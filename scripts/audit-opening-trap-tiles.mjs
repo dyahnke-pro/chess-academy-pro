@@ -20,7 +20,7 @@
  * Default target = prod (chess-academy-pro.vercel.app).
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -60,8 +60,13 @@ async function main() {
 
   const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[trap-tiles] chromium = ${executablePath}`);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
+  // sandboxLaunchArgs/-ContextOptions: without them a sandbox prod run dies
+  // with net::ERR_CONNECTION_RESET at the first goto (the egress proxy's
+  // TLS1.2 MITM — the documented AUDIT_PROXY fix). This script predated the
+  // helper; bitten 2026-08-13.
+  const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({
+    ...sandboxContextOptions(),
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditTrapTilesBot/1.0 (chromium)',
