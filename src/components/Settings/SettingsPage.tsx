@@ -587,7 +587,6 @@ function BoardGameplayTab({ profile, setProfile }: TabProps): JSX.Element {
 function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
   const [name, setName] = useState(profile.name);
   const [elo, setElo] = useState(profile.currentRating);
-  const [dailyMin, setDailyMin] = useState(profile.preferences.dailySessionMinutes);
   const [profileSaveStatus, setProfileSaveStatus] = useState<string | null>(null);
 
   // Auto-save profile on change, debounced 400ms (slightly longer than
@@ -604,7 +603,7 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
         ...profile,
         name,
         currentRating: elo,
-        preferences: { ...profile.preferences, dailySessionMinutes: dailyMin },
+        preferences: profile.preferences,
       };
       void db.profiles.update(profile.id, {
         name,
@@ -618,7 +617,7 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
     }, 400);
     return () => clearTimeout(handle);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [name, elo, dailyMin]);
+  }, [name, elo]);
 
   const handleExport = async (): Promise<void> => {
     const data = await exportUserData();
@@ -655,20 +654,12 @@ function ProfileTab({ profile, setProfile }: TabProps): JSX.Element {
           data-testid="elo-input"
         />
       </div>
-      <div>
-        <label className="text-xs font-medium block mb-1" style={{ color: 'var(--color-text-muted)' }}>Daily Session (min)</label>
-        <select
-          value={dailyMin}
-          onChange={(e) => setDailyMin(Number(e.target.value))}
-          className="w-full px-3 py-2 rounded-lg border text-sm"
-          style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-          data-testid="daily-min-select"
-        >
-          {[15, 30, 45, 60, 90].map((m) => (
-            <option key={m} value={m}>{m} minutes</option>
-          ))}
-        </select>
-      </div>
+      {/* "Daily Session (min)" REMOVED (full-map audit 2026-08-13): the value
+          was settable, saved, defaulted — and consumed by nothing. No timer,
+          no pacing, no goal display reads dailySessionMinutes anywhere in the
+          app, so the control was a promise the product does not keep. The
+          preference field stays in storage (harmless, and a session-pacing
+          feature can pick it back up); only the lying control goes. */}
       {profileSaveStatus && (
         <p className="text-sm font-medium" style={{ color: 'var(--color-accent)' }} data-testid="profile-save-status">
           {profileSaveStatus}

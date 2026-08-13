@@ -148,6 +148,20 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
   const navigate = useNavigate();
   const { settings } = useSettings();
   const coachedReview = settings.coachedReview;
+  // 🔒 "Review Voice Narration" — a Settings toggle that shipped reading
+  // NOTHING. It was written to preferences, mapped through useSettings, and
+  // not one of this file's 33 speak sites ever consulted it: a paying user
+  // who turned review voice OFF kept hearing the coach, and the control was
+  // a lie. Every spoken line in the review now routes through this guard.
+  // Ref-backed so the callbacks the walk registers early never capture a
+  // stale value of the toggle.
+  const reviewVoiceRef = useRef(settings.coachReviewVoice);
+  reviewVoiceRef.current = settings.coachReviewVoice;
+  const reviewSay = useCallback(
+    (text: string, opts?: Parameters<typeof voiceService.speakForced>[1]): Promise<void> =>
+      (reviewVoiceRef.current ? voiceService.speakForced(text, opts) : Promise.resolve()),
+    [],
+  );
 
   // ship-4: `reviewPhase` state removed. The walk-phase UI is the only
   // review surface; when narration generation fails or the prep effect
@@ -820,7 +834,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           if (trap) {
             setTrapQ(trap);
             captureEvent('review_trap_asked', { target: trap.targetSquare, tempting: trap.temptingSan, ply: nextPly });
-            void voiceService.speakForced(trap.prompt).catch(() => undefined);
+            void reviewSay(trap.prompt).catch(() => undefined);
             return; // pause the walk; resumes when the student answers + dismisses
           }
           // couldn't build (edge) → fall through to the why-picker below.
@@ -842,7 +856,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           // spot-the-sequence ask is ready the moment the shot resolves
           // (Phase 1; budget-capped, never blocks the card).
           if (seg.bestMoveUci) prefetchPvForShot(nextPly, seg.fenBefore, seg.bestMoveUci);
-          void voiceService.speakForced(`Hold on — right here you had something. ${shot.question}`).catch(() => undefined);
+          void reviewSay(`Hold on — right here you had something. ${shot.question}`).catch(() => undefined);
           return; // pause the walk; resumes from the shot card
         }
         // §5 WALK-THE-BETTER-LINE: after you answer the picker, the coach plays
@@ -878,7 +892,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           studentRating: playerRating ?? undefined,
         };
         void (async () => {
-          try { await voiceService.speakForced('Here’s the move you played. Take a look.'); } catch { /* voice off */ }
+          try { await reviewSay('Here’s the move you played. Take a look.'); } catch { /* voice off */ }
           await new Promise((r) => setTimeout(r, 900)); // a beat to absorb the move
           if (!walkMountedRef.current) return;
           raiseFaucet(faucetArgs);
@@ -923,7 +937,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!target) { rewindDiag('no-target'); return false; }
     setRewindOffer(target);
     captureEvent('review_rewind_offered', { blunder_ply: ply, rewind_ply: target.ply });
-    void voiceService.speakForced('Before we move on — want to go back to the last moment this was still holdable?').catch(() => undefined);
+    void reviewSay('Before we move on — want to go back to the last moment this was still holdable?').catch(() => undefined);
     return true;
   }, [walkPlayback, walkNarration, playerColor, moves, moverIsStudent]);
 
@@ -941,7 +955,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       const segAt = walkNarration?.segments.find((s) => s.ply === t.ply);
       setShotState({ challenge: ch, playedSan: segAt?.san ?? '', costPawns: null });
       setShotReveal(null);
-      void voiceService.speakForced(ch.question).catch(() => undefined);
+      void reviewSay(ch.question).catch(() => undefined);
     }
   }, [rewindOffer, walkPlayback, walkNarration]);
 
@@ -963,7 +977,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (san !== null) {
       const line = quizVerdictLine(quiz, san);
       captureEvent('review_principle_quiz_result', { tag: quiz.tag, picked: san, correct: san === quiz.correctSan });
-      void voiceService.speakForced(line).catch(() => undefined);
+      void reviewSay(line).catch(() => undefined);
     } else {
       captureEvent('review_principle_quiz_result', { tag: quiz.tag, picked: null, correct: false });
     }
@@ -990,7 +1004,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       shotHintRungRef.current = rung + 1;
       setShotHintText(ladder[rung]);
       captureEvent('review_find_shot_result', { outcome: `hint-${rung}`, attempts: shotAttemptsRef.current, answer: shotState.challenge.answerSan });
-      void voiceService.speakForced(ladder[rung]).catch(() => undefined);
+      void reviewSay(ladder[rung]).catch(() => undefined);
       return;
     }
     // Final rung — the full answer; end the shot.
@@ -999,7 +1013,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setShotState(null);
     setShotHintText(null);
     setShotReveal(text);
-    void voiceService.speakForced(text).catch(() => undefined);
+    void reviewSay(text).catch(() => undefined);
   }, [shotState, shotCostLine]);
 
   const handleShotSkip = useCallback((): void => {
@@ -1085,7 +1099,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (!q) return; // clean game / single obvious moment — no question to ask
     setTurningQ(q);
     captureEvent('review_turning_point_asked', { candidates: q.candidates.length, answer_ply: q.answer.ply });
-    void voiceService.speakForced(q.question).catch(() => undefined);
+    void reviewSay(q.question).catch(() => undefined);
   }, [walkPlayback.currentPly, walkNarration, moves.length]);
 
   const handleTurningPick = useCallback((ply: number): void => {
@@ -1104,7 +1118,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setTurningReveal({ correct, text });
     // Decisive-beat prosody spike (#25): the payoff line lifts only when
     // the student CALLED it — a wrong pick keeps the flat register.
-    void voiceService.speakForced(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
+    void reviewSay(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
   }, [turningQ]);
 
   // First tap PREVIEWS the candidate on the board; a second tap on the SAME chip
@@ -1128,7 +1142,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     captureEvent('review_trap_result', { correct, picked: id, answer: trapQ.answerId });
     setTrapQ(null);
     setTrapReveal({ correct, text });
-    void voiceService.speakForced(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
+    void reviewSay(text, correct ? { prosodySpike: true } : undefined).catch(() => undefined);
   }, [trapQ]);
 
 
@@ -1248,7 +1262,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       principleQuizRef.current = null;
       setPrincipleQuizState(quiz);
       captureEvent('review_principle_quiz_offered', { tag: quiz.tag, candidates: quiz.candidates.length });
-      void voiceService.speakForced(quiz.ask).catch(() => undefined);
+      void reviewSay(quiz.ask).catch(() => undefined);
       return;
     }
     if (maybeOfferRewind(questionPlyRef.current ?? undefined)) return; // the rewind card takes over the advance
@@ -1320,7 +1334,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const speakPaced = async (t: string): Promise<void> => {
       await waitVoiceIdle();              // let whatever is playing finish → guard passes
       if (betterLineTokenRef.current !== token || !walkMountedRef.current) return;
-      try { await voiceService.speakForced(t); } catch { /* voice off */ }
+      try { await reviewSay(t); } catch { /* voice off */ }
       await waitVoiceIdle();              // hold the board until THIS why finishes
     };
     // Speak the intro FIRST — masks the ~2s grounding warm below so the walk
@@ -1509,7 +1523,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const speak = async (text: string, caption?: string): Promise<void> => {
       setTheoryCaption(caption ?? text);
       const t0 = performance.now();
-      try { await voiceService.speakForced(text); } catch { /* voice off */ }
+      try { await reviewSay(text); } catch { /* voice off */ }
       await waitIdle();
       const dwell = Math.min(4500, 1000 + text.length * 22);
       const elapsed = performance.now() - t0;
@@ -1580,7 +1594,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const speak = async (text: string, caption?: string): Promise<void> => {
       setTheoryCaption(caption ?? text);
       const t0 = performance.now();
-      try { await voiceService.speakForced(text); } catch { /* voice off */ }
+      try { await reviewSay(text); } catch { /* voice off */ }
       await waitIdle();
       const dwell = Math.min(4500, 1000 + text.length * 22);
       const elapsed = performance.now() - t0;
@@ -1644,7 +1658,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       playMoveSound(ply.san);
       const spoken = state.voice[i] ?? renderPlyFactLine(ply);
       if (spoken) {
-        try { await voiceService.speakForced(spoken); } catch { /* voice off */ }
+        try { await reviewSay(spoken); } catch { /* voice off */ }
         if (seqRunTokenRef.current !== token || !walkMountedRef.current) return;
         await new Promise((r) => setTimeout(r, 350));
       } else {
@@ -1669,7 +1683,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         if (callback) closing = `${closing} ${callback}`;
       } catch { /* history is a bonus, never a blocker */ }
     }
-    try { await voiceService.speakForced(closing); } catch { /* voice off */ }
+    try { await reviewSay(closing); } catch { /* voice off */ }
     setSeqState(null);
     setWalkExplorationFen(null);
     setWalkExplorationSan(null);
@@ -1706,7 +1720,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         playMoveSound(line.plies[1].san);
       }
       const ask = `${line.plies[1] ? `He answers ${line.plies[1].san}. ` : ''}Can you see the follow-up? Play your next move.`;
-      try { await voiceService.speakForced(ask); } catch { /* voice off */ }
+      try { await reviewSay(ask); } catch { /* voice off */ }
     })();
     return true;
   }, [playMoveSound]);
@@ -1761,7 +1775,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         });
         captureEvent('review_sequence_falloff', { reached: state.reached, total: state.totalAsk, at_ply: state.atPly, opening: seg ? openingName : openingName });
         setShotBoardEpoch((e) => e + 1); // snap their move back
-        void voiceService.speakForced(`Not quite — ${moveResult.san} lets it slip. Watch the full line.`).catch(() => undefined);
+        void reviewSay(`Not quite — ${moveResult.san} lets it slip. Watch the full line.`).catch(() => undefined);
         void runSequencePlayback({ ...state, fellOff: true }, state.ptr);
         return;
       }
@@ -1770,7 +1784,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       if (verdict !== 'exact') {
         // Their equally-good move diverges from the PV — credit it, then
         // show the engine's line from here so the teaching stays coherent.
-        void voiceService.speakForced(`${moveResult.san} works just as well — you're seeing it. Here's the engine's own line.`).catch(() => undefined);
+        void reviewSay(`${moveResult.san} works just as well — you're seeing it. Here's the engine's own line.`).catch(() => undefined);
         void runSequencePlayback({ ...state, reached }, state.ptr);
         return;
       }
@@ -1793,7 +1807,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         if (done) {
           captureEvent('review_sequence_completed', { reached, total: state.totalAsk, at_ply: state.atPly });
           const bravo = 'You saw the whole thing — that was the line, move for move.';
-          try { await voiceService.speakForced(bravo, { prosodySpike: true }); } catch { /* voice off */ }
+          try { await reviewSay(bravo, { prosodySpike: true }); } catch { /* voice off */ }
           if (seqRunTokenRef.current !== token || !walkMountedRef.current) return;
           setSeqState(null);
           setWalkExplorationFen(null);
@@ -1801,7 +1815,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
           if (!maybeOfferRewind(questionPlyRef.current ?? undefined)) walkPlayback.goForward();
         } else {
           setSeqState({ ...state, ptr: afterDefender, reached });
-          void voiceService.speakForced(defender ? `${defender.san}. And now?` : 'And now?').catch(() => undefined);
+          void reviewSay(defender ? `${defender.san}. And now?` : 'And now?').catch(() => undefined);
         }
       })();
     })();
@@ -2079,7 +2093,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setWalkExplorationFen(playback.startFen);
     setWalkExplorationSan(null);
     try {
-      await voiceService.speakForced(intro);
+      await reviewSay(intro);
     } catch { /* voice failure never blocks the board */ }
     if (cameoRunTokenRef.current !== token || !walkMountedRef.current) return;
     for (const p of playback.plies) {
@@ -2093,7 +2107,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (cameoRunTokenRef.current !== token || !walkMountedRef.current) return;
     const tieBack = `Back to your board — ${feature}, just like theirs.`;
     try {
-      await voiceService.speakForced(tieBack);
+      await reviewSay(tieBack);
     } catch { /* ignore */ }
     if (cameoRunTokenRef.current !== token || !walkMountedRef.current) return;
     setCameoState(null);
@@ -2258,7 +2272,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     setWalkExplorationFen(state.dep.bookFen);
     setWalkExplorationSan(null);
     try {
-      await voiceService.speakForced(`${theoryStatsLine(state.dep)} Watch the book line.`);
+      await reviewSay(`${theoryStatsLine(state.dep)} Watch the book line.`);
     } catch { /* voice off */ }
     if (theoryRunTokenRef.current !== token || !walkMountedRef.current) return;
     for (const p of state.bookLine) {
@@ -2271,7 +2285,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     await new Promise((r) => setTimeout(r, 900));
     if (theoryRunTokenRef.current !== token || !walkMountedRef.current) return;
     try {
-      await voiceService.speakForced('That is where the book goes — back to your game.');
+      await reviewSay('That is where the book goes — back to your game.');
     } catch { /* ignore */ }
     if (theoryRunTokenRef.current !== token || !walkMountedRef.current) return;
     setTheoryState(null);
@@ -2287,13 +2301,13 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     const dep = state.dep;
     if (san === dep.mainMove.san) {
       captureEvent('review_theory_result', { outcome: 'main', attempts: theoryAttemptsRef.current + 1 });
-      void voiceService.speakForced(`${san} — you know the book.`, { prosodySpike: true }).catch(() => undefined);
+      void reviewSay(`${san} — you know the book.`, { prosodySpike: true }).catch(() => undefined);
       void runTheoryPlayback(state);
       return;
     }
     if (dep.topMoves.some((m) => m.san === san)) {
       captureEvent('review_theory_result', { outcome: 'book-alt', attempts: theoryAttemptsRef.current + 1 });
-      void voiceService.speakForced(`${san} is book too — the main move is ${dep.mainMove.san}.`).catch(() => undefined);
+      void reviewSay(`${san} is book too — the main move is ${dep.mainMove.san}.`).catch(() => undefined);
       void runTheoryPlayback(state);
       return;
     }
@@ -2305,7 +2319,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       return;
     }
     captureEvent('review_theory_result', { outcome: 'retry', attempts: theoryAttemptsRef.current });
-    void voiceService.speakForced('Not that one — look again.').catch(() => undefined);
+    void reviewSay('Not that one — look again.').catch(() => undefined);
   }, [runTheoryPlayback]);
 
   // Fire ONCE, when the walk reaches the departure ply and no other card
@@ -2372,7 +2386,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
     if (shotState || shotReveal || turningQ || rewindOffer || seqStateRef.current || cameoStateRef.current || theoryStateRef.current || principleQuizStateRef.current) return;
     themeSpokenRef.current = true;
     captureEvent('review_theme_named', { theme: theme.theme, at_ply: walkPlayback.currentPly });
-    void voiceService.speakForced(theme.line).catch(() => undefined);
+    void reviewSay(theme.line).catch(() => undefined);
   }, [walkPlayback.currentPly, shotState, shotReveal, turningQ, rewindOffer]);
 
   // A blocking card the user can't SEE is indistinguishable from a hang
@@ -2634,7 +2648,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         summary: `extracted [VOICE: ...] block (${inner.length} chars${inner.length !== rawInner.length ? `, grounded from ${rawInner.length}` : ''})`,
         details: JSON.stringify({ length: inner.length, preview: inner.slice(0, 80) }),
       });
-      void voiceService.speakForced(inner);
+      void reviewSay(inner);
     };
 
     void coachService
@@ -3309,12 +3323,12 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
                       setShotState(null);
                       setShotReveal(text);
                       // Decisive-beat prosody spike (#25) — the found shot is THE payoff.
-                      void voiceService.speakForced(text, { prosodySpike: true }).catch(() => undefined);
+                      void reviewSay(text, { prosodySpike: true }).catch(() => undefined);
                     } else if (verdict === 'retry') {
                       shotAttemptsRef.current += 1;
                       captureEvent('review_find_shot_result', { outcome: 'retry', attempts: shotAttemptsRef.current, answer: shotState.challenge.answerSan });
                       setShotBoardEpoch((e) => e + 1); // takeback: remount → initialFen
-                      void voiceService.speakForced(shotState.challenge.retry).catch(() => undefined);
+                      void reviewSay(shotState.challenge.retry).catch(() => undefined);
                     } else {
                       setShotState(null); // board drifted — never judge the wrong position
                     }
