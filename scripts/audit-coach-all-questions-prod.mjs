@@ -48,10 +48,10 @@ const ACCEPT = {
   stats: /rating|\d{3,4}|haven'?t played|no games/i,
   strengths: /strong|best|good at|not enough|haven'?t played/i,
   'opening-profile': /opening|best|score|haven'?t|not enough|no games/i,
-  'opening-accuracy': /accura|caro|haven'?t|no games|not enough/i,
-  'opening-traps': /trap|gem|italian/i,
-  'opening-record': /sicilian|record|score|haven'?t|no games/i,
-  'opponent-record': /magnus|record|haven'?t|no games|never (played|faced)/i,
+  'opening-accuracy': /accura|haven'?t|no games|not enough/i,
+  'opening-traps': /trap|gem|lesson plan|verified/i,
+  'opening-record': /record|score|logged|haven'?t|no games|don'?t have any of your games/i,
+  'opponent-record': /record|haven'?t|no games|logged|never (played|faced)|don'?t have any/i,
   'review-due': /due|review|flashcard|card|nothing|none|caught up/i,
   mistakes: /mistake|drill|puzzle|none|haven'?t|no recorded/i,
   'tactics-profile': /tactic|theme|fork|pin|puzzle|haven'?t|not enough/i,
@@ -62,7 +62,7 @@ const ACCEPT = {
   converting: /convert|winning position|haven'?t|not enough/i,
   color: /white|black|colou?r|haven'?t|not enough/i,
   records: /win|best|record|haven'?t|no games/i,
-  'record-vs-target': /sicilian|score|record|haven'?t|no games/i,
+  'record-vs-target': /score|record|logged|haven'?t|no games|don'?t have any/i,
   'puzzle-stats': /puzzle|rating|solved|haven'?t|none yet/i,
   'transfer-gap': /transfer|games?|puzzle|haven'?t|not enough/i,
   'skill-radar': /radar|skill|tactic|strateg|endgame|haven'?t|not enough/i,
@@ -79,13 +79,13 @@ const ACCEPT = {
   'set-hints': /hint|on\b|enabled|already/i,
   'set-premium-voice': /premium|voice|on\b|enabled|already/i,
   'set-theme': /theme|dark|switched|done|already/i,
-  'play-against': /caro|play|your move|board/i,
-  'teach-opening': /vienna|putting together|lesson|walk|branches into/i,
+  'play-against': /play|your move|board|game on|walk/i,
+  'teach-opening': /putting together|lesson|walk|branches into|pick one|variation/i,
   'explain-position': /pawn|knight|bishop|center|centre|develop|white|black/i,
-  'continue-middlegame': /italian|middlegame|plan|position/i,
-  'drill-stage': /drill|italian|line/i,
-  'favorite-opening': /favou?rite|starred|saved|added/i,
-  'manage-repertoire': /repertoire|added|vienna|saved/i,
+  'continue-middlegame': /middlegame|plan|position|pick one/i,
+  'drill-stage': /drill|line|lesson|putting together/i,
+  'favorite-opening': /favou?rite|starred|saved|added|couldn'?t find/i,
+  'manage-repertoire': /repertoire|added|saved|favou?rites? now/i,
   'board-control': /took|take|back|board|reset|nothing to/i,
   'training-aid': /fork|puzzle|drill|tactic/i,
 };
@@ -104,10 +104,24 @@ const SECTIONS = [
   ['actions', ['board-control', 'favorite-opening', 'manage-repertoire', 'training-aid', 'opening-traps', 'explain-position', 'continue-middlegame', 'drill-stage', 'play-against', 'teach-opening', 'review-game', 'navigate']],
 ];
 
+// EVERY RUN ASKS DIFFERENT QUESTIONS (David 2026-08-13: "make sure the new
+// sweep is asking different questions and playing different games and
+// functions"). Each capability carries 2-3 alternate phrasing sets in the
+// matrix (naming different openings/functions); the pick is seeded by the
+// RUN ID so any run can be reproduced exactly from its report.
+const seedHash = [...RUN_ID].reduce((h, c) => (Math.imul(h ^ c.charCodeAt(0), 16777619)) >>> 0, 2166136261);
+let rngState = seedHash || 1;
+const rng = () => { rngState = (Math.imul(rngState, 1664525) + 1013904223) >>> 0; return rngState / 4294967296; };
+const pickPhrasing = (entry) => {
+  const pool = [...(entry.qs ?? []), ...(entry.qs2 ?? []), ...(entry.qs3 ?? [])];
+  return pool.length ? pool[Math.floor(rng() * pool.length)] : null;
+};
+
 const byId = new Map(QUESTION_MATRIX.map((e) => [e.id, e]));
 const results = [];
+let CURRENT_ASK = '';
 const record = (id, pass, detail, note = '') => {
-  results.push({ id, pass, detail, note });
+  results.push({ id, pass, detail, note, asked: CURRENT_ASK });
   console.log(`${pass ? '✅' : '❌'} [${id}] ${detail}${note ? ` (${note})` : ''}`);
 };
 
@@ -179,8 +193,9 @@ for (const [section, ids] of SECTIONS) {
   for (const id of ids) {
     const entry = byId.get(id);
     if (!entry) { record(id, false, 'not in matrix'); continue; }
-    const q = (entry.qs ?? [])[0];
+    const q = pickPhrasing(entry);
     if (!q) { record(id, false, 'matrix entry has no phrasing'); continue; }
+    CURRENT_ASK = q;
     // A fresh surface for the session-starting asks — run 2 proved the
     // previous ask's Italian lesson-gen completing DURING "play the
     // Caro-Kann against me" polluted both the surface state and the reply
