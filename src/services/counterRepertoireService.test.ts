@@ -2,8 +2,11 @@ import { describe, it, expect } from 'vitest';
 import { getCounterFamilies, matchOpponentOpening } from './counterRepertoireService';
 import proRepertoires from '../data/pro-repertoires.json';
 import antiOpenings from '../data/anti-openings.json';
+import baseRepertoire from '../data/repertoire.json';
 
-/** Every id the recommendation map may point at: pro-rep + anti-openings. */
+/** Every id the recommendation map may point at: pro-rep + anti-openings +
+ *  the BASE repertoire (masterclass openings ARE routable openings pages —
+ *  the Benko Gambit joined vs-d4 as its gambit answer, David 2026-08-13). */
 function realOpeningIds(): Set<string> {
   const ids = new Set<string>();
   const pro = proRepertoires as unknown as { openings?: Array<{ id: string }> } | Array<{ id: string }>;
@@ -12,6 +15,9 @@ function realOpeningIds(): Set<string> {
   const anti = antiOpenings as unknown as { openings?: Array<{ id: string }> } | Array<{ id: string }>;
   const antiList = Array.isArray(anti) ? anti : (anti.openings ?? []);
   for (const o of antiList) ids.add(o.id);
+  const base = baseRepertoire as unknown as { repertoire?: Array<{ id: string }>; openings?: Array<{ id: string }> } | Array<{ id: string }>;
+  const baseList = Array.isArray(base) ? base : (base.repertoire ?? base.openings ?? []);
+  for (const o of baseList) ids.add(o.id);
   return ids;
 }
 

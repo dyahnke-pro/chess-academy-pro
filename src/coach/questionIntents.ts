@@ -1450,6 +1450,12 @@ const COUNTER_REPERTOIRE_RE = anyOf([
   String.raw`\bwhich\s+(?:opening|line|defen[cs]e|system|weapon)\s+.{0,40}\b(?:against|vs\.?|versus)\b`,
   String.raw`\bhow\s+(?:do|should|can)\s+i\s+(?:meet|face|counter|beat|handle|punish|deal\s+with|respond\s+to|answer)\s+(?:the\s+|a\s+)?[a-z]`,
   String.raw`\b(?:best|good|solid|sharp)\s+(?:opening|line|defen[cs]e|system|weapon|answer|response|reply)\s+(?:against|vs\.?|versus|to)\b`,
+  // "(the) best gambit against d4" — a RECOMMENDATION ask (David 2026-08-13:
+  // this phrasing fired no lane, fell to the brain, and the brain taught him
+  // the Amar/Gent Gambit — an unrelated White joke line — instead of the
+  // app's real anti-d4 gambits). `gambit`/`attack`/`counter` join the noun
+  // group, with or without a grading adjective.
+  String.raw`\b(?:(?:best|good|solid|sharp|a|an|the)\s+)?(?:gambit|attack|counter)\s+(?:against|vs\.?|versus|to\s+(?:meet|play\s+against|face))\b`,
   String.raw`\b(?:an?\s+)?(?:line|answer|weapon|antidote)\s+against\s+(?:the\s+)?[a-z]`,
   String.raw`\brecommend\s+(?:me\s+)?(?:an?\s+)?(?:opening|line|defen[cs]e|system|weapon)\b`,
   // "which opening do you suggest (I play)?" is inherently a recommendation

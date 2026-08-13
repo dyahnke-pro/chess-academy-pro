@@ -53,7 +53,11 @@ const ALIAS_INDEX: ReadonlyArray<{ alias: string; family: CounterFamily }> = FAM
  */
 export function matchOpponentOpening(text: string | undefined | null): CounterFamily | null {
   if (!text) return null;
-  const t = ` ${text.toLowerCase()} `;
+  // Normalize move-number prefixes the way people actually type first moves:
+  // "against 1.d4" / "vs 1. e4" → "against d4" / "vs e4". Without this the
+  // digit-dot broke every alias substring and the ask fell to the brain
+  // (David 2026-08-13: "best gambit against 1.d4" got the Gent Gambit).
+  const t = ` ${text.toLowerCase().replace(/\b1\.\s*([a-h][1-8]|n[a-h][1-8])/g, '$1')} `;
   for (const { alias, family } of ALIAS_INDEX) {
     if (t.includes(alias)) return family;
   }

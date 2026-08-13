@@ -1,808 +1,817 @@
 {
- "_doc": "Counter-repertoire recommendation map (David 2026-07-15). Keys = opponent-opening families the student asks about ('what should I play against the Pirc?'). Each entry: aliases (lowercase substrings matched against the de-filled question), the side the STUDENT plays in the matchup, and 1-2 recommendations pointing at REAL app openings (Naroditsky pro-rep + anti-openings/Counter-Weapons). styleTags use the gameStyleClassifier vocabulary (tactical/positional/aggressive/solid/sharp) so the coach can style-match against the student's own profile. stat = honest W/D/L score from the player's real corpus (data/sources/danielnaroditsky-trees rootStats, 2026-07-15); omitted where no corpus stat exists (empty > invented). PHRASING CONTRACT: the coach recommends first-person with anonymous stats — NEVER a pro's name.",
- "families": [
-  {
-   "key": "sicilian",
-   "displayName": "the Sicilian",
-   "studentSide": "white",
-   "aliases": [
-    "sicilian",
-    "najdorf",
-    "sveshnikov",
-    "kan sicilian",
-    "taimanov"
-   ],
-   "recommendations": [
+  "_doc": "Counter-repertoire recommendation map (David 2026-07-15). Keys = opponent-opening families the student asks about ('what should I play against the Pirc?'). Each entry: aliases (lowercase substrings matched against the de-filled question), the side the STUDENT plays in the matchup, and 1-2 recommendations pointing at REAL app openings (Naroditsky pro-rep + anti-openings/Counter-Weapons). styleTags use the gameStyleClassifier vocabulary (tactical/positional/aggressive/solid/sharp) so the coach can style-match against the student's own profile. stat = honest W/D/L score from the player's real corpus (data/sources/danielnaroditsky-trees rootStats, 2026-07-15); omitted where no corpus stat exists (empty > invented). PHRASING CONTRACT: the coach recommends first-person with anonymous stats — NEVER a pro's name.",
+  "families": [
     {
-     "openingId": "pro-naroditsky-alapin",
-     "name": "the Alapin (2.c3)",
-     "styleTags": [
-      "solid",
-      "positional"
-     ],
-     "stat": {
-      "games": 2752,
-      "scorePct": 73.8
-     }
+      "key": "sicilian",
+      "displayName": "the Sicilian",
+      "studentSide": "white",
+      "aliases": [
+        "sicilian",
+        "najdorf",
+        "sveshnikov",
+        "kan sicilian",
+        "taimanov"
+      ],
+      "recommendations": [
+        {
+          "openingId": "pro-naroditsky-alapin",
+          "name": "the Alapin (2.c3)",
+          "styleTags": [
+            "solid",
+            "positional"
+          ],
+          "stat": {
+            "games": 2752,
+            "scorePct": 73.8
+          }
+        },
+        {
+          "openingId": "pro-naroditsky-rossolimo",
+          "name": "the Rossolimo Attack",
+          "styleTags": [
+            "aggressive",
+            "sharp"
+          ],
+          "stat": {
+            "games": 4151,
+            "scorePct": 65.5
+          }
+        }
+      ]
     },
     {
-     "openingId": "pro-naroditsky-rossolimo",
-     "name": "the Rossolimo Attack",
-     "styleTags": [
-      "aggressive",
-      "sharp"
-     ],
-     "stat": {
-      "games": 4151,
-      "scorePct": 65.5
-     }
-    }
-   ]
-  },
-  {
-   "key": "caro-kann",
-   "displayName": "the Caro-Kann",
-   "studentSide": "white",
-   "aliases": [
-    "caro-kann",
-    "caro kann",
-    "caro cann",
-    "caro"
-   ],
-   "recommendations": [
-    {
-     "openingId": "pro-naroditsky-fantasy-caro",
-     "name": "the Fantasy Variation (3.f3)",
-     "styleTags": [
-      "sharp",
-      "aggressive"
-     ],
-     "stat": {
-      "games": 370,
-      "scorePct": 73.4
-     }
-    }
-   ]
-  },
-  {
-   "key": "french",
-   "displayName": "the French Defense",
-   "studentSide": "white",
-   "aliases": [
-    "french"
-   ],
-   "recommendations": [
-    {
-     "openingId": "anti-french-tarrasch",
-     "name": "the Tarrasch (3.Nd2)",
-     "styleTags": [
-      "solid",
-      "positional"
-     ]
+      "key": "caro-kann",
+      "displayName": "the Caro-Kann",
+      "studentSide": "white",
+      "aliases": [
+        "caro-kann",
+        "caro kann",
+        "caro cann",
+        "caro"
+      ],
+      "recommendations": [
+        {
+          "openingId": "pro-naroditsky-fantasy-caro",
+          "name": "the Fantasy Variation (3.f3)",
+          "styleTags": [
+            "sharp",
+            "aggressive"
+          ],
+          "stat": {
+            "games": 370,
+            "scorePct": 73.4
+          }
+        }
+      ]
     },
     {
-     "openingId": "pro-naroditsky-kia",
-     "name": "the King's Indian Attack",
-     "styleTags": [
-      "aggressive",
-      "sharp"
-     ],
-     "stat": {
-      "games": 18216,
-      "scorePct": 69.7
-     }
-    }
-   ]
-  },
-  {
-   "key": "pirc",
-   "displayName": "the Pirc Defense",
-   "studentSide": "white",
-   "aliases": [
-    "pirc"
-   ],
-   "recommendations": [
-    {
-     "openingId": "anti-pirc-battery",
-     "name": "the 150 Battery & d5 Squeeze",
-     "styleTags": [
-      "positional",
-      "solid"
-     ]
+      "key": "french",
+      "displayName": "the French Defense",
+      "studentSide": "white",
+      "aliases": [
+        "french"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-french-tarrasch",
+          "name": "the Tarrasch (3.Nd2)",
+          "styleTags": [
+            "solid",
+            "positional"
+          ]
+        },
+        {
+          "openingId": "pro-naroditsky-kia",
+          "name": "the King's Indian Attack",
+          "styleTags": [
+            "aggressive",
+            "sharp"
+          ],
+          "stat": {
+            "games": 18216,
+            "scorePct": 69.7
+          }
+        }
+      ]
     },
     {
-     "openingId": "anti-pirc-austrian",
-     "name": "the Austrian Attack (4.f4)",
-     "styleTags": [
-      "aggressive",
-      "sharp"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "modern",
-   "displayName": "the Modern Defense",
-   "studentSide": "white",
-   "aliases": [
-    "modern defense",
-    "modern defence",
-    "the modern"
-   ],
-   "recommendations": [
-    {
-     "openingId": "anti-modern-150",
-     "name": "the 150 Attack",
-     "styleTags": [
-      "aggressive",
-      "sharp"
-     ]
+      "key": "pirc",
+      "displayName": "the Pirc Defense",
+      "studentSide": "white",
+      "aliases": [
+        "pirc"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-pirc-battery",
+          "name": "the 150 Battery & d5 Squeeze",
+          "styleTags": [
+            "positional",
+            "solid"
+          ]
+        },
+        {
+          "openingId": "anti-pirc-austrian",
+          "name": "the Austrian Attack (4.f4)",
+          "styleTags": [
+            "aggressive",
+            "sharp"
+          ]
+        }
+      ]
     },
     {
-     "openingId": "anti-pirc-battery",
-     "name": "the 150 Battery & d5 Squeeze",
-     "styleTags": [
-      "positional",
-      "solid"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "scandinavian",
-   "displayName": "the Scandinavian",
-   "studentSide": "white",
-   "aliases": [
-    "scandinavian",
-    "scandi",
-    "center counter",
-    "centre counter"
-   ],
-   "recommendations": [
-    {
-     "openingId": "anti-scandinavian",
-     "name": "the Main Line (3.Nc3)",
-     "styleTags": [
-      "solid",
-      "positional"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "alekhine",
-   "displayName": "Alekhine's Defense",
-   "studentSide": "white",
-   "aliases": [
-    "alekhine",
-    "alekhines",
-    "alekhine's"
-   ],
-   "recommendations": [
-    {
-     "openingId": "anti-alekhine-modern",
-     "name": "the Modern Variation (4.Nf3)",
-     "styleTags": [
-      "solid",
-      "positional"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "open-e5",
-   "displayName": "1…e5 (the Open Games)",
-   "studentSide": "white",
-   "aliases": [
-    "e5 defense",
-    "open game",
-    "double king pawn",
-    "1...e5",
-    "petroff",
-    "petrov"
-   ],
-   "recommendations": [
-    {
-     "openingId": "pro-naroditsky-ruy-lopez",
-     "name": "the Ruy Lopez",
-     "styleTags": [
-      "positional",
-      "solid"
-     ],
-     "stat": {
-      "games": 2922,
-      "scorePct": 62.5
-     }
+      "key": "modern",
+      "displayName": "the Modern Defense",
+      "studentSide": "white",
+      "aliases": [
+        "modern defense",
+        "modern defence",
+        "the modern"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-modern-150",
+          "name": "the 150 Attack",
+          "styleTags": [
+            "aggressive",
+            "sharp"
+          ]
+        },
+        {
+          "openingId": "anti-pirc-battery",
+          "name": "the 150 Battery & d5 Squeeze",
+          "styleTags": [
+            "positional",
+            "solid"
+          ]
+        }
+      ]
     },
     {
-     "openingId": "belgrade-gambit",
-     "name": "the Belgrade Gambit",
-     "styleTags": [
-      "sharp",
-      "aggressive"
-     ],
-     "stat": {
-      "games": 158,
-      "scorePct": 70.9
-     }
-    }
-   ]
-  },
-  {
-   "key": "kings-indian",
-   "displayName": "the King's Indian Defense",
-   "studentSide": "white",
-   "aliases": [
-    "king's indian defense",
-    "king's indian defence",
-    "kings indian defense",
-    "kings indian defence",
-    "kings indian",
-    "king's indian",
-    "kid"
-   ],
-   "recommendations": [
-    {
-     "openingId": "anti-kid-saemisch",
-     "name": "the Sämisch (5.f3)",
-     "styleTags": [
-      "aggressive",
-      "solid"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "grunfeld",
-   "displayName": "the Grünfeld",
-   "studentSide": "white",
-   "aliases": [
-    "grunfeld",
-    "gruenfeld",
-    "grünfeld"
-   ],
-   "recommendations": [
-    {
-     "openingId": "anti-grunfeld-exchange",
-     "name": "the Exchange Variation",
-     "styleTags": [
-      "aggressive",
-      "positional"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "benoni",
-   "displayName": "the Benoni/Benko",
-   "studentSide": "white",
-   "aliases": [
-    "benoni",
-    "benko"
-   ],
-   "recommendations": [
-    {
-     "openingId": "anti-benoni-push",
-     "name": "the d5 Push",
-     "styleTags": [
-      "solid",
-      "positional"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "englund",
-   "displayName": "the Englund Gambit",
-   "studentSide": "white",
-   "aliases": [
-    "englund"
-   ],
-   "recommendations": [
-    {
-     "openingId": "anti-englund",
-     "name": "the refutation setup",
-     "styleTags": [
-      "solid",
-      "tactical"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "nimzo-indian",
-   "displayName": "the Nimzo-Indian",
-   "studentSide": "white",
-   "aliases": [
-    "nimzo-indian",
-    "nimzo indian",
-    "nimzo"
-   ],
-   "recommendations": [
-    {
-     "openingId": "anti-nimzo-qc2",
-     "name": "the Classical 4.Qc2",
-     "styleTags": [
-      "positional",
-      "solid"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "queens-indian",
-   "displayName": "the Queen's Indian",
-   "studentSide": "white",
-   "aliases": [
-    "queen's indian",
-    "queens indian",
-    "qid"
-   ],
-   "recommendations": [
-    {
-     "openingId": "anti-qid-fianchetto",
-     "name": "the Fianchetto Variation",
-     "styleTags": [
-      "positional",
-      "solid"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "dutch",
-   "displayName": "the Dutch Defense",
-   "studentSide": "white",
-   "aliases": [
-    "dutch"
-   ],
-   "recommendations": [
-    {
-     "openingId": "anti-dutch-staunton",
-     "name": "the Staunton Gambit",
-     "styleTags": [
-      "aggressive",
-      "sharp"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "qgd",
-   "displayName": "the Queen's Gambit Declined",
-   "studentSide": "white",
-   "aliases": [
-    "queen's gambit declined",
-    "queens gambit declined",
-    "qgd"
-   ],
-   "recommendations": [
-    {
-     "openingId": "anti-qgd-exchange",
-     "name": "the Exchange + Minority Attack",
-     "styleTags": [
-      "positional",
-      "solid"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "budapest",
-   "displayName": "the Budapest Gambit",
-   "studentSide": "white",
-   "aliases": [
-    "budapest"
-   ],
-   "recommendations": [
-    {
-     "openingId": "anti-budapest",
-     "name": "the 4.Bf4 line",
-     "styleTags": [
-      "solid",
-      "positional"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "vs-e4",
-   "displayName": "1.e4",
-   "studentSide": "black",
-   "aliases": [
-    "e4 as black",
-    "against e4",
-    "versus e4",
-    "vs e4",
-    "king's pawn",
-    "kings pawn"
-   ],
-   "recommendations": [
-    {
-     "openingId": "pro-naroditsky-caro-kann",
-     "name": "the Caro-Kann",
-     "styleTags": [
-      "solid",
-      "positional"
-     ],
-     "stat": {
-      "games": 3546,
-      "scorePct": 63.7
-     }
+      "key": "scandinavian",
+      "displayName": "the Scandinavian",
+      "studentSide": "white",
+      "aliases": [
+        "scandinavian",
+        "scandi",
+        "center counter",
+        "centre counter"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-scandinavian",
+          "name": "the Main Line (3.Nc3)",
+          "styleTags": [
+            "solid",
+            "positional"
+          ]
+        }
+      ]
     },
     {
-     "openingId": "pro-naroditsky-najdorf",
-     "name": "the Sicilian Najdorf",
-     "styleTags": [
-      "sharp",
-      "aggressive"
-     ],
-     "stat": {
-      "games": 1475,
-      "scorePct": 65.3
-     }
-    }
-   ]
-  },
-  {
-   "key": "vs-d4",
-   "displayName": "1.d4",
-   "studentSide": "black",
-   "aliases": [
-    "d4 as black",
-    "against d4",
-    "versus d4",
-    "vs d4",
-    "queen's pawn",
-    "queens pawn"
-   ],
-   "recommendations": [
+      "key": "alekhine",
+      "displayName": "Alekhine's Defense",
+      "studentSide": "white",
+      "aliases": [
+        "alekhine",
+        "alekhines",
+        "alekhine's"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-alekhine-modern",
+          "name": "the Modern Variation (4.Nf3)",
+          "styleTags": [
+            "solid",
+            "positional"
+          ]
+        }
+      ]
+    },
     {
-     "openingId": "pro-naroditsky-kid",
-     "name": "the King's Indian Defense",
-     "styleTags": [
-      "sharp",
-      "aggressive"
-     ],
-     "stat": {
-      "games": 4432,
-      "scorePct": 65.0
-     }
-    }
-   ]
-  },
-  {
-   "key": "london",
-   "displayName": "the London System",
-   "studentSide": "black",
-   "aliases": [
-    "london"
-   ],
-   "recommendations": [
+      "key": "open-e5",
+      "displayName": "1…e5 (the Open Games)",
+      "studentSide": "white",
+      "aliases": [
+        "e5 defense",
+        "open game",
+        "double king pawn",
+        "1...e5",
+        "petroff",
+        "petrov"
+      ],
+      "recommendations": [
+        {
+          "openingId": "pro-naroditsky-ruy-lopez",
+          "name": "the Ruy Lopez",
+          "styleTags": [
+            "positional",
+            "solid"
+          ],
+          "stat": {
+            "games": 2922,
+            "scorePct": 62.5
+          }
+        },
+        {
+          "openingId": "belgrade-gambit",
+          "name": "the Belgrade Gambit",
+          "styleTags": [
+            "sharp",
+            "aggressive"
+          ],
+          "stat": {
+            "games": 158,
+            "scorePct": 70.9
+          }
+        }
+      ]
+    },
     {
-     "openingId": "anti-london-black",
-     "name": "the Anti-London setup",
-     "styleTags": [
-      "aggressive",
-      "positional"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "catalan",
-   "displayName": "the Catalan",
-   "studentSide": "black",
-   "aliases": [
-    "catalan"
-   ],
-   "recommendations": [
+      "key": "kings-indian",
+      "displayName": "the King's Indian Defense",
+      "studentSide": "white",
+      "aliases": [
+        "king's indian defense",
+        "king's indian defence",
+        "kings indian defense",
+        "kings indian defence",
+        "kings indian",
+        "king's indian",
+        "kid"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-kid-saemisch",
+          "name": "the Sämisch (5.f3)",
+          "styleTags": [
+            "aggressive",
+            "solid"
+          ]
+        }
+      ]
+    },
     {
-     "openingId": "anti-catalan-black",
-     "name": "the Open Catalan defense",
-     "styleTags": [
-      "solid",
-      "positional"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "trompowsky",
-   "displayName": "the Trompowsky",
-   "studentSide": "black",
-   "aliases": [
-    "trompowsky",
-    "tromp"
-   ],
-   "recommendations": [
+      "key": "grunfeld",
+      "displayName": "the Grünfeld",
+      "studentSide": "white",
+      "aliases": [
+        "grunfeld",
+        "gruenfeld",
+        "grünfeld"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-grunfeld-exchange",
+          "name": "the Exchange Variation",
+          "styleTags": [
+            "aggressive",
+            "positional"
+          ]
+        }
+      ]
+    },
     {
-     "openingId": "anti-trompowsky-black",
-     "name": "the 2…Ne4 counter",
-     "styleTags": [
-      "tactical",
-      "sharp"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "colle",
-   "displayName": "the Colle/Stonewall",
-   "studentSide": "black",
-   "aliases": [
-    "colle",
-    "stonewall attack"
-   ],
-   "recommendations": [
+      "key": "benoni",
+      "displayName": "the Benoni/Benko",
+      "studentSide": "white",
+      "aliases": [
+        "benoni",
+        "benko"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-benoni-push",
+          "name": "the d5 Push",
+          "styleTags": [
+            "solid",
+            "positional"
+          ]
+        }
+      ]
+    },
     {
-     "openingId": "anti-colle-black",
-     "name": "the Anti-Colle setup",
-     "styleTags": [
-      "solid",
-      "positional"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "smith-morra",
-   "displayName": "the Smith-Morra Gambit",
-   "studentSide": "black",
-   "aliases": [
-    "smith-morra",
-    "smith morra",
-    "morra"
-   ],
-   "recommendations": [
+      "key": "englund",
+      "displayName": "the Englund Gambit",
+      "studentSide": "white",
+      "aliases": [
+        "englund"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-englund",
+          "name": "the refutation setup",
+          "styleTags": [
+            "solid",
+            "tactical"
+          ]
+        }
+      ]
+    },
     {
-     "openingId": "anti-smith-morra-black",
-     "name": "taking and holding (Accepted)",
-     "styleTags": [
-      "solid",
-      "tactical"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "alapin-vs",
-   "displayName": "the Alapin",
-   "studentSide": "black",
-   "aliases": [
-    "against the alapin",
-    "vs the alapin",
-    "meet the alapin",
-    "counter the alapin",
-    "alapin as black"
-   ],
-   "recommendations": [
+      "key": "nimzo-indian",
+      "displayName": "the Nimzo-Indian",
+      "studentSide": "white",
+      "aliases": [
+        "nimzo-indian",
+        "nimzo indian",
+        "nimzo"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-nimzo-qc2",
+          "name": "the Classical 4.Qc2",
+          "styleTags": [
+            "positional",
+            "solid"
+          ]
+        }
+      ]
+    },
     {
-     "openingId": "anti-alapin-black",
-     "name": "the 2…Nf6 line",
-     "styleTags": [
-      "solid",
-      "tactical"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "grand-prix",
-   "displayName": "the Grand Prix Attack",
-   "studentSide": "black",
-   "aliases": [
-    "grand prix",
-    "grand-prix"
-   ],
-   "recommendations": [
+      "key": "queens-indian",
+      "displayName": "the Queen's Indian",
+      "studentSide": "white",
+      "aliases": [
+        "queen's indian",
+        "queens indian",
+        "qid"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-qid-fianchetto",
+          "name": "the Fianchetto Variation",
+          "styleTags": [
+            "positional",
+            "solid"
+          ]
+        }
+      ]
+    },
     {
-     "openingId": "anti-grand-prix-black",
-     "name": "the …g6 setup",
-     "styleTags": [
-      "solid",
-      "positional"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "kings-gambit",
-   "displayName": "the King's Gambit",
-   "studentSide": "black",
-   "aliases": [
-    "king's gambit",
-    "kings gambit"
-   ],
-   "recommendations": [
+      "key": "dutch",
+      "displayName": "the Dutch Defense",
+      "studentSide": "white",
+      "aliases": [
+        "dutch"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-dutch-staunton",
+          "name": "the Staunton Gambit",
+          "styleTags": [
+            "aggressive",
+            "sharp"
+          ]
+        }
+      ]
+    },
     {
-     "openingId": "anti-kings-gambit-black",
-     "name": "the …d5 Modern counter",
-     "styleTags": [
-      "solid",
-      "tactical"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "philidor",
-   "displayName": "the Philidor Defense",
-   "studentSide": "white",
-   "aliases": [
-    "philidor"
-   ],
-   "recommendations": [
+      "key": "qgd",
+      "displayName": "the Queen's Gambit Declined",
+      "studentSide": "white",
+      "aliases": [
+        "queen's gambit declined",
+        "queens gambit declined",
+        "qgd"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-qgd-exchange",
+          "name": "the Exchange + Minority Attack",
+          "styleTags": [
+            "positional",
+            "solid"
+          ]
+        }
+      ]
+    },
     {
-     "openingId": "anti-philidor",
-     "name": "the Bc4 System",
-     "styleTags": [
-      "aggressive",
-      "tactical"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "elephant",
-   "displayName": "the Elephant Gambit",
-   "studentSide": "white",
-   "aliases": [
-    "elephant gambit",
-    "elephant"
-   ],
-   "recommendations": [
+      "key": "budapest",
+      "displayName": "the Budapest Gambit",
+      "studentSide": "white",
+      "aliases": [
+        "budapest"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-budapest",
+          "name": "the 4.Bf4 line",
+          "styleTags": [
+            "solid",
+            "positional"
+          ]
+        }
+      ]
+    },
     {
-     "openingId": "anti-elephant",
-     "name": "the knight-capture demolition (3.Nxe5)",
-     "styleTags": [
-      "solid",
-      "tactical"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "danish",
-   "displayName": "the Danish Gambit",
-   "studentSide": "black",
-   "aliases": [
-    "danish gambit",
-    "danish"
-   ],
-   "recommendations": [
+      "key": "vs-e4",
+      "displayName": "1.e4",
+      "studentSide": "black",
+      "aliases": [
+        "e4 as black",
+        "against e4",
+        "versus e4",
+        "vs e4",
+        "king's pawn",
+        "kings pawn"
+      ],
+      "recommendations": [
+        {
+          "openingId": "pro-naroditsky-caro-kann",
+          "name": "the Caro-Kann",
+          "styleTags": [
+            "solid",
+            "positional"
+          ],
+          "stat": {
+            "games": 3546,
+            "scorePct": 63.7
+          }
+        },
+        {
+          "openingId": "pro-naroditsky-najdorf",
+          "name": "the Sicilian Najdorf",
+          "styleTags": [
+            "sharp",
+            "aggressive"
+          ],
+          "stat": {
+            "games": 1475,
+            "scorePct": 65.3
+          }
+        }
+      ]
+    },
     {
-     "openingId": "anti-danish",
-     "name": "taking everything (the Bb4+/d5 demolition)",
-     "styleTags": [
-      "tactical",
-      "sharp"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "latvian",
-   "displayName": "the Latvian Gambit",
-   "studentSide": "white",
-   "aliases": [
-    "latvian gambit",
-    "latvian"
-   ],
-   "recommendations": [
+      "key": "vs-d4",
+      "displayName": "1.d4",
+      "studentSide": "black",
+      "aliases": [
+        "d4 as black",
+        "against d4",
+        "versus d4",
+        "vs d4",
+        "queen's pawn",
+        "queens pawn"
+      ],
+      "recommendations": [
+        {
+          "openingId": "pro-naroditsky-kid",
+          "name": "the King's Indian Defense",
+          "styleTags": [
+            "sharp",
+            "aggressive"
+          ],
+          "stat": {
+            "games": 4432,
+            "scorePct": 65.0
+          }
+        },
+        {
+          "openingId": "benko-gambit",
+          "name": "the Benko Gambit",
+          "styleTags": [
+            "sharp",
+            "aggressive"
+          ],
+          "stat": null
+        }
+      ]
+    },
     {
-     "openingId": "anti-latvian",
-     "name": "the d4 central refutation",
-     "styleTags": [
-      "solid",
-      "positional"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "owen",
-   "displayName": "Owen's Defense",
-   "studentSide": "white",
-   "aliases": [
-    "owen's defense",
-    "owens defense",
-    "owen"
-   ],
-   "recommendations": [
+      "key": "london",
+      "displayName": "the London System",
+      "studentSide": "black",
+      "aliases": [
+        "london"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-london-black",
+          "name": "the Anti-London setup",
+          "styleTags": [
+            "aggressive",
+            "positional"
+          ]
+        }
+      ]
+    },
     {
-     "openingId": "anti-owen",
-     "name": "the full-centre kingside attack",
-     "styleTags": [
-      "aggressive",
-      "sharp"
-     ]
-    }
-   ]
-  },
-  {
-   "key": "hippo",
-   "displayName": "the Hippo",
-   "studentSide": "white",
-   "aliases": [
-    "hippo",
-    "hippopotamus",
-    "hippopotamus defense",
-    "hippo defense",
-    "hippo setup"
-   ],
-   "recommendations": [
+      "key": "catalan",
+      "displayName": "the Catalan",
+      "studentSide": "black",
+      "aliases": [
+        "catalan"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-catalan-black",
+          "name": "the Open Catalan defense",
+          "styleTags": [
+            "solid",
+            "positional"
+          ]
+        }
+      ]
+    },
     {
-     "openingId": "anti-hippo-white",
-     "name": "the Austrian squeeze with the Qe1 swing",
-     "styleTags": [
-      "aggressive",
-      "sharp"
-     ],
-     "stat": {
-      "games": 1483,
-      "scorePct": 64.8
-     }
-    }
-   ]
-  },
-  {
-   "key": "passive-white",
-   "displayName": "passive setups like 1.e3 or 1.d3",
-   "studentSide": "black",
-   "aliases": [
-    "van't kruijs",
-    "vant kruijs",
-    "van t kruijs",
-    "1.e3",
-    "e3 opening",
-    "mieses",
-    "1.d3",
-    "d3 opening",
-    "reverse hippo",
-    "white hippo",
-    "passive white",
-    "troll opening"
-   ],
-   "recommendations": [
+      "key": "trompowsky",
+      "displayName": "the Trompowsky",
+      "studentSide": "black",
+      "aliases": [
+        "trompowsky",
+        "tromp"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-trompowsky-black",
+          "name": "the 2…Ne4 counter",
+          "styleTags": [
+            "tactical",
+            "sharp"
+          ]
+        }
+      ]
+    },
     {
-     "openingId": "anti-hippo",
-     "name": "the full-centre squeeze with the knight tour",
-     "styleTags": [
-      "positional",
-      "solid"
-     ],
-     "stat": {
-      "games": 1501,
-      "scorePct": 66.4
-     }
-    }
-   ]
-  },
-  {
-   "key": "maroczy",
-   "displayName": "the Maróczy Bind",
-   "studentSide": "black",
-   "aliases": [
-    "maroczy",
-    "maroczy bind",
-    "marotzy",
-    "maróczy"
-   ],
-   "recommendations": [
+      "key": "colle",
+      "displayName": "the Colle/Stonewall",
+      "studentSide": "black",
+      "aliases": [
+        "colle",
+        "stonewall attack"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-colle-black",
+          "name": "the Anti-Colle setup",
+          "styleTags": [
+            "solid",
+            "positional"
+          ]
+        }
+      ]
+    },
     {
-     "openingId": "accel-dragon",
-     "name": "the Accelerated Dragon with the Qb6 poke and a5 clamp",
-     "styleTags": [
-      "positional",
-      "solid"
-     ],
-     "stat": {
-      "games": 756,
-      "scorePct": 53.2
-     }
+      "key": "smith-morra",
+      "displayName": "the Smith-Morra Gambit",
+      "studentSide": "black",
+      "aliases": [
+        "smith-morra",
+        "smith morra",
+        "morra"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-smith-morra-black",
+          "name": "taking and holding (Accepted)",
+          "styleTags": [
+            "solid",
+            "tactical"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "alapin-vs",
+      "displayName": "the Alapin",
+      "studentSide": "black",
+      "aliases": [
+        "against the alapin",
+        "vs the alapin",
+        "meet the alapin",
+        "counter the alapin",
+        "alapin as black"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-alapin-black",
+          "name": "the 2…Nf6 line",
+          "styleTags": [
+            "solid",
+            "tactical"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "grand-prix",
+      "displayName": "the Grand Prix Attack",
+      "studentSide": "black",
+      "aliases": [
+        "grand prix",
+        "grand-prix"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-grand-prix-black",
+          "name": "the …g6 setup",
+          "styleTags": [
+            "solid",
+            "positional"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "kings-gambit",
+      "displayName": "the King's Gambit",
+      "studentSide": "black",
+      "aliases": [
+        "king's gambit",
+        "kings gambit"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-kings-gambit-black",
+          "name": "the …d5 Modern counter",
+          "styleTags": [
+            "solid",
+            "tactical"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "philidor",
+      "displayName": "the Philidor Defense",
+      "studentSide": "white",
+      "aliases": [
+        "philidor"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-philidor",
+          "name": "the Bc4 System",
+          "styleTags": [
+            "aggressive",
+            "tactical"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "elephant",
+      "displayName": "the Elephant Gambit",
+      "studentSide": "white",
+      "aliases": [
+        "elephant gambit",
+        "elephant"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-elephant",
+          "name": "the knight-capture demolition (3.Nxe5)",
+          "styleTags": [
+            "solid",
+            "tactical"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "danish",
+      "displayName": "the Danish Gambit",
+      "studentSide": "black",
+      "aliases": [
+        "danish gambit",
+        "danish"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-danish",
+          "name": "taking everything (the Bb4+/d5 demolition)",
+          "styleTags": [
+            "tactical",
+            "sharp"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "latvian",
+      "displayName": "the Latvian Gambit",
+      "studentSide": "white",
+      "aliases": [
+        "latvian gambit",
+        "latvian"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-latvian",
+          "name": "the d4 central refutation",
+          "styleTags": [
+            "solid",
+            "positional"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "owen",
+      "displayName": "Owen's Defense",
+      "studentSide": "white",
+      "aliases": [
+        "owen's defense",
+        "owens defense",
+        "owen"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-owen",
+          "name": "the full-centre kingside attack",
+          "styleTags": [
+            "aggressive",
+            "sharp"
+          ]
+        }
+      ]
+    },
+    {
+      "key": "hippo",
+      "displayName": "the Hippo",
+      "studentSide": "white",
+      "aliases": [
+        "hippo",
+        "hippopotamus",
+        "hippopotamus defense",
+        "hippo defense",
+        "hippo setup"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-hippo-white",
+          "name": "the Austrian squeeze with the Qe1 swing",
+          "styleTags": [
+            "aggressive",
+            "sharp"
+          ],
+          "stat": {
+            "games": 1483,
+            "scorePct": 64.8
+          }
+        }
+      ]
+    },
+    {
+      "key": "passive-white",
+      "displayName": "passive setups like 1.e3 or 1.d3",
+      "studentSide": "black",
+      "aliases": [
+        "van't kruijs",
+        "vant kruijs",
+        "van t kruijs",
+        "1.e3",
+        "e3 opening",
+        "mieses",
+        "1.d3",
+        "d3 opening",
+        "reverse hippo",
+        "white hippo",
+        "passive white",
+        "troll opening"
+      ],
+      "recommendations": [
+        {
+          "openingId": "anti-hippo",
+          "name": "the full-centre squeeze with the knight tour",
+          "styleTags": [
+            "positional",
+            "solid"
+          ],
+          "stat": {
+            "games": 1501,
+            "scorePct": 66.4
+          }
+        }
+      ]
+    },
+    {
+      "key": "maroczy",
+      "displayName": "the Maróczy Bind",
+      "studentSide": "black",
+      "aliases": [
+        "maroczy",
+        "maroczy bind",
+        "marotzy",
+        "maróczy"
+      ],
+      "recommendations": [
+        {
+          "openingId": "accel-dragon",
+          "name": "the Accelerated Dragon with the Qb6 poke and a5 clamp",
+          "styleTags": [
+            "positional",
+            "solid"
+          ],
+          "stat": {
+            "games": 756,
+            "scorePct": 53.2
+          }
+        }
+      ]
     }
-   ]
-  }
- ]
+  ]
 }

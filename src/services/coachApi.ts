@@ -3303,6 +3303,16 @@ export async function getCoachChatResponse(
           try {
             const family = matchOpponentOpening(lastUserMessage());
             if (family) {
+              // "best GAMBIT against d4" names the SHAPE of line the student
+              // wants — honor it by putting the family's real gambits first
+              // (curated data only; if the family has none, the ordering is
+              // unchanged and the honest curated answer stands). David
+              // 2026-08-13: without this the ask had no gambit to land on.
+              const wantsGambit = /\bgambit\b/i.test(lastUserMessage() ?? '');
+              const orderedRecs = wantsGambit
+                ? [...family.recommendations].sort((a, b) =>
+                    Number(/gambit/i.test(b.name)) - Number(/gambit/i.test(a.name)))
+                : family.recommendations;
               // The student's own score vs this opening family, when their
               // game insights carry a row whose name matches an alias.
               let userMatchup: { winRate: number; games: number } | null = null;
@@ -3320,14 +3330,14 @@ export async function getCoachChatResponse(
               const answer = assembleCounterRepertoireAnswer({
                 opponentDisplayName: family.displayName,
                 studentSide: family.studentSide,
-                recommendations: family.recommendations,
+                recommendations: orderedRecs,
                 userMatchup,
                 styleProfile,
               });
               if (answer) {
                 const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'counter-repertoire', preferRaw: true });
                 if (voiced) {
-                  const pick = pickCounterRecommendation(family.recommendations, styleProfile);
+                  const pick = pickCounterRecommendation(orderedRecs, styleProfile);
                   lastCoachActionOffer = pick ? [{ type: 'drill_opening', id: pick.openingId }] : null;
                   return voiced;
                 }
