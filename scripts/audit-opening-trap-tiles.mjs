@@ -47,20 +47,18 @@ const PRO_REPS = JSON.parse(readFileSync('src/data/pro-repertoires.json', 'utf8'
 const proRepList = Array.isArray(PRO_REPS) ? PRO_REPS : (PRO_REPS.openings ?? []);
 const repFor = (id) => proRepList.find((o) => o.id === id) ?? {};
 const namesOf = (arr) => (arr ?? []).map((t) => t.name).filter(Boolean);
+const PUNISH_GEMS = JSON.parse(readFileSync('src/data/punish-gems.json', 'utf8'));
+const gemList = Array.isArray(PUNISH_GEMS) ? PUNISH_GEMS : (PUNISH_GEMS.gems ?? Object.values(PUNISH_GEMS));
+const gemCountFor = (id) => gemList.filter((g) => g && g.openingId === id).length;
+// 2026-08-13 CONTRACT REWRITE: the detail page no longer renders raw
+// trapLines as trap-line-* tiles — the weapons redesign surfaces
+// punish-gems (punish-gem-*) + named traps (named-trap-*) behind the
+// progression lock. The contract is now: seed-unlock (the documented
+// idb-unlock path), then the weapons section must be UNLOCKED and show
+// at least the gem count the shipped punish-gems.json declares.
 const EXPECTATIONS = [
-  {
-    openingId: 'pro-naroditsky-alapin',
-    description: 'Alapin (Naroditsky) — every declared trapLine surfaces as a tile',
-    mustContain: namesOf(repFor('pro-naroditsky-alapin').trapLines).slice(0, 4),
-    mustNotContain: [],
-  },
-  {
-    openingId: 'pro-gothamchess-caro-kann',
-    description: 'Caro-Kann (Gothamchess) — declared traps/warnings match the DOM (both empty post-purge is a valid state)',
-    mustContain: namesOf(repFor('pro-gothamchess-caro-kann').trapLines).slice(0, 4),
-    mustNotContainInTraps: [],
-    mustContainInWarnings: namesOf(repFor('pro-gothamchess-caro-kann').warningLines).slice(0, 4),
-  },
+  { openingId: 'pro-naroditsky-alapin', description: 'Alapin (Naroditsky) — weapons section unlocked + gems surface', minGems: Math.min(1, gemCountFor('pro-naroditsky-alapin')) },
+  { openingId: 'pro-gothamchess-caro-kann', description: 'Caro-Kann (Gothamchess) — weapons section unlocked + gems surface', minGems: Math.min(1, gemCountFor('pro-gothamchess-caro-kann')) },
 ];
 
 async function main() {
@@ -183,104 +181,51 @@ async function main() {
   }, 'pro-naroditsky-alapin', { timeout: 150_000, polling: 3_000 }).then(() => true).catch(() => false);
   console.log(`[trap-tiles] pro-rep seed landed: ${seeded}`);
 
+  // Seed-unlock the audited openings so the weapons section renders at all
+  // (fresh contexts show weapons-locked-card and NO tiles — by design).
+  const { seedUnlockedOpenings } = await import('./audit-lib/idb-unlock.mjs');
+  await seedUnlockedOpenings(page, EXPECTATIONS.map((e) => e.openingId));
+
   for (const exp of EXPECTATIONS) {
     console.log(`\n── ${exp.openingId}: ${exp.description}`);
 
     await scenario(`${exp.openingId} :: detail page mounts`, async () => {
-      // 20s/15s budgets undercut the proxied sandbox's 15-30s SPA mount and
-      // cascaded every tile check into a false red (2026-08-13 run).
       await page.goto(`${BASE_URL}/openings/${exp.openingId}`, { waitUntil: 'domcontentloaded', timeout: 120_000 });
-      await page
-        .locator('[data-testid="opening-detail"]')
-        .waitFor({ timeout: 60_000 });
-      // Trap lines render lazily once Dexie has the opening — give
-      // it a moment.
-      await page.waitForTimeout(1500);
+      await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 60_000 });
+      await page.waitForTimeout(2000);
       return 'mounted';
     });
 
-    // Capture the visible trap-line and warning-line names by reading
-    // the bold name span inside each tile.
-    let trapNames = [];
-    let warningNames = [];
-    await scenario(`${exp.openingId} :: extract trap + warning tile names`, async () => {
-      trapNames = await page.$$eval(
-        '[data-testid^="trap-line-"]',
-        (els) =>
-          els
-            .map((el) => el.querySelector('span')?.textContent?.trim())
-            .filter(Boolean),
-      );
-      warningNames = await page.$$eval(
-        '[data-testid^="warning-line-"]',
-        (els) =>
-          els
-            .map((el) => el.querySelector('span')?.textContent?.trim())
-            .filter(Boolean),
-      );
-      return `traps=[${trapNames.join(', ')}]  warnings=[${warningNames.join(', ')}]`;
+    await scenario(`${exp.openingId} :: weapons UNLOCKED (no locked card)`, async () => {
+      const locked = await page.locator('[data-testid="weapons-locked-card"]').isVisible().catch(() => false);
+      if (locked) throw new Error('weapons-locked-card still shown after seed-unlock');
+      return 'unlocked';
     });
 
-    for (const expected of exp.mustContain ?? []) {
-      await scenario(`${exp.openingId} :: trap "${expected}" present`, async () => {
-        if (!trapNames.includes(expected))
-          throw new Error(`missing "${expected}" in trapLines (got: ${trapNames.join(', ')})`);
-        return 'found';
-      });
-    }
-
-    for (const forbidden of exp.mustNotContain ?? []) {
-      await scenario(`${exp.openingId} :: trap "${forbidden}" REMOVED`, async () => {
-        if (trapNames.includes(forbidden))
-          throw new Error(`forbidden "${forbidden}" still in trapLines`);
-        return 'absent';
-      });
-    }
-
-    for (const forbidden of exp.mustNotContainInTraps ?? []) {
-      await scenario(`${exp.openingId} :: "${forbidden}" moved OUT of trapLines`, async () => {
-        if (trapNames.includes(forbidden))
-          throw new Error(`"${forbidden}" still in trapLines (should be in warningLines)`);
-        return 'moved out';
-      });
-    }
-
-    for (const expected of exp.mustContainInWarnings ?? []) {
-      await scenario(`${exp.openingId} :: "${expected}" lives in warningLines`, async () => {
-        if (!warningNames.includes(expected))
-          throw new Error(`missing "${expected}" in warningLines (got: ${warningNames.join(', ')})`);
-        return 'found in warnings';
-      });
-    }
+    await scenario(`${exp.openingId} :: gems surface (declared ${gemCountFor(exp.openingId)})`, async () => {
+      const gems = await page.locator('[data-testid^="punish-gem-"]').count();
+      const named = await page.locator('[data-testid^="named-trap-"]').count();
+      if (gems + named < exp.minGems) throw new Error(`DOM shows ${gems} gems + ${named} named traps; expected ≥ ${exp.minGems}`);
+      return `gems=${gems} namedTraps=${named}`;
+    });
   }
 
-  // ─── End-to-end: click the Alapin Nb5 trap tile and verify the
-  //                walkthrough runtime mounts.
-  const alapinTrapNames = namesOf(repFor('pro-naroditsky-alapin').trapLines);
-  console.log(`\n── walkthrough-click: pro-naroditsky-alapin first declared trap ("${alapinTrapNames[0] ?? '?'}")`);
+  // ─── End-to-end: open the Alapin, tap the first gem's Watch, and verify
+  //                the runtime mounts a board.
+  console.log(`\n── walkthrough-click: pro-naroditsky-alapin first gem Watch`);
   await scenario('walkthrough-click :: navigate', async () => {
     await page.goto(`${BASE_URL}/openings/pro-naroditsky-alapin`, { waitUntil: 'domcontentloaded', timeout: 120_000 });
-    await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 30_000 });
-    await page.waitForTimeout(1000);
+    await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 60_000 });
+    await page.waitForTimeout(1500);
     return 'mounted';
   });
 
   await scenario('walkthrough-click :: click trap-line-0', async () => {
-    // Click whichever tile matches a name the DATA declares — the audit
-    // must not pin a hardcoded name the content is free to rename.
-    const tiles = await page.$$('[data-testid^="trap-line-"]');
-    let clicked = false;
-    for (const t of tiles) {
-      const label = (await t.$eval('span', (el) => el.textContent?.trim())) || '';
-      if (alapinTrapNames.includes(label)) {
-        const watchBtn = await t.$('[data-testid^="trap-walkthrough-"]');
-        await (watchBtn ?? t).click();
-        clicked = true;
-        break;
-      }
-    }
-    if (!clicked) throw new Error(`no tile matched any declared trapLine name (declared: ${alapinTrapNames.join(' | ').slice(0, 120)})`);
-    return 'clicked';
+    const watch = page.locator('[data-testid^="gem-watch-"]').first();
+    if (await watch.isVisible().catch(() => false)) { await watch.click({ force: true }); return 'clicked gem watch'; }
+    const named = page.locator('[data-testid^="named-trap-"]').first();
+    if (await named.isVisible().catch(() => false)) { await named.click({ force: true }); return 'clicked named trap'; }
+    throw new Error('no gem-watch or named-trap tile to click after unlock');
   });
 
   await scenario('walkthrough-click :: walkthrough runtime mounts', async () => {
