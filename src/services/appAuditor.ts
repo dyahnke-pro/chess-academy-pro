@@ -34,6 +34,8 @@ const APP_AUDIT_LOG_MAX_ENTRIES = 300;
 export type AuditCategory = 'narration' | 'runtime' | 'subsystem' | 'app';
 
 export type AuditKind =
+  // Pro Games rewatch surface (/coach/pro-games)
+  | 'pro-game-rewatch-opened'
   // Narration (from narrationAuditor)
   | 'piece-on-square'
   | 'hanging-piece'

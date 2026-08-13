@@ -25,6 +25,12 @@ export const APP_ROUTES_MANIFEST: RouteManifestEntry[] = [
   },
   // ─── Coach ────────────────────────────────────────────────────────
   {
+    path: '/coach/pro-games',
+    title: 'Pro Games',
+    description: 'Rewatch how any pro plays a certain opening — their real games, grouped by opening and variation, replayed move by move on the board.',
+    featuresAvailable: ['pro-game-rewatch'],
+  },
+  {
     path: '/coach/play',
     title: 'Play with the Coach',
     description: 'Live chess game against the coach with adaptive difficulty, hints, and post-game review.',

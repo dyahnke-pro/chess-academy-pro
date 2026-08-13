@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown, Library, Mic } from 'lucide-react';
+import { Swords, BarChart3, Calendar, Search, GraduationCap, History, Info, X, Crown, Library, Mic , Medal } from 'lucide-react';
 import { useState } from 'react';
 import { SmartSearchBar } from '../Search/SmartSearchBar';
 import { PageHelp } from '../Layout/PageHelp';
@@ -239,6 +239,20 @@ export function CoachHomePage(): JSX.Element {
           gB={gB}
           gS={gS}
           testId="coach-action-plan"
+        />
+        <SecondaryTile
+          icon={<Medal size={28} className="text-orange-400" />}
+          label="Pro Games"
+          info={
+            "Rewatch how any pro plays a certain opening.\n\nPick a pro (Naroditsky, Carlsen, Caruana, Hikaru, GothamChess, Rosen, Aman, Samay), pick the opening, and step through their actual games move by move — 2,200+ real games grouped by the variation they played, strongest opponents first.\n\nThe same games the coach itself cites when it teaches a pro's repertoire."
+          }
+          rgb="251, 146, 60"
+          bgClass="bg-orange-500/10"
+          textColorClass="text-orange-400"
+          onClick={goTo('pro-games', '/coach/pro-games')}
+          gB={gB}
+          gS={gS}
+          testId="coach-action-pro-games"
         />
         <SecondaryTile
           icon={<Search size={28} className="text-sky-400" />}

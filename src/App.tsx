@@ -52,6 +52,7 @@ import { TrainingPlanRolodexPage } from './components/Coach/TrainingPlanRolodexP
 import { GameInsightsPage } from './components/Insights/GameInsightsPage';
 import { GamesDrilldownPage } from './components/Insights/GamesDrilldownPage';
 import { CoachTeachPage } from './components/Coach/CoachTeachPage';
+import { ProGamesPage } from './components/Coach/ProGamesPage';
 import { CoachEndgamePage } from './components/Coach/CoachEndgamePage';
 import { CoachesLibraryPage } from './components/Coach/CoachesLibraryPage';
 import { CoachReviewListPage } from './components/Coach/CoachReviewListPage';
@@ -475,6 +476,7 @@ export function App(): JSX.Element {
           <Route path="/coach/endgame" element={<ErrorBoundary><CoachEndgamePage /></ErrorBoundary>} />
           <Route path="/coach/academy" element={<Navigate to="/coach/library" replace />} />
           <Route path="/coach/library" element={<ErrorBoundary><CoachesLibraryPage /></ErrorBoundary>} />
+          <Route path="/coach/pro-games" element={<ErrorBoundary><ProGamesPage /></ErrorBoundary>} />
           <Route path="/coach/review" element={<ErrorBoundary><CoachReviewListPage /></ErrorBoundary>} />
           <Route path="/coach/review/:gameId" element={<ErrorBoundary><CoachReviewSessionPage /></ErrorBoundary>} />
           {/* Tactics (absorbs former Puzzles tab) */}
