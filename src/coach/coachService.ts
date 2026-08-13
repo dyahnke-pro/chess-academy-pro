@@ -1076,7 +1076,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const isInternalAsk = INTERNAL_ASK_SURFACES.has(input.liveState.surface);
     // Detectors see the STUDENT's words only — never surface-injected
     // instruction blocks (the "I played f4" → training-pitch hijack).
-    const askForIntents = isInternalAsk ? undefined : stripInjectedBlocks(input.ask);
+    let askForIntents = isInternalAsk ? undefined : stripInjectedBlocks(input.ask);
     // KEYBOARD-MASH GUARD (2026-08-13 audit): "asdfghjkl" got a confident
     // best-move readout. A single token that is literally a keyboard-row run
     // (or one character repeated) is noise, not a question — answer with a
@@ -1096,6 +1096,23 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
           dispatchedToolNames: [],
           provider: 'deepseek',
         };
+      }
+    }
+    // BARE-"WHY?" CONTEXT CARRY (2026-08-13 audit): a lone "why?" right after
+    // the coach names a best move is a follow-up on THAT move, not a new
+    // topic — it used to miss every detector and fall to the generic best-move
+    // default, repeating the exact answer that prompted the question. When the
+    // memory's last coach line is best-move-shaped, rewrite the ask into the
+    // canonical why-best-move phrasing so the engine-reasoning lane (which
+    // builds and walks the PV) answers in context. Deterministic: the memory
+    // text was written by code, and the rewrite only ever targets a lane that
+    // computes its answer (G0).
+    if (askForIntents && /^\s*(?:why|how\s+come)[?!.\s]*$/i.test(askForIntents)) {
+      const lastCoach = [...(envelope.memory.conversationHistory ?? [])]
+        .reverse()
+        .find((msg) => msg.role === 'coach' && msg.text.trim().length > 0);
+      if (lastCoach && /\bbest\s+move\b|\bbetter\s+move\b|\bstrongest\s+move\b|\bi'?d\s+play\b/i.test(lastCoach.text)) {
+        askForIntents = 'why is that the best move?';
       }
     }
     // Progress ("am I improving?") and concept ("what's a fork?") questions are

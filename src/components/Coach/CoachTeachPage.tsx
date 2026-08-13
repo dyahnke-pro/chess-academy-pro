@@ -3173,6 +3173,29 @@ export function CoachTeachPage(): JSX.Element {
         { regex: /\b(?:let'?s|can\s+we|could\s+we|wanna|i\s+want\s+to)\s+play\s+(?!through\b)(?:the\s+)?/i, stage: 'play-real' },
       ];
       const trimmed = text.trim();
+      // MULTI-INTENT FIRST-VERB ROUTING (2026-08-13 audit): "teach me the
+      // najdorf and quiz me and show me a trap" must honor the FIRST verb —
+      // teach the Najdorf. Left whole, the tail's stage words hijack the
+      // stage detector below ("trap" → punish) and the compound string then
+      // fails name resolution. When the input LEADS with an action verb and
+      // a later " and "/" then " segment asks for another action, keep only
+      // the first segment; the follow-ons are the student's roadmap, spoken
+      // in one breath, not part of this turn's ask. Conservative on purpose:
+      // a name list ("the ruy and the italian") has no action verb in its
+      // tail and is untouched.
+      let effectiveInput = trimmed;
+      if (
+        /^\s*(?:please\s+)?(?:teach|show|walk|learn|study|play|drill|quiz|watch|review|explain|tell)\b/i.test(trimmed)
+        && /\s(?:and|then)\s/i.test(trimmed)
+      ) {
+        const [firstSegment, ...laterSegments] = trimmed.split(/\s+(?:and\s+then|and|then)\s+/i);
+        if (
+          laterSegments.length > 0
+          && /\b(?:quiz|drill|traps?|test|play|practice|show|watch|review)\b/i.test(laterSegments.join(' '))
+        ) {
+          effectiveInput = firstSegment.trim();
+        }
+      }
       // `userMessageAppended` is hoisted to the outer scope — see the
       // long comment block above `if (!opts?.kickoff)`. Don't
       // re-declare it here; doing so would shadow the outer let and
@@ -3184,7 +3207,7 @@ export function CoachTeachPage(): JSX.Element {
         | 'punish'
         | 'play-real'
         | null = null;
-      let stageStrippedInput = trimmed;
+      let stageStrippedInput = effectiveInput;
       for (const sp of STAGE_PATTERNS) {
         const sm = stageStrippedInput.match(sp.regex);
         if (sm) {
@@ -3222,7 +3245,7 @@ export function CoachTeachPage(): JSX.Element {
       // to buildSystemPrompt, which switches to a "teach the counter
       // against X" prompt.
       let faceMode = false;
-      let workingInput = trimmed;
+      let workingInput = effectiveInput;
       if (/^face:\s*/i.test(workingInput)) {
         faceMode = true;
         workingInput = workingInput.replace(/^face:\s*/i, '').trim();
@@ -3307,6 +3330,21 @@ export function CoachTeachPage(): JSX.Element {
         // letting full sentences through (sentences usually have a
         // verb, > 60 chars, or end with ?/.).
         requestedName = workingInput;
+      }
+      // MULTI-INTENT: "teach me the najdorf and quiz me and show me a trap"
+      // must honor the FIRST verb — teach the Najdorf — instead of feeding
+      // the whole compound string to the fuzzy matcher (where it resolves
+      // nothing and falls to the brain). The follow-on asks are the
+      // student's roadmap, not part of the opening's name: truncate at the
+      // first " and "/" then " whose remainder requests another action.
+      // Real opening names never contain " and ", so a plain name is
+      // untouched; a compound WITHOUT an action verb in the tail (e.g. a
+      // rambling description) is also untouched and takes the normal path.
+      if (requestedName && /\s(?:and|then)\s/i.test(requestedName)) {
+        const [first, ...rest] = requestedName.split(/\s+(?:and|then)\s+/i);
+        if (rest.length > 0 && /\b(?:quiz|drill|trap|traps|test|play|practice|show)\b/i.test(rest.join(' '))) {
+          requestedName = first.trim();
+        }
       }
       // A RECOMMENDATION question is never an opening NAME. "show me the best
       // gambit against 1.d4" fit the bare-name tier (short, no question mark)

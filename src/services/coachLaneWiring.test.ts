@@ -201,7 +201,10 @@ describe('a question lane can REACH the branch that answers it', () => {
     // question there could ground only if the masters DB covered the position.
     // Measured on prod over 30 days: home-chat served the stock "I can't verify
     // that precisely" for 7 of 9 answers, review for 2 of 3.
-    expect(SERVICE).toMatch(/bestMoveQuestionEngage && !input\.liveState\.engineBestMoveUci/);
+    // The hint lane (2026-08-13) shares the same on-demand build — a hint is
+    // a best-move ask that withholds the destination, so it needs the same
+    // engine grounding on the six surfaces that never thread one.
+    expect(SERVICE).toMatch(/\(bestMoveQuestionEngage \|\| hintRequestEngage\) && !input\.liveState\.engineBestMoveUci/);
     // And the two surfaces that DO thread one must not pay for a second search.
     expect(SERVICE, 'the guard that keeps the already-grounded surfaces free')
       .toMatch(/!input\.liveState\.engineBestMoveUci/);
