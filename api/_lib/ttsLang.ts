@@ -38,6 +38,16 @@ export const LANG_VOICES: Record<string, LangVoice> = {
   ar: { voiceId: 'Zeina', engine: 'standard', languageCode: 'arb' },
   hi: { voiceId: 'Kajal', engine: 'neural', languageCode: 'hi-IN' },
   ko: { voiceId: 'Seoyeon', engine: 'neural', languageCode: 'ko-KR' },
+  // 🔒 THE SETTINGS PICKER OFFERED THESE AND NOTHING COULD SPEAK THEM. Dutch,
+  // Polish and Turkish were selectable, the model duly translated every spoken
+  // line into them, and then the detector returned null and an AMERICAN voice
+  // read the result aloud. Correct words, wrong mouth — worse than English,
+  // because it sounds broken rather than unsupported. `narrationLanguages` in
+  // the gate below now holds the picker's list against this map so a language
+  // can never again be offered without a voice behind it.
+  nl: { voiceId: 'Lotte', engine: 'standard', languageCode: 'nl-NL' },
+  pl: { voiceId: 'Ewa', engine: 'standard', languageCode: 'pl-PL' },
+  tr: { voiceId: 'Filiz', engine: 'standard', languageCode: 'tr-TR' },
 };
 
 /**
@@ -59,7 +69,7 @@ export function detectVoiceForText(text: string): LangVoice | null {
 
   // ── Latin-script heuristic (es/fr/de/pt/it), English = safe fallback ─────
   const lower = ' ' + text.toLowerCase() + ' ';
-  const score: Record<string, number> = { es: 0, fr: 0, de: 0, pt: 0, it: 0 };
+  const score: Record<string, number> = { es: 0, fr: 0, de: 0, pt: 0, it: 0, nl: 0, pl: 0, tr: 0 };
   const bump = (lang: keyof typeof score, re: RegExp, weight = 1): void => {
     const m = lower.match(re);
     if (m) score[lang] += m.length * weight;
@@ -71,6 +81,10 @@ export function detectVoiceForText(text: string): LangVoice | null {
   bump('de', /ß|ä|ö|ü/g, 2);
   bump('fr', /ç|œ|â|ê|î|ô|û/g, 2);
   bump('it', /à|ò|ù/g, 1);
+  // Polish and Turkish carry letters that exist in no other language the app
+  // speaks, so they are as definitive as a non-Latin script.
+  bump('pl', /ł|ą|ę|ż|ź|ś|ć/g, 3);
+  bump('tr', /ğ|ı|ş/g, 3);
 
   // Distinctive stopwords (spaced so they can't match inside a longer word).
   // Chosen to avoid English homographs (no "die", no "a", no "is").
@@ -79,6 +93,12 @@ export function detectVoiceForText(text: string): LangVoice | null {
   bump('de', / (der|das|und|ist|nicht|eine|wie|warum|über|mehr|kann|figuren|zentrum|schach|des) /g);
   bump('pt', / (você|não|para|porque|como|uma|está|peças|tabuleiro|xadrez|mais|é|no) /g);
   bump('it', / (perché|gli|che|non|una|per|con|come|più|scacchi|pezzi|centro|della|è) /g);
+  // Dutch has no letter of its own, so it rests entirely on function words —
+  // chosen to have no English homograph at all ("het", "een", "niet", "naar"),
+  // plus the chess nouns that appear in almost every spoken line.
+  bump('nl', / (het|een|niet|zijn|maar|ook|naar|wordt|deze|jouw|uw|zwart|wit|stuk|zet|koning|loper|paard|toren|dame) /g);
+  bump('pl', / (się|nie|jest|że|dla|przez|jak|ten|szachy|pion|goniec|skoczek|wieża|hetman|król) /g);
+  bump('tr', / (bir|ve|için|bu|ile|değil|nasıl|neden|satranç|piyon|fil|at|kale|vezir|şah) /g);
 
   let best: string | null = null;
   let bestScore = 1; // require > 1 so a stray word never flips English

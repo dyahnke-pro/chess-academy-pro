@@ -77,6 +77,15 @@ export const GOOGLE_LANG_VOICES: Record<string, GoogleVoice> = {
   'arb':   { voiceName: 'ar-XA-Chirp3-HD-Aoede',  languageCode: 'ar-XA', fallbackVoiceName: 'ar-XA-Wavenet-A', supportsSsml: false },
   'hi-IN': { voiceName: 'hi-IN-Chirp3-HD-Aoede',  languageCode: 'hi-IN', fallbackVoiceName: 'hi-IN-Wavenet-A', supportsSsml: false },
   'ko-KR': { voiceName: 'ko-KR-Chirp3-HD-Aoede',  languageCode: 'ko-KR', fallbackVoiceName: 'ko-KR-Wavenet-A', supportsSsml: false },
+  // Offered in Settings since the language work shipped, and unspeakable until
+  // now: with no entry here the detector returned null and an American voice
+  // read the translated Dutch, Polish or Turkish aloud. If Chirp3 is not
+  // published for one of these locales the request 400s and the synthesiser
+  // retries the Wavenet fallback automatically, so the worst case is a slightly
+  // older voice in the right language rather than the wrong language entirely.
+  'nl-NL': { voiceName: 'nl-NL-Chirp3-HD-Aoede',  languageCode: 'nl-NL', fallbackVoiceName: 'nl-NL-Wavenet-A', supportsSsml: false },
+  'pl-PL': { voiceName: 'pl-PL-Chirp3-HD-Aoede',  languageCode: 'pl-PL', fallbackVoiceName: 'pl-PL-Wavenet-A', supportsSsml: false },
+  'tr-TR': { voiceName: 'tr-TR-Chirp3-HD-Aoede',  languageCode: 'tr-TR', fallbackVoiceName: 'tr-TR-Wavenet-A', supportsSsml: false },
 };
 
 /** Default when a caller sends an unmapped voice key — the coach's own voice. */

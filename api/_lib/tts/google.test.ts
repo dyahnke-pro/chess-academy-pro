@@ -11,7 +11,7 @@
 import { describe, it, expect } from 'vitest';
 import { streamAudioContent, base64ToBytes } from './google';
 import { GOOGLE_VOICES, GOOGLE_LANG_VOICES, resolveGoogleVoice, engineForGoogleVoice, chirp3ProsodyFor } from './googleVoices';
-import { LANG_VOICES } from '../ttsLang';
+import { LANG_VOICES, detectVoiceForText } from '../ttsLang';
 
 /** A ReadableStream that emits exactly the chunk boundaries we specify. */
 function streamOf(chunks: string[]): ReadableStream<Uint8Array> {
@@ -173,6 +173,60 @@ describe('google voice map', () => {
         GOOGLE_LANG_VOICES[pollyVoice.languageCode],
         `no Google voice for ${lang} (${pollyVoice.languageCode})`,
       ).toBeDefined();
+    }
+  });
+
+  it('can speak every language the Settings picker offers', () => {
+    // 🔒 THE PICKER OFFERED THREE LANGUAGES NOTHING COULD SPEAK. Dutch, Polish
+    // and Turkish were selectable from the day the language work shipped; the
+    // model translated every spoken line into them and an AMERICAN voice then
+    // read the result aloud. Correct words, wrong mouth — which sounds broken
+    // rather than unsupported, and is worse than leaving them off the list.
+    //
+    // The old gate only checked LANG_VOICES ⊆ GOOGLE_LANG_VOICES: it proved the
+    // detector's outputs had voices, never that the picker's inputs reached the
+    // detector at all. This holds the two ends together.
+    //
+    // Kept as a literal rather than imported: this file runs server-side and
+    // the picker is a React component, but the duplication is the point — if
+    // the two lists drift, this fails and names the language that drifted.
+    const OFFERED_IN_SETTINGS = [
+      'en', 'es', 'fr', 'de', 'pt', 'it', 'nl', 'pl', 'tr',
+      'ru', 'ar', 'hi', 'ja', 'ko', 'zh',
+    ];
+    for (const code of OFFERED_IN_SETTINGS) {
+      if (code === 'en') continue; // English is the default voice, not a mapping
+      const polly = LANG_VOICES[code];
+      expect(polly, `Settings offers "${code}" but the detector cannot return it`).toBeDefined();
+      expect(
+        GOOGLE_LANG_VOICES[polly.languageCode],
+        `Settings offers "${code}" but no Google voice speaks ${polly.languageCode}`,
+      ).toBeDefined();
+    }
+  });
+
+  it('detects the three languages that used to fall through to English', () => {
+    // Each string is the kind of line the coach actually speaks, translated —
+    // not a lexicon sample — because that is what the detector will see.
+    const cases: Array<[string, string]> = [
+      ['nl-NL', 'Het zwarte paard staat niet veilig op deze zet naar f6.'],
+      ['pl-PL', 'Skoczek nie jest bezpieczny — goniec przez ten ruch atakuje hetmana.'],
+      ['tr-TR', 'At bu kare için güvenli değil ve fil vezire karşı bir tehdit oluşturuyor.'],
+    ];
+    for (const [expected, text] of cases) {
+      expect(detectVoiceForText(text)?.languageCode, text).toBe(expected);
+    }
+  });
+
+  it('still leaves an English chess sentence on the English voice', () => {
+    // The failure mode of adding Latin-script languages: an English line trips
+    // one of the new markers and the coach suddenly speaks with a Dutch accent.
+    for (const text of [
+      'The knight on f6 is not safe here, and the bishop eyes the queen.',
+      'Your best move is Nc3 — it develops and covers the centre.',
+      'Take on e5 and the rook lifts to the open file.',
+    ]) {
+      expect(detectVoiceForText(text), text).toBeNull();
     }
   });
 
