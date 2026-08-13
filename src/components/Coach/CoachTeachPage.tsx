@@ -2207,6 +2207,27 @@ export function CoachTeachPage(): JSX.Element {
         void voiceService.speak(say);
         return;
       }
+      // NAVIGATION + "review my last game" (2026-08-13 all-questions audit):
+      // "take me to tactics" was swallowed by the live-tactics lane and
+      // "review my last game" rode the fuzzy opening matcher into a "did you
+      // mean East Indian Defense?" picker. Both are deterministic commands —
+      // route them like a human tapping the nav, no LLM turn.
+      const navTargets: Array<[RegExp, string, string]> = [
+        [/^(?:please\s+)?review\s+my\s+(?:last|latest|recent)?\s*game[.!]?$/i, '/coach/review', 'Opening your games for review.'],
+        [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?tactics(?:\s+tab)?[.!]?$/i, '/tactics', 'Heading to Tactics.'],
+        [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?openings(?:\s+tab)?[.!]?$/i, '/openings', 'Heading to Openings.'],
+        [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?(?:weaknesses|my\s+weaknesses)[.!]?$/i, '/weaknesses', 'Heading to your weaknesses.'],
+        [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?settings[.!]?$/i, '/settings', 'Opening Settings.'],
+        [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?(?:dashboard|home)[.!]?$/i, '/', 'Back to the dashboard.'],
+      ];
+      for (const [re, route, sayNav] of navTargets) {
+        if (re.test(text.trim())) {
+          setMessages((prev) => [...prev, { id: uid('nav-u'), role: 'user', content: text, timestamp: Date.now() }]);
+          setMessages((prev) => [...prev, { id: uid('nav-a'), role: 'assistant', content: sayNav, timestamp: Date.now() }]);
+          void navigate(route);
+          return;
+        }
+      }
       if (routed && (routed.kind === 'take_back_move' || routed.kind === 'reset_board')) {
         setMessages((prev) => [...prev, { id: uid('cmd-u'), role: 'user', content: text, timestamp: Date.now() }]);
         const outcome = routed.kind === 'take_back_move'
@@ -3382,6 +3403,13 @@ export function CoachTeachPage(): JSX.Element {
       // here sends the ask down to the spine, where the counter-repertoire
       // lane answers from curated data.
       if (requestedName && isCounterRepertoireQuestion(requestedName)) {
+        requestedName = null;
+      }
+      // "HOW DO YOU TEACH the Caro-Kann?" is a question about METHOD, not a
+      // request to start the lesson — TEACH_PATTERN's "teach" verb captured it
+      // and popped the line picker (2026-08-13 all-questions audit). Clear the
+      // capture so the ask reaches the spine's teaching-method lane.
+      if (requestedName && /^how\s+(?:do|would|will|does)\s+(?:you|the\s+coach)\s+teach\b/i.test(workingInput)) {
         requestedName = null;
       }
       // MATCHUP: "teach X vs Y" — CONSTRUCT the two openings colliding on one

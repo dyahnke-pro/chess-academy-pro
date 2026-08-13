@@ -508,6 +508,11 @@ const TACTICS_QUESTION_RE = anyOf([
 ]);
 export function isTacticsQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
+  // "take me to tactics" / "open the tactics tab" is NAVIGATION, not a
+  // board-scan ask — the 2026-08-13 all-questions audit caught the live
+  // tactics lane swallowing it and answering "nothing is hanging" while the
+  // student just wanted the tab.
+  if (/\b(?:take\s+me\s+to|go\s+to|open|navigate\s+to|show\s+me)\s+(?:the\s+)?tactics\b/i.test(ask)) return false;
   // A tactics-PROFILE ask ("what's my weakest tactic", "how are my tactics")
   // is about the student over time — the bare `\btactics?\b` pattern below
   // would otherwise misroute it to the live-board scan (live prod 2026-07-09).
@@ -780,6 +785,11 @@ export function isConceptQuestion(ask: string | undefined): boolean {
   // ("what's <word>") would otherwise over-match every personal-stat question
   // (David 2026-07-04 stress test). A concept ask is "what's a fork", not "my X".
   if (/^\s*what(?:'?s| is| are)\s+my\b/i.test(ask)) return false;
+  // "what does the Tactics TAB do?" is an APP-HELP ask about a surface, not a
+  // glossary lookup — concept dispatches first, so without this guard the
+  // student asking about the app was taught what a fork is (2026-08-13
+  // all-questions audit, run allq-msrzt11w).
+  if (/\b(?:tab|page|screen|section|button|menu|the\s+app)\b/i.test(ask)) return false;
   return CONCEPT_QUESTION_RE.test(ask) && !CONCEPT_POSITIONAL_CUE_RE.test(ask);
 }
 

@@ -207,6 +207,7 @@ import {
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
   isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic, isGameMistakeQuestion,
+  isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -1147,6 +1148,13 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const puzzleStatsQuestionEngage = isPuzzleStatsQuestion(askForIntents);
     const transferGapQuestionEngage = isTransferGapQuestion(askForIntents);
     const skillRadarQuestionEngage = isSkillRadarQuestion(askForIntents);
+    // The five lanes the 2026-08-13 all-questions audit found unreachable —
+    // none needs a board, so they must also ENGAGE grounding without a FEN.
+    const teachingMethodQuestionEngage = isTeachingMethodQuestion(askForIntents);
+    const settingsQuestionEngage = isSettingsQuestion(askForIntents);
+    const appHelpQuestionEngage = isAppHelpQuestion(askForIntents);
+    const timeTroubleQuestionEngage = isTimeTroubleQuestion(askForIntents);
+    const lastGameQuestionEngage = isLastGameQuestion(askForIntents);
     // "WHY does the engine like this move" needs the engine PV to walk. CENTRALIZE
     // it here (David 2026-07-10: "coach is master of all now, no isolated tabs")
     // so EVERY surface gets the reasoning walk — not just the ones that pre-inject
@@ -1243,7 +1251,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     }
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage
+      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1432,6 +1440,17 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // tactic (assemblePositionAssessment); grounds the biggest slice of
             // the free-reasoning chat fallback.
             positionAssessmentQuestion: isPositionAssessmentQuestion(askForIntents),
+            // THE FIVE UNREACHABLE LANES (2026-08-13 all-questions audit, run
+            // allq-msrzt11w): these detectors + assemblers + dispatch all
+            // existed, but nothing on the coachService path ever SET the
+            // flags — so "is voice on?" got the best-move readout, "do I play
+            // too fast?" the stock line, "did I win my last game?" silence.
+            // The same lane-reaches-nobody class as the plan/best-move fixes.
+            teachingMethodQuestion: teachingMethodQuestionEngage,
+            settingsQuestion: settingsQuestionEngage,
+            appHelpQuestion: appHelpQuestionEngage,
+            timeTroubleQuestion: timeTroubleQuestionEngage,
+            lastGameQuestion: lastGameQuestionEngage,
             studentColor: input.liveState.studentColor,
             surface: coachSurfaceToRoute(input.liveState.surface),
             // Composed-prompt surfaces: coachApi skips the grounded-intent
