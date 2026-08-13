@@ -206,7 +206,7 @@ import {
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
-  isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic,
+  isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic, isGameMistakeQuestion,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -1291,6 +1291,11 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             askedPiece: restrictedPieceInAsk(askForIntents),
             whyBestMoveQuestion: whyBestMoveEngage,
             reviewFlaggedMove: input.liveState.reviewFlaggedMove,
+            // Game-scoped mistake ask + the reviewed game's computed worst
+            // moment (2026-08-13 — the review ask was answered from the habit
+            // profile instead of THIS game).
+            gameMistakeQuestion: isGameMistakeQuestion(askForIntents),
+            reviewWorstMoment: input.liveState.reviewWorstMoment,
             // Comparative ask — dispatched BEFORE whyBestMove/bestMove so the
             // alternatives comparison wins over the generic reasoning walk.
             alternativesQuestion: alternativesEngage,

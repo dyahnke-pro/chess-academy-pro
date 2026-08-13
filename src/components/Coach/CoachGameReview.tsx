@@ -2528,6 +2528,32 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
         }
       : undefined;
     const fenForQ = move?.fen ?? STARTING_FEN;
+    // The reviewed game's WORST student moment — grounds "what was the
+    // biggest mistake in this game?" in the GAME's own stored analysis
+    // instead of the habit profile (2026-08-13 proof run).
+    const SEVERITY: Record<string, number> = { blunder: 3, mistake: 2, inaccuracy: 1 };
+    const worst = moves.reduce<{ idx: number; sev: number } | null>((acc, m2, i) => {
+      if (m2.isCoachMove) return acc;
+      const sev = SEVERITY[m2.classification ?? ''] ?? 0;
+      if (sev === 0) return acc;
+      return !acc || sev > acc.sev ? { idx: i, sev } : acc;
+    }, null);
+    const reviewWorstMoment = worst
+      ? {
+          moveNumber: Math.floor(worst.idx / 2) + 1,
+          san: moves[worst.idx].san,
+          classification: moves[worst.idx].classification ?? 'mistake',
+          bestMoveSan: (() => {
+            const bm = moves[worst.idx].bestMove;
+            if (!bm || bm.length < 4) return null;
+            try {
+              const c = new Chess(worst.idx > 0 ? moves[worst.idx - 1].fen : STARTING_FEN);
+              const mv = c.move({ from: bm.slice(0, 2), to: bm.slice(2, 4), promotion: 'q' });
+              return mv?.san ?? null;
+            } catch { return null; }
+          })(),
+        }
+      : undefined;
     // Thread the game's STORED engine read for this ply — "why was h3 better"
     // answers instantly from the analysis instead of racing a fresh on-device
     // engine search, which stalled 12s+ on iOS and left the Ask silent
@@ -2593,6 +2619,7 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       tactics: reviewTactics,
       reviewFlaggedMove,
       reviewNarrationContext,
+      reviewWorstMoment,
     };
     void logAppAudit({
       kind: 'coach-surface-migrated',

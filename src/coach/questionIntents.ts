@@ -1287,8 +1287,23 @@ const MISTAKES_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+\w+\s+(?:mistakes?|blunders?|errors?)\s+do\s+i\b`,
   String.raw`\b(?:mistakes?|blunders?|errors?)\s+do\s+i\s+keep\s+(?:making|repeating|committing)\b`,
 ]);
+/** A GAME-SCOPED mistake ask — "the biggest mistake in this game", "where did
+ *  I go wrong in that game", "my worst move this game". Answered from the
+ *  REVIEWED GAME's own analysis (the worst student moment), never the habit
+ *  profile (2026-08-13 proof run: the review ask got "you haven't played
+ *  enough games…" — a history answer to a question about THIS game). */
+const GAME_SCOPE_RE = /\b(?:in|during|of)\s+(?:this|that|the)\s+game\b|\bthis\s+game\b/i;
+export function isGameMistakeQuestion(ask: string | undefined): boolean {
+  if (!ask) return false;
+  return GAME_SCOPE_RE.test(ask)
+    && /\b(?:biggest|worst|main|critical|costliest)?\s*(?:mistake|blunder|error|move|wrong|turning\s+point)\b/i.test(ask);
+}
+
 export function isMistakesQuestion(ask: string | undefined): boolean {
-  return !!ask && MISTAKES_QUESTION_RE.test(ask);
+  if (!ask) return false;
+  // Game-scoped asks belong to the reviewed game, not the habit profile.
+  if (isGameMistakeQuestion(ask)) return false;
+  return MISTAKES_QUESTION_RE.test(ask);
 }
 
 /** "how are my tactics / what tactics do I miss?" → assembleTacticsProfileAnswer

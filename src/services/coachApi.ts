@@ -1115,6 +1115,10 @@ export interface MasterGroundingOptions {
    *  where a lane must read the words as typed (the piece-square
    *  false-premise check). */
   cleanAsk?: string;
+  /** Game-scoped mistake ask ("biggest mistake in this game") + the reviewed
+   *  game's computed worst student moment to answer it from. */
+  gameMistakeQuestion?: boolean;
+  reviewWorstMoment?: { moveNumber: number; san: string; classification: string; bestMoveSan: string | null };
   /** STEP B — true when this turn is a STUDENT-PROGRESS question ("am I
    *  improving?", "what should I work on?"). The answer is the student's OWN
    *  bad-habit profile (assembleProgressAnswer), voiced via voiceFacts. Needs
@@ -2784,6 +2788,7 @@ export async function getCoachChatResponse(
       grounding.planQuestion === true ||
       grounding.tacticsQuestion === true ||
       grounding.hintQuestion === true ||
+      grounding.gameMistakeQuestion === true ||
       grounding.progressQuestion === true ||
       grounding.trendQuestion === true ||
       grounding.openingProfileQuestion === true ||
@@ -4067,6 +4072,25 @@ export async function getCoachChatResponse(
                 : voiced;
             }
           }
+        }
+
+        // ── GAME-SCOPED MISTAKE (2026-08-13) — "biggest mistake in this
+        // game?" answered from the reviewed game's OWN analysis, never the
+        // habit profile. Falls through when no worst moment is threaded (a
+        // clean game, or a non-review surface).
+        if (grounding.gameMistakeQuestion && grounding.reviewWorstMoment) {
+          const w = grounding.reviewWorstMoment;
+          const better = w.bestMoveSan ? ` ${w.bestMoveSan} was the better move.` : '';
+          const facts = `Your biggest slip in this game was ${w.san} on move ${w.moveNumber} — a ${w.classification}.${better}`;
+          const voiced = await voiceFacts(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
+          if (voiced) return voiced;
+          return facts;
+        }
+        if (grounding.gameMistakeQuestion && !grounding.reviewWorstMoment && grounding.gameSans && grounding.gameSans.length > 0) {
+          const clean = 'Nothing in this game was flagged as a mistake or blunder — a clean game by the analysis.';
+          const voicedClean = await voiceFacts(clean, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'game-mistake', preferRaw: true });
+          if (voicedClean) return voicedClean;
+          return clean;
         }
 
         // ── TACTICS / DANGER (Phase 2) — voice the engine's computed tactics ──

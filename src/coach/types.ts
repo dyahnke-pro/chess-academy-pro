@@ -299,6 +299,15 @@ export interface LiveState {
     staticThreat: string | null;
     bestMoveSan: string | null;
   };
+  /** The reviewed game's WORST student moment (computed from the stored
+   *  analysis) — grounds "what was the biggest mistake in this game?" in the
+   *  GAME instead of the habit profile (2026-08-13). */
+  reviewWorstMoment?: {
+    moveNumber: number;
+    san: string;
+    classification: string;
+    bestMoveSan: string | null;
+  };
   /** Engine-computed principal variation, pre-injected when the student
    *  asks for a PLAN ("what's my plan?", "next three moves?"). David
    *  2026-06-05: "use stockfish for the next three moves — more reliable."
