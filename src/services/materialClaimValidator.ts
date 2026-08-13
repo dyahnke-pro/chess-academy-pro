@@ -83,6 +83,39 @@ export function stripDisprovenMaterialSentences(text: string, fen: string): Mate
   const kept: string[] = [];
   const dropped: string[] = [];
   for (const sentence of text.split(SENTENCE_SPLIT_RE)) {
+    // HYPOTHETICAL-CAPTURE ACCOUNTING (the exact class David heard, hp-54v):
+    // "After White takes the Benko pawn, he's down a pawn…" is future-marked,
+    // so the present-tense rules below never see it. But one arithmetic fact
+    // IS checkable without replaying anything: a capture only ever ADDS to
+    // the capturer's balance, so the capturing side cannot come out DOWN
+    // unless it was already down by more than the captured piece is worth.
+    // Conservative on purpose: fires only on the single-capture shape (no
+    // recapture in the sentence) and only when the side claimed down IS the
+    // capturing side — "After White takes, Black is down a pawn" (the
+    // corrected note) needs no replay and is left alone.
+    const cap = /\b(?:after|once|when|if)\s+(white|black)\s+(?:takes|captures|grabs|wins|snaps\s+off)\b([^.!?]*)/i.exec(sentence);
+    if (cap) {
+      const capSide: 'w' | 'b' = cap[1].toLowerCase() === 'white' ? 'w' : 'b';
+      const captureVerbCount = (sentence.match(/\b(?:takes(?:\s+back)?|captures|recaptures|grabs|snaps\s+off)\b/gi) ?? []).length;
+      const pieceMatch = /\b(pawn|knight|bishop|rook|queen)\b/i.exec((cap[2] ?? '').slice(0, 40));
+      const capturedValue = pieceMatch
+        ? ({ pawn: 1, knight: 3, bishop: 3, rook: 5, queen: 9 } as Record<string, number>)[pieceMatch[1].toLowerCase()] ?? 1
+        : 1;
+      // The claim's subject is the NEAREST side/pronoun BEFORE "down" — a
+      // leftmost regex would grab the capture clause's "White" in "After
+      // White takes…, Black is down a pawn" and misread the corrected note.
+      const down = /\b(?:down|behind)\b[^.!?]{0,40}?\b(?:material|pawns?|a\s+pawn|the\s+exchange|a\s+piece|in\s+material)\b/i.exec(sentence);
+      if (captureVerbCount === 1 && down) {
+        const before = sentence.slice(0, down.index);
+        const subjects = [...before.matchAll(/\b(white|black|he|she)\b/gi)];
+        const nearest = subjects.length > 0 ? subjects[subjects.length - 1] : null;
+        const claimSide = nearest ? resolveSide(nearest[1], sentence, nearest.index ?? 0) : null;
+        if (claimSide === capSide) {
+          const sideBal = capSide === 'w' ? bal : -bal;
+          if (sideBal + capturedValue > 0) { dropped.push(sentence); continue; }
+        }
+      }
+    }
     if (FUTURE_MARKER_RE.test(sentence)) { kept.push(sentence); continue; }
     let bad = false;
 

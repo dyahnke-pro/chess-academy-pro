@@ -61,12 +61,38 @@ describe('stripDisprovenMaterialSentences — the Benko tape lines', () => {
     expect(r.dropped).toHaveLength(0);
   });
 
-  it('keeps hypotheticals — prevention for those is the generator ledger', () => {
+  it('drops the hypothetical-capture inversion — the capturer described as down (hp-54v shape)', () => {
+    // A capture only ever ADDS to the capturer's balance: from an even board,
+    // "once White takes … he is down" is arithmetic, not judgment.
     const r = stripDisprovenMaterialSentences(
       'Once White takes the offered Benko pawn, he is down material.',
       START,
     );
-    expect(r.dropped).toHaveLength(0); // "Once" = future marker, exempt
+    expect(r.dropped).toHaveLength(1);
+  });
+
+  it('keeps the CORRECTED hp-54v accounting — the non-capturer is down', () => {
+    const r = stripDisprovenMaterialSentences(
+      'After White takes the Benko pawn, Black is down a pawn but leads in development, while White keeps the extra pawn and the big center.',
+      START,
+    );
+    expect(r.dropped).toHaveLength(0);
+  });
+
+  it('leaves multi-capture sequences alone — a recapture needs a real replay', () => {
+    const r = stripDisprovenMaterialSentences(
+      'After White takes the knight and Black recaptures with the pawn, White is down the exchange.',
+      START,
+    );
+    expect(r.dropped).toHaveLength(0); // two capture verbs → not the simple shape
+  });
+
+  it('keeps other hypotheticals — prevention for those is the generator ledger', () => {
+    const r = stripDisprovenMaterialSentences(
+      'If Black castles next, White will aim the bishop at h7.',
+      START,
+    );
+    expect(r.dropped).toHaveLength(0); // future marker, no capture accounting
   });
 
   it('keeps prose with no material claim at all', () => {

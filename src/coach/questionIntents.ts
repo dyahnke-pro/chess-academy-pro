@@ -902,7 +902,12 @@ const PROGRESS_QUESTION_RE = anyOf([
   String.raw`\bwhat\s+(?:parts?|areas?|aspects?|bits?|elements?)\s+of\s+my\s+(?:game|play|chess)\s+(?:are|is)\s+(?:` + WEAK_PRED + String.raw`|lacking|off|shaky)\b`,
 ]);
 export function isProgressQuestion(ask: string | undefined): boolean {
-  return !!ask && PROGRESS_QUESTION_RE.test(ask);
+  // A GAME-SCOPED mistake ask ("biggest mistake in this game") is about ONE
+  // game's own analysis, not the habit profile — the game-mistake lane owns
+  // it. Without this guard the progress lane (dispatched first) swallowed the
+  // ask and served the patterns empty-state on prod (proof run qafn-msrv28zv,
+  // 2026-08-13). Same opt-out isMistakesQuestion already carries.
+  return !!ask && !isGameMistakeQuestion(ask) && PROGRESS_QUESTION_RE.test(ask);
 }
 
 /** An IMPROVEMENT-TREND question — "am I improving?", "am I getting better /
