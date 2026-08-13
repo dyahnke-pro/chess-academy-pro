@@ -187,10 +187,12 @@ async function main() {
     console.log(`\n── ${exp.openingId}: ${exp.description}`);
 
     await scenario(`${exp.openingId} :: detail page mounts`, async () => {
-      await page.goto(`${BASE_URL}/openings/${exp.openingId}`, { timeout: 20_000 });
+      // 20s/15s budgets undercut the proxied sandbox's 15-30s SPA mount and
+      // cascaded every tile check into a false red (2026-08-13 run).
+      await page.goto(`${BASE_URL}/openings/${exp.openingId}`, { waitUntil: 'domcontentloaded', timeout: 120_000 });
       await page
         .locator('[data-testid="opening-detail"]')
-        .waitFor({ timeout: 15_000 });
+        .waitFor({ timeout: 60_000 });
       // Trap lines render lazily once Dexie has the opening — give
       // it a moment.
       await page.waitForTimeout(1500);
