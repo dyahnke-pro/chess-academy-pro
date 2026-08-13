@@ -119,10 +119,13 @@ try {
         await drill.click();
         let routed = false;
         for (let i = 0; i < 10; i++) {
-          if (/\/tactics\/drill/.test(page.url())) { routed = true; break; }
+          // The button's real contract is /tactics/adaptive with the
+          // pattern's themes forced (startDrill, PatternSchoolPage:85) —
+          // the first version asserted /tactics/drill and false-failed.
+          if (/\/tactics\/(adaptive|drill)/.test(page.url())) { routed = true; break; }
           await page.waitForTimeout(1000);
         }
-        record('patterns', 'the Drill button routes to the tactic drill', routed,
+        record('patterns', 'the Drill button routes to the adaptive drill', routed,
           routed ? page.url() : `url stayed ${page.url()}`);
       } else {
         record('patterns', 'the Drill button routes to the tactic drill', false, 'no drill button on expanded card');
@@ -194,14 +197,22 @@ try {
     if (up) {
       const skip = page.locator('[data-testid="skip-puzzle"]');
       if (await skip.waitFor({ timeout: 30000 }).then(() => true).catch(() => false)) {
-        const before = await page.locator('[data-square="e4"]').first().getAttribute('data-square-color').catch(() => null);
-        const boardBefore = await trainer.innerText().catch(() => '');
+        // Compare the BOARD, not the chrome: puzzle prompt text is identical
+        // between puzzles and pieces are images, so innerText can't see an
+        // advance (the first version false-failed on exactly that).
+        const boardSnapshot = () => page.evaluate(() =>
+          [...document.querySelectorAll('[data-square] [data-piece]')]
+            .map((el) => `${el.closest('[data-square]')?.getAttribute('data-square')}:${el.getAttribute('data-piece')}`)
+            .sort().join('|'));
+        const boardBefore = await boardSnapshot();
         await skip.click({ force: true });
-        await page.waitForTimeout(4000);
-        const boardAfter = await trainer.innerText().catch(() => '');
-        record('classic', 'skip advances to the next puzzle', boardBefore !== boardAfter,
-          boardBefore === boardAfter ? 'trainer view unchanged' : 'advanced');
-        void before;
+        let advanced = false;
+        for (let i = 0; i < 10; i++) {
+          await page.waitForTimeout(1500);
+          if ((await boardSnapshot()) !== boardBefore) { advanced = true; break; }
+        }
+        record('classic', 'skip advances to the next puzzle (board position changes)', advanced,
+          advanced ? 'new position on the board' : 'board identical after skip');
       } else {
         record('classic', 'skip advances to the next puzzle', false, 'no skip control in 30s');
       }
