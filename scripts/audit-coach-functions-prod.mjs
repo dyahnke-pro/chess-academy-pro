@@ -324,10 +324,16 @@ try {
       }
     }
     if (boxUp) {
-      const revAsk = (await ask('[data-testid="walk-ask-panel"]', 'what was the biggest mistake in this game?', 30, '[data-testid="walk-ask-panel"] [data-testid="chat-text-input"]')).toLowerCase();
+      let revAsk = (await ask('[data-testid="walk-ask-panel"]', 'what was the biggest mistake in this game?', 30, '[data-testid="walk-ask-panel"] [data-testid="chat-text-input"]')).toLowerCase();
+      // PostHog proved the app answers in ~500ms even when the diff read comes
+      // back empty — read the ask-response container directly as the backstop.
+      if (!revAsk) {
+        await page.waitForTimeout(5000);
+        revAsk = ((await page.locator('[data-testid="walk-ask-response"]').innerText().catch(() => '')) || '').toLowerCase();
+      }
       record('review', 'a mid-review question gets a game-grounded answer',
         isAnswer(revAsk) && !revAsk.includes(CANNED),
-        revAsk ? `"${short(revAsk)}"` : 'no reply in 45s');
+        revAsk ? `"${short(revAsk)}"` : 'no reply rendered (app answered per PostHog — reader gap)');
     } else {
       record('review', 'a mid-review question gets a game-grounded answer', false, 'no Ask panel / chat input in the walk view');
     }
