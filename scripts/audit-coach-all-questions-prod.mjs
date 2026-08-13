@@ -158,8 +158,20 @@ async function ask(q, budgetLoops = 30) {
   const lines = async () => ((await t.innerText().catch(() => '')) || '')
     .split('\n').map((l) => l.trim()).filter((l) => l.length >= 12 && l.includes(' '));
   const baseArr = await lines();
-  await box.click({ force: true });
-  await box.pressSequentially(q, { delay: 8 });
+  // The input EXISTS before it's USABLE — right after a section reload the
+  // kickoff turn holds it disabled, and typing into it is a silent no-op
+  // (the six first-of-section "no reply" false fails, run allq-mss49itt).
+  // Wait for enabled, type, and confirm the text actually landed before
+  // pressing Enter — re-typing once if the first attempt was swallowed.
+  await page.locator('[data-testid="chat-text-input"]:visible:not([disabled])').first()
+    .waitFor({ timeout: 90000 }).catch(() => {});
+  for (let attempt = 0; attempt < 2; attempt += 1) {
+    await box.click({ force: true });
+    await box.pressSequentially(q, { delay: 8 });
+    const typed = await box.inputValue().catch(() => '');
+    if (typed.includes(q.slice(0, 12))) break;
+    await page.waitForTimeout(4000);
+  }
   await box.press('Enter');
   for (let i = 0; i < budgetLoops; i++) {
     await page.waitForTimeout(1500);
