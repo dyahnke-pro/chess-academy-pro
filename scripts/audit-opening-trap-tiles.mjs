@@ -43,7 +43,8 @@ const OUT_DIR = `audit-reports/opening-trap-tiles-${stamp}`;
 // DOM", so derive the names from src/data/pro-repertoires.json itself.
 import { readFileSync } from 'node:fs';
 const PRO_REPS = JSON.parse(readFileSync('src/data/pro-repertoires.json', 'utf8'));
-const proRepList = Array.isArray(PRO_REPS) ? PRO_REPS : Object.values(PRO_REPS).filter((v) => v && typeof v === 'object');
+// Top level is { players, openings } — the entries live under `openings`.
+const proRepList = Array.isArray(PRO_REPS) ? PRO_REPS : (PRO_REPS.openings ?? []);
 const repFor = (id) => proRepList.find((o) => o.id === id) ?? {};
 const namesOf = (arr) => (arr ?? []).map((t) => t.name).filter(Boolean);
 const EXPECTATIONS = [
