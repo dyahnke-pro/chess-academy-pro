@@ -206,13 +206,17 @@ try {
             .sort().join('|'));
         const boardBefore = await boardSnapshot();
         await skip.click({ force: true });
-        let advanced = false;
+        let outcome = '';
         for (let i = 0; i < 10; i++) {
           await page.waitForTimeout(1500);
-          if ((await boardSnapshot()) !== boardBefore) { advanced = true; break; }
+          if ((await boardSnapshot()) !== boardBefore) { outcome = 'advanced to a new position'; break; }
+          // Skip on the LAST puzzle correctly ends the session instead.
+          if (await page.locator('[data-testid="session-complete"]').isVisible().catch(() => false)) {
+            outcome = 'last puzzle — session-complete screen shown'; break;
+          }
         }
-        record('classic', 'skip advances to the next puzzle (board position changes)', advanced,
-          advanced ? 'new position on the board' : 'board identical after skip');
+        record('classic', 'skip advances (next position or session complete)', outcome !== '',
+          outcome || 'board identical and no completion screen after skip');
       } else {
         record('classic', 'skip advances to the next puzzle', false, 'no skip control in 30s');
       }
