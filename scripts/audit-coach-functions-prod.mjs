@@ -31,6 +31,13 @@ const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.ap
 const RUN_ID = process.env.AUDIT_RUN_ID || `qafn-${Date.now().toString(36)}`;
 const CANNED = "i can't verify that precisely";
 
+/** Scope to a comma-list of sections (teach,home,review,endgame) — reruns of a
+ *  failed leg shouldn't repeat the whole battery (and two of these legs die
+ *  under the memory pressure a long run builds up: the sandbox runs out of
+ *  WASM memory for stockfish workers after several page loads). */
+const ONLY = (process.env.AUDIT_ONLY || 'teach,home,review,endgame').split(',').map((s) => s.trim());
+const wants = (s) => ONLY.includes(s);
+
 const results = [];
 const record = (surface, name, pass, detail, kind = 'contract') => {
   results.push({ surface, name, pass, kind, detail });
@@ -51,7 +58,12 @@ await ctx.addInitScript((id) => {
   try { localStorage.setItem('auditRunId', id); } catch { /* private mode */ }
 }, RUN_ID);
 const page = await ctx.newPage();
-page.on('pageerror', (e) => pageErrors.push(String(e?.message ?? e)));
+// Dedupe: a wedged stockfish worker can spam one identical allocation error
+// hundreds of thousands of times; count each distinct message once.
+page.on('pageerror', (e) => {
+  const msg = String(e?.message ?? e);
+  if (!pageErrors.includes(msg)) pageErrors.push(msg);
+});
 
 async function dismissGates() {
   for (const [gate, btn] of [
@@ -149,6 +161,7 @@ const TEACH = '[data-testid="teach-transcript"]';
 
 try {
   // ══ TEACH — board commands, memory tools, theme, multi-turn ═══════════════
+  if (wants('teach')) {
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 120000 });
   await dismissGates();
   await dismissGates();
@@ -214,7 +227,10 @@ try {
     isAnswer(quiz) || choicesUp,
     choicesUp ? 'quiz UI rendered' : quiz ? `"${short(quiz)}"` : 'no visible response');
 
+  } // end teach
+
   // ══ HOME drawer — action lanes ════════════════════════════════════════════
+  if (wants('home')) {
   await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 120000 });
   await dismissGates();
 
@@ -254,14 +270,24 @@ try {
     record('home', '"review my last game" navigates to the review surface', false, 'drawer never opened');
   }
 
+  } // end home
+
   // ══ REVIEW — a real mid-review question ═══════════════════════════════════
+  if (wants('review')) {
   await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 120000 });
   await dismissGates();
   const card = page.locator('[data-testid^="review-game-card-"]').first();
   const hasCard = await card.waitFor({ timeout: 45000 }).then(() => true).catch(() => false);
   if (hasCard) {
     await card.click();
-    // The summary card renders first; the chat input mounts with the surface.
+    // The summary card renders first. The chat only mounts once the WALK
+    // starts — click Start when it enables (walkNarration prep can take ~20s;
+    // clicking it disabled was this scenario's first instrument bug).
+    const startBtn = page.locator('[data-testid="start-walk-btn"]:not([disabled])');
+    if (await startBtn.waitFor({ timeout: 90000 }).then(() => true).catch(() => false)) {
+      await startBtn.click();
+      await page.locator('[data-testid="review-nav-controls"]').waitFor({ timeout: 30000 }).catch(() => {});
+    }
     const reviewBox = page.locator('[data-testid="chat-text-input"]').first();
     const boxUp = await reviewBox.waitFor({ timeout: 60000 }).then(() => true).catch(() => false);
     if (boxUp) {
@@ -276,7 +302,10 @@ try {
     record('review', 'a mid-review question gets a game-grounded answer', false, 'no review cards rendered in 45s', 'informational');
   }
 
+  } // end review
+
   // ══ ENDGAME — drawer chat ═════════════════════════════════════════════════
+  if (wants('endgame')) {
   await page.goto(`${BASE}/coach/endgame`, { waitUntil: 'domcontentloaded', timeout: 120000 });
   await dismissGates();
   const chatBtn = page.locator('button[aria-label="Open chat"]').first();
@@ -296,6 +325,7 @@ try {
   } else {
     record('endgame', 'the endgame page chat answers an endgame question', false, 'no Open-chat button found');
   }
+  } // end endgame
 } finally {
   console.log(`\n── coverage grid ──`);
   for (const r of results) {
