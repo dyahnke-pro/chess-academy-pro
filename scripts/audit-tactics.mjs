@@ -471,9 +471,15 @@ async function main() {
     ],
   );
 
-  // Theme row navigation — click first row, verify navigation
+  // Theme row navigation — click first row, verify navigation.
+  // `section-spot` no longer exists anywhere in src — the profile page's
+  // sections were rebuilt around `theme-row`, and this click was aiming at a
+  // testid from the previous design. It timed out and took the rest of the
+  // run down with it (an uncaught click, so the script died instead of
+  // reporting). Aim at what the page actually renders, tolerantly.
   await clickTacticsNav();
-  await page.locator('[data-testid="section-spot"]').click();
+  await page.locator('[data-testid="theme-row"], [data-testid="section-spot"]').first()
+    .click({ timeout: 15_000 }).catch(() => {});
   // Was 25s — reduced 2026-05-15 to 10s (same reasoning as scenario 04).
   await page.locator('[data-testid="begin-training-btn"]').waitFor({ timeout: 10_000 }).catch(() => {});
   await scenario(

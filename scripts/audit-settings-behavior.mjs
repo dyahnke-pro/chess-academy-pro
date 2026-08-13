@@ -112,6 +112,20 @@ async function main() {
     return events.some((e) => e.kind === kind);
   }
 
+  // ── Pre-warm the Vienna lesson ─────────────────────────────────
+  // A COLD generation runs 60-120s before the first spoken word. The three
+  // verbosity scenarios each waited a fixed 8s, so whichever ran first paid
+  // the cold gen and "failed" while the later ones rode its warm cache and
+  // passed — the audit reporting the exact wiring it had just proved, as
+  // broken. One warm-up visit here puts all three scenarios on equal cached
+  // footing, which is also the footing a real user's second visit has.
+  await page.goto(`${BASE_URL}/coach/session/walkthrough?subject=Vienna%20Game`, { waitUntil: 'domcontentloaded' });
+  await page.waitForFunction(
+    () => (document.body?.innerText ?? '').length > 200,
+    { timeout: 30_000 },
+  ).catch(() => {});
+  await page.waitForTimeout(120_000);
+
   // ── Test specs ──────────────────────────────────────────────────
   const tests = [
     // The narration-density assertions drive /coach/session/walkthrough,
