@@ -1284,6 +1284,10 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // default and a FALSE premise was never corrected (proof run
             // proof-msrqv0s8). Threaded here, every spine surface gets it.
             positionalTopic: positionalTopic(askForIntents) ?? undefined,
+            // The CLEAN student text (injected blocks stripped) — the
+            // false-premise check must see exactly what the student typed;
+            // lastUserMessage() on wrapped surfaces sees the envelope.
+            cleanAsk: askForIntents,
             askedPiece: restrictedPieceInAsk(askForIntents),
             whyBestMoveQuestion: whyBestMoveEngage,
             reviewFlaggedMove: input.liveState.reviewFlaggedMove,

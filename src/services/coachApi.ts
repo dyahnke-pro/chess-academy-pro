@@ -1111,6 +1111,10 @@ export interface MasterGroundingOptions {
    *  answer names the PIECE and the goal and WITHHOLDS the square (honesty
    *  contract; 2026-08-13 audit: hints were handing over the full answer). */
   hintQuestion?: boolean;
+  /** The student's CLEAN ask text (surface-injected blocks stripped) — used
+   *  where a lane must read the words as typed (the piece-square
+   *  false-premise check). */
+  cleanAsk?: string;
   /** STEP B — true when this turn is a STUDENT-PROGRESS question ("am I
    *  improving?", "what should I work on?"). The answer is the student's OWN
    *  bad-habit profile (assembleProgressAnswer), voiced via voiceFacts. Needs
@@ -4156,7 +4160,7 @@ export async function getCoachChatResponse(
           const sc: 'white' | 'black' =
             grounding.studentColor ??
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
-          const answer = assemblePositionalAnswer(grounding.currentFen, sc, grounding.positionalTopic, lastUserMessage());
+          const answer = assemblePositionalAnswer(grounding.currentFen, sc, grounding.positionalTopic, grounding.cleanAsk ?? lastUserMessage());
           if (answer) {
             const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'positional-feature', preferRaw: true });
             if (voiced) return voiced;
