@@ -2233,7 +2233,7 @@ export function CoachTeachPage(): JSX.Element {
       // mean East Indian Defense?" picker. Both are deterministic commands —
       // route them like a human tapping the nav, no LLM turn.
       const navTargets: Array<[RegExp, string, string]> = [
-        [/^(?:please\s+)?review\s+my\s+(?:last|latest|recent)?\s*game[.!]?$/i, '/coach/review', 'Opening your games for review.'],
+        [/^(?:please\s+)?(?:review|go\s+over|look\s+at)\s+my\s+(?:last|latest|recent)?\s*game[.!]?$/i, '/coach/review', 'Opening your games for review.'],
         [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?tactics(?:\s+tab)?[.!]?$/i, '/tactics', 'Heading to Tactics.'],
         [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?openings(?:\s+tab)?[.!]?$/i, '/openings', 'Heading to Openings.'],
         [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?(?:weaknesses|my\s+weaknesses)[.!]?$/i, '/weaknesses', 'Heading to your weaknesses.'],
@@ -2253,7 +2253,8 @@ export function CoachTeachPage(): JSX.Element {
       // not the thin best-move readout (David 2026-08-13 all-questions audit:
       // "the full read with the move at the end"). The hook mirrors its text
       // into the chat as it reads.
-      if (/^(?:please\s+)?(?:explain|describe|read)\s+(?:this|the)\s+(?:position|board)(?:\s+(?:to|for)\s+me)?[?!.\s]*$/i.test(text.trim())) {
+      if (/^(?:please\s+)?(?:explain|describe|read)\s+(?:this|the)\s+(?:position|board)(?:\s+(?:to|for)\s+me)?[?!.\s]*$/i.test(text.trim())
+        || /^(?:what'?s|what\s+is)\s+(?:happening|going\s+on)(?:\s+here)?[?!.\s]*$/i.test(text.trim())) {
         setMessages((prev) => [...prev, { id: uid('read-u'), role: 'user', content: text, timestamp: Date.now() }]);
         void positionNarration.narrate();
         return;
@@ -3440,6 +3441,12 @@ export function CoachTeachPage(): JSX.Element {
       // and popped the line picker (2026-08-13 all-questions audit). Clear the
       // capture so the ask reaches the spine's teaching-method lane.
       if (requestedName && /^how\s+(?:do|would|will|does)\s+(?:you|the\s+coach)\s+teach\b/i.test(workingInput)) {
+        requestedName = null;
+      }
+      // "walk me through the ENGINE LINE" is an engine-reasoning ask, not an
+      // opening name — the fuzzy matcher popped a "did you mean…?" picker on
+      // it (varied sweep, run allq-mss55zxn). No opening is named "engine".
+      if (requestedName && /\bengine\b/i.test(requestedName)) {
         requestedName = null;
       }
       // MATCHUP: "teach X vs Y" — CONSTRUCT the two openings colliding on one

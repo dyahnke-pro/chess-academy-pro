@@ -917,7 +917,13 @@ export function isProgressQuestion(ask: string | undefined): boolean {
   // it. Without this guard the progress lane (dispatched first) swallowed the
   // ask and served the patterns empty-state on prod (proof run qafn-msrv28zv,
   // 2026-08-13). Same opt-out isMistakesQuestion already carries.
-  return !!ask && !isGameMistakeQuestion(ask) && PROGRESS_QUESTION_RE.test(ask);
+  if (!ask || isGameMistakeQuestion(ask)) return false;
+  // "what's the Weaknesses TAB for?" is an app-help ask about a surface, not
+  // a request for the habit profile — same guard the concept lane carries
+  // (varied sweep, run allq-mss55zxn: the tab question got the patterns
+  // empty-state instead of the tab description).
+  if (/\b(?:tab|page|screen|section|button|menu)\b/i.test(ask)) return false;
+  return PROGRESS_QUESTION_RE.test(ask);
 }
 
 /** An IMPROVEMENT-TREND question — "am I improving?", "am I getting better /

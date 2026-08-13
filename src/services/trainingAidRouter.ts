@@ -67,7 +67,11 @@ const FRAMING_RE =
  *  "give me a tactics puzzle") has no what/which/where/why/how lead-in, so it
  *  still routes to a drill. */
 const DIAGNOSIS_RE =
-  /\b(?:what|which|where|why|how)\b[\s\S]{0,50}?\b(?:weak(?:est|ness(?:es)?)?|bad\s+at|worst\s+at|poor\s+at|struggl(?:e|ing)|los(?:e|ing)|blunder(?:ing)?|go(?:ing)?\s+wrong|mess(?:ing)?\s+up|holding\s+me\s+back|costing\s+me|need(?:s)?\s+(?:the\s+most\s+)?work|should\s+i\s+(?:train|learn|study|work\s+on|focus|improve|practi[sc]e)|do\s+i\s+(?:need\s+to|train|learn|work\s+on|focus|improve))\b/i;
+  // "do I …" / "am I …" lead-ins added 2026-08-13 (varied-phrasing sweep,
+  // run allq-mss55zxn): "do I blunder in time trouble?" and "why am I good
+  // at puzzles but bad IN games?" both slipped this guard by one word each
+  // and got hijacked into drills instead of their grounded answers.
+  /\b(?:what|which|where|why|how|do\s+i|am\s+i)\b[\s\S]{0,50}?\b(?:weak(?:est|ness(?:es)?)?|bad\s+(?:at|in)|worst\s+at|poor\s+at|struggl(?:e|ing)|los(?:e|ing)|blunder(?:ing)?|go(?:ing)?\s+wrong|mess(?:ing)?\s+up|holding\s+me\s+back|costing\s+me|time\s+trouble|need(?:s)?\s+(?:the\s+most\s+)?work|should\s+i\s+(?:train|learn|study|work\s+on|focus|improve|practi[sc]e)|do\s+i\s+(?:need\s+to|train|learn|work\s+on|focus|improve))\b/i;
 
 /** A puzzle/tactic STATS question ("my puzzle rating", "how many puzzles have I
  *  solved", "my puzzle accuracy") is answered by the grounded coach

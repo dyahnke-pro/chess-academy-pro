@@ -91,8 +91,16 @@ const ACCEPT = {
 };
 // Entries proven by POST-STATE (URL move) instead of / in addition to text.
 const URL_PROOF = {
-  navigate: /\/tactics/,
-  'review-game': /\/coach\/(review|game)/,
+  // navigate's expected route depends on which phrasing the run drew —
+  // "open settings" landing on /settings was graded RED against a
+  // hardcoded /tactics (run allq-mss55zxn). Derive it from the ask.
+  navigate: (asked) =>
+    /settings/i.test(asked) ? /\/settings/
+      : /opening/i.test(asked) ? /\/openings/
+        : /weakness/i.test(asked) ? /\/weaknesses/
+          : /dashboard|home/i.test(asked) ? /\/$/
+            : /\/tactics/,
+  'review-game': () => /\/coach\/(review|game)/,
 };
 // Section layout: reload between sections so a stage started by one ask
 // can't swallow the next section's turns.
@@ -220,8 +228,9 @@ for (const [section, ids] of SECTIONS) {
     const urlAfter = page.url();
     if (URL_PROOF[id]) {
       // Post-state contract: the ask must MOVE the app.
-      let moved = URL_PROOF[id].test(urlAfter);
-      if (!moved) { await page.waitForTimeout(8000); moved = URL_PROOF[id].test(page.url()); }
+      const proofRe = URL_PROOF[id](q);
+      let moved = proofRe.test(urlAfter);
+      if (!moved) { await page.waitForTimeout(8000); moved = proofRe.test(page.url()); }
       record(id, moved, moved ? `routed to ${page.url()}` : `url stayed ${urlAfter}; reply "${reply.slice(0, 90)}"`);
       await gotoTeach();
       continue;
