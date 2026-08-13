@@ -195,6 +195,13 @@ try {
     const up = await trainer.waitFor({ timeout: 60000 }).then(() => true).catch(() => false);
     record('classic', 'the daily-training trainer mounts', up, up ? '' : 'no puzzle-trainer in 60s');
     if (up) {
+      // The trainer opens on MODE SELECT — a real user picks a mode before
+      // any puzzle (or skip button) exists. The first two reruns waited for
+      // skip on the mode screen and false-failed.
+      const mode = page.locator('[data-testid^="mode-"]').first();
+      if (await mode.waitFor({ timeout: 30000 }).then(() => true).catch(() => false)) {
+        await mode.click();
+      }
       const skip = page.locator('[data-testid="skip-puzzle"]');
       if (await skip.waitFor({ timeout: 30000 }).then(() => true).catch(() => false)) {
         // Compare the BOARD, not the chrome: puzzle prompt text is identical
