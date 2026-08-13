@@ -164,7 +164,14 @@ export function applyBriefVoiceCap(
   // the backtracking entirely.
   const sentences: string[] = [];
   {
-    const SENTENCE_TERMINATOR_RE = /[.!?]+(?=\s|$)/g;
+    // Fullwidth 。！？ are the sentence enders in Chinese and Japanese, and
+    // they are NOT followed by whitespace — text continues immediately — so
+    // they get their own alternation without the whitespace lookahead. They
+    // never appear in SAN and have no abbreviation use, so neither guard
+    // applies to them. Without this branch a whole Chinese paragraph scanned
+    // as ONE sentence and the brief cap never fired in the very languages the
+    // app just started speaking.
+    const SENTENCE_TERMINATOR_RE = /[.!?]+(?=\s|$)|[。！？]+/g;
     let cursor = 0;
     let m: RegExpExecArray | null;
     SENTENCE_TERMINATOR_RE.lastIndex = 0;
@@ -184,8 +191,20 @@ export function applyBriefVoiceCap(
   const filteredSentences = sentences.filter((s) => s.length > 0);
   const sentencesForCap = filteredSentences.length > 0 ? filteredSentences : [trimmed];
 
+  // Words = whitespace tokens PLUS a budget for CJK, which has no spaces to
+  // split on: a 200-character Chinese explanation whitespace-counts as one
+  // "word" and sailed under the cap untouched. Two characters per word-unit
+  // tracks spoken duration closely enough that brief means roughly the same
+  // number of seconds in every language. Zero CJK characters → the count is
+  // exactly what it always was.
+  const countWords = (t: string): number => {
+    const cjk = (t.match(/[\u3000-\u9fff\uf900-\ufaff]/g) ?? []).length;
+    const spaced = t.replace(/[\u3000-\u9fff\uf900-\ufaff]/g, '').split(/\s+/).filter(Boolean).length;
+    return spaced + Math.ceil(cjk / 2);
+  };
+
   // Early-out: input already obeys both caps → return it unchanged.
-  const totalWords = trimmed.split(/\s+/).length;
+  const totalWords = countWords(trimmed);
   if (sentencesForCap.length <= BRIEF_VOICE_SENTENCE_CAP && totalWords <= BRIEF_VOICE_WORD_CAP) {
     return { text: trimmed, truncated: false, originalLength };
   }
@@ -202,7 +221,7 @@ export function applyBriefVoiceCap(
   let sentenceCount = 0;
   for (const sentence of sentencesForCap) {
     if (sentenceCount >= BRIEF_VOICE_SENTENCE_CAP) break;
-    const w = sentence.split(/\s+/).filter(Boolean).length;
+    const w = countWords(sentence);
     if (chosen && wordCount + w > BRIEF_VOICE_WORD_CAP) break;
     chosen = chosen ? `${chosen} ${sentence}` : sentence;
     wordCount += w;

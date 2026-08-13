@@ -304,3 +304,44 @@ describe('applyBriefVoiceCap', () => {
     });
   });
 });
+
+describe('brief is a hard contract in every language the app speaks (G5)', () => {
+  // 🔒 THE CAP WAS A NO-OP IN CHINESE AND JAPANESE. Sentences were split on
+  // `. ! ?` and words counted by spaces — CJK ends sentences with 。！？ and
+  // has no spaces, so a four-sentence Chinese explanation scanned as ONE
+  // sentence of ONE word and sailed under both caps untouched. Found on the
+  // session-end reread of the day nl/pl/tr shipped: the languages went out,
+  // the verbosity contract quietly did not go with them.
+
+  it('clips a long Chinese explanation to the sentence cap', () => {
+    const zh = '马在f6并不安全，因为象正在攻击后。白方应该先出子控制中心。'
+      + '接下来王车易位保护国王安全。最后用车占领开放线发动进攻。';
+    const r = applyBriefVoiceCap(zh, 'brief');
+    expect(r.truncated).toBe(true);
+    // Two sentences survive; the third and fourth are gone.
+    expect(r.text).toContain('控制中心');
+    expect(r.text).not.toContain('开放线');
+  });
+
+  it('clips Japanese the same way', () => {
+    const ja = 'ナイトは安全ではありません。ビショップがクイーンを攻撃しています。'
+      + 'まずキャスリングで王を守るべきです。それからルークで攻撃を始めます。';
+    const r = applyBriefVoiceCap(ja, 'brief');
+    expect(r.truncated).toBe(true);
+    expect(r.text).not.toContain('ルーク');
+  });
+
+  it('leaves a short Chinese line alone', () => {
+    const short = '马在f6并不安全。';
+    const r = applyBriefVoiceCap(short, 'brief');
+    expect(r.truncated).toBe(false);
+    expect(r.text).toBe(short);
+  });
+
+  it('changes nothing about English counting', () => {
+    // The CJK branch must be invisible to Latin text: zero CJK characters →
+    // the word count is exactly the whitespace split it always was.
+    const twoShort = 'The knight is safe. The bishop is not.';
+    expect(applyBriefVoiceCap(twoShort, 'brief').truncated).toBe(false);
+  });
+});
