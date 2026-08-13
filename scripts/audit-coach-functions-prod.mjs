@@ -105,7 +105,9 @@ async function ask(transcriptSel, question, waitLoops = 30, inputSel = '[data-te
   // above the ask panel's, and .first() on the bare selector clicked into it.
   const box = page.locator(`${inputSel}:visible`).first();
   await box.waitFor({ timeout: 20000 });
-  const transcript = page.locator(transcriptSel).first();
+  // The global drawer renders BOTH its mobile and desktop variants — the
+  // hidden twin matches first and reads as an empty panel. Visible only.
+  const transcript = page.locator(`${transcriptSel}:visible`).first();
   const linesOf = async () => (await transcript.innerText().catch(() => ''))
     .split('\n').map((l) => l.trim()).filter(Boolean);
   const tally = (ls) => ls.reduce((m, l) => m.set(l, (m.get(l) ?? 0) + 1), new Map());
@@ -118,7 +120,10 @@ async function ask(transcriptSel, question, waitLoops = 30, inputSel = '[data-te
     }
     return out.filter((l) => !l.includes(question));
   };
-  await box.click();
+  // A continuously-animating overlay (narration banner, streaming bubble) can
+  // fail the stability check on a perfectly tappable input — force is the
+  // documented fallback for that class (a human can tap anyway).
+  await box.click({ timeout: 15000 }).catch(() => box.click({ force: true }));
   await box.pressSequentially(question, { delay: 10 });
   await box.press('Enter');
   const SUBSTANTIVE = (l) => l.length >= 20 && l.includes(' ');
@@ -309,7 +314,15 @@ try {
       await page.locator('[data-testid="walk-ask-panel"]').waitFor({ timeout: 10000 }).catch(() => {});
     }
     const reviewBox = page.locator('[data-testid="walk-ask-panel"] [data-testid="chat-text-input"]').first();
-    const boxUp = await reviewBox.waitFor({ timeout: 30000 }).then(() => true).catch(() => false);
+    let boxUp = await reviewBox.waitFor({ timeout: 30000 }).then(() => true).catch(() => false);
+    if (boxUp) {
+      // The panel can collapse again when the walk narration re-renders —
+      // re-open right before asking so the input is live at type time.
+      if (!(await reviewBox.isVisible().catch(() => false))) {
+        await askToggle.click().catch(() => {});
+        boxUp = await reviewBox.waitFor({ timeout: 10000 }).then(() => true).catch(() => false);
+      }
+    }
     if (boxUp) {
       const revAsk = (await ask('[data-testid="walk-ask-panel"]', 'what was the biggest mistake in this game?', 30, '[data-testid="walk-ask-panel"] [data-testid="chat-text-input"]')).toLowerCase();
       record('review', 'a mid-review question gets a game-grounded answer',
