@@ -7,6 +7,7 @@ import { buildVoicePackage } from '../services/voicePackage';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
 import { formatReadingFacts } from '../services/positionReadingService';
+import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from '../services/danyaTeachingService';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
 import {
@@ -233,6 +234,26 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         ? ` REQUIRED: the engine has computed the deepest look-ahead for this position. You MUST include this exact sentence, verbatim, as part of your narration (do not paraphrase, do not omit it): "${lookaheadLine}"`
         : '';
 
+      // THE CORPUS LEADS (David 2026-08-13: "narrations follow the corpus,
+      // hand written, computed note format"). A read of the board starts from
+      // a farmed teaching note about THIS position or structure when one
+      // exists — board-gated at retrieval (teachingSourceForBoard), framed
+      // honestly by origin (generalizedTeaching), and injected as a REQUIRED
+      // verbatim lead exactly like the computed look-ahead, so the model
+      // phrases around it instead of freestyling past it. No note = the
+      // computed facts carry the read alone, as before.
+      let requiredNote = '';
+      try {
+        const historySans = args.pgn.split(/\s+/).map((t) => t.replace(/^\d+\.+/, '')).filter((t) => t && !/^(?:1-0|0-1|1\/2-1\/2|\*)$/.test(t));
+        const src = teachingSourceForBoard(historySans, args.fen, args.openingName ?? null);
+        if (src) {
+          const noteLine = generalizedTeaching(src.origin, spokenBeatText(src.note));
+          if (noteLine.trim().length > 0) {
+            requiredNote = ` LEAD WITH THIS VERIFIED TEACHING NOTE, verbatim, as your opening sentence(s): "${noteLine}"`;
+          }
+        }
+      } catch { /* corpus unavailable — the computed read stands alone */ }
+
       const context: CoachContext = {
         fen: args.fen,
         lastMoveSan: null,
@@ -243,7 +264,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         playerMove: null,
         moveClassification: null,
         playerProfile: { rating, weaknesses: [] },
-        additionalContext: `${readingFacts ? `${readingFacts}\n\n` : ''}The student is playing as ${args.playerColor}. They just tapped "Read this position" — give them a live, spoken narration of what you see.${requiredLookahead}`,
+        additionalContext: `${readingFacts ? `${readingFacts}\n\n` : ''}The student is playing as ${args.playerColor}. They just tapped "Read this position" — give them a live, spoken narration of what you see.${requiredNote}${requiredLookahead}`,
       };
 
       const userMessage = buildChessContextMessage(context);
