@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { voiceService } from '../services/voiceService';
 import { logAppAudit } from '../services/appAuditor';
+import { useAppStore } from '../stores/appStore';
 import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 import type { ReviewNarration, ReviewMoveSegment } from '../services/coachFeatureService';
 
@@ -206,6 +207,17 @@ export function useReviewPlayback(args: UseReviewPlaybackArgs): UseReviewPlaybac
     const token = activeTokenRef.current;
     voiceService.stop();
     if (!text || !text.trim()) {
+      setNarrationState('idle');
+      return;
+    }
+    // Settings → Coach → "Review Voice Narration" governs EVERY spoken line
+    // of the review, and the per-ply walk speech lives HERE — not in
+    // CoachGameReview's reviewSay guard. The 2026-08-13 live drive caught this
+    // path speaking with the toggle off (the unit gate only scanned the
+    // component file). Read live so a mid-review Settings change takes effect
+    // on the next ply. The written banner is untouched — voice only.
+    const voiceOn = useAppStore.getState().activeProfile?.preferences.coachReviewVoice ?? true;
+    if (!voiceOn) {
       setNarrationState('idle');
       return;
     }
