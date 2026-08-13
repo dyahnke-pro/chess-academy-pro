@@ -321,6 +321,14 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
           'Content-Type': 'audio/mpeg',
           'Cache-Control': isPrimary ? AUDIO_CACHE_CONTROL : 'no-store',
           'X-TTS-Source': provider.id,
+          // WHICH LANGUAGE ACTUALLY SPOKE. The response proved a clip was
+          // synthesised and said nothing about the voice that read it, so a
+          // student's Dutch coming back in an American accent looked identical
+          // from outside to Dutch coming back in Dutch — both a 200 from
+          // google with real audio. Three languages sat mis-voiced behind that
+          // blind spot. Diagnostic only, and it carries no secret: a locale
+          // and the fact that detection fired.
+          'X-TTS-Lang': langVoice?.languageCode ?? 'en-US',
         },
       });
     } catch (error: unknown) {
