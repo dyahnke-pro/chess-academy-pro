@@ -130,7 +130,10 @@ async function main() {
   // forever once seeded. Wipe IndexedDB before navigating into any
   // route that reads from it so the audit always reflects the
   // current JSON.
-  await page.goto(`${BASE_URL}/`, { timeout: 30_000 });
+  // domcontentloaded + a wide budget: the proxied sandbox boots this SPA in
+  // 8-25s and the full "load" event can outrun 30s — the 2026-08-13 battery
+  // run died right here on the timeout, not on the app.
+  await page.goto(`${BASE_URL}/`, { waitUntil: 'domcontentloaded', timeout: 120_000 });
   await page.waitForTimeout(1500);
   await page.evaluate(async () => {
     const dbs = await indexedDB.databases();
