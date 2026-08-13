@@ -162,10 +162,26 @@ async function main() {
     }
   });
   await page.reload({ waitUntil: 'networkidle' });
-  // Fresh seed includes ECO (~3.6k entries), repertoire, pro
-  // repertoires, gambits, model games, middlegame plans, flashcards,
-  // narrations. Takes ~15-25s in the sandbox; give it 30s.
-  await page.waitForTimeout(30_000);
+  // Fresh seed includes ECO (~3.6k entries), repertoire, pro repertoires,
+  // gambits, model games, middlegame plans, flashcards, narrations. The old
+  // fixed 30s was the documented too-tight class (G1 says 45-60s; the
+  // proxied sandbox runs slower still) — 2026-08-13 it produced an empty
+  // trap section and a false red. Poll Dexie for the audited pro-rep row
+  // itself instead of guessing.
+  const seeded = await page.waitForFunction(async (wantId) => {
+    return await new Promise((res) => {
+      const rq = indexedDB.open('ChessAcademyDB');
+      rq.onerror = () => res(false);
+      rq.onsuccess = () => {
+        const db = rq.result;
+        if (!db.objectStoreNames.contains('openings')) { db.close(); res(false); return; }
+        const g = db.transaction('openings', 'readonly').objectStore('openings').get(wantId);
+        g.onsuccess = () => { db.close(); res(!!g.result); };
+        g.onerror = () => { db.close(); res(false); };
+      };
+    });
+  }, 'pro-naroditsky-alapin', { timeout: 150_000, polling: 3_000 }).then(() => true).catch(() => false);
+  console.log(`[trap-tiles] pro-rep seed landed: ${seeded}`);
 
   for (const exp of EXPECTATIONS) {
     console.log(`\n── ${exp.openingId}: ${exp.description}`);
