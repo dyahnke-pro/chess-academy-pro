@@ -45,6 +45,7 @@ import {
 } from './openingDetectionService';
 import { db, type CachedOpening } from '../db/schema';
 import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates';
+import { materialBalance } from './materialClaimValidator';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
@@ -377,7 +378,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // lesson cached at the '-spelling' rev keeps its dead-tier prose forever while
 // the audits (fresh browser, cold cache, always regenerating) show green.
 // One bump batching both fixes, per the locked cost rule.
-const WALKTHROUGH_GEN_REV = '2026-08-13-authored-window';
+const WALKTHROUGH_GEN_REV = '2026-08-13-material-ledger';
 
 export async function getCachedOpening(
   name: string,
@@ -1774,7 +1775,16 @@ async function generateOpeningFromDbNarration(
     .map((p, idx) => {
       const moveNum = Math.floor(p.ply / 2) + 1;
       const dotted = p.movedBy === 'white' ? `${moveNum}.` : `${moveNum}…`;
-      return `${idx + 1}. ${dotted}${p.san}  (after this move FEN: ${p.fen})`;
+      // MATERIAL LEDGER (David 2026-08-13, the Benko color-swap incident):
+      // the model inverted who was up material because nothing computed told
+      // it. The balance per ply is code-computed; the prompt directive below
+      // makes it the ONLY permissible material claim.
+      const bal = materialBalance(p.fen);
+      const matNote = bal === null || bal === 0
+        ? 'material even'
+        : bal > 0 ? `WHITE is up ${bal} point${bal === 1 ? '' : 's'} of material`
+          : `BLACK is up ${-bal} point${bal === -1 ? '' : 's'} of material`;
+      return `${idx + 1}. ${dotted}${p.san}  (after this move FEN: ${p.fen}; ${matNote})`;
     })
     .join('\n');
   // Branches sit at the position AFTER the canonical's last move.
@@ -1804,6 +1814,7 @@ WHY DISCIPLINE (David 2026-07-19 — "be careful not to overstate the why, I don
 - State only reasons that are TRUE of THIS EXACT position. ONE true, concrete reason beats three plausible-sounding ones. Multiple reasons are welcome ONLY when each is genuinely true here — never pad a move with a second or third justification just to sound thorough or fill space.
 - A normal developing move is allowed to be just that. If a move is routine, say so plainly ("Castles kingside — all very natural") rather than inventing a deep hidden purpose. A tag that says "this needs no theory" is itself useful information; a fabricated deep reason is not.
 - Anchor the reason to something on the board: a specific square, pawn, piece, or line. If you can't name what the reason points AT, don't state it.
+- MATERIAL ACCOUNTING IS COMPUTED, NOT YOURS TO JUDGE: every move below carries a computed material note ("material even" / "BLACK is up 1 point"). Any statement about who is up or down material, an extra pawn, or material being level MUST match that note for the move being narrated — including hypotheticals ("once White takes X" must describe the accounting that capture actually produces). Never claim a piece "stays home" or "is kept back" on the very move where that piece develops.
 
 STRUCTURAL BEATS (the tape's keystone shape — use on the defining/keystone moves, not routine ones):
 - Shape a keystone's WHY as: the TRIGGER that makes the plan apply (a structure, a pawn event like "once the center locks", or a piece placement) → the concrete PLAN as a square-by-square route ("the knight travels f3→d2→c4", not "the knight improves") → the ONE weakness it TARGETS, stated with "because" ("a monster on c4 because d6 can never challenge it"). Optionally add the rule then its exception ("you almost always meet …c6 with a4 — but here b4 is fine because…").

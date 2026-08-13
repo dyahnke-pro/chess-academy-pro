@@ -35,6 +35,7 @@ import { injectCandidateArrows, injectCandidateHighlights, type RankedCandidate 
 import { stockfishEngine } from './stockfishEngine';
 import { stripUngroundedTacticSentences } from './tacticClaimValidator';
 import { stripDisprovenEvalSentences } from './evalClaimValidator';
+import { stripDisprovenMaterialSentences } from './materialClaimValidator';
 import type { TacticsLiveContext } from '../coach/types';
 
 /** Per-sentence spoken gate for STREAMING-TTS surfaces. Those hand each
@@ -218,6 +219,13 @@ export function gradeNarrationText(
       droppedCount += ev.dropped.length;
       out = ev.dropped.length > 0 ? ev.clean : out;
     }
+    // MATERIAL-DIRECTION claims (David heard "Once White takes the Benko
+    // pawn, he's DOWN material" live, 2026-08-13): who is up/down/level is
+    // pure piece-counting — checkable, so checked. Hypotheticals stay exempt
+    // (the generator's material ledger prevents those at the prompt).
+    const mat = stripDisprovenMaterialSentences(out, fen);
+    droppedCount += mat.dropped.length;
+    out = mat.dropped.length > 0 ? mat.clean : out;
     if (droppedCount > 0) {
       // ── SAY WHAT WAS DROPPED, NOT ONLY WHAT SURVIVED ────────────────────
       //
@@ -242,6 +250,7 @@ export function gradeNarrationText(
       const refused = [
         ...board.dropped.map((d) => d.sentence),
         ...(typeof evalCp === 'number' ? stripDisprovenEvalSentences(text, evalCp).dropped : []),
+        ...mat.dropped,
       ].filter(Boolean).join(' ');
       void logAppAudit({
         kind: 'claim-validator-trip',
