@@ -4,9 +4,9 @@
 // Muted throughout — the mute branch emits the same narration events, so the
 // instrument works with zero TTS spend.
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
-import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
-import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from '/home/user/chess-academy-pro/scripts/audit-lib/chromium.mjs';
+import { autoDismissCalibration } from '/home/user/chess-academy-pro/scripts/audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from '/home/user/chess-academy-pro/scripts/audit-lib/mute-tts.mjs';
 
 const BASE = 'https://chess-academy-pro.vercel.app';
 const sleep = (ms) => new Promise((r) => { setTimeout(r, ms); });
