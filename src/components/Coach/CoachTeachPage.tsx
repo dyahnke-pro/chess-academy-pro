@@ -3303,7 +3303,36 @@ export function CoachTeachPage(): JSX.Element {
         requestedName = m[2].trim();
       } else if (stageHint && stageStrippedInput.length > 0 && stageStrippedInput.length <= 60) {
         // Stage keyword stripped → remaining text is the opening name.
-        requestedName = stageStrippedInput;
+        // DEICTIC remainder (2026-08-13 audit): "quiz me on this position"
+        // strips to "this position", which names no opening — the fuzzy
+        // matcher then served a bogus picker/greeting. Use the ACTIVE
+        // lesson's opening when one is running; with nothing running, ask
+        // for a name honestly instead of guessing.
+        if (/^(?:(?:this|that|the|current|my)\s+)?(?:position|board|game|line|here|it)$/i.test(stageStrippedInput)) {
+          const activeName = walkthrough.tree?.openingName ?? null;
+          if (activeName) {
+            requestedName = activeName;
+          } else {
+            const dTurnId = freshTurnId('deictic');
+            setMessages((prev) => [...prev, {
+              id: `${dTurnId}-u`, role: 'user', content: text, timestamp: Date.now(),
+            }]);
+            const dProse = stageHint === 'play-real'
+              ? 'Name the opening you want to play and we\'ll start — "play the Vienna against me".'
+              : 'Name the opening and I\'ll set that up — like "quiz me on the Vienna". Once a lesson is running, "this position" works too.';
+            setMessages((prev) => [...prev, {
+              id: `${dTurnId}-c`, role: 'assistant', content: dProse, timestamp: Date.now(),
+            }]);
+            useCoachMemoryStore.getState().appendConversationMessage({
+              surface: 'chat-teach', role: 'coach', text: dProse,
+              fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
+            });
+            void voiceService.speak(dProse);
+            return;
+          }
+        } else {
+          requestedName = stageStrippedInput;
+        }
       } else if (
         workingInput.length <= 60 &&
         !workingInput.includes('?') &&
