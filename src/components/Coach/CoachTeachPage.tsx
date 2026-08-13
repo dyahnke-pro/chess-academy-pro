@@ -245,6 +245,7 @@ import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingRating } from '../../services/coachGameEngine';
 import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
+import { tryRouteIntent } from '../../services/coachSessionRouter';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -2162,6 +2163,61 @@ export function CoachTeachPage(): JSX.Element {
         setCoachChoices(null);
         setMessages((prev) => [...prev, { id: uid('cont-u'), role: 'user', content: text, timestamp: Date.now() }]);
         void startContinuationRef.current();
+        return;
+      }
+    }
+
+    // BOARD-COMMAND PRE-PASS (2026-08-13 audit, Cluster B): "reset the
+    // board" / "take that back" typed on Learn fell to the LLM, which served
+    // the best-move readout instead of acting — GameChatPanel runs this same
+    // deterministic router; Learn never did. Only the two board-state kinds
+    // route here: play_move stays with Learn's own move pipeline (it feeds
+    // commentary + slip capture), and navigation stays with the surface
+    // router below.
+    {
+      const routed = tryRouteIntent(text, {
+        currentFen: liveFenRef.current,
+        lastMoveBy: gameRef.current.turn === playerColor?.[0] ? 'coach' : 'user',
+      });
+      // "favorite the Caro-Kann" / "star the Vienna" / "add X to my favorites"
+      // — an imperative-led favorite COMMAND. Without this, Learn's opening
+      // resolver hijacked it into the line PICKER (2026-08-13 audit) and the
+      // favorite tool was unreachable. Imperative-led only, so "what's my
+      // favorite opening?" stays a question for the brain.
+      const favMatch = text.trim().match(
+        /^(?:please\s+)?(?:favou?rite|star|bookmark)\s+(?:the\s+)?(.{2,60})$/i,
+      ) ?? text.trim().match(
+        /^(?:please\s+)?add\s+(?:the\s+)?(.{2,60}?)\s+to\s+my\s+favou?rites?$/i,
+      );
+      if (favMatch) {
+        setMessages((prev) => [...prev, { id: uid('fav-u'), role: 'user', content: text, timestamp: Date.now() }]);
+        const subject = favMatch[1].trim().replace(/[.!?]+$/, '');
+        const { searchOpenings, toggleFavorite } = await import('../../services/openingService');
+        const matches = await searchOpenings(subject).catch(() => []);
+        const target = matches[0] ?? null;
+        let say: string;
+        if (target) {
+          if (!target.isFavorite) await toggleFavorite(target.id).catch(() => {});
+          say = `${target.name} is in your favorites now.`;
+        } else {
+          say = `I couldn't find "${subject}" in the openings database, so nothing was favorited.`;
+        }
+        setMessages((prev) => [...prev, { id: uid('fav-a'), role: 'assistant', content: say, timestamp: Date.now() }]);
+        void voiceService.speak(say);
+        return;
+      }
+      if (routed && (routed.kind === 'take_back_move' || routed.kind === 'reset_board')) {
+        setMessages((prev) => [...prev, { id: uid('cmd-u'), role: 'user', content: text, timestamp: Date.now() }]);
+        const outcome = routed.kind === 'take_back_move'
+          ? handleTakeBack(routed.count)
+          : handleResetBoard();
+        const say = !outcome.ok
+          ? `Couldn't do that: ${('reason' in outcome && outcome.reason) || 'nothing to take back yet'}.`
+          : routed.kind === 'reset_board'
+            ? 'Board reset — fresh start.'
+            : routed.count === 2 ? 'Took the last exchange back.' : 'Took it back — your move again.';
+        setMessages((prev) => [...prev, { id: uid('cmd-a'), role: 'assistant', content: say, timestamp: Date.now() }]);
+        void voiceService.speak(say);
         return;
       }
     }

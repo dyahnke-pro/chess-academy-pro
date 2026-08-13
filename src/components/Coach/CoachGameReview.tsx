@@ -2733,6 +2733,16 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
             fen: fenForQ,
             trigger: null,
           });
+          // GROUNDED TURNS DON'T STREAM — Layer B disables streaming so the
+          // claim validator can rerun, which means onChunk never fires and the
+          // bubble a student is staring at stays EMPTY while the answer sits
+          // in memory (live prod 2026-08-13: coach_answer 138 chars in 520ms,
+          // blank <p> at +15s). The resolved answer is the display of record
+          // whenever nothing streamed.
+          patchAssistant((prevText) =>
+            prevText.trim().length > 0
+              ? prevText
+              : (spokenDisplayText.trim() || answer.text.replace(VOICE_MARKER_RE, '').trim()));
         }
       })
       .catch((err: unknown) => {

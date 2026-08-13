@@ -3205,9 +3205,47 @@ export type PositionalTopic = 'material' | 'center' | 'development' | 'structure
 
 const PIECE_WORD: Record<string, string> = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queen', k: 'king' };
 
-export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'black', topic: PositionalTopic): GroundedAnswer | null {
+export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'black', topic: PositionalTopic, ask?: string): GroundedAnswer | null {
   let a: ReturnType<typeof assessPosition>;
   try { a = assessPosition(fen); } catch { return null; }
+
+  // FALSE-PREMISE CHECK (2026-08-13 audit): "is my queen on h5 well placed?"
+  // at the start position must be CORRECTED from the board, never answered as
+  // if the premise were true (and never topic-switched to the best move). When
+  // the ask names a piece ON a square, verify it — a mismatch is itself the
+  // grounded answer.
+  if (topic === 'piece' && ask) {
+    const m = ask.toLowerCase().match(/\b(queen|rook|bishop|knight|pawn|king)\s+(?:on|at)\s+([a-h][1-8])\b/);
+    if (m) {
+      const LETTER: Record<string, string> = { queen: 'q', rook: 'r', bishop: 'b', knight: 'n', pawn: 'p', king: 'k' };
+      const wanted = LETTER[m[1]];
+      const sq = m[2];
+      try {
+        const board = new Chess(fen);
+        const cell = board.get(sq as Parameters<Chess['get']>[0]);
+        const myC2: 'w' | 'b' = studentColor === 'white' ? 'w' : 'b';
+        if (!cell || cell.type !== wanted || cell.color !== myC2) {
+          const actual = cell
+            ? `${cell.color === myC2 ? 'your' : "your opponent's"} ${REVIEW_PIECE_NAME[cell.type] ?? cell.type} is on ${sq}`
+            : `${sq} is empty`;
+          // Where IS their piece of that type? Name real squares only.
+          const homes: string[] = [];
+          for (const row of board.board()) {
+            for (const c of row) {
+              if (c && c.type === wanted && c.color === myC2) homes.push(c.square);
+            }
+          }
+          const whereabouts = homes.length
+            ? ` Your ${m[1]}${homes.length > 1 ? 's are' : ' is'} on ${homes.join(' and ')}.`
+            : ` You have no ${m[1]} on the board.`;
+          return {
+            facts: `Your ${m[1]} isn't on ${sq} — ${actual}.${whereabouts}`,
+            bestMoveSan: null, bestMoveFromTo: null, sources: ['board:chess.js'],
+          };
+        }
+      } catch { /* bad fen — fall through to the generic read */ }
+    }
+  }
   const me = studentColor;
   const opp = studentColor === 'white' ? 'black' : 'white';
   const myC: 'w' | 'b' = me === 'white' ? 'w' : 'b';

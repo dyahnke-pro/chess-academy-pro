@@ -1107,6 +1107,10 @@ export interface MasterGroundingOptions {
    *  hanging?", "what's the threat?", "fork here?"). The answer is COMPUTED
    *  from `tactics` (assembleTacticsAnswer) and voiced via voiceFacts. */
   tacticsQuestion?: boolean;
+  /** A HINT ask ("give me a hint") — reuses the engine best-move read but the
+   *  answer names the PIECE and the goal and WITHHOLDS the square (honesty
+   *  contract; 2026-08-13 audit: hints were handing over the full answer). */
+  hintQuestion?: boolean;
   /** STEP B — true when this turn is a STUDENT-PROGRESS question ("am I
    *  improving?", "what should I work on?"). The answer is the student's OWN
    *  bad-habit profile (assembleProgressAnswer), voiced via voiceFacts. Needs
@@ -2775,6 +2779,7 @@ export async function getCoachChatResponse(
       grounding.masterPlayQuestion === true ||
       grounding.planQuestion === true ||
       grounding.tacticsQuestion === true ||
+      grounding.hintQuestion === true ||
       grounding.progressQuestion === true ||
       grounding.trendQuestion === true ||
       grounding.openingProfileQuestion === true ||
@@ -3960,6 +3965,37 @@ export async function getCoachChatResponse(
           }
         }
 
+        // ── HINT (2026-08-13) — name the piece + the goal, WITHHOLD the square.
+        // Derived from the same engine best move the best-move lane uses, so
+        // it is a computed board fact; the destination stays the student's to
+        // find. Falls through when no engine/master move is in hand.
+        if (grounding.hintQuestion) {
+          const hintUci = grounding.engineBestMoveUci
+            ?? (masterPlayContext && masterPlayContext.current.moves.length > 0
+              ? masterPlayContext.current.moves[0].uci ?? null
+              : null);
+          const hintFen = grounding.currentFen ?? masterPlayContext?.current.fen ?? null;
+          if (hintUci && hintUci.length >= 4 && hintFen) {
+            try {
+              const { Chess } = await import('chess.js');
+              const hintBoard = new Chess(hintFen);
+              const from = hintUci.slice(0, 2);
+              const piece = hintBoard.get(from as Parameters<Chess['get']>[0]);
+              const PIECE_NAME: Record<string, string> = { p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king' };
+              if (piece) {
+                const mv = hintBoard.move({ from, to: hintUci.slice(2, 4), promotion: 'q' });
+                const flavor = mv?.captured
+                  ? 'there is something it can win'
+                  : mv?.san === 'O-O' || mv?.san === 'O-O-O'
+                    ? 'think about king safety'
+                    : 'it has a better square waiting';
+                const hint = `Here's your hint: look at your ${PIECE_NAME[piece.type] ?? 'piece'}${mv?.san?.startsWith('O-O') ? '' : ` on ${from}`} — ${flavor}. Where does it want to go?`;
+                return hint;
+              }
+            } catch { /* malformed uci/fen — fall through to the normal lanes */ }
+          }
+        }
+
         if (grounding.bestMoveQuestion) {
           // Prefer Stockfish's TRUE best move (threaded from the surface engine
           // snapshot, STEP A); fall back to the top master move when the engine
@@ -4033,6 +4069,18 @@ export async function getCoachChatResponse(
             const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics', preferRaw: true });
             if (voiced) return voiced;
           }
+          // A QUIET board is still an answer to a THREAT question. The
+          // assembler returns null when nothing concrete exists, and the old
+          // fall-through served the best-move readout — a topic switch (live
+          // prod 2026-08-13: "what's the biggest threat right now?" → "the
+          // best move is d4"). The all-clear is a computed board fact (the
+          // scan ran and found nothing), so voice THAT instead. G0-clean:
+          // code decided; the LLM only phrases.
+          const allClear =
+            'Nothing is hanging and there are no immediate tactical threats on the board right now — this is a quiet position, so the fight is positional.';
+          const voicedClear = await voiceFacts(allClear, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'tactics', preferRaw: true });
+          if (voicedClear) return voicedClear;
+          return allClear;
         }
 
         // ── MASTER PLAY (Phase 4) — voice the real top moves + frequencies ──
@@ -4098,7 +4146,7 @@ export async function getCoachChatResponse(
           const sc: 'white' | 'black' =
             grounding.studentColor ??
             ((grounding.currentFen ?? '').split(' ')[1] === 'b' ? 'black' : 'white');
-          const answer = assemblePositionalAnswer(grounding.currentFen, sc, grounding.positionalTopic);
+          const answer = assemblePositionalAnswer(grounding.currentFen, sc, grounding.positionalTopic, lastUserMessage());
           if (answer) {
             const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'positional-feature', preferRaw: true });
             if (voiced) return voiced;

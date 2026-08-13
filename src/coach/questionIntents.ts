@@ -240,6 +240,17 @@ export function restrictedPieceInAsk(ask: string | undefined): AskedPiece | null
   return m ? (m[1].toLowerCase() as AskedPiece) : null;
 }
 
+/** A HINT request — "give me a hint", "a nudge", "point me in the right
+ *  direction", "help me without telling me the move". The honesty contract
+ *  (locked): a hint names the PIECE and the goal and WITHHOLDS the square —
+ *  the 2026-08-13 audit caught "give me a hint" answered with the full
+ *  best-move readout, which hands over the answer. Checked BEFORE best-move
+ *  so the hint shape wins. */
+export function isHintRequest(ask: string | undefined): boolean {
+  if (!ask) return false;
+  return /\b(?:hint|a\s+nudge|nudge\s+me|point\s+me\s+in\s+the\s+right\s+direction|help\s+me\s+(?:out\s+)?without\s+(?:telling|giving)\b)/i.test(ask);
+}
+
 export function isBestMoveQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // "my best OPENING / defence / repertoire" is an opening-profile question, not
@@ -639,6 +650,11 @@ const MASTER_PLAY_QUESTION_RE = anyOf([
   String.raw`\bwhat(?:'?s| is)?\s+(?:played|standard|normal)\s+(?:here|in\s+this)\b`,
   String.raw`\bhow\s+is\s+(?:this|it)\s+(?:usually|normally|typically)\s+(?:played|met|handled|answered)\b`,
   String.raw`\bwhat\s+do\s+the\s+(?:best|elite|top)\s+players?\b`,
+  // A NAMED famous master ("what would Magnus play here?") is a master-play
+  // ask — the honest data is the masters DB, never an invented attribution
+  // (2026-08-13 audit: this fell through to the best-move readout). Names are
+  // a routing hint only; the ANSWER voices anonymous master stats (G0).
+  String.raw`\bwhat\s+(?:would|does|did)\s+(?:magnus(?:\s+carlsen)?|carlsen|hikaru(?:\s+nakamura)?|nakamura|kasparov|fischer|caruana|naroditsky|gotham(?:chess)?|levy|a\s+(?:gm|grandmaster|master|pro|2000)|(?:a\s+)?(?:strong|top|titled)\s+player)\s+(?:play|do|choose|go\s+for)\b`,
   String.raw`\bwhat\s+(?:the\s+)?(?:best|elite|top|strong|titled|good)\s+players?\s+(?:play|do|prefer|choose|go\s+for)\b`,
   String.raw`\bbest\s+by\s+test\b`,
   String.raw`\bwhat(?:'?s| is)?\s+(?:the\s+)?(?:engine|database)\s+(?:top|favou?rite)\b`,
@@ -1899,7 +1915,7 @@ export function positionalTopic(ask: string | undefined): PositionalTopic | null
   if (/\bhave\s+i\s+developed\b|\bam\s+i\s+(?:behind|ahead)\s+in\s+development\b|\bhow(?:'?s| is)\s+my\s+development\b/.test(a)) return 'development';
   if (/\bis\s+my\s+(?:pawn\s+)?structure\b|\bdo\s+i\s+have\s+(?:any\s+)?weak\s+(?:pawns|squares)\b|\bweak\s+pawns?\b/.test(a)) return 'structure';
   if (/\bis\s+my\s+king\s+(?:exposed|safe|weak|in\s+danger|under\s+attack|vulnerable)\b|\bworried\s+about\s+my\s+king\b|\bmy\s+king\s+safety\b|\bhow(?:'?s| is)\s+my\s+king\b/.test(a)) return 'king';
-  if (/\bis\s+my\s+(?:bishop|knight|rook|queen)\s+(?:on\s+[a-h][1-8]\s+)?(?:bad|good|active|passive|misplaced|awkward)\b|\bare\s+my\s+(?:bishops|knights|rooks|pieces)\s+(?:any\s+)?(?:good|bad|active|coordinated|placed)\b|\bare\s+my\s+pieces\s+coordinated\b|\bis\s+[a-h][1-8]\s+a\s+(?:good|key|weak|strong)\s+square\b/.test(a)) return 'piece';
+  if (/\bis\s+my\s+(?:bishop|knight|rook|queen|pawn|king)\s+(?:on\s+[a-h][1-8]\s+)?(?:bad|good|active|passive|misplaced|awkward|(?:well[\s-]+)?placed|happy|safe\s+there|strong|weak)\b|\bare\s+my\s+(?:bishops|knights|rooks|pieces)\s+(?:any\s+)?(?:good|bad|active|coordinated|placed|well[\s-]+placed)\b|\bare\s+my\s+pieces\s+coordinated\b|\bis\s+[a-h][1-8]\s+a\s+(?:good|key|weak|strong)\s+square\b/.test(a)) return 'piece';
   return null;
 }
 

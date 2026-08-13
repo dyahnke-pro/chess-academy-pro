@@ -206,7 +206,7 @@ import {
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
-  isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion,
+  isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -1077,6 +1077,26 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // Detectors see the STUDENT's words only — never surface-injected
     // instruction blocks (the "I played f4" → training-pitch hijack).
     const askForIntents = isInternalAsk ? undefined : stripInjectedBlocks(input.ask);
+    // KEYBOARD-MASH GUARD (2026-08-13 audit): "asdfghjkl" got a confident
+    // best-move readout. A single token that is literally a keyboard-row run
+    // (or one character repeated) is noise, not a question — answer with a
+    // clarifying nudge instead of burning an LLM turn on it. Deliberately
+    // narrow: any real word ("hi", "e4", "why") passes untouched.
+    if (askForIntents) {
+      const mash = askForIntents.toLowerCase().replace(/[^a-z]/g, '');
+      const KEYBOARD_ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
+      const isMash = mash.length >= 6 && !askForIntents.trim().includes(' ')
+        && (KEYBOARD_ROWS.some((row) => row.includes(mash) || [...row].reverse().join('').includes(mash))
+          || /^(.)\1{5,}$/.test(mash));
+      if (isMash) {
+        return {
+          text: "Didn't catch that — ask me about the position, name an opening you want to work on, or tell me what to drill.",
+          toolCallIds: [],
+          dispatchedToolNames: [],
+          provider: 'deepseek',
+        };
+      }
+    }
     // Progress ("am I improving?") and concept ("what's a fork?") questions are
     // answered from the student's history / the book corpus — NO board needed —
     // so engage grounding even with no FEN. Other grounded intents need a live
@@ -1153,6 +1173,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // letting this build run for a best-move ask too: one condition, six
     // surfaces, and no new engine call on the two that already thread it.
     const bestMoveQuestionEngage = isBestMoveQuestion(askForIntents);
+    const hintRequestEngage = isHintRequest(askForIntents);
     let resolvedEnginePlan = input.liveState.enginePlan;
     // The review threads its STORED analysis (reviewFlaggedMove) — no fresh
     // engine search needed, and on a stalling device engine (iOS ios-native,
@@ -1162,7 +1183,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       && (whyBestMoveEngage || planQuestionEngage
         // Only when the surface didn't already hand one over — the two that do
         // must not pay for a second search.
-        || (bestMoveQuestionEngage && !input.liveState.engineBestMoveUci))
+        || ((bestMoveQuestionEngage || hintRequestEngage) && !input.liveState.engineBestMoveUci))
       && input.liveState.fen && !input.liveState.reviewFlaggedMove) {
       const sideToMove: 'white' | 'black' = (input.liveState.fen.split(' ')[1] ?? 'w') === 'b' ? 'black' : 'white';
       // THE BUDGET IS INSIDE THE SEARCH NOW, and the race is only the backstop
@@ -1252,6 +1273,10 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // the curated recommendation (David 2026-07-15 live screenshot).
             counterRepertoireQuestion: counterRepertoireQuestionEngage,
             bestMoveQuestion: bestMoveQuestionEngage && !candidateMoveEngage && !counterRepertoireQuestionEngage,
+            // A hint ask reuses the best-move engine read but WITHHOLDS the
+            // square (honesty contract; 2026-08-13 audit — "give me a hint"
+            // was handing over the full answer).
+            hintQuestion: hintRequestEngage,
             askedPiece: restrictedPieceInAsk(askForIntents),
             whyBestMoveQuestion: whyBestMoveEngage,
             reviewFlaggedMove: input.liveState.reviewFlaggedMove,

@@ -205,3 +205,29 @@ describe('matchTrainingAidRoute — non-matches (fall through to brain / opening
     expect(matchTrainingAidRoute('hello coach')).toBeNull();
   });
 });
+
+describe('matchTrainingAidRoute — HOW-TO questions are ANSWERED, never hijacked into a drill (2026-08-13 audit)', () => {
+  // Live prod: "how do I win a king and pawn endgame?" typed in the endgame
+  // drawer got "On it." and a navigation to the pawn-endings drill — the
+  // question-vs-drill class the 2026-07-04 tactics guard fixed, still open on
+  // the endgame branches (they have no framing requirement).
+  it('"how do I win a king and pawn endgame?" falls through to the brain', () => {
+    expect(matchTrainingAidRoute('how do I win a king and pawn endgame?')).toBeNull();
+  });
+  it('"how do I hold a rook endgame?" falls through to the brain', () => {
+    expect(matchTrainingAidRoute('how do I hold a rook endgame?')).toBeNull();
+  });
+  it('"how should I convert a winning endgame?" falls through to the brain', () => {
+    expect(matchTrainingAidRoute('how should I convert a winning endgame?')).toBeNull();
+  });
+  it('"what is the best way to win pawn endings?" falls through to the brain', () => {
+    expect(matchTrainingAidRoute('what is the best way to win pawn endings?')).toBeNull();
+  });
+  // The drill imperatives KEEP drilling — the guard is interrogative-led only.
+  it('"drill pawn endings" still drills', () => {
+    expect(matchTrainingAidRoute('drill pawn endings')?.aid).toBe('pawn-endings');
+  });
+  it('"rook endings" (bare chip) still drills', () => {
+    expect(matchTrainingAidRoute('practice rook endings')?.aid).toBe('rook-endings');
+  });
+});

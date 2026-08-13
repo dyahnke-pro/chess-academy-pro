@@ -80,6 +80,18 @@ const DIAGNOSIS_RE =
 const STATS_RE =
   /\bmy\s+puzzle\s+(?:rating|accuracy|score|stats?|elo)\b|\bhow\s+many\s+puzzles?\s+(?:have\s+i|did\s+i|i'?ve)\s+(?:solved|done|completed|gotten)\b|\bhow\s+(?:good|strong)\s+am\s+i\s+at\s+puzzles?\b|\bwhat(?:'?s| is)?\s+my\s+puzzle\s+(?:rating|accuracy|score|stats?)\b/i;
 
+/** A HOW-TO question ("how do I win a king and pawn endgame?", "how should I
+ *  convert this?") is a TEACHING ask for the brain — never a drill hand-off.
+ *  The pawn/rook-endings branches below have no framing requirement (a bare
+ *  "pawn endings" chip is a legitimate drill request), so without this guard a
+ *  live prod question got "On it." and a navigation to /coach/teach?drill=
+ *  pawn-endings instead of an answer (2026-08-13 audit, run qafn-msrnlovk —
+ *  the same question-vs-drill class the DIAGNOSIS guard fixed for tactics on
+ *  2026-07-04). Interrogative-led ONLY: a drill imperative has no "how do I"
+ *  lead-in and still drills. */
+const HOWTO_RE =
+  /\b(?:how\s+(?:do|can|should|would)\s+i|how\s+to|what(?:'?s| is)\s+the\s+(?:best\s+)?(?:way|technique|method|plan|idea))\b[\s\S]{0,40}\b(?:win|hold|draw|convert|defend|play|handle|approach|checkmate|mate)\b/i;
+
 export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
   const raw = text.trim();
   if (!raw) return null;
@@ -88,6 +100,8 @@ export function matchTrainingAidRoute(text: string): TrainingAidRoute | null {
   if (DIAGNOSIS_RE.test(lower)) return null;
   // Puzzle/tactic STATS questions go to the grounded brain, not a drill.
   if (STATS_RE.test(lower)) return null;
+  // HOW-TO questions go to the grounded brain, not a drill.
+  if (HOWTO_RE.test(lower)) return null;
   const framed = FRAMING_RE.test(lower);
 
   // 1. Calculation drills → set a real puzzle up ON THE BOARD in Learn
