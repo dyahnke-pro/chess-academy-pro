@@ -246,6 +246,7 @@ import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingR
 import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
+import { isCounterRepertoireQuestion } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -3306,6 +3307,15 @@ export function CoachTeachPage(): JSX.Element {
         // letting full sentences through (sentences usually have a
         // verb, > 60 chars, or end with ?/.).
         requestedName = workingInput;
+      }
+      // A RECOMMENDATION question is never an opening NAME. "show me the best
+      // gambit against 1.d4" fit the bare-name tier (short, no question mark)
+      // and rode the fuzzy matcher into a "did you mean the Gent Gambit?"
+      // picker (David's live report + proof run proof-msrqv0s8). Clearing it
+      // here sends the ask down to the spine, where the counter-repertoire
+      // lane answers from curated data.
+      if (requestedName && isCounterRepertoireQuestion(requestedName)) {
+        requestedName = null;
       }
       // MATCHUP: "teach X vs Y" — CONSTRUCT the two openings colliding on one
       // board from each opening's own DB setup + Stockfish (David 2026-07-18:

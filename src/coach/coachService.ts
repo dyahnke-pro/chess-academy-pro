@@ -206,7 +206,7 @@ import {
   isRepertoireGapQuestion, repertoireGapKind,
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
-  isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest,
+  isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -1278,6 +1278,12 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // square (honesty contract; 2026-08-13 audit — "give me a hint"
             // was handing over the full answer).
             hintQuestion: hintRequestEngage,
+            // Piece-square / structural asks ("is my queen on h5 well
+            // placed?") — the flag existed but only buildQuestionGrounding
+            // surfaces ever set it, so on Learn the ask fell to the best-move
+            // default and a FALSE premise was never corrected (proof run
+            // proof-msrqv0s8). Threaded here, every spine surface gets it.
+            positionalTopic: positionalTopic(askForIntents) ?? undefined,
             askedPiece: restrictedPieceInAsk(askForIntents),
             whyBestMoveQuestion: whyBestMoveEngage,
             reviewFlaggedMove: input.liveState.reviewFlaggedMove,

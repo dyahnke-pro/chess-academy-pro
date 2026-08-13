@@ -1655,9 +1655,14 @@ export function assembleMasterPlayAnswer(current: MasterPlayResult): GroundedAns
   const leadWhite = Math.round(lead.whitePct * 100);
   const leadDraw = Math.round(lead.drawPct * 100);
   const leadBlack = Math.round(lead.blackPct * 100);
+  // The LOCAL masters DB carries no per-move W/D/L splits — every pct is 0
+  // and the old phrasing spoke "White wins 0%, draws 0%, Black wins 0%" on
+  // 1.3M games (proof run proof-msrqv0s8). Unknown splits are OMITTED, never
+  // manufactured (G0: only computed facts get voiced).
+  const hasSplits = leadWhite + leadDraw + leadBlack > 0;
   const parts: string[] = [
-    `The most popular master move here is ${lead.san}, played in ${fmt(lead.games)} game${lead.games === 1 ? '' : 's'} ` +
-      `(White wins ${leadWhite}%, draws ${leadDraw}%, Black wins ${leadBlack}%).`,
+    `The most popular master move here is ${lead.san}, played in ${fmt(lead.games)} game${lead.games === 1 ? '' : 's'}` +
+      (hasSplits ? ` (White wins ${leadWhite}%, draws ${leadDraw}%, Black wins ${leadBlack}%).` : `.`),
   ];
   const others = top.slice(1);
   if (others.length > 0) {
