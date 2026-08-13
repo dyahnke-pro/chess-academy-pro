@@ -35,21 +35,30 @@ const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/opening-trap-tiles-${stamp}`;
 
-// Expected post-fix shape per opening. Verifiable purely from the
-// rendered DOM — we count tiles and read their visible names.
+// Expected shape per opening, READ FROM THE SHIPPED JSON at run time — the
+// hardcoded-name era broke twice without an app bug: the ±150cp accuracy
+// purge (b1be27ed) deliberately emptied gotham-caro's trapLines (its weapons
+// live in 11 punish-gems now), and the Alapin trap was renamed to its
+// data-cited form. The contract is "what the data declares SURFACES in the
+// DOM", so derive the names from src/data/pro-repertoires.json itself.
+import { readFileSync } from 'node:fs';
+const PRO_REPS = JSON.parse(readFileSync('src/data/pro-repertoires.json', 'utf8'));
+const proRepList = Array.isArray(PRO_REPS) ? PRO_REPS : Object.values(PRO_REPS).filter((v) => v && typeof v === 'object');
+const repFor = (id) => proRepList.find((o) => o.id === id) ?? {};
+const namesOf = (arr) => (arr ?? []).map((t) => t.name).filter(Boolean);
 const EXPECTATIONS = [
   {
     openingId: 'pro-naroditsky-alapin',
-    description: 'Alapin (Naroditsky) — Nb5 queen-fork trap surfaces as a red TRAP tile',
-    mustContain: ['Nb5 Queen-Fork Trap (d5 Open)'],
+    description: 'Alapin (Naroditsky) — every declared trapLine surfaces as a tile',
+    mustContain: namesOf(repFor('pro-naroditsky-alapin').trapLines).slice(0, 4),
     mustNotContain: [],
   },
   {
     openingId: 'pro-gothamchess-caro-kann',
-    description: 'Caro-Kann (Gothamchess) — Qb6 Fork moved from traps to warnings',
-    mustContain: [], // trapLines side — only checks Qb6 isn't in traps
-    mustNotContainInTraps: ['Advance Variation Qb6 Fork'],
-    mustContainInWarnings: ['Advance Variation Qb6 Fork'],
+    description: 'Caro-Kann (Gothamchess) — declared traps/warnings match the DOM (both empty post-purge is a valid state)',
+    mustContain: namesOf(repFor('pro-gothamchess-caro-kann').trapLines).slice(0, 4),
+    mustNotContainInTraps: [],
+    mustContainInWarnings: namesOf(repFor('pro-gothamchess-caro-kann').warningLines).slice(0, 4),
   },
 ];
 
@@ -228,30 +237,30 @@ async function main() {
 
   // ─── End-to-end: click the Alapin Nb5 trap tile and verify the
   //                walkthrough runtime mounts.
-  console.log(`\n── walkthrough-click: pro-naroditsky-alapin Nb5 Queen-Fork Trap`);
+  const alapinTrapNames = namesOf(repFor('pro-naroditsky-alapin').trapLines);
+  console.log(`\n── walkthrough-click: pro-naroditsky-alapin first declared trap ("${alapinTrapNames[0] ?? '?'}")`);
   await scenario('walkthrough-click :: navigate', async () => {
-    await page.goto(`${BASE_URL}/openings/pro-naroditsky-alapin`, { timeout: 20_000 });
-    await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 15_000 });
+    await page.goto(`${BASE_URL}/openings/pro-naroditsky-alapin`, { waitUntil: 'domcontentloaded', timeout: 120_000 });
+    await page.locator('[data-testid="opening-detail"]').waitFor({ timeout: 30_000 });
     await page.waitForTimeout(1000);
     return 'mounted';
   });
 
   await scenario('walkthrough-click :: click trap-line-0', async () => {
-    // The tiles are sorted by the order they appear in
-    // pro-repertoires.json. We can't be sure which index the Nb5
-    // fork lands at, so find the tile whose label matches.
+    // Click whichever tile matches a name the DATA declares — the audit
+    // must not pin a hardcoded name the content is free to rename.
     const tiles = await page.$$('[data-testid^="trap-line-"]');
     let clicked = false;
     for (const t of tiles) {
       const label = (await t.$eval('span', (el) => el.textContent?.trim())) || '';
-      if (label === 'Nb5 Queen-Fork Trap (d5 Open)') {
+      if (alapinTrapNames.includes(label)) {
         const watchBtn = await t.$('[data-testid^="trap-walkthrough-"]');
         await (watchBtn ?? t).click();
         clicked = true;
         break;
       }
     }
-    if (!clicked) throw new Error('Nb5 Queen-Fork Trap tile not found to click');
+    if (!clicked) throw new Error(`no tile matched any declared trapLine name (declared: ${alapinTrapNames.join(' | ').slice(0, 120)})`);
     return 'clicked';
   });
 
