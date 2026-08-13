@@ -1086,7 +1086,8 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
       const mash = askForIntents.toLowerCase().replace(/[^a-z]/g, '');
       const KEYBOARD_ROWS = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'];
       const isMash = mash.length >= 6 && !askForIntents.trim().includes(' ')
-        && (KEYBOARD_ROWS.some((row) => row.includes(mash) || [...row].reverse().join('').includes(mash))
+        && (KEYBOARD_ROWS.some((row) => row.includes(mash) || row.split('').reverse().join('').includes(mash)) // ascii rows only — no emoji risk
+
           || /^(.)\1{5,}$/.test(mash));
       if (isMash) {
         return {

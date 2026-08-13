@@ -2211,8 +2211,10 @@ export function CoachTeachPage(): JSX.Element {
         const outcome = routed.kind === 'take_back_move'
           ? handleTakeBack(routed.count)
           : handleResetBoard();
+        const failReason = 'reason' in outcome && typeof outcome.reason === 'string'
+          ? outcome.reason : 'nothing to take back yet';
         const say = !outcome.ok
-          ? `Couldn't do that: ${('reason' in outcome && outcome.reason) || 'nothing to take back yet'}.`
+          ? `Couldn't do that: ${failReason}.`
           : routed.kind === 'reset_board'
             ? 'Board reset — fresh start.'
             : routed.count === 2 ? 'Took the last exchange back.' : 'Took it back — your move again.';
