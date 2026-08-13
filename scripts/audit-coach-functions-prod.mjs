@@ -65,6 +65,17 @@ page.on('pageerror', (e) => {
   if (!pageErrors.includes(msg)) pageErrors.push(msg);
 });
 
+/** goto with one retry — a transient nav timeout must fail a SECTION, not
+ *  silently zero the whole run (the 14:54 rerun printed 0/0 because a throw
+ *  before the first record was swallowed by process.exit in finally). */
+async function goRetry(path) {
+  try {
+    await page.goto(`${BASE}${path}`, { waitUntil: 'domcontentloaded', timeout: 90000 });
+  } catch {
+    await page.goto(`${BASE}${path}`, { waitUntil: 'domcontentloaded', timeout: 120000 });
+  }
+}
+
 async function dismissGates() {
   for (const [gate, btn] of [
     ['[data-testid="ai-consent-modal"]', '[data-testid="ai-consent-allow"]'],
@@ -161,8 +172,8 @@ const TEACH = '[data-testid="teach-transcript"]';
 
 try {
   // ══ TEACH — board commands, memory tools, theme, multi-turn ═══════════════
-  if (wants('teach')) {
-  await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 120000 });
+  if (wants('teach')) { try {
+  await goRetry('/coach/teach');
   await dismissGates();
   await dismissGates();
   // Openings-dependent tools (favorite / repertoire) need the deferred seed.
@@ -227,11 +238,11 @@ try {
     isAnswer(quiz) || choicesUp,
     choicesUp ? 'quiz UI rendered' : quiz ? `"${short(quiz)}"` : 'no visible response');
 
-  } // end teach
+  } catch (err) { record('teach', "section crashed", false, String(err?.message ?? err).slice(0, 160)); } } // end teach
 
   // ══ HOME drawer — action lanes ════════════════════════════════════════════
-  if (wants('home')) {
-  await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 120000 });
+  if (wants('home')) { try {
+  await goRetry('/');
   await dismissGates();
 
   // 9 — "show my games" (list_games). Sample games are seeded on first boot,
@@ -270,11 +281,11 @@ try {
     record('home', '"review my last game" navigates to the review surface', false, 'drawer never opened');
   }
 
-  } // end home
+  } catch (err) { record('home', "section crashed", false, String(err?.message ?? err).slice(0, 160)); } } // end home
 
   // ══ REVIEW — a real mid-review question ═══════════════════════════════════
-  if (wants('review')) {
-  await page.goto(`${BASE}/coach/review`, { waitUntil: 'domcontentloaded', timeout: 120000 });
+  if (wants('review')) { try {
+  await goRetry('/coach/review');
   await dismissGates();
   const card = page.locator('[data-testid^="review-game-card-"]').first();
   const hasCard = await card.waitFor({ timeout: 45000 }).then(() => true).catch(() => false);
@@ -288,26 +299,40 @@ try {
       await startBtn.click();
       await page.locator('[data-testid="review-nav-controls"]').waitFor({ timeout: 30000 }).catch(() => {});
     }
-    const reviewBox = page.locator('[data-testid="chat-text-input"]').first();
-    const boxUp = await reviewBox.waitFor({ timeout: 60000 }).then(() => true).catch(() => false);
+    // The walk's chat is behind the Ask toggle — the input mounts only after
+    // the student taps Ask (walk-ask-toggle-btn → walk-ask-panel).
+    const askToggle = page.locator('[data-testid="walk-ask-toggle-btn"]');
+    if (await askToggle.waitFor({ timeout: 30000 }).then(() => true).catch(() => false)) {
+      await askToggle.click();
+      await page.locator('[data-testid="walk-ask-panel"]').waitFor({ timeout: 10000 }).catch(() => {});
+    }
+    const reviewBox = page.locator('[data-testid="walk-ask-panel"] [data-testid="chat-text-input"]').first();
+    const boxUp = await reviewBox.waitFor({ timeout: 30000 }).then(() => true).catch(() => false);
     if (boxUp) {
-      const revAsk = (await ask('[data-testid="game-chat-panel"], [data-testid="coach-game-review-walk"], main', 'what was the biggest mistake in this game?')).toLowerCase();
+      const revAsk = (await ask('[data-testid="walk-ask-panel"]', 'what was the biggest mistake in this game?')).toLowerCase();
       record('review', 'a mid-review question gets a game-grounded answer',
         isAnswer(revAsk) && !revAsk.includes(CANNED),
         revAsk ? `"${short(revAsk)}"` : 'no reply in 45s');
     } else {
-      record('review', 'a mid-review question gets a game-grounded answer', false, 'no chat input on review surface');
+      record('review', 'a mid-review question gets a game-grounded answer', false, 'no Ask panel / chat input in the walk view');
     }
   } else {
     record('review', 'a mid-review question gets a game-grounded answer', false, 'no review cards rendered in 45s', 'informational');
   }
 
-  } // end review
+  } catch (err) { record('review', "section crashed", false, String(err?.message ?? err).slice(0, 160)); } } // end review
 
   // ══ ENDGAME — drawer chat ═════════════════════════════════════════════════
-  if (wants('endgame')) {
-  await page.goto(`${BASE}/coach/endgame`, { waitUntil: 'domcontentloaded', timeout: 120000 });
+  if (wants('endgame')) { try {
+  await goRetry('/coach/endgame');
   await dismissGates();
+  // The chat button lives in a PATTERN LESSON's header, not on the hub —
+  // enter the first pattern like a real user before looking for it.
+  const pattern = page.locator('[data-testid^="endgame-pattern-"]').first();
+  if (await pattern.waitFor({ timeout: 45000 }).then(() => true).catch(() => false)) {
+    await pattern.click();
+    await page.waitForTimeout(3000);
+  }
   const chatBtn = page.locator('button[aria-label="Open chat"]').first();
   const btnUp = await chatBtn.waitFor({ timeout: 30000 }).then(() => true).catch(() => false);
   if (btnUp) {
@@ -325,7 +350,7 @@ try {
   } else {
     record('endgame', 'the endgame page chat answers an endgame question', false, 'no Open-chat button found');
   }
-  } // end endgame
+  } catch (err) { record('endgame', "section crashed", false, String(err?.message ?? err).slice(0, 160)); } } // end endgame
 } finally {
   console.log(`\n── coverage grid ──`);
   for (const r of results) {
