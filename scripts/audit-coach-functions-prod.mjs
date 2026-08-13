@@ -99,9 +99,11 @@ async function dismissGates() {
 /** Transcript-diff ask. `transcriptSel` is read for the reply; the question is
  *  typed into the first ENABLED chat-text-input on the page (surfaces differ
  *  in where the input lives relative to the transcript). */
-async function ask(transcriptSel, question, waitLoops = 30) {
+async function ask(transcriptSel, question, waitLoops = 30, inputSel = '[data-testid="chat-text-input"]') {
   await page.waitForTimeout(4000); // pace brain-heavy asks
-  const box = page.locator('[data-testid="chat-text-input"]').first();
+  // `:visible` matters: the review walk mounts a HIDDEN reviewCapture input
+  // above the ask panel's, and .first() on the bare selector clicked into it.
+  const box = page.locator(`${inputSel}:visible`).first();
   await box.waitFor({ timeout: 20000 });
   const transcript = page.locator(transcriptSel).first();
   const linesOf = async () => (await transcript.innerText().catch(() => ''))
@@ -309,7 +311,7 @@ try {
     const reviewBox = page.locator('[data-testid="walk-ask-panel"] [data-testid="chat-text-input"]').first();
     const boxUp = await reviewBox.waitFor({ timeout: 30000 }).then(() => true).catch(() => false);
     if (boxUp) {
-      const revAsk = (await ask('[data-testid="walk-ask-panel"]', 'what was the biggest mistake in this game?')).toLowerCase();
+      const revAsk = (await ask('[data-testid="walk-ask-panel"]', 'what was the biggest mistake in this game?', 30, '[data-testid="walk-ask-panel"] [data-testid="chat-text-input"]')).toLowerCase();
       record('review', 'a mid-review question gets a game-grounded answer',
         isAnswer(revAsk) && !revAsk.includes(CANNED),
         revAsk ? `"${short(revAsk)}"` : 'no reply in 45s');
@@ -340,10 +342,11 @@ try {
     const egPanel = page.locator('[data-testid="game-chat-panel"]');
     const egUp = await egPanel.waitFor({ timeout: 15000 }).then(() => true).catch(() => false);
     if (egUp) {
-      const eg = (await ask('[data-testid="game-chat-panel"]', 'how do I win a king and pawn endgame?')).toLowerCase();
+      const eg = (await ask('[data-testid="game-chat-panel"]', 'how do I win a king and pawn endgame?', 45)).toLowerCase();
+      const panelDump = eg ? '' : short(await page.locator('[data-testid="game-chat-panel"]').innerText().catch(() => ''));
       record('endgame', 'the endgame page chat answers an endgame question',
         isAnswer(eg) && !eg.includes(CANNED),
-        eg ? `"${short(eg)}"` : 'no reply in 45s');
+        eg ? `"${short(eg)}"` : `no reply in 70s; panel="${panelDump}"`);
     } else {
       record('endgame', 'the endgame page chat answers an endgame question', false, 'drawer never opened');
     }
