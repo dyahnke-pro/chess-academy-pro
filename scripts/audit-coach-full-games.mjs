@@ -255,6 +255,16 @@ async function main() {
         .click({ timeout: 3000 }).catch(() => {});
       await page.waitForTimeout(300);
     }
+    // The rating-harvest ask ("Enjoying Chess Academy Pro?") fires after a
+    // student VICTORY and covers the review summary — runs 31379840616 /
+    // 31481020131 / 31586907934 all failed "game-8-french: review walk never
+    // mounted" because this modal sat over the Start button. Dismiss like a
+    // player would (the X), never "Yes" (that routes toward the store ask).
+    const harvest = page.locator('[data-testid="review-prompt"]');
+    if (await harvest.isVisible().catch(() => false)) {
+      await page.locator('[data-testid="review-prompt-close"]').first().click({ timeout: 3000 }).catch(() => {});
+      await page.waitForTimeout(300);
+    }
   }
 
   /** Click-to-move (drag doesn't fire cleanly headless). */
@@ -300,6 +310,9 @@ async function main() {
     const prepDeadline = Date.now() + 180_000;
     while (Date.now() < prepDeadline) {
       if (await page.locator('[data-testid="coach-game-review-walk"]').isVisible().catch(() => false)) break;
+      // The victory rating-harvest modal covers the Start button — clear it
+      // (and any other first-run overlay) every pass so the click can land.
+      await clearFirstRunOverlays();
       const label = (await startBtn.innerText().catch(() => '')).trim();
       if (label) review.lastPrepLabel = label;
       if (label === 'Start') { await startBtn.click({ timeout: 3000 }).catch(() => {}); break; }
@@ -469,6 +482,12 @@ async function main() {
       const replyBudget = studentPly <= 1 ? 90_000 : (g === 0 ? 75_000 : COACH_REPLY_TIMEOUT_MS);
       const reply = await waitCoachReply(lastTs, replyBudget);
       if (!reply?.san) {
+        // A "stall" is often a MODAL, not latency: the AI-consent dialog
+        // mounts at the first coach interaction — AFTER the fixed-point
+        // overlay sweeps — and the coach cannot reply until it's allowed
+        // (three straight nightlies stall-resigned game 1 at ply 3 this
+        // way). Sweep overlays before spending a stall strike.
+        await clearFirstRunOverlays();
         stalled++;
         // Verify via checkpoint FEN next round; after N stalls, resign to
         // finish (one extra stall of grace on the cold first game).

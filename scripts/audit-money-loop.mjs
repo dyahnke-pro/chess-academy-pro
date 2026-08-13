@@ -24,6 +24,8 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -151,6 +153,12 @@ async function main() {
   const exe = await resolveChromiumExecutable(HEADED);
   const browser = await chromium.launch({ headless: !HEADED, executablePath: exe, args: sandboxLaunchArgs() });
   const context = await browser.newContext(sandboxContextOptions());
+  // Fresh contexts get the strength-calibration modal over EVERYTHING
+  // (z-110, aria-modal) — without the dismissal every later click times out
+  // on "intercepts pointer events" (bit this audit 2026-08-13). Muted per
+  // the G1 audit-mute law: this run drives coach surfaces.
+  await context.addInitScript(autoDismissCalibration);
+  await context.addInitScript(muteTtsForAudit);
   const page = await context.newPage();
   const pageErrors = [];
   page.on('pageerror', (e) => pageErrors.push(String(e)));

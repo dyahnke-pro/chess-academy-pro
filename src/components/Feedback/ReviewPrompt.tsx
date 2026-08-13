@@ -38,7 +38,7 @@ export function ReviewPrompt(): JSX.Element | null {
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/60 p-4 sm:items-center">
+    <div className="fixed inset-0 z-[100] flex items-end justify-center bg-black/60 p-4 sm:items-center" data-testid="review-prompt">
       <div className="w-full max-w-sm rounded-2xl border border-zinc-700 bg-[#1a1a1a] p-5 shadow-xl">
         {step === 'ask' ? (
           <>
@@ -46,7 +46,7 @@ export function ReviewPrompt(): JSX.Element | null {
               <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#c9a84c]/15">
                 <Star className="h-6 w-6 text-[#c9a84c]" />
               </div>
-              <button type="button" onClick={dismiss} aria-label="Close" className="text-zinc-500 hover:text-zinc-300">
+              <button type="button" onClick={dismiss} aria-label="Close" className="text-zinc-500 hover:text-zinc-300" data-testid="review-prompt-close">
                 <X className="h-5 w-5" />
               </button>
             </div>
