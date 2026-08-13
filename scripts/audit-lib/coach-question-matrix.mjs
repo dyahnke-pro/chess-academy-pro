@@ -257,6 +257,11 @@ export const KNOWLEDGE = [
     qs3: ["what's a pin?", 'explain a battery', 'what is a passed pawn?'],
   },
   {
+    id: 'opening-existence', lane: 'openingExistence (coachApi DB lookup)', needsData: null,
+    qs: ['is there an opening called the intercontinental ballistic missile?', 'is the bongcloud a real opening?', 'does the fried liver opening exist?'],
+    qs2: ['is there an opening named the vienna game?', 'is the cow a real opening?'],
+  },
+  {
     id: 'teaching-method', lane: 'assembleTeachingAnswer', needsData: null,
     qs: ['how do you teach the Caro-Kann?', 'how do you teach the Vienna?', 'how does this app teach the Italian?'],
     qs2: ['walk me through how you teach the French', "what's your method for teaching the London?", 'how would you break down teaching the Sicilian?'],

@@ -41,7 +41,7 @@ const INTENT_KEYS: ReadonlyArray<keyof MasterGroundingOptions> = [
   // the same wasted hunt as a gate that stays silent on a real one. Verified
   // 2026-08-08 that both are FALSE on gibberish and on off-topic asks, so
   // adding them cannot make a probe pass trivially.
-  'candidateMoveQuestion', 'counterRepertoireQuestion',
+  'candidateMoveQuestion', 'counterRepertoireQuestion', 'openingExistenceName',
 ];
 
 function firedIntent(g: MasterGroundingOptions): boolean {

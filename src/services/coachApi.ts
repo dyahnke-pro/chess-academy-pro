@@ -1118,6 +1118,9 @@ export interface MasterGroundingOptions {
   /** Game-scoped mistake ask ("biggest mistake in this game") + the reviewed
    *  game's computed worst student moment to answer it from. */
   gameMistakeQuestion?: boolean;
+  /** "is there an opening called X?" — the candidate NAME, answered by a
+   *  deterministic lookup against the canonical openings DB. */
+  openingExistenceName?: string;
   reviewWorstMoment?: { moveNumber: number; san: string; classification: string; bestMoveSan: string | null };
   /** STEP B — true when this turn is a STUDENT-PROGRESS question ("am I
    *  improving?", "what should I work on?"). The answer is the student's OWN
@@ -2789,6 +2792,7 @@ export async function getCoachChatResponse(
       grounding.tacticsQuestion === true ||
       grounding.hintQuestion === true ||
       grounding.gameMistakeQuestion === true ||
+      typeof grounding.openingExistenceName === 'string' ||
       grounding.progressQuestion === true ||
       grounding.trendQuestion === true ||
       grounding.openingProfileQuestion === true ||
@@ -4085,6 +4089,35 @@ export async function getCoachChatResponse(
                 : voiced;
             }
           }
+        }
+
+        // ── OPENING EXISTENCE (2026-08-13, David live on his phone) — "is
+        // there an opening called the intercontinental ballistic missile?"
+        // served the stock refusal while the app owns the canonical 3,600-
+        // entry named-openings DB. Deterministic lookup: exact-ish hit →
+        // confirm + offer to teach; miss → honest no + the closest REAL
+        // names. The DB is the fact; nothing is invented (G3).
+        if (typeof grounding.openingExistenceName === 'string' && grounding.openingExistenceName.length > 0) {
+          try {
+            const { searchOpenings } = await import('./openingService');
+            const q = grounding.openingExistenceName;
+            const matches = await searchOpenings(q).catch(() => []);
+            const norm = (s: string): string => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+            const hit = matches.find((m) => norm(m.name).includes(norm(q)) || norm(q).includes(norm(m.name)));
+            // The confirm is a LIVE offer: "teach me the <name>" is the exact
+            // command the teach router honors, and the lesson it starts walks
+            // the line to the MIDDLEGAME (the Gate-B depth standard) — never
+            // an eight-move fragment (David 2026-08-13: "It should then be
+            // able to teach that opening to the middle game").
+            const facts = hit
+              ? `Yes — the ${hit.name} is a real opening in my database. Say "teach me the ${hit.name}" and I'll walk it with you all the way into the middlegame.`
+              : matches.length > 0
+                ? `No — there's no opening called "${q}" in my database of 3,600+ named openings. The closest real names I have: ${matches.slice(0, 3).map((m) => m.name).join('; ')}. Name one and I'll teach it into the middlegame.`
+                : `No — there's no opening called "${q}" in my database of 3,600+ named openings, and nothing close to it either.`;
+            const voicedExist = await voiceFacts(facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'opening-existence', preferRaw: true });
+            if (voicedExist) return voicedExist;
+            return facts;
+          } catch { /* DB unavailable — fall through */ }
         }
 
         // ── GAME-SCOPED MISTAKE (2026-08-13) — "biggest mistake in this

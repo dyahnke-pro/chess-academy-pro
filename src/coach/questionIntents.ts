@@ -1502,6 +1502,24 @@ const COUNTER_REPERTOIRE_RE = anyOf([
   // does NOT match (nothing real is left after stripping "this position").
   String.raw`\bagainst\s+(?:the\s+|an?\s+)?[a-z][\w\s-]{0,40},?\s+what\s+(?:should|do|can|would)\s+(?:i|you)\s*(?:play|use|go\s+with)?\b`,
 ]);
+/** OPENING-EXISTENCE ask — "is there an opening called X?" / "is X a real
+ *  opening?" / "does the X opening exist?". The app owns the canonical
+ *  3,600-entry named-openings DB (openings-lichess.json — "if it isn't in
+ *  there, it doesn't exist"), so this is a deterministic lookup, never the
+ *  stock refusal (David 2026-08-13, live on his phone: "Is there an opening
+ *  called the intercontinental ballistic missile?" got "I can't verify that
+ *  precisely"). Returns the candidate NAME, or null when not this ask. */
+export function openingExistenceQuery(ask: string | undefined): string | null {
+  if (!ask) return null;
+  const m =
+    /\bis\s+there\s+an?\s+opening\s+(?:called|named)\s+(?:the\s+)?(.{2,60}?)[?!.\s]*$/i.exec(ask)
+    ?? /\bis\s+(?:the\s+)?(.{2,60}?)\s+(?:a\s+real|an\s+actual|really\s+an?)\s+opening[?!.\s]*$/i.exec(ask)
+    ?? /\bdoes\s+(?:the\s+)?(.{2,60}?)\s+opening\s+exist[?!.\s]*$/i.exec(ask)
+    ?? /\bis\s+(?:the\s+)?(.{2,60}?)\s+(?:an?\s+)?opening\s+(?:that\s+exists|in\s+(?:the|your)\s+(?:database|book))[?!.\s]*$/i.exec(ask);
+  const name = m?.[1]?.trim() ?? null;
+  return name && name.length >= 2 ? name : null;
+}
+
 export function isCounterRepertoireQuestion(ask: string | undefined): boolean {
   if (!ask) return false;
   // Deictic against-objects ("against it / this / here / the position") are
@@ -2051,6 +2069,7 @@ export function buildQuestionGrounding(
     counterRepertoireQuestion: isCounterRepertoireQuestion(a),
     bestMoveQuestion: isBestMoveQuestion(a) && !isCandidateMoveQuestion(a) && !isCounterRepertoireQuestion(a),
     whyBestMoveQuestion: isWhyBestMoveQuestion(a),
+    openingExistenceName: openingExistenceQuery(a) ?? undefined,
     tacticsQuestion: isTacticsQuestion(a),
     progressQuestion: isProgressQuestion(a),
     trendQuestion: isImprovementTrendQuestion(a),

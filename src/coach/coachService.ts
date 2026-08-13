@@ -207,7 +207,7 @@ import {
   isAccuracyQuestion, isConsistencyQuestion, isErrorsBySituationQuestion, isMisconceptionsQuestion, isConvertingQuestion,
   isColorQuestion, isRecordsQuestion, recordVsTarget, isRecordVsQuestion, isMoveRatingQuestion, trainingRequestKind, isTrainingRequest, isPuzzleStatsQuestion, isTransferGapQuestion, isSkillRadarQuestion,
   isWhyBestMoveQuestion, isCandidateMoveQuestion, extractCandidateSan, isAlternativesQuestion, isHintRequest, positionalTopic, isGameMistakeQuestion,
-  isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion,
+  isTeachingMethodQuestion, isSettingsQuestion, isAppHelpQuestion, isTimeTroubleQuestion, isLastGameQuestion, openingExistenceQuery,
 } from './questionIntents';
 export {
   isPlanQuestion, isBestMoveQuestion, restrictedPieceInAsk, isCounterRepertoireQuestion, isTacticsQuestion, isPositionAssessmentQuestion,
@@ -1150,6 +1150,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     const skillRadarQuestionEngage = isSkillRadarQuestion(askForIntents);
     // The five lanes the 2026-08-13 all-questions audit found unreachable —
     // none needs a board, so they must also ENGAGE grounding without a FEN.
+    const openingExistenceName = openingExistenceQuery(askForIntents);
     const teachingMethodQuestionEngage = isTeachingMethodQuestion(askForIntents);
     const settingsQuestionEngage = isSettingsQuestion(askForIntents);
     const appHelpQuestionEngage = isAppHelpQuestion(askForIntents);
@@ -1251,7 +1252,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     }
     const autoGrounding =
       options.grounding ??
-      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage
+      (input.liveState.fen || progressQuestion || trendQuestionEngage || conceptQuestionEngage || openingProfileQuestionEngage || statsQuestionEngage || strengthsQuestionEngage || openingAccuracyQuestionEngage || openingTrapsQuestionEngage || reviewDueQuestionEngage || mistakesQuestionEngage || tacticsProfileQuestionEngage || phaseQuestionEngage || repertoireGapQuestionEngage || counterRepertoireQuestionEngage || accuracyQuestionEngage || consistencyQuestionEngage || convertingQuestionEngage || colorQuestionEngage || recordsQuestionEngage || recordVsTargetEngage !== null || trainingRequestEngage !== null || puzzleStatsQuestionEngage || transferGapQuestionEngage || skillRadarQuestionEngage || whyBestMoveEngage || candidateMoveEngage || alternativesEngage || teachingMethodQuestionEngage || settingsQuestionEngage || appHelpQuestionEngage || timeTroubleQuestionEngage || lastGameQuestionEngage || openingExistenceName !== null
         ? {
             currentFen: input.liveState.fen,
             // DB-grounding: thread the move history through so the
@@ -1446,6 +1447,7 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // flags — so "is voice on?" got the best-move readout, "do I play
             // too fast?" the stock line, "did I win my last game?" silence.
             // The same lane-reaches-nobody class as the plan/best-move fixes.
+            openingExistenceName: openingExistenceName ?? undefined,
             teachingMethodQuestion: teachingMethodQuestionEngage,
             settingsQuestion: settingsQuestionEngage,
             appHelpQuestion: appHelpQuestionEngage,
