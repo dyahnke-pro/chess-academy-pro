@@ -50,6 +50,7 @@ import {
   resetLessonProgress,
 } from '../../services/endgameProgressService';
 import { EndgameRecapCard } from './EndgameRecapCard';
+import { teachingSourceForBoard, generalizedTeaching, spokenBeatText, endgameNoteForLesson } from '../../services/danyaTeachingService';
 import type { EndgameLesson, EndgameLessonPosition } from '../../types/endgameLesson';
 import type { EndgameProgressRecord } from '../../types';
 
@@ -407,6 +408,16 @@ function LessonView({ lesson, onExit }: LessonViewProps): JSX.Element {
   );
 }
 
+/** Corpus-note ids already shown, per lesson, for this app session.
+ *  Module-level because PositionRunner remounts per position (parent key) —
+ *  a component ref would reset and repeat the same note on the next card. */
+const CORPUS_NOTES_SEEN = new Map<string, Set<string>>();
+function corpusNoteSeenIds(lessonId: string): Set<string> {
+  let s = CORPUS_NOTES_SEEN.get(lessonId);
+  if (!s) { s = new Set(); CORPUS_NOTES_SEEN.set(lessonId, s); }
+  return s;
+}
+
 interface PositionRunnerProps {
   lesson: EndgameLesson;
   position: EndgameLessonPosition;
@@ -570,6 +581,35 @@ function PositionRunner({
   useEffect(() => {
     startTimeRef.current = Date.now();
   }, [position.fen]);
+
+  // Post-completion corpus note — the farmed teaching about this position's
+  // idea, shown WRITTEN-ONLY after the playout completes (never before or
+  // during: the board is the lesson while they're solving, and the endgame
+  // voice contract stays untouched — the voice speaks only the curated
+  // `explanation`). Position/structure tier first (board-gated at retrieval);
+  // the lesson's concept tier second (geometry-free + board-checked in
+  // endgameNoteForLesson). Deduped per lesson via the module-level seen-set
+  // (PositionRunner remounts per position — a local ref would reset and
+  // repeat notes as the student pages through).
+  const [corpusNote, setCorpusNote] = useState<string | null>(null);
+  useEffect(() => { setCorpusNote(null); }, [position.fen]);
+  useEffect(() => {
+    if (!playout.isComplete || corpusNote !== null) return;
+    try {
+      const src = teachingSourceForBoard([], position.fen, null);
+      const exact = src ? spokenBeatText(src.note).trim() : '';
+      let note = src && exact ? generalizedTeaching(src.origin, exact) : '';
+      if (!note) {
+        const themed = endgameNoteForLesson({
+          lessonId: lesson.id,
+          seenIds: corpusNoteSeenIds(lesson.id),
+          fen: position.fen,
+        });
+        if (themed) note = themed.text;
+      }
+      if (note) setCorpusNote(note);
+    } catch { /* the note is a bonus, never a blocker */ }
+  }, [playout.isComplete, corpusNote, position.fen, lesson.id]);
 
   const recordedRef = useRef(false);
   useEffect(() => {
@@ -759,6 +799,7 @@ function PositionRunner({
         playItOutEngaged={playItOut}
         onEngagePlayItOut={() => setPlayItOut(true)}
         onReplayNarration={narrationText ? onReplayNarration : undefined}
+        corpusNote={corpusNote}
       />
       {posIndex === 0 && <NarrationPanel lesson={lesson} />}
       <div className="flex items-center justify-between gap-2">
@@ -827,6 +868,9 @@ interface PositionCardProps {
    *  affordance next to the title so the user can re-trigger the
    *  narration if it failed to play (or just wants it again). */
   onReplayNarration?: () => void;
+  /** Post-completion farmed-corpus note (written-only) — null until the
+   *  playout completes and the corpus has something board-true to add. */
+  corpusNote?: string | null;
 }
 
 function PositionCard({
@@ -842,6 +886,7 @@ function PositionCard({
   playItOutEngaged,
   onEngagePlayItOut,
   onReplayNarration,
+  corpusNote,
 }: PositionCardProps): JSX.Element {
   return (
     <div className="rounded-xl border border-theme-border bg-theme-surface p-3 flex flex-col gap-2">
@@ -875,6 +920,14 @@ function PositionCard({
         </span>
       </div>
       <p className="text-[12px] text-theme-text-muted leading-relaxed">{position.explanation}</p>
+      {corpusNote && (
+        <div
+          className="text-[12px] text-theme-text-muted leading-relaxed border-l-2 border-cyan-500/40 pl-2"
+          data-testid="endgame-corpus-note"
+        >
+          {corpusNote}
+        </div>
+      )}
       {playout.wrongAttempts > 0 && (position.conceptHint || lesson.narration.rule) && (
         <div
           className="text-[12px] text-amber-300 leading-relaxed border-l-2 border-amber-500/40 pl-2"

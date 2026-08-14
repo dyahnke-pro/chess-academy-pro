@@ -1154,6 +1154,148 @@ const TACTIC_PATTERN_WORDS: Record<string, string[]> = {
   defense: ['defend', 'defence', 'defense'],
 };
 
+/** Endgame lesson id (endgameLessonsService catalog) → the corpus concepts
+ *  that teach its idea. Every concept listed here EXISTS in the endgame
+ *  phase of the loaded corpus (probed 2026-08-14: king-activity 114,
+ *  passed-pawn 74, zugzwang 63, rook-endgame 46, opposition 25, …) — the
+ *  gate test asserts that stays true so a re-farm can't silently orphan a
+ *  lesson's lookup. Same architecture as PUZZLE_THEME_TO_TACTIC: the
+ *  lesson already knows what idea it teaches; the corpus has notes about
+ *  that idea; this is the translation layer. */
+export const ENDGAME_LESSON_CONCEPTS: Record<string, string[]> = {
+  'activate-the-king': ['king-activity', 'king activity', 'endgame-technique'],
+  'push-passed-pawns': ['passed-pawn', 'passed pawn', 'promotion', 'pawn-promotion', 'pawn promotion'],
+  'attack-weak-pawns': ['weak-pawn', 'weak-pawns', 'weak pawns', 'pawn-structure', 'pawn structure'],
+  'two-weaknesses': ['endgame-technique', 'weak-pawn', 'prophylaxis'],
+  'do-not-rush': ['waiting-move', 'prophylaxis', 'endgame-technique', 'zugzwang'],
+  'rooks-behind-passed-pawns': ['rook-endgame', 'rook-activity', 'passed-pawn'],
+  'trade-when-ahead': ['simplification', 'conversion', 'material-advantage'],
+  'opposition': ['opposition', 'pawn-endgame'],
+  'key-squares': ['key-squares', 'key squares', 'opposition', 'pawn-endgame'],
+  'rule-of-the-square': ['pawn-race', 'pawn-endgame'],
+  'distant-opposition': ['opposition'],
+  'outflanking': ['opposition', 'king-activity', 'pawn-endgame'],
+  'breakthrough': ['breakthrough', 'pawn-break', 'pawn-sacrifice'],
+  'triangulation': ['triangulation', 'zugzwang', 'waiting-move'],
+  'wrong-rook-pawn-bishop': ['fortress', 'bishop-endgame'],
+  'opposite-color-bishops': ['opposite-colored-bishops', 'fortress', 'blockade', 'bishop-endgame'],
+  'philidor-position': ['rook-endgame'],
+  'queen-vs-rook-fortress': ['fortress', 'queen-endgame'],
+  'k-vs-kp-opposition-draw': ['opposition', 'fortress', 'pawn-endgame'],
+  'stalemate-stalking': ['stalemate', 'fortress'],
+  'perpetual-check': ['perpetual-check'],
+  'insufficient-material': ['fortress'],
+  'lucena-position': ['rook-endgame', 'promotion', 'passed-pawn'],
+  'philidor-rook-ending': ['rook-endgame'],
+  'active-rook': ['rook-activity', 'rook-endgame'],
+  'vancura-position': ['rook-endgame', 'fortress'],
+  'cutting-off-the-king': ['cut-off', 'rook-endgame', 'restriction'],
+};
+
+/** The words a note must SAY to count as teaching an endgame lesson's idea —
+ *  the tag-is-not-the-teaching rule, same as TACTIC_PATTERN_WORDS. */
+const ENDGAME_LESSON_WORDS: Record<string, string[]> = {
+  'activate-the-king': ['king'],
+  'push-passed-pawns': ['passed pawn', 'promote', 'promotion', 'queening'],
+  'attack-weak-pawns': ['weak pawn', 'weakness', 'target'],
+  'two-weaknesses': ['two weaknesses', 'second weakness', 'second front'],
+  'do-not-rush': ['rush', 'waiting', 'patien', 'improve'],
+  'rooks-behind-passed-pawns': ['behind the passed', 'behind passed', 'rook behind', 'rook belongs behind'],
+  'trade-when-ahead': ['trade', 'simplif', 'exchange'],
+  'opposition': ['opposition'],
+  'key-squares': ['key square'],
+  'rule-of-the-square': ['rule of the square', 'square of the pawn', 'catch', 'race'],
+  'distant-opposition': ['opposition'],
+  'outflanking': ['outflank', 'opposition'],
+  'breakthrough': ['breakthrough', 'break through'],
+  'triangulation': ['triangul', 'zugzwang', 'lose a tempo', 'losing a tempo'],
+  'wrong-rook-pawn-bishop': ['wrong bishop', 'wrong-colored', 'wrong colour', 'wrong color', 'corner'],
+  'opposite-color-bishops': ['opposite-color', 'opposite color', 'opposite-colour', 'opposite colour'],
+  'philidor-position': ['philidor', 'third rank', 'checks from behind', 'check from behind'],
+  'queen-vs-rook-fortress': ['fortress'],
+  'k-vs-kp-opposition-draw': ['opposition'],
+  'stalemate-stalking': ['stalemate'],
+  'perpetual-check': ['perpetual'],
+  'insufficient-material': ['insufficient', 'bare king', 'cannot mate', "can't mate"],
+  'lucena-position': ['lucena', 'bridge'],
+  'philidor-rook-ending': ['philidor', 'third rank', 'checks from behind', 'check from behind'],
+  'active-rook': ['active rook', 'rook activ', 'activity'],
+  'vancura-position': ['vancura', 'checks from the side', 'side check'],
+  'cutting-off-the-king': ['cut off', 'cutting off', 'cut-off'],
+};
+
+/** ONE corpus note teaching the idea an ENDGAME LESSON is about, for the
+ *  moment AFTER the student completes a position — never before or during
+ *  (narration rule 8: the board is the lesson while they're solving).
+ *
+ *  Same contract as `spokenTacticNote`: the note's own prose must NAME the
+ *  lesson's idea (a tag alone selects noise), it may name no squares (this
+ *  tier is reached by CONCEPT, so its example's geometry would be false of
+ *  the study position in front of the student), and it may not assert a
+ *  configuration the live board lacks. */
+export function endgameNoteForLesson(args: {
+  lessonId: string;
+  /** Ids already shown this lesson session — a repeated note teaches nothing. */
+  seenIds?: Set<string>;
+  /** The study position's board — a note may not claim pieces it lacks. */
+  fen?: string | null;
+}): { id: string; text: string } | null {
+  const concepts = ENDGAME_LESSON_CONCEPTS[args.lessonId] ?? [];
+  const words = ENDGAME_LESSON_WORDS[args.lessonId] ?? [];
+  if (concepts.length === 0 || words.length === 0) return null;
+  // This card is WRITTEN, not spoken, so the candidate text is the baked
+  // spoken form when one exists, else the note's `teaches` field — the
+  // distilled GENERAL principle ("In rook endgames, keeping rooks on often
+  // makes conversion easier…"), which is the right register for a lesson
+  // explicitly about that concept. `spokenBeatText` alone starves this
+  // surface: concept-tier notes are FLOATING (no lineSan), and the per-ply
+  // VOICE register rightly silences unbaked floating notes (measured
+  // 2026-08-14: 2/27 lessons fired). `teaches` is geometry-free by
+  // distillation, and every board-truth guard below still applies — a
+  // squares-naming or configuration-claiming candidate is dropped whole.
+  const candidateText = (n: DanyaNote): string => {
+    const spoken = spokenBeatText(n);
+    if (spoken) return spoken;
+    const teaches = (n.teaches ?? '').trim();
+    if (!teaches) return '';
+    // A distillation fragment that lost its subject is not a sentence.
+    if (/^[,;:.)\]]/.test(teaches)) return '';
+    if (teaches.replace(/[^a-zA-Z]/g, '').length < 30) return '';
+    return teaches;
+  };
+  // Case-INSENSITIVE square guard for this lane: transcript-farmed prose
+  // capitalizes squares ("maneuver to G4"), which the case-sensitive
+  // NAMES_A_SQUARE misses — caught live on the triangulation lesson
+  // 2026-08-14. Foreign geometry in either case disqualifies the note.
+  const NAMES_A_SQUARE_ANY_CASE = /\b[a-hA-H][1-8]\b/;
+  for (const n of conceptNotesFor({ phase: 'endgame', concepts, limit: 40 })) {
+    if (args.seenIds?.has(n.id)) continue;
+    const text = candidateText(n);
+    if (!text) continue;
+    const low = text.toLowerCase();
+    if (!words.some((w) => low.includes(w))) continue;
+    if (NAMES_A_SQUARE_ANY_CASE.test(text)) continue;
+    if (args.fen) {
+      if (!namedPiecesExistOnBoard(text, args.fen)) continue;
+      const bad = falseConfigurationClaim(text, args.fen);
+      if (bad) {
+        void logAppAudit({
+          kind: 'claim-validator-trip',
+          category: 'subsystem',
+          source: 'endgameNoteForLesson.configurationClaim',
+          summary: `skipped a note claiming "${bad}" — not true of this board`,
+          fen: args.fen,
+        });
+        continue;
+      }
+    }
+    args.seenIds?.add(n.id);
+    return { id: n.id, text };
+  }
+  return null;
+}
+
+
 export function buildDanyaTeachingBlock(args: {
   historySans?: string[];
   openingName?: string | null;
