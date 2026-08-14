@@ -702,11 +702,17 @@ async function main() {
   // parallel), so a single process tops out around 5 videos a minute whatever
   // --concurrency says. Splitting the queue by index lets several processes
   // work disjoint slices without duplicating a video or needing a lock.
+  // BUG (found 2026-08-14, silently zeroed every non-sharded run): the !shard
+  // branch used to `return queue` — the SAME array reference, not a copy. The
+  // `queue.length = 0` two lines below then truncated `queueForThisRun` too
+  // (same object), so the following `queue.push(...queueForThisRun)` spread an
+  // already-empty array and every non-sharded invocation processed 0 videos
+  // while reporting "0 video(s) to process" with no error. Always copy.
   const shard = arg('shard', null);
   const queueForThisRun = (() => {
-    if (!shard) return queue;
+    if (!shard) return [...queue];
     const [i, n] = shard.split('/').map(Number);
-    if (!Number.isFinite(i) || !Number.isFinite(n) || n < 1) return queue;
+    if (!Number.isFinite(i) || !Number.isFinite(n) || n < 1) return [...queue];
     return queue.filter((_, idx) => idx % n === i % n);
   })();
   queue.length = 0;
