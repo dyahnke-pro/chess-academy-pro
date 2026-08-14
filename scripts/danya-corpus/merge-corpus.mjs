@@ -154,11 +154,73 @@ async function main() {
     }
   }
 
-  const notes = [...byKey.values()].flat().map((n, i) => {
+  // ── NOTE IDS ARE STABLE ACROSS RE-MERGES. THEY MUST BE. ──────────────────
+  //
+  // This used to be `${idPrefix}-${i.toString(36)}` — the note's INDEX in the
+  // merged array. Every id was therefore a function of how many notes happened
+  // to sort before it, so adding one video renumbered the corpus from that
+  // point on. The 2026-08-14 Naroditsky wave moved 8,150 of 8,162 ids.
+  //
+  // That is not a cosmetic churn. `public/data/corpus-spoken.json` holds 52,611
+  // BAKED SPOKEN FORMS keyed by note id — the text the voice actually says — so
+  // a renumber silently re-points every one of them at a different note, and
+  // the coach speaks one note's baked line over another note's teaching. The
+  // same is true of anything else that remembers a note by id. It fails
+  // SILENTLY: every id still resolves, just to the wrong note.
+  //
+  // So the id is derived from the note's CONTENT and nothing else. Re-merging
+  // the same note yields the same id no matter what else joined the corpus, and
+  // a note that genuinely changes gets a genuinely new id (its stale bake then
+  // falls away, which is correct — the bake was of different words).
+  //
+  // The prior id is reused when a note's content is unchanged, so this wave and
+  // every future one leave existing bakes intact. New notes take a fresh
+  // content id. Collisions fall back to a suffix rather than silently merging
+  // two notes into one row.
+  const contentKey = (n) =>
+    [(n.sources ?? []).join(','), (n.lineSan ?? []).join(' '), norm(n.explains ?? ''), norm(n.teaches ?? ''), norm(n.plans ?? '')].join('|');
+
+  /** Short, stable, filename-safe digest of the content key (FNV-1a, base36).
+   *  Deliberately not the index of anything. */
+  const digest = (s) => {
+    let h = 0x811c9dc5;
+    for (let i = 0; i < s.length; i++) {
+      h ^= s.charCodeAt(i);
+      h = Math.imul(h, 0x01000193) >>> 0;
+    }
+    // Second pass over the reversed string widens the space enough that 60k
+    // notes collide with vanishing probability; the taken-set below is the
+    // backstop that makes a collision harmless rather than merely unlikely.
+    let g = 0x811c9dc5;
+    for (let i = s.length - 1; i >= 0; i--) {
+      g ^= s.charCodeAt(i);
+      g = Math.imul(g, 0x01000193) >>> 0;
+    }
+    return `${h.toString(36)}${g.toString(36)}`;
+  };
+
+  // Prior ids, so an unchanged note keeps exactly the id its bake is filed
+  // under — including the legacy positional ids minted before this change.
+  const priorById = new Map();
+  try {
+    const prior = JSON.parse(await readFile(OUT, 'utf8'));
+    for (const p of prior.notes ?? []) priorById.set(contentKey(p), p.id);
+  } catch { /* fresh corpus — every note is new */ }
+
+  const taken = new Set();
+  const notes = [...byKey.values()].flat().map((n) => {
     // `__tokens` is dedup scratch and must never reach the shipped corpus.
     const { __tokens, ...rest } = n;
     void __tokens;
-    return { id: `${CREATOR.idPrefix}-${i.toString(36)}`, ...rest };
+    const key = contentKey(n);
+    let id = priorById.get(key) ?? `${CREATOR.idPrefix}-${digest(key)}`;
+    if (taken.has(id)) {
+      let k = 2;
+      while (taken.has(`${id}x${k}`)) k += 1;
+      id = `${id}x${k}`;
+    }
+    taken.add(id);
+    return { id, ...rest };
   });
   const positioned = notes.filter((n) => n.lineSan.length > 0);
   const openings = new Set(notes.map((n) => n.opening).filter(Boolean));
