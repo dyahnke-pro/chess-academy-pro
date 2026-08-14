@@ -80,8 +80,17 @@ async function main() {
     await page.locator('[data-testid="settings-page"]').waitFor({ timeout: 30_000 });
   }
   async function pickCoachTab() {
+    // The tab button can be clickable before the page finishes hydrating,
+    // in which case the first click lands on a not-yet-wired button and
+    // the panel never mounts (seen on the 3rd settings visit of a run,
+    // 2026-08-14). Retry the click once, generous panel wait.
     await page.locator('[data-testid="tab-coach"]').click();
-    await page.locator('[data-testid="coach-tab"]').waitFor({ timeout: 5000 });
+    try {
+      await page.locator('[data-testid="coach-tab"]').waitFor({ timeout: 8000 });
+    } catch {
+      await page.locator('[data-testid="tab-coach"]').click();
+      await page.locator('[data-testid="coach-tab"]').waitFor({ timeout: 15_000 });
+    }
   }
   async function pickBoardTab() {
     await page.locator('[data-testid="tab-board"]').click();
@@ -160,9 +169,18 @@ async function main() {
         await setCoachNarration('full');
         const before = await snapshot();
         await page.goto(`${BASE_URL}/coach/session/walkthrough?subject=Vienna%20Game`, { waitUntil: 'domcontentloaded' });
-        await page.waitForTimeout(8000);
+        // Poll up to 45s for the first speak — the walkthrough's first
+        // narration lands behind session resolution + voice-gated start,
+        // which cold-varies well past a fixed 8s (2026-08-14 fix: the
+        // fixed wait false-failed brief mode). Early-exit on first event.
+        let speaks = [];
+        const deadline = Date.now() + 45_000;
+        while (Date.now() < deadline) {
+          await page.waitForTimeout(2000);
+          speaks = eventsSince(before).filter((e) => e.kind === 'voice-speak-invoked');
+          if (speaks.length > 0) break;
+        }
         const events = eventsSince(before);
-        const speaks = events.filter((e) => e.kind === 'voice-speak-invoked');
         return {
           ok: speaks.length > 0,
           why: `${speaks.length} voice-speak-invoked events; expected ≥1`,
@@ -177,9 +195,18 @@ async function main() {
         await setCoachNarration('brief');
         const before = await snapshot();
         await page.goto(`${BASE_URL}/coach/session/walkthrough?subject=Vienna%20Game`, { waitUntil: 'domcontentloaded' });
-        await page.waitForTimeout(8000);
+        // Same 45s poll as the full-mode scenario (see comment there).
+        // If brief still shows 0 at 45s while full fired, that is a REAL
+        // G5 dead-control (brief must speak the capped line, never
+        // silence) — not a timing artifact.
+        let speaks = [];
+        const deadline = Date.now() + 45_000;
+        while (Date.now() < deadline) {
+          await page.waitForTimeout(2000);
+          speaks = eventsSince(before).filter((e) => e.kind === 'voice-speak-invoked');
+          if (speaks.length > 0) break;
+        }
         const events = eventsSince(before);
-        const speaks = events.filter((e) => e.kind === 'voice-speak-invoked');
         return {
           ok: speaks.length > 0,
           why: `${speaks.length} voice-speak-invoked events; expected ≥1`,

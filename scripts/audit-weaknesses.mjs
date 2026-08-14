@@ -112,6 +112,14 @@ async function main() {
     // because the bundle is cached. Generous timeout here.
     await page.goto(`${BASE_URL}/weaknesses`, { timeout: 60_000 });
     await page.locator('[data-testid="game-insights-page"]').waitFor({ timeout: 45_000 });
+    // Fresh-context boot shows the strength-calibration bubble over the
+    // page; dismiss it first or later clicks intercept + loadAll stalls
+    // behind the modal (measured 2026-08-14: bubble adds ~6s cold).
+    const bubble = page.locator('[data-testid="strength-calibration-bubble"]');
+    if (await bubble.isVisible().catch(() => false)) {
+      await page.locator('[data-testid="skill-band-intermediate"]').click();
+      await bubble.waitFor({ state: 'detached', timeout: 15_000 }).catch(() => {});
+    }
     return 'page mounted';
   });
 
@@ -149,7 +157,13 @@ async function main() {
   // ───────────────────────────────────────────────────────────────
   await scenario('overview-tab-content-mounts', async () => {
     // Tab defaults to overview on fresh entry (state.tab unset).
-    await page.locator('[data-testid="overview-tab"]').waitFor({ timeout: 5_000 });
+    // OverviewTab mounts only after loadAll() resolves `overview` — on a
+    // COLD prod context (deferred seed contention, no warm Dexie) that
+    // measured ~10-16s after boot (2026-08-14 probe: visible at 19.2s
+    // from goto incl. calibration dismissal). 5s was a stale contract
+    // that failed the cold path the app handles correctly (loading
+    // state → content). 45s matches the boot scenario's budget.
+    await page.locator('[data-testid="overview-tab"]').waitFor({ timeout: 45_000 });
     return 'overview content visible';
   });
 

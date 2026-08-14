@@ -192,6 +192,16 @@ async function main() {
   // attributeScenarioEvents() with the in-page Dexie log to avoid
   // the network-race issue documented in event-attribution.mjs.
   const captured = [];
+  // Kid-isolation filter: a grounding ENGAGEMENT event is any master-play /
+  // claim-validator event EXCEPT the containment tripwire
+  // (voiceFacts.containmentTripwire, coachApi.ts ~4473-4494) — that one is an
+  // audit-only MEASUREMENT that runs precisely on the not-yet-inverted lanes
+  // (kid lane included, by design), never alters the reply, and engages zero
+  // grounding layers. It shares the `claim-validator-trip` kind, so a bare
+  // kind-prefix filter false-positives the kid contract on it.
+  const isGroundingEngagementEvent = (e) =>
+    /^master-play-|^claim-validator-/.test(String(e.kind)) &&
+    !(String(e.kind) === 'claim-validator-trip' && String(e.source) === 'voiceFacts.containmentTripwire');
   const auditTracker = attachAuditStreamTracker(page, STREAM_URL);
   page.on('request', (req) => {
     const u = req.url();
@@ -376,7 +386,7 @@ async function main() {
       await new Promise((r) => setTimeout(r, 300));
       return { cacheSize: cache.masterPlayCache.size() };
     }, STARTING_FEN);
-    const newEvents = captured.slice(before).filter((e) => /^master-play-|^claim-validator-/.test(String(e.kind)));
+    const newEvents = captured.slice(before).filter(isGroundingEngagementEvent);
     if (newEvents.length > 0) {
       throw new Error(
         `kid surface emitted ${newEvents.length} master-play events — CONTRACT VIOLATION. kinds: ${newEvents.map((e) => e.kind).join(', ')}`,
@@ -405,10 +415,10 @@ async function main() {
       await new Promise((r) => setTimeout(r, 200));
       return { response: r };
     });
-    const newEvents = captured.slice(before).filter((e) => /^master-play-|^claim-validator-/.test(String(e.kind)));
+    const newEvents = captured.slice(before).filter(isGroundingEngagementEvent);
     if (newEvents.length > 0) {
       throw new Error(
-        `kid LLM call emitted ${newEvents.length} master-play / claim-validator events — CONTRACT VIOLATION. kinds: ${newEvents.map((e) => e.kind).join(', ')}`,
+        `kid LLM call emitted ${newEvents.length} master-play / claim-validator events — CONTRACT VIOLATION. kinds: ${newEvents.map((e) => e.kind).join(', ')} sources: ${newEvents.map((e) => e.source).join(', ')}`,
       );
     }
     return result;
