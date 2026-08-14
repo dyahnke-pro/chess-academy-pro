@@ -1268,7 +1268,9 @@ export function endgameNoteForLesson(args: {
   // NAMES_A_SQUARE misses — caught live on the triangulation lesson
   // 2026-08-14. Foreign geometry in either case disqualifies the note.
   const NAMES_A_SQUARE_ANY_CASE = /\b[a-hA-H][1-8]\b/;
-  for (const n of conceptNotesFor({ phase: 'endgame', concepts, limit: 40 })) {
+    // Words go INTO the query so the limit caps MATCHING notes, never the pool
+  // the match is drawn from. See conceptNotesFor's `words` note.
+  for (const n of conceptNotesFor({ phase: 'endgame', concepts, words, limit: 40 })) {
     if (args.seenIds?.has(n.id)) continue;
     const text = candidateText(n);
     if (!text) continue;
@@ -1684,12 +1686,36 @@ export function conceptNotesFor(args: {
   phase: DanyaNote['phase'];
   concepts: string[];
   limit?: number;
+  /**
+   * Lowercase words the note's own prose must contain — applied BEFORE the
+   * limit, which is the entire point of the parameter.
+   *
+   * 🚨 A LIMIT APPLIED BEFORE THE CALLER'S FILTER IS A TIME BOMB (2026-08-14).
+   * `endgameNoteForLesson` asked for 40 notes on ['rook-endgame', 'promotion',
+   * 'passed-pawn'] and THEN kept the ones saying "lucena" or "bridge". That
+   * worked only while the corpus was small enough for the Lucena note to land
+   * in the first 40. Adding 3,264 endgame-tagged notes pushed it out, and the
+   * Lucena lesson went silent — with the note still sitting in the corpus,
+   * perfectly intact and simply never reached.
+   *
+   * Growing the corpus must never take teaching AWAY. Since the caller's
+   * keywords are the real selector, they belong in the query: filter first,
+   * then cap. Callers that pass no words are unaffected.
+   */
+  words?: string[];
 }): DanyaNote[] {
   const wanted = args.concepts.map((c) => c.toLowerCase()).filter(Boolean);
   if (wanted.length === 0) return [];
+  const words = (args.words ?? []).map((w) => w.toLowerCase()).filter(Boolean);
   const hits = new Map<string, { note: DanyaNote; matched: number }>();
   for (const c of wanted) {
     for (const n of byConcept.get(`${args.phase}::${c}`) ?? []) {
+      if (words.length > 0) {
+        // Match against the same text the caller will read, so a note cannot
+        // pass here and be discarded there (or the reverse).
+        const text = `${spokenBeatText(n)} ${n.teaches ?? ''}`.toLowerCase();
+        if (!words.some((w) => text.includes(w))) continue;
+      }
       const seen = hits.get(n.id);
       if (seen) seen.matched += 1;
       else hits.set(n.id, { note: n, matched: 1 });
