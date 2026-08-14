@@ -146,7 +146,7 @@ async function main() {
     // CoachTeachPage in greeting mode, so full/brief reported 0 voice
     // events even though the density gate was fine.
     {
-      label: 'Coach Narration = "silent" → no voice-speak-invoked on Vienna walkthrough',
+      label: 'Coach Narration = "silent" → no UN-SILENCED speak on Vienna walkthrough',
       run: async () => {
         await openSettings();
         await setCoachNarration('silent');
@@ -154,10 +154,17 @@ async function main() {
         await page.goto(`${BASE_URL}/coach/session/walkthrough?subject=Vienna%20Game`, { waitUntil: 'domcontentloaded' });
         await page.waitForTimeout(8000);
         const events = eventsSince(before);
-        const speaks = events.filter((e) => e.kind === 'voice-speak-invoked');
+        // The G5 contract is about what PASSES the gate, not what reaches
+        // it: `voice-speak-invoked` fires at speakForced ENTRY, then
+        // `voice-speak-silenced` fires when speakInternal's silent gate
+        // blocks it (proven 2026-08-14 — the same line appeared in both
+        // events, zero audio). Counting bare invocations failed a working
+        // gate. Silent = every invocation must be matched by a silenced.
+        const invoked = events.filter((e) => e.kind === 'voice-speak-invoked').length;
+        const silenced = events.filter((e) => e.kind === 'voice-speak-silenced').length;
         return {
-          ok: speaks.length === 0,
-          why: `${speaks.length} voice-speak-invoked events; expected 0`,
+          ok: invoked - silenced <= 0,
+          why: `${invoked} invoked / ${silenced} silenced; expected every invocation gated`,
           events,
         };
       },
@@ -173,17 +180,22 @@ async function main() {
         // narration lands behind session resolution + voice-gated start,
         // which cold-varies well past a fixed 8s (2026-08-14 fix: the
         // fixed wait false-failed brief mode). Early-exit on first event.
-        let speaks = [];
+        // ≥1 invocation that was NOT gate-silenced — a silenced-everything
+        // regression must not pass on bare invocation counts (mirror of
+        // the silent scenario's invoked/silenced contract).
+        let passed = 0;
         const deadline = Date.now() + 45_000;
         while (Date.now() < deadline) {
           await page.waitForTimeout(2000);
-          speaks = eventsSince(before).filter((e) => e.kind === 'voice-speak-invoked');
-          if (speaks.length > 0) break;
+          const evs = eventsSince(before);
+          passed = evs.filter((e) => e.kind === 'voice-speak-invoked').length
+            - evs.filter((e) => e.kind === 'voice-speak-silenced').length;
+          if (passed > 0) break;
         }
         const events = eventsSince(before);
         return {
-          ok: speaks.length > 0,
-          why: `${speaks.length} voice-speak-invoked events; expected ≥1`,
+          ok: passed > 0,
+          why: `${passed} un-silenced speak(s); expected ≥1`,
           events,
         };
       },
@@ -199,17 +211,20 @@ async function main() {
         // If brief still shows 0 at 45s while full fired, that is a REAL
         // G5 dead-control (brief must speak the capped line, never
         // silence) — not a timing artifact.
-        let speaks = [];
+        // Same un-silenced contract as the full-mode scenario above.
+        let passed = 0;
         const deadline = Date.now() + 45_000;
         while (Date.now() < deadline) {
           await page.waitForTimeout(2000);
-          speaks = eventsSince(before).filter((e) => e.kind === 'voice-speak-invoked');
-          if (speaks.length > 0) break;
+          const evs = eventsSince(before);
+          passed = evs.filter((e) => e.kind === 'voice-speak-invoked').length
+            - evs.filter((e) => e.kind === 'voice-speak-silenced').length;
+          if (passed > 0) break;
         }
         const events = eventsSince(before);
         return {
-          ok: speaks.length > 0,
-          why: `${speaks.length} voice-speak-invoked events; expected ≥1`,
+          ok: passed > 0,
+          why: `${passed} un-silenced speak(s); expected ≥1`,
           events,
         };
       },
