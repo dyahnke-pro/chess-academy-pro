@@ -111,3 +111,8 @@ scripts/_*.mjs
 
 # Per-shard bake outputs — merged into public/data/corpus-spoken.json, never committed raw.
 .bake/
+
+# video-align: raw video + extracted frames are research inputs, never shipped
+*.mp4
+*.webm
+scripts/video-align/frames/
