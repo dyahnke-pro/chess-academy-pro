@@ -44,7 +44,9 @@
  */
 
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -285,12 +287,21 @@ async function main() {
   const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[deep-walk] chromium = ${executablePath}`);
 
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
+  // 2026-08-14: this script predated the sandbox helpers — bare launch args
+  // meant no --ssl-version-max=tls1.2, so the agent proxy RST every first
+  // goto AND the app's own seed fetches, which is why the explorer "never
+  // mounted": seedDatabase's network reads were dying on the same flaky
+  // transport. Also previously UNMUTED (real TTS spend across 820 sublines)
+  // and blind to the calibration bubble.
+  const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({
+    ...sandboxContextOptions(),
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditDeepWalkBot/1.0 (chromium)',
   });
+  await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
 
   const page = await ctx.newPage();
   const allEvents = [];
