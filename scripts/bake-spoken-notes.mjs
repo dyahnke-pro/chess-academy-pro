@@ -45,11 +45,22 @@ import { fileURLToPath } from 'node:url';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = resolve(ROOT, 'public/data/corpus-spoken.json');
 
+// EVERY shipped corpus belongs here. A corpus missing from this list is not
+// "unbaked pending a decision" — it is silent, because the floating notes that
+// make up most of a farm are deliberately mute until baked (their original
+// prose names a foreign game's squares). The four 2026-08-14 farms shipped
+// wired into the app and absent from this list, so all 3,585 of their notes
+// could never be spoken. Adding a creator to `farmedCorpusData` without adding
+// it here ships teaching that can never be heard.
 const CORPORA = [
   'src/data/danya-teachings.json',
   'src/data/chessbrah-teachings.json',
   'public/data/hangingpawns-teachings.json',
   'public/data/saintlouis-teachings.json',
+  'public/data/gothamchess-teachings.json',
+  'public/data/hikaru-teachings.json',
+  'public/data/imrosen-teachings.json',
+  'public/data/magnuscarlsen-teachings.json',
 ];
 
 const API_KEY = process.env.DEEPSEEK_KEY ?? process.env.VITE_DEEPSEEK_API_KEY ?? '';
