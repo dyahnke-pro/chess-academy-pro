@@ -1,0 +1,22 @@
+{
+  "note": "THE single registry of farmed teaching corpora. Every consumer reads this — the app loader, the bake, the coverage report, the gates, the test harness. Adding a creator is a one-line edit HERE and nowhere else.",
+  "why": "A corpus used to be registered in seven separate places. On 2026-08-14 four new farms were added to six of them and missed scripts/bake-spoken-notes.mjs, so 3,585 notes shipped wired into the app, counted in every coverage number, and unable to ever be spoken (floating notes are mute until baked). Nothing errored. One registry makes that omission impossible rather than merely unlikely.",
+  "fields": {
+    "key": "creator id, matches scripts/danya-corpus/creator.mjs",
+    "path": "repo-relative path to the corpus JSON",
+    "load": "'static' = compiled into the JS bundle; 'fetch' = pulled from public/ at boot. Large corpora MUST be fetch — hangingpawns as a static import became a 7.94 MB chunk against Workbox's 8 MB precache cap.",
+    "idPrefix": "note-id prefix; must be unique because the coach dedupes notes by id ACROSS corpora, so a shared prefix silently drops one corpus's note",
+    "primary": "the house-voice corpus; its notes lead. Exactly one is true."
+  },
+  "corpora": [
+    { "key": "naroditsky",    "path": "src/data/danya-teachings.json",              "load": "static", "idPrefix": "dt", "primary": true },
+    { "key": "chessbrah",     "path": "src/data/chessbrah-teachings.json",          "load": "static", "idPrefix": "cb", "primary": false },
+    { "key": "hangingpawns",  "path": "public/data/hangingpawns-teachings.json",    "load": "fetch",  "idPrefix": "hp", "primary": false },
+    { "key": "saintlouis",    "path": "public/data/saintlouis-teachings.json",      "load": "fetch",  "idPrefix": "sl", "primary": false },
+    { "key": "gothamchess",   "path": "public/data/gothamchess-teachings.json",     "load": "fetch",  "idPrefix": "gc", "primary": false },
+    { "key": "hikaru",        "path": "public/data/hikaru-teachings.json",          "load": "fetch",  "idPrefix": "hk", "primary": false },
+    { "key": "imrosen",       "path": "public/data/imrosen-teachings.json",         "load": "fetch",  "idPrefix": "ir", "primary": false },
+    { "key": "magnuscarlsen", "path": "public/data/magnuscarlsen-teachings.json",   "load": "fetch",  "idPrefix": "mgc", "primary": false }
+  ],
+  "bake": "public/data/corpus-spoken.json"
+}
