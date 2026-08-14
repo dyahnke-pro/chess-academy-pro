@@ -1,4 +1,11 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(yt-dlp:*)",
+      "Bash(ffmpeg:*)",
+      "Bash(ffprobe:*)"
+    ]
+  },
   "hooks": {
     "SessionStart": [
       {
