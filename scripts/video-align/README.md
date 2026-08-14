@@ -58,7 +58,9 @@ and validate a candidate on empty-square flatness rather than checker contrast.
 yt-dlp --cookies /tmp/yt.txt --remote-components ejs:github -f 396 -o v.mp4 "<url>"
 
 # 3. frames -> occupancy grids  (x0 y0 square fps)
-python3 scripts/video-align/scan_video.py v.mp4 /tmp/frames 279.2 -3 45.2 0.5
+# geometry comes from the detector; 2fps, not 0.5 — see "Sampling rate" below
+python3 scripts/video-align/detect_board.py /tmp/frames/f_00001.png
+python3 scripts/video-align/scan_video.py v.mp4 /tmp/frames 284 -2.4 44.4 2
 
 # 4. grids -> timestamped moves, constrained by the rules
 node scripts/video-align/track.mjs /tmp/frames/grids.json
@@ -81,11 +83,43 @@ FEN**.
   without a trailing newline it silently corrupts the last existing cert, and
   every Python HTTPS call fails with `CERTIFICATE_VERIFY_FAILED`.
 
+## Teaching videos REWIND — this is the thing to understand
+
+The tracker first stalled at ply 9 of a 27-minute video, and the cause was not
+the OCR. At t=134s the d7 pawn was home again and the e4 pawn was back: a
+position from four plies EARLIER. He had taken the moves back to show a
+different continuation, which is what a lesson does constantly. A forward-only
+tracker reads that as an impossible jump and never recovers.
+
+Remembering every position the game has visited, and treating a match as a
+rewind, took the pilot from **9 plies to 49** — and recovered the shape of the
+lesson itself:
+
+    ply 1-9    e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5   the Fried Liver
+    << rewind to ply 7
+    ply 8      Bc5                                  the Traxler
+    ply 9-10   Nxf7 Bxf2+                           the counterattack
+    << rewind to ply 8
+    ply 9      Bxf7+                                White's refutation
+
+15 rewinds in one video. **The rewind points are the valuable part**: a branch
+point is exactly where a teacher stops to explain why, so those timestamps are
+the ones most likely to carry teaching worth positioning.
+
+## Sampling rate matters more than search cleverness
+
+At 0.5fps, 67 of 154 gaps between settled positions were 7+ squares wide —
+several plies had passed, and explaining them needs a deep search that explodes
+combinatorially. At **2fps** most gaps are a single move. Sample faster before
+making the search smarter.
+
 ## Not done yet
 
-- **Multi-game videos.** Tracking stops when the thread breaks. Needs a reset
-  when the position returns to the start, and re-acquisition after a gap.
-- **Board auto-detection.** The geometry above was derived by hand from edge
-  scans; `find()` in `read_board.py` is not yet reliable enough to trust
-  unattended.
 - **Orientation.** A board shown from Black's side is not yet detected.
+- **Validation across themes.** The detector is proven on one chess.com layout.
+  Before running at scale it needs to earn its keep on several videos with
+  different boards — a confidently wrong geometry produces confidently wrong
+  positions. The tracker's exact-match rule is the backstop (a bad grid matches
+  no legal move and is dropped), but that is the last line, not a substitute.
+- **Joining to the notes.** Timestamp -> FEN exists now; mapping distilled
+  notes onto it is the remaining step.
