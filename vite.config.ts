@@ -103,7 +103,18 @@ export default defineConfig(({ mode }) => {
             handler: 'CacheFirst' as const,
             options: {
               cacheName: 'opening-data-cache',
-              expiration: { maxEntries: 5, maxAgeSeconds: 60 * 60 * 24 * 90 },
+              // 20, not 5. The comment above still describes the day this rule
+              // was written, when `/data/` held essentially one file. It now
+              // holds ELEVEN — the masters DB, the spoken bake, the play DB,
+              // the game references, and six teaching corpora — so a 5-entry
+              // LRU had them evicting each other, and a phone re-fetched
+              // whichever ones lost. Silent, because nothing fails: the SW
+              // simply goes back to the network and the user pays for it again.
+              //
+              // The cap exists to bound disk, and these are served brotli'd
+              // (~10-12 MB for the whole set), so 20 is comfortable and leaves
+              // room for the next corpus without re-introducing the thrash.
+              expiration: { maxEntries: 20, maxAgeSeconds: 60 * 60 * 24 * 90 },
               cacheableResponse: { statuses: [0, 200] },
               matchOptions: { ignoreSearch: true },
             },
