@@ -95,6 +95,18 @@ async function main() {
 
   const page = await ctx.newPage();
 
+  // The AI-consent gate (z-120 modal) can surface mid-run the first time
+  // a flow engages AI coaching; it intercepts every click until answered
+  // (killed scenarios 19-21 on 2026-08-14 — the section tile click retried
+  // into the overlay for 30s). Correct app behavior; the audit answers it
+  // like a real user would, whenever it appears.
+  await page.addLocatorHandler(
+    page.locator('[data-testid="ai-consent-modal"]'),
+    async () => {
+      await page.locator('[data-testid="ai-consent-allow"]').click().catch(() => undefined);
+    },
+  );
+
   const captured = [];
   // Match by path-suffix rather than exact URL so dev-vs-prod base
   // differences don't cause silent capture misses. Audit-stream POSTs
