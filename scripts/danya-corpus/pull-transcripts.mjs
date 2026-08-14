@@ -79,17 +79,21 @@ async function main() {
   const budgetMs = Number(arg('budget-minutes', process.env.PULL_BUDGET_MIN ?? '0')) * 60_000;
   const deadline = budgetMs > 0 ? Date.now() + budgetMs : Infinity;
   const timeLeft = () => deadline - Date.now();
-  // PIN THE PLAYER CLIENT (2026-08-02). yt-dlp's default rotation lands on
-  // `android_vr`, which serves the video but carries NO caption tracks at all
-  // — every request came back "There are no subtitles for the requested
-  // languages" and, because that is not an ERROR, yt-dlp exited 0 and the loop
-  // below counted a pull that wrote no file as a success. That is how the farm
-  // ran for hours reporting healthy progress and produced zero transcripts.
-  // `android` returns the caption track and is not bot-checked (`web`,
-  // `web_safari`, `web_embedded`, `mweb` and `ios` all demand a sign-in
-  // challenge from a datacenter IP; `tv` is DRM-walled).
+  // PIN THE PLAYER CLIENT (2026-08-02, RE-PINNED 2026-08-14 — this rots as
+  // YouTube's bot-check evolves; re-verify empirically before trusting either
+  // date's choice). yt-dlp's default rotation lands on `android_vr`, which
+  // serves the video but carries NO caption tracks at all — every request
+  // came back "There are no subtitles for the requested languages" and,
+  // because that is not an ERROR, yt-dlp exited 0 and the loop below counted
+  // a pull that wrote no file as a success. That is how the farm ran for
+  // hours reporting healthy progress and produced zero transcripts.
+  // `android` (2026-08-02's pin) is now itself bot-checked from this
+  // datacenter IP ("Sign in to confirm you're not a bot"), and so are `ios`,
+  // `web_creator`, and `mweb` (PO-token wall); `tv` is DRM-walled. Verified
+  // 2026-08-14: `tv_embedded` is the one client that still serves both video
+  // and caption track with no challenge.
   const fetchOne = (id) => run('yt-dlp', [
-    '--extractor-args', 'youtube:player_client=android',
+    '--extractor-args', 'youtube:player_client=tv_embedded',
     '--write-auto-sub', '--skip-download', '--sub-format', 'vtt', '--sub-langs', 'en',
     '--sleep-requests', '2',
     '-o', `${TDIR}/%(id)s.%(ext)s`,
