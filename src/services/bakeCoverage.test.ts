@@ -73,7 +73,7 @@ describe('corpus registry', () => {
   it('each corpus actually uses the prefix it declares', () => {
     for (const c of registry.corpora) {
       const notes = (JSON.parse(readFileSync(c.path, 'utf8')) as { notes: Array<{ id: string }> }).notes;
-      const seen = new Set(notes.slice(0, 200).map((n) => String(n.id).split('-')[0]));
+      const seen = new Set(notes.slice(0, 200).map((n) => n.id.split('-')[0]));
       expect(
         [...seen],
         `${c.key} declares idPrefix "${c.idPrefix}" but its notes use ${[...seen].join('/')}`,

@@ -1737,7 +1737,8 @@ export function conceptNotesFor(args: {
   const hits = new Map<string, { note: DanyaNote; matched: number }>();
   for (const c of wanted) {
     for (const n of byConcept.get(`${args.phase}::${c}`) ?? []) {
-      if (hits.has(n.id)) { hits.get(n.id)!.matched += 1; continue; }
+      const already = hits.get(n.id);
+      if (already) { already.matched += 1; continue; }
       if (words.length > 0) {
         // Match against the same text the caller will read, so a note cannot
         // pass here and be discarded there (or the reverse).

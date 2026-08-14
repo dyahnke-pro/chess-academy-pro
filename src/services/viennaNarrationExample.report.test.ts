@@ -49,7 +49,21 @@ describe('Vienna — what the student actually hears', () => {
   it('walks the spine and reports the spoken line at every ply', () => {
     const board = new Chess();
     const history: string[] = [];
-    const plies: unknown[] = [];
+    /** One row per ply. Declared rather than `unknown[]`: every field below is
+     *  printed, and stringifying `unknown` is both a lint error and a real
+     *  "[object Object]" risk in the report a human reads. */
+    interface PlyRow {
+      ply: number;
+      move: string;
+      candidates: number;
+      spoke: boolean;
+      noteId: string | null;
+      opening: string | null;
+      heard: string | null;
+      gateTook: string | null;
+      silenceBlame: Record<string, number> | null;
+    }
+    const plies: PlyRow[] = [];
 
     for (const san of VIENNA) {
       board.move(san);
@@ -107,8 +121,8 @@ describe('Vienna — what the student actually hears', () => {
       });
     }
 
-    const spokeCount = plies.filter((p) => (p as { spoke: boolean }).spoke).length;
-    const withCandidates = plies.filter((p) => (p as { candidates: number }).candidates > 0).length;
+    const spokeCount = plies.filter((p) => p.spoke).length;
+    const withCandidates = plies.filter((p) => p.candidates > 0).length;
     const report = {
       generatedAt: new Date().toISOString().slice(0, 10),
       lesson: LESSON,
@@ -124,8 +138,8 @@ describe('Vienna — what the student actually hears', () => {
 
     console.log(`\n════ ${LESSON} — ${VIENNA.join(' ')} ════`);
     console.log(`spoke on ${spokeCount} of ${VIENNA.length} plies (${withCandidates} had candidates)\n`);
-    for (const p of plies as Array<Record<string, unknown>>) {
-      const head = `ply ${String(p.ply).padStart(2)}  ${String(p.move).padEnd(7)} cand=${String(p.candidates).padStart(3)}`;
+    for (const p of plies) {
+      const head = `ply ${String(p.ply).padStart(2)}  ${p.move.padEnd(7)} cand=${String(p.candidates).padStart(3)}`;
       if (p.heard) {
         console.log(`${head}  ▶ ${p.opening ?? '—'} [${p.noteId}]`);
         console.log(`          "${p.heard}"`);
@@ -134,10 +148,10 @@ describe('Vienna — what the student actually hears', () => {
         // Selected, but spoke nothing — the note has no baked spoken form.
         console.log(`${head}  · silent — note ${p.noteId} selected but has no spoken form (unbaked)`);
       } else {
-        const b = p.silenceBlame as Record<string, number> | null;
+        const b = p.silenceBlame;
         const why = b && Object.keys(b).length
           ? Object.entries(b).map(([k, v]) => `${k}×${v}`).join(' ')
-          : (p.candidates as number) > 0
+          : p.candidates > 0
             ? 'candidates present but every one refused by a private filter'
             : 'no candidates at all';
         console.log(`${head}  · silent — ${why}`);

@@ -74,7 +74,7 @@ describe('beats vs corpus — which one can speak, and where', () => {
         const note = noteAtPosition(history, fen, entry.name ?? null);
         // A note that cannot be spoken has not taught anything, so require
         // speakable text on both sides rather than mere existence.
-        const beatText = beat ? String((beat as { text?: string }).text ?? '').trim() : '';
+        const beatText = (beat as { text?: string } | null)?.text?.trim() ?? '';
         const noteText = note ? spokenBeatText(note).trim() : '';
         const hasBeat = beatText.length > 0;
         const hasNote = noteText.length > 0;
