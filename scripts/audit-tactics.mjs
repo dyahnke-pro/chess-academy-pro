@@ -542,8 +542,13 @@ async function main() {
     [
       { label: 'puzzle-board appears OR empty-state shown',
         fn: async () => (await visible('puzzle-board')) || (await hasText('no puzzles')) || (await visible('session-complete')) },
-      { label: 'tactic-type-heading present when puzzle loaded',
-        fn: async () => (await visible('puzzle-board')) ? await visible('tactic-type-heading') : true },
+      // The neon theme heading is a THEMED-drill affordance — the classic
+      // trainer renders PuzzleBoard with no themeLabel by design (a mixed
+      // session has no single theme), so the heading is correctly absent
+      // here. Assert the board itself rendered instead. (2026-08-14: the
+      // old heading check only "passed" when the puzzle hadn't loaded yet.)
+      { label: 'board-wrapper renders when puzzle loaded',
+        fn: async () => (await visible('puzzle-board')) ? await visible('board-wrapper') : true },
       { label: 'back-to-modes button visible',
         fn: () => visible('back-to-modes') },
     ],
@@ -1330,8 +1335,21 @@ async function main() {
     [
       { label: 'page mounts', fn: () => visible('tactical-profile-page') },
       {
-        label: 'either theme-row OR begin-training-btn is present',
-        fn: async () => (await count('[data-testid="theme-row"]')) > 0 || (await visible('begin-training-btn')),
+        // The profile computes from Dexie on mount — cold contexts sit in
+        // the "Loading tactical profile..." state well past the settle
+        // (2026-08-14 screenshot: still loading at ~5s). Poll up to 30s
+        // for content or an honest no-data state.
+        label: 'theme-row OR begin-training-btn OR no-data state appears (30s)',
+        fn: async () => {
+          const deadline = Date.now() + 30_000;
+          while (Date.now() < deadline) {
+            if ((await count('[data-testid="theme-row"]')) > 0) return true;
+            if (await visible('begin-training-btn')) return true;
+            if (await hasText('no tactical data')) return true;
+            await page.waitForTimeout(1500);
+          }
+          return false;
+        },
       },
     ],
   );
@@ -1682,9 +1700,13 @@ async function main() {
   // ═══════════════════════════════════════════════════════════════════
 
   // 51. Show-Solution flow: open a tactic drill, click "Show Solution",
-  // verify the puzzle reaches its solved state via `puzzle-correct`
-  // testid. The cleanest end-to-end "puzzle was solved" assertion
-  // available without knowing the puzzle's expected move SAN.
+  // verify the line auto-plays and the puzzle is GRADED AS MISSED —
+  // handleShowSolution deliberately marks the puzzle failed
+  // (PuzzleBoard.tsx "auto-play remaining moves and mark as failed"),
+  // so `puzzle-correct` never appears here by design; the observable
+  // contract is the drill's missed counter incrementing. (2026-08-14:
+  // the old puzzle-correct assertion tested a contract the app never
+  // had.)
   await clickTacticsNav();
   await page.locator('[data-testid="section-forks"]').click().catch(() => undefined);
   await page.locator('[data-testid="tactic-drill-page"]').waitFor({ timeout: 10000 }).catch(() => undefined);
@@ -1699,23 +1721,25 @@ async function main() {
         return;
       }
       await showBtn.click();
-      // Solution auto-plays one ply at a time; wait for completion
-      // (puzzle-correct testid surfaces when the puzzle reaches solved
-      // state OR the board stops changing for 1.5s).
-      await waitUntil(() => visible('puzzle-correct').then((v) => v), 15000).catch(() => undefined);
+      // Solution auto-plays one ply at a time (600ms/ply) then grades
+      // the puzzle as missed 1.5s later; wait for the missed counter.
+      await waitUntil(
+        () => page.locator('text=/[1-9]\\d* missed/').first().isVisible().catch(() => false),
+        20000,
+      ).catch(() => undefined);
     },
     SETTLE_PUZZLE,
     [
       {
-        label: 'puzzle-correct state appears after Show Solution (or skipped if button absent)',
+        label: 'Show Solution auto-plays the line and grades the puzzle as missed (or skipped if button absent)',
         fn: async () => {
           if (report.scenarios._showSolutionSkipped) {
             delete report.scenarios._showSolutionSkipped;
             return true;
           }
-          return await visible('puzzle-correct');
+          return await page.locator('text=/[1-9]\\d* missed/').first().isVisible().catch(() => false);
         },
-        detail: 'Show Solution must auto-play the line to the solved state',
+        detail: 'Show Solution marks the puzzle failed by design — the missed counter must increment',
       },
     ],
   );
