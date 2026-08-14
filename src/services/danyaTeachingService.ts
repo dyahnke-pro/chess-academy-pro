@@ -608,8 +608,14 @@ export function teachingSourceForBoard(
   // the ideas, the model only phrases the note (G0).
   const derived = boardConcepts(fen);
   if (!derived) return null;
-  const concept = conceptNotesFor({ phase: derived.phase, concepts: derived.concepts, limit: 8 })
-    .find((n) => phaseFits(n) && accept(n, 'concept'));
+  // Predicate INTO the query — the limit must cap accepted notes, not the pool
+  // they are drawn from. See conceptNotesFor's `accept`.
+  const concept = conceptNotesFor({
+    phase: derived.phase,
+    concepts: derived.concepts,
+    limit: 8,
+    accept: (n) => phaseFits(n) && accept(n, 'concept'),
+  })[0];
   return concept ? { note: concept, origin: 'concept' } : null;
 }
 
@@ -838,14 +844,18 @@ export function transitionTeachingSourceForGame(args: {
       // same live truth filter the structure tier applies. Selection owns
       // this; the caller's grade is the backup that should never fire.
       const boardFen = args.fen;
-      const concept = conceptNotesFor({ phase: derived.phase, concepts: derived.concepts, limit: 5 })
-        .find((n) => {
+      const concept = conceptNotesFor({
+        phase: derived.phase,
+        concepts: derived.concepts,
+        limit: 5,
+        accept: (n) => {
           if (!usable(n)) return false;
           if (!namedPiecesExistOnBoard(n.plans ?? '', boardFen)) return false;
           try {
             return validateBoardClaims(`${n.explains} ${n.teaches} ${n.plans}`, boardFen).violations.length === 0;
           } catch { return false; }
-        });
+        },
+      })[0];
       if (concept) return { note: concept, origin: 'structure' };
     }
   }
@@ -1034,7 +1044,7 @@ export function spokenTacticNote(args: {
   // chosen to explain.
   const patternWords = args.types.flatMap((t) => TACTIC_PATTERN_WORDS[t] ?? []);
   if (patternWords.length === 0) return null;
-  for (const n of conceptNotesFor({ phase: args.phase ?? 'middlegame', concepts, limit: 40 })) {
+  for (const n of conceptNotesFor({ phase: args.phase ?? 'middlegame', concepts, words: patternWords, limit: 40 })) {
     if (args.seenIds?.has(n.id)) continue;
     const text = spokenBeatText(n);
     if (!text) continue;
@@ -1356,7 +1366,7 @@ export function buildDanyaTeachingBlock(args: {
     const concepts = Array.from(new Set(
       args.liveTacticTypes.flatMap((t) => TACTIC_TYPE_CONCEPTS[t] ?? ['tactics', 'tactical-awareness']),
     ));
-    for (const n of conceptNotesFor({ phase: args.phase ?? 'middlegame', concepts, limit: 6 })) {
+    for (const n of conceptNotesFor({ phase: args.phase ?? 'middlegame', concepts, limit: 6, accept: onTopic })) {
       if (seen.has(n.id) || !onTopic(n)) continue;
       picked.push(n);
       seen.add(n.id);
@@ -1703,6 +1713,23 @@ export function conceptNotesFor(args: {
    * then cap. Callers that pass no words are unaffected.
    */
   words?: string[];
+  /**
+   * The caller's own predicate, likewise applied BEFORE the limit.
+   *
+   * Every call site here had the same shape — take N, then `.find()` the one
+   * that satisfies a board-truth or topic test — and every one of them was a
+   * silent time bomb for the same reason `words` exists. The tightest was
+   * `limit: 5` followed by a full board-claim validation: five candidates, most
+   * of which name squares that are false on the live board, and the tier goes
+   * quiet with hundreds of usable notes behind them.
+   *
+   * Passing the predicate in means the limit caps ACCEPTED notes, so the tier
+   * returns something whenever the corpus holds something acceptable, no matter
+   * how large the corpus grows. It is evaluated per candidate, so keep it cheap
+   * relative to the pool — board validation over a few thousand notes is fine;
+   * an engine call would not be.
+   */
+  accept?: (n: DanyaNote) => boolean;
 }): DanyaNote[] {
   const wanted = args.concepts.map((c) => c.toLowerCase()).filter(Boolean);
   if (wanted.length === 0) return [];
@@ -1710,15 +1737,15 @@ export function conceptNotesFor(args: {
   const hits = new Map<string, { note: DanyaNote; matched: number }>();
   for (const c of wanted) {
     for (const n of byConcept.get(`${args.phase}::${c}`) ?? []) {
+      if (hits.has(n.id)) { hits.get(n.id)!.matched += 1; continue; }
       if (words.length > 0) {
         // Match against the same text the caller will read, so a note cannot
         // pass here and be discarded there (or the reverse).
         const text = `${spokenBeatText(n)} ${n.teaches ?? ''}`.toLowerCase();
         if (!words.some((w) => text.includes(w))) continue;
       }
-      const seen = hits.get(n.id);
-      if (seen) seen.matched += 1;
-      else hits.set(n.id, { note: n, matched: 1 });
+      if (args.accept && !args.accept(n)) continue;
+      hits.set(n.id, { note: n, matched: 1 });
     }
   }
   return [...hits.values()]
