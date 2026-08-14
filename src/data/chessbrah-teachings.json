@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-07-30T17:26:53.646Z",
+ "generatedAt": "2026-08-14T17:15:28.164Z",
  "videosDistilled": 152,
  "v2VideoIds": [
   "-4n6rkBsF6Y",
@@ -54191,7 +54191,9 @@
     "e5",
     "Nd5",
     "d4",
-    "Nc6"
+    "Nc6",
+    "h4",
+    "h5"
    ],
    "opening": "Sicilian Defense: Taimanov Variation",
    "phase": "middlegame",
@@ -55898,7 +55900,8 @@
     "Nf3",
     "e6",
     "c3",
-    "Nf6"
+    "Nf6",
+    "e5"
    ],
    "opening": "Sicilian Defense: Taimanov Variation",
    "phase": "middlegame",
@@ -59736,7 +59739,8 @@
     "d6",
     "d4",
     "cxd4",
-    "Nxd4"
+    "Nxd4",
+    "f5"
    ],
    "opening": "Sicilian Defense: Taimanov Variation",
    "phase": "endgame",
@@ -60315,7 +60319,8 @@
     "c5",
     "d5",
     "Nf6",
-    "Nc3"
+    "Nc3",
+    "e5"
    ],
    "opening": "Queen's Gambit",
    "phase": "opening",

@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-01T03:33:26.062Z",
+ "generatedAt": "2026-08-14T17:15:30.282Z",
  "videosDistilled": 404,
  "v2VideoIds": [
   "-3wnJxmUJZg",
@@ -115643,7 +115643,11 @@
     "Nxe4",
     "Nf6",
     "Nxf6+",
-    "exf6"
+    "exf6",
+    "f3",
+    "g5",
+    "Ne2",
+    "b6"
    ],
    "opening": "Caro-Kann Defense",
    "phase": "middlegame",
@@ -115925,7 +115929,10 @@
     "Nxe4",
     "Nf6",
     "Nxf6+",
-    "exf6"
+    "exf6",
+    "Nf3",
+    "Nd7",
+    "Ne5"
    ],
    "opening": "Caro-Kann Defense: Classical Variation",
    "phase": "opening",
@@ -116125,7 +116132,9 @@
     "Nxe4",
     "Nf6",
     "Nxf6+",
-    "exf6"
+    "exf6",
+    "Qf3",
+    "Qe7+"
    ],
    "opening": "Caro-Kann Defense: Classical Variation",
    "phase": "opening",
@@ -116437,7 +116446,8 @@
     "Nxe4",
     "Nf6",
     "Nxf6+",
-    "exf6"
+    "exf6",
+    "d5"
    ],
    "opening": "Caro-Kann Defense: Classical Variation",
    "phase": "middlegame",
@@ -117472,7 +117482,8 @@
     "Nc3",
     "Nc6",
     "Bg5",
-    "e6"
+    "e6",
+    "Rc1"
    ],
    "opening": "Sicilian Defense: Kramnik Variation",
    "phase": "middlegame",
@@ -120432,7 +120443,8 @@
     "Bb7",
     "Bg2",
     "c5",
-    "d5"
+    "d5",
+    "d6"
    ],
    "opening": "Queen's Indian Defense",
    "phase": "middlegame",
@@ -121245,7 +121257,10 @@
     "Nxd4",
     "Nf6",
     "Nc3",
-    "a6"
+    "a6",
+    "Bg5",
+    "e5",
+    "Nf5"
    ],
    "opening": "Sicilian Defense: Najdorf Variation",
    "phase": "opening",
@@ -121602,7 +121617,8 @@
     "Be7",
     "Qf3",
     "Qc7",
-    "O-O-O"
+    "O-O-O",
+    "d5"
    ],
    "opening": "Sicilian Defense: Najdorf Variation",
    "phase": "opening",
@@ -123439,7 +123455,10 @@
     "e3",
     "d6",
     "Be2",
-    "O-O"
+    "O-O",
+    "Ne5",
+    "Nc6",
+    "g4"
    ],
    "opening": "London System",
    "phase": "opening",
@@ -126192,7 +126211,9 @@
     "d4",
     "d5",
     "e5",
-    "c5"
+    "c5",
+    "Qg4",
+    "Nc6"
    ],
    "opening": "Caro-Kann Defense: Advance Variation, Botvinnik-Carls Defense",
    "phase": "opening",
@@ -126999,7 +127020,8 @@
     "Nf6",
     "f3",
     "exf3",
-    "Nxf3"
+    "Nxf3",
+    "e5"
    ],
    "opening": "Blackmar-Diemer Gambit",
    "phase": "opening",
@@ -130111,7 +130133,13 @@
     "e4",
     "c5",
     "Nf3",
-    "d6"
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "e5"
    ],
    "opening": "Sicilian Defense",
    "phase": "opening",
@@ -131633,7 +131661,8 @@
     "Nc3",
     "Nc6",
     "Be2",
-    "e5"
+    "e5",
+    "Be3"
    ],
    "opening": "Sicilian Defense",
    "phase": "opening",
@@ -133750,7 +133779,11 @@
     "a6",
     "Ba4",
     "Nf6",
-    "d4"
+    "d4",
+    "b5",
+    "Bb3",
+    "d6",
+    "a4"
    ],
    "opening": "Ruy Lopez: Morphy Defense, Mackenzie Variation",
    "phase": "opening",
@@ -133860,7 +133893,8 @@
     "Bg7",
     "Nf3",
     "O-O",
-    "Be3"
+    "Be3",
+    "e5"
    ],
    "opening": "Pirc Defense: Austrian Attack",
    "phase": "opening",
@@ -134643,7 +134677,11 @@
     "Nc3",
     "e6",
     "Nf3",
-    "Bb4"
+    "Bb4",
+    "d3",
+    "d5",
+    "e4",
+    "a5"
    ],
    "opening": "Nimzo-Larsen Attack: English Variation",
    "phase": "opening",
@@ -134668,7 +134706,10 @@
     "Nc3",
     "e6",
     "Nf3",
-    "Bb4"
+    "Bb4",
+    "g3",
+    "d5",
+    "a3"
    ],
    "opening": "Nimzo-Larsen Attack: English Variation",
    "phase": "opening",
@@ -134793,7 +134834,8 @@
     "Nc3",
     "e6",
     "Nf3",
-    "Bb4"
+    "Bb4",
+    "Ng5"
    ],
    "opening": "Nimzo-Larsen Attack: English Variation",
    "phase": "middlegame",
@@ -134893,7 +134935,9 @@
     "Nc3",
     "e6",
     "Nf3",
-    "Bb4"
+    "Bb4",
+    "a3",
+    "a5"
    ],
    "opening": "Nimzo-Larsen Attack: English Variation",
    "phase": "opening",
@@ -134918,7 +134962,8 @@
     "Nc3",
     "e6",
     "Nf3",
-    "Bb4"
+    "Bb4",
+    "Qb3"
    ],
    "opening": "Nimzo-Larsen Attack: English Variation",
    "phase": "opening",
@@ -140151,7 +140196,8 @@
     "Nxd4",
     "Nf6",
     "Nc3",
-    "Bb4"
+    "Bb4",
+    "f4"
    ],
    "opening": "Sicilian Defense: Flohr Variation",
    "phase": "middlegame",
@@ -140982,7 +141028,8 @@
     "Bg7",
     "d3",
     "d6",
-    "e4"
+    "e4",
+    "h6"
    ],
    "opening": "English Opening: Symmetrical Variation, Botvinnik System",
    "phase": "middlegame",
@@ -141098,7 +141145,11 @@
     "Bg7",
     "d3",
     "d6",
-    "e4"
+    "e4",
+    "f5",
+    "h4",
+    "Nf6",
+    "h5"
    ],
    "opening": "English Opening: Symmetrical Variation, Botvinnik System",
    "phase": "opening",
@@ -142579,7 +142630,8 @@
     "g6",
     "Nf3",
     "Bg7",
-    "e4"
+    "e4",
+    "Nc6"
    ],
    "opening": "English Opening: Anglo-Indian Defense, Anti-Anti-Grünfeld",
    "phase": "opening",
@@ -143061,7 +143113,8 @@
     "g6",
     "Nf3",
     "Bg7",
-    "e4"
+    "e4",
+    "d5"
    ],
    "opening": "Neo-Grünfeld Defense: with g3",
    "phase": "middlegame",
@@ -143087,7 +143140,8 @@
     "g6",
     "Nf3",
     "Bg7",
-    "e4"
+    "e4",
+    "d5"
    ],
    "opening": "Neo-Grünfeld Defense: with g3",
    "phase": "middlegame",
@@ -144336,7 +144390,10 @@
     "e4",
     "Nxc3",
     "bxc3",
-    "Bg7"
+    "Bg7",
+    "Nf3",
+    "Bg4",
+    "Bc4"
    ],
    "opening": "Grünfeld Defense: Exchange Variation",
    "phase": "opening",
@@ -144836,7 +144893,8 @@
     "e6",
     "Nf3",
     "Nbd7",
-    "Bd3"
+    "Bd3",
+    "e5"
    ],
    "opening": "French Defense: Chigorin Variation",
    "phase": "opening",
@@ -147597,7 +147655,10 @@
     "O-O",
     "d6",
     "d4",
-    "Nd7"
+    "Nd7",
+    "d5",
+    "a5",
+    "c4"
    ],
    "opening": "Ruy Lopez: Closed, Chigorin Defense",
    "phase": "middlegame",
@@ -151748,7 +151809,8 @@
     "e5",
     "Nf3",
     "exd4",
-    "Bc4"
+    "Bc4",
+    "Qb6"
    ],
    "opening": "Caro-Kann Defense",
    "phase": "opening",
@@ -157404,7 +157466,8 @@
     "a6",
     "Be2",
     "e5",
-    "Nb3"
+    "Nb3",
+    "Nd5"
    ],
    "opening": "Sicilian Defense: Kalashnikov Variation",
    "phase": "opening",
@@ -159691,7 +159754,8 @@
     "a6",
     "Ba4",
     "Nf6",
-    "O-O"
+    "O-O",
+    "b5"
    ],
    "opening": "Ruy Lopez: Morphy Defense, Neo-Arkhangelsk Variation",
    "phase": "opening",
@@ -160318,7 +160382,8 @@
     "a6",
     "Ba4",
     "Nf6",
-    "O-O"
+    "O-O",
+    "b5"
    ],
    "opening": "Ruy Lopez: Morphy Defense, Neo-Arkhangelsk Variation",
    "phase": "opening",
@@ -161253,7 +161318,10 @@
     "g6",
     "Be3",
     "c6",
-    "Qd2"
+    "Qd2",
+    "Bg7",
+    "O-O-O",
+    "g5"
    ],
    "opening": "Pirc Defense: Byrne Variation",
    "phase": "opening",
@@ -161486,7 +161554,8 @@
     "Bc4",
     "e6",
     "Nc3",
-    "d6"
+    "d6",
+    "Qb3"
    ],
    "opening": "Alekhine Defense: Two Pawns Attack",
    "phase": "middlegame",
@@ -162697,7 +162766,8 @@
     "Nf3",
     "d5",
     "g3",
-    "Be7"
+    "Be7",
+    "Bd2"
    ],
    "opening": "Catalan Opening: Open Defense",
    "phase": "opening",
@@ -163214,7 +163284,9 @@
     "Be7",
     "Bg2",
     "O-O",
-    "O-O"
+    "O-O",
+    "Bb4",
+    "c5"
    ],
    "opening": "Catalan Opening: Open Defense",
    "phase": "opening",
@@ -165071,7 +165143,9 @@
     "d5",
     "e5",
     "Bf5",
-    "g4"
+    "g4",
+    "e6",
+    "f4"
    ],
    "opening": "Caro-Kann Defense: Advance Variation, Bayonet Attack",
    "phase": "opening",
@@ -165246,7 +165320,8 @@
     "d5",
     "e5",
     "Bf5",
-    "g4"
+    "g4",
+    "c5"
    ],
    "opening": "Caro-Kann Defense: Advance Variation, Bayonet Attack",
    "phase": "middlegame",
@@ -167498,7 +167573,8 @@
     "Nc6",
     "Bc4",
     "Bd7",
-    "O-O-O"
+    "O-O-O",
+    "b5"
    ],
    "opening": "Sicilian Defense: Dragon Variation, Yugoslav Attack",
    "phase": "opening",
@@ -167868,7 +167944,8 @@
     "Nc6",
     "Bc4",
     "Bd7",
-    "O-O-O"
+    "O-O-O",
+    "b5"
    ],
    "opening": "Sicilian Defense: Dragon Variation, Yugoslav Attack",
    "phase": "opening",
@@ -168988,7 +169065,8 @@
     "gxf6",
     "e4",
     "dxe4",
-    "d5"
+    "d5",
+    "h6"
    ],
    "opening": "Richter-Veresov Attack",
    "phase": "opening",
@@ -169193,7 +169271,8 @@
     "gxf6",
     "e4",
     "dxe4",
-    "d5"
+    "d5",
+    "f5"
    ],
    "opening": "Richter-Veresov Attack",
    "phase": "opening",
@@ -169223,7 +169302,8 @@
     "gxf6",
     "e4",
     "dxe4",
-    "d5"
+    "d5",
+    "f5"
    ],
    "opening": "Richter-Veresov Attack",
    "phase": "opening",
@@ -170316,7 +170396,8 @@
     "O-O",
     "Qd2",
     "Nc6",
-    "Bc4"
+    "Bc4",
+    "Bd7"
    ],
    "opening": "Sicilian Defense: Dragon Variation, Yugoslav Attack",
    "phase": "opening",
@@ -172593,7 +172674,8 @@
     "d4",
     "d5",
     "Nc3",
-    "g6"
+    "g6",
+    "h4"
    ],
    "opening": "Caro-Kann Defense: Gurgenidze System",
    "phase": "opening",
@@ -172813,7 +172895,9 @@
     "d4",
     "d5",
     "Nc3",
-    "g6"
+    "g6",
+    "f4",
+    "f6"
    ],
    "opening": "Caro-Kann Defense: Gurgenidze System",
    "phase": "opening",
@@ -173059,7 +173143,10 @@
     "d4",
     "d5",
     "Nc3",
-    "g6"
+    "g6",
+    "Nf3",
+    "Bg7",
+    "Bf4"
    ],
    "opening": "Caro-Kann Defense: Gurgenidze System",
    "phase": "opening",
@@ -174598,7 +174685,8 @@
     "Nd2",
     "c5",
     "Qc2",
-    "e5"
+    "e5",
+    "e4"
    ],
    "opening": "King's Indian Defense: Fianchetto Variation",
    "phase": "opening",
@@ -175507,7 +175595,9 @@
     "Bf4",
     "c5",
     "e3",
-    "Qb6"
+    "Qb6",
+    "e4",
+    "e5"
    ],
    "opening": "London System",
    "phase": "middlegame",
@@ -180527,7 +180617,14 @@
     "Nf6",
     "Nc3",
     "dxc4",
-    "e4"
+    "e4",
+    "a5",
+    "d5",
+    "e5",
+    "b4",
+    "Na6",
+    "Bg5",
+    "Nxb4"
    ],
    "opening": "Queen's Gambit",
    "phase": "opening",
@@ -181839,7 +181936,8 @@
     "g4",
     "Bg6",
     "Nge2",
-    "c5"
+    "c5",
+    "Nf4"
    ],
    "opening": "Caro-Kann Defense: Advance Variation, Van der Wiel Attack",
    "phase": "middlegame",
@@ -182326,7 +182424,8 @@
     "g4",
     "Bg6",
     "Nge2",
-    "c5"
+    "c5",
+    "Bg2"
    ],
    "opening": "Caro-Kann Defense: Advance Variation, Van der Wiel Attack",
    "phase": "opening",
@@ -183641,7 +183740,9 @@
     "Nf3",
     "c5",
     "e3",
-    "e6"
+    "e6",
+    "a4",
+    "b5"
    ],
    "opening": "English Opening: Agincourt Defense",
    "phase": "middlegame",
@@ -184935,7 +185036,9 @@
     "Bc4",
     "Ngf6",
     "Ng5",
-    "e6"
+    "e6",
+    "g4",
+    "b6"
    ],
    "opening": "Caro-Kann Defense: Karpov Variation",
    "phase": "middlegame",
@@ -187219,7 +187322,9 @@
     "d5",
     "b5",
     "cxb5",
-    "a6"
+    "a6",
+    "Nd2",
+    "c4"
    ],
    "opening": "Benko Gambit",
    "phase": "opening",
@@ -187984,7 +188089,11 @@
     "d5",
     "b5",
     "cxb5",
-    "a6"
+    "a6",
+    "e3",
+    "Qa5+",
+    "Bd2",
+    "Bb7"
    ],
    "opening": "Benko Gambit",
    "phase": "opening",
@@ -190858,7 +190967,9 @@
     "d4",
     "d5",
     "e5",
-    "Bf5"
+    "Bf5",
+    "h4",
+    "h5"
    ],
    "opening": "Caro-Kann Defense: Advance Variation, Tal Variation",
    "phase": "concept",
@@ -191174,7 +191285,8 @@
     "d4",
     "d5",
     "e5",
-    "Bf5"
+    "Bf5",
+    "g4"
    ],
    "opening": "Caro-Kann Defense: Advance Variation, Tal Variation",
    "phase": "middlegame",
@@ -191585,7 +191697,8 @@
     "Nb6",
     "exd6",
     "cxd6",
-    "Nc3"
+    "Nc3",
+    "e5"
    ],
    "opening": "Alekhine Defense: Balogh Variation",
    "phase": "opening",
@@ -193704,7 +193817,8 @@
     "a6",
     "Ba4",
     "d6",
-    "O-O"
+    "O-O",
+    "Bg4"
    ],
    "opening": "Ruy Lopez: Morphy Defense, Steinitz Deferred",
    "phase": "opening",
@@ -193937,7 +194051,8 @@
     "e6",
     "Bg5",
     "Nbd7",
-    "e3"
+    "e3",
+    "b5"
    ],
    "opening": "Queen's Gambit",
    "phase": "opening",
@@ -194631,7 +194746,9 @@
     "Nc6",
     "f4",
     "g6",
-    "Nf3"
+    "Nf3",
+    "Bg7",
+    "Bb5"
    ],
    "opening": "Sicilian Defense: Grand Prix Attack",
    "phase": "opening",
@@ -194994,7 +195111,8 @@
     "d6",
     "d4",
     "cxd4",
-    "Nxd4"
+    "Nxd4",
+    "e5"
    ],
    "opening": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack",
    "phase": "middlegame",
@@ -196778,7 +196896,9 @@
     "d4",
     "cxd4",
     "Nxd4",
-    "Nf6"
+    "Nf6",
+    "Nc3",
+    "e5"
    ],
    "opening": "Sicilian Defense: Modern Variations",
    "phase": "opening",
@@ -198577,7 +198697,9 @@
     "Nf6",
     "Nc3",
     "g6",
-    "Nf3"
+    "Nf3",
+    "a5",
+    "d4"
    ],
    "opening": "Neo-Grünfeld Defense: with g3",
    "phase": "opening",
@@ -206369,7 +206491,8 @@
     "cxd4",
     "cxd4",
     "Bd7",
-    "O-O"
+    "O-O",
+    "Nh6"
    ],
    "opening": "French Defense: Advance Variation",
    "phase": "opening",
@@ -206467,7 +206590,9 @@
     "O-O",
     "Nxe4",
     "Re1",
-    "d5"
+    "d5",
+    "Ng5",
+    "b5"
    ],
    "opening": "Italian Game: Two Knights Defense, Knight Attack",
    "phase": "middlegame",
@@ -206529,7 +206654,9 @@
     "O-O",
     "Nxe4",
     "Re1",
-    "d5"
+    "d5",
+    "Nxd4",
+    "b5"
    ],
    "opening": "Italian Game: Two Knights Defense, Knight Attack",
    "phase": "middlegame",
@@ -208503,7 +208630,8 @@
     "c4",
     "d6",
     "Nf3",
-    "Bg4"
+    "Bg4",
+    "d5"
    ],
    "opening": "Old Indian Defense",
    "phase": "opening",
@@ -210992,7 +211120,9 @@
     "O-O",
     "h3",
     "Nb8",
-    "d4"
+    "d4",
+    "d5",
+    "c4"
    ],
    "opening": "Ruy Lopez: Closed",
    "phase": "concept",
@@ -212263,7 +212393,8 @@
     "dxe5",
     "d4",
     "exd4",
-    "Bc4"
+    "Bc4",
+    "Qh4+"
    ],
    "opening": "King's Gambit",
    "phase": "opening",
@@ -213686,7 +213817,8 @@
     "O-O",
     "O-O",
     "d5",
-    "Nc3"
+    "Nc3",
+    "g6"
    ],
    "opening": "Dutch Defense: Raphael Variation",
    "phase": "middlegame",
@@ -219390,7 +219522,8 @@
     "d3",
     "d6",
     "Nd2",
-    "Bg5"
+    "Bg5",
+    "f4"
    ],
    "opening": "Sicilian Defense: Nimzowitsch Variation",
    "phase": "opening",
@@ -220117,7 +220250,8 @@
     "d6",
     "h3",
     "c5",
-    "Be2"
+    "Be2",
+    "e5"
    ],
    "opening": "London System",
    "phase": "middlegame",
@@ -220309,7 +220443,9 @@
     "Bf5",
     "Nc3",
     "e6",
-    "Nf3"
+    "Nf3",
+    "c5",
+    "d5"
    ],
    "opening": "Alekhine Defense: Four Pawns Attack",
    "phase": "opening",

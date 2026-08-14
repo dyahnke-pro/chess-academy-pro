@@ -120,17 +120,36 @@ export function recoverPosition(lineSan, prose) {
   return { outcome: 'unrecoverable', lineSan: null };
 }
 
+/**
+ * Which notes to judge. The anchor report narrows the sweep to the notes
+ * anchor-notes flagged, but it is FARM-TIME state living in a gitignored
+ * directory — on a fresh clone it is simply absent, and a sweep of an
+ * already-shipped corpus is exactly when it is needed most.
+ *
+ * Absent, judge EVERY positioned note. That is safe rather than merely
+ * convenient: `recoverPosition` verifies claims against the board, and a note
+ * anchor-notes VERIFIED satisfies those same claims by construction — it comes
+ * back `already-true` and is left untouched. The wider sweep can therefore only
+ * ever find notes the narrow one would have found too.
+ */
+async function flaggedIds() {
+  try {
+    const report = JSON.parse(await readFile(`${CREATOR.anchorDir}/report.json`, 'utf8'));
+    return new Set(report.results.filter((r) => r.was > 0 && r.outcome !== 'anchored').map((r) => r.id));
+  } catch {
+    return null; // no report — judge everything positioned
+  }
+}
+
 async function main() {
   const corpus = JSON.parse(await readFile(CREATOR.corpus, 'utf8'));
-  const report = JSON.parse(await readFile(`${CREATOR.anchorDir}/report.json`, 'utf8'));
-  const flagged = new Set(
-    report.results.filter((r) => r.was > 0 && r.outcome !== 'anchored').map((r) => r.id),
-  );
+  const flagged = await flaggedIds();
 
   const tally = {};
   const recovered = [];
   for (const n of corpus.notes) {
-    if (!flagged.has(n.id) || !n.lineSan?.length) continue;
+    if (!n.lineSan?.length) continue;
+    if (flagged && !flagged.has(n.id)) continue;
     const prose = [n.explains, n.teaches, n.plans].filter(Boolean).join(' ');
     const res = recoverPosition(n.lineSan, prose);
     tally[res.outcome] = (tally[res.outcome] ?? 0) + 1;
@@ -143,7 +162,7 @@ async function main() {
   await mkdir(CREATOR.anchorDir, { recursive: true });
   await writeFile(
     `${CREATOR.anchorDir}/recovery.json`,
-    JSON.stringify({ creator: CREATOR.key, flagged: flagged.size, tally, recovered }, null, 2),
+    JSON.stringify({ creator: CREATOR.key, scope: flagged ? 'anchor-flagged' : 'all-positioned', judged: flagged?.size ?? null, tally, recovered }, null, 2),
   );
 
   if (APPLY && recovered.length > 0) {
@@ -152,7 +171,7 @@ async function main() {
   }
 
   console.log(`\n──── RECOVERY (${CREATOR.key}) ────`);
-  console.log(`flagged notes with a position: ${flagged.size}`);
+  console.log(`scope: ${flagged ? `${flagged.size} anchor-flagged notes` : 'every positioned note (no anchor report on disk)'}`);
   for (const [k, v] of Object.entries(tally).sort((a, b) => b[1] - a[1])) {
     console.log(`  ${String(v).padStart(5)}  ${k}`);
   }
