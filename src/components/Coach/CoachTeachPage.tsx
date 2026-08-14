@@ -2233,7 +2233,7 @@ export function CoachTeachPage(): JSX.Element {
       // mean East Indian Defense?" picker. Both are deterministic commands —
       // route them like a human tapping the nav, no LLM turn.
       const navTargets: Array<[RegExp, string, string]> = [
-        [/^(?:please\s+)?(?:review|go\s+over|look\s+at)\s+my\s+(?:last|latest|recent)?\s*game[.!]?$/i, '/coach/review', 'Opening your games for review.'],
+        [/^(?:please\s+)?(?:review|go\s+over|look\s+at|narrate|walk\s+me\s+through)\s+my\s+(?:last|latest|recent)?\s*game[.!]?$/i, '/coach/review', 'Opening your games for review.'],
         [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?tactics(?:\s+tab)?[.!]?$/i, '/tactics', 'Heading to Tactics.'],
         [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?openings(?:\s+tab)?[.!]?$/i, '/openings', 'Heading to Openings.'],
         [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?(?:weaknesses|my\s+weaknesses)[.!]?$/i, '/weaknesses', 'Heading to your weaknesses.'],
@@ -3265,6 +3265,11 @@ export function CoachTeachPage(): JSX.Element {
         if (sm) {
           stageHint = sp.stage;
           stageStrippedInput = stageStrippedInput.replace(sp.regex, ' ').replace(/\s+/g, ' ').trim();
+          // "play against me IN the Vienna" leaves "in the Vienna" after the
+          // strip, and the resolver has no opening called "in the" (varied
+          // sweep, run allq-mss6tkuy). A dangling leading preposition is
+          // never part of the name.
+          stageStrippedInput = stageStrippedInput.replace(/^(?:in|with|on|at|using)\s+(?:the\s+)?/i, '').trim();
           break;
         }
       }
@@ -3440,7 +3445,7 @@ export function CoachTeachPage(): JSX.Element {
       // request to start the lesson — TEACH_PATTERN's "teach" verb captured it
       // and popped the line picker (2026-08-13 all-questions audit). Clear the
       // capture so the ask reaches the spine's teaching-method lane.
-      if (requestedName && /^how\s+(?:do|would|will|does)\s+(?:you|the\s+coach)\s+teach\b/i.test(workingInput)) {
+      if (requestedName && /^how\s+(?:do|would|will|does)\s+(?:you|the\s+coach|this\s+app|the\s+app)\s+teach\b/i.test(workingInput)) {
         requestedName = null;
       }
       // "walk me through the ENGINE LINE" is an engine-reasoning ask, not an

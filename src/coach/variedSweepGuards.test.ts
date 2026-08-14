@@ -13,3 +13,19 @@ describe('varied-sweep guards', () => {
     expect(isProgressQuestion('what mistakes do I keep making?')).toBe(true);
   });
 });
+
+describe('round-3 lane-yield guards', () => {
+  it('the color and last-game asks are never swallowed by record-vs', async () => {
+    const { recordVsTarget } = await import('./questionIntents');
+    expect(recordVsTarget('am I better as White or Black?')).toBeNull();
+    expect(recordVsTarget('how did my most recent game go?')).toBeNull();
+    expect(recordVsTarget('my record against Magnus')).toBe('Magnus');
+  });
+  it('question-shaped puzzle/time asks never become training requests', async () => {
+    const { trainingRequestKind } = await import('./questionIntents');
+    expect(trainingRequestKind('do I blunder in time trouble?')).toBeNull();
+    expect(trainingRequestKind('am I better at puzzles than games?')).toBeNull();
+    expect(trainingRequestKind('how good is my puzzle rush?')).toBeNull();
+    expect(trainingRequestKind('drill my mistakes')).toBe('mistakes');
+  });
+});

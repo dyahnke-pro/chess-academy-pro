@@ -181,17 +181,26 @@ async function ask(q, budgetLoops = 30) {
     await page.waitForTimeout(4000);
   }
   await box.press('Enter');
+  const baseSet = new Set(baseArr);
   for (let i = 0; i < budgetLoops; i++) {
     await page.waitForTimeout(1500);
     const now = await lines();
     const n = now.length - baseArr.length;
+    let fresh = [];
     if (n > 0) {
       // The transcript renders newest-at-top; take whichever end changed so
       // this stays correct if that ever flips.
       const tailIsOld = now.slice(n).join('|') === baseArr.join('|');
-      const fresh = (tailIsOld ? now.slice(0, n) : now.slice(baseArr.length)).filter((l) => !l.includes(q));
-      if (fresh.length) { await page.waitForTimeout(2000); return { reply: fresh.join(' '), sent: true }; }
+      fresh = (tailIsOld ? now.slice(0, n) : now.slice(baseArr.length)).filter((l) => !l.includes(q));
     }
+    if (!fresh.length) {
+      // Count didn't grow (a transient mount line in the baseline vanished
+      // when the reply landed — the first-of-section misses, runs
+      // allq-mss49itt/mss6tkuy). Fall back to a set-diff: any line the
+      // baseline never contained is new, whatever the count says.
+      fresh = now.filter((l) => !baseSet.has(l) && !l.includes(q));
+    }
+    if (fresh.length) { await page.waitForTimeout(2000); return { reply: fresh.join(' '), sent: true }; }
   }
   return { reply: '', sent: true };
 }

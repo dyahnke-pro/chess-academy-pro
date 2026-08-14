@@ -1736,6 +1736,12 @@ const RECORD_VS_OPP_RE = new RegExp(
 const RECORD_VS_STOP = /^(?:it|that|them|this|those|me|him|her|us|people|players?|opponents?|everyone|anyone|games?|blitz|rapid|bullet|classical|(?:the\s+)?clock|time|time\s+control|knights?|bishops?|rooks?|pawns?|queens?|kings?|pieces?)$/i;
 export function recordVsTarget(ask: string | undefined): string | null {
   if (!ask) return null;
+  // "am I better as WHITE or Black?" and "how did MY MOST RECENT GAME go?"
+  // are the color and last-game lanes' asks — this lane extracted "White" /
+  // "my most recent game" as an opponent and answered "no games against
+  // 'White' logged" (varied sweep run allq-mss6tkuy, green-but-wrong). Their
+  // own detectors own them.
+  if (isColorQuestion(ask) || isLastGameQuestion(ask)) return null;
   const trimmed = ask.trim();
   const m = RECORD_VS_RE.exec(trimmed) ?? RECORD_VS_OPP_RE.exec(trimmed);
   if (!m) return null;
@@ -1794,6 +1800,13 @@ const TRAINING_REQUEST_RE = new RegExp(
 );
 export function trainingRequestKind(ask: string | undefined): TrainingKind | null {
   if (!ask) return null;
+  // A QUESTION about the student's own play is never a drill request — the
+  // varied sweep (runs allq-mss55zxn/mss6tkuy) caught "do I blunder in time
+  // trouble?", "am I better at puzzles than games?" and "how good is my
+  // puzzle rush?" hijacked into drills because this lane dispatches before
+  // their grounded lanes. Their own detectors own those asks; a real drill
+  // imperative fires none of them.
+  if (isTimeTroubleQuestion(ask) || isTransferGapQuestion(ask) || isPuzzleStatsQuestion(ask)) return null;
   const m = TRAINING_REQUEST_RE.exec(ask);
   if (!m) return null;
   const t = m[1].toLowerCase();
