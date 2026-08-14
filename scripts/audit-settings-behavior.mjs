@@ -243,7 +243,16 @@ async function main() {
       if (!r.ok && r.events && r.events.length > 0) {
         console.log('  Captured kinds: ', [...new Set(r.events.map((e) => e.kind))].join(', '));
       }
-      results.push({ label: t.label, ok: r.ok, why: r.why, eventKinds: r.events ? [...new Set(r.events.map((e) => e.kind))] : [] });
+      results.push({
+        label: t.label,
+        ok: r.ok,
+        why: r.why,
+        eventKinds: r.events ? [...new Set(r.events.map((e) => e.kind))] : [],
+        // Full voice events so a silent-mode leak is diagnosable from the
+        // report (source/summary tell bypassVerbosity-sanctioned apart
+        // from a real G5 leak; kinds alone cannot).
+        voiceEvents: r.events ? r.events.filter((e) => String(e.kind).startsWith('voice-')) : [],
+      });
     } catch (err) {
       console.log(`  ✗ ERROR — ${err.message}`);
       results.push({ label: t.label, ok: false, why: `error: ${err.message}` });
