@@ -2233,7 +2233,7 @@ export function CoachTeachPage(): JSX.Element {
       // mean East Indian Defense?" picker. Both are deterministic commands —
       // route them like a human tapping the nav, no LLM turn.
       const navTargets: Array<[RegExp, string, string]> = [
-        [/^(?:please\s+)?(?:review|go\s+over|look\s+at|narrate|walk\s+me\s+through)\s+my\s+(?:last|latest|recent)?\s*game[.!]?$/i, '/coach/review', 'Opening your games for review.'],
+        [/^(?:please\s+)?(?:review|go\s+over|look\s+at|narrate|walk\s+me\s+through|recap|summari[sz]e)\s+my\s+(?:last|latest|recent)?\s*game[.!]?$/i, '/coach/review', 'Opening your games for review.'],
         [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?tactics(?:\s+tab)?[.!]?$/i, '/tactics', 'Heading to Tactics.'],
         [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?openings(?:\s+tab)?[.!]?$/i, '/openings', 'Heading to Openings.'],
         [/^(?:please\s+)?(?:take\s+me\s+to|go\s+to|open|navigate\s+to)\s+(?:the\s+)?(?:weaknesses|my\s+weaknesses)[.!]?$/i, '/weaknesses', 'Heading to your weaknesses.'],

@@ -4213,6 +4213,17 @@ export async function getCoachChatResponse(
         // proxy miss) → fall through to the engine-eval path. The verdict is
         // voiced from the STUDENT's perspective; the LLM decides nothing.
         if (grounding.endgameQuestion && grounding.currentFen) {
+          // "Can I hold this ending?" asked in the OPENING got a best-move
+          // readout (full-app sweep, run allq-mss8dkto). With most of the
+          // army still on the board the honest answer is that it isn't an
+          // endgame yet — computed by piece count, no engine, no LLM choice.
+          const pieceCount = (grounding.currentFen.split(' ')[0].match(/[a-zA-Z]/g) ?? []).length;
+          if (pieceCount > 16) {
+            const notYet = `We're not in an endgame yet — ${pieceCount} pieces are still on the board. Ask me again when the position thins out, or ask for the best move here.`;
+            const voicedNotYet = await voiceFacts(notYet, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'endgame', preferRaw: true });
+            if (voicedNotYet) return voicedNotYet;
+            return notYet;
+          }
           try {
             const tb = await lookupTablebase(grounding.currentFen);
             if (tb) {
