@@ -428,15 +428,51 @@ export function alignToDbLine(text, dbLines, opts = {}) {
   return best;
 }
 
+/**
+ * How far BEHIND a chunk its position-fixing checkpoint may sit, in transcript
+ * characters. Beyond this the checkpoint is STALE and the chunk gets no
+ * position at all.
+ *
+ * WHY THIS BOUND EXISTS (measured 2026-08-14). `positionAt` used to return the
+ * last checkpoint at ANY distance before the offset. On a speedrun that is
+ * catastrophic: `alignToDbLine` aligns a video to ONE DB line, so checkpoints
+ * only ever land in the FIRST game's opening. Everything after — the rest of
+ * that game's middlegame, and every subsequent game in the video — inherited
+ * that one shallow opening position.
+ *
+ * The damage, measured on the shipped Naroditsky corpus: 214 notes carried a
+ * position board-truth rejects, collapsing into just 23 (video, position)
+ * buckets — a mean of 9.3 notes per stale position, worst bucket 24 notes —
+ * and every stale position was shallow (median 9 plies, max 13) while the prose
+ * described middlegames 15-25 moves deeper ("after winning material…", "the
+ * king on b1 is safe", "after f5 and gxf6…"). The teaching was CORRECT; only
+ * the position was a lie, which is the one thing G0 cannot tolerate, because a
+ * position-keyed note is handed to the model as authoritative fact about that
+ * exact board.
+ *
+ * The bound is the chunker's own overlap: a checkpoint inside the chunk, or
+ * within the window the chunk shares with its predecessor, is genuinely near
+ * what is being discussed. Anything further back is a different game or a
+ * different phase, and the honest answer is no position (the note still ships
+ * — opening- and concept-keyed — it just stops claiming WHERE it applies).
+ * Empty beats invented.
+ */
+const CHUNK_OVERLAP = 600;
+
 /** The tracked position as of a transcript offset — the last checkpoint at or
- *  before it. Empty array when nothing has been resolved yet. */
-function positionAt(timeline, index) {
+ *  before it, PROVIDED that checkpoint is not stale (see CHUNK_OVERLAP).
+ *  Empty array when nothing has been resolved yet, or when the nearest
+ *  checkpoint is too far behind to still describe this part of the video. */
+function positionAt(timeline, index, maxStale = CHUNK_OVERLAP) {
   let lo = 0; let hi = timeline.length - 1; let best = null;
   while (lo <= hi) {
     const mid = (lo + hi) >> 1;
     if (timeline[mid].index <= index) { best = timeline[mid]; lo = mid + 1; } else hi = mid - 1;
   }
-  return best ? best.lineSan : [];
+  if (!best) return [];
+  // STALENESS GATE — the whole point of this function's rewrite.
+  if (index - best.index > maxStale) return [];
+  return best.lineSan;
 }
 
 // ── PLAGIARISM GATE (unchanged from v1) ───────────────────────────────────
