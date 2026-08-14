@@ -53,16 +53,50 @@ const PIECE_CODE = { knight: 'n', bishop: 'b', rook: 'r', queen: 'q', king: 'k',
 const SAN_RE =
   /\b(?:O-O-O|O-O|[KQRBN][a-h1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?|[a-h]x[a-h][1-8](?:=[QRBN])?[+#]?|[a-h][1-8](?:=[QRBN])?[+#]?)\b/g;
 
-/** Piece-on-square assertions the prose makes — the same extraction
- *  anchor-notes uses, so the two agree about what a claim is. */
+/**
+ * 🚨 TEACHING TALKS ABOUT MOVES THAT HAVE NOT HAPPENED YET, AND THAT IS THE
+ * POINT (David 2026-08-14: "i want to hear future moves and ideas. that's a
+ * large part of teaching chess" — and, on this very sweep, "double check they
+ * are truly false, and you're not just viewing something incorrectly").
+ *
+ * The first cut of this function read the whole note as present-tense
+ * assertions about the board. It is not. "After White plays f3 and g4, Black's
+ * bishop on e4 seems trapped" says nothing about where the bishop is NOW — it
+ * describes a position several plies away. Read literally, 323 of the 1,079
+ * notes this sweep condemned were not false at all: 287 make no present-tense
+ * claim whatsoever and 36 were simply true. It also MOVED 44 notes off the
+ * moment they teach, because walking forward until the hypothetical came true
+ * lands the anchor AFTER the move the note is telling the student to play.
+ *
+ * So this mirrors `boardClaimValidator.stripDisprovenSentences` exactly:
+ * sentence by sentence, truncate at the FIRST future marker, and extract only
+ * from what remains. Truncating rather than skipping the whole sentence is
+ * deliberate and load-bearing — "the knight on f6 threatens your queen" must
+ * still be checked on an empty f6 (David 2026-06-05: "the gate must FULLY
+ * close every time there is a contradiction"), so the marker ends the checked
+ * region instead of exempting the sentence.
+ *
+ * Keeping the two extractors identical is the actual contract: this decides
+ * where a note is FILED, that one decides what survives being SPOKEN. If this
+ * one is stricter, notes get relocated away from positions the app was
+ * perfectly happy with.
+ */
+const FUTURE_MARKER_RE =
+  /\b(after|if|once|then|would|will|could|should|when|next|prepares?|preparing|plan(?:s|ning)?|threatens?|going to|about to)\b/i;
+
 function extractClaims(text) {
   const out = [];
   const push = (sq, word) => {
     const code = PIECE_CODE[word.toLowerCase()];
     if (code) out.push({ square: sq.toLowerCase(), code });
   };
-  for (const m of text.matchAll(/\b(knight|bishop|rook|queen|king|pawn)\s+on\s+([a-h][1-8])\b/gi)) push(m[2], m[1]);
-  for (const m of text.matchAll(/\b([a-h][1-8])[-\s](knight|bishop|rook|queen|king|pawn)\b/gi)) push(m[1], m[2]);
+  for (const full of text.split(/(?<=[.!?])\s+/)) {
+    const fm = FUTURE_MARKER_RE.exec(full);
+    const s = fm ? full.slice(0, fm.index) : full;
+    if (!s.trim()) continue;
+    for (const m of s.matchAll(/\b(knight|bishop|rook|queen|king|pawn)\s+on\s+([a-h][1-8])\b/gi)) push(m[2], m[1]);
+    for (const m of s.matchAll(/\b([a-h][1-8])[-\s](knight|bishop|rook|queen|king|pawn)\b/gi)) push(m[1], m[2]);
+  }
   return out;
 }
 

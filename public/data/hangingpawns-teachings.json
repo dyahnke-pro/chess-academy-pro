@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-14T17:15:30.282Z",
+ "generatedAt": "2026-08-14T17:29:15.250Z",
  "videosDistilled": 404,
  "v2VideoIds": [
   "-3wnJxmUJZg",
@@ -115643,11 +115643,7 @@
     "Nxe4",
     "Nf6",
     "Nxf6+",
-    "exf6",
-    "f3",
-    "g5",
-    "Ne2",
-    "b6"
+    "exf6"
    ],
    "opening": "Caro-Kann Defense",
    "phase": "middlegame",
@@ -115929,10 +115925,7 @@
     "Nxe4",
     "Nf6",
     "Nxf6+",
-    "exf6",
-    "Nf3",
-    "Nd7",
-    "Ne5"
+    "exf6"
    ],
    "opening": "Caro-Kann Defense: Classical Variation",
    "phase": "opening",
@@ -116446,8 +116439,7 @@
     "Nxe4",
     "Nf6",
     "Nxf6+",
-    "exf6",
-    "d5"
+    "exf6"
    ],
    "opening": "Caro-Kann Defense: Classical Variation",
    "phase": "middlegame",
@@ -121257,10 +121249,7 @@
     "Nxd4",
     "Nf6",
     "Nc3",
-    "a6",
-    "Bg5",
-    "e5",
-    "Nf5"
+    "a6"
    ],
    "opening": "Sicilian Defense: Najdorf Variation",
    "phase": "opening",
@@ -127020,8 +127009,7 @@
     "Nf6",
     "f3",
     "exf3",
-    "Nxf3",
-    "e5"
+    "Nxf3"
    ],
    "opening": "Blackmar-Diemer Gambit",
    "phase": "opening",
@@ -134706,10 +134694,7 @@
     "Nc3",
     "e6",
     "Nf3",
-    "Bb4",
-    "g3",
-    "d5",
-    "a3"
+    "Bb4"
    ],
    "opening": "Nimzo-Larsen Attack: English Variation",
    "phase": "opening",
@@ -134834,8 +134819,7 @@
     "Nc3",
     "e6",
     "Nf3",
-    "Bb4",
-    "Ng5"
+    "Bb4"
    ],
    "opening": "Nimzo-Larsen Attack: English Variation",
    "phase": "middlegame",
@@ -140196,8 +140180,7 @@
     "Nxd4",
     "Nf6",
     "Nc3",
-    "Bb4",
-    "f4"
+    "Bb4"
    ],
    "opening": "Sicilian Defense: Flohr Variation",
    "phase": "middlegame",
@@ -143113,8 +143096,7 @@
     "g6",
     "Nf3",
     "Bg7",
-    "e4",
-    "d5"
+    "e4"
    ],
    "opening": "Neo-Grünfeld Defense: with g3",
    "phase": "middlegame",
@@ -143140,8 +143122,7 @@
     "g6",
     "Nf3",
     "Bg7",
-    "e4",
-    "d5"
+    "e4"
    ],
    "opening": "Neo-Grünfeld Defense: with g3",
    "phase": "middlegame",
@@ -147655,10 +147636,7 @@
     "O-O",
     "d6",
     "d4",
-    "Nd7",
-    "d5",
-    "a5",
-    "c4"
+    "Nd7"
    ],
    "opening": "Ruy Lopez: Closed, Chigorin Defense",
    "phase": "middlegame",
@@ -160382,8 +160360,7 @@
     "a6",
     "Ba4",
     "Nf6",
-    "O-O",
-    "b5"
+    "O-O"
    ],
    "opening": "Ruy Lopez: Morphy Defense, Neo-Arkhangelsk Variation",
    "phase": "opening",
@@ -163284,9 +163261,7 @@
     "Be7",
     "Bg2",
     "O-O",
-    "O-O",
-    "Bb4",
-    "c5"
+    "O-O"
    ],
    "opening": "Catalan Opening: Open Defense",
    "phase": "opening",
@@ -165143,9 +165118,7 @@
     "d5",
     "e5",
     "Bf5",
-    "g4",
-    "e6",
-    "f4"
+    "g4"
    ],
    "opening": "Caro-Kann Defense: Advance Variation, Bayonet Attack",
    "phase": "opening",
@@ -165320,8 +165293,7 @@
     "d5",
     "e5",
     "Bf5",
-    "g4",
-    "c5"
+    "g4"
    ],
    "opening": "Caro-Kann Defense: Advance Variation, Bayonet Attack",
    "phase": "middlegame",
@@ -169271,8 +169243,7 @@
     "gxf6",
     "e4",
     "dxe4",
-    "d5",
-    "f5"
+    "d5"
    ],
    "opening": "Richter-Veresov Attack",
    "phase": "opening",
@@ -173143,10 +173114,7 @@
     "d4",
     "d5",
     "Nc3",
-    "g6",
-    "Nf3",
-    "Bg7",
-    "Bf4"
+    "g6"
    ],
    "opening": "Caro-Kann Defense: Gurgenidze System",
    "phase": "opening",
@@ -175595,9 +175563,7 @@
     "Bf4",
     "c5",
     "e3",
-    "Qb6",
-    "e4",
-    "e5"
+    "Qb6"
    ],
    "opening": "London System",
    "phase": "middlegame",
@@ -185036,9 +185002,7 @@
     "Bc4",
     "Ngf6",
     "Ng5",
-    "e6",
-    "g4",
-    "b6"
+    "e6"
    ],
    "opening": "Caro-Kann Defense: Karpov Variation",
    "phase": "middlegame",
@@ -195111,8 +195075,7 @@
     "d6",
     "d4",
     "cxd4",
-    "Nxd4",
-    "e5"
+    "Nxd4"
    ],
    "opening": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack",
    "phase": "middlegame",
@@ -198697,9 +198660,7 @@
     "Nf6",
     "Nc3",
     "g6",
-    "Nf3",
-    "a5",
-    "d4"
+    "Nf3"
    ],
    "opening": "Neo-Grünfeld Defense: with g3",
    "phase": "opening",
@@ -206590,9 +206551,7 @@
     "O-O",
     "Nxe4",
     "Re1",
-    "d5",
-    "Ng5",
-    "b5"
+    "d5"
    ],
    "opening": "Italian Game: Two Knights Defense, Knight Attack",
    "phase": "middlegame",
@@ -206654,9 +206613,7 @@
     "O-O",
     "Nxe4",
     "Re1",
-    "d5",
-    "Nxd4",
-    "b5"
+    "d5"
    ],
    "opening": "Italian Game: Two Knights Defense, Knight Attack",
    "phase": "middlegame",
@@ -219522,8 +219479,7 @@
     "d3",
     "d6",
     "Nd2",
-    "Bg5",
-    "f4"
+    "Bg5"
    ],
    "opening": "Sicilian Defense: Nimzowitsch Variation",
    "phase": "opening",

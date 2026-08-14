@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-14T17:15:27.804Z",
+ "generatedAt": "2026-08-14T17:29:14.890Z",
  "videosDistilled": 315,
  "v2VideoIds": [
   "-4hTQEnwa7s",
@@ -150480,9 +150480,7 @@
     "e5",
     "Nd5",
     "Nf3",
-    "Nc6",
-    "Bc4",
-    "h6"
+    "Nc6"
    ],
    "opening": "Sicilian Defense: Alapin Variation",
    "phase": "middlegame",
@@ -152769,9 +152767,7 @@
     "e5",
     "Bb2",
     "Nc6",
-    "c4",
-    "b5",
-    "c5"
+    "c4"
    ],
    "opening": "Sicilian Defense: Wing Gambit",
    "phase": "middlegame",
@@ -154866,10 +154862,7 @@
     "Nd5",
     "d4",
     "d6",
-    "c4",
-    "Nc6",
-    "c5",
-    "b6"
+    "c4"
    ],
    "opening": "Alekhine Defense",
    "phase": "concept",
