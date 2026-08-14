@@ -28,12 +28,24 @@ import { join } from 'node:path';
 import { __setFarmedCorporaCache } from '../services/farmedCorpusData';
 import { warmSecondaryPositionIndexSync } from '../services/secondaryCorpora';
 import type { TeachingsBundle } from '../services/secondaryCorpus';
+import registry from '../data/corpora.json';
 
-/** Mirrors the `FARMED` list in farmedCorpusData — same keys, same files. */
-const FARMED_FILES: Array<{ key: string; file: string }> = [
-  { key: 'hangingpawns', file: 'hangingpawns-teachings.json' },
-  { key: 'saintlouis', file: 'saintlouis-teachings.json' },
-];
+/**
+ * From the REGISTRY, not a copy of it.
+ *
+ * This list was hand-mirrored from `farmedCorpusData` and went stale the moment
+ * four more corpora were farmed — so this helper, whose entire purpose is to
+ * stop tests measuring a fraction of the data, was itself measuring a fraction
+ * of the data. Every coverage number taken through it while it was stale
+ * understated the corpus, which is precisely the failure its own header warns
+ * about, recurring one level up.
+ *
+ * `src/data/corpora.json` is the single declaration; a new corpus appears here
+ * automatically.
+ */
+const FARMED_FILES: Array<{ key: string; file: string }> = registry.corpora
+  .filter((c) => c.load === 'fetch')
+  .map((c) => ({ key: c.key, file: c.path.replace(/^public\/data\//, '') }));
 
 const EMPTY: TeachingsBundle = { generatedAt: '', videosDistilled: 0, noteCount: 0, notes: [] };
 

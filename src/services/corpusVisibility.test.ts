@@ -16,6 +16,8 @@ import { describe, it, expect, beforeAll } from 'vitest';
 import { loadFullCorpus } from '../test/loadFullCorpus';
 import { secondaryCorpusStats } from './secondaryCorpora';
 import { danyaCorpusStats } from './danyaTeachingService';
+import { readFileSync } from 'node:fs';
+import registry from '../data/corpora.json';
 
 describe('teaching corpus visibility', () => {
   // 120s: the helper parses ~37 MB of corpus JSON and builds the transposition
@@ -24,21 +26,28 @@ describe('teaching corpus visibility', () => {
     loadFullCorpus();
   }, 120_000);
 
-  it('sees all four corpora, with counts matching the files on disk', () => {
+  it('sees every declared corpus, with counts matching the files on disk', () => {
+    // Derived from the REGISTRY and the files themselves, never a hand-typed
+    // roster. The roster is what rotted: this gate asserted four corpora and
+    // 58,124 notes while eight were shipping, so it went green over a corpus a
+    // third larger than the one it was checking — the exact blindness it exists
+    // to prevent, one level up.
     const secondary = secondaryCorpusStats();
-    const keys = secondary.map((s) => s.key).sort();
-    expect(keys).toEqual(['chessbrah', 'hangingpawns', 'saintlouis']);
+    const expectedKeys = registry.corpora
+      .filter((c) => !c.primary)
+      .map((c) => c.key)
+      .sort();
+    expect(secondary.map((s) => s.key).sort()).toEqual(expectedKeys);
 
     const byKey = Object.fromEntries(secondary.map((s) => [s.key, s.notes]));
-    const primary = danyaCorpusStats().notes;
-
-    // Exact counts, not floors: a corpus that silently shrinks (a re-farm that
-    // dropped videos, a truncated download) is exactly what this must catch.
-    expect(primary).toBe(8162);
-    expect(byKey.chessbrah).toBe(3223);
-    expect(byKey.hangingpawns).toBe(10209);
-    expect(byKey.saintlouis).toBe(36530);
-    expect(primary + byKey.chessbrah + byKey.hangingpawns + byKey.saintlouis).toBe(58124);
+    // Exact counts, read from disk: a corpus that silently shrinks — a re-farm
+    // that dropped videos, a truncated download — is what this must catch, and
+    // a floor would let that through.
+    for (const c of registry.corpora) {
+      const onDisk = (JSON.parse(readFileSync(c.path, 'utf8')) as { notes: unknown[] }).notes.length;
+      const seen = c.primary ? danyaCorpusStats().notes : byKey[c.key];
+      expect(seen, `${c.key}: loader sees ${seen} notes, file holds ${onDisk}`).toBe(onDisk);
+    }
   });
 
   it('degrades to the static corpora when the farmed fetch has not resolved', async () => {
