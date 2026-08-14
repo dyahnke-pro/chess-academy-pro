@@ -35,6 +35,7 @@
  */
 import { readFile, writeFile } from 'node:fs/promises';
 import { resolveCreator } from './creator.mjs';
+import { recoverPosition } from './recover-positions.mjs';
 
 const CORPUS = resolveCreator().corpus;
 const REPORT = `${resolveCreator().anchorDir}/report.json`;
@@ -49,9 +50,22 @@ for (const r of report.results) {
   }
 }
 
-// Notes that ARRIVED with a position (`was > 0`) which the anchor pass could
-// not re-verify. `was` is the prior lineSan LENGTH, not the line itself.
-const disproven = new Set(
+// Notes that ARRIVED with a position (`was > 0`) the anchor pass did not
+// re-anchor. `was` is the prior lineSan LENGTH, not the line itself.
+//
+// 🚨 "NOT RE-ANCHORED" IS NOT "FALSE" (David 2026-08-14: "most of them were
+// wrong because you were looking at them wrong"). anchor-notes rejects for ANY
+// failure to re-anchor — including its requirement that the note's own moves
+// play 2-deep from the candidate root — so this set bundles together notes that
+// are false, notes that are unverifiable, and notes that are simply fine.
+// Stripping all of them, which this script did on its first cut, DELETES
+// CORRECT DATA: measured across the four shipped corpora, of 2,164 such notes
+// only 1,077 are genuinely unplaceable, while 304 verify TRUE where they sit,
+// 657 make no checkable claim at all, and 124 are recoverable a few plies on.
+//
+// So each one is re-judged individually against the board (`recoverPosition`,
+// pure chess.js) and only the genuinely unplaceable lose their position.
+const notReanchored = new Set(
   report.results.filter((r) => r.was > 0 && r.outcome !== 'anchored').map((r) => r.id),
 );
 
@@ -59,14 +73,26 @@ let applied = 0;
 let already = 0;
 let conflicting = 0;
 let stripped = 0;
+let recovered = 0;
+let keptTrue = 0;
+let keptUnverifiable = 0;
 for (const n of corpus.notes) {
   const a = anchors.get(n.id);
   if (!a) {
-    // No verified anchor. If the position it already carries was DISPROVEN,
-    // drop it rather than ship a board claim the anchor pass rejected.
-    if (n.lineSan.length > 0 && disproven.has(n.id)) {
-      n.lineSan = [];
-      stripped += 1;
+    if (n.lineSan.length > 0 && notReanchored.has(n.id)) {
+      const prose = [n.explains, n.teaches, n.plans].filter(Boolean).join(' ');
+      const res = recoverPosition(n.lineSan, prose);
+      if (res.outcome === 'recovered') {
+        n.lineSan = res.lineSan;          // mis-filed by a few plies — walk it forward
+        recovered += 1;
+      } else if (res.outcome === 'already-true') {
+        keptTrue += 1;                     // its claims hold right here; nothing to fix
+      } else if (res.outcome === 'unrecoverable') {
+        n.lineSan = [];                    // claims false here and no walk makes them true
+        stripped += 1;
+      } else {
+        keptUnverifiable += 1;             // no claim to check — no basis to strip it
+      }
     }
     continue;
   }
@@ -87,5 +113,7 @@ await writeFile(CORPUS, JSON.stringify(corpus, null, 1));
 const positioned = corpus.notes.filter((n) => n.lineSan.length > 0).length;
 console.log(`[apply-anchors] high anchors in report: ${anchors.size}`);
 console.log(`[apply-anchors] applied: ${applied} (${conflicting} replaced an unverified aligner position; ${already} already matched)`);
-console.log(`[apply-anchors] stripped: ${stripped} disproven position${stripped === 1 ? '' : 's'} (note kept, falls back to opening/concept keying)`);
+console.log(`[apply-anchors] recovered: ${recovered} mis-filed position${recovered === 1 ? '' : 's'} walked forward to the moment the note describes`);
+console.log(`[apply-anchors] kept: ${keptTrue} verify TRUE where filed, ${keptUnverifiable} make no checkable claim`);
+console.log(`[apply-anchors] stripped: ${stripped} genuinely unplaceable (note kept, falls back to opening/concept keying)`);
 console.log(`[apply-anchors] corpus positioned notes now: ${positioned} / ${corpus.notes.length}`);
