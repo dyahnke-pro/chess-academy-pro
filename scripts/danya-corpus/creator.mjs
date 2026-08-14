@@ -68,6 +68,60 @@ export const CREATORS = {
     playlistFilter: '(^lectures with|course|strategy across the board)',
     playlistExclude: '(grand chess tour|championship|cup|classic|rapid|blitz|showdown|today in chess|candidates)',
   },
+  // David 2026-08-14 ("get all of them"). Six pros identified for voice-corpus
+  // expansion; Caruana was checked and dropped — his channel
+  // (UCCqT1qXkh8DvMmJ6NN1xYBw) has NO playlists tab at all, so there is no
+  // personal teaching source to farm (empty > invented — see CLAUDE.md).
+  // Every include/exclude regex below was derived from the REAL playlist
+  // titles returned by `yt-dlp --flat-playlist` against each channel, never
+  // guessed from training recall.
+  gothamchess: {
+    key: 'gothamchess',
+    voiceDir: 'data/sources/gothamchess-voice',
+    corpus: 'public/data/gothamchess-teachings.json',
+    idPrefix: 'gc',
+    bannedExtra: ['gotham', 'levy', 'rozman', 'gothamchess', 'this channel', 'the channel', 'chess.com', 'subscribe'],
+    channel: 'https://www.youtube.com/@GothamChess/playlists',
+    playlistFilter: '(gotham chess (openings|guide)|chess steps|^endgames$|win at chess|how to solve chess tactics|chess tips|chess lesson collabs|rating climb|chess slowrun|how to lose at chess)',
+    playlistExclude: '(candidates|recap|chatbot|mlb|wife plays|pogchamp|cheater|shorts)',
+  },
+  hikaru: {
+    key: 'hikaru',
+    voiceDir: 'data/sources/hikaru-voice',
+    corpus: 'public/data/hikaru-teachings.json',
+    idPrefix: 'hk',
+    bannedExtra: ['hikaru', 'nakamura', 'gmhikaru', 'chess.com', 'subscribe', 'chat'],
+    channel: 'https://www.youtube.com/@GMHikaru/playlists',
+    playlistFilter: '(speedrun|educational)',
+    playlistExclude: '(bongcloud|chessle)',
+  },
+  imrosen: {
+    key: 'imrosen',
+    voiceDir: 'data/sources/imrosen-voice',
+    corpus: 'public/data/imrosen-teachings.json',
+    idPrefix: 'ir',
+    bannedExtra: ['eric rosen', 'im rosen', 'rosen', 'chessmood', 'subscribe', 'chat', 'twitch'],
+    channel: 'https://www.youtube.com/@eric-rosen/playlists',
+    playlistFilter: "(^chess opening lessons$|chessmood openings|tricks and traps speedrun|^opening traps$|stafford gambit|budapest gambit|o'sullivan gambit|ponziani opening|beginner to master speedrun|^endgames$|chess games everyone should know)",
+  },
+  magnuscarlsen: {
+    key: 'magnuscarlsen',
+    voiceDir: 'data/sources/magnuscarlsen-voice',
+    corpus: 'public/data/magnuscarlsen-teachings.json',
+    idPrefix: 'mgc',
+    bannedExtra: ['magnus', 'carlsen', 'play magnus', 'chess24', 'subscribe'],
+    channel: 'https://www.youtube.com/channel/UCbdcpQ5uPPymv7Ea0nnFfOw/playlists',
+    playlistFilter: "(chess tutorials by magnus carlsen|chess commentary by magnus carlsen|magnus.?kingdom of chess)",
+  },
+  samayraina: {
+    key: 'samayraina',
+    voiceDir: 'data/sources/samayraina-voice',
+    corpus: 'public/data/samayraina-teachings.json',
+    idPrefix: 'sr',
+    bannedExtra: ['samay', 'raina', 'chess.com', 'subscribe', 'chat', 'stream'],
+    channel: 'https://www.youtube.com/@samayrainachess/playlists',
+    playlistFilter: '(ta.ching chess|chess gambit)',
+  },
 };
 
 export function resolveCreator(argv = process.argv) {
