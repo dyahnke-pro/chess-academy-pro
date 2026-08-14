@@ -33,6 +33,10 @@ const CORPORA = [
   ['chessbrah', 'src/data/chessbrah-teachings.json'],
   ['hangingpawns', 'public/data/hangingpawns-teachings.json'],
   ['saintlouis', 'public/data/saintlouis-teachings.json'],
+  ['gothamchess', 'public/data/gothamchess-teachings.json'],
+  ['hikaru', 'public/data/hikaru-teachings.json'],
+  ['imrosen', 'public/data/imrosen-teachings.json'],
+  ['magnuscarlsen', 'public/data/magnuscarlsen-teachings.json'],
 ];
 
 /** opening → { display, opening, middlegame, endgame, concept, total, sources:Set } */

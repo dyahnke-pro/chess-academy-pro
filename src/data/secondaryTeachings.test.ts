@@ -58,6 +58,30 @@ const CORPORA: Array<{ key: string; idPrefix: string; notes: Note[]; banned: Reg
       'i',
     ),
   },
+  {
+    key: 'gothamchess',
+    idPrefix: 'gc',
+    notes: readCorpus('gothamchess').notes,
+    banned: new RegExp(`\\b(${SHARED_BAN}|gotham|levy|rozman|gothamchess|this channel|the channel|chess\\.com)\\b`, 'i'),
+  },
+  {
+    key: 'hikaru',
+    idPrefix: 'hk',
+    notes: readCorpus('hikaru').notes,
+    banned: new RegExp(`\\b(${SHARED_BAN}|hikaru|nakamura|gmhikaru|chess\\.com)\\b`, 'i'),
+  },
+  {
+    key: 'imrosen',
+    idPrefix: 'ir',
+    notes: readCorpus('imrosen').notes,
+    banned: new RegExp(`\\b(${SHARED_BAN}|eric rosen|im rosen|rosen|chessmood|twitch)\\b`, 'i'),
+  },
+  {
+    key: 'magnuscarlsen',
+    idPrefix: 'mgc',
+    notes: readCorpus('magnuscarlsen').notes,
+    banned: new RegExp(`\\b(${SHARED_BAN}|magnus|carlsen|play magnus|chess24)\\b`, 'i'),
+  },
 ];
 
 const MOVE_NUMBER_PREFIX = /\d{1,2}(\.|…|\.\.\.)(?=[NBRQKO]|[a-h][1-8x])/;

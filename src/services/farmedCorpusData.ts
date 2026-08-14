@@ -26,6 +26,10 @@ import type { TeachingsBundle } from './secondaryCorpus';
 const FARMED: Array<{ key: string; url: string }> = [
   { key: 'hangingpawns', url: '/data/hangingpawns-teachings.json' },
   { key: 'saintlouis', url: '/data/saintlouis-teachings.json' },
+  { key: 'gothamchess', url: '/data/gothamchess-teachings.json' },
+  { key: 'hikaru', url: '/data/hikaru-teachings.json' },
+  { key: 'imrosen', url: '/data/imrosen-teachings.json' },
+  { key: 'magnuscarlsen', url: '/data/magnuscarlsen-teachings.json' },
 ];
 
 const EMPTY: TeachingsBundle = { generatedAt: '', videosDistilled: 0, noteCount: 0, notes: [] };

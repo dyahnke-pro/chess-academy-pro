@@ -1,0 +1,1476 @@
+{
+ "generatedAt": "2026-08-14T14:33:26.902Z",
+ "videosDistilled": 10,
+ "v2VideoIds": [
+  "4PDmhXjrnJY",
+  "6SB4Q9ndhlw",
+  "9aEhXqgPEAs",
+  "CHuZXLjfTcw",
+  "FMaaHd7aFIs",
+  "MGU5miqgvEk",
+  "_22ev6f7Fdc",
+  "dQMhqD70ruA",
+  "dhzoxMhqMQs",
+  "eI9ZjwL6Tk0"
+ ],
+ "noteCount": 85,
+ "notes": [
+  {
+   "id": "mgc-0",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "After a poor tournament result, confidence can be low, and external factors like disrupted sleep can further undermine performance. In this case, watching football until 7 a.m. before a rest day threw off the player's rhythm, leading to tentative play in the early games.",
+   "teaches": "Preparation for a tournament includes managing your physical and mental state, not just opening prep. A consistent sleep schedule and maintaining confidence are crucial for performing at your best.",
+   "plans": "Ensure adequate rest before and during the event, and use rest days to recover rather than engage in activities that disrupt your routine.",
+   "concepts": [
+    "tournament-preparation",
+    "confidence",
+    "sleep-rhythm",
+    "mental-state"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-1",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Preparing well for each game while also enjoying time with family and not obsessing over results can create a healthy balance. A first-round draw is not a disaster, and maintaining high spirits throughout a long tournament is crucial.",
+   "teaches": "A balanced approach to tournament life—preparing seriously but also relaxing and enjoying the experience—can sustain your energy and motivation over the long haul.",
+   "plans": "Keep a positive mindset and focus on playing good chess, trusting that results will follow if you maintain high spirits and consistent preparation.",
+   "concepts": [
+    "tournament-preparation",
+    "work-life-balance",
+    "mindset"
+   ],
+   "sources": [
+    "yt:MGU5miqgvEk"
+   ]
+  },
+  {
+   "id": "mgc-2",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "In a game where the player was slightly worse, they had a key pawn that needed protection. They intended to use a bishop but accidentally grabbed the rook and froze, failing to place it on the only square that would defend the pawn. This blunder cost the pawn and nearly the game, but the opponent played too passively and allowed a draw.",
+   "teaches": "Concentration lapses can happen even without time pressure. Always double-check which piece you are touching and where it will go, especially when the move is critical. A single careless move can turn a defensible position into a lost one.",
+   "plans": "When you have a clear defensive task, focus on the immediate threat and choose the simplest, most reliable move. Avoid overcomplicating or rushing.",
+   "concepts": [
+    "blunder",
+    "concentration",
+    "piece-protection",
+    "defense"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-3",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "Against a strong opponent, the player was under serious pressure. They found good defensive moves to stay afloat, but then started drifting while trying to simplify. The opponent kept finding resources, and the player's king became exposed. The computer showed a win for the opponent, but the natural play allowed the player to escape into a defensible position.",
+   "teaches": "When defending, it's important to stay precise and not drift. Simplification is a good strategy, but you must ensure that the resulting endgame is actually safe. Sometimes the opponent's most natural moves are not the most accurate, giving you chances to survive.",
+   "plans": "Look for active defense and counterplay, even when under pressure. Keep pieces coordinated to protect the king and create threats of your own.",
+   "concepts": [
+    "defense",
+    "pressure",
+    "simplification",
+    "counterplay"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-4",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In a game where the opponent has a material advantage, the defender must be pragmatic and avoid unnecessary risks, even if it means accepting a worse position to stay in the game.",
+   "teaches": "When defending a worse position, prioritize solidity over activity; choose moves that minimize risk and force the opponent to prove their advantage.",
+   "plans": "Look for ways to consolidate the position, trade off attacking pieces, and steer toward an endgame where the material deficit might be less significant.",
+   "concepts": [
+    "pragmatic-defense",
+    "risk-management",
+    "consolidation"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-5",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "A tactical oversight can lead to losing a piece for insufficient compensation, as when a player missed that their knight and bishop were both hanging and lost one.",
+   "teaches": "Always double-check hanging pieces and be aware of the opponent's tactical threats, especially when you are focused on your own plans; a single blunder can turn a playable position into a lost one.",
+   "plans": "After a blunder, try to defend as tenaciously as possible; even in a lost position, make the opponent work for the win and look for swindling chances.",
+   "concepts": [
+    "tactical-awareness",
+    "hanging-pieces",
+    "blunder-recovery"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-6",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "When you are exhausted and have just lost a game, it can be helpful to face a weaker opponent to regain confidence and get back on track.",
+   "teaches": "In a tournament, psychological recovery is important; choosing a pragmatic approach against a lower-rated opponent can help you rebuild momentum.",
+   "plans": "If you need a win, target games against opponents you are favored against, and play solidly to convert your advantage.",
+   "concepts": [
+    "psychological-recovery",
+    "tournament-strategy",
+    "momentum"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-7",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "In a game where the opponent sacrifices a pawn, if you can consolidate and emerge a pawn up with little compensation, you have a clear advantage.",
+   "teaches": "When accepting a pawn sacrifice, ensure you can consolidate your material advantage and neutralize any attacking chances; if the compensation is insufficient, the extra pawn should be decisive.",
+   "plans": "Use the extra pawn to create a passed pawn or trade down to a favorable endgame, while keeping the king safe.",
+   "concepts": [
+    "pawn-sacrifice",
+    "consolidation",
+    "material-advantage"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-8",
+   "lineSan": [],
+   "opening": null,
+   "phase": "endgame",
+   "explains": "A player with a dominating position allowed a tactic that liquidated to a drawn endgame, showing that even a winning position can slip if you miss a tactical resource.",
+   "teaches": "When you have a large advantage, be alert to the opponent's tactical resources; converting a winning position requires precision and avoiding simplification that leads to a draw.",
+   "plans": "Look for ways to maintain the initiative and avoid trades that reduce your winning chances; calculate carefully before allowing liquidation.",
+   "concepts": [
+    "conversion",
+    "tactical-resources",
+    "liquidation"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-9",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "Missing several things in the opening can lead to being outplayed from the outset, as the opponent energetically exploits the mistakes.",
+   "teaches": "In the opening, it's essential to be accurate and not miss tactical or strategic ideas; strong players will punish even small inaccuracies.",
+   "plans": "If you have a bad opening, try to find the best defensive resources and look for a moment to regain the thread and stabilize the position.",
+   "concepts": [
+    "opening-mistakes",
+    "punishment",
+    "defensive-resources"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-a",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "A temporary pawn sacrifice can lead to a much worse position than expected, as the opponent's initiative and king safety become critical.",
+   "teaches": "When considering a pawn sacrifice, evaluate the resulting position deeply; sometimes the compensation is not enough, and you may end up losing more pawns or having a ruined king position.",
+   "plans": "If you are in a bad position, look for practical chances to complicate and create counterplay, even if it means taking risks.",
+   "concepts": [
+    "pawn-sacrifice-evaluation",
+    "initiative",
+    "king-safety"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-b",
+   "lineSan": [],
+   "opening": null,
+   "phase": "endgame",
+   "explains": "In a desperate situation, playing the best practical chance can lead to survival, especially if the opponent runs low on time and gives opportunities.",
+   "teaches": "When you are losing, do not give up; create maximum practical difficulties for the opponent, and be ready to seize any chance to escape or even win.",
+   "plans": "Keep the position complicated, force the opponent to use time, and look for tactical tricks to regain material or improve your chances.",
+   "concepts": [
+    "practical-chances",
+    "time-pressure",
+    "swindling"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-c",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "Even when a pawn is lost, the position may still hold defensive resources if the king is not in immediate mating danger and there are chances to trade down or reach an endgame.",
+   "teaches": "When material down, assess the danger to your king first; if there is no forced mate, look for ways to simplify or transition to an endgame where drawing chances exist.",
+   "plans": "Defend accurately, seek exchanges, and aim for a favorable endgame if possible.",
+   "concepts": [
+    "defensive-resources",
+    "material-deficit",
+    "king-safety",
+    "simplification"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-d",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "After winning back the pawn, the resulting material balance was Queen and Knight and three pawns versus Queen and Bishop and three pawns, but the side with the knight had a passed pawn and the opponent was low on time.",
+   "teaches": "In queen and minor piece endgames, a knight can be more effective than a bishop when there are passed pawns and the position is closed or tactical; also, time pressure on the opponent increases your practical chances.",
+   "plans": "Coordinate pieces, protect the king, and retain the vital passed pawn to maintain winning chances.",
+   "concepts": [
+    "knight-vs-bishop",
+    "passed-pawn",
+    "time-pressure",
+    "piece-coordination"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-e",
+   "lineSan": [],
+   "opening": null,
+   "phase": "endgame",
+   "explains": "With a passed pawn and coordinated pieces, the side with the knight had the momentum and managed to win, despite the opponent's attacking chances earlier.",
+   "teaches": "In endgames, a passed pawn is a decisive advantage if supported and if the opponent's counterplay can be neutralized; momentum and initiative matter even in simplified positions.",
+   "plans": "Push the passed pawn, keep pieces active, and avoid unnecessary risks.",
+   "concepts": [
+    "passed-pawn",
+    "initiative",
+    "endgame-technique"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-f",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In a tournament, tiebreaks can be decisive; here the average rating of opponents was the main tiebreak, and the player had the best score regardless of other results except if a specific rival won.",
+   "teaches": "Understanding tiebreak rules before the final round can influence strategy; sometimes a safe draw is sufficient to secure first place.",
+   "plans": "If tiebreaks favor you, consider playing solidly to avoid losing rather than taking unnecessary risks.",
+   "concepts": [
+    "tiebreaks",
+    "tournament-strategy",
+    "safe-draw"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-g",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The player set a goal of scoring four out of five each day; achieving that on the first two days but only three on the last was still enough to win the tournament.",
+   "teaches": "Setting daily scoring goals helps maintain consistency, but flexibility is needed because not every day will go as planned; overall tournament performance matters more than daily perfection.",
+   "plans": "Aim for consistent scoring, but adapt to circumstances and results.",
+   "concepts": [
+    "goal-setting",
+    "consistency",
+    "tournament-strategy"
+   ],
+   "sources": [
+    "yt:4PDmhXjrnJY"
+   ]
+  },
+  {
+   "id": "mgc-h",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In the first round, the player spent a lot of time and made poor decisions in time trouble, even though the overall level was decent. This shows that time management can undermine otherwise good play.",
+   "teaches": "Time management is a critical skill; spending too much time early can lead to poor decisions later. It's important to maintain a reasonable pace to avoid time pressure.",
+   "plans": "Work on time management strategies, such as setting checkpoints or using a more balanced time distribution.",
+   "concepts": [
+    "time-management",
+    "time-trouble",
+    "decision-making"
+   ],
+   "sources": [
+    "yt:6SB4Q9ndhlw"
+   ]
+  },
+  {
+   "id": "mgc-i",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "When you realize you are in contention to win the tournament, nervousness can arise. In the final round, the excitement can impair clear thinking, but recognizing this can lead to a practical solution: play quickly to deny the opponent time to think as well.",
+   "teaches": "If you feel too excited to calculate deeply, switch to a practical approach: play fast, intuitive moves to put time pressure on the opponent, rather than trying to calculate everything.",
+   "plans": "In a critical game, if you sense your own mental clarity fading, deliberately speed up your play to shift the pressure onto the opponent.",
+   "concepts": [
+    "time-management",
+    "psychological-pressure",
+    "practical-play"
+   ],
+   "sources": [
+    "yt:MGU5miqgvEk"
+   ]
+  },
+  {
+   "id": "mgc-j",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The player noted that losing a game can be beneficial because it breaks the habit of avoiding difficult decisions and helps you get used to handling setbacks. This loss served as a learning experience.",
+   "teaches": "Losses can be valuable for growth; they force you to confront challenges and make tough decisions, which can improve your resilience and decision-making in future games.",
+   "plans": "After a loss, analyze the game to identify decision-making flaws and use the experience to strengthen your play.",
+   "concepts": [
+    "resilience",
+    "learning-from-loss",
+    "decision-making"
+   ],
+   "sources": [
+    "yt:6SB4Q9ndhlw"
+   ]
+  },
+  {
+   "id": "mgc-k",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "A poor start in a tournament does not necessarily doom the event; a player can recover with a strong streak and still win overall.",
+   "teaches": "Do not overreact to early losses or draws; focus on playing well in the remaining games.",
+   "plans": "Maintain confidence and aim for a streak of wins after a slow start.",
+   "concepts": [
+    "resilience",
+    "tournament-strategy",
+    "momentum"
+   ],
+   "sources": [
+    "yt:MGU5miqgvEk"
+   ]
+  },
+  {
+   "id": "mgc-l",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The player was not satisfied with the opening in the final game, feeling it was too aggressive or risky, but was pleased with the subsequent play. This shows that even in a good result, there can be parts to improve.",
+   "teaches": "Self-critique is essential for improvement; even when you win, review your opening choices and execution to find areas for refinement.",
+   "plans": "Review the opening of the final game to understand what was 'too much' and adjust your preparation accordingly.",
+   "concepts": [
+    "self-critique",
+    "opening-preparation",
+    "continuous-improvement"
+   ],
+   "sources": [
+    "yt:6SB4Q9ndhlw"
+   ]
+  },
+  {
+   "id": "mgc-m",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The player emphasized the importance of being self-critical to improve, but also enjoying good results. This balance is crucial for long-term development and motivation.",
+   "teaches": "Maintain a balance between self-criticism and appreciation of success. Being overly critical can hinder enjoyment, while ignoring flaws prevents growth.",
+   "plans": "After a tournament, celebrate the achievement but also note areas for improvement to fuel future training.",
+   "concepts": [
+    "self-critique",
+    "motivation",
+    "balance"
+   ],
+   "sources": [
+    "yt:6SB4Q9ndhlw"
+   ]
+  },
+  {
+   "id": "mgc-n",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The player commented on another player's performance, noting that they dominated a strong opponent and were impressive, while others were less so. This reflects an assessment of competitive level and confidence.",
+   "teaches": "Observing others' performances can provide benchmarks for your own play and inspire you to strive for similar excellence.",
+   "plans": "Study strong players' games to identify what makes them successful and incorporate those elements into your own training.",
+   "concepts": [
+    "benchmarking",
+    "inspiration",
+    "competitive-analysis"
+   ],
+   "sources": [
+    "yt:6SB4Q9ndhlw"
+   ]
+  },
+  {
+   "id": "mgc-o",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "After a draining rapid championship, entering blitz without great expectations and with a tentative start is natural; the first games may be shaky.",
+   "teaches": "In blitz, a fresh mindset and low pressure can help you ease into the tournament; don't force results early.",
+   "plans": "",
+   "concepts": [
+    "tournament-management",
+    "mindset"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-p",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "In a blitz game, when both players have little time, pieces fly and the position can become chaotic; the player who handles the time pressure better often wins.",
+   "teaches": "In time trouble, keep your cool and look for practical chances; the game can turn quickly.",
+   "plans": "",
+   "concepts": [
+    "time-pressure",
+    "practical-play"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-q",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "Playing an experimental or arrogant opening early in a tournament can be a psychological choice, but it may provoke the opponent.",
+   "teaches": "Opening choices can have psychological effects; be prepared for the opponent's reaction.",
+   "plans": "",
+   "concepts": [
+    "opening-choice",
+    "psychology"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-r",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "When the opponent offers a repetition, declining it can be a psychological statement, but it may lead to a worse position.",
+   "teaches": "Accepting a repetition is often objectively best; pride can be costly.",
+   "plans": "",
+   "concepts": [
+    "repetition",
+    "objectivity"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-s",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "A passed pawn can be strong, but if it can be blockaded and surrounded, it becomes a weakness.",
+   "teaches": "Passed pawns must be supported; blockade and attack them if they are not advancing.",
+   "plans": "",
+   "concepts": [
+    "passed-pawn",
+    "blockade"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-t",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In blitz, playing quickly is a sign of good form; if you are thinking too long, your brain may not be functioning well.",
+   "teaches": "Blitz should be fluid; trust your instincts and play at a natural pace.",
+   "plans": "",
+   "concepts": [
+    "blitz-pacing",
+    "intuition"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-u",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "When facing a ridiculous opening, failing to punish it can give the opponent a better position and pressure.",
+   "teaches": "Be alert to punish dubious opening moves; otherwise, the initiative may shift.",
+   "plans": "",
+   "concepts": [
+    "punishment",
+    "initiative"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-v",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "In a position with a safe advantage but no clear win, pressing for a long time can lead to time trouble for both players.",
+   "teaches": "Keep pressing with real plans and mix in practical tries; sometimes the opponent will crack.",
+   "plans": "",
+   "concepts": [
+    "conversion",
+    "time-pressure"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-w",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In blitz, when you cannot win cleanly, the game often becomes a test of endurance and resilience rather than pure accuracy.",
+   "teaches": "Keep fighting and outlast your opponent; even if you miss opportunities, persistence can force errors from them.",
+   "plans": "",
+   "concepts": [
+    "blitz-resilience",
+    "outlasting-opponent",
+    "practical-endgame"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-x",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "A player with a strong score against higher-rated opponents likely has solid opening preparation, even if they play poorly in a specific game.",
+   "teaches": "Respect opponents who have been winning, but don't overestimate them; their past results don't guarantee perfect play in every game.",
+   "plans": "",
+   "concepts": [
+    "opponent-respect",
+    "opening-advantage",
+    "blitz-tournament"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-y",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "A single careless move that exposes the king can turn a vastly superior position into a lost one, especially in blitz where initiative is decisive.",
+   "teaches": "In blitz, king safety is paramount; one careless move can hand your opponent the initiative and the game.",
+   "plans": "",
+   "concepts": [
+    "king-safety",
+    "careless-move",
+    "initiative"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-z",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In blitz, the impression of playing well can be as important as actual accuracy; if you appear confident, opponents may blunder more.",
+   "teaches": "Maintain a confident demeanor and keep playing actively; even if you miss moves, your opponent may feel pressure and make mistakes.",
+   "plans": "",
+   "concepts": [
+    "psychology",
+    "blitz-confidence",
+    "opponent-pressure"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-10",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "After a tough loss, it's crucial to reset mentally and not let previous results affect your next game. A player who fails to do this may play too emotionally and be psychologically unprepared.",
+   "teaches": "In chess, emotional resilience is key. Always adjust to the new circumstances of each game, leaving past wins and losses behind.",
+   "plans": "Focus on the current position and the opponent, not on the previous game's outcome.",
+   "concepts": [
+    "psychology",
+    "resilience",
+    "emotional-control",
+    "preparation"
+   ],
+   "sources": [
+    "yt:dhzoxMhqMQs"
+   ]
+  },
+  {
+   "id": "mgc-11",
+   "lineSan": [],
+   "opening": null,
+   "phase": "endgame",
+   "explains": "In a rook ending, a player with a worse position can defend tenaciously and wait for the opponent to overreach, as seen when a strong player lost from a winning position.",
+   "teaches": "In rook endings, active defense and patience can turn the tables; don't rush to force a win when the position is balanced.",
+   "plans": "",
+   "concepts": [
+    "rook-endgame",
+    "defense",
+    "patience"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-12",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In a complicated position with both players low on time, being a pawn down is less relevant than the tactical complexity; the side with the initiative can still win.",
+   "teaches": "When time is short, prioritize activity and complications over material; a pawn deficit matters less if the position is sharp and your opponent can blunder.",
+   "plans": "Keep the position complicated and look for tactical opportunities, especially when the opponent is low on time.",
+   "concepts": [
+    "time-pressure",
+    "material-vs-activity",
+    "tactical-complications"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-13",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "A player may have a very good position but still find it difficult to convert; this is common and can lead to frustration.",
+   "teaches": "Winning from a good position requires precise technique; do not underestimate the difficulty of converting advantages.",
+   "plans": "When you have a good position, focus on improving piece activity and creating threats rather than rushing to win material.",
+   "concepts": [
+    "converting-advantages",
+    "technique",
+    "psychological-factors"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-14",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "When leading the tournament, you don't need to take risks; playing solidly and waiting for the opponent to overreach can be effective.",
+   "teaches": "In a winning position in the tournament, avoid unnecessary complications; let the opponent take risks and capitalize on their mistakes.",
+   "plans": "Play solid, quiet moves that maintain your advantage and force the opponent to prove something.",
+   "concepts": [
+    "tournament-strategy",
+    "risk-management",
+    "solid-play"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-15",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "When a tournament is tightly contested, a modest score like plus two may be enough to win, so it is not necessary to force risky play early on.",
+   "teaches": "Assess the tournament situation realistically; sometimes solid, drawish play is sufficient, and converting chances when they arise is key.",
+   "plans": "Aim for steady play, convert winning chances when they appear, and avoid unnecessary risks if the score is sufficient.",
+   "concepts": [
+    "tournament-strategy",
+    "risk-management",
+    "conversion"
+   ],
+   "sources": [
+    "yt:MGU5miqgvEk"
+   ]
+  },
+  {
+   "id": "mgc-16",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In a tournament where the field is evenly matched and no one is likely to run away with the lead, a modest score like plus two can be enough to win. Early draws are not a disaster and should not cause concern.",
+   "teaches": "Assess the realistic winning score early in an event. If a small plus score is likely sufficient, you can play more calmly and not force matters in the opening rounds.",
+   "plans": "Maintain patience and focus on playing solid chess, converting chances when they arise, without panicking after early draws.",
+   "concepts": [
+    "tournament-strategy",
+    "score-assessment",
+    "patience"
+   ],
+   "sources": [
+    "yt:MGU5miqgvEk"
+   ]
+  },
+  {
+   "id": "mgc-17",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In a long tournament, stamina and energy management are crucial; tiredness in later rounds can cause unexpected results, making the usual rules less reliable.",
+   "teaches": "In long events, physical and mental fatigue can lead to upsets; players should manage energy and expect anything in the final rounds.",
+   "plans": "",
+   "concepts": [
+    "tournament-strategy",
+    "fatigue",
+    "upsets"
+   ],
+   "sources": [
+    "yt:dhzoxMhqMQs"
+   ]
+  },
+  {
+   "id": "mgc-18",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In a long tournament, a modest plus score might be enough to win, as seen previously; the tournament is likely to be decided in the final rounds.",
+   "teaches": "In round-robin tournaments, consistency over brilliance often wins; a small plus score can suffice if others are inconsistent.",
+   "plans": "",
+   "concepts": [
+    "tournament-strategy",
+    "consistency",
+    "score-management"
+   ],
+   "sources": [
+    "yt:dhzoxMhqMQs"
+   ]
+  },
+  {
+   "id": "mgc-19",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "A player may blunder when they feel pressure to create something; this can happen even in a quiet game.",
+   "teaches": "Patience is a virtue; if you have a comfortable position, wait for the opponent's mistakes rather than forcing the issue.",
+   "plans": "Maintain pressure without overextending; be ready to punish any inaccuracies.",
+   "concepts": [
+    "patience",
+    "punishing-blunders",
+    "pressure"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-1a",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Success in slower time controls can translate to faster time controls because the underlying calculation and pattern recognition are similar.",
+   "teaches": "Strong calculation and positional understanding are transferable across time controls; quick thinking is built on solid fundamentals.",
+   "plans": "Continue to develop your chess understanding through slower games; this will improve your blitz and rapid play.",
+   "concepts": [
+    "time-controls",
+    "transferable-skills",
+    "calculation"
+   ],
+   "sources": [
+    "yt:9aEhXqgPEAs"
+   ]
+  },
+  {
+   "id": "mgc-1b",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "When material is equal or favorable but a piece is stranded, the position may call for a forcing resource rather than quiet maneuvering.",
+   "teaches": "In any position, start by examining all possible captures and checks; forcing moves often reveal tactical solutions.",
+   "plans": "",
+   "concepts": [
+    "candidate-moves",
+    "forcing-moves",
+    "tactics"
+   ],
+   "sources": [
+    "yt:CHuZXLjfTcw"
+   ]
+  },
+  {
+   "id": "mgc-1c",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "Here, black is a pawn up but the knight is out of play. The only capture loses material, so attention turns to checks.",
+   "teaches": "When few captures are viable, systematically list all checks; one may be a decisive resource even if it looks surprising.",
+   "plans": "Deliver the strong check; if white is forced to capture, follow up with the mating pattern.",
+   "concepts": [
+    "checks",
+    "material-imbalance",
+    "initiative"
+   ],
+   "sources": [
+    "yt:CHuZXLjfTcw"
+   ]
+  },
+  {
+   "id": "mgc-1d",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "The key check forces white to take the queen, after which a rook delivers checkmate; the stranded knight covers the only escape square.",
+   "teaches": "A sacrifice can be correct if it leads to a forced mate; the defender's replies may be limited.",
+   "plans": "Execute the forcing sequence: check, then mate with the rook, using the knight to control the escape square.",
+   "concepts": [
+    "sacrifice",
+    "forced-mate",
+    "knight-control"
+   ],
+   "sources": [
+    "yt:CHuZXLjfTcw"
+   ]
+  },
+  {
+   "id": "mgc-1e",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Learning from every game and every opponent, regardless of their level or the time control, builds a broad base of experience.",
+   "teaches": "Play against a wide range of opponents and in different time controls to expose yourself to varied styles and ideas.",
+   "plans": "Seek out games against players of all strengths, both online and over the board.",
+   "concepts": [
+    "learning-from-games",
+    "diverse-opponents",
+    "time-controls"
+   ],
+   "sources": [
+    "yt:FMaaHd7aFIs"
+   ]
+  },
+  {
+   "id": "mgc-1f",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Enjoying the game is essential for sustained motivation and improvement.",
+   "teaches": "Prioritize having fun in chess; it fuels consistent practice and curiosity.",
+   "plans": "Choose activities and games that you find enjoyable, whether that's playing, studying, or solving puzzles.",
+   "concepts": [
+    "enjoyment",
+    "motivation",
+    "sustained-practice"
+   ],
+   "sources": [
+    "yt:FMaaHd7aFIs"
+   ]
+  },
+  {
+   "id": "mgc-1g",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Trying different openings and playing styles expands your understanding of chess principles and structures.",
+   "teaches": "Broaden your repertoire and approach to the game to deepen your overall chess knowledge.",
+   "plans": "Experiment with new openings and strategic ideas in casual or training games.",
+   "concepts": [
+    "openings",
+    "versatility",
+    "understanding"
+   ],
+   "sources": [
+    "yt:FMaaHd7aFIs"
+   ]
+  },
+  {
+   "id": "mgc-1h",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Physical well-being directly affects mental performance at the board.",
+   "teaches": "Get adequate sleep, eat well, and take physical breaks to maintain a clear head during tournaments.",
+   "plans": "Establish a routine that includes at least 9 hours of sleep, proper hydration, and regular exercise.",
+   "concepts": [
+    "sleep",
+    "nutrition",
+    "physical-health",
+    "mental-clarity"
+   ],
+   "sources": [
+    "yt:FMaaHd7aFIs"
+   ]
+  },
+  {
+   "id": "mgc-1i",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Playing against yourself helps you see the board from both sides and improves your feel for the game.",
+   "teaches": "Sit at the board and play both colors to develop objectivity and deeper positional understanding.",
+   "plans": "Set up a position and play both sides, trying to find the best moves for each color.",
+   "concepts": [
+    "self-play",
+    "objectivity",
+    "positional-understanding"
+   ],
+   "sources": [
+    "yt:FMaaHd7aFIs"
+   ]
+  },
+  {
+   "id": "mgc-1j",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Studying past players' games is a rich source of techniques and strategic patterns.",
+   "teaches": "Learn from historical games and incorporate their methods into your own play.",
+   "plans": "Review games of famous players and identify techniques you can apply in your own games.",
+   "concepts": [
+    "classical-games",
+    "technique",
+    "study"
+   ],
+   "sources": [
+    "yt:FMaaHd7aFIs"
+   ]
+  },
+  {
+   "id": "mgc-1k",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Persistence is crucial in chess; fighting to the end can turn losses into draws and draws into wins.",
+   "teaches": "Never give up, whether you are trying to win or to draw, because the game is not over until it's over.",
+   "plans": "In every game, keep looking for the best moves and resist the urge to resign prematurely.",
+   "concepts": [
+    "persistence",
+    "fighting-spirit",
+    "resilience"
+   ],
+   "sources": [
+    "yt:FMaaHd7aFIs"
+   ]
+  },
+  {
+   "id": "mgc-1l",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Chess mastery requires consistent practice over time.",
+   "teaches": "Don't be discouraged by setbacks; regular practice is the key to improvement.",
+   "plans": "Commit to a regular practice schedule and keep going even when progress seems slow.",
+   "concepts": [
+    "practice",
+    "perseverance",
+    "improvement"
+   ],
+   "sources": [
+    "yt:FMaaHd7aFIs"
+   ]
+  },
+  {
+   "id": "mgc-1m",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In classical tournaments, a single bad day can be absorbed because there is time to recover before the next game, whereas in rapid or blitz, many games are played in a short period, so a bad day can ruin the entire event.",
+   "teaches": "In rapid and blitz, mental focus is crucial; if you start focusing on the wrong things, results deteriorate quickly. Recognize when your mindset is off and try to reset before each game.",
+   "plans": "In blitz or rapid, take breaks between games to clear your mind and refocus on the next game.",
+   "concepts": [
+    "mental-game",
+    "time-controls",
+    "focus"
+   ],
+   "sources": [
+    "yt:MGU5miqgvEk"
+   ]
+  },
+  {
+   "id": "mgc-1n",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "Nervousness can appear when a player realizes they have a chance to win the tournament, which can affect performance in the final rounds.",
+   "teaches": "Acknowledge that nervousness is natural when stakes are high; use it as a positive motivator rather than letting it disrupt your play.",
+   "plans": "In the last rounds, focus on the process and your preparation, not just the outcome.",
+   "concepts": [
+    "nerves",
+    "closing-out",
+    "psychology"
+   ],
+   "sources": [
+    "yt:MGU5miqgvEk"
+   ]
+  },
+  {
+   "id": "mgc-1o",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In this position, the player's pawn structure is less solid than the opponent's, so a queenside expansion would only create weaknesses without generating active play. The opponent's position is solid but passive, so the player needs to find active play elsewhere.",
+   "teaches": "When your pawn structure is less solid, avoid pawn advances that create weaknesses without concrete benefits. Instead, seek active piece play to compensate for structural disadvantages.",
+   "plans": "Activate the idle knight and consider kingside pawn pushes like h5-h4, but only if they don't play into the opponent's hands.",
+   "concepts": [
+    "pawn-structure",
+    "active-play",
+    "weaknesses",
+    "piece-activity"
+   ],
+   "sources": [
+    "yt:_22ev6f7Fdc"
+   ]
+  },
+  {
+   "id": "mgc-1p",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "The player considered a move like Nd3, which was objectively dubious, but felt it was necessary to prevent the opponent from playing Ne3, which would leave the player with a poorly placed knight on g6 and allow the opponent to improve their position with moves like Nf5, Nd4, and eventually f5 and Nd6, leaving the player without counterplay.",
+   "teaches": "Sometimes you must make a slightly dubious move to prevent the opponent from establishing a dominating position. It's important to weigh the risk of a concrete move against the long-term danger of allowing the opponent's plan.",
+   "plans": "After Nd3, be prepared to enter an endgame if the opponent trades queens, as the player's play is easier (pushing on the queenside) while the opponent spends time looking for a clearer win.",
+   "concepts": [
+    "prophylaxis",
+    "piece-activity",
+    "counterplay",
+    "endgame-transition"
+   ],
+   "sources": [
+    "yt:_22ev6f7Fdc"
+   ]
+  },
+  {
+   "id": "mgc-1q",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The player noted that after a series of long games and distractions (watching TV, football, etc.), their mental sharpness declined, leading to sluggish play. Cutting out distractions and getting physical activity helped restore focus.",
+   "teaches": "Mental fatigue and external distractions can significantly impact chess performance. Maintaining a disciplined routine, including physical activity and adequate rest, is crucial for peak performance in tournaments.",
+   "plans": "In future tournaments, limit distractions during rest days and engage in physical activity to clear the mind and regain competitive energy.",
+   "concepts": [
+    "mental-fatigue",
+    "preparation",
+    "tournament-routine",
+    "focus"
+   ],
+   "sources": [
+    "yt:_22ev6f7Fdc"
+   ]
+  },
+  {
+   "id": "mgc-1r",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "In a game against Karjakin, the player found a good plan in the opening but ran out of time to complete it, and then had to be careful not to make mistakes. The opponent was well-prepared.",
+   "teaches": "Time management is critical when executing long-term plans. If you spend too much time on the opening, you may not have enough time to complete your plan in the middlegame, forcing you into defensive mode.",
+   "plans": "Work on faster decision-making in the opening to preserve time for critical middlegame decisions.",
+   "concepts": [
+    "time-management",
+    "opening-preparation",
+    "planning"
+   ],
+   "sources": [
+    "yt:_22ev6f7Fdc"
+   ]
+  },
+  {
+   "id": "mgc-1s",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "When ahead, trading queens can simplify to a win, but keeping queens on can maintain attacking chances. The player chose to avoid the trade and keep pressure, even though the opponent was better after the exchange.",
+   "teaches": "Sometimes it's worth declining a queen trade to keep the initiative, even if the resulting endgame is winning. Pressure can force mistakes.",
+   "plans": "Continue pushing on the queenside and maintain the attack, hoping to convert the initiative into a full point.",
+   "concepts": [
+    "initiative",
+    "queen-trade-decision",
+    "prophylaxis"
+   ],
+   "sources": [
+    "yt:_22ev6f7Fdc"
+   ]
+  },
+  {
+   "id": "mgc-1t",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "After equalizing in the opening, a player can take over the game by making every move purposeful, occupying key squares, and never playing a waiting move. This approach quickly builds a dominant position.",
+   "teaches": "Once you have equalized, look for active plans that improve your pieces and control important squares. Avoid passive moves; every move should have a point.",
+   "plans": "Identify the key squares in the position and fight for them, using your pieces to restrict the opponent's activity.",
+   "concepts": [
+    "initiative",
+    "key-squares",
+    "active-play",
+    "no-waiting-moves"
+   ],
+   "sources": [
+    "yt:dhzoxMhqMQs"
+   ]
+  },
+  {
+   "id": "mgc-1u",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "In the Queen's Indian, even if the opponent is well-prepared, the opening is generally safe for both sides. The player had a plan but ran out of time to execute it, and had to be careful not to worsen the position.",
+   "teaches": "Opening preparation can give an edge, but in solid openings like the Queen's Indian, the defender often has resources to equalize. Time management is crucial in executing plans.",
+   "plans": "Aim for a sound position and avoid overpressing; the safety of the opening can neutralize preparation.",
+   "concepts": [
+    "opening-preparation",
+    "queens-indian",
+    "time-management"
+   ],
+   "sources": [
+    "yt:_22ev6f7Fdc"
+   ]
+  },
+  {
+   "id": "mgc-1v",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "In a slightly worse position, the opponent made a mistake allowing a capture on e3. The resulting position had hidden excitement: the player could maneuver for many moves, trying to induce small concessions without any risk.",
+   "teaches": "In positions with no immediate tactics, you can maneuver patiently, probing for weaknesses. Even small concessions can accumulate and turn the game.",
+   "plans": "Explore all options, milk every drop of advantage, and avoid forcing anything that carries risk.",
+   "concepts": [
+    "maneuvering",
+    "prophylaxis",
+    "accumulation-of-small-advantages"
+   ],
+   "sources": [
+    "yt:_22ev6f7Fdc"
+   ]
+  },
+  {
+   "id": "mgc-1w",
+   "lineSan": [],
+   "opening": null,
+   "phase": "opening",
+   "explains": "In the final game, the player needed only a draw to win the tournament but refused to play for a draw. Facing c5, he chose the creative c3, which led to a position where White is theoretically slightly better due to the extra move, but it would be a long maneuvering game.",
+   "teaches": "Even when a draw suffices, playing for a win can be a valid approach if you trust your creativity. In symmetrical structures, a single extra move can offer lasting pressure.",
+   "plans": "Aim to make something of the slight theoretical edge, but be prepared for a long game.",
+   "concepts": [
+    "playing-for-a-win",
+    "creativity",
+    "symmetrical-positions"
+   ],
+   "sources": [
+    "yt:_22ev6f7Fdc"
+   ]
+  },
+  {
+   "id": "mgc-1x",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "In this position, the opponent's bishop on d7 is passive and not participating, while all of my pieces are actively involved in both attack and defense. The pawn structure with e4, f4, and e3 may look scary, but it gives me control over many key squares.",
+   "teaches": "When evaluating a position, compare the activity of both sides' pieces. A passive piece like a bishop on d7 can be a major liability, while having all your pieces participating gives you a significant advantage even if the pawn structure looks compromised.",
+   "plans": "Look for ways to bring the queen to active squares like e4 or d3, and consider pawn breaks like e4 to open lines and increase pressure.",
+   "concepts": [
+    "piece-activity",
+    "passive-piece",
+    "central-control",
+    "pawn-structure"
+   ],
+   "sources": [
+    "yt:_22ev6f7Fdc"
+   ]
+  },
+  {
+   "id": "mgc-1y",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The tournament featured many fighting games, with a high number of decisive results. Some players might have needed to play more carefully in certain games, but the aggressive style led to exciting chess.",
+   "teaches": "Aggressive play can lead to more wins but also more risks. It's important to balance the desire for fighting chess with the need to avoid getting into unnecessarily difficult positions.",
+   "plans": "In future tournaments, continue to play aggressively but aim to avoid the overly sharp positions that led to difficulties in a couple of games.",
+   "concepts": [
+    "aggressive-play",
+    "risk-management",
+    "tournament-strategy"
+   ],
+   "sources": [
+    "yt:_22ev6f7Fdc"
+   ]
+  },
+  {
+   "id": "mgc-1z",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "White has sacrificed a knight and must justify it with a direct attack. The black king is exposed in the center, so the priority is to keep it trapped and deliver a series of checks.",
+   "teaches": "When you have sacrificed material for an attack, look for forcing moves—checks and captures—that restrict the enemy king's escape squares. A king stuck in the middle is a huge liability.",
+   "plans": "Play Rf1-d1 to cut off the king's escape route, then follow with rook checks and queen checks to drive the king to the edge and mate.",
+   "concepts": [
+    "king-in-the-middle",
+    "forcing-moves",
+    "attack",
+    "sacrifice"
+   ],
+   "sources": [
+    "yt:dQMhqD70ruA"
+   ]
+  },
+  {
+   "id": "mgc-20",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "After Rf1-d1, the black king's escape via the d-file is blocked. White threatens Rc1+, forcing the king to b4, then Rd4+ with mate threats.",
+   "teaches": "A single rook move can take away the king's only flight square, turning a loose king into a trapped one. Always consider how to cut off escape routes before starting the check sequence.",
+   "plans": "If black defends against Rd4, switch to a different checkmate pattern: B4+ (if the king takes), Rb1+ driving the king to c3, then Rb3+ and Qe2#.",
+   "concepts": [
+    "escape-route",
+    "checkmate-pattern",
+    "rook-lift",
+    "king-hunt"
+   ],
+   "sources": [
+    "yt:dQMhqD70ruA"
+   ]
+  },
+  {
+   "id": "mgc-21",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The black king is chased across the board to the other side, which is normally a sign of impending doom in chess—unlike in shogi, where it can be a defensive resource.",
+   "teaches": "A king that is forced to run across the board is almost always lost because its own pieces cannot defend it and the attacker's pieces coordinate for mate. Use checks to drive the king into a mating net.",
+   "plans": "Continue the check sequence: after the king reaches c2, deliver Qe2# with all escape squares covered.",
+   "concepts": [
+    "king-hunt",
+    "mating-net",
+    "coordination",
+    "checkmate"
+   ],
+   "sources": [
+    "yt:dQMhqD70ruA"
+   ]
+  },
+  {
+   "id": "mgc-22",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In a tournament, when some players start strongly, others are forced to take risks, which naturally leads to fighting chess. This tournament has had many decisive games from the start, with only two players on a plus score after six rounds.",
+   "teaches": "Tournament dynamics matter: early leaders force the rest to play aggressively, raising the overall intensity. Be ready for sharp, fighting games when the standings are tight.",
+   "plans": "",
+   "concepts": [
+    "tournament-dynamics",
+    "fighting-chess",
+    "plus-score"
+   ],
+   "sources": [
+    "yt:dhzoxMhqMQs"
+   ]
+  },
+  {
+   "id": "mgc-23",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "In a game where one player has a winning position, converting it with pure technique is rare and impressive, especially against a strong defender who tries everything to create counterplay. The winner maneuvered his bishops to clear lines for his rook, slowly squeezing without giving chances.",
+   "teaches": "When you have a technical advantage, improve your pieces to their best squares, avoid rushing, and take away all counterplay. Patience and precise maneuvering convert without risk.",
+   "plans": "Continue improving pieces, trade off key defenders, and use the rook on open files to increase pressure.",
+   "concepts": [
+    "technique",
+    "piece-maneuvering",
+    "conversion",
+    "counterplay"
+   ],
+   "sources": [
+    "yt:dhzoxMhqMQs"
+   ]
+  },
+  {
+   "id": "mgc-24",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "In a game where one player gets a slightly worse but sound position from the opening, the better player can gradually outplay the opponent without creating serious winning chances, simply by playing better chess move by move.",
+   "teaches": "Even from a slightly worse position, you can outplay your opponent by making sound, principled moves and waiting for them to err. Patience and accuracy can turn a small disadvantage into a win.",
+   "plans": "Keep the position solid, improve your pieces, and wait for the opponent's inaccuracies to exploit.",
+   "concepts": [
+    "outplaying",
+    "sound-chess",
+    "slight-disadvantage",
+    "patience"
+   ],
+   "sources": [
+    "yt:dhzoxMhqMQs"
+   ]
+  },
+  {
+   "id": "mgc-25",
+   "lineSan": [],
+   "opening": null,
+   "phase": "endgame",
+   "explains": "In a drawn endgame, there might be long-term winning attempts, like putting a bishop on a strong square and pushing kingside pawns, but they are often far-fetched. A player with a clear style may prefer a draw rather than chasing such small chances.",
+   "teaches": "Assess endgames objectively: if the winning chances are minimal and the opponent can easily hold, it's often practical to take the draw. Know your own style and when to push for more.",
+   "plans": "If playing on, place the bishop on a dominant square, exchange rooks and pawns, and try to create kingside pressure, but be ready to accept a draw if the defense holds.",
+   "concepts": [
+    "endgame",
+    "draw-offer",
+    "practical-chess",
+    "style"
+   ],
+   "sources": [
+    "yt:dhzoxMhqMQs"
+   ]
+  },
+  {
+   "id": "mgc-26",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In this tournament context, players must adapt to new circumstances each game; carrying emotional baggage from previous results harms performance. One player's play was too emotional and he was not psychologically ready, while the opponent showed enterprising preparation and followed it up with strong play.",
+   "teaches": "Chess requires psychological resilience: treat each game as a fresh start and do not let earlier results affect your decisions or mindset.",
+   "plans": "",
+   "concepts": [
+    "psychological-resilience",
+    "adaptation",
+    "emotional-control"
+   ],
+   "sources": [
+    "yt:dhzoxMhqMQs"
+   ]
+  },
+  {
+   "id": "mgc-27",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "A player with a solid style may struggle to convert advantages into wins; one player played a very good game against him, but other games were draws, and he hasn't gotten going.",
+   "teaches": "Solidity alone may not win tournaments; you need to create chances and convert when opportunities arise.",
+   "plans": "",
+   "concepts": [
+    "solidity",
+    "conversion",
+    "initiative"
+   ],
+   "sources": [
+    "yt:dhzoxMhqMQs"
+   ]
+  },
+  {
+   "id": "mgc-28",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "A player missed a chance to win and thereby lost the opportunity to become a runaway leader; his technique was not good enough that day.",
+   "teaches": "In top-level chess, precise technique is essential to convert winning positions; missing such chances can change the tournament landscape.",
+   "plans": "",
+   "concepts": [
+    "technique",
+    "conversion",
+    "missed-opportunities"
+   ],
+   "sources": [
+    "yt:dhzoxMhqMQs"
+   ]
+  },
+  {
+   "id": "mgc-29",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "In a queen ending where you are worse, the defender must keep giving checks to avoid immediate mate. The attacker's king placement can be poor, allowing the defender to trade queens and run a pawn.",
+   "teaches": "The rule of the square is a quick way to know if a king can catch a passed pawn without calculating every move. If the king is outside the square, the pawn promotes.",
+   "plans": "When checks run out, consider trading queens if the resulting pawn race favors you because the enemy king is out of the square.",
+   "concepts": [
+    "rule-of-the-square",
+    "queen-endings",
+    "perpetual-check",
+    "pawn-race"
+   ],
+   "sources": [
+    "yt:eI9ZjwL6Tk0"
+   ]
+  },
+  {
+   "id": "mgc-2a",
+   "lineSan": [],
+   "opening": null,
+   "phase": "concept",
+   "explains": "The rule of the square is not absolute; even if a king is in the square, other factors like the defender's own pawns or checks can change the outcome.",
+   "teaches": "Use the rule of the square as a shortcut, but always verify with concrete calculation when other pieces or pawns are involved.",
+   "plans": "In practical play, trust the rule for simple positions, but be ready to calculate if there are additional pieces or tactical motifs.",
+   "concepts": [
+    "rule-of-the-square",
+    "calculation",
+    "tactics"
+   ],
+   "sources": [
+    "yt:eI9ZjwL6Tk0"
+   ]
+  },
+  {
+   "id": "mgc-2b",
+   "lineSan": [],
+   "opening": null,
+   "phase": "middlegame",
+   "explains": "In a queen ending, placing the king on the same diagonal as the enemy queen can lose the queen to a skewer. Also, moving the king to a square that allows a queen trade can be bad if the resulting pawn endgame is lost.",
+   "teaches": "Always be alert to king-queen diagonals and the consequences of trading queens in a pawn race.",
+   "plans": "When defending, look for checks that force the king to bad squares. When attacking, avoid putting your king on a diagonal with the enemy queen.",
+   "concepts": [
+    "skewer",
+    "king-safety",
+    "queen-trade",
+    "pawn-race"
+   ],
+   "sources": [
+    "yt:eI9ZjwL6Tk0"
+   ]
+  },
+  {
+   "id": "mgc-2c",
+   "lineSan": [],
+   "opening": null,
+   "phase": "endgame",
+   "explains": "With two passed pawns on opposite sides of the board, a single king cannot stop both. Even if the king is in the square of one pawn, it cannot catch the other.",
+   "teaches": "In king and pawn endgames, two widely separated passed pawns often win because the king cannot be in two places at once.",
+   "plans": "If you have two passed pawns far apart, advance them; the opponent's king will be unable to stop both.",
+   "concepts": [
+    "passed-pawns",
+    "outside-passed-pawn",
+    "king-activity"
+   ],
+   "sources": [
+    "yt:eI9ZjwL6Tk0"
+   ]
+  }
+ ]
+}
