@@ -531,6 +531,54 @@ export function kingSafetyRead(fen: string, color: Color): KingSafetyNote | null
   return { square: ksq, castled, inCenter, openFilesNearKing, shieldPawns, exposed };
 }
 
+export interface MaterialCount {
+  white: Record<string, number>;
+  black: Record<string, number>;
+}
+
+/** Piece counts + the White-perspective material advantage in points.
+ *  Absorbed from the now-deleted positionAssessor.ts (2026-08-14) — that
+ *  module had exactly one caller (groundedAnswer's 'material'/'center'
+ *  topics) and its OTHER three fields (pawn structure, king safety, piece
+ *  development) duplicated this file's richer, already-wired versions
+ *  (findWeakPawns/kingSafetyRead/developmentRead) and were never read —
+ *  computed and discarded on every call. One file, so nothing sits unused
+ *  in a module nobody else reaches. */
+export function countMaterial(fen: string): { material: MaterialCount; advantage: number } {
+  const white: Record<string, number> = { p: 0, n: 0, b: 0, r: 0, q: 0 };
+  const black: Record<string, number> = { p: 0, n: 0, b: 0, r: 0, q: 0 };
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return { material: { white, black }, advantage: 0 }; }
+  for (const row of chess.board()) for (const cell of row) {
+    if (!cell || cell.type === 'k') continue;
+    const bucket = cell.color === 'w' ? white : black;
+    bucket[cell.type] += 1;
+  }
+  let whiteTotal = 0;
+  let blackTotal = 0;
+  for (const [type, count] of Object.entries(white)) whiteTotal += (PIECE_VALUE[type as PieceSymbol] ?? 0) * count;
+  for (const [type, count] of Object.entries(black)) blackTotal += (PIECE_VALUE[type as PieceSymbol] ?? 0) * count;
+  return { material: { white, black }, advantage: whiteTotal - blackTotal };
+}
+
+const CENTER_SQUARES = new Set(['d4', 'd5', 'e4', 'e5']);
+const EXTENDED_CENTER = new Set(['c3', 'c4', 'c5', 'c6', 'd3', 'd6', 'e3', 'e6', 'f3', 'f4', 'f5', 'f6']);
+
+/** How many of each side's non-pawn, non-king pieces bear on the center
+ *  (the 4 central squares or the extended ring around them). */
+export function centralPieceCount(fen: string): { white: number; black: number } {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return { white: 0, black: 0 }; }
+  let white = 0;
+  let black = 0;
+  for (const row of chess.board()) for (const cell of row) {
+    if (!cell || cell.type === 'k' || cell.type === 'p') continue;
+    if (!CENTER_SQUARES.has(cell.square) && !EXTENDED_CENTER.has(cell.square)) continue;
+    if (cell.color === 'w') white += 1; else black += 1;
+  }
+  return { white, black };
+}
+
 export interface DevelopmentNote { developedMinors: number; totalMinors: number; castled: boolean }
 
 /** Grounded DEVELOPMENT read for `color` — minor pieces off their home squares

@@ -3208,19 +3208,23 @@ export function assembleLastGameAnswer(g: LastGameLike | null): GroundedAnswer |
 // calculated with the correct deterministic data"). The eval-only
 // assemblePositionAssessment answers "who's winning" but NOT "who controls the
 // center / how many pieces / is my structure sound" — those need the STATIC
-// features, computed here from the FEN via assessPosition + positionReading
-// service (pure chess.js). One assembler, dispatched by TOPIC.
+// features, computed here from the FEN via positionReadingService (pure
+// chess.js — same module for every static feature this function reads, per
+// David 2026-08-14: "all the coding in one place so knowledge doesn't get
+// forgotten in a different file". This used to split material/center off into
+// a separate positionAssessor.ts with its own duplicate pawn-structure/king-
+// safety logic that nothing ever read — deleted; countMaterial/
+// centralPieceCount now live alongside the rest of this file's static reads.
 // ─────────────────────────────────────────────────────────────────────────────
-import { assessPosition } from './positionAssessor';
-import { findPieceQuality, findWeakPawns, developmentRead, kingSafetyRead } from './positionReadingService';
+import { findPieceQuality, findWeakPawns, developmentRead, kingSafetyRead, countMaterial, centralPieceCount } from './positionReadingService';
 
 export type PositionalTopic = 'material' | 'center' | 'development' | 'structure' | 'king' | 'piece';
 
 const PIECE_WORD: Record<string, string> = { p: 'pawns', n: 'knights', b: 'bishops', r: 'rooks', q: 'queen', k: 'king' };
 
 export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'black', topic: PositionalTopic, ask?: string): GroundedAnswer | null {
-  let a: ReturnType<typeof assessPosition>;
-  try { a = assessPosition(fen); } catch { return null; }
+  let a: ReturnType<typeof countMaterial>;
+  try { a = countMaterial(fen); } catch { return null; }
 
   // FALSE-PREMISE CHECK (2026-08-13 audit): "is my queen on h5 well placed?"
   // at the start position must be CORRECTED from the board, never answered as
@@ -3265,7 +3269,7 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
   const src = ['board:chess.js'];
 
   if (topic === 'material') {
-    const adv = me === 'white' ? a.materialAdvantage : -a.materialAdvantage;
+    const adv = me === 'white' ? a.advantage : -a.advantage;
     const mineCount = me === 'white' ? a.material.white : a.material.black;
     const pieces = (['q', 'r', 'b', 'n', 'p'] as const)
       .filter((p) => (mineCount[p] ?? 0) > 0)
@@ -3276,8 +3280,9 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
   }
 
   if (topic === 'center') {
-    const mine = me === 'white' ? a.pieceActivity.whiteCentralPieces : a.pieceActivity.blackCentralPieces;
-    const theirs = me === 'white' ? a.pieceActivity.blackCentralPieces : a.pieceActivity.whiteCentralPieces;
+    const central = centralPieceCount(fen);
+    const mine = me === 'white' ? central.white : central.black;
+    const theirs = me === 'white' ? central.black : central.white;
     const verdict = mine > theirs ? `you control the center` : mine < theirs ? `${opp} controls the center` : `the center is contested`;
     return { facts: `You have ${mine} piece${mine === 1 ? '' : 's'} bearing on the centre to ${opp}'s ${theirs} — ${verdict}.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
@@ -3299,10 +3304,15 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
   }
 
   if (topic === 'king') {
+    // kingSafetyRead is the ONE king-safety read now — it already carries
+    // castled + exposed (this used to also cross-check a duplicate castled/
+    // exposed pair computed independently in the deleted positionAssessor.ts;
+    // the two rarely disagreed, and when they did there was no reason to
+    // prefer one over the other — one computer, one answer).
     const k = kingSafetyRead(fen, myC);
-    const castled = (me === 'white' ? a.kingSafety.whiteCastled : a.kingSafety.blackCastled);
-    const exposed = (me === 'white' ? a.kingSafety.whiteKingExposed : a.kingSafety.blackKingExposed) || !!k?.exposed;
-    const detail = exposed && k?.exposed ? ' Its pawn shield is compromised.' : '';
+    const castled = k?.castled ?? false;
+    const exposed = k?.exposed ?? false;
+    const detail = exposed ? ' Its pawn shield is compromised.' : '';
     return { facts: `Your king is ${castled ? 'castled' : 'not castled'} and ${exposed ? 'looks exposed' : 'reasonably safe'}.${detail}`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
