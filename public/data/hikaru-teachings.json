@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-14T14:33:26.763Z",
+ "generatedAt": "2026-08-14T14:54:55.194Z",
  "videosDistilled": 33,
  "v2VideoIds": [
   "6Qs2I6RPoFg",
@@ -143,17 +143,7 @@
   },
   {
    "id": "hk-5",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "Black plays Bd6, attacking the knight on f4. If White moves the knight, Black can trade it off; if White doesn't, Black can capture it. This pressure forces White to make a decision.",
@@ -169,17 +159,7 @@
   },
   {
    "id": "hk-6",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "After White plays Nf5, Black captures it with the bishop. White then threatens Qg5, hitting the knight on g4. Black responds with Re8+, giving check and forcing the king to move, then plays Bg7, placing the bishop on a safe square that also shields the king.",
@@ -197,17 +177,7 @@
   },
   {
    "id": "hk-7",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "Black trades rooks and queens, reducing material and making the win easier with the extra pieces. The principle is to exchange pieces when ahead in material.",
@@ -224,17 +194,7 @@
   },
   {
    "id": "hk-8",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "endgame",
    "explains": "With the queenside pawns frozen (neither side can push them), Black focuses on the kingside, playing a king and pawn endgame. The knight blockades the queenside pawns, allowing Black to advance on the kingside.",
@@ -252,17 +212,7 @@
   },
   {
    "id": "hk-9",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "endgame",
    "explains": "In the final phase, Black cuts off the white king, forces it to the corner, and promotes a pawn, being careful to avoid stalemate by giving check before the final mate.",
@@ -415,17 +365,7 @@
   },
   {
    "id": "hk-e",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "concept",
    "explains": "A tactical motif arises: after ...Nxd4, White's queen on d2 is vulnerable, and Black can play ...e5, creating a discovered attack on the bishop on f4. This is similar to a theme in the Sicilian Defense where ...e5 and ...Qa5 work together.",
@@ -443,17 +383,7 @@
   },
   {
    "id": "hk-f",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "opening",
    "explains": "In this London System position, White cannot play e5 because Black responds with Qa5+, hitting the king and the e5 pawn, and after Nc3, Qxe5 wins a pawn. This tactical motif is common in Sicilian lines but rare in d4 systems.",
@@ -470,17 +400,7 @@
   },
   {
    "id": "hk-g",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "After Black's queen goes to b6, the rook on a8 is forced to c8, limiting Black's development. White has three minor pieces against two, so trading pieces is favorable.",
@@ -497,17 +417,7 @@
   },
   {
    "id": "hk-h",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "If Black castles and plays Bg6, capturing on g6 with the bishop might be better than taking towards the center. The rook on the open file can be doubled, and the bishop can pressure the pawn on d6.",
@@ -551,17 +461,7 @@
   },
   {
    "id": "hk-j",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "Black's pawn on d6 is backward because it cannot be supported by a pawn on e5 (which is further advanced). If Black can play d5, the weakness is eliminated; otherwise, White can pressure it.",
@@ -578,17 +478,7 @@
   },
   {
    "id": "hk-k",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "In this position, Black has a backward pawn on d6, which cannot advance to d5 to support the e5 pawn. This structural weakness means Black's pawn chain is vulnerable, and if Black cannot push d5, White stands better.",
@@ -632,17 +522,7 @@
   },
   {
    "id": "hk-m",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "White plays Be3 with a specific idea: to support a knight jump to d5, and then potentially Bb6 to attack the queen. The bishop on b3 later supports the knight on d5 by covering the queen's recapture.",
@@ -713,17 +593,7 @@
   },
   {
    "id": "hk-p",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "In this position, after d4 Nf6 Nf3 g6 Bf4 Bg7 e3 d6 Bd3, White has a solid London System setup with the bishop on f4 and the pawn chain e3-d4. Black's king is still uncastled, and White's pieces are ready to support a kingside attack. The key is that Black's bishop on g7 is blocked by the d6 pawn, limiting its activity, while White's bishop on d3 eyes the h7 square.",
@@ -793,17 +663,7 @@
   },
   {
    "id": "hk-s",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "opening",
    "explains": "In the game, after d4 Nf6 Nf3 g6 Bf4 Bg7 e3 d6 Bd3, Black played h6 to prevent Bg5, which would trade the knight and allow Nd5. Black wants to keep the knight on f6 to target e4 and support a d5 break. White's bishop on c4 is blocked by the d6 pawn, so it can't go to g5.",
@@ -821,17 +681,7 @@
   },
   {
    "id": "hk-t",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "In the Sicilian, the knight on f6 is well placed because it cannot be easily traded, it targets e4, and it supports a future d5 pawn break. The bishop on e3, combined with a knight jump to d5 and the threat of Bb6, can be a decisive attacking idea.",
@@ -877,17 +727,7 @@
   },
   {
    "id": "hk-v",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "The bishop pair is not a significant factor at beginner level; even trades are fine. In this position, after a trade on e5, playing c6 to kick the bishop is a simple way to maintain the extra pawn and solidify the position.",
@@ -1025,17 +865,7 @@
   },
   {
    "id": "hk-10",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "After the bishop takes on f3 and white recaptures with the queen, black has five pieces still on the back rank while white is castled and has an open file. This is a massive development lead.",
@@ -1052,17 +882,7 @@
   },
   {
    "id": "hk-11",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "After the trade on f3, White has a huge development lead: five black pieces remain on the back rank, White is castled, and both rooks can occupy the central open files. The two bishops are aimed along active diagonals, creating immediate threats.",
@@ -1108,17 +928,7 @@
   },
   {
    "id": "hk-13",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "opening",
    "explains": "Black's best move here is e6, opening the diagonal for the dark-squared bishop. If White trades knights, both diagonals open for Black's bishops. This line can transpose to the Alapin Sicilian after a specific sequence.",
@@ -1135,17 +945,7 @@
   },
   {
    "id": "hk-14",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "opening",
    "explains": "White played Bf4, but Nf3 was better. After Black plays d6, White can use the idea of Be3, Qa4, and castling, with pressure on the e5 pawn and the open file. There is also a tactical idea with Bb5, Rd1, and Nxe5 to win quickly if Black is unaware.",
@@ -1191,17 +991,7 @@
   },
   {
    "id": "hk-16",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "In this London System position, White has completed development while Black's kingside pieces remain on their original squares. The bishop on b5 pins the knight on c6 to the king, creating tactical pressure.",
@@ -1219,17 +1009,7 @@
   },
   {
    "id": "hk-17",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "After Black plays Qd7 to guard the pinned knight, White can exploit the pin with a tactical sequence: check with the bishop, then capture on d6 with the rook. The bishop on e7 remains pinned, so Black cannot recapture with the queen without losing it.",
@@ -1247,17 +1027,7 @@
   },
   {
    "id": "hk-18",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Nf3",
-    "g6",
-    "Bf4",
-    "Bg7",
-    "e3",
-    "d6",
-    "Bd3"
-   ],
+   "lineSan": [],
    "opening": "London System",
    "phase": "middlegame",
    "explains": "White is up a pawn and has the option to trade queens. The general rule is that if you are only up one pawn, you should avoid trading down to an endgame, because the win is not trivial. Here, Black has undeveloped pieces and a weak pawn on d6, so White can keep the queens and build pressure.",
