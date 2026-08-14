@@ -3293,8 +3293,9 @@ export function assemblePositionalAnswer(fen: string, studentColor: 'white' | 'b
     const wp = findWeakPawns(fen, myC);
     const iso = wp.isolated.length ? `isolated pawn${wp.isolated.length === 1 ? '' : 's'} on ${wp.isolated.join(', ')}` : '';
     const dbl = wp.doubled.length ? `doubled pawn${wp.doubled.length === 1 ? '' : 's'} on ${wp.doubled.join(', ')}` : '';
-    const faults = [iso, dbl].filter(Boolean).join(' and ');
-    return { facts: faults ? `Your pawn structure has ${faults}.` : `Your pawn structure is sound — no isolated or doubled pawns.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
+    const bwd = wp.backward.length ? `backward pawn${wp.backward.length === 1 ? '' : 's'} on ${wp.backward.join(', ')}` : '';
+    const faults = [iso, dbl, bwd].filter(Boolean).join(' and ');
+    return { facts: faults ? `Your pawn structure has ${faults}.` : `Your pawn structure is sound — no isolated, doubled, or backward pawns.`, bestMoveSan: null, bestMoveFromTo: null, sources: src };
   }
 
   if (topic === 'king') {

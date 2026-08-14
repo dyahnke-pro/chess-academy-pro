@@ -327,27 +327,114 @@ export function strongestWeakestPiece(fen: string, color: Color): { strongest: A
 }
 
 /** STRUCTURAL pawn weaknesses for `color` — isolated (no friendly pawn on an
- *  adjacent file) and doubled (≥2 on a file). The squares the opponent targets. */
-export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; doubled: Square[] } {
+ *  adjacent file), doubled (≥2 on a file), and backward (no neighboring pawn
+ *  can ever support it advancing, AND the square directly ahead is already
+ *  controlled by an enemy pawn — so it can neither be defended by a pawn nor
+ *  safely pushed). The squares the opponent targets. */
+export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; doubled: Square[]; backward: Square[] } {
   let chess: Chess;
-  try { chess = new Chess(fen); } catch { return { isolated: [], doubled: [] }; }
-  const byFile: Record<number, Square[]> = {};
+  try { chess = new Chess(fen); } catch { return { isolated: [], doubled: [], backward: [] }; }
+  const byFile: Record<number, number[]> = {};
+  const squareByFileRank: Record<string, Square> = {};
   for (const row of chess.board()) for (const cell of row) {
     if (cell && cell.type === 'p' && cell.color === color) {
       const f = cell.square.charCodeAt(0) - 97;
-      (byFile[f] ??= []).push(cell.square);
+      const r = Number(cell.square[1]);
+      (byFile[f] ??= []).push(r);
+      squareByFileRank[`${f}:${r}`] = cell.square;
     }
   }
   const isolated: Square[] = [];
   const doubled: Square[] = [];
+  const backward: Square[] = [];
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  const forward = color === 'w' ? 1 : -1;
   for (const fStr of Object.keys(byFile)) {
     const f = Number(fStr);
-    const sqs = byFile[f];
-    if (sqs.length >= 2) doubled.push(...sqs);
+    const ranks = byFile[f];
+    if (ranks.length >= 2) doubled.push(...ranks.map((r) => squareByFileRank[`${f}:${r}`]));
     const hasNeighbor = !!byFile[f - 1] || !!byFile[f + 1];
-    if (!hasNeighbor) isolated.push(...sqs);
+    if (!hasNeighbor) isolated.push(...ranks.map((r) => squareByFileRank[`${f}:${r}`]));
+
+    for (const r of ranks) {
+      // A neighboring pawn on an adjacent file, level with or behind this one,
+      // could one day advance to guard it — that rules out "backward".
+      const neighborCouldSupport = [f - 1, f + 1].some((nf) =>
+        (byFile[nf] ?? []).some((nr) => (color === 'w' ? nr <= r : nr >= r)));
+      if (neighborCouldSupport) continue;
+      const pushRank = r + forward;
+      if (pushRank < 1 || pushRank > 8) continue;
+      const pushSq = `${String.fromCharCode(97 + f)}${pushRank}` as Square;
+      const controlledByEnemyPawn = chess.attackers(pushSq, enemy).some((s) => chess.get(s)?.type === 'p');
+      if (controlledByEnemyPawn) backward.push(squareByFileRank[`${f}:${r}`]);
+    }
   }
-  return { isolated, doubled };
+  return { isolated, doubled, backward };
+}
+
+export interface OpenFilesInfo {
+  /** Files with no pawns of EITHER color — fully open. */
+  open: string[];
+  /** Files with no WHITE pawns (may still carry black pawns) — open for White's rooks. */
+  whiteSemiOpen: string[];
+  /** Files with no BLACK pawns (may still carry white pawns) — open for Black's rooks. */
+  blackSemiOpen: string[];
+}
+
+/** Which files are OPEN or SEMI-OPEN — where rooks belong. Pure pawn-count
+ *  geometry (G3); independent of whether a rook currently sits there (that
+ *  reactive read lives in `findPieceQuality`). */
+export function findOpenFiles(fen: string): OpenFilesInfo {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return { open: [], whiteSemiOpen: [], blackSemiOpen: [] }; }
+  const counts: { w: number; b: number }[] = Array.from({ length: 8 }, () => ({ w: 0, b: 0 }));
+  for (const row of chess.board()) for (const cell of row) {
+    if (cell && cell.type === 'p') counts[cell.square.charCodeAt(0) - 97][cell.color] += 1;
+  }
+  const open: string[] = [];
+  const whiteSemiOpen: string[] = [];
+  const blackSemiOpen: string[] = [];
+  for (let f = 0; f < 8; f += 1) {
+    const letter = String.fromCharCode(97 + f);
+    const { w, b } = counts[f];
+    if (w === 0 && b === 0) { open.push(letter); continue; }
+    if (w === 0) whiteSemiOpen.push(letter);
+    if (b === 0) blackSemiOpen.push(letter);
+  }
+  return { open, whiteSemiOpen, blackSemiOpen };
+}
+
+export interface SpaceInfo { white: number; black: number }
+
+/** Whether `rank` sits in the classic "contestable" zone for `color` — the
+ *  same band `findPieceQuality` uses for knight outposts, reused here for
+ *  consistency across the codebase's structural reads. */
+function inContestedZone(rank: number, color: Color): boolean {
+  return color === 'w' ? rank >= 4 && rank <= 6 : rank >= 3 && rank <= 5;
+}
+
+/** SPACE — how many squares in the opponent's half each side's PAWNS control
+ *  (the classic engine space metric: squares a pawn attacks, not squares it
+ *  merely occupies). More space = more room to maneuver, less for the
+ *  opponent. Pure geometry (G3) — pawn diagonal-attack squares, deduplicated. */
+export function computeSpace(fen: string): SpaceInfo {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return { white: 0, black: 0 }; }
+  const controlled: Record<Color, Set<string>> = { w: new Set(), b: new Set() };
+  for (const row of chess.board()) for (const cell of row) {
+    if (!cell || cell.type !== 'p') continue;
+    const file = cell.square.charCodeAt(0) - 97;
+    const rank = Number(cell.square[1]);
+    const forward = cell.color === 'w' ? 1 : -1;
+    for (const df of [-1, 1]) {
+      const f = file + df;
+      const r = rank + forward;
+      if (f < 0 || f > 7 || r < 1 || r > 8) continue;
+      if (!inContestedZone(r, cell.color)) continue;
+      controlled[cell.color].add(`${String.fromCharCode(97 + f)}${r}`);
+    }
+  }
+  return { white: controlled.w.size, black: controlled.b.size };
 }
 
 /** The best squares for `attackerColor` to TARGET — the enemy's concrete
@@ -669,6 +756,12 @@ export interface ReadingQuestion {
 const NEG_TOKENS = ['nothing', 'none', 'no', 'safe', 'fine', 'equal', 'even', 'quiet', "nothing's", 'nope'];
 
 function sq(square: string): string { return square.toLowerCase(); }
+
+/** A file list a person would say out loud: "d and e" / "c, d and e". */
+function listOfFiles(files: readonly string[]): string {
+  if (files.length <= 1) return files[0] ?? '';
+  return `${files.slice(0, -1).join(', ')} and ${files[files.length - 1]}`;
+}
 
 /**
  * Build the question set for a position from its computed tactics package.
@@ -1038,16 +1131,45 @@ export function buildReadingQuestions(fen: string, tactics: TacticsLiveContext, 
     });
   }
 
-  // WEAK PAWNS — your structural weaknesses (isolated / doubled).
+  // WEAK PAWNS — your structural weaknesses (isolated / doubled / backward).
   const wp = findWeakPawns(fen, me);
-  const weakPawnSquares = [...new Set([...wp.isolated, ...wp.doubled])];
+  const weakPawnSquares = [...new Set([...wp.isolated, ...wp.doubled, ...wp.backward])];
   if (weakPawnSquares.length > 0) {
     out.push({
       id: 'weak-pawn', type: 'weak-pawn', bucket: 'positional', misconceptionTag: 'created-pawn-weakness',
       prompt: 'Do you have any weak pawns? Where are they?',
-      answer: `Weak pawn${weakPawnSquares.length > 1 ? 's' : ''}: ${weakPawnSquares.join(', ')}${wp.isolated.length ? ` (isolated: ${wp.isolated.join(', ')})` : ''}${wp.doubled.length ? ` (doubled: ${wp.doubled.join(', ')})` : ''}.`,
+      answer: `Weak pawn${weakPawnSquares.length > 1 ? 's' : ''}: ${weakPawnSquares.join(', ')}${wp.isolated.length ? ` (isolated: ${wp.isolated.join(', ')})` : ''}${wp.doubled.length ? ` (doubled: ${wp.doubled.join(', ')})` : ''}${wp.backward.length ? ` (backward: ${wp.backward.join(', ')})` : ''}.`,
       acceptTokens: weakPawnSquares.map(sq),
       answerSquares: weakPawnSquares,
+      negative: false,
+    });
+  }
+
+  // SPACE — pawn-controlled squares in the opponent's half.
+  const space = computeSpace(fen);
+  const mySpace = me === 'w' ? space.white : space.black;
+  const theirSpace = me === 'w' ? space.black : space.white;
+  if (mySpace !== theirSpace) {
+    out.push({
+      id: 'space', type: 'space', bucket: 'positional',
+      prompt: 'Who has more space, and by how much?',
+      answer: mySpace > theirSpace
+        ? `You control more space — your pawns cover ${mySpace} squares in enemy territory to your opponent's ${theirSpace}.`
+        : `Your opponent controls more space — their pawns cover ${theirSpace} squares in your territory to your ${mySpace}.`,
+      acceptTokens: [mySpace > theirSpace ? 'you' : 'opponent', 'space', String(mySpace), String(theirSpace)],
+      negative: false,
+    });
+  }
+
+  // OPEN FILES — where the rooks belong (independent of whether one sits there yet).
+  const files = findOpenFiles(fen);
+  const myOpen = [...files.open, ...(me === 'w' ? files.whiteSemiOpen : files.blackSemiOpen)];
+  if (myOpen.length > 0) {
+    out.push({
+      id: 'open-file', type: 'open-file', bucket: 'positional',
+      prompt: 'Which file(s) should your rooks be heading for?',
+      answer: `The ${listOfFiles(myOpen)}-file${myOpen.length > 1 ? 's are' : ' is'} open for your rooks.`,
+      acceptTokens: myOpen.map((f) => `${f}-file`).concat(myOpen),
       negative: false,
     });
   }
@@ -1198,6 +1320,8 @@ const HINT_TIER1: Partial<Record<ReadingQuestionType, string>> = {
   'who-is-winning': 'Weigh material, king safety, and piece activity together.',
   material: 'Count the points of material on each side.',
   plan: 'Look for the most forcing, most active continuation.',
+  space: "Count how far each side's pawns have pushed into enemy territory.",
+  'open-file': 'Scan the files for one with no pawns of your color on it.',
 };
 
 /**

@@ -46,6 +46,8 @@ export type TacticPatternType =
   | 'removal_of_guard'
   | 'trapped_piece'
   | 'mate_threat'
+  | 'overload'
+  | 'battery'
   | 'none';
 
 export interface HangingPiece {

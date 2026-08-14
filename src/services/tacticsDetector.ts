@@ -491,6 +491,89 @@ function rankOfSquare(sq: string): number {
   return Number(sq[1]);
 }
 
+/** OVERLOADED PIECE: an enemy piece that is currently the SOLE defender of two
+ *  or more of its own pieces that WE are attacking right now. Whichever one it
+ *  recaptures on, the other falls — the general form of "removal of the
+ *  guard" (that detector only covers capturing the single defender itself;
+ *  this covers the defender being stretched across two live threats without
+ *  needing to touch it at all). */
+function findOverloadedPieces(chess: Chess): TacticPattern[] {
+  const out: TacticPattern[] = [];
+  const board = chess.board();
+  for (const color of ['w', 'b'] as Color[]) {
+    const enemy: Color = color === 'w' ? 'b' : 'w';
+    // defenderSquare -> targets it is the SOLE defender of, among targets WE attack.
+    const soleDuty = new Map<Square, Square[]>();
+    for (const row of board) {
+      for (const t of row) {
+        if (!t || t.color !== enemy || t.type === 'k' || PIECE_VALUE[t.type] < 3) continue;
+        const targetSq = t.square;
+        if (attackersOfSquare(chess, targetSq, color).length === 0) continue;
+        const defenders = chess.attackers(targetSq, enemy).filter((d) => d !== targetSq);
+        if (defenders.length !== 1) continue;
+        const guardSq = defenders[0];
+        const list = soleDuty.get(guardSq) ?? [];
+        list.push(targetSq);
+        soleDuty.set(guardSq, list);
+      }
+    }
+    for (const [guardSq, targets] of soleDuty) {
+      if (targets.length < 2) continue;
+      const guard = chess.get(guardSq);
+      if (!guard) continue;
+      const targetDescs = targets.map((sq) => `${PIECE_NAMES[chess.get(sq)?.type ?? 'p']} on ${sq}`);
+      out.push({
+        type: 'overload',
+        beneficiary: color,
+        involvedSquares: [guardSq, ...targets],
+        description: `The ${PIECE_NAMES[guard.type]} on ${guardSq} is overloaded — it's the only defender of both ${listOf(targetDescs)}`,
+      });
+    }
+  }
+  return out;
+}
+
+/** BATTERY: two same-color sliding pieces stacked on the same file, rank, or
+ *  diagonal with nothing between them — each able to reinforce the other along
+ *  that line. A clean, unambiguous formation (doubled rooks, queen behind a
+ *  bishop on the long diagonal); deliberately narrower than "x-ray", which has
+ *  several conflicting definitions in chess literature and risks false
+ *  positives. Reported once per pair (deduped by square pair). */
+function findBatteries(chess: Chess): TacticPattern[] {
+  const out: TacticPattern[] = [];
+  const seen = new Set<string>();
+  const board = chess.board();
+  for (const row of board) {
+    for (const p of row) {
+      if (!p || (p.type !== 'r' && p.type !== 'b' && p.type !== 'q')) continue;
+      const sq = p.square;
+      const dirs = p.type === 'b' ? BISHOP_DIRS : p.type === 'r' ? ROOK_DIRS : [...BISHOP_DIRS, ...ROOK_DIRS];
+      for (const dir of dirs) {
+        const ray = traceRay(chess, sq, dir, 1);
+        if (ray.length < 1) continue;
+        const front = ray[0];
+        if (front.color !== p.color) continue;
+        // The front piece must itself be able to continue this exact ray —
+        // a rook behind a knight isn't a battery, the knight can't slide on.
+        const straight = dir[0] === 0 || dir[1] === 0;
+        const frontCanContinue = straight ? (front.type === 'r' || front.type === 'q') : (front.type === 'b' || front.type === 'q');
+        if (!frontCanContinue) continue;
+        const key = [sq, front.square].sort().join('-');
+        if (seen.has(key)) continue;
+        seen.add(key);
+        const lineWord = straight ? (dir[1] === 0 ? 'rank' : 'file') : 'diagonal';
+        out.push({
+          type: 'battery',
+          beneficiary: p.color,
+          involvedSquares: [sq, front.square],
+          description: `The ${PIECE_NAMES[p.type]} on ${sq} and ${PIECE_NAMES[front.type]} on ${front.square} form a battery on the ${lineWord}`,
+        });
+      }
+    }
+  }
+  return out;
+}
+
 // ─── Main Detection Function ────────────────────────────────────────────────
 
 /**
@@ -541,6 +624,8 @@ function detectTacticsUncached(fen: string): TacticsDetectionResult {
       ...findBackRankWeakness(chess),
       ...findTrappedPieces(chess),
       ...findRemovableGuards(chess),
+      ...findOverloadedPieces(chess),
+      ...findBatteries(chess),
     ];
 
     // Build highlights — hanging pieces first, then tactic squares

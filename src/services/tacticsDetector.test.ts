@@ -208,6 +208,69 @@ describe('detectTactics — summary', () => {
   });
 });
 
+// ─── Overload Detection ─────────────────────────────────────────────────────
+
+describe('detectTactics — overloaded pieces', () => {
+  it('detects a piece that solely defends two different attacked targets', () => {
+    // Black queen e5 is the ONLY defender of both knight a5 (attacked by Ra1
+    // up the open a-file) and knight h5 (attacked by Rh1 up the open h-file) —
+    // whichever recapture it makes, the other knight falls. King on g1 (not
+    // e1) so the open e-file doesn't put White in check from Qe5.
+    const fen = '4k3/8/8/n3q2n/8/8/8/R5KR w - - 0 1';
+    const result = detectTactics(fen);
+    const overload = result.tactics.find((t) => t.type === 'overload');
+    expect(overload).toBeDefined();
+    expect(overload?.involvedSquares).toEqual(expect.arrayContaining(['e5', 'a5', 'h5']));
+    expect(overload?.description).toContain('overloaded');
+  });
+
+  it('does not flag a defender covering only one live target', () => {
+    // Rook d5 attacked by Rd1, defended only by Qd7; nothing else Qd7 defends is attacked.
+    const fen = '4k3/3q4/8/3r4/8/8/8/3RK3 w - - 0 1';
+    const result = detectTactics(fen);
+    const overload = result.tactics.find((t) => t.type === 'overload');
+    expect(overload).toBeUndefined();
+  });
+});
+
+// ─── Battery Detection ──────────────────────────────────────────────────────
+
+describe('detectTactics — batteries', () => {
+  it('detects doubled rooks stacked on an open file', () => {
+    const fen = '4k3/8/8/8/3R4/8/8/3RK3 w - - 0 1';
+    const result = detectTactics(fen);
+    const battery = result.tactics.find((t) => t.type === 'battery');
+    expect(battery).toBeDefined();
+    expect(battery?.involvedSquares).toEqual(expect.arrayContaining(['d1', 'd4']));
+    expect(battery?.description).toContain('file');
+  });
+
+  it('detects a queen-and-bishop diagonal battery', () => {
+    // Queen b1 and bishop d3 share the a2-g8-adjacent diagonal with nothing between.
+    const fen = '4k3/8/8/8/8/3B4/8/1Q2K3 w - - 0 1';
+    const result = detectTactics(fen);
+    const battery = result.tactics.find((t) => t.type === 'battery');
+    expect(battery).toBeDefined();
+    expect(battery?.involvedSquares).toEqual(expect.arrayContaining(['b1', 'd3']));
+    expect(battery?.description).toContain('diagonal');
+  });
+
+  it('does not flag two same-color sliders with an enemy piece between them', () => {
+    // White rooks on d1 and d6, black pawn on d3 sitting between them.
+    const fen = '4k3/8/3R4/8/8/3p4/8/3RK3 w - - 0 1';
+    const result = detectTactics(fen);
+    const battery = result.tactics.find((t) => t.type === 'battery' && t.involvedSquares.includes('d6') && t.involvedSquares.includes('d1'));
+    expect(battery).toBeUndefined();
+  });
+
+  it('does not flag a rook behind a knight (knight cannot continue the ray)', () => {
+    const fen = '4k3/8/8/8/3N4/8/8/3RK3 w - - 0 1';
+    const result = detectTactics(fen);
+    const battery = result.tactics.find((t) => t.type === 'battery');
+    expect(battery).toBeUndefined();
+  });
+});
+
 // ─── Edge Cases ────────────────────────────────────────────────────────────
 
 describe('detectTactics — edge cases', () => {

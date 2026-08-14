@@ -20,6 +20,8 @@ import {
   findPawnGrabs,
   findForcingCandidates,
   readingHint,
+  findOpenFiles,
+  computeSpace,
 } from './positionReadingService';
 import type { WeaknessCategory } from '../types';
 import type { TacticsLiveContext } from '../coach/types';
@@ -111,6 +113,57 @@ describe('findPieceQuality', () => {
 
   it('returns [] on an invalid FEN', () => {
     expect(findPieceQuality('garbage')).toEqual([]);
+  });
+});
+
+describe('findWeakPawns — backward pawns', () => {
+  it('flags a pawn whose neighbors are both too far advanced to support it AND whose push square is enemy-pawn-controlled', () => {
+    // White d2: neighbor e4 is more advanced (can't drop back to guard d3); no
+    // c-file neighbor at all; black pawn on c4 controls the d3 push square.
+    const wp = findWeakPawns('4k3/8/8/8/2p1P3/8/3P4/4K3 w - - 0 1', 'w');
+    expect(wp.backward).toContain('d2');
+  });
+
+  it('does not flag a pawn whose push square is uncontested', () => {
+    const wp = findWeakPawns('4k3/8/8/8/4P3/8/3P4/4K3 w - - 0 1', 'w');
+    expect(wp.backward).not.toContain('d2');
+  });
+
+  it('does not flag a pawn with a neighbor that can still drop back to support it', () => {
+    // White d3 has a neighbor on c2 (behind it) that could advance to guard d3's push.
+    const wp = findWeakPawns('4k3/8/8/8/8/3P4/2P5/4K3 w - - 0 1', 'w');
+    expect(wp.backward).not.toContain('d3');
+  });
+});
+
+describe('findOpenFiles', () => {
+  it('classifies open, white-semi-open, and black-semi-open files correctly', () => {
+    // a-file: no pawns at all (open). b-file: only a black pawn (open for White).
+    // c-file: only a white pawn (open for Black). d-file: pawns of both colors (closed).
+    const files = findOpenFiles('4k3/1p6/8/3p4/2P5/3P4/8/4K3 w - - 0 1');
+    expect(files.open).toContain('a');
+    expect(files.whiteSemiOpen).toContain('b');
+    expect(files.blackSemiOpen).toContain('c');
+    expect(files.open).not.toContain('d');
+    expect(files.whiteSemiOpen).not.toContain('d');
+    expect(files.blackSemiOpen).not.toContain('d');
+  });
+
+  it('returns empty lists on an invalid FEN', () => {
+    expect(findOpenFiles('garbage')).toEqual({ open: [], whiteSemiOpen: [], blackSemiOpen: [] });
+  });
+});
+
+describe('computeSpace', () => {
+  it('credits a side more space for pawns pushed deeper into the contestable zone', () => {
+    // White pawns on e4/d4 control squares in ranks 4-6; Black's pawns are
+    // still on their home rank and control nothing beyond rank 3-5's own side.
+    const space = computeSpace('4k3/8/8/8/3PP3/8/PPP2PPP/4K3 w - - 0 1');
+    expect(space.white).toBeGreaterThan(space.black);
+  });
+
+  it('returns zero for both sides on an invalid FEN', () => {
+    expect(computeSpace('garbage')).toEqual({ white: 0, black: 0 });
   });
 });
 
@@ -328,6 +381,32 @@ describe('positional computers (David 2026-06-28 — weak squares / piece activi
     // Black knight e5 is undefended and attacked by the white d4 pawn (dxe5 wins it).
     const t = findAttackTargets('4k3/8/8/4n3/3P4/8/8/4K3 w - - 0 1', 'w');
     expect(t).toContain('e5');
+  });
+});
+
+describe('buildReadingQuestions — space and open-file (2026-08-14, filled a declared-but-unwired gap)', () => {
+  it('asks a space question when one side controls visibly more squares', () => {
+    const fen = '4k3/8/8/8/3PP3/8/PPP2PPP/4K3 w - - 0 1';
+    const qs = buildReadingQuestions(fen, emptyTactics());
+    const space = qs.find((q) => q.type === 'space');
+    expect(space).toBeDefined();
+    expect(space?.answer.toLowerCase()).toContain('you control more space');
+  });
+
+  it('asks an open-file question naming a real open file for the student\'s rooks', () => {
+    const fen = '4k3/1p6/8/3p4/2P5/3P4/8/4K3 w - - 0 1';
+    const qs = buildReadingQuestions(fen, emptyTactics());
+    const openFile = qs.find((q) => q.type === 'open-file');
+    expect(openFile).toBeDefined();
+    // White has no pawn on the a-file — open for White's rooks.
+    expect(openFile?.acceptTokens).toEqual(expect.arrayContaining(['a', 'a-file']));
+    // White DOES have a pawn on c4 — not a file White's own rook wants.
+    expect(openFile?.acceptTokens).not.toContain('c');
+  });
+
+  it('does not ask a space question when both sides control the same amount', () => {
+    const qs = buildReadingQuestions('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', emptyTactics());
+    expect(qs.find((q) => q.type === 'space')).toBeUndefined();
   });
 });
 
