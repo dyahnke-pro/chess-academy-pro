@@ -1743,6 +1743,24 @@ never for history. STOP treating the Vercel audit buffer as the analytics
 backend; it isn't, and saying "the buffer was wiped, the data's gone" when
 the real data is sitting in PostHog is the mistake this rule exists to kill.
 
+**🔒🔒 NATIVE iOS ONLY — David's PostHog usage questions get ONLY native
+iOS data, every time, no exceptions (David 2026-08-14, LOCKED: "The only
+data I EVER want is native iOS.").** When David asks about users, errors,
+churn, feedback, engagement — anything usage-shaped — filter to
+`properties.platform = 'native'` (equivalently `properties.is_native =
+true` / `properties.native_platform = 'ios'`) and stop there. Do NOT
+include `web` or `pwa` platform rows, and do NOT report raw unfiltered
+totals "for context" — the open web app (permanently unlocked per the
+promise to beta testers, see above) and PWA installs are noise for this
+question: crawlers, bots, David's own browser testing, and the web mirror
+all inflate the numbers and have repeatedly produced false signals (a
+Chrome-iOS bot burst read as "10 new users," `$browser_type=bot` rows
+slipping past an `audit_run_id` filter). Native iOS is the paying,
+App-Store-distributed product — it's the only cohort that answers "how
+is my app doing." Still exclude `audit_run_id`-tagged / `$browser_type
+= 'bot'` rows same as always; the platform filter is in ADDITION to that,
+not instead of it.
+
 **🔒 POSTHOG ACCESS = THE POSTHOG MCP SERVER, NOT THE API KEY (David
 2026-07-18: "PostHog access is granted through a different manner … don't
 use the api key").** The session has the PostHog MCP server connected
