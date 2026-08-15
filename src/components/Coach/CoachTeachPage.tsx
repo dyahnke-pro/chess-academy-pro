@@ -7948,9 +7948,40 @@ export function CoachTeachPage(): JSX.Element {
                 // the rank the callout owns, so a student hears what their move
                 // cost before they hear what the line does next.
                 try {
-                  if (preStudentRead && mid && !preStudentRead.isMate && !mid.isMate) {
+                  // ── MATE IS THE ONE THING IT MUST NEVER MISS ─────────────
+                  //
+                  // David 2026-08-15: "Can it see mate further out? Stockfish
+                  // can, the computer should see everything that Stockfish
+                  // does." It could not see mate AT ALL on this path, at any
+                  // depth.
+                  //
+                  // The guard read `!preStudentRead.isMate && !mid.isMate`, and
+                  // the call inside it then passed `missedMate:
+                  // preStudentRead.isMate ? … : null` — fields that are
+                  // structurally always null, because the guard has already
+                  // established both are false. So `classifyMove`'s
+                  // mate-is-a-blunder branch was unreachable, `callInaccuracy`'s
+                  // mate exemption from the centipawn floor was unreachable, and
+                  // the coach said NOTHING on the single highest-stakes moment
+                  // in a game: the student walking into a forced mate, or
+                  // missing one.
+                  //
+                  // The guard was protecting the ARITHMETIC — a mate score is a
+                  // six-figure sentinel, so a swing into one reads as a cost of
+                  // 100,000 centipawns. That is a real hazard and the wrong cure:
+                  // the mate fields exist precisely so the depth travels OUTSIDE
+                  // the centipawns. The coach's own verdict, forty lines below,
+                  // already does it correctly (`bothCp`), so this file contained
+                  // the fix for its own bug.
+                  if (preStudentRead && mid) {
                     const sign = playerColor === 'white' ? 1 : -1;
-                    const cpLoss = (preStudentRead.evaluation * sign) - (mid.evaluation * sign);
+                    // Centipawns only when BOTH reads are real centipawns. When
+                    // either is a mate the delta is meaningless and the mate
+                    // fields carry the story instead — same rule as the coach's.
+                    const bothCp = !preStudentRead.isMate && !mid.isMate;
+                    const cpLoss = bothCp
+                      ? (preStudentRead.evaluation * sign) - (mid.evaluation * sign)
+                      : 0;
                     const look = backwardLook({
                       fenBefore,
                       fenAfter: move.fen,

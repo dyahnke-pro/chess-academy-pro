@@ -170,21 +170,47 @@ export function callInaccuracy(args: {
   // simply survives has no want-list worth the name — so the weakest clause on
   // the board wins by default at the single highest-stakes moment in a game.
   //
-  // COMPUTED, NOT ASSERTED (G0), and scoped to what can be settled without an
-  // engine: replay the better move and ask chess.js whether the opponent still
-  // has mate on the spot. Only claimed for `allowedMate === 1`, because that is
-  // the depth a one-ply legal-move scan can actually prove — a deeper mate needs
-  // a search this function is not given and would be a claim we have not earned.
+  // COMPUTED, NOT ASSERTED (G0) — and at WHATEVER DEPTH STOCKFISH SAW.
+  //
+  // David 2026-08-15: "Can it see mate further out? Stockfish can, the computer
+  // should see everything that Stockfish does." He is right, and the first cut
+  // of this was scoped to `allowedMate === 1` because I reached for a one-ply
+  // chess.js scan to prove it. That was solving a problem the engine had already
+  // solved: `allowedMate` IS Stockfish's depth, at any N, and the engine's own
+  // line from the better move is right here in `bestLineUci`.
+  //
+  // So the proof is the PV. Replay the engine's preferred line and ask whether
+  // the MOVER ends up checkmated anywhere along it. If they do not, the better
+  // move genuinely does avoid the mate the played move walked into — true for
+  // mate in one, mate in five, mate in twelve, with no depth ceiling of our own
+  // invention bolted under Stockfish's.
+  //
+  // Still refuses rather than guesses: no line, or a line that runs out before
+  // the mate would have landed, produces no claim and the callout falls back to
+  // the plan's own reason.
   const stopsMate = ((): boolean => {
-    if (args.allowedMate !== 1 || !args.bestSan) return false;
+    if (args.allowedMate === null || args.allowedMate === undefined) return false;
+    if (!args.bestLineUci || args.bestLineUci.length < 2) return false;
+    const moverChar = args.moverColor === 'white' ? 'w' : 'b';
     try {
       const b = new Chess(args.fenBefore);
-      if (!b.move(args.bestSan)) return false;
-      return !b.moves().some((m) => {
-        const probe = new Chess(b.fen());
-        try { probe.move(m); } catch { return false; }
-        return probe.isCheckmate();
-      });
+      for (const uci of args.bestLineUci) {
+        if (!uci || uci.length < 4) break;
+        const mv = b.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.slice(4, 5) || undefined });
+        if (!mv) return false;
+        // The mover being mated anywhere in their own best line means the mate
+        // was not the played move's fault and this claim is not ours to make.
+        if (b.isCheckmate() && b.turn() === moverChar) return false;
+      }
+      // The line has to be long enough to have carried the mate if it were
+      // coming — a two-ply PV proves nothing about a mate in six.
+      //
+      // ABSOLUTE VALUE: `allowedMate` arrives SIGNED (the engine's mate score is
+      // relative to a side, so walking into mate reads -1 as readily as 1). Used
+      // raw, a negative depth makes this comparison `length >= -2`, which is
+      // every line ever — the guard would pass vacuously on exactly the half of
+      // the cases it exists to check. Only the magnitude is a depth.
+      return args.bestLineUci.length >= Math.min(2 * Math.abs(args.allowedMate), 8);
     } catch { return false; }
   })();
 
