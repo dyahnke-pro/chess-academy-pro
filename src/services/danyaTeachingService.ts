@@ -60,7 +60,7 @@ export interface DanyaNote {
    * treated as `inferred` wherever it is missing — an unverified position must
    * never inherit verified authority through an omission.
    */
-  positionSource?: 'high' | 'medium' | 'inferred';
+  positionSource?: 'high' | 'medium' | 'inferred' | 'video';
 }
 
 interface TeachingsBundle {
@@ -194,9 +194,22 @@ export const anchorTeachesItsPosition = (n: DanyaNote): boolean =>
  * seen live were all `no-spine` or `rejected`, never medium — tightening to
  * high alone would silence a third of the corpus to fix defects it does not
  * have.
+ *
+ * `video` is a fourth verified tier and the strongest evidence of the four: the
+ * position was READ OFF THE BOARD that was on screen when the note was spoken
+ * (`scripts/video-align`), which is a measurement rather than a re-derivation.
+ * It is admitted here because it is verified TWICE more on top of that — the
+ * OCR only accepts a grid matching a legal move, and the aligner only accepts a
+ * position where the note's own claims hold or its own named moves are legal.
+ * A note carrying this tier was never inferred from prose at any step.
+ *
+ * No note carries it yet; the aligner is proven on one video and applies
+ * nothing until it has run at scale.
  */
 export const isVerifiedPosition = (n: DanyaNote): boolean =>
-  n.positionSource === 'high' || n.positionSource === 'medium';
+  n.positionSource === 'high'
+  || n.positionSource === 'medium'
+  || n.positionSource === 'video';
 
 
 for (const n of DATA.notes) {
