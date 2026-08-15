@@ -50,18 +50,90 @@ const askNorm = norm(ASK).replace(/[^a-z0-9 ]/g, '');
 const notes = corpus.notes
   .filter((n) => n.lineSan.length > 0 && norm(n.opening ?? '').replace(/[^a-z0-9 ]/g, '').includes(askNorm))
   .sort((a, b) => a.lineSan.length - b.lineSan.length);
+// ── MARKS COME FROM THE BAKE, BECAUSE THAT IS WHAT THE VOICE SAYS ──────────
+//
+// 🔒 THIS AUDIT WAS MEASURING THE WRONG FILE, AND SO COULD NEVER PASS.
+//
+// `spokenBeatText` opens with "THE BAKE WINS": when a note has a committed
+// spoken form it returns `bake.spoken` VERBATIM and the raw corpus fields are
+// never uttered. Marks were computed from `n.explains` / `n.teaches` — the RAW
+// fields, full of SAN — so they could not appear in speech by construction.
+//
+// The tell, from a real prod run (2026-08-15): note dt-48c raw reads "…Black's
+// main tricky move is Qe7", and prod SPOKE "Black's main tricky move is queen
+// to e7, attacking the e5 pawn." The note landed perfectly; the ruler was
+// looking for "Qe7" in text where SAN has been expanded into words. 0 of 36
+// matched against a working app, twice, and the natural reading of that red is
+// "the corpus is not reaching the voice" — a wholly false alarm that sent one
+// session hunting a splice bug that did not exist.
+//
+// An instrument that cannot pass when the thing works cannot fail when it
+// breaks. Marks now come from the SPOKEN form: the bake where a note has one,
+// and the raw field only for a note with no bake entry (anchored notes keep
+// that runtime fallback, so it is genuinely what would be said).
+const bake = JSON.parse(await readFile('public/data/corpus-spoken.json', 'utf8'));
 const marks = [];
+let bakedMarks = 0;
+let fallbackMarks = 0;
 for (const n of notes) {
-  for (const field of [n.explains, n.teaches]) {
-    const words = norm(field).replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').split(' ');
-    if (words.length >= 8) marks.push(words.slice(1, 8).join(' '));
+  const b = bake[n.id];
+  // An `unspeakable` note is deliberately silent — it needs geometry it cannot
+  // have here — so marking it would demand speech the contract forbids.
+  if (b?.unspeakable) continue;
+  const sources = b?.spoken ? [b.spoken] : [n.explains, n.teaches];
+  for (const field of sources) {
+    if (!field) continue;
+    // ── SLIDING WINDOWS, OVER SAN-STRIPPED TEXT ────────────────────────────
+    //
+    // A single fixed window cannot survive the runtime path. `sanitizeForTTS`
+    // expands SAN into words before the voice says it — note dt-48c's "Black's
+    // main tricky move is Qe7" is SPOKEN as "…is queen to e7" — so any window
+    // straddling a move token is broken by three words being inserted into the
+    // middle of it, and a window ANCHORED at the start lands on the "In the
+    // Englund Gambit, after d4 e5 dxe5 Nc6 Nf3" preamble, which is nothing but
+    // move tokens.
+    //
+    // Stripping SAN and sliding gives every prose run in the note a chance to
+    // match, so the probe succeeds on the half of the sentence the expansion
+    // did not touch. "black s main tricky move is" matches; the clause after
+    // the inserted words matches too.
+    // 🔒 STRIP BEFORE LOWERCASING, AND ONLY PIECE MOVES.
+    //
+    // Two bugs, both mine, both silent: `norm()` lowercases first, so a
+    // `[KQRBN]` class never matched and every piece move survived intact — and
+    // the pawn-move pattern ate bare squares like `e5`, which the voice KEEPS
+    // ("the e5 pawn") and which are some of the most matchable words in the
+    // note. The strip was removing what speech preserves and preserving what
+    // speech rewrites: exactly backwards.
+    //
+    // Piece moves are what `sanitizeForTTS` expands ("Qe7" -> "queen to e7"),
+    // so those are the only tokens that must go. Case-sensitive, on the raw
+    // text, before any normalisation.
+    const stripped = norm(
+      field.replace(/\b(?:O-O-O|O-O|[KQRBN][a-h1-8]?x?[a-h][1-8][+#]?)\b/g, ' '),
+    )
+      .replace(/[^a-z0-9 ]/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+    // EVERY window, stride 1. Striding by 3 and capping at 4 was a third
+    // self-inflicted miss: on the note that provably SPEAKS on prod, the only
+    // matching run starts at word 8, and a stride-3 cap-4 loop generates
+    // 0/3/6/9 and stops — it never produces it. The windows are cheap and the
+    // probe needs ANY of them to land, so there is no reason to ration them.
+    const words = stripped.split(' ').filter(Boolean);
+    let added = 0;
+    for (let i = 0; i + 6 <= words.length; i += 1) {
+      marks.push(words.slice(i, i + 6).join(' '));
+      added += 1;
+    }
+    if (added > 0) { if (b?.spoken) bakedMarks += added; else fallbackMarks += added; }
   }
 }
 if (marks.length === 0) {
   console.log(`✗ FAIL: no positioned corpus notes for "${ASK}" — nothing to prove`);
   process.exit(1);
 }
-console.log(`[probe] "${ASK}" — ${notes.length} positioned notes, ${marks.length} marks (shallowest line: ${notes[0].lineSan.join(' ')})`);
+console.log(`[probe] "${ASK}" — ${notes.length} positioned notes, ${marks.length} marks (${bakedMarks} from the bake, ${fallbackMarks} from the runtime fallback; shallowest line: ${notes[0].lineSan.join(' ')})`);
 
 const listener = await startAuditListener();
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
