@@ -166,6 +166,8 @@ import { noteStaysInScope, noteSuitsStudentSide, noteAdvisesSide } from '../../s
  *  instant, verified masterclass is still the better lesson, so it keeps it. */
 const NOTE_PRIMARY_MIN_PLIES = 3;
 import { findLivePunishment } from '../../services/gemCrushLines';
+import { engineReadLines } from '../../services/engineReadNarration';
+import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead';
 
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
@@ -1403,6 +1405,14 @@ export function CoachTeachPage(): JSX.Element {
    *  same pin is still coming three moves later — so without this the coach
    *  chants. A five-ply sample from a real game repeated one line four times. */
   const planSaidRef = useRef<Set<string>>(new Set());
+  /** Engine readings already spoken this game — WDL and sharpness are stable
+   *  across many plies by nature, so without this the coach repeats "you come
+   *  out on top three times in four" every move it holds. Same contract as
+   *  `planSaidRef`. */
+  const engineReadSaidRef = useRef<Set<string>>(new Set());
+  /** Pieces already called out this game, so "improve your worst piece" names
+   *  a given square once rather than every ply it stays idle. */
+  const pieceQualitySaidRef = useRef<Set<string>>(new Set());
   /** Positional observations already spoken this game — see `buildPositionalRead`.
    *  Without it an uncastled king repeats the same sentence every ply until it
    *  castles, and the boundary repeat-guard turns each of those back into the
@@ -6851,6 +6861,52 @@ export function CoachTeachPage(): JSX.Element {
                     fenAfter: probe.fen(),
                   }
                   : null;
+
+                // ── WHAT THE ENGINE ITSELF REPORTS, SPOKEN ────────────────
+                //
+                // David 2026-08-15: "I want every stockfish point narrated at
+                // the computed narration tier."
+                //
+                // `studentBest` is the read of the board the student now faces,
+                // so its WDL and its MultiPV spread describe THIS position. The
+                // lane composes in code and is queued like every other computed
+                // fact — no model, nothing to phrase, nothing to police.
+                //
+                // Mounted HERE rather than left to a later pass on purpose: a
+                // lane that is built, tested and never called is the exact
+                // failure this session has been unpicking all day (the gem, the
+                // plan, the mate branch). Built and inert is not built.
+                try {
+                  if (studentBest) {
+                    for (const r of engineReadLines(studentBest, playerColor, engineReadSaidRef.current)) {
+                      queueSpokenHint(probe.fen(), r.text, 'computed');
+                      captureEvent('engine_read_spoken', { surface: 'coach-teach', kind: r.kind });
+                    }
+                  }
+                } catch { /* the engine read is a bonus, never a blocker */ }
+
+                // ── WHICH PIECE IS WORKING, AND WHICH IS ASLEEP ───────────
+                //
+                // Stockfish's `eval` prints a per-square contribution for every
+                // piece on the board. It is a STATIC evaluation — no search —
+                // so it is far cheaper than the analysis above and safe here.
+                //
+                // This is the lane that lets the coach finally say the two
+                // Naroditsky staples honestly: trade off their best piece, and
+                // improve your worst one. Both were previously hand-written
+                // heuristics, and one of them (`opponentsBestPiece`) is the
+                // function that shipped a false outpost claim with its test
+                // running backwards. A number from the engine cannot have its
+                // direction reversed.
+                try {
+                  const raw = await stockfishEngine.evalBoard(probe.fen());
+                  if (raw) {
+                    for (const q of pieceQualityLines(parseEvalTable(raw), playerColor, pieceQualitySaidRef.current)) {
+                      queueSpokenHint(probe.fen(), q.text, 'computed', q.squares);
+                      captureEvent('piece_quality_spoken', { surface: 'coach-teach', kind: q.kind });
+                    }
+                  }
+                } catch { /* the piece read is a bonus, never a blocker */ }
 
                 const tctx = buildTacticsLiveContext(probe.fen(), studentBest, studentCC, rating);
                 // Tactics facts are held back until the question decision

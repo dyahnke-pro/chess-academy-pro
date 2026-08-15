@@ -832,6 +832,21 @@ class StockfishEngine {
             if (typeof line === 'string' && /^error:/i.test(line)) {
               this.surfaceWorkerError(line);
             }
+            // ── THE `eval` CAPTURE ────────────────────────────────────────
+            // `handleMessage` only parses info/bestmove, so the eval table —
+            // an ASCII board of per-piece contributions — would be dropped
+            // exactly like every other field this session found on the floor.
+            // Armed only while `evalCapture` is set, so the normal path is
+            // untouched.
+            if (this.evalCapture) {
+              this.evalCapture.lines.push(line);
+              if (/^Final evaluation/.test(line)) {
+                const cap = this.evalCapture;
+                this.evalCapture = null;
+                if (cap.timer) clearTimeout(cap.timer);
+                cap.resolve(cap.lines.join('\n'));
+              }
+            }
             this.handleMessage(line);
           };
 
@@ -1603,6 +1618,46 @@ class StockfishEngine {
   onAnalysis(handler: StockfishMessageHandler): () => void {
     this.messageHandlers.add(handler);
     return () => this.messageHandlers.delete(handler);
+  }
+
+  /** In-flight `eval` capture, or null. One at a time: the command is cheap
+   *  (a static evaluation, no search) and serializing keeps its output from
+   *  interleaving with another position's. */
+  private evalCapture: {
+    lines: string[];
+    resolve: (raw: string) => void;
+    timer: ReturnType<typeof setTimeout> | null;
+  } | null = null;
+
+  /**
+   * Stockfish's per-piece contribution table for a position.
+   *
+   * David 2026-08-15: the biggest untapped source is not a second engine, it is
+   * this command in the one already shipped. It answers "which piece is doing
+   * the work and which is asleep" with a NUMBER, replacing the hand-written
+   * heuristics that shipped a false outpost claim.
+   *
+   * Static — no search — so it is far cheaper than an analysis and safe on the
+   * move path. Returns '' on timeout or when the engine is not ready, and every
+   * caller treats '' as "no read" rather than as an empty board.
+   */
+  async evalBoard(fen: string, timeoutMs = 2500): Promise<string> {
+    if (!this.isReady || !this.worker) return '';
+    // Never interleave two captures; the second would collect the first's tail.
+    if (this.evalCapture) return '';
+    return new Promise<string>((resolve) => {
+      const cap = {
+        lines: [] as string[],
+        resolve,
+        timer: setTimeout(() => {
+          if (this.evalCapture === cap) this.evalCapture = null;
+          resolve('');
+        }, timeoutMs),
+      };
+      this.evalCapture = cap;
+      this.send(`position fen ${fen}`);
+      this.send('eval');
+    });
   }
 
   private send(command: string): void {
