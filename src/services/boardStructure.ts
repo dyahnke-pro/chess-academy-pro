@@ -507,7 +507,31 @@ export function describeStructuralChange(
     return `That creates a passed pawn on ${newPassed[0]} — nothing can stop it by pawn alone.`;
   }
 
-  // 2) A FILE OPENS. Named for whoever it serves: fully open belongs to both,
+  // 2) A STRUCTURAL WEAKNESS APPEARS — BEFORE the file clauses, because the
+  //    two are usually the SAME event seen from opposite sides and the
+  //    weakness is the lasting one. Measured over the repertoire, the file
+  //    clauses swallowed every doubled pawn in the app: 61 half-open files
+  //    fired and doubled pawns fired ZERO times across 1,310 plies, which
+  //    cannot be right — the Exchange Ruy doubles Black's c-pawns on move
+  //    four. It was reporting White's new half-open file and never the
+  //    doubling that caused it, and the doubling is the teaching point.
+  //    ORIGINAL ORDER: The opponent's is worth naming as a
+  //    target; the mover's own is worth naming as the price, and a coach who
+  //    only ever mentions the opponent's weaknesses is selling something.
+  const theirDoubled = gained(before.pawns.doubledFiles[them], after.pawns.doubledFiles[them]);
+  if (theirDoubled.length > 0) {
+    return `${other} is left with doubled pawns on the ${theirDoubled[0]}-file.`;
+  }
+  const ourDoubled = gained(before.pawns.doubledFiles[moverColor], after.pawns.doubledFiles[moverColor]);
+  if (ourDoubled.length > 0) {
+    return `The cost is doubled pawns on the ${ourDoubled[0]}-file.`;
+  }
+  const theirIsolated = gained(before.pawns.isolatedPawns[them], after.pawns.isolatedPawns[them]);
+  if (theirIsolated.length > 0) {
+    return `${other}'s pawn on ${theirIsolated[0]} is isolated now — no pawn can ever defend it.`;
+  }
+
+  // 3) A FILE OPENS. Named for whoever it serves: fully open belongs to both,
   //    half-open to the side whose pawn has left it.
   const newOpen = gained(before.pawns.openFiles, after.pawns.openFiles);
   if (newOpen.length > 0) {
@@ -525,22 +549,6 @@ export function describeStructuralChange(
   if (newOutpost) {
     const piece = newOutpost.piece === 'n' ? 'knight' : 'bishop';
     return `The ${piece} lands on ${newOutpost.square} as an outpost — no pawn can ever chase it off.`;
-  }
-
-  // 4) A STRUCTURAL WEAKNESS APPEARS. The opponent's is worth naming as a
-  //    target; the mover's own is worth naming as the price, and a coach who
-  //    only ever mentions the opponent's weaknesses is selling something.
-  const theirDoubled = gained(before.pawns.doubledFiles[them], after.pawns.doubledFiles[them]);
-  if (theirDoubled.length > 0) {
-    return `${other} is left with doubled pawns on the ${theirDoubled[0]}-file.`;
-  }
-  const ourDoubled = gained(before.pawns.doubledFiles[moverColor], after.pawns.doubledFiles[moverColor]);
-  if (ourDoubled.length > 0) {
-    return `The cost is doubled pawns on the ${ourDoubled[0]}-file.`;
-  }
-  const theirIsolated = gained(before.pawns.isolatedPawns[them], after.pawns.isolatedPawns[them]);
-  if (theirIsolated.length > 0) {
-    return `${other}'s pawn on ${theirIsolated[0]} is isolated now — no pawn can ever defend it.`;
   }
 
   // 5) THE KING'S SHIELD IS TORN. Only the opponent's, and only when a pawn in
