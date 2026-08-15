@@ -40,6 +40,27 @@ export interface DanyaNote {
   plans: string;
   concepts: string[];
   sources: string[];
+  /**
+   * HOW the position in `lineSan` was established — written by
+   * `stamp-provenance.mjs` from the anchor pass's own verdict.
+   *
+   *   high / medium  the anchor pass re-derived the position and checked this
+   *                  note's claims against that board.
+   *   inferred       the position is the chunk aligner's GUESS: either no
+   *                  matching line could be found (no-spine) or one was found
+   *                  and it disproved the filed position (rejected).
+   *
+   * This exists because the position is the fact that decides whether a note
+   * may describe a board, and an inferred one was being spoken with the same
+   * authority as a verified one. Walking the Ruy, five of the ten notes that
+   * spoke were inferred, and they produced "the bishop's fianchetto" at Bb5
+   * and "the early d-pawn locks the bishop" with no d-pawn moved.
+   *
+   * Optional: absent on any corpus stamped before this field existed, and
+   * treated as `inferred` wherever it is missing — an unverified position must
+   * never inherit verified authority through an omission.
+   */
+  positionSource?: 'high' | 'medium' | 'inferred';
 }
 
 interface TeachingsBundle {
@@ -158,6 +179,24 @@ const MIN_TEACHING_ANCHOR_PLIES = 3;
  *  to "mixed" causes largely because of that blind spot. */
 export const anchorTeachesItsPosition = (n: DanyaNote): boolean =>
   n.lineSan.length >= MIN_TEACHING_ANCHOR_PLIES;
+
+/**
+ * True when the note's position was VERIFIED rather than guessed.
+ *
+ * `high` and `medium` both mean the anchor pass re-derived the position and
+ * checked the note's own claims against that board; `inferred` means it did
+ * not, and a missing field means the corpus predates the stamp. Missing counts
+ * as unverified ON PURPOSE — an omission must never grant a position the
+ * authority of a checked one.
+ *
+ * Cut-off measured 2026-08-15 over 6,738 positioned notes: high+medium is
+ * 4,645 (68.9%), high alone 2,452 (36.4%). Medium is kept because the failures
+ * seen live were all `no-spine` or `rejected`, never medium — tightening to
+ * high alone would silence a third of the corpus to fix defects it does not
+ * have.
+ */
+export const isVerifiedPosition = (n: DanyaNote): boolean =>
+  n.positionSource === 'high' || n.positionSource === 'medium';
 
 
 for (const n of DATA.notes) {
@@ -285,6 +324,22 @@ export function supportNoteForPly(
 ): DanyaNote | null {
   const usable = (n: DanyaNote): boolean =>
     anchorTeachesItsPosition(n)
+    // The position must have been VERIFIED, not guessed. This tier is the one
+    // that speaks a note as teaching about THIS board, so it may only use a
+    // position the anchor pass re-derived and claim-checked. An `inferred`
+    // position is the chunk aligner's guess — either nothing matched it
+    // (no-spine) or something did and DISPROVED it (rejected) — and speaking
+    // one here is the G0 violation: chess content asserted about a board from
+    // an inference rather than a computation.
+    //
+    // Measured on the Ruy: five of the ten notes that spoke were inferred, and
+    // they produced "the bishop's fianchetto was ahead of its time" at Bb5 and
+    // "the early d-pawn locks the light-squared bishop" with no d-pawn moved.
+    // Those notes are not deleted — they remain reachable through the opening
+    // and concept tiers, where `generalizedTeaching` frames them honestly as a
+    // general idea rather than a claim about the position in front of the
+    // student.
+    && isVerifiedPosition(n)
     && !noteContradictsLine(`${n.explains} ${n.teaches}`, historySans)
     && !notePhaseMismatchesBoard(n.phase, fen, historySans.length)
     && !noteOpeningConflicts(n.opening, openingName)
@@ -366,6 +421,23 @@ export function noteAtPosition(
   // one is teaching a different opening even when it is anchored right here.
   const onThisLine = (n: DanyaNote): boolean =>
     anchorTeachesItsPosition(n)
+    // The position must have been VERIFIED, not guessed. This is the tier that
+    // speaks a note AS teaching about the board in front of the student, so it
+    // may only use a position the anchor pass re-derived and claim-checked. An
+    // `inferred` position is the chunk aligner's guess — nothing matched it
+    // (no-spine), or something did and DISPROVED it (rejected).
+    //
+    // This is the G0 fix, and it is a NARROWING rather than another stripper:
+    // the position is the fact that licenses the claim, and we were asserting
+    // it from an inference. Measured on the Ruy, five of the ten notes that
+    // spoke were inferred, producing "the bishop's fianchetto was ahead of its
+    // time" at Bb5 and "the early d-pawn locks the light-squared bishop" with
+    // no d-pawn moved.
+    //
+    // Nothing is deleted: these notes stay reachable through the opening and
+    // concept tiers, where `generalizedTeaching` frames them honestly as a
+    // general idea instead of a claim about this position.
+    && isVerifiedPosition(n)
     && !noteContradictsLine(`${n.explains} ${n.teaches}`, historySans)
     && !notePhaseMismatchesBoard(n.phase, fen, historySans.length)
     && !noteOpeningConflicts(n.opening, openingName)

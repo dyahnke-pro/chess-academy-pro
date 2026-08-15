@@ -47,9 +47,23 @@ describe('danya-teachings corpus gate', () => {
     }
   });
 
-  it('every note is anchored: position-keyed or opening-named', () => {
+  // Concept-keyed counts as anchored here, matching the secondary corpora's
+  // contract ("position-keyed, opening-named, or concept-keyed"). The primary
+  // gate was stricter for no stated reason, and the 2026-08-15 Naroditsky merge
+  // brought in 3,136 notes the distiller could tag with neither a position nor
+  // an opening — videos with no DB alignment and no opening in the title.
+  //
+  // They are kept deliberately (David: "add the distilled notes so that maybe
+  // they can be used"), with the limitation stated plainly: a concept-only note
+  // has NO position, so it can never fire at a specific move. The concept tier
+  // is the only one that can ever reach it. What is NOT acceptable is a note
+  // anchored to nothing at all — no position, no opening, no concept — because
+  // nothing could ever retrieve it and it would just be dead weight in the
+  // bundle.
+  it('every note is anchored: position-keyed, opening-named, or concept-keyed', () => {
     for (const n of notes) {
-      expect(n.lineSan.length > 0 || !!n.opening, `${n.id}: unanchored note`).toBe(true);
+      const anchored = n.lineSan.length > 0 || !!n.opening || (n.concepts?.length ?? 0) > 0;
+      expect(anchored, `${n.id}: unanchored note — no position, opening or concept`).toBe(true);
     }
   });
 

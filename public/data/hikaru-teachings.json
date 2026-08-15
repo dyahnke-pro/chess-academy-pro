@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-08-14T16:50:32.859Z",
+ "generatedAt": "2026-08-15T02:26:24.354Z",
  "videosDistilled": 33,
  "v2VideoIds": [
   "6Qs2I6RPoFg",
@@ -112,7 +112,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "high"
   },
   {
    "id": "hk-4",
@@ -139,7 +140,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-5",
@@ -200,7 +202,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "inferred"
   },
   {
    "id": "hk-8",
@@ -228,7 +231,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "inferred"
   },
   {
    "id": "hk-9",
@@ -255,7 +259,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "inferred"
   },
   {
    "id": "hk-a",
@@ -299,7 +304,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "high"
   },
   {
    "id": "hk-b",
@@ -336,7 +342,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "high"
   },
   {
    "id": "hk-c",
@@ -364,7 +371,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-d",
@@ -391,7 +399,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-e",
@@ -437,7 +446,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "inferred"
   },
   {
    "id": "hk-g",
@@ -464,7 +474,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "inferred"
   },
   {
    "id": "hk-h",
@@ -491,7 +502,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "inferred"
   },
   {
    "id": "hk-i",
@@ -518,7 +530,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-j",
@@ -546,7 +559,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "inferred"
   },
   {
    "id": "hk-k",
@@ -590,7 +604,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-m",
@@ -634,7 +649,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-o",
@@ -661,7 +677,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-p",
@@ -689,7 +706,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "inferred"
   },
   {
    "id": "hk-q",
@@ -717,7 +735,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-r",
@@ -741,7 +760,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "high"
   },
   {
    "id": "hk-s",
@@ -805,7 +825,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-v",
@@ -833,7 +854,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "inferred"
   },
   {
    "id": "hk-w",
@@ -861,7 +883,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-x",
@@ -888,7 +911,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-y",
@@ -915,7 +939,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-z",
@@ -953,7 +978,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "high"
   },
   {
    "id": "hk-10",
@@ -980,7 +1006,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "inferred"
   },
   {
    "id": "hk-11",
@@ -1008,7 +1035,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "inferred"
   },
   {
    "id": "hk-12",
@@ -1036,7 +1064,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-13",
@@ -1063,7 +1092,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "inferred"
   },
   {
    "id": "hk-14",
@@ -1109,7 +1139,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-16",
@@ -1173,7 +1204,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "inferred"
   },
   {
    "id": "hk-19",
@@ -1201,7 +1233,8 @@
    ],
    "sources": [
     "yt:6Qs2I6RPoFg"
-   ]
+   ],
+   "positionSource": "medium"
   },
   {
    "id": "hk-1a",
@@ -8093,7 +8126,8 @@
    ],
    "sources": [
     "yt:B5DxPzUZfZI"
-   ]
+   ],
+   "positionSource": "high"
   },
   {
    "id": "hk-cb",
@@ -8190,7 +8224,8 @@
    ],
    "sources": [
     "yt:B5DxPzUZfZI"
-   ]
+   ],
+   "positionSource": "high"
   },
   {
    "id": "hk-cg",
@@ -8233,7 +8268,8 @@
    ],
    "sources": [
     "yt:B5DxPzUZfZI"
-   ]
+   ],
+   "positionSource": "high"
   },
   {
    "id": "hk-ci",
@@ -8258,7 +8294,8 @@
    ],
    "sources": [
     "yt:B5DxPzUZfZI"
-   ]
+   ],
+   "positionSource": "high"
   },
   {
    "id": "hk-cj",
@@ -8403,7 +8440,8 @@
    ],
    "sources": [
     "yt:B5DxPzUZfZI"
-   ]
+   ],
+   "positionSource": "high"
   },
   {
    "id": "hk-cr",
@@ -8438,7 +8476,8 @@
    ],
    "sources": [
     "yt:B5DxPzUZfZI"
-   ]
+   ],
+   "positionSource": "high"
   },
   {
    "id": "hk-cs",
