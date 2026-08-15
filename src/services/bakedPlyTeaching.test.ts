@@ -154,3 +154,50 @@ describe('the coach plays the line it has teaching for', () => {
     expect(bakedSpineNextMove(null, play(['e4', 'e5']))).toBeNull();
   });
 });
+
+// A BAKE RECORDS WHOSE TEACHING IT IS, AND THE RUNTIME MUST HONOUR IT.
+//
+// David 2026-08-15, from the 12-opening transcript. `bakedTeachingForPly` read
+// neither `studentSide` nor the `ideasFlipped` register beside it, so the
+// primary register went to whoever was listening:
+//
+//   QGD (bake authored for White), student playing BLACK:
+//     "We offer the gambit with c4, inviting Black to take on c4 and surrender
+//      the center. If Black accepts, we can recapture with the pawn…"
+//
+// The coach calls the student "Black" and itself "we" in one sentence. Every
+// claim is true of the board, so board-truth grading passes it and always
+// will — whose teaching this is cannot be settled by looking at the position.
+describe('the bake speaks to the side it was written for', () => {
+  const TAIMANOV = DATA.narrations['sicilian defense taimanov variation'];
+  const QGD = DATA.narrations['queen s gambit declined'];
+
+  it('gives the primary register to the side it was authored for', () => {
+    const hit = bakedTeachingForPly(TAIMANOV.openingName, TAIMANOV.spine.slice(0, 2), 'black');
+    expect(hit?.text).toBe(TAIMANOV.ideas[1].text.trim());
+  });
+
+  it('gives the FLIPPED register to the other side when the bake has one', () => {
+    expect(TAIMANOV.studentSide).toBe('black');
+    expect(TAIMANOV.ideasFlipped?.length).toBe(TAIMANOV.spine.length);
+    const hit = bakedTeachingForPly(TAIMANOV.openingName, TAIMANOV.spine.slice(0, 2), 'white');
+    expect(hit?.text).toBe(TAIMANOV.ideasFlipped?.[1].text.trim());
+    expect(hit?.text).not.toBe(TAIMANOV.ideas[1].text.trim());
+  });
+
+  it('STAYS SILENT rather than read the wrong side, when there is no flipped register', () => {
+    // 21 of the 23 bakes have no opposite register. Silence costs a little
+    // authored prose and buys teaching that is about the right player — the
+    // corpus tier below reaches most of these plies anyway.
+    expect(QGD.studentSide).toBe('white');
+    expect(QGD.ideasFlipped ?? []).toHaveLength(0);
+    expect(bakedTeachingForPly(QGD.openingName, QGD.spine.slice(0, 2), 'black')).toBeNull();
+    // …and still teaches the side it was written for.
+    expect(bakedTeachingForPly(QGD.openingName, QGD.spine.slice(0, 2), 'white')?.text).toBeTruthy();
+  });
+
+  it('is unchanged when the caller names no side', () => {
+    const named = bakedTeachingForPly(QGD.openingName, QGD.spine.slice(0, 2), 'white');
+    expect(bakedTeachingForPly(QGD.openingName, QGD.spine.slice(0, 2))?.text).toBe(named?.text);
+  });
+});

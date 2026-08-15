@@ -211,17 +211,52 @@ export interface BakedPlyTeaching {
 export function bakedTeachingForPly(
   openingName: string | null | undefined,
   historySans: string[],
+  /** WHO IS BEING TAUGHT. Every bake records the side its primary register
+   *  addresses as "we" (`studentSide`), and until 2026-08-15 this function read
+   *  neither that field nor the `ideasFlipped` register sitting beside it — so
+   *  a bake authored from White's side was read verbatim to a student playing
+   *  Black, in the first person. The 12-opening audit caught it twice in twelve
+   *  games:
+   *
+   *    QGD, student BLACK: "We offer the gambit with c4, inviting Black to take
+   *      on c4 and surrender the center. If Black accepts, we can recapture…"
+   *    Najdorf, student BLACK: "…it clears the way for our bishop to reach b5…
+   *      lets us trade on c6 and start chipping at Black's pawns."
+   *
+   *  The coach calls the student "Black" and itself "we" in one breath. Every
+   *  word is true of the position, so board-truth grading passes it and always
+   *  will — this is a question about WHOSE teaching it is, which no amount of
+   *  looking at the board can answer. It is the same defect `noteSuitsStudentSide`
+   *  was built for on the corpus tier, arriving through the one tier that had no
+   *  such check because its notes are hand-authored and were assumed safe.
+   *
+   *  Omitted, the old behaviour stands (the caller has no side to violate). */
+  studentSide?: 'white' | 'black' | null,
 ): BakedPlyTeaching | null {
   if (historySans.length === 0) return null;
 
   /** Is `history` an exact prefix of this bake's spine, with an idea here? */
   const prefixIdea = (entry: BakedNarration): BakedPlyTeaching | null => {
-    if (entry.ideas.length !== entry.spine.length) return null;
+    // ── THE REGISTER THAT ADDRESSES THIS STUDENT ─────────────────────────
+    // Matching side → the primary ideas. Mismatched → the flipped register if
+    // this bake has one (2 of 23 do), and SILENCE if it does not.
+    //
+    // Silence is the right answer and not a reluctant one: the corpus tier
+    // below reaches most of these plies anyway (measured 81 borrowed + 20
+    // position-keyed over 118 turns), so refusing here costs a little baked
+    // prose and buys teaching that is about the right player. Speaking the
+    // opponent's plan to the student in the first person is worse than saying
+    // nothing — "empty > generic > invented", and this is invented in the only
+    // way that matters, about WHO.
+    const mismatched = Boolean(studentSide) && Boolean(entry.studentSide)
+      && studentSide !== entry.studentSide;
+    const ideas = mismatched ? entry.ideasFlipped : entry.ideas;
+    if (!ideas || ideas.length !== entry.spine.length) return null;
     if (historySans.length > entry.spine.length) return null;
     for (let i = 0; i < historySans.length; i += 1) {
       if (entry.spine[i] !== historySans[i]) return null;
     }
-    const idea = entry.ideas[historySans.length - 1];
+    const idea = ideas[historySans.length - 1];
     if (!idea?.text?.trim()) return null;
     return {
       openingName: entry.openingName,

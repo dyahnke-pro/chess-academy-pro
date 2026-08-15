@@ -6117,7 +6117,9 @@ export function CoachTeachPage(): JSX.Element {
       // prose about it sitting on disk. Ask about the reply first, then about
       // the move the student actually made.
       const unspoken = (h: string[]) => {
-        const hit = bakedTeachingForPly(wanted, h);
+        // THE SIDE GOES WITH IT. A bake records whose teaching it is; without
+        // this the coach reads White's first-person plan to a Black student.
+        const hit = bakedTeachingForPly(wanted, h, args.studentColor);
         return hit && !bakedPlySeenRef.current.has(hit.ply) ? hit : null;
       };
       const baked = unspoken(history)

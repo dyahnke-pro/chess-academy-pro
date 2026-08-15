@@ -308,8 +308,8 @@ describe('computed voice audit', () => {
         let noteLine: string | null = null;
         let noteTier = '';
         try {
-          const baked = bakedTeachingForPly(openingName, history)
-            ?? (history.length > 1 ? bakedTeachingForPly(openingName, history.slice(0, -1)) : null);
+          const baked = bakedTeachingForPly(openingName, history, game.student)
+            ?? (history.length > 1 ? bakedTeachingForPly(openingName, history.slice(0, -1), game.student) : null);
           if (baked && !bakedPlySeen.has(baked.ply)) {
             bakedPlySeen.add(baked.ply);
             noteLine = baked.text;
