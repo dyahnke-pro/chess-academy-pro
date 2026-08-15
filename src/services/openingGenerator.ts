@@ -48,7 +48,10 @@ import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates
 import { materialBalance } from './materialClaimValidator';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
-import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
+import {
+  buildDanyaTeachingBlock, noteAtPosition, notesAtPosition, spokenBeatText,
+} from './danyaTeachingService';
+import { addsSomething } from './layeredNarration';
 import { authoredNoteAt, authoredEntryFor } from './authoredOpeningNotes';
 import authoredRepertoire from '../data/repertoire.json';
 import { deriveNarrationArrows } from './narrationArrows';
@@ -1171,23 +1174,39 @@ export function noteArrowSourceAt(
     // result here left 647 of 1,310 plies silent, because retrieval kept handing
     // back a note the lesson had already spoken and had no way to be asked for
     // the next one.
-    const note = noteAtPosition(historySans, fen, openingName, seenIds);
-    if (!note) return null;
-    // SPOKEN register, not the full beat. `teachingBeatText` concatenates
-    // explains+teaches+plans (median 544 chars) and the splice then stacked
-    // generated prose on top — ~130 spoken words for one move. David 2026-08-05:
-    // "a bit too wordy … droned on with long strings of FENs which lost me."
-    // `spokenBeatText` is explains-only, recitation sentences dropped, capped
-    // at a sentence boundary; teaches/plans still reach the model via the
-    // lesson-level teaching block.
-    const graded = gradeNarrationText(spokenBeatText(note), fen, 'openingGenerator.noteArrows');
-    if (!graded?.trim()) return null;
-    seenIds.add(note.id);
-    return graded;
+    // NO CAP — speak every note here that ADDS something (David 2026-08-15:
+    // "no cap! if it adds something new speak it").
+    //
+    // Returning one note per ply was never a pedagogical choice, it was the
+    // shape of the selector, and it cost real teaching: 108 plies that spoke
+    // had 554 further usable notes queued behind the winner. The worry about
+    // flooding a lesson does not survive the data either — 766 of 1,310 plies
+    // have NO usable note at all, so nothing is added where there was nothing
+    // to say.
+    //
+    // CONTENT is the limit, not a count. `addsSomething` compares each
+    // candidate against what this ply has already said, so a second note has to
+    // earn its place by being about something else; two sources rephrasing one
+    // idea collapse to one line. Every note still passed every gate in
+    // `notesAtPosition` first — this widens how MANY verified notes may speak,
+    // never what qualifies.
+    const notes = notesAtPosition(historySans, fen, openingName, seenIds);
+    if (notes.length === 0) return null;
+    const parts: string[] = [];
+    for (const n of notes) {
+      const graded = gradeNarrationText(spokenBeatText(n), fen, 'openingGenerator.noteArrows');
+      const text = graded?.trim();
+      if (!text) continue;
+      if (parts.length > 0 && !addsSomething(text, parts.join(' '))) continue;
+      parts.push(text);
+      seenIds.add(n.id);
+    }
+    return parts.length > 0 ? parts.join(' ') : null;
   } catch {
     return null; // the corpus is a bonus, never a blocker
   }
 }
+
 
 /** The ply's arrows: the ORANGE trail on the move just played, plus GREEN
  *  vision arrows for the moves the GROUNDING SOURCE names.
