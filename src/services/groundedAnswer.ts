@@ -1276,9 +1276,14 @@ export function assembleMovePurpose(opts: {
     try {
       defended = afterBoard.attackers(mv.to, enemy).length > 0;
     } catch { /* keep the cautious reading */ }
+    // PHRASED SO IT DOES NOT LOCATE THE CAPTURED PIECE. "takes the pawn on e4"
+    // reads as a claim that a pawn is on e4 — and after the capture the square
+    // holds the CAPTURER, so the board-truth gate refused the sentence and the
+    // ply went silent. The gate was right. The square belongs to the action
+    // ("captures on e4"), and the victim is named without one.
     clauses.push(defended
-      ? `The ${pieceName} takes the ${takenName} on ${mv.to}.`
-      : `The ${pieceName} takes the ${takenName} on ${mv.to}, and nothing recaptures.`);
+      ? `The ${pieceName} captures on ${mv.to}, taking a ${takenName}.`
+      : `The ${pieceName} captures on ${mv.to}, taking a ${takenName} that nothing recaptures.`);
   }
 
   const geo = isCastle || mv.captured

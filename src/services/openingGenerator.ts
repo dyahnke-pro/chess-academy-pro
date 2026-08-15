@@ -40,6 +40,7 @@ import {
   findShortestCanonicalPgn,
   resolveTeachSpine,
   findContinuationsAtPly,
+  detectOpening,
   inferStudentSideFromName,
   type ForkBranch,
 } from './openingDetectionService';
@@ -47,6 +48,7 @@ import { db, type CachedOpening } from '../db/schema';
 import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates';
 import { materialBalance } from './materialClaimValidator';
 import { assembleMovePurpose } from './groundedAnswer';
+import { buildTacticsLiveContext } from './liveTacticsContext';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import { noteAtPosition, spokenBeatText } from './danyaTeachingService';
@@ -2337,17 +2339,77 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       // is not close. Over the Ruy and Caro main lines the corpus spoke on 6 of
       // 38 plies and four of those were false; this speaks on 38 of 38 and
       // every clause is checkable against the board in front of the student.
+      const moverColor: 'white' | 'black' = i % 2 === 0 ? 'white' : 'black';
+      // THE TACTIC ON THE BOARD, computed. `assembleMovePurpose` has always
+      // accepted a tactics context and used it for its "The point:" clause —
+      // the sentence that says what the move actually THREATENS rather than
+      // where it went — and the walkthrough never supplied one, so every beat
+      // was the geometry clause alone. That is most of why the computed voice
+      // reads flat.
+      //
+      // Passed WITHOUT an engine analysis on purpose (`null`): that path still
+      // yields immediate tactics and hanging pieces from chess.js alone, which
+      // is the half that is true of the position right now. The PV-scanned
+      // half — threats and opportunities several plies out — needs Stockfish
+      // and would put an engine call on every ply of every generation; it is
+      // the next step, not this one.
+      //
+      // ONLY WHAT THIS MOVE CREATED. Handing the raw context in was worse than
+      // silence: a static feature of the position was announced as "the point"
+      // of every move that followed it. On the Ruy, "bishop on a4 skewers
+      // knight on c6" was spoken as the point of Ba4, then Nf6, then O-O, then
+      // Be7, then Re1 — five different moves, one unchanged fact, none of them
+      // its cause. It is TRUE and it is not the point of any of them.
+      //
+      // So the tactic is diffed against the position BEFORE the move, and only
+      // what appeared survives. That is the question the clause claims to
+      // answer — what did this move bring about — and it is a computation, not
+      // a filter over prose.
+      let plyTactics = null;
+      try {
+        const side = moverColor === 'white' ? 'w' : 'b';
+        const after = buildTacticsLiveContext(p.fen, null, side, 1500);
+        const fenBefore = i === 0 ? new Chess().fen() : positions[i - 1].fen;
+        const before = buildTacticsLiveContext(fenBefore, null, side, 1500);
+        const wasThere = new Set(
+          [...before.immediate, ...before.opportunities].map((t) => t.description),
+        );
+        plyTactics = {
+          ...after,
+          immediate: after.immediate.filter((t) => !wasThere.has(t.description)),
+          opportunities: after.opportunities.filter((t) => !wasThere.has(t.description)),
+        };
+      } catch { /* a fact computer is a bonus, never a blocker */ }
       const computed = assembleMovePurpose({
         fenBefore: i === 0 ? new Chess().fen() : positions[i - 1].fen,
         san: p.san,
-        moverColor: i % 2 === 0 ? 'white' : 'black',
+        moverColor,
+        tactics: plyTactics,
       });
       const computedText = computed?.facts?.trim();
       if (computedText) {
         const graded = gradeNarrationText(computedText, p.fen, 'openingGenerator.computedPurpose');
         if (graded?.trim()) {
-          plyNoteText[i] = graded;
-          return generated ? `${graded} ${generated}` : graded;
+          // NAME THE LINE THE MOVE JUST REACHED. The first thing a coach does
+          // when a position acquires a name is say the name, and the DB knows
+          // it exactly (G3 — the Lichess opening database is the canon, so
+          // this is a lookup, never a recollection).
+          //
+          // Only on the ply where the name CHANGES: repeating "this is the Ruy
+          // Lopez" for fifteen consecutive moves is noise, and the transition
+          // is the moment worth marking. `detectOpening` walks a trie, so this
+          // is a map descent per ply rather than a scan.
+          let named = '';
+          try {
+            const now = detectOpening(prefix)?.name ?? null;
+            const before = i === 0
+              ? null
+              : detectOpening(positions.slice(0, i).map((q) => q.san))?.name ?? null;
+            if (now && now !== before) named = `This is the ${now}. `;
+          } catch { /* the name is a bonus, never a blocker */ }
+          const withName = `${named}${graded}`;
+          plyNoteText[i] = withName;
+          return generated ? `${withName} ${generated}` : withName;
         }
       }
       return fallback;

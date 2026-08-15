@@ -178,6 +178,10 @@ const GATE_TESTS = [
   'src/services/planPrescriptions.test.ts',
   'src/data/lessons/lessonIntegrity.test.ts',
   'src/data/lessons/narrationAccuracy.test.ts',
+  // The COMPUTED narration tier — the one that replaced the farmed corpus
+  // (2026-08-15). Content-gate class: it is the only thing standing between a
+  // student and a sentence about a different move.
+  'src/services/computedNarrationTruth.test.ts',
   'src/data/lessons/narrationGrounding.test.ts',
   'src/data/lessons/lessonDepth.test.ts',
   'src/data/lessons/courseScope.test.ts',
