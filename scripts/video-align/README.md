@@ -66,10 +66,66 @@ python3 scripts/video-align/scan_video.py v.mp4 /tmp/frames 284 -2.4 44.4 2
 node scripts/video-align/track.mjs /tmp/frames/grids.json
 ```
 
+```bash
+# 5. timeline + notes -> positions for notes that had none
+node scripts/video-align/align-notes.mjs --video ykmGxE9DURo \
+     --track /tmp/vidtest/track2.json           # add --apply to write
+```
+
 Pilot result on *"Trashing the Traxler"* — `e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5`,
-the Two Knights into the Fried Liver, with a timestamp on every ply. Since every
-distilled note carries a transcript timestamp, that is the join: **timestamp →
-FEN**.
+the Two Knights into the Fried Liver, with a timestamp on every ply.
+
+## The join is NOT a timestamp — that claim was wrong
+
+This file used to end with "since every distilled note carries a transcript
+timestamp, that is the join: timestamp → FEN". It was written before the field
+was checked. **0 of the 11,426 shipped Naroditsky notes carry a timestamp.**
+The distiller retains it going forward, but the corpus we already have was
+farmed without it, and re-distilling 58,124 notes to recover one field is not
+the cheapest route.
+
+Two properties of the corpus replace it, and between them they are enough:
+
+- **ORDER.** Notes come out of a video in transcript order, so their moments
+  run forward. That turns a scatter of possible matches into a monotone
+  alignment, and it is what separates the same line taught twice.
+- **MOVES.** Teaching prose names the moves. The tracker knows which moves were
+  on the board and when — rewinds included — so a recited sequence usually
+  identifies its own moment.
+
+Three things decide WHICH moment, in this order of authority:
+
+1. **Where the pieces are.** "Dislodge the knight from d4" is a present-tense
+   assertion about the board, and it outranks everything else — it locates the
+   PLY. Without it, two notes about that knight sat at the position after `d4`,
+   before Black's knight had gone there at all.
+2. **What was just played**, counting only moves the prose ASSERTS. A move
+   introduced by "if" or "after" has not happened, and treating it as history
+   files the note one ply late — "if Black plays d5" belongs before d5, not
+   after it.
+3. **What the line contains**, which locates the segment rather than the ply.
+
+## Nothing enters the corpus on the video's word
+
+The video only ever PROPOSES. A proposal is then certified two ways, and a note
+needs one:
+
+- **The claim gate** — `recoverPosition`, the same function `recover-positions`
+  already applies to the primary corpus. Every piece-on-square claim must be
+  true at the position, and it can also walk the note forward to the exact ply
+  it describes.
+- **Legality** — a move of a NAMED PIECE to a NAMED SQUARE must be legal, twice
+  in sequence, from the proposed board.
+
+The second exists because the first cannot fire here: teaching prose says
+"bishop takes d5", not "the bishop on d5", so on the first pilot run every
+correct proposal was refused as `no-claims` while naming its position
+unmistakably. Legality asks chess instead of phrasing — and it is a real bar,
+because a proposal at the wrong moment has the pieces in the wrong places.
+
+Pilot outcome: **12 unpositioned notes → 6 positioned, 0 wrong** on inspection.
+Four certified by the strict claim gate, two by legality. The other six name no
+verifiable move and stay unpositioned, which is the correct answer for them.
 
 ## Environment notes (each of these cost real time)
 
@@ -121,5 +177,10 @@ making the search smarter.
   different boards — a confidently wrong geometry produces confidently wrong
   positions. The tracker's exact-match rule is the backstop (a bad grid matches
   no legal move and is dropped), but that is the last line, not a substitute.
-- **Joining to the notes.** Timestamp -> FEN exists now; mapping distilled
-  notes onto it is the remaining step.
+- **Scale.** The aligner is proven on ONE video. 421 Naroditsky videos carry
+  notes, 10,144 of those notes have no position, and 3,641 of them recite two
+  or more moves — which is the population this can reach. Each video needs a
+  download, a frame scan and a tracker run before the aligner sees it.
+- **Notes that name no move** (six of nineteen on the pilot) stay unpositioned.
+  Order places them in a window, but nothing in them can be verified against a
+  board, so they are refused rather than guessed at.
