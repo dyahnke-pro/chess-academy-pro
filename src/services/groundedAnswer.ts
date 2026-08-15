@@ -20,6 +20,7 @@ import type { BadHabit, LessonScript, MoveAnnotation } from '../types';
 import type { MasterPlayResult } from './masterPlayTypes';
 import type { ConceptEntry } from './chessConceptService';
 import type { TablebaseLookupResult } from './lichessTablebaseService';
+import { describeStructuralChange } from './boardStructure';
 
 // Pure board-fact constants — universal chess values, leaf-local so this module
 // imports nothing that could loop back. coachFeatureService imports these FROM
@@ -1259,11 +1260,23 @@ export function assembleMovePurpose(opts: {
   // quiet advance and loses the capture entirely. Both were true of the
   // destination square and wrong about the move.
   const isCastle = opts.san.startsWith('O-O');
+  const sacrifice = isCastle ? null : describeSacrifice(opts.fenBefore, opts.san);
   if (isCastle) {
     const side = opts.san.startsWith('O-O-O') ? 'queenside' : 'kingside';
     clauses.push(
       `The king castles ${side}, tucking away behind its pawns and bringing the rook toward the centre.`,
     );
+  } else if (sacrifice) {
+    // A SACRIFICE IS NAMED AS ONE. `describeSacrifice` has always been able to
+    // tell a sac from a trade — it compares what was captured against what the
+    // opponent wins back on the square — and nothing called it, so Bxf7+
+    // giving up a bishop for a pawn came out as "the bishop captures on f7,
+    // taking a pawn". That is true and it buries the entire point of the move.
+    //
+    // Soundness is deliberately NOT claimed here: on one ply a brilliant decoy
+    // and a blunder look identical, and the difference is the follow-up. The
+    // move is named a sacrifice; whether it WORKS is the engine's to say.
+    clauses.push(`The ${pieceName} ${sacrifice.replace(/^sacrifices the \w+ /, 'sacrifices itself ')}.`);
   } else if (mv.captured) {
     const takenName = REVIEW_PIECE_NAME[mv.captured];
     // Whether it WINS material is a separate claim from whether it captures,
@@ -1291,7 +1304,7 @@ export function assembleMovePurpose(opts: {
     : describeMoveGeometry(opts.fenBefore, opts.san, opts.moverColor);
   if (geo) {
     clauses.push(`The ${pieceName} ${geo}.`);
-  } else if (isCastle || mv.captured) {
+  } else if (isCastle || sacrifice || mv.captured) {
     /* already described above */
   } else if (mv.piece === 'p') {
     // "staking out space in the center" is FALSE for a wing pawn (h4, a3, g3…).
@@ -1327,6 +1340,20 @@ export function assembleMovePurpose(opts: {
   // 3) THE POINT — the threat/opportunity the move creates (computed tactics).
   const point = opts.tactics?.opportunities?.[0] ?? opts.tactics?.immediate?.[0];
   if (point?.description) clauses.push(`The point: ${lowerFirst(point.description)}.`);
+
+  // 3b) WHAT IT CHANGED ABOUT THE STRUCTURE — the open file, the passed pawn,
+  //     the outpost, the doubled pawns, the torn king shield, the endgame that
+  //     just arrived. `describeStructure` has computed all of it since the day
+  //     it was written and no narration path ever asked: the voice could say
+  //     where a piece went and what it hit, and nothing about what the move DID
+  //     to the position.
+  //
+  //     Stated as a change, never a description — "the c-file is open" is true
+  //     of twenty consecutive plies and is the point of exactly one of them.
+  const structural = describeStructuralChange(
+    opts.fenBefore, afterBoard.fen(), opts.moverColor === 'white' ? 'w' : 'b',
+  );
+  if (structural) clauses.push(structural);
 
   // 4) THE PLAN — the mover's follow-up in the engine PV (index 1; index 0 is
   //    the opponent's reply).

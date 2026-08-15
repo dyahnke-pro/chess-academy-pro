@@ -466,3 +466,97 @@ export function structureMatchScore(a: StructureSignature, b: StructureSignature
   const d = structureMatchDetail(a, b);
   return d.weight > 0 ? d.score / d.weight : 0;
 }
+
+/**
+ * What this move CHANGED about the structure, in one sentence, or null.
+ *
+ * `describeStructure` has always computed the facts a coach actually talks
+ * about — open files, passed pawns, doubled and isolated pawns, outposts, the
+ * king's pawn shield, the endgame that has arrived — and none of it reached the
+ * narration. The per-ply voice could say where a piece went and what it
+ * attacked, and nothing about what the move DID to the position.
+ *
+ * Stated as a CHANGE rather than a description, for the same reason the tactic
+ * clause is diffed: "the c-file is open" is true of twenty consecutive plies
+ * and is the point of exactly one of them — the capture that opened it. A
+ * description repeated every move is noise; the moment it becomes true is
+ * teaching.
+ *
+ * Ordered by what a coach would lead with, and only the first is spoken: a
+ * passed pawn outranks a new open file, which outranks a structural weakness,
+ * which outranks a king's shield being torn. Everything here is read off two
+ * boards with chess.js — no engine, no model (G0).
+ */
+export function describeStructuralChange(
+  fenBefore: string,
+  fenAfter: string,
+  moverColor: Color,
+): string | null {
+  const before = describeStructure(fenBefore);
+  const after = describeStructure(fenAfter);
+  if (!before || !after) return null;
+  const them: Color = moverColor === 'w' ? 'b' : 'w';
+  const side = moverColor === 'w' ? 'White' : 'Black';
+  const other = moverColor === 'w' ? 'Black' : 'White';
+  const gained = (a: string[], b: string[]): string[] => b.filter((x) => !a.includes(x));
+
+  // 1) A PASSED PAWN — the single most consequential structural event, because
+  //    it is the thing endgames are decided by.
+  const newPassed = gained(before.pawns.passedPawns[moverColor], after.pawns.passedPawns[moverColor]);
+  if (newPassed.length > 0) {
+    return `That creates a passed pawn on ${newPassed[0]} — nothing can stop it by pawn alone.`;
+  }
+
+  // 2) A FILE OPENS. Named for whoever it serves: fully open belongs to both,
+  //    half-open to the side whose pawn has left it.
+  const newOpen = gained(before.pawns.openFiles, after.pawns.openFiles);
+  if (newOpen.length > 0) {
+    return `The ${newOpen[0]}-file opens — that is where the rooks belong now.`;
+  }
+  const newHalf = gained(before.pawns.halfOpenFiles[moverColor], after.pawns.halfOpenFiles[moverColor]);
+  if (newHalf.length > 0) {
+    return `That leaves ${side} a half-open ${newHalf[0]}-file to press down.`;
+  }
+
+  // 3) AN OUTPOST is established — a square no enemy pawn can ever contest.
+  const outpostKey = (o: { color: Color; square: string }): string => `${o.color}${o.square}`;
+  const hadOutpost = new Set(before.outposts.map(outpostKey));
+  const newOutpost = after.outposts.find((o) => o.color === moverColor && !hadOutpost.has(outpostKey(o)));
+  if (newOutpost) {
+    const piece = newOutpost.piece === 'n' ? 'knight' : 'bishop';
+    return `The ${piece} lands on ${newOutpost.square} as an outpost — no pawn can ever chase it off.`;
+  }
+
+  // 4) A STRUCTURAL WEAKNESS APPEARS. The opponent's is worth naming as a
+  //    target; the mover's own is worth naming as the price, and a coach who
+  //    only ever mentions the opponent's weaknesses is selling something.
+  const theirDoubled = gained(before.pawns.doubledFiles[them], after.pawns.doubledFiles[them]);
+  if (theirDoubled.length > 0) {
+    return `${other} is left with doubled pawns on the ${theirDoubled[0]}-file.`;
+  }
+  const ourDoubled = gained(before.pawns.doubledFiles[moverColor], after.pawns.doubledFiles[moverColor]);
+  if (ourDoubled.length > 0) {
+    return `The cost is doubled pawns on the ${ourDoubled[0]}-file.`;
+  }
+  const theirIsolated = gained(before.pawns.isolatedPawns[them], after.pawns.isolatedPawns[them]);
+  if (theirIsolated.length > 0) {
+    return `${other}'s pawn on ${theirIsolated[0]} is isolated now — no pawn can ever defend it.`;
+  }
+
+  // 5) THE KING'S SHIELD IS TORN. Only the opponent's, and only when a pawn in
+  //    front of the king actually goes: this is an attacking signal, not a
+  //    running commentary on king position.
+  if (after.kings.shieldPawns[them] < before.kings.shieldPawns[them]) {
+    return `${other}'s king loses a pawn from its shield.`;
+  }
+
+  // 6) THE ENDGAME ARRIVES — the phase transition, named once when it happens.
+  if (!before.material.endgameType && after.material.endgameType) {
+    return `This is an endgame now: ${after.material.endgameType}.`;
+  }
+  if (before.material.queensOn && !after.material.queensOn) {
+    return `With the queens off, the game changes character.`;
+  }
+
+  return null;
+}
