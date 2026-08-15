@@ -112,6 +112,67 @@ const PIECE_LETTER = {
 };
 
 /**
+ * How deep a video-proposed position must be before it counts as evidence.
+ *
+ * The corpus floor is 3 plies and it is far too low HERE. At move two almost
+ * every recited move is legal, so the legality check certifies anything: the
+ * first batch put a note about "the Sicilian, e4 c5" onto the position after
+ * `e4 e5`, and another about a rook on the open a-file onto the same board.
+ * Both passed because their moves were legal — of course they were, nothing is
+ * blocked yet.
+ *
+ * Eight plies is where a position starts to discriminate, and it costs nothing
+ * worth having: shallow book positions are the one place the corpus already
+ * speaks, and the whole point of reading the video is the middlegame depth the
+ * corpus lacks.
+ */
+const MIN_EVIDENCE_PLIES = 8;
+
+/** Opening names the prose claims to be about. Deliberately narrow — a capital
+ *  word followed by a family word is a name; a bare capitalised word is not. */
+const NAMED_OPENING =
+  /\b((?:[A-Z][\w'-]+ )+(?:Defen[cs]e|Attack|Gambit|System|Variation|Opening|Game))\b/g;
+
+/** What opening the BOARD is in: the longest DB entry this line begins with. */
+function openingNameFor(lineSan, db) {
+  const line = lineSan.join(' ');
+  let best = null;
+  for (const e of db) {
+    if (line !== e.pgn && !line.startsWith(`${e.pgn} `)) continue;
+    if (!best || e.pgn.length > best.pgn.length) best = e;
+  }
+  return best?.name ?? null;
+}
+
+const tokensOf = (name) => new Set(
+  name.toLowerCase().replace(/defence/g, 'defense')
+    .split(/[^a-z']+/).filter((t) => t.length > 2),
+);
+
+/**
+ * Does the note claim to be about a DIFFERENT opening than the board is in?
+ *
+ * This is the app's own `noteStaysInScope` rule applied one step earlier. It
+ * has to be here rather than left to retrieval, because a position written into
+ * the corpus is permanent: a London System note filed at a `Nc3 e5 f4` line is
+ * wrong for every future lookup, not just this one.
+ */
+function noteContradictsOpening(prose, lineSan, db) {
+  const boardName = openingNameFor(lineSan, db);
+  if (!boardName) return false; // board not in the DB — nothing to contradict
+  const board = tokensOf(boardName);
+  NAMED_OPENING.lastIndex = 0;
+  const claimed = [...prose.matchAll(NAMED_OPENING)].map((m) => m[1]);
+  if (claimed.length === 0) return false;
+  // ANY overlap clears it — teaching compares openings constantly, and a note
+  // that mentions this opening alongside another is on topic.
+  return !claimed.some((name) => {
+    for (const t of tokensOf(name)) if (board.has(t)) return true;
+    return false;
+  });
+}
+
+/**
  * The moves a note NAMES, in the order it names them — from both notations,
  * because teaching prose mixes them freely in the same sentence.
  *
@@ -170,6 +231,37 @@ function recitedMoves(prose) {
  * Nothing here is heuristic about the PROSE (G0): every accept/reject is
  * decided by chess.js on a real board.
  */
+/**
+ * Every piece the prose says is on a square must BE on that square.
+ *
+ * Placement was being used to rank candidates and never to reject one, and the
+ * gap showed: "the queen on b6 has fulfilled its purpose" was certified at a
+ * position where the queen stands on c8, because the three moves it recited
+ * happened to be legal there. Legality says the position COULD host the note's
+ * moves; placement says the note is about THIS board.
+ *
+ * Only assertions count. A hypothetical clause is cut first, so "if the knight
+ * on d5 is sacrificed" is not read as a claim that a knight is on d5 — the same
+ * cut `recover-positions` makes before testing its own claims.
+ */
+function placementsHold(fen, prose) {
+  const asserted = prose
+    .split(/(?<=[.!?])\s+/)
+    .map((s) => {
+      const cut = HYPOTHETICAL.exec(s);
+      return cut ? s.slice(0, cut.index) : s;
+    })
+    .join(' ');
+  const claims = statedPlacements(asserted);
+  if (claims.length === 0) return { ok: true, checked: 0 };
+  for (const c of claims) {
+    if (pieceAt(fen, c.square) !== c.code) {
+      return { ok: false, checked: claims.length, failed: `${c.code}@${c.square}` };
+    }
+  }
+  return { ok: true, checked: claims.length };
+}
+
 function verifyByLegality(fen, prose) {
   const moves = recitedMoves(prose);
   if (moves.length < 2) return { ok: false, reason: 'names too few moves', legal: 0 };
@@ -319,6 +411,9 @@ function enforceOrder(assignments) {
   return assignments.filter((_, i) => keep.has(i));
 }
 
+const OPENINGS_DB = JSON.parse(readFileSync('src/data/openings-lichess.json', 'utf8'))
+  .filter((e) => e?.pgn && e?.name);
+
 function main() {
   const corpus = JSON.parse(readFileSync(CORPUS, 'utf8'));
   const notes = corpus.notes.filter((n) => (n.sources ?? []).includes(`yt:${VIDEO}`));
@@ -383,6 +478,20 @@ function main() {
   const refused = [];
   for (const p of ordered) {
     const prose = `${p.note.explains} ${p.note.teaches} ${p.note.plans ?? ''}`;
+    if (p.lineSan.length < MIN_EVIDENCE_PLIES) {
+      refused.push({
+        id: p.id, t: p.t, outcome: `position too shallow (${p.lineSan.length} plies)`,
+        proposedLine: p.lineSan.join(' '), prose: `${p.note.explains.slice(0, 140)}…`,
+      });
+      continue;
+    }
+    if (noteContradictsOpening(prose, p.lineSan, OPENINGS_DB)) {
+      refused.push({
+        id: p.id, t: p.t, outcome: 'note names a different opening than the board',
+        proposedLine: p.lineSan.join(' '), prose: `${p.note.explains.slice(0, 140)}…`,
+      });
+      continue;
+    }
     // TWO ways to certify, and a note only needs one.
     //
     // The claim gate is tried FIRST and wins when it fires, because it is the
@@ -392,6 +501,21 @@ function main() {
     const r = recoverPosition(p.lineSan, prose);
     if (r.lineSan && r.lineSan.length > 0) {
       accepted.push({ ...p, lineSan: r.lineSan, outcome: r.outcome });
+      continue;
+    }
+    // PLACEMENT gates the LEGALITY path only. The claim gate above already
+    // checks placement its own way AND can walk a note forward to the position
+    // its claims fit, so running this first would refuse notes that were merely
+    // filed a few plies early — the exact case `recover-positions` exists for.
+    // Below it, nothing else is checking the board, and legality alone let "the
+    // queen on b6 has fulfilled its purpose" through at a position where the
+    // queen stands on c8.
+    const placed = placementsHold(p.step.fen, prose);
+    if (!placed.ok) {
+      refused.push({
+        id: p.id, t: p.t, outcome: `prose puts a ${placed.failed} that is not there`,
+        proposedLine: p.lineSan.join(' '), prose: `${p.note.explains.slice(0, 140)}…`,
+      });
       continue;
     }
     const byLegality = verifyByLegality(p.step.fen, prose);
