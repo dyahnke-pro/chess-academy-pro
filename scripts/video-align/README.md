@@ -172,15 +172,60 @@ making the search smarter.
 ## Not done yet
 
 - **Orientation.** A board shown from Black's side is not yet detected.
-- **Validation across themes.** The detector is proven on one chess.com layout.
-  Before running at scale it needs to earn its keep on several videos with
-  different boards — a confidently wrong geometry produces confidently wrong
-  positions. The tracker's exact-match rule is the backstop (a bad grid matches
-  no legal move and is dropped), but that is the last line, not a substitute.
-- **Scale.** The aligner is proven on ONE video. 421 Naroditsky videos carry
-  notes, 10,144 of those notes have no position, and 3,641 of them recite two
-  or more moves — which is the population this can reach. Each video needs a
-  download, a frame scan and a tracker run before the aligner sees it.
-- **Notes that name no move** (six of nineteen on the pilot) stay unpositioned.
-  Order places them in a window, but nothing in them can be verified against a
-  board, so they are refused rather than guessed at.
+- **Validation across themes.** DONE for nine videos — the detector found the
+  board on every one, after two fixes it needed: scoring checkerboard
+  separation instead of flatness (flatness rewards the blank UI panel), and
+  requiring four probe frames to AGREE (one frame at 10:00 confidently found
+  the webcam).
+## First batch: 9 videos, 38 of 426 unpositioned notes placed (8.9%)
+
+Run dry on 2026-08-15, and reading the output was the point — the FIRST pass
+placed 46 and sixteen of them were wrong, in ways no pass-rate would show. A
+Sicilian note at `e4 e5`; a London System note on a `Nc3 e5 f4` line; "the
+queen on b6 has fulfilled its purpose" at a board where the queen stands on c8.
+Three gates now catch each (depth floor, opening scope, placement enforcement,
+all described in align-notes.mjs), and every refusal names something
+falsifiable — `prose puts a q@b6 that is not there`.
+
+| video | unpositioned | placed | timeline steps |
+|---|---|---|---|
+| nkDlJMpLezk | 54 | 14 | 75 |
+| ykmGxE9DURo | 12 | 6 | 51 |
+| JKxlT73xpYo | 48 | 5 | 24 |
+| RzfG5SfKRak | 52 | 4 | 36 |
+| f8alAsVJRc8 | 47 | 4 | 9 |
+| lryqtSMy4pY | 56 | 4 | 24 |
+| zEqoGIgzk1E | 48 | 1 | 7 |
+| 2jXSWOTKx8M | 44 | 0 | 21 |
+| dfu5wt0wwFc | 65 | 0 | 36 |
+
+## The bottleneck is now the TRACKER, and it is sparsity not truncation
+
+Placements track the timeline-step column almost exactly, so the limit is how
+many board states get recognised — not the gates, and not the notes.
+
+The tracker does NOT die early: it spans the whole video (t=29 → 1980, t=17.5 →
+4694.5). It is SPARSE. A 60-90 minute speedrun contains hundreds of positions
+and it recognises nine to seventy-five, so most settled grids match no legal
+continuation within `MAX_PLY` of the last known position and are skipped.
+
+That points at read quality rather than search: matching is EXACT by design (a
+grid matching no legal move is dropped rather than believed), so a single
+misread square costs the whole frame. The right next move is to measure how
+many settled grids are one or two squares away from a legal successor before
+touching either the matcher or `MAX_PLY` — loosening the matcher without that
+number is the mistake this file already warns about twice.
+
+**Do not scale before fixing it.** At four placements a video and eleven
+minutes each, 421 videos is seventy-seven hours of compute for ~1,700
+positions. The same hours spent on read quality would multiply every video
+already processed.
+
+## Also still owed
+
+- **Orientation.** A board shown from Black's side is not yet detected.
+- **Notes that name no move** stay unpositioned. Order places them in a window,
+  but nothing in them can be checked against a board, so they are refused
+  rather than guessed at.
+- **A video that never shows the start position tracks nothing.** The tracker
+  builds forward and cannot recognise a position it did not walk into.
