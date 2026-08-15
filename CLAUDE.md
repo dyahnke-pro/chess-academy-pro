@@ -2216,6 +2216,30 @@ once it lands) is the runtime gate; this list is the design gate.
 
 Chess Academy Pro is an AI-powered chess training PWA built with React + TypeScript + Vite. It wraps as a native iOS app via Capacitor and is distributed through TestFlight. The app features an LLM-powered chess coach (Claude API), Stockfish WASM analysis, spaced repetition puzzles, opening training, and adaptive difficulty.
 
+### 🔒🔒 `main` IS THE FREE WEB APP. IT DOES **NOT** REACH PAYING CUSTOMERS — THE APP STORE DOES (David 2026-08-15, emphatic: "Main does not reach paying customers!! That's the App Store. Lock that in tired of saying this crap.").
+
+He has had to say this more than once, so it goes ABOVE the paying-customers
+section that keeps getting misread.
+
+Pushing to `main` deploys **chess-academy-pro.vercel.app** — the free, permanently
+unlocked web app (see the unlock promise below). Paying customers are on **iOS via
+the App Store**, and reaching them takes a SEPARATE, deliberate step: an Xcode
+Cloud build + TestFlight + a store submission, which only happens when David asks
+(see the iOS build rule in Deployment Policy).
+
+So `main` is NOT the paying-customer blast radius, and it must not be treated as
+one. Concretely, these are all WRONG and have each cost real time:
+
+- holding a finished, green change off `main` "because paying customers";
+- treating a `main` push as a release requiring extra ceremony;
+- citing the 2 paying members as a reason to be cautious about a web deploy.
+
+The standing order is unchanged and means what it says: **work on `main`, push to
+`main`, by default, without asking.** The web deploy is the fast, reversible,
+low-stakes half of this project — that is exactly why it is the default. Caution
+belongs at the App Store submission, which is a different action on a different
+day.
+
 ### 🔴🔴 THE APP IS LIVE ON THE APP STORE WITH PAYING CUSTOMERS (David 2026-08-03, LOCKED: "Lock into your memory where I stand with the App Store. It's live, have 21 downloads, and 2 paying members").
 
 **This is a SHIPPED, REVENUE-GENERATING product. It is NOT a beta and NOT a
