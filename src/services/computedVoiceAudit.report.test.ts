@@ -23,6 +23,11 @@ import { buildTacticsLiveContext } from './liveTacticsContext';
 import { buildPlayCommentary } from './playCommentary';
 import { findLivePunishment } from './gemCrushLines';
 import { teachingSourceForBoard, spokenBeatText, generalizedTeaching } from './danyaTeachingService';
+import { bakedTeachingForPly } from './bakedWalkthroughNarration';
+import { curatedBeatAt } from './curatedBeatSource';
+import { detectOpening } from './openingDetectionService';
+import { noteStaysInScope } from './noteAnchorIntegrity';
+import { gradeBorrowedTeaching } from './coachAnswerGates';
 import { buildVoicePackage, type VoiceFact, type VoiceFactKind } from './voicePackage';
 import { gradeNarrationText } from './coachAnswerGates';
 import { tacticWord } from './lookaheadPlan';
@@ -83,10 +88,26 @@ class Engine {
 const GAMES: Array<{ name: string; student: 'white' | 'black'; sans: string[] }> = [
   { name: 'Pirc (David\'s prod game)', student: 'white',
     sans: ['e4', 'd6', 'd4', 'Nf6', 'Nc3', 'g6', 'Be3', 'Bg7', 'f4', 'c6', 'Be2', 'b5', 'a3', 'a5', 'Nf3', 'Ng4', 'Bg1', 'e5', 'fxe5', 'dxe5', 'h3', 'Nh6', 'd5', 'Qb6'] },
-  { name: 'Italian', student: 'white',
+  { name: 'Italian (Giuoco Pianissimo)', student: 'white',
     sans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'c3', 'Nf6', 'd3', 'd6', 'O-O', 'O-O', 'Re1', 'a6', 'Nbd2', 'Ba7', 'Nf1', 'Ne7', 'Ng3', 'Ng6', 'd4', 'c6'] },
-  { name: 'Caro-Kann', student: 'black',
+  { name: 'Caro-Kann Classical', student: 'black',
     sans: ['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4', 'Bf5', 'Ng3', 'Bg6', 'h4', 'h6', 'Nf3', 'Nd7', 'h5', 'Bh7', 'Bd3', 'Bxd3', 'Qxd3', 'e6', 'Bf4', 'Ngf6'] },
+  { name: 'Ruy Lopez Closed', student: 'white',
+    sans: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'Nf6', 'O-O', 'Be7', 'Re1', 'b5', 'Bb3', 'd6', 'c3', 'O-O', 'h3', 'Na5', 'Bc2', 'c5', 'd4', 'Qc7'] },
+  { name: 'Sicilian Najdorf', student: 'black',
+    sans: ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Be3', 'e5', 'Nb3', 'Be6', 'f3', 'Be7', 'Qd2', 'O-O', 'O-O-O', 'Nbd7', 'g4', 'b5'] },
+  { name: 'French Winawer', student: 'black',
+    sans: ['e4', 'e6', 'd4', 'd5', 'Nc3', 'Bb4', 'e5', 'c5', 'a3', 'Bxc3+', 'bxc3', 'Ne7', 'Qg4', 'O-O', 'Bd3', 'Nbc6', 'Nf3', 'f5', 'exf6', 'Rxf6'] },
+  { name: "Queen's Gambit Declined", student: 'black',
+    sans: ['d4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5', 'Be7', 'e3', 'O-O', 'Nf3', 'h6', 'Bh4', 'b6', 'cxd5', 'Nxd5', 'Bxe7', 'Qxe7', 'Nxd5', 'exd5'] },
+  { name: "King's Indian Defence", student: 'black',
+    sans: ['d4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6', 'Nf3', 'O-O', 'Be2', 'e5', 'O-O', 'Nc6', 'd5', 'Ne7', 'Ne1', 'Nd7', 'Be3', 'f5'] },
+  { name: 'Vienna Gambit', student: 'white',
+    sans: ['e4', 'e5', 'Nc3', 'Nf6', 'f4', 'd5', 'fxe5', 'Nxe4', 'Nf3', 'Be7', 'd4', 'O-O', 'Bd3', 'f5', 'exf6', 'Bxf6'] },
+  { name: 'London System', student: 'white',
+    sans: ['d4', 'd5', 'Bf4', 'Nf6', 'e3', 'e6', 'Nf3', 'Bd6', 'Bg3', 'O-O', 'Bd3', 'b6', 'Nbd2', 'Bb7', 'Ne5', 'c5', 'c3', 'Nc6'] },
+  { name: 'Scandinavian', student: 'black',
+    sans: ['e4', 'd5', 'exd5', 'Qxd5', 'Nc3', 'Qa5', 'd4', 'Nf6', 'Nf3', 'c6', 'Bc4', 'Bf5', 'Bd2', 'e6', 'Nd5', 'Qd8', 'Nxf6+', 'gxf6'] },
   { name: 'Legal-style tactic', student: 'black',
     sans: ['e4', 'e5', 'Nf3', 'd6', 'Bc4', 'Bg4', 'Nc3', 'g6', 'Nxe5', 'Bxd1', 'Bxf7', 'Ke7', 'Nd5'] },
 ];
@@ -105,7 +126,7 @@ describe('computed voice audit', () => {
     let turnsWithAnyVoice = 0;
     let corpusOffered = 0;
     let corpusSuppressedByPv = 0;
-    const utterances: Array<{ game: string; ply: number; text: string }> = [];
+    const utterances: Array<{ game: string; ply: number; text: string; move: string; tier: string | null; lanes: string[] }> = [];
 
     for (const game of GAMES) {
       const c = new Chess();
@@ -123,6 +144,10 @@ describe('computed voice audit', () => {
       let lastComputedKey = '';
       const spokenTacticLines = new Set<string>();
       const spokenThreatLines = new Set<string>();
+      const bakedPlySeen = new Set<number>();
+      const curatedSeen = new Set<string>();
+      const corpusSeen = new Set<string>();
+      let openingName: string | null = null;
       let gameVoice = 0;
 
       for (let i = 0; i < game.sans.length; i += 1) {
@@ -268,6 +293,36 @@ describe('computed voice audit', () => {
           }
         } catch { /* bonus */ }
 
+        // ── THE TEACHING LADDER, in the surface's own order ────────────────
+        // bake → curated masterclass beat → corpus note AT this board. One per
+        // ply: both are verified-before-ship, and saying both stacks two
+        // teaching paragraphs onto one move.
+        let announceLine: string | null = null;
+        const det = (() => { try { return detectOpening(history); } catch { return null; } })();
+        if (det?.name && det.name !== openingName) {
+          const first = openingName === null;
+          openingName = det.name;
+          announceLine = first ? `This game is now the ${det.name}.` : `The line has sharpened into the ${det.name}.`;
+        }
+
+        let noteLine: string | null = null;
+        let noteTier = '';
+        try {
+          const baked = bakedTeachingForPly(openingName, history)
+            ?? (history.length > 1 ? bakedTeachingForPly(openingName, history.slice(0, -1)) : null);
+          if (baked && !bakedPlySeen.has(baked.ply)) {
+            bakedPlySeen.add(baked.ply);
+            noteLine = baked.text;
+            noteTier = 'baked';
+          }
+        } catch { /* bonus */ }
+        if (!noteLine) {
+          try {
+            const beat = curatedBeatAt(history, fenAfterReply, curatedSeen, openingName);
+            if (beat) { curatedSeen.add(beat.id); noteLine = beat.text; noteTier = 'curated'; }
+          } catch { /* bonus */ }
+        }
+
         // ── THE GEM ────────────────────────────────────────────────────────
         let gemLine: string | null = null;
         try {
@@ -280,6 +335,8 @@ describe('computed voice audit', () => {
           ...(gemLine ? [{ kind: 'gem' as const, text: gemLine, fen: fenAfterReply }] : []),
           ...(tacticLine ? [{ kind: 'tactic' as const, text: tacticLine, fen: fenAfterReply }] : []),
           ...(threatLine ? [{ kind: 'threat' as const, text: threatLine, fen: fenAfterReply }] : []),
+          ...(announceLine ? [{ kind: 'opening' as const, text: announceLine, fen: fenAfterReply }] : []),
+          ...(noteLine ? [{ kind: 'note' as const, text: noteLine, fen: fenAfterReply }] : []),
           ...(computedLine ? [{ kind: 'computed' as const, text: computedLine, fen: fenAfterReply }] : []),
         ];
         const instant = buildVoicePackage(instantFacts);
@@ -296,14 +353,32 @@ describe('computed voice audit', () => {
         // count how often the package refuses it for that reason alone.
         let borrowedOffered = 0;
         let borrowedSuppressed = 0;
-        try {
-          const src = teachingSourceForBoard(history, fenAfterReply, null);
-          const noteText = src ? spokenBeatText(src.note) : '';
-          if (noteText) {
-            borrowedOffered = 1;
-            lateFacts.push({ kind: 'borrowed', text: generalizedTeaching(src!.origin, noteText), fen: fenAfterReply });
-          }
-        } catch { /* bonus */ }
+        if (!noteLine) {
+          try {
+            // The surface's own predicate: a tier keeps looking rather than
+            // handing back a note the voice will drop.
+            const src = teachingSourceForBoard(
+              history, fenAfterReply, openingName,
+              (note) => !corpusSeen.has(note.id)
+                && noteStaysInScope(note, openingName)
+                && gradeBorrowedTeaching(spokenBeatText(note), fenAfterReply, 'audit.tier').length > 0,
+            );
+            const noteText = src ? gradeBorrowedTeaching(spokenBeatText(src.note), fenAfterReply, 'audit.tier') : '';
+            if (src && noteText.trim()) {
+              corpusSeen.add(src.note.id);
+              // 'position' is a note authored AT this board — the `note` rank.
+              // Everything else is teaching BORROWED from a different one.
+              if (src.origin === 'position') {
+                noteTier = 'corpus-position';
+                lateFacts.push({ kind: 'note', text: noteText, fen: fenAfterReply });
+              } else {
+                borrowedOffered = 1;
+                noteTier = `borrowed:${src.origin}`;
+                lateFacts.push({ kind: 'borrowed', text: generalizedTeaching(src.origin, noteText), fen: fenAfterReply });
+              }
+            }
+          } catch { /* bonus */ }
+        }
 
         const late = buildVoicePackage(lateFacts, instant.spoken);
         if (borrowedOffered) {
@@ -318,7 +393,15 @@ describe('computed voice audit', () => {
           for (const d of pkg.dropped) hits.push({ game: game.name, ply: history.length, kind: d.fact.kind, text: d.fact.text, spoken: false, dropReason: d.reason });
         }
         const said = [instant.spoken, late.spoken].filter(Boolean).join(' ');
-        if (said) { turnsWithAnyVoice += 1; gameVoice += 1; utterances.push({ game: game.name, ply: history.length, text: said }); }
+        if (said) {
+          turnsWithAnyVoice += 1; gameVoice += 1;
+          utterances.push({
+            game: game.name, ply: history.length, text: said,
+            move: `${studentMove.san} / ${coachMove.san}`,
+            tier: noteTier || null,
+            lanes: [...instant.kept, ...late.kept].map((f) => f.kind),
+          });
+        }
       }
       perGame.push({ game: game.name, turnsWithVoice: gameVoice });
     }
@@ -349,7 +432,7 @@ describe('computed voice audit', () => {
       corpus: { offered: corpusOffered, suppressedByLookahead: corpusSuppressedByPv, suppressionRate: corpusOffered ? Number((corpusSuppressedByPv / corpusOffered).toFixed(3)) : 0 },
       lanes,
       perGame,
-      utterances: utterances.slice(0, 40),
+      utterances,
     };
     mkdirSync('audit-reports', { recursive: true });
     writeFileSync('audit-reports/computed-voice-audit.json', JSON.stringify(report, null, 2));
