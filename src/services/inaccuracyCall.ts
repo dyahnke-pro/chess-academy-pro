@@ -160,9 +160,39 @@ export function callInaccuracy(args: {
     return null;
   }
 
-  const better = args.bestLineUci
-    ? whyBetter(args.fenBefore, args.bestLineUci, args.moverColor)
-    : null;
+  // ── WHEN THE MOVE WALKED INTO MATE, THAT IS THE WHY ─────────────────────
+  //
+  // David 2026-08-15: "Stating why a certain move is better than another?"
+  // Measured on a Scholar's-mate blunder, the answer was "g6 was the move — it
+  // would bring pieces to d6 and d7 over the next few moves." True, and a
+  // ludicrous thing to say about the move that stops mate in one. `whyBetter`
+  // reads the want-list of the line the better move produces, and a line that
+  // simply survives has no want-list worth the name — so the weakest clause on
+  // the board wins by default at the single highest-stakes moment in a game.
+  //
+  // COMPUTED, NOT ASSERTED (G0), and scoped to what can be settled without an
+  // engine: replay the better move and ask chess.js whether the opponent still
+  // has mate on the spot. Only claimed for `allowedMate === 1`, because that is
+  // the depth a one-ply legal-move scan can actually prove — a deeper mate needs
+  // a search this function is not given and would be a claim we have not earned.
+  const stopsMate = ((): boolean => {
+    if (args.allowedMate !== 1 || !args.bestSan) return false;
+    try {
+      const b = new Chess(args.fenBefore);
+      if (!b.move(args.bestSan)) return false;
+      return !b.moves().some((m) => {
+        const probe = new Chess(b.fen());
+        try { probe.move(m); } catch { return false; }
+        return probe.isCheckmate();
+      });
+    } catch { return false; }
+  })();
+
+  const better = stopsMate
+    ? { why: 'stop the mate', square: '' }
+    : args.bestLineUci
+      ? whyBetter(args.fenBefore, args.bestLineUci, args.moverColor)
+      : null;
   const cost = Math.round(Math.max(0, args.cpLoss));
 
   // THE COACH OWNS ITS OWN MISTAKES, IN THE FIRST PERSON, AND HANDS THE STUDENT

@@ -201,6 +201,19 @@ export interface SidePlan {
    *  the coupling that makes marks honest: a caller draws a clause's squares
    *  only after confirming that clause is in the utterance the student actually
    *  heard. See `planMarks`. */
+  /** The want-list, clause by clause, ranked — highest weight first.
+   *
+   *  🔒 EACH `text` IS A BARE VERB PHRASE, NEVER A FINISHED SENTENCE. It has to
+   *  read correctly spliced after BOTH "You want to …" (here) and "it would …"
+   *  (`inaccuracyCall.whyBetter`, which takes the leader as the single strongest
+   *  reason the better move was better). So: "win a pawn", "land a skewer",
+   *  "walk the bishop round to b3, by way of f7" — lowercase, no full stop.
+   *
+   *  Two producers broke this and both shipped ungrammatical callouts that every
+   *  board-truth gate passed, because each half was true and only the JOIN was
+   *  wrong. Keep new producers to the contract rather than teaching consumers to
+   *  detect the violation — a validator on prose is the thing G0 says to stop
+   *  writing. */
   spokenClauses: Array<{ text: string; squares: string[] }>;
 }
 
@@ -639,8 +652,16 @@ export function describePlan(
   // CHECKS ON THE WAY. Low weight on purpose — it is texture, not a plan — but
   // it is the difference between a quiet line and one the student has to
   // survive move by move.
+  //
+  // 🔒 AND IT CHECKS THE OTHER SIDE, WHICHEVER SIDE IS SPEAKING. This read
+  // `check you …` in both voices, so the student's OWN plan said "You want to …
+  // check you twice along the way" — the student checking themselves. Every
+  // sibling clause in this want-list takes its side from `theirKing`; this was
+  // the only one that hardcoded a pronoun, and being board-true (the checks are
+  // counted correctly) it was invisible to every gate.
   if (plan.checks >= 2) {
-    add(30, `check you ${plan.checks === 2 ? 'twice' : `${plan.checks} times`} along the way`);
+    const whom = voice === 'mine' ? 'them' : 'you';
+    add(30, `check ${whom} ${plan.checks === 2 ? 'twice' : `${plan.checks} times`} along the way`);
   }
   // WHAT THE PLAN LEAVES OUT IS NOT A CLAUSE — it is its own sentence, added
   // after the want-list at the bottom of this function. See the note there.
@@ -702,7 +723,13 @@ export function describePlan(
     if (said?.has(key)) return '';
     said?.add(key);
     const line = `${subject === 'You' ? "You're" : "They're"} bringing pieces to ${squares} over the next few moves.`;
-    plan.spokenClauses = [{ text: line, squares: heading }];
+    // THE CLAUSE, NOT THE SENTENCE. `spokenClauses[].text` is a bare verb
+    // phrase by contract — `inaccuracyCall.whyBetter` splices the leader
+    // straight after "it would ". Storing the finished SENTENCE here produced,
+    // on a real Two Knights blunder: "Na5 was the move — it would You're
+    // bringing pieces to c6 and a5 over the next few moves.." Board-true in
+    // every part, so no gate could see it; it is simply not English.
+    plan.spokenClauses = [{ text: `bring pieces to ${squares} over the next few moves`, squares: heading }];
     return line;
   }
 
@@ -836,10 +863,17 @@ function mergeTwinDrift(mine: SidePlan, theirs: SidePlan): void {
   mine.text = '';
   // The squares keep their owners, so the board still marks each half in its
   // own colour — the merge is a sentence change, never a fact change.
-  const merged = theirs.spokenClauses.concat(mine.spokenClauses)
-    .map((c) => ({ text: theirs.text, squares: c.squares }));
+  //
+  // 🔒 AND THE CLAUSES KEEP THEIR OWN TEXT, which is what that sentence claims
+  // and the code did not do: both halves were overwritten with `theirs.text`,
+  // the finished MERGED SENTENCE. `spokenClauses[].text` is a bare verb phrase
+  // by contract — `whyBetter` splices the leader after "it would " — so the
+  // merge was reaching out of its own scope and corrupting a downstream lane
+  // with a sentence. A fact change, in the one function documented not to make
+  // one.
+  const merged = theirs.spokenClauses.concat(mine.spokenClauses);
   theirs.spokenClauses = merged.filter((_, i) => i < 1);
-  mine.spokenClauses = merged.slice(1).map((c) => ({ text: theirs.text, squares: c.squares }));
+  mine.spokenClauses = merged.slice(1);
 }
 
 /**

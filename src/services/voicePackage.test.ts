@@ -190,15 +190,28 @@ describe('the corpus note is always first', () => {
     }
   });
 
-  it('the borrowed note now YIELDS to the computed plan, not just ranks below it', () => {
-    // This used to assert the borrowed line was spoken AFTER the plan. David
-    // 2026-08-10 went further — "I want more out of the PV and less from
-    // general rules. They do not match the board well enough" → "Do it." A
-    // plan about THIS board does not merely outrank a rule about some other
-    // one; when it speaks, the rule stands down. See the dedicated block below.
+  it('the borrowed note RANKS BELOW the plan but is no longer silenced by it', () => {
+    // The history of this one test is the history of the rule.
+    //
+    // It first asserted the borrowed line was spoken AFTER the plan. David
+    // 2026-08-10 went further — "I want more out of the PV and less from general
+    // rules" → "Do it" — and it became: when the plan speaks, the rule stands
+    // down.
+    //
+    // That was written for a plan that spoke occasionally. It does not:
+    // `computedVoiceAudit` measured it firing on 90% of student turns, and the
+    // corpus refused on 31 of the 33 turns it had something to say — 93.9%, for
+    // this reason alone. David 2026-08-15: "I don't want the corpus narrowed
+    // that much. I need to hear the teachings from the corpus!!"
+    //
+    // So it is back to ordering: the plan leads because it outranks, and the
+    // teaching still gets said. Both, and longer — which is the instruction
+    // ("The longer narrations are good. Do not cap them."). What still silences
+    // the borrowed tier is an EVENT lane, asserted below.
     const pkg = buildVoicePackage([at('borrowed', 'Borrowed line.'), at('plan', 'Plan line.')]);
     expect(pkg.spoken).toContain('Plan');
-    expect(pkg.spoken).not.toContain('Borrowed');
+    expect(pkg.spoken, 'the corpus must survive a routine forward plan').toContain('Borrowed');
+    expect(pkg.spoken.indexOf('Plan')).toBeLessThan(pkg.spoken.indexOf('Borrowed'));
   });
 });
 
@@ -259,12 +272,39 @@ describe('the general rule yields to the particular board', () => {
   const FEN = 'r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6';
   const borrowed = fact('borrowed', 'As a rule in these positions: trade pieces when ahead.', FEN);
 
-  it('drops the borrowed tier when the forward plan spoke', () => {
+  it('KEEPS the borrowed tier when only the routine forward plan spoke', () => {
+    // 🔒 THE REVERSAL, AND WHY. The forward plan is not an event: it needs only
+    // a 4-ply PV, which always exists, so it is present on essentially every
+    // turn by construction rather than because anything happened. Measured
+    // through this function over 40 real student turns it fired on 90% of them
+    // and took the corpus down on 93.9% of the turns the corpus had something —
+    // inverting the locked 90/10 ratio, with the notes reaching ~10%.
+    //
+    // A scope guard that fires nine times in ten is a silencer. The stand-down
+    // now keys on the EVENT lanes only (next three tests).
     const pkg = buildVoicePackage([
       borrowed,
       fact('plan', 'They want to win a pawn.', FEN),
     ]);
-    expect(pkg.kept.map((f) => f.kind)).toEqual(['plan']);
+    expect(pkg.kept.map((f) => f.kind)).toEqual(['plan', 'borrowed']);
+    expect(pkg.dropped).toHaveLength(0);
+  });
+
+  it('drops it when the student\'s own MISTAKE was called', () => {
+    const pkg = buildVoicePackage([
+      borrowed,
+      fact('mistake', 'Nf3 was the move — it would win a pawn.', FEN),
+    ]);
+    expect(pkg.kept.map((f) => f.kind)).toEqual(['mistake']);
+    expect(pkg.dropped[0]?.reason).toContain('look-ahead');
+  });
+
+  it('drops it when the COACH owned its own move', () => {
+    const pkg = buildVoicePackage([
+      borrowed,
+      fact('coachMistake', 'That was a mistake from me. d4 was the move.', FEN),
+    ]);
+    expect(pkg.kept.map((f) => f.kind)).toEqual(['coachMistake']);
     expect(pkg.dropped[0]?.reason).toContain('look-ahead');
   });
 

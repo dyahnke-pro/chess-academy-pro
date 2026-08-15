@@ -196,7 +196,43 @@ export function backwardLook(args: {
     }
 
     if (attempt || cost) {
-      const line = [attempt, cost ? `${cost.said} ${cost.opening}` : '']
+      // ── AND WHAT TO PLAY INSTEAD ─────────────────────────────────────────
+      //
+      // 🔒 THIS BRANCH USED TO RETURN HERE, so a move with a structural read
+      // NEVER got its alternative named. David 2026-08-15: "Is the delta
+      // working? Stating why a certain move is better than another?" — measured
+      // on six real blunders, the better move was named on two. The other three
+      // that spoke all took this early return, INCLUDING a mate-in-one: the
+      // coach explained the tactic that was coming and never said "g6 was the
+      // move". The highest-stakes moment in a game, and the half that tells the
+      // student what to do was missing.
+      //
+      // The two halves answer different questions and a student wants both:
+      // this one says what the move ATTEMPTED and what it COST, the callout says
+      // what should have been played and what THAT would have done. Reading in
+      // that order — attempt, cost, alternative — is one thought.
+      //
+      // Not a rank change: it stays `drawback`, so nothing about the locked lane
+      // order moves. It is strictly more teaching in the same slot, which is the
+      // right direction ("The longer narrations are good. Do not cap them.").
+      let instead: string | null = null;
+      if (args.bestSan) {
+        try {
+          const call = callInaccuracy({
+            fenBefore: args.fenBefore,
+            playedSan: args.playedSan,
+            bestSan: args.bestSan,
+            bestLineUci: args.bestPvUci,
+            cpLoss: args.cpLoss,
+            missedMate: args.missedMate ?? null,
+            allowedMate: args.allowedMate ?? null,
+            side: 'student',
+            moverColor: args.studentColor,
+          });
+          instead = call?.said ?? null;
+        } catch { /* the alternative is a bonus; the read still stands */ }
+      }
+      const line = [attempt, cost ? `${cost.said} ${cost.opening}` : '', instead ?? '']
         .filter(Boolean).join(' ');
       // The mark follows the same order: the square the ATTEMPT is about when
       // there is one, because that is what the sentence opens on.

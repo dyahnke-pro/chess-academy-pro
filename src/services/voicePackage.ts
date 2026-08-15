@@ -385,22 +385,47 @@ export function buildVoicePackage(
   // advantage makes development the priority" with no pawn advantage. Each is
   // true somewhere; none was true there.
   //
-  // So when the look-ahead has produced something about THIS position — the
-  // forward plan or the rear-facing consequence — the borrowed tier stands
-  // down. It still carries whole turns the PV cannot reach, which is most of
-  // its value and all of its reason to exist.
+  // So when the look-ahead has produced something about THIS position, the
+  // borrowed tier stands down. It still carries whole turns the PV cannot
+  // reach, which is most of its value and all of its reason to exist.
   //
   // A note authored AT this exact board is a different kind and is untouched:
   // the corpus note is always first (the 90/10 rule), and this is about the
   // tier that borrows, not the tier that belongs.
-  // Read off `kept`, never off the facts supplied: a plan that was COMPUTED but
+  //
+  // ── 🔒 BUT `plan` IS NOT AN EVENT, AND IT WAS SILENCING THE CORPUS ───────
+  //
+  // David 2026-08-15, shown the measurement: "I don't want the corpus narrowed
+  // that much. I need to hear the teachings from the corpus!!"
+  //
+  // The rule above was written for a look-ahead that spoke OCCASIONALLY, and
+  // `plan` does not: `computedVoiceAudit` over 40 student turns of four real
+  // games has it firing on 90% of them — it needs only a 4-ply PV, which always
+  // exists, so it is present on essentially every turn by construction rather
+  // than because the turn had something to report. Measured through this very
+  // function, the corpus was offered on 33 turns and refused on 31 of them —
+  // 93.9% — for this reason alone.
+  //
+  // That inverts the locked ratio (CLAUDE.md: "90% of what needs to be said to
+  // user lives within these notes"): the notes were reaching ~10% and the
+  // routine forward read was taking the rest. A scope guard that fires nine
+  // times in ten is not a scope guard, it is a silencer.
+  //
+  // So the stand-down is now keyed to the EVENT lanes — the backward-looking
+  // ones that fire because something actually happened on this board: a mistake,
+  // the coach's own, a concession. Those genuinely are "something about THIS
+  // position" and genuinely should outrank a rule borrowed from another one.
+  // The routine plan no longer counts, so a turn can carry both the plan and the
+  // corpus teaching — which is longer, and is the point (David, same message:
+  // "The longer narrations are good. Do not cap them.").
+  //
+  // Read off `kept`, never off the facts supplied: a fact that was COMPUTED but
   // then refused by board-grading has said nothing, and letting it silence the
   // corpus as well would turn one dropped sentence into a silent turn. Rank
-  // makes this safe — `plan` and `drawback` both outrank `borrowed`, so by the
-  // time a borrowed fact is considered, their verdict is already in.
+  // makes this safe — every lane below outranks `borrowed`, so by the time a
+  // borrowed fact is considered, their verdict is already in.
   const pvSpoke = (): boolean => kept.some(
-    (f) => f.kind === 'plan' || f.kind === 'drawback'
-      || f.kind === 'mistake' || f.kind === 'coachMistake',
+    (f) => f.kind === 'drawback' || f.kind === 'mistake' || f.kind === 'coachMistake',
   );
 
   for (const { f } of ordered) {
