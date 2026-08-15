@@ -32,8 +32,10 @@ import {
   notesForPrefix,
   notesForFen,
   noteOpeningConflicts,
+  anchorTeachesItsPosition,
   type DanyaNote,
 } from './danyaTeachingService';
+import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 import { secondaryNotesForPosition, secondaryNotesForFen } from './secondaryCorpora';
 import {
   noteDescribesPosition,
@@ -74,9 +76,15 @@ describe('note filter funnel — where candidate notes die', () => {
         noteTeachesChessNotItsSource: 0,
         noteStaysInScope: 0,
         noteOpeningConflicts: 0,
-        /** Survived every filter this harness can call, yet the note was still
-         *  not the one selected — the three private filters plus the
-         *  single-winner rule (noteAtPosition returns ONE note per ply). */
+        anchorTeachesItsPosition: 0,
+        noteContradictsLine: 0,
+        notePhaseMismatchesBoard: 0,
+        /** Survived EVERY filter and still was not selected. Now that the three
+         *  formerly-private filters are attributed above, what remains here is
+         *  only the single-winner rule — noteAtPosition returns ONE note per
+         *  ply, so with ~8 candidates per ply most losers were never rejected,
+         *  they simply lost. That distinction is the whole point: a tie-loser
+         *  is not evidence a gate is too strict. */
         survivedExportedFiltersButUnselected: 0,
       },
     };
@@ -90,6 +98,9 @@ describe('note filter funnel — where candidate notes die', () => {
       noteTeachesChessNotItsSource: 0,
       noteStaysInScope: 0,
       noteOpeningConflicts: 0,
+      anchorTeachesItsPosition: 0,
+      noteContradictsLine: 0,
+      notePhaseMismatchesBoard: 0,
       survivedExportedFiltersButUnselected: 0,
     };
     /** Plies that went silent, blamed on the filter that rejected EVERY
@@ -152,6 +163,10 @@ describe('note filter funnel — where candidate notes die', () => {
           if (!noteTeachesChessNotItsSource(n)) { tally.rejected.noteTeachesChessNotItsSource += 1; survivorsPerFilter.noteTeachesChessNotItsSource += 1; continue; }
           if (!noteStaysInScope(n, entry.name ?? null)) { tally.rejected.noteStaysInScope += 1; survivorsPerFilter.noteStaysInScope += 1; continue; }
           if (noteOpeningConflicts(n.opening, entry.name ?? null)) { tally.rejected.noteOpeningConflicts += 1; survivorsPerFilter.noteOpeningConflicts += 1; continue; }
+          // The three that used to be invisible.
+          if (!anchorTeachesItsPosition(n)) { tally.rejected.anchorTeachesItsPosition += 1; survivorsPerFilter.anchorTeachesItsPosition += 1; continue; }
+          if (noteContradictsLine(`${n.explains} ${n.teaches}`, history)) { tally.rejected.noteContradictsLine += 1; survivorsPerFilter.noteContradictsLine += 1; continue; }
+          if (notePhaseMismatchesBoard(n.phase, fen, history.length)) { tally.rejected.notePhaseMismatchesBoard += 1; survivorsPerFilter.notePhaseMismatchesBoard += 1; continue; }
           tally.rejected.survivedExportedFiltersButUnselected += 1;
           survivorsPerFilter.survivedExportedFiltersButUnselected += 1;
         }

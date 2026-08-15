@@ -151,7 +151,12 @@ export function noteOpeningConflicts(
  *  tier still reaches them for the lesson they actually belong to. */
 const MIN_TEACHING_ANCHOR_PLIES = 3;
 
-const anchorTeachesItsPosition = (n: DanyaNote): boolean =>
+/** Exported so the funnel report can ATTRIBUTE its rejections. While this was
+ *  private it fell into an "unselected" bucket of 4,076 candidates alongside
+ *  tie-losers and two other private filters — the largest number in the table
+ *  and the only one nobody could see inside. 688 plies were reported as dying
+ *  to "mixed" causes largely because of that blind spot. */
+export const anchorTeachesItsPosition = (n: DanyaNote): boolean =>
   n.lineSan.length >= MIN_TEACHING_ANCHOR_PLIES;
 
 
