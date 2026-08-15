@@ -1258,6 +1258,37 @@ class StockfishEngine {
       });
     }
 
+    // Priority contention rules:
+    //   1. Incoming brain call cancels any in-flight prefetch.
+    //   2. Incoming prefetch is DROPPED if a brain call is in flight
+    //      (real coaching work must not be preempted by speculative
+    //      warming).
+    //   3. Brain-on-brain serializes via `_brainMutex` — the in-flight
+    //      brain eval runs to completion before the new one starts,
+    //      since both are providing real coaching value.
+    //
+    // 🔒 RULE 2 IS EVALUATED BEFORE IN-FLIGHT COALESCING, AND HAS TO BE.
+    //
+    // The coalescing block below was added later and inserted ABOVE this, so a
+    // prefetch that rule 2 says must be DROPPED would instead join the brain's
+    // running search via `await shared` and block on it. The contract says a
+    // prefetch arriving behind a brain eval goes away; what actually happened
+    // is that it attached itself to the very work it was supposed to stay out
+    // of the way of.
+    //
+    // Proven by probe (2026-08-15): with a brain eval in flight and its
+    // bestmove withheld, the prefetch neither resolved nor rejected — it hung,
+    // never reaching the worker at all. Two tests had been red on `main` long
+    // enough to be assumed test rot; they were reporting this.
+    //
+    // A dropped prefetch must never join anything, so the drop decision comes
+    // first. Coalescing still applies to every call that is NOT dropped here —
+    // brain-on-brain and prefetch-on-prefetch keep sharing a search, which is
+    // the duplicate-work saving it was added for.
+    if (priority === 'prefetch' && this.pending?.priority === 'brain') {
+      throw new PrefetchDroppedError();
+    }
+
     // IN-FLIGHT COALESCING — share a search that is ALREADY RUNNING for this
     // exact position and depth instead of starting a second one. The cache
     // above is written only on COMPLETION, so before this, two callers racing
@@ -1283,18 +1314,6 @@ class StockfishEngine {
           /* the search we joined failed — run our own below */
         }
       }
-    }
-
-    // Priority contention rules:
-    //   1. Incoming brain call cancels any in-flight prefetch.
-    //   2. Incoming prefetch is DROPPED if a brain call is in flight
-    //      (real coaching work must not be preempted by speculative
-    //      warming).
-    //   3. Brain-on-brain serializes via `_brainMutex` — the in-flight
-    //      brain eval runs to completion before the new one starts,
-    //      since both are providing real coaching value.
-    if (priority === 'prefetch' && this.pending?.priority === 'brain') {
-      throw new PrefetchDroppedError();
     }
 
     const run = async (): Promise<StockfishAnalysis> => {
