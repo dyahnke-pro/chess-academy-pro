@@ -17,5 +17,5 @@ jobs:
           ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           APP_BUNDLE_ID: com.chessacademy.pro
-          APP_VERSION: '3.5'
+          APP_VERSION: '3.6'
         run: node scripts/ci/asc-attach-latest-build.mjs
