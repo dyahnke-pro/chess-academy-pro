@@ -113,7 +113,18 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # move one under the play-out), traps wired to the curated gem lines, the coach
 # speaking the student's language on every surface, the rating-matched opponent
 # on iOS, and the training ledger that feeds the weakness profile again.
-IOS_MARKETING_VERSION="3.5"
+# BUMP 3.5 → 3.6 (2026-08-15): 3.5 has been RELEASED on the App Store since
+# 2026-08-03 (iTunes lookup confirms it live), so Xcode Cloud run #171 died at
+# "Preparing build for App Store Connect" — the SEVENTH released-version
+# rejection (2.8, 3.0, 3.1, 3.2, 3.3, 3.4, 3.5 all hit it). The Splash
+# "3 unassigned children" line in that log is only a warning, not the cause.
+# 3.6 carries the corpus expansion (Naroditsky farm 8,162 → 11,426 notes, the
+# spoken-form bake at 91.8%), the position-verification G0 narrowing (a note
+# may only claim a position the anchor pass verified), layered per-ply
+# narration, the endgame surface wired into the farmed corpus, the coach Q&A
+# lane fixes (opening-existence lookup, named-opening traps offer, five
+# unreachable lanes threaded), and the tactics drill framing beats.
+IOS_MARKETING_VERSION="3.6"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
 echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"
