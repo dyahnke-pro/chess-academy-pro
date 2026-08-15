@@ -28,6 +28,13 @@ interface PendingAnalysis {
   bestMove: string;
   depth: number;
   blackToMove: boolean;
+  /** Search telemetry off the info lines — carried so the settled analysis can
+   *  report how much work is behind its number. `nps` in particular was a
+   *  declared field on the result that nothing ever populated. */
+  nodes?: number;
+  nps?: number;
+  timeMs?: number;
+  hashfull?: number;
   /** Caller's priority. Used by `analyzePosition`'s contention rules:
    *  brain calls preempt prefetch; prefetch is dropped when a brain
    *  eval is already in flight; brain-on-brain serializes via the
@@ -960,6 +967,22 @@ class StockfishEngine {
                 );
               }
               this.send('setoption name MultiPV value 3');
+              // ── ASK THE ENGINE FOR ITS WIN/DRAW/LOSS READ ────────────────
+              //
+              // David 2026-08-15: "widen the scope of our computer to capture
+              // everything stockfish gives us. I want every stockfish point
+              // narrated at the computed narration tier."
+              //
+              // Stockfish emits `wdl <win> <draw> <loss>` in permille alongside
+              // every score — but ONLY when asked, and nothing asked. It is the
+              // single most teachable number the engine produces: "+0.7" means
+              // nothing to a student, "you hold this three times in four" is a
+              // sentence. Centipawns also compress badly at the extremes, where
+              // WDL keeps saying something useful.
+              //
+              // Free: it rides `info` lines the parser is already reading, so
+              // there is no extra search and no extra round trip.
+              this.send('setoption name UCI_ShowWDL value true');
               // ONE ucinewgame per engine session — initializes the hash tables
               // at the configured size and starts clean. It is deliberately NOT
               // sent per analysis (that would clear the transposition table
@@ -1625,11 +1648,40 @@ class StockfishEngine {
 
         this.pending.depth = depth;
 
+        // ── EVERYTHING ELSE THE LINE CARRIES ───────────────────────────────
+        //
+        // David 2026-08-15: "the computer should see everything that Stockfish
+        // does". It saw four fields of thirteen — `multipv`, `depth`, `score`,
+        // `pv` — and dropped the rest on the floor at this exact spot, every
+        // info line, for the life of the app. `nodesPerSecond` was even
+        // declared on the result type and hardcoded to 0 downstream: a field
+        // that existed and was never once populated.
+        //
+        // All of it rides info lines already being read, so this costs nothing
+        // — no extra search, no extra round trip, just stopping the discard.
+        const wdlMatch = /wdl (\d+) (\d+) (\d+)/.exec(data);
+        const seldepthMatch = /seldepth (\d+)/.exec(data);
+        const boundMatch = /score (?:cp|mate) -?\d+ (lowerbound|upperbound)/.exec(data);
+        const nodesMatch = /nodes (\d+)/.exec(data);
+        const npsMatch = /nps (\d+)/.exec(data);
+        const timeMatch = / time (\d+)/.exec(data);
+        const hashfullMatch = /hashfull (\d+)/.exec(data);
+
+        if (nodesMatch) this.pending.nodes = parseInt(nodesMatch[1]);
+        if (npsMatch) this.pending.nps = parseInt(npsMatch[1]);
+        if (timeMatch) this.pending.timeMs = parseInt(timeMatch[1]);
+        if (hashfullMatch) this.pending.hashfull = parseInt(hashfullMatch[1]);
+
         const line: AnalysisLine = {
           rank,
           evaluation: scoreType === 'cp' ? scoreValue : (scoreValue > 0 ? MATE_EVAL_VALUE : -MATE_EVAL_VALUE),
           moves,
           mate: scoreType === 'mate' ? scoreValue : null,
+          wdl: wdlMatch
+            ? { win: parseInt(wdlMatch[1]), draw: parseInt(wdlMatch[2]), loss: parseInt(wdlMatch[3]) }
+            : null,
+          seldepth: seldepthMatch ? parseInt(seldepthMatch[1]) : null,
+          bound: boundMatch ? (boundMatch[1] === 'lowerbound' ? 'lower' : 'upper') : null,
         };
 
         this.pending.lines.set(rank, line);
@@ -1654,10 +1706,22 @@ class StockfishEngine {
         : null;
 
       // Normalize all lines to white's perspective
+      //
+      // 🔒 WDL FLIPS BY SWAPPING WIN AND LOSS, NOT BY NEGATING. The score is a
+      // signed number so `* flip` is right for it; win/draw/loss are three
+      // probabilities that always sum to 1000, and multiplying them by -1 would
+      // be meaningless. Black's 700-win read IS white's 700-LOSS read, so the
+      // two ends trade places and the draw share — which belongs to neither
+      // side — stays exactly where it is.
       const normalizedLines = topLines.map((line) => ({
         ...line,
         evaluation: line.evaluation * flip,
         mate: line.mate !== null ? line.mate * flip : null,
+        wdl: line.wdl
+          ? (this.pending?.blackToMove
+            ? { win: line.wdl.loss, draw: line.wdl.draw, loss: line.wdl.win }
+            : line.wdl)
+          : null,
       }));
 
       const analysis: StockfishAnalysis = {
@@ -1667,7 +1731,14 @@ class StockfishEngine {
         mateIn,
         depth: this.pending.depth,
         topLines: normalizedLines,
-        nodesPerSecond: 0,
+        // WAS HARDCODED 0 — a declared field nothing ever populated, for the
+        // life of the app. The engine reports `nps` on every info line.
+        nodesPerSecond: this.pending.nps ?? 0,
+        wdl: normalizedLines[0]?.wdl ?? null,
+        seldepth: normalizedLines[0]?.seldepth ?? null,
+        nodes: this.pending.nodes ?? null,
+        timeMs: this.pending.timeMs ?? null,
+        hashfull: this.pending.hashfull ?? null,
       };
 
       if (this.pending.cacheFen !== undefined && this.pending.cacheDepth !== undefined) {

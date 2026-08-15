@@ -1093,11 +1093,30 @@ export interface SrsResult {
 
 // ─── Stockfish ───────────────────────────────────────────────────────────────
 
+/** Win/draw/loss, as PERMILLE (0-1000), from the perspective the line is
+ *  normalized to. Stockfish's own read of how the position actually ends —
+ *  present only when `UCI_ShowWDL` is on and the build supports it. */
+export interface WdlRead {
+  win: number;
+  draw: number;
+  loss: number;
+}
+
 export interface AnalysisLine {
   rank: number;
   evaluation: number;
   moves: string[];
   mate: number | null;
+  /** Stockfish's win/draw/loss for THIS line. Null when the engine did not
+   *  report it (older build, or the option failed to take). */
+  wdl?: WdlRead | null;
+  /** How deep this line was actually searched, past the nominal `depth` — the
+   *  engine's own statement of how hard it looked down this branch. */
+  seldepth?: number | null;
+  /** The score is a bound, not a settled value: the search cut off before
+   *  proving it. A claim built on a bound is weaker than one built on an exact
+   *  score, and until now nothing downstream could tell the difference. */
+  bound?: 'lower' | 'upper' | null;
 }
 
 export interface StockfishAnalysis {
@@ -1108,6 +1127,23 @@ export interface StockfishAnalysis {
   depth: number;
   topLines: AnalysisLine[];
   nodesPerSecond: number;
+  /** THE ENGINE'S OWN READ OF THE OUTCOME, for the best line, white-POV.
+   *
+   *  David 2026-08-15: "I want every stockfish point narrated at the computed
+   *  narration tier." This is the first of them and the most teachable: a
+   *  student cannot picture +0.7, and can picture holding a position three
+   *  times in four. */
+  wdl?: WdlRead | null;
+  /** Deepest ply the search actually reached on the principal line. */
+  seldepth?: number | null;
+  /** Nodes searched, and how long it took — the engine's statement of how much
+   *  work is behind the number. A shallow, fast read and a deep, laboured one
+   *  should not be spoken with the same confidence. */
+  nodes?: number | null;
+  timeMs?: number | null;
+  /** Transposition-table saturation, permille. High means the engine is
+   *  recycling its own table and the read is cheaper than it looks. */
+  hashfull?: number | null;
 }
 
 // ─── Coach ───────────────────────────────────────────────────────────────────
