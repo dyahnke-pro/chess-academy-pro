@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseEvalTable, pieceQualityLines } from './pieceValueRead';
+import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine } from './pieceValueRead';
 
 // Real `eval` output from the shipped WASM build, after 1.e4 e5 2.Nf3 Nc6
 // 3.Bc4 Nf6 — trimmed to the board table plus the NNUE table that follows it,
@@ -105,5 +105,61 @@ describe('the engine\'s per-piece table', () => {
   it('carries the square it is about, for the board to mark', () => {
     const l = pieceQualityLines(parseEvalTable(REAL), 'white')[0];
     expect(l.squares).toEqual(['a1']);
+  });
+});
+
+describe('where the edge comes from', () => {
+  const bucket = (mat: string, pos: string): string => `
+ NNUE network contributions (White to move)
++------------+------------+------------+------------+
+|   Bucket   |  Material  | Positional |   Total    |
++------------+------------+------------+------------+
+|  7         |  ${mat}   |  ${pos}   |  -  0.12   | <-- this bucket is used
++------------+------------+------------+------------+
+`;
+
+  it('reads the marked bucket, with the detached sign closed up', () => {
+    // Stockfish prints "-  2.83" — sign, spaces, digits. Parsed naively every
+    // negative reads as positive and the advice inverts.
+    expect(parseEvalSplit(bucket('-  2.83', '-  1.30'))).toEqual({ material: -2.83, positional: -1.3 });
+  });
+
+  it('tells a material edge to simplify — the side that HAS it', () => {
+    const s = parseEvalSplit(bucket('-  2.83', '-  1.30'))!;
+    // White-POV negative = Black is up. Black hears it; White does not.
+    expect(evalSplitLine(s, 'black', new Set())).toContain('simplifying is the plan');
+    expect(evalSplitLine(s, 'white', new Set())).toBeNull();
+  });
+
+  it('tells a positional edge to KEEP pieces on', () => {
+    const s = parseEvalSplit(bucket('+  0.05', '+  1.40'))!;
+    expect(evalSplitLine(s, 'white', new Set())).toContain('Keep them on the board');
+  });
+
+  it('🔒 fires when the terms move TOGETHER, which is how NNUE behaves', () => {
+    // THE REGRESSION. The first cut required one term near zero
+    // (`material <= 0.1`). On a position a full rook up the real read is
+    // material 2.83 / positional 1.30 — and it said NOTHING, because 1.30 is
+    // not <= 0.1. A threshold that cannot be met is a dead lane wearing a
+    // condition. It is a ratio now: twice the other, either way.
+    const s = parseEvalSplit(bucket('-  2.83', '-  1.30'))!;
+    expect(evalSplitLine(s, 'black', new Set())).not.toBeNull();
+  });
+
+  it('stays silent on a level board and on a mixed edge', () => {
+    expect(evalSplitLine(parseEvalSplit(bucket('-  0.06', '-  0.06'))!, 'white', new Set())).toBeNull();
+    // Both terms pulling equally is not a story worth a sentence.
+    expect(evalSplitLine(parseEvalSplit(bucket('+  1.00', '+  1.00'))!, 'white', new Set())).toBeNull();
+  });
+
+  it('says it once per game', () => {
+    const said = new Set<string>();
+    const s = parseEvalSplit(bucket('+  0.05', '+  1.40'))!;
+    expect(evalSplitLine(s, 'white', said)).not.toBeNull();
+    expect(evalSplitLine(s, 'white', said)).toBeNull();
+  });
+
+  it('returns null when no bucket is marked', () => {
+    expect(parseEvalSplit('no bucket table here')).toBeNull();
   });
 });

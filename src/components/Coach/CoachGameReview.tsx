@@ -3,6 +3,13 @@ import { RotateCcw, Home, ArrowLeft, MessageCircle, Loader2, Volume2, VolumeX, T
 import { ChessBoard } from '../Board/ChessBoard';
 import { voiceService } from '../../services/voiceService';
 import { buildVoicePackage } from '../../services/voicePackage';
+
+/** Candidate lines the LIVE surfaces run at — the engine's shipped default. */
+const LIVE_MULTIPV = 3;
+/** …and what a review runs at. MultiPV is a spin up to 256; three answers "is
+ *  there one move or several", a wider fan answers "of everything I could have
+ *  played, which ones held?" — the question a review exists to ask. */
+const REVIEW_MULTIPV = 8;
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { explorationAnchorAction } from '../../services/reviewExplorationAnchor';
 import { usePieceSound } from '../../hooks/usePieceSound';
@@ -650,7 +657,23 @@ export function CoachGameReview(props: CoachGameReviewProps): JSX.Element {
       tag,
       fen: ctx.fen,
       playedSan: ctx.playedSan,
-      engine: { analyzePosition: (f, d) => stockfishEngine.analyzeWithBudget(f, d, 4000) },
+      // ── THE REVIEW WIDENS THE CANDIDATE FAN ────────────────────────────
+      // David 2026-08-15, on MultiPV: "3 goes live and in review." Live stays
+      // narrow because every extra line is search time on the move path; a
+      // review is where the student is already waiting, and where "of
+      // everything you could have played, these four held" is the whole point.
+      // Narrowed again on the way out — MultiPV persists on the singleton, so
+      // a widened review would otherwise slow every later live move.
+      engine: {
+        analyzePosition: async (f, d) => {
+          stockfishEngine.setMultiPv(REVIEW_MULTIPV);
+          try {
+            return await stockfishEngine.analyzeWithBudget(f, d, 4000);
+          } finally {
+            stockfishEngine.setMultiPv(LIVE_MULTIPV);
+          }
+        },
+      },
       depth: 12,
     }).then((quiz) => {
       if (quiz && !principleQuizShownRef.current) principleQuizRef.current = quiz;

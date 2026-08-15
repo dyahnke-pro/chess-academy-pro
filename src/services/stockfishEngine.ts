@@ -1498,7 +1498,28 @@ class StockfishEngine {
    * after an adaptive game lowered the engine (David 2026-07-24 — no silent
    * skill leak across callers).
    */
-  async getBestMove(fen: string, moveTimeMs: number = 1000, skill: number = 20): Promise<string> {
+  async getBestMove(
+    fen: string,
+    moveTimeMs: number = 1000,
+    skill: number = 20,
+    /** THE OPPONENT'S STRENGTH, AS AN ELO, USING THE ENGINE'S OWN CALIBRATION.
+     *
+     *  David 2026-08-15: "I want them all."
+     *
+     *  Stockfish ships `UCI_LimitStrength` + `UCI_Elo` (1320-3190) — you tell it
+     *  a rating and it plays that rating. Nothing in this app ever sent either
+     *  one. Instead a rating was mapped onto `Skill Level` 0-20, a scale that is
+     *  NOT Elo and never claimed to be, and CLAUDE.md records what that cost:
+     *  "Skill Level is not Elo, and reading it as though it were is what handed
+     *  a 1729 player an opponent around 2500."
+     *
+     *  That was patched by re-tuning the mapping. This removes the mapping: when
+     *  a caller knows the Elo it wants, the engine is told the Elo. Skill Level
+     *  stays as the fallback for callers that have no rating to give, and full
+     *  strength still means `UCI_LimitStrength false` — a limited engine must
+     *  never leak into a hint or a best-move lookup. */
+    targetElo?: number,
+  ): Promise<string> {
     await this.initialize();
 
     return new Promise((resolve) => {
@@ -1511,7 +1532,20 @@ class StockfishEngine {
       };
 
       this.worker?.addEventListener('message', handler);
-      this.send(`setoption name Skill Level value ${Math.max(0, Math.min(20, Math.round(skill)))}`);
+      // Set EVERY call: the worker is a singleton and options persist, so a
+      // previous adaptive game must not leak strength into this one. Both
+      // mechanisms are written every time — including the OFF state — so
+      // whichever the caller chose, the other cannot be left armed.
+      if (targetElo !== undefined) {
+        this.send('setoption name UCI_LimitStrength value true');
+        this.send(`setoption name UCI_Elo value ${Math.max(1320, Math.min(3190, Math.round(targetElo)))}`);
+        // Skill Level and UCI_Elo are independent limiters; leaving a low skill
+        // armed underneath an Elo cap weakens the engine twice.
+        this.send('setoption name Skill Level value 20');
+      } else {
+        this.send('setoption name UCI_LimitStrength value false');
+        this.send(`setoption name Skill Level value ${Math.max(0, Math.min(20, Math.round(skill)))}`);
+      }
       this.send(`position fen ${fen}`);
       this.send(`go movetime ${moveTimeMs}`);
     });
@@ -1660,6 +1694,49 @@ class StockfishEngine {
    * move path. Returns '' on timeout or when the engine is not ready, and every
    * caller treats '' as "no read" rather than as an empty board.
    */
+  /** WIDEN THE CANDIDATE FAN — MultiPV is a spin up to 256 and we ship 3.
+   *
+   *  Three lines answer "is there one move or several"; a wide fan answers "of
+   *  everything I could play, which ones hold?", which is the question a review
+   *  is actually for. Live stays narrow (every extra line is search time on the
+   *  move path); review widens, because the student is already waiting.
+   *
+   *  Persists on the singleton, so callers that widen MUST narrow again — the
+   *  same leak rule as strength. */
+  setMultiPv(lines: number): void {
+    if (!this.isReady || !this.worker) return;
+    this.send(`setoption name MultiPV value ${Math.max(1, Math.min(256, Math.round(lines)))}`);
+  }
+
+  /** ASK ABOUT ONE SPECIFIC MOVE — `go searchmoves`.
+   *
+   *  "What if I play X?" answered by the engine directly, instead of inferred
+   *  from whether X happens to appear in the top three. Returns the analysis
+   *  restricted to that move, so its eval is the eval OF THAT MOVE rather than
+   *  of the position. */
+  async evaluateMove(fen: string, uci: string, moveTimeMs = 1200): Promise<number | null> {
+    if (!this.isReady || !this.worker) return null;
+    await this.initialize();
+    return new Promise<number | null>((resolve) => {
+      let cp: number | null = null;
+      const stm = fen.split(' ')[1];
+      const done = setTimeout(() => { this.worker?.removeEventListener('message', h); resolve(null); }, moveTimeMs + 2500);
+      const h = (event: MessageEvent<string>): void => {
+        const line = event.data;
+        const m = /score cp (-?\d+)/.exec(line);
+        if (m) cp = Number(m[1]) * (stm === 'b' ? -1 : 1);
+        if (/^bestmove/.test(line)) {
+          clearTimeout(done);
+          this.worker?.removeEventListener('message', h);
+          resolve(cp);
+        }
+      };
+      this.worker?.addEventListener('message', h);
+      this.send(`position fen ${fen}`);
+      this.send(`go movetime ${moveTimeMs} searchmoves ${uci}`);
+    });
+  }
+
   async evalBoard(fen: string, timeoutMs = 2500): Promise<string> {
     if (!this.isReady || !this.worker) return '';
     // Never interleave two captures; the second would collect the first's tail.

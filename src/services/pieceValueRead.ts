@@ -211,3 +211,72 @@ export function pieceQualityLines(
 
 /** Squares as chess.js types them, for the callers that mark the board. */
 export const asSquare = (s: string): Square => s as Square;
+
+/** Where an advantage actually COMES FROM.
+ *
+ *  `eval` prints an NNUE bucket table under the board — Material (PSQT) against
+ *  Positional (Layers) — and marks the bucket in use. The parser above read the
+ *  board and stepped straight over it.
+ *
+ *  It answers a question a student asks constantly and the coach could not:
+ *  am I better because I HAVE more, or because my pieces are BETTER? Those call
+ *  for opposite plans — trade down and convert, or keep pieces on and press —
+ *  and telling them apart by eye is exactly the judgement that goes wrong.
+ *
+ *  Read off the marked bucket, not averaged across all eight: the others are
+ *  scored for material counts this position does not have. */
+export interface EvalSplit {
+  /** Pawns, white-POV. */
+  material: number;
+  positional: number;
+}
+
+export function parseEvalSplit(raw: string): EvalSplit | null {
+  // The row in use is flagged "<-- this bucket is used". Numbers are printed
+  // with the sign detached ("-  2.57"), so the space has to be closed up before
+  // parsing or every negative reads as positive.
+  const line = raw.split('\n').find((l) => /this bucket is used/.test(l));
+  if (!line) return null;
+  const cells = line.split('|').slice(1, -1).map((c) => c.replace(/\s+/g, ''));
+  if (cells.length < 4) return null;
+  const material = Number(cells[1]);
+  const positional = Number(cells[2]);
+  if (!Number.isFinite(material) || !Number.isFinite(positional)) return null;
+  return { material, positional };
+}
+
+/** The sentence that split earns, or null when it would be noise. */
+export function evalSplitLine(
+  split: EvalSplit,
+  studentColor: 'white' | 'black',
+  said?: Set<string>,
+): string | null {
+  const sign = studentColor === 'white' ? 1 : -1;
+  const material = split.material * sign;
+  const positional = split.positional * sign;
+  const total = material + positional;
+  // A level position has no story here, and "you are very slightly better on
+  // structure" is filler.
+  if (Math.abs(total) < 0.5) return null;
+  // Only worth saying when the two DISAGREE about where the edge lives —
+  // otherwise it is just restating the evaluation.
+  // 🔒 A RATIO, NOT A NEAR-ZERO TEST. The first cut fired only when one term was
+  // essentially absent (`material <= 0.1`), and NNUE does not work that way —
+  // it distributes the evaluation across both, so they move TOGETHER. Probed on
+  // a position a full rook up, it read material 2.83 / positional 1.3 and said
+  // NOTHING, because 1.3 is not <= 0.1. A threshold that cannot be met is a
+  // dead lane wearing a condition, which is the failure this whole session has
+  // been about.
+  //
+  // What the student needs is which term DOMINATES, so that is what is asked:
+  // twice the other, either way. The rook position then reads material-led
+  // (2.83 vs 1.3) and correctly advises simplifying.
+  const key = positional >= Math.abs(material) * 2 && positional > 0.4 ? 'edge-positional'
+    : material >= Math.abs(positional) * 2 && material > 0.4 ? 'edge-material'
+      : null;
+  if (!key || said?.has(key)) return null;
+  said?.add(key);
+  return key === 'edge-positional'
+    ? 'Your edge here is not material — it is where your pieces are. Keep them on the board; trading down would hand it back.'
+    : 'Your edge here is material rather than position, so simplifying is the plan: every trade makes the extra count for more.';
+}

@@ -167,7 +167,7 @@ import { noteStaysInScope, noteSuitsStudentSide, noteAdvisesSide } from '../../s
 const NOTE_PRIMARY_MIN_PLIES = 3;
 import { findLivePunishment } from '../../services/gemCrushLines';
 import { engineReadLines } from '../../services/engineReadNarration';
-import { parseEvalTable, pieceQualityLines } from '../../services/pieceValueRead';
+import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine } from '../../services/pieceValueRead';
 
 import { buildThinkAloud } from '../../services/thinkAloud';
 import { scaleGap, packageForRegister, readsForRegister } from '../../services/hintRegister';
@@ -6904,6 +6904,16 @@ export function CoachTeachPage(): JSX.Element {
                     for (const q of pieceQualityLines(parseEvalTable(raw), playerColor, pieceQualitySaidRef.current)) {
                       queueSpokenHint(probe.fen(), q.text, 'computed', q.squares);
                       captureEvent('piece_quality_spoken', { surface: 'coach-teach', kind: q.kind });
+                    }
+                    // WHERE THE EDGE COMES FROM — material or position. The two
+                    // call for OPPOSITE plans (trade down and convert, or keep
+                    // pieces on and press), which is why guessing at it by eye
+                    // goes wrong and why the engine's own split is worth having.
+                    const split = parseEvalSplit(raw);
+                    const splitLine = split ? evalSplitLine(split, playerColor, pieceQualitySaidRef.current) : null;
+                    if (splitLine) {
+                      queueSpokenHint(probe.fen(), splitLine, 'computed');
+                      captureEvent('eval_split_spoken', { surface: 'coach-teach' });
                     }
                   }
                 } catch { /* the piece read is a bonus, never a blocker */ }
