@@ -65,26 +65,70 @@ const exists = async (p) => { try { await access(p); return true; } catch { retu
 const norm = (s) => s.toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
 
 // ── TRANSCRIPT ────────────────────────────────────────────────────────────
+/** Seconds from a VTT cue stamp ("00:04:12.340" or "04:12.340"). */
+function cueSeconds(stamp) {
+  const p = stamp.split(':').map(Number);
+  if (p.length === 3) return p[0] * 3600 + p[1] * 60 + p[2];
+  if (p.length === 2) return p[0] * 60 + p[1];
+  return 0;
+}
+
 /** Parse a YouTube auto-sub VTT into clean running text. Auto-subs repeat each
  *  line across overlapping cues, so collapse consecutive duplicates and the
- *  rolling-window A,B,B,C,C artifact. (Same logic as v1 — it worked.) */
+ *  rolling-window A,B,B,C,C artifact. (Same logic as v1 — it worked.)
+ *
+ *  ALSO RETURNS AN OFFSET→TIME INDEX. The cue stamps used to be dropped on the
+ *  floor here, which cost more than it looked: a note's transcript TIME is the
+ *  only key that can ever join it to a position read off the VIDEO, and without
+ *  it a note can never be re-positioned after the fact — it has to be
+ *  re-distilled from scratch. Measured on the shipped corpus: 0 of 11,426 notes
+ *  carry a time. Keeping it is nearly free and keeps that door open. */
 export function vttToText(vtt) {
   const lines = [];
+  const times = [];               // parallel to `lines`: when each was said
+  let pending = null;
   for (const raw of vtt.split('\n')) {
     const line = raw.replace(/<[^>]+>/g, '').replace(/&nbsp;/g, ' ').trim();
     if (!line) continue;
     if (/^WEBVTT|^Kind:|^Language:|^NOTE/.test(line)) continue;
-    if (/^\d{2}:\d{2}/.test(line) && line.includes('-->')) continue;
+    if (/^\d{2}:\d{2}/.test(line) && line.includes('-->')) {
+      pending = cueSeconds(line.split('-->')[0].trim());
+      continue;
+    }
     if (/^\d+$/.test(line)) continue;
     if (lines[lines.length - 1] === line) continue;
     lines.push(line);
+    times.push(pending ?? 0);
   }
   const out = [];
-  for (const l of lines) {
+  const outTimes = [];
+  for (let i = 0; i < lines.length; i += 1) {
+    const l = lines[i];
     if (out[out.length - 1] === l || out[out.length - 2] === l) continue;
     out.push(l);
+    outTimes.push(times[i]);
   }
+  // Character offset at which each surviving line starts, so a chunk's offset
+  // can be turned back into a timestamp.
+  const offsets = [];
+  let at = 0;
+  for (const l of out) { offsets.push(at); at += l.length + 1; }
+  vttToText.lastIndex = { offsets, times: outTimes };
   return out.join(' ');
+}
+
+/** Transcript character offset -> seconds, using the index `vttToText` just
+ *  built. Returns null when no index is available (a caller that passed plain
+ *  text rather than a VTT). */
+export function offsetToSeconds(offset) {
+  const idx = vttToText.lastIndex;
+  if (!idx || !idx.offsets.length) return null;
+  let lo = 0; let hi = idx.offsets.length - 1; let best = 0;
+  while (lo <= hi) {
+    const mid = (lo + hi) >> 1;
+    if (idx.offsets[mid] <= offset) { best = mid; lo = mid + 1; } else { hi = mid - 1; }
+  }
+  return idx.times[best] ?? null;
 }
 
 // ── SPOKEN CHESS → SAN CANDIDATES ─────────────────────────────────────────
@@ -599,7 +643,11 @@ async function distillOne(videoId, meta, { dry, concurrency, dbLines, dbNames })
     }
     if (parsed?.failed) chunkErrors += 1;
     const raw = Array.isArray(parsed?.notes) ? parsed.notes : [];
-    return raw.map((n) => ({ n, lineSan }));
+    // The chunk's transcript offset as SECONDS. This is the join key to a
+    // position read off the video, and it is the field whose absence means an
+    // existing note can never be re-positioned without a full re-distill.
+    const t = offsetToSeconds(c.start);
+    return raw.map((n) => ({ n, lineSan, t }));
   });
   if (chunkErrors > chunks.length / 2) {
     throw new Error(`${chunkErrors}/${chunks.length} chunk calls FAILED (provider down or key invalid) — refusing to write a near-empty distillation`);
@@ -609,7 +657,7 @@ async function distillOne(videoId, meta, { dry, concurrency, dbLines, dbNames })
   const dropped = { overlap: 0, empty: 0, dupe: 0 };
   const seen = new Set();
   for (const bucket of perChunk) {
-    for (const { n, lineSan } of bucket ?? []) {
+    for (const { n, lineSan, t } of bucket ?? []) {
       const explains = String(n.explains ?? '').trim();
       const teaches = String(n.teaches ?? '').trim();
       const plans = String(n.plans ?? '').trim();
@@ -626,6 +674,9 @@ async function distillOne(videoId, meta, { dry, concurrency, dbLines, dbNames })
         explains, teaches, plans,
         concepts: Array.isArray(n.concepts) ? n.concepts.slice(0, 4).map(String) : [],
         sources: [`yt:${videoId}`],
+        // Seconds into the video this was said. Omitted when the transcript
+        // carried no cue times, so downstream must treat it as optional.
+        ...(typeof t === 'number' ? { t } : {}),
       });
     }
   }
