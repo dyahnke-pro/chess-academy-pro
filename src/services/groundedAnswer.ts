@@ -1250,9 +1250,44 @@ export function assembleMovePurpose(opts: {
   const pieceName = REVIEW_PIECE_NAME[mv.piece];
 
   // 1) WHAT IT DOES.
-  const geo = describeMoveGeometry(opts.fenBefore, opts.san, opts.moverColor);
+  //
+  // CASTLING AND CAPTURES ARE ANSWERED FIRST, because the geometry describer
+  // does not own either and the fallbacks below silently mis-said them: `O-O`
+  // came out as "the king develops to g1" — a king move, with the rook and the
+  // whole point of castling missing — and the pawn capture `dxe4` came out as
+  // "the pawn goes to e4, staking out space in the center", which describes a
+  // quiet advance and loses the capture entirely. Both were true of the
+  // destination square and wrong about the move.
+  const isCastle = opts.san.startsWith('O-O');
+  if (isCastle) {
+    const side = opts.san.startsWith('O-O-O') ? 'queenside' : 'kingside';
+    clauses.push(
+      `The king castles ${side}, tucking away behind its pawns and bringing the rook toward the centre.`,
+    );
+  } else if (mv.captured) {
+    const takenName = REVIEW_PIECE_NAME[mv.captured];
+    // Whether it WINS material is a separate claim from whether it captures,
+    // and only the first needs the opponent's recapture checked. Saying "wins"
+    // over a defended piece is the kind of confident falsehood this whole
+    // rewrite exists to stop, so the undefended case is the only one that
+    // earns the word.
+    const enemy = opts.moverColor === 'white' ? 'b' : 'w';
+    let defended = true;
+    try {
+      defended = afterBoard.attackers(mv.to, enemy).length > 0;
+    } catch { /* keep the cautious reading */ }
+    clauses.push(defended
+      ? `The ${pieceName} takes the ${takenName} on ${mv.to}.`
+      : `The ${pieceName} takes the ${takenName} on ${mv.to}, and nothing recaptures.`);
+  }
+
+  const geo = isCastle || mv.captured
+    ? null
+    : describeMoveGeometry(opts.fenBefore, opts.san, opts.moverColor);
   if (geo) {
     clauses.push(`The ${pieceName} ${geo}.`);
+  } else if (isCastle || mv.captured) {
+    /* already described above */
   } else if (mv.piece === 'p') {
     // "staking out space in the center" is FALSE for a wing pawn (h4, a3, g3…).
     // Only a genuinely central destination earns the centre claim; otherwise

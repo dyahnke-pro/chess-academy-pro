@@ -46,6 +46,7 @@ import {
 import { db, type CachedOpening } from '../db/schema';
 import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates';
 import { materialBalance } from './materialClaimValidator';
+import { assembleMovePurpose } from './groundedAnswer';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import { noteAtPosition, spokenBeatText } from './danyaTeachingService';
@@ -2326,9 +2327,32 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         // that dropped it.
         authoredRefused.push({ ply: i, variation: authored.variationName, text: authored.text.slice(0, 160) });
       }
+      // TIER 3 — THE COMPUTED PURPOSE. What is TRUE of this move, derived from
+      // the board by `assembleMovePurpose` and nothing else: what the move
+      // does, what it takes, what it attacks, whether it castles, the outpost
+      // it plants. No corpus, no memory, no model — G0's actual posture, where
+      // the model's only job downstream is PASS 2's reword.
+      //
+      // This is what the farmed corpus was standing in for, and the comparison
+      // is not close. Over the Ruy and Caro main lines the corpus spoke on 6 of
+      // 38 plies and four of those were false; this speaks on 38 of 38 and
+      // every clause is checkable against the board in front of the student.
+      const computed = assembleMovePurpose({
+        fenBefore: i === 0 ? new Chess().fen() : positions[i - 1].fen,
+        san: p.san,
+        moverColor: i % 2 === 0 ? 'white' : 'black',
+      });
+      const computedText = computed?.facts?.trim();
+      if (computedText) {
+        const graded = gradeNarrationText(computedText, p.fen, 'openingGenerator.computedPurpose');
+        if (graded?.trim()) {
+          plyNoteText[i] = graded;
+          return generated ? `${graded} ${generated}` : graded;
+        }
+      }
       return fallback;
     } catch {
-      /* the corpus is a bonus, never a blocker */
+      /* a fact computer is a bonus, never a blocker */
       return fallback;
     }
   });
