@@ -206,6 +206,14 @@ const GATE_TESTS = [
   'src/components/Openings/CommonMistakesSection.test.tsx',
   'src/components/Openings/OpeningExplorerPage.test.tsx',
   'src/components/Openings/OpeningDetailPage.wiring.test.ts',
+  // 🔒 NO DEAD LANES. Five narration lanes were found this session computing
+  // correctly and reaching nobody — the gem, the plan, the mate branch, the
+  // corpus tiers below the bake, and a split lane whose threshold could never
+  // be met. Every one passed its own unit tests, because a test that calls a
+  // function with values chosen to satisfy it can never ask whether those
+  // values occur. This gate asks the opposite question of each lane and fails
+  // the build the moment one becomes structurally unable to speak.
+  'src/services/laneReachability.test.ts',
   'src/utils/commonMistakeLine.test.ts',
   'src/data/commonMistakeNarration.test.ts',
   'src/data/proRepertoireSources.test.ts',
