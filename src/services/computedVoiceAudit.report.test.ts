@@ -126,6 +126,8 @@ describe('computed voice audit', () => {
     let turnsWithAnyVoice = 0;
     let corpusOffered = 0;
     let corpusSuppressedByPv = 0;
+    const tierAvailable: Record<string, number> = {};
+    const tierNeverAsked: Record<string, number> = {};
     const utterances: Array<{ game: string; ply: number; text: string; move: string; tier: string | null; lanes: string[] }> = [];
 
     for (const game of GAMES) {
@@ -323,6 +325,43 @@ describe('computed voice audit', () => {
           } catch { /* bonus */ }
         }
 
+        // ── WHAT THE LADDER NEVER ASKED ───────────────────────────────────
+        // The teaching ladder is `if (!noteLine)` chained: bake, then curated,
+        // then the corpus note AT this board, then the borrowed tiers. So the
+        // moment one fires, every tier below it is never COMPUTED — and a tier
+        // that is never asked cannot appear as a drop, which is why the refusal
+        // table reads clean while tiers stay silent.
+        //
+        // Compute all four unconditionally here (measurement only, nothing is
+        // spoken from it) and count the ones that had board-surviving teaching
+        // this turn but never got a turn.
+        const avail: Record<string, boolean> = {};
+        for (const [tier, text] of Object.entries({
+          baked: (() => {
+            try {
+              const b = bakedTeachingForPly(openingName, history, game.student)
+                ?? (history.length > 1 ? bakedTeachingForPly(openingName, history.slice(0, -1), game.student) : null);
+              return b && !bakedPlySeen.has(b.ply) ? b.text : '';
+            } catch { return ''; }
+          })(),
+          curated: (() => {
+            try { return curatedBeatAt(history, fenAfterReply, curatedSeen, openingName)?.text ?? ''; }
+            catch { return ''; }
+          })(),
+          corpus: (() => {
+            try {
+              const src = teachingSourceForBoard(history, fenAfterReply, openingName,
+                (n) => !corpusSeen.has(n.id) && noteStaysInScope(n, openingName)
+                  && gradeBorrowedTeaching(spokenBeatText(n), fenAfterReply, 'audit.avail').length > 0);
+              return src ? gradeBorrowedTeaching(spokenBeatText(src.note), fenAfterReply, 'audit.avail') : '';
+            } catch { return ''; }
+          })(),
+        })) {
+          if (!text.trim()) continue;
+          avail[tier] = true;
+          tierAvailable[tier] = (tierAvailable[tier] ?? 0) + 1;
+        }
+
         // ── THE GEM ────────────────────────────────────────────────────────
         let gemLine: string | null = null;
         try {
@@ -353,7 +392,7 @@ describe('computed voice audit', () => {
         // count how often the package refuses it for that reason alone.
         let borrowedOffered = 0;
         let borrowedSuppressed = 0;
-        if (!noteLine) {
+        {
           try {
             // The surface's own predicate: a tier keeps looking rather than
             // handing back a note the voice will drop.
@@ -385,6 +424,15 @@ describe('computed voice audit', () => {
           const d = late.dropped.find((x) => x.fact.kind === 'borrowed');
           if (d?.reason === 'the look-ahead had something about THIS board') borrowedSuppressed = 1;
         }
+        // NOW noteTier is final — the corpus block above sets it. Comparing
+        // before that point is what made the first version of this metric
+        // report 106 of 106 tiers silent while 88 of them had plainly spoken.
+        for (const tier of Object.keys(avail)) {
+          const picked = tier === 'corpus'
+            ? (noteTier.startsWith('corpus') || noteTier.startsWith('borrowed'))
+            : noteTier.startsWith(tier);
+          if (!picked) tierNeverAsked[tier] = (tierNeverAsked[tier] ?? 0) + 1;
+        }
         corpusOffered += borrowedOffered;
         corpusSuppressedByPv += borrowedSuppressed;
 
@@ -407,7 +455,7 @@ describe('computed voice audit', () => {
     }
 
     // ── SCORE ────────────────────────────────────────────────────────────
-    const KINDS: VoiceFactKind[] = ['gem', 'note', 'mistake', 'coachMistake', 'drawback', 'plan', 'threat', 'tactic', 'computed'];
+    const KINDS: VoiceFactKind[] = ['gem', 'note', 'mistake', 'coachMistake', 'drawback', 'plan', 'borrowed', 'threat', 'tactic', 'fork', 'opening', 'computed', 'observation'];
     const lanes = KINDS.map((k) => {
       const mine = hits.filter((h) => h.kind === k);
       const spoke = mine.filter((h) => h.spoken);
@@ -429,6 +477,7 @@ describe('computed voice audit', () => {
       studentTurnsMeasured: studentPlies,
       turnsWithAnyVoice,
       silentTurnRate: Number((1 - turnsWithAnyVoice / studentPlies).toFixed(3)),
+      tiers: { available: tierAvailable, hadSomethingButNeverSpoke: tierNeverAsked },
       corpus: { offered: corpusOffered, suppressedByLookahead: corpusSuppressedByPv, suppressionRate: corpusOffered ? Number((corpusSuppressedByPv / corpusOffered).toFixed(3)) : 0 },
       lanes,
       perGame,

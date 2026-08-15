@@ -6317,7 +6317,27 @@ export function CoachTeachPage(): JSX.Element {
     } catch { /* curated teaching is a bonus, never a blocker */ }
 
     let teachingLine: string | null = null;
-    if (!noteLine && !curatedLine && !bakedLine) {
+    // ── A TIER THAT HAS SOMETHING NEW GETS TO SAY IT ──────────────────────
+    //
+    // David 2026-08-15: "And all narration tiers fire as long as they add
+    // something new?" Measured over 118 turns of twelve openings: not quite —
+    // on 5 of them the corpus had board-surviving teaching this ply and never
+    // got asked, because this gate had already been satisfied by the bake or a
+    // curated beat.
+    //
+    // The gate was there so one move does not collect two teaching paragraphs.
+    // That reasoning was about LENGTH, and length is no longer the constraint
+    // ("The longer narrations are good. Do not cap them."). What the gate
+    // cannot distinguish is the case that matters: a corpus note about a
+    // DIFFERENT idea than the baked one is not a second paragraph on the same
+    // point, it is the second point.
+    //
+    // Repetition is still governed, and by the mechanism built for it rather
+    // than by refusing to compute: `buildVoicePackage` matches sentence by
+    // sentence and refuses a fact left with nothing new, so a corpus note that
+    // merely restates the bake is dropped there — where the reason is recorded
+    // — instead of never being asked, where nothing is.
+    {
       try {
         // 🔒 PASS THE OPENING. It was `null`, which switches OFF
         // `noteOpeningConflicts` — the guard whose entire job is stopping a
