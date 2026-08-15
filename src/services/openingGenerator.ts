@@ -49,9 +49,12 @@ import { materialBalance } from './materialClaimValidator';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import {
-  buildDanyaTeachingBlock, noteAtPosition, notesAtPosition, spokenBeatText,
+  buildDanyaTeachingBlock, notesAtPosition, spokenBeatText,
 } from './danyaTeachingService';
 import { addsSomething } from './layeredNarration';
+import {
+  narrationWordBudget, fitToBudget, boardPhase, type PlyImportance,
+} from './narrationBudget';
 import { authoredNoteAt, authoredEntryFor } from './authoredOpeningNotes';
 import authoredRepertoire from '../data/repertoire.json';
 import { deriveNarrationArrows } from './narrationArrows';
@@ -381,7 +384,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // lesson cached at the '-spelling' rev keeps its dead-tier prose forever while
 // the audits (fresh browser, cold cache, always regenerating) show green.
 // One bump batching both fixes, per the locked cost rule.
-const WALKTHROUGH_GEN_REV = '2026-08-13-material-ledger';
+const WALKTHROUGH_GEN_REV = '2026-08-15-uncapped-notes-budgeted';
 
 export async function getCachedOpening(
   name: string,
@@ -1155,6 +1158,28 @@ export function repairNarrationArrows(tree: WalkthroughTree): number {
  *  those say what the corpus COULD offer, while this says what a lesson actually
  *  splices — the dedupe and the board-truth grade both drop plies, and a report
  *  that skips them overstates by a factor of three. */
+/** How much this ply is worth stopping on, decided by the DB rather than by
+ *  the prose (G0 — the model never gets a say in its own airtime).
+ *
+ *  KEYSTONE is where theory ENDS: no entry in `openings-lichess.json` continues
+ *  past this prefix, so the student has just left book and everything after is
+ *  plan rather than memory. That is the moment a lesson exists for, and it is
+ *  where a long answer is worth hearing.
+ *
+ *  DECISION is a genuine fork — three or more distinct named continuations
+ *  diverge here, so the student is about to choose. Two continuations is the
+ *  ordinary shape of a main line with one sideline and does not earn extra
+ *  airtime. */
+function plyImportance(historySans: string[]): PlyImportance {
+  try {
+    const continuations = findContinuationsAtPly(historySans);
+    if (continuations.size === 0) return 'keystone';
+    return continuations.size >= 3 ? 'decision' : 'routine';
+  } catch {
+    return 'routine';
+  }
+}
+
 export function noteArrowSourceAt(
   historySans: string[],
   fen: string,
@@ -1193,15 +1218,38 @@ export function noteArrowSourceAt(
     const notes = notesAtPosition(historySans, fen, openingName, seenIds);
     if (notes.length === 0) return null;
     const parts: string[] = [];
+    const kept: string[] = [];
+    const keptIds: string[] = [];
     for (const n of notes) {
       const graded = gradeNarrationText(spokenBeatText(n), fen, 'openingGenerator.noteArrows');
       const text = graded?.trim();
       if (!text) continue;
       if (parts.length > 0 && !addsSomething(text, parts.join(' '))) continue;
       parts.push(text);
-      seenIds.add(n.id);
+      kept.push(text);
+      keptIds.push(n.id);
     }
-    return parts.length > 0 ? parts.join(' ') : null;
+    if (parts.length === 0) return null;
+
+    // AIRTIME, the last limit — and a different question from every one above
+    // it. Everything so far asked whether a note is TRUE here, RELEVANT here,
+    // and NEW here; a note that clears all three has earned the right to be
+    // spoken and nothing below revokes it. What is left is how much of the
+    // queue fits in one breath: uncapped, this ply reached 787 words on the
+    // Nimzo's sixth move — five minutes of narration on one developing move.
+    //
+    // The first note is never subject to the budget, and a note is skipped
+    // whole rather than clipped, so no teaching is ever half-spoken.
+    const budget = narrationWordBudget({
+      verbosity: 'full', // beats bake before the student's setting is knowable
+      phase: boardPhase(fen, historySans.length),
+      importance: plyImportance(historySans),
+    });
+    const spoken = fitToBudget(kept, budget);
+    for (let i = 0; i < kept.length; i += 1) {
+      if (spoken.includes(kept[i])) seenIds.add(keptIds[i]);
+    }
+    return spoken.join(' ');
   } catch {
     return null; // the corpus is a bonus, never a blocker
   }

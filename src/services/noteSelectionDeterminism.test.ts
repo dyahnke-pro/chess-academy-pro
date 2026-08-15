@@ -21,7 +21,9 @@
 // by Nxe5 works only if Black's bishop on d6 is defended" at move two.
 import { describe, it, expect, beforeAll } from 'vitest';
 import { Chess } from 'chess.js';
-import { noteAtPosition, teachingSourceForBoard, teachingFactLine } from './danyaTeachingService';
+import {
+  noteAtPosition, notesAtPosition, teachingSourceForBoard, teachingFactLine,
+} from './danyaTeachingService';
 import { noteArrowSourceAt } from './openingGenerator';
 import { loadFullCorpus } from '../test/loadFullCorpus';
 import repertoireRaw from '../data/repertoire.json';
@@ -107,6 +109,15 @@ describe('note selection is position-determined', () => {
     // Same rule through the function the walkthrough actually calls, so the two
     // cannot drift: `noteArrowSourceAt` is what produces both the spoken beat and
     // the arrows, and it is the site whose documented contract was violated.
+    //
+    // EVERY spliced note is checked, not just the first. A ply can now speak
+    // several notes, and an earlier version of this test resolved only the head
+    // of the queue — which asserted an implementation detail (that the splice
+    // picks the top-ranked note) rather than the contract (that everything
+    // spoken is about THIS board). Notes are dropped between selection and
+    // speech by board-truth grading and by the airtime budget, so the head is
+    // routinely not what was said; the ids the splice actually marked as used
+    // are.
     const offences: string[] = [];
     let spliced = 0;
 
@@ -115,20 +126,22 @@ describe('note selection is position-determined', () => {
       const seen = new Set<string>();
       for (const step of walk(entry.pgn)) {
         const before = new Set(seen);
+        const reachable = new Map(
+          notesAtPosition(step.prefix, step.fen, entry.name, before).map((n) => [n.id, n]),
+        );
         const text = noteArrowSourceAt(step.prefix, step.fen, seen, entry.name);
         if (!text) continue;
-        spliced += 1;
-        const chosen = [...seen].find((id) => !before.has(id));
-        if (!chosen) continue;
-        // The id must belong to a note whose line reproduces this board. Resolve
-        // it back through the same lookup rather than trusting the text.
-        const note = noteAtPosition(step.prefix, step.fen, entry.name, before);
-        if (!note || note.id !== chosen) {
-          offences.push(`${entry.name} ply ${step.prefix.length}: spliced ${chosen} unreachable by position lookup`);
-          continue;
-        }
-        if (notePositionFen(note.lineSan) !== normFen(step.fen)) {
-          offences.push(`${entry.name} ply ${step.prefix.length}: ${note.id} authored elsewhere`);
+        for (const id of seen) {
+          if (before.has(id)) continue;
+          spliced += 1;
+          const note = reachable.get(id);
+          if (!note) {
+            offences.push(`${entry.name} ply ${step.prefix.length}: spliced ${id} unreachable by position lookup`);
+            continue;
+          }
+          if (notePositionFen(note.lineSan) !== normFen(step.fen)) {
+            offences.push(`${entry.name} ply ${step.prefix.length}: ${note.id} authored elsewhere`);
+          }
         }
       }
     }
