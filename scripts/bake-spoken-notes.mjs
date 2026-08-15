@@ -272,9 +272,30 @@ export function gateSpoken(source, out, kind) {
   const text = (out ?? '').trim();
   if (!text) return 'empty';
   if (CONTROL_LEAK.test(text)) return 'control token in prose';
-  if (text.length > 260) return `too long (${text.length})`;
-  if (MOVE_NUMBER.test(text)) return 'move-number prefix';
-  if (/\.\.\.[a-hNBRQK]/.test(text)) return 'ellipsis move notation';
+  // ── LENGTH AND MOVES ARE NOT REJECTIONS (David 2026-08-15) ───────────────
+  //
+  // "The gate should not reject based on length. Or on moves. However arrows
+  // are needed to illustrate the move order so beginners and intermediates do
+  // not get lost in the wording."
+  //
+  // These three gates were discarding the substantive teaching and keeping the
+  // trivia. Measured over the 5,327 notes still unbaked: 1,373 refused for
+  // length, 567 for move dictation, 566 for ellipsis notation, 317 for a
+  // move-number prefix — and a note rich enough to be worth speaking is exactly
+  // the one that is long and walks a line. The bake was succeeding on the short
+  // tidy notes that needed it least, which is why the openings we actually
+  // teach were left speaking raw distilled transcript through the runtime
+  // fallback (dt-48c, heard on prod, has no bake entry at all).
+  //
+  // Length was never the constraint — "the longer narrations are good, do not
+  // cap them" — and a move order is CONTENT, not noise. What the move order
+  // needs is not deletion but ILLUSTRATION: the board draws the sequence as it
+  // is spoken (see `moveOrderOf` below), so a student follows it on the squares
+  // instead of holding "d4 e5 dxe5 Nc6 Nf3" in their head from audio.
+  //
+  // Move-NUMBER prefixes stay banned in SPEECH only in the sense that they are
+  // rewritten, not rejected: TTS reads "2." as "two". That is a phrasing job for
+  // the rewrite prompt, not grounds for throwing the teaching away.
   const low = text.toLowerCase();
   for (const b of BANNED) if (low.includes(b)) return `banned phrase "${b.trim()}"`;
 
@@ -287,7 +308,9 @@ export function gateSpoken(source, out, kind) {
     if (squares.length > 0) return `floating note names square ${squares[0]}`;
     if (sans.length > 0) return `floating note names move ${sans[0]}`;
   } else {
-    if (sans.length > 2) return `move dictation (${sans.length} moves)`;
+    // Move dictation is no longer a rejection — an anchored note may walk its
+    // line, because the board now walks it too. `invented square` STAYS: a
+    // square the source never named is still a claim we did not earn.
     const srcSquares = new Set((source.match(SQUARE) ?? []).map((s) => s.toLowerCase()));
     for (const sq of squares) if (!srcSquares.has(sq.toLowerCase())) return `invented square ${sq}`;
   }

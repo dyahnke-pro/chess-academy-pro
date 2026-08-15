@@ -167,6 +167,7 @@ import { noteStaysInScope, noteSuitsStudentSide, noteAdvisesSide } from '../../s
 const NOTE_PRIMARY_MIN_PLIES = 3;
 import { findLivePunishment } from '../../services/gemCrushLines';
 import { engineReadLines } from '../../services/engineReadNarration';
+import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine } from '../../services/pieceValueRead';
 
 import { buildThinkAloud } from '../../services/thinkAloud';
@@ -6474,6 +6475,32 @@ export function CoachTeachPage(): JSX.Element {
         if (pr) { positionalLine = pr; factLines.push(`Positional read: ${pr}`); }
       } catch { /* never a blocker */ }
     }
+
+    // ── THE BOARD WALKS ANY LINE THE TEACHING RECITES ─────────────────────
+    //
+    // David 2026-08-15: "arrows are needed to illustrate the move order so
+    // beginners and intermediates do not get lost in the wording."
+    //
+    // The bake no longer refuses a note for reciting a sequence, so a note may
+    // now say "after d4 e5 dxe5 Nc6 Nf3…" — four plies a student would otherwise
+    // hold in their head from audio alone. Replayed from the board the note is
+    // anchored at, they become arrows to watch instead.
+    //
+    // Applied to whichever teaching lane actually produced a line: the deficit
+    // belongs to the PROSE, not to the tier it came from. Student moves green,
+    // the opponent's blue, so whose move is whose needs no narration.
+    try {
+      const recited = bakedLine ?? curatedLine ?? noteLine ?? teachingLine;
+      if (recited) {
+        for (const a of moveOrderArrows(recited, args.fenAfterReply)) {
+          leadEyeArrows.push({
+            startSquare: a.from,
+            endSquare: a.to,
+            color: a.color === studentCC ? 'green' : 'blue',
+          });
+        }
+      }
+    } catch { /* the walk is a bonus, never a blocker */ }
 
     // THE PACKAGE. Priority is a declared rank in `voicePackage`, not a `??`
     // chain here, and every entry is verified against the board it was computed
