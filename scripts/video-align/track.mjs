@@ -48,7 +48,28 @@ const MAX_DIFF = 10;
 /** Ceiling on the work a single frame may cost. */
 const NODE_BUDGET = 60_000;
 
-const gridOf = (c) => c.board().map((r) => r.map((x) => (x ? x.color : '.')).join(''));
+/**
+ * OCCUPANCY, not colour — which is what this file's own header says it reads,
+ * and what it did NOT do until 2026-08-15.
+ *
+ * The design argument is in the README: we are not reading a position cold, we
+ * are tracking from the start where chess.js already knows the legal moves, and
+ * each of those produces a distinct occupancy pattern. Colour is not needed to
+ * tell them apart — and it is the channel that breaks first. On the second
+ * pilot video the reader got the occupancy of a mid-game board EXACTLY right
+ * and the colours wrong across the bottom three ranks, because that part of the
+ * frame is dimmer and white pieces there missed a global brightness threshold.
+ * Comparing colour turned a perfect occupancy read into 0 plies from 9,547
+ * frames.
+ *
+ * So squares compare as occupied-or-not. Colour is still READ (the grids carry
+ * w/b) and is used only to break ties between candidate lines that reach the
+ * same occupancy.
+ */
+const OCC = (ch) => (ch === '.' ? '.' : 'x');
+const occupancyOf = (rows) => rows.map((r) => r.split('').map(OCC).join(''));
+const colourOf = (c) => c.board().map((r) => r.map((x) => (x ? x.color : '.')).join(''));
+const gridOf = (c) => occupancyOf(colourOf(c));
 const START = gridOf(new Chess());
 
 function diff(a, b) {
@@ -106,7 +127,7 @@ function diffSquares(a, b) {
 
 /** Occupancy grid straight off a live Chess instance, no FEN round-trip. */
 function liveGrid(c) {
-  return c.board().map((r) => r.map((x) => (x ? x.color : '.')).join(''));
+  return gridOf(c);
 }
 
 /**
@@ -165,7 +186,13 @@ function explain(chess, target) {
   return null;
 }
 
-const grids = JSON.parse(readFileSync(process.argv[2], 'utf8'));
+// Normalise to OCCUPANCY the moment the grids are read, so calibration, the
+// settle pass and the search all speak one alphabet. The colour the reader
+// produced is deliberately dropped here rather than threaded through: it was
+// never load-bearing, and keeping two representations alive is how one of them
+// ends up compared against the other.
+const grids = JSON.parse(readFileSync(process.argv[2], 'utf8'))
+  .map((row) => ({ ...row, grid: occupancyOf(row.grid) }));
 const fix = calibrate(grids);
 if (fix.length) {
   console.log(`calibrated: ${fix.length} biased square(s) — `
