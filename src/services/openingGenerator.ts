@@ -2380,11 +2380,27 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
           opportunities: after.opportunities.filter((t) => !wasThere.has(t.description)),
         };
       } catch { /* a fact computer is a bonus, never a blocker */ }
+      // THE PLAN, AND IT NEEDS NO ENGINE (David 2026-08-15: "future plans
+      // should also be computable").
+      //
+      // `assembleMovePurpose` reads its plan off a principal variation, and
+      // the clause was dead because nothing here runs Stockfish. But a
+      // walkthrough is not predicting anything: the continuation IS the line,
+      // already chosen, already DB-validated, sitting in `positions`. The PV
+      // contract is index 0 = the opponent's reply, index 1 = the mover's
+      // follow-up — which is exactly the next two plies of the spine.
+      //
+      // So the deepest missing clause turns out to be free on this surface.
+      // It stays engine-shaped for the surfaces that ARE predicting (live
+      // play, review), where the PV really is the only source.
+      const spinePlan = [positions[i + 1]?.san, positions[i + 2]?.san]
+        .filter((san): san is string => typeof san === 'string' && san.length > 0);
       const computed = assembleMovePurpose({
         fenBefore: i === 0 ? new Chess().fen() : positions[i - 1].fen,
         san: p.san,
         moverColor,
         tactics: plyTactics,
+        pvSan: spinePlan.length > 0 ? spinePlan : undefined,
       });
       const computedText = computed?.facts?.trim();
       if (computedText) {

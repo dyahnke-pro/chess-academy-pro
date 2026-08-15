@@ -991,7 +991,16 @@ class VoiceService {
    *  voiceService doesn't take a hard dep on appAuditor (which pulls
    *  Dexie — can cold-start early in the app lifecycle). */
   private logSpeakInvoked(method: string, text: string): void {
-    const preview = text.slice(0, 40);
+    // THE WHOLE LINE, NOT A PREVIEW (David 2026-08-15: "remove the cap on the
+    // audit as you can see the entire narration").
+    //
+    // 40 characters was enough to prove a line FIRED and never enough to prove
+    // WHAT it said, which is the only question a narration audit asks. The
+    // 2026-08-15 run watched the coach say "The point: the bishop on a4
+    // skewers the " and could not tell whether the sentence finished, whether
+    // it was true, or whether the clause behind it was ever spoken — so the
+    // stream was useless for exactly the defect it existed to catch.
+    const preview = text;
     void import('./appAuditor').then(({ logAppAudit }) => {
       void logAppAudit({
         kind: 'voice-speak-invoked',
@@ -1047,7 +1056,7 @@ class VoiceService {
           kind: 'voice-speak-invoked',
           category: 'subsystem',
           source: 'voiceService.speakIfFree',
-          summary: `dropped (busy): ${text.slice(0, 40)}`,
+          summary: `dropped (busy): ${text}`,
           details: `length=${text.length} reason=already-playing`,
         });
       }).catch(() => undefined);
@@ -1239,7 +1248,7 @@ class VoiceService {
           kind: 'voice-speak-silenced',
           category: 'subsystem',
           source: 'voiceService.speakInternal',
-          summary: `silenced by Coach Narration = "silent": "${text.slice(0, 40)}"`,
+          summary: `silenced by Coach Narration = "silent": "${text}"`,
           details: `length=${text.length} force=${force}`,
         });
       }).catch(() => undefined);
@@ -1310,7 +1319,7 @@ class VoiceService {
           kind: 'voice-speak-invoked',
           category: 'subsystem',
           source: 'voiceService.speakInternal',
-          summary: `dropped (no speakable content): "${text.slice(0, 40)}"`,
+          summary: `dropped (no speakable content): "${text}"`,
           details: `length=${text.length} reason=no-alphanumeric`,
         });
       }).catch(() => undefined);
@@ -1336,7 +1345,7 @@ class VoiceService {
             kind: 'voice-speak-invoked',
             category: 'subsystem',
             source: 'voiceService.speakInternal.dedup',
-            summary: `dropped duplicate line within ${VoiceService.DEDUP_WINDOW_MS}ms: "${text.slice(0, 40)}"`,
+            summary: `dropped duplicate line within ${VoiceService.DEDUP_WINDOW_MS}ms: "${text}"`,
             // Full text of the SUPPRESSED line — PostHog keeps it as narration_text
             // so an audit can prove what was dropped, not just that something was.
             narrationText: text,
@@ -1362,7 +1371,7 @@ class VoiceService {
             kind: 'voice-speak-invoked',
             category: 'subsystem',
             source: 'voiceService.speakInternal.noOverlap',
-            summary: `dropped overlapping line (already speaking): "${text.slice(0, 40)}"`,
+            summary: `dropped overlapping line (already speaking): "${text}"`,
             // Full text of the SUPPRESSED line — PostHog keeps it as narration_text
             // so an audit can prove what was dropped, not just that something was.
             narrationText: text,
@@ -1381,7 +1390,7 @@ class VoiceService {
               kind: 'voice-speak-invoked',
               category: 'subsystem',
               source: 'voiceService.speakInternal.queueFull',
-              summary: `dropped — ${this.speakWaiting} lines already waiting: "${text.slice(0, 40)}"`,
+              summary: `dropped — ${this.speakWaiting} lines already waiting: "${text}"`,
               narrationText: text,
             });
           }).catch(() => undefined);
@@ -1410,7 +1419,7 @@ class VoiceService {
             kind: 'voice-speak-invoked',
             category: 'subsystem',
             source: 'voiceService.speakInternal.throttle',
-            summary: `throttled line (<${VoiceService.THROTTLE_MS}ms since last): "${text.slice(0, 40)}"`,
+            summary: `throttled line (<${VoiceService.THROTTLE_MS}ms since last): "${text}"`,
             // Full text of the SUPPRESSED line — PostHog keeps it as narration_text
             // so an audit can prove what was dropped, not just that something was.
             narrationText: text,
@@ -1467,7 +1476,7 @@ class VoiceService {
           kind: 'tts-concurrent-speak',
           category: 'subsystem',
           source: 'voiceService.speakInternal',
-          summary: `force=${force} prevTier=${this.lastTier} newPreview="${text.slice(0, 40)}"`,
+          summary: `force=${force} prevTier=${this.lastTier} newText="${text}"`,
           details: JSON.stringify({
             force,
             prevTier: this.lastTier,
@@ -1902,7 +1911,7 @@ class VoiceService {
         kind: 'coach-narration-spoken',
         category: 'subsystem',
         source: 'voiceService.speakPolly',
-        summary: `voice=${voice} personality=${personality} text="${text.slice(0, 40)}"`,
+        summary: `voice=${voice} personality=${personality} text="${text}"`,
         // FULL spoken line — stored in PostHog as `narration_text` so we can
         // review exactly what Ruth said (David 2026-06-06). The summary above
         // is just a preview; this is the real text.

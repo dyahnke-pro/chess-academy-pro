@@ -97,7 +97,13 @@ describe('computed voice map', () => {
           };
         } catch { /* board-only fallback */ }
 
-        const purpose = assembleMovePurpose({ fenBefore, san, moverColor, tactics });
+        // The spine's own next two plies ARE the plan on a walkthrough — the
+        // continuation is chosen and DB-validated, not predicted.
+        const upcoming = sans.slice(history.length, history.length + 2);
+        const purpose = assembleMovePurpose({
+          fenBefore, san, moverColor, tactics,
+          pvSan: upcoming.length > 0 ? upcoming : undefined,
+        });
         if (!purpose?.facts) continue;
         const graded = gradeNarrationText(purpose.facts, board.fen(), 'voiceMap');
         if (!graded?.trim()) { refusedByGate += 1; continue; }
