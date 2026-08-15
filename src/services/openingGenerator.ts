@@ -48,7 +48,7 @@ import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates
 import { materialBalance } from './materialClaimValidator';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
-import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
+import { noteAtPosition, spokenBeatText } from './danyaTeachingService';
 import { authoredNoteAt, authoredEntryFor } from './authoredOpeningNotes';
 import authoredRepertoire from '../data/repertoire.json';
 import { deriveNarrationArrows } from './narrationArrows';
@@ -95,35 +95,19 @@ function formatDbEntriesForPrompt(
  *  Opening-level rather than per-ply: a stage spans many positions, so the note
  *  selection keys off the opening name and the canonical spine.
  *
- *  This ADDS to the book block rather than replacing it — the book block is
- *  what carries the DB move sequences a stage must stay inside (G3), and those
- *  are load-bearing for legality. Only the IDEAS move to the notes. */
-function buildStageTeachingBlock(openingName?: string): string {
-  if (!openingName) return '';
-  try {
-    const entry = resolveOpeningEntry(openingName);
-    const block = buildDanyaTeachingBlock({
-      historySans: entry?.moves ?? [],
-      openingName: entry?.canonicalName ?? openingName,
-      maxNotes: 6,
-    });
-    if (!block) return '';
-    void logAppAudit({
-      kind: 'book-grounding-injected',
-      category: 'subsystem',
-      source: 'openingGenerator.stageTeaching',
-      summary: `stage prompt grounded with teaching notes for "${openingName}" (${block.length} chars)`,
-    });
-    return `${block}
-
-USE THE TEACHING ABOVE. The questions, labels and explanations you write must
-draw on those ideas — they are what the coach already taught the student in the
-walkthrough, so a stage that tests something else teaches two different lessons.
-Ground the PROSE in them; the move sequences still come from the database lines
-below.`;
-  } catch {
-    return ''; // the corpus is a bonus, never a blocker
-  }
+ *  Retired 2026-08-15 — kept as a named no-op so the call site still reads in
+ *  order and the removal is visible where the block used to be built. */
+function buildStageTeachingBlock(_openingName?: string): string {
+  // UNWIRED 2026-08-15. This handed the model up to six farmed video notes as
+  // "grounding" for stage prose. It is the same defect as the spoken tier, one
+  // step earlier: the model reads a summary of speech and writes from it, which
+  // is how a lesson came to say "both sides follow a forced sequence up to move
+  // nine" — a sentence about a video, not about a board.
+  //
+  // Grounding a prompt in unverified prose is not grounding. The stage
+  // generator's real grounding is the DB line and chess.js, which it already
+  // has (G3).
+  return '';
 }
 
 function buildBookSourceBlock(openingName?: string): string {
@@ -1860,19 +1844,10 @@ ${(() => {
   // Danya teaching corpus — his explanation of the positions, the ideas, the
   // plans — instead of the pre-1930 book passages ("unwire the books"). The
   // spine SANs key position-specific notes; the name keys opening-level ones.
-  const block = buildDanyaTeachingBlock({
-    historySans: positions.map((p) => p.san),
-    openingName: entry.canonicalName,
-    maxNotes: 6,
-  });
-  if (block) {
-    void logAppAudit({
-      kind: 'book-grounding-injected',
-      category: 'subsystem',
-      source: 'openingGenerator.danyaTeaching',
-      summary: `narration grounded with teaching notes for "${entry.canonicalName}" (${block.length} chars)`,
-    });
-  }
+  // UNWIRED 2026-08-15 — see buildStageTeachingBlock. The narration prompt no
+  // longer carries farmed notes; what the model is given is the DB line, the
+  // board, and the hand-written prose, all of which are verified.
+  const block = '';
   return block;
 })()}`;
   const userPrompt = `Opening: ${entry.canonicalName} (${entry.eco})
@@ -2102,16 +2077,10 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // Branches sit at the spine terminus; replay each branch line from
   // there so its lead-the-eye arrows are code-computed too.
   const terminusFen = positions[positions.length - 1].fen;
-  const spineSans = positions.map((q) => q.san);
   const branchChildren: ChildWrap[] = branches.map((b, idx) => {
-    // Notes ground this branch's arrows the same way they ground the spine's
-    // (G0). Scoped per branch: a branch is a path the student takes INSTEAD of
-    // the others, so one note may legitimately teach on two of them.
-    const branchNoteIds = new Set<string>();
-    // Resolved in FORWARD ply order and cached, because the tree below is
-    // assembled bottom-up: walking the once-per-note dedupe in reverse would
-    // hand a note to the deepest ply it touches instead of the first.
-    // [0] = the branch move itself, [1 + j] = extension move j.
+    // One entry per branch ply, all null since the farmed-note splice was
+    // removed. Kept as an array rather than deleted because the tree below is
+    // assembled bottom-up and indexes into it by ply.
     const branchNoteSources: Array<string | null> = [];
     // CODE-COMPUTED arrows for [b.san, ...extensionMoves], replayed
     // from the spine terminus. branchSeq[0] = b.san's replayed move;
@@ -2126,17 +2095,11 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         break; // shouldn't happen (DB-validated), but never throw mid-build
       }
     }
-    const branchSans = [b.san, ...b.extensionMoves];
-    for (let k = 0; k < branchSeq.length; k += 1) {
-      branchNoteSources.push(
-        noteArrowSourceAt(
-          [...spineSans, ...branchSans.slice(0, k + 1)],
-          branchSeq[k].fen,
-          branchNoteIds,
-          entry.canonicalName,
-        ),
-      );
-    }
+    // The branch beats carried the same farmed-note splice as the spine and it
+    // is gone for the same reason (2026-08-15). Branch arrows fall back to the
+    // prose, which `groundedSegmentArrows` already handles — it takes both and
+    // uses the note ONLY when there is one.
+    for (let k = 0; k < branchSeq.length; k += 1) branchNoteSources.push(null);
     // The branch's first move belongs to the side whose turn it is
     // after the canonical's last ply. Position[i].ply = i, so after
     // the last spine move the next ply is positions.length (odd =
@@ -2235,12 +2198,6 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // "teach me X" walkthrough as PACKAGE, not as advisory prompt context the
   // model may ignore). CODE walks each spine ply, looks up the corpus note
   // taught EXACTLY at that position (move-prefix or transposition-safe FEN —
-  // never the fuzzy tiers, so a note can't land on the wrong ply), grades its
-  // prose against that ply's board, and appends it to the spoken idea. The
-  // LLM's generated prose stays; the teaching rides regardless of what the
-  // model did with the advisory block. Once per note id, so an opening-level
-  // note can't spam every ply.
-  const splicedNoteIds = new Set<string>();
   // One introduction per variation per lesson — see `authoredNoteAt`.
   const authoredNamesUsed = new Set<string>();
   // Which plies the AUTHORED tier spoke on, and in what words — kept apart
@@ -2304,16 +2261,45 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     // narration, and the board is the lesson on those plies.
     const fallback = generated;
     try {
-      // Baked video narration IS the teaching for this ply — splicing a
-      // corpus note on top would double-teach the same source material.
+      // Baked narration IS the teaching for this ply.
       if (baked) return fallback;
       const prefix = positions.slice(0, i + 1).map((q) => q.san);
-      const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName);
-      if (teaching) {
-        plyNoteText[i] = teaching;
-        return generated ? `${teaching} ${generated}` : teaching;
-      }
-      // TIER 3 — THE HAND-WRITTEN PROSE, BEFORE ANYTHING COMPUTED.
+      // ── THE FARMED CORPUS NO LONGER SPEAKS HERE (David 2026-08-15: "so
+      //    repulsive the narrations. Start over completely.") ──────────────
+      //
+      // A corpus tier used to LEAD this beat. What it actually said, on the
+      // Ruy Lopez main line, at the ply named:
+      //
+      //   a6  "Black's queenside majority cannot, because of doubled pawns"
+      //       — nothing has been exchanged; there are no doubled pawns.
+      //   Ba4 "Black plays ...Be7" — Black plays Nf6; Be7 is three plies away.
+      //       And: "both sides follow a forced sequence up to move nine."
+      //   Be7 "the earlier threat of knight takes e5" — there was no earlier
+      //       threat. It is describing a different game.
+      //   d4  "Black plays a5 to discourage White's d4" — a5 is never played.
+      //
+      // Four of the six plies that spoke were false; the Caro-Kann named the
+      // wrong variation outright and offered "After Bb5, Black cannot take the
+      // c5 pawn because the knight is pinned" on a board with no Bb5, no c5
+      // pawn and no pin.
+      //
+      // The cause is not selection, and three successive gates could not fix
+      // it because it is not a filtering problem. A farmed note is a SUMMARY
+      // OF SPEECH, not a statement about a position: it carries discourse
+      // ("the earlier threat", "up to move nine"), it names other boards, and
+      // some entries are sentence fragments. Attaching a FEN to that prose
+      // cannot make it true at that board, so every gate was an attempt to
+      // filter discourse into fact — which G0 names as the disease outright:
+      // "if you are adding a validator, a gate, a claim-stripper — STOP."
+      //
+      // The corpus is not deleted and is not worthless. It is now what the
+      // project's own transcript doctrine always said it should be: RESEARCH
+      // for authoring, read by a human writing verified prose offline, never
+      // a runtime source spoken at a board it was not written about.
+      //
+      // What speaks instead is the tier that was sitting right behind it.
+      //
+      // TIER 2 — THE HAND-WRITTEN PROSE, BEFORE ANYTHING COMPUTED.
       //
       // David 2026-08-12: "I still want the computer narrations to fire after
       // the handwritten narrations." All 318 variations in repertoire.json

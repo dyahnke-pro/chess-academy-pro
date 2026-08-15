@@ -46,7 +46,6 @@ import { loadAnnotationContextForLive } from '../coach/sources/annotationContext
 import { loadBookGroundingForLive } from '../coach/sources/bookGrounding';
 import { loadMiddlegamePlanForLive } from '../coach/sources/middlegamePlan';
 import { loadModelGamesForLive } from '../coach/sources/modelGames';
-import { buildDanyaTeachingBlock } from './danyaTeachingService';
 import {
   formatAnnotationContextSubBlock,
   formatBookGroundingSubBlock,
@@ -114,16 +113,15 @@ export async function buildNarrationGroundingBlock(
     Promise.resolve(loadMiddlegamePlanForLive({ openingName, moveHistory })).catch(() => null),
     Promise.resolve(loadModelGamesForLive({ openingName, moveHistory })).catch(() => null),
     Promise.resolve(loadBookGroundingForLive({ askText, openingName })).catch(() => null),
-    // Corpus teaching (David 2026-07-30: EVERY surface that teaches or answers
-    // gets the full teaching stack — Play answers with the same information
-    // Learn narrates, it just waits to be asked). Exact position → prefix →
-    // opening → structure transfer, all code-selected + truth-filtered.
-    Promise.resolve(buildDanyaTeachingBlock({
-      historySans: moveHistory,
-      openingName,
-      fen: args.fen ?? null,
-      maxNotes: 3,
-    })).catch(() => ''),
+    // UNWIRED 2026-08-15 (David: "so repulsive the narrations"). The farmed
+    // corpus used to ride into every answer here. It was described as
+    // "truth-filtered", and it was — against the board — but the filter cannot
+    // reach the defect: a farmed note is a summary of SPEECH, so it carries
+    // discourse about a video and sentences about other positions, and no
+    // board test makes that prose about THIS board. The annotation, plan,
+    // model-game and book blocks above are all authored or DB-derived and
+    // stay.
+    Promise.resolve(''),
   ]);
 
   const parts: string[] = [];

@@ -33,9 +33,6 @@ import { scanPositionForTrap } from '../services/positionTrapScan';
 import { applyCandidateArrows } from '../services/coachAnswerGates';
 import { assembleEnvelope } from './envelope';
 import { loadAnnotationContextForLive } from './sources/annotationContext';
-import { buildDanyaTeachingBlock } from '../services/danyaTeachingService';
-import { classifyPhase } from '../services/gamePhaseService';
-import { detectOpening } from '../services/openingDetectionService';
 import { loadMiddlegamePlanForLive } from './sources/middlegamePlan';
 import { loadModelGamesForLive } from './sources/modelGames';
 import { loadPlayerGamesForLive, resolvePlayerIdFromAsk } from './sources/playerGames';
@@ -820,87 +817,20 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     }
   }
 
-  // TEACHING grounding — the Danya teaching corpus (David 2026-07-12: "what
-  // he teaches in every position… make sure to unwire the books, I don't want
-  // them intruding on danya"). This slot used to carry the pre-1930 book
-  // passages (loadBookGroundingForLive); the coach's SPEECH now grounds on
-  // the position-keyed teaching notes instead. Same envelope slot, same
-  // never-block contract. Keyed on the live move history (position notes,
-  // longest prefix wins) + the opening name (opening-level notes). The books
-  // remain a READING feature on the opening pages only.
-  if (!input.liveState.bookGrounding) {
-    try {
-      // Opening name: the snapshot when the surface set one; otherwise detect
-      // it from the move history (Play's game-chat never sets a snapshot, and
-      // a null name silenced the corpus's opening-family tier there — the
-      // Learn/Play information-parity gap, David 2026-07-30).
-      let teachingOpeningName = input.liveState.lichessSnapshot?.name ?? null;
-      if (!teachingOpeningName && (input.liveState.moveHistory?.length ?? 0) >= 2) {
-        try {
-          teachingOpeningName = detectOpening(input.liveState.moveHistory ?? [])?.name ?? null;
-        } catch { /* detection is a bonus */ }
-      }
-      // LIVE TACTIC TYPES from the watcher's context (David 2026-08-07:
-      // "Positional notes are there, not tactical notes") — a real tactic
-      // on the board pulls ONE corpus concept note teaching it into the
-      // block. Detector-emitted types only (G0); the student's hanging
-      // pieces count as 'hanging'.
-      //
-      // The UPCOMING lanes count too (David 2026-08-07: "no corpus notes
-      // about geometry and how to set any traps myself"). A tactic the
-      // student can STEER TOWARD — an opportunity in their own PV — is
-      // exactly the trap-setting teaching he's asking for, and it was
-      // ignored: only tactics already ON the board pulled a note, so the
-      // corpus could describe a fork he'd walked into but never one he
-      // could build. Threats feed it as well: knowing the shape the
-      // opponent is aiming at is how you learn to avoid or invert it.
-      const liveTactics = input.liveState.tactics;
-      const liveTacticTypes = liveTactics
-        ? Array.from(new Set([
-            ...liveTactics.immediate.map((t) => t.type),
-            ...liveTactics.opportunities.map((t) => t.type),
-            ...liveTactics.threats.map((t) => t.type),
-            ...(liveTactics.hanging.length > 0 ? ['hanging'] : []),
-          ]))
-        : [];
-      let teachingPhase: 'opening' | 'middlegame' | 'endgame' = 'middlegame';
-      try {
-        if (input.liveState.fen) {
-          teachingPhase = classifyPhase(input.liveState.fen, Math.ceil((input.liveState.moveHistory?.length ?? 0) / 2));
-        }
-      } catch { /* default middlegame */ }
-      const block = buildDanyaTeachingBlock({
-        historySans: input.liveState.moveHistory ?? [],
-        openingName: teachingOpeningName,
-        // Live board FEN — transposition-safe exact-position notes.
-        fen: input.liveState.fen ?? null,
-        liveTacticTypes,
-        phase: teachingPhase,
-      });
-      if (block) {
-        const sourceCount = (block.match(/^•/gm)?.length ?? 0);
-        input = {
-          ...input,
-          liveState: { ...input.liveState, bookGrounding: { block, sourceCount } },
-        };
-        void logAppAudit({
-          kind: 'book-grounding-injected',
-          category: 'subsystem',
-          source: 'coachService.ask.danyaTeaching',
-          summary: `loaded ${sourceCount} teaching note(s) (${block.length} chars) for ask="${input.ask.slice(0, 60)}"`,
-        });
-      }
-    } catch (err) {
-      // Teaching lookup failures must NEVER block the call. Existing
-      // grounding (annotations, lichess, tactics) carries the brain.
-      void logAppAudit({
-        kind: 'coach-surface-migrated',
-        category: 'subsystem',
-        source: 'coachService.ask.danyaTeaching',
-        summary: `teaching grounding load failed: ${(err as Error)?.message?.slice(0, 120) ?? 'unknown'}`,
-      });
-    }
-  }
+  // TEACHING grounding — REMOVED 2026-08-15 (David: "so repulsive the
+  // narrations. Start over completely.").
+  //
+  // Every coach answer used to carry farmed corpus notes in this envelope
+  // slot. They are summaries of video SPEECH, not statements about a board:
+  // they carry discourse ("the earlier threat", "up to move nine"), they
+  // describe other positions, and some are sentence fragments. Three
+  // successive gates were built to filter that into fact and none could,
+  // because it is not a filtering problem — see the removal note in
+  // `openingGenerator` for the measured examples.
+  //
+  // The answer's real grounding is untouched and is all still present: the
+  // annotation context, the DB line, live tactics, master play, the
+  // middlegame plans, the model games and the player's own games.
 
   const envelope = assembleEnvelope({
     identity: options.identity,

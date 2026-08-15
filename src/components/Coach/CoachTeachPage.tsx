@@ -93,7 +93,6 @@ import {
   getCachedOpening,
   cacheOpening,
   generateMissingStagesInBackground,
-  noteArrowSourceAt,
   groundedSegmentArrows,
 } from '../../services/openingGenerator';
 import {
@@ -151,7 +150,7 @@ import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
 import { forkOfferAt } from '../../services/forkNarration';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText, notesForOpening } from '../../services/danyaTeachingService';
+import { teachingSourceForBoard, generalizedTeaching, noteCoverageForLine, spokenBeatText, notesForOpening } from '../../services/danyaTeachingService';
 import { secondarySupportNotes } from '../../services/secondaryCorpora';
 import { bakedTeachingForPly, bakedSpineNextMove } from '../../services/bakedWalkthroughNarration';
 import { framedOpponentPlan } from '../../services/opponentVoice';
@@ -5872,7 +5871,7 @@ export function CoachTeachPage(): JSX.Element {
     let threatLine: string | null = null;
     let alertArrow: BoardArrow | null = null;
     let announceLine: string | null = null;
-    let noteLine: string | null = null;
+    const noteLine: string | null = null;
     let gemLine: string | null = null;
     // Which ply of the bake spoke, so an audit can prove the opening was taught
     // move by move from the app's own event rather than by pattern-matching the
@@ -6135,30 +6134,14 @@ export function CoachTeachPage(): JSX.Element {
       }
     } catch { /* the bake is a bonus, never a blocker */ }
 
-    // ── THE TAUGHT NOTE + its lead-the-eye arrows ──────────────────────────
-    try {
-      const noteText = bakedLine
-        ? null
-        : noteArrowSourceAt(history, args.fenAfterReply, teachNoteSeenIdsRef.current);
-      if (noteText) {
-        factLines.push(`Coaching note taught at THIS position: ${noteText}`);
-        noteLine = noteText;
-        teachingTierRef.current = 'position';
-        const seg = groundedSegmentArrows(noteText, '', { from: args.moveFrom, to: args.moveTo, fen: args.fenAfterReply });
-        for (const a of (seg.arrows ?? [])) {
-          if (a.color === 'green') leadEyeArrows.push({ startSquare: a.from, endSquare: a.to, color: 'green' });
-        }
-        if (leadEyeArrows.length > 0) {
-          void logAppAudit({
-            kind: 'coach-narration-spoken',
-            category: 'narration',
-            source: 'CoachTeachPage.noteLeadEye',
-            summary: `note lead-the-eye: ${leadEyeArrows.length} green arrow(s) from the taught note`,
-            fen: args.fenAfterReply,
-          });
-        }
-      }
-    } catch { /* corpus is a bonus, never a blocker */ }
+    // ── THE TAUGHT NOTE — REMOVED 2026-08-15 ──────────────────────────────
+    // A farmed corpus note used to be announced here as "Coaching note taught
+    // at THIS position", and its named moves drove the lead-the-eye arrows.
+    // Both are gone (David: "so repulsive the narrations. Start over
+    // completely."): a farmed note is a summary of speech, not a statement
+    // about a board, so the label was false and the arrows pointed at another
+    // game's moves. The BAKED line above still speaks — it was written for its
+    // position and verified before it shipped.
 
     // ── THE COMPUTED READ — what is actually true of THIS board right now.
     //
@@ -7546,46 +7529,17 @@ export function CoachTeachPage(): JSX.Element {
                 // general principle — so the model was told a borrowed idea was
                 // a fact about the board, and dutifully said so (2026-08-04).
                 {
-                  try {
-                    // LEAD-THE-EYE FROM THE NOTE (David 2026-08-07: "add the
-                    // lead the eye arrows like teach me x opening has").
-                    // Position-taught notes ride the SAME grounded pipeline
-                    // the walkthrough uses: `noteArrowSourceAt` grades the
-                    // spoken note against THIS board, and
-                    // `groundedSegmentArrows` derives green vision arrows
-                    // from the moves the NOTE names — the note decides what
-                    // gets pointed at, never the model's prose (G0). Other
-                    // origins (opening-family / structure / concept) keep the
-                    // provenance-labeled fact line, no arrows — they are not
-                    // about this board.
-                    const noteText = noteArrowSourceAt(historyAfterReply, probe.fen(), teachNoteSeenIdsRef.current);
-                    if (noteText) {
-                      facts.push(`Coaching note taught at THIS position: ${noteText}`);
-                      // Voiced by the instant pass instead (which also
-                      // marked the note seen, so this rarely re-derives one).
-                      const seg = groundedSegmentArrows(noteText, '', { from: m.from, to: m.to, fen: probe.fen() });
-                      // Map the narration-arrow shape onto the board's
-                      // (startSquare/endSquare); green vision arrows only —
-                      // the orange trail is the move itself, already visible.
-                      const leadEye: BoardArrow[] = (seg.arrows ?? [])
-                        .filter((a) => a.color === 'green')
-                        .map((a) => ({ startSquare: a.from, endSquare: a.to, color: 'green' }));
-                      if (leadEye.length > 0) {
-                        chainArrowsRef.current = [...chainArrowsRef.current, ...leadEye];
-                        void padDone.then(() => setArrows((prev) => uniqueArrows([...prev, ...leadEye])));
-                        void logAppAudit({
-                          kind: 'coach-narration-spoken',
-                          category: 'narration',
-                          source: 'CoachTeachPage.noteLeadEye',
-                          summary: `note lead-the-eye: ${leadEye.length} green arrow(s) from the taught note`,
-                          fen: probe.fen(),
-                        });
-                      }
-                    } else {
-                      const source = teachingSourceForBoard(historyAfterReply, probe.fen());
-                      if (source) facts.push(teachingFactLine(source));
-                    }
-                  } catch { /* corpus is a bonus, never a blocker */ }
+                  // REMOVED 2026-08-15 (David: "so repulsive the narrations.
+                  // Start over completely."). Two corpus tiers used to sit
+                  // here: a position note announced as taught at THIS board
+                  // and driving the lead-the-eye arrows, and — when that
+                  // missed — a weaker opening-family / structure / concept
+                  // note carrying a provenance label. Both are farmed
+                  // summaries of video speech rather than statements about a
+                  // board, so the first pointed arrows at another game's moves
+                  // and the second was teaching borrowed from a position the
+                  // student is not in.
+
                   // GEM DETECTION on Learn (David 2026-07-30: "This is for the
                   // learn with coach tab!!"). If the coach's reply just walked
                   // into a known engine-verified gem inaccuracy, the coach
