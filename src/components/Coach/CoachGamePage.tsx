@@ -113,6 +113,7 @@ import { resolveVerbosity, shouldCallLlmForMove } from '../../services/coachComm
 import { resolvePhaseNarrationVerbosity, resolveLlmNarrationDensity } from '../../utils/coachNarration';
 import { BLUNDER_ALERT_ADDITION, EXPLORE_REACTION_ADDITION } from '../../services/coachPrompts';
 import { stockfishEngine } from '../../services/stockfishEngine';
+import { limitStrengthElo } from '../../services/engineConstants';
 import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { resolveConfig as resolvePlayConfig } from '../../services/coachPlaySession';
 import { detectOpening, getOpeningMoves, resolveOpeningEntry } from '../../services/openingDetectionService';
@@ -2307,7 +2308,15 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
                   kind: 'coach-move-fastpath',
                   category: 'subsystem',
                   source: 'CoachGamePage.coachTurn.fastpath',
-                  summary: `stockfish: ${result.san} at strength ${targetStrength} (skill ${config.skill}, ${config.moveTimeMs}ms)`,
+                  // SAY WHAT THE ENGINE WAS ACTUALLY LIMITED TO. This line used
+                  // to report the requested strength and the skill level, which
+                  // between them said nothing about how strongly the opponent
+                  // would play — `UCI_LimitStrength` was never sent, so the real
+                  // answer was "full strength, minus a skill handicap that is
+                  // not an Elo". Play is where most games happen and its
+                  // opponent strength was unobservable in the log; that is how
+                  // the dead wire survived.
+                  summary: `stockfish: ${result.san} at elo ${limitStrengthElo(config.targetElo)} (requested ${targetStrength}, UCI_LimitStrength, ${config.moveTimeMs}ms)`,
                   fen: game.fen,
                 });
               }
