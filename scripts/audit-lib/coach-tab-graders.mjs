@@ -53,7 +53,25 @@ export const TACTIC_WORDS = new RegExp([
 /** Lines Play is ALLOWED to speak mid-game: move dictation, the opening name,
  *  phase transitions. Anything else is volunteered teaching, which Play is
  *  contractually silent about until asked. */
-export const SANCTIONED = /^(pawn|knight|bishop|rook|queen|king) (to|takes|captures)|castles|check(mate)?\.?$|opening|defen[cs]e|game is now|middlegame|endgame|opening phase/i;
+export const SANCTIONED = new RegExp([
+  // Move dictation — how the student knows what the coach played.
+  String.raw`^(?:pawn|knight|bishop|rook|queen|king) (?:to|takes|captures)`,
+  String.raw`\bcastles\b`,
+  String.raw`^check(?:mate)?\.?$`,
+  // Opening name + phase transitions — explicitly allowed on Play.
+  String.raw`\bopening\b`, String.raw`\bdefen[cs]e\b`, String.raw`\bgame is now\b`,
+  String.raw`\bmiddlegame\b`, String.raw`\bendgame\b`,
+  // The move-quality flags. The Play contract allows the coach to "mention a
+  // couple of the mistakes made with the positional analysis", and these three
+  // are the complete fixed set `buildFastMoveLine` can emit at that tier. They
+  // name no square and reveal no tactic — they tell the student their own move
+  // was loose, which is not the same as reading the board out to them. The
+  // volunteered board reading (the fork, the pin, the hanging piece) is what
+  // Play now stays quiet about.
+  String.raw`^that drops material\.?$`,
+  String.raw`^that gives ground\.?$`,
+  String.raw`^a small slip — there was better\.?$`,
+].join('|'), 'i');
 
 /**
  * THE SPOKEN LINE, not the audit event's summary.

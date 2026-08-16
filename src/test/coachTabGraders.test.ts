@@ -141,6 +141,24 @@ describe('SANCTIONED — Play may dictate moves, not volunteer teaching', () => 
       expect(SANCTIONED.test(t), t).toBe(true);
   });
 
+  it('accepts the three move-quality flags — the contract allows mentioning mistakes', () => {
+    // The complete fixed set buildFastMoveLine can emit at that tier. They name
+    // no square and reveal no tactic: telling the student their own move was
+    // loose is not reading the board out to them.
+    for (const t of ['That drops material.', 'That gives ground.', 'A small slip — there was better.'])
+      expect(SANCTIONED.test(t), t).toBe(true);
+  });
+
+  it('still REJECTS the board reading, so widening for slips did not widen for tactics', () => {
+    // The risk of the line above: a classifier loosened to make a run green.
+    // These are the exact sentences the prod audit caught Play volunteering.
+    for (const t of [
+      'Bishop on c4 pins pawn on f7 against knight on g8.',
+      'Knight on f7 forks queen on d8 and rook on h8.',
+      'That leaves your knight on d4 hanging — it can be taken.',
+    ]) expect(SANCTIONED.test(t), t).toBe(false);
+  });
+
   it('REJECTS volunteered teaching — the contract Play would be breaking', () => {
     // If this ever returns true, the silence check waves through exactly the
     // behaviour it exists to catch.
