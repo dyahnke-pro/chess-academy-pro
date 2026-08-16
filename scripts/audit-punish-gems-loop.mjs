@@ -116,10 +116,18 @@ const WEAPON = new Set(['confirmed', 'positional']);
 // reports them as failures buries any real defect in the noise.
 const NARRATION_SRC = (await readFile('src/data/lessons/punishGemNarration.ts', 'utf-8'))
   + (await readFile('src/data/lessons/gambitGemNarration.ts', 'utf-8'));
-const NARRATED = new Set([...NARRATION_SRC.matchAll(/'([^']*:[^']*:[^']*)'\s*:/g)].map((m) => m[1]));
 const gemKey = (g) => `${g.openingId}:${g.lineMoves.replace(/\s+/g, '_')}:${g.inaccuracy}`;
+// SUBSTRING, NOT A QUOTE-SHAPED REGEX. This was
+// `/'([^']*:[^']*:[^']*)'\s*:/` — single quotes only — while the narration file
+// uses BOTH quote styles. It saw 285 of the 388 authored keys and declared 103
+// weapon gems un-narrated when the true number is ZERO. That wrong number was
+// reported as a content backlog, and the same predicate would have filtered
+// 103 correctly-narrated gems out of the DOM check, hiding real failures behind
+// a fake explanation. A gemId either appears in the file or it does not; asking
+// that question directly cannot be broken by punctuation.
+const hasNarration = (g) => NARRATION_SRC.includes(gemKey(g));
 /** Exactly what the student can see — the only set a missing tile is a bug for. */
-const isSurfaceable = (g) => WEAPON.has(g.tier) && NARRATED.has(gemKey(g));
+const isSurfaceable = (g) => WEAPON.has(g.tier) && hasNarration(g);
 
 /** THE UN-NARRATED GEMS ARE A FAILURE, NOT A FILTER (David 2026-08-16: "Why no
  *  narrations?? Need to add, the app should NEVER hide a gem!!").
@@ -131,7 +139,7 @@ const isSurfaceable = (g) => WEAPON.has(g.tier) && NARRATED.has(gemKey(g));
  *  reported in its own right, with the count and the worst openings named. */
 function narrationBacklog() {
   const weapons = GEMS.filter((g) => WEAPON.has(g.tier));
-  const missing = weapons.filter((g) => !NARRATED.has(gemKey(g)));
+  const missing = weapons.filter((g) => !hasNarration(g));
   const byOpening = {};
   for (const g of missing) byOpening[g.openingId] = (byOpening[g.openingId] ?? 0) + 1;
   const worst = Object.entries(byOpening).sort((a, b) => b[1] - a[1]);
