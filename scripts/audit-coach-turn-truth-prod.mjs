@@ -209,6 +209,59 @@ const main = async () => {
         + ` (was 238 vs 49 on build 6a92b06) · ${newFormat.length}/${gateTrips.length} trips report both classes`,
     spoken.length);
 
+  // 2c. THE ALERT LANE SAYS SOMETHING USEFUL (David 2026-08-16).
+  //
+  // "The useless rook and queen battery on the 8th rank — we don't need that."
+  // A battery is only worth a warning if it is AIMED at something, so every
+  // battery line must now name its target. This is checkable from the spoken
+  // text alone: the detector appends "bearing down on the <piece> on <sq>".
+  const said = (e) => (e.summary ?? '').replace(/^[^"]*"/, '').replace(/"$/, '');
+  const batteryLines = spoken.filter((e) => /form a battery/.test(said(e)));
+  const aimless = batteryLines.filter((e) => !/bearing down on/.test(said(e)));
+  add('no battery is announced without saying what it is aimed at',
+    aimless.length === 0,
+    `${batteryLines.length} battery line(s), ${aimless.length} aimless`
+      + (aimless.length ? ` — e.g. "${said(aimless[0]).slice(0, 90)}"` : ''),
+    batteryLines.length);
+
+  // 2d. THE OPPONENT LOOK-AHEAD IS REACHABLE.
+  //
+  // "I never heard a tactic alert for the opponent when it came to a fork."
+  // The lane passed `analysis: null`, so the forward scan was unreachable and
+  // only already-landed geometry could be announced.
+  //
+  // A single game may legitimately contain no upcoming tactic, so this cannot
+  // demand a fork warning — it would fail on a quiet game and teach us
+  // nothing. What it CAN prove is that the lane is no longer blind: the
+  // cached read it now depends on has to be there. Reported either way, with
+  // the warning count, so a run of games where none ever fires is visible
+  // rather than silently assumed fine.
+  const upcomingWarnings = spoken.filter((e) => /Watch out — if they play|is coming\./.test(said(e)));
+  const cachedTurnReads = has(/stockfishCache/).filter((e) => /depth=14/.test(e.summary ?? ''));
+  add('the alert lane has the cached read its look-ahead depends on',
+    cachedTurnReads.length > 0,
+    `${cachedTurnReads.length} depth-14 cache event(s) on the turn board`
+      + ` · ${upcomingWarnings.length} upcoming-threat warning(s) spoken`
+      + (upcomingWarnings.length ? ` — e.g. "${said(upcomingWarnings[0]).slice(0, 90)}"` : ' (none this game — a quiet game is allowed)'),
+    cachedTurnReads.length);
+
+  // 2e. THE SUPERLATIVE IS EARNED.
+  //
+  // "A lot of suggestions are bad" — they were within 26cp of best, and two of
+  // four were announced as "your strongest reply" while not being the top
+  // line. With MultiPV kept, a close position says "two good moves here". A
+  // game may have no close positions, so this reports the split rather than
+  // demanding one; what it FAILS on is the shape being impossible — the
+  // two-move sentence never appearing across a game with many recommendations
+  // would mean the ranking never ran.
+  const recLines = spoken.filter((e) => /strongest reply here is|Two good moves here/.test(said(e)));
+  const twoMove = recLines.filter((e) => /Two good moves here/.test(said(e)));
+  add('recommendations report their ranking',
+    recLines.length === 0 || recLines.length >= twoMove.length,
+    `${recLines.length} recommendation(s): ${twoMove.length} named two moves,`
+      + ` ${recLines.length - twoMove.length} called a clear best`,
+    recLines.length);
+
   // 3. ONE DEPTH
   // SCOPED TO THE TURN LANES. The contradiction was between the hint read and
   // the grading read on ONE board; other lanes (Play's prefetch, the eval bar)
