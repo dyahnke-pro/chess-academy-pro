@@ -3432,7 +3432,18 @@ export function CoachTeachPage(): JSX.Element {
         // matcher then served a bogus picker/greeting. Use the ACTIVE
         // lesson's opening when one is running; with nothing running, ask
         // for a name honestly instead of guessing.
-        if (/^(?:(?:this|that|the|current|my)\s+)?(?:position|board|game|line|here|it)$/i.test(stageStrippedInput)) {
+        // CONTINUATION WORDS ARE NOT OPENING NAMES. "Teach me more traps"
+        // strips to "more", which the fuzzy matcher then scored against the
+        // whole opening DB and offered as "Sicilian Defense: Modern
+        // Variations" — while a lesson on the Bishop's Opening was running and
+        // the follow-up detector had already logged "expecting context:
+        // Bishop's Opening" 73ms earlier (David's device log, 2026-08-16).
+        // Same shape as the deictic case beside it: a remainder that names no
+        // opening must resolve to the lesson in front of the student, not to
+        // whatever the DB thinks "more" sounds like.
+        const namesNoOpening = /^(?:(?:this|that|the|current|my)\s+)?(?:position|board|game|line|here|it)$/i.test(stageStrippedInput)
+          || /^(?:some\s+|any\s+|a\s+few\s+)?(?:more|another|other|others|again|next|else|extra)(?:\s+(?:one|ones))?$/i.test(stageStrippedInput);
+        if (namesNoOpening) {
           const activeName = walkthrough.tree?.openingName ?? null;
           if (activeName) {
             requestedName = activeName;
