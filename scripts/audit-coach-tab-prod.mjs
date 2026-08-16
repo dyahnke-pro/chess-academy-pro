@@ -47,6 +47,11 @@ import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { clickMove, awaitCoachReply, readPlacement, samePlacement, placementOf, sleep } from './audit-lib/board-drive.mjs';
+// The graders live in their own module because they are UNDER TEST — every one
+// is fed input it must reject in src/test/coachTabGraders.test.ts. A private
+// copy here would drift out from under those controls, which is how the
+// TACTIC_WORDS alternation bug survived a green run in the first place.
+import { STOCK, isGrounded, TACTIC_WORDS, SANCTIONED, evalSpread, evalMagnitudeOf, freshTexts, tally } from './audit-lib/coach-tab-graders.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -86,21 +91,7 @@ const PARITY_QUESTIONS = [
   { id: 'opening', q: 'what opening is this?' },
 ];
 
-/** The stock non-answer. If a surface returns THIS, the lane is not wired —
- *  that is the whole point of the matrix (David 2026-07-09: "If it comes back
- *  with the stock answer we track it down and plug it in"). */
-const STOCK = /I can only speak to what I can verify|I can't verify|I don't have enough|not sure what you|Hit a snag|Connection error/i;
 
-/** BREVITY IS NOT A FAILURE. An earlier version of this required 60+
- *  characters, which graded "The best move is d4. Black is winning (about 4.9
- *  points)." and "Queen on d8 pins pawn on d2 against queen on d1." as thin —
- *  two precise, grounded, board-true answers marked as non-answers because
- *  they were short. The app's own voice rules say the opposite ("No length
- *  floor. Two words beats two sentences when two words is what the position
- *  needs"), so an audit with a length floor is enforcing the reverse of the
- *  standard. What actually distinguishes an answer from a non-answer is the
- *  stock refusal, plus enough text to be a sentence at all. */
-const isGrounded = (r) => !!r.ok && !STOCK.test(r.text) && r.text.trim().length >= 15;
 
 async function dismissModals(page) {
   for (const sel of ['[data-testid="ai-consent-allow"]', '[data-testid="page-help-modal-close"]', '[data-testid="page-help-modal"] button']) {
@@ -142,11 +133,6 @@ async function ask(page, question) {
   // -for-word a message already on screen. Membership-testing against a set
   // then discards the real reply as "already seen" and reports the surface as
   // silent. Counting occurrences catches a repeat as a genuinely new bubble.
-  const tally = (list) => {
-    const m = new Map();
-    for (const x of list) if (x.role === 'assistant' && x.text) m.set(x.text, (m.get(x.text) ?? 0) + 1);
-    return m;
-  };
   const before = tally(await roles().catch(() => []));
 
   await box.click({ force: true }).catch(() => {});
@@ -188,9 +174,7 @@ async function ask(page, question) {
   while (Date.now() < deadline) {
     await sleep(1500);
     const after = tally(await roles().catch(() => []));
-    const fresh = [...after.entries()]
-      .filter(([txt, n]) => n > (before.get(txt) ?? 0))
-      .map(([txt]) => txt);
+    const fresh = freshTexts(before, after);
     if (!fresh.length) continue;
     const now = fresh.reduce((a, b) => (b.length > a.length ? b : a));
     if (now === text) { if (++stable >= 2) break; } else { stable = 0; text = now; }
@@ -363,20 +347,14 @@ async function main() {
   //    trip it but 4.9-vs-0.5 does.
   const evalClaims = [];
   for (const [id, a] of Object.entries(learnAnswers)) {
-    const m = /(-?\d+(?:\.\d+)?)\s*(?:points?|pawns?)/i.exec(a.text ?? '');
-    if (!m) continue;
-    // Normalise to "how far from equal", since the wording carries the side
-    // ("Black is winning by 4.9" vs "a small edge to you, 0.5").
-    evalClaims.push({ id, mag: Math.abs(Number(m[1])), text: (a.text ?? '').slice(0, 90) });
+    const mag = evalMagnitudeOf(a.text ?? '');
+    if (mag !== null) evalClaims.push({ id, mag, text: (a.text ?? '').slice(0, 90) });
   }
-  if (evalClaims.length < 2) unproven('Learn: the answers agree about who is winning', `${evalClaims.length} answer(s) quoted a number — need 2 to compare`);
-  else {
-    const mags = evalClaims.map((e) => e.mag);
-    const spread = Math.max(...mags) - Math.min(...mags);
-    if (spread > 1.5) fail('Learn: the answers agree about who is winning',
-      `${spread.toFixed(1)} pawns apart on ONE position — ${evalClaims.map((e) => `${e.id}="${e.text}"`).join(' | ')}`);
-    else pass('Learn: the answers agree about who is winning', `${evalClaims.length} numeric answer(s), spread ${spread.toFixed(1)} pawns`);
-  }
+  const spread = evalSpread(Object.values(learnAnswers).map((a) => a.text ?? ''));
+  if (spread === null) unproven('Learn: the answers agree about who is winning', `${evalClaims.length} answer(s) quoted a number — need 2 to compare`);
+  else if (spread > 1.5) fail('Learn: the answers agree about who is winning',
+    `${spread.toFixed(1)} pawns apart on ONE position — ${evalClaims.map((e) => `${e.id}="${e.text}"`).join(' | ')}`);
+  else pass('Learn: the answers agree about who is winning', `${evalClaims.length} numeric answer(s), spread ${spread.toFixed(1)} pawns`);
 
   // ── Contract A — a tactic on the board is detected AND spoken.
   const learnEvents = listener.getCapturedEvents();
@@ -392,7 +370,6 @@ async function main() {
     else pass('Learn: the tactics context has real content', (live[0].summary ?? '').slice(0, 90));
   } else fail('Learn: tactics context is built', 'no "tactics ctx:" audit fired, even on a direct tactics question');
 
-  const TACTIC_WORDS = /\bfork|pin\b|skewer|discovered|hanging|double attack|sacrifice|threat|attack(s|ing)? the|wins? (a|the) (pawn|piece|knight|bishop|rook|queen)/i;
   const tacticSpoken = learnSpoken.filter((t) => TACTIC_WORDS.test(t));
   const tacticAnswered = TACTIC_WORDS.test(learnAnswers.tactics?.text ?? '') || TACTIC_WORDS.test(learnAnswers.threats?.text ?? '');
   if (tacticSpoken.length) pass('Learn: the tactic is NARRATED, not just detected', `${tacticSpoken.length}/${learnSpoken.length} spoken line(s) name tactical content · e.g. "${tacticSpoken[0].slice(0, 100)}"`);
@@ -437,7 +414,6 @@ async function main() {
   // on: Play is silent-by-contract mid-game, but phase transitions, the opening
   // announcement and move dictation are all sanctioned, so the count alone
   // cannot separate a contract breach from the contract working. Sort them.
-  const SANCTIONED = /^(pawn|knight|bishop|rook|queen|king) (to|takes|captures)|castles|check(mate)?\.?$|opening|defen[cs]e|game is now|middlegame|endgame|opening phase/i;
   const volunteered = playSpoken.filter((t) => !SANCTIONED.test(t));
   if (!volunteered.length) {
     pass('Play stays silent until asked', `${playSpoken.length} line(s), all sanctioned (move dictation / opening name / phase transition)`);
