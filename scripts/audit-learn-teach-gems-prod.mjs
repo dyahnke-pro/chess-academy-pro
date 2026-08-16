@@ -122,13 +122,33 @@ async function main() {
   else if (answered.length) fail('Learn answers a request for the traps', `only ${answered.length}/${ASKS.length} — e.g. "${(answers.find((a) => !isGrounded({ ok: !!a.text, text: a.text }))?.text || '(silence)').slice(0, 110)}"`);
   else fail('Learn answers a request for the traps', `every phrasing came back stock or empty: "${(answers[0]?.text || '(silence)').slice(0, 140)}"`);
 
-  // ── B. it names REAL gem content.
+  // ── B0. IS IT EVEN ABOUT TRAPS? Asked "show me a Vienna trap where my
+  //    opponent goes wrong", the coach replied "The best move is e4. It stakes
+  //    out the centre..." — a fluent, correct, entirely unrelated answer. A
+  //    lane that answers a different question is not a lane that works, and
+  //    every content check below would happily grade that prose.
   const joined = answers.map((a) => a.text).join('\n');
-  const namedSlips = [...slips].filter((s) => new RegExp(`(^|[^A-Za-z0-9])${s.replace(/[+#]/g, '\\$&')}([^A-Za-z0-9]|$)`).test(joined));
-  const namedPunishes = [...punishes].filter((p) => new RegExp(`(^|[^A-Za-z0-9])${p.replace(/[+#]/g, '\\$&')}([^A-Za-z0-9]|$)`).test(joined));
+  const TRAP_TALK = /\btrap|punish|refut|blunder|mistake|goes wrong|slip|falls? for|pitfall|weapon\b/i;
+  const onTopic = answers.filter((a) => TRAP_TALK.test(a.text));
+  if (!joined.trim()) unproven('the answers are about traps at all', 'nothing was answered');
+  else if (onTopic.length === answers.length) pass('the answers are about traps at all', `${onTopic.length}/${answers.length}`);
+  else fail('the answers are about traps at all', `${onTopic.length}/${answers.length} — e.g. "${(answers.find((a) => !TRAP_TALK.test(a.text))?.text || '').slice(0, 110)}"`);
+
+  // ── B. it names REAL gem content.
+  //    A BARE COORDINATE IS NOT A CITATION. "e4" is the first move of most of
+  //    chess and also one Vienna gem's inaccuracy, so a best-move answer
+  //    mentioning e4 scored as "cites REAL gems" — a false pass produced by the
+  //    very ambiguity the invention check below deliberately filters out. Count
+  //    it only when the answer names a PUNISH (the crux of a trap) or names two
+  //    or more distinct gem moves. One incidental pawn move proves nothing.
+  const named = (set) => [...set].filter((mv) => new RegExp(`(^|[^A-Za-z0-9])${mv.replace(/[+#]/g, '\\$&')}([^A-Za-z0-9]|$)`).test(joined));
+  const namedSlips = named(slips);
+  const namedPunishes = named(punishes);
+  const distinct = new Set([...namedSlips, ...namedPunishes]);
+  const citesGem = namedPunishes.length > 0 || distinct.size >= 2;
   if (!joined.trim()) unproven('the answer cites REAL gems from the data', 'nothing was answered, so there is nothing to check');
-  else if (namedSlips.length || namedPunishes.length) pass('the answer cites REAL gems from the data', `slips {${namedSlips.join(', ')}} punishes {${namedPunishes.join(', ')}}`);
-  else fail('the answer cites REAL gems from the data', `${gems.length} gems exist and the answer named none of them — it is teaching from somewhere other than the file`);
+  else if (citesGem) pass('the answer cites REAL gems from the data', `slips {${namedSlips.join(', ')}} punishes {${namedPunishes.join(', ')}}`);
+  else fail('the answer cites REAL gems from the data', `${gems.length} gems exist; the answer named ${distinct.size ? `only {${[...distinct].join(', ')}} — not a punish and not two distinct gem moves` : 'none of them'}`);
 
   // ── C. no invented chess. Every SAN-shaped token must live in a gem line.
   const SAN = /\b(?:O-O(?:-O)?|[KQRBN]?[a-h]?[1-8]?x?[a-h][1-8](?:=[QRBN])?[+#]?)\b/g;
