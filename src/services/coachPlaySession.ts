@@ -195,7 +195,11 @@ export async function getCoachMove(
   // Pass the config skill straight into getBestMove so the weakened strength is
   // set per-call (immune to a full-strength eval resetting Skill Level on the
   // shared singleton engine between moves).
-  const uci = await stockfishEngine.getBestMove(fen, config.moveTimeMs, config.skill);
+  // The Elo goes to the engine, not just into the label. Same omission as
+  // `coachGameEngine`: the config has carried `targetElo` all along and the
+  // engine was never told it, so Skill Level — which is not Elo — was the only
+  // limiter on the Play surface too.
+  const uci = await stockfishEngine.getBestMove(fen, config.moveTimeMs, config.skill, config.targetElo);
   return parseUci(uci);
 }
 

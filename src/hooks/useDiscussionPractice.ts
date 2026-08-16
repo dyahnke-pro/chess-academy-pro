@@ -37,6 +37,7 @@ import { captureEvent } from '../services/analytics';
 import { getMisconceptionTag } from '../data/misconceptionTags';
 import { principleFor } from '../data/principles';
 import type { MisconceptionSource } from '../types';
+import { COACH_TURN_DEPTH } from '../services/engineConstants';
 
 /** Sentinel the panel's Hint button submits — the hook treats it as an honest
  *  "I couldn't say" (reveal the answer, log the gap), never a typed reason. */
@@ -170,7 +171,10 @@ export interface UseDiscussionPracticeOptions {
   onSlipLogged?: (tag: string, ctx: { fen: string; playedSan: string; bestSan: string }) => void;
 }
 
-const ANALYSIS_DEPTH = 14;
+/** Shared with the hint lane, deliberately. A local 14 here against the hint
+ *  lane's 12 is what let the coach recommend one move and grade against
+ *  another on the same board — see `COACH_TURN_DEPTH`. */
+const ANALYSIS_DEPTH = COACH_TURN_DEPTH;
 
 interface MoveContext {
   args: EvaluatePlayerMoveArgs;

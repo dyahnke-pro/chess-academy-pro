@@ -301,13 +301,28 @@ export function gradeBorrowedTeaching(
   if (!text || !text.trim()) return '';
   if (!fen) return text;
   try {
-    const res = stripDisprovenSentences(text, fen, { strictHypotheticals: true });
+    // `requireNamedPiecesPresent` — the half this gate was missing. Everything
+    // else here is anchored to a SQUARE, so a borrowed sentence that names no
+    // square was unjudgeable and passed by default. Three did, out loud, in a
+    // rook endgame (David, prod 2026-08-16): "the knight presses the pawn…
+    // bishop and rook can trap", "the bishop pins the rook to the king". No
+    // knights or bishops were on the board. See the option's own note for why
+    // a square-only filter used as a SELECTOR made this likelier, not rarer.
+    const res = stripDisprovenSentences(text, fen, {
+      strictHypotheticals: true,
+      requireNamedPiecesPresent: true,
+    });
     if (res.dropped.length > 0) {
+      // SAY WHICH KIND. The old line said "naming squares this board does not
+      // have" for every drop, so the new class would have been invisible in the
+      // stream — and this gate fires ~20 times a ply, which is a lot of log to
+      // read wrongly.
+      const absent = res.dropped.filter((d) => d.violations.some((v) => v.kind === 'piece-absent')).length;
       void logAppAudit({
         kind: 'claim-validator-trip',
         category: 'subsystem',
         source: `${source}.borrowedTeachingGate`,
-        summary: `dropped ${res.dropped.length} sentence(s) naming squares this board does not have`,
+        summary: `dropped ${res.dropped.length} sentence(s): ${res.dropped.length - absent} naming squares this board does not have, ${absent} naming pieces it does not have`,
       });
     }
     return res.clean.trim();

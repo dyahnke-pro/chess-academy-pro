@@ -1,5 +1,6 @@
 import { Chess } from 'chess.js';
 import { stockfishEngine } from './stockfishEngine';
+import { limitStrengthElo, ENGINE_ELO_MIN } from './engineConstants';
 import { getNextOpeningBookMove } from './openingDetectionService';
 import { findHangingPieces } from './tacticClassifier';
 import { lookupMasterPlay } from './masterPlayLookup';
@@ -74,6 +75,39 @@ const FALLBACK_ANALYSIS: StockfishAnalysis = {
  */
 function getSkillLevelForElo(targetElo: number): number {
   return configFromTargetElo(targetElo).skill;
+}
+
+/**
+ * How long the opponent thinks — and, BELOW THE ENGINE'S FLOOR, the only thing
+ * left that can still make it weaker.
+ *
+ * 🔒 ONE STRENGTH MECHANISM, NOT THREE (David 2026-08-16: "something that uses
+ * elo exactly"). This file used to weaken the opponent three different ways at
+ * once — a Skill Level ladder, a movetime table, and book-breaking — none of
+ * which is a rating, while the engine has taken a rating natively all along.
+ * With `UCI_LimitStrength` now actually armed (it never was), the Elo cap does
+ * the work and think-time goes back to being what the anchors always said it
+ * was: "how long the student waits, not how well the engine plays". So at or
+ * above the floor this returns the LATENCY budget, unchanged, and the rating
+ * is honoured by the engine rather than approximated by the clock.
+ *
+ * Below 1320 the cap has nothing left to give — `UCI_Elo` cannot go lower, so
+ * a 900-rated student would face 1320 however the request is phrased. There
+ * the anchor table's own movetime becomes the honest lever (its comment says
+ * exactly this: "below that the number cannot go lower and the honest levers
+ * are elsewhere — breaking book, the amateur bands, shorter movetime"), and a
+ * ~250ms think on a beginner's board is a genuinely weaker opponent.
+ *
+ * Never longer than the latency budget: a weaker target must not make the
+ * student wait more.
+ */
+export function opponentMovetime(targetElo: number, threaded: boolean): number {
+  const budget = threaded ? THREADED_MOVETIME_MS : SINGLE_THREAD_MOVETIME_MS;
+  if (targetElo >= ENGINE_ELO_MIN) return budget;
+  // Floored on 150ms: the engine still has to return a legal move, and on the
+  // single-threaded asm build a few dozen milliseconds is not a move, it is a
+  // coin flip. Weak is the goal; broken is not.
+  return Math.max(150, Math.min(budget, configFromTargetElo(targetElo).moveTimeMs));
 }
 
 /**
@@ -761,10 +795,17 @@ export async function getAdaptiveMove(
   // think returns the same rating-matched move in ~1-2.5s and CANNOT
   // overrun. The depth search below stays only as the recovery ladder.
   {
-    const movetime = threaded ? THREADED_MOVETIME_MS : SINGLE_THREAD_MOVETIME_MS;
+    const movetime = opponentMovetime(targetElo, threaded);
     try {
       const timed = await Promise.race([
-        stockfishEngine.getBestMove(fen, movetime, skillLevel),
+        // TELL THE ENGINE THE RATING. `getBestMove` has taken a `targetElo`
+        // since 2026-08-15 and not one caller passed it, so every coach move
+        // ran with `UCI_LimitStrength false` and Skill Level as the only
+        // limiter — while the audit line below printed the Elo as though it
+        // had been applied. Skill 0 bottoms out around 1320 by this file's own
+        // anchors, so a sub-1300 target was unreachable no matter what the log
+        // said, and David (1729) was outplayed by an opponent labelled 1237.
+        stockfishEngine.getBestMove(fen, movetime, skillLevel, targetElo),
         makeTimeoutPromise(movetime + 3000),
       ]);
       if (timed && timed !== '(none)') {
@@ -772,7 +813,7 @@ export async function getAdaptiveMove(
           kind: 'coach-opponent-move-source',
           category: 'subsystem',
           source: 'coachGameEngine.getAdaptiveMove',
-          summary: `source=stockfish-timed move=${timed} skill=${skillLevel} elo=${targetElo} (${movetime}ms movetime search)`,
+          summary: `source=stockfish-timed move=${timed} elo=${limitStrengthElo(targetElo)} (requested ${targetElo}, UCI_LimitStrength, ${movetime}ms movetime search)`,
           fen,
         });
         return {
@@ -811,7 +852,7 @@ export async function getAdaptiveMove(
     // worse move than the primary search; it may never play a stronger one.
     try {
       const bestMove = await Promise.race([
-        stockfishEngine.getBestMove(fen, 2000, skillLevel),
+        stockfishEngine.getBestMove(fen, 2000, skillLevel, targetElo),
         makeTimeoutPromise(4000),
       ]);
       if (bestMove && bestMove !== '(none)') {
@@ -819,7 +860,7 @@ export async function getAdaptiveMove(
           kind: 'coach-opponent-move-source',
           category: 'subsystem',
           source: 'coachGameEngine.getAdaptiveMove',
-          summary: `source=stockfish-fallback move=${bestMove} elo=${targetElo}`,
+          summary: `source=stockfish-fallback move=${bestMove} elo=${limitStrengthElo(targetElo)} (requested ${targetElo})`,
           fen,
         });
         return {
@@ -847,7 +888,7 @@ export async function getAdaptiveMove(
     try {
       stockfishEngine.forceRestart('getAdaptiveMove hung-worker recovery');
       const revivedMove = await Promise.race([
-        stockfishEngine.getBestMove(fen, 2000, skillLevel),
+        stockfishEngine.getBestMove(fen, 2000, skillLevel, targetElo),
         makeTimeoutPromise(6000),
       ]).catch(() => null);
       if (revivedMove && revivedMove !== '(none)') {
@@ -855,7 +896,7 @@ export async function getAdaptiveMove(
           kind: 'coach-opponent-move-source',
           category: 'subsystem',
           source: 'coachGameEngine.getAdaptiveMove',
-          summary: `source=stockfish-respawn move=${revivedMove} elo=${targetElo} (recovered a hung worker)`,
+          summary: `source=stockfish-respawn move=${revivedMove} elo=${limitStrengthElo(targetElo)} (requested ${targetElo}, recovered a hung worker)`,
           fen,
         });
         return {

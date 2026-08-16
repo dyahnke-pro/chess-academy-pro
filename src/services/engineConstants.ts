@@ -68,6 +68,27 @@ export const MISTAKE_CP = 100;
 /** At or above this, a blunder — unless the mover is still clearly winning. */
 export const BLUNDER_CP = 300;
 
+/** THE ONE DEPTH A COACH TURN IS READ AT — hint lane and grading lane alike.
+ *
+ * 🔒 TWO DEPTHS MEANT TWO BEST MOVES FOR ONE POSITION, AND THE COACH
+ * CONTRADICTED ITSELF OUT LOUD (David's prod game, 2026-08-16). At
+ * `6k1/1p4pp/p3p3/1q6/4P3/1P2QPPP/5R1K/3r4` the hint lane read depth 12 and
+ * said "your strongest reply here is Kg2"; the capture lane read depth 14 and
+ * logged the same position as `bestSan=Qc3`. He was told one move and then
+ * marked wrong for not finding the other — and the second one is what reached
+ * My Mistakes and the drill queue.
+ *
+ * There is no version of this where disagreeing is correct, so the depth is
+ * not a per-lane choice any more. It is set at the GRADING depth, because the
+ * read that judges the student must never be the shallower one; the hint,
+ * which already lives behind a time budget, now shares it.
+ *
+ * The cache is keyed `(fen, depth)`, so agreeing also means the second lane
+ * gets a hit instead of running a whole second search on the same board —
+ * fewer engine seconds per turn, not more.
+ */
+export const COACH_TURN_DEPTH = 14;
+
 // ── THE CHESS.COM BANDS, IN CHESS.COM'S OWN CURRENCY ────────────────────────
 //
 // 🔒 THE COUNTS DID NOT MATCH CHESS.COM BECAUSE THE TWO HALVES OF THE REVIEW
@@ -105,3 +126,21 @@ export const BLUNDER_WIN_PCT = 20;
 /** Below this the move is "good"; above it and under inaccuracy, still good but
  *  no longer excellent. Kept so the bands stay a faithful copy of the table. */
 export const EXCELLENT_WIN_PCT = 2;
+
+/** The Elo the engine will ACTUALLY be limited to, clamped into the range
+ *  Stockfish's `UCI_Elo` accepts.
+ *
+ *  Lives here, in the leaf, for two reasons. One owner, so the number in the
+ *  audit line is the number in the engine — the old line printed the REQUESTED
+ *  rating next to a search that had not been told any rating, and a label that
+ *  reads as delivery is how a dead wire survives for weeks. And no coupling to
+ *  `stockfishEngine`, which every coach test mocks: exporting it from there
+ *  made the audit call `undefined()` under test, throwing the timed search into
+ *  the recovery ladder. A logging helper must never be able to change which
+ *  search runs.
+ */
+export const ENGINE_ELO_MIN = 1320;
+export const ENGINE_ELO_MAX = 3190;
+export function limitStrengthElo(targetElo: number): number {
+  return Math.max(ENGINE_ELO_MIN, Math.min(ENGINE_ELO_MAX, Math.round(targetElo)));
+}

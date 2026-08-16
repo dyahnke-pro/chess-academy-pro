@@ -242,6 +242,13 @@ const GATE_TESTS = [
   // app keeps speaking, just not the reviewed words. This asserts the merge
   // has been run and every line is in the shipped bake verbatim.
   'src/services/handwrittenSpoken.test.ts',
+  // The three defects David's 2026-08-16 prod game exposed: borrowed teaching
+  // naming pieces the board does not have, the opponent's Elo never reaching
+  // the engine, and the hint lane grading the student at a different depth
+  // than it advised at. Each passed every existing test.
+  'src/services/coachTurnTruth.test.ts',
+  // Was red on `main` and nobody saw it, because it was in no gate list.
+  'src/services/hintLaneCoverage.test.ts',
   // ── WEAKNESS-LOOP / BUCKET-DELIVERY GATES (David 2026-07-06 "log and audit the buckets"). ──
   'src/services/bucketPipelineAudit.test.ts', // captured answer → right bucket + drill (delivery) + ranking/dedup/SRS (organization)
   'src/hooks/useDiscussionPractice.test.ts',  // faucet: rating-adaptive slip picker, good-move non-blocking line, response logging

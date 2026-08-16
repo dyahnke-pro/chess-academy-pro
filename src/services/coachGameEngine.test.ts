@@ -73,15 +73,42 @@ describe('coachGameEngine', () => {
       expect(analyzePositionMock).not.toHaveBeenCalled(); // depth search never runs when the timed search delivers
     });
 
-    it('uses the bounded THREADED movetime with the rating-matched skill', async () => {
-      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1200);
-      expect(getBestMoveMock).toHaveBeenCalledWith(expect.any(String), 1200, skillFor(1200));
+    // ── THE ENGINE IS TOLD THE RATING NOW ─────────────────────────────────
+    // These two pinned a three-argument call, which is exactly the contract
+    // that was wrong: `getBestMove` has accepted a `targetElo` since
+    // 2026-08-15 and no caller passed one, so every coach move ran with
+    // `UCI_LimitStrength false` and Skill Level — a scale that is not Elo —
+    // as the only limiter. David (targeted at 1237) was outplayed. The fourth
+    // argument is the fix, and it is asserted here so it cannot fall off again.
+    it('tells the engine the target rating, not just the skill level', async () => {
+      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1500);
+      expect(getBestMoveMock).toHaveBeenCalledWith(
+        expect.any(String), expect.any(Number), skillFor(1500), 1500,
+      );
     });
 
-    it('uses the longer single-threaded movetime when not cross-origin isolated', async () => {
-      vi.stubGlobal('crossOriginIsolated', false);
+    it('at or above the engine floor, think-time is the LATENCY budget', async () => {
+      // With the Elo cap armed, time stops being a strength lever — the
+      // anchors always said so ("how long the student waits, not how well the
+      // engine plays"); it just was not true until the cap was actually sent.
       await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1500);
-      expect(getBestMoveMock).toHaveBeenCalledWith(expect.any(String), 2500, skillFor(1500));
+      expect(getBestMoveMock).toHaveBeenCalledWith(expect.any(String), 1200, skillFor(1500), 1500);
+      vi.stubGlobal('crossOriginIsolated', false);
+      getBestMoveMock.mockClear();
+      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1500);
+      expect(getBestMoveMock).toHaveBeenCalledWith(expect.any(String), 2500, skillFor(1500), 1500);
+    });
+
+    it('BELOW the engine floor, think-time is the only lever left — so it shortens', async () => {
+      // `UCI_Elo` bottoms out at 1320. A 1000-rated student cannot be given a
+      // 1000-rated opponent by the cap however the request is phrased, so the
+      // anchor table's movetime does the remaining work rather than the
+      // opponent quietly playing 300 points above the target.
+      getBestMoveMock.mockClear();
+      await getAdaptiveMove('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', 1000);
+      const [, movetime] = getBestMoveMock.mock.calls.at(-1) as [string, number, number, number];
+      expect(movetime).toBeLessThan(1200);
+      expect(movetime).toBeGreaterThanOrEqual(150);
     });
   });
 

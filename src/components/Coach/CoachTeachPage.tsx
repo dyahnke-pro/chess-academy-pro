@@ -243,6 +243,9 @@ import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText, gradeBorrowedTeaching } from '../../services/coachAnswerGates';
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
+// ONE depth for the whole turn — the hint lane and the lane that grades the
+// student must not read the same board at different depths. See the constant.
+import { COACH_TURN_DEPTH } from '../../services/engineConstants';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, studentPlayingRating } from '../../services/coachGameEngine';
@@ -6752,7 +6755,7 @@ export function CoachTeachPage(): JSX.Element {
           try {
             const warmProbe = new Chess(move.fen);
             if (warmProbe.move(reply)) {
-              void stockfishEngine.analyzeWithBudget(warmProbe.fen(), 12, 2500).catch(() => undefined);
+              void stockfishEngine.analyzeWithBudget(warmProbe.fen(), COACH_TURN_DEPTH, 2500).catch(() => undefined);
             }
           } catch { /* warming is a bonus, never a blocker */ }
         }
@@ -6775,7 +6778,7 @@ export function CoachTeachPage(): JSX.Element {
         // therefore refused every single turn. The coach's own mistake callout
         // was wired end to end and could not fire once.
         const midTurnRead = stockfishEngine
-          .analyzeWithBudget(move.fen, 12, 1500)
+          .analyzeWithBudget(move.fen, COACH_TURN_DEPTH, 1500)
           .catch(() => null);
         // THE PAD IS THEATER, NOT A PIPELINE STAGE (David 2026-08-07: "The
         // two second wait time is for the opponents move… That doesn't mean
@@ -6858,7 +6861,7 @@ export function CoachTeachPage(): JSX.Element {
                 // opps=0" to the model while he hung a knight for 530cp.
                 let studentBest: StockfishAnalysis | null = null;
                 try {
-                  studentBest = await stockfishEngine.analyzeWithBudget(probe.fen(), 12, 1200);
+                  studentBest = await stockfishEngine.analyzeWithBudget(probe.fen(), COACH_TURN_DEPTH, 1200);
                 } catch { /* engine down → thin (chess.js-only) context below */ }
                 // ── THE COACH JUDGES ITS OWN MOVE ──────────────────────────
                 // David 2026-08-10: "the coach side needs wiring." Until now

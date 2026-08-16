@@ -46,9 +46,21 @@ const HINT_LANES: Array<{ name: string; near: string; proof: RegExp }> = [
     proof: /packageForRegister\(\{[\s\S]*?GEM ALERT[\s\S]*?\}, discussion\.hintDial\.register\)/,
   },
   {
+    // DELIBERATE EXEMPTION, and the gate has to say so out loud rather than
+    // keep failing. The look-ahead plan used to be truncated to 3 parts on
+    // 'obvious' and 2 elsewhere; that was removed on purpose — the key square,
+    // the board read and both plans are computed from one PV line and are all
+    // board-true, so the register was throwing away half of what the position
+    // says. The register governs how much help a HINT gives, not how much of
+    // the position is described.
+    //
+    // What must still hold: the parts are graded INDIVIDUALLY (so the spoken
+    // text and the board marks cannot disagree), and the register is still
+    // reported, so the choice stays visible in the stream. Left red on `main`
+    // since that change because this file was not in ship-check; it is now.
     name: 'look-ahead plan',
     near: 'lookahead_plan_offered',
-    proof: /discussion\.hintDial\.register === 'obvious' \? 3 : 2/,
+    proof: /register: discussion\.hintDial\.register,/,
   },
 ];
 

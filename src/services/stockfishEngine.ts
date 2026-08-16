@@ -1,7 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import { StockfishNative } from 'capacitor-stockfish-native';
 import type { StockfishAnalysis, AnalysisLine } from '../types';
-import { MATE_EVAL_VALUE } from './engineConstants';
+import { MATE_EVAL_VALUE, limitStrengthElo } from './engineConstants';
 import { stockfishCache } from './stockfishCache';
 import { logAppAudit } from './appAuditor';
 
@@ -1538,7 +1538,7 @@ class StockfishEngine {
       // whichever the caller chose, the other cannot be left armed.
       if (targetElo !== undefined) {
         this.send('setoption name UCI_LimitStrength value true');
-        this.send(`setoption name UCI_Elo value ${Math.max(1320, Math.min(3190, Math.round(targetElo)))}`);
+        this.send(`setoption name UCI_Elo value ${limitStrengthElo(targetElo)}`);
         // Skill Level and UCI_Elo are independent limiters; leaving a low skill
         // armed underneath an Elo cap weakens the engine twice.
         this.send('setoption name Skill Level value 20');

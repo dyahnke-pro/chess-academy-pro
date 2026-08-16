@@ -42,7 +42,7 @@
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
 
-export type BoardClaimKind = 'piece-on-square' | 'pin-geometry';
+export type BoardClaimKind = 'piece-on-square' | 'pin-geometry' | 'piece-absent';
 
 export interface BoardClaimViolation {
   kind: BoardClaimKind;
@@ -221,6 +221,31 @@ export interface BoardClaimOptions {
    *  Callers speaking borrowed teaching set this; callers narrating their own
    *  line must not. */
   strictHypotheticals?: boolean;
+  /** Also refuse a sentence that names a PIECE TYPE nowhere on the board.
+   *
+   *  🔒 THE SQUARE-ONLY GATE WAS SELECTING FOR THE BUG IT COULD NOT SEE
+   *  (David, prod, 2026-08-16: "a lot of narrations had wrong pieces or
+   *  squares called out"). Everything above is anchored to a SQUARE — a claim
+   *  has to say "on d6" before it can be checked. So a borrowed note that
+   *  names no square at all sails through, and three did, out loud, in a rook
+   *  endgame: "the knight presses the pawn… bishop and rook can trap", "the
+   *  bishop pins the rook to the king". No knights, no bishops, anywhere.
+   *
+   *  Worse than a miss: this gate is used as the SELECTOR for the borrowed
+   *  tier, so it was actively preferring geometry-free prose — and
+   *  geometry-free prose is exactly where unverifiable piece claims live. The
+   *  filter was steering toward its own blind spot.
+   *
+   *  `namedPiecesExistOnBoard` has asked this question since 2026-08-05, but
+   *  only of a note's `plans` field at selection time, never of the text that
+   *  actually gets spoken. Same question, now asked where the words leave.
+   *
+   *  Deliberately colour-blind and deliberately not hypothetical-aware: a
+   *  borrowed note's "if the knight jumps in" is about a knight in ANOTHER
+   *  game, and if this board has no knight at all there is nothing here for
+   *  the sentence to be about. Opt-in, because a coach narrating its own line
+   *  may legitimately discuss a promotion or a piece it is about to trade. */
+  requireNamedPiecesPresent?: boolean;
 }
 
 export function validateBoardClaims(
@@ -235,6 +260,30 @@ export function validateBoardClaims(
     return { ok: true, violations: [] }; // unparseable FEN → can't judge
   }
   const violations: BoardClaimViolation[] = [];
+
+  // ── (0) DOES THE PIECE EVEN EXIST? ────────────────────────────────
+  // Opt-in (see `requireNamedPiecesPresent`). Runs FIRST and cheaply: no
+  // square needs to be named for this to be answerable, which is the whole
+  // point — every check below waits for a square and therefore never sees the
+  // sentences that name none.
+  if (options?.requireNamedPiecesPresent) {
+    const present = new Set<PieceSymbol>();
+    for (const row of chess.board()) {
+      for (const p of row) if (p) present.add(p.type);
+    }
+    for (const [word, type] of Object.entries(PIECE_WORD_TO_TYPE)) {
+      // Kings are never absent, so the pair is skipped rather than special-cased.
+      if (type === 'k' || present.has(type)) continue;
+      const m = new RegExp(`\\b${word}s?\\b`, 'i').exec(text);
+      if (m) {
+        violations.push({
+          kind: 'piece-absent',
+          claim: m[0],
+          reason: `no ${word} of either colour is on the board`,
+        });
+      }
+    }
+  }
 
   // ── (1) PIN / SKEWER GEOMETRY ─────────────────────────────────────
   // "A pins/skewers B to C". Evaluated across the whole text (not gated
