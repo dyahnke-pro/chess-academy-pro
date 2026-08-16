@@ -163,6 +163,19 @@ describe('a fresh plan search self-limits', () => {
     expect(analyzeWithBudget.mock.calls[0]?.[2]).toBe(900);
   });
 
+  it('stamps the position it was computed for', async () => {
+    // A plan with no record of its own position is unfalsifiable: a surface
+    // hands one over, the brain reuses it, and nothing downstream can tell a
+    // fresh plan from one computed several moves ago. That shipped a coach
+    // saying "your plan: e4, then d4, then Nc3 ... White is slightly better
+    // (0.5)" five moves into a game the engine scored as Black winning by 2.9
+    // (2026-08-16 coach-tab audit). The stamp is what lets coachService DROP a
+    // stale plan at selection instead of narrating it.
+    getCachedStockfish.mockReturnValue(analysis({ bestMove: 'g1f3', topLines: [{ moves: ['g1f3'], evaluation: 15, mateIn: null }] }));
+    const plan = await buildEnginePlan(START, 'white');
+    expect(plan?.fen).toBe(START);
+  });
+
   it('still prefers the cache and searches nothing when it hits', async () => {
     // The property the "two best moves" fix turned on: a warm board must not
     // pay for a second opinion that can disagree with the eval bar.
