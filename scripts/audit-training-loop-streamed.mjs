@@ -19,7 +19,7 @@
  *   node scripts/audit-training-loop-streamed.mjs
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 
 const U = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -30,8 +30,8 @@ const isWarmup = (t) => !t || t.trim() === '.' || t.trim() === '';
 const listener = await startAuditListener();
 console.log(`[stream] listener up at ${listener.url}`);
 
-const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), headless: true });
-const ctx = await browser.newContext();
+const browser = await chromium.launch({ args: sandboxLaunchArgs(), executablePath: await resolveChromiumExecutable(), headless: true });
+const ctx = await browser.newContext(sandboxContextOptions());
 const page = await ctx.newPage();
 const tts = [];
 const pageErrors = [];

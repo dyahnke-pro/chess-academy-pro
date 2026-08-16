@@ -47,7 +47,7 @@
  *   AUDIT_LOOP_MAX_PASSES=10 node scripts/audit-weaknesses-loop.mjs
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -207,7 +207,7 @@ function attachAuditCapture(page) {
 
 // ─── Scenario runner ─────────────────────────────────────────────
 async function runPass(browser, passIdx) {
-  const ctx = await browser.newContext({
+  const ctx = await browser.newContext({ ...sandboxContextOptions(),
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditWeaknessesLoopBot/1.0',
@@ -579,7 +579,7 @@ async function main() {
 
   const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[weaknesses-loop] chromium = ${executablePath}`);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath });
 
   let consecutiveClean = 0;
   let passIdx = 0;

@@ -15,6 +15,7 @@
 // Targets `AUDIT_SMOKE_URL` (defaults to localhost:5173). To run
 // against prod, set `AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app`.
 import { chromium } from 'playwright';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { writeFileSync, mkdirSync } from 'fs';
 import { join } from 'path';
 
@@ -237,7 +238,7 @@ const SCENARIOS = [
 ];
 
 async function runScenario(browser, scenario) {
-  const ctx = await browser.newContext({ ignoreHTTPSErrors: true });
+  const ctx = await browser.newContext({ ...sandboxContextOptions(), ignoreHTTPSErrors: true });
   const page = await ctx.newPage();
 
   const consoleErrors = [];
@@ -336,7 +337,13 @@ async function runScenario(browser, scenario) {
 
 (async () => {
   console.log(`Driving ${SCENARIOS.length} rolodex deep-link URLs against ${BASE}\n`);
-  const browser = await chromium.launch({ headless: true });
+  const browser = await chromium.launch({
+    headless: true,
+    // No resolver and no args at all — it could never reach prod from the
+    // sandbox, and said so as ERR_CONNECTION_RESET.
+    executablePath: await resolveChromiumExecutable(false),
+    args: sandboxLaunchArgs(),
+  });
   const results = [];
   for (const s of SCENARIOS) {
     process.stdout.write(`▶ ${s.tool}\n  ${s.url}\n`);

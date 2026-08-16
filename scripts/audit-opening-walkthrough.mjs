@@ -9,7 +9,7 @@
 //   AUDIT_OPENING=ruy-lopez node scripts/audit-opening-walkthrough.mjs
 
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const ID = process.env.AUDIT_OPENING ?? 'vienna-game';
@@ -58,8 +58,8 @@ async function clickTab(page, testid) {
 
 async function main() {
   const exe = await resolveChromiumExecutable();
-  const browser = await chromium.launch({ executablePath: exe, headless: true });
-  const ctx = await browser.newContext();
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), executablePath: exe, headless: true });
+  const ctx = await browser.newContext(sandboxContextOptions());
   const page = await ctx.newPage();
   const tts = [];
   const errs = [];

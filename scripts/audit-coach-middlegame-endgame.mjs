@@ -31,7 +31,7 @@
  *   node scripts/audit-coach-middlegame-endgame.mjs
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
@@ -57,8 +57,8 @@ async function main() {
 
   const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[mid-end] chromium   = ${executablePath}`);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
-  const ctx = await browser.newContext({
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath });
+  const ctx = await browser.newContext({ ...sandboxContextOptions(),
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditCoachMidEndBot/1.0 (chromium)',

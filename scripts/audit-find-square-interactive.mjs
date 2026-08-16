@@ -35,7 +35,7 @@
  * EXIT 0 = all 3 passes green. EXIT 1 = any pass failed.
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { attachAuditStreamTracker, attributeScenarioEvents } from './audit-lib/event-attribution.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -491,7 +491,7 @@ async function pass3(page, tracker) {
 }
 
 async function runOnePass(passFn, passNum, browser) {
-  const ctx = await browser.newContext({ viewport: { width: 414, height: 896 } });
+  const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 } });
   await ctx.addInitScript(({ url, secret }) => {
     try {
       window.localStorage.setItem('auditStreamUrl', url);
@@ -518,7 +518,7 @@ async function main() {
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
 
   const executablePath = await resolveChromiumExecutable(HEADED);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath });
 
   await runOnePass(pass1, 1, browser);
   await runOnePass(pass2, 2, browser);

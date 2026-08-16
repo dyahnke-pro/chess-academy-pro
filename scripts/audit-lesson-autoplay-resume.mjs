@@ -16,7 +16,7 @@
 // the bug; the script flags it for David to confirm on a real device.
 
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const ID = process.env.AUDIT_OPENING ?? 'scotch-game';
@@ -51,8 +51,8 @@ async function waitForAdvance(page, floor, timeoutMs) {
 
 async function main() {
   const exe = await resolveChromiumExecutable();
-  const browser = await chromium.launch({ executablePath: exe, headless: true });
-  const ctx = await browser.newContext();
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), executablePath: exe, headless: true });
+  const ctx = await browser.newContext(sandboxContextOptions());
   const page = await ctx.newPage();
   const errs = [];
   page.on('pageerror', (e) => errs.push(String(e).slice(0, 160)));

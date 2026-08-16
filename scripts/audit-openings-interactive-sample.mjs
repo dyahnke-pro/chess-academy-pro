@@ -28,7 +28,7 @@
  */
 
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { Chess } from 'chess.js';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -180,8 +180,8 @@ async function main() {
   const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[interactive] chromium = ${executablePath}`);
 
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
-  const ctx = await browser.newContext({
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath });
+  const ctx = await browser.newContext({ ...sandboxContextOptions(),
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditInteractiveBot/1.0 (chromium)',

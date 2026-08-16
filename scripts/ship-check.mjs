@@ -263,6 +263,10 @@ const GATE_TESTS = [
   // to aim at ("the useless rook and queen battery on the 8th rank"), and the
   // opponent look-ahead switched off by a `null` analysis, so a fork could
   // only ever be announced after it landed.
+  // An audit that cannot reach prod is not an audit — it fails as
+  // ERR_CONNECTION_RESET, which reads as "prod is down, use localhost". 43 of
+  // 278 scripts were in that state on 2026-08-16.
+  'src/test/auditHarnessReach.test.ts',
   'src/services/tacticsDetector.test.ts',
   'src/services/liveTacticsContext.test.ts',
   // "Your strongest reply" said for a move 10-18cp off the engine's own top

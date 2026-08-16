@@ -260,9 +260,10 @@ async function main() {
     executablePath,
     // Sandbox's chromium doesn't trust the CA chain for the public
     // DeepSeek / Anthropic API hosts. Real-device browsers (and the
-    // production deploy) don't have this issue. Pass the flag so the
-    // audit can actually exercise the brain in the sandbox.
-    args: ['--ignore-certificate-errors'],
+    // production deploy) don't have this issue. `sandboxLaunchArgs()`
+    // carries that flag — plus the --proxy-server and TLS 1.2 pin this line
+    // was missing, without which the prod goto dies on ERR_CONNECTION_RESET.
+    args: sandboxLaunchArgs(),
   });
   const ctx = await browser.newContext({ ...sandboxContextOptions(),
     viewport: { width: 1280, height: 800 },

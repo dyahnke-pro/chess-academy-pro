@@ -15,7 +15,7 @@
  *     node scripts/audit-weaknesses-visual.mjs
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -187,9 +187,10 @@ async function main() {
   const browser = await chromium.launch({
     headless: !HEADED,
     executablePath,
-    args: SANDBOX ? ['--ignore-certificate-errors', '--no-sandbox'] : [],
+    args: sandboxLaunchArgs(),   // proxy + TLS 1.2 pin; the pair here lacked both
   });
   const ctx = await browser.newContext({
+    ...sandboxContextOptions(),
     viewport: { width: 1440, height: 900 }, // desktop / "windows view"
     ignoreHTTPSErrors: true,
     userAgent: 'AuditWeaknessVisualBot/1.0 (chromium)',

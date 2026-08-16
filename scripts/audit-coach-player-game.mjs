@@ -30,7 +30,7 @@
  *     node scripts/audit-coach-player-game.mjs
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -78,9 +78,13 @@ async function main() {
   console.log(`[pg] listener = ${listener.url}`);
 
   const executablePath = await resolveChromiumExecutable(HEADED);
-  const launchArgs = SANDBOX ? ['--ignore-certificate-errors', '--no-sandbox'] : [];
+  // Was a hand-rolled pair that omitted --proxy-server and the TLS 1.2 pin,
+  // so every prod goto died with ERR_CONNECTION_RESET. The helper is the one
+  // place that knows what this container's egress proxy needs.
+  const launchArgs = sandboxLaunchArgs();
   const browser = await chromium.launch({ headless: !HEADED, executablePath, args: launchArgs });
   const ctx = await browser.newContext({
+    ...sandboxContextOptions(),
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditPlayerGameBot/1.0 (chromium)',

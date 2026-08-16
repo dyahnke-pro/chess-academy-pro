@@ -18,7 +18,7 @@
  * Default target = http://localhost:5173 (sandbox can't reach prod).
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -483,7 +483,7 @@ async function main() {
 
   const executablePath = await resolveChromiumExecutable(HEADED);
   if (executablePath) console.log(`[audit-everything] chromium = ${executablePath}`);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath });
 
   // Shared context across the whole pass so Dexie seed persists
   // between scenarios. Recreate per loop pass so each loop starts
@@ -495,7 +495,7 @@ async function main() {
   while (true) {
     loop++;
     console.log(`\n━━━ PASS ${loop} ━━━`);
-    const ctx = await browser.newContext({
+    const ctx = await browser.newContext({ ...sandboxContextOptions(),
       viewport: { width: 414, height: 896 },
       deviceScaleFactor: 2,
       userAgent: 'AuditEverythingBot/1.0',

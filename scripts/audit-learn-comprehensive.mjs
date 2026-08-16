@@ -43,7 +43,7 @@
  * Exit 0 = zero real errors. Nonzero = errors recorded.
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -330,8 +330,8 @@ async function main() {
   const executablePath = await resolveChromiumExecutable({
     preferred: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
   });
-  const browser = await chromium.launch({ headless: true, executablePath });
-  const ctx = await browser.newContext({
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: true, executablePath });
+  const ctx = await browser.newContext({ ...sandboxContextOptions(),
     viewport: { width: 420, height: 900 },
     ...(RECORD_VIDEO && { recordVideo: { dir: VIDEO_DIR, size: { width: 420, height: 900 } } }),
   });

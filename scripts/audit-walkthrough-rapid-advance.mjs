@@ -22,7 +22,7 @@
  */
 
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
@@ -32,8 +32,8 @@ const CLICK_INTERVAL_MS = parseInt(process.env.CLICK_INTERVAL_MS ?? '150', 10);
 
 async function main() {
   const exe = await resolveChromiumExecutable(HEADED);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath: exe });
-  const ctx = await browser.newContext({ viewport: { width: 414, height: 896 }, deviceScaleFactor: 2 });
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath: exe });
+  const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, deviceScaleFactor: 2 });
   const page = await ctx.newPage();
 
   // Track TTS fetch + abort signals

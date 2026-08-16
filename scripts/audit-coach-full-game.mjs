@@ -28,7 +28,7 @@
  */
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -167,8 +167,8 @@ async function main() {
   console.log(`[full-game] headed     = ${HEADED}`);
 
   const executablePath = await resolveChromiumExecutable(HEADED);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath, slowMo: HEADED ? 400 : 0 });
-  const ctx = await browser.newContext({
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath, slowMo: HEADED ? 400 : 0 });
+  const ctx = await browser.newContext({ ...sandboxContextOptions(),
     viewport: HEADED ? { width: 480, height: 920 } : { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditCoachFullGameBot/1.0 (chromium)',

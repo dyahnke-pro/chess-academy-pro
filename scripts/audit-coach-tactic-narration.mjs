@@ -21,7 +21,7 @@
  *   node scripts/audit-coach-tactic-narration.mjs
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 // SANDBOX_CHROMIUM_ARGS available but kept off until the brain-on
 // scenarios (5 narration probes) are restructured to verify the
 // real LLM behavior. Today's run shows brain reachable + responses
@@ -116,13 +116,13 @@ async function main() {
   console.log(`[narration] outDir     = ${OUT_DIR}`);
 
   const executablePath = await resolveChromiumExecutable(HEADED);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath });
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath });
 
   // Brain-reachability gate (in-browser). Probe BEFORE setting up the
   // full audit listener / context so we can exit cleanly when the
   // sandbox firewall is in place.
   {
-    const probeCtx = await browser.newContext();
+    const probeCtx = await browser.newContext(sandboxContextOptions());
     const probePage = await probeCtx.newPage();
     await probePage.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
     const brainOk = await isBrainReachableFromBrowser(probePage);
@@ -142,7 +142,7 @@ async function main() {
   }
 
   const listener = await startAuditListener();
-  const ctx = await browser.newContext({
+  const ctx = await browser.newContext({ ...sandboxContextOptions(),
     viewport: { width: 414, height: 896 },
     deviceScaleFactor: 2,
     userAgent: 'AuditCoachTacticNarrationBot/1.0 (chromium)',

@@ -41,7 +41,7 @@
  */
 
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -845,7 +845,7 @@ async function main() {
   }
   console.log(`[interactive-loop] queue: ${queue.length} openings`);
   const exe = await resolveChromiumExecutable(HEADED);
-  const browser = await chromium.launch({ headless: !HEADED, executablePath: exe });
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath: exe });
 
   // Improvement #5+6: iOS-flavored context. Even/odd rounds alternate
   // between desktop Chromium (default) and iOS-WebKit-flavored

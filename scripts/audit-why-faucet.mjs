@@ -14,18 +14,18 @@
  * live fire, reported honestly (G7 — never a fake green).
  */
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const exe = await resolveChromiumExecutable(false);
-const browser = await chromium.launch({ headless: true, executablePath: exe });
+const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: true, executablePath: exe });
 const results = [];
 const rec = (name, pass, note) => { results.push({ name, pass, note }); console.log(`  ${pass ? '✓' : '✗'} ${name}${note ? ` — ${note}` : ''}`); };
 
 async function newPage() {
-  const ctx = await browser.newContext({ viewport: { width: 414, height: 896 }, ignoreHTTPSErrors: true });
+  const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, ignoreHTTPSErrors: true });
   await ctx.addInitScript(autoDismissCalibration);
   await ctx.addInitScript(muteTtsForAudit); // no TTS spend — see mute-tts.mjs
   const page = await ctx.newPage();

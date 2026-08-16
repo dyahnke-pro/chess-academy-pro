@@ -27,7 +27,7 @@
 
 import { chromium } from 'playwright';
 import { writeFileSync, mkdirSync } from 'node:fs';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -61,7 +61,7 @@ async function btnText(page, testid) {
 
 async function main() {
   const exe = await resolveChromiumExecutable();
-  const browser = await chromium.launch({ executablePath: exe, headless: true });
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), executablePath: exe, headless: true });
   const page = await browser.newPage();
   page.on('pageerror', (e) => console.log(`  [pageerror] ${String(e).slice(0, 140)}`));
 

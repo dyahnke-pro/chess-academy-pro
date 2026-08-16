@@ -9,7 +9,7 @@
 //   node scripts/audit-vienna-walkthrough.mjs
 
 import { chromium } from 'playwright';
-import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const ID = 'vienna-game';
@@ -34,8 +34,8 @@ async function closeHelp(page) {
 
 async function main() {
   const exe = await resolveChromiumExecutable();
-  const browser = await chromium.launch({ executablePath: exe, headless: true });
-  const ctx = await browser.newContext();
+  const browser = await chromium.launch({ args: sandboxLaunchArgs(), executablePath: exe, headless: true });
+  const ctx = await browser.newContext(sandboxContextOptions());
   const page = await ctx.newPage();
   const tts = [];
   const errs = [];
