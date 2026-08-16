@@ -134,8 +134,17 @@ async function ask(page, question) {
     role: e.getAttribute('data-testid')?.endsWith('user') ? 'user' : 'assistant',
     text: (e.textContent ?? '').replace(/^\s*C\s+/, '').trim(),
   })));
-  const seedList = await roles().catch(() => []);
-  const seen = new Set(seedList.filter((m) => m.role === 'assistant').map((m) => m.text));
+  // A MULTISET, not a set. Play auto-announces things ("This game is now the
+  // Caro-Kann Defense…"), so the answer to "what opening is this?" can be word
+  // -for-word a message already on screen. Membership-testing against a set
+  // then discards the real reply as "already seen" and reports the surface as
+  // silent. Counting occurrences catches a repeat as a genuinely new bubble.
+  const tally = (list) => {
+    const m = new Map();
+    for (const x of list) if (x.role === 'assistant' && x.text) m.set(x.text, (m.get(x.text) ?? 0) + 1);
+    return m;
+  };
+  const before = tally(await roles().catch(() => []));
 
   await box.click({ force: true }).catch(() => {});
   await box.fill('').catch(() => {});
@@ -175,10 +184,12 @@ async function ask(page, question) {
   let text = '', stable = 0;
   while (Date.now() < deadline) {
     await sleep(1500);
-    const list = await roles().catch(() => []);
-    const fresh = list.filter((m) => m.role === 'assistant' && m.text && !seen.has(m.text));
+    const after = tally(await roles().catch(() => []));
+    const fresh = [...after.entries()]
+      .filter(([txt, n]) => n > (before.get(txt) ?? 0))
+      .map(([txt]) => txt);
     if (!fresh.length) continue;
-    const now = fresh.reduce((a, b) => (b.text.length > a.text.length ? b : a)).text;
+    const now = fresh.reduce((a, b) => (b.length > a.length ? b : a));
     if (now === text) { if (++stable >= 2) break; } else { stable = 0; text = now; }
   }
   return { ok: !!text, text, why: text ? '' : 'no new assistant reply within 90s' };
@@ -314,13 +325,18 @@ async function main() {
   //    four into one check reports "no nav anywhere" during free play and hides
   //    which of the two is actually missing. Check the free-play board on its
   //    own terms — takeback is not navigation, it destroys the move.
-  const learnNavIds = ['teach-nav-prev', 'teach-nav-next', 'teach-nav-first', 'teach-nav-last'];
-  const learnNavSeen = [];
-  for (const id of learnNavIds) if (await page.locator(`[data-testid="${id}"]`).first().isVisible().catch(() => false)) learnNavSeen.push(id);
-  const takebackSeen = await page.locator('[data-testid="teach-takeback"]').first().isVisible().catch(() => false);
-  if (learnNavSeen.length) pass('Learn free-play: forward/back controls present', learnNavSeen.join(' + '));
-  else fail('Learn free-play: forward/back controls present',
-    `no move navigation on the Learn board — only ${takebackSeen ? 'Takeback (destroys the move, cannot step forward again)' : 'nothing'}. Play has first/prev/next/last.`);
+  // PRESENT *AND* WORKING — checkNav clicks each direction and requires the
+  // rendered placement to change. Presence alone was the weaker half of the
+  // contract and would pass a button that renders and does nothing.
+  await checkNav(page, 'Learn free-play', ['teach-nav-prev', 'teach-nav-next']);
+  for (const id of ['teach-nav-first', 'teach-nav-last']) {
+    const seen = await page.locator(`[data-testid="${id}"]`).first().isVisible().catch(() => false);
+    if (seen) pass(`Learn free-play: ${id} present`); else fail(`Learn free-play: ${id} present`, 'not rendered');
+  }
+  // Leave the board live — the questions below must be asked about the CURRENT
+  // position, and a reviewed board is deliberately read-only.
+  await page.locator('[data-testid="teach-nav-last"]').first().click({ force: true }).catch(() => {});
+  await sleep(800);
 
   // ── Contract C, Learn half — the baseline the Play side is compared to.
   //    RUN THIS BEFORE SAMPLING TACTICS: `CoachTeachPage.buildLiveTactics`
