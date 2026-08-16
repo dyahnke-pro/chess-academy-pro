@@ -51,7 +51,7 @@ import { clickMove, awaitCoachReply, readPlacement, samePlacement, placementOf, 
 // is fed input it must reject in src/test/coachTabGraders.test.ts. A private
 // copy here would drift out from under those controls, which is how the
 // TACTIC_WORDS alternation bug survived a green run in the first place.
-import { STOCK, isGrounded, TACTIC_WORDS, SANCTIONED, evalSpread, evalMagnitudeOf, freshTexts, tally } from './audit-lib/coach-tab-graders.mjs';
+import { STOCK, isGrounded, TACTIC_WORDS, SANCTIONED, spokenTextOf, evalSpread, evalMagnitudeOf, freshTexts, tally } from './audit-lib/coach-tab-graders.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -301,9 +301,13 @@ async function main() {
     else fail('Learn: reached the position by playing, not typing', `only ${playedTo} move(s) landed`);
   }
 
+  // `spokenTextOf` — NOT the summary. The summary is a truncated preview whose
+  // prefix carries fact-kind tags, one of which is literally "fork", so
+  // matching tactic vocabulary against it matched METADATA and reported a green
+  // for narration that never happened. See coach-tab-graders.mjs.
   const spokenOf = (evs) => evs
     .filter((e) => (e.kind ?? '') === 'coach-narration-spoken')
-    .map((e) => e.summary ?? e.text ?? (typeof e.detail === 'string' ? e.detail : JSON.stringify(e.detail ?? '')))
+    .map(spokenTextOf)
     .filter(Boolean);
 
   // ── Contract B on Learn. Free-play move navigation and the walkthrough's own

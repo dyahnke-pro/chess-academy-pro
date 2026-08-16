@@ -55,6 +55,41 @@ export const TACTIC_WORDS = new RegExp([
  *  contractually silent about until asked. */
 export const SANCTIONED = /^(pawn|knight|bishop|rook|queen|king) (to|takes|captures)|castles|check(mate)?\.?$|opening|defen[cs]e|game is now|middlegame|endgame|opening phase/i;
 
+/**
+ * THE SPOKEN LINE, not the audit event's summary.
+ *
+ * Every `coach-narration-spoken` event carries `narrationText` — the full line,
+ * with a comment in voiceService saying outright that the summary "is just a
+ * preview". Reading the summary instead was wrong in three compounding ways,
+ * and produced the worst false green of the session:
+ *
+ *   · `speakPackage` formats its summary as `${fact kinds.join('+')} — ${text}`,
+ *     and one of the fact kinds is literally **fork**. So a tactic-vocabulary
+ *     match on the summary matched the SOURCE TAG, not anything the coach said.
+ *     "the tactic is NARRATED" was passing on metadata.
+ *   · `speakPolly` formats its summary as `voice=… personality=… text="…"`, so
+ *     an anchored classifier never matches and sanctioned move dictation reads
+ *     as volunteered teaching.
+ *   · both previews are TRUNCATED (40 and 200 chars), so even parsed correctly
+ *     they are fragments of the real line.
+ *
+ * Prefer narrationText; parse the known summary shapes only as a fallback.
+ */
+export function spokenTextOf(ev) {
+  if (!ev) return '';
+  if (typeof ev.narrationText === 'string' && ev.narrationText.trim()) return ev.narrationText.trim();
+  const s = typeof ev.summary === 'string' ? ev.summary : '';
+  const quoted = /text="([\s\S]*)"\s*$/.exec(s);
+  if (quoted) return quoted[1].trim();
+  const repeat = /^suppressed a repeat:\s*([\s\S]*)$/.exec(s);
+  if (repeat) return repeat[1].trim();
+  // `<kind>+<kind>+… — <spoken>`: strip the tag prefix so its words are never
+  // mistaken for the coach's. Only when the prefix really looks like tags.
+  const tagged = /^([a-z+]+)\s+—\s+([\s\S]*)$/.exec(s);
+  if (tagged && tagged[1].includes('+')) return tagged[2].trim();
+  return s.trim();
+}
+
 /** Pull a pawn-magnitude eval claim out of an answer, or null if it makes none.
  *  Magnitude, not signed value: the wording carries the side ("Black is winning
  *  by 4.9" vs "a small edge to you, 0.5"), so comparing raw signs would call

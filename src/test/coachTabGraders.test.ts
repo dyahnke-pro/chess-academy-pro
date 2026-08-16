@@ -24,7 +24,7 @@
  */
 import { describe, it, expect } from 'vitest';
 // @ts-expect-error — plain .mjs audit helper, no type declarations by design.
-import { isGrounded, TACTIC_WORDS, SANCTIONED, evalSpread, evalMagnitudeOf, freshTexts, tally } from '../../scripts/audit-lib/coach-tab-graders.mjs';
+import { isGrounded, TACTIC_WORDS, SANCTIONED, spokenTextOf, evalSpread, evalMagnitudeOf, freshTexts, tally } from '../../scripts/audit-lib/coach-tab-graders.mjs';
 
 describe('isGrounded — must reject non-answers', () => {
   it('rejects every stock refusal the coach can emit', () => {
@@ -83,6 +83,35 @@ describe('evalSpread — must catch a contradiction and must not invent agreemen
     expect(evalMagnitudeOf('Black is winning (about 2.9 points).')).toBeCloseTo(2.9, 5);
     expect(evalMagnitudeOf('White is slightly better (about 0.5 points).')).toBeCloseTo(0.5, 5);
     expect(evalMagnitudeOf('no number at all')).toBeNull();
+  });
+});
+
+describe('spokenTextOf — grade what was SAID, never the event metadata', () => {
+  it('prefers narrationText, which carries the full untruncated line', () => {
+    expect(spokenTextOf({ narrationText: 'The knight forks the king and rook.', summary: 'plan+fork — The knight fo' }))
+      .toBe('The knight forks the king and rook.');
+  });
+
+  it('strips the fact-kind prefix so the tag "fork" is never read as the coach saying fork', () => {
+    // THE false green: `speakPackage` joins fact kinds with '+', one kind is
+    // literally "fork", and matching tactic vocabulary against the summary
+    // therefore matched the SOURCE TAG. The check passed on metadata.
+    const text = spokenTextOf({ summary: 'plan+fork+borrowed+computed — Nothing gets taken for a good while here.' });
+    expect(text).toBe('Nothing gets taken for a good while here.');
+    expect(TACTIC_WORDS.test(text), 'tag leaked into the graded text').toBe(false);
+  });
+
+  it('unwraps the voice=… text="…" preview so move dictation reads as itself', () => {
+    expect(spokenTextOf({ summary: 'voice=audit-muted personality=default text="Pawn to e4."' })).toBe('Pawn to e4.');
+  });
+
+  it('unwraps a suppressed repeat', () => {
+    expect(spokenTextOf({ summary: 'suppressed a repeat: Knight to f3.' })).toBe('Knight to f3.');
+  });
+
+  it('leaves an ordinary summary alone rather than mangling it', () => {
+    expect(spokenTextOf({ summary: 'Everything runs through d5.' })).toBe('Everything runs through d5.');
+    expect(spokenTextOf(undefined)).toBe('');
   });
 });
 
