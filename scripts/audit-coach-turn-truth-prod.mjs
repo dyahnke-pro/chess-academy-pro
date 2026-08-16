@@ -110,6 +110,9 @@ const pullProdStream = async (since) => {
   }
 };
 
+/** The engine this run will use, known before the browser launches. */
+const engineName = () => ((process.env.AUDIT_ENGINE ?? 'chromium').toLowerCase() === 'webkit' ? 'webkit' : 'chromium');
+
 const main = async () => {
   await mkdir(OUT, { recursive: true });
 
@@ -126,7 +129,24 @@ const main = async () => {
   // Dexie proves the app COMPUTED a line. Only the POST proves the app tried
   // to SPEAK it. Silence where a keystone should speak looks identical to a
   // healthy run in the buffer — that is exactly the regression class G1 names.
-  const listener = await startAuditListener();
+  // 🚨 THE LISTENER IS CHROMIUM-ONLY, AND THAT IS AN ENGINE FACT, NOT A BUG.
+  //
+  // This morning I "corrected" this file's header, which said the sidecar
+  // cannot attach because the page is https and the sidecar is http. I called
+  // that WRONG on the strength of a Chromium run: 127.0.0.1 is a potentially
+  // trustworthy origin there, and 602 POSTs proved it.
+  //
+  // It is right on WEBKIT. The first WebKit run failed with "Fetch API cannot
+  // load http://127.0.0.1:PORT/audit-stream due to access control checks" —
+  // Safari does not grant loopback the same exemption. So the original note was
+  // true for the engine the iOS app actually ships on, and I overturned a true
+  // statement using evidence from the wrong browser.
+  //
+  // Attaching it on WebKit therefore does nothing except spray console errors
+  // that fail the page-error check. Instrument 3 is Chromium's; on WebKit the
+  // Dexie read carries the narration evidence instead, and the run says so.
+  const useListener = engineName() === 'chromium';
+  const listener = useListener ? await startAuditListener() : null;
   const runStartedAt = Date.now();
   const streamBefore = await pullProdStream(runStartedAt - 5 * 60_000);
 
@@ -137,19 +157,21 @@ const main = async () => {
   // IndexedDB, and the AudioContext gating that Chromium simply does not have.
   // Default stays Chromium, so nothing changes until a run opts in.
   const { engine, browser, contextOptions } = await launchAuditBrowser();
-  console.log(`[turn-truth] engine = ${engine}`);
+  console.log(`[turn-truth] engine = ${engine}${engine === 'webkit' ? ' (listener disabled — WebKit blocks loopback from https)' : ''}`);
   const ctx = await browser.newContext(contextOptions);
   await ctx.addInitScript(muteTtsForAudit);       // audits never spend TTS money
   await ctx.addInitScript(autoDismissCalibration);
   // Attach the listener through the legacy localStorage keys, which
   // `loadAuditStreamConfig` still migrates into the profile at boot. Seeding
   // the profile row directly would race the deferred seed.
-  await ctx.addInitScript(([url, secret]) => {
-    try {
-      localStorage.setItem('auditStreamUrl', url);
-      localStorage.setItem('auditStreamSecret', secret);
-    } catch { /* private browsing — the Dexie read still stands */ }
-  }, [listener.url, LOCAL_LISTENER_SECRET]);   // listener.url already ends /audit-stream
+  if (listener) {
+    await ctx.addInitScript(([url, secret]) => {
+      try {
+        localStorage.setItem('auditStreamUrl', url);
+        localStorage.setItem('auditStreamSecret', secret);
+      } catch { /* private browsing — the Dexie read still stands */ }
+    }, [listener.url, LOCAL_LISTENER_SECRET]);   // listener.url already ends /audit-stream
+  }
   const page = await ctx.newPage();
   const consoleErrors = [];
   page.on('pageerror', (e) => consoleErrors.push(String(e)));
@@ -341,13 +363,16 @@ const main = async () => {
   // line was computed; the POST says the app pushed it out. A surface that
   // computes perfectly and never calls the voice reads as healthy in Dexie and
   // as silence here, which is the ModelGameViewer regression class by name.
-  const heard = listener.getCapturedEvents();
+  const heard = listener ? listener.getCapturedEvents() : [];
   const heardSpoken = heard.filter((e) => e.kind === 'coach-narration-spoken');
   add('the narration listener heard the app speak',
     heardSpoken.length > 0,
     `${heard.length} event(s) POSTed, ${heardSpoken.length} narration`
-      + ` · kinds ${JSON.stringify(listener.countByKind())}`,
-    heard.length);
+      + ` · kinds ${JSON.stringify(listener ? listener.countByKind() : {})}`,
+    // On WebKit there is no listener, so this reports NOT EXERCISED rather than
+    // failing — the contract is Chromium's, and pretending otherwise would be a
+    // red row for an engine difference.
+    useListener ? heard.length : 0);
 
   // The board-truth question again, asked of the SPOKEN stream rather than the
   // buffer. Same replay, independent instrument — if these two ever disagree,
@@ -452,7 +477,7 @@ const main = async () => {
   await writeFile(join(OUT, 'report.json'), JSON.stringify(report, null, 2));
   await writeFile(join(OUT, 'audit-log.json'), JSON.stringify(log, null, 2));
   await browser.close();
-  await listener.stop();
+  if (listener) await listener.stop();
 
   const failed = checks.filter((c) => !c.ok);
   const unexercised = checks.filter((c) => !c.exercised);
