@@ -116,15 +116,71 @@ const main = async () => {
   }
   console.log(`[turn-truth] played ${played} student moves`);
 
+  // ── AND NOW THE SURFACE THE NARRATION LIVES ON ───────────────────────────
+  // Play is SILENT by contract (CLAUDE.md: it never volunteers a note
+  // mid-game), so the piece contract and the turn-depth contract cannot be
+  // exercised there at all — the first run "passed" both on zero samples.
+  // David heard the wrong pieces on LEARN. So the run continues there: ask for
+  // a lesson, let it narrate, and check every spoken line against its board.
+  console.log('[turn-truth] → /coach/teach for the narration contracts');
+  await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 120_000 });
+  await page.waitForTimeout(8_000);
+  await clearFirstRunOverlays(page);
+  try {
+    const box = page.locator('textarea, [data-testid="coach-chat-input"]').first();
+    await box.waitFor({ state: 'visible', timeout: 20_000 });
+    // pressSequentially, not fill: the React textarea needs real key events or
+    // the send button never enables (CLAUDE.md, the coach-chat audit pattern).
+    await box.pressSequentially('teach me the caro-kann', { delay: 25 });
+    await page.keyboard.press('Enter');
+    // THE PICKER IS NOT THE LESSON. A broad family name ("caro-kann") opens a
+    // VARIATION PICKER and waits; the first run of this phase sat on it for 90
+    // seconds and logged "line picker shown — 7 variations", so no ply was ever
+    // narrated and the piece contract examined zero lines. Click a variation —
+    // exactly the failure CLAUDE.md's interactive-audit rule names.
+    await page.waitForTimeout(12_000);
+    const picker = page.locator('[data-testid="line-picker"]');
+    if (await picker.isVisible().catch(() => false)) {
+      const option = page.locator('[data-testid^="line-picker-"]')
+        .filter({ hasNotText: /dismiss/i }).first();
+      await option.click({ force: true, timeout: 8000 }).catch(() => {});
+      console.log('[turn-truth] variation picked from the line picker');
+      await page.waitForTimeout(4_000);
+    }
+    console.log('[turn-truth] letting the lesson narrate (110s)');
+    await page.waitForTimeout(110_000);
+    // Nudge the walkthrough along so more than the first beat is spoken.
+    for (let i = 0; i < 6; i += 1) {
+      const skip = page.locator('[data-testid="walkthrough-skip"], [data-testid="walkthrough-next"]').first();
+      if (await skip.isVisible().catch(() => false)) {
+        await skip.click({ force: true, timeout: 4000 }).catch(() => {});
+        await page.waitForTimeout(6_000);
+      } else break;
+    }
+  } catch (e) {
+    console.log(`[turn-truth] learn phase could not start: ${String(e).slice(0, 90)}`);
+  }
+
   // ── READ THE APP'S OWN LOG ───────────────────────────────────────────────
   const log = await dumpAudit(page);
   console.log(`[turn-truth] ${log.length} audit entries read from Dexie`);
 
   const has = (re) => log.filter((e) => re.test(`${e.summary ?? ''} ${e.source ?? ''}`));
   const checks = [];
-  const add = (name, ok, detail) => { checks.push({ name, ok, detail }); console.log(`  ${ok ? '✓' : '✗'} ${name} — ${detail}`); };
+  // 🔒 A CHECK THAT PASSES ON AN EMPTY SET IS WORSE THAN NO CHECK. The first
+  // prod run of this script reported 5/5 green with TWO of the five having
+  // examined zero samples — no spoken line had a FEN, no turn-lane read had
+  // happened — which is the precise false green this whole session has been
+  // about. `samples` is mandatory: nothing was exercised, nothing is proven.
+  const add = (name, ok, detail, samples) => {
+    const exercised = samples === undefined || samples > 0;
+    const state = !exercised ? 'NOT EXERCISED' : (ok ? 'ok' : 'FAILED');
+    checks.push({ name, ok: ok && exercised, exercised, samples, detail });
+    console.log(`  ${!exercised ? '·' : (ok ? '✓' : '✗')} ${name} — ${detail}${!exercised ? '  ← NOT EXERCISED, nothing proven' : ''}`);
+    void state;
+  };
 
-  add('the app logged anything at all (guards the guard)', log.length > 0, `${log.length} entries`);
+  add('the app logged anything at all (guards the guard)', log.length > 0, `${log.length} entries`, log.length);
 
   // 1. STRENGTH
   // EVIDENCE DIFFERS BY SURFACE, and the first run of this audit failed on
@@ -137,7 +193,8 @@ const main = async () => {
   const limited = searches.filter((e) => /UCI_LimitStrength/.test(e.summary ?? ''));
   add('every opponent move says the Elo the engine was limited to',
     searches.length > 0 && limited.length === searches.length,
-    `${limited.length}/${searches.length} · e.g. ${searches[0]?.summary?.slice(0, 130) ?? 'none seen'}`);
+    `${limited.length}/${searches.length} · e.g. ${searches[0]?.summary?.slice(0, 130) ?? 'none seen'}`,
+    searches.length);
 
   // 2. PIECES — checked against the board, not against the gate's own wording.
   const spoken = log.filter((e) => e.kind === 'coach-narration-spoken' && e.fen
@@ -150,7 +207,26 @@ const main = async () => {
   }
   add('no spoken line names a piece the board does not have',
     lies.length === 0,
-    `${spoken.length} spoken lines checked, ${lies.length} naming an absent piece`);
+    `${spoken.length} spoken lines checked, ${lies.length} naming an absent piece`,
+    spoken.length);
+
+  // 2b. THE GATE ITSELF, LIVE. The board-anchored check above needs a spoken
+  // line that carries a FEN, and those come only from Learn's IN-GAME lanes
+  // (trackA / voicePackage / hintRegister) — the flow David was in. This
+  // harness cannot reach the in-game playout yet, so that check reports NOT
+  // EXERCISED rather than green. What CAN be proven from any narrating
+  // surface is that the piece gate is running in the shipped build at all:
+  // its summary now names both classes, and the old build could not emit that
+  // wording. Weaker evidence, honestly labelled.
+  const gateTrips = has(/borrowedTeachingGate/);
+  const newFormat = gateTrips.filter((e) => /naming pieces it does not have/.test(e.summary ?? ''));
+  const piecesDropped = gateTrips
+    .map((e) => Number(/(\d+) naming pieces/.exec(e.summary ?? '')?.[1] ?? 0))
+    .reduce((a, b) => a + b, 0);
+  add('the piece gate is running in the shipped build',
+    gateTrips.length > 0 && newFormat.length === gateTrips.length,
+    `${newFormat.length}/${gateTrips.length} trips report both classes · ${piecesDropped} piece-false sentence(s) refused`,
+    gateTrips.length);
 
   // 3. ONE DEPTH
   // SCOPED TO THE TURN LANES. The contradiction was between the hint read and
@@ -166,9 +242,10 @@ const main = async () => {
   const turnDepths = Object.keys(depths);
   add('the turn lanes read at ONE depth',
     turnDepths.length <= 1,
-    turnDepths.length ? `depths seen: ${JSON.stringify(depths)}` : 'no turn-lane reads on this surface (run against /coach/teach for this one)');
+    turnDepths.length ? `depths seen: ${JSON.stringify(depths)}` : 'no turn-lane reads captured',
+    turnDepths.length);
 
-  add('no page errors', consoleErrors.length === 0, `${consoleErrors.length}`);
+  add('no page errors', consoleErrors.length === 0, `${consoleErrors.length}`, 1);
 
   const report = { base: BASE, plies: played, entries: log.length, checks, lies, depths, consoleErrors: consoleErrors.slice(0, 10) };
   await writeFile(join(OUT, 'report.json'), JSON.stringify(report, null, 2));
@@ -176,7 +253,9 @@ const main = async () => {
   await browser.close();
 
   const failed = checks.filter((c) => !c.ok);
-  console.log(`\n[turn-truth] ${checks.length - failed.length}/${checks.length} green · ${OUT}`);
+  const unexercised = checks.filter((c) => !c.exercised);
+  console.log(`\n[turn-truth] ${checks.length - failed.length}/${checks.length} proven · ${unexercised.length} not exercised · ${OUT}`);
+  if (unexercised.length) console.log(`[turn-truth] NOT PROVEN: ${unexercised.map((c) => c.name).join('; ')}`);
   process.exit(failed.length ? 1 : 0);
 };
 
