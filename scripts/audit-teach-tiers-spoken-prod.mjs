@@ -13,6 +13,7 @@
 import { readFile, writeFile } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -75,6 +76,7 @@ console.log(`[probe] tier=${TIER} "${ASK}" — ${marks.length} marks from the sh
 const listener = await startAuditListener();
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const p = await (await b.newContext(sandboxContextOptions())).newPage();
+await blockTtsNetwork(p);   // instrument keeps the request; the provider never sees it
 const ttsTexts = [];
 p.on('request', (r) => {
   if (r.url().includes('/api/tts')) {

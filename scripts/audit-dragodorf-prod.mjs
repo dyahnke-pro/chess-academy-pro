@@ -5,6 +5,7 @@
 // [data-testid="walkthrough-progress"]/[walkthrough-back]).
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const PROD = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const ID = 'pro-naroditsky-dragodorf';
@@ -13,6 +14,7 @@ const rec = (name, ok, detail = '') => { results.push({ name, ok, detail }); con
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const page = await ctx.newPage();
 const errors = [];
 page.on('pageerror', (e) => errors.push(String(e)));

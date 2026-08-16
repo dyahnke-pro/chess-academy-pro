@@ -5,6 +5,7 @@
 // captures screenshots. Run: AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-gambit-kings.mjs
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -56,6 +57,7 @@ async function highlightsPainted(page) {
   await mkdir(OUT, { recursive: true });
   const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
   const page = await browser.newContext(sandboxContextOptions()).then((c) => c.newPage());
+  await page.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   page.setDefaultTimeout(30000);
   try {
     await page.goto(`${BASE}/openings/${ID}`, { waitUntil: 'domcontentloaded' });

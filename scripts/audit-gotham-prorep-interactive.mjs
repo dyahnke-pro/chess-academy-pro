@@ -7,6 +7,7 @@
 // resets and the bundle advances past C9F65Jim.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL || 'http://localhost:5173';
 const results = [];
@@ -21,6 +22,7 @@ const browser = await chromium.launch({ executablePath: exe, headless: true, arg
 async function freshPage() {
   const ctx = await browser.newContext(sandboxContextOptions());
   const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
   return { ctx, page };
 }
 

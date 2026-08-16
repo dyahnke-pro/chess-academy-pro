@@ -9,6 +9,7 @@
 // error-fallback reply, silent-hang, stuck-input.
 import { chromium } from 'playwright';
 import { attachProxyInterception } from './audit-lib/proxy-intercept.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 
 const PROD = 'https://chess-academy-pro.vercel.app';
@@ -19,6 +20,7 @@ const push = (kind, detail) => breaks.push({ pass: PASS, input: current, kind, d
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 await attachProxyInterception(ctx);
 const page = await ctx.newPage();
 

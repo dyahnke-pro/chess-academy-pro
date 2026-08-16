@@ -27,6 +27,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -38,6 +39,7 @@ async function main() {
   if (executablePath) console.log(`[consent] chromium = ${executablePath}`);
   const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, deviceScaleFactor: 2 });
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   const page = await ctx.newPage();
 
   const consoleErrors = [];

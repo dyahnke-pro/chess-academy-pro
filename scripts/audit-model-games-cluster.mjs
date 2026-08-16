@@ -5,6 +5,7 @@
 // overview and studentSide set.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -13,6 +14,7 @@ const TARGETS = ['pirc-defence','petrov-defence','philidor-defence','qgd','qga',
 const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, args: sandboxLaunchArgs(), headless: true });
 const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const page = await ctx.newPage();
 page.setDefaultTimeout(30000);
 

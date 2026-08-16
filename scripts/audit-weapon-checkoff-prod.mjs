@@ -20,6 +20,7 @@ import {
   sandboxContextOptions,
 } from './audit-lib/chromium.mjs';
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const OPENING = 'caro-kann';
@@ -75,6 +76,7 @@ async function main() {
   const executablePath = await resolveChromiumExecutable();
   const browser = await chromium.launch({ headless: true, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   const page = await ctx.newPage();
 
   try {

@@ -25,6 +25,7 @@ import {
   sandboxContextOptions,
 } from './audit-lib/chromium.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -89,6 +90,7 @@ async function main() {
   }, [listener.url, listener.secret]);
 
   const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
   page.on('request', (req) => {
     const u = req.url();
     if (u.includes('/api/tts')) {

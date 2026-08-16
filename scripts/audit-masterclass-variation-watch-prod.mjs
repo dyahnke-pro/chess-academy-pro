@@ -17,6 +17,7 @@
 // Run: AUDIT_SANDBOX=1 node scripts/audit-masterclass-variation-watch-prod.mjs
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 
 const PROD = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 
@@ -39,6 +40,7 @@ const browser = await chromium.launch({
 });
 const ctx = await browser.newContext(sandboxContextOptions());
 const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 // Capture /api/tts requests, separating real beat narration from the
 // one-char warmup probe (text=. — voiceService.warmup) which fires on every
 // surface mount and is NOT lesson voice.

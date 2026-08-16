@@ -9,6 +9,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const GID = 'functions-probe-iqp';
@@ -22,6 +23,7 @@ const run = async () => {
   const exe = await resolveChromiumExecutable();
   const browser = await chromium.launch({ headless: true, executablePath: exe, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 } });
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   await ctx.addInitScript(() => { window.__REVIEW_UNCAPPED__ = false; });
   const page = await ctx.newPage();
   const errs = [];

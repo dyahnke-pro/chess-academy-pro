@@ -6,6 +6,7 @@
 // server: AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-gambit-plans.mjs
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { readFileSync } from 'node:fs';
@@ -54,6 +55,7 @@ async function leadEyePainted(page) {
   await mkdir(OUT, { recursive: true });
   const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
   const page = await browser.newContext(sandboxContextOptions()).then((c) => c.newPage());
+  await page.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   page.setDefaultTimeout(25000);
   for (const { id, plan } of PLANS) {
     const r = { id, plan, seeded: 0, section: false, line: false, watchNarration: false, leadEye: 0, learn: false, error: null };

@@ -6,6 +6,7 @@
 //       then ask the hanging/empty/mate question as a SEPARATE message.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const T = 70000;
@@ -14,6 +15,7 @@ const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: tru
 const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, userAgent: 'AuditCoachPlayBot/1.0 retest' });
 await ctx.addInitScript(autoDismissCalibration);
 const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 const ttsTexts = [];
 page.on('request', (r) => { const u = r.url(); if (u.includes('/api/tts')) { try { const t = new URL(u).searchParams.get('text'); if (t && t.trim() !== '.' ) ttsTexts.push(t); } catch {} } });
 const wc = (s) => (s ? s.trim().split(/\s+/).filter(Boolean).length : 0);

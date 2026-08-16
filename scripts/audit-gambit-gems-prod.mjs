@@ -8,6 +8,7 @@
 //   node scripts/audit-gambit-gems-prod.mjs
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -82,6 +83,7 @@ async function unlockWeapons(page, ids) {
   await mkdir(OUT, { recursive: true });
   const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
   const page = await browser.newContext(sandboxContextOptions()).then((c) => c.newPage());
+  await page.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   page.setDefaultTimeout(30000);
   const report = { ts: new Date().toISOString(), base: BASE, targets: TARGETS, results, perOpening: {} };
   try {

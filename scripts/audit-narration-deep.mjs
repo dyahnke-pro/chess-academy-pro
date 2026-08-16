@@ -41,6 +41,7 @@
  */
 import { chromium } from 'playwright-core';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -97,6 +98,7 @@ async function main() {
   // ── Shared page factory ────────────────────────────────────────────────
   const newAuditedPage = async (ctx) => {
     const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
     const consoleErrors = [];
     const pageErrors = [];
     const ttsReqs = []; // { t, text }

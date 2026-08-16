@@ -20,6 +20,7 @@ import {
   sandboxContextOptions,
 } from './audit-lib/chromium.mjs';
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const OPENINGS = (process.env.AUDIT_OPENING ?? 'caro-kann,vienna-game,italian-game,ruy-lopez').split(',');
@@ -48,6 +49,7 @@ async function run() {
     ...(proxyServer ? { proxy: { server: proxyServer } } : {}),
   });
   const context = await browser.newContext(sandboxContextOptions());
+  await context.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   const page = await context.newPage();
   const results = [];
 

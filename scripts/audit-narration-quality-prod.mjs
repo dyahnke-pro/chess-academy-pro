@@ -30,6 +30,7 @@
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const ASKS = (process.env.AUDIT_OPENINGS || 'alapin|italian game|caro-kann').split('|').map((s) => s.trim()).filter(Boolean);
@@ -110,6 +111,7 @@ const pullStream = async () => {
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await b.newContext(sandboxContextOptions());
 const p = await ctx.newPage();
+  await blockTtsNetwork(p);   // instrument keeps the request; the provider never sees it
 const spoken = [];
 p.on('request', (r) => {
   if (r.url().includes('/api/tts')) {

@@ -14,6 +14,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const GID = 'mobile-layout-iqp';
@@ -30,6 +31,7 @@ const run = async () => {
   // usable height David actually has (his 2796px screen ÷ 3 = 932 CSS px, minus
   // ~270px of chrome). This is the height the 896px audits never stressed.
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 390, height: 660 }, isMobile: true, hasTouch: true, deviceScaleFactor: 3 });
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   const page = await ctx.newPage();
   const errs = [];
   page.on('pageerror', (e) => errs.push('PAGEERROR: ' + e.message.slice(0, 140)));

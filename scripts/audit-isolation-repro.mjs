@@ -8,6 +8,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const INPUTS = (process.env.AUDIT_ISO_INPUTS
@@ -22,6 +23,7 @@ const SHOT_DIR = 'audit-reports/iso-shots';
 
 async function run(browser, text) {
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, userAgent: 'AuditIsoBot/1.0' });
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   const page = await ctx.newPage();
   let askFiredMs = null;   // brain REQUEST went out
   let llmDoneMs = null;    // brain RESPONSE returned (the authoritative "answered")

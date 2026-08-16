@@ -1,4 +1,5 @@
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 import { chromium } from 'playwright';
 import { build } from 'esbuild';
@@ -29,6 +30,7 @@ const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
 const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 const tts = [];
 page.on('request', (r) => { const u = r.url(); if (/\/api\/tts/.test(u)) { const m = /[?&]text=([^&]*)/.exec(u); tts.push(m ? decodeURIComponent(m[1]) : ''); } });
 const fails = []; const F = (m) => { fails.push(m); console.log('  ✗ ' + m); };

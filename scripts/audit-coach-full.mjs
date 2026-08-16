@@ -25,6 +25,7 @@
  */
 import { chromium } from 'playwright-core';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -77,6 +78,7 @@ async function main() {
 
   const mkPage = async (ctx) => {
     const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
     const consoleErrors = [], pageErrors = [], ttsReqs = [];
     page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text().slice(0, 300)); });
     page.on('pageerror', (e) => pageErrors.push(e.message.slice(0, 300)));

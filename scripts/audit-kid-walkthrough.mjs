@@ -10,6 +10,7 @@
  *   - a light interaction probe on game surfaces (begin button, one move)
  */
 import { chromium } from 'playwright';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import {
   resolveChromiumExecutable,
   sandboxLaunchArgs,
@@ -94,6 +95,7 @@ async function run() {
   const browser = await chromium.launch({ headless: true, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({ viewport: { width: 420, height: 900 }, ...sandboxContextOptions() });
   const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 
   // Capture narration text from /api/tts request bodies + speech-synth.
   const ttsByUrl = new Map();

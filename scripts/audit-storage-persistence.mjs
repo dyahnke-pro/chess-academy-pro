@@ -27,6 +27,7 @@
  *   AUDIT_SMOKE_URL=http://localhost:5173 node scripts/audit-storage-persistence.mjs
  */
 import { chromium } from 'playwright';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import {
   resolveChromiumExecutable,
@@ -45,6 +46,7 @@ async function main() {
   const executablePath = await resolveChromiumExecutable();
   const browser = await chromium.launch({ executablePath, args: sandboxLaunchArgs() });
   const context = await browser.newContext(sandboxContextOptions());
+  await context.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   // Chromium denies persist() to a low-engagement origin, which would leave the
   // granted path untested. Grant it explicitly so we exercise the real branch;
   // the DENIED branch is covered by storageQuota.test.ts.

@@ -19,6 +19,7 @@
 import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { join } from 'node:path';
 
 // Sandbox/CI environments often have a Chromium build pre-installed
@@ -82,6 +83,7 @@ async function main() {
     deviceScaleFactor: 2,
     userAgent: 'AuditTacticsBot/1.0 (chromium)',
   });
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 
   await ctx.addInitScript(
     ({ url, secret }) => {

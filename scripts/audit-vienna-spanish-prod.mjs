@@ -7,6 +7,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
@@ -57,6 +58,7 @@ async function run() {
   });
   const context = await browser.newContext(sandboxContextOptions());
   const page = await context.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
   const ttsTexts = [];
   page.on('request', (r) => {
     if (r.url().includes('/api/tts') && r.method() === 'POST') {

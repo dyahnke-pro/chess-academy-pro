@@ -30,6 +30,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -462,6 +463,7 @@ async function main() {
   for (let pass = 1; pass <= MAX_PASSES; pass++) {
     const passStartMs = Date.now();
     const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
     const page = await ctx.newPage();
     const breaks = [];
     page.on('pageerror', (e) => breaks.push({ kind: 'pageerror', text: String(e.message).slice(0, 200) }));

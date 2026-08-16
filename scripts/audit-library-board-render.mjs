@@ -4,6 +4,7 @@
 //
 //   AUDIT_SANDBOX=1 node scripts/audit-library-board-render.mjs
 import { chromium } from 'playwright';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdirSync, writeFileSync } from 'node:fs';
 import {
   resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions,
@@ -18,6 +19,7 @@ const rec = (name, pass, detail = '') => { out.push({ name, pass, detail }); con
 const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 420, height: 1000 } });
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const page = await ctx.newPage();
 const pageErrors = [];
 const consoleErrors = [];

@@ -26,6 +26,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -159,6 +160,7 @@ async function main() {
   const exe = await resolveChromiumExecutable(HEADED);
   const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath: exe });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 1200, height: 1000 }, userAgent: 'AuditCoachPlayBot/1.0 (move-grounding)' });
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   const page = await ctx.newPage();
   const pageErrors = [];
   page.on('pageerror', (e) => pageErrors.push(e.message.slice(0, 200)));

@@ -36,6 +36,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { falseBoardClaims, resolveClaimFen } from './audit-lib/board-claims.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -83,6 +84,7 @@ async function main() {
         { url: listener.url, secret: LOCAL_LISTENER_SECRET },
       );
       const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 
       // Capture the ACTUAL spoken text from every /api/tts request (what Polly
       // says, post-sanitize) — the voice, not the shown bubble.

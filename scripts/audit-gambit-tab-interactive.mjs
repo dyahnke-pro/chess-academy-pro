@@ -11,6 +11,7 @@
 // prod doesn't yet). Set AUDIT_SMOKE_URL to point elsewhere.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'http://localhost:5173';
 
@@ -27,6 +28,7 @@ function rec(name, status, detail) { results.push({ name, status, detail }); con
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
 const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 
 // Capture every /api/tts attempt (voice fired). Reset per-lesson.
 let ttsHits = [];

@@ -7,6 +7,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const URL = 'https://chess-academy-pro.vercel.app';
 const grid = [];
@@ -16,6 +17,7 @@ const rec = (fn, reached, ok, note) => grid.push({ fn, reached, ok, note: (note 
 
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const ctx = await b.newContext(sandboxContextOptions());
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const p = await ctx.newPage();
 p.on('pageerror', (e) => pageErrs.push(e.message.slice(0, 120)));
 p.on('response', async (r) => {

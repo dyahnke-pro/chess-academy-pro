@@ -7,6 +7,7 @@
 //       + the /api/tts synthesis calls = proof the Watch narration FIRES.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 
 const PROD = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -28,6 +29,7 @@ const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: [...sandboxLaunchArgs(), '--autoplay-policy=no-user-gesture-required'] });
 const ctx = await browser.newContext(sandboxContextOptions());
 const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 await page.addInitScript(({ url, secret }) => {
   try { localStorage.setItem('auditStreamUrl', url); localStorage.setItem('auditStreamSecret', secret); } catch {}
 }, { url: listener.url, secret: LOCAL_LISTENER_SECRET });

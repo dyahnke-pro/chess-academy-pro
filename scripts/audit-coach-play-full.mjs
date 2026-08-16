@@ -30,6 +30,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -89,6 +90,7 @@ async function main() {
     deviceScaleFactor: 2,
     userAgent: 'AuditCoachPlayBot/2.0 (chromium)',
   });
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 
   // Point the page's audit stream at the local listener (instrument 3).
   await ctx.addInitScript(

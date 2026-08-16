@@ -47,6 +47,7 @@ import { chromium } from 'playwright';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? process.env.PROD_URL ?? 'https://chess-academy-pro.vercel.app';
 const SECRET =
@@ -97,6 +98,7 @@ async function main() {
     deviceScaleFactor: 1,
     userAgent: 'AuditCoachPlayBot/1.0 (gaps)',
   });
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   // Point the in-app audit logger at the prod stream so the page's own
   // logAppAudit() events (phase-transition, quiz-resolved) are durably
   // emitted; we ALSO pull the stream over HTTP for the phase assertion.

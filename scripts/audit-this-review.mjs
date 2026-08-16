@@ -11,6 +11,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { attachVoiceListener, voiceLines, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -25,6 +26,7 @@ const run = async () => {
   const exe = await resolveChromiumExecutable();
   const browser = await chromium.launch({ headless: true, executablePath: exe, args: [...sandboxLaunchArgs(), ...(process.env.AUDIT_LISTENER === '1' ? LISTENER_LAUNCH_ARGS : [])] });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 } });
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   const voice = process.env.AUDIT_LISTENER === '1' ? await attachVoiceListener(ctx) : null;
   const page = await ctx.newPage();
   const errs = [];

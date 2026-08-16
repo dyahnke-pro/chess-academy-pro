@@ -6,6 +6,7 @@
 // tab-mashing. Runs against LIVE PROD via the bridge.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startProdBridge } from './audit-lib/prod-bridge.mjs';
 
 const bridge = process.env.AUDIT_PROD_BRIDGE === '1' ? await startProdBridge(Number(process.env.AUDIT_BRIDGE_PORT || 8098)) : null;
@@ -17,6 +18,7 @@ const rec = (name, ok, detail) => console.log(`  [${ok ? 'PASS' : 'BREAK'}] ${na
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const page = await ctx.newPage();
 
 let current = 'boot';

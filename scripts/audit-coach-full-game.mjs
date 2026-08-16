@@ -29,6 +29,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -174,7 +175,8 @@ async function main() {
     deviceScaleFactor: 2,
     userAgent: 'AuditCoachFullGameBot/1.0 (chromium)',
   });
-  await ctx.addInitScript(autoDismissCalibration);   // the first-run bubble intercepts every click
+  await ctx.addInitScript(autoDismissCalibration);
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)   // the first-run bubble intercepts every click
 
   await ctx.addInitScript(
     ({ url, secret }) => {

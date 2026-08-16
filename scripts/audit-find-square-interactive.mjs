@@ -36,6 +36,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { attachAuditStreamTracker, attributeScenarioEvents } from './audit-lib/event-attribution.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
@@ -501,6 +502,7 @@ async function runOnePass(passFn, passNum, browser) {
     } catch {}
   }, { url: STREAM_URL, secret: SECRET });
   const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
   const tracker = attachAuditStreamTracker(page, STREAM_URL);
   page.on('pageerror', (e) => {
     const msg = e.message || '';

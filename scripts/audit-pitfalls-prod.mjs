@@ -25,6 +25,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const SANDBOX = process.env.AUDIT_SANDBOX === '1';
@@ -119,7 +120,10 @@ async function freshPage() {
     ctx = await browser.newContext(SANDBOX ? sandboxContextOptions() : {});
   }
   pageCount++;
-  return ctx.newPage();
+  const pg = await ctx.newPage();
+  // Context is built in a helper and reused, so the mute goes on each page.
+  await pg.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
+  return pg;
 }
 
 async function dismissOverlays(page) {

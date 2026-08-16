@@ -15,6 +15,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -215,6 +216,7 @@ async function main() {
   const executablePath = await resolveChromiumExecutable(HEADED);
   const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandboxLaunchArgs() });
   const context = await browser.newContext(sandboxContextOptions());
+  await context.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   const page = await context.newPage();
 
   const consoleErrors = [];

@@ -5,6 +5,7 @@
 // with content, and back-navigation closes the loop.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 const PROD = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const PLAYERS = [
   { id: 'naroditsky', min: 10 }, { id: 'gothamchess', min: 18 },
@@ -14,6 +15,7 @@ const results = [];
 function rec(n, s, d) { results.push({ n, s, d }); console.log(`  [${s}] ${n}${d ? ': ' + d : ''}`); }
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const page = await ctx.newPage();
 const appErrors = [];
 page.on('pageerror', e => appErrors.push(e.message));

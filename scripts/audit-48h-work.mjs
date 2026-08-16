@@ -8,6 +8,7 @@
 // via bundle grep + the audit-stream.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startProdBridge } from './audit-lib/prod-bridge.mjs';
 
 // AUDIT_PROD_BRIDGE=1 audits the LIVE prod app: Chromium's HTTPS handshake is
@@ -22,6 +23,7 @@ const rec = (name, status, detail) => { results.push({ name, status, detail }); 
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const page = await ctx.newPage();
 
 const errors = [];

@@ -3,6 +3,7 @@
 // LIVE prod UI (AUDIT_SANDBOX=1 for the resigned cert) and asserts real DOM state.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const results = [];
@@ -41,6 +42,7 @@ const browser = await chromium.launch({
   ...(proxyServer ? { proxy: { server: proxyServer } } : {}),
 });
 const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const page = await ctx.newPage();
 try {
   // ── /openings: Counter-Weapons tab ─────────────────────────────────────────

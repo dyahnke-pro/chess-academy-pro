@@ -28,6 +28,7 @@
 import { chromium } from 'playwright';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -67,6 +68,7 @@ async function main() {
   // No explicit context here — `newPage()` makes its own, so the init
   // script goes on the page.
   await page.addInitScript(autoDismissCalibration);
+  await page.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   page.on('pageerror', (e) => console.log(`  [pageerror] ${String(e).slice(0, 140)}`));
 
   // Boot-seed Dexie with the masterclass openings. dataLoader bulk-puts

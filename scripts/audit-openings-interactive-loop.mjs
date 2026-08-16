@@ -42,6 +42,7 @@
 
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
@@ -869,6 +870,7 @@ async function main() {
     // its context per round, and a per-round fresh context re-arms the
     // first-run bubble that intercepts every click.
     await built.addInitScript(autoDismissCalibration);
+  await built.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
     return built;
   }
 

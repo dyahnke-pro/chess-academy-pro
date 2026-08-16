@@ -20,6 +20,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 
@@ -35,6 +36,7 @@ const browser = await chromium.launch({ args: sandboxLaunchArgs(), executablePat
 const ctx = await browser.newContext(sandboxContextOptions());
   await ctx.addInitScript(autoDismissCalibration);   // the first-run bubble intercepts every click
 const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 const tts = [];
 const pageErrors = [];
 page.on('pageerror', (e) => pageErrors.push(String(e).slice(0, 140)));

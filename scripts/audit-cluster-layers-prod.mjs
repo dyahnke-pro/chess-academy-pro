@@ -4,6 +4,7 @@
 // data gates). Reads the rendered DOM after the deferred seed completes.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 // opening id -> which sections we EXPECT to render (based on what I authored)
@@ -19,6 +20,7 @@ const EXPECT = [
 const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, args: sandboxLaunchArgs(), headless: true });
 const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const page = await ctx.newPage();
 page.setDefaultTimeout(20000);
 

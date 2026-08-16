@@ -3,9 +3,11 @@
 // never offer King's Indian Defence lines.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const b = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
 const p = await (await b.newContext(sandboxContextOptions())).newPage();
+await p.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 async function dismiss(){
   for (const [gate, btn] of [
     ['[data-testid="ai-consent-modal"]','[data-testid="ai-consent-allow"]'],

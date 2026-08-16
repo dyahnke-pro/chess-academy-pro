@@ -24,6 +24,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 import { attachVoiceListener, voiceLines, LISTENER_LAUNCH_ARGS } from './audit-lib/review-voice-listener.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -77,6 +78,7 @@ const run = async () => {
   if (UNCAPPED) await ctx.addInitScript(() => { window.__REVIEW_UNCAPPED__ = true; });
   const voice = process.env.AUDIT_LISTENER === '1' ? await attachVoiceListener(ctx) : null;
   const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
   const errs = [];
   // FULL SPOKEN TEXT — intercept the /api/tts POST bodies (the EXACT words sent to
   // the voice), so the transcript is the real spoken words, not a 40-char preview

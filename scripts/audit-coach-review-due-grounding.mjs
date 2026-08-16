@@ -8,6 +8,7 @@
 // collision ("review my last game" must NOT hit this vertical).
 import { chromium } from 'playwright';
 import { attachProxyInterception } from './audit-lib/proxy-intercept.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 
 const PROD = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
@@ -15,6 +16,7 @@ const breaks = [];
 
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 await attachProxyInterception(ctx);
 const page = await ctx.newPage();
 page.on('pageerror', (e) => breaks.push({ kind: 'pageerror', detail: (e.message || '').split('\n')[0] }));

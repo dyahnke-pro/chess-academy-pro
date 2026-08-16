@@ -39,6 +39,7 @@
 import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 import { seedUnlockedOpenings } from './audit-lib/idb-unlock.mjs';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
@@ -192,6 +193,13 @@ const lineSig = (dicts) => dicts.map(destToken).join('-');
 
 async function makeCtx(browser) {
   const ctx = await browser.newContext(sandboxContextOptions());
+  // 🚨 MUTED (David 2026-08-16: "so we don't burn through my tts budget").
+  // 86 openings × Watch + Learn is exactly the shape that ran him $100 over in
+  // a day, and it buys nothing: the mute emits the SAME
+  // `coach-narration-spoken` event with the SAME text and resolves on a
+  // text-proportional delay, so the voice-gated pacing this audit depends on
+  // still behaves. The narration instrument below reads those events.
+  await ctx.addInitScript(muteTtsForAudit);
   const page = await ctx.newPage();
   // Instrument 3: route the app's audit POSTs to the local listener sidecar.
   const listenerUrl = process.env.AUDIT_LISTENER_URL || LISTENER_URL;
@@ -204,6 +212,31 @@ async function makeCtx(browser) {
   page.on('pageerror', (e) => ev.pageerrors.push((e && e.stack ? e.stack : String(e)).slice(0, 800)));
   page.on('console', (m) => { if (m.type() === 'error' && !isNoise(m.text())) ev.consoleErrors.push(m.text().slice(0, 200)); });
   page.on('request', (r) => { const u = r.url(); if (/\/api\/tts/.test(u)) ev.tts.push({ t: Date.now(), text: ttsTextOf(u) }); });
+  // THE TEXT COMES FROM THE APP'S OWN EVENT, NOT FROM A SYNTHESIS REQUEST.
+  // The handler above was this audit's only narration instrument and it works
+  // by watching real /api/tts traffic — i.e. by spending money to learn what
+  // was said. Same `ev.tts` shape, fed from the audit POSTs instead, so every
+  // downstream assertion (`narrationTexts`, the Watch-prose / Learn-cue /
+  // Practice-silence contract) is untouched. Both handlers stay live: an
+  // unmuted run still sees the wire, a muted run sees the events.
+  page.on('request', (r) => {
+    if (r.method() !== 'POST' || !/audit-stream/.test(r.url())) return;
+    try {
+      const body = JSON.parse(r.postData() || '{}');
+      const list = Array.isArray(body) ? body : (body.entries ?? body.events ?? [body]);
+      for (const e of list) {
+        // ONE kind only — `voice-speak-invoked` carries the same line and would
+        // double every utterance in a contract that counts them.
+        if ((e?.kind ?? '') !== 'coach-narration-spoken') continue;
+        // Prefer the un-truncated field: `summary` is a 40-char preview on the
+        // speak events, and a clipped line fails a prose-vs-cue comparison for
+        // a reason that has nothing to do with the app.
+        const text = e.data?.textPreview ?? e.data?.text
+          ?? (e.summary ?? '').replace(/^[^"]*"/, '').replace(/"$/, '');
+        if (text) ev.tts.push({ t: Date.now(), text });
+      }
+    } catch { /* a malformed body is not this audit's business */ }
+  });
   return { ctx, page, ev };
 }
 

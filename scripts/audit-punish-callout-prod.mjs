@@ -21,6 +21,7 @@
 import { Chess } from 'chess.js';
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 const URL='https://chess-academy-pro.vercel.app'; const OPENING=process.env.OP||'caro-kann';
 const MYCOLOR=process.env.MYCOLOR||'b'; // caro-kann student = black
 const SECRET=process.env.AUDIT_STREAM_SECRET||'';
@@ -28,6 +29,7 @@ const pull=async s=>{try{const r=await fetch(`${URL}/api/audit-stream?since=${s}
 const t0=Date.now();
 const browser=await chromium.launch({executablePath:await resolveChromiumExecutable(),args:sandboxLaunchArgs()});
 const page=await (await browser.newContext(sandboxContextOptions())).newPage();
+await page.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 const errs=[];page.on('pageerror',e=>errs.push('PAGEERROR: '+e.message));page.on('console',m=>{if(m.type()==='error'){const x=m.text();if(!/Download the React|favicon|ERR_|Manifest/.test(x))errs.push('CONSOLE: '+x.slice(0,160));}});
 const D=async(t,l)=>{try{await page.locator(`[data-testid="${t}"]`).first().click({timeout:8000});console.log('  ✓',l);await page.waitForTimeout(1000);return true;}catch{console.log('  ·',l,'(none)');return false;}};
 const PMAP={wP:'P',wN:'N',wB:'B',wR:'R',wQ:'Q',wK:'K',bP:'p',bN:'n',bB:'b',bR:'r',bQ:'q',bK:'k'};

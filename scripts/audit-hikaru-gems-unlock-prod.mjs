@@ -11,6 +11,7 @@
 // (2) audit-stream pulled pre/post; (3) /api/tts capture when a gem Watch plays.
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
 
 const PROD = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const SECRET = process.env.AUDIT_STREAM_SECRET || '';
@@ -30,6 +31,7 @@ async function pullStream(sinceMs) {
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), headless: true, args: sandboxLaunchArgs() });
 const ctx = await browser.newContext(sandboxContextOptions());
 const page = await ctx.newPage();
+  await blockTtsNetwork(page);   // instrument keeps the request; the provider never sees it
 const appErrors = [];
 let ttsCount = 0;
 page.on('pageerror', (e) => appErrors.push(e.message));

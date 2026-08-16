@@ -1,5 +1,6 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 const BASE = process.env.AUDIT_SMOKE_URL || 'http://localhost:5173';
 const MIDDLEGAME_MOVES = 12;
 const OPENINGS = ['pro-carlsen-open-sicilian','pro-carlsen-ruy-lopez','pro-carlsen-queens-pawn','pro-carlsen-sicilian','pro-carlsen-1e5','pro-carlsen-nimzo','pro-carlsen-kid','pro-carlsen-french'];
@@ -7,6 +8,7 @@ const results=[];
 const rec=(n,s,d)=>{results.push({n,s,d});console.log(`  [${s}] ${n}${d?': '+d:''}`);};
 const browser=await chromium.launch({executablePath:await resolveChromiumExecutable(),headless:true,args:sandboxLaunchArgs()});
 const ctx=await browser.newContext(sandboxContextOptions());const page=await ctx.newPage();
+  await page.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 async function dismissOnboarding(){try{await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({timeout:12000});await page.locator('[data-testid="skill-band-intermediate"]').click({timeout:5000});await page.locator('[data-testid="strength-calibration-bubble"]').waitFor({state:'detached',timeout:15000});}catch{}}
 async function dismissHelp(){const m=page.locator('[data-testid="page-help-modal"]');if(await m.count()>0){await page.keyboard.press('Escape').catch(()=>null);await m.waitFor({state:'detached',timeout:5000}).catch(()=>null);}}
 console.log(`=== Carlsen Watch-depth audit vs ${BASE} ===\n`);

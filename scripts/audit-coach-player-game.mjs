@@ -31,6 +31,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -90,6 +91,7 @@ async function main() {
     userAgent: 'AuditPlayerGameBot/1.0 (chromium)',
     ignoreHTTPSErrors: true,
   });
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   await ctx.addInitScript(
     ({ url, secret }) => {
       try {

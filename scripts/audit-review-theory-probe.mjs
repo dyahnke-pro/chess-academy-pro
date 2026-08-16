@@ -7,6 +7,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const GID = 'theory-probe-iqp';
@@ -19,6 +20,7 @@ const run = async () => {
   const exe = await resolveChromiumExecutable();
   const browser = await chromium.launch({ headless: true, executablePath: exe, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 } });
+  await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
   const page = await ctx.newPage();
   const dismiss = async () => { for (let i = 0; i < 6; i++) { for (const [s, c] of [['[data-testid="ai-consent-allow"]', '[data-testid="ai-consent-allow"]'], ['[data-testid="strength-calibration-bubble"]', '[data-testid="skill-band-intermediate"]'], ['[data-testid="page-help-modal"]', '[data-testid="page-help-modal"] button']]) { if (await has(page, s)) { try { await page.locator(c).first().click({ timeout: 2000 }); } catch { /* */ } } } await page.waitForTimeout(400); } };
 

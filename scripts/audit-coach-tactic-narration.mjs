@@ -22,6 +22,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 // SANDBOX_CHROMIUM_ARGS available but kept off until the brain-on
 // scenarios (5 narration probes) are restructured to verify the
@@ -124,7 +125,8 @@ async function main() {
   // sandbox firewall is in place.
   {
     const probeCtx = await browser.newContext(sandboxContextOptions());
-  await probeCtx.addInitScript(autoDismissCalibration);   // the first-run bubble intercepts every click
+  await probeCtx.addInitScript(autoDismissCalibration);
+  await probeCtx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)   // the first-run bubble intercepts every click
     const probePage = await probeCtx.newPage();
     await probePage.goto(BASE_URL, { waitUntil: 'domcontentloaded' });
     const brainOk = await isBrainReachableFromBrowser(probePage);

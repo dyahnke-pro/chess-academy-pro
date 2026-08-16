@@ -1,10 +1,12 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const PROD = 'https://chess-academy-pro.vercel.app';
 const exe = await resolveChromiumExecutable();
 const browser = await chromium.launch({ executablePath: exe, headless: true, args: sandboxLaunchArgs() });
 const page = await browser.newContext(sandboxContextOptions()).then(c => c.newPage());
+  await page.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
 
 await page.goto(PROD, { waitUntil: 'domcontentloaded', timeout: 20000 });
 // Dismiss strength-calibration
