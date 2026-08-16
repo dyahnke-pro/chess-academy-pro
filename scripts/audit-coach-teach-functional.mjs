@@ -116,6 +116,36 @@ async function playMoves(pairs) {
   return played === pairs.length;
 }
 
+/** Get a lesson RUNNING, by clicking — the only way a person does it.
+ *
+ *  🚨 Six probes started theirs with `ask('teach me the Vienna')`, and the
+ *  Vienna branches: the typed verb lands on the LINE PICKER, not a walkthrough.
+ *  Nothing clicked a variation, so no lesson was ever running when the control
+ *  words fired — and `control-stop`, `auto-pause-on-question`, `control-resume`
+ *  and `control-new-lesson` all failed for want of a lesson to control, not for
+ *  anything wrong with the controls.
+ *
+ *  Also David 2026-08-16: "Do not type in 'teach me', just start playing" —
+ *  typing a request is injection; tapping a tile is use. One helper so a future
+ *  probe cannot reintroduce either mistake. */
+const LESSON_LIVE = ['walkthrough-narrating-panel', 'walkthrough-fork-panel', 'walkthrough-leaf-panel'];
+async function startLessonByClicking() {
+  await gotoTeach();
+  const openingTile = '[data-testid^="teach-picker-opening-"]';
+  await page.locator(openingTile).first().waitFor({ state: 'visible', timeout: 20000 }).catch(() => undefined);
+  if (!(await clickReq(openingTile))) return false;
+  if (await until(async () => (await phase()) === 'line-picker', 20000)) {
+    const tile = '[data-testid^="line-picker-"]:not([data-testid*="mode"]):not([data-testid="line-picker-dismiss"])';
+    await page.locator(tile).first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => undefined);
+    await clickReq(tile);
+  }
+  // The returning-visitor chooser sits between the pick and the narration.
+  if (await until(async () => (await phase()) === 'walkthrough-choose-mode', 20000)) {
+    await clickReq('[data-testid="walkthrough-choose-walkthrough"]');
+  }
+  return until(async () => LESSON_LIVE.includes(await phase()), 60000);
+}
+
 async function until(pred, ms = 30000, step = 600) {
   const end = Date.now() + ms;
   while (Date.now() < end) { if (await pred()) return true; await page.waitForTimeout(step); }
@@ -300,8 +330,7 @@ async function main() {
   // The lesson must keep flowing on its own: reach a fork, then WITHOUT tapping
   // anything, assert it leaves that fork (advances down the main line). The
   // fork-panel text is captured so a deeper fork still counts as "advanced".
-  await gotoTeach(); await ask('teach me the Vienna');
-  if (await visible('[data-testid="walkthrough-choose-mode"]')) { await clickReq('[data-testid="walkthrough-choose-walkthrough"]'); }
+  await startLessonByClicking();
   // Skip-click through the NARRATION only (a user may skip) to reach the first
   // fork fast — then STOP clicking at the fork and prove it advances on its own.
   let gotFork = false;
@@ -351,32 +380,31 @@ async function main() {
   const mg = await (async () => { await ask('middle game plans in the Pirc'); return until(async () => /plan/i.test(await transcript()) || (await phase()) !== 'teach-picker', 40000); })();
   record('middlegame-plan-intent', mg, mg ? 'plan intent handled' : 'not handled');
 
-  // control: start Vienna, then control words
-  await gotoTeach(); await ask('teach me the Vienna');
-  await until(async () => (await phase()) !== 'teach-picker', 30000);
+  // control words, against a lesson that is genuinely RUNNING
+  const liveForControls = await startLessonByClicking();
+  record('lesson-live-for-controls', liveForControls,
+    liveForControls ? `lesson running (${await phase()})` : `no lesson to control (${await phase()})`);
   await ask('teach me something else');
-  record('control-new-lesson', await until(async () => /what would you like to learn|done with/i.test(await transcript()), 15000), 'tore down + invited');
-  await gotoTeach(); await ask('teach me the Vienna');
-  // drive PAST the chooser to a real narrating walkthrough, then fire stop
-  // (S9b proves the control path works when a walkthrough is genuinely active).
-  if (await visible('[data-testid="walkthrough-choose-mode"]')) { await clickReq('[data-testid="walkthrough-choose-walkthrough"]'); }
-  await until(async () => ['walkthrough-narrating-panel', 'walkthrough-fork-panel', 'walkthrough-leaf-panel'].includes(await phase()), 40000);
+  const tornDown = await until(async () => /what would you like to learn|done with/i.test(await transcript()), 15000);
+  record('control-new-lesson', tornDown, tornDown ? 'tore down + invited' : 'no teardown/invite in transcript');
+  // stop, against a real narrating walkthrough (S9b proves the control path
+  // works when one is genuinely active — which is the part that was missing).
+  await startLessonByClicking();
   await waitInput();
   await ask('stop the walkthrough');
-  record('control-stop', await until(async () => /ended/i.test(await transcript()), 15000), 'ended');
-  await gotoTeach(); await ask('teach me the Vienna');
-  await until(async () => ['walkthrough-narrating-panel', 'walkthrough-choose-mode'].includes(await phase()), 30000);
-  if (await visible('[data-testid="walkthrough-choose-mode"]')) await clickReq('[data-testid="walkthrough-choose-walkthrough"]');
-  await until(async () => (await phase()) === 'walkthrough-narrating-panel', 15000);
-  await ask('what is the key idea?'); // auto-pause
+  const stopped = await until(async () => /ended/i.test(await transcript()), 15000);
+  record('control-stop', stopped, stopped ? 'ended' : `no "ended" in transcript (phase=${await phase()})`);
+  await startLessonByClicking();
+  await ask('what is the key idea?'); // auto-pause — a real typed QUESTION
   const paused = await until(async () => (await phase()) === 'walkthrough-paused-panel', 15000);
   record('auto-pause-on-question', paused, paused ? 'auto-paused' : 'not paused');
   await waitInput();
   await ask('go on');
-  record('control-resume', await until(async () => /resume/i.test((await transcript())) || (await phase()) === 'walkthrough-narrating-panel', 15000) || paused, 'resumed');
+  const resumed = await until(async () => /resume/i.test((await transcript())) || (await phase()) === 'walkthrough-narrating-panel', 15000);
+  record('control-resume', resumed, resumed ? 'resumed' : `never resumed (phase=${await phase()})`);
 
   // forget-intent (typed; no button)
-  await gotoTeach(); await ask('teach me the Vienna'); await until(async () => (await phase()) !== 'teach-picker', 30000);
+  await startLessonByClicking();
   await ask('forget the Vienna');
   record('forget-intent', await until(async () => (await transcript()).length > 0, 12000), 'forget request handled (no crash)');
 
