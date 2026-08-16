@@ -56,7 +56,7 @@ export class TtsProviderError extends Error {
 }
 
 export interface TtsProvider {
-  /** Stable id for logs / audits ('google', 'polly'). */
+  /** Stable id for logs / audits ('google', 'cloud'). */
   readonly id: string;
   /** False when the provider's credentials aren't configured — the endpoint
    *  uses this to pick a leg instead of failing a request. */

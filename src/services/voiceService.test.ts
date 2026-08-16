@@ -7,25 +7,25 @@ import { describePollyFalloverReason } from './voiceService';
 describe('describePollyFalloverReason', () => {
   it('returns an explicit diagnostic error verbatim', () => {
     expect(
-      describePollyFalloverReason({ error: 'stream playback error: code=3', pollyStatus: 200 }),
+      describePollyFalloverReason({ error: 'stream playback error: code=3', cloudStatus: 200 }),
     ).toBe('stream playback error: code=3');
   });
 
   it('names the CLIENT layer when the server succeeded (2xx) with no error — never "http 200"', () => {
     // The KIA fallover bug (2026-07-17): a server-OK-but-iOS-couldnt-play beat
     // was mislabeled "http 200", masquerading a client failure as a server one.
-    const reason = describePollyFalloverReason({ error: null, pollyStatus: 200 });
+    const reason = describePollyFalloverReason({ error: null, cloudStatus: 200 });
     expect(reason).toBe('client playback failed (server ok, http 200)');
     expect(reason).not.toBe('http 200');
   });
 
   it('reports an http cause only for a real server-error status (>=400)', () => {
-    expect(describePollyFalloverReason({ error: null, pollyStatus: 500 })).toBe('http 500');
-    expect(describePollyFalloverReason({ error: null, pollyStatus: 429 })).toBe('http 429');
+    expect(describePollyFalloverReason({ error: null, cloudStatus: 500 })).toBe('http 500');
+    expect(describePollyFalloverReason({ error: null, cloudStatus: 429 })).toBe('http 429');
   });
 
   it('falls back cleanly when there is no status and no error', () => {
-    expect(describePollyFalloverReason({ error: null, pollyStatus: null })).toBe(
+    expect(describePollyFalloverReason({ error: null, cloudStatus: null })).toBe(
       'client playback failed (no server error)',
     );
   });
@@ -97,7 +97,7 @@ describe('voiceService', () => {
         id: 'main',
         preferences: {
           voiceEnabled: true,
-          pollyEnabled: false,
+          cloudEnabled: false,
         },
       });
       await db.profiles.put(profile);
@@ -113,7 +113,7 @@ describe('voiceService', () => {
         id: 'main',
         preferences: {
           voiceEnabled: true,
-          pollyEnabled: true,
+          cloudEnabled: true,
         },
       });
       await db.profiles.put(profile);
@@ -136,7 +136,7 @@ describe('voiceService', () => {
         id: 'main',
         preferences: {
           voiceEnabled: true,
-          pollyEnabled: true,
+          cloudEnabled: true,
         },
       });
       await db.profiles.put(profile);
@@ -154,7 +154,7 @@ describe('voiceService', () => {
         id: 'main',
         preferences: {
           voiceEnabled: true,
-          pollyEnabled: false,
+          cloudEnabled: false,
           systemVoiceURI: 'Microsoft Aria Online (Natural)',
         },
       });
@@ -444,7 +444,7 @@ describe('voiceService', () => {
     it('getCurrentTier() reports web-speech after a fallback speak', async () => {
       const profile = buildUserProfile({ id: 'main' });
       profile.preferences.voiceEnabled = true;
-      profile.preferences.pollyEnabled = false;
+      profile.preferences.cloudEnabled = false;
       await db.profiles.put(profile);
 
       await voiceService.speak('Hello');
@@ -478,7 +478,7 @@ describe('voiceService', () => {
       // Polly so it resolves fast on the web-speech branch.
       const profile = buildUserProfile({
         id: 'main',
-        preferences: { voiceEnabled: true, pollyEnabled: false },
+        preferences: { voiceEnabled: true, cloudEnabled: false },
       });
       await db.profiles.put(profile);
       voiceService.stop(); // settle any prior state
@@ -544,7 +544,7 @@ describe('superseded speak ≠ Polly failure (the phantom voice_fallover flood, 
   // Live prod: 90 iOS voice_fallovers in 3 days — 11 in ONE second on
   // 2026-07-10 20:41:51 — were ABANDONED utterances (a stop()/newer speak
   // bumped the generation mid-flight), not Polly failures. speakInternal
-  // treated speakPolly's `false` as a failure and "fell over" for text
+  // treated speakCloud's `false` as a failure and "fell over" for text
   // nobody should hear anymore. The guard: a generation bump after Tier 1
   // returns MUTED — no fallover, no web-speech tier, no phantom telemetry.
   beforeEach(async () => {
@@ -559,21 +559,21 @@ describe('superseded speak ≠ Polly failure (the phantom voice_fallover flood, 
     voiceService.clearCache();
   });
 
-  it('a generation bump during speakPolly ends muted, never web-speech', async () => {
+  it('a generation bump during speakCloud ends muted, never web-speech', async () => {
     const profile = buildUserProfile({ id: 'main' });
     profile.preferences.voiceEnabled = true;
-    profile.preferences.pollyEnabled = true;
+    profile.preferences.cloudEnabled = true;
     await db.profiles.put(profile);
 
     const vs = voiceService as unknown as {
       pollyAvailable: boolean;
-      speakPolly: (...a: unknown[]) => Promise<boolean>;
+      speakCloud: (...a: unknown[]) => Promise<boolean>;
     };
     vs.pollyAvailable = true; // make isPollyLive() true so Tier 1 runs
     // Simulate a mid-speak supersession: a newer stop() bumps the
     // generation while THIS utterance is in flight, then Polly's
     // playback gates resolve false (intentional abandonment).
-    vi.spyOn(vs, 'speakPolly').mockImplementation(async () => {
+    vi.spyOn(vs, 'speakCloud').mockImplementation(async () => {
       voiceService.stop();
       return false;
     });
@@ -590,15 +590,15 @@ describe('superseded speak ≠ Polly failure (the phantom voice_fallover flood, 
   it('a GENUINE Polly failure (no generation bump) still falls over to the web-speech tier', async () => {
     const profile = buildUserProfile({ id: 'main' });
     profile.preferences.voiceEnabled = true;
-    profile.preferences.pollyEnabled = true;
+    profile.preferences.cloudEnabled = true;
     await db.profiles.put(profile);
 
     const vs = voiceService as unknown as {
       pollyAvailable: boolean;
-      speakPolly: (...a: unknown[]) => Promise<boolean>;
+      speakCloud: (...a: unknown[]) => Promise<boolean>;
     };
     vs.pollyAvailable = true;
-    vi.spyOn(vs, 'speakPolly').mockResolvedValue(false); // real failure, same generation
+    vi.spyOn(vs, 'speakCloud').mockResolvedValue(false); // real failure, same generation
 
     await voiceService.speak('This narration genuinely failed');
 

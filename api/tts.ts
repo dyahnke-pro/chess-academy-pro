@@ -177,22 +177,18 @@ export { buildSsmlForEngine } from './_lib/tts/ssml.js';
 /**
  * Pick the synthesis provider.
  *
- * Google is primary (perpetual monthly free tier; Polly's is a one-time
- * 12-month cliff). Polly stays as the fallback leg ONLY until the Google key is
- * live and the branch audit is green — see
- * docs/plans/2026-08-03-polly-to-google-tts.md. Removing it is then a one-line
- * change here plus deleting `_lib/tts/polly.ts`.
+ * Google is the only one. The AWS leg was cut from the chain on 2026-08-07 and
+ * the provider module deleted on 2026-08-16 (David: "Ok to remove Polly. We
+ * don't use that anymore."), so this is a chain of one — kept as a chain
+ * because the seam is the thing that made swapping vendors a one-line change,
+ * and the point of that lesson was not to be cliff-edged by a single vendor
+ * again.
+ *
+ * One server voice, always. A rare Google failure returns an error and the
+ * client falls to its device-TTS floor: an obviously-different voice for one
+ * line beats sometimes-one-voice-sometimes-another, which reads as a broken app.
  */
 export function selectProviders(): TtsProvider[] {
-  // POLLY LEG REMOVED (David 2026-08-07, second "I heard the old Polly
-  // voice" report — this time on the NEW cache generation, so the clip was
-  // freshly served by the fallback leg, not a stale CDN entry). The
-  // migration plan's exit criteria are met: the Google key is live on prod
-  // (`x-tts-source: google` verified across real games), so per the plan
-  // this is the sanctioned one-line removal. One server voice, always. A
-  // rare Google failure now returns an error and the client falls to its
-  // device-TTS floor — an obviously-different voice for one line beats
-  // sometimes-Ruth-sometimes-Polly, which reads as a broken app.
   const chain: TtsProvider[] = [];
   if (googleProvider.isConfigured()) chain.push(googleProvider);
   return chain;
@@ -204,7 +200,7 @@ async function synthesize(text: string, voice: string, req: Request, useSsml: bo
 
   if (providers.length === 0) {
     return new Response(
-      'TTS not configured — set GOOGLE_TTS_API_KEY (or AWS_ACCESS_KEY_ID_POLLY / AWS_SECRET_ACCESS_KEY_POLLY)',
+      'TTS not configured — set GOOGLE_TTS_API_KEY',
       { status: 503, headers: cors },
     );
   }

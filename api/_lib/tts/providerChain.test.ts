@@ -1,11 +1,17 @@
 /**
- * ONE SERVER VOICE — the chain is Google-only (David 2026-08-07, second
- * "I heard the old Polly voice" report; the migration plan's exit criteria
- * were met — `x-tts-source: google` verified on prod — so the Polly leg is
- * removed per the plan's sanctioned one-line change).
+ * ONE SERVER VOICE — the chain is Google-only.
+ *
+ * The AWS leg was cut from the chain on 2026-08-07 (David's second "I heard
+ * the old Polly voice" report) and the provider module was DELETED on
+ * 2026-08-16 ("Ok to remove Polly. We don't use that anymore."), along with
+ * the @aws-sdk/client-polly dependency.
+ *
+ * The credential test below is worth MORE after the deletion, not less: the
+ * AWS keys may still be provisioned in Vercel, and this pins that they are
+ * inert — no combination of them puts anything but Google in the chain.
  *
  * The properties pinned here:
- *  - Polly credentials NEVER put Polly in the chain, in any combination.
+ *  - AWS credentials NEVER add a provider, in any combination.
  *  - Google serves alone whenever any accepted spelling of its key is set.
  *  - Nothing configured → empty chain (endpoint 503s; the client falls to
  *    its device-TTS floor). Never a crash, never a silent 200.
@@ -42,12 +48,12 @@ function withPolly(): void {
 }
 
 describe('selectProviders', () => {
-  it('NEVER serves from Polly — even with only AWS credentials set', () => {
+  it('NEVER serves from AWS — even with only AWS credentials set', () => {
     withPolly();
     expect(selectProviders()).toEqual([]);
   });
 
-  it('runs on Google alone even when Polly credentials are still provisioned', () => {
+  it('runs on Google alone even when AWS credentials are still provisioned', () => {
     withPolly();
     process.env.GOOGLE_TTS_API_KEY = 'test-google-key';
     expect(selectProviders().map((p) => p.id)).toEqual(['google']);

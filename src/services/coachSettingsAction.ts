@@ -187,9 +187,9 @@ export function resolveSettingsCommand(text: string): ResolvedCommand | null {
     if (onWord || offWord || switchTo) {
       const on = !offWord;
       return {
-        key: 'pollyEnabled',
+        key: 'cloudEnabled',
         confirmation: on ? 'The premium voice is on now.' : 'The premium voice is off; narration uses the device voice.',
-        prefsPatch: { pollyEnabled: on },
+        prefsPatch: { cloudEnabled: on },
       };
     }
   }

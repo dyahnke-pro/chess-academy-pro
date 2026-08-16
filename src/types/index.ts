@@ -810,7 +810,7 @@ export interface UserPreferences {
   elevenlabsKeyIv: string | null;
   elevenlabsVoiceId: string | null;
   // Amazon Polly TTS (server-side, no API key in browser)
-  pollyEnabled: boolean;
+  cloudEnabled: boolean;
   pollyVoice: string;
   voiceSpeed: number;
   // Kokoro TTS (open-source, in-browser)

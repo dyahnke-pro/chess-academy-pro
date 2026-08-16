@@ -657,7 +657,7 @@ export type AuditKind =
   | 'coach-grounding-coverage'
   // `coach-setting-changed`: the coach mutated a user preference on command
   //   (settings-as-actions). `key` in the details names which pref changed
-  //   (coachVoiceOn / coachNarration / showHints / pollyEnabled). Safe
+  //   (coachVoiceOn / coachNarration / showHints / cloudEnabled). Safe
   //   whitelist only — keys/backup/destructive are never reachable.
   | 'coach-setting-changed'
   // `coach-llm-call`: the grounding-inversion leak audit (STEP E). Fires on

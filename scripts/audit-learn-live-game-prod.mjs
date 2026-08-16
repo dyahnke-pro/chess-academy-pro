@@ -256,11 +256,11 @@ async function main() {
         const text = String(e.narrationText ?? e.summary ?? '');
         // The arrow/highlight engines log under the same kind; only lines the
         // VOICE said are graded here.
-        if (!/trackA|speakForced|speakPolly|narration/i.test(String(e.source ?? ''))) continue;
+        if (!/trackA|speakForced|speakCloud|narration/i.test(String(e.source ?? ''))) continue;
         if (/arrowEngine|highlightEngine/.test(String(e.source ?? ''))) continue;
         // ONLY grade lines whose event carries its own FEN. Those are stamped
         // at the instant the utterance begins (`queueSpeak.spoken`, `trackA`),
-        // so the anchor is exact. `speakPolly`/`speakForced` carry no
+        // so the anchor is exact. `speakCloud`/`speakForced` carry no
         // position, and anchoring them by arrival order mis-blames a line that
         // was true when it started and went stale while it played — which is
         // a pacing problem, not a false claim, and must not be reported as

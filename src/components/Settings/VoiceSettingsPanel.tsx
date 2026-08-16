@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useAppStore } from '../../stores/appStore';
 import { db } from '../../db/schema';
-import { POLLY_VOICES, getTtsUrl, voiceService, sanitizeForTTS, type VoiceTier } from '../../services/voiceService';
+import { CLOUD_VOICES, getTtsUrl, voiceService, sanitizeForTTS, type VoiceTier } from '../../services/voiceService';
 import { speechService } from '../../services/speechService';
 import type { SystemVoice } from '../../services/speechService';
 import { Volume2, Play, Mic, Sparkles, AlertCircle } from 'lucide-react';
@@ -40,7 +40,7 @@ export function VoiceSettingsPanel(): JSX.Element {
   // or a fallback. Polling (not push) because voiceService doesn't
   // emit events yet; 2s is plenty and costs nothing.
   const [currentTier, setCurrentTier] = useState<VoiceTier>(() => voiceService.getCurrentTier());
-  const [pollyLive, setPollyLive] = useState<boolean>(() => voiceService.isPollyLive());
+  const [cloudLive, setPollyLive] = useState<boolean>(() => voiceService.isPollyLive());
   useEffect(() => {
     const id = setInterval(() => {
       setCurrentTier(voiceService.getCurrentTier());
@@ -50,7 +50,7 @@ export function VoiceSettingsPanel(): JSX.Element {
   }, []);
 
   // Amazon Polly TTS state
-  const [pollyEnabled, setPollyEnabled] = useState(() => activeProfile?.preferences.pollyEnabled ?? true);
+  const [cloudEnabled, setPollyEnabled] = useState(() => activeProfile?.preferences.cloudEnabled ?? true);
   const [pollyVoice, setPollyVoice] = useState(() => activeProfile?.preferences.pollyVoice ?? 'ruth');
   const [pollyPreviewPlaying, setPollyPreviewPlaying] = useState(false);
 
@@ -93,7 +93,7 @@ export function VoiceSettingsPanel(): JSX.Element {
   const handlePollyToggle = async (enabled: boolean): Promise<void> => {
     setPollyEnabled(enabled);
     if (!activeProfile) return;
-    const updatedPrefs = { ...activeProfile.preferences, pollyEnabled: enabled };
+    const updatedPrefs = { ...activeProfile.preferences, cloudEnabled: enabled };
     await db.profiles.update(activeProfile.id, { preferences: updatedPrefs });
     setActiveProfile({ ...activeProfile, preferences: updatedPrefs });
     voiceService.clearCache();
@@ -231,23 +231,23 @@ export function VoiceSettingsPanel(): JSX.Element {
           <button
             type="button"
             role="switch"
-            aria-checked={pollyEnabled}
+            aria-checked={cloudEnabled}
             aria-label="Cloud voice priority — use Amazon Polly before the system voice"
-            onClick={() => void handlePollyToggle(!pollyEnabled)}
+            onClick={() => void handlePollyToggle(!cloudEnabled)}
             className="flex items-center gap-2 cursor-pointer rounded-md focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-1"
             data-testid="polly-toggle"
           >
             <span className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
-              {pollyEnabled ? 'Polly first' : 'System voice first'}
+              {cloudEnabled ? 'Polly first' : 'System voice first'}
             </span>
             <span
               aria-hidden="true"
               className="relative inline-flex h-6 w-11 items-center rounded-full transition-colors"
-              style={{ background: pollyEnabled ? 'var(--color-accent)' : 'var(--color-border)' }}
+              style={{ background: cloudEnabled ? 'var(--color-accent)' : 'var(--color-border)' }}
             >
               <span
                 className="inline-block h-4 w-4 rounded-full bg-white transition-transform"
-                style={{ transform: pollyEnabled ? 'translateX(24px)' : 'translateX(4px)' }}
+                style={{ transform: cloudEnabled ? 'translateX(24px)' : 'translateX(4px)' }}
               />
             </span>
           </button>
@@ -263,9 +263,9 @@ export function VoiceSettingsPanel(): JSX.Element {
             served the last speak() call, so the user can tell when
             Polly is in use vs. fallen back to Web Speech. Polls
             voiceService every 2s. */}
-        <VoiceTierIndicator tier={currentTier} pollyLive={pollyLive} pollyEnabled={pollyEnabled} />
+        <VoiceTierIndicator tier={currentTier} cloudLive={cloudLive} cloudEnabled={cloudEnabled} />
 
-        {pollyEnabled && (
+        {cloudEnabled && (
           <div className="space-y-3">
             <div>
               <label className="text-xs font-medium block mb-1.5" style={{ color: 'var(--color-text-muted)' }}>
@@ -278,7 +278,7 @@ export function VoiceSettingsPanel(): JSX.Element {
                 style={{ background: 'var(--color-bg)', borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
                 data-testid="polly-voice-select"
               >
-                {POLLY_VOICES.map((voice) => (
+                {CLOUD_VOICES.map((voice) => (
                   <option key={voice.id} value={voice.id}>
                     {voice.name} — {voice.description}
                   </option>
@@ -363,7 +363,7 @@ export function VoiceSettingsPanel(): JSX.Element {
         </h3>
         <p className="text-xs" style={{ color: 'var(--color-text-muted)' }}>
           Built-in voices from your browser. Microsoft Natural voices are high quality and free.
-          {!pollyEnabled && ' Used as the primary voice when Cloud Voice is off.'}
+          {!cloudEnabled && ' Used as the primary voice when Cloud Voice is off.'}
         </p>
 
         {systemVoices.length > 0 ? (
@@ -433,8 +433,8 @@ export function VoiceSettingsPanel(): JSX.Element {
 
 interface VoiceTierIndicatorProps {
   tier: VoiceTier;
-  pollyLive: boolean;
-  pollyEnabled: boolean;
+  cloudLive: boolean;
+  cloudEnabled: boolean;
 }
 
 /**
@@ -444,8 +444,8 @@ interface VoiceTierIndicatorProps {
  * show an explicit warning — otherwise the user would silently hear
  * Web Speech and wonder why their premium voice disappeared.
  */
-function VoiceTierIndicator({ tier, pollyLive, pollyEnabled }: VoiceTierIndicatorProps): JSX.Element {
-  const { label, description, color } = describeTier(tier, pollyLive, pollyEnabled);
+function VoiceTierIndicator({ tier, cloudLive, cloudEnabled }: VoiceTierIndicatorProps): JSX.Element {
+  const { label, description, color } = describeTier(tier, cloudLive, cloudEnabled);
   return (
     <div
       className="flex items-center gap-3 rounded-lg px-3 py-2 text-xs"
@@ -468,10 +468,10 @@ function VoiceTierIndicator({ tier, pollyLive, pollyEnabled }: VoiceTierIndicato
 
 function describeTier(
   tier: VoiceTier,
-  pollyLive: boolean,
-  pollyEnabled: boolean,
+  cloudLive: boolean,
+  cloudEnabled: boolean,
 ): { label: string; description: string; color: string } {
-  if (pollyEnabled && !pollyLive && tier !== 'polly') {
+  if (cloudEnabled && !cloudLive && tier !== 'cloud') {
     return {
       label: 'Polly cooling down',
       description: 'Recent TTS call failed — using fallback. Will retry automatically.',
@@ -479,7 +479,7 @@ function describeTier(
     };
   }
   switch (tier) {
-    case 'polly':
+    case 'cloud':
       return {
         label: 'Polly (Cloud Voice) active',
         description: 'Premium AI voice is serving the coach audio.',
@@ -488,7 +488,7 @@ function describeTier(
     case 'web-speech':
       return {
         label: 'System voice (fallback)',
-        description: pollyEnabled
+        description: cloudEnabled
           ? 'Device voice in use. Polly will resume when reachable.'
           : 'Device voice. Enable Cloud Voice for higher quality.',
         color: '#64748b',

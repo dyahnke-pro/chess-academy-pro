@@ -86,7 +86,7 @@ await dismissOverlays();
 console.log('  waiting 35s for base-repertoire seed...');
 await page.waitForTimeout(35000);
 
-// A fresh context defaults pollyEnabled=false (voiceService.loadPrefs), so the
+// A fresh context defaults cloudEnabled=false (voiceService.loadPrefs), so the
 // app would speak via Web Speech and never hit /api/tts — making a voice
 // assertion meaningless. David's real device has Polly ON. Flip it on the
 // seeded 'main' profile so the streaming path fetches /api/tts, then reload so
@@ -107,7 +107,7 @@ const pollyResult = await page.evaluate(async () => {
         const profile = get.result;
         if (!profile) { clearTimeout(to); resolve('no-main-profile'); return; }
         profile.preferences = profile.preferences || {};
-        profile.preferences.pollyEnabled = true;
+        profile.preferences.cloudEnabled = true;
         profile.preferences.voiceEnabled = true;
         profile.preferences.coachNarration = 'full';
         const put = store.put(profile);

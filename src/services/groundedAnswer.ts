@@ -205,7 +205,7 @@ export function assembleSettingsAnswer(opts: {
   voiceOn?: boolean | null;
   narration?: 'silent' | 'brief' | 'full' | null;
   showHints?: boolean | null;
-  pollyEnabled?: boolean | null;
+  cloudEnabled?: boolean | null;
   personality?: string | null;
 }): GroundedAnswer | null {
   const parts: string[] = [];
@@ -218,7 +218,7 @@ export function assembleSettingsAnswer(opts: {
     parts.push(`Your narration level is ${desc}.`);
   }
   if (typeof opts.showHints === 'boolean') parts.push(`Hints are ${opts.showHints ? 'on' : 'off'}.`);
-  if (typeof opts.pollyEnabled === 'boolean' && !opts.pollyEnabled) {
+  if (typeof opts.cloudEnabled === 'boolean' && !opts.cloudEnabled) {
     parts.push('The premium voice is off, so narration uses the device voice.');
   }
   if (opts.personality && opts.personality !== 'default') parts.push(`Coach personality is set to ${opts.personality}.`);

@@ -31,7 +31,7 @@ export function VoiceDebugPanel(): JSX.Element | null {
     >
       <div className="mb-1 font-bold text-emerald-300">VOICE DEBUG</div>
       <div>tier: <span className={tierColor[snap.tier] ?? 'text-neutral-300'}>{snap.tier}</span></div>
-      <div>polly: {snap.pollyAttempted ? `${snap.pollyOk ? 'OK' : 'FAIL'} (${snap.pollyStatus ?? '—'})` : 'not attempted'}</div>
+      <div>polly: {snap.cloudAttempted ? `${snap.pollyOk ? 'OK' : 'FAIL'} (${snap.cloudStatus ?? '—'})` : 'not attempted'}</div>
       <div>audioCtx: {snap.audioContextState}</div>
       <div className="mt-1 text-neutral-400">
         text: {snap.text ? `"${snap.text}…"` : '(none)'}

@@ -44,7 +44,7 @@ await page.waitForTimeout(35000);
 await page.evaluate(() => new Promise((res) => {
   const to = setTimeout(() => res('t'), 8000);
   const o = indexedDB.open('ChessAcademyDB');
-  o.onsuccess = () => { const tx = o.result.transaction('profiles', 'readwrite'); const s = tx.objectStore('profiles'); const g = s.get('main'); g.onsuccess = () => { const p = g.result; if (!p) { clearTimeout(to); res('no'); return; } p.preferences = p.preferences || {}; p.preferences.pollyEnabled = true; p.preferences.voiceEnabled = true; p.preferences.coachNarration = 'full'; s.put(p).onsuccess = () => { clearTimeout(to); res('ok'); }; }; };
+  o.onsuccess = () => { const tx = o.result.transaction('profiles', 'readwrite'); const s = tx.objectStore('profiles'); const g = s.get('main'); g.onsuccess = () => { const p = g.result; if (!p) { clearTimeout(to); res('no'); return; } p.preferences = p.preferences || {}; p.preferences.cloudEnabled = true; p.preferences.voiceEnabled = true; p.preferences.coachNarration = 'full'; s.put(p).onsuccess = () => { clearTimeout(to); res('ok'); }; }; };
   o.onerror = () => { clearTimeout(to); res('e'); };
 }));
 await page.reload({ waitUntil: 'domcontentloaded', timeout: 30000 }).catch(() => null);

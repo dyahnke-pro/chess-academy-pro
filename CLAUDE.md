@@ -138,14 +138,32 @@ Fixing each layer exposed the next — reach, then the overlay, then the bill.
 When an audit fails, ask whether the HARNESS reached the surface before
 concluding anything about the product.
 
-**THE VOICE IS GOOGLE, NOT POLLY (David 2026-08-04).** The migration landed —
-`/api/tts` is served by Google Cloud TTS behind the provider seam (`x-tts-source:
-google` on prod). The client method is still named `speakPolly` and the tier
-comment still says "Amazon Polly": that is LEGACY NAMING, not the current
-provider. Don't reason about cost from those names, and don't "fix" a bug by
-reaching for Polly. The audit mute is placed above the tier for exactly this
-reason — it skips the `/api/tts` request itself and stays correct across seam
-swaps.
+**THE VOICE IS GOOGLE. POLLY IS GONE (David 2026-08-04 → removed 2026-08-16:
+"Ok to remove Polly. We don't use that anymore.").** `/api/tts` is served by
+Google Cloud TTS behind the provider seam (`x-tts-source: google` on prod). The
+AWS leg left the chain on 2026-08-07; on 2026-08-16 the provider module
+(`api/_lib/tts/polly.ts`) and the `@aws-sdk/client-polly` dependency were
+DELETED, and the legacy client naming went with them:
+
+| was | is |
+|---|---|
+| `voiceService.speakPolly` | `voiceService.speakCloud` |
+| tier `'polly'` | tier `'cloud'` |
+| `pollyStatus` / `pollyAttempted` / `pollyLive` | `cloudStatus` / `cloudAttempted` / `cloudLive` |
+| `POLLY_VOICES` | `CLOUD_VOICES` |
+| "Polly not live (warmup failed…)" | "cloud voice not live (warmup failed…)" |
+
+The rename matters because the name was actively misleading a reader: David's
+2026-08-16 device log showed `voice-fallover — Polly failed (Polly not live)`
+three times on a build whose voice had been Google for two weeks. Audit scripts
+key on the event `source` string, so anything matching `voiceService.speakPolly`
+must now match `speakCloud`.
+
+`providerChain.test.ts` still asserts AWS credentials put NOTHING in the chain —
+worth more after the deletion, not less, since the keys may still be
+provisioned in Vercel and this pins that they are inert. The audit mute sits
+above the tier for the same reason: it skips the `/api/tts` request itself and
+stays correct across seam swaps.
 
 **COST ALSO COMES FROM CACHE INVALIDATION, not just from speaking.** `/api/tts`
 clips are CDN-cached forever on `(text, voice, style)`, so repeated identical
@@ -198,7 +216,7 @@ The reference 3-instrument audit script:
 audits. The Naroditsky build (2026-05-28) proved this end-to-end:
 Playwright drove the player page + Watch click, the audit-stream
 captured `coach-narration-spoken` events, the listener confirmed the
-exact text Ruth spoke through `voiceService.speakPolly`.
+exact text Ruth spoke through `voiceService.speakCloud`.
 
 Unit tests + typecheck + lint are NOT sufficient — they don't catch
 deploy-pipeline issues. The 2026-05-14 back-button incident proved

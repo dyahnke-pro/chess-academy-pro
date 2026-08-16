@@ -33,7 +33,7 @@ export function getManagedMediaSource(): ManagedMediaSourceCtor | null {
  *  the Capacitor WKWebView). Pure so it can be unit-tested across UA
  *  strings. iOS is where Web Audio output is unreliable but the
  *  `<audio>` element always works — so it gates the element-playback
- *  path in speakPolly. */
+ *  path in speakCloud. */
 export function isIosUserAgent(userAgent: string, hasTouchAndMac: boolean): boolean {
   return /iPhone|iPad|iPod/.test(userAgent) || (userAgent.includes('Mac') && hasTouchAndMac);
 }
@@ -205,7 +205,7 @@ export function getTtsUrl(text: string, voice: string, useSsml = true, style?: s
 }
 
 /** Available Amazon Polly voices (served via /api/tts endpoint) */
-export const POLLY_VOICES = [
+export const CLOUD_VOICES = [
   { id: 'ruth',     name: 'Ruth',     description: 'Generative female', engine: 'generative' },
   { id: 'matthew',  name: 'Matthew',  description: 'Generative male',   engine: 'generative' },
   { id: 'danielle', name: 'Danielle', description: 'Generative female', engine: 'generative' },
@@ -256,14 +256,14 @@ const POLLY_COOLDOWN_MAX_MS = 120_000;
 /** Voice delivery tier currently serving speak() calls. Exposed for
  *  UI so the Settings screen can show "Polly active" vs "Web Speech
  *  fallback". */
-export type VoiceTier = 'polly' | 'web-speech' | 'muted';
+export type VoiceTier = 'cloud' | 'web-speech' | 'muted';
 
 /** Human-readable cause for a Polly→Web-Speech fallover, for the
  *  `voice-fallover` audit SUMMARY (PostHog stores the summary, not details —
  *  David 2026-07-06). The summary is the ONLY place the cause survives, so it
  *  must name the real failing layer.
  *
- *  A 2xx `pollyStatus` means Polly's SERVER succeeded — so falling over on it
+ *  A 2xx `cloudStatus` means Polly's SERVER succeeded — so falling over on it
  *  is categorically a CLIENT-side playback failure (iOS `<audio>` decode wedge /
  *  AudioContext refusal), NOT an HTTP error. The prior logic printed
  *  `http ${status}` for ANY status, so a server-OK-but-iOS-couldn't-play beat
@@ -271,17 +271,17 @@ export type VoiceTier = 'polly' | 'web-speech' | 'muted';
  *  response (David 2026-07-17, the King's Indian Attack narration fallover). An
  *  explicit `error` always wins; otherwise only >=400 is a real HTTP cause. */
 export function describePollyFalloverReason(
-  diag: { error: string | null; pollyStatus: number | null; pollyAttempted?: boolean },
+  diag: { error: string | null; cloudStatus: number | null; cloudAttempted?: boolean },
 ): string {
   if (diag.error) return diag.error;
-  if (diag.pollyStatus && diag.pollyStatus >= 400) return `http ${diag.pollyStatus}`;
-  if (diag.pollyStatus) return `client playback failed (server ok, http ${diag.pollyStatus})`;
+  if (diag.cloudStatus && diag.cloudStatus >= 400) return `http ${diag.cloudStatus}`;
+  if (diag.cloudStatus) return `client playback failed (server ok, http ${diag.cloudStatus})`;
   // No status AND no error means Polly was never ATTEMPTED — `isPollyLive()`
   // was false (warmup never succeeded, or a cooldown is latched), so
   // speakInternal skipped the tier entirely. Reporting that as "client
   // playback failed" sent this investigation looking for a decode bug that
   // wasn't there (David 2026-07-31).
-  if (diag.pollyAttempted === false) return 'Polly not live (warmup failed or cooling down) — never attempted';
+  if (diag.cloudAttempted === false) return 'cloud voice not live (warmup failed or cooling down) — never attempted';
   return 'client playback failed (no server error)';
 }
 
@@ -670,7 +670,7 @@ class VoiceService {
   // accelerated default down to natural pace.
   private speed = 1.0;
   /** Whether the Polly endpoint is currently considered usable. Set by
-   *  warmup() on probe success, cleared (temporarily) by speakPolly on
+   *  warmup() on probe success, cleared (temporarily) by speakCloud on
    *  failure. Comes back automatically after POLLY_COOLDOWN_MS so a
    *  transient blip doesn't drop the user to Web Speech for the whole
    *  session. */
@@ -743,9 +743,9 @@ class VoiceService {
   getLastSpeakDiagnostic(): {
     text: string;
     tier: VoiceTier;
-    pollyAttempted: boolean;
+    cloudAttempted: boolean;
     pollyOk: boolean | null;
-    pollyStatus: number | null;
+    cloudStatus: number | null;
     audioContextState: string;
     error: string | null;
     timestamp: number;
@@ -756,18 +756,18 @@ class VoiceService {
   private lastSpeakDiagnostic: {
     text: string;
     tier: VoiceTier;
-    pollyAttempted: boolean;
+    cloudAttempted: boolean;
     pollyOk: boolean | null;
-    pollyStatus: number | null;
+    cloudStatus: number | null;
     audioContextState: string;
     error: string | null;
     timestamp: number;
   } = {
     text: '',
     tier: 'muted',
-    pollyAttempted: false,
+    cloudAttempted: false,
     pollyOk: null,
-    pollyStatus: null,
+    cloudStatus: null,
     audioContextState: 'unknown',
     error: null,
     timestamp: 0,
@@ -776,7 +776,7 @@ class VoiceService {
   // Cached preferences to avoid DB read on every speak() call
   private cachedPrefs: {
     voiceEnabled: boolean;
-    pollyEnabled: boolean;
+    cloudEnabled: boolean;
     pollyVoice: string;
     /** WO-COACH-PERSONALITY-VOICE: cached for resolvePollyVoice() at
      *  speak time. Defaults to undefined / 'default' so behavior is
@@ -828,7 +828,7 @@ class VoiceService {
     // synthesis tier, so probing whether Polly is reachable answers a question
     // no one will ask. Skipping keeps a muted audit at exactly zero billable
     // requests, which is the property the audit now asserts.
-    if (prefs?.pollyEnabled && prefs.voiceEnabled && !this.isAuditMuted()) {
+    if (prefs?.cloudEnabled && prefs.voiceEnabled && !this.isAuditMuted()) {
       // Probe Polly availability with a short timeout
       try {
         const controller = new AbortController();
@@ -867,7 +867,7 @@ class VoiceService {
    *  null, so `isPollyLive()`'s recovery branch could never fire and every
    *  later narration fell to Web Speech with no diagnostic. David's native
    *  TestFlight log (2026-07-31) shows exactly that — 34 consecutive
-   *  `voice-fallover` entries, all `pollyStatus: null`, all robotic.
+   *  `voice-fallover` entries, all `cloudStatus: null`, all robotic.
    *
    *  One 3-second timeout at boot must not cost the session its voice. Set a
    *  SHORT cooldown so the next speak retries, and say so out loud: this is
@@ -964,7 +964,7 @@ class VoiceService {
     const prefs = profile.preferences as Partial<typeof profile.preferences>;
     this.cachedPrefs = {
       voiceEnabled: prefs.voiceEnabled ?? true,
-      pollyEnabled: prefs.pollyEnabled ?? false,
+      cloudEnabled: prefs.cloudEnabled ?? false,
       pollyVoice: prefs.pollyVoice || 'ruth',
       coachPersonality: prefs.coachPersonality,
       coachPersonalityVoices: prefs.coachPersonalityVoices,
@@ -1432,9 +1432,9 @@ class VoiceService {
     this.lastSpeakDiagnostic = {
       text: text.slice(0, 80),
       tier: 'muted',
-      pollyAttempted: false,
+      cloudAttempted: false,
       pollyOk: null,
-      pollyStatus: null,
+      cloudStatus: null,
       audioContextState: typeof AudioContext !== 'undefined'
         ? (((globalThis as unknown as { _sharedAudioContext?: AudioContext })._sharedAudioContext)?.state ?? 'no-context')
         : 'no-AudioContext',
@@ -1560,7 +1560,7 @@ class VoiceService {
     // every synthesis tier. The audit is byte-identical; the bill is zero.
     //
     // PROVIDER-AGNOSTIC ON PURPOSE, and deliberately placed ABOVE Tier 1. The
-    // method below is still called `speakPolly` and the tier comment still says
+    // method below is still called `speakCloud` and the tier comment still says
     // "Amazon Polly", but that is legacy naming: since the provider-seam
     // migration the voice is GOOGLE CLOUD TTS, served behind `/api/tts` (a prod
     // probe returns `x-tts-source: google`). Muting here skips the `/api/tts`
@@ -1580,7 +1580,7 @@ class VoiceService {
     }
 
     // Tier 1: Amazon Polly.
-    if (prefs.pollyEnabled && this.isPollyLive()) {
+    if (prefs.cloudEnabled && this.isPollyLive()) {
       // WO-COACH-PERSONALITY-VOICE: resolve voice from active
       // personality + per-personality override map, falling back to
       // the legacy pollyVoice when on the 'default' personality with
@@ -1625,10 +1625,10 @@ class VoiceService {
         : prefs.coachPersonality && prefs.coachPersonality !== 'default'
           ? prefs.coachPersonality
           : undefined;
-      const success = await this.speakPolly(text, voiceForSpeak, personalityStyle, opts?.prosodySpike ? 'spike' : undefined);
+      const success = await this.speakCloud(text, voiceForSpeak, personalityStyle, opts?.prosodySpike ? 'spike' : undefined);
       if (success) {
-        this.lastTier = 'polly';
-        this.lastSpeakDiagnostic.tier = 'polly';
+        this.lastTier = 'cloud';
+        this.lastSpeakDiagnostic.tier = 'cloud';
         return;
       }
       // SUPERSEDED ≠ FAILED: a stop()/newer speak() bumped the generation
@@ -1655,13 +1655,13 @@ class VoiceService {
       this.lastTier = 'muted';
       this.lastSpeakDiagnostic.tier = 'muted';
       this.lastSpeakDiagnostic.error =
-        'noFallback set; Polly failed; sentence skipped audibly';
+        'noFallback set; cloud voice failed; sentence skipped audibly';
       void import('./appAuditor').then(({ logAppAudit }) => {
         void logAppAudit({
           kind: 'polly-fallback',
           category: 'subsystem',
           source: 'voiceService.speakInternal',
-          summary: 'Polly failed; noFallback skipped web-speech',
+          summary: 'cloud voice failed; noFallback skipped web-speech',
           details: `text: ${text.slice(0, 80)}`,
         });
       }).catch(() => undefined);
@@ -1680,18 +1680,18 @@ class VoiceService {
     // cause recorded). The reason distinguishes a server error (status/AWS
     // code) from a client-side iOS playback failure (element/stream), which is
     // the difference between "Polly is down" and "iOS WKWebView can't play it".
-    const pollyReason = describePollyFalloverReason(this.lastSpeakDiagnostic);
+    const cloudReason = describePollyFalloverReason(this.lastSpeakDiagnostic);
     void import('./appAuditor').then(({ logAppAudit }) => {
       void logAppAudit({
         kind: 'voice-fallover',
         category: 'subsystem',
         source: 'voiceService.speakInternal',
-        summary: `Polly failed (${pollyReason}) → Web Speech for "${text.slice(0, 32)}"`,
+        summary: `cloud voice failed (${cloudReason}) → Web Speech for "${text.slice(0, 32)}"`,
         details: JSON.stringify({
-          fromTier: 'polly',
+          fromTier: 'cloud',
           toTier: 'web-speech',
-          reason: pollyReason,
-          pollyStatus: this.lastSpeakDiagnostic.pollyStatus ?? null,
+          reason: cloudReason,
+          cloudStatus: this.lastSpeakDiagnostic.cloudStatus ?? null,
           textLength: text.length,
           textPreview: text.slice(0, 120),
         }),
@@ -1708,7 +1708,7 @@ class VoiceService {
     this.lastSpeakDiagnostic.tier = 'web-speech';
     if (!this.lastSpeakDiagnostic.error) {
       this.lastSpeakDiagnostic.error =
-        'fell through to web-speech (Polly failed; web-speech is disabled)';
+        'fell through to web-speech (cloud voice failed; web-speech is disabled)';
     }
   }
 
@@ -1813,7 +1813,7 @@ class VoiceService {
       void logAppAudit({
         kind: 'polly-fallback',
         category: 'subsystem',
-        source: 'voiceService.speakPolly',
+        source: 'voiceService.speakCloud',
         summary: `Polly cooling down for ${Math.round(ms / 1000)}s`,
         details: reason,
       });
@@ -1901,7 +1901,7 @@ class VoiceService {
       void logAppAudit({
         kind: 'coach-narration-spoken',
         category: 'subsystem',
-        source: 'voiceService.speakPolly',
+        source: 'voiceService.speakCloud',
         summary: `voice=${voice} personality=${personality} text="${text.slice(0, 40)}"`,
         // FULL spoken line — stored in PostHog as `narration_text` so we can
         // review exactly what Ruth said (David 2026-06-06). The summary above
@@ -2225,7 +2225,7 @@ audio.playbackRate = this.speed;
     // Tracks a mid-stream decode failure (iOS ManagedMediaSource's flaky
     // mode). Load-bearing: without it, this method returned `true` even after
     // the audio element errored — reporting SUCCESS on a clip the user never
-    // heard, so speakPolly never fell back and the narration silently dropped.
+    // heard, so speakCloud never fell back and the narration silently dropped.
     // That is the silent-drop class behind the voice_fallover flood (David
     // 2026-07-08 device data: iOS "Polly 200 OK but playback FAILED").
     let playbackErrored = false;
@@ -2239,7 +2239,7 @@ audio.playbackRate = this.speed;
       audio.addEventListener('ended', onEnded, { once: true });
       audio.addEventListener('error', () => {
         // Audio decode failed mid-stream. Flag it so we return false and
-        // speakPolly self-heals to the reliable buffered-element path;
+        // speakCloud self-heals to the reliable buffered-element path;
         // resolve so the awaiter unblocks; the cache write below won't fire.
         playbackErrored = true;
         this.lastSpeakDiagnostic.error =
@@ -2332,7 +2332,7 @@ audio.playbackRate = this.speed;
     await ended;
 
     // The audio element errored mid-decode → the user heard nothing (or a
-    // broken fragment). Report failure so speakPolly re-fetches and plays the
+    // broken fragment). Report failure so speakCloud re-fetches and plays the
     // COMPLETE clip through the proven buffered-element path instead of
     // returning a phantom success. Don't cache a clip that just failed to play.
     if (playbackErrored) return false;
@@ -2355,7 +2355,7 @@ audio.playbackRate = this.speed;
     return true;
   }
 
-  private async speakPolly(text: string, voice: string, style?: string, prosody?: 'spike'): Promise<boolean> {
+  private async speakCloud(text: string, voice: string, style?: string, prosody?: 'spike'): Promise<boolean> {
     // No speakable content (empty string, whitespace, or pure punctuation left by
     // a sentence-split) → never build a /api/tts URL for it. Prod returns 400 on
     // empty text, which littered the console with harmless resource errors and
@@ -2363,7 +2363,7 @@ audio.playbackRate = this.speed;
     // \p{L}\p{N} keeps all real Unicode prose. Return false so callers fall
     // through exactly as they do on any Polly miss (David 2026-07-24).
     if (!/[\p{L}\p{N}]/u.test(text)) return false;
-    this.lastSpeakDiagnostic.pollyAttempted = true;
+    this.lastSpeakDiagnostic.cloudAttempted = true;
     try {
       // Cache key includes style so a style change doesn't return
       // a stale audio buffer from an earlier prosody setting.
@@ -2378,7 +2378,7 @@ audio.playbackRate = this.speed;
       if (cachedBuffer) {
         const genAtCached = this.stopGeneration;
         this.lastSpeakDiagnostic.pollyOk = true;
-        this.lastSpeakDiagnostic.pollyStatus = 200;
+        this.lastSpeakDiagnostic.cloudStatus = 200;
         let played: boolean;
         if (this.isIosPlatform()) {
           const blobUrl = URL.createObjectURL(new Blob([cachedBuffer], { type: 'audio/mpeg' }));
@@ -2415,7 +2415,7 @@ audio.playbackRate = this.speed;
       // NATIVE iOS (Capacitor WKWebView) ALWAYS takes this path — never
       // the MediaSource streaming path below. On iOS 26 the WKWebView's
       // ManagedMediaSource append/sourceBuffer throws, which falls into
-      // speakPolly's catch → coolDownPolly and silences narration entirely
+      // speakCloud's catch → coolDownPolly and silences narration entirely
       // while the Settings Preview (plain <audio>) still plays. Routing
       // native iOS through playViaElement off the direct URL fixes it
       // (David 2026-06-09: narration dead on iOS 26.5, Preview worked).
@@ -2442,7 +2442,7 @@ audio.playbackRate = this.speed;
         ? AbortSignal.any([this.abortController.signal, timeoutSignal])
         : this.abortController.signal;
       const response = await fetch(url, { signal: combinedSignal });
-      this.lastSpeakDiagnostic.pollyStatus = response.status;
+      this.lastSpeakDiagnostic.cloudStatus = response.status;
       this.lastSpeakDiagnostic.pollyOk = response.ok;
       // WHICH PROVIDER'S VOICE IS THIS? (David 2026-08-07: "I heard a weird
       // accent… the last narration switched to the old Polly voice" — and the
@@ -2531,7 +2531,7 @@ audio.playbackRate = this.speed;
           void logAppAudit({
             kind: 'tts-failure',
             category: 'subsystem',
-            source: 'voiceService.speakPolly',
+            source: 'voiceService.speakCloud',
             summary: 'Polly fetched audio but AudioContext could not resume — audio not played',
             details: `text (first 80): ${text.slice(0, 80)}; voice=${voice}`,
           });
@@ -2565,7 +2565,7 @@ audio.playbackRate = this.speed;
       ? AbortSignal.any([this.abortController.signal, createTimeoutSignal(10_000)])
       : this.abortController.signal;
     const res = await fetch(url, { signal: combined });
-    this.lastSpeakDiagnostic.pollyStatus = res.status;
+    this.lastSpeakDiagnostic.cloudStatus = res.status;
     this.lastSpeakDiagnostic.pollyOk = res.ok;
     if (!res.ok) {
       this.lastSpeakDiagnostic.error = `iOS buffered /api/tts ${res.status}`;
@@ -2631,7 +2631,7 @@ audio.playbackRate = this.speed;
         return await this.playViaElementBuffered(url, cacheKey);
       }
       const res = await fetch(url, { signal: createTimeoutSignal(10_000) });
-      this.lastSpeakDiagnostic.pollyStatus = res.status;
+      this.lastSpeakDiagnostic.cloudStatus = res.status;
       if (!res.ok) {
         this.lastSpeakDiagnostic.error = `buffered Polly fallback /api/tts ${res.status}`;
         return false;
@@ -2654,7 +2654,7 @@ audio.playbackRate = this.speed;
    *  annotations are known so playback is instant later. */
   async prefetchAudio(texts: string[]): Promise<void> {
     const prefs = await this.loadPrefs();
-    if (!prefs?.pollyEnabled || !this.isPollyLive() || !prefs.voiceEnabled) return;
+    if (!prefs?.cloudEnabled || !this.isPollyLive() || !prefs.voiceEnabled) return;
 
     const voice = resolvePollyVoice(
       prefs.coachPersonality,

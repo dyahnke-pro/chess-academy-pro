@@ -38,7 +38,7 @@ const BASELINE_PROFILE: UserProfile = {
     elevenlabsKeyEncrypted: null,
     elevenlabsKeyIv: null,
     elevenlabsVoiceId: null,
-    pollyEnabled: false,
+    cloudEnabled: false,
     pollyVoice: 'ruth',
     voiceSpeed: 1,
     kokoroEnabled: false,

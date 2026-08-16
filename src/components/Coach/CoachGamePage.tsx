@@ -133,7 +133,7 @@ import { generateMistakePuzzlesFromGame } from '../../services/mistakePuzzleServ
 import { autoAnalyzeGameMisconceptions } from '../../services/autoAnalyzeGame';
 import { computeWeaknessProfile } from '../../services/weaknessAnalyzer';
 import { reconstructMovesFromGame } from '../../services/gameReconstructionService';
-import { voiceService, resolvePollyVoice, POLLY_VOICES } from '../../services/voiceService';
+import { voiceService, resolvePollyVoice, CLOUD_VOICES } from '../../services/voiceService';
 import type {
   CoachGameState, CoachGameMove, KeyMoment, DetectedOpening,
   CoachDifficulty, MoveClassification, MoveAnnotation,
@@ -3485,7 +3485,7 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               activePrefs?.coachPersonalityVoices,
               activePrefs?.pollyVoice ?? 'ruth',
             );
-            return POLLY_VOICES.find((v) => v.id === activeVoice)?.engine;
+            return CLOUD_VOICES.find((v) => v.id === activeVoice)?.engine;
           })(),
           // Stream the LLM and ship each completed sentence to Polly
           // the moment it lands. `createStreamingSpeaker()` encapsulates

@@ -44,7 +44,7 @@ describe('VoiceSettingsPanel', () => {
   it('shows Polly voice selector when enabled', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({
       id: 'main',
-      preferences: { pollyEnabled: true },
+      preferences: { cloudEnabled: true },
     }));
     render(<VoiceSettingsPanel />);
     expect(screen.getByTestId('polly-voice-select')).toBeInTheDocument();
@@ -53,7 +53,7 @@ describe('VoiceSettingsPanel', () => {
   it('shows preview button when Polly enabled', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({
       id: 'main',
-      preferences: { pollyEnabled: true },
+      preferences: { cloudEnabled: true },
     }));
     render(<VoiceSettingsPanel />);
     expect(screen.getByTestId('polly-preview-btn')).toBeInTheDocument();
@@ -62,7 +62,7 @@ describe('VoiceSettingsPanel', () => {
   it('shows test API endpoint button when Polly enabled', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({
       id: 'main',
-      preferences: { pollyEnabled: true },
+      preferences: { cloudEnabled: true },
     }));
     render(<VoiceSettingsPanel />);
     expect(screen.getByTestId('polly-test-btn')).toBeInTheDocument();
@@ -89,7 +89,7 @@ describe('VoiceSettingsPanel', () => {
   it('hides Polly controls when disabled', () => {
     useAppStore.getState().setActiveProfile(buildUserProfile({
       id: 'main',
-      preferences: { pollyEnabled: false },
+      preferences: { cloudEnabled: false },
     }));
     render(<VoiceSettingsPanel />);
     expect(screen.queryByTestId('polly-voice-select')).not.toBeInTheDocument();

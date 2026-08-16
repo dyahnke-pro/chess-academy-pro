@@ -73,7 +73,7 @@ function buildDefaultPreferences(overrides?: Partial<UserPreferences>): UserPref
     moveConfirmation: false,
     autoPromoteQueen: true,
     masterAllOff: false,
-    pollyEnabled: false,
+    cloudEnabled: false,
     pollyVoice: 'ruth',
     kokoroEnabled: true,
     kokoroVoiceId: 'af_bella',

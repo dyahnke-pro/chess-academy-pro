@@ -360,8 +360,8 @@ class ChessAcademyDB extends Dexie {
       // Add Amazon Polly TTS fields to existing profiles
       await tx.table('profiles').toCollection().modify((profile: UserProfile) => {
         const prefs = profile.preferences as unknown as Record<string, unknown>;
-        if (!('pollyEnabled' in prefs)) {
-          prefs.pollyEnabled = true;
+        if (!('cloudEnabled' in prefs)) {
+          prefs.cloudEnabled = true;
           prefs.pollyVoice = 'ruth';
         }
       });

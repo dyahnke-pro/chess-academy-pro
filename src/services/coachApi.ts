@@ -3827,7 +3827,7 @@ export async function getCoachChatResponse(
                 voiceOn: prefs.coachVoiceOn ?? prefs.voiceEnabled,
                 narration: prefs.coachNarration ?? null,
                 showHints: prefs.showHints,
-                pollyEnabled: prefs.pollyEnabled,
+                cloudEnabled: prefs.cloudEnabled,
                 personality: prefs.coachPersonality ?? null,
               });
               if (answer) {

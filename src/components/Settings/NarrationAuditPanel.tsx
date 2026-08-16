@@ -341,7 +341,7 @@ export function NarrationAuditPanel(): JSX.Element {
         <div className="grid grid-cols-2 gap-x-3 gap-y-0.5 font-mono text-[10px]" style={{ color: 'var(--color-text-muted)' }}>
           <div>tier: <span>{voiceSnap.tier}</span></div>
           <div>audioCtx: {voiceSnap.audioContextState}</div>
-          <div>polly: {voiceSnap.pollyAttempted ? `${voiceSnap.pollyOk ? 'OK' : 'FAIL'} (${voiceSnap.pollyStatus ?? '—'})` : 'idle'}</div>
+          <div>polly: {voiceSnap.cloudAttempted ? `${voiceSnap.pollyOk ? 'OK' : 'FAIL'} (${voiceSnap.cloudStatus ?? '—'})` : 'idle'}</div>
           <div>last: {voiceSnap.timestamp ? `${Math.round((Date.now() - voiceSnap.timestamp) / 100) / 10}s ago` : '—'}</div>
         </div>
         {voiceSnap.text && (

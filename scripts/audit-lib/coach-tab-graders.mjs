@@ -85,7 +85,7 @@ export const SANCTIONED = new RegExp([
  *     and one of the fact kinds is literally **fork**. So a tactic-vocabulary
  *     match on the summary matched the SOURCE TAG, not anything the coach said.
  *     "the tactic is NARRATED" was passing on metadata.
- *   · `speakPolly` formats its summary as `voice=… personality=… text="…"`, so
+ *   · `speakCloud` formats its summary as `voice=… personality=… text="…"`, so
  *     an anchored classifier never matches and sanctioned move dictation reads
  *     as volunteered teaching.
  *   · both previews are TRUNCATED (40 and 200 chars), so even parsed correctly

@@ -26,8 +26,8 @@ describe('resolveSettingsCommand', () => {
   });
 
   it('toggles the premium voice', () => {
-    expect(resolveSettingsCommand('disable the premium voice')?.prefsPatch).toMatchObject({ pollyEnabled: false });
-    expect(resolveSettingsCommand('turn on polly')?.prefsPatch).toMatchObject({ pollyEnabled: true });
+    expect(resolveSettingsCommand('disable the premium voice')?.prefsPatch).toMatchObject({ cloudEnabled: false });
+    expect(resolveSettingsCommand('turn on polly')?.prefsPatch).toMatchObject({ cloudEnabled: true });
   });
 
   it('switches the theme (dark/light/named)', () => {

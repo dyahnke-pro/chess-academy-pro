@@ -17,9 +17,9 @@ vi.mock('../../services/voiceService', () => ({
     getLastSpeakDiagnostic: vi.fn().mockReturnValue({
       text: '',
       tier: 'muted',
-      pollyAttempted: false,
+      cloudAttempted: false,
       pollyOk: null,
-      pollyStatus: null,
+      cloudStatus: null,
       audioContextState: 'suspended',
       error: null,
       timestamp: 0,

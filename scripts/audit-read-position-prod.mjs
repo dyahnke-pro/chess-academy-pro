@@ -111,7 +111,7 @@ async function main() {
             getReq.onsuccess = () => {
               const p = getReq.result;
               if (p) {
-                p.preferences = { ...(p.preferences || {}), coachNarration: 'silent', voiceEnabled: true, pollyEnabled: true };
+                p.preferences = { ...(p.preferences || {}), coachNarration: 'silent', voiceEnabled: true, cloudEnabled: true };
                 store.put(p);
               }
               resolve();

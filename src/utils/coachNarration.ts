@@ -127,7 +127,7 @@ const BRIEF_VOICE_SENTENCE_CAP = 2;
  * The chat bubble may show the full text (it's silent prose the user
  * reads on demand). The VOICE always speaks the truncated version.
  * Callers should pass the same prefs they already use for the
- * voiceEnabled / pollyEnabled gates.
+ * voiceEnabled / cloudEnabled gates.
  *
  * Returns `{ text, truncated, originalLength }` so the call site can
  * emit a `voice-truncated-by-verbosity` audit when truncated=true —

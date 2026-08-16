@@ -46,7 +46,7 @@ describe('assembleSettingsAnswer', () => {
       voiceOn: true,
       narration: 'brief',
       showHints: false,
-      pollyEnabled: true,
+      cloudEnabled: true,
       personality: 'default',
     });
     expect(a).not.toBeNull();
@@ -57,7 +57,7 @@ describe('assembleSettingsAnswer', () => {
   });
 
   it('reports voice off + device voice when Polly is disabled', () => {
-    const a = assembleSettingsAnswer({ voiceOn: false, pollyEnabled: false });
+    const a = assembleSettingsAnswer({ voiceOn: false, cloudEnabled: false });
     expect(a!.facts).toContain('Voice narration is off');
     expect(a!.facts).toContain('device voice');
   });

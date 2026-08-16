@@ -63,7 +63,7 @@ function setProfile(overrides: Partial<UserProfile> = {}): UserProfile {
       moveMethod: 'both',
       moveConfirmation: false,
       autoPromoteQueen: true,
-      pollyEnabled: false,
+      cloudEnabled: false,
       pollyVoice: 'ruth',
       masterAllOff: false,
     },

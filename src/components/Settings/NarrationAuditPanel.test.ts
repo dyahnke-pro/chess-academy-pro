@@ -38,7 +38,7 @@ describe('formatLogAsMarkdown', () => {
         timestamp: 1_700_000_200_000,
         kind: 'polly-fallback',
         category: 'subsystem',
-        source: 'voiceService.speakPolly',
+        source: 'voiceService.speakCloud',
         summary: 'Polly cooling down for 60s',
         details: 'HTTP 429',
       },
@@ -57,7 +57,7 @@ describe('formatLogAsMarkdown', () => {
     expect(md).toContain('polly-fallback: 1');
     expect(md).toContain('### Finding 1 — [');
     expect(md).toContain('source: `move-commentary`');
-    expect(md).toContain('source: `voiceService.speakPolly`');
+    expect(md).toContain('source: `voiceService.speakCloud`');
     expect(md).toContain('FEN: `rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1`');
   });
 
