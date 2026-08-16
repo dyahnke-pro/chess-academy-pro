@@ -48,6 +48,7 @@ const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.ap
 const PLIES = Number(process.env.PLIES || 24);
 const OUT = join('audit-reports', `coach-turn-truth-${new Date().toISOString().replace(/[:.]/g, '-')}`);
 
+const COACH_TURN_DEPTH = 14;   // mirrors src/services/engineConstants.ts
 const PIECE_WORDS = [['queen', 'q'], ['rook', 'r'], ['bishop', 'b'], ['knight', 'n'], ['pawn', 'p']];
 
 /** Piece types named in prose that are nowhere on the board. The same question
@@ -77,6 +78,13 @@ const main = async () => {
   const consoleErrors = [];
   page.on('pageerror', (e) => consoleErrors.push(String(e)));
   page.on('console', (m) => { if (m.type() === 'error') consoleErrors.push(m.text()); });
+  // WHICH endpoint failed, not just that one did. "Failed to load resource:
+  // 429" names nothing, and a rate-limit on a paying-customer path is a very
+  // different finding from a bot hammering its own audit endpoint.
+  const httpFailures = [];
+  page.on('response', (r) => {
+    if (r.status() >= 400) httpFailures.push(`${r.status()} ${r.url().replace(BASE, '')}`);
+  });
 
   console.log(`[turn-truth] ${BASE} · ${PLIES} plies`);
   await page.goto(`${BASE}/coach/play`, { waitUntil: 'domcontentloaded', timeout: 120_000 });
@@ -89,77 +97,29 @@ const main = async () => {
   // reply from the DOM is what made the first run of this script stall after
   // one move: the mirror never learned it was White's turn again.
   await clearFirstRunOverlays(page);
-  const mirror = new Chess();
-  const OPENING = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'c3', 'Nf6', 'd3', 'd6'];
-  let played = 0;
-  let lastTs = 0;
-  for (let i = 0; i < PLIES && !mirror.isGameOver(); i += 1) {
-    const scripted = OPENING[played];
-    const legal = mirror.moves({ verbose: true });
-    const pick = (scripted && legal.find((m) => m.san === scripted))
-      || legal.find((m) => m.san.includes('#'))
-      || legal.find((m) => m.captured)
-      || legal[0];
-    if (!pick) break;
-    try {
-      await page.locator(`[data-square="${pick.from}"]`).click({ force: true, timeout: 8000 });
-      await page.locator(`[data-square="${pick.to}"]`).click({ force: true, timeout: 8000 });
-    } catch { break; }
-    mirror.move(pick.san);
-    played += 1;
-    const reply = await waitCoachReply(page, lastTs);
-    if (!reply?.san) { console.log('[turn-truth] no coach reply — stopping'); break; }
-    lastTs = reply.ts;
-    if (mirror.moves().includes(reply.san)) mirror.move(reply.san);
-    else if (reply.fen) { try { mirror.load(reply.fen); } catch { break; } }
-    else break;
-  }
-  console.log(`[turn-truth] played ${played} student moves`);
+  const playPlies = await playGame(page, PLIES);
+  console.log(`[turn-truth] play: ${playPlies} student moves`);
 
   // ── AND NOW THE SURFACE THE NARRATION LIVES ON ───────────────────────────
   // Play is SILENT by contract (CLAUDE.md: it never volunteers a note
-  // mid-game), so the piece contract and the turn-depth contract cannot be
-  // exercised there at all — the first run "passed" both on zero samples.
-  // David heard the wrong pieces on LEARN. So the run continues there: ask for
-  // a lesson, let it narrate, and check every spoken line against its board.
-  console.log('[turn-truth] → /coach/teach for the narration contracts');
+  // mid-game), so neither the piece contract nor the turn-depth contract can
+  // be exercised there — the first run "passed" both on zero samples. David
+  // heard the wrong pieces on LEARN, in a GAME.
+  //
+  // And a game is all it takes: the Learn board is live on a fresh load. An
+  // earlier version of this phase typed "teach me the caro-kann" and drove the
+  // LESSON instead, which narrates through `speakPolly` with no FEN attached —
+  // so the board-anchored check still had nothing to examine, and dutifully
+  // reported NOT EXERCISED. One e2-e4 on the Learn board produces
+  // `voicePackage` and `openingAnnouncement` entries that DO carry their
+  // board. So: play the game.
+  const learnStartedAt = Date.now();
+  console.log('[turn-truth] → /coach/teach, playing on the Learn board');
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 120_000 });
-  await page.waitForTimeout(8_000);
+  await page.waitForTimeout(15_000);
   await clearFirstRunOverlays(page);
-  try {
-    const box = page.locator('textarea, [data-testid="coach-chat-input"]').first();
-    await box.waitFor({ state: 'visible', timeout: 20_000 });
-    // pressSequentially, not fill: the React textarea needs real key events or
-    // the send button never enables (CLAUDE.md, the coach-chat audit pattern).
-    await box.pressSequentially('teach me the caro-kann', { delay: 25 });
-    await page.keyboard.press('Enter');
-    // THE PICKER IS NOT THE LESSON. A broad family name ("caro-kann") opens a
-    // VARIATION PICKER and waits; the first run of this phase sat on it for 90
-    // seconds and logged "line picker shown — 7 variations", so no ply was ever
-    // narrated and the piece contract examined zero lines. Click a variation —
-    // exactly the failure CLAUDE.md's interactive-audit rule names.
-    await page.waitForTimeout(12_000);
-    const picker = page.locator('[data-testid="line-picker"]');
-    if (await picker.isVisible().catch(() => false)) {
-      const option = page.locator('[data-testid^="line-picker-"]')
-        .filter({ hasNotText: /dismiss/i }).first();
-      await option.click({ force: true, timeout: 8000 }).catch(() => {});
-      console.log('[turn-truth] variation picked from the line picker');
-      await page.waitForTimeout(4_000);
-    }
-    console.log('[turn-truth] letting the lesson narrate (110s)');
-    await page.waitForTimeout(110_000);
-    // Nudge the walkthrough along so more than the first beat is spoken.
-    for (let i = 0; i < 6; i += 1) {
-      const skip = page.locator('[data-testid="walkthrough-skip"], [data-testid="walkthrough-next"]').first();
-      if (await skip.isVisible().catch(() => false)) {
-        await skip.click({ force: true, timeout: 4000 }).catch(() => {});
-        await page.waitForTimeout(6_000);
-      } else break;
-    }
-  } catch (e) {
-    console.log(`[turn-truth] learn phase could not start: ${String(e).slice(0, 90)}`);
-  }
+  const learnPlies = await playGame(page, Math.max(8, PLIES));
+  console.log(`[turn-truth] learn: ${learnPlies} student moves`);
 
   // ── READ THE APP'S OWN LOG ───────────────────────────────────────────────
   const log = await dumpAudit(page);
@@ -198,7 +158,7 @@ const main = async () => {
 
   // 2. PIECES — checked against the board, not against the gate's own wording.
   const spoken = log.filter((e) => e.kind === 'coach-narration-spoken' && e.fen
-    && /trackA|voicePackage|hintRegister/.test(e.source ?? ''));
+    && /trackA|voicePackage|hintRegister|openingAnnouncement/.test(e.source ?? ''));
   const lies = [];
   for (const e of spoken) {
     const said = (e.summary ?? '').replace(/^[^"]*"/, '').replace(/"$/, '');
@@ -233,21 +193,43 @@ const main = async () => {
   // the grading read on ONE board; other lanes (Play's prefetch, the eval bar)
   // legitimately read at their own depths, and flagging those made the check
   // fail on a surface it was not about.
-  const depths = {};
-  for (const e of log) {
-    if (!/CoachTeachPage|discussion|analyzeWithBudget/.test(e.source ?? '')) continue;
-    const m = /depth=(\d+)/.exec(e.summary ?? '');
-    if (m) depths[m[1]] = (depths[m[1]] ?? 0) + 1;
-  }
-  const turnDepths = Object.keys(depths);
-  add('the turn lanes read at ONE depth',
-    turnDepths.length <= 1,
-    turnDepths.length ? `depths seen: ${JSON.stringify(depths)}` : 'no turn-lane reads captured',
-    turnDepths.length);
+  // THE CONTRACT IS ABOUT THE TWO BEST-MOVE READS, not about every engine call
+  // on the surface. `liveTacticsContext` also reads this board at depth 12,
+  // deliberately and on 15+ surfaces including the kid coach — but it answers
+  // a DIFFERENT question (which threats exist), never "what is best", so it
+  // cannot contradict the hint the way the grading read did. Deepening it
+  // globally would slow every one of those surfaces to fix a disagreement that
+  // is not there. What must hold is narrower and checkable: the turn's
+  // best-move reads happen at the grading depth, and no CoachTeachPage lane
+  // reads at a second one.
+  const learnWindow = log.filter((e) => (e.timestamp ?? 0) >= learnStartedAt);
+  const depthOf = (e) => Number(/depth=(\d+)/.exec(e.summary ?? '')?.[1] ?? 0);
+  const gradingReads = learnWindow.filter((e) => depthOf(e) === COACH_TURN_DEPTH);
+  const teachOwnDepths = [...new Set(learnWindow
+    .filter((e) => /CoachTeachPage/.test(e.source ?? ''))
+    .map(depthOf).filter(Boolean))];
+  const depths = { atGradingDepth: gradingReads.length, teachLaneDepths: teachOwnDepths };
+  add('the turn is read at the grading depth, and no teach lane disagrees',
+    gradingReads.length > 0 && teachOwnDepths.every((d) => d === COACH_TURN_DEPTH),
+    `${gradingReads.length} read(s) at depth ${COACH_TURN_DEPTH}; teach-lane depths ${JSON.stringify(teachOwnDepths)}`,
+    gradingReads.length);
 
-  add('no page errors', consoleErrors.length === 0, `${consoleErrors.length}`, 1);
+  // 429 ON THE EXPLORER PROXY IS THE HARNESS, NOT THE APP. Lichess throttles
+  // rapid book lookups from one IP, and a bot playing a move every three
+  // seconds earns that fairly. The app degrades exactly as designed — the book
+  // miss falls through to the engine, no crash, no wrong move — so failing the
+  // run on it would be manufacturing a red. Reported, never hidden: an audit
+  // that silently swallows a class of error is how the next real one gets
+  // missed.
+  const throttled = httpFailures.filter((f) => f.startsWith('429') && f.includes('lichess-explorer'));
+  const realErrors = consoleErrors.filter((e) => !/Failed to load resource/.test(String(e)))
+    .concat(httpFailures.filter((f) => !throttled.includes(f)));
+  if (throttled.length) console.log(`  · ${throttled.length} explorer 429(s) — third-party rate limit under bot load, app fell through to the engine`);
+  add('no page errors', realErrors.length === 0,
+    realErrors.length ? realErrors.slice(0, 3).map((x) => String(x).slice(0, 100)).join(' | ')
+      : `0 real (${throttled.length} explorer 429 ignored as load)`, 1);
 
-  const report = { base: BASE, plies: played, entries: log.length, checks, lies, depths, consoleErrors: consoleErrors.slice(0, 10) };
+  const report = { base: BASE, plies: { play: playPlies, learn: learnPlies }, entries: log.length, checks, lies, depths, consoleErrors: consoleErrors.slice(0, 10), httpFailures: [...new Set(httpFailures)], throttled: throttled.length };
   await writeFile(join(OUT, 'report.json'), JSON.stringify(report, null, 2));
   await writeFile(join(OUT, 'audit-log.json'), JSON.stringify(log, null, 2));
   await browser.close();
@@ -258,6 +240,40 @@ const main = async () => {
   if (unexercised.length) console.log(`[turn-truth] NOT PROVEN: ${unexercised.map((c) => c.name).join('; ')}`);
   process.exit(failed.length ? 1 : 0);
 };
+
+/** Play a real game on whatever coach board is mounted. The Node-side chess.js
+ *  mirror only ever picks LEGAL moves (G3) and the board is driven by clicking
+ *  squares, exactly as a hand would; the coach's replies are read back from the
+ *  app's own `coach-turn-checkpoint` entries rather than inferred from the DOM.
+ *  Inferring them is what made the first version stall after one move. */
+async function playGame(page, plies) {
+  const mirror = new Chess();
+  const OPENING = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'c3', 'Nf6', 'd3', 'd6'];
+  let played = 0;
+  let lastTs = Date.now() - 1;
+  for (let i = 0; i < plies && !mirror.isGameOver(); i += 1) {
+    const scripted = OPENING[played];
+    const legal = mirror.moves({ verbose: true });
+    const pick = (scripted && legal.find((m) => m.san === scripted))
+      || legal.find((m) => m.san.includes('#'))
+      || legal.find((m) => m.captured)
+      || legal[0];
+    if (!pick) break;
+    try {
+      await page.locator(`[data-square="${pick.from}"]`).click({ force: true, timeout: 8000 });
+      await page.locator(`[data-square="${pick.to}"]`).click({ force: true, timeout: 8000 });
+    } catch { break; }
+    mirror.move(pick.san);
+    played += 1;
+    const reply = await waitCoachReply(page, lastTs);
+    if (!reply?.san) break;
+    lastTs = reply.ts;
+    if (mirror.moves().includes(reply.san)) mirror.move(reply.san);
+    else if (reply.fen) { try { mirror.load(reply.fen); } catch { break; } }
+    else break;
+  }
+  return played;
+}
 
 /** The app's own rolling audit buffer, read live out of Dexie. */
 async function dumpAudit(page) {
