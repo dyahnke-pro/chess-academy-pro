@@ -82,10 +82,61 @@ while the bill grows).
 
 **The ONLY audits that may synthesise** are the ones whose purpose IS the audio:
 the `/api/tts` contract, iOS decode, MediaSource streaming. Those are short,
-deliberate runs — never a side effect of auditing something else. ~43 scripts
-still intercept `/api/tts` as their narration instrument and are therefore left
-unmuted; they should migrate to the listener (which is the proper instrument per
-§G1 anyway — "decoding /api/tts request text alone is NOT the voice gate").
+deliberate runs — never a side effect of auditing something else. Exactly ONE
+script is in that class today (`audit-narration-latency-prod`, which measures
+real synthesis latency) and it is the gate's only allowlist entry.
+
+🔒🔒 **TWO SHAPES, TWO TOOLS — AND A BLANKET MUTE IS THE WRONG ANSWER (David
+2026-08-16: "So we don't burn through my tts budget" → "Add that to the written
+standard").** He asked whether the audits ran silent. They did not: **161 of 278
+browser-driving audits were synthesising for real**, and the punish-gems loop was
+RUNNING as he asked — two openings into an 86-opening Watch + Learn walk, the
+precise shape of the $100 day. The prior wording above ("~43 … are therefore
+left unmuted") had normalised that. Never leave one unmuted.
+
+The 161 were not one problem. Sort every audit into one of these:
+
+1. **NO tts instrument → `muteTtsForAudit`.** 119 were in this class: they made
+   the app talk and measured nothing about it. Pure spend. Mute, no downside.
+2. **The REQUEST *is* the narration instrument → `blockTtsNetwork(page)`.** 41
+   read the spoken line out of the `/api/tts` URL via
+   `page.on('request', r => /\/api\/tts/.test(r.url()))`. **Muting these blinds
+   them** — the request never fires, the instrument goes silent, and the audit
+   reports the coach said nothing, which is a false green in the exact place the
+   audit was watching. Instead:
+   ```js
+   import { blockTtsNetwork } from './audit-lib/block-tts-network.mjs';
+   await blockTtsNetwork(page);   // right after newPage()
+   ```
+   Playwright fires `request` BEFORE consulting the route handler, so every
+   existing instrument still sees the call and still reads the text — while the
+   route is fulfilled locally and the provider never sees a byte.
+
+**Better still, migrate the instrument off the wire.** The listener/event path
+is the proper one per §G1 ("decoding `/api/tts` request text alone is NOT the
+voice gate"). `audit-punish-gems-loop` is the worked example: it now keeps its
+`ev.tts` shape but fills it from the app's own `coach-narration-spoken` POSTs,
+so its Watch-prose / Learn-cue / Practice-silence contract runs off events, and
+no downstream assertion changed. Prefer the event; use the intercept when
+rewriting the instrument is out of scope for the change you are making.
+
+**GATE: `src/test/auditHarnessReach.test.ts` (in ship-check).** It fails on any
+browser-driving audit that has neither the mute nor the intercept. It also
+guards the two OTHER harness defects found the same day, each of which silently
+disabled audits and argued for the wrong diagnosis:
+- **43 audits could not reach prod** — launched without `sandboxLaunchArgs()`
+  (no `--proxy-server`, no TLS 1.2 pin), so every prod `goto` died with
+  `ERR_CONNECTION_RESET`, which reads as "prod is down, fall back to localhost".
+  Three hand-rolled `['--ignore-certificate-errors','--no-sandbox']` and looked
+  deliberate, so the gate checks "uses the helper", not "passes some args".
+- **36 audits lost their first click** to the strength-calibration bubble.
+  `autoDismissCalibration` is CSS-based ON PURPOSE: clicking the skill band
+  fires an async Dexie write, and where that write stalls the bubble never
+  detaches, so a hand-rolled click-to-dismiss HANGS instead of timing out.
+
+Fixing each layer exposed the next — reach, then the overlay, then the bill.
+When an audit fails, ask whether the HARNESS reached the surface before
+concluding anything about the product.
 
 **THE VOICE IS GOOGLE, NOT POLLY (David 2026-08-04).** The migration landed —
 `/api/tts` is served by Google Cloud TTS behind the provider seam (`x-tts-source:
