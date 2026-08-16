@@ -9442,44 +9442,54 @@ export function CoachTeachPage(): JSX.Element {
                 )}
               </div>
             ) : (
-              <ConsistentChessboard
-                // Reviewing renders a REPLAYED position in static mode, so the
-                // real game object is untouched and a stray click on a past
-                // position cannot become a move. Live play is unchanged.
-                {...(reviewFen ? { fen: reviewFen, interactive: false } : {
-                  game,
-                  interactive: !opponentThinking && !generationStatus && !kickoffStatus,
-                })}
-                boardOrientation={playerColor}
-                showFlipButton={false}
-                showUndoButton={false}
-                showResetButton={false}
-                showEvalBar={showEvalBarEffective}
-                evaluation={latestEval}
-                isMate={latestIsMate}
-                mateIn={latestMateIn}
-                showVoiceMic={false}
-                showLastMoveHighlight
-                onMove={handleStudentMove}
-                // During the middlegame/endgame play-out the continuation owns
-                // the board's arrows — same orange trail + green threat grammar
-                // as the lesson it continues.
-                //
-                // THE LIGHTBULB OWNS THE ARROWS (David 2026-08-07: "make sure
-                // the arrows are tied into the lightbulb for on/off settings").
-                // `coachTipsOn` was a glowing button wired to NOTHING — now
-                // Tips OFF hides every coach arrow + highlight at render
-                // (instant both ways; the underlying state keeps computing,
-                // so toggling back on restores the current turn's cues).
-                arrows={
-                  !coachTipsOn
-                    ? undefined
-                    : continuationArrows.length > 0
-                      ? walkthroughBoardArrows(continuationArrows)
-                      : (arrows.length > 0 ? arrows : undefined)
-                }
-                annotationHighlights={coachTipsOn && highlights.length > 0 ? highlights : undefined}
-              />
+              // REVIEWING A PAST POSITION renders a replayed FEN through the
+              // board's STATIC mode: the real game object is untouched, so a
+              // stray click on a past position can never become a move.
+              // Two elements rather than one with a merged prop bag — static
+              // mode does not take the controlled-mode chrome (flip / undo /
+              // reset / eval bar / mic), and spreading them in only
+              // type-checks by accident.
+              reviewFen ? (
+                <ConsistentChessboard
+                  fen={reviewFen}
+                  interactive={false}
+                  boardOrientation={playerColor}
+                  showLastMoveHighlight
+                />
+              ) : (
+                <ConsistentChessboard
+                  game={game}
+                  interactive={!opponentThinking && !generationStatus && !kickoffStatus}
+                  showFlipButton={false}
+                  showUndoButton={false}
+                  showResetButton={false}
+                  showEvalBar={showEvalBarEffective}
+                  evaluation={latestEval}
+                  isMate={latestIsMate}
+                  mateIn={latestMateIn}
+                  showVoiceMic={false}
+                  showLastMoveHighlight
+                  onMove={handleStudentMove}
+                  // During the middlegame/endgame play-out the continuation owns
+                  // the board's arrows — same orange trail + green threat grammar
+                  // as the lesson it continues.
+                  //
+                  // THE LIGHTBULB OWNS THE ARROWS (David 2026-08-07: "make sure
+                  // the arrows are tied into the lightbulb for on/off settings").
+                  // `coachTipsOn` was a glowing button wired to NOTHING — now
+                  // Tips OFF hides every coach arrow + highlight at render
+                  // (instant both ways; the underlying state keeps computing,
+                  // so toggling back on restores the current turn's cues).
+                  arrows={
+                    !coachTipsOn
+                      ? undefined
+                      : continuationArrows.length > 0
+                        ? walkthroughBoardArrows(continuationArrows)
+                        : (arrows.length > 0 ? arrows : undefined)
+                  }
+                  annotationHighlights={coachTipsOn && highlights.length > 0 ? highlights : undefined}
+                />
+              )
             )}
           </div>
         </div>

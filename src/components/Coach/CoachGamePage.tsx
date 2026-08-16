@@ -5046,11 +5046,12 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         />
 
         {/* Controls */}
-        {/* The board is still on screen while a blunder card is up and while
-            the game-over card shows, so navigation stays reachable — see the
-            note on `moveNavRow`. The rest of the controls stay hidden: those
-            act on a live turn, and this is not one. */}
-        {(gameState.status === 'blunder_pause' || gameState.status === 'gameover') && (
+        {/* The board is still on screen while a blunder card is up, so
+            navigation stays reachable — see the note on `moveNavRow`. The rest
+            of the controls stay hidden: those act on a live turn, and this is
+            not one. (`gameover` and `postgame` never reach here — each returns
+            its own screen above — so this is the whole of the fix.) */}
+        {gameState.status === 'blunder_pause' && (
           <div className="flex flex-col gap-1.5 px-4 py-2 flex-shrink-0">{moveNavRow}</div>
         )}
         {gameState.status === 'playing' && (
