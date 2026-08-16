@@ -1650,6 +1650,59 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     setViewedMoveIndex(null);
   }, []);
 
+  /** The move-navigation row, defined once and rendered from two places.
+   *
+   *  It used to live only inside the `status === 'playing'` control block, so
+   *  the moment a blocking card took the turn — "Blunder Detected", or the
+   *  game ending — the whole block unmounted and the student lost the ability
+   *  to step back and LOOK at the position the coach was asking them about.
+   *  That is the worst moment to take navigation away: the card's entire point
+   *  is "think about what just happened."
+   *
+   *  Stepping back is read-only (it only moves `viewedMoveIndex`; the board is
+   *  non-interactive while `viewedMoveIndex !== null`), so it cannot interfere
+   *  with resolving the card or with a finished game's result. */
+  const moveNavRow = (
+              <div className="flex items-center justify-center gap-0.5" data-testid="move-nav">
+                <button
+                  onClick={goToFirstMove}
+                  disabled={gameState.moves.length === 0 || viewedMoveIndex === -1}
+                  className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                  aria-label="First move"
+                  data-testid="nav-first"
+                >
+                  <ChevronsLeft size={16} />
+                </button>
+                <button
+                  onClick={goToPrevMove}
+                  disabled={gameState.moves.length === 0 || viewedMoveIndex === -1}
+                  className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                  aria-label="Previous move"
+                  data-testid="nav-prev"
+                >
+                  <ChevronLeft size={16} />
+                </button>
+                <button
+                  onClick={goToNextMove}
+                  disabled={gameState.moves.length === 0 || viewedMoveIndex === null}
+                  className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                  aria-label="Next move"
+                  data-testid="nav-next"
+                >
+                  <ChevronRight size={16} />
+                </button>
+                <button
+                  onClick={goToLastMove}
+                  disabled={gameState.moves.length === 0 || viewedMoveIndex === null}
+                  className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
+                  aria-label="Last move"
+                  data-testid="nav-last"
+                >
+                  <ChevronsRight size={16} />
+                </button>
+              </div>
+  );
+
   // Compute the displayed FEN based on navigation state
   const displayFen = practicePosition?.fen
     ?? temporaryFen
@@ -4993,6 +5046,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         />
 
         {/* Controls */}
+        {/* The board is still on screen while a blunder card is up and while
+            the game-over card shows, so navigation stays reachable — see the
+            note on `moveNavRow`. The rest of the controls stay hidden: those
+            act on a live turn, and this is not one. */}
+        {(gameState.status === 'blunder_pause' || gameState.status === 'gameover') && (
+          <div className="flex flex-col gap-1.5 px-4 py-2 flex-shrink-0">{moveNavRow}</div>
+        )}
         {gameState.status === 'playing' && (
           <div className="flex flex-col gap-1.5 px-4 py-2 flex-shrink-0">
             {/* Row 1: Hint, Why?, Takeback — primary in-move actions. (David
@@ -5088,45 +5148,9 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               />
             </div>
 
-            {/* Row 3: Move navigation */}
-            <div className="flex items-center justify-center gap-0.5" data-testid="move-nav">
-              <button
-                onClick={goToFirstMove}
-                disabled={gameState.moves.length === 0 || viewedMoveIndex === -1}
-                className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                aria-label="First move"
-                data-testid="nav-first"
-              >
-                <ChevronsLeft size={16} />
-              </button>
-              <button
-                onClick={goToPrevMove}
-                disabled={gameState.moves.length === 0 || viewedMoveIndex === -1}
-                className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                aria-label="Previous move"
-                data-testid="nav-prev"
-              >
-                <ChevronLeft size={16} />
-              </button>
-              <button
-                onClick={goToNextMove}
-                disabled={gameState.moves.length === 0 || viewedMoveIndex === null}
-                className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                aria-label="Next move"
-                data-testid="nav-next"
-              >
-                <ChevronRight size={16} />
-              </button>
-              <button
-                onClick={goToLastMove}
-                disabled={gameState.moves.length === 0 || viewedMoveIndex === null}
-                className="p-2 md:p-1.5 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
-                aria-label="Last move"
-                data-testid="nav-last"
-              >
-                <ChevronsRight size={16} />
-              </button>
-            </div>
+            {/* Row 3: Move navigation — see the sibling copy below, which keeps
+                these controls alive while a blocking card owns the turn. */}
+            {moveNavRow}
           </div>
         )}
 
