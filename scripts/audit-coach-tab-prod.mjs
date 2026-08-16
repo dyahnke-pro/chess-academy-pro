@@ -55,6 +55,9 @@ const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/coach-tab-${stamp}`;
 
 const results = [];
+/** Everything Play spoke unprompted, saved to the report so a suspicious
+ *  count can be READ rather than guessed at. */
+let playSpokenSample = [];
 const pass = (name, detail) => { results.push({ name, ok: true, detail }); console.log(`  ✓ ${name}${detail ? ` — ${detail}` : ''}`); };
 const fail = (name, detail) => { results.push({ name, ok: false, detail }); console.log(`  ✗ ${name} — ${detail}`); };
 /** Not exercised ≠ passed. A contract we could not reach is reported as unproven,
@@ -430,7 +433,19 @@ async function main() {
   //    here is CORRECT to be absent. What must work is the ON-DEMAND answer,
   //    which the parity battery below tests. We only record what it did say.
   const playSpoken = spokenOf(listener.getCapturedEvents().slice(beforePlay));
-  pass('Play: mid-game silence recorded (silent by contract)', `${playSpoken.length} unprompted spoken line(s) — 0 is the contract, non-zero is a finding to read`);
+  // NAME WHAT IT SAID. "14 unprompted spoken lines" is a number nobody can act
+  // on: Play is silent-by-contract mid-game, but phase transitions, the opening
+  // announcement and move dictation are all sanctioned, so the count alone
+  // cannot separate a contract breach from the contract working. Sort them.
+  const SANCTIONED = /^(pawn|knight|bishop|rook|queen|king) (to|takes|captures)|castles|check(mate)?\.?$|opening|defen[cs]e|game is now|middlegame|endgame|opening phase/i;
+  const volunteered = playSpoken.filter((t) => !SANCTIONED.test(t));
+  if (!volunteered.length) {
+    pass('Play stays silent until asked', `${playSpoken.length} line(s), all sanctioned (move dictation / opening name / phase transition)`);
+  } else {
+    fail('Play stays silent until asked',
+      `${volunteered.length} of ${playSpoken.length} line(s) were volunteered teaching mid-game — e.g. "${volunteered[0].slice(0, 120)}"`);
+  }
+  playSpokenSample = playSpoken.slice(0, 25);
 
   // ── Contract C, Play half.
   const playAnswers = {};
@@ -471,7 +486,7 @@ async function main() {
   const failCount = results.filter((r) => r.ok === false).length;
   const unprovenCount = results.filter((r) => r.ok === null).length;
   await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({
-    baseUrl: BASE_URL, results, learnAnswers, playAnswers, kinds, pageErrors,
+    baseUrl: BASE_URL, results, learnAnswers, playAnswers, playSpokenSample, kinds, pageErrors,
   }, null, 2));
   console.log(`\n[coach-tab] ${okCount} passed · ${failCount} failed · ${unprovenCount} not exercised · ${OUT_DIR}`);
   if (failCount) console.log(`[coach-tab] FAILED: ${results.filter((r) => r.ok === false).map((r) => r.name).join('; ')}`);
