@@ -43,7 +43,7 @@ export interface PunishGem {
 // from distinct files (gambit-punish-gems.json is never touched by the
 // masterclass lane); merged only here in the consumer, and they never collide
 // because they're keyed by distinct openingIds (gambit-* vs masterclass ids).
-const GEMS = [...(gemsData as PunishGem[]), ...(gambitGemsData as PunishGem[])];
+export const ALL_GEMS = [...(gemsData as PunishGem[]), ...(gambitGemsData as PunishGem[])];
 
 // Narration lookup that also covers the gambit-lane narration map, so gambit
 // gems surface + play through the same WLPP path without the masterclass
@@ -79,14 +79,14 @@ export function gemId(gem: PunishGem): string {
 
 export function getPunishGemsForOpening(openingId: string | undefined | null): PunishGem[] {
   if (!openingId) return [];
-  return GEMS.filter((g) => g.openingId === openingId);
+  return ALL_GEMS.filter((g) => g.openingId === openingId);
 }
 
 /** Every gem (both lanes). A gem's `lineMoves` is a unique full opening spine, so
  *  a caller can look one up by position alone — no openingId resolution needed
  *  (the Watch walkthrough / review walk have the SAN path, not the kebab id). */
 export function getAllPunishGems(): PunishGem[] {
-  return GEMS;
+  return ALL_GEMS;
 }
 
 /** Gems that sit on a given variation tab. A gem belongs to a tab when the
@@ -110,7 +110,7 @@ export function getPunishGemsForTab(
 }
 
 export function getPunishGemById(id: string): PunishGem | null {
-  return GEMS.find((g) => gemId(g) === id) ?? null;
+  return ALL_GEMS.find((g) => gemId(g) === id) ?? null;
 }
 
 const START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';

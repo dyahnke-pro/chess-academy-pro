@@ -82,6 +82,8 @@ import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
+import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
+import { gemId } from '../../data/lessons/punishGems';
 import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import type {
@@ -914,6 +916,16 @@ export function CoachTeachPage(): JSX.Element {
   // the chosen text and clears the chips so the next turn starts
   // fresh. null = no choices on offer.
   const [coachChoices, setCoachChoices] = useState<string[] | null>(null);
+
+  /** Which opening's trap menu is on screen, and which of its traps have been
+   *  taught this session. Refs, not state: `handleSubmit` closes over its
+   *  render's values, so a chip tapped after the menu appeared would read a
+   *  stale set and re-offer a trap it just taught. */
+  /** The opening id the current lesson/ask resolved to — the scope a trap
+   *  menu belongs to. */
+  const resolvedOpeningIdRef = useRef<string | null>(null);
+  const gemMenuOpeningIdRef = useRef<string | null>(null);
+  const taughtGemIdsRef = useRef<Set<string>>(new Set());
   // Picker state — drives the starter chips shown above the chat
   // input while the transcript is empty. `pickerAction` is the
   // currently-selected mode (Teach / Drill / Quiz / Trap / Play);
@@ -2350,6 +2362,65 @@ export function CoachTeachPage(): JSX.Element {
     // emit a `user-retry-detected` event — signal the prior turn's
     // resolution probably missed what they wanted.
     const trimmedText = text.trim();
+
+    // ── A TAPPED TRAP CHIP TEACHES ITS GEM ─────────────────────────────────
+    // David 2026-08-16: "Place them in pickers into the chat … Once one gem is
+    // taught have the coach ask if they want to continue down the list. Again
+    // present the pickers."
+    //
+    // The chip's label IS its identity — tapping routes the label text back
+    // here — so it is resolved to one gem by its coordinates (move number,
+    // slip, punish) and never by its position in the menu, which shifts as
+    // traps are taught. The taught text is the gem's OWN hand-authored
+    // narration, assembled in code: the model is not asked to describe a
+    // verified line and cannot reword it into an unverified one (G0).
+    {
+      const trapOpeningId = gemMenuOpeningIdRef.current;
+      if (trimmedText === MORE_TRAPS_CHIP && trapOpeningId) {
+        const left = remainingGemChoices(trapOpeningId, taughtGemIdsRef.current);
+        const page = left.length > 6 ? [...left.slice(0, 5), MORE_TRAPS_CHIP] : left;
+        setMessages((prev) => [...prev,
+          { id: uid('more-u'), role: 'user', content: text, timestamp: Date.now() },
+          { id: uid('more-c'), role: 'assistant', timestamp: Date.now(),
+            content: page.length ? 'Here are the rest — pick one.' : "That's every trap I have for this opening.",
+            ...(page.length ? { choices: page } : {}) },
+        ]);
+        return;
+      }
+      // Scope first when we have it; otherwise resolve across every opening
+      // that has gems and take the match only if it is unique.
+      const picked = (trapOpeningId ? gemForChipLabel(trapOpeningId, trimmedText) : null)
+        ?? gemForChipLabelAnywhere(trimmedText);
+      if (picked) {
+        const taught = gemTeachingText(picked);
+        if (taught) {
+          taughtGemIdsRef.current.add(gemId(picked));
+          // The taught gem names its own opening — so the menu has a scope from
+          // here on even if the chip arrived without one.
+          gemMenuOpeningIdRef.current = picked.openingId;
+          const left = remainingGemChoices(picked.openingId, taughtGemIdsRef.current);
+          const page = left.length > 6 ? [...left.slice(0, 5), MORE_TRAPS_CHIP] : left;
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.gemTrapChip',
+            summary: `taught gem ${gemId(picked)} — ${left.length} trap(s) left`,
+          });
+          setMessages((prev) => [...prev,
+            { id: uid('gem-u'), role: 'user', content: text, timestamp: Date.now() },
+            { id: uid('gem-c'), role: 'assistant', timestamp: Date.now(), content: taught },
+            { id: uid('gem-n'), role: 'assistant', timestamp: Date.now(),
+              content: page.length
+                ? 'Want to keep going down the list?'
+                : "That's every trap I have for this opening.",
+              ...(page.length ? { choices: page } : {}) },
+          ]);
+          void voiceService.speakForced(taught).catch(() => undefined);
+          return;
+        }
+      }
+    }
+
     {
       const prev = recentUserInputsRef.current[recentUserInputsRef.current.length - 1];
       // A step-by-step move report ("I played e4." → "I played dxc6.") is NOT
@@ -4509,6 +4580,15 @@ export function CoachTeachPage(): JSX.Element {
         .slice(0, 6); // hard cap so a runaway brain can't overflow
       if (items.length === 0) return;
       extractedChoices = items;
+      // REMEMBER WHOSE TRAP MENU THIS IS. A tapped chip routes only its own
+      // label back, which names the trap but not the opening — so the opening
+      // is captured here, the moment the menu is offered. Without it a chip
+      // resolves against nothing and falls through to the generic router,
+      // which is how "Teach me more traps" ended up offering the Sicilian.
+      if (items.some((it) => parseGemChipLabel(it) !== null) || items.includes(MORE_TRAPS_CHIP)) {
+        const menuOpening = resolvedOpeningIdRef.current ?? gemMenuOpeningIdRef.current;
+        if (menuOpening) gemMenuOpeningIdRef.current = menuOpening;
+      }
       void logAppAudit({
         kind: 'coach-voice-marker-extracted',
         category: 'subsystem',

@@ -90,6 +90,7 @@ import { buildOpeningDbEntries } from './openingDbGrounding';
 import { buildNarrationGroundingBlock } from './narrationGrounding';
 import { buildLessonReferenceBlock, getLessonScript } from '../data/lessons';
 import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punishGems';
+import { gemTrapChoices, MORE_TRAPS_CHIP } from '../data/lessons/gemTrapMenu';
 import type { CoachTask, CoachVerbosity, AiProvider } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 
@@ -3123,10 +3124,32 @@ export async function getCoachChatResponse(
             // opening traps"). Name extracted after in/for/of/against and
             // resolved against the real openings DB — no match, no override.
             if (!ctx) {
-              const named = /\b(?:in|for|of|against)\s+(?:the\s+)?([a-z'\-\s]{3,40}?)[?!.\s]*$/i.exec(lastUserMessage() ?? '');
+              // TWO WAYS THE NAME HIDES. Both cost a real answer on prod
+              // (2026-08-16, asking for the Vienna's traps three ways got zero
+              // of its twenty-one gems):
+              //
+              // 1. The name is not always at the END. "show me a Vienna trap
+              //    where my opponent goes wrong" puts it mid-sentence, so an
+              //    end-anchored pattern found nothing. Try the anchored form
+              //    first (it is the precise one), then an unanchored sweep.
+              const msg = lastUserMessage() ?? '';
+              const named = /\b(?:in|for|of|against)\s+(?:the\s+)?([a-z'\-\s]{3,40}?)[?!.\s]*$/i.exec(msg)
+                ?? /\b(?:in|for|of|against)\s+(?:the\s+)?([a-z's-]+(?:\s+[a-z's-]+)?)\b/i.exec(msg)
+                ?? /\b([a-z's-]+)\s+(?:trap|traps|gem|gems)\b/i.exec(msg);
               if (named) {
                 const { searchOpenings } = await import('./openingService');
-                ctx = (await searchOpenings(named[1].trim()).catch(() => []))[0];
+                const hits = await searchOpenings(named[1].trim()).catch(() => []);
+                // 2. PREFER THE RECORD THAT ACTUALLY OWNS TRAPS. `searchOpenings`
+                //    ranks by score then ALPHABETICALLY across the whole store —
+                //    repertoire entries and the ~3,000 bare lichess/ECO twins
+                //    alike — so "Vienna Game" can resolve to a twin whose id is
+                //    not `vienna-game`. Gems are keyed by the masterclass id, so
+                //    that lookup returns nothing and the coach reports it has no
+                //    traps while twenty-one sit in the file. Asking which
+                //    candidate HAS traps is the whole fix.
+                ctx = hits.find((o) => getPunishGemsForOpening(o.id).some(isSurfaceableGem))
+                  ?? hits.find((o) => (o.trapLines?.length ?? 0) > 0 || (o.traps?.length ?? 0) > 0)
+                  ?? hits[0];
               }
             }
             if (ctx) {
@@ -3152,6 +3175,21 @@ export async function getCoachChatResponse(
                 // Opt-in "Practice Opening" chip → the opening whose traps
                 // we just described, so the student can drill the weapons.
                 if (primaryOpening) lastCoachActionOffer = [{ type: 'drill_opening', id: primaryOpening.id }];
+                // ONE CHIP PER TRAP (David 2026-08-16: "Place them in pickers
+                // into the chat like we do for other things … Make sure they
+                // are labeled well enough to identify each one individually").
+                //
+                // Appended AFTER voicing, never handed to the model: the labels
+                // are computed from the gem file and are the identity a tap
+                // resolves back through, so a reworded chip teaches the wrong
+                // line. The model phrases the prose; code owns the menu (G0).
+                const menu = gemTrapChoices(primaryOpening?.id);
+                if (menu.length) {
+                  // The extractor caps chips at 6, so a 21-trap opening pages:
+                  // five traps plus a "more" chip that asks for the next page.
+                  const page = menu.length > 6 ? [...menu.slice(0, 5), MORE_TRAPS_CHIP] : menu;
+                  return `${voiced} [CHOICES: ${page.join(' | ')}]`;
+                }
                 return voiced;
               }
             }
