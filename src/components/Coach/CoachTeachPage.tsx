@@ -9,12 +9,12 @@
  * / reset_board markers parsed from its response. Same room, different
  * actions.
  */
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { uid } from '../../utils/uid';
 import { acquireSwReloadHold } from '../../utils/swReloadHold';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { Chess } from 'chess.js';
-import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
+import { ArrowLeft, Lightbulb, SkipBack, RefreshCw, Flag, Loader2, ChevronRight, ChevronLeft, ChevronsLeft, ChevronsRight, X, Check, MessageCircle, Zap, Undo2, RotateCcw, Volume2, Swords } from 'lucide-react';
 import { TeachGameOverCard } from './TeachGameOverCard';
 import { ConsistentChessboard } from '../Chessboard/ConsistentChessboard';
 import { ChessBoard } from '../Board/ChessBoard';
@@ -1341,6 +1341,57 @@ export function CoachTeachPage(): JSX.Element {
   });
   const [coachTipsOn, setCoachTipsOn] = useState<boolean>(true);
   const [evalBarOverride, setEvalBarOverride] = useState<boolean | null>(null);
+
+  /** STEP BACK THROUGH THE GAME WITHOUT DESTROYING IT (David 2026-08-16:
+   *  "Forward and back buttons present and working").
+   *
+   *  Learn had no move navigation at all — the only way back was Takeback,
+   *  which UNDOES the move: you cannot look at what just happened and then
+   *  return to the live position, because the position no longer exists. Play
+   *  has had first/prev/next/last the whole time; this is Learn catching up.
+   *
+   *  `null` = live board (the default, fully interactive). A number is an index
+   *  into the SAN history being reviewed; `-1` is the starting position. While
+   *  reviewing, the board renders read-only from a replayed FEN, so a review
+   *  click can never inject a move into the real game. */
+  const [reviewIndex, setReviewIndex] = useState<number | null>(null);
+
+  /** FENs after each move, replayed from the SAN history. `useChessGame` keeps
+   *  history as SANs only, and chess.js is the truth for the position (G3) —
+   *  so this is derived, never stored, and cannot drift from the real game. */
+  const historyFens = useMemo(() => {
+    const board = new Chess(STARTING_FEN);
+    const fens: string[] = [];
+    for (const san of game.history) {
+      try { board.move(san); } catch { break; }
+      fens.push(board.fen());
+    }
+    return fens;
+  }, [game.history]);
+
+  const reviewing = reviewIndex !== null;
+  const canStepBack = game.history.length > 0 && reviewIndex !== -1;
+  const canStepForward = reviewing;
+  const goToPrevMove = useCallback(() => {
+    if (game.history.length === 0) return;
+    setReviewIndex((prev) => (prev === null ? game.history.length - 2 : Math.max(-1, prev - 1)));
+  }, [game.history.length]);
+  const goToNextMove = useCallback(() => {
+    setReviewIndex((prev) => {
+      if (prev === null) return null;
+      return prev >= game.history.length - 1 ? null : prev + 1;   // past the last move = back to live
+    });
+  }, [game.history.length]);
+  const goToFirstMove = useCallback(() => { if (game.history.length) setReviewIndex(-1); }, [game.history.length]);
+  const goToLastMove = useCallback(() => { setReviewIndex(null); }, []);
+
+  /** Any new move returns the board to the live position — reviewing is a
+   *  detour, never a state the game can be left stranded in. */
+  useEffect(() => { setReviewIndex(null); }, [game.history.length]);
+
+  const reviewFen = reviewing
+    ? (reviewIndex === -1 ? STARTING_FEN : historyFens[reviewIndex] ?? game.fen)
+    : null;
 
   /** Traps/gems already announced this game (openingFactChains dedup) — the
    *  same lurking line isn't re-announced on every ply it stays live. */
@@ -9392,8 +9443,14 @@ export function CoachTeachPage(): JSX.Element {
               </div>
             ) : (
               <ConsistentChessboard
-                game={game}
-                interactive={!opponentThinking && !generationStatus && !kickoffStatus}
+                // Reviewing renders a REPLAYED position in static mode, so the
+                // real game object is untouched and a stray click on a past
+                // position cannot become a move. Live play is unchanged.
+                {...(reviewFen ? { fen: reviewFen, interactive: false } : {
+                  game,
+                  interactive: !opponentThinking && !generationStatus && !kickoffStatus,
+                })}
+                boardOrientation={playerColor}
                 showFlipButton={false}
                 showUndoButton={false}
                 showResetButton={false}
@@ -9546,6 +9603,50 @@ export function CoachTeachPage(): JSX.Element {
                 <Volume2 size={16} />
               )}
               <span>{positionNarration.isNarrating ? 'Reading…' : 'Read this position'}</span>
+            </button>
+          </div>
+          {/* MOVE NAVIGATION — step back through what was played without
+              losing it. Takeback below is a different act: it DELETES the move.
+              Reviewing is read-only and any new move snaps back to live. */}
+          <div className="flex items-center justify-center gap-1" data-testid="teach-nav-row">
+            <button
+              onClick={goToFirstMove}
+              disabled={!canStepBack}
+              className="p-2 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
+              aria-label="First move"
+              data-testid="teach-nav-first"
+            >
+              <ChevronsLeft size={16} />
+            </button>
+            <button
+              onClick={goToPrevMove}
+              disabled={!canStepBack}
+              className="p-2 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
+              aria-label="Previous move"
+              data-testid="teach-nav-prev"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <span className="px-2 text-xs text-theme-text-muted tabular-nums" data-testid="teach-nav-status">
+              {reviewing ? `Move ${reviewIndex === -1 ? 0 : reviewIndex + 1} / ${game.history.length}` : 'Live'}
+            </span>
+            <button
+              onClick={goToNextMove}
+              disabled={!canStepForward}
+              className="p-2 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
+              aria-label="Next move"
+              data-testid="teach-nav-next"
+            >
+              <ChevronRight size={16} />
+            </button>
+            <button
+              onClick={goToLastMove}
+              disabled={!canStepForward}
+              className="p-2 rounded-md text-cyan-400/70 hover:text-cyan-300 hover:bg-cyan-500/10 disabled:opacity-30 transition-all duration-200 min-w-[44px] min-h-[44px] flex items-center justify-center"
+              aria-label="Back to the live position"
+              data-testid="teach-nav-last"
+            >
+              <ChevronsRight size={16} />
             </button>
           </div>
           <div className="flex items-center justify-center gap-2">

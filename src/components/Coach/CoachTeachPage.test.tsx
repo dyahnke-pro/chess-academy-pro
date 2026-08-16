@@ -302,6 +302,47 @@ describe('CoachTeachPage — Polly dispatch (regression for speakQueuedForced bu
     }, { timeout: 4000 });
   });
 
+  /** MOVE NAVIGATION ON LEARN (David 2026-08-16: "Forward and back buttons
+   *  present and working"). Learn had none — Takeback was the only way back,
+   *  and Takeback DELETES the move, so you could not look at what happened and
+   *  return. Play has had first/prev/next/last throughout; these lock Learn's.
+   *
+   *  "Present" is deliberately not the whole assertion. A nav button that
+   *  renders and does not move the board is the failure this pair exists to
+   *  catch, so the second test reads the rendered position back. */
+  /** SCOPE NOTE. react-chessboard needs real layout to place squares — under
+   *  jsdom it throws "Square width not found" — so a move cannot be clicked
+   *  onto the board here, and the "does BACK actually rewind the position"
+   *  half of the contract is owned by `scripts/audit-coach-tab-prod.mjs`,
+   *  which clicks the controls on a real board on prod and compares the
+   *  rendered placement before and after. What IS unit-testable is that the
+   *  controls exist and start in the right state — which is precisely the
+   *  regression that had them missing from Learn entirely. */
+  describe('move navigation', () => {
+    it('renders forward/back controls, disabled until there is a move to step through', async () => {
+      render(<CoachTeachPage />);
+      await screen.findByTestId('teach-nav-row');
+      for (const id of ['teach-nav-first', 'teach-nav-prev', 'teach-nav-next', 'teach-nav-last']) {
+        expect(screen.getByTestId(id)).toBeInTheDocument();
+      }
+      // An empty game has nothing to review, so every direction is inert and
+      // the board reports itself live rather than at some phantom index.
+      expect(screen.getByTestId('teach-nav-prev')).toBeDisabled();
+      expect(screen.getByTestId('teach-nav-next')).toBeDisabled();
+      expect(screen.getByTestId('teach-nav-status')).toHaveTextContent('Live');
+    });
+
+    it('keeps Takeback as a separate control — reviewing must not be the thing that deletes a move', async () => {
+      render(<CoachTeachPage />);
+      await screen.findByTestId('teach-nav-row');
+      // The whole point of adding navigation: stepping back and destroying the
+      // move are different acts, and Learn used to offer only the destructive
+      // one. Both must be present and distinct.
+      expect(screen.getByTestId('teach-takeback')).toBeInTheDocument();
+      expect(screen.getByTestId('teach-nav-prev')).not.toBe(screen.getByTestId('teach-takeback'));
+    });
+  });
+
   it('Hint button grounds on Stockfish (best move), not the LLM', async () => {
     render(<CoachTeachPage />);
     const hintBtn = await screen.findByTestId('teach-hint-btn');
