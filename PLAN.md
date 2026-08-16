@@ -1,3 +1,31 @@
+# SEQUENCE — locked with David 2026-08-15
+
+1. **The hand-written notes land** (other session). Keyed by note id into
+   `public/data/corpus-spoken.json`; `spokenBeatText` returns them VERBATIM, so
+   whatever is written is exactly what is spoken. Confirm that session has
+   COMMITTED before it is stopped — two engine commits nearly stranded in a
+   container tonight, and a container is reclaimed without warning.
+
+2. **Full audit.** Muted, always: `await ctx.addInitScript(muteTtsForAudit)`.
+   An audit needs to know WHAT was said, not to hear it — the listener reads the
+   text out of `coach-narration-spoken`, so synthesising bills for audio nobody
+   is in the room for.
+
+   SCOPE — everything below is currently UNAUDITED on prod:
+   - `ee5a7cb9` UCI_Elo + MultiPV live/review + searchmoves. The priority: it
+     changes how the opponent PICKS MOVES in a live game, and no unit test can
+     tell you whether a 1729 now faces a 1729.
+   - `bacb0c04` the no-dead-lanes gate
+   - `f156bb76` bake gate change + moveOrderArrows, AND ~471 notes baked with
+     the length/move gates lifted whose wording is live and unheard
+   - the hand-written notes from step 1
+
+   Instrument: `scripts/audit-teach-corpus-spoken-prod.mjs`, verdict from
+   PostHog by `audit_run_id`. Its marks now come from the BAKE, so a
+   hand-written note appearing in the transcript IS the proof it fired.
+
+3. **Then the sync** (video alignment) — see the section below.
+
 # PLAN — computed voice narration (2026-08-15, active)
 
 David: *"I'm willing to spend your context on better hand written notes. But you
