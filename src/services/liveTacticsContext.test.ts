@@ -291,3 +291,49 @@ describe('speakDeepestLookahead (P5 — the directly-spoken deep look-ahead)', (
     expect(speakDeepestLookahead(ctxWith([], []))).toBeNull();
   });
 });
+
+// ── THE FORK THAT HASN'T LANDED YET ──────────────────────────────────────────
+// David 2026-08-16: "I never heard a tactic alert for the opponent when it came
+// to a fork." He heard pins, a battery and a hanging bishop — all geometry
+// already standing on the board — and never a fork warning, because the Learn
+// alert lane called this builder with `analysis: null`. The entire forward scan
+// sits behind `if (analysis && …)`, so `threats` was permanently empty there and
+// the only forks reachable were ones that had already happened. By then it is
+// not a warning.
+describe('the opponent look-ahead is what a null analysis switches off', () => {
+  // Student is White (Ke1, Ra1). Black's knight on e3 hops to c2 NEXT move and
+  // forks the king and the rook. Nothing is forking anyone in this position.
+  const FEN = 'r5k1/ppp2ppp/8/8/8/4n3/PPPP1PPP/R3K3 w Q - 0 1';
+  const PV = ['a2a3', 'e3c2', 'e1e2', 'c2a1'];
+  const withPv = (cp: number): StockfishAnalysis => ({
+    bestMove: PV[0], evaluation: cp, isMate: false, mateIn: null, depth: 14,
+    topLines: [{ rank: 1, evaluation: cp, moves: PV, mate: null }], nodesPerSecond: 0,
+  } as StockfishAnalysis);
+
+  it('sees the fork two plies out when it is given the analysis', () => {
+    const ctx = buildTacticsLiveContext(FEN, withPv(-450), 'w', 1500);
+    const fork = ctx.threats.find((t) => t.type === 'fork');
+    expect(fork, `threats: ${JSON.stringify(ctx.threats)}`).toBeDefined();
+    expect(fork?.description).toContain('c2');
+    expect(fork?.depthAhead).toBe(2);
+  });
+
+  it('is blind to it with a null analysis — the defect, stated as a test', () => {
+    expect(buildTacticsLiveContext(FEN, null, 'w', 1500).threats).toEqual([]);
+    // …and the fork is genuinely NOT on the board yet, so `immediate` cannot
+    // cover for it. This is the whole class that went unwarned.
+    expect(buildTacticsLiveContext(FEN, null, 'w', 1500).immediate
+      .filter((t) => t.type === 'fork')).toEqual([]);
+  });
+
+  it('the Learn alert lane no longer passes null', async () => {
+    const { readFileSync } = await import('node:fs');
+    const page = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    expect(page).toMatch(/buildTacticsLiveContext\(\s*args\.fenAfterReply,\s*cachedForAlert,/);
+    // The cache read must stay SYNC — the lane returns an object, not a promise,
+    // and an await here would put the alert behind the engine again.
+    expect(page).toMatch(/stockfishCache\.get\(args\.fenAfterReply, COACH_TURN_DEPTH\)/);
+    // And the lane must actually SPEAK an upcoming threat, not merely receive it.
+    expect(page).toMatch(/tctx\.threats\.length > 0/);
+  });
+});

@@ -236,23 +236,44 @@ describe('detectTactics — overloaded pieces', () => {
 // ─── Battery Detection ──────────────────────────────────────────────────────
 
 describe('detectTactics — batteries', () => {
-  it('detects doubled rooks stacked on an open file', () => {
-    const fen = '4k3/8/8/8/3R4/8/8/3RK3 w - - 0 1';
+  it('detects doubled rooks stacked on a file, bearing on a target', () => {
+    // A pawn on d7 is what the battery is FOR. Both of these tests used to run
+    // on an empty file — see the furniture test below for why that changed.
+    const fen = '4k3/3p4/8/8/3R4/8/8/3RK3 w - - 0 1';
     const result = detectTactics(fen);
     const battery = result.tactics.find((t) => t.type === 'battery');
     expect(battery).toBeDefined();
     expect(battery?.involvedSquares).toEqual(expect.arrayContaining(['d1', 'd4']));
     expect(battery?.description).toContain('file');
+    expect(battery?.description).toContain('d7');   // says what it is aimed at
   });
 
   it('detects a queen-and-bishop diagonal battery', () => {
-    // Queen b1 and bishop d3 share the a2-g8-adjacent diagonal with nothing between.
-    const fen = '4k3/8/8/8/8/3B4/8/1Q2K3 w - - 0 1';
+    // Queen b1 and bishop d3 share the diagonal; the pawn on g6 is the target.
+    const fen = '4k3/8/6p1/8/8/3B4/8/1Q2K3 w - - 0 1';
     const result = detectTactics(fen);
     const battery = result.tactics.find((t) => t.type === 'battery');
     expect(battery).toBeDefined();
     expect(battery?.involvedSquares).toEqual(expect.arrayContaining(['b1', 'd3']));
     expect(battery?.description).toContain('diagonal');
+  });
+
+  // 🚨 DAVID 2026-08-16: "the useless rook and queen battery on the 8th rank —
+  // we don't need that." His game warned him about his opponent's rook on a8
+  // and queen on d8: two pieces on their own back rank, behind their own rook
+  // on e8, threatening nothing. Every structural condition was met and none of
+  // them asked what the battery was aimed at.
+  it('does not flag a battery that points at nothing (his 8th rank)', () => {
+    const fen = 'r2qr1k1/1p4pp/p1nbbp2/3p4/N2Pp3/P4N1P/1P1B1PP1/1BRQR1K1 w - - 2 21';
+    expect(detectTactics(fen).tactics.filter((t) => t.type === 'battery')).toEqual([]);
+  });
+
+  it('does not flag doubled rooks aimed down an empty file', () => {
+    // A real formation, and the student can see it. It is not a TACTIC, and
+    // this detector feeds an alert lane — a warning about nothing teaches the
+    // student to ignore warnings.
+    const fen = '6k1/5ppp/8/8/8/8/3R2PP/3R2K1 w - - 0 1';
+    expect(detectTactics(fen).tactics.filter((t) => t.type === 'battery')).toEqual([]);
   });
 
   it('does not flag two same-color sliders with an enemy piece between them', () => {

@@ -259,6 +259,12 @@ const GATE_TESTS = [
   // bishop covering f5 is why David said the suggestions were bad — the moves
   // were all within 26cp of best; the reasons were not true.
   'src/services/playCommentary.test.ts',
+  // The alert lane's two 2026-08-16 defects: a battery reported with nothing
+  // to aim at ("the useless rook and queen battery on the 8th rank"), and the
+  // opponent look-ahead switched off by a `null` analysis, so a fork could
+  // only ever be announced after it landed.
+  'src/services/tacticsDetector.test.ts',
+  'src/services/liveTacticsContext.test.ts',
   // Was red on `main` and nobody saw it, because it was in no gate list.
   'src/services/hintLaneCoverage.test.ts',
   // ── WEAKNESS-LOOP / BUCKET-DELIVERY GATES (David 2026-07-06 "log and audit the buckets"). ──

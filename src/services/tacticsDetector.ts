@@ -558,6 +558,24 @@ function findBatteries(chess: Chess): TacticPattern[] {
         const straight = dir[0] === 0 || dir[1] === 0;
         const frontCanContinue = straight ? (front.type === 'r' || front.type === 'q') : (front.type === 'b' || front.type === 'q');
         if (!frontCanContinue) continue;
+        // 🚨 A BATTERY THAT POINTS AT NOTHING IS FURNITURE, NOT A TACTIC
+        // (David 2026-08-16: "the useless rook and queen battery on the 8th
+        // rank — we don't need that").
+        //
+        // His game: "Watch out — the rook on a8 and queen on d8 form a battery
+        // on the rank", spoken as a THREAT TO HIM. Those two are sitting on
+        // their own back rank behind their own rook on e8. Every condition
+        // above was satisfied and not one of them asked the only question that
+        // makes a battery worth a warning: what is it AIMED at.
+        //
+        // So continue the ray past the front piece. An enemy piece in its path
+        // is the target and the reason to speak; a friendly piece blocks the
+        // battery, and empty board to the edge is a formation the student can
+        // see for themselves. Both go unreported — this feeds a tactics ALERT,
+        // and a warning about nothing teaches the student to ignore warnings.
+        const beyond = traceRay(chess, front.square, dir, 1);
+        const target = beyond[0];
+        if (!target || target.color === p.color) continue;
         const key = [sq, front.square].sort().join('-');
         if (seen.has(key)) continue;
         seen.add(key);
@@ -565,8 +583,8 @@ function findBatteries(chess: Chess): TacticPattern[] {
         out.push({
           type: 'battery',
           beneficiary: p.color,
-          involvedSquares: [sq, front.square],
-          description: `The ${PIECE_NAMES[p.type]} on ${sq} and ${PIECE_NAMES[front.type]} on ${front.square} form a battery on the ${lineWord}`,
+          involvedSquares: [sq, front.square, target.square],
+          description: `The ${PIECE_NAMES[p.type]} on ${sq} and ${PIECE_NAMES[front.type]} on ${front.square} form a battery on the ${lineWord}, bearing down on the ${PIECE_NAMES[target.type]} on ${target.square}`,
         });
       }
     }

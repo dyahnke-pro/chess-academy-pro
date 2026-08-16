@@ -245,6 +245,7 @@ import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText, gr
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
+import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
 import type { StockfishAnalysis } from '../../types';
 import { fetchLichessExplorer } from '../../services/lichessExplorerService';
@@ -5909,7 +5910,26 @@ export function CoachTeachPage(): JSX.Element {
     // `boardFacts` are all FEN-only, so the alert loses nothing by skipping
     // the engine — it only loses the wait.
     try {
-      const tctx = buildTacticsLiveContext(args.fenAfterReply, null, studentCC, rating);
+      // 🚨 THE LOOK-AHEAD WAS SWITCHED OFF BY THAT `null` (David 2026-08-16:
+      // "I never heard a tactic alert for the opponent when it came to a
+      // fork").
+      //
+      // Inside `buildTacticsLiveContext` the whole forward scan sits behind
+      // `if (analysis && analysis.topLines.length > 0)`, so passing null makes
+      // `threats` and `opportunities` permanently EMPTY here. The lane could
+      // only ever see geometry already standing on the board — which is why he
+      // heard pins, a battery and a hanging bishop, and never once heard that
+      // a fork was coming. By the time a fork is `immediate`, it has landed.
+      //
+      // The comment this replaces said the null "loses nothing but the wait".
+      // It lost a whole class of warning, and it does not even buy the wait:
+      // `stockfishCache.get` is synchronous and serves a DEEPER result for a
+      // shallower ask, and the turn has already searched this exact position —
+      // his log shows the depth-14 read cached on the very plies that went
+      // unwarned. Same shape as the other two bugs today: the answer was in
+      // hand and thrown away. A miss simply returns null and behaves as before.
+      const cachedForAlert = stockfishCache.get(args.fenAfterReply, COACH_TURN_DEPTH) ?? null;
+      const tctx = buildTacticsLiveContext(args.fenAfterReply, cachedForAlert, studentCC, rating);
       let tacticKey = '';
       let threatKey = '';
       /** The tactic type the STUDENT has available, so the threat lane can tell
@@ -5992,6 +6012,24 @@ export function CoachTeachPage(): JSX.Element {
         if (myTacticType && myTacticType === t.type) {
           tacticLine = `You've got a ${tacticWord(myTacticType) ?? 'chance'} of your own here — a different one. See it?`;
         }
+      } else if (tctx.threats.length > 0) {
+        // NOT ON THE BOARD YET — AND THAT IS THE POINT. The branch above warns
+        // about geometry that already exists; this one is the fork two plies
+        // out, from the PV scan the cached analysis just unlocked. Warning a
+        // student about a fork after it has landed is not a warning.
+        //
+        // The move IS named here, unlike the student's own opportunities: the
+        // honesty contract withholds an answer the student is meant to find,
+        // and the opponent's plan is not that. Same call `CoachGamePage` makes
+        // ("Watch out — if I play Nc7, …").
+        const up = tctx.threats[0];
+        const first = up.line?.[0];
+        threatKey = `soon:${up.type}:${first ?? ''}`;
+        threatSquares = (up.description.match(/\b[a-h][1-8]\b/g) ?? []).slice(0, 4);
+        const desc = `${up.description.charAt(0).toLowerCase()}${up.description.slice(1)}`;
+        threatLine = first
+          ? `Watch out — if they play ${first}, ${desc}.`
+          : `Watch out — ${desc} is coming.`;
       } else if (myHanging.length > 0) {
         const worst = myHanging[0];
         threatKey = `hang:${worst.piece}${worst.square}`;
