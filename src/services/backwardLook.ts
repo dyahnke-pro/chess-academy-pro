@@ -31,6 +31,7 @@ import { findConcession, findStudentDrawback, whatItAllowed } from './concession
 import { callInaccuracy } from './inaccuracyCall';
 import { whyItFailed } from './whyItFailed';
 import { INACCURACY_CP } from './engineConstants';
+import { logAppAudit } from './appAuditor';
 
 export interface BackwardLook {
   /** The spoken line. Past tense — the move has happened. */
@@ -272,6 +273,26 @@ export function backwardLook(args: {
       studentColor: args.studentColor,
       cpLoss: args.cpLoss,
     });
+    // 🚨 LOG THE INPUTS, NOT JUST THE SENTENCE (David's prod game, 2026-08-16).
+    //
+    // He heard "That let them win a rook, prise open the e-file and trade off
+    // the knight" on a board where he was +1.7 and the engine's own line wins
+    // nobody a rook — I replayed his FEN at depths 10-20 to check. But the
+    // stream logged only the SENTENCE, so which board and which line produced
+    // it could not be recovered, and a false claim I cannot reproduce is a
+    // false claim I cannot fix.
+    //
+    // This beat is a pure function of (fenAfter, replyPvUci, cpLoss). Logging
+    // those three makes the next occurrence reproducible offline in one call.
+    if (allowed) {
+      void logAppAudit({
+        kind: 'coach-narration-spoken',
+        category: 'subsystem',
+        source: 'backwardLook.drawback',
+        summary: `"${allowed.line}" · cpLoss=${args.cpLoss} · pv=${(args.replyPvUci ?? []).slice(0, 12).join(' ') || 'none'}`,
+        fen: args.fenAfter,
+      });
+    }
     return allowed ? { ...allowed, kind: 'drawback' } : null;
   } catch { return null; }
 }
