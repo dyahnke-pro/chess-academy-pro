@@ -120,6 +120,23 @@ const NARRATED = new Set([...NARRATION_SRC.matchAll(/'([^']*:[^']*:[^']*)'\s*:/g
 const gemKey = (g) => `${g.openingId}:${g.lineMoves.replace(/\s+/g, '_')}:${g.inaccuracy}`;
 /** Exactly what the student can see — the only set a missing tile is a bug for. */
 const isSurfaceable = (g) => WEAPON.has(g.tier) && NARRATED.has(gemKey(g));
+
+/** THE UN-NARRATED GEMS ARE A FAILURE, NOT A FILTER (David 2026-08-16: "Why no
+ *  narrations?? Need to add, the app should NEVER hide a gem!!").
+ *
+ *  Filtering the DOM check to surfaceable gems fixes the wrong DIAGNOSIS —
+ *  "gem tile missing" blamed the renderer for content that was never written —
+ *  but on its own it would bury the real problem, which is that a verified
+ *  weapon the student should be learning never reaches them. So the backlog is
+ *  reported in its own right, with the count and the worst openings named. */
+function narrationBacklog() {
+  const weapons = GEMS.filter((g) => WEAPON.has(g.tier));
+  const missing = weapons.filter((g) => !NARRATED.has(gemKey(g)));
+  const byOpening = {};
+  for (const g of missing) byOpening[g.openingId] = (byOpening[g.openingId] ?? 0) + 1;
+  const worst = Object.entries(byOpening).sort((a, b) => b[1] - a[1]);
+  return { total: weapons.length, missing: missing.length, worst };
+}
 // POST-DEPLOY: this is THE masterclass post-deploy audit (David 2026-05-24) —
 // it must verify EVERY masterclass line is integrated, not just today's gem
 // work. Walk EVERY masterclass opening and every variation tab's WLPP. The
@@ -692,6 +709,12 @@ async function runPass(browser, level) {
 //      line — never a cold/unrelated position.
 async function continuityPreflight() {
   const errs = [];
+  // A verified weapon with no narration never reaches the student. Reported
+  // here so it is read as the content gap it is, not as a renderer bug.
+  const backlog = narrationBacklog();
+  if (backlog.missing > 0) {
+    errs.push(`NARRATION BACKLOG: ${backlog.missing}/${backlog.total} weapon-tier gems have no narration, so the app never shows them — ${backlog.worst.slice(0, 8).map(([id, n]) => `${id}:${n}`).join(', ')}`);
+  }
   let proRep = [];
   try { proRep = JSON.parse(await readFile('src/data/pro-repertoires.json', 'utf-8')).openings ?? []; } catch { /* none */ }
   let NARR = {};

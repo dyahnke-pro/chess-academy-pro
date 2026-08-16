@@ -48,6 +48,21 @@ export interface FastMoveLineInput {
    *  builder adds it. Omit it (tests, callers without a game) to disable
    *  de-dup. */
   announcedHangingSquares?: Set<string>;
+  /** May the coach VOLUNTEER what it sees on the board — the fork, the pin,
+   *  the piece left hanging?
+   *
+   *  Off by default, because the only caller is `/coach/play`, and Play is a
+   *  playing surface: it stays silent until the student asks (David
+   *  2026-07-06, re-confirmed 2026-08-16 on seeing it speak — "Keep it silent.
+   *  Unless the user asks! It still needs to be able to identify!"). A prod
+   *  audit caught it volunteering "Bishop on c4 pins pawn on f7 against knight
+   *  on g8" and "Knight on f7 forks queen on d8 and rook on h8" — twice —
+   *  unprompted, mid-game.
+   *
+   *  This gates VOLUNTEERING only. The coach's ABILITY to identify a tactic is
+   *  untouched: ask on Play and the same detection answers through the grounded
+   *  tactics lane. Silence here is about who starts the conversation. */
+  volunteerBoardReading?: boolean;
 }
 
 const KEY_CLASSIFICATIONS = new Set(['blunder', 'mistake', 'inaccuracy']);
@@ -75,21 +90,28 @@ function spellSquare(sq: string): string {
  * Priority of what to say (most concrete first):
  *   1. A real tactic motif on the board now (fork / pin / skewer …) —
  *      `TacticPattern.description` is already concrete and board-true.
+ *      ONLY when `volunteerBoardReading` is set; Play leaves it off.
  *   2. A hanging piece the move exposed — name the piece + square.
+ *      Same gate: volunteered board reading, not a playing surface's job.
  *   3. A key-moment classification (blunder / mistake / inaccuracy)
- *      with no detected motif — an honest "that gives ground" flag.
+ *      with no detected motif — an honest "that gives ground" flag. This
+ *      one stays on for Play: the contract allows it to "mention a couple
+ *      of the mistakes", and a slip flag names no square the student has
+ *      not already played.
  *   4. Full density only: dictate the move ("Knight takes on f7,
  *      check") so every-move users still hear a beat.
  */
 export function buildFastMoveLine(input: FastMoveLineInput): string {
-  const { san, moverIsWhite, classification, tactics, hangingPieces, density, announcedHangingSquares } = input;
+  const { san, moverIsWhite, classification, tactics, hangingPieces, density, announcedHangingSquares, volunteerBoardReading } = input;
   if (density === 'none') return '';
 
   const realTactics = (tactics ?? []).filter((t) => t.type !== 'none' && t.description.trim());
   const isKey = !!classification && KEY_CLASSIFICATIONS.has(classification);
 
   // 1. Concrete tactic on the board — already human-readable + board-true.
-  if (realTactics.length > 0) {
+  //    Only when the surface VOLUNTEERS board reading. Play does not: naming
+  //    the fork unasked plays the student's game for them.
+  if (volunteerBoardReading && realTactics.length > 0) {
     let line = capitalizeFirst(realTactics[0].description.trim());
     if (!/[.!?]$/.test(line)) line += '.';
     return line;
@@ -107,7 +129,7 @@ export function buildFastMoveLine(input: FastMoveLineInput): string {
     .sort((a, b) => pieceValue(b.piece) - pieceValue(a.piece));
   const moverColor: 'w' | 'b' = moverIsWhite ? 'w' : 'b';
   const ownHanging = hanging.find((h) => h.color === moverColor);
-  if (ownHanging && (isKey || density !== 'fast')) {
+  if (volunteerBoardReading && ownHanging && (isKey || density !== 'fast')) {
     if (!announcedHangingSquares?.has(ownHanging.square)) {
       announcedHangingSquares?.add(ownHanging.square);
       const word = PIECE_WORD[ownHanging.piece.toLowerCase()] ?? 'piece';
