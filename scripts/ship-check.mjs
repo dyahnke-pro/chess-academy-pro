@@ -255,6 +255,10 @@ const GATE_TESTS = [
   // The audit's own honesty: a candidate the SEARCH passed over is not a gate
   // trip. 130 of them filled 43% of David's rolling buffer in one game.
   'src/services/coachAnswerGates.test.ts',
+  // The REASON attached to a recommended move. "Winning the pawn on f5" with a
+  // bishop covering f5 is why David said the suggestions were bad — the moves
+  // were all within 26cp of best; the reasons were not true.
+  'src/services/playCommentary.test.ts',
   // Was red on `main` and nobody saw it, because it was in no gate list.
   'src/services/hintLaneCoverage.test.ts',
   // ── WEAKNESS-LOOP / BUCKET-DELIVERY GATES (David 2026-07-06 "log and audit the buckets"). ──

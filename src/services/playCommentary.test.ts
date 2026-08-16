@@ -196,11 +196,13 @@ describe('buildInstantReplyLine', () => {
 
 describe('describeMoveConsequence (the computed why — David 2026-08-07: "a couple hallucinations")', () => {
   it('names the capture a recommended move makes', () => {
-    // 1.e4 e5 2.Nf3 — Black to move; Nxe4?? no — test White capture: after
-    // 1.e4 d5, exd5 wins the pawn on d5.
+    // 1.e4 d5 2.exd5 — and this used to assert "winning the pawn on d5", which
+    // is the bug David heard on 2026-08-16, written down as the contract.
+    // Black plays Qxd5 and the pawn is straight back; nobody won anything. The
+    // capture is still named, with the word that is true of it.
     const c = new Chess();
     c.move('e4'); c.move('d5');
-    expect(describeMoveConsequence(c.fen(), 'exd5')).toBe(', winning the pawn on d5');
+    expect(describeMoveConsequence(c.fen(), 'exd5')).toBe(', trading off the pawn on d5');
   });
 
   it('names a check', () => {
@@ -496,9 +498,14 @@ describe('the quiet move still has a reason', () => {
   });
 
   it('still prefers the concrete consequence when there is one', () => {
-    // A capture outranks any positional reason — the ordering must not have
-    // been disturbed by adding fallbacks beneath it.
-    const fen = 'rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 4';
+    // A capture that WINS material outranks any positional reason — the
+    // ordering must not have been disturbed by adding fallbacks beneath it.
+    //
+    // The position this used to use was the Philidor after 1.e4 e5 2.Nf3 d6,
+    // asserting Nxe5 "winning the pawn" — with the d6 pawn recapturing. That
+    // is a knight for a pawn, and it is the same overclaim David heard on
+    // 2026-08-16. Moved to a board where the pawn really is free.
+    const fen = 'rnbqkbnr/ppp2ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 4';
     expect(describeMoveConsequence(fen, 'Nxe5')).toContain('winning the pawn');
   });
 
@@ -517,5 +524,46 @@ describe('the quiet move still has a reason', () => {
       expect(() => describeMoveConsequence(c.fen(), san)).not.toThrow();
       c.move(san);
     }
+  });
+});
+
+// ── A CAPTURE IS NOT A WIN ───────────────────────────────────────────────────
+// David's prod game, 2026-08-16: "a lot of suggestions are bad". They were not
+// bad MOVES — I scored every recommendation in his log at depths 12, 14 and 20
+// and each was within 2–26cp of best. What was bad was the REASON attached:
+// the clause read `mv.captured` and called any capture a win, so the coach
+// recommended Nxf5 "winning the pawn on f5" with his opponent's bishop on e6
+// covering f5. The knight comes off next move; the "win" is a two-point loss.
+// A move sold with a false reason is worse than a bare move name — the student
+// learns to distrust the reason on the moves where it is true.
+describe('describeMoveConsequence — the material claim survives the recapture', () => {
+  it('does not call a defended capture a win (his Nxf5, bishop on e6)', () => {
+    const clause = describeMoveConsequence('r2qr1k1/1p4pp/p1nbb3/3p1p2/N2Pp2N/P6P/1P1B1PP1/1BRQR1K1 w - - 0 22', 'Nxf5');
+    expect(clause).not.toMatch(/winning/);
+    // …and it still says something true, rather than going bare.
+    expect(clause).toBe(', attacking the bishop on d6');
+  });
+
+  it('still calls a genuinely hanging piece a win (his Rxc5)', () => {
+    expect(describeMoveConsequence('r2qr1k1/1p4pp/p1n1b3/2bp1p2/3Pp2N/P6P/1P1B1PP1/1BRQR1K1 w - - 0 23', 'Rxc5'))
+      .toBe(', winning the bishop on c5');
+  });
+
+  it('calls an even recapture a trade, not a win', () => {
+    // 1.e4 d5 2.exd5 — the pawn comes straight back with Qxd5.
+    expect(describeMoveConsequence('rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2', 'exd5'))
+      .toBe(', trading off the pawn on d5');
+  });
+
+  it('calls a free pawn a win', () => {
+    // 1.e4 d5 2.d4 dxe4 — nothing defends e4.
+    expect(describeMoveConsequence('rnbqkbnr/ppp1pppp/8/3p4/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2', 'dxe4'))
+      .toBe(', winning the pawn on e4');
+  });
+
+  it('takes with the least valuable attacker, both sides', () => {
+    // A pawn guards d5, so Qxd5?? is not "winning the pawn" — it loses a queen.
+    const clause = describeMoveConsequence('rnbqkbnr/ppp1pppp/8/3p4/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2', 'Qh5');
+    expect(clause).not.toMatch(/winning/);
   });
 });
