@@ -265,6 +265,9 @@ const GATE_TESTS = [
   // only ever be announced after it landed.
   'src/services/tacticsDetector.test.ts',
   'src/services/liveTacticsContext.test.ts',
+  // "Your strongest reply" said for a move 10-18cp off the engine's own top
+  // line, twice in one game. MultiPV 3 already returns the runner-up.
+  'src/services/bestReplyRanking.test.ts',
   // Was red on `main` and nobody saw it, because it was in no gate list.
   'src/services/hintLaneCoverage.test.ts',
   // ── WEAKNESS-LOOP / BUCKET-DELIVERY GATES (David 2026-07-06 "log and audit the buckets"). ──

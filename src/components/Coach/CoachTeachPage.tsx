@@ -245,6 +245,7 @@ import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText, gr
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
+import { rankReplies, bestReplyLine } from '../../services/bestReplyRanking';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
 import type { StockfishAnalysis } from '../../types';
@@ -7259,7 +7260,16 @@ export function CoachTeachPage(): JSX.Element {
                               // (same rule as the think-aloud).
                               facts.push(...improve.facts.slice(0, readsForRegister(discussion.hintDial.register)));
                             } else {
-                            const recLine = `Your strongest reply here is ${recMove.san}${recWhy}.`;
+                            // SUPERLATIVE ONLY WHEN THE SEARCH SUPPORTS ONE
+                            // (David 2026-08-16: "a lot of suggestions are
+                            // bad"). MultiPV 3 is already running; the
+                            // runner-up was being thrown away. See
+                            // `bestReplyRanking` — a null ranking (single-PV
+                            // engine, cache miss) keeps the old sentence.
+                            const ranked = rankReplies(probe.fen(), studentBest);
+                            const recLine = ranked
+                              ? bestReplyLine(ranked, recWhy)
+                              : `Your strongest reply here is ${recMove.san}${recWhy}.`;
                             facts.push(recLine);
                             // Track A candidate — ONLY set here, where no
                             // fork / think-aloud / priority beat withheld the
