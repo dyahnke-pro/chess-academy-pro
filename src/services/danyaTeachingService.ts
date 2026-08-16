@@ -60,7 +60,7 @@ export interface DanyaNote {
    * treated as `inferred` wherever it is missing — an unverified position must
    * never inherit verified authority through an omission.
    */
-  positionSource?: 'high' | 'medium' | 'inferred';
+  positionSource?: 'high' | 'medium' | 'inferred' | 'video';
 }
 
 interface TeachingsBundle {
@@ -194,9 +194,22 @@ export const anchorTeachesItsPosition = (n: DanyaNote): boolean =>
  * seen live were all `no-spine` or `rejected`, never medium — tightening to
  * high alone would silence a third of the corpus to fix defects it does not
  * have.
+ *
+ * `video` is a fourth verified tier and the strongest evidence of the four: the
+ * position was READ OFF THE BOARD that was on screen when the note was spoken
+ * (`scripts/video-align`), which is a measurement rather than a re-derivation.
+ * It is admitted here because it is verified TWICE more on top of that — the
+ * OCR only accepts a grid matching a legal move, and the aligner only accepts a
+ * position where the note's own claims hold or its own named moves are legal.
+ * A note carrying this tier was never inferred from prose at any step.
+ *
+ * No note carries it yet; the aligner is proven on one video and applies
+ * nothing until it has run at scale.
  */
 export const isVerifiedPosition = (n: DanyaNote): boolean =>
-  n.positionSource === 'high' || n.positionSource === 'medium';
+  n.positionSource === 'high'
+  || n.positionSource === 'medium'
+  || n.positionSource === 'video';
 
 
 for (const n of DATA.notes) {
@@ -408,13 +421,13 @@ export function noteCoverageForLine(historySans: readonly string[]): number {
 // to phrase is the hallucination, upstream of any gate that might catch it. A
 // staleness window was tried here first and was wrong for the same reason: the
 // same fuzziness, smaller. `noteSelectionDeterminism.test.ts` is the proof.
-export function noteAtPosition(
+export function notesAtPosition(
   historySans: string[],
   fen?: string,
   openingName?: string | null,
   /** Notes the caller has already spoken. See `supportNoteForPly`. */
   exclude?: ReadonlySet<string>,
-): DanyaNote | null {
+): DanyaNote[] {
   // A note that recites a different line than the one played narrates the wrong
   // opening (see noteLineGuard) — silence beats teaching someone else's theory.
   // `openingName` is the lesson's own opening: a note tagged with a DIFFERENT
@@ -452,6 +465,16 @@ export function noteAtPosition(
     // variation foreign to this lesson is out of scope — David's 2026-08-05
     // run heard "In the Fantasy…" inside a Tartakower lesson.
     && noteStaysInScope(n, openingName)
+    // IT MUST BE ABLE TO SAY SOMETHING. Selection returned the first note that
+    // passed the gates without asking whether it had a spoken form; the caller
+    // then found `spokenBeatText` empty and the ply went silent, with usable
+    // notes still queued behind it. Measured over the 1,310 plies of
+    // repertoire.json: 159 silent plies had a fully-usable, unused note.
+    //
+    // Same shape as the conceptNotesFor bug — choose first, filter after.
+    // Speakability is part of whether a note is usable AT ALL, so it belongs in
+    // the predicate, not in the caller's hands.
+    && spokenBeatText(n).trim().length > 0
     && !exclude?.has(n.id);
   // WHEN SEVERAL NOTES SIT AT ONE BOARD, PREFER THE ONE WHOSE OWN OPENING GETS
   // HERE. Measured over the 1,310 plies of repertoire.json: 44.6% of selected
@@ -476,29 +499,44 @@ export function noteAtPosition(
     });
   };
 
-  const bucket = preferReachable((byPrefix.get(historySans.join(' ')) ?? []).filter(onThisLine));
-  if (bucket[0]) return bucket[0];
-  if (fen) {
-    // Uncapped: `notesForFen(fen, 1)` handed the filter a single candidate, so
-    // one note failing `onThisLine` (or already spoken) meant silence at a
-    // position the corpus does teach.
-    const viaFen = preferReachable(notesForFen(fen).filter(onThisLine))[0];
-    if (viaFen) return viaFen;
-  }
-  // GAP TIER, exact positions only. This is the walkthrough splice's source, so
-  // without it the narration goes silent on an opening the primary corpus never
-  // covers. The "exactly at this position" contract is preserved — only a
-  // secondary note keyed at THIS very line qualifies, never an opening-level one.
-  const viaSecondaryPrefix = preferReachable(secondaryNotesForPosition(historySans).filter(onThisLine))[0];
-  if (viaSecondaryPrefix) return viaSecondaryPrefix;
-  // SECONDARY TRANSPOSITION — same contract, other corpora. Until 2026-08-04
-  // only the primary corpus was indexed by position, so 5,412 position-keyed
-  // secondary notes were reachable only by an exact move-order string match.
-  // That scarcity is what made the fuzzy opening-name arm look necessary; this
-  // is the deterministic way to get the reach back, and the note is provably
-  // about THIS board.
-  return fen ? preferReachable(secondaryNotesForFen(fen).filter(onThisLine))[0] ?? null : null;
+  // EVERY usable note at this board, tier by tier, best first. `noteAtPosition`
+  // returns the head of this list; callers that can speak more than one take
+  // the rest.
+  //
+  // The single-note contract was never a pedagogical choice, it was the shape
+  // of the function — and it cost real teaching. Measured over the 1,310 plies
+  // of repertoire.json: 108 plies that spoke had 554 further usable notes
+  // queued behind the one that won, and 766 plies have NO usable note at all,
+  // so returning more cannot flood a lesson that had nothing to say. David
+  // 2026-08-15: "no cap! if it adds something new speak it" — the caller
+  // decides on CONTENT (see `addsSomething`), which is a better filter than an
+  // arbitrary count.
+  const all: DanyaNote[] = [];
+  const push = (ns: DanyaNote[]): void => {
+    for (const n of ns) if (!all.some((x) => x.id === n.id)) all.push(n);
+  };
+  push(preferReachable((byPrefix.get(historySans.join(' ')) ?? []).filter(onThisLine)));
+  if (fen) push(preferReachable(notesForFen(fen).filter(onThisLine)));
+  push(preferReachable(secondaryNotesForPosition(historySans).filter(onThisLine)));
+  if (fen) push(preferReachable(secondaryNotesForFen(fen).filter(onThisLine)));
+  return all;
 }
+
+/**
+ * The single best note at this board — the head of `notesAtPosition`.
+ *
+ * Kept as its own export because most callers speak one line per ply and
+ * should not have to know about the list.
+ */
+export function noteAtPosition(
+  historySans: string[],
+  fen?: string,
+  openingName?: string | null,
+  exclude?: ReadonlySet<string>,
+): DanyaNote | null {
+  return notesAtPosition(historySans, fen, openingName, exclude)[0] ?? null;
+}
+
 
 /** The best teaching note for a live position, for FACT-PACKAGE builders
  *  (thinkAloud, step narration): exact position first, then STRUCTURE

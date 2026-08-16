@@ -48,7 +48,13 @@ import { gradeNarrationText, gradeNarrationAcrossLine } from './coachAnswerGates
 import { materialBalance } from './materialClaimValidator';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
-import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
+import {
+  buildDanyaTeachingBlock, notesAtPosition, spokenBeatText,
+} from './danyaTeachingService';
+import { addsSomething } from './layeredNarration';
+import {
+  narrationWordBudget, fitToBudget, boardPhase, type PlyImportance,
+} from './narrationBudget';
 import { authoredNoteAt, authoredEntryFor } from './authoredOpeningNotes';
 import authoredRepertoire from '../data/repertoire.json';
 import { deriveNarrationArrows } from './narrationArrows';
@@ -378,7 +384,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // lesson cached at the '-spelling' rev keeps its dead-tier prose forever while
 // the audits (fresh browser, cold cache, always regenerating) show green.
 // One bump batching both fixes, per the locked cost rule.
-const WALKTHROUGH_GEN_REV = '2026-08-13-material-ledger';
+const WALKTHROUGH_GEN_REV = '2026-08-15-uncapped-notes-budgeted';
 
 export async function getCachedOpening(
   name: string,
@@ -1152,6 +1158,28 @@ export function repairNarrationArrows(tree: WalkthroughTree): number {
  *  those say what the corpus COULD offer, while this says what a lesson actually
  *  splices — the dedupe and the board-truth grade both drop plies, and a report
  *  that skips them overstates by a factor of three. */
+/** How much this ply is worth stopping on, decided by the DB rather than by
+ *  the prose (G0 — the model never gets a say in its own airtime).
+ *
+ *  KEYSTONE is where theory ENDS: no entry in `openings-lichess.json` continues
+ *  past this prefix, so the student has just left book and everything after is
+ *  plan rather than memory. That is the moment a lesson exists for, and it is
+ *  where a long answer is worth hearing.
+ *
+ *  DECISION is a genuine fork — three or more distinct named continuations
+ *  diverge here, so the student is about to choose. Two continuations is the
+ *  ordinary shape of a main line with one sideline and does not earn extra
+ *  airtime. */
+function plyImportance(historySans: string[]): PlyImportance {
+  try {
+    const continuations = findContinuationsAtPly(historySans);
+    if (continuations.size === 0) return 'keystone';
+    return continuations.size >= 3 ? 'decision' : 'routine';
+  } catch {
+    return 'routine';
+  }
+}
+
 export function noteArrowSourceAt(
   historySans: string[],
   fen: string,
@@ -1171,23 +1199,62 @@ export function noteArrowSourceAt(
     // result here left 647 of 1,310 plies silent, because retrieval kept handing
     // back a note the lesson had already spoken and had no way to be asked for
     // the next one.
-    const note = noteAtPosition(historySans, fen, openingName, seenIds);
-    if (!note) return null;
-    // SPOKEN register, not the full beat. `teachingBeatText` concatenates
-    // explains+teaches+plans (median 544 chars) and the splice then stacked
-    // generated prose on top — ~130 spoken words for one move. David 2026-08-05:
-    // "a bit too wordy … droned on with long strings of FENs which lost me."
-    // `spokenBeatText` is explains-only, recitation sentences dropped, capped
-    // at a sentence boundary; teaches/plans still reach the model via the
-    // lesson-level teaching block.
-    const graded = gradeNarrationText(spokenBeatText(note), fen, 'openingGenerator.noteArrows');
-    if (!graded?.trim()) return null;
-    seenIds.add(note.id);
-    return graded;
+    // NO CAP — speak every note here that ADDS something (David 2026-08-15:
+    // "no cap! if it adds something new speak it").
+    //
+    // Returning one note per ply was never a pedagogical choice, it was the
+    // shape of the selector, and it cost real teaching: 108 plies that spoke
+    // had 554 further usable notes queued behind the winner. The worry about
+    // flooding a lesson does not survive the data either — 766 of 1,310 plies
+    // have NO usable note at all, so nothing is added where there was nothing
+    // to say.
+    //
+    // CONTENT is the limit, not a count. `addsSomething` compares each
+    // candidate against what this ply has already said, so a second note has to
+    // earn its place by being about something else; two sources rephrasing one
+    // idea collapse to one line. Every note still passed every gate in
+    // `notesAtPosition` first — this widens how MANY verified notes may speak,
+    // never what qualifies.
+    const notes = notesAtPosition(historySans, fen, openingName, seenIds);
+    if (notes.length === 0) return null;
+    const parts: string[] = [];
+    const kept: string[] = [];
+    const keptIds: string[] = [];
+    for (const n of notes) {
+      const graded = gradeNarrationText(spokenBeatText(n), fen, 'openingGenerator.noteArrows');
+      const text = graded?.trim();
+      if (!text) continue;
+      if (parts.length > 0 && !addsSomething(text, parts.join(' '))) continue;
+      parts.push(text);
+      kept.push(text);
+      keptIds.push(n.id);
+    }
+    if (parts.length === 0) return null;
+
+    // AIRTIME, the last limit — and a different question from every one above
+    // it. Everything so far asked whether a note is TRUE here, RELEVANT here,
+    // and NEW here; a note that clears all three has earned the right to be
+    // spoken and nothing below revokes it. What is left is how much of the
+    // queue fits in one breath: uncapped, this ply reached 787 words on the
+    // Nimzo's sixth move — five minutes of narration on one developing move.
+    //
+    // The first note is never subject to the budget, and a note is skipped
+    // whole rather than clipped, so no teaching is ever half-spoken.
+    const budget = narrationWordBudget({
+      verbosity: 'full', // beats bake before the student's setting is knowable
+      phase: boardPhase(fen, historySans.length),
+      importance: plyImportance(historySans),
+    });
+    const spoken = fitToBudget(kept, budget);
+    for (let i = 0; i < kept.length; i += 1) {
+      if (spoken.includes(kept[i])) seenIds.add(keptIds[i]);
+    }
+    return spoken.join(' ');
   } catch {
     return null; // the corpus is a bonus, never a blocker
   }
 }
+
 
 /** The ply's arrows: the ORANGE trail on the move just played, plus GREEN
  *  vision arrows for the moves the GROUNDING SOURCE names.
