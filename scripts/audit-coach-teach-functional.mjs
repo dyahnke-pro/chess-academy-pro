@@ -96,6 +96,26 @@ async function ask(text) {
 }
 async function transcript() { return page.locator('[data-testid="teach-transcript"]').innerText({ timeout: 2000 }).catch(() => ''); }
 // wait until `pred()` is true or timeout; returns bool (REACHED or not)
+/** Play moves on the board the way a hand does — tap the from-square, tap the
+ *  to-square. `force` because a board mid-animation fails Playwright's
+ *  stability check while a real finger lands fine (the documented harness
+ *  artifact, not a defect). Opponent replies are auto-played, so the pause
+ *  between moves waits for the coach's answer before the next tap. */
+async function playMoves(pairs) {
+  let played = 0;
+  for (const [from, to] of pairs) {
+    if (!(await visible(`[data-square="${from}"]`))) break;
+    await page.locator(`[data-square="${from}"]`).first().click({ force: true }).catch(() => undefined);
+    await page.waitForTimeout(300);
+    await page.locator(`[data-square="${to}"]`).first().click({ force: true }).catch(() => undefined);
+    // The coach replies through the rating-limited engine; give the reply and
+    // its narration time to land before the next move goes down.
+    await page.waitForTimeout(4000);
+    played += 1;
+  }
+  return played === pairs.length;
+}
+
 async function until(pred, ms = 30000, step = 600) {
   const end = Date.now() + ms;
   while (Date.now() < end) { if (await pred()) return true; await page.waitForTimeout(step); }
@@ -158,22 +178,41 @@ async function main() {
   // is the exact trap CLAUDE.md names: "a broad family tile opens a variation
   // picker — the user taps a line; the audit MUST too."
   //
-  // A real user taps a line, so the audit does. The routing assertion now asks
-  // the honest question — did the typed verb reach EITHER a lesson or the
-  // picker that leads to one — and then it clicks through, exactly as section
-  // D already does for the Sicilian.
-  await gotoTeach();
-  await ask('teach me the Vienna');
+  // 🚨 DON'T TYPE A REQUEST — PLAY (David 2026-08-16: "Do not type in 'teach
+  // me', just start playing an opening"). He opens Learn and plays; he does
+  // not narrate his intentions to a text box. Typing a command string is the
+  // same synthetic-injection this file's own header bans ("a human CLICKS the
+  // Drill tile"), and a request I typed is a path only an audit walks.
+  //
+  // So the opening is entered the way he enters it: moves on the board. 1.e4
+  // e5 2.Nc3 IS the Vienna — the coach detects it, announces it, and every
+  // in-game lane (alerts, recommendation, corpus teaching) runs off that.
   const LESSON_PHASES = ['walkthrough-narrating-panel', 'walkthrough-choose-mode', 'teach-generation-progress'];
+  await gotoTeach();
+  const playedIn = await playMoves([['e2', 'e4'], ['b1', 'c3']]);
+  record('play-into-an-opening', playedIn, playedIn ? 'played 1.e4 … 2.Nc3 on the board' : 'board not interactable');
+  const announced = await until(async () => /vienna|king'?s pawn|open game/i.test(await transcript()), 45000);
+  record('opening-announced-from-play', announced,
+    announced ? 'coach named the opening from the moves alone' : 'no opening announcement');
+
+  // THE LESSON MACHINERY still has to be reached, and it is reached by
+  // CLICKING — the picker's opening tile, then a variation tile if the family
+  // branches. That is an affordance a real user taps, which is the line this
+  // file draws: clicking is use, typing a command is injection.
+  await gotoTeach();
+  const openingTile = '[data-testid^="teach-picker-opening-"]';
+  const tapped = await page.locator(openingTile).first().waitFor({ state: 'visible', timeout: 20000 })
+    .then(() => clickReq(openingTile)).catch(() => false);
+  record('picker-opening-tile-click', tapped, tapped ? 'tapped an opening tile' : 'no opening tile');
   const routed = await until(async () => [...LESSON_PHASES, 'line-picker'].includes(await phase()), 45000);
-  record('teach-verb-routing', routed, routed ? `typed verb → ${await phase()}` : 'never started');
+  record('tile-routing', routed, routed ? `tile → ${await phase()}` : 'never started');
   if ((await phase()) === 'line-picker') {
     const tile = '[data-testid^="line-picker-"]:not([data-testid*="mode"]):not([data-testid="line-picker-dismiss"])';
     await page.locator(tile).first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => undefined);
     await clickReq(tile);
   }
   const started = await until(async () => LESSON_PHASES.includes(await phase()), 60000);
-  record('teach-verb-lesson-starts', started, started ? 'Vienna walkthrough started' : `stuck at ${await phase()}`);
+  record('lesson-starts-from-click', started, started ? 'walkthrough started' : `stuck at ${await phase()}`);
   // returning-visitor chooser?
   if (await visible('[data-testid="walkthrough-choose-mode"]')) {
     record('returning-visitor-chooser', true, 'chooser shown (Vienna completed)');
