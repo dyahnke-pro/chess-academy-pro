@@ -89,6 +89,7 @@ import type { MasterPlayContext, MasterPlayResult, OpeningDbEntry } from './mast
 import { buildOpeningDbEntries } from './openingDbGrounding';
 import { buildNarrationGroundingBlock } from './narrationGrounding';
 import { buildLessonReferenceBlock, getLessonScript } from '../data/lessons';
+import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punishGems';
 import type { CoachTask, CoachVerbosity, AiProvider } from '../types';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 
@@ -3080,9 +3081,30 @@ export async function getCoachChatResponse(
         if (grounding.openingTrapsQuestion) {
           try {
             const text = (lastUserMessage() ?? '').toLowerCase();
+            // THE PUNISH GEMS ARE TRAPS TOO — and this lane could not see them.
+            //
+            // It read `trapLines`/`traps` off the opening record only, so asking
+            // "what traps can I play in the Vienna Game?" answered "I don't have
+            // named traps logged" while TWENTY-ONE verified, engine-graded,
+            // hand-narrated weapon gems for the Vienna sat in punish-gems.json
+            // (David 2026-08-16: "Make sure the coach can teach the gems when
+            // asked under learn"). Two stores, one question, and the answer only
+            // knew about one of them.
+            //
+            // A gem has no curated NAME the way "Legal's Mate" does — it is a
+            // slip and its refutation — so it is labelled by exactly that, which
+            // is both honest and the thing the student needs to recognise. Only
+            // surfaceable gems count: weapon tier AND narration, the same rule
+            // the UI renders by, so the coach never offers a trap the app cannot
+            // then show.
+            const gemTrapNames = (o: OpeningRecord): string[] =>
+              getPunishGemsForOpening(o.id)
+                .filter(isSurfaceableGem)
+                .map((g) => `after ${g.inaccuracy}, punish with ${g.punish}`);
             const trapNames = (o: OpeningRecord): string[] => {
               const named = (o.trapLines ?? []).map((v) => v.name).filter((n): n is string => !!n && n.trim().length > 0);
-              return named.length ? named : (o.traps ?? []).filter((t) => !!t && t.trim().length > 0);
+              const curated = named.length ? named : (o.traps ?? []).filter((t) => !!t && t.trim().length > 0);
+              return [...curated, ...gemTrapNames(o)];
             };
             const warnNames = (o: OpeningRecord): string[] => {
               const named = (o.warningLines ?? []).map((v) => v.name).filter((n): n is string => !!n && n.trim().length > 0);
