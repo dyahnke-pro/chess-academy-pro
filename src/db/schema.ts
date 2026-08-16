@@ -849,6 +849,25 @@ class ChessAcademyDB extends Dexie {
       masterPlayCache: 'fen, cachedAt',
       freeTier: 'id',
     });
+
+    // RENAMING A PERSISTED KEY IS A DATA MIGRATION (2026-08-16). The Polly
+    // removal renamed `preferences.pollyEnabled` → `cloudEnabled` across the
+    // code but not in the DB, so every already-installed profile kept the old
+    // key. `voiceService` reads `prefs.cloudEnabled ?? false` — undefined
+    // became FALSE — and the app went silent on the next load. David: "My app
+    // is no longer talking to me!!"
+    //
+    // Carry the stored value forward. `voiceService` also reads both keys so a
+    // profile that has not run this upgrade yet still speaks.
+    this.version(33).stores({ profiles: 'id' }).upgrade(async (tx) => {
+      await tx.table('profiles').toCollection().modify((profile: UserProfile) => {
+        const prefs = profile.preferences as unknown as Record<string, unknown>;
+        if (!('cloudEnabled' in prefs) && 'pollyEnabled' in prefs) {
+          prefs.cloudEnabled = prefs.pollyEnabled;
+        }
+        if (!('cloudEnabled' in prefs)) prefs.cloudEnabled = true;
+      });
+    });
   }
 }
 

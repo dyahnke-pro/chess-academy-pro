@@ -962,9 +962,20 @@ class VoiceService {
     }
     // Cast to partial — old IndexedDB records may lack newer fields
     const prefs = profile.preferences as Partial<typeof profile.preferences>;
+    // READ THE OLD KEY TOO. The Polly removal renamed this preference in the
+    // code; every already-installed profile still had `pollyEnabled` on disk,
+    // so this read `undefined ?? false` and the app went SILENT for existing
+    // users on the next load (David, 2026-08-16: "My app is no longer talking
+    // to me!!"). A Dexie v33 upgrade copies the value forward; this fallback is
+    // what keeps a profile speaking BEFORE that upgrade runs, and what makes
+    // the fix safe to ship without depending on migration order.
+    //
+    // Default TRUE, not false: the old default was true, and a rename must not
+    // quietly turn a feature off for people who had it on.
+    const legacyCloudEnabled = (profile.preferences as unknown as Record<string, unknown>).pollyEnabled;
     this.cachedPrefs = {
       voiceEnabled: prefs.voiceEnabled ?? true,
-      cloudEnabled: prefs.cloudEnabled ?? false,
+      cloudEnabled: prefs.cloudEnabled ?? (typeof legacyCloudEnabled === 'boolean' ? legacyCloudEnabled : true),
       pollyVoice: prefs.pollyVoice || 'ruth',
       coachPersonality: prefs.coachPersonality,
       coachPersonalityVoices: prefs.coachPersonalityVoices,
