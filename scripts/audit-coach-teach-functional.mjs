@@ -191,7 +191,15 @@ async function main() {
   await gotoTeach();
   const playedIn = await playMoves([['e2', 'e4'], ['b1', 'c3']]);
   record('play-into-an-opening', playedIn, playedIn ? 'played 1.e4 … 2.Nc3 on the board' : 'board not interactable');
-  const announced = await until(async () => /vienna|king'?s pawn|open game/i.test(await transcript()), 45000);
+  // NAME-AGNOSTIC, BECAUSE THE OPPONENT PICKS ITS OWN REPLY. This first asked
+  // for /vienna/ — but 1.e4 … 2.Nc3 is only a Vienna if the coach answers
+  // 1…e5, and it answers with whatever the rating-limited engine likes. So the
+  // assertion demanded a specific opening from a game only half of which the
+  // audit controls. What is actually contracted is that the coach NAMES the
+  // opening it detects, whichever one the two of them just played — so match
+  // the announcement's own phrasing instead of a chosen name.
+  const announced = await until(
+    async () => /this game is now the|the line has sharpened into the/i.test(await transcript()), 45000);
   record('opening-announced-from-play', announced,
     announced ? 'coach named the opening from the moves alone' : 'no opening announcement');
 
