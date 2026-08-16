@@ -111,7 +111,7 @@ describe('a relation check, priced before it is wired', () => {
     };
     mkdirSync('audit-reports', { recursive: true });
     writeFileSync('audit-reports/relation-claim-cost.json', JSON.stringify(report, null, 2));
-    console.log(JSON.stringify({ ...report, detail: wouldRefuse.map((r) => `${r.claimed}: ${r.text}`) }, null, 2));
+    console.log(JSON.stringify({ ...report, detail: wouldRefuse.map((r) => `${r.claimed.join('+')}: ${r.text}`) }, null, 2));
 
     expect(BOARDS.length).toBeGreaterThan(0);
   }, 300_000);
