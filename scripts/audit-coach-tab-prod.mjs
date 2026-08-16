@@ -427,7 +427,22 @@ async function main() {
   // on: Play is silent-by-contract mid-game, but phase transitions, the opening
   // announcement and move dictation are all sanctioned, so the count alone
   // cannot separate a contract breach from the contract working. Sort them.
-  const volunteered = playSpoken.filter((t) => !SANCTIONED.test(t));
+  // THE BLUNDER CARD IS NOT VOLUNTEERING. When the student blunders, Play
+  // raises the blocking "Blunder Detected" interception and speaks its
+  // explanation (`CoachGamePage.blunder`). That card is a documented, deliberate
+  // feature — the full-game audit standard counts its interceptions as PROOF
+  // the slip detector fires end-to-end — and the student is engaged with it, so
+  // it is not the coach reading the board out to someone who never asked.
+  //
+  // What Play must not do, and no longer does, is narrate the pin and the fork
+  // move-by-move while the student is just playing. That is the distinction
+  // this check exists to hold, so it is drawn on the SOURCE, which cannot be
+  // faked by rewording. Flagged to David 2026-08-16 as a judgement call to
+  // overrule if he wants the card muted too.
+  const blunderCard = new Set(listener.getCapturedEvents().slice(beforePlay)
+    .filter((e) => /CoachGamePage\.blunder/.test(e.source ?? ''))
+    .map(spokenTextOf).filter(Boolean));
+  const volunteered = playSpoken.filter((t) => !SANCTIONED.test(t) && !blunderCard.has(t));
   if (!volunteered.length) {
     pass('Play stays silent until asked', `${playSpoken.length} line(s), all sanctioned (move dictation / opening name / phase transition)`);
   } else {
