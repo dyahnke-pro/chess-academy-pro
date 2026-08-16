@@ -370,8 +370,17 @@ async function main() {
   if (tacticsCtx.length) {
     const live = tacticsCtx.filter((e) => /immediate=[1-9]|hanging=[1-9]|threats=[1-9]|opps=[1-9]/.test(e.summary ?? ''));
     pass('Learn: tactics context is built', `${tacticsCtx.length} build(s), ${live.length} with non-zero content · e.g. ${(tacticsCtx[0].summary ?? '').slice(0, 90)}`);
-    if (!live.length) fail('Learn: the tactics context has real content', `all ${tacticsCtx.length} build(s) came back empty on a board with a live fork`);
-    else pass('Learn: the tactics context has real content', (live[0].summary ?? '').slice(0, 90));
+    // ONLY DEMAND CONTENT WHEN WE PUT SOMETHING THERE. This asserted "on a
+    // board with a live fork" while never establishing that a fork existed:
+    // the coach picks its own replies, so a run where it declines the
+    // Fried-Liver shape reaches a quiet position, and an empty tactics context
+    // is then CORRECT. Failing it blamed the app for a game it played well.
+    // `playedTo` counts our moves that landed; the tactical shape needs Ng5
+    // (the 4th), so anything less is unproven, not broken.
+    const reachedTacticalShape = playedTo >= 4;
+    if (live.length) pass('Learn: the tactics context has real content', (live[0].summary ?? '').slice(0, 90));
+    else if (reachedTacticalShape) fail('Learn: the tactics context has real content', `all ${tacticsCtx.length} build(s) empty after reaching the tactical shape (${playedTo} student moves)`);
+    else unproven('Learn: the tactics context has real content', `only ${playedTo} student move(s) landed — the position stayed quiet, so an empty context is correct here`);
   } else fail('Learn: tactics context is built', 'no "tactics ctx:" audit fired, even on a direct tactics question');
 
   const tacticSpoken = learnSpoken.filter((t) => TACTIC_WORDS.test(t));
@@ -422,10 +431,20 @@ async function main() {
   if (!volunteered.length) {
     pass('Play stays silent until asked', `${playSpoken.length} line(s), all sanctioned (move dictation / opening name / phase transition)`);
   } else {
+    const srcOf = (txt) => (listener.getCapturedEvents().slice(beforePlay)
+      .find((e) => spokenTextOf(e) === txt)?.source) ?? '?';
     fail('Play stays silent until asked',
-      `${volunteered.length} of ${playSpoken.length} line(s) were volunteered teaching mid-game — e.g. "${volunteered[0].slice(0, 120)}"`);
+      `${volunteered.length} of ${playSpoken.length} line(s) were volunteered teaching mid-game — sources: ${[...new Set(volunteered.map(srcOf))].join(', ')} — e.g. "${volunteered[0].slice(0, 110)}"`);
   }
-  playSpokenSample = playSpoken.slice(0, 25);
+  // KEEP THE SOURCE, not just the words. Run 13 caught Play volunteering three
+  // lines of real teaching that `buildFastMoveLine` cannot produce, and finding
+  // out WHICH code path said them cost a grep through half the coach. The
+  // events carry `source`; record it and the next run names the culprit.
+  playSpokenSample = listener.getCapturedEvents().slice(beforePlay)
+    .filter((e) => (e.kind ?? '') === 'coach-narration-spoken')
+    .map((e) => ({ source: e.source ?? '?', text: spokenTextOf(e) }))
+    .filter((x) => x.text)
+    .slice(0, 30);
 
   // ── Contract C, Play half.
   const playAnswers = {};
