@@ -860,7 +860,12 @@ export async function getAdaptiveMove(
           kind: 'coach-opponent-move-source',
           category: 'subsystem',
           source: 'coachGameEngine.getAdaptiveMove',
-          summary: `source=stockfish-fallback move=${bestMove} elo=${limitStrengthElo(targetElo)} (requested ${targetElo})`,
+          // SAY `UCI_LimitStrength` HERE TOO. The recovery paths DO pass `targetElo`
+          // to `getBestMove`, so the engine really is limited — but they were the
+          // only opponent lines that did not SAY so, and a prod audit read the
+          // missing word as a missing limit (2026-08-16, 11/12). One wording
+          // across every opponent move, so the log can be checked for one thing.
+          summary: `source=stockfish-fallback move=${bestMove} elo=${limitStrengthElo(targetElo)} (requested ${targetElo}, UCI_LimitStrength)`,
           fen,
         });
         return {
@@ -896,7 +901,7 @@ export async function getAdaptiveMove(
           kind: 'coach-opponent-move-source',
           category: 'subsystem',
           source: 'coachGameEngine.getAdaptiveMove',
-          summary: `source=stockfish-respawn move=${revivedMove} elo=${limitStrengthElo(targetElo)} (requested ${targetElo}, recovered a hung worker)`,
+          summary: `source=stockfish-respawn move=${revivedMove} elo=${limitStrengthElo(targetElo)} (requested ${targetElo}, UCI_LimitStrength, recovered a hung worker)`,
           fen,
         });
         return {

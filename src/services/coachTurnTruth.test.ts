@@ -145,3 +145,33 @@ describe('the hint lane and the grading lane read the turn at one depth', () => 
     expect(COACH_TURN_DEPTH).toBeGreaterThanOrEqual(14);
   });
 });
+
+// ── EVERY OPPONENT MOVE SAYS IT, INCLUDING THE RECOVERY PATHS ────────────────
+// The first 3-instrument prod run came back 11/12 on the strength check. The
+// odd one out was `stockfish-fallback`, taken after an 8s engine timeout — and
+// it was NOT a missing limit: that path passes `targetElo` to `getBestMove`
+// like every other, so the engine really was capped. It was the only opponent
+// line that did not SAY so, and a log read for one wording reported the
+// missing word as a missing limit.
+//
+// A recovery path is exactly where an unlimited opponent would hide, so the
+// log must not have a dialect there.
+describe('the recovery paths report the limit too', () => {
+  const engine = src('src/services/coachGameEngine.ts');
+
+  it.each(['stockfish-timed', 'stockfish-fallback', 'stockfish-respawn'])(
+    '%s names UCI_LimitStrength and the limited Elo', (source) => {
+      const line = engine.split('\n').find((l) => l.includes(`source=${source} move=`));
+      expect(line, `no audit line for ${source}`).toBeDefined();
+      expect(line).toContain('UCI_LimitStrength');
+      expect(line).toContain('limitStrengthElo(targetElo)');
+    });
+
+  it('and every one of them actually passes the Elo to the engine', () => {
+    // The wording above is only honest because this holds. Asserted here so a
+    // future edit cannot keep the reassuring log line while dropping the arg.
+    const calls = [...engine.matchAll(/stockfishEngine\.getBestMove\(([^)]*)\)/g)].map((m) => m[1]);
+    expect(calls.length).toBeGreaterThanOrEqual(3);
+    for (const args of calls) expect(args).toContain('targetElo');
+  });
+});

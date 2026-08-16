@@ -274,7 +274,20 @@ const main = async () => {
   // battery line must now name its target. This is checkable from the spoken
   // text alone: the detector appends "bearing down on the <piece> on <sq>".
   const said = (e) => (e.summary ?? '').replace(/^[^"]*"/, '').replace(/"$/, '');
-  const batteryLines = spoken.filter((e) => /form a battery/.test(said(e)));
+  // 🚨 NEVER JUDGE A TRUNCATED PREVIEW (this audit's own bug, caught by its
+  // first 3-instrument run). `CoachTeachPage.trackA` logs `track A spoke:
+  // "<first 80 chars>"` — a preview, by construction. The battery check read
+  // one of those, saw the sentence stop at "…on the diagonal, bea", and
+  // reported the product had announced an aimless battery. The full line,
+  // logged by `voicePackage` on the same ply, read "…bearing down on the pawn
+  // on c3" and was correct.
+  //
+  // The asymmetry is what matters: truncation can only HIDE a claim, never
+  // invent one, so it costs the piece check a false negative and costs a
+  // presence check a false POSITIVE. Only checks of the second kind must
+  // exclude previews.
+  const isPreview = (e) => /\.trackA$/.test(e.source ?? '');
+  const batteryLines = spoken.filter((e) => !isPreview(e) && /form a battery/.test(said(e)));
   const aimless = batteryLines.filter((e) => !/bearing down on/.test(said(e)));
   add('no battery is announced without saying what it is aimed at',
     aimless.length === 0,
