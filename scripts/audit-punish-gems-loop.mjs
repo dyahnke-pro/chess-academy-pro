@@ -102,6 +102,24 @@ const LISTENER_URL = process.env.AUDIT_LISTENER_URL || '';
 // self-hides and there's nothing to drive there.
 const GEMS = JSON.parse(await readFile('src/data/punish-gems.json', 'utf-8'));
 const WEAPON = new Set(['confirmed', 'positional']);
+
+// SURFACEABILITY IS TIER *AND* NARRATION — mirror `isSurfaceableGem`.
+//
+// The app renders a gem only when `isWeaponGem(gem) && hasNarrationFor(gemId)`:
+// a mined weapon with no hand-authored narration is DELIBERATELY hidden ("no
+// thin-narration ships"). This audit filtered on tier alone, so it demanded a
+// tile for every weapon and reported "gem tile missing" for each un-narrated
+// one — 42 red lines in a single pass, all of them the app behaving exactly as
+// specified. 103 of the 344 weapon-tier gems are in that state today; they are
+// a tracked authoring backlog with its own shrinking gate
+// (punishGemNarration.baseline.json), not runtime defects, and an audit that
+// reports them as failures buries any real defect in the noise.
+const NARRATION_SRC = (await readFile('src/data/lessons/punishGemNarration.ts', 'utf-8'))
+  + (await readFile('src/data/lessons/gambitGemNarration.ts', 'utf-8'));
+const NARRATED = new Set([...NARRATION_SRC.matchAll(/'([^']*:[^']*:[^']*)'\s*:/g)].map((m) => m[1]));
+const gemKey = (g) => `${g.openingId}:${g.lineMoves.replace(/\s+/g, '_')}:${g.inaccuracy}`;
+/** Exactly what the student can see — the only set a missing tile is a bug for. */
+const isSurfaceable = (g) => WEAPON.has(g.tier) && NARRATED.has(gemKey(g));
 // POST-DEPLOY: this is THE masterclass post-deploy audit (David 2026-05-24) —
 // it must verify EVERY masterclass line is integrated, not just today's gem
 // work. Walk EVERY masterclass opening and every variation tab's WLPP. The
@@ -410,7 +428,7 @@ async function runPass(browser, level) {
       for (const mode of ['watch', 'learn', 'practice', 'play']) {
         if (!(await page.locator(`[data-testid^="gem-${mode}-"]`).count())) fail(`${id}: missing ${mode} button`);
       }
-      for (const g of GEMS.filter((x) => x.openingId === id && WEAPON.has(x.tier))) {
+      for (const g of GEMS.filter((x) => x.openingId === id && isSurfaceable(x))) {
         const tile = page.locator(`[data-testid="punish-gem-${gemIdOf(g)}"]`);
         if (!(await tile.count())) { fail(`${id}: gem tile missing for ${g.inaccuracy}→${g.punish}`); continue; }
         const txt = await tile.innerText().catch(() => '');
