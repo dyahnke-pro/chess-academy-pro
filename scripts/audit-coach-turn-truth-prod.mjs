@@ -375,6 +375,36 @@ const main = async () => {
     1);
   void streamBefore;
 
+  // ── 2f. WHAT THE COACH DIDN'T SAY ────────────────────────────────────────
+  //
+  // Every other check here asks whether a spoken line was TRUE. None of them
+  // asks whether a line that should have existed is missing — and G1 names
+  // that as the dangerous direction: "silence where a keystone should speak is
+  // a bug". A surface that computes everything correctly and never calls the
+  // voice looks identical to a healthy run in all three instruments.
+  //
+  // REPORTED, NOT GATED, and deliberately so. Silence is frequently the RIGHT
+  // answer — the Narration Voice Rules say so outright ("silence is
+  // acceptable… two words beats two sentences"), and a coach that must fill
+  // every ply is the chatty coach those rules exist to prevent. A pass/fail bar
+  // here would invent a quota and the app would start meeting it.
+  //
+  // What the number IS good for is trend and shape: it is computed from the
+  // ply checkpoints and the spoken lines the app already emits, so a lane that
+  // stops firing shows up as a step change rather than as nothing at all.
+  const plyCheckpoints = log.filter((e) => e.kind === 'coach-turn-checkpoint');
+  const spokenFens = new Set(spoken.map((e) => e.fen).filter(Boolean));
+  const silentPlies = plyCheckpoints.filter((e) => e.fen && !spokenFens.has(e.fen));
+  const pct = plyCheckpoints.length
+    ? Math.round((100 * (plyCheckpoints.length - silentPlies.length)) / plyCheckpoints.length) : 0;
+  add('the coach spoke on a reportable share of plies',
+    // The only thing that FAILS is total silence across a whole game, which is
+    // never correct and is exactly the regression this is here to catch.
+    plyCheckpoints.length === 0 || silentPlies.length < plyCheckpoints.length,
+    `${plyCheckpoints.length - silentPlies.length}/${plyCheckpoints.length} plies spoke (${pct}%)`
+      + ` · ${silentPlies.length} silent — silence is often correct, so this is a trend line, not a bar`,
+    plyCheckpoints.length);
+
   // 3. ONE DEPTH
   // SCOPED TO THE TURN LANES. The contradiction was between the hint read and
   // the grading read on ONE board; other lanes (Play's prefetch, the eval bar)
