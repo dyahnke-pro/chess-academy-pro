@@ -13,15 +13,26 @@
  * request (narrates with no FEN attached); between them they exercised none of
  * the three, and said so.
  *
- * WHY DEXIE AND NOT THE AUDIT STREAM. The stream only receives what the app
- * POSTS, and the app only posts when the profile carries `auditStreamSecret`
- * — which a fresh Playwright profile does not. A stream pull against a bot
- * context therefore returns 0 events and reads exactly like "nothing
- * happened", which is the most dangerous possible false green. The rolling
- * buffer in `db.meta` is written unconditionally and is, per CLAUDE.md, the
- * source of truth on-device. So the instrument reads the truth, not the
- * mirror. (The narration listener cannot attach either: the page is https and
- * the sidecar is http.)
+ * THREE INSTRUMENTS, per G1 — and this file argued its way out of two of them
+ * for a day, so the correction is recorded here rather than quietly fixed.
+ *
+ *   1. PLAYWRIGHT drives Learn and plays a real game.
+ *   2. THE LIVE PROD STREAM is pulled BEFORE and AFTER, so the delta is
+ *      exactly this run. Informational by design: an empty pull is the
+ *      documented normal (CLAUDE.md — "app probably not open") and must never
+ *      fail the audit, or the instrument becomes noise a session learns to
+ *      skip.
+ *   3. THE NARRATION LISTENER sidecar receives the app's own POSTs. The old
+ *      header claimed it "cannot attach: the page is https and the sidecar is
+ *      http" — WRONG. `http://127.0.0.1` is a potentially trustworthy origin
+ *      and is exempt from mixed-content blocking; the listener's own header
+ *      describes exactly this case, a page on the prod origin posting to
+ *      127.0.0.1. The attach is two localStorage keys.
+ *
+ * The Dexie read stays, and is not redundant with the listener. Dexie proves
+ * the app COMPUTED a line; only the POST proves it tried to SPEAK one. Silence
+ * where a keystone should speak is invisible in the buffer and visible in the
+ * listener — that is the whole reason G1 asks for all three.
  *
  * THE THREE CONTRACTS, each tied to what David heard:
  *
@@ -52,6 +63,7 @@ import { join } from 'node:path';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
+import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 // FAR ENOUGH TO REACH THE PHASE THE DEFECT LIVES IN. Both borrow tiers stand
@@ -80,8 +92,45 @@ function absentPiecesNamed(text, fen) {
     .map(([word]) => word);
 }
 
+/** INSTRUMENT 2 — the live prod stream, pulled before and after so the delta
+ *  is exactly this run (G1). Never fails the audit: an empty pull is the
+ *  documented normal for a bot context, and treating it as a failure is how a
+ *  session learns to ignore the instrument. */
+const pullProdStream = async (since) => {
+  const secret = process.env.AUDIT_STREAM_SECRET ?? '';
+  if (!secret) return { ok: false, reason: 'AUDIT_STREAM_SECRET not in env', entries: [] };
+  try {
+    const res = await fetch(`${BASE}/api/audit-stream?since=${since}`, {
+      headers: { 'x-audit-secret': secret },
+    });
+    if (!res.ok) return { ok: false, reason: `HTTP ${res.status}`, entries: [] };
+    const body = await res.json();
+    return { ok: true, storage: body?.storage ?? null, entries: body?.entries ?? [] };
+  } catch (e) {
+    return { ok: false, reason: String(e).slice(0, 80), entries: [] };
+  }
+};
+
 const main = async () => {
   await mkdir(OUT, { recursive: true });
+
+  // ── INSTRUMENT 3 — THE NARRATION LISTENER ────────────────────────────────
+  //
+  // The header of this file used to claim the sidecar "cannot attach either:
+  // the page is https and the sidecar is http". That was wrong, and it is why
+  // this audit ran on one instrument for a day. `http://127.0.0.1` is a
+  // POTENTIALLY TRUSTWORTHY origin, so it is exempt from mixed-content
+  // blocking — the listener's own header says as much, describing a page
+  // "served from a PUBLIC origin (the prod URL) posting to 127.0.0.1".
+  //
+  // Why it matters that this is a SEPARATE instrument from the Dexie read:
+  // Dexie proves the app COMPUTED a line. Only the POST proves the app tried
+  // to SPEAK it. Silence where a keystone should speak looks identical to a
+  // healthy run in the buffer — that is exactly the regression class G1 names.
+  const listener = await startAuditListener();
+  const runStartedAt = Date.now();
+  const streamBefore = await pullProdStream(runStartedAt - 5 * 60_000);
+
   const browser = await chromium.launch({
     headless: true,
     executablePath: await resolveChromiumExecutable(false),
@@ -90,6 +139,15 @@ const main = async () => {
   const ctx = await browser.newContext(sandboxContextOptions());
   await ctx.addInitScript(muteTtsForAudit);       // audits never spend TTS money
   await ctx.addInitScript(autoDismissCalibration);
+  // Attach the listener through the legacy localStorage keys, which
+  // `loadAuditStreamConfig` still migrates into the profile at boot. Seeding
+  // the profile row directly would race the deferred seed.
+  await ctx.addInitScript(([url, secret]) => {
+    try {
+      localStorage.setItem('auditStreamUrl', url);
+      localStorage.setItem('auditStreamSecret', secret);
+    } catch { /* private browsing — the Dexie read still stands */ }
+  }, [listener.url, LOCAL_LISTENER_SECRET]);   // listener.url already ends /audit-stream
   const page = await ctx.newPage();
   const consoleErrors = [];
   page.on('pageerror', (e) => consoleErrors.push(String(e)));
@@ -262,6 +320,48 @@ const main = async () => {
       + ` ${recLines.length - twoMove.length} called a clear best`,
     recLines.length);
 
+  // ── INSTRUMENT 3 — WHAT THE APP TRIED TO SPEAK ───────────────────────────
+  //
+  // Not a second opinion on Dexie: a different question. The buffer says a
+  // line was computed; the POST says the app pushed it out. A surface that
+  // computes perfectly and never calls the voice reads as healthy in Dexie and
+  // as silence here, which is the ModelGameViewer regression class by name.
+  const heard = listener.getCapturedEvents();
+  const heardSpoken = heard.filter((e) => e.kind === 'coach-narration-spoken');
+  add('the narration listener heard the app speak',
+    heardSpoken.length > 0,
+    `${heard.length} event(s) POSTed, ${heardSpoken.length} narration`
+      + ` · kinds ${JSON.stringify(listener.countByKind())}`,
+    heard.length);
+
+  // The board-truth question again, asked of the SPOKEN stream rather than the
+  // buffer. Same replay, independent instrument — if these two ever disagree,
+  // one of them is measuring the wrong thing and I want to know which.
+  const heardWithFen = heardSpoken.filter((e) => e.fen);
+  const heardLies = heardWithFen.filter((e) => absentPiecesNamed(said(e), e.fen).length > 0);
+  add('nothing the listener heard names a piece the board lacks',
+    heardLies.length === 0,
+    `${heardWithFen.length} spoken line(s) with a board, ${heardLies.length} false`
+      + (heardLies.length ? ` — e.g. "${said(heardLies[0]).slice(0, 90)}"` : ''),
+    heardWithFen.length);
+
+  // ── INSTRUMENT 2 — THE LIVE PROD STREAM ──────────────────────────────────
+  //
+  // Reported, never demanded. With the listener attached the app posts THERE,
+  // so this run contributes nothing to prod's buffer by design — what this
+  // proves is that the endpoint is alive and correctly configured, which is
+  // the check that catches a Preview deployment aliased over production (its
+  // env lacks the secret and the endpoint answers "server misconfigured").
+  const streamAfter = await pullProdStream(runStartedAt);
+  add('the prod audit-stream endpoint is alive and configured',
+    streamAfter.ok,
+    streamAfter.ok
+      ? `storage=${streamAfter.storage} · ${streamAfter.entries.length} entr(y|ies) in this run's window`
+        + ` (this run posts to the listener, so 0 is expected)`
+      : `unreachable: ${streamAfter.reason}`,
+    1);
+  void streamBefore;
+
   // 3. ONE DEPTH
   // SCOPED TO THE TURN LANES. The contradiction was between the hint read and
   // the grading read on ONE board; other lanes (Play's prefetch, the eval bar)
@@ -307,6 +407,7 @@ const main = async () => {
   await writeFile(join(OUT, 'report.json'), JSON.stringify(report, null, 2));
   await writeFile(join(OUT, 'audit-log.json'), JSON.stringify(log, null, 2));
   await browser.close();
+  await listener.stop();
 
   const failed = checks.filter((c) => !c.ok);
   const unexercised = checks.filter((c) => !c.exercised);
