@@ -39,7 +39,24 @@ export function splitSentences(text: string): string[] {
     .split(/(?<=[.!?])\s+(?=[A-Z0-9"'(])/)
     .map((s) => s.trim())
     .filter((s) => s.length > 0);
-  return parts.length > 0 ? parts : [trimmed];
+
+  // A MOVE NUMBER IS NOT A SENTENCE. "That gives ground. 9. Nc3 is better."
+  // breaks after `ground.` and again after `9.`, so the coach speaks a
+  // standalone "9." — caught on prod saying exactly that, out loud, as its own
+  // utterance (2026-08-16 coach-tab audit). Prose is not supposed to carry
+  // move-number prefixes at all (G9.4), but the splitter should not turn one
+  // into a spoken fragment when it slips through: glue a bare number-period
+  // onto the sentence it introduces.
+  const merged: string[] = [];
+  for (const part of parts) {
+    if (/^\d{1,3}\.$/.test(part)) { merged.push(part); continue; }   // hold it
+    const prev = merged[merged.length - 1];
+    if (prev && /^\d{1,3}\.$/.test(prev)) merged[merged.length - 1] = `${prev} ${part}`;
+    else merged.push(part);
+  }
+  // A trailing number-period with nothing to introduce is pure noise — drop it.
+  const cleaned = merged.filter((s) => !/^\d{1,3}\.$/.test(s));
+  return cleaned.length > 0 ? cleaned : [trimmed];
 }
 
 export interface NarrationSegment {

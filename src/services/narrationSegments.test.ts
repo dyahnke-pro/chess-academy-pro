@@ -19,6 +19,23 @@ describe('squaresInText', () => {
 });
 
 describe('splitSentences', () => {
+  // A MOVE NUMBER IS NOT A SENTENCE. Prod caught the coach speaking a
+  // standalone "9." — the splitter had broken "…ground. 9. Nc3 is better."
+  // after BOTH periods.
+  it('does not leave a bare move number as its own utterance', () => {
+    expect(splitSentences('That gives ground. 9. Nc3 is better.'))
+      .toEqual(['That gives ground.', '9. Nc3 is better.']);
+  });
+
+  it('drops a trailing move number that introduces nothing', () => {
+    expect(splitSentences('That gives ground. 9.')).toEqual(['That gives ground.']);
+  });
+
+  it('still splits ordinary sentences that end in a number', () => {
+    expect(splitSentences('You are up by 2.9. Keep pressing.'))
+      .toEqual(['You are up by 2.9.', 'Keep pressing.']);
+  });
+
   it('splits on sentence boundaries, keeps punctuation', () => {
     const out = splitSentences('First idea. Second idea! Third?');
     expect(out).toEqual(['First idea.', 'Second idea!', 'Third?']);
