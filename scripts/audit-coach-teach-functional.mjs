@@ -143,11 +143,37 @@ async function main() {
   record('picker-action-chip', await clickReq('[data-testid="teach-picker-action-quiz"]') && await visible('[data-testid="teach-picker-description"]'), 'tapped Quiz action chip');
 
   // ── B. TEACH (typed verb is fine) → drive the runtime + stages on Vienna ──
-  // Vienna is static → straight to a walkthrough (no broad-family picker trap).
+  //
+  // 🚨 THE VIENNA BRANCHES. This said "Vienna is static → straight to a
+  // walkthrough (no broad-family picker trap)" and then never handled a
+  // picker. It is not static: typing "teach me the Vienna" opens the line
+  // picker with eight variations (Gambit, Frankenstein-Dracula, Paulsen,
+  // Stanley, Copycat…) and the coach says "pick one to dive in deep". Correct
+  // product behaviour, driven by hand on prod to be sure.
+  //
+  // So the audit sat on the picker for 45s, reported `teach-verb-routing:
+  // never started`, and every one of the FOURTEEN downstream steps — narrate,
+  // skip, fork, leaf, stage-menu, quiz, drill, play — came back unreached,
+  // because no lesson was ever running. 16 red rows, one unhandled fork. That
+  // is the exact trap CLAUDE.md names: "a broad family tile opens a variation
+  // picker — the user taps a line; the audit MUST too."
+  //
+  // A real user taps a line, so the audit does. The routing assertion now asks
+  // the honest question — did the typed verb reach EITHER a lesson or the
+  // picker that leads to one — and then it clicks through, exactly as section
+  // D already does for the Sicilian.
   await gotoTeach();
   await ask('teach me the Vienna');
-  const started = await until(async () => ['walkthrough-narrating-panel', 'walkthrough-choose-mode', 'teach-generation-progress'].includes(await phase()), 45000);
-  record('teach-verb-routing', started, started ? 'Vienna walkthrough started' : 'never started');
+  const LESSON_PHASES = ['walkthrough-narrating-panel', 'walkthrough-choose-mode', 'teach-generation-progress'];
+  const routed = await until(async () => [...LESSON_PHASES, 'line-picker'].includes(await phase()), 45000);
+  record('teach-verb-routing', routed, routed ? `typed verb → ${await phase()}` : 'never started');
+  if ((await phase()) === 'line-picker') {
+    const tile = '[data-testid^="line-picker-"]:not([data-testid*="mode"]):not([data-testid="line-picker-dismiss"])';
+    await page.locator(tile).first().waitFor({ state: 'visible', timeout: 10000 }).catch(() => undefined);
+    await clickReq(tile);
+  }
+  const started = await until(async () => LESSON_PHASES.includes(await phase()), 60000);
+  record('teach-verb-lesson-starts', started, started ? 'Vienna walkthrough started' : `stuck at ${await phase()}`);
   // returning-visitor chooser?
   if (await visible('[data-testid="walkthrough-choose-mode"]')) {
     record('returning-visitor-chooser', true, 'chooser shown (Vienna completed)');
