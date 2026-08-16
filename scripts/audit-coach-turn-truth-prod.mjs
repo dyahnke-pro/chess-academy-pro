@@ -1,8 +1,17 @@
 #!/usr/bin/env node
 /**
  * audit-coach-turn-truth-prod — did the 2026-08-16 fixes actually reach a
- * student? Drives a real game on LIVE prod and reads the app's own audit log
- * back out of Dexie to answer three questions with the app's own words.
+ * student? Opens Learn on LIVE prod, starts playing, and reads the app's own
+ * audit log back out of Dexie to answer three questions with the app's own
+ * words.
+ *
+ * NO SETUP, BY INSTRUCTION (David: "just go to learn and make a move. Don't
+ * ask for anything just start playing"). Every contract here lives in a Learn
+ * GAME, and the Learn board is live on a fresh load — so one move is the whole
+ * harness. Earlier versions warmed up on `/coach/play` (silent by contract,
+ * and it never routes through `getAdaptiveMove`) and then typed a lesson
+ * request (narrates with no FEN attached); between them they exercised none of
+ * the three, and said so.
  *
  * WHY DEXIE AND NOT THE AUDIT STREAM. The stream only receives what the app
  * POSTS, and the app only posts when the profile carries `auditStreamSecret`
@@ -45,7 +54,14 @@ import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
-const PLIES = Number(process.env.PLIES || 24);
+// FAR ENOUGH TO REACH THE PHASE THE DEFECT LIVES IN. Both borrow tiers stand
+// down in the opening on purpose (`teachingSourceForBoard`: "in the opening
+// there is no KIND of position yet, only a specific line"), so a short game
+// cannot exercise the piece gate at all — a 14-ply run reported it NOT
+// EXERCISED, correctly. David heard the wrong pieces in a rook ending. The
+// default plays into a middlegame so the tier that produced the bug actually
+// speaks.
+const PLIES = Number(process.env.PLIES || 44);
 const OUT = join('audit-reports', `coach-turn-truth-${new Date().toISOString().replace(/[:.]/g, '-')}`);
 
 const COACH_TURN_DEPTH = 14;   // mirrors src/services/engineConstants.ts
@@ -87,39 +103,31 @@ const main = async () => {
   });
 
   console.log(`[turn-truth] ${BASE} · ${PLIES} plies`);
-  await page.goto(`${BASE}/coach/play`, { waitUntil: 'domcontentloaded', timeout: 120_000 });
-  await page.waitForTimeout(20_000);              // deferred seed + engine warm
 
-  // ── PLAY A REAL GAME. Node-side chess.js mirror picks only legal moves (G3);
-  // the board is driven by clicking squares, exactly as a hand would. The
-  // coach's replies are read back from the app's OWN `coach-turn-checkpoint`
-  // entries — the mechanism `audit-coach-full-games` proved out. Inferring the
-  // reply from the DOM is what made the first run of this script stall after
-  // one move: the mirror never learned it was White's turn again.
-  await clearFirstRunOverlays(page);
-  const playPlies = await playGame(page, PLIES);
-  console.log(`[turn-truth] play: ${playPlies} student moves`);
-
-  // ── AND NOW THE SURFACE THE NARRATION LIVES ON ───────────────────────────
-  // Play is SILENT by contract (CLAUDE.md: it never volunteers a note
-  // mid-game), so neither the piece contract nor the turn-depth contract can
-  // be exercised there — the first run "passed" both on zero samples. David
-  // heard the wrong pieces on LEARN, in a GAME.
+  // ── GO TO LEARN AND PLAY. THAT IS THE WHOLE SETUP ────────────────────────
+  // David 2026-08-16: "just go to learn and make a move. Don't ask for
+  // anything just start playing."
   //
-  // And a game is all it takes: the Learn board is live on a fresh load. An
-  // earlier version of this phase typed "teach me the caro-kann" and drove the
-  // LESSON instead, which narrates through `speakPolly` with no FEN attached —
-  // so the board-anchored check still had nothing to examine, and dutifully
-  // reported NOT EXERCISED. One e2-e4 on the Learn board produces
-  // `voicePackage` and `openingAnnouncement` entries that DO carry their
-  // board. So: play the game.
-  const learnStartedAt = Date.now();
-  console.log('[turn-truth] → /coach/teach, playing on the Learn board');
+  // He is right, and the earlier versions of this script were the long way
+  // round. It opened `/coach/play` first — a surface that is SILENT by
+  // contract and never routes through `getAdaptiveMove`, so it could not
+  // exercise a single one of the three contracts — and then it typed "teach me
+  // the caro-kann" and drove the LESSON, which narrates without a FEN
+  // attached, so the board-anchored check still had nothing to examine.
+  //
+  // All three contracts live in a Learn GAME, and the Learn board is live on a
+  // fresh load. One move is the entire setup: e2-e4 produces an opponent reply
+  // through the rating-limited engine, `voicePackage` / `openingAnnouncement`
+  // lines that carry their board, and the turn's grading read. Nothing to ask
+  // for, nothing to pick, no lesson to request.
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 120_000 });
-  await page.waitForTimeout(15_000);
+  await page.waitForTimeout(20_000);              // deferred seed + engine warm
+  // Not a request — the consent / calibration modals intercept pointer events
+  // until dismissed, so the first click never lands otherwise.
   await clearFirstRunOverlays(page);
-  const learnPlies = await playGame(page, Math.max(8, PLIES));
-  console.log(`[turn-truth] learn: ${learnPlies} student moves`);
+  const learnStartedAt = Date.now();
+  const learnPlies = await playGame(page, PLIES);
+  console.log(`[turn-truth] played ${learnPlies} moves on Learn`);
 
   // ── READ THE APP'S OWN LOG ───────────────────────────────────────────────
   const log = await dumpAudit(page);
@@ -143,12 +151,13 @@ const main = async () => {
   add('the app logged anything at all (guards the guard)', log.length > 0, `${log.length} entries`, log.length);
 
   // 1. STRENGTH
-  // EVIDENCE DIFFERS BY SURFACE, and the first run of this audit failed on
-  // that rather than on the code. `/coach/play` does not route through
-  // `getAdaptiveMove` at all — it has its own fast path — so looking only for
-  // `source=stockfish-timed` there finds nothing and reads like a regression.
-  // Both forms are accepted; what is asserted is that EVERY engine-picked
-  // opponent move says which Elo the engine was limited to.
+  // BOTH FORMS ACCEPTED. Learn picks its opponent move through
+  // `getAdaptiveMove` (`source=stockfish-timed`), while the Play surface uses
+  // its own fast path — a difference that failed an earlier run of this audit
+  // rather than the code. This run only drives Learn, but the check stays
+  // surface-agnostic so pointing it at Play never reads as a regression.
+  // What is asserted either way: EVERY engine-picked opponent move says which
+  // Elo the engine was actually limited to.
   const searches = has(/source=stockfish-(timed|fallback|respawn)|coachTurn\.fastpath/);
   const limited = searches.filter((e) => /UCI_LimitStrength/.test(e.summary ?? ''));
   add('every opponent move says the Elo the engine was limited to',
@@ -229,7 +238,7 @@ const main = async () => {
     realErrors.length ? realErrors.slice(0, 3).map((x) => String(x).slice(0, 100)).join(' | ')
       : `0 real (${throttled.length} explorer 429 ignored as load)`, 1);
 
-  const report = { base: BASE, plies: { play: playPlies, learn: learnPlies }, entries: log.length, checks, lies, depths, consoleErrors: consoleErrors.slice(0, 10), httpFailures: [...new Set(httpFailures)], throttled: throttled.length };
+  const report = { base: BASE, plies: learnPlies, entries: log.length, checks, lies, depths, consoleErrors: consoleErrors.slice(0, 10), httpFailures: [...new Set(httpFailures)], throttled: throttled.length };
   await writeFile(join(OUT, 'report.json'), JSON.stringify(report, null, 2));
   await writeFile(join(OUT, 'audit-log.json'), JSON.stringify(log, null, 2));
   await browser.close();
@@ -240,6 +249,43 @@ const main = async () => {
   if (unexercised.length) console.log(`[turn-truth] NOT PROVEN: ${unexercised.map((c) => c.name).join('; ')}`);
   process.exit(failed.length ? 1 : 0);
 };
+
+/** A plausible club move, not a suicidal one.
+ *
+ *  The first version of this took "mate, else any capture, else the FIRST
+ *  LEGAL MOVE". Off the scripted opening that walks the king up the board —
+ *  a 44-ply run ended after 15 with White's king on e5 — and an absurd
+ *  position is not a test of anything. Worse, it never reached a middlegame,
+ *  and BOTH borrow tiers stand down in the opening by design, so the lane that
+ *  produced David's wrong-piece narration could never speak.
+ *
+ *  No engine here (this is the audit's own side, and an engine call per ply
+ *  would double the run): just enough chess to stay sane — take what is
+ *  free, do not hang the piece you just moved, develop, castle, and leave the
+ *  king alone unless there is nothing else. */
+function bestPlausible(mirror, legal) {
+  const VAL = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+  let best = null;
+  let bestScore = -Infinity;
+  for (const m of legal) {
+    if (m.san.includes('#')) return m;
+    let score = 0;
+    if (m.captured) score += VAL[m.captured] * 10;
+    // Would the moved piece simply be taken back? Cheap SEE stand-in: after
+    // the move, is the destination attacked by the side to move next?
+    const probe = new Chess(mirror.fen());
+    probe.move(m.san);
+    if (probe.isAttacked(m.to, probe.turn())) score -= VAL[m.piece] * 8;
+    if (m.san.startsWith('O-O')) score += 25;
+    if (m.piece === 'k') score -= 40;               // the king stays home
+    if (m.piece === 'q' && mirror.moveNumber() < 12) score -= 12;
+    if ('nb'.includes(m.piece) && /[1-8]/.test(m.from[1]) && !m.captured) score += 6;
+    if (['d4', 'e4', 'd5', 'e5', 'c4', 'c5', 'f4', 'f5'].includes(m.to)) score += 4;
+    if (probe.isCheck()) score += 3;
+    if (score > bestScore) { bestScore = score; best = m; }
+  }
+  return best;
+}
 
 /** Play a real game on whatever coach board is mounted. The Node-side chess.js
  *  mirror only ever picks LEGAL moves (G3) and the board is driven by clicking
@@ -254,10 +300,7 @@ async function playGame(page, plies) {
   for (let i = 0; i < plies && !mirror.isGameOver(); i += 1) {
     const scripted = OPENING[played];
     const legal = mirror.moves({ verbose: true });
-    const pick = (scripted && legal.find((m) => m.san === scripted))
-      || legal.find((m) => m.san.includes('#'))
-      || legal.find((m) => m.captured)
-      || legal[0];
+    const pick = (scripted && legal.find((m) => m.san === scripted)) || bestPlausible(mirror, legal);
     if (!pick) break;
     try {
       await page.locator(`[data-square="${pick.from}"]`).click({ force: true, timeout: 8000 });
