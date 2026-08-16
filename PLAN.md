@@ -136,6 +136,52 @@ REMOVED 2026-08-15 on David's call; these remain)
 
 ---
 
+## 2026-08-16 — WHAT DAVID'S OWN GAME EXPOSED, AND WHAT IS LEFT
+
+He played a full game on Learn, pasted the 300-entry log, and named three
+things: narration calling out wrong pieces, the opponent playing better than
+him, and later — from a second reading — "a lot of suggestions are bad", "the
+useless rook and queen battery on the 8th rank", and "I never heard a tactic
+alert for the opponent when it came to a fork".
+
+**Every one had the same shape: a value already computed, and thrown away
+before it reached the thing that needed it.** That is the pattern to look for
+first on this surface; it has now been the answer six times in one day.
+
+| Defect | Root | Evidence |
+|---|---|---|
+| Sentences about pieces not on the board | Selection asked `namedPiecesExistOnBoard` of `note.plans` — empty on most notes, spoken by no tier — while the student hears `spokenBeatText` | 238 refusals in a 44-ply game → **0**; coverage unchanged (10 boards, 10 offered, 10 kept) |
+| 130 `claim-validator-trip` in a 12-move game | The gate is the tier's SELECTION PREDICATE, so every candidate it passed over logged a trip. 43% of a 300-entry buffer; the visible window was 4 minutes | probes tally silently, one rollup per turn |
+| Opponent "played way better than I was" | `UCI_LimitStrength`/`UCI_Elo` never sent — three mechanisms stood in for a rating | `elo=1320 (requested 1237)` on every opponent move |
+| "Winning the pawn on f5" | Any capture was called a win; nothing asked about defenders. His opponent's bishop on e6 covered f5 | legal-move swap: win / trade / no claim |
+| "Your strongest reply is Be3" | MultiPV 3 runs and the runner-up was discarded, so a 10-18cp spread was spoken as a superlative | 175/169/158 at d14, top two swap by d20 → "Two good moves here" |
+| Battery on the 8th rank | `findBatteries` never asked what the battery was aimed at | ray continued past the front piece; his position now yields none |
+| No fork warning | The Learn alert passed `analysis: null`, and the whole forward scan sits behind `if (analysis && …)`. It could only ever see forks that had already landed | `stockfishCache.get` is sync and the depth-14 read was already cached on the unwarned plies |
+
+**STILL OPEN**
+
+1. **"That let them win a rook"** — spoken on a board where he was +1.7 and no
+   line at depth 10/12/14/16/20 wins anyone a rook. Replaying `whatItAllowed`
+   with the engine's real line from that position produces a DIFFERENT and true
+   sentence, so it was fed a stale board or another ply's line. Unrecoverable
+   from his log, because only the sentence was logged. `backwardLook.drawback`
+   now logs `(fenAfter, replyPvUci, cpLoss)` — the beat is a pure function of
+   those three, so the next occurrence replays offline in one call. **Needs one
+   live occurrence; do not guess at it.**
+2. **Relevance, not truth** — the last class standing. "As a rule in these
+   positions: the bishop pins, then trades itself for the knight" on a board
+   with no pin. Names no square, and both pieces exist, so every gate passes
+   it. True somewhere, useless here.
+3. Re-run the 3-instrument prod audit for the whole stack.
+
+**NOT DOING, deliberately:** grading the material claim a second time against
+the engine eval. The swap is legal-move-driven, so it already respects pins,
+checks and blocked recaptures for free; a second opinion computed from evals at
+a different depth would disagree with the first without being better. One
+source of truth.
+
+---
+
 ## OPEN, RANKED
 
 1. ~~**Hand-write the spoken forms**~~ — DONE for every note that can currently
