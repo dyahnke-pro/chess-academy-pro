@@ -1,9 +1,16 @@
 #!/usr/bin/env node
 // Change the price of an App Store subscription, via the App Store Connect API.
 //
-// David 2026-08-16: $7.99/mo → $3.99/mo, and $79.99/yr → $39.99/yr. The yearly
-// is then ~16% off (12 × 3.99 = 47.88 vs 39.99) — his call, made knowing the
-// spread; the cheaper monthly is the lever he wants for attracting users.
+// David 2026-08-16: $7.99/mo → $3.99/mo, and $79.99/yr → $34.99/yr.
+//
+// The yearly target came from him as an EFFECTIVE MONTHLY: "best value should
+// be equal to 2.99/mo". That is $35.88/yr, which is not an Apple tier — Apple
+// prices by tier and they land on .99. $34.99 is the nearest tier AT OR BELOW
+// it: $2.92/mo effective, so the 2.99 claim holds instead of rounding up
+// against the customer. ($35.99 would be $3.00/mo — over the line he drew.)
+//
+// Against $3.99/mo that is 27% off, ~3.2 months free — a "BEST VALUE" badge
+// that means something, where 39.99 was only ~16%.
 //
 // 🔒 DRY RUN BY DEFAULT. This writes to a LIVE store with paying subscribers,
 // and a price is not a thing to discover you got wrong afterwards. Nothing is
@@ -27,7 +34,7 @@
 //   APPLY=1        actually create the prices (default: dry run)
 //   PRESERVE=1     keep existing subscribers on their current price
 //   TERRITORY      base territory to price from (default USA)
-//   MONTHLY_USD / YEARLY_USD   target prices (default 3.99 / 39.99)
+//   MONTHLY_USD / YEARLY_USD   target prices (default 3.99 / 34.99)
 import crypto from 'node:crypto';
 
 const APP = '6776418777';
@@ -38,7 +45,7 @@ const PRESERVE = process.env.PRESERVE === '1';
 /** productId → target price, as a plain number of dollars. */
 const TARGETS = {
   chess_academy_pro_monthly: Number(process.env.MONTHLY_USD || '3.99'),
-  chess_academy_pro_yearly: Number(process.env.YEARLY_USD || '39.99'),
+  chess_academy_pro_yearly: Number(process.env.YEARLY_USD || '34.99'),
 };
 
 const KEY_ID = need('APP_STORE_CONNECT_API_KEY_ID');

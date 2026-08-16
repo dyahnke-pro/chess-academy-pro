@@ -20,9 +20,9 @@ on:
         required: true
         default: '3.99'
       yearly_usd:
-        description: 'Yearly price (USD)'
+        description: 'Yearly price (USD) — 34.99 is $2.92/mo effective, the nearest tier at or below the $2.99/mo target'
         required: true
-        default: '39.99'
+        default: '34.99'
       preserve_existing:
         description: 'Keep CURRENT subscribers on their old price? ("yes" to keep; default migrates them to the cheaper price)'
         required: true
