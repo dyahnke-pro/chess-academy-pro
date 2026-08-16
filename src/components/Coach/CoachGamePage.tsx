@@ -47,6 +47,8 @@ import { useCoachMemoryStore } from '../../stores/coachMemoryStore';
 import { narrateMove } from '../../services/coachAgentRunner';
 import { useSettings } from '../../hooks/useSettings';
 import { getAdaptiveMove, getRandomLegalMove, getTargetStrength, pickTaughtSlip, studentPlayingRating } from '../../services/coachGameEngine';
+import { stockfishCache } from '../../services/stockfishCache';
+import { COACH_TURN_DEPTH } from '../../services/engineConstants';
 import { DEFAULT_TIME_CONTROL_ID, TIME_CONTROLS, getTimeControlById, type ClockState } from '../../services/chessClock';
 import { shouldPersistFinishedGame } from '../../utils/coachGamePersistence';
 import { useChessClock } from '../../hooks/useChessClock';
@@ -1242,13 +1244,26 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
       const exploreFenSideToMove = newFen.split(' ')[1] === 'b' ? 'black' : 'white';
       // Tactical context on the explore-mode reaction — student is
       // sandboxing moves and wants the coach to comment. Tactics
-      // detection runs without analysis (no cached PV at this hot
-      // path); immediate + hanging are still surfaced.
+      // 🚨 SAME AWARENESS AS LEARN, ON DEMAND (David 2026-08-16: "play with
+      // coach needs the same functions as learn, just on an on-demand state…
+      // but the board and coach need the same level of awareness").
+      //
+      // This said "no cached PV at this hot path" and passed null — the exact
+      // premise that made Learn blind to a fork until it had already landed,
+      // because the whole forward scan inside `buildTacticsLiveContext` sits
+      // behind `if (analysis && …)`. The premise is wrong on both surfaces:
+      // `stockfishCache.get` is SYNCHRONOUS and serves a deeper result for a
+      // shallower ask, so the hot path pays nothing to look. A miss returns
+      // null and behaves exactly as before.
+      //
+      // Play stays SILENT by contract — this changes what the coach KNOWS, not
+      // what it volunteers. That distinction is the whole rule: awareness is
+      // identical, only the trigger differs.
       const exploreStudentColor = playerColor === 'white' ? 'w' : 'b';
       const exploreRating = activeProfile?.puzzleRating ?? 1200;
       const exploreTactics = buildTacticsLiveContext(
         newFen,
-        null,
+        stockfishCache.get(newFen, COACH_TURN_DEPTH) ?? null,
         exploreStudentColor,
         exploreRating,
       );

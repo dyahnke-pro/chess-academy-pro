@@ -28,6 +28,7 @@
 import { chromium } from 'playwright';
 import { writeFileSync, mkdirSync } from 'node:fs';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
@@ -63,6 +64,9 @@ async function main() {
   const exe = await resolveChromiumExecutable();
   const browser = await chromium.launch({ args: sandboxLaunchArgs(), executablePath: exe, headless: true });
   const page = await browser.newPage();
+  // No explicit context here — `newPage()` makes its own, so the init
+  // script goes on the page.
+  await page.addInitScript(autoDismissCalibration);
   page.on('pageerror', (e) => console.log(`  [pageerror] ${String(e).slice(0, 140)}`));
 
   // Boot-seed Dexie with the masterclass openings. dataLoader bulk-puts

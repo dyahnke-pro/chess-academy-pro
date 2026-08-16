@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 import { describe, it, expect, vi } from 'vitest';
 import { buildTacticsLiveContext, buildFedTacticsContext, speakDeepestLookahead } from './liveTacticsContext';
 import type { StockfishAnalysis } from '../types';
@@ -335,5 +336,39 @@ describe('the opponent look-ahead is what a null analysis switches off', () => {
     expect(page).toMatch(/stockfishCache\.get\(args\.fenAfterReply, COACH_TURN_DEPTH\)/);
     // And the lane must actually SPEAK an upcoming threat, not merely receive it.
     expect(page).toMatch(/tctx\.threats\.length > 0/);
+  });
+});
+
+// ── PLAY KNOWS WHAT LEARN KNOWS ──────────────────────────────────────────────
+// David 2026-08-16: "play with coach needs the same functions as learn, just on
+// an on-demand state / only when user asks. But the board and coach need the
+// same level of awareness."
+//
+// The two are different rules and only one of them is about silence. Play does
+// not VOLUNTEER — that is locked and unchanged. But it must SEE everything
+// Learn sees, or an answer it gives when asked is worse than Learn's answer to
+// the same board, and the student cannot tell which coach they are talking to.
+//
+// Both surfaces had the same blind spot for the same reason: a `null` analysis
+// passed on the hot path, which switches off the entire forward scan. Learn's
+// was fixed first; this gate keeps them level.
+describe('Play and Learn read the board with the same awareness', () => {
+  it('neither surface passes a null analysis on its live-move path', async () => {
+    const { readFileSync } = await import('node:fs');
+    const learn = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
+    const play = readFileSync('src/components/Coach/CoachGamePage.tsx', 'utf8');
+    // Both must hand the builder a cached read rather than null.
+    expect(learn).toMatch(/buildTacticsLiveContext\(\s*args\.fenAfterReply,\s*cachedForAlert,/);
+    expect(play).toMatch(/stockfishCache\.get\(newFen, COACH_TURN_DEPTH\)/);
+  });
+
+  it('the cache read stays synchronous on both — awareness must not cost a wait', () => {
+    // If either surface ever awaits the engine here, the hot path slows for
+    // every move. The whole reason this is free is that `stockfishCache.get`
+    // answers from memory and serves a deeper result for a shallower ask.
+    const src = readFileSync('src/services/stockfishCache.ts', 'utf8');
+    const get = src.slice(src.indexOf('get(fen: string'), src.indexOf('set(fen: string'));
+    expect(get).not.toMatch(/\bawait\b/);
+    expect(get).not.toMatch(/Promise</);
   });
 });

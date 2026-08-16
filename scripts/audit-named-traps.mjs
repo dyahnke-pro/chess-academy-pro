@@ -17,6 +17,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 
@@ -210,6 +211,7 @@ async function main() {
   const executablePath = await resolveChromiumExecutable(HEADED);
   const browser = await chromium.launch({ headless: !HEADED, executablePath, args: sandboxLaunchArgs() });
   const context = await browser.newContext(sandboxContextOptions());
+  await context.addInitScript(autoDismissCalibration);   // the first-run bubble intercepts every click
   const page = await context.newPage();
   const pageErrors = [];
   page.on('pageerror', (e) => pageErrors.push(String(e)));

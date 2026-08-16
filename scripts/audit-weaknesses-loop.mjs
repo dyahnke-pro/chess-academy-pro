@@ -48,6 +48,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -212,6 +213,7 @@ async function runPass(browser, passIdx) {
     deviceScaleFactor: 2,
     userAgent: 'AuditWeaknessesLoopBot/1.0',
   });
+  await ctx.addInitScript(autoDismissCalibration);   // the first-run bubble intercepts every click
   const page = await ctx.newPage();
   const auditEvents = attachAuditCapture(page);
   const consoleErrors = [];

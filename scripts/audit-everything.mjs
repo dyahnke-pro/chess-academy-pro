@@ -19,6 +19,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { mkdir, writeFile } from 'node:fs/promises';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -500,6 +501,7 @@ async function main() {
       deviceScaleFactor: 2,
       userAgent: 'AuditEverythingBot/1.0',
     });
+  await ctx.addInitScript(autoDismissCalibration);   // the first-run bubble intercepts every click
     await warmup(ctx);
     const results = await runPass(ctx);
     await ctx.close();

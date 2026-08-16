@@ -23,6 +23,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { readFile } from 'node:fs/promises';
 
 const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
@@ -136,6 +137,7 @@ async function openUnlocked(page, id, varCount) {
 async function main() {
   const browser = await chromium.launch({ args: sandboxLaunchArgs(), executablePath: await resolveChromiumExecutable(), headless: true });
   const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(autoDismissCalibration);   // the first-run bubble intercepts every click
   const page = await ctx.newPage();
   const tts = [];
   const pageErrors = [];

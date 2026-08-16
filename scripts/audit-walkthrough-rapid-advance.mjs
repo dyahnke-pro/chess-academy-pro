@@ -23,6 +23,7 @@
 
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const HEADED = process.env.AUDIT_SMOKE_HEADED === '1';
@@ -34,6 +35,7 @@ async function main() {
   const exe = await resolveChromiumExecutable(HEADED);
   const browser = await chromium.launch({ args: sandboxLaunchArgs(), headless: !HEADED, executablePath: exe });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 414, height: 896 }, deviceScaleFactor: 2 });
+  await ctx.addInitScript(autoDismissCalibration);   // the first-run bubble intercepts every click
   const page = await ctx.newPage();
 
   // Track TTS fetch + abort signals

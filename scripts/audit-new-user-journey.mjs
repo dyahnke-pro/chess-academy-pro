@@ -26,6 +26,7 @@
  */
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { readFile } from 'node:fs/promises';
 import { Chess } from 'chess.js';
 
@@ -110,6 +111,7 @@ async function watchGate(id) {
 
 const browser = await chromium.launch({ args: sandboxLaunchArgs(), executablePath: await resolveChromiumExecutable(), headless: true });
 const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(autoDismissCalibration);   // the first-run bubble intercepts every click
 page = await ctx.newPage();
 const pageErrors = [];
 page.on('pageerror', (e) => pageErrors.push(String(e).slice(0, 140)));

@@ -46,6 +46,25 @@ describe('audit scripts can reach prod from the sandbox', () => {
     expect(handRolled, `hand-rolled args omit the proxy + TLS pin: ${handRolled.join(', ')}`).toEqual([]);
   });
 
+  it('every clicking audit neutralises the first-run overlay', () => {
+    // The SECOND thing that stops an audit reaching prod, found the moment the
+    // first was fixed: `audit-coach-tactical-awareness` got through to the page
+    // and then timed out clicking the chat box, because the strength-calibration
+    // bubble is a full-screen role="dialog" that intercepts pointer events on
+    // every fresh context. 36 clicking audits never injected the dismissal.
+    //
+    // `autoDismissCalibration` is CSS-based ON PURPOSE — clicking the skill band
+    // fires an async Dexie write, and in a container where that write stalls the
+    // bubble never detaches, so a band-click alone hangs forever. Any audit that
+    // rolls its own click-to-dismiss is reintroducing that hang.
+    const clicking = driving.filter((f) => /chat-text-input|clickReq|\.click\(/.test(f.src));
+    expect(clicking.length).toBeGreaterThan(50);
+    const missing = clicking
+      .filter((f) => !/autoDismissCalibration|strength-calibration-bubble|skill-band/.test(f.src))
+      .map((f) => f.name);
+    expect(missing, `the first-run bubble will eat their first click: ${missing.join(', ')}`).toEqual([]);
+  });
+
   it('every one resolves the Chromium binary rather than trusting the default', () => {
     // `resolveChromiumExecutable` prefers the FULL chrome when AUDIT_PROXY is
     // set, because headless_shell ignores --ssl-version-max and resets anyway.

@@ -42,6 +42,7 @@
 
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
 import { join } from 'node:path';
@@ -852,7 +853,7 @@ async function main() {
   // (touch enabled + iOS UA + iPhone viewport). The latter catches
   // Safari quirks: AudioContext gates, ManagedMediaSource paths,
   // overflow:scroll touch behaviors.
-  function buildContext(roundN) {
+  async function buildContext(roundN) {
     const isIOSRound = roundN % 2 === 0;
     const ctxOpts = {
       viewport: isIOSRound ? { width: 390, height: 844 } : { width: 414, height: 896 },
@@ -863,7 +864,12 @@ async function main() {
         ? 'Mozilla/5.0 (iPhone; CPU iPhone OS 17_4 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/17.0 Mobile/15E148 Safari/604.1'
         : undefined,
     };
-    return browser.newContext(ctxOpts);
+    const built = await browser.newContext(ctxOpts);
+    // Injected in the FACTORY, not at one call site — this audit rebuilds
+    // its context per round, and a per-round fresh context re-arms the
+    // first-run bubble that intercepts every click.
+    await built.addInitScript(autoDismissCalibration);
+    return built;
   }
 
   // Initial context (round 1, desktop-mobile)

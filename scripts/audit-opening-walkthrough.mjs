@@ -10,6 +10,7 @@
 
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 
 const URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
 const ID = process.env.AUDIT_OPENING ?? 'vienna-game';
@@ -60,6 +61,7 @@ async function main() {
   const exe = await resolveChromiumExecutable();
   const browser = await chromium.launch({ args: sandboxLaunchArgs(), executablePath: exe, headless: true });
   const ctx = await browser.newContext(sandboxContextOptions());
+  await ctx.addInitScript(autoDismissCalibration);   // the first-run bubble intercepts every click
   const page = await ctx.newPage();
   const tts = [];
   const errs = [];
