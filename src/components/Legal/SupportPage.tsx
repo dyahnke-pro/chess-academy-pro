@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { PRICE_MONTHLY, TRIAL_DAYS } from '../../data/pricing';
 
 /**
  * Support page — reachable at /support on the production domain so it doubles
@@ -29,9 +30,9 @@ export function SupportPage(): JSX.Element {
 
         <Section title="Managing your subscription">
           <p>
-            Chess Academy Pro is a $7.99/month subscription with a 7-day free
-            trial for new subscribers. You manage or cancel it in your store
-            account, not in the app:
+            Chess Academy Pro is a {PRICE_MONTHLY}/month subscription with a{' '}
+            {TRIAL_DAYS}-day free trial for new subscribers. You manage or cancel
+            it in your store account, not in the app:
           </p>
           <ul className="mt-2 list-disc space-y-1 pl-5">
             <li>

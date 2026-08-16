@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { PRICE_MONTHLY, PRICE_YEARLY, TRIAL_DAYS } from '../../data/pricing';
 
 /**
  * Terms of Service / EULA — reachable at /terms on the production domain so it
@@ -7,9 +8,9 @@ import { Link } from 'react-router-dom';
  * functional Terms + Privacy links wherever an auto-renewable subscription is
  * offered). Standalone route (no app chrome).
  *
- * Keep the subscription terms in sync with the live offering:
- *  - $7.99 / month auto-renewable subscription.
- *  - 7-day free trial for new subscribers; converts to paid unless cancelled.
+ * The subscription terms come from `src/data/pricing.ts` — a comment asking a
+ * human to "keep them in sync with the live offering" is exactly how a Terms
+ * page ends up stating a price the store no longer charges.
  */
 const LAST_UPDATED = 'June 28, 2026';
 const CONTACT_EMAIL = 'dyahnke@gmail.com';
@@ -44,12 +45,12 @@ export function TermsOfServicePage(): JSX.Element {
           <ul className="mt-2 list-disc space-y-2 pl-5">
             <li>
               Chess Academy Pro is offered as an auto-renewable subscription:{' '}
-              <strong>$7.99 per month</strong> or <strong>$79.99 per year</strong>{' '}
+              <strong>{PRICE_MONTHLY} per month</strong> or <strong>{PRICE_YEARLY} per year</strong>{' '}
               (or the equivalent in your local currency as shown in the App at
               purchase). You choose the plan at checkout.
             </li>
             <li>
-              New subscribers may be offered a <strong>7-day free trial</strong>.
+              New subscribers may be offered a <strong>{TRIAL_DAYS}-day free trial</strong>.
               Starting the trial requires confirming the subscription with your
               store account (a payment method on file). If you don't cancel at
               least 24 hours before the trial ends, it automatically converts to

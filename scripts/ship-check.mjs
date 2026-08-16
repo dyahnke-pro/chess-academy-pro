@@ -271,6 +271,9 @@ const GATE_TESTS = [
   // 7 real iOS devices were failing to update because Xcode Cloud and the
   // deploy runner abbreviated the same SHA to different lengths.
   'src/test/otaVersionStable.test.ts',
+  // A price stated in prose drifts the moment the store tier changes — and it
+  // was stated in the Terms of Service, for a product with paying members.
+  'src/data/pricingCopy.test.ts',
   'src/services/tacticsDetector.test.ts',
   'src/services/liveTacticsContext.test.ts',
   // "Your strongest reply" said for a move 10-18cp off the engine's own top
