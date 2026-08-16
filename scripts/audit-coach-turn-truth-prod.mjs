@@ -56,11 +56,10 @@
  *   AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app \
  *   [PLIES=24] node scripts/audit-coach-turn-truth-prod.mjs
  */
-import { chromium } from 'playwright';
 import { Chess } from 'chess.js';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
-import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { launchAuditBrowser } from './audit-lib/engine.mjs';
 import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 import { startAuditListener, LOCAL_LISTENER_SECRET } from './audit-lib/audit-listener.mjs';
@@ -131,12 +130,15 @@ const main = async () => {
   const runStartedAt = Date.now();
   const streamBefore = await pullProdStream(runStartedAt - 5 * 60_000);
 
-  const browser = await chromium.launch({
-    headless: true,
-    executablePath: await resolveChromiumExecutable(false),
-    args: sandboxLaunchArgs(),
-  });
-  const ctx = await browser.newContext(sandboxContextOptions());
+  // ENGINE IS SELECTABLE (David 2026-08-16: "maybe the app simulator would be
+  // more accurate?"). `AUDIT_ENGINE=webkit` drives REAL WebKit with an iPhone
+  // profile — the same engine family as the WKWebView Capacitor ships, and the
+  // only way from a Linux box to exercise `ManagedMediaSource`, WebKit's
+  // IndexedDB, and the AudioContext gating that Chromium simply does not have.
+  // Default stays Chromium, so nothing changes until a run opts in.
+  const { engine, browser, contextOptions } = await launchAuditBrowser();
+  console.log(`[turn-truth] engine = ${engine}`);
+  const ctx = await browser.newContext(contextOptions);
   await ctx.addInitScript(muteTtsForAudit);       // audits never spend TTS money
   await ctx.addInitScript(autoDismissCalibration);
   // Attach the listener through the legacy localStorage keys, which
