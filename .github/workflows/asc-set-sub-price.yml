@@ -1,0 +1,50 @@
+name: ASC — set subscription price
+
+# Runs the price change where the credentials actually live. A Claude session
+# has no ASC_KEY_P8 / _KEY_ID / _ISSUER_ID, so the change cannot be made from
+# there; these secrets exist in Actions.
+#
+# 🔒 DRY RUN BY DEFAULT. `apply` is a string input defaulting to "no", so
+# clicking Run without thinking produces a report, not a price change on a live
+# store with paying subscribers.
+
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: 'Type "yes" to actually write the prices (anything else = dry run)'
+        required: true
+        default: 'no'
+      monthly_usd:
+        description: 'Monthly price (USD)'
+        required: true
+        default: '4.99'
+      yearly_usd:
+        description: 'Yearly price (USD)'
+        required: true
+        default: '39.99'
+      preserve_existing:
+        description: 'Keep CURRENT subscribers on their old price? ("yes" to keep; default migrates them to the cheaper price)'
+        required: true
+        default: 'no'
+
+jobs:
+  set-price:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Set subscription price
+        env:
+          APP_STORE_CONNECT_API_KEY: ${{ secrets.APP_STORE_CONNECT_API_KEY }}
+          APP_STORE_CONNECT_API_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
+          APP_STORE_CONNECT_API_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
+          MONTHLY_USD: ${{ inputs.monthly_usd }}
+          YEARLY_USD: ${{ inputs.yearly_usd }}
+          # Only the exact string "yes" applies. Anything else — including a
+          # typo, or "true" — stays a dry run.
+          APPLY: ${{ inputs.apply == 'yes' && '1' || '0' }}
+          PRESERVE: ${{ inputs.preserve_existing == 'yes' && '1' || '0' }}
+        run: node scripts/ci/asc-set-sub-price.mjs
