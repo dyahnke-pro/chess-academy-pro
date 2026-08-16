@@ -41,7 +41,12 @@ npm run build
 # (scripts/ci/publish-ota-bundle.mjs) — a fresh install won't redundantly
 # re-download the bundle it already ships with. Read by capacitor.config.ts
 # CapacitorUpdater.version, baked into the native project by `cap sync`.
-export OTA_BUNDLE_VERSION="$(git -C "$CI_PRIMARY_REPOSITORY_PATH" rev-parse --short HEAD)"
+# --short=8, NOT bare --short: core.abbrev defaults to auto, so git lengthens
+# the SHA when 7 chars are ambiguous. Xcode Cloud and the deploy runner have
+# different object databases, so the same commit was being stamped 7 chars here
+# and 8 there — the device then saw a permanent phantom update. Both sides must
+# pin the SAME length or the comparison is meaningless.
+export OTA_BUNDLE_VERSION="$(git -C "$CI_PRIMARY_REPOSITORY_PATH" rev-parse --short=8 HEAD)"
 echo "OTA_BUNDLE_VERSION=$OTA_BUNDLE_VERSION"
 
 npx cap add ios

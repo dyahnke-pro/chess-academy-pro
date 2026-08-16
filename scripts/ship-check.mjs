@@ -267,6 +267,10 @@ const GATE_TESTS = [
   // ERR_CONNECTION_RESET, which reads as "prod is down, use localhost". 43 of
   // 278 scripts were in that state on 2026-08-16.
   'src/test/auditHarnessReach.test.ts',
+  // The OTA version must mean the same thing on both sides of the comparison.
+  // 7 real iOS devices were failing to update because Xcode Cloud and the
+  // deploy runner abbreviated the same SHA to different lengths.
+  'src/test/otaVersionStable.test.ts',
   'src/services/tacticsDetector.test.ts',
   'src/services/liveTacticsContext.test.ts',
   // "Your strongest reply" said for a move 10-18cp off the engine's own top

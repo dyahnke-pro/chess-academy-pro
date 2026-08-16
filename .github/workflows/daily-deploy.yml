@@ -179,7 +179,7 @@ jobs:
           [ -f .vercel/.env.production.local ] && . .vercel/.env.production.local
           set +a
           if [ ! -d dist ]; then npm run build; fi
-          node scripts/ci/publish-ota-bundle.mjs "$(git rev-parse --short HEAD)" \
+          node scripts/ci/publish-ota-bundle.mjs "$(git rev-parse --short=8 HEAD)" \
             || echo "::warning::OTA bundle publish failed (non-fatal) — testers stay on their current bundle."
 
       # --- iOS: build once (per-push auto-builds are off) then distribute -----

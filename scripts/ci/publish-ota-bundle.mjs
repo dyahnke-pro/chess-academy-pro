@@ -20,7 +20,21 @@
 import { execSync } from 'node:child_process';
 import { readFileSync, existsSync, rmSync } from 'node:fs';
 
-const version = (process.argv[2] || execSync('git rev-parse --short HEAD').toString().trim()).replace(/[^A-Za-z0-9._-]/g, '');
+// 🚨 PIN THE LENGTH. `git rev-parse --short` obeys core.abbrev, which defaults
+// to AUTO — git lengthens the SHA whenever 7 characters would be ambiguous in
+// that particular object database. Two machines building the SAME COMMIT can
+// therefore mint different version strings: PostHog shows f929e5b vs f929e5b3,
+// 90c89ee vs 90c89ee5, 7ba2cf9 vs 7ba2cf96 in the wild.
+//
+// The device compares version STRINGS, so that mismatch reads as "an update is
+// available" for the bundle it is already running — and the blob path is
+// `ota/bundles/<version>.zip`, so the URL it then fetches is for a version that
+// was never uploaded under that name. 10 `ota_download_failed` across 7 real
+// iOS devices in 7 days, with rows where running == updateTo.
+//
+// --short=8 is explicit and stable across machines. Devices currently on a
+// 7-char version take one real update and are then consistent forever.
+const version = (process.argv[2] || execSync('git rev-parse --short=8 HEAD').toString().trim()).replace(/[^A-Za-z0-9._-]/g, '');
 const DIST = 'dist';
 const ZIP = `ota-bundle-${version}.zip`;
 
