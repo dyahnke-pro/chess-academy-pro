@@ -97,23 +97,43 @@ const main = async () => {
     const sub = subs.find((s) => s.attributes.productId === productId);
     if (!sub) { console.log(`⏭  ${productId} — not found on this app, skipping`); continue; }
 
-    // 2. Current price, so the change is legible rather than asserted.
-    const cur = await api('GET', `/v1/subscriptions/${sub.id}/prices?limit=200&include=subscriptionPricePoint,territory`);
+    // 2. Current price — for THIS territory. The prices endpoint returns every
+    //    territory Apple sells in, so taking the first included price point
+    //    reports some other market's number as if it were ours. The first dry
+    //    run did exactly that and claimed "currently 29.99", which is not what
+    //    anyone pays here. Filter, then read.
+    const cur = await api('GET',
+      `/v1/subscriptions/${sub.id}/prices?filter[territory]=${TERRITORY}&limit=200&include=subscriptionPricePoint`);
     const curPoint = (cur.j.included || []).find((i) => i.type === 'subscriptionPricePoints');
-    console.log(`${productId}: currently ${curPoint?.attributes?.customerPrice ?? 'unknown'} → target ${usd.toFixed(2)}`);
+    console.log(`${productId}: currently ${curPoint?.attributes?.customerPrice ?? 'unknown'} ${TERRITORY} → target ${usd.toFixed(2)}`);
 
     // 3. Resolve the price POINT. Apple prices by tier, not by arbitrary
     //    number, so the target has to match a real point in this territory —
     //    asking for 3.99 when the tier is 3.99 is fine, asking for 3.98 is not.
-    const pts = await api('GET',
-      `/v1/subscriptions/${sub.id}/pricePoints?filter[territory]=${TERRITORY}&limit=200&include=territory`);
-    if (pts.status >= 400) fail(`pricePoints ${pts.status} ${JSON.stringify(pts.j).slice(0, 300)}`);
-    const match = (pts.j.data || []).find((p) => Number(p.attributes.customerPrice) === usd);
+    //
+    //    PAGINATE. A single limit=200 page is not the whole ladder: the yearly
+    //    subscription's tiers ran past it, so 34.99 came back "not a tier" AND
+    //    the nearby-tier hint came back empty — a failure that told us nothing,
+    //    because the answer was on page two.
+    const pricePoints = [];
+    let next = `/v1/subscriptions/${sub.id}/pricePoints?filter[territory]=${TERRITORY}&limit=200`;
+    while (next) {
+      const page = await api('GET', next);
+      if (page.status >= 400) fail(`pricePoints ${page.status} ${JSON.stringify(page.j).slice(0, 300)}`);
+      pricePoints.push(...(page.j.data || []));
+      const link = page.j.links?.next;
+      next = link ? link.replace('https://api.appstoreconnect.apple.com', '') : null;
+    }
+    const priceOf = (p) => Number(p.attributes.customerPrice);
+    const match = pricePoints.find((p) => priceOf(p) === usd);
     if (!match) {
-      const near = (pts.j.data || [])
-        .map((p) => Number(p.attributes.customerPrice))
-        .filter((n) => Math.abs(n - usd) < 1.5).sort((a, b) => a - b);
-      fail(`${productId}: no ${TERRITORY} price point at ${usd.toFixed(2)} — nearby tiers: ${near.join(', ') || 'none returned'}`);
+      // Show the real ladder around the target rather than a fixed ±1.50
+      // window that can legitimately contain nothing — the point of failing
+      // here is to say what to ask for instead.
+      const sorted = [...pricePoints].sort((a, b) => priceOf(a) - priceOf(b));
+      const i = sorted.findIndex((p) => priceOf(p) > usd);
+      const around = (i < 0 ? sorted.slice(-6) : sorted.slice(Math.max(0, i - 3), i + 3)).map(priceOf);
+      fail(`${productId}: no ${TERRITORY} price point at ${usd.toFixed(2)} — ${pricePoints.length} tiers exist; nearest: ${around.join(', ') || 'none'}`);
     }
     console.log(`   price point ${match.id} = ${match.attributes.customerPrice} ${TERRITORY}`);
 
