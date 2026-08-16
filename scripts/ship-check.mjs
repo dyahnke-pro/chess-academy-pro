@@ -247,6 +247,11 @@ const GATE_TESTS = [
   // the engine, and the hint lane grading the student at a different depth
   // than it advised at. Each passed every existing test.
   'src/services/coachTurnTruth.test.ts',
+  // …and the ROOT of the first of those (David: "good that gates work, but fix
+  // at the root"). The gate refused 238 piece-false sentences in one prod game;
+  // this asserts selection stops offering them, so the gate goes back to being
+  // the backup that never fires.
+  'src/services/noteSelectionPieceTruth.test.ts',
   // Was red on `main` and nobody saw it, because it was in no gate list.
   'src/services/hintLaneCoverage.test.ts',
   // ── WEAKNESS-LOOP / BUCKET-DELIVERY GATES (David 2026-07-06 "log and audit the buckets"). ──

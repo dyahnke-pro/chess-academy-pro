@@ -151,7 +151,7 @@ import { buildForkTalk, type ForkTalk } from '../../services/forkTalk';
 import { forkOfferAt } from '../../services/forkNarration';
 import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
-import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText, notesForOpening } from '../../services/danyaTeachingService';
+import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText, notesForOpening, noteSpeaksOnlyPiecesOnBoard } from '../../services/danyaTeachingService';
 import { secondarySupportNotes } from '../../services/secondaryCorpora';
 import { bakedTeachingForPly, bakedSpineNextMove } from '../../services/bakedWalkthroughNarration';
 import { framedOpponentPlan } from '../../services/opponentVoice';
@@ -6063,10 +6063,16 @@ export function CoachTeachPage(): JSX.Element {
         // corpus note against it selects on the word "pawn". Naming the
         // placeholder is fine and useful; attaching teaching to it is not,
         // because there is no opening yet for the teaching to be about.
+        // "Key idea" is opening-level teaching, not a board claim — but the
+        // student still hears it over a board, and a refinement fires deep in
+        // a game. Piece-truth is the one board test it has to pass, so take
+        // the first note that can honestly be said HERE rather than the first
+        // note at all.
         const ideaNote = isGenericOpeningName(det.name)
           ? undefined
-          : (notesForOpening(det.name, 1)[0]
-            ?? secondarySupportNotes({ openingName: det.name, maxNotes: 1 })[0]);
+          : (notesForOpening(det.name, 8).find((n) => noteSpeaksOnlyPiecesOnBoard(n, args.fenAfterReply))
+            ?? secondarySupportNotes({ openingName: det.name, maxNotes: 8 })
+              .find((n) => noteSpeaksOnlyPiecesOnBoard(n, args.fenAfterReply)));
         const idea = ideaNote ? spokenBeatText(ideaNote) : '';
         announceLine = (firstResolve
           ? `This game is now the ${det.name}.`
@@ -7571,10 +7577,13 @@ export function CoachTeachPage(): JSX.Element {
                         // both sites build this sentence, so a fix applied to
                         // one of them is a fix the student still hears the bug
                         // from on the other.
+                        // Same piece-truth filter as the instant lane above —
+                        // both sites build this sentence, so both owe it.
                         const ideaNote = isGenericOpeningName(det.name)
                           ? undefined
-                          : (notesForOpening(det.name, 1)[0]
-                            ?? secondarySupportNotes({ openingName: det.name, maxNotes: 1 })[0]);
+                          : (notesForOpening(det.name, 8).find((n) => noteSpeaksOnlyPiecesOnBoard(n, probe.fen()))
+                            ?? secondarySupportNotes({ openingName: det.name, maxNotes: 8 })
+                              .find((n) => noteSpeaksOnlyPiecesOnBoard(n, probe.fen())));
                         const idea = ideaNote ? spokenBeatText(ideaNote) : '';
                         // SPEAKABLE — on a gate fallback this string IS the
                         // voice (David heard the old "mention the new name in

@@ -132,6 +132,7 @@ REMOVED 2026-08-15 on David's call; these remain)
 | No-dead-lanes gate in ship-check | 10 lanes + all 13 package ranks |
 | Move-order arrows | dt-48c draws 6 arrows instead of 6 SANs in audio |
 | Audit instrument (was measuring raw corpus, not the bake) | 0 → 10 marks matched on prod |
+| **Selection asked its piece-truth question of `plans`** — a field most notes leave empty and no tier speaks, while the student hears `spokenBeatText`. The gate caught them (238 refusals in one 44-ply game); nothing stopped them being offered. | `noteSpeaksOnlyPiecesOnBoard` in `phaseFits` + structure + transition + both "Key idea" sites. Priced: 10 boards, 10 offered, **10 kept, 0 refused, 0 silent** — the tier finds a true note instead of going quiet. Gate `noteSelectionPieceTruth.test.ts` (6 real failures without the fix). |
 
 ---
 

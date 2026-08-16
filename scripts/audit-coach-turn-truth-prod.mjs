@@ -179,23 +179,35 @@ const main = async () => {
     `${spoken.length} spoken lines checked, ${lies.length} naming an absent piece`,
     spoken.length);
 
-  // 2b. THE GATE ITSELF, LIVE. The board-anchored check above needs a spoken
-  // line that carries a FEN, and those come only from Learn's IN-GAME lanes
-  // (trackA / voicePackage / hintRegister) — the flow David was in. This
-  // harness cannot reach the in-game playout yet, so that check reports NOT
-  // EXERCISED rather than green. What CAN be proven from any narrating
-  // surface is that the piece gate is running in the shipped build at all:
-  // its summary now names both classes, and the old build could not emit that
-  // wording. Weaker evidence, honestly labelled.
+  // 2b. THE GATE IS THE BACKUP, NOT THE MECHANISM.
+  //
+  // The first run of this audit asserted `gateTrips.length > 0` — it wanted to
+  // SEE the gate work — and it did: 238 piece-false sentences refused in one
+  // 44-ply game. David's read of that number was the right one ("good that
+  // gates work, but fix at the root"). A gate firing hundreds of times a game
+  // means something upstream is offering hundreds of sentences about pieces
+  // that are not there, which is the disease G0 names.
+  //
+  // The root was the FIELD: every selection tier asked `namedPiecesExistOnBoard`
+  // of `n.plans` — empty on most notes, spoken by no tier — while the student
+  // hears `spokenBeatText`. Selection asks of the spoken form now.
+  //
+  // So the expectation inverts. Zero trips is the GOAL, not a failure to
+  // observe: check 2 above already proves the surface narrated and that none
+  // of it named an absent piece. What fails here is the disease signature —
+  // the gate doing the work selection should have done.
   const gateTrips = has(/borrowedTeachingGate/);
   const newFormat = gateTrips.filter((e) => /naming pieces it does not have/.test(e.summary ?? ''));
   const piecesDropped = gateTrips
     .map((e) => Number(/(\d+) naming pieces/.exec(e.summary ?? '')?.[1] ?? 0))
     .reduce((a, b) => a + b, 0);
-  add('the piece gate is running in the shipped build',
-    gateTrips.length > 0 && newFormat.length === gateTrips.length,
-    `${newFormat.length}/${gateTrips.length} trips report both classes · ${piecesDropped} piece-false sentence(s) refused`,
-    gateTrips.length);
+  add('selection, not the gate, is keeping piece-false teaching out',
+    newFormat.length === gateTrips.length && piecesDropped <= spoken.length,
+    gateTrips.length === 0
+      ? `gate never fired across ${spoken.length} spoken lines — selection refused upstream`
+      : `${piecesDropped} piece-false sentence(s) refused vs ${spoken.length} spoken`
+        + ` (was 238 vs 49 on build 6a92b06) · ${newFormat.length}/${gateTrips.length} trips report both classes`,
+    spoken.length);
 
   // 3. ONE DEPTH
   // SCOPED TO THE TURN LANES. The contradiction was between the hint read and

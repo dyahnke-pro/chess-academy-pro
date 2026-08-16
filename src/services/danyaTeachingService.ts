@@ -586,7 +586,11 @@ export function teachingSourceForBoard(
     && (!boardPhase || note.phase === 'concept' || note.phase === boardPhase)
     && notePhaseMatchesBoardWords(note, boardPhase)
     && noteRecommendsALegalMove(note, fen)
-    && noteDescribesPosition(note, fen);
+    && noteDescribesPosition(note, fen)
+    // …and the pieces its SPOKEN form names are on the board. The other four
+    // read `explains`/`teaches`/`plans`; this one reads what gets said, which
+    // is where "the bishop pins the rook" reached a board with no bishop.
+    && noteSpeaksOnlyPiecesOnBoard(note, fen);
   // GAP TIER — an opening the primary corpus never covers still gets a note in
   // the FACTS PACKAGE, so the coach can teach its ideas instead of going quiet.
   //
@@ -928,6 +932,7 @@ export function transitionTeachingSourceForGame(args: {
         accept: (n) => {
           if (!usable(n)) return false;
           if (!namedPiecesExistOnBoard(n.plans ?? '', boardFen)) return false;
+          if (!noteSpeaksOnlyPiecesOnBoard(n, boardFen)) return false;
           try {
             return validateBoardClaims(`${n.explains} ${n.teaches} ${n.plans}`, boardFen).violations.length === 0;
           } catch { return false; }
@@ -1006,6 +1011,22 @@ export function namedPiecesExistOnBoard(text: string, fen: string): boolean {
   return true;
 }
 
+/** The same question, asked of the words that actually leave the app.
+ *
+ *  🚨 THE FIELD WAS WRONG, NOT THE TEST (David 2026-08-16: "Good that gates
+ *  work, but fix at the root"). Every selection tier called
+ *  `namedPiecesExistOnBoard(n.plans, fen)` — and `plans` is a field most notes
+ *  leave empty and NO tier speaks. What the student hears is `spokenBeatText`:
+ *  the baked spoken form when there is one, the pruned `explains` otherwise.
+ *  So the ladder asked its truth question of a string nobody says, passed the
+ *  note, and left the chokepoint to refuse it. One 44-ply prod game refused 238
+ *  sentences that way — a gate firing hundreds of times a game is the disease
+ *  G0 names, not the cure. Selection owns this now; the gate goes back to being
+ *  the backup that should never fire. */
+export function noteSpeaksOnlyPiecesOnBoard(note: DanyaNote, fen: string): boolean {
+  return namedPiecesExistOnBoard(spokenBeatText(note), fen);
+}
+
 /** Notes whose TAUGHT STRUCTURE matches the live position, regardless of
  *  opening — deterministic transfer. Excludes exact-position hits (the FEN
  *  tier owns those) and drops any note making a claim that is false on THIS
@@ -1017,7 +1038,7 @@ export function namedPiecesExistOnBoard(text: string, fen: string): boolean {
 function noteClaimsHoldOnBoard(n: DanyaNote, fen: string): boolean {
   try {
     if (validateBoardClaims(`${n.explains} ${n.teaches} ${n.plans}`, fen).violations.length > 0) return false;
-    return namedPiecesExistOnBoard(n.plans ?? '', fen);
+    return namedPiecesExistOnBoard(n.plans ?? '', fen) && noteSpeaksOnlyPiecesOnBoard(n, fen);
   } catch {
     return false;
   }
@@ -1046,6 +1067,8 @@ export function notesForStructure(fen: string, maxNotes = Infinity): DanyaNote[]
     try {
       if (validateBoardClaims(text, fen).violations.length > 0) continue;
       if (!namedPiecesExistOnBoard(n.plans ?? '', fen)) continue;
+      // …and of the spoken form, which is the string the student hears.
+      if (!noteSpeaksOnlyPiecesOnBoard(n, fen)) continue;
     } catch { continue; }
     scored.push({ n, score });
   }
