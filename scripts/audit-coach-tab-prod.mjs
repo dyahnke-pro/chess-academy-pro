@@ -335,6 +335,30 @@ async function main() {
     console.log(`   learn · ${row.id}: ${grounded ? 'grounded' : (r.ok ? `STOCK/thin ("${r.text.slice(0, 70)}")` : `no reply (${r.why})`)}`);
   }
 
+  // ── ONE POSITION, ONE ASSESSMENT. No move is played between the questions
+  //    above, so every answer that quotes a number is describing the SAME
+  //    board. Two answers that disagree about who is winning cannot both be
+  //    right, and the student is told both within a few seconds of each other
+  //    — which is precisely the "a lot of suggestions are bad" complaint.
+  //    Graded as a spread in pawns, so a settling engine (0.3 → 0.5) does not
+  //    trip it but 4.9-vs-0.5 does.
+  const evalClaims = [];
+  for (const [id, a] of Object.entries(learnAnswers)) {
+    const m = /(-?\d+(?:\.\d+)?)\s*(?:points?|pawns?)/i.exec(a.text ?? '');
+    if (!m) continue;
+    // Normalise to "how far from equal", since the wording carries the side
+    // ("Black is winning by 4.9" vs "a small edge to you, 0.5").
+    evalClaims.push({ id, mag: Math.abs(Number(m[1])), text: (a.text ?? '').slice(0, 90) });
+  }
+  if (evalClaims.length < 2) unproven('Learn: the answers agree about who is winning', `${evalClaims.length} answer(s) quoted a number — need 2 to compare`);
+  else {
+    const mags = evalClaims.map((e) => e.mag);
+    const spread = Math.max(...mags) - Math.min(...mags);
+    if (spread > 1.5) fail('Learn: the answers agree about who is winning',
+      `${spread.toFixed(1)} pawns apart on ONE position — ${evalClaims.map((e) => `${e.id}="${e.text}"`).join(' | ')}`);
+    else pass('Learn: the answers agree about who is winning', `${evalClaims.length} numeric answer(s), spread ${spread.toFixed(1)} pawns`);
+  }
+
   // ── Contract A — a tactic on the board is detected AND spoken.
   const learnEvents = listener.getCapturedEvents();
   const learnSpoken = spokenOf(learnEvents);
