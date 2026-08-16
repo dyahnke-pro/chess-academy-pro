@@ -293,10 +293,37 @@ export function gradeNarrationText(
  *  borrow legitimate and is exactly what makes the squares dangerous — the
  *  sentence reads as a generalization right up to the square the student then
  *  goes looking for. */
+/** Candidate notes rejected while SEARCHING, since the last rollup. */
+let probeRejects = 0;
+let probeSentences = 0;
+
+/** Take and reset the search-probe tally, for one rollup line per turn. */
+export function takeBorrowedProbeStats(): { notes: number; sentences: number } {
+  const out = { notes: probeRejects, sentences: probeSentences };
+  probeRejects = 0;
+  probeSentences = 0;
+  return out;
+}
+
 export function gradeBorrowedTeaching(
   text: string | undefined,
   fen: string | null | undefined,
   source: string,
+  /**
+   * 🚨 A SEARCH PROBE IS NOT A GATE TRIP (David's prod log, 2026-08-16).
+   *
+   * The teaching tier passes this function IN as its selection predicate, so
+   * it runs once per CANDIDATE — and every candidate with a false sentence
+   * emitted a `claim-validator-trip`. His log came back 130 of them in a
+   * twelve-move game: 43% of a 300-entry rolling buffer, which cut the window
+   * he could actually see down to four minutes, and read as though the coach
+   * had been caught out 130 times. It had not. Those are notes the search
+   * looked at and passed over — the tier working.
+   *
+   * A trip is only a trip when the note was CHOSEN and the student lost a
+   * sentence from what was said. Probes tally into one rollup line instead.
+   */
+  opts?: { probe?: boolean },
 ): string {
   if (!text || !text.trim()) return '';
   if (!fen) return text;
@@ -312,7 +339,10 @@ export function gradeBorrowedTeaching(
       strictHypotheticals: true,
       requireNamedPiecesPresent: true,
     });
-    if (res.dropped.length > 0) {
+    if (res.dropped.length > 0 && opts?.probe) {
+      probeRejects += 1;
+      probeSentences += res.dropped.length;
+    } else if (res.dropped.length > 0) {
       // SAY WHICH KIND. The old line said "naming squares this board does not
       // have" for every drop, so the new class would have been invisible in the
       // stream — and this gate fires ~20 times a ply, which is a lot of log to

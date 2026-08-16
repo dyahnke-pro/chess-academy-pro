@@ -241,7 +241,7 @@ import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
-import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText, gradeBorrowedTeaching } from '../../services/coachAnswerGates';
+import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText, gradeBorrowedTeaching, takeBorrowedProbeStats } from '../../services/coachAnswerGates';
 import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGrounding';
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
@@ -6410,8 +6410,22 @@ export function CoachTeachPage(): JSX.Element {
             // squares true, and the student hears squares. Grading here rather
             // than after selection is what lets the tier keep looking — a note
             // that grades to nothing is skipped, not spoken hollow.
-            && gradeBorrowedTeaching(spokenBeatText(note), args.fenAfterReply, 'coachTeach.teachingTier').length > 0,
+            // `probe` — this call is the SEARCH, not the verdict. See the
+            // parameter's own note: auditing every candidate turned one game
+            // into 130 `claim-validator-trip` entries and ate 43% of the
+            // rolling buffer.
+            && gradeBorrowedTeaching(spokenBeatText(note), args.fenAfterReply, 'coachTeach.teachingTier', { probe: true }).length > 0,
         );
+        const probes = takeBorrowedProbeStats();
+        if (probes.notes > 0) {
+          void logAppAudit({
+            kind: 'claim-validator-trip',
+            category: 'subsystem',
+            source: 'coachTeach.teachingTier.selectionSearch',
+            summary: `search passed over ${probes.notes} candidate note(s) (${probes.sentences} sentence(s) false here) before settling`,
+            fen: args.fenAfterReply,
+          });
+        }
         if (src) {
           const t = gradeBorrowedTeaching(spokenBeatText(src.note), args.fenAfterReply, 'coachTeach.teachingTier');
           if (t.trim()) {

@@ -252,6 +252,9 @@ const GATE_TESTS = [
   // this asserts selection stops offering them, so the gate goes back to being
   // the backup that never fires.
   'src/services/noteSelectionPieceTruth.test.ts',
+  // The audit's own honesty: a candidate the SEARCH passed over is not a gate
+  // trip. 130 of them filled 43% of David's rolling buffer in one game.
+  'src/services/coachAnswerGates.test.ts',
   // Was red on `main` and nobody saw it, because it was in no gate list.
   'src/services/hintLaneCoverage.test.ts',
   // ── WEAKNESS-LOOP / BUCKET-DELIVERY GATES (David 2026-07-06 "log and audit the buckets"). ──
