@@ -465,6 +465,31 @@ function previewToolResult(
  *  2026-07-11 session had "I played f4" hijacked by the training-request
  *  vertical (the block's wording tripped it) and the language misread from
  *  block text. Exported for tests. */
+/**
+ * Is this engine plan about the board the student is looking at?
+ *
+ * Surfaces hand a plan over and the brain used to take it on trust, so a plan
+ * computed several moves earlier flowed into the grounded plan answer and was
+ * narrated against the CURRENT position. The visible result was a coach that
+ * said "your plan: e4, then d4, then Nc3 ... White is slightly better (0.5)"
+ * five moves into a game the engine scored as Black winning by 2.9 — in the
+ * same breath as two other answers that had the position right (2026-08-16
+ * coach-tab audit).
+ *
+ * An UNSTAMPED plan is accepted: `fen` is newly required on the type, and
+ * refusing older shapes would silently drop plans on any surface still
+ * constructing one by hand — a regression dressed as a fix. Once a plan does
+ * carry a position, it must be THIS position.
+ */
+export function enginePlanIsForBoard(
+  plan: { fen?: string } | undefined,
+  boardFen: string | undefined,
+): boolean {
+  if (!plan) return false;
+  if (!plan.fen || !boardFen) return true;
+  return plan.fen === boardFen;
+}
+
 export function stripInjectedBlocks(ask: string): string {
   const idx = ask.search(/\n\n\[[A-Z]/);
   return idx >= 0 ? ask.slice(0, idx).trim() : ask;
@@ -1201,7 +1226,27 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
     // surfaces, and no new engine call on the two that already thread it.
     const bestMoveQuestionEngage = isBestMoveQuestion(askForIntents);
     const hintRequestEngage = isHintRequest(askForIntents);
-    let resolvedEnginePlan = input.liveState.enginePlan;
+    // A PLAN ABOUT ANOTHER POSITION IS NOT A PLAN. Surfaces hand one over and
+    // this used to take it on trust — `if (!resolvedEnginePlan)` short-circuits
+    // the rebuild, so a plan computed several moves ago flowed straight into
+    // `assemblePlanAnswer` and got narrated against the LIVE fen. On 2026-08-16
+    // that told the student "your plan: e4, then d4, then Nc3 … White is
+    // slightly better (0.5)" five moves into a game the engine scored as Black
+    // winning by 2.9, in the same breath as two other answers that had it right.
+    // Dropping the mismatch here means the rebuild below runs and the plan is
+    // recomputed for the board in front of the student — the answer is fixed at
+    // selection rather than checked after the model has already said it (G0).
+    const suppliedPlan = input.liveState.enginePlan;
+    const planMatchesBoard = enginePlanIsForBoard(suppliedPlan, input.liveState.fen);
+    if (suppliedPlan && !planMatchesBoard) {
+      void logAppAudit({
+        kind: 'coach-surface-migrated',
+        category: 'subsystem',
+        source: 'coachService.enginePlan.staleDropped',
+        summary: `engine plan was for another position — rebuilding (plan fen ${suppliedPlan.fen?.split(' ')[0] ?? 'unstamped'} vs board ${input.liveState.fen?.split(' ')[0] ?? 'none'})`,
+      });
+    }
+    let resolvedEnginePlan = planMatchesBoard ? suppliedPlan : undefined;
     // The review threads its STORED analysis (reviewFlaggedMove) — no fresh
     // engine search needed, and on a stalling device engine (iOS ios-native,
     // David 2026-07-21) that search left the Ask silent for 12s+. Time-box the

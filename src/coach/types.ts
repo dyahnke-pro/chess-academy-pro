@@ -320,7 +320,19 @@ export interface LiveState {
    *  what makes it reliable — the brain skipped the tool intermittently.
    *  The play surface computes it for plan turns; quiet otherwise. */
   enginePlan?: {
-    /** Principal variation in SAN from the current FEN, alternating
+    /** THE POSITION THIS PLAN DESCRIBES.
+     *
+     *  Without it a plan is unfalsifiable: surfaces hand one over, the brain
+     *  reuses whatever it was given, and nothing downstream can tell a fresh
+     *  plan from one computed several moves ago. That produced a coach that
+     *  answered "your plan: e4, then d4, then Nc3 … White is slightly better
+     *  (0.5)" on a board five moves deep where the engine had Black winning by
+     *  2.9 — a plan for move one, narrated over the live position, alongside
+     *  two other answers that had the position right (2026-08-16 coach-tab
+     *  audit). Stamping the FEN is what lets a stale plan be DISCARDED at
+     *  selection instead of validated after the fact (G0). */
+    fen: string;
+    /** Principal variation in SAN from `fen`, alternating
      *  sides (~6 plies). `pvSan[0]` is the side-to-move's best move. */
     pvSan: string[];
     /** The side-to-move's best move in UCI (PV[0]) — lets the grounded

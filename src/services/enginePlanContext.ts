@@ -119,6 +119,7 @@ export async function buildEnginePlan(
   if (pvSan.length === 0) return null;
 
   return {
+    fen,                       // the position this plan is about — see LiveState.enginePlan.fen
     pvSan,
     bestMoveUci: uciSeq[0],
     evalCp: analysis.isMate ? null : Math.round(analysis.evaluation),
