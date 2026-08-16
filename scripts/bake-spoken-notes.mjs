@@ -249,7 +249,13 @@ const ADVANCED = [
   'undermin', 'triangulat', 'fortress', 'desperado', 'interference', 'clearance',
   'en passant', 'underpromot', 'zwisch',
 ];
-const saysTempo = (s) => s.includes('tempo') || s.includes('tempi');
+/** WORD BOUNDARIES, because "temporary" is not the chess term "tempo".
+ *  A bare `includes('tempo')` matched "temporary fix" and "temporarily", and
+ *  then demanded the rewrite say tempo — ordering an author to assert a chess
+ *  concept the note never raised, which is exactly the invention every other
+ *  rule here exists to prevent. Caught hand-writing `dt-2yx` ("...Be7 is only a
+ *  temporary fix"); 1,700+ notes in the corpus use the word. */
+const saysTempo = (s) => /\btempo\b|\btempi\b/.test(s);
 
 /** A rewrite that carries a term is fine; a rewrite that carries none of the
  *  one or two the note leaned on has taught the student less than the note did.

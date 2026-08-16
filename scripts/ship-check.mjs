@@ -237,6 +237,11 @@ const GATE_TESTS = [
   // real gate over the real bake (2026-08-08: 342 lines had come back echoing
   // the prompt's own example, turning a Philidor note into skewer prose).
   'src/services/spokenBakeFidelity.test.ts',
+  // The hand-written spoken forms live in a small reviewable file and only
+  // reach a student through the big one. Two files can drift, silently — the
+  // app keeps speaking, just not the reviewed words. This asserts the merge
+  // has been run and every line is in the shipped bake verbatim.
+  'src/services/handwrittenSpoken.test.ts',
   // ── WEAKNESS-LOOP / BUCKET-DELIVERY GATES (David 2026-07-06 "log and audit the buckets"). ──
   'src/services/bucketPipelineAudit.test.ts', // captured answer → right bucket + drill (delivery) + ranking/dedup/SRS (organization)
   'src/hooks/useDiscussionPractice.test.ts',  // faucet: rating-adaptive slip picker, good-move non-blocking line, response logging

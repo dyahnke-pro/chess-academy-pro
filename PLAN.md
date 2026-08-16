@@ -61,6 +61,43 @@ e7…") is PROVEN to fire — heard on prod 2026-08-15, matched by the probe. It
 **no bake entry**, so it currently speaks as raw distilled transcript pruned to
 one sentence. It is the first note to hand-write, and the template for the rest.
 
+### ✅ DONE 2026-08-16 — the three steps, in that order
+
+1. **MEASURED.** `src/services/selectedNotes.report.test.ts` walks every
+   repertoire line through the real splice (`noteAtPosition` → board-truth
+   grade over `spokenBeatText`, exactly what `noteArrowSourceAt` does) and
+   names the ids that speak. A second pass asks the same selector at each
+   note's OWN anchor, which is what catches a note like `dt-48c` — Englund
+   Gambit, no repertoire line plays it, so the first walk never sees it.
+   - 370 distinct notes speak on the lines we ship; **107 had no bake entry.**
+   - 830 of 6,738 anchored notes are selectable at their own anchor; **251
+     unbaked.** Union of the two: **266 notes** speaking raw transcript.
+2. **WROTE all 266 by hand** into `src/data/corpus-spoken-handwritten.json`
+   (+2 more the gate fix below exposed = 268). Every one passes the REAL
+   `gateSpoken`, imported from the bake script rather than copied.
+   `scripts/merge-handwritten-spoken.mjs` (`npm run merge-handwritten`)
+   validates and merges them into the shipped bake; hand-written wins, and the
+   bake script only ever fills gaps, so a later re-bake cannot undo them.
+   - One note is deliberately **silent**: `dt-1ee` is anchored in the Open
+     Sicilian and its prose teaches the Grünfeld. A rewrite would only launder
+     the misfile, so it is marked `unspeakable`. That is PLAN item 2 answered
+     for this one case, by measurement: it is a misfile, not a comparison.
+3. **VERIFIED end-to-end.** Re-running the measurement: **unbaked selected = 0**
+   on both walks, and 102 of the 106 hand-written notes that speak on
+   repertoire lines are spoken VERBATIM. The other 4 lose a sentence to
+   `gradeNarrationText` — the board-truth gate cutting a clause that is not
+   true at that particular ply, which is the system working, not a defect.
+
+**Gate fix found while writing:** `saysTempo` in `gateSpoken` matched
+"temporary" with a bare `includes('tempo')`, then demanded the rewrite say
+tempo — ordering an author to assert a chess concept the note never raised.
+Word boundaries now. It exposed two machine-baked lines that had genuinely
+dropped "compensation"; both were hand-written.
+
+**Gates:** `handwrittenSpoken.test.ts` (in ship-check) fails the build if the
+hand-written file and the shipped bake drift, which is the failure mode that
+would keep the app speaking while nobody hears the reviewed words.
+
 ### The rules a hand-written spoken form must satisfy
 (`gateSpoken` in `scripts/bake-spoken-notes.mjs` — length and move gates were
 REMOVED 2026-08-15 on David's call; these remain)
@@ -100,9 +137,12 @@ REMOVED 2026-08-15 on David's call; these remain)
 
 ## OPEN, RANKED
 
-1. **Hand-write the spoken forms** — the job above. ~4,600 notes lack a bake
-   entry; do NOT attempt all of them. Do the ones measured as *selected* on
-   taught openings first; that is a few dozen and it is what students hear.
+1. ~~**Hand-write the spoken forms**~~ — DONE for every note that can currently
+   be heard (see above). What is left is notes that are NOT selectable today:
+   ~4,600 lack a bake entry, but 5,908 of the 6,738 anchored ones fail
+   selection at their own anchor, so prose for them changes nothing. The next
+   move on coverage is to find out WHY they fail selection (which gate drops
+   them, and whether it should) — a measurement, not a writing job.
 2. **`corpus-position` selecting notes about other positions** — a Najdorf ply
    spoke "…a Fried Liver situation". The exact-tier predicate is already heavily
    guarded, so this needs measurement before touching: it may be a legitimate

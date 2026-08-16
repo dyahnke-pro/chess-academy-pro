@@ -16,6 +16,7 @@
     "test:run": "vitest run",
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
+    "merge-handwritten": "node scripts/merge-handwritten-spoken.mjs",
     "ship-check": "node scripts/ship-check.mjs",
     "ship-check:full": "node scripts/ship-check.mjs --full",
     "ship-check:summary": "node scripts/ship-check.mjs --summary",
