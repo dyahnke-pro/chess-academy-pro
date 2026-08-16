@@ -18,7 +18,7 @@ on:
       monthly_usd:
         description: 'Monthly price (USD)'
         required: true
-        default: '4.99'
+        default: '3.99'
       yearly_usd:
         description: 'Yearly price (USD)'
         required: true

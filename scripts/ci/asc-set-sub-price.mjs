@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 // Change the price of an App Store subscription, via the App Store Connect API.
 //
-// David 2026-08-16: $7.99/mo → $4.99/mo, and $79.99/yr → $39.99/yr. At those
-// numbers the yearly is 33% off (four months free) rather than the ~17% a
-// $3.99 monthly would have given.
+// David 2026-08-16: $7.99/mo → $3.99/mo, and $79.99/yr → $39.99/yr. The yearly
+// is then ~16% off (12 × 3.99 = 47.88 vs 39.99) — his call, made knowing the
+// spread; the cheaper monthly is the lever he wants for attracting users.
 //
 // 🔒 DRY RUN BY DEFAULT. This writes to a LIVE store with paying subscribers,
 // and a price is not a thing to discover you got wrong afterwards. Nothing is
@@ -27,7 +27,7 @@
 //   APPLY=1        actually create the prices (default: dry run)
 //   PRESERVE=1     keep existing subscribers on their current price
 //   TERRITORY      base territory to price from (default USA)
-//   MONTHLY_USD / YEARLY_USD   target prices (default 4.99 / 39.99)
+//   MONTHLY_USD / YEARLY_USD   target prices (default 3.99 / 39.99)
 import crypto from 'node:crypto';
 
 const APP = '6776418777';
@@ -37,7 +37,7 @@ const PRESERVE = process.env.PRESERVE === '1';
 
 /** productId → target price, as a plain number of dollars. */
 const TARGETS = {
-  chess_academy_pro_monthly: Number(process.env.MONTHLY_USD || '4.99'),
+  chess_academy_pro_monthly: Number(process.env.MONTHLY_USD || '3.99'),
   chess_academy_pro_yearly: Number(process.env.YEARLY_USD || '39.99'),
 };
 
@@ -97,7 +97,7 @@ const main = async () => {
 
     // 3. Resolve the price POINT. Apple prices by tier, not by arbitrary
     //    number, so the target has to match a real point in this territory —
-    //    asking for 4.99 when the tier is 4.99 is fine, asking for 4.98 is not.
+    //    asking for 3.99 when the tier is 3.99 is fine, asking for 3.98 is not.
     const pts = await api('GET',
       `/v1/subscriptions/${sub.id}/pricePoints?filter[territory]=${TERRITORY}&limit=200&include=territory`);
     if (pts.status >= 400) fail(`pricePoints ${pts.status} ${JSON.stringify(pts.j).slice(0, 300)}`);
