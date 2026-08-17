@@ -38,8 +38,10 @@ const fenAfter = (sans: string[]): string => {
 };
 
 describe('video-disproved anchors', () => {
-  beforeAll(async () => {
-    await loadFullCorpus();
+  beforeAll(() => {
+    // Synchronous despite the name — the fetched corpora are loaded into the
+    // module registry, not awaited.
+    loadFullCorpus();
   });
 
   it('reports whether the selector speaks each one', () => {
@@ -56,7 +58,7 @@ describe('video-disproved anchors', () => {
       rows.push(
         `${spoke ? 'SPEAKS  ' : 'silent  '} ${a.id} @ ${a.why}`
         + (got ? `  (selector returned ${got.id})` : '  (selector returned nothing)')
-        + (spoke ? `\n     -> "${(spokenBeatText(got!) ?? '').slice(0, 160)}"` : ''),
+        + (got && spoke ? `\n     -> "${(spokenBeatText(got) ?? '').slice(0, 160)}"` : ''),
       );
     }
     // eslint-disable-next-line no-console
