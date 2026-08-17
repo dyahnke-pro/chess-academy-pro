@@ -28,11 +28,11 @@ on:
       cancel_sub:
         description: 'reviewSubmission id to cancel'
         type: string
+        default: ''
       cancel_active:
         description: 'Cancel the in-flight submission without knowing its id'
         type: boolean
         default: false
-        default: ''
       resubmit_sub:
         description: 'reviewSubmission id to (re)submit directly'
         type: string
