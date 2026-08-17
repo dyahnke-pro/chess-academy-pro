@@ -19,14 +19,6 @@
    "forks": 3
   },
   {
-   "videoId": "3Qw4AL8RDOw",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
    "videoId": "5MAKlJpkpsg",
    "eco": "B00",
    "plies": 1,
@@ -65,14 +57,6 @@
    "coverage": 1,
    "subject": false,
    "forks": 0
-  },
-  {
-   "videoId": "Jt5bST3j-Cw",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 2
   },
   {
    "videoId": "Oj04sSCzraE",
@@ -203,36 +187,6 @@
    "forks": 0
   }
  ],
- "Scandinavian Defense: Modern Variation": [
-  {
-   "videoId": "3Qw4AL8RDOw",
-   "eco": "B01",
-   "plies": 4,
-   "coverage": 0.769,
-   "subject": true,
-   "forks": 1
-  }
- ],
- "Scandinavian Defense: Mieses-Kotroc Variation": [
-  {
-   "videoId": "3Qw4AL8RDOw",
-   "eco": "B01",
-   "plies": 4,
-   "coverage": 0.077,
-   "subject": false,
-   "forks": 1
-  }
- ],
- "Scandinavian Defense": [
-  {
-   "videoId": "3Qw4AL8RDOw",
-   "eco": "B01",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  }
- ],
  "Neo-Grünfeld Defense: Classical Variation, Modern Defense": [
   {
    "videoId": "55gXMP9N5sM",
@@ -333,14 +287,6 @@
    "forks": 0
   },
   {
-   "videoId": "_X7t6o3o6JM",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
    "videoId": "dqYU2XP72pM",
    "eco": "A45",
    "plies": 2,
@@ -400,14 +346,6 @@
   },
   {
    "videoId": "W8YPj9QMtEs",
-   "eco": "A40",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "_X7t6o3o6JM",
    "eco": "A40",
    "plies": 1,
    "coverage": 1,
@@ -863,58 +801,6 @@
    "forks": 0
   }
  ],
- "Caro-Kann Defense: Maróczy Variation": [
-  {
-   "videoId": "Jt5bST3j-Cw",
-   "eco": "B12",
-   "plies": 5,
-   "coverage": 0.957,
-   "subject": true,
-   "forks": 2
-  },
-  {
-   "videoId": "UiNSl_OnvDQ",
-   "eco": "B12",
-   "plies": 5,
-   "coverage": 0.864,
-   "subject": true,
-   "forks": 0
-  },
-  {
-   "videoId": "zprg2WbmgzQ",
-   "eco": "B12",
-   "plies": 5,
-   "coverage": 0.893,
-   "subject": true,
-   "forks": 0
-  }
- ],
- "Caro-Kann Defense": [
-  {
-   "videoId": "Jt5bST3j-Cw",
-   "eco": "B10",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 2
-  },
-  {
-   "videoId": "UiNSl_OnvDQ",
-   "eco": "B10",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "zprg2WbmgzQ",
-   "eco": "B10",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  }
- ],
  "Dutch Defense: Staunton Gambit Accepted": [
   {
    "videoId": "LLidbvIUZ5I",
@@ -1067,20 +953,48 @@
    "forks": 5
   }
  ],
+ "Caro-Kann Defense: Maróczy Variation": [
+  {
+   "videoId": "UiNSl_OnvDQ",
+   "eco": "B12",
+   "plies": 5,
+   "coverage": 0.864,
+   "subject": true,
+   "forks": 0
+  },
+  {
+   "videoId": "zprg2WbmgzQ",
+   "eco": "B12",
+   "plies": 5,
+   "coverage": 0.893,
+   "subject": true,
+   "forks": 0
+  }
+ ],
+ "Caro-Kann Defense": [
+  {
+   "videoId": "UiNSl_OnvDQ",
+   "eco": "B10",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "zprg2WbmgzQ",
+   "eco": "B10",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  }
+ ],
  "Rapport-Jobava System": [
   {
    "videoId": "W8YPj9QMtEs",
    "eco": "D01",
    "plies": 5,
    "coverage": 0.727,
-   "subject": true,
-   "forks": 0
-  },
-  {
-   "videoId": "_X7t6o3o6JM",
-   "eco": "D01",
-   "plies": 5,
-   "coverage": 0.983,
    "subject": true,
    "forks": 0
   },
@@ -1099,14 +1013,6 @@
    "eco": "A45",
    "plies": 4,
    "coverage": 0.818,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "_X7t6o3o6JM",
-   "eco": "A45",
-   "plies": 4,
-   "coverage": 0.983,
    "subject": false,
    "forks": 0
   },

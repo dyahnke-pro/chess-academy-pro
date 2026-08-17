@@ -1,0 +1,20 @@
+[
+ {
+  "id": "vn-scandi-modern-bb5-check-costs-the-recapture",
+  "line": "e4 d5 exd5 Nf6 Bb5+ Bd7",
+  "teaches": "A check is worth playing when every legal answer to it costs something. Look at what each reply does to the defender's own pieces before judging the check as slow — the value is not in the check, it is in the awkward square the opponent has to commit to.",
+  "explains": "Blocking on d7 with the bishop is the natural-looking answer and it quietly costs Black the recapture. The bishop now stands between the queen on d8 and the pawn on d5, so the queen can no longer reach it and Black has to win the pawn back with the knight instead. It also takes d7 from the knight on b8, which now has to settle for c6 or a6.",
+  "reasons": [
+   {
+    "kind": "blocks",
+    "from": "d8",
+    "to": "d5"
+   },
+   {
+    "kind": "deprives",
+    "from": "b8",
+    "square": "d7"
+   }
+  ]
+ }
+]

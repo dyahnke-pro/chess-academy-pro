@@ -195,6 +195,14 @@
    "forks": 0
   },
   {
+   "videoId": "3Qw4AL8RDOw",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
    "videoId": "6nEI2p3ftgk",
    "eco": "B00",
    "plies": 1,
@@ -217,6 +225,14 @@
    "coverage": 1,
    "subject": false,
    "forks": 1
+  },
+  {
+   "videoId": "Jt5bST3j-Cw",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
   },
   {
    "videoId": "Ov4J-FZWoQg",
@@ -275,6 +291,14 @@
    "coverage": 0.9,
    "subject": true,
    "forks": 0
+  },
+  {
+   "videoId": "3Qw4AL8RDOw",
+   "eco": "B01",
+   "plies": 4,
+   "coverage": 0.769,
+   "subject": true,
+   "forks": 1
   }
  ],
  "Scandinavian Defense": [
@@ -285,6 +309,24 @@
    "coverage": 1,
    "subject": false,
    "forks": 0
+  },
+  {
+   "videoId": "3Qw4AL8RDOw",
+   "eco": "B01",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "Scandinavian Defense: Mieses-Kotroc Variation": [
+  {
+   "videoId": "3Qw4AL8RDOw",
+   "eco": "B01",
+   "plies": 4,
+   "coverage": 0.077,
+   "subject": false,
+   "forks": 1
   }
  ],
  "Philidor Defense": [
@@ -373,6 +415,14 @@
    "forks": 9
   },
   {
+   "videoId": "_X7t6o3o6JM",
+   "eco": "D01",
+   "plies": 5,
+   "coverage": 0.983,
+   "subject": true,
+   "forks": 0
+  },
+  {
    "videoId": "qN8kNz0_c3s",
    "eco": "D01",
    "plies": 5,
@@ -389,6 +439,14 @@
    "coverage": 1,
    "subject": false,
    "forks": 9
+  },
+  {
+   "videoId": "_X7t6o3o6JM",
+   "eco": "A45",
+   "plies": 4,
+   "coverage": 0.983,
+   "subject": false,
+   "forks": 0
   },
   {
    "videoId": "qN8kNz0_c3s",
@@ -423,6 +481,14 @@
    "coverage": 1,
    "subject": false,
    "forks": 4
+  },
+  {
+   "videoId": "_X7t6o3o6JM",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
   },
   {
    "videoId": "qN8kNz0_c3s",
@@ -597,12 +663,56 @@
    "forks": 4
   },
   {
+   "videoId": "_X7t6o3o6JM",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
    "videoId": "qN8kNz0_c3s",
    "eco": "A45",
    "plies": 2,
    "coverage": 1,
    "subject": false,
    "forks": 4
+  }
+ ],
+ "Caro-Kann Defense: Maróczy Variation": [
+  {
+   "videoId": "Jt5bST3j-Cw",
+   "eco": "B12",
+   "plies": 5,
+   "coverage": 0.957,
+   "subject": true,
+   "forks": 2
+  },
+  {
+   "videoId": "k4T6TJGOSA0",
+   "eco": "B12",
+   "plies": 5,
+   "coverage": 0.932,
+   "subject": true,
+   "forks": 0
+  }
+ ],
+ "Caro-Kann Defense": [
+  {
+   "videoId": "Jt5bST3j-Cw",
+   "eco": "B10",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "k4T6TJGOSA0",
+   "eco": "B10",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
   }
  ],
  "Sicilian Defense: Delayed Alapin Variation": [
@@ -731,26 +841,6 @@
    "coverage": 0.043,
    "subject": false,
    "forks": 7
-  }
- ],
- "Caro-Kann Defense: Maróczy Variation": [
-  {
-   "videoId": "k4T6TJGOSA0",
-   "eco": "B12",
-   "plies": 5,
-   "coverage": 0.932,
-   "subject": true,
-   "forks": 0
-  }
- ],
- "Caro-Kann Defense": [
-  {
-   "videoId": "k4T6TJGOSA0",
-   "eco": "B10",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
   }
  ],
  "Queen's Pawn Game: Chigorin Variation, Alburt Defense": [

@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-17",
- "videosDistilled": 18,
- "noteCount": 48,
+ "videosDistilled": 21,
+ "noteCount": 54,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -45,6 +45,27 @@
    "concepts": [],
    "sources": [
     "yt:358seoKegqA"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-scandi-modern-bb5-check-costs-the-recapture",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "Bb5+",
+    "Bd7"
+   ],
+   "opening": "Scandinavian Defense: Modern Variation",
+   "phase": "opening",
+   "explains": "Blocking on d7 with the bishop is the natural-looking answer and it quietly costs Black the recapture. The bishop now stands between the queen on d8 and the pawn on d5, so the queen can no longer reach it and Black has to win the pawn back with the knight instead. It also takes d7 from the knight on b8, which now has to settle for c6 or a6.",
+   "teaches": "A check is worth playing when every legal answer to it costs something. Look at what each reply does to the defender's own pieces before judging the check as slow — the value is not in the check, it is in the awkward square the opponent has to commit to.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:3Qw4AL8RDOw"
    ],
    "positionSource": "high"
   },
@@ -526,6 +547,53 @@
    "positionSource": "high"
   },
   {
+   "id": "vn-caro-fantasy-strike-the-base-of-the-chain",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "Nd7",
+    "e5",
+    "c5"
+   ],
+   "opening": "Caro-Kann Defense: Maróczy Variation",
+   "phase": "opening",
+   "explains": "With the pawns locked on d5 and e5, the white centre rests on d4, and the pawn arriving on c5 hits exactly that square. The head of the chain on e5 cannot be attacked profitably while it is defended from behind, so play goes after the pawn holding it up instead.",
+   "teaches": "A pawn chain is attacked at its base, not at its head. The front pawn is defended by the one behind it, so hitting the rear pawn is the move that asks a real question — take the base away and everything in front of it is loose.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Jt5bST3j-Cw"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-caro-fantasy-shore-up-the-base-before-it-is-questioned",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "Nd7",
+    "e5",
+    "c5",
+    "c3"
+   ],
+   "opening": "Caro-Kann Defense: Maróczy Variation",
+   "phase": "opening",
+   "explains": "Before this the base on d4 was held only by the queen, which is a defender you would rather not commit so early. The modest pawn move gives d4 a second guard that nothing can harass, so the centre holds and the pieces stay free to develop where they want to go.",
+   "teaches": "When the base of your chain is attacked, add a pawn defender before you add a piece one. A pawn holds the square without being driven off, while a piece tied to defence has to keep standing there and can be chased.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Jt5bST3j-Cw"
+   ],
+   "positionSource": "high"
+  },
+  {
    "id": "vn-alapin-knight-guards-c7",
    "lineSan": [
     "c3",
@@ -762,6 +830,77 @@
    "concepts": [],
    "sources": [
     "yt:Ust1WJO7KQ0"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-jobava-london-knight-first-eyes-the-centre",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nc3"
+   ],
+   "opening": "Rapport-Jobava System",
+   "phase": "opening",
+   "explains": "The knight covers e4, so the pawn is ready to come there next and take the whole centre. That is the threat this move order lives on: an answer that ignores it lets the big centre appear and hands the opponent a game they chose rather than one you did. Meeting it in the centre keeps that push honest, because the pawn arriving on e4 can then simply be taken.",
+   "teaches": "When a knight develops before the centre pawns, look at which pawn break it has just made possible. A quiet-looking developing move can be the one that decides whether your opponent gets to choose their own opening or gets steered into yours.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:_X7t6o3o6JM"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-jobava-london-h5-stops-the-rook-pawn-dead",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "g6",
+    "e3",
+    "Bg7",
+    "h4",
+    "h5"
+   ],
+   "opening": "Rapport-Jobava System",
+   "phase": "opening",
+   "explains": "Once the pawn arrives on h5 the white h-pawn has nowhere to go: its one square is occupied and it cannot capture, so the pawn storm stops without a piece being touched. That is why the attacking side treats this as the main line and starts looking at sacrificing on h5 instead — the pawn alone can no longer make progress.",
+   "teaches": "Against a rook pawn running at a fianchetto, meeting it head on is the move that ends the discussion. A pawn that has been blocked on an open file is not slow — it has no squares at all, and the attacker has to find a different plan or spend pieces.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:_X7t6o3o6JM"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-jobava-london-queen-step-clears-the-castling-path",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "g6",
+    "e3",
+    "Bg7",
+    "h4",
+    "h5",
+    "Nf3",
+    "O-O",
+    "Qd2"
+   ],
+   "opening": "Rapport-Jobava System",
+   "phase": "opening",
+   "explains": "Stepping the queen to d2 empties the last square between king and queen's rook, so castling long becomes available. That is the side the king belongs on here, because the h-pawn has already committed to the attack and going short would put the king behind it. The queen also connects to the bishop on f4, so the move does two jobs.",
+   "teaches": "A quiet queen move is often a castling move. Before reading a developing move as slow, check which squares it empties — the last piece to leave the back rank is what makes the king's journey to the other wing possible.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:_X7t6o3o6JM"
    ],
    "positionSource": "high"
   },
