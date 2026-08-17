@@ -7,6 +7,19 @@
  * wire that does not fire is not a wire, and an audit that asserts an element
  * exists rather than that the teaching arrived is worth nothing.
  *
+ * 🚨 THIS SCRIPT CURRENTLY REPORTS A FALSE NEGATIVE. It has never once been
+ * right: five separate driver faults each made it say "the note never reached
+ * the student" about a product that was working — the chat panel unopened, the
+ * calibration bubble swallowing clicks, the variation picker untapped, a wait
+ * that covered generation instead of the walk, and a search for `teaches` when
+ * the spoken register only ever emits `explains`. Four are fixed; it still does
+ * not drive the walkthrough far enough to reach the plies the notes sit on.
+ *
+ * The claim it was written to make is now proved by `videoNoteSplice.test.ts`,
+ * which runs the same functions the app runs in two seconds and cannot be lied
+ * to by a driver. Fix the walkthrough driving here before trusting this script,
+ * and do NOT read a red from it as evidence against the corpus.
+ *
  * Three instruments together, per G1:
  *   1. Playwright drives /coach/teach on the LIVE prod deployment.
  *   2. The narration listener sidecar captures what the coach actually SPOKE,
@@ -56,9 +69,13 @@ const TARGETS = [
 ].map((t) => {
   const note = bundle.notes.find((n) => n.id === t.id);
   if (!note) throw new Error(`note ${t.id} is not in the shipped bundle`);
-  // A distinctive run of words, long enough that it cannot collide with
-  // generated prose and short enough to survive sentence-level splicing.
-  const phrase = note.teaches.split(/[.!?]/)[0].trim().slice(0, 48).toLowerCase();
+  // FROM `explains`, NOT `teaches`. `spokenBeatText` is explains-only —
+  // teaches/plans reach the model as lesson-level background and never enter
+  // the spoken beat. Searching for the `teaches` text meant hunting a string
+  // the surface cannot emit, so the audit reported the note missing on a page
+  // that may well have been speaking it. The first sentence, because the
+  // splice caps at a sentence boundary.
+  const phrase = note.explains.split(/[.!?:]/)[0].trim().slice(0, 44).toLowerCase();
   return { ...t, phrase, opening: note.opening };
 });
 
