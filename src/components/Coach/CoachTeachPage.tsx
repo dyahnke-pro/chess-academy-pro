@@ -1,3 +1,4 @@
+import { routeStage, type TeachStage } from './teachStageRouting';
 /**
  * CoachTeachPage — dedicated teaching surface using the SAME board
  * primitives as Play with Coach (`/coach/play`). Chess state runs
@@ -3349,58 +3350,6 @@ export function CoachTeachPage(): JSX.Element {
       // walkthrough and go straight to punish lines after their
       // first session?" Each pattern strips the keyword from the
       // input; the cleaned text is then resolved as the opening name.
-      const STAGE_PATTERNS: Array<{
-        regex: RegExp;
-        stage: 'concepts' | 'findMove' | 'drill' | 'punish' | 'play-real';
-      }> = [
-        { regex: /\b(?:drill|practice)\s+(?:the\s+)?/i, stage: 'drill' },
-        { regex: /\b(?:the\s+)?(?:.+?)\s+drill(?:s)?\b/i, stage: 'drill' },
-        { regex: /\bpunish(?:ment)?(?:\s+lines?)?\s+(?:in\s+|for\s+|from\s+)?(?:the\s+)?/i, stage: 'punish' },
-        { regex: /\b(?:the\s+)?(?:.+?)\s+punish(?:ment)?(?:\s+lines?)?\b/i, stage: 'punish' },
-        // TRAPS ARE THE PUNISH STAGE (David 2026-08-02: "Learn with coach
-        // cannot teach traps in x openings. Wire that in. Should be gem
-        // lines."). Nobody asks for "punish lines" — they ask for traps. The
-        // stage they mean already exists and already prefers the curated,
-        // engine-verified gems over the puzzle path (openingGenerator's punish
-        // branch), so this is purely the missing word: with no pattern for it,
-        // "teach me the traps in the Vienna" fell through to the brain, which
-        // is forbidden from inventing chess content and correctly refused.
-        //
-        // Two patterns, mirroring the punish pair, but each matching ONLY the
-        // keyword and its connective — the opening name must survive the strip
-        // to be resolved afterwards.
-        { regex: /\btraps?(?:\s+lines?)?\s+(?:in|for|from|of|against|with)\s+(?:the\s+)?/i, stage: 'punish' },
-        { regex: /\btraps?(?:\s+lines?)?\b/i, stage: 'punish' },
-        { regex: /\b(?:quiz\s+me\s+on|quiz)\s+(?:the\s+)?/i, stage: 'concepts' },
-        { regex: /\b(?:concept(?:\s+check)?|concepts)\s+(?:for\s+|of\s+)?(?:the\s+)?/i, stage: 'concepts' },
-        { regex: /\b(?:find(?:\s+the)?\s+moves?|recognition)\s+(?:in\s+|for\s+)?(?:the\s+)?/i, stage: 'findMove' },
-        // 🔒 "PLAY X AGAINST ME" IS A REQUEST FOR A GAME, NOT A LECTURE
-        // (David 2026-08-09: "Ask it to play a certain opening against you").
-        //
-        // Until now the ONLY route to a game required the literal word
-        // "real" — "play it for real the Vienna". Nobody says that. Driving a
-        // live game on prod, "play the Vienna Gambit against me" resolved the
-        // opening perfectly (score=1.00) and then started a WALKTHROUGH:
-        // "Ready — let's walk through the Vienna Game: Vienna Gambit." The
-        // board never moved because it was waiting to be watched.
-        //
-        // Exactly the same bug as the traps patterns above — "nobody asks for
-        // 'punish lines', they ask for traps… this is purely the missing
-        // word" — one verb further along.
-        //
-        // Each pattern strips only its connective so the opening NAME survives
-        // for resolution: "play the Vienna Gambit against me" → "Vienna
-        // Gambit". Order matters — the against/with-me arm runs first because
-        // it is the most specific.
-        { regex: /\bplay\s+(?:it\s+)?(?:for\s+)?real\s+(?:the\s+)?/i, stage: 'play-real' },
-        // "play the Vienna against me" / "…with me" / "…versus me"
-        { regex: /\b(?:let'?s\s+|can\s+we\s+|could\s+we\s+|i\s+want\s+to\s+|wanna\s+)?play\s+(?:the\s+)?(?=.*\b(?:against|versus|vs\.?|with)\s+(?:me|you)\b)|\s*\b(?:against|versus|vs\.?|with)\s+(?:me|you)\b/gi, stage: 'play-real' },
-        // "play me the Italian" — the coach is the opponent, not the lecturer.
-        { regex: /\bplay\s+me\s+(?:the\s+)?/i, stage: 'play-real' },
-        // "let's play the Caro" / "can we play the London". NOT "play through
-        // the Vienna" — that is a watch ask and keeps its walkthrough.
-        { regex: /\b(?:let'?s|can\s+we|could\s+we|wanna|i\s+want\s+to)\s+play\s+(?!through\b)(?:the\s+)?/i, stage: 'play-real' },
-      ];
       const trimmed = text.trim();
       // MULTI-INTENT FIRST-VERB ROUTING (2026-08-13 audit): "teach me the
       // najdorf and quiz me and show me a trap" must honor the FIRST verb —
@@ -3429,27 +3378,16 @@ export function CoachTeachPage(): JSX.Element {
       // long comment block above `if (!opts?.kickoff)`. Don't
       // re-declare it here; doing so would shadow the outer let and
       // re-introduce the "not defined" pageerror on the brain path.
-      let stageHint:
-        | 'concepts'
-        | 'findMove'
-        | 'drill'
-        | 'punish'
-        | 'play-real'
-        | null = null;
-      let stageStrippedInput = effectiveInput;
-      for (const sp of STAGE_PATTERNS) {
-        const sm = stageStrippedInput.match(sp.regex);
-        if (sm) {
-          stageHint = sp.stage;
-          stageStrippedInput = stageStrippedInput.replace(sp.regex, ' ').replace(/\s+/g, ' ').trim();
-          // "play against me IN the Vienna" leaves "in the Vienna" after the
-          // strip, and the resolver has no opening called "in the" (varied
-          // sweep, run allq-mss6tkuy). A dangling leading preposition is
-          // never part of the name.
-          stageStrippedInput = stageStrippedInput.replace(/^(?:in|with|on|at|using)\s+(?:the\s+)?/i, '').trim();
-          break;
-        }
-      }
+      // Routing lives in `teachStageRouting` so the PICKER'S CONTRACT can be
+      // tested: every picker builds a phrase and submits it as if typed, so a
+      // picker is only as good as the regex its phrasing hits, and nothing was
+      // checking that pairing. Both known failures ("play X against me" started
+      // a walkthrough; "traps in X" fell through to the brain) were one missing
+      // word, invisible until someone drove prod. See teachPickerRouting.test.
+      const routed = routeStage(effectiveInput);
+      let stageHint: TeachStage | null = routed.stage;
+      const stageStrippedInput = routed.remainder;
+
       // THE PICKER'S OFFER IS HONOURED BOTH WAYS. Its acknowledgement says
       // "pick the one you want to play, or just type its name" — and a typed
       // name carries no stage word, so it would have been read as a request to
@@ -3551,8 +3489,16 @@ export function CoachTeachPage(): JSX.Element {
         // Same shape as the deictic case beside it: a remainder that names no
         // opening must resolve to the lesson in front of the student, not to
         // whatever the DB thinks "more" sounds like.
-        const namesNoOpening = /^(?:(?:this|that|the|current|my)\s+)?(?:position|board|game|line|here|it)$/i.test(stageStrippedInput)
-          || /^(?:some\s+|any\s+|a\s+few\s+)?(?:more|another|other|others|again|next|else|extra)(?:\s+(?:one|ones))?$/i.test(stageStrippedInput);
+        // PLURALS AND "LINES" COUNT TOO (David 2026-08-17, from real use:
+        // *"during the quiz questions when i then ask coach to 'quiz me on
+        // lines' it doesnt know which opening im talking about"*). The noun
+        // list ended at a singular `line`, so "lines" missed the anchor and
+        // fell through to be fuzzy-matched as an OPENING NAME — mid-quiz, with
+        // the Vienna on the board and the student plainly asking for more of
+        // it. The memory was never the problem; the word was one letter out of
+        // the list. Determiners gain these/those for the same reason.
+        const namesNoOpening = /^(?:(?:this|that|the|current|my|these|those)\s+)?(?:positions?|boards?|games?|lines?|variations?|moves?|ideas?|here|it|them)$/i.test(stageStrippedInput)
+          || /^(?:some\s+|any\s+|a\s+few\s+)?(?:more|another|other|others|again|next|else|extra)(?:\s+(?:one|ones|lines?))?$/i.test(stageStrippedInput);
         if (namesNoOpening) {
           const activeName = walkthrough.tree?.openingName ?? null;
           if (activeName) {
