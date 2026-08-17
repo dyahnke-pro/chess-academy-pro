@@ -2763,10 +2763,24 @@ owes it.
 
 Consequences, all of them load-bearing:
 
-- **Do not pull more than you will write.** Machine time is ~3 min/video; the
-  WRITING is the cost and does not parallelise. Downloading thirty videos in a
-  batch because the cookies are live creates thirty debts. Pull what you will
-  finish.
+- **HARVEST AGGRESSIVELY; WRITE AT LEISURE (David 2026-08-17, refining the
+  above): *"the hardest or most important part is getting the video DL. so do
+  that first, save them, then we do the rewrite at our leisure."*** The download
+  is the perishable step — it needs YouTube cookies that die within the hour, and
+  a video we failed to grab is gone until David exports fresh ones. The WRITING
+  needs nothing but time. So the two are decoupled: pull and scan as much as the
+  cookies allow, bank the result, and hand-write against the bank afterwards.
+  This SUPERSEDES the earlier "pull only what you will finish tonight" — that
+  throttled the wrong half.
+- **BANK THE TRACK, NOT THE VIDEO.** A video is ~50MB and cannot go in git; the
+  TRACK is ~15KB and is everything a note needs (positions, timestamps, forks).
+  So the harvest loop is download → scan → track → **delete the video**, and the
+  track lands in `data/video-pending/` where it survives the container. Disk
+  stays flat and nothing has to be re-downloaded.
+- **`data/video-pending/` IS THE BANK, AND IT IS NOT A BACKLOG TO FEEL BAD
+  ABOUT.** A staged track is captured work. What it is NOT is shipped: a build
+  only moves to `data/video-tracks/` once its notes are written, and the gate
+  keeps that line bright.
 - **Claude writes the prose. Not the LLM-in-a-loop, not a distillation pass**
   (David: *"you do this, not the LLM"*, *"DO IT YOURSELF"*). That is the whole
   reason these notes outrank the farmed corpus — a farmed note is a model's
