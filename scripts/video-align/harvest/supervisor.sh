@@ -13,6 +13,27 @@
 cd /home/user/chess-academy-pro || exit 1
 
 while true; do
+  # STAND DOWN WHILE A PUSH IS RUNNING. push-cycle pauses the loops so
+  # ship-check gets a quiet box; this supervisor then saw them "down" and
+  # restarted them within two minutes, so ship-check ran under full load
+  # anyway and timed out — reported identically to a real test failure. Three
+  # separate pushes died this way before the two scripts were reconciled.
+  if [ -f /tmp/harvest-paused ]; then
+    sleep 20
+    continue
+  fi
+
+  # COUNT, DO NOT JUST TEST FOR ONE. `pgrep -f x > /dev/null` answers "is at
+  # least one running", which is the wrong question when something else also
+  # starts them: push-cycle used to restart the loops itself, so its copy and
+  # this one both ran and stacked. Three downloaders were live at once, which
+  # TRIPLED the request rate against a limit that was already refusing us — the
+  # 429s read as YouTube tightening when they were self-inflicted. push-cycle no
+  # longer restarts anything, and any surplus found here is trimmed.
+  for extra in $(pgrep -f "bank-loop.sh" | tail -n +2); do kill "$extra" 2>/dev/null; done
+  for extra in $(pgrep -f "ytq.sh" | tail -n +2); do kill "$extra" 2>/dev/null; done
+  for extra in $(pgrep -f "trq.sh" | tail -n +2); do kill "$extra" 2>/dev/null; done
+
   if ! pgrep -f "bank-loop.sh" > /dev/null; then
     setsid nohup scripts/video-align/bank-loop.sh >> /tmp/bankloop.live.log 2>&1 < /dev/null &
     echo "[$(date -u +%H:%M:%S)] restarted bank-loop"

@@ -8,6 +8,12 @@
 # racing them is not.
 cd /home/user/chess-academy-pro || exit 1
 
+# Hold the lock for the whole cycle, and release it however we exit — a stale
+# lock would leave the harvest permanently stopped, which is worse than the
+# race it prevents.
+touch /tmp/harvest-paused
+trap 'rm -f /tmp/harvest-paused' EXIT INT TERM
+
 for p in $(pgrep -f "ytq.sh"); do kill "$p" 2>/dev/null; done
 for p in $(pgrep -f "bank-loop.sh"); do kill "$p" 2>/dev/null; done
 sleep 2
@@ -32,7 +38,5 @@ git fetch origin -q
 git push origin HEAD:main HEAD:claude/coach-narration-sync-jhu1ws 2>&1 | tail -5
 echo "--- push finished, restarting loops ---"
 
-setsid nohup /tmp/ytq.sh > /tmp/ytq3.log 2>&1 < /dev/null &
-setsid nohup scripts/video-align/bank-loop.sh > /tmp/bankloop3.log 2>&1 < /dev/null &
-sleep 2
-echo "loops restarted"
+rm -f /tmp/harvest-paused
+echo "lock released — supervisor restarts the loops within 2 min"

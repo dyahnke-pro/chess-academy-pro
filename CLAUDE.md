@@ -2752,6 +2752,91 @@ positions from the track output; NEVER retype them** — a hand-transcribed FEN
 put a bishop on a square it had already been captured from, minutes after the
 rule was written down. Tracks live in `data/video-tracks/<videoId>.json`.
 
+### 🔒🔒 A MOVE HAS MORE THAN ONE REASON, AND WE KEEP ALL OF THEM (David 2026-08-17, LOCKED: *"why only pick one if there are multiple reasons to play a certain move. this is the cap that i want removed."*)
+
+The old habit was one note per move — one reason, the best one, the rest thrown
+away. That cap is REMOVED. Measured across the paired corpus: a narrated
+position names **3.4 distinct squares on average** and 59% name three or more,
+so the reasons are already in the data and it was only the note format
+discarding them.
+
+**KEEPING ALL OF THEM IS WHAT MAKES THE NARRATION *CORRECT*, NOT MERELY
+FULLER — this is the part to understand before touching the format.** In free
+play the student reaches a position that is SIMILAR, not identical, so which
+reasons are still true varies with their board. A `Bd7` note carries three:
+deprives the b8 knight of a square, cuts the queen's contact with the centre,
+blocks the bishop's own development. If their knight already sits on c6 the
+first is FALSE. With one stored reason the coach must either speak a false one
+or say nothing; with three, each independently checkable, code picks the true
+ones and the coach still teaches. That is G0 exactly — **code decides WHICH
+reasons apply, the model only phrases them** — and it is what David's
+2026-07-19 rule was protecting: *"be careful not to overstate the why, I don't
+want non-applicable reasons stated."*
+
+So a note is a **LIST of atomic reasons, each naming the squares it claims**,
+never one prose blob. A blob cannot be filtered, so a blob forces the choice
+between silence and a false claim. Delivery decides how many to speak: Watch
+several, a Learn cue the sharpest one, free play whichever survive the board
+test, Review all of them.
+
+**The cost is real and is the writing.** Three reasons per move is roughly
+triple the hand-writing, and the writing is Claude's per the rule below. That
+is the constraint — not the data, which already has them.
+
+### 🔒🔒 THE FOUR SURFACES THESE NARRATIONS FEED (David 2026-08-17, LOCKED: *"all of the things"*)
+
+One corpus, four consumers. Each takes the SAME paired data at a different
+depth; none of them gets a different voice (the two-registers rule still
+governs — Learn is present-tense, Review is retrospective).
+
+1. **"Teach me X opening" mirrors his teaching shape.** Not just the main line:
+   *"arrowing multiple moves, talking about opponents counters, how we handle
+   those counters, what our other alternatives are."* The arrows come from the
+   squares the note NAMES (chess.js-verified against the board), never from the
+   model's prose. The counters and alternatives are the FORKS, which already
+   carry his explanation of each specific option.
+2. **Review with Coach is the deeper dive** — *"a deeper dive into those lines
+   as they play out on the board."* Learn NAMES that a fork exists; Review WALKS
+   it. Same fork data, more depth, and the retrospective register.
+3. **Free play in Learn with Coach** — *"we have multiple reasons to address why
+   a move is good when the user reaches the same or similar positions in their
+   game."* This is the surface that needs the multi-reason rule above, because
+   "similar" is what makes per-reason board-checking load-bearing.
+4. **Endgame** — *"his endgame teachings will be used to help improve our
+   endgame teachings."* Best fit of the four by measurement: the endgame layer
+   has 7,120 notes but only ~1.4% are position-keyed, so it lives on the concept
+   tier. Video-tracked endgames are **100% position-keyed with teaching
+   attached**. This is an upgrade in kind, not degree.
+
+### 🔒🔒 THE VIDEO IS NEEDED EXACTLY ONCE, FOR THE POSITIONS (David 2026-08-17: *"We don't really need the video as long as we have the FENs narrations, and captions ... We just need the information from the video. Narrations paired with moves. And all words spoken."*)
+
+A video delivers three things — the positions, the words, and which words went
+with which position. Once those are extracted the video is genuinely disposable,
+which is why the harvest deletes it and keeps the ~15KB track instead.
+
+**The captions are NOT gated behind the video.** They come from a separate and
+far more permissive endpoint: measured 2026-08-17, a subtitle fetch returned
+515KB on the same cookies that had just been refused three video downloads in a
+row with HTTP 429. So the transcript loop is supervised SEPARATELY from the
+downloader, and a rate-limited hour still banks the channel's teaching text.
+
+**What the video alone provides is the POSITIONS**, and that is why it is still
+needed once per lesson. The join lives in `data/video-narration/<id>.json`
+(built offline by `pair-narration.mjs`): per settled position, the FEN, the
+moves, and every word spoken while it was on the board, with forks pairing each
+alternative to the explanation of that alternative.
+
+🚨 **THE TEMPTING SHORTCUT, AND WHY IT IS A LOWER TIER.** The captions name
+moves out loud (*"we start by checking on B5"*), so a line could be
+reconstructed from the transcript alone and chess.js-validated — no video, no
+rate limit. Do NOT promote that to the primary path. It is **inference, not
+observation**, and its failure mode is the one already measured twice: a
+caption-derived line can be entirely legal and entirely wrong (auto-captions
+garbled `Nxe4` as "Knight takes C4" the same day). The board read is what
+CAUGHT the `srNXYAsaX7I` mistrack, by disagreeing with the transcript. If the
+caption-reconstruction is ever built, it is a clearly-labelled fallback tier
+with its own `positionSource`, never mixed with the read-off-the-screen tier.
+
 ### 🔒🔒 EVERY LINE PULLED GETS HAND-WRITTEN NOTES — BY CLAUDE, NOT A MODEL PASS (David 2026-08-17, LOCKED: *"all openings we get corpus for will get hand written lines. So every line you pull needs to be hand written by you to maintain accuracy and standard."*)
 
 There is NO scoping question here, and a session that asks "which openings should
