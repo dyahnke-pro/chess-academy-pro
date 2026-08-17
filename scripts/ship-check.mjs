@@ -176,6 +176,14 @@ const GATE_TESTS = [
   // prescribe a piece the student doesn't have or phase-blind technique.
   // Locative claims were gated; prescriptive grammar is now gated too.
   'src/services/planPrescriptions.test.ts',
+  // 🔒 VIDEO-TRACK GATE (David 2026-08-17) — a note may only cite a position the
+  // video actually showed. Added because the rule was broken BY HAND minutes
+  // after being written down: a transcribed FEN put a bishop on a square it had
+  // already been captured from. The prose was sound, the board was fiction —
+  // which is the farmed corpus's defect exactly, and invisible to
+  // narrationAccuracy, since that asks whether prose is TRUE OF a board and
+  // never whether it was ABOUT that board.
+  'src/data/videoTrackIntegrity.test.ts',
   'src/data/lessons/lessonIntegrity.test.ts',
   'src/data/lessons/narrationAccuracy.test.ts',
   'src/data/lessons/narrationGrounding.test.ts',
