@@ -24,6 +24,37 @@ import { checkReasons } from '../../src/services/reasonCheck.ts';
 
 const DIR = 'data/video-notes';
 
+/** Every position the repertoire's taught lines actually walk through.
+ *
+ *  A NOTE OFF THE TAUGHT LINE IS SILENT IN WATCH AND LEARN. It still fires in
+ *  free play and review, where the student reaches whatever they reach — but
+ *  that is not where most students meet the coach. Measured when this check was
+ *  added: 10 of 64 hand-written notes were on a taught line. The other 54 were
+ *  written from wherever the video happened to settle, which is nobody's fault
+ *  but is a 16% hit rate on work that is expensive to produce.
+ *
+ *  The fix is to anchor the note onto the taught line, NEVER to bend the taught
+ *  line toward the note: spines are data-chosen (the most-played master move at
+ *  each ply), and steering them by what we happen to have prose for would mean
+ *  teaching what we can narrate instead of what the data says is theory. */
+const taughtPositions = (() => {
+  const seen = new Set();
+  const posKey = (fen) => fen.split(' ').slice(0, 2).join(' ');
+  try {
+    const raw = JSON.parse(readFileSync('src/data/repertoire.json', 'utf8'));
+    const rows = Array.isArray(raw) ? raw : Object.values(raw).flat();
+    const walk = (pgn) => {
+      const g = new Chess();
+      for (const san of (pgn ?? '').split(/\s+/).filter((t) => !/^\d+\.+$/.test(t))) {
+        try { if (!g.move(san)) break; } catch { break; }
+        seen.add(posKey(g.fen()));
+      }
+    };
+    for (const r of rows) { walk(r?.pgn); for (const v of r?.variations ?? []) walk(v?.pgn); }
+  } catch { /* no repertoire on disk: skip the check rather than fail every note */ }
+  return seen;
+})();
+
 /** Opening names that must not appear in a note's prose. Kept short and
  *  literal on purpose — this is a tripwire for the commonest phrasing, not an
  *  attempt to parse chess English. */
@@ -38,6 +69,7 @@ const only = process.argv[2];
 let checked = 0;
 let failed = 0;
 let unverifiable = 0;
+const offLine = [];
 
 for (const file of readdirSync(DIR).filter((f) => f.endsWith('.json'))) {
   if (only && !file.startsWith(only)) continue;
@@ -79,6 +111,16 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith('.json'))) {
       continue;
     }
 
+    // Reachability is a WARNING, not a failure: an off-line note is still real
+    // teaching that fires in free play and review. It is surfaced so the choice
+    // to leave it there is deliberate rather than accidental.
+    if (taughtPositions.size) {
+      const after = new Chess(game.fen());
+      let reachable = false;
+      try { after.move(san); reachable = taughtPositions.has(after.fen().split(' ').slice(0, 2).join(' ')); } catch { /* checked below */ }
+      if (!reachable) offLine.push(note.id);
+    }
+
     const verdicts = checkReasons(game.fen(), san, note.reasons);
     const bad = verdicts.filter((v) => !v.holds);
     checked += verdicts.length;
@@ -93,4 +135,10 @@ for (const file of readdirSync(DIR).filter((f) => f.endsWith('.json'))) {
 }
 
 console.log(`\n${checked} reasons checked, ${failed} note(s) failed, ${unverifiable} note(s) carry no structured reasons yet`);
+if (offLine.length) {
+  console.log(`\n⚠ ${offLine.length} note(s) sit OFF every taught line — silent in Watch/Learn, live only in free play and review:`);
+  for (const id of offLine.slice(0, 10)) console.log(`    ${id}`);
+  if (offLine.length > 10) console.log(`    … and ${offLine.length - 10} more`);
+  console.log('  Anchor onto the taught line where the idea survives the move; never bend the line to the note.');
+}
 process.exit(failed ? 1 : 0);
