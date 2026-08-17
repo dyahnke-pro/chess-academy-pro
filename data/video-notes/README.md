@@ -28,6 +28,14 @@ note reaches nobody:
    deeper only if the deeper move actually CAUSES what the note claims, and
    otherwise let it go.
 
+4. **Writing conditionally.** The board-truth grader cuts claim by claim
+   against the position AS IT IS, so a sentence about a position that does not
+   exist yet — "the knight on d7 can offer a trade" with d7 empty, or a line
+   played out in prose — is stripped at delivery. Nothing false reaches the
+   student, which is the point, but the teaching is lost. Measured: 59 of 64
+   notes survive whole; all five that do not are conditional. **Write about the
+   board in front of you, in the present tense.**
+
 ## What the checking is for
 
 The teachers' load-bearing facts hold up; their EMPHASIS does not. Measured

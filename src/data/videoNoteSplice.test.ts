@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
-import { noteAtPosition, spokenBeatText } from '../services/danyaTeachingService';
+import { ALL_NOTES, noteAtPosition, spokenBeatText } from '../services/danyaTeachingService';
 import { gradeNarrationText } from '../services/coachAnswerGates';
 
 /**
@@ -70,6 +70,30 @@ describe('hand-written notes reach the spoken narration', () => {
     for (const s of walk(TAUGHT, OPENING).filter((x) => x.id.startsWith('vn-'))) {
       expect(s.text.length, `${s.id} arrives as a ${s.text.length}-char fragment`).toBeGreaterThan(80);
     }
+  });
+
+  it('survives the board-truth grader whole, at every note\'s own position', () => {
+    // G0: the grader is the LAST thing between a note and the student, and it
+    // cuts claim by claim against the board AS IT IS. Nothing false gets
+    // through — but a note can also be quietly halved, and that is invisible
+    // without measuring it. Measured when this landed: 59 of 64 notes survive
+    // whole; the five that do not are all CONDITIONAL prose about positions
+    // that do not exist yet ("the knight on d7 can offer a trade" with d7
+    // empty), which the grader is right to cut and which therefore teaches
+    // nobody. Write about the board in front of you, in the present tense.
+    const shrunk = [];
+    for (const n of ALL_NOTES.filter((x) => x.id.startsWith('vn-'))) {
+      const g = new Chess();
+      let legal = true;
+      for (const san of n.lineSan) { try { if (!g.move(san)) { legal = false; break; } } catch { legal = false; break; } }
+      if (!legal) continue;
+      const src = (n.explains ?? '').trim();
+      const kept = (gradeNarrationText(src, g.fen(), 'videoNoteSplice') ?? '').trim();
+      if (src.length && kept.length < src.length * 0.75) shrunk.push(`${n.id}: ${src.length} -> ${kept.length}`);
+    }
+    // A shrink-only ceiling: the five known conditional notes are the backlog,
+    // and a new note must not join them.
+    expect(shrunk.length, `notes losing >25% to the grader:\n${shrunk.join('\n')}`).toBeLessThanOrEqual(5);
   });
 
   it('speaks the words that were written, not a paraphrase of them', () => {
