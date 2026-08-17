@@ -187,6 +187,14 @@
    "forks": 0
   },
   {
+   "videoId": "1Rejj6niwvo",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
+  },
+  {
    "videoId": "358seoKegqA",
    "eco": "B00",
    "plies": 1,
@@ -305,6 +313,16 @@
    "coverage": 1,
    "subject": false,
    "forks": 10
+  }
+ ],
+ "Alekhine Defense": [
+  {
+   "videoId": "1Rejj6niwvo",
+   "eco": "B02",
+   "plies": 2,
+   "coverage": 1,
+   "subject": true,
+   "forks": 3
   }
  ],
  "Scandinavian Defense: Modern Variation": [

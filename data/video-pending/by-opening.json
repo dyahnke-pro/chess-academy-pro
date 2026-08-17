@@ -1,168 +1,4 @@
 {
- "Alekhine Defense": [
-  {
-   "videoId": "1Rejj6niwvo",
-   "eco": "B02",
-   "plies": 2,
-   "coverage": 1,
-   "subject": true,
-   "forks": 3
-  }
- ],
- "King's Pawn Game": [
-  {
-   "videoId": "1Rejj6niwvo",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 3
-  },
-  {
-   "videoId": "5MAKlJpkpsg",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "9m3W5m6SkOY",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "C4xtj2rc0_k",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "J4WzTSR3hmo",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "Oj04sSCzraE",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "PACqm__Sne8",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "Qe6L7y3bdjM",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "UDDLO-WuOmE",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "YXz0xSbhY70",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 14
-  },
-  {
-   "videoId": "YzI6qI-33_U",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 3
-  },
-  {
-   "videoId": "dEjoCta8oOQ",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 20
-  },
-  {
-   "videoId": "fABTn305-Eg",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "kO23hnArI4Y",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 4
-  },
-  {
-   "videoId": "o12epkA2jeE",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 4
-  },
-  {
-   "videoId": "rMNFLg1gLoI",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 5
-  },
-  {
-   "videoId": "zEqoGIgzk1E",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "zEytN1zSTEE",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 11
-  },
-  {
-   "videoId": "zprg2WbmgzQ",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  }
- ],
  "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation": [
   {
    "videoId": "5MAKlJpkpsg",
@@ -353,6 +189,152 @@
    "coverage": 1,
    "subject": false,
    "forks": 1
+  }
+ ],
+ "King's Pawn Game": [
+  {
+   "videoId": "5MAKlJpkpsg",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "9m3W5m6SkOY",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "C4xtj2rc0_k",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "J4WzTSR3hmo",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "Oj04sSCzraE",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "PACqm__Sne8",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "Qe6L7y3bdjM",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "UDDLO-WuOmE",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "YXz0xSbhY70",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 14
+  },
+  {
+   "videoId": "YzI6qI-33_U",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 20
+  },
+  {
+   "videoId": "fABTn305-Eg",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "kO23hnArI4Y",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "o12epkA2jeE",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "rMNFLg1gLoI",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "zEqoGIgzk1E",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "zEytN1zSTEE",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 11
+  },
+  {
+   "videoId": "zprg2WbmgzQ",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
   }
  ],
  "Sicilian Defense: McDonnell Attack, Tal Gambit": [
