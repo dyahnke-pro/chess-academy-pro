@@ -41,6 +41,23 @@ while true; do
     fi
   fi
 
+  # The transcript pull is supervised separately from the video download BECAUSE
+  # IT SURVIVES A RATE LIMIT THE DOWNLOADER DOES NOT. Captions come back fine
+  # while media fetches are returning 429, so tying the two together would idle
+  # the half that still works for the sake of the half that does not.
+  if ! pgrep -f "trq.sh" > /dev/null; then
+    left=$(node -e "
+      const fs=require('fs');
+      const ids=(f)=>{try{return fs.readFileSync(f,'utf8').split('\n').filter(Boolean);}catch{return [];}};
+      const have=new Set(fs.readdirSync('data/video-transcripts').map(f=>f.replace('.vtt.gz','')));
+      for (const id of ids('data/video-queues/no-transcript.txt')) have.add(id);
+      console.log(ids('data/video-queues/naroditsky.txt').filter(id=>!have.has(id)).length);" 2>/dev/null || echo 0)
+    if [ "${left:-0}" -gt 0 ]; then
+      setsid nohup /tmp/trq.sh >> /tmp/trq.live.log 2>&1 < /dev/null &
+      echo "[$(date -u +%H:%M:%S)] restarted transcript pull ($left left)"
+    fi
+  fi
+
   # The pusher is supervised too. It died with the loops, which is the worse
   # failure of the two: the harvest would have kept running and quietly
   # accumulated work that was never committed or pushed.
@@ -55,7 +72,8 @@ while true; do
     echo "  bank-loop:  $(pgrep -f 'bank-loop.sh' >/dev/null && echo up || echo DOWN)"
     echo "  downloader: $(pgrep -f 'ytq.sh' >/dev/null && echo up || echo idle)"
     echo "  pusher:     $(pgrep -f 'periodic-push.sh' >/dev/null && echo up || echo DOWN)"
-    echo "  banked: $(ls data/video-pending/*.json 2>/dev/null | grep -vc by-opening)  on-disk: $(ls /tmp/vid/*.mp4 /tmp/vid/*.webm 2>/dev/null | wc -l)"
+    echo "  transcripts:$(pgrep -f 'trq.sh' >/dev/null && echo ' up' || echo ' idle')"
+    echo "  banked: $(ls data/video-pending/*.json 2>/dev/null | grep -vc by-opening)  on-disk: $(ls /tmp/vid/*.mp4 /tmp/vid/*.webm 2>/dev/null | wc -l)  transcripts: $(ls data/video-transcripts/*.gz 2>/dev/null | wc -l)  grids: $(ls data/video-grids/*.gz 2>/dev/null | wc -l)"
     echo "  uncommitted: $(git status --porcelain | wc -l)  unpushed: $(git log origin/main..HEAD --oneline 2>/dev/null | wc -l)"
   } > /tmp/harvest-heartbeat.txt
   sleep 120

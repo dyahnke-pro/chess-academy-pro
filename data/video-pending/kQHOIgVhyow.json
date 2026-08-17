@@ -1,0 +1,311 @@
+{
+ "videoId": "kQHOIgVhyow",
+ "title": "Mastering Transitions in The King’s Indian Opening | A GM Naroditsky Theory Speed Run",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-17",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 8230,
+  "settledPositions": null
+ },
+ "plies": 31,
+ "rewinds": 1,
+ "moves": [
+  {
+   "t": 27.5,
+   "ply": 2,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2"
+  },
+  {
+   "t": 37,
+   "ply": 3,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 54,
+   "ply": 4,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 60,
+   "ply": 5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3"
+  },
+  {
+   "t": 64,
+   "ply": 4,
+   "line": [],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 76.5,
+   "ply": 5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3"
+  },
+  {
+   "t": 95.5,
+   "ply": 6,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4"
+  },
+  {
+   "t": 111.5,
+   "ply": 7,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP1B2/5N2/PP2PPPP/RN1QKB1R b KQkq - 3 4"
+  },
+  {
+   "t": 198.5,
+   "ply": 8,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PP1B2/5N2/PP2PPPP/RN1QKB1R w KQ - 4 5"
+  },
+  {
+   "t": 227,
+   "ply": 9,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PP1B2/2N2N2/PP2PPPP/R2QKB1R b KQ - 5 5"
+  },
+  {
+   "t": 278.5,
+   "ply": 10,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP1B2/2N2N2/PP2PPPP/R2QKB1R w KQ - 0 6"
+  },
+  {
+   "t": 293.5,
+   "ply": 11,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP1B2/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 6"
+  },
+  {
+   "t": 325,
+   "ply": 12,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/2pp1np1/8/2PP1B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 7"
+  },
+  {
+   "t": 395,
+   "ply": 13,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/2pp1np1/8/2PP1B2/2N1PN2/PP2BPPP/R2QK2R b KQ - 1 7"
+  },
+  {
+   "t": 416.5,
+   "ply": 14,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbq1rk1/1p2ppbp/p1pp1np1/8/2PP1B2/2N1PN2/PP2BPPP/R2QK2R w KQ - 0 8"
+  },
+  {
+   "t": 486,
+   "ply": 15,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "rnbq1rk1/1p2ppbp/p1pp1np1/8/2PP1B2/2N1PN2/PP1QBPPP/R3K2R b KQ - 1 8"
+  },
+  {
+   "t": 503,
+   "ply": 16,
+   "line": [
+    "b5"
+   ],
+   "fen": "rnbq1rk1/4ppbp/p1pp1np1/1p6/2PP1B2/2N1PN2/PP1QBPPP/R3K2R w KQ - 0 9"
+  },
+  {
+   "t": 558.5,
+   "ply": 17,
+   "line": [
+    "a3"
+   ],
+   "fen": "rnbq1rk1/4ppbp/p1pp1np1/1p6/2PP1B2/P1N1PN2/1P1QBPPP/R3K2R b KQ - 0 9"
+  },
+  {
+   "t": 641,
+   "ply": 18,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "rn1q1rk1/1b2ppbp/p1pp1np1/1p6/2PP1B2/P1N1PN2/1P1QBPPP/R3K2R w KQ - 1 10"
+  },
+  {
+   "t": 663,
+   "ply": 19,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/1b2ppbp/p1pp1np1/1p6/2PP1B2/P1N1PN2/1P1QBPPP/R4RK1 b - - 2 10"
+  },
+  {
+   "t": 692.5,
+   "ply": 20,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r2q1rk1/1b1nppbp/p1pp1np1/1p6/2PP1B2/P1N1PN2/1P1QBPPP/R4RK1 w - - 3 11"
+  },
+  {
+   "t": 818,
+   "ply": 21,
+   "line": [
+    "h3"
+   ],
+   "fen": "r2q1rk1/1b1nppbp/p1pp1np1/1p6/2PP1B2/P1N1PN1P/1P1QBPP1/R4RK1 b - - 0 11"
+  },
+  {
+   "t": 848,
+   "ply": 22,
+   "line": [
+    "bxc4"
+   ],
+   "fen": "r2q1rk1/1b1nppbp/p1pp1np1/8/2pP1B2/P1N1PN1P/1P1QBPP1/R4RK1 w - - 0 12"
+  },
+  {
+   "t": 853.5,
+   "ply": 23,
+   "line": [
+    "Bxc4"
+   ],
+   "fen": "r2q1rk1/1b1nppbp/p1pp1np1/8/2BP1B2/P1N1PN1P/1P1Q1PP1/R4RK1 b - - 0 12"
+  },
+  {
+   "t": 865,
+   "ply": 24,
+   "line": [
+    "c5"
+   ],
+   "fen": "r2q1rk1/1b1nppbp/p2p1np1/2p5/2BP1B2/P1N1PN1P/1P1Q1PP1/R4RK1 w - - 0 13"
+  },
+  {
+   "t": 907,
+   "ply": 25,
+   "line": [
+    "d5"
+   ],
+   "fen": "r2q1rk1/1b1nppbp/p2p1np1/2pP4/2B2B2/P1N1PN1P/1P1Q1PP1/R4RK1 b - - 0 13"
+  },
+  {
+   "t": 959,
+   "ply": 26,
+   "line": [
+    "Nb6"
+   ],
+   "fen": "r2q1rk1/1b2ppbp/pn1p1np1/2pP4/2B2B2/P1N1PN1P/1P1Q1PP1/R4RK1 w - - 1 14"
+  },
+  {
+   "t": 999,
+   "ply": 27,
+   "line": [
+    "Ba2"
+   ],
+   "fen": "r2q1rk1/1b2ppbp/pn1p1np1/2pP4/5B2/P1N1PN1P/BP1Q1PP1/R4RK1 b - - 2 14"
+  },
+  {
+   "t": 1045.5,
+   "ply": 28,
+   "line": [
+    "c4"
+   ],
+   "fen": "r2q1rk1/1b2ppbp/pn1p1np1/3P4/2p2B2/P1N1PN1P/BP1Q1PP1/R4RK1 w - - 0 15"
+  },
+  {
+   "t": 1073,
+   "ply": 29,
+   "line": [
+    "e4"
+   ],
+   "fen": "r2q1rk1/1b2ppbp/pn1p1np1/3P4/2p1PB2/P1N2N1P/BP1Q1PP1/R4RK1 b - - 0 15"
+  },
+  {
+   "t": 1131,
+   "ply": 30,
+   "line": [
+    "Re8"
+   ],
+   "fen": "r2qr1k1/1b2ppbp/pn1p1np1/3P4/2p1PB2/P1N2N1P/BP1Q1PP1/R4RK1 w - - 1 16"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "King's Indian Defense: Normal Variation, King's Knight Variation",
+   "eco": "E60",
+   "plies": 5,
+   "line": "d4 Nf6 c4 g6 Nf3",
+   "coverage": 0.897
+  },
+  {
+   "name": "Indian Defense: West Indian Defense",
+   "eco": "E60",
+   "plies": 4,
+   "line": "d4 Nf6 c4 g6",
+   "coverage": 0.931
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.966
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "King's Indian Defense: Normal Variation, King's Knight Variation",
+  "confirmed": true
+ }
+}

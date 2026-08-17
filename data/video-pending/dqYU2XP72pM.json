@@ -1,0 +1,344 @@
+{
+ "videoId": "dqYU2XP72pM",
+ "title": "Bishop & Knight for a Rook?! Sneaky!! | Jobava London | GM Naroditsky’s Theory Speed Run",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-17",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 7157,
+  "settledPositions": null
+ },
+ "plies": 31,
+ "rewinds": 2,
+ "moves": [
+  {
+   "t": 22,
+   "ply": 2,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2"
+  },
+  {
+   "t": 23,
+   "ply": 3,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2"
+  },
+  {
+   "t": 25,
+   "ply": 4,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 26.5,
+   "ply": 5,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3"
+  },
+  {
+   "t": 30,
+   "ply": 6,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqkb1r/1pp1pppp/p4n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 52,
+   "ply": 7,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkb1r/1pp1pppp/p4n2/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 74,
+   "ply": 8,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p4n2/2pp4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 116,
+   "ply": 9,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p4n2/2Pp4/5B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 5"
+  },
+  {
+   "t": 125,
+   "ply": 10,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/1p2pppp/p1n2n2/2Pp4/5B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 6"
+  },
+  {
+   "t": 146,
+   "ply": 11,
+   "line": [
+    "a3"
+   ],
+   "fen": "r1bqkb1r/1p2pppp/p1n2n2/2Pp4/5B2/P1N1P3/1PP2PPP/R2QKBNR b KQkq - 0 6"
+  },
+  {
+   "t": 155,
+   "ply": 12,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkb1r/1p3ppp/p1n2n2/2Ppp3/5B2/P1N1P3/1PP2PPP/R2QKBNR w KQkq - 0 7"
+  },
+  {
+   "t": 167,
+   "ply": 13,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1bqkb1r/1p3ppp/p1n2n2/2Ppp1B1/8/P1N1P3/1PP2PPP/R2QKBNR b KQkq - 1 7"
+  },
+  {
+   "t": 179,
+   "ply": 14,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2qkb1r/1p3ppp/p1n1bn2/2Ppp1B1/8/P1N1P3/1PP2PPP/R2QKBNR w KQkq - 2 8"
+  },
+  {
+   "t": 190,
+   "ply": 15,
+   "line": [
+    "b4"
+   ],
+   "fen": "r2qkb1r/1p3ppp/p1n1bn2/2Ppp1B1/1P6/P1N1P3/2P2PPP/R2QKBNR b KQkq - 0 8"
+  },
+  {
+   "t": 194,
+   "ply": 16,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r2qk2r/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1P3/2P2PPP/R2QKBNR w KQkq - 1 9"
+  },
+  {
+   "t": 233,
+   "ply": 17,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r2qk2r/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P2PPP/R2QKB1R b KQkq - 2 9"
+  },
+  {
+   "t": 235.5,
+   "ply": 18,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P2PPP/R2QKB1R w KQ - 3 10"
+  },
+  {
+   "t": 245,
+   "ply": 19,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r2q1rk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2QK2R b KQ - 4 10"
+  },
+  {
+   "t": 332.5,
+   "ply": 20,
+   "line": [
+    "Qe8"
+   ],
+   "fen": "r3qrk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2QK2R w KQ - 5 11"
+  },
+  {
+   "t": 381.5,
+   "ply": 21,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r3qrk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2Q1RK1 b - - 6 11"
+  },
+  {
+   "t": 388.5,
+   "ply": 22,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2Ppp1B1/1P2n3/P1N1PN2/2P1BPPP/R2Q1RK1 w - - 7 12"
+  },
+  {
+   "t": 401.5,
+   "ply": 25,
+   "line": [
+    "Re1",
+    "Nf6",
+    "Kh1"
+   ],
+   "fen": "r3qrk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2QR2K b - - 10 13"
+  },
+  {
+   "t": 404.5,
+   "ply": 22,
+   "line": [],
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2Ppp1B1/1P2n3/P1N1PN2/2P1BPPP/R2Q1RK1 w - - 7 12"
+  },
+  {
+   "t": 417,
+   "ply": 23,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2Ppp1B1/1P2N3/P3PN2/2P1BPPP/R2Q1RK1 b - - 0 12"
+  },
+  {
+   "t": 424,
+   "ply": 24,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2P1p1B1/1P2p3/P3PN2/2P1BPPP/R2Q1RK1 w - - 0 13"
+  },
+  {
+   "t": 437.5,
+   "ply": 25,
+   "line": [
+    "Bxe7"
+   ],
+   "fen": "r3qrk1/1p2Bppp/p1n1b3/2P1p3/1P2p3/P3PN2/2P1BPPP/R2Q1RK1 b - - 0 13"
+  },
+  {
+   "t": 439.5,
+   "ply": 26,
+   "line": [
+    "exf3"
+   ],
+   "fen": "r3qrk1/1p2Bppp/p1n1b3/2P1p3/1P6/P3Pp2/2P1BPPP/R2Q1RK1 w - - 0 14"
+  },
+  {
+   "t": 442.5,
+   "ply": 27,
+   "line": [
+    "Bxf8"
+   ],
+   "fen": "r3qBk1/1p3ppp/p1n1b3/2P1p3/1P6/P3Pp2/2P1BPPP/R2Q1RK1 b - - 0 14"
+  },
+  {
+   "t": 501.5,
+   "ply": 31,
+   "line": [
+    "Qxf8",
+    "Qb1",
+    "fxe2",
+    "Rd1"
+   ],
+   "fen": "r4qk1/1p3ppp/p1n1b3/2P1p3/1P6/P3P3/2P1pPPP/RQ1R2K1 b - - 1 16"
+  },
+  {
+   "t": 510.5,
+   "ply": 21,
+   "line": [],
+   "fen": "r3qrk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2Q1RK1 b - - 6 11"
+  },
+  {
+   "t": 513.5,
+   "ply": 22,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2Ppp1B1/1P2n3/P1N1PN2/2P1BPPP/R2Q1RK1 w - - 7 12"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2Ppp1B1/1P2n3/P1N1PN2/2P1BPPP/R2Q1RK1 w - - 7 12",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "a6",
+    "e3",
+    "c5",
+    "dxc5",
+    "Nc6",
+    "a3",
+    "e5",
+    "Bg5",
+    "Be6",
+    "b4",
+    "Be7",
+    "Nf3",
+    "O-O",
+    "Be2",
+    "Qe8",
+    "O-O",
+    "Ne4"
+   ],
+   "ply": 22,
+   "options": [
+    {
+     "san": "Re1",
+     "t": 401.5,
+     "continuation": "Re1 Nf6 Kh1"
+    },
+    {
+     "san": "Nxe4",
+     "t": 417,
+     "continuation": "Nxe4"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Rapport-Jobava System",
+   "eco": "D01",
+   "plies": 5,
+   "line": "d4 Nf6 Nc3 d5 Bf4",
+   "coverage": 0.893
+  },
+  {
+   "name": "Queen's Pawn Game: Chigorin Variation",
+   "eco": "A45",
+   "plies": 4,
+   "line": "d4 Nf6 Nc3 d5",
+   "coverage": 0.929
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ]
+}

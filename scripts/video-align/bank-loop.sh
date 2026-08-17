@@ -71,6 +71,15 @@ while true; do
       echo "NO-GAME  $id :: $(tail -1 /tmp/b_$id.log | cut -c1-60)"
       grep -qxF "$id" data/video-queues/no-game.txt 2>/dev/null || echo "$id" >> data/video-queues/no-game.txt
     fi
+
+    # KEEP THE GRID. It is the raw board read — every settled position the scan
+    # found — and it is what a re-track needs. Deleting it meant a build that
+    # tracked wrong could only be fixed by re-downloading the video, which is
+    # the one step that needs live cookies and a rate limit that is currently
+    # refusing us. 448K of JSON gzips to 16K, so keeping every one costs almost
+    # nothing against an alternative that is sometimes impossible.
+    mkdir -p data/video-grids
+    gzip -c /tmp/g_$id.json > data/video-grids/$id.json.gz 2>/dev/null
     rm -f "$v" /tmp/g_$id.json
     progressed=1
   done
