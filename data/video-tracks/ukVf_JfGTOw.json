@@ -1,0 +1,142 @@
+{
+ "videoId": "ukVf_JfGTOw",
+ "title": "The Power of a Knight on H7! | King’s Indian Defense | GM Naroditsky’s Theory Speed Run",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-17",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 8314,
+  "settledPositions": null
+ },
+ "plies": 12,
+ "rewinds": 0,
+ "moves": [
+  {
+   "t": 34,
+   "ply": 2,
+   "line": [
+    "Nc3",
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppppppp/2n5/8/8/2N5/PPPPPPPP/R1BQKBNR w KQkq - 2 2"
+  },
+  {
+   "t": 41,
+   "ply": 4,
+   "line": [
+    "b3",
+    "f5"
+   ],
+   "fen": "r1bqkbnr/ppppp1pp/2n5/5p2/8/1PN5/P1PPPPPP/R1BQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 46.5,
+   "ply": 6,
+   "line": [
+    "Bb2",
+    "e5"
+   ],
+   "fen": "r1bqkbnr/pppp2pp/2n5/4pp2/8/1PN5/PBPPPPPP/R2QKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 95.5,
+   "ply": 9,
+   "line": [
+    "Rb1",
+    "b6",
+    "Qc1"
+   ],
+   "fen": "r1bqkbnr/p1pp2pp/1pn5/4pp2/8/1PN5/PBPPPPPP/1RQ1KBNR b Kkq - 1 5"
+  },
+  {
+   "t": 99,
+   "ply": 10,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "r2qkbnr/pbpp2pp/1pn5/4pp2/8/1PN5/PBPPPPPP/1RQ1KBNR w Kkq - 2 6"
+  },
+  {
+   "t": 100,
+   "ply": 11,
+   "line": [
+    "e3"
+   ],
+   "fen": "r2qkbnr/pbpp2pp/1pn5/4pp2/8/1PN1P3/PBPP1PPP/1RQ1KBNR b Kkq - 0 6"
+  },
+  {
+   "t": 103,
+   "ply": 12,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r2qkb1r/pbpp2pp/1pn2n2/4pp2/8/1PN1P3/PBPP1PPP/1RQ1KBNR w Kkq - 1 7"
+  },
+  {
+   "t": 152,
+   "ply": 13,
+   "line": [
+    "Nge2"
+   ],
+   "fen": "r2qkb1r/pbpp2pp/1pn2n2/4pp2/8/1PN1P3/PBPPNPPP/1RQ1KB1R b Kkq - 2 7"
+  },
+  {
+   "t": 157.5,
+   "ply": 16,
+   "line": [
+    "Rb8",
+    "d4",
+    "Qc8"
+   ],
+   "fen": "1rq1kb1r/pbpp2pp/1pn2n2/4pp2/3P4/1PN1P3/PBP1NPPP/1RQ1KB1R w Kk - 1 9"
+  },
+  {
+   "t": 160.5,
+   "ply": 20,
+   "line": [
+    "Nd5",
+    "d6",
+    "Ndc3",
+    "d5"
+   ],
+   "fen": "1rq1kb1r/pbp3pp/1pn2n2/3ppp2/3P4/1PN1P3/PBP1NPPP/1RQ1KB1R w Kk - 0 11"
+  },
+  {
+   "t": 211,
+   "ply": 21,
+   "line": [
+    "f3"
+   ],
+   "fen": "1rq1kb1r/pbp3pp/1pn2n2/3ppp2/3P4/1PN1PP2/PBP1N1PP/1RQ1KB1R b Kk - 0 11"
+  },
+  {
+   "t": 231.5,
+   "ply": 22,
+   "line": [
+    "a6"
+   ],
+   "fen": "1rq1kb1r/1bp3pp/ppn2n2/3ppp2/3P4/1PN1PP2/PBP1N1PP/1RQ1KB1R w Kk - 0 12"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Van Geet Opening",
+   "eco": "A00",
+   "plies": 1,
+   "line": "Nc3",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "English Opening: Anglo-Indian Defense, King's Knight Variation",
+  "confirmed": false
+ }
+}

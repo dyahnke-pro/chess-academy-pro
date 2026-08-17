@@ -1,0 +1,944 @@
+{
+ "generatedAt": "2026-08-17",
+ "videosDistilled": 10,
+ "noteCount": 36,
+ "notes": [
+  {
+   "id": "vn-french-adv-dont-rush-the-recapture",
+   "lineSan": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "Nf3",
+    "cxd4"
+   ],
+   "opening": "French Defense: Advance Variation, Nimzowitsch System",
+   "phase": "opening",
+   "explains": "Both obvious recaptures on d4 invite the queen's knight to c6, attacking the piece that just landed there and developing at the same time. Placing the bishop on d3 instead ignores the pawn for now and gets on with the kingside, trusting that d4 is weak enough to collect in due course.",
+   "teaches": "A pawn taken from you is not a pawn you must take back immediately. When every natural recapture can be hit with tempo, the move that wins the pawn is the one you play later, after the pieces are out — recovering material on the opponent's schedule is how a lead in development gets spent for nothing.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:6si_sctYAS0"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-french-adv-clamp-pawn",
+   "lineSan": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "Nf3",
+    "cxd4",
+    "Bd3"
+   ],
+   "opening": "French Defense: Advance Variation, Nimzowitsch System",
+   "phase": "opening",
+   "explains": "The pawn on e5 covers both f6 and d6, so the king's knight and the dark-squared bishop lose their natural developing squares, and Black's position is cut in two with the queenside pieces struggling to join the kingside. That is why White is content to leave d4 alone for the moment: the clamp is worth more than the pawn.",
+   "teaches": "One advanced pawn can do the work of a piece when it takes away the squares the opponent's pieces most want. Judge such a pawn by what it denies rather than by whether it is defended — and be correspondingly unwilling to part with it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:6si_sctYAS0"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-french-adv-knight-route-b3",
+   "lineSan": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "Nf3",
+    "cxd4",
+    "Bd3",
+    "Nc6",
+    "O-O"
+   ],
+   "opening": "French Defense: Advance Variation, Nimzowitsch System",
+   "phase": "opening",
+   "explains": "The queen's knight is still at home and heads for b3 by way of d2. From b3 it bears down on the d4 pawn, which is the pawn White intends to regain, and it stands clear of both bishops rather than shutting one of them in. Black's tries here were to post the bishop actively or to challenge the centre with the f-pawn.",
+   "teaches": "When a knight has to travel, choose the route that leaves your own bishops breathing. A square is good not only for what the piece attacks from it but for what it stops blocking — a knight that presses on the target while stepping out of its own bishops' way is doing two jobs.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:6si_sctYAS0"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-french-adv-f6-invites-b5",
+   "lineSan": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "Nf3",
+    "cxd4",
+    "Bd3",
+    "Nc6",
+    "O-O",
+    "f6"
+   ],
+   "opening": "French Defense: Advance Variation, Nimzowitsch System",
+   "phase": "opening",
+   "explains": "Black challenges the e5 pawn directly, and the reply is the bishop to b5 — pinning the knight on c6 against the king, since d7 is empty. That takes the sting out of capturing on e5, because recapturing with the knight then hits c6 a second time, from the other side of the board.",
+   "teaches": "A move that is wrong early can be exactly right once the position has changed. Striking at a cramping pawn with the f-pawn loosens the squares around your own king, so before you play it, ask which enemy piece is waiting to use them.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:6si_sctYAS0"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-jobava2-bb4-is-not-scary",
+   "lineSan": [
+    "d4",
+    "d5",
+    "Nc3",
+    "Nf6",
+    "Bf4",
+    "Bf5",
+    "e3",
+    "e6",
+    "Nf3",
+    "Bb4"
+   ],
+   "opening": "Rapport-Jobava System",
+   "phase": "opening",
+   "explains": "The bishop has stepped to b4 to swap itself for the knight on c3. The reply is to develop the other bishop to d3, and if the exchange comes, recapturing with the c-pawn is the point — it takes the central squares and opens a path for the queen along the c-file, leaving White the bishop pair.",
+   "teaches": "Being pinned against nothing is not a threat. When a bishop comes out to trade itself for a knight, ask what it actually costs you: doubled pawns are only a weakness if they cannot be used, and a pair of bishops plus open lines is usually the better half of that bargain.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:6uFhzy3VnXA"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-jobava2-e5-supports-the-storm",
+   "lineSan": [
+    "d4",
+    "d5",
+    "Nc3",
+    "Nf6",
+    "Bf4",
+    "Bf5",
+    "e3",
+    "e6",
+    "Nf3",
+    "Bb4",
+    "Bd6",
+    "Bc5",
+    "Bf4",
+    "Bd6",
+    "Ne5"
+   ],
+   "opening": "Rapport-Jobava System",
+   "phase": "opening",
+   "explains": "The knight has landed on e5, and from here the choice is between castling and bringing the queen’s knight to d7. The difference matters: the knight on d7 can offer a trade on e5 and change the structure before White's kingside pawns get going, while castling leaves the centre alone and lets the storm start at once.",
+   "teaches": "A knight planted in the centre is often preparation for a pawn advance elsewhere, not an end in itself. Whether that advance works usually turns on move order — if the opponent can challenge the knight first, the whole plan arrives a move too late.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:6uFhzy3VnXA"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-jobava2-nowhere-safe-for-the-bishop",
+   "lineSan": [
+    "d4",
+    "d5",
+    "Nc3",
+    "Nf6",
+    "Bf4",
+    "Bf5",
+    "e3",
+    "e6",
+    "Nf3",
+    "Bb4",
+    "Bd6",
+    "Bc5",
+    "Bf4",
+    "Bd6",
+    "Ne5",
+    "O-O"
+   ],
+   "opening": "Rapport-Jobava System",
+   "phase": "opening",
+   "explains": "The advance of the g-pawn drives the bishop, and after it steps to g6 the h-pawn comes too, threatening to push again. Every square the bishop can then reach is covered by a white pawn, so it can only come off for a pawn — which is why the alternative here was the quieter bishop to d3, inviting the trade on White's terms instead.",
+   "teaches": "Pawns hunt bishops. When your king is castled on the side an enemy pawn storm is coming, count the squares your loose bishop can retreat to and check whether pawns cover them — a bishop with only defended squares to run to is still lost if every one of them can be taken by a pawn.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:6uFhzy3VnXA"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-jobava2-equalising-move-vs-natural-one",
+   "lineSan": [
+    "d4",
+    "d5",
+    "Nc3",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "e3",
+    "cxd4",
+    "exd4"
+   ],
+   "opening": "Rapport-Jobava System",
+   "phase": "opening",
+   "explains": "The centre has just been clarified and both sides look alike. Developing the queen's knight to c6 is the natural move and is the inaccuracy here, because the knight can be harried from b5; the small pawn move to a6 takes the square away first, and it is that line that holds the balance.",
+   "teaches": "In a symmetrical-looking position the most natural developing move and the move that actually equalises are frequently not the same. Where a knight would be hit by a knight jumping to b5, a quiet pawn move that takes that square away can be worth more than a tempo of development.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:6uFhzy3VnXA"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-modern-poisoned-b2",
+   "lineSan": [
+    "d4",
+    "g6",
+    "e4",
+    "Bg7",
+    "Nc3",
+    "c6",
+    "Be3",
+    "Qb6",
+    "Qd2"
+   ],
+   "opening": "Modern Defense: Standard Line",
+   "phase": "opening",
+   "explains": "Two paths diverge here. Capturing on b2 wins a pawn, but the rook then comes to b1 attacking the queen, and at that moment the only black piece off the back rank besides the queen is the fianchettoed bishop. Advancing in the centre with the d-pawn instead keeps the pieces at home for now but leaves nothing loose.",
+   "teaches": "Taking the pawn on b2 with the queen is a decision about time, not about material. The rook that swings to b1 arrives with a threat and gains the move it would otherwise have spent developing, so the side that grabbed the pawn ends up defending in a position where nothing else is out.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:B7r1bgPEyIQ"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-modern-take-the-exit-square",
+   "lineSan": [
+    "d4",
+    "g6",
+    "e4",
+    "Bg7",
+    "Nc3",
+    "c6",
+    "Be3",
+    "Qb6",
+    "Qd2",
+    "Qxb2",
+    "Rb1",
+    "Qa3",
+    "Nf3",
+    "b5",
+    "Bxb5",
+    "cxb5",
+    "Nxb5",
+    "Qxa2"
+   ],
+   "opening": "Modern Defense: Standard Line",
+   "phase": "opening",
+   "explains": "White has given up a bishop to open lines against the uncastled king, and the black queen sits on a2 with almost nothing else developed. Three tries come into consideration: the knight check, castling, and a quiet queen move — the difference between them is whether they hurry the queen along or shut her escape route first.",
+   "teaches": "When an enemy queen has raided deep into your position, the move that wins is rarely the check that chases her. Look instead for the quiet move that removes her last route home — a queen with plenty of squares and no way back is a piece you can hunt at leisure.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:B7r1bgPEyIQ"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-modern-central-break-timing",
+   "lineSan": [
+    "d4",
+    "g6",
+    "e4",
+    "Bg7",
+    "Nc3",
+    "c6",
+    "Be3",
+    "d5",
+    "f3"
+   ],
+   "opening": "Modern Defense: Standard Line",
+   "phase": "opening",
+   "explains": "White has supported the e4 pawn with the f-pawn rather than a piece, so the centre will not disappear on its own. Four continuations branch from here — capturing on e4, developing the queen to b6, bringing the knight round via h6, and striking with the e-pawn — and they lead to genuinely different games rather than transposing.",
+   "teaches": "Against a big pawn centre propped up by f3, the choice is between resolving the tension at once and keeping it. Releasing it hands the opponent a clear structure to play against; keeping it means accepting a cramped position for a while in exchange for keeping options.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:B7r1bgPEyIQ"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-alapin-knight-guards-c7",
+   "lineSan": [
+    "c3",
+    "c5",
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "d4",
+    "Nf6",
+    "Nf3",
+    "e6",
+    "Na3",
+    "cxd4",
+    "Nb5"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation, Barmen Defense",
+   "phase": "opening",
+   "explains": "The knight on b5 threatens to jump into c7, forking the king and the rook in the corner, so the square has to be covered. Bringing the bishop to d6 does cover it, and looks natural because it develops at the same time — but the bishop on c4 then hits the queen on d5 and White gains the move. The knight to a6 covers c7 just as well and asks nothing of the queen.",
+   "teaches": "When a knight arrives on b5 and eyes c7, that square wants a knight to guard it rather than a bishop. The question is not simply whether a move defends, but whether the defender then becomes a target itself — a guard that can be attacked with tempo has solved one problem by creating another.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:KNwKz9Ssi8c"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-alapin-answer-manoeuvre-with-manoeuvre",
+   "lineSan": [
+    "c3",
+    "c5",
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "d4",
+    "Nf6",
+    "Nf3",
+    "e6",
+    "Na3"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation, Barmen Defense",
+   "phase": "opening",
+   "explains": "The knight has stepped to a3 and is heading for c4, where it would press on b6 and d6. Three replies deal with it: a pawn to a6 preparing to gain space on the queenside, releasing the tension in the centre at once, and developing the queen's knight. The first keeps the most options, because once the white knight reaches c4 the queen's knight comes to d7 to cover b6 while developing, and the b-pawn then evicts the knight and opens the long diagonal for the light-squared bishop.",
+   "teaches": "A knight travelling to the edge is usually going somewhere better, and the reply that keeps most in hand is one that guards the squares it wants while a piece comes into play. Answering a manoeuvre with a manoeuvre keeps the pieces flowing; answering it with pawn moves alone leaves them at home.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:KNwKz9Ssi8c"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-alapin-g2-is-expensive",
+   "lineSan": [
+    "c3",
+    "c5",
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "d4",
+    "Nf6",
+    "Nf3",
+    "e6",
+    "Na3",
+    "a6",
+    "Nc4",
+    "Nbd7",
+    "Be2",
+    "cxd4",
+    "Nxd4"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation, Barmen Defense",
+   "phase": "opening",
+   "explains": "The queen can win the pawn on g2 from here, but the bishop then comes to f3 and every white piece arrives with a threat while the queen looks for somewhere to stand. Advancing the e-pawn instead offers the queen trade and keeps everything sound, leaving White only a small pull.",
+   "teaches": "The pawn on g2 is the most expensive free pawn in the opening. Taking it drags the queen to the edge of the board and away from everything she was doing, and the bill arrives as lost time rather than lost material — which is exactly the currency that decides an opening.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:KNwKz9Ssi8c"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-alapin-fork-not-flash",
+   "lineSan": [
+    "c3",
+    "c5",
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "d4",
+    "g6",
+    "Nf3",
+    "Bg7",
+    "Na3",
+    "cxd4",
+    "Bc4",
+    "Qe4+",
+    "Be3",
+    "dxe3"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation, Barmen Defense",
+   "phase": "opening",
+   "explains": "Two checks are available and only one works. The bishop check on b5 is the eye-catching one, and it is met by interposing the knight on c6. Taking on f7 instead forces the king out, and after the recapture the knight springs to g5 with check: the king has three squares, and the queen on e4 is undefended after every one of them.",
+   "teaches": "With the enemy queen sitting in the centre and the king still on its starting square, look for the check that wins the queen after the king moves — not the one that looks most like mate. The showy check is usually the one that can simply be blocked; the blunt capture is the one that sets up the fork.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:KNwKz9Ssi8c"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-belgrade-remove-the-guard",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "d4",
+    "exd4",
+    "Nd5",
+    "h6"
+   ],
+   "opening": "Four Knights Game: Scotch Variation, Belgrade Gambit",
+   "phase": "opening",
+   "explains": "Black is a pawn up on d4 and the knight on c6 is what holds it. Two bishop developments come into consideration: one to d3, intending to swing round afterwards, and one straight to b5, which attacks the guard at once — once that knight is dealt with, both the knight and the queen are ready to collect on d4.",
+   "teaches": "To win back a gambit pawn, attack the piece defending it rather than the pawn itself. Counting defenders first tells you which piece to harass, and a bishop that pins or hits the guard does more than a piece aimed at the pawn ever will.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Ov4J-FZWoQg"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-ruybird-standalone-structure",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Bb5",
+    "Nc6",
+    "Nf3",
+    "Nd4"
+   ],
+   "opening": "Ruy Lopez: Bird Variation",
+   "phase": "opening",
+   "explains": "Black jumps the knight to d4 instead of defending, offering the trade in the centre and inviting the bishop to declare itself. Three replies branch here: taking on d4, retreating the bishop along the diagonal, and dropping it all the way home. The resulting pawn structures do not arise from any other line in this opening.",
+   "teaches": "Some sidelines are not shortcuts into the main lines — they build a structure that appears nowhere else in the opening. When a line does that, general familiarity with the parent opening will not carry you, and the only preparation that helps is knowing this position specifically.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Ust1WJO7KQ0"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-ruybird-two-legitimate-replies",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Bb5",
+    "Nc6",
+    "Nf3",
+    "Nd4",
+    "Nxd4",
+    "exd4",
+    "O-O"
+   ],
+   "opening": "Ruy Lopez: Bird Variation",
+   "phase": "opening",
+   "explains": "White has taken on d4 and castled, leaving Black a pawn on d4 and a choice. Two moves are genuinely playable: the bishop to c5, which is the most common, and the modest c6, taking the b5 square away. Anything else concedes more than the line can afford.",
+   "teaches": "An opening the books call dubious is only dubious against an accurate reply. That is exactly why strong players still pick one — the objective verdict matters less than whether the person opposite has looked at it recently.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Ust1WJO7KQ0"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-ruybird-f7-and-the-loose-bishop",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Bb5",
+    "Nc6",
+    "Nf3",
+    "Nd4",
+    "Nxd4",
+    "exd4",
+    "O-O",
+    "Bc5",
+    "Bc4"
+   ],
+   "opening": "Ruy Lopez: Bird Variation",
+   "phase": "opening",
+   "explains": "The bishop has come to c4 and now eyes f7. Taking there with check drags the king out, and the queen arriving on h5 forces a pawn move — after which the undefended bishop on c5 falls. That is the tactical point behind the natural-looking bishop move, and it is why Black's replies here all have to reckon with it.",
+   "teaches": "A bishop aimed at f7 combines with a queen that can reach h5, and the two together are worth more than either alone. Before developing a bishop where it can be hit by that pair, check whether it is defended — the check on f7 is only the setup, and the piece it wins is somewhere else entirely.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Ust1WJO7KQ0"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-ruybird-space-with-tempo",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Bb5",
+    "Nc6",
+    "Nf3",
+    "Nd4",
+    "Nxd4",
+    "exd4",
+    "O-O",
+    "Bc5",
+    "Bc4",
+    "Nf6"
+   ],
+   "opening": "Ruy Lopez: Bird Variation",
+   "phase": "opening",
+   "explains": "The knight has just come to f6, and pushing the e-pawn attacks it immediately. Black cannot meet it by striking back in the centre, because that opens lines toward the king while the pieces are still at home; the pawn has to come forward first, and only then can the position be held together.",
+   "teaches": "When a knight develops to its natural square in front of a pawn that can advance, the advance usually comes with tempo — and a tempo spent chasing a piece is a tempo you did not have to spend on development. Look for the pawn push before you look for a new piece to move.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Ust1WJO7KQ0"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-3knights-sideline-exists-isnt-good",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3"
+   ],
+   "opening": "Three Knights Opening",
+   "phase": "opening",
+   "explains": "Two replies divide here. Developing the king's knight is the sound, mainstream choice. Jumping the queen's knight to d4 instead is the tricky one — it exists and is played, but it invites White to take on e5, and from there Black is relying on the opponent going wrong.",
+   "teaches": "A move can be playable, well known and still not good. Openings collect lines that survive because they set traps rather than because they equalise, and the way to meet one is to know the refutation rather than to avoid the whole position.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:h-9MlTRN-fk"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-3knights-queen-king-same-file",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "Bc4",
+    "Nd4",
+    "Nxe5",
+    "Qe7",
+    "Nxf7"
+   ],
+   "opening": "Three Knights Opening",
+   "phase": "opening",
+   "explains": "Grabbing the pawn on e4 with the knight loses a piece outright — White castles and the knight cannot be held, with the black queen and king sitting on the e-file behind it. The move that works instead is pushing the d-pawn, which cuts across the bishop's diagonal and the knight's path at the same time.",
+   "teaches": "A queen standing on the same file as her own king is a standing invitation, and it is worth noticing before you go pawn-grabbing rather than after. When the file between them can be opened, the tactics tend to appear on their own.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:h-9MlTRN-fk"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-3knights-dont-grab-the-rook",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "Bc4",
+    "Nd4",
+    "Nxe5",
+    "Qe7",
+    "Nxf7",
+    "d5"
+   ],
+   "opening": "Three Knights Opening",
+   "phase": "opening",
+   "explains": "Taking the rook on h8 is the greedy try, and after Black recaptures the bishop on c4 the knight has just two squares to leave by, g6 and f7, and Black covers them both. The alternative is to take on d5 and keep the pieces in play; the position stays messy, but nothing is stranded.",
+   "teaches": "A rook in the corner is worth more than a knight only if the knight comes home. Before taking material with a piece that has to travel back through enemy territory, count its exit squares — a won exchange that costs the piece which won it is not won at all.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:h-9MlTRN-fk"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-3knights-discovery-recapture",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "Bc4",
+    "Nd4",
+    "Nxe5",
+    "Qe7",
+    "Nxf7",
+    "d5",
+    "Nxd5",
+    "Qxf7"
+   ],
+   "opening": "Three Knights Opening",
+   "phase": "opening",
+   "explains": "The knight can leap to c7 with check, hitting the king and the rook in the corner at once — but the queen on f7 travels along the seventh rank and takes it, and the whole idea comes to nothing. Retreating the knight to b6 keeps material, though it leaves the king alone in the centre, where the queen swings to g6 and hunts it down the light squares.",
+   "teaches": "When you calculate a discovered attack, check that the piece you intend to win cannot simply capture the piece doing the discovering. That single question is what separates a real double attack from one that evaporates, and it is the most common way these tricks are miscounted.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:h-9MlTRN-fk"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-jobava-three-ways-to-meet-nb5",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "Bf5",
+    "Bc1",
+    "Ng8",
+    "Nb1",
+    "Bc8",
+    "Nc3",
+    "Nf6",
+    "Bf4",
+    "e6",
+    "Nb5"
+   ],
+   "opening": "Rapport-Jobava System",
+   "phase": "opening",
+   "explains": "The knight on b5 wants to land on c7, where it would check the king and hit the rook in the corner at the same time. Three replies deal with it: a bishop check on b4 that answers the threat by making one of its own, a knight to a6 covering the square from the edge, and a bishop to d6 blocking the square directly. All three address c7; they are not equally good.",
+   "teaches": "When one square is the whole problem, list every way of dealing with it before choosing — guard it, occupy it, or hit something bigger elsewhere. The move that comes to mind first is usually the one that defends most obviously, and obvious defence and best defence are different things.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:qN8kNz0_c3s"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-jobava-popular-is-not-best",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "Bf5",
+    "Bc1",
+    "Ng8",
+    "Nb1",
+    "Bc8",
+    "Nc3",
+    "Nf6",
+    "Bf4",
+    "e6",
+    "Nb5",
+    "Bd6",
+    "Nxd6+",
+    "cxd6",
+    "e3"
+   ],
+   "opening": "Rapport-Jobava System",
+   "phase": "opening",
+   "explains": "Black has just recaptured on d6 with the c-pawn, accepting doubled pawns on the d-file in exchange for the half-open c-file. From here the queen sortie to b6 is the critical try, while castling is the move most players reach for.",
+   "teaches": "The reply you will actually meet is not always the sharpest one. Preparing only for the critical try leaves you improvising in the position that turns up most often, so it is worth knowing the ordinary continuation at least as well as the forcing one.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:qN8kNz0_c3s"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-jobava-pawn-storm-hunts-the-bishop",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "Ng8",
+    "Nb1",
+    "Nf6",
+    "Nc3",
+    "Bf5",
+    "e3",
+    "e6",
+    "Nf3",
+    "Nbd7",
+    "Ne5",
+    "a6",
+    "g4",
+    "Bg6",
+    "h4"
+   ],
+   "opening": "Rapport-Jobava System",
+   "phase": "opening",
+   "explains": "The g- and h-pawns are marching at the bishop on g6, and the threat of pushing the h-pawn again is the reason Black is uncomfortable. Stopping it with the h-pawn does not solve the problem either: the knight on e5 simply takes the bishop, and recapturing with the f-pawn wrecks the pawns in front of the king, leaving the pawn on g6 as the next target.",
+   "teaches": "A bishop developed outside its own pawn chain can be chased by pawns, and the chase costs nothing when your king has not committed to that side. Before placing a bishop where pawns can reach it, look at whether the opponent's kingside pawns are still free to advance.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:qN8kNz0_c3s"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-englund-dont-hand-back-development",
+   "lineSan": [
+    "d4",
+    "e5",
+    "dxe5",
+    "f6"
+   ],
+   "opening": "Englund Gambit",
+   "phase": "opening",
+   "explains": "Black offers a second pawn to open the f-file and get the pieces out fast. Capturing on f6 does win it, but Black recaptures with the knight and emerges developed with the file already open in front of the white king. Pushing the e-pawn to e4 instead holds the extra pawn without opening anything, and leaves Black to prove the compensation.",
+   "teaches": "Against a gambit, the pawn is not the prize — the question is what the opponent gets for it. Taking everything offered often hands back exactly what was being paid for: quick development and an open file. Declining once, and keeping the extra pawn on your own terms, is usually the better bargain.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:vrZ3WwAXBsQ"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-englund-indirect-defence",
+   "lineSan": [
+    "d4",
+    "e5",
+    "dxe5",
+    "f6",
+    "e4"
+   ],
+   "opening": "Englund Gambit",
+   "phase": "opening",
+   "explains": "The pawn on e5 looks loose, but taking it opens the line to the black king: the queen comes to h5 with check the moment the f-pawn captures. So the pawn defends itself, and White has spent the move building a centre instead of babysitting it.",
+   "teaches": "A pawn can be defended by consequences rather than by defenders. When capturing it exposes the enemy king along a diagonal, the pawn is guarded by the check that follows — and a defence like that costs no piece and no time.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:vrZ3WwAXBsQ"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-englund-qb4-forks-the-bishop",
+   "lineSan": [
+    "d4",
+    "e5",
+    "dxe5",
+    "Nc6",
+    "Nf3",
+    "Qe7"
+   ],
+   "opening": "Englund Gambit",
+   "phase": "opening",
+   "explains": "Black eyes the pawn on e5 and White wants to hold it. Developing the bishop to f4 is the instinctive way, and it runs into the queen coming to b4: the fourth rank is empty after the capture on e5, so the check on the king and the attack on the bishop arrive together. The piece cannot be saved by parrying the check.",
+   "teaches": "Before defending a pawn with a piece, check the ranks and diagonals the defender will stand on. The most natural-looking guard is worth nothing if the enemy queen can check and attack it in the same move — and a fourth rank swept clear by an early exchange is exactly where that happens.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:vrZ3WwAXBsQ"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-englund-four-crossroads",
+   "lineSan": [
+    "d4",
+    "e5",
+    "dxe5",
+    "Bc5",
+    "Nc3"
+   ],
+   "opening": "Englund Gambit",
+   "phase": "opening",
+   "explains": "Black has developed the bishop actively instead of regaining the pawn, and three continuations branch from here: bringing out the queen's knight, supporting with the d-pawn, or the knight to e7. White's job in all of them is the same — finish development without giving the f-file or the long diagonal away.",
+   "teaches": "In a gambit that has already lost its pawn, the defender's tries fan out quickly and none of them is forced. Meeting them is a matter of knowing the one idea that answers the whole family — usually to develop, keep the extra pawn, and refuse open lines — rather than memorising a reply to each.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:vrZ3WwAXBsQ"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-traxler-sac-declined",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "Ng5",
+    "Bc5",
+    "Nxf7"
+   ],
+   "opening": "Italian Game: Two Knights Defense, Traxler Counterattack",
+   "phase": "opening",
+   "explains": "Taking on f7 drags the black king into the open, but it hands Black a long series of checks that must each be met exactly. White is no better at the end of it, so the risk buys no advantage — only an obligation to remember a great deal of theory correctly under a clock.",
+   "teaches": "A line can be objectively playable and still be the wrong practical choice. When every continuation is forcing and one slip ends the game, the recall a line demands is part of its price, and a verdict of \"balanced\" does not repay that price.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ykmGxE9DURo"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-traxler-surprise",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "Ng5",
+    "Bc5",
+    "d4"
+   ],
+   "opening": "Italian Game: Two Knights Defense, Traxler Counterattack",
+   "phase": "opening",
+   "explains": "Pushing the d-pawn opens the queen’s bishop and strikes at the centre while Black’s pieces are still committed to a kingside attack that has not started. Black’s position is defensible, but only by a reply most players never consider.",
+   "teaches": "Against a gambit whose whole value is preparation, the strongest practical reply is often the one your opponent has not studied. A move that is merely good but unexpected can outperform a move that is best and famous, because the opponent’s preparation is part of the position too.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ykmGxE9DURo"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-traxler-counter-not-retreat",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "Ng5",
+    "Bc5",
+    "d4",
+    "d5"
+   ],
+   "opening": "Italian Game: Two Knights Defense, Traxler Counterattack",
+   "phase": "opening",
+   "explains": "Advancing the d-pawn ignores the threat and challenges the bishop that aims at f7. Because it interferes with the most dangerous attacking piece rather than fleeing, Black gains the time a defensive move would have spent.",
+   "teaches": "When a defender’s instinct is to protect the attacked point, the saving move is often to hit something of equal value instead. Counting who is attacking what, rather than rescuing the piece under fire, is what finds these.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ykmGxE9DURo"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-traxler-simplifying-capture",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "Ng5",
+    "Bc5",
+    "Bxf7+",
+    "Ke7",
+    "Bc4"
+   ],
+   "opening": "Italian Game: Two Knights Defense, Traxler Counterattack",
+   "phase": "opening",
+   "explains": "Capturing with the bishop checks immediately and forces the king to step forward before Black can coordinate. The lines that make this opening dangerous never begin, and White keeps a sound extra pawn and a safe king.",
+   "teaches": "Against an aggressive gambit, prefer the capture that removes the opponent’s attacking chances over the one that wins the most material. The best practical answer often leaves the fewest enemy pieces pointing at your king.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ykmGxE9DURo"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-traxler-king-choice",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "Ng5",
+    "Bc5",
+    "Nxf7",
+    "Bxf2+",
+    "Kxf2",
+    "Nxe4+"
+   ],
+   "opening": "Italian Game: Two Knights Defense, Traxler Counterattack",
+   "phase": "opening",
+   "explains": "The king has six legal squares here. Stepping forward keeps everything defended and walks into a forced mate; stepping back concedes a pawn and survives. The difference is not calculation depth, it is which question was asked first.",
+   "teaches": "A king dragged into the open has to choose between holding on to material and getting out of the way, and the instinct to hold on is usually the losing one. Count the checks available to the attacker before deciding where to step, not after.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ykmGxE9DURo"
+   ],
+   "positionSource": "high"
+  }
+ ]
+}

@@ -62,6 +62,27 @@ const loadTracks = (): Track[] => {
  *  note is about. */
 const posKey = (fen: string): string => fen.split(' ').slice(0, 2).join(' ');
 
+/** FEN after a move prefix, memoized.
+ *
+ *  Replaying each prefix from the opening position is quadratic in line length,
+ *  and with 100+ ply lessons and twenty tracks these checks stopped FAILING and
+ *  started TIMING OUT — the least useful way for a gate to break, since a
+ *  timeout says nothing about the data. A prefix is its parent plus one move, so
+ *  each is derived from the cached parent instead. Shared across checks: the
+ *  same prefixes are walked by more than one. `''` caches an illegal line. */
+const fenCache = new Map<string, string>();
+const fenOfPrefix = (sans: string[]): string | null => {
+  const key = sans.join(' ');
+  const hit = fenCache.get(key);
+  if (hit !== undefined) return hit || null;
+  const parent = sans.length === 1 ? new Chess().fen() : fenOfPrefix(sans.slice(0, -1));
+  if (parent === null) { fenCache.set(key, ''); return null; }
+  const c = new Chess(parent);
+  try { c.move(sans[sans.length - 1]); } catch { fenCache.set(key, ''); return null; }
+  fenCache.set(key, c.fen());
+  return c.fen();
+};
+
 describe('video tracks', () => {
   const tracks = loadTracks();
 
@@ -88,18 +109,12 @@ describe('video tracks', () => {
       for (const m of track.moves) {
         line = line.slice(0, m.ply - m.line.length);
         line.push(...m.line);
-        const c = new Chess();
-        let threw: string | null = null;
-        try {
-          for (const san of line) c.move(san);
-        } catch (e) {
-          threw = String(e);
-        }
-        expect(threw, `${track.videoId} @${m.t}s: ${line.join(' ')}`).toBeNull();
+        const got = fenOfPrefix(line);
+        expect(got, `${track.videoId} @${m.t}s: illegal line ${line.join(' ')}`).not.toBeNull();
         // The FEN must be what those moves actually produce. This is the check
         // that makes a track trustworthy: prose can be graded against a board
         // only if the board is what the moves say it is.
-        expect(posKey(c.fen()), `${track.videoId} @${m.t}s FEN disagrees with its moves`)
+        expect(got && posKey(got), `${track.videoId} @${m.t}s FEN disagrees with its moves`)
           .toBe(posKey(m.fen));
       }
     }
@@ -154,7 +169,7 @@ describe('video tracks', () => {
     }
   });
 
-  it('every opening a track claims is one the lesson actually reached', () => {
+  it('every opening a track claims is one the lesson actually reached', { timeout: 60000 }, () => {
     // `by-opening.json` is how a later session finds what we have for an
     // opening, and until now nothing checked it. The risk it carries is the one
     // this whole pipeline exists to remove: an upload titled "Scotch Game" that
@@ -167,9 +182,14 @@ describe('video tracks', () => {
     const db = JSON.parse(
       readFileSync(join(process.cwd(), 'src/data/openings-lichess.json'), 'utf8'),
     ) as Array<{ name: string; pgn: string }>;
-    const dbPos = new Map<string, string>();
+    // A NAME MAPS TO MANY POSITIONS, not one. "Queen's Pawn Game: Chigorin
+    // Variation" is four separate DB entries — d4 Nf6 Nc3 d5, d4 d5 Nc3,
+    // d4 d5 Nc3 e6 and d4 d5 Nf3 Nc6 — and the same is true across the file
+    // wherever move orders converge on one name. Keying name -> one position
+    // made this gate fail on a correct build, so it collects every position a
+    // name is used for and asks whether the cited line is one of them.
+    const dbPos = new Map<string, Set<string>>();
     for (const e of db) {
-      if (dbPos.has(e.name)) continue;
       const c = new Chess();
       let ok = true;
       for (const san of e.pgn.trim().split(/\s+/).filter((t) => !/^\d+\.+$/.test(t))) {
@@ -177,7 +197,10 @@ describe('video tracks', () => {
         // catch IS the guard — testing the return value is dead code.
         try { c.move(san); } catch { ok = false; break; }
       }
-      if (ok) dbPos.set(e.name, posKey(c.fen()));
+      if (!ok) continue;
+      const bucket = dbPos.get(e.name) ?? new Set<string>();
+      bucket.add(posKey(c.fen()));
+      dbPos.set(e.name, bucket);
     }
 
     for (const track of tracks) {
@@ -188,16 +211,17 @@ describe('video tracks', () => {
         if (!m.line.length) continue;
         line = line.slice(0, m.ply - m.line.length);
         line.push(...m.line);
-        const c = new Chess();
-        for (const san of line) {
-          try { c.move(san); } catch { break; }
-          visited.add(posKey(c.fen()));
+        for (let n = 1; n <= line.length; n++) {
+          const f = fenOfPrefix(line.slice(0, n));
+          if (f === null) break;
+          visited.add(posKey(f));
         }
       }
 
       for (const o of track.openings ?? []) {
         const want = dbPos.get(o.name);
         expect(want, `${track.videoId}: "${o.name}" is not a name in the DB`).toBeDefined();
+        if (!want) continue;
         const c = new Chess();
         let threw: string | null = null;
         try {
@@ -207,8 +231,8 @@ describe('video tracks', () => {
         }
         expect(threw, `${track.videoId}: "${o.name}" cites an illegal line`).toBeNull();
         // The cited line must BE that opening, and the lesson must have played it.
-        expect(posKey(c.fen()), `${track.videoId}: "${o.name}" cites a line that is a different opening`)
-          .toBe(want);
+        expect(want.has(posKey(c.fen())),
+          `${track.videoId}: "${o.name}" cites a line that is a different opening`).toBe(true);
         expect(visited.has(posKey(c.fen())), `${track.videoId}: "${o.name}" was never on the board`)
           .toBe(true);
       }

@@ -1,0 +1,26 @@
+[
+ {
+  "id": "vn-alapin-knight-guards-c7",
+  "line": "c3 c5 e4 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 cxd4 Nb5",
+  "teaches": "When a knight arrives on b5 and eyes c7, that square wants a knight to guard it rather than a bishop. The question is not simply whether a move defends, but whether the defender then becomes a target itself — a guard that can be attacked with tempo has solved one problem by creating another.",
+  "explains": "The knight on b5 threatens to jump into c7, forking the king and the rook in the corner, so the square has to be covered. Bringing the bishop to d6 does cover it, and looks natural because it develops at the same time — but the bishop on c4 then hits the queen on d5 and White gains the move. The knight to a6 covers c7 just as well and asks nothing of the queen."
+ },
+ {
+  "id": "vn-alapin-answer-manoeuvre-with-manoeuvre",
+  "line": "c3 c5 e4 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3",
+  "teaches": "A knight travelling to the edge is usually going somewhere better, and the reply that keeps most in hand is one that guards the squares it wants while a piece comes into play. Answering a manoeuvre with a manoeuvre keeps the pieces flowing; answering it with pawn moves alone leaves them at home.",
+  "explains": "The knight has stepped to a3 and is heading for c4, where it would press on b6 and d6. Three replies deal with it: a pawn to a6 preparing to gain space on the queenside, releasing the tension in the centre at once, and developing the queen's knight. The first keeps the most options, because once the white knight reaches c4 the queen's knight comes to d7 to cover b6 while developing, and the b-pawn then evicts the knight and opens the long diagonal for the light-squared bishop."
+ },
+ {
+  "id": "vn-alapin-g2-is-expensive",
+  "line": "c3 c5 e4 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 a6 Nc4 Nbd7 Be2 cxd4 Nxd4",
+  "teaches": "The pawn on g2 is the most expensive free pawn in the opening. Taking it drags the queen to the edge of the board and away from everything she was doing, and the bill arrives as lost time rather than lost material — which is exactly the currency that decides an opening.",
+  "explains": "The queen can win the pawn on g2 from here, but the bishop then comes to f3 and every white piece arrives with a threat while the queen looks for somewhere to stand. Advancing the e-pawn instead offers the queen trade and keeps everything sound, leaving White only a small pull."
+ },
+ {
+  "id": "vn-alapin-fork-not-flash",
+  "line": "c3 c5 e4 d5 exd5 Qxd5 d4 g6 Nf3 Bg7 Na3 cxd4 Bc4 Qe4+ Be3 dxe3",
+  "teaches": "With the enemy queen sitting in the centre and the king still on its starting square, look for the check that wins the queen after the king moves — not the one that looks most like mate. The showy check is usually the one that can simply be blocked; the blunt capture is the one that sets up the fork.",
+  "explains": "Two checks are available and only one works. The bishop check on b5 is the eye-catching one, and it is met by interposing the knight on c6. Taking on f7 instead forces the king out, and after the recapture the knight springs to g5 with check: the king has three squares, and the queen on e4 is undefended after every one of them."
+ }
+]

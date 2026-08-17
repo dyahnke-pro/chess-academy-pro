@@ -610,5 +610,37 @@
    "line": "d4",
    "coverage": 1
   }
+ ],
+ "notes": [
+  {
+   "id": "vn-jobava-three-ways-to-meet-nb5",
+   "line": "d4 Nf6 Nc3 d5 Bf4 Bf5 Bc1 Ng8 Nb1 Bc8 Nc3 Nf6 Bf4 e6 Nb5",
+   "teaches": "When one square is the whole problem, list every way of dealing with it before choosing — guard it, occupy it, or hit something bigger elsewhere. The move that comes to mind first is usually the one that defends most obviously, and obvious defence and best defence are different things.",
+   "explains": "The knight on b5 wants to land on c7, where it would check the king and hit the rook in the corner at the same time. Three replies deal with it: a bishop check on b4 that answers the threat by making one of its own, a knight to a6 covering the square from the edge, and a bishop to d6 blocking the square directly. All three address c7; they are not equally good.",
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 1 8",
+   "t": 412.5,
+   "ply": 15,
+   "source": "yt:qN8kNz0_c3s"
+  },
+  {
+   "id": "vn-jobava-popular-is-not-best",
+   "line": "d4 Nf6 Nc3 d5 Bf4 Bf5 Bc1 Ng8 Nb1 Bc8 Nc3 Nf6 Bf4 e6 Nb5 Bd6 Nxd6+ cxd6 e3",
+   "teaches": "The reply you will actually meet is not always the sharpest one. Preparing only for the critical try leaves you improvising in the position that turns up most often, so it is worth knowing the ordinary continuation at least as well as the forcing one.",
+   "explains": "Black has just recaptured on d6 with the c-pawn, accepting doubled pawns on the d-file in exchange for the half-open c-file. From here the queen sortie to b6 is the critical try, while castling is the move most players reach for.",
+   "fen": "rnbqk2r/pp3ppp/3ppn2/3p4/3P1B2/4P3/PPP2PPP/R2QKBNR b KQkq - 0 10",
+   "t": 485,
+   "ply": 19,
+   "source": "yt:qN8kNz0_c3s"
+  },
+  {
+   "id": "vn-jobava-pawn-storm-hunts-the-bishop",
+   "line": "d4 Nf6 Nc3 d5 Bf4 Ng8 Nb1 Nf6 Nc3 Bf5 e3 e6 Nf3 Nbd7 Ne5 a6 g4 Bg6 h4",
+   "teaches": "A bishop developed outside its own pawn chain can be chased by pawns, and the chase costs nothing when your king has not committed to that side. Before placing a bishop where pawns can reach it, look at whether the opponent's kingside pawns are still free to advance.",
+   "explains": "The g- and h-pawns are marching at the bishop on g6, and the threat of pushing the h-pawn again is the reason Black is uncomfortable. Stopping it with the h-pawn does not solve the problem either: the knight on e5 simply takes the bishop, and recapturing with the f-pawn wrecks the pawns in front of the king, leaving the pawn on g6 as the next target.",
+   "fen": "r2qkb1r/1ppn1ppp/p3pnb1/3pN3/3P1BPP/2N1P3/PPP2P2/R2QKB1R b KQkq - 0 10",
+   "t": 707,
+   "ply": 19,
+   "source": "yt:qN8kNz0_c3s"
+  }
  ]
 }

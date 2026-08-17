@@ -95,6 +95,76 @@ def _cell_features(g, x0, y0, sq):
     return mean, std
 
 
+def read_board_calibrated_arr(g, x0, y0, sq, cal):
+    """`read_board_calibrated` on an array already in memory.
+
+    Exists so frames can be STREAMED from ffmpeg instead of written to disk.
+    Measured on this corpus: 2fps over a ~65-minute lesson is ~7,800 PNGs at
+    ~2.6GB, so scanning the 34 downloaded videos the file-based way needs ~90GB
+    against 23GB free — the pipeline worked at six videos and silently did not
+    scale past about eight. Nothing about the reading changes; only where the
+    pixels come from.
+    """
+    import numpy as np
+    mean, std = _cell_features(g, x0, y0, sq)
+    idx = np.indices((8, 8)).sum(axis=0) % 2
+    out = []
+    for r in range(8):
+        row = ''
+        for c in range(8):
+            parity = idx[r, c]
+            best, bestd = '.', None
+            for label in ('b', 'w', '.'):
+                cm, cs_ = cal[(parity, label)]
+                d = (mean[r, c] - cm) ** 2 + 3.0 * (std[r, c] - cs_) ** 2
+                if bestd is None or d < bestd:
+                    best, bestd = label, d
+            row += best
+        out.append(row)
+    return out
+
+
+def calibrate_from_start_arr(g, x0, y0, sq):
+    """`calibrate_from_start` on an array already in memory."""
+    import numpy as np
+    mean, std = _cell_features(g, x0, y0, sq)
+    idx = np.indices((8, 8)).sum(axis=0) % 2
+    rows = {'b': [0, 1], 'w': [6, 7], '.': [2, 3, 4, 5]}
+    cal = {}
+    for parity in (0, 1):
+        for label, rs in rows.items():
+            m = [mean[r, c] for r in rs for c in range(8) if idx[r, c] == parity]
+            s = [std[r, c] for r in rs for c in range(8) if idx[r, c] == parity]
+            cal[(parity, label)] = (float(np.median(m)), float(np.median(s)))
+    return cal
+
+
+def read_board_arr(g, x0, y0, sq):
+    """`read_board` (uncalibrated) on an array already in memory."""
+    import numpy as np
+    cs = _cells(g, x0, y0, sq)
+    lum = np.array([[cs[r, c].mean() for c in range(8)] for r in range(8)])
+    idx = np.indices((8, 8)).sum(axis=0) % 2
+    a, b = np.median(lum[idx == 0]), np.median(lum[idx == 1])
+    dark_sq, light_sq = min(a, b), max(a, b)
+    rows = []
+    for r in range(8):
+        row = ''
+        for c in range(8):
+            p = cs[r, c]
+            if p.size < 4:
+                row += '?'
+                continue
+            bright = int((p > light_sq + MARGIN).sum())
+            dark = int((p < dark_sq - MARGIN).sum())
+            if max(bright, dark) < p.size * 0.06:
+                row += '.'
+            else:
+                row += 'w' if bright > dark else 'b'
+        rows.append(row)
+    return rows
+
+
 def calibrate_from_start(path, x0, y0, sq):
     """Learn the three classes from a frame KNOWN to show the start position.
 

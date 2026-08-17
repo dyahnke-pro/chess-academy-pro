@@ -1,0 +1,545 @@
+{
+ "videoId": "6nEI2p3ftgk",
+ "title": "Understanding Positional Drawbacks | Philidor Defense | GM Naroditsky’s Top Theory Speedrun",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-17",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 5262,
+  "settledPositions": null
+ },
+ "plies": 63,
+ "rewinds": 8,
+ "moves": [
+  {
+   "t": 122,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 160.5,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 165,
+   "ply": 4,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3"
+  },
+  {
+   "t": 184.5,
+   "ply": 3,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 188,
+   "ply": 4,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3"
+  },
+  {
+   "t": 241,
+   "ply": 5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3"
+  },
+  {
+   "t": 245,
+   "ply": 6,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rnbqk1nr/ppp1bppp/3p4/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 4"
+  },
+  {
+   "t": 264,
+   "ply": 7,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqk1nr/ppp1bppp/3p4/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 3 4"
+  },
+  {
+   "t": 272.5,
+   "ply": 8,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/3p1n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 4 5"
+  },
+  {
+   "t": 291.5,
+   "ply": 9,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/3p1n2/4p3/2BPP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 0 5"
+  },
+  {
+   "t": 295.5,
+   "ply": 10,
+   "line": [
+    "exd4"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/3p1n2/8/2BpP3/2N2N2/PPP2PPP/R1BQK2R w KQkq - 0 6"
+  },
+  {
+   "t": 297.5,
+   "ply": 11,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/3p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 6"
+  },
+  {
+   "t": 299.5,
+   "ply": 12,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1bppp/3p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R w KQ - 1 7"
+  },
+  {
+   "t": 396.5,
+   "ply": 13,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "rnbq1rk1/ppp1bppp/3p1n2/8/3NP3/1BN5/PPP2PPP/R1BQK2R b KQ - 2 7"
+  },
+  {
+   "t": 402.5,
+   "ply": 14,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbq1rk1/1pp1bppp/p2p1n2/8/3NP3/1BN5/PPP2PPP/R1BQK2R w KQ - 0 8"
+  },
+  {
+   "t": 479.5,
+   "ply": 15,
+   "line": [
+    "a4"
+   ],
+   "fen": "rnbq1rk1/1pp1bppp/p2p1n2/8/P2NP3/1BN5/1PP2PPP/R1BQK2R b KQ - 0 8"
+  },
+  {
+   "t": 484,
+   "ply": 16,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "rn1q1rk1/1ppbbppp/p2p1n2/8/P2NP3/1BN5/1PP2PPP/R1BQK2R w KQ - 1 9"
+  },
+  {
+   "t": 489,
+   "ply": 17,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/1ppbbppp/p2p1n2/8/P2NP3/1BN5/1PP2PPP/R1BQ1RK1 b - - 2 9"
+  },
+  {
+   "t": 491.5,
+   "ply": 18,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2q1rk1/1ppbbppp/p1np1n2/8/P2NP3/1BN5/1PP2PPP/R1BQ1RK1 w - - 3 10"
+  },
+  {
+   "t": 492.5,
+   "ply": 17,
+   "line": [],
+   "fen": "rn1q1rk1/1ppbbppp/p2p1n2/8/P2NP3/1BN5/1PP2PPP/R1BQ1RK1 b - - 2 9"
+  },
+  {
+   "t": 514,
+   "ply": 18,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2q1rk1/1ppbbppp/p1np1n2/8/P2NP3/1BN5/1PP2PPP/R1BQ1RK1 w - - 3 10"
+  },
+  {
+   "t": 560,
+   "ply": 19,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r2q1rk1/1ppbbppp/p1np1n2/8/P2NP3/1BN5/1PP2PPP/R1BQR1K1 b - - 4 10"
+  },
+  {
+   "t": 564.5,
+   "ply": 20,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r2q1rk1/1ppbbppp/p2p1n2/8/P2nP3/1BN5/1PP2PPP/R1BQR1K1 w - - 0 11"
+  },
+  {
+   "t": 565.5,
+   "ply": 21,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r2q1rk1/1ppbbppp/p2p1n2/8/P2QP3/1BN5/1PP2PPP/R1B1R1K1 b - - 0 11"
+  },
+  {
+   "t": 568.5,
+   "ply": 22,
+   "line": [
+    "Bc6"
+   ],
+   "fen": "r2q1rk1/1pp1bppp/p1bp1n2/8/P2QP3/1BN5/1PP2PPP/R1B1R1K1 w - - 1 12"
+  },
+  {
+   "t": 629.5,
+   "ply": 23,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r2q1rk1/1pp1bppp/p1bp1n2/8/P2QPB2/1BN5/1PP2PPP/R3R1K1 b - - 2 12"
+  },
+  {
+   "t": 635.5,
+   "ply": 24,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r2q1rk1/1ppnbppp/p1bp4/8/P2QPB2/1BN5/1PP2PPP/R3R1K1 w - - 3 13"
+  },
+  {
+   "t": 678,
+   "ply": 25,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r2q1rk1/1ppnbppp/p1bp4/8/P3PB2/1BN5/1PPQ1PPP/R3R1K1 b - - 4 13"
+  },
+  {
+   "t": 696.5,
+   "ply": 26,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "r2q1rk1/1pp1bppp/p1bp4/4n3/P3PB2/1BN5/1PPQ1PPP/R3R1K1 w - - 5 14"
+  },
+  {
+   "t": 751,
+   "ply": 27,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r2q1rk1/1pp1bppp/p1bp4/3Nn3/P3PB2/1B6/1PPQ1PPP/R3R1K1 b - - 6 14"
+  },
+  {
+   "t": 761,
+   "ply": 28,
+   "line": [
+    "Bxd5"
+   ],
+   "fen": "r2q1rk1/1pp1bppp/p2p4/3bn3/P3PB2/1B6/1PPQ1PPP/R3R1K1 w - - 0 15"
+  },
+  {
+   "t": 769.5,
+   "ply": 26,
+   "line": [],
+   "fen": "r2q1rk1/1pp1bppp/p1bp4/4n3/P3PB2/1BN5/1PPQ1PPP/R3R1K1 w - - 5 14"
+  },
+  {
+   "t": 772,
+   "ply": 28,
+   "line": [
+    "Nd5",
+    "Bxd5"
+   ],
+   "fen": "r2q1rk1/1pp1bppp/p2p4/3bn3/P3PB2/1B6/1PPQ1PPP/R3R1K1 w - - 0 15"
+  },
+  {
+   "t": 776.5,
+   "ply": 29,
+   "line": [
+    "Bxd5"
+   ],
+   "fen": "r2q1rk1/1pp1bppp/p2p4/3Bn3/P3PB2/8/1PPQ1PPP/R3R1K1 b - - 0 15"
+  },
+  {
+   "t": 779,
+   "ply": 28,
+   "line": [],
+   "fen": "r2q1rk1/1pp1bppp/p2p4/3bn3/P3PB2/1B6/1PPQ1PPP/R3R1K1 w - - 0 15"
+  },
+  {
+   "t": 780,
+   "ply": 30,
+   "line": [
+    "Bxd5",
+    "c6"
+   ],
+   "fen": "r2q1rk1/1p2bppp/p1pp4/3Bn3/P3PB2/8/1PPQ1PPP/R3R1K1 w - - 0 16"
+  },
+  {
+   "t": 784,
+   "ply": 31,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "r2q1rk1/1p2bppp/p1pp4/4n3/P3PB2/1B6/1PPQ1PPP/R3R1K1 b - - 1 16"
+  },
+  {
+   "t": 787,
+   "ply": 32,
+   "line": [
+    "Bf6"
+   ],
+   "fen": "r2q1rk1/1p3ppp/p1pp1b2/4n3/P3PB2/1B6/1PPQ1PPP/R3R1K1 w - - 2 17"
+  },
+  {
+   "t": 806.5,
+   "ply": 33,
+   "line": [
+    "Rad1"
+   ],
+   "fen": "r2q1rk1/1p3ppp/p1pp1b2/4n3/P3PB2/1B6/1PPQ1PPP/3RR1K1 b - - 3 17"
+  },
+  {
+   "t": 852,
+   "ply": 36,
+   "line": [
+    "Ng6",
+    "Bxd6",
+    "Re8"
+   ],
+   "fen": "r2qr1k1/1p3ppp/p1pB1bn1/8/P3P3/1B6/1PPQ1PPP/3RR1K1 w - - 1 19"
+  },
+  {
+   "t": 853.5,
+   "ply": 33,
+   "line": [],
+   "fen": "r2q1rk1/1p3ppp/p1pp1b2/4n3/P3PB2/1B6/1PPQ1PPP/3RR1K1 b - - 3 17"
+  },
+  {
+   "t": 871,
+   "ply": 34,
+   "line": [
+    "Ng6"
+   ],
+   "fen": "r2q1rk1/1p3ppp/p1pp1bn1/8/P3PB2/1B6/1PPQ1PPP/3RR1K1 w - - 4 18"
+  },
+  {
+   "t": 897.5,
+   "ply": 35,
+   "line": [
+    "Bxd6"
+   ],
+   "fen": "r2q1rk1/1p3ppp/p1pB1bn1/8/P3P3/1B6/1PPQ1PPP/3RR1K1 b - - 0 18"
+  },
+  {
+   "t": 911,
+   "ply": 36,
+   "line": [
+    "Re8"
+   ],
+   "fen": "r2qr1k1/1p3ppp/p1pB1bn1/8/P3P3/1B6/1PPQ1PPP/3RR1K1 w - - 1 19"
+  },
+  {
+   "t": 1028,
+   "ply": 37,
+   "line": [
+    "f4"
+   ],
+   "fen": "r2qr1k1/1p3ppp/p1pB1bn1/8/P3PP2/1B6/1PPQ2PP/3RR1K1 b - - 0 19"
+  },
+  {
+   "t": 1033,
+   "ply": 36,
+   "line": [],
+   "fen": "r2qr1k1/1p3ppp/p1pB1bn1/8/P3P3/1B6/1PPQ1PPP/3RR1K1 w - - 1 19"
+  },
+  {
+   "t": 1052.5,
+   "ply": 37,
+   "line": [
+    "f4"
+   ],
+   "fen": "r2qr1k1/1p3ppp/p1pB1bn1/8/P3PP2/1B6/1PPQ2PP/3RR1K1 b - - 0 19"
+  },
+  {
+   "t": 1065,
+   "ply": 36,
+   "line": [],
+   "fen": "r2qr1k1/1p3ppp/p1pB1bn1/8/P3P3/1B6/1PPQ1PPP/3RR1K1 w - - 1 19"
+  },
+  {
+   "t": 1073.5,
+   "ply": 38,
+   "line": [
+    "f4",
+    "Be7"
+   ],
+   "fen": "r2qr1k1/1p2bppp/p1pB2n1/8/P3PP2/1B6/1PPQ2PP/3RR1K1 w - - 1 20"
+  },
+  {
+   "t": 1127,
+   "ply": 39,
+   "line": [
+    "e5"
+   ],
+   "fen": "r2qr1k1/1p2bppp/p1pB2n1/4P3/P4P2/1B6/1PPQ2PP/3RR1K1 b - - 0 20"
+  },
+  {
+   "t": 1132,
+   "ply": 38,
+   "line": [],
+   "fen": "r2qr1k1/1p2bppp/p1pB2n1/8/P3PP2/1B6/1PPQ2PP/3RR1K1 w - - 1 20"
+  },
+  {
+   "t": 1139.5,
+   "ply": 40,
+   "line": [
+    "e5",
+    "Bxd6"
+   ],
+   "fen": "r2qr1k1/1p3ppp/p1pb2n1/4P3/P4P2/1B6/1PPQ2PP/3RR1K1 w - - 0 21"
+  },
+  {
+   "t": 1147.5,
+   "ply": 41,
+   "line": [
+    "exd6"
+   ],
+   "fen": "r2qr1k1/1p3ppp/p1pP2n1/8/P4P2/1B6/1PPQ2PP/3RR1K1 b - - 0 21"
+  },
+  {
+   "t": 1154.5,
+   "ply": 42,
+   "line": [
+    "Rxe1+"
+   ],
+   "fen": "r2q2k1/1p3ppp/p1pP2n1/8/P4P2/1B6/1PPQ2PP/3Rr1K1 w - - 0 22"
+  },
+  {
+   "t": 1193,
+   "ply": 43,
+   "line": [
+    "Rxe1"
+   ],
+   "fen": "r2q2k1/1p3ppp/p1pP2n1/8/P4P2/1B6/1PPQ2PP/4R1K1 b - - 0 22"
+  },
+  {
+   "t": 1211,
+   "ply": 44,
+   "line": [
+    "Qf6"
+   ],
+   "fen": "r5k1/1p3ppp/p1pP1qn1/8/P4P2/1B6/1PPQ2PP/4R1K1 w - - 1 23"
+  },
+  {
+   "t": 1247,
+   "ply": 45,
+   "line": [
+    "d7"
+   ],
+   "fen": "r5k1/1p1P1ppp/p1p2qn1/8/P4P2/1B6/1PPQ2PP/4R1K1 b - - 0 23"
+  },
+  {
+   "t": 1289,
+   "ply": 46,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "3r2k1/1p1P1ppp/p1p2qn1/8/P4P2/1B6/1PPQ2PP/4R1K1 w - - 1 24"
+  },
+  {
+   "t": 1378.5,
+   "ply": 47,
+   "line": [
+    "Re8+"
+   ],
+   "fen": "3rR1k1/1p1P1ppp/p1p2qn1/8/P4P2/1B6/1PPQ2PP/6K1 b - - 2 24"
+  },
+  {
+   "t": 1384.5,
+   "ply": 48,
+   "line": [
+    "Nf8"
+   ],
+   "fen": "3rRnk1/1p1P1ppp/p1p2q2/8/P4P2/1B6/1PPQ2PP/6K1 w - - 3 25"
+  },
+  {
+   "t": 1390.5,
+   "ply": 49,
+   "line": [
+    "Qb4"
+   ],
+   "fen": "3rRnk1/1p1P1ppp/p1p2q2/8/PQ3P2/1B6/1PP3PP/6K1 b - - 4 25"
+  },
+  {
+   "t": 1521.5,
+   "ply": 50,
+   "line": [
+    "Rxd7"
+   ],
+   "fen": "4Rnk1/1p1r1ppp/p1p2q2/8/PQ3P2/1B6/1PP3PP/6K1 w - - 0 26"
+  },
+  {
+   "t": 1523,
+   "ply": 51,
+   "line": [
+    "Rxf8#"
+   ],
+   "fen": "5Rk1/1p1r1ppp/p1p2q2/8/PQ3P2/1B6/1PP3PP/6K1 b - - 0 26"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Philidor Defense",
+   "eco": "C41",
+   "plies": 4,
+   "line": "e4 e5 Nf3 d6",
+   "coverage": 0.96
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.98
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Philidor Defense",
+  "confirmed": true
+ }
+}

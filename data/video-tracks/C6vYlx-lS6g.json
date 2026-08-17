@@ -1,0 +1,390 @@
+{
+ "videoId": "C6vYlx-lS6g",
+ "title": "The Glek System Explained | GM Naroditsky Theory Speedrun",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-17",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 9016,
+  "settledPositions": null
+ },
+ "plies": 36,
+ "rewinds": 6,
+ "moves": [
+  {
+   "t": 31.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 40,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 41.5,
+   "ply": 4,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 45,
+   "ply": 3,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 54,
+   "ply": 4,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 58,
+   "ply": 5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3"
+  },
+  {
+   "t": 60.5,
+   "ply": 6,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4"
+  },
+  {
+   "t": 105.5,
+   "ply": 7,
+   "line": [
+    "g3"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 120.5,
+   "ply": 2,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 150.5,
+   "ply": 6,
+   "line": [
+    "Nc3",
+    "Nc6",
+    "Nf3",
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4"
+  },
+  {
+   "t": 151.5,
+   "ply": 7,
+   "line": [
+    "g3"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 159,
+   "ply": 8,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R w KQkq - 1 5"
+  },
+  {
+   "t": 160,
+   "ply": 9,
+   "line": [
+    "Bg2"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 2 5"
+  },
+  {
+   "t": 162,
+   "ply": 10,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R w KQkq - 0 6"
+  },
+  {
+   "t": 186,
+   "ply": 11,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/4P3/2NP1NP1/PPP2PBP/R1BQK2R b KQkq - 0 6"
+  },
+  {
+   "t": 189.5,
+   "ply": 12,
+   "line": [
+    "h6"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/2np1n1p/2b1p3/4P3/2NP1NP1/PPP2PBP/R1BQK2R w KQkq - 0 7"
+  },
+  {
+   "t": 205.5,
+   "ply": 13,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/2np1n1p/2b1p3/4P3/2NP1NP1/PPP2PBP/R1BQ1RK1 b kq - 1 7"
+  },
+  {
+   "t": 206.5,
+   "ply": 14,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/ppp2pp1/2np1n1p/2b1p3/4P3/2NP1NP1/PPP2PBP/R1BQ1RK1 w - - 2 8"
+  },
+  {
+   "t": 282,
+   "ply": 15,
+   "line": [
+    "h3"
+   ],
+   "fen": "r1bq1rk1/ppp2pp1/2np1n1p/2b1p3/4P3/2NP1NPP/PPP2PB1/R1BQ1RK1 b - - 0 8"
+  },
+  {
+   "t": 290.5,
+   "ply": 16,
+   "line": [
+    "a5"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/2np1n1p/p1b1p3/4P3/2NP1NPP/PPP2PB1/R1BQ1RK1 w - - 0 9"
+  },
+  {
+   "t": 324.5,
+   "ply": 17,
+   "line": [
+    "Kh2"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/2np1n1p/p1b1p3/4P3/2NP1NPP/PPP2PBK/R1BQ1R2 b - - 1 9"
+  },
+  {
+   "t": 408,
+   "ply": 18,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "r1bq1rk1/1pp1npp1/3p1n1p/p1b1p3/4P3/2NP1NPP/PPP2PBK/R1BQ1R2 w - - 2 10"
+  },
+  {
+   "t": 590,
+   "ply": 19,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "r1bq1rk1/1pp1npp1/3p1n1p/p1b1p3/4P3/2NP2PP/PPPN1PBK/R1BQ1R2 b - - 3 10"
+  },
+  {
+   "t": 606,
+   "ply": 18,
+   "line": [],
+   "fen": "r1bq1rk1/1pp1npp1/3p1n1p/p1b1p3/4P3/2NP1NPP/PPP2PBK/R1BQ1R2 w - - 2 10"
+  },
+  {
+   "t": 633,
+   "ply": 20,
+   "line": [
+    "Nd2",
+    "Ng6"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/3p1nnp/p1b1p3/4P3/2NP2PP/PPPN1PBK/R1BQ1R2 w - - 4 11"
+  },
+  {
+   "t": 637,
+   "ply": 21,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/3p1nnp/p1b1p3/4PP2/2NP2PP/PPPN2BK/R1BQ1R2 b - - 0 11"
+  },
+  {
+   "t": 736.5,
+   "ply": 22,
+   "line": [
+    "exf4"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/3p1nnp/p1b5/4Pp2/2NP2PP/PPPN2BK/R1BQ1R2 w - - 0 12"
+  },
+  {
+   "t": 737.5,
+   "ply": 23,
+   "line": [
+    "gxf4"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/3p1nnp/p1b5/4PP2/2NP3P/PPPN2BK/R1BQ1R2 b - - 0 12"
+  },
+  {
+   "t": 739.5,
+   "ply": 24,
+   "line": [
+    "Nh4"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/3p1n1p/p1b5/4PP1n/2NP3P/PPPN2BK/R1BQ1R2 w - - 1 13"
+  },
+  {
+   "t": 774.5,
+   "ply": 25,
+   "line": [
+    "Bh1"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/3p1n1p/p1b5/4PP1n/2NP3P/PPPN3K/R1BQ1R1B b - - 2 13"
+  },
+  {
+   "t": 782,
+   "ply": 26,
+   "line": [
+    "Qd7"
+   ],
+   "fen": "r1b2rk1/1ppq1pp1/3p1n1p/p1b5/4PP1n/2NP3P/PPPN3K/R1BQ1R1B w - - 3 14"
+  },
+  {
+   "t": 784,
+   "ply": 27,
+   "line": [
+    "f5"
+   ],
+   "fen": "r1b2rk1/1ppq1pp1/3p1n1p/p1b2P2/4P2n/2NP3P/PPPN3K/R1BQ1R1B b - - 0 14"
+  },
+  {
+   "t": 793,
+   "ply": 26,
+   "line": [],
+   "fen": "r1b2rk1/1ppq1pp1/3p1n1p/p1b5/4PP1n/2NP3P/PPPN3K/R1BQ1R1B w - - 3 14"
+  },
+  {
+   "t": 801,
+   "ply": 27,
+   "line": [
+    "f5"
+   ],
+   "fen": "r1b2rk1/1ppq1pp1/3p1n1p/p1b2P2/4P2n/2NP3P/PPPN3K/R1BQ1R1B b - - 0 14"
+  },
+  {
+   "t": 854.5,
+   "ply": 20,
+   "line": [],
+   "fen": "r1bq1rk1/1pp2pp1/3p1nnp/p1b1p3/4P3/2NP2PP/PPPN1PBK/R1BQ1R2 w - - 4 11"
+  },
+  {
+   "t": 2020,
+   "ply": 7,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 0 4"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "ply": 2,
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 40,
+     "continuation": "Nf3"
+    },
+    {
+     "san": "Nc3",
+     "t": 150.5,
+     "continuation": "Nc3 Nc6 Nf3 Nf6"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Four Knights Game: Glek System",
+   "eco": "C47",
+   "plies": 7,
+   "line": "e4 e5 Nf3 Nf6 Nc3 Nc6 g3",
+   "coverage": 0.036
+  },
+  {
+   "name": "Four Knights Game",
+   "eco": "C47",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nf6 Nc3 Nc6",
+   "coverage": 0.071
+  },
+  {
+   "name": "Petrov's Defense: Three Knights Game",
+   "eco": "C42",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nf6 Nc3",
+   "coverage": 0.107
+  },
+  {
+   "name": "Three Knights Opening",
+   "eco": "C46",
+   "plies": 5,
+   "line": "e4 e5 Nc3 Nc6 Nf3",
+   "coverage": 0.786
+  },
+  {
+   "name": "Petrov's Defense",
+   "eco": "C42",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nf6",
+   "coverage": 0.143
+  },
+  {
+   "name": "Vienna Game: Max Lange Defense",
+   "eco": "C25",
+   "plies": 4,
+   "line": "e4 e5 Nc3 Nc6",
+   "coverage": 0.786
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.179
+  },
+  {
+   "name": "Vienna Game",
+   "eco": "C25",
+   "plies": 3,
+   "line": "e4 e5 Nc3",
+   "coverage": 0.786
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ]
+}

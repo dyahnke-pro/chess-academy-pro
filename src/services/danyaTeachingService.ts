@@ -17,6 +17,7 @@
 
 import { Chess } from 'chess.js';
 import teachingsData from '../data/danya-teachings.json';
+import videoTeachings from '../data/video-teachings.json';
 import { computeStructureSignature, signatureMatchScore, type StructureSignature } from './structureSignature';
 import { validateBoardClaims } from './boardClaimValidator';
 import { secondarySupportNotes, secondaryNotesForPosition, secondaryNotesForFen } from './secondaryCorpora';
@@ -71,13 +72,43 @@ interface TeachingsBundle {
 }
 
 const RAW_DATA = teachingsData as unknown as TeachingsBundle;
+const VIDEO_DATA = videoTeachings as unknown as TeachingsBundle;
 
+// VIDEO NOTES JOIN THE PRIMARY POOL, not the gap tier.
+//
+// The gap tier exists for farmed corpora, which are consulted only where the
+// primary corpus is silent — right for notes distilled from audio, wrong for
+// these. A video note's position was READ OFF THE SCREEN frame by frame and
+// every move chess.js-validated before the tracker accepted it, and its prose
+// was written by hand against that board. There is no inference in the chain,
+// which makes these the best-evidenced notes in the corpus; filing them behind
+// the farmed ones would rank them below the material they were built to fix.
+//
+// They are a small static import ON PURPOSE, unlike the farmed corpora that had
+// to leave the bundle at ~9MB each: this file is hand-written and grows a
+// paragraph at a time, so it will not approach the precache cap.
+//
+// VIDEO NOTES GO FIRST so they win a tie. Where two notes sit at one board the
+// selector takes the first that passes its filters, and at the Englund position
+// after 1.d4 e5 2.dxe5 Nc6 3.Nf3 Qe7 a distilled note was chosen over the
+// hand-written one. Order is the whole mechanism, and the better-evidenced note
+// should be the one the student hears.
 // Derived anchors are applied ONCE, here, before any index below is built —
 // every lookup map (prefix, opening, concept, fen) must be keyed on the
 // corrected line or the correction is invisible to selection. See
 // `noteAnchorOverrides`, and read `scripts/derive-note-anchors.mjs` before
 // touching the derivation itself.
-const DATA: TeachingsBundle = { ...RAW_DATA, notes: applyDerivedAnchors(RAW_DATA.notes ?? []) };
+//
+// VIDEO NOTES ARE NOT PUT THROUGH THE DERIVATION. It exists to repair anchors
+// that a transcript distillation guessed at, and these were not guessed — the
+// position came off the screen and the prose was written against that board.
+// Running them through it would let a repair pass RELOCATE a note that is
+// already correct, and it silently changed the derived sidecar (1201 anchors ->
+// 1226) the moment they were included, which is the gate that caught it.
+const DATA: TeachingsBundle = {
+  ...RAW_DATA,
+  notes: [...(VIDEO_DATA.notes ?? []), ...applyDerivedAnchors(RAW_DATA.notes ?? [])],
+};
 
 /** Position-keyed notes indexed by their SAN-prefix key ("e4 c6 d4"). */
 const byPrefix = new Map<string, DanyaNote[]>();

@@ -1,0 +1,256 @@
+{
+ "videoId": "358seoKegqA",
+ "title": "Settle for a Draw!?! | Scandinavian Defense | GM Naroditsky’s Theory Speed Run",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-17",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 6212,
+  "settledPositions": null
+ },
+ "plies": 26,
+ "rewinds": 3,
+ "moves": [
+  {
+   "t": 30.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 38.5,
+   "ply": 3,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 39.5,
+   "ply": 4,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3"
+  },
+  {
+   "t": 43.5,
+   "ply": 3,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 48,
+   "ply": 4,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3"
+  },
+  {
+   "t": 86.5,
+   "ply": 5,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR b KQkq - 2 3"
+  },
+  {
+   "t": 91,
+   "ply": 6,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "rn1qkb1r/pppbpppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR w KQkq - 3 4"
+  },
+  {
+   "t": 134.5,
+   "ply": 7,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rn1qkb1r/pppbpppp/5n2/3P4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 4 4"
+  },
+  {
+   "t": 137,
+   "ply": 8,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/8/8/PPPPBPPP/RNBQK1NR w KQkq - 0 5"
+  },
+  {
+   "t": 139,
+   "ply": 9,
+   "line": [
+    "d4"
+   ],
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/3P4/8/PPP1BPPP/RNBQK1NR b KQkq - 0 5"
+  },
+  {
+   "t": 146.5,
+   "ply": 10,
+   "line": [
+    "c5"
+   ],
+   "fen": "rn1qkb1r/pp1bpppp/8/2pn4/3P4/8/PPP1BPPP/RNBQK1NR w KQkq - 0 6"
+  },
+  {
+   "t": 167.5,
+   "ply": 9,
+   "line": [],
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/3P4/8/PPP1BPPP/RNBQK1NR b KQkq - 0 5"
+  },
+  {
+   "t": 173.5,
+   "ply": 10,
+   "line": [
+    "c5"
+   ],
+   "fen": "rn1qkb1r/pp1bpppp/8/2pn4/3P4/8/PPP1BPPP/RNBQK1NR w KQkq - 0 6"
+  },
+  {
+   "t": 210,
+   "ply": 11,
+   "line": [
+    "c4"
+   ],
+   "fen": "rn1qkb1r/pp1bpppp/8/2pn4/2PP4/8/PP2BPPP/RNBQK1NR b KQkq - 0 6"
+  },
+  {
+   "t": 215.5,
+   "ply": 12,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rn1qkb1r/pp1bpppp/5n2/2p5/2PP4/8/PP2BPPP/RNBQK1NR w KQkq - 1 7"
+  },
+  {
+   "t": 252.5,
+   "ply": 13,
+   "line": [
+    "d5"
+   ],
+   "fen": "rn1qkb1r/pp1bpppp/5n2/2pP4/2P5/8/PP2BPPP/RNBQK1NR b KQkq - 0 7"
+  },
+  {
+   "t": 255,
+   "ply": 14,
+   "line": [
+    "e6"
+   ],
+   "fen": "rn1qkb1r/pp1b1ppp/4pn2/2pP4/2P5/8/PP2BPPP/RNBQK1NR w KQkq - 0 8"
+  },
+  {
+   "t": 319.5,
+   "ply": 16,
+   "line": [
+    "dxe6",
+    "fxe6"
+   ],
+   "fen": "rn1qkb1r/pp1b2pp/4pn2/2p5/2P5/8/PP2BPPP/RNBQK1NR w KQkq - 0 9"
+  },
+  {
+   "t": 358.5,
+   "ply": 17,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rn1qkb1r/pp1b2pp/4pn2/2p5/2P5/2N5/PP2BPPP/R1BQK1NR b KQkq - 1 9"
+  },
+  {
+   "t": 360.5,
+   "ply": 18,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2qkb1r/pp1b2pp/2n1pn2/2p5/2P5/2N5/PP2BPPP/R1BQK1NR w KQkq - 2 10"
+  },
+  {
+   "t": 361.5,
+   "ply": 19,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r2qkb1r/pp1b2pp/2n1pn2/2p5/2P5/2N2N2/PP2BPPP/R1BQK2R b KQkq - 3 10"
+  },
+  {
+   "t": 363,
+   "ply": 20,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r2qk2r/pp1bb1pp/2n1pn2/2p5/2P5/2N2N2/PP2BPPP/R1BQK2R w KQkq - 4 11"
+  },
+  {
+   "t": 364.5,
+   "ply": 21,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2qk2r/pp1bb1pp/2n1pn2/2p5/2P5/2N2N2/PP2BPPP/R1BQ1RK1 b kq - 5 11"
+  },
+  {
+   "t": 370,
+   "ply": 22,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/pp1bb1pp/2n1pn2/2p5/2P5/2N2N2/PP2BPPP/R1BQ1RK1 w - - 6 12"
+  },
+  {
+   "t": 420,
+   "ply": 13,
+   "line": [],
+   "fen": "rn1qkb1r/pp1bpppp/5n2/2pP4/2P5/8/PP2BPPP/RNBQK1NR b KQkq - 0 7"
+  },
+  {
+   "t": 1123,
+   "ply": 16,
+   "line": [
+    "e6",
+    "dxe6",
+    "fxe6"
+   ],
+   "fen": "rn1qkb1r/pp1b2pp/4pn2/2p5/2P5/8/PP2BPPP/RNBQK1NR w KQkq - 0 9"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Scandinavian Defense: Modern Variation",
+   "eco": "B01",
+   "plies": 4,
+   "line": "e4 d5 exd5 Nf6",
+   "coverage": 0.9
+  },
+  {
+   "name": "Scandinavian Defense",
+   "eco": "B01",
+   "plies": 2,
+   "line": "e4 d5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Scandinavian Defense",
+  "confirmed": true
+ }
+}

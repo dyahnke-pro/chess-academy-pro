@@ -336,6 +336,72 @@ So there are two independent paths, and only one costs LLM money:
    where the old corpus is the only coverage; pointless where a fresh build
    exists.
 
+## THE NOTES REACH THE APP NOW (2026-08-17, overnight)
+
+Until this run a note lived in `data/video-tracks/<id>.json` and nothing in the
+running app ever opened that directory — a record, not a build. The notes are
+now emitted to `src/data/video-teachings.json` and merged into the PRIMARY note
+pool in `danyaTeachingService`, so they are selected by the same retrieval every
+other note goes through.
+
+**36 hand-written notes across 10 openings**, each anchored to a position its
+lesson actually reached: Traxler, Alapin, Three Knights, French Advance
+Nimzowitsch, Jobava (two lessons), Modern, Belgrade, Englund, Ruy Lopez Bird.
+
+Three decisions worth keeping:
+
+- **Primary pool, not the gap tier, and FIRST in it.** The farmed corpora are
+  consulted only where the primary is silent, which is right for notes distilled
+  from audio and wrong for these: a video note's position was read off the screen
+  frame by frame and chess.js-validated, and its prose was written by hand
+  against that board. Order is the tie-break mechanism, so they go ahead of the
+  distilled notes — measured: at the Englund position after 3…Qe7 a distilled
+  note was being chosen over the hand-written one.
+- **`positionSource: 'high'` is earned here.** For a farmed note that field means
+  an anchor pass re-derived the position from a transcript. For these it means
+  there was never an inference in the chain at all.
+- **Anchors are screened by GENERICNESS, not depth.** A first cut used a six-ply
+  minimum and threw away the Englund's best teaching, which lives at plies 4-5
+  because the opening is short. Counting DB openings through a position settles
+  it: 1.e4 e5 has 1020, 1.d4 e5 2.dxe5 has 8, five plies of the Three Knights has
+  47. The limit is 100 openings, and depth is not consulted.
+
+**Gate: `videoNotesSpeak.test.ts`** — asks the REAL selector at each note's own
+position, and separately that each is reachable BY POSITION rather than only by
+the move order the video used. That second check is the one that matters for a
+real student: the tracker reads occupancy, so it cannot distinguish move orders
+and legitimately returns a permutation (the Alapin came back as "c3 c5 e4 d5 …"
+where a player types "e4 c5 c3 d5 …"). Matching on the move string alone, every
+one of these notes would be silent in the app while passing every other check.
+
+**What the writing has to avoid.** `noteTeachesChessNotItsSource` rejects prose
+that describes the lesson instead of the board — "the lesson showed both …" is
+meta, and it is the same rule as the narration voice's "never reference the
+interface". Two notes were silently dropped by it before the sweep. Write about
+the position, never about the video.
+
+### Videos in, videos out
+
+34 downloaded, **20 built, 14 refused**. The refusals are not a mystery and are
+not a reader problem: both the calibrated and uncalibrated readers return zero
+tracked games on the same files, while the geometry confirms against a start
+position. That is the per-SECTION geometry case the README already documents —
+he resizes the board between the game and the review — and the fix is to
+calibrate each section separately rather than to loosen anything.
+
+**Scanning no longer needs disk.** `scan_stream.py` pipes frames from ffmpeg and
+scores them in memory. The file-based scanner wrote ~7,800 PNGs (~2.6GB) per
+lesson, so this batch would have needed ~90GB against 23GB free — it worked at
+six videos and could not have gone past about eight. Disk now stays flat at one
+frame regardless of how many run at once.
+
+**The title check earns its place twice over.** Built to catch the upload titled
+"Scotch Game" that plays 3.Nc3 for eighty plies, it is now also catching bad
+TRACKS: a Najdorf video resolving to "Bird Opening", a King's Gambit video to
+"Mieses Opening". Those are mistracked games, not mislabelled ones, and the flag
+is what keeps notes from being written off them. Nothing was written from any
+unconfirmed build.
+
 ## NEXT STEP
 
 Scope, then repeat path 1. Hand-writing does not parallelise, so the unit is
