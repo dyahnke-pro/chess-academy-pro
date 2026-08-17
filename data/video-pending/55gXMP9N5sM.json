@@ -262,5 +262,56 @@
     }
    ]
   }
+ ],
+ "openings": [
+  {
+   "name": "Neo-Grünfeld Defense: Classical Variation, Modern Defense",
+   "eco": "D77",
+   "plies": 12,
+   "line": "d4 Nf6 Nf3 g6 g3 Bg7 Bg2 O-O O-O d5 c4 dxc4",
+   "coverage": 0.6
+  },
+  {
+   "name": "Neo-Grünfeld Defense: Classical Variation",
+   "eco": "D77",
+   "plies": 11,
+   "line": "d4 Nf6 Nf3 g6 g3 Bg7 Bg2 O-O O-O d5 c4",
+   "coverage": 0.65
+  },
+  {
+   "name": "Indian Defense: Przepiorka Variation",
+   "eco": "A49",
+   "plies": 5,
+   "line": "d4 Nf6 Nf3 g6 g3",
+   "coverage": 0.9
+  },
+  {
+   "name": "East Indian Defense",
+   "eco": "A48",
+   "plies": 4,
+   "line": "d4 Nf6 Nf3 g6",
+   "coverage": 0.95
+  },
+  {
+   "name": "Indian Defense: Knights Variation",
+   "eco": "A46",
+   "plies": 3,
+   "line": "d4 Nf6 Nf3",
+   "coverage": 1
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
  ]
 }

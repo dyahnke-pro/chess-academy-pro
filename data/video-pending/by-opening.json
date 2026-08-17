@@ -1,4 +1,154 @@
 {
+ "Neo-Grünfeld Defense: Classical Variation, Modern Defense": [
+  {
+   "videoId": "55gXMP9N5sM",
+   "eco": "D77",
+   "plies": 12,
+   "coverage": 0.6,
+   "subject": true,
+   "forks": 1
+  }
+ ],
+ "Neo-Grünfeld Defense: Classical Variation": [
+  {
+   "videoId": "55gXMP9N5sM",
+   "eco": "D77",
+   "plies": 11,
+   "coverage": 0.65,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "Indian Defense: Przepiorka Variation": [
+  {
+   "videoId": "55gXMP9N5sM",
+   "eco": "A49",
+   "plies": 5,
+   "coverage": 0.9,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "East Indian Defense": [
+  {
+   "videoId": "55gXMP9N5sM",
+   "eco": "A48",
+   "plies": 4,
+   "coverage": 0.95,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "C2unZJEz01o",
+   "eco": "A48",
+   "plies": 4,
+   "coverage": 0.969,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "Indian Defense: Knights Variation": [
+  {
+   "videoId": "55gXMP9N5sM",
+   "eco": "A46",
+   "plies": 3,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "C2unZJEz01o",
+   "eco": "A46",
+   "plies": 3,
+   "coverage": 0.985,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "Indian Defense": [
+  {
+   "videoId": "55gXMP9N5sM",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "C2unZJEz01o",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "RzfG5SfKRak",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 12
+  },
+  {
+   "videoId": "W8YPj9QMtEs",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "Queen's Pawn Game": [
+  {
+   "videoId": "55gXMP9N5sM",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "C2unZJEz01o",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "Fz0_pECE5vo",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "LLidbvIUZ5I",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "RzfG5SfKRak",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 12
+  },
+  {
+   "videoId": "W8YPj9QMtEs",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  }
+ ],
  "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation": [
   {
    "videoId": "5MAKlJpkpsg",
@@ -95,6 +245,14 @@
    "forks": 0
   },
   {
+   "videoId": "YXz0xSbhY70",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 14
+  },
+  {
    "videoId": "YzI6qI-33_U",
    "eco": "B20",
    "plies": 2,
@@ -161,6 +319,14 @@
    "forks": 0
   },
   {
+   "videoId": "YXz0xSbhY70",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 14
+  },
+  {
    "videoId": "YzI6qI-33_U",
    "eco": "B00",
    "plies": 1,
@@ -199,6 +365,46 @@
    "coverage": 1,
    "subject": false,
    "forks": 0
+  }
+ ],
+ "Queen's Pawn Game: Barry Attack, Grünfeld Variation": [
+  {
+   "videoId": "C2unZJEz01o",
+   "eco": "A48",
+   "plies": 11,
+   "coverage": 0.862,
+   "subject": true,
+   "forks": 0
+  }
+ ],
+ "Queen's Pawn Game: Barry Attack": [
+  {
+   "videoId": "C2unZJEz01o",
+   "eco": "A48",
+   "plies": 7,
+   "coverage": 0.923,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "Sicilian Defense: Smith-Morra Gambit": [
+  {
+   "videoId": "Fz0_pECE5vo",
+   "eco": "B21",
+   "plies": 3,
+   "coverage": 1,
+   "subject": true,
+   "forks": 4
+  }
+ ],
+ "Benoni Defense: Old Benoni": [
+  {
+   "videoId": "Fz0_pECE5vo",
+   "eco": "A43",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
   }
  ],
  "Sicilian Defense: Accelerated Dragon, Maróczy Bind": [
@@ -315,24 +521,6 @@
    "forks": 1
   }
  ],
- "Queen's Pawn Game": [
-  {
-   "videoId": "LLidbvIUZ5I",
-   "eco": "A40",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "RzfG5SfKRak",
-   "eco": "A40",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 12
-  }
- ],
  "Sicilian Defense: Accelerated Dragon, Maróczy Bind, Gurgenidze Variation": [
   {
    "videoId": "Oj04sSCzraE",
@@ -389,14 +577,58 @@
    "forks": 12
   }
  ],
- "Indian Defense": [
+ "Rapport-Jobava System": [
   {
-   "videoId": "RzfG5SfKRak",
+   "videoId": "W8YPj9QMtEs",
+   "eco": "D01",
+   "plies": 5,
+   "coverage": 0.727,
+   "subject": true,
+   "forks": 0
+  }
+ ],
+ "Queen's Pawn Game: Chigorin Variation": [
+  {
+   "videoId": "W8YPj9QMtEs",
    "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
+   "plies": 4,
+   "coverage": 0.818,
    "subject": false,
-   "forks": 12
+   "forks": 0
+  }
+ ],
+ "Sicilian Defense: Closed": [
+  {
+   "videoId": "YXz0xSbhY70",
+   "eco": "B23",
+   "plies": 3,
+   "coverage": 1,
+   "subject": true,
+   "forks": 14
+  },
+  {
+   "videoId": "fABTn305-Eg",
+   "eco": "B23",
+   "plies": 3,
+   "coverage": 0.955,
+   "subject": true,
+   "forks": 0
+  },
+  {
+   "videoId": "kO23hnArI4Y",
+   "eco": "B23",
+   "plies": 3,
+   "coverage": 0.96,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "rMNFLg1gLoI",
+   "eco": "B23",
+   "plies": 3,
+   "coverage": 0.986,
+   "subject": false,
+   "forks": 5
   }
  ],
  "Sicilian Defense: Dragon Variation, Yugoslav Attack, Modern Line": [
@@ -503,32 +735,6 @@
    "coverage": 0.45,
    "subject": false,
    "forks": 3
-  }
- ],
- "Sicilian Defense: Closed": [
-  {
-   "videoId": "fABTn305-Eg",
-   "eco": "B23",
-   "plies": 3,
-   "coverage": 0.955,
-   "subject": true,
-   "forks": 0
-  },
-  {
-   "videoId": "kO23hnArI4Y",
-   "eco": "B23",
-   "plies": 3,
-   "coverage": 0.96,
-   "subject": false,
-   "forks": 4
-  },
-  {
-   "videoId": "rMNFLg1gLoI",
-   "eco": "B23",
-   "plies": 3,
-   "coverage": 0.986,
-   "subject": false,
-   "forks": 5
   }
  ],
  "Sicilian Defense: Najdorf Variation": [

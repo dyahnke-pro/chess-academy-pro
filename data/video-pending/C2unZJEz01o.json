@@ -552,5 +552,53 @@
    "fen": "3r2k1/p3rp2/6p1/3p2P1/4p3/2P1Pnbb/P3QBR1/2R2K2 w - - 0 40"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Queen's Pawn Game: Barry Attack, Grünfeld Variation",
+   "eco": "A48",
+   "plies": 11,
+   "line": "d4 Nf6 Nf3 g6 Nc3 d5 Bf4 Bg7 e3 O-O Be2",
+   "coverage": 0.862
+  },
+  {
+   "name": "Queen's Pawn Game: Barry Attack",
+   "eco": "A48",
+   "plies": 7,
+   "line": "d4 Nf6 Nf3 g6 Nc3 d5 Bf4",
+   "coverage": 0.923
+  },
+  {
+   "name": "East Indian Defense",
+   "eco": "A48",
+   "plies": 4,
+   "line": "d4 Nf6 Nf3 g6",
+   "coverage": 0.969
+  },
+  {
+   "name": "Indian Defense: Knights Variation",
+   "eco": "A46",
+   "plies": 3,
+   "line": "d4 Nf6 Nf3",
+   "coverage": 0.985
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Queen's Pawn Game: Barry Attack",
+  "confirmed": true
+ }
 }
