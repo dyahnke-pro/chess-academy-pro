@@ -378,7 +378,21 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // lesson cached at the '-spelling' rev keeps its dead-tier prose forever while
 // the audits (fresh browser, cold cache, always regenerating) show green.
 // One bump batching both fixes, per the locked cost rule.
-const WALKTHROUGH_GEN_REV = '2026-08-13-material-ledger';
+// 2026-08-17: sixteen hand-written video notes landed, and PASS 1 splices a note
+// at the ply it is anchored to. Beats bake at generation time, so without this
+// bump every lesson already cached — including the trees seeded onto a fresh
+// device — keeps prose written before the notes existed, and the new teaching
+// reaches nobody. A prod audit chased that for an hour: the note was verifiably
+// in the shipped bundle, verifiably on the taught line, and verifiably selected
+// by the real selector in unit tests, while the lesson on prod served a cached
+// tree that predated it. The comment directly above describes the same failure
+// from August, which is the argument for bumping WITH the change rather than
+// after noticing.
+//
+// One bump for all sixteen notes, per the locked cost rule: a bump regenerates
+// prose into new strings that miss the TTS clip cache, so batching keeps that to
+// a single synthesis bill instead of one per lesson written.
+const WALKTHROUGH_GEN_REV = '2026-08-17-video-notes';
 
 export async function getCachedOpening(
   name: string,
