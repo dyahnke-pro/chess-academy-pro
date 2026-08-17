@@ -66,15 +66,21 @@ describe('multi-intent + bare-why wiring (source scan)', () => {
   it('CoachTeachPage truncates BEFORE stage detection', () => {
     const src = readFileSync('src/components/Coach/CoachTeachPage.tsx', 'utf8');
     const truncIdx = src.indexOf('MULTI-INTENT FIRST-VERB ROUTING');
-    const stageLoopIdx = src.indexOf('for (const sp of STAGE_PATTERNS)');
+    // The stage loop moved into `teachStageRouting` so the picker's contract
+    // could be tested at all; the CONTRACT this guards is unchanged, so the
+    // scan follows the call rather than the loop it replaced.
+    const stageLoopIdx = src.indexOf('routeStage(effectiveInput)');
     expect(truncIdx).toBeGreaterThan(-1);
     expect(stageLoopIdx).toBeGreaterThan(-1);
-    // The truncation must run before the stage loop or the tail's stage
+    // The truncation must run before stage detection or the tail's stage
     // words ("trap", "quiz") hijack the stage before the name resolves.
     expect(truncIdx).toBeLessThan(stageLoopIdx);
     // And the stage detector + name resolution must both consume the
-    // truncated input, not the raw one.
-    expect(src).toContain('let stageStrippedInput = effectiveInput;');
+    // truncated input, not the raw one. Detection takes `effectiveInput`
+    // directly, which is a stronger guarantee than the old loop gave: there is
+    // no longer an intermediate variable that could be reassigned in between.
+    expect(src).toContain('routeStage(effectiveInput)');
+    expect(src).toContain('stageStrippedInput = routed.remainder;');
     expect(src).toContain('let workingInput = effectiveInput;');
   });
 

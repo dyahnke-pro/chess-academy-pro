@@ -1,4 +1,3 @@
-import { routeStage, type TeachStage } from './teachStageRouting';
 /**
  * CoachTeachPage — dedicated teaching surface using the SAME board
  * primitives as Play with Coach (`/coach/play`). Chess state runs
@@ -258,6 +257,7 @@ import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { isCounterRepertoireQuestion } from '../../coach/questionIntents';
+import { routeStage, type TeachStage } from './teachStageRouting';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
