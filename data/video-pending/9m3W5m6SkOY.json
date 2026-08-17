@@ -1,0 +1,217 @@
+{
+ "videoId": "9m3W5m6SkOY",
+ "title": "Refuting Unsound Attacks | Sicilian Defense: Tal Gambit | GM Naroditsky’s Top Theory Speedrun",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-17",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 4875,
+  "settledPositions": null
+ },
+ "plies": 20,
+ "rewinds": 2,
+ "moves": [
+  {
+   "t": 15,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 37.5,
+   "ply": 3,
+   "line": [
+    "f4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 60.5,
+   "ply": 4,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 64.5,
+   "ply": 2,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 72.5,
+   "ply": 4,
+   "line": [
+    "f4",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 99,
+   "ply": 5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pP4/5P2/8/PPPP2PP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 101.5,
+   "ply": 7,
+   "line": [
+    "Nf6",
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/5P2/2N5/PPPP2PP/R1BQKBNR b KQkq - 2 4"
+  },
+  {
+   "t": 132.5,
+   "ply": 8,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/8/2pn4/5P2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 155,
+   "ply": 9,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/8/2pn4/2B2P2/2N5/PPPP2PP/R1BQK1NR b KQkq - 1 5"
+  },
+  {
+   "t": 244,
+   "ply": 10,
+   "line": [
+    "Nb6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/1n6/2p5/2B2P2/2N5/PPPP2PP/R1BQK1NR w KQkq - 2 6"
+  },
+  {
+   "t": 301.5,
+   "ply": 11,
+   "line": [
+    "Bxf7+"
+   ],
+   "fen": "rnbqkb1r/pp2pBpp/1n6/2p5/5P2/2N5/PPPP2PP/R1BQK1NR b KQkq - 0 6"
+  },
+  {
+   "t": 323,
+   "ply": 13,
+   "line": [
+    "Kxf7",
+    "Nf3"
+   ],
+   "fen": "rnbq1b1r/pp2pkpp/1n6/2p5/5P2/2N2N2/PPPP2PP/R1BQK2R b KQ - 1 7"
+  },
+  {
+   "t": 444,
+   "ply": 14,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbq1b1r/pp2pk1p/1n4p1/2p5/5P2/2N2N2/PPPP2PP/R1BQK2R w KQ - 0 8"
+  },
+  {
+   "t": 447.5,
+   "ply": 15,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1b1r/pp2pk1p/1n4p1/2p5/5P2/2N2N2/PPPP2PP/R1BQ1RK1 b - - 1 8"
+  },
+  {
+   "t": 451.5,
+   "ply": 16,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbq3r/pp2pkbp/1n4p1/2p5/5P2/2N2N2/PPPP2PP/R1BQ1RK1 w - - 2 9"
+  },
+  {
+   "t": 494.5,
+   "ply": 17,
+   "line": [
+    "f5"
+   ],
+   "fen": "rnbq3r/pp2pkbp/1n4p1/2p2P2/8/2N2N2/PPPP2PP/R1BQ1RK1 b - - 0 9"
+  },
+  {
+   "t": 668.5,
+   "ply": 18,
+   "line": [
+    "gxf5"
+   ],
+   "fen": "rnbq3r/pp2pkbp/1n6/2p2p2/8/2N2N2/PPPP2PP/R1BQ1RK1 w - - 0 10"
+  },
+  {
+   "t": 671.5,
+   "ply": 19,
+   "line": [
+    "g4"
+   ],
+   "fen": "rnbq3r/pp2pkbp/1n6/2p2p2/6P1/2N2N2/PPPP3P/R1BQ1RK1 b - - 0 10"
+  },
+  {
+   "t": 687.5,
+   "ply": 20,
+   "line": [
+    "Rf8"
+   ],
+   "fen": "rnbq1r2/pp2pkbp/1n6/2p2p2/6P1/2N2N2/PPPP3P/R1BQ1RK1 w - - 1 11"
+  },
+  {
+   "t": 699.5,
+   "ply": 11,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pBpp/1n6/2p5/5P2/2N5/PPPP2PP/R1BQK1NR b KQkq - 0 6"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: McDonnell Attack, Tal Gambit",
+   "eco": "B21",
+   "plies": 6,
+   "line": "e4 c5 f4 d5 exd5 Nf6",
+   "coverage": 0.765
+  },
+  {
+   "name": "Sicilian Defense: McDonnell Attack",
+   "eco": "B21",
+   "plies": 3,
+   "line": "e4 c5 f4",
+   "coverage": 0.941
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: McDonnell Attack, Tal Gambit",
+  "confirmed": true
+ }
+}

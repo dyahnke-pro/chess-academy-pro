@@ -1233,6 +1233,9 @@
  ],
  "titleCheck": {
   "claims": "Caro-Kann Defense: Panov Attack",
-  "confirmed": false
+  "confirmed": false,
+  "verdict": "mistracked",
+  "note": "QUARANTINED — NO NOTES. Transcript: \"we are facing an Alapin from the black side\", \"our opponent plays d4, we play c takes d4\". At the same stage the Alapin has 12 pawns (Black c/d traded, White c/e traded); the track records 14, carrying a Black c5 and White e3 the game never had. Different position, not a different name. Every move is legal, which is exactly why chess.js passed it — the legal-but-false class. Re-track per section geometry before any note is written.",
+  "checkedBy": "hand 2026-08-17"
  }
 }

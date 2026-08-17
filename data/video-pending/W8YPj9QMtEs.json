@@ -182,6 +182,8 @@
  ],
  "titleCheck": {
   "claims": "London System",
-  "confirmed": false
+  "confirmed": false,
+  "verdict": "track-sound",
+  "checkedBy": "hand 2026-08-17"
  }
 }

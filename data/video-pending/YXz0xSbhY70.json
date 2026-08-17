@@ -1807,6 +1807,8 @@
  ],
  "titleCheck": {
   "claims": "Sicilian Defense: Grand Prix Attack",
-  "confirmed": false
+  "confirmed": false,
+  "verdict": "track-sound",
+  "checkedBy": "hand 2026-08-17"
  }
 }

@@ -490,6 +490,8 @@
  ],
  "titleCheck": {
   "claims": "Sicilian Defense: Double-Dutch Gambit",
-  "confirmed": false
+  "confirmed": false,
+  "verdict": "track-sound",
+  "checkedBy": "hand 2026-08-17"
  }
 }

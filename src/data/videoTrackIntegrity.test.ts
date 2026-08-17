@@ -287,6 +287,24 @@ describe('video tracks', () => {
       .toEqual([]);
   });
 
+  it('a build judged mistracked is never written from', () => {
+    // The verdict above records the judgement; this enforces it. Recording
+    // "mistracked" and then writing notes anyway satisfies both of the tests
+    // above — the build has a verdict, and it has notes — while shipping prose
+    // over a board the video never showed, which is the exact harm the whole
+    // pipeline exists to prevent.
+    //
+    // Quarantining the file out of the bank is the first line of defence and the
+    // one that works day to day; this is what survives someone moving it back.
+    // `srNXYAsaX7I` is the worked example: 113 plies of a real, legal, correctly
+    // named Semi-Tarrasch, over a video whose game was an Alapin.
+    const written = tracks
+      .filter((t) => t.titleCheck?.verdict === 'mistracked' && (t.notes ?? []).length)
+      .map((t) => t.videoId);
+    expect(written, `mistracked builds carrying notes — re-track them or drop them:\n${written.join('\n')}`)
+      .toEqual([]);
+  });
+
   it('hand-written notes cite only positions the video showed', () => {
     if (!existsSync(NOTES_DOC)) return;
     const shown = new Set(tracks.flatMap((t) => t.moves.map((m) => posKey(m.fen))));

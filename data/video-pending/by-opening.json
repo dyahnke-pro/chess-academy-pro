@@ -35,6 +35,14 @@
    "forks": 0
   },
   {
+   "videoId": "9m3W5m6SkOY",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
    "videoId": "C4xtj2rc0_k",
    "eco": "B00",
    "plies": 1,
@@ -439,6 +447,14 @@
    "forks": 0
   },
   {
+   "videoId": "9m3W5m6SkOY",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
    "videoId": "Oj04sSCzraE",
    "eco": "B20",
    "plies": 2,
@@ -525,6 +541,26 @@
    "coverage": 1,
    "subject": false,
    "forks": 1
+  }
+ ],
+ "Sicilian Defense: McDonnell Attack, Tal Gambit": [
+  {
+   "videoId": "9m3W5m6SkOY",
+   "eco": "B21",
+   "plies": 6,
+   "coverage": 0.765,
+   "subject": true,
+   "forks": 0
+  }
+ ],
+ "Sicilian Defense: McDonnell Attack": [
+  {
+   "videoId": "9m3W5m6SkOY",
+   "eco": "B21",
+   "plies": 3,
+   "coverage": 0.941,
+   "subject": false,
+   "forks": 0
   }
  ],
  "Queen's Pawn Game: Barry Attack, Grünfeld Variation": [
@@ -1095,6 +1131,16 @@
    "coverage": 0.025,
    "subject": false,
    "forks": 20
+  }
+ ],
+ "Van't Kruijs Opening": [
+  {
+   "videoId": "gG_NzjqbyYo",
+   "eco": "A00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": true,
+   "forks": 0
   }
  ],
  "Sicilian Defense: Najdorf Variation": [
