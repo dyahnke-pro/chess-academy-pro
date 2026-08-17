@@ -157,3 +157,25 @@ scripts/audit-pitfalls-prod.mjs — post-deploy audit for opening pitfalls (comm
 | `scripts/danya-corpus/tier-coverage.mts` | DATA PROBE (no browser) — for each opening ask, which TIER the runtime serves it from (1 masterclass / 2 baked / 3 computed) plus side, spine, branches. Run it BEFORE a bake session to target exactly the Tier-3 gaps: `npx tsx scripts/danya-corpus/tier-coverage.mts "<ask>" …` |
 | `scripts/danya-corpus/batch-bake.mjs` | BATCH BAKE driver — maps each gap opening to its dedicated videos by manifest title, pulls missing transcripts, runs narrate-from-video per target, prints a BAKED/FAILED/NO_VIDEOS summary. `DEEPSEEK_KEY=… node scripts/danya-corpus/batch-bake.mjs [--only "<ask>"]` |
 | `scripts/audit-coach-all-questions-prod.mjs` | THE ALL-QUESTIONS AUDIT (David 2026-08-13: "Ask every question the coach should be able to answer") — iterates ALL 55 capabilities of `scripts/audit-lib/coach-question-matrix.mjs` (39 Q&A lanes + 16 actions) LIVE on prod, one real ask per capability, each reply graded CONTRACT-vs-OBSERVED: a data answer or the lane's own honest empty-state passes; the stock fall-through, greeting, or picker hijack fails; navigation/settings actions grade by post-state. Sections reload /coach/teach so a stage started by one ask can't swallow the next. Muted + audit_run_id stamped. `AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY node scripts/audit-coach-all-questions-prod.mjs` |
+
+## `audit-video-notes-prod.mjs` — hand-written video notes reached prod
+
+Run after any change to `src/data/video-teachings.json`, `data/video-notes/`,
+or the corpus merge in `danyaTeachingService`.
+
+```bash
+AUDIT_SANDBOX=1 AUDIT_PROXY=$HTTPS_PROXY \
+  AUDIT_SMOKE_URL=https://chess-academy-pro.vercel.app \
+  node scripts/audit-video-notes-prod.mjs
+```
+
+Four checks, three instruments. It asks only what vitest cannot: the notes are a
+static import, so a chunking change could drop them from the bundle while every
+local gate stayed green. Check 2 fetches the deployed chunks and looks for the
+ids.
+
+**What it does NOT prove, deliberately:** which note grounded a given spoken
+line. A note is grounding — the model phrases it rather than reciting it — and
+the audit stream carries no note id. That half is proved by
+`videoNotesSpeak.test.ts`, which asks the real selector at each note's own
+position. Neither half is reported as the other.
