@@ -269,16 +269,46 @@ content digests: regenerating prose mints new ids and orphans the 268
 hand-written spoken forms. Add notes, never replace them, and dedupe against
 the existing corpus by `contentKey`.
 
-## NEXT STEP — price it before spending
+## ✅ WHAT LANDED 2026-08-17 — and it changes what the re-distill is FOR
 
-Run ONE video end-to-end by hand before committing to 421: calibrate its
-sections, track it, re-distill just that video for `t`, join, and measure how
-many of its ~27 notes gain a verified position. That number is what makes the
-full re-distill a decision instead of a bet.
+The video half is done and proven on a full lesson. A **build** is now one
+self-contained file, `data/video-tracks/<videoId>.json`, holding:
 
-Cost per video, measured at 480p: ~3 min (download 40s, extract 96s, reads 23s,
-track seconds), parallelisable. Stream frames rather than writing PNGs — 3,244
-frames is ~1GB per video.
+| | pilot lesson |
+|---|---|
+| track — every position with its timestamp | 153 plies, 31 rewinds, 3,245 frames |
+| forks — the alternatives DEMONSTRATED | 10 forks, 24 options |
+| openings — resolved from the MOVES, not the title | 12 named; subject `Traxler Counterattack` at 0.917 coverage |
+| notes — hand-written, anchored by position | 5 |
+
+`by-opening.json` indexes builds by opening, so the question asked later ("what
+do we have for the Traxler") is the one the data answers.
+
+**THE RE-DISTILL IS NOW ONLY FOR REPAIRING OLD NOTES.** That is the reframe.
+New teaching does NOT need it: a hand-written note anchored to a tracked
+position is already correct by construction, because the FEN is looked up from
+the track rather than typed. The re-distill's remaining job is the 11,426
+EXISTING notes, of which the ones we could check are largely mis-anchored — a
+separate, optional, and lower-priority piece of work than it looked last night.
+
+So there are two independent paths, and only one costs LLM money:
+
+1. **Forward (free, works today)** — track a lesson, write its notes by hand,
+   ship the build. No `t`, no re-distill, nothing to join.
+2. **Backward (LLM spend, optional)** — additive re-distill so existing notes
+   carry `t` and can be re-anchored against a track. Worth doing for openings
+   where the old corpus is the only coverage; pointless where a fresh build
+   exists.
+
+## NEXT STEP
+
+Scope, then repeat path 1. Hand-writing does not parallelise, so the unit is
+roughly ONE SESSION PER LESSON for notes against ~3 minutes of machine time.
+Pick the 20-30 videos covering openings actually taught rather than the whole
+channel — that decision is David's and is the only thing gating volume.
+
+Downloads need fresh YouTube cookies (they expire within the hour; export from a
+window you do NOT sign out of).
 
 ## WHAT THE VIDEO PROVED, ON ONE LESSON (2026-08-17)
 
