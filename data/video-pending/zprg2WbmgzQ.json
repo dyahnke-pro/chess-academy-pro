@@ -1,0 +1,251 @@
+{
+ "videoId": "zprg2WbmgzQ",
+ "title": "Exposing CHEATERS In the Caro-Kann Defense: Fantasy Variation | GM Naroditsky’s Top Theory Speedrun",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-17",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 6662,
+  "settledPositions": null
+ },
+ "plies": 28,
+ "rewinds": 0,
+ "moves": [
+  {
+   "t": 17.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 25.5,
+   "ply": 3,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 30.5,
+   "ply": 4,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 58,
+   "ply": 5,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 110,
+   "ply": 6,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 163,
+   "ply": 7,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/2N2P2/PPP3PP/R1BQKBNR b KQkq - 1 4"
+  },
+  {
+   "t": 182,
+   "ply": 8,
+   "line": [
+    "Bb4"
+   ],
+   "fen": "rnbqk1nr/pp3ppp/2p1p3/3p4/1b1PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 2 5"
+  },
+  {
+   "t": 226.5,
+   "ply": 9,
+   "line": [
+    "a3"
+   ],
+   "fen": "rnbqk1nr/pp3ppp/2p1p3/3p4/1b1PP3/P1N2P2/1PP3PP/R1BQKBNR b KQkq - 0 5"
+  },
+  {
+   "t": 236,
+   "ply": 10,
+   "line": [
+    "Bxc3+"
+   ],
+   "fen": "rnbqk1nr/pp3ppp/2p1p3/3p4/3PP3/P1b2P2/1PP3PP/R1BQKBNR w KQkq - 0 6"
+  },
+  {
+   "t": 241,
+   "ply": 11,
+   "line": [
+    "bxc3"
+   ],
+   "fen": "rnbqk1nr/pp3ppp/2p1p3/3p4/3PP3/P1P2P2/2P3PP/R1BQKBNR b KQkq - 0 6"
+  },
+  {
+   "t": 250.5,
+   "ply": 12,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "rnbqk1nr/pp3ppp/2p1p3/8/3Pp3/P1P2P2/2P3PP/R1BQKBNR w KQkq - 0 7"
+  },
+  {
+   "t": 293,
+   "ply": 13,
+   "line": [
+    "Nh3"
+   ],
+   "fen": "rnbqk1nr/pp3ppp/2p1p3/8/3Pp3/P1P2P1N/2P3PP/R1BQKB1R b KQkq - 1 7"
+  },
+  {
+   "t": 328,
+   "ply": 14,
+   "line": [
+    "Qa5"
+   ],
+   "fen": "rnb1k1nr/pp3ppp/2p1p3/q7/3Pp3/P1P2P1N/2P3PP/R1BQKB1R w KQkq - 2 8"
+  },
+  {
+   "t": 368,
+   "ply": 15,
+   "line": [
+    "Bb2"
+   ],
+   "fen": "rnb1k1nr/pp3ppp/2p1p3/q7/3Pp3/P1P2P1N/1BP3PP/R2QKB1R b KQkq - 3 8"
+  },
+  {
+   "t": 372,
+   "ply": 16,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnb1k2r/pp3ppp/2p1pn2/q7/3Pp3/P1P2P1N/1BP3PP/R2QKB1R w KQkq - 4 9"
+  },
+  {
+   "t": 421.5,
+   "ply": 17,
+   "line": [
+    "fxe4"
+   ],
+   "fen": "rnb1k2r/pp3ppp/2p1pn2/q7/3PP3/P1P4N/1BP3PP/R2QKB1R b KQkq - 0 9"
+  },
+  {
+   "t": 434,
+   "ply": 18,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "rnb1k2r/pp3ppp/2p1p3/q7/3Pn3/P1P4N/1BP3PP/R2QKB1R w KQkq - 0 10"
+  },
+  {
+   "t": 484,
+   "ply": 19,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnb1k2r/pp3ppp/2p1p3/q7/3Pn3/P1PB3N/1BP3PP/R2QK2R b KQkq - 1 10"
+  },
+  {
+   "t": 491.5,
+   "ply": 20,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnb1k2r/pp3ppp/2p1pn2/q7/3P4/P1PB3N/1BP3PP/R2QK2R w KQkq - 2 11"
+  },
+  {
+   "t": 499,
+   "ply": 21,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnb1k2r/pp3ppp/2p1pn2/q7/3P4/P1PB3N/1BP3PP/R2Q1RK1 b kq - 3 11"
+  },
+  {
+   "t": 512.5,
+   "ply": 22,
+   "line": [
+    "b6"
+   ],
+   "fen": "rnb1k2r/p4ppp/1pp1pn2/q7/3P4/P1PB3N/1BP3PP/R2Q1RK1 w kq - 0 12"
+  },
+  {
+   "t": 600,
+   "ply": 23,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnb1k2r/p4ppp/1pp1pn2/q7/2PP4/P2B3N/1BP3PP/R2Q1RK1 b kq - 0 12"
+  },
+  {
+   "t": 620.5,
+   "ply": 24,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r1b1k2r/p2n1ppp/1pp1pn2/q7/2PP4/P2B3N/1BP3PP/R2Q1RK1 w kq - 1 13"
+  },
+  {
+   "t": 681.5,
+   "ply": 27,
+   "line": [
+    "Qf3",
+    "Bb7",
+    "Qg3"
+   ],
+   "fen": "r3k2r/pb1n1ppp/1pp1pn2/q7/2PP4/P2B2QN/1BP3PP/R4RK1 b kq - 4 14"
+  },
+  {
+   "t": 708.5,
+   "ply": 28,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "2kr3r/pb1n1ppp/1pp1pn2/q7/2PP4/P2B2QN/1BP3PP/R4RK1 w - - 5 15"
+  },
+  {
+   "t": 813.5,
+   "ply": 29,
+   "line": [
+    "Qxg7"
+   ],
+   "fen": "2kr3r/pb1n1pQp/1pp1pn2/q7/2PP4/P2B3N/1BP3PP/R4RK1 b - - 0 15"
+  },
+  {
+   "t": 823.5,
+   "ply": 30,
+   "line": [
+    "Rhg8"
+   ],
+   "fen": "2kr2r1/pb1n1pQp/1pp1pn2/q7/2PP4/P2B3N/1BP3PP/R4RK1 w - - 1 16"
+  },
+  {
+   "t": 864,
+   "ply": 32,
+   "line": [
+    "Qxf7",
+    "Rde8"
+   ],
+   "fen": "2k1r1r1/pb1n1Q1p/1pp1pn2/q7/2PP4/P2B3N/1BP3PP/R4RK1 w - - 1 17"
+  }
+ ],
+ "forks": []
+}

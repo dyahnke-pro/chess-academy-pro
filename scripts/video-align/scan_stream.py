@@ -35,7 +35,7 @@ from read_board import (  # noqa: E402
     read_board_arr,
     read_board_calibrated_arr,
 )
-from calibrate import orientation_of  # noqa: E402
+from read_board import orientation_from_luminance  # noqa: E402
 
 
 def flip(grid):
@@ -110,14 +110,17 @@ def scan(video, x0, y0, sq, fps, calibrated=False):
             # why it tracked 0 games), so a start-frame search resting on that
             # reader finds nothing and the video is refused for the wrong reason.
             if cal is None:
-                trial = calibrate_from_start_arr(g, x0, y0, sq)
+                # ORIENTATION FIRST, FROM RAW LUMINANCE — the calibration needs
+                # it, because labelling the two full ranks the wrong way round
+                # inverts every colour and then reads back as self-consistent.
+                trial_orient = orientation_from_luminance(g, x0, y0, sq)
+                if trial_orient is None:
+                    continue
+                trial = calibrate_from_start_arr(g, x0, y0, sq, trial_orient)
                 start = read_board_calibrated_arr(g, x0, y0, sq, trial)
                 if not looks_like_start(start):
                     continue
-                orient = orientation_of(start)
-                if orient is None:
-                    continue
-                cal = trial
+                cal, orient = trial, trial_orient
                 print(f'calibrated at frame {i} (t={i / fps:.1f}s), orientation={orient}', flush=True)
             grid = read_board_calibrated_arr(g, x0, y0, sq, cal)
             # ORIENTATION IS RE-READ AT EVERY START POSITION, never fixed once
@@ -132,7 +135,7 @@ def scan(video, x0, y0, sq, fps, calibrated=False):
             # two full ranks resolves it — and it is also exactly where the
             # tracker segments games, so the two agree by construction.
             if looks_like_start(grid):
-                fresh = orientation_of(grid)
+                fresh = orientation_from_luminance(g, x0, y0, sq)
                 if fresh is not None and fresh != orient:
                     print(f'  orientation -> {fresh} at t={i / fps:.1f}s', flush=True)
                     orient = fresh
