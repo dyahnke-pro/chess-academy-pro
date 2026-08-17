@@ -25,6 +25,7 @@ import { getCachedStockfish } from './stockfishFenCache';
 import { applyCandidateArrows } from '../services/coachAnswerGates';
 import type { TacticsLiveContext } from '../coach/types';
 import { voiceService } from '../services/voiceService';
+import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import { logAppAudit } from '../services/appAuditor';
 import { useAppStore } from '../stores/appStore';
 import { alertSensitivityMultiplier } from '../services/skillScaling';
@@ -40,6 +41,14 @@ import { useCoachMemoryStore } from '../stores/coachMemoryStore';
 export interface UseLiveCoachArgs {
   gameId: string;
   playerColor: 'white' | 'black';
+  /** Master switch. This hook VOLUNTEERS speech — it predates the locked
+   *  Play contract ("PLAY STAYS SILENT UNTIL THE STUDENT ASKS", David
+   *  2026-07-06, re-confirmed 2026-08-16 on hearing it speak), and its
+   *  "firehose first, tune later" rate-limit note is from that earlier era.
+   *  Play passes false; the trigger machinery stays for surfaces that may
+   *  legitimately interject (or a future opt-in setting). Off = the notify
+   *  functions are inert: no triggers, no LLM call, no speech, no spend. */
+  enabled?: boolean;
 }
 
 export interface PlayerMoveNotification {
@@ -92,7 +101,12 @@ function toStudentEval(whitePerspectiveCp: number, color: 'white' | 'black'): nu
 }
 
 function speakStreamed(text: string): void {
-  const sentences = text.match(/([^.!?]+[.!?])(?=\s|$)/g) ?? [text];
+  // splitSpeakableSentences, not the old global regex: that regex dies at a
+  // decimal, restarts mid-number, and speaks the tail as its own utterance —
+  // prod said "4 in their favor." out of "+0.4 in their favor" (run 17,
+  // 2026-08-17), the same defect sentenceSplit.ts documents from 2026-08-09.
+  const { sentences: split, rest } = splitSpeakableSentences(text);
+  const sentences = split.length > 0 ? (rest ? [...split, rest] : split) : [text];
   if (sentences.length === 0) return;
   voiceService.stop();
   let chain: Promise<void> = Promise.resolve();
@@ -256,6 +270,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
 
   const notifyPlayerMove = useCallback(
     (n: PlayerMoveNotification) => {
+      if (args.enabled === false) return;   // silent surface — no triggers, no LLM, no speech
       const studentEvalBefore = toStudentEval(n.evalBefore, playerColor);
       const studentEvalAfter = toStudentEval(n.evalAfter, playerColor);
       const studentBestEval =
@@ -309,11 +324,12 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         last3Moves: undefined,
       });
     },
-    [handleTrigger, playerColor],
+    [handleTrigger, playerColor, args.enabled],
   );
 
   const notifyOpponentMove = useCallback(
     (n: OpponentMoveNotification) => {
+      if (args.enabled === false) return;   // silent surface — no triggers, no LLM, no speech
       const studentEvalBefore = toStudentEval(n.evalBefore, playerColor);
       const studentEvalAfter = toStudentEval(n.evalAfter, playerColor);
       // Opponent moves don't extend the recovery history — only the
@@ -339,7 +355,7 @@ export function useLiveCoach(args: UseLiveCoachArgs): UseLiveCoachResult {
         studentEvalAfter,
       });
     },
-    [handleTrigger, playerColor],
+    [handleTrigger, playerColor, args.enabled],
   );
 
   return { notifyPlayerMove, notifyOpponentMove };

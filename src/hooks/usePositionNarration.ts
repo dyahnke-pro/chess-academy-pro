@@ -3,6 +3,7 @@ import { getCoachChatResponse } from '../services/coachApi';
 import { isSpokenSentenceGrounded } from '../services/coachAnswerGates';
 import { buildFedTacticsContext, speakDeepestLookahead } from '../services/liveTacticsContext';
 import { voiceService } from '../services/voiceService';
+import { splitSpeakableSentences } from '../utils/sentenceSplit';
 import { buildVoicePackage } from '../services/voicePackage';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
@@ -318,19 +319,27 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
           })
           .catch(() => undefined);
       };
-      // `+` (not `*`) so a bare terminator like "..." can't match a
-      // zero-char sentence. Requires ≥1 non-terminator char before the
-      // `.`/`!`/`?` so we dispatch only actual sentences.
-      const SENTENCE_END_RE = /([^.!?]+[.!?])(?=\s|$)/g;
+      // splitSpeakableSentences, not the old global regex. That regex is the
+      // documented decimal bug (sentenceSplit.ts, 2026-08-09): the match dies
+      // at "3.7", restarts mid-number, and dispatches "7 points)." as its own
+      // spoken sentence — with the front half silently dropped. This hook is
+      // an explicit read-aloud, so a fragment here reads a NUMBER to the
+      // student as if it were the position.
       const flushCompletedSentences = (): void => {
-        SENTENCE_END_RE.lastIndex = 0;
-        let match: RegExpExecArray | null;
-        let lastEnd = 0;
-        while ((match = SENTENCE_END_RE.exec(sentenceBuffer)) !== null) {
-          dispatchSentence(match[1]);
-          lastEnd = SENTENCE_END_RE.lastIndex;
+        const { sentences, rest } = splitSpeakableSentences(sentenceBuffer);
+        // STREAMING CAVEAT: end-of-buffer is not end-of-text. A sentence that
+        // ends exactly at the buffer's edge may be a decimal or abbreviation
+        // split across chunks — "held at +0." with "4 in their favor." still
+        // in flight. Hold it; the next chunk completes it, and the final
+        // flush below speaks whatever legitimately ends the narration.
+        let complete = sentences;
+        let keep = rest;
+        if (rest === '' && sentences.length > 0 && !/\s$/.test(sentenceBuffer)) {
+          keep = sentences[sentences.length - 1];
+          complete = sentences.slice(0, -1);
         }
-        if (lastEnd > 0) sentenceBuffer = sentenceBuffer.slice(lastEnd);
+        for (const sent of complete) dispatchSentence(sent);
+        sentenceBuffer = keep;
       };
 
       try {

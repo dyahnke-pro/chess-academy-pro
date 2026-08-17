@@ -974,6 +974,14 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
   const liveCoach = useLiveCoach({
     gameId: gameState.gameId,
     playerColor,
+    // OFF — Play is a pure playing surface and stays silent until asked
+    // (David 2026-07-06, locked; re-confirmed 2026-08-16). This hook predates
+    // that contract and volunteers LLM commentary on "meaningful moments" —
+    // run 17 caught it speaking a fragment of an eval swing mid-game. The
+    // sanctioned speakers on Play remain: move dictation, the slip flags, the
+    // blunder card, and phase transitions. Interjections like these belong in
+    // post-game review, whose wiring is designed WITH David first.
+    enabled: false,
   });
 
   // Inject nudge text into chat when it appears
