@@ -29,8 +29,19 @@ while true; do
     [ -f "data/video-tracks/$id.json" ] && { rm -f "$v"; continue; }
     [ -f "data/video-pending/$id.json" ] && { rm -f "$v"; continue; }
 
+    # GEOMETRY SCALES WITH THE ENCODE. The stream layout is fixed, but YouTube
+    # serves it at whatever resolution it likes, and the pixel numbers scale with
+    # it — the 640x360 encode is exactly 0.75x the 854x480 one. Feeding the
+    # 854-width numbers to a 640-width video reads a board that is not there and
+    # the scan refuses, which looks like a bad video and is not: C4xtj2rc0_k
+    # refused this way and gave 58 plies of Owen's Defence once scaled.
+    w=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$v" 2>/dev/null | head -1)
+    w=${w:-854}
+    sx=$(node -e "process.stdout.write(String($GEO_X*$w/854))")
+    sy=$(node -e "process.stdout.write(String($GEO_Y*$w/854))")
+    ss=$(node -e "process.stdout.write(String($GEO_S*$w/854))")
     if ! python3 scripts/video-align/scan_stream.py "$v" /tmp/g_$id.json \
-         "$GEO_X" "$GEO_Y" "$GEO_S" 2 --calibrated > /tmp/g_$id.log 2>&1; then
+         "$sx" "$sy" "$ss" 2 --calibrated > /tmp/g_$id.log 2>&1; then
       # DO NOT DELETE A REFUSED VIDEO. A refusal is usually a fixable geometry
       # or orientation problem, not a bad video — the Danish Gambit refused,
       # then yielded 286 plies once its board was read by hand. Deleting it
@@ -48,7 +59,7 @@ while true; do
       process.stdout.write(v?v.title:'');" "$id" 2>/dev/null)
 
     if VIDEO_TRACK_DIR=data/video-pending node scripts/video-align/build.mjs \
-         "$id" /tmp/g_$id.json "$title" "$GEO_X,$GEO_Y,$GEO_S" > /tmp/b_$id.log 2>&1; then
+         "$id" /tmp/g_$id.json "$title" "$sx,$sy,$ss" > /tmp/b_$id.log 2>&1; then
       echo "BANKED   $id :: $(cat /tmp/b_$id.log)"
     else
       echo "NO-GAME  $id :: $(tail -1 /tmp/b_$id.log | cut -c1-60)"
