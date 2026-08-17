@@ -89,7 +89,7 @@ while true; do
 
   # Heartbeat: readable proof of life, not an assertion.
   {
-    echo "heartbeat $(date -u +%H:%M:%S)"
+    echo "heartbeat $(date -u +%H:%M:%S)  (epoch $(date +%s) — STALE IF OLDER THAN ~3 MIN)"
     echo "  bank-loop:  $(pgrep -f 'bank-loop.sh' >/dev/null && echo up || echo DOWN)"
     echo "  downloader: $(pgrep -f 'ytq.sh' >/dev/null && echo up || echo idle)"
     echo "  pusher:     $(pgrep -f 'periodic-push.sh' >/dev/null && echo up || echo DOWN)"
