@@ -65,27 +65,32 @@ export function forksOf(track) {
     .sort((a, b) => a.ply - b.ply);
 }
 
-const path = process.argv[2];
-if (!path) {
-  console.error('usage: forks.mjs <track.json> [--write]');
-  process.exit(1);
-}
-const track = JSON.parse(readFileSync(path, 'utf8'));
-const forks = forksOf(track);
-
-console.log(`${forks.length} fork(s) demonstrated in ${track.videoId}\n`);
-for (const f of forks) {
-  console.log(`  after ${f.line.join(' ') || '(start)'}`);
-  for (const o of f.options) {
-    const mm = Math.floor(o.t / 60);
-    const ss = String(Math.round(o.t % 60)).padStart(2, '0');
-    console.log(`      ${o.san.padEnd(7)} ${mm}m${ss}   ${o.continuation}`);
+// Only act as a CLI when RUN, never when imported. Without this guard the
+// import in build.mjs executed this block and tried to open build's own first
+// argument as a track file.
+if (process.argv[1]?.endsWith('forks.mjs')) {
+  const path = process.argv[2];
+  if (!path) {
+    console.error('usage: forks.mjs <track.json> [--write]');
+    process.exit(1);
   }
-  console.log('');
-}
+  const track = JSON.parse(readFileSync(path, 'utf8'));
+  const forks = forksOf(track);
 
-if (process.argv.includes('--write')) {
-  track.forks = forks;
-  writeFileSync(path, JSON.stringify(track, null, 1));
-  console.log(`wrote ${forks.length} forks into ${path}`);
+  console.log(`${forks.length} fork(s) demonstrated in ${track.videoId}\n`);
+  for (const f of forks) {
+    console.log(`  after ${f.line.join(' ') || '(start)'}`);
+    for (const o of f.options) {
+      const mm = Math.floor(o.t / 60);
+      const ss = String(Math.round(o.t % 60)).padStart(2, '0');
+      console.log(`      ${o.san.padEnd(7)} ${mm}m${ss}   ${o.continuation}`);
+    }
+    console.log('');
+  }
+
+  if (process.argv.includes('--write')) {
+    track.forks = forks;
+    writeFileSync(path, JSON.stringify(track, null, 1));
+    console.log(`wrote ${forks.length} forks into ${path}`);
+  }
 }

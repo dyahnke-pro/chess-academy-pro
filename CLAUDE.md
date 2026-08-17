@@ -2675,6 +2675,22 @@ note text too. Bump `WALKTHROUGH_GEN_REV` whenever this ordering changes —
 beats are baked at generation time, so a cached tree serves the old order
 forever.
 
+**HIS POST-GAME REVIEW STYLE IS THE MODEL FOR OURS — AND PLAY AND REVIEW STAY
+SEPARATE (David 2026-08-17: "the post game review style of his teachings will be
+used to help restructure and style our post game review. Play and review have
+two different styles and will stay separate and consistant").** The tracked
+lessons are therefore a source for TWO different things, and mixing them is the
+error the two-registers rule above already warns about:
+
+- his REVIEW register → restructures `/coach/review` (retrospective, mistake-
+  aware, "the turning point was…");
+- his IN-GAME/WATCH register → Learn and the walkthroughs (present-tense, no
+  hindsight, "White develops and the tension builds").
+
+Each surface keeps ONE register and keeps it consistently. Do not carry review
+phrasing into Play or Learn, and do not flatten the two into a single voice
+because both came off the same video.
+
 ### 🔒🔒 THE VIDEO IS THE RECORD OF WHAT WAS TAUGHT — and its FORKS are the "other lines" (David 2026-08-17, LOCKED: "lock this in for future sessions").
 
 David: *"what i like about his videos and what i want to carry over are the
