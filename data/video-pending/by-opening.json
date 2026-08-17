@@ -75,6 +75,14 @@
    "forks": 0
   },
   {
+   "videoId": "UDDLO-WuOmE",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
    "videoId": "YXz0xSbhY70",
    "eco": "B00",
    "plies": 1,
@@ -439,6 +447,14 @@
    "forks": 0
   },
   {
+   "videoId": "UDDLO-WuOmE",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
    "videoId": "YXz0xSbhY70",
    "eco": "B20",
    "plies": 2,
@@ -707,27 +723,41 @@
    "forks": 12
   }
  ],
- "Rapport-Jobava System": [
+ "Sicilian Defense: Closed, Traditional": [
   {
-   "videoId": "W8YPj9QMtEs",
-   "eco": "D01",
-   "plies": 5,
-   "coverage": 0.727,
-   "subject": true,
-   "forks": 0
-  }
- ],
- "Queen's Pawn Game: Chigorin Variation": [
-  {
-   "videoId": "W8YPj9QMtEs",
-   "eco": "A45",
+   "videoId": "UDDLO-WuOmE",
+   "eco": "B23",
    "plies": 4,
-   "coverage": 0.818,
+   "coverage": 0.923,
+   "subject": true,
+   "forks": 1
+  },
+  {
+   "videoId": "kO23hnArI4Y",
+   "eco": "B23",
+   "plies": 4,
+   "coverage": 0.92,
+   "subject": true,
+   "forks": 4
+  },
+  {
+   "videoId": "rMNFLg1gLoI",
+   "eco": "B23",
+   "plies": 4,
+   "coverage": 0.971,
    "subject": false,
-   "forks": 0
+   "forks": 5
   }
  ],
  "Sicilian Defense: Closed": [
+  {
+   "videoId": "UDDLO-WuOmE",
+   "eco": "B23",
+   "plies": 3,
+   "coverage": 0.962,
+   "subject": false,
+   "forks": 1
+  },
   {
    "videoId": "YXz0xSbhY70",
    "eco": "B23",
@@ -759,6 +789,26 @@
    "coverage": 0.986,
    "subject": false,
    "forks": 5
+  }
+ ],
+ "Rapport-Jobava System": [
+  {
+   "videoId": "W8YPj9QMtEs",
+   "eco": "D01",
+   "plies": 5,
+   "coverage": 0.727,
+   "subject": true,
+   "forks": 0
+  }
+ ],
+ "Queen's Pawn Game: Chigorin Variation": [
+  {
+   "videoId": "W8YPj9QMtEs",
+   "eco": "A45",
+   "plies": 4,
+   "coverage": 0.818,
+   "subject": false,
+   "forks": 0
   }
  ],
  "Sicilian Defense: Dragon Variation, Yugoslav Attack, Modern Line": [
@@ -1059,24 +1109,6 @@
    "coverage": 0.04,
    "subject": false,
    "forks": 4
-  }
- ],
- "Sicilian Defense: Closed, Traditional": [
-  {
-   "videoId": "kO23hnArI4Y",
-   "eco": "B23",
-   "plies": 4,
-   "coverage": 0.92,
-   "subject": true,
-   "forks": 4
-  },
-  {
-   "videoId": "rMNFLg1gLoI",
-   "eco": "B23",
-   "plies": 4,
-   "coverage": 0.971,
-   "subject": false,
-   "forks": 5
   }
  ],
  "Queen's Gambit Declined: Semi-Tarrasch Defense, Main Line": [
