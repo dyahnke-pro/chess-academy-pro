@@ -124,12 +124,49 @@ def read_board_calibrated_arr(g, x0, y0, sq, cal):
     return out
 
 
-def calibrate_from_start_arr(g, x0, y0, sq):
-    """`calibrate_from_start` on an array already in memory."""
+def orientation_from_luminance(g, x0, y0, sq, margin=20.0):
+    """Which end of a START-POSITION frame holds the white pieces.
+
+    'white' = White at the bottom (the normal view), 'black' = the board is drawn
+    from Black's side. Returns None when the two ends are too close to call.
+
+    WHY LUMINANCE AND NOT THE CLASSIFIED GRID. `orientation_of` reads a grid that
+    has already been classified, and the classifier is calibrated by
+    `calibrate_from_start_arr`, which until now ASSUMED White was at the bottom.
+    On a board drawn from Black's side that assumption inverts every label — and
+    then `orientation_of` reads the inverted grid and confidently answers
+    "white", agreeing with the mistake that produced it. The check could never
+    catch itself, because both halves shared the same wrong premise.
+
+    A white piece is brighter than a black piece on every theme, so comparing the
+    two full ranks directly breaks the circle. Measured on the Danish Gambit
+    upload, whose flipped tan board defeated the old path: rows 0-1 mean 182,
+    rows 6-7 mean 80. Not a close call — and the same frame had been calibrated
+    as "white".
+    """
+    import numpy as np
+    mean, _ = _cell_features(g, x0, y0, sq)
+    far = float(np.mean(mean[0:2]))    # top two ranks as drawn
+    near = float(np.mean(mean[6:8]))   # bottom two ranks as drawn
+    if abs(near - far) < margin:
+        return None                    # washed out; abstain rather than guess
+    return 'white' if near > far else 'black'
+
+
+def calibrate_from_start_arr(g, x0, y0, sq, orientation='white'):
+    """`calibrate_from_start` on an array already in memory.
+
+    `orientation` says which end the WHITE pieces are on, and it must be passed
+    correctly or every colour label is inverted — see `orientation_from_luminance`
+    for how that used to happen silently.
+    """
     import numpy as np
     mean, std = _cell_features(g, x0, y0, sq)
     idx = np.indices((8, 8)).sum(axis=0) % 2
-    rows = {'b': [0, 1], 'w': [6, 7], '.': [2, 3, 4, 5]}
+    if orientation == 'black':
+        rows = {'w': [0, 1], 'b': [6, 7], '.': [2, 3, 4, 5]}
+    else:
+        rows = {'b': [0, 1], 'w': [6, 7], '.': [2, 3, 4, 5]}
     cal = {}
     for parity in (0, 1):
         for label, rs in rows.items():
