@@ -1,0 +1,278 @@
+{
+ "videoId": "55gXMP9N5sM",
+ "title": "What's a Tabia? | Grunfeld Theory: Fianchetto System | GM Naroditsky’s Top Theory Speedrun",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 68,
+   "line": [
+    "d4",
+    "Nf6",
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 2 2",
+   "said": "okay so whatever opening you play you essentially play the same setup against Knight F3 because it is so likely to transpose into the D4 opening of course Knight F3 could also be an independent opening if white plays the king's Indian attack but in this case we have indeed transposed to one D4 and indeed we respond with G6"
+  },
+  {
+   "ply": 4,
+   "t": 78,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 3",
+   "said": "Knight F3 could also be an independent opening if white plays the king's Indian attack but in this case we have indeed transposed to one D4 and indeed we respond with G6 which is the gateway to the grunfeld and"
+  },
+  {
+   "ply": 5,
+   "t": 81,
+   "line": [
+    "g3"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/3P4/5NP1/PPP1PP1P/RNBQKB1R b KQkq - 0 3",
+   "said": "opening if white plays the king's Indian attack but in this case we have indeed transposed to one D4 and indeed we respond with G6 which is the gateway to the grunfeld and the King's Indian and after the game I'll talk a little bit about why I'm recommending the grunfels specifically and not the king's Indian G3 our"
+  },
+  {
+   "ply": 6,
+   "t": 89.5,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/3P4/5NP1/PPP1PP1P/RNBQKB1R w KQkq - 1 4",
+   "said": "which is the gateway to the grunfeld and the King's Indian and after the game I'll talk a little bit about why I'm recommending the grunfels specifically and not the king's Indian G3 our opponent responds with What's called the"
+  },
+  {
+   "ply": 7,
+   "t": 90.5,
+   "line": [
+    "Bg2"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/3P4/5NP1/PPP1PPBP/RNBQK2R b KQkq - 2 4",
+   "said": "which is the gateway to the grunfeld and the King's Indian and after the game I'll talk a little bit about why I'm recommending the grunfels specifically and not the king's Indian G3 our opponent responds with What's called the fianchetto setup surprisingly enough and to start we complete the development of our King side we go Castle short"
+  },
+  {
+   "ply": 9,
+   "t": 99,
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/3P4/5NP1/PPP1PPBP/RNBQ1RK1 b - - 4 5",
+   "said": "and not the king's Indian G3 our opponent responds with What's called the fianchetto setup surprisingly enough and to start we complete the development of our King side we go Castle short and of course here we reach the main Crossroads if you've watched my Blitz Games in this position I mostly play the move D6 which is what you play if you're a king's Indian player but if you're a grunfeld player and for the purposes of this speedrun we are grundfeld players we play the move D5"
+  },
+  {
+   "ply": 10,
+   "t": 117.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/3p4/3P4/5NP1/PPP1PPBP/RNBQ1RK1 w - - 0 6",
+   "said": "move D6 which is what you play if you're a king's Indian player but if you're a grunfeld player and for the purposes of this speedrun we are grundfeld players we play the move D5 reaching a totally symmetrical position"
+  },
+  {
+   "ply": 11,
+   "t": 119,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/3p4/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 0 6",
+   "said": "move D6 which is what you play if you're a king's Indian player but if you're a grunfeld player and for the purposes of this speedrun we are grundfeld players we play the move D5 reaching a totally symmetrical position our opponent responds with the main line c2c4 and some idiot named Vladimir kramnik played this against me with white in a classical game and uh I think I've even shown that game on stream this is a very theoretical line and I'm pretty impressed that our opponent is going for a not a common Occurrence at you know like 15 1600 level for players to go uh for the fiancado grinfeld but still this allows us to fill uh a gap in the speedrun thus far what do we do in this position another major crossroads there are two main moves the most popular move at a top Grand Master Level is to play its slav Style with C6 but the more exciting line and the line that I think is more testing at a club player level is the"
+  },
+  {
+   "ply": 12,
+   "t": 165,
+   "line": [
+    "dxc4"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/8/2pP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 0 7",
+   "said": "Grand Master Level is to play its slav Style with C6 but the more exciting line and the line that I think is more testing at a club player level is the move that I played against kramnik this"
+  },
+  {
+   "ply": 11,
+   "t": 166.5,
+   "line": [],
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/3p4/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 0 6",
+   "said": "Grand Master Level is to play its slav Style with C6 but the more exciting line and the line that I think is more testing at a club player level is the move that I played against kramnik this is not a bad move it's also very theoretical but at least it leads to"
+  },
+  {
+   "ply": 12,
+   "t": 170,
+   "line": [
+    "dxc4"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/8/2pP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 0 7",
+   "said": "and the line that I think is more testing at a club player level is the move that I played against kramnik this is not a bad move it's also very theoretical but at least it leads to some imbalance in the position we play D takes C4 I'm way too bored uh to play C6"
+  },
+  {
+   "ply": 11,
+   "t": 174.5,
+   "line": [],
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/3p4/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 0 6",
+   "said": "move that I played against kramnik this is not a bad move it's also very theoretical but at least it leads to some imbalance in the position we play D takes C4 I'm way too bored uh to play C6 I think C6 leads to some incredibly boring positions very often the position remains symmetrical for a long time and most games at the highest level end in draws after C6 Knight A3 this is the"
+  },
+  {
+   "ply": 13,
+   "t": 187.5,
+   "line": [
+    "dxc4",
+    "Na3"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/8/2pP4/N4NP1/PP2PPBP/R1BQ1RK1 b - - 1 7",
+   "said": "I think C6 leads to some incredibly boring positions very often the position remains symmetrical for a long time and most games at the highest level end in draws after C6 Knight A3 this is the correct move by our opponent and here we perform a very instructive procedure if you aren't familiar with the theory of this line it is hard to come up with the next move independently does anybody know what the move that I'm talking about actually is now the logic behind this move is here's the thing we are not going to be able to preserve the extra Pawn we can't play B5 because we give that pawn up Bishop E6 is an attempt to cling to the pawn but it runs into the very unpleasant response Knight G5 and if you visualize in your head Bishop B6 Knight G5 you could try Bishop D5 there but white counter strikes with E4 and then the bishop has to move again and you've given up the entire Center and you haven't even managed to to keep your extra Pawn so what you often see is a situation where you're already going to lose the pun the pawn is condemned so we might as well use this Pawn to extract as much damage out of white structure as possible so goes the logic right if we're already losing the pawn why don't we give that pawn up on our own terms why don't we force white to at least make some weaknesses in their structure and that's where the move C4"
+  },
+  {
+   "ply": 14,
+   "t": 263,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/8/3P4/N1p2NP1/PP2PPBP/R1BQ1RK1 w - - 0 8",
+   "said": "right if we're already losing the pawn why don't we give that pawn up on our own terms why don't we force white to at least make some weaknesses in their structure and that's where the move C4 C3 comes from white has to play PC and you might say well but doesn't that help white solidify his central control on the one"
+  },
+  {
+   "ply": 15,
+   "t": 269,
+   "line": [
+    "bxc3"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/8/3P4/N1P2NP1/P3PPBP/R1BQ1RK1 b - - 0 8",
+   "said": "least make some weaknesses in their structure and that's where the move C4 C3 comes from white has to play PC and you might say well but doesn't that help white solidify his central control on the one hand yes but on the other hand the pawn on C3 is now a backward pawn and of course white is left with an isolated opponent A2 but we can't fall asleep here if we fall asleep we essentially allow white to prepare E4 we need to Counter Strike immediately we need to grab our own share of the center before it's too late and of course we do that"
+  },
+  {
+   "ply": 16,
+   "t": 290.5,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2p5/3P4/N1P2NP1/P3PPBP/R1BQ1RK1 w - - 0 9",
+   "said": "here if we fall asleep we essentially allow white to prepare E4 we need to Counter Strike immediately we need to grab our own share of the center before it's too late and of course we do that with a classic grunfeld move C5 leading to what's called a tabia a position from which there are five or six different viable continuations the old main line is 95. kramnik did play 95 against me and in response in response to 95 black is supposed to sacrifice upon I will show you some of the theory after the game and there are some very very exciting lines here this is actually a super interesting line both positionally and tactically and you should be able to sense that like there's a lot going on in the center but if white doesn't play this in principled fashion then our next move is of course very likely to be Knight to C6 putting more pressure on D4 okay so it's it's a super complex position and I'm going to try to illustrate most of Black's main ideas here as we make our moves can you go C5 before pushing C3 yes absolutely so a completely viable alternative is the immediate C5 but"
+  },
+  {
+   "ply": 13,
+   "t": 350,
+   "line": [],
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/8/2pP4/N4NP1/PP2PPBP/R1BQ1RK1 b - - 1 7",
+   "said": "and I'm going to try to illustrate most of Black's main ideas here as we make our moves can you go C5 before pushing C3 yes absolutely so a completely viable alternative is the immediate C5 but after an I take C4 again the position gets very symmetrical and if we play C5 and then C takes D4 white recaptures with the Knight and we want to be careful about a situation where we allow the the fiancado bishop to get too active right it's actually in our favor for the Knight to remain on F3 because it for the time being kind of cancels out the activity of the fionkyo bishop allowing us to develop our Queen side a little bit more easily"
+  },
+  {
+   "ply": 16,
+   "t": 380,
+   "line": [
+    "c3",
+    "bxc3",
+    "c5"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2p5/3P4/N1P2NP1/P3PPBP/R1BQ1RK1 w - - 0 9",
+   "said": "our favor for the Knight to remain on F3 because it for the time being kind of cancels out the activity of the fionkyo bishop allowing us to develop our Queen side a little bit more easily why can't white just take well if white takes then he ruins permanently his entire Queen side and that also opens up our own fianchetto Bishop in response to DC we have many moves we can slide Our Queen over to A5 forking two of White's pawns but we can also play the move Knight F6 to E4 opening up a double attack on the C3 Pawn and double attack in the sense that two pieces are attacking it at once and we don't mind a queen trade if white trades Queens giving the D file be my guest so one of the keys to understanding the grunfeld is that you almost never mind sacrificing Pawns you have to be ready as early as move four or five to give away the seep honor to give away the epon right activity is sacred in the grunfeld whatever you do you have to make sure that your pieces remain active just like in all hyper modern openings otherwise why are you giving up the center right if you give up the center and you play passively then you know you"
+  },
+  {
+   "ply": 17,
+   "t": 440.5,
+   "line": [
+    "Re1"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2p5/3P4/N1P2NP1/P3PPBP/R1BQR1K1 b - - 1 9",
+   "said": "remain active just like in all hyper modern openings otherwise why are you giving up the center right if you give up the center and you play passively then you know you should be playing the Queen's gamma decline rookie one okay that is a move it's not the main line but it is quite popular these days and I'm pretty impressed that our opponent uh knows this amount of theory now what is the purpose of rookie one well the purpose is very obvious white is preparing to play E4 but you should understand that E4 is a double-sided move on the one hand it occupies the center with pawns but on the other hand it leaves the D4 Pawn a little bit more vulnerable and most importantly it allows our light squared Bishop to develop to G4 putting very significant pressure on the Knight and therefore on the D4 Pawn so in these positions it's not all about stopping your opponent from grabbing the center sometimes you want to actually encourage it so an instructive mistake here would be to play Bishop F5 that would be a little bit premature because it leaves the B7 Pawn without a Defender and white has a couple of nasty responses like Queen B3 or like Knight F3 to E5 so in this case we actually"
+  },
+  {
+   "ply": 18,
+   "t": 501.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2n2np1/2p5/3P4/N1P2NP1/P3PPBP/R1BQR1K1 w - - 2 10",
+   "said": "here would be to play Bishop F5 that would be a little bit premature because it leaves the B7 Pawn without a Defender and white has a couple of nasty responses like Queen B3 or like Knight F3 to E5 so in this case we actually want to proceed with our development we go Knight C6"
+  },
+  {
+   "ply": 19,
+   "t": 507.5,
+   "line": [
+    "Bf1"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2n2np1/2p5/3P4/N1P2NP1/P3PP1P/R1BQRBK1 b - - 3 10",
+   "said": "responses like Queen B3 or like Knight F3 to E5 so in this case we actually want to proceed with our development we go Knight C6"
+  },
+  {
+   "ply": 18,
+   "t": 509,
+   "line": [],
+   "fen": "r1bq1rk1/pp2ppbp/2n2np1/2p5/3P4/N1P2NP1/P3PPBP/R1BQR1K1 w - - 2 10",
+   "said": "responses like Queen B3 or like Knight F3 to E5 so in this case we actually want to proceed with our development we go Knight C6 and we encourage white to play we encourage white to play uh E4 sorry H3"
+  },
+  {
+   "ply": 19,
+   "t": 512,
+   "line": [
+    "h3"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2n2np1/2p5/3P4/N1P2NPP/P3PPB1/R1BQR1K1 b - - 0 10",
+   "said": "want to proceed with our development we go Knight C6 and we encourage white to play we encourage white to play uh E4 sorry H3 okay so that's another very good move our opponent is preventing us from bringing our Bishop out to G4 now there's a very well known trap in this line actually maybe it's not here no maybe H3 is inaccurate I'm trying to remember let me think for a second trying to remember something so there is a developing move that you should be inclined to play if we're not playing Bishop G4 and we're not for obvious reasons what is the second best Square for the bishop well the second best square is of course F5 which prevents the movie for and later on the bishop can actually position itself on e4 in order to cancel out White's most active piece a very classic idea but after Bishop G5 after Bishop F4 there is a well-known trick that you have to be aware of white has this very weird looking move D5 Bishop F5 D5 and hopefully you can understand the idea if Knight takes D5 white Forks the two miners with E4 now that position is still not the end of the story because the C3 Pawn hangs and if we take C3 We're x-raying The Rook in the corner so things get incredibly complicated there and we could potentially get three pawns for the piece so that's the line I was trying to work out but Bishop F5 is far from Forced we have a bunch of other ways that we could apply pressure on White Center and one other tempting option is for us to play Queen to A5 putting pressure on the Knight and flat out attacking the C3 Pawn and the other good thing about moving the queen away from d8 is that we're vacating that square for the rook and putting the Rook on d8 here should be good for for obvious reasons so I like the look of Queen A5 Bishop F5 leads to some very complicated tactical complicated complications let's play this in a somewhat more conservative manner here let's go Queen"
+  },
+  {
+   "ply": 20,
+   "t": 631,
+   "line": [
+    "Qa5"
+   ],
+   "fen": "r1b2rk1/pp2ppbp/2n2np1/q1p5/3P4/N1P2NPP/P3PPB1/R1BQR1K1 w - - 1 11",
+   "said": "so I like the look of Queen A5 Bishop F5 leads to some very complicated tactical complicated complications let's play this in a somewhat more conservative manner here let's go Queen A5 I'm not really in the mood to allow Bishop F5 D5 and we'll investigate it after the game let's go Queen A5 we're asking White a rather annoying question right how are you planning to defend the C3 Pawn now a couple of tactical observations and you can sense how complex the position is and these types of situations you really have to do the work of making tactical observations noticing things that could lead to attacking and one such thing is an x-ray that may appear insignificant The Queen Is x-raying The Rook on E1 now who cares about that well it's actually kind of important if white plays the move Queen D1 to B3 which is not unlikely then we already have a tactic to exploit it as long as the Rooks remain unconnected you should always be looking at deflection tactics what deflection tactic is available after Queen B3 well you should see it it's C takes D4 C takes D4 and Knight takes D4 deflecting the Knight on F3 and then capturing on E1 with check and it's important that we capture with check because otherwise the queen potentially could get trapped there but that gives us a Tempo to evacuate the queen okay so any move that leaves The Rook anymore without a second Defender uh is is a precursor to a deflection tactic along this diagonal of course we should also pay attention to the Knight on A3 Bishop D2 would blunder the knight in one move I think White's best move perhaps even lights only move is Bishop C1 to B2"
+  },
+  {
+   "ply": 21,
+   "t": 723.5,
+   "line": [
+    "Bb2"
+   ],
+   "fen": "r1b2rk1/pp2ppbp/2n2np1/q1p5/3P4/N1P2NPP/PB2PPB1/R2QR1K1 b - - 2 11",
+   "said": "of course we should also pay attention to the Knight on A3 Bishop D2 would blunder the knight in one move I think White's best move perhaps even lights only move is Bishop C1 to B2 okay good stuff by our opponent let's continue applying pressure on the center how are we going to put pressure on the center well we already know what technique is available for us to do that we should probably play the move Rook to d8 and something actually tells me that Queen A5 might be an inaccuracy if that's the case it's a very very instructive moment because of how tempting the move is let me think yeah Queen A5 might have been a mistake because the movie should be two actually helps white in the sense that it really solidifies the center makes it harder for us to put pressure on D4 but at this point we're in too deep"
+  },
+  {
+   "ply": 22,
+   "t": 766.5,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "r1br2k1/pp2ppbp/2n2np1/q1p5/3P4/N1P2NPP/PB2PPB1/R2QR1K1 w - - 3 12",
+   "said": "yeah Queen A5 might have been a mistake because the movie should be two actually helps white in the sense that it really solidifies the center makes it harder for us to put pressure on D4 but at this point we're in too deep let's go rook d8 and that's a move we should kind of just play automatically and let's see what our opponent comes up with here yeah I don't think our opponent is stream sniping I think Bishop B2 is an easy move to find by process of elimination they're literally just were no other viable moves all right so let's not jump to conclusions we are not afraid of night well Knight C4 might be a good move here Knight C4 might be a good move here but you know we'll drop our Queen back to A6 or to B5 and I don't really see where that Knight is is going to go so position remains super complicated and it's a battle over the center right it's a classic grunfeld game where both sides are jostling for position in the center we are trying to cause White Center to collapse and white is trying to expand his central control and make sure that all the bases are covered essentially"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 18,
+   "fen": "r1bq1rk1/pp2ppbp/2n2np1/2p5/3P4/N1P2NP1/P3PPBP/R1BQR1K1 w - - 2 10",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nf3",
+    "g6",
+    "g3",
+    "Bg7",
+    "Bg2",
+    "O-O",
+    "O-O",
+    "d5",
+    "c4",
+    "dxc4",
+    "Na3",
+    "c3",
+    "bxc3",
+    "c5",
+    "Re1",
+    "Nc6"
+   ],
+   "options": [
+    {
+     "san": "Bf1",
+     "t": 507.5,
+     "continuation": "Bf1",
+     "said": "responses like Queen B3 or like Knight F3 to E5 so in this case we actually want to proceed with our development we go Knight C6 and we encourage white to play we encourage white to play uh E4 sorry H3 okay so that's another very good move our opponent is preventing us from bringing our Bishop out to G4 now there's a very well known trap in this line actually maybe it's not here no maybe H3 is inaccurate I'm trying to remember let me think for a second trying to remember something so there is a developing move that you should be inclined to play if we're not playing Bishop G4 and we're not for obvious reasons what is the second best Square for the bishop well the second best square is of course F5 which prevents the movie for and later on the bishop can actually position itself on e4 in order to cancel out White's most active piece a very classic idea but after Bishop G5 after Bishop F4 there is a well-known trick that you have to be aware of white has this very"
+    },
+    {
+     "san": "h3",
+     "t": 512,
+     "continuation": "h3",
+     "said": "want to proceed with our development we go Knight C6 and we encourage white to play we encourage white to play uh E4 sorry H3 okay so that's another very good move our opponent is preventing us from bringing our Bishop out to G4 now there's a very well known trap in this line actually maybe it's not here no maybe H3 is inaccurate I'm trying to remember let me think for a second trying to remember something so there is a developing move that you should be inclined to play if we're not playing Bishop G4 and we're not for obvious reasons what is the second best Square for the bishop well the second best square is of course F5 which prevents the movie for and later on the bishop can actually position itself on e4 in order to cancel out White's most active piece a very classic idea but after Bishop G5 after Bishop F4 there is a well-known trick that you have to be aware of white has this very weird looking move D5 Bishop F5 D5 and hopefully you can"
+    }
+   ]
+  }
+ ]
+}

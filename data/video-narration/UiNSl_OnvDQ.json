@@ -1,0 +1,239 @@
+{
+ "videoId": "UiNSl_OnvDQ",
+ "title": "From Worse to Victory! Art of the Comeback!! | Caro-Kann: Fantasy | GM Naroditsky’s Theory Speed Run",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 43,
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] okay nikito 3001 I do want to play E4 in this game even though we've been kind of toggling between the jababa London uh and 1e4 but let's Resort back to our main repertoire especially because we're facing the Karo Khan yet again and"
+  },
+  {
+   "ply": 3,
+   "t": 48.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "this game even though we've been kind of toggling between the jababa London uh and 1e4 but let's Resort back to our main repertoire especially because we're facing the Karo Khan yet again and anybody who's watched the speedrun for any length of time should know what move"
+  },
+  {
+   "ply": 4,
+   "t": 51,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "this game even though we've been kind of toggling between the jababa London uh and 1e4 but let's Resort back to our main repertoire especially because we're facing the Karo Khan yet again and anybody who's watched the speedrun for any length of time should know what move I wholeheartedly recommend against the karokan this I think is the best weapon for Club players for beginner turn intermediate players by far and that is of course the fantasy it is the"
+  },
+  {
+   "ply": 5,
+   "t": 62.5,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "said": "any length of time should know what move I wholeheartedly recommend against the karokan this I think is the best weapon for Club players for beginner turn intermediate players by far and that is of course the fantasy it is the Kryptonite of the majority of Karo Khan players for two main reasons it's less well-known than Knight C3 E5 and E takes"
+  },
+  {
+   "ply": 4,
+   "t": 70,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "intermediate players by far and that is of course the fantasy it is the Kryptonite of the majority of Karo Khan players for two main reasons it's less well-known than Knight C3 E5 and E takes D5 the kind of Mainline Trifecta so it's less studied and two it leads to"
+  },
+  {
+   "ply": 5,
+   "t": 75.5,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "said": "players for two main reasons it's less well-known than Knight C3 E5 and E takes D5 the kind of Mainline Trifecta so it's less studied and two it leads to extremely tactical positions so black can't get away with just making Karo"
+  },
+  {
+   "ply": 6,
+   "t": 80.5,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+   "said": "well-known than Knight C3 E5 and E takes D5 the kind of Mainline Trifecta so it's less studied and two it leads to extremely tactical positions so black can't get away with just making Karo Khan moves and improvising okay so Pawn takes E4 and E5 is what everybody seems"
+  },
+  {
+   "ply": 8,
+   "t": 84.5,
+   "line": [
+    "fxe4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/8/PPP3PP/RNBQKBNR w KQkq - 0 5",
+   "said": "less studied and two it leads to extremely tactical positions so black can't get away with just making Karo Khan moves and improvising okay so Pawn takes E4 and E5 is what everybody seems to be playing against us this is the main line and if you've watched the previous speedrun game there was one a couple of games ago where we sacrificed Our Queen it was an amazing game and this exact line was featured in that game so you should know that the move is not Pawn takes E5 not because of the queen trade although that's also fine for black but of course because of Queen H4 check and then the queen picks up the pawn on e4 instead we prioritize"
+  },
+  {
+   "ply": 9,
+   "t": 110,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/5N2/PPP3PP/RNBQKB1R b KQkq - 1 5",
+   "said": "game so you should know that the move is not Pawn takes E5 not because of the queen trade although that's also fine for black but of course because of Queen H4 check and then the queen picks up the pawn on e4 instead we prioritize development we bring our Knight out to F3 black plays Bishop G4 which is the"
+  },
+  {
+   "ply": 10,
+   "t": 114,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "rn1qkbnr/pp3ppp/2p5/4p3/3PP1b1/5N2/PPP3PP/RNBQKB1R w KQkq - 2 6",
+   "said": "queen trade although that's also fine for black but of course because of Queen H4 check and then the queen picks up the pawn on e4 instead we prioritize development we bring our Knight out to F3 black plays Bishop G4 which is the best move the old line is e takes D4"
+  },
+  {
+   "ply": 9,
+   "t": 117,
+   "line": [],
+   "fen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/5N2/PPP3PP/RNBQKB1R b KQkq - 1 5",
+   "said": "for black but of course because of Queen H4 check and then the queen picks up the pawn on e4 instead we prioritize development we bring our Knight out to F3 black plays Bishop G4 which is the best move the old line is e takes D4 which almost loses I've analyzed that pretty extensively throughout the speedrun games and on Bishop G4"
+  },
+  {
+   "ply": 10,
+   "t": 123,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "rn1qkbnr/pp3ppp/2p5/4p3/3PP1b1/5N2/PPP3PP/RNBQKB1R w KQkq - 2 6",
+   "said": "development we bring our Knight out to F3 black plays Bishop G4 which is the best move the old line is e takes D4 which almost loses I've analyzed that pretty extensively throughout the speedrun games and on Bishop G4 I've kind of advocated for two different lines the line that I myself play with white is this move C3 solidifying the center and then bringing the light squirt Bishop out to E2 but the move that I recommend to players in the sort of 1800 to 2000 Range is the more ambitious more popular move which is Bishop to C4 which really forces black to demonstrate very extensive theoretical knowledge in order to attain a good position and leads to countless tactical traps now I don't know Bishop C4 as well as C3 but again for the purposes of the speeder and I'm willing to put myself on the line and improvise if necessary let's bring the bishop out"
+  },
+  {
+   "ply": 11,
+   "t": 166,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rn1qkbnr/pp3ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R b KQkq - 3 6",
+   "said": "tactical traps now I don't know Bishop C4 as well as C3 but again for the purposes of the speeder and I'm willing to put myself on the line and improvise if necessary let's bring the bishop out to C4 now we've already had a game where Bishop takes F7 check was overlooked by"
+  },
+  {
+   "ply": 12,
+   "t": 172.5,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r2qkbnr/pp1n1ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R w KQkq - 4 7",
+   "said": "purposes of the speeder and I'm willing to put myself on the line and improvise if necessary let's bring the bishop out to C4 now we've already had a game where Bishop takes F7 check was overlooked by our opponent of course this guy clearly knows what he's doing Knight to D7 is correct and I've already explained previously why Bishop takes F7 doesn't work here so you know if you're watching on YouTube and you don't uh remember the previous Fantasy games it might be worth pausing and you know doing a quick run through of the previous Fantasy games to acquaint yourself with the basic Theory because I'm not going to repeat you know the same basic observations we're just gonna go straight into the correct line of play which is of course to Castle"
+  },
+  {
+   "ply": 13,
+   "t": 201,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2qkbnr/pp1n1ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQ1RK1 b kq - 5 7",
+   "said": "through of the previous Fantasy games to acquaint yourself with the basic Theory because I'm not going to repeat you know the same basic observations we're just gonna go straight into the correct line of play which is of course to Castle kingside and this is one of the biggest appeals of the fantasy you get this semi-openf file on which you can engineer A Massive Attack if black is not careful Bishop takes F7 of course is"
+  },
+  {
+   "ply": 14,
+   "t": 213.5,
+   "line": [
+    "Ngf6"
+   ],
+   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP1b1/5N2/PPP3PP/RNBQ1RK1 w kq - 6 8",
+   "said": "appeals of the fantasy you get this semi-openf file on which you can engineer A Massive Attack if black is not careful Bishop takes F7 of course is once again reinforced as a threat black plays Knight Knight F6 and now it's time for us to solidify our Center because once black gets a couple of pieces out Pawn takes Pawn is now a rather uh nasty Prospect right our Center is part of the reason part of the appeal of the fantasy so we need to take the sting out of the move he takes D4 note that pawn takes E5 is not effective not because of Knight takes C5 that loses a piece but rather because black and first take the Knight on F3 then recapture on E5 and again our Center sort of evaporates so once again"
+  },
+  {
+   "ply": 15,
+   "t": 250.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP1b1/2P2N2/PP4PP/RNBQ1RK1 b kq - 0 8",
+   "said": "takes C5 that loses a piece but rather because black and first take the Knight on F3 then recapture on E5 and again our Center sort of evaporates so once again we need to play this move C3 and you might say well what about the Knight on B1 well don't worry about the Knight because the Knight can be brought out via D2 later on in the game this Knight is not essential to our general development into the health of our position as things stand but before"
+  },
+  {
+   "ply": 16,
+   "t": 265,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p3/2BPP1b1/2P2N2/PP4PP/RNBQ1RK1 w kq - 1 9",
+   "said": "might say well what about the Knight on B1 well don't worry about the Knight because the Knight can be brought out via D2 later on in the game this Knight is not essential to our general development into the health of our position as things stand but before bringing the night out to D2 of course it's always a good idea to bring your Bishop out first this is pretty standard fare you don't want to block the development of one piece by bringing out another piece so it's important for us to find suitable employment for our Bishop and there's really only one reasonable Square all of this has"
+  },
+  {
+   "ply": 17,
+   "t": 286,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p1B1/2BPP1b1/2P2N2/PP4PP/RN1Q1RK1 b kq - 2 9",
+   "said": "development of one piece by bringing out another piece so it's important for us to find suitable employment for our Bishop and there's really only one reasonable Square all of this has happened in previous speedrun games we've followed this main line to to the T being gone more than one occasion and around this point I think is where most players in the 2000 chess.com range are"
+  },
+  {
+   "ply": 18,
+   "t": 300.5,
+   "line": [
+    "h6"
+   ],
+   "fen": "r2qk2r/pp1n1pp1/2pb1n1p/4p1B1/2BPP1b1/2P2N2/PP4PP/RN1Q1RK1 w kq - 0 10",
+   "said": "we've followed this main line to to the T being gone more than one occasion and around this point I think is where most players in the 2000 chess.com range are out of theory but I've been pretty surprised by the knowledge displayed by a couple of our opponents H6 okay and of course we drop our Bishop"
+  },
+  {
+   "ply": 19,
+   "t": 310.5,
+   "line": [
+    "Bh4"
+   ],
+   "fen": "r2qk2r/pp1n1pp1/2pb1n1p/4p3/2BPP1bB/2P2N2/PP4PP/RN1Q1RK1 b kq - 1 10",
+   "said": "out of theory but I've been pretty surprised by the knowledge displayed by a couple of our opponents H6 okay and of course we drop our Bishop back to H4 we're trying to provoke the move G5 which our opponent plays so now"
+  },
+  {
+   "ply": 20,
+   "t": 314.5,
+   "line": [
+    "g5"
+   ],
+   "fen": "r2qk2r/pp1n1p2/2pb1n1p/4p1p1/2BPP1bB/2P2N2/PP4PP/RN1Q1RK1 w kq - 0 11",
+   "said": "surprised by the knowledge displayed by a couple of our opponents H6 okay and of course we drop our Bishop back to H4 we're trying to provoke the move G5 which our opponent plays so now of course we drop our Bishop back to G 3 and again you should remember that Knight takes E4 is never a major problem because Bishop takes F7 check always exists in response this might be what we faced last time but I don't really"
+  },
+  {
+   "ply": 21,
+   "t": 332,
+   "line": [
+    "Bg3"
+   ],
+   "fen": "r2qk2r/pp1n1p2/2pb1n1p/4p1p1/2BPP1b1/2P2NB1/PP4PP/RN1Q1RK1 b kq - 1 11",
+   "said": "and again you should remember that Knight takes E4 is never a major problem because Bishop takes F7 check always exists in response this might be what we faced last time but I don't really remember Bishop G3 Queen E7 okay so"
+  },
+  {
+   "ply": 22,
+   "t": 334,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r3k2r/pp1nqp2/2pb1n1p/4p1p1/2BPP1b1/2P2NB1/PP4PP/RN1Q1RK1 w kq - 2 12",
+   "said": "Knight takes E4 is never a major problem because Bishop takes F7 check always exists in response this might be what we faced last time but I don't really remember Bishop G3 Queen E7 okay so clearly our opponent knows absolutely everything here so we're on our own let's think about this for a second I think we might have faced this exact sequence before I'm definitely out of theory I will admit we're on our own here and it might very well be that we face this exact sequence and I just don't remember but please forgive me it is pretty late and my memory for openings is a lot worse than people realize so clearly first of all clearly this guy did extremely serious war against the fantasy now as I see it the point of Queen E7 is pretty clear black is solidifying his control over the E5 pawn and preparing to Castle Queen side which is going to lead to an opposite side castling situation where both sides are going to use their pawns to attack the opposing side's King so black has this clear plan of h5h4 we on the other hand have our own methods of approaching Black's King we can play A4 A5 but we can also deploy Our Queen to B3 or even to A4 and try to harass and massage some of these weak pawns on the queen side but all of that is beyond the scope of this position first of all we need to complete our"
+  },
+  {
+   "ply": 23,
+   "t": 404.5,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "r3k2r/pp1nqp2/2pb1n1p/4p1p1/2BPP1b1/2P2NB1/PP1N2PP/R2Q1RK1 b kq - 3 12",
+   "said": "Our Queen to B3 or even to A4 and try to harass and massage some of these weak pawns on the queen side but all of that is beyond the scope of this position first of all we need to complete our development we need to play Knight bd2 and we need to wait for black to put his"
+  },
+  {
+   "ply": 24,
+   "t": 410,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "2kr3r/pp1nqp2/2pb1n1p/4p1p1/2BPP1b1/2P2NB1/PP1N2PP/R2Q1RK1 w - - 4 13",
+   "said": "harass and massage some of these weak pawns on the queen side but all of that is beyond the scope of this position first of all we need to complete our development we need to play Knight bd2 and we need to wait for black to put his cards on the table okay Castle's Queen side now My worry is that if we start storming with our pawns if we play a move like A4 we apply what I call the best case scenario test where we say okay let's say our opponent allows us to do exactly what we want to do how good is that going to be well even if we get our Pawn all the way up to A6 that's not as big of a deal as it may appear because black can just push the beep on forward like B5 we've wasted three Tempe and all we've done is induce you know an unexploitable weakness on C6 which cannot be approached so I think A4 is ineffective I think we need to try to attack with our pieces well what pieces can we recruit for the purpose of pressuring Black's Queen side there's also a weakness on F7 by the way which you shouldn't forget about well to me the queen is the only piece that can be immediately recruited we can play them move Queen to A4 which is actually quite interesting we can try to induce black into playing"
+  }
+ ],
+ "forks": []
+}

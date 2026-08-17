@@ -1,0 +1,213 @@
+{
+ "videoId": "LLidbvIUZ5I",
+ "title": "Finegold Once Said \"Never Play F5\" | Latvian Gambit | A GM Naroditsky Theory Speed Run",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1460.5,
+   "line": [
+    "d4",
+    "f5"
+   ],
+   "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "That was nice. It was a simple game, but it really illustrates how how bad the move f5 is like across most openings. With the exception, of course, of the Dutch. But, the reason f5 here is justified is because this diagonal is closed and this diagonal is closed, right? White hasn't moved the e-pawn yet. So, it really changes the dynamic of the game. Although, f5 is a pretty dubious opening even against 1 d4. You have to know a lot of very tactical lines like the Staunton Gambit with e4 is nothing to"
+  },
+  {
+   "ply": 3,
+   "t": 1479.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqkbnr/ppppp1pp/8/5p2/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "moved the e-pawn yet. So, it really changes the dynamic of the game. Although, f5 is a pretty dubious opening even against 1 d4. You have to know a lot of very tactical lines like the Staunton Gambit with e4 is nothing to sneeze at. And that this can get very very very"
+  },
+  {
+   "ply": 5,
+   "t": 1485,
+   "line": [
+    "fxe4",
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/ppppp1pp/8/8/3Pp3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "even against 1 d4. You have to know a lot of very tactical lines like the Staunton Gambit with e4 is nothing to sneeze at. And that this can get very very very dicey for black if you don't know all of the theory. So, let's have a look at how bad exactly how bad the move f5 here is. So, we respond with D4. Hopefully, the logic behind this move was clear enough. Really, really quickly, I was referencing the Damiano, which is F6. There is a fascinating story between why the Damiano's called what it is called. Right? You might say, \"Well, what kind of an idiot was Damiano to advocate for a move like F6, which even if it's the year is 1400 or 1500, which is when Damiano lived, and opening theory isn't well developed, just using first principles, it's obvious that F6 is a very bad move. You're blocking the knight's normal developing square. You're opening up a diagonal. You're weakening the king side permanently. So, it's obviously a bad move. And even D4 leads to an almost decisive advantage for white. But, knight takes E5 is the famous refutation. It's been known for hundreds of years, really since the 1500s. And it is followed by Queen H5 check, forking the king and the pawn. One fork turns into another. If black plays G6, we win the rook in the corner. It's important to point out that in this position, black cannot play Bishop G7 on the next move because of the pin against the bishop. So, I think the simplest is to play D3, and essentially to pre-move Bishop G5, which pins and potentially wins the knight. Black loses all of his freaking pieces. Or, you can even play Bishop to H6 if you want to keep it simple and then simplify by taking on F8 with the queen and forcing a queen trade. White is up an exchange and a pawn in the resulting end game. There are many ways to win. You can analyze this with an engine if you want to be very diligent. You can also play knight C3. Okay. So, G6 loses and King E7 loses in even more spectacular fashion because the king is driven to the edge of the earth with a series of checks. And King G6 gets checkmated in very famous style. This is a very famous line. Again, it's been known for centuries. Check. Now, I discovered check with a pawn. And now the classic, right? You can see the rook. you can see the king. They are x-raying each other, so h4 is a very thematic mating move. You're threatening hg and queen f7. It's mate in nine according to the engine, but if black gives up like all of his pieces. So white can play bishop takes g5 or hg. There's nothing left to analyze. Technically, it is more resilient to play d5 with the idea of protecting the f5 square with the bishop. And here white has many ways to win, but there's a very beautiful line that also has been known for many centuries. It starts with h4. So you're threatening to play h5 followed by a discovery with d4 forcing black to make some luft. And now there is a beautiful move that ends the game on the spot. It wins a decisive amount of material. Who knows what this move is? And by the way, the same move would follow after h5. It would come with even greater effect. It's bishop takes b7. Yeah, this is worth knowing. This is worth knowing. It's a deflection sacrifice, but it's not really a sacrifice because this is checkmate. And in the event of h5, this just takes a couple moves longer. Here, here, and the clinical move here is actually queen to f7 threatening hg and rook takes h5, which will be mate. So this is definitely worth remembering. What else is there to say? I guess black has bishop d6, but as long as we maintain contact with the f5 square, this move doesn't change anything. Queen to a5 is the computer move, which evades any further attacks on the queen. Black can play knight c6, but then we take c6. We're up two pawns and the raging attack against the king continues. So uh this is really all you have to know. h4 followed by bishop takes b7. Now someone was asking what happens if black doesn't take the knight? Yes, the best move for black here is the pathetic queen e7. And this does win the pawn back. You just drop your knight back, but But black takes, look at the development advantage that white has, I was going to say development advantage that white has developed. White's going to go knight c3 castles, put something on e1 such as a rook, and black's king queen is going to get absolutely massacred. This is plus three according to the computer. You can analyze this further on your own. It's been tried by some good players, but black is just dead lost here. Dead lost. For example, let's say black plays knight c6. I would actually castle, right? I wouldn't rush with knight c3 because the black queen is a great asset for white. If you play rook e1, either you win the queen or you can deliver a devastating discover check against the queen. If the queen drops back, there's a bunch of cool moves. You can even play knight to e5. Chigorin actually fell for a trick like this uh the one time that he tried the Damiano. And you lose the queen. So, wherever you look, there are sexy tactics and this is really not worthy of analysis. But before we move to the game continuation, the hilarious story behind why the Damiano is called is named after Damiano has to do with Ruy Lopez, not the opening, but the man himself. Ruy Lopez was a priest from Spain who lived in the 16th century. He wrote one of the first books on chess where he examined some openings including the one that's named after him. But a little known fact is that Ruy Lopez was actually the first person to I think he invented a couple of other openings. He definitely considered the Italian, but believed that bishop b5 was a better move. That's why we name it Ruy Lopez. He might have been the originator also of like the Ponziani and a couple of other openings. So, his manuscript was really groundbreaking for the time. The funny thing is that he had a feud with Damiano. I've talked talked about this on stream before. He had a flat-out um feud with Damiano who lived before him and published a manuscript before Ruy Lopez, which apparently Ruy Lopez was jealous about. So, Ruy Lopez falsely attributed the move f6 to Damiano and basically called it the Damiano game kind of as a troll, right? Sarcastically. And it has stuck ever since. All right, so it's We think it's named after someone who advocated for this move. But Damiano was actually the first one to refute f6. He understood that f6 was bad. He gave the reputation in his book, and yet we still call it that. I have the actual evidence for that and the historical underpinnings of this in a book that I have. But uh if I would rifle through it right now, this YouTube video would take 2 hours. So, I'll save that for another video. I'll save that for another video. Okay. So, on we go to the game continuation knight c3 f5 d4. Okay, e takes d4 I think makes things even worse because it helps us open the center. Black's position here is in dire straits. According to the engine, f takes e4 is the only way to save to stay"
+  },
+  {
+   "ply": 8,
+   "t": 1903,
+   "line": [
+    "Nc6",
+    "Nf3",
+    "e5"
+   ],
+   "fen": "r1bqkbnr/pppp2pp/2n5/4p3/3Pp3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "said": "think makes things even worse because it helps us open the center. Black's position here is in dire straits. According to the engine, f takes e4 is the only way to save to stay alive. More or less, knight takes e5 and"
+  },
+  {
+   "ply": 9,
+   "t": 1906.5,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bqkbnr/pppp2pp/2n5/4N3/3Pp3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "said": "helps us open the center. Black's position here is in dire straits. According to the engine, f takes e4 is the only way to save to stay alive. More or less, knight takes e5 and"
+  },
+  {
+   "ply": 10,
+   "t": 1907.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/3Pp3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "said": "helps us open the center. Black's position here is in dire straits. According to the engine, f takes e4 is the only way to save to stay alive. More or less, knight takes e5 and knight f6. Here black is Oh, no. Black is actually busted because of a really cool line. So, apparently white is supposed to go here,"
+  },
+  {
+   "ply": 11,
+   "t": 1915.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/2BPp3/2N5/PPP2PPP/R1BQK2R b KQkq - 2 6",
+   "said": "alive. More or less, knight takes e5 and knight f6. Here black is Oh, no. Black is actually busted because of a really cool line. So, apparently white is supposed to go here, which looks rather dumb because of d5. But black is so"
+  },
+  {
+   "ply": 12,
+   "t": 1921,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3pN3/2BPp3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 7",
+   "said": "Oh, no. Black is actually busted because of a really cool line. So, apparently white is supposed to go here, which looks rather dumb because of d5. But black is so poorly developed that almost any sacrifices are going to be strong here. So, for example, knight takes d5 is the"
+  },
+  {
+   "ply": 13,
+   "t": 1928.5,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3NN3/2BPp3/8/PPP2PPP/R1BQK2R b KQkq - 0 7",
+   "said": "which looks rather dumb because of d5. But black is so poorly developed that almost any sacrifices are going to be strong here. So, for example, knight takes d5 is the engine move. Sacrificing a knight in order to pave"
+  },
+  {
+   "ply": 14,
+   "t": 1931,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/2n5/3nN3/2BPp3/8/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "said": "dumb because of d5. But black is so poorly developed that almost any sacrifices are going to be strong here. So, for example, knight takes d5 is the engine move. Sacrificing a knight in order to pave the way for a check on h5. Now, what did I talk about during the game? Anytime there's a knight on one of these three squares, g6 is innocuous because of knight takes g6. And what's funny is that here you don't take the rook. You actually take the pawn. You take the pawn. If the king steps up to e7, you skewer the queen. So, king d7 is forced, and bishop takes d5 leads to clearly a decisive attack. Now, this is Stockfish 11 that I'm using on on chess.com. You should probably confirm this with stronger engine, but it gives plus four and I don't see any reason to doubt its evaluation. White's threatening checkmate in one. Let's say knight takes D4. Now, the other bishop comes out. Bishop Oh, now a sexy move. Bishop E6 check is winning. Either black has to step into a discovery or black has to step into a skew or and the bishop is pinned. So, black can't block the check. Here, you can even gobble up the pawn first and only now you can take the queen. Bishop E3 check. White's got three additional pawns, C5, B4, with a decisive attack on the king, which has been driven all the way to the queen side, which I always kind of like. Um Wow. That is a pretty juicy line. So, where did that come from? Yeah, so takes D4, knight F6 is more logical to"
+  },
+  {
+   "ply": 10,
+   "t": 2015.5,
+   "line": [],
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/3Pp3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "said": "side, which I always kind of like. Um Wow. That is a pretty juicy line. So, where did that come from? Yeah, so takes D4, knight F6 is more logical to me. Here, bishop C4 is incredibly"
+  },
+  {
+   "ply": 11,
+   "t": 2017.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/2BPp3/2N5/PPP2PPP/R1BQK2R b KQkq - 2 6",
+   "said": "Um Wow. That is a pretty juicy line. So, where did that come from? Yeah, so takes D4, knight F6 is more logical to me. Here, bishop C4 is incredibly strong. It threatens knight F7. So, black's hand is essentially forced here."
+  },
+  {
+   "ply": 12,
+   "t": 2021.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3pN3/2BPp3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 7",
+   "said": "So, where did that come from? Yeah, so takes D4, knight F6 is more logical to me. Here, bishop C4 is incredibly strong. It threatens knight F7. So, black's hand is essentially forced here. Knight takes D5."
+  },
+  {
+   "ply": 13,
+   "t": 2023.5,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3NN3/2BPp3/8/PPP2PPP/R1BQK2R b KQkq - 0 7",
+   "said": "So, where did that come from? Yeah, so takes D4, knight F6 is more logical to me. Here, bishop C4 is incredibly strong. It threatens knight F7. So, black's hand is essentially forced here. Knight takes D5. And if knight takes E5, then of course,"
+  },
+  {
+   "ply": 14,
+   "t": 2025.5,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/5n2/3Nn3/2BPp3/8/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "said": "takes D4, knight F6 is more logical to me. Here, bishop C4 is incredibly strong. It threatens knight F7. So, black's hand is essentially forced here. Knight takes D5. And if knight takes E5, then of course, we just recapture and now the queen"
+  },
+  {
+   "ply": 15,
+   "t": 2027,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/5n2/3NP3/2B1p3/8/PPP2PPP/R1BQK2R b KQkq - 0 8",
+   "said": "me. Here, bishop C4 is incredibly strong. It threatens knight F7. So, black's hand is essentially forced here. Knight takes D5. And if knight takes E5, then of course, we just recapture and now the queen defends the knight. And here, I would even play like a Russian schoolboy and take back with the queen, take back with"
+  },
+  {
+   "ply": 19,
+   "t": 2033.5,
+   "line": [
+    "Qxd5",
+    "Bxd5",
+    "Nxd5",
+    "Qxd5"
+   ],
+   "fen": "r1b1kb1r/ppp3pp/8/3QP3/4p3/8/PPP2PPP/R1B1K2R b KQkq - 0 10",
+   "said": "Knight takes D5. And if knight takes E5, then of course, we just recapture and now the queen defends the knight. And here, I would even play like a Russian schoolboy and take back with the queen, take back with the bishop. So, these lines are pretty one-sided, but they're always very fun to look at because they really"
+  },
+  {
+   "ply": 12,
+   "t": 2038,
+   "line": [],
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3pN3/2BPp3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 7",
+   "said": "we just recapture and now the queen defends the knight. And here, I would even play like a Russian schoolboy and take back with the queen, take back with the bishop. So, these lines are pretty one-sided, but they're always very fun to look at because they really"
+  },
+  {
+   "ply": 11,
+   "t": 2039,
+   "line": [],
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/2BPp3/2N5/PPP2PPP/R1BQK2R b KQkq - 2 6",
+   "said": "defends the knight. And here, I would even play like a Russian schoolboy and take back with the queen, take back with the bishop. So, these lines are pretty one-sided, but they're always very fun to look at because they really demonstrate the the importance of developing your pieces and the disaster that that waits for for he who, you know, who pushes his F pawn too early. Now, you might be listening to this and saying, \"Well, wait a second. I learned that in the Ruy Lopez, knight F3, knight C6, bishop B5, there is a variation called the Schliemann where black plays F5. You might have also learned from someone like Eric Rosen that F5 is a possible move even after white plays bishop C4, even in the Italian.\" And how do do marry those that with what I just said? Is that F5 a losing line? Is the Schliemann refuted? No, the Schliemann is not refuted. White is considered to be better in the Schliemann. Actually, the best move, ironically, is D3, which is the move that I criticized in the context of our game. But, you have to remember that these things I say are very concretely tied into the position. The bishop on B5 is not ideally placed in the context of punishing black from playing F5 because"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 13,
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3NN3/2BPp3/8/PPP2PPP/R1BQK2R b KQkq - 0 7",
+   "line": [
+    "d4",
+    "f5",
+    "e4",
+    "fxe4",
+    "Nc3",
+    "Nc6",
+    "Nf3",
+    "e5",
+    "Nxe5",
+    "Nf6",
+    "Bc4",
+    "d5",
+    "Nxd5"
+   ],
+   "options": [
+    {
+     "san": "Nxd5",
+     "t": 1931,
+     "continuation": "Nxd5",
+     "said": "dumb because of d5. But black is so poorly developed that almost any sacrifices are going to be strong here. So, for example, knight takes d5 is the engine move. Sacrificing a knight in order to pave the way for a check on h5. Now, what did I talk about during the game? Anytime there's a knight on one of these three squares, g6 is innocuous because of knight takes g6. And what's funny is that here you don't take the rook. You actually take the pawn. You take the pawn. If the king steps up to e7, you skewer the queen. So, king d7 is forced, and bishop takes d5 leads to clearly a decisive attack. Now, this is Stockfish 11 that I'm using on on chess.com. You should probably confirm this with stronger engine, but it gives plus four and I don't see any reason to doubt its evaluation. White's threatening checkmate in one. Let's say knight takes D4. Now, the other bishop comes out. Bishop Oh, now a sexy move. Bishop E6 check is winning. Either black has to step into a discovery or black has to step into a skew or and the bishop is pinned. So, black can't block the check. Here, you can even gobble up the pawn"
+    },
+    {
+     "san": "Nxe5",
+     "t": 2025.5,
+     "continuation": "Nxe5",
+     "said": "takes D4, knight F6 is more logical to me. Here, bishop C4 is incredibly strong. It threatens knight F7. So, black's hand is essentially forced here. Knight takes D5. And if knight takes E5, then of course, we just recapture and now the queen defends the knight. And here, I would even play like a Russian schoolboy and take back with the queen, take back with the bishop. So, these lines are pretty one-sided, but they're always very fun to look at because they really demonstrate the the importance of developing your pieces and the disaster that that waits for for he who, you know, who pushes his F pawn too early. Now, you might be listening to this and saying, \"Well, wait a second. I learned that in the Ruy Lopez, knight F3, knight C6, bishop B5, there is a variation called the Schliemann where black plays F5. You might have also learned from someone like Eric Rosen that F5 is a possible move even after white plays bishop C4, even in the Italian.\" And how do do marry those that with what I just said? Is that F5 a losing line? Is the Schliemann refuted? No, the Schliemann is not refuted. White is considered to be better in the Schliemann. Actually, the best move, ironically, is D3, which is the move that I criticized in the context of our"
+    }
+   ]
+  }
+ ]
+}
