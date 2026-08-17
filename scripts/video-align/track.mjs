@@ -65,6 +65,17 @@ function diff(a, b) {
  * untouched start position. That is an offset, not noise, so it is subtracted
  * rather than absorbed by loosening the match threshold, which would admit real
  * misreads everywhere else.
+ *
+ * A COMMON EARLY POSITION IS NOT A BIASED START POSITION, and no distance
+ * threshold separates them: a London video calibrated against the board after
+ * 1.d4 d5 (which appears far more often than the untouched one) and "corrected"
+ * d2/d4/d5/d7, erasing real pawns from every frame. Tightening to two squares
+ * only moved the problem to 1.d4, which is a two-square difference.
+ *
+ * The RULES separate them. A real position is reachable from the start by legal
+ * moves; a read bias is not — no move turns c1 and d1 black while leaving
+ * everything else. So a candidate that chess.js can explain as a played line is
+ * a position and must not be subtracted from every frame.
  */
 function calibrate(grids) {
   const counts = new Map();
@@ -74,7 +85,9 @@ function calibrate(grids) {
   }
   for (const [k] of [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8)) {
     const g = k.split('/');
-    if (diff(g, START) <= 6) {
+    // Explainable as a played line => a real position, not a bias. Skip it.
+    if (explain(new Chess(), g)) continue;
+    if (diff(g, START) <= 2) {
       const fix = [];
       for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) {
         if (g[r][c] !== START[r][c]) fix.push([r, c, g[r][c], START[r][c]]);

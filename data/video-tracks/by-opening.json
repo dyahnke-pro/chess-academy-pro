@@ -42,7 +42,7 @@
    "videoId": "ykmGxE9DURo",
    "eco": "C44",
    "plies": 4,
-   "coverage": 0.972,
+   "coverage": 0.981,
    "subject": false,
    "forks": 10
   }
@@ -60,7 +60,7 @@
    "videoId": "ykmGxE9DURo",
    "eco": "C40",
    "plies": 3,
-   "coverage": 0.982,
+   "coverage": 0.991,
    "subject": false,
    "forks": 10
   }
@@ -78,9 +78,29 @@
    "videoId": "ykmGxE9DURo",
    "eco": "C20",
    "plies": 2,
-   "coverage": 0.991,
+   "coverage": 1,
    "subject": false,
    "forks": 10
+  }
+ ],
+ "Queen's Pawn Game: Chigorin Variation": [
+  {
+   "videoId": "qN8kNz0_c3s",
+   "eco": "A45",
+   "plies": 4,
+   "coverage": 0.949,
+   "subject": true,
+   "forks": 4
+  }
+ ],
+ "Indian Defense": [
+  {
+   "videoId": "qN8kNz0_c3s",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
   }
  ],
  "Italian Game: Two Knights Defense, Traxler Counterattack, King March Line": [
@@ -88,7 +108,7 @@
    "videoId": "ykmGxE9DURo",
    "eco": "C57",
    "plies": 13,
-   "coverage": 0.055,
+   "coverage": 0.056,
    "subject": false,
    "forks": 10
   }
@@ -108,7 +128,7 @@
    "videoId": "ykmGxE9DURo",
    "eco": "C57",
    "plies": 9,
-   "coverage": 0.092,
+   "coverage": 0.093,
    "subject": false,
    "forks": 10
   }
@@ -118,7 +138,7 @@
    "videoId": "ykmGxE9DURo",
    "eco": "C57",
    "plies": 9,
-   "coverage": 0.101,
+   "coverage": 0.102,
    "subject": false,
    "forks": 10
   }
@@ -138,7 +158,7 @@
    "videoId": "ykmGxE9DURo",
    "eco": "C57",
    "plies": 8,
-   "coverage": 0.917,
+   "coverage": 0.926,
    "subject": true,
    "forks": 10
   }
@@ -148,7 +168,7 @@
    "videoId": "ykmGxE9DURo",
    "eco": "C57",
    "plies": 7,
-   "coverage": 0.954,
+   "coverage": 0.963,
    "subject": false,
    "forks": 10
   }
@@ -158,7 +178,7 @@
    "videoId": "ykmGxE9DURo",
    "eco": "C55",
    "plies": 6,
-   "coverage": 0.963,
+   "coverage": 0.972,
    "subject": false,
    "forks": 10
   }
@@ -168,7 +188,7 @@
    "videoId": "ykmGxE9DURo",
    "eco": "C50",
    "plies": 5,
-   "coverage": 0.972,
+   "coverage": 0.981,
    "subject": false,
    "forks": 10
   }

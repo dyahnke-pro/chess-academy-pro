@@ -21,7 +21,11 @@ import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import { forksOf } from './forks.mjs';
 
-const [videoId, gridsPath, title] = process.argv.slice(2);
+const [videoId, gridsPath, title, geoArg] = process.argv.slice(2);
+// Geometry as "x0,y0,sq" — REQUIRED when the upload is not 854x480. It scales
+// with resolution: the 640x360 encode of the same stream confirmed at exactly
+// 0.75x the 854x480 values, first guess.
+const [gx, gy, gs] = (geoArg ?? '370,-2,60').split(',').map(Number);
 if (!videoId || !gridsPath) {
   console.error('usage: build.mjs <videoId> <gridsJson> [title]');
   process.exit(1);
@@ -52,7 +56,7 @@ const track = {
   creator: 'naroditsky',
   trackedAt: new Date().toISOString().slice(0, 10),
   geometry: {
-    x0: 370, y0: -2, square: 60.0, orientation: 'white',
+    x0: gx, y0: gy, square: gs, orientation: 'white',
     source: 'confirmed against the start position by calibrate_section',
   },
   sampling: { fps: 2, frames: grids.length, settledPositions: null },
