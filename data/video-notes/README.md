@@ -21,6 +21,13 @@ note reaches nobody:
    mis-anchored note. A perfectly true aside costs the note its voice. Simplest
    rule: name no opening at all in note prose.
 
+3. **Anchoring shallower than 3 plies.** `MIN_TEACHING_ANCHOR_PLIES` excludes
+   them: a note two moves deep matches every lesson that opened the same way,
+   so it teaches about wherever its own line went rather than about the
+   position. A true note about a second move is still dropped — re-anchor it
+   deeper only if the deeper move actually CAUSES what the note claims, and
+   otherwise let it go.
+
 ## What the checking is for
 
 The teachers' load-bearing facts hold up; their EMPHASIS does not. Measured

@@ -499,6 +499,14 @@
    "forks": 4
   },
   {
+   "videoId": "LLidbvIUZ5I",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
    "videoId": "_X7t6o3o6JM",
    "eco": "A40",
    "plies": 1,
@@ -815,6 +823,36 @@
    "coverage": 0.979,
    "subject": true,
    "forks": 8
+  }
+ ],
+ "Dutch Defense: Staunton Gambit Accepted": [
+  {
+   "videoId": "LLidbvIUZ5I",
+   "eco": "A82",
+   "plies": 4,
+   "coverage": 0.846,
+   "subject": true,
+   "forks": 1
+  }
+ ],
+ "Dutch Defense: Staunton Gambit": [
+  {
+   "videoId": "LLidbvIUZ5I",
+   "eco": "A82",
+   "plies": 3,
+   "coverage": 0.923,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "Dutch Defense": [
+  {
+   "videoId": "LLidbvIUZ5I",
+   "eco": "A80",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
   }
  ],
  "Four Knights Game: Scotch Variation, Belgrade Gambit": [
