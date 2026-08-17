@@ -42,7 +42,7 @@ interface Track {
   forks?: Fork[];
   notes?: VideoNote[];
   openings?: TrackOpening[];
-  titleCheck?: { claims: string; confirmed: boolean };
+  titleCheck?: { claims: string; confirmed: boolean; verdict?: string; checkedBy?: string };
 }
 
 /** `by-opening.json` lives beside the tracks but is an INDEX, not a track — it
@@ -247,6 +247,44 @@ describe('video tracks', () => {
         ).toBe(false);
       }
     }
+  });
+
+  it('every committed build carries hand-written notes', () => {
+    // David 2026-08-17: *"all openings we get corpus for will get hand written
+    // lines. So every line you pull needs to be hand written by you to maintain
+    // accuracy and standard."*
+    //
+    // Pulling a line IS the commitment to write it, so a build sitting here with
+    // no notes is not a backlog item — it is an unpaid debt against the standard,
+    // and debts accumulate silently unless something counts them. This is that
+    // something.
+    //
+    // It is also what stops the tempting shortcut. Seven builds were removed the
+    // day this rule landed rather than papered over, and six of them were removed
+    // because they were MISTRACKED, not merely un-noted: a King's Gambit lesson
+    // had tracked as `d3 c5 d4 d5`. Note that every move of that line is LEGAL —
+    // chess.js cannot catch a systematically wrong read, only an impossible one,
+    // so the legality checks above all passed on nonsense. Writing prose over it
+    // would have satisfied this test while destroying exactly what it protects.
+    const bare = tracks.filter((t) => !(t.notes ?? []).length).map((t) => t.videoId);
+    expect(bare, `builds with no hand-written notes — write them or drop the build:\n${bare.join('\n')}`)
+      .toEqual([]);
+  });
+
+  it('an unconfirmed title is resolved by hand, never left hanging', () => {
+    // `titleCheck.confirmed === false` means the board did not back the title,
+    // and that has two very different causes: the TITLE is wrong (the "Scotch
+    // Game" upload that plays 3.Nc3 for eighty plies — a fine build), or the
+    // TRACK is wrong (a Najdorf video resolving to "Bird Opening" — junk). Only
+    // a person looking at it can tell, and nothing else in the pipeline can.
+    //
+    // So the verdict is required to be recorded. Without this, an unresolved
+    // flag looks identical to a resolved one and the distinction rots.
+    const unresolved = tracks
+      .filter((t) => t.titleCheck && !t.titleCheck.confirmed && !t.titleCheck.verdict)
+      .map((t) => `${t.videoId} claims "${t.titleCheck?.claims}"`);
+    expect(unresolved, `unconfirmed titles with no hand verdict:\n${unresolved.join('\n')}`)
+      .toEqual([]);
   });
 
   it('hand-written notes cite only positions the video showed', () => {

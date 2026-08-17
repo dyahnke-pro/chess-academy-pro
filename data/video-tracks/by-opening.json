@@ -195,14 +195,6 @@
    "forks": 0
   },
   {
-   "videoId": "3Qw4AL8RDOw",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
    "videoId": "6nEI2p3ftgk",
    "eco": "B00",
    "plies": 1,
@@ -225,14 +217,6 @@
    "coverage": 1,
    "subject": false,
    "forks": 1
-  },
-  {
-   "videoId": "J4WzTSR3hmo",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
   },
   {
    "videoId": "Ov4J-FZWoQg",
@@ -291,14 +275,6 @@
    "coverage": 0.9,
    "subject": true,
    "forks": 0
-  },
-  {
-   "videoId": "3Qw4AL8RDOw",
-   "eco": "B01",
-   "plies": 4,
-   "coverage": 0.769,
-   "subject": true,
-   "forks": 1
   }
  ],
  "Scandinavian Defense": [
@@ -309,24 +285,6 @@
    "coverage": 1,
    "subject": false,
    "forks": 0
-  },
-  {
-   "videoId": "3Qw4AL8RDOw",
-   "eco": "B01",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  }
- ],
- "Scandinavian Defense: Mieses-Kotroc Variation": [
-  {
-   "videoId": "3Qw4AL8RDOw",
-   "eco": "B01",
-   "plies": 4,
-   "coverage": 0.077,
-   "subject": false,
-   "forks": 1
   }
  ],
  "Philidor Defense": [
@@ -379,14 +337,6 @@
    "forks": 5
   },
   {
-   "videoId": "J4WzTSR3hmo",
-   "eco": "C00",
-   "plies": 3,
-   "coverage": 0.95,
-   "subject": true,
-   "forks": 0
-  },
-  {
    "videoId": "tWGrKGoNNEA",
    "eco": "C00",
    "plies": 3,
@@ -403,14 +353,6 @@
    "coverage": 1,
    "subject": false,
    "forks": 5
-  },
-  {
-   "videoId": "J4WzTSR3hmo",
-   "eco": "C00",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
   },
   {
    "videoId": "tWGrKGoNNEA",
@@ -449,14 +391,6 @@
    "forks": 9
   },
   {
-   "videoId": "dEjoCta8oOQ",
-   "eco": "D02",
-   "plies": 4,
-   "coverage": 0.333,
-   "subject": false,
-   "forks": 2
-  },
-  {
    "videoId": "qN8kNz0_c3s",
    "eco": "A45",
    "plies": 4,
@@ -481,22 +415,6 @@
    "coverage": 1,
    "subject": false,
    "forks": 6
-  },
-  {
-   "videoId": "LLidbvIUZ5I",
-   "eco": "A40",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "dEjoCta8oOQ",
-   "eco": "A40",
-   "plies": 1,
-   "coverage": 1,
-   "subject": true,
-   "forks": 2
   },
   {
    "videoId": "qN8kNz0_c3s",
@@ -661,36 +579,6 @@
    "forks": 8
   }
  ],
- "Dutch Defense: Staunton Gambit Accepted": [
-  {
-   "videoId": "LLidbvIUZ5I",
-   "eco": "A82",
-   "plies": 4,
-   "coverage": 0.846,
-   "subject": true,
-   "forks": 1
-  }
- ],
- "Dutch Defense: Staunton Gambit": [
-  {
-   "videoId": "LLidbvIUZ5I",
-   "eco": "A82",
-   "plies": 3,
-   "coverage": 0.923,
-   "subject": false,
-   "forks": 1
-  }
- ],
- "Dutch Defense": [
-  {
-   "videoId": "LLidbvIUZ5I",
-   "eco": "A80",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  }
- ],
  "Four Knights Game: Scotch Variation, Belgrade Gambit": [
   {
    "videoId": "Ov4J-FZWoQg",
@@ -777,36 +665,6 @@
    "coverage": 0.989,
    "subject": false,
    "forks": 12
-  }
- ],
- "King's Pawn Game: Beyer Gambit": [
-  {
-   "videoId": "dEjoCta8oOQ",
-   "eco": "C20",
-   "plies": 4,
-   "coverage": 0.583,
-   "subject": false,
-   "forks": 2
-  }
- ],
- "Blackmar-Diemer Gambit": [
-  {
-   "videoId": "dEjoCta8oOQ",
-   "eco": "D00",
-   "plies": 3,
-   "coverage": 0.583,
-   "subject": false,
-   "forks": 2
-  }
- ],
- "Queen's Pawn Game: Zukertort Variation": [
-  {
-   "videoId": "dEjoCta8oOQ",
-   "eco": "D02",
-   "plies": 3,
-   "coverage": 0.333,
-   "subject": false,
-   "forks": 2
   }
  ],
  "Four Knights Game: Italian Variation": [
@@ -907,16 +765,6 @@
    "coverage": 0.973,
    "subject": false,
    "forks": 1
-  }
- ],
- "Van Geet Opening": [
-  {
-   "videoId": "ukVf_JfGTOw",
-   "eco": "A00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": true,
-   "forks": 0
   }
  ],
  "Englund Gambit: Main Line": [
@@ -1067,36 +915,6 @@
    "coverage": 0.972,
    "subject": false,
    "forks": 10
-  }
- ],
- "Bird Opening: Dutch Variation": [
-  {
-   "videoId": "zEqoGIgzk1E",
-   "eco": "A03",
-   "plies": 2,
-   "coverage": 1,
-   "subject": true,
-   "forks": 2
-  }
- ],
- "Bird Opening": [
-  {
-   "videoId": "zEqoGIgzk1E",
-   "eco": "A02",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 2
-  }
- ],
- "Mieses Opening": [
-  {
-   "videoId": "zEytN1zSTEE",
-   "eco": "A00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": true,
-   "forks": 8
   }
  ]
 }

@@ -2752,13 +2752,48 @@ positions from the track output; NEVER retype them** — a hand-transcribed FEN
 put a bishop on a square it had already been captured from, minutes after the
 rule was written down. Tracks live in `data/video-tracks/<videoId>.json`.
 
+### 🔒🔒 EVERY LINE PULLED GETS HAND-WRITTEN NOTES — BY CLAUDE, NOT A MODEL PASS (David 2026-08-17, LOCKED: *"all openings we get corpus for will get hand written lines. So every line you pull needs to be hand written by you to maintain accuracy and standard."*)
+
+There is NO scoping question here, and a session that asks "which openings should
+get notes?" has misunderstood the standard. **Pulling a line IS the commitment to
+hand-write it.** The corpus we build is only as good as its worst entry, so a
+build sitting in `data/video-tracks/` with no notes is not a backlog item — it is
+an unpaid debt against the standard, and it is the session that pulled it that
+owes it.
+
+Consequences, all of them load-bearing:
+
+- **Do not pull more than you will write.** Machine time is ~3 min/video; the
+  WRITING is the cost and does not parallelise. Downloading thirty videos in a
+  batch because the cookies are live creates thirty debts. Pull what you will
+  finish.
+- **Claude writes the prose. Not the LLM-in-a-loop, not a distillation pass**
+  (David: *"you do this, not the LLM"*, *"DO IT YOURSELF"*). That is the whole
+  reason these notes outrank the farmed corpus — a farmed note is a model's
+  summary of speech, a hand-written note is verified teaching.
+- **VERIFY EVERY BOARD CLAIM WITH chess.js BEFORE WRITING IT.** This is not
+  optional care, it is the accuracy the rule exists to protect. Measured on the
+  first ten lessons, the auto-caption transcript was LOOSE three separate times:
+  a "trapped" bishop had five escape squares, a "queen trap" trapped nothing, and
+  a mate on c8 did not exist. Each would have shipped as confident false teaching.
+  Compute the fact, then phrase it (G0).
+- **A MISTRACKED BUILD IS NOT A LINE — IT GETS NO NOTES.** Where `titleCheck`
+  comes back unconfirmed and the resolved opening is implausible (a Najdorf video
+  resolving to "Bird Opening"), the tracker followed the wrong game. Re-track it
+  per SECTION geometry or drop the build. Never write prose over a bad track to
+  clear the debt; that is the one way to satisfy the letter of this rule while
+  destroying the thing it protects.
+- **When the lesson itself is unsure, skip.** A teacher saying "I don't remember
+  the correct move here" is not a source. Empty > generic > invented, as always.
+
 **DOWNLOAD RECIPE** (cookies expire fast; re-export from a window you do NOT
 sign out of, since signing out rotates them):
 `yt-dlp --cookies /tmp/yt.txt --remote-components ejs:npm -f 135 -o v.mp4 <url>`
 Video-only DASH sidesteps the SABR wall that 403s every progressive format.
-Needs `npm i -g deno` for the n-challenge. ~3 min/video of machine time; the
-WRITING is the cost and does not parallelise, so scope to the openings actually
-taught rather than a whole channel.
+Needs `npm i -g deno` for the n-challenge. Format 135 is missing on some uploads
+— fall back `-f "135/396/bestvideo[height<=480]/bestvideo"`. Scan with
+`scan_stream.py` (frames piped from ffmpeg, never written to disk; the file-based
+scanner needs ~2.6GB per lesson and does not survive a batch).
 
 **SPEEDRUN UPLOADS ARE IN SCOPE — the whole channel is reachable, not just the 5
 opening-labs.** Three of them tracked 0-4 plies and it looked like a format

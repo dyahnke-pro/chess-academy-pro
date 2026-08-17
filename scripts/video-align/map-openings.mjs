@@ -166,7 +166,19 @@ for (const file of readdirSync(TRACK_DIR).filter((f) => f.endsWith('.json') && f
     // The upload's own title stays untouched — it is how the build points back
     // at its source, and rewriting it to what the board says would destroy that
     // link to make the record tidier. The disagreement is recorded ALONGSIDE it.
-    if (titleCheck) track.titleCheck = titleCheck;
+    //
+    // A HAND VERDICT SURVIVES A RE-RUN. When a title is unconfirmed, someone has
+    // to look and decide whether the TITLE is wrong or the TRACK is, and that
+    // judgement is the expensive part. Recomputing `titleCheck` wholesale wiped
+    // it — the verdict on the "Scotch Game" upload vanished the moment this
+    // script ran again, which would have put the build straight back into the
+    // unresolved pile it had already been rescued from.
+    if (titleCheck) {
+      const prior = track.titleCheck ?? {};
+      track.titleCheck = prior.verdict && prior.claims === titleCheck.claims
+        ? { ...titleCheck, verdict: prior.verdict, checkedBy: prior.checkedBy }
+        : titleCheck;
+    }
     writeFileSync(path, JSON.stringify(track, null, 1));
   }
 }

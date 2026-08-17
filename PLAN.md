@@ -380,6 +380,33 @@ meta, and it is the same rule as the narration voice's "never reference the
 interface". Two notes were silently dropped by it before the sweep. Write about
 the position, never about the video.
 
+### Every pulled line gets hand-written notes (David 2026-08-17)
+
+*"all openings we get corpus for will get hand written lines. So every line you
+pull needs to be hand written by you to maintain accuracy and standard."*
+
+There is no scoping question — pulling a line IS the commitment to write it, and
+a build with no notes is an unpaid debt rather than a backlog item. Locked in
+CLAUDE.md; gated by `videoTrackIntegrity.test.ts` ("every committed build carries
+hand-written notes").
+
+Paying it down took the corpus from 10 noted builds to **17, 45 notes**, and
+removed **seven builds** rather than papering over them:
+
+- **Six were MISTRACKED.** A King's Gambit lesson had tracked as `d3 c5 d4 d5`; a
+  Najdorf video resolved to "Bird Opening"; a Danish Gambit to "Queen's Pawn
+  Game". **Every move of those lines is LEGAL** — which is the point worth
+  keeping: chess.js catches an impossible read, never a systematically wrong one,
+  so every legality check passed on nonsense. Only the title check caught them.
+- **One was too thin** to teach from (4 plies of a 30-minute video).
+
+An unconfirmed title has two very different causes — the TITLE is wrong (the
+"Scotch Game" upload that really does play 3.Nc3 for eighty plies, a fine build)
+or the TRACK is wrong (junk). Nothing in the pipeline can tell them apart, so the
+hand verdict is now REQUIRED and gated, and `map-openings` preserves it across
+re-runs — it wiped the verdict on its next run and put a rescued build straight
+back into the unresolved pile.
+
 ### Videos in, videos out
 
 34 downloaded, **20 built, 14 refused**. The refusals are not a mystery and are

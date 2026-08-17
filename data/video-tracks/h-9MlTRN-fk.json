@@ -1220,7 +1220,9 @@
  ],
  "titleCheck": {
   "claims": "Scotch Game",
-  "confirmed": false
+  "confirmed": false,
+  "verdict": "title-wrong-track-good",
+  "checkedBy": "hand, 2026-08-17: one game tracked, 3.Nc3 played, 80 legal plies to a promotion — Three Knights is right and the title is not"
  },
  "notes": [
   {

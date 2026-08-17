@@ -541,5 +541,27 @@
  "titleCheck": {
   "claims": "Philidor Defense",
   "confirmed": true
- }
+ },
+ "notes": [
+  {
+   "id": "vn-philidor-bishop-before-the-centre",
+   "line": "e4 e5 Nf3 d6 Bc4 Be7 Nc3",
+   "teaches": "A move order can be worth more than the move it delays. Playing the natural central break a little later, after the pieces are out, keeps the same position available while denying the opponent the setup they have prepared against — and a defender who is not on familiar ground is worth a tempo on its own.",
+   "explains": "Black has shut the king's bishop in with the d-pawn, and White has developed the light-squared bishop and the queen's knight before touching the centre. The central push is still coming and the game usually transposes to the same structures; the value of holding it back is that it arrives when the pieces are already placed to meet the reply.",
+   "fen": "rnbqk1nr/ppp1bppp/3p4/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 3 4",
+   "t": 264,
+   "ply": 7,
+   "source": "yt:6nEI2p3ftgk"
+  },
+  {
+   "id": "vn-philidor-center-fork-trick",
+   "line": "e4 e5 Nf3 d6 Bc4 Be7 Nc3 Nf6 d4 exd4 Nxd4 O-O",
+   "teaches": "Whenever a bishop sits on c4 and a pawn on e4 with a knight able to reach it, check for the centre fork trick before you castle: the knight takes the pawn, and after the recapture a pawn advance hits knight and bishop at once. It is not usually winning, but it solves the defender's problems, and that is the point — the cost is paid in structure, not material.",
+   "explains": "Black has castled and everything looks routine, but taking on e4 here works: after the recapture the d-pawn comes forward and attacks the knight on e4 and the bishop on c4 together. Dropping the bishop to d3 keeps the bishop pair and the material is level — what is gone is the centre, and trading the e4 pawn for the pawn on d6 is a poor bargain, because it frees the very bishop Black's opening had shut in.",
+   "fen": "rnbq1rk1/ppp1bppp/3p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R w KQ - 1 7",
+   "t": 299.5,
+   "ply": 12,
+   "source": "yt:6nEI2p3ftgk"
+  }
+ ]
 }

@@ -1,0 +1,14 @@
+[
+ {
+  "id": "vn-fantasy-pawns-are-not-development",
+  "line": "e4 c6 d4 d5 f3 dxe4 fxe4 Nf6 e5 Nd5 c4",
+  "teaches": "Taking a large share of the centre with pawns is not the same as being ahead, and the danger grows with every further pawn move. Grabbing more space while none of your pieces are out is playable only if you can follow it immediately with accurate development — the space has to be defended by something.",
+  "explains": "Every white move so far has been a pawn, and the c-pawn takes still more ground while the knight on d5 is asked to move again. It is a real gain and a real risk at once: the knight drops back to b6 or c7 and White has to bring pieces out quickly, because a centre this wide with nothing developed behind it invites a counterstrike."
+ },
+ {
+  "id": "vn-fantasy-knight-order",
+  "line": "e4 c6 d4 d5 f3 dxe4 fxe4 Nf6 e5 Nd5 c4 Nb6",
+  "teaches": "When two knights both want to come out, the order is decided by which one can be given a target. Develop the piece that cannot be harassed first and leave the other at home a moment longer — the opponent then has to commit a piece without knowing what it will be aiming at.",
+  "explains": "Bringing the king's knight to f3 hands the light-squared bishop a job: it comes to g4 and pins the knight against the queen on d1, since e2 is empty. Developing the queen's knight to c3 first leaves f3 vacant, so that bishop has nothing to attack and has to choose a square on its own terms."
+ }
+]

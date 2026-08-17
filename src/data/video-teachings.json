@@ -1,8 +1,102 @@
 {
  "generatedAt": "2026-08-17",
- "videosDistilled": 10,
- "noteCount": 36,
+ "videosDistilled": 17,
+ "noteCount": 45,
  "notes": [
+  {
+   "id": "vn-4knights-pinned-knight-cannot-recapture",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "d4",
+    "Bb4"
+   ],
+   "opening": "Four Knights Game: Scotch Variation",
+   "phase": "opening",
+   "explains": "The bishop on b4 pins the knight on c3 against the king, and that knight has no legal move at all. So taking on e5 loses a pawn outright: Black takes on e4 and there is no recapture, because the only piece that guards it cannot move. Pushing the d-pawn past instead gains space and forces the knight on c6 to find a new square.",
+   "teaches": "Before making a capture in the centre, check whether the piece you are counting on to recapture is pinned. A bishop pinning a knight against the king does not have to win material to matter — it removes that knight from every calculation, and captures that looked safe stop being safe.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:-FRuDd_oXz4"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-scandi-check-that-gets-in-the-way",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Be2"
+   ],
+   "opening": "Scandinavian Defense: Modern Variation",
+   "phase": "opening",
+   "explains": "The bishop checked and has now stepped back, having achieved one thing: a black piece stands on d7. That square sits between the queen and the pawn on d5, so the queen can no longer take it back — only the knight can. White has spent two moves with the same bishop and still comes out ahead, because the interposition is permanent and the retreat costs nothing.",
+   "teaches": "A check is worth playing when the only ways to answer it all cost the defender something, even if you intend to retreat straight afterwards. Forcing a piece onto a square where it blocks its own side's plans buys a concession that no amount of quiet development would have obtained.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:358seoKegqA"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-philidor-bishop-before-the-centre",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "d6",
+    "Bc4",
+    "Be7",
+    "Nc3"
+   ],
+   "opening": "Philidor Defense",
+   "phase": "opening",
+   "explains": "Black has shut the king's bishop in with the d-pawn, and White has developed the light-squared bishop and the queen's knight before touching the centre. The central push is still coming and the game usually transposes to the same structures; the value of holding it back is that it arrives when the pieces are already placed to meet the reply.",
+   "teaches": "A move order can be worth more than the move it delays. Playing the natural central break a little later, after the pieces are out, keeps the same position available while denying the opponent the setup they have prepared against — and a defender who is not on familiar ground is worth a tempo on its own.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:6nEI2p3ftgk"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-philidor-center-fork-trick",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "d6",
+    "Bc4",
+    "Be7",
+    "Nc3",
+    "Nf6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "O-O"
+   ],
+   "opening": "Philidor Defense",
+   "phase": "opening",
+   "explains": "Black has castled and everything looks routine, but taking on e4 here works: after the recapture the d-pawn comes forward and attacks the knight on e4 and the bishop on c4 together. Dropping the bishop to d3 keeps the bishop pair and the material is level — what is gone is the centre, and trading the e4 pawn for the pawn on d6 is a poor bargain, because it frees the very bishop Black's opening had shut in.",
+   "teaches": "Whenever a bishop sits on c4 and a pawn on e4 with a knight able to reach it, check for the centre fork trick before you castle: the knight takes the pawn, and after the recapture a pawn advance hits knight and bishop at once. It is not usually winning, but it solves the defender's problems, and that is the point — the cost is paid in structure, not material.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:6nEI2p3ftgk"
+   ],
+   "positionSource": "high"
+  },
   {
    "id": "vn-french-adv-dont-rush-the-recapture",
    "lineSan": [
@@ -291,6 +385,81 @@
    "concepts": [],
    "sources": [
     "yt:B7r1bgPEyIQ"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-glek-fianchetto-in-the-open-game",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nc3",
+    "Nc6",
+    "g3"
+   ],
+   "opening": "Three Knights Opening",
+   "phase": "opening",
+   "explains": "Both knights are developed and the g-pawn steps forward to put the bishop on the long diagonal rather than on the usual c4 or b5 square. Nothing is committed yet in the centre: the plan waits to see which setup Black chooses, because the pawn structure Black picks decides where White's pieces belong.",
+   "teaches": "A fianchetto is unusual in the open game, and that is most of its value at club level: the resulting positions are sound but unfamiliar, so the opponent is out of book while nothing has been risked. It is reachable through more than one move order, which makes it hard to sidestep — the knights can come out in either order before the g-pawn moves.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:C6vYlx-lS6g"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-alapin-which-pawn-is-working",
+   "lineSan": [
+    "c3",
+    "c5",
+    "e4",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "d4",
+    "cxd4",
+    "Nf3",
+    "Nc6",
+    "cxd4",
+    "g6",
+    "Bc4",
+    "Nb6",
+    "Bb3",
+    "d6",
+    "Qe2",
+    "Bg7",
+    "O-O",
+    "O-O",
+    "h3",
+    "dxe5",
+    "dxe5",
+    "Qc7",
+    "Bf4",
+    "Bf5",
+    "Nc3",
+    "Rfd8",
+    "Bxf7+",
+    "Kh8",
+    "Bb3",
+    "Bd3",
+    "Qe3",
+    "Bxf1",
+    "Rxf1",
+    "Na5",
+    "Be6",
+    "Nac4"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation, Smith-Morra Declined",
+   "phase": "middlegame",
+   "explains": "The queen has to choose a square, and the pawn on b2 is hanging. It can be left: the knight that takes it is out of play, and the attack continues with the knight coming to g5 regardless. What matters far more is the pawn on e5, which is the reason the bishop on g7 has nothing to look at — the queen belongs where it keeps that pawn and the attacking pieces together.",
+   "teaches": "When you are attacking, sort your pawns by what they are doing rather than by whether they can be taken. A pawn that shuts an enemy piece out of the game is part of the attack and must not be traded away to save something else; a pawn on the far side of the board that no piece is using can simply be allowed to fall.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:GwJ8yk2hsT8"
    ],
    "positionSource": "high"
   },
@@ -637,6 +806,59 @@
    "positionSource": "high"
   },
   {
+   "id": "vn-fantasy-pawns-are-not-development",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "dxe4",
+    "fxe4",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "c4"
+   ],
+   "opening": "Caro-Kann Defense: Maróczy Variation",
+   "phase": "opening",
+   "explains": "Every white move so far has been a pawn, and the c-pawn takes still more ground while the knight on d5 is asked to move again. It is a real gain and a real risk at once: the knight drops back to b6 or c7 and White has to bring pieces out quickly, because a centre this wide with nothing developed behind it invites a counterstrike.",
+   "teaches": "Taking a large share of the centre with pawns is not the same as being ahead, and the danger grows with every further pawn move. Grabbing more space while none of your pieces are out is playable only if you can follow it immediately with accurate development — the space has to be defended by something.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:k4T6TJGOSA0"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-fantasy-knight-order",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "dxe4",
+    "fxe4",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "c4",
+    "Nb6"
+   ],
+   "opening": "Caro-Kann Defense: Maróczy Variation",
+   "phase": "opening",
+   "explains": "Bringing the king's knight to f3 hands the light-squared bishop a job: it comes to g4 and pins the knight against the queen on d1, since e2 is empty. Developing the queen's knight to c3 first leaves f3 vacant, so that bishop has nothing to attack and has to choose a square on its own terms.",
+   "teaches": "When two knights both want to come out, the order is decided by which one can be given a target. Develop the piece that cannot be harassed first and leave the other at home a moment longer — the opponent then has to commit a piece without knowing what it will be aiming at.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:k4T6TJGOSA0"
+   ],
+   "positionSource": "high"
+  },
+  {
    "id": "vn-jobava-three-ways-to-meet-nb5",
    "lineSan": [
     "d4",
@@ -731,6 +953,37 @@
    "concepts": [],
    "sources": [
     "yt:qN8kNz0_c3s"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-rubinstein-choose-a-setup",
+   "lineSan": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nd2",
+    "dxe4",
+    "Nxe4",
+    "Nd7",
+    "Nf3",
+    "Ngf6",
+    "Ng1",
+    "Ng8",
+    "Nf3",
+    "Ngf6",
+    "Nxf6+",
+    "Nxf6"
+   ],
+   "opening": "French Defense: Rubinstein Variation, Kasparov Attack",
+   "phase": "opening",
+   "explains": "Black has recaptured on f6 and the knights are off, leaving a symmetrical-looking centre where Black is solid but short of space. Several setups are available: a kingside fianchetto with the g-pawn, the classical bishop to d3, and the modest c-pawn move, which is easy to read as pure consolidation and is well regarded precisely because it is not.",
+   "teaches": "Against a defence that is solid rather than sharp, there is nothing to refute — so the opening question stops being which line wins and becomes which setup you want to play. Choose by the kind of position you want on the board, because all of the reasonable tries here are sound and they lead to different games.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:tWGrKGoNNEA"
    ],
    "positionSource": "high"
   },
