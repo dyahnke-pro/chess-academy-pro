@@ -29,11 +29,16 @@ const NOTES_DOC = join(process.cwd(), 'docs/plans/2026-08-17-handwritten-note-pi
 interface TrackMove { t: number; ply: number; line: string[]; fen: string }
 interface ForkOption { san: string; t: number; continuation: string }
 interface Fork { fen: string; line: string[]; ply: number; options: ForkOption[] }
+interface VideoNote {
+  id: string; line: string; fen: string; t: number; ply: number;
+  teaches: string; explains: string; source: string;
+}
 interface Track {
   videoId: string;
   geometry: { x0: number; y0: number; square: number; orientation: string | null };
   moves: TrackMove[];
   forks?: Fork[];
+  notes?: VideoNote[];
 }
 
 /** `by-opening.json` lives beside the tracks but is an INDEX, not a track — it
@@ -116,6 +121,31 @@ describe('video tracks', () => {
           }
           expect(ok, `${track.videoId}: ${o.san} illegal after ${f.line.join(' ')}`).toBe(true);
         }
+      }
+    }
+  });
+
+  it('every attached note sits on the position its own moves produce', () => {
+    // Notes name their anchor by MOVES and have the FEN resolved from the track
+    // (attach-notes.mjs), so a typo is structurally unavailable rather than
+    // merely discouraged. This proves the resolution actually held: replay the
+    // note's line and the board must be the one stored.
+    for (const track of tracks) {
+      for (const n of track.notes ?? []) {
+        const c = new Chess();
+        let threw: string | null = null;
+        try {
+          for (const san of n.line.split(' ')) c.move(san);
+        } catch (e) {
+          threw = String(e);
+        }
+        expect(threw, `${n.id}: illegal line`).toBeNull();
+        expect(posKey(c.fen()), `${n.id}: stored FEN is not what its moves produce`)
+          .toBe(posKey(n.fen));
+        // And the lesson must actually have reached it.
+        const shown = new Set(track.moves.map((m) => posKey(m.fen)));
+        expect(shown.has(posKey(n.fen)), `${n.id}: position never on screen`).toBe(true);
+        expect(n.teaches.length, `${n.id}: empty teaching`).toBeGreaterThan(20);
       }
     }
   });
