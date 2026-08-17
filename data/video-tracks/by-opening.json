@@ -275,6 +275,14 @@
    "forks": 0
   },
   {
+   "videoId": "lryqtSMy4pY",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 17
+  },
+  {
    "videoId": "tWGrKGoNNEA",
    "eco": "B00",
    "plies": 1,
@@ -613,6 +621,14 @@
    "coverage": 0.304,
    "subject": false,
    "forks": 2
+  },
+  {
+   "videoId": "lryqtSMy4pY",
+   "eco": "B32",
+   "plies": 5,
+   "coverage": 0.993,
+   "subject": false,
+   "forks": 17
   }
  ],
  "Sicilian Defense: Morphy Gambit": [
@@ -643,6 +659,14 @@
    "coverage": 1,
    "subject": false,
    "forks": 2
+  },
+  {
+   "videoId": "lryqtSMy4pY",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 17
   }
  ],
  "Sicilian Defense: Alapin Variation, Smith-Morra Declined": [
@@ -899,6 +923,66 @@
    "coverage": 0.043,
    "subject": false,
    "forks": 7
+  }
+ ],
+ "Sicilian Defense: Accelerated Dragon, Maróczy Bind, Gurgenidze Variation": [
+  {
+   "videoId": "lryqtSMy4pY",
+   "eco": "B36",
+   "plies": 14,
+   "coverage": 0.66,
+   "subject": true,
+   "forks": 17
+  }
+ ],
+ "Sicilian Defense: Accelerated Dragon, Modern Bc4 Variation": [
+  {
+   "videoId": "lryqtSMy4pY",
+   "eco": "B35",
+   "plies": 13,
+   "coverage": 0.05,
+   "subject": false,
+   "forks": 17
+  }
+ ],
+ "Sicilian Defense: Accelerated Dragon, Maróczy Bind": [
+  {
+   "videoId": "lryqtSMy4pY",
+   "eco": "B36",
+   "plies": 9,
+   "coverage": 0.908,
+   "subject": false,
+   "forks": 17
+  }
+ ],
+ "Sicilian Defense: Accelerated Dragon, Modern Variation": [
+  {
+   "videoId": "lryqtSMy4pY",
+   "eco": "B34",
+   "plies": 9,
+   "coverage": 0.071,
+   "subject": false,
+   "forks": 17
+  }
+ ],
+ "Sicilian Defense: Accelerated Dragon": [
+  {
+   "videoId": "lryqtSMy4pY",
+   "eco": "B32",
+   "plies": 8,
+   "coverage": 0.986,
+   "subject": false,
+   "forks": 17
+  }
+ ],
+ "Sicilian Defense: Old Sicilian": [
+  {
+   "videoId": "lryqtSMy4pY",
+   "eco": "B30",
+   "plies": 4,
+   "coverage": 1,
+   "subject": false,
+   "forks": 17
   }
  ],
  "Queen's Pawn Game: Chigorin Variation, Alburt Defense": [

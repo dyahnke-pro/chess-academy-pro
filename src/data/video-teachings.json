@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-17",
- "videosDistilled": 22,
- "noteCount": 56,
+ "videosDistilled": 23,
+ "noteCount": 57,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -1103,6 +1103,37 @@
    "concepts": [],
    "sources": [
     "yt:k4T6TJGOSA0"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-maroczy-queen-sortie-against-a-loose-bishop",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "Be3",
+    "Nf6",
+    "Bc4",
+    "O-O",
+    "f3",
+    "Qb6"
+   ],
+   "opening": "Sicilian Defense: Accelerated Dragon, Maróczy Bind, Gurgenidze Variation",
+   "phase": "opening",
+   "explains": "The queen steps out to b6 and takes aim at the pawn on b2, which is the obvious half of the move. The half that makes it work is that the bishop on e3 has no defender, and it is one of the two pieces holding the knight on d4 together. Grabbing material immediately would let the position be defended; asking a second question first is what makes the loose bishop start to matter.",
+   "teaches": "Before playing the capture you can see, look for the piece that is not defended. A tactic usually fails or succeeds on one loose piece somewhere else on the board, and the strongest move is often the quiet one that adds a second problem while that piece stays loose.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lryqtSMy4pY"
    ],
    "positionSource": "high"
   },
