@@ -28,6 +28,10 @@ on:
       cancel_sub:
         description: 'reviewSubmission id to cancel'
         type: string
+      cancel_active:
+        description: 'Cancel the in-flight submission without knowing its id'
+        type: boolean
+        default: false
         default: ''
       resubmit_sub:
         description: 'reviewSubmission id to (re)submit directly'
@@ -61,6 +65,7 @@ jobs:
           DUMP_SUB: ${{ inputs.dump_sub }}
           DELETE_ITEM: ${{ inputs.delete_item }}
           CANCEL_SUB: ${{ inputs.cancel_sub }}
+          CANCEL_ACTIVE: ${{ inputs.cancel_active && '1' || '' }}
           RESUBMIT_SUB: ${{ inputs.resubmit_sub }}
           COMPLIANCE_BUILD: ${{ inputs.compliance_build }}
           UPDATE_DESCRIPTION: ${{ inputs.update_description && '1' || '' }}

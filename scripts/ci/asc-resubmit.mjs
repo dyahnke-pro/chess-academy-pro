@@ -98,9 +98,29 @@ const main = async () => {
   // so we see terminal/rejected ones too; include items to see what holds the version.
   const subs = await api('GET', `/v1/apps/${APP}/reviewSubmissions?limit=50&include=items&fields[reviewSubmissions]=state,submitted,platform,createdDate`);
   console.log('\nreview submissions (all):');
+  // SAY WHEN THE LIST ITSELF FAILED. `subs.j.data || []` turned an API error
+  // into a silently empty list — the 2026-08-17 3.6 submission existed
+  // (SUBMIT: 200) while two consecutive inspects printed nothing, and the
+  // cancel-by-id path was unusable because the id was unknowable.
+  if (subs.status >= 400) console.log(`  (list FAILED: ${subs.status} ${JSON.stringify(subs.j).slice(0, 300)})`);
   for (const s of subs.j.data || []) {
     const items = (s.relationships?.items?.data || []).length;
     console.log(`  ${s.id} state=${s.attributes.state} submitted=${s.attributes.submitted} platform=${s.attributes.platform} items=${items} created=${s.attributes.createdDate}`);
+  }
+  // CANCEL_ACTIVE=1 — cancel the in-flight submission WITHOUT knowing its id.
+  // The create step never logs the id, so when the list above breaks there is
+  // no handle to pass CANCEL_SUB. Resolve it here: the newest non-terminal
+  // submission is the one holding the version.
+  if (process.env.CANCEL_ACTIVE === '1') {
+    const TERMINAL = new Set(['COMPLETE', 'COMPLETING', 'CANCELING', 'CANCELED']);
+    const active = (subs.j.data || [])
+      .filter((x) => !TERMINAL.has(x.attributes.state))
+      .sort((a, b) => String(b.attributes.createdDate).localeCompare(String(a.attributes.createdDate)))[0];
+    if (!active) { console.log('CANCEL_ACTIVE: no active submission found — nothing to cancel'); }
+    else {
+      const c = await api('PATCH', `/v1/reviewSubmissions/${active.id}`, { data: { type: 'reviewSubmissions', id: active.id, attributes: { canceled: true } } });
+      console.log(`CANCEL_ACTIVE ${active.id} (was ${active.attributes.state}): ${c.status} ${c.status >= 400 ? JSON.stringify(c.j).slice(0, 300) : 'state=' + c.j.data?.attributes?.state}`);
+    }
   }
   if (process.env.DUMP_SUB) {
     const one = await api('GET', `/v1/reviewSubmissions/${process.env.DUMP_SUB}?include=items`);
