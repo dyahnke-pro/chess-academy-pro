@@ -172,3 +172,67 @@ the pure Traxler. chess.js says otherwise: the king has the same six legal
 squares in both lines. Had that gone into a note from memory it would have been
 fluent, plausible and false — which is precisely the failure this whole pipeline
 exists to prevent.
+
+---
+
+# THE FORKS — the "other lines", which is the point
+
+David 2026-08-17: *"what i like about his videos and what i want to carry over
+are the teachings about the other lines. I want to walk people down those lines,
+especially in the review section, but i want Learn with coach to touch on them
+as well so the user knows there are other options at certain forks/positions."*
+
+**That content was already captured, and it is what the rewinds are.** A teacher
+rewinds for exactly one reason: to return to a position and show a different
+option. So each rewind marks a fork, and the moves played after each visit are
+the options. `scripts/video-align/forks.mjs` derives them; they are stored in
+the track.
+
+On the pilot lesson: **10 forks, 24 options, every one legal at its position.**
+
+| after | options the lesson showed |
+|---|---|
+| `Ng5` | `d5` 2m03 · `Bc5` 2m17 |
+| `Ng5 Bc5` | `Nxf7` 2m38 · `Bxf7+` 3m45 · `d4` 5m09 |
+| `… d4` | `d5` 5m46 · `Bxd4` 5m60 · `Nxd4` 10m10 · `exd4` 11m36 |
+| `… Bxd5` | `Nxd5` 12m20 · `Nxd4` 13m35 |
+| `… Nxe4` | `Qh5+` 10m29 · `Be2` 11m01 |
+| `… Kg1 Qh4` | `Nd8` 6m30 · `g3` 6m44 |
+| `… Nxh8` | `Nd4` 7m09 · `Qxc4` 7m14 |
+| `… Bc4` (deep) | `Bg4` 15m58 · `Rf8` 16m41 · `Qe8` 17m31 |
+
+## Why these are safe to present, when a generated list would not be
+
+The options are not proposed by a model and not looked up in a database — they
+are the moves that appeared on screen. "Here are three other tries at this
+position" is a claim about the video, and the video is the evidence. There is
+nothing to hallucinate and nothing to verify afterwards, which is the whole G0
+posture: code computes the fact, the coach only voices it.
+
+Contrast the alternative that was never on the table: asking a model "what else
+could Black play here?" That produces fluent, plausible, sometimes-wrong lines
+with nothing to check them against — the failure this corpus already has.
+
+## How each surface uses them
+
+**Review — walk the line.** Each option carries its `continuation` and the
+TIMESTAMP where the teacher takes it up. So a review can play the alternative
+out move by move, and the teaching that belongs to it is locatable rather than
+guessed at. This is the surface David named first, and it is the one the data
+suits best: a fork with three options is three walkable lines.
+
+**Learn — say that the fork exists.** At a fork position, the student should
+learn that a choice is being made, not just watch one move happen: *"this is one
+of three tries here; the lesson also looks at X and Y."* Naming the alternatives
+without walking them is the lighter touch he asked for — enough that the student
+knows the position is a decision point.
+
+The fork's `ply` says how deep it sits, which is the natural way to decide how
+much to say: the move-4 fork between three whole systems deserves a sentence,
+the move-19 fork between three quiet developing moves does not.
+
+## Gate
+
+`videoTrackIntegrity.test.ts` (in ship-check) plays every option at its own fork
+position. They were demonstrated rather than invented, but a transcription slip
+would still put an impossible move in front of a student.

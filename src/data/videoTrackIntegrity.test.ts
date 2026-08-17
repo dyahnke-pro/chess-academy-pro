@@ -27,10 +27,13 @@ const TRACK_DIR = join(process.cwd(), 'data/video-tracks');
 const NOTES_DOC = join(process.cwd(), 'docs/plans/2026-08-17-handwritten-note-pilot.md');
 
 interface TrackMove { t: number; ply: number; line: string[]; fen: string }
+interface ForkOption { san: string; t: number; continuation: string }
+interface Fork { fen: string; line: string[]; ply: number; options: ForkOption[] }
 interface Track {
   videoId: string;
   geometry: { x0: number; y0: number; square: number; orientation: string | null };
   moves: TrackMove[];
+  forks?: Fork[];
 }
 
 const loadTracks = (): Track[] => {
@@ -84,6 +87,30 @@ describe('video tracks', () => {
         // only if the board is what the moves say it is.
         expect(posKey(c.fen()), `${track.videoId} @${m.t}s FEN disagrees with its moves`)
           .toBe(posKey(m.fen));
+      }
+    }
+  });
+
+  it('every fork option is legal at its own position', () => {
+    // The forks are the alternatives the lesson DEMONSTRATED — what David asked
+    // Learn and Review to surface ("so the user knows there are other options
+    // at certain forks"). They are safe to present precisely because they were
+    // on screen rather than proposed, but a transcription slip would still put
+    // an impossible move in front of a student, so each is played.
+    for (const track of tracks) {
+      for (const f of track.forks ?? []) {
+        expect(f.options.length, `${track.videoId}: a fork needs >1 option`)
+          .toBeGreaterThan(1);
+        for (const o of f.options) {
+          const c = new Chess(f.fen);
+          let ok = false;
+          try {
+            ok = Boolean(c.move(o.san));
+          } catch {
+            ok = false;
+          }
+          expect(ok, `${track.videoId}: ${o.san} illegal after ${f.line.join(' ')}`).toBe(true);
+        }
       }
     }
   });
