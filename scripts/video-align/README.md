@@ -103,10 +103,29 @@ per-SECTION, not per-video — calibrate each layout separately and scan its
 range. A geometry carried across a section boundary reads a board that is no
 longer there.
 
-## Verified end-to-end (2026-08-17, hand-calibrated)
+## Verified end-to-end — FULL VIDEO (2026-08-17, hand-calibrated)
 
-Seven minutes of *Trashing the Traxler* at 2fps: 840 frames -> 71 settled
-positions -> the lesson's real shape, with a timestamp on every ply.
+All 27 minutes of *Trashing the Traxler* at 2fps:
+
+    3,245 frames -> 325 settled positions -> 153 plies, 31 rewinds
+
+against the original pilot's 49 plies and 15 rewinds. Geometry `x=370 y=-2
+sq=60` held for the entire video — no blank chunk anywhere — so this one does
+NOT resize its board, though others do and each section must still be checked.
+
+Read in 3-minute chunks, deleting frames as it goes: 3,245 PNGs is ~1GB, and
+there is no reason to hold them.
+
+The strongest evidence the reads are right is that the moves are known theory.
+The tracker recovers the Traxler mate exactly:
+
+    Nxf7 Bxf2+ Kxf2 Nxe4+ Ke3 Qh4 Nxh8 Qf4+ Ke2 Qf2+ Kd3 Nc5+ Kc3 Qd4#
+
+Before the colour calibration that stretch came out as a garbled three-ply
+jump. Every move is chess.js-legal from its predecessor, and no grid that fails
+to match a legal move is ever believed.
+
+The earlier 7-minute run, for reference — 840 frames -> 71 settled positions:
 
     t=81    ply 1-9   e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5   the Fried Liver
     t=134.5 << rewind to ply 7
