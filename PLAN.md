@@ -24,7 +24,7 @@
    PostHog by `audit_run_id`. Its marks now come from the BAKE, so a
    hand-written note appearing in the transcript IS the proof it fired.
 
-3. **Then the sync** (video alignment) — see the section below.
+3. **Then the sync** (video alignment) — see "VIDEO SYNC" at the bottom.
 
 # PLAN — computed voice narration (2026-08-15, active)
 
@@ -224,3 +224,58 @@ values chosen to satisfy it can never ask whether those values occur.**
 
 Probe a real position. Measure before writing. A green test is not a working
 feature.
+
+---
+
+# VIDEO SYNC — pickup state (2026-08-17)
+
+Goal: make corpus notes fire at the position the teacher was actually showing.
+Only ~11% of notes carry a position, which is most of why Learn goes quiet.
+
+## SOLVED
+
+- **Downloading works from this environment.** Valid cookies (Netscape, exported
+  from a window you do NOT sign out of — signing out rotates them), `npm i -g
+  deno` for the n-challenge, then **video-only DASH**:
+  `yt-dlp --cookies /tmp/yt.txt --remote-components ejs:npm -f 135 -o v.mp4 <url>`
+  Progressive formats are behind YouTube's SABR rollout and 403 even with good
+  cookies. Transcripts pull fine and always did.
+- **Hand calibration + deterministic tracking works end-to-end.** Verified on
+  the pilot: 840 frames -> 71 settled positions -> the full lesson shape with a
+  timestamp on every ply, including all 15 rewinds. See
+  `scripts/video-align/README.md` for the procedure and the numbers.
+- **Do NOT build a board detector.** One session was burned on it. Four scoring
+  functions each looked right and measured wrong (see `detect_board.py`
+  docstring). The geometry is three numbers you can read off a frame in
+  seconds; supply them by eye and let code confirm them against the position
+  you read. Geometry is per-SECTION — the board is resized between play,
+  review and example games.
+
+## THE REMAINING BLOCKER — it is the corpus, not the video
+
+**0 of 11,426 notes carry `t`**, the transcript timestamp, so there is nothing
+to join the video's timestamp->FEN against. `t` was added to `distill-v2` on
+2026-08-16, after all 421 videos were distilled.
+
+It cannot be recovered: 10,144 notes have no position and an empty `lineSan`
+(chunk unidentifiable); 1,152 had `lineSan` rewritten by the anchor pass; the
+130 remaining are `inferred`, which `isVerifiedPosition` rejects.
+
+And the transcript aligner cannot substitute — measured **0 of 52 chunks**
+aligned across 6 videos, matching the corpus's 130 `inferred` from 421 videos.
+
+**So the join needs an ADDITIVE re-distill.** Additive because note ids are
+content digests: regenerating prose mints new ids and orphans the 268
+hand-written spoken forms. Add notes, never replace them, and dedupe against
+the existing corpus by `contentKey`.
+
+## NEXT STEP — price it before spending
+
+Run ONE video end-to-end by hand before committing to 421: calibrate its
+sections, track it, re-distill just that video for `t`, join, and measure how
+many of its ~27 notes gain a verified position. That number is what makes the
+full re-distill a decision instead of a bet.
+
+Cost per video, measured at 480p: ~3 min (download 40s, extract 96s, reads 23s,
+track seconds), parallelisable. Stream frames rather than writing PNGs — 3,244
+frames is ~1GB per video.
