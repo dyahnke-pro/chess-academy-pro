@@ -19,12 +19,28 @@
    "forks": 3
   },
   {
+   "videoId": "3Qw4AL8RDOw",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
    "videoId": "5MAKlJpkpsg",
    "eco": "B00",
    "plies": 1,
    "coverage": 1,
    "subject": false,
    "forks": 0
+  },
+  {
+   "videoId": "C4xtj2rc0_k",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
   },
   {
    "videoId": "J4WzTSR3hmo",
@@ -129,6 +145,36 @@
    "coverage": 1,
    "subject": false,
    "forks": 0
+  }
+ ],
+ "Scandinavian Defense: Modern Variation": [
+  {
+   "videoId": "3Qw4AL8RDOw",
+   "eco": "B01",
+   "plies": 4,
+   "coverage": 0.769,
+   "subject": true,
+   "forks": 1
+  }
+ ],
+ "Scandinavian Defense: Mieses-Kotroc Variation": [
+  {
+   "videoId": "3Qw4AL8RDOw",
+   "eco": "B01",
+   "plies": 4,
+   "coverage": 0.077,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "Scandinavian Defense": [
+  {
+   "videoId": "3Qw4AL8RDOw",
+   "eco": "B01",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
   }
  ],
  "Neo-Grünfeld Defense: Classical Variation, Modern Defense": [
@@ -459,6 +505,16 @@
    "coverage": 0.923,
    "subject": false,
    "forks": 0
+  }
+ ],
+ "Owen Defense": [
+  {
+   "videoId": "C4xtj2rc0_k",
+   "eco": "B00",
+   "plies": 2,
+   "coverage": 1,
+   "subject": true,
+   "forks": 1
   }
  ],
  "Sicilian Defense: Smith-Morra Gambit": [
