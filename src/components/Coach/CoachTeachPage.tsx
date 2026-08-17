@@ -324,12 +324,30 @@ function freshTurnId(topic?: string): string {
 // square-pair and flooded "Encountered two children with the same key".
 const uniqueArrows = dedupeArrowsBySquarePair;
 
+/** Free-form starters, chosen to DEMONSTRATE what this surface can actually do
+ *  rather than to look like a search box (David 2026-08-17: *"something that
+ *  more accurately demonstrates the better capabilities of learn with coach"*).
+ *
+ *  The old five were generic — pins and skewers, "what is the Sicilian" — and
+ *  showed none of the routes that make this surface different from a chat box:
+ *  a narrated walkthrough off hand-written teaching, a live game in a chosen
+ *  opening, engine-verified traps, and a pro's REAL moves pulled from their
+ *  games. Each line below exercises a different one, and each names an opening
+ *  where the hand-written corpus actually has coverage, so the first thing a
+ *  student taps is the surface at its best rather than at its most generic.
+ *
+ *  PHRASINGS ARE LOAD-BEARING, not stylistic. "Play X against me" is the wired
+ *  game route (a walkthrough starts instead if the verb is wrong), and the pro
+ *  query must read "How does <player> play the <opening>?" — the leading "How
+ *  does" dodges TEACH_PATTERN and the trailing "?" trips the bare-name router,
+ *  so it reaches the grounded player tools instead of being fuzzy-matched as an
+ *  opening name. Do not tidy either one. */
 const SUGGESTIONS = [
-  'Walk me through the Vienna opening',
-  'Teach me about pins and skewers',
-  'Show me the Italian Game main line',
-  'How do I attack a castled king?',
-  'What is the Sicilian Defense and why play it?',
+  'Teach me the Four Knights Game',
+  'Play the Caro-Kann Defence against me',
+  'Traps in the Two Knights Defence',
+  'How does Magnus Carlsen play the London System?',
+  'Quiz me on the French Defence',
 ];
 
 /** Action modes the picker offers above the chat input. Each maps to
@@ -420,13 +438,34 @@ export function buildPlayerStyleQuery(player: string, opening: string): string {
 
 /** Fallback openings shown when the student has no favorites yet —
  *  a curated mix of the most-asked-about ones across both colors. */
+/** Openings offered when the student has favourited none yet.
+ *
+ *  ORDERED BY WHERE THE TEACHING ACTUALLY IS, not by how famous the opening is.
+ *  These are the openings whose lines carry hand-written, board-verified notes
+ *  that survive the splice — measured, not chosen by taste:
+ *
+ *    Four Knights Game    2 on-line notes + 2 forks
+ *    Two Knights Defence  2 + 1
+ *    Trompowsky Attack    2 + 1
+ *    Caro-Kann Defence    2
+ *    London System        1 + 1
+ *    French Defence       1
+ *
+ *  The previous list was the six most famous openings, which is a reasonable
+ *  default for a surface with nothing behind it and the wrong one for this
+ *  surface: tapping "Sicilian Defense" opened a variation picker and then a
+ *  lesson with no hand-written teaching on it, while the openings that DO have
+ *  it were not offered at all. Re-derive this list from `reanchor-report.mjs`
+ *  whenever the corpus grows — the names must match `repertoire.json` exactly
+ *  (note the British spellings) so they resolve without going through the
+ *  fuzzy matcher. */
 const FALLBACK_OPENING_NAMES: string[] = [
-  'Sicilian Defense',
-  'Italian Game',
-  'Caro-Kann Defense',
-  'French Defense',
-  "Queen's Gambit",
-  'Vienna Game',
+  'Four Knights Game',
+  'Two Knights Defence',
+  'Trompowsky Attack',
+  'Caro-Kann Defence',
+  'London System',
+  'French Defence',
 ];
 
 /** A deep-dive entry point pulled from the walkthrough tree. Every
