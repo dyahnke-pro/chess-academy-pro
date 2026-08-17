@@ -26,15 +26,30 @@
  */
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
+import { Chess } from 'chess.js';
 
 const TRACK_DIR = 'data/video-tracks';
 const INDEX = join(TRACK_DIR, 'by-opening.json');
 
+// INDEXED BY POSITION, NOT BY MOVE STRING. Occupancy cannot distinguish move
+// ORDERS that reach the same board, so the tracker legitimately returns a
+// permutation — the Alapin came back as "c3 c5 e4 d5 …" instead of "e4 c5 c3
+// d5 …". Keyed on the move text that resolved to ZERO named openings for a
+// video that is entirely about one. The position is what the opening IS.
 const db = JSON.parse(readFileSync('src/data/openings-lichess.json', 'utf8'));
-const byLine = new Map();
+const posKey = (fen) => fen.split(' ').slice(0, 2).join(' ');
+const byPos = new Map();
 for (const e of db) {
-  const sans = e.pgn.trim().split(/\s+/).filter((t) => !/^\d+\.+$/.test(t));
-  byLine.set(sans.join(' '), e);
+  const c = new Chess();
+  let ok = true;
+  for (const san of e.pgn.trim().split(/\s+/).filter((t) => !/^\d+\.+$/.test(t))) {
+    try { if (!c.move(san)) { ok = false; break; } } catch { ok = false; break; }
+  }
+  if (!ok) continue;
+  const k = posKey(c.fen());
+  // First (shallowest) name for a position wins; deeper entries transposing
+  // into it are the same board by another route.
+  if (!byPos.has(k)) byPos.set(k, { ...e, plies: c.history().length });
 }
 
 /** Named openings a track covers, deepest first, each with the share of the
@@ -56,10 +71,13 @@ export function openingsOf(track) {
     line.push(...m.line);
     lines.add(line.join(' '));
     // Every prefix, so a deep line credits the whole chain it passed through.
-    for (let n = line.length; n >= 2; n--) {
-      const key = line.slice(0, n).join(' ');
-      const e = byLine.get(key);
-      if (e && !hits.has(e.name)) hits.set(e.name, { eco: e.eco, plies: n, line: key });
+    const c = new Chess();
+    for (let n = 1; n <= line.length; n++) {
+      try { if (!c.move(line[n - 1])) break; } catch { break; }
+      const e = byPos.get(posKey(c.fen()));
+      if (e && !hits.has(e.name)) {
+        hits.set(e.name, { eco: e.eco, plies: n, line: line.slice(0, n).join(' ') });
+      }
     }
   }
   const all = [...lines];

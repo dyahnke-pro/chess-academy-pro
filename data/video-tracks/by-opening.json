@@ -29,6 +29,40 @@
    "forks": 1
   }
  ],
+ "King's Pawn Game": [
+  {
+   "videoId": "3Qw4AL8RDOw",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "6si_sctYAS0",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "h-9MlTRN-fk",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 7
+  },
+  {
+   "videoId": "ykmGxE9DURo",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 10
+  }
+ ],
  "French Defense: Advance Variation, Ruisdonk Gambit": [
   {
    "videoId": "6si_sctYAS0",
@@ -77,6 +111,56 @@
    "coverage": 1,
    "subject": false,
    "forks": 5
+  }
+ ],
+ "Sicilian Defense: Delayed Alapin Variation": [
+  {
+   "videoId": "KNwKz9Ssi8c",
+   "eco": "B22",
+   "plies": 10,
+   "coverage": 0.479,
+   "subject": false,
+   "forks": 8
+  }
+ ],
+ "Sicilian Defense: Alapin Variation, Barmen Defense": [
+  {
+   "videoId": "KNwKz9Ssi8c",
+   "eco": "B22",
+   "plies": 6,
+   "coverage": 0.979,
+   "subject": true,
+   "forks": 8
+  }
+ ],
+ "Sicilian Defense: Alapin Variation": [
+  {
+   "videoId": "KNwKz9Ssi8c",
+   "eco": "B22",
+   "plies": 3,
+   "coverage": 1,
+   "subject": false,
+   "forks": 8
+  }
+ ],
+ "Saragossa Opening": [
+  {
+   "videoId": "KNwKz9Ssi8c",
+   "eco": "A00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 8
+  }
+ ],
+ "Four Knights Game: Italian Variation": [
+  {
+   "videoId": "h-9MlTRN-fk",
+   "eco": "C47",
+   "plies": 7,
+   "coverage": 0.234,
+   "subject": false,
+   "forks": 7
   }
  ],
  "Four Knights Game: Halloween Gambit": [
@@ -145,22 +229,34 @@
    "forks": 10
   }
  ],
- "King's Pawn Game": [
+ "Queen's Pawn Game: Chigorin Variation, Alburt Defense": [
   {
-   "videoId": "h-9MlTRN-fk",
-   "eco": "C20",
-   "plies": 2,
-   "coverage": 1,
+   "videoId": "qN8kNz0_c3s",
+   "eco": "D00",
+   "plies": 8,
+   "coverage": 0.385,
    "subject": false,
-   "forks": 7
-  },
+   "forks": 4
+  }
+ ],
+ "Queen's Pawn Game: Accelerated London System": [
   {
-   "videoId": "ykmGxE9DURo",
-   "eco": "C20",
-   "plies": 2,
-   "coverage": 1,
+   "videoId": "qN8kNz0_c3s",
+   "eco": "D00",
+   "plies": 7,
+   "coverage": 0.462,
    "subject": false,
-   "forks": 10
+   "forks": 4
+  }
+ ],
+ "Rapport-Jobava System": [
+  {
+   "videoId": "qN8kNz0_c3s",
+   "eco": "D01",
+   "plies": 5,
+   "coverage": 0.949,
+   "subject": true,
+   "forks": 4
   }
  ],
  "Queen's Pawn Game: Chigorin Variation": [
@@ -169,7 +265,7 @@
    "eco": "A45",
    "plies": 4,
    "coverage": 0.949,
-   "subject": true,
+   "subject": false,
    "forks": 4
   }
  ],
@@ -178,6 +274,16 @@
    "videoId": "qN8kNz0_c3s",
    "eco": "A45",
    "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  }
+ ],
+ "Queen's Pawn Game": [
+  {
+   "videoId": "qN8kNz0_c3s",
+   "eco": "A40",
+   "plies": 1,
    "coverage": 1,
    "subject": false,
    "forks": 4

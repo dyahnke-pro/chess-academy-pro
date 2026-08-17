@@ -569,6 +569,27 @@
  ],
  "openings": [
   {
+   "name": "Queen's Pawn Game: Chigorin Variation, Alburt Defense",
+   "eco": "D00",
+   "plies": 8,
+   "line": "d4 Nf6 Nc3 d5 Bf4 Bf5 Bc1 Ng8",
+   "coverage": 0.385
+  },
+  {
+   "name": "Queen's Pawn Game: Accelerated London System",
+   "eco": "D00",
+   "plies": 7,
+   "line": "d4 Nf6 Nc3 d5 Bf4 Ng8 Nb1",
+   "coverage": 0.462
+  },
+  {
+   "name": "Rapport-Jobava System",
+   "eco": "D01",
+   "plies": 5,
+   "line": "d4 Nf6 Nc3 d5 Bf4",
+   "coverage": 0.949
+  },
+  {
    "name": "Queen's Pawn Game: Chigorin Variation",
    "eco": "A45",
    "plies": 4,
@@ -580,6 +601,13 @@
    "eco": "A45",
    "plies": 2,
    "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
    "coverage": 1
   }
  ]

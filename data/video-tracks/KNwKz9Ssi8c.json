@@ -768,5 +768,34 @@
    ]
   }
  ],
- "openings": []
+ "openings": [
+  {
+   "name": "Sicilian Defense: Delayed Alapin Variation",
+   "eco": "B22",
+   "plies": 10,
+   "line": "c3 c5 e4 d5 exd5 Qxd5 d4 Nf6 Nf3 e6",
+   "coverage": 0.479
+  },
+  {
+   "name": "Sicilian Defense: Alapin Variation, Barmen Defense",
+   "eco": "B22",
+   "plies": 6,
+   "line": "c3 c5 e4 d5 exd5 Qxd5",
+   "coverage": 0.979
+  },
+  {
+   "name": "Sicilian Defense: Alapin Variation",
+   "eco": "B22",
+   "plies": 3,
+   "line": "c3 c5 e4",
+   "coverage": 1
+  },
+  {
+   "name": "Saragossa Opening",
+   "eco": "A00",
+   "plies": 1,
+   "line": "c3",
+   "coverage": 1
+  }
+ ]
 }

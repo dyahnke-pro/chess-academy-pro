@@ -1169,6 +1169,13 @@
  ],
  "openings": [
   {
+   "name": "Four Knights Game: Italian Variation",
+   "eco": "C47",
+   "plies": 7,
+   "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bc4",
+   "coverage": 0.234
+  },
+  {
    "name": "Four Knights Game: Halloween Gambit",
    "eco": "C47",
    "plies": 7,
@@ -1205,9 +1212,9 @@
   },
   {
    "name": "King's Pawn Game",
-   "eco": "C20",
-   "plies": 2,
-   "line": "e4 e5",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
    "coverage": 1
   }
  ]

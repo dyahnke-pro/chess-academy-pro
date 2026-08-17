@@ -197,6 +197,13 @@
    "plies": 2,
    "line": "e4 d5",
    "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
   }
  ]
 }
