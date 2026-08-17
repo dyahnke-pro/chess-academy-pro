@@ -1,0 +1,224 @@
+{
+ "videoId": "fABTn305-Eg",
+ "title": "Castle Queenside!!? | Sicilian Defense: Grand Prix Attack | GM Naroditsky’s Top Theory Speedrun",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-17",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 6938,
+  "settledPositions": null
+ },
+ "plies": 25,
+ "rewinds": 2,
+ "moves": [
+  {
+   "t": 21,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 26,
+   "ply": 3,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2"
+  },
+  {
+   "t": 112,
+   "ply": 4,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 121,
+   "ply": 5,
+   "line": [
+    "f4"
+   ],
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 141,
+   "ply": 6,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk1nr/pp1pppbp/6p1/2p5/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 1 4"
+  },
+  {
+   "t": 153,
+   "ply": 7,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqk1nr/pp1pppbp/6p1/2p5/4PP2/2N2N2/PPPP2PP/R1BQKB1R b KQkq - 2 4"
+  },
+  {
+   "t": 203.5,
+   "ply": 8,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/4PP2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 3 5"
+  },
+  {
+   "t": 211,
+   "ply": 9,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/1Bp5/4PP2/2N2N2/PPPP2PP/R1BQK2R b KQkq - 4 5"
+  },
+  {
+   "t": 259,
+   "ply": 10,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/6p1/1Bp5/3nPP2/2N2N2/PPPP2PP/R1BQK2R w KQkq - 5 6"
+  },
+  {
+   "t": 287.5,
+   "ply": 11,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/6p1/1Bp5/3nPP2/2N2N2/PPPP2PP/R1BQ1RK1 b kq - 6 6"
+  },
+  {
+   "t": 319,
+   "ply": 12,
+   "line": [
+    "Nxb5"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/6p1/1np5/4PP2/2N2N2/PPPP2PP/R1BQ1RK1 w kq - 0 7"
+  },
+  {
+   "t": 325,
+   "ply": 13,
+   "line": [
+    "Nxb5"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/6p1/1Np5/4PP2/5N2/PPPP2PP/R1BQ1RK1 b kq - 0 7"
+  },
+  {
+   "t": 394.5,
+   "ply": 14,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk1nr/pp2ppbp/3p2p1/1Np5/4PP2/5N2/PPPP2PP/R1BQ1RK1 w kq - 0 8"
+  },
+  {
+   "t": 413,
+   "ply": 13,
+   "line": [],
+   "fen": "r1bqk1nr/pp1pppbp/6p1/1Np5/4PP2/5N2/PPPP2PP/R1BQ1RK1 b kq - 0 7"
+  },
+  {
+   "t": 415,
+   "ply": 15,
+   "line": [
+    "d6",
+    "d3"
+   ],
+   "fen": "r1bqk1nr/pp2ppbp/3p2p1/1Np5/4PP2/3P1N2/PPP3PP/R1BQ1RK1 b kq - 0 8"
+  },
+  {
+   "t": 441.5,
+   "ply": 16,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pp2ppbp/3p1np1/1Np5/4PP2/3P1N2/PPP3PP/R1BQ1RK1 w kq - 1 9"
+  },
+  {
+   "t": 472.5,
+   "ply": 17,
+   "line": [
+    "Qe1"
+   ],
+   "fen": "r1bqk2r/pp2ppbp/3p1np1/1Np5/4PP2/3P1N2/PPP3PP/R1B1QRK1 b kq - 2 9"
+  },
+  {
+   "t": 583,
+   "ply": 18,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "r2qk2r/pp2ppbp/3p1np1/1Np5/4PPb1/3P1N2/PPP3PP/R1B1QRK1 w kq - 3 10"
+  },
+  {
+   "t": 626,
+   "ply": 19,
+   "line": [
+    "Qh4"
+   ],
+   "fen": "r2qk2r/pp2ppbp/3p1np1/1Np5/4PPbQ/3P1N2/PPP3PP/R1B2RK1 b kq - 4 10"
+  },
+  {
+   "t": 635,
+   "ply": 20,
+   "line": [
+    "Qd7"
+   ],
+   "fen": "r3k2r/pp1qppbp/3p1np1/1Np5/4PPbQ/3P1N2/PPP3PP/R1B2RK1 w kq - 5 11"
+  },
+  {
+   "t": 646,
+   "ply": 21,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r3k2r/pp1qppbp/3p1np1/2p5/4PPbQ/2NP1N2/PPP3PP/R1B2RK1 b kq - 6 11"
+  },
+  {
+   "t": 686,
+   "ply": 22,
+   "line": [
+    "Bxf3"
+   ],
+   "fen": "r3k2r/pp1qppbp/3p1np1/2p5/4PP1Q/2NP1b2/PPP3PP/R1B2RK1 w kq - 0 12"
+  },
+  {
+   "t": 701,
+   "ply": 26,
+   "line": [
+    "Rf2",
+    "Kd8",
+    "Rxf3",
+    "Kc8"
+   ],
+   "fen": "r1k4r/pp1qppbp/3p1np1/2p5/4PP1Q/2NP1R2/PPP3PP/R1B3K1 w - - 1 14"
+  },
+  {
+   "t": 1946,
+   "ply": 3,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2"
+  },
+  {
+   "t": 1949.5,
+   "ply": 4,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3"
+  }
+ ],
+ "forks": []
+}
