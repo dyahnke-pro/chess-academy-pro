@@ -36,11 +36,16 @@ interface Track {
   forks?: Fork[];
 }
 
+/** `by-opening.json` lives beside the tracks but is an INDEX, not a track — it
+ *  has no `moves`, so loading it as one crashes every check here. Identify a
+ *  track by its shape rather than by listing filenames to exclude, so a future
+ *  sidecar cannot break this the same way. */
 const loadTracks = (): Track[] => {
   if (!existsSync(TRACK_DIR)) return [];
   return readdirSync(TRACK_DIR)
     .filter((f) => f.endsWith('.json'))
-    .map((f) => JSON.parse(readFileSync(join(TRACK_DIR, f), 'utf8')) as Track);
+    .map((f) => JSON.parse(readFileSync(join(TRACK_DIR, f), 'utf8')) as Partial<Track>)
+    .filter((t): t is Track => Array.isArray(t.moves) && typeof t.videoId === 'string');
 };
 
 /** Placement + side to move. Move counters differ between a replay and a
