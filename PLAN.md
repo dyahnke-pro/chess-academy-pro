@@ -279,3 +279,41 @@ full re-distill a decision instead of a bet.
 Cost per video, measured at 480p: ~3 min (download 40s, extract 96s, reads 23s,
 track seconds), parallelisable. Stream frames rather than writing PNGs — 3,244
 frames is ~1GB per video.
+
+## WHAT THE VIDEO PROVED, ON ONE LESSON (2026-08-17)
+
+Tracked the Traxler video end to end (3,245 frames -> 153 plies, 31 rewinds)
+and checked its 19 corpus notes against the positions the lesson ACTUALLY
+showed. This check was never possible before: the video is the only record of
+what was on screen.
+
+| | |
+|---|---|
+| notes from this video | 19 |
+| no position at all | 12 |
+| anchored | 7 |
+| ...on the taught line | 3 |
+| ...**on a line the lesson never taught** | **4** |
+
+The four are `dt-5qk` (anchored in the Giuoco Pianissimo, `Bc4 Bc5 c3 d3`) and
+`dt-5qr` / `dt-5qy` / `dt-5qz` (anchored in the `4.O-O … d4 Bxd4` line). This
+video's branch is `Bc4 Nf6 Ng5`. So Traxler teaching is filed at positions from
+other openings, and it WILL speak there.
+
+**No existing gate catches this.** `noteDescribesPosition` asks whether the
+prose is true of the board, and it can be — a sentence about a bishop on c4 is
+board-true in the Pianissimo too. The question it cannot ask is whether the note
+was ever ABOUT that position. Only the video answers that.
+
+CAVEAT, stated because the sample is one video: "not shown" and "mis-anchored"
+are different failures and were separated by hand here. The tracker records
+SETTLED positions, so a position that existed for under half a second between
+sampled frames is absent without being wrong — that is why `e4 e5 Nf3 Nc6` reads
+as not-shown while being plainly on the path. Do not automate this distinction
+without checking it the same way.
+
+**This is the argument for the re-distill, and it is stronger than coverage.**
+The value is not only that 12 notes gain a position; it is that 4 of 7 existing
+anchors on this lesson are WRONG and currently unfalsifiable. Re-distilling with
+`t` lets every note be placed against what the lesson actually displayed, rather
+than against a DB spine search that picked a plausible-looking line.
