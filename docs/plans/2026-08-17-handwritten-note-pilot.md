@@ -93,7 +93,7 @@ a note attached to the wrong one teaches the wrong repertoire.
 ### 5. Six squares, and the greedy one is mate
 
 - **position** (tracker t=176.0s, ply 12, king on f2, Black has just checked)
-  `r1bqk2r/pppp1Npp/2n5/2b1p3/4n3/8/PPPPPKPP/RNBQ3R w kq - 0 7`
+  `r1bqk2r/pppp1Npp/2n5/4p3/2B1n3/8/PPPP1KPP/RNBQ3R w kq - 0 7`
 - **teaches** — A king dragged into the open has to choose between holding on to
   material and getting out of the way, and the instinct to hold on is usually
   the losing one. Count the checks available to the attacker before deciding
@@ -157,6 +157,14 @@ recommended instead, the four replies to it, the critical defence, and the mate
 that punishes greed. A thorough pass might reach 12-15 by adding the sub-branches
 after `5…Nxd4`, which the lesson explores at length (two White tries, each
 walked to a conclusion).
+
+**A FEN I TYPED WRONG, caught by checking it against the tracker.** Note 5's
+position was hand-transcribed instead of copied, and I put Black's bishop on c5
+when it had already been captured on f2, dropped White's bishop from c4, and got
+the pawn rank wrong. Every sentence of the note was fine; the board it pointed at
+was fiction. This is the corpus's own defect reproduced by hand, three notes
+after writing a warning about it — so: **copy positions from the tracker output,
+never retype them**, and diff every one before it ships.
 
 **A claim checked and DROPPED, recorded because the checking is the method.** I
 expected the point of 5.d4 to be that it denies the king the escape it needs in
