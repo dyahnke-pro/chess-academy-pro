@@ -83,7 +83,14 @@ function calibrate(grids) {
     const k = grid.join('/');
     counts.set(k, (counts.get(k) ?? 0) + 1);
   }
-  for (const [k] of [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8)) {
+  // ALL grids, most common first — NOT the top few. Limiting to the eight
+  // commonest missed the start position entirely on a video where the teacher
+  // lingers: its top grids were deep middlegame boards seen 128-248 times each,
+  // while the start frames were spread thin. The result was no calibration at
+  // all, so a persistent d1 misread (the white queen reading black) rode along
+  // in every frame and no target could ever match a legal position — the video
+  // tracked 4 plies out of 197 settled positions.
+  for (const [k] of [...counts.entries()].sort((a, b) => b[1] - a[1])) {
     const g = k.split('/');
     // Explainable as a played line => a real position, not a bias. Skip it.
     if (explain(new Chess(), g)) continue;

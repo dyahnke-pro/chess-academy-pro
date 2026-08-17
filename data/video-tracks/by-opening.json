@@ -1,4 +1,84 @@
 {
+ "Scandinavian Defense: Modern Variation": [
+  {
+   "videoId": "3Qw4AL8RDOw",
+   "eco": "B01",
+   "plies": 4,
+   "coverage": 0.769,
+   "subject": true,
+   "forks": 1
+  }
+ ],
+ "Scandinavian Defense: Mieses-Kotroc Variation": [
+  {
+   "videoId": "3Qw4AL8RDOw",
+   "eco": "B01",
+   "plies": 4,
+   "coverage": 0.077,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "Scandinavian Defense": [
+  {
+   "videoId": "3Qw4AL8RDOw",
+   "eco": "B01",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "French Defense: Advance Variation, Ruisdonk Gambit": [
+  {
+   "videoId": "6si_sctYAS0",
+   "eco": "C02",
+   "plies": 9,
+   "coverage": 0.344,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "French Defense: Advance Variation, Nimzowitsch System": [
+  {
+   "videoId": "6si_sctYAS0",
+   "eco": "C02",
+   "plies": 7,
+   "coverage": 0.906,
+   "subject": true,
+   "forks": 5
+  }
+ ],
+ "French Defense: Advance Variation": [
+  {
+   "videoId": "6si_sctYAS0",
+   "eco": "C02",
+   "plies": 5,
+   "coverage": 0.953,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "French Defense: Normal Variation": [
+  {
+   "videoId": "6si_sctYAS0",
+   "eco": "C00",
+   "plies": 3,
+   "coverage": 0.984,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "French Defense": [
+  {
+   "videoId": "6si_sctYAS0",
+   "eco": "C00",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
+  }
+ ],
  "Four Knights Game: Halloween Gambit": [
   {
    "videoId": "h-9MlTRN-fk",
