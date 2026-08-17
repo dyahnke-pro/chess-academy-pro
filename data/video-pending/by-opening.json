@@ -99,6 +99,22 @@
    "forks": 5
   },
   {
+   "videoId": "zEqoGIgzk1E",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "zEytN1zSTEE",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 11
+  },
+  {
    "videoId": "zprg2WbmgzQ",
    "eco": "B00",
    "plies": 1,
@@ -391,6 +407,14 @@
    "coverage": 1,
    "subject": false,
    "forks": 5
+  },
+  {
+   "videoId": "zEqoGIgzk1E",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
   }
  ],
  "Queen's Pawn Game: Barry Attack, Grünfeld Variation": [
@@ -751,6 +775,14 @@
    "coverage": 0.425,
    "subject": false,
    "forks": 3
+  },
+  {
+   "videoId": "zEqoGIgzk1E",
+   "eco": "B54",
+   "plies": 8,
+   "coverage": 0.926,
+   "subject": false,
+   "forks": 1
   }
  ],
  "Sicilian Defense: Modern Variations": [
@@ -761,6 +793,14 @@
    "coverage": 0.45,
    "subject": false,
    "forks": 3
+  },
+  {
+   "videoId": "zEqoGIgzk1E",
+   "eco": "B50",
+   "plies": 4,
+   "coverage": 0.971,
+   "subject": false,
+   "forks": 1
   }
  ],
  "Danish Gambit Accepted: Schlechter Defense": [
@@ -911,6 +951,14 @@
    "coverage": 0.04,
    "subject": false,
    "forks": 4
+  },
+  {
+   "videoId": "zEqoGIgzk1E",
+   "eco": "B90",
+   "plies": 10,
+   "coverage": 0.897,
+   "subject": true,
+   "forks": 1
   }
  ],
  "Sicilian Defense: Closed, Fianchetto Variation": [
@@ -1149,6 +1197,106 @@
    "coverage": 1,
    "subject": false,
    "forks": 0
+  }
+ ],
+ "King's Gambit Accepted: Bishop's Gambit, Maurian Defense": [
+  {
+   "videoId": "zEytN1zSTEE",
+   "eco": "C33",
+   "plies": 10,
+   "coverage": 0.063,
+   "subject": false,
+   "forks": 11
+  }
+ ],
+ "King's Gambit Accepted: Schallopp Defense, Tashkent Attack": [
+  {
+   "videoId": "zEytN1zSTEE",
+   "eco": "C34",
+   "plies": 9,
+   "coverage": 0.018,
+   "subject": false,
+   "forks": 11
+  }
+ ],
+ "King's Gambit Accepted: Rosentreter Gambit": [
+  {
+   "videoId": "zEytN1zSTEE",
+   "eco": "C37",
+   "plies": 7,
+   "coverage": 0.009,
+   "subject": false,
+   "forks": 11
+  }
+ ],
+ "King's Gambit Accepted: Schallopp Defense": [
+  {
+   "videoId": "zEytN1zSTEE",
+   "eco": "C34",
+   "plies": 6,
+   "coverage": 0.545,
+   "subject": false,
+   "forks": 11
+  }
+ ],
+ "King's Gambit Accepted: Villemson Gambit": [
+  {
+   "videoId": "zEytN1zSTEE",
+   "eco": "C33",
+   "plies": 5,
+   "coverage": 0.17,
+   "subject": false,
+   "forks": 11
+  }
+ ],
+ "King's Gambit Accepted: King's Knight's Gambit": [
+  {
+   "videoId": "zEytN1zSTEE",
+   "eco": "C34",
+   "plies": 5,
+   "coverage": 0.58,
+   "subject": false,
+   "forks": 11
+  }
+ ],
+ "Van Geet Opening: Nowokunski Gambit": [
+  {
+   "videoId": "zEytN1zSTEE",
+   "eco": "A00",
+   "plies": 5,
+   "coverage": 0.134,
+   "subject": false,
+   "forks": 11
+  }
+ ],
+ "King's Gambit Accepted: Bishop's Gambit": [
+  {
+   "videoId": "zEytN1zSTEE",
+   "eco": "C33",
+   "plies": 5,
+   "coverage": 0.098,
+   "subject": false,
+   "forks": 11
+  }
+ ],
+ "King's Gambit Accepted": [
+  {
+   "videoId": "zEytN1zSTEE",
+   "eco": "C33",
+   "plies": 4,
+   "coverage": 0.991,
+   "subject": true,
+   "forks": 11
+  }
+ ],
+ "King's Gambit": [
+  {
+   "videoId": "zEytN1zSTEE",
+   "eco": "C30",
+   "plies": 3,
+   "coverage": 1,
+   "subject": false,
+   "forks": 11
   }
  ],
  "Caro-Kann Defense: Maróczy Variation": [
