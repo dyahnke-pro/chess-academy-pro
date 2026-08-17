@@ -196,7 +196,18 @@ for (const { t, grid } of settled) {
   if (diff(grid, gridOf(chess)) === 0) continue;
 
   // A settled board back at the starting layout is the NEXT GAME, not a move.
-  if (diff(grid, START) === 0) {
+  //
+  // TOLERANT, because an exact match never happens on some videos. Measured on
+  // a speedrun upload: ZERO of 3,881 frames matched START exactly, while 76 sat
+  // one square away — the board returns to the start between games, with a
+  // single square consistently misread that `calibrate` did not catch. With an
+  // exact test the tracker never re-synced after losing the first game and
+  // produced 4 plies from 197 settled positions.
+  //
+  // Two squares is safe rather than loose: a genuine mid-game position differs
+  // from the start by many squares (every developed piece and every pawn push),
+  // so nothing but a real start position lands this close.
+  if (diff(grid, START) <= 2) {
     if (game.moves.length) games.push(game);
     chess = new Chess();
     game = { start: t, moves: [] };
