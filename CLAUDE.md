@@ -2837,6 +2837,31 @@ CAUGHT the `srNXYAsaX7I` mistrack, by disagreeing with the transcript. If the
 caption-reconstruction is ever built, it is a clearly-labelled fallback tier
 with its own `positionSource`, never mixed with the read-off-the-screen tier.
 
+### 🔒🔒 THE NEW NARRATIONS REPLACE THE OLD — THEY DO NOT BLEND WITH THEM (David 2026-08-17, LOCKED: *"dont get these new narrations mixed up with the old, we will replace the old when the new are done."*)
+
+Two corpora are live at once and they are NOT peers. The farmed transcript
+notes are what the app has today; the hand-written video notes are what will
+replace them, opening by opening, as each is finished.
+
+**ORDERING IS NOT SEPARATION, and for a while it was all there was.** Both sets
+landed in one undated pool where the only difference was which came first, so
+nothing downstream — no audit, no gate, no log line — could say whether a
+student had heard a hand-written note or a distilled one. A replacement nobody
+can observe is just a merge. Every note now carries `origin`
+(`handwritten` | `farmed`), stamped at load in `danyaTeachingService`, and
+`noteOriginSeparation.test.ts` fails if any note loses it or if either corpus
+vanishes entirely.
+
+**REPLACING MEANS DROPPING, NOT OUT-RANKING.** `REPLACED_BY_HANDWRITTEN` names
+the openings whose hand-written coverage is complete, and their farmed notes are
+removed from the pool rather than ranked beneath. Leaving them underneath means
+any position the hand-written set does not happen to cover falls back to exactly
+the material this work exists to replace — the same mixing by a quieter route.
+
+**Add an opening to that set the day its notes are written, never before.**
+Dropping the farmed notes early leaves the surface with nothing to say, which is
+worse than the old note. The set is empty until the first opening is finished.
+
 ### 🔒🔒 EVERY LINE PULLED GETS HAND-WRITTEN NOTES — BY CLAUDE, NOT A MODEL PASS (David 2026-08-17, LOCKED: *"all openings we get corpus for will get hand written lines. So every line you pull needs to be hand written by you to maintain accuracy and standard."*)
 
 There is NO scoping question here, and a session that asks "which openings should

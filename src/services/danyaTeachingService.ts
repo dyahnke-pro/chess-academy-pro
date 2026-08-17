@@ -62,6 +62,20 @@ export interface DanyaNote {
    * never inherit verified authority through an omission.
    */
   positionSource?: 'high' | 'medium' | 'inferred';
+  /**
+   * WHICH CORPUS this note came from — stamped at load, never authored.
+   *
+   *   handwritten  read off the video frame by frame, chess.js-validated, and
+   *                the prose written by hand against that board.
+   *   farmed       distilled from a transcript by an earlier automated pass.
+   *
+   * These two are being kept apart on purpose, because the hand-written set is
+   * REPLACING the farmed one opening by opening (David 2026-08-17). Until this
+   * existed the only thing separating them was which came first in an array,
+   * so nothing downstream could report which kind a student had actually heard
+   * — and a replacement that cannot be observed is just a merge.
+   */
+  origin?: 'handwritten' | 'farmed';
 }
 
 interface TeachingsBundle {
@@ -105,10 +119,44 @@ const VIDEO_DATA = videoTeachings as unknown as TeachingsBundle;
 // Running them through it would let a repair pass RELOCATE a note that is
 // already correct, and it silently changed the derived sidecar (1201 anchors ->
 // 1226) the moment they were included, which is the gate that caught it.
+// THE TWO CORPORA STAY TELLABLE APART, AND THE NEW ONE REPLACES THE OLD PER
+// OPENING WHEN IT IS FINISHED (David 2026-08-17: *"dont get these new
+// narrations mixed up with the old, we will replace the old when the new are
+// done."*).
+//
+// Ordering alone was NOT that separation. Both sets landed in one undated pool
+// where the only difference was which came first, so nothing downstream — no
+// audit, no gate, no log line — could say whether a student heard a
+// hand-written note or a distilled one. That is precisely the state in which a
+// replacement quietly becomes a merge.
+//
+// So origin is stamped on every note, and `REPLACED_BY_HANDWRITTEN` names the
+// openings whose hand-written coverage is complete. For those, the farmed notes
+// are DROPPED rather than out-ranked: leaving them underneath means a position
+// the hand-written set does not happen to cover falls back to the material this
+// work exists to replace, which is the mixing by another route.
+//
+// The set is empty today because no opening is finished yet. Add an opening the
+// day its notes are written — never before, since dropping the old notes early
+// leaves the surface with nothing to say.
+const REPLACED_BY_HANDWRITTEN: ReadonlySet<string> = new Set<string>([]);
+
+const openingOf = (note: DanyaNote): string => (note.opening ?? '').toLowerCase().trim();
+
+const handwritten = (VIDEO_DATA.notes ?? []).map((n) => ({ ...n, origin: 'handwritten' as const }));
+const farmed = applyDerivedAnchors(RAW_DATA.notes ?? [])
+  .filter((n) => !REPLACED_BY_HANDWRITTEN.has(openingOf(n)))
+  .map((n) => ({ ...n, origin: 'farmed' as const }));
+
 const DATA: TeachingsBundle = {
   ...RAW_DATA,
-  notes: [...(VIDEO_DATA.notes ?? []), ...applyDerivedAnchors(RAW_DATA.notes ?? [])],
+  notes: [...handwritten, ...farmed],
 };
+
+/** Every note in the pool, origin-stamped. Exported so the separation between
+ *  the hand-written and farmed corpora is inspectable — a distinction nothing
+ *  can observe is one that quietly stops being true. */
+export const ALL_NOTES: readonly DanyaNote[] = DATA.notes;
 
 /** Position-keyed notes indexed by their SAN-prefix key ("e4 c6 d4"). */
 const byPrefix = new Map<string, DanyaNote[]>();
