@@ -72,6 +72,42 @@ const openingsThrough = new Map();
   }
 }
 
+/** Lines the repertoire teaches, for the fork computation below. */
+const TAUGHT_LINES = (() => {
+  try {
+    const raw = JSON.parse(readFileSync('src/data/repertoire.json', 'utf8'));
+    const rows = Array.isArray(raw) ? raw : Object.values(raw).flat();
+    const sansOf = (pgn) => (pgn ?? '').split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t));
+    const out = [];
+    for (const r of rows) {
+      if (r?.pgn) out.push({ name: r.name ?? '?', sans: sansOf(r.pgn) });
+      for (const v of r?.variations ?? []) {
+        if (v?.pgn) out.push({ name: `${r.name ?? '?'} / ${v.name ?? '?'}`, sans: sansOf(v.pgn) });
+      }
+    }
+    return out;
+  } catch { return []; }
+})();
+
+/** The fork this note sits on, when its line matches a taught line up to its
+ *  own last move. Anything shallower is a different line, not a fork, and
+ *  claiming otherwise would put the note at a position it was not authored at. */
+function forkOf(lineSan) {
+  let best = null;
+  for (const line of TAUGHT_LINES) {
+    let i = 0;
+    while (i < lineSan.length && i < line.sans.length && lineSan[i] === line.sans[i]) i++;
+    if (i === lineSan.length - 1 && i < line.sans.length && (!best || i > best.i)) best = { i, line };
+  }
+  if (!best) return null;
+  return {
+    atLine: lineSan.slice(0, best.i),
+    taughtMove: best.line.sans[best.i],
+    alternative: lineSan[best.i],
+    lineName: best.line.name,
+  };
+}
+
 const notes = [];
 const perVideo = [];
 for (const file of readdirSync(TRACK_DIR).filter((f) => f.endsWith('.json') && f !== 'by-opening.json')) {
@@ -111,6 +147,14 @@ for (const file of readdirSync(TRACK_DIR).filter((f) => f.endsWith('.json') && f
       concepts: n.concepts ?? [],
       sources: [n.source],
       positionSource: 'high',
+      // A note one move off a taught line is not off-line teaching to be
+      // discarded — it is a FORK. Computed here so the relationship can never
+      // be typed wrong: the shared prefix is the position the student actually
+      // reaches, and both the taught move and this note's alternative come off
+      // the real lines. David 2026-08-17 chose this over re-anchoring, because
+      // re-anchoring onto the taught move throws away what the note teaches
+      // while the fork keeps it AND supplies the "other lines" content.
+      ...(forkOf(lineSan) ? { forkOf: forkOf(lineSan) } : {}),
     });
   }
   perVideo.push(`${track.videoId} (${track.notes.length}) -> ${subject}`);

@@ -76,6 +76,22 @@ export interface DanyaNote {
    * — and a replacement that cannot be observed is just a merge.
    */
   origin?: 'handwritten' | 'farmed';
+  /**
+   * This note explains an ALTERNATIVE at a position the lesson reaches but a
+   * move it does not play — computed at emit time, never hand-written.
+   *
+   * David 2026-08-17, choosing this over re-anchoring: *"fork alternative"*.
+   * Five notes sat exactly one move off a taught line. Re-anchoring them onto
+   * the taught move would have thrown away what they actually teach; keeping
+   * them as forks preserves it AND is the "other lines" content the video forks
+   * exist for. Learn NAMES that a fork exists ("this is one of three tries
+   * here"); Review WALKS it. Same data, two depths.
+   *
+   * `atLine` is the shared prefix — the position the student really reaches.
+   * `taughtMove` is what the lesson plays there; `alternative` is what this
+   * note is about. A surface can say both without inventing either.
+   */
+  forkOf?: { atLine: string[]; taughtMove: string; alternative: string; lineName: string };
 }
 
 interface TeachingsBundle {

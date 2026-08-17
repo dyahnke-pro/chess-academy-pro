@@ -24,7 +24,21 @@
    "sources": [
     "yt:-FRuDd_oXz4"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "e5",
+     "Nf3",
+     "Nc6",
+     "Nc3",
+     "Nf6",
+     "d4"
+    ],
+    "taughtMove": "exd4",
+    "alternative": "Bb4",
+    "lineName": "Four Knights Game / Scotch Four Knights: 4.d4 exd4 5.Nxd4"
+   }
   },
   {
    "id": "vn-early-queen-develop-toward-the-centre-instead-of-chasing",
@@ -504,7 +518,20 @@
    "sources": [
     "yt:C6vYlx-lS6g"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "e5",
+     "Nf3",
+     "Nf6",
+     "Nc3",
+     "Nc6"
+    ],
+    "taughtMove": "d4",
+    "alternative": "g3",
+    "lineName": "Petrov Defence / Three Knights Game"
+   }
   },
   {
    "id": "vn-open-sicilian-develop-with-a-question-attached",
@@ -666,7 +693,18 @@
    "sources": [
     "yt:ILYWTV0uCio"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "forkOf": {
+    "atLine": [
+     "d4",
+     "Nf6",
+     "Bg5",
+     "Ne4"
+    ],
+    "taughtMove": "Bf4",
+    "alternative": "h4",
+    "lineName": "Trompowsky Attack"
+   }
   },
   {
    "id": "vn-caro-fantasy-strike-the-base-of-the-chain",
@@ -901,7 +939,23 @@
    "sources": [
     "yt:Ov4J-FZWoQg"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "e5",
+     "Nf3",
+     "Nc6",
+     "Nc3",
+     "Nf6",
+     "d4",
+     "exd4",
+     "Nd5"
+    ],
+    "taughtMove": "Nxe4",
+    "alternative": "h6",
+    "lineName": "Four Knights Game / Belgrade Gambit: 4.d4 exd4 5.Nd5"
+   }
   },
   {
    "id": "vn-fantasy-caro-strike-back-at-the-centre-immediately",
@@ -1064,7 +1118,16 @@
    "sources": [
     "yt:_X7t6o3o6JM"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "forkOf": {
+    "atLine": [
+     "d4",
+     "Nf6"
+    ],
+    "taughtMove": "Nf3",
+    "alternative": "Nc3",
+    "lineName": "London System"
+   }
   },
   {
    "id": "vn-jobava-london-h5-stops-the-rook-pawn-dead",
@@ -1137,7 +1200,18 @@
    "sources": [
     "yt:h-9MlTRN-fk"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "e5",
+     "Nf3",
+     "Nc6"
+    ],
+    "taughtMove": "Bc4",
+    "alternative": "Nc3",
+    "lineName": "Italian Game"
+   }
   },
   {
    "id": "vn-3knights-queen-king-same-file",
@@ -1560,7 +1634,22 @@
    "sources": [
     "yt:ykmGxE9DURo"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "e5",
+     "Nf3",
+     "Nc6",
+     "Bc4",
+     "Nf6",
+     "Ng5",
+     "Bc5"
+    ],
+    "taughtMove": "Nxf7",
+    "alternative": "d4",
+    "lineName": "Two Knights Defence / Two Knights: Traxler Counterattack"
+   }
   },
   {
    "id": "vn-traxler-counter-not-retreat",
