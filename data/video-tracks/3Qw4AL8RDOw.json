@@ -205,5 +205,9 @@
    "line": "e4",
    "coverage": 1
   }
- ]
+ ],
+ "titleCheck": {
+  "claims": "Scandinavian Defense: Modern Variation",
+  "confirmed": true
+ }
 }

@@ -58,10 +58,9 @@ describe('video-disproved anchors', () => {
       rows.push(
         `${spoke ? 'SPEAKS  ' : 'silent  '} ${a.id} @ ${a.why}`
         + (got ? `  (selector returned ${got.id})` : '  (selector returned nothing)')
-        + (got && spoke ? `\n     -> "${(spokenBeatText(got) ?? '').slice(0, 160)}"` : ''),
+        + (got && spoke ? `\n     -> "${spokenBeatText(got).slice(0, 160)}"` : ''),
       );
     }
-    // eslint-disable-next-line no-console
     console.log(`\nVIDEO-DISPROVED ANCHORS — ${live}/${WRONG_ANCHORS.length} speak at a position their lesson never taught\n`
       + rows.map((r) => '  ' + r).join('\n') + '\n');
     expect(WRONG_ANCHORS.length).toBe(4);

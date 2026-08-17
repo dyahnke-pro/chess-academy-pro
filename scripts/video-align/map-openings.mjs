@@ -27,6 +27,7 @@
 import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
 import { join } from 'node:path';
 import { Chess } from 'chess.js';
+import { openingFromTitle } from '../danya-corpus/distill-v2.mjs';
 
 const TRACK_DIR = 'data/video-tracks';
 const INDEX = join(TRACK_DIR, 'by-opening.json');
@@ -89,6 +90,46 @@ export function openingsOf(track) {
     .sort((a, b) => b.plies - a.plies);
 }
 
+const ALL_DB_NAMES = [...byPos.values()].map((e) => e.name);
+
+/** DOES THE BOARD CONFIRM THE TITLE?
+ *
+ *  A title is a claim about a video written by whoever needed it clicked on;
+ *  the board is the evidence. Usually they agree and this is silent. When they
+ *  disagree the build has to say so, because the disagreement is invisible
+ *  afterwards: an upload titled "Scotch Game" that plays 3.Nc3 for eighty plies
+ *  is a Three Knights lesson, and filing its teaching under the title would send
+ *  every note to an opening the lesson never touched (h-9MlTRN-fk, 2026-08-17).
+ *
+ *  ASKED AGAINST THE LESSON'S OWN OPENINGS, NOT THE WHOLE DB. Resolving the
+ *  title against all 3,000 names and then checking whether that one position
+ *  appeared reads well and is wrong: "French Defense, Adv. Nimzowitsch" resolves
+ *  across the full DB to *Nimzowitsch Defense: French Connection* — a genuinely
+ *  different opening that shares two words — so a correct title flagged, on a
+ *  video whose board had resolved French Advance Nimzowitsch exactly. A warning
+ *  that fires on correct input is a warning that gets ignored, which costs more
+ *  than not having it.
+ *
+ *  So the question is not "which opening does the title name" but "can this
+ *  title be describing THIS lesson", and the candidates are the openings the
+ *  board already proved. The same resolver answers both, which keeps its
+ *  hard-won eligibility rules (a name segment must actually identify something;
+ *  a one-word name must be said in full) working on our side rather than
+ *  against us.
+ *
+ *  A title that names no opening at all makes no claim — nothing to confirm and
+ *  nothing to flag. */
+const checkTitle = (track, openings) => {
+  const title = track.title ?? '';
+  // Does it claim an opening at all? Marketing titles ("Opening Blunders!!")
+  // often do not, and silence is not a disagreement.
+  const claims = openingFromTitle(title, ALL_DB_NAMES);
+  if (!claims) return null;
+  // Could it be describing one of the openings this lesson actually played?
+  const matched = openingFromTitle(title, openings.map((o) => o.name));
+  return matched ? { claims: matched, confirmed: true } : { claims, confirmed: false };
+};
+
 const write = process.argv.includes('--write');
 const index = {};
 for (const file of readdirSync(TRACK_DIR).filter((f) => f.endsWith('.json') && f !== 'by-opening.json')) {
@@ -98,6 +139,11 @@ for (const file of readdirSync(TRACK_DIR).filter((f) => f.endsWith('.json') && f
   console.log(`${track.videoId}: ${openings.length} named opening(s)`);
   for (const o of openings.slice(0, 4)) console.log(`   ${o.eco}  ${o.name}  (${o.plies} plies)`);
   if (openings.length > 4) console.log(`   … and ${openings.length - 4} shallower`);
+
+  const titleCheck = checkTitle(track, openings);
+  if (titleCheck && !titleCheck.confirmed) {
+    console.log(`   ⚠ TITLE UNCONFIRMED — claims "${titleCheck.claims}", which this lesson never played`);
+  }
 
   // The SUBJECT is the deepest name that still carries most of the lesson.
   // A 2-ply match ("King's Pawn Game") covers everything and teaches nothing
@@ -117,6 +163,10 @@ for (const file of readdirSync(TRACK_DIR).filter((f) => f.endsWith('.json') && f
   }
   if (write) {
     track.openings = openings;
+    // The upload's own title stays untouched — it is how the build points back
+    // at its source, and rewriting it to what the board says would destroy that
+    // link to make the record tidier. The disagreement is recorded ALONGSIDE it.
+    if (titleCheck) track.titleCheck = titleCheck;
     writeFileSync(path, JSON.stringify(track, null, 1));
   }
 }

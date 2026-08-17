@@ -1217,5 +1217,9 @@
    "line": "e4",
    "coverage": 1
   }
- ]
+ ],
+ "titleCheck": {
+  "claims": "Scotch Game",
+  "confirmed": false
+ }
 }

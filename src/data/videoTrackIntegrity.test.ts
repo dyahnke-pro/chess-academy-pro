@@ -33,12 +33,16 @@ interface VideoNote {
   id: string; line: string; fen: string; t: number; ply: number;
   teaches: string; explains: string; source: string;
 }
+interface TrackOpening { name: string; eco: string; plies: number; line: string; coverage: number }
 interface Track {
   videoId: string;
+  title?: string | null;
   geometry: { x0: number; y0: number; square: number; orientation: string | null };
   moves: TrackMove[];
   forks?: Fork[];
   notes?: VideoNote[];
+  openings?: TrackOpening[];
+  titleCheck?: { claims: string; confirmed: boolean };
 }
 
 /** `by-opening.json` lives beside the tracks but is an INDEX, not a track — it
@@ -146,6 +150,77 @@ describe('video tracks', () => {
         const shown = new Set(track.moves.map((m) => posKey(m.fen)));
         expect(shown.has(posKey(n.fen)), `${n.id}: position never on screen`).toBe(true);
         expect(n.teaches.length, `${n.id}: empty teaching`).toBeGreaterThan(20);
+      }
+    }
+  });
+
+  it('every opening a track claims is one the lesson actually reached', () => {
+    // `by-opening.json` is how a later session finds what we have for an
+    // opening, and until now nothing checked it. The risk it carries is the one
+    // this whole pipeline exists to remove: an upload titled "Scotch Game" that
+    // plays 3.Nc3 for eighty plies would, if filed by its title, hand a Three
+    // Knights lesson to students learning the Scotch (h-9MlTRN-fk, 2026-08-17).
+    //
+    // The index resolves from the board instead, so the defect never reached it
+    // — this pins that. Each named opening must be a real DB line, and the
+    // lesson must have stood on the position that line produces.
+    const db = JSON.parse(
+      readFileSync(join(process.cwd(), 'src/data/openings-lichess.json'), 'utf8'),
+    ) as Array<{ name: string; pgn: string }>;
+    const dbPos = new Map<string, string>();
+    for (const e of db) {
+      if (dbPos.has(e.name)) continue;
+      const c = new Chess();
+      let ok = true;
+      for (const san of e.pgn.trim().split(/\s+/).filter((t) => !/^\d+\.+$/.test(t))) {
+        // chess.js throws on an illegal move rather than returning null, so the
+        // catch IS the guard — testing the return value is dead code.
+        try { c.move(san); } catch { ok = false; break; }
+      }
+      if (ok) dbPos.set(e.name, posKey(c.fen()));
+    }
+
+    for (const track of tracks) {
+      // Every position the lesson stood on, prefixes included.
+      const visited = new Set<string>();
+      let line: string[] = [];
+      for (const m of track.moves) {
+        if (!m.line.length) continue;
+        line = line.slice(0, m.ply - m.line.length);
+        line.push(...m.line);
+        const c = new Chess();
+        for (const san of line) {
+          try { c.move(san); } catch { break; }
+          visited.add(posKey(c.fen()));
+        }
+      }
+
+      for (const o of track.openings ?? []) {
+        const want = dbPos.get(o.name);
+        expect(want, `${track.videoId}: "${o.name}" is not a name in the DB`).toBeDefined();
+        const c = new Chess();
+        let threw: string | null = null;
+        try {
+          for (const san of o.line.split(' ')) c.move(san);
+        } catch (e) {
+          threw = String(e);
+        }
+        expect(threw, `${track.videoId}: "${o.name}" cites an illegal line`).toBeNull();
+        // The cited line must BE that opening, and the lesson must have played it.
+        expect(posKey(c.fen()), `${track.videoId}: "${o.name}" cites a line that is a different opening`)
+          .toBe(want);
+        expect(visited.has(posKey(c.fen())), `${track.videoId}: "${o.name}" was never on the board`)
+          .toBe(true);
+      }
+
+      // A title that disagrees with the board is allowed — the video is still a
+      // real lesson — but it has to stay visible, because the disagreement is
+      // exactly what would otherwise be copied forward as fact.
+      if (track.titleCheck && !track.titleCheck.confirmed) {
+        expect(
+          (track.openings ?? []).some((o) => o.name === track.titleCheck?.claims),
+          `${track.videoId}: flagged as unconfirmed yet "${track.titleCheck.claims}" is in its openings`,
+        ).toBe(false);
       }
     }
   });

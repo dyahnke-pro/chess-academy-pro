@@ -284,6 +284,42 @@ self-contained file, `data/video-tracks/<videoId>.json`, holding:
 `by-opening.json` indexes builds by opening, so the question asked later ("what
 do we have for the Traxler") is the one the data answers.
 
+### The title is not evidence — one of six disagreed with its own board
+
+Resolving from the moves rather than the title was a precaution when it was
+written. It is now a finding. The upload titled **"Opening Blunders!! | Scotch
+Game | 900 Elo"** (`h-9MlTRN-fk`) never plays a Scotch: its single tracked game
+is `1.e4 e5 2.Nf3 Nc6 3.Nc3`, runs 80 plies to a promotion, and resolves to
+**Three Knights Opening at 0.979 coverage**. Verified by hand — the tracker
+found one game, not several, and a misread does not survive eighty legal plies.
+
+Had it been filed by its title, every note written from it would have taught
+Three Knights material to students learning the Scotch. That is the same defect
+as the mis-anchored corpus notes below, arriving through a different door.
+
+Two things changed so this cannot pass silently again:
+
+- `map-openings.mjs` now asks whether the title **can be describing this
+  lesson**, using the lesson's own resolved openings as the candidate set, and
+  records the answer as `titleCheck` on the build. The upload's `title` is left
+  exactly as it is — it is the link back to the source, and rewriting it to what
+  the board says would destroy that to make the record look tidier.
+- `videoTrackIntegrity.test.ts` gates the opening-resolution layer, which had no
+  gate at all despite being what a future session queries. Every claimed opening
+  must be a real DB line AND a position the lesson stood on. Confirmed failing on
+  the injected defect before being accepted.
+
+Asked against the whole DB the check was WRONG on its first run: it flagged the
+French video, whose title "French Defense, Adv. Nimzowitsch" resolves across
+3,000 names to *Nimzowitsch Defense: French Connection*, a different opening
+sharing two words — while that video's board had resolved French Advance
+Nimzowitsch correctly. A warning that fires on correct input is one people learn
+to skip, so the question was narrowed to the lesson's own openings. Now: five
+confirm, one flags, two make no claim ("Trashing the Traxler", "Jobava London" —
+`openingFromTitle` is deliberately conservative and neither is a full DB name
+segment; it is left alone, since it tags the 58k-note corpus and loosening it to
+satisfy two video titles would re-label thousands of notes).
+
 **THE RE-DISTILL IS NOW ONLY FOR REPAIRING OLD NOTES.** That is the reframe.
 New teaching does NOT need it: a hand-written note anchored to a tracked
 position is already correct by construction, because the FEN is looked up from

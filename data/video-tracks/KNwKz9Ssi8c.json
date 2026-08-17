@@ -797,5 +797,9 @@
    "line": "c3",
    "coverage": 1
   }
- ]
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Alapin Variation",
+  "confirmed": true
+ }
 }

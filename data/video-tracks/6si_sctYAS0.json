@@ -847,5 +847,9 @@
    "line": "e4",
    "coverage": 1
   }
- ]
+ ],
+ "titleCheck": {
+  "claims": "French Defense: Advance Variation, Nimzowitsch System",
+  "confirmed": true
+ }
 }
