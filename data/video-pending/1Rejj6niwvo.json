@@ -1,0 +1,495 @@
+{
+ "videoId": "1Rejj6niwvo",
+ "title": "Double Dose of Speedrun | Sicilian, Scandi | 800 Elo | Top Theory Speedrun | GM Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-17",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 3197,
+  "settledPositions": null
+ },
+ "plies": 44,
+ "rewinds": 7,
+ "moves": [
+  {
+   "t": 117,
+   "ply": 4,
+   "line": [
+    "e4",
+    "Nf6",
+    "Qh5",
+    "c5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p4Q/4P3/8/PPPP1PPP/RNB1KBNR w KQkq - 0 3"
+  },
+  {
+   "t": 119,
+   "ply": 5,
+   "line": [
+    "Qxc5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2Q5/4P3/8/PPPP1PPP/RNB1KBNR b KQkq - 0 3"
+  },
+  {
+   "t": 122.5,
+   "ply": 6,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/8/2Q5/4n3/8/PPPP1PPP/RNB1KBNR w KQkq - 0 4"
+  },
+  {
+   "t": 152,
+   "ply": 7,
+   "line": [
+    "Qh5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/8/7Q/4n3/8/PPPP1PPP/RNB1KBNR b KQkq - 1 4"
+  },
+  {
+   "t": 194,
+   "ply": 8,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/2n5/7Q/4n3/8/PPPP1PPP/RNB1KBNR w KQkq - 2 5"
+  },
+  {
+   "t": 197.5,
+   "ply": 9,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/2n5/7Q/2B1n3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 5"
+  },
+  {
+   "t": 225,
+   "ply": 10,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n1p3/7Q/2B1n3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 6"
+  },
+  {
+   "t": 266,
+   "ply": 11,
+   "line": [
+    "Qf3"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n1p3/8/2B1n3/5Q2/PPPP1PPP/RNB1K1NR b KQkq - 1 6"
+  },
+  {
+   "t": 300,
+   "ply": 12,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n1p3/3p4/2B1n3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 0 7"
+  },
+  {
+   "t": 354,
+   "ply": 14,
+   "line": [
+    "Bb5",
+    "Bc5"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n1p3/1Bbp4/4n3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 2 8"
+  },
+  {
+   "t": 384,
+   "ply": 15,
+   "line": [
+    "Nh3"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n1p3/1Bbp4/4n3/5Q1N/PPPP1PPP/RNB1K2R b KQkq - 3 8"
+  },
+  {
+   "t": 387.5,
+   "ply": 16,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/2n1p3/1Bbp4/4n3/5Q1N/PPPP1PPP/RNB1K2R w KQ - 4 9"
+  },
+  {
+   "t": 403,
+   "ply": 17,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/2n1p3/1Bbp4/4n3/3P1Q1N/PPP2PPP/RNB1K2R b KQ - 0 9"
+  },
+  {
+   "t": 451,
+   "ply": 18,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/4p3/1Bbp4/3nn3/3P1Q1N/PPP2PPP/RNB1K2R w KQ - 1 10"
+  },
+  {
+   "t": 489,
+   "ply": 19,
+   "line": [
+    "Na3"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/4p3/1Bbp4/3nn3/N2P1Q1N/PPP2PPP/R1B1K2R b KQ - 2 10"
+  },
+  {
+   "t": 492.5,
+   "ply": 20,
+   "line": [
+    "Nxf3+"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/4p3/1Bbp4/4n3/N2P1n1N/PPP2PPP/R1B1K2R w KQ - 0 11"
+  },
+  {
+   "t": 508.5,
+   "ply": 15,
+   "line": [],
+   "fen": "r1bqk2r/pp3ppp/2n1p3/1Bbp4/4n3/5Q1N/PPPP1PPP/RNB1K2R b KQkq - 3 8"
+  },
+  {
+   "t": 544.5,
+   "ply": 4,
+   "line": [],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p4Q/4P3/8/PPPP1PPP/RNB1KBNR w KQkq - 0 3"
+  },
+  {
+   "t": 548.5,
+   "ply": 5,
+   "line": [
+    "Qxc5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2Q5/4P3/8/PPPP1PPP/RNB1KBNR b KQkq - 0 3"
+  },
+  {
+   "t": 550.5,
+   "ply": 6,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/8/2Q5/4n3/8/PPPP1PPP/RNB1KBNR w KQkq - 0 4"
+  },
+  {
+   "t": 553,
+   "ply": 5,
+   "line": [],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2Q5/4P3/8/PPPP1PPP/RNB1KBNR b KQkq - 0 3"
+  },
+  {
+   "t": 555,
+   "ply": 7,
+   "line": [
+    "Nxe4",
+    "Qh5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/8/7Q/4n3/8/PPPP1PPP/RNB1KBNR b KQkq - 1 4"
+  },
+  {
+   "t": 569.5,
+   "ply": 11,
+   "line": [
+    "Nc5",
+    "Qg5",
+    "Ne4",
+    "Qc5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/8/2Q5/4n3/8/PPPP1PPP/RNB1KBNR b KQkq - 5 6"
+  },
+  {
+   "t": 632,
+   "ply": 7,
+   "line": [],
+   "fen": "rnbqkb1r/pp1ppppp/8/7Q/4n3/8/PPPP1PPP/RNB1KBNR b KQkq - 1 4"
+  },
+  {
+   "t": 639.5,
+   "ply": 8,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/2n5/7Q/4n3/8/PPPP1PPP/RNB1KBNR w KQkq - 2 5"
+  },
+  {
+   "t": 642.5,
+   "ply": 9,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/2n5/7Q/2B1n3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 5"
+  },
+  {
+   "t": 657.5,
+   "ply": 10,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n1p3/7Q/2B1n3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 6"
+  },
+  {
+   "t": 667.5,
+   "ply": 12,
+   "line": [
+    "Qf3",
+    "d5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n1p3/3p4/2B1n3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 0 7"
+  },
+  {
+   "t": 676.5,
+   "ply": 13,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n1p3/1B1p4/4n3/5Q2/PPPP1PPP/RNB1K1NR b KQkq - 1 7"
+  },
+  {
+   "t": 678,
+   "ply": 14,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n1p3/1Bbp4/4n3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 2 8"
+  },
+  {
+   "t": 679.5,
+   "ply": 16,
+   "line": [
+    "Nh3",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/2n1p3/1Bbp4/4n3/5Q1N/PPPP1PPP/RNB1K2R w KQ - 4 9"
+  },
+  {
+   "t": 681.5,
+   "ply": 18,
+   "line": [
+    "d3",
+    "Nd4"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/4p3/1Bbp4/3nn3/3P1Q1N/PPP2PPP/RNB1K2R w KQ - 1 10"
+  },
+  {
+   "t": 684,
+   "ply": 19,
+   "line": [
+    "Qd1"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/4p3/1Bbp4/3nn3/3P3N/PPP2PPP/RNBQK2R b KQ - 2 10"
+  },
+  {
+   "t": 692,
+   "ply": 20,
+   "line": [
+    "Nxb5"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/4p3/1nbp4/4n3/3P3N/PPP2PPP/RNBQK2R w KQ - 0 11"
+  },
+  {
+   "t": 693.5,
+   "ply": 22,
+   "line": [
+    "dxe4",
+    "dxe4"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/4p3/1nb5/4p3/7N/PPP2PPP/RNBQK2R w KQ - 0 12"
+  },
+  {
+   "t": 702,
+   "ply": 24,
+   "line": [
+    "Qxd8",
+    "Rxd8"
+   ],
+   "fen": "r1br2k1/pp3ppp/4p3/1nb5/4p3/7N/PPP2PPP/RNB1K2R w KQ - 0 13"
+  },
+  {
+   "t": 710.5,
+   "ply": 19,
+   "line": [],
+   "fen": "r1bq1rk1/pp3ppp/4p3/1Bbp4/3nn3/3P3N/PPP2PPP/RNBQK2R b KQ - 2 10"
+  },
+  {
+   "t": 743.5,
+   "ply": 20,
+   "line": [
+    "Nxf2"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/4p3/1Bbp4/3n4/3P3N/PPP2nPP/RNBQK2R w KQ - 0 11"
+  },
+  {
+   "t": 755.5,
+   "ply": 22,
+   "line": [
+    "Nxf2",
+    "Nxb5"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/4p3/1nbp4/8/3P4/PPP2NPP/RNBQK2R w KQ - 0 12"
+  },
+  {
+   "t": 761,
+   "ply": 23,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/4p3/1nbp4/8/3P4/PPP2NPP/RNBQ1RK1 b - - 1 12"
+  },
+  {
+   "t": 766,
+   "ply": 24,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/8/1nbpp3/8/3P4/PPP2NPP/RNBQ1RK1 w - - 0 13"
+  },
+  {
+   "t": 775.5,
+   "ply": 19,
+   "line": [],
+   "fen": "r1bq1rk1/pp3ppp/4p3/1Bbp4/3nn3/3P3N/PPP2PPP/RNBQK2R b KQ - 2 10"
+  },
+  {
+   "t": 776.5,
+   "ply": 18,
+   "line": [],
+   "fen": "r1bq1rk1/pp3ppp/4p3/1Bbp4/3nn3/3P1Q1N/PPP2PPP/RNB1K2R w KQ - 1 10"
+  },
+  {
+   "t": 777.5,
+   "ply": 20,
+   "line": [
+    "Na3",
+    "Nxf3+"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/4p3/1Bbp4/4n3/N2P1n1N/PPP2PPP/R1B1K2R w KQ - 0 11"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rnbqkb1r/pp1ppppp/8/7Q/4n3/8/PPPP1PPP/RNB1KBNR b KQkq - 1 4",
+   "line": [
+    "e4",
+    "Nf6",
+    "Qh5",
+    "c5",
+    "Qxc5",
+    "Nxe4",
+    "Qh5"
+   ],
+   "ply": 7,
+   "options": [
+    {
+     "san": "Nc6",
+     "t": 194,
+     "continuation": "Nc6"
+    },
+    {
+     "san": "Nc5",
+     "t": 569.5,
+     "continuation": "Nc5 Qg5 Ne4 Qc5"
+    }
+   ]
+  },
+  {
+   "fen": "r1bq1rk1/pp3ppp/4p3/1Bbp4/3nn3/3P1Q1N/PPP2PPP/RNB1K2R w KQ - 1 10",
+   "line": [
+    "e4",
+    "Nf6",
+    "Qh5",
+    "c5",
+    "Qxc5",
+    "Nxe4",
+    "Qh5",
+    "Nc6",
+    "Bc4",
+    "e6",
+    "Qf3",
+    "d5",
+    "Bb5",
+    "Bc5",
+    "Nh3",
+    "O-O",
+    "d3",
+    "Nd4"
+   ],
+   "ply": 18,
+   "options": [
+    {
+     "san": "Na3",
+     "t": 489,
+     "continuation": "Na3"
+    },
+    {
+     "san": "Qd1",
+     "t": 684,
+     "continuation": "Qd1"
+    }
+   ]
+  },
+  {
+   "fen": "r1bq1rk1/pp3ppp/4p3/1Bbp4/3nn3/3P3N/PPP2PPP/RNBQK2R b KQ - 2 10",
+   "line": [
+    "e4",
+    "Nf6",
+    "Qh5",
+    "c5",
+    "Qxc5",
+    "Nxe4",
+    "Qh5",
+    "Nc6",
+    "Bc4",
+    "e6",
+    "Qf3",
+    "d5",
+    "Bb5",
+    "Bc5",
+    "Nh3",
+    "O-O",
+    "d3",
+    "Nd4",
+    "Qd1"
+   ],
+   "ply": 19,
+   "options": [
+    {
+     "san": "Nxb5",
+     "t": 692,
+     "continuation": "Nxb5"
+    },
+    {
+     "san": "Nxf2",
+     "t": 743.5,
+     "continuation": "Nxf2"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Alekhine Defense",
+   "eco": "B02",
+   "plies": 2,
+   "line": "e4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Double-Dutch Gambit",
+  "confirmed": false
+ }
+}
