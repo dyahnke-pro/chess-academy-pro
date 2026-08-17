@@ -335,6 +335,14 @@
    "forks": 3
   },
   {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 20
+  },
+  {
    "videoId": "fABTn305-Eg",
    "eco": "B00",
    "plies": 1,
@@ -737,6 +745,146 @@
    "forks": 3
   }
  ],
+ "Danish Gambit Accepted: Schlechter Defense": [
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "C21",
+   "plies": 10,
+   "coverage": 0.039,
+   "subject": false,
+   "forks": 20
+  }
+ ],
+ "Danish Gambit Accepted: Classical Defense": [
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "C21",
+   "plies": 10,
+   "coverage": 0.3,
+   "subject": false,
+   "forks": 20
+  }
+ ],
+ "Scotch Game: Scotch Gambit, Advance Variation": [
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "C44",
+   "plies": 9,
+   "coverage": 0.01,
+   "subject": false,
+   "forks": 20
+  }
+ ],
+ "Scotch Game: Scotch Gambit, Dubois Réti Defense": [
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "C44",
+   "plies": 8,
+   "coverage": 0.01,
+   "subject": false,
+   "forks": 20
+  }
+ ],
+ "Italian Game: Two Knights Defense, Open Variation": [
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "C56",
+   "plies": 7,
+   "coverage": 0.015,
+   "subject": false,
+   "forks": 20
+  }
+ ],
+ "Danish Gambit Accepted": [
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "C21",
+   "plies": 6,
+   "coverage": 0.862,
+   "subject": true,
+   "forks": 20
+  }
+ ],
+ "Danish Gambit Declined: Sörensen Defense": [
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "C21",
+   "plies": 6,
+   "coverage": 0.089,
+   "subject": false,
+   "forks": 20
+  }
+ ],
+ "Italian Game: Two Knights Defense": [
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "C55",
+   "plies": 6,
+   "coverage": 0.02,
+   "subject": false,
+   "forks": 20
+  }
+ ],
+ "Danish Gambit": [
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "C21",
+   "plies": 5,
+   "coverage": 0.956,
+   "subject": false,
+   "forks": 20
+  }
+ ],
+ "Italian Game": [
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "C50",
+   "plies": 5,
+   "coverage": 0.02,
+   "subject": false,
+   "forks": 20
+  }
+ ],
+ "Center Game Accepted": [
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "C21",
+   "plies": 4,
+   "coverage": 0.966,
+   "subject": false,
+   "forks": 20
+  }
+ ],
+ "King's Knight Opening: Normal Variation": [
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.025,
+   "subject": false,
+   "forks": 20
+  }
+ ],
+ "Center Game": [
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "C20",
+   "plies": 3,
+   "coverage": 0.97,
+   "subject": false,
+   "forks": 20
+  }
+ ],
+ "King's Knight Opening": [
+  {
+   "videoId": "dEjoCta8oOQ",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.025,
+   "subject": false,
+   "forks": 20
+  }
+ ],
  "Sicilian Defense: Najdorf Variation": [
   {
    "videoId": "kO23hnArI4Y",
@@ -833,6 +981,96 @@
    "coverage": 1,
    "subject": false,
    "forks": 9
+  }
+ ],
+ "King's Indian Defense: Fianchetto Variation, Classical Main Line": [
+  {
+   "videoId": "ukVf_JfGTOw",
+   "eco": "E69",
+   "plies": 17,
+   "coverage": 0.348,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "King's Indian Defense: Fianchetto Variation, Classical Variation": [
+  {
+   "videoId": "ukVf_JfGTOw",
+   "eco": "E68",
+   "plies": 15,
+   "coverage": 0.435,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "King's Indian Defense: Fianchetto Variation, Classical Fianchetto": [
+  {
+   "videoId": "ukVf_JfGTOw",
+   "eco": "E67",
+   "plies": 14,
+   "coverage": 0.478,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "King's Indian Defense: Fianchetto Variation, Debrecen Defense": [
+  {
+   "videoId": "ukVf_JfGTOw",
+   "eco": "E67",
+   "plies": 12,
+   "coverage": 0.565,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "King's Indian Defense: Fianchetto Variation": [
+  {
+   "videoId": "ukVf_JfGTOw",
+   "eco": "E60",
+   "plies": 7,
+   "coverage": 0.783,
+   "subject": true,
+   "forks": 0
+  }
+ ],
+ "King's Indian Defense: Normal Variation, King's Knight Variation": [
+  {
+   "videoId": "ukVf_JfGTOw",
+   "eco": "E60",
+   "plies": 5,
+   "coverage": 0.87,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "English Opening: Anglo-Indian Defense, King's Indian Formation": [
+  {
+   "videoId": "ukVf_JfGTOw",
+   "eco": "A15",
+   "plies": 4,
+   "coverage": 0.913,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "English Opening: Anglo-Indian Defense, King's Knight Variation": [
+  {
+   "videoId": "ukVf_JfGTOw",
+   "eco": "A15",
+   "plies": 3,
+   "coverage": 0.957,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "Zukertort Opening": [
+  {
+   "videoId": "ukVf_JfGTOw",
+   "eco": "A04",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
   }
  ],
  "English Opening: King's English Variation, Four Knights Variation, Fianchetto Line, with Nb6": [
