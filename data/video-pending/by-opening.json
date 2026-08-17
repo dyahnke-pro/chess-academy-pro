@@ -83,14 +83,6 @@
    "forks": 1
   },
   {
-   "videoId": "UiNSl_OnvDQ",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
    "videoId": "YXz0xSbhY70",
    "eco": "B00",
    "plies": 1,
@@ -745,42 +737,6 @@
    "forks": 5
   }
  ],
- "Caro-Kann Defense: Maróczy Variation": [
-  {
-   "videoId": "UiNSl_OnvDQ",
-   "eco": "B12",
-   "plies": 5,
-   "coverage": 0.864,
-   "subject": true,
-   "forks": 0
-  },
-  {
-   "videoId": "zprg2WbmgzQ",
-   "eco": "B12",
-   "plies": 5,
-   "coverage": 0.893,
-   "subject": true,
-   "forks": 0
-  }
- ],
- "Caro-Kann Defense": [
-  {
-   "videoId": "UiNSl_OnvDQ",
-   "eco": "B10",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "zprg2WbmgzQ",
-   "eco": "B10",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  }
- ],
  "Rapport-Jobava System": [
   {
    "videoId": "W8YPj9QMtEs",
@@ -1413,6 +1369,26 @@
    "coverage": 1,
    "subject": false,
    "forks": 11
+  }
+ ],
+ "Caro-Kann Defense: Maróczy Variation": [
+  {
+   "videoId": "zprg2WbmgzQ",
+   "eco": "B12",
+   "plies": 5,
+   "coverage": 0.893,
+   "subject": true,
+   "forks": 0
+  }
+ ],
+ "Caro-Kann Defense": [
+  {
+   "videoId": "zprg2WbmgzQ",
+   "eco": "B10",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
   }
  ]
 }

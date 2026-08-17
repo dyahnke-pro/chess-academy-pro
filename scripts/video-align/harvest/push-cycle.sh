@@ -35,7 +35,11 @@ if [ -n "$(git status --porcelain)" ]; then
   git status --porcelain | sed 's/^/  /'
 fi
 git fetch origin -q
-git push origin HEAD:main HEAD:claude/coach-narration-sync-jhu1ws 2>&1 | tail -5
+# FULL OUTPUT, NOT `tail -5`. The pre-push hook runs ship-check and prints the
+# failing gate through THIS pipe, so truncating here throws away the only
+# diagnosis and leaves "push aborted" — the same defect just fixed one level up
+# in periodic-push, which is why fixing that one alone changed nothing.
+git push origin HEAD:main HEAD:claude/coach-narration-sync-jhu1ws 2>&1 | tail -60
 echo "--- push finished, restarting loops ---"
 
 rm -f /tmp/harvest-paused
