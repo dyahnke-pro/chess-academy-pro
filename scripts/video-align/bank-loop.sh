@@ -31,7 +31,16 @@ while true; do
 
     if ! python3 scripts/video-align/scan_stream.py "$v" /tmp/g_$id.json \
          "$GEO_X" "$GEO_Y" "$GEO_S" 2 --calibrated > /tmp/g_$id.log 2>&1; then
-      echo "SCAN-REF $id"; rm -f "$v" /tmp/g_$id.json; progressed=1; continue
+      # DO NOT DELETE A REFUSED VIDEO. A refusal is usually a fixable geometry
+      # or orientation problem, not a bad video — the Danish Gambit refused,
+      # then yielded 286 plies once its board was read by hand. Deleting it
+      # destroys the only artifact that makes that fix possible, and the video
+      # cannot be re-fetched without live cookies. Park it instead.
+      echo "SCAN-REF $id (parked for a hand look)"
+      mkdir -p /tmp/vid-refused
+      mv -f "$v" /tmp/vid-refused/ 2>/dev/null
+      echo "$id" >> data/video-queues/needs-hand-geometry.txt
+      rm -f /tmp/g_$id.json; progressed=1; continue
     fi
     title=$(node -e "
       const m=JSON.parse(require('fs').readFileSync('data/sources/naroditsky-voice/manifest.json','utf8'));
