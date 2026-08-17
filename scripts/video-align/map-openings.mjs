@@ -29,7 +29,12 @@ import { join } from 'node:path';
 import { Chess } from 'chess.js';
 import { openingFromTitle } from '../danya-corpus/distill-v2.mjs';
 
-const TRACK_DIR = 'data/video-tracks';
+// Runs over the SHIPPED corpus by default and over the staging bank on request
+// (`VIDEO_TRACK_DIR=data/video-pending`). Staged tracks need the opening
+// resolution and the title check as much as shipped ones do — more, in fact,
+// since the whole point of the bank is that a later session can write from it
+// without re-deriving whether the board matches the title.
+const TRACK_DIR = process.env.VIDEO_TRACK_DIR ?? 'data/video-tracks';
 const INDEX = join(TRACK_DIR, 'by-opening.json');
 
 // INDEXED BY POSITION, NOT BY MOVE STRING. Occupancy cannot distinguish move

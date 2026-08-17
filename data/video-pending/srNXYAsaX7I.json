@@ -1186,5 +1186,53 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Queen's Gambit Declined: Semi-Tarrasch Defense, Main Line",
+   "eco": "D42",
+   "plies": 13,
+   "line": "c4 Nf6 d4 e6 Nc3 c5 Nf3 d5 cxd5 Nxd5 e3 Nc6 Bd3",
+   "coverage": 0.943
+  },
+  {
+   "name": "Queen's Gambit Declined: Semi-Tarrasch Defense, Pillsbury Variation",
+   "eco": "D41",
+   "plies": 11,
+   "line": "c4 Nf6 d4 e6 Nc3 c5 Nf3 d5 cxd5 Nxd5 e3",
+   "coverage": 0.957
+  },
+  {
+   "name": "Queen's Gambit Declined: Semi-Tarrasch Defense",
+   "eco": "D40",
+   "plies": 8,
+   "line": "c4 Nf6 d4 e6 Nc3 c5 Nf3 d5",
+   "coverage": 0.986
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "c4 Nf6 d4",
+   "coverage": 1
+  },
+  {
+   "name": "English Opening: Anglo-Indian Defense",
+   "eco": "A15",
+   "plies": 2,
+   "line": "c4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "English Opening",
+   "eco": "A10",
+   "plies": 1,
+   "line": "c4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Caro-Kann Defense: Panov Attack",
+  "confirmed": false
+ }
 }

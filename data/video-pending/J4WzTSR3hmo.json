@@ -202,5 +202,32 @@
    "fen": "r2qkb1r/p1pb1pp1/1p1p1n1p/1B1P4/1n6/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 3 10"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "French Defense: Normal Variation",
+   "eco": "C00",
+   "plies": 3,
+   "line": "e4 e6 d4",
+   "coverage": 0.95
+  },
+  {
+   "name": "French Defense",
+   "eco": "C00",
+   "plies": 2,
+   "line": "e4 e6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Nimzowitsch Defense: French Connection",
+  "confirmed": false
+ }
 }

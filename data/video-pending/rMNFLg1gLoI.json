@@ -979,5 +979,46 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Accelerated Dragon, Modern Variation",
+   "eco": "B34",
+   "plies": 9,
+   "line": "e4 c5 Nc3 Nc6 Nf3 g6 d4 cxd4 Nxd4",
+   "coverage": 0.899
+  },
+  {
+   "name": "Sicilian Defense: Closed, Traditional",
+   "eco": "B23",
+   "plies": 4,
+   "line": "e4 c5 Nc3 Nc6",
+   "coverage": 0.971
+  },
+  {
+   "name": "Sicilian Defense: Closed",
+   "eco": "B23",
+   "plies": 3,
+   "line": "e4 c5 Nc3",
+   "coverage": 0.986
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Accelerated Dragon, Modern Variation",
+  "confirmed": true
+ }
 }

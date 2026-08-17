@@ -123,5 +123,60 @@
    "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Accelerated Dragon, Maróczy Bind, Gurgenidze Variation",
+   "eco": "B36",
+   "plies": 14,
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4 Nf6 Nc3 Nxd4 Qxd4 d6",
+   "coverage": 0.083
+  },
+  {
+   "name": "Sicilian Defense: Accelerated Dragon, Maróczy Bind",
+   "eco": "B36",
+   "plies": 9,
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4",
+   "coverage": 0.5
+  },
+  {
+   "name": "Sicilian Defense: Accelerated Dragon",
+   "eco": "B32",
+   "plies": 8,
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6",
+   "coverage": 0.583
+  },
+  {
+   "name": "Sicilian Defense: Open",
+   "eco": "B32",
+   "plies": 5,
+   "line": "e4 c5 Nf3 Nc6 d4",
+   "coverage": 0.75
+  },
+  {
+   "name": "Sicilian Defense: Old Sicilian",
+   "eco": "B30",
+   "plies": 4,
+   "line": "e4 c5 Nf3 Nc6",
+   "coverage": 0.833
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Accelerated Dragon, Maróczy Bind",
+  "confirmed": true
+ }
 }

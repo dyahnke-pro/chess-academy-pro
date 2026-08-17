@@ -204,5 +204,39 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Dutch Defense: Staunton Gambit Accepted",
+   "eco": "A82",
+   "plies": 4,
+   "line": "d4 f5 e4 fxe4",
+   "coverage": 0.846
+  },
+  {
+   "name": "Dutch Defense: Staunton Gambit",
+   "eco": "A82",
+   "plies": 3,
+   "line": "d4 f5 e4",
+   "coverage": 0.923
+  },
+  {
+   "name": "Dutch Defense",
+   "eco": "A80",
+   "plies": 2,
+   "line": "d4 f5",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Latvian Gambit",
+  "confirmed": false
+ }
 }

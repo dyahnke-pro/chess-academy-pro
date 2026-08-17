@@ -513,5 +513,60 @@
    "fen": "r2q1rk1/pR1b1ppp/8/3Pb3/2p1P3/P5P1/6BP/3QR1K1 w - - 0 26"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "English Opening: King's English Variation, Four Knights Variation, Fianchetto Line, with Nb6",
+   "eco": "A29",
+   "plies": 12,
+   "line": "c4 e5 Nc3 Nf6 g3 d5 cxd5 Nxd5 Bg2 Nb6 Nf3 Nc6",
+   "coverage": 0.796
+  },
+  {
+   "name": "English Opening: King's English Variation, Two Knights Variation, Reversed Dragon",
+   "eco": "A22",
+   "plies": 6,
+   "line": "c4 e5 Nc3 Nf6 g3 d5",
+   "coverage": 0.918
+  },
+  {
+   "name": "English Opening: Carls-Bremen System",
+   "eco": "A22",
+   "plies": 5,
+   "line": "c4 e5 Nc3 Nf6 g3",
+   "coverage": 0.939
+  },
+  {
+   "name": "English Opening: King's English Variation, Two Knights Variation",
+   "eco": "A22",
+   "plies": 4,
+   "line": "c4 e5 Nc3 Nf6",
+   "coverage": 0.959
+  },
+  {
+   "name": "English Opening: King's English Variation, Reversed Sicilian",
+   "eco": "A21",
+   "plies": 3,
+   "line": "c4 e5 Nc3",
+   "coverage": 0.98
+  },
+  {
+   "name": "English Opening: King's English Variation",
+   "eco": "A20",
+   "plies": 2,
+   "line": "c4 e5",
+   "coverage": 1
+  },
+  {
+   "name": "English Opening",
+   "eco": "A10",
+   "plies": 1,
+   "line": "c4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "English Opening",
+  "confirmed": true
+ }
 }

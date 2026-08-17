@@ -574,5 +574,39 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Accelerated Dragon, Maróczy Bind",
+   "eco": "B36",
+   "plies": 9,
+   "line": "c4 c5 e4 Nc6 Nf3 g6 d4 cxd4 Nxd4",
+   "coverage": 0.019
+  },
+  {
+   "name": "Sicilian Defense: Staunton-Cochrane Variation",
+   "eco": "B20",
+   "plies": 3,
+   "line": "c4 c5 e4",
+   "coverage": 1
+  },
+  {
+   "name": "English Opening: Symmetrical Variation",
+   "eco": "A30",
+   "plies": 2,
+   "line": "c4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "English Opening",
+   "eco": "A10",
+   "plies": 1,
+   "line": "c4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Accelerated Dragon, Maróczy Bind",
+  "confirmed": true
+ }
 }

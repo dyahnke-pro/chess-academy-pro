@@ -549,5 +549,109 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Dragon Variation, Yugoslav Attack, Modern Line",
+   "eco": "B76",
+   "plies": 17,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O O-O-O",
+   "coverage": 0.2
+  },
+  {
+   "name": "Sicilian Defense: Dragon Variation, Yugoslav Attack, Main Line",
+   "eco": "B77",
+   "plies": 17,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O Bc4",
+   "coverage": 0.025
+  },
+  {
+   "name": "Sicilian Defense: Dragon Variation, Yugoslav Attack",
+   "eco": "B76",
+   "plies": 16,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O",
+   "coverage": 0.25
+  },
+  {
+   "name": "Sicilian Defense: Dragon Variation, Yugoslav Attack, Belezky Line",
+   "eco": "B75",
+   "plies": 14,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6",
+   "coverage": 0.275
+  },
+  {
+   "name": "Sicilian Defense: Dragon Variation, Yugoslav Attack, Early Deviations",
+   "eco": "B75",
+   "plies": 13,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3",
+   "coverage": 0.3
+  },
+  {
+   "name": "Sicilian Defense: Dragon Variation",
+   "eco": "B70",
+   "plies": 10,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6",
+   "coverage": 0.375
+  },
+  {
+   "name": "Sicilian Defense: Accelerated Dragon, Modern Variation",
+   "eco": "B34",
+   "plies": 9,
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3",
+   "coverage": 0.375
+  },
+  {
+   "name": "Sicilian Defense: Accelerated Dragon",
+   "eco": "B32",
+   "plies": 8,
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6",
+   "coverage": 0.4
+  },
+  {
+   "name": "Sicilian Defense: Modern Variations, Main Line",
+   "eco": "B54",
+   "plies": 8,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6",
+   "coverage": 0.425
+  },
+  {
+   "name": "Sicilian Defense: Open",
+   "eco": "B32",
+   "plies": 5,
+   "line": "e4 c5 Nf3 Nc6 d4",
+   "coverage": 0.475
+  },
+  {
+   "name": "Sicilian Defense: Old Sicilian",
+   "eco": "B30",
+   "plies": 4,
+   "line": "e4 c5 Nf3 Nc6",
+   "coverage": 0.5
+  },
+  {
+   "name": "Sicilian Defense: Modern Variations",
+   "eco": "B50",
+   "plies": 4,
+   "line": "e4 c5 Nf3 d6",
+   "coverage": 0.45
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Accelerated Dragon",
+  "confirmed": true
+ }
 }
