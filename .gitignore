@@ -116,3 +116,7 @@ scripts/_*.mjs
 *.mp4
 *.webm
 scripts/video-align/frames/
+
+# Python bytecode — regenerated on import, and version-specific
+__pycache__/
+*.pyc
