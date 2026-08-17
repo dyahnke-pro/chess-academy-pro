@@ -1,0 +1,122 @@
+{
+ "Italian Game: Two Knights Defense, Traxler Counterattack, King March Line": [
+  {
+   "videoId": "ykmGxE9DURo",
+   "eco": "C57",
+   "plies": 13,
+   "coverage": 0.055,
+   "subject": false,
+   "forks": 10
+  }
+ ],
+ "Italian Game: Two Knights Defense, Polerio Defense": [
+  {
+   "videoId": "ykmGxE9DURo",
+   "eco": "C58",
+   "plies": 10,
+   "coverage": 0.009,
+   "subject": false,
+   "forks": 10
+  }
+ ],
+ "Italian Game: Two Knights Defense, Traxler Counterattack, Knight Sacrifice Line": [
+  {
+   "videoId": "ykmGxE9DURo",
+   "eco": "C57",
+   "plies": 9,
+   "coverage": 0.092,
+   "subject": false,
+   "forks": 10
+  }
+ ],
+ "Italian Game: Two Knights Defense, Traxler Counterattack, Bishop Sacrifice Line": [
+  {
+   "videoId": "ykmGxE9DURo",
+   "eco": "C57",
+   "plies": 9,
+   "coverage": 0.101,
+   "subject": false,
+   "forks": 10
+  }
+ ],
+ "Italian Game: Two Knights Defense, Knight Attack, Normal Variation": [
+  {
+   "videoId": "ykmGxE9DURo",
+   "eco": "C57",
+   "plies": 8,
+   "coverage": 0.028,
+   "subject": false,
+   "forks": 10
+  }
+ ],
+ "Italian Game: Two Knights Defense, Traxler Counterattack": [
+  {
+   "videoId": "ykmGxE9DURo",
+   "eco": "C57",
+   "plies": 8,
+   "coverage": 0.917,
+   "subject": true,
+   "forks": 10
+  }
+ ],
+ "Italian Game: Two Knights Defense, Knight Attack": [
+  {
+   "videoId": "ykmGxE9DURo",
+   "eco": "C57",
+   "plies": 7,
+   "coverage": 0.954,
+   "subject": false,
+   "forks": 10
+  }
+ ],
+ "Italian Game: Two Knights Defense": [
+  {
+   "videoId": "ykmGxE9DURo",
+   "eco": "C55",
+   "plies": 6,
+   "coverage": 0.963,
+   "subject": false,
+   "forks": 10
+  }
+ ],
+ "Italian Game": [
+  {
+   "videoId": "ykmGxE9DURo",
+   "eco": "C50",
+   "plies": 5,
+   "coverage": 0.972,
+   "subject": false,
+   "forks": 10
+  }
+ ],
+ "King's Knight Opening: Normal Variation": [
+  {
+   "videoId": "ykmGxE9DURo",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.972,
+   "subject": false,
+   "forks": 10
+  }
+ ],
+ "King's Knight Opening": [
+  {
+   "videoId": "ykmGxE9DURo",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.982,
+   "subject": false,
+   "forks": 10
+  }
+ ],
+ "King's Pawn Game": [
+  {
+   "videoId": "ykmGxE9DURo",
+   "eco": "C20",
+   "plies": 2,
+   "coverage": 0.991,
+   "subject": false,
+   "forks": 10
+  }
+ ]
+}
