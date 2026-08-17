@@ -49,3 +49,20 @@ a tweak, and it should not be bodged: a tracker that guesses its own starting
 position is exactly how a legal-but-false line gets produced.
 
 Danya's pipeline works end to end and has 336 videos queued; finish that first.
+
+## Refusal ledgers — why a handled video must never be re-fetched
+
+- `needs-hand-geometry.txt` — the scan refused; the video is parked in
+  `/tmp/vid-refused/` because a refusal is usually a fixable geometry or
+  orientation problem, not a bad video (the Danish Gambit refused, then gave
+  286 plies once its board was read by hand).
+- `no-game.txt` — the scan succeeded and the build found no usable game. Often
+  correct rather than broken: `GqdveDSL2SA` is a "Miniature Game" upload with
+  no continuous play long enough to track.
+
+Both are read by the downloader's skip test. Neither outcome leaves a track
+behind, so without them the downloader's "do I already have this" question goes
+false the moment the video is deleted and fetches it again on every pass —
+`C4xtj2rc0_k` was pulled four times that way, against a request budget David
+asked to protect. The supervisor's remaining-count reads the same ledgers, or it
+respawns a downloader that has nothing left to do.

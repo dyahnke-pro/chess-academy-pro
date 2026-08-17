@@ -50,7 +50,7 @@ while true; do
       echo "SCAN-REF $id (parked for a hand look)"
       mkdir -p /tmp/vid-refused
       mv -f "$v" /tmp/vid-refused/ 2>/dev/null
-      echo "$id" >> data/video-queues/needs-hand-geometry.txt
+      grep -qxF "$id" data/video-queues/needs-hand-geometry.txt 2>/dev/null || echo "$id" >> data/video-queues/needs-hand-geometry.txt
       rm -f /tmp/g_$id.json; progressed=1; continue
     fi
     title=$(node -e "
@@ -62,7 +62,14 @@ while true; do
          "$id" /tmp/g_$id.json "$title" "$sx,$sy,$ss" > /tmp/b_$id.log 2>&1; then
       echo "BANKED   $id :: $(cat /tmp/b_$id.log)"
     else
+      # RECORD THE REFUSAL OR IT WILL BE RE-DOWNLOADED FOREVER. A build that
+      # tracks fine but finds no usable game leaves nothing behind, so the
+      # downloader's "do I already have this" test went false the moment the
+      # video was deleted and fetched it again on the next pass — GqdveDSL2SA
+      # went round twice before this was caught. The ledger is what makes the
+      # outcome durable; the video itself is disposable either way.
       echo "NO-GAME  $id :: $(tail -1 /tmp/b_$id.log | cut -c1-60)"
+      grep -qxF "$id" data/video-queues/no-game.txt 2>/dev/null || echo "$id" >> data/video-queues/no-game.txt
     fi
     rm -f "$v" /tmp/g_$id.json
     progressed=1
