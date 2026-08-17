@@ -229,7 +229,13 @@ for (const { t, grid } of settled) {
 if (game.moves.length) games.push(game);
 
 const total = games.reduce((n, g) => n + g.moves.reduce((m, x) => m + x.line.length, 0), 0);
-writeFileSync(process.argv[3] ?? '/tmp/vidtest/track.json', JSON.stringify(games, null, 1));
+// Default beside the grids it came from. The previous default was a scratch
+// path from the original pilot's container, so a run that had already done all
+// the work — 840 frames, 71 settled positions, the full move list printed —
+// still died with ENOENT at the last line.
+const outPath = process.argv[3]
+  ?? process.argv[2].replace(/grids\.json$/, 'track.json');
+writeFileSync(outPath, JSON.stringify(games, null, 1));
 console.log(`\n${games.length} game(s), ${total} plies tracked`);
 // Print the STEPS, never a flattened move list. After a rewind the following
 // moves continue from the earlier position, so concatenating everything into

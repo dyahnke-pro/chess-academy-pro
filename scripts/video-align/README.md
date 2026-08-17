@@ -52,19 +52,73 @@ and validate a candidate on empty-square flatness rather than checker contrast.
 ## Pipeline
 
 ```bash
-# 1. cookies from a signed-in (throwaway) YouTube account, Netscape format
-#    — YouTube blocks datacenter IPs without them. Never commit this file.
-# 2. a PO-token provider must be running (bgutil-ytdlp-pot-provider).
-yt-dlp --cookies /tmp/yt.txt --remote-components ejs:github -f 396 -o v.mp4 "<url>"
+# 1. cookies from a signed-in YouTube account, Netscape format. Export from a
+#    window you do NOT then sign out of — signing out rotates the session and
+#    the file dies with "cookies are no longer valid". Never commit it.
+# 2. a JS runtime for the n-challenge:  npm i -g deno
+# 3. VIDEO-ONLY DASH (-f 135 / 396). The progressive formats are behind
+#    YouTube's SABR rollout and 403 even with valid cookies; video-only DASH
+#    is served normally, and we only ever want pixels.
+yt-dlp --cookies /tmp/yt.txt --remote-components ejs:npm -f 135 -o v.mp4 "<url>"
 
-# 3. frames -> occupancy grids  (x0 y0 square fps)
-# geometry comes from the detector; 2fps, not 0.5 — see "Sampling rate" below
-python3 scripts/video-align/detect_board.py /tmp/frames/f_00001.png
-python3 scripts/video-align/scan_video.py v.mp4 /tmp/frames 284 -2.4 44.4 2
+# 4. CALIBRATE BY HAND — see below. Three numbers per board layout.
+# 5. frames -> occupancy grids  (x0 y0 square fps)
+#    2fps, not 0.5 — see "Sampling rate" below
+python3 scripts/video-align/scan_video.py v.mp4 /tmp/frames 370 -2 60 2
 
-# 4. grids -> timestamped moves, constrained by the rules
+# 6. grids -> timestamped moves, constrained by the rules
 node scripts/video-align/track.mjs /tmp/frames/grids.json
 ```
+
+## Calibrate by hand. Do not build a detector.
+
+David 2026-08-17: *"maybe aligning by hand yourself is the way to go. do not
+rely on bots?"* — and he was right, after a detector had already burned a
+session failing.
+
+The geometry is THREE NUMBERS per board layout, and reading them off a frame
+takes seconds, because you can see the board. Automating that is replacing the
+one part of this job that is genuinely easy. `detect_board.py` is kept for
+reference and is NOT trustworthy (see its docstring for the four scoring
+functions that each looked right and measured wrong).
+
+The reliable procedure, which is how the numbers below were found:
+
+1. Extract one frame from the section and LOOK at it.
+2. Read the position off it by eye.
+3. Let code find the geometry that reproduces that position — search a small
+   grid of `(x0, y0, sq)` around your estimate and keep the one with fewest
+   mismatches against the position you read. This is hand alignment with a
+   machine check, not a guess: you supply the truth, code confirms the numbers.
+
+On the pilot that lands in one pass: `x=370 y=-2 sq=60.0`, **63 of 64 squares
+correct**. The single miss was d1 reading black — the exact fixed bias
+described above, which `track.mjs`'s `calibrate()` then found and subtracted on
+its own (`c1(b->w) d1(b->w)`). Do not chase that last square by hand.
+
+**Every video needs this more than once.** David 2026-08-17: *"he does also
+change board size when switching from play to the review section, and the board
+also changes a third time when he shows example games."* So geometry is
+per-SECTION, not per-video — calibrate each layout separately and scan its
+range. A geometry carried across a section boundary reads a board that is no
+longer there.
+
+## Verified end-to-end (2026-08-17, hand-calibrated)
+
+Seven minutes of *Trashing the Traxler* at 2fps: 840 frames -> 71 settled
+positions -> the lesson's real shape, with a timestamp on every ply.
+
+    t=81    ply 1-9   e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5   the Fried Liver
+    t=134.5 << rewind to ply 7
+    t=136.5 ply 8     Bc5                                  the Traxler
+    t=158   ply 9-15  Nxf7 Bxf2+ Kxf2 Nxe4+ Ke3 Qh4 Nxh8   the counterattack
+    t=219.5 << rewind to ply 8
+    t=224.5 ply 9     Bxf7+                                White's refutation
+
+Cost, measured on the full 27-minute video at 480p: download ~40s, frame
+extraction ~96s, board reads 7.1ms/frame (~23s), tracking seconds. Roughly
+**3 minutes per video**, which parallelises. Frame extraction should stream
+rather than write PNGs — 3,244 frames is ~1GB per video on disk.
 
 Pilot result on *"Trashing the Traxler"* — `e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5`,
 the Two Knights into the Fried Liver, with a timestamp on every ply. Since every
@@ -115,11 +169,33 @@ making the search smarter.
 
 ## Not done yet
 
-- **Orientation.** A board shown from Black's side is not yet detected.
-- **Validation across themes.** The detector is proven on one chess.com layout.
-  Before running at scale it needs to earn its keep on several videos with
-  different boards — a confidently wrong geometry produces confidently wrong
-  positions. The tracker's exact-match rule is the backstop (a bad grid matches
-  no legal move and is dropped), but that is the last line, not a substitute.
-- **Joining to the notes.** Timestamp -> FEN exists now; mapping distilled
-  notes onto it is the remaining step.
+- **Joining to the notes — and it is blocked on the CORPUS, not on video.**
+  Timestamp -> FEN works. The notes have no timestamp to join it to: **0 of
+  11,426** carry `t`. The field was only added to `distill-v2` on 2026-08-16,
+  after all 421 videos had been distilled.
+
+  It cannot be recovered from the shipped corpus. Measured: 10,144 notes have
+  no position and an empty `lineSan`, so their chunk is unidentifiable; the
+  1,152 positioned ones had `lineSan` REWRITTEN by the anchor pass, so it no
+  longer names the chunk; the remaining 130 are `inferred`, which
+  `isVerifiedPosition` rejects anyway. So the join needs an **additive**
+  re-distill — additive because note ids are content digests, and regenerating
+  prose would orphan the 268 hand-written spoken forms.
+
+- **Why the video is needed at all**, since the transcript already has the
+  words: the transcript aligner positions nothing. Measured across 6 videos,
+  **0 of 52 chunks** got a DB alignment, consistent with the shipped corpus's
+  130 `inferred` notes from 421 videos. That is why ~89% of the corpus cannot
+  fire at a specific move.
+
+- **What the board adds over just reading the transcript** (David asked, and it
+  is a fair question — the move ORDER is largely readable): per-ply
+  TIMESTAMPS, which are the join key; the REWINDS, 15 in the pilot, which are
+  the branch points where the teaching actually happens; and PROOF, since a
+  position read from pixels is a measurement rather than an assertion. The
+  board is not doing the thinking here, it is doing the verifying — the same
+  role Stockfish plays for gems.
+
+- **Orientation.** A board shown from Black's side is not yet handled. Read it
+  off the frame when calibrating that section; it is one more thing you can
+  simply see.
