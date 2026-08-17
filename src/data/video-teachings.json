@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-17",
- "videosDistilled": 24,
- "noteCount": 59,
+ "videosDistilled": 25,
+ "noteCount": 60,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -66,6 +66,31 @@
    "concepts": [],
    "sources": [
     "yt:3Qw4AL8RDOw"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-fianchetto-tabia-the-pawn-that-claims-two-squares",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nf3",
+    "g6",
+    "g3",
+    "Bg7",
+    "Bg2",
+    "O-O",
+    "O-O",
+    "d5"
+   ],
+   "opening": "Neo-Grünfeld Defense: Classical Variation, Modern Defense",
+   "phase": "opening",
+   "explains": "Both sides have finished the same quiet development, and this is the move that decides which game gets played. The pawn arriving on d5 covers c4 and e4 together, so the natural pawn breaks are answered before they are played. The modest alternative one square shorter leaves both of those squares free and invites a bigger centre instead.",
+   "teaches": "When a setup gives you a free choice of central pawn move, pick the one that takes squares away from the opponent rather than the one that only makes room for you. A pawn on the fourth rank of the centre contests two squares at once, and those are usually the two the other side wanted.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:55gXMP9N5sM"
    ],
    "positionSource": "high"
   },
