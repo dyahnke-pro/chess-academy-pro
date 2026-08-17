@@ -3893,6 +3893,13 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
           category: 'subsystem',
           source: 'CoachGamePage.blunder',
           summary: `verbosity=${verbosity} chars=${explanation.length}`,
+          // The TEXT, not just its length. The coach-tab audit exempts the
+          // blunder card's speech from the Play-silence check by matching
+          // spoken lines against this event's text — with only `chars=` in the
+          // summary the match could never fire, and the card's own explanation
+          // ("Your knight on g5 is hanging.") was reported as volunteered
+          // teaching (run 16, 2026-08-17).
+          narrationText: explanation,
           fen: moveResult.fen,
         });
         // Mirror the spoken blunder explanation into the VISIBLE chat so the

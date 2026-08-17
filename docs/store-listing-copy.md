@@ -51,7 +51,7 @@ plan is:
 | Model games (student-side wins) | **644** | array `.length` | `src/data/model-games.json` |
 | Middlegame plans | **550** | array `.length` | `src/data/middlegame-plans.json` |
 | Opening pitfalls / common mistakes | 127 openings covered | object keys `.length` | `src/data/common-mistakes.json` |
-| Punish-gems (tactical traps in lines) | 296 | array `.length` | `src/data/punish-gems.json` |
+| Punish-gems (tactical traps in lines) | **344** across **86 openings**, every one narrated + teachable in coach chat | array `.length`; teachability = weapon tier + narration (`isSurfaceableGem`), verified 344/344 on 2026-08-17 | `src/data/punish-gems.json` + `src/data/lessons/punishGemNarration.ts` |
 | Pro game references (coach breadth corpus) | 2,209 | array `.length` | `public/data/pro-game-references.json` |
 | Mating patterns | 37 | array `.length` | `src/data/mating-patterns.json` |
 | Real-master-game sourcing | TRUE | masters DB ships in `public/data/`; spines are data-built from it | `public/data/openings-masters-db.json`, `openings-lichess-spine.json` |
@@ -115,7 +115,7 @@ TALK TO YOUR AI CHESS COACH
 Ask any question, anytime — "why was that a blunder?", "what's the plan here?", "how do I beat the London?" — and get a real answer in plain English. The coach narrates every move and points lead-the-eye arrows at exactly what matters, so you learn the idea, not just the move.
 
 3,654 OPENINGS — WITH EVERY VARIATION AND SUBLINE
-Study 3,654 openings, variations, and sublines. 42 are built into guided masterclasses using the Watch → Learn → Practice → Play method, plus 15 pro-player repertoires across 81 openings, 570 model games, 520 middlegame plans, and 296 traps. Every line is built from real master games — so you study what strong players actually play.
+Study 3,654 openings, variations, and sublines. 42 are built into guided masterclasses using the Watch → Learn → Practice → Play method, plus 15 pro-player repertoires across 81 openings, 570 model games, 520 middlegame plans, and 344 opening traps the coach can teach you line by line. Every line is built from real master games — so you study what strong players actually play.
 
 IMPORT YOUR GAMES, GET REAL ANALYSIS
 Import your Chess.com and Lichess games in seconds. A full-strength Stockfish 18 engine reviews every move right on your device, and the coach explains why a move was wrong and what to play instead — no cryptic engine numbers.
@@ -227,11 +227,16 @@ TALK TO YOUR AI COACH
 • A talking coach that narrates every move in plain English, never cryptic engine numbers
 • Lead-the-eye arrows and highlights land your eye exactly where the coach is pointing
 
+LEARN THE TRAPS — THEN SPRING THEM ON REAL OPPONENTS
+• Ask the coach to teach the traps in any opening — pick a trap from the list and it walks the whole line, move by move, out loud
+• 344 verified trap lines across 86 openings — mined from real games at your level and graded by the engine, not folklore
+• Every trap is a mistake your opponents actually play, plus the exact move that punishes it
+
 3,654 OPENINGS TO STUDY — WITH EVERY VARIATION AND SUBLINE
 • 3,654 openings, variations, and sublines to explore — you will not run out of theory
 • 42 of them built into guided masterclasses (Watch → Learn → Practice → Play)
 • 15 pro-player repertoires across 81 openings — the exact lines top players use
-• 570 annotated model games, 520 middlegame plans, and 296 traps
+• 570 annotated model games, 520 middlegame plans, and 344 traps
 • Common pitfalls flagged across 125 openings
 
 IMPORT YOUR GAMES, GET REAL ANALYSIS
@@ -271,7 +276,7 @@ Pick an opening and start improving today.
 > Structure = sell THEN moat: the hook + the one-thing-nobody-else-does
 > (the closed loop) earn the read, then the **full feature list** lays out the
 > arsenal — every line carrying a **specific verified number** (42 / 3,600 / 15
-> pros / 570 / 520 / 296 / 15,000 / 72 / 37) so the breadth reads as *proof*,
+> pros / 570 / 520 / 344 / 86 / 15,000 / 72 / 37) so the breadth reads as *proof*,
 > not fluff. Scannable bullets are how people actually read an App Store body.
 > All numbers verified in the table at the top. ~2,700 chars, well under 4,000.
 
