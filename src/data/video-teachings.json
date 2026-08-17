@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-17",
- "videosDistilled": 21,
- "noteCount": 54,
+ "videosDistilled": 22,
+ "noteCount": 56,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -428,6 +428,53 @@
    "concepts": [],
    "sources": [
     "yt:C6vYlx-lS6g"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-open-sicilian-develop-with-a-question-attached",
+   "lineSan": [
+    "e4",
+    "c5",
+    "d4",
+    "cxd4",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6"
+   ],
+   "opening": "Sicilian Defense: Morphy Gambit",
+   "phase": "opening",
+   "explains": "The knight arriving on f6 hits the pawn on e4, so the choice is not between developing and attacking — the move does both. That matters most against a set-up that has not committed its centre yet, because the question has to be answered before anything else gets built.",
+   "teaches": "Given two developing moves, prefer the one that asks a question. A piece that comes out attacking something forces a reply, so you get the tempo to finish developing instead of spending it answering.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:EiH21nGiRGs"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-open-sicilian-a-pawn-attacking-a-piece-ignores-defenders",
+   "lineSan": [
+    "e4",
+    "c5",
+    "d4",
+    "cxd4",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "e5"
+   ],
+   "opening": "Sicilian Defense: Morphy Gambit",
+   "phase": "opening",
+   "explains": "Pushing the pawn to e5 hits the knight, and the two pawns covering f6 do not rescue it: taking on f6 would win a piece for a pawn and the recapture only gets the pawn back. So the knight cannot simply sit there, which is exactly what the push is asking. The answer has to be a move that creates a threat of its own rather than a quiet retreat.",
+   "teaches": "When a pawn attacks a piece, counting defenders is the wrong calculation. The pawn is worth less than anything it hits, so the trade is good for the attacker no matter how many times the square is guarded — the piece has to move, or find a bigger answer elsewhere.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:EiH21nGiRGs"
    ],
    "positionSource": "high"
   },

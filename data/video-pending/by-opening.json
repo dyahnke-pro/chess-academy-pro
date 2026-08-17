@@ -43,14 +43,6 @@
    "forks": 1
   },
   {
-   "videoId": "EiH21nGiRGs",
-   "eco": "B00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 2
-  },
-  {
    "videoId": "J4WzTSR3hmo",
    "eco": "B00",
    "plies": 1,
@@ -481,14 +473,6 @@
    "forks": 0
   },
   {
-   "videoId": "EiH21nGiRGs",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 2
-  },
-  {
    "videoId": "Oj04sSCzraE",
    "eco": "B20",
    "plies": 2,
@@ -635,69 +619,7 @@
    "forks": 1
   }
  ],
- "Sicilian Defense: Morphy Gambit, Andreaschek Gambit": [
-  {
-   "videoId": "EiH21nGiRGs",
-   "eco": "B21",
-   "plies": 7,
-   "coverage": 0.348,
-   "subject": false,
-   "forks": 2
-  }
- ],
- "Sicilian Defense: Open": [
-  {
-   "videoId": "EiH21nGiRGs",
-   "eco": "B32",
-   "plies": 6,
-   "coverage": 0.304,
-   "subject": false,
-   "forks": 2
-  },
-  {
-   "videoId": "Oj04sSCzraE",
-   "eco": "B32",
-   "plies": 5,
-   "coverage": 0.75,
-   "subject": true,
-   "forks": 0
-  },
-  {
-   "videoId": "YzI6qI-33_U",
-   "eco": "B32",
-   "plies": 5,
-   "coverage": 0.475,
-   "subject": false,
-   "forks": 3
-  },
-  {
-   "videoId": "lryqtSMy4pY",
-   "eco": "B32",
-   "plies": 5,
-   "coverage": 0.993,
-   "subject": false,
-   "forks": 17
-  }
- ],
- "Sicilian Defense: Morphy Gambit": [
-  {
-   "videoId": "EiH21nGiRGs",
-   "eco": "B21",
-   "plies": 5,
-   "coverage": 0.87,
-   "subject": true,
-   "forks": 2
-  }
- ],
  "Sicilian Defense: Smith-Morra Gambit": [
-  {
-   "videoId": "EiH21nGiRGs",
-   "eco": "B21",
-   "plies": 3,
-   "coverage": 0.957,
-   "subject": false,
-   "forks": 2
-  },
   {
    "videoId": "Fz0_pECE5vo",
    "eco": "B21",
@@ -871,6 +793,32 @@
    "eco": "B32",
    "plies": 8,
    "coverage": 0.986,
+   "subject": false,
+   "forks": 17
+  }
+ ],
+ "Sicilian Defense: Open": [
+  {
+   "videoId": "Oj04sSCzraE",
+   "eco": "B32",
+   "plies": 5,
+   "coverage": 0.75,
+   "subject": true,
+   "forks": 0
+  },
+  {
+   "videoId": "YzI6qI-33_U",
+   "eco": "B32",
+   "plies": 5,
+   "coverage": 0.475,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "lryqtSMy4pY",
+   "eco": "B32",
+   "plies": 5,
+   "coverage": 0.993,
    "subject": false,
    "forks": 17
   }
