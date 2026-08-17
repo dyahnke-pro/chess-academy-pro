@@ -2675,6 +2675,78 @@ note text too. Bump `WALKTHROUGH_GEN_REV` whenever this ordering changes —
 beats are baked at generation time, so a cached tree serves the old order
 forever.
 
+### 🔒🔒 THE VIDEO IS THE RECORD OF WHAT WAS TAUGHT — and its FORKS are the "other lines" (David 2026-08-17, LOCKED: "lock this in for future sessions").
+
+David: *"what i like about his videos and what i want to carry over are the
+teachings about the other lines. I want to walk people down those lines,
+especially in the review section, but i want Learn with coach to touch on them
+as well so the user knows there are other options at certain forks/positions"* —
+and, on seeing the fork map: *"this would be amazing in the 'teach me X
+opening'."*
+
+**A LESSON'S REWINDS ARE ITS FORKS.** A teacher rewinds for exactly one reason:
+to return to a position and show a different option. So the rewinds recovered by
+reading the board off the video ARE the alternative-lines content, already
+grouped by position, each option carrying the timestamp where it is explained.
+The pilot lesson yielded **10 forks / 24 options** from 31 rewinds.
+
+**WHY THESE MAY BE PUT IN FRONT OF A STUDENT WHEN A GENERATED LIST MAY NOT.**
+The options are the moves that APPEARED ON SCREEN. "Here are three other tries
+here" is a claim about the video, and the video is the evidence — nothing to
+hallucinate, nothing to verify afterwards. Asking a model "what else could be
+played here" produces fluent, plausible, sometimes-wrong lines with nothing to
+check them against, which is the defect the farmed corpus already has. This is
+G0 exactly: code computes the fact, the coach only voices it.
+
+**HOW EACH SURFACE USES THEM:**
+- **Review** — WALK the alternative line. Each option carries its continuation
+  and the timestamp where the teacher takes it up, so the line plays out and its
+  teaching is locatable rather than guessed at.
+- **Learn / "teach me X opening"** — SAY THE FORK EXISTS. The student should know
+  a choice is being made: *"this is one of three tries here; the lesson also
+  looks at X and Y."* Naming without walking is the lighter touch. `WalkthroughTree`
+  ALREADY forks on `node.children.length > 1`, so video forks map onto the
+  existing runtime rather than needing a new surface.
+- Use the fork's `ply` to decide how much to say: a move-4 fork between three
+  whole systems earns a sentence; a move-19 fork between three quiet developing
+  moves does not.
+
+**GEOMETRY IS READ BY EYE. DO NOT WRITE A THIRD DETECTOR** (David: *"keep doing
+it yourself, no bots. it seems to work better that way"*). Two have died:
+`detect_board.py` on appearance (four scorings, each measured wrong), and a fit
+to the start position that looked principled, worked at 854x480, and produced NO
+FIT on the same frame rescaled. Three numbers per board layout, read off a frame
+in seconds. `calibrate.py` is the machine HALF — it confirms your numbers against
+the start position and REFUSES geometry one square off. Board size changes WITHIN
+a video (play → review → example games), so calibrate per SECTION.
+
+**COLOUR IS MEASURED, NOT GUESSED, AND IS LOAD-BEARING.** A start-position frame
+labels six classes (black/white/empty x two parities). `read_board`'s fixed ±25
+margin is theme-specific and INVERTS white pieces on boards whose light square is
+nearly as bright as a white piece — that cost the pilot most of its video (71
+settled positions → 325, 49 plies → 153 once measured). Find the start frame by
+SEARCHING; never assume t=0 (David: *"he starts most times with old games"*), and
+note that an old-game intro's positions belong to THAT game, not the lesson.
+
+**A NOTE MAY ONLY CITE A POSITION THE VIDEO SHOWED.** Gate:
+`src/data/videoTrackIntegrity.test.ts` (ship-check) — every recorded FEN must be
+exactly what its moves produce, every fork option must be legal at its fork, and
+every FEN cited in a hand-written note must appear in a committed track. **COPY
+positions from the track output; NEVER retype them** — a hand-transcribed FEN
+put a bishop on a square it had already been captured from, minutes after the
+rule was written down. Tracks live in `data/video-tracks/<videoId>.json`.
+
+**DOWNLOAD RECIPE** (cookies expire fast; re-export from a window you do NOT
+sign out of, since signing out rotates them):
+`yt-dlp --cookies /tmp/yt.txt --remote-components ejs:npm -f 135 -o v.mp4 <url>`
+Video-only DASH sidesteps the SABR wall that 403s every progressive format.
+Needs `npm i -g deno` for the n-challenge. ~3 min/video of machine time; the
+WRITING is the cost and does not parallelise, so scope to the openings actually
+taught rather than a whole channel.
+
+Full method + the failed approaches: `scripts/video-align/README.md`.
+Worked example: `docs/plans/2026-08-17-handwritten-note-pilot.md`.
+
 ### 🔒🔒 THE NARODITSKY HOUSE VOICE + PLAYED-OUT / EVERY-STEP STANDARD — the ENTIRE repertoire (David 2026-07-02, LOCKED. "I want the entire repertoire to be in Naroditsky's teaching/language style. It's beautiful.")
 
 David watched a Naroditsky Dragodorf teaching video and locked three things
