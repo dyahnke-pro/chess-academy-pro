@@ -317,3 +317,30 @@ The value is not only that 12 notes gain a position; it is that 4 of 7 existing
 anchors on this lesson are WRONG and currently unfalsifiable. Re-distilling with
 `t` lets every note be placed against what the lesson actually displayed, rather
 than against a DB spine search that picked a plausible-looking line.
+
+### …and the selector SPEAKS them (measured 2026-08-17)
+
+`videoAnchorCheck.report.test.ts` asks the real `noteAtPosition` at each of the
+four anchors the video disproved. **Three of four are selected.** This is a live
+defect, not a latent one.
+
+    SPEAKS  dt-5qk @ Giuoco Pianissimo
+    SPEAKS  dt-5qr @ 4.O-O d4 Bxd4   -> "Black must respond with tempo. If Bg4,
+                                         White plays f3 … c3 forces the knight
+                                         back to c6 …"
+    silent  dt-5qy                    (outranked by dt-5qr at the same anchor,
+                                       NOT rejected — it would speak alone)
+    SPEAKS  dt-5qz @ 4.O-O d4 Bxd4
+
+Two different harms:
+
+1. `dt-5qr` speaks real teaching at a board from another line. A student in that
+   line hears Traxler-video content presented as being about their position.
+2. `dt-5qk` and `dt-5qz` are selected but return EMPTY spoken text. That is not
+   harmless — they take the slot, so a correct note is never offered and the
+   tier goes quiet. Exactly the shape of the piece-truth bug above, where
+   selection passed over true notes and coverage silently died.
+
+The second is the one no audit would have surfaced: it presents as SILENCE, and
+silence reads as "the corpus has nothing here" rather than "the corpus had
+something and this took its place."
