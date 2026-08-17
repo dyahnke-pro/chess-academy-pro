@@ -1,0 +1,208 @@
+{
+ "videoId": "LLidbvIUZ5I",
+ "title": "Finegold Once Said \"Never Play F5\" | Latvian Gambit | A GM Naroditsky Theory Speed Run",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-17",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 6007,
+  "settledPositions": null
+ },
+ "plies": 19,
+ "rewinds": 3,
+ "moves": [
+  {
+   "t": 1460.5,
+   "ply": 2,
+   "line": [
+    "d4",
+    "f5"
+   ],
+   "fen": "rnbqkbnr/ppppp1pp/8/5p2/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 1479.5,
+   "ply": 3,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqkbnr/ppppp1pp/8/5p2/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 1485,
+   "ply": 5,
+   "line": [
+    "fxe4",
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/ppppp1pp/8/8/3Pp3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3"
+  },
+  {
+   "t": 1903,
+   "ply": 8,
+   "line": [
+    "Nc6",
+    "Nf3",
+    "e5"
+   ],
+   "fen": "r1bqkbnr/pppp2pp/2n5/4p3/3Pp3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5"
+  },
+  {
+   "t": 1906.5,
+   "ply": 9,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bqkbnr/pppp2pp/2n5/4N3/3Pp3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5"
+  },
+  {
+   "t": 1907.5,
+   "ply": 10,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/3Pp3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6"
+  },
+  {
+   "t": 1915.5,
+   "ply": 11,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/2BPp3/2N5/PPP2PPP/R1BQK2R b KQkq - 2 6"
+  },
+  {
+   "t": 1921,
+   "ply": 12,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3pN3/2BPp3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 7"
+  },
+  {
+   "t": 1928.5,
+   "ply": 13,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3NN3/2BPp3/8/PPP2PPP/R1BQK2R b KQkq - 0 7"
+  },
+  {
+   "t": 1931,
+   "ply": 14,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/2n5/3nN3/2BPp3/8/PPP2PPP/R1BQK2R w KQkq - 0 8"
+  },
+  {
+   "t": 2015.5,
+   "ply": 10,
+   "line": [],
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/3Pp3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6"
+  },
+  {
+   "t": 2017.5,
+   "ply": 11,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/2BPp3/2N5/PPP2PPP/R1BQK2R b KQkq - 2 6"
+  },
+  {
+   "t": 2021.5,
+   "ply": 12,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3pN3/2BPp3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 7"
+  },
+  {
+   "t": 2023.5,
+   "ply": 13,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3NN3/2BPp3/8/PPP2PPP/R1BQK2R b KQkq - 0 7"
+  },
+  {
+   "t": 2025.5,
+   "ply": 14,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/5n2/3Nn3/2BPp3/8/PPP2PPP/R1BQK2R w KQkq - 0 8"
+  },
+  {
+   "t": 2027,
+   "ply": 15,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/5n2/3NP3/2B1p3/8/PPP2PPP/R1BQK2R b KQkq - 0 8"
+  },
+  {
+   "t": 2033.5,
+   "ply": 19,
+   "line": [
+    "Qxd5",
+    "Bxd5",
+    "Nxd5",
+    "Qxd5"
+   ],
+   "fen": "r1b1kb1r/ppp3pp/8/3QP3/4p3/8/PPP2PPP/R1B1K2R b KQkq - 0 10"
+  },
+  {
+   "t": 2038,
+   "ply": 12,
+   "line": [],
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3pN3/2BPp3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 7"
+  },
+  {
+   "t": 2039,
+   "ply": 11,
+   "line": [],
+   "fen": "r1bqkb1r/pppp2pp/2n2n2/4N3/2BPp3/2N5/PPP2PPP/R1BQK2R b KQkq - 2 6"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "r1bqkb1r/ppp3pp/2n2n2/3NN3/2BPp3/8/PPP2PPP/R1BQK2R b KQkq - 0 7",
+   "line": [
+    "d4",
+    "f5",
+    "e4",
+    "fxe4",
+    "Nc3",
+    "Nc6",
+    "Nf3",
+    "e5",
+    "Nxe5",
+    "Nf6",
+    "Bc4",
+    "d5",
+    "Nxd5"
+   ],
+   "ply": 13,
+   "options": [
+    {
+     "san": "Nxd5",
+     "t": 1931,
+     "continuation": "Nxd5"
+    },
+    {
+     "san": "Nxe5",
+     "t": 2025.5,
+     "continuation": "Nxe5"
+    }
+   ]
+  }
+ ]
+}

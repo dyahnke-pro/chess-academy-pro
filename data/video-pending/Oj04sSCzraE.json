@@ -1,0 +1,127 @@
+{
+ "videoId": "Oj04sSCzraE",
+ "title": "Mastering the Maróczy Bind | Sicilian Defense | GM Naroditsky’s Top Theory Speedrun",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-17",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 5891,
+  "settledPositions": null
+ },
+ "plies": 13,
+ "rewinds": 1,
+ "moves": [
+  {
+   "t": 20.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 22,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 23,
+   "ply": 4,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 24.5,
+   "ply": 5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3"
+  },
+  {
+   "t": 26.5,
+   "ply": 7,
+   "line": [
+    "cxd4",
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 28,
+   "ply": 8,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5"
+  },
+  {
+   "t": 29.5,
+   "ply": 9,
+   "line": [
+    "c4"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5"
+  },
+  {
+   "t": 120.5,
+   "ply": 10,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pp1ppp1p/2n2np1/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 1 6"
+  },
+  {
+   "t": 138.5,
+   "ply": 11,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/pp1ppp1p/2n2np1/8/2PNP3/2N5/PP3PPP/R1BQKB1R b KQkq - 2 6"
+  },
+  {
+   "t": 153,
+   "ply": 12,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkb1r/pp1ppp1p/5np1/8/2PnP3/2N5/PP3PPP/R1BQKB1R w KQkq - 0 7"
+  },
+  {
+   "t": 157.5,
+   "ply": 13,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r1bqkb1r/pp1ppp1p/5np1/8/2PQP3/2N5/PP3PPP/R1B1KB1R b KQkq - 0 7"
+  },
+  {
+   "t": 175.5,
+   "ply": 14,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkb1r/pp2pp1p/3p1np1/8/2PQP3/2N5/PP3PPP/R1B1KB1R w KQkq - 0 8"
+  },
+  {
+   "t": 202.5,
+   "ply": 9,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5"
+  }
+ ],
+ "forks": []
+}
