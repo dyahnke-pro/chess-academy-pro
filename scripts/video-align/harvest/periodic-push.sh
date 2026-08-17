@@ -16,7 +16,12 @@ while true; do
   sleep "$INTERVAL"
   if [ -n "$(git status --porcelain)" ] || [ -n "$(git log origin/main..HEAD --oneline 2>/dev/null)" ]; then
     echo "[$(date -u +%H:%M)] push cycle starting"
-    /tmp/pushcycle.sh 2>&1 | tail -6
+    # KEEP THE WHOLE OUTPUT. This piped through `tail -6`, which threw away
+    # every line of a ship-check failure and left only "push aborted" — so a
+    # real regression looked identical to a timeout and could not be diagnosed
+    # without re-running a 10-minute check by hand.
+    /tmp/pushcycle.sh > /tmp/pushcycle.last.log 2>&1
+    tail -6 /tmp/pushcycle.last.log
   else
     echo "[$(date -u +%H:%M)] nothing to push"
   fi
