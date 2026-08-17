@@ -134,6 +134,38 @@ per-SECTION, not per-video — calibrate each layout separately and scan its
 range. A geometry carried across a section boundary reads a board that is no
 longer there.
 
+## ONE MISREAD SQUARE CAN COST A WHOLE VIDEO — and it will look like a format problem
+
+Three uploads tracked 0-4 plies and every plausible story for it was wrong:
+blitz outrunning the sampler (no — 140 of 196 gaps between settled positions
+were a single ply), search depth (no — MAX_PLY 6 changed nothing), boards too
+annotated to settle (no — 197 settled positions is not "never settles").
+
+The cause was **d1 reading black with a white queen on it**, in every frame from
+t=112 on. One phantom piece means no target grid can match a legal position, so
+the tracker stalls immediately and permanently. It presents exactly like "this
+kind of video does not work".
+
+`calibrate` in `track.mjs` should have caught it and could not, because it
+inspected only the EIGHT most common grids. On a video where the teacher lingers
+on positions those are all deep middlegame boards (128-248 occurrences each),
+while start-position frames are spread thin across many near-identical grids.
+Searching ALL grids, most-common first, finds the biased start immediately:
+
+    French       4 -> 82 plies      Sicilian Alapin   0 -> 62
+    Scandinavian 0 -> 16            pilot unchanged at 153
+
+**And a common early position is not a biased start position.** No distance
+threshold separates them — a London video calibrated against the board after
+1.d4 d5 and "corrected" d2/d4/d5/d7, erasing real pawns; tightening the
+threshold just moved it to 1.d4. The RULES separate them: a real position is
+reachable from the start by legal moves, a read bias is not. A candidate
+chess.js can explain as a played line is skipped.
+
+So when a video refuses: diff a settled grid against the position the tracker
+believes it is at, and look for a square that is wrong in EVERY frame. Do that
+before concluding anything about the source material.
+
 ## Verified end-to-end — FULL VIDEO (2026-08-17, hand-calibrated)
 
 All 27 minutes of *Trashing the Traxler* at 2fps:

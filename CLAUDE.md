@@ -2760,6 +2760,15 @@ Needs `npm i -g deno` for the n-challenge. ~3 min/video of machine time; the
 WRITING is the cost and does not parallelise, so scope to the openings actually
 taught rather than a whole channel.
 
+**SPEEDRUN UPLOADS ARE IN SCOPE — the whole channel is reachable, not just the 5
+opening-labs.** Three of them tracked 0-4 plies and it looked like a format
+limit; the cause was ONE square (d1 reading black under a white queen) in every
+frame, which makes every grid unmatchable. `calibrate` missed it by inspecting
+only the eight commonest grids, which on a lingering teacher are all middlegame
+boards. When a video refuses, diff a settled grid against the tracker's believed
+position and look for a square wrong in EVERY frame BEFORE concluding anything
+about the source.
+
 Full method + the failed approaches: `scripts/video-align/README.md`.
 Worked example: `docs/plans/2026-08-17-handwritten-note-pilot.md`.
 
