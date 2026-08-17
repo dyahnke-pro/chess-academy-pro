@@ -90,6 +90,55 @@ a note attached to the wrong one teaches the wrong repertoire.
   opening dangerous never begin, and White keeps a sound extra pawn and a safe
   king rather than a larger material count and an exposed one.
 
+### 5. Six squares, and the greedy one is mate
+
+- **position** (tracker t=176.0s, ply 12, king on f2, Black has just checked)
+  `r1bqk2r/pppp1Npp/2n5/2b1p3/4n3/8/PPPPPKPP/RNBQ3R w kq - 0 7`
+- **teaches** — A king dragged into the open has to choose between holding on to
+  material and getting out of the way, and the instinct to hold on is usually
+  the losing one. Count the checks available to the attacker before deciding
+  where to step, not after.
+- **explains** — The king has six legal squares here. Stepping forward keeps
+  everything defended and walks into a forced mate; stepping back to the corner
+  concedes a pawn and survives. The difference is not calculation depth, it is
+  which question was asked first — "what can I keep" or "where can I not be
+  checked".
+- **verified** — chess.js confirms the forced sequence the lesson plays out ends
+  in checkmate, and that the retreat square was legal and available throughout.
+
+### 6. Four ways to meet a central break, and what they have in common
+
+The lesson answers 5.d4 with four separate branches. Each is a distinct beat and
+each has a position the tracker recorded:
+
+| Black's try | position after it |
+|---|---|
+| `5…Bxd4` | `r1bqk2r/pppp1ppp/2n2n2/4p1N1/2BbP3/8/PPP2PPP/RNBQK2R w KQkq - 0 6` |
+| `5…Nxd4` | `r1bqk2r/pppp1ppp/5n2/2b1p1N1/2BnP3/8/PPP2PPP/RNBQK2R w KQkq - 0 6` |
+| `5…exd4` | `r1bqk2r/pppp1ppp/2n2n2/2b3N1/2BpP3/8/PPP2PPP/RNBQK2R w KQkq - 0 6` |
+| `5…d5` | `r1bqk2r/ppp2ppp/2n2n2/2bpp1N1/2BPP3/8/PPP2PPP/RNBQK2R w KQkq - 0 6` |
+
+- **teaches** — When a pawn break is met by three different captures and one
+  counter-push, the captures usually share a refutation and the push is the real
+  test. Group the replies that take before spending effort on them separately.
+- **explains** — Each of the three captures leaves the f7 square undefended for
+  one more move, and the same knight jump answers all three. Only the counter-push
+  declines to take, which is why it is the line worth studying: it changes what
+  the attacking pieces are aimed at instead of accepting the trade.
+
+### 7. The critical defence, and why it is a trade rather than a rescue
+
+- **position** (tracker t=345.5s, ply 10, the counter-push)
+  `r1bqk2r/ppp2ppp/2n2n2/2bpp1N1/2BPP3/8/PPP2PPP/RNBQK2R w KQkq - 0 6`
+- **teaches** — The soundest defences to a sacrificial attack usually give
+  something back rather than clinging to everything. Returning material to blunt
+  the attacker's best piece is a trade, not a concession.
+- **explains** — The lesson continues by taking the pawn, trading knights, and
+  recapturing the bishop, which liquidates the pieces aimed at the king. What
+  survives is an ordinary position where the extra pawn matters and the attack
+  does not, and that is the whole point of choosing this defence over one that
+  tries to keep everything.
+
 ## Status — NOT merged into the corpus
 
 A demonstration of method, not shipped content. Merging needs the usual gates
@@ -98,11 +147,20 @@ these are new notes rather than rewrites of existing ones.
 
 ## Rate, measured
 
-Four notes from one 27-minute lesson, working from the tracker's 31 rewind
-points to find the moments worth writing about. That is the honest unit of work:
-the machine part (download, calibrate, track) is ~3 minutes per video and
-unattended; the writing is the cost, and it does not parallelise.
+Seven notes from one 27-minute lesson, working from the tracker's 31 rewind
+points to find the moments worth writing about. The machine part (download,
+calibrate, track) is ~3 minutes per video and unattended; the writing is the
+cost, and it does not parallelise.
 
-A full pass on this lesson would be perhaps 12-18 notes — the branch points that
-teach something distinct, not every ply. Scale from that before committing to a
-video count.
+Seven covers the lesson's spine: why the famous sacrifice is declined, what is
+recommended instead, the four replies to it, the critical defence, and the mate
+that punishes greed. A thorough pass might reach 12-15 by adding the sub-branches
+after `5…Nxd4`, which the lesson explores at length (two White tries, each
+walked to a conclusion).
+
+**A claim checked and DROPPED, recorded because the checking is the method.** I
+expected the point of 5.d4 to be that it denies the king the escape it needs in
+the pure Traxler. chess.js says otherwise: the king has the same six legal
+squares in both lines. Had that gone into a note from memory it would have been
+fluent, plausible and false — which is precisely the failure this whole pipeline
+exists to prevent.
