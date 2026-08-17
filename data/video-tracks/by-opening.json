@@ -417,6 +417,14 @@
    "forks": 6
   },
   {
+   "videoId": "ILYWTV0uCio",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
    "videoId": "qN8kNz0_c3s",
    "eco": "A40",
    "plies": 1,
@@ -557,6 +565,44 @@
    "coverage": 1,
    "subject": false,
    "forks": 8
+  }
+ ],
+ "Trompowsky Attack: Raptor Variation": [
+  {
+   "videoId": "ILYWTV0uCio",
+   "eco": "A45",
+   "plies": 5,
+   "coverage": 0.592,
+   "subject": false,
+   "forks": 4
+  }
+ ],
+ "Trompowsky Attack": [
+  {
+   "videoId": "ILYWTV0uCio",
+   "eco": "A45",
+   "plies": 3,
+   "coverage": 0.98,
+   "subject": true,
+   "forks": 4
+  }
+ ],
+ "Indian Defense": [
+  {
+   "videoId": "ILYWTV0uCio",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "qN8kNz0_c3s",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
   }
  ],
  "Sicilian Defense: Delayed Alapin Variation": [
@@ -723,16 +769,6 @@
    "eco": "D00",
    "plies": 7,
    "coverage": 0.462,
-   "subject": false,
-   "forks": 4
-  }
- ],
- "Indian Defense": [
-  {
-   "videoId": "qN8kNz0_c3s",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
    "subject": false,
    "forks": 4
   }
