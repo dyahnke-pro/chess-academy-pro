@@ -1,176 +1,148 @@
-"""Per-video geometry calibration — because every video's board is a different size.
+"""Per-video calibration, anchored on the one position we know.
 
 David 2026-08-17: *"the chess board in each video is a different size and needs
-recalibrating each time."*
+recalibrating each time"* — and, on automating it: *"maybe aligning by hand
+yourself is the way to go. do not rely on bots?"*
 
-`detect_board.py` already derives geometry from square edges, but the pipeline
-made you run it on ONE frame by hand and paste `x0 y0 sq` into `scan_video.py`,
-once per video. Two things are wrong with that:
+Both are honoured here. Calibration IS per video. And nothing guesses what a
+board looks like — the whole procedure is anchored on a frame showing the
+STARTING POSITION, where the answer is already known, so every number is fitted
+to observed truth rather than inferred from a heuristic.
 
-  * It is manual, so it does not scale past a pilot.
-  * It trusts a SINGLE frame. A frame caught mid-animation, on a talking-head
-    cut, or on a rank crowded with pieces gives a plausible-looking pitch that
-    is simply wrong — and a confidently wrong geometry produces confidently
-    wrong positions, which is the one failure mode this pipeline must never
-    have (G3: silence over invention).
+That distinction is what separates this from `detect_board.py`, which tried to
+recognise a board from appearance alone and failed four different ways (see its
+docstring). A start-position frame makes the problem trivial in comparison:
 
-So calibration samples MANY frames and requires them to AGREE. Frames that
-disagree are not averaged into a compromise — a compromise between two wrong
-geometries is a third wrong geometry. They are counted, and if too few agree the
-whole video is refused.
+  GEOMETRY — occupancy at the start is known (two full ranks at each end, four
+  empty between) and occupancy can be judged by VARIANCE alone: an empty square
+  is flat, an occupied one carries a fill/outline edge. Colour never enters, so
+  this breaks the chicken-and-egg where colour calibration needed geometry and
+  geometry needed colour. Score a candidate grid by the MARGIN between the
+  quietest piece and the loudest empty square; a grid that merely looks close
+  cannot beat one that truly separates them.
 
-WHY AGREEMENT IS THE RIGHT TEST. The board is static for the whole video: its
-size and origin cannot change between frames, only its contents can. So pitch
-measured on frame 40 and frame 900 must match to within rounding. When they do
-not, the detector is reading something else — a scene cut, an overlay, a
-different camera — and that is worth failing on rather than guessing through.
+  COLOUR — the same frame labels six classes for free: black pieces, white
+  pieces and empty squares, each on both square parities. `read_board`'s fixed
+  +/-25 margin is theme-specific and inverts on boards whose light square is
+  nearly as bright as a white piece; measured centroids never do.
 
-ORIENTATION. Not previously detected (the README lists it as open). Occupancy
-alone cannot tell you which way the board faces: the start position is
-occupancy-symmetric under a 180° rotation. COLOUR can — at the start position
-the two ranks nearest the viewer are the near player's pieces. So orientation is
-read only from frames that actually show the untouched start layout, and stays
-`None` when no such frame exists rather than defaulting to white, because
-defaulting would silently mirror every square of a Black-side lesson.
+FIND THE ANCHOR, NEVER ASSUME t=0. David: *"he starts most times with old games
+before jumping to youtube"*, so the opening seconds may show an unrelated game
+— and notes from that stretch belong to ITS positions, not the taught line.
+`looks_like_start` keys on occupancy only, so it holds for a flipped board too.
+
+WHEN THERE IS NO START FRAME, this returns None and you calibrate that section
+by eye — read the position off it and search a small grid of (x0, y0, sq) for
+the numbers that reproduce what you read. Verified equivalent: on the pilot,
+hand calibration gave x=370 y=-2 sq=60 and this fit gave x=376.6 y=-6.6
+sq=60.75, and the two produce IDENTICAL reads on a deep middlegame frame.
 """
 import sys
 import json
-from collections import Counter
 
 import numpy as np
 from PIL import Image
 
-from detect_board import detect
-from read_board import read_board
+from detect_board import Cells
+from read_board import calibrate_from_start, read_board_calibrated, looks_like_start
 
-# How far two pitch measurements may sit apart and still count as the same
-# board. Pitch is measured as a median of transition gaps, so it carries
-# sub-pixel noise; 0.6px is comfortably above that and far below the ~4px gap
-# that separates genuinely different geometries.
-PITCH_TOL = 0.6
-# Origin tolerance is looser: x0/y0 are refined against flatness, which has a
-# broad optimum when a rank happens to be full of pieces.
-ORIGIN_TOL = 2.5
-# Below this fraction of sampled frames agreeing, refuse the video. Talking-head
-# intros, sponsor reads and full-screen graphics are all normal, so a healthy
-# video still fails plenty of frames — but a board that is really there holds a
-# clear majority of the frames that produced any reading at all.
-MIN_AGREEMENT = 0.6
-
-# The start position as an occupancy+colour grid, top row first, from White's
-# view. Used only to decide orientation.
-START_WHITE_BOTTOM = ['bbbbbbbb', 'bbbbbbbb', '........', '........',
-                      '........', '........', 'wwwwwwww', 'wwwwwwww']
+# Square sizes worth considering. Below ~20px the centre sample is too small to
+# judge occupancy; above ~100px the board would exceed a 480p frame.
+SQ_LO, SQ_HI = 20.0, 100.0
 
 
-def _cluster(values, tol):
-    """Largest group of values that all sit within `tol` of its median.
+def start_score(cells, x0, y0, sq):
+    """How cleanly this grid splits the start position's pieces from its gaps."""
+    _mean, std = cells.stats(x0, y0, sq)
+    if np.isnan(std).any():
+        return -1e9
+    occupied = np.r_[std[0], std[1], std[6], std[7]]
+    empty = np.r_[std[2], std[3], std[4], std[5]]
+    return float(occupied.min() - empty.max())
 
-    Deliberately not k-means or a histogram: there is exactly one right answer
-    here and everything else is junk, so the question is only "which value do
-    most frames repeat", not "how does this distribute".
+
+def fit_geometry_to_start(path, sq_lo=SQ_LO, sq_hi=SQ_HI):
+    """(score, x0, y0, sq) for a frame known to show the start position.
+
+    Coarse sweep then refine. Uses summed-area cell stats so each candidate is
+    O(1) — the plain nested-loop version took over 560s and timed out, the same
+    mistake `detect_board`'s original origin search made.
     """
-    best = []
-    for v in values:
-        group = [w for w in values if abs(w - v) <= tol]
-        if len(group) > len(best):
-            best = group
+    g = np.asarray(Image.open(path).convert('L'), dtype=np.float64)
+    H, W = g.shape
+    cells = Cells(g)
+    best = None
+    for sq in np.arange(sq_lo, sq_hi, 1.0):
+        span = sq * 8
+        if span > max(H, W) * 1.6:
+            break
+        for x0 in np.arange(-sq, W - span * 0.5, max(2.0, sq / 8)):
+            for y0 in np.arange(-sq, H - span * 0.5, max(2.0, sq / 8)):
+                s = start_score(cells, x0, y0, sq)
+                if best is None or s > best[0]:
+                    best = (s, float(x0), float(y0), float(sq))
+    # A non-positive margin means some "empty" square was busier than some
+    # "piece" — this frame is not a start position, or not a board. Fail closed.
+    if best is None or best[0] <= 0:
+        return None
+    _s, bx, by, bs = best
+    for sq in np.arange(bs - 1.5, bs + 1.51, 0.25):
+        for x0 in np.arange(bx - 3, bx + 3.01, 0.5):
+            for y0 in np.arange(by - 3, by + 3.01, 0.5):
+                v = start_score(cells, x0, y0, sq)
+                if v > best[0]:
+                    best = (v, float(x0), float(y0), float(sq))
     return best
 
 
-def _looks_like_start(grid):
-    """Two full ranks at each end, four empty ranks between — the start layout,
-    read as occupancy only so it holds for either orientation."""
-    occ = [''.join('x' if c in 'wb' else '.' for c in row) for row in grid]
-    return (occ[0] == occ[1] == 'xxxxxxxx' and occ[6] == occ[7] == 'xxxxxxxx'
-            and all(r == '........' for r in occ[2:6]))
+def orientation_of(grid):
+    """'white' if White is at the bottom, 'black' if flipped, else None.
 
-
-def orientation_from(grid):
-    """'white' if White sits at the bottom, 'black' if flipped, else None.
-
-    Only meaningful on a start-position frame; the caller enforces that.
+    Only meaningful on a start-position grid, since occupancy there is symmetric
+    under a 180 degree turn and only COLOUR resolves it. Abstains on a washed-out
+    read rather than guessing — a wrong answer mirrors every square of a
+    Black-side lesson.
     """
-    if not _looks_like_start(grid):
-        return None
-    near = ''.join(grid[6]) + ''.join(grid[7])
-    far = ''.join(grid[0]) + ''.join(grid[1])
-    near_w, far_w = near.count('w'), far.count('w')
-    near_b, far_b = near.count('b'), far.count('b')
-    # Require a decisive majority both ways; a washed-out theme that reads half
-    # the pieces as the wrong colour should abstain, not guess.
-    if near_w >= 12 and far_b >= 12:
+    near = grid[6] + grid[7]
+    far = grid[0] + grid[1]
+    if near.count('w') >= 12 and far.count('b') >= 12:
         return 'white'
-    if near_b >= 12 and far_w >= 12:
+    if near.count('b') >= 12 and far.count('w') >= 12:
         return 'black'
     return None
 
 
-def calibrate(frame_paths):
-    """Consensus geometry over many frames, or None if they do not agree.
+def calibrate_video(frame_paths):
+    """Fit on the FIRST frame that reproduces the start position.
 
-    Returns {x0, y0, square, orientation, agreement, frames_read, frames_used}.
+    Returns {x0, y0, square, orientation, anchor, score} or None. Scans in order,
+    so it takes the earliest anchor; pass a section's frames to calibrate that
+    section when a video resizes its board partway through.
     """
-    readings = []
-    for p in frame_paths:
-        got = detect(p)
-        if got:
-            _flat, x0, y0, sq = got
-            readings.append((x0, y0, sq, p))
-    if not readings:
-        return None
-
-    # PITCH FIRST. It is the most reliable of the three — it comes from counting
-    # colour transitions across a whole rank, so it survives pieces and
-    # highlights that would move an origin estimate.
-    pitch_group = _cluster([r[2] for r in readings], PITCH_TOL)
-    if len(pitch_group) / len(readings) < MIN_AGREEMENT:
-        return None
-    sq = float(np.median(pitch_group))
-
-    # Then the origin, but only among frames that already agreed on pitch: a
-    # frame with the wrong pitch has a meaningless origin and must not vote.
-    on_pitch = [r for r in readings if abs(r[2] - sq) <= PITCH_TOL]
-    xs = _cluster([r[0] for r in on_pitch], ORIGIN_TOL)
-    ys = _cluster([r[1] for r in on_pitch], ORIGIN_TOL)
-    if not xs or not ys:
-        return None
-    x0, y0 = float(np.median(xs)), float(np.median(ys))
-
-    agreed = [r for r in on_pitch
-              if abs(r[0] - x0) <= ORIGIN_TOL and abs(r[1] - y0) <= ORIGIN_TOL]
-    agreement = len(agreed) / len(readings)
-    if agreement < MIN_AGREEMENT:
-        return None
-
-    # ORIENTATION, from whichever agreed frames show the untouched start. Most
-    # videos open on one; those that do not simply get None, and the tracker
-    # keeps its current White-at-bottom assumption explicitly rather than
-    # silently.
-    votes = Counter()
-    for _x, _y, _s, path in agreed:
-        o = orientation_from(read_board(path, x0, y0, sq))
-        if o:
-            votes[o] += 1
-    orientation = votes.most_common(1)[0][0] if votes else None
-
-    return {
-        'x0': round(x0, 2),
-        'y0': round(y0, 2),
-        'square': round(sq, 2),
-        'orientation': orientation,
-        'agreement': round(agreement, 3),
-        'frames_read': len(readings),
-        'frames_used': len(agreed),
-    }
+    for path in frame_paths:
+        got = fit_geometry_to_start(path)
+        if not got:
+            continue
+        score, x0, y0, sq = got
+        cal = calibrate_from_start(path, x0, y0, sq)
+        grid = read_board_calibrated(path, x0, y0, sq, cal)
+        # The fit maximised a variance margin; this asks the far stricter
+        # question of whether the calibrated read actually IS the start layout.
+        if not looks_like_start(grid):
+            continue
+        return {
+            'x0': round(x0, 2), 'y0': round(y0, 2), 'square': round(sq, 2),
+            'orientation': orientation_of(grid),
+            'anchor': path, 'score': round(score, 2),
+        }
+    return None
 
 
 if __name__ == '__main__':
-    got = calibrate(sys.argv[1:])
+    got = calibrate_video(sys.argv[1:])
     if not got:
-        # A refusal is a RESULT, not a crash: it means this video's frames did
-        # not agree on a board, and the correct next step is to look at them,
-        # never to loosen the tolerance until something comes out.
-        print('no agreed board geometry', file=sys.stderr)
+        # A refusal is a RESULT: no frame in this range showed a start position,
+        # so calibrate the section by eye rather than loosening anything.
+        print('no start-position frame found — calibrate by eye', file=sys.stderr)
         sys.exit(1)
     print(json.dumps(got))

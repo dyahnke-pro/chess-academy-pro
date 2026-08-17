@@ -70,7 +70,30 @@ python3 scripts/video-align/scan_video.py v.mp4 /tmp/frames 370 -2 60 2
 node scripts/video-align/track.mjs /tmp/frames/grids.json
 ```
 
-## Calibrate by hand. Do not build a detector.
+## Calibration is anchored on the start position — not on a detector
+
+`calibrate.py` fits geometry AND colour to a frame showing the untouched
+starting position, where the answer is already known. That is why it works
+where `detect_board.py` (which tried to recognise a board from appearance)
+failed four different ways.
+
+```bash
+python3 scripts/video-align/calibrate.py /tmp/frames/f_*.png
+# -> {"x0": 376.62, "y0": -6.62, "square": 60.75, "orientation": "white", ...}
+```
+
+Verified equivalent to doing it by eye: hand calibration gave `x=370 y=-2
+sq=60`, the fit gave `x=376.6 y=-6.6 sq=60.75`, and the two produce IDENTICAL
+reads on a deep middlegame frame. It also REFUSES a middlegame frame outright,
+which is the property that matters — it only ever fits to truth.
+
+Costs ~120s per fit (a coarse sweep over x0/y0/sq, then refine). That is once
+per video, or once per section on a video that resizes its board.
+
+**No start-position frame? Then calibrate that section by eye** — the procedure
+below still applies, and is the fallback the refusal hands you.
+
+## Calibrating by hand, when there is no anchor
 
 David 2026-08-17: *"maybe aligning by hand yourself is the way to go. do not
 rely on bots?"* — and he was right, after a detector had already burned a
