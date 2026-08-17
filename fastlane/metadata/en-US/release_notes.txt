@@ -1,4 +1,4 @@
-What's new in 3.5
+What's new in 3.6
 
 WALKTHROUGHS FOR 3,600+ OPENINGS
 • Type any opening and the coach plays the line out one move at a time, explains why each move is there, and draws arrows on the squares it is talking about while it speaks.
