@@ -70,30 +70,38 @@ python3 scripts/video-align/scan_video.py v.mp4 /tmp/frames 370 -2 60 2
 node scripts/video-align/track.mjs /tmp/frames/grids.json
 ```
 
-## Calibration is anchored on the start position — not on a detector
-
-`calibrate.py` fits geometry AND colour to a frame showing the untouched
-starting position, where the answer is already known. That is why it works
-where `detect_board.py` (which tried to recognise a board from appearance)
-failed four different ways.
+## You read the geometry. Code confirms it and measures the colours.
 
 ```bash
-python3 scripts/video-align/calibrate.py /tmp/frames/f_*.png
-# -> {"x0": 376.62, "y0": -6.62, "square": 60.75, "orientation": "white", ...}
+# the three numbers are YOURS, read off a frame (see below)
+python3 scripts/video-align/calibrate.py 370 -2 60 /tmp/frames/f_*.png
+# -> {"x0": 370, "y0": -2, "square": 60.0, "orientation": "white",
+#     "anchor": "/tmp/frames/f_00015.png"}
 ```
 
-Verified equivalent to doing it by eye: hand calibration gave `x=370 y=-2
-sq=60`, the fit gave `x=376.6 y=-6.6 sq=60.75`, and the two produce IDENTICAL
-reads on a deep middlegame frame. It also REFUSES a middlegame frame outright,
-which is the property that matters — it only ever fits to truth.
+It scans for the first frame where YOUR numbers actually reproduce the start
+position, then measures the six colour classes from that frame. Three
+behaviours, all verified:
 
-Costs ~120s per fit (a coarse sweep over x0/y0/sq, then refine). That is once
-per video, or once per section on a video that resizes its board.
+| input | result |
+|---|---|
+| correct hand geometry | confirmed, anchor found, orientation `white` |
+| geometry one square off | **refused** |
+| no start-position frame in range | **refused** |
 
-**No start-position frame? Then calibrate that section by eye** — the procedure
-below still applies, and is the fallback the refusal hands you.
+That middle row is the whole point. A geometry one square out — or carried
+across a section boundary onto a resized board — is the exact failure that
+killed both automated detectors, and it now cannot pass silently.
 
-## Calibrating by hand, when there is no anchor
+**TWO GEOMETRY GUESSERS HAVE DIED HERE. Do not write a third.**
+`detect_board.py` failed four ways on appearance. Then fitting to the start
+position looked principled and returned a plausible `x=376.6 y=-6.6 sq=60.75`
+on the pilot — and produced NO FIT at all on that same frame rescaled to
+640x360 and 1024x576. Videos arrive at whatever resolution YouTube serves, so
+that would silently skip most of a corpus. David, having watched it:
+*"keep doing it yourself, no bots. it seems to work better that way."*
+
+## Reading the geometry by eye — the standard procedure
 
 David 2026-08-17: *"maybe aligning by hand yourself is the way to go. do not
 rely on bots?"* — and he was right, after a detector had already burned a
