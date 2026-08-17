@@ -1,0 +1,153 @@
+{
+ "videoId": "W8YPj9QMtEs",
+ "title": "Amazing Game!! London System Analysis | Jobava London | GM Naroditsky’s Theory Speed Run",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-17",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 11435,
+  "settledPositions": null
+ },
+ "plies": 17,
+ "rewinds": 4,
+ "moves": [
+  {
+   "t": 16.5,
+   "ply": 2,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2"
+  },
+  {
+   "t": 20.5,
+   "ply": 3,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2"
+  },
+  {
+   "t": 28.5,
+   "ply": 4,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 36,
+   "ply": 5,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3"
+  },
+  {
+   "t": 134,
+   "ply": 6,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 152.5,
+   "ply": 7,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3PPB2/2N5/PPP2PPP/R2QKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 153.5,
+   "ply": 6,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 166,
+   "ply": 7,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3PPB2/2N5/PPP2PPP/R2QKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 197,
+   "ply": 8,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/8/2pp4/3PnB2/2N5/PPP2PPP/R2QKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 213,
+   "ply": 9,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/8/2pp4/3PNB2/8/PPP2PPP/R2QKBNR b KQkq - 0 5"
+  },
+  {
+   "t": 214.5,
+   "ply": 8,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/8/2pp4/3PnB2/2N5/PPP2PPP/R2QKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 222,
+   "ply": 10,
+   "line": [
+    "Nxe4",
+    "dxe4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/8/2p5/3PpB2/8/PPP2PPP/R2QKBNR w KQkq - 0 6"
+  },
+  {
+   "t": 232.5,
+   "ply": 11,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/8/2P5/4pB2/8/PPP2PPP/R2QKBNR b KQkq - 0 6"
+  },
+  {
+   "t": 235,
+   "ply": 10,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/8/2p5/3PpB2/8/PPP2PPP/R2QKBNR w KQkq - 0 6"
+  },
+  {
+   "t": 252,
+   "ply": 11,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/8/2P5/4pB2/8/PPP2PPP/R2QKBNR b KQkq - 0 6"
+  },
+  {
+   "t": 280,
+   "ply": 12,
+   "line": [
+    "Qa5+"
+   ],
+   "fen": "rnb1kb1r/pp2pppp/8/q1P5/4pB2/8/PPP2PPP/R2QKBNR w KQkq - 1 7"
+  },
+  {
+   "t": 303.5,
+   "ply": 6,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4"
+  }
+ ],
+ "forks": []
+}

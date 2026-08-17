@@ -429,6 +429,35 @@ TRACKS: a Najdorf video resolving to "Bird Opening", a King's Gambit video to
 is what keeps notes from being written off them. Nothing was written from any
 unconfirmed build.
 
+## AFTER DANYA: HANGING PAWNS (decided 2026-08-17, David: *"once Danya is done, move onto the next most important set of videos"*)
+
+Every farmed corpus tags its notes with `yt:<videoId>`, so the video ids for
+other creators are already in the repo — no new manifest is needed to harvest
+any of them. Measured across the corpora:
+
+| creator | videos | opening-tagged | position-keyed |
+|---|---|---|---|
+| **hangingpawns** | **404** | **100%** | **35%** |
+| saintlouis | 1168 | 23% | 4% |
+| gothamchess | 42 | 0% | 0% |
+| hikaru | 33 | 6% | 3% |
+| imrosen | 36 | 7% | 1% |
+
+**Hanging Pawns is next, and it is not close.** Every one of its notes carries an
+opening tag, because every video IS one opening — which is exactly the shape an
+opening-training app wants. Saint Louis is three times the size and the wrong
+shape: mostly lectures, endgames and history, with 4% of notes position-keyed.
+
+Queue is built at `/tmp/todo-hp.txt`, ordered by how much teaching each video
+produced (Ponziani, Najdorf English Attack, Closed Ruy, Yugoslav Dragon lead it).
+
+**ONE THING MUST BE DONE BY HAND FIRST: read the Hanging Pawns board geometry off
+a frame.** Danya's `370,-2,60` is his chess.com stream layout and will not hold
+for a different channel. Per the standing rule, geometry is read by eye and
+confirmed by `calibrate.py`, never guessed — two automated detectors already died
+proving that. Until that read exists, a scan of these videos would produce grids
+that match no legal move (refusal, harmless) or, worse, a legal-but-false line.
+
 ## NEXT STEP
 
 Scope, then repeat path 1. Hand-writing does not parallelise, so the unit is
