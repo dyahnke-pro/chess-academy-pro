@@ -73,3 +73,89 @@ if __name__ == '__main__':
     import sys
     for r in read_board(sys.argv[1], float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4])):
         print(r)
+
+
+def _cell_features(g, x0, y0, sq):
+    """(mean, std) per cell — the two numbers that separate the three classes.
+
+    Mean alone cannot: a white piece on a LIGHT square averages out close to the
+    empty light square itself, because its bright fill and its dark outline pull
+    in opposite directions. Std is what tells them apart — an empty square is
+    flat, and any piece carries a fill/outline edge.
+    """
+    import numpy as np
+    cs = _cells(g, x0, y0, sq)
+    mean = np.zeros((8, 8))
+    std = np.zeros((8, 8))
+    for r in range(8):
+        for c in range(8):
+            p = cs[r, c]
+            mean[r, c] = p.mean() if p.size else 0.0
+            std[r, c] = p.std() if p.size else 0.0
+    return mean, std
+
+
+def calibrate_from_start(path, x0, y0, sq):
+    """Learn the three classes from a frame KNOWN to show the start position.
+
+    The fixed +/-25 margin in `read_board` is theme-specific and inverts on
+    boards whose light square is nearly as bright as a white piece: measured on
+    a chess.com blue/cream layout, white pieces on light squares scored more
+    DARK pixels (their outline) than BRIGHT (their fill over cream), so g7, a1,
+    c1, e1, h1, b2, f2 and h2 all read as BLACK. Grids that wrong match no legal
+    move, so the tracker silently dropped most of the video — 71 settled
+    positions out of 840 frames.
+
+    Nothing needs to be tuned, because a start-position frame states the answer:
+    ranks 7-8 are black pieces, ranks 1-2 are white, ranks 3-6 are empty, and
+    each of those appears on BOTH square colours. So it yields six labelled
+    centroids — three classes x two parities — measured from this video's own
+    pixels. Find the frame with `looks_like_start`; never assume t=0 (David:
+    "he starts most times with old games").
+    """
+    import numpy as np
+    from PIL import Image
+    g = np.asarray(Image.open(path).convert('L'), dtype=np.float64)
+    mean, std = _cell_features(g, x0, y0, sq)
+    idx = np.indices((8, 8)).sum(axis=0) % 2
+    rows = {'b': [0, 1], 'w': [6, 7], '.': [2, 3, 4, 5]}
+    cal = {}
+    for parity in (0, 1):
+        for label, rs in rows.items():
+            m = [mean[r, c] for r in rs for c in range(8) if idx[r, c] == parity]
+            s = [std[r, c] for r in rs for c in range(8) if idx[r, c] == parity]
+            cal[(parity, label)] = (float(np.median(m)), float(np.median(s)))
+    return cal
+
+
+def read_board_calibrated(path, x0, y0, sq, cal):
+    """Occupancy+colour by nearest labelled centroid, per square parity."""
+    import numpy as np
+    from PIL import Image
+    g = np.asarray(Image.open(path).convert('L'), dtype=np.float64)
+    mean, std = _cell_features(g, x0, y0, sq)
+    idx = np.indices((8, 8)).sum(axis=0) % 2
+    out = []
+    for r in range(8):
+        row = ''
+        for c in range(8):
+            parity = idx[r, c]
+            best, bestd = '.', None
+            for label in ('b', 'w', '.'):
+                cm, cs_ = cal[(parity, label)]
+                # Std is the occupancy signal and deserves equal weight to mean
+                # despite its smaller range, so it is scaled up rather than
+                # being swamped by a few grey levels of brightness drift.
+                d = (mean[r, c] - cm) ** 2 + 3.0 * (std[r, c] - cs_) ** 2
+                if bestd is None or d < bestd:
+                    best, bestd = label, d
+            row += best
+        out.append(row)
+    return out
+
+
+def looks_like_start(grid):
+    """Two full ranks at each end, four empty between — orientation-independent."""
+    occ = [''.join('x' if c in 'wb' else '.' for c in row) for row in grid]
+    return (occ[0] == occ[1] == 'xxxxxxxx' and occ[6] == occ[7] == 'xxxxxxxx'
+            and all(r == '........' for r in occ[2:6]))
