@@ -20,7 +20,12 @@
 # that tracks fine but finds no usable game records NO-GAME. Both are recorded in
 # the queue dir, so both are consulted here.
 set -u
-BASE=${BASE:-150}
+# The gap ADAPTS rather than sitting on a guess — see the success branch below.
+# It starts where the old fixed value was, so a limited IP is not hammered on
+# startup, and walks down to MIN_GAP while fetches keep succeeding.
+GAP=${GAP:-150}
+MIN_GAP=${MIN_GAP:-20}
+MAX_GAP=${MAX_GAP:-600}
 fails=0
 
 # Read fresh per video, never cached: the bank loop appends to these files
@@ -57,15 +62,35 @@ while read -r id; do
   fi
 
   if [ "$rc" -eq 0 ]; then
-    echo "DL OK   $id"
+    # WALK THE GAP DOWN WHILE IT IS WORKING. The old fixed 150-270s was a guess
+    # made once after a bot-check and never retested — David's point, and a fair
+    # one. But the ceiling is real and is YouTube's, not ours: measured
+    # 2026-08-17, three back-to-back fetches returned HTTP 429 then 403 twice,
+    # while a subtitle fetch on the same cookies pulled 515KB fine. So auth is
+    # not the constraint and MEDIA fetches specifically are.
+    #
+    # Neither a fixed fast gap nor a fixed slow one can be right, because the
+    # limit moves with whatever else has hit this IP. Shrinking on success and
+    # growing on refusal finds it instead of assuming it.
+    echo "DL OK   $id (gap ${GAP}s)"
     fails=0
-    sleep $((BASE + RANDOM % 120))
+    GAP=$(( GAP - 15 )); [ "$GAP" -lt "$MIN_GAP" ] && GAP=$MIN_GAP
+    sleep $((GAP + RANDOM % 30))
   else
     fails=$((fails + 1))
-    echo "DL FAIL $id (streak $fails)"
-    if [ "$fails" -ge 5 ]; then back=4800; else back=$((300 * (1 << (fails - 1)))); fi
-    echo "  backing off ${back}s"
-    sleep "$back"
+    # 429 and 403 on media are the limiter talking; anything else is usually
+    # this one video (missing format, members-only) and must not drag the whole
+    # queue into an 80-minute backoff.
+    if grep -qE "HTTP Error (429|403)" /tmp/vid/"$id".log 2>/dev/null; then
+      GAP=$(( GAP * 2 )); [ "$GAP" -gt "$MAX_GAP" ] && GAP=$MAX_GAP
+      if [ "$fails" -ge 5 ]; then back=4800; else back=$((300 * (1 << (fails - 1)))); fi
+      echo "DL LIMIT $id (streak $fails) — gap now ${GAP}s, backing off ${back}s"
+      sleep "$back"
+    else
+      echo "DL SKIP $id :: $(grep -oiE 'ERROR.*' /tmp/vid/"$id".log 2>/dev/null | head -1 | cut -c1-70)"
+      fails=0
+      sleep $((GAP + RANDOM % 30))
+    fi
   fi
 done < /tmp/todo.txt
 echo "=== SLOW PASS DONE ==="
