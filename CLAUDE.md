@@ -2862,6 +2862,44 @@ the material this work exists to replace — the same mixing by a quieter route.
 Dropping the farmed notes early leaves the surface with nothing to say, which is
 worse than the old note. The set is empty until the first opening is finished.
 
+### 🔒🔒 A NOTE IS ANCHORED ONTO THE TAUGHT LINE — THE LINE IS NEVER BENT TOWARD THE NOTE (David 2026-08-17, LOCKED: *"I like the plan. Lock it in"*)
+
+A note anchored where the lesson never goes is **silent in Watch and Learn**. It
+still fires in free play and review, where the student reaches whatever they
+reach — but that is not where most students meet the coach, so a note written
+off-line is teaching almost nobody will hear.
+
+**Measured when this was found: 10 of 64 hand-written notes sat on a taught
+line.** Not carelessness — they were written from wherever the VIDEO happened to
+settle, which has no reason to match where the REPERTOIRE goes. The Fantasy note
+anchored at `...f3 Nd7 e5 c5` is the worked example, against a taught line that
+plays `...f3 dxe4 fxe4 e5`: they diverge at move three, so the lesson never
+reaches it.
+
+**THE FIX RUNS ONE WAY ONLY.** Move the NOTE onto the taught line; never steer
+the taught line toward the notes. Spines are data-chosen — the most-played
+master move at each ply (the DATA-REBUILD doctrine) — and choosing them by what
+we happen to have prose for would mean teaching what we can NARRATE instead of
+what the data says is theory. That inversion is the exact failure the spine
+doctrine exists to prevent, and it would be invisible afterwards because the
+lesson would still look coherent.
+
+**Before writing a note, read the taught line first** (`repertoire.json`, the
+opening's `pgn` and each variation's `pgn`) and anchor onto a position it
+actually walks. Most ideas survive the move: a note about a general idea is
+usually just as true one ply over, on the line students really see.
+`check-notes.mjs` warns on every off-line note at authoring time — a WARNING,
+not a failure, because off-line notes are real teaching; what changed is that
+leaving one there is now a deliberate choice rather than an accident.
+
+**RE-ANCHORING BEATS HARVESTING.** With a corpus already banked, moving existing
+notes onto taught lines multiplies the reach of work already paid for — from
+10/64 toward most of them — while a new video adds notes that may land off-line
+too. Do the re-anchoring pass before pulling more. A note whose idea CANNOT
+survive relocation (a specific tactic in a specific position) stays where it is
+and is left for free play and review; that is a legitimate outcome, not a
+failure to fix.
+
 ### 🔒🔒 EVERY LINE PULLED GETS HAND-WRITTEN NOTES — BY CLAUDE, NOT A MODEL PASS (David 2026-08-17, LOCKED: *"all openings we get corpus for will get hand written lines. So every line you pull needs to be hand written by you to maintain accuracy and standard."*)
 
 There is NO scoping question here, and a session that asks "which openings should
