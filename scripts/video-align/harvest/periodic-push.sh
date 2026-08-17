@@ -14,7 +14,14 @@ INTERVAL=${INTERVAL:-1200}   # 20 minutes — keeps pace with the bank loop
 cd /home/user/chess-academy-pro || exit 1
 while true; do
   sleep "$INTERVAL"
-  if [ -n "$(git status --porcelain)" ] || [ -n "$(git log origin/main..HEAD --oneline 2>/dev/null)" ]; then
+  # NEVER START A SECOND SHIP-CHECK. Each one is a ~10-minute, CPU-bound run
+  # (typecheck, prod build, full eslint), so two on a 4-core box do not take 10
+  # minutes each — they take 35 and look hung. That is exactly what happened
+  # when a hand-run check overlapped this timer, and the symptom was
+  # indistinguishable from a stuck gate.
+  if pgrep -f "ship-check.mjs" > /dev/null; then
+    echo "[$(date -u +%H:%M)] ship-check already running — skipping this cycle"
+  elif [ -n "$(git status --porcelain)" ] || [ -n "$(git log origin/main..HEAD --oneline 2>/dev/null)" ]; then
     echo "[$(date -u +%H:%M)] push cycle starting"
     # KEEP THE WHOLE OUTPUT. This piped through `tail -6`, which threw away
     # every line of a ship-check failure and left only "push aborted" — so a
