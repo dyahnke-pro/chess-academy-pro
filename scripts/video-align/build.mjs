@@ -66,6 +66,10 @@ const track = {
 };
 track.forks = forksOf(track);
 
-mkdirSync('data/video-tracks', { recursive: true });
-writeFileSync(`data/video-tracks/${videoId}.json`, JSON.stringify(track, null, 1));
+// Staging vs shipped: a freshly scanned lesson lands in `data/video-pending/`
+// so the machine work survives this container, and only moves to
+// `data/video-tracks/` once its notes are written. See that directory's README.
+const outDir = process.env.VIDEO_TRACK_DIR ?? 'data/video-tracks';
+mkdirSync(outDir, { recursive: true });
+writeFileSync(`${outDir}/${videoId}.json`, JSON.stringify(track, null, 1));
 console.log(`${videoId}: ${track.plies} plies, ${track.rewinds} rewinds, ${track.forks.length} forks`);

@@ -35,6 +35,26 @@ from read_board import (  # noqa: E402
     read_board_arr,
     read_board_calibrated_arr,
 )
+from calibrate import orientation_of  # noqa: E402
+
+
+def flip(grid):
+    """Rotate a grid 180 degrees — what a board shown from Black's side needs.
+
+    THIS IS WHY FOURTEEN PULLS 'FAILED ON GEOMETRY' AND SIX TRACKED NONSENSE.
+    He plays Black in most speedruns, so chess.com draws the board from his side:
+    rank 1 at the top, files h..a left to right. The geometry is IDENTICAL — same
+    x, y and square size — so every geometry check passed, and `looks_like_start`
+    passed too because two full ranks at each end is symmetric under a half turn.
+    Only COLOUR distinguishes the two, which is exactly what `orientation_of`
+    reads.
+
+    Unflipped, every square maps to its mirror. Sometimes that matches no legal
+    move and the video is refused; worse, sometimes it matches a legal SEQUENCE
+    that never happened — a King's Gambit lesson tracked as `d3 c5 d4 d5`, every
+    move legal, the whole line false. Refusal was the lucky outcome.
+    """
+    return [row[::-1] for row in grid[::-1]]
 
 
 def dimensions(video):
@@ -72,6 +92,7 @@ def scan(video, x0, y0, sq, fps, calibrated=False):
     w, h = dimensions(video)
     rows = []
     cal = None
+    orient = None
     for i, g in stream(video, fps, w, h):
         if not calibrated:
             grid = read_board_arr(g, x0, y0, sq)
@@ -90,11 +111,33 @@ def scan(video, x0, y0, sq, fps, calibrated=False):
             # reader finds nothing and the video is refused for the wrong reason.
             if cal is None:
                 trial = calibrate_from_start_arr(g, x0, y0, sq)
-                if not looks_like_start(read_board_calibrated_arr(g, x0, y0, sq, trial)):
+                start = read_board_calibrated_arr(g, x0, y0, sq, trial)
+                if not looks_like_start(start):
+                    continue
+                orient = orientation_of(start)
+                if orient is None:
                     continue
                 cal = trial
-                print(f'calibrated at frame {i} (t={i / fps:.1f}s)', flush=True)
+                print(f'calibrated at frame {i} (t={i / fps:.1f}s), orientation={orient}', flush=True)
             grid = read_board_calibrated_arr(g, x0, y0, sq, cal)
+            # ORIENTATION IS RE-READ AT EVERY START POSITION, never fixed once
+            # for the file. A lesson opens with an old game, then plays his own,
+            # then walks example games — and he is Black in most speedruns, so
+            # the board turns over partway through. Measured on the Panov upload:
+            # it calibrates `white` at 7.5s and is unmistakably Black-oriented by
+            # t=600. Deciding once gets the whole second half mirrored.
+            #
+            # A start position is the only frame orientation can be read from —
+            # occupancy is symmetric under a half turn, so only the COLOUR of the
+            # two full ranks resolves it — and it is also exactly where the
+            # tracker segments games, so the two agree by construction.
+            if looks_like_start(grid):
+                fresh = orientation_of(grid)
+                if fresh is not None and fresh != orient:
+                    print(f'  orientation -> {fresh} at t={i / fps:.1f}s', flush=True)
+                    orient = fresh
+            if orient == 'black':
+                grid = flip(grid)
         rows.append({'t': round(i / fps, 1), 'grid': grid})
     return rows
 

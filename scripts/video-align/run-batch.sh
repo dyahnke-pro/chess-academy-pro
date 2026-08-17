@@ -22,7 +22,7 @@ mkdir -p "$OUT"
 one() {
   local f="$1" id
   id=$(basename "$f"); id="${id%.*}"
-  if [ -f "data/video-tracks/$id.json" ]; then echo "SKIP $id (already built)"; return; fi
+  if [ -f "data/video-tracks/$id.json" ] || [ -f "data/video-pending/$id.json" ]; then echo "SKIP $id (already built)"; return; fi
   local grids="$OUT/$id.grids.json"
   if [ ! -s "$grids" ]; then
     if ! python3 scripts/video-align/scan_stream.py "$f" "$grids" "$GEO_X" "$GEO_Y" "$GEO_S" 2 --calibrated \
