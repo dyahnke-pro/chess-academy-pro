@@ -184,6 +184,17 @@ const GATE_TESTS = [
   // narrationAccuracy, since that asks whether prose is TRUE OF a board and
   // never whether it was ABOUT that board.
   'src/data/videoTrackIntegrity.test.ts',
+  // 🔒 THE NOTE GATES BELONG HERE. A false claim reached main on 2026-08-18 —
+  // a note asserting "the pawns on c6 and c7 are doubled" on a board where c7
+  // is empty. The board-truth grader CAUGHT it and cut it, and the shrink-only
+  // ceiling in videoNoteSplice went red the moment it landed. Neither gate was
+  // in this list, so ship-check passed and the note shipped. The guardrail
+  // existed and nothing was watching it, which is the same defect as a lane
+  // that computes correctly and reaches nobody.
+  'src/data/videoNoteSplice.test.ts',
+  'src/data/videoNotesSpeak.test.ts',
+  'src/data/videoNoteReasons.test.ts',
+  'src/services/reasonVoice.test.ts',
   'src/data/lessons/lessonIntegrity.test.ts',
   'src/data/lessons/narrationAccuracy.test.ts',
   'src/data/lessons/narrationGrounding.test.ts',

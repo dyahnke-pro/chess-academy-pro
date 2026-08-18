@@ -62,5 +62,19 @@
     "square": "f7"
    }
   ]
+ },
+ {
+  "id": "vn-bowdler-open-it-or-aim-at-it",
+  "line": "e4 c5 Nf3 Nc6",
+  "teaches": "Two sound third moves with nothing between them objectively, and a real difference in what you are signing up for. Opening the centre leads to the positions both sides have studied hardest. Putting the bishop out at once aims at the weakest square near the enemy king before anything is settled, and takes the game somewhere far less familiar — which at club level is most of its value.",
+  "explains": "Both knights are out and the centre is still unresolved. One try takes on the centre immediately and transposes into heavily analysed ground. The other develops the light-squared bishop toward f7 first, keeping the pawns flexible and asking the opponent to think from move three rather than recite.",
+  "options": [
+   {
+    "san": "d4"
+   },
+   {
+    "san": "Bc4"
+   }
+  ]
  }
 ]

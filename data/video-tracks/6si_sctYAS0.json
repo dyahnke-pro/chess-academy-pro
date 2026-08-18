@@ -887,16 +887,17 @@
   {
    "id": "vn-french-adv-knight-route-b3",
    "line": "e4 e6 d4 d5 e5 c5 Nf3 cxd4 Bd3 Nc6 O-O",
-   "teaches": "When a knight has to travel, choose the route that leaves your own bishops breathing. A square is good not only for what the piece attacks from it but for what it stops blocking — a knight that presses on the target while stepping out of its own bishops' way is doing two jobs.",
-   "explains": "The queen's knight is still at home and heads for b3 by way of d2. From b3 it bears down on the d4 pawn, which is the pawn White intends to regain, and it stands clear of both bishops rather than shutting one of them in. Black's tries here were to post the bishop actively or to challenge the centre with the f-pawn.",
+   "teaches": "With the centre locked and the king still to be tucked away, the choice is which piece the position needs first. A knight developed behind its own pawns keeps every option; a bishop posted actively commits it; a pawn break at the head of the chain changes the structure at once. All three are played here, and they are not the same game.",
+   "explains": "The pawn chain is fixed and White has castled. Three tries come into consideration: the knight to e7, heading for f5 or g6 behind the chain; the bishop out to c5 where it eyes the centre immediately; or the pawn to f6, striking at the head of the chain before the pieces are settled.",
    "options": [
     {
-     "san": "Bc5",
-     "continuation": "Bc5"
+     "san": "Nge7"
     },
     {
-     "san": "f6",
-     "continuation": "f6"
+     "san": "Bc5"
+    },
+    {
+     "san": "f6"
     }
    ],
    "fen": "r1bqkbnr/pp3ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 3 6",

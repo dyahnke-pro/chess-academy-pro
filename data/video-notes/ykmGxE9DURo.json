@@ -3,7 +3,7 @@
   "id": "vn-traxler-sac-declined",
   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7",
   "teaches": "A line can be objectively playable and still be the wrong practical choice. When every continuation is forcing and one slip ends the game, the recall a line demands is part of its price, and a verdict of \"balanced\" does not repay that price.",
-  "explains": "The knight lands on f7 forking the queen and the rook in the corner, which is exactly why it is tempting. What follows is a long series of checks that must each be met exactly, and at the end of them White is no better \u2014 so the risk buys no advantage, only an obligation to remember a great deal of theory correctly under pressure.",
+  "explains": "The knight lands on f7 forking the queen and the rook in the corner, which is exactly why it is tempting. What follows is a long series of checks that must each be met exactly, and at the end of them White is no better — so the risk buys no advantage, only an obligation to remember a great deal of theory correctly under pressure.",
   "reasons": [
    {
     "kind": "attacks",
@@ -18,8 +18,8 @@
  {
   "id": "vn-traxler-surprise",
   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 d4",
-  "teaches": "Against a gambit whose whole value is preparation, the strongest practical reply is often the one your opponent has not studied. A move that is merely good but unexpected can outperform a move that is best and famous, because the opponent\u2019s preparation is part of the position too.",
-  "explains": "Pushing the d-pawn opens the queen\u2019s bishop and strikes at the centre while Black\u2019s pieces are still committed to a kingside attack that has not started. Black\u2019s position is defensible, but only by a reply most players never consider.",
+  "teaches": "Against a gambit whose whole value is preparation, the strongest practical reply is often the one your opponent has not studied. A move that is merely good but unexpected can outperform a move that is best and famous, because the opponent’s preparation is part of the position too.",
+  "explains": "Pushing the d-pawn opens the queen’s bishop and strikes at the centre while Black’s pieces are still committed to a kingside attack that has not started. Black’s position is defensible, but only by a reply most players never consider.",
   "reasons": [
    {
     "kind": "attacks",
@@ -35,7 +35,7 @@
  {
   "id": "vn-traxler-counter-not-retreat",
   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 d4 d5",
-  "teaches": "When a defender\u2019s instinct is to protect the attacked point, the saving move is often to hit something of equal value instead. Counting who is attacking what, rather than rescuing the piece under fire, is what finds these.",
+  "teaches": "When a defender’s instinct is to protect the attacked point, the saving move is often to hit something of equal value instead. Counting who is attacking what, rather than rescuing the piece under fire, is what finds these.",
   "explains": "Advancing the d-pawn ignores the threat and challenges the bishop that aims at f7. Because it interferes with the most dangerous attacking piece rather than fleeing, Black gains the time a defensive move would have spent.",
   "reasons": [
    {
@@ -51,8 +51,8 @@
  {
   "id": "vn-traxler-simplifying-capture",
   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Bxf7+",
-  "teaches": "Against an aggressive gambit, prefer the capture that removes the opponent\u2019s attacking chances over the one that wins the most material. The best practical answer often leaves the fewest enemy pieces pointing at your king.",
-  "explains": "Taking with the bishop comes with check, and the king has exactly two squares \u2014 neither of them a capture, because the knight covers f7 \u2014 so Black spends the move walking and loses the right to castle on the way. The lines that make this whole variation dangerous never begin, and White is simply a pawn up with a safe king.",
+  "teaches": "Against an aggressive gambit, prefer the capture that removes the opponent’s attacking chances over the one that wins the most material. The best practical answer often leaves the fewest enemy pieces pointing at your king.",
+  "explains": "Taking with the bishop comes with check, and the king has exactly two squares — neither of them a capture, because the knight covers f7 — so Black spends the move walking and loses the right to castle on the way. The lines that make this whole variation dangerous never begin, and White is simply a pawn up with a safe king.",
   "reasons": [
    {
     "kind": "attacks",
@@ -77,6 +77,23 @@
    {
     "kind": "attacks",
     "square": "d2"
+   }
+  ]
+ },
+ {
+  "id": "vn-sharpknight-three-answers-to-the-counterattack",
+  "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5",
+  "teaches": "When the defender ignores your threat and develops into it, stop and count before grabbing. The capture that looks like it wins material invites the whole point of their move; the check first changes the order; and the central push declines the argument altogether and plays chess. Knowing which one you want is the difference between walking into preparation and setting your own.",
+  "explains": "The knight is attacking f7 and instead of defending it the bishop has come out. Three tries come into consideration here: taking on f7 with the knight, the bishop check on f7 first, or the central pawn push that ignores the offer and opens the position while the defender's pieces are committed.",
+  "options": [
+   {
+    "san": "Nxf7"
+   },
+   {
+    "san": "Bxf7+"
+   },
+   {
+    "san": "d4"
    }
   ]
  }

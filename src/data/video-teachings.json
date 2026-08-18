@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-18",
  "videosDistilled": 55,
- "noteCount": 138,
+ "noteCount": 140,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -417,8 +417,8 @@
    ],
    "opening": "French Defense: Advance Variation, Nimzowitsch System",
    "phase": "opening",
-   "explains": "The queen's knight is still at home and heads for b3 by way of d2. From b3 it bears down on the d4 pawn, which is the pawn White intends to regain, and it stands clear of both bishops rather than shutting one of them in. Black's tries here were to post the bishop actively or to challenge the centre with the f-pawn.",
-   "teaches": "When a knight has to travel, choose the route that leaves your own bishops breathing. A square is good not only for what the piece attacks from it but for what it stops blocking — a knight that presses on the target while stepping out of its own bishops' way is doing two jobs.",
+   "explains": "The pawn chain is fixed and White has castled. Three tries come into consideration: the knight to e7, heading for f5 or g6 behind the chain; the bishop out to c5 where it eyes the centre immediately; or the pawn to f6, striking at the head of the chain before the pieces are settled.",
+   "teaches": "With the centre locked and the king still to be tucked away, the choice is which piece the position needs first. A knight developed behind its own pawns keeps every option; a bishop posted actively commits it; a pawn break at the head of the chain changes the structure at once. All three are played here, and they are not the same game.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -427,12 +427,13 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "Bc5",
-     "continuation": "Bc5"
+     "san": "Nge7"
     },
     {
-     "san": "f6",
-     "continuation": "f6"
+     "san": "Bc5"
+    },
+    {
+     "san": "f6"
     }
    ]
   },
@@ -3855,6 +3856,43 @@
    ]
   },
   {
+   "id": "vn-bowdler-open-it-or-aim-at-it",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6"
+   ],
+   "opening": "Sicilian Defense",
+   "phase": "opening",
+   "explains": "Both knights are out and the centre is still unresolved. One try takes on the centre immediately and transposes into heavily analysed ground. The other develops the light-squared bishop toward f7 first, keeping the pawns flexible and asking the opponent to think from move three rather than recite.",
+   "teaches": "Two sound third moves with nothing between them objectively, and a real difference in what you are signing up for. Opening the centre leads to the positions both sides have studied hardest. Putting the bishop out at once aims at the weakest square near the enemy king before anything is settled, and takes the game somewhere far less familiar — which at club level is most of its value.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:o12epkA2jeE"
+   ],
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "d4"
+    },
+    {
+     "san": "Bc4"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "c5",
+     "Nf3"
+    ],
+    "taughtMove": "d6",
+    "alternative": "Nc6",
+    "lineName": "Sicilian: Najdorf"
+   }
+  },
+  {
    "id": "vn-jobava-three-ways-to-meet-nb5",
    "lineSan": [
     "d4",
@@ -4155,7 +4193,7 @@
    ],
    "opening": "Sicilian Defense: Accelerated Dragon, Modern Variation",
    "phase": "opening",
-   "explains": "The pawns on c6 and c7 are doubled after the exchange, and the pawn advances to e5 hitting the knight on f6. It also covers d6, so the knight cannot simply drop back into the middle of the position. The knight has to go somewhere awkward, and every move it spends finding a square is a move the attacker spends developing.",
+   "explains": "Black's pawn stands on c6 with b7 and c7 empty behind it. The pawn advances to e5, hitting the knight on f6, and it covers d6 as well, so the knight cannot drop back into the middle of the position. It has to go somewhere awkward, and every move it spends finding a square is a move the attacker spends developing.",
    "teaches": "After trading in the centre, the follow-up push earns its place if it hits a piece and takes a square in one move. The knight it attacks is usually the piece holding the defender's position together, and the square behind the pawn is where the attack wants to land next.",
    "plans": "",
    "concepts": [],
@@ -4637,6 +4675,54 @@
    ]
   },
   {
+   "id": "vn-sharpknight-three-answers-to-the-counterattack",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "Ng5",
+    "Bc5"
+   ],
+   "opening": "Italian Game: Two Knights Defense, Traxler Counterattack",
+   "phase": "opening",
+   "explains": "The knight is attacking f7 and instead of defending it the bishop has come out. Three tries come into consideration here: taking on f7 with the knight, the bishop check on f7 first, or the central pawn push that ignores the offer and opens the position while the defender's pieces are committed.",
+   "teaches": "When the defender ignores your threat and develops into it, stop and count before grabbing. The capture that looks like it wins material invites the whole point of their move; the check first changes the order; and the central push declines the argument altogether and plays chess. Knowing which one you want is the difference between walking into preparation and setting your own.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ykmGxE9DURo"
+   ],
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Nxf7"
+    },
+    {
+     "san": "Bxf7+"
+    },
+    {
+     "san": "d4"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "e5",
+     "Nf3",
+     "Nc6",
+     "Bc4",
+     "Nf6",
+     "Ng5"
+    ],
+    "taughtMove": "d5",
+    "alternative": "Bc5",
+    "lineName": "Two Knights Defence / Two Knights: Fried Liver Defence 5...Na5"
+   }
+  },
+  {
    "id": "vn-english-fianchetto-that-hits-the-centre-knight",
    "lineSan": [
     "c4",
@@ -4807,8 +4893,8 @@
    ],
    "opening": "King's Gambit Accepted",
    "phase": "opening",
-   "explains": "The knight has come out and the extra pawn on f4 needs a decision. Advancing the g-pawn props it up and keeps the material, at the price of loosening the squares your own king will want later. Developing the king's knight instead ignores the pawn and turns the game toward the centre immediately.",
-   "teaches": "Two honest ways to meet a gambit: hold what you took, or give it back and play in the centre. Holding it means committing pawns in front of your own king, which is a real cost and not a bluff — the older move is not refuted, it is simply expensive. Decide which bill you would rather pay before you take a second pawn.",
+   "explains": "The knight has come out and the extra pawn on f4 needs an answer. Advancing the g-pawn props it up and keeps the material at the price of loosening the kingside. Returning it with the central push, or the modest pawn move, both trade the pawn for a free game. Developing the king's knight leaves the pawn where it is and hits the centre instead.",
+   "teaches": "Four honest ways to meet a gambit, and the choice is what you are willing to pay. Hold the pawn and you commit pawns in front of your own king. Give it straight back in the centre and you get development instead of material. Or ignore the question and simply develop, which asks the attacker to prove the pawn was worth it.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4817,7 +4903,13 @@
    "positionSource": "high",
    "options": [
     {
+     "san": "d5"
+    },
+    {
      "san": "g5"
+    },
+    {
+     "san": "d6"
     },
     {
      "san": "Nf6"

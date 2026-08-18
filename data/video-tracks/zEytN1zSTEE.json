@@ -1842,11 +1842,17 @@
   {
    "id": "vn-kgambit-hold-the-pawn-or-hit-the-centre",
    "line": "e4 e5 f4 exf4 Nf3",
-   "teaches": "Two honest ways to meet a gambit: hold what you took, or give it back and play in the centre. Holding it means committing pawns in front of your own king, which is a real cost and not a bluff — the older move is not refuted, it is simply expensive. Decide which bill you would rather pay before you take a second pawn.",
-   "explains": "The knight has come out and the extra pawn on f4 needs a decision. Advancing the g-pawn props it up and keeps the material, at the price of loosening the squares your own king will want later. Developing the king's knight instead ignores the pawn and turns the game toward the centre immediately.",
+   "teaches": "Four honest ways to meet a gambit, and the choice is what you are willing to pay. Hold the pawn and you commit pawns in front of your own king. Give it straight back in the centre and you get development instead of material. Or ignore the question and simply develop, which asks the attacker to prove the pawn was worth it.",
+   "explains": "The knight has come out and the extra pawn on f4 needs an answer. Advancing the g-pawn props it up and keeps the material at the price of loosening the kingside. Returning it with the central push, or the modest pawn move, both trade the pawn for a free game. Developing the king's knight leaves the pawn where it is and hits the centre instead.",
    "options": [
     {
+     "san": "d5"
+    },
+    {
      "san": "g5"
+    },
+    {
+     "san": "d6"
     },
     {
      "san": "Nf6"

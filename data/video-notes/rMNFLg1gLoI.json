@@ -67,7 +67,7 @@
   "id": "vn-accdragon-push-that-hits-the-defender-of-the-square",
   "line": "e4 c5 Nc3 Nc6 Nf3 g6 d4 cxd4 Nxd4 Bg7 Be3 Nf6 Nxc6 bxc6 e5",
   "teaches": "After trading in the centre, the follow-up push earns its place if it hits a piece and takes a square in one move. The knight it attacks is usually the piece holding the defender's position together, and the square behind the pawn is where the attack wants to land next.",
-  "explains": "The pawns on c6 and c7 are doubled after the exchange, and the pawn advances to e5 hitting the knight on f6. It also covers d6, so the knight cannot simply drop back into the middle of the position. The knight has to go somewhere awkward, and every move it spends finding a square is a move the attacker spends developing.",
+  "explains": "Black's pawn stands on c6 with b7 and c7 empty behind it. The pawn advances to e5, hitting the knight on f6, and it covers d6 as well, so the knight cannot drop back into the middle of the position. It has to go somewhere awkward, and every move it spends finding a square is a move the attacker spends developing.",
   "reasons": [
    {
     "kind": "attacks",
