@@ -1,7 +1,7 @@
 {
- "generatedAt": "2026-08-17",
- "videosDistilled": 27,
- "noteCount": 64,
+ "generatedAt": "2026-08-18",
+ "videosDistilled": 28,
+ "noteCount": 68,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -1349,6 +1349,164 @@
    "positionSource": "high"
   },
   {
+   "id": "vn-kid-bf4-count-the-square-before-you-break",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nf3",
+    "Bg7",
+    "Bf4",
+    "O-O",
+    "Nc3",
+    "d6",
+    "e3",
+    "c6",
+    "Be2",
+    "a6"
+   ],
+   "opening": "King's Indian Defense: Normal Variation, King's Knight Variation",
+   "phase": "opening",
+   "explains": "The expansion with b5 is what this whole set-up is for, but played right now it simply drops a pawn: the c-pawn and the queen's knight both cover b5, and only the pawn on c6 guards it. The rook's pawn to a6 makes it two against two, and from here the break goes in whenever the moment is right rather than never.",
+   "teaches": "Before pushing a pawn into the opponent's half, count the pieces covering the square it lands on. A break that is one defender short is not a break, it is a donation — and the cheapest repair is almost always a quiet pawn move on the neighbouring file, which costs a tempo and buys the whole plan.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:kQHOIgVhyow"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-kid-bf4-chase-a-piece-that-only-defends",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nf3",
+    "Bg7",
+    "Bf4",
+    "O-O",
+    "Nc3",
+    "d6",
+    "e3",
+    "c6",
+    "Be2",
+    "a6",
+    "Qd2",
+    "b5",
+    "a3",
+    "Bb7",
+    "O-O",
+    "Nbd7",
+    "h3",
+    "bxc4",
+    "Bxc4",
+    "c5",
+    "d5",
+    "Nb6"
+   ],
+   "opening": "King's Indian Defense: Normal Variation, King's Knight Variation",
+   "phase": "middlegame",
+   "explains": "The knight arrives on b6 hitting the bishop and joining the pieces already trained on d5. Count where that bishop can go and the position speaks for itself — of its six squares, exactly two keep it guarding the pawn, and both of them are behind it on the same diagonal, further from the game rather than nearer to it.",
+   "teaches": "When a piece has been reduced to guarding a single pawn, push it further back before it can be re-routed. Time spent harassing a defender is not time lost: every square you take away from it is a square it can never help from again.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:kQHOIgVhyow"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-kid-bf4-push-past-a-defender-to-remove-it",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nf3",
+    "Bg7",
+    "Bf4",
+    "O-O",
+    "Nc3",
+    "d6",
+    "e3",
+    "c6",
+    "Be2",
+    "a6",
+    "Qd2",
+    "b5",
+    "a3",
+    "Bb7",
+    "O-O",
+    "Nbd7",
+    "h3",
+    "bxc4",
+    "Bxc4",
+    "c5",
+    "d5",
+    "Nb6",
+    "Ba2",
+    "c4"
+   ],
+   "opening": "King's Indian Defense: Normal Variation, King's Knight Variation",
+   "phase": "middlegame",
+   "explains": "The pawn steps to c4 and shuts the bishop off the long diagonal it was defending along. Three defenders become two, against three attackers, and the pawn on d5 cannot simply be guarded again: the one move that adds a defender without losing material is the central push, which is exactly the concession being played for.",
+   "teaches": "A pawn does not have to attack a square to win it. Pushing past a defender cuts the line that defender was working along, and a point held three times by pieces that can no longer see it is a point held twice. Removing a guard and adding an attacker are the same arithmetic from opposite ends.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:kQHOIgVhyow"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-kid-bf4-step-the-rook-off-before-the-bishop-comes",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nf3",
+    "Bg7",
+    "Bf4",
+    "O-O",
+    "Nc3",
+    "d6",
+    "e3",
+    "c6",
+    "Be2",
+    "a6",
+    "Qd2",
+    "b5",
+    "a3",
+    "Bb7",
+    "O-O",
+    "Nbd7",
+    "h3",
+    "bxc4",
+    "Bxc4",
+    "c5",
+    "d5",
+    "Nb6",
+    "Ba2",
+    "c4",
+    "e4",
+    "Re8"
+   ],
+   "opening": "King's Indian Defense: Normal Variation, King's Knight Variation",
+   "phase": "middlegame",
+   "explains": "The offer to trade on h6 is coming, and with the rook where it stands the retreat along the diagonal walks into a capture on the square the rook has just left, which means the trade cannot be declined. Stepping the rook to e8 empties that square and the retreat becomes free. It is a piece of technique worth keeping: the rook move looks like ordinary development and is really the answer to a threat one move ahead.",
+   "teaches": "When the whole character of your position rests on one bishop, look for the move that gives it a safe retreat before it is ever challenged. A fianchettoed bishop offered a trade has only one square to duck to, and whether ducking is possible depends on a rook standing a file away — so move the rook first, while it is still free.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:kQHOIgVhyow"
+   ],
+   "positionSource": "high"
+  },
+  {
    "id": "vn-maroczy-queen-sortie-against-a-loose-bishop",
    "lineSan": [
     "e4",
@@ -1603,7 +1761,7 @@
    ],
    "opening": "Italian Game: Two Knights Defense, Traxler Counterattack",
    "phase": "opening",
-   "explains": "Taking on f7 drags the black king into the open, but it hands Black a long series of checks that must each be met exactly. White is no better at the end of it, so the risk buys no advantage — only an obligation to remember a great deal of theory correctly under a clock.",
+   "explains": "The knight lands on f7 forking the queen and the rook in the corner, which is exactly why it is tempting. What follows is a long series of checks that must each be met exactly, and at the end of them White is no better — so the risk buys no advantage, only an obligation to remember a great deal of theory correctly under pressure.",
    "teaches": "A line can be objectively playable and still be the wrong practical choice. When every continuation is forcing and one slip ends the game, the recall a line demands is part of its price, and a verdict of \"balanced\" does not repay that price.",
    "plans": "",
    "concepts": [],
@@ -1687,20 +1845,33 @@
     "Nf6",
     "Ng5",
     "Bc5",
-    "Bxf7+",
-    "Ke7",
-    "Bc4"
+    "Bxf7+"
    ],
    "opening": "Italian Game: Two Knights Defense, Traxler Counterattack",
    "phase": "opening",
-   "explains": "Capturing with the bishop checks immediately and forces the king to step forward before Black can coordinate. The lines that make this opening dangerous never begin, and White keeps a sound extra pawn and a safe king.",
+   "explains": "Taking with the bishop comes with check, and the king has exactly two squares — neither of them a capture, because the knight covers f7 — so Black spends the move walking and loses the right to castle on the way. The lines that make this whole variation dangerous never begin, and White is simply a pawn up with a safe king.",
    "teaches": "Against an aggressive gambit, prefer the capture that removes the opponent’s attacking chances over the one that wins the most material. The best practical answer often leaves the fewest enemy pieces pointing at your king.",
    "plans": "",
    "concepts": [],
    "sources": [
     "yt:ykmGxE9DURo"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "e5",
+     "Nf3",
+     "Nc6",
+     "Bc4",
+     "Nf6",
+     "Ng5",
+     "Bc5"
+    ],
+    "taughtMove": "Nxf7",
+    "alternative": "Bxf7+",
+    "lineName": "Two Knights Defence / Two Knights: Traxler Counterattack"
+   }
   },
   {
    "id": "vn-traxler-king-choice",

@@ -6253,6 +6253,12 @@
    "line": "d4 e5 dxe5 f6",
    "teaches": "Against a gambit, the pawn is not the prize — the question is what the opponent gets for it. Taking everything offered often hands back exactly what was being paid for: quick development and an open file. Declining once, and keeping the extra pawn on your own terms, is usually the better bargain.",
    "explains": "Black offers a second pawn to open the f-file and get the pieces out fast. Capturing on f6 does win it, but Black recaptures with the knight and emerges developed with the file already open in front of the white king. Pushing the e-pawn to e4 instead holds the extra pawn without opening anything, and leaves Black to prove the compensation.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    }
+   ],
    "fen": "rnbqkbnr/pppp2pp/5p2/4P3/8/8/PPP1PPPP/RNBQKBNR w KQkq - 0 3",
    "t": 303.5,
    "ply": 4,
@@ -6273,6 +6279,12 @@
    "line": "d4 e5 dxe5 Nc6 Nf3 Qe7",
    "teaches": "Before defending a pawn with a piece, check the ranks and diagonals the defender will stand on. The most natural-looking guard is worth nothing if the enemy queen can check and attack it in the same move — and a fourth rank swept clear by an early exchange is exactly where that happens.",
    "explains": "Black eyes the pawn on e5 and White wants to hold it. Developing the bishop to f4 is the instinctive way, and it runs into the queen coming to b4: the fourth rank is empty after the capture on e5, so the check on the king and the attack on the bishop arrive together. The piece cannot be saved by parrying the check.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    }
+   ],
    "fen": "r1b1kbnr/ppppqppp/2n5/4P3/8/5N2/PPP1PPPP/RNBQKB1R w KQkq - 3 4",
    "t": 292.5,
    "ply": 6,

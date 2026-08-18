@@ -1,0 +1,37 @@
+[
+ {
+  "id": "vn-kid-bf4-count-the-square-before-you-break",
+  "line": "d4 Nf6 c4 g6 Nf3 Bg7 Bf4 O-O Nc3 d6 e3 c6 Be2 a6",
+  "teaches": "Before pushing a pawn into the opponent's half, count the pieces covering the square it lands on. A break that is one defender short is not a break, it is a donation — and the cheapest repair is almost always a quiet pawn move on the neighbouring file, which costs a tempo and buys the whole plan.",
+  "explains": "The expansion with b5 is what this whole set-up is for, but played right now it simply drops a pawn: the c-pawn and the queen's knight both cover b5, and only the pawn on c6 guards it. The rook's pawn to a6 makes it two against two, and from here the break goes in whenever the moment is right rather than never.",
+  "reasons": [
+   { "kind": "controls", "square": "b5" }
+  ]
+ },
+ {
+  "id": "vn-kid-bf4-chase-a-piece-that-only-defends",
+  "line": "d4 Nf6 c4 g6 Nf3 Bg7 Bf4 O-O Nc3 d6 e3 c6 Be2 a6 Qd2 b5 a3 Bb7 O-O Nbd7 h3 bxc4 Bxc4 c5 d5 Nb6",
+  "teaches": "When a piece has been reduced to guarding a single pawn, push it further back before it can be re-routed. Time spent harassing a defender is not time lost: every square you take away from it is a square it can never help from again.",
+  "explains": "The knight arrives on b6 hitting the bishop and joining the pieces already trained on d5. Count where that bishop can go and the position speaks for itself — of its six squares, exactly two keep it guarding the pawn, and both of them are behind it on the same diagonal, further from the game rather than nearer to it.",
+  "reasons": [
+   { "kind": "attacks", "square": "c4" },
+   { "kind": "attacks", "square": "d5" }
+  ]
+ },
+ {
+  "id": "vn-kid-bf4-push-past-a-defender-to-remove-it",
+  "line": "d4 Nf6 c4 g6 Nf3 Bg7 Bf4 O-O Nc3 d6 e3 c6 Be2 a6 Qd2 b5 a3 Bb7 O-O Nbd7 h3 bxc4 Bxc4 c5 d5 Nb6 Ba2 c4",
+  "teaches": "A pawn does not have to attack a square to win it. Pushing past a defender cuts the line that defender was working along, and a point held three times by pieces that can no longer see it is a point held twice. Removing a guard and adding an attacker are the same arithmetic from opposite ends.",
+  "explains": "The pawn steps to c4 and shuts the bishop off the long diagonal it was defending along. Three defenders become two, against three attackers, and the pawn on d5 cannot simply be guarded again: the one move that adds a defender without losing material is the central push, which is exactly the concession being played for.",
+  "reasons": [
+   { "kind": "blocks", "from": "a2", "to": "d5" }
+  ]
+ },
+ {
+  "id": "vn-kid-bf4-step-the-rook-off-before-the-bishop-comes",
+  "line": "d4 Nf6 c4 g6 Nf3 Bg7 Bf4 O-O Nc3 d6 e3 c6 Be2 a6 Qd2 b5 a3 Bb7 O-O Nbd7 h3 bxc4 Bxc4 c5 d5 Nb6 Ba2 c4 e4 Re8",
+  "teaches": "When the whole character of your position rests on one bishop, look for the move that gives it a safe retreat before it is ever challenged. A fianchettoed bishop offered a trade has only one square to duck to, and whether ducking is possible depends on a rook standing a file away — so move the rook first, while it is still free.",
+  "explains": "The offer to trade on h6 is coming, and with the rook where it stands the retreat along the diagonal walks into a capture on the square the rook has just left, which means the trade cannot be declined. Stepping the rook to e8 empties that square and the retreat becomes free. It is a piece of technique worth keeping: the rook move looks like ordinary development and is really the answer to a threat one move ahead.",
+  "reasons": []
+ }
+]

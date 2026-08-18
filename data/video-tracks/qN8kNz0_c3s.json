@@ -617,6 +617,12 @@
    "line": "d4 Nf6 Nc3 d5 Bf4 Bf5 Bc1 Ng8 Nb1 Bc8 Nc3 Nf6 Bf4 e6 Nb5",
    "teaches": "When one square is the whole problem, list every way of dealing with it before choosing — guard it, occupy it, or hit something bigger elsewhere. The move that comes to mind first is usually the one that defends most obviously, and obvious defence and best defence are different things.",
    "explains": "The knight on b5 wants to land on c7, where it would check the king and hit the rook in the corner at the same time. Three replies deal with it: a bishop check on b4 that answers the threat by making one of its own, a knight to a6 covering the square from the edge, and a bishop to d6 blocking the square directly. All three address c7; they are not equally good.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c7"
+    }
+   ],
    "fen": "rnbqkb1r/ppp2ppp/4pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 1 8",
    "t": 412.5,
    "ply": 15,

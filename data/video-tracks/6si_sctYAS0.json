@@ -888,6 +888,12 @@
    "line": "e4 e6 d4 d5 e5 c5 Nf3 cxd4 Bd3 Nc6 O-O f6",
    "teaches": "A move that is wrong early can be exactly right once the position has changed. Striking at a cramping pawn with the f-pawn loosens the squares around your own king, so before you play it, ask which enemy piece is waiting to use them.",
    "explains": "Black challenges the e5 pawn directly, and the reply is the bishop to b5 — pinning the knight on c6 against the king, since d7 is empty. That takes the sting out of capturing on e5, because recapturing with the knight then hits c6 a second time, from the other side of the board.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    }
+   ],
    "fen": "r1bqkbnr/pp4pp/2n1pp2/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
    "t": 1253.5,
    "ply": 12,

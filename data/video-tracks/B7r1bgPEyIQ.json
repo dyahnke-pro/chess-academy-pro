@@ -1233,6 +1233,12 @@
    "line": "d4 g6 e4 Bg7 Nc3 c6 Be3 d5 f3",
    "teaches": "Against a big pawn centre propped up by f3, the choice is between resolving the tension at once and keeping it. Releasing it hands the opponent a clear structure to play against; keeping it means accepting a cramped position for a while in exchange for keeping options.",
    "explains": "White has supported the e4 pawn with the f-pawn rather than a piece, so the centre will not disappear on its own. Four continuations branch from here — capturing on e4, developing the queen to b6, bringing the knight round via h6, and striking with the e-pawn — and they lead to genuinely different games rather than transposing.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    }
+   ],
    "fen": "rnbqk1nr/pp2ppbp/2p3p1/3p4/3PP3/2N1BP2/PPP3PP/R2QKBNR b KQkq - 0 5",
    "t": 2213,
    "ply": 9,

@@ -112,6 +112,30 @@ function between(from: Square, to: Square): Square[] {
 const clear = (game: Chess, from: Square, to: Square): boolean =>
   between(from, to).every((sq) => !game.get(sq));
 
+/** The same position with `color` to move.
+ *
+ *  NOT `setTurn`, which plays a null move and THROWS "Null move not allowed when
+ *  in check" — so every checker built on it died on any move that answers a
+ *  check. Measured 2026-08-18 on `1.d4 e5 2.dxe5 Bb4+`: a `prevents` reason on
+ *  White's reply crashed the whole run rather than returning a verdict, which
+ *  would have taken out `check-notes` and any runtime caller alike. Rewriting
+ *  the FEN's active field asks the same question without moving anything.
+ *
+ *  The en-passant square goes with the turn — it is only ever available to the
+ *  side to move — so it is cleared, or the swap invents a capture. */
+function asTurnOf(fen: string, color: Color): Chess | null {
+  const parts = fen.split(' ');
+  if (parts.length < 4) return null;
+  if (parts[1] === color) return new Chess(fen);
+  parts[1] = color;
+  parts[3] = '-';
+  try {
+    return new Chess(parts.join(' '));
+  } catch {
+    return null;
+  }
+}
+
 /** Can the piece on `from` reach `square`, ignoring whose turn it is?
  *
  *  TURN HAS TO BE FORCED. `moves()` only ever lists the side to move, so asking
@@ -119,10 +143,10 @@ const clear = (game: Chess, from: Square, to: Square): boolean =>
  *  every `deprives` claim silently reads as true — the failure mode where a
  *  checker that always passes is worse than no checker. */
 function canReach(fen: string, from: Square, square: Square): boolean {
-  const probe = new Chess(fen);
-  const piece = probe.get(from);
+  const piece = new Chess(fen).get(from);
   if (!piece) return false;
-  probe.setTurn(piece.color);
+  const probe = asTurnOf(fen, piece.color);
+  if (!probe) return false;
   try {
     return probe.moves({ square: from, verbose: true }).some((m) => m.to === square);
   } catch {
@@ -132,10 +156,10 @@ function canReach(fen: string, from: Square, square: Square): boolean {
 
 /** Every legal destination of the piece on `square`, from its owner's turn. */
 function destinations(fen: string, square: Square): number {
-  const probe = new Chess(fen);
-  const piece = probe.get(square);
+  const piece = new Chess(fen).get(square);
   if (!piece) return 0;
-  probe.setTurn(piece.color);
+  const probe = asTurnOf(fen, piece.color);
+  if (!probe) return 0;
   try {
     return probe.moves({ square, verbose: true }).length;
   } catch {
@@ -206,8 +230,8 @@ export function checkReason(fenBefore: string, san: string, reason: Reason): Rea
     case 'prevents': {
       // Available to the OPPONENT before, gone after. Checked from their turn
       // both times, since before the move it is not their turn.
-      const pre = new Chess(fenBefore);
-      pre.setTurn(other(mover));
+      const pre = asTurnOf(fenBefore, other(mover));
+      if (!pre) return { reason, holds: false, note: 'could not read the position from their side' };
       const wasLegal = pre.moves().includes(reason.san) || pre.moves().includes(`${reason.san}+`);
       if (!wasLegal) return { reason, holds: false, note: `${reason.san} was not available anyway` };
       const nowLegal = after.moves().includes(reason.san) || after.moves().includes(`${reason.san}+`);

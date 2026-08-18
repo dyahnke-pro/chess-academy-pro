@@ -908,6 +908,12 @@
    "line": "d4 d5 Nc3 Nf6 Bf4 Bf5 e3 e6 Nf3 Bb4",
    "teaches": "Being pinned against nothing is not a threat. When a bishop comes out to trade itself for a knight, ask what it actually costs you: doubled pawns are only a weakness if they cannot be used, and a pair of bishops plus open lines is usually the better half of that bargain.",
    "explains": "The bishop has stepped to b4 to swap itself for the knight on c3. The reply is to develop the other bishop to d3, and if the exchange comes, recapturing with the c-pawn is the point — it takes the central squares and opens a path for the queen along the c-file, leaving White the bishop pair.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c3"
+    }
+   ],
    "fen": "rn1qk2r/ppp2ppp/4pn2/3p1b2/1b1P1B2/2N1PN2/PPP2PPP/R2QKB1R w KQkq - 2 6",
    "t": 2797.5,
    "ply": 10,

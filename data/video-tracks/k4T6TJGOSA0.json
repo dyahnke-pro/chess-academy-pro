@@ -527,6 +527,12 @@
    "line": "e4 c6 d4 d5 f3 dxe4 fxe4 Nf6 e5 Nd5 c4",
    "teaches": "Taking a large share of the centre with pawns is not the same as being ahead, and the danger grows with every further pawn move. Grabbing more space while none of your pieces are out is playable only if you can follow it immediately with accurate development — the space has to be defended by something.",
    "explains": "Every white move so far has been a pawn, and the c-pawn takes still more ground while the knight on d5 is asked to move again. It is a real gain and a real risk at once: the knight drops back to b6 or c7 and White has to bring pieces out quickly, because a centre this wide with nothing developed behind it invites a counterstrike.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d5"
+    }
+   ],
    "fen": "rnbqkb1r/pp2pppp/2p5/3nP3/2PP4/8/PP4PP/RNBQKBNR b KQkq - 0 6",
    "t": 310.5,
    "ply": 11,

@@ -2,25 +2,37 @@
  {
   "id": "vn-englund-dont-hand-back-development",
   "line": "d4 e5 dxe5 f6",
-  "teaches": "Against a gambit, the pawn is not the prize — the question is what the opponent gets for it. Taking everything offered often hands back exactly what was being paid for: quick development and an open file. Declining once, and keeping the extra pawn on your own terms, is usually the better bargain.",
-  "explains": "Black offers a second pawn to open the f-file and get the pieces out fast. Capturing on f6 does win it, but Black recaptures with the knight and emerges developed with the file already open in front of the white king. Pushing the e-pawn to e4 instead holds the extra pawn without opening anything, and leaves Black to prove the compensation."
+  "teaches": "Against a gambit, the pawn is not the prize \u2014 the question is what the opponent gets for it. Taking everything offered often hands back exactly what was being paid for: quick development and an open file. Declining once, and keeping the extra pawn on your own terms, is usually the better bargain.",
+  "explains": "Black offers a second pawn to open the f-file and get the pieces out fast. Capturing on f6 does win it, but Black recaptures with the knight and emerges developed with the file already open in front of the white king. Pushing the e-pawn to e4 instead holds the extra pawn without opening anything, and leaves Black to prove the compensation.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e5"
+   }
+  ]
  },
  {
   "id": "vn-englund-indirect-defence",
   "line": "d4 e5 dxe5 f6 e4",
-  "teaches": "A pawn can be defended by consequences rather than by defenders. When capturing it exposes the enemy king along a diagonal, the pawn is guarded by the check that follows — and a defence like that costs no piece and no time.",
+  "teaches": "A pawn can be defended by consequences rather than by defenders. When capturing it exposes the enemy king along a diagonal, the pawn is guarded by the check that follows \u2014 and a defence like that costs no piece and no time.",
   "explains": "The pawn on e5 looks loose, but taking it opens the line to the black king: the queen comes to h5 with check the moment the f-pawn captures. So the pawn defends itself, and White has spent the move building a centre instead of babysitting it."
  },
  {
   "id": "vn-englund-qb4-forks-the-bishop",
   "line": "d4 e5 dxe5 Nc6 Nf3 Qe7",
-  "teaches": "Before defending a pawn with a piece, check the ranks and diagonals the defender will stand on. The most natural-looking guard is worth nothing if the enemy queen can check and attack it in the same move — and a fourth rank swept clear by an early exchange is exactly where that happens.",
-  "explains": "Black eyes the pawn on e5 and White wants to hold it. Developing the bishop to f4 is the instinctive way, and it runs into the queen coming to b4: the fourth rank is empty after the capture on e5, so the check on the king and the attack on the bishop arrive together. The piece cannot be saved by parrying the check."
+  "teaches": "Before defending a pawn with a piece, check the ranks and diagonals the defender will stand on. The most natural-looking guard is worth nothing if the enemy queen can check and attack it in the same move \u2014 and a fourth rank swept clear by an early exchange is exactly where that happens.",
+  "explains": "Black eyes the pawn on e5 and White wants to hold it. Developing the bishop to f4 is the instinctive way, and it runs into the queen coming to b4: the fourth rank is empty after the capture on e5, so the check on the king and the attack on the bishop arrive together. The piece cannot be saved by parrying the check.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e5"
+   }
+  ]
  },
  {
   "id": "vn-englund-four-crossroads",
   "line": "d4 e5 dxe5 Bc5 Nc3",
-  "teaches": "In a gambit that has already lost its pawn, the defender's tries fan out quickly and none of them is forced. Meeting them is a matter of knowing the one idea that answers the whole family — usually to develop, keep the extra pawn, and refuse open lines — rather than memorising a reply to each.",
-  "explains": "Black has developed the bishop actively instead of regaining the pawn, and three continuations branch from here: bringing out the queen's knight, supporting with the d-pawn, or the knight to e7. White's job in all of them is the same — finish development without giving the f-file or the long diagonal away."
+  "teaches": "In a gambit that has already lost its pawn, the defender's tries fan out quickly and none of them is forced. Meeting them is a matter of knowing the one idea that answers the whole family \u2014 usually to develop, keep the extra pawn, and refuse open lines \u2014 rather than memorising a reply to each.",
+  "explains": "Black has developed the bishop actively instead of regaining the pawn, and three continuations branch from here: bringing out the queen's knight, supporting with the d-pawn, or the knight to e7. White's job in all of them is the same \u2014 finish development without giving the f-file or the long diagonal away."
  }
 ]

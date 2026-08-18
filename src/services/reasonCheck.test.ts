@@ -103,4 +103,22 @@ describe('reasonCheck', () => {
     expect(verdicts[0].holds).toBe(false);
     expect(verdicts[0].note).toMatch(/not legal/);
   });
+
+  it('returns a verdict for a move that answers a check instead of throwing', () => {
+    // `setTurn` plays a null move, and a null move is illegal while the side to
+    // move is in check — so reading the position "from their side" crashed on
+    // every check-answering move rather than returning false. A checker that
+    // throws takes the whole run with it, which is strictly worse than a wrong
+    // answer: nothing downstream gets a verdict at all.
+    const game = new Chess();
+    for (const san of ['d4', 'e5', 'dxe5', 'Bb4+']) game.move(san);
+    expect(game.isCheck()).toBe(true);
+    for (const reason of [
+      { kind: 'prevents', san: 'Qh4' },
+      { kind: 'deprives', from: 'b4', square: 'd2' },
+      { kind: 'traps', square: 'b4' },
+    ] as const) {
+      expect(() => checkReason(game.fen(), 'Bd2', reason)).not.toThrow();
+    }
+  });
 });

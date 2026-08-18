@@ -724,6 +724,12 @@
    "line": "d4 Nf6 Bg5 Ne4 h4",
    "teaches": "An early rook's-pawn thrust is unsettling rather than refuting. Meet it by asking what it actually does — usually it defends the bishop's retreat square or prepares to open a file — instead of treating strangeness as danger. Being surprised is not the same as being worse.",
    "explains": "Black has hit the bishop with the knight and White, instead of retreating it, has pushed the h-pawn. Nothing is hanging and nothing is forced; the position is double-edged and both sides still have everything to play for. Advancing the d-pawn to stake out the centre is the natural, unhurried reply.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "g5"
+    }
+   ],
    "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn2P/8/PPP1PPP1/RN1QKBNR b KQkq - 0 3",
    "t": 120.5,
    "ply": 5,

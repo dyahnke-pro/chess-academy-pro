@@ -1250,6 +1250,12 @@
    "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bc4 Nd4 Nxe5 Qe7 Nxf7 d5",
    "teaches": "A rook in the corner is worth more than a knight only if the knight comes home. Before taking material with a piece that has to travel back through enemy territory, count its exit squares — a won exchange that costs the piece which won it is not won at all.",
    "explains": "Taking the rook on h8 is the greedy try, and after Black recaptures the bishop on c4 the knight has just two squares to leave by, g6 and f7, and Black covers them both. The alternative is to take on d5 and keep the pieces in play; the position stays messy, but nothing is stranded.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c4"
+    }
+   ],
    "fen": "r1b1kb1r/ppp1qNpp/5n2/3p4/2BnP3/2N5/PPPP1PPP/R1BQK2R w KQkq - 0 7",
    "t": 1293.5,
    "ply": 12,
@@ -1260,6 +1266,12 @@
    "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bc4 Nd4 Nxe5 Qe7 Nxf7 d5 Nxd5 Qxf7",
    "teaches": "When you calculate a discovered attack, check that the piece you intend to win cannot simply capture the piece doing the discovering. That single question is what separates a real double attack from one that evaporates, and it is the most common way these tricks are miscounted.",
    "explains": "The knight can leap to c7 with check, hitting the king and the rook in the corner at once — but the queen on f7 travels along the seventh rank and takes it, and the whole idea comes to nothing. Retreating the knight to b6 keeps material, though it leaves the king alone in the centre, where the queen swings to g6 and hunts it down the light squares.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "c7"
+    }
+   ],
    "fen": "r1b1kb1r/ppp2qpp/5n2/3N4/2BnP3/8/PPPP1PPP/R1BQK2R w KQkq - 0 8",
    "t": 1301.5,
    "ply": 14,

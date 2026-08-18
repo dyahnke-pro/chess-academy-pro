@@ -1640,7 +1640,17 @@
    "id": "vn-traxler-sac-declined",
    "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7",
    "teaches": "A line can be objectively playable and still be the wrong practical choice. When every continuation is forcing and one slip ends the game, the recall a line demands is part of its price, and a verdict of \"balanced\" does not repay that price.",
-   "explains": "Taking on f7 drags the black king into the open, but it hands Black a long series of checks that must each be met exactly. White is no better at the end of it, so the risk buys no advantage — only an obligation to remember a great deal of theory correctly under a clock.",
+   "explains": "The knight lands on f7 forking the queen and the rook in the corner, which is exactly why it is tempting. What follows is a long series of checks that must each be met exactly, and at the end of them White is no better — so the risk buys no advantage, only an obligation to remember a great deal of theory correctly under pressure.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d8"
+    },
+    {
+     "kind": "attacks",
+     "square": "h8"
+    }
+   ],
    "fen": "r1bqk2r/pppp1Npp/2n2n2/2b1p3/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 5",
    "t": 158,
    "ply": 9,
@@ -1651,6 +1661,17 @@
    "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 d4",
    "teaches": "Against a gambit whose whole value is preparation, the strongest practical reply is often the one your opponent has not studied. A move that is merely good but unexpected can outperform a move that is best and famous, because the opponent’s preparation is part of the position too.",
    "explains": "Pushing the d-pawn opens the queen’s bishop and strikes at the centre while Black’s pieces are still committed to a kingside attack that has not started. Black’s position is defensible, but only by a reply most players never consider.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c5"
+    },
+    {
+     "kind": "opens",
+     "from": "c1",
+     "to": "g5"
+    }
+   ],
    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p1N1/2BPP3/8/PPP2PPP/RNBQK2R b KQkq - 0 5",
    "t": 308.5,
    "ply": 9,
@@ -1661,6 +1682,16 @@
    "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 d4 d5",
    "teaches": "When a defender’s instinct is to protect the attacked point, the saving move is often to hit something of equal value instead. Counting who is attacking what, rather than rescuing the piece under fire, is what finds these.",
    "explains": "Advancing the d-pawn ignores the threat and challenges the bishop that aims at f7. Because it interferes with the most dangerous attacking piece rather than fleeing, Black gains the time a defensive move would have spent.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c4"
+    },
+    {
+     "kind": "attacks",
+     "square": "e4"
+    }
+   ],
    "fen": "r1bqk2r/ppp2ppp/2n2n2/2bpp1N1/2BPP3/8/PPP2PPP/RNBQK2R w KQkq - 0 6",
    "t": 345.5,
    "ply": 10,
@@ -1668,12 +1699,22 @@
   },
   {
    "id": "vn-traxler-simplifying-capture",
-   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Bxf7+ Ke7 Bc4",
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Bxf7+",
    "teaches": "Against an aggressive gambit, prefer the capture that removes the opponent’s attacking chances over the one that wins the most material. The best practical answer often leaves the fewest enemy pieces pointing at your king.",
-   "explains": "Capturing with the bishop checks immediately and forces the king to step forward before Black can coordinate. The lines that make this opening dangerous never begin, and White keeps a sound extra pawn and a safe king.",
-   "fen": "r1bq3r/ppppk1pp/2n2n2/2b1p1N1/2B1P3/8/PPPP1PPP/RNBQK2R b KQ - 2 6",
-   "t": 229,
-   "ply": 11,
+   "explains": "Taking with the bishop comes with check, and the king has exactly two squares — neither of them a capture, because the knight covers f7 — so Black spends the move walking and loses the right to castle on the way. The lines that make this whole variation dangerous never begin, and White is simply a pawn up with a safe king.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e8"
+    },
+    {
+     "kind": "prevents",
+     "san": "O-O"
+    }
+   ],
+   "fen": "r1bqk2r/pppp1Bpp/2n2n2/2b1p1N1/4P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 5",
+   "t": 224.5,
+   "ply": 9,
    "source": "yt:ykmGxE9DURo"
   },
   {
@@ -1681,6 +1722,16 @@
    "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Nxf7 Bxf2+ Kxf2 Nxe4+",
    "teaches": "A king dragged into the open has to choose between holding on to material and getting out of the way, and the instinct to hold on is usually the losing one. Count the checks available to the attacker before deciding where to step, not after.",
    "explains": "The king has six legal squares here. Stepping forward keeps everything defended and walks into a forced mate; stepping back concedes a pawn and survives. The difference is not calculation depth, it is which question was asked first.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f2"
+    },
+    {
+     "kind": "attacks",
+     "square": "d2"
+    }
+   ],
    "fen": "r1bqk2r/pppp1Npp/2n5/4p3/2B1n3/8/PPPP1KPP/RNBQ3R w kq - 0 7",
    "t": 176,
    "ply": 12,
