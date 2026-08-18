@@ -1,9 +1,26 @@
-/* What is TRUE about the move this note is written on?
+#!/usr/bin/env node
+/**
+ * move-facts — what is TRUE about the move a note is written on.
  *
  * Retrofitting reasons onto a note written before the checker existed is not a
- * memory exercise: the facts are computed here and the author only picks which
- * of them the prose actually claims. Anything not on this list cannot be a
- * reason, which is the point. */
+ * memory exercise. The facts are computed here and the author only picks which
+ * of them the prose actually CLAIMS — anything not on this list cannot be a
+ * reason, which is the whole point.
+ *
+ * The discipline that goes with it: a true fact the note never asserts is not a
+ * reason for the move. Padding the list would make the check pass on claims
+ * nobody made, which is the failure the checker exists to prevent, arrived at
+ * from the other side.
+ *
+ * It also surfaces a defect nothing else looks for — ANCHOR DRIFT, where a note
+ * is filed on one move and its prose describes another. Several were found this
+ * way: a note about capturing on f7 anchored two plies later on the bishop's
+ * retreat. When `attacks/defends/controls` come back empty but the prose is full
+ * of concrete claims, the note is almost always about a different move.
+ *
+ * Usage:
+ *   node scripts/video-align/move-facts.mjs [videoId] [noteId...]
+ */
 import { readFileSync, readdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
 

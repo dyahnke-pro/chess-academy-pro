@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { Chess } from 'chess.js';
 import { ALL_NOTES, noteAtPosition, spokenBeatText } from '../services/danyaTeachingService';
 import { gradeNarrationText } from '../services/coachAnswerGates';
+import repertoire from './repertoire.json';
 
 /**
  * Do the hand-written notes actually reach a student's ear?
@@ -106,5 +107,39 @@ describe('hand-written notes reach the spoken narration', () => {
       expect(s.text, `${s.id} names no square, so it cannot be the written note`)
         .toMatch(/\b[a-h][1-8]\b/);
     }
+  });
+
+  /** The branches added so a hand-written note is reachable in Watch and Learn.
+   *
+   *  A FORK EXISTS TO CARRY TEACHING. Each of these lines was added for exactly
+   *  one reason — the lesson walks to a position where notes were already
+   *  written and had nowhere to be spoken (CLAUDE.md, the fork rule). Adding it
+   *  took the on-taught-line count from 10 of 68 to 25. Nothing else notices if
+   *  one is later renamed, trimmed or dropped: the opening still works, the
+   *  gates still pass, and the notes simply go quiet again. */
+  const FORK_VARIATIONS: ReadonlyArray<[opening: string, variation: string]> = [
+    ['french-defence', 'Advance: 5.Nf3 Move Order'],
+    ['london-system', 'Jobava: 3...Bf5 and the g4-h4 Storm'],
+    ['london-system', 'Jobava: 3...c5 Central Challenge'],
+    ['sicilian-dragon', 'Accelerated Dragon: Maróczy with ...Qb6'],
+    ['philidor-defence', 'Bc4 Move Order (Hanham Setup)'],
+    ['scandinavian-defence', 'Nf6 Modern: 3.Bb5+ Check'],
+    ['four-knights-game', 'Scotch Four Knights: 4...Bb4'],
+    ['two-knights-defence', 'Traxler: 5.Bxf7+ Declined Sacrifice'],
+    ['trompowsky-attack', '2...Ne4 3.h4 Sideline'],
+    ['caro-kann', 'Fantasy: 3...e6 Main Line'],
+  ];
+
+  it.each(FORK_VARIATIONS)('%s / %s still speaks the note it was added for', (openingId, variationName) => {
+    const rows = repertoire as Array<{ id: string; name: string; variations?: Array<{ name: string; pgn: string }> }>;
+    const opening = rows.find((r) => r.id === openingId);
+    const variation = opening?.variations?.find((v) => v.name === variationName);
+    expect(variation, `${openingId} has no variation "${variationName}" — the fork was renamed or removed`).toBeTruthy();
+    const sans = variation!.pgn.trim().split(/\s+/).filter((t) => !/^\d+\.+$/.test(t));
+    const spoken = walk(sans, `${opening!.name}: ${variationName}`);
+    expect(
+      spoken.filter((s) => s.id.startsWith('vn-')).map((s) => `ply${s.ply} ${s.id}`),
+      `no hand-written note survives the splice on ${variationName}`,
+    ).not.toEqual([]);
   });
 });

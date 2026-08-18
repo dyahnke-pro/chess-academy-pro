@@ -274,5 +274,59 @@
  "titleCheck": {
   "claims": "Caro-Kann Defense",
   "confirmed": true
- }
+ },
+ "notes": [
+  {
+   "id": "vn-fantasy-e6-swap-for-the-knight-that-holds-it-together",
+   "line": "e4 c6 d4 d5 f3 e6 Nc3 Bb4",
+   "teaches": "A pin is worth playing for what it leaves behind, not only for what it freezes. When the piece you pin can be recaptured only by a pawn, trading for it hands the opponent a structural weakness that outlasts every piece on the board — so the bishop is worth more as a trade than as a bishop.",
+   "explains": "The bishop steps to b4 and pins the knight against the king. The pawn on e4 is not falling — it has two defenders — but that was never the idea. Once the bishop is chased, the swap on c3 puts White to a choice with no comfortable answer: recapture with the pawn and live with a doubled pawn for the rest of the game, or recapture with a piece and spend the time it takes to bring a second knight round to do it.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c3"
+    }
+   ],
+   "fen": "rnbqk1nr/pp3ppp/2p1p3/3p4/1b1PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 2 5",
+   "t": 182,
+   "ply": 8,
+   "source": "yt:zprg2WbmgzQ"
+  },
+  {
+   "id": "vn-fantasy-e6-hit-the-new-weakness-before-it-is-covered",
+   "line": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 a3 Bxc3+ bxc3 dxe4 Nh3 Qa5",
+   "teaches": "The moment a structural weakness appears, attack it — not because it will fall, but because covering it costs the opponent a move and usually a piece placed where it did not want to go. A weakness is worth most in the two moves before it gets defended.",
+   "explains": "The queen swings to a5 and hits both pawns on the queenside at once. The one on the edge is guarded twice over, but the doubled pawn on c3 has no defender at all, so it has to be covered immediately — and the piece that comes to cover it spends the rest of the opening staring at its own pawn.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c3"
+    },
+    {
+     "kind": "attacks",
+     "square": "a3"
+    }
+   ],
+   "fen": "rnb1k1nr/pp3ppp/2p1p3/q7/3Pp3/P1P2P1N/2P3PP/R1BQKB1R w KQkq - 2 8",
+   "t": 328,
+   "ply": 14,
+   "source": "yt:zprg2WbmgzQ"
+  },
+  {
+   "id": "vn-fantasy-e6-the-file-the-grab-opens",
+   "line": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 a3 Bxc3+ bxc3 dxe4 Nh3 Qa5 Bb2 Nf6 fxe4 Nxe4 Bd3 Nf6 O-O b6 c4 Nbd7 Qf3 Bb7 Qg3 O-O-O Qxg7 Rhg8",
+   "teaches": "When you have castled away from a wing, a pawn taken on that wing is often worth less to the opponent than the file it opens for you. Count what the capture gives up before calling it a loss: a rook arriving with tempo on a file that was closed a move ago is real compensation, and the queen that took the pawn now has to answer it.",
+   "explains": "The queen has collected on g7 while the king sits on the other side of the board, so nothing near the king is loose. The rook drops onto the g-file attacking her, and she has to move again — she still has plenty of squares, so this is a gain of time rather than a trap, and time is what an open file next to the enemy king is bought with.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "g7"
+    }
+   ],
+   "fen": "2kr2r1/pb1n1pQp/1pp1pn2/q7/2PP4/P2B3N/1BP3PP/R4RK1 w - - 1 16",
+   "t": 823.5,
+   "ply": 30,
+   "source": "yt:zprg2WbmgzQ"
+  }
+ ]
 }

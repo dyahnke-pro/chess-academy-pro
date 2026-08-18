@@ -572,6 +572,12 @@
     "name": "Glek System: 4.g3",
     "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 g3 Bc5 Bg2 d6 d3 a6 O-O O-O h3 h6 Be3 Bxe3 fxe3 Ne7 Nh4 c6",
     "explanation": "The Glek System fianchettoes with 4.g3 and Bg2, blending a King's Indian Attack idea into the open game. The bishop on the long diagonal and a flexible pawn structure make this a modern, low-theory way to play for a positional pull — a favourite of Mamedyarov. After both sides develop and castle, White trades the dark-squared bishops with Be3 and recaptures fxe3 to open the f-file and build a broad central front. The knight reroutes via h4 toward the f5 outpost, where combined with the f-file rook and the g2-bishop, White generates a patient, lasting kingside initiative without committing to any forcing line."
+   },
+   {
+    "name": "Scotch Four Knights: 4...Bb4",
+    "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 Bb4 Nxe5 Qe7 Qd3 Nxe5 dxe5 Qxe5 Bd2 O-O O-O-O Bxc3 Bxc3 Qxe4 Qg3 Qg6 Qxc7",
+    "explanation": "Black pins the queen's knight instead of taking on d4, and the pin has teeth: the knight on c3 has no legal move at all, so the pawn on e4 is guarded by a piece that cannot come to its rescue. White answers by taking on e5 first, and after the queens come to the e-file the pieces trade off quickly — the bishop recaptures on c3 to keep the structure, and White ends up collecting on c7 while Black's queen sits on g6.",
+    "shortExplanation": "4...Bb4 pins the c3 knight dead; White takes on e5 first and the e-file trades follow."
    }
   ],
   "trapLines": [],
@@ -769,6 +775,12 @@
     "explanation": "The Anti-Dragon with 6.Bg5 aims to damage Black's pawn structure by trading the bishop for the f6 knight before the Dragon setup is fully deployed. After Bxf6 Bxf6, Black has the bishop pair but the dark-squared bishop is temporarily misplaced on f6 and must retreat to g7. White follows up with Bb5+ and quick development, hoping to exploit the time Black spends rerouting pieces. Black should welcome the bishop pair, play ...b5 for queenside space, and aim for ...e5 or ...e6 to solidify the center, after which the two bishops become a significant long-term advantage.",
     "frequency": "uncommon",
     "deviationMove": 6
+   },
+   {
+    "name": "Accelerated Dragon: Maróczy with ...Qb6",
+    "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Bc4 O-O f3 Qb6 Bb3 Nxe4 Nd5 Qa5+ c3 Nc5 Nxc6 dxc6 Nxe7+ Kh8 Nxc8 Raxc8 O-O Rcd8 Qc2 Rfe8 Bf2 Nd3 Bxf7 Re7 Bc4 Nxf2 Rxf2 Qc5",
+    "explanation": "Black meets the bishop on c4 with the queen sortie to b6, hitting the bishop and the b2 pawn at the same time. White tucks the bishop on b3 and Black grabs on e4, which is the point of the whole idea — the knight is loose only for a moment. What follows is forced: the knight jumps to d5, the queen checks from a5, and the pieces come off in a long sequence that ends with the material back and Black's pieces on the open files.",
+    "shortExplanation": "...Qb6 hits the bishop and b2, ...Nxe4 follows, and the forcing sequence returns the material."
    }
   ],
   "trapLines": [],
@@ -1022,6 +1034,12 @@
     "pgn": "e4 e6 d4 d5 Nc3 dxe4 Nxe4 Nd7 Nf3 Ngf6 Nxf6+ Nxf6 Bd3 c5 dxc5 Bxc5 O-O O-O Bg5 b6 Qe2 Bb7",
     "explanation": "The Rubinstein is the French player's solid escape hatch — and at club level the single most common Black choice against 3.Nc3. Black resolves the central tension at once with ...dxe4, conceding the centre in return for a position with no weaknesses and an easy plan: develop, trade a pair of knights, and free the light-squared bishop — the French's traditional problem piece. After Nxe4 Nd7 and ...Ngf6, Black invites the knight trade Nxf6+ Nxf6 that removes White's most active piece. Then ...c5 hits d4, dxc5 Bxc5 develops the dark-squared bishop with tempo, both sides castle, and ...b6 with ...Bb7 finally fianchettoes the light-squared bishop onto the long diagonal. The result is a sound, slightly passive but rock-solid position where Black is never worse than a touch and White's extra space is hard to convert.",
     "shortExplanation": "Rubinstein: ...dxe4 gives up the centre for a weakness-free structure; trade knights, ...c5/...Bxc5, then ...b6/...Bb7 frees the bad bishop."
+   },
+   {
+    "name": "Advance: 5.Nf3 Move Order",
+    "pgn": "e4 e6 d4 d5 e5 c5 Nf3 cxd4 Bd3 Nc6 O-O Nge7 Bf4 Ng6 Bg3 Be7 Nbd2 O-O Nb3 Qb6 h4 f6",
+    "explanation": "White develops the king's knight instead of propping the centre with c3, so Black can take on d4 and keep the pawn for a long time — at the end of this line it is still there. What White gets for it is the clamp: the pawn on e5 covers d6 and f6, so Black's king's knight has to travel the long way by e7 and g6, and the dark-squared bishop has no natural square. White's queen's knight reroutes through d2 to b3 to lean on d4, and h4 gains space against the knight before Black's ...f6 break arrives.",
+    "shortExplanation": "5.Nf3 lets Black keep d4; White plays for the e5 clamp, Nd2-b3 on d4 and h4 against the g6 knight."
    }
   ],
   "trapLines": [],
@@ -1091,6 +1109,12 @@
     "pgn": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6 c3 Bd6 Bd3 O-O Qc2 Re8+ Ne2 h5 Be3 Nd7 O-O-O Nf8 Kb1 Be6 c4 Rc8",
     "explanation": "Black voluntarily accepts doubled f-pawns after Nxf6+ exf6, gaining the half-open e-file and the bishop pair in return. The doubled pawns are not as weak as they appear — the f5 square becomes available for pieces, and the f6 pawn supports a future ...f5-f4 kingside advance. After opposite-side castling, ...Be6 develops the bad bishop and ...Rc8 prepares queenside operations against White's king on b1.",
     "shortExplanation": "Doubled f-pawns + bishop pair + e-file. After opposite-side castle, ...Be6/Rc8 builds queenside attack."
+   },
+   {
+    "name": "Fantasy: 3...e6 Main Line",
+    "pgn": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 Bf4 Ne7 Qd3 b6 Ne2 Ba6 Qe3 Nd7 O-O-O O-O a3 Bxc3 Nxc3 Bxf1 Rhxf1 b5",
+    "explanation": "The most-played answer to the Fantasy, and one the rest of this repertoire did not cover: Black supports the centre with the modest pawn move rather than resolving the tension. The bishop then comes to b4 to pin the queen's knight, which is what holds the e4 pawn together, and White has to choose between a doubled pawn and the time it costs to recapture with a piece instead. Black's light-squared bishop, normally the problem piece behind this pawn chain, gets out via a6 to trade itself for the one White has not yet developed.",
+    "shortExplanation": "3...e6 supports the centre, ...Bb4 pins the knight holding e4, and ...Ba6 solves the problem bishop."
    }
   ],
   "trapLines": [],
@@ -1292,6 +1316,12 @@
     "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 d4 Nf6 Bd2 Bg4 Be2 Bxe2 Ngxe2 Nc6 O-O O-O-O Ne4 Qf5 Nxf6 gxf6 c3 Rg8",
     "explanation": "When White plays the quiet Bd2, we trade light bishops with …Bg4 and …Bxe2, bring the knight to c6 and castle long. When White jumps Ne4 we hold with …Qf5, and after the knights come off on f6 we recapture …gxf6 — opening the g-file for our rook. A sound, double-edged middlegame with chances for both of us.",
     "shortExplanation": "Bd2 line: ...Bb4 pin, opposite-side castle, ...Qc7 centralizes; Ne5 is White's critical test."
+   },
+   {
+    "name": "Nf6 Modern: 3.Bb5+ Check",
+    "pgn": "e4 d5 exd5 Nf6 Bb5+ Bd7 Be2 Nxd5 d4 Bf5 Nf3 e6 O-O Be7 a3 O-O c4 Nb6 Nc3 Nc6 Be3 Bf6 h3 Qd7 Qd2 Rad8 Rfd1 Na5",
+    "explanation": "The check on b5 is played precisely so that Black has to block it, and the block on d7 costs something concrete: the bishop stands between the queen and the pawn on d5, so the queen can no longer take it back and only the knight can. White then retreats the bishop, having spent two moves with one piece to force a piece onto a square it did not choose. Black recaptures with the knight and develops normally, and the game becomes a standard isolated-centre struggle.",
+    "shortExplanation": "3.Bb5+ forces ...Bd7, which blocks the queen off d5 so only the knight can recapture."
    }
   ],
   "trapLines": [],
@@ -1419,6 +1449,12 @@
     "name": "Modern d3 Hybrid",
     "pgn": "e4 e5 Nf3 d6 d3 Nf6 g3 Be7 Bg2 O-O O-O Nc6 Nbd2 Be6 Re1 Qd7 a4 a5 Nc4 Bxc4 dxc4 Nb4 b3 Na6",
     "explanation": "A solid, low-theory King's-Indian-Attack-style Philidor. Black develops naturally and, after the trade on c4 saddles White with doubled c-pawns, reroutes the knight via b4-a6-c5 to target them. Comfortable and sound."
+   },
+   {
+    "name": "Bc4 Move Order (Hanham Setup)",
+    "pgn": "e4 e5 Nf3 d6 Bc4 Be7 Nc3 Nf6 d4 exd4 Nxd4 O-O O-O c6 a4 Nxe4 Nxe4 d5 Bd3 dxe4 Bxe4 Bf6 Be3 Re8 Bf3 Nd7 c3 Ne5 Be2 Qc7",
+    "explanation": "White develops the light-squared bishop and the queen's knight before touching the centre, which avoids the sharpest lines and usually transposes to the same structures a move later. Once the centre does open, the fork trick is available: taking on e4 and following with ...d5 hits the knight and the bishop together, and the pawn comes back. The game settles with the bishops trading on e4 and Black rerouting the queen's knight to e5.",
+    "shortExplanation": "Bc4 and Nc3 before d4; Black answers the open centre with the ...Nxe4 and ...d5 fork trick."
    }
   ],
   "trapLines": [],
@@ -1645,6 +1681,18 @@
     "name": "London vs Early c5 Challenge",
     "pgn": "d4 Nf6 Bf4 c5 d5 b5 f3 g6 e4 Bg7 Be3 O-O Bxc5 d6",
     "explanation": "When Black plays an early ...c5 challenging the d4 pawn, White advances d5 to seize space. Black's Benko-style gambit with ...b5 looks aggressive but White's solid structure and extra central space are more important. After e3 and c4, White undermines Black's queenside expansion and the d5 pawn becomes a powerful space-gaining wedge dividing Black's army."
+   },
+   {
+    "name": "Jobava: 3...Bf5 and the g4-h4 Storm",
+    "pgn": "d4 d5 Nc3 Nf6 Bf4 Bf5 e3 e6 Nf3 Bb4 Bd6 Bc5 Bf4 Bd6 Ne5 O-O g4 Bg6 h4 h5 Nxg6 fxg6 Bxd6 Qxd6 g5 Ng4 Qd3",
+    "explanation": "Black develops the light-squared bishop outside the pawn chain before playing ...e6, which is the most testing way to meet this set-up. The bishops trade offers on d6 repeat until White commits the knight to e5, and only then does the pawn storm start: g4 drives the bishop to g6, h4 threatens to push again, and because White has not castled the advance costs nothing. Taking on g6 with the knight leaves Black with doubled g-pawns and an open f-file to defend.",
+    "shortExplanation": "...Bf5 before ...e6; White answers Ne5 then g4-h4, chasing the bishop and taking on g6."
+   },
+   {
+    "name": "Jobava: 3...c5 Central Challenge",
+    "pgn": "d4 d5 Nc3 Nf6 Bf4 c5 e3 cxd4 exd4 a6 Nf3 Nc6 Ne5 Bd7 g4 e6 g5 Ng8 h4 Nge7",
+    "explanation": "Instead of developing a piece Black hits the centre at once. The exchange on d4 leaves White with an isolated-looking d-pawn that is in fact well supported, and ...a6 is the accurate follow-up — it takes b5 away from the knight before it can jump there. White builds the same way as in the main line: the knight to e5, then g4 and g5 to drive the king's knight backwards, and h4 behind it.",
+    "shortExplanation": "3...c5 hits the centre; ...a6 stops Nb5, and White answers with Ne5 and the g4-g5-h4 storm."
    }
   ],
   "trapLines": [],
@@ -1775,6 +1823,12 @@
     "name": "2...d5 3.Bxf6 gxf6 Recapture",
     "pgn": "d4 Nf6 Bg5 d5 Bxf6 gxf6 e3 c5 dxc5 e6 c4 dxc4 Qxd8+ Kxd8 Bxc4 Bxc5 Nf3 Ke7 Nc3 Nd7 O-O",
     "explanation": "The gxf6 recapture is the ambitious alternative to exf6. Black accepts a shattered kingside in exchange for the half-open g-file and active piece play. After c5 and e6, Black develops quickly and the position often simplifies into an endgame where Black's bishop pair and active rooks compensate for the damaged structure. White should aim for an early queen exchange with Qxd8+ to exploit the king's inability to castle, but Black's active pieces make this harder than it looks."
+   },
+   {
+    "name": "2...Ne4 3.h4 Sideline",
+    "pgn": "d4 Nf6 Bg5 Ne4 h4 c5 dxc5 Qa5+ Nd2 Nxg5 hxg5 g6 c3 Qxc5 Ngf3 Bg7 e3 Nc6 Bd3 d5 Qe2",
+    "explanation": "Instead of retreating the attacked bishop, White defends it with the h-pawn. Nothing is hanging and nothing is forced — the point is to be unsettling rather than refuting, and the pawn on h4 also prepares to open the rook's file after the knights come off on g5. Black's most testing answer is to hit the centre with ...c5, and after the check on a5 the pieces trade on g5 and both sides get a double-edged middlegame with the h-file already half-open.",
+    "shortExplanation": "3.h4 defends the bishop instead of retreating it, and opens the h-file when the knights trade on g5."
    }
   ],
   "warningLines": []
@@ -3016,6 +3070,12 @@
     "name": "Two Knights: 4.d3 Main Line with ...Be7",
     "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 d3 Be7 O-O O-O Re1 d6 c3 Na5 Bb3 Nxb3 axb3",
     "explanation": "This is the rock-solid main line against 4.d3 where Black develops with ...Be7 and aims for the liberating ...d5 break. The exchange ...Na5xb3 doubles White's pawns and removes the dangerous Italian bishop from the board. After ...Be6 and ...d5, Black achieves full equality with active piece play in the center. The key strategic idea is that Black should not rush the ...d5 break but prepare it with ...Be6 first, ensuring maximum impact when the center opens."
+   },
+   {
+    "name": "Traxler: 5.Bxf7+ Declined Sacrifice",
+    "pgn": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 Bc5 Bxf7+ Ke7 Bc4 Rf8 O-O d6 Nc3 h6 Nf3 Bg4 Be2 Qe8 Nd5+ Nxd5 exd5 Bxf3 Bxf3 Nd4 Be4",
+    "explanation": "Rather than take the knight sacrifice, White takes with the bishop and check. The king has exactly two squares, neither of them a capture, so Black spends the move walking and loses the right to castle — and the long forced sequences the counterattack is built on never begin. White is a pawn up with a safe king; Black's compensation is the open f-file and pressure on the light squares, and the king on e7 is awkward for a long time.",
+    "shortExplanation": "5.Bxf7+ takes with check instead of sacrificing: the king must walk, and Black's forcing lines never start."
    }
   ],
   "trapLines": [],

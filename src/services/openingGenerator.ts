@@ -392,7 +392,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // One bump for all sixteen notes, per the locked cost rule: a bump regenerates
 // prose into new strings that miss the TTS clip cache, so batching keeps that to
 // a single synthesis bill instead of one per lesson written.
-const WALKTHROUGH_GEN_REV = '2026-08-17-video-notes';
+const WALKTHROUGH_GEN_REV = '2026-08-18-note-forks';
 
 export async function getCachedOpening(
   name: string,

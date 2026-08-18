@@ -1,12 +1,27 @@
-/* The fork plan, computed rather than remembered.
+#!/usr/bin/env node
+/**
+ * fork-plan — where every off-line note leaves the lines we teach.
  *
- * For every hand-written note that sits off every taught line, find where its
- * line LEAVES the nearest taught line. That divergence point is the fork: the
+ * For each hand-written note stranded off every taught line, find the ply where
+ * its line parts company with the nearest one. That divergence IS the fork: the
  * lesson already walks to it, so adding the note's move as a branch makes the
- * teaching audible without moving the spine (CLAUDE.md, the fork rule).
+ * teaching audible without moving the spine an inch (CLAUDE.md, the fork rule).
  *
- * A fork at ply 0-2 is a different opening, not an alternative — those are
- * reported separately and stay free-play material. */
+ * Read it as a WORK LIST, not a verdict. Notes cluster: four notes anchored at
+ * successive plies of one branch need ONE variation between them, so the number
+ * of lines to add is far smaller than the number of notes to rescue. Grouping
+ * by host and by branch is what makes that visible.
+ *
+ * A fork at ply 0-3 is a different opening, not an alternative, and is reported
+ * separately — those notes stay free-play and review material.
+ *
+ * Pipeline: fork-plan (what to add) -> build-opening-spine (how the line
+ * continues, from master data) -> fork-check (is it fit, and what does it buy)
+ * -> line-profile (where a flagged line goes wrong).
+ *
+ * Usage:
+ *   node scripts/video-align/fork-plan.mjs
+ */
 import { readFileSync, readdirSync } from 'node:fs';
 import { Chess } from 'chess.js';
 const sansOf = (p) => (p ?? '').split(/\s+/).filter((t) => t && !/^\d+\.+$/.test(t));
