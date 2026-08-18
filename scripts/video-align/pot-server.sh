@@ -20,9 +20,17 @@
 # dies, and no token can ever be minted. The upstream ProxyAgent already
 # tunnels correctly; the patch just stops axios duplicating it.
 #
-# Even with all four, googlevideo soft-throttles this datacenter IP: fragments
-# 403 individually and retries win. Download with:
-#   -N 1 --fragment-retries 30 --retry-sleep fragment:exp=2:30 --limit-rate 400K
+# 🚨 THE FLAG, AND HOW WE EARNED IT (2026-08-18). Downloads WORKED at 01:30 and
+# blanket-403'd by evening — same container, same egress, same flags. Between
+# the two: the overnight loop kept RETRYING its failing videos every 5-80min
+# for hours after "DL LIMIT" began, hundreds of failed media hits, which is
+# exactly how a soft rate limit escalates into a day-scale IP flag. Probes
+# confirmed it is the IP, not the account: no-cookies fails identically while
+# captions still 200. These flags DECAY — so when downloads 403:
+#   1. STOP. Do not loop retries; every 403 refreshes the flag.
+#   2. Probe once every ~3h (one video, one attempt), resume only on success.
+#   3. Harvest SERIAL with 60-120s sleeps between videos, and back off hard
+#      (hours, not minutes) on the first 403.
 set -e
 DIR=/tmp/potp
 if [ ! -f "$DIR/server/build/main.js" ]; then
