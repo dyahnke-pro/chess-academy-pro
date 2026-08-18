@@ -378,24 +378,6 @@
  },
  "notes": [
   {
-   "id": "vn-bowdler-bishop-out-before-the-knight",
-   "line": "e4 c5",
-   "teaches": "Development order is a choice, not a rule. Bringing the light-squared bishop out on the second move is perfectly sound and takes the game away from everything the opponent has prepared — the cost is that the bishop commits early and can be asked questions. Playing the knight first keeps every option and walks into theory.",
-   "explains": "Two tries come into consideration here. The knight is the mainstream move and leads to the positions both sides have studied. Putting the bishop on c4 immediately aims at f7 before anything is settled, which is objectively fine and practically much less familiar.",
-   "options": [
-    {
-     "san": "Nf3"
-    },
-    {
-     "san": "Bc4"
-    }
-   ],
-   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "t": 27.5,
-   "ply": 2,
-   "source": "yt:o12epkA2jeE"
-  },
-  {
    "id": "vn-bowdler-bishop-that-holds-the-light-squares",
    "line": "e4 c5 Nf3 Nc6 Bc4",
    "teaches": "A bishop on c4 is doing more than staring at f7. From that square it also covers d5 and b5 — the two squares the defender needs for a knight or a freeing pawn — so it restrains as much as it attacks. Judge the piece by the whole diagonal, not by the one square at the end of it.",

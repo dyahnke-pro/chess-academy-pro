@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-18",
- "videosDistilled": 48,
- "noteCount": 129,
+ "videosDistilled": 55,
+ "noteCount": 138,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -975,6 +975,78 @@
    ]
   },
   {
+   "id": "vn-owen-bishop-that-answers-the-long-diagonal",
+   "lineSan": [
+    "e4",
+    "b6",
+    "d4",
+    "Bb7",
+    "Nc3",
+    "e6",
+    "Bd3"
+   ],
+   "opening": "Owen Defense",
+   "phase": "opening",
+   "explains": "The bishop has been placed on b7 aiming down the long diagonal at the pawn on e4. Putting the bishop on d3 defends that pawn and the one on c2 behind it, so the whole idea of the setup opposite has nothing to work on. The bishop is modestly placed and it is the move that makes the big centre permanent.",
+   "teaches": "When the opponent fianchettoes on the queenside, their bishop's only target is your centre pawn. Develop the bishop that defends it rather than the one that looks more active — a centre that cannot be undermined leaves the fianchettoed bishop staring at a wall for the rest of the game.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:C4xtj2rc0_k"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    },
+    {
+     "kind": "defends",
+     "square": "c2"
+    }
+   ]
+  },
+  {
+   "id": "vn-owen-push-that-shuts-the-diagonal",
+   "lineSan": [
+    "e4",
+    "b6",
+    "d4",
+    "Bb7",
+    "Nc3",
+    "e6",
+    "Bd3",
+    "Bb4",
+    "Ne2",
+    "Nf6",
+    "O-O",
+    "Bxc3",
+    "Nxc3",
+    "h6",
+    "e5"
+   ],
+   "opening": "Owen Defense",
+   "phase": "opening",
+   "explains": "The pawn advances to e5, hitting the knight on f6 and covering d6. The knight has no comfortable square and the pawn now blocks the long diagonal the bishop on b7 was placed for. One move gains space, gains a tempo, and shuts the opponent's best piece out of the game.",
+   "teaches": "Space gained with tempo is the cheapest kind. When the centre pawn can advance hitting a knight, look at what the pawn covers once it has moved — if it also takes the square that knight would retreat to, the defender has to find somewhere awkward and the diagonal you were worried about closes at the same time.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:C4xtj2rc0_k"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    },
+    {
+     "kind": "controls",
+     "square": "d6"
+    }
+   ]
+  },
+  {
    "id": "vn-glek-fianchetto-in-the-open-game",
    "lineSan": [
     "e4",
@@ -1502,6 +1574,44 @@
     {
      "kind": "controls",
      "square": "f6"
+    }
+   ]
+  },
+  {
+   "id": "vn-knightbeforepawn-push-that-hits-two-things",
+   "lineSan": [
+    "e4",
+    "e6",
+    "d4",
+    "Nc6",
+    "Nf3",
+    "d6",
+    "Nc3",
+    "Nf6",
+    "Bd3",
+    "h6",
+    "O-O",
+    "b6",
+    "d5"
+   ],
+   "opening": "French Defense: Normal Variation",
+   "phase": "opening",
+   "explains": "The knight has been placed on c6 rather than behind the c-pawn, and the pawn advances to d5 hitting it and the pawn on e6 at the same time. The knight has to jump somewhere awkward or the centre gets opened on terms the developed side chooses. This is the cost of that knight placement, and it arrives the moment the centre is ready.",
+   "teaches": "When a knight is developed in front of its own c-pawn, the centre push arrives hitting the knight and a pawn together. Before advancing, check whether the defender can answer both — if one reply saves the knight and a different one saves the pawn, the push wins something whatever they choose.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:J4WzTSR3hmo"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c6"
+    },
+    {
+     "kind": "attacks",
+     "square": "e6"
     }
    ]
   },
@@ -2149,6 +2259,70 @@
    ]
   },
   {
+   "id": "vn-earlylondon-close-the-centre-before-it-is-challenged",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "d5"
+   ],
+   "opening": "Indian Defense: Accelerated London System",
+   "phase": "opening",
+   "explains": "The pawn has been offered on c5 and the centre pawn advances past it to d5, covering c6 and e6. Those are the squares the knight and the light-squared bishop want. The position locks, which suits the side whose bishop is already outside the pawn chain — the piece that could have been trapped is the one with the open diagonal.",
+   "teaches": "When the bishop comes out before the pawns are settled, a pawn push in the centre answers the challenge by closing it. Judge the push by the two squares it covers rather than by the space it takes: with both entry squares held by a pawn, the pieces opposite have nowhere to develop toward and the bishop outside the chain is safe.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:RzfG5SfKRak"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "c6"
+    },
+    {
+     "kind": "controls",
+     "square": "e6"
+    }
+   ]
+  },
+  {
+   "id": "vn-earlylondon-step-back-onto-the-pawn",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "d5",
+    "d6",
+    "Nc3",
+    "e5",
+    "Bg3"
+   ],
+   "opening": "Indian Defense: Accelerated London System",
+   "phase": "opening",
+   "explains": "The pawn has come to e5 to hit the bishop, and the bishop drops back to g3 still looking at that same pawn. It also holds the pawns on f2 and h2 behind it. The advance gained space and created a target in the same move, and the bishop is now the piece asking the questions.",
+   "teaches": "A bishop attacked by a pawn advance should retreat along the diagonal rather than off it, if the square behind still bears on the pawn that just moved. The pawn cannot come back, so the retreat keeps the target and the tempo the opponent spent is gone.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:RzfG5SfKRak"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    },
+    {
+     "kind": "defends",
+     "square": "h2"
+    }
+   ]
+  },
+  {
    "id": "vn-closedtrad-queen-that-hits-two-pawns-across-the-board",
    "lineSan": [
     "e4",
@@ -2382,6 +2556,75 @@
     {
      "kind": "attacks",
      "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-jobavapush-strike-the-centre-while-the-bishop-is-out",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "c5",
+    "e4"
+   ],
+   "opening": "Rapport-Jobava System",
+   "phase": "opening",
+   "explains": "Both knights and the dark-squared bishop are developed and Black has struck at the centre from the side. The pawn advances to e4 hitting the pawn on d5 and covering f5. Taking it leads to a position where every white piece has a line and the extra pawn is on a square that cannot be held.",
+   "teaches": "A gambit is worth playing when the pawn buys development you were going to need anyway. Pushing the second centre pawn while both minor pieces are already out hits the pawn holding the centre and opens the line for the pieces behind it — the material comes back or it does not, but the position opens for the side that is ready.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:W8YPj9QMtEs"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d5"
+    },
+    {
+     "kind": "controls",
+     "square": "f5"
+    }
+   ]
+  },
+  {
+   "id": "vn-attackingsystem-recapture-or-jump",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nc3",
+    "g6",
+    "f4",
+    "Bg7",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "d6",
+    "O-O",
+    "e6",
+    "d4",
+    "cxd4"
+   ],
+   "opening": "Sicilian Defense: Closed",
+   "phase": "opening",
+   "explains": "The pawns have been traded in the centre and there are two ways to continue. Taking back restores material immediately and asks nothing. Jumping the knight to b5 instead hits the weak pawn the setup opposite created, and the pawn in the middle can be collected a move later.",
+   "teaches": "When the centre opens, recapturing is the move you play if nothing better exists — so look for the jump first. A knight that lands hitting several pawns at once cannot be answered by defending one of them, and the pawn in the middle is usually still there afterwards.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:YXz0xSbhY70"
+   ],
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Nxd4"
+    },
+    {
+     "san": "Nb5"
     }
    ]
   },
@@ -2817,6 +3060,40 @@
    ]
   },
   {
+   "id": "vn-jobavatake-take-the-pawn-and-keep-the-squares",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "a6",
+    "e3",
+    "c5",
+    "dxc5"
+   ],
+   "opening": "Rapport-Jobava System",
+   "phase": "opening",
+   "explains": "The pawn has been offered on c5 and is taken. From there it covers b6 and d6, which are the two squares a knight or a bishop would use to win it back. Nothing recaptures immediately, so the extra pawn either survives or costs the defender a move to collect while the pieces opposite are still at home.",
+   "teaches": "Capturing toward the wing looks like it concedes the centre, and the question is what the pawn does from its new square. A pawn on the sixth file that covers both squares the opponent needs to recapture from is not a loose pawn — it is a wedge that has to be dealt with before anything else happens.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:dqYU2XP72pM"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "b6"
+    },
+    {
+     "kind": "controls",
+     "square": "d6"
+    }
+   ]
+  },
+  {
    "id": "vn-grandprix-queen-behind-the-attack",
    "lineSan": [
     "e4",
@@ -2855,6 +3132,44 @@
     {
      "kind": "defends",
      "square": "f1"
+    }
+   ]
+  },
+  {
+   "id": "vn-mirrorsetup-fianchetto-that-aims-at-the-centre-pawn",
+   "lineSan": [
+    "e3",
+    "Nf6",
+    "d3",
+    "e5",
+    "a3",
+    "d5",
+    "h3",
+    "Bd6",
+    "b3",
+    "O-O",
+    "g3",
+    "c6",
+    "Bb2"
+   ],
+   "opening": "Van't Kruijs Opening",
+   "phase": "opening",
+   "explains": "Both sides have made modest pawn moves and the position is still closed. The bishop goes to b2 on the long diagonal, where it hits the pawn on e5 and covers d4 — the square the centre would be contested from. It also holds the rook in the corner. Nothing has been risked, and the piece that will decide the game is pointing at the only fixed target on the board.",
+   "teaches": "A slow setup with pawns on the third rank is answered on its own terms: build the same shape, then develop the bishop onto the diagonal where the opponent's centre pawn already stands. The bishop arrives with a target rather than into empty space, which is the whole difference between a passive system and a patient one.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:gG_NzjqbyYo"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    },
+    {
+     "kind": "controls",
+     "square": "d4"
     }
    ]
   },

@@ -231,5 +231,27 @@
   "confirmed": false,
   "verdict": "track-sound",
   "checkedBy": "hand 2026-08-17"
- }
+ },
+ "notes": [
+  {
+   "id": "vn-knightbeforepawn-push-that-hits-two-things",
+   "line": "e4 e6 d4 Nc6 Nf3 d6 Nc3 Nf6 Bd3 h6 O-O b6 d5",
+   "teaches": "When a knight is developed in front of its own c-pawn, the centre push arrives hitting the knight and a pawn together. Before advancing, check whether the defender can answer both — if one reply saves the knight and a different one saves the pawn, the push wins something whatever they choose.",
+   "explains": "The knight has been placed on c6 rather than behind the c-pawn, and the pawn advances to d5 hitting it and the pawn on e6 at the same time. The knight has to jump somewhere awkward or the centre gets opened on terms the developed side chooses. This is the cost of that knight placement, and it arrives the moment the centre is ready.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c6"
+    },
+    {
+     "kind": "attacks",
+     "square": "e6"
+    }
+   ],
+   "fen": "r1bqkb1r/p1p2pp1/1pnppn1p/3P4/4P3/2NB1N2/PPP2PPP/R1BQ1RK1 b kq - 0 7",
+   "t": 398.5,
+   "ply": 13,
+   "source": "yt:J4WzTSR3hmo"
+  }
+ ]
 }

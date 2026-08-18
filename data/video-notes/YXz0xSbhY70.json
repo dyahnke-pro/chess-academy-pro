@@ -1,0 +1,16 @@
+[
+ {
+  "id": "vn-attackingsystem-recapture-or-jump",
+  "line": "e4 c5 Nc3 g6 f4 Bg7 Nf3 Nc6 Bc4 d6 O-O e6 d4 cxd4",
+  "teaches": "When the centre opens, recapturing is the move you play if nothing better exists — so look for the jump first. A knight that lands hitting several pawns at once cannot be answered by defending one of them, and the pawn in the middle is usually still there afterwards.",
+  "explains": "The pawns have been traded in the centre and there are two ways to continue. Taking back restores material immediately and asks nothing. Jumping the knight to b5 instead hits the weak pawn the setup opposite created, and the pawn in the middle can be collected a move later.",
+  "options": [
+   {
+    "san": "Nxd4"
+   },
+   {
+    "san": "Nb5"
+   }
+  ]
+ }
+]

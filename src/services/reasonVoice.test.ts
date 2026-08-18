@@ -30,8 +30,16 @@ describe('reasonVoice', () => {
   });
 
   it('says nothing when the move is not one the corpus reasoned about', () => {
-    expect(reasonsForMove(new Chess().fen(), 'h3')).toEqual([]);
-    expect(reasonLineFor(new Chess().fen(), 'h3')).toBeNull();
+    // Derived, not hard-coded. Twice now a hard-coded "quiet move nobody wrote
+    // about" (a3, then h3) became one the corpus DOES reason about as notes
+    // were added, and the test failed for a reason that had nothing to do with
+    // the behaviour under test.
+    const start = new Chess();
+    const reasoned = new Set(notes.map((n) => n.lineSan[n.lineSan.length - 1].replace(/[+#]$/, '')));
+    const uncovered = start.moves().find((m) => !reasoned.has(m.replace(/[+#]$/, '')));
+    expect(uncovered, 'the corpus now reasons about every legal first move').toBeDefined();
+    expect(reasonsForMove(start.fen(), uncovered as string)).toEqual([]);
+    expect(reasonLineFor(start.fen(), uncovered as string)).toBeNull();
   });
 
   // The corpus reasons about a3 as a prophylactic move that covers b4. That
