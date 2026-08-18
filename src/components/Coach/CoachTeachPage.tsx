@@ -25,6 +25,7 @@ import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
 import type { CommentaryKind } from '../../services/playCommentary';
+import { reasonLineFor } from '../../services/reasonVoice';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
 // Walkthrough arrows/highlights render through the SAME react-chessboard
@@ -6366,8 +6367,54 @@ export function CoachTeachPage(): JSX.Element {
     // fact verified against the FEN it was handed, and null on a quiet
     // position, which is the correct answer most of the time.
     let computedLine: string | null = null;
+
+    // ── THE MOVE'S OWN REASONS, CHECKED ON THIS BOARD ──────────────────────
+    //
+    // David 2026-08-18, on the computed voice: *"can we attach them to the
+    // computer?"* — the corpus's structured reasons, spoken by the computed
+    // lane. They are the sharpest thing this lane can say, so they run FIRST
+    // and `buildPlayCommentary` becomes the fallback for plies they don't
+    // cover.
+    //
+    // WHY THIS IS NOT A LOOSENING OF NOTE SELECTION. A note may only SPEAK at a
+    // position its own line produces — unchanged. What travels here is not the
+    // note's prose but its atomic claims, each re-checked against THIS board by
+    // `survivingReasons` before a word is phrased. A reason that fails is not
+    // hedged, it is dropped; a move with no surviving reason says nothing. So
+    // the coach can teach at a position the corpus never anchored to without
+    // ever asserting something it has not verified here — which is the whole
+    // point of storing reasons atomically rather than as prose (G0).
+    //
+    // The STUDENT's move first, then the coach's reply. Both just landed, but
+    // "why what you played works" is the teaching; what the opponent's move
+    // does is the fallback.
     try {
-      const beat = buildPlayCommentary({
+      const replayTo = (n: number): string | null => {
+        const c = new Chess();
+        try { for (const san of history.slice(0, n)) c.move(san); } catch { return null; }
+        return c.fen();
+      };
+      for (const back of [2, 1]) {
+        if (history.length < back) continue;
+        const fenBefore = replayTo(history.length - back);
+        if (!fenBefore) continue;
+        const line = reasonLineFor(fenBefore, history[history.length - back]);
+        // Same immediate-repeat guard the other lanes use, keyed on the reason
+        // set rather than the text — the same claims phrased two ways is still
+        // the same observation.
+        if (!line || line.key === lastComputedRef.current) continue;
+        computedLine = line.spoken;
+        lastComputedRef.current = line.key;
+        for (const sq of line.squares) spokenSquaresThisTurn.add(sq);
+        factLines.push(`Computed from the board (reasons): ${line.spoken}`);
+        captureEvent('coach_beat_offered', { surface: 'coach-teach', kind: 'reasons', spoke: true });
+        break;
+      }
+    } catch { /* the reason lane is a bonus, never a blocker */ }
+
+    try {
+      // Only when the reasons had nothing for this ply.
+      const beat = computedLine ? null : buildPlayCommentary({
         fen: args.fenAfterReply,
         studentColor: playerColor,
         saidExplainers: saidExplainersRef.current,

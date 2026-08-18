@@ -147,6 +147,22 @@ for (const file of readdirSync(TRACK_DIR).filter((f) => f.endsWith('.json') && f
       concepts: n.concepts ?? [],
       sources: [n.source],
       positionSource: 'high',
+      // 🔒 THE REASONS MUST SURVIVE THE BAKE. They were dropped here for the
+      // field's entire life: 24 note files carried structured reasons, the
+      // authoring check verified every one against the board, and then this
+      // builder rebuilt the note without the field — so `video-teachings.json`
+      // shipped with ZERO occurrences of "reasons" and `reasonCheck.ts` had no
+      // runtime importer at all. The multi-reason rule (David 2026-08-17) was
+      // therefore build-time only: it proved the prose was true on the day it
+      // was written and handed the app nothing it could re-check.
+      //
+      // That is the whole point of storing reasons atomically. In free play the
+      // student reaches a SIMILAR position, not this one, so which reasons still
+      // hold varies with their board — and only a structured reason can be
+      // tested there. Without the field the coach must choose between silence
+      // and a claim it cannot verify, which is exactly the choice G0 exists to
+      // remove. Gated by `videoNoteReasons.test.ts`.
+      ...(n.reasons?.length ? { reasons: n.reasons } : {}),
       // A note one move off a taught line is not off-line teaching to be
       // discarded — it is a FORK. Computed here so the relationship can never
       // be typed wrong: the shared prefix is the position the student actually

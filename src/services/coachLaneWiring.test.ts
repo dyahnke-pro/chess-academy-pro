@@ -238,6 +238,22 @@ describe('phase narration is judged against the board it was computed from', () 
   // against `getLiveFen()`, the board right now. Both are real boards, just
   // different ones, so a sentence true when detected became "board-false"
   // because the student moved while it was being phrased and streamed.
+  // ── THE REASON LANE MUST ACTUALLY BE REACHED ─────────────────────────────
+  //
+  // `reasonCheck` shipped with ZERO runtime importers and `emit-notes.mjs`
+  // dropped the `reasons` field on the way into the corpus, so the whole
+  // multi-reason rule verified prose at authoring time and reached no student.
+  // A wire that does not fire is not a wire (David 2026-08-07), and the way
+  // this one dies is silently — every other lane keeps working.
+  it('offers the move\'s checked reasons before the generic beat', () => {
+    expect(TEACH, 'the reason lane is not wired into coach-teach at all')
+      .toMatch(/reasonLineFor\(/);
+    // The generic commentary must be the FALLBACK. If it runs unconditionally
+    // the reasons can still be computed and then lose the slot every time.
+    expect(TEACH, 'the generic beat is not gated behind the reason lane')
+      .toMatch(/computedLine \? null : buildPlayCommentary\(/);
+  });
+
   it('grades against event.fen, not against whatever is on screen', () => {
     expect(PHASE).toMatch(/isSpokenSentenceGrounded\(trimmed, event\.fen/);
     expect(PHASE, 'the sentence is graded against a board it was not computed from')
