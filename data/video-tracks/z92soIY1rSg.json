@@ -568,5 +568,67 @@
  "titleCheck": {
   "claims": "English Opening",
   "confirmed": true
- }
+ },
+ "notes": [
+  {
+   "id": "vn-english-fianchetto-that-hits-the-centre-knight",
+   "line": "c4 e5 Nc3 Nf6 g3 d5 cxd5 Nxd5 Bg2",
+   "teaches": "The point of a fianchetto is not that the bishop is safe there — it is that the diagonal already contains a target. Trade in the centre first so the long diagonal is open, then develop the bishop onto a piece rather than onto empty squares, and the developing move comes with a question attached.",
+   "explains": "The centre pawns have come off and the knight has recaptured on d5, standing on the long diagonal. The bishop develops to g2 hitting it immediately, so the knight must be defended or moved before anything else happens. The bishop also covers e4 and holds the rook in the corner, which is why this setup is solid as well as active.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d5"
+    },
+    {
+     "kind": "controls",
+     "square": "e4"
+    }
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/8/3np3/8/2N3P1/PP1PPPBP/R1BQK1NR b KQkq - 1 5",
+   "t": 215,
+   "ply": 9,
+   "source": "yt:z92soIY1rSg"
+  },
+  {
+   "id": "vn-english-central-push-once-the-pieces-are-out",
+   "line": "c4 e5 Nc3 Nf6 g3 d5 cxd5 Nxd5 Bg2 Nb6 Nf3 Nc6 O-O Be7 e3 O-O d4",
+   "teaches": "Prepare the central break with the modest pawn move first, then play it. Pushing two squares while the pawn behind is still at home leaves a hole; pushing it after the small move means the pawn arrives supported, hits something, and takes a square on the far side in the same move.",
+   "explains": "Both sides have castled and the pieces are developed, so the pawn goes to d4 backed by the pawn on e3. It hits the pawn on e5 at once, and it covers c5, which is the square the knight would otherwise use. The centre is being claimed at the moment it can be held rather than at the moment it first looked available.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    },
+    {
+     "kind": "controls",
+     "square": "c5"
+    }
+   ],
+   "fen": "r1bq1rk1/ppp1bppp/1nn5/4p3/3P4/2N1PNP1/PP3PBP/R1BQ1RK1 b - - 0 9",
+   "t": 490,
+   "ply": 17,
+   "source": "yt:z92soIY1rSg"
+  },
+  {
+   "id": "vn-english-rook-onto-the-file-the-pawns-opened",
+   "line": "c4 e5 Nc3 Nf6 g3 d5 cxd5 Nxd5 Bg2 Nb6 Nf3 Nc6 O-O Be7 e3 O-O d4 exd4 exd4 Be6 Re1",
+   "teaches": "The moment a file opens, the rook belongs on it — and the best time is when a piece has just stepped onto that file. A developing move that also attacks means the opponent answers your rook instead of getting on with their own plan.",
+   "explains": "The pawns have been traded in the centre and the e-file is open. The bishop has just come to e6, so the rook swings to e1 looking straight at it down the file. The rook also holds the squares in front of it in the middle, so the piece that finished development is the one that now controls where the game is played.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e6"
+    },
+    {
+     "kind": "controls",
+     "square": "e4"
+    }
+   ],
+   "fen": "r2q1rk1/ppp1bppp/1nn1b3/8/3P4/2N2NP1/PP3PBP/R1BQR1K1 b - - 2 11",
+   "t": 614,
+   "ply": 21,
+   "source": "yt:z92soIY1rSg"
+  }
+ ]
 }

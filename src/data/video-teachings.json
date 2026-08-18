@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-18",
- "videosDistilled": 34,
- "noteCount": 97,
+ "videosDistilled": 36,
+ "noteCount": 105,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -653,6 +653,198 @@
     {
      "kind": "defends",
      "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-barry-bishop-out-before-the-pawn-wall",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nf3",
+    "g6",
+    "Nc3",
+    "d5",
+    "Bf4"
+   ],
+   "opening": "Queen's Pawn Game: Barry Attack, Grünfeld Variation",
+   "phase": "opening",
+   "explains": "The bishop steps to f4 and looks straight down at the pawn on c7 while covering e5, the square in the middle that both sides want for a knight. It also holds h2, which matters later once the pawns start moving on that wing. Nothing is committed in the centre yet, and the piece that would have been trapped is already out.",
+   "teaches": "Against a fianchetto, get the dark-squared bishop outside the pawn chain before you build it. Once the modest e-pawn move goes in, that bishop has no way out — so develop it first, on the diagonal where it already has a target, and let the pawns follow.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:C2unZJEz01o"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c7"
+    },
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ]
+  },
+  {
+   "id": "vn-barry-rook-pawn-that-asks-a-question",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nf3",
+    "g6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "Bg7",
+    "e3",
+    "O-O",
+    "Be2",
+    "c6",
+    "h4"
+   ],
+   "opening": "Queen's Pawn Game: Barry Attack, Grünfeld Variation",
+   "phase": "opening",
+   "explains": "The centre is closed enough that the game will be decided on a wing, and the pawn goes to h4 covering g5. Black must either let it come to h5 or stop it with the h-pawn, and both replies loosen something around the king. Nothing is threatened for several moves; the point is that the shelter is now a little worse whatever happens.",
+   "teaches": "A rook's pawn pushed at a fianchettoed king is not an attack yet — it is a question the defender has to answer with a pawn move of their own. Whichever answer comes, a pawn in front of the castled king will have moved, and that is what you were buying.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:C2unZJEz01o"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "g5"
+    }
+   ]
+  },
+  {
+   "id": "vn-barry-knight-lands-on-three-pawns",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nf3",
+    "g6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "Bg7",
+    "e3",
+    "O-O",
+    "Be2",
+    "c6",
+    "h4",
+    "h5",
+    "Ne5"
+   ],
+   "opening": "Queen's Pawn Game: Barry Attack, Grünfeld Variation",
+   "phase": "opening",
+   "explains": "The knight comes to e5 in the centre, where it hits the pawns on c6, f7 and g6 at the same time. It cannot be taken by a pawn and it cannot be chased by one either, so the only way to remove it is a trade — and every trade there opens a line toward the king the pawns have already been loosened around.",
+   "teaches": "An outpost is worth more the more it touches. Before planting a knight in the middle, count the pawns it will hit from there — a knight attacking three of them at once cannot simply be ignored, and driving it away usually costs the defender a concession somewhere else.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:C2unZJEz01o"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f7"
+    },
+    {
+     "kind": "attacks",
+     "square": "g6"
+    }
+   ]
+  },
+  {
+   "id": "vn-barry-pawn-that-props-the-outpost",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nf3",
+    "g6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "Bg7",
+    "e3",
+    "O-O",
+    "Be2",
+    "c6",
+    "h4",
+    "h5",
+    "Ne5",
+    "Nbd7",
+    "f3"
+   ],
+   "opening": "Queen's Pawn Game: Barry Attack, Grünfeld Variation",
+   "phase": "opening",
+   "explains": "The pawn goes to f3 and covers e4 and g4, the two squares from which a black knight could come and challenge the outpost. Nothing is attacked and nothing is developed. What has changed is that the knight on e5 now has no way of being asked to leave, so every plan built around it stays available.",
+   "teaches": "When a knight is doing all the work in the centre, spend a move making sure it cannot be dislodged. A modest pawn move that covers the two squares an enemy knight would jump to is not slow — it is what turns a good square into a permanent one.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:C2unZJEz01o"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e4"
+    },
+    {
+     "kind": "controls",
+     "square": "g4"
+    }
+   ]
+  },
+  {
+   "id": "vn-barry-recapture-onto-the-long-diagonal",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nf3",
+    "g6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "Bg7",
+    "e3",
+    "O-O",
+    "Be2",
+    "c6",
+    "h4",
+    "h5",
+    "Ne5",
+    "Nbd7",
+    "f3",
+    "Nxe5",
+    "Bxe5"
+   ],
+   "opening": "Queen's Pawn Game: Barry Attack, Grünfeld Variation",
+   "phase": "opening",
+   "explains": "The knight has been exchanged and the bishop takes back on e5. From there it hits the knight on f6, which is the piece defending the fianchetto, and it holds the pawn on d4 behind it. The square that was strong for the knight is strong for the bishop as well — and the bishop stares straight at the king.",
+   "teaches": "When your outpost knight gets traded, recapture with the piece that inherits the square. A bishop that lands on the long diagonal facing a fianchettoed king has taken over the job, and it arrives hitting a piece, so the defender does not get the quiet move the exchange was supposed to win.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:C2unZJEz01o"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    },
+    {
+     "kind": "defends",
+     "square": "d4"
     }
    ]
   },
@@ -3225,6 +3417,128 @@
     {
      "kind": "attacks",
      "square": "d2"
+    }
+   ]
+  },
+  {
+   "id": "vn-english-fianchetto-that-hits-the-centre-knight",
+   "lineSan": [
+    "c4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "d5",
+    "cxd5",
+    "Nxd5",
+    "Bg2"
+   ],
+   "opening": "English Opening: King's English Variation, Four Knights Variation, Fianchetto Line, with Nb6",
+   "phase": "opening",
+   "explains": "The centre pawns have come off and the knight has recaptured on d5, standing on the long diagonal. The bishop develops to g2 hitting it immediately, so the knight must be defended or moved before anything else happens. The bishop also covers e4 and holds the rook in the corner, which is why this setup is solid as well as active.",
+   "teaches": "The point of a fianchetto is not that the bishop is safe there — it is that the diagonal already contains a target. Trade in the centre first so the long diagonal is open, then develop the bishop onto a piece rather than onto empty squares, and the developing move comes with a question attached.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:z92soIY1rSg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d5"
+    },
+    {
+     "kind": "controls",
+     "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-english-central-push-once-the-pieces-are-out",
+   "lineSan": [
+    "c4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "d5",
+    "cxd5",
+    "Nxd5",
+    "Bg2",
+    "Nb6",
+    "Nf3",
+    "Nc6",
+    "O-O",
+    "Be7",
+    "e3",
+    "O-O",
+    "d4"
+   ],
+   "opening": "English Opening: King's English Variation, Four Knights Variation, Fianchetto Line, with Nb6",
+   "phase": "opening",
+   "explains": "Both sides have castled and the pieces are developed, so the pawn goes to d4 backed by the pawn on e3. It hits the pawn on e5 at once, and it covers c5, which is the square the knight would otherwise use. The centre is being claimed at the moment it can be held rather than at the moment it first looked available.",
+   "teaches": "Prepare the central break with the modest pawn move first, then play it. Pushing two squares while the pawn behind is still at home leaves a hole; pushing it after the small move means the pawn arrives supported, hits something, and takes a square on the far side in the same move.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:z92soIY1rSg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    },
+    {
+     "kind": "controls",
+     "square": "c5"
+    }
+   ]
+  },
+  {
+   "id": "vn-english-rook-onto-the-file-the-pawns-opened",
+   "lineSan": [
+    "c4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "d5",
+    "cxd5",
+    "Nxd5",
+    "Bg2",
+    "Nb6",
+    "Nf3",
+    "Nc6",
+    "O-O",
+    "Be7",
+    "e3",
+    "O-O",
+    "d4",
+    "exd4",
+    "exd4",
+    "Be6",
+    "Re1"
+   ],
+   "opening": "English Opening: King's English Variation, Four Knights Variation, Fianchetto Line, with Nb6",
+   "phase": "opening",
+   "explains": "The pawns have been traded in the centre and the e-file is open. The bishop has just come to e6, so the rook swings to e1 looking straight at it down the file. The rook also holds the squares in front of it in the middle, so the piece that finished development is the one that now controls where the game is played.",
+   "teaches": "The moment a file opens, the rook belongs on it — and the best time is when a piece has just stepped onto that file. A developing move that also attacks means the opponent answers your rook instead of getting on with their own plan.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:z92soIY1rSg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e6"
+    },
+    {
+     "kind": "controls",
+     "square": "e4"
     }
    ]
   },
