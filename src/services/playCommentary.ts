@@ -292,11 +292,25 @@ export function buildInstantReplyLine(m: {
   isCheckmate: boolean;
   isCheck: boolean;
 }): string | null {
-  const capturedName = m.captured ? (NAME[m.captured] ?? 'piece') : null;
+  // 🔒 A CAPTURE AND A CHECK ARE PICTURES, NOT NEWS (David 2026-08-18, after a
+  // full game driven on prod: *"find all irrelevant computed phrases and cut
+  // them out"*). "That takes your bishop." / "Check." fired seven times in
+  // twenty moves, and on three of those the voice package had ALREADY computed
+  // SILENCE for the turn — so the one line that reached the student was the one
+  // restating what they had just watched happen, over the top of code that had
+  // judged there was nothing worth saying.
+  //
+  // Narration Voice Rule 3 says it outright: the voice carries only what the
+  // picture does not. The piece leaves the board in the animation; the king
+  // lights up in check. Saying it again is the filler that makes a long session
+  // tune out, and it is the same complaint David already made about narrating
+  // the opponent's move at all.
+  //
+  // CHECKMATE STAYS. It is the one event that is not merely visible but
+  // terminal — the game is over, the board stops meaning anything, and the
+  // student needs to be told rather than left to infer it from a frozen
+  // position.
   if (m.isCheckmate) return 'Checkmate.';
-  if (capturedName && m.isCheck) return `That takes your ${capturedName} — and it's check.`;
-  if (capturedName) return `That takes your ${capturedName}.`;
-  if (m.isCheck) return 'Check.';
   return null;
 }
 

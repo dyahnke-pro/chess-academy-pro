@@ -161,17 +161,18 @@ describe('buildInstantReplyLine', () => {
     expect(buildInstantReplyLine({ san: 'Nf3', isCheckmate: false, isCheck: false })).toBeNull();
   });
 
-  it('a capture calls out the EFFECT, never the SAN', () => {
-    const line = buildInstantReplyLine({ san: 'Bxc6', captured: 'n', isCheckmate: false, isCheck: false });
-    expect(line).toBe('That takes your knight.');
-    expect(line).not.toContain('Bxc6');
+  it('a capture is SILENT — the piece left the board in front of them', () => {
+    // NARROWED 2026-08-18. This used to expect "That takes your knight.", and a
+    // full game driven on prod spoke that shape seven times in twenty moves —
+    // on three of them over the top of a voice package that had already
+    // computed SILENCE for the turn. Rule 3: the voice carries what the picture
+    // does not, and a capture is the most visible thing on a chessboard.
+    expect(buildInstantReplyLine({ san: 'Bxc6', captured: 'n', isCheckmate: false, isCheck: false })).toBeNull();
   });
 
-  it('check and capture-with-check carry their own emphasis, SAN-free', () => {
-    expect(buildInstantReplyLine({ san: 'Qh5+', isCheckmate: false, isCheck: true }))
-      .toBe('Check.');
-    expect(buildInstantReplyLine({ san: 'Qxf7+', captured: 'p', isCheckmate: false, isCheck: true }))
-      .toBe("That takes your pawn — and it's check.");
+  it('a check is SILENT too — the board already shows it', () => {
+    expect(buildInstantReplyLine({ san: 'Qh5+', isCheckmate: false, isCheck: true })).toBeNull();
+    expect(buildInstantReplyLine({ san: 'Qxf7+', captured: 'p', isCheckmate: false, isCheck: true })).toBeNull();
   });
 
   it('checkmate outranks everything', () => {

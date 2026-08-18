@@ -30,7 +30,15 @@ describe('rankReplies', () => {
     expect(r?.bestSan).toBe('Bd2');
     expect(r?.alsoSan).toBe('Bh4');
     expect(r?.clear).toBe(false);
-    expect(bestReplyLine(r!, '')).toBe('Two good moves here — Bd2, or Bh4.');
+    // NARROWED 2026-08-18. This used to expect "Two good moves here — Bd2, or
+    // Bh4." — two pieces of notation, saying neither what either move does nor
+    // how they differ. It fired that bare on a game driven on prod. With no
+    // `why` there is nothing to teach and no strongest to name, so the line is
+    // dropped and the turn's other facts are heard instead.
+    expect(bestReplyLine(r!, '')).toBe('');
+    // With something to say about the top move, the pair is back — the second
+    // move earns its mention by the first having a lesson in it.
+    expect(bestReplyLine(r!, ', taking the pin off')).toBe('Two good moves here — Bd2, taking the pin off, or Bh4.');
   });
 
   it('keeps the superlative when the top move really is clear', () => {
