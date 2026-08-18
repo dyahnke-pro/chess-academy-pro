@@ -1,0 +1,96 @@
+[
+ {
+  "id": "vn-kgambit-four-ways-to-follow-the-offer",
+  "line": "e4 e5 f4 exf4",
+  "teaches": "When a gambit pawn has been taken, the follow-up is a choice of character rather than a search for the best move. One try opens the centre at once, one develops toward the hole the missing f-pawn leaves, one hurries a piece out, and one aims straight at the weakest square near the king. None of them refutes the capture; each of them decides what the game is about.",
+  "explains": "The f-pawn is gone and the king's diagonal is open in both directions. Four continuations come into consideration here, and the difference between them is which weakness they choose to work on — the centre, the open file, or the square the missing pawn used to guard.",
+  "options": [
+   {
+    "san": "d4"
+   },
+   {
+    "san": "Nf3"
+   },
+   {
+    "san": "Nc3"
+   },
+   {
+    "san": "Bc4"
+   }
+  ]
+ },
+ {
+  "id": "vn-kgambit-hold-the-pawn-or-hit-the-centre",
+  "line": "e4 e5 f4 exf4 Nf3",
+  "teaches": "Two honest ways to meet a gambit: hold what you took, or give it back and play in the centre. Holding it means committing pawns in front of your own king, which is a real cost and not a bluff — the older move is not refuted, it is simply expensive. Decide which bill you would rather pay before you take a second pawn.",
+  "explains": "The knight has come out and the extra pawn on f4 needs a decision. Advancing the g-pawn props it up and keeps the material, at the price of loosening the squares your own king will want later. Developing the king's knight instead ignores the pawn and turns the game toward the centre immediately.",
+  "options": [
+   {
+    "san": "g5"
+   },
+   {
+    "san": "Nf6"
+   }
+  ]
+ },
+ {
+  "id": "vn-kgambit-develop-at-the-loose-pawn",
+  "line": "e4 e5 f4 exf4 Nf3 Nf6",
+  "teaches": "The cleanest answer to a gambit is often a developing move that also asks a question. A knight that comes out hitting the centre pawn takes the initiative back without committing anything — the attacker now has to spend a move on you rather than on their plan.",
+  "explains": "The knight steps to f6 and hits the pawn on e4, which has just been left without a pawn beside it. It also covers d5, so the centre cannot be expanded freely either. Nothing has been risked and nothing loosened: the extra pawn is still on f4 for now, and the position is already about White's problems rather than Black's.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e4"
+   },
+   {
+    "kind": "controls",
+    "square": "d5"
+   }
+  ]
+ },
+ {
+  "id": "vn-kgambit-rim-knight-that-holds-the-pawn",
+  "line": "e4 e5 f4 exf4 Nf3 Nf6 e5 Nh5",
+  "teaches": "A knight on the edge is bad only when it is doing nothing. When the pawn it guards is the pawn the whole game is being fought over, the edge is exactly where it belongs — judge a knight by its job, not by its file.",
+  "explains": "The pawn has been pushed to e5 to chase the knight, and the knight has gone to h5 rather than back. From there it defends the extra pawn on f4 and covers g3, so the pawn cannot simply be regained and the squares in front of White's king stay awkward. The knight looks misplaced and is holding the entire point of the opening together.",
+  "reasons": [
+   {
+    "kind": "defends",
+    "square": "f4"
+   },
+   {
+    "kind": "controls",
+    "square": "g3"
+   }
+  ]
+ },
+ {
+  "id": "vn-kgambit-check-that-costs-castling",
+  "line": "e4 e5 f4 exf4 d4 Qh4+",
+  "teaches": "An early queen check is worth playing when every answer to it costs something. The rule against bringing the queen out early is about losing time, so count the defender's legal replies first: if the only ways to meet the check are a king step that forfeits castling or a pawn move in front of the king, the check has already paid for itself.",
+  "explains": "With the f-pawn gone the diagonal to the king is open, and the queen arrives on h4 giving check. Exactly three moves answer it: a pawn block on g3, or the king stepping to d2 or e2. Two of the three give up castling and the third loosens the shelter further. The queen also props up the pawn on f4 from h4, so she is holding the extra material while she asks the question.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e1"
+   },
+   {
+    "kind": "defends",
+    "square": "f4"
+   }
+  ]
+ },
+ {
+  "id": "vn-kgambit-challenge-the-chain-at-its-head",
+  "line": "e4 e5 f4 exf4 Nf3 g5 h4",
+  "teaches": "Against a pawn holding a gambit pawn in place, hit the front pawn rather than the one behind it. Opening a file toward a king that has not castled is worth a pawn of its own, and the defender usually has to choose between keeping the material and keeping the shelter.",
+  "explains": "The g-pawn has come forward to hold the pawn on f4, and the h-pawn immediately hits it. Black now has to decide whether to push past, hold the chain together, or take — and each answer opens something. The pawn that looked like a solid defender is the one being attacked.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "g5"
+   }
+  ]
+ }
+]
