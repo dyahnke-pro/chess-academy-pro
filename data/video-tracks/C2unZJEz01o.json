@@ -697,6 +697,27 @@
    "t": 213,
    "ply": 19,
    "source": "yt:C2unZJEz01o"
+  },
+  {
+   "id": "vn-fork-d4nf6nf3g6-three-setups",
+   "line": "d4 Nf6 Nf3 g6",
+   "teaches": "Against a kingside fianchetto the third move decides which structure you are playing for, and all three tries here are sound. The bishop out early claims the dark squares before the pawns commit. The fianchetto answers the opponent on their own terms. The knight out keeps the centre pawns free to advance later. Pick the structure you know.",
+   "explains": "The bishop is heading for g7 and the long diagonal. Three continuations come into consideration: developing the dark-squared bishop outside the pawn chain while it still can get out, mirroring with a fianchetto of your own, or bringing the queen's knight out and leaving the pawns uncommitted for one more move.",
+   "options": [
+    {
+     "san": "Bf4"
+    },
+    {
+     "san": "g3"
+    },
+    {
+     "san": "Nc3"
+    }
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 3",
+   "t": 31.5,
+   "ply": 4,
+   "source": "yt:C2unZJEz01o"
   }
  ]
 }

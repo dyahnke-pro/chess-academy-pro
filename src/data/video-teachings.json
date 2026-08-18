@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-18",
  "videosDistilled": 55,
- "noteCount": 140,
+ "noteCount": 144,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -972,6 +972,36 @@
     {
      "kind": "defends",
      "square": "d4"
+    }
+   ]
+  },
+  {
+   "id": "vn-fork-d4nf6nf3g6-three-setups",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nf3",
+    "g6"
+   ],
+   "opening": "Queen's Pawn Game: Barry Attack, Grünfeld Variation",
+   "phase": "opening",
+   "explains": "The bishop is heading for g7 and the long diagonal. Three continuations come into consideration: developing the dark-squared bishop outside the pawn chain while it still can get out, mirroring with a fianchetto of your own, or bringing the queen's knight out and leaving the pawns uncommitted for one more move.",
+   "teaches": "Against a kingside fianchetto the third move decides which structure you are playing for, and all three tries here are sound. The bishop out early claims the dark squares before the pawns commit. The fianchetto answers the opponent on their own terms. The knight out keeps the centre pawns free to advance later. Pick the structure you know.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:C2unZJEz01o"
+   ],
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Bf4"
+    },
+    {
+     "san": "g3"
+    },
+    {
+     "san": "Nc3"
     }
    ]
   },
@@ -3387,6 +3417,48 @@
    ]
   },
   {
+   "id": "vn-fork-three-answers-to-the-pawn-prop",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3"
+   ],
+   "opening": "Caro-Kann Defense: Maróczy Variation",
+   "phase": "opening",
+   "explains": "The pawn on f3 supports the centre and blocks the king's knight from its natural square. Three replies come into consideration: capturing in the centre straight away, the modest pawn move that keeps the position closed, or bringing a knight out and leaving the tension for another move.",
+   "teaches": "When the centre is propped up by a pawn rather than a piece, you can take it, sidestep it, or develop and leave the tension. Taking resolves the position at once and hands over the centre. Sidestepping keeps everything closed and asks whether the prop was worth the move. Developing declines the argument entirely. All three are played here.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:k4T6TJGOSA0"
+   ],
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "dxe4"
+    },
+    {
+     "san": "e6"
+    },
+    {
+     "san": "Nd7"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "c6",
+     "d4",
+     "d5"
+    ],
+    "taughtMove": "Nc3",
+    "alternative": "f3",
+    "lineName": "Caro-Kann Defence"
+   }
+  },
+  {
    "id": "vn-closed-five-honest-second-moves",
    "lineSan": [
     "e4",
@@ -3670,6 +3742,35 @@
    "structural": "prophylaxis one move ahead of a threat; one move, so no fork"
   },
   {
+   "id": "vn-fork-fianchetto-or-bishop-out",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nf3",
+    "Bg7"
+   ],
+   "opening": "King's Indian Defense: Normal Variation, King's Knight Variation",
+   "phase": "opening",
+   "explains": "The bishop stands on g7 aiming through the centre. One try puts a bishop opposite it on the same diagonal, so the piece the opponent built around has something to look at. The other develops the dark-squared bishop outside the pawn chain, where it contests the squares in front of the fianchetto rather than facing it down.",
+   "teaches": "With both centre pawns out and the opponent fianchettoed, the choice is whether to answer on the long diagonal or on the dark squares. A fianchetto of your own blunts their best piece by facing it; the bishop developed outside the chain contests the squares that bishop wants to use instead. Both are mainstream and they ask different questions.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:kQHOIgVhyow"
+   ],
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "g3"
+    },
+    {
+     "san": "Bf4"
+    }
+   ]
+  },
+  {
    "id": "vn-maroczy-queen-sortie-against-a-loose-bishop",
    "lineSan": [
     "e4",
@@ -3865,8 +3966,8 @@
    ],
    "opening": "Sicilian Defense",
    "phase": "opening",
-   "explains": "Both knights are out and the centre is still unresolved. One try takes on the centre immediately and transposes into heavily analysed ground. The other develops the light-squared bishop toward f7 first, keeping the pawns flexible and asking the opponent to think from move three rather than recite.",
-   "teaches": "Two sound third moves with nothing between them objectively, and a real difference in what you are signing up for. Opening the centre leads to the positions both sides have studied hardest. Putting the bishop out at once aims at the weakest square near the enemy king before anything is settled, and takes the game somewhere far less familiar — which at club level is most of its value.",
+   "explains": "Both knights are out and the centre is still unresolved. Three continuations come into consideration here: taking on the centre at once, the bishop to b5 hitting the knight that holds it, or the bishop to c4 aiming at the weakest square near the enemy king. They lead to genuinely different games rather than to a single best line.",
+   "teaches": "Three sound third moves with little between them objectively, and a real difference in what you are signing up for. Opening the centre leads to the positions both sides have studied hardest. Offering the bishop for the knight trades a piece for a permanent change in the pawn structure. Putting the bishop out toward f7 keeps everything flexible and takes the game somewhere far less familiar — which at club level is most of its value.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3876,6 +3977,9 @@
    "options": [
     {
      "san": "d4"
+    },
+    {
+     "san": "Bb5"
     },
     {
      "san": "Bc4"
@@ -4843,6 +4947,43 @@
      "square": "e4"
     }
    ]
+  },
+  {
+   "id": "vn-fork-knight-or-fianchetto-third",
+   "lineSan": [
+    "c4",
+    "e5",
+    "Nc3",
+    "Nf6"
+   ],
+   "opening": "English Opening: King's English Variation, Four Knights Variation, Fianchetto Line, with Nb6",
+   "phase": "opening",
+   "explains": "The position is symmetrical and nothing is committed. One try develops the king's knight and keeps every structure open. The other steps the g-pawn forward so the bishop can take the long diagonal, aiming at the centre from the side rather than occupying it.",
+   "teaches": "Two sound ways to continue a flank opening, and the difference is where the light-squared bishop ends up. Developing the knight keeps a classical setup available. The fianchetto commits the bishop to the long diagonal before the centre is resolved, which is exactly what makes it strong once the centre pawns come off.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:z92soIY1rSg"
+   ],
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Nf3"
+    },
+    {
+     "san": "g3"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "c4",
+     "e5",
+     "Nc3"
+    ],
+    "taughtMove": "Nc6",
+    "alternative": "Nf6",
+    "lineName": "English Opening / English: Botvinnik System"
+   }
   },
   {
    "id": "vn-bigcentre-knight-steps-back-to-keep-the-bind",

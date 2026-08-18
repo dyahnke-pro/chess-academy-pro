@@ -373,6 +373,24 @@
    "t": 1131,
    "ply": 30,
    "source": "yt:kQHOIgVhyow"
+  },
+  {
+   "id": "vn-fork-fianchetto-or-bishop-out",
+   "line": "d4 Nf6 c4 g6 Nf3 Bg7",
+   "teaches": "With both centre pawns out and the opponent fianchettoed, the choice is whether to answer on the long diagonal or on the dark squares. A fianchetto of your own blunts their best piece by facing it; the bishop developed outside the chain contests the squares that bishop wants to use instead. Both are mainstream and they ask different questions.",
+   "explains": "The bishop stands on g7 aiming through the centre. One try puts a bishop opposite it on the same diagonal, so the piece the opponent built around has something to look at. The other develops the dark-squared bishop outside the pawn chain, where it contests the squares in front of the fianchetto rather than facing it down.",
+   "options": [
+    {
+     "san": "g3"
+    },
+    {
+     "san": "Bf4"
+    }
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4",
+   "t": 95.5,
+   "ply": 6,
+   "source": "yt:kQHOIgVhyow"
   }
  ]
 }

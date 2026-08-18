@@ -629,6 +629,24 @@
    "t": 614,
    "ply": 21,
    "source": "yt:z92soIY1rSg"
+  },
+  {
+   "id": "vn-fork-knight-or-fianchetto-third",
+   "line": "c4 e5 Nc3 Nf6",
+   "teaches": "Two sound ways to continue a flank opening, and the difference is where the light-squared bishop ends up. Developing the knight keeps a classical setup available. The fianchetto commits the bishop to the long diagonal before the centre is resolved, which is exactly what makes it strong once the centre pawns come off.",
+   "explains": "The position is symmetrical and nothing is committed. One try develops the king's knight and keeps every structure open. The other steps the g-pawn forward so the bishop can take the long diagonal, aiming at the centre from the side rather than occupying it.",
+   "options": [
+    {
+     "san": "Nf3"
+    },
+    {
+     "san": "g3"
+    }
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 2 3",
+   "t": 122.5,
+   "ply": 4,
+   "source": "yt:z92soIY1rSg"
   }
  ]
 }

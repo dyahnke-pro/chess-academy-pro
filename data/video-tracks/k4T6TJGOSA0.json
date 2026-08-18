@@ -555,6 +555,27 @@
    "t": 335,
    "ply": 12,
    "source": "yt:k4T6TJGOSA0"
+  },
+  {
+   "id": "vn-fork-three-answers-to-the-pawn-prop",
+   "line": "e4 c6 d4 d5 f3",
+   "teaches": "When the centre is propped up by a pawn rather than a piece, you can take it, sidestep it, or develop and leave the tension. Taking resolves the position at once and hands over the centre. Sidestepping keeps everything closed and asks whether the prop was worth the move. Developing declines the argument entirely. All three are played here.",
+   "explains": "The pawn on f3 supports the centre and blocks the king's knight from its natural square. Three replies come into consideration: capturing in the centre straight away, the modest pawn move that keeps the position closed, or bringing a knight out and leaving the tension for another move.",
+   "options": [
+    {
+     "san": "dxe4"
+    },
+    {
+     "san": "e6"
+    },
+    {
+     "san": "Nd7"
+    }
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "t": 36.5,
+   "ply": 5,
+   "source": "yt:k4T6TJGOSA0"
   }
  ]
 }
