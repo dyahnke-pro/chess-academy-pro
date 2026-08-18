@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-18",
- "videosDistilled": 33,
- "noteCount": 92,
+ "videosDistilled": 34,
+ "noteCount": 96,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -901,6 +901,143 @@
     "alternative": "h4",
     "lineName": "Trompowsky Attack"
    }
+  },
+  {
+   "id": "vn-bind-hold-the-clamp-or-open-the-centre",
+   "lineSan": [
+    "c4",
+    "c5",
+    "e4",
+    "Nc6",
+    "Nf3",
+    "g6"
+   ],
+   "opening": "Sicilian Defense: Staunton-Cochrane Variation",
+   "phase": "opening",
+   "explains": "The bishop is heading for g7 and wants the long diagonal opened. Two tries come into consideration: resolve the centre now, or hold the clamp with the modest pawn move and make the opponent find a way in. Neither is a mistake; they are different bargains.",
+   "teaches": "With pawns already on c4 and e4 there are two honest plans, and they lead to different games. Pushing the d-pawn two squares opens the centre and hands the fianchettoed bishop the long diagonal it was put there for. Playing it one square keeps everything closed and leaves that bishop biting on granite — quieter, and much harder to play against.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:IZN7fZFpzoc"
+   ],
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "d3"
+    },
+    {
+     "san": "d4"
+    }
+   ]
+  },
+  {
+   "id": "vn-bind-one-square-holds-both-pawns",
+   "lineSan": [
+    "c4",
+    "c5",
+    "e4",
+    "Nc6",
+    "Nf3",
+    "g6",
+    "d3"
+   ],
+   "opening": "Sicilian Defense: Staunton-Cochrane Variation",
+   "phase": "opening",
+   "explains": "The pawn goes only to d3, where it defends the pawns on c4 and e4 at the same time. Both of those are the clamp — between them they cover the squares in the middle that the opponent's pieces want. Nothing has been grabbed and nothing can be attacked, which is exactly the point.",
+   "teaches": "A pawn advanced one square instead of two can be the move that makes a whole structure work. Judge it by what it holds rather than by the ground it takes: a single pawn propping up both wings of your centre means neither can be undermined, and a clamp that cannot be broken is worth more than space you have to defend.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:IZN7fZFpzoc"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "c4"
+    },
+    {
+     "kind": "defends",
+     "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-bind-bishop-that-takes-the-dark-square",
+   "lineSan": [
+    "c4",
+    "c5",
+    "e4",
+    "Nc6",
+    "Nf3",
+    "g6",
+    "d3",
+    "Bg7",
+    "Nc3",
+    "d6",
+    "Be3"
+   ],
+   "opening": "Sicilian Defense: Staunton-Cochrane Variation",
+   "phase": "opening",
+   "explains": "The bishop comes to e3, hitting the pawn on c5 and covering d4. That square in the middle is the one the fianchettoed bishop is aimed at through the whole game, and it is now held by a piece that cannot easily be driven away. The centre stays closed and the dark squares stop being available.",
+   "teaches": "When the opponent has fianchettoed, the fight is for the dark squares that bishop wants to use. Develop the bishop that contests them, and prefer the square where it both holds the central outpost and asks a question of a pawn — a developing move that also denies a square is doing two jobs.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:IZN7fZFpzoc"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c5"
+    },
+    {
+     "kind": "controls",
+     "square": "d4"
+    }
+   ]
+  },
+  {
+   "id": "vn-bind-recapture-that-keeps-everything-covered",
+   "lineSan": [
+    "c4",
+    "c5",
+    "e4",
+    "Nc6",
+    "Nf3",
+    "g6",
+    "d3",
+    "Bg7",
+    "Nc3",
+    "d6",
+    "Be3",
+    "Bg4",
+    "Be2",
+    "Bxf3",
+    "Bxf3"
+   ],
+   "opening": "Sicilian Defense: Staunton-Cochrane Variation",
+   "phase": "opening",
+   "explains": "The bishop has been exchanged on f3 and the other bishop takes back. From f3 it holds the pawn on e4, which is half the clamp, and covers g2 and the queen behind it. The knight that guarded those squares is gone and nothing has been loosened, so the trade costs nothing in a position that will not open.",
+   "teaches": "Giving up a knight for a bishop is not automatically a concession when the position is closed. What matters is whether the recapturing piece takes over the jobs the knight was doing — a bishop that lands defending the centre pawn and the squares around its own king has replaced the knight, not merely traded with it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:IZN7fZFpzoc"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    },
+    {
+     "kind": "defends",
+     "square": "g2"
+    }
+   ]
   },
   {
    "id": "vn-caro-fantasy-strike-the-base-of-the-chain",
