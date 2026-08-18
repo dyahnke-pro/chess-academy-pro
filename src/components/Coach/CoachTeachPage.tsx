@@ -1541,9 +1541,6 @@ export function CoachTeachPage(): JSX.Element {
   const gemFenRef = useRef<string | null>(null);
   /** Last spoken tactics-alert key (David 2026-08-07: "I saw no tactics
    *  alerts") — a persisting danger alerts once, not every turn. */
-  /** Generic teaching clauses `buildPlayCommentary` has already used this game.
-   *  The principle is worth saying once; the fact speaks every time. */
-  const saidExplainersRef = useRef(new Set<string>());
   /** The last computed read spoken. A standing board feature (an outpost, an
    *  open file) survives many plies, and the lane had NO repeat guard at all —
    *  the tactic and threat lanes each had one — so it re-narrated the identical
@@ -6412,67 +6409,31 @@ export function CoachTeachPage(): JSX.Element {
       }
     } catch { /* the reason lane is a bonus, never a blocker */ }
 
-    try {
-      // Only when the reasons had nothing for this ply.
-      const beat = computedLine ? null : buildPlayCommentary({
-        fen: args.fenAfterReply,
-        studentColor: playerColor,
-        saidExplainers: saidExplainersRef.current,
-        // ROOT CAUSE, not the gate. Both this composer and the tactics alert
-        // above read `detectTactics` off THIS board, and neither knew the
-        // other had spoken — so both announced the same loose piece and the
-        // student heard the observation twice with a different moral bolted on
-        // each time. Handing over the squares already spoken means the
-        // duplicate is never composed: the ladder descends to the next real
-        // thing, so the turn GAINS a beat rather than losing one to a filter.
-        skipSquares: spokenSquaresThisTurn,
-      });
-      if (beat) {
-        // `spoken`, NOT `facts`. The facts are written at a phrasing model —
-        // shouted header, then an instruction ("Do NOT name the winning move")
-        // — so once the package started refusing scaffolding this lane was
-        // being dropped on every single ply, silently. It is the lane meant to
-        // FILL the silence: the corpus can only reach ~14% of the plies we
-        // teach, and the computed read is what the other 86% was always
-        // supposed to hear. Feeding it directives made it contribute nothing.
-        // Immediate repeat only — the same guard shape the tactic and threat
-        // lanes use. A feature that comes BACK after other content is fair to
-        // mention again; the same observation twice running is not.
-        //
-        // Keyed on `beat.key`, NOT on the text: the say-the-principle-once rule
-        // strips a trailing clause the second time a pattern appears, so the
-        // same observation yields two different strings on consecutive plies
-        // and a text guard sails straight past it. Measured on a Vienna walk —
-        // the e4-outpost beat spoke on moves 4 and 5, the second time minus
-        // its moral.
-        if (beat.key && beat.key === lastComputedRef.current) {
-          computedLine = null;
-        } else {
-          computedLine = beat.spoken;
-          lastComputedRef.current = beat.key;
-        }
-        // ── WHICH BEATS ACTUALLY REACH ANYONE ──────────────────────────────
-        //
-        // 🔒 A LANE NOBODY CAN MEASURE IS A LANE NOBODY CAN FIX. `playCommentary`
-        // knows nine kinds and NOT ONE of them emitted an event, so "does the
-        // seeding observation ever fire?" had no answer short of reading a
-        // transcript by hand. That is the same blind spot that let
-        // `gem_alert_spoken` sit at zero events for its entire life, and the
-        // same one that hid four dead lanes this week.
-        //
-        // Emitted HERE, where the beat became `computedLine` and is on its way
-        // to the voice — not where it was computed. The distinction is the
-        // whole point: every lane that failed this week computed correctly and
-        // reached nobody, so counting computations would have reported all of
-        // them healthy. `spoke` separates the two in one field.
-        captureEvent('coach_beat_offered', {
-          surface: 'coach-teach',
-          kind: beat.kind,
-          spoke: computedLine !== null,
-        });
-        factLines.push(`Computed from the board (${beat.kind}): ${beat.facts.join(' ')}`);
-      }
-    } catch { /* commentary is a bonus, never a blocker */ }
+    // ── NO REASON, NO SENTENCE ───────────────────────────────────────────
+    //
+    // David 2026-08-18: *"We can also gate the computer to narrate only when
+    // there is a reason to go with it."*
+    //
+    // This lane used to fall back to `buildPlayCommentary`, a generic beat
+    // composer, on every ply the reasons did not cover. The argument for it was
+    // coverage — the corpus reaches ~14% of taught plies, so something had to
+    // fill the other 86%. What actually filled them was true-but-unremarkable
+    // observation, which is the filler a driven game kept surfacing.
+    //
+    // The checked reasons reach 25% of the taught repertoire's plies, and each
+    // one is a fact about THIS board rather than a general remark about the
+    // position. So the trade is a lane that speaks less often and says
+    // something every time, which the narration rules ask for outright:
+    // silence is acceptable, there is no length floor, and when in doubt
+    // prefer silence. The other `buildPlayCommentary` call sites are untouched
+    // — they are engine-driven recommendation beats, not this ambient lane.
+    //
+    // The silence is MEASURED, not assumed: the event fires either way, so
+    // "how often does the computed lane say nothing now" has an answer.
+    if (!computedLine) {
+      captureEvent('coach_beat_offered', { surface: 'coach-teach', kind: 'reasons', spoke: false });
+    }
+
 
     // ── THE SILENT PLIES. David 2026-08-08, after reading a ply-by-ply
     // transcript: "There needs to be positional notes then or something at the

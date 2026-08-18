@@ -57,6 +57,7 @@ import { withTimeout } from '../../coach/withTimeout';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
 import { buildTacticVisuals } from '../../services/tacticVisuals';
 import { isCriticalThreat } from '../../services/tacticAlertService';
+import { reasonLineFor } from '../../services/reasonVoice';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { getScenarioTemplate } from '../../services/coachTemplates';
@@ -3665,8 +3666,38 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // feeds the chat the student reads).
         gameChatRef.current?.injectAssistantMessage(fastLine);
       } else {
-        commentary = tacticSuffix.trim();
-        llmProducedSpeech = false;
+        // ── THE QUIET MOVE, WHERE PLAY WAS SILENT ────────────────────────
+        //
+        // David 2026-08-18: *"And wire into Play!"*
+        //
+        // `buildFastMoveLine` returns null on an ordinary move — no blunder,
+        // no tactic, nothing hanging — and Play then said nothing at all. That
+        // is most moves of most games. A checked reason is exactly what belongs
+        // there: it is a fact about THIS board, computed in code and verified
+        // before a word is phrased (G0), so it teaches without the engine wait
+        // and without ever asserting something it has not proved.
+        //
+        // 🔒 THIS CHANGES A LOCKED RULE, deliberately and on David's
+        // instruction. "Play stays silent until the student asks" (2026-08-07)
+        // and "the coach may only speak phase-transition narration" (2026-07-06)
+        // both scoped Play to silence. What those rules were protecting against
+        // is a BLOCKING interruption and a volunteered corpus note that might be
+        // about another position — neither of which this is. It is non-blocking
+        // voice, it never stops the board, and it cannot be about another
+        // position because every claim is re-checked here. The detectors keep
+        // priority: this only fills the slot they left empty.
+        //
+        // Silence is still available and still respected — `off` gets nothing,
+        // exactly as before.
+        const reasonLine = verbosity === 'off' ? null : reasonLineFor(preFen, moveResult.san);
+        if (reasonLine) {
+          commentary = reasonLine.spoken;
+          llmProducedSpeech = true;
+          gameChatRef.current?.injectAssistantMessage(reasonLine.spoken);
+        } else {
+          commentary = tacticSuffix.trim();
+          llmProducedSpeech = false;
+        }
       }
     }
     // Keep evalLoss referenced even when we drop the template so it's

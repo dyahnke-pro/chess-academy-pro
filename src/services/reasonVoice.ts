@@ -132,145 +132,125 @@ function atOwnAnchor(fenBefore: string, san: string): boolean {
   return (byMove.get(normSan(san)) ?? []).some((c) => c.anchor === here);
 }
 
-/** Name whatever stands on a square, reading the board rather than assuming. */
-function pieceOn(board: Chess, square: Square): string | null {
-  const p = board.get(square);
-  return p ? PIECE[p.type] : null;
+/** Deterministic variant picker. Same board, same move, same sentence — so a
+ *  transcript is reproducible and a test can assert on it — while different
+ *  positions get different wording, which is what stops the lane sounding like
+ *  a template being filled in. */
+function variant(fen: string, san: string, count: number): number {
+  let h = 0;
+  const key = `${fen}|${san}`;
+  for (let i = 0; i < key.length; i += 1) h = (h * 31 + key.charCodeAt(i)) | 0;
+  return Math.abs(h) % count;
 }
 
-/** Join clauses the way a person speaks a short list. */
-function joinClauses(parts: readonly string[]): string {
-  if (parts.length === 1) return parts[0];
-  if (parts.length === 2) return `${parts[0]} and ${parts[1]}`;
-  return `${parts.slice(0, -1).join(', ')}, and ${parts[parts.length - 1]}`;
-}
+const pick = (options: readonly string[], fen: string, san: string, salt = ''): string =>
+  options[variant(fen + salt, san, options.length)];
 
-/** One reason as a VERB-FIRST clause — no leading "it", so clauses join into
- *  one sentence without "and it … and it …". Null when the board no longer
- *  supports naming it; belt and braces, since a surviving reason should always
- *  be nameable. */
-function clauseFor(after: Chess, before: Chess, r: Reason): string | null {
-  switch (r.kind) {
-    case 'attacks': {
-      const p = pieceOn(after, r.square);
-      return p ? `hits the ${p} on ${r.square}` : null;
-    }
-    case 'defends': {
-      const p = pieceOn(after, r.square);
-      return p ? `covers the ${p} on ${r.square}` : null;
-    }
-    case 'controls':
-      return `takes ${r.square} under control`;
-    case 'deprives': {
-      const p = pieceOn(after, r.from);
-      return p ? `takes ${r.square} away from the ${p} on ${r.from}` : null;
-    }
-    case 'prevents':
-      return `rules out ${normSan(r.san)}`;
-    case 'meets':
-      return `leaves ${normSan(r.san)} landing on a square you cover`;
-    case 'blocks': {
-      const p = pieceOn(before, r.from);
-      return p ? `shuts the ${p} on ${r.from} off from ${r.to}` : null;
-    }
-    case 'opens': {
-      const p = pieceOn(after, r.from);
-      if (!p) return null;
-      // A bishop or rook is opened ONTO a square — that is its new line. A king
-      // or a pawn is not: "opens the king on e1 onto a1" says nothing a player
-      // would recognise, and the corpus does produce it (a queen move clearing
-      // the back rank). Name the line instead and the fact survives intact.
-      return p === 'king' || p === 'pawn'
-        ? `clears the line from ${r.from} to ${r.to}`
-        : `opens the ${p} on ${r.from} onto ${r.to}`;
-    }
-    case 'traps': {
-      const p = pieceOn(after, r.square);
-      return p ? `leaves the ${p} on ${r.square} with nowhere to go` : null;
-    }
-    default:
-      return null;
-  }
-}
-
-/** Fold reasons that read as one idea into one clause.
+/**
+ * HAND-WRITTEN PHRASING. David 2026-08-18: *"I want hand written phrases for
+ * the computed speech … not rough compete phrase."*
  *
- *  Two shapes came straight out of the corpus and both sounded like a machine:
- *  attacking a piece that is ALSO trapped produced "hits the knight on c3 and
- *  the knight on c3 has nowhere to go", naming the same square twice; and two
- *  `controls` reasons produced "takes c4 under control and takes e4 under
- *  control". A person says "traps the knight on c3" and "takes c4 and e4 under
- *  control", so the merge happens before phrasing rather than being patched out
- *  of the string afterwards. */
-function foldReasons(after: Chess, before: Chess, reasons: readonly Reason[]): { text: string; reasons: Reason[] }[] {
-  const trapped = new Set(reasons.filter((r) => r.kind === 'traps').map((r) => r.square));
-  const controls = reasons.filter((r) => r.kind === 'controls');
-  const out: { text: string; reasons: Reason[] }[] = [];
-  const emittedControls = { done: false };
+ * The first version composed clauses mechanically — "That hits the pawn on e4
+ * and takes d5 under control" — which is legible and reads like a machine
+ * filling in a form. Every line below is written out by hand for the shape it
+ * covers, including the COMBINED shapes: a pair of reasons gets its own
+ * sentence rather than two clauses stapled together with "and".
+ *
+ * This does not weaken G0 one bit. Code still decides WHICH reasons are true on
+ * this board; the table only decides how a surviving reason is said. Nothing
+ * here consults a model, and no phrase can assert anything the reason did not
+ * already claim — the squares and piece names are read off the live board.
+ *
+ * Variants exist because the narration rules ask for varied stems on anything
+ * spoken often (rule 9), and `attacks` alone is 75 of the 166 claims in the
+ * corpus. One wording repeated every third move is how a voice starts sounding
+ * automated even when every word is true.
+ */
 
-  // Same verb, several targets: "hits the pawn on b2 and hits the pawn on e5"
-  // is machine phrasing for "hits the pawn on b2 and the pawn on e5".
-  const grouped = { attacks: false, defends: false };
-  const sameKind = (kind: 'attacks' | 'defends'): (Reason & { square: Square })[] =>
-    reasons.filter((o): o is Reason & { kind: typeof kind; square: Square } =>
-      o.kind === kind && !(kind === 'attacks' && trapped.has(o.square)));
+type Named = { square: Square; piece: string };
 
-  for (const r of reasons) {
-    // An attack on a piece that is also trapped IS the trap — one clause.
-    if (r.kind === 'attacks' && trapped.has(r.square)) continue;
-    if (r.kind === 'attacks' || r.kind === 'defends') {
-      if (grouped[r.kind]) continue;
-      grouped[r.kind] = true;
-      const group = sameKind(r.kind);
-      const named = group
-        .map((g) => ({ g, p: pieceOn(after, g.square) }))
-        .filter((x): x is { g: typeof group[number]; p: string } => x.p !== null);
-      if (!named.length) continue;
-      // ATTACKING A KING IS A CHECK. "hits the king on e8" is not something a
-      // chess player says, and the corpus does produce it — `Bxf7+` carries an
-      // `attacks` reason on the king's square. Split so the king gets its own
-      // verb and the rest still group.
-      const kings = named.filter((x) => x.p === 'king');
-      const rest = named.filter((x) => x.p !== 'king');
-      const verb = r.kind === 'attacks' ? 'hits' : 'covers';
-      if (kings.length) {
-        out.push({
-          text: `checks the king on ${kings[0].g.square}`,
-          reasons: kings.map((x) => x.g),
-        });
-      }
-      if (rest.length) {
-        out.push({
-          text: `${verb} ${joinClauses(rest.map((x) => `the ${x.p} on ${x.g.square}`))}`,
-          reasons: rest.map((x) => x.g),
-        });
-      }
-      continue;
-    }
-    if (r.kind === 'traps') {
-      const p = pieceOn(after, r.square);
-      if (!p) continue;
-      const alsoHit = reasons.some((o) => o.kind === 'attacks' && o.square === r.square);
-      out.push({
-        text: alsoHit ? `traps the ${p} on ${r.square}` : `leaves the ${p} on ${r.square} with nowhere to go`,
-        reasons: [r],
-      });
-      continue;
-    }
-    if (r.kind === 'controls') {
-      if (emittedControls.done) continue;
-      emittedControls.done = true;
-      const squares = controls.map((c) => (c as { square: Square }).square);
-      out.push({
-        text: `takes ${joinClauses(squares)} under control`,
-        reasons: controls,
-      });
-      continue;
-    }
-    const text = clauseFor(after, before, r);
-    if (text) out.push({ text, reasons: [r] });
-  }
-  return out;
+const SINGLE = {
+  attacks: [
+    'The {p} on {sq} is the target now.',
+    'That comes down on the {p} on {sq}.',
+    'Now the {p} on {sq} has to be answered.',
+  ],
+  check: [
+    "That's check — the king has to deal with it first.",
+    'Check, so nothing else happens until the king is safe.',
+    'The king is in check, and everything else waits.',
+  ],
+  defends: [
+    'The {p} on {sq} is held now.',
+    'Nothing wins the {p} on {sq} any more.',
+    '{sq} is covered.',
+  ],
+  controls: [
+    '{sq} belongs to you now.',
+    'Nothing settles on {sq} any more.',
+    'That takes {sq} away.',
+  ],
+  traps: [
+    'The {p} on {sq} has nowhere to go.',
+    'The {p} on {sq} is stuck where it stands.',
+  ],
+  prevents: [
+    '{san} is off the table now.',
+    'That rules out {san}.',
+  ],
+  meets: [
+    '{san} runs into your cover now.',
+    'If {san}, it lands where you are already waiting.',
+  ],
+  blocks: [
+    'The {p} on {from} no longer sees {to}.',
+    'That shuts the line to {to}.',
+  ],
+  opens: [
+    'The {p} on {from} has {to} now.',
+    'That clears the line from {from} to {to}.',
+  ],
+  deprives: [
+    'The {p} on {from} has lost {sq}.',
+    '{sq} is gone for the {p} on {from}.',
+  ],
+} as const;
+
+const PAIR = {
+  'attacks+attacks': [
+    'Two targets at once — the {p1} on {s1} and the {p2} on {s2}.',
+    'That hits the {p1} on {s1} and the {p2} on {s2}, and one move cannot save both.',
+  ],
+  'attacks+controls': [
+    'That comes down on the {p1} on {s1}, and takes {s2} on the way.',
+    'The {p1} on {s1} is the target, and {s2} goes with it.',
+  ],
+  'attacks+defends': [
+    'That hits the {p1} on {s1} and holds {s2} behind it.',
+    'The {p1} on {s1} is the target, and nothing is left loose on {s2}.',
+  ],
+  'defends+defends': [
+    'One move holds both {s1} and {s2}.',
+    '{s1} and {s2} are both covered now.',
+  ],
+  'defends+controls': [
+    '{s1} is held, and {s2} is taken away too.',
+    'That covers {s1} and claims {s2} in the same move.',
+  ],
+  'controls+controls': [
+    '{s1} and {s2} are both taken away.',
+    'Nothing settles on {s1} or {s2} now.',
+  ],
+} as const;
+
+const fill = (template: string, vals: Record<string, string>): string =>
+  template.replace(/\{(\w+)\}/g, (_, k: string) => vals[k] ?? '');
+
+/** Name whatever the reason points at, reading the live board. Null when the
+ *  square is empty — a phrase that would say "the on e4" is not spoken. */
+function named(board: Chess, square: Square): Named | null {
+  const p = board.get(square);
+  return p ? { square, piece: PIECE[p.type] } : null;
 }
 
 export interface ReasonLine {
@@ -305,10 +285,9 @@ export function reasonLineFor(fenBefore: string, san: string, max = 2): ReasonLi
   const reasons = reasonsForMove(fenBefore, san);
   if (!reasons.length) return null;
   // A lone square-control claim is not worth a sentence AWAY FROM HOME. Two of
-  // them are ("takes c4 and e4 under control" says something about the centre
-  // one does not), and at the note's own position even one is — the author
-  // judged that square worth teaching there. What this stops is the same claim
-  // travelling onto an unrelated board, where "takes b4 under control" is true
+  // them are, and at the note's own position even one is — the author judged
+  // that square worth teaching there. What this stops is the same claim
+  // travelling onto an unrelated board, where "b4 belongs to you now" is true
   // of a3 almost everywhere and teaches nobody.
   if (reasons.length < 2
     && !reasons.some((r) => CONCRETE.has(r.kind))
@@ -318,19 +297,127 @@ export function reasonLineFor(fenBefore: string, san: string, max = 2): ReasonLi
   const after = new Chess(fenBefore);
   try { after.move(san); } catch { return null; }
 
-  const folded = foldReasons(after, before, reasons).slice(0, max);
-  if (!folded.length) return null;
+  const spoken = composeSentence(after, before, reasons, fenBefore, san, max);
+  if (!spoken) return null;
 
   const squares: Square[] = [];
-  for (const r of folded.flatMap((f) => f.reasons)) {
+  for (const r of reasons.slice(0, max === 99 ? reasons.length : max + 1)) {
     if ('square' in r) squares.push(r.square);
     if ('from' in r) squares.push(r.from);
     if ('to' in r) squares.push(r.to);
   }
 
   return {
-    spoken: `That ${joinClauses(folded.map((f) => f.text))}.`,
+    spoken,
     squares: [...new Set(squares)],
-    key: `reason:${folded.flatMap((f) => f.reasons).map(reasonKey).join('|')}`,
+    key: `reason:${reasons.map(reasonKey).join('|')}`,
   };
+}
+
+/** One hand-written sentence for the reasons that survived.
+ *
+ *  PAIRS FIRST, and that ordering is the point. Two reasons of the same kind,
+ *  or the attack-plus-square shape the corpus produces constantly, each have
+ *  their own written line — so the common cases never fall through to clause
+ *  assembly. Only the rarer mixtures compose, and they compose as whole
+ *  sentences rather than as clauses joined by "and". */
+function composeSentence(
+  after: Chess,
+  before: Chess,
+  reasons: readonly Reason[],
+  fen: string,
+  san: string,
+  max: number,
+): string | null {
+  // A check is never folded into anything — it outranks every other reason on
+  // the board, and burying it in the second half of a sentence is exactly how a
+  // student misses it.
+  const check = reasons.find((r): r is Reason & { kind: 'attacks'; square: Square } =>
+    r.kind === 'attacks' && after.get(r.square)?.type === 'k');
+  if (check) return fill(pick(SINGLE.check, fen, san), {});
+
+  const bySquare = (r: Reason): Named | null =>
+    'square' in r ? named(r.kind === 'blocks' || r.kind === 'opens' ? before : after, r.square) : null;
+
+  const attacks = reasons.filter((r) => r.kind === 'attacks').map(bySquare).filter((n): n is Named => n !== null);
+  const defends = reasons.filter((r) => r.kind === 'defends').map(bySquare).filter((n): n is Named => n !== null);
+  const controls = reasons.filter((r): r is Reason & { kind: 'controls'; square: Square } => r.kind === 'controls');
+
+  const pairLine = (key: keyof typeof PAIR, vals: Record<string, string>): string =>
+    fill(pick(PAIR[key], fen, san), vals);
+
+  // ── the written pair shapes ──────────────────────────────────────────────
+  if (attacks.length >= 2) {
+    return pairLine('attacks+attacks', {
+      p1: attacks[0].piece, s1: attacks[0].square, p2: attacks[1].piece, s2: attacks[1].square,
+    });
+  }
+  if (defends.length >= 2) {
+    return pairLine('defends+defends', { s1: defends[0].square, s2: defends[1].square });
+  }
+  if (controls.length >= 2) {
+    return pairLine('controls+controls', { s1: controls[0].square, s2: controls[1].square });
+  }
+  if (attacks.length === 1 && controls.length >= 1) {
+    return pairLine('attacks+controls', { p1: attacks[0].piece, s1: attacks[0].square, s2: controls[0].square });
+  }
+  if (attacks.length === 1 && defends.length >= 1) {
+    return pairLine('attacks+defends', { p1: attacks[0].piece, s1: attacks[0].square, s2: defends[0].square });
+  }
+  if (defends.length === 1 && controls.length >= 1) {
+    return pairLine('defends+controls', { s1: defends[0].square, s2: controls[0].square });
+  }
+
+  // ── singles, and the rarer kinds ─────────────────────────────────────────
+  const sentences: string[] = [];
+  for (const r of reasons) {
+    if (sentences.length >= Math.min(max, 2)) break;
+    const line = singleSentence(after, before, r, fen, san);
+    if (line && !sentences.includes(line)) sentences.push(line);
+  }
+  return sentences.length ? sentences.join(' ') : null;
+}
+
+function singleSentence(after: Chess, before: Chess, r: Reason, fen: string, san: string): string | null {
+  const salt = reasonKey(r);
+  switch (r.kind) {
+    case 'attacks': {
+      const n = named(after, r.square);
+      return n ? fill(pick(SINGLE.attacks, fen, san, salt), { p: n.piece, sq: n.square }) : null;
+    }
+    case 'defends': {
+      const n = named(after, r.square);
+      return n ? fill(pick(SINGLE.defends, fen, san, salt), { p: n.piece, sq: n.square }) : null;
+    }
+    case 'controls':
+      return fill(pick(SINGLE.controls, fen, san, salt), { sq: r.square });
+    case 'traps': {
+      const n = named(after, r.square);
+      return n ? fill(pick(SINGLE.traps, fen, san, salt), { p: n.piece, sq: n.square }) : null;
+    }
+    case 'prevents':
+      return fill(pick(SINGLE.prevents, fen, san, salt), { san: normSan(r.san) });
+    case 'meets':
+      return fill(pick(SINGLE.meets, fen, san, salt), { san: normSan(r.san) });
+    case 'blocks': {
+      const n = named(before, r.from);
+      return n ? fill(pick(SINGLE.blocks, fen, san, salt), { p: n.piece, from: r.from, to: r.to }) : null;
+    }
+    case 'opens': {
+      const n = named(after, r.from);
+      if (!n) return null;
+      // A king or a pawn is not "opened onto" a square — that says nothing a
+      // player would recognise, and the corpus does produce it (a queen move
+      // clearing the back rank). Name the line instead.
+      return n.piece === 'king' || n.piece === 'pawn'
+        ? fill(SINGLE.opens[1], { from: r.from, to: r.to })
+        : fill(pick(SINGLE.opens, fen, san, salt), { p: n.piece, from: r.from, to: r.to });
+    }
+    case 'deprives': {
+      const n = named(after, r.from);
+      return n ? fill(pick(SINGLE.deprives, fen, san, salt), { p: n.piece, from: r.from, sq: r.square }) : null;
+    }
+    default:
+      return null;
+  }
 }

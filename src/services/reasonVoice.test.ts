@@ -62,6 +62,25 @@ describe('reasonVoice', () => {
     }
   });
 
+  // The converse of the test below, and the one that would catch a pooled
+  // reason speaking about the wrong board: several notes share a move (four
+  // notes anchor on Bc4), so their reasons pool and are checked individually.
+  // A "nothing settles on f7" line is correct where f7 is empty and a lie where
+  // a pawn stands there — only the per-board check separates them.
+  it('never calls a square empty when a piece stands on it', () => {
+    for (const n of notes) {
+      const fen = before(n.lineSan);
+      const san = n.lineSan[n.lineSan.length - 1];
+      const line = reasonLineFor(fen, san, 99);
+      if (!line) continue;
+      const after = new Chess(fen);
+      after.move(san);
+      for (const [, sq] of line.spoken.matchAll(/(?:Nothing settles on|belongs to you now|takes) ([a-h][1-8])/g)) {
+        expect(after.get(sq as never), `${n.id}: ${sq} is occupied but spoken as empty`).toBeFalsy();
+      }
+    }
+  });
+
   it('never names a square that is empty when it claims a piece', () => {
     for (const n of notes) {
       const fen = before(n.lineSan);
