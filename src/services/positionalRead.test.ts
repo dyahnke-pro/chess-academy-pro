@@ -158,7 +158,11 @@ describe('the one-sentence face still behaves', () => {
     const said = new Set<string>();
     const first = buildPositionalRead(FRENCH, 'white', said);
     expect(first).not.toBe('');
-    expect(said.size).toBe(1);
+    // Two entries per observation since 2026-08-18: the derivation key, which
+    // stops the ladder re-deriving it, and a say-key over the sentence's
+    // opening clause, which stops a DIFFERENT derivation repeating the same
+    // words. The count is an implementation detail; that it remembered is not.
+    expect(said.size).toBeGreaterThan(0);
     const second = buildPositionalRead(FRENCH, 'white', said);
     expect(second, 'the same observation was spoken twice in a row').not.toBe(first);
   });
@@ -219,5 +223,42 @@ describe('a piece that has not moved is not a problem piece', () => {
       expect(o.key.split('-').pop()).not.toMatch(/^[a-h][18]$/);
     }
     expect(obs.length, 'the guard silenced the whole read').toBeGreaterThan(0);
+  });
+});
+
+describe('the said-set suppresses what the student HEARS, not what was derived', () => {
+  // Both positions from one game driven on prod (David 2026-08-18). Two moves
+  // apart, the read produced sentences identical for seventy-eight characters
+  // and differing in a single square — "a pawn to a6 would fix it" against
+  // "a pawn to c6". The derivation keys differ, so the said-set saw two
+  // observations and the student heard the same sentence twice.
+  const PLY_8 = 'rnbqk2r/ppp1bpp1/4p2p/3p4/3PnB2/2N1PN2/PPP2PPP/R2QKB1R w KQkq - 0 8';
+  const PLY_10 = 'r1bqk2r/pppnbpp1/4p2p/1B1p4/3PnB2/2N1PN2/PPP2PPP/R2QK2R w KQkq - 2 9';
+
+  it('does not say the same thing again two moves later', () => {
+    const said = new Set<string>();
+    const first = buildPositionalRead(PLY_8, 'white', said);
+    expect(first).toMatch(/problem piece/);
+    const second = buildPositionalRead(PLY_10, 'white', said);
+    expect(second).not.toBe(first);
+    // Not merely different — it must not open the same way either, which is
+    // what "the same sentence" means to an ear.
+    expect(second.slice(0, 60)).not.toBe(first.slice(0, 60));
+  });
+
+  it('descends the ladder rather than falling silent', () => {
+    // The whole point of the said-set: skip what has been said and read the
+    // NEXT true observation. Silence here would be a regression dressed as a
+    // fix — the turn had something else worth saying.
+    const said = new Set<string>();
+    buildPositionalRead(PLY_8, 'white', said);
+    expect(buildPositionalRead(PLY_10, 'white', said).length).toBeGreaterThan(0);
+  });
+
+  it('still lets an unrelated observation through', () => {
+    // The prefix is long enough to reach past "<piece> on <square>", so two
+    // observations only collide when they are about the same piece on the same
+    // square. A fresh set on a fresh position must speak.
+    expect(buildPositionalRead(PLY_10, 'white', new Set()).length).toBeGreaterThan(0);
   });
 });

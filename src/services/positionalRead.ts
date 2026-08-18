@@ -296,6 +296,32 @@ export function readPosition(
   return deduped.sort((a, b) => b.rank - a.rank);
 }
 
+
+/** The set entry standing for what a sentence SOUNDS like — its opening clause,
+ *  normalised. Prefixed so it can never collide with a derivation key.
+ *
+ *  A PREFIX, NOT THE WHOLE SENTENCE, and that is the whole point. Measured on a
+ *  game driven on prod (David 2026-08-18), the student heard this two moves
+ *  apart:
+ *
+ *    "Their bishop on e7 is their problem piece — bad bishop (hemmed in by its
+ *     own pawns) — and a pawn to a6 would fix it."
+ *    "Their bishop on e7 is their problem piece — bad bishop (hemmed in by its
+ *     own pawns) — and a pawn to c6 would fix it."
+ *
+ *  Identical for seventy-eight characters, differing in one square. The
+ *  derivation keys differ (`opponent-join-e7-a6` / `-c6`) so the said-set saw
+ *  two observations; the ear hears the same sentence twice. `voicePackage`
+ *  already has a name for this — "same observation, different moral" — but its
+ *  guard is scoped to one turn, and this lane repeats across them.
+ *
+ *  Sixty characters is past "Their <piece> on <square> is their problem piece",
+ *  so two observations only collide when they are about the same piece on the
+ *  same square, which is exactly the collapse worth making. */
+const SAY_PREFIX = 60;
+const sayKeyOf = (text: string): string =>
+  `said:${text.toLowerCase().replace(/[^a-z0-9 ]+/g, ' ').replace(/\s+/g, ' ').trim().slice(0, SAY_PREFIX)}`;
+
 /**
  * One speakable observation about a quiet position, or '' when even this has
  * nothing — which is rare, and when it happens silence is the honest answer.
@@ -322,8 +348,16 @@ export function buildPositionalRead(
   said?: Set<string>,
 ): string {
   for (const o of readPosition(fen, studentColor)) {
-    if (said?.has(o.key)) continue;
+    // DEDUPE ON WHAT IS HEARD, NOT ON HOW IT WAS DERIVED. The key encodes the
+    // derivation and is finer-grained than its own sentence, so an observation
+    // whose prose barely moved gets a fresh key and is spoken again — see
+    // `sayKeyOf` for the pair this was measured on. Both go in the set: the key
+    // still stops the ladder re-deriving the same observation, and the say-key
+    // stops a new derivation repeating a sentence the student just heard.
+    const spoken = sayKeyOf(o.text);
+    if (said?.has(o.key) || said?.has(spoken)) continue;
     said?.add(o.key);
+    said?.add(spoken);
     return o.text;
   }
   return '';
