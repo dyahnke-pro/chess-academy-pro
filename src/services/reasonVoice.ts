@@ -336,8 +336,12 @@ function composeSentence(
     r.kind === 'attacks' && after.get(r.square)?.type === 'k');
   if (check) return fill(pick(SINGLE.check, fen, san), {});
 
-  const bySquare = (r: Reason): Named | null =>
-    'square' in r ? named(r.kind === 'blocks' || r.kind === 'opens' ? before : after, r.square) : null;
+  // Only the square-bearing kinds reach here, and every one of them names a
+  // piece as it stands AFTER the move. `blocks` and `opens` carry from/to
+  // rather than a square, so they are already excluded by the narrowing — an
+  // earlier version tested for them here and `tsc -b` correctly called the
+  // comparison dead.
+  const bySquare = (r: Reason): Named | null => ('square' in r ? named(after, r.square) : null);
 
   const attacks = reasons.filter((r) => r.kind === 'attacks').map(bySquare).filter((n): n is Named => n !== null);
   const defends = reasons.filter((r) => r.kind === 'defends').map(bySquare).filter((n): n is Named => n !== null);
