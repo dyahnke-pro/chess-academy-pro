@@ -308,5 +308,43 @@
  "titleCheck": {
   "claims": "English Opening: Anglo-Indian Defense, King's Knight Variation",
   "confirmed": true
- }
+ },
+ "notes": [
+  {
+   "id": "vn-fianchettokid-luft-that-is-really-prophylaxis",
+   "line": "Nf3 Nf6 c4 g6 d4 Bg7 g3 O-O Bg2 d6 Nc3 Nbd7 O-O e5 e4 c6 h3",
+   "teaches": "A rook's pawn moved one square in a closed position is almost never about air for the king. Ask which piece wanted the square it just covered: if a bishop or knight was coming there to trade off your best piece, the quiet pawn move has prevented a plan rather than made a hole.",
+   "explains": "The centre is locked with pawns on e4 and e5 and neither side is breaking through quickly. The pawn goes to h3 and covers g4, which is the square the light-squared bishop uses to come out and offer itself for the knight. With that square gone, the bishop has no active post and the fight moves to the wings.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "g4"
+    }
+   ],
+   "fen": "r1bq1rk1/pp1n1pbp/2pp1np1/4p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 b - - 0 9",
+   "t": 231.5,
+   "ply": 17,
+   "source": "yt:ukVf_JfGTOw"
+  },
+  {
+   "id": "vn-fianchettokid-recapture-onto-the-long-diagonal",
+   "line": "Nf3 Nf6 c4 g6 d4 Bg7 g3 O-O Bg2 d6 Nc3 Nbd7 O-O e5 e4 c6 h3 Qa5 Be3 exd4 Bxd4",
+   "teaches": "When the centre is released, take back with the piece that lands on the diagonal facing the enemy king. A bishop that arrives hitting a knight and staring past it at the fianchetto has answered the exchange with a threat, so the defender never gets the free move the trade was meant to buy.",
+   "explains": "The pawns have come off in the centre and the bishop recaptures on d4. From there it hits the knight on f6 and the pawn on a7, and it looks down the long diagonal at the bishop on g7 — the piece guarding the dark squares near the king. It also holds the knight on c3 behind it, so nothing is left hanging while the pressure builds.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    },
+    {
+     "kind": "defends",
+     "square": "c3"
+    }
+   ],
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q7/2PBP3/2N2NPP/PP3PB1/R2Q1RK1 b - - 0 11",
+   "t": 376,
+   "ply": 21,
+   "source": "yt:ukVf_JfGTOw"
+  }
+ ]
 }

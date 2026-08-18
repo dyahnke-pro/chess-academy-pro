@@ -1,0 +1,12 @@
+[
+ {
+  "id": "vn-cpawnattack-recapture-that-comes-back-to-the-diagonal",
+  "line": "e4 c5 Nf3 Nc6 Bc4 e6 c3 d5 exd5 exd5 Bb3 Nf6 c4 dxc4 Bxc4",
+  "teaches": "Offering a pawn trade to reopen your own bishop's diagonal is a fair bargain when the pawn comes straight back. Count what the bishop is aiming at after the recapture rather than what the structure looks like — a bishop restored to the long light diagonal with the king still in the centre is worth the simplification.",
+  "explains": "The pawn push has been taken and the bishop recaptures on c4, back on the diagonal pointing at f7. The centre pawns have come off, so nothing blocks it any more, and the king opposite has not yet castled. The structure is now symmetrical and the position is not — one bishop is aimed at a target and the other is not.",
+  "reasons": [
+   { "kind": "attacks", "square": "f7" },
+   { "kind": "controls", "square": "d5" }
+  ]
+ }
+]

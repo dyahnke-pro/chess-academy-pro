@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-18",
- "videosDistilled": 43,
- "noteCount": 123,
+ "videosDistilled": 48,
+ "noteCount": 129,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -630,6 +630,44 @@
     {
      "san": "a6",
      "continuation": "a6"
+    }
+   ]
+  },
+  {
+   "id": "vn-unsoundsac-develop-instead-of-chasing-the-attack",
+   "lineSan": [
+    "e4",
+    "c5",
+    "f4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "Nc3",
+    "Nxd5",
+    "Bc4",
+    "Nb6",
+    "Bxf7+",
+    "Kxf7",
+    "Nf3"
+   ],
+   "opening": "Sicilian Defense: McDonnell Attack, Tal Gambit",
+   "phase": "opening",
+   "explains": "The bishop has been given up for the pawn on f7 and the king has taken. White now brings the knight out to f3, which is the only developing move with tempo available, covering e5 and g5 and holding the back rank. From here the attack has one piece out and a bishop invested — the material is not coming back unless the defender helps.",
+   "teaches": "When a sacrifice on f7 has dragged your king out and there is no follow-up check, the refutation is development, not evasion. Count the attacker's pieces: if only one of them is out, every move you spend bringing a piece toward the king is worth more than the pawn you are up, and the attack runs out before it starts.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:9m3W5m6SkOY"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e5"
+    },
+    {
+     "kind": "controls",
+     "square": "g5"
     }
    ]
   },
@@ -2071,6 +2109,92 @@
    ]
   },
   {
+   "id": "vn-cpawnattack-recapture-that-comes-back-to-the-diagonal",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "e6",
+    "c3",
+    "d5",
+    "exd5",
+    "exd5",
+    "Bb3",
+    "Nf6",
+    "c4",
+    "dxc4",
+    "Bxc4"
+   ],
+   "opening": "Sicilian Defense: Old Sicilian",
+   "phase": "opening",
+   "explains": "The pawn push has been taken and the bishop recaptures on c4, back on the diagonal pointing at f7. The centre pawns have come off, so nothing blocks it any more, and the king opposite has not yet castled. The structure is now symmetrical and the position is not — one bishop is aimed at a target and the other is not.",
+   "teaches": "Offering a pawn trade to reopen your own bishop's diagonal is a fair bargain when the pawn comes straight back. Count what the bishop is aiming at after the recapture rather than what the structure looks like — a bishop restored to the long light diagonal with the king still in the centre is worth the simplification.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Qe6L7y3bdjM"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f7"
+    },
+    {
+     "kind": "controls",
+     "square": "d5"
+    }
+   ]
+  },
+  {
+   "id": "vn-closedtrad-queen-that-hits-two-pawns-across-the-board",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nc3",
+    "Nc6",
+    "Bb5",
+    "Nb8",
+    "Bf1",
+    "Nc6",
+    "Bb5",
+    "Nd4",
+    "Nf3",
+    "Nxb5",
+    "Nxb5",
+    "a6",
+    "Nc3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Qxd4",
+    "e5",
+    "Qb4"
+   ],
+   "opening": "Sicilian Defense: Closed, Traditional",
+   "phase": "opening",
+   "explains": "The pawn has advanced to e5 to chase the queen out of the centre. She steps to b4, where she hits the pawns on b7 and d6 and still holds the centre pawn and the knight behind her. The move that was meant to gain time has instead pointed her at the two pawns the pawn advance left behind.",
+   "teaches": "A queen driven off a central square should look for the diagonal that hits two pawns at once rather than the nearest safe square. When both targets are on squares a pawn can never defend, the defender has to answer with a piece, and the queen has kept the initiative she was supposed to lose.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:UDDLO-WuOmE"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "b7"
+    },
+    {
+     "kind": "attacks",
+     "square": "d6"
+    }
+   ]
+  },
+  {
    "id": "vn-fantasy-caro-strike-back-at-the-centre-immediately",
    "lineSan": [
     "e4",
@@ -2689,6 +2813,48 @@
     },
     {
      "san": "e5"
+    }
+   ]
+  },
+  {
+   "id": "vn-grandprix-queen-behind-the-attack",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nc3",
+    "g6",
+    "f4",
+    "Bg7",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "Nd4",
+    "O-O",
+    "Nxb5",
+    "Nxb5",
+    "d6",
+    "d3",
+    "Nf6",
+    "Qe1"
+   ],
+   "opening": "Sicilian Defense: Closed",
+   "phase": "opening",
+   "explains": "The bishops have been traded and the pawn on f4 has committed the attack. The queen steps to e1, where she holds the pawn on e4, connects the pieces on the back rank, and can travel to the kingside along the third rank once the pawns advance. Nothing is attacked yet; the piece that will lead the attack has simply been put where it can join it.",
+   "teaches": "In a kingside attack the queen usually belongs behind the pawns rather than in front of them. A move to the back rank that clears her original square, holds the centre pawn and opens the route toward the king does three jobs and threatens nothing — which is exactly why it is hard to meet.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fABTn305-Eg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    },
+    {
+     "kind": "defends",
+     "square": "f1"
     }
    ]
   },
@@ -3732,6 +3898,90 @@
     },
     {
      "san": "c3"
+    }
+   ]
+  },
+  {
+   "id": "vn-fianchettokid-luft-that-is-really-prophylaxis",
+   "lineSan": [
+    "Nf3",
+    "Nf6",
+    "c4",
+    "g6",
+    "d4",
+    "Bg7",
+    "g3",
+    "O-O",
+    "Bg2",
+    "d6",
+    "Nc3",
+    "Nbd7",
+    "O-O",
+    "e5",
+    "e4",
+    "c6",
+    "h3"
+   ],
+   "opening": "King's Indian Defense: Fianchetto Variation",
+   "phase": "opening",
+   "explains": "The centre is locked with pawns on e4 and e5 and neither side is breaking through quickly. The pawn goes to h3 and covers g4, which is the square the light-squared bishop uses to come out and offer itself for the knight. With that square gone, the bishop has no active post and the fight moves to the wings.",
+   "teaches": "A rook's pawn moved one square in a closed position is almost never about air for the king. Ask which piece wanted the square it just covered: if a bishop or knight was coming there to trade off your best piece, the quiet pawn move has prevented a plan rather than made a hole.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ukVf_JfGTOw"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "g4"
+    }
+   ]
+  },
+  {
+   "id": "vn-fianchettokid-recapture-onto-the-long-diagonal",
+   "lineSan": [
+    "Nf3",
+    "Nf6",
+    "c4",
+    "g6",
+    "d4",
+    "Bg7",
+    "g3",
+    "O-O",
+    "Bg2",
+    "d6",
+    "Nc3",
+    "Nbd7",
+    "O-O",
+    "e5",
+    "e4",
+    "c6",
+    "h3",
+    "Qa5",
+    "Be3",
+    "exd4",
+    "Bxd4"
+   ],
+   "opening": "King's Indian Defense: Fianchetto Variation",
+   "phase": "opening",
+   "explains": "The pawns have come off in the centre and the bishop recaptures on d4. From there it hits the knight on f6 and the pawn on a7, and it looks down the long diagonal at the bishop on g7 — the piece guarding the dark squares near the king. It also holds the knight on c3 behind it, so nothing is left hanging while the pressure builds.",
+   "teaches": "When the centre is released, take back with the piece that lands on the diagonal facing the enemy king. A bishop that arrives hitting a knight and staring past it at the fianchetto has answered the exchange with a threat, so the defender never gets the free move the trade was meant to buy.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ukVf_JfGTOw"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    },
+    {
+     "kind": "defends",
+     "square": "c3"
     }
    ]
   },
