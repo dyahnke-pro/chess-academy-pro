@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-18",
  "videosDistilled": 34,
- "noteCount": 96,
+ "noteCount": 97,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -1036,6 +1036,50 @@
     {
      "kind": "defends",
      "square": "g2"
+    }
+   ]
+  },
+  {
+   "id": "vn-bind-bishop-fixes-the-knight-against-the-queen",
+   "lineSan": [
+    "c4",
+    "c5",
+    "e4",
+    "Nc6",
+    "Nf3",
+    "g6",
+    "d3",
+    "Bg7",
+    "Nc3",
+    "d6",
+    "Be3",
+    "Bg4",
+    "Be2",
+    "Bxf3",
+    "Bxf3",
+    "e6",
+    "O-O",
+    "Nge7",
+    "Bg5"
+   ],
+   "opening": "Sicilian Defense: Staunton-Cochrane Variation",
+   "phase": "opening",
+   "explains": "The knight has come to e7 and the bishop steps to g5, looking at it with the queen standing behind on d8. The knight still has four legal squares and every one of them loses the queen, so in practice it cannot move at all. The bishop covers f6 and h6 from the same square, which are the squares in front of the fianchetto — so the piece is doing the pinning and the restraining together.",
+   "teaches": "A piece is pinned in the way that matters whenever every square it can legally reach costs you something behind it. Do not look only for pins against the king: a bishop dropped on the diagonal in front of the queen fixes the piece in between just as firmly, and the defender usually has to spend a pawn move to break it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:IZN7fZFpzoc"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e7"
+    },
+    {
+     "kind": "controls",
+     "square": "f6"
     }
    ]
   },

@@ -30,7 +30,16 @@ describe('reasonVoice', () => {
   });
 
   it('says nothing when the move is not one the corpus reasoned about', () => {
-    expect(reasonsForMove(new Chess().fen(), 'a3')).toEqual([]);
+    expect(reasonsForMove(new Chess().fen(), 'h3')).toEqual([]);
+    expect(reasonLineFor(new Chess().fen(), 'h3')).toBeNull();
+  });
+
+  // The corpus reasons about a3 as a prophylactic move that covers b4. That
+  // reason is TRUE from the bare starting position too — and worthless there,
+  // which is the whole point: a lone square-control claim is filler, so it does
+  // not get a sentence even though it verifies.
+  it('will not speak a lone control claim', () => {
+    expect(reasonsForMove(new Chess().fen(), 'a3')).toEqual([{ kind: 'controls', square: 'b4' }]);
     expect(reasonLineFor(new Chess().fen(), 'a3')).toBeNull();
   });
 

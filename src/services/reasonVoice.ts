@@ -45,8 +45,13 @@ const PIECE: Record<PieceSymbol, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
 };
 
-/** Reasons indexed by the move they were written about. Built once. */
-const byMove = new Map<string, Reason[]>();
+/** Reasons indexed by the move they were written about, each remembering the
+ *  position it was written AT. The anchor matters at speak time: at its own
+ *  position a reason is the author's judgement about what mattered there, and
+ *  the weakest kind is still teaching. Carried onto a different board it has to
+ *  earn the sentence on its own. */
+interface IndexedReason { reason: Reason; anchor: string }
+const byMove = new Map<string, IndexedReason[]>();
 let indexBuilt = false;
 
 /** A move's SAN minus check/mate marks, so `Bb5+` and `Bb5` index together —
@@ -54,14 +59,23 @@ let indexBuilt = false;
  *  on what the move is doing. */
 const normSan = (san: string): string => san.replace(/[+#]$/, '');
 
+/** Placement + side + castling + en-passant, the same shape the corpus indexes
+ *  by — so a transposition into the note's position still counts as its anchor. */
+const posKey = (fen: string): string => fen.split(' ').slice(0, 4).join(' ');
+
 function buildIndex(): void {
   if (indexBuilt) return;
   indexBuilt = true;
   for (const note of (teachings as { notes: CorpusNote[] }).notes) {
     if (!note.reasons?.length || !note.lineSan.length) continue;
+    const board = new Chess();
+    let legal = true;
+    try { for (const san of note.lineSan) board.move(san); } catch { legal = false; }
+    if (!legal) continue;
+    const anchor = posKey(board.fen());
     const key = normSan(note.lineSan[note.lineSan.length - 1]);
     const bucket = byMove.get(key) ?? [];
-    for (const r of note.reasons) bucket.push(r);
+    for (const r of note.reasons) bucket.push({ reason: r, anchor });
     byMove.set(key, bucket);
   }
 }
@@ -100,13 +114,22 @@ export function reasonsForMove(fenBefore: string, san: string): Reason[] {
   if (!candidates?.length) return [];
   const seen = new Set<string>();
   const out: Reason[] = [];
-  for (const r of survivingReasons(fenBefore, san, candidates)) {
+  for (const r of survivingReasons(fenBefore, san, candidates.map((c) => c.reason))) {
     const key = reasonKey(r);
     if (seen.has(key)) continue;
     seen.add(key);
     out.push(r);
   }
   return out;
+}
+
+/** True when this move reproduces a position some note carrying it was written
+ *  at — i.e. we are standing where the author was standing. */
+function atOwnAnchor(fenBefore: string, san: string): boolean {
+  const board = new Chess(fenBefore);
+  try { board.move(san); } catch { return false; }
+  const here = posKey(board.fen());
+  return (byMove.get(normSan(san)) ?? []).some((c) => c.anchor === here);
 }
 
 /** Name whatever stands on a square, reading the board rather than assuming. */
@@ -270,9 +293,26 @@ export interface ReasonLine {
  * just watched it land, and restating the board is filler (the narration voice
  * rules). What the picture does not carry is WHY, and that is all this says.
  */
+/** Kinds that assert something CONCRETE about this board — a piece hit, a piece
+ *  held, a reply removed, a line changed. `controls` is deliberately not one of
+ *  them: "takes b4 under control" is true of a3 on almost any board, so alone it
+ *  is filler dressed as teaching. Caught by ship-check the moment the corpus
+ *  gained an `a3` note — the reason verified TRUE from the bare starting
+ *  position, which is exactly when it is worth least. */
+const CONCRETE = new Set(['attacks', 'defends', 'traps', 'prevents', 'meets', 'blocks', 'opens', 'deprives']);
+
 export function reasonLineFor(fenBefore: string, san: string, max = 2): ReasonLine | null {
   const reasons = reasonsForMove(fenBefore, san);
   if (!reasons.length) return null;
+  // A lone square-control claim is not worth a sentence AWAY FROM HOME. Two of
+  // them are ("takes c4 and e4 under control" says something about the centre
+  // one does not), and at the note's own position even one is — the author
+  // judged that square worth teaching there. What this stops is the same claim
+  // travelling onto an unrelated board, where "takes b4 under control" is true
+  // of a3 almost everywhere and teaches nobody.
+  if (reasons.length < 2
+    && !reasons.some((r) => CONCRETE.has(r.kind))
+    && !atOwnAnchor(fenBefore, san)) return null;
 
   const before = new Chess(fenBefore);
   const after = new Chess(fenBefore);
