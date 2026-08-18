@@ -1846,16 +1846,48 @@
    "explains": "The knight has come out and the extra pawn on f4 needs an answer. Advancing the g-pawn props it up and keeps the material at the price of loosening the kingside. Returning it with the central push, or the modest pawn move, both trade the pawn for a free game. Developing the king's knight leaves the pawn where it is and hits the centre instead.",
    "options": [
     {
-     "san": "d5"
+     "san": "d5",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e4"
+      },
+      {
+       "kind": "controls",
+       "square": "c4"
+      }
+     ]
     },
     {
-     "san": "g5"
+     "san": "g5",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "f4"
+      }
+     ]
     },
     {
-     "san": "d6"
+     "san": "d6",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "e5"
+      }
+     ]
     },
     {
-     "san": "Nf6"
+     "san": "Nf6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e4"
+      },
+      {
+       "kind": "controls",
+       "square": "d5"
+      }
+     ]
     }
    ],
    "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/5N2/PPPP2PP/RNBQKB1R b KQkq - 1 3",

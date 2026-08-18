@@ -87,13 +87,39 @@
   "explains": "The knight is attacking f7 and instead of defending it the bishop has come out. Three tries come into consideration here: taking on f7 with the knight, the bishop check on f7 first, or the central pawn push that ignores the offer and opens the position while the defender's pieces are committed.",
   "options": [
    {
-    "san": "Nxf7"
+    "san": "Nxf7",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "d8"
+     },
+     {
+      "kind": "attacks",
+      "square": "h8"
+     }
+    ]
    },
    {
-    "san": "Bxf7+"
+    "san": "Bxf7+",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "e8"
+     }
+    ]
    },
    {
-    "san": "d4"
+    "san": "d4",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "c5"
+     },
+     {
+      "kind": "attacks",
+      "square": "e5"
+     }
+    ]
    }
   ]
  }

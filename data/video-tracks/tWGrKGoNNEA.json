@@ -802,13 +802,39 @@
    "explains": "Black has recaptured on f6 and the knights are off, leaving a symmetrical-looking centre where Black is solid but short of space. Several setups are available: a kingside fianchetto with the g-pawn, the classical bishop to d3, and the modest c-pawn move, which is easy to read as pure consolidation and is well regarded precisely because it is not.",
    "options": [
     {
-     "san": "g3"
+     "san": "g3",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "f4"
+      },
+      {
+       "kind": "controls",
+       "square": "h4"
+      }
+     ]
     },
     {
-     "san": "Bd3"
+     "san": "Bd3",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "h7"
+      }
+     ]
     },
     {
-     "san": "c3"
+     "san": "c3",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "d4"
+      },
+      {
+       "kind": "controls",
+       "square": "b4"
+      }
+     ]
     }
    ],
    "fen": "r1bqkb1r/ppp2ppp/4pn2/8/3P4/5N2/PPP2PPP/R1BQKB1R w KQkq - 0 9",

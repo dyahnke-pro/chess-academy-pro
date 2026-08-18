@@ -367,11 +367,27 @@
    "options": [
     {
      "san": "Nxd4",
-     "continuation": "Nxd4"
+     "continuation": "Nxd4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e6"
+      }
+     ]
     },
     {
      "san": "Bd3",
-     "continuation": "Bd3"
+     "continuation": "Bd3",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "h7"
+      },
+      {
+       "kind": "defends",
+       "square": "c2"
+      }
+     ]
     }
    ]
   },
@@ -427,13 +443,35 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "Nge7"
+     "san": "Nge7",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "c6"
+      },
+      {
+       "kind": "defends",
+       "square": "d5"
+      }
+     ]
     },
     {
-     "san": "Bc5"
+     "san": "Bc5",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "d4"
+      }
+     ]
     },
     {
-     "san": "f6"
+     "san": "f6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e5"
+      }
+     ]
     }
    ]
   },
@@ -551,11 +589,27 @@
    "options": [
     {
      "san": "Nbd7",
-     "continuation": "Nbd7"
+     "continuation": "Nbd7",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e5"
+      },
+      {
+       "kind": "defends",
+       "square": "f6"
+      }
+     ]
     },
     {
      "san": "O-O",
-     "continuation": "O-O"
+     "continuation": "O-O",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "f7"
+      }
+     ]
     }
    ]
   },
@@ -592,11 +646,23 @@
    "options": [
     {
      "san": "g4",
-     "continuation": "g4"
+     "continuation": "g4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "f5"
+      }
+     ]
     },
     {
      "san": "Bd3",
-     "continuation": "Bd3 Bxd3 cxd3 Nbd7"
+     "continuation": "Bd3 Bxd3 cxd3 Nbd7",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "f5"
+      }
+     ]
     }
    ]
   },
@@ -626,11 +692,23 @@
    "options": [
     {
      "san": "Nc6",
-     "continuation": "Nc6"
+     "continuation": "Nc6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "d4"
+      }
+     ]
     },
     {
      "san": "a6",
-     "continuation": "a6"
+     "continuation": "a6",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "b5"
+      }
+     ]
     }
    ]
   },
@@ -698,11 +776,27 @@
    "options": [
     {
      "san": "Qxb2",
-     "continuation": "Qxb2 Rb1 Qa3"
+     "continuation": "Qxb2 Rb1 Qa3",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "a1"
+      },
+      {
+       "kind": "attacks",
+       "square": "c3"
+      }
+     ]
     },
     {
      "san": "d5",
-     "continuation": "d5 f3"
+     "continuation": "d5 f3",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e4"
+      }
+     ]
     }
    ]
   },
@@ -741,15 +835,41 @@
    "options": [
     {
      "san": "Nc7+",
-     "continuation": "Nc7+ Kd8"
+     "continuation": "Nc7+ Kd8",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e8"
+      },
+      {
+       "kind": "attacks",
+       "square": "a8"
+      }
+     ]
     },
     {
      "san": "O-O",
-     "continuation": "O-O"
+     "continuation": "O-O",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "f1"
+      }
+     ]
     },
     {
      "san": "Qc3",
-     "continuation": "Qc3"
+     "continuation": "Qc3",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "c8"
+      },
+      {
+       "kind": "defends",
+       "square": "d4"
+      }
+     ]
     }
    ]
   },
@@ -995,13 +1115,43 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "Bf4"
+     "san": "Bf4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "c7"
+      },
+      {
+       "kind": "controls",
+       "square": "e5"
+      }
+     ]
     },
     {
-     "san": "g3"
+     "san": "g3",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "f4"
+      },
+      {
+       "kind": "controls",
+       "square": "h4"
+      }
+     ]
     },
     {
-     "san": "Nc3"
+     "san": "Nc3",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "d5"
+      },
+      {
+       "kind": "controls",
+       "square": "e4"
+      }
+     ]
     }
    ]
   },
@@ -1269,10 +1419,26 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "Ng8"
+     "san": "Ng8",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "e7"
+      },
+      {
+       "kind": "controls",
+       "square": "f6"
+      }
+     ]
     },
     {
-     "san": "O-O"
+     "san": "O-O",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "g7"
+      }
+     ]
     }
    ]
   },
@@ -1449,10 +1615,30 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "d3"
+     "san": "d3",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "c4"
+      },
+      {
+       "kind": "defends",
+       "square": "e4"
+      }
+     ]
     },
     {
-     "san": "d4"
+     "san": "d4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "c5"
+      },
+      {
+       "kind": "controls",
+       "square": "e5"
+      }
+     ]
     }
    ]
   },
@@ -1805,11 +1991,23 @@
    "options": [
     {
      "san": "Qxg2",
-     "continuation": "Qxg2 Bf3"
+     "continuation": "Qxg2 Bf3",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "h1"
+      }
+     ]
     },
     {
      "san": "e5",
-     "continuation": "e5"
+     "continuation": "e5",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "d4"
+      }
+     ]
     }
    ]
   },
@@ -1846,11 +2044,27 @@
    "options": [
     {
      "san": "Bb5+",
-     "continuation": "Bb5+"
+     "continuation": "Bb5+",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e8"
+      }
+     ]
     },
     {
      "san": "Bxf7+",
-     "continuation": "Bxf7+"
+     "continuation": "Bxf7+",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e8"
+      },
+      {
+       "kind": "attacks",
+       "square": "g8"
+      }
+     ]
     }
    ]
   },
@@ -2026,11 +2240,23 @@
    "options": [
     {
      "san": "Bd3",
-     "continuation": "Bd3"
+     "continuation": "Bd3",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "e4"
+      }
+     ]
     },
     {
      "san": "Bb5",
-     "continuation": "Bb5 d6"
+     "continuation": "Bb5 d6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "c6"
+      }
+     ]
     }
    ],
    "forkOf": {
@@ -2518,10 +2744,22 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "Bc5"
+     "san": "Bc5",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "d4"
+      }
+     ]
     },
     {
-     "san": "c6"
+     "san": "c6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "b5"
+      }
+     ]
     }
    ]
   },
@@ -2652,10 +2890,26 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "Nxd4"
+     "san": "Nxd4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "c6"
+      }
+     ]
     },
     {
-     "san": "Nb5"
+     "san": "Nb5",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "d6"
+      },
+      {
+       "kind": "attacks",
+       "square": "d4"
+      }
+     ]
     }
    ]
   },
@@ -2902,10 +3156,26 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "dxc3"
+     "san": "dxc3",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "b2"
+      }
+     ]
     },
     {
-     "san": "d5"
+     "san": "d5",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e4"
+      },
+      {
+       "kind": "controls",
+       "square": "c4"
+      }
+     ]
     }
    ]
   },
@@ -3437,13 +3707,35 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "dxe4"
+     "san": "dxe4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "f3"
+      }
+     ]
     },
     {
-     "san": "e6"
+     "san": "e6",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "d5"
+      }
+     ]
     },
     {
-     "san": "Nd7"
+     "san": "Nd7",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "c5"
+      },
+      {
+       "kind": "controls",
+       "square": "e5"
+      }
+     ]
     }
    ],
    "forkOf": {
@@ -3763,10 +4055,30 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "g3"
+     "san": "g3",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "f4"
+      },
+      {
+       "kind": "controls",
+       "square": "h4"
+      }
+     ]
     },
     {
-     "san": "Bf4"
+     "san": "Bf4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "c7"
+      },
+      {
+       "kind": "controls",
+       "square": "e5"
+      }
+     ]
     }
    ]
   },
@@ -3976,13 +4288,35 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "d4"
+     "san": "d4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "c5"
+      }
+     ]
     },
     {
-     "san": "Bb5"
+     "san": "Bb5",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "c6"
+      }
+     ]
     },
     {
-     "san": "Bc4"
+     "san": "Bc4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "f7"
+      },
+      {
+       "kind": "controls",
+       "square": "d5"
+      }
+     ]
     }
    ],
    "forkOf": {
@@ -4068,11 +4402,27 @@
    "options": [
     {
      "san": "Qb6",
-     "continuation": "Qb6"
+     "continuation": "Qb6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "b2"
+      },
+      {
+       "kind": "attacks",
+       "square": "d4"
+      }
+     ]
     },
     {
      "san": "O-O",
-     "continuation": "O-O"
+     "continuation": "O-O",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "f7"
+      }
+     ]
     }
    ]
   },
@@ -4112,11 +4462,23 @@
    "options": [
     {
      "san": "Nxe5",
-     "continuation": "Nxe5 dxe5 Ne4 h5"
+     "continuation": "Nxe5 dxe5 Ne4 h5",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "g4"
+      }
+     ]
     },
     {
      "san": "h6",
-     "continuation": "h6"
+     "continuation": "h6",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "g5"
+      }
+     ]
     }
    ]
   },
@@ -4148,10 +4510,26 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "a3"
+     "san": "a3",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "b4"
+      }
+     ]
     },
     {
-     "san": "Nxc6"
+     "san": "Nxc6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "d8"
+      },
+      {
+       "kind": "attacks",
+       "square": "a7"
+      }
+     ]
     }
    ]
   },
@@ -4230,10 +4608,30 @@
    ],
    "options": [
     {
-     "san": "Nxe4"
+     "san": "Nxe4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "c3"
+      },
+      {
+       "kind": "attacks",
+       "square": "f2"
+      }
+     ]
     },
     {
-     "san": "d5"
+     "san": "d5",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "c4"
+      },
+      {
+       "kind": "attacks",
+       "square": "e4"
+      }
+     ]
     }
    ]
   },
@@ -4269,10 +4667,26 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "Nxe4"
+     "san": "Nxe4",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "f2"
+      },
+      {
+       "kind": "controls",
+       "square": "d6"
+      }
+     ]
     },
     {
-     "san": "Bxf7+"
+     "san": "Bxf7+",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "g8"
+      }
+     ]
     }
    ]
   },
@@ -4348,13 +4762,39 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "g3"
+     "san": "g3",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "f4"
+      },
+      {
+       "kind": "controls",
+       "square": "h4"
+      }
+     ]
     },
     {
-     "san": "Bd3"
+     "san": "Bd3",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "h7"
+      }
+     ]
     },
     {
-     "san": "c3"
+     "san": "c3",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "d4"
+      },
+      {
+       "kind": "controls",
+       "square": "b4"
+      }
+     ]
     }
    ]
   },
@@ -4489,11 +4929,27 @@
    "options": [
     {
      "san": "fxe5",
-     "continuation": "fxe5"
+     "continuation": "fxe5",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "d4"
+      },
+      {
+       "kind": "controls",
+       "square": "f4"
+      }
+     ]
     },
     {
      "san": "Nc6",
-     "continuation": "Nc6"
+     "continuation": "Nc6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e5"
+      }
+     ]
     }
    ]
   },
@@ -4546,15 +5002,41 @@
    "options": [
     {
      "san": "Nc6",
-     "continuation": "Nc6"
+     "continuation": "Nc6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e5"
+      }
+     ]
     },
     {
      "san": "d6",
-     "continuation": "d6"
+     "continuation": "d6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e5"
+      },
+      {
+       "kind": "defends",
+       "square": "c5"
+      }
+     ]
     },
     {
      "san": "Ne7",
-     "continuation": "Ne7"
+     "continuation": "Ne7",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "c8"
+      },
+      {
+       "kind": "controls",
+       "square": "d5"
+      }
+     ]
     }
    ]
   },
@@ -4802,13 +5284,39 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "Nxf7"
+     "san": "Nxf7",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "d8"
+      },
+      {
+       "kind": "attacks",
+       "square": "h8"
+      }
+     ]
     },
     {
-     "san": "Bxf7+"
+     "san": "Bxf7+",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e8"
+      }
+     ]
     },
     {
-     "san": "d4"
+     "san": "d4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "c5"
+      },
+      {
+       "kind": "attacks",
+       "square": "e5"
+      }
+     ]
     }
    ],
    "forkOf": {
@@ -4968,10 +5476,30 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "Nf3"
+     "san": "Nf3",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e5"
+      },
+      {
+       "kind": "controls",
+       "square": "d4"
+      }
+     ]
     },
     {
-     "san": "g3"
+     "san": "g3",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "f4"
+      },
+      {
+       "kind": "controls",
+       "square": "h4"
+      }
+     ]
     }
    ],
    "forkOf": {
@@ -5044,16 +5572,48 @@
    "positionSource": "high",
    "options": [
     {
-     "san": "d5"
+     "san": "d5",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e4"
+      },
+      {
+       "kind": "controls",
+       "square": "c4"
+      }
+     ]
     },
     {
-     "san": "g5"
+     "san": "g5",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "f4"
+      }
+     ]
     },
     {
-     "san": "d6"
+     "san": "d6",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "e5"
+      }
+     ]
     },
     {
-     "san": "Nf6"
+     "san": "Nf6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e4"
+      },
+      {
+       "kind": "controls",
+       "square": "d5"
+      }
+     ]
     }
    ],
    "forkOf": {

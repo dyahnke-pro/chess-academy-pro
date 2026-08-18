@@ -70,13 +70,35 @@
   "explains": "Both knights are out and the centre is still unresolved. Three continuations come into consideration here: taking on the centre at once, the bishop to b5 hitting the knight that holds it, or the bishop to c4 aiming at the weakest square near the enemy king. They lead to genuinely different games rather than to a single best line.",
   "options": [
    {
-    "san": "d4"
+    "san": "d4",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "c5"
+     }
+    ]
    },
    {
-    "san": "Bb5"
+    "san": "Bb5",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "c6"
+     }
+    ]
    },
    {
-    "san": "Bc4"
+    "san": "Bc4",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "f7"
+     },
+     {
+      "kind": "controls",
+      "square": "d5"
+     }
+    ]
    }
   ]
  }

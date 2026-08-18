@@ -3068,10 +3068,26 @@
    "explains": "The pawn on c3 invites the capture, and taking it opens the diagonals the whole attack is built on. The other try ignores the offer and strikes in the centre instead, returning the pawn on terms you choose rather than on terms your opponent has prepared for.",
    "options": [
     {
-     "san": "dxc3"
+     "san": "dxc3",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "b2"
+      }
+     ]
     },
     {
-     "san": "d5"
+     "san": "d5",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e4"
+      },
+      {
+       "kind": "controls",
+       "square": "c4"
+      }
+     ]
     }
    ],
    "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",

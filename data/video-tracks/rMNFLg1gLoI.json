@@ -1029,10 +1029,26 @@
    "explains": "Both sides are developed and the tension in the centre still stands. One try is a modest pawn move on the edge that removes a square before it is used. The other takes on c6 immediately, doubling the pawns there and opening a file, which changes what both sides are playing for.",
    "options": [
     {
-     "san": "a3"
+     "san": "a3",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "b4"
+      }
+     ]
     },
     {
-     "san": "Nxc6"
+     "san": "Nxc6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "d8"
+      },
+      {
+       "kind": "attacks",
+       "square": "a7"
+      }
+     ]
     }
    ],
    "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 3 7",
@@ -1073,10 +1089,30 @@
    ],
    "options": [
     {
-     "san": "Nxe4"
+     "san": "Nxe4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "c3"
+      },
+      {
+       "kind": "attacks",
+       "square": "f2"
+      }
+     ]
     },
     {
-     "san": "d5"
+     "san": "d5",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "c4"
+      },
+      {
+       "kind": "attacks",
+       "square": "e4"
+      }
+     ]
     }
    ],
    "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/2BNP3/P1N1B3/1PP2PPP/R2QK2R b KQ - 2 8",
@@ -1091,10 +1127,26 @@
    "explains": "The knight has taken on e4 and there are two ways to answer. Recapturing the knight straight away keeps everything simple. Taking on f7 with check first is the move: the king has to choose between stepping out and letting the rook come to f7, and only then does the knight come off. Material ends up level — what has changed is where the black king lives.",
    "options": [
     {
-     "san": "Nxe4"
+     "san": "Nxe4",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "f2"
+      },
+      {
+       "kind": "controls",
+       "square": "d6"
+      }
+     ]
     },
     {
-     "san": "Bxf7+"
+     "san": "Bxf7+",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "g8"
+      }
+     ]
     }
    ],
    "fen": "r1bq1rk1/pp1pppbp/2n3p1/8/2BNn3/P1N1B3/1PP2PPP/R2QK2R w KQ - 0 9",

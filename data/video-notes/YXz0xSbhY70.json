@@ -6,10 +6,26 @@
   "explains": "The pawns have been traded in the centre and there are two ways to continue. Taking back restores material immediately and asks nothing. Jumping the knight to b5 instead hits the weak pawn the setup opposite created, and the pawn in the middle can be collected a move later.",
   "options": [
    {
-    "san": "Nxd4"
+    "san": "Nxd4",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "c6"
+     }
+    ]
    },
    {
-    "san": "Nb5"
+    "san": "Nb5",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "d6"
+     },
+     {
+      "kind": "attacks",
+      "square": "d4"
+     }
+    ]
    }
   ]
  }

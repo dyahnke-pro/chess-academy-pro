@@ -292,6 +292,29 @@ describe('phase narration is judged against the board it was computed from', () 
       .toMatch(/never raise it unprompted/);
   });
 
+  // ── THE FORK SIGNPOST ────────────────────────────────────────────────────
+  //
+  // David 2026-08-17: *"i want Learn with coach to touch on them as well so the
+  // user knows there are other options at certain forks/positions."*
+  //
+  // The `options` field was DATA-ONLY until this landed — 37 fork notes, 90
+  // candidate moves and 105 verified claims that no runtime code read. Exactly
+  // the defect the reasons themselves had: computed, checked, reaching nobody.
+  it('names the fork in Learn, once per fork', () => {
+    expect(TEACH, 'the fork signpost is not wired into coach-teach')
+      .toMatch(/forkLineFor\(/);
+    // On the STUDENT's move. Naming alternatives to the coach's reply is a
+    // different and much less useful sentence.
+    expect(TEACH, 'the fork is reading the wrong ply')
+      .toMatch(/forkLineFor\(fenBefore, history\[history\.length - 2\]\)/);
+    // A signpost repeated is noise — a student replaying a line passes the same
+    // fork every time.
+    expect(TEACH, 'the fork has no once-per-session guard')
+      .toMatch(/forkSaidRef\.current\.has\(line\.key\)/);
+    expect(TEACH, 'the fork never reaches the voice package')
+      .toMatch(/kind: 'fork' as const, text: forkLine/);
+  });
+
   it('speaks the move\'s checked reasons, and nothing when there are none', () => {
     expect(TEACH, 'the reason lane is not wired into coach-teach at all')
       .toMatch(/reasonLineFor\(/);

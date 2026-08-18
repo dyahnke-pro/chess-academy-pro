@@ -33,7 +33,7 @@ interface Note {
   id: string;
   lineSan: string[];
   reasons?: Reason[];
-  options?: { san: string }[];
+  options?: { san: string; reasons?: Reason[] }[];
   structural?: string;
 }
 
@@ -102,6 +102,33 @@ describe('video note reasons', () => {
       if ((note.options?.length ?? 0) < 2) bad.push(`${note.id}: a fork needs at least two options`);
     }
     expect(bad).toEqual([]);
+  });
+
+  // ── AN OPTION'S OWN REASONS ──────────────────────────────────────────────
+  //
+  // A fork note's prose is about the CHOICE, not about the move it sits on —
+  // which is why these notes carry no reasons of their own. The reasoning that
+  // belongs to them is what each candidate DOES: "Bb5 hits the knight that
+  // holds the centre" is the teaching a bare list of SANs is missing.
+  //
+  // Verified at the FORK position, not at the note's own — the option has not
+  // been played, so its claims are about the board the student is choosing
+  // from. That is the same rule as everywhere else, applied one ply forward.
+  it('every option reason holds at the fork position', () => {
+    const broken: string[] = [];
+    for (const note of notes.filter((n) => n.options?.some((o) => o.reasons?.length))) {
+      const game = new Chess();
+      try { for (const san of note.lineSan) game.move(san); } catch {
+        broken.push(`${note.id}: line is not legal`); continue;
+      }
+      for (const o of note.options ?? []) {
+        if (!o.reasons?.length) continue;
+        for (const v of checkReasons(game.fen(), o.san, o.reasons)) {
+          if (!v.holds) broken.push(`${note.id} [${o.san} ${v.reason.kind}]: ${v.note}`);
+        }
+      }
+    }
+    expect(broken).toEqual([]);
   });
 
   it('name only kinds reasonCheck can verify', () => {

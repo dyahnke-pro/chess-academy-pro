@@ -7,11 +7,27 @@
   "options": [
    {
     "san": "Nxd4",
-    "continuation": "Nxd4"
+    "continuation": "Nxd4",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "e6"
+     }
+    ]
    },
    {
     "san": "Bd3",
-    "continuation": "Bd3"
+    "continuation": "Bd3",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "h7"
+     },
+     {
+      "kind": "defends",
+      "square": "c2"
+     }
+    ]
    }
   ]
  },
@@ -29,13 +45,35 @@
   "explains": "The pawn chain is fixed and White has castled. Three tries come into consideration: the knight to e7, heading for f5 or g6 behind the chain; the bishop out to c5 where it eyes the centre immediately; or the pawn to f6, striking at the head of the chain before the pieces are settled.",
   "options": [
    {
-    "san": "Nge7"
+    "san": "Nge7",
+    "reasons": [
+     {
+      "kind": "defends",
+      "square": "c6"
+     },
+     {
+      "kind": "defends",
+      "square": "d5"
+     }
+    ]
    },
    {
-    "san": "Bc5"
+    "san": "Bc5",
+    "reasons": [
+     {
+      "kind": "defends",
+      "square": "d4"
+     }
+    ]
    },
    {
-    "san": "f6"
+    "san": "f6",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "e5"
+     }
+    ]
    }
   ]
  },

@@ -7,11 +7,23 @@
   "options": [
    {
     "san": "Bd3",
-    "continuation": "Bd3"
+    "continuation": "Bd3",
+    "reasons": [
+     {
+      "kind": "defends",
+      "square": "e4"
+     }
+    ]
    },
    {
     "san": "Bb5",
-    "continuation": "Bb5 d6"
+    "continuation": "Bb5 d6",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "c6"
+     }
+    ]
    }
   ]
  }

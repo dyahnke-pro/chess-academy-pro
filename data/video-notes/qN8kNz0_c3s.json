@@ -19,11 +19,27 @@
   "options": [
    {
     "san": "Qb6",
-    "continuation": "Qb6"
+    "continuation": "Qb6",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "b2"
+     },
+     {
+      "kind": "attacks",
+      "square": "d4"
+     }
+    ]
    },
    {
     "san": "O-O",
-    "continuation": "O-O"
+    "continuation": "O-O",
+    "reasons": [
+     {
+      "kind": "defends",
+      "square": "f7"
+     }
+    ]
    }
   ]
  },
@@ -35,11 +51,23 @@
   "options": [
    {
     "san": "Nxe5",
-    "continuation": "Nxe5 dxe5 Ne4 h5"
+    "continuation": "Nxe5 dxe5 Ne4 h5",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "g4"
+     }
+    ]
    },
    {
     "san": "h6",
-    "continuation": "h6"
+    "continuation": "h6",
+    "reasons": [
+     {
+      "kind": "controls",
+      "square": "g5"
+     }
+    ]
    }
   ]
  }

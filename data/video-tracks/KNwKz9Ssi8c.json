@@ -843,11 +843,23 @@
    "options": [
     {
      "san": "Qxg2",
-     "continuation": "Qxg2 Bf3"
+     "continuation": "Qxg2 Bf3",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "h1"
+      }
+     ]
     },
     {
      "san": "e5",
-     "continuation": "e5"
+     "continuation": "e5",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "d4"
+      }
+     ]
     }
    ],
    "fen": "r1b1kb1r/1p1n1ppp/p3pn2/3q4/2NN4/2P5/PP2BPPP/R1BQK2R b KQkq - 0 9",
@@ -863,11 +875,27 @@
    "options": [
     {
      "san": "Bb5+",
-     "continuation": "Bb5+"
+     "continuation": "Bb5+",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e8"
+      }
+     ]
     },
     {
      "san": "Bxf7+",
-     "continuation": "Bxf7+"
+     "continuation": "Bxf7+",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e8"
+      },
+      {
+       "kind": "attacks",
+       "square": "g8"
+      }
+     ]
     }
    ],
    "fen": "rnb1k1nr/pp2ppbp/6p1/8/2B1q3/N1P1pN2/PP3PPP/R2QK2R w KQkq - 0 9",

@@ -638,10 +638,26 @@
    "explains": "The bishop has come to f4 covering the dark squares in the middle. Black can step the knight back and invite the bishop to return, or castle and get on with the game. Both are playable and they lead to completely different results, so this is the moment to know which one you want.",
    "options": [
     {
-     "san": "Ng8"
+     "san": "Ng8",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "e7"
+      },
+      {
+       "kind": "controls",
+       "square": "f6"
+      }
+     ]
     },
     {
-     "san": "O-O"
+     "san": "O-O",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "g7"
+      }
+     ]
     }
    ],
    "fen": "r1bqk2r/pp1pppbp/2n2np1/8/Q3PB2/2P5/PP3PPP/RN2KBNR b KQkq - 2 7",

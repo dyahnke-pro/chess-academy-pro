@@ -25,7 +25,7 @@ import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
 import type { CommentaryKind } from '../../services/playCommentary';
-import { reasonLineFor } from '../../services/reasonVoice';
+import { reasonLineFor, forkLineFor } from '../../services/reasonVoice';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
 // Walkthrough arrows/highlights render through the SAME react-chessboard
@@ -1546,6 +1546,9 @@ export function CoachTeachPage(): JSX.Element {
    *  the tactic and threat lanes each had one — so it re-narrated the identical
    *  sentence turn after turn. Measured on a Vienna walk: the e4-outpost line
    *  spoke on two consecutive moves, verbatim. */
+  /** Forks already named this session. A signpost repeated is noise, and a
+   *  student replaying a line passes the same fork every time. */
+  const forkSaidRef = useRef(new Set<string>());
   const lastComputedRef = useRef('');
 
   /** Last spoken TACTIC key, so a standing opportunity does not nag every ply. */
@@ -6385,12 +6388,14 @@ export function CoachTeachPage(): JSX.Element {
     // The STUDENT's move first, then the coach's reply. Both just landed, but
     // "why what you played works" is the teaching; what the opponent's move
     // does is the fallback.
+    // Shared by the reason lane and the fork signpost below — both need the
+    // board a move was played FROM, and that board is gone from `args`.
+    const replayTo = (n: number): string | null => {
+      const c = new Chess();
+      try { for (const san of history.slice(0, n)) c.move(san); } catch { return null; }
+      return c.fen();
+    };
     try {
-      const replayTo = (n: number): string | null => {
-        const c = new Chess();
-        try { for (const san of history.slice(0, n)) c.move(san); } catch { return null; }
-        return c.fen();
-      };
       for (const back of [2, 1]) {
         if (history.length < back) continue;
         const fenBefore = replayTo(history.length - back);
@@ -6408,6 +6413,37 @@ export function CoachTeachPage(): JSX.Element {
         break;
       }
     } catch { /* the reason lane is a bonus, never a blocker */ }
+
+    // ── THE FORK: NAMING THAT A CHOICE WAS MADE ──────────────────────────
+    //
+    // David 2026-08-17: *"i want Learn with coach to touch on them as well so
+    // the user knows there are other options at certain forks/positions."*
+    // Learn NAMES the fork; Review is where the lines get walked.
+    //
+    // The options are the moves that APPEARED ON SCREEN in the lesson, so
+    // "here are the other tries" is a claim about the video with the video as
+    // its evidence. That is what makes it safe to put in front of a student
+    // when a model-generated list of alternatives would not be.
+    //
+    // Fires on the STUDENT's move only. The fork is about the choice they just
+    // made, and naming alternatives to the coach's reply is a different (and
+    // much less useful) sentence.
+    let forkLine: string | null = null;
+    try {
+      if (history.length >= 2) {
+        const fenBefore = replayTo(history.length - 2);
+        const line = fenBefore ? forkLineFor(fenBefore, history[history.length - 2]) : null;
+        // Once per fork per session. A signpost repeated is noise, and the
+        // student passes the same position every time they replay the line.
+        if (line && !forkSaidRef.current.has(line.key)) {
+          forkSaidRef.current.add(line.key);
+          forkLine = line.spoken;
+          for (const sq of line.squares) spokenSquaresThisTurn.add(sq);
+          factLines.push(`Fork recorded in the lesson: ${line.spoken}`);
+          captureEvent('coach_beat_offered', { surface: 'coach-teach', kind: 'fork', spoke: true });
+        }
+      }
+    } catch { /* the fork signpost is a bonus, never a blocker */ }
 
     // ── NO REASON, NO SENTENCE ───────────────────────────────────────────
     //
@@ -6710,6 +6746,7 @@ export function CoachTeachPage(): JSX.Element {
       ...(threatLine ? [{ kind: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares }] : []),
       ...(announceLine ? [{ kind: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
       ...(computedLine ? [{ kind: 'computed' as const, text: computedLine, fen: args.fenAfterReply }] : []),
+      ...(forkLine ? [{ kind: 'fork' as const, text: forkLine, fen: args.fenAfterReply }] : []),
       // The masterclass beat first among the teaching lanes — it is the only
       // one verified before it shipped.
       ...(curatedLine ? [{ kind: 'note' as const, text: curatedLine, fen: args.fenAfterReply }] : []),

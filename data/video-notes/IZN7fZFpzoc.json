@@ -6,10 +6,30 @@
   "explains": "The bishop is heading for g7 and wants the long diagonal opened. Two tries come into consideration: resolve the centre now, or hold the clamp with the modest pawn move and make the opponent find a way in. Neither is a mistake; they are different bargains.",
   "options": [
    {
-    "san": "d3"
+    "san": "d3",
+    "reasons": [
+     {
+      "kind": "defends",
+      "square": "c4"
+     },
+     {
+      "kind": "defends",
+      "square": "e4"
+     }
+    ]
    },
    {
-    "san": "d4"
+    "san": "d4",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "c5"
+     },
+     {
+      "kind": "controls",
+      "square": "e5"
+     }
+    ]
    }
   ]
  },

@@ -22,10 +22,22 @@
   "explains": "White has taken on d4 and castled, leaving Black a pawn on d4 and a choice. Two moves are genuinely playable: the bishop to c5, which is the most common, and the modest c6, taking the b5 square away. Anything else concedes more than the line can afford.",
   "options": [
    {
-    "san": "Bc5"
+    "san": "Bc5",
+    "reasons": [
+     {
+      "kind": "defends",
+      "square": "d4"
+     }
+    ]
    },
    {
-    "san": "c6"
+    "san": "c6",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "b5"
+     }
+    ]
    }
   ]
  },

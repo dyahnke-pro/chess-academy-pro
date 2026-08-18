@@ -39,6 +39,7 @@ interface CorpusNote {
   id: string;
   lineSan: string[];
   reasons?: Reason[];
+  options?: { san: string; reasons?: Reason[] }[];
 }
 
 const PIECE: Record<PieceSymbol, string> = {
@@ -246,6 +247,14 @@ const PAIR = {
 const fill = (template: string, vals: Record<string, string>): string =>
   template.replace(/\{(\w+)\}/g, (_, k: string) => vals[k] ?? '');
 
+/** Join a short list the way a person speaks one. */
+function joinClauses(parts: readonly string[]): string {
+  if (parts.length === 0) return '';
+  if (parts.length === 1) return parts[0];
+  if (parts.length === 2) return `${parts[0]} and ${parts[1]}`;
+  return `${parts.slice(0, -1).join(', ')}, and ${parts[parts.length - 1]}`;
+}
+
 /** Name whatever the reason points at, reading the live board. Null when the
  *  square is empty — a phrase that would say "the on e4" is not spoken. */
 function named(board: Chess, square: Square): Named | null {
@@ -424,4 +433,122 @@ function singleSentence(after: Chess, before: Chess, r: Reason, fen: string, san
     default:
       return null;
   }
+}
+
+
+// ─── THE FORK: NAMING THE CHOICE ──────────────────────────────────────────
+//
+// David 2026-08-17, on the video forks: *"i want Learn with coach to touch on
+// them as well so the user knows there are other options at certain
+// forks/positions."* Learn NAMES that a choice exists; Review walks it.
+//
+// Why these may be put in front of a student when a generated list may not: the
+// options are the moves that APPEARED ON SCREEN in the lesson. "Here are two
+// other tries here" is a claim about the video, and the video is the evidence.
+// Asking a model what else could be played produces fluent, sometimes-wrong
+// lines with nothing to check them against.
+//
+// The field was data-only until now — 37 fork notes, 90 candidate moves and 105
+// verified claims that no runtime code read. That is the same defect as the
+// reasons themselves had: computed, checked, and reaching nobody.
+
+/** Fork notes indexed by the position they sit at. */
+const byPosition = new Map<string, CorpusNote[]>();
+let forkIndexBuilt = false;
+
+function buildForkIndex(): void {
+  if (forkIndexBuilt) return;
+  forkIndexBuilt = true;
+  for (const note of (teachings as { notes: CorpusNote[] }).notes) {
+    if ((note.options?.length ?? 0) < 2) continue;
+    const board = new Chess();
+    try { for (const san of note.lineSan) board.move(san); } catch { continue; }
+    const key = posKey(board.fen());
+    const bucket = byPosition.get(key) ?? [];
+    bucket.push(note);
+    byPosition.set(key, bucket);
+  }
+}
+
+const COUNT_WORD = ['', '', 'two', 'three', 'four', 'five', 'six'];
+
+/** A reason as a short RELATIVE CLAUSE, for naming an alternative inline.
+ *
+ *  The sentence table above cannot be reused here: its entries are whole
+ *  sentences, so splicing one after "which" produced "Bc5, which nothing wins
+ *  the pawn on d4 any more". A clause is a different grammatical job and needs
+ *  its own writing. Deliberately terse — this rides inside a signpost, and the
+ *  point is that a choice exists, not to teach the whole of it. */
+function forkClause(fen: string, san: string, r: Reason): string | null {
+  const after = new Chess(fen);
+  try { after.move(san); } catch { return null; }
+  const nameAt = (sq: Square): string | null => {
+    const p = after.get(sq);
+    return p ? PIECE[p.type] : null;
+  };
+  switch (r.kind) {
+    case 'attacks': {
+      const p = nameAt(r.square);
+      if (!p) return null;
+      return p === 'king' ? 'gives check' : `hits the ${p} on ${r.square}`;
+    }
+    case 'defends': {
+      const p = nameAt(r.square);
+      return p ? `holds the ${p} on ${r.square}` : null;
+    }
+    case 'controls':
+      return `takes ${r.square}`;
+    case 'traps': {
+      const p = nameAt(r.square);
+      return p ? `traps the ${p} on ${r.square}` : null;
+    }
+    case 'prevents':
+      return `rules out ${normSan(r.san)}`;
+    case 'meets':
+      return `answers ${normSan(r.san)}`;
+    case 'blocks':
+      return `shuts the line to ${r.to}`;
+    case 'opens':
+      return `opens the line to ${r.to}`;
+    case 'deprives':
+      return `takes ${r.square} away`;
+    default:
+      return null;
+  }
+}
+
+export function forkLineFor(fen: string, played?: string): ReasonLine | null {
+  buildForkIndex();
+  const notes = byPosition.get(posKey(fen));
+  if (!notes?.length) return null;
+  const note = notes[0];
+  const options = note.options ?? [];
+  if (options.length < 2) return null;
+
+  const taken = played ? normSan(played) : null;
+  const others = options.filter((o) => normSan(o.san) !== taken);
+  if (!others.length) return null;
+
+  const squares: Square[] = [];
+  // ONE clause, on the first alternative only. Every option carrying its own
+  // explanation turns a signpost into a lecture — Learn NAMES that a choice
+  // exists, Review is where the lines get walked (David 2026-08-17).
+  const described = others.map((o, i) => {
+    const r = i === 0 ? o.reasons?.[0] : undefined;
+    const clause = r ? forkClause(fen, o.san, r) : null;
+    if (clause && r && 'square' in r) squares.push(r.square);
+    return clause ? `${o.san}, which ${clause},` : o.san;
+  });
+  // Strip the trailing comma when the described option is last — it only exists
+  // to keep the list readable when something follows it.
+  if (described.length === 1) described[0] = described[0].replace(/,$/, '');
+
+  const n = COUNT_WORD[Math.min(options.length, 6)] || `${options.length}`;
+  return {
+    spoken: taken
+      ? `That is one of ${n} tries here — the lesson also looks at ${joinClauses(described)}.`
+      : `There are ${n} tries here: ${joinClauses(options.map((o) => o.san))}.`,
+    squares: [...new Set(squares)],
+    key: `fork:${note.id}`,
+  };
 }

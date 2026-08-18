@@ -31,11 +31,23 @@
   "options": [
    {
     "san": "Qxg2",
-    "continuation": "Qxg2 Bf3"
+    "continuation": "Qxg2 Bf3",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "h1"
+     }
+    ]
    },
    {
     "san": "e5",
-    "continuation": "e5"
+    "continuation": "e5",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "d4"
+     }
+    ]
    }
   ]
  },
@@ -47,11 +59,27 @@
   "options": [
    {
     "san": "Bb5+",
-    "continuation": "Bb5+"
+    "continuation": "Bb5+",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "e8"
+     }
+    ]
    },
    {
     "san": "Bxf7+",
-    "continuation": "Bxf7+"
+    "continuation": "Bxf7+",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "e8"
+     },
+     {
+      "kind": "attacks",
+      "square": "g8"
+     }
+    ]
    }
   ]
  }

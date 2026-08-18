@@ -7,11 +7,27 @@
   "options": [
    {
     "san": "Qxb2",
-    "continuation": "Qxb2 Rb1 Qa3"
+    "continuation": "Qxb2 Rb1 Qa3",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "a1"
+     },
+     {
+      "kind": "attacks",
+      "square": "c3"
+     }
+    ]
    },
    {
     "san": "d5",
-    "continuation": "d5 f3"
+    "continuation": "d5 f3",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "e4"
+     }
+    ]
    }
   ]
  },
@@ -23,15 +39,41 @@
   "options": [
    {
     "san": "Nc7+",
-    "continuation": "Nc7+ Kd8"
+    "continuation": "Nc7+ Kd8",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "e8"
+     },
+     {
+      "kind": "attacks",
+      "square": "a8"
+     }
+    ]
    },
    {
     "san": "O-O",
-    "continuation": "O-O"
+    "continuation": "O-O",
+    "reasons": [
+     {
+      "kind": "defends",
+      "square": "f1"
+     }
+    ]
    },
    {
     "san": "Qc3",
-    "continuation": "Qc3"
+    "continuation": "Qc3",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "c8"
+     },
+     {
+      "kind": "defends",
+      "square": "d4"
+     }
+    ]
    }
   ]
  },

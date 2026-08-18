@@ -54,10 +54,30 @@
   "explains": "The position is symmetrical and nothing is committed. One try develops the king's knight and keeps every structure open. The other steps the g-pawn forward so the bishop can take the long diagonal, aiming at the centre from the side rather than occupying it.",
   "options": [
    {
-    "san": "Nf3"
+    "san": "Nf3",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "e5"
+     },
+     {
+      "kind": "controls",
+      "square": "d4"
+     }
+    ]
    },
    {
-    "san": "g3"
+    "san": "g3",
+    "reasons": [
+     {
+      "kind": "controls",
+      "square": "f4"
+     },
+     {
+      "kind": "controls",
+      "square": "h4"
+     }
+    ]
    }
   ]
  }

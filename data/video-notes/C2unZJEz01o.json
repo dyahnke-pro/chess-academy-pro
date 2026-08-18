@@ -82,13 +82,43 @@
   "explains": "The bishop is heading for g7 and the long diagonal. Three continuations come into consideration: developing the dark-squared bishop outside the pawn chain while it still can get out, mirroring with a fianchetto of your own, or bringing the queen's knight out and leaving the pawns uncommitted for one more move.",
   "options": [
    {
-    "san": "Bf4"
+    "san": "Bf4",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "c7"
+     },
+     {
+      "kind": "controls",
+      "square": "e5"
+     }
+    ]
    },
    {
-    "san": "g3"
+    "san": "g3",
+    "reasons": [
+     {
+      "kind": "controls",
+      "square": "f4"
+     },
+     {
+      "kind": "controls",
+      "square": "h4"
+     }
+    ]
    },
    {
-    "san": "Nc3"
+    "san": "Nc3",
+    "reasons": [
+     {
+      "kind": "controls",
+      "square": "d5"
+     },
+     {
+      "kind": "controls",
+      "square": "e4"
+     }
+    ]
    }
   ]
  }

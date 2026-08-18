@@ -19,11 +19,27 @@
   "options": [
    {
     "san": "fxe5",
-    "continuation": "fxe5"
+    "continuation": "fxe5",
+    "reasons": [
+     {
+      "kind": "controls",
+      "square": "d4"
+     },
+     {
+      "kind": "controls",
+      "square": "f4"
+     }
+    ]
    },
    {
     "san": "Nc6",
-    "continuation": "Nc6"
+    "continuation": "Nc6",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "e5"
+     }
+    ]
    }
   ]
  },
@@ -47,15 +63,41 @@
   "options": [
    {
     "san": "Nc6",
-    "continuation": "Nc6"
+    "continuation": "Nc6",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "e5"
+     }
+    ]
    },
    {
     "san": "d6",
-    "continuation": "d6"
+    "continuation": "d6",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "e5"
+     },
+     {
+      "kind": "defends",
+      "square": "c5"
+     }
+    ]
    },
    {
     "san": "Ne7",
-    "continuation": "Ne7"
+    "continuation": "Ne7",
+    "reasons": [
+     {
+      "kind": "defends",
+      "square": "c8"
+     },
+     {
+      "kind": "controls",
+      "square": "d5"
+     }
+    ]
    }
   ]
  }

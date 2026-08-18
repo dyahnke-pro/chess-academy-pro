@@ -927,11 +927,27 @@
    "options": [
     {
      "san": "Nbd7",
-     "continuation": "Nbd7"
+     "continuation": "Nbd7",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e5"
+      },
+      {
+       "kind": "defends",
+       "square": "f6"
+      }
+     ]
     },
     {
      "san": "O-O",
-     "continuation": "O-O"
+     "continuation": "O-O",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "f7"
+      }
+     ]
     }
    ],
    "fen": "rn1qk2r/ppp2ppp/3bpn2/3pNb2/3P1B2/2N1P3/PPP2PPP/R2QKB1R b KQkq - 7 8",
@@ -947,11 +963,23 @@
    "options": [
     {
      "san": "g4",
-     "continuation": "g4"
+     "continuation": "g4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "f5"
+      }
+     ]
     },
     {
      "san": "Bd3",
-     "continuation": "Bd3 Bxd3 cxd3 Nbd7"
+     "continuation": "Bd3 Bxd3 cxd3 Nbd7",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "f5"
+      }
+     ]
     }
    ],
    "fen": "rn1q1rk1/ppp2ppp/3bpn2/3pNb2/3P1B2/2N1P3/PPP2PPP/R2QKB1R w KQ - 8 9",
@@ -967,11 +995,23 @@
    "options": [
     {
      "san": "Nc6",
-     "continuation": "Nc6"
+     "continuation": "Nc6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "d4"
+      }
+     ]
     },
     {
      "san": "a6",
-     "continuation": "a6"
+     "continuation": "a6",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "b5"
+      }
+     ]
     }
    ],
    "fen": "rnbqkb1r/pp2pppp/5n2/3p4/3P1B2/2N5/PPP2PPP/R2QKBNR b KQkq - 0 5",

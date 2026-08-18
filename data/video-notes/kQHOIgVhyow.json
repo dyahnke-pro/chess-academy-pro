@@ -55,10 +55,30 @@
   "explains": "The bishop stands on g7 aiming through the centre. One try puts a bishop opposite it on the same diagonal, so the piece the opponent built around has something to look at. The other develops the dark-squared bishop outside the pawn chain, where it contests the squares in front of the fianchetto rather than facing it down.",
   "options": [
    {
-    "san": "g3"
+    "san": "g3",
+    "reasons": [
+     {
+      "kind": "controls",
+      "square": "f4"
+     },
+     {
+      "kind": "controls",
+      "square": "h4"
+     }
+    ]
    },
    {
-    "san": "Bf4"
+    "san": "Bf4",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "c7"
+     },
+     {
+      "kind": "controls",
+      "square": "e5"
+     }
+    ]
    }
   ]
  }

@@ -528,11 +528,23 @@
    "options": [
     {
      "san": "Bd3",
-     "continuation": "Bd3"
+     "continuation": "Bd3",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "e4"
+      }
+     ]
     },
     {
      "san": "Bb5",
-     "continuation": "Bb5 d6"
+     "continuation": "Bb5 d6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "c6"
+      }
+     ]
     }
    ],
    "fen": "r1bqkb1r/pppp1pp1/2n2n1p/3N4/3pP3/5N2/PPP2PPP/R1BQKB1R w KQkq - 0 6",

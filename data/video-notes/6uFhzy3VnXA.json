@@ -19,11 +19,27 @@
   "options": [
    {
     "san": "Nbd7",
-    "continuation": "Nbd7"
+    "continuation": "Nbd7",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "e5"
+     },
+     {
+      "kind": "defends",
+      "square": "f6"
+     }
+    ]
    },
    {
     "san": "O-O",
-    "continuation": "O-O"
+    "continuation": "O-O",
+    "reasons": [
+     {
+      "kind": "defends",
+      "square": "f7"
+     }
+    ]
    }
   ]
  },
@@ -35,11 +51,23 @@
   "options": [
    {
     "san": "g4",
-    "continuation": "g4"
+    "continuation": "g4",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "f5"
+     }
+    ]
    },
    {
     "san": "Bd3",
-    "continuation": "Bd3 Bxd3 cxd3 Nbd7"
+    "continuation": "Bd3 Bxd3 cxd3 Nbd7",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "f5"
+     }
+    ]
    }
   ]
  },
@@ -51,11 +79,23 @@
   "options": [
    {
     "san": "Nc6",
-    "continuation": "Nc6"
+    "continuation": "Nc6",
+    "reasons": [
+     {
+      "kind": "attacks",
+      "square": "d4"
+     }
+    ]
    },
    {
     "san": "a6",
-    "continuation": "a6"
+    "continuation": "a6",
+    "reasons": [
+     {
+      "kind": "controls",
+      "square": "b5"
+     }
+    ]
    }
   ]
  }
