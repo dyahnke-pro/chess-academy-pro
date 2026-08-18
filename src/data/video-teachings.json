@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-18",
- "videosDistilled": 29,
- "noteCount": 71,
+ "videosDistilled": 30,
+ "noteCount": 77,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -1507,6 +1507,215 @@
      "kind": "opens",
      "from": "e1",
      "to": "a1"
+    }
+   ]
+  },
+  {
+   "id": "vn-danish-decline-in-the-centre",
+   "lineSan": [
+    "e4",
+    "e5",
+    "d4",
+    "exd4",
+    "c3"
+   ],
+   "opening": "Danish Gambit Accepted",
+   "phase": "opening",
+   "explains": "The pawn on c3 invites the capture, and taking it opens the diagonals the whole attack is built on. The other try ignores the offer and strikes in the centre instead, returning the pawn on terms you choose rather than on terms your opponent has prepared for.",
+   "teaches": "A gambit pawn offered a second time is a question about time, not about greed. You can take everything and spend the next ten moves untangling, or hand one pawn straight back in the centre and reach a position where the extra material was never the point. Both are playable; only one of them lets you decide what the game looks like.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:dEjoCta8oOQ"
+   ],
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "dxc3"
+    },
+    {
+     "san": "d5"
+    }
+   ]
+  },
+  {
+   "id": "vn-danish-central-strike-takes-the-bishop-square",
+   "lineSan": [
+    "e4",
+    "e5",
+    "d4",
+    "exd4",
+    "c3",
+    "d5"
+   ],
+   "opening": "Danish Gambit Accepted",
+   "phase": "opening",
+   "explains": "The pawn steps to d5 and hits the pawn on e4, so the centre has to be resolved immediately rather than at leisure. It also covers c4, which is where the light-squared bishop wants to sit and stare at f7. Giving the pawn back here buys both of those, and the attack loses the square it was built around.",
+   "teaches": "The best way to decline a gambit is usually a pawn move that does two jobs at once. Look for the push that hits something and takes away the square the attacking piece was heading for — a defender that gains a move while removing a plan is worth more than a pawn.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:dEjoCta8oOQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e4"
+    },
+    {
+     "kind": "controls",
+     "square": "c4"
+    }
+   ]
+  },
+  {
+   "id": "vn-danish-two-pawns-for-two-diagonals",
+   "lineSan": [
+    "e4",
+    "e5",
+    "d4",
+    "exd4",
+    "c3",
+    "dxc3",
+    "Bc4",
+    "cxb2",
+    "Bxb2"
+   ],
+   "opening": "Danish Gambit Accepted",
+   "phase": "opening",
+   "explains": "Both bishops are now on their diagonals. The dark-squared one has taken on b2 and looks straight down at g7, and it covers f6 as well, so the natural developing square for the king's knight is contested before the knight has moved. Nothing is won yet; what has been bought is that every black piece must now come out with the attack already pointing at it.",
+   "teaches": "Count what a gambit buys in lines, not in pawns. Two pawns given up for two bishops raking toward the same king is a real bargain when the defender still has pieces at home — the moment the position opens, every tempo spent taking is a tempo not spent developing.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:dEjoCta8oOQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "g7"
+    },
+    {
+     "kind": "controls",
+     "square": "f6"
+    }
+   ]
+  },
+  {
+   "id": "vn-danish-meeting-the-check-costs-something",
+   "lineSan": [
+    "e4",
+    "e5",
+    "d4",
+    "exd4",
+    "c3",
+    "dxc3",
+    "Bc4",
+    "cxb2",
+    "Bxb2",
+    "Nf6",
+    "e5",
+    "Bb4+"
+   ],
+   "opening": "Danish Gambit Accepted",
+   "phase": "opening",
+   "explains": "The bishop has come to b4 with check and it must be dealt with at once. Four answers are on the board: the king steps to f1, or one of three pieces interposes on the c3 and d2 squares — and each of them changes what the position is about. Blocking with the dark-squared bishop offers a trade of the piece doing the most work.",
+   "teaches": "When every way of answering a check gives something up, the choice is about which concession you can live with. Blocking with a piece invites a trade you may not want, stepping the king aside forfeits castling, and the bishop that came to block is often the one the whole attack depended on. Pick the concession, do not stumble into it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:dEjoCta8oOQ"
+   ],
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Kf1"
+    },
+    {
+     "san": "Bc3"
+    },
+    {
+     "san": "Nd2"
+    },
+    {
+     "san": "Nc3"
+    }
+   ]
+  },
+  {
+   "id": "vn-danish-push-that-asks-the-knight-a-question",
+   "lineSan": [
+    "e4",
+    "e5",
+    "d4",
+    "exd4",
+    "c3",
+    "dxc3",
+    "Nxc3",
+    "Bc5",
+    "Bc4",
+    "d6",
+    "e5"
+   ],
+   "opening": "Danish Gambit Accepted",
+   "phase": "opening",
+   "explains": "The pawn advances to e5 and hits the pawn on d6, so the centre cannot simply be left alone. What matters more is that it now covers f6, so the king's knight has lost its natural square while the position is still open. That is the shape of the whole gambit: not one big threat, but a series of small ones that each cost the defender a move.",
+   "teaches": "A pawn push in the centre earns its place when it hits a pawn and takes a square from a piece in the same move. Before you push, look at what the pawn will cover once it has moved — the square behind the target is often worth more than the target.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:dEjoCta8oOQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d6"
+    },
+    {
+     "kind": "controls",
+     "square": "f6"
+    }
+   ]
+  },
+  {
+   "id": "vn-danish-three-ways-to-keep-the-initiative",
+   "lineSan": [
+    "e4",
+    "e5",
+    "d4",
+    "exd4",
+    "c3",
+    "dxc3",
+    "Nxc3",
+    "Bc5",
+    "Bc4",
+    "d6"
+   ],
+   "opening": "Danish Gambit Accepted",
+   "phase": "opening",
+   "explains": "Black has stabilised with the pawn on d6 and the position is level in material after the pawn came back. Four tries come into consideration: two different queen placements, the natural knight development, and the central push. They lead to genuinely different games rather than to a single best line.",
+   "teaches": "With a lead in development and no forced win, the choice is which piece to commit and how early. A queen sortie asks a question immediately but can be answered by a queen move; a quiet developing move keeps every option and asks nothing. There is no refutation to find here, only a preference to have.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:dEjoCta8oOQ"
+   ],
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Qd5"
+    },
+    {
+     "san": "Nf3"
+    },
+    {
+     "san": "Qb3"
+    },
+    {
+     "san": "e5"
     }
    ]
   },
