@@ -35,6 +35,9 @@ the real splice (retrieval → spoken register → board-truth grader). Nothing 
 notices if a fork is later renamed or trimmed — the opening still works, the
 gates still pass, and the notes simply go quiet again.
 
+**"On a taught line" is not yet "on a taught surface"** — see the section below
+before treating this table as delivery.
+
 ## The pipeline
 
 ```
@@ -82,6 +85,36 @@ Six candidate forks were dropped rather than shipped:
 
 Their notes stay where they are. Free play and review is a legitimate home for a
 note; a bad taught line is not.
+
+## The wire that does not fire yet — READ THIS BEFORE CALLING THE FORKS DONE
+
+The forks landed in `repertoire.json`, the gates went green, and **no surface
+shows them.** `buildVariationTabs` lists a variation only when it is hand-listed
+in its opening's curated array or carries its own `LessonScript` — and it gates
+BOTH the openings-detail tabs and the `/coach/teach` line picker. So ten
+variations sit in the shipped bundle, seeded into Dexie on a real device, offered
+by nothing.
+
+Nothing in the test suite could see it. `videoNoteSplice` walks the variation's
+own PGN, so it proves the notes fire on those positions and says nothing about
+whether a student can get there. It was found by driving prod: the Caro picker
+offered seven tiles for eight variations.
+
+**Adding curated tab entries is NOT the fix on its own, and was reverted.**
+`lessonTabIntegrity` is a locked gate: every masterclass variation tab must have
+its own `LessonScript`, or it falls back to the main-line lesson and shows the
+student a duplicate. Wiring the ten tabs failed it on all nine openings, with the
+gate stating the choice outright — *"Add a lesson … or drop the tab."*
+
+**So the remaining step is authoring, not wiring:** one hand-written
+`LessonScript` per fork, keyed `<openingId>::<variation name>`, to the masterclass
+standard (two registers on every beat, lead-the-eye arrows, `sources[]`,
+board-verified). The tab entry goes in with the lesson, in the same change. Half
+of the teaching already exists — each fork was chosen because notes were written
+against its positions, and those notes are the spine of the beats.
+
+Until then the forks are not wasted: the notes fire on those positions in free
+play and review, where a student reaches whatever they reach.
 
 ## Also in this pass
 
