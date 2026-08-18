@@ -19,6 +19,9 @@ on:
       max_res:
         description: 'height cap'
         default: '480'
+      extra:
+        description: 'extra yt-dlp args (client experiments without re-editing this file)'
+        default: ''
 concurrency:
   group: video-harvest
 permissions:
@@ -40,7 +43,7 @@ jobs:
           ok=0; fail=0; streak=0
           for id in ${{ github.event.inputs.ids }}; do
             echo "::group::$id"
-            if timeout 600 yt-dlp --remote-components ejs:npm \
+            if timeout 600 yt-dlp --remote-components ejs:npm ${{ github.event.inputs.extra }} \
                  -f "135/134/bestvideo[height<=${{ github.event.inputs.max_res }}]/bestvideo" \
                  -o "drop/$id.mp4" "https://www.youtube.com/watch?v=$id"; then
               ok=$((ok+1)); streak=0
