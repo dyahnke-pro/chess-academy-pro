@@ -38,12 +38,25 @@ jobs:
           sudo npm i -g deno >/dev/null 2>&1 || npm i -g deno
           bash scripts/video-align/pot-server.sh
       - name: download serially
+        env:
+          YT_COOKIES: ${{ secrets.YT_COOKIES }}
         run: |
           mkdir -p drop
+          # Optional cookies, via a real GitHub secret ONLY (masked in logs).
+          # Runners are bot-gated logged-out — verified on both the default and
+          # tv clients, 2026-08-18. The secret cannot be set from a session
+          # (org policy blocks the API); David adds it in repo Settings →
+          # Secrets → Actions if he chooses to. NEVER pass cookies through
+          # workflow inputs — this repo is public and inputs are visible.
+          CK=""
+          if [ -n "$YT_COOKIES" ]; then
+            printf '%s\n' "$YT_COOKIES" > /tmp/ck.txt && chmod 600 /tmp/ck.txt
+            CK="--cookies /tmp/ck.txt"
+          fi
           ok=0; fail=0; streak=0
           for id in ${{ github.event.inputs.ids }}; do
             echo "::group::$id"
-            if timeout 600 yt-dlp --remote-components ejs:npm ${{ github.event.inputs.extra }} \
+            if timeout 600 yt-dlp $CK --remote-components ejs:npm ${{ github.event.inputs.extra }} \
                  -f "135/134/bestvideo[height<=${{ github.event.inputs.max_res }}]/bestvideo" \
                  -o "drop/$id.mp4" "https://www.youtube.com/watch?v=$id"; then
               ok=$((ok+1)); streak=0
