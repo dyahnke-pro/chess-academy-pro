@@ -91,6 +91,32 @@ describe('every Learn picker routes to the stage its label promises', () => {
     }
   });
 
+  it('an in-lesson chip carries the opening, so switching subjects never loses it', () => {
+    // David 2026-08-17: *"if i chose quiz lines, but get tired of that, i want
+    // to see different quiz options about the same opening"*. The start picker
+    // hides once a lesson begins, so changing activity mid-opening meant
+    // retyping the name — and typing a deictic instead is what sent the router
+    // hunting for an opening called "lines".
+    //
+    // The in-lesson row builds each chip from the ACTIVE opening name, so the
+    // request is unambiguous however many subjects the student moves through.
+    // Simulated here as the component does it: buildInput(activeOpening).
+    const active = 'Vienna Game';
+    const chips: ReadonlyArray<[(o: string) => string, TeachStage | null]> = [
+      [(o) => `drill ${o}`, 'drill'],
+      [(o) => `quiz me on ${o}`, 'concepts'],
+      [(o) => `punish lines for ${o}`, 'punish'],
+      [(o) => `play it for real ${o}`, 'play-real'],
+    ];
+    for (const [build, stage] of chips) {
+      const { stage: got, remainder } = routeStage(build(active));
+      expect(got, `"${build(active)}"`).toBe(stage);
+      // The name must survive every hop, or the second subject change lands
+      // the student in a lesson about nothing.
+      expect(resolveOpeningEntry(remainder), `"${remainder}" lost the opening`).toBeTruthy();
+    }
+  });
+
   it('keeps "play through" a walkthrough, not a game', () => {
     // The distinction the play patterns are carefully written around: asking to
     // play THROUGH a line is a request to watch it, and routing that to a live

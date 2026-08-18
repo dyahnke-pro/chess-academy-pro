@@ -10365,6 +10365,57 @@ export function CoachTeachPage(): JSX.Element {
             );
           })()}
 
+          {/* IN-LESSON PICKER — the same actions, still scoped to the opening
+              you are already in (David 2026-08-17: *"if i chose quiz lines, but
+              get tired of that, i want to see different quiz options about the
+              same opening"*).
+
+              The start picker hides the moment a lesson begins, so switching
+              from one activity to another mid-opening meant typing the opening
+              name again — and typing a deictic instead ("quiz me on lines") is
+              exactly what sent the router hunting for an opening called
+              "lines". This removes the need to say it at all: every chip
+              carries the ACTIVE opening name, so the request is never
+              ambiguous no matter how many subjects the student moves through.
+
+              Deliberately excludes the action already running — offering
+              "Quiz me on the Vienna" during a Vienna quiz is noise, and the
+              point of the row is somewhere ELSE to go. */}
+          {walkthrough.tree?.openingName && !streaming && !kickoffStatus && !linePicker && (() => {
+            const active = walkthrough.tree?.openingName;
+            if (!active) return null;
+            const others = PICKER_ACTIONS.filter((a) => a.id !== 'player' && a.id !== pickerAction);
+            if (!others.length) return null;
+            return (
+              <div className="mt-3 space-y-1.5" data-testid="teach-inlesson-picker">
+                <div
+                  className="text-[11px] font-medium uppercase tracking-wide px-1"
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
+                  More on the {active}
+                </div>
+                <div className="flex flex-wrap gap-1.5">
+                  {others.map((a) => (
+                    <button
+                      key={a.id}
+                      type="button"
+                      onClick={() => {
+                        setPickerAction(a.id);
+                        void handleSubmit(a.buildInput(active));
+                      }}
+                      className="px-2.5 py-1.5 rounded-md border text-xs hover:opacity-80 transition-opacity"
+                      style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
+                      data-testid={`teach-inlesson-${a.id}`}
+                      title={a.description}
+                    >
+                      {a.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            );
+          })()}
+
           {/* Rolodex Start button (WO-ROLODEX-PLUMBING-01 item 3a).
               When the page was opened via `?opening=<name>`, the
               welcome line invites the student to start that specific
