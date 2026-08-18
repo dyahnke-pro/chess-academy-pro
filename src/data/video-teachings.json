@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-18",
  "videosDistilled": 55,
- "noteCount": 151,
+ "noteCount": 147,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -2204,6 +2204,30 @@
      "square": "d5"
     }
    ],
+   "options": [
+    {
+     "san": "Bg7",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "d4"
+      }
+     ]
+    },
+    {
+     "san": "Nf6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e4"
+      },
+      {
+       "kind": "controls",
+       "square": "d5"
+      }
+     ]
+    }
+   ],
    "forkOf": {
     "atLine": [
      "e4",
@@ -2257,69 +2281,6 @@
      "square": "a7"
     }
    ]
-  },
-  {
-   "id": "vn-fork-bishop-first-or-knight-first",
-   "lineSan": [
-    "e4",
-    "c5",
-    "Nf3",
-    "Nc6",
-    "d4",
-    "cxd4",
-    "Nxd4",
-    "g6",
-    "c4"
-   ],
-   "opening": "Sicilian Defense: Open",
-   "phase": "opening",
-   "explains": "Both centre pawns are on the fourth rank and the knight is coming out. Two orders come into consideration: putting the bishop on the long diagonal now, or bringing the king's knight out first and leaving the fianchetto for a move.",
-   "teaches": "Against a clamp, move order decides what the opponent learns about your setup. Completing the fianchetto commits the bishop and gets the king closer to safety. Developing the knight first keeps the bishop's square free for one more move and asks the clamp to declare itself. The positions usually transpose; the information does not.",
-   "plans": "",
-   "concepts": [],
-   "sources": [
-    "yt:Oj04sSCzraE"
-   ],
-   "positionSource": "high",
-   "options": [
-    {
-     "san": "Bg7",
-     "reasons": [
-      {
-       "kind": "attacks",
-       "square": "d4"
-      }
-     ]
-    },
-    {
-     "san": "Nf6",
-     "reasons": [
-      {
-       "kind": "attacks",
-       "square": "e4"
-      },
-      {
-       "kind": "controls",
-       "square": "d5"
-      }
-     ]
-    }
-   ],
-   "forkOf": {
-    "atLine": [
-     "e4",
-     "c5",
-     "Nf3",
-     "Nc6",
-     "d4",
-     "cxd4",
-     "Nxd4",
-     "g6"
-    ],
-    "taughtMove": "Nc3",
-    "alternative": "c4",
-    "lineName": "Sicilian: Dragon / Accelerated Dragon: Maróczy with ...Qb6"
-   }
   },
   {
    "id": "vn-belgrade-remove-the-guard",
@@ -2651,6 +2612,30 @@
      "kind": "controls",
      "square": "e6"
     }
+   ],
+   "options": [
+    {
+     "san": "b5",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "c4"
+      }
+     ]
+    },
+    {
+     "san": "d6",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "c5"
+      },
+      {
+       "kind": "controls",
+       "square": "e5"
+      }
+     ]
+    }
    ]
   },
   {
@@ -2684,50 +2669,6 @@
     {
      "kind": "defends",
      "square": "h2"
-    }
-   ]
-  },
-  {
-   "id": "vn-fork-hit-the-wedge-or-support-it",
-   "lineSan": [
-    "d4",
-    "Nf6",
-    "Bf4",
-    "c5",
-    "d5"
-   ],
-   "opening": "Indian Defense: Accelerated London System",
-   "phase": "opening",
-   "explains": "The pawn has advanced to d5 and taken squares in the centre. One try hits it from the side with the b-pawn, aiming to undermine the pawn holding the wedge. The other plays the quiet central pawn move, accepting the space and building behind it.",
-   "teaches": "A pawn pushed past you can be attacked from the side or simply lived with. The wing pawn strikes at its base and opens lines while the position is still fluid; the modest central move supports your own pawn and keeps everything closed. The first plays for the initiative, the second for structure.",
-   "plans": "",
-   "concepts": [],
-   "sources": [
-    "yt:RzfG5SfKRak"
-   ],
-   "positionSource": "high",
-   "options": [
-    {
-     "san": "b5",
-     "reasons": [
-      {
-       "kind": "controls",
-       "square": "c4"
-      }
-     ]
-    },
-    {
-     "san": "d6",
-     "reasons": [
-      {
-       "kind": "defends",
-       "square": "c5"
-      },
-      {
-       "kind": "controls",
-       "square": "e5"
-      }
-     ]
     }
    ]
   },
@@ -3137,6 +3078,26 @@
      "kind": "controls",
      "square": "g4"
     }
+   ],
+   "options": [
+    {
+     "san": "O-O",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "g7"
+      }
+     ]
+    },
+    {
+     "san": "Nc6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "d4"
+      }
+     ]
+    }
    ]
   },
   {
@@ -3184,54 +3145,6 @@
     {
      "kind": "attacks",
      "square": "a7"
-    }
-   ]
-  },
-  {
-   "id": "vn-fork-castle-now-or-bring-the-knight",
-   "lineSan": [
-    "e4",
-    "c5",
-    "Nf3",
-    "d6",
-    "d4",
-    "cxd4",
-    "Nxd4",
-    "Nf6",
-    "Nc3",
-    "g6",
-    "Be3",
-    "Bg7",
-    "f3"
-   ],
-   "opening": "Sicilian Defense",
-   "phase": "opening",
-   "explains": "White has played the pawn to f3, which is the move that makes the whole attacking setup work. Two replies come into consideration: castling immediately and accepting the race, or developing the queen's knight and keeping the king's destination open for another move.",
-   "teaches": "Facing a setup that intends to castle the other way and storm your king, the choice is whether to get the king tucked away first or to finish development. Castling commits your king to the side the pawns are coming toward; the knight keeps every option and contests the centre while you decide.",
-   "plans": "",
-   "concepts": [],
-   "sources": [
-    "yt:YzI6qI-33_U"
-   ],
-   "positionSource": "high",
-   "options": [
-    {
-     "san": "O-O",
-     "reasons": [
-      {
-       "kind": "defends",
-       "square": "g7"
-      }
-     ]
-    },
-    {
-     "san": "Nc6",
-     "reasons": [
-      {
-       "kind": "attacks",
-       "square": "d4"
-      }
-     ]
     }
    ]
   },
@@ -6099,6 +6012,26 @@
      "kind": "attacks",
      "square": "c3"
     }
+   ],
+   "options": [
+    {
+     "san": "a3",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "b4"
+      }
+     ]
+    },
+    {
+     "san": "Bf4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "b8"
+      }
+     ]
+    }
    ]
   },
   {
@@ -6188,49 +6121,6 @@
     {
      "kind": "attacks",
      "square": "g7"
-    }
-   ]
-  },
-  {
-   "id": "vn-fork-meet-the-pin-or-develop-past-it",
-   "lineSan": [
-    "e4",
-    "c6",
-    "d4",
-    "d5",
-    "f3",
-    "e6",
-    "Nc3",
-    "Bb4"
-   ],
-   "opening": "Caro-Kann Defense: Maróczy Variation",
-   "phase": "opening",
-   "explains": "The bishop has come to b4 pinning the knight on c3. One try pokes it with the a-pawn at once, so the bishop must take, retreat or commit. The other ignores it and brings the dark-squared bishop out, leaving the pin in place while the pieces come to their squares.",
-   "teaches": "When a bishop pins your knight, you can spend a pawn move asking it to decide or carry on developing and let it sit there. The pawn move costs a tempo and wins the bishop pair or a clarified structure; developing past it keeps the initiative and accepts the pin. Both are played; neither is a mistake.",
-   "plans": "",
-   "concepts": [],
-   "sources": [
-    "yt:zprg2WbmgzQ"
-   ],
-   "positionSource": "high",
-   "options": [
-    {
-     "san": "a3",
-     "reasons": [
-      {
-       "kind": "attacks",
-       "square": "b4"
-      }
-     ]
-    },
-    {
-     "san": "Bf4",
-     "reasons": [
-      {
-       "kind": "attacks",
-       "square": "b8"
-      }
-     ]
     }
    ]
   }

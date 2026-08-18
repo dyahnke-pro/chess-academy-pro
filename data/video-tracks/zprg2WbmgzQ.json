@@ -287,6 +287,26 @@
      "square": "c3"
     }
    ],
+   "options": [
+    {
+     "san": "a3",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "b4"
+      }
+     ]
+    },
+    {
+     "san": "Bf4",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "b8"
+      }
+     ]
+    }
+   ],
    "fen": "rnbqk1nr/pp3ppp/2p1p3/3p4/1b1PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 2 5",
    "t": 182,
    "ply": 8,
@@ -326,36 +346,6 @@
    "fen": "2kr2r1/pb1n1pQp/1pp1pn2/q7/2PP4/P2B3N/1BP3PP/R4RK1 w - - 1 16",
    "t": 823.5,
    "ply": 30,
-   "source": "yt:zprg2WbmgzQ"
-  },
-  {
-   "id": "vn-fork-meet-the-pin-or-develop-past-it",
-   "line": "e4 c6 d4 d5 f3 e6 Nc3 Bb4",
-   "teaches": "When a bishop pins your knight, you can spend a pawn move asking it to decide or carry on developing and let it sit there. The pawn move costs a tempo and wins the bishop pair or a clarified structure; developing past it keeps the initiative and accepts the pin. Both are played; neither is a mistake.",
-   "explains": "The bishop has come to b4 pinning the knight on c3. One try pokes it with the a-pawn at once, so the bishop must take, retreat or commit. The other ignores it and brings the dark-squared bishop out, leaving the pin in place while the pieces come to their squares.",
-   "options": [
-    {
-     "san": "a3",
-     "reasons": [
-      {
-       "kind": "attacks",
-       "square": "b4"
-      }
-     ]
-    },
-    {
-     "san": "Bf4",
-     "reasons": [
-      {
-       "kind": "attacks",
-       "square": "b8"
-      }
-     ]
-    }
-   ],
-   "fen": "rnbqk1nr/pp3ppp/2p1p3/3p4/1b1PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 2 5",
-   "t": 182,
-   "ply": 8,
    "source": "yt:zprg2WbmgzQ"
   }
  ]

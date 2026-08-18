@@ -690,36 +690,6 @@
      "square": "g4"
     }
    ],
-   "fen": "rnbqk2r/pp2ppbp/3p1np1/8/3NP3/2N1BP2/PPP3PP/R2QKB1R b KQkq - 0 7",
-   "t": 1666.5,
-   "ply": 13,
-   "source": "yt:YzI6qI-33_U"
-  },
-  {
-   "id": "vn-yugoslav-trade-the-bishop-that-guards-the-king",
-   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O O-O-O d5 exd5 Nxd5 Nxc6 bxc6 Bd4",
-   "teaches": "When attacking a fianchettoed king, the piece to remove is the bishop on the long diagonal — it is the only defender that covers the dark squares around the king. Getting your own bishop onto the same diagonal facing it forces the trade or forces the king's guard to stay home, and either answer helps the attack.",
-   "explains": "The knights have come off in the centre and the bishop steps to d4, straight down the long diagonal at the bishop on g7. It hits the pawn on a7 on the way and holds the knight on c3 behind it. The defender must either accept the exchange of the king's best guard or spend moves avoiding it while the pawns are already coming.",
-   "reasons": [
-    {
-     "kind": "attacks",
-     "square": "g7"
-    },
-    {
-     "kind": "attacks",
-     "square": "a7"
-    }
-   ],
-   "fen": "r1bq1rk1/p3ppbp/2p3p1/3n4/3B4/2N2P2/PPPQ2PP/2KR1B1R b - - 1 12",
-   "t": 1691.5,
-   "ply": 23,
-   "source": "yt:YzI6qI-33_U"
-  },
-  {
-   "id": "vn-fork-castle-now-or-bring-the-knight",
-   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3",
-   "teaches": "Facing a setup that intends to castle the other way and storm your king, the choice is whether to get the king tucked away first or to finish development. Castling commits your king to the side the pawns are coming toward; the knight keeps every option and contests the centre while you decide.",
-   "explains": "White has played the pawn to f3, which is the move that makes the whole attacking setup work. Two replies come into consideration: castling immediately and accepting the race, or developing the queen's knight and keeping the king's destination open for another move.",
    "options": [
     {
      "san": "O-O",
@@ -743,6 +713,26 @@
    "fen": "rnbqk2r/pp2ppbp/3p1np1/8/3NP3/2N1BP2/PPP3PP/R2QKB1R b KQkq - 0 7",
    "t": 1666.5,
    "ply": 13,
+   "source": "yt:YzI6qI-33_U"
+  },
+  {
+   "id": "vn-yugoslav-trade-the-bishop-that-guards-the-king",
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O O-O-O d5 exd5 Nxd5 Nxc6 bxc6 Bd4",
+   "teaches": "When attacking a fianchettoed king, the piece to remove is the bishop on the long diagonal — it is the only defender that covers the dark squares around the king. Getting your own bishop onto the same diagonal facing it forces the trade or forces the king's guard to stay home, and either answer helps the attack.",
+   "explains": "The knights have come off in the centre and the bishop steps to d4, straight down the long diagonal at the bishop on g7. It hits the pawn on a7 on the way and holds the knight on c3 behind it. The defender must either accept the exchange of the king's best guard or spend moves avoiding it while the pawns are already coming.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "g7"
+    },
+    {
+     "kind": "attacks",
+     "square": "a7"
+    }
+   ],
+   "fen": "r1bq1rk1/p3ppbp/2p3p1/3n4/3B4/2N2P2/PPPQ2PP/2KR1B1R b - - 1 12",
+   "t": 1691.5,
+   "ply": 23,
    "source": "yt:YzI6qI-33_U"
   }
  ]
