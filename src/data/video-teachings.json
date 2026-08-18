@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-18",
- "videosDistilled": 38,
- "noteCount": 112,
+ "videosDistilled": 40,
+ "noteCount": 118,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -940,6 +940,110 @@
     {
      "kind": "attacks",
      "square": "f6"
+    }
+   ]
+  },
+  {
+   "id": "vn-earlyqueen-queen-out-with-a-job",
+   "lineSan": [
+    "d4",
+    "c5",
+    "e4",
+    "cxd4",
+    "Qxd4",
+    "Nc6",
+    "Qa4"
+   ],
+   "opening": "Sicilian Defense: Smith-Morra Gambit",
+   "phase": "opening",
+   "explains": "The knight has come to c6 hitting the queen, and instead of retreating she steps sideways to a4, where she hits that same knight back and eyes the pawn on a7. She also holds the pawns on c2 and e4 from there. The move that was supposed to gain time has instead put the knight on a square where it is the piece being asked questions.",
+   "teaches": "Bringing the queen out early is only bad when she has to move again. Look for the square where the move that chases her has already been made — from there she is out, doing something, and the tempo the opponent expected to win is not available.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Fz0_pECE5vo"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c6"
+    },
+    {
+     "kind": "defends",
+     "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-earlyqueen-small-pawn-that-builds-a-fence",
+   "lineSan": [
+    "d4",
+    "c5",
+    "e4",
+    "cxd4",
+    "Qxd4",
+    "Nc6",
+    "Qa4",
+    "g6",
+    "Bd2",
+    "Bg7",
+    "c3"
+   ],
+   "opening": "Sicilian Defense: Smith-Morra Gambit",
+   "phase": "opening",
+   "explains": "The pawn goes to c3 covering b4 and d4, which are the two squares a bishop or knight would use to come at the queen with tempo. It also blunts the fianchettoed bishop's diagonal. Nothing is developed by the move and the position becomes much harder to play against, because the loose piece stops being loose.",
+   "teaches": "When your queen is out and slightly exposed, the pawn move that covers the squares an enemy piece would use to attack her is worth more than another developing move. Count where the attack could come from, then take those squares away — a queen nobody can hit is simply a developed piece.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Fz0_pECE5vo"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "b4"
+    },
+    {
+     "kind": "controls",
+     "square": "d4"
+    }
+   ]
+  },
+  {
+   "id": "vn-earlyqueen-repeat-or-commit",
+   "lineSan": [
+    "d4",
+    "c5",
+    "e4",
+    "cxd4",
+    "Qxd4",
+    "Nc6",
+    "Qa4",
+    "g6",
+    "Bd2",
+    "Bg7",
+    "c3",
+    "Nf6",
+    "Bf4"
+   ],
+   "opening": "Sicilian Defense: Smith-Morra Gambit",
+   "phase": "opening",
+   "explains": "The bishop has come to f4 covering the dark squares in the middle. Black can step the knight back and invite the bishop to return, or castle and get on with the game. Both are playable and they lead to completely different results, so this is the moment to know which one you want.",
+   "teaches": "When a bishop lands on a square the opponent can challenge by shuffling a knight, the position is offering a repetition. Taking it is a legitimate result and refusing it is a decision — but decide, rather than drifting into the same squares three times without noticing what you agreed to.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Fz0_pECE5vo"
+   ],
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Ng8"
+    },
+    {
+     "san": "O-O"
     }
    ]
   },
@@ -1979,6 +2083,128 @@
     {
      "kind": "attacks",
      "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-yugoslav-bishop-that-guards-its-own-knight",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "Be3"
+   ],
+   "opening": "Sicilian Defense",
+   "phase": "opening",
+   "explains": "The bishop comes to e3, where it holds the knight in the centre and covers the squares in front of it. The fianchettoed bishop on g7 is aimed down the long diagonal at that knight, and this quietly answers it — the knight is no longer loose, so the pawn breaks that would have won it are simply moves.",
+   "teaches": "Against a fianchetto the dark-squared bishop belongs where it both supports your own centre and contests the diagonal the enemy bishop was put on. A developing move that defends the piece already in the middle costs nothing and removes every tactic built on hitting it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:YzI6qI-33_U"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    },
+    {
+     "kind": "defends",
+     "square": "f2"
+    }
+   ]
+  },
+  {
+   "id": "vn-yugoslav-pawn-that-buys-the-whole-plan",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "g6",
+    "Be3",
+    "Bg7",
+    "f3"
+   ],
+   "opening": "Sicilian Defense",
+   "phase": "opening",
+   "explains": "The pawn steps to f3, defending the pawn on e4 and covering g4 so no bishop or knight can land there. That single move is what makes the whole setup work: the centre cannot be undermined, the kingside pawns are free to advance, and the king has somewhere to go on the other wing.",
+   "teaches": "Before castling on the side you intend to attack, spend the pawn move that makes the attack legal. Holding the centre pawn and covering the square an enemy piece would use to come forward is what lets the king go the other way and the pawns march — without it, the attack is a plan the position cannot support.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:YzI6qI-33_U"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    },
+    {
+     "kind": "controls",
+     "square": "g4"
+    }
+   ]
+  },
+  {
+   "id": "vn-yugoslav-trade-the-bishop-that-guards-the-king",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "g6",
+    "Be3",
+    "Bg7",
+    "f3",
+    "Nc6",
+    "Qd2",
+    "O-O",
+    "O-O-O",
+    "d5",
+    "exd5",
+    "Nxd5",
+    "Nxc6",
+    "bxc6",
+    "Bd4"
+   ],
+   "opening": "Sicilian Defense",
+   "phase": "opening",
+   "explains": "The knights have come off in the centre and the bishop steps to d4, straight down the long diagonal at the bishop on g7. It hits the pawn on a7 on the way and holds the knight on c3 behind it. The defender must either accept the exchange of the king's best guard or spend moves avoiding it while the pawns are already coming.",
+   "teaches": "When attacking a fianchettoed king, the piece to remove is the bishop on the long diagonal — it is the only defender that covers the dark squares around the king. Getting your own bishop onto the same diagonal facing it forces the trade or forces the king's guard to stay home, and either answer helps the attack.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:YzI6qI-33_U"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "g7"
+    },
+    {
+     "kind": "attacks",
+     "square": "a7"
     }
    ]
   },
