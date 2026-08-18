@@ -56,6 +56,15 @@ function extractCoachChoices(raw: string): string[] | null {
 
 interface GameChatPanelProps {
   fen: string;
+  /** Checked reasons for the move just played, computed by the surface from
+   *  the PRE-move board (which is gone by the time a question arrives).
+   *
+   *  ACCESS, NOT VOICE. Play never volunteers this — it is here so that when
+   *  the student asks "why was that good?" the answer is already grounded in
+   *  facts verified against the board, rather than the brain reasoning about
+   *  the position from scratch. David 2026-08-18: *"Play stays silent. I just
+   *  want coach to have access to the info."* */
+  lastMoveReasons?: { san: string; line: string } | null;
   /**
    * Live FEN getter off the underlying chess.js instance. `fen` (above) is
    * a React snapshot that lags the true board by a render, so building the
@@ -175,6 +184,7 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
       isGameOver,
       history,
       lastMoveBy,
+      lastMoveReasons,
       className,
       onBoardAnnotation,
       onRestartGame,
@@ -801,6 +811,14 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             engineBestMoveUci: cachedSf?.bestMove,
             evalCp: cachedSf && !cachedSf.isMate ? cachedSf.evaluation : undefined,
             evalMateIn: cachedSf?.isMate ? (cachedSf.mateIn ?? undefined) : undefined,
+            // The move just played, already verified against the board it was
+            // played on. Handed over on EVERY ask rather than only on a
+            // why-question, because "was that ok?", "what did I miss?" and
+            // "should I have taken?" are all the same question and none of them
+            // matches a keyword reliably. It costs one short line in the
+            // envelope and it means the coach answers from a checked fact
+            // instead of re-deriving one.
+            lastMoveReasons: lastMoveReasons ?? undefined,
           };
           void logAppAudit({
             kind: 'coach-surface-migrated',

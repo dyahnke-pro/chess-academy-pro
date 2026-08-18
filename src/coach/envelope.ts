@@ -702,6 +702,20 @@ function formatLiveStateBlock(state: LiveState): string {
       `- Engine eval (PRE-COMPUTED, white-perspective): ${state.evalCp}cp — ${describeEval(state.evalCp)}. This is engine ground truth — do not contradict it with your own material counting. When making "winning"/"losing"/"up material"/"down material" claims, USE THIS NUMBER, not your eyeball count.`,
     );
   }
+  // THE MOVE JUST PLAYED, ALREADY CHECKED. Handed over as a fact the coach
+  // VOICES rather than a position it reasons about — the squares in this line
+  // were each verified against the board the move was played from, so a
+  // "why was that good?" answer is phrasing, not derivation (G0).
+  //
+  // Explicitly marked as answer-only. On Play the coach must never bring it up
+  // unprompted — that surface stays silent until the student asks (David
+  // 2026-08-18), and a fact sitting in the envelope is exactly the kind of
+  // thing a model will volunteer if nothing tells it not to.
+  if (state.lastMoveReasons) {
+    parts.push(
+      `- Why ${state.lastMoveReasons.san} worked (VERIFIED on the board it was played from — state this rather than deriving your own): ${state.lastMoveReasons.line} Use it ONLY if the student asks about that move; never raise it unprompted.`,
+    );
+  }
   if (state.enginePlan && state.enginePlan.pvSan.length > 0) {
     parts.push(formatEnginePlanSubBlock(state.enginePlan));
   }

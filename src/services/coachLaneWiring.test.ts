@@ -247,26 +247,49 @@ describe('phase narration is judged against the board it was computed from', () 
   // multi-reason rule verified prose at authoring time and reached no student.
   // A wire that does not fire is not a wire (David 2026-08-07), and the way
   // this one dies is silently — every other lane keeps working.
-  // ── PLAY GETS THE REASONS TOO ────────────────────────────────────────────
+  // ── PLAY GETS THE REASONS, AND STAYS SILENT ──────────────────────────────
   //
-  // David 2026-08-18: *"And wire into Play!"* — and this is the wire most
-  // likely to rot, because Play's per-move path has several branches and the
-  // reason line sits in the one that used to do nothing at all.
+  // David 2026-08-18: *"Play stays silent. I just want coach to have access to
+  // the info."* A first pass spoke the reason on quiet moves and was wrong —
+  // the locked rule already said access is not permission to speak.
   //
-  // It fills the QUIET-MOVE slot specifically. `buildFastMoveLine` returns null
-  // when there is no blunder, no tactic and nothing hanging, which is most
-  // moves — Play said nothing there. The detectors keep priority; the reasons
-  // only take the slot they left empty.
-  it('speaks checked reasons on a quiet move in Play', () => {
+  // Both halves are gated, because each fails independently and each failure is
+  // invisible: the reasons can stop being computed (the coach then answers from
+  // nothing) or they can start being spoken (Play stops being a playing
+  // surface, which nobody would see in a test that only checked the data).
+  it('computes checked reasons in Play from the pre-move board', () => {
     expect(PLAY, 'the reason lane is not wired into coach-play at all')
       .toMatch(/reasonLineFor\(/);
     // From the PRE-move board. Handing it the post-move fen would check every
-    // claim against the wrong position and silently drop the true ones.
+    // claim against the wrong position and silently drop the true ones — and
+    // preFen is gone by the time a question arrives, which is why this is
+    // computed per move rather than lazily at ask time.
     expect(PLAY, 'the reason lane is reading the wrong board')
       .toMatch(/reasonLineFor\(preFen, moveResult\.san\)/);
-    // Silence stays available: 'off' means off, exactly as before this landed.
-    expect(PLAY, "the 'off' verbosity no longer silences the reason lane")
-      .toMatch(/verbosity === 'off' \? null : reasonLineFor/);
+    expect(PLAY, 'the computed reasons are not stored for the coach to answer with')
+      .toMatch(/lastMoveReasonsRef\.current = rl/);
+    expect(PLAY, 'the reasons never reach the chat panel')
+      .toMatch(/lastMoveReasons=\{lastMoveReasonsRef\.current\}/);
+  });
+
+  it('never speaks the reasons on Play', () => {
+    // The exact shape of the reverted mistake: assigning a reason line to the
+    // spoken commentary. Play may compute them and hand them to the coach; it
+    // may not put them in the voice.
+    expect(PLAY, 'Play is speaking the reasons again — it must stay silent')
+      .not.toMatch(/commentary = reasonLine\.spoken/);
+    expect(PLAY, 'Play is injecting the reasons into the transcript unprompted')
+      .not.toMatch(/injectAssistantMessage\(reasonLine/);
+  });
+
+  it('hands the reasons to the brain as answer-only material', () => {
+    const ENVELOPE = read('src/coach/envelope.ts');
+    expect(ENVELOPE, 'lastMoveReasons never reaches the prompt — a field on a type is not a wire')
+      .toMatch(/state\.lastMoveReasons/);
+    // Without this the model will volunteer it, which is the silence rule
+    // broken by a longer route.
+    expect(ENVELOPE, 'the brain is not told to keep it until asked')
+      .toMatch(/never raise it unprompted/);
   });
 
   it('speaks the move\'s checked reasons, and nothing when there are none', () => {
