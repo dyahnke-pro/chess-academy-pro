@@ -1,0 +1,22 @@
+[
+ {
+  "id": "vn-g6rossolimo-bishop-back-onto-the-pawn",
+  "line": "e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Re1 e5 Nc3 Nge7 d3 d6 Bg5 f6 Be3",
+  "teaches": "A bishop chased by a pawn should retreat onto a diagonal that already has a target. If the defender's pawn move to drive you away also weakened a square you can now hit, the retreat has cost nothing and the weakness is permanent.",
+  "explains": "The pawn has stepped to f6 to push the bishop off the diagonal, and the bishop drops back to e3, where it hits the pawn on c5 and covers d4. The pawn move that chased it cannot be taken back, and the squares it gave up are exactly the ones the bishop now works on.",
+  "reasons": [
+   { "kind": "attacks", "square": "c5" },
+   { "kind": "controls", "square": "d4" }
+  ]
+ },
+ {
+  "id": "vn-g6rossolimo-offer-the-trade-the-king-cannot-decline",
+  "line": "e4 c5 Nf3 Nc6 Bb5 g6 O-O Bg7 Re1 e5 Nc3 Nge7 d3 d6 Bg5 f6 Be3 Be6 Qd2 O-O Bh6",
+  "teaches": "Against a fianchettoed king, put your bishop where it offers a trade the defender cannot sensibly refuse. Once the guard of the dark squares comes off, every square around the king that a pawn does not cover belongs to the attacker — and the pawns there can never cover them again.",
+  "explains": "The bishop steps to h6 and offers itself for the bishop on g7, which is the only piece holding the dark squares near the king. It is defended by the queen behind it, so the offer is real. Declining leaves the bishop sitting on the king's doorstep; accepting hands over the squares the fianchetto was built to hold.",
+  "reasons": [
+   { "kind": "attacks", "square": "g7" },
+   { "kind": "defends", "square": "d2" }
+  ]
+ }
+]
