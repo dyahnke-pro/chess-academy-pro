@@ -50,4 +50,57 @@ describe('configuration claims', () => {
   it('an unreadable board judges nothing rather than guessing', () => {
     expect(falseConfigurationClaim(THE_LIE, 'not a fen')).toBeNull();
   });
+
+  describe('the endgame TYPE a note names', () => {
+    // Heard on prod (David 2026-08-18) in a Pirc free-play game. Two knights
+    // and a bishop are still on and White has five pawns, so the sentence is
+    // wrong twice over — and it named no square, so nothing before this caught
+    // it. The whole of the advice that follows rests on the type being right.
+    const NOT_A_ROOK_ENDING = '4r3/p7/2p2k1p/4b3/1P6/P2Nn1P1/2P4P/2K4R w - - 0 27';
+
+    it('refuses "the rook endgame" while minor pieces are still on', () => {
+      expect(falseConfigurationClaim(
+        'The rook endgame turns on removing both white pawns while keeping at least one black pawn.',
+        NOT_A_ROOK_ENDING,
+      )).toBe('a rook endgame');
+    });
+
+    it('refuses "both white pawns" when the side has five', () => {
+      expect(falseConfigurationClaim('Trade off both white pawns.', NOT_A_ROOK_ENDING))
+        .toBe('exactly two white pawns');
+    });
+
+    it('allows "the rook endgame" when rooks really are the only pieces left', () => {
+      // Same position with the minor pieces removed. The sentence deliberately
+      // claims nothing else — an earlier draft of this test also said "turns on
+      // the passed pawn" and was refused, correctly: no pawn here is passed.
+      expect(configurationClaimsHold(
+        'The rook endgame turns on which king gets active first.',
+        '4r3/p7/2p2k1p/8/1P6/P5P1/2P4P/2K4R w - - 0 27',
+      )).toBe(true);
+    });
+
+    it('refuses a pawn endgame while a rook is still on', () => {
+      expect(falseConfigurationClaim('This king and pawn endgame is won.', NOT_A_ROOK_ENDING))
+        .toBe('a pawn endgame');
+    });
+
+    it('settles opposite-coloured bishops by the squares they stand on', () => {
+      // Bishops on e6 and c3 — different square colours, the real thing.
+      expect(configurationClaimsHold(
+        'Opposite-coloured bishops make this hard to win.',
+        '8/5k2/4b3/8/8/2B5/5K2/8 w - - 0 1',
+      )).toBe(true);
+      // Bishops on e6 and d3 — the SAME colour, which looks opposite at a
+      // glance and is exactly the pair an author would get wrong.
+      expect(falseConfigurationClaim(
+        'Opposite-coloured bishops make this hard to win.',
+        '8/5k2/4b3/8/8/3B4/5K2/8 w - - 0 1',
+      )).toBe('opposite-coloured bishops');
+    });
+
+    it('says nothing about a note that names no endgame type', () => {
+      expect(configurationClaimsHold('Bring the king toward the centre.', NOT_A_ROOK_ENDING)).toBe(true);
+    });
+  });
 });

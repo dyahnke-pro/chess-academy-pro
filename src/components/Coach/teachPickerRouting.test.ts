@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { routeStage, type TeachStage } from './teachStageRouting';
 import { resolveOpeningEntry } from '../../services/openingDetectionService';
+import { TEACHING_OFFERS, pickTeachingOffers } from '../../data/coachGreetings';
 
 /**
  * Does every picker actually DO what its label promises?
@@ -131,5 +132,59 @@ describe('every Learn picker routes to the stage its label promises', () => {
     expect(stage).toBe('play-real');
     expect(remainder.toLowerCase()).not.toMatch(/^in\b/);
     expect(resolveOpeningEntry(remainder)).toBeTruthy();
+  });
+
+  it('every kickoff teaching chip routes somewhere real and keeps its opening', () => {
+    // David 2026-08-18: the kickoff pickers were four questions about the
+    // STUDENT — rating, blunder rate, weaknesses — so the surface advertised
+    // its scoreboard and hid its teaching. They now lead with offers built from
+    // TEACHING_OFFERS, which makes those templates load-bearing: a chip is only
+    // as good as the regex its wording happens to hit, and the two failures
+    // this file already records were each one missing word.
+    //
+    // Asserted over the generated chip, not the template, because the failure
+    // mode is in the joining: an offer that routes perfectly can still eat the
+    // opening name and land the student in a lesson about nothing.
+    for (const opening of OPENINGS) {
+      for (const template of TEACHING_OFFERS) {
+        const chip = template.replace('{}', opening);
+        const { stage, remainder } = routeStage(chip);
+        expect(resolveOpeningEntry(opening), `${opening} does not resolve at all`).toBeTruthy();
+        if (/^teach me\b/i.test(template)) {
+          // The walkthrough default: no stage, and the teach VERB is stripped
+          // later by handleSubmit's own pattern rather than here — so the only
+          // thing to check at this layer is that the template left the name
+          // whole for it.
+          expect(stage, `"${chip}" should stay a plain walkthrough`).toBeNull();
+          expect(chip, `"${chip}" mangled the opening name`).toContain(opening);
+          continue;
+        }
+        expect(stage, `"${chip}" routed nowhere`).not.toBeNull();
+        expect(remainder.length, `the verb ate the name in "${chip}"`).toBeGreaterThan(0);
+        expect(resolveOpeningEntry(remainder), `"${chip}" -> "${remainder}" no longer resolves`).toBeTruthy();
+      }
+    }
+  });
+
+  it('spreads the chips across openings instead of five ways to study one', () => {
+    // Pairing offer k with opening k rather than nesting the loops: a student
+    // seeing "Teach me / Play / Traps in" all for the same opening learns less
+    // about what the coach can do than one chip each for three openings.
+    const chips = pickTeachingOffers(OPENINGS, 0, 3);
+    expect(chips).toHaveLength(3);
+    expect(new Set(chips).size).toBe(3);
+    const named = OPENINGS.filter((o) => chips.some((c) => c.includes(o)));
+    expect(named.length, `all three chips came from ${JSON.stringify(named)}`).toBeGreaterThan(1);
+  });
+
+  it('rotates, so opening the app twice does not show the same set', () => {
+    expect(pickTeachingOffers(OPENINGS, 0, 3)).not.toEqual(pickTeachingOffers(OPENINGS, 1, 3));
+  });
+
+  it('returns nothing rather than a broken chip when there are no openings', () => {
+    // The caller falls back to the stats pool; a chip reading "Teach me the "
+    // would route to the brain with an empty name.
+    expect(pickTeachingOffers([], 3, 3)).toEqual([]);
+    expect(pickTeachingOffers(['', ' '], 3, 3)).toEqual([]);
   });
 });

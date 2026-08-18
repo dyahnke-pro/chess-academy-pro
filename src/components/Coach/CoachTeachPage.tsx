@@ -84,7 +84,7 @@ import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../service
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
 import { gemId } from '../../data/lessons/punishGems';
-import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
+import { pickGreeting, pickSuggestedQuestions, pickTeachingOffers, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import type {
   WalkthroughTree,
@@ -8707,7 +8707,19 @@ export function CoachTeachPage(): JSX.Element {
       // chip they tap), still grounded (routes to a computed vertical). Cheap
       // stored read; null-guarded so a fresh profile just shows the generic set.
       if (!rolodexOpening) {
-        const generic = pickSuggestedQuestions(greetingRotation, 4);
+        // TEACHING LEADS, STATS FOLLOW (David 2026-08-18: *"These pickers I
+        // wanted to be more relevant"*). The pool used to be four questions
+        // about the student — rating, blunder rate, weaknesses — so the first
+        // thing a student saw was the scoreboard, and nothing on screen said
+        // the coach could teach them an opening, play one against them or drill
+        // its traps. Three offers built from openings they have favourited (or
+        // the ones taught deepest), then ONE stats question so that vertical is
+        // still discoverable.
+        const chipOpenings = favoriteOpenings.length > 0
+          ? favoriteOpenings.slice(0, 6).map((o) => o.name)
+          : FALLBACK_OPENING_NAMES;
+        const teaching = pickTeachingOffers(chipOpenings, greetingRotation, 3);
+        const generic = [...teaching, ...pickSuggestedQuestions(greetingRotation, 4 - teaching.length)];
         // Show the generic set immediately, then asynchronously upgrade to a
         // nudge-led set if a stored weakness profile is available (non-blocking
         // — the kickoff IIFE is synchronous). Null-guarded end to end.
@@ -8731,7 +8743,12 @@ export function CoachTeachPage(): JSX.Element {
             const top = (profile?.items ?? []).slice().sort((a, b) => b.severity - a.severity)[0];
             const nudge = top ? weaknessNudgeFromItem(top.category, top.label) : null;
             if (nudge) {
-              setCoachChoices([nudge, ...generic.filter((q) => q !== nudge)].slice(0, 4));
+              // Drop the STATS tail for the nudge, never a teaching offer: the
+              // nudge is itself a question about the student, and prepending it
+              // to a slice(0, 4) would otherwise push the teaching off screen
+              // one chip at a time — the same way the set David saw ended up
+              // with nothing but questions about himself on it.
+              setCoachChoices([nudge, ...teaching, ...generic.filter((q) => q !== nudge && !teaching.includes(q))].slice(0, 4));
             }
             let spokeCall = false;
             try {
@@ -8743,7 +8760,10 @@ export function CoachTeachPage(): JSX.Element {
                 spokeCall = true;
                 const chip = call.prescription === 'weakness' && nudge ? nudge : call.chip;
                 setMessages((prev) => [...prev, { id: uid('coachs-call'), role: 'assistant', content: call.line, timestamp: Date.now() }]);
-                setCoachChoices((prev) => [chip, ...(prev ?? generic).filter((q) => q !== chip)].slice(0, 4));
+                setCoachChoices((prev) => {
+                  const rest = (prev ?? generic).filter((q) => q !== chip && !teaching.includes(q));
+                  return [chip, ...teaching, ...rest].slice(0, 4);
+                });
                 speechChainRef.current = speechChainRef.current
                   .then(() => voiceService.speakForced(call.line))
                   .catch(() => undefined);
