@@ -924,6 +924,16 @@
    "line": "d4 d5 Nc3 Nf6 Bf4 Bf5 e3 e6 Nf3 Bb4 Bd6 Bc5 Bf4 Bd6 Ne5",
    "teaches": "A knight planted in the centre is often preparation for a pawn advance elsewhere, not an end in itself. Whether that advance works usually turns on move order — if the opponent can challenge the knight first, the whole plan arrives a move too late.",
    "explains": "The knight has landed on e5, and from here the choice is between castling and bringing the queen’s knight to d7. The difference matters: the knight on d7 can offer a trade on e5 and change the structure before White's kingside pawns get going, while castling leaves the centre alone and lets the storm start at once.",
+   "options": [
+    {
+     "san": "Nbd7",
+     "continuation": "Nbd7"
+    },
+    {
+     "san": "O-O",
+     "continuation": "O-O"
+    }
+   ],
    "fen": "rn1qk2r/ppp2ppp/3bpn2/3pNb2/3P1B2/2N1P3/PPP2PPP/R2QKB1R b KQkq - 7 8",
    "t": 2827.5,
    "ply": 15,
@@ -934,6 +944,16 @@
    "line": "d4 d5 Nc3 Nf6 Bf4 Bf5 e3 e6 Nf3 Bb4 Bd6 Bc5 Bf4 Bd6 Ne5 O-O",
    "teaches": "Pawns hunt bishops. When your king is castled on the side an enemy pawn storm is coming, count the squares your loose bishop can retreat to and check whether pawns cover them — a bishop with only defended squares to run to is still lost if every one of them can be taken by a pawn.",
    "explains": "The advance of the g-pawn drives the bishop, and after it steps to g6 the h-pawn comes too, threatening to push again. Every square the bishop can then reach is covered by a white pawn, so it can only come off for a pawn — which is why the alternative here was the quieter bishop to d3, inviting the trade on White's terms instead.",
+   "options": [
+    {
+     "san": "g4",
+     "continuation": "g4"
+    },
+    {
+     "san": "Bd3",
+     "continuation": "Bd3 Bxd3 cxd3 Nbd7"
+    }
+   ],
    "fen": "rn1q1rk1/ppp2ppp/3bpn2/3pNb2/3P1B2/2N1P3/PPP2PPP/R2QKB1R w KQ - 8 9",
    "t": 2830.5,
    "ply": 16,
@@ -944,6 +964,16 @@
    "line": "d4 d5 Nc3 Nf6 Bf4 c5 e3 cxd4 exd4",
    "teaches": "In a symmetrical-looking position the most natural developing move and the move that actually equalises are frequently not the same. Where a knight would be hit by a knight jumping to b5, a quiet pawn move that takes that square away can be worth more than a tempo of development.",
    "explains": "The centre has just been clarified and both sides look alike. Developing the queen's knight to c6 is the natural move and is the inaccuracy here, because the knight can be harried from b5; the small pawn move to a6 takes the square away first, and it is that line that holds the balance.",
+   "options": [
+    {
+     "san": "Nc6",
+     "continuation": "Nc6"
+    },
+    {
+     "san": "a6",
+     "continuation": "a6"
+    }
+   ],
    "fen": "rnbqkb1r/pp2pppp/5n2/3p4/3P1B2/2N5/PPP2PPP/R2QKBNR b KQkq - 0 5",
    "t": 2654.5,
    "ply": 9,

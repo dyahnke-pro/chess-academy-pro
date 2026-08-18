@@ -3,6 +3,7 @@
   "id": "vn-scandi-check-that-gets-in-the-way",
   "line": "e4 d5 exd5 Nf6 Bb5+ Bd7 Be2",
   "teaches": "A check is worth playing when the only ways to answer it all cost the defender something, even if you intend to retreat straight afterwards. Forcing a piece onto a square where it blocks its own side's plans buys a concession that no amount of quiet development would have obtained.",
-  "explains": "The bishop checked and has now stepped back, having achieved one thing: a black piece stands on d7. That square sits between the queen and the pawn on d5, so the queen can no longer take it back — only the knight can. White has spent two moves with the same bishop and still comes out ahead, because the interposition is permanent and the retreat costs nothing."
+  "explains": "The bishop checked and has now stepped back, having achieved one thing: a black piece stands on d7. That square sits between the queen and the pawn on d5, so the queen can no longer take it back — only the knight can. White has spent two moves with the same bishop and still comes out ahead, because the interposition is permanent and the retreat costs nothing.",
+  "structural": "the interposition is permanent — its checkable claim belongs to Bd7, not to the retreat it is anchored on"
  }
 ]

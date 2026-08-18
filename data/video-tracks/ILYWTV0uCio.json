@@ -704,6 +704,14 @@
    "line": "d4 Nf6 Bg5 d5 Bxf6",
    "teaches": "When a bishop takes your knight, the recapture is a choice about what you want the position to look like for the next thirty moves, not a reflex. Taking with the g-pawn accepts doubled pawns and looks ugly; in return it opens a file, keeps both bishops aimed at open diagonals, and leaves the e-pawn free — and doubled pawns that are not weak are simply pawns.",
    "explains": "The bishop has taken on f6, which is the whole point of putting it on g5. Both recaptures are legal. Taking with the e-pawn keeps the pawns tidy but leaves the queen's bishop staring at its own pawn. Taking with the g-pawn doubles them on f7 and f6, opens the g-file, and leaves Black with the pair of bishops, since White has just given the dark-squared one away.",
+   "options": [
+    {
+     "san": "gxf6"
+    },
+    {
+     "san": "exf6"
+    }
+   ],
    "fen": "rnbqkb1r/ppp1pppp/5B2/3p4/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 0 3",
    "t": 1301,
    "ply": 5,
@@ -714,6 +722,7 @@
    "line": "d4 Nf6 Bg5 d5 Bxf6 gxf6 e3",
    "teaches": "A pawn structure tells you which break to look for before any calculation begins. With a solid centre pawn and no dark-squared bishop opposing you, the lever against the queenside is the one that opens lines for the pieces you kept — read the structure, then find the move it asks for.",
    "explains": "White has closed the position in with the modest e-pawn, and Black's doubled f-pawns are not going anywhere. That makes the c-pawn advance the move the position wants: it strikes at the base of White's centre while the two bishops still have open diagonals to work along.",
+   "structural": "reads the structure to find the break; one move, so no fork",
    "fen": "rnbqkb1r/ppp1pp1p/5p2/3p4/3P4/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 4",
    "t": 1323,
    "ply": 7,

@@ -6269,6 +6269,16 @@
    "line": "d4 e5 dxe5 f6 e4",
    "teaches": "A pawn can be defended by consequences rather than by defenders. When capturing it exposes the enemy king along a diagonal, the pawn is guarded by the check that follows — and a defence like that costs no piece and no time.",
    "explains": "The pawn on e5 looks loose, but taking it opens the line to the black king: the queen comes to h5 with check the moment the f-pawn captures. So the pawn defends itself, and White has spent the move building a centre instead of babysitting it.",
+   "options": [
+    {
+     "san": "fxe5",
+     "continuation": "fxe5"
+    },
+    {
+     "san": "Nc6",
+     "continuation": "Nc6"
+    }
+   ],
    "fen": "rnbqkbnr/pppp2pp/5p2/4P3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
    "t": 339.5,
    "ply": 5,
@@ -6295,6 +6305,20 @@
    "line": "d4 e5 dxe5 Bc5 Nc3",
    "teaches": "In a gambit that has already lost its pawn, the defender's tries fan out quickly and none of them is forced. Meeting them is a matter of knowing the one idea that answers the whole family — usually to develop, keep the extra pawn, and refuse open lines — rather than memorising a reply to each.",
    "explains": "Black has developed the bishop actively instead of regaining the pawn, and three continuations branch from here: bringing out the queen's knight, supporting with the d-pawn, or the knight to e7. White's job in all of them is the same — finish development without giving the f-file or the long diagonal away.",
+   "options": [
+    {
+     "san": "Nc6",
+     "continuation": "Nc6"
+    },
+    {
+     "san": "d6",
+     "continuation": "d6"
+    },
+    {
+     "san": "Ne7",
+     "continuation": "Ne7"
+    }
+   ],
    "fen": "rnbqk1nr/pppp1ppp/8/2b1P3/8/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 3",
    "t": 811.5,
    "ply": 5,

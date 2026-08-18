@@ -132,7 +132,8 @@
    "sources": [
     "yt:358seoKegqA"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "structural": "the interposition is permanent — its checkable claim belongs to Bd7, not to the retreat it is anchored on"
   },
   {
    "id": "vn-scandi-modern-bb5-check-costs-the-recapture",
@@ -222,7 +223,8 @@
    "sources": [
     "yt:6nEI2p3ftgk"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "structural": "a move-order judgement: the same position reached with the pieces already placed"
   },
   {
    "id": "vn-philidor-center-fork-trick",
@@ -249,7 +251,8 @@
    "sources": [
     "yt:6nEI2p3ftgk"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "structural": "names a resource to check for before castling, not a claim about castling"
   },
   {
    "id": "vn-french-adv-dont-rush-the-recapture",
@@ -272,7 +275,17 @@
    "sources": [
     "yt:6si_sctYAS0"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Nxd4",
+     "continuation": "Nxd4"
+    },
+    {
+     "san": "Bd3",
+     "continuation": "Bd3"
+    }
+   ]
   },
   {
    "id": "vn-french-adv-clamp-pawn",
@@ -296,7 +309,8 @@
    "sources": [
     "yt:6si_sctYAS0"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "structural": "what the e5 pawn denies — a property of the structure, not of the move played"
   },
   {
    "id": "vn-french-adv-knight-route-b3",
@@ -322,7 +336,17 @@
    "sources": [
     "yt:6si_sctYAS0"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Bc5",
+     "continuation": "Bc5"
+    },
+    {
+     "san": "f6",
+     "continuation": "f6"
+    }
+   ]
   },
   {
    "id": "vn-french-adv-f6-invites-b5",
@@ -434,7 +458,17 @@
    "sources": [
     "yt:6uFhzy3VnXA"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Nbd7",
+     "continuation": "Nbd7"
+    },
+    {
+     "san": "O-O",
+     "continuation": "O-O"
+    }
+   ]
   },
   {
    "id": "vn-jobava2-nowhere-safe-for-the-bishop",
@@ -465,7 +499,17 @@
    "sources": [
     "yt:6uFhzy3VnXA"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "g4",
+     "continuation": "g4"
+    },
+    {
+     "san": "Bd3",
+     "continuation": "Bd3 Bxd3 cxd3 Nbd7"
+    }
+   ]
   },
   {
    "id": "vn-jobava2-equalising-move-vs-natural-one",
@@ -489,7 +533,17 @@
    "sources": [
     "yt:6uFhzy3VnXA"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Nc6",
+     "continuation": "Nc6"
+    },
+    {
+     "san": "a6",
+     "continuation": "a6"
+    }
+   ]
   },
   {
    "id": "vn-modern-poisoned-b2",
@@ -513,7 +567,17 @@
    "sources": [
     "yt:B7r1bgPEyIQ"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Qxb2",
+     "continuation": "Qxb2 Rb1 Qa3"
+    },
+    {
+     "san": "d5",
+     "continuation": "d5 f3"
+    }
+   ]
   },
   {
    "id": "vn-modern-take-the-exit-square",
@@ -546,7 +610,21 @@
    "sources": [
     "yt:B7r1bgPEyIQ"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Nc7+",
+     "continuation": "Nc7+ Kd8"
+    },
+    {
+     "san": "O-O",
+     "continuation": "O-O"
+    },
+    {
+     "san": "Qc3",
+     "continuation": "Qc3"
+    }
+   ]
   },
   {
    "id": "vn-modern-central-break-timing",
@@ -599,6 +677,7 @@
     "yt:C6vYlx-lS6g"
    ],
    "positionSource": "high",
+   "structural": "why an unusual-but-sound setup is worth playing at club level",
    "forkOf": {
     "atLine": [
      "e4",
@@ -753,7 +832,15 @@
    "sources": [
     "yt:ILYWTV0uCio"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "gxf6"
+    },
+    {
+     "san": "exf6"
+    }
+   ]
   },
   {
    "id": "vn-tromp-structure-calls-the-break",
@@ -775,7 +862,8 @@
    "sources": [
     "yt:ILYWTV0uCio"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "structural": "reads the structure to find the break; one move, so no fork"
   },
   {
    "id": "vn-tromp-h4-is-disorienting-not-refuting",
@@ -969,7 +1057,17 @@
    "sources": [
     "yt:KNwKz9Ssi8c"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Qxg2",
+     "continuation": "Qxg2 Bf3"
+    },
+    {
+     "san": "e5",
+     "continuation": "e5"
+    }
+   ]
   },
   {
    "id": "vn-alapin-fork-not-flash",
@@ -1000,7 +1098,17 @@
    "sources": [
     "yt:KNwKz9Ssi8c"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Bb5+",
+     "continuation": "Bb5+"
+    },
+    {
+     "san": "Bxf7+",
+     "continuation": "Bxf7+"
+    }
+   ]
   },
   {
    "id": "vn-staunton-the-gambit-pawn-comes-straight-back",
@@ -1084,6 +1192,16 @@
     "yt:Ov4J-FZWoQg"
    ],
    "positionSource": "high",
+   "options": [
+    {
+     "san": "Bd3",
+     "continuation": "Bd3"
+    },
+    {
+     "san": "Bb5",
+     "continuation": "Bb5 d6"
+    }
+   ],
    "forkOf": {
     "atLine": [
      "e4",
@@ -1217,7 +1335,15 @@
    "sources": [
     "yt:Ust1WJO7KQ0"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Bc5"
+    },
+    {
+     "san": "c6"
+    }
+   ]
   },
   {
    "id": "vn-ruybird-f7-and-the-loose-bishop",
@@ -1403,6 +1529,16 @@
     "yt:h-9MlTRN-fk"
    ],
    "positionSource": "high",
+   "options": [
+    {
+     "san": "Nd4",
+     "continuation": "Nd4"
+    },
+    {
+     "san": "Nf6",
+     "continuation": "Nf6"
+    }
+   ],
    "forkOf": {
     "atLine": [
      "e4",
@@ -1439,7 +1575,17 @@
    "sources": [
     "yt:h-9MlTRN-fk"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Nxe4",
+     "continuation": "Nxe4"
+    },
+    {
+     "san": "d5",
+     "continuation": "d5"
+    }
+   ]
   },
   {
    "id": "vn-3knights-dont-grab-the-rook",
@@ -1566,7 +1712,15 @@
    "sources": [
     "yt:k4T6TJGOSA0"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Nf3"
+    },
+    {
+     "san": "Nc3"
+    }
+   ]
   },
   {
    "id": "vn-kid-bf4-count-the-square-before-you-break",
@@ -1747,7 +1901,8 @@
    "sources": [
     "yt:kQHOIgVhyow"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "structural": "prophylaxis one move ahead of a threat; one move, so no fork"
   },
   {
    "id": "vn-maroczy-queen-sortie-against-a-loose-bishop",
@@ -1854,7 +2009,17 @@
    "sources": [
     "yt:qN8kNz0_c3s"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Qb6",
+     "continuation": "Qb6"
+    },
+    {
+     "san": "O-O",
+     "continuation": "O-O"
+    }
+   ]
   },
   {
    "id": "vn-jobava-pawn-storm-hunts-the-bishop",
@@ -1888,7 +2053,17 @@
    "sources": [
     "yt:qN8kNz0_c3s"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Nxe5",
+     "continuation": "Nxe5 dxe5 Ne4 h5"
+    },
+    {
+     "san": "h6",
+     "continuation": "h6"
+    }
+   ]
   },
   {
    "id": "vn-rubinstein-choose-a-setup",
@@ -1919,7 +2094,18 @@
    "sources": [
     "yt:tWGrKGoNNEA"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "g3"
+    },
+    {
+     "san": "Bd3"
+    },
+    {
+     "san": "c3"
+    }
+   ]
   },
   {
    "id": "vn-englund-dont-hand-back-development",
@@ -1964,7 +2150,17 @@
    "sources": [
     "yt:vrZ3WwAXBsQ"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "fxe5",
+     "continuation": "fxe5"
+    },
+    {
+     "san": "Nc6",
+     "continuation": "Nc6"
+    }
+   ]
   },
   {
    "id": "vn-englund-qb4-forks-the-bishop",
@@ -2011,7 +2207,21 @@
    "sources": [
     "yt:vrZ3WwAXBsQ"
    ],
-   "positionSource": "high"
+   "positionSource": "high",
+   "options": [
+    {
+     "san": "Nc6",
+     "continuation": "Nc6"
+    },
+    {
+     "san": "d6",
+     "continuation": "d6"
+    },
+    {
+     "san": "Ne7",
+     "continuation": "Ne7"
+    }
+   ]
   },
   {
    "id": "vn-traxler-sac-declined",

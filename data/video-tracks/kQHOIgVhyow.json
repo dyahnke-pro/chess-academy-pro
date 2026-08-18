@@ -368,6 +368,7 @@
    "teaches": "When the whole character of your position rests on one bishop, look for the move that gives it a safe retreat before it is ever challenged. A fianchettoed bishop offered a trade has only one square to duck to, and whether ducking is possible depends on a rook standing a file away — so move the rook first, while it is still free.",
    "explains": "The offer to trade on h6 is coming, and with the rook where it stands the retreat along the diagonal walks into a capture on the square the rook has just left, which means the trade cannot be declined. Stepping the rook to e8 empties that square and the retreat becomes free. It is a piece of technique worth keeping: the rook move looks like ordinary development and is really the answer to a threat one move ahead.",
    "reasons": [],
+   "structural": "prophylaxis one move ahead of a threat; one move, so no fork",
    "fen": "r2qr1k1/1b2ppbp/pn1p1np1/3P4/2p1PB2/P1N2N1P/BP1Q1PP1/R4RK1 w - - 1 16",
    "t": 1131,
    "ply": 30,

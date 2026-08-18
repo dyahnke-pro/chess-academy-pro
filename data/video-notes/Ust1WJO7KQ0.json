@@ -2,7 +2,7 @@
  {
   "id": "vn-ruybird-standalone-structure",
   "line": "e4 e5 Bb5 Nc6 Nf3 Nd4",
-  "teaches": "Some sidelines are not shortcuts into the main lines \u2014 they build a structure that appears nowhere else in the opening. When a line does that, general familiarity with the parent opening will not carry you, and the only preparation that helps is knowing this position specifically.",
+  "teaches": "Some sidelines are not shortcuts into the main lines — they build a structure that appears nowhere else in the opening. When a line does that, general familiarity with the parent opening will not carry you, and the only preparation that helps is knowing this position specifically.",
   "explains": "Black jumps the knight to d4 instead of defending, offering the trade in the centre and inviting the bishop to declare itself. Three replies branch here: taking on d4, retreating the bishop along the diagonal, and dropping it all the way home. The resulting pawn structures do not arise from any other line in this opening.",
   "reasons": [
    {
@@ -18,14 +18,22 @@
  {
   "id": "vn-ruybird-two-legitimate-replies",
   "line": "e4 e5 Bb5 Nc6 Nf3 Nd4 Nxd4 exd4 O-O",
-  "teaches": "An opening the books call dubious is only dubious against an accurate reply. That is exactly why strong players still pick one \u2014 the objective verdict matters less than whether the person opposite has looked at it recently.",
-  "explains": "White has taken on d4 and castled, leaving Black a pawn on d4 and a choice. Two moves are genuinely playable: the bishop to c5, which is the most common, and the modest c6, taking the b5 square away. Anything else concedes more than the line can afford."
+  "teaches": "An opening the books call dubious is only dubious against an accurate reply. That is exactly why strong players still pick one — the objective verdict matters less than whether the person opposite has looked at it recently.",
+  "explains": "White has taken on d4 and castled, leaving Black a pawn on d4 and a choice. Two moves are genuinely playable: the bishop to c5, which is the most common, and the modest c6, taking the b5 square away. Anything else concedes more than the line can afford.",
+  "options": [
+   {
+    "san": "Bc5"
+   },
+   {
+    "san": "c6"
+   }
+  ]
  },
  {
   "id": "vn-ruybird-f7-and-the-loose-bishop",
   "line": "e4 e5 Bb5 Nc6 Nf3 Nd4 Nxd4 exd4 O-O Bc5 Bc4",
-  "teaches": "A bishop aimed at f7 combines with a queen that can reach h5, and the two together are worth more than either alone. Before developing a bishop where it can be hit by that pair, check whether it is defended \u2014 the check on f7 is only the setup, and the piece it wins is somewhere else entirely.",
-  "explains": "The bishop has come to c4 and now eyes f7. Taking there with check drags the king out, and the queen arriving on h5 forces a pawn move \u2014 after which the undefended bishop on c5 falls. That is the tactical point behind the natural-looking bishop move, and it is why Black's replies here all have to reckon with it.",
+  "teaches": "A bishop aimed at f7 combines with a queen that can reach h5, and the two together are worth more than either alone. Before developing a bishop where it can be hit by that pair, check whether it is defended — the check on f7 is only the setup, and the piece it wins is somewhere else entirely.",
+  "explains": "The bishop has come to c4 and now eyes f7. Taking there with check drags the king out, and the queen arriving on h5 forces a pawn move — after which the undefended bishop on c5 falls. That is the tactical point behind the natural-looking bishop move, and it is why Black's replies here all have to reckon with it.",
   "reasons": [
    {
     "kind": "attacks",
@@ -36,7 +44,7 @@
  {
   "id": "vn-ruybird-space-with-tempo",
   "line": "e4 e5 Bb5 Nc6 Nf3 Nd4 Nxd4 exd4 O-O Bc5 Bc4 Nf6",
-  "teaches": "When a knight develops to its natural square in front of a pawn that can advance, the advance usually comes with tempo \u2014 and a tempo spent chasing a piece is a tempo you did not have to spend on development. Look for the pawn push before you look for a new piece to move.",
+  "teaches": "When a knight develops to its natural square in front of a pawn that can advance, the advance usually comes with tempo — and a tempo spent chasing a piece is a tempo you did not have to spend on development. Look for the pawn push before you look for a new piece to move.",
   "explains": "The knight has just come to f6, and pushing the e-pawn attacks it immediately. Black cannot meet it by striking back in the centre, because that opens lines toward the king while the pieces are still at home; the pawn has to come forward first, and only then can the position be held together.",
   "reasons": [
    {

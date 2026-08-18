@@ -840,6 +840,16 @@
    "line": "c3 c5 e4 d5 exd5 Qxd5 d4 Nf6 Nf3 e6 Na3 a6 Nc4 Nbd7 Be2 cxd4 Nxd4",
    "teaches": "The pawn on g2 is the most expensive free pawn in the opening. Taking it drags the queen to the edge of the board and away from everything she was doing, and the bill arrives as lost time rather than lost material — which is exactly the currency that decides an opening.",
    "explains": "The queen can win the pawn on g2 from here, but the bishop then comes to f3 and every white piece arrives with a threat while the queen looks for somewhere to stand. Advancing the e-pawn instead offers the queen trade and keeps everything sound, leaving White only a small pull.",
+   "options": [
+    {
+     "san": "Qxg2",
+     "continuation": "Qxg2 Bf3"
+    },
+    {
+     "san": "e5",
+     "continuation": "e5"
+    }
+   ],
    "fen": "r1b1kb1r/1p1n1ppp/p3pn2/3q4/2NN4/2P5/PP2BPPP/R1BQK2R b KQkq - 0 9",
    "t": 1361,
    "ply": 17,
@@ -850,6 +860,16 @@
    "line": "c3 c5 e4 d5 exd5 Qxd5 d4 g6 Nf3 Bg7 Na3 cxd4 Bc4 Qe4+ Be3 dxe3",
    "teaches": "With the enemy queen sitting in the centre and the king still on its starting square, look for the check that wins the queen after the king moves — not the one that looks most like mate. The showy check is usually the one that can simply be blocked; the blunt capture is the one that sets up the fork.",
    "explains": "Two checks are available and only one works. The bishop check on b5 is the eye-catching one, and it is met by interposing the knight on c6. Taking on f7 instead forces the king out, and after the recapture the knight springs to g5 with check: the king has three squares, and the queen on e4 is undefended after every one of them.",
+   "options": [
+    {
+     "san": "Bb5+",
+     "continuation": "Bb5+"
+    },
+    {
+     "san": "Bxf7+",
+     "continuation": "Bxf7+"
+    }
+   ],
    "fen": "rnb1k1nr/pp2ppbp/6p1/8/2B1q3/N1P1pN2/PP3PPP/R2QK2R w KQkq - 0 9",
    "t": 1742.5,
    "ply": 16,

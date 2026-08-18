@@ -33,6 +33,8 @@ interface Note {
   id: string;
   lineSan: string[];
   reasons?: Reason[];
+  options?: { san: string }[];
+  structural?: string;
 }
 
 const notes = (teachings as { notes: Note[] }).notes;
@@ -60,6 +62,46 @@ describe('video note reasons', () => {
       }
     }
     expect(broken).toEqual([]);
+  });
+
+  // ── EVERY NOTE DECLARES A SHAPE ─────────────────────────────────────────
+  //
+  // Retrofitting reasons onto the 27 notes that lacked them was the wrong
+  // repair, and `move-facts` said so before a word was written: for most of
+  // them the computed facts came back empty or unclaimed. Reading all 27 showed
+  // why — they are COMPARISONS ("two bishop developments come into
+  // consideration"), which assert nothing about the move they sit on. Adding a
+  // reason there would make the checker pass on a claim nobody made.
+  //
+  // So a note declares one of three shapes and every one is verifiable:
+  // `reasons` (claims about its move, re-checked above), `options` (the
+  // candidate moves it compares, each legal here), or `structural` (a judgement
+  // about the position, with the justification recorded). What is banned is the
+  // fourth state — carrying none of them silently, which is where all 27 sat.
+  it('every note declares reasons, options, or a structural judgement', () => {
+    const undeclared = notes
+      .filter((n) => !n.reasons?.length && !n.options?.length && !n.structural)
+      .map((n) => n.id);
+    expect(undeclared).toEqual([]);
+  });
+
+  it('every option is legal at the note position', () => {
+    const bad: string[] = [];
+    for (const note of notes.filter((n) => n.options?.length)) {
+      const game = new Chess();
+      try { for (const san of note.lineSan) game.move(san); } catch {
+        bad.push(`${note.id}: line is not legal`); continue;
+      }
+      // A fork is only teaching if the moves it names can actually be played —
+      // "here are three other tries" is a claim about the board, so it is
+      // checked like one.
+      for (const o of note.options ?? []) {
+        const probe = new Chess(game.fen());
+        try { probe.move(o.san); } catch { bad.push(`${note.id}: ${o.san} is not legal here`); }
+      }
+      if ((note.options?.length ?? 0) < 2) bad.push(`${note.id}: a fork needs at least two options`);
+    }
+    expect(bad).toEqual([]);
   });
 
   it('name only kinds reasonCheck can verify', () => {

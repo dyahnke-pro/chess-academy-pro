@@ -163,6 +163,16 @@ for (const file of readdirSync(TRACK_DIR).filter((f) => f.endsWith('.json') && f
       // and a claim it cannot verify, which is exactly the choice G0 exists to
       // remove. Gated by `videoNoteReasons.test.ts`.
       ...(n.reasons?.length ? { reasons: n.reasons } : {}),
+      // The OTHER checkable shape. A comparison note ("two bishop developments
+      // come into consideration") asserts nothing about the move it sits on, so
+      // it carries no reasons — what it asserts is the set of candidate moves at
+      // this position, each one legal there. That is the fork content David
+      // locked on 2026-08-17: Learn names that a choice exists, Review walks it.
+      ...(n.options?.length ? { options: n.options } : {}),
+      // A structural note claims neither. Declared rather than left blank so
+      // "no reasons" can never again mean "nobody looked" — the state is a
+      // decision with a recorded justification, and the gate holds the count.
+      ...(n.structural ? { structural: n.structural } : {}),
       // A note one move off a taught line is not off-line teaching to be
       // discarded — it is a FORK. Computed here so the relationship can never
       // be typed wrong: the shared prefix is the position the student actually

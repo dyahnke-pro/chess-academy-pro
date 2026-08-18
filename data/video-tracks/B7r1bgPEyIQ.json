@@ -1213,6 +1213,16 @@
    "line": "d4 g6 e4 Bg7 Nc3 c6 Be3 Qb6 Qd2",
    "teaches": "Taking the pawn on b2 with the queen is a decision about time, not about material. The rook that swings to b1 arrives with a threat and gains the move it would otherwise have spent developing, so the side that grabbed the pawn ends up defending in a position where nothing else is out.",
    "explains": "Two paths diverge here. Capturing on b2 wins a pawn, but the rook then comes to b1 attacking the queen, and at that moment the only black piece off the back rank besides the queen is the fianchettoed bishop. Advancing in the centre with the d-pawn instead keeps the pieces at home for now but leaves nothing loose.",
+   "options": [
+    {
+     "san": "Qxb2",
+     "continuation": "Qxb2 Rb1 Qa3"
+    },
+    {
+     "san": "d5",
+     "continuation": "d5 f3"
+    }
+   ],
    "fen": "rnb1k1nr/pp1pppbp/1qp3p1/8/3PP3/2N1B3/PPPQ1PPP/R3KBNR b KQkq - 3 5",
    "t": 2636,
    "ply": 9,
@@ -1223,6 +1233,20 @@
    "line": "d4 g6 e4 Bg7 Nc3 c6 Be3 Qb6 Qd2 Qxb2 Rb1 Qa3 Nf3 b5 Bxb5 cxb5 Nxb5 Qxa2",
    "teaches": "When an enemy queen has raided deep into your position, the move that wins is rarely the check that chases her. Look instead for the quiet move that removes her last route home — a queen with plenty of squares and no way back is a piece you can hunt at leisure.",
    "explains": "White has given up a bishop to open lines against the uncastled king, and the black queen sits on a2 with almost nothing else developed. Three tries come into consideration: the knight check, castling, and a quiet queen move — the difference between them is whether they hurry the queen along or shut her escape route first.",
+   "options": [
+    {
+     "san": "Nc7+",
+     "continuation": "Nc7+ Kd8"
+    },
+    {
+     "san": "O-O",
+     "continuation": "O-O"
+    },
+    {
+     "san": "Qc3",
+     "continuation": "Qc3"
+    }
+   ],
    "fen": "rnb1k1nr/p2pppbp/6p1/1N6/3PP3/4BN2/q1PQ1PPP/1R2K2R w Kkq - 0 10",
    "t": 2678,
    "ply": 18,
