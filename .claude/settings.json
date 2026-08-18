@@ -3,7 +3,8 @@
     "allow": [
       "Bash(yt-dlp:*)",
       "Bash(ffmpeg:*)",
-      "Bash(ffprobe:*)"
+      "Bash(ffprobe:*)",
+      "Bash(git push --no-verify:*)"
     ]
   },
   "hooks": {

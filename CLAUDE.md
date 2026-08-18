@@ -2862,6 +2862,45 @@ the material this work exists to replace — the same mixing by a quieter route.
 Dropping the farmed notes early leaves the surface with nothing to say, which is
 worse than the old note. The set is empty until the first opening is finished.
 
+### 🔒🔒 A PRO'S TAUGHT LINE MAY BE ADDED AS A FORK OFF THE SPINE — the spine itself stays data-chosen (David 2026-08-18, approving the fork plan)
+
+The anchoring rule below says move the NOTE onto the taught line, never the line
+toward the note. That leaves 49 of 64 notes stranded on lines the repertoire does
+not teach. **The fork inverts it correctly**: add the video's line as a BRANCH at
+the position where it leaves our spine, and the teaching becomes reachable
+without the spine moving an inch.
+
+**Measured before approving it** — the plan is worth 2.5x the alternative:
+
+| | notes reachable |
+|---|---|
+| already on a taught line | 10 |
+| **deep forks (divergence at ply 6+)** | **15** |
+| **usable forks (ply 4-5)** | **12** |
+| generic (ply 0-2) | 27 — too shallow to be a fork |
+
+37 of 64 versus 15 for re-anchoring. `reanchor-report.mjs` prints the current
+split; re-run it rather than trusting these numbers as the corpus grows.
+
+**WHY THIS DOES NOT BREAK THE DATA-CHOSEN RULE.** The spine — the most-played
+master move at each ply — is untouched. What is added is a BRANCH, and the fork
+doctrine already says branches are where a lesson names the other tries. The
+line being added is not invented: it is a line a strong teacher actually played
+and taught, chess.js-validated, with the teaching already written against it.
+Choosing the SPINE by what we have prose for would be the violation; adding a
+real alternative at a real fork is what forks are for.
+
+**A GENERIC FORK IS NOT A FORK.** Divergence at ply 0-2 means a different
+opening, not an alternative — those 27 notes stay free-play and review material.
+Ply 4+ is the floor, and deeper is better: a fork at ply 9 (the Belgrade) names a
+genuine choice, a fork at ply 2 names a whole system.
+
+**EVERY ADDED VARIATION STILL CLEARS THE EXISTING GATES** — legal and gap-free,
+reaches a middlegame (G9.3 Gate B), plans anchored at its terminus (Gate C), and
+engine-checked so it does not leave the student worse than ≈ −1.0 except as an
+honest gambit showcase. A fork is a normal variation once added; nothing about
+its origin exempts it.
+
 ### 🔒🔒 A NOTE IS ANCHORED ONTO THE TAUGHT LINE — THE LINE IS NEVER BENT TOWARD THE NOTE (David 2026-08-17, LOCKED: *"I like the plan. Lock it in"*)
 
 A note anchored where the lesson never goes is **silent in Watch and Learn**. It
