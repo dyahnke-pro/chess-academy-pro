@@ -78,4 +78,20 @@ describe('the engine read, spoken', () => {
   it('stays silent when the engine reported no WDL at all', () => {
     expect(engineReadLines(analysis({ wdl: null }), 'white')).toHaveLength(0);
   });
+
+describe('the win-probability line does not repeat its own words', () => {
+  it('says "almost always" once, however the permille moves inside that band', () => {
+    // 900 and 1000 fall in different hundreds buckets and render the SAME
+    // phrase, so the old key let it through twice — heard on a driven game
+    // (David 2026-08-18). The key is the phrase now, so the band is one entry.
+    const said = new Set<string>();
+    const lines: string[] = [];
+    for (const win of [905, 960, 1000]) {
+      const a = analysis({ wdl: { win, draw: 1000 - win, loss: 0 } });
+      for (const l of engineReadLines(a, 'white', said)) lines.push(l.text);
+    }
+    const almost = lines.filter((t) => /almost always/.test(t));
+    expect(almost.length, `said it ${almost.length} times: ${JSON.stringify(almost)}`).toBeLessThanOrEqual(1);
+  });
+});
 });

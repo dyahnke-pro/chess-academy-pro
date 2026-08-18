@@ -61,4 +61,24 @@ describe('a borrowed note may carry an idea, never a continuation', () => {
       expect(borrowedNoteIsOutOfScope(idea), idea).toBeNull();
     }
   });
+
+  it('catches the two shapes that slipped the first pass', () => {
+    // Found by REPLAYING a game after the first cut landed: four borrowed notes
+    // survived and two of them were still narrating moves. Both slipped on a
+    // detail of phrasing, which is the argument for calibrating on transcripts
+    // rather than on invented fixtures.
+    expect(borrowedNoteIsOutOfScope('The bishop takes, and the king steps aside, opening the file toward the king.'))
+      .toBe('narrates a capture');   // a capture verb with no object, saved by a comma
+    expect(borrowedNoteIsOutOfScope('Trading those bishops is safe. White has too few pieces left to attack.'))
+      .toBe('names a specific trade'); // a gerund with a determiner points at one board
+  });
+
+  it('keeps the two that survived the same replay on merit', () => {
+    for (const idea of [
+      'The central square is the hinge of the whole position — whoever owns it dictates the plans.',
+      'A king still in the center is a target, and tactics follow the exposed king.',
+    ]) {
+      expect(borrowedNoteIsOutOfScope(idea), idea).toBeNull();
+    }
+  });
 });

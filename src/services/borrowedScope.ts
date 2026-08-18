@@ -46,6 +46,13 @@ const CONTINUATION: ReadonlyArray<{ re: RegExp; why: string }> = [
   { re: /\b(?:capturing|taking|recapturing)\s+(?:it|him|her|there|on\s+[a-h][1-8])\b/i, why: 'narrates a capture' },
   // "the trade surrenders…", "the pawn sacrifice buys…", "the prize after the capture"
   { re: /\b(?:the|that|this)\s+(?:trade|exchange|capture|sacrifice|recapture)\b/i, why: 'names a specific trade' },
+  // "Trading those bishops is safe." A gerund with a determiner points at
+  // pieces on one board — the general form has no "those".
+  { re: /\b(?:trading|exchanging|capturing|sacrificing|taking)\s+(?:those|these|that|this|the|off\s+(?:the|his|her|their))\b/i, why: 'names a specific trade' },
+  // "The bishop takes, and the king steps aside." A named piece with a capture
+  // verb and no object at all is still a move being narrated — the version with
+  // an object is caught above, and this one slipped through on a comma.
+  { re: /\b(?:the|a|an|his|her|their|that|this)\s+(?:queen|king|rook|bishop|knight|pawn)\s+(?:takes|captures|recaptures|takes off)\b/i, why: 'narrates a capture' },
   // "the bishop strikes, and the queen follows", "the pawn falls"
   { re: /\b(?:strikes|falls|wins (?:her|him|it) outright|wins material)\b/i, why: 'narrates an outcome' },
   // "White cannot develop without losing a pawn" — a verdict on one position.
