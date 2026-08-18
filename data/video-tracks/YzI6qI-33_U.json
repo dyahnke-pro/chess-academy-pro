@@ -714,6 +714,36 @@
    "t": 1691.5,
    "ply": 23,
    "source": "yt:YzI6qI-33_U"
+  },
+  {
+   "id": "vn-fork-castle-now-or-bring-the-knight",
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3",
+   "teaches": "Facing a setup that intends to castle the other way and storm your king, the choice is whether to get the king tucked away first or to finish development. Castling commits your king to the side the pawns are coming toward; the knight keeps every option and contests the centre while you decide.",
+   "explains": "White has played the pawn to f3, which is the move that makes the whole attacking setup work. Two replies come into consideration: castling immediately and accepting the race, or developing the queen's knight and keeping the king's destination open for another move.",
+   "options": [
+    {
+     "san": "O-O",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "g7"
+      }
+     ]
+    },
+    {
+     "san": "Nc6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "d4"
+      }
+     ]
+    }
+   ],
+   "fen": "rnbqk2r/pp2ppbp/3p1np1/8/3NP3/2N1BP2/PPP3PP/R2QKB1R b KQkq - 0 7",
+   "t": 1666.5,
+   "ply": 13,
+   "source": "yt:YzI6qI-33_U"
   }
  ]
 }

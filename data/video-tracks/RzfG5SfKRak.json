@@ -1625,6 +1625,40 @@
    "t": 2856.5,
    "ply": 9,
    "source": "yt:RzfG5SfKRak"
+  },
+  {
+   "id": "vn-fork-hit-the-wedge-or-support-it",
+   "line": "d4 Nf6 Bf4 c5 d5",
+   "teaches": "A pawn pushed past you can be attacked from the side or simply lived with. The wing pawn strikes at its base and opens lines while the position is still fluid; the modest central move supports your own pawn and keeps everything closed. The first plays for the initiative, the second for structure.",
+   "explains": "The pawn has advanced to d5 and taken squares in the centre. One try hits it from the side with the b-pawn, aiming to undermine the pawn holding the wedge. The other plays the quiet central pawn move, accepting the space and building behind it.",
+   "options": [
+    {
+     "san": "b5",
+     "reasons": [
+      {
+       "kind": "controls",
+       "square": "c4"
+      }
+     ]
+    },
+    {
+     "san": "d6",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "c5"
+      },
+      {
+       "kind": "controls",
+       "square": "e5"
+      }
+     ]
+    }
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/5B2/8/PPP1PPPP/RN1QKBNR b KQkq - 0 3",
+   "t": 2380,
+   "ply": 5,
+   "source": "yt:RzfG5SfKRak"
   }
  ]
 }

@@ -598,6 +598,40 @@
    "t": 36.5,
    "ply": 5,
    "source": "yt:k4T6TJGOSA0"
+  },
+  {
+   "id": "vn-fork-after-the-recapture-centre-or-knight",
+   "line": "e4 c6 d4 d5 f3 dxe4 fxe4",
+   "teaches": "Against a big centre held by pawns you can strike it or develop at it. The pawn break challenges immediately and accepts an open game; the knight comes out hitting the same pawn and keeps the tension for another move. Which you want depends on whether you are happy to open the position while your king is still at home.",
+   "explains": "White has rebuilt the centre with the pawn on e4 and the f-file is open. Two tries come into consideration: the central pawn push that challenges the pawn head-on, or the king's knight developing onto it, which asks the same question without committing a pawn.",
+   "options": [
+    {
+     "san": "e5",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "d4"
+      }
+     ]
+    },
+    {
+     "san": "Nf6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e4"
+      },
+      {
+       "kind": "controls",
+       "square": "d5"
+      }
+     ]
+    }
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3PP3/8/PPP3PP/RNBQKBNR b KQkq - 0 4",
+   "t": 78,
+   "ply": 7,
+   "source": "yt:k4T6TJGOSA0"
   }
  ]
 }

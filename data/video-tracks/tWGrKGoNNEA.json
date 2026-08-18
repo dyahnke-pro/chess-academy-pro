@@ -841,6 +841,44 @@
    "t": 125.5,
    "ply": 16,
    "source": "yt:tWGrKGoNNEA"
+  },
+  {
+   "id": "vn-fork-which-piece-takes-the-square",
+   "line": "e4 e6 d4 d5 Nd2 dxe4 Nxe4",
+   "teaches": "Two developing moves onto neighbouring squares, and the difference is which piece you are willing to trade. Bringing the knight out offers an exchange in the centre and simplifies toward a solid game; developing the bishop keeps the knights on and prepares to challenge with pieces rather than by trading.",
+   "explains": "White's knight stands on e4, recaptured and so far unchallenged. Two different pieces can head for d7, and the choice is which one goes: the queen's knight, which offers a trade in the centre straight away, or the light-squared bishop, which leaves the knights on and challenges with pieces instead.",
+   "options": [
+    {
+     "san": "Nd7",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "f8"
+      },
+      {
+       "kind": "controls",
+       "square": "e5"
+      }
+     ]
+    },
+    {
+     "san": "Bd7",
+     "reasons": [
+      {
+       "kind": "defends",
+       "square": "e6"
+      },
+      {
+       "kind": "controls",
+       "square": "b5"
+      }
+     ]
+    }
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/8/3PN3/8/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "t": 27,
+   "ply": 7,
+   "source": "yt:tWGrKGoNNEA"
   }
  ]
 }

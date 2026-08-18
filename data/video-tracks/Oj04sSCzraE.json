@@ -219,6 +219,40 @@
    "t": 157.5,
    "ply": 13,
    "source": "yt:Oj04sSCzraE"
+  },
+  {
+   "id": "vn-fork-bishop-first-or-knight-first",
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4",
+   "teaches": "Against a clamp, move order decides what the opponent learns about your setup. Completing the fianchetto commits the bishop and gets the king closer to safety. Developing the knight first keeps the bishop's square free for one more move and asks the clamp to declare itself. The positions usually transpose; the information does not.",
+   "explains": "Both centre pawns are on the fourth rank and the knight is coming out. Two orders come into consideration: putting the bishop on the long diagonal now, or bringing the king's knight out first and leaving the fianchetto for a move.",
+   "options": [
+    {
+     "san": "Bg7",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "d4"
+      }
+     ]
+    },
+    {
+     "san": "Nf6",
+     "reasons": [
+      {
+       "kind": "attacks",
+       "square": "e4"
+      },
+      {
+       "kind": "controls",
+       "square": "d5"
+      }
+     ]
+    }
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "t": 29.5,
+   "ply": 9,
+   "source": "yt:Oj04sSCzraE"
   }
  ]
 }
