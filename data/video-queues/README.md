@@ -58,7 +58,11 @@ Danya's pipeline works end to end and has 336 videos queued; finish that first.
   286 plies once its board was read by hand).
 - `no-game.txt` — the scan succeeded and the build found no usable game. Often
   correct rather than broken: `GqdveDSL2SA` is a "Miniature Game" upload with
-  no continuous play long enough to track.
+  no continuous play long enough to track. `ye0OP1Bu_hs` is an English-opening
+  lecture taught by dragging pieces into hand-set positions — the grids read
+  the board faithfully (checked square-by-square at t=966 against the tracked
+  FEN) but hand-set exploration never chains into a followable game; both its
+  games stall at ply 8-11.
 
 Both are read by the downloader's skip test. Neither outcome leaves a track
 behind, so without them the downloader's "do I already have this" question goes

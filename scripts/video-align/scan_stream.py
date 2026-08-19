@@ -20,6 +20,24 @@ could not be attributed to either. `--calibrated` selects the other reader for
 measuring them against each other on the same video.
 
 Usage: python3 scan_stream.py <video> <out.json> <x0> <y0> <sq> [fps] [--calibrated]
+                              [--anchor=<png>]
+
+--orient=<white|black> seeds the INITIAL orientation when the scanned range
+opens mid-game so there is no start frame to read it from — the Caro-Kann
+upload joins its games in progress, Black-oriented, and its only start flash is
+the white-oriented new-game preview. The value is read off a frame BY EYE (the
+doctrine's rule), and orientation still re-reads at every start position, so a
+later section that flips is still caught.
+
+--anchor seeds the colour calibration from a HAND-VERIFIED start-position frame
+extracted separately (ffmpeg -ss). It exists because the in-stream search can
+have nothing to find: the Ruy "Bishop Sac" upload's only pristine start lives in
+the t=0 keyframe — the fps-filtered stream's first frame already has 1.e4 played
+— and every later start reads 31/32 under the plain margin. looks_like_start
+stays STRICT (the doctrine says calibrate the OCR, never loosen the matcher):
+the anchor frame must read back as a perfect start after trial calibration or
+the scan refuses loudly, same as ever. Orientation still re-reads at every
+start position in the stream.
 """
 import json
 import os
@@ -88,11 +106,36 @@ def stream(video, fps, w, h):
         proc.wait()
 
 
-def scan(video, x0, y0, sq, fps, calibrated=False):
+def load_anchor(path, x0, y0, sq):
+    """Calibration seeded from a hand-verified start frame, or die loudly.
+
+    The frame arrives as a PNG extracted with `ffmpeg -ss` because that decode
+    can differ from the fps-filtered stream's — the Gti01VN0zXA keyframe at t=0
+    is a pristine start while the stream's frame 0 already shows 1.e4.
+    """
+    proc = subprocess.run(
+        ['ffmpeg', '-loglevel', 'error', '-i', path, '-pix_fmt', 'gray', '-f', 'rawvideo', '-'],
+        capture_output=True, check=True,
+    )
+    w, h = dimensions(path)
+    g = np.frombuffer(proc.stdout, dtype=np.uint8).reshape(h, w).astype(np.float64)
+    orient = orientation_from_luminance(g, x0, y0, sq)
+    if orient is None:
+        print(f'{path}: anchor frame has no readable orientation — REFUSED')
+        sys.exit(2)
+    cal = calibrate_from_start_arr(g, x0, y0, sq, orient)
+    back = read_board_calibrated_arr(g, x0, y0, sq, cal)
+    if not looks_like_start(back):
+        print(f'{path}: anchor frame does not read back as a start position — REFUSED')
+        sys.exit(2)
+    print(f'calibrated from anchor {path}, orientation={orient}', flush=True)
+    return cal, orient
+
+
+def scan(video, x0, y0, sq, fps, calibrated=False, anchor=None):
     w, h = dimensions(video)
     rows = []
-    cal = None
-    orient = None
+    cal, orient = (anchor if anchor else (None, None))
     for i, g in stream(video, fps, w, h):
         if not calibrated:
             grid = read_board_arr(g, x0, y0, sq)
@@ -148,10 +191,18 @@ def scan(video, x0, y0, sq, fps, calibrated=False):
 if __name__ == '__main__':
     argv = [a for a in sys.argv[1:] if not a.startswith('--')]
     calibrated = '--calibrated' in sys.argv
+    anchor_path = next((a.split('=', 1)[1] for a in sys.argv[1:] if a.startswith('--anchor=')), None)
+    orient_seed = next((a.split('=', 1)[1] for a in sys.argv[1:] if a.startswith('--orient=')), None)
+    if orient_seed not in (None, 'white', 'black'):
+        print(f'--orient must be white or black, got {orient_seed}')
+        sys.exit(2)
     video, out = argv[0], argv[1]
     x0, y0, sq = float(argv[2]), float(argv[3]), float(argv[4])
     fps = float(argv[5]) if len(argv) > 5 else 2.0
-    grids = scan(video, x0, y0, sq, fps, calibrated)
+    anchor = load_anchor(anchor_path, x0, y0, sq) if anchor_path else None
+    if anchor and orient_seed:
+        anchor = (anchor[0], orient_seed)
+    grids = scan(video, x0, y0, sq, fps, calibrated or anchor is not None, anchor)
     if not grids:
         print(f'{video}: nothing read under geometry {x0},{y0},{sq} — REFUSED')
         sys.exit(2)

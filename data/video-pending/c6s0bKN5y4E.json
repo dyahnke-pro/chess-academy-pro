@@ -1,0 +1,263 @@
+{
+ "videoId": "c6s0bKN5y4E",
+ "title": "Master Class | 1.B3!! Nimzo-Larsen | Chess Speedrun | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-19",
+ "geometry": {
+  "x0": null,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 4016,
+  "settledPositions": null
+ },
+ "plies": 19,
+ "rewinds": 4,
+ "moves": [
+  {
+   "t": 1062,
+   "ply": 2,
+   "line": [
+    "b3",
+    "d6"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/8/1P6/P1PPPPPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 1063,
+   "ply": 3,
+   "line": [
+    "Bb2"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/8/1P6/PBPPPPPP/RN1QKBNR b KQkq - 1 2"
+  },
+  {
+   "t": 1065.5,
+   "ply": 4,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/8/1P6/PBPPPPPP/RN1QKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 1113,
+   "ply": 3,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/8/1P6/PBPPPPPP/RN1QKBNR b KQkq - 1 2"
+  },
+  {
+   "t": 1114,
+   "ply": 4,
+   "line": [
+    "h5"
+   ],
+   "fen": "rnbqkbnr/ppp1ppp1/3p4/7p/8/1P6/PBPPPPPP/RN1QKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 1116.5,
+   "ply": 7,
+   "line": [
+    "a3",
+    "a5",
+    "e3"
+   ],
+   "fen": "rnbqkbnr/1pp1ppp1/3p4/p6p/8/PP2P3/1BPP1PPP/RN1QKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 1127.5,
+   "ply": 8,
+   "line": [
+    "a4"
+   ],
+   "fen": "rnbqkbnr/1pp1ppp1/3p4/7p/p7/PP2P3/1BPP1PPP/RN1QKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 1128.5,
+   "ply": 9,
+   "line": [
+    "b4"
+   ],
+   "fen": "rnbqkbnr/1pp1ppp1/3p4/7p/pP6/P3P3/1BPP1PPP/RN1QKBNR b KQkq - 0 5"
+  },
+  {
+   "t": 1130,
+   "ply": 8,
+   "line": [],
+   "fen": "rnbqkbnr/1pp1ppp1/3p4/7p/p7/PP2P3/1BPP1PPP/RN1QKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 1131.5,
+   "ply": 9,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqkbnr/1pp1ppp1/3p4/1B5p/p7/PP2P3/1BPP1PPP/RN1QK1NR b KQkq - 1 5"
+  },
+  {
+   "t": 1149,
+   "ply": 10,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqkbnr/1p2ppp1/2pp4/1B5p/p7/PP2P3/1BPP1PPP/RN1QK1NR w KQkq - 0 6"
+  },
+  {
+   "t": 1150.5,
+   "ply": 11,
+   "line": [
+    "Bxa4"
+   ],
+   "fen": "rnbqkbnr/1p2ppp1/2pp4/7p/B7/PP2P3/1BPP1PPP/RN1QK1NR b KQkq - 0 6"
+  },
+  {
+   "t": 1151.5,
+   "ply": 12,
+   "line": [
+    "b5"
+   ],
+   "fen": "rnbqkbnr/4ppp1/2pp4/1p5p/B7/PP2P3/1BPP1PPP/RN1QK1NR w KQkq - 0 7"
+  },
+  {
+   "t": 1161.5,
+   "ply": 8,
+   "line": [],
+   "fen": "rnbqkbnr/1pp1ppp1/3p4/7p/p7/PP2P3/1BPP1PPP/RN1QKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 1167,
+   "ply": 9,
+   "line": [
+    "bxa4"
+   ],
+   "fen": "rnbqkbnr/1pp1ppp1/3p4/7p/P7/P3P3/1BPP1PPP/RN1QKBNR b KQkq - 0 5"
+  },
+  {
+   "t": 1169,
+   "ply": 10,
+   "line": [
+    "Rxa4"
+   ],
+   "fen": "1nbqkbnr/1pp1ppp1/3p4/7p/r7/P3P3/1BPP1PPP/RN1QKBNR w KQk - 0 6"
+  },
+  {
+   "t": 1170,
+   "ply": 11,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "1nbqkbnr/1pp1ppp1/3p4/1B5p/r7/P3P3/1BPP1PPP/RN1QK1NR b KQk - 1 6"
+  },
+  {
+   "t": 1172.5,
+   "ply": 9,
+   "line": [],
+   "fen": "rnbqkbnr/1pp1ppp1/3p4/7p/P7/P3P3/1BPP1PPP/RN1QKBNR b KQkq - 0 5"
+  },
+  {
+   "t": 1175.5,
+   "ply": 10,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/1pp1ppp1/3p1n2/7p/P7/P3P3/1BPP1PPP/RN1QKBNR w KQkq - 1 6"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/8/1P6/PBPPPPPP/RN1QKBNR b KQkq - 1 2",
+   "line": [
+    "b3",
+    "d6",
+    "Bb2"
+   ],
+   "ply": 3,
+   "options": [
+    {
+     "san": "e5",
+     "t": 1065.5,
+     "continuation": "e5"
+    },
+    {
+     "san": "h5",
+     "t": 1114,
+     "continuation": "h5"
+    }
+   ]
+  },
+  {
+   "fen": "rnbqkbnr/1pp1ppp1/3p4/7p/p7/PP2P3/1BPP1PPP/RN1QKBNR w KQkq - 0 5",
+   "line": [
+    "b3",
+    "d6",
+    "Bb2",
+    "h5",
+    "a3",
+    "a5",
+    "e3",
+    "a4"
+   ],
+   "ply": 8,
+   "options": [
+    {
+     "san": "b4",
+     "t": 1128.5,
+     "continuation": "b4"
+    },
+    {
+     "san": "Bb5+",
+     "t": 1131.5,
+     "continuation": "Bb5+"
+    },
+    {
+     "san": "bxa4",
+     "t": 1167,
+     "continuation": "bxa4"
+    }
+   ]
+  },
+  {
+   "fen": "rnbqkbnr/1pp1ppp1/3p4/7p/P7/P3P3/1BPP1PPP/RN1QKBNR b KQkq - 0 5",
+   "line": [
+    "b3",
+    "d6",
+    "Bb2",
+    "h5",
+    "a3",
+    "a5",
+    "e3",
+    "a4",
+    "bxa4"
+   ],
+   "ply": 9,
+   "options": [
+    {
+     "san": "Rxa4",
+     "t": 1169,
+     "continuation": "Rxa4"
+    },
+    {
+     "san": "Nf6",
+     "t": 1175.5,
+     "continuation": "Nf6"
+    }
+   ]
+  }
+ ],
+ "titleCheck": {
+  "claims": "Zukertort Opening: Nimzo-Larsen Variation",
+  "confirmed": false,
+  "verdict": "track-right-resolver-artifact",
+  "checkedBy": "hand 2026-08-19 — track-right-resolver-artifact — board opens 1.b3 Bb2 exactly as titled; DB names it Nimzo-Larsen Attack while the title resolves to the Zukertort move-order entry."
+ },
+ "openings": [
+  {
+   "name": "Nimzo-Larsen Attack",
+   "eco": "A01",
+   "plies": 1,
+   "line": "b3",
+   "coverage": 1
+  }
+ ]
+}

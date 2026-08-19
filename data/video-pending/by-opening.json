@@ -1,35 +1,77 @@
 {
- "Grünfeld Defense: Exchange Variation, Nadanian Attack": [
+ "King's Indian Defense: Sämisch Variation, Closed Variation": [
   {
-   "videoId": "Di-5aO2lddU",
-   "eco": "D85",
-   "plies": 9,
-   "coverage": 0.864,
+   "videoId": "2Mys0GRUgM4",
+   "eco": "E87",
+   "plies": 13,
+   "coverage": 0.643,
    "subject": true,
-   "forks": 1
+   "forks": 0
   }
  ],
- "Grünfeld Defense: Exchange Variation": [
+ "King's Indian Defense: Sämisch Variation, Orthodox Variation": [
   {
-   "videoId": "Di-5aO2lddU",
-   "eco": "D85",
-   "plies": 8,
-   "coverage": 0.886,
+   "videoId": "2Mys0GRUgM4",
+   "eco": "E85",
+   "plies": 12,
+   "coverage": 0.679,
    "subject": false,
-   "forks": 1
+   "forks": 0
   }
  ],
- "Grünfeld Defense": [
+ "King's Indian Defense: Sämisch Variation, Normal Defense": [
   {
-   "videoId": "Di-5aO2lddU",
-   "eco": "D80",
-   "plies": 6,
-   "coverage": 0.932,
+   "videoId": "2Mys0GRUgM4",
+   "eco": "E81",
+   "plies": 10,
+   "coverage": 0.75,
    "subject": false,
-   "forks": 1
+   "forks": 0
+  }
+ ],
+ "King's Indian Defense: Normal Variation": [
+  {
+   "videoId": "2Mys0GRUgM4",
+   "eco": "E70",
+   "plies": 7,
+   "coverage": 0.857,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "B0AdPztLsHs",
+   "eco": "E70",
+   "plies": 7,
+   "coverage": 0.878,
+   "subject": false,
+   "forks": 0
   }
  ],
  "King's Indian Defense": [
+  {
+   "videoId": "2Mys0GRUgM4",
+   "eco": "E61",
+   "plies": 5,
+   "coverage": 0.929,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "B0AdPztLsHs",
+   "eco": "E61",
+   "plies": 5,
+   "coverage": 0.927,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "Cjxk_qrmeMY",
+   "eco": "E61",
+   "plies": 5,
+   "coverage": 0.964,
+   "subject": false,
+   "forks": 5
+  },
   {
    "videoId": "Di-5aO2lddU",
    "eco": "E61",
@@ -41,6 +83,30 @@
  ],
  "Indian Defense: West Indian Defense": [
   {
+   "videoId": "2Mys0GRUgM4",
+   "eco": "E60",
+   "plies": 4,
+   "coverage": 0.964,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "B0AdPztLsHs",
+   "eco": "E60",
+   "plies": 4,
+   "coverage": 0.951,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "Cjxk_qrmeMY",
+   "eco": "E60",
+   "plies": 4,
+   "coverage": 0.982,
+   "subject": false,
+   "forks": 5
+  },
+  {
    "videoId": "Di-5aO2lddU",
    "eco": "E60",
    "plies": 4,
@@ -51,92 +117,344 @@
  ],
  "Indian Defense: Normal Variation": [
   {
+   "videoId": "2Mys0GRUgM4",
+   "eco": "A50",
+   "plies": 3,
+   "coverage": 0.964,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "B0AdPztLsHs",
+   "eco": "A50",
+   "plies": 3,
+   "coverage": 0.976,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "Cjxk_qrmeMY",
+   "eco": "A50",
+   "plies": 3,
+   "coverage": 0.982,
+   "subject": false,
+   "forks": 5
+  },
+  {
    "videoId": "Di-5aO2lddU",
    "eco": "A50",
    "plies": 3,
    "coverage": 1,
    "subject": false,
    "forks": 1
+  },
+  {
+   "videoId": "kudYuwgjAeY",
+   "eco": "A50",
+   "plies": 3,
+   "coverage": 0.968,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "o17K4WiESWQ",
+   "eco": "A50",
+   "plies": 3,
+   "coverage": 0.971,
+   "subject": false,
+   "forks": 1
   }
  ],
- "English Opening: Anglo-Indian Defense": [
+ "Indian Defense": [
   {
-   "videoId": "Di-5aO2lddU",
-   "eco": "A15",
+   "videoId": "2Mys0GRUgM4",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "B0AdPztLsHs",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "Cjxk_qrmeMY",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "TSM7CFcJ1L0",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 6
+  },
+  {
+   "videoId": "kudYuwgjAeY",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "lyUZn39V6TY",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "o17K4WiESWQ",
+   "eco": "A45",
    "plies": 2,
    "coverage": 1,
    "subject": false,
    "forks": 1
   }
  ],
- "English Opening": [
+ "Queen's Pawn Game": [
   {
-   "videoId": "Di-5aO2lddU",
-   "eco": "A10",
+   "videoId": "2Mys0GRUgM4",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "B0AdPztLsHs",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "Cjxk_qrmeMY",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "TSM7CFcJ1L0",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 6
+  },
+  {
+   "videoId": "kO4qTTR0B7o",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "kudYuwgjAeY",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "lyUZn39V6TY",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "o17K4WiESWQ",
+   "eco": "A40",
    "plies": 1,
    "coverage": 1,
    "subject": false,
    "forks": 1
   }
  ],
- "Petrov's Defense: Italian Variation": [
+ "Caro-Kann Defense: Main Line": [
   {
-   "videoId": "DnJl1cmihNQ",
-   "eco": "C42",
+   "videoId": "4GIsh7cTsHc",
+   "eco": "B15",
+   "plies": 7,
+   "coverage": 0.022,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "cPVp5TWZR0w",
+   "eco": "B15",
+   "plies": 7,
+   "coverage": 0.812,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "Caro-Kann Defense: Advance Variation, Bayonet Attack": [
+  {
+   "videoId": "4GIsh7cTsHc",
+   "eco": "B12",
+   "plies": 7,
+   "coverage": 0.022,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "Caro-Kann Defense: Advance Variation, Tal Variation": [
+  {
+   "videoId": "4GIsh7cTsHc",
+   "eco": "B12",
+   "plies": 7,
+   "coverage": 0.022,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "Caro-Kann Defense: Advance Variation, Short Variation": [
+  {
+   "videoId": "4GIsh7cTsHc",
+   "eco": "B12",
+   "plies": 7,
+   "coverage": 0.022,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "Caro-Kann Defense: Advance Variation": [
+  {
+   "videoId": "4GIsh7cTsHc",
+   "eco": "B12",
    "plies": 5,
-   "coverage": 0.8,
+   "coverage": 0.891,
    "subject": true,
-   "forks": 3
-  }
- ],
- "Philidor Defense": [
+   "forks": 5
+  },
   {
-   "videoId": "DnJl1cmihNQ",
-   "eco": "C41",
-   "plies": 4,
-   "coverage": 0.16,
+   "videoId": "cPVp5TWZR0w",
+   "eco": "B12",
+   "plies": 5,
+   "coverage": 0.043,
    "subject": false,
-   "forks": 3
+   "forks": 5
   }
  ],
- "Petrov's Defense": [
+ "Caro-Kann Defense": [
   {
-   "videoId": "DnJl1cmihNQ",
-   "eco": "C42",
-   "plies": 4,
-   "coverage": 0.8,
+   "videoId": "4GIsh7cTsHc",
+   "eco": "B10",
+   "plies": 2,
+   "coverage": 1,
    "subject": false,
-   "forks": 3
-  }
- ],
- "King's Knight Opening": [
+   "forks": 5
+  },
   {
-   "videoId": "DnJl1cmihNQ",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.98,
+   "videoId": "IloLuuXW7lE",
+   "eco": "B10",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "KV90PAgPO2A",
+   "eco": "B10",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "cPVp5TWZR0w",
+   "eco": "B10",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "gyOxMMJWiYg",
+   "eco": "B10",
+   "plies": 2,
+   "coverage": 1,
    "subject": false,
    "forks": 3
   },
   {
-   "videoId": "F7UDk49ESWs",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.985,
-   "subject": false,
-   "forks": 11
+   "videoId": "iuLI_EUlgvE",
+   "eco": "B10",
+   "plies": 2,
+   "coverage": 1,
+   "subject": true,
+   "forks": 0
   },
   {
-   "videoId": "Y-a6cV08zDM",
-   "eco": "C40",
+   "videoId": "kO4qTTR0B7o",
+   "eco": "B12",
    "plies": 3,
-   "coverage": 0.991,
+   "coverage": 1,
    "subject": false,
-   "forks": 11
+   "forks": 1
+  },
+  {
+   "videoId": "mCzuNeWLYBs",
+   "eco": "B10",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "rkoC8ZlqOII",
+   "eco": "B10",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 7
   }
  ],
  "King's Pawn Game": [
   {
+   "videoId": "4GIsh7cTsHc",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "8urm2D1HhX8",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "DO28z1MTaC8",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
    "videoId": "DnJl1cmihNQ",
    "eco": "B00",
    "plies": 1,
@@ -151,6 +469,22 @@
    "coverage": 1,
    "subject": false,
    "forks": 11
+  },
+  {
+   "videoId": "Gti01VN0zXA",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": true,
+   "forks": 1
+  },
+  {
+   "videoId": "IloLuuXW7lE",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
   },
   {
    "videoId": "JKxlT73xpYo",
@@ -167,6 +501,14 @@
    "coverage": 1,
    "subject": false,
    "forks": 2
+  },
+  {
+   "videoId": "OQsa_sdKzjY",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
   },
   {
    "videoId": "V4lW-6f56Cg",
@@ -191,6 +533,46 @@
    "coverage": 1,
    "subject": false,
    "forks": 5
+  },
+  {
+   "videoId": "_4xbS0Crtic",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "br2ThhGdJXU",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "cPVp5TWZR0w",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "gyOxMMJWiYg",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "ihv2TK04WPg",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
   },
   {
    "videoId": "iuLI_EUlgvE",
@@ -241,12 +623,356 @@
    "forks": 7
   },
   {
+   "videoId": "u1ZSMsWIfBM",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
    "videoId": "vbWQt7Qn_eQ",
    "eco": "B00",
    "plies": 1,
    "coverage": 1,
    "subject": false,
    "forks": 1
+  },
+  {
+   "videoId": "xp727Z8dXZc",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  }
+ ],
+ "Petrov's Defense: Stafford Gambit": [
+  {
+   "videoId": "8urm2D1HhX8",
+   "eco": "C42",
+   "plies": 6,
+   "coverage": 0.706,
+   "subject": true,
+   "forks": 3
+  }
+ ],
+ "Irish Gambit": [
+  {
+   "videoId": "8urm2D1HhX8",
+   "eco": "C44",
+   "plies": 5,
+   "coverage": 0.216,
+   "subject": false,
+   "forks": 3
+  }
+ ],
+ "Petrov's Defense": [
+  {
+   "videoId": "8urm2D1HhX8",
+   "eco": "C42",
+   "plies": 4,
+   "coverage": 0.745,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "DO28z1MTaC8",
+   "eco": "C42",
+   "plies": 4,
+   "coverage": 0.976,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "DnJl1cmihNQ",
+   "eco": "C42",
+   "plies": 4,
+   "coverage": 0.8,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "_4xbS0Crtic",
+   "eco": "C42",
+   "plies": 4,
+   "coverage": 0.957,
+   "subject": false,
+   "forks": 4
+  }
+ ],
+ "King's Knight Opening: Normal Variation": [
+  {
+   "videoId": "8urm2D1HhX8",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.216,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "F7UDk49ESWs",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.97,
+   "subject": false,
+   "forks": 11
+  },
+  {
+   "videoId": "Y-a6cV08zDM",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.982,
+   "subject": false,
+   "forks": 11
+  }
+ ],
+ "King's Knight Opening": [
+  {
+   "videoId": "8urm2D1HhX8",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.98,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "DO28z1MTaC8",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.988,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "DnJl1cmihNQ",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.98,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "F7UDk49ESWs",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.985,
+   "subject": false,
+   "forks": 11
+  },
+  {
+   "videoId": "Y-a6cV08zDM",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.991,
+   "subject": false,
+   "forks": 11
+  },
+  {
+   "videoId": "_4xbS0Crtic",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.978,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "xp727Z8dXZc",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.975,
+   "subject": false,
+   "forks": 4
+  }
+ ],
+ "King's Indian Defense: Averbakh Variation, Geller Defense": [
+  {
+   "videoId": "B0AdPztLsHs",
+   "eco": "E73",
+   "plies": 12,
+   "coverage": 0.756,
+   "subject": true,
+   "forks": 0
+  }
+ ],
+ "King's Indian Defense: Averbakh Variation": [
+  {
+   "videoId": "B0AdPztLsHs",
+   "eco": "E73",
+   "plies": 11,
+   "coverage": 0.78,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "King's Indian Defense: Normal Variation, Standard Development": [
+  {
+   "videoId": "B0AdPztLsHs",
+   "eco": "E73",
+   "plies": 9,
+   "coverage": 0.829,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "Grünfeld Defense: Brinckmann Attack, Grünfeld Gambit Accepted": [
+  {
+   "videoId": "Cjxk_qrmeMY",
+   "eco": "D84",
+   "plies": 15,
+   "coverage": 0.071,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "Grünfeld Defense: Exchange Variation, Modern Exchange Variation": [
+  {
+   "videoId": "Cjxk_qrmeMY",
+   "eco": "D85",
+   "plies": 13,
+   "coverage": 0.018,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "Grünfeld Defense: Exchange Variation, Classical Variation": [
+  {
+   "videoId": "Cjxk_qrmeMY",
+   "eco": "D86",
+   "plies": 13,
+   "coverage": 0.071,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "Grünfeld Defense: Exchange Variation": [
+  {
+   "videoId": "Cjxk_qrmeMY",
+   "eco": "D85",
+   "plies": 8,
+   "coverage": 0.161,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "Di-5aO2lddU",
+   "eco": "D85",
+   "plies": 8,
+   "coverage": 0.886,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "Grünfeld Defense: Brinckmann Attack": [
+  {
+   "videoId": "Cjxk_qrmeMY",
+   "eco": "D82",
+   "plies": 7,
+   "coverage": 0.071,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "Grünfeld Defense": [
+  {
+   "videoId": "Cjxk_qrmeMY",
+   "eco": "D80",
+   "plies": 6,
+   "coverage": 0.946,
+   "subject": true,
+   "forks": 5
+  },
+  {
+   "videoId": "Di-5aO2lddU",
+   "eco": "D80",
+   "plies": 6,
+   "coverage": 0.932,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "Petrov's Defense: Three Knights Game": [
+  {
+   "videoId": "DO28z1MTaC8",
+   "eco": "C42",
+   "plies": 5,
+   "coverage": 0.964,
+   "subject": true,
+   "forks": 1
+  },
+  {
+   "videoId": "_4xbS0Crtic",
+   "eco": "C42",
+   "plies": 5,
+   "coverage": 0.935,
+   "subject": true,
+   "forks": 4
+  }
+ ],
+ "Grünfeld Defense: Exchange Variation, Nadanian Attack": [
+  {
+   "videoId": "Di-5aO2lddU",
+   "eco": "D85",
+   "plies": 9,
+   "coverage": 0.864,
+   "subject": true,
+   "forks": 1
+  }
+ ],
+ "English Opening: Anglo-Indian Defense": [
+  {
+   "videoId": "Di-5aO2lddU",
+   "eco": "A15",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "English Opening": [
+  {
+   "videoId": "Di-5aO2lddU",
+   "eco": "A10",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "fz9td9L2uIo",
+   "eco": "A10",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "Petrov's Defense: Italian Variation": [
+  {
+   "videoId": "DnJl1cmihNQ",
+   "eco": "C42",
+   "plies": 5,
+   "coverage": 0.8,
+   "subject": true,
+   "forks": 3
+  }
+ ],
+ "Philidor Defense": [
+  {
+   "videoId": "DnJl1cmihNQ",
+   "eco": "C41",
+   "plies": 4,
+   "coverage": 0.16,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "xp727Z8dXZc",
+   "eco": "C41",
+   "plies": 4,
+   "coverage": 0.95,
+   "subject": false,
+   "forks": 4
   }
  ],
  "Four Knights Game: Scotch Variation Accepted, Main Line": [
@@ -309,22 +1035,14 @@
    "forks": 11
   }
  ],
- "King's Knight Opening: Normal Variation": [
+ "Caro-Kann Defense: Hillbilly Attack": [
   {
-   "videoId": "F7UDk49ESWs",
-   "eco": "C44",
-   "plies": 4,
-   "coverage": 0.97,
-   "subject": false,
-   "forks": 11
-  },
-  {
-   "videoId": "Y-a6cV08zDM",
-   "eco": "C44",
-   "plies": 4,
-   "coverage": 0.982,
-   "subject": false,
-   "forks": 11
+   "videoId": "IloLuuXW7lE",
+   "eco": "B10",
+   "plies": 3,
+   "coverage": 0.972,
+   "subject": true,
+   "forks": 0
   }
  ],
  "French Defense: Advance Variation, Ruisdonk Gambit": [
@@ -477,6 +1195,14 @@
    "forks": 2
   },
   {
+   "videoId": "cPVp5TWZR0w",
+   "eco": "B13",
+   "plies": 5,
+   "coverage": 0.029,
+   "subject": false,
+   "forks": 5
+  },
+  {
    "videoId": "kO4qTTR0B7o",
    "eco": "B13",
    "plies": 5,
@@ -493,46 +1219,86 @@
    "forks": 7
   }
  ],
- "Caro-Kann Defense": [
+ "Alekhine Defense: Exchange Variation": [
   {
-   "videoId": "KV90PAgPO2A",
-   "eco": "B10",
-   "plies": 2,
-   "coverage": 1,
+   "videoId": "OQsa_sdKzjY",
+   "eco": "B03",
+   "plies": 9,
+   "coverage": 0.538,
    "subject": false,
-   "forks": 2
-  },
-  {
-   "videoId": "iuLI_EUlgvE",
-   "eco": "B10",
-   "plies": 2,
-   "coverage": 1,
-   "subject": true,
    "forks": 0
   },
   {
-   "videoId": "kO4qTTR0B7o",
-   "eco": "B12",
+   "videoId": "br2ThhGdJXU",
+   "eco": "B03",
+   "plies": 9,
+   "coverage": 0.011,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "Alekhine Defense: Two Pawns Attack": [
+  {
+   "videoId": "OQsa_sdKzjY",
+   "eco": "B02",
+   "plies": 5,
+   "coverage": 0.846,
+   "subject": true,
+   "forks": 0
+  }
+ ],
+ "Alekhine Defense: Normal Variation": [
+  {
+   "videoId": "OQsa_sdKzjY",
+   "eco": "B02",
+   "plies": 4,
+   "coverage": 0.923,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "br2ThhGdJXU",
+   "eco": "B02",
+   "plies": 4,
+   "coverage": 0.978,
+   "subject": true,
+   "forks": 5
+  }
+ ],
+ "Alekhine Defense": [
+  {
+   "videoId": "OQsa_sdKzjY",
+   "eco": "B02",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "br2ThhGdJXU",
+   "eco": "B02",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "Indian Defense: Accelerated London System": [
+  {
+   "videoId": "TSM7CFcJ1L0",
+   "eco": "A45",
    "plies": 3,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
+   "coverage": 0.991,
+   "subject": true,
+   "forks": 6
   },
   {
-   "videoId": "mCzuNeWLYBs",
-   "eco": "B10",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "rkoC8ZlqOII",
-   "eco": "B10",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 7
+   "videoId": "lyUZn39V6TY",
+   "eco": "A45",
+   "plies": 3,
+   "coverage": 0.983,
+   "subject": true,
+   "forks": 4
   }
  ],
  "Vienna Game: Vienna Gambit, Accepted": [
@@ -693,35 +1459,157 @@
    "forks": 11
   }
  ],
- "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack": [
+ "Nimzo-Larsen Attack": [
   {
-   "videoId": "k9lpwbZ1Cyw",
-   "eco": "B30",
-   "plies": 5,
-   "coverage": 0.068,
+   "videoId": "c6s0bKN5y4E",
+   "eco": "A01",
+   "plies": 1,
+   "coverage": 1,
+   "subject": true,
+   "forks": 3
+  }
+ ],
+ "Caro-Kann Defense: Tartakower Variation": [
+  {
+   "videoId": "cPVp5TWZR0w",
+   "eco": "B15",
+   "plies": 10,
+   "coverage": 0.768,
+   "subject": true,
+   "forks": 5
+  }
+ ],
+ "Caro-Kann Defense: Advance Variation, Botvinnik-Carls Defense": [
+  {
+   "videoId": "cPVp5TWZR0w",
+   "eco": "B12",
+   "plies": 6,
+   "coverage": 0.014,
    "subject": false,
+   "forks": 5
+  }
+ ],
+ "Caro-Kann Defense: Modern Variation": [
+  {
+   "videoId": "cPVp5TWZR0w",
+   "eco": "B12",
+   "plies": 5,
+   "coverage": 0.841,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "Caro-Kann Defense: Maróczy Variation": [
+  {
+   "videoId": "cPVp5TWZR0w",
+   "eco": "B12",
+   "plies": 5,
+   "coverage": 0.014,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "gyOxMMJWiYg",
+   "eco": "B12",
+   "plies": 5,
+   "coverage": 0.942,
+   "subject": true,
+   "forks": 3
+  },
+  {
+   "videoId": "mCzuNeWLYBs",
+   "eco": "B12",
+   "plies": 5,
+   "coverage": 0.94,
+   "subject": true,
    "forks": 1
   }
  ],
- "Sicilian Defense: Old Sicilian": [
+ "Caro-Kann Defense: Two Knights Attack": [
   {
-   "videoId": "k9lpwbZ1Cyw",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.966,
+   "videoId": "cPVp5TWZR0w",
+   "eco": "B10",
+   "plies": 5,
+   "coverage": 0.043,
+   "subject": false,
+   "forks": 5
+  }
+ ],
+ "Caro-Kann Defense: Accelerated Panov Attack": [
+  {
+   "videoId": "fz9td9L2uIo",
+   "eco": "B10",
+   "plies": 3,
+   "coverage": 1,
    "subject": true,
-   "forks": 1
-  },
+   "forks": 0
+  }
+ ],
+ "English Opening: Caro-Kann Defensive System": [
   {
-   "videoId": "qfiO5HGBWWc",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.962,
+   "videoId": "fz9td9L2uIo",
+   "eco": "A11",
+   "plies": 2,
+   "coverage": 1,
    "subject": false,
    "forks": 0
   }
  ],
+ "Sicilian Defense: Venice Attack": [
+  {
+   "videoId": "ihv2TK04WPg",
+   "eco": "B56",
+   "plies": 11,
+   "coverage": 0.825,
+   "subject": true,
+   "forks": 0
+  }
+ ],
+ "Sicilian Defense: Modern Variations, Main Line": [
+  {
+   "videoId": "ihv2TK04WPg",
+   "eco": "B54",
+   "plies": 8,
+   "coverage": 0.9,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "vbWQt7Qn_eQ",
+   "eco": "B54",
+   "plies": 8,
+   "coverage": 0.813,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "Sicilian Defense: Modern Variations": [
+  {
+   "videoId": "ihv2TK04WPg",
+   "eco": "B50",
+   "plies": 4,
+   "coverage": 0.95,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "vbWQt7Qn_eQ",
+   "eco": "B50",
+   "plies": 4,
+   "coverage": 0.875,
+   "subject": false,
+   "forks": 1
+  }
+ ],
  "Sicilian Defense": [
+  {
+   "videoId": "ihv2TK04WPg",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
   {
    "videoId": "k9lpwbZ1Cyw",
    "eco": "B20",
@@ -755,24 +1643,102 @@
    "forks": 1
   }
  ],
- "Queen's Pawn Game": [
+ "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack": [
   {
-   "videoId": "kO4qTTR0B7o",
-   "eco": "A40",
-   "plies": 1,
-   "coverage": 1,
+   "videoId": "k9lpwbZ1Cyw",
+   "eco": "B30",
+   "plies": 5,
+   "coverage": 0.068,
    "subject": false,
    "forks": 1
   }
  ],
- "Caro-Kann Defense: Maróczy Variation": [
+ "Sicilian Defense: Old Sicilian": [
   {
-   "videoId": "mCzuNeWLYBs",
-   "eco": "B12",
-   "plies": 5,
-   "coverage": 0.94,
+   "videoId": "k9lpwbZ1Cyw",
+   "eco": "B30",
+   "plies": 4,
+   "coverage": 0.966,
    "subject": true,
    "forks": 1
+  },
+  {
+   "videoId": "qfiO5HGBWWc",
+   "eco": "B30",
+   "plies": 4,
+   "coverage": 0.962,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "French Defense: King's Indian Attack": [
+  {
+   "videoId": "knRe3EsANdg",
+   "eco": "C00",
+   "plies": 3,
+   "coverage": 1,
+   "subject": true,
+   "forks": 6
+  }
+ ],
+ "Mieses Opening": [
+  {
+   "videoId": "knRe3EsANdg",
+   "eco": "A00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 6
+  }
+ ],
+ "Queen's Indian Defense: Spassky System": [
+  {
+   "videoId": "kudYuwgjAeY",
+   "eco": "E14",
+   "plies": 7,
+   "coverage": 0.645,
+   "subject": true,
+   "forks": 4
+  }
+ ],
+ "Nimzo-Indian Defense": [
+  {
+   "videoId": "kudYuwgjAeY",
+   "eco": "E20",
+   "plies": 6,
+   "coverage": 0.032,
+   "subject": false,
+   "forks": 4
+  }
+ ],
+ "Queen's Indian Defense": [
+  {
+   "videoId": "kudYuwgjAeY",
+   "eco": "E12",
+   "plies": 6,
+   "coverage": 0.032,
+   "subject": false,
+   "forks": 4
+  }
+ ],
+ "Indian Defense: Anti-Nimzo-Indian": [
+  {
+   "videoId": "kudYuwgjAeY",
+   "eco": "E10",
+   "plies": 5,
+   "coverage": 0.065,
+   "subject": false,
+   "forks": 4
+  }
+ ],
+ "Catalan Opening": [
+  {
+   "videoId": "kudYuwgjAeY",
+   "eco": "E00",
+   "plies": 5,
+   "coverage": 0.032,
+   "subject": false,
+   "forks": 4
   }
  ],
  "Sicilian Defense: Bowdler Attack": [
@@ -783,6 +1749,16 @@
    "coverage": 0.982,
    "subject": true,
    "forks": 0
+  }
+ ],
+ "Benoni Defense": [
+  {
+   "videoId": "o17K4WiESWQ",
+   "eco": "A56",
+   "plies": 4,
+   "coverage": 0.857,
+   "subject": true,
+   "forks": 1
   }
  ],
  "Sicilian Defense: Accelerated Dragon": [
@@ -815,6 +1791,16 @@
    "forks": 7
   }
  ],
+ "Scandinavian Defense": [
+  {
+   "videoId": "u1ZSMsWIfBM",
+   "eco": "B01",
+   "plies": 2,
+   "coverage": 1,
+   "subject": true,
+   "forks": 0
+  }
+ ],
  "Sicilian Defense: Najdorf Variation": [
   {
    "videoId": "vbWQt7Qn_eQ",
@@ -825,24 +1811,34 @@
    "forks": 1
   }
  ],
- "Sicilian Defense: Modern Variations, Main Line": [
+ "Philidor Defense: Hanham Variation": [
   {
-   "videoId": "vbWQt7Qn_eQ",
-   "eco": "B54",
-   "plies": 8,
-   "coverage": 0.813,
-   "subject": false,
-   "forks": 1
+   "videoId": "xp727Z8dXZc",
+   "eco": "C41",
+   "plies": 6,
+   "coverage": 0.725,
+   "subject": true,
+   "forks": 4
   }
  ],
- "Sicilian Defense: Modern Variations": [
+ "Philidor Defense: Exchange Variation": [
   {
-   "videoId": "vbWQt7Qn_eQ",
-   "eco": "B50",
-   "plies": 4,
-   "coverage": 0.875,
+   "videoId": "xp727Z8dXZc",
+   "eco": "C41",
+   "plies": 6,
+   "coverage": 0.075,
    "subject": false,
-   "forks": 1
+   "forks": 4
+  }
+ ],
+ "Philidor Defense: Nimzowitsch Variation": [
+  {
+   "videoId": "xp727Z8dXZc",
+   "eco": "C41",
+   "plies": 6,
+   "coverage": 0.1,
+   "subject": false,
+   "forks": 4
   }
  ]
 }
