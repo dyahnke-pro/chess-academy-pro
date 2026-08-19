@@ -14,6 +14,17 @@
 #
 # Usage: harvest-local.sh <dir-of-mp4s> [id ...]     # no ids = every mp4 there
 set -u
+# ONE RUN AT A TIME. Two concurrent runs iterate the same directory, and each
+# deletes the grids file at the end of its own iteration — so one run removed the
+# grids the other had just written, build.mjs died on the missing file, and the
+# non-zero exit was recorded as NO-GAME with the video deleted. Seven lessons
+# were written off that way, all of them fine. The lock makes the race
+# impossible rather than making the failure legible after the fact.
+LOCK=${LOCK:-/tmp/harvest-local.lock}
+exec 9>"$LOCK"
+if ! flock -n 9; then
+  echo "another harvest-local is running (lock: $LOCK) — refusing to race"; exit 1
+fi
 SRC=${1:?usage: harvest-local.sh <dir> [id...]}
 shift || true
 GRIDS=${GRIDS:-/tmp/batchbuild}
@@ -63,15 +74,24 @@ for id in "${ids[@]}"; do
     const v=(Array.isArray(m)?m:(m.videos??[])).find(v=>v.id===process.argv[1]);
     process.stdout.write(v?v.title:'');" "$id" 2>/dev/null)
 
-  if VIDEO_TRACK_DIR=data/video-pending node scripts/video-align/build.mjs \
-       "$id" "$GRIDS/$id.grids.json" "$title" "$GX,$GY,$GS" \
-       > "$GRIDS/$id.build.log" 2>&1; then
+  VIDEO_TRACK_DIR=data/video-pending node scripts/video-align/build.mjs \
+    "$id" "$GRIDS/$id.grids.json" "$title" "$GX,$GY,$GS" \
+    > "$GRIDS/$id.build.log" 2>&1
+  rc=$?
+  if [ "$rc" -eq 0 ]; then
     echo "BANKED   $id :: $(cat "$GRIDS/$id.build.log")"
     [ -z "${KEEP_VIDEO:-}" ] && rm -f "$f"
-  else
+  # A CRASH IS NOT A NO-GAME, AND MUST NOT DELETE THE VIDEO. `build.mjs` prints
+  # its own refusal and exits non-zero for a genuine no-game; a stack trace is
+  # the pipeline breaking, and recording that as a verdict retires a good video
+  # permanently — the skip test consults no-game.txt, so it would never be
+  # fetched again.
+  elif grep -q "no usable game tracked" "$GRIDS/$id.build.log" 2>/dev/null; then
     echo "NO-GAME  $id :: $(tail -1 "$GRIDS/$id.build.log" | cut -c1-70)"
     grep -qxF "$id" data/video-queues/no-game.txt 2>/dev/null || echo "$id" >> data/video-queues/no-game.txt
     [ -z "${KEEP_VIDEO:-}" ] && rm -f "$f"
+  else
+    echo "CRASHED  $id (rc=$rc) :: $(grep -m1 -oE 'Error:.*' "$GRIDS/$id.build.log" | cut -c1-70) — video KEPT"
   fi
   rm -f "$GRIDS/$id.grids.json"
 done
