@@ -1,0 +1,25 @@
+[
+ {
+  "id": "vn-kingside-clamp-the-pawn-that-asks-two-questions",
+  "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Bg5 Nbd7 h4 h6 Be3 e5 d5 b6 Qd2 Kh7 g4 Nc5 f3 a5 Nh3 Rh8 g5",
+  "teaches": "In a locked centre the pawn storm is the argument, and its best moves hit two things at once. A pawn advance that attacks a piece and a pawn together forces a concession whichever way it is answered — and every trade it causes opens another line toward the king.",
+  "explains": "The pawn steps to g5 and attacks the knight on f6 and the pawn on h6 in the same move. One of them must give: the knight retreats or the pawns trade, and either answer opens lines on the side of the board where all the storming pawns already point.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "f6"
+   },
+   {
+    "kind": "attacks",
+    "square": "h6"
+   }
+  ]
+ },
+ {
+  "id": "vn-kingside-clamp-find-the-piece-missing-in-action",
+  "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Bg5 Nbd7 h4 h6 Be3 e5 d5 b6 Qd2 Kh7 g4 Nc5 f3 a5 Nh3 Rh8 g5 Ng8 h5 Bxh3 Rxh3 gxh5 O-O-O",
+  "teaches": "In a tense position with many captures available, two disciplines pay together: let the opponent be the one who takes — you only recapture, keeping every file that opens working for you — and ask which of your pieces is missing in action. The move that signs in the last absent piece usually outranks every capture on the board.",
+  "explains": "Castling long brings the rook from a1 — the one piece that had no job — into the game while the king steps to safety, and the kingside tension stays exactly as it was: unresolved, on the opponent's clock. Whoever takes first there opens lines for the side that was ready.",
+  "structural": "the last absent piece signed in before any capture — tension held so the opener pays for the opening"
+ }
+]

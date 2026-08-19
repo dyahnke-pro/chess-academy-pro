@@ -1,0 +1,26 @@
+[
+ {
+  "id": "vn-counterstrike-hit-the-centre-the-moment-it-overreaches",
+  "line": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Bg7 Bf4 Nxd5 Nxd5 Qxd5 Bg3 c5",
+  "teaches": "This defence gives up the centre on purpose to attack it from the wings, and the c-pawn's strike is the signature blow. Play it the moment the opponent's setup stops fitting together — a mixed-up move order in the centre is exactly the target the counterstrike was designed for.",
+  "explains": "The pawn strikes at c5, attacking the pawn on d4 while the bishop on g7 leans on the same long diagonal. The opponent's pieces arrived in an order that does not defend this — the centre they were promised is already under fire.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "d4"
+   }
+  ]
+ },
+ {
+  "id": "vn-counterstrike-force-the-trade-that-drags-the-king-out",
+  "line": "d4 Nf6 c4 g6 Nc3 d5 cxd5 Bg7 Bf4 Nxd5 Nxd5 Qxd5 Bg3 c5 dxc5 Qxc5 Rc1 Qa5+",
+  "teaches": "When the enemy king is still in the centre, a queen check that can only be answered by a block is a lever: the block invites the trade, and the recapture drags the king to a working square of your choosing. The endgame that follows starts with their king misplaced — a permanent, free concession.",
+  "explains": "The queen checks from a5 down the open diagonal to the king on e1. There is no comfortable answer: blocking invites the queen trade, and the recapture pulls the king into the middle of the board with pieces still on. Every later idea gains a move against a king that has to watch its step.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e1"
+   }
+  ]
+ }
+]
