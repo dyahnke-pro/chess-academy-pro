@@ -326,5 +326,64 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-advance-e6-count-the-tempi-a-retreat-costs",
+   "line": "e4 e6 e5 b6 d4 d5 c3 Ba6 Be2 c6 Bd3 Bc8",
+   "teaches": "A piece that goes out, is asked a question, and comes home has spent two moves to arrive where it started. That is the real cost of an early sortie, and it is paid in a currency that cannot be earned back — count the moves, not the squares, when deciding whether a plan is worth starting.",
+   "explains": "The bishop returns to its original square after the trade it came out for was declined, guarding the base pawn on e6 exactly as it did before it left. Two moves have gone into a piece that is now where it began, while the other side developed both times.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e6"
+    }
+   ],
+   "fen": "rnbqkbnr/p4ppp/1pp1p3/3pP3/3P4/2PB4/PP3PPP/RNBQK1NR w KQkq - 2 7",
+   "t": 1074,
+   "ply": 12,
+   "source": "yt:FozbGMUOOjs"
+  }
+ ],
+ "openings": [
+  {
+   "name": "French Defense: Advance Variation",
+   "eco": "C02",
+   "plies": 5,
+   "line": "e4 e6 d4 d5 e5",
+   "coverage": 0.45
+  },
+  {
+   "name": "French Defense: Normal Variation",
+   "eco": "C00",
+   "plies": 3,
+   "line": "e4 e6 d4",
+   "coverage": 0.5
+  },
+  {
+   "name": "French Defense: Steinitz Attack",
+   "eco": "C00",
+   "plies": 3,
+   "line": "e4 e6 e5",
+   "coverage": 0.45
+  },
+  {
+   "name": "French Defense",
+   "eco": "C00",
+   "plies": 2,
+   "line": "e4 e6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "French Defense",
+  "confirmed": true
+ }
 }

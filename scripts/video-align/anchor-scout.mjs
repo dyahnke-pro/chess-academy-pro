@@ -40,21 +40,33 @@ const path = existsSync(`data/video-pending/${id}.json`)
   ? `data/video-pending/${id}.json` : `data/video-tracks/${id}.json`;
 const track = JSON.parse(readFileSync(path, 'utf8'));
 
-// A RECORD'S `line` IS A DELTA, AND `ply` IS WHERE IT LANDS. Concatenating the
-// deltas produces an illegal line the moment the lesson rewinds, because a
-// rewind record carries an empty delta and a LOWER ply — the truncation is the
-// whole content of that record. So the running line is cut back to
-// `ply - delta.length` before the delta is appended, which reproduces both the
-// forward moves and the take-backs.
+// PRINT THE RECORDED POSITIONS, NOT A RECONSTRUCTED DEEPEST LINE.
+//
+// A record's `line` is a DELTA and `ply` is where it lands, so the running line
+// is cut back to `ply - delta.length` before the delta is appended — that
+// reproduces both the forward moves and the rewinds. But walking that to its
+// deepest point and printing it ply by ply invents anchors: a lesson that jumps
+// several moves at once never SETTLED on the positions in between, and
+// `attach-notes` resolves a note by exact recorded key, so a note written on one
+// of those intermediate plies is refused after the prose is already written.
+// Three were, which is what this now prevents. Every line printed below is a key
+// `attach-notes` will find.
 let line = [];
-const tOf = new Map();
-const deepest = { line: [], t: 0 };
+const keys = [];
+const seen = new Set();
 for (const m of track.moves) {
+  if (!m.line.length) continue;
   line = line.slice(0, Math.max(0, m.ply - m.line.length)).concat(m.line);
-  for (let i = 0; i < line.length; i += 1) if (!tOf.has(i + 1)) tOf.set(i + 1, m.t);
-  if (line.length > deepest.line.length) { deepest.line = [...line]; deepest.t = m.t; }
+  const key = line.join(' ');
+  if (seen.has(key)) continue;
+  seen.add(key);
+  keys.push({ key, sans: [...line], t: m.t });
 }
-const sans = deepest.line;
+const deepest = keys.reduce((a, b) => (b.sans.length > a.sans.length ? b : a), keys[0]);
+const sans = deepest.sans;
+const tOf = new Map();
+for (const k of keys) if (!tOf.has(k.sans.length)) tOf.set(k.sans.length, k.t);
+const anchorable = new Set(keys.map((k) => k.sans.length === 0 ? '' : k.key));
 
 const g = new Chess();
 console.log(`${id} — ${track.title ?? ''}`);
@@ -67,6 +79,9 @@ sans.forEach((san, i) => {
   if (!hit && !flags.includes('--all')) return;
   const num = `${Math.floor(i / 2) + 1}${i % 2 === 0 ? '.' : '...'}`;
   const t = tOf.get(i + 1);
-  console.log(`  ${String(i + 1).padStart(2)} ${num.padEnd(6)} ${san.padEnd(7)} ${t != null ? `t=${String(t).padStart(6)}` : '        '}  ${hit ? `TAUGHT: ${hit}` : ''}`);
+  // A ply the lesson passed through inside a multi-move jump cannot carry a
+  // note: there is no recorded position to anchor it to.
+  const anchor = anchorable.has(sans.slice(0, i + 1).join(' ')) ? '' : '  [no anchor]';
+  console.log(`  ${String(i + 1).padStart(2)} ${num.padEnd(6)} ${san.padEnd(7)} ${t != null ? `t=${String(t).padStart(6)}` : '        '}  ${hit ? `TAUGHT: ${hit}` : ''}${anchor}`);
 });
 console.log(`\n${onLine}/${sans.length} plies sit on a taught line`);

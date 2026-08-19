@@ -30,25 +30,5 @@
     "square": "c5"
    }
   ]
- },
- {
-  "id": "vn-advance-e6-trade-into-the-bishop-pair-not-out-of-it",
-  "line": "e4 e6 d4 d5 e5 c5 Nf3 Nc6 Bd3 Qb6 O-O Bd7 Re1 Nh6 Nc3 a6 Na4 Qa7 Nxc5",
-  "teaches": "A knight arriving on a square where it must be captured by the opponent's good bishop is not losing a piece \u2014 it is BUYING one. When their dark-squared bishop is the piece holding their position together, the trade that removes it leaves you with two bishops and them with none, and that imbalance outlives the tactics that produced it.",
-  "explains": "The knight takes on c5, where it also hits the bishop on d7 and leans on the pawns on b7, a6 and e6. Recapturing means giving up the bishop that was guarding the dark squares their whole structure has conceded.",
-  "reasons": [
-   {
-    "kind": "attacks",
-    "square": "d7"
-   },
-   {
-    "kind": "attacks",
-    "square": "b7"
-   },
-   {
-    "kind": "attacks",
-    "square": "e6"
-   }
-  ]
  }
 ]

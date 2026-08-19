@@ -519,5 +519,124 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-advance-e6-develop-instead-of-propping-the-pawn",
+   "line": "e4 e6 d4 d5 e5 c5 Nf3 Nc6 Bd3",
+   "teaches": "When your centre is attacked, defending it with a pawn is not the only answer — and it is often the worst one, because the propping move develops nothing and commits a square your pieces wanted. Give the pawn up and DEVELOP instead: a lead in development buys back more than one pawn is worth, provided every move you spend is a piece coming out with a purpose.",
+   "explains": "The bishop takes the strongest diagonal it has, pointing at h7 and covering the light squares in front of the centre. The pawn in the middle can be taken; the position it is being traded for is a full move ahead in development.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "h7"
+    },
+    {
+     "kind": "controls",
+     "square": "e4"
+    },
+    {
+     "kind": "controls",
+     "square": "f5"
+    }
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R b KQkq - 3 5",
+   "t": 95,
+   "ply": 9,
+   "source": "yt:bRMHNmDMLqw"
+  },
+  {
+   "id": "vn-advance-e6-hold-the-square-instead-of-taking-the-pawn",
+   "line": "e4 e6 d4 d5 e5 c5 Nf3 Nc6 Bd3 cxd4 O-O f6 Re1",
+   "teaches": "When the opponent strikes at the pawn that anchors your whole position, capturing back is the move that throws the position away. The pawn is not the point — the SQUARE it sits on is, and taking removes your own occupant of it. Add a defender instead and make them do the trading, so whatever lands on that square is yours.",
+   "explains": "The rook comes to e1 straight behind the advanced pawn, holding it and holding the file behind it. If the pawn is captured now, a piece of ours arrives on that square rather than the position simply opening.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e5"
+    }
+   ],
+   "fen": "r1bqkbnr/pp4pp/2n1pp2/3pP3/3p4/3B1N2/PPP2PPP/RNBQR1K1 b kq - 1 7",
+   "t": 150.5,
+   "ply": 13,
+   "source": "yt:bRMHNmDMLqw"
+  },
+  {
+   "id": "vn-advance-e6-the-pin-is-not-the-plan",
+   "line": "e4 e6 d4 d5 e5 c5 Nf3 Nc6 Bd3 cxd4 O-O f6 Re1 fxe5 Nxe5 Nf6 Bf4",
+   "teaches": "A pin is attractive because it is concrete, and that is exactly why it distracts. If your position is built around holding one square, judge every developing move by whether it adds a guard to that square — the flashier square that pins a knight but abandons the outpost is a worse move even though it looks like it does more.",
+   "explains": "The bishop settles on f4, defending the knight that occupies the key square. The pin one square further along looks more active and touches nothing that matters here; this is the square that keeps the knight where it is.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e5"
+    }
+   ],
+   "fen": "r1bqkb1r/pp4pp/2n1pn2/3pN3/3p1B2/3B4/PPP2PPP/RN1QR1K1 b kq - 2 9",
+   "t": 186.5,
+   "ply": 17,
+   "source": "yt:bRMHNmDMLqw"
+  },
+  {
+   "id": "vn-advance-e6-develop-along-the-route-to-the-square-you-are-holding",
+   "line": "e4 e6 d4 d5 e5 c5 Nf3 Nc6 Bd3 cxd4 O-O f6 Re1 fxe5 Nxe5 Nf6 Bf4 Bd6 Nd2",
+   "teaches": "When a piece must be developed and a square must be reinforced, look for the move that does both. A knight has more than one route out, and the route that passes through a square from which it will defend your outpost is worth more than the one that merely looks central. Development and the plan should be the same move whenever they can be.",
+   "explains": "The knight comes to d2, covering f3 — the square from which it will add another defender to the outpost — and holding e4 on the way. Nothing has been developed for its own sake.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "f3"
+    },
+    {
+     "kind": "controls",
+     "square": "e4"
+    }
+   ],
+   "fen": "r1bqk2r/pp4pp/2nbpn2/3pN3/3p1B2/3B4/PPPN1PPP/R2QR1K1 b kq - 4 10",
+   "t": 222,
+   "ply": 19,
+   "source": "yt:bRMHNmDMLqw"
+  }
+ ],
+ "openings": [
+  {
+   "name": "French Defense: Advance Variation, Nimzowitsch System",
+   "eco": "C02",
+   "plies": 7,
+   "line": "e4 e6 d4 d5 e5 c5 Nf3",
+   "coverage": 0.477
+  },
+  {
+   "name": "French Defense: Advance Variation",
+   "eco": "C02",
+   "plies": 5,
+   "line": "e4 e6 d4 d5 e5",
+   "coverage": 0.932
+  },
+  {
+   "name": "French Defense: Normal Variation",
+   "eco": "C00",
+   "plies": 3,
+   "line": "e4 e6 d4",
+   "coverage": 0.977
+  },
+  {
+   "name": "French Defense",
+   "eco": "C00",
+   "plies": 2,
+   "line": "e4 e6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "French Defense: Advance Variation",
+  "confirmed": true
+ }
 }

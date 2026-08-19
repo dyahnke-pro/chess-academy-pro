@@ -1,0 +1,18 @@
+[
+ {
+  "id": "vn-modern-e6-close-the-centre-when-they-have-weakened-a-colour",
+  "line": "e4 g6 d4 Bg7 c3 e6 Bd3 d5 e5",
+  "teaches": "A pawn move that fianchettoes a bishop also gives away the squares of the other colour around it for good. Against that, CLOSING the centre is not passive \u2014 it removes the counterplay that would distract you and leaves the weakened squares as the only thing happening on the board. Fix the position where they cannot fix their weakness.",
+  "explains": "The pawn advances to e5, taking d6 and f6 in hand and shutting the middle. Those are exactly the squares the earlier pawn move gave up, and there is now no pawn break that reclaims them.",
+  "reasons": [
+   {
+    "kind": "controls",
+    "square": "d6"
+   },
+   {
+    "kind": "controls",
+    "square": "f6"
+   }
+  ]
+ }
+]

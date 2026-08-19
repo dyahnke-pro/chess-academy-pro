@@ -806,5 +806,165 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-fourpawns-recapture-that-keeps-the-file-shut",
+   "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5",
+   "teaches": "With two ways to recapture, the choice is a choice of position, not of bookkeeping. Take with the wing pawn and the big centre survives intact and the file behind it opens for the rook; take with the centre pawn and the middle thins out exactly where the whole plan lives. Recapture toward the strength you are trying to keep.",
+   "explains": "The pawn arrives on e5 covering d6 and f6, so the knight has no way back to the natural square in front of its king and the dark squares in front of Black stay sealed. The centre pawns are still standing side by side, which is the entire point of the system.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "d6"
+    },
+    {
+     "kind": "controls",
+     "square": "f6"
+    }
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/1n6/4P3/2PP4/8/PP4PP/RNBQKBNR b KQkq - 0 6",
+   "t": 124,
+   "ply": 11,
+   "source": "yt:Nd2NeAbF3k8"
+  },
+  {
+   "id": "vn-fourpawns-defend-the-defender-not-the-target",
+   "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3",
+   "teaches": "When a pawn comes under fire, look at what is HOLDING it before you look at the pawn. A big centre is a chain, and pressure on the front pawn is answered by reinforcing the one underneath — the natural knight move looks like it does the same job, but it steps onto a square where it can be pinned to the very pawn it is meant to hold.",
+   "explains": "The knight that just came out attacks d4, and d4 is the pawn holding e5 in place. The bishop to e3 adds a second defender to d4, so the front of the centre stays supported without putting a pinnable piece in front of it.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    }
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/1nn5/4P3/2PP4/4B3/PP4PP/RN1QKBNR b KQkq - 2 7",
+   "t": 170,
+   "ply": 13,
+   "source": "yt:Nd2NeAbF3k8"
+  },
+  {
+   "id": "vn-fourpawns-modest-square-that-answers-the-pin",
+   "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 e6 Nf3 Be7 Be2",
+   "teaches": "The active-looking square for a bishop is often the one that invites the pin; the modest square behind it is the one that answers it. A pin only bites when the pinned piece is undefended — put a defender on it in advance and the pin becomes a question with an easy answer, which is worth more than a diagonal you were never going to use.",
+   "explains": "From e2 the bishop covers the knight on f3, so the pin against it no longer threatens to win anything, and the same bishop is holding the pawn on c4 that the forward square would have left loose.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "f3"
+    },
+    {
+     "kind": "defends",
+     "square": "c4"
+    }
+   ],
+   "fen": "r2qk2r/ppp1bppp/1nn1p3/4Pb2/2PP4/2N1BN2/PP2B1PP/R2QK2R b KQkq - 3 10",
+   "t": 262,
+   "ply": 19,
+   "source": "yt:Nd2NeAbF3k8"
+  },
+  {
+   "id": "vn-fourpawns-advance-when-the-push-hits-two-things",
+   "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 e6 Nf3 Be7 Be2 O-O O-O a5 d5",
+   "teaches": "A space-gaining push is worth playing the moment it comes with a question attached. One pawn move that attacks a developed piece and strikes a defended pawn at the same time forces the answer to be found immediately, and answers found under pressure are the ones that go wrong.",
+   "explains": "The pawn steps to d5 hitting the knight on c6 and the pawn on e6 together. The knight has to move and the pawn has to be dealt with, and only one of those can be attended to first.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c6"
+    },
+    {
+     "kind": "attacks",
+     "square": "e6"
+    }
+   ],
+   "fen": "r2q1rk1/1pp1bppp/1nn1p3/p2PPb2/2P5/2N1BN2/PP2B1PP/R2Q1RK1 b - - 0 12",
+   "t": 373,
+   "ply": 23,
+   "source": "yt:Nd2NeAbF3k8"
+  },
+  {
+   "id": "vn-fourpawns-take-the-piece-that-was-hanging-first",
+   "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 e6 Nf3 Be7 Be2 O-O O-O a5 d5 Nb4 Bxb6",
+   "teaches": "When a piece jumps to an aggressive square, check what it LEFT before you answer where it went. A knight arriving with threats is only frightening if the piece it abandoned is still safe — and once the abandoned one is taken, the aggressive one has to justify itself alone.",
+   "explains": "The bishop takes the knight on b6, where it also bears down on the pawn on c7 behind it and on the pawn out on a5. The knight that hopped to the rim has won nothing yet, and it is now a piece behind.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c7"
+    },
+    {
+     "kind": "attacks",
+     "square": "a5"
+    }
+   ],
+   "fen": "r2q1rk1/1pp1bppp/1B2p3/p2PPb2/1nP5/2N2N2/PP2B1PP/R2Q1RK1 b - - 0 13",
+   "t": 472,
+   "ply": 25,
+   "source": "yt:Nd2NeAbF3k8"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Alekhine Defense: Four Pawns Attack, Main Line",
+   "eco": "B03",
+   "plies": 13,
+   "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3",
+   "coverage": 0.571
+  },
+  {
+   "name": "Alekhine Defense: Four Pawns Attack",
+   "eco": "B03",
+   "plies": 9,
+   "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4",
+   "coverage": 0.794
+  },
+  {
+   "name": "Alekhine Defense: Exchange Variation",
+   "eco": "B03",
+   "plies": 9,
+   "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 exd6",
+   "coverage": 0.048
+  },
+  {
+   "name": "Alekhine Defense: Modern Variation, Larsen Variation",
+   "eco": "B04",
+   "plies": 8,
+   "line": "e4 Nf6 e5 Nd5 d4 d6 Nf3 dxe5",
+   "coverage": 0.032
+  },
+  {
+   "name": "Alekhine Defense: Modern Variation",
+   "eco": "B04",
+   "plies": 7,
+   "line": "e4 Nf6 e5 Nd5 d4 d6 Nf3",
+   "coverage": 0.048
+  },
+  {
+   "name": "Alekhine Defense: Normal Variation",
+   "eco": "B02",
+   "plies": 4,
+   "line": "e4 Nf6 e5 Nd5",
+   "coverage": 0.968
+  },
+  {
+   "name": "Alekhine Defense",
+   "eco": "B02",
+   "plies": 2,
+   "line": "e4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Alekhine Defense",
+  "confirmed": true
+ }
 }
