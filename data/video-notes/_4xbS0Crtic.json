@@ -1,0 +1,18 @@
+[
+ {
+  "id": "vn-pin-break-count-what-the-capture-attacks",
+  "line": "e4 e5 Nf3 Nf6 Nc3 Bc5 d4 exd4 Nxd4 O-O Be2 Re8 Bg5 h6 Bh4 g5 Bg3 Nxe4",
+  "teaches": "A pin on your king's knight is only as strong as the tactics keeping it there. When the pawns have pushed the pinning bishop to a square where the knight's capture in the centre attacks it, the pin is over — count everything the capture hits before dismissing it as impossible.",
+  "explains": "The knight has taken on e4 and attacks two pieces from there: the bishop on g3 that was doing the pinning, and the knight on c3. The move looked forbidden while the pin stood; the pawn advances changed the geometry, and now it wins material or the initiative whichever way the opponent answers.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "g3"
+   },
+   {
+    "kind": "attacks",
+    "square": "c3"
+   }
+  ]
+ }
+]

@@ -1,0 +1,21 @@
+[
+ {
+  "id": "vn-gambit-antidote-cut-the-bishop-off-before-it-bites",
+  "line": "e4 e5 Nf3 Nc6 Nxe5 Nf6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3",
+  "teaches": "The antidote to a piece-activity gambit is not to refute it move by move but to switch off its one dangerous piece. The modest pawn-and-bishop setup blunts the diagonal into your king's position, and with that bishop talking to nobody, the gambiteer is simply a pawn down with pretty pieces.",
+  "explains": "The pawn on c3 takes d4 in hand, ready to hit the bishop on c5 and shut its diagonal for good, while the quiet bishop development already stands guard in front of the king. The attacking setup across the board has no target left — the counterplay ended before it began.",
+  "reasons": [
+   {
+    "kind": "controls",
+    "square": "d4"
+   }
+  ]
+ },
+ {
+  "id": "vn-gambit-antidote-own-the-promotion-square-first",
+  "line": "e4 e5 Nf3 Nf6 Nxe5 Nc6 Nxc6 dxc6 d3 Bc5 Be3 Bxe3 fxe3 Ng4 Qf3 Qg5 Ke2 Nxh2 Rxh2 Bg4 Nd2 O-O Kf2 Bxf3 gxf3 Qe5 f4 Qxb2 Rb1 Qxa2 Rxb7 a5 Kf3 a4 Nc4 a3 Bh3 Qa1",
+  "teaches": "When a passed pawn nears the end of the board, look at the whole board and ask one question: what can still stop the promotion? The strongest technique is often to seize the promotion square itself with a heavy piece — nothing can contest a square you already occupy, and the pawn walks home behind you.",
+  "explains": "The queen has gone to a1, the very square the a-pawn promotes on, with the pawn already on a3. The one defensive idea — a rook racing to the back rank to fight for that square — arrives too late at a square that is no longer for sale.",
+  "structural": "promotion secured by occupying the queening square with the queen before the pawn asks for it"
+ }
+]
