@@ -1,0 +1,9 @@
+[
+ {
+  "id": "vn-space-grab-recapture-toward-the-imbalance",
+  "line": "e4 Nf6 e5 Nd5 c4 Nb6 d4 d6 exd6 cxd6",
+  "teaches": "When two recaptures are both sound, prefer the one that creates a structure with a plan built in. Recapturing to leave majorities on opposite wings gives each side a clear job — your extra pawns advance on their wing, and the whole middlegame plays itself by plan rather than by move-to-move invention. It is also the recapture that teaches you the most.",
+  "explains": "The pawns have traded so that the wing majorities point in opposite directions — the queenside pawns outnumber their counterparts and will advance there, while the opponent's extra kingside pawn does the same on the other wing. The imbalance is the plan: push where you are the majority.",
+  "structural": "the recapture chosen for the structure it leaves — opposite majorities, each side owning one wing"
+ }
+]
