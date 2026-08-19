@@ -1,0 +1,62 @@
+[
+ {
+  "id": "vn-advance-structure-bishop-out-before-the-chain-closes",
+  "line": "e4 d5 e5 Bf5 d4 e6",
+  "teaches": "When the centre gets locked with a pawn chain, the light-squared bishop's whole life depends on which side of the chain it stands on. Bring it out first and only then close the chain behind it — the same structure with the bishop inside is a well-known headache, and with the bishop outside it is simply comfortable.",
+  "explains": "The bishop already stands on f5, outside the pawns, and only now does the pawn come to e6, defending the pawn on d5 and completing the chain behind a bishop that escaped in time. Compare the two pictures: identical pawns, and the difference is one move of ordering.",
+  "reasons": [
+   {
+    "kind": "defends",
+    "square": "d5"
+   }
+  ]
+ },
+ {
+  "id": "vn-advance-structure-hit-the-base-and-let-them-break-their-own-chain",
+  "line": "e4 d5 e5 Bf5 d4 e6 a3 c5 c3 Nc6 h3 Qb6",
+  "teaches": "Against a pawn chain, pressure beats haste: aim pieces at the chain's base and keep the tension. Capturing in the centre yourself releases it — trade on the base pawn only when something concrete is won by it. If they capture toward you instead, their own chain breaks up and your pieces come in through the gap.",
+  "explains": "The queen on b6 attacks the pawn on b2 down the open path, and together with the pawn on c5 it leans on the chain's base. If the pawn on d4 ever takes on c5, the chain is theirs no longer — the recapture comes with a gain of time and the centre stops being a wall.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "b2"
+   }
+  ]
+ },
+ {
+  "id": "vn-advance-structure-check-the-colour-complex-before-grabbing",
+  "line": "e4 d5 e5 Bf5 d4 e6 a3 c5 c3 Nc6 h3 Qb6 Nf3 cxd4 cxd4 Bxb1 Rxb1 Bxa3",
+  "teaches": "Before playing a sequence that leaves pieces hanging for a move, check for discovered checks the way a strong player does — by colour complex, not by staring. A king on a light square can never be checked by a dark-squared bishop, so whole families of discoveries can be ruled out in one glance.",
+  "explains": "The bishop has just taken the pawn on a3, and the sequence stands on one verification: the king on e8 sits on a light square, and the bishop that could ever aim at it from that side of the board runs on dark squares — so no discovery exists and the pawn count, not a hidden tactic, decides who came out ahead.",
+  "structural": "a grab verified by colour complex — light-squared king, dark-squared bishop, so no discovered check exists"
+ },
+ {
+  "id": "vn-advance-structure-the-raider-returns-with-tempo",
+  "line": "e4 d5 e5 Bf5 d4 e6 a3 c5 c3 Nc6 h3 Qb6 Nf3 cxd4 cxd4 Bxb1 Rxb1 Bxa3 Bd3 Bb4+",
+  "teaches": "A piece that has grabbed material deep in enemy territory should come home with tempo whenever the board offers it. Every forcing move on the way back is a whole move your opponent cannot use to punish the raid.",
+  "explains": "The bishop returns from its pawn-grab by way of b4, and the move is check — the king on e1 has to be dealt with before anything else happens. The retreat costs nothing because the opponent spends the move answering it.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e1"
+   }
+  ]
+ },
+ {
+  "id": "vn-advance-structure-park-a-knight-where-it-blocks-and-waits",
+  "line": "e4 d5 e5 Bf5 d4 e6 a3 c5 c3 Nc6 h3 Qb6 Nf3 cxd4 cxd4 Bxb1 Rxb1 Bxa3 Bd3 Bb4+ Bd2 Nge7 O-O Bxd2 Qxd2 O-O Rfe1 Ng6",
+  "teaches": "A repositioned knight can be worth playing for what it stops and what it might do, not what it does today. Blocking a dangerous diagonal with a knight rather than a pawn keeps the pawn shield intact, and the knight sits loaded — potential energy the opponent has to keep accounting for.",
+  "explains": "The knight on g6 cuts the bishop's diagonal from d3 toward h7, so the standard attacking picture against the castled king is switched off by a piece rather than a weakening pawn move. From g6 the knight also takes f4 under control, a square right next to the queen's diagonal, which is exactly the kind of option that makes an opponent spend moves on guard duty.",
+  "reasons": [
+   {
+    "kind": "blocks",
+    "from": "d3",
+    "to": "h7"
+   },
+   {
+    "kind": "controls",
+    "square": "f4"
+   }
+  ]
+ }
+]

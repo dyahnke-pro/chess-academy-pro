@@ -1,0 +1,42 @@
+[
+ {
+  "id": "vn-blocked-centre-simplicity-finishes-development",
+  "line": "d4 Nf6 c4 c5 Nc3 e6 d5 d6 e4 Be7 Bd3 Nbd7 Nf3 Ng4 O-O Nge5 Nxe5 Nxe5 Be2 Bf6 f4 Ng6 Be3",
+  "teaches": "Part of having a positional style is knowing when simplicity is required. When the position is rich with sharp tries, the developing move that completes your setup is often stronger than any of them — and being willing to accept doubled pawns after a trade you actively welcome is part of that simplicity.",
+  "explains": "The bishop develops to e3 and immediately attacks the pawn on c5, so the quiet move is not even passive — it completes development, connects the heavy pieces, and puts a question to the queenside pawn in the same motion. The sharper pawn sacrifice was available, and declining it in favour of this is the lesson.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "c5"
+   }
+  ]
+ },
+ {
+  "id": "vn-blocked-centre-the-pawn-advance-that-hits-two-pieces",
+  "line": "d4 Nf6 c4 c5 Nc3 e6 d5 d6 e4 Be7 Bd3 Nbd7 Nf3 Ng4 O-O Nge5 Nxe5 Nxe5 Be2 Bf6 f4 Ng6 Be3 O-O dxe6 Bxe6 f5",
+  "teaches": "A pawn storm earns its keep when each step lands with tempo. Trade in the centre to pull a piece onto the square your pawn wants to hit, and the advance stops being a loosening gesture and becomes a forcing sequence — every move of it answered on your opponent's clock.",
+  "explains": "The pawn arrives on f5 attacking the bishop on e6 and the knight on g6 at the same time — two pieces, one pawn, and only one of them can step away. The capture on e6 a move earlier is what put the bishop there, so the whole sequence was one idea: pull the piece in, then hit it and its neighbour together.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e6"
+   },
+   {
+    "kind": "attacks",
+    "square": "g6"
+   }
+  ]
+ },
+ {
+  "id": "vn-blocked-centre-collect-on-the-file-you-opened",
+  "line": "d4 Nf6 c4 c5 Nc3 e6 d5 d6 e4 Be7 Bd3 Nbd7 Nf3 Ng4 O-O Nge5 Nxe5 Nxe5 Be2 Bf6 f4 Ng6 Be3 O-O dxe6 Bxe6 f5 Bd7 fxg6 fxg6 Qxd6 b6 Rad1",
+  "teaches": "When a backward pawn falls, the file it lived on is the real prize. Bring the rook to that file at once — the piece that captured is strong there but exposed, and the rook behind it turns a one-move raid into permanent occupation.",
+  "explains": "The queen has taken the pawn on d6 and the rook comes to d1 behind it, defending the queen along a completely open file. The whole line — from the trade on e6 to the pawn hits — was aimed at this pawn, and the rook move is what converts the raid into control of the only open file on the board.",
+  "reasons": [
+   {
+    "kind": "defends",
+    "square": "d6"
+   }
+  ]
+ }
+]

@@ -1,0 +1,84 @@
+[
+ {
+  "id": "vn-exchange-structure-pin-that-carries-no-threat",
+  "line": "e4 c6 Nf3 d5 exd5 cxd5 d4 Nc6 c3 Nf6 Bb5 Bg4",
+  "teaches": "Before avoiding a pin, ask what the pin actually threatens. A pinned piece that is already defended by a pawn cannot be won by piling up, so the pin is a picture, not a problem — and you are free to spend the move on the piece that genuinely needs a job.",
+  "explains": "The bishop on b5 pins the knight on c6, but the pawn on b7 defends that knight, so there is nothing to pile up on. Meanwhile the bishop from c8 has come to g4 and attacks the knight on f3 — the one developing move that also puts a question to the defender of the centre.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "f3"
+   }
+  ]
+ },
+ {
+  "id": "vn-exchange-structure-trade-the-problem-bishop-first",
+  "line": "e4 c6 Nf3 d5 exd5 cxd5 d4 Nc6 c3 Nf6 Bb5 Bg4 Qd3 Bxf3 Qxf3 e6",
+  "teaches": "In this pawn structure the light-squared bishop is the piece with no future, so give it away for a knight before the pawn chain closes over it. Once the trade is made, the rest of the development is peaceful — there is no bad piece left to apologise for.",
+  "explains": "The light-squared bishop has already been exchanged for the knight, and only now does the pawn step to e6 — the chain closes behind a bishop that is no longer inside it. Every remaining piece has a natural square, which is the whole point of the trade's timing.",
+  "structural": "trade the bishop the structure condemns, then close the chain — order, not material, is the lesson"
+ },
+ {
+  "id": "vn-exchange-structure-deny-the-trade-that-frees-the-outpost",
+  "line": "e4 c6 Nf3 d5 exd5 cxd5 d4 Nc6 c3 Nf6 Bb5 Bg4 Qd3 Bxf3 Qxf3 e6 O-O h6 Nd2 Bd6 Bxc6+ bxc6 Nb3 Qc7",
+  "teaches": "A knight eyeing an outpost usually needs one more thing to happen before the outpost is real — most often a trade of the piece that could evict it. Find that enabling trade and deny it, and the whole plan stays theoretical.",
+  "explains": "The knight on b3 is aiming at c5, and it can only sit there for good if the dark-squared bishops come off. The queen on c7 stands behind the bishop on d6, defending it, and the bishop covers f4 — so the trade offer on f4 that would enable the outpost has no square to land on.",
+  "reasons": [
+   {
+    "kind": "defends",
+    "square": "d6"
+   }
+  ]
+ },
+ {
+  "id": "vn-exchange-structure-count-the-overloaded-defender-before-castling",
+  "line": "e4 c6 Nf3 d5 exd5 cxd5 d4 Nc6 c3 Nf6 Bb5 Bg4 Qd3 Bxf3 Qxf3 e6 O-O h6 Nd2 Bd6 Bxc6+ bxc6 Nb3 Qc7 g3",
+  "teaches": "Before castling, count the defenders on the squares in front of your king and check whether one pawn is doing two jobs. A capture on the square an overloaded pawn guards forces it to choose, and whatever it stops guarding falls next. Improving the position first costs one move; castling into the capture costs a piece.",
+  "explains": "The pawn on g7 is the only defender of the pawn on h6, and it is also the only defender of the knight on f6 — one pawn, two jobs. The diagonal from c1 to h6 is open, so the capture on h6 is available right now, and answering it with the g-pawn leaves the knight behind it loose.",
+  "structural": "an overloaded pawn counted before castling; the capture it invites is read off the open diagonal, not guessed"
+ },
+ {
+  "id": "vn-exchange-structure-ask-the-rim-knight-the-question",
+  "line": "e4 c6 Nf3 d5 exd5 cxd5 d4 Nc6 c3 Nf6 Bb5 Bg4 Qd3 Bxf3 Qxf3 e6 O-O h6 Nd2 Bd6 Bxc6+ bxc6 Nb3 Qc7 g3 a5",
+  "teaches": "A knight parked on the edge is asked the question with the rook's pawn. The pawn move is healthy on its own — it gains space and takes a square away — and the threat of running one square further forces the knight to declare where it is actually going.",
+  "explains": "The pawn stands on a5, taking b4 away from the pieces behind it, and the knight on b3 now has to reckon with the pawn coming one square further and hitting it directly. Whatever the knight chooses, the choice was forced by a pawn move that cost nothing.",
+  "reasons": [
+   {
+    "kind": "controls",
+    "square": "b4"
+   }
+  ]
+ },
+ {
+  "id": "vn-exchange-structure-take-the-outpost-you-denied-them",
+  "line": "e4 c6 Nf3 d5 exd5 cxd5 d4 Nc6 c3 Nf6 Bb5 Bg4 Qd3 Bxf3 Qxf3 e6 O-O h6 Nd2 Bd6 Bxc6+ bxc6 Nb3 Qc7 g3 a5 Nc5 Bxc5 dxc5 Ne4",
+  "teaches": "Outposts run both ways. The same central square you spent moves denying to their knight is usually available to yours, and a knight that lands there with several targets in reach is worth more than any of the pieces it is annoying.",
+  "explains": "The knight has landed on e4 and attacks three pawns at once — the pawn on c3, the pawn on g3, and the pawn on c5. No pawn can ever evict it from this square, so every one of those targets has to be watched for as long as the knight chooses to stay.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "c3"
+   },
+   {
+    "kind": "attacks",
+    "square": "g3"
+   },
+   {
+    "kind": "attacks",
+    "square": "c5"
+   }
+  ]
+ },
+ {
+  "id": "vn-exchange-structure-cement-the-knight-before-anything-else",
+  "line": "e4 c6 Nf3 d5 exd5 cxd5 d4 Nc6 c3 Nf6 Bb5 Bg4 Qd3 Bxf3 Qxf3 e6 O-O h6 Nd2 Bd6 Bxc6+ bxc6 Nb3 Qc7 g3 a5 Nc5 Bxc5 dxc5 Ne4 Re1 O-O b4 f5",
+  "teaches": "When a knight has found a great central square, the move that guarantees it stays there outranks the sharper tries. Cement first — the attacking ideas do not run away, and every later plan is stronger with the knight permanent than with it evictable.",
+  "explains": "The pawn arrives on f5 and defends the knight on e4, so the knight is now held by a pawn on a square no enemy pawn can ever attack. The sharper queen moves were available, but each of them left the knight's future to be negotiated; this settles it first.",
+  "reasons": [
+   {
+    "kind": "defends",
+    "square": "e4"
+   }
+  ]
+ }
+]
