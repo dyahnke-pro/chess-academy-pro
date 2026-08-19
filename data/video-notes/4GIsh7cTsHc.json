@@ -1,0 +1,42 @@
+[
+ {
+  "id": "vn-advance-caro-the-bishop-beats-the-bars",
+  "line": "e4 c6 d4 d5 e5 Bf5",
+  "teaches": "The whole point of this defence's first moves is one comparison: the same locked centre with the light-squared bishop outside the chain instead of behind it. Bring the bishop out first, every time, and only then close the chain — the difference between the two pictures is the difference between a comfortable game and a lifelong apology.",
+  "explains": "The bishop has come out to f5 before the e-pawn moves, and it is already working: it holds e4, the square in front of the chain where the opponent would love to post a piece, and the pawn can go to e6 behind it next. The structure that follows is the good version of the closed centre — same pawns, bishop on the right side of them.",
+  "reasons": [
+   {
+    "kind": "controls",
+    "square": "e4"
+   }
+  ]
+ },
+ {
+  "id": "vn-advance-caro-strike-the-base-on-schedule",
+  "line": "e4 c6 d4 d5 e5 Bf5 f4 Nh6 Bd3 e6 Nf3 c5",
+  "teaches": "Against a pawn chain, the plan is not a secret: attack the base. The c-pawn's strike at the centre is the main idea of the whole structure, and it lands best once your minor pieces have settled — the pawn asks the question and the pieces are already in place to profit from any answer.",
+  "explains": "The pawn strikes at c5, attacking the pawn on d4 — the base of the chain that starts there and runs to e5. Whatever happens next, the chain's foundation is under pressure, and the pieces developed on the previous moves are aimed at exactly this fight.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "d4"
+   }
+  ]
+ },
+ {
+  "id": "vn-advance-caro-keep-the-tension-never-lock-it-yourself",
+  "line": "e4 c6 d4 d5 e5 Bf5 f4 Nh6 Bd3 e6 Nf3 c5 Bxf5 Nc6 Kf1 Nb8 dxc5 Nc6 c3 Qb6",
+  "teaches": "When the base is reinforced by a pawn, resist the urge to push past and lock the centre — a closed queenside is nearly impossible to break open afterwards, even with the pawn-storm you are imagining. Keep the tension and pile pieces on instead: the pressure is the asset, and it evaporates the moment the pawns interlock.",
+  "explains": "The queen lands on b6 and attacks two pawns at once — the pawn on b2 down the open file and the pawn that captured on c5 beside her. Both have to be minded, which is what piece pressure looks like; a pawn push past the tension would have handed back both targets for one blocked file.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "b2"
+   },
+   {
+    "kind": "attacks",
+    "square": "c5"
+   }
+  ]
+ }
+]
