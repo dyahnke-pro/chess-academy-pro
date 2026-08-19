@@ -1,0 +1,1360 @@
+{
+ "videoId": "TSM7CFcJ1L0",
+ "title": "Master Class | Learn The London | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 14,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "[Music] no we got another black game oh gosh i really was hoping you'd get a white game so i could play d4 but we've got another d4 oh my gosh that's pretty funny we got three in a"
+  },
+  {
+   "ply": 3,
+   "t": 16,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+   "said": "[Music] no we got another black game oh gosh i really was hoping you'd get a white game so i could play d4 but we've got another d4 oh my gosh that's pretty funny we got three in a row and another london system okay well um guess what of course i could now play the kings in and i could showcase a different line but let's see if let's see if i can get a chance thank you for the 300. uh let's let's play the same line i'm excited to see what this guy's gonna play uh just to hopefully we'll get a chance to uh emphasize some of the concepts that we just talked about so this is"
+  },
+  {
+   "ply": 4,
+   "t": 37,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+   "said": "the 300. uh let's let's play the same line i'm excited to see what this guy's gonna play uh just to hopefully we'll get a chance to uh emphasize some of the concepts that we just talked about so this is pretty exciting stuff let's go d5 and let's go c5 maybe he'll take"
+  },
+  {
+   "ply": 6,
+   "t": 40,
+   "line": [
+    "e3",
+    "c5"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 4",
+   "said": "excited to see what this guy's gonna play uh just to hopefully we'll get a chance to uh emphasize some of the concepts that we just talked about so this is pretty exciting stuff let's go d5 and let's go c5 maybe he'll take um we'll see what we'll see what he plays uh knight f3 okay"
+  },
+  {
+   "ply": 7,
+   "t": 45,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 1 4",
+   "said": "to uh emphasize some of the concepts that we just talked about so this is pretty exciting stuff let's go d5 and let's go c5 maybe he'll take um we'll see what we'll see what he plays uh knight f3 okay so knight f3 yeah knight f3 pres gives black more more options than c3 does but um i don't think we should reinvent the wheel here let's let's still play knight c6"
+  },
+  {
+   "ply": 8,
+   "t": 57.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/2pp4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 2 5",
+   "said": "so knight f3 yeah knight f3 pres gives black more more options than c3 does but um i don't think we should reinvent the wheel here let's let's still play knight c6 and if he goes c3 this will be very similar position to what we just had it"
+  },
+  {
+   "ply": 9,
+   "t": 61.5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/1Bpp4/3P1B2/4PN2/PPP2PPP/RN1QK2R b KQkq - 3 5",
+   "said": "more options than c3 does but um i don't think we should reinvent the wheel here let's let's still play knight c6 and if he goes c3 this will be very similar position to what we just had it should be five okay so bishop b5 is a little bit weird just a little bit weird because in the london general you play c3 first so there's a couple of options that we have at our disposal we can play bishop d7 that's the sort of instinctual move and it leads to a very solid position i think um a lot of you guys should be seeing queen a5 track and again it doesn't win a bishop because of knight c3 but at this level you sometimes do stuff not because it wins material but because it induces an undesirable move okay now what is the purpose of the london system as a whole let's deconstruct it for a second the london revolves around the pawn on d4 being a stronghold for white that pawn on d4 is mega defended when white plays c3 so from a positional standpoint queen a5 check is a tremendously helpful move why who can put the pieces of the puzzle together why would we want to induce knight c3 well obviously we prevent him from playing c3 and that pawn on d4 turns from a weakness into a strength sorry from a strength into a weakness so let's play queen a5 trick in addition"
+  },
+  {
+   "ply": 10,
+   "t": 131.5,
+   "line": [
+    "Qa5+"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/qBpp4/3P1B2/4PN2/PPP2PPP/RN1QK2R w KQkq - 4 6",
+   "said": "knight c3 well obviously we prevent him from playing c3 and that pawn on d4 turns from a weakness into a strength sorry from a strength into a weakness so let's play queen a5 trick in addition the queen on a5 is very nicely placed i mean there's nothing wrong with putting the bishop under some pressure uh and we'll have to play precisely in response to knight c3 so"
+  },
+  {
+   "ply": 11,
+   "t": 142.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/qBpp4/3P1B2/2N1PN2/PPP2PPP/R2QK2R b KQkq - 5 6",
+   "said": "so let's play queen a5 trick in addition the queen on a5 is very nicely placed i mean there's nothing wrong with putting the bishop under some pressure uh and we'll have to play precisely in response to knight c3 so right now we want to play actively we don't want to go e6 because we're a little bit underdeveloped and he'll go knight e5 so how should we restrict the knight on f3 while also developing a piece i'm giving basically giving it away but i don't like knight e4 because i would prefer to emphasize the development so let's go vision g4 yeah this is a"
+  },
+  {
+   "ply": 12,
+   "t": 166.5,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "r3kb1r/pp2pppp/2n2n2/qBpp4/3P1Bb1/2N1PN2/PPP2PPP/R2QK2R w KQkq - 6 7",
+   "said": "basically giving it away but i don't like knight e4 because i would prefer to emphasize the development so let's go vision g4 yeah this is a very typical way of developing and we're putting pressure on the knight which is in turn defending the pawn of"
+  },
+  {
+   "ply": 13,
+   "t": 172.5,
+   "line": [
+    "Bxc6+"
+   ],
+   "fen": "r3kb1r/pp2pppp/2B2n2/q1pp4/3P1Bb1/2N1PN2/PPP2PPP/R2QK2R b KQkq - 0 7",
+   "said": "because i would prefer to emphasize the development so let's go vision g4 yeah this is a very typical way of developing and we're putting pressure on the knight which is in turn defending the pawn of d4k he takes we take that's nice"
+  },
+  {
+   "ply": 14,
+   "t": 173.5,
+   "line": [
+    "bxc6"
+   ],
+   "fen": "r3kb1r/p3pppp/2p2n2/q1pp4/3P1Bb1/2N1PN2/PPP2PPP/R2QK2R w KQkq - 0 8",
+   "said": "development so let's go vision g4 yeah this is a very typical way of developing and we're putting pressure on the knight which is in turn defending the pawn of d4k he takes we take that's nice that leads to a very compact and a very nice pawn structure i like the spawn structure"
+  },
+  {
+   "ply": 15,
+   "t": 179,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r3kb1r/p3pppp/2p2n2/q1pp4/3P1Bb1/2N1PN2/PPP2PPP/R2Q1RK1 b kq - 1 8",
+   "said": "very typical way of developing and we're putting pressure on the knight which is in turn defending the pawn of d4k he takes we take that's nice that leads to a very compact and a very nice pawn structure i like the spawn structure okay so we can take on d4 we don't necessarily need to do that we can also just play e6 and work on the development of this bishop on the other hand one can make the case that e6 allows them to take on c5 and relinquish the pawn on d4 but on the other hand is that really something we should be worried about it gives away the whole center so when in doubt and by the way rook ba be careful that bishop guards the square when in doubt keep the tension let him"
+  },
+  {
+   "ply": 16,
+   "t": 216.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "r3kb1r/p4ppp/2p1pn2/q1pp4/3P1Bb1/2N1PN2/PPP2PPP/R2Q1RK1 w kq - 0 9",
+   "said": "worried about it gives away the whole center so when in doubt and by the way rook ba be careful that bishop guards the square when in doubt keep the tension let him be the one to decide whether he wants to take her knight that's always going to be less of a headache than asking"
+  },
+  {
+   "ply": 17,
+   "t": 221,
+   "line": [
+    "h3"
+   ],
+   "fen": "r3kb1r/p4ppp/2p1pn2/q1pp4/3P1Bb1/2N1PN1P/PPP2PP1/R2Q1RK1 b kq - 0 9",
+   "said": "be careful that bishop guards the square when in doubt keep the tension let him be the one to decide whether he wants to take her knight that's always going to be less of a headache than asking yourself the same question on the third hand no you can say that in russian you can stay on the second hand on the third hand etc so here another question should we take on f3 or should we drop the bishop back now to answer that question is it is important to understand that dropping the bishop back we should ask ourselves is he realistically going to play g4 and the answer to that question is no that's a tremendously weakening move"
+  },
+  {
+   "ply": 18,
+   "t": 248.5,
+   "line": [
+    "Bh5"
+   ],
+   "fen": "r3kb1r/p4ppp/2p1pn2/q1pp3b/3P1B2/2N1PN1P/PPP2PP1/R2Q1RK1 w kq - 1 10",
+   "said": "important to understand that dropping the bishop back we should ask ourselves is he realistically going to play g4 and the answer to that question is no that's a tremendously weakening move there's no reason to assume there's no reason to be afraid of a move like this so we definitely keep the tension here"
+  },
+  {
+   "ply": 19,
+   "t": 255,
+   "line": [
+    "g4"
+   ],
+   "fen": "r3kb1r/p4ppp/2p1pn2/q1pp3b/3P1BP1/2N1PN1P/PPP2P2/R2Q1RK1 b kq - 0 10",
+   "said": "to play g4 and the answer to that question is no that's a tremendously weakening move there's no reason to assume there's no reason to be afraid of a move like this so we definitely keep the tension here he plays you for and in a blitz game i might have even captured on g4 and considered the the peace sacrifice but um in this particular instance i i don't really want to do that i want to play positionally let's drop the bishop back"
+  },
+  {
+   "ply": 20,
+   "t": 271,
+   "line": [
+    "Bg6"
+   ],
+   "fen": "r3kb1r/p4ppp/2p1pnb1/q1pp4/3P1BP1/2N1PN1P/PPP2P2/R2Q1RK1 w kq - 1 11",
+   "said": "captured on g4 and considered the the peace sacrifice but um in this particular instance i i don't really want to do that i want to play positionally let's drop the bishop back to g6 why is g4 weakening will because he's"
+  },
+  {
+   "ply": 21,
+   "t": 274,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "r3kb1r/p4ppp/2p1pnb1/q1ppN3/3P1BP1/2N1P2P/PPP2P2/R2Q1RK1 b kq - 2 11",
+   "said": "peace sacrifice but um in this particular instance i i don't really want to do that i want to play positionally let's drop the bishop back to g6 why is g4 weakening will because he's pushing a pawn out in front of his king knight e5 this looks intimidating for us but it's not uh it's a very surface level move he's threatening the pawn on c6 uh all we need to do is defend that pawn we gotta be careful about how we defend it perhaps some of you are spotting queen b6 but that walks into the nasty move knight to a4 we have queen a6 but here would be a good time to apply the rule of peace value you you want to perform a task any given task with a piece of least possible value which means rook c8"
+  },
+  {
+   "ply": 22,
+   "t": 310,
+   "line": [
+    "Rc8"
+   ],
+   "fen": "2r1kb1r/p4ppp/2p1pnb1/q1ppN3/3P1BP1/2N1P2P/PPP2P2/R2Q1RK1 w k - 3 12",
+   "said": "good time to apply the rule of peace value you you want to perform a task any given task with a piece of least possible value which means rook c8 come back to what i said earlier does that does this move look glamorous no but there sometimes pieces got to do the dirty work and there's nothing wrong with that uh the rook is doing some dirty work it's defending the pawn it's not going to be doing it forever eventually we're going to try to get rid of this knight but for the time being we need to get our pieces developed and the rook's going to have to suck it up"
+  },
+  {
+   "ply": 23,
+   "t": 331,
+   "line": [
+    "h4"
+   ],
+   "fen": "2r1kb1r/p4ppp/2p1pnb1/q1ppN3/3P1BPP/2N1P3/PPP2P2/R2Q1RK1 b k - 0 12",
+   "said": "dirty work it's defending the pawn it's not going to be doing it forever eventually we're going to try to get rid of this knight but for the time being we need to get our pieces developed and the rook's going to have to suck it up for a couple of moves h4 now this guy is this guy is very playing actually very interesting style so he wants to trap our um our bishop okay so what's the general reaction to this kind of move so h6 or h5 yeah h6 or h5 either is fine of course he could take on g6 but um that's not something to be"
+  },
+  {
+   "ply": 24,
+   "t": 354,
+   "line": [
+    "h6"
+   ],
+   "fen": "2r1kb1r/p4pp1/2p1pnbp/q1ppN3/3P1BPP/2N1P3/PPP2P2/R2Q1RK1 w k - 0 13",
+   "said": "okay so what's the general reaction to this kind of move so h6 or h5 yeah h6 or h5 either is fine of course he could take on g6 but um that's not something to be concerned about we play fg and he continues to weaken his king side so this is going to come back to bite him i think in in a couple of moves"
+  },
+  {
+   "ply": 25,
+   "t": 365,
+   "line": [
+    "g5"
+   ],
+   "fen": "2r1kb1r/p4pp1/2p1pnbp/q1ppN1P1/3P1B1P/2N1P3/PPP2P2/R2Q1RK1 b k - 0 13",
+   "said": "but um that's not something to be concerned about we play fg and he continues to weaken his king side so this is going to come back to bite him i think in in a couple of moves g5 now but the guy is very fearless i"
+  },
+  {
+   "ply": 26,
+   "t": 366.5,
+   "line": [
+    "hxg5"
+   ],
+   "fen": "2r1kb1r/p4pp1/2p1pnb1/q1ppN1p1/3P1B1P/2N1P3/PPP2P2/R2Q1RK1 w k - 0 14",
+   "said": "concerned about we play fg and he continues to weaken his king side so this is going to come back to bite him i think in in a couple of moves g5 now but the guy is very fearless i have to hand it to him"
+  },
+  {
+   "ply": 25,
+   "t": 367.5,
+   "line": [],
+   "fen": "2r1kb1r/p4pp1/2p1pnbp/q1ppN1P1/3P1B1P/2N1P3/PPP2P2/R2Q1RK1 b k - 0 13",
+   "said": "concerned about we play fg and he continues to weaken his king side so this is going to come back to bite him i think in in a couple of moves g5 now but the guy is very fearless i have to hand it to him now we should take for sure"
+  },
+  {
+   "ply": 26,
+   "t": 369,
+   "line": [
+    "hxg5"
+   ],
+   "fen": "2r1kb1r/p4pp1/2p1pnb1/q1ppN1p1/3P1B1P/2N1P3/PPP2P2/R2Q1RK1 w k - 0 14",
+   "said": "and he continues to weaken his king side so this is going to come back to bite him i think in in a couple of moves g5 now but the guy is very fearless i have to hand it to him now we should take for sure for sure we should take just to open up the h file yeah this opens up a file to his king so this is one of those games where it seems like he might be in charge because"
+  },
+  {
+   "ply": 27,
+   "t": 380.5,
+   "line": [
+    "Nxg6"
+   ],
+   "fen": "2r1kb1r/p4pp1/2p1pnN1/q1pp2p1/3P1B1P/2N1P3/PPP2P2/R2Q1RK1 b k - 0 14",
+   "said": "now we should take for sure for sure we should take just to open up the h file yeah this opens up a file to his king so this is one of those games where it seems like he might be in charge because he's calling the shots so far but once we end his initiative we are it's going to be our turn okay"
+  },
+  {
+   "ply": 28,
+   "t": 387.5,
+   "line": [
+    "fxg6"
+   ],
+   "fen": "2r1kb1r/p5p1/2p1pnp1/q1pp2p1/3P1B1P/2N1P3/PPP2P2/R2Q1RK1 w k - 0 15",
+   "said": "so this is one of those games where it seems like he might be in charge because he's calling the shots so far but once we end his initiative we are it's going to be our turn okay take on g6"
+  },
+  {
+   "ply": 29,
+   "t": 390.5,
+   "line": [
+    "Bxg5"
+   ],
+   "fen": "2r1kb1r/p5p1/2p1pnp1/q1pp2B1/3P3P/2N1P3/PPP2P2/R2Q1RK1 b k - 0 15",
+   "said": "seems like he might be in charge because he's calling the shots so far but once we end his initiative we are it's going to be our turn okay take on g6 all right now it begins to be our turn so we need to deconstruct this position and understand what our priorities are we probably are not going to castle we're probably going to keep our king in the center for the time being now what do we want to achieve here what's what's our goal how do we make sure that the h file works in our favor well we need to get rid of his bishop and to get rid of his bishop we can play in a very simple way we can just play bishop b7"
+  },
+  {
+   "ply": 30,
+   "t": 419.5,
+   "line": [
+    "Be7"
+   ],
+   "fen": "2r1k2r/p3b1p1/2p1pnp1/q1pp2B1/3P3P/2N1P3/PPP2P2/R2Q1RK1 w k - 1 16",
+   "said": "what's what's our goal how do we make sure that the h file works in our favor well we need to get rid of his bishop and to get rid of his bishop we can play in a very simple way we can just play bishop b7 and eventually we can try to move our knight from f6 and uh initiate the trait of bishops so that the h4 pawn loses its defender that should be pretty sensible to everybody it makes"
+  },
+  {
+   "ply": 31,
+   "t": 431.5,
+   "line": [
+    "Ne2"
+   ],
+   "fen": "2r1k2r/p3b1p1/2p1pnp1/q1pp2B1/3P3P/4P3/PPP1NP2/R2Q1RK1 b k - 2 16",
+   "said": "and eventually we can try to move our knight from f6 and uh initiate the trait of bishops so that the h4 pawn loses its defender that should be pretty sensible to everybody it makes okay and he actually just helps us do that that is a i think a mist i see what he's trying to do he's trying to get his knight to f4 the guy is very very strong actually he's he's stronger than his rating for sure um but on the other hand he allows us to go 94. however on the third hand if we calculate concretely that's where i have to give my opponent some kudos 94 bishop e7 king e7 knight f4 and guess what i mean that pawn on g6 being hanging with a fork that queen comes into g4 i'm a little bit concerned about that so i don't want to do it let's let's hold off on 94. now does that mean we abandon the general idea no and this is sort of high-level thinking um a lot of the time you would get frustrated in such a situation and say well we can't that means we can't move our knight but wait a second all we discovered is that knight e4 is not a great move but can we modify our plan we can't we can"
+  },
+  {
+   "ply": 32,
+   "t": 491,
+   "line": [
+    "Nh5"
+   ],
+   "fen": "2r1k2r/p3b1p1/2p1p1p1/q1pp2Bn/3P3P/4P3/PPP1NP2/R2Q1RK1 w k - 3 17",
+   "said": "you would get frustrated in such a situation and say well we can't that means we can't move our knight but wait a second all we discovered is that knight e4 is not a great move but can we modify our plan we can't we can go knight h5 i don't like this move from the perspective that it it blocks the h file but peace placement is temporary we will meet we will deal with that night uh it's far more important to accomplish"
+  },
+  {
+   "ply": 33,
+   "t": 501.5,
+   "line": [
+    "Bxe7"
+   ],
+   "fen": "2r1k2r/p3B1p1/2p1p1p1/q1pp3n/3P3P/4P3/PPP1NP2/R2Q1RK1 b k - 0 17",
+   "said": "can we modify our plan we can't we can go knight h5 i don't like this move from the perspective that it it blocks the h file but peace placement is temporary we will meet we will deal with that night uh it's far more important to accomplish"
+  },
+  {
+   "ply": 34,
+   "t": 502.5,
+   "line": [
+    "Kxe7"
+   ],
+   "fen": "2r4r/p3k1p1/2p1p1p1/q1pp3n/3P3P/4P3/PPP1NP2/R2Q1RK1 w - - 0 18",
+   "said": "go knight h5 i don't like this move from the perspective that it it blocks the h file but peace placement is temporary we will meet we will deal with that night uh it's far more important to accomplish the uh long-term priority of of opening the"
+  },
+  {
+   "ply": 35,
+   "t": 504.5,
+   "line": [
+    "Ng3"
+   ],
+   "fen": "2r4r/p3k1p1/2p1p1p1/q1pp3n/3P3P/4P1N1/PPP2P2/R2Q1RK1 b - - 1 18",
+   "said": "the perspective that it it blocks the h file but peace placement is temporary we will meet we will deal with that night uh it's far more important to accomplish the uh long-term priority of of opening the hvac at knight g3 and you know we move the knight back"
+  },
+  {
+   "ply": 36,
+   "t": 510.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "2r4r/p3k1p1/2p1pnp1/q1pp4/3P3P/4P1N1/PPP2P2/R2Q1RK1 w - - 2 19",
+   "said": "will meet we will deal with that night uh it's far more important to accomplish the uh long-term priority of of opening the hvac at knight g3 and you know we move the knight back that's it and the h4 pawn cannot be defended so uh this difference between what's temporary what's permanent is important here um sometimes you've got to break uh some"
+  },
+  {
+   "ply": 38,
+   "t": 523,
+   "line": [
+    "Kg2",
+    "Rxh4"
+   ],
+   "fen": "2r5/p3k1p1/2p1pnp1/q1pp4/3P3r/4P1N1/PPP2PK1/R2Q1R2 w - - 0 20",
+   "said": "that's it and the h4 pawn cannot be defended so uh this difference between what's temporary what's permanent is important here um sometimes you've got to break uh some eggs to make you know you can't make an omelet without breaking some eggs and this is a good example of it okay i'm going to speed up a little bit here"
+  },
+  {
+   "ply": 40,
+   "t": 528.5,
+   "line": [
+    "Rh1",
+    "Rch8"
+   ],
+   "fen": "7r/p3k1p1/2p1pnp1/q1pp4/3P3r/4P1N1/PPP2PK1/R2Q3R w - - 2 21",
+   "said": "temporary what's permanent is important here um sometimes you've got to break uh some eggs to make you know you can't make an omelet without breaking some eggs and this is a good example of it okay i'm going to speed up a little bit here we're going to double the rooks we're not going to relinquish control of the h file the guy is playing incredibly well though um i have to say so i'm speeding up just"
+  },
+  {
+   "ply": 42,
+   "t": 536.5,
+   "line": [
+    "Rxh4",
+    "Rxh4"
+   ],
+   "fen": "8/p3k1p1/2p1pnp1/q1pp4/3P3r/4P1N1/PPP2PK1/R2Q4 w - - 0 22",
+   "said": "omelet without breaking some eggs and this is a good example of it okay i'm going to speed up a little bit here we're going to double the rooks we're not going to relinquish control of the h file the guy is playing incredibly well though um i have to say so i'm speeding up just a little bit here we've won a pawn we have pressure down the h file and we have all of the positional advantages here so black's got a great position we just gotta play precisely to carry this one home if he plays queen d3 okay go c3 and finally he plays that"
+  },
+  {
+   "ply": 43,
+   "t": 553,
+   "line": [
+    "c3"
+   ],
+   "fen": "8/p3k1p1/2p1pnp1/q1pp4/3P3r/2P1P1N1/PP3PK1/R2Q4 b - - 0 22",
+   "said": "and we have all of the positional advantages here so black's got a great position we just gotta play precisely to carry this one home if he plays queen d3 okay go c3 and finally he plays that move all right i think that's a little bit too slow can we pounce do we have an opportunity to pounce on uh the initiative here can we can we rev up the engines here yeah we can try knight g4 but again i'm sorry i keep i keep faking you guys out um let's start with the move queen b5 let's"
+  },
+  {
+   "ply": 44,
+   "t": 582,
+   "line": [
+    "Qb5"
+   ],
+   "fen": "8/p3k1p1/2p1pnp1/1qpp4/3P3r/2P1P1N1/PP3PK1/R2Q4 w - - 1 23",
+   "said": "yeah we can try knight g4 but again i'm sorry i keep i keep faking you guys out um let's start with the move queen b5 let's start with this move attack the pawn and try to like get the queen into a position where it can um can rejoin the game i'll show you guys why i didn't like knight g4 after the game he goes here okay eah we can do so many different things yeah we can do so many different things here yeah we're going to go c4 anyway we're going to go c4 anyway"
+  },
+  {
+   "ply": 48,
+   "t": 631,
+   "line": [
+    "Qb3",
+    "c4",
+    "Qxb5",
+    "cxb5"
+   ],
+   "fen": "8/p3k1p1/4pnp1/1p1p4/2pP3r/2P1P1N1/PP3PK1/R7 w - - 0 25",
+   "said": "yeah we're going to go c4 anyway we're going to go c4 anyway and he's going to go a4 he's going to find that move no he's going to go there he's going to"
+  },
+  {
+   "ply": 49,
+   "t": 635.5,
+   "line": [
+    "Rh1"
+   ],
+   "fen": "8/p3k1p1/4pnp1/1p1p4/2pP3r/2P1P1N1/PP3PK1/7R b - - 1 25",
+   "said": "yeah we're going to go c4 anyway we're going to go c4 anyway and he's going to go a4 he's going to find that move no he's going to go there he's going to trade rooks but that's"
+  },
+  {
+   "ply": 50,
+   "t": 637.5,
+   "line": [
+    "Rxh1"
+   ],
+   "fen": "8/p3k1p1/4pnp1/1p1p4/2pP4/2P1P1N1/PP3PK1/7r w - - 0 26",
+   "said": "yeah we're going to go c4 anyway we're going to go c4 anyway and he's going to go a4 he's going to find that move no he's going to go there he's going to trade rooks but that's going completely astray because now in the in the night end game we're up upon um and we're going to start the queen"
+  },
+  {
+   "ply": 52,
+   "t": 644,
+   "line": [
+    "Kxh1",
+    "a5"
+   ],
+   "fen": "8/4k1p1/4pnp1/pp1p4/2pP4/2P1P1N1/PP3P2/7K w - - 0 27",
+   "said": "find that move no he's going to go there he's going to trade rooks but that's going completely astray because now in the in the night end game we're up upon um and we're going to start the queen side pressure here let's go a5"
+  },
+  {
+   "ply": 53,
+   "t": 648,
+   "line": [
+    "Kg1"
+   ],
+   "fen": "8/4k1p1/4pnp1/pp1p4/2pP4/2P1P1N1/PP3P2/6K1 b - - 1 27",
+   "said": "trade rooks but that's going completely astray because now in the in the night end game we're up upon um and we're going to start the queen side pressure here let's go a5 yeah i'll explain i'll explain after let's go b4 so what are we doing here we"
+  },
+  {
+   "ply": 54,
+   "t": 650,
+   "line": [
+    "b4"
+   ],
+   "fen": "8/4k1p1/4pnp1/p2p4/1ppP4/2P1P1N1/PP3P2/6K1 w - - 0 28",
+   "said": "going completely astray because now in the in the night end game we're up upon um and we're going to start the queen side pressure here let's go a5 yeah i'll explain i'll explain after let's go b4 so what are we doing here we are orchestrating the queen side pressure now let's bring our king into the center"
+  },
+  {
+   "ply": 56,
+   "t": 654.5,
+   "line": [
+    "Kf1",
+    "Kd6"
+   ],
+   "fen": "8/6p1/3kpnp1/p2p4/1ppP4/2P1P1N1/PP3P2/5K2 w - - 2 29",
+   "said": "um and we're going to start the queen side pressure here let's go a5 yeah i'll explain i'll explain after let's go b4 so what are we doing here we are orchestrating the queen side pressure now let's bring our king into the center of the board we can break through"
+  },
+  {
+   "ply": 58,
+   "t": 657.5,
+   "line": [
+    "Ke1",
+    "e5"
+   ],
+   "fen": "8/6p1/3k1np1/p2pp3/1ppP4/2P1P1N1/PP3P2/4K3 w - - 0 30",
+   "said": "yeah i'll explain i'll explain after let's go b4 so what are we doing here we are orchestrating the queen side pressure now let's bring our king into the center of the board we can break through further with e5 just trying to grab space and break through in the center"
+  },
+  {
+   "ply": 59,
+   "t": 662,
+   "line": [
+    "Kd2"
+   ],
+   "fen": "8/6p1/3k1np1/p2pp3/1ppP4/2P1P1N1/PP1K1P2/8 b - - 1 30",
+   "said": "are orchestrating the queen side pressure now let's bring our king into the center of the board we can break through further with e5 just trying to grab space and break through in the center now we can try to get our knight over to"
+  },
+  {
+   "ply": 60,
+   "t": 663.5,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "8/3n2p1/3k2p1/p2pp3/1ppP4/2P1P1N1/PP1K1P2/8 w - - 2 31",
+   "said": "pressure now let's bring our king into the center of the board we can break through further with e5 just trying to grab space and break through in the center now we can try to get our knight over to a4 just like we would in the middle game this is not going to be easy to win by the way this might be uh this is close to a draw but we're going to try to uh"
+  },
+  {
+   "ply": 61,
+   "t": 673.5,
+   "line": [
+    "a3"
+   ],
+   "fen": "8/3n2p1/3k2p1/p2pp3/1ppP4/P1P1P1N1/1P1K1P2/8 b - - 0 31",
+   "said": "now we can try to get our knight over to a4 just like we would in the middle game this is not going to be easy to win by the way this might be uh this is close to a draw but we're going to try to uh yeah that's a nice move yeah the guy is he's very good now i'm going to make a move here that looks really bad i'm going to play b3"
+  },
+  {
+   "ply": 62,
+   "t": 680.5,
+   "line": [
+    "b3"
+   ],
+   "fen": "8/3n2p1/3k2p1/p2pp3/2pP4/PpP1P1N1/1P1K1P2/8 w - - 0 32",
+   "said": "this is close to a draw but we're going to try to uh yeah that's a nice move yeah the guy is he's very good now i'm going to make a move here that looks really bad i'm going to play b3 why am i doing this why am i closing down the position because i'm trying to fix the weakness on b2 um and the way that i'm going to attack this so"
+  },
+  {
+   "ply": 63,
+   "t": 690.5,
+   "line": [
+    "dxe5+"
+   ],
+   "fen": "8/3n2p1/3k2p1/p2pP3/2p5/PpP1P1N1/1P1K1P2/8 b - - 0 32",
+   "said": "move here that looks really bad i'm going to play b3 why am i doing this why am i closing down the position because i'm trying to fix the weakness on b2 um and the way that i'm going to attack this so he's actually helping me get the knight to d3 and that was a decisive mistake now he's busted because he cannot stop my knight from getting to d3 and the purpose of b3 is revealed we have fixed his weakness and he won't be able to defend it all right no at this point like these 1800s are actually very very good this guy was quite a bit underrated but he he's definitely human and he just he just played well okay knight d3"
+  },
+  {
+   "ply": 66,
+   "t": 722,
+   "line": [
+    "Nxe5",
+    "f4",
+    "Nd3"
+   ],
+   "fen": "8/6p1/3k2p1/p2p4/2p2P2/PpPnP1N1/1P1K4/8 w - - 1 34",
+   "said": "no at this point like these 1800s are actually very very good this guy was quite a bit underrated but he he's definitely human and he just he just played well okay knight d3 this is not minus .5 i mean you know i don't think so at least"
+  },
+  {
+   "ply": 67,
+   "t": 727.5,
+   "line": [
+    "Ne2"
+   ],
+   "fen": "8/6p1/3k2p1/p2p4/2p2P2/PpPnP3/1P1KN3/8 b - - 2 34",
+   "said": "quite a bit underrated but he he's definitely human and he just he just played well okay knight d3 this is not minus .5 i mean you know i don't think so at least boom"
+  },
+  {
+   "ply": 68,
+   "t": 729.5,
+   "line": [
+    "Nxb2"
+   ],
+   "fen": "8/6p1/3k2p1/p2p4/2p2P2/PpP1P3/1n1KN3/8 w - - 0 35",
+   "said": "definitely human and he just he just played well okay knight d3 this is not minus .5 i mean you know i don't think so at least boom knight h1 defense oh yeah that was a joke okay yeah but king c1 yeah king c one knight d3 and then i win the other pawn king c1 i win the other pawn so i win one of the pawns"
+  },
+  {
+   "ply": 69,
+   "t": 745.5,
+   "line": [
+    "Kc1"
+   ],
+   "fen": "8/6p1/3k2p1/p2p4/2p2P2/PpP1P3/1n2N3/2K5 b - - 1 35",
+   "said": "knight h1 defense oh yeah that was a joke okay yeah but king c1 yeah king c one knight d3 and then i win the other pawn king c1 i win the other pawn so i win one of the pawns sorry i was misleading"
+  },
+  {
+   "ply": 70,
+   "t": 747.5,
+   "line": [
+    "Nd3+"
+   ],
+   "fen": "8/6p1/3k2p1/p2p4/2p2P2/PpPnP3/4N3/2K5 w - - 2 36",
+   "said": "yeah but king c1 yeah king c one knight d3 and then i win the other pawn king c1 i win the other pawn so i win one of the pawns sorry i was misleading all right so where should we go here and"
+  },
+  {
+   "ply": 69,
+   "t": 750,
+   "line": [],
+   "fen": "8/6p1/3k2p1/p2p4/2p2P2/PpP1P3/1n2N3/2K5 b - - 1 35",
+   "said": "yeah but king c1 yeah king c one knight d3 and then i win the other pawn king c1 i win the other pawn so i win one of the pawns sorry i was misleading all right so where should we go here and we can go back to a4 just to tie him"
+  },
+  {
+   "ply": 70,
+   "t": 752.5,
+   "line": [
+    "Na4"
+   ],
+   "fen": "8/6p1/3k2p1/p2p4/n1p2P2/PpP1P3/4N3/2K5 w - - 2 36",
+   "said": "the other pawn king c1 i win the other pawn so i win one of the pawns sorry i was misleading all right so where should we go here and we can go back to a4 just to tie him down to the c3 pawn"
+  },
+  {
+   "ply": 71,
+   "t": 758.5,
+   "line": [
+    "Kb1"
+   ],
+   "fen": "8/6p1/3k2p1/p2p4/n1p2P2/PpP1P3/4N3/1K6 b - - 3 36",
+   "said": "sorry i was misleading all right so where should we go here and we can go back to a4 just to tie him down to the c3 pawn and now we need to use basically the principle of two weaknesses like the night itself is not going to win you the game uh we played to win the game we need to get the king involved how do we get the king involved we can play king e6 but there is an even more elegant way to get the king involved into the game uh does anybody see it this is like a little bit creative we want to get the king to e5 right well what's stopping us obviously it's the f4 pawn that's why doubled pawns are so"
+  },
+  {
+   "ply": 72,
+   "t": 790,
+   "line": [
+    "g5"
+   ],
+   "fen": "8/6p1/3k4/p2p2p1/n1p2P2/PpP1P3/4N3/1K6 w - - 0 37",
+   "said": "uh does anybody see it this is like a little bit creative we want to get the king to e5 right well what's stopping us obviously it's the f4 pawn that's why doubled pawns are so phenomenal in the end game sometimes if we didn't have a pawn on g7 this would be unthinkable we would never allow him to get a passer as it stands we use one of the pawns as a battering ram just to you know shake off his defense"
+  },
+  {
+   "ply": 73,
+   "t": 803.5,
+   "line": [
+    "fxg5"
+   ],
+   "fen": "8/6p1/3k4/p2p2P1/n1p5/PpP1P3/4N3/1K6 b - - 0 37",
+   "said": "if we didn't have a pawn on g7 this would be unthinkable we would never allow him to get a passer as it stands we use one of the pawns as a battering ram just to you know shake off his defense and now we go king e5 and the king has a"
+  },
+  {
+   "ply": 74,
+   "t": 804.5,
+   "line": [
+    "Ke5"
+   ],
+   "fen": "8/6p1/8/p2pk1P1/n1p5/PpP1P3/4N3/1K6 w - - 1 38",
+   "said": "if we didn't have a pawn on g7 this would be unthinkable we would never allow him to get a passer as it stands we use one of the pawns as a battering ram just to you know shake off his defense and now we go king e5 and the king has a very direct passageway uh to to paradise the moment he moves his knight"
+  },
+  {
+   "ply": 75,
+   "t": 810,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "8/6p1/8/p2pk1P1/n1pN4/PpP1P3/8/1K6 b - - 2 38",
+   "said": "we use one of the pawns as a battering ram just to you know shake off his defense and now we go king e5 and the king has a very direct passageway uh to to paradise the moment he moves his knight um you know we don't want a blind lego king e4 we spot the opportunity to take"
+  },
+  {
+   "ply": 76,
+   "t": 814,
+   "line": [
+    "Nxc3+"
+   ],
+   "fen": "8/6p1/8/p2pk1P1/2pN4/Ppn1P3/8/1K6 w - - 0 39",
+   "said": "defense and now we go king e5 and the king has a very direct passageway uh to to paradise the moment he moves his knight um you know we don't want a blind lego king e4 we spot the opportunity to take on c3"
+  },
+  {
+   "ply": 77,
+   "t": 820.5,
+   "line": [
+    "Kb2"
+   ],
+   "fen": "8/6p1/8/p2pk1P1/2pN4/Ppn1P3/1K6/8 b - - 1 39",
+   "said": "his knight um you know we don't want a blind lego king e4 we spot the opportunity to take on c3 sorry twisters is that important right now all right so what should we do how should we where should we move the knight forkey where yeah knight d1 for sure"
+  },
+  {
+   "ply": 78,
+   "t": 835,
+   "line": [
+    "Nd1+"
+   ],
+   "fen": "8/6p1/8/p2pk1P1/2pN4/Pp2P3/1K6/3n4 w - - 2 40",
+   "said": "all right so what should we do how should we where should we move the knight forkey where yeah knight d1 for sure and then we want to take another pawn on e3 and that's a third one"
+  },
+  {
+   "ply": 80,
+   "t": 838.5,
+   "line": [
+    "Kc1",
+    "Nxe3"
+   ],
+   "fen": "8/6p1/8/p2pk1P1/2pN4/Pp2n3/8/2K5 w - - 0 41",
+   "said": "knight forkey where yeah knight d1 for sure and then we want to take another pawn on e3 and that's a third one and his position finally starts to crumble"
+  },
+  {
+   "ply": 82,
+   "t": 846.5,
+   "line": [
+    "Nc6+",
+    "Ke4"
+   ],
+   "fen": "8/6p1/2N5/p2p2P1/2p1k3/Pp2n3/8/2K5 w - - 2 42",
+   "said": "and then we want to take another pawn on e3 and that's a third one and his position finally starts to crumble okay so where should we go we should go to e4"
+  },
+  {
+   "ply": 83,
+   "t": 853.5,
+   "line": [
+    "Nxa5"
+   ],
+   "fen": "8/6p1/8/N2p2P1/2p1k3/Pp2n3/8/2K5 b - - 0 42",
+   "said": "crumble okay so where should we go we should go to e4 okay so which how should we you know what should we do how should we continue there's a couple of options here the key you know the one thing you should understand is like there's this common piece of advice don't hurry in the end game but that doesn't mean you shouldn't push your"
+  },
+  {
+   "ply": 84,
+   "t": 868.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "8/6p1/8/N5P1/2ppk3/Pp2n3/8/2K5 w - - 0 43",
+   "said": "there's a couple of options here the key you know the one thing you should understand is like there's this common piece of advice don't hurry in the end game but that doesn't mean you shouldn't push your puns when you can you know you don't want to take forever or he has his apon he's going to push it so don't you know don't dilly dally"
+  },
+  {
+   "ply": 85,
+   "t": 875.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "8/6p1/2N5/6P1/2ppk3/Pp2n3/8/2K5 b - - 1 43",
+   "said": "there's this common piece of advice don't hurry in the end game but that doesn't mean you shouldn't push your puns when you can you know you don't want to take forever or he has his apon he's going to push it so don't you know don't dilly dally"
+  },
+  {
+   "ply": 86,
+   "t": 877.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "8/6p1/2N5/6P1/3pk3/Ppp1n3/8/2K5 w - - 0 44",
+   "said": "don't hurry in the end game but that doesn't mean you shouldn't push your puns when you can you know you don't want to take forever or he has his apon he's going to push it so don't you know don't dilly dally forever c3 chris i i know don't worry guys i know how much time i have trust me everything is under perfect control"
+  },
+  {
+   "ply": 87,
+   "t": 884.5,
+   "line": [
+    "Nb4"
+   ],
+   "fen": "8/6p1/8/6P1/1N1pk3/Ppp1n3/8/2K5 b - - 1 44",
+   "said": "he's going to push it so don't you know don't dilly dally forever c3 chris i i know don't worry guys i know how much time i have trust me everything is under perfect control which pawn should we push now well we can push b2 we can push d3 it doesn't"
+  },
+  {
+   "ply": 88,
+   "t": 891.5,
+   "line": [
+    "d3"
+   ],
+   "fen": "8/6p1/8/6P1/1N2k3/Ppppn3/8/2K5 w - - 0 45",
+   "said": "chris i i know don't worry guys i know how much time i have trust me everything is under perfect control which pawn should we push now well we can push b2 we can push d3 it doesn't really matter we push d3"
+  },
+  {
+   "ply": 89,
+   "t": 902,
+   "line": [
+    "Nxd3"
+   ],
+   "fen": "8/6p1/8/6P1/4k3/PppNn3/8/2K5 b - - 0 45",
+   "said": "really matter we push d3 no this isn't this isn't few like it's trust me i it's not like it was a close call okay so we should take the knight of course don't go b2"
+  },
+  {
+   "ply": 90,
+   "t": 908.5,
+   "line": [
+    "Kxd3"
+   ],
+   "fen": "8/6p1/8/6P1/8/Pppkn3/8/2K5 w - - 0 46",
+   "said": "no this isn't this isn't few like it's trust me i it's not like it was a close call okay so we should take the knight of course don't go b2 b2 check and final sequence what's can"
+  },
+  {
+   "ply": 92,
+   "t": 911.5,
+   "line": [
+    "a4",
+    "b2+"
+   ],
+   "fen": "8/6p1/8/6P1/P7/2pkn3/1p6/2K5 w - - 0 47",
+   "said": "no this isn't this isn't few like it's trust me i it's not like it was a close call okay so we should take the knight of course don't go b2 b2 check and final sequence what's can anybody spot the most accurate winning"
+  },
+  {
+   "ply": 93,
+   "t": 915,
+   "line": [
+    "Kb1"
+   ],
+   "fen": "8/6p1/8/6P1/P7/2pkn3/1p6/1K6 b - - 1 47",
+   "said": "no this isn't this isn't few like it's trust me i it's not like it was a close call okay so we should take the knight of course don't go b2 b2 check and final sequence what's can anybody spot the most accurate winning idea here it's not c2 there is a there's an option here that leads to checkmate almost immediately does anybody see it it's knocking d2 yeah it's knight c4 and"
+  },
+  {
+   "ply": 94,
+   "t": 927.5,
+   "line": [
+    "Nc4"
+   ],
+   "fen": "8/6p1/8/6P1/P1n5/2pk4/1p6/1K6 w - - 2 48",
+   "said": "idea here it's not c2 there is a there's an option here that leads to checkmate almost immediately does anybody see it it's knocking d2 yeah it's knight c4 and then c2 and and b1 queen so this is the most accurate knight c4 c2 and v1"
+  },
+  {
+   "ply": 95,
+   "t": 942,
+   "line": [
+    "g6"
+   ],
+   "fen": "8/6p1/6P1/8/P1n5/2pk4/1p6/1K6 b - - 0 48",
+   "said": "and b1 queen so this is the most accurate knight c4 c2 and v1"
+  },
+  {
+   "ply": 96,
+   "t": 943,
+   "line": [
+    "c2+"
+   ],
+   "fen": "8/6p1/6P1/8/P1n5/3k4/1pp5/1K6 w - - 0 49",
+   "said": "so this is the most accurate knight c4 c2 and v1 yeah so c2 check and um b1 wait check me okay i was toying with you guys i mean i knew"
+  },
+  {
+   "ply": 98,
+   "t": 950,
+   "line": [
+    "Ka2",
+    "b1=N"
+   ],
+   "fen": "8/6p1/6P1/8/P1n5/3k4/K1p5/1n6 w - - 0 50",
+   "said": "yeah so c2 check and um b1 wait check me okay i was toying with you guys i mean i knew i had five seconds but i it was also it was also made see one night well everything is made thank you for another 200 bits thank you sir lots of good support today you work our way back toward 5000 subs it's good to see no my accuracy i mean i mean both both"
+  },
+  {
+   "ply": 3,
+   "t": 972,
+   "line": [],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+   "said": "lots of good support today you work our way back toward 5000 subs it's good to see no my accuracy i mean i mean both both were good okay the end game the engine wasn't a fan of either side during much of the end game well fair enough so we had another london now in the last game you guys will remember"
+  },
+  {
+   "ply": 6,
+   "t": 983,
+   "line": [
+    "c5",
+    "e3",
+    "d5"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 4",
+   "said": "were good okay the end game the engine wasn't a fan of either side during much of the end game well fair enough so we had another london now in the last game you guys will remember that"
+  },
+  {
+   "ply": 7,
+   "t": 984,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/2P1P3/PP3PPP/RN1QKBNR b KQkq - 0 4",
+   "said": "were good okay the end game the engine wasn't a fan of either side during much of the end game well fair enough so we had another london now in the last game you guys will remember that c3 happened followed by knight d2 that"
+  },
+  {
+   "ply": 9,
+   "t": 986,
+   "line": [
+    "Nc6",
+    "Nd2"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/2pp4/3P1B2/2P1P3/PP1N1PPP/R2QKBNR b KQkq - 2 5",
+   "said": "the end game the engine wasn't a fan of either side during much of the end game well fair enough so we had another london now in the last game you guys will remember that c3 happened followed by knight d2 that is the more uh that is considered to be the more accurate move order"
+  },
+  {
+   "ply": 11,
+   "t": 991,
+   "line": [
+    "Nb8",
+    "Nb1"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/2P1P3/PP3PPP/RN1QKBNR b KQkq - 4 6",
+   "said": "fair enough so we had another london now in the last game you guys will remember that c3 happened followed by knight d2 that is the more uh that is considered to be the more accurate move order and um after knight f3 knight c6"
+  },
+  {
+   "ply": 8,
+   "t": 993,
+   "line": [],
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/2pp4/3P1B2/2P1P3/PP3PPP/RN1QKBNR w KQkq - 1 5",
+   "said": "in the last game you guys will remember that c3 happened followed by knight d2 that is the more uh that is considered to be the more accurate move order and um after knight f3 knight c6 bishop b5 is i guess this is a move i i don't think it's the best um and i think there's a couple of i i honestly don't understand the c and d pushes by black in the opening well it's i mean one of the most basic sort of opening principles is that you"
+  },
+  {
+   "ply": 4,
+   "t": 1013,
+   "line": [],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+   "said": "and i think there's a couple of i i honestly don't understand the c and d pushes by black in the opening well it's i mean one of the most basic sort of opening principles is that you need to control the center with your"
+  },
+  {
+   "ply": 3,
+   "t": 1014.5,
+   "line": [],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+   "said": "honestly don't understand the c and d pushes by black in the opening well it's i mean one of the most basic sort of opening principles is that you need to control the center with your pawns are you familiar with that uh with that rule because that's that's sort of the basic opening rule that's the whole premise behind moving your pawns out into the center of the board um if you're familiar with that then these moves should make sense we're basically grabbing space in the center"
+  },
+  {
+   "ply": 6,
+   "t": 1036,
+   "line": [
+    "c5",
+    "e3",
+    "d5"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 4",
+   "said": "center of the board um if you're familiar with that then these moves should make sense we're basically grabbing space in the center to facilitate yeah so that's all that that we're doing um i mean it's hard for me to go to that level but if you're familiar with that that's basically what we're doing here okay"
+  },
+  {
+   "ply": 7,
+   "t": 1050.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 1 4",
+   "said": "um i mean it's hard for me to go to that level but if you're familiar with that that's basically what we're doing here okay so knight f3 knight c6 bishop b5 queen a5 track knight c3 so this is the"
+  },
+  {
+   "ply": 10,
+   "t": 1053.5,
+   "line": [
+    "Nc6",
+    "Bb5",
+    "Qa5+"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/qBpp4/3P1B2/4PN2/PPP2PPP/RN1QK2R w KQkq - 4 6",
+   "said": "i mean it's hard for me to go to that level but if you're familiar with that that's basically what we're doing here okay so knight f3 knight c6 bishop b5 queen a5 track knight c3 so this is the"
+  },
+  {
+   "ply": 11,
+   "t": 1054.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/qBpp4/3P1B2/2N1PN2/PPP2PPP/R2QK2R b KQkq - 5 6",
+   "said": "it's hard for me to go to that level but if you're familiar with that that's basically what we're doing here okay so knight f3 knight c6 bishop b5 queen a5 track knight c3 so this is the concept of provoking"
+  },
+  {
+   "ply": 10,
+   "t": 1056,
+   "line": [],
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/qBpp4/3P1B2/4PN2/PPP2PPP/RN1QK2R w KQkq - 4 6",
+   "said": "it's hard for me to go to that level but if you're familiar with that that's basically what we're doing here okay so knight f3 knight c6 bishop b5 queen a5 track knight c3 so this is the concept of provoking uh we are provoking knight c3 in order"
+  },
+  {
+   "ply": 11,
+   "t": 1057.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/qBpp4/3P1B2/2N1PN2/PPP2PPP/R2QK2R b KQkq - 5 6",
+   "said": "to that level but if you're familiar with that that's basically what we're doing here okay so knight f3 knight c6 bishop b5 queen a5 track knight c3 so this is the concept of provoking uh we are provoking knight c3 in order to soften up the d4 pawn and at this level these kinds of moves become very commonplace you're not you know"
+  },
+  {
+   "ply": 13,
+   "t": 1064.5,
+   "line": [
+    "Qd8",
+    "Nb1"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/1Bpp4/3P1B2/4PN2/PPP2PPP/RN1QK2R b KQkq - 7 7",
+   "said": "a5 track knight c3 so this is the concept of provoking uh we are provoking knight c3 in order to soften up the d4 pawn and at this level these kinds of moves become very commonplace you're not you know blunders are less frequent and so to win a lot of these games you need to celebrate small victories you need to provoke relatively small weaknesses and you have to start becoming comfortable with these various positional considerations such as oh i'm getting his knight to c3"
+  },
+  {
+   "ply": 15,
+   "t": 1084.5,
+   "line": [
+    "Qa5+",
+    "Nc3"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/qBpp4/3P1B2/2N1PN2/PPP2PPP/R2QK2R b KQkq - 9 8",
+   "said": "you need to provoke relatively small weaknesses and you have to start becoming comfortable with these various positional considerations such as oh i'm getting his knight to c3 um and a layman could look at this position and say well what the heck's wrong with bringing the knight out to its natural square but if you are familiar with the london you know that the pawn belongs on c3 not the knight all right bishop b5 is not bad i would say it's a little bit inaccurate"
+  },
+  {
+   "ply": 17,
+   "t": 1103.5,
+   "line": [
+    "Qd8",
+    "Nb1"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/1Bpp4/3P1B2/4PN2/PPP2PPP/RN1QK2R b KQkq - 11 9",
+   "said": "its natural square but if you are familiar with the london you know that the pawn belongs on c3 not the knight all right bishop b5 is not bad i would say it's a little bit inaccurate"
+  },
+  {
+   "ply": 20,
+   "t": 1108,
+   "line": [
+    "Bg4",
+    "Nc3",
+    "Qa5"
+   ],
+   "fen": "r3kb1r/pp2pppp/2n2n2/qBpp4/3P1Bb1/2N1PN2/PPP2PPP/R2QK2R w KQkq - 14 11",
+   "said": "all right bishop b5 is not bad i would say it's a little bit inaccurate"
+  },
+  {
+   "ply": 24,
+   "t": 1113.5,
+   "line": [
+    "Qb1",
+    "Qd8",
+    "Nd1",
+    "Bc8"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/1Bpp4/3P1B2/4PN2/PPP2PPP/RQ1NK2R w KQkq - 18 13",
+   "said": "little bit inaccurate yeah i mean i understand stockfish um stockfish might say bishop g4 yeah that also seems very sensible um i don't like to use the engine in these"
+  },
+  {
+   "ply": 10,
+   "t": 1121.5,
+   "line": [],
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/qBpp4/3P1B2/4PN2/PPP2PPP/RN1QK2R w KQkq - 4 6",
+   "said": "yeah i mean i understand stockfish um stockfish might say bishop g4 yeah that also seems very sensible um i don't like to use the engine in these positions because i'm going instead for"
+  },
+  {
+   "ply": 12,
+   "t": 1123,
+   "line": [
+    "Nc3",
+    "Bg4"
+   ],
+   "fen": "r3kb1r/pp2pppp/2n2n2/qBpp4/3P1Bb1/2N1PN2/PPP2PPP/R2QK2R w KQkq - 6 7",
+   "said": "yeah i mean i understand stockfish um stockfish might say bishop g4 yeah that also seems very sensible um i don't like to use the engine in these positions because i'm going instead for a conceptual illustration this is not really like jabba london why don't i like knight e4 i'm not sure where so bishop g4 okay so bishop c6 bc bishop"
+  },
+  {
+   "ply": 13,
+   "t": 1135,
+   "line": [
+    "Bxc6+"
+   ],
+   "fen": "r3kb1r/pp2pppp/2B2n2/q1pp4/3P1Bb1/2N1PN2/PPP2PPP/R2QK2R b KQkq - 0 7",
+   "said": "a conceptual illustration this is not really like jabba london why don't i like knight e4 i'm not sure where so bishop g4 okay so bishop c6 bc bishop c6 was unnecessary i think he should"
+  },
+  {
+   "ply": 12,
+   "t": 1138,
+   "line": [],
+   "fen": "r3kb1r/pp2pppp/2n2n2/qBpp4/3P1Bb1/2N1PN2/PPP2PPP/R2QK2R w KQkq - 6 7",
+   "said": "this is not really like jabba london why don't i like knight e4 i'm not sure where so bishop g4 okay so bishop c6 bc bishop c6 was unnecessary i think he should have probably castled"
+  },
+  {
+   "ply": 13,
+   "t": 1139.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r3kb1r/pp2pppp/2n2n2/qBpp4/3P1Bb1/2N1PN2/PPP2PPP/R2Q1RK1 b kq - 7 7",
+   "said": "why don't i like knight e4 i'm not sure where so bishop g4 okay so bishop c6 bc bishop c6 was unnecessary i think he should have probably castled"
+  },
+  {
+   "ply": 17,
+   "t": 1143,
+   "line": [
+    "Bf5",
+    "Re1",
+    "Bc8",
+    "Kh1"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/qBpp4/3P1B2/2N1PN2/PPP2PPP/R2QR2K b kq - 11 9",
+   "said": "where so bishop g4 okay so bishop c6 bc bishop c6 was unnecessary i think he should have probably castled"
+  },
+  {
+   "ply": 18,
+   "t": 1144,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/2n5/qBpp4/3PnB2/2N1PN2/PPP2PPP/R2QR2K w kq - 12 10",
+   "said": "so bishop g4 okay so bishop c6 bc bishop c6 was unnecessary i think he should have probably castled oh 94 here oh sorry 94 in this position i got it yeah so the reason i didn't like 94 ladies and gentlemen is because because of castling and okay black wins a piece right i take c3"
+  },
+  {
+   "ply": 21,
+   "t": 1153.5,
+   "line": [
+    "Rf1",
+    "Nxc3",
+    "Kg1"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/2n5/qBpp4/3P1B2/2n1PN2/PPP2PPP/R2Q1RK1 b kq - 1 11",
+   "said": "oh 94 here oh sorry 94 in this position i got it yeah so the reason i didn't like 94 ladies and gentlemen is because because of castling and okay black wins a piece right i take c3 bc3 queen takes b5 so"
+  },
+  {
+   "ply": 23,
+   "t": 1157,
+   "line": [
+    "Qxb5",
+    "bxc3"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/2n5/1qpp4/3P1B2/2P1PN2/P1P2PPP/R2Q1RK1 b kq - 0 12",
+   "said": "like 94 ladies and gentlemen is because because of castling and okay black wins a piece right i take c3 bc3 queen takes b5 so i'm just done right what am i missing here what are we missing"
+  },
+  {
+   "ply": 21,
+   "t": 1163.5,
+   "line": [],
+   "fen": "r1b1kb1r/pp2pppp/2n5/qBpp4/3P1B2/2n1PN2/PPP2PPP/R2Q1RK1 b kq - 1 11",
+   "said": "and okay black wins a piece right i take c3 bc3 queen takes b5 so i'm just done right what am i missing here what are we missing not rook b1 but white has an intermediate move which intermediate move does white have of course he takes with check bc bc now i understand that some of you are looking at this and saying well black's up upon like why didn't you go for this but that's exactly the thing"
+  },
+  {
+   "ply": 12,
+   "t": 1188,
+   "line": [],
+   "fen": "r3kb1r/pp2pppp/2n2n2/qBpp4/3P1Bb1/2N1PN2/PPP2PPP/R2QK2R w KQkq - 6 7",
+   "said": "of course he takes with check bc bc now i understand that some of you are looking at this and saying well black's up upon like why didn't you go for this but that's exactly the thing at this level you cannot just look at the position and say ah we're up upon so we have a good position you have to look at the other you have to contextualize this and what other considerations are well clearly black is hugely lacking in development we literally don't have a single piece developed white has his entire army ready to rumble this gets super nasty really fast he's got the b file uh anybody should be able to see that white has huge compensation here so it you know doing all of this for for the sake of winning a pawn is just not something i consider to be worth it"
+  },
+  {
+   "ply": 16,
+   "t": 1224.5,
+   "line": [
+    "Kf1",
+    "Ne4",
+    "Rg1",
+    "Bc8"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/2n5/qBpp4/3PnB2/2N1PN2/PPP2PPP/R2Q1KR1 w kq - 10 9",
+   "said": "got the b file uh anybody should be able to see that white has huge compensation here so it you know doing all of this for for the sake of winning a pawn is just not something i consider to be worth it and there's a lot of these layers you know of consideration 94 looks very"
+  },
+  {
+   "ply": 19,
+   "t": 1230,
+   "line": [
+    "Ke1",
+    "Nf6",
+    "Rh1"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/qBpp4/3P1B2/2N1PN2/PPP2PPP/R2QK2R b kq - 13 10",
+   "said": "it you know doing all of this for for the sake of winning a pawn is just not something i consider to be worth it and there's a lot of these layers you know of consideration 94 looks very logical but concretely i didn't think it was that good bishop g4 i always like to prioritize"
+  },
+  {
+   "ply": 20,
+   "t": 1235.5,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "r3kb1r/pp2pppp/2n2n2/qBpp4/3P1Bb1/2N1PN2/PPP2PPP/R2QK2R w kq - 14 11",
+   "said": "something i consider to be worth it and there's a lot of these layers you know of consideration 94 looks very logical but concretely i didn't think it was that good bishop g4 i always like to prioritize"
+  },
+  {
+   "ply": 21,
+   "t": 1236.5,
+   "line": [
+    "Bxc6+"
+   ],
+   "fen": "r3kb1r/pp2pppp/2B2n2/q1pp4/3P1Bb1/2N1PN2/PPP2PPP/R2QK2R b kq - 0 11",
+   "said": "and there's a lot of these layers you know of consideration 94 looks very logical but concretely i didn't think it was that good bishop g4 i always like to prioritize the development all right"
+  },
+  {
+   "ply": 22,
+   "t": 1246,
+   "line": [
+    "bxc6"
+   ],
+   "fen": "r3kb1r/p3pppp/2p2n2/q1pp4/3P1Bb1/2N1PN2/PPP2PPP/R2QK2R w kq - 0 12",
+   "said": "was that good bishop g4 i always like to prioritize the development all right well chess is hard castles e6 this is normal h3 bishop h5"
+  },
+  {
+   "ply": 15,
+   "t": 1248,
+   "line": [],
+   "fen": "r3kb1r/pp2pppp/2n5/qBpp4/3PnBb1/2N1PN2/PPP2PPP/R2Q1KR1 b kq - 9 8",
+   "said": "the development all right well chess is hard castles e6 this is normal h3 bishop h5 um yeah so we could have taken on f3 here and essentially softened up the d4 pawn uh yes well you know as emanuel alaska said i spent the first half of my chest career learning roles in the second half unlearning them to paraphrase and yes you could put it that way at lower levels it's all about mastery of fundamental principles short calculation tactical pattern recognition and at higher levels all of those things are absolutely true they still decide games but you can see these very subtle considerations start to creep in such as when do you violate the rules when do you find exceptions to the rules um you know you see these subtle subtle considerations of provoking certain moves and weak pawns one analogy that i've i heard this analogy from somebody i thought it was very nifty uh to demonstrate how the uh makeup of"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 3,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+   "line": [
+    "d4",
+    "Nf6",
+    "Bf4"
+   ],
+   "options": [
+    {
+     "san": "d5",
+     "t": 37,
+     "continuation": "d5",
+     "said": "the 300. uh let's let's play the same line i'm excited to see what this guy's gonna play uh just to hopefully we'll get a chance to uh emphasize some of the concepts that we just talked about so this is pretty exciting stuff let's go d5 and let's go c5 maybe he'll take um we'll see what we'll see what he plays uh knight f3 okay so knight f3 yeah knight f3 pres gives black more more options than c3 does but um i don't think we should reinvent the wheel here let's let's still play knight c6 and if he goes c3 this will be very similar position to what we just had it should be five okay so bishop b5 is a little bit weird just a little bit weird because in the london general you play c3 first so there's a couple of options that we have at our disposal we can play bishop d7 that's the sort of instinctual move and it leads to a very solid position i think um a lot of you guys should be seeing queen a5 track and again it doesn't win a bishop because of knight c3 but at this level you sometimes do stuff not because it wins material but because it induces an undesirable move okay now"
+    },
+    {
+     "san": "c5",
+     "t": 983,
+     "continuation": "c5 e3 d5",
+     "said": "were good okay the end game the engine wasn't a fan of either side during much of the end game well fair enough so we had another london now in the last game you guys will remember that c3 happened followed by knight d2 that is the more uh that is considered to be the more accurate move order and um after knight f3 knight c6 bishop b5 is i guess this is a move i i don't think it's the best um and i think there's a couple of i i honestly don't understand the c and d pushes by black in the opening well it's i mean one of the most basic sort of opening principles is that you need to control the center with your pawns are you familiar with that uh with that rule because that's that's sort of the basic opening rule that's the whole premise behind moving your pawns out into the center of the board um if you're familiar with that then these moves should make sense we're basically grabbing space in the center to facilitate yeah so that's all that that we're doing um i mean"
+    }
+   ]
+  },
+  {
+   "ply": 6,
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pp4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 4",
+   "line": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "d5",
+    "e3",
+    "c5"
+   ],
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 45,
+     "continuation": "Nf3",
+     "said": "to uh emphasize some of the concepts that we just talked about so this is pretty exciting stuff let's go d5 and let's go c5 maybe he'll take um we'll see what we'll see what he plays uh knight f3 okay so knight f3 yeah knight f3 pres gives black more more options than c3 does but um i don't think we should reinvent the wheel here let's let's still play knight c6 and if he goes c3 this will be very similar position to what we just had it should be five okay so bishop b5 is a little bit weird just a little bit weird because in the london general you play c3 first so there's a couple of options that we have at our disposal we can play bishop d7 that's the sort of instinctual move and it leads to a very solid position i think um a lot of you guys should be seeing queen a5 track and again it doesn't win a bishop because of knight c3 but at this level you sometimes do stuff not because it wins material but because it induces an undesirable move okay now what is the purpose of the london system as a whole let's deconstruct it for a second the london revolves around the pawn on d4 being a stronghold for white that"
+    },
+    {
+     "san": "c3",
+     "t": 984,
+     "continuation": "c3",
+     "said": "were good okay the end game the engine wasn't a fan of either side during much of the end game well fair enough so we had another london now in the last game you guys will remember that c3 happened followed by knight d2 that is the more uh that is considered to be the more accurate move order and um after knight f3 knight c6 bishop b5 is i guess this is a move i i don't think it's the best um and i think there's a couple of i i honestly don't understand the c and d pushes by black in the opening well it's i mean one of the most basic sort of opening principles is that you need to control the center with your pawns are you familiar with that uh with that rule because that's that's sort of the basic opening rule that's the whole premise behind moving your pawns out into the center of the board um if you're familiar with that then these moves should make sense we're basically grabbing space in the center to facilitate yeah so that's all that that we're doing um i mean"
+    }
+   ]
+  },
+  {
+   "ply": 9,
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/1Bpp4/3P1B2/4PN2/PPP2PPP/RN1QK2R b KQkq - 3 5",
+   "line": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "d5",
+    "e3",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "Bb5"
+   ],
+   "options": [
+    {
+     "san": "Qa5+",
+     "t": 131.5,
+     "continuation": "Qa5+",
+     "said": "knight c3 well obviously we prevent him from playing c3 and that pawn on d4 turns from a weakness into a strength sorry from a strength into a weakness so let's play queen a5 trick in addition the queen on a5 is very nicely placed i mean there's nothing wrong with putting the bishop under some pressure uh and we'll have to play precisely in response to knight c3 so right now we want to play actively we don't want to go e6 because we're a little bit underdeveloped and he'll go knight e5 so how should we restrict the knight on f3 while also developing a piece i'm giving basically giving it away but i don't like knight e4 because i would prefer to emphasize the development so let's go vision g4 yeah this is a very typical way of developing and we're putting pressure on the knight which is in turn defending the pawn of d4k he takes we take that's nice that leads to a very compact and a very nice pawn structure i like the spawn structure okay so we can take on d4 we don't necessarily need to do that we can also just play e6 and work on the development of this bishop"
+    },
+    {
+     "san": "Bg4",
+     "t": 1108,
+     "continuation": "Bg4 Nc3 Qa5",
+     "said": "all right bishop b5 is not bad i would say it's a little bit inaccurate yeah i mean i understand stockfish um stockfish might say bishop g4 yeah that also seems very sensible um i don't like to use the engine in these positions because i'm going instead for a conceptual illustration this is not really like jabba london why don't i like knight e4 i'm not sure where so bishop g4 okay so bishop c6 bc bishop c6 was unnecessary i think he should have probably castled oh 94 here oh sorry 94 in this position i got it yeah so the reason i didn't like 94 ladies and gentlemen is because because of castling and okay black wins a piece right i take c3 bc3 queen takes b5 so i'm just done right what am i missing here what are we missing"
+    }
+   ]
+  },
+  {
+   "ply": 11,
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/qBpp4/3P1B2/2N1PN2/PPP2PPP/R2QK2R b KQkq - 5 6",
+   "line": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "d5",
+    "e3",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "Qa5+",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "Bg4",
+     "t": 166.5,
+     "continuation": "Bg4",
+     "said": "basically giving it away but i don't like knight e4 because i would prefer to emphasize the development so let's go vision g4 yeah this is a very typical way of developing and we're putting pressure on the knight which is in turn defending the pawn of d4k he takes we take that's nice that leads to a very compact and a very nice pawn structure i like the spawn structure okay so we can take on d4 we don't necessarily need to do that we can also just play e6 and work on the development of this bishop on the other hand one can make the case that e6 allows them to take on c5 and relinquish the pawn on d4 but on the other hand is that really something we should be worried about it gives away the whole center so when in doubt and by the way rook ba be careful that bishop guards the square when in doubt keep the tension let him be the one to decide whether he wants to take her knight that's always going to be less of a headache than asking yourself the same question on the third hand no you can say that in russian you can stay on the second hand"
+    },
+    {
+     "san": "Qd8",
+     "t": 1064.5,
+     "continuation": "Qd8 Nb1",
+     "said": "a5 track knight c3 so this is the concept of provoking uh we are provoking knight c3 in order to soften up the d4 pawn and at this level these kinds of moves become very commonplace you're not you know blunders are less frequent and so to win a lot of these games you need to celebrate small victories you need to provoke relatively small weaknesses and you have to start becoming comfortable with these various positional considerations such as oh i'm getting his knight to c3 um and a layman could look at this position and say well what the heck's wrong with bringing the knight out to its natural square but if you are familiar with the london you know that the pawn belongs on c3 not the knight all right bishop b5 is not bad i would say it's a little bit inaccurate yeah i mean i understand stockfish um stockfish might say bishop g4 yeah that also seems very sensible um i don't like to use the engine in these positions because i'm going instead for a conceptual illustration"
+    }
+   ]
+  },
+  {
+   "ply": 12,
+   "fen": "r3kb1r/pp2pppp/2n2n2/qBpp4/3P1Bb1/2N1PN2/PPP2PPP/R2QK2R w KQkq - 6 7",
+   "line": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "d5",
+    "e3",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "Qa5+",
+    "Nc3",
+    "Bg4"
+   ],
+   "options": [
+    {
+     "san": "Bxc6+",
+     "t": 172.5,
+     "continuation": "Bxc6+",
+     "said": "because i would prefer to emphasize the development so let's go vision g4 yeah this is a very typical way of developing and we're putting pressure on the knight which is in turn defending the pawn of d4k he takes we take that's nice that leads to a very compact and a very nice pawn structure i like the spawn structure okay so we can take on d4 we don't necessarily need to do that we can also just play e6 and work on the development of this bishop on the other hand one can make the case that e6 allows them to take on c5 and relinquish the pawn on d4 but on the other hand is that really something we should be worried about it gives away the whole center so when in doubt and by the way rook ba be careful that bishop guards the square when in doubt keep the tension let him be the one to decide whether he wants to take her knight that's always going to be less of a headache than asking yourself the same question on the third hand no you can say that in russian you can stay on the second hand on the third hand etc so here another question should we take on f3 or should we drop the bishop back"
+    },
+    {
+     "san": "Qb1",
+     "t": 1113.5,
+     "continuation": "Qb1 Qd8 Nd1 Bc8",
+     "said": "little bit inaccurate yeah i mean i understand stockfish um stockfish might say bishop g4 yeah that also seems very sensible um i don't like to use the engine in these positions because i'm going instead for a conceptual illustration this is not really like jabba london why don't i like knight e4 i'm not sure where so bishop g4 okay so bishop c6 bc bishop c6 was unnecessary i think he should have probably castled oh 94 here oh sorry 94 in this position i got it yeah so the reason i didn't like 94 ladies and gentlemen is because because of castling and okay black wins a piece right i take c3 bc3 queen takes b5 so i'm just done right what am i missing here what are we missing not rook b1 but white has an intermediate move"
+    },
+    {
+     "san": "O-O",
+     "t": 1139.5,
+     "continuation": "O-O",
+     "said": "why don't i like knight e4 i'm not sure where so bishop g4 okay so bishop c6 bc bishop c6 was unnecessary i think he should have probably castled oh 94 here oh sorry 94 in this position i got it yeah so the reason i didn't like 94 ladies and gentlemen is because because of castling and okay black wins a piece right i take c3 bc3 queen takes b5 so i'm just done right what am i missing here what are we missing not rook b1 but white has an intermediate move which intermediate move does white have of course he takes with check bc bc now i understand that some of you are looking at this and saying well black's up upon like why didn't you go for this but that's exactly the thing at this level you cannot just look at the position and say ah we're up upon so we have a good position you have to look at the other you have to contextualize this"
+    },
+    {
+     "san": "Kf1",
+     "t": 1224.5,
+     "continuation": "Kf1 Ne4 Rg1 Bc8",
+     "said": "got the b file uh anybody should be able to see that white has huge compensation here so it you know doing all of this for for the sake of winning a pawn is just not something i consider to be worth it and there's a lot of these layers you know of consideration 94 looks very logical but concretely i didn't think it was that good bishop g4 i always like to prioritize the development all right well chess is hard castles e6 this is normal h3 bishop h5 um yeah so we could have taken on f3 here and essentially softened up the d4 pawn uh yes well you know as emanuel alaska said i spent the first half of my chest career learning roles in the second half unlearning them to paraphrase and yes you could put it that way at lower levels it's all about mastery of fundamental principles short calculation tactical pattern recognition and at higher levels all of those things are absolutely true they still decide games"
+    }
+   ]
+  },
+  {
+   "ply": 69,
+   "fen": "8/6p1/3k2p1/p2p4/2p2P2/PpP1P3/1n2N3/2K5 b - - 1 35",
+   "line": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "d5",
+    "e3",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "Qa5+",
+    "Nc3",
+    "Bg4",
+    "Bxc6+",
+    "bxc6",
+    "O-O",
+    "e6",
+    "h3",
+    "Bh5",
+    "g4",
+    "Bg6",
+    "Ne5",
+    "Rc8",
+    "h4",
+    "h6",
+    "g5",
+    "hxg5",
+    "Nxg6",
+    "fxg6",
+    "Bxg5",
+    "Be7",
+    "Ne2",
+    "Nh5",
+    "Bxe7",
+    "Kxe7",
+    "Ng3",
+    "Nf6",
+    "Kg2",
+    "Rxh4",
+    "Rh1",
+    "Rch8",
+    "Rxh4",
+    "Rxh4",
+    "c3",
+    "Qb5",
+    "Qb3",
+    "c4",
+    "Qxb5",
+    "cxb5",
+    "Rh1",
+    "Rxh1",
+    "Kxh1",
+    "a5",
+    "Kg1",
+    "b4",
+    "Kf1",
+    "Kd6",
+    "Ke1",
+    "e5",
+    "Kd2",
+    "Nd7",
+    "a3",
+    "b3",
+    "dxe5+",
+    "Nxe5",
+    "f4",
+    "Nd3",
+    "Ne2",
+    "Nxb2",
+    "Kc1"
+   ],
+   "options": [
+    {
+     "san": "Nd3+",
+     "t": 747.5,
+     "continuation": "Nd3+",
+     "said": "yeah but king c1 yeah king c one knight d3 and then i win the other pawn king c1 i win the other pawn so i win one of the pawns sorry i was misleading all right so where should we go here and we can go back to a4 just to tie him down to the c3 pawn and now we need to use basically the principle of two weaknesses like the night itself is not going to win you the game uh we played to win the game we need to get the king involved how do we get the king involved we can play king e6 but there is an even more elegant way to get the king involved into the game uh does anybody see it this is like a little bit creative we want to get the king to e5 right well what's stopping us obviously it's the f4 pawn that's why doubled pawns are so phenomenal in the end game sometimes if we didn't have a pawn on g7 this would be unthinkable we would never allow him to get a passer as it stands we use one of the pawns as a battering ram just to you know shake off his defense and now we go king e5 and the king has a very direct passageway"
+    },
+    {
+     "san": "Na4",
+     "t": 752.5,
+     "continuation": "Na4",
+     "said": "the other pawn king c1 i win the other pawn so i win one of the pawns sorry i was misleading all right so where should we go here and we can go back to a4 just to tie him down to the c3 pawn and now we need to use basically the principle of two weaknesses like the night itself is not going to win you the game uh we played to win the game we need to get the king involved how do we get the king involved we can play king e6 but there is an even more elegant way to get the king involved into the game uh does anybody see it this is like a little bit creative we want to get the king to e5 right well what's stopping us obviously it's the f4 pawn that's why doubled pawns are so phenomenal in the end game sometimes if we didn't have a pawn on g7 this would be unthinkable we would never allow him to get a passer as it stands we use one of the pawns as a battering ram just to you know shake off his defense and now we go king e5 and the king has a very direct passageway uh to to paradise the moment he moves his knight um you know we don't want a blind lego"
+    }
+   ]
+  }
+ ]
+}

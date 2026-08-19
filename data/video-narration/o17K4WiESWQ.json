@@ -1,0 +1,397 @@
+{
+ "videoId": "o17K4WiESWQ",
+ "title": "Master Class | Veresov / Benoni | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1078,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "kay d4 and finally we got white can you believe it we got white okay so we're going to play mainline d4c4"
+  },
+  {
+   "ply": 3,
+   "t": 1079.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "kay d4 and finally we got white can you believe it we got white okay so we're going to play mainline d4c4"
+  },
+  {
+   "ply": 4,
+   "t": 1081.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "kay d4 and finally we got white can you believe it we got white okay so we're going to play mainline d4c4"
+  },
+  {
+   "ply": 5,
+   "t": 1082.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "said": "it we got white okay so we're going to play mainline d4c4 okay so this is the nimzo indian and what do i recommend"
+  },
+  {
+   "ply": 4,
+   "t": 1084,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "it we got white okay so we're going to play mainline d4c4 okay so this is the nimzo indian and what do i recommend against the nimzo well there's three main systems that white has and all of them are legitimate we can play into the nimzo indian with knight c3 knight c3 bishop b4 is the nimzo indian he can also go d5 and transpose into the queen's gambit knight f3 is a gateway into the queen's indian into the ragazin or to the queen's gambit and the most like independent line is to go g3 that is called the catalan is a very positional opening it's incredibly reputable and popular at he highest levels but you know the most positionally rich move is to go into the"
+  },
+  {
+   "ply": 5,
+   "t": 1126.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "said": "is a very positional opening it's incredibly reputable and popular at he highest levels but you know the most positionally rich move is to go into the nimzo let's go into the dim zone go knights yeah he goes c5 so he plays the"
+  },
+  {
+   "ply": 6,
+   "t": 1129,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqkb1r/pp1p1ppp/4pn2/2p5/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+   "said": "he highest levels but you know the most positionally rich move is to go into the nimzo let's go into the dim zone go knights yeah he goes c5 so he plays the binoni thank you t paige for the three months he plays the benoni and this is one of the several ways to reach the benoni you can also play c5 in this position and uh transpose after knight c3 so uh he"
+  },
+  {
+   "ply": 3,
+   "t": 1139,
+   "line": [],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "binoni thank you t paige for the three months he plays the benoni and this is one of the several ways to reach the benoni you can also play c5 in this position and uh transpose after knight c3 so uh he"
+  },
+  {
+   "ply": 6,
+   "t": 1143,
+   "line": [
+    "c5",
+    "Nc3",
+    "e6"
+   ],
+   "fen": "rnbqkb1r/pp1p1ppp/4pn2/2p5/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+   "said": "and this is one of the several ways to reach the benoni you can also play c5 in this position and uh transpose after knight c3 so uh he goes c5 let's go into mainline bononi with d5"
+  },
+  {
+   "ply": 7,
+   "t": 1146,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/pp1p1ppp/4pn2/2pP4/2P5/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4",
+   "said": "and this is one of the several ways to reach the benoni you can also play c5 in this position and uh transpose after knight c3 so uh he goes c5 let's go into mainline bononi with d5 he takes him and goes d6 okay he goes d6 immediately now that is a bit inaccurate that's a"
+  },
+  {
+   "ply": 8,
+   "t": 1153.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/3ppn2/2pP4/2P5/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+   "said": "goes c5 let's go into mainline bononi with d5 he takes him and goes d6 okay he goes d6 immediately now that is a bit inaccurate that's a little bit passive it's not terrible but it's passive how should white expand in the center what's the typical binoni move here of course it's to play e4 and the reason that d6 is inaccurate is"
+  },
+  {
+   "ply": 9,
+   "t": 1166.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/3ppn2/2pP4/2P1P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 5",
+   "said": "little bit passive it's not terrible but it's passive how should white expand in the center what's the typical binoni move here of course it's to play e4 and the reason that d6 is inaccurate is because after e takes d5 you should always use the process of comparison comparing often yields wisdom about the position that otherwise you might not have attained okay what's the difference well here we can play he takes d5 and we can maintain the"
+  },
+  {
+   "ply": 10,
+   "t": 1182,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rnbqk2r/pp2bppp/3ppn2/2pP4/2P1P3/2N5/PP3PPP/R1BQKBNR w KQkq - 1 6",
+   "said": "because after e takes d5 you should always use the process of comparison comparing often yields wisdom about the position that otherwise you might not have attained okay what's the difference well here we can play he takes d5 and we can maintain the the symmetry of the pawn structure uh and his position is tremendously cramped now given that he's probably going to take on d5 where do we want to put this bishop what would be a good forward thinking square for this bishop given that he's probably going to play e takes d5 and if he doesn't it still would be good on that square i love to"
+  },
+  {
+   "ply": 11,
+   "t": 1207.5,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqk2r/pp2bppp/3ppn2/2pP4/2P1P3/2NB4/PP3PPP/R1BQK1NR b KQkq - 2 6",
+   "said": "thinking square for this bishop given that he's probably going to play e takes d5 and if he doesn't it still would be good on that square i love to put the bishop on d3 here okay knight d7 now there's no need for us to take i"
+  },
+  {
+   "ply": 12,
+   "t": 1212.5,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r1bqk2r/pp1nbppp/3ppn2/2pP4/2P1P3/2NB4/PP3PPP/R1BQK1NR w KQkq - 3 7",
+   "said": "takes d5 and if he doesn't it still would be good on that square i love to put the bishop on d3 here okay knight d7 now there's no need for us to take i don't think that trade is particularly beneficial for white um we have a couple of ways that we could um you know uh set up our pieces a very ambitious approach would be to play f4 and get the pawn i don't like that move i don't really recommend it in the sense of playing positionally no need to reinvent the wheel let's develop"
+  },
+  {
+   "ply": 13,
+   "t": 1240.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqk2r/pp1nbppp/3ppn2/2pP4/2P1P3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 4 7",
+   "said": "play f4 and get the pawn i don't like that move i don't really recommend it in the sense of playing positionally no need to reinvent the wheel let's develop the knight okay again very unoriginal but solid his position is just so cramped and we're going to try to squeeze the life out of him here which is a way of playing that i think some of you uh"
+  },
+  {
+   "ply": 14,
+   "t": 1250,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "r1bqk2r/pp1nbppp/3pp3/2pP4/2P1P1n1/2NB1N2/PP3PPP/R1BQK2R w KQkq - 5 8",
+   "said": "the knight okay again very unoriginal but solid his position is just so cramped and we're going to try to squeeze the life out of him here which is a way of playing that i think some of you uh might use a little bit of help with okay so knight g4 i i assume he's trying to get a knight to e5 which is totally not dangerous and we shouldn't try to go ut of our way to stop him why because if you just calculate a little bit further down the road let's say we castle which is what we're going to do he's probably going to go 95 or this knight"
+  },
+  {
+   "ply": 15,
+   "t": 1268.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk2r/pp1nbppp/3pp3/2pP4/2P1P1n1/2NB1N2/PP3PPP/R1BQ1RK1 b kq - 6 8",
+   "said": "ut of our way to stop him why because if you just calculate a little bit further down the road let's say we castle which is what we're going to do he's probably going to go 95 or this knight o e5 uh and you know this there's a misconception associated with pieces that are in the center i've"
+  },
+  {
+   "ply": 16,
+   "t": 1277,
+   "line": [
+    "Nge5"
+   ],
+   "fen": "r1bqk2r/pp1nbppp/3pp3/2pPn3/2P1P3/2NB1N2/PP3PPP/R1BQ1RK1 w kq - 7 9",
+   "said": "which is what we're going to do he's probably going to go 95 or this knight o e5 uh and you know this there's a misconception associated with pieces that are in the center i've talked about this before you can't assume that a piece in the center is good just because it's in the center uh and one of the litmus tests is well how easy is is it to chase that piece away and you should see that well we're going to be able to play f4 at some point so we should definitely take the"
+  },
+  {
+   "ply": 17,
+   "t": 1293.5,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bqk2r/pp1nbppp/3pp3/2pPN3/2P1P3/2NB4/PP3PPP/R1BQ1RK1 b kq - 0 9",
+   "said": "good just because it's in the center uh and one of the litmus tests is well how easy is is it to chase that piece away and you should see that well we're going to be able to play f4 at some point so we should definitely take the knight and then we should drop the bishop back and then we should play f4 this knight is not going to hold on to e5 right so it's it's good for a couple of moves but then we're gonna hit it with f4 now"
+  },
+  {
+   "ply": 18,
+   "t": 1301,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bqk2r/pp2bppp/3pp3/2pPn3/2P1P3/2NB4/PP3PPP/R1BQ1RK1 w kq - 0 10",
+   "said": "going to be able to play f4 at some point so we should definitely take the knight and then we should drop the bishop back and then we should play f4 this knight is not going to hold on to e5 right so it's it's good for a couple of moves but then we're gonna hit it with f4 now e need to be careful don't just automatically drop the bishop to c2 that would blunder the pawn let's go bishop e2 we gotta be precise"
+  },
+  {
+   "ply": 19,
+   "t": 1311,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r1bqk2r/pp2bppp/3pp3/2pPn3/2P1P3/2N5/PP2BPPP/R1BQ1RK1 b kq - 1 10",
+   "said": "it's it's good for a couple of moves but then we're gonna hit it with f4 now e need to be careful don't just automatically drop the bishop to c2 that would blunder the pawn let's go bishop e2 we gotta be precise and then we're gonna hit him with a nice little f4 with tempo and now that we're fully developed f4 is a little bit less risky hope that makes sense"
+  },
+  {
+   "ply": 20,
+   "t": 1334.5,
+   "line": [
+    "Bf6"
+   ],
+   "fen": "r1bqk2r/pp3ppp/3ppb2/2pPn3/2P1P3/2N5/PP2BPPP/R1BQ1RK1 w kq - 2 11",
+   "said": "hope that makes sense all right bishop f6 well um i don't see a reason not to play f4"
+  },
+  {
+   "ply": 21,
+   "t": 1345.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1bqk2r/pp3ppp/3ppb2/2pPn3/2P1PP2/2N5/PP2B1PP/R1BQ1RK1 b kq - 0 11",
+   "said": "all right bishop f6 well um i don't see a reason not to play f4 let's go uh well i've talked about that before about making the king more vulnerable and the bottom line is that among the three pawns pushing the f-pawn is the most innocuous because you're not actually"
+  },
+  {
+   "ply": 20,
+   "t": 1355.5,
+   "line": [],
+   "fen": "r1bqk2r/pp3ppp/3ppb2/2pPn3/2P1P3/2N5/PP2BPPP/R1BQ1RK1 w kq - 2 11",
+   "said": "let's go uh well i've talked about that before about making the king more vulnerable and the bottom line is that among the three pawns pushing the f-pawn is the most innocuous because you're not actually destroying the pawn shell around the king you still have your g and h ones so"
+  },
+  {
+   "ply": 22,
+   "t": 1360,
+   "line": [
+    "f4",
+    "Ng6"
+   ],
+   "fen": "r1bqk2r/pp3ppp/3ppbn1/2pP4/2P1PP2/2N5/PP2B1PP/R1BQ1RK1 w kq - 1 12",
+   "said": "uh well i've talked about that before about making the king more vulnerable and the bottom line is that among the three pawns pushing the f-pawn is the most innocuous because you're not actually destroying the pawn shell around the king you still have your g and h ones so remember that you can always tuck your king on h1 and the king is still going to be relatively safe so i think it's important to uncouple all three of those pawn wait i mean making a move like g4 is infinitely more"
+  },
+  {
+   "ply": 20,
+   "t": 1374,
+   "line": [],
+   "fen": "r1bqk2r/pp3ppp/3ppb2/2pPn3/2P1P3/2N5/PP2BPPP/R1BQ1RK1 w kq - 2 11",
+   "said": "remember that you can always tuck your king on h1 and the king is still going to be relatively safe so i think it's important to uncouple all three of those pawn wait i mean making a move like g4 is infinitely more weakening that doesn't mean you never want to make it there are situations when you push all three of your pawns in front of your king but i you know i hope"
+  },
+  {
+   "ply": 22,
+   "t": 1379.5,
+   "line": [
+    "f4",
+    "Ng6"
+   ],
+   "fen": "r1bqk2r/pp3ppp/3ppbn1/2pP4/2P1PP2/2N5/PP2B1PP/R1BQ1RK1 w kq - 1 12",
+   "said": "three of those pawn wait i mean making a move like g4 is infinitely more weakening that doesn't mean you never want to make it there are situations when you push all three of your pawns in front of your king but i you know i hope that makes sense okay so this is a very rich position the simplest move is to go bishop e3 we can complete our development we don't care about him taking and doubling our pawns that's that's just not that important we definitely want him to do that and uh we also have some interesting stuff going on here with a move like e5 trying to sacrifice the pawn but i don't need i don't see a reason to reinvent"
+  },
+  {
+   "ply": 23,
+   "t": 1404,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r1bqk2r/pp3ppp/3ppbn1/2pP4/2P1PP2/2N1B3/PP2B1PP/R2Q1RK1 b kq - 2 12",
+   "said": "important we definitely want him to do that and uh we also have some interesting stuff going on here with a move like e5 trying to sacrifice the pawn but i don't need i don't see a reason to reinvent he wheel let's just go bishop e3 and part of playing positionally having a positional style is knowing when simplicity is is required all grandmasters uh no matter if it's mike mikeltal you know or anybody you associate with an attacking style you can become truly good without knowing when to play uh with simplicity and that is sometimes a far more difficult skill to acquire than you know understanding when a fancy move is required because we all like to find fancy moves and sacrifices but this kind"
+  },
+  {
+   "ply": 24,
+   "t": 1436.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/3ppbn1/2pP4/2P1PP2/2N1B3/PP2B1PP/R2Q1RK1 w - - 3 13",
+   "said": "and that is sometimes a far more difficult skill to acquire than you know understanding when a fancy move is required because we all like to find fancy moves and sacrifices but this kind of very simple play uh you know ornery just develop your pieces kind of meat and potato style can be hard for players who are looking for interesting games and stuff and yet sometimes you just have to bite the bullet and play like that okay so here the situation has changed a little bit how should we understand this position well um whenever there exists a source of central tension there are pawns that are in a standoff you have an obligation every move to spend a couple of seconds considering whether you want to be the one to release the tension right that's just something that you want to do because who knows maybe the circumstances change in one move you didn't want to release the tension but all of a sudden again things have changed and now you do so hint hint wink i think this is a situation where now we want to take on e6 why because he if he takes with the bishop sorry if he takes with a bishop he gets forked f5 could somebody explain to me why the trade benefits us now now that we've completed our development what is it about the position uh that benefits us in the event of defe i will give you guys a hint it it enables us to accomplish a very straightforward plan so what's what physically happens well the d file is open what exists on the d file there's a weak backward d6 bond and connect two and two together we have a weak d6 pawn we have an open d file what plan literally begs to be played well queen b2 rook d1 look at how nicely this"
+  },
+  {
+   "ply": 25,
+   "t": 1533.5,
+   "line": [
+    "dxe6"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/3pPbn1/2p5/2P1PP2/2N1B3/PP2B1PP/R2Q1RK1 b - - 0 13",
+   "said": "what exists on the d file there's a weak backward d6 bond and connect two and two together we have a weak d6 pawn we have an open d file what plan literally begs to be played well queen b2 rook d1 look at how nicely this coordinates all of white's pieces we okay so"
+  },
+  {
+   "ply": 26,
+   "t": 1539,
+   "line": [
+    "Bxe6"
+   ],
+   "fen": "r2q1rk1/pp3ppp/3pbbn1/2p5/2P1PP2/2N1B3/PP2B1PP/R2Q1RK1 w - - 0 14",
+   "said": "weak d6 pawn we have an open d file what plan literally begs to be played well queen b2 rook d1 look at how nicely this coordinates all of white's pieces we okay so"
+  },
+  {
+   "ply": 27,
+   "t": 1540,
+   "line": [
+    "f5"
+   ],
+   "fen": "r2q1rk1/pp3ppp/3pbbn1/2p2P2/2P1P3/2N1B3/PP2B1PP/R2Q1RK1 b - - 0 14",
+   "said": "weak d6 pawn we have an open d file what plan literally begs to be played well queen b2 rook d1 look at how nicely this coordinates all of white's pieces we okay so i just i just explain all that for like 10 minutes any minute this is a fork um yeah let's just castle but uh it's like ernest hemingway's iceberg theory you know this is exactly i think there's a good analogy to be made and i found this to be the case when you think very deeply so just to paraphrase um as far as i remember the iceberg theory i think it was advanced by hemingway it"
+  },
+  {
+   "ply": 28,
+   "t": 1563.5,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2q1rk1/pp1b1ppp/3p1bn1/2p2P2/2P1P3/2N1B3/PP2B1PP/R2Q1RK1 w - - 1 15",
+   "said": "this is exactly i think there's a good analogy to be made and i found this to be the case when you think very deeply so just to paraphrase um as far as i remember the iceberg theory i think it was advanced by hemingway it"
+  },
+  {
+   "ply": 29,
+   "t": 1565,
+   "line": [
+    "fxg6"
+   ],
+   "fen": "r2q1rk1/pp1b1ppp/3p1bP1/2p5/2P1P3/2N1B3/PP2B1PP/R2Q1RK1 b - - 0 15",
+   "said": "this is exactly i think there's a good analogy to be made and i found this to be the case when you think very deeply so just to paraphrase um as far as i remember the iceberg theory i think it was advanced by hemingway it basically says 90 percent of"
+  },
+  {
+   "ply": 30,
+   "t": 1569.5,
+   "line": [
+    "fxg6"
+   ],
+   "fen": "r2q1rk1/pp1b2pp/3p1bp1/2p5/2P1P3/2N1B3/PP2B1PP/R2Q1RK1 w - - 0 16",
+   "said": "remember the iceberg theory i think it was advanced by hemingway it basically says 90 percent of your character a character that appears in a work of fiction should not make it uh to the surface of the book it should be behind the scenes because the ten percent that will appear will be so deeply written that you need those 90 of character development behind the scenes to be able to write a deep book and i think that a similar thing goes here when you think very deeply about your moves even if you feel like it's a sunk cost like your opponent didn't go into it your understanding of the position is still deep uh to where first of all you've just gotten better at whatever type of thinking you did and you know it might pay off later he also blunders the pawn on d6 so it did pay"
+  },
+  {
+   "ply": 31,
+   "t": 1609,
+   "line": [
+    "Qxd6"
+   ],
+   "fen": "r2q1rk1/pp1b2pp/3Q1bp1/2p5/2P1P3/2N1B3/PP2B1PP/R4RK1 b - - 0 16",
+   "said": "your understanding of the position is still deep uh to where first of all you've just gotten better at whatever type of thinking you did and you know it might pay off later he also blunders the pawn on d6 so it did pay off in the end all right hello so we want to go e5 and just crush him down the f file everything is falling rook 81 is is coming yeah that's some good writing advice that i was given as well so a little bit of a bonus speed run bonus okay let's go rook d1 just bring the rook into the"
+  },
+  {
+   "ply": 32,
+   "t": 1631.5,
+   "line": [
+    "b6"
+   ],
+   "fen": "r2q1rk1/p2b2pp/1p1Q1bp1/2p5/2P1P3/2N1B3/PP2B1PP/R4RK1 w - - 0 17",
+   "said": "rook 81 is is coming yeah that's some good writing advice that i was given as well so a little bit of a bonus speed run bonus okay let's go rook d1 just bring the rook into the"
+  },
+  {
+   "ply": 33,
+   "t": 1633,
+   "line": [
+    "Rad1"
+   ],
+   "fen": "r2q1rk1/p2b2pp/1p1Q1bp1/2p5/2P1P3/2N1B3/PP2B1PP/3R1RK1 b - - 1 17",
+   "said": "rook 81 is is coming yeah that's some good writing advice that i was given as well so a little bit of a bonus speed run bonus okay let's go rook d1 just bring the rook into the game this game is over i'm quite surprised that he blundered in that way but perhaps he was getting a little bit dejected by his position okay eah after this game i'm gonna get going guys it's already pretty late it's been five hours that's pretty cool time has flown by eah of course my pleasure no worries okay rook f7 okay so we can't let him escape here how"
+  },
+  {
+   "ply": 34,
+   "t": 1676,
+   "line": [
+    "Rf7"
+   ],
+   "fen": "r2q2k1/p2b1rpp/1p1Q1bp1/2p5/2P1P3/2N1B3/PP2B1PP/3R1RK1 w - - 2 18",
+   "said": "eah of course my pleasure no worries okay rook f7 okay so we can't let him escape here how should we continue yeah so e5 seems very natural here e5 just crushing him down every file every"
+  },
+  {
+   "ply": 35,
+   "t": 1691.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "r2q2k1/p2b1rpp/1p1Q1bp1/2p1P3/2P5/2N1B3/PP2B1PP/3R1RK1 b - - 0 18",
+   "said": "should we continue yeah so e5 seems very natural here e5 just crushing him down every file every avenue uh you can almost play these moves you know by intuition there isn't anything to oh well that's a great reason you're forgiven you are very much forgiven okay he resigns one second all right guys so um it it it is you know because foreign"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 3,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4"
+   ],
+   "options": [
+    {
+     "san": "e6",
+     "t": 1081.5,
+     "continuation": "e6",
+     "said": "kay d4 and finally we got white can you believe it we got white okay so we're going to play mainline d4c4 okay so this is the nimzo indian and what do i recommend against the nimzo well there's three main systems that white has and all of them are legitimate we can play into the nimzo indian with knight c3 knight c3 bishop b4 is the nimzo indian he can also go d5 and transpose into the queen's gambit knight f3 is a gateway into the queen's indian into the ragazin or to the queen's gambit and the most like independent line is to go g3 that is called the catalan is a very positional opening it's incredibly reputable and popular at he highest levels but you know the most positionally rich move is to go into the nimzo let's go into the dim zone go knights yeah he goes c5 so he plays the binoni thank you t paige for the three months he plays the benoni and this is one of the several ways to reach the benoni you can also play c5 in this position and uh transpose after knight c3 so uh he"
+    },
+    {
+     "san": "c5",
+     "t": 1143,
+     "continuation": "c5 Nc3 e6",
+     "said": "and this is one of the several ways to reach the benoni you can also play c5 in this position and uh transpose after knight c3 so uh he goes c5 let's go into mainline bononi with d5 he takes him and goes d6 okay he goes d6 immediately now that is a bit inaccurate that's a little bit passive it's not terrible but it's passive how should white expand in the center what's the typical binoni move here of course it's to play e4 and the reason that d6 is inaccurate is because after e takes d5 you should always use the process of comparison comparing often yields wisdom about the position that otherwise you might not have attained okay what's the difference well here we can play he takes d5 and we can maintain the the symmetry of the pawn structure uh and his position is tremendously cramped now given that he's probably going to take on d5 where do we want to put this bishop what would be a good forward thinking square for this bishop given that he's probably going to play e"
+    }
+   ]
+  }
+ ]
+}

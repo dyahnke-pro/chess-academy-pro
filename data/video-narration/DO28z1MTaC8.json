@@ -1,0 +1,868 @@
+{
+ "videoId": "DO28z1MTaC8",
+ "title": "Master Class | Three Knights Game | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 21,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "let's go let's go with the next game 1835 for chow chow uh let's play something offbeat let's play something offbeat i want to play something offbeat"
+  },
+  {
+   "ply": 3,
+   "t": 23.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "1835 for chow chow uh let's play something offbeat let's play something offbeat i want to play something offbeat um i kinda wanna play d5 here i wanna play the elephant gambit or the stafford shall we see how the staffer turns out at this level we've played the stafford once let's play the staffer to get let's play the stafford let's play this down let's see how it turns out against an 1800 let's play the"
+  },
+  {
+   "ply": 4,
+   "t": 37.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "play the elephant gambit or the stafford shall we see how the staffer turns out at this level we've played the stafford once let's play the staffer to get let's play the stafford let's play this down let's see how it turns out against an 1800 let's play the stafford"
+  },
+  {
+   "ply": 5,
+   "t": 40,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "or the stafford shall we see how the staffer turns out at this level we've played the stafford once let's play the staffer to get let's play the stafford let's play this down let's see how it turns out against an 1800 let's play the stafford oh my gosh god dang knight c3 come on this should be criminalized it should be illegally criminalized um every time i say the the uh the s word uh people don't go into it now i will say that in my recollection you can play d5 in this position and get an interesting position so if i remember correctly you don't have to go knight c6 um people also telling me bishop c5 sort of potentially transposes to the stafford i guess i've never seen this move before i guess this could transpose to the stafford shall we try i mean i don't really want to make the speed run about you know goading him into some sort of a gambit um that's what eric does okay we'll play bishop c5 i'll play like eric rosen"
+  },
+  {
+   "ply": 6,
+   "t": 88.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "rnbqk2r/pppp1ppp/5n2/2b1p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "said": "this could transpose to the stafford shall we try i mean i don't really want to make the speed run about you know goading him into some sort of a gambit um that's what eric does okay we'll play bishop c5 i'll play like eric rosen oh"
+  },
+  {
+   "ply": 7,
+   "t": 90.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqk2r/pppp1ppp/5n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
+   "said": "shall we try i mean i don't really want to make the speed run about you know goading him into some sort of a gambit um that's what eric does okay we'll play bishop c5 i'll play like eric rosen oh all right get me out of here this is ridiculous get me out of here all right he goes bishop c4 fine i guess we'll have to play conventionally but it's okay we'll make this interesting we'll make this let's punish him let's punish him well at this point there's nothing i can do because now if we castle and he takes um there's no more stafford to play he's already close to castling so unfortunately we're gonna have to either go knight c6 and go into the four knights or we're gonna have to go d6 and it doesn't really matter which of those moves we play let's start with d6"
+  },
+  {
+   "ply": 8,
+   "t": 121,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3p1n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 5",
+   "said": "already close to castling so unfortunately we're gonna have to either go knight c6 and go into the four knights or we're gonna have to go d6 and it doesn't really matter which of those moves we play let's start with d6 to defend the pawn"
+  },
+  {
+   "ply": 9,
+   "t": 124.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3p1n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQ1RK1 b kq - 1 5",
+   "said": "either go knight c6 and go into the four knights or we're gonna have to go d6 and it doesn't really matter which of those moves we play let's start with d6 to defend the pawn and i can load 312. now if we want to spice things up a little bit if we want to make it a little bit challenging for him to develop how should we proceed in this position should we go knight c6 conventionally do we have another option how do we spice add some tabasco sauce to the position bishop g4 bishop g4 because if we play knight c6 knowing this guy's style he's probably going to go h3 and we're gonna regret it so we got to squeeze this into in while we have the"
+  },
+  {
+   "ply": 10,
+   "t": 156.5,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "rn1qk2r/ppp2ppp/3p1n2/2b1p3/2B1P1b1/2N2N2/PPPP1PPP/R1BQ1RK1 w kq - 2 6",
+   "said": "bishop g4 bishop g4 because if we play knight c6 knowing this guy's style he's probably going to go h3 and we're gonna regret it so we got to squeeze this into in while we have the window of opportunity he's probably going to go back to e2 or something d3"
+  },
+  {
+   "ply": 11,
+   "t": 160.5,
+   "line": [
+    "d3"
+   ],
+   "fen": "rn1qk2r/ppp2ppp/3p1n2/2b1p3/2B1P1b1/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 0 6",
+   "said": "this guy's style he's probably going to go h3 and we're gonna regret it so we got to squeeze this into in while we have the window of opportunity he's probably going to go back to e2 or something d3 okay now we go knight c6 obviously and"
+  },
+  {
+   "ply": 12,
+   "t": 162.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2qk2r/ppp2ppp/2np1n2/2b1p3/2B1P1b1/2NP1N2/PPP2PPP/R1BQ1RK1 w kq - 1 7",
+   "said": "style he's probably going to go h3 and we're gonna regret it so we got to squeeze this into in while we have the window of opportunity he's probably going to go back to e2 or something d3 okay now we go knight c6 obviously and now we're threatening knight t4 so this"
+  },
+  {
+   "ply": 13,
+   "t": 165.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r2qk2r/ppp2ppp/2np1n2/2b1p3/2B1P1b1/2NPBN2/PPP2PPP/R2Q1RK1 b kq - 2 7",
+   "said": "and we're gonna regret it so we got to squeeze this into in while we have the window of opportunity he's probably going to go back to e2 or something d3 okay now we go knight c6 obviously and now we're threatening knight t4 so this is a classic line i've had this in blitz a million times this is still boring as hell now in this position there's a couple of things to understand knight d4 is possible that's one possible move it's not as strong as it is when there's no bishop on e3 because he can play bishop takes d4 and preserve his pawn structure against players who are very boring how do you play how do you spice things up you want to keep the tension the best thing to do against these kinds of players is to let them you know give them some rope force them to make decisions so the classic way of making white make the decision here is to drop the bishop to b6 so that we avoid him taking on c5 and ruining our pawn structure um because if he takes now we play a"
+  },
+  {
+   "ply": 14,
+   "t": 210,
+   "line": [
+    "Bb6"
+   ],
+   "fen": "r2qk2r/ppp2ppp/1bnp1n2/4p3/2B1P1b1/2NPBN2/PPP2PPP/R2Q1RK1 w kq - 3 8",
+   "said": "classic way of making white make the decision here is to drop the bishop to b6 so that we avoid him taking on c5 and ruining our pawn structure um because if he takes now we play a takes b6 and those double pawns are not a big deal we get the a file which is really good yeah so you got to make them make them think make these players think and you will see i can almost guarantee you"
+  },
+  {
+   "ply": 15,
+   "t": 224,
+   "line": [
+    "h3"
+   ],
+   "fen": "r2qk2r/ppp2ppp/1bnp1n2/4p3/2B1P1b1/2NPBN1P/PPP2PP1/R2Q1RK1 b kq - 0 8",
+   "said": "a big deal we get the a file which is really good yeah so you got to make them make them think make these players think and you will see i can almost guarantee you that he's going to do something either irrational or he's going to panic okay so we dropped the bishop to h5 he's"
+  },
+  {
+   "ply": 16,
+   "t": 228.5,
+   "line": [
+    "Bh5"
+   ],
+   "fen": "r2qk2r/ppp2ppp/1bnp1n2/4p2b/2B1P3/2NPBN1P/PPP2PP1/R2Q1RK1 w kq - 1 9",
+   "said": "yeah so you got to make them make them think make these players think and you will see i can almost guarantee you that he's going to do something either irrational or he's going to panic okay so we dropped the bishop to h5 he's probably going to contemplate g4 uh for a while here if he plays g4 we have to contemplate a sacrifice on g4 i don't know if it's the time is right for that i don't think it is i don't think we have enough there uh to sacrifice i think we'll just drop it goes king h2"
+  },
+  {
+   "ply": 17,
+   "t": 245.5,
+   "line": [
+    "Kh2"
+   ],
+   "fen": "r2qk2r/ppp2ppp/1bnp1n2/4p2b/2B1P3/2NPBN1P/PPP2PPK/R2Q1R2 b kq - 2 9",
+   "said": "if he plays g4 we have to contemplate a sacrifice on g4 i don't know if it's the time is right for that i don't think it is i don't think we have enough there uh to sacrifice i think we'll just drop it goes king h2 now that's a weird looking move i'm not sure what he's trying to do maybe rook juwon and g4 something like that that would be an interesting idea for sure i'll talk about that after the game guys so how should we proceed what should we do how do we what do we do i think we just castle i don't think there's a point in uh in doing anything wild i think we'll"
+  },
+  {
+   "ply": 18,
+   "t": 270.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/ppp2ppp/1bnp1n2/4p2b/2B1P3/2NPBN1P/PPP2PPK/R2Q1R2 w - - 3 10",
+   "said": "how should we proceed what should we do how do we what do we do i think we just castle i don't think there's a point in uh in doing anything wild i think we'll just castle here let's see what he does let's see how he orients his pieces here is queen d2"
+  },
+  {
+   "ply": 19,
+   "t": 278,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r2q1rk1/ppp2ppp/1bnp1n2/4p2b/2B1P3/2NPBN1P/PPPQ1PPK/R4R2 b - - 4 10",
+   "said": "i think we just castle i don't think there's a point in uh in doing anything wild i think we'll just castle here let's see what he does let's see how he orients his pieces here is queen d2 okay so i see what he was trying to do i think the reason he put this king on h2 is that in the event of bishop takes f3 he plays g takes f3 and his king is no longer on that open jupa he can then quickly play rook g1 and try to attack us down the gpa we've seen this kind of theme before where even though his pawn structure technically is ruined he's the one who gets he gets a file too so the question we should ask ourselves is does that warrant us not taking on f3 and i would say that the answer to that is no i think bishop takes f3 creates"
+  },
+  {
+   "ply": 20,
+   "t": 311.5,
+   "line": [
+    "Bxf3"
+   ],
+   "fen": "r2q1rk1/ppp2ppp/1bnp1n2/4p3/2B1P3/2NPBb1P/PPPQ1PPK/R4R2 w - - 0 11",
+   "said": "he gets a file too so the question we should ask ourselves is does that warrant us not taking on f3 and i would say that the answer to that is no i think bishop takes f3 creates such damage on his king side that assuming that we can manage the g-file getting"
+  },
+  {
+   "ply": 21,
+   "t": 318,
+   "line": [
+    "gxf3"
+   ],
+   "fen": "r2q1rk1/ppp2ppp/1bnp1n2/4p3/2B1P3/2NPBP1P/PPPQ1P1K/R4R2 b - - 0 11",
+   "said": "and i would say that the answer to that is no i think bishop takes f3 creates such damage on his king side that assuming that we can manage the g-file getting open and assuming that we can manage the threats along the g-file which i'm sure we will be able to uh the weaknesses that he's just created are permanent so 100 this is a deal that is worth it as long as we're very careful we have to be very careful now we can't you know it's easy to get checkmated here as well so there's two things that have to be considered the first is that we should probably try to start king side operation so moves like knight h5 come to mind the second thing is that we should balance that with some prophylaxis so at some point we don't have to do this immediately we should probably consider a move like king hay but i think the greater priority is for us to stake a claim on the king side so that he doesn't run circles over us on that side of the board so i vote knight"
+  },
+  {
+   "ply": 22,
+   "t": 361.5,
+   "line": [
+    "Nh5"
+   ],
+   "fen": "r2q1rk1/ppp2ppp/1bnp4/4p2n/2B1P3/2NPBP1P/PPPQ1P1K/R4R2 w - - 1 12",
+   "said": "have to do this immediately we should probably consider a move like king hay but i think the greater priority is for us to stake a claim on the king side so that he doesn't run circles over us on that side of the board so i vote knight h5 let's get the wheels turning let's get the factory running because as of yet he's not attacking"
+  },
+  {
+   "ply": 23,
+   "t": 367.5,
+   "line": [
+    "Rg1"
+   ],
+   "fen": "r2q1rk1/ppp2ppp/1bnp4/4p2n/2B1P3/2NPBP1P/PPPQ1P1K/R5R1 b - - 2 12",
+   "said": "us to stake a claim on the king side so that he doesn't run circles over us on that side of the board so i vote knight h5 let's get the wheels turning let's get the factory running because as of yet he's not attacking this pawn he's not threatening anything there so we need to be the ones to start attacking first and i think a lot of people are automatically tempted to meet rook she won with kha that's an instinct that's a knee jerk reaction he's gone rook g1 oh he's got a pin let's move the king away but that one tempo could potentially be very important against a skilled attacker a lot of you want to activate the queen where should we put it where should we put the queen should we put it on f6 or should we put it on h4 where's the queen accomplishing more think about specifics on which of these two squares is the queen actually creating a threat only on one of them on f6 it's not doing anything on h4 it's not attacking h3 we don't have a light scored bishop anymore you want to make sure the queen is doing something specific i vote queen f6"
+  },
+  {
+   "ply": 24,
+   "t": 416,
+   "line": [
+    "Qf6"
+   ],
+   "fen": "r4rk1/ppp2ppp/1bnp1q2/4p2n/2B1P3/2NPBP1P/PPPQ1P1K/R5R1 w - - 3 13",
+   "said": "one of them on f6 it's not doing anything on h4 it's not attacking h3 we don't have a light scored bishop anymore you want to make sure the queen is doing something specific i vote queen f6"
+  },
+  {
+   "ply": 25,
+   "t": 419,
+   "line": [
+    "Rg4"
+   ],
+   "fen": "r4rk1/ppp2ppp/1bnp1q2/4p2n/2B1P1R1/2NPBP1P/PPPQ1P1K/R7 b - - 4 13",
+   "said": "anything on h4 it's not attacking h3 we don't have a light scored bishop anymore you want to make sure the queen is doing something specific i vote queen f6 okay so he goes rook g4 ignoring the attack on f3 this guy is legit i like the way he's playing so he's gone from very passive to very aggressive in the snap of a finger now as the russian expression goes having said a you gotta say b so putting the queen on f6 and then not taking on f3 well that doesn't seem very"
+  },
+  {
+   "ply": 26,
+   "t": 440.5,
+   "line": [
+    "Qxf3"
+   ],
+   "fen": "r4rk1/ppp2ppp/1bnp4/4p2n/2B1P1R1/2NPBq1P/PPPQ1P1K/R7 w - - 0 14",
+   "said": "the snap of a finger now as the russian expression goes having said a you gotta say b so putting the queen on f6 and then not taking on f3 well that doesn't seem very sensible does it let's do it let's go for it rook g1"
+  },
+  {
+   "ply": 27,
+   "t": 445,
+   "line": [
+    "Rag1"
+   ],
+   "fen": "r4rk1/ppp2ppp/1bnp4/4p2n/2B1P1R1/2NPBq1P/PPPQ1P1K/6R1 b - - 1 14",
+   "said": "having said a you gotta say b so putting the queen on f6 and then not taking on f3 well that doesn't seem very sensible does it let's do it let's go for it rook g1 um now the threats against g7 have gotten serious now he's doubled his rooks now we need to take care of this jeep on because one more move and he's going to create potentially insurmountable threats he's already probably thinking about a sacrifice so we've waited until the last second g6 is possible but it doesn't solve the underlying problem and he could def he could potentially use this pin to sack on g6 so now is the time to do what now is the time to do what why i don't see why we need to take his bishop that has nothing to do with it the problem is the g file you guys are going at it from the wrong angle i'll explain this after after the"
+  },
+  {
+   "ply": 28,
+   "t": 487,
+   "line": [
+    "Kh8"
+   ],
+   "fen": "r4r1k/ppp2ppp/1bnp4/4p2n/2B1P1R1/2NPBq1P/PPPQ1P1K/6R1 w - - 2 15",
+   "said": "why i don't see why we need to take his bishop that has nothing to do with it the problem is the g file you guys are going at it from the wrong angle i'll explain this after after the game go king hd he ate chain is the better move the problem would take okay i'll explain it"
+  },
+  {
+   "ply": 29,
+   "t": 491.5,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r4r1k/ppp2ppp/1bnp4/3Np2n/2B1P1R1/3PBq1P/PPPQ1P1K/6R1 b - - 3 15",
+   "said": "the problem is the g file you guys are going at it from the wrong angle i'll explain this after after the game go king hd he ate chain is the better move the problem would take okay i'll explain it after the game knight t5 is good this guy is very legit i'm gonna have to play a little bit faster here so now we need to continue attacking i'm not too worried about anything that he can do to us the king is very safe we need to continue attacking on the king's side and what's missing on the king side is a little bit of spice we need some open files we need something to join this queen this queen is all alone so we got to go f5"
+  },
+  {
+   "ply": 30,
+   "t": 514.5,
+   "line": [
+    "f5"
+   ],
+   "fen": "r4r1k/ppp3pp/1bnp4/3Npp1n/2B1P1R1/3PBq1P/PPPQ1P1K/6R1 w - - 0 16",
+   "said": "we need to continue attacking on the king's side and what's missing on the king side is a little bit of spice we need some open files we need something to join this queen this queen is all alone so we got to go f5 this is very gutsy play by both of us and because of the placement of my queen which is so dominant the knight on h5"
+  },
+  {
+   "ply": 31,
+   "t": 523.5,
+   "line": [
+    "exf5"
+   ],
+   "fen": "r4r1k/ppp3pp/1bnp4/3NpP1n/2B3R1/3PBq1P/PPPQ1P1K/6R1 b - - 0 16",
+   "said": "alone so we got to go f5 this is very gutsy play by both of us and because of the placement of my queen which is so dominant the knight on h5 which is defending g7 i'm very"
+  },
+  {
+   "ply": 32,
+   "t": 525.5,
+   "line": [
+    "Rxf5"
+   ],
+   "fen": "r6k/ppp3pp/1bnp4/3Npr1n/2B3R1/3PBq1P/PPPQ1P1K/6R1 w - - 0 17",
+   "said": "we got to go f5 this is very gutsy play by both of us and because of the placement of my queen which is so dominant the knight on h5 which is defending g7 i'm very optimistic about our attack but uh the time situation not our friend so let's see if we can accelerate a little bit rook takes f5 okay now potentially we want to triple on the file knight d4 comes to mind yeah rook a to f8 is probably going to be our next move notice how he's managed to keep the bishops here all the way"
+  },
+  {
+   "ply": 33,
+   "t": 545.5,
+   "line": [
+    "R4g2"
+   ],
+   "fen": "r6k/ppp3pp/1bnp4/3Npr1n/2B5/3PBq1P/PPPQ1PRK/6R1 b - - 1 17",
+   "said": "okay now potentially we want to triple on the file knight d4 comes to mind yeah rook a to f8 is probably going to be our next move notice how he's managed to keep the bishops here all the way throughout the game rook g2 now this seems like a bit of a capitulation of his attacking ambitions i like that he's played that move that means he doesn't know what to do um he's also trying to milk our clock now 97 is protected okay so what should we do how should we proceed o we change our strategy or do we change our strategy or do we continue yeah we don't have to change"
+  },
+  {
+   "ply": 34,
+   "t": 572.5,
+   "line": [
+    "Raf8"
+   ],
+   "fen": "5r1k/ppp3pp/1bnp4/3Npr1n/2B5/3PBq1P/PPPQ1PRK/6R1 w - - 2 18",
+   "said": "okay so what should we do how should we proceed o we change our strategy or do we change our strategy or do we continue yeah we don't have to change anything we go rook of fate uh continuing to accumulate pieces on"
+  },
+  {
+   "ply": 35,
+   "t": 576.5,
+   "line": [
+    "Nxb6"
+   ],
+   "fen": "5r1k/ppp3pp/1Nnp4/4pr1n/2B5/3PBq1P/PPPQ1PRK/6R1 b - - 0 18",
+   "said": "what should we do how should we proceed o we change our strategy or do we change our strategy or do we continue yeah we don't have to change anything we go rook of fate uh continuing to accumulate pieces on the king side okay takes all right so we'll take i mean you've got to take see how it took a second there just to check for intermediate moves anything i don't see anything let's take"
+  },
+  {
+   "ply": 36,
+   "t": 586,
+   "line": [
+    "axb6"
+   ],
+   "fen": "5r1k/1pp3pp/1pnp4/4pr1n/2B5/3PBq1P/PPPQ1PRK/6R1 w - - 0 19",
+   "said": "uh continuing to accumulate pieces on the king side okay takes all right so we'll take i mean you've got to take see how it took a second there just to check for intermediate moves anything i don't see anything let's take oh he wants"
+  },
+  {
+   "ply": 37,
+   "t": 588,
+   "line": [
+    "Be6"
+   ],
+   "fen": "5r1k/1pp3pp/1pnpB3/4pr1n/8/3PBq1P/PPPQ1PRK/6R1 b - - 1 19",
+   "said": "the king side okay takes all right so we'll take i mean you've got to take see how it took a second there just to check for intermediate moves anything i don't see anything let's take oh he wants this oh that's his oh wow that's uh that's a very advanced idea which i will fully and fully admit i missed we'll have to sack an exchange here because if we move the rook then he goes bishop g4 and he wins a piece that's nice okay we're going to have to sack an exchange we're going to have to stack an exchange and the way that we have to sack an exchange is to play knight e7 i'm gonna"
+  },
+  {
+   "ply": 38,
+   "t": 618,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "5r1k/1pp1n1pp/1p1pB3/4pr1n/8/3PBq1P/PPPQ1PRK/6R1 w - - 2 20",
+   "said": "that's nice okay we're going to have to sack an exchange we're going to have to stack an exchange and the way that we have to sack an exchange is to play knight e7 i'm gonna have to focus here guys and basically play silently for the rest of the game probably um because after bishop f5 knight f5 my worry isn't even the position it's the clock"
+  },
+  {
+   "ply": 40,
+   "t": 628.5,
+   "line": [
+    "Bxf5",
+    "Nxf5"
+   ],
+   "fen": "5r1k/1pp3pp/1p1p4/4pn1n/8/3PBq1P/PPPQ1PRK/6R1 w - - 0 21",
+   "said": "exchange is to play knight e7 i'm gonna have to focus here guys and basically play silently for the rest of the game probably um because after bishop f5 knight f5 my worry isn't even the position it's the clock my worry is more the clock than the position so i'm gonna have to focus and then after the game after the game i'm going to talk through uh hopefully you know win or lose my strategy in this position okay guys zero accusations tolerated he literally just found one good idea i'm capable of missing it so i don't"
+  },
+  {
+   "ply": 41,
+   "t": 648.5,
+   "line": [
+    "Rg5"
+   ],
+   "fen": "5r1k/1pp3pp/1p1p4/4pnRn/8/3PBq1P/PPPQ1P1K/6R1 b - - 1 21",
+   "said": "uh hopefully you know win or lose my strategy in this position okay guys zero accusations tolerated he literally just found one good idea i'm capable of missing it so i don't want to hear it"
+  },
+  {
+   "ply": 42,
+   "t": 650.5,
+   "line": [
+    "Nh4"
+   ],
+   "fen": "5r1k/1pp3pp/1p1p4/4p1Rn/7n/3PBq1P/PPPQ1P1K/6R1 w - - 2 22",
+   "said": "strategy in this position okay guys zero accusations tolerated he literally just found one good idea i'm capable of missing it so i don't want to hear it we will check the game"
+  },
+  {
+   "ply": 41,
+   "t": 652,
+   "line": [],
+   "fen": "5r1k/1pp3pp/1p1p4/4pnRn/8/3PBq1P/PPPQ1P1K/6R1 b - - 1 21",
+   "said": "okay guys zero accusations tolerated he literally just found one good idea i'm capable of missing it so i don't want to hear it we will check the game"
+  },
+  {
+   "ply": 42,
+   "t": 656.5,
+   "line": [
+    "Nh4"
+   ],
+   "fen": "5r1k/1pp3pp/1p1p4/4p1Rn/7n/3PBq1P/PPPQ1P1K/6R1 w - - 2 22",
+   "said": "i'm capable of missing it so i don't want to hear it we will check the game as you guys know i always check the game at this point he's playing incredibly well but totally have seen 1800s play this well a million times so again if you were him you wouldn't want an entire crowd of people chanting that he's using stockfish we will check the game all right so i still think i have a very strong attack by the way rook g4 and see he's"
+  },
+  {
+   "ply": 43,
+   "t": 678,
+   "line": [
+    "R5g4"
+   ],
+   "fen": "5r1k/1pp3pp/1p1p4/4p2n/6Rn/3PBq1P/PPPQ1P1K/6R1 b - - 3 22",
+   "said": "again if you were him you wouldn't want an entire crowd of people chanting that he's using stockfish we will check the game all right so i still think i have a very strong attack by the way rook g4 and see he's blundered back so this is a small blunder what should we do now i want to put a knight on f3 we have to try to put a knight on f3 and so in order to do that we take the rook first then we put a knight on f3"
+  },
+  {
+   "ply": 44,
+   "t": 691.5,
+   "line": [
+    "Qxg4"
+   ],
+   "fen": "5r1k/1pp3pp/1p1p4/4p2n/6qn/3PB2P/PPPQ1P1K/6R1 w - - 0 23",
+   "said": "blunder what should we do now i want to put a knight on f3 we have to try to put a knight on f3 and so in order to do that we take the rook first then we put a knight on f3"
+  },
+  {
+   "ply": 43,
+   "t": 693,
+   "line": [],
+   "fen": "5r1k/1pp3pp/1p1p4/4p2n/6Rn/3PBq1P/PPPQ1P1K/6R1 b - - 3 22",
+   "said": "now i want to put a knight on f3 we have to try to put a knight on f3 and so in order to do that we take the rook first then we put a knight on f3 and recapture his queen winning back the exchange we're going to be up a pawn in that end game it's not going to be over that is going to be a very hard end game for me to win with one minute on the clock but i'm going to try my best"
+  },
+  {
+   "ply": 44,
+   "t": 705.5,
+   "line": [
+    "Qxg4"
+   ],
+   "fen": "5r1k/1pp3pp/1p1p4/4p2n/6qn/3PB2P/PPPQ1P1K/6R1 w - - 0 23",
+   "said": "and recapture his queen winning back the exchange we're going to be up a pawn in that end game it's not going to be over that is going to be a very hard end game for me to win with one minute on the clock but i'm going to try my best and then i'm going to do a small lecture after the game about you know cheating and stuff"
+  },
+  {
+   "ply": 46,
+   "t": 714.5,
+   "line": [
+    "hxg4",
+    "Nf3+"
+   ],
+   "fen": "5r1k/1pp3pp/1p1p4/4p2n/6P1/3PBn2/PPPQ1P1K/6R1 w - - 1 24",
+   "said": "clock but i'm going to try my best and then i'm going to do a small lecture after the game about you know cheating and stuff"
+  },
+  {
+   "ply": 48,
+   "t": 717.5,
+   "line": [
+    "Kg2",
+    "Nxd2"
+   ],
+   "fen": "5r1k/1pp3pp/1p1p4/4p2n/6P1/3PB3/PPPn1PK1/6R1 w - - 0 25",
+   "said": "and then i'm going to do a small lecture after the game about you know cheating and stuff okay so knight f3 knight takes d2 then we're gonna okay he takes with the bishop"
+  },
+  {
+   "ply": 49,
+   "t": 720,
+   "line": [
+    "Bxd2"
+   ],
+   "fen": "5r1k/1pp3pp/1p1p4/4p2n/6P1/3P4/PPPB1PK1/6R1 b - - 0 25",
+   "said": "and then i'm going to do a small lecture after the game about you know cheating and stuff okay so knight f3 knight takes d2 then we're gonna okay he takes with the bishop"
+  },
+  {
+   "ply": 50,
+   "t": 721.5,
+   "line": [
+    "Nf4+"
+   ],
+   "fen": "5r1k/1pp3pp/1p1p4/4p3/5nP1/3P4/PPPB1PK1/6R1 w - - 1 26",
+   "said": "you know cheating and stuff okay so knight f3 knight takes d2 then we're gonna okay he takes with the bishop so let's play knight f4 check centralizing the knight if he takes it that's a good trade for us we're up a pawn and now we have a very nice rook on f4"
+  },
+  {
+   "ply": 51,
+   "t": 729,
+   "line": [
+    "Bxf4"
+   ],
+   "fen": "5r1k/1pp3pp/1p1p4/4p3/5BP1/3P4/PPP2PK1/6R1 b - - 0 26",
+   "said": "okay so knight f3 knight takes d2 then we're gonna okay he takes with the bishop so let's play knight f4 check centralizing the knight if he takes it that's a good trade for us we're up a pawn and now we have a very nice rook on f4"
+  },
+  {
+   "ply": 52,
+   "t": 730,
+   "line": [
+    "Rxf4"
+   ],
+   "fen": "7k/1pp3pp/1p1p4/4p3/5rP1/3P4/PPP2PK1/6R1 w - - 0 27",
+   "said": "okay so knight f3 knight takes d2 then we're gonna okay he takes with the bishop so let's play knight f4 check centralizing the knight if he takes it that's a good trade for us we're up a pawn and now we have a very nice rook on f4 he's gonna go f3 i guess"
+  },
+  {
+   "ply": 53,
+   "t": 733.5,
+   "line": [
+    "f3"
+   ],
+   "fen": "7k/1pp3pp/1p1p4/4p3/5rP1/3P1P2/PPP3K1/6R1 b - - 0 27",
+   "said": "so let's play knight f4 check centralizing the knight if he takes it that's a good trade for us we're up a pawn and now we have a very nice rook on f4 he's gonna go f3 i guess okay so let's get our king out we got to"
+  },
+  {
+   "ply": 54,
+   "t": 735.5,
+   "line": [
+    "Kg8"
+   ],
+   "fen": "6k1/1pp3pp/1p1p4/4p3/5rP1/3P1P2/PPP3K1/6R1 w - - 1 28",
+   "said": "if he takes it that's a good trade for us we're up a pawn and now we have a very nice rook on f4 he's gonna go f3 i guess okay so let's get our king out we got to get our king out yeah but"
+  },
+  {
+   "ply": 56,
+   "t": 739.5,
+   "line": [
+    "a3",
+    "b5"
+   ],
+   "fen": "6k1/1pp3pp/3p4/1p2p3/5rP1/P2P1P2/1PP3K1/6R1 w - - 0 29",
+   "said": "and now we have a very nice rook on f4 he's gonna go f3 i guess okay so let's get our king out we got to get our king out yeah but tone down the cheating and stuff because"
+  },
+  {
+   "ply": 57,
+   "t": 741.5,
+   "line": [
+    "Kg3"
+   ],
+   "fen": "6k1/1pp3pp/3p4/1p2p3/5rP1/P2P1PK1/1PP5/6R1 b - - 1 29",
+   "said": "he's gonna go f3 i guess okay so let's get our king out we got to get our king out yeah but tone down the cheating and stuff because i'm always going to check the game anyway so if there are suspicions i'm going to"
+  },
+  {
+   "ply": 58,
+   "t": 745,
+   "line": [
+    "Kf7"
+   ],
+   "fen": "8/1pp2kpp/3p4/1p2p3/5rP1/P2P1PK1/1PP5/6R1 w - - 2 30",
+   "said": "okay so let's get our king out we got to get our king out yeah but tone down the cheating and stuff because i'm always going to check the game anyway so if there are suspicions i'm going to always bring them up um"
+  },
+  {
+   "ply": 59,
+   "t": 748.5,
+   "line": [
+    "Rh1"
+   ],
+   "fen": "8/1pp2kpp/3p4/1p2p3/5rP1/P2P1PK1/1PP5/7R b - - 3 30",
+   "said": "yeah but tone down the cheating and stuff because i'm always going to check the game anyway so if there are suspicions i'm going to always bring them up um okay so let's go h6"
+  },
+  {
+   "ply": 60,
+   "t": 750,
+   "line": [
+    "h6"
+   ],
+   "fen": "8/1pp2kp1/3p3p/1p2p3/5rP1/P2P1PK1/1PP5/7R w - - 0 31",
+   "said": "yeah but tone down the cheating and stuff because i'm always going to check the game anyway so if there are suspicions i'm going to always bring them up um okay so let's go h6"
+  },
+  {
+   "ply": 61,
+   "t": 752.5,
+   "line": [
+    "Rh5"
+   ],
+   "fen": "8/1pp2kp1/3p3p/1p2p2R/5rP1/P2P1PK1/1PP5/8 b - - 1 31",
+   "said": "i'm always going to check the game anyway so if there are suspicions i'm going to always bring them up um okay so let's go h6"
+  },
+  {
+   "ply": 62,
+   "t": 753.5,
+   "line": [
+    "Kg6"
+   ],
+   "fen": "8/1pp3p1/3p2kp/1p2p2R/5rP1/P2P1PK1/1PP5/8 w - - 2 32",
+   "said": "i'm always going to check the game anyway so if there are suspicions i'm going to always bring them up um okay so let's go h6 yeah so what i'm going to try to do here is make things go boom on the on the other side of the board"
+  },
+  {
+   "ply": 63,
+   "t": 762,
+   "line": [
+    "c3"
+   ],
+   "fen": "8/1pp3p1/3p2kp/1p2p2R/5rP1/P1PP1PK1/1P6/8 b - - 0 32",
+   "said": "yeah so what i'm going to try to do here is make things go boom on the on the other side of the board"
+  },
+  {
+   "ply": 64,
+   "t": 764,
+   "line": [
+    "c5"
+   ],
+   "fen": "8/1p4p1/3p2kp/1pp1p2R/5rP1/P1PP1PK1/1P6/8 w - - 0 33",
+   "said": "yeah so what i'm going to try to do here is make things go boom on the on the other side of the board check the game just means i'm going to look i'm going to plug the moves into an engine and if i find that he played suspiciously i will let everybody know"
+  },
+  {
+   "ply": 65,
+   "t": 771,
+   "line": [
+    "Rh1"
+   ],
+   "fen": "8/1p4p1/3p2kp/1pp1p3/5rP1/P1PP1PK1/1P6/7R b - - 1 33",
+   "said": "check the game just means i'm going to look i'm going to plug the moves into an engine and if i find that he played suspiciously i will let everybody know"
+  },
+  {
+   "ply": 66,
+   "t": 772,
+   "line": [
+    "Ra4"
+   ],
+   "fen": "8/1p4p1/3p2kp/1pp1p3/r5P1/P1PP1PK1/1P6/7R w - - 2 34",
+   "said": "check the game just means i'm going to look i'm going to plug the moves into an engine and if i find that he played suspiciously i will let everybody know but i don't believe he did"
+  },
+  {
+   "ply": 67,
+   "t": 775.5,
+   "line": [
+    "Re1"
+   ],
+   "fen": "8/1p4p1/3p2kp/1pp1p3/r5P1/P1PP1PK1/1P6/4R3 b - - 3 34",
+   "said": "check the game just means i'm going to look i'm going to plug the moves into an engine and if i find that he played suspiciously i will let everybody know but i don't believe he did he's just very strong i mean there's no doubt about that"
+  },
+  {
+   "ply": 68,
+   "t": 782,
+   "line": [
+    "Kf6"
+   ],
+   "fen": "8/1p4p1/3p1k1p/1pp1p3/r5P1/P1PP1PK1/1P6/4R3 w - - 4 35",
+   "said": "but i don't believe he did he's just very strong i mean there's no doubt about that"
+  },
+  {
+   "ply": 69,
+   "t": 785.5,
+   "line": [
+    "Re4"
+   ],
+   "fen": "8/1p4p1/3p1k1p/1pp1p3/r3R1P1/P1PP1PK1/1P6/8 b - - 5 35",
+   "said": "he's just very strong i mean there's no doubt about that here oh wow he offers a rook trade wait let me think this is uh i mean if this is a draw then i will be shocked wait i gotta calculate it take six"
+  },
+  {
+   "ply": 70,
+   "t": 808,
+   "line": [
+    "Rxe4"
+   ],
+   "fen": "8/1p4p1/3p1k1p/1pp1p3/4r1P1/P1PP1PK1/1P6/8 w - - 0 36",
+   "said": "wait i gotta calculate it take six yeah let's take it let's take it let's take it"
+  },
+  {
+   "ply": 71,
+   "t": 811,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "8/1p4p1/3p1k1p/1pp1p3/4P1P1/P1P2PK1/1P6/8 b - - 0 36",
+   "said": "yeah let's take it let's take it let's take it"
+  },
+  {
+   "ply": 72,
+   "t": 816,
+   "line": [
+    "Ke6"
+   ],
+   "fen": "8/1p4p1/3pk2p/1pp1p3/4P1P1/P1P2PK1/1P6/8 w - - 1 37",
+   "said": "yeah let's take it let's take it let's take it"
+  },
+  {
+   "ply": 74,
+   "t": 819.5,
+   "line": [
+    "Kh4",
+    "g6"
+   ],
+   "fen": "8/1p6/3pk1pp/1pp1p3/4P1PK/P1P2P2/1P6/8 w - - 0 38",
+   "said": "yeah let's take it let's take it let's take it"
+  },
+  {
+   "ply": 75,
+   "t": 821.5,
+   "line": [
+    "g5"
+   ],
+   "fen": "8/1p6/3pk1pp/1pp1p1P1/4P2K/P1P2P2/1P6/8 b - - 0 38",
+   "said": ""
+  },
+  {
+   "ply": 76,
+   "t": 822.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "8/1p6/3pk1p1/1pp1p1Pp/4P2K/P1P2P2/1P6/8 w - - 0 39",
+   "said": ""
+  },
+  {
+   "ply": 78,
+   "t": 826.5,
+   "line": [
+    "Kg3",
+    "d5"
+   ],
+   "fen": "8/1p6/4k1p1/1pppp1Pp/4P3/P1P2PK1/1P6/8 w - - 0 40",
+   "said": ""
+  },
+  {
+   "ply": 79,
+   "t": 828,
+   "line": [
+    "Kf2"
+   ],
+   "fen": "8/1p6/4k1p1/1pppp1Pp/4P3/P1P2P2/1P3K2/8 b - - 1 40",
+   "said": ""
+  },
+  {
+   "ply": 80,
+   "t": 829,
+   "line": [
+    "d4"
+   ],
+   "fen": "8/1p6/4k1p1/1pp1p1Pp/3pP3/P1P2P2/1P3K2/8 w - - 0 41",
+   "said": "his is winning that's it two pass pawns this is winning that's it two pass pawns it's called pants in russian this is"
+  },
+  {
+   "ply": 82,
+   "t": 832.5,
+   "line": [
+    "Ke2",
+    "h4"
+   ],
+   "fen": "8/1p6/4k1p1/1pp1p1P1/3pP2p/P1P2P2/1P2K3/8 w - - 0 42",
+   "said": "his is winning that's it two pass pawns this is winning that's it two pass pawns it's called pants in russian this is winning thank you eclipse yeah guys i have like an hour on my clock this is fine"
+  },
+  {
+   "ply": 83,
+   "t": 839,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "8/1p6/4k1p1/1pp1p1P1/3PP2p/P4P2/1P2K3/8 b - - 0 42",
+   "said": "his is winning that's it two pass pawns this is winning that's it two pass pawns it's called pants in russian this is winning thank you eclipse yeah guys i have like an hour on my clock this is fine"
+  },
+  {
+   "ply": 84,
+   "t": 840.5,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "8/1p6/4k1p1/1p2p1P1/3pP2p/P4P2/1P2K3/8 w - - 0 43",
+   "said": "his is winning that's it two pass pawns this is winning that's it two pass pawns it's called pants in russian this is winning thank you eclipse yeah guys i have like an hour on my clock this is fine this is not a problem trust me this is not a draw we've got two connected we have got two passers that are too far away from the king"
+  },
+  {
+   "ply": 85,
+   "t": 847,
+   "line": [
+    "Kf2"
+   ],
+   "fen": "8/1p6/4k1p1/1p2p1P1/3pP2p/P4P2/1P3K2/8 b - - 1 43",
+   "said": "thank you eclipse yeah guys i have like an hour on my clock this is fine this is not a problem trust me this is not a draw we've got two connected we have got two passers that are too far away from the king we just go h3"
+  },
+  {
+   "ply": 86,
+   "t": 848.5,
+   "line": [
+    "h3"
+   ],
+   "fen": "8/1p6/4k1p1/1p2p1P1/3pP3/P4P1p/1P3K2/8 w - - 0 44",
+   "said": "an hour on my clock this is fine this is not a problem trust me this is not a draw we've got two connected we have got two passers that are too far away from the king we just go h3"
+  },
+  {
+   "ply": 87,
+   "t": 850.5,
+   "line": [
+    "Kg3"
+   ],
+   "fen": "8/1p6/4k1p1/1p2p1P1/3pP3/P4PKp/1P6/8 b - - 1 44",
+   "said": "this is not a problem trust me this is not a draw we've got two connected we have got two passers that are too far away from the king we just go h3 d3"
+  },
+  {
+   "ply": 88,
+   "t": 851.5,
+   "line": [
+    "d3"
+   ],
+   "fen": "8/1p6/4k1p1/1p2p1P1/4P3/P2p1PKp/1P6/8 w - - 0 45",
+   "said": "this is not a problem trust me this is not a draw we've got two connected we have got two passers that are too far away from the king we just go h3 d3 d2 d1 that's me this guy was good congrats that was a good game by this guy fatcher chow 100 i'm 99.9 sure it was legit no stalemate okay so let's go here notice what i'm doing i'm leaving with a pawn i'm leaving him with the pawn and now we're going to walk around to this side of the board and checkmate him there's no stalemate he still has this move i don't care see when you're trying to mate with like a couple seconds make sure you're leaving him with pawn moves that way you don't have to worry about stalemate if you know he's got a bunch of pawn moves you know that the game is going to be over you know there's gonna be no stalemate nice i can check the accuracy but it doesn't really indicate much my accuracy was probably pretty low uh given that i missed that idea but we'll see okay 90 so 78.6 to 90.5 which is which is reasonable but uh not not amazing um so i want to say a couple of things i've said i've talked about this before i know that very few people actually were like accusing him and stuff so i'm not going to pretend that everybody was uh jumped to the conclusion i will also take a little bit of the blame when i say i think when people see that i've missed something the automatic suspicion is well this guy's 1800 how can an 1800 see something that i missed and the reality is that it is very rare for me to miss something or a tactical sequence than an 1800 saw but it happens and i think that's one of the good things about chess it totally happens um i'm human i don't look at everything i'm also talking about the game as i'm playing it um this guy might be familiar with this idea from another game so if you were this guy you don't want to get into a situation where weaker players are afraid of playing good moves because they're afraid that they're going to get accused that's a situation that's even worse than a lot of people cheating thank you oh eclipse i appreciate it now at this point some people will say well let's be real when you're playing blitz you get salty at certain fms and ims who play incredibly well and i do um and i'm not always plugging the games in before i'm kind of hinting that something is amiss i admit that but you know that's a little bit different so um you know i if i if i'm saying that i'm i genuinely believe that i'm suspicious even if i'm wrong and even if i shouldn't do that as much i've tried to do that less but with these 18 18 1900s you really never know um okay so let's take a look at the game and then we'll move on to some blitz"
+  },
+  {
+   "ply": 3,
+   "t": 1022.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "but with these 18 18 1900s you really never know um okay so let's take a look at the game and then we'll move on to some blitz"
+  },
+  {
+   "ply": 4,
+   "t": 1027,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "um okay so let's take a look at the game and then we'll move on to some blitz um i've been accused of cheating many times on my various different accounts it's not a good feeling it's scary when a top player accuses you of cheating and you actually didn't cheat because you know that they have authority and weight so um but but with chess.com they check everything independently they're not subject to the influence of some player who throws the fit and says i'm not gonna play anymore if this guy's not banned also 1800s are good all right so knight c3 unfortunately he"
+  },
+  {
+   "ply": 5,
+   "t": 1059,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "who throws the fit and says i'm not gonna play anymore if this guy's not banned also 1800s are good all right so knight c3 unfortunately he didn't play into the staffer that was the real problem that's why i want to ban him not because he not because of some purported accusation but because he didn't go into the staffer that's actually the reason to ban him um so bishop c5 i mean the other way to"
+  },
+  {
+   "ply": 6,
+   "t": 1072,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "rnbqk2r/pppp1ppp/5n2/2b1p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "said": "the real problem that's why i want to ban him not because he not because of some purported accusation but because he didn't go into the staffer that's actually the reason to ban him um so bishop c5 i mean the other way to"
+  },
+  {
+   "ply": 5,
+   "t": 1073,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "ban him not because he not because of some purported accusation but because he didn't go into the staffer that's actually the reason to ban him um so bishop c5 i mean the other way to spice this up is to go d5 and transpose"
+  },
+  {
+   "ply": 6,
+   "t": 1074,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 4",
+   "said": "ban him not because he not because of some purported accusation but because he didn't go into the staffer that's actually the reason to ban him um so bishop c5 i mean the other way to spice this up is to go d5 and transpose into the elephant gambit after he takes d5 and bishop d6 this is"
+  },
+  {
+   "ply": 7,
+   "t": 1080,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3Pp3/8/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "said": "actually the reason to ban him um so bishop c5 i mean the other way to spice this up is to go d5 and transpose into the elephant gambit after he takes d5 and bishop d6 this is"
+  },
+  {
+   "ply": 8,
+   "t": 1081.5,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3Pp3/8/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 1 5",
+   "said": "um so bishop c5 i mean the other way to spice this up is to go d5 and transpose into the elephant gambit after he takes d5 and bishop d6 this is the elephant gambit which is interesting now if he goes 95 i guess eric's idea is to go knight c6 and again offer a transition into the stafford with knight c3 bishop c5 which are the main moves i guess in this position white could play knight f3 um i think that's the downside of this move order and trying to go d4 quickly but after castles d4 bishop b4 i mean i guess this is okay for black so i'm sure eric has analyzed this all right so bishop c4 d6 castles"
+  },
+  {
+   "ply": 7,
+   "t": 1112.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3Pp3/8/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "said": "bishop b4 i mean i guess this is okay for black so i'm sure eric has analyzed this all right so bishop c4 d6 castles and i guess that if i were white i would start with h3 uh just to stop bishop g4 although it doesn't really impact the evaluation d3 knight c6 um eric rosen bishop e3 is important now there's a lot of misunderstanding okay bishop b6 h3 bishop h5 if he had played g4 there's a lot of people who think that every time this happens you should sack that's not true sacking on g4 is exceedingly dangerous uh but for both sides particularly for the side that's doing the sacking because if you look at this position you might think well we have two pawns for the piece the king is wide open queen is coming out to f6 that's all true black's got undeniable compensation here but it's often not as simple as it looks because why can bring the king up to g2 in order to lend more support to this knight and if black plays queen f6 well then you have to reckon with knight d5 that's a nasty little move also white could go rook h1 trying to"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "Bc5",
+     "t": 88.5,
+     "continuation": "Bc5",
+     "said": "this could transpose to the stafford shall we try i mean i don't really want to make the speed run about you know goading him into some sort of a gambit um that's what eric does okay we'll play bishop c5 i'll play like eric rosen oh all right get me out of here this is ridiculous get me out of here all right he goes bishop c4 fine i guess we'll have to play conventionally but it's okay we'll make this interesting we'll make this let's punish him let's punish him well at this point there's nothing i can do because now if we castle and he takes um there's no more stafford to play he's already close to castling so unfortunately we're gonna have to either go knight c6 and go into the four knights or we're gonna have to go d6 and it doesn't really matter which of those moves we play let's start with d6 to defend the pawn and i can load 312. now if we want to spice things up a little bit if we want to make it a little bit challenging for him to develop how should we proceed in this position should we go knight c6 conventionally do we have another option how do we spice add some tabasco sauce to the position bishop g4 bishop g4 because if we play knight c6 knowing"
+    },
+    {
+     "san": "d5",
+     "t": 1074,
+     "continuation": "d5",
+     "said": "ban him not because he not because of some purported accusation but because he didn't go into the staffer that's actually the reason to ban him um so bishop c5 i mean the other way to spice this up is to go d5 and transpose into the elephant gambit after he takes d5 and bishop d6 this is the elephant gambit which is interesting now if he goes 95 i guess eric's idea is to go knight c6 and again offer a transition into the stafford with knight c3 bishop c5 which are the main moves i guess in this position white could play knight f3 um i think that's the downside of this move order and trying to go d4 quickly but after castles d4 bishop b4 i mean i guess this is okay for black so i'm sure eric has analyzed this all right so bishop c4 d6 castles and i guess that if i were white i would start with h3 uh just to stop bishop g4 although it doesn't really impact the evaluation d3 knight c6 um eric rosen bishop e3 is important now there's a lot of misunderstanding okay bishop b6 h3 bishop h5"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,129 @@
+{
+ "videoId": "OQsa_sdKzjY",
+ "title": "Master Class | Alekhine Defense | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 764,
+   "line": [
+    "e4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2",
+   "said": "question of slight advantages this we're not talking here about horrible openings that have been refuted okay eah well i think the french is like a yeah well i think the french is like a meme by now okay so e4 and f6 well the alakan is rare it's"
+  },
+  {
+   "ply": 4,
+   "t": 766.5,
+   "line": [
+    "e5",
+    "Nd5"
+   ],
+   "fen": "rnbqkb1r/pppppppp/8/3nP3/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+   "said": "openings that have been refuted okay eah well i think the french is like a yeah well i think the french is like a meme by now okay so e4 and f6 well the alakan is rare it's definitely rare e5 knight d5 the philidor's philidor is actually experiencing a resurgence it's very"
+  },
+  {
+   "ply": 5,
+   "t": 773,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/8/3nP3/2P5/8/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "eah well i think the french is like a yeah well i think the french is like a meme by now okay so e4 and f6 well the alakan is rare it's definitely rare e5 knight d5 the philidor's philidor is actually experiencing a resurgence it's very solid opening okay so e4 knight d5 c4 knight p6 now the best move here is to"
+  },
+  {
+   "ply": 6,
+   "t": 780.5,
+   "line": [
+    "Nb6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/1n6/4P3/2P5/8/PP1P1PPP/RNBQKBNR w KQkq - 1 4",
+   "said": "actually experiencing a resurgence it's very solid opening okay so e4 knight d5 c4 knight p6 now the best move here is to play d4"
+  },
+  {
+   "ply": 7,
+   "t": 783,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/1n6/4P3/2PP4/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "actually experiencing a resurgence it's very solid opening okay so e4 knight d5 c4 knight p6 now the best move here is to play d4 and to occupy the center but to do it in a measured way and black plays d6 he takes d6 and"
+  },
+  {
+   "ply": 8,
+   "t": 788,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/2PP4/8/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "said": "okay so e4 knight d5 c4 knight p6 now the best move here is to play d4 and to occupy the center but to do it in a measured way and black plays d6 he takes d6 and"
+  },
+  {
+   "ply": 9,
+   "t": 789,
+   "line": [
+    "exd6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/1n1P4/8/2PP4/8/PP3PPP/RNBQKBNR b KQkq - 0 5",
+   "said": "knight p6 now the best move here is to play d4 and to occupy the center but to do it in a measured way and black plays d6 he takes d6 and there are two main lines there's e takes d6 and c takes d6 but the move that i recommend for people who are interested in"
+  },
+  {
+   "ply": 10,
+   "t": 796,
+   "line": [
+    "cxd6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/1n1p4/8/2PP4/8/PP3PPP/RNBQKBNR w KQkq - 0 6",
+   "said": "a measured way and black plays d6 he takes d6 and there are two main lines there's e takes d6 and c takes d6 but the move that i recommend for people who are interested in starting the algon is c takes d6 because this teaches you to play with an imbalance pawn structure imbalance of course because now white has a queen side majority and black has essentially king side majority and black develops very naturally here this"
+  },
+  {
+   "ply": 11,
+   "t": 810,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/1n1p4/8/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 1 6",
+   "said": "because this teaches you to play with an imbalance pawn structure imbalance of course because now white has a queen side majority and black has essentially king side majority and black develops very naturally here this bishop is going to have a hard time getting out on this diagonal so you find"
+  },
+  {
+   "ply": 12,
+   "t": 814,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pp2pp1p/1n1p2p1/8/2PP4/2N5/PP3PPP/R1BQKBNR w KQkq - 0 7",
+   "said": "of course because now white has a queen side majority and black has essentially king side majority and black develops very naturally here this bishop is going to have a hard time getting out on this diagonal so you find keto it"
+  },
+  {
+   "ply": 13,
+   "t": 815,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/pp2pp1p/1n1p2p1/8/2PP4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 7",
+   "said": "side majority and black has essentially king side majority and black develops very naturally here this bishop is going to have a hard time getting out on this diagonal so you find keto it"
+  },
+  {
+   "ply": 14,
+   "t": 816,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/pp2ppbp/1n1p2p1/8/2PP4/2N2N2/PP3PPP/R1BQKB1R w KQkq - 2 8",
+   "said": "side majority and black has essentially king side majority and black develops very naturally here this bishop is going to have a hard time getting out on this diagonal so you find keto it very nice i mean natural development you know like knight c6"
+  },
+  {
+   "ply": 18,
+   "t": 819.5,
+   "line": [
+    "Ke2",
+    "Nc6",
+    "Rg1",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/1nnp2p1/8/2PP4/2N2N2/PP2KPPP/R1BQ1BR1 w - - 6 10",
+   "said": "black develops very naturally here this bishop is going to have a hard time getting out on this diagonal so you find keto it very nice i mean natural development you know like knight c6 and the plan emerges naturally from this position you're going to put pressure on white's two pawns um okay so that's really all there is to it and there's a lot of theory um it looks like a dragon but yes but of course it's much more peaceful because you've tasseled short and neither side is is is going to get checkmated in the next five move um yes so it's very hard to play at like 1100 and there's two main reasons for that i think right what makes a position like this hard to play for black the first thing is of course that we're a little bit cramped and it's natural to find it hard to play as i said on two three ranks because it makes you uncomfortable and you gotta know you gotta be accurate right when you're very cramped you cannot afford to make too many mistakes you're just going to get pushed off the board the second thing is you've got to know how to react to a lot of different things when you're playing an opening like e4 e5 you have a very stable center"
+  }
+ ],
+ "forks": []
+}

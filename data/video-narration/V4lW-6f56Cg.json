@@ -1,0 +1,1052 @@
+{
+ "videoId": "V4lW-6f56Cg",
+ "title": "Master Class | Vienna Gambit | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 20.5,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "we're moving right along and 1620 lozax [Music] let's go with the vienna gimbal maybe what should we play i don't know let's play"
+  },
+  {
+   "ply": 3,
+   "t": 44,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "said": "what should we play i don't know let's play okay let's play vn again but let's play a vienna gamble let's go knight c3 let's play avayana gambit and f4 that's my volley on the gambit"
+  },
+  {
+   "ply": 5,
+   "t": 51.5,
+   "line": [
+    "Nf6",
+    "f4"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3",
+   "said": "okay let's play vn again but let's play a vienna gamble let's go knight c3 let's play avayana gambit and f4 that's my volley on the gambit because most people okay d6 now this is"
+  },
+  {
+   "ply": 6,
+   "t": 55,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/3p1n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
+   "said": "okay let's play vn again but let's play a vienna gamble let's go knight c3 let's play avayana gambit and f4 that's my volley on the gambit because most people okay d6 now this is a very common move at this level it's not terrible but it's very passive it's very passive um it's a typical way of declining the gambit it blocks in the bishop and it essentially gives us all that we want now in the vienna your goal is for black to take the pawn what does it do why are we sacrificing the pawn well there are two main reasons the first is that we of course get uh a bigger control of the center with d4 the second is that we open up the f file and as i've often stated opening up the f file is a double-sided sword on the one hand it can be good for black because well it's a weakness particularly of white castle short but it can also be a great strength because white's rook on f1 will have essentially a wide open avenue to attacking blacks upon an f7 if that makes sense so how should we play here well there's nothing particularly special that we should do we should just develop our pieces and try to get black to take the"
+  },
+  {
+   "ply": 7,
+   "t": 110,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/3p1n2/4p3/4PP2/2N2N2/PPPP2PP/R1BQKB1R b KQkq - 1 4",
+   "said": "will have essentially a wide open avenue to attacking blacks upon an f7 if that makes sense so how should we play here well there's nothing particularly special that we should do we should just develop our pieces and try to get black to take the pun yeah with the vienna you play knight c3 i'll talk about that a little bit after the game"
+  },
+  {
+   "ply": 8,
+   "t": 116.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/4p3/4PP2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 2 5",
+   "said": "so how should we play here well there's nothing particularly special that we should do we should just develop our pieces and try to get black to take the pun yeah with the vienna you play knight c3 i'll talk about that a little bit after the game okay knight c6 and now we we have two choices for where to develop this bishop we can um we can develop it to c4 but we can also play the sort of rye lopez style and and develop it to b5 and the plus of developing developing it to b5 is that we put immediate pressure on the pawn on e5 i've analyzed this a little bit because i have some students who play the vienna and bishop v5 is the best"
+  },
+  {
+   "ply": 9,
+   "t": 140,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B2p3/4PP2/2N2N2/PPPP2PP/R1BQK2R b KQkq - 3 5",
+   "said": "and and develop it to b5 and the plus of developing developing it to b5 is that we put immediate pressure on the pawn on e5 i've analyzed this a little bit because i have some students who play the vienna and bishop v5 is the best move i think this should be five this is like a rye lopez on steroids though bishop d7"
+  },
+  {
+   "ply": 10,
+   "t": 144.5,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/2np1n2/1B2p3/4PP2/2N2N2/PPPP2PP/R1BQK2R w KQkq - 4 6",
+   "said": "immediate pressure on the pawn on e5 i've analyzed this a little bit because i have some students who play the vienna and bishop v5 is the best move i think this should be five this is like a rye lopez on steroids though bishop d7 all right now what should we do this is a bit of a trick question because i think i know what some of you will come up with what do you think we should do yeah so dj you fell into my trap now some of you may think ah let me take the knight and then take the pawn and win a pawn but you need to see the bigger picture here which is that white isn't very well developed yet and going after the pawn not only does it not win a pawn because black will be able to capture on e4 i'll show this after the game but those transformations are favorable for black because whites we've made a weakness on the king side and so the point of the vienna isn't to go upon"
+  },
+  {
+   "ply": 11,
+   "t": 182.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/2np1n2/1B2p3/4PP2/2N2N2/PPPP2PP/R1BQ1RK1 b kq - 5 6",
+   "said": "going after the pawn not only does it not win a pawn because black will be able to capture on e4 i'll show this after the game but those transformations are favorable for black because whites we've made a weakness on the king side and so the point of the vienna isn't to go upon hunting it's to develop your pieces and"
+  },
+  {
+   "ply": 12,
+   "t": 185.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "r2qkb1r/1ppb1ppp/p1np1n2/1B2p3/4PP2/2N2N2/PPPP2PP/R1BQ1RK1 w kq - 0 7",
+   "said": "able to capture on e4 i'll show this after the game but those transformations are favorable for black because whites we've made a weakness on the king side and so the point of the vienna isn't to go upon hunting it's to develop your pieces and go for an attack now i would consider this a little bit more carefully but it still doesn't work still doesn't work who can tell me why if we take on c6 and then we take twice on e5 what move is black going to have at the end of the line which shows the fact that the f file being open is double-sided you know not bishop takes e4 bishop takes c4 is not dangerous but queen d4 chuck forks the knight and the king so instead of this we should move our bishop where should we move it we can move it either to c4 or to a4 i feel like now that we've castled bishop c4 makes more sense maybe a sacrifice on f7 is on the cards"
+  },
+  {
+   "ply": 13,
+   "t": 227,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r2qkb1r/1ppb1ppp/p1np1n2/4p3/2B1PP2/2N2N2/PPPP2PP/R1BQ1RK1 b kq - 1 7",
+   "said": "of this we should move our bishop where should we move it we can move it either to c4 or to a4 i feel like now that we've castled bishop c4 makes more sense maybe a sacrifice on f7 is on the cards let's go bishop c4 if he doesn't do anything to castle if he doesn't go here okay goes bishop e6 that's not a"
+  },
+  {
+   "ply": 14,
+   "t": 234,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2qkb1r/1pp2ppp/p1npbn2/4p3/2B1PP2/2N2N2/PPPP2PP/R1BQ1RK1 w kq - 2 8",
+   "said": "more sense maybe a sacrifice on f7 is on the cards let's go bishop c4 if he doesn't do anything to castle if he doesn't go here okay goes bishop e6 that's not a terrible move now what options do we have we can either trade bishops that's probably what we're going to end up doing because that weakens the center and it's king side or if we wanted to trade on our own terms if we wanted to make a mature move how could we trade on our own terms what's the common move in such positions it's not d3 it's bishop b3 bishop b3 stepping back you see this in the london you see this in a lot of different openings i call it trading on your own terms where you get black to take your bishop you take with the a pawn and it's a much more favorable transformation than for example playing d3 but i like the concept of taking the bishop"
+  },
+  {
+   "ply": 15,
+   "t": 272,
+   "line": [
+    "Bxe6"
+   ],
+   "fen": "r2qkb1r/1pp2ppp/p1npBn2/4p3/4PP2/2N2N2/PPPP2PP/R1BQ1RK1 b kq - 0 8",
+   "said": "openings i call it trading on your own terms where you get black to take your bishop you take with the a pawn and it's a much more favorable transformation than for example playing d3 but i like the concept of taking the bishop because we weaken his position nothing wrong with that at all simple chess now"
+  },
+  {
+   "ply": 16,
+   "t": 275,
+   "line": [
+    "fxe6"
+   ],
+   "fen": "r2qkb1r/1pp3pp/p1nppn2/4p3/4PP2/2N2N2/PPPP2PP/R1BQ1RK1 w kq - 0 9",
+   "said": "you take with the a pawn and it's a much more favorable transformation than for example playing d3 but i like the concept of taking the bishop because we weaken his position nothing wrong with that at all simple chess now again we can play more positionally we can play more tactically um the positional move is to take on e5 we can take on e5 and just say okay you're gonna have double pawns you're gonna have weak pawns in the center and then we can play d3 and bishop g5 and we have a slight advantage but we can also play this very aggressively very tactically and how should we play it tactically if we wanted to well he has an e-pawn that's now a weakness we need to consider that can we attack it let's go ahead and do"
+  },
+  {
+   "ply": 17,
+   "t": 305,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "r2qkb1r/1pp3pp/p1nppn2/4p1N1/4PP2/2N5/PPPP2PP/R1BQ1RK1 b kq - 1 9",
+   "said": "aggressively very tactically and how should we play it tactically if we wanted to well he has an e-pawn that's now a weakness we need to consider that can we attack it let's go ahead and do it knight you five probably not what i would have played in one of my own games but it is in the spirit of the vienna yeah d3 is fine too d3 is a more"
+  },
+  {
+   "ply": 18,
+   "t": 314,
+   "line": [
+    "Qd7"
+   ],
+   "fen": "r3kb1r/1ppq2pp/p1nppn2/4p1N1/4PP2/2N5/PPPP2PP/R1BQ1RK1 w kq - 2 10",
+   "said": "can we attack it let's go ahead and do it knight you five probably not what i would have played in one of my own games but it is in the spirit of the vienna yeah d3 is fine too d3 is a more positional move but i want to act with a sense of urgency here all right now we have a really cool idea which let me calculate one moment i'm just trying to figure it out whether it works it's believe it or not it's very complex there's an idea that that that is very interesting but it's but it's it's it involves a certain degree of risk but let's do it now it's yeah so you guys are many of you are saying"
+  },
+  {
+   "ply": 19,
+   "t": 351.5,
+   "line": [
+    "fxe5"
+   ],
+   "fen": "r3kb1r/1ppq2pp/p1nppn2/4P1N1/4P3/2N5/PPPP2PP/R1BQ1RK1 b kq - 0 10",
+   "said": "very interesting but it's but it's it's it involves a certain degree of risk but let's do it now it's yeah so you guys are many of you are saying d f takes e5 and if he takes with a knight then he walks right into d4 if he takes with a pawn many of you are noticing the possibility of bringing the queen out to h5 but of course that's not"
+  },
+  {
+   "ply": 20,
+   "t": 363.5,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r3kb1r/1ppq2pp/p2ppn2/4n1N1/4P3/2N5/PPPP2PP/R1BQ1RK1 w kq - 0 11",
+   "said": "d f takes e5 and if he takes with a knight then he walks right into d4 if he takes with a pawn many of you are noticing the possibility of bringing the queen out to h5 but of course that's not possible when he has an i don't have six so as i'll show after the game we could have sacrificed our exchange here doing the same thing isn't effective because that knight could step back to g6 and block the check so here of course we should just play d4"
+  },
+  {
+   "ply": 21,
+   "t": 376.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r3kb1r/1ppq2pp/p2ppn2/4n1N1/3PP3/2N5/PPP3PP/R1BQ1RK1 b kq - 0 11",
+   "said": "so as i'll show after the game we could have sacrificed our exchange here doing the same thing isn't effective because that knight could step back to g6 and block the check so here of course we should just play d4 uh with tempo this is a phenomenal position for us knight g6"
+  },
+  {
+   "ply": 22,
+   "t": 379,
+   "line": [
+    "Ng6"
+   ],
+   "fen": "r3kb1r/1ppq2pp/p2ppnn1/6N1/3PP3/2N5/PPP3PP/R1BQ1RK1 w kq - 1 12",
+   "said": "have sacrificed our exchange here doing the same thing isn't effective because that knight could step back to g6 and block the check so here of course we should just play d4 uh with tempo this is a phenomenal position for us knight g6 so what should we do now how should we transform our clear initiative into a concrete advantage now what we need to realize here is that when you've got a center like this when you've got an attack on the pawn you just need the move i think flows naturally from the position there's two pawn breaks that need to be considered there's e5 and d5 if you look at e5 carefully you'll see that after d takes e5 that just gives a pawn up i don't see a follow up there and that allows the queen trade which is not in our favor but the move d5 is very good because it"
+  },
+  {
+   "ply": 23,
+   "t": 410,
+   "line": [
+    "d5"
+   ],
+   "fen": "r3kb1r/1ppq2pp/p2ppnn1/3P2N1/4P3/2N5/PPP3PP/R1BQ1RK1 b kq - 0 12",
+   "said": "considered there's e5 and d5 if you look at e5 carefully you'll see that after d takes e5 that just gives a pawn up i don't see a follow up there and that allows the queen trade which is not in our favor but the move d5 is very good because it establishes a stronghold for the knight on e6 that's a more positional move than anything uh but that outpost 96 is going to be completely deadly very natural play"
+  },
+  {
+   "ply": 24,
+   "t": 425,
+   "line": [
+    "e5"
+   ],
+   "fen": "r3kb1r/1ppq2pp/p2p1nn1/3Pp1N1/4P3/2N5/PPP3PP/R1BQ1RK1 w kq - 0 13",
+   "said": "that's a more positional move than anything uh but that outpost 96 is going to be completely deadly very natural play after he okay it was e5 our move is very obvious now we go knight e6 look at"
+  },
+  {
+   "ply": 25,
+   "t": 428.5,
+   "line": [
+    "Ne6"
+   ],
+   "fen": "r3kb1r/1ppq2pp/p2pNnn1/3Pp3/4P3/2N5/PPP3PP/R1BQ1RK1 b kq - 1 13",
+   "said": "to be completely deadly very natural play after he okay it was e5 our move is very obvious now we go knight e6 look at this beautiful outpost he can't even castle he can barely move this knight paralyzes his entire position and it's supported by a pawn chain so even if he goes c6 we don't need to do anything about that because our pawn will not be at risk of being undermined yeah so as gaines is indicating bishop g5 is probably going to be our follow-up hitting the knight on f6 his position is on the verge of collapse if he goes bishop b7 he drops the pawn there comes c6"
+  },
+  {
+   "ply": 26,
+   "t": 454.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "r3kb1r/1p1q2pp/p1ppNnn1/3Pp3/4P3/2N5/PPP3PP/R1BQ1RK1 w kq - 0 14",
+   "said": "yeah so as gaines is indicating bishop g5 is probably going to be our follow-up hitting the knight on f6 his position is on the verge of collapse if he goes bishop b7 he drops the pawn there comes c6 here comes c6 we don't need to do anything about it he's not really threatening to take that will soften up our knight outpost but it won't necessarily you know won't do anything specific by the time he gets"
+  },
+  {
+   "ply": 27,
+   "t": 466,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r3kb1r/1p1q2pp/p1ppNnn1/3Pp1B1/4P3/2N5/PPP3PP/R2Q1RK1 b kq - 1 14",
+   "said": "c6 here comes c6 we don't need to do anything about it he's not really threatening to take that will soften up our knight outpost but it won't necessarily you know won't do anything specific by the time he gets around to challenging this knight is going to be checkmated bishop g5 it is now in such situations"
+  },
+  {
+   "ply": 28,
+   "t": 472.5,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r3kb1r/1p1q2pp/p2pNnn1/3pp1B1/4P3/2N5/PPP3PP/R2Q1RK1 w kq - 0 15",
+   "said": "soften up our knight outpost but it won't necessarily you know won't do anything specific by the time he gets around to challenging this knight is going to be checkmated bishop g5 it is now in such situations you know that the very best players when you get into a situation you can feel that the win is nearby you don't want to rush a single move because you never know when there might be a hidden tactic or a way to improve on the obvious move so e takes d5 is the obvious move and it's perfectly good enough is there a better move is there any way to win the game even faster there is if you take on f6 he can take the other knight but the best move is knight takes d5 he"
+  },
+  {
+   "ply": 29,
+   "t": 503,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r3kb1r/1p1q2pp/p2pNnn1/3Np1B1/4P3/8/PPP3PP/R2Q1RK1 b kq - 0 15",
+   "said": "perfectly good enough is there a better move is there any way to win the game even faster there is if you take on f6 he can take the other knight but the best move is knight takes d5 he takes on e6 not hard to establish that we fork the queen and the king which is what's going to happen and i'll"
+  },
+  {
+   "ply": 31,
+   "t": 509.5,
+   "line": [
+    "Qxe6",
+    "Nc7+"
+   ],
+   "fen": "r3kb1r/1pN3pp/p2pqnn1/4p1B1/4P3/8/PPP3PP/R2Q1RK1 b kq - 1 16",
+   "said": "other knight but the best move is knight takes d5 he takes on e6 not hard to establish that we fork the queen and the king which is what's going to happen and i'll show what have happened yeah he resigns if he would have taken our knight then"
+  },
+  {
+   "ply": 29,
+   "t": 514.5,
+   "line": [],
+   "fen": "r3kb1r/1p1q2pp/p2pNnn1/3Np1B1/4P3/8/PPP3PP/R2Q1RK1 b kq - 0 15",
+   "said": "takes on e6 not hard to establish that we fork the queen and the king which is what's going to happen and i'll show what have happened yeah he resigns if he would have taken our knight then"
+  },
+  {
+   "ply": 31,
+   "t": 516,
+   "line": [
+    "Nxd5",
+    "exd5"
+   ],
+   "fen": "r3kb1r/1p1q2pp/p2pN1n1/3Pp1B1/8/8/PPP3PP/R2Q1RK1 b kq - 0 16",
+   "said": "takes on e6 not hard to establish that we fork the queen and the king which is what's going to happen and i'll show what have happened yeah he resigns if he would have taken our knight then in contrast with the immediate e takes d5 in contrast with this the f file is open the f file being open is obviously in our favor he's totally paralyzed we have a very simple plan of victory we can go queen h5 or queen f3 i mean there's just every anything would win here he's he can resign all right so that was a nice game and the vienna is one of the best openings bar none for players of this"
+  },
+  {
+   "ply": 2,
+   "t": 543.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "resign all right so that was a nice game and the vienna is one of the best openings bar none for players of this level 1600 1700. so the bottom line in the vienna is that"
+  },
+  {
+   "ply": 5,
+   "t": 548.5,
+   "line": [
+    "f4",
+    "Nf6",
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 2 3",
+   "said": "so that was a nice game and the vienna is one of the best openings bar none for players of this level 1600 1700. so the bottom line in the vienna is that e takes f4 is a big mistake"
+  },
+  {
+   "ply": 6,
+   "t": 551,
+   "line": [
+    "exf4"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/4Pp2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
+   "said": "so that was a nice game and the vienna is one of the best openings bar none for players of this level 1600 1700. so the bottom line in the vienna is that e takes f4 is a big mistake a lot of people take the pawn thinking that this is a king's gambit but the difference between the king's gamut and the vienna is revealed in the fact that the knights are developed which is in white's favor because the move e5 becomes possible"
+  },
+  {
+   "ply": 7,
+   "t": 561.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/5p2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 4",
+   "said": "e takes f4 is a big mistake a lot of people take the pawn thinking that this is a king's gambit but the difference between the king's gamut and the vienna is revealed in the fact that the knights are developed which is in white's favor because the move e5 becomes possible chasing away the knight in fact the knight has nowhere to go it has to go back to g8 which is a huge"
+  },
+  {
+   "ply": 8,
+   "t": 567,
+   "line": [
+    "Ng8"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4P3/5p2/2N5/PPPP2PP/R1BQKBNR w KQkq - 1 5",
+   "said": "but the difference between the king's gamut and the vienna is revealed in the fact that the knights are developed which is in white's favor because the move e5 becomes possible chasing away the knight in fact the knight has nowhere to go it has to go back to g8 which is a huge undeveloper pieces like this is not good you go knight f3 don't go d4"
+  },
+  {
+   "ply": 9,
+   "t": 571.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4P3/5p2/2N2N2/PPPP2PP/R1BQKB1R b KQkq - 2 5",
+   "said": "which is in white's favor because the move e5 becomes possible chasing away the knight in fact the knight has nowhere to go it has to go back to g8 which is a huge undeveloper pieces like this is not good you go knight f3 don't go d4 don't allow this nasty check on h4 so you go knight f3 then d4 you've got a big lead in development you're probably going to win this pawn back i've got a couple of students who play this black is in massive trouble here now there's a couple of beautiful lines that stem from this position one is well black often"
+  },
+  {
+   "ply": 10,
+   "t": 591,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4P3/5p2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 0 6",
+   "said": "i've got a couple of students who play this black is in massive trouble here now there's a couple of beautiful lines that stem from this position one is well black often plays d6 right and you play d4 to support the"
+  },
+  {
+   "ply": 11,
+   "t": 595.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4P3/3P1p2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+   "said": "now there's a couple of beautiful lines that stem from this position one is well black often plays d6 right and you play d4 to support the pawn after d takes c5 i've analyzed this very"
+  },
+  {
+   "ply": 12,
+   "t": 598,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/3P1p2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 0 7",
+   "said": "that stem from this position one is well black often plays d6 right and you play d4 to support the pawn after d takes c5 i've analyzed this very deeply with a computer and it may appear that white is in a little bit of trouble here because if you take with a knight"
+  },
+  {
+   "ply": 13,
+   "t": 605.5,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/4N3/3P1p2/2N5/PPP3PP/R1BQKB1R b KQkq - 0 7",
+   "said": "pawn after d takes c5 i've analyzed this very deeply with a computer and it may appear that white is in a little bit of trouble here because if you take with a knight what move is possible i just want to hammer this into people's heads this is a big no-no in such positions because it allows but h4 check why is this a problem because you have"
+  },
+  {
+   "ply": 14,
+   "t": 614.5,
+   "line": [
+    "Qh4+"
+   ],
+   "fen": "rnb1kbnr/ppp2ppp/8/4N3/3P1p1q/2N5/PPP3PP/R1BQKB1R w KQkq - 1 8",
+   "said": "little bit of trouble here because if you take with a knight what move is possible i just want to hammer this into people's heads this is a big no-no in such positions because it allows but h4 check why is this a problem because you have to move your king if you go g3"
+  },
+  {
+   "ply": 16,
+   "t": 617.5,
+   "line": [
+    "g3",
+    "fxg3"
+   ],
+   "fen": "rnb1kbnr/ppp2ppp/8/4N3/3P3q/2N3p1/PPP4P/R1BQKB1R w KQkq - 0 9",
+   "said": "what move is possible i just want to hammer this into people's heads this is a big no-no in such positions because it allows but h4 check why is this a problem because you have to move your king if you go g3 then there's f takes g3 the pawn on f4 is a very nasty one"
+  },
+  {
+   "ply": 13,
+   "t": 622,
+   "line": [],
+   "fen": "rnbqkbnr/ppp2ppp/8/4N3/3P1p2/2N5/PPP3PP/R1BQKB1R b KQkq - 0 7",
+   "said": "this is a big no-no in such positions because it allows but h4 check why is this a problem because you have to move your king if you go g3 then there's f takes g3 the pawn on f4 is a very nasty one but if you play d e then you allow the"
+  },
+  {
+   "ply": 16,
+   "t": 624.5,
+   "line": [
+    "Qxd4",
+    "Qf3",
+    "Qd1+"
+   ],
+   "fen": "rnb1kbnr/ppp2ppp/8/4N3/5p2/2N2Q2/PPP3PP/R1BqKB1R w KQkq - 2 9",
+   "said": "because it allows but h4 check why is this a problem because you have to move your king if you go g3 then there's f takes g3 the pawn on f4 is a very nasty one but if you play d e then you allow the queen trading you certainly don't want to allow the queen trade the whole point of a development advantage is to well you don't want the queen trade so"
+  },
+  {
+   "ply": 12,
+   "t": 630,
+   "line": [],
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/3P1p2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 0 7",
+   "said": "is a very nasty one but if you play d e then you allow the queen trading you certainly don't want to allow the queen trade the whole point of a development advantage is to well you don't want the queen trade so you give a check on b5 you develop a"
+  },
+  {
+   "ply": 13,
+   "t": 631.5,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/1B2p3/3P1p2/2N2N2/PPP3PP/R1BQK2R b KQkq - 1 7",
+   "said": "but if you play d e then you allow the queen trading you certainly don't want to allow the queen trade the whole point of a development advantage is to well you don't want the queen trade so you give a check on b5 you develop a tempo but black simply has the move c6 so what"
+  },
+  {
+   "ply": 14,
+   "t": 634.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p5/1B2p3/3P1p2/2N2N2/PPP3PP/R1BQK2R w KQkq - 0 8",
+   "said": "queen trading you certainly don't want to allow the queen trade the whole point of a development advantage is to well you don't want the queen trade so you give a check on b5 you develop a tempo but black simply has the move c6 so what are we doing here but the funny thing is you just play"
+  },
+  {
+   "ply": 15,
+   "t": 638.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p5/4p3/2BP1p2/2N2N2/PPP3PP/R1BQK2R b KQkq - 1 8",
+   "said": "of a development advantage is to well you don't want the queen trade so you give a check on b5 you develop a tempo but black simply has the move c6 so what are we doing here but the funny thing is you just play bishop c4 you have three pieces developed black is none and you don't give a damn about any of the pawns e takes d4"
+  },
+  {
+   "ply": 16,
+   "t": 646,
+   "line": [
+    "exd4"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p5/8/2Bp1p2/2N2N2/PPP3PP/R1BQK2R w KQkq - 0 9",
+   "said": "are we doing here but the funny thing is you just play bishop c4 you have three pieces developed black is none and you don't give a damn about any of the pawns e takes d4 um and at this point wait just let me remember yeah at this point you play bishop takes"
+  },
+  {
+   "ply": 17,
+   "t": 654,
+   "line": [
+    "Bxf4"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p5/8/2Bp1B2/2N2N2/PPP3PP/R2QK2R b KQkq - 0 9",
+   "said": "about any of the pawns e takes d4 um and at this point wait just let me remember yeah at this point you play bishop takes f4 that's the idea okay now you're currently two pawns down currently two pawns down what do you have in a turn for them you've developed all four pieces and black's developed nothing now what are we doing here why are we giving away the knight what's the"
+  },
+  {
+   "ply": 18,
+   "t": 667,
+   "line": [
+    "dxc3"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p5/8/2B2B2/2p2N2/PPP3PP/R2QK2R w KQkq - 0 10",
+   "said": "that's the idea okay now you're currently two pawns down currently two pawns down what do you have in a turn for them you've developed all four pieces and black's developed nothing now what are we doing here why are we giving away the knight what's the idea what's the idea here and this is an idea which we've had on the speed run many times the king in contact with the queen boom"
+  },
+  {
+   "ply": 19,
+   "t": 676.5,
+   "line": [
+    "Bxf7+"
+   ],
+   "fen": "rnbqkbnr/pp3Bpp/2p5/8/5B2/2p2N2/PPP3PP/R2QK2R b KQkq - 0 10",
+   "said": "are we giving away the knight what's the idea what's the idea here and this is an idea which we've had on the speed run many times the king in contact with the queen boom goes the dynamite but it's not over yet black has the move"
+  },
+  {
+   "ply": 20,
+   "t": 680,
+   "line": [
+    "Ke7"
+   ],
+   "fen": "rnbq1bnr/pp2kBpp/2p5/8/5B2/2p2N2/PPP3PP/R2QK2R w KQ - 1 11",
+   "said": "what's the idea here and this is an idea which we've had on the speed run many times the king in contact with the queen boom goes the dynamite but it's not over yet black has the move king e7 he doesn't have to take the bishop and drop the queen now we sacrifice another piece we give a"
+  },
+  {
+   "ply": 21,
+   "t": 685.5,
+   "line": [
+    "Qe2+"
+   ],
+   "fen": "rnbq1bnr/pp2kBpp/2p5/8/5B2/2p2N2/PPP1Q1PP/R3K2R b KQ - 2 11",
+   "said": "times the king in contact with the queen boom goes the dynamite but it's not over yet black has the move king e7 he doesn't have to take the bishop and drop the queen now we sacrifice another piece we give a check on e2 this forces the king to take the bishop"
+  },
+  {
+   "ply": 22,
+   "t": 688,
+   "line": [
+    "Kxf7"
+   ],
+   "fen": "rnbq1bnr/pp3kpp/2p5/8/5B2/2p2N2/PPP1Q1PP/R3K2R w KQ - 0 12",
+   "said": "goes the dynamite but it's not over yet black has the move king e7 he doesn't have to take the bishop and drop the queen now we sacrifice another piece we give a check on e2 this forces the king to take the bishop but now the king is literally toast and there's one really funny line um you have several ways to win the game several ways to win the game let me remember what the best line is i'm trying to remember"
+  },
+  {
+   "ply": 23,
+   "t": 709,
+   "line": [
+    "Ne5+"
+   ],
+   "fen": "rnbq1bnr/pp3kpp/2p5/4N3/5B2/2p5/PPP1Q1PP/R3K2R b KQ - 1 12",
+   "said": "several ways to win the game let me remember what the best line is i'm trying to remember yeah so the best move here is knight to e5 check centralizing the knight if the king goes back to ea"
+  },
+  {
+   "ply": 24,
+   "t": 713,
+   "line": [
+    "Ke8"
+   ],
+   "fen": "rnbqkbnr/pp4pp/2p5/4N3/5B2/2p5/PPP1Q1PP/R3K2R w KQ - 2 13",
+   "said": "remember yeah so the best move here is knight to e5 check centralizing the knight if the king goes back to ea then it walks right into a discovered check which wins the queen all right this is a typical discovered check wins the queen black will have some pieces for the queen but because black's king is so exposed he's still losing"
+  },
+  {
+   "ply": 23,
+   "t": 723.5,
+   "line": [],
+   "fen": "rnbq1bnr/pp3kpp/2p5/4N3/5B2/2p5/PPP1Q1PP/R3K2R b KQ - 1 12",
+   "said": "king goes back to ea then it walks right into a discovered check which wins the queen all right this is a typical discovered check wins the queen black will have some pieces for the queen but because black's king is so exposed he's still losing so the king can go to e6 and you still"
+  },
+  {
+   "ply": 25,
+   "t": 726,
+   "line": [
+    "Ke6",
+    "Nxc6+"
+   ],
+   "fen": "rnbq1bnr/pp4pp/2N1k3/8/5B2/2p5/PPP1Q1PP/R3K2R b KQ - 0 13",
+   "said": "check which wins the queen all right this is a typical discovered check wins the queen black will have some pieces for the queen but because black's king is so exposed he's still losing so the king can go to e6 and you still have a discovery"
+  },
+  {
+   "ply": 23,
+   "t": 728,
+   "line": [],
+   "fen": "rnbq1bnr/pp3kpp/2p5/4N3/5B2/2p5/PPP1Q1PP/R3K2R b KQ - 1 12",
+   "said": "all right this is a typical discovered check wins the queen black will have some pieces for the queen but because black's king is so exposed he's still losing so the king can go to e6 and you still have a discovery all right so king f6 seems to be the"
+  },
+  {
+   "ply": 24,
+   "t": 729.5,
+   "line": [
+    "Kf6"
+   ],
+   "fen": "rnbq1bnr/pp4pp/2p2k2/4N3/5B2/2p5/PPP1Q1PP/R3K2R w KQ - 2 13",
+   "said": "check wins the queen black will have some pieces for the queen but because black's king is so exposed he's still losing so the king can go to e6 and you still have a discovery all right so king f6 seems to be the only way to avoid losing a queen immediately but what tactic does white have in this position and this is another very common pattern bishop g5 distracting"
+  },
+  {
+   "ply": 26,
+   "t": 742,
+   "line": [
+    "Bg5+",
+    "Kxg5"
+   ],
+   "fen": "rnbq1bnr/pp4pp/2p5/4N1k1/8/2p5/PPP1Q1PP/R3K2R w KQ - 0 14",
+   "said": "only way to avoid losing a queen immediately but what tactic does white have in this position and this is another very common pattern bishop g5 distracting knight f7 check winning the queen but"
+  },
+  {
+   "ply": 27,
+   "t": 743,
+   "line": [
+    "Nf7+"
+   ],
+   "fen": "rnbq1bnr/pp3Npp/2p5/6k1/8/2p5/PPP1Q1PP/R3K2R b KQ - 1 14",
+   "said": "immediately but what tactic does white have in this position and this is another very common pattern bishop g5 distracting knight f7 check winning the queen but you don't even take the queen yet if black ghost king f6 white has a"
+  },
+  {
+   "ply": 28,
+   "t": 748,
+   "line": [
+    "Kf6"
+   ],
+   "fen": "rnbq1bnr/pp3Npp/2p2k2/8/8/2p5/PPP1Q1PP/R3K2R w KQ - 2 15",
+   "said": "and this is another very common pattern bishop g5 distracting knight f7 check winning the queen but you don't even take the queen yet if black ghost king f6 white has a really sexy move really sexy move you don't have to take the queen yet what is that sexy move this this move will get you way too many dates"
+  },
+  {
+   "ply": 29,
+   "t": 758,
+   "line": [
+    "O-O+"
+   ],
+   "fen": "rnbq1bnr/pp3Npp/2p2k2/8/8/2p5/PPP1Q1PP/R4RK1 b - - 3 15",
+   "said": "yet if black ghost king f6 white has a really sexy move really sexy move you don't have to take the queen yet what is that sexy move this this move will get you way too many dates castle will check depend on the night black has to block it with bishop f5"
+  },
+  {
+   "ply": 30,
+   "t": 760,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "rn1q1bnr/pp3Npp/2p2k2/5b2/8/2p5/PPP1Q1PP/R4RK1 w - - 4 16",
+   "said": "really sexy move really sexy move you don't have to take the queen yet what is that sexy move this this move will get you way too many dates castle will check depend on the night black has to block it with bishop f5 rook takes f5 this all plays itself rock"
+  },
+  {
+   "ply": 31,
+   "t": 762,
+   "line": [
+    "Rxf5+"
+   ],
+   "fen": "rn1q1bnr/pp3Npp/2p2k2/5R2/8/2p5/PPP1Q1PP/R5K1 b - - 0 16",
+   "said": "really sexy move you don't have to take the queen yet what is that sexy move this this move will get you way too many dates castle will check depend on the night black has to block it with bishop f5 rook takes f5 this all plays itself rock"
+  },
+  {
+   "ply": 32,
+   "t": 763.5,
+   "line": [
+    "Kxf5"
+   ],
+   "fen": "rn1q1bnr/pp3Npp/2p5/5k2/8/2p5/PPP1Q1PP/R5K1 w - - 0 17",
+   "said": "the queen yet what is that sexy move this this move will get you way too many dates castle will check depend on the night black has to block it with bishop f5 rook takes f5 this all plays itself rock f1"
+  },
+  {
+   "ply": 33,
+   "t": 765,
+   "line": [
+    "Rf1+"
+   ],
+   "fen": "rn1q1bnr/pp3Npp/2p5/5k2/8/2p5/PPP1Q1PP/5RK1 b - - 1 17",
+   "said": "what is that sexy move this this move will get you way too many dates castle will check depend on the night black has to block it with bishop f5 rook takes f5 this all plays itself rock f1 king g6 and checkmate is at hand after"
+  },
+  {
+   "ply": 34,
+   "t": 766.5,
+   "line": [
+    "Kg6"
+   ],
+   "fen": "rn1q1bnr/pp3Npp/2p3k1/8/8/2p5/PPP1Q1PP/5RK1 w - - 2 18",
+   "said": "will get you way too many dates castle will check depend on the night black has to block it with bishop f5 rook takes f5 this all plays itself rock f1 king g6 and checkmate is at hand after"
+  },
+  {
+   "ply": 35,
+   "t": 768,
+   "line": [
+    "Qg4+"
+   ],
+   "fen": "rn1q1bnr/pp3Npp/2p3k1/8/6Q1/2p5/PPP3PP/5RK1 b - - 3 18",
+   "said": "will get you way too many dates castle will check depend on the night black has to block it with bishop f5 rook takes f5 this all plays itself rock f1 king g6 and checkmate is at hand after queen g4"
+  },
+  {
+   "ply": 37,
+   "t": 773.5,
+   "line": [
+    "Qg5",
+    "Qxg5#"
+   ],
+   "fen": "rn3bnr/pp3Npp/2p3k1/6Q1/8/2p5/PPP3PP/5RK1 b - - 0 19",
+   "said": "rook takes f5 this all plays itself rock f1 king g6 and checkmate is at hand after queen g4 yeah this is mate that's a really sick line so black is forced to go king g6 and now"
+  },
+  {
+   "ply": 28,
+   "t": 777,
+   "line": [],
+   "fen": "rnbq1bnr/pp3Npp/2p2k2/8/8/2p5/PPP1Q1PP/R3K2R w KQ - 2 15",
+   "said": "king g6 and checkmate is at hand after queen g4 yeah this is mate that's a really sick line so black is forced to go king g6 and now comes an even cooler to me this is even cooler now you can take the queen that seems very natural and that is winning but it's not winning as obviously as"
+  },
+  {
+   "ply": 30,
+   "t": 787.5,
+   "line": [
+    "Nxd8",
+    "Kg6"
+   ],
+   "fen": "rnbN1bnr/pp4pp/2p3k1/8/8/2p5/PPP1Q1PP/R3K2R w KQ - 1 16",
+   "said": "yeah this is mate that's a really sick line so black is forced to go king g6 and now comes an even cooler to me this is even cooler now you can take the queen that seems very natural and that is winning but it's not winning as obviously as people may think because remember black has three pieces for the queen and if black brings all of his pieces out the king may become relatively safe so instead of taking the queen what else can white do here this move looks really bad you can take the rook now it looks bad because why would you take the rook when you can take the queen but the point is that the king has nowhere to go if it goes to h6 or g5 you simply return to f7 and win the queen if it goes to f6 we already know how white wins white castles bishop f5 is forced king has no other squares the fact that the queen cuts the king off is what kills black and then you basically do the same thing it's a slightly different checkmate after king g5 you do basically transpose into the main line queen g4 with checkmate you don't even have to take the queen it's yeah this is uh what i analyzed so this is really amazing now this is unlikely to happen"
+  },
+  {
+   "ply": 18,
+   "t": 840,
+   "line": [],
+   "fen": "rnbqkbnr/pp3ppp/2p5/8/2B2B2/2p2N2/PPP3PP/R2QK2R w KQkq - 0 10",
+   "said": "into the main line queen g4 with checkmate you don't even have to take the queen it's yeah this is uh what i analyzed so this is really amazing now this is unlikely to happen in all of your games but it's just one example of how tactical the vienna can"
+  },
+  {
+   "ply": 9,
+   "t": 844,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4P3/5p2/2N2N2/PPPP2PP/R1BQKB1R b KQkq - 2 5",
+   "said": "you don't even have to take the queen it's yeah this is uh what i analyzed so this is really amazing now this is unlikely to happen in all of your games but it's just one example of how tactical the vienna can get and the consequences you suffer if you're behind in development you're welcome so i hope everybody followed more or less the lens uh which this is why he takes f4 as a"
+  },
+  {
+   "ply": 5,
+   "t": 856,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 2 3",
+   "said": "get and the consequences you suffer if you're behind in development you're welcome so i hope everybody followed more or less the lens uh which this is why he takes f4 as a mistake the the best move is d5 the best move is"
+  },
+  {
+   "ply": 6,
+   "t": 860,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
+   "said": "behind in development you're welcome so i hope everybody followed more or less the lens uh which this is why he takes f4 as a mistake the the best move is d5 the best move is d5 um and that counter strikes in the center it's a pretty logical move right you meet a move on the flank with a move in the center and this is the theoretical"
+  },
+  {
+   "ply": 8,
+   "t": 870,
+   "line": [
+    "fxe5",
+    "Nxe4"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5",
+   "said": "d5 um and that counter strikes in the center it's a pretty logical move right you meet a move on the flank with a move in the center and this is the theoretical position where queen f3 has recently"
+  },
+  {
+   "ply": 9,
+   "t": 871.5,
+   "line": [
+    "Qf3"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N2Q2/PPPP2PP/R1B1KBNR b KQkq - 1 5",
+   "said": "d5 um and that counter strikes in the center it's a pretty logical move right you meet a move on the flank with a move in the center and this is the theoretical position where queen f3 has recently become uh the best move this is super interesting i think levi's met of course on this i don't want to get into the details but it's quite dangerous it's quite a dangerous line for black so black i've even faced it myself and i've lost a couple of games here with black i highly recommend the vienna for people who want this kind of stuff"
+  },
+  {
+   "ply": 5,
+   "t": 889.5,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 2 3",
+   "said": "details but it's quite dangerous it's quite a dangerous line for black so black i've even faced it myself and i've lost a couple of games here with black i highly recommend the vienna for people who want this kind of stuff okay so there is no really good way and technically this declines the gambit technically this is"
+  },
+  {
+   "ply": 6,
+   "t": 898,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
+   "said": "i highly recommend the vienna for people who want this kind of stuff okay so there is no really good way and technically this declines the gambit technically this is a counter gambit almost but material is equal so d6 is not"
+  },
+  {
+   "ply": 8,
+   "t": 902,
+   "line": [
+    "fxe5",
+    "Nxe4"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP3/4n3/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5",
+   "said": "okay so there is no really good way and technically this declines the gambit technically this is a counter gambit almost but material is equal so d6 is not"
+  },
+  {
+   "ply": 6,
+   "t": 905,
+   "line": [],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 4",
+   "said": "okay so there is no really good way and technically this declines the gambit technically this is a counter gambit almost but material is equal so d6 is not terrible but it's the precursor to playing very passively so knight c6 is fine bishop b5 this is all okay for him but i think he has to develop very quickly he's got to go bishop b7 and castle clearly black is worse here um from a just positional perspective but black's position is very solid here there's nothing terribly wrong with playing this all right and and how should white play here why does a couple of ways of going about this maybe it's time to take on e5 another good move is to talk the king on h1 so that these queen d4 check ideas i'm sure you've seen this move played in many types of positions it's kind of the same as going king b1 when you're castling long the vienna is not a no vienna is played by many grandmasters it's not unsound at all i mean black can equalize on the main line but white is not worse white is not worse in the main line even if black plays everything correctly what are the reasons why it is clearly better positionally well if you can compare the development right look at how passive black's bishops are white's bishop light squared bishop is developed to a good square knights are developed to good squares white's got more central control than black white's got these two puns white can bring a third pawn up it's just even visually it has to do with the fact that black is very passive black's pieces don't have a lot of potential energy and white's pieces have a lot all right so he plays a6 we play bishop c4 again why didn't we take on c6 takes takes f takes d takes knight takes this is a very bad move because we've castled black hasn't castled it should be clear to you guys that black is gonna get killed here i mean knight takes f7 for one thing looks pretty good and despite this check i think black is on the cusp of being losing another little side note there is no smothered mate when you've got a rook on f1 this is a very good way to defend against mother may because you can always sack the exchange in this position you're not actually attacking the exchange here because blackstroke is also hanging but that's the bottom line and but but but all of that is a moot point because queen d4 check wins the knight so that's a pretty big uh pretty pretty typical kind of blunder when you open the f file all right bishop c4 um it well gdd it's it's played by gm's it's played by jim but but yeah at the highest level everybody knows how to equalize it's not particularly testing at the highest level because everybody knows how to equalize but again white is not worse okay um so bishop e6 we decided to take the bishop i still think he should have gone bishop e7 and castled it wouldn't have been too late although now black is quite a bit worse so bishop c4 bishop b6 captures captures and again the positional approach would be to simply take and say yeah you've got these doubled pawns they're also isolated so we just go d3 bishop c5 king h1 but this is a little boring white is better undoubtedly white is better then you have a plan for example of getting your queen to g3 but we decided to play a little bit more adventurously knight to g5 now i think that black had a better way perhaps of defending this pawn there was knight knight to d4 which would have been quite interesting but our opponent played queen d7 we go f takes c5 and at this point knight takes c5 is i would say a decisive mistake because allowing this move to be played with tempo is is totally disastrous totally totally disastrous um but after dtak c5 i was calculating a very cool continuation rook takes f6 now the idea is to remove the defender from the h5 square this line is very simple to calculate if king to d8 you give a four can you win the rook if king to e7 who can spot the winning continuation and it's not just the first move you need to play the first move correctly and the second move is very important not to fall for the temptation look carefully guys everybody should be able to see this move queen f7 but this is the tricky moment a lot of you guys are falling for the temptation to take i know it don't make any assumptions about what the correct move looks like king c8 and black is out of the woods the knight check looks fancy but it doesn't do anything the move you have to play is this check queen f6 this does something this forks the rook and the king and white wins the rook and wipes up a piece all right queen takes f6 very important the move all doesn't always look good but this is the move which accomplishes the most but what was i calculating what did i spend time calculating this took me a couple of seconds what about king d6 oh you're right yeah i mean king d6 is possible but after queen takes f6 anyway there's going to be too many threats you're right that should be considered but knight f7 is going to come and the king is going to get hunted down all right oh my goodness there's a cool line there yeah i miss king d6 but i think white is winning here anyway but great great job indicating this you know what would be a nice movers b3 could be cool too preparing bishop a3 and black can't really take because of the fork that's kind of cool anyways um so what was i looking at what was i looking at what was i worried about again when you play the vienna you always have to watch for stuff happening on this diagonal because that's that's the price you pay to get such a tactical position bishop c5 check is an intermediate move which can be potentially very very nasty well queen d4 doesn't do much queen d4 you can play rook f2 queen d4 you can play rook f2 and you're fine but you can even go king h1 and i don't think this is any weaker because the queen is now away from d7 but um rook f2 check just keeps the extra piece and after bishop c5 white has to be a little bit careful but i don't think white's in any trouble for one thing you could play the move queen to f3 and if you count up the material after black takes everything white's got two pieces for a rook white's much much better here that's a pretty significant material plus but black can play bishop c5 first and if king h1 then g takes f6 and if queen h5 the king now has this little square on f8 uh where it can go to and it seems to be relatively safe but there is the move in this position rook f2 anyway and that's a hard move to spot it looks very scary right you have to get your king to f2 but i couldn't find anything any good follow-up for black or for cafe travel i could even castle with check just drop your knife back to f3 if queen d4 check the king can migrate to g3 which i think is a very safe square there's just no stuff on the king side that black could use to attack the game as soon as white plays d3 and gets the bishop out this is called consolidating white's going to be totally fine two pieces for rook white is better all right but in such situations you've got to look for the intermediate mode it's always easy for me to say but practice telling yourself that you're going to see more of these kinds of moves just like in the background after knight takes c5 d4 and i26 and now d5 d5 securing the e6 square for the night this is game over um e5 96 yeah this is totally crushing he's got no moves if he moves the bishop out the knight takes g7 but the way it happened yeah this and a fork um just last thing after king f7 96 who can spot the fastest way to win the game what's the fastest way to follow up from here and force uh just a complete catastrophe boom boom simple clearance of the defender removal the defender check check i won the rook yeah and the game is over red or over as mr wrench says okay um any questions what's the meaning of life there we go in the mean line vienna with queen f6 yeah knight c6 is the main line yeah the beginning of the vienna e45 knight c3"
+  },
+  {
+   "ply": 3,
+   "t": 1419,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+   "said": "what's the meaning of life there we go in the mean line vienna with queen f6 yeah knight c6 is the main line yeah the beginning of the vienna e45 knight c3 so in contrast to the kings gamble where you play for immediately you go knight at night c3 for don't go knight f3"
+  },
+  {
+   "ply": 2,
+   "t": 1422.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "what's the meaning of life there we go in the mean line vienna with queen f6 yeah knight c6 is the main line yeah the beginning of the vienna e45 knight c3 so in contrast to the kings gamble where you play for immediately you go knight at night c3 for don't go knight f3 that blocks the f1 knight f6 and then f4"
+  },
+  {
+   "ply": 3,
+   "t": 1426,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "said": "yeah the beginning of the vienna e45 knight c3 so in contrast to the kings gamble where you play for immediately you go knight at night c3 for don't go knight f3 that blocks the f1 knight f6 and then f4"
+  },
+  {
+   "ply": 5,
+   "t": 1427.5,
+   "line": [
+    "Nf6",
+    "f4"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3",
+   "said": "yeah the beginning of the vienna e45 knight c3 so in contrast to the kings gamble where you play for immediately you go knight at night c3 for don't go knight f3 that blocks the f1 knight f6 and then f4 [Music] you"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 2,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "options": [
+    {
+     "san": "Nc3",
+     "t": 44,
+     "continuation": "Nc3",
+     "said": "what should we play i don't know let's play okay let's play vn again but let's play a vienna gamble let's go knight c3 let's play avayana gambit and f4 that's my volley on the gambit because most people okay d6 now this is a very common move at this level it's not terrible but it's very passive it's very passive um it's a typical way of declining the gambit it blocks in the bishop and it essentially gives us all that we want now in the vienna your goal is for black to take the pawn what does it do why are we sacrificing the pawn well there are two main reasons the first is that we of course get uh a bigger control of the center with d4 the second is that we open up the f file and as i've often stated opening up the f file is a double-sided sword on the one hand it can be good for black because well it's a weakness particularly of white castle short but it can also be a great strength because white's rook on f1 will have essentially a wide open avenue to attacking blacks upon an f7 if that makes sense"
+    },
+    {
+     "san": "f4",
+     "t": 548.5,
+     "continuation": "f4 Nf6 Nc3",
+     "said": "so that was a nice game and the vienna is one of the best openings bar none for players of this level 1600 1700. so the bottom line in the vienna is that e takes f4 is a big mistake a lot of people take the pawn thinking that this is a king's gambit but the difference between the king's gamut and the vienna is revealed in the fact that the knights are developed which is in white's favor because the move e5 becomes possible chasing away the knight in fact the knight has nowhere to go it has to go back to g8 which is a huge undeveloper pieces like this is not good you go knight f3 don't go d4 don't allow this nasty check on h4 so you go knight f3 then d4 you've got a big lead in development you're probably going to win this pawn back i've got a couple of students who play this black is in massive trouble here now there's a couple of beautiful lines that stem from this position one is well black often plays d6 right and you play d4 to support the pawn after d takes c5 i've analyzed this very deeply with a computer and it may appear that white is in a little bit of trouble here because if you take with a knight what move is possible i just want to hammer this into people's heads"
+    }
+   ]
+  },
+  {
+   "ply": 5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4"
+   ],
+   "options": [
+    {
+     "san": "d6",
+     "t": 55,
+     "continuation": "d6",
+     "said": "okay let's play vn again but let's play a vienna gamble let's go knight c3 let's play avayana gambit and f4 that's my volley on the gambit because most people okay d6 now this is a very common move at this level it's not terrible but it's very passive it's very passive um it's a typical way of declining the gambit it blocks in the bishop and it essentially gives us all that we want now in the vienna your goal is for black to take the pawn what does it do why are we sacrificing the pawn well there are two main reasons the first is that we of course get uh a bigger control of the center with d4 the second is that we open up the f file and as i've often stated opening up the f file is a double-sided sword on the one hand it can be good for black because well it's a weakness particularly of white castle short but it can also be a great strength because white's rook on f1 will have essentially a wide open avenue to attacking blacks upon an f7 if that makes sense so how should we play here well there's nothing particularly special that we should do we should just develop our pieces and try to get black to take the pun yeah with the vienna you play knight c3 i'll talk about that a little bit after"
+    },
+    {
+     "san": "exf4",
+     "t": 551,
+     "continuation": "exf4",
+     "said": "so that was a nice game and the vienna is one of the best openings bar none for players of this level 1600 1700. so the bottom line in the vienna is that e takes f4 is a big mistake a lot of people take the pawn thinking that this is a king's gambit but the difference between the king's gamut and the vienna is revealed in the fact that the knights are developed which is in white's favor because the move e5 becomes possible chasing away the knight in fact the knight has nowhere to go it has to go back to g8 which is a huge undeveloper pieces like this is not good you go knight f3 don't go d4 don't allow this nasty check on h4 so you go knight f3 then d4 you've got a big lead in development you're probably going to win this pawn back i've got a couple of students who play this black is in massive trouble here now there's a couple of beautiful lines that stem from this position one is well black often plays d6 right and you play d4 to support the pawn after d takes c5 i've analyzed this very deeply with a computer and it may appear that white is in a little bit of trouble here because if you take with a knight what move is possible i just want to hammer this into people's heads this is a big no-no in such positions"
+    },
+    {
+     "san": "d5",
+     "t": 860,
+     "continuation": "d5",
+     "said": "behind in development you're welcome so i hope everybody followed more or less the lens uh which this is why he takes f4 as a mistake the the best move is d5 the best move is d5 um and that counter strikes in the center it's a pretty logical move right you meet a move on the flank with a move in the center and this is the theoretical position where queen f3 has recently become uh the best move this is super interesting i think levi's met of course on this i don't want to get into the details but it's quite dangerous it's quite a dangerous line for black so black i've even faced it myself and i've lost a couple of games here with black i highly recommend the vienna for people who want this kind of stuff okay so there is no really good way and technically this declines the gambit technically this is a counter gambit almost but material is equal so d6 is not terrible but it's the precursor to playing very passively so knight c6 is fine bishop b5 this is all okay for him but i think he has to develop very quickly he's got to go bishop b7 and castle clearly black is worse here um from a"
+    }
+   ]
+  },
+  {
+   "ply": 12,
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/3P1p2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "e4",
+    "e5",
+    "f4",
+    "Nf6",
+    "Nc3",
+    "exf4",
+    "e5",
+    "Ng8",
+    "Nf3",
+    "d6",
+    "d4",
+    "dxe5"
+   ],
+   "options": [
+    {
+     "san": "Nxe5",
+     "t": 605.5,
+     "continuation": "Nxe5",
+     "said": "pawn after d takes c5 i've analyzed this very deeply with a computer and it may appear that white is in a little bit of trouble here because if you take with a knight what move is possible i just want to hammer this into people's heads this is a big no-no in such positions because it allows but h4 check why is this a problem because you have to move your king if you go g3 then there's f takes g3 the pawn on f4 is a very nasty one but if you play d e then you allow the queen trading you certainly don't want to allow the queen trade the whole point of a development advantage is to well you don't want the queen trade so you give a check on b5 you develop a tempo but black simply has the move c6 so what are we doing here but the funny thing is you just play bishop c4 you have three pieces developed black is none and you don't give a damn about any of the pawns e takes d4 um and at this point wait just let me remember yeah at this point you play bishop takes f4 that's the idea okay now you're currently two pawns down currently two pawns down what do you have in a turn for them you've developed all four pieces and black's developed nothing now what are we doing here why"
+    },
+    {
+     "san": "Bb5+",
+     "t": 631.5,
+     "continuation": "Bb5+",
+     "said": "but if you play d e then you allow the queen trading you certainly don't want to allow the queen trade the whole point of a development advantage is to well you don't want the queen trade so you give a check on b5 you develop a tempo but black simply has the move c6 so what are we doing here but the funny thing is you just play bishop c4 you have three pieces developed black is none and you don't give a damn about any of the pawns e takes d4 um and at this point wait just let me remember yeah at this point you play bishop takes f4 that's the idea okay now you're currently two pawns down currently two pawns down what do you have in a turn for them you've developed all four pieces and black's developed nothing now what are we doing here why are we giving away the knight what's the idea what's the idea here and this is an idea which we've had on the speed run many times the king in contact with the queen boom goes the dynamite but it's not over yet black has the move king e7 he doesn't have to take the bishop and drop the queen now we sacrifice another piece we give a check on e2 this forces the king to take the bishop but now the king is literally toast"
+    }
+   ]
+  },
+  {
+   "ply": 13,
+   "fen": "rnbqkbnr/ppp2ppp/8/4N3/3P1p2/2N5/PPP3PP/R1BQKB1R b KQkq - 0 7",
+   "line": [
+    "e4",
+    "e5",
+    "f4",
+    "Nf6",
+    "Nc3",
+    "exf4",
+    "e5",
+    "Ng8",
+    "Nf3",
+    "d6",
+    "d4",
+    "dxe5",
+    "Nxe5"
+   ],
+   "options": [
+    {
+     "san": "Qh4+",
+     "t": 614.5,
+     "continuation": "Qh4+",
+     "said": "little bit of trouble here because if you take with a knight what move is possible i just want to hammer this into people's heads this is a big no-no in such positions because it allows but h4 check why is this a problem because you have to move your king if you go g3 then there's f takes g3 the pawn on f4 is a very nasty one but if you play d e then you allow the queen trading you certainly don't want to allow the queen trade the whole point of a development advantage is to well you don't want the queen trade so you give a check on b5 you develop a tempo but black simply has the move c6 so what are we doing here but the funny thing is you just play bishop c4 you have three pieces developed black is none and you don't give a damn about any of the pawns e takes d4 um and at this point wait just let me remember yeah at this point you play bishop takes f4 that's the idea okay now you're currently two pawns down currently two pawns down what do you have in a turn for them you've developed all four pieces and black's developed nothing now what are we doing here why are we giving away the knight what's the idea what's the idea here and this is an idea which we've had on the speed run many times the king in contact with the queen boom"
+    },
+    {
+     "san": "Qxd4",
+     "t": 624.5,
+     "continuation": "Qxd4 Qf3 Qd1+",
+     "said": "because it allows but h4 check why is this a problem because you have to move your king if you go g3 then there's f takes g3 the pawn on f4 is a very nasty one but if you play d e then you allow the queen trading you certainly don't want to allow the queen trade the whole point of a development advantage is to well you don't want the queen trade so you give a check on b5 you develop a tempo but black simply has the move c6 so what are we doing here but the funny thing is you just play bishop c4 you have three pieces developed black is none and you don't give a damn about any of the pawns e takes d4 um and at this point wait just let me remember yeah at this point you play bishop takes f4 that's the idea okay now you're currently two pawns down currently two pawns down what do you have in a turn for them you've developed all four pieces and black's developed nothing now what are we doing here why are we giving away the knight what's the idea what's the idea here and this is an idea which we've had on the speed run many times the king in contact with the queen boom goes the dynamite but it's not over yet black has the move king e7 he doesn't have to take the bishop and drop the queen now we sacrifice another piece we give a"
+    }
+   ]
+  },
+  {
+   "ply": 23,
+   "fen": "rnbq1bnr/pp3kpp/2p5/4N3/5B2/2p5/PPP1Q1PP/R3K2R b KQ - 1 12",
+   "line": [
+    "e4",
+    "e5",
+    "f4",
+    "Nf6",
+    "Nc3",
+    "exf4",
+    "e5",
+    "Ng8",
+    "Nf3",
+    "d6",
+    "d4",
+    "dxe5",
+    "Bb5+",
+    "c6",
+    "Bc4",
+    "exd4",
+    "Bxf4",
+    "dxc3",
+    "Bxf7+",
+    "Ke7",
+    "Qe2+",
+    "Kxf7",
+    "Ne5+"
+   ],
+   "options": [
+    {
+     "san": "Ke8",
+     "t": 713,
+     "continuation": "Ke8",
+     "said": "remember yeah so the best move here is knight to e5 check centralizing the knight if the king goes back to ea then it walks right into a discovered check which wins the queen all right this is a typical discovered check wins the queen black will have some pieces for the queen but because black's king is so exposed he's still losing so the king can go to e6 and you still have a discovery all right so king f6 seems to be the only way to avoid losing a queen immediately but what tactic does white have in this position and this is another very common pattern bishop g5 distracting knight f7 check winning the queen but you don't even take the queen yet if black ghost king f6 white has a really sexy move really sexy move you don't have to take the queen yet what is that sexy move this this move will get you way too many dates castle will check depend on the night black has to block it with bishop f5 rook takes f5 this all plays itself rock f1 king g6 and checkmate is at hand after queen g4"
+    },
+    {
+     "san": "Ke6",
+     "t": 726,
+     "continuation": "Ke6 Nxc6+",
+     "said": "check which wins the queen all right this is a typical discovered check wins the queen black will have some pieces for the queen but because black's king is so exposed he's still losing so the king can go to e6 and you still have a discovery all right so king f6 seems to be the only way to avoid losing a queen immediately but what tactic does white have in this position and this is another very common pattern bishop g5 distracting knight f7 check winning the queen but you don't even take the queen yet if black ghost king f6 white has a really sexy move really sexy move you don't have to take the queen yet what is that sexy move this this move will get you way too many dates castle will check depend on the night black has to block it with bishop f5 rook takes f5 this all plays itself rock f1 king g6 and checkmate is at hand after queen g4 yeah this is mate that's a really sick line so black is forced to go king g6 and now comes an even cooler to me this is even cooler now you can take the queen that seems very natural and that is winning"
+    },
+    {
+     "san": "Kf6",
+     "t": 729.5,
+     "continuation": "Kf6",
+     "said": "check wins the queen black will have some pieces for the queen but because black's king is so exposed he's still losing so the king can go to e6 and you still have a discovery all right so king f6 seems to be the only way to avoid losing a queen immediately but what tactic does white have in this position and this is another very common pattern bishop g5 distracting knight f7 check winning the queen but you don't even take the queen yet if black ghost king f6 white has a really sexy move really sexy move you don't have to take the queen yet what is that sexy move this this move will get you way too many dates castle will check depend on the night black has to block it with bishop f5 rook takes f5 this all plays itself rock f1 king g6 and checkmate is at hand after queen g4 yeah this is mate that's a really sick line so black is forced to go king g6 and now comes an even cooler to me this is even cooler now you can take the queen that seems very natural and that is winning but it's not winning as obviously as people may think because remember black"
+    }
+   ]
+  },
+  {
+   "ply": 28,
+   "fen": "rnbq1bnr/pp3Npp/2p2k2/8/8/2p5/PPP1Q1PP/R3K2R w KQ - 2 15",
+   "line": [
+    "e4",
+    "e5",
+    "f4",
+    "Nf6",
+    "Nc3",
+    "exf4",
+    "e5",
+    "Ng8",
+    "Nf3",
+    "d6",
+    "d4",
+    "dxe5",
+    "Bb5+",
+    "c6",
+    "Bc4",
+    "exd4",
+    "Bxf4",
+    "dxc3",
+    "Bxf7+",
+    "Ke7",
+    "Qe2+",
+    "Kxf7",
+    "Ne5+",
+    "Kf6",
+    "Bg5+",
+    "Kxg5",
+    "Nf7+",
+    "Kf6"
+   ],
+   "options": [
+    {
+     "san": "O-O+",
+     "t": 758,
+     "continuation": "O-O+",
+     "said": "yet if black ghost king f6 white has a really sexy move really sexy move you don't have to take the queen yet what is that sexy move this this move will get you way too many dates castle will check depend on the night black has to block it with bishop f5 rook takes f5 this all plays itself rock f1 king g6 and checkmate is at hand after queen g4 yeah this is mate that's a really sick line so black is forced to go king g6 and now comes an even cooler to me this is even cooler now you can take the queen that seems very natural and that is winning but it's not winning as obviously as people may think because remember black has three pieces for the queen and if black brings all of his pieces out the king may become relatively safe so instead of taking the queen what else can white do here this move looks really bad you can take the rook now it looks bad because why would you take the rook when you can take the queen but the point is that the king has nowhere to go if it goes to h6 or g5 you simply return to f7 and win the queen if it goes to f6 we already know how white wins white castles bishop f5"
+    },
+    {
+     "san": "Nxd8",
+     "t": 787.5,
+     "continuation": "Nxd8 Kg6",
+     "said": "yeah this is mate that's a really sick line so black is forced to go king g6 and now comes an even cooler to me this is even cooler now you can take the queen that seems very natural and that is winning but it's not winning as obviously as people may think because remember black has three pieces for the queen and if black brings all of his pieces out the king may become relatively safe so instead of taking the queen what else can white do here this move looks really bad you can take the rook now it looks bad because why would you take the rook when you can take the queen but the point is that the king has nowhere to go if it goes to h6 or g5 you simply return to f7 and win the queen if it goes to f6 we already know how white wins white castles bishop f5 is forced king has no other squares the fact that the queen cuts the king off is what kills black and then you basically do the same thing it's a slightly different checkmate after king g5 you do basically transpose into the main line queen g4 with checkmate you don't even have to take the queen it's yeah this is uh what i analyzed so this is really amazing now this is unlikely to happen in all of your games but it's just one example of how tactical the vienna can get and the consequences you suffer if you're"
+    }
+   ]
+  },
+  {
+   "ply": 29,
+   "fen": "r3kb1r/1p1q2pp/p2pNnn1/3Np1B1/4P3/8/PPP3PP/R2Q1RK1 b kq - 0 15",
+   "line": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4",
+    "d6",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "Bd7",
+    "O-O",
+    "a6",
+    "Bc4",
+    "Be6",
+    "Bxe6",
+    "fxe6",
+    "Ng5",
+    "Qd7",
+    "fxe5",
+    "Nxe5",
+    "d4",
+    "Ng6",
+    "d5",
+    "e5",
+    "Ne6",
+    "c6",
+    "Bg5",
+    "cxd5",
+    "Nxd5"
+   ],
+   "options": [
+    {
+     "san": "Qxe6",
+     "t": 509.5,
+     "continuation": "Qxe6 Nc7+",
+     "said": "other knight but the best move is knight takes d5 he takes on e6 not hard to establish that we fork the queen and the king which is what's going to happen and i'll show what have happened yeah he resigns if he would have taken our knight then in contrast with the immediate e takes d5 in contrast with this the f file is open the f file being open is obviously in our favor he's totally paralyzed we have a very simple plan of victory we can go queen h5 or queen f3 i mean there's just every anything would win here he's he can resign all right so that was a nice game and the vienna is one of the best openings bar none for players of this level 1600 1700. so the bottom line in the vienna is that e takes f4 is a big mistake a lot of people take the pawn thinking that this is a king's gambit but the difference between the king's gamut and the vienna is revealed in the fact that the knights are developed which is in white's favor because the move e5 becomes possible chasing away the knight in fact the knight has nowhere to go it has to go back to g8 which is a huge undeveloper pieces like this is not good"
+    },
+    {
+     "san": "Nxd5",
+     "t": 516,
+     "continuation": "Nxd5 exd5",
+     "said": "takes on e6 not hard to establish that we fork the queen and the king which is what's going to happen and i'll show what have happened yeah he resigns if he would have taken our knight then in contrast with the immediate e takes d5 in contrast with this the f file is open the f file being open is obviously in our favor he's totally paralyzed we have a very simple plan of victory we can go queen h5 or queen f3 i mean there's just every anything would win here he's he can resign all right so that was a nice game and the vienna is one of the best openings bar none for players of this level 1600 1700. so the bottom line in the vienna is that e takes f4 is a big mistake a lot of people take the pawn thinking that this is a king's gambit but the difference between the king's gamut and the vienna is revealed in the fact that the knights are developed which is in white's favor because the move e5 becomes possible chasing away the knight in fact the knight has nowhere to go it has to go back to g8 which is a huge undeveloper pieces like this is not good you go knight f3 don't go d4 don't allow this nasty check on h4 so you go knight f3 then d4 you've got a"
+    }
+   ]
+  }
+ ]
+}

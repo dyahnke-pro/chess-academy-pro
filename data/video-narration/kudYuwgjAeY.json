@@ -1,0 +1,576 @@
+{
+ "videoId": "kudYuwgjAeY",
+ "title": "Master Class | Nimzo-Indian Defence | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 10.5,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "Okay, we're playing black against Akshay 2010. 1210. And he goes D4. Now, you guys want to see a King's Indian. Let's go knight F6 and then decide what we're going to do."
+  },
+  {
+   "ply": 3,
+   "t": 14,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "Okay, we're playing black against Akshay 2010. 1210. And he goes D4. Now, you guys want to see a King's Indian. Let's go knight F6 and then decide what we're going to do. We can do a King's Indian. [sighs] We can do a Nimzo Indian. Now, a Nimzo Indian is an opening that flies under the radar a lot of the time. The Benoni, Grunfeld, there's a lot of good openings that I could expose you guys to. Uh even the Budapest is good. But, let's play positionally. Let's play"
+  },
+  {
+   "ply": 4,
+   "t": 37,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "The Benoni, Grunfeld, there's a lot of good openings that I could expose you guys to. Uh even the Budapest is good. But, let's play positionally. Let's play a Nimzo Indian E6. And hopefully he goes knight C3. By the way, uh one misconception, knight C3 bishop B4 is the Nimzo Indian."
+  },
+  {
+   "ply": 5,
+   "t": 54,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "And hopefully he goes knight C3. By the way, uh one misconception, knight C3 bishop B4 is the Nimzo Indian. Uh any other move does not technically allow us to play the Nimzo Indian per se. Uh and that's why we'll have to play the Queen's Indian setup or the Bogo Indian. He goes E3, which is very passive. It's not bad. I mean, it's a solid move, right? It protects the pawn. But, it blocks in the bishop. And one good companion setup to the Nimzo Indian is the Queen's Indian setup. The Queen's Indian setup being the move B6. The actual Queen's Indian is knight F3 B6. This is an even better version of it. Now, why might you ask are should we not give a check on B4? Well, the thing to understand is that bishop B4 is most effective in response to knight C3. If we give a check here, it's not bad, but he can go simply go bishop D2. And then we don't have the same possibility of capturing that knight on C3 and ruining his structure. So, instead I propose the move B6. It"
+  },
+  {
+   "ply": 6,
+   "t": 104.5,
+   "line": [
+    "b6"
+   ],
+   "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/4P3/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "C3. If we give a check here, it's not bad, but he can go simply go bishop D2. And then we don't have the same possibility of capturing that knight on C3 and ruining his structure. So, instead I propose the move B6. It would also been possible to go D5, transposing to a favorable Queen's"
+  },
+  {
+   "ply": 7,
+   "t": 108.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/4PN2/PP3PPP/RNBQKB1R b KQkq - 1 4",
+   "said": "And then we don't have the same possibility of capturing that knight on C3 and ruining his structure. So, instead I propose the move B6. It would also been possible to go D5, transposing to a favorable Queen's Gambit Declined. Fianchettoing the bishop."
+  },
+  {
+   "ply": 8,
+   "t": 111.5,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "rn1qkb1r/pbpp1ppp/1p2pn2/8/2PP4/4PN2/PP3PPP/RNBQKB1R w KQkq - 2 5",
+   "said": "possibility of capturing that knight on C3 and ruining his structure. So, instead I propose the move B6. It would also been possible to go D5, transposing to a favorable Queen's Gambit Declined. Fianchettoing the bishop. And"
+  },
+  {
+   "ply": 9,
+   "t": 114.5,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rn1qkb1r/pbpp1ppp/1p2pn2/8/2PP4/4PN2/PP2BPPP/RNBQK2R b KQkq - 3 5",
+   "said": "So, instead I propose the move B6. It would also been possible to go D5, transposing to a favorable Queen's Gambit Declined. Fianchettoing the bishop. And look at the nice control we over the e4 square. Now, how should we proceed uh developmentally? Nothing particularly crazy here. We should control the center a little bit with pawns, the move being d5. And I think d5 is a great opportunity to talk about what I would call the uh bishop as an extension of a pawn. Or sorry, the other way around. Pawn is an extension of the bishop. The move d5 might great on uh it might be a little bit of an eyesore for some people. Right, Red Dragon and Reggae Speedway, thank you for the subs. Because you look at this move and you say, \"Well, doesn't it block in the bishop, doesn't it?\" Uh counter counter act the whole point of a bishop b7. Well, it does from the point of view of the that it restricts the bishop temporarily. But if you think about what the overall"
+  },
+  {
+   "ply": 10,
+   "t": 167.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rn1qkb1r/pbp2ppp/1p2pn2/3p4/2PP4/4PN2/PP2BPPP/RNBQK2R w KQkq - 0 6",
+   "said": "bishop, doesn't it?\" Uh counter counter act the whole point of a bishop b7. Well, it does from the point of view of the that it restricts the bishop temporarily. But if you think about what the overall idea is, which is to control central"
+  },
+  {
+   "ply": 11,
+   "t": 170,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1qkb1r/pbp2ppp/1p2pn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 b kq - 1 6",
+   "said": "act the whole point of a bishop b7. Well, it does from the point of view of the that it restricts the bishop temporarily. But if you think about what the overall idea is, which is to control central squares, the bishop acts, and this is what I mean, the pawn acts simply as an extension of the bishop. If we put something on e4 later, and that thing on e4 is captured, let's say we put a knight, and then we recapture with a pawn, you guys should see that the bishop will then be defending that pawn. In addition, we obviously can take on c4 and reopen the diagonal. In fact, that would be one of the best moves here. But, uh let's not rush with that. Let's complete our development. Where should this bishop go? What do you guys think? C5 is possible, but not strictly necessary. Bishop d6 would be"
+  },
+  {
+   "ply": 12,
+   "t": 212.5,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "rn1qk2r/pbp2ppp/1p1bpn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 w kq - 2 7",
+   "said": "should this bishop go? What do you guys think? C5 is possible, but not strictly necessary. Bishop d6 would be beautiful square. And now our bishops are aimed at white's king. So, let's make a mental note to ourself to check various tactics once we start developing."
+  },
+  {
+   "ply": 13,
+   "t": 222.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rn1qk2r/pbp2ppp/1p1bpn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 b kq - 3 7",
+   "said": "Bishop d6 would be beautiful square. And now our bishops are aimed at white's king. So, let's make a mental note to ourself to check various tactics once we start developing. Okay. So, let's castle."
+  },
+  {
+   "ply": 14,
+   "t": 225,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 4 8",
+   "said": "are aimed at white's king. So, let's make a mental note to ourself to check various tactics once we start developing. Okay. So, let's castle."
+  },
+  {
+   "ply": 15,
+   "t": 229,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3P4/3P4/2N1PN2/PP2BPPP/R1BQ1RK1 b - - 0 8",
+   "said": "make a mental note to ourself to check various tactics once we start developing. Okay. So, let's castle."
+  },
+  {
+   "ply": 16,
+   "t": 230,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rn1q1rk1/pbp2ppp/1p1b1n2/3p4/3P4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 0 9",
+   "said": "various tactics once we start developing. Okay. So, let's castle. Now we've got very nice central control here."
+  },
+  {
+   "ply": 17,
+   "t": 240,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rn1q1rk1/pbp2ppp/1p1b1n2/3p4/3P4/2NBPN2/PP3PPP/R1BQ1RK1 b - - 1 9",
+   "said": "Now we've got very nice central control here. Bishop to D3. So, ideas? Well, maybe he's preparing E4, but that's not a threat here because we've got 1 2 3 defenders on the square and only two attackers. Now, how should we position our pieces here? Uh this knight on B8 should not go on C6. Uh that's a big no-no because it blocks in the C pawn as you guys know, and it blocks the bishop even further. It should definitely go to B7 uh to D7."
+  },
+  {
+   "ply": 18,
+   "t": 266.5,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r2q1rk1/pbpn1ppp/1p1b1n2/3p4/3P4/2NBPN2/PP3PPP/R1BQ1RK1 w - - 2 10",
+   "said": "Uh this knight on B8 should not go on C6. Uh that's a big no-no because it blocks in the C pawn as you guys know, and it blocks the bishop even further. It should definitely go to B7 uh to D7. Now, in such situations also the move A6 is often very effective at stopping potential knight B5 ideas. Knight B5 is not dangerous here because the bishop can drop to E7, then we go A6 and it comes back to D6. But,"
+  },
+  {
+   "ply": 19,
+   "t": 287,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r2q1rk1/pbpn1ppp/1p1b1n2/3p4/3P4/2NBPN2/PP3PPP/R1BQR1K1 b - - 3 10",
+   "said": "potential knight B5 ideas. Knight B5 is not dangerous here because the bishop can drop to E7, then we go A6 and it comes back to D6. But, uh later on uh for example, if white's queen is on C2, knight B5 becomes a much more dangerous idea because if the bishop uh drops to E7, then C7 might fall. Now, we we could go A6, but let's think for a second about what our opponent wants. Our opponent perhaps wants to play E4 opening up the center. That's not such a dangerous idea, but I don't really want to allow all of these trades. I really don't. So, let's start with the move rook E8 expand"
+  },
+  {
+   "ply": 20,
+   "t": 317.5,
+   "line": [
+    "Re8"
+   ],
+   "fen": "r2qr1k1/pbpn1ppp/1p1b1n2/3p4/3P4/2NBPN2/PP3PPP/R1BQR1K1 w - - 4 11",
+   "said": "wants to play E4 opening up the center. That's not such a dangerous idea, but I don't really want to allow all of these trades. I really don't. So, let's start with the move rook E8 expand or uh increasing our uh clamp on the E4 square discouraging white from going E4 just to make it difficult for white to to to breathe. Hope this is all making sense so far. I I realize this is a position which may be unfamiliar to a lot of you, and that's precisely that's a good thing. You know, hopefully when you get exposed to these positions, you see that the logic isn't all that crazy. He goes queen C2. Good good uh good play by our opponent. Now, as you guys can see, knight B5 becomes a serious positional threat because it would necessitate us giving up the bishop, but we have a way to deal with it, and we don't have to play A6. We have a more active move, which some of you guys have been suggesting for a long time now. What am I talking about here? This is a move which not only takes the sting out of knight B5, but also um increases our, you know, turns up the temperature dial on the center. We are ready to play C5 now that everything is developed. This is a good time to play C5. Knight B5, we can just drop the bishop back to B8. That's what I love about such moves. Uh it's the fact that it creates this escape square for the bishop, and we don't even move the bishop from the sexy diagonal that it's on. Now, obviously, we want to take with the pawn just to keep the integrity of our of our central pawns, and he's he shouldn't have done that. Now, we have D4 ideas, which may come with devastating effect, opening up this bishop. Potential energy, ladies and gentlemen. This is why it's such an important concept. Potential energy of the bishop is super high. It might still seem pretty lame, but it could win us the game. In fact, it probably will. Mhm. All right, guys. The tactics, the potential tactics in this position are through the roof. But, let's be calm. Let's be methodical. What should we do? Now, what should we consider? What's the first move we should consider? Well, as I just indicated, we should definitely consider that Queen C7 is a good move, generally speaking, but it does fall into knight B5, picking off this important bishop. We should definitely consider the move D4. Now, let's calculate. D4 E takes D4. Okay. So, D4 E takes D4. What do we notice about the position as a result? Well, now the rooks are in a standoff. Uh white's rook is defended by the knight. So, one thing that comes to mind is play d4 e takes d4 and now what move logically stems from our observation that the rook is defended by the knight? Well, bishop takes f3. Okay, so if you're following the line d4 takes bishop takes f3. If he takes the bishop, what do we do in that position? And everybody can visualize this. That's my point. Well, well, that drops the rook. So, he has to take our rook, but what happens then? What do we gain from that? And we're going to play this. We can play queen takes e8 and occupy the open file and then give him a pretty nasty looking check on e1. So, that would be one way of playing. That That doesn't end That's not mate because he's going to have the king's going to have g2. Remember that when you take the knight, he takes gf. That does create a a little loophole for the So, I wouldn't rush to do that. I would consider the other candidate moves, perhaps trying to find something even more convincing. And I'm actually looking right now. Thank you, butchutato. Yeah, the space opening up is important to notice for sure. Unacceptable, Sky. Get out of the stream. Okay. Thank you, tuppy uh t4bioca. Lamo, thank you so much. [laughter] Appreciate it, man. Daniel the human, he's so funny. But I have something crazy to tell you, folks. I propose that we play a move that's perhaps if very few of you are considering because it's so anticlimactic. Uh and yet at a very high level, at a grandmaster level, such moves uh are often Well, first we're going to take the rook. And I'll explain everything after it because we're low on time. I want to play it play this a little bit faster than simply c takes d4. Sometimes the simplest uh continuation can be the strongest because it's the easiest to evaluate and it keeps all of the plusses of the position. Think about it this way. When you have all of these active pieces, you're looking for ways to play, you have all of this potential energy and you're transferring into kinetic energy by taking on f3 and doing all of this stuff. You want to make sure that you're not cashing in too soon. Here, we're keeping all of our pieces as active as possible because what I'm going to try to find is some sort of a knockout blow. I wasn't too satisfied by taking on f3. I think that was more complicated than it looked. What I'm trying to see here, can we straight away do something devastating? Let's start with bringing our rook into the game with rook to c8. The Greek gift doesn't work, or maybe it does actually. We'll see. Let Let's start with this man. I don't think there's a downside to this. Now we need to consider the Greek gift. So, takes, takes, knight g4, queen h4. Bishop f4 Okay, so let's calculate. Takes, takes, check. Let's say he drops back. Queen h4. Bishop f4 defending uh the h2 square. Do we have anything in that position, folks? Visualize, visualize, visualize. We do. Takes, takes, knight g4, king g1, queen takes f2. That pawn on f2 is undefended because the knight on e2 blocks the queen queen's defense of it. So, this is complicated. I have a sense that perhaps white has some sort of reputation here, but it's a prac- good practical choice, I think. With full due respect at a 1400 level, it's going to be tremendously difficult for somebody to refute this. Check. And dropping in the queen. Oh, but he does have something I missed. Mhm, but it's still good for us. He does have a way to defend this pawn. Now, the point is this is not checkmate. Queen H2 Queen H1 might seem like mate, but it's not cuz that knight could slide on over to G1, uh and in doing so, create an escape square on E2 for the king. But, oh, no, that That's not what I was thinking, but knight G3 is good. Okay, now this guy's playing really well. We need to bring some stuff in. Now, give me a second to think here. Mhm. Now, we can give him a check and go king F1. Yeah, rook E8 is what I was thinking of. Let's go rook E8. Let's bring the rook back into the game. Yeah, now it gets complicated. Now, this guy's definitely uh out-calculating me here. So, let's see. This is super complicated position. There's some beautiful ideas. Mhm. [snorts] I'll I'll I'll uh fill you guys in on everything afterward, but hopefully you can excuse me for being for calculating here. There are some incredible tactical ideas here. He disconnected. okay. So, what's the idea of rookie? The idea is simply to transfer the rook and attack the knight, but that's not the only idea. The main idea is to make sure that the rook controls the E2 square. Why is that important? The reason that is important is because I'm afraid that the king will eventually make a mad dash to the center, and I want to make sure that if that happens, this rook on E8 doesn't allow that to happen. Does that make sense? Okay, so he goes there. That looks like a mistake. That looks like a mistake. But I can't exactly refute it, man. This dude 1 second. Okay. Let's bring Hmm. Let's Let's give him a check. Let's give him a check. And then, let's bring this knight on D7. It's not doing anything. This is an all-hands-on-deck effort. We need every piece involved, every piece participating. Let's get this knight involved. This is a super interesting and very instructive position that can show you how tactical chess can become. We have some incredible ideas here in our camp. And he's got some amazing defensive ideas in his. I'm trying to get a get a hold of them, but they're very difficult to to understand everything here. This is super cool, guys. There's so Wow, I'm I'm looking at a stunning line, but I'll fill you guys in on it shortly. Don't worry, I'm not cheating. [laughter] So, what we're threatening here is to take and go knight f3. That's one thing we're threatening. Oh my god. Oh my god, I'm going to knock your socks off with a with a line here. I just I hope he goes something like queen before. Oh, there's an absolutely But, it only if he gets his queen out away, which I don't think he will. Oh my god, guys. This is This is beautiful. Oh, this is Nobody wants to go anywhere. Trust me. Trust me, you will find this idea stunning. Okay, bishop e2. Now, wait a minute. Let me think. Let me think. Knight f3. Yeah, I like d3. Let's go d3. Yeah, d3 of course. D3 is the most obvious move, but um it's not the most beautiful. I wanted to find something more beautiful, but it is what it is. Just forcing him just to do something. This is poggers. We had an insane draw, guys. Oh my goodness, this is This is super exciting business. Now, I have to take my hat off for this for this guy. He is playing out of his mind. And he takes, which is correct, I think. We take. He takes this thing out of a lot of these attacking opportunities now that he's taken a knight. Which is very unfortunate, but it is what it is. Oh god, that's correct, I think. And what if we go rookie two, though? Now, look at this. If he takes, we have checkmate. Check and mate with the knight on H2. That's checkmate. Now, that wasn't even the tip of the iceberg. Unfortunately, a lot of it will remain behind the scenes. By the way, if knight takes E2, checkerusky, knight G1, and checkmate on H2. But that is literally the tip of the iceberg. Okay. We need to unpack some of this some of this amazingness, if you guys want. We need to unpack some of this amazingness. Okay. So,"
+  },
+  {
+   "ply": 5,
+   "t": 1132,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "this amazingness, if you guys want. We need to unpack some of this amazingness. Okay. So, uh we all want to go right to the end. So, let me walk but but let's be patient cuz I think there's a couple of"
+  },
+  {
+   "ply": 9,
+   "t": 1137,
+   "line": [
+    "b6",
+    "Be2",
+    "Bb7",
+    "Nf3"
+   ],
+   "fen": "rn1qkb1r/pbpp1ppp/1p2pn2/8/2PP4/4PN2/PP2BPPP/RNBQK2R b KQkq - 3 5",
+   "said": "Okay. So, uh we all want to go right to the end. So, let me walk but but let's be patient cuz I think there's a couple of instructive moments in the beginning. I'm on 3391. Now, Nimzo-Indian is uh knight C3 bishop B4."
+  },
+  {
+   "ply": 4,
+   "t": 1142.5,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "Okay. So, uh we all want to go right to the end. So, let me walk but but let's be patient cuz I think there's a couple of instructive moments in the beginning. I'm on 3391. Now, Nimzo-Indian is uh knight C3 bishop B4."
+  },
+  {
+   "ply": 5,
+   "t": 1144,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "said": "uh we all want to go right to the end. So, let me walk but but let's be patient cuz I think there's a couple of instructive moments in the beginning. I'm on 3391. Now, Nimzo-Indian is uh knight C3 bishop B4."
+  },
+  {
+   "ply": 6,
+   "t": 1145,
+   "line": [
+    "Bb4"
+   ],
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": "So, let me walk but but let's be patient cuz I think there's a couple of instructive moments in the beginning. I'm on 3391. Now, Nimzo-Indian is uh knight C3 bishop B4. Think of good play. Okay, that's the Nimzo-Indian. Uh Uh, white's other main moves are"
+  },
+  {
+   "ply": 4,
+   "t": 1151,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "Now, Nimzo-Indian is uh knight C3 bishop B4. Think of good play. Okay, that's the Nimzo-Indian. Uh Uh, white's other main moves are knight f3 and then the Queen's Indian is"
+  },
+  {
+   "ply": 5,
+   "t": 1152.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "said": "Nimzo-Indian is uh knight C3 bishop B4. Think of good play. Okay, that's the Nimzo-Indian. Uh Uh, white's other main moves are knight f3 and then the Queen's Indian is"
+  },
+  {
+   "ply": 6,
+   "t": 1154.5,
+   "line": [
+    "b6"
+   ],
+   "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 4",
+   "said": "Think of good play. Okay, that's the Nimzo-Indian. Uh Uh, white's other main moves are knight f3 and then the Queen's Indian is b6."
+  },
+  {
+   "ply": 4,
+   "t": 1156.5,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "Think of good play. Okay, that's the Nimzo-Indian. Uh Uh, white's other main moves are knight f3 and then the Queen's Indian is b6."
+  },
+  {
+   "ply": 5,
+   "t": 1158,
+   "line": [
+    "g3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/6P1/PP2PP1P/RNBQKBNR b KQkq - 0 3",
+   "said": "Okay, that's the Nimzo-Indian. Uh Uh, white's other main moves are knight f3 and then the Queen's Indian is b6. And the Catalan is g3. So, there's there's a trifecta here. A trifecta of"
+  },
+  {
+   "ply": 4,
+   "t": 1161,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "Uh Uh, white's other main moves are knight f3 and then the Queen's Indian is b6. And the Catalan is g3. So, there's there's a trifecta here. A trifecta of responses to the movie e6. At a club player level, knight c3 is more common. At a grandmaster level, knight f3 and g3 are more common. All three are good. I mean, and all three lead to completely different types of positions. We're not going to delve into the details."
+  },
+  {
+   "ply": 5,
+   "t": 1177,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "more common. At a grandmaster level, knight f3 and g3 are more common. All three are good. I mean, and all three lead to completely different types of positions. We're not going to delve into the details. e3 is is is innocuous. It's not bad, but"
+  },
+  {
+   "ply": 6,
+   "t": 1180,
+   "line": [
+    "b6"
+   ],
+   "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/4P3/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "All three are good. I mean, and all three lead to completely different types of positions. We're not going to delve into the details. e3 is is is innocuous. It's not bad, but it's there's no need to play it immediately. Okay, so e3 knight f3"
+  },
+  {
+   "ply": 7,
+   "t": 1185,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/4PN2/PP3PPP/RNBQKB1R b KQkq - 1 4",
+   "said": "of positions. We're not going to delve into the details. e3 is is is innocuous. It's not bad, but it's there's no need to play it immediately. Okay, so e3 knight f3"
+  },
+  {
+   "ply": 8,
+   "t": 1186,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "rn1qkb1r/pbpp1ppp/1p2pn2/8/2PP4/4PN2/PP3PPP/RNBQKB1R w KQkq - 2 5",
+   "said": "into the details. e3 is is is innocuous. It's not bad, but it's there's no need to play it immediately. Okay, so e3 knight f3 bishop e2. He's playing okay. Just"
+  },
+  {
+   "ply": 9,
+   "t": 1187,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rn1qkb1r/pbpp1ppp/1p2pn2/8/2PP4/4PN2/PP2BPPP/RNBQK2R b KQkq - 3 5",
+   "said": "e3 is is is innocuous. It's not bad, but it's there's no need to play it immediately. Okay, so e3 knight f3 bishop e2. He's playing okay. Just again, just kind of passive. Castles,"
+  },
+  {
+   "ply": 10,
+   "t": 1190.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rn1qkb1r/pbp2ppp/1p2pn2/3p4/2PP4/4PN2/PP2BPPP/RNBQK2R w KQkq - 0 6",
+   "said": "it's there's no need to play it immediately. Okay, so e3 knight f3 bishop e2. He's playing okay. Just again, just kind of passive. Castles,"
+  },
+  {
+   "ply": 11,
+   "t": 1191.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1qkb1r/pbp2ppp/1p2pn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 b kq - 1 6",
+   "said": "it's there's no need to play it immediately. Okay, so e3 knight f3 bishop e2. He's playing okay. Just again, just kind of passive. Castles, bishop d6."
+  },
+  {
+   "ply": 12,
+   "t": 1193,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "rn1qk2r/pbp2ppp/1p1bpn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 w kq - 2 7",
+   "said": "there's no need to play it immediately. Okay, so e3 knight f3 bishop e2. He's playing okay. Just again, just kind of passive. Castles, bishop d6."
+  },
+  {
+   "ply": 13,
+   "t": 1194,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rn1qk2r/pbp2ppp/1p1bpn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 b kq - 3 7",
+   "said": "Okay, so e3 knight f3 bishop e2. He's playing okay. Just again, just kind of passive. Castles, bishop d6. And the way that I would play this with"
+  },
+  {
+   "ply": 15,
+   "t": 1195.5,
+   "line": [
+    "Bf8",
+    "Nb1"
+   ],
+   "fen": "rn1qkb1r/pbp2ppp/1p2pn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 b kq - 5 8",
+   "said": "Okay, so e3 knight f3 bishop e2. He's playing okay. Just again, just kind of passive. Castles, bishop d6. And the way that I would play this with white is probably b3. Thank you, cashl"
+  },
+  {
+   "ply": 18,
+   "t": 1197.5,
+   "line": [
+    "Bd6",
+    "Nc3",
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 8 10",
+   "said": "bishop e2. He's playing okay. Just again, just kind of passive. Castles, bishop d6. And the way that I would play this with white is probably b3. Thank you, cashl"
+  },
+  {
+   "ply": 19,
+   "t": 1198.5,
+   "line": [
+    "b3"
+   ],
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3p4/2PP4/1PN1PN2/P3BPPP/R1BQ1RK1 b - - 0 10",
+   "said": "bishop e2. He's playing okay. Just again, just kind of passive. Castles, bishop d6. And the way that I would play this with white is probably b3. Thank you, cashl with a prime. Thank you, cash man. All these subs are just crazy. So, this is"
+  },
+  {
+   "ply": 18,
+   "t": 1204.5,
+   "line": [],
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 8 10",
+   "said": "And the way that I would play this with white is probably b3. Thank you, cashl with a prime. Thank you, cash man. All these subs are just crazy. So, this is"
+  },
+  {
+   "ply": 19,
+   "t": 1205.5,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3P4/3P4/2N1PN2/PP2BPPP/R1BQ1RK1 b - - 0 10",
+   "said": "And the way that I would play this with white is probably b3. Thank you, cashl with a prime. Thank you, cash man. All these subs are just crazy. So, this is um he's relinquishing the tension and"
+  },
+  {
+   "ply": 20,
+   "t": 1207,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rn1q1rk1/pbp2ppp/1p1b1n2/3p4/3P4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 0 11",
+   "said": "white is probably b3. Thank you, cashl with a prime. Thank you, cash man. All these subs are just crazy. So, this is um he's relinquishing the tension and giving us everything that we want like an ideal setup if that makes sense. I would have gone b3 and fianchetto the"
+  },
+  {
+   "ply": 18,
+   "t": 1212.5,
+   "line": [],
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 8 10",
+   "said": "with a prime. Thank you, cash man. All these subs are just crazy. So, this is um he's relinquishing the tension and giving us everything that we want like an ideal setup if that makes sense. I would have gone b3 and fianchetto the bishop and then you get a very combative position, you know, white's super solid. Black has no problems, but it's uh it's just a position. It's a complex structure. If uh c5, then we simply take it. c5"
+  },
+  {
+   "ply": 12,
+   "t": 1225.5,
+   "line": [],
+   "fen": "rn1qk2r/pbp2ppp/1p1bpn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 w kq - 2 7",
+   "said": "bishop and then you get a very combative position, you know, white's super solid. Black has no problems, but it's uh it's just a position. It's a complex structure. If uh c5, then we simply take it. c5"
+  },
+  {
+   "ply": 16,
+   "t": 1227.5,
+   "line": [
+    "c5",
+    "bxc5",
+    "dxc5",
+    "Bxc5"
+   ],
+   "fen": "rn1qk2r/pbp2ppp/4pn2/2bp4/8/4PN2/PP2BPPP/RNBQ1RK1 w kq - 0 9",
+   "said": "position, you know, white's super solid. Black has no problems, but it's uh it's just a position. It's a complex structure. If uh c5, then we simply take it. c5 blunders a pawn. That's why we put our"
+  },
+  {
+   "ply": 12,
+   "t": 1229,
+   "line": [],
+   "fen": "rn1qk2r/pbp2ppp/1p1bpn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 w kq - 2 7",
+   "said": "Black has no problems, but it's uh it's just a position. It's a complex structure. If uh c5, then we simply take it. c5 blunders a pawn. That's why we put our One of the benefits of putting a pawn on b6 is it prevents c5. Does that make sense? Uh, Sam? Yeah. So, knight c3 cd bishop d3 repositioning the bishop knight b to d7 rook e1 rook a8 stopping e4 and queen c2 and now c5 the fun begins. Again, a6 would be fine to prevent knight b5, but I didn't want to allow e4 which potentially leads to a mass trade on e4. Now, black again, black is is doing completely fine here. Uh takes takes and now what's the typical idea in such a position? That's to play knight f6 and knight d5. The square in front of the isolated pawn is what we want to blockade usually with a knight. Black is doing well here. Thank you norp007 gifting to craft. But it's Monday and it's too vanilla. We want to keep pieces on the board. Okay."
+  }
+ ],
+ "forks": [
+  {
+   "ply": 4,
+   "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6"
+   ],
+   "options": [
+    {
+     "san": "e3",
+     "t": 54,
+     "continuation": "e3",
+     "said": "And hopefully he goes knight C3. By the way, uh one misconception, knight C3 bishop B4 is the Nimzo Indian. Uh any other move does not technically allow us to play the Nimzo Indian per se. Uh and that's why we'll have to play the Queen's Indian setup or the Bogo Indian. He goes E3, which is very passive. It's not bad. I mean, it's a solid move, right? It protects the pawn. But, it blocks in the bishop. And one good companion setup to the Nimzo Indian is the Queen's Indian setup. The Queen's Indian setup being the move B6. The actual Queen's Indian is knight F3 B6. This is an even better version of it. Now, why might you ask are should we not give a check on B4? Well, the thing to understand is that bishop B4 is most effective in response to knight C3. If we give a check here, it's not bad, but he can go simply go bishop D2. And then we don't have the same possibility of capturing that knight on C3 and ruining his structure. So, instead I propose the move B6. It would also been possible to go D5, transposing to a favorable Queen's Gambit Declined. Fianchettoing the bishop."
+    },
+    {
+     "san": "Nc3",
+     "t": 1144,
+     "continuation": "Nc3",
+     "said": "uh we all want to go right to the end. So, let me walk but but let's be patient cuz I think there's a couple of instructive moments in the beginning. I'm on 3391. Now, Nimzo-Indian is uh knight C3 bishop B4. Think of good play. Okay, that's the Nimzo-Indian. Uh Uh, white's other main moves are knight f3 and then the Queen's Indian is b6. And the Catalan is g3. So, there's there's a trifecta here. A trifecta of responses to the movie e6. At a club player level, knight c3 is more common. At a grandmaster level, knight f3 and g3 are more common. All three are good. I mean, and all three lead to completely different types of positions. We're not going to delve into the details. e3 is is is innocuous. It's not bad, but it's there's no need to play it immediately. Okay, so e3 knight f3 bishop e2. He's playing okay. Just again, just kind of passive. Castles, bishop d6. And the way that I would play this with white is probably b3. Thank you, cashl with a prime. Thank you, cash man. All these subs are just crazy. So, this is"
+    },
+    {
+     "san": "Nf3",
+     "t": 1152.5,
+     "continuation": "Nf3",
+     "said": "Nimzo-Indian is uh knight C3 bishop B4. Think of good play. Okay, that's the Nimzo-Indian. Uh Uh, white's other main moves are knight f3 and then the Queen's Indian is b6. And the Catalan is g3. So, there's there's a trifecta here. A trifecta of responses to the movie e6. At a club player level, knight c3 is more common. At a grandmaster level, knight f3 and g3 are more common. All three are good. I mean, and all three lead to completely different types of positions. We're not going to delve into the details. e3 is is is innocuous. It's not bad, but it's there's no need to play it immediately. Okay, so e3 knight f3 bishop e2. He's playing okay. Just again, just kind of passive. Castles, bishop d6. And the way that I would play this with white is probably b3. Thank you, cashl with a prime. Thank you, cash man. All these subs are just crazy. So, this is um he's relinquishing the tension and giving us everything that we want like an ideal setup if that makes sense. I would have gone b3 and fianchetto the"
+    },
+    {
+     "san": "g3",
+     "t": 1158,
+     "continuation": "g3",
+     "said": "Okay, that's the Nimzo-Indian. Uh Uh, white's other main moves are knight f3 and then the Queen's Indian is b6. And the Catalan is g3. So, there's there's a trifecta here. A trifecta of responses to the movie e6. At a club player level, knight c3 is more common. At a grandmaster level, knight f3 and g3 are more common. All three are good. I mean, and all three lead to completely different types of positions. We're not going to delve into the details. e3 is is is innocuous. It's not bad, but it's there's no need to play it immediately. Okay, so e3 knight f3 bishop e2. He's playing okay. Just again, just kind of passive. Castles, bishop d6. And the way that I would play this with white is probably b3. Thank you, cashl with a prime. Thank you, cash man. All these subs are just crazy. So, this is um he's relinquishing the tension and giving us everything that we want like an ideal setup if that makes sense. I would have gone b3 and fianchetto the bishop and then you get a very combative position, you know, white's super solid."
+    }
+   ]
+  },
+  {
+   "ply": 12,
+   "fen": "rn1qk2r/pbp2ppp/1p1bpn2/3p4/2PP4/4PN2/PP2BPPP/RNBQ1RK1 w kq - 2 7",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "e3",
+    "b6",
+    "Nf3",
+    "Bb7",
+    "Be2",
+    "d5",
+    "O-O",
+    "Bd6"
+   ],
+   "options": [
+    {
+     "san": "Nc3",
+     "t": 222.5,
+     "continuation": "Nc3",
+     "said": "Bishop d6 would be beautiful square. And now our bishops are aimed at white's king. So, let's make a mental note to ourself to check various tactics once we start developing. Okay. So, let's castle. Now we've got very nice central control here. Bishop to D3. So, ideas? Well, maybe he's preparing E4, but that's not a threat here because we've got 1 2 3 defenders on the square and only two attackers. Now, how should we position our pieces here? Uh this knight on B8 should not go on C6. Uh that's a big no-no because it blocks in the C pawn as you guys know, and it blocks the bishop even further. It should definitely go to B7 uh to D7. Now, in such situations also the move A6 is often very effective at stopping potential knight B5 ideas. Knight B5 is not dangerous here because the bishop can drop to E7, then we go A6"
+    },
+    {
+     "san": "c5",
+     "t": 1227.5,
+     "continuation": "c5 bxc5 dxc5 Bxc5",
+     "said": "position, you know, white's super solid. Black has no problems, but it's uh it's just a position. It's a complex structure. If uh c5, then we simply take it. c5 blunders a pawn. That's why we put our One of the benefits of putting a pawn on b6 is it prevents c5. Does that make sense? Uh, Sam? Yeah. So, knight c3 cd bishop d3 repositioning the bishop knight b to d7 rook e1 rook a8 stopping e4 and queen c2 and now c5 the fun begins. Again, a6 would be fine to prevent knight b5, but I didn't want to allow e4 which potentially leads to a mass trade on e4. Now, black again, black is is doing completely fine here. Uh takes takes and now what's the typical idea in such a position? That's to play knight f6 and knight d5. The square in front of the isolated pawn is what we want to blockade usually with a knight. Black is doing well here. Thank you norp007 gifting to craft. But it's Monday and it's too vanilla. We want to keep pieces on the board."
+    }
+   ]
+  },
+  {
+   "ply": 13,
+   "fen": "rn1qk2r/pbp2ppp/1p1bpn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 b kq - 3 7",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "e3",
+    "b6",
+    "Nf3",
+    "Bb7",
+    "Be2",
+    "d5",
+    "O-O",
+    "Bd6",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "O-O",
+     "t": 225,
+     "continuation": "O-O",
+     "said": "are aimed at white's king. So, let's make a mental note to ourself to check various tactics once we start developing. Okay. So, let's castle. Now we've got very nice central control here. Bishop to D3. So, ideas? Well, maybe he's preparing E4, but that's not a threat here because we've got 1 2 3 defenders on the square and only two attackers. Now, how should we position our pieces here? Uh this knight on B8 should not go on C6. Uh that's a big no-no because it blocks in the C pawn as you guys know, and it blocks the bishop even further. It should definitely go to B7 uh to D7. Now, in such situations also the move A6 is often very effective at stopping potential knight B5 ideas. Knight B5 is not dangerous here because the bishop can drop to E7, then we go A6 and it comes back to D6. But,"
+    },
+    {
+     "san": "Bf8",
+     "t": 1195.5,
+     "continuation": "Bf8 Nb1",
+     "said": "Okay, so e3 knight f3 bishop e2. He's playing okay. Just again, just kind of passive. Castles, bishop d6. And the way that I would play this with white is probably b3. Thank you, cashl with a prime. Thank you, cash man. All these subs are just crazy. So, this is um he's relinquishing the tension and giving us everything that we want like an ideal setup if that makes sense. I would have gone b3 and fianchetto the bishop and then you get a very combative position, you know, white's super solid. Black has no problems, but it's uh it's just a position. It's a complex structure. If uh c5, then we simply take it. c5 blunders a pawn. That's why we put our One of the benefits of putting a pawn on b6 is it prevents c5. Does that make sense? Uh, Sam? Yeah. So, knight c3 cd bishop d3 repositioning the bishop knight b to d7 rook e1 rook a8 stopping e4 and queen c2 and now c5 the fun begins. Again, a6 would be fine to prevent"
+    }
+   ]
+  },
+  {
+   "ply": 14,
+   "fen": "rn1q1rk1/pbp2ppp/1p1bpn2/3p4/2PP4/2N1PN2/PP2BPPP/R1BQ1RK1 w - - 4 8",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "e3",
+    "b6",
+    "Nf3",
+    "Bb7",
+    "Be2",
+    "d5",
+    "O-O",
+    "Bd6",
+    "Nc3",
+    "O-O"
+   ],
+   "options": [
+    {
+     "san": "cxd5",
+     "t": 229,
+     "continuation": "cxd5",
+     "said": "make a mental note to ourself to check various tactics once we start developing. Okay. So, let's castle. Now we've got very nice central control here. Bishop to D3. So, ideas? Well, maybe he's preparing E4, but that's not a threat here because we've got 1 2 3 defenders on the square and only two attackers. Now, how should we position our pieces here? Uh this knight on B8 should not go on C6. Uh that's a big no-no because it blocks in the C pawn as you guys know, and it blocks the bishop even further. It should definitely go to B7 uh to D7. Now, in such situations also the move A6 is often very effective at stopping potential knight B5 ideas. Knight B5 is not dangerous here because the bishop can drop to E7, then we go A6 and it comes back to D6. But, uh later on uh"
+    },
+    {
+     "san": "b3",
+     "t": 1198.5,
+     "continuation": "b3",
+     "said": "bishop e2. He's playing okay. Just again, just kind of passive. Castles, bishop d6. And the way that I would play this with white is probably b3. Thank you, cashl with a prime. Thank you, cash man. All these subs are just crazy. So, this is um he's relinquishing the tension and giving us everything that we want like an ideal setup if that makes sense. I would have gone b3 and fianchetto the bishop and then you get a very combative position, you know, white's super solid. Black has no problems, but it's uh it's just a position. It's a complex structure. If uh c5, then we simply take it. c5 blunders a pawn. That's why we put our One of the benefits of putting a pawn on b6 is it prevents c5. Does that make sense? Uh, Sam? Yeah. So, knight c3 cd bishop d3 repositioning the bishop knight b to d7 rook e1 rook a8 stopping e4 and queen c2 and now c5 the fun begins. Again, a6 would be fine to prevent knight b5, but I didn't want to allow e4"
+    }
+   ]
+  }
+ ]
+}

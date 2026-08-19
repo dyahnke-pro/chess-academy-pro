@@ -1,0 +1,203 @@
+{
+ "videoId": "vbWQt7Qn_eQ",
+ "title": "Restarting the Speedrun Soon!? | Sicilian - Najdorf | GM Naroditsky's Theory Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 32,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "like looks like he's legit though because he's played a lot of standard games okay yeah he's played a lot of standard games let's keep going all right so"
+  },
+  {
+   "ply": 3,
+   "t": 33.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "like looks like he's legit though because he's played a lot of standard games okay yeah he's played a lot of standard games let's keep going all right so"
+  },
+  {
+   "ply": 4,
+   "t": 35,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "like looks like he's legit though because he's played a lot of standard games okay yeah he's played a lot of standard games let's keep going all right so we're going to get a knight or fin Knight F6 Knight finally we get a"
+  },
+  {
+   "ply": 8,
+   "t": 38.5,
+   "line": [
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "said": "because he's played a lot of standard games okay yeah he's played a lot of standard games let's keep going all right so we're going to get a knight or fin Knight F6 Knight finally we get a Mainline Knight or it's been a while we we constantly face anti-sicilians but at"
+  },
+  {
+   "ply": 10,
+   "t": 42,
+   "line": [
+    "Nc3",
+    "a6"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "standard games let's keep going all right so we're going to get a knight or fin Knight F6 Knight finally we get a Mainline Knight or it's been a while we we constantly face anti-sicilians but at this level the open Sicilian becomes very very popular F3 okay so we have faced this"
+  },
+  {
+   "ply": 11,
+   "t": 49,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N2P2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+   "said": "fin Knight F6 Knight finally we get a Mainline Knight or it's been a while we we constantly face anti-sicilians but at this level the open Sicilian becomes very very popular F3 okay so we have faced this line exactly once in the speedrun uh this was that was a very technical speedrun video where I really delved"
+  },
+  {
+   "ply": 12,
+   "t": 56.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/3NP3/2N2P2/PPP3PP/R1BQKB1R w KQkq - 0 7",
+   "said": "very very popular F3 okay so we have faced this line exactly once in the speedrun uh this was that was a very technical speedrun video where I really delved deeply into the theory of What's called the English attack and in the English"
+  },
+  {
+   "ply": 13,
+   "t": 60.5,
+   "line": [
+    "Nb3"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/4P3/1NN2P2/PPP3PP/R1BQKB1R b KQkq - 1 7",
+   "said": "line exactly once in the speedrun uh this was that was a very technical speedrun video where I really delved deeply into the theory of What's called the English attack and in the English attack white plays this early F3 move"
+  },
+  {
+   "ply": 14,
+   "t": 64.5,
+   "line": [
+    "Be6"
+   ],
+   "fen": "rn1qkb1r/1p3ppp/p2pbn2/4p3/4P3/1NN2P2/PPP3PP/R1BQKB1R w KQkq - 2 8",
+   "said": "this was that was a very technical speedrun video where I really delved deeply into the theory of What's called the English attack and in the English attack white plays this early F3 move generally develops the bishop to E3 then plays Queen D2 long castle and then"
+  },
+  {
+   "ply": 15,
+   "t": 68,
+   "line": [
+    "Be3"
+   ],
+   "fen": "rn1qkb1r/1p3ppp/p2pbn2/4p3/4P3/1NN1BP2/PPP3PP/R2QKB1R b KQkq - 3 8",
+   "said": "speedrun video where I really delved deeply into the theory of What's called the English attack and in the English attack white plays this early F3 move generally develops the bishop to E3 then plays Queen D2 long castle and then"
+  },
+  {
+   "ply": 16,
+   "t": 69,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rn1qk2r/1p2bppp/p2pbn2/4p3/4P3/1NN1BP2/PPP3PP/R2QKB1R w KQkq - 4 9",
+   "said": "deeply into the theory of What's called the English attack and in the English attack white plays this early F3 move generally develops the bishop to E3 then plays Queen D2 long castle and then essentially sends his pawns down the king side and and and you get the kind"
+  },
+  {
+   "ply": 17,
+   "t": 72.5,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rn1qk2r/1p2bppp/p2pbn2/4p3/4P3/1NN1BP2/PPP1B1PP/R2QK2R b KQkq - 5 9",
+   "said": "attack white plays this early F3 move generally develops the bishop to E3 then plays Queen D2 long castle and then essentially sends his pawns down the king side and and and you get the kind of stereotypical nter of battle where black attacks on the queen side and white attacks on the king side but Bishop B2 is a more modest approach it's not a particularly dangerous move I mean it's not all that great for white to"
+  },
+  {
+   "ply": 18,
+   "t": 84,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/1p2bppp/p2pbn2/4p3/4P3/1NN1BP2/PPP1B1PP/R2QK2R w KQ - 6 10",
+   "said": "of stereotypical nter of battle where black attacks on the queen side and white attacks on the king side but Bishop B2 is a more modest approach it's not a particularly dangerous move I mean it's not all that great for white to combine uh to combine the move F3 and"
+  },
+  {
+   "ply": 19,
+   "t": 87,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/1p2bppp/p2pbn2/4p3/4P3/1NN1BP2/PPP1B1PP/R2Q1RK1 b - - 7 10",
+   "said": "black attacks on the queen side and white attacks on the king side but Bishop B2 is a more modest approach it's not a particularly dangerous move I mean it's not all that great for white to combine uh to combine the move F3 and short Castle because it is it is a relatively weakening move but it's obviously not the end of the world so black is not like much better or anything we should just continue playing normally and I'm going to continue developing my pieces as is kind of"
+  },
+  {
+   "ply": 20,
+   "t": 99,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r2q1rk1/1p1nbppp/p2pbn2/4p3/4P3/1NN1BP2/PPP1B1PP/R2Q1RK1 w - - 8 11",
+   "said": "short Castle because it is it is a relatively weakening move but it's obviously not the end of the world so black is not like much better or anything we should just continue playing normally and I'm going to continue developing my pieces as is kind of customary in the nidorf where typically the Knight heads to D7 rare is the instance where you develop the Knight to C6 and there's positional reasons for that that I'll get into after the game but black is already a good position out of the opening typically uh essentially white is combining two different variations one is the quiet the carpa"
+  },
+  {
+   "ply": 10,
+   "t": 120.5,
+   "line": [],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "that that I'll get into after the game but black is already a good position out of the opening typically uh essentially white is combining two different variations one is the quiet the carpa variation Bishop B2 and the other is the English attack and sometimes when you mix two lines uh you get kind of a mishmash and you give your opponent comfortable play Queen D2 okay so let's continue making marginal improving moves I like the look of Rook C8 I like the look of the typical knight orph move B5 of course when you play B5 you have to be very careful uh not to allow A4 which can lead to very unpleasant dissolution of your king uh Queen side so let's start with a more non committ improving move Rook C8 and Knight D5 okay so here we have a choice we can take with a knight and after e takes D5 we can park our Bishop on F5 this is typically how I've been taught to respond to this move we can also of course take with the bishop and after e takes D5 we can start playing positionally on the king side I think both options uh contain a good deal of sense but I think the standard approach is Knight takes D5 e and Bishop F5 maintaining the bishop pair and now the plan well first of all the C Pawn is hanging so presumably our opponent is going to go C4 and then the plan that I was taught when I was first learning the KN or is to drop this bishop back to G6 and to quickly send our kingside pawns up the board so we almost get in effect a reverse English attack where white is going to play on the queen side and we are going to play on the king's side which I have no problems with as a king's Indian player I prefer to play against my opponent's king okay so Bishop G6 now I'm anti ipating C4 but the catch is that we don't just have to close our eyes and you know pray that nothing's going to happen on the on the queen side we can actively try to hurt White's chances on the queen side so A4 is a really high level move because C4 could have been met with B6 slowing down the progress of White's pawns A4 is a very good prophylactic move right now B6 doesn't work because it blunders the A6 pawn and after white plays C4 if we go B6 then then white can undermine our Our Queen side blockade with A5 so we have no nothing better to do than to initiate our own kingside attack let's go F5 and we're just going to send our our Center pawns down the board very likely we're going to play F4 followed by E4 or even in some instances E4 followed by F4 now G3 is really asking for it it's really asking F4 it now E4 here is very ineffective because it weakens the D4 Square it gives the Knight a potential outpost on E6 I do like F4 a lot more and it usually isn't even a question you kind of have to play F4 in this situation even without calculating this just looks like the right move opening up our opponent's king and leading to direct tactical confrontation so we're going to have to do some heavy calculation here especially because I'm lower on time so okay EF Bishop F4 I have to calculate in silence for a bit here cuz we don't actually have to play takes F4 we can keep the pawn on E5 and make a an improving move such as Bishop H5 yeah have a cool idea all right let's take let's take um ah our opponent also can play Bishop F2 but he takes on F4 and now I'm really hoping that this works out let's centralize our Knight I'm really hoping for Knight D4 I think that's the move that most people would play here is Knight D4 heading for E6 but I believe that Knight D4 is a blunder for a very instructive tactical reason so I'm really really hoping that we get Knight D4 here now if our opponent takes on E5 then we take back with the pawn and I'm getting what I want which is control of the dark squares on the king side as well as uh the pawn on E5 restricting the Knight on B3 preventing it from moving to D4 which is would be very beneficial to us the move that I would play with white very high level move is something like King H1 okay so this guy's strong title player strength okay so King H1 Knight C4 is possible takes takes Knight D4 takes looks very promising but it's hard to actually find a followup here and feels like I'm getting outplayed in every Speed game The Last like 30 games okay what about Queen D7 Queen H3 this is an interesting idea too yeah let's go Queen D7 and try to implement and and and more directly involve the queen in the attack via H3 yeah very sharp position I mean I in in Blitz I really like black here because we have EAS ways to continue attacking on the other hand we're down a pawn and obviously there's this very big weakness on E6 so we really really I mean if we allow the Knight to get to E6 especially if it shuts off our queen that would be really bad news which is why I'm playing Queen D7 I'm trying to slide the queen into the attack kind of before the the gates close so if our Queen is already on H3 wow C3 that looks wrong that looks wrong but I can't put my finger on why there's not a move that I would play Queen H3 I guess is logical to start with involving the queen yeah if we're given a move uh we could lift The Rook up to H5 but I'm assuming he's going to go Knight D4 okay he takes on E5 interesting well generally this is what we want but obviously the situation has changed a little bit now D6 is possible okay so Rook F3 doesn't work D6 doesn't work unfortunately we don't have Bishop G5 here which we used to that's a bit of a problem Bishop H4 comes to mind yeah Bishop H4 very much comes to mind Rook d8 also possible wait Rook fd8 Queen D5 check Bishop F7 yeah Rook fd8 might be the clinical approach here Rook cd8 there is CD that's bad but Rook fd8 might be a nice way to pick off this Pawn I really don't know Bishop H4 also possible but I really don't want to let this Pawn live any longer than we have to okay let's go Rook fd8 trying to pick up thank you GM chica to Cowboy Dixon trying to pick up the D6 Pawn we're also trying to pick up in a way such that our attack on H2 increases if we take it with the bishop then we'll have the later possibility of pushing E4 and opening up a direct attack on H2 so if white doesn't come up with anything super concrete right now and we're able to win back this Pawn then we're doing amazingly the the pawn count could not be more irrelevant here that's not the point okay Rook D1 is a good is a great sign now we could take with the Rook I think a lot of people would be tempted by this move but as I've already explained the thematically correct move is Bishop takes D6 because it sets up the idea of E4 on the other hand this move does not come with Tempo but my intuition tells me to play Bishop takes D6 now E4 is a very very powerful idea I wouldn't necessarily call it a threat but it's it's a very strong idea note that Queen D5 check is never dangerous because we can always block with our other Bishop Bishop F7 and the Knight on B3 is also left hanging in many of these variations thank you for the sub distant 187 very high tension position but I really feel like our attacking chances should outweigh White's pressure in the center okay there was a lot to unpack there in the last couple of moves I know that I was a little wishy-washy about some of the Vari because didn't have to them out I'll cple of them theen G5 okay G5 interesting move Bishop C2 no that doesn't look right what about E4 E4 F4 E3 man that looks very promising and E4 has to be the right move E4 Rook D6 Rook D6 on the other hand E4 F4 threatens Bishop G4 for F4 E34 go somehow he holds on there Queen G5 is an excellent move I might also just want to drop back to E6 here yeah let's go Queen E6 I think this is the more practical approach um E4 I didn't like the look of f4 this move I like because it also hits what oh my gosh that's insane okay Knight C5 it's not the end of the world now I can't take with either piece of course I didn't see that he's Way Beyond my pay grade I'll go Queen F7 I think we're holding on here yeah we're holding on here okay Bishop C7 I didn't want to play Bishop E7 because that would have dropped the E5 pawn and I really don't want to give away this Pawn KES takes now I think uh black is doing quite fine we're low on time and I'm GNA have to be super precise Rook D1 okay so takes takes takes takes and I don't quite get what I want in the interest of time I think trading in something like Queen C4 is the most practical approach trading in H6 is also possible yeah definitely I think we should trade okay a very difficult decision now by our opponent requiring some thought so now let's go H6 and chase away the queen also I want to create a Lo Square for a king on H7 and definitely feels like black is slightly better here because he's got these weak pawns he's got the long-term weakness of his King which could cost him even without the Rooks on the board Queen E3 I think we're going to King H tucking away the King on what I think is probably the safest sare on the board because the Knight is completely restricted he's never going to have Knight G5 Knight F2 okay now Queen C4 Fields right activating the queen activating the queen I would really love to put my Bishop on B6 if that Bishop starts firing on this diagonal that would be amazing now that becomes possible the issue though is Bishop C2 I really didn't want to allow the trade of of Bishops and I missed that was a mistake by me probably even trading might be the most prudent option some oh I can actually go Queen F4 wait a second Queen F4 Bishop C2 I have Queen uh Queen C1 okay so I found a way to keep the the bishop air alive and we're continuing to put pressure Knight H3 what is going on here Queen C1 has to be the move optimizing the activity of the queen and our next move is to be Bishop B6 to get this bishop active I'm assuming he's going to go King G2 and unpin his King I mean that's what most people would do that's what I would do Knight F2 jeez B2 okay Bishop B6 I have no real other way to improve my position and Knight D3 Queen G5 is very important because there's a m threat on G1 so a lot of threats being created here and a lot of tactics are kind of brewing in this position the issue is if he plays a move like Knight E4 the question comes okay how do I actually convert my Superior peace activity into of course he plays it into a winning Advantage so I'm just going to keep poking and prodding and try to milk his clock down um and keep creating threats following Smith lov's advice if you create 40 threats eventually your opponent's going to buckle although this guy doesn't seem to have any plans buckling let's go king h8 unpinning the king or unpinning the bishop now I'm setting up Bishop H5 which would put pressure on this Pawn que D1 I think Bishop H5 is sensible to attack F3 unfortunately he's got King G2 he's defending extremely well but the clock situation is now even what am I going to do if he plays King G2 though I don't quite know King G2 is basically automatic I think maybe Queen E3 setting up threats on this long diagonal the very important detail the bishop is guarding d8 if it wasn't Queen d8 would be immediate Checkmate because King H7 there's Knight G m double attack on the king I I really like the look of a move like Queen E3 just kind of squeezing my way into some of these weak squares he's taking a really long time here it's a good sign I think this game might be decided on the clock our opponent's time usage feels very unnatural to me I'm going to be honest here King G2 is a completely automatic move for anybody over like 1,600 there are no other ways to defend F3 so could be an internet problem but I don't know what's going on Knight D2 okay okay that is suicidal that is I mean even Queen takes D2 is possible but Queen D2 Queen D2 Bishop F3 there's Queen G2 but that is a un Unthinkable move just because of Bishop E3 I I don't understand that moment at all this is going to lose but white is losing just Bishop D2 that's it we're up a piece yeah bit of a strange resolution and he resigns bit of a strange resolution but an interesting game overall yeah I me this is the reason I"
+  },
+  {
+   "ply": 13,
+   "t": 897,
+   "line": [
+    "Nb3",
+    "e5",
+    "f3"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/4P3/1NN2P2/PPP3PP/R1BQKB1R b KQkq - 0 7",
+   "said": "losing just Bishop D2 that's it we're up a piece yeah bit of a strange resolution and he resigns bit of a strange resolution but an interesting game overall yeah I me this is the reason I kind of want to start a new speed and a lot of these recent games to be honest I mean as you can see are are weird the time usage was weird some of the moves were weird the fact that he played Knight C5 instantly but spent you know a minute on a move that anybody over 1400 would never play yes a little bit strange uh but King G2 is is is just automatic and the position is equal after Queen E3 according to the engine so anyways let's take a look let's take a look so I'm gonna uh because this game"
+  },
+  {
+   "ply": 3,
+   "t": 932.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "the position is equal after Queen E3 according to the engine so anyways let's take a look let's take a look so I'm gonna uh because this game is very complex I'm going to load it into chess base and turn on stockfish there because it's worthy of closer analysis the accuracy was 85.3 to 89.6 so I played quite decently and we had a narf so F3 E5 Knight B3 Bishop B6 Bishop B3 Bishop B7 is all theoretical Bishop B2 is is a a side move again it's it's not a mistake but it's just not considered the most ambitious line I'll direct you to the previous speedrun game where we did face Queen D2 castles castles and here the move that I really really like to play this is a sideline and I play this very successfully even against GMS and Blitz it's this weird looking move A5 just trying to send the A- Pawn up the board the main line here uh is or sorry it's not B5 it's Knight bd7 and now you have this crazy line that goes G4 B5 G5 B4 pandemonium lot of theory and I went into this in the previous uh night or"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 10,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "a6"
+   ],
+   "options": [
+    {
+     "san": "f3",
+     "t": 49,
+     "continuation": "f3",
+     "said": "fin Knight F6 Knight finally we get a Mainline Knight or it's been a while we we constantly face anti-sicilians but at this level the open Sicilian becomes very very popular F3 okay so we have faced this line exactly once in the speedrun uh this was that was a very technical speedrun video where I really delved deeply into the theory of What's called the English attack and in the English attack white plays this early F3 move generally develops the bishop to E3 then plays Queen D2 long castle and then essentially sends his pawns down the king side and and and you get the kind of stereotypical nter of battle where black attacks on the queen side and white attacks on the king side but Bishop B2 is a more modest approach it's not a particularly dangerous move I mean it's not all that great for white to combine uh to combine the move F3 and short Castle because it is it is a relatively weakening move but it's obviously not the end of the world so black is not like much better or anything we should just continue playing normally and I'm going to continue developing my pieces as is kind of customary in the nidorf where typically the Knight heads to D7 rare is the instance where you develop the Knight to C6 and there's positional reasons for"
+    },
+    {
+     "san": "Nb3",
+     "t": 897,
+     "continuation": "Nb3 e5 f3",
+     "said": "losing just Bishop D2 that's it we're up a piece yeah bit of a strange resolution and he resigns bit of a strange resolution but an interesting game overall yeah I me this is the reason I kind of want to start a new speed and a lot of these recent games to be honest I mean as you can see are are weird the time usage was weird some of the moves were weird the fact that he played Knight C5 instantly but spent you know a minute on a move that anybody over 1400 would never play yes a little bit strange uh but King G2 is is is just automatic and the position is equal after Queen E3 according to the engine so anyways let's take a look let's take a look so I'm gonna uh because this game is very complex I'm going to load it into chess base and turn on stockfish there because it's worthy of closer analysis the accuracy was 85.3 to 89.6 so I played quite decently and we had a narf so F3 E5 Knight B3 Bishop B6 Bishop B3 Bishop B7 is all theoretical Bishop"
+    }
+   ]
+  }
+ ]
+}

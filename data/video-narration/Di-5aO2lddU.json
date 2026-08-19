@@ -1,0 +1,518 @@
+{
+ "videoId": "Di-5aO2lddU",
+ "title": "Master Class | Grünfeld Defence | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 23,
+   "line": [
+    "c4",
+    "Nf6",
+    "d4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "we're 18 31 so moving right along and playing 1868 with white yeah we're going to go with the d4 we're going to go more positional we're going to go more positional"
+  },
+  {
+   "ply": 4,
+   "t": 25,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "moving right along and playing 1868 with white yeah we're going to go with the d4 we're going to go more positional we're going to go more positional and he goes g6 so this is either a grunfeld or a king's indian okay knight c3"
+  },
+  {
+   "ply": 5,
+   "t": 30,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "said": "going to go with the d4 we're going to go more positional we're going to go more positional and he goes g6 so this is either a grunfeld or a king's indian okay knight c3 okay so this is our first grunfeld i"
+  },
+  {
+   "ply": 6,
+   "t": 31.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+   "said": "going to go with the d4 we're going to go more positional we're going to go more positional and he goes g6 so this is either a grunfeld or a king's indian okay knight c3 okay so this is our first grunfeld i don't think we faced a grunfeld with the white pieces it really is it only becomes i would say truly popular at the level of um at the level of 18 1900 um and white has a bajillion options against the krenfeld and they're all nothing has been proven to get an advantage i'll put it this way um and i'm just trying to think of like a system that might be easy to play one system that sort of flies under the radar a little bit particularly at this level when people are often just learning the grunt felt is to refrain from taking on d5 um and instead oh actually i know i know what i know what to play i know what to play um we're gonna take we are gonna take"
+  },
+  {
+   "ply": 7,
+   "t": 82,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4",
+   "said": "is to refrain from taking on d5 um and instead oh actually i know i know what i know what to play i know what to play um we're gonna take we are gonna take and in the ground field there's a lot of"
+  },
+  {
+   "ply": 8,
+   "t": 85.5,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+   "said": "um and instead oh actually i know i know what i know what to play i know what to play um we're gonna take we are gonna take and in the ground field there's a lot of very off-beat very off-beat systems that are actually not that bad and they can give you an advantage um if black is not precise and one of the rarest moves available in this position this is a move that you will not come up with in a million years and not because you're um not because you're bad but just because it's it's pretty crazy is knight a4 whoa bandit out of the 10"
+  },
+  {
+   "ply": 9,
+   "t": 109.5,
+   "line": [
+    "Na4"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/N2P4/8/PP2PPPP/R1BQKBNR b KQkq - 1 5",
+   "said": "move that you will not come up with in a million years and not because you're um not because you're bad but just because it's it's pretty crazy is knight a4 whoa bandit out of the 10 gifted thank you damn girl thank you for the 10 gifted band-a-dad"
+  },
+  {
+   "ply": 10,
+   "t": 116.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkb1r/ppp2p1p/6p1/3np3/N2P4/8/PP2PPPP/R1BQKBNR w KQkq - 0 6",
+   "said": "but just because it's it's pretty crazy is knight a4 whoa bandit out of the 10 gifted thank you damn girl thank you for the 10 gifted band-a-dad all right so he goes e5 i'm very surprised that he actually knows this move and the purpose of knight a4 i'll talk more about this after the game but the"
+  },
+  {
+   "ply": 9,
+   "t": 128,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/N2P4/8/PP2PPPP/R1BQKBNR b KQkq - 1 5",
+   "said": "all right so he goes e5 i'm very surprised that he actually knows this move and the purpose of knight a4 i'll talk more about this after the game but the purp the main purpose is to prevent him from being able to take my knight in response to e4 so i want to play e4 and chase his knight away so it makes sense from that perspective and in order to do that you have to move your knight now he goes e5 this is the main line this is uh"
+  },
+  {
+   "ply": 10,
+   "t": 140,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkb1r/ppp2p1p/6p1/3np3/N2P4/8/PP2PPPP/R1BQKBNR w KQkq - 0 6",
+   "said": "purp the main purpose is to prevent him from being able to take my knight in response to e4 so i want to play e4 and chase his knight away so it makes sense from that perspective and in order to do that you have to move your knight now he goes e5 this is the main line this is uh the sacrifices upon and gets an initiative in return as far as i remember we're supposed to take this"
+  },
+  {
+   "ply": 11,
+   "t": 145.5,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "rnbqkb1r/ppp2p1p/6p1/3nP3/N7/8/PP2PPPP/R1BQKBNR b KQkq - 0 6",
+   "said": "chase his knight away so it makes sense from that perspective and in order to do that you have to move your knight now he goes e5 this is the main line this is uh the sacrifices upon and gets an initiative in return as far as i remember we're supposed to take this pawn and then he gives me like a check on v4 we block with bishop d2 and then i don't remember the rest let's see how this goes um"
+  },
+  {
+   "ply": 12,
+   "t": 158,
+   "line": [
+    "Bb4+"
+   ],
+   "fen": "rnbqk2r/ppp2p1p/6p1/3nP3/Nb6/8/PP2PPPP/R1BQKBNR w KQkq - 1 7",
+   "said": "pawn and then he gives me like a check on v4 we block with bishop d2 and then i don't remember the rest let's see how this goes um"
+  },
+  {
+   "ply": 13,
+   "t": 159.5,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "rnbqk2r/ppp2p1p/6p1/3nP3/Nb6/8/PP1BPPPP/R2QKBNR b KQkq - 2 7",
+   "said": "we block with bishop d2 and then i don't remember the rest let's see how this goes um bishop b4 check we have to cover the check yeah knight e3 is a move um"
+  },
+  {
+   "ply": 14,
+   "t": 161.5,
+   "line": [
+    "Ne3"
+   ],
+   "fen": "rnbqk2r/ppp2p1p/6p1/4P3/Nb6/4n3/PP1BPPPP/R2QKBNR w KQkq - 3 8",
+   "said": "remember the rest let's see how this goes um bishop b4 check we have to cover the check yeah knight e3 is a move um so i'm very surprised that he knows this line very surprised uh because this is as far as i know this is not that well known now he sacrifices a knight temporarily but he's going to win the knight back on a4 he's going to win the knight back on a4 as you guys will see this knight on a4 is going to be undefended after he takes on d2 and then he's going to go queen h4 queen takes a four so takes"
+  },
+  {
+   "ply": 15,
+   "t": 185.5,
+   "line": [
+    "fxe3"
+   ],
+   "fen": "rnbqk2r/ppp2p1p/6p1/4P3/Nb6/4P3/PP1BP1PP/R2QKBNR b KQkq - 0 8",
+   "said": "but he's going to win the knight back on a4 he's going to win the knight back on a4 as you guys will see this knight on a4 is going to be undefended after he takes on d2 and then he's going to go queen h4 queen takes a four so takes he has oh and i think he just confused"
+  },
+  {
+   "ply": 16,
+   "t": 188.5,
+   "line": [
+    "Qh4+"
+   ],
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/Nb5q/4P3/PP1BP1PP/R2QKBNR w KQkq - 1 9",
+   "said": "as you guys will see this knight on a4 is going to be undefended after he takes on d2 and then he's going to go queen h4 queen takes a four so takes he has oh and i think he just confused the move order i think he just confused the movement i'm pretty sure i'm pretty sure that you have to take the bishop first because here's the thing when you take the bishop i have to take with the queen then you give a check on h4 and it forks the king of the knight but there's a subtle difference here and that i can play g3"
+  },
+  {
+   "ply": 17,
+   "t": 207,
+   "line": [
+    "g3"
+   ],
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/Nb5q/4P1P1/PP1BP2P/R2QKBNR b KQkq - 0 9",
+   "said": "the bishop first because here's the thing when you take the bishop i have to take with the queen then you give a check on h4 and it forks the king of the knight but there's a subtle difference here and that i can play g3 he takes my bishop what's the difference"
+  },
+  {
+   "ply": 18,
+   "t": 209,
+   "line": [
+    "Bxd2+"
+   ],
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/N6q/4P1P1/PP1bP2P/R2QKBNR w KQkq - 0 10",
+   "said": "when you take the bishop i have to take with the queen then you give a check on h4 and it forks the king of the knight but there's a subtle difference here and that i can play g3 he takes my bishop what's the difference as far as i know maybe i'm wrong maybe this is still theory but i don't think so we can take with the king and the queen still defends the knight"
+  },
+  {
+   "ply": 19,
+   "t": 217,
+   "line": [
+    "Kxd2"
+   ],
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/N6q/4P1P1/PP1KP2P/R2Q1BNR b kq - 0 10",
+   "said": "but there's a subtle difference here and that i can play g3 he takes my bishop what's the difference as far as i know maybe i'm wrong maybe this is still theory but i don't think so we can take with the king and the queen still defends the knight so that's the danger of trying to you know overly parrot a repertoire that you learned you confused one little thing in these very topical openings and immediately you're losing uh and our queen defends the knight now isn't it dangerous that our king is in the center not really because the king is going to tuck itself away on c1 so it's not actually dangerous that our king is in the center he doesn't have any pieces out he gives"
+  },
+  {
+   "ply": 20,
+   "t": 242,
+   "line": [
+    "Qb4+"
+   ],
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/Nq6/4P1P1/PP1KP2P/R2Q1BNR w kq - 1 11",
+   "said": "isn't it dangerous that our king is in the center not really because the king is going to tuck itself away on c1 so it's not actually dangerous that our king is in the center he doesn't have any pieces out he gives me a check on b4 some of you might be tempted to cover this with the knight that would be a very bad blunder because of queen takes b2 check so we've got to be very precise here and there's no reason as far as i can tell not to go king c1 tuck the king"
+  },
+  {
+   "ply": 21,
+   "t": 256,
+   "line": [
+    "Kc1"
+   ],
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/Nq6/4P1P1/PP2P2P/R1KQ1BNR b kq - 2 11",
+   "said": "this with the knight that would be a very bad blunder because of queen takes b2 check so we've got to be very precise here and there's no reason as far as i can tell not to go king c1 tuck the king away and then quickly we need to develop our pieces see that's what some people uh that's what derails some people in these positions you start um you know you start various shenanigans no shenanigans just got to develop your pieces consolidate the advantage and then you're up a piece white has some difficulty because we've got irish pawns we don't have the king side developed we've got some stuff that we need to solve um but we'll solve it he doesn't have his pieces developed either so yeah move orders are crucial move orders are absolutely crucial and when you're studying and opening if there is a sequence like this you've got to make sure you're establishing why the move order is whether the move order is important and why it's important if it is because that will help you avoid these kinds of mistakes which happen pretty often bishop f5 you can play but there's no threat i mean we just develop our knight to c3 so it's no it's no issues it's not weird at all people forget and confuse stuff all the time"
+  },
+  {
+   "ply": 22,
+   "t": 322,
+   "line": [
+    "Qe4"
+   ],
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/N3q3/4P1P1/PP2P2P/R1KQ1BNR w kq - 3 12",
+   "said": "bishop f5 you can play but there's no threat i mean we just develop our knight to c3 so it's no it's no issues it's not weird at all people forget and confuse stuff all the time it's it's not 100 totally understandable that he confused the line grenfell is very theoretical okay so obviously here we're just going"
+  },
+  {
+   "ply": 23,
+   "t": 329,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/N3q3/4PNP1/PP2P2P/R1KQ1B1R b kq - 4 12",
+   "said": "it's not weird at all people forget and confuse stuff all the time it's it's not 100 totally understandable that he confused the line grenfell is very theoretical okay so obviously here we're just going to f3"
+  },
+  {
+   "ply": 24,
+   "t": 331.5,
+   "line": [
+    "Qxe3+"
+   ],
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/N7/4qNP1/PP2P2P/R1KQ1B1R w kq - 0 13",
+   "said": "it's not weird at all people forget and confuse stuff all the time it's it's not 100 totally understandable that he confused the line grenfell is very theoretical okay so obviously here we're just going to f3 okay queen takes e3 check doesn't help his cause at all we can just block with"
+  },
+  {
+   "ply": 25,
+   "t": 335.5,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/N7/4qNP1/PP1QP2P/R1K2B1R b kq - 1 13",
+   "said": "totally understandable that he confused the line grenfell is very theoretical okay so obviously here we're just going to f3 okay queen takes e3 check doesn't help his cause at all we can just block with our queen and in a sense this helps us because now if we move this pawn out to e4 the bishop will be"
+  },
+  {
+   "ply": 26,
+   "t": 345.5,
+   "line": [
+    "Qe4"
+   ],
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/N3q3/5NP1/PP1QP2P/R1K2B1R w kq - 2 14",
+   "said": "his cause at all we can just block with our queen and in a sense this helps us because now if we move this pawn out to e4 the bishop will be open 300 bits thank you so what should we do now should we go e3 no we should definitely not go e3 blunders both of our knights we should instead drop our"
+  },
+  {
+   "ply": 27,
+   "t": 355,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnb1k2r/ppp2p1p/6p1/4P3/4q3/2N2NP1/PP1QP2P/R1K2B1R b kq - 3 14",
+   "said": "this pawn out to e4 the bishop will be open 300 bits thank you so what should we do now should we go e3 no we should definitely not go e3 blunders both of our knights we should instead drop our knight back to c3 just very simple"
+  },
+  {
+   "ply": 28,
+   "t": 356.5,
+   "line": [
+    "Qc6"
+   ],
+   "fen": "rnb1k2r/ppp2p1p/2q3p1/4P3/8/2N2NP1/PP1QP2P/R1K2B1R w kq - 4 15",
+   "said": "open 300 bits thank you so what should we do now should we go e3 no we should definitely not go e3 blunders both of our knights we should instead drop our knight back to c3 just very simple now we can move in for the kill so we've got two separate ways to win a position like this we can do it through the trading method we can go queen up to d5 and basically force the queen trade i don't like that because that's it seems a little bit too i don't know how to define it it just we don't need to do that because now we have a lead in development so there's absolutely no need uh to go out of our way to uh to to trade the queens knight d4 would blunder the rogue so from that perspective we can fianchetto our bishop that's a great idea another great idea is to prepare the development of the bishop via this diagonal and how can we do that yeah we can go e4 and the reason i like this move on top"
+  },
+  {
+   "ply": 29,
+   "t": 393.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnb1k2r/ppp2p1p/2q3p1/4P3/4P3/2N2NP1/PP1Q3P/R1K2B1R b kq - 0 15",
+   "said": "knight d4 would blunder the rogue so from that perspective we can fianchetto our bishop that's a great idea another great idea is to prepare the development of the bishop via this diagonal and how can we do that yeah we can go e4 and the reason i like this move on top of what i just said is that it threatens the pin it goads him into castling and i"
+  },
+  {
+   "ply": 30,
+   "t": 398,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnb2rk1/ppp2p1p/2q3p1/4P3/4P3/2N2NP1/PP1Q3P/R1K2B1R w - - 1 16",
+   "said": "another great idea is to prepare the development of the bishop via this diagonal and how can we do that yeah we can go e4 and the reason i like this move on top of what i just said is that it threatens the pin it goads him into castling and i had seen that we have a very strong move here and the way that you guys should see this move is to recognize that he lacks his gruntfield bishop he lacks if he encounter bishop when you lack a fiance bishop these dark scars around the kings around the king are incredibly weak and there's a bunch of very thematic ideas that stem directly from that one of them of course is to put the queen on h6 and follow it"
+  },
+  {
+   "ply": 31,
+   "t": 420.5,
+   "line": [
+    "Qh6"
+   ],
+   "fen": "rnb2rk1/ppp2p1p/2q3pQ/4P3/4P3/2N2NP1/PP5P/R1K2B1R b - - 2 16",
+   "said": "fiance bishop these dark scars around the kings around the king are incredibly weak and there's a bunch of very thematic ideas that stem directly from that one of them of course is to put the queen on h6 and follow it up with a devastating knight g5 so he has to push his f on out to stop me from doing that in turn that creates other weaknesses um that creates other weaknesses which we're going to so in particular it creates the weakness of sorry creates the weakness of this diagonal so if we put a bishop on c4 that's going to be checkmate okay so he finds f6 to his credit"
+  },
+  {
+   "ply": 32,
+   "t": 441,
+   "line": [
+    "f6"
+   ],
+   "fen": "rnb2rk1/ppp4p/2q2ppQ/4P3/4P3/2N2NP1/PP5P/R1K2B1R w - - 0 17",
+   "said": "um that creates other weaknesses which we're going to so in particular it creates the weakness of sorry creates the weakness of this diagonal so if we put a bishop on c4 that's going to be checkmate okay so he finds f6 to his credit and how do we approach the question of actually finishing this one off well like i said if we could put a bishop on c4 that would be devastating okay so do we go b3 here to prepare it well that would be a bad idea because that would blunder the knight so instead we need to go at it from the opposite end opposite angle can we chase the queen away from c6 in order to pave the way for bishop c4 that needs to be done a little bit carefully um so how can we do that how can we go about doing that well 95 the night is pinned the knight is spin guys so you keep trying to put stuff on d5 and see where you need to chase the queen away you need to chase the queen away you can do that in two different ways i love knight d4 but i also love the move bishop b5"
+  },
+  {
+   "ply": 33,
+   "t": 492,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "rnb2rk1/ppp4p/2q2ppQ/1B2P3/4P3/2N2NP1/PP5P/R1K4R b - - 1 17",
+   "said": "the knight is spin guys so you keep trying to put stuff on d5 and see where you need to chase the queen away you need to chase the queen away you can do that in two different ways i love knight d4 but i also love the move bishop b5 because this develops the bishop simultaneously so it's a helpful move and we're trying to get the queen off of its control of c4 that's the bottom line here but if that doesn't happen then guess what we could do worse than just having developed our bishop that's a good thing"
+  },
+  {
+   "ply": 34,
+   "t": 514,
+   "line": [
+    "Qc5"
+   ],
+   "fen": "rnb2rk1/ppp4p/5ppQ/1Bq1P3/4P3/2N2NP1/PP5P/R1K4R w - - 2 18",
+   "said": "guess what we could do worse than just having developed our bishop that's a good thing okay queen c5 is a good move so he continues to stop us from coming bishop c4 but now asking ourselves how the position has changed as a result of the last two moves well now we can we can continue the idea that we started with queen h6 so um now that we've displaced his queen from its protection of the f6 pawn we can we can continue the idea that we started now we need to get a knight to g5 that was the idea should we do that immediately well no he's got the pawn on f6 so we take first"
+  },
+  {
+   "ply": 35,
+   "t": 545.5,
+   "line": [
+    "exf6"
+   ],
+   "fen": "rnb2rk1/ppp4p/5PpQ/1Bq5/4P3/2N2NP1/PP5P/R1K4R b - - 0 18",
+   "said": "we can we can continue the idea that we started now we need to get a knight to g5 that was the idea should we do that immediately well no he's got the pawn on f6 so we take first we give him the f-file so if we didn't have knight g5 this wouldn't have been a good idea there would there would have been no need to"
+  },
+  {
+   "ply": 37,
+   "t": 552,
+   "line": [
+    "Rxf6",
+    "Ng5"
+   ],
+   "fen": "rnb3k1/ppp4p/5rpQ/1Bq3N1/4P3/2N3P1/PP5P/R1K4R b - - 1 19",
+   "said": "was the idea should we do that immediately well no he's got the pawn on f6 so we take first we give him the f-file so if we didn't have knight g5 this wouldn't have been a good idea there would there would have been no need to give him more concessions but we're going directly for the kill here he's got to check on e3 it's not dangerous we can just tuck her king away on b1 um queen back to e7 and now we can"
+  },
+  {
+   "ply": 38,
+   "t": 561.5,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "rnb3k1/ppp1q2p/5rpQ/1B4N1/4P3/2N3P1/PP5P/R1K4R w - - 2 20",
+   "said": "wouldn't have been a good idea there would there would have been no need to give him more concessions but we're going directly for the kill here he's got to check on e3 it's not dangerous we can just tuck her king away on b1 um queen back to e7 and now we can actually move in for the kill so let's be careful um what should we do"
+  },
+  {
+   "ply": 39,
+   "t": 574,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "rnb3k1/ppp1q2p/5rpQ/1B1N2N1/4P3/6P1/PP5P/R1K4R b - - 3 20",
+   "said": "actually move in for the kill so let's be careful um what should we do yeah knight t5 is the simplest you can come back to c5 with check but easily it's easy to see that king b1"
+  },
+  {
+   "ply": 41,
+   "t": 578.5,
+   "line": [
+    "Qc5+",
+    "Kb1"
+   ],
+   "fen": "rnb3k1/ppp4p/5rpQ/1BqN2N1/4P3/6P1/PP5P/RK5R b - - 5 21",
+   "said": "um what should we do yeah knight t5 is the simplest you can come back to c5 with check but easily it's easy to see that king b1 defends against all of the checks and creates insurmountable threats against this game so this is mate this is made and this is winning yeah this is over i mean this was a pretty easy game given that he blotted the piece he helped us but but yeah i guess this guy has the chestable repertoire though which is good svidler released the grunfeld repertoire yeah guys i'll answer the questions after the game as i always do more youtube videos are coming out every day on the speed run i'll just throw this out there if you enjoy the speedrun content it really helps grow my channel if you subscribe to my youtube i appreciate each and every sub we're trying to move to our 200k subs so it would be a dream if we could uh if we could hit that"
+  },
+  {
+   "ply": 6,
+   "t": 640.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+   "said": "i appreciate each and every sub we're trying to move to our 200k subs so it would be a dream if we could uh if we could hit that so we had a grunfeld and the smooth knight a4"
+  },
+  {
+   "ply": 9,
+   "t": 643,
+   "line": [
+    "cxd5",
+    "Nxd5",
+    "Na4"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/N2P4/8/PP2PPPP/R1BQKBNR b KQkq - 1 5",
+   "said": "trying to move to our 200k subs so it would be a dream if we could uh if we could hit that so we had a grunfeld and the smooth knight a4 is incredibly rare but nowadays nothing truly is rare everything's been analyzed everything is known and so these kind of like surprising moves are are actually not they just don't have the same they don't have the same effect that they used to a couple of years ago uh and knight a4 was first played i think it's called the nadanyan variation this is armenian gm who played this often he wasn't surprised i mean this guy but here yeah this has over a thousand games at this point nakamura played against nepo 1997 first time it was played thank you the grand elixir with two subs appreciate it and it was no sorry no in 1995 and ashot nadanyan played it in 96 twice and beat varja nakobian and var actually knew var played e5 and bishop before in 1996. only the second"
+  },
+  {
+   "ply": 12,
+   "t": 701.5,
+   "line": [
+    "e5",
+    "dxe5",
+    "Bb4+"
+   ],
+   "fen": "rnbqk2r/ppp2p1p/6p1/3nP3/Nb6/8/PP2PPPP/R1BQKBNR w KQkq - 1 7",
+   "said": "ashot nadanyan played it in 96 twice and beat varja nakobian and var actually knew var played e5 and bishop before in 1996. only the second time this appeared far found this over the board and again so what is the point of knight"
+  },
+  {
+   "ply": 9,
+   "t": 706.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/N2P4/8/PP2PPPP/R1BQKBNR b KQkq - 1 5",
+   "said": "and var actually knew var played e5 and bishop before in 1996. only the second time this appeared far found this over the board and again so what is the point of knight a4 what is the purpose of this so let's say black plays normally let's say black plays bishop g7 white plays e4 and generally in the"
+  },
+  {
+   "ply": 11,
+   "t": 713,
+   "line": [
+    "Bg7",
+    "e4"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/N2PP3/8/PP3PPP/R1BQKBNR b KQkq - 0 6",
+   "said": "time this appeared far found this over the board and again so what is the point of knight a4 what is the purpose of this so let's say black plays normally let's say black plays bishop g7 white plays e4 and generally in the grunfeld black takes on c3 at this moment so if you"
+  },
+  {
+   "ply": 12,
+   "t": 717,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/6p1/8/N2PP3/2n5/PP3PPP/R1BQKBNR w KQkq - 1 7",
+   "said": "and again so what is the point of knight a4 what is the purpose of this so let's say black plays normally let's say black plays bishop g7 white plays e4 and generally in the grunfeld black takes on c3 at this moment so if you play a main line okay if you play e4"
+  },
+  {
+   "ply": 10,
+   "t": 721.5,
+   "line": [],
+   "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/N2P4/8/PP2PPPP/R1BQKBNR w KQkq - 2 6",
+   "said": "plays bishop g7 white plays e4 and generally in the grunfeld black takes on c3 at this moment so if you play a main line okay if you play e4 black takes on c3"
+  },
+  {
+   "ply": 14,
+   "t": 723,
+   "line": [
+    "Nc3",
+    "Bf8",
+    "e4",
+    "Nxc3"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/8/3PP3/2n5/PP3PPP/R1BQKBNR w KQkq - 0 8",
+   "said": "white plays e4 and generally in the grunfeld black takes on c3 at this moment so if you play a main line okay if you play e4 black takes on c3 and this creates sort of a pawn chain"
+  },
+  {
+   "ply": 15,
+   "t": 725,
+   "line": [
+    "bxc3"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/8/3PP3/2P5/P4PPP/R1BQKBNR b KQkq - 0 8",
+   "said": "grunfeld black takes on c3 at this moment so if you play a main line okay if you play e4 black takes on c3 and this creates sort of a pawn chain the black later attacks of the move c5 and that formulates the basis of the whole set up behind the grunt felt black attacks white center by developing the pieces and channeling them toward white center how does knight a4 not allow that like why can't black just okay so you can drop the b6 what's the bit what's the big deal here why is this like supposed to be good for white so the point is that after so white plays bishop e3 um that's the main move and this creates a funny situation because this knight on a4 which looks bad is actually stopping black from going c5 and this makes it harder for black to assail white's pawn center um so for instance if black castles y goes knight f3 and now if black decides to take the queen on a4 is very very good it's protecting the deforest upon from the side white is already you know as a small lead in development and i think the main line goes c5 and now rook to d1 white gets the pieces out super quickly and even though black is able to cut into white's center uh it's not good enough because white gets this big lead in development the d file is under control so i think white's supposed to be slightly better here i i i haven't reviewed this in a while cd94 i see svidler plays this played this with black and zhang though thanks for another gift itself so maybe white is only slightly better but you guys can see kind of the point the point is to"
+  },
+  {
+   "ply": 12,
+   "t": 814.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 4 7",
+   "said": "reviewed this in a while cd94 i see svidler plays this played this with black and zhang though thanks for another gift itself so maybe white is only slightly better but you guys can see kind of the point the point is to disallow knight take c3"
+  },
+  {
+   "ply": 15,
+   "t": 816.5,
+   "line": [
+    "Na4",
+    "Bg7",
+    "e3"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/N2P4/4P3/PP3PPP/R1BQKBNR b KQkq - 0 8",
+   "said": "i see svidler plays this played this with black and zhang though thanks for another gift itself so maybe white is only slightly better but you guys can see kind of the point the point is to disallow knight take c3 okay so e4 knight b6 bishop e3 is the"
+  },
+  {
+   "ply": 17,
+   "t": 817.5,
+   "line": [
+    "Nb6",
+    "e4"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/1n4p1/8/N2PP3/8/PP3PPP/R1BQKBNR b KQkq - 0 9",
+   "said": "i see svidler plays this played this with black and zhang though thanks for another gift itself so maybe white is only slightly better but you guys can see kind of the point the point is to disallow knight take c3 okay so e4 knight b6 bishop e3 is the main line he played e5 which"
+  },
+  {
+   "ply": 19,
+   "t": 819.5,
+   "line": [
+    "O-O",
+    "Be3"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/1n4p1/8/N2PP3/4B3/PP3PPP/R2QKBNR b KQ - 2 10",
+   "said": "with black and zhang though thanks for another gift itself so maybe white is only slightly better but you guys can see kind of the point the point is to disallow knight take c3 okay so e4 knight b6 bishop e3 is the main line he played e5 which"
+  },
+  {
+   "ply": 10,
+   "t": 821.5,
+   "line": [],
+   "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/N2P4/8/PP2PPPP/R1BQKBNR w KQkq - 2 6",
+   "said": "only slightly better but you guys can see kind of the point the point is to disallow knight take c3 okay so e4 knight b6 bishop e3 is the main line he played e5 which uh which is the sharp move immediately exploiting the fact that white has made a move to the side this follows the rules you know you meet a move to the side of the board with a move in the center uh e5d five it's very concrete idea this should be four now knight e3 uh it's it's yeah no 2023 it's a good surprise weapon still and i think this is supposed to be equal i don't think white is worse than this line and again the whole point is that you ruin white's pawn structure now you're supposed to take the bishop and then fork the king and the knight with queen h4 g3 queen takes a4 and you get this very interesting very unbalanced position where technically white is up a pawn yes however if you've got irish puns you've got sort of a permanently weak king even if white manages to castle king side white's got g3 black on the other hand also has a permanently weakened king side so both sides kings are in some trouble i don't know how the theory goes here i have no idea what white's main move in this position is i can check uh so apparently"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 9,
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/N2P4/8/PP2PPPP/R1BQKBNR b KQkq - 1 5",
+   "line": [
+    "c4",
+    "Nf6",
+    "d4",
+    "g6",
+    "Nc3",
+    "d5",
+    "cxd5",
+    "Nxd5",
+    "Na4"
+   ],
+   "options": [
+    {
+     "san": "e5",
+     "t": 116.5,
+     "continuation": "e5",
+     "said": "but just because it's it's pretty crazy is knight a4 whoa bandit out of the 10 gifted thank you damn girl thank you for the 10 gifted band-a-dad all right so he goes e5 i'm very surprised that he actually knows this move and the purpose of knight a4 i'll talk more about this after the game but the purp the main purpose is to prevent him from being able to take my knight in response to e4 so i want to play e4 and chase his knight away so it makes sense from that perspective and in order to do that you have to move your knight now he goes e5 this is the main line this is uh the sacrifices upon and gets an initiative in return as far as i remember we're supposed to take this pawn and then he gives me like a check on v4 we block with bishop d2 and then i don't remember the rest let's see how this goes um bishop b4 check we have to cover the check yeah knight e3 is a move um so i'm very surprised that he knows this line very surprised uh because this is as far as i know this is not that well known now he sacrifices a knight temporarily but he's going to win the knight back on a4 he's going to win the knight back on a4"
+    },
+    {
+     "san": "Bg7",
+     "t": 713,
+     "continuation": "Bg7 e4",
+     "said": "time this appeared far found this over the board and again so what is the point of knight a4 what is the purpose of this so let's say black plays normally let's say black plays bishop g7 white plays e4 and generally in the grunfeld black takes on c3 at this moment so if you play a main line okay if you play e4 black takes on c3 and this creates sort of a pawn chain the black later attacks of the move c5 and that formulates the basis of the whole set up behind the grunt felt black attacks white center by developing the pieces and channeling them toward white center how does knight a4 not allow that like why can't black just okay so you can drop the b6 what's the bit what's the big deal here why is this like supposed to be good for white so the point is that after so white plays bishop e3 um that's the main move and this creates a funny situation because this knight on a4 which looks bad is actually stopping black from going c5 and this makes it harder for black to assail white's pawn center um so for instance if black castles y goes knight f3 and now if black decides to take the"
+    }
+   ]
+  }
+ ]
+}
