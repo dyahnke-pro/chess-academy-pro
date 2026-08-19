@@ -1,0 +1,30 @@
+[
+ {
+  "id": "vn-fourpawns-strike-the-head-of-the-chain-once-you-are-castled",
+  "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 e6 Nf3 Be7 Be2 f6",
+  "teaches": "A big pawn centre is attacked at its FRONT pawn when that pawn is the one cramping you. The break costs a move and opens lines toward your own king, so it waits until development is finished \u2014 but once it lands, the whole structure that was squeezing you has to resolve itself.",
+  "explains": "The pawn steps to f6 hitting the head of the chain on e5. Everything of Black's is already out, so the lines the break opens run toward the side with more pieces on them.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e5"
+   }
+  ]
+ },
+ {
+  "id": "vn-fourpawns-recapture-with-the-piece-that-gains-the-diagonal",
+  "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 e6 Nf3 Be7 Be2 f6 O-O O-O exf6 Bxf6",
+  "teaches": "After a central break is resolved, recapture with the piece that ends up doing the most, not the one nearest to hand. A bishop that lands on the long diagonal turns the opened centre into pressure on the pawn that is left \u2014 the break was never about the pawn count.",
+  "explains": "The bishop takes on f6, where it bears down the diagonal on the pawn on d4 and connects with the queen behind it. The chain that was cramping the position is gone and its remaining pawn is now the target.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "d4"
+   },
+   {
+    "kind": "defends",
+    "square": "g7"
+   }
+  ]
+ }
+]
