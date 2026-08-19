@@ -10,7 +10,7 @@ for (const l of process.argv.slice(2)) {
     const t=f+r; if (t===sq) continue;
     if (g.attackers(t, last.color).includes(sq)) hit.push(t);
   }
-  console.log(`\n${last.san} on ${sq} (${last.color}) mate=${g.isCheckmate()} fen=${g.fen()}`);
+  console.log(`\n${last.san} on ${sq} (${last.color})`);
   console.log('  empty  :', hit.filter(t=>!g.get(t)).join(' '));
   console.log('  pieces :', hit.filter(t=>g.get(t)).map(t=>`${t}:${g.get(t).color}${g.get(t).type}`).join(' '));
 }

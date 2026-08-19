@@ -1,0 +1,98 @@
+[
+ {
+  "id": "vn-closed-e5-the-rook-move-that-turns-a-bluff-into-a-threat",
+  "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1",
+  "teaches": "A capture that 'wins a pawn' is only a threat once the pawn behind it is covered. The same two-move trick can be harmless on one move and winning on the next, and the move that changes it is often a quiet rook step that touches nothing. Before dismissing a capture as unsound, check what has just been defended.",
+  "explains": "The rook steps to e1 behind the pawn on e4. Until now, grabbing on c6 and taking the pawn in the centre lost the e-pawn straight back; with the file supported, that sequence is real and has to be answered.",
+  "reasons": [
+   {
+    "kind": "defends",
+    "square": "e4"
+   }
+  ]
+ },
+ {
+  "id": "vn-closed-e5-answer-a-threat-by-hitting-the-piece-that-makes-it",
+  "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5",
+  "teaches": "When a threat depends on one particular piece, the cleanest answer is often to attack that piece rather than to shore up what it is aiming at. Defending the target is passive and permanent; hitting the attacker gains space and buys the move you were going to need anyway.",
+  "explains": "The pawn to b5 hits the bishop on a4 and takes c4 away from it at the same time, so the piece that made the capture work has to retreat. The queenside space is a bonus that the defensive alternative would never have collected.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "a4"
+   },
+   {
+    "kind": "controls",
+    "square": "c4"
+   }
+  ]
+ },
+ {
+  "id": "vn-closed-e5-pay-a-pawn-to-open-the-lines-you-already-aim-down",
+  "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5",
+  "teaches": "A gambit in a quiet position is not a wild bet; it is a purchase of TIME and OPEN LINES, and it is only sound if your pieces are already pointing at the king. Push the central pawn in one move rather than two \u2014 the tempo saved is the whole compensation.",
+  "explains": "The pawn goes to d5 in one step, hitting the pawn on e4 and covering c4. The centre opens while every black piece is developed and the king is already castled; the pawn in the middle is the price of that.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e4"
+   },
+   {
+    "kind": "controls",
+    "square": "c4"
+   }
+  ]
+ },
+ {
+  "id": "vn-closed-e5-defend-a-piece-with-a-pawn-when-you-can",
+  "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6",
+  "teaches": "Given a choice of defenders, use the pawn. A pawn holds a piece without being tied down itself, and nothing that attacks the defended piece is willing to trade into it \u2014 so the defence costs nothing and cannot be undermined by an exchange. It is the cheapest way to answer a threat and get on with your plan.",
+  "explains": "The pawn to c6 holds the knight in the centre and props up the pawn on b5 behind it. The rook can no longer take the knight, and no piece has been diverted from the attack to babysit it.",
+  "reasons": [
+   {
+    "kind": "defends",
+    "square": "d5"
+   },
+   {
+    "kind": "defends",
+    "square": "b5"
+   }
+  ]
+ },
+ {
+  "id": "vn-closed-e5-chase-the-piece-with-the-move-you-wanted-anyway",
+  "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6",
+  "teaches": "When an enemy piece is standing in your way, drive it off with a move that also belongs to your attack. A tempo-gaining move that leaves your pieces pointing somewhere useless has gained nothing; the test of the chasing move is where your army is aiming after the piece has run.",
+  "explains": "The bishop comes to d6 attacking the rook in the centre and connecting the rooks behind it. The rook has to leave, and the bishop is left on the diagonal that runs at the castled king.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e5"
+   },
+   {
+    "kind": "defends",
+    "square": "f8"
+   }
+  ]
+ },
+ {
+  "id": "vn-closed-e5-sink-the-queen-into-the-holes-the-pawn-move-left",
+  "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O c3 d5 exd5 Nxd5 Nxe5 Nxe5 Rxe5 c6 d4 Bd6 Re1 Qh4 g3 Qh3",
+  "teaches": "A pawn move in front of the castled king answers one threat and creates a permanent one: the squares of the other colour around the king can never be covered by pawns again. Do not retreat the attacking piece when it is pushed \u2014 walk it INTO the holes, where it cannot be driven away by anything the defender still has.",
+  "explains": "The queen drops into h3, holding the pawn on g3 and the pawn on h2 under attack and standing on squares no pawn can ever contest again. Nothing chases it: the defender has no light-squared piece left near its own king.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "g3"
+   },
+   {
+    "kind": "attacks",
+    "square": "h2"
+   },
+   {
+    "kind": "controls",
+    "square": "g2"
+   }
+  ]
+ }
+]
