@@ -1,0 +1,34 @@
+[
+ {
+  "id": "vn-openings-e5-take-the-pawn-the-bishop-move-stopped-guarding",
+  "line": "e4 e5 Nf3 Nc6 Nc3 Bc5 Nxe5",
+  "teaches": "A developing move that looks natural can still drop a pawn, and the way to find it is to ask which defender left. When a piece comes out to an active square without adding anything to the centre, count the guards on the central pawn again before assuming the position is symmetrical \u2014 and take, rather than fearing the counter-check that comes with it.",
+  "explains": "The knight takes on e5, forking the knight on c6 and leaning on d7 and f7. The bishop that just developed is not defending anything it left behind, so the pawn was simply available.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "c6"
+   },
+   {
+    "kind": "attacks",
+    "square": "f7"
+   }
+  ]
+ },
+ {
+  "id": "vn-openings-e5-count-the-follow-up-before-the-check",
+  "line": "e4 e5 Nf3 Nc6 Nc3 Bc5 Nxe5 Bxf2+ Kxf2 Nxe5 d4",
+  "teaches": "A sacrifice that drags the king out is only worth a piece if you can name what comes NEXT. A check the king simply accepts, followed by a central pawn move that regains the material with tempo, leaves the sacrificing side a piece down and the exposed king perfectly safe. Take the piece and hand it back on your own terms.",
+  "explains": "The pawn to d4 attacks the knight that has just recaptured and takes c5 away from it, so the material comes straight back. The king on f2 is inconvenienced, and inconvenience is not compensation.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e5"
+   },
+   {
+    "kind": "controls",
+    "square": "c5"
+   }
+  ]
+ }
+]
