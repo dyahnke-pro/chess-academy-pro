@@ -1,0 +1,349 @@
+{
+ "videoId": "KV90PAgPO2A",
+ "title": "Master Class | Panov Attack (Caro–Kann) | Chess Speedrun | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-19",
+ "geometry": {
+  "x0": 374,
+  "y0": 0,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 2760,
+  "settledPositions": null
+ },
+ "plies": 29,
+ "rewinds": 6,
+ "moves": [
+  {
+   "t": 11.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 45.5,
+   "ply": 3,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 49,
+   "ply": 4,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 63.5,
+   "ply": 5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 65.5,
+   "ply": 6,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 78.5,
+   "ply": 7,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/2PP4/8/PP3PPP/RNBQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 83.5,
+   "ply": 8,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/8/PP3PPP/RNBQKBNR w KQkq - 1 5"
+  },
+  {
+   "t": 85,
+   "ply": 9,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 5"
+  },
+  {
+   "t": 87,
+   "ply": 10,
+   "line": [
+    "dxc4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/8/2pP4/2N5/PP3PPP/R1BQKBNR w KQkq - 0 6"
+  },
+  {
+   "t": 96,
+   "ply": 11,
+   "line": [
+    "Bxc4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/8/2BP4/2N5/PP3PPP/R1BQK1NR b KQkq - 0 6"
+  },
+  {
+   "t": 99,
+   "ply": 12,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "rn1qkb1r/pp2pppp/5n2/5b2/2BP4/2N5/PP3PPP/R1BQK1NR w KQkq - 1 7"
+  },
+  {
+   "t": 173.5,
+   "ply": 16,
+   "line": [
+    "Qb3",
+    "Nbd7",
+    "Qb5",
+    "e6"
+   ],
+   "fen": "r2qkb1r/pp1n1ppp/4pn2/1Q3b2/2BP4/2N5/PP3PPP/R1B1K1NR w KQkq - 0 9"
+  },
+  {
+   "t": 213.5,
+   "ply": 20,
+   "line": [
+    "Qb6",
+    "Qxb6",
+    "Nf3",
+    "Qd8"
+   ],
+   "fen": "r2qkb1r/pp1n1ppp/4pn2/5b2/2BP4/2N2N2/PP3PPP/R1B1K2R w KQkq - 2 11"
+  },
+  {
+   "t": 921,
+   "ply": 3,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 922,
+   "ply": 2,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 925.5,
+   "ply": 6,
+   "line": [
+    "d4",
+    "d5",
+    "exd5",
+    "cxd5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 938.5,
+   "ply": 7,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/3B4/PPP2PPP/RNBQK1NR b KQkq - 1 4"
+  },
+  {
+   "t": 941.5,
+   "ply": 9,
+   "line": [
+    "Nc6",
+    "c3"
+   ],
+   "fen": "r1bqkbnr/pp2pppp/2n5/3p4/3P4/2PB4/PP3PPP/RNBQK1NR b KQkq - 0 5"
+  },
+  {
+   "t": 954,
+   "ply": 6,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 955.5,
+   "ply": 7,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/2PP4/8/PP3PPP/RNBQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 1145,
+   "ply": 8,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/8/PP3PPP/RNBQKBNR w KQkq - 1 5"
+  },
+  {
+   "t": 1148,
+   "ply": 10,
+   "line": [
+    "Nc3",
+    "dxc4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/8/2pP4/2N5/PP3PPP/R1BQKBNR w KQkq - 0 6"
+  },
+  {
+   "t": 1149.5,
+   "ply": 9,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 5"
+  },
+  {
+   "t": 1153,
+   "ply": 10,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR w KQkq - 3 6"
+  },
+  {
+   "t": 1160,
+   "ply": 9,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 5"
+  },
+  {
+   "t": 1162,
+   "ply": 10,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR w KQkq - 3 6"
+  },
+  {
+   "t": 1163,
+   "ply": 11,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/3P4/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 0 6"
+  },
+  {
+   "t": 1176,
+   "ply": 13,
+   "line": [
+    "Nb8",
+    "Bc4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/3P4/2BP4/2N5/PP3PPP/R1BQK1NR b KQkq - 2 7"
+  },
+  {
+   "t": 1177,
+   "ply": 11,
+   "line": [],
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/3P4/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 0 6"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "exd5",
+    "cxd5"
+   ],
+   "ply": 6,
+   "options": [
+    {
+     "san": "c4",
+     "t": 78.5,
+     "continuation": "c4"
+    },
+    {
+     "san": "Bd3",
+     "t": 938.5,
+     "continuation": "Bd3"
+    }
+   ]
+  },
+  {
+   "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 5",
+   "line": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "exd5",
+    "cxd5",
+    "c4",
+    "Nf6",
+    "Nc3"
+   ],
+   "ply": 9,
+   "options": [
+    {
+     "san": "dxc4",
+     "t": 87,
+     "continuation": "dxc4"
+    },
+    {
+     "san": "Nc6",
+     "t": 1153,
+     "continuation": "Nc6"
+    }
+   ]
+  }
+ ],
+ "titleCheck": {
+  "claims": "Caro-Kann Defense: Panov Attack",
+  "confirmed": true
+ },
+ "openings": [
+  {
+   "name": "Caro-Kann Defense: Panov Attack, Modern Defense",
+   "eco": "B13",
+   "plies": 10,
+   "line": "e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 Nc6",
+   "coverage": 0.167
+  },
+  {
+   "name": "Caro-Kann Defense: Panov Attack",
+   "eco": "B13",
+   "plies": 7,
+   "line": "e4 c6 d4 d5 exd5 cxd5 c4",
+   "coverage": 0.611
+  },
+  {
+   "name": "Caro-Kann Defense: Exchange Variation",
+   "eco": "B13",
+   "plies": 5,
+   "line": "e4 c6 d4 d5 exd5",
+   "coverage": 0.833
+  },
+  {
+   "name": "Caro-Kann Defense",
+   "eco": "B10",
+   "plies": 2,
+   "line": "e4 c6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ]
+}
