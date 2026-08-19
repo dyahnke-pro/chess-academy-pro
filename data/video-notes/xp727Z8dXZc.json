@@ -1,0 +1,14 @@
+[
+ {
+  "id": "vn-move-order-the-developing-move-that-is-also-a-refutation",
+  "line": "e4 e5 Nf3 d6 d4 Nf6 dxe5 Nxe4 Bc4",
+  "teaches": "Move orders inside one opening are not interchangeable — the same developing move can be fine after one sequence and dubious after another. When your opponent picks the order that grabs in the centre too early, the bishop's natural developing square becomes a refutation: it aims at the weakest pawn while their advanced piece still has to justify itself.",
+  "explains": "The bishop develops to c4 and attacks the pawn on f7 down an open diagonal, while the enemy knight sits on e4 with its position still unpaid for. Development and threat arrive in one move — the punishment for the wrong order is simply that your normal moves now come with teeth.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "f7"
+   }
+  ]
+ }
+]

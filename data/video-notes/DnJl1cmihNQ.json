@@ -1,0 +1,26 @@
+[
+ {
+  "id": "vn-quiet-italian-the-little-pawn-move-that-guards-the-pin-square",
+  "line": "e4 e5 Nf3 Nf6 Bc4 d6 d3 Be7 Nc3 O-O h3",
+  "teaches": "In quiet openings the annoying pin against your king's knight is half your opponent's plan, and the rook-pawn's one-square step is the standing answer. Play it before castling short: the pin square is covered, so the bishop's visit costs a tempo instead of creating a nagging problem.",
+  "explains": "The pawn on h3 covers g4, so the bishop's arrival there now runs into a defended square — it can still come, but it gets asked the question immediately and on your terms. With that settled, castling short is safe and the plans with the pawns can begin.",
+  "reasons": [
+   {
+    "kind": "meets",
+    "san": "Bg4"
+   }
+  ]
+ },
+ {
+  "id": "vn-quiet-italian-compare-to-the-pattern-before-copying-it",
+  "line": "e4 e5 Nf3 d6 Bc4 Nf6 Ng5 d5 exd5 h6",
+  "teaches": "A famous attacking pattern is a set of conditions, not a move to copy. The knight's raid works in its home position because a specific piece stands on a specific square — remove that piece and the same raid loses a tempo at every step. Compare the board in front of you to the pattern's conditions before borrowing its moves.",
+  "explains": "The raid came without the enemy knight on c6, so the pawn capture in the centre hit nothing and gained no time — and now the rook-pawn attacks the knight on g5, which has no good forward square to show for the adventure. The pattern's conditions were absent; the punishment is a full tempo, permanently.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "g5"
+   }
+  ]
+ }
+]

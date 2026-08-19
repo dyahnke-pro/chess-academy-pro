@@ -1,0 +1,26 @@
+[
+ {
+  "id": "vn-practical-french-the-pawn-prop-the-knight-left-room-for",
+  "line": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 c3",
+  "teaches": "Choosing an opening line is a practical decision, not only an objective one — the knight's modest development square costs a little activity and buys an enormous saving in theory, because the c-pawn keeps its job. When the chain forms, that pawn props the base and the whole structure holds itself with no memorisation required.",
+  "explains": "The pawn steps to c3 and defends the pawn on d4, the base of the chain — possible only because the knight developed to d2 instead of onto the c-pawn's square. The centre is now held by pawns, and the pieces are free to find their standard posts at leisure.",
+  "reasons": [
+   {
+    "kind": "defends",
+    "square": "d4"
+   }
+  ]
+ },
+ {
+  "id": "vn-practical-french-clamp-the-wing-before-the-counterplay-starts",
+  "line": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 c3 c5 Bd3 Nc6 Ngf3 Qb6 Ng1 Qd8 Ne2 Qb6 Nf3 Qc7 Bd2 Qd8 Nc1 Be7 O-O a5 a4",
+  "teaches": "When your play is on one wing, spend a single pawn move to freeze the other. The rook-pawn's advance takes away the square the enemy pawns need to start rolling, and the counterplay that would have arrived in five moves never arrives at all.",
+  "explains": "The pawn goes to a4 and takes b5 away, so the queenside pawns opposite have no lever to advance with — their storm needs that square and it is gone. The kingside plans can now be prepared without a clock ticking on the other side of the board.",
+  "reasons": [
+   {
+    "kind": "controls",
+    "square": "b5"
+   }
+  ]
+ }
+]
