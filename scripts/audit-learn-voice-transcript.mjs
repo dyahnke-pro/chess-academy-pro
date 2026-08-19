@@ -34,6 +34,13 @@ import { pickStudentMove } from './audit-lib/student-player.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const MAX_PLIES = Number(process.env.AUDIT_MAX_PLIES ?? 60);
+// Optional scripted student opening — SAN list consumed one per STUDENT turn.
+// Each entry is played when legal on the live board and skipped otherwise (the
+// coach's replies cannot be scripted, so a scripted move may arrive at a board
+// where it no longer applies). Lets a run steer INTO a corpus line so the
+// reason lane's firing can be proven E2E, instead of hoping a free game
+// wanders onto one of the ~25% of taught plies the checked reasons cover.
+const SCRIPT = (process.env.AUDIT_SCRIPT_SANS ?? '').split(/\s+/).filter(Boolean);
 
 const listener = await startAuditListener();
 const browser = await chromium.launch({ executablePath: await resolveChromiumExecutable(), args: sandboxLaunchArgs() });
@@ -96,8 +103,17 @@ try {
 
   const game = new Chess();
 
+  let scriptIdx = 0;
   while (ply < MAX_PLIES && !game.isGameOver()) {
-    const move = pickStudentMove(game.fen(), ply);
+    let move = null;
+    if (scriptIdx < SCRIPT.length) {
+      const want = SCRIPT[scriptIdx];
+      scriptIdx += 1;
+      const legal = new Chess(game.fen()).moves({ verbose: true }).find((m) => m.san === want);
+      if (legal) move = legal;
+      else console.log(`[transcript] scripted ${want} not legal at ply ${ply} — falling back`);
+    }
+    move = move ?? pickStudentMove(game.fen(), ply);
     if (!move) { console.log(`[transcript] the student had no move at ply ${ply}`); break; }
     const probe = new Chess(game.fen());
     probe.move(move.san);
