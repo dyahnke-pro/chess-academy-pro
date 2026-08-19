@@ -16,8 +16,12 @@
 set -u
 # The working shape, from the run that landed the first drop (David 2026-08-19):
 # the NIGHTLY binary (stock yt-dlp 403s on the media fetch even when the webpage
-# and player API come back fine), cookies at /tmp/yt.txt, -4 to pin IPv4, and the
-# bare video id after `--` so an id beginning with a dash is not read as a flag.
+# and player API come back fine), -4 to pin IPv4, and the bare video id after `--`
+# so an id beginning with a dash is not read as a flag.
+#
+# NO COOKIES — David 2026-08-19: they are not needed from his home IP. The
+# cookie dance in the older notes was a datacenter-IP problem, and carrying it
+# over adds an hour-long expiry to a command that does not need one.
 # It BREAKS on the first failure rather than walking the rest of the list into a
 # limiter that has already said no.
 mkdir -p drop
@@ -27,7 +31,7 @@ for id in qhHtJcXkkfg l65FZlRkWcM k7R9Omne_1Y 9qWUk9eDpTg WmCImz1fv5s CXvo1dMF1Q
           jwFOi039eeg hw9tEjYabd8 Gk7MNomOOSA Zko_JUK06vM vB8yLBR5lHs QxHsw4ZS2Ts; do
   test -f "drop/$id.mp4" && continue
   echo "=== $id"
-  ./yt-dlp-nightly --cookies /tmp/yt.txt --remote-components ejs:npm -4 --socket-timeout 30 --retries 15 \
+  ./yt-dlp-nightly --remote-components ejs:npm -4 --socket-timeout 30 --retries 15 \
     -f "135/396/bestvideo[height<=480]/bestvideo" --max-filesize 99M \
     -o "drop/$id.mp4" -- "$id" || { echo "STOPPED at $id"; break; }
   sleep $((60 + RANDOM % 60))
