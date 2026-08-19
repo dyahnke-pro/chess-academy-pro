@@ -2987,6 +2987,25 @@ Consequences, all of them load-bearing:
 - **When the lesson itself is unsure, skip.** A teacher saying "I don't remember
   the correct move here" is not a source. Empty > generic > invented, as always.
 
+### 🔒🔒 THE SESSION DOES NOT DOWNLOAD VIDEOS — DAVID DOES (David 2026-08-19, emphatic: *"last session burned through my data in 15 minutes!!! TWICE!!!!!"*)
+
+Two sessions ran the harvest loop from the container and burned David's data
+allowance twice, fifteen minutes each. A 480p lesson is ~50MB and the loop pulls
+them back to back, so an unsupervised harvest is gigabytes before anyone looks at
+it. **Never run `yt-dlp` on video from a session** — not `harvest.sh`, not
+`harvest/download-queue.sh`, not `supervisor.sh`, not a hand-rolled loop, and not
+"just one to check the geometry."
+
+What a session DOES instead: pick WHICH videos are worth his bandwidth
+(`scripts/video-align/next-round.mjs` — gap-first, so the round goes at taught
+openings with no track rather than a seventh upload about one already covered),
+emit a paste-ready script, and hand it to David to run on his own connection.
+Then scan, track and hand-write against what he brings back.
+
+Subtitles are the one exception worth knowing about — a VTT is ~500KB against a
+video's ~50MB — but they are still a per-video network pull, so batch them into
+the same handoff rather than looping them from a session.
+
 **DOWNLOAD RECIPE** (cookies expire fast; re-export from a window you do NOT
 sign out of, since signing out rotates them):
 `yt-dlp --cookies /tmp/yt.txt --remote-components ejs:npm -f 135 -o v.mp4 <url>`
