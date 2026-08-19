@@ -1,0 +1,14 @@
+[
+ {
+  "id": "vn-jobava-pin-the-knight-that-makes-the-system-work",
+  "line": "d4 Nf6 Nc3 e6 Bf4 Bb4",
+  "teaches": "A system that develops the queen's knight before the c-pawn buys speed and pays for it with a pin. Against any such setup, the bishop that comes out to pin that knight is the most annoying move available \u2014 it ties the piece the whole scheme rests on, and it cannot be answered by the pawn move the system has already given up.",
+  "explains": "The bishop steps to b4 pinning the knight on c3 against the king behind it. The pawn move that would normally chase this bishop away is unavailable, because the knight is standing on the square it needs.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "c3"
+   }
+  ]
+ }
+]
