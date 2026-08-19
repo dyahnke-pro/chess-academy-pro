@@ -1,0 +1,146 @@
+{
+ "videoId": "iZyf2oBcR9Q",
+ "title": "Ponziani Opening | The Sensei Speedrun | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-19",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 3745,
+  "settledPositions": null
+ },
+ "plies": 13,
+ "rewinds": 3,
+ "moves": [
+  {
+   "t": 11.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 14,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 15,
+   "ply": 4,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 17,
+   "ply": 5,
+   "line": [
+    "c3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3"
+  },
+  {
+   "t": 40.5,
+   "ply": 6,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4"
+  },
+  {
+   "t": 1324,
+   "ply": 5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3"
+  },
+  {
+   "t": 1328,
+   "ply": 6,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 1 4"
+  },
+  {
+   "t": 1335.5,
+   "ply": 7,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 1338,
+   "ply": 8,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3pP3/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 5"
+  },
+  {
+   "t": 1340,
+   "ply": 9,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4P3/3p4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 5"
+  },
+  {
+   "t": 1341.5,
+   "ply": 10,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n5/3nP3/3p4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 1 6"
+  },
+  {
+   "t": 1358,
+   "ply": 7,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 1362,
+   "ply": 6,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 1 4"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "c3"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "d5",
+     "t": 40.5,
+     "continuation": "d5"
+    },
+    {
+     "san": "Nf6",
+     "t": 1328,
+     "continuation": "Nf6"
+    }
+   ]
+  }
+ ]
+}
