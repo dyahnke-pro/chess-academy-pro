@@ -1,0 +1,14 @@
+[
+ {
+  "id": "vn-two-knights-the-auto-recapture-that-walks-into-mate",
+  "line": "e4 c6 Nc3 d5 Nf3 dxe4 Nxe4 Nf6 Qe2 Nbd7 Nd6#",
+  "teaches": "When a quiet-looking queen move appears in a position you know, stop and ask what changed — the move you always play may have just become a losing one. The queen stepping to the e-file turns the centralised knight into a discovered battery, and the standard developing move now allows mate on the spot.",
+  "explains": "The knight has landed on d6, checkmate. The pawn on e7 cannot take it because the queen on e2 stands behind the knight on the open file, and every flight square is covered. One automatic developing move earlier — the knight to d7, blocking the bishop that guarded d6's approach — is the whole story of the game.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e8"
+   }
+  ]
+ }
+]
