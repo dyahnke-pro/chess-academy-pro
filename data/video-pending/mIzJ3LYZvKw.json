@@ -483,7 +483,9 @@
  "forks": [],
  "titleCheck": {
   "claims": "Sicilian Defense: Najdorf Variation",
-  "confirmed": false
+  "confirmed": false,
+  "verdict": "track-right-title-is-series-theme",
+  "checkedBy": "hand 2026-08-19 — Najdorf speedrun episode but White played 2.Bc4 (Bowdler); the game legitimately never reached a Najdorf. Track is one coherent legal 57-ply game; not a mistrack."
  },
  "openings": [
   {
