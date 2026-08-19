@@ -1,0 +1,26 @@
+[
+ {
+  "id": "vn-gambit-faced-the-modest-retreat-that-pre-answers-the-attack",
+  "line": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 c3 Be7",
+  "teaches": "Against a gambit you do not have to meet sharpness with sharpness — a modest retreat that pre-answers the standard attacking idea is a complete strategy. Slightly passive and completely solid beats theoretical and half-remembered, especially when the attacker is counting on you to know less than they do.",
+  "explains": "The bishop drops back to e7, and the knight's leap to g5 — the move every attack in this structure begins with — now lands on a square the bishop already covers. The retreat looks like a concession and is actually a preparation: the attack's first move has been answered before it was played.",
+  "reasons": [
+   {
+    "kind": "meets",
+    "san": "Ng5"
+   }
+  ]
+ },
+ {
+  "id": "vn-gambit-faced-hit-the-bishop-that-carries-the-attack",
+  "line": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 c3 Be7 Qc2 Na5",
+  "teaches": "A gambit's pressure usually runs through one piece — here the bishop aimed at the weakest pawn. The knight's move to the rim that attacks that bishop is worth the ugly geometry: trade it or drive it, and the attack has no spearhead left.",
+  "explains": "The knight on a5 attacks the bishop on c4, the piece every threat in this line runs through. The rim is a fine address when the visit has a purpose — the bishop must move or be traded, and either way the aim at the king's weakest square is broken.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "c4"
+   }
+  ]
+ }
+]

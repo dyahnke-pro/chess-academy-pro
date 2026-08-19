@@ -1,0 +1,38 @@
+[
+ {
+  "id": "vn-gambit-play-rule-out-the-counter-check-first",
+  "line": "e4 e5 Nc3 Bb4 f4 exf4 Nf3",
+  "teaches": "After giving up the f-pawn, the queen check on the h-file is the counter-blow every gambit player must respect \u2014 it is the difference between an attack and an accident. The knight's developing move that covers the checking square is therefore not optional or slow: it is the move that makes the whole gambit playable.",
+  "explains": "The knight has come to f3 and the queen's landing on h4 is covered \u2014 the check that was the position's one forcing counter now walks into a defended square. One developing move turned the sting into a blunder, and everything the pawn sacrifice promised can be collected in peace.",
+  "reasons": [
+   {
+    "kind": "meets",
+    "san": "Qh4"
+   }
+  ]
+ },
+ {
+  "id": "vn-gambit-play-chase-the-only-developed-piece",
+  "line": "e4 e5 Nc3 Bb4 f4 exf4 Nf3 h6 Bc4 Nf6 e5",
+  "teaches": "When your opponent spends moves on slow pawn gestures in a sharp position, open the game at once \u2014 their one developed piece becomes a target, and every tempo they spent on the flank is a tempo your centre uses now.",
+  "explains": "The pawn advances to e5 and attacks the knight on f6, the only piece the opponent has developed. The slow pawn move on the rim gave this advance for free, and the knight has to move again while the centre rolls forward.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "f6"
+   }
+  ]
+ },
+ {
+  "id": "vn-gambit-play-the-runaway-pawn-inside-the-shelter",
+  "line": "e4 e5 Nc3 Bb4 f4 exf4 Nf3 h6 Bc4 Nf6 e5 O-O O-O d5 exf6 dxc4 fxg7",
+  "teaches": "A pawn that reaches the sixth and seventh rank inside the king's shelter is worth more than the piece it may have cost along the way. Each capture it makes strips another pawn off the king's cover, and by the time it stands next to the king, every heavy piece you own has a target to aim at.",
+  "explains": "The pawn has eaten its way to g7 and now attacks the rook on f8, standing one square from the king with the shelter gone. Whatever happens to the pawn itself, the pawns that used to cover the king went with it, and the open lines remain.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "f8"
+   }
+  ]
+ }
+]
