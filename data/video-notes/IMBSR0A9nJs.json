@@ -1,0 +1,30 @@
+[
+ {
+  "id": "vn-philidor-punish-the-pawn-push-that-ignores-a-diagonal",
+  "line": "e4 e5 Nf3 d6 Bc4 c6 d4 b5 Bb3 exd4 Nxd4 c5 Bd5",
+  "teaches": "Before advancing a pawn on the wing, check every long diagonal that already points into your position. A pawn move that chases a knight is worthless if the square it vacates lets a bishop through to two targets at once \u2014 the tempo you gained is spent answering a double attack you created yourself.",
+  "explains": "The bishop steps into d5, hitting the rook in the corner on a8 and the pawn on f7 on the same move. The pawn that just advanced is what cleared the diagonal, and nothing covers d5 any more.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "a8"
+   },
+   {
+    "kind": "attacks",
+    "square": "f7"
+   }
+  ]
+ },
+ {
+  "id": "vn-philidor-development-decides-the-tactics",
+  "line": "e4 e5 Nf3 d6 Bc4 c6 d4 b5 Bb3 exd4 Nxd4 c5 Bd5 cxd4 Bxa8",
+  "teaches": "In a tactical flurry the side with more pieces out usually comes out ahead, and that is not luck \u2014 it is arithmetic. Every extra developed piece is another defender, another attacker, and another resource in the calculation. Push pawns while your pieces sit at home and the skirmish is decided before it starts.",
+  "explains": "The bishop collects the rook in the corner. Counting up, the side that spent its moves on the queenside pawns is now the exchange and a pawn down with most of its army still on the back rank.",
+  "reasons": [
+   {
+    "kind": "defends",
+    "square": "e4"
+   }
+  ]
+ }
+]
