@@ -1,0 +1,30 @@
+[
+ {
+  "id": "vn-flank-b3-attack-the-defender-of-the-pawn-you-are-eyeing",
+  "line": "b3 e5 Bb2 Nc6 e3 d5 Bb5",
+  "teaches": "An opening that concedes the centre wins it back by PRESSURE, and pressure is applied to the defenders, not to the pawn itself. Find the piece holding the enemy centre together and put a question to that piece \u2014 the pawn you are really after has never been touched, and it starts falling the moment its guard has to move.",
+  "explains": "The bishop steps to b5 and attacks the knight on c6, and that knight is the piece holding the pawn in the middle. The long diagonal from the other bishop is already trained on the same pawn from behind.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "c6"
+   }
+  ]
+ },
+ {
+  "id": "vn-flank-b3-pawns-are-the-best-way-to-pressure-pawns",
+  "line": "b3 e5 Bb2 Nc6 e3 d5 Bb5 Bd6 f4",
+  "teaches": "A piece attacking a pawn can be answered by defending it; a PAWN attacking a pawn cannot, because nothing wants to trade down into it. When the natural knight move would let the opponent build a chain and settle the centre for good, use the pawn instead \u2014 it asks a question the defender has to answer immediately.",
+  "explains": "The pawn to f4 hits the pawn on e5 head-on and covers g5. The knight move that looks equally natural allows a pawn chain in front of it, after which the centre can no longer be pressured at all.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e5"
+   },
+   {
+    "kind": "controls",
+    "square": "g5"
+   }
+  ]
+ }
+]
