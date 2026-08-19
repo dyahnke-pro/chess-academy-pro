@@ -2987,6 +2987,21 @@ Consequences, all of them load-bearing:
 - **When the lesson itself is unsure, skip.** A teacher saying "I don't remember
   the correct move here" is not a source. Empty > generic > invented, as always.
 
+### 🔒🔒 A SECOND VIDEO ON AN OPENING WE ALREADY HAVE IS NOT A DUPLICATE (David 2026-08-19: *"we still download and transcribe all videos even of same openings because they hold different positions and we get more notes and moves about new positions on same openings"*)
+
+A note may only be written where the video actually went — the position has to
+have settled on screen (`attach-notes` resolves the FEN from the track, and
+plies the lesson jumped through carry no anchor). So two lessons on the same
+opening produce two DIFFERENT sets of anchorable boards, and the second one is
+worth as much as the first: more positions in an opening we teach, not more of
+the same prose. Measured on the drop that prompted this: one Accelerated Dragon
+lesson played 7.Be2 and the next played 7.Bc4, so a note about why the bishop
+belongs on c4 was unanchorable until the second video arrived.
+
+Coverage counts therefore ORDER the harvest queue and never trim it
+(`next-round.mjs`). The only video excluded is one naming no opening the app
+teaches, which has nowhere for a note to attach at all.
+
 ### 🔒🔒 THE SESSION DOES NOT DOWNLOAD VIDEOS — DAVID DOES (David 2026-08-19, emphatic: *"last session burned through my data in 15 minutes!!! TWICE!!!!!"*)
 
 Two sessions ran the harvest loop from the container and burned David's data

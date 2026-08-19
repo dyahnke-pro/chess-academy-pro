@@ -13,6 +13,16 @@
  * contributes a second. Coverage across the taught set, not depth on whichever
  * opening the channel uploaded most about.
  *
+ * 🔒 IT ORDERS. IT NEVER EXCLUDES A VIDEO FOR BEING A REPEAT (David 2026-08-19:
+ * *"we still download and transcribe all videos even of same openings because
+ * they hold different positions and we get more notes and moves about new
+ * positions on same openings"*). A second Caro lesson is not a duplicate — it
+ * settles on different boards, and a note can only be written where the video
+ * actually went, so more lessons in one opening means more anchored positions in
+ * that opening rather than more of the same. `have` therefore sorts the queue and
+ * decides nothing else: every unharvested video stays in the list, and `--count`
+ * is a batch size for one download run, not a verdict on the rest.
+ *
  * Usage: node scripts/video-align/next-round.mjs [queue.txt] [--count N] [--write]
  */
 import { readFileSync, writeFileSync, existsSync, readdirSync } from 'node:fs';
@@ -81,7 +91,10 @@ ids.forEach((id, i) => {
   const v = byId.get(id) ?? { id, title: '' };
   const title = (v.title ?? '').toLowerCase();
   const hits = [...keywords.entries()].filter(([tok]) => hasWord(title, tok));
-  if (!hits.length) return;                       // nowhere for a note to land
+  // The one real exclusion, and it is not about repeats: a video naming no
+  // opening the app teaches has nowhere for a note to attach, however good the
+  // lesson is.
+  if (!hits.length) return;
   const opening = hits.map(([, n]) => n)[0];
   // One opening per video tracks cleanly; a speedrun wanders across games.
   const quality = (v.playlist === 'opening-lab' ? 10 : 0) + hits.length;
