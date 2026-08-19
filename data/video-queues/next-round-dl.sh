@@ -14,23 +14,22 @@
 # One at a time with jittered gaps: four at a time got the IP bot-checked after
 # ~40 videos, and the cookies were never the problem, the request RATE was.
 set -u
+# The working shape, from the run that landed the first drop (David 2026-08-19):
+# the NIGHTLY binary (stock yt-dlp 403s on the media fetch even when the webpage
+# and player API come back fine), cookies at /tmp/yt.txt, -4 to pin IPv4, and the
+# bare video id after `--` so an id beginning with a dash is not read as a flag.
+# It BREAKS on the first failure rather than walking the rest of the list into a
+# limiter that has already said no.
 mkdir -p drop
 for id in qhHtJcXkkfg l65FZlRkWcM k7R9Omne_1Y 9qWUk9eDpTg WmCImz1fv5s CXvo1dMF1Qs \
           uJCgrG90u8A 0npOMfkAlVU mCB8n7v0MEA EN72rn5tVYI KwbAHRLJ1RY Ybg_2qbKXdA \
           IMBSR0A9nJs ieznxMQccW0 D7sbbap9lIc WQFcuBCL1F4 Qewug63GIqc Twv9FExvwSw \
           jwFOi039eeg hw9tEjYabd8 Gk7MNomOOSA Zko_JUK06vM vB8yLBR5lHs QxHsw4ZS2Ts; do
-  [ -s "drop/$id.mp4" ] && { echo "SKIP $id"; continue; }
-  # 135 is 480p; the chain falls back rather than dropping the video. Video-only
-  # DASH sidesteps the SABR wall that 403s every progressive format.
-  if yt-dlp --cookies /tmp/yt-cookies.txt --remote-components ejs:npm \
-       -f "135/396/bestvideo[height<=480]/bestvideo" \
-       -o "drop/%(id)s.%(ext)s" "https://www.youtube.com/watch?v=$id" > "drop/$id.log" 2>&1; then
-    echo "OK   $id"
-  else
-    echo "FAIL $id :: $(grep -oiE 'ERROR.*' "drop/$id.log" | head -1 | cut -c1-70)"
-    grep -qE 'HTTP Error (429|403)' "drop/$id.log" && { echo "  rate-limited, sleeping 300s"; sleep 300; }
-  fi
-  sleep $((45 + RANDOM % 30))
+  test -f "drop/$id.mp4" && continue
+  echo "=== $id"
+  ./yt-dlp-nightly --cookies /tmp/yt.txt --remote-components ejs:npm -4 --socket-timeout 30 --retries 15 \
+    -f "135/396/bestvideo[height<=480]/bestvideo" --max-filesize 99M \
+    -o "drop/$id.mp4" -- "$id" || { echo "STOPPED at $id"; break; }
+  sleep $((60 + RANDOM % 60))
 done
-rm -f drop/*.log
-git add drop && git commit -m "videos: next round — 24 lessons" && git push origin video-drop
+git add drop && git commit -m "videos: next round" && git push origin video-drop
