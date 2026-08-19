@@ -1,0 +1,602 @@
+{
+ "videoId": "k9lpwbZ1Cyw",
+ "title": "Master Class | Sicilian, Rossolimo / Vienna | Chess Speedrun | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-19",
+ "geometry": {
+  "x0": null,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 5521,
+  "settledPositions": null
+ },
+ "plies": 61,
+ "rewinds": 1,
+ "moves": [
+  {
+   "t": 4,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 10.5,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 12,
+   "ply": 4,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 43,
+   "ply": 5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3"
+  },
+  {
+   "t": 46.5,
+   "ply": 6,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bqkbnr/1p1ppppp/p1n5/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4"
+  },
+  {
+   "t": 91,
+   "ply": 7,
+   "line": [
+    "Bxc6"
+   ],
+   "fen": "r1bqkbnr/1p1ppppp/p1B5/2p5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 4"
+  },
+  {
+   "t": 92.5,
+   "ply": 8,
+   "line": [
+    "bxc6"
+   ],
+   "fen": "r1bqkbnr/3ppppp/p1p5/2p5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5"
+  },
+  {
+   "t": 113,
+   "ply": 2,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 114,
+   "ply": 4,
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 117,
+   "ply": 8,
+   "line": [
+    "Be2",
+    "a6",
+    "Bxa6",
+    "bxa6"
+   ],
+   "fen": "r1bqkbnr/3ppppp/p1n5/2p5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5"
+  },
+  {
+   "t": 148,
+   "ply": 9,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkbnr/3ppppp/p1n5/2p5/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 5"
+  },
+  {
+   "t": 149.5,
+   "ply": 10,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkbnr/4pppp/p1np4/2p5/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 6"
+  },
+  {
+   "t": 205.5,
+   "ply": 11,
+   "line": [
+    "h3"
+   ],
+   "fen": "r1bqkbnr/4pppp/p1np4/2p5/4P3/5N1P/PPPP1PP1/RNBQ1RK1 b kq - 0 6"
+  },
+  {
+   "t": 207,
+   "ply": 12,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/4pppp/p1np1n2/2p5/4P3/5N1P/PPPP1PP1/RNBQ1RK1 w kq - 1 7"
+  },
+  {
+   "t": 231,
+   "ply": 13,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1bqkb1r/4pppp/p1np1n2/2p5/4P3/5N1P/PPPP1PP1/RNBQR1K1 b kq - 2 7"
+  },
+  {
+   "t": 234,
+   "ply": 15,
+   "line": [
+    "g6",
+    "c3"
+   ],
+   "fen": "r1bqkb1r/4pp1p/p1np1np1/2p5/4P3/2P2N1P/PP1P1PP1/RNBQR1K1 b kq - 0 8"
+  },
+  {
+   "t": 236.5,
+   "ply": 17,
+   "line": [
+    "Bg7",
+    "d4"
+   ],
+   "fen": "r1bqk2r/4ppbp/p1np1np1/2p5/3PP3/2P2N1P/PP3PP1/RNBQR1K1 b kq - 0 9"
+  },
+  {
+   "t": 237.5,
+   "ply": 18,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/4ppbp/p1np1np1/2p5/3PP3/2P2N1P/PP3PP1/RNBQR1K1 w - - 1 10"
+  },
+  {
+   "t": 260.5,
+   "ply": 19,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "r1bq1rk1/4ppbp/p1np1np1/2P5/4P3/2P2N1P/PP3PP1/RNBQR1K1 b - - 0 10"
+  },
+  {
+   "t": 261.5,
+   "ply": 20,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "r1bq1rk1/4ppbp/p1n2np1/2p5/4P3/2P2N1P/PP3PP1/RNBQR1K1 w - - 0 11"
+  },
+  {
+   "t": 310.5,
+   "ply": 22,
+   "line": [
+    "Qa4",
+    "Qb6"
+   ],
+   "fen": "r1b2rk1/4ppbp/pqn2np1/2p5/Q3P3/2P2N1P/PP3PP1/RNB1R1K1 w - - 2 12"
+  },
+  {
+   "t": 343,
+   "ply": 23,
+   "line": [
+    "Na3"
+   ],
+   "fen": "r1b2rk1/4ppbp/pqn2np1/2p5/Q3P3/N1P2N1P/PP3PP1/R1B1R1K1 b - - 3 12"
+  },
+  {
+   "t": 353,
+   "ply": 24,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r4rk1/4ppbp/pqn1bnp1/2p5/Q3P3/N1P2N1P/PP3PP1/R1B1R1K1 w - - 4 13"
+  },
+  {
+   "t": 371,
+   "ply": 25,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "r4rk1/4ppbp/pqn1bnp1/2p3N1/Q3P3/N1P4P/PP3PP1/R1B1R1K1 b - - 5 13"
+  },
+  {
+   "t": 390.5,
+   "ply": 26,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r4rk1/3nppbp/pqn1b1p1/2p3N1/Q3P3/N1P4P/PP3PP1/R1B1R1K1 w - - 6 14"
+  },
+  {
+   "t": 392,
+   "ply": 27,
+   "line": [
+    "Nxe6"
+   ],
+   "fen": "r4rk1/3nppbp/pqn1N1p1/2p5/Q3P3/N1P4P/PP3PP1/R1B1R1K1 b - - 0 14"
+  },
+  {
+   "t": 394,
+   "ply": 28,
+   "line": [
+    "fxe6"
+   ],
+   "fen": "r4rk1/3np1bp/pqn1p1p1/2p5/Q3P3/N1P4P/PP3PP1/R1B1R1K1 w - - 0 15"
+  },
+  {
+   "t": 466,
+   "ply": 29,
+   "line": [
+    "Qc4"
+   ],
+   "fen": "r4rk1/3np1bp/pqn1p1p1/2p5/2Q1P3/N1P4P/PP3PP1/R1B1R1K1 b - - 1 15"
+  },
+  {
+   "t": 488,
+   "ply": 30,
+   "line": [
+    "Bf6"
+   ],
+   "fen": "r4rk1/3np2p/pqn1pbp1/2p5/2Q1P3/N1P4P/PP3PP1/R1B1R1K1 w - - 2 16"
+  },
+  {
+   "t": 489.5,
+   "ply": 31,
+   "line": [
+    "Qxe6+"
+   ],
+   "fen": "r4rk1/3np2p/pqn1Qbp1/2p5/4P3/N1P4P/PP3PP1/R1B1R1K1 b - - 0 16"
+  },
+  {
+   "t": 493.5,
+   "ply": 32,
+   "line": [
+    "Kh8"
+   ],
+   "fen": "r4r1k/3np2p/pqn1Qbp1/2p5/4P3/N1P4P/PP3PP1/R1B1R1K1 w - - 1 17"
+  },
+  {
+   "t": 496,
+   "ply": 33,
+   "line": [
+    "Qxd7"
+   ],
+   "fen": "r4r1k/3Qp2p/pqn2bp1/2p5/4P3/N1P4P/PP3PP1/R1B1R1K1 b - - 0 17"
+  },
+  {
+   "t": 497.5,
+   "ply": 34,
+   "line": [
+    "c4"
+   ],
+   "fen": "r4r1k/3Qp2p/pqn2bp1/8/2p1P3/N1P4P/PP3PP1/R1B1R1K1 w - - 0 18"
+  },
+  {
+   "t": 505,
+   "ply": 35,
+   "line": [
+    "Nxc4"
+   ],
+   "fen": "r4r1k/3Qp2p/pqn2bp1/8/2N1P3/2P4P/PP3PP1/R1B1R1K1 b - - 0 18"
+  },
+  {
+   "t": 509,
+   "ply": 36,
+   "line": [
+    "Qc5"
+   ],
+   "fen": "r4r1k/3Qp2p/p1n2bp1/2q5/2N1P3/2P4P/PP3PP1/R1B1R1K1 w - - 1 19"
+  },
+  {
+   "t": 542.5,
+   "ply": 37,
+   "line": [
+    "Qd3"
+   ],
+   "fen": "r4r1k/4p2p/p1n2bp1/2q5/2N1P3/2PQ3P/PP3PP1/R1B1R1K1 b - - 2 19"
+  },
+  {
+   "t": 559.5,
+   "ply": 38,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r4r1k/4p1bp/p1n3p1/2q5/2N1P3/2PQ3P/PP3PP1/R1B1R1K1 w - - 3 20"
+  },
+  {
+   "t": 561,
+   "ply": 39,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r4r1k/4p1bp/p1n3p1/2q5/2N1P3/2PQB2P/PP3PP1/R3R1K1 b - - 4 20"
+  },
+  {
+   "t": 567.5,
+   "ply": 40,
+   "line": [
+    "Qb5"
+   ],
+   "fen": "r4r1k/4p1bp/p1n3p1/1q6/2N1P3/2PQB2P/PP3PP1/R3R1K1 w - - 5 21"
+  },
+  {
+   "t": 570,
+   "ply": 41,
+   "line": [
+    "a4"
+   ],
+   "fen": "r4r1k/4p1bp/p1n3p1/1q6/P1N1P3/2PQB2P/1P3PP1/R3R1K1 b - - 0 21"
+  },
+  {
+   "t": 584.5,
+   "ply": 42,
+   "line": [
+    "Qh5"
+   ],
+   "fen": "r4r1k/4p1bp/p1n3p1/7q/P1N1P3/2PQB2P/1P3PP1/R3R1K1 w - - 1 22"
+  },
+  {
+   "t": 606.5,
+   "ply": 43,
+   "line": [
+    "Rad1"
+   ],
+   "fen": "r4r1k/4p1bp/p1n3p1/7q/P1N1P3/2PQB2P/1P3PP1/3RR1K1 b - - 2 22"
+  },
+  {
+   "t": 618,
+   "ply": 44,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "r4r1k/4p2p/p1n3pb/7q/P1N1P3/2PQB2P/1P3PP1/3RR1K1 w - - 3 23"
+  },
+  {
+   "t": 623,
+   "ply": 45,
+   "line": [
+    "Bxh6"
+   ],
+   "fen": "r4r1k/4p2p/p1n3pB/7q/P1N1P3/2PQ3P/1P3PP1/3RR1K1 b - - 0 23"
+  },
+  {
+   "t": 625.5,
+   "ply": 46,
+   "line": [
+    "Qxh6"
+   ],
+   "fen": "r4r1k/4p2p/p1n3pq/8/P1N1P3/2PQ3P/1P3PP1/3RR1K1 w - - 0 24"
+  },
+  {
+   "t": 634,
+   "ply": 47,
+   "line": [
+    "Qg3"
+   ],
+   "fen": "r4r1k/4p2p/p1n3pq/8/P1N1P3/2P3QP/1P3PP1/3RR1K1 b - - 1 24"
+  },
+  {
+   "t": 638,
+   "ply": 48,
+   "line": [
+    "Rab8"
+   ],
+   "fen": "1r3r1k/4p2p/p1n3pq/8/P1N1P3/2P3QP/1P3PP1/3RR1K1 w - - 2 25"
+  },
+  {
+   "t": 641,
+   "ply": 49,
+   "line": [
+    "Rd7"
+   ],
+   "fen": "1r3r1k/3Rp2p/p1n3pq/8/P1N1P3/2P3QP/1P3PP1/4R1K1 b - - 3 25"
+  },
+  {
+   "t": 644,
+   "ply": 50,
+   "line": [
+    "Qg7"
+   ],
+   "fen": "1r3r1k/3Rp1qp/p1n3p1/8/P1N1P3/2P3QP/1P3PP1/4R1K1 w - - 4 26"
+  },
+  {
+   "t": 656,
+   "ply": 51,
+   "line": [
+    "Re3"
+   ],
+   "fen": "1r3r1k/3Rp1qp/p1n3p1/8/P1N1P3/2P1R1QP/1P3PP1/6K1 b - - 5 26"
+  },
+  {
+   "t": 669,
+   "ply": 52,
+   "line": [
+    "Rbe8"
+   ],
+   "fen": "4rr1k/3Rp1qp/p1n3p1/8/P1N1P3/2P1R1QP/1P3PP1/6K1 w - - 6 27"
+  },
+  {
+   "t": 670,
+   "ply": 53,
+   "line": [
+    "Rf3"
+   ],
+   "fen": "4rr1k/3Rp1qp/p1n3p1/8/P1N1P3/2P2RQP/1P3PP1/6K1 b - - 7 27"
+  },
+  {
+   "t": 682.5,
+   "ply": 54,
+   "line": [
+    "Rf7"
+   ],
+   "fen": "4r2k/3Rprqp/p1n3p1/8/P1N1P3/2P2RQP/1P3PP1/6K1 w - - 8 28"
+  },
+  {
+   "t": 684.5,
+   "ply": 55,
+   "line": [
+    "Rxf7"
+   ],
+   "fen": "4r2k/3RpRqp/p1n3p1/8/P1N1P3/2P3QP/1P3PP1/6K1 b - - 0 28"
+  },
+  {
+   "t": 686,
+   "ply": 56,
+   "line": [
+    "Qxf7"
+   ],
+   "fen": "4r2k/3Rpq1p/p1n3p1/8/P1N1P3/2P3QP/1P3PP1/6K1 w - - 0 29"
+  },
+  {
+   "t": 697,
+   "ply": 57,
+   "line": [
+    "Nd6"
+   ],
+   "fen": "4r2k/3Rpq1p/p1nN2p1/8/P3P3/2P3QP/1P3PP1/6K1 b - - 1 29"
+  },
+  {
+   "t": 706,
+   "ply": 58,
+   "line": [
+    "Qe6"
+   ],
+   "fen": "4r2k/3Rp2p/p1nNq1p1/8/P3P3/2P3QP/1P3PP1/6K1 w - - 2 30"
+  },
+  {
+   "t": 722,
+   "ply": 59,
+   "line": [
+    "Nxe8"
+   ],
+   "fen": "4N2k/3Rp2p/p1n1q1p1/8/P3P3/2P3QP/1P3PP1/6K1 b - - 0 30"
+  },
+  {
+   "t": 725.5,
+   "ply": 61,
+   "line": [
+    "Qxd7",
+    "Qe5+"
+   ],
+   "fen": "4N2k/3qp2p/p1n3p1/4Q3/P3P3/2P4P/1P3PP1/6K1 b - - 1 31"
+  },
+  {
+   "t": 733,
+   "ply": 62,
+   "line": [
+    "Kg8"
+   ],
+   "fen": "4N1k1/3qp2p/p1n3p1/4Q3/P3P3/2P4P/1P3PP1/6K1 w - - 2 32"
+  },
+  {
+   "t": 734.5,
+   "ply": 63,
+   "line": [
+    "Qg7#"
+   ],
+   "fen": "4N1k1/3qp1Qp/p1n3p1/8/P3P3/2P4P/1P3PP1/6K1 b - - 3 32"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6"
+   ],
+   "ply": 4,
+   "options": [
+    {
+     "san": "Bb5",
+     "t": 43,
+     "continuation": "Bb5"
+    },
+    {
+     "san": "Be2",
+     "t": 117,
+     "continuation": "Be2 a6 Bxa6 bxa6"
+    }
+   ]
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack",
+  "confirmed": true
+ },
+ "openings": [
+  {
+   "name": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack",
+   "eco": "B30",
+   "plies": 5,
+   "line": "e4 c5 Nf3 Nc6 Bb5",
+   "coverage": 0.068
+  },
+  {
+   "name": "Sicilian Defense: Old Sicilian",
+   "eco": "B30",
+   "plies": 4,
+   "line": "e4 c5 Nf3 Nc6",
+   "coverage": 0.966
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "notes": [
+  {
+   "id": "vn-clean-position-just-take-the-pawn",
+   "line": "e4 c5 Nf3 Nc6 Be2 a6 Bxa6 bxa6 O-O d6 h3 Nf6 Re1 g6 c3 Bg7 d4 O-O dxc5",
+   "teaches": "When a clean capture wins a pawn and the tempting alternative merely looks clever, take the pawn. Material is the one advantage that does not evaporate while you work out the rest — the flashy move can be checked afterwards, from a position where you are already a pawn up.",
+   "explains": "The pawn has captured on c5 and from there attacks the pawn on d6 — a pawn won and a second one asked about, in one move. The tempting piece moves are still on the board and lose nothing by waiting; the pawn does not wait.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d6"
+    }
+   ],
+   "fen": "r1bq1rk1/4ppbp/p1np1np1/2P5/4P3/2P2N1P/PP3PP1/RNBQR1K1 b - - 0 10",
+   "t": 260.5,
+   "ply": 19,
+   "source": "yt:k9lpwbZ1Cyw"
+  },
+  {
+   "id": "vn-clean-position-read-the-wreckage",
+   "line": "e4 c5 Nf3 Nc6 Be2 a6 Bxa6 bxa6 O-O d6 h3 Nf6 Re1 g6 c3 Bg7 d4 O-O dxc5 dxc5 Qa4 Qb6 Na3 Be6 Ng5 Nd7 Nxe6 fxe6",
+   "teaches": "Pawn structure is a ledger, and sometimes the right plan is simply to read it. Doubled pawns, an isolated rook-pawn and a torn king's cover are not abstractions — each one is a target or an open line, and a position with several of them loses itself once you aim at them patiently.",
+   "explains": "The recapture has left doubled pawns on e6 and e7, the rook-pawn on a6 stands isolated with its b-file neighbour long gone, and the pawn cover in front of the castled king is torn where the f-pawn used to be. Three permanent debts on one ledger — the plan is to collect them.",
+   "structural": "the position judged by its pawn ledger — doubled e-pawns, isolated rook-pawn, torn king cover, all permanent",
+   "fen": "r4rk1/3np1bp/pqn1p1p1/2p5/Q3P3/N1P4P/PP3PP1/R1B1R1K1 w - - 0 15",
+   "t": 394,
+   "ply": 28,
+   "source": "yt:k9lpwbZ1Cyw"
+  }
+ ]
+}

@@ -1,0 +1,26 @@
+[
+ {
+  "id": "vn-flexible-defence-own-the-square-the-setup-cannot-fight-for",
+  "line": "d4 Nf6 c4 e6 e3 b6 Nf3 Bb7",
+  "teaches": "Openings are conversations about specific squares, and when your opponent's quiet setup declines the sharp argument, pick the square their setup cannot fight for and own it. The fianchettoed bishop trained on the central light square decides what their pawns may ever do in the middle — a whole plan built from one diagonal.",
+  "explains": "The bishop settles on b7 with the long diagonal open through the centre, taking e4 in hand from a distance. The opponent's modest setup has no piece that argues for that square, so the central advance their position wants is already spoken against.",
+  "reasons": [
+   {
+    "kind": "controls",
+    "square": "e4"
+   }
+  ]
+ },
+ {
+  "id": "vn-flexible-defence-a-push-is-a-purchase-count-the-price",
+  "line": "d4 Nf6 c4 e6 e3 b6 Nf3 Bb7 Be2 d5 O-O Bd6 c5 bxc5 dxc5 Bxc5",
+  "teaches": "A pawn advance that looks like it gains space is a purchase, and the price is counted in captures: every pawn that can take it, and every recapture that follows. When the count comes out against the pusher, the space never existed — the pawn simply left. The modest pawn on b6 was insurance bought moves earlier for exactly this.",
+  "explains": "The advanced pawn has been captured twice over, and the bishop finishes the sequence by retaking on c5, where it now attacks the pawn on e3 down the cleared diagonal. The count was knowable before the push: two captures against, one recapture for, and a bishop improved for free at the end of it.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e3"
+   }
+  ]
+ }
+]

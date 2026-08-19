@@ -2,7 +2,7 @@
  {
   "id": "vn-anti-system-hit-the-centre-the-setup-forgot",
   "line": "d4 Nf6 Bf4 d5 e3 c5",
-  "teaches": "A system that develops its bishop before minding the centre has left the centre to be minded by you. The immediate c-pawn strike attacks the base while the system's pieces are still filing into their usual seats — the setup's comfort is exactly one tempo of neglect, and this move collects it.",
+  "teaches": "A system that develops its bishop before minding the centre has left the centre to be minded by you. The immediate c-pawn strike attacks the base while the system's pieces are still filing into their usual seats \u2014 the setup's comfort is exactly one tempo of neglect, and this move collects it.",
   "explains": "The pawn strikes at c5 and attacks the pawn on d4, which the early bishop sortie left underdefended by pieces. The system now has to answer a concrete question in a position its move order never wanted to discuss.",
   "reasons": [
    {
@@ -13,12 +13,12 @@
  },
  {
   "id": "vn-anti-system-lever-the-overextended-wing",
-  "line": "d4 Nf6 Bf4 d5 e3 c5 dxc5 Nc6 Bb5 Qa5+ Nc3 Qd8 Nb1 e6 b4 a5",
-  "teaches": "When your opponent grabs a pawn and props it with a wing pawn advance, the rook-pawn lever is the standing answer: attack the prop, and either the file opens for your rook or the props trade themselves away and the grabbed pawn stands alone. The lever costs nothing — the rook behind it is already developed.",
-  "explains": "The pawn on a5 attacks the pawn on b4, the prop holding the extra pawn on c5. Whatever happens on the queenside now happens with your rook already staring down the opening file — the lever turned the opponent's pawn-grab into your open lines.",
+  "line": "d4 Nf6 Bf4 d5 e3 c5 dxc5 Nc6 Bb5 Qa5+ Nc3 Qd8 Nb1 e6 b4 a5 c3",
+  "teaches": "When your lever hits their wing pawn and they answer by propping it with another pawn, the exchange is yours to take: capturing opens the file your rook already stands on, and every prop they added becomes another target hanging on it. Props do not defend a file \u2014 they furnish it.",
+  "explains": "The pawn on c3 now defends the pawn on b4 \u2014 a second pawn committed to holding the first. The capture on b4 opens the rook's file whenever you choose, and the chain of props stays behind on squares the rook will visit one by one.",
   "reasons": [
    {
-    "kind": "attacks",
+    "kind": "defends",
     "square": "b4"
    }
   ]

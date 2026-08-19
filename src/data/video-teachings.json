@@ -1,7 +1,7 @@
 {
- "generatedAt": "2026-08-18",
- "videosDistilled": 55,
- "noteCount": 147,
+ "generatedAt": "2026-08-19",
+ "videosDistilled": 94,
+ "noteCount": 241,
  "notes": [
   {
    "id": "vn-4knights-pinned-knight-cannot-recapture",
@@ -113,6 +113,82 @@
    ]
   },
   {
+   "id": "vn-saemisch-wall-the-pawn-that-holds-the-whole-plan",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "O-O",
+    "f3"
+   ],
+   "opening": "King's Indian Defense: Sämisch Variation, Closed Variation",
+   "phase": "opening",
+   "explains": "The pawn on f3 defends the pawn on e4, and with the centre held by pawns alone the pieces are free to take up attacking posts instead of guard duty. The fianchettoed bishop across the board now stares into a wall that never needs a defender.",
+   "teaches": "The modest f-pawn move is the spine of this whole setup: it bolts the centre shut so that everything that follows — the bishop's development, the queen behind it, castling long, the pawn storm — happens behind a wall. Judge it by what it enables, not by what it looks like.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:2Mys0GRUgM4"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-saemisch-wall-a-healthy-structure-can-afford-to-take",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "O-O",
+    "f3",
+    "d6",
+    "Be3",
+    "e5",
+    "d5",
+    "c6",
+    "Qd2",
+    "Bd7",
+    "O-O-O",
+    "b5",
+    "dxc6",
+    "Nxc6",
+    "Nxb5"
+   ],
+   "opening": "King's Indian Defense: Sämisch Variation, Closed Variation",
+   "phase": "opening",
+   "explains": "The knight on b5 attacks the pawn on d6. It also attacks the pawn on a7. Nothing at home hangs: the centre is bolted and development is finished, so the pawn grab is just good bookkeeping.",
+   "teaches": "Whether you can accept a pawn offer depends on your structure, not your nerve. A setup with no weaknesses behind it can open the centre and grab material without exposing anything — count your loose pieces and pawn holes first, and when the count says none, take.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:2Mys0GRUgM4"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d6"
+    },
+    {
+     "kind": "attacks",
+     "square": "a7"
+    }
+   ]
+  },
+  {
    "id": "vn-scandi-check-that-gets-in-the-way",
    "lineSan": [
     "e4",
@@ -167,6 +243,104 @@
      "square": "d7"
     }
    ]
+  },
+  {
+   "id": "vn-advance-caro-the-bishop-beats-the-bars",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "Bf5"
+   ],
+   "opening": "Caro-Kann Defense: Advance Variation",
+   "phase": "opening",
+   "explains": "The bishop has come out to f5 before the e-pawn moves, and it is already working: it holds e4, the square in front of the chain where the opponent would love to post a piece, and the pawn can go to e6 behind it next. The structure that follows is the good version of the closed centre — same pawns, bishop on the right side of them.",
+   "teaches": "The whole point of this defence's first moves is one comparison: the same locked centre with the light-squared bishop outside the chain instead of behind it. Bring the bishop out first, every time, and only then close the chain — the difference between the two pictures is the difference between a comfortable game and a lifelong apology.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:4GIsh7cTsHc"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-advance-caro-strike-the-base-on-schedule",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "Bf5",
+    "f4",
+    "Nh6",
+    "Bd3",
+    "e6",
+    "Nf3",
+    "c5"
+   ],
+   "opening": "Caro-Kann Defense: Advance Variation",
+   "phase": "opening",
+   "explains": "The pawn strikes at c5, attacking the pawn on d4 — the base of the chain that starts there and runs to e5. Whatever happens next, the chain's foundation is under pressure, and the pieces developed on the previous moves are aimed at exactly this fight.",
+   "teaches": "Against a pawn chain, the plan is not a secret: attack the base. The c-pawn's strike at the centre is the main idea of the whole structure, and it lands best once your minor pieces have settled — the pawn asks the question and the pieces are already in place to profit from any answer.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:4GIsh7cTsHc"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d4"
+    }
+   ]
+  },
+  {
+   "id": "vn-advance-caro-keep-the-tension-never-lock-it-yourself",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "e5",
+    "Bf5",
+    "f4",
+    "Nh6",
+    "Bd3",
+    "e6",
+    "Nf3",
+    "c5",
+    "Bxf5",
+    "Nc6",
+    "Kf1",
+    "Nb8",
+    "dxc5",
+    "Nc6",
+    "c3",
+    "Qb6",
+    "Rg1",
+    "Nxf5"
+   ],
+   "opening": "Caro-Kann Defense: Advance Variation",
+   "phase": "opening",
+   "explains": "The knight has recaptured on f5, stepping from the rim into the fight, and every pawn in front of the king still stands where it started. The queen on b6 keeps leaning on the pawns on b2 and c5 meanwhile — pressure held, structure intact, one piece better than before the trade.",
+   "teaches": "When a trade is offered on a square your knight can reach, prefer the recapture that improves a piece over the one that moves a pawn. The knight that retakes arrives on an active square with the pawn shield untouched — the same trade, and one version of it develops you.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:4GIsh7cTsHc"
+   ],
+   "positionSource": "high",
+   "structural": "the recapture chosen to activate a piece and keep the pawn shield — same trade, better version"
   },
   {
    "id": "vn-fianchetto-tabia-the-pawn-that-claims-two-squares",
@@ -713,6 +887,94 @@
    ]
   },
   {
+   "id": "vn-gambit-antidote-cut-the-bishop-off-before-it-bites",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nxe5",
+    "Nf6",
+    "Nxc6",
+    "dxc6",
+    "d3",
+    "Bc5",
+    "Be2",
+    "h5",
+    "c3"
+   ],
+   "opening": "Petrov's Defense: Stafford Gambit",
+   "phase": "opening",
+   "explains": "The pawn on c3 takes d4 in hand, ready to hit the bishop on c5 and shut its diagonal for good, while the quiet bishop development already stands guard in front of the king. The attacking setup across the board has no target left — the counterplay ended before it began.",
+   "teaches": "The antidote to a piece-activity gambit is not to refute it move by move but to switch off its one dangerous piece. The modest pawn-and-bishop setup blunts the diagonal into your king's position, and with that bishop talking to nobody, the gambiteer is simply a pawn down with pretty pieces.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:8urm2D1HhX8"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "d4"
+    }
+   ]
+  },
+  {
+   "id": "vn-gambit-antidote-own-the-promotion-square-first",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nxe5",
+    "Nc6",
+    "Nxc6",
+    "dxc6",
+    "d3",
+    "Bc5",
+    "Be3",
+    "Bxe3",
+    "fxe3",
+    "Ng4",
+    "Qf3",
+    "Qg5",
+    "Ke2",
+    "Nxh2",
+    "Rxh2",
+    "Bg4",
+    "Nd2",
+    "O-O",
+    "Kf2",
+    "Bxf3",
+    "gxf3",
+    "Qe5",
+    "f4",
+    "Qxb2",
+    "Rb1",
+    "Qxa2",
+    "Rxb7",
+    "a5",
+    "Kf3",
+    "a4",
+    "Nc4",
+    "a3",
+    "Bh3",
+    "Qa1"
+   ],
+   "opening": "Petrov's Defense: Stafford Gambit",
+   "phase": "middlegame",
+   "explains": "The queen has gone to a1, the very square the a-pawn promotes on, with the pawn already on a3. The one defensive idea — a rook racing to the back rank to fight for that square — arrives too late at a square that is no longer for sale.",
+   "teaches": "When a passed pawn nears the end of the board, look at the whole board and ask one question: what can still stop the promotion? The strongest technique is often to seize the promotion square itself with a heavy piece — nothing can contest a square you already occupy, and the pawn walks home behind you.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:8urm2D1HhX8"
+   ],
+   "positionSource": "high",
+   "structural": "promotion secured by occupying the queening square with the queen before the pawn asks for it"
+  },
+  {
    "id": "vn-unsoundsac-develop-instead-of-chasing-the-attack",
    "lineSan": [
     "e4",
@@ -749,6 +1011,107 @@
      "square": "g5"
     }
    ]
+  },
+  {
+   "id": "vn-kingside-clamp-the-pawn-that-asks-two-questions",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6",
+    "Be2",
+    "O-O",
+    "Bg5",
+    "Nbd7",
+    "h4",
+    "h6",
+    "Be3",
+    "e5",
+    "d5",
+    "b6",
+    "Qd2",
+    "Kh7",
+    "g4",
+    "Nc5",
+    "f3",
+    "a5",
+    "Nh3",
+    "Rh8",
+    "g5"
+   ],
+   "opening": "King's Indian Defense: Averbakh Variation, Geller Defense",
+   "phase": "middlegame",
+   "explains": "The pawn steps to g5 and attacks the knight on f6 and the pawn on h6 in the same move. One of them must give: the knight retreats or the pawns trade, and either answer opens lines on the side of the board where all the storming pawns already point.",
+   "teaches": "In a locked centre the pawn storm is the argument, and its best moves hit two things at once. A pawn advance that attacks a piece and a pawn together forces a concession whichever way it is answered — and every trade it causes opens another line toward the king.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:B0AdPztLsHs"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    },
+    {
+     "kind": "attacks",
+     "square": "h6"
+    }
+   ]
+  },
+  {
+   "id": "vn-kingside-clamp-find-the-piece-missing-in-action",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6",
+    "Be2",
+    "O-O",
+    "Bg5",
+    "Nbd7",
+    "h4",
+    "h6",
+    "Be3",
+    "e5",
+    "d5",
+    "b6",
+    "Qd2",
+    "Kh7",
+    "g4",
+    "Nc5",
+    "f3",
+    "a5",
+    "Nh3",
+    "Rh8",
+    "g5",
+    "Ng8",
+    "h5",
+    "Bxh3",
+    "Rxh3",
+    "gxh5",
+    "O-O-O"
+   ],
+   "opening": "King's Indian Defense: Averbakh Variation, Geller Defense",
+   "phase": "middlegame",
+   "explains": "Castling long brings the rook from a1 — the one piece that had no job — into the game while the king steps to safety, and the kingside tension stays exactly as it was: unresolved, on the opponent's clock. Whoever takes first there opens lines for the side that was ready.",
+   "teaches": "In a tense position with many captures available, two disciplines pay together: let the opponent be the one who takes — you only recapture, keeping every file that opens working for you — and ask which of your pieces is missing in action. The move that signs in the last absent piece usually outranks every capture on the board.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:B0AdPztLsHs"
+   ],
+   "positionSource": "high",
+   "structural": "the last absent piece signed in before any capture — tension held so the opener pays for the opening"
   },
   {
    "id": "vn-modern-poisoned-b2",
@@ -1309,6 +1672,401 @@
    ]
   },
   {
+   "id": "vn-counterstrike-hit-the-centre-the-moment-it-overreaches",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "d5",
+    "cxd5",
+    "Bg7",
+    "Bf4",
+    "Nxd5",
+    "Nxd5",
+    "Qxd5",
+    "Bg3",
+    "c5",
+    "dxc5"
+   ],
+   "opening": "Grünfeld Defense",
+   "phase": "opening",
+   "explains": "The pawn's capture on c5 has cleared the d-file from top to bottom: the queen on d5 now looks straight down at the queen on d1 with nothing between them. The pawn can be regained at leisure — the open file and the exposed first rank are the real change on the board.",
+   "teaches": "When the centre pawn finally captures, look down the file it just left. The capture that wins a pawn can open the line your queen was already standing on — and a file opened onto their back rank matters more than the pawn that opened it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Cjxk_qrmeMY"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "opens",
+     "from": "d5",
+     "to": "d1"
+    }
+   ]
+  },
+  {
+   "id": "vn-counterstrike-force-the-trade-that-drags-the-king-out",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "d5",
+    "cxd5",
+    "Bg7",
+    "Bf4",
+    "Nxd5",
+    "Nxd5",
+    "Qxd5",
+    "Bg3",
+    "c5",
+    "dxc5",
+    "Qxc5",
+    "Rc1",
+    "Qa5+"
+   ],
+   "opening": "Grünfeld Defense",
+   "phase": "opening",
+   "explains": "The queen checks from a5 down the open diagonal to the king on e1. There is no comfortable answer: blocking invites the queen trade, and the recapture pulls the king into the middle of the board with pieces still on. Every later idea gains a move against a king that has to watch its step.",
+   "teaches": "When the enemy king is still in the centre, a queen check that can only be answered by a block is a lever: the block invites the trade, and the recapture drags the king to a working square of your choosing. The endgame that follows starts with their king misplaced — a permanent, free concession.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Cjxk_qrmeMY"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e1"
+    }
+   ]
+  },
+  {
+   "id": "vn-open-game-develop-with-a-threat-behind-it",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nc3",
+    "Bc5",
+    "Bc4",
+    "d6",
+    "O-O",
+    "Bg4",
+    "d3",
+    "Nc6"
+   ],
+   "opening": "Petrov's Defense: Three Knights Game",
+   "phase": "opening",
+   "explains": "The knight develops to c6 and takes the d4 square in hand, and with the bishop already pinning the defender on f3, the jump into d4 is a real threat the opponent has to answer at once. The developing move set the agenda.",
+   "teaches": "The best developing move is the one that arrives carrying a threat. A knight that comes out eyeing the central jump forces your opponent to spend their next move on your plans instead of their own — development and initiative in the same motion.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:DO28z1MTaC8"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "d4"
+    }
+   ]
+  },
+  {
+   "id": "vn-open-game-stake-a-claim-on-the-wing-they-own",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nc3",
+    "Bc5",
+    "Bc4",
+    "d6",
+    "O-O",
+    "Bg4",
+    "d3",
+    "Nc6",
+    "Be3",
+    "Bb6",
+    "h3",
+    "Bh5",
+    "Kh2",
+    "O-O",
+    "Qd2",
+    "Bxf3",
+    "gxf3",
+    "Nh5"
+   ],
+   "opening": "Petrov's Defense: Three Knights Game",
+   "phase": "opening",
+   "explains": "The knight swings to h5 and takes both f4 and g3 in hand — the two dark squares the doubled pawns no longer guard. The factory starts running on the side of the board where the opponent's king lives, one hop ahead of their regrouping.",
+   "teaches": "When the pawn cover in front of their king has been damaged, do not wait — get the wheels turning on that wing before they reorganise. A knight hopping toward the weakened squares stakes the claim, and every piece that follows finds the squares already prepared.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:DO28z1MTaC8"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "f4"
+    },
+    {
+     "kind": "controls",
+     "square": "g3"
+    }
+   ]
+  },
+  {
+   "id": "vn-open-game-two-passers-the-king-cannot-catch",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nc3",
+    "Bc5",
+    "Bc4",
+    "d6",
+    "O-O",
+    "Bg4",
+    "d3",
+    "Nc6",
+    "Be3",
+    "Bb6",
+    "h3",
+    "Bh5",
+    "Kh2",
+    "O-O",
+    "Qd2",
+    "Bxf3",
+    "gxf3",
+    "Nh5",
+    "Rg1",
+    "Qf6",
+    "Rg4",
+    "Qxf3",
+    "Rag1",
+    "Kh8",
+    "Nd5",
+    "f5",
+    "exf5",
+    "Rxf5",
+    "R4g2",
+    "Raf8",
+    "Nxb6",
+    "axb6",
+    "Be6",
+    "Ne7",
+    "Bxf5",
+    "Nxf5",
+    "Rg5",
+    "Nh4",
+    "R5g4",
+    "Qxg4",
+    "hxg4",
+    "Nf3+",
+    "Kg2",
+    "Nxd2",
+    "Bxd2",
+    "Nf4+",
+    "Bxf4",
+    "Rxf4",
+    "f3",
+    "Kg8",
+    "a3",
+    "b5",
+    "Kg3",
+    "Kf7",
+    "Rh1",
+    "h6",
+    "Rh5",
+    "Kg6",
+    "c3",
+    "c5",
+    "Rh1",
+    "Ra4",
+    "Re1",
+    "Kf6",
+    "Re4",
+    "Rxe4",
+    "dxe4",
+    "Ke6",
+    "Kh4",
+    "g6",
+    "g5",
+    "h5",
+    "Kg3",
+    "d5",
+    "Kf2",
+    "d4",
+    "Ke2",
+    "h4",
+    "cxd4",
+    "cxd4",
+    "Kf2",
+    "h3",
+    "Kg3",
+    "d3"
+   ],
+   "opening": "Petrov's Defense: Three Knights Game",
+   "phase": "middlegame",
+   "explains": "One passed pawn stands on d3 and another on h3, a whole board apart, and the enemy king on one side cannot reach the other in time. The plan is the pawns' own legs — each step by one forces the king to abandon the other.",
+   "teaches": "Two passed pawns on opposite sides of the board beat a lone king even when neither pawn has support — the king cannot stand in two doorways at once. Count the squares before agreeing to any trade that leaves this race: if the pawns are far enough apart, the position that looks thin is simply winning.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:DO28z1MTaC8"
+   ],
+   "positionSource": "high",
+   "structural": "two distant passers against a king judged by counting, not hope — the king cannot hold both doorways"
+  },
+  {
+   "id": "vn-counter-fianchetto-step-the-knight-off-the-trade-square",
+   "lineSan": [
+    "c4",
+    "Nf6",
+    "d4",
+    "g6",
+    "Nc3",
+    "d5",
+    "cxd5",
+    "Nxd5",
+    "Na4"
+   ],
+   "opening": "Grünfeld Defense: Exchange Variation, Nadanian Attack",
+   "phase": "opening",
+   "explains": "The knight has stepped to a4 and the capture on c3 is off the table — the centralised knight has nothing to take and no favourable trade to anchor its plans on. The pawn can come to e4 next with the centre intact, which is exactly the picture this defence exists to prevent.",
+   "teaches": "This defence's whole machine runs on one trade: the knight takes on c3, the pawn chain forms, and the c-pawn's strike attacks it. Deny the trade and the machine has no fuel — a knight move to the rim that disallows the capture forces the defence to find a different game entirely.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Di-5aO2lddU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "prevents",
+     "san": "Nxc3"
+    }
+   ]
+  },
+  {
+   "id": "vn-counter-fianchetto-step-dont-block-when-the-block-hangs-something",
+   "lineSan": [
+    "c4",
+    "Nf6",
+    "d4",
+    "g6",
+    "Nc3",
+    "d5",
+    "cxd5",
+    "Nxd5",
+    "Na4",
+    "e5",
+    "dxe5",
+    "Bb4+",
+    "Bd2",
+    "Ne3",
+    "fxe3",
+    "Qh4+",
+    "g3",
+    "Bxd2+",
+    "Kxd2",
+    "Qb4+",
+    "Kc1"
+   ],
+   "opening": "Grünfeld Defense: Exchange Variation, Nadanian Attack",
+   "phase": "opening",
+   "explains": "The king steps to c1 out of the check, and in doing so it defends the pawn on b2 — the pawn a blocking piece would have abandoned to a capture with check. Nothing hangs, the extra material stays, and the attack has run out of forcing moves.",
+   "teaches": "When a check can be met by blocking or by a king step, count what each answer leaves loose before choosing. A block that abandons a pawn with check is not a developing move, it is a blunder in stages — and the quiet king step that keeps everything defended is precise, not passive.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Di-5aO2lddU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "b2"
+    }
+   ]
+  },
+  {
+   "id": "vn-quiet-italian-the-little-pawn-move-that-guards-the-pin-square",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Bc4",
+    "d6",
+    "d3",
+    "Be7",
+    "Nc3",
+    "O-O",
+    "h3"
+   ],
+   "opening": "Petrov's Defense: Italian Variation",
+   "phase": "opening",
+   "explains": "The pawn on h3 covers g4, so the bishop's arrival there now runs into a defended square — it can still come, but it gets asked the question immediately and on your terms. With that settled, castling short is safe and the plans with the pawns can begin.",
+   "teaches": "In quiet openings the annoying pin against your king's knight is half your opponent's plan, and the rook-pawn's one-square step is the standing answer. Play it before castling short: the pin square is covered, so the bishop's visit costs a tempo instead of creating a nagging problem.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:DnJl1cmihNQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "meets",
+     "san": "Bg4"
+    }
+   ]
+  },
+  {
+   "id": "vn-quiet-italian-compare-to-the-pattern-before-copying-it",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "d6",
+    "Bc4",
+    "Nf6",
+    "Ng5",
+    "d5",
+    "exd5",
+    "h6"
+   ],
+   "opening": "Petrov's Defense: Italian Variation",
+   "phase": "opening",
+   "explains": "The pawn on h6 attacks the knight on g5. The square c6 is empty, so the capture on d5 hit nothing and gained no time. The knight on g5 must retreat, and a full move is gone from the raid.",
+   "teaches": "A famous attacking pattern is a set of conditions, not a move to copy. The knight's raid works in its home position because a specific piece stands on a specific square — remove that piece and the same raid loses a tempo at every step. Compare the board in front of you to the pattern's conditions before borrowing its moves.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:DnJl1cmihNQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "g5"
+    }
+   ]
+  },
+  {
    "id": "vn-open-sicilian-develop-with-a-question-attached",
    "lineSan": [
     "e4",
@@ -1366,6 +2124,83 @@
      "square": "f6"
     }
    ]
+  },
+  {
+   "id": "vn-open-centre-pin-the-recapturing-knight",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Bb4",
+    "Nxc6",
+    "bxc6",
+    "Bd3",
+    "O-O",
+    "O-O",
+    "d6",
+    "Bg5"
+   ],
+   "opening": "Four Knights Game: Scotch Variation Accepted",
+   "phase": "opening",
+   "explains": "The bishop on g5 attacks the knight on f6 and pins it against the queen behind it. The knight can neither move nor be comfortably unpinned, so the kingside squares it was guarding are already half-abandoned while the attack is still choosing its plan.",
+   "teaches": "After the centre opens, the enemy king's knight is the piece holding the position together, and the bishop's pin against the queen freezes it. Every attacking idea that follows — the pawn advances, the piece lifts — gains a move because the defender's best piece is spoken for.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:F7UDk49ESWs"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    }
+   ]
+  },
+  {
+   "id": "vn-open-centre-the-prophylactic-king-step",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Bb4",
+    "Nxc6",
+    "bxc6",
+    "Bd3",
+    "O-O",
+    "O-O",
+    "d6",
+    "Bg5",
+    "h6",
+    "Bh4",
+    "Re8",
+    "f4",
+    "a5",
+    "Kh1"
+   ],
+   "opening": "Four Knights Game: Scotch Variation Accepted",
+   "phase": "opening",
+   "explains": "The king tucks into the corner, off the diagonal that runs through the centre toward g1 — the line the enemy bishop would love once the pawns advance and the position opens. The attacking setup continues next move, now without a single tactical string attached to it.",
+   "teaches": "Before committing to the pawn storm, spend one move stepping the king off the diagonal your opponent's pieces want. Prophylaxis is cheapest when nothing is happening yet: the check or the hit that would have interrupted your attack at its critical moment simply never exists.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:F7UDk49ESWs"
+   ],
+   "positionSource": "high",
+   "structural": "the king stepped off the working diagonal before the storm — prophylaxis paid while it costs nothing"
   },
   {
    "id": "vn-earlyqueen-queen-out-with-a-job",
@@ -1486,6 +2321,93 @@
      ]
     }
    ]
+  },
+  {
+   "id": "vn-opposite-castles-the-storm-hunts-the-gatekeeper",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Ba6",
+    "Nxa6",
+    "Nf3",
+    "d6",
+    "d4",
+    "Bg4",
+    "c3",
+    "Be7",
+    "Be3",
+    "Nf6",
+    "Nbd2",
+    "O-O",
+    "h3",
+    "Bxf3",
+    "Qxf3",
+    "c5",
+    "dxe5",
+    "dxe5",
+    "O-O-O",
+    "Qa5",
+    "Kb1",
+    "Rad8",
+    "g4"
+   ],
+   "opening": "King's Pawn Game",
+   "phase": "middlegame",
+   "explains": "The pawn steps to g4 with the kings castled on opposite sides, taking f5 and h5 in hand, and the next step of the same pawn asks the knight on f6 to leave. That knight is the kingside's gatekeeper — everything the storm wants to do afterwards begins with making it move.",
+   "teaches": "With the kings on opposite wings, the pawn storm is not a mood — it has two precise jobs. It pries open files for the rooks, and before that it evicts the knight in front of the castled king, the gatekeeper whose departure makes every later sacrifice work. Aim the pawns at that knight first.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Gti01VN0zXA"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "f5"
+    },
+    {
+     "kind": "controls",
+     "square": "h5"
+    }
+   ]
+  },
+  {
+   "id": "vn-opposite-castles-unbalance-by-castling-the-other-way",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Ba6",
+    "Nxa6",
+    "Nf3",
+    "d6",
+    "d4",
+    "Bg4",
+    "c3",
+    "Be7",
+    "Be3",
+    "Nf6",
+    "Nbd2",
+    "O-O",
+    "h3",
+    "Bxf3",
+    "Qxf3",
+    "c5",
+    "dxe5",
+    "dxe5",
+    "O-O-O"
+   ],
+   "opening": "King's Pawn Game",
+   "phase": "opening",
+   "explains": "Castling long against a short-castled king splits the board into two attacking zones: the pawns in front of each king are free to charge, because they shelter nobody on their own side. The position stops being about equality and starts being about speed.",
+   "teaches": "When you need to unbalance a position — because the material or the position says a draw is a loss — the simplest formula is to castle the opposite side from your opponent. Both sides get pawn storms that do not weaken their own king, the race begins, and the better attacker wins rather than the better memoriser.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Gti01VN0zXA"
+   ],
+   "positionSource": "high",
+   "structural": "opposite-side castling chosen deliberately to turn the game into a race both sides must run"
   },
   {
    "id": "vn-alapin-which-pawn-is-working",
@@ -1840,6 +2762,95 @@
    ]
   },
   {
+   "id": "vn-minor-piece-play-hit-the-knight-whose-retreat-just-vanished",
+   "lineSan": [
+    "e4",
+    "c6",
+    "Bc4",
+    "d5",
+    "exd5",
+    "cxd5",
+    "Bb5+",
+    "Bd7",
+    "Nc3",
+    "Bxb5",
+    "Nxb5",
+    "Nc6",
+    "c3",
+    "a6"
+   ],
+   "opening": "Caro-Kann Defense: Hillbilly Attack",
+   "phase": "opening",
+   "explains": "The pawn on a6 attacks the knight on b5, and the pawn move a moment ago took c3 away as its retreat — the knight's comfortable road home is gone, and its remaining choices either misplace it or wreck the pawns around it. One little pawn move, played at exactly the right time.",
+   "teaches": "Timing in the opening is often about a square that just disappeared. The moment a pawn move takes away a piece's retreat square, the move that attacks that piece is promoted from routine to urgent — the same attack a move earlier or later achieves nothing.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:IloLuuXW7lE"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "b5"
+    }
+   ]
+  },
+  {
+   "id": "vn-minor-piece-play-trade-on-your-own-terms",
+   "lineSan": [
+    "e4",
+    "c6",
+    "Bc4",
+    "d5",
+    "exd5",
+    "cxd5",
+    "Bb5+",
+    "Bd7",
+    "Nc3",
+    "Bxb5",
+    "Nxb5",
+    "Nc6",
+    "c3",
+    "a6",
+    "Nd4",
+    "Nxd4",
+    "cxd4",
+    "e6",
+    "Nf3",
+    "Bd6",
+    "d3",
+    "Ne7",
+    "O-O",
+    "O-O",
+    "Re1",
+    "Qb6",
+    "a3",
+    "Nf5",
+    "b4",
+    "a5",
+    "Bd2",
+    "axb4",
+    "axb4",
+    "Nxd4",
+    "Rxa8",
+    "Rxa8",
+    "Nxd4",
+    "Qxd4"
+   ],
+   "opening": "Caro-Kann Defense: Hillbilly Attack",
+   "phase": "middlegame",
+   "explains": "The queen has recaptured on d4 and stands in the middle of the board, centralised by the trade her opponent initiated. The sequence was invited, not avoided: each capture pulled a defender away and the recapture was the developing move.",
+   "teaches": "Trading on your own terms means arranging that your opponent is the one who captures first, so every recapture improves your pieces instead of theirs. The material stays level; the activity does not — count who ends up better placed after the dust settles, not who took what.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:IloLuuXW7lE"
+   ],
+   "positionSource": "high",
+   "structural": "a level trade sequence steered so every recapture activates the recapturing side"
+  },
+  {
    "id": "vn-knightbeforepawn-push-that-hits-two-things",
    "lineSan": [
     "e4",
@@ -1874,6 +2885,86 @@
     {
      "kind": "attacks",
      "square": "e6"
+    }
+   ]
+  },
+  {
+   "id": "vn-practical-french-the-pawn-prop-the-knight-left-room-for",
+   "lineSan": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nd2",
+    "Nf6",
+    "e5",
+    "Nfd7",
+    "c3",
+    "c5",
+    "Bd3"
+   ],
+   "opening": "French Defense: Tarrasch Variation, Closed Variation",
+   "phase": "opening",
+   "explains": "The bishop develops to d3 and attacks the pawn on h7 down a completely open diagonal — the advanced e-pawn stands out of its way on e5, not in it. The chain is propped by the c-pawn behind it, and every piece is on the square the setup always gives it.",
+   "teaches": "This setup's pieces have standard posts, and the light-squared bishop's is the diagonal aimed at the enemy king's home — take it before the king castles into it. The modest knight development earlier is what makes the whole scheme work: the c-pawn kept its job propping the chain, and the bishop keeps this diagonal.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:JKxlT73xpYo"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "h7"
+    }
+   ]
+  },
+  {
+   "id": "vn-practical-french-clamp-the-wing-before-the-counterplay-starts",
+   "lineSan": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nd2",
+    "Nf6",
+    "e5",
+    "Nfd7",
+    "c3",
+    "c5",
+    "Bd3",
+    "Nc6",
+    "Ngf3",
+    "Qb6",
+    "Ng1",
+    "Qd8",
+    "Ne2",
+    "Qb6",
+    "Nf3",
+    "Qc7",
+    "Bd2",
+    "Qd8",
+    "Nc1",
+    "Be7",
+    "O-O",
+    "a5",
+    "a4"
+   ],
+   "opening": "French Defense: Tarrasch Variation, Closed Variation",
+   "phase": "middlegame",
+   "explains": "The pawn goes to a4 and takes b5 away, so the queenside pawns opposite have no lever to advance with — their storm needs that square and it is gone. The kingside plans can now be prepared without a clock ticking on the other side of the board.",
+   "teaches": "When your play is on one wing, spend a single pawn move to freeze the other. The rook-pawn's advance takes away the square the enemy pawns need to start rolling, and the counterplay that would have arrived in five moves never arrives at all.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:JKxlT73xpYo"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "b5"
     }
    ]
   },
@@ -2114,6 +3205,40 @@
    ]
   },
   {
+   "id": "vn-iqp-hold-the-extra-pawn-while-it-annoys",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "exd5",
+    "cxd5",
+    "c4",
+    "Nf6",
+    "Nc3",
+    "Nc6",
+    "cxd5",
+    "Nb8",
+    "Bc4"
+   ],
+   "opening": "Caro-Kann Defense: Panov Attack",
+   "phase": "opening",
+   "explains": "The bishop develops to c4 and defends the pawn on d5 — the extra pawn the whole line revolves around. As long as it stands there, the opponent's pieces are tied to regaining it, which means every developing move that holds it is a move that also cramps them.",
+   "teaches": "In the structures that come from this pawn grab, the question is always the square in front of the queen's pawn — the shortest way to judge these positions is to ask who controls that square. Hold what you have won with pieces, not more pawn moves, and make the opponent prove the pawn comes back.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:KV90PAgPO2A"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d5"
+    }
+   ]
+  },
+  {
    "id": "vn-staunton-the-gambit-pawn-comes-straight-back",
    "lineSan": [
     "d4",
@@ -2170,6 +3295,32 @@
      "square": "f7"
     }
    ]
+  },
+  {
+   "id": "vn-space-grab-recapture-toward-the-imbalance",
+   "lineSan": [
+    "e4",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "c4",
+    "Nb6",
+    "d4",
+    "d6",
+    "exd6",
+    "cxd6"
+   ],
+   "opening": "Alekhine Defense: Two Pawns Attack",
+   "phase": "opening",
+   "explains": "The pawns have traded so that the wing majorities point in opposite directions — the queenside pawns outnumber their counterparts and will advance there, while the opponent's extra kingside pawn does the same on the other wing. The imbalance is the plan: push where you are the majority.",
+   "teaches": "When two recaptures are both sound, prefer the one that creates a structure with a plan built in. Recapturing to leave majorities on opposite wings gives each side a clear job — your extra pawns advance on their wing, and the whole middlegame plays itself by plan rather than by move-to-move invention. It is also the recapture that teaches you the most.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:OQsa_sdKzjY"
+   ],
+   "positionSource": "high",
+   "structural": "the recapture chosen for the structure it leaves — opposite majorities, each side owning one wing"
   },
   {
    "id": "vn-clamp-second-pawn-takes-the-freeing-square",
@@ -2673,6 +3824,70 @@
    ]
   },
   {
+   "id": "vn-system-opening-the-check-that-interrupts-the-routine",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "e3",
+    "d5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "Qa5+"
+   ],
+   "opening": "Indian Defense: Accelerated London System",
+   "phase": "opening",
+   "explains": "The queen checks from a5 at the king still on e1, and the routine stops: blocking commits a piece to a square it did not want, and the alternatives disturb the setup's order. The system player is out of their script on move six.",
+   "teaches": "A system opening's strength is its routine — the same setup in the same order every game. The early queen check is the interruption: it arrives before the routine finishes, and every answer costs something the system wanted to keep. Against a setup player, the question beats the scheme.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:TSM7CFcJ1L0"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e1"
+    }
+   ]
+  },
+  {
+   "id": "vn-system-opening-pin-the-glue-piece",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "e3",
+    "d5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "Qa5+",
+    "Nc3",
+    "Bg4"
+   ],
+   "opening": "Indian Defense: Accelerated London System",
+   "phase": "opening",
+   "explains": "The bishop on g4 attacks the knight on f3 and pins it against the queen. The knight holds the centre together, and while it is stuck the development race is running in only one direction — the pawn-grabs on offer are worth less than the next developing move.",
+   "teaches": "In these solid setups one knight glues the position together — it holds the centre pawn and covers the squares the setup depends on. The pin against the queen freezes that knight, and greed can wait: developing every piece against a tangled position wins more than any pawn on offer.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:TSM7CFcJ1L0"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f3"
+    }
+   ]
+  },
+  {
    "id": "vn-closedtrad-queen-that-hits-two-pawns-across-the-board",
    "lineSan": [
     "e4",
@@ -2922,6 +4137,73 @@
    ]
   },
   {
+   "id": "vn-f-pawn-offer-the-question-in-the-centre",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4"
+   ],
+   "opening": "King's Pawn Game",
+   "phase": "opening",
+   "explains": "The pawn on f4 attacks the pawn on e5 and puts the whole game's character on the table in one move. Accepting hands over the centre for a pawn; propping the pawn up with slow moves keeps the material and gives up the initiative instead.",
+   "teaches": "The f-pawn's early strike offers a pawn to seize the centre and the initiative. The knight developed to c3 first is what makes it sound — the centre is covered, so whichever way the offer is answered, the pawns and pieces come forward with tempo. Passive declines concede the centre without even winning the pawn.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:V4lW-6f56Cg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "e5",
+     "Nc3",
+     "Nf6"
+    ],
+    "taughtMove": "Bc4",
+    "alternative": "f4",
+    "lineName": "Vienna Game"
+   }
+  },
+  {
+   "id": "vn-f-pawn-offer-pin-the-defender-of-the-strongpoint",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4",
+    "d6",
+    "Nf3",
+    "Nc6",
+    "Bb5"
+   ],
+   "opening": "King's Pawn Game",
+   "phase": "opening",
+   "explains": "The bishop on b5 attacks the knight on c6, the piece holding up the pawn on e5, and the king behind the knight makes the attack a pin. The strongpoint's defence is stretched one move after it was declared.",
+   "teaches": "When a pawn chain's strongpoint is held by a knight, the bishop's pin against that knight is pressure on the strongpoint itself — the defender is frozen, so every attacker you add counts double. Develop toward the pin rather than around it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:V4lW-6f56Cg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c6"
+    }
+   ]
+  },
+  {
    "id": "vn-jobavapush-strike-the-centre-while-the-bishop-is-out",
    "lineSan": [
     "d4",
@@ -2950,6 +4232,76 @@
     {
      "kind": "controls",
      "square": "f5"
+    }
+   ]
+  },
+  {
+   "id": "vn-gambit-faced-the-modest-retreat-that-pre-answers-the-attack",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "exd4",
+    "Bc4",
+    "Bc5",
+    "c3",
+    "Be7"
+   ],
+   "opening": "Scotch Game: Scotch Gambit",
+   "phase": "opening",
+   "explains": "The bishop drops back to e7, and the knight's leap to g5 — the move every attack in this structure begins with — now lands on a square the bishop already covers. The retreat looks like a concession and is actually a preparation: the attack's first move has been answered before it was played.",
+   "teaches": "Against a gambit you do not have to meet sharpness with sharpness — a modest retreat that pre-answers the standard attacking idea is a complete strategy. Slightly passive and completely solid beats theoretical and half-remembered, especially when the attacker is counting on you to know less than they do.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Y-a6cV08zDM"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "meets",
+     "san": "Ng5"
+    }
+   ]
+  },
+  {
+   "id": "vn-gambit-faced-hit-the-bishop-that-carries-the-attack",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "exd4",
+    "Bc4",
+    "Bc5",
+    "c3",
+    "Be7",
+    "Qc2",
+    "Na5",
+    "Qb3",
+    "d3"
+   ],
+   "opening": "Scotch Game: Scotch Gambit",
+   "phase": "opening",
+   "explains": "The pawn has advanced to d3, where it takes both c2 and e2 in hand — the queen's home diagonal square and the king's bishop's only developing square. Until it is dealt with, the pieces behind those squares are staring at a wall the opponent has to spend real moves dismantling.",
+   "teaches": "An extra gambit pawn is a bargaining chip, and sometimes its best move is to give itself back on the most annoying square available. Pushed into the heart of their queenside, it sits on the squares their pieces need to develop through — they spend moves removing it, and you spend those moves developing.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Y-a6cV08zDM"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "c2"
+    },
+    {
+     "kind": "controls",
+     "square": "e2"
     }
    ]
   },
@@ -3003,6 +4355,104 @@
        "square": "d4"
       }
      ]
+    }
+   ]
+  },
+  {
+   "id": "vn-gambit-play-rule-out-the-counter-check-first",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Bb4",
+    "f4",
+    "exf4",
+    "Nf3"
+   ],
+   "opening": "Vienna Game",
+   "phase": "opening",
+   "explains": "The knight has come to f3 and the queen's landing on h4 is covered — the check that was the position's one forcing counter now walks into a defended square. One developing move turned the sting into a blunder, and everything the pawn sacrifice promised can be collected in peace.",
+   "teaches": "After giving up the f-pawn, the queen check on the h-file is the counter-blow every gambit player must respect — it is the difference between an attack and an accident. The knight's developing move that covers the checking square is therefore not optional or slow: it is the move that makes the whole gambit playable.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:YgMVGhponbU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "meets",
+     "san": "Qh4"
+    }
+   ]
+  },
+  {
+   "id": "vn-gambit-play-chase-the-only-developed-piece",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Bb4",
+    "f4",
+    "exf4",
+    "Nf3",
+    "h6",
+    "Bc4",
+    "Nf6",
+    "e5"
+   ],
+   "opening": "Vienna Game",
+   "phase": "opening",
+   "explains": "The pawn advances to e5 and attacks the knight on f6, the only piece the opponent has developed. The slow pawn move on the rim gave this advance for free, and the knight has to move again while the centre rolls forward.",
+   "teaches": "When your opponent spends moves on slow pawn gestures in a sharp position, open the game at once — their one developed piece becomes a target, and every tempo they spent on the flank is a tempo your centre uses now.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:YgMVGhponbU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    }
+   ]
+  },
+  {
+   "id": "vn-gambit-play-the-runaway-pawn-inside-the-shelter",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Bb4",
+    "f4",
+    "exf4",
+    "Nf3",
+    "h6",
+    "Bc4",
+    "Nf6",
+    "e5",
+    "O-O",
+    "O-O",
+    "d5",
+    "exf6",
+    "dxc4",
+    "fxg7"
+   ],
+   "opening": "Vienna Game",
+   "phase": "opening",
+   "explains": "The pawn has eaten its way to g7 and now attacks the rook on f8, standing one square from the king with the shelter gone. Whatever happens to the pawn itself, the pawns that used to cover the king went with it, and the open lines remain.",
+   "teaches": "A pawn that reaches the sixth and seventh rank inside the king's shelter is worth more than the piece it may have cost along the way. Each capture it makes strips another pawn off the king's cover, and by the time it stands next to the king, every heavy piece you own has a target to aim at.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:YgMVGhponbU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f8"
     }
    ]
   },
@@ -3149,6 +4599,49 @@
    ]
   },
   {
+   "id": "vn-pin-break-count-what-the-capture-attacks",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nc3",
+    "Bc5",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "O-O",
+    "Be2",
+    "Re8",
+    "Bg5",
+    "h6",
+    "Bh4",
+    "g5",
+    "Bg3",
+    "Nxe4"
+   ],
+   "opening": "Petrov's Defense: Three Knights Game",
+   "phase": "opening",
+   "explains": "The knight has taken on e4 and attacks two pieces from there: the bishop on g3 that was doing the pinning, and the knight on c3. The move looked forbidden while the pin stood; the pawn advances changed the geometry, and now it wins material or the initiative whichever way the opponent answers.",
+   "teaches": "A pin on your king's knight is only as strong as the tactics keeping it there. When the pawns have pushed the pinning bishop to a square where the knight's capture in the centre attacks it, the pin is over — count everything the capture hits before dismissing it as impossible.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:_4xbS0Crtic"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "g3"
+    },
+    {
+     "kind": "attacks",
+     "square": "c3"
+    }
+   ]
+  },
+  {
    "id": "vn-jobava-london-knight-first-eyes-the-centre",
    "lineSan": [
     "d4",
@@ -3245,6 +4738,155 @@
      "kind": "opens",
      "from": "e1",
      "to": "a1"
+    }
+   ]
+  },
+  {
+   "id": "vn-provoked-centre-the-simple-strike-needs-no-overthinking",
+   "lineSan": [
+    "e4",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "Be2",
+    "Nb6",
+    "d3",
+    "Nc6",
+    "d4",
+    "d6"
+   ],
+   "opening": "Alekhine Defense: Normal Variation",
+   "phase": "opening",
+   "explains": "The pawn on d6 attacks the pawn on e5, the one the opening's early moves lured forward. However the tension resolves, the bishop behind the pawn gets its diagonal and the centre stops belonging to one side.",
+   "teaches": "This whole defence provokes the centre forward in order to hit it, and the strike itself is not a subtle move — do not overthink it. The pawn challenges the advanced pawn, claims a share of the centre, and opens the bishop's diagonal, all in one routine gesture. Some moves are just correct.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:br2ThhGdJXU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    }
+   ]
+  },
+  {
+   "id": "vn-provoked-centre-trade-queens-against-the-uncastled-king",
+   "lineSan": [
+    "e4",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "Be2",
+    "Nb6",
+    "d3",
+    "Nc6",
+    "d4",
+    "d6",
+    "Nf3",
+    "dxe5",
+    "dxe5",
+    "Qxd1+",
+    "Bxd1",
+    "Bg4"
+   ],
+   "opening": "Alekhine Defense: Normal Variation",
+   "phase": "opening",
+   "explains": "The bishop develops to g4 and attacks the knight on f3, which is all that stands between it and the bishop that recaptured on d1. One developing move, one threat, and the opponent's pieces — king in the centre, bishop home on d1 — must untangle under pressure.",
+   "teaches": "After a queen trade that denies castling, keep developing with hits — every piece that comes out attacking something extends the lead the trade created. The piece that recaptured is usually the most tangled one; aim at it and its defenders and the endgame plays like an attack.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:br2ThhGdJXU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f3"
+    }
+   ]
+  },
+  {
+   "id": "vn-flank-opening-the-diagonal-is-the-opening",
+   "lineSan": [
+    "b3",
+    "d6",
+    "Bb2"
+   ],
+   "opening": "Nimzo-Larsen Attack",
+   "phase": "opening",
+   "explains": "The bishop on b2 takes the e5 square in hand down a completely open diagonal. The opponent's modest pawn move promised a central stake it has not yet made — until the pawn arrives on e5, the bishop owns the centre from the wing.",
+   "teaches": "This opening is one idea wearing a move order: the bishop on the long diagonal, fighting for the central dark squares with pieces instead of pawns. Every reply that concedes that diagonal — a modest pawn move without its counterpart claim in the centre — hands the bishop exactly the board it wanted.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:c6s0bKN5y4E"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ]
+  },
+  {
+   "id": "vn-flank-opening-take-what-the-gestures-hang",
+   "lineSan": [
+    "b3",
+    "d6",
+    "Bb2",
+    "h5",
+    "a3",
+    "a5",
+    "e3",
+    "a4",
+    "bxa4"
+   ],
+   "opening": "Nimzo-Larsen Attack",
+   "phase": "opening",
+   "explains": "The pawn on a4 has been taken, and the opponent's opening consists of pawn moves on both rims with no piece developed past the first rank. There is no trick to fear from pieces that have not moved; the material is simply banked and the game continues a pawn up with the better diagonal.",
+   "teaches": "Flank pawn gestures that are not backed by development are not threats — they are deposits. When the rim pawn offers itself, count what recapturing actually exposes; usually the answer is nothing, and the pawns your opponent marched forward are weaknesses you now own the squares beside.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:c6s0bKN5y4E"
+   ],
+   "positionSource": "high",
+   "structural": "a rim-pawn offer accepted after counting the undeveloped pieces behind it — gestures are not threats"
+  },
+  {
+   "id": "vn-two-knights-the-auto-recapture-that-walks-into-mate",
+   "lineSan": [
+    "e4",
+    "c6",
+    "Nc3",
+    "d5",
+    "Nf3",
+    "dxe4",
+    "Nxe4",
+    "Nf6",
+    "Qe2",
+    "Nbd7",
+    "Nd6#"
+   ],
+   "opening": "Caro-Kann Defense: Tartakower Variation",
+   "phase": "opening",
+   "explains": "The knight has landed on d6, checkmate. The pawn on e7 cannot take it because the queen on e2 stands behind the knight on the same file, and every flight square is covered. One automatic developing move earlier — the knight to d7, blocking the bishop that guarded d6's approach — is the whole story of the game.",
+   "teaches": "When a quiet-looking queen move appears in a position you know, stop and ask what changed — the move you always play may have just become a losing one. The queen stepping to the e-file turns the centralised knight into a discovered battery, and the standard developing move now allows mate on the spot.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:cPVp5TWZR0w"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e8"
     }
    ]
   },
@@ -3550,6 +5192,194 @@
    ]
   },
   {
+   "id": "vn-chain-play-the-free-bishop-glares-down-the-board",
+   "lineSan": [
+    "c4",
+    "c6",
+    "e4",
+    "d5",
+    "cxd5",
+    "cxd5",
+    "e5",
+    "Nc6",
+    "d4",
+    "Bf5"
+   ],
+   "opening": "Caro-Kann Defense: Accelerated Panov Attack",
+   "phase": "opening",
+   "explains": "The bishop stands on f5 with the diagonal toward b1 completely open — it attacks the knight sitting on its home square, so even the opponent's first developing moves are constrained. The pawn move to e6 can come next, closing the chain behind a bishop that is already at work.",
+   "teaches": "When the centre locks into a chain, get the light-squared bishop out before closing it in — and notice how much the freed bishop actually does. From its natural post outside the chain it sweeps the whole long diagonal into the opponent's queenside, and every piece that wants to develop on that side has to reckon with it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fz9td9L2uIo"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "b1"
+    }
+   ]
+  },
+  {
+   "id": "vn-chain-play-one-pawn-move-holds-both",
+   "lineSan": [
+    "c4",
+    "c6",
+    "e4",
+    "d5",
+    "cxd5",
+    "cxd5",
+    "e5",
+    "Nc6",
+    "d4",
+    "Bf5",
+    "Nc3",
+    "e6"
+   ],
+   "opening": "Caro-Kann Defense: Accelerated Panov Attack",
+   "phase": "opening",
+   "explains": "The pawn arrives on e6 and defends two pieces at once: the pawn on d5 in the centre and the bishop on f5 beside it. The chain is complete with the bishop on the right side of it, and every unit in the structure is now held by a pawn.",
+   "teaches": "The pawn move that completes a chain should be counted for everything it holds, not just the square it stands on. And a matching pair of pawns — one of theirs propping their centre, one of yours attacking it — cancel each other out: neither makes the pawn between them weaker or stronger by itself.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fz9td9L2uIo"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d5"
+    },
+    {
+     "kind": "defends",
+     "square": "f5"
+    }
+   ]
+  },
+  {
+   "id": "vn-chain-play-develop-the-knight-around-the-bishop",
+   "lineSan": [
+    "c4",
+    "c6",
+    "e4",
+    "d5",
+    "cxd5",
+    "cxd5",
+    "e5",
+    "Nc6",
+    "d4",
+    "Bf5",
+    "Nc3",
+    "e6",
+    "Nf3",
+    "Qb6",
+    "Be2",
+    "Nh6"
+   ],
+   "opening": "Caro-Kann Defense: Accelerated Panov Attack",
+   "phase": "opening",
+   "explains": "The knight has gone to h6 because the bishop sits on f5, the knight's usual home in this structure. The square e7 stays empty for the dark-squared bishop, so the kingside can finish developing without the pieces queuing behind one another, and the knight keeps g4 in view for its next hop.",
+   "teaches": "When your bishop already occupies the knight's favourite square, be deliberate about how the king's knight develops — the routes are not equal. The rim development that keeps the other bishop's square free is often the practical choice: the knight can re-route later, but a tangled queenside cannot untangle itself.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fz9td9L2uIo"
+   ],
+   "positionSource": "high",
+   "structural": "development order solved around an occupied square — the rim knight keeps e7 free and the pieces never queue"
+  },
+  {
+   "id": "vn-chain-play-step-off-the-knights-square-with-tempo",
+   "lineSan": [
+    "c4",
+    "c6",
+    "e4",
+    "d5",
+    "cxd5",
+    "cxd5",
+    "e5",
+    "Nc6",
+    "d4",
+    "Bf5",
+    "Nc3",
+    "e6",
+    "Nf3",
+    "Qb6",
+    "Be2",
+    "Nh6",
+    "Na4",
+    "Qc7"
+   ],
+   "opening": "Caro-Kann Defense: Accelerated Panov Attack",
+   "phase": "opening",
+   "explains": "The queen stands on c7. From there she attacks the pawn on e5, the head of the chain. The knight's lunge to the rim asked her to move, and the retreat answered by hitting something — the opponent spent a move on the edge and got a new problem for it.",
+   "teaches": "Know the standard knight-traps by pattern, not by calculation — a queen on the knight's-edge square is a puzzle theme your opponent has drilled too. When the knight comes asking, step the queen to the square where she keeps working, and the retreat costs nothing.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fz9td9L2uIo"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    }
+   ]
+  },
+  {
+   "id": "vn-chain-play-strike-the-head-when-the-pieces-stand-ready",
+   "lineSan": [
+    "c4",
+    "c6",
+    "e4",
+    "d5",
+    "cxd5",
+    "cxd5",
+    "e5",
+    "Nc6",
+    "d4",
+    "Bf5",
+    "Nc3",
+    "e6",
+    "Nf3",
+    "Qb6",
+    "Be2",
+    "Nh6",
+    "Na4",
+    "Qc7",
+    "O-O",
+    "Be7",
+    "Bd2",
+    "Bg6",
+    "a3",
+    "Nf5",
+    "Be3",
+    "O-O",
+    "Nc3",
+    "f6"
+   ],
+   "opening": "Caro-Kann Defense: Accelerated Panov Attack",
+   "phase": "middlegame",
+   "explains": "The pawn strikes at e5, the head of the chain, with the king already castled and the rook standing behind the very file the capture will open. Every developed piece keeps its job while the pawn does the asking — this is the position the earlier quiet moves were for.",
+   "teaches": "Against a pawn chain there are two targets: the base and the head. Once your pieces are developed and castled, the strike at the head with the f-pawn opens your rook's file and asks the chain a question it cannot keep refusing. Before calculating any of the captures, list the enemy pieces that are undefended or defended only once — the piece that hangs at the end of a line is the most common thing a calculation forgets.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fz9td9L2uIo"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    }
+   ]
+  },
+  {
    "id": "vn-mirrorsetup-fianchetto-that-aims-at-the-centre-pawn",
    "lineSan": [
     "e3",
@@ -3584,6 +5414,72 @@
     {
      "kind": "controls",
      "square": "d4"
+    }
+   ]
+  },
+  {
+   "id": "vn-centre-push-punish-the-same-piece-moved-again",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "h5",
+    "Nc3",
+    "Nf6",
+    "e5"
+   ],
+   "opening": "Caro-Kann Defense: Maróczy Variation",
+   "phase": "opening",
+   "explains": "The pawn advances to e5 and attacks the knight on f6 — the one piece the opponent has developed — while their flank pawn move sits on the edge doing nothing for the fight. The knight must move again, and the pawn that chased it stands in the centre it was given for free.",
+   "teaches": "When your opponent spends their opening moves on flank gestures and repeat moves with the same piece, the centre push is the punishment. Every tempo they wasted is a tempo your pawns use to start asking questions their undeveloped pieces cannot answer.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:gyOxMMJWiYg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    }
+   ]
+  },
+  {
+   "id": "vn-centre-push-the-wedge-that-buries-a-position",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "h5",
+    "Nc3",
+    "Nf6",
+    "e5",
+    "Nfd7",
+    "e6"
+   ],
+   "opening": "Caro-Kann Defense: Maróczy Variation",
+   "phase": "opening",
+   "explains": "The pawn steps into e6 attacking the knight on d7 and the pawn on f7 at once. There is no way to ignore it and no good way to take it — the capture opens the king's cover, and afterwards the pieces behind the broken pawns have nowhere sensible to stand.",
+   "teaches": "A pawn given away on the right square can be worth more than a pawn kept. The wedge thrown into the heart of an undeveloped position forks defenders, wrecks the pawn shelter whichever way it is taken, and leaves every enemy piece tripping over the wreckage for the rest of the game.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:gyOxMMJWiYg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d7"
+    },
+    {
+     "kind": "attacks",
+     "square": "f7"
     }
    ]
   },
@@ -3729,6 +5625,225 @@
     {
      "kind": "defends",
      "square": "c7"
+    }
+   ]
+  },
+  {
+   "id": "vn-open-sicilian-trade-toward-their-weak-squares",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "e5",
+    "Bb5+"
+   ],
+   "opening": "Sicilian Defense: Venice Attack",
+   "phase": "opening",
+   "explains": "The bishop checks on b5, and however the check is met, the light-squared defenders start coming off the board — the pieces that would have guarded the squares the pawn advance abandoned in the centre. The holes are permanent; the defenders are not.",
+   "teaches": "When the opponent's pawn advance leaves permanent holes, the bishop check that forces a trade is not a drawish gesture — it removes the one piece that could have covered those holes. Trade toward the weak squares: every exchange makes the holes harder to patch.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ihv2TK04WPg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e8"
+    }
+   ]
+  },
+  {
+   "id": "vn-open-sicilian-the-knight-moves-into-the-hole",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "e5",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+",
+    "Nbxd7",
+    "Nf5"
+   ],
+   "opening": "Sicilian Defense: Venice Attack",
+   "phase": "opening",
+   "explains": "The knight has landed on f5, the square the pawn push to e5 gave away forever, and it attacks the pawn on d6 and the pawn on g7 at the same time. No pawn can ever ask it to leave — the hole has a tenant, and the rent is paid in defensive moves.",
+   "teaches": "A hole is only a weakness once a piece lives in it. The knight's jump to the square the pawn advance can never attack again is the follow-through — from there it hits in two directions at once, and evicting it costs a concession every time.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ihv2TK04WPg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d6"
+    },
+    {
+     "kind": "attacks",
+     "square": "g7"
+    }
+   ]
+  },
+  {
+   "id": "vn-open-sicilian-centralize-on-the-pin",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "e5",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+",
+    "Nbxd7",
+    "Nf5",
+    "Qb6",
+    "O-O",
+    "Rd8",
+    "Bg5",
+    "Qxb2",
+    "Nd5"
+   ],
+   "opening": "Sicilian Defense: Venice Attack",
+   "phase": "opening",
+   "explains": "The knight has centralised on d5, attacking the pinned knight on f6 — pinned by the bishop against the rook behind it. Taking the intruder walks into the pin's point, and declining leaves a monster in the middle while the queen is away on b2 counting pawns.",
+   "teaches": "When your opponent goes pawn-grabbing with the queen while behind in development, answer in the centre, not on the wing she left. The knight's leap to the central square works because the pin behind it makes the capture unpalatable — and keep your eyes on the greater prize rather than the first material the tactic offers.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ihv2TK04WPg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    }
+   ]
+  },
+  {
+   "id": "vn-early-push-challenge-the-overextended-pawn-at-once",
+   "lineSan": [
+    "e4",
+    "c6",
+    "e5",
+    "d6"
+   ],
+   "opening": "Caro-Kann Defense",
+   "phase": "opening",
+   "explains": "The pawn on d6 attacks the pawn on e5 directly. There is no way to keep the advanced pawn without committing more forces to it, so the opponent's second move is already a question they have to answer on their third.",
+   "teaches": "A pawn pushed forward this early has outrun its support, and the right response is to challenge it immediately rather than play around it. The pawn either trades itself off — giving back the space it grabbed — or its owner spends more moves propping it up while you simply develop.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:iuLI_EUlgvE"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    }
+   ]
+  },
+  {
+   "id": "vn-early-push-pin-instead-of-defending-what-needs-no-defence",
+   "lineSan": [
+    "e4",
+    "c6",
+    "e5",
+    "d6",
+    "exd6",
+    "exd6",
+    "d4",
+    "Nf6",
+    "c3",
+    "d5",
+    "Bg5",
+    "Be7",
+    "Nf3",
+    "Ne4",
+    "Bf4",
+    "O-O",
+    "Bd3",
+    "Bg4"
+   ],
+   "opening": "Caro-Kann Defense",
+   "phase": "opening",
+   "explains": "The knight on e4 is supported by the pawn on d5, so the bishop is free to skip the defensive posting and come to g4, attacking the knight on f3 and pinning it against the queen behind it. One move, and it is the opponent who has to spend the next one.",
+   "teaches": "Before spending a move defending a piece, check whether it is already defended — a centralised knight held by a pawn needs nothing from you. Spend the move on a new problem for your opponent instead: the pin that ties their knight to the queen costs them a tempo however they resolve it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:iuLI_EUlgvE"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f3"
+    }
+   ]
+  },
+  {
+   "id": "vn-early-push-small-problems-coalesce",
+   "lineSan": [
+    "e4",
+    "c6",
+    "e5",
+    "d6",
+    "exd6",
+    "exd6",
+    "d4",
+    "Nf6",
+    "c3",
+    "d5",
+    "Bg5",
+    "Be7",
+    "Nf3",
+    "Ne4",
+    "Bf4",
+    "O-O",
+    "Bd3",
+    "Bg4",
+    "O-O",
+    "Nd7"
+   ],
+   "opening": "Caro-Kann Defense",
+   "phase": "opening",
+   "explains": "The knight develops to d7 and takes the e5 square in hand, and behind it the pawn break with the f-pawn stays in reserve. Nothing here forces anything yet — but every piece now carries a small threat, and the opponent has to answer all of them at once.",
+   "teaches": "Positions are rarely won by one blow — they are won inch by inch, by creating enough small problems that they coalesce into a big one. Each developing move should carry a little annoyance: a square eyed, a pawn break held in reserve, a piece the opponent has to keep watching.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:iuLI_EUlgvE"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e5"
     }
    ]
   },
@@ -3910,6 +6025,90 @@
    ]
   },
   {
+   "id": "vn-clean-position-just-take-the-pawn",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "Be2",
+    "a6",
+    "Bxa6",
+    "bxa6",
+    "O-O",
+    "d6",
+    "h3",
+    "Nf6",
+    "Re1",
+    "g6",
+    "c3",
+    "Bg7",
+    "d4",
+    "O-O",
+    "dxc5"
+   ],
+   "opening": "Sicilian Defense: Old Sicilian",
+   "phase": "opening",
+   "explains": "The pawn has captured on c5 and from there attacks the pawn on d6 — a pawn won and a second one asked about, in one move. The tempting piece moves are still on the board and lose nothing by waiting; the pawn does not wait.",
+   "teaches": "When a clean capture wins a pawn and the tempting alternative merely looks clever, take the pawn. Material is the one advantage that does not evaporate while you work out the rest — the flashy move can be checked afterwards, from a position where you are already a pawn up.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:k9lpwbZ1Cyw"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d6"
+    }
+   ]
+  },
+  {
+   "id": "vn-clean-position-read-the-wreckage",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "Be2",
+    "a6",
+    "Bxa6",
+    "bxa6",
+    "O-O",
+    "d6",
+    "h3",
+    "Nf6",
+    "Re1",
+    "g6",
+    "c3",
+    "Bg7",
+    "d4",
+    "O-O",
+    "dxc5",
+    "dxc5",
+    "Qa4",
+    "Qb6",
+    "Na3",
+    "Be6",
+    "Ng5",
+    "Nd7",
+    "Nxe6",
+    "fxe6"
+   ],
+   "opening": "Sicilian Defense: Old Sicilian",
+   "phase": "middlegame",
+   "explains": "The recapture has left doubled pawns on e6 and e7, the rook-pawn on a6 stands isolated with its b-file neighbour long gone, and the pawn cover in front of the castled king is torn where the f-pawn used to be. Three permanent debts on one ledger — the plan is to collect them.",
+   "teaches": "Pawn structure is a ledger, and sometimes the right plan is simply to read it. Doubled pawns, an isolated rook-pawn and a torn king's cover are not abstractions — each one is a target or an open line, and a position with several of them loses itself once you aim at them patiently.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:k9lpwbZ1Cyw"
+   ],
+   "positionSource": "high",
+   "structural": "the position judged by its pawn ledger — doubled e-pawns, isolated rook-pawn, torn king cover, all permanent"
+  },
+  {
    "id": "vn-closed-five-honest-second-moves",
    "lineSan": [
     "e4",
@@ -4009,6 +6208,36 @@
      "square": "f5"
     }
    ]
+  },
+  {
+   "id": "vn-symmetry-take-the-knight-before-the-bishop-gets-caught",
+   "lineSan": [
+    "d4",
+    "c6",
+    "e4",
+    "d5",
+    "exd5",
+    "cxd5",
+    "Nc3",
+    "Nc6",
+    "Nf3",
+    "Nf6",
+    "Bb5",
+    "Bg4",
+    "h3",
+    "Bxf3"
+   ],
+   "opening": "Caro-Kann Defense: Exchange Variation",
+   "phase": "opening",
+   "explains": "The bishop takes the knight on f3. The pawn on h3 asked the question, and the pawn on g2 stands ready behind it. The bishop came out to make this trade — taking now does it on your terms.",
+   "teaches": "When the rook's pawn puts the question to your bishop, the retreat is not automatically the safe answer — count the pawn advances that follow before choosing it. Players are conditioned never to give a bishop for a knight, and that conditioning is exactly what walks the bishop into a cage two moves later. This bishop came out to take that knight; let it do its job.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:kO4qTTR0B7o"
+   ],
+   "positionSource": "high",
+   "structural": "the take-or-retreat decision answered by counting the pawn advances behind the retreat, not by habit"
   },
   {
    "id": "vn-kid-bf4-count-the-square-before-you-break",
@@ -4242,6 +6471,204 @@
    ]
   },
   {
+   "id": "vn-kia-clockwork-the-space-wedge-starts-the-attack",
+   "lineSan": [
+    "d3",
+    "e6",
+    "e4",
+    "d5",
+    "Nc3",
+    "Nf6",
+    "Nb1",
+    "Ng8",
+    "Nd2",
+    "Nf6",
+    "g3",
+    "c5",
+    "Bg2",
+    "Nc6",
+    "Ngf3",
+    "Be7",
+    "O-O",
+    "O-O",
+    "e5"
+   ],
+   "opening": "French Defense: King's Indian Attack",
+   "phase": "opening",
+   "explains": "The pawn advances to e5 and attacks the knight on f6, the defender in front of the castled king. Once it moves, the wedge stands permanently between the wings, and the standard kingside build-up unrolls behind it move by move.",
+   "teaches": "This whole setup plays the same middlegame every time, and it begins with the pawn wedge: the e-pawn advances, evicts the defender knight, and divides the board — your attack lives on the king's wing behind that pawn, their counterplay on the other. Learn the clockwork once and it plays itself for a lifetime.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:knRe3EsANdg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    }
+   ]
+  },
+  {
+   "id": "vn-kia-clockwork-the-rook-pawn-with-two-jobs",
+   "lineSan": [
+    "d3",
+    "e6",
+    "e4",
+    "d5",
+    "Nc3",
+    "Nf6",
+    "Nb1",
+    "Ng8",
+    "Nd2",
+    "Nf6",
+    "g3",
+    "c5",
+    "Bg2",
+    "Nc6",
+    "Ngf3",
+    "Be7",
+    "O-O",
+    "O-O",
+    "e5",
+    "Nd7",
+    "Re1",
+    "b5",
+    "Nf1",
+    "a6",
+    "h3",
+    "a5",
+    "h4",
+    "b4"
+   ],
+   "opening": "French Defense: King's Indian Attack",
+   "phase": "middlegame",
+   "explains": "The pawn on h4 covers g5, so the defence's freeing break there runs into a capture, and the same square is reserved for your own pieces to come through. Across the board the enemy pawn has reached b4 — both storms are declared, and the kingside one is the better prepared.",
+   "teaches": "In the standard attack a quiet rook-pawn move serves two purposes at once: it stops the freeing pawn break in front of the wedge, and it reserves the squares the pieces will use to lift toward the king. Their wing pawns will race meanwhile — that is the bargain of the position, and the side whose preparation is further along wins it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:knRe3EsANdg"
+   ],
+   "positionSource": "high",
+   "structural": "the rook-pawn's two jobs — the g5 break covered and the lift squares reserved — while the wing race runs"
+  },
+  {
+   "id": "vn-kia-clockwork-let-their-pawns-run-past",
+   "lineSan": [
+    "d3",
+    "e6",
+    "e4",
+    "d5",
+    "Nc3",
+    "Nf6",
+    "Nb1",
+    "Ng8",
+    "Nd2",
+    "Nf6",
+    "g3",
+    "c5",
+    "Bg2",
+    "Nc6",
+    "Ngf3",
+    "Be7",
+    "O-O",
+    "O-O",
+    "e5",
+    "Nd7",
+    "Re1",
+    "b5",
+    "Nf1",
+    "a6",
+    "h3",
+    "a5",
+    "h4",
+    "b4",
+    "Bf4",
+    "a4",
+    "N1h2",
+    "a3"
+   ],
+   "opening": "French Defense: King's Indian Attack",
+   "phase": "middlegame",
+   "explains": "The enemy pawns have marched all the way down the board while every one of your pawns on that wing still stands on its original square — no hooks, no holes, nothing for their pieces to use when they arrive. Meanwhile the pieces continue their regrouping toward the other king, where the game is actually being decided.",
+   "teaches": "When the opponent's counterplay is a pawn storm on the wing you have abandoned, the master's answer is to ignore it correctly: do not touch your pawns to meet theirs, because every pawn move on that wing creates the holes their pieces need. Pawns arriving alone win nothing — keep your own structure smooth and your pieces on the attacking wing.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:knRe3EsANdg"
+   ],
+   "positionSource": "high",
+   "structural": "the queenside storm met by not moving a single pawn — no hooks conceded, the race run only on one wing"
+  },
+  {
+   "id": "vn-flexible-defence-own-the-square-the-setup-cannot-fight-for",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "e3",
+    "b6",
+    "Nf3",
+    "Bb7"
+   ],
+   "opening": "Queen's Indian Defense: Spassky System",
+   "phase": "opening",
+   "explains": "The bishop settles on b7 with the long diagonal open through the centre, taking e4 in hand from a distance. The opponent's modest setup has no piece that argues for that square, so the central advance their position wants is already spoken against.",
+   "teaches": "Openings are conversations about specific squares, and when your opponent's quiet setup declines the sharp argument, pick the square their setup cannot fight for and own it. The fianchettoed bishop trained on the central light square decides what their pawns may ever do in the middle — a whole plan built from one diagonal.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:kudYuwgjAeY"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-flexible-defence-a-push-is-a-purchase-count-the-price",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e6",
+    "e3",
+    "b6",
+    "Nf3",
+    "Bb7",
+    "Be2",
+    "d5",
+    "O-O",
+    "Bd6",
+    "c5",
+    "bxc5",
+    "dxc5",
+    "Bxc5"
+   ],
+   "opening": "Queen's Indian Defense: Spassky System",
+   "phase": "opening",
+   "explains": "The advanced pawn has been captured twice over, and the bishop finishes the sequence by retaking on c5, where it now attacks the pawn on e3 down the cleared diagonal. The count was knowable before the push: two captures against, one recapture for, and a bishop improved for free at the end of it.",
+   "teaches": "A pawn advance that looks like it gains space is a purchase, and the price is counted in captures: every pawn that can take it, and every recapture that follows. When the count comes out against the pusher, the space never existed — the pawn simply left. The modest pawn on b6 was insurance bought moves earlier for exactly this.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:kudYuwgjAeY"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e3"
+    }
+   ]
+  },
+  {
    "id": "vn-maroczy-queen-sortie-against-a-loose-bishop",
    "lineSan": [
     "e4",
@@ -4275,6 +6702,315 @@
     {
      "kind": "attacks",
      "square": "b2"
+    }
+   ]
+  },
+  {
+   "id": "vn-anti-system-hit-the-centre-the-setup-forgot",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "d5",
+    "e3",
+    "c5"
+   ],
+   "opening": "Indian Defense: Accelerated London System",
+   "phase": "opening",
+   "explains": "The pawn strikes at c5 and attacks the pawn on d4, which the early bishop sortie left underdefended by pieces. The system now has to answer a concrete question in a position its move order never wanted to discuss.",
+   "teaches": "A system that develops its bishop before minding the centre has left the centre to be minded by you. The immediate c-pawn strike attacks the base while the system's pieces are still filing into their usual seats — the setup's comfort is exactly one tempo of neglect, and this move collects it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lyUZn39V6TY"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d4"
+    }
+   ]
+  },
+  {
+   "id": "vn-anti-system-lever-the-overextended-wing",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "d5",
+    "e3",
+    "c5",
+    "dxc5",
+    "Nc6",
+    "Bb5",
+    "Qa5+",
+    "Nc3",
+    "Qd8",
+    "Nb1",
+    "e6",
+    "b4",
+    "a5",
+    "c3"
+   ],
+   "opening": "Indian Defense: Accelerated London System",
+   "phase": "opening",
+   "explains": "The pawn on c3 now defends the pawn on b4 — a second pawn committed to holding the first. The capture on b4 opens the rook's file whenever you choose, and the chain of props stays behind on squares the rook will visit one by one.",
+   "teaches": "When your lever hits their wing pawn and they answer by propping it with another pawn, the exchange is yours to take: capturing opens the file your rook already stands on, and every prop they added becomes another target hanging on it. Props do not defend a file — they furnish it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lyUZn39V6TY"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "b4"
+    }
+   ]
+  },
+  {
+   "id": "vn-open-f-file-castle-into-the-attack-first",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "dxe4",
+    "fxe4",
+    "e5",
+    "Nf3",
+    "Bg4",
+    "Bc4",
+    "Nd7",
+    "O-O"
+   ],
+   "opening": "Caro-Kann Defense: Maróczy Variation",
+   "phase": "opening",
+   "explains": "Castling has put the rook on f1, on the half-open file the pawn trade left behind, and the bishop on c4 already looks at f7 from the other side. The pieces now converge on one square from two directions, which is what makes the coming ideas real rather than hopeful.",
+   "teaches": "When your f-pawn has already been traded away, castling short is an attacking move: the rook arrives on the half-open file pointed straight at the weakest square in the enemy camp. Do it before starting anything violent — the sacrifice ideas only work with the whole army signed in.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:mCzuNeWLYBs"
+   ],
+   "positionSource": "high",
+   "structural": "castling as an attacking move — the rook lands on the half-open file the pawn trade prepared"
+  },
+  {
+   "id": "vn-open-f-file-the-typical-sacrifice-drags-the-king-out",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "dxe4",
+    "fxe4",
+    "e5",
+    "Nf3",
+    "Bg4",
+    "Bc4",
+    "Nd7",
+    "O-O",
+    "Bd6",
+    "Bxf7+"
+   ],
+   "opening": "Caro-Kann Defense: Maróczy Variation",
+   "phase": "opening",
+   "explains": "The bishop has taken on f7 with check, so the king must deal with it at once and loses the right to castle whatever it chooses. Every developed piece joins the chase from its current square — the sacrifice spends one bishop to make all of them stronger.",
+   "teaches": "A king out in the open is easier to checkmate than a king behind pawns — that arithmetic is what piece sacrifices on the weakest square are buying. When your pieces already converge there and the defender is short of developed pieces, giving the bishop to drag the king forward is a typical idea, not a stunt.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:mCzuNeWLYBs"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e8"
+    }
+   ]
+  },
+  {
+   "id": "vn-open-f-file-develop-the-last-piece-with-a-second-job",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "dxe4",
+    "fxe4",
+    "e5",
+    "Nf3",
+    "Bg4",
+    "Bc4",
+    "Nd7",
+    "O-O",
+    "Bd6",
+    "Bxf7+",
+    "Kf8",
+    "Be6",
+    "Ngf6",
+    "Bxg4",
+    "Nxg4",
+    "Ng5+",
+    "Ngf6",
+    "Ne6+",
+    "Ke7",
+    "Nxd8",
+    "Raxd8",
+    "c3",
+    "Rdf8",
+    "Bg5",
+    "h6",
+    "Bxf6+",
+    "Nxf6",
+    "Nd2"
+   ],
+   "opening": "Caro-Kann Defense: Maróczy Variation",
+   "phase": "middlegame",
+   "explains": "The knight develops to d2 and defends the pawn on e4 in the same motion — the last undeveloped piece joins the game and a target comes off the opponent's list at once. Nothing about the material edge made this optional; converting is just development continued.",
+   "teaches": "Even in a winning position, the rule does not change: develop the last piece, and pick the developing square that also does a job. A knight that comes out defending a pawn asks nothing of the pieces already working, and a position with every piece playing needs no heroics to convert.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:mCzuNeWLYBs"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-forcing-play-the-check-that-sets-the-fork",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Bc4",
+    "Nc6",
+    "Nf3",
+    "e6",
+    "a3",
+    "Nf6",
+    "d3",
+    "d5",
+    "exd5",
+    "exd5",
+    "Bb5",
+    "Qa5+"
+   ],
+   "opening": "Sicilian Defense: Bowdler Attack",
+   "phase": "opening",
+   "explains": "The queen checks from a5 and attacks the bishop on b5 in the same breath. The reply that covers the check and defends the bishop at once looks perfect — and it steps directly into the pawn advance that wins the blocking piece. The check chose the opponent's move for them.",
+   "teaches": "A check that also attacks a piece narrows your opponent's world to a handful of replies — and when the most natural of those replies walks into the next blow, the check is really a two-move combination wearing a modest face. Look one move past the block before deciding a check achieves nothing.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:mIzJ3LYZvKw"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e1"
+    },
+    {
+     "kind": "attacks",
+     "square": "b5"
+    }
+   ]
+  },
+  {
+   "id": "vn-forcing-play-the-pawn-collects-the-blocker",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Bc4",
+    "Nc6",
+    "Nf3",
+    "e6",
+    "a3",
+    "Nf6",
+    "d3",
+    "d5",
+    "exd5",
+    "exd5",
+    "Bb5",
+    "Qa5+",
+    "Nc3",
+    "d4"
+   ],
+   "opening": "Sicilian Defense: Bowdler Attack",
+   "phase": "opening",
+   "explains": "The pawn advances to d4 and attacks the knight on c3 — the piece the check just compelled to that square, now pinned against its own queen's defence of the bishop. The knight was placed by force and is collected by a pawn.",
+   "teaches": "A piece forced to a square by a check is a piece whose next address you already know. The quiet pawn advance that attacks the compelled blocker is the harvest: it cannot step away without abandoning the job the check gave it, and the pin against the queen behind it seals the trap.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:mIzJ3LYZvKw"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c3"
+    }
+   ]
+  },
+  {
+   "id": "vn-forcing-play-take-with-check-and-the-order-fixes-itself",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Bc4",
+    "Nc6",
+    "Nf3",
+    "e6",
+    "a3",
+    "Nf6",
+    "d3",
+    "d5",
+    "exd5",
+    "exd5",
+    "Bb5",
+    "Qa5+",
+    "Nc3",
+    "d4",
+    "Bxc6+",
+    "bxc6",
+    "b4",
+    "cxb4",
+    "Ne4",
+    "Nxe4",
+    "dxe4",
+    "bxa3+",
+    "Qd2",
+    "Bb4",
+    "Rxa3",
+    "Bxd2+"
+   ],
+   "opening": "Sicilian Defense: Bowdler Attack",
+   "phase": "middlegame",
+   "explains": "The bishop captures on d2 with check, so the recapture is forced before the opponent can take anything back elsewhere. The rook on offer was louder; the capture with check was correct, and the whole exchange resolves a piece ahead with no counting required.",
+   "teaches": "In a sequence of mutual captures, take with check whenever you can — the check fixes the move order, because your opponent must answer it before collecting anything of yours. Getting waylaid by the biggest piece on offer instead of the forcing capture is how won sequences come apart.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:mIzJ3LYZvKw"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e1"
     }
    ]
   },
@@ -4490,6 +7226,156 @@
    }
   },
   {
+   "id": "vn-blocked-centre-simplicity-finishes-development",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "c5",
+    "Nc3",
+    "e6",
+    "d5",
+    "d6",
+    "e4",
+    "Be7",
+    "Bd3",
+    "Nbd7",
+    "Nf3",
+    "Ng4",
+    "O-O",
+    "Nge5",
+    "Nxe5",
+    "Nxe5",
+    "Be2",
+    "Bf6",
+    "f4",
+    "Ng6",
+    "Be3"
+   ],
+   "opening": "Benoni Defense",
+   "phase": "opening",
+   "explains": "The bishop develops to e3 and attacks the pawn on c5. The quiet move is not passive — it completes development, connects the heavy pieces, and puts a question to the queenside pawn in the same motion. The sharper pawn sacrifice was available; simplicity outranked it.",
+   "teaches": "Part of having a positional style is knowing when simplicity is required. When the position is rich with sharp tries, the developing move that completes your setup is often stronger than any of them — a trade that ruins your pawns a little while opening a file for your rook is a price worth agreeing to in advance.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:o17K4WiESWQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c5"
+    }
+   ]
+  },
+  {
+   "id": "vn-blocked-centre-the-pawn-advance-that-hits-two-pieces",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "c5",
+    "Nc3",
+    "e6",
+    "d5",
+    "d6",
+    "e4",
+    "Be7",
+    "Bd3",
+    "Nbd7",
+    "Nf3",
+    "Ng4",
+    "O-O",
+    "Nge5",
+    "Nxe5",
+    "Nxe5",
+    "Be2",
+    "Bf6",
+    "f4",
+    "Ng6",
+    "Be3",
+    "O-O",
+    "dxe6",
+    "Bxe6",
+    "f5"
+   ],
+   "opening": "Benoni Defense",
+   "phase": "middlegame",
+   "explains": "The pawn arrives on f5 attacking the bishop on e6 and the knight on g6 at the same time — two pieces, one pawn, and only one of them can step away. The capture on e6 a move earlier is what put the bishop there, so the whole sequence was one idea: pull the piece in, then hit it and its neighbour together.",
+   "teaches": "A pawn storm earns its keep when each step lands with tempo. Trade in the centre to pull a piece onto the square your pawn wants to hit, and the advance stops being a loosening gesture and becomes a forcing sequence — every move of it answered on your opponent's clock.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:o17K4WiESWQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e6"
+    },
+    {
+     "kind": "attacks",
+     "square": "g6"
+    }
+   ]
+  },
+  {
+   "id": "vn-blocked-centre-collect-on-the-file-you-opened",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "c5",
+    "Nc3",
+    "e6",
+    "d5",
+    "d6",
+    "e4",
+    "Be7",
+    "Bd3",
+    "Nbd7",
+    "Nf3",
+    "Ng4",
+    "O-O",
+    "Nge5",
+    "Nxe5",
+    "Nxe5",
+    "Be2",
+    "Bf6",
+    "f4",
+    "Ng6",
+    "Be3",
+    "O-O",
+    "dxe6",
+    "Bxe6",
+    "f5",
+    "Bd7",
+    "fxg6",
+    "fxg6",
+    "Qxd6",
+    "b6",
+    "Rad1"
+   ],
+   "opening": "Benoni Defense",
+   "phase": "middlegame",
+   "explains": "The queen on d6 has taken the backward pawn. The rook on d1 defends the queen along a completely open file. The whole line aimed at this pawn, and the rook move converts the raid into control of the only open file on the board.",
+   "teaches": "When a backward pawn falls, the file it lived on is the real prize. Bring the rook to that file at once — the piece that captured is strong there but exposed, and the rook behind it turns a one-move raid into permanent occupation.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:o17K4WiESWQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d6"
+    }
+   ]
+  },
+  {
    "id": "vn-jobava-three-ways-to-meet-nb5",
    "lineSan": [
     "d4",
@@ -4638,6 +7524,208 @@
        "square": "g5"
       }
      ]
+    }
+   ]
+  },
+  {
+   "id": "vn-fianchetto-pressure-recount-the-centre-after-their-pawn-move",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6",
+    "Be3",
+    "Bg7",
+    "c3",
+    "Nf6"
+   ],
+   "opening": "Sicilian Defense: Accelerated Dragon",
+   "phase": "opening",
+   "explains": "The pawn move to c3 propped up the knight but took the c3 square away from the queenside knight — the natural defender of the pawn on e4. The knight comes to f6 attacking that pawn, and there is no longer a clean way to add a defender.",
+   "teaches": "When your opponent reinforces one piece with a pawn move that steals a square from another, count the defenders of their centre again — the pawn move often costs more than it saves. A move that neither develops nor defends the pawn that matters is an invitation to attack that pawn one more time.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:qfiO5HGBWWc"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-fianchetto-pressure-recapture-for-activity-not-structure",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6",
+    "Be3",
+    "Bg7",
+    "c3",
+    "Nf6",
+    "Bb5",
+    "Nxe4",
+    "Bxc6",
+    "dxc6"
+   ],
+   "opening": "Sicilian Defense: Accelerated Dragon",
+   "phase": "opening",
+   "explains": "Taking with the d-pawn opens the queen's file: the path from d8 down to the knight on d4 is clear where a pawn stood a move ago, and the bishop on c8 has its diagonal too. The alternative capture kept the prettier pawns and left both of those pieces staring at their own pawn.",
+   "teaches": "When several recaptures are possible, prioritise piece placement and activity over pawn structure. The recapture that opens lines for your unmoved pieces is usually worth a small structural concession — pieces win games while structure is being admired.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:qfiO5HGBWWc"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "opens",
+     "from": "d8",
+     "to": "d4"
+    }
+   ]
+  },
+  {
+   "id": "vn-fianchetto-pressure-a-retreat-in-name-only",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6",
+    "Be3",
+    "Bg7",
+    "c3",
+    "Nf6",
+    "Bb5",
+    "Nxe4",
+    "Bxc6",
+    "dxc6",
+    "O-O",
+    "O-O",
+    "Nd2",
+    "Nf6",
+    "Nc4"
+   ],
+   "opening": "Sicilian Defense: Accelerated Dragon",
+   "phase": "opening",
+   "explains": "The knight stands back on f6 rather than traded off, and from there it looks at two forward posts at once — d5 in the centre and g4 beside the enemy king's position, both empty and both reachable in one hop. The opponent's own knight wanders the queenside meanwhile; the redeployment race has a leader.",
+   "teaches": "A retreat that begins a redeployment is a retreat in name only. When trading would relieve your opponent's cramped pieces, step back instead and point the piece at its next post — keeping the pieces on is itself a way of making a passive position hard to breathe in.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:qfiO5HGBWWc"
+   ],
+   "positionSource": "high",
+   "structural": "a retreat chosen over a relieving trade — the piece keeps two forward posts and the cramp stays theirs"
+  },
+  {
+   "id": "vn-fianchetto-pressure-the-quiet-queen-move-with-a-long-diagonal",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6",
+    "Be3",
+    "Bg7",
+    "c3",
+    "Nf6",
+    "Bb5",
+    "Nxe4",
+    "Bxc6",
+    "dxc6",
+    "O-O",
+    "O-O",
+    "Nd2",
+    "Nf6",
+    "Nc4",
+    "Qc7"
+   ],
+   "opening": "Sicilian Defense: Accelerated Dragon",
+   "phase": "opening",
+   "explains": "From c7 the queen attacks the pawn on h2 down a completely open diagonal, and the same square supports the knight's leap toward g4 next. Nothing attacks the queen on c7, and everything she looks at has to be minded.",
+   "teaches": "Look for the queen move that does two jobs from one square: eye a distant weakness and support the pieces' next jumps. The best queen squares early in the middlegame are usually the quiet ones a knight cannot reach, where the queen pressures without being pressured.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:qfiO5HGBWWc"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "h2"
+    }
+   ]
+  },
+  {
+   "id": "vn-fianchetto-pressure-push-the-centre-when-your-pieces-stand-ready",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6",
+    "Be3",
+    "Bg7",
+    "c3",
+    "Nf6",
+    "Bb5",
+    "Nxe4",
+    "Bxc6",
+    "dxc6",
+    "O-O",
+    "O-O",
+    "Nd2",
+    "Nf6",
+    "Nc4",
+    "Qc7",
+    "Qf3",
+    "Nd5",
+    "Rad1",
+    "e5"
+   ],
+   "opening": "Sicilian Defense: Accelerated Dragon",
+   "phase": "middlegame",
+   "explains": "The pawn steps to e5 and attacks the knight on d4 directly, so the central advance begins on the opponent's clock. It also takes f4 in hand for the pawn behind it — the plan is e5, then f5, then the further push, and this first step pays for itself.",
+   "teaches": "Keep the tension until your pieces are placed, then let the central pawns roll. A pawn push that arrives hitting a piece starts the whole advance with a gained move, and each pawn that follows walks into space the first one cleared.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:qfiO5HGBWWc"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d4"
+    },
+    {
+     "kind": "controls",
+     "square": "f4"
     }
    ]
   },
@@ -4890,6 +7978,318 @@
    ]
   },
   {
+   "id": "vn-exchange-structure-pin-that-carries-no-threat",
+   "lineSan": [
+    "e4",
+    "c6",
+    "Nf3",
+    "d5",
+    "exd5",
+    "cxd5",
+    "d4",
+    "Nc6",
+    "c3",
+    "Nf6",
+    "Bb5",
+    "Bg4"
+   ],
+   "opening": "Caro-Kann Defense: Exchange Variation",
+   "phase": "opening",
+   "explains": "The bishop on b5 pins the knight on c6, but the pawn on b7 defends that knight, so there is nothing to pile up on. Meanwhile the bishop from c8 has come to g4 and attacks the knight on f3 — the one developing move that also puts a question to the defender of the centre.",
+   "teaches": "Before avoiding a pin, ask what the pin actually threatens. A pinned piece that is already defended by a pawn cannot be won by piling up, so the pin is a picture, not a problem — and you are free to spend the move on the piece that genuinely needs a job.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:rkoC8ZlqOII"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f3"
+    }
+   ]
+  },
+  {
+   "id": "vn-exchange-structure-trade-the-problem-bishop-first",
+   "lineSan": [
+    "e4",
+    "c6",
+    "Nf3",
+    "d5",
+    "exd5",
+    "cxd5",
+    "d4",
+    "Nc6",
+    "c3",
+    "Nf6",
+    "Bb5",
+    "Bg4",
+    "Qd3",
+    "Bxf3",
+    "Qxf3",
+    "e6"
+   ],
+   "opening": "Caro-Kann Defense: Exchange Variation",
+   "phase": "opening",
+   "explains": "The light-squared bishop has already been exchanged for the knight, and only now does the pawn step to e6 — the chain closes behind a bishop that is no longer inside it. Every remaining piece has a natural square, which is the whole point of the trade's timing.",
+   "teaches": "In this pawn structure the light-squared bishop is the piece with no future, so give it away for a knight before the pawn chain closes over it. Once the trade is made, the rest of the development is peaceful — there is no bad piece left to apologise for.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:rkoC8ZlqOII"
+   ],
+   "positionSource": "high",
+   "structural": "trade the bishop the structure condemns, then close the chain — order, not material, is the lesson"
+  },
+  {
+   "id": "vn-exchange-structure-deny-the-trade-that-frees-the-outpost",
+   "lineSan": [
+    "e4",
+    "c6",
+    "Nf3",
+    "d5",
+    "exd5",
+    "cxd5",
+    "d4",
+    "Nc6",
+    "c3",
+    "Nf6",
+    "Bb5",
+    "Bg4",
+    "Qd3",
+    "Bxf3",
+    "Qxf3",
+    "e6",
+    "O-O",
+    "h6",
+    "Nd2",
+    "Bd6",
+    "Bxc6+",
+    "bxc6",
+    "Nb3",
+    "Qc7"
+   ],
+   "opening": "Caro-Kann Defense: Exchange Variation",
+   "phase": "opening",
+   "explains": "The knight on b3 is aiming at c5, and it can only sit there for good if the dark-squared bishops come off. The queen on c7 stands behind the bishop on d6, defending it, and the bishop covers f4 — so the trade offer on f4 that would enable the outpost has no square to land on.",
+   "teaches": "A knight eyeing an outpost usually needs one more thing to happen before the outpost is real — most often a trade of the piece that could evict it. Find that enabling trade and deny it, and the whole plan stays theoretical.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:rkoC8ZlqOII"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d6"
+    }
+   ]
+  },
+  {
+   "id": "vn-exchange-structure-count-the-overloaded-defender-before-castling",
+   "lineSan": [
+    "e4",
+    "c6",
+    "Nf3",
+    "d5",
+    "exd5",
+    "cxd5",
+    "d4",
+    "Nc6",
+    "c3",
+    "Nf6",
+    "Bb5",
+    "Bg4",
+    "Qd3",
+    "Bxf3",
+    "Qxf3",
+    "e6",
+    "O-O",
+    "h6",
+    "Nd2",
+    "Bd6",
+    "Bxc6+",
+    "bxc6",
+    "Nb3",
+    "Qc7",
+    "g3"
+   ],
+   "opening": "Caro-Kann Defense: Exchange Variation",
+   "phase": "middlegame",
+   "explains": "The pawn on g7 is the only defender of the pawn on h6, and it is also the only defender of the knight on f6 — one pawn, two jobs. The diagonal from c1 to h6 is open, so the capture on h6 is available right now, and answering it with the g-pawn leaves the knight behind it loose.",
+   "teaches": "Before castling, count the defenders on the squares in front of your king and check whether one pawn is doing two jobs. A capture on the square an overloaded pawn guards forces it to choose, and whatever it stops guarding falls next. Improving the position first costs one move; castling into the capture costs a piece.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:rkoC8ZlqOII"
+   ],
+   "positionSource": "high",
+   "structural": "an overloaded pawn counted before castling; the capture it invites is read off the open diagonal, not guessed"
+  },
+  {
+   "id": "vn-exchange-structure-ask-the-rim-knight-the-question",
+   "lineSan": [
+    "e4",
+    "c6",
+    "Nf3",
+    "d5",
+    "exd5",
+    "cxd5",
+    "d4",
+    "Nc6",
+    "c3",
+    "Nf6",
+    "Bb5",
+    "Bg4",
+    "Qd3",
+    "Bxf3",
+    "Qxf3",
+    "e6",
+    "O-O",
+    "h6",
+    "Nd2",
+    "Bd6",
+    "Bxc6+",
+    "bxc6",
+    "Nb3",
+    "Qc7",
+    "g3",
+    "a5"
+   ],
+   "opening": "Caro-Kann Defense: Exchange Variation",
+   "phase": "middlegame",
+   "explains": "The pawn stands on a5, taking b4 away from the pieces behind it, and the knight on b3 now has to reckon with the pawn coming one square further and hitting it directly. Whatever the knight chooses, the choice was forced by a pawn move that cost nothing.",
+   "teaches": "A knight parked on the edge is asked the question with the rook's pawn. The pawn move is healthy on its own — it gains space and takes a square away — and the threat of running one square further forces the knight to declare where it is actually going.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:rkoC8ZlqOII"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "b4"
+    }
+   ]
+  },
+  {
+   "id": "vn-exchange-structure-take-the-outpost-you-denied-them",
+   "lineSan": [
+    "e4",
+    "c6",
+    "Nf3",
+    "d5",
+    "exd5",
+    "cxd5",
+    "d4",
+    "Nc6",
+    "c3",
+    "Nf6",
+    "Bb5",
+    "Bg4",
+    "Qd3",
+    "Bxf3",
+    "Qxf3",
+    "e6",
+    "O-O",
+    "h6",
+    "Nd2",
+    "Bd6",
+    "Bxc6+",
+    "bxc6",
+    "Nb3",
+    "Qc7",
+    "g3",
+    "a5",
+    "Nc5",
+    "Bxc5",
+    "dxc5",
+    "Ne4"
+   ],
+   "opening": "Caro-Kann Defense: Exchange Variation",
+   "phase": "middlegame",
+   "explains": "The knight has landed on e4 and attacks three pawns at once — the pawn on c3, the pawn on g3, and the pawn on c5. No pawn can ever evict it from this square, so every one of those targets has to be watched for as long as the knight chooses to stay.",
+   "teaches": "Outposts run both ways. The same central square you spent moves denying to their knight is usually available to yours, and a knight that lands there with several targets in reach is worth more than any of the pieces it is annoying.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:rkoC8ZlqOII"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c3"
+    },
+    {
+     "kind": "attacks",
+     "square": "g3"
+    },
+    {
+     "kind": "attacks",
+     "square": "c5"
+    }
+   ]
+  },
+  {
+   "id": "vn-exchange-structure-cement-the-knight-before-anything-else",
+   "lineSan": [
+    "e4",
+    "c6",
+    "Nf3",
+    "d5",
+    "exd5",
+    "cxd5",
+    "d4",
+    "Nc6",
+    "c3",
+    "Nf6",
+    "Bb5",
+    "Bg4",
+    "Qd3",
+    "Bxf3",
+    "Qxf3",
+    "e6",
+    "O-O",
+    "h6",
+    "Nd2",
+    "Bd6",
+    "Bxc6+",
+    "bxc6",
+    "Nb3",
+    "Qc7",
+    "g3",
+    "a5",
+    "Nc5",
+    "Bxc5",
+    "dxc5",
+    "Ne4",
+    "Re1",
+    "O-O",
+    "b4",
+    "f5"
+   ],
+   "opening": "Caro-Kann Defense: Exchange Variation",
+   "phase": "middlegame",
+   "explains": "The pawn arrives on f5 and defends the knight on e4, so the knight is now held by a pawn on a square no enemy pawn can ever attack. The sharper queen moves were available, but each of them left the knight's future to be negotiated; this settles it first.",
+   "teaches": "When a knight has found a great central square, the move that guarantees it stays there outranks the sharper tries. Cement first — the attacking ideas do not run away, and every later plan is stronger with the knight permanent than with it evictable.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:rkoC8ZlqOII"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    }
+   ]
+  },
+  {
    "id": "vn-rubinstein-choose-a-setup",
    "lineSan": [
     "e4",
@@ -5008,6 +8408,195 @@
    ]
   },
   {
+   "id": "vn-advance-structure-bishop-out-before-the-chain-closes",
+   "lineSan": [
+    "e4",
+    "d5",
+    "e5",
+    "Bf5",
+    "d4",
+    "e6"
+   ],
+   "opening": "Scandinavian Defense",
+   "phase": "opening",
+   "explains": "The bishop already stands on f5, outside the pawns, and only now does the pawn come to e6, defending the pawn on d5 and completing the chain behind a bishop that escaped in time. Compare the two pictures: identical pawns, and the difference is one move of ordering.",
+   "teaches": "When the centre gets locked with a pawn chain, the light-squared bishop's whole life depends on which side of the chain it stands on. Bring it out first and only then close the chain behind it — the same structure with the bishop inside is a well-known headache, and with the bishop outside it is simply comfortable.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:u1ZSMsWIfBM"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d5"
+    }
+   ]
+  },
+  {
+   "id": "vn-advance-structure-hit-the-base-and-let-them-break-their-own-chain",
+   "lineSan": [
+    "e4",
+    "d5",
+    "e5",
+    "Bf5",
+    "d4",
+    "e6",
+    "a3",
+    "c5",
+    "c3",
+    "Nc6",
+    "h3",
+    "Qb6"
+   ],
+   "opening": "Scandinavian Defense",
+   "phase": "opening",
+   "explains": "The queen on b6 attacks the pawn on b2 down the open path, and together with the pawn on c5 it leans on the chain's base. If the pawn on d4 ever takes on c5, the chain is theirs no longer — the recapture comes with a gain of time and the centre stops being a wall.",
+   "teaches": "Against a pawn chain, pressure beats haste: aim pieces at the chain's base and keep the tension. Capturing in the centre yourself releases it — trade on the base pawn only when something concrete is won by it. If they capture toward you instead, their own chain breaks up and your pieces come in through the gap.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:u1ZSMsWIfBM"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "b2"
+    }
+   ]
+  },
+  {
+   "id": "vn-advance-structure-check-the-colour-complex-before-grabbing",
+   "lineSan": [
+    "e4",
+    "d5",
+    "e5",
+    "Bf5",
+    "d4",
+    "e6",
+    "a3",
+    "c5",
+    "c3",
+    "Nc6",
+    "h3",
+    "Qb6",
+    "Nf3",
+    "cxd4",
+    "cxd4",
+    "Bxb1",
+    "Rxb1",
+    "Bxa3"
+   ],
+   "opening": "Scandinavian Defense",
+   "phase": "opening",
+   "explains": "The bishop stands on a3 after taking the pawn. The king on e8 sits on a light square. The remaining attacking bishop runs on dark squares, so it can never check that king. No discovery exists, and the pawn count decides who came out ahead.",
+   "teaches": "Before playing a sequence that leaves pieces hanging for a move, check for discovered checks the way a strong player does — by colour complex, not by staring. A king on a light square can never be checked by a dark-squared bishop, so whole families of discoveries can be ruled out in one glance.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:u1ZSMsWIfBM"
+   ],
+   "positionSource": "high",
+   "structural": "a grab verified by colour complex — light-squared king, dark-squared bishop, so no discovered check exists"
+  },
+  {
+   "id": "vn-advance-structure-the-raider-returns-with-tempo",
+   "lineSan": [
+    "e4",
+    "d5",
+    "e5",
+    "Bf5",
+    "d4",
+    "e6",
+    "a3",
+    "c5",
+    "c3",
+    "Nc6",
+    "h3",
+    "Qb6",
+    "Nf3",
+    "cxd4",
+    "cxd4",
+    "Bxb1",
+    "Rxb1",
+    "Bxa3",
+    "Bd3",
+    "Bb4+"
+   ],
+   "opening": "Scandinavian Defense",
+   "phase": "opening",
+   "explains": "The bishop returns from its pawn-grab by way of b4, and the move is check — the king on e1 has to be dealt with before anything else happens. The retreat costs nothing because the opponent spends the move answering it.",
+   "teaches": "A piece that has grabbed material deep in enemy territory should come home with tempo whenever the board offers it. Every forcing move on the way back is a whole move your opponent cannot use to punish the raid.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:u1ZSMsWIfBM"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e1"
+    }
+   ]
+  },
+  {
+   "id": "vn-advance-structure-park-a-knight-where-it-blocks-and-waits",
+   "lineSan": [
+    "e4",
+    "d5",
+    "e5",
+    "Bf5",
+    "d4",
+    "e6",
+    "a3",
+    "c5",
+    "c3",
+    "Nc6",
+    "h3",
+    "Qb6",
+    "Nf3",
+    "cxd4",
+    "cxd4",
+    "Bxb1",
+    "Rxb1",
+    "Bxa3",
+    "Bd3",
+    "Bb4+",
+    "Bd2",
+    "Nge7",
+    "O-O",
+    "Bxd2",
+    "Qxd2",
+    "O-O",
+    "Rfe1",
+    "Ng6"
+   ],
+   "opening": "Scandinavian Defense",
+   "phase": "middlegame",
+   "explains": "The knight on g6 cuts the bishop's diagonal from d3 toward h7, so the standard attacking picture against the castled king is switched off by a piece rather than a weakening pawn move. From g6 the knight also takes f4 under control, a square right next to the queen's diagonal, which is exactly the kind of option that makes an opponent spend moves on guard duty.",
+   "teaches": "A repositioned knight can be worth playing for what it stops and what it might do, not what it does today. Blocking a dangerous diagonal with a knight rather than a pawn keeps the pawn shield intact, and the knight sits loaded — potential energy the opponent has to keep accounting for.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:u1ZSMsWIfBM"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "blocks",
+     "from": "d3",
+     "to": "h7"
+    },
+    {
+     "kind": "controls",
+     "square": "f4"
+    }
+   ]
+  },
+  {
    "id": "vn-fianchettokid-luft-that-is-really-prophylaxis",
    "lineSan": [
     "Nf3",
@@ -5090,6 +8679,35 @@
      "square": "c3"
     }
    ]
+  },
+  {
+   "id": "vn-mixed-systems-stake-the-centre-the-retreat-released",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "a6",
+    "Nb3",
+    "e5",
+    "f3"
+   ],
+   "opening": "Sicilian Defense: Najdorf Variation",
+   "phase": "opening",
+   "explains": "The pawn stands on e5 holding d4 and f4, claimed for free the moment the knight stepped back to b3, and the reply mixes systems — the modest pawn move belongs to a setup whose knight is supposed to still be in the centre. The opening argument is already won on move six.",
+   "teaches": "When the centralised knight retreats, the central pawn advance it was preventing becomes available at full value — no tricks left to fall into, a full share of the centre gained. An opponent mixing two systems usually pays exactly here: each half-system allows the resource the other one was built to prevent.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:vbWQt7Qn_eQ"
+   ],
+   "positionSource": "high",
+   "structural": "the central stake collected the move the knight retreated — mixed systems each allowing the other's antidote"
   },
   {
    "id": "vn-englund-dont-hand-back-development",
@@ -5246,6 +8864,36 @@
        "square": "d5"
       }
      ]
+    }
+   ]
+  },
+  {
+   "id": "vn-move-order-the-developing-move-that-is-also-a-refutation",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "d6",
+    "d4",
+    "Nf6",
+    "dxe5",
+    "Nxe4",
+    "Bc4"
+   ],
+   "opening": "Philidor Defense: Hanham Variation",
+   "phase": "opening",
+   "explains": "The bishop develops to c4 and attacks the pawn on f7 down an open diagonal, while the enemy knight sits on e4 with its position still unpaid for. Development and threat arrive in one move — the punishment for the wrong order is simply that your normal moves now come with teeth.",
+   "teaches": "Move orders inside one opening are not interchangeable — the same developing move can be fine after one sequence and dubious after another. When your opponent picks the order that grabs in the centre too early, the bishop's natural developing square becomes a refutation: it aims at the weakest pawn while their advanced piece still has to justify itself.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:xp727Z8dXZc"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f7"
     }
    ]
   },

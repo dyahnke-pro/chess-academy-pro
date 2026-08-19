@@ -1,0 +1,258 @@
+{
+ "videoId": "iuLI_EUlgvE",
+ "title": "Master Class | Caro-Kann Exploration | Chess Speedrun | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-19",
+ "geometry": {
+  "x0": null,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 3188,
+  "settledPositions": null
+ },
+ "plies": 21,
+ "rewinds": 1,
+ "moves": [
+  {
+   "t": 27.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 30,
+   "ply": 3,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 60.5,
+   "ply": 4,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2pp4/4P3/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 64,
+   "ply": 5,
+   "line": [
+    "exd6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2pP4/8/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 65.5,
+   "ply": 6,
+   "line": [
+    "exd6"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2pp4/8/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 68.5,
+   "ply": 7,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2pp4/8/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 82,
+   "ply": 8,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2pp1n2/8/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 1 5"
+  },
+  {
+   "t": 84,
+   "ply": 9,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2pp1n2/8/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 5"
+  },
+  {
+   "t": 100.5,
+   "ply": 10,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3p4/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 0 6"
+  },
+  {
+   "t": 106,
+   "ply": 11,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3p2B1/3P4/2P5/PP3PPP/RN1QKBNR b KQkq - 1 6"
+  },
+  {
+   "t": 130.5,
+   "ply": 12,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rnbqk2r/pp2bppp/2p2n2/3p2B1/3P4/2P5/PP3PPP/RN1QKBNR w KQkq - 2 7"
+  },
+  {
+   "t": 135,
+   "ply": 13,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqk2r/pp2bppp/2p2n2/3p2B1/3P4/2P2N2/PP3PPP/RN1QKB1R b KQkq - 3 7"
+  },
+  {
+   "t": 170.5,
+   "ply": 14,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "rnbqk2r/pp2bppp/2p5/3p2B1/3Pn3/2P2N2/PP3PPP/RN1QKB1R w KQkq - 4 8"
+  },
+  {
+   "t": 180,
+   "ply": 15,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "rnbqk2r/pp2bppp/2p5/3p4/3PnB2/2P2N2/PP3PPP/RN1QKB1R b KQkq - 5 8"
+  },
+  {
+   "t": 187.5,
+   "ply": 16,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp2bppp/2p5/3p4/3PnB2/2P2N2/PP3PPP/RN1QKB1R w KQ - 6 9"
+  },
+  {
+   "t": 190.5,
+   "ply": 17,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbq1rk1/pp2bppp/2p5/3p4/3PnB2/2PB1N2/PP3PPP/RN1QK2R b KQ - 7 9"
+  },
+  {
+   "t": 223,
+   "ply": 18,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "rn1q1rk1/pp2bppp/2p5/3p4/3PnBb1/2PB1N2/PP3PPP/RN1QK2R w KQ - 8 10"
+  },
+  {
+   "t": 294.5,
+   "ply": 19,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/pp2bppp/2p5/3p4/3PnBb1/2PB1N2/PP3PPP/RN1Q1RK1 b - - 9 10"
+  },
+  {
+   "t": 303.5,
+   "ply": 20,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r2q1rk1/pp1nbppp/2p5/3p4/3PnBb1/2PB1N2/PP3PPP/RN1Q1RK1 w - - 10 11"
+  },
+  {
+   "t": 484,
+   "ply": 3,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 487,
+   "ply": 4,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2pp4/4P3/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3"
+  }
+ ],
+ "forks": [],
+ "titleCheck": {
+  "claims": "Caro-Kann Defense",
+  "confirmed": true
+ },
+ "openings": [
+  {
+   "name": "Caro-Kann Defense",
+   "eco": "B10",
+   "plies": 2,
+   "line": "e4 c6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "notes": [
+  {
+   "id": "vn-early-push-challenge-the-overextended-pawn-at-once",
+   "line": "e4 c6 e5 d6",
+   "teaches": "A pawn pushed forward this early has outrun its support, and the right response is to challenge it immediately rather than play around it. The pawn either trades itself off — giving back the space it grabbed — or its owner spends more moves propping it up while you simply develop.",
+   "explains": "The pawn on d6 attacks the pawn on e5 directly. There is no way to keep the advanced pawn without committing more forces to it, so the opponent's second move is already a question they have to answer on their third.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    }
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2pp4/4P3/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3",
+   "t": 60.5,
+   "ply": 4,
+   "source": "yt:iuLI_EUlgvE"
+  },
+  {
+   "id": "vn-early-push-pin-instead-of-defending-what-needs-no-defence",
+   "line": "e4 c6 e5 d6 exd6 exd6 d4 Nf6 c3 d5 Bg5 Be7 Nf3 Ne4 Bf4 O-O Bd3 Bg4",
+   "teaches": "Before spending a move defending a piece, check whether it is already defended — a centralised knight held by a pawn needs nothing from you. Spend the move on a new problem for your opponent instead: the pin that ties their knight to the queen costs them a tempo however they resolve it.",
+   "explains": "The knight on e4 is supported by the pawn on d5, so the bishop is free to skip the defensive posting and come to g4, attacking the knight on f3 and pinning it against the queen behind it. One move, and it is the opponent who has to spend the next one.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f3"
+    }
+   ],
+   "fen": "rn1q1rk1/pp2bppp/2p5/3p4/3PnBb1/2PB1N2/PP3PPP/RN1QK2R w KQ - 8 10",
+   "t": 223,
+   "ply": 18,
+   "source": "yt:iuLI_EUlgvE"
+  },
+  {
+   "id": "vn-early-push-small-problems-coalesce",
+   "line": "e4 c6 e5 d6 exd6 exd6 d4 Nf6 c3 d5 Bg5 Be7 Nf3 Ne4 Bf4 O-O Bd3 Bg4 O-O Nd7",
+   "teaches": "Positions are rarely won by one blow — they are won inch by inch, by creating enough small problems that they coalesce into a big one. Each developing move should carry a little annoyance: a square eyed, a pawn break held in reserve, a piece the opponent has to keep watching.",
+   "explains": "The knight develops to d7 and takes the e5 square in hand, and behind it the pawn break with the f-pawn stays in reserve. Nothing here forces anything yet — but every piece now carries a small threat, and the opponent has to answer all of them at once.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ],
+   "fen": "r2q1rk1/pp1nbppp/2p5/3p4/3PnBb1/2PB1N2/PP3PPP/RN1Q1RK1 w - - 10 11",
+   "t": 303.5,
+   "ply": 20,
+   "source": "yt:iuLI_EUlgvE"
+  }
+ ]
+}

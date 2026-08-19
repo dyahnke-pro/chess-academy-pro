@@ -2,15 +2,15 @@
  {
   "id": "vn-open-f-file-castle-into-the-attack-first",
   "line": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O",
-  "teaches": "When your f-pawn has already been traded away, castling short is an attacking move: the rook arrives on the half-open file pointed straight at the weakest square in the enemy camp. Do it before starting anything violent — the sacrifice ideas only work with the whole army signed in.",
-  "explains": "Castling has put the rook on f1, on the file the pawn trade opened, and the bishop on c4 already looks at f7 from the other side. The pieces now converge on one square from two directions, which is what makes the coming ideas real rather than hopeful.",
-  "structural": "castling as an attacking move — the rook lands on the half-open file the pawn trade prepared"
+  "teaches": "When your f-pawn has already been traded away, castling short is an attacking move: the rook arrives on the half-open file pointed straight at the weakest square in the enemy camp. Do it before starting anything violent \u2014 the sacrifice ideas only work with the whole army signed in.",
+  "explains": "Castling has put the rook on f1, on the half-open file the pawn trade left behind, and the bishop on c4 already looks at f7 from the other side. The pieces now converge on one square from two directions, which is what makes the coming ideas real rather than hopeful.",
+  "structural": "castling as an attacking move \u2014 the rook lands on the half-open file the pawn trade prepared"
  },
  {
   "id": "vn-open-f-file-the-typical-sacrifice-drags-the-king-out",
   "line": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Bd6 Bxf7+",
-  "teaches": "A king out in the open is easier to checkmate than a king behind pawns — that arithmetic is what piece sacrifices on the weakest square are buying. When your pieces already converge there and the defender is short of developed pieces, giving the bishop to drag the king forward is a typical idea, not a stunt.",
-  "explains": "The bishop has taken on f7 with check, so the king must deal with it at once and loses the right to castle whatever it chooses. Every developed piece joins the chase from its current square — the sacrifice spends one bishop to make all of them stronger.",
+  "teaches": "A king out in the open is easier to checkmate than a king behind pawns \u2014 that arithmetic is what piece sacrifices on the weakest square are buying. When your pieces already converge there and the defender is short of developed pieces, giving the bishop to drag the king forward is a typical idea, not a stunt.",
+  "explains": "The bishop has taken on f7 with check, so the king must deal with it at once and loses the right to castle whatever it chooses. Every developed piece joins the chase from its current square \u2014 the sacrifice spends one bishop to make all of them stronger.",
   "reasons": [
    {
     "kind": "attacks",
@@ -22,7 +22,7 @@
   "id": "vn-open-f-file-develop-the-last-piece-with-a-second-job",
   "line": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nd7 O-O Bd6 Bxf7+ Kf8 Be6 Ngf6 Bxg4 Nxg4 Ng5+ Ngf6 Ne6+ Ke7 Nxd8 Raxd8 c3 Rdf8 Bg5 h6 Bxf6+ Nxf6 Nd2",
   "teaches": "Even in a winning position, the rule does not change: develop the last piece, and pick the developing square that also does a job. A knight that comes out defending a pawn asks nothing of the pieces already working, and a position with every piece playing needs no heroics to convert.",
-  "explains": "The knight develops to d2 and defends the pawn on e4 in the same motion — the last undeveloped piece joins the game and a target comes off the opponent's list at once. Nothing about the material edge made this optional; converting is just development continued.",
+  "explains": "The knight develops to d2 and defends the pawn on e4 in the same motion \u2014 the last undeveloped piece joins the game and a target comes off the opponent's list at once. Nothing about the material edge made this optional; converting is just development continued.",
   "reasons": [
    {
     "kind": "defends",

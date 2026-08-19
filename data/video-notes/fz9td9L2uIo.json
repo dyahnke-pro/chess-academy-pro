@@ -2,8 +2,8 @@
  {
   "id": "vn-chain-play-the-free-bishop-glares-down-the-board",
   "line": "c4 c6 e4 d5 cxd5 cxd5 e5 Nc6 d4 Bf5",
-  "teaches": "When the centre locks into a chain, get the light-squared bishop out before closing it in — and notice how much the freed bishop actually does. From its natural post outside the chain it sweeps the whole long diagonal into the opponent's queenside, and every piece that wants to develop on that side has to reckon with it.",
-  "explains": "The bishop stands on f5 with the diagonal toward b1 completely open — it attacks the knight sitting on its home square, so even the opponent's first developing moves are constrained. The pawn move to e6 can come next, closing the chain behind a bishop that is already at work.",
+  "teaches": "When the centre locks into a chain, get the light-squared bishop out before closing it in \u2014 and notice how much the freed bishop actually does. From its natural post outside the chain it sweeps the whole long diagonal into the opponent's queenside, and every piece that wants to develop on that side has to reckon with it.",
+  "explains": "The bishop stands on f5 with the diagonal toward b1 completely open \u2014 it attacks the knight sitting on its home square, so even the opponent's first developing moves are constrained. The pawn move to e6 can come next, closing the chain behind a bishop that is already at work.",
   "reasons": [
    {
     "kind": "attacks",
@@ -14,7 +14,7 @@
  {
   "id": "vn-chain-play-one-pawn-move-holds-both",
   "line": "c4 c6 e4 d5 cxd5 cxd5 e5 Nc6 d4 Bf5 Nc3 e6",
-  "teaches": "The pawn move that completes a chain should be counted for everything it holds, not just the square it stands on. And a matching pair of pawns — one of theirs propping their centre, one of yours attacking it — cancel each other out: neither makes the pawn between them weaker or stronger by itself.",
+  "teaches": "The pawn move that completes a chain should be counted for everything it holds, not just the square it stands on. And a matching pair of pawns \u2014 one of theirs propping their centre, one of yours attacking it \u2014 cancel each other out: neither makes the pawn between them weaker or stronger by itself.",
   "explains": "The pawn arrives on e6 and defends two pieces at once: the pawn on d5 in the centre and the bishop on f5 beside it. The chain is complete with the bishop on the right side of it, and every unit in the structure is now held by a pawn.",
   "reasons": [
    {
@@ -30,15 +30,15 @@
  {
   "id": "vn-chain-play-develop-the-knight-around-the-bishop",
   "line": "c4 c6 e4 d5 cxd5 cxd5 e5 Nc6 d4 Bf5 Nc3 e6 Nf3 Qb6 Be2 Nh6",
-  "teaches": "When your bishop already occupies the knight's favourite square, be deliberate about how the king's knight develops — the routes are not equal. The rim development that keeps the other bishop's square free is often the practical choice: the knight can re-route later, but a tangled queenside cannot untangle itself.",
+  "teaches": "When your bishop already occupies the knight's favourite square, be deliberate about how the king's knight develops \u2014 the routes are not equal. The rim development that keeps the other bishop's square free is often the practical choice: the knight can re-route later, but a tangled queenside cannot untangle itself.",
   "explains": "The knight has gone to h6 because the bishop sits on f5, the knight's usual home in this structure. The square e7 stays empty for the dark-squared bishop, so the kingside can finish developing without the pieces queuing behind one another, and the knight keeps g4 in view for its next hop.",
-  "structural": "development order solved around an occupied square — the rim knight keeps e7 free and the pieces never queue"
+  "structural": "development order solved around an occupied square \u2014 the rim knight keeps e7 free and the pieces never queue"
  },
  {
   "id": "vn-chain-play-step-off-the-knights-square-with-tempo",
   "line": "c4 c6 e4 d5 cxd5 cxd5 e5 Nc6 d4 Bf5 Nc3 e6 Nf3 Qb6 Be2 Nh6 Na4 Qc7",
-  "teaches": "Know the standard knight-traps by pattern, not by calculation — a queen on the knight's-edge square is a puzzle theme your opponent has drilled too. When the knight comes asking, step the queen to the square where she keeps working, and the retreat costs nothing.",
-  "explains": "The knight's lunge to the rim asked the queen on b6 to declare herself, and she steps to c7 — where she immediately attacks the pawn on e5, the head of the chain. The retreat is an attacking move: the opponent spent a move on the rim and the queen answered by hitting something.",
+  "teaches": "Know the standard knight-traps by pattern, not by calculation \u2014 a queen on the knight's-edge square is a puzzle theme your opponent has drilled too. When the knight comes asking, step the queen to the square where she keeps working, and the retreat costs nothing.",
+  "explains": "The queen stands on c7. From there she attacks the pawn on e5, the head of the chain. The knight's lunge to the rim asked her to move, and the retreat answered by hitting something \u2014 the opponent spent a move on the edge and got a new problem for it.",
   "reasons": [
    {
     "kind": "attacks",
@@ -49,8 +49,8 @@
  {
   "id": "vn-chain-play-strike-the-head-when-the-pieces-stand-ready",
   "line": "c4 c6 e4 d5 cxd5 cxd5 e5 Nc6 d4 Bf5 Nc3 e6 Nf3 Qb6 Be2 Nh6 Na4 Qc7 O-O Be7 Bd2 Bg6 a3 Nf5 Be3 O-O Nc3 f6",
-  "teaches": "Against a pawn chain there are two targets: the base and the head. Once your pieces are developed and castled, the strike at the head with the f-pawn opens your rook's file and asks the chain a question it cannot keep refusing. Before calculating any of the captures, list the enemy pieces that are undefended or defended only once — the piece that hangs at the end of a line is the most common thing a calculation forgets.",
-  "explains": "The pawn strikes at e5, the head of the chain, with the king already castled and the rook standing behind the very file the capture will open. Every developed piece keeps its job while the pawn does the asking — this is the position the earlier quiet moves were for.",
+  "teaches": "Against a pawn chain there are two targets: the base and the head. Once your pieces are developed and castled, the strike at the head with the f-pawn opens your rook's file and asks the chain a question it cannot keep refusing. Before calculating any of the captures, list the enemy pieces that are undefended or defended only once \u2014 the piece that hangs at the end of a line is the most common thing a calculation forgets.",
+  "explains": "The pawn strikes at e5, the head of the chain, with the king already castled and the rook standing behind the very file the capture will open. Every developed piece keeps its job while the pawn does the asking \u2014 this is the position the earlier quiet moves were for.",
   "reasons": [
    {
     "kind": "attacks",

@@ -2,7 +2,7 @@
  {
   "id": "vn-provoked-centre-the-simple-strike-needs-no-overthinking",
   "line": "e4 Nf6 e5 Nd5 Be2 Nb6 d3 Nc6 d4 d6",
-  "teaches": "This whole defence provokes the centre forward in order to hit it, and the strike itself is not a subtle move — do not overthink it. The pawn challenges the advanced pawn, claims a share of the centre, and opens the bishop's diagonal, all in one routine gesture. Some moves are just correct.",
+  "teaches": "This whole defence provokes the centre forward in order to hit it, and the strike itself is not a subtle move \u2014 do not overthink it. The pawn challenges the advanced pawn, claims a share of the centre, and opens the bishop's diagonal, all in one routine gesture. Some moves are just correct.",
   "explains": "The pawn on d6 attacks the pawn on e5, the one the opening's early moves lured forward. However the tension resolves, the bishop behind the pawn gets its diagonal and the centre stops belonging to one side.",
   "reasons": [
    {
@@ -13,13 +13,13 @@
  },
  {
   "id": "vn-provoked-centre-trade-queens-against-the-uncastled-king",
-  "line": "e4 Nf6 e5 Nd5 Be2 Nb6 d3 Nc6 d4 d6 Nf3 dxe5 dxe5 Qxd1+",
-  "teaches": "An open d-file with the enemy king still in the centre makes the queen trade a gaining move, not a drawish one: the recapture costs them castling or ties a piece to the back rank, and your development continues against a king that has to walk. Endgames where only one king is safe are middlegames in disguise.",
-  "explains": "The queen takes on d1 with check, so the reply is forced and the trade happens on your terms — the recapturing piece is pulled to d1 and the king behind it has lost its castling future. The game heads toward an ending where one king already has a job and the other still needs one.",
+  "line": "e4 Nf6 e5 Nd5 Be2 Nb6 d3 Nc6 d4 d6 Nf3 dxe5 dxe5 Qxd1+ Bxd1 Bg4",
+  "teaches": "After a queen trade that denies castling, keep developing with hits \u2014 every piece that comes out attacking something extends the lead the trade created. The piece that recaptured is usually the most tangled one; aim at it and its defenders and the endgame plays like an attack.",
+  "explains": "The bishop develops to g4 and attacks the knight on f3, which is all that stands between it and the bishop that recaptured on d1. One developing move, one threat, and the opponent's pieces \u2014 king in the centre, bishop home on d1 \u2014 must untangle under pressure.",
   "reasons": [
    {
     "kind": "attacks",
-    "square": "e1"
+    "square": "f3"
    }
   ]
  }
