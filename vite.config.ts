@@ -209,6 +209,13 @@ export default defineConfig(({ mode }) => {
             // the entry chunk (7.7 → 10.0 MB) the moment it was added without
             // one. A new corpus needs a chunk rule in the same commit.
             if (id.includes('chessbrah-teachings.json')) return 'appdata-chessbrah';
+            // The hand-written video corpus — the third instance of the same
+            // regression, and the first one this rule was already written down
+            // for. It was added as a static import with no chunk rule, inlined
+            // into `index`, and sat just under the cap until a note pass pushed
+            // the entry chunk to 8.41 MB and broke the build. It grows every
+            // time a lesson is written, so it needs its own chunk permanently.
+            if (id.includes('video-teachings.json')) return 'appdata-video-teachings';
             // The FARMED corpora (hangingpawns, saintlouis, …) need no rule:
             // they are no longer imported at all. They live in `public/data/`
             // and are fetched at runtime by `farmedCorpusData`, because a

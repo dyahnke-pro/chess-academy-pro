@@ -1,0 +1,104 @@
+{
+ "videoId": "EN72rn5tVYI",
+ "title": "\"Let Switch It Up and Play D4!!\" | Catalan Opening | The Sensei Speedrun | GM Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-19",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 3052,
+  "settledPositions": null
+ },
+ "plies": 10,
+ "rewinds": 1,
+ "moves": [
+  {
+   "t": 10,
+   "ply": 2,
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 17.5,
+   "ply": 3,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 19,
+   "ply": 4,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 22,
+   "ply": 5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3"
+  },
+  {
+   "t": 23.5,
+   "ply": 6,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4"
+  },
+  {
+   "t": 24.5,
+   "ply": 7,
+   "line": [
+    "g3"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/5NP1/PP2PP1P/RNBQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 26.5,
+   "ply": 8,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/5NP1/PP2PP1P/RNBQKB1R w KQkq - 1 5"
+  },
+  {
+   "t": 28.5,
+   "ply": 10,
+   "line": [
+    "Bg2",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2PP4/5NP1/PP2PPBP/RNBQK2R w KQ - 3 6"
+  },
+  {
+   "t": 31.5,
+   "ply": 12,
+   "line": [
+    "O-O",
+    "a6"
+   ],
+   "fen": "rnbq1rk1/1pp1bppp/p3pn2/3p4/2PP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 0 7"
+  },
+  {
+   "t": 855.5,
+   "ply": 4,
+   "line": [],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3"
+  }
+ ],
+ "forks": []
+}

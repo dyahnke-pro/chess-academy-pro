@@ -22,7 +22,7 @@
  {
   "id": "vn-advance-e6-hold-the-square-instead-of-taking-the-pawn",
   "line": "e4 e6 d4 d5 e5 c5 Nf3 Nc6 Bd3 cxd4 O-O f6 Re1",
-  "teaches": "When the opponent strikes at the pawn that anchors your whole position, capturing back is the move that throws the position away. The pawn is not the point \u2014 the SQUARE it sits on is, and taking removes your own occupant of it. Add a defender instead and make them do the trading, so whatever lands on that square is yours.",
+  "teaches": "When the opponent strikes at the pawn that anchors your whole position, capturing back is the move that throws the position away. The pawn is not the point \u2014 the square it sits on is, and taking removes your own occupant of it. Add a defender instead and make them do the trading, so whatever lands on that square is yours.",
   "explains": "The rook comes to e1 straight behind the advanced pawn, holding it and holding the file behind it. If the pawn is captured now, a piece of ours arrives on that square rather than the position simply opening.",
   "reasons": [
    {

@@ -405,47 +405,6 @@
  ],
  "notes": [
   {
-   "id": "vn-scandi-modern-blocking-the-check-with-the-piece-that-was-needed-elsewhere",
-   "line": "e4 d5 exd5 Nf6 Bb5+ Bd7",
-   "teaches": "Every way of answering a check is a decision about the rest of the game. Blocking with a piece looks free because it develops something, but a blocker lands on a square chosen by the CHECKING side, not by you — and it usually takes that square away from a piece that wanted it more.",
-   "explains": "The bishop steps in front of the check and hits the checking bishop, but it has also settled on the square the queen's knight was heading for. That knight now has one fewer good route into the game, and the bishop itself is not doing much on the square it was forced onto.",
-   "reasons": [
-    {
-     "kind": "attacks",
-     "square": "b5"
-    },
-    {
-     "kind": "deprives",
-     "from": "b8",
-     "square": "d7"
-    }
-   ],
-   "fen": "rn1qkb1r/pppbpppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR w KQkq - 3 4",
-   "t": 1256,
-   "ply": 6,
-   "source": "yt:_j8aiuqS4_0"
-  },
-  {
-   "id": "vn-scandi-modern-retreat-once-the-blocker-is-committed",
-   "line": "e4 d5 exd5 Nf6 Bb5+ Bd7 Be2",
-   "teaches": "Once a check has forced a piece onto an awkward square, the checking piece has done its work and should step back rather than trade. Trading releases the opponent from the awkwardness for free; retreating keeps it, and the retreat square can be chosen to answer the very move they need to fix it.",
-   "explains": "The bishop drops back to e2, covering g4 — the square the blocked bishop would most like to escape to — along with c4 and d3. The opponent is left holding a piece on a square nobody chose for good reasons, and usually spends a second move fixing it.",
-   "reasons": [
-    {
-     "kind": "meets",
-     "san": "Bg4"
-    },
-    {
-     "kind": "controls",
-     "square": "c4"
-    }
-   ],
-   "fen": "rn1qkb1r/pppbpppp/5n2/3P4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 4 4",
-   "t": 1259.5,
-   "ply": 7,
-   "source": "yt:_j8aiuqS4_0"
-  },
-  {
    "id": "vn-scandi-modern-the-second-move-with-the-same-piece",
    "line": "e4 d5 exd5 Nf6 Bb5+ Bd7 Be2 Nxd5 d4 Bf5",
    "teaches": "Counting development means counting MOVES, not pieces. A piece that reaches its good square on the second try has cost two moves and delivered one developed piece, and that arithmetic is the whole reason a side stands slightly better out of a quiet opening. When you must move a piece twice, make the second square earn it.",
