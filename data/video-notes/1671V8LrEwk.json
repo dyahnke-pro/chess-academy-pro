@@ -1,0 +1,34 @@
+[
+ {
+  "id": "vn-giuoco-block-with-the-piece-that-asks-for-the-trade",
+  "line": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2",
+  "teaches": "Blocking a check with a piece that immediately attacks the checking piece turns a defensive move into an offer. The opponent must decide whether to trade off their active bishop or move it a second time, and either answer costs them the tempo the check was supposed to win.",
+  "explains": "The bishop interposes on d2 and hits the bishop that gave the check. The check has produced nothing, and the piece that gave it now has a decision to make.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "b4"
+   }
+  ]
+ },
+ {
+  "id": "vn-giuoco-develop-at-the-grabber-instead-of-recapturing",
+  "line": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+ Bd2 Nxe4 Nc3",
+  "teaches": "When a piece takes a central pawn and is not yet safe, the move that wins time is not the recapture \u2014 it is the developing move that ATTACKS the piece which took. Recapturing settles the position; developing with a threat keeps the intruder loose, and every move they spend rescuing it is a move you spend bringing another piece out.",
+  "explains": "The knight comes out to c3 attacking the knight sitting on e4 and covering d5 and b5 on the way. The pawn is not being taken back; the piece that took it is being asked what it intends to do next.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e4"
+   },
+   {
+    "kind": "controls",
+    "square": "d5"
+   },
+   {
+    "kind": "controls",
+    "square": "b5"
+   }
+  ]
+ }
+]
