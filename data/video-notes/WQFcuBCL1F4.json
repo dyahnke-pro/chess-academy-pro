@@ -1,0 +1,34 @@
+[
+ {
+  "id": "vn-vienna-strike-the-centre-when-they-play-quietly",
+  "line": "e4 e5 Nc3 Nf6 d3 d5",
+  "teaches": "A modest pawn move that declines to fight for the centre is an invitation. Count the defenders of the square you want to break on \u2014 if the count is even, the break is sound, because every trade on it happens on your terms. Meeting slow play with a central strike is the standing answer, not a special case.",
+  "explains": "The pawn steps to d5 hitting the pawn on e4 and taking c4 in hand. Two pieces attack the square and two defend it, so the whole exchange resolves without loss and the centre opens while their pieces are still at home.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e4"
+   },
+   {
+    "kind": "controls",
+    "square": "c4"
+   }
+  ]
+ },
+ {
+  "id": "vn-vienna-the-dark-bishop-exists-to-let-the-king-castle",
+  "line": "e4 e5 Nc3 Nf6 d3 d5 exd5 Nxd5 Nf3 Nc6 Bd2 Be7",
+  "teaches": "The main job of the last minor piece is usually to get the king to safety, not to find its most active square. A bishop planted aggressively where it can be chased by a knight costs a move and delays castling; the modest square finishes development this move. Ask what a piece is FOR before asking where it looks best.",
+  "explains": "The bishop steps to e7, defending the queen behind it and leaving the king free to castle at once. The two more forward squares both walk into a knight jump that gains time.",
+  "reasons": [
+   {
+    "kind": "defends",
+    "square": "d8"
+   },
+   {
+    "kind": "controls",
+    "square": "f8"
+   }
+  ]
+ }
+]
