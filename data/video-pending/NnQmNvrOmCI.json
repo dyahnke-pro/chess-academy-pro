@@ -1,0 +1,227 @@
+{
+ "videoId": "NnQmNvrOmCI",
+ "title": "Master Class | 700 Elo | Chess Speedrun | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-20",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 2796,
+  "settledPositions": null
+ },
+ "plies": 22,
+ "rewinds": 2,
+ "moves": [
+  {
+   "t": 549,
+   "ply": 3,
+   "line": [
+    "d4",
+    "e5",
+    "e4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 551,
+   "ply": 4,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 566,
+   "ply": 5,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/4P3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 574,
+   "ply": 6,
+   "line": [
+    "Qa5+"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/q3P3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 1 4"
+  },
+  {
+   "t": 622.5,
+   "ply": 7,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/q3P3/4P3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 4"
+  },
+  {
+   "t": 631.5,
+   "ply": 8,
+   "line": [
+    "Qxe5"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/4q3/4P3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 639,
+   "ply": 9,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/4q3/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 5"
+  },
+  {
+   "t": 662,
+   "ply": 10,
+   "line": [
+    "Qe6"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p1q3/8/4P3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 2 6"
+  },
+  {
+   "t": 707.5,
+   "ply": 11,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p1q3/6N1/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 3 6"
+  },
+  {
+   "t": 726.5,
+   "ply": 12,
+   "line": [
+    "Qe5"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/4q1N1/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 4 7"
+  },
+  {
+   "t": 754.5,
+   "ply": 13,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/4q1N1/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 5 7"
+  },
+  {
+   "t": 774,
+   "ply": 14,
+   "line": [
+    "b5"
+   ],
+   "fen": "rnb1kbnr/p2p1ppp/2p5/1p2q1N1/2B1P3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 8"
+  },
+  {
+   "t": 862,
+   "ply": 15,
+   "line": [
+    "Nxf7"
+   ],
+   "fen": "rnb1kbnr/p2p1Npp/2p5/1p2q3/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 8"
+  },
+  {
+   "t": 931.5,
+   "ply": 16,
+   "line": [
+    "b4"
+   ],
+   "fen": "rnb1kbnr/p2p1Npp/2p5/4q3/1pB1P3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 9"
+  },
+  {
+   "t": 933.5,
+   "ply": 17,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "rnb1kbnr/p2p2pp/2p5/4N3/1pB1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 9"
+  },
+  {
+   "t": 936.5,
+   "ply": 18,
+   "line": [
+    "bxc3"
+   ],
+   "fen": "rnb1kbnr/p2p2pp/2p5/4N3/2B1P3/2p5/PPP2PPP/R1BQK2R w KQkq - 0 10"
+  },
+  {
+   "t": 1038,
+   "ply": 4,
+   "line": [],
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 1039.5,
+   "ply": 6,
+   "line": [
+    "dxe5",
+    "Qa5+"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/q3P3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 1 4"
+  },
+  {
+   "t": 1044,
+   "ply": 7,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/q3P3/4P3/8/PPPB1PPP/RN1QKBNR b KQkq - 2 4"
+  },
+  {
+   "t": 1049.5,
+   "ply": 9,
+   "line": [
+    "Qxe5",
+    "Nc3"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/4q3/4P3/2N5/PPPB1PPP/R2QKBNR b KQkq - 1 5"
+  },
+  {
+   "t": 1060.5,
+   "ply": 13,
+   "line": [
+    "Qd6",
+    "Bc1",
+    "Qe6",
+    "Nf3"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p1q3/8/4P3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 5 7"
+  },
+  {
+   "t": 1073,
+   "ply": 11,
+   "line": [],
+   "fen": "rnb1kbnr/pp1p1ppp/2pq4/8/4P3/2N5/PPP2PPP/R1BQKBNR b KQkq - 3 6"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rnb1kbnr/pp1p1ppp/2p5/q3P3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "d4",
+    "e5",
+    "e4",
+    "c6",
+    "dxe5",
+    "Qa5+"
+   ],
+   "ply": 6,
+   "options": [
+    {
+     "san": "Nc3",
+     "t": 622.5,
+     "continuation": "Nc3"
+    },
+    {
+     "san": "Bd2",
+     "t": 1044,
+     "continuation": "Bd2"
+    }
+   ]
+  }
+ ]
+}

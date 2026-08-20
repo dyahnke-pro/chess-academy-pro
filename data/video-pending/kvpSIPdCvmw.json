@@ -1,0 +1,140 @@
+{
+ "videoId": "kvpSIPdCvmw",
+ "title": "Never Play F6! | Master Class | Chess Speedrun | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-20",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 1253,
+  "settledPositions": null
+ },
+ "plies": 11,
+ "rewinds": 2,
+ "moves": [
+  {
+   "t": 277.5,
+   "ply": 3,
+   "line": [
+    "d4",
+    "e5",
+    "e4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 280,
+   "ply": 4,
+   "line": [
+    "exd4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 585,
+   "ply": 6,
+   "line": [
+    "c3",
+    "dxc3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 586,
+   "ply": 7,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4"
+  },
+  {
+   "t": 587,
+   "ply": 8,
+   "line": [
+    "cxb2"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/8/Pp3PPP/RNBQK1NR w KQkq - 0 5"
+  },
+  {
+   "t": 588,
+   "ply": 9,
+   "line": [
+    "Bxb2"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/8/PB3PPP/RN1QK1NR b KQkq - 0 5"
+  },
+  {
+   "t": 597.5,
+   "ply": 10,
+   "line": [
+    "Bb4+"
+   ],
+   "fen": "rnbqk1nr/pppp1ppp/8/8/1bB1P3/8/PB3PPP/RN1QK1NR w KQkq - 1 6"
+  },
+  {
+   "t": 618,
+   "ply": 7,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4"
+  },
+  {
+   "t": 669,
+   "ply": 6,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 671.5,
+   "ply": 9,
+   "line": [
+    "Bc4",
+    "cxb2",
+    "Bxb2"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/8/PB3PPP/RN1QK1NR b KQkq - 0 5"
+  },
+  {
+   "t": 672.5,
+   "ply": 10,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/3p4/2B1P3/8/PB3PPP/RN1QK1NR w KQkq - 0 6"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/8/PB3PPP/RN1QK1NR b KQkq - 0 5",
+   "line": [
+    "d4",
+    "e5",
+    "e4",
+    "exd4",
+    "c3",
+    "dxc3",
+    "Bc4",
+    "cxb2",
+    "Bxb2"
+   ],
+   "ply": 9,
+   "options": [
+    {
+     "san": "Bb4+",
+     "t": 597.5,
+     "continuation": "Bb4+"
+    },
+    {
+     "san": "d5",
+     "t": 672.5,
+     "continuation": "d5"
+    }
+   ]
+  }
+ ]
+}

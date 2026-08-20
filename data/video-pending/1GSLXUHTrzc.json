@@ -1,0 +1,211 @@
+{
+ "videoId": "1GSLXUHTrzc",
+ "title": "How YOU Can Positionally Outplay The Scotch Game!! | The Sensei Speedrun | GM Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-20",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 3620,
+  "settledPositions": null
+ },
+ "plies": 24,
+ "rewinds": 3,
+ "moves": [
+  {
+   "t": 70,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 72,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 75,
+   "ply": 4,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 77.5,
+   "ply": 5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3"
+  },
+  {
+   "t": 83,
+   "ply": 6,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4"
+  },
+  {
+   "t": 85,
+   "ply": 7,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 88,
+   "ply": 6,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4"
+  },
+  {
+   "t": 95,
+   "ply": 7,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 136.5,
+   "ply": 8,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b5/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5"
+  },
+  {
+   "t": 142,
+   "ply": 9,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b5/3NP3/4B3/PPP2PPP/RN1QKB1R b KQkq - 2 5"
+  },
+  {
+   "t": 160,
+   "ply": 10,
+   "line": [
+    "Qf6"
+   ],
+   "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b5/3NP3/4B3/PPP2PPP/RN1QKB1R w KQkq - 3 6"
+  },
+  {
+   "t": 162,
+   "ply": 9,
+   "line": [],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b5/3NP3/4B3/PPP2PPP/RN1QKB1R b KQkq - 2 5"
+  },
+  {
+   "t": 165.5,
+   "ply": 11,
+   "line": [
+    "Qf6",
+    "c3"
+   ],
+   "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b5/3NP3/2P1B3/PP3PPP/RN1QKB1R b KQkq - 0 6"
+  },
+  {
+   "t": 178,
+   "ply": 12,
+   "line": [
+    "Nge7"
+   ],
+   "fen": "r1b1k2r/ppppnppp/2n2q2/2b5/3NP3/2P1B3/PP3PPP/RN1QKB1R w KQkq - 1 7"
+  },
+  {
+   "t": 206,
+   "ply": 13,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1b1k2r/ppppnppp/2n2q2/2b5/2BNP3/2P1B3/PP3PPP/RN1QK2R b KQkq - 2 7"
+  },
+  {
+   "t": 217,
+   "ply": 14,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1b2rk1/ppppnppp/2n2q2/2b5/2BNP3/2P1B3/PP3PPP/RN1QK2R w KQ - 3 8"
+  },
+  {
+   "t": 229,
+   "ply": 15,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1b2rk1/ppppnppp/2n2q2/2b5/2BNP3/2P1B3/PP3PPP/RN1Q1RK1 b - - 4 8"
+  },
+  {
+   "t": 307.5,
+   "ply": 16,
+   "line": [
+    "b6"
+   ],
+   "fen": "r1b2rk1/p1ppnppp/1pn2q2/2b5/2BNP3/2P1B3/PP3PPP/RN1Q1RK1 w - - 0 9"
+  },
+  {
+   "t": 380.5,
+   "ply": 17,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1b2rk1/p1ppnppp/1pn2q2/2b5/2BNPP2/2P1B3/PP4PP/RN1Q1RK1 b - - 0 9"
+  },
+  {
+   "t": 456.5,
+   "ply": 18,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "r4rk1/pbppnppp/1pn2q2/2b5/2BNPP2/2P1B3/PP4PP/RN1Q1RK1 w - - 1 10"
+  },
+  {
+   "t": 490.5,
+   "ply": 19,
+   "line": [
+    "e5"
+   ],
+   "fen": "r4rk1/pbppnppp/1pn2q2/2b1P3/2BN1P2/2P1B3/PP4PP/RN1Q1RK1 b - - 0 10"
+  },
+  {
+   "t": 492,
+   "ply": 20,
+   "line": [
+    "Qh6"
+   ],
+   "fen": "r4rk1/pbppnppp/1pn4q/2b1P3/2BN1P2/2P1B3/PP4PP/RN1Q1RK1 w - - 1 11"
+  },
+  {
+   "t": 572,
+   "ply": 19,
+   "line": [],
+   "fen": "r4rk1/pbppnppp/1pn2q2/2b1P3/2BN1P2/2P1B3/PP4PP/RN1Q1RK1 b - - 0 10"
+  },
+  {
+   "t": 596.5,
+   "ply": 20,
+   "line": [
+    "Qh6"
+   ],
+   "fen": "r4rk1/pbppnppp/1pn4q/2b1P3/2BN1P2/2P1B3/PP4PP/RN1Q1RK1 w - - 1 11"
+  }
+ ],
+ "forks": []
+}

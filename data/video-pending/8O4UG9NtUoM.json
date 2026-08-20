@@ -1,0 +1,299 @@
+{
+ "videoId": "8O4UG9NtUoM",
+ "title": "Beginner To Master | Chess Speedrun | French Defense | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-20",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 1892,
+  "settledPositions": null
+ },
+ "plies": 31,
+ "rewinds": 2,
+ "moves": [
+  {
+   "t": 6.5,
+   "ply": 3,
+   "line": [
+    "d4",
+    "d5",
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 1 2"
+  },
+  {
+   "t": 8.5,
+   "ply": 4,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 24,
+   "ply": 5,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 41.5,
+   "ply": 6,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r1bqkbnr/pppn1ppp/4p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 1 4"
+  },
+  {
+   "t": 66,
+   "ply": 7,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r1bqkbnr/pppn1ppp/4p3/3P4/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 67,
+   "ply": 8,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r1bqkbnr/pppn1ppp/8/3p4/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 68,
+   "ply": 9,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r1bqkbnr/pppn1ppp/8/3N4/3P4/8/PPP2PPP/R1BQKBNR b KQkq - 0 5"
+  },
+  {
+   "t": 72.5,
+   "ply": 10,
+   "line": [
+    "Ngf6"
+   ],
+   "fen": "r1bqkb1r/pppn1ppp/5n2/3N4/3P4/8/PPP2PPP/R1BQKBNR w KQkq - 1 6"
+  },
+  {
+   "t": 87.5,
+   "ply": 11,
+   "line": [
+    "Nxf6+"
+   ],
+   "fen": "r1bqkb1r/pppn1ppp/5N2/8/3P4/8/PPP2PPP/R1BQKBNR b KQkq - 0 6"
+  },
+  {
+   "t": 100.5,
+   "ply": 12,
+   "line": [
+    "Qxf6"
+   ],
+   "fen": "r1b1kb1r/pppn1ppp/5q2/8/3P4/8/PPP2PPP/R1BQKBNR w KQkq - 0 7"
+  },
+  {
+   "t": 101.5,
+   "ply": 13,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1b1kb1r/pppn1ppp/5q2/8/3P4/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 7"
+  },
+  {
+   "t": 106,
+   "ply": 14,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "r1b1k2r/pppn1ppp/3b1q2/8/3P4/5N2/PPP2PPP/R1BQKB1R w KQkq - 2 8"
+  },
+  {
+   "t": 174.5,
+   "ply": 15,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "r1b1k2r/pppn1ppp/3b1q2/8/3P4/3B1N2/PPP2PPP/R1BQK2R b KQkq - 3 8"
+  },
+  {
+   "t": 182.5,
+   "ply": 16,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1b2rk1/pppn1ppp/3b1q2/8/3P4/3B1N2/PPP2PPP/R1BQK2R w KQ - 4 9"
+  },
+  {
+   "t": 203,
+   "ply": 17,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1b2rk1/pppn1ppp/3b1q2/8/3P4/3B1N2/PPP2PPP/R1BQ1RK1 b - - 5 9"
+  },
+  {
+   "t": 212,
+   "ply": 18,
+   "line": [
+    "h6"
+   ],
+   "fen": "r1b2rk1/pppn1pp1/3b1q1p/8/3P4/3B1N2/PPP2PPP/R1BQ1RK1 w - - 0 10"
+  },
+  {
+   "t": 256,
+   "ply": 19,
+   "line": [
+    "c3"
+   ],
+   "fen": "r1b2rk1/pppn1pp1/3b1q1p/8/3P4/2PB1N2/PP3PPP/R1BQ1RK1 b - - 0 10"
+  },
+  {
+   "t": 299.5,
+   "ply": 20,
+   "line": [
+    "c5"
+   ],
+   "fen": "r1b2rk1/pp1n1pp1/3b1q1p/2p5/3P4/2PB1N2/PP3PPP/R1BQ1RK1 w - - 0 11"
+  },
+  {
+   "t": 307,
+   "ply": 21,
+   "line": [
+    "Bc2"
+   ],
+   "fen": "r1b2rk1/pp1n1pp1/3b1q1p/2p5/3P4/2P2N2/PPB2PPP/R1BQ1RK1 b - - 1 11"
+  },
+  {
+   "t": 324,
+   "ply": 22,
+   "line": [
+    "c4"
+   ],
+   "fen": "r1b2rk1/pp1n1pp1/3b1q1p/8/2pP4/2P2N2/PPB2PPP/R1BQ1RK1 w - - 0 12"
+  },
+  {
+   "t": 345,
+   "ply": 23,
+   "line": [
+    "b3"
+   ],
+   "fen": "r1b2rk1/pp1n1pp1/3b1q1p/8/2pP4/1PP2N2/P1B2PPP/R1BQ1RK1 b - - 0 12"
+  },
+  {
+   "t": 363,
+   "ply": 24,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1b2rk1/p2n1pp1/3b1q1p/1p6/2pP4/1PP2N2/P1B2PPP/R1BQ1RK1 w - - 0 13"
+  },
+  {
+   "t": 394,
+   "ply": 25,
+   "line": [
+    "bxc4"
+   ],
+   "fen": "r1b2rk1/p2n1pp1/3b1q1p/1p6/2PP4/2P2N2/P1B2PPP/R1BQ1RK1 b - - 0 13"
+  },
+  {
+   "t": 411,
+   "ply": 26,
+   "line": [
+    "bxc4"
+   ],
+   "fen": "r1b2rk1/p2n1pp1/3b1q1p/8/2pP4/2P2N2/P1B2PPP/R1BQ1RK1 w - - 0 14"
+  },
+  {
+   "t": 478.5,
+   "ply": 30,
+   "line": [
+    "Be4",
+    "Nb6",
+    "Qc2",
+    "Qg6"
+   ],
+   "fen": "r1b2rk1/p4pp1/1n1b2qp/8/2pPB3/2P2N2/P1Q2PPP/R1B2RK1 w - - 4 16"
+  },
+  {
+   "t": 524,
+   "ply": 34,
+   "line": [
+    "Qb3",
+    "Qxe4",
+    "Qc2",
+    "Qxc2"
+   ],
+   "fen": "r1b2rk1/p4pp1/1n1b3p/8/2pP4/2P2N2/P1q2PPP/R1B2RK1 w - - 0 18"
+  },
+  {
+   "t": 833,
+   "ply": 4,
+   "line": [],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 834,
+   "ply": 5,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 858,
+   "ply": 6,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 860.5,
+   "ply": 7,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/8/3PN3/8/PPP2PPP/R1BQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 871,
+   "ply": 6,
+   "line": [],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 3",
+   "line": [
+    "d4",
+    "d5",
+    "Nc3",
+    "e6",
+    "e4"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "Nd7",
+     "t": 41.5,
+     "continuation": "Nd7"
+    },
+    {
+     "san": "dxe4",
+     "t": 858,
+     "continuation": "dxe4"
+    }
+   ]
+  }
+ ]
+}
