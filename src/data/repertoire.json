@@ -1127,6 +1127,12 @@
         "pgn": "e4 c6 d4 d5 f3 e6 Nc3 Bb4 Bf4 Ne7 Qd3 b6 Ne2 Ba6 Qe3 Nd7 O-O-O O-O a3 Bxc3 Nxc3 Bxf1 Rhxf1 b5",
         "explanation": "The most-played answer to the Fantasy, and one the rest of this repertoire did not cover: Black supports the centre with the modest pawn move rather than resolving the tension. The bishop then comes to b4 to pin the queen's knight, which is what holds the e4 pawn together, and White has to choose between a doubled pawn and the time it costs to recapture with a piece instead. Black's light-squared bishop, normally the problem piece behind this pawn chain, gets out via a6 to trade itself for the one White has not yet developed.",
         "shortExplanation": "3...e6 supports the centre, ...Bb4 pins the knight holding e4, and ...Ba6 solves the problem bishop."
+      },
+      {
+        "name": "Panov-Botvinnik: ...Nc6 and ...Be6",
+        "pgn": "e4 c6 d4 d5 exd5 cxd5 c4 Nf6 Nc3 Nc6 Nf3 Be6 Bg5 Qa5 Bxf6 exf6 c5 g6 Bd3 Bg7 O-O O-O a3 Bg4",
+        "explanation": "Black develops the bishop to e6 rather than shutting it in with ...e6 \u2014 it looks like it blocks the kingside bishop, and it does, but that bishop comes out the long way instead and the pawn in the middle gets a defender from the side. ...Qa5 develops onto the knight holding that pawn. When White trades on f6, recapture with the e-pawn: the doubled pawns are the price of the long dark diagonal. The rest is one plan \u2014 d4 is the only real target in White's camp, so trade off the knight guarding it.",
+        "shortExplanation": "Black plays ...Be6 and ...Qa5, recaptures on f6 with the e-pawn, then hunts the d4 pawn."
       }
     ],
     "trapLines": [],
