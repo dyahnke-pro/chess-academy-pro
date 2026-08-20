@@ -1,0 +1,97 @@
+# PRIORITY DOWNLOADS — the videos behind the 23 gen-1 baked narrations
+#
+# The 2026-08-01 bakes were written from transcripts BEFORE the board-reading
+# pipeline existed, so they carry prose but no positions. Downloading these and
+# scanning them gives those narrations FENs, which is what lets them be placed.
+# Until then they can only fire when a taught spine matches them exactly, which
+# today is 1 of 23.
+#
+# 76 source videos total: 32 already tracked, 44 listed here.
+# Ordered: openings the app teaches first, most-completable first.
+# (cap) = captions already banked, so only the video itself is needed.
+
+## Sicilian Defense: Closed   [TAUGHT]
+ecbOBKL_hos   (cap)   Closed Sicilian Deconstructed | Sicilian | GM Naroditsky’s Theor
+
+## Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Gurgenidze Variation   [TAUGHT]
+11hlPJYNX_s   (cap)   Grandmasters Blunder Mate Too!! | Sicilian, Rossolimo Attack | G
+
+## Queen's Gambit Accepted   [TAUGHT]
+U7pqt57VwuU   (cap)   Attacking F7 Early W/ Theory | QGA | The Sensei Speedrun | GM Na
+Ty0DEz4Wevw   (cap)   Double Dose of Speedrun! | Queens Gambit Accepted | The Sensei S
+hX6W4X_CqkA   (cap)   Master Class | Queen's Gambit Accepted | Chess Speedrun | Grandm
+
+## Sicilian Defense: Alapin Variation   [TAUGHT]
+o29kg7LLAVg   (cap)   The Alapin (C3) Sicilian Defense | The Sensei Speedrun | Grandma
+0fb75Z-i03A   (cap)   Master Class | Alapin Sicilian | Chess Speedrun | Grandmaster Na
+uJro3yCDEgk   (cap)   Alapin Sicilian | The Sensei Speedrun | Grandmaster Naroditsky
+
+## Queen's Gambit Declined   [TAUGHT]
+HAMhInc37gI   (cap)   Queen's Gambit Declined | The Sensei Speedrun | Grandmaster Naro
+k9EmWn_MvQc   (cap)   QGD - Colle System | The Sensei Speedrun | Grandmaster Naroditsk
+lLkqjBOGgek   (cap)   Queen's Gambit Declined | The Sensei Speedrun | Grandmaster Naro
+wrk4e6bGi1Y   (cap)   QGD + C3 Sicilian | The Sensei Speedrun | Grandmaster Naroditsky
+KJTX68hK87w   (cap)   Chigorin Defense; QGD | The Sensei Speedrun | GM Naro
+d6tZXETpqT0   (cap)   What Is The Carlsbad?? | Queens Gambit Declined | The Sensei Spe
+
+## Sicilian Defense: Taimanov Variation   [TAUGHT]
+3V4w5jcomRU        
+AmDns9omB7g        
+FmlhwZT7Vcs        
+GNQUFFiYBRA        
+GxGqIrEye4w        
+LOu9flRkHdE        
+
+## Bird Opening
+4Vbr9EQoGd4   (cap)   How GMs TRAP London System Players!! | Glek, Kings Indian, Bird 
+
+## Bishop's Opening
+MvaAX4pTvYU   (cap)   Bishop's Opening | The Sensei Speedrun | Grandmaster Naroditsky
+
+## Latvian Gambit
+4_Ev1a1_2Mg   (cap)   Taming the Elephant Gambit!! | Elephant Gambit, Sicilian, Latvia
+
+## Modern Defense
+iCtRgphJ3_8   (cap)   Master Class | Crushing The Modern Defense | Chess Speedrun | Gr
+
+## Torre Attack: Classical Defense
+untay_co3oY   (cap)   Building Patient, Unstoppable Attacks | Torre Attack & Alapin | 
+
+## Polish Opening: King's Indian Variation, Sokolsky Attack
+Ah6OXpQBRfE        
+HewqyrsBO2c        
+
+## Elephant Gambit
+4ajr7LFi170   (cap)   Scandinavian + Elephant Gambit | Develop Your Instincts | GM Nar
+wBbeP1w-NTQ   (cap)   Mastering Offbeat Openings | Elephant Gambit, Sicilian, Alapin |
+
+## Rubinstein Opening
+33X807y7ImM        
+JxNsdre0UyE        
+
+## Owen Defense
+oF7Rh6qXj1A   (cap)   Owen's Defense | The Sensei Speedrun | GM Naro
+opvsrx5TCdU   (cap)   Hunting for a Queenside Attack | Owen's Defence | The Sensei Spe
+2fYsaiS_NS4   (cap)   Master Class | Owen's Game | Chess Speedrun | Grandmaster Narodi
+
+## Queen's Pawn Game: Colle System
+0aPDOllSk7k        
+1l2Ide7YzCY        
+7_uy4U5eWFg        
+C0TZM5VEbMI        
+
+## Queen's Pawn Game: Stonewall Attack
+-4n6rkBsF6Y        
+2WhtInYXPio        
+6yYOQWfQwCk        
+8p6zBd3U8Tw        
+DSvi3ngZr0A        
+DYjp2MrfxkA        
+
+# ---- paste-ready (360p, split anything oversize) ----
+# mkdir -p drop && for id in $(grep -oE "^[A-Za-z0-9_-]{11}" priority-downloads.txt); do
+#   test -f "drop/$id.mp4" && continue
+#   ./yt-dlp-nightly --remote-components ejs:npm -4 --socket-timeout 30 --retries 15 \
+#     -f "134/396/135/bestvideo[height<=480]/bestvideo" -o "drop/$id.mp4" -- "$id" || echo SKIP $id
+#   sleep 5
+# done
