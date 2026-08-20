@@ -532,3 +532,139 @@ Two different harms:
 The second is the one no audit would have surfaced: it presents as SILENCE, and
 silence reads as "the corpus has nothing here" rather than "the corpus had
 something and this took its place."
+
+
+---
+
+# PLAN — tier-1 narration, the note backlog, and the walkthrough stall
+_opened 2026-08-20. This CONTINUES step 3 ("the sync — video alignment") of the
+2026-08-15 locked sequence at the top of this file. Every number below was
+MEASURED, not recalled; re-measure before trusting any of it._
+
+_opened 2026-08-20. Written to survive context loss: every number here was measured, not recalled._
+
+## THE ONE-PARAGRAPH VERSION
+
+The walkthrough calls the LLM at runtime because "not baked" falls through to a
+model call instead of to hand-written narration. Three days of hand-written
+notes exist but are spliced on TOP of generated prose, so they never prevent
+that call. The job is to make the note corpus tier 1, delete the LLM arms, keep
+gems on the same path, and fix the lesson that still cannot reach its leaf.
+
+## MEASURED STATE (2026-08-20)
+
+| thing | number |
+|---|---|
+| hand-written notes | 340, across 152 lesson files |
+| …of those, ON a taught line (audible in Watch/Learn) | **123** |
+| …off every taught line (free-play/review only) | 217 |
+| openings covered by hand-written notes | 20 of 43 |
+| gen-1 baked openings (`walkthrough-narrations.json`) | 23, generated 2026-08-01 |
+| …matching a taught spine today | **1 of 23** |
+| opening-tab beats reachable by position (`lessonBeatAt`) | 3,373 / 8,803 plies = 38.3%, **0 lines with zero** |
+| pending tracks ("the dump") | 35, **0 with notes** |
+| pending-track positions carrying the teacher's words | 1,744 — **336 on a taught line**, 1,408 off |
+| corpus notes total / position-resolvable | 63,287 / 7,034 |
+
+## THE DEFECT, WITH ANCHORS
+
+`src/services/openingGenerator.ts`
+
+| step | line | behaviour |
+|---|---|---|
+| cache | `:481` | tree with matching `genRev` (`:435`) → generation skipped entirely |
+| bake lookup | `:1998` | `bakedNarrationFor(canonicalName, sans)` |
+| **the decision** | `:2042` | `if (baked && branchesCovered)` → zero LLM; **`else` → LLM** |
+| PASS 1 | `:2064` | `getCoachStructuredResponse` writes narration (2 attempts → template) |
+| PASS 2 reword | `:2621`→`:2881` | `if (!baked)` → **second LLM call** |
+| beat splice | `:2264`, `:2484` | `lessonBeatAt` decorates prose the LLM already wrote |
+| note splice | `:1276` | `noteAtPosition` corpus notes |
+| **gems** | `:4097` | punish/gem labels — **same LLM dependency** |
+
+Chain as built: `baked → LLM ×2 → template`.
+Chain as specified: `baked → hand-written opening-tab beats → computed`. No LLM, ever.
+
+Measured on prod during ONE Copycat walkthrough: **5× `/api/llm/deepseek/chat/completions`**,
+plus `/api/lichess-explorer` → **429**.
+
+**Why it looks intermittent:** a warm device with a matching `genRev` never
+generates, so it never calls the LLM. Every gen-rev bump re-exposes every device.
+
+## DECISIONS LOG (David, 2026-08-20)
+
+- Baking = rewording narration from the video. Not baked → hand-written opening-tab
+  narration → computed. **No LLM or TTS for walkthrough teachings. Gems are prebaked too.**
+- The 3 days of hand-written notes **are** baked by that definition; they are simply not
+  wired as tier 1. Wiring, not rewriting, is the work.
+- **Never add a line to rescue one note.** Bd2 (4.Bd2) was the only offender — removed.
+- An unbaked line is **not** an un-teachable line: bake it, never revert it.
+- **Only the NEW hand-written narrations get placed.** The 23 gen-1 bakes wait until we
+  know specifically where they go.
+- Old narrations are deleted **only** once new ones replace them
+  (`REPLACED_BY_HANDWRITTEN`, currently an empty set — correct).
+- Videos may be deleted once FEN + captions + timestamps are tied together.
+
+## PHASES
+
+### P0 — prep (no build; removes blockers) — IN PROGRESS
+- [ ] Bank captions for the 20 download-list videos that lack them. Cookie-free:
+      `yt-dlp --extractor-args "youtube:player_client=web_embedded" --ignore-no-formats-error
+       --write-auto-sub --skip-download --sub-format vtt --sub-langs en`
+      (`harvest/transcript-queue.sh` already does exactly this.)
+- [ ] **6 of the 35 pending tracks carry NO `titleCheck`** — indistinguishable from verified.
+      Run `map-openings.mjs`; an absent verdict must never be read as passed.
+      NEVER write notes against a mistracked track.
+
+### P1 — the stall (do before tier-1; a deterministic lesson that can't finish is just a reliable failure)
+- [ ] Root-cause: does generation hang on the LLM round-trip, on the 429'd explorer call, or
+      on the runner's token guard? Evidence so far: no console error, no advance, budget
+      irrelevant (11 nodes at 600s AND 1500s), TTS instrument irrelevant (block AND mute both stall).
+- [ ] A lesson must ALWAYS fall through to computed narration rather than sit silent.
+- [ ] Fix the picker line spoken twice (David flagged; not yet diagnosed).
+
+### P2 — tier-1 wiring
+- [ ] Make `:2042`'s `else` resolve: hand-written note (FEN-keyed) → opening-tab beat
+      (`lessonBeatAt`) → computed. **Delete the LLM arms rather than guard them**, so nothing
+      can quietly re-enter.
+- [ ] Same for gems at `:4097`.
+- [ ] Verify gems still fire with a preloaded plan: `findMatchingTraps` rejects a gem whose
+      `setupFen` is not the position its `setupMoves` produce — that derivation must still hold.
+- [ ] **GATE: a walkthrough completes with ZERO LLM calls.** Without it this regresses silently,
+      exactly as it did here.
+- [ ] Add `origin` to baked entries (`video-reworded` | `video-handwritten`) + a gate. The bake
+      file has NO provenance field today; notes already carry `origin`.
+- [ ] Keep bake keying position-based for gen 2. Gen 1's exact-spine match is a SAFETY INTERLOCK
+      (order-indexed prose ⇒ one changed move misaligns every later idea). Prefix-only tolerance
+      is safe; anything past divergence is not.
+
+### P3 — distil the dump (35 tracks)
+- [ ] Write notes from the captions at each anchor's timestamp (`at.mjs <vtt> <seconds>`).
+      Verify EVERY board claim with chess.js first. Captions gate every note.
+- [ ] Start with the 336 positions already on a taught line — **160 of them are the Alapin**,
+      then Scotch 49, Najdorf 30, Italian 23.
+- [ ] Move a track `video-pending/` → `video-tracks/` only once its notes are written.
+
+### P4 — the 1,408 off-line positions + 217 stranded notes
+- [ ] Re-anchor onto a taught line where the idea survives the move (cheapest, highest yield).
+- [ ] Fork only where it clears count + score + middlegame depth AND is bakeable AND rescues >1 note.
+- [ ] Otherwise leave to free play/review — a legitimate outcome, not a failure.
+
+### P5 — prune + the old-narration download list
+- [ ] **130 of the 150 drop videos are safe to delete** (track + paired narration exist).
+      KEEP: 9 `needs-hand-geometry`, 1 mistracked (`CXvo1dMF1Qs`), 11 no-game.
+- [ ] When all work is done: give David the download list to attach the OLD narrations,
+      **ordered most-effect → least**. Raw data: `data/video-queues/priority-downloads.txt`
+      (44 videos; 20 in taught openings; 24 already have captions).
+
+## SEQUENCING LOGIC
+P0 unblocks everything and needs nothing from David. P1 before P2 because determinism does not
+help a lesson that cannot finish. P2 before P3 so newly written notes land in a path that
+actually speaks them. P4 after P3 because re-anchoring is judged against the finished corpus.
+P5 last — deleting inputs before the outputs are verified is unrecoverable.
+
+## NEXT-SESSION PICKUP
+1. Read this file, then `CLAUDE.md` §THREE NARRATION TIERS and §WE DO NOT ADD A LINE FOR ONE NOTE.
+2. `git log --oneline -12` — everything lands on `main`.
+3. Re-measure before trusting any number above; the measurement one-liners are in the session
+   history and every one of them is cheap to re-run.
+4. Do NOT "fix" the exact-spine bake match without reading why it exists (safety interlock).
