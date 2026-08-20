@@ -13,9 +13,20 @@
  *
  * Usage: node scripts/video-align/at.mjs <vtt> <seconds> [window]
  */
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 
 const [vtt, secArg, winArg] = process.argv.slice(2);
+// SAY THE TRANSCRIPT IS MISSING, DO NOT THROW A STACK TRACE. A missing VTT used
+// to surface as an ENOENT dump in the middle of a batch, which reads like a tool
+// that had nothing to say — so the note got written from the board alone, which
+// is exactly what this script exists to prevent. Four notes went that way before
+// the pattern was spotted (David 2026-08-20: "make sure to be getting the
+// narrations from the captions").
+if (vtt && !existsSync(vtt)) {
+  console.error(`NO CAPTIONS: ${vtt} is not on disk. Bank the caption track before writing notes —`);
+  console.error('a note written without the transcript is a fact about the board, not the point being taught.');
+  process.exit(2);
+}
 const at = Number(secArg);
 const win = Number(winArg ?? 45);
 

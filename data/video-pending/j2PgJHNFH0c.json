@@ -1,0 +1,225 @@
+{
+ "videoId": "j2PgJHNFH0c",
+ "title": "Catching the London off Guard With QB6!! | The Sensei Speedrun | GM Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-20",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 3733,
+  "settledPositions": null
+ },
+ "plies": 25,
+ "rewinds": 1,
+ "moves": [
+  {
+   "t": 11.5,
+   "ply": 2,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2"
+  },
+  {
+   "t": 14,
+   "ply": 3,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2"
+  },
+  {
+   "t": 24,
+   "ply": 4,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 26.5,
+   "ply": 5,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 29,
+   "ply": 6,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/8/3p1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 31.5,
+   "ply": 8,
+   "line": [
+    "exd4",
+    "Qb6"
+   ],
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/8/PPP2PPP/RN1QKBNR w KQkq - 1 5"
+  },
+  {
+   "t": 33.5,
+   "ply": 9,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/2N5/PPP2PPP/R2QKBNR b KQkq - 2 5"
+  },
+  {
+   "t": 49,
+   "ply": 10,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnb1kb1r/pp2pppp/1q1p1n2/8/3P1B2/2N5/PPP2PPP/R2QKBNR w KQkq - 0 6"
+  },
+  {
+   "t": 56,
+   "ply": 11,
+   "line": [
+    "Rb1"
+   ],
+   "fen": "rnb1kb1r/pp2pppp/1q1p1n2/8/3P1B2/2N5/PPP2PPP/1R1QKBNR b Kkq - 1 6"
+  },
+  {
+   "t": 96,
+   "ply": 12,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnb1kb1r/pp2pp1p/1q1p1np1/8/3P1B2/2N5/PPP2PPP/1R1QKBNR w Kkq - 0 7"
+  },
+  {
+   "t": 100.5,
+   "ply": 14,
+   "line": [
+    "Nf3",
+    "Bg7"
+   ],
+   "fen": "rnb1k2r/pp2ppbp/1q1p1np1/8/3P1B2/2N2N2/PPP2PPP/1R1QKB1R w Kkq - 2 8"
+  },
+  {
+   "t": 107,
+   "ply": 16,
+   "line": [
+    "Be2",
+    "O-O"
+   ],
+   "fen": "rnb2rk1/pp2ppbp/1q1p1np1/8/3P1B2/2N2N2/PPP1BPPP/1R1QK2R w K - 4 9"
+  },
+  {
+   "t": 110.5,
+   "ply": 17,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnb2rk1/pp2ppbp/1q1p1np1/8/3P1B2/2N2N2/PPP1BPPP/1R1Q1RK1 b - - 5 9"
+  },
+  {
+   "t": 156.5,
+   "ply": 18,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "rn3rk1/pp2ppbp/1q1p1np1/5b2/3P1B2/2N2N2/PPP1BPPP/1R1Q1RK1 w - - 6 10"
+  },
+  {
+   "t": 185,
+   "ply": 19,
+   "line": [
+    "h3"
+   ],
+   "fen": "rn3rk1/pp2ppbp/1q1p1np1/5b2/3P1B2/2N2N1P/PPP1BPP1/1R1Q1RK1 b - - 0 10"
+  },
+  {
+   "t": 218,
+   "ply": 20,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r4rk1/pp2ppbp/1qnp1np1/5b2/3P1B2/2N2N1P/PPP1BPP1/1R1Q1RK1 w - - 1 11"
+  },
+  {
+   "t": 232,
+   "ply": 21,
+   "line": [
+    "d5"
+   ],
+   "fen": "r4rk1/pp2ppbp/1qnp1np1/3P1b2/5B2/2N2N1P/PPP1BPP1/1R1Q1RK1 b - - 0 11"
+  },
+  {
+   "t": 233.5,
+   "ply": 22,
+   "line": [
+    "Nb4"
+   ],
+   "fen": "r4rk1/pp2ppbp/1q1p1np1/3P1b2/1n3B2/2N2N1P/PPP1BPP1/1R1Q1RK1 w - - 1 12"
+  },
+  {
+   "t": 280.5,
+   "ply": 23,
+   "line": [
+    "Ne1"
+   ],
+   "fen": "r4rk1/pp2ppbp/1q1p1np1/3P1b2/1n3B2/2N4P/PPP1BPP1/1R1QNRK1 b - - 2 12"
+  },
+  {
+   "t": 359,
+   "ply": 24,
+   "line": [
+    "Rac8"
+   ],
+   "fen": "2r2rk1/pp2ppbp/1q1p1np1/3P1b2/1n3B2/2N4P/PPP1BPP1/1R1QNRK1 w - - 3 13"
+  },
+  {
+   "t": 362.5,
+   "ply": 25,
+   "line": [
+    "a3"
+   ],
+   "fen": "2r2rk1/pp2ppbp/1q1p1np1/3P1b2/1n3B2/P1N4P/1PP1BPP1/1R1QNRK1 b - - 0 13"
+  },
+  {
+   "t": 363.5,
+   "ply": 26,
+   "line": [
+    "Na6"
+   ],
+   "fen": "2r2rk1/pp2ppbp/nq1p1np1/3P1b2/5B2/P1N4P/1PP1BPP1/1R1QNRK1 w - - 1 14"
+  },
+  {
+   "t": 373,
+   "ply": 27,
+   "line": [
+    "Be3"
+   ],
+   "fen": "2r2rk1/pp2ppbp/nq1p1np1/3P1b2/8/P1N1B2P/1PP1BPP1/1R1QNRK1 b - - 2 14"
+  },
+  {
+   "t": 390,
+   "ply": 28,
+   "line": [
+    "Qa5"
+   ],
+   "fen": "2r2rk1/pp2ppbp/n2p1np1/q2P1b2/8/P1N1B2P/1PP1BPP1/1R1QNRK1 w - - 3 15"
+  },
+  {
+   "t": 404.5,
+   "ply": 23,
+   "line": [],
+   "fen": "r4rk1/pp2ppbp/1q1p1np1/3P1b2/1n3B2/2N4P/PPP1BPP1/1R1QNRK1 b - - 2 12"
+  }
+ ],
+ "forks": []
+}

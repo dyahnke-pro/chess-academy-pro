@@ -1,0 +1,138 @@
+{
+ "videoId": "qbin8r7EErE",
+ "title": "Four Knights Scotch | The Sensei Speedrun | GM Naro",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-20",
+ "geometry": {
+  "x0": 370,
+  "y0": -2,
+  "square": 60,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 3001,
+  "settledPositions": null
+ },
+ "plies": 14,
+ "rewinds": 0,
+ "moves": [
+  {
+   "t": 13.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 14.5,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 17,
+   "ply": 4,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 20,
+   "ply": 5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3"
+  },
+  {
+   "t": 25.5,
+   "ply": 6,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4"
+  },
+  {
+   "t": 28,
+   "ply": 7,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 35.5,
+   "ply": 9,
+   "line": [
+    "exd4",
+    "Nxd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5"
+  },
+  {
+   "t": 44.5,
+   "ply": 10,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/8/3nP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6"
+  },
+  {
+   "t": 50.5,
+   "ply": 11,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/8/3QP3/2N5/PPP2PPP/R1B1KB1R b KQkq - 0 6"
+  },
+  {
+   "t": 64,
+   "ply": 12,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/3p1n2/8/3QP3/2N5/PPP2PPP/R1B1KB1R w KQkq - 0 7"
+  },
+  {
+   "t": 144,
+   "ply": 14,
+   "line": [
+    "Bc4",
+    "Be7"
+   ],
+   "fen": "r1bqk2r/ppp1bppp/3p1n2/8/2BQP3/2N5/PPP2PPP/R1B1K2R w KQkq - 2 8"
+  },
+  {
+   "t": 145.5,
+   "ply": 15,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk2r/ppp1bppp/3p1n2/8/2BQP3/2N5/PPP2PPP/R1B2RK1 b kq - 3 8"
+  },
+  {
+   "t": 147.5,
+   "ply": 16,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/ppp1bppp/3p1n2/8/2BQP3/2N5/PPP2PPP/R1B2RK1 w - - 4 9"
+  },
+  {
+   "t": 194.5,
+   "ply": 17,
+   "line": [
+    "b3"
+   ],
+   "fen": "r1bq1rk1/ppp1bppp/3p1n2/8/2BQP3/1PN5/P1P2PPP/R1B2RK1 b - - 0 9"
+  }
+ ],
+ "forks": []
+}

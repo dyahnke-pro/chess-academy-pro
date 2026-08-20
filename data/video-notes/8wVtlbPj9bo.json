@@ -1,0 +1,14 @@
+[
+ {
+  "id": "vn-kid-averbakh-development-that-is-really-prophylaxis",
+  "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Bg5",
+  "teaches": "The best developing moves do a second job the opponent notices only when they try their plan. Pinning the knight that would support the central break does not forbid the break \u2014 it makes it cost a pawn and an ending. Ask of every developing square: which of their ideas does this quietly discourage?",
+  "explains": "The bishop lands on g5 pinning the knight on f6 against the queen behind it. The central pawn push this setup exists to play is still legal, and it now runs into the pin rather than into a defence.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "f6"
+   }
+  ]
+ }
+]

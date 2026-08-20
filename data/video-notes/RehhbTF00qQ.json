@@ -1,0 +1,30 @@
+[
+ {
+  "id": "vn-vienna-gambit-hit-the-bishop-and-build-the-centre",
+  "line": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Bc5 d4",
+  "teaches": "When a piece plants itself on the square in front of your centre, the pawn move that both attacks it and builds the centre is worth more than any developing move. One push does two jobs: the intruder has to decide, and the pawn it now stands beside is defended by the one that just arrived.",
+  "explains": "The pawn to d4 hits the bishop on c5 and props up the pawn on e5 that the gambit won. The bishop must move or trade, and either way the big centre is the thing that remains.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "c5"
+   },
+   {
+    "kind": "defends",
+    "square": "e5"
+   }
+  ]
+ },
+ {
+  "id": "vn-vienna-gambit-answer-the-pin-with-the-piece-that-unpins",
+  "line": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Bc5 d4 Bb4 Bd2",
+  "teaches": "A pin on the knight holding your centre is answered by developing the piece that breaks it, not by moving the knight. Interposing a bishop both unpins and offers a trade the pinner did not ask for \u2014 and the piece you develop was going to that side of the board anyway.",
+  "explains": "The bishop comes to d2, defending the knight on c3 and standing between it and the king so the pin no longer bites. The knight is free to move again and the centre keeps its guard.",
+  "reasons": [
+   {
+    "kind": "defends",
+    "square": "c3"
+   }
+  ]
+ }
+]

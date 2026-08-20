@@ -1,0 +1,14 @@
+[
+ {
+  "id": "vn-giuoco-open-the-file-the-grabbing-piece-stands-on",
+  "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 O-O Nxe4 Re1",
+  "teaches": "When a piece takes a pawn in the centre, look at the FILE it is now standing on before deciding whether the pawn was worth anything. A rook swung behind it costs nothing, develops, and forces the intruder to be defended by a move the opponent did not want to make \u2014 which is the tempo the pawn was traded for.",
+  "explains": "The rook drops onto e1 behind the knight that has just taken in the centre. The knight is attacked and has no easy retreat, so the reply is dictated rather than chosen.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e4"
+   }
+  ]
+ }
+]

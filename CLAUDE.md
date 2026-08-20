@@ -2901,6 +2901,34 @@ engine-checked so it does not leave the student worse than ≈ −1.0 except as 
 honest gambit showcase. A fork is a normal variation once added; nothing about
 its origin exempts it.
 
+### 🔒🔒 A NOTE IS WRITTEN FROM THE CAPTIONS — NO TRANSCRIPT, NO NOTE (David 2026-08-20: *"make sure to be getting the narrations from the captions"*, then *"recheck all of your work from this session to make sure you didnt miss any other captions"*)
+
+The board tells you what is TRUE at a position. The transcript tells you which
+of those true things the lesson is TEACHING. Write from the board alone and you
+get something accurate and arbitrary — a fact about the position instead of the
+point being made — which is the failure mode that looks fine in review and
+teaches nobody.
+
+**The order is: bank the caption track, read it at the anchor's timestamp, then
+write.** `at.mjs <vtt> <seconds>` is that read.
+
+**IT FAILED SILENTLY, WHICH IS WHY THIS IS A RULE AND A GATE.** `at.mjs` read
+the VTT with no existence check, so a missing transcript came out as a Node
+ENOENT stack trace mid-batch — at a glance indistinguishable from a tool with
+nothing to say. Four notes were written from the board before the pattern was
+noticed. It now refuses by name and says why.
+
+**GATE: `src/data/videoNoteCaptions.test.ts`** — every note file must have a
+banked `data/video-transcripts/<id>.vtt.gz`. Shrink-only, baselined at the 47
+files that predate it (118 notes). The number may never grow, and each entry is
+re-groundable once its captions are banked.
+
+**Captions are NOT the video and are not the expensive half.** A VTT is ~500KB
+against a video's ~50MB, and it comes from a separate, far more permissive
+endpoint — measured 2026-08-17, a subtitle fetch returned 515KB on the same
+cookies that had just been refused three video downloads with HTTP 429. So a
+missing transcript is cheap to fix and there is no reason to write around it.
+
 ### 🔒🔒 THE FORK PIPELINE IS HOW A STRANDED NOTE IS RESCUED — RUN IT, DON'T IMPROVISE (locked 2026-08-19 after a session hand-rolled a lesser version of work that already existed)
 
 An off-line note is SILENT in Watch and Learn. The fix is to add the video's
