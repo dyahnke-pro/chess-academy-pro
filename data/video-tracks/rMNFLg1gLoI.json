@@ -1076,7 +1076,7 @@
    "id": "vn-accdragon-bishop-eyes-f7-and-the-hole",
    "line": "e4 c5 Nc3 Nc6 Nf3 g6 d4 cxd4 Nxd4 Bg7 Be3 Nf6 a3 O-O Bc4",
    "teaches": "A bishop aimed at f7 is doing two jobs whenever the defender has castled: it hits the pawn in front of the king, and it covers the square in the centre that the defender's pieces most want. Before you decide the bishop is only an attacking piece, look at what it holds behind the attack.",
-   "explains": "The bishop comes to c4 and stares at the pawn on f7, which is the only pawn near the king not defended by another pawn. From the same square it covers d5, so the freeing pawn break in the centre is contested before it is played. That double duty is why this square, rather than a more modest one, is the one to aim for. From here two tries come into consideration: grabbing the pawn on e4 with the knight, which looks free because the pawn appears loose and walks into the capture on f7, or the freeing pawn push that contests the centre while the bishop still has nothing to hit.",
+   "explains": "The bishop comes to c4 and stares at the pawn on f7, which is the only pawn near the king not defended by another pawn. From the same square it covers d5, so the freeing pawn break in the centre is contested before it is played. That double duty is why this square, rather than a more modest one, is the one to aim for. It also answers the tempting grab in the centre: the pawn there is defended once and attacked once, so taking it is not winning a pawn — it is a trade that banks on the pawn push which would fork the recapturing knight and this bishop, and the bishop on c4 is the piece that break has to get past.",
    "reasons": [
     {
      "kind": "attacks",

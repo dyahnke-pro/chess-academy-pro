@@ -2901,6 +2901,55 @@ engine-checked so it does not leave the student worse than ≈ −1.0 except as 
 honest gambit showcase. A fork is a normal variation once added; nothing about
 its origin exempts it.
 
+### 🔒🔒 SESSION LESSONS — 2026-08-19/20 (locked at David's request: *"add all that you have learned to md notes"*)
+
+**TOOL OUTPUT DOES NOT REACH DAVID. PASTE IT INTO THE REPLY.** He asked to see a
+note, I printed it with `node -e`, and he replied *"i cant see it."* Command
+output renders for the model, not reliably for him. Anything he asked to SEE —
+a note's prose, a measurement, a diff — goes in the message body as text.
+
+**"WE ARE THE COMPUTER, WE DON'T NEED TO GUESS" (David 2026-08-20).** He read
+*"the pawn appears loose"* in a note and asked: is it free, or does it look
+free? It was defended — one attacker, one defender — so the sentence was a hedge
+over a fact chess.js answers in a line. Hedging language is fine for what a move
+LOOKS like rhetorically ("looks natural, and here is why it is not") and for
+spatial verbs ("the bishop looks down at f7"); it is never acceptable over
+something computable. Compute it, then write it.
+
+**BEAT LENGTH IS TIME, NOT TOKENS.** Hand-written notes speak `explains` AND
+`teaches` whole, which is ~104 spoken words — about forty seconds of voice per
+move, since auto-advance is voice-promise gated. A trim to the first sentence of
+`teaches` gives ~72 words. David was shown the longest note in the corpus and
+chose full length knowingly (*"i dont care about long statements"*). Do not
+re-trim it as a "wordiness" fix; it is a decision, and the cost is a ~13-minute
+lesson instead of ~9.
+
+**BUMP `BASE_DATA_REVISION` WHENEVER `repertoire.json` CHANGES.** The base
+repertoire seeds on FIRST INSTALL ONLY. Four variations were added and would
+have existed in the file and appeared on no device that already had the app —
+including every current user. `dataLoader.ts`, next to `PRO_DATA_REVISION`.
+
+**A CRASH IS NOT A VERDICT.** `harvest-local.sh` recorded a build crash as
+NO-GAME and deleted the video; seven good lessons were retired that way, all
+fine on re-scan. Any pipeline that writes a verdict must distinguish the
+failure it understands (`build.mjs` prints "no usable game tracked") from a
+stack trace, and must never delete the input on the latter. Concurrent runs of
+the same harvester are now locked out — they delete each other's grids.
+
+**THE HANDOFF SCRIPT IS PART OF THE WORK.** Two download rounds produced nothing
+because of defects in the command I wrote, not in David's execution: `|| break`
+meant one oversized file killed the whole round, and a `--max-filesize` under
+the real file sizes rejected everything. Read a paste-back before assuming the
+other side went wrong, and prefer `|| echo SKIP` to `break` in anything he runs
+unattended.
+
+**GEMS FIRE INLINE BECAUSE THEIR `setupFen` IS DERIVED FROM THEIR OWN MOVES.**
+`findMatchingTraps` rejects a punish lesson whose `setupFen` is not the position
+its `setupMoves` produce — that filter exists for puzzle-derived punishes, whose
+FEN is an unrelated mid-game board. It is a computed discriminator, not a check
+on the record's shape, and it is what lets a gem fork out of a lesson and snap
+back. Measured after wiring: 105 of 376 taught lines now fire a gem.
+
 ### 🔒🔒 A NOTE IS WRITTEN FROM THE CAPTIONS — NO TRANSCRIPT, NO NOTE (David 2026-08-20: *"make sure to be getting the narrations from the captions"*, then *"recheck all of your work from this session to make sure you didnt miss any other captions"*)
 
 The board tells you what is TRUE at a position. The transcript tells you which

@@ -11,7 +11,6 @@
 // Where a hand-written note already speaks, that half is now simply absent.
 import { describe, it, expect } from 'vitest';
 import { spliceNarration } from './openingGenerator';
-import { spokenBeatText, ALL_NOTES } from './danyaTeachingService';
 
 const GENERATED = 'Nc3 develops toward the centre.';
 
