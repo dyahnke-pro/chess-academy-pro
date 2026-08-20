@@ -1815,6 +1815,15 @@ export function spokenBeatText(note: DanyaNote): string {
   // claim in it is chess.js-checked, so running that repair over it can only
   // damage it.
   if (note.origin === 'handwritten') {
+    // BOTH HALVES, WHOLE (David 2026-08-20, shown the longest beat: "i dont
+    // care about long statements"). An earlier trim spoke only the first
+    // sentence of `teaches` to hold the beat near its old length; he read the
+    // note it was written for and kept the full version.
+    //
+    // The cost is real and is time, not tokens: the median hand-written beat is
+    // 104 spoken words, roughly forty seconds of voice for one move, against 72
+    // words trimmed. Auto-advance is voice-promise gated, so a lesson moves at
+    // that pace by design.
     const idea = (note.teaches ?? '').trim();
     return idea ? `${explains} ${idea}` : explains;
   }

@@ -11,6 +11,7 @@
 // Where a hand-written note already speaks, that half is now simply absent.
 import { describe, it, expect } from 'vitest';
 import { spliceNarration } from './openingGenerator';
+import { spokenBeatText, ALL_NOTES } from './danyaTeachingService';
 
 const GENERATED = 'Nc3 develops toward the centre.';
 
@@ -81,14 +82,14 @@ describe('the origin flag on a real spliced note', () => {
 // Facts first, then the point — the house voice.
 describe('what a hand-written note says out loud', () => {
   it('speaks the board fact AND the idea', async () => {
-    const { spokenBeatText } = await import('./danyaTeachingService');
-    const { ALL_NOTES } = await import('./danyaTeachingService');
+    const { spokenBeatText, ALL_NOTES } = await import('./danyaTeachingService');
     const n = ALL_NOTES.find((x) => x.origin === 'handwritten' && x.lineSan?.length && x.teaches?.trim());
     expect(n, 'no hand-written note with an idea to speak').toBeTruthy();
     const said = spokenBeatText(n!);
     expect(said).toContain(n!.explains.trim());
     expect(said, 'the idea is left unspoken — the beat has nothing following it now').toContain(n!.teaches.trim());
   });
+
 
   it('leaves farmed notes on the pruned explains-only path', async () => {
     const { spokenBeatText, ALL_NOTES } = await import('./danyaTeachingService');
