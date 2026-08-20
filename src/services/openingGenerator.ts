@@ -1166,12 +1166,40 @@ export function repairNarrationArrows(tree: WalkthroughTree): number {
  *  those say what the corpus COULD offer, while this says what a lesson actually
  *  splices — the dedupe and the board-truth grade both drop plies, and a report
  *  that skips them overstates by a factor of three. */
+export interface SplicedNote {
+  text: string;
+  /** Hand-written notes SUPPRESS the generated prose on their ply; farmed ones
+   *  still lead it. See the splice site for why the two are treated apart. */
+  handwritten: boolean;
+}
+
+/** How a spliced note and the model's generated sentence combine on one ply.
+ *
+ *  HAND-WRITTEN REPLACES; FARMED LEADS (David 2026-08-19: "the narrations are
+ *  also good enough to turn off the computed narrations. so any lines that has
+ *  had written teachings should not play the computed narrations").
+ *
+ *  A hand-written note is written against the board with every claim checked by
+ *  chess.js, so a generated sentence after it is a second, weaker account of the
+ *  same move — and it is the half that reaches for the opening's NAME when it
+ *  has nothing computed to say, which is how a Caro-Kann lesson came to narrate
+ *  Queen's-Gambit ideas. A farmed note is a distillation of speech: thinner, and
+ *  not written to carry a ply on its own, so it still leads the generated prose
+ *  rather than replacing it.
+ *
+ *  Pulled out of the splice so the rule is one testable expression rather than a
+ *  branch inside a two-hundred-line assembly. */
+export function spliceNarration(teaching: SplicedNote, generated: string): string {
+  if (teaching.handwritten) return teaching.text;
+  return generated.trim() ? `${teaching.text} ${generated}` : teaching.text;
+}
+
 export function noteArrowSourceAt(
   historySans: string[],
   fen: string,
   seenIds: Set<string>,
   openingName?: string | null,
-): string | null {
+): SplicedNote | null {
   try {
     // POSITION ONLY — move-prefix or transposition into this very FEN. This is
     // the contract documented at the splice site below, and for three days the
@@ -1197,7 +1225,7 @@ export function noteArrowSourceAt(
     const graded = gradeNarrationText(spokenBeatText(note), fen, 'openingGenerator.noteArrows');
     if (!graded?.trim()) return null;
     seenIds.add(note.id);
-    return graded;
+    return { text: graded, handwritten: note.origin === 'handwritten' };
   } catch {
     return null; // the corpus is a bonus, never a blocker
   }
@@ -2148,7 +2176,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
           branchSeq[k].fen,
           branchNoteIds,
           entry.canonicalName,
-        ),
+        )?.text ?? null,
       );
     }
     // The branch's first move belongs to the side whose turn it is
@@ -2324,8 +2352,24 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       const prefix = positions.slice(0, i + 1).map((q) => q.san);
       const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName);
       if (teaching) {
-        plyNoteText[i] = teaching;
-        return generated ? `${teaching} ${generated}` : teaching;
+        plyNoteText[i] = teaching.text;
+        // A HAND-WRITTEN NOTE IS THE WHOLE NARRATION FOR ITS PLY (David
+        // 2026-08-19: "the narrations are also good enough to turn off the
+        // computed narrations. so any lines that has had written teachings
+        // should not play the computed narrations").
+        //
+        // These notes are written against the board with every claim checked by
+        // chess.js, so the generated sentence after them adds a second, weaker
+        // account of the same move — and it is the half that reaches for the
+        // opening's NAME when it has nothing computed to say, which is how a
+        // Caro-Kann lesson ended up narrating Queen's-Gambit ideas. Dropping it
+        // where a hand-written note already speaks removes that failure from
+        // every ply the hand-written corpus covers.
+        //
+        // A FARMED note still LEADS the generated prose rather than replacing
+        // it: those are distillations of speech, thinner and not written to
+        // carry a ply alone. Same treatment for the baked tier above.
+        return spliceNarration(teaching, generated);
       }
       // TIER 3 — THE HAND-WRITTEN PROSE, BEFORE ANYTHING COMPUTED.
       //

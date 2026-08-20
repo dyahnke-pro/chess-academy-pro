@@ -6326,9 +6326,10 @@ export function CoachTeachPage(): JSX.Element {
 
     // ── THE TAUGHT NOTE + its lead-the-eye arrows ──────────────────────────
     try {
-      const noteText = bakedLine
+      const spliced = bakedLine
         ? null
         : noteArrowSourceAt(history, args.fenAfterReply, teachNoteSeenIdsRef.current);
+      const noteText = spliced?.text ?? null;
       if (noteText) {
         factLines.push(`Coaching note taught at THIS position: ${noteText}`);
         noteLine = noteText;
@@ -7919,7 +7920,7 @@ export function CoachTeachPage(): JSX.Element {
                     // origins (opening-family / structure / concept) keep the
                     // provenance-labeled fact line, no arrows — they are not
                     // about this board.
-                    const noteText = noteArrowSourceAt(historyAfterReply, probe.fen(), teachNoteSeenIdsRef.current);
+                    const noteText = noteArrowSourceAt(historyAfterReply, probe.fen(), teachNoteSeenIdsRef.current)?.text ?? null;
                     if (noteText) {
                       facts.push(`Coaching note taught at THIS position: ${noteText}`);
                       // Voiced by the instant pass instead (which also
