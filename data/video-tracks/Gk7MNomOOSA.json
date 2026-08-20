@@ -366,5 +366,124 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-nimzo-trade-the-bishop-to-keep-the-pawn-off-e4",
+   "line": "d4 Nf6 c4 e6 Nc3 Bb4 Bd2 O-O a3 Bxc3",
+   "teaches": "Giving up the bishop pair is a price, not a mistake, when what you buy is a permanent say over one central square. The knight being traded is a defender of that square; once it is gone, the pawn advance the whole opening is built on becomes hard to arrange, and the doubled pawns left behind cannot help with it either.",
+   "explains": "The bishop takes on c3, removing the knight that was contesting the centre and leaving the recapture to damage the queenside pawns. The advance that would claim the middle now has one fewer supporter.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "b2"
+    },
+    {
+     "kind": "attacks",
+     "square": "d4"
+    }
+   ],
+   "fen": "rnbq1rk1/pppp1ppp/4pn2/8/2PP4/P1b5/1P1BPPPP/R2QKBNR w KQ - 0 6",
+   "t": 51,
+   "ply": 10,
+   "source": "yt:Gk7MNomOOSA"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Catalan Opening: Open Defense, Classical Line",
+   "eco": "E05",
+   "plies": 10,
+   "line": "d4 Nf6 c4 e6 g3 d5 Nf3 Be7 Bg2 dxc4",
+   "coverage": 0.036
+  },
+  {
+   "name": "Catalan Opening: Closed",
+   "eco": "E06",
+   "plies": 9,
+   "line": "d4 Nf6 c4 e6 g3 d5 Nf3 Be7 Bg2",
+   "coverage": 0.036
+  },
+  {
+   "name": "Queen's Gambit Declined: Ragozin Defense",
+   "eco": "D38",
+   "plies": 8,
+   "line": "d4 Nf6 c4 e6 Nf3 d5 Nc3 Bb4",
+   "coverage": 0.036
+  },
+  {
+   "name": "Queen's Gambit Declined: Three Knights Variation",
+   "eco": "D37",
+   "plies": 7,
+   "line": "d4 Nf6 c4 e6 Nf3 d5 Nc3",
+   "coverage": 0.036
+  },
+  {
+   "name": "Nimzo-Indian Defense: Romanishin Variation",
+   "eco": "E20",
+   "plies": 7,
+   "line": "d4 Nf6 c4 e6 g3 Bb4+ Nc3",
+   "coverage": 0.036
+  },
+  {
+   "name": "Nimzo-Indian Defense",
+   "eco": "E20",
+   "plies": 6,
+   "line": "d4 Nf6 c4 e6 Nc3 Bb4",
+   "coverage": 0.536
+  },
+  {
+   "name": "Bogo-Indian Defense",
+   "eco": "E11",
+   "plies": 6,
+   "line": "d4 Nf6 c4 e6 Nf3 Bb4+",
+   "coverage": 0.036
+  },
+  {
+   "name": "Queen's Indian Defense",
+   "eco": "E12",
+   "plies": 6,
+   "line": "d4 Nf6 c4 e6 Nf3 b6",
+   "coverage": 0.036
+  },
+  {
+   "name": "Indian Defense: Anti-Nimzo-Indian",
+   "eco": "E10",
+   "plies": 5,
+   "line": "d4 Nf6 c4 e6 Nf3",
+   "coverage": 0.179
+  },
+  {
+   "name": "Catalan Opening",
+   "eco": "E00",
+   "plies": 5,
+   "line": "d4 Nf6 c4 e6 g3",
+   "coverage": 0.179
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.964
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Nimzo-Indian Defense",
+  "confirmed": true
+ }
 }

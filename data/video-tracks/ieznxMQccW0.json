@@ -292,5 +292,57 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-scandi-qd8-answer-a-solid-system-with-plain-good-moves",
+   "line": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 c6 Nf3 Bg4 Bc4",
+   "teaches": "Against a system whose whole point is solidity, there is nothing clever to find — occupy the centre, develop toward their weakest point, and let the extra space do the arguing. A setup that retreats the queen all the way home has conceded time, and time is only collected by moves that do something.",
+   "explains": "The bishop takes the diagonal aiming straight at f7, the one square a retreated-queen setup has not reinforced, with the centre already occupied behind it. Every move so far has been a piece coming out to a square it wants.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f7"
+    }
+   ],
+   "fen": "rn1qkbnr/pp2pppp/2p5/8/2BP2b1/2N2N2/PPP2PPP/R1BQK2R b KQkq - 3 6",
+   "t": 744.5,
+   "ply": 11,
+   "source": "yt:ieznxMQccW0"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Scandinavian Defense: Valencian Variation",
+   "eco": "B01",
+   "plies": 6,
+   "line": "e4 d5 exd5 Qxd5 Nc3 Qd8",
+   "coverage": 0.81
+  },
+  {
+   "name": "Scandinavian Defense: Mieses-Kotroc Variation",
+   "eco": "B01",
+   "plies": 4,
+   "line": "e4 d5 exd5 Qxd5",
+   "coverage": 0.905
+  },
+  {
+   "name": "Scandinavian Defense",
+   "eco": "B01",
+   "plies": 2,
+   "line": "e4 d5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Scandinavian Defense",
+  "confirmed": true
+ }
 }

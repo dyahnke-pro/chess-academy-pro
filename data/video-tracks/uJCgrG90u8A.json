@@ -514,5 +514,81 @@
     }
    ]
   }
+ ],
+ "notes": [
+  {
+   "id": "vn-open-sicilian-a6-the-move-that-does-two-jobs-quietly",
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6",
+   "teaches": "The most-played quiet move in a whole family of openings usually earns its place twice over. Here it takes a check square away from a bishop AND prepares the pawn advance that claims the queenside — one is defensive, the other is the plan, and the move that does both is why it appears in system after system.",
+   "explains": "The pawn to a6 covers b5, so the bishop has no check there and no outpost either, and it prepares the pawn behind it to advance and take space. Nothing is threatened; both jobs are about the next ten moves.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "b5"
+    }
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "t": 116.5,
+   "ply": 10,
+   "source": "yt:uJCgrG90u8A"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Najdorf Variation",
+   "eco": "B90",
+   "plies": 10,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6",
+   "coverage": 0.745
+  },
+  {
+   "name": "Sicilian Defense: Dragon Variation",
+   "eco": "B70",
+   "plies": 10,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6",
+   "coverage": 0.021
+  },
+  {
+   "name": "Sicilian Defense: Scheveningen Variation",
+   "eco": "B80",
+   "plies": 10,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 e6",
+   "coverage": 0.021
+  },
+  {
+   "name": "Sicilian Defense: Kupreichik Variation",
+   "eco": "B56",
+   "plies": 10,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 Bd7",
+   "coverage": 0.043
+  },
+  {
+   "name": "Sicilian Defense: Modern Variations, Main Line",
+   "eco": "B54",
+   "plies": 8,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6",
+   "coverage": 0.872
+  },
+  {
+   "name": "Sicilian Defense: Modern Variations",
+   "eco": "B50",
+   "plies": 4,
+   "line": "e4 c5 Nf3 d6",
+   "coverage": 0.957
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
  ]
 }

@@ -391,5 +391,53 @@
     }
    ]
   }
+ ],
+ "notes": [
+  {
+   "id": "vn-jobava-pin-the-knight-that-makes-the-system-work",
+   "line": "d4 Nf6 Nc3 e6 Bf4 Bb4",
+   "teaches": "A system that develops the queen's knight before the c-pawn buys speed and pays for it with a pin. Against any such setup, the bishop that comes out to pin that knight is the most annoying move available — it ties the piece the whole scheme rests on, and it cannot be answered by the pawn move the system has already given up.",
+   "explains": "The bishop steps to b4 pinning the knight on c3 against the king behind it. The pawn move that would normally chase this bishop away is unavailable, because the knight is standing on the square it needs.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c3"
+    }
+   ],
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1b1P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 4",
+   "t": 1898,
+   "ply": 6,
+   "source": "yt:Ybg_2qbKXdA"
+  }
+ ],
+ "openings": [
+  {
+   "name": "French Defense: Classical Variation",
+   "eco": "C11",
+   "plies": 6,
+   "line": "d4 Nf6 Nc3 e6 e4 d5",
+   "coverage": 0.048
+  },
+  {
+   "name": "Queen's Pawn Game: Chigorin Variation",
+   "eco": "A45",
+   "plies": 4,
+   "line": "d4 Nf6 Nc3 d5",
+   "coverage": 0.048
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
  ]
 }

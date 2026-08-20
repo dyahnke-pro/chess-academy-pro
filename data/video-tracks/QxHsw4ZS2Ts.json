@@ -373,5 +373,71 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-slav-exchange-the-ugly-pawn-move-that-buys-the-centre",
+   "line": "d4 d5 c4 c6 cxd5 cxd5 Nc3 Nf6 f3",
+   "teaches": "A pawn move that develops nothing and blocks your own knight's best square is worth playing when it buys the one square the position turns on. In a symmetrical structure whoever gets the big central advance in first is better, and preparing it with a pawn is slow, ugly, and the only way to get there.",
+   "explains": "The pawn to f3 takes e4 in hand, which is the square the central advance needs. It breaks every rule about early development and it is the move that makes the advance possible at all.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e4"
+    }
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/3p4/3P4/2N2P2/PP2P1PP/R1BQKBNR b KQkq - 0 5",
+   "t": 151,
+   "ply": 9,
+   "source": "yt:QxHsw4ZS2Ts"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Slav Defense: Exchange Variation, Boor Attack",
+   "eco": "D10",
+   "plies": 9,
+   "line": "d4 d5 c4 c6 cxd5 cxd5 Nc3 Nf6 f3",
+   "coverage": 0.552
+  },
+  {
+   "name": "Queen's Gambit Declined: Marshall Defense, Tan Gambit",
+   "eco": "D06",
+   "plies": 6,
+   "line": "d4 d5 c4 c6 cxd5 Nf6",
+   "coverage": 0.207
+  },
+  {
+   "name": "Slav Defense: Exchange Variation",
+   "eco": "D10",
+   "plies": 5,
+   "line": "d4 d5 c4 c6 cxd5",
+   "coverage": 0.897
+  },
+  {
+   "name": "Slav Defense",
+   "eco": "D10",
+   "plies": 4,
+   "line": "d4 d5 c4 c6",
+   "coverage": 0.931
+  },
+  {
+   "name": "Queen's Gambit",
+   "eco": "D06",
+   "plies": 3,
+   "line": "d4 d5 c4",
+   "coverage": 0.966
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Slav Defense: Exchange Variation, Boor Attack",
+  "confirmed": true
+ }
 }

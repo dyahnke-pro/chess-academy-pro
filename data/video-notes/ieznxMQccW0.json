@@ -1,0 +1,14 @@
+[
+ {
+  "id": "vn-scandi-qd8-answer-a-solid-system-with-plain-good-moves",
+  "line": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 c6 Nf3 Bg4 Bc4",
+  "teaches": "Against a system whose whole point is solidity, there is nothing clever to find \u2014 occupy the centre, develop toward their weakest point, and let the extra space do the arguing. A setup that retreats the queen all the way home has conceded time, and time is only collected by moves that do something.",
+  "explains": "The bishop takes the diagonal aiming straight at f7, the one square a retreated-queen setup has not reinforced, with the centre already occupied behind it. Every move so far has been a piece coming out to a square it wants.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "f7"
+   }
+  ]
+ }
+]

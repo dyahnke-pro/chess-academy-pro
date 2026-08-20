@@ -702,5 +702,82 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-accel-fianchetto-the-bishop-is-aimed-at-a-square",
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Bc4",
+   "teaches": "A developing move can be aimed at a SQUARE rather than at a piece, and when it is, the square is the reason — not the diagonal it happens to open. Black's whole opening rests on one freeing break; the bishop is placed where it argues against that break before it is ever played. Ask what a developing move is DENYING, not only what it is doing.",
+   "explains": "From c4 the bishop looks down at d5, the square the central break needs, and the same diagonal reaches the pawn on f7. Both jobs come from one move, but only the first explains why this square is chosen over the quieter one behind it.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "d5"
+    },
+    {
+     "kind": "attacks",
+     "square": "f7"
+    }
+   ],
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/2BNP3/2N1B3/PPP2PPP/R2QK2R b KQkq - 5 7",
+   "t": 65.5,
+   "ply": 13,
+   "source": "yt:qhHtJcXkkfg"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Accelerated Dragon, Modern Bc4 Variation",
+   "eco": "B35",
+   "plies": 13,
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Bc4",
+   "coverage": 0.828
+  },
+  {
+   "name": "Sicilian Defense: Accelerated Dragon, Modern Variation",
+   "eco": "B34",
+   "plies": 9,
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3",
+   "coverage": 0.891
+  },
+  {
+   "name": "Sicilian Defense: Accelerated Dragon",
+   "eco": "B32",
+   "plies": 8,
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6",
+   "coverage": 0.906
+  },
+  {
+   "name": "Sicilian Defense: Open",
+   "eco": "B32",
+   "plies": 5,
+   "line": "e4 c5 Nf3 Nc6 d4",
+   "coverage": 0.953
+  },
+  {
+   "name": "Sicilian Defense: Old Sicilian",
+   "eco": "B30",
+   "plies": 4,
+   "line": "e4 c5 Nf3 Nc6",
+   "coverage": 0.969
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Accelerated Dragon",
+  "confirmed": true
+ }
 }

@@ -30,7 +30,7 @@
  {
   "id": "vn-budapest-declined-jump-in-when-the-defender-must-go-to-the-rim",
   "line": "d4 Nf6 c4 e5 d5 Bc5 Nc3 d6 e4 Ng4",
-  "teaches": "A knight leap that looks superficial is worth calculating when the ONLY defence forces a piece to the edge. You are not counting on the threat landing; you are counting on the answer being ugly. Provoking a defender onto a bad square is a real gain even when nothing is won by force.",
+  "teaches": "A knight leap that looks superficial is worth calculating when the only defence forces a piece to the edge. You are not counting on the threat landing; you are counting on the answer being ugly. Provoking a defender onto a bad square is a real gain even when nothing is won by force.",
   "explains": "The knight hops to g4 hitting the pawn on f2 alongside the bishop, and the only way to hold it puts the other knight on the rim. Once the knight has left the centre, the f-pawn behind it is free to advance.",
   "reasons": [
    {

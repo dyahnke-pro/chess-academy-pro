@@ -253,5 +253,93 @@
     }
    ]
   }
+ ],
+ "notes": [
+  {
+   "id": "vn-budapest-declined-take-the-square-the-advance-gave-up",
+   "line": "d4 Nf6 c4 e5 d5 Bc5",
+   "teaches": "A pawn that advances past a square can never guard it again. When the centre pawn steps forward, ask which square in front of it just became permanent property — then put a piece there. The developing move that occupies it is doing two jobs: it develops, and it collects the concession.",
+   "explains": "The pawn's advance means c5 can no longer be challenged by a pawn, so the bishop settles there and looks straight down the diagonal at f2. It is a home nobody can take away.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f2"
+    }
+   ],
+   "fen": "rnbqk2r/pppp1ppp/5n2/2bPp3/2P5/8/PP2PPPP/RNBQKBNR w KQkq - 1 4",
+   "t": 80.5,
+   "ply": 6,
+   "source": "yt:vB8yLBR5lHs"
+  },
+  {
+   "id": "vn-budapest-declined-anchor-the-piece-you-just-planted",
+   "line": "d4 Nf6 c4 e5 d5 Bc5 Nc3 d6",
+   "teaches": "A piece on a strong square still needs holding. The quiet pawn move that supports it costs one tempo and buys permanence — and it usually opens a line for the next piece at the same time, which is what makes it worth playing before anything more ambitious.",
+   "explains": "The pawn to d6 defends the bishop on c5 and props up the pawn on e5 behind it, and the other bishop's diagonal is opened in the same move.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "c5"
+    },
+    {
+     "kind": "defends",
+     "square": "e5"
+    }
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3p1n2/2bPp3/2P5/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+   "t": 99,
+   "ply": 8,
+   "source": "yt:vB8yLBR5lHs"
+  },
+  {
+   "id": "vn-budapest-declined-jump-in-when-the-defender-must-go-to-the-rim",
+   "line": "d4 Nf6 c4 e5 d5 Bc5 Nc3 d6 e4 Ng4",
+   "teaches": "A knight leap that looks superficial is worth calculating when the only defence forces a piece to the edge. You are not counting on the threat landing; you are counting on the answer being ugly. Provoking a defender onto a bad square is a real gain even when nothing is won by force.",
+   "explains": "The knight hops to g4 hitting the pawn on f2 alongside the bishop, and the only way to hold it puts the other knight on the rim. Once the knight has left the centre, the f-pawn behind it is free to advance.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f2"
+    },
+    {
+     "kind": "attacks",
+     "square": "h2"
+    }
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3p4/2bPp3/2P1P1n1/2N5/PP3PPP/R1BQKBNR w KQkq - 1 6",
+   "t": 159.5,
+   "ply": 10,
+   "source": "yt:vB8yLBR5lHs"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Indian Defense: Budapest Defense",
+   "eco": "A51",
+   "plies": 4,
+   "line": "d4 Nf6 c4 e5",
+   "coverage": 0.882
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.941
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
  ]
 }

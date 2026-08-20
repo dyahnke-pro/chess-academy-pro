@@ -451,5 +451,9 @@
     }
    ]
   }
- ]
+ ],
+ "titleCheck": {
+  "verdict": "mistracked",
+  "checkedBy": "hand 2026-08-19 — mistracked — titled a Benko; the track has a knight retreating to g1 on move five and most plies unanchorable. No notes written; re-track per section geometry or drop."
+ }
 }

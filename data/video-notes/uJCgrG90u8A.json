@@ -1,0 +1,14 @@
+[
+ {
+  "id": "vn-open-sicilian-a6-the-move-that-does-two-jobs-quietly",
+  "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6",
+  "teaches": "The most-played quiet move in a whole family of openings usually earns its place twice over. Here it takes a check square away from a bishop AND prepares the pawn advance that claims the queenside \u2014 one is defensive, the other is the plan, and the move that does both is why it appears in system after system.",
+  "explains": "The pawn to a6 covers b5, so the bishop has no check there and no outpost either, and it prepares the pawn behind it to advance and take space. Nothing is threatened; both jobs are about the next ten moves.",
+  "reasons": [
+   {
+    "kind": "controls",
+    "square": "b5"
+   }
+  ]
+ }
+]

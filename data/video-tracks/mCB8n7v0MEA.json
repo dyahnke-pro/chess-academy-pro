@@ -534,5 +534,77 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-grandprix-get-the-bishop-out-before-you-shut-it-in",
+   "line": "e4 c5 f4 d5 e5 Bf5",
+   "teaches": "When a closed centre is coming and you will need a pawn on e6, develop the light-squared bishop FIRST. That one move is the difference between an active piece and the bad bishop that defines every version of this structure — and it is available for exactly one move, before the pawn goes.",
+   "explains": "The bishop steps outside the chain to f5, hitting the pawn on c2 down the open diagonal. Once the e-pawn advances behind it, this bishop is already on the good side of everything.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c2"
+    }
+   ],
+   "fen": "rn1qkbnr/pp2pppp/8/2ppPb2/5P2/8/PPPP2PP/RNBQKBNR w KQkq - 1 4",
+   "t": 399.5,
+   "ply": 6,
+   "source": "yt:mCB8n7v0MEA"
+  },
+  {
+   "id": "vn-grandprix-prepare-to-recapture-with-a-piece",
+   "line": "e4 c5 f4 d5 e5 Bf5 Nf3 Nc6 Bb5 Qb6",
+   "teaches": "When a bishop is lining up to trade itself for your knight and wreck your pawns, the answer is not to move the knight — it is to arrange a recapture by a PIECE. The trade then still happens, and it costs you nothing: they have spent a bishop to develop your queen.",
+   "explains": "The queen steps to b6 defending the knight on c6, so the exchange on that square is answered by the queen rather than by a pawn. The structure stays whole and the queen is developed to an active square in the same move.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "c6"
+    },
+    {
+     "kind": "defends",
+     "square": "c5"
+    }
+   ],
+   "fen": "r3kbnr/pp2pppp/1qn5/1BppPb2/5P2/5N2/PPPP2PP/RNBQK2R w KQkq - 5 6",
+   "t": 455.5,
+   "ply": 10,
+   "source": "yt:mCB8n7v0MEA"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: McDonnell Attack, Tal Gambit",
+   "eco": "B21",
+   "plies": 6,
+   "line": "e4 c5 f4 d5 exd5 Nf6",
+   "coverage": 0.283
+  },
+  {
+   "name": "Sicilian Defense: McDonnell Attack",
+   "eco": "B21",
+   "plies": 3,
+   "line": "e4 c5 f4",
+   "coverage": 0.978
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: McDonnell Attack",
+  "confirmed": true
+ }
 }

@@ -453,5 +453,90 @@
     }
    ]
   }
+ ],
+ "notes": [
+  {
+   "id": "vn-austrian-d6-develop-against-the-trade-they-are-planning",
+   "line": "e4 d6 d4 c6 Nc3 g6 f4 Bg7 Nf3 Bg4 Be3",
+   "teaches": "When a bishop pins your knight, ask what the pin is FOR before you spend a move on it. If the plan behind it is to trade off the knight and leave a central pawn short of defenders, the answer is to add a defender to that pawn now — then the trade they were preparing simply happens and costs you nothing.",
+   "explains": "The bishop comes to e3 holding the pawn on d4 and the pawn on f4 at the same time. The trade on f3 is still available to them, and after it the centre is still propped up.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    },
+    {
+     "kind": "defends",
+     "square": "f4"
+    }
+   ],
+   "fen": "rn1qk1nr/pp2ppbp/2pp2p1/8/3PPPb1/2N1BN2/PPP3PP/R2QKB1R b KQkq - 4 6",
+   "t": 110.5,
+   "ply": 11,
+   "source": "yt:l65FZlRkWcM"
+  },
+  {
+   "id": "vn-austrian-d6-connect-the-defenders-before-they-grab",
+   "line": "e4 d6 d4 c6 Nc3 g6 f4 Bg7 Nf3 Bg4 Be3 Qb6 Qd2",
+   "teaches": "A queen sortie against your queenside is answered by finishing your own development, not by defending the pawn it is eyeing. Bring the queen to the square that links your centre and your minor pieces together, and the pawn-grab becomes a line you WANT them to enter — they spend two moves on a pawn while your rook arrives with tempo.",
+   "explains": "The queen settles on d2 holding the knight on c3, the pawn on d4 and the bishop on e3 all at once. Everything in the middle is now defended twice, and the king is ready to go long.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "c3"
+    },
+    {
+     "kind": "defends",
+     "square": "d4"
+    },
+    {
+     "kind": "defends",
+     "square": "e3"
+    }
+   ],
+   "fen": "rn2k1nr/pp2ppbp/1qpp2p1/8/3PPPb1/2N1BN2/PPPQ2PP/R3KB1R b KQkq - 6 7",
+   "t": 125,
+   "ply": 13,
+   "source": "yt:l65FZlRkWcM"
+  },
+  {
+   "id": "vn-austrian-d6-doubled-pawns-that-hold-the-centre",
+   "line": "e4 d6 d4 c6 Nc3 g6 f4 Bg7 Nf3 Bg4 Be3 Qb6 Qd2 Bxf3 gxf3",
+   "teaches": "Recapture toward the centre even when it doubles your pawns, if the doubled pawn is what holds your space. The structure looks damaged and the position is not: the pawn does a job, and the half-open file it leaves behind points at the wing the opponent is about to castle into.",
+   "explains": "Taking with the g-pawn doubles on the f-file, and the new pawn on f3 defends the pawn on e4 — so the big centre survives the trade intact. The file the pawn left is now open toward their kingside.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    }
+   ],
+   "fen": "rn2k1nr/pp2ppbp/1qpp2p1/8/3PPP2/2N1BP2/PPPQ3P/R3KB1R b KQkq - 0 8",
+   "t": 130.5,
+   "ply": 15,
+   "source": "yt:l65FZlRkWcM"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Rat Defense: Accelerated Gurgenidze",
+   "eco": "B06",
+   "plies": 6,
+   "line": "e4 d6 d4 c6 Nc3 g6",
+   "coverage": 0.8
+  },
+  {
+   "name": "Pirc Defense",
+   "eco": "B00",
+   "plies": 2,
+   "line": "e4 d6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
  ]
 }

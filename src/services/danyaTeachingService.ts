@@ -565,6 +565,16 @@ export function noteAtPosition(
   const preferReachable = (notes: DanyaNote[]): DanyaNote[] => {
     if (notes.length < 2) return notes;
     return [...notes].sort((a, b) => {
+      // HAND-WRITTEN BEATS FARMED AT THE SAME BOARD. The replacement doctrine
+      // says the new narrations replace the old, and a hand-written note losing
+      // a tie to a distilled one is that replacement failing silently — the note
+      // is in the corpus, indexed, board-true, and never spoken. Caught by
+      // `videoNotesSpeak` when a Slav note lost its own position to `dt-2n6`.
+      //
+      // It is a TIE-BREAK, not a filter: a farmed note still wins wherever no
+      // hand-written note is anchored, which is most of the board.
+      const written = (n: DanyaNote): number => (n.origin === 'handwritten' ? 1 : 0);
+      if (written(b) !== written(a)) return written(b) - written(a);
       const ok = (n: DanyaNote): number =>
         (!n.opening || openingReachesPosition(n.opening, historySans) ? 1 : 0);
       return ok(b) - ok(a);

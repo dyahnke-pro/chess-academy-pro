@@ -888,7 +888,7 @@
    "id": "vn-fourpawns-take-the-piece-that-was-hanging-first",
    "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 e6 Nf3 Be7 Be2 O-O O-O a5 d5 Nb4 Bxb6",
    "teaches": "When a piece jumps to an aggressive square, check what it LEFT before you answer where it went. A knight arriving with threats is only frightening if the piece it abandoned is still safe — and once the abandoned one is taken, the aggressive one has to justify itself alone.",
-   "explains": "The bishop takes the knight on b6, where it also bears down on the pawn on c7 behind it and on the pawn out on a5. The knight that hopped to the rim has won nothing yet, and it is now a piece behind.",
+   "explains": "The bishop now stands on b6, bearing down on the pawn on c7 behind it and on the pawn out on a5. The knight that hopped to the rim has won nothing yet, and it is now a piece behind.",
    "reasons": [
     {
      "kind": "attacks",

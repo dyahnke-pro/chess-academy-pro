@@ -258,5 +258,105 @@
    "fen": "r2q1rk1/1pp1n1pp/p1pb4/4p2b/2N1P3/2P2N1P/PP3PP1/R1BQ1RK1 w - - 2 12"
   }
  ],
- "forks": []
+ "forks": [],
+ "notes": [
+  {
+   "id": "vn-ruy-exchange-recapture-toward-the-open-file",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6",
+   "teaches": "When a capture can be answered by either pawn, the doubled pawn is not the deciding factor — the file is. Taking toward the centre opens a line for the queen and the rook behind it, and that open file is what makes the damaged structure playable. Structure is a means; activity is the end.",
+   "explains": "Taking with the d-pawn doubles the c-pawns and clears the d-file in front of the queen, with d5 and b5 both covered by the new pawn. The bishop pair is gone, and in return every piece has somewhere to go.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "d5"
+    },
+    {
+     "kind": "controls",
+     "square": "b5"
+    }
+   ],
+   "fen": "r1bqkbnr/1pp2ppp/p1p5/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+   "t": 163,
+   "ply": 8,
+   "source": "yt:KwbAHRLJ1RY"
+  },
+  {
+   "id": "vn-ruy-exchange-the-move-that-breaks-a-rule-and-works",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O f6",
+   "teaches": "\"Never block your own knight with the f-pawn\" is a good rule and it is a rule, not a law. It holds because the move usually costs development and weakens the king. Where the knight in question has already been traded off and the king has a safe square anyway, both reasons are gone — and the move that holds your centre for free is simply the best one.",
+   "explains": "The pawn to f6 defends the pawn on e5, which was the only thing hanging. The knight this move would normally block no longer exists, so nothing is being shut in.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e5"
+    }
+   ],
+   "fen": "r1bqkbnr/1pp3pp/p1p2p2/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 6",
+   "t": 266,
+   "ply": 10,
+   "source": "yt:KwbAHRLJ1RY"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Ruy Lopez: Exchange Variation, Gligoric Variation",
+   "eco": "C69",
+   "plies": 10,
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O f6",
+   "coverage": 0.619
+  },
+  {
+   "name": "Ruy Lopez: Exchange Variation, Normal Variation",
+   "eco": "C69",
+   "plies": 9,
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Bxc6 dxc6 O-O",
+   "coverage": 0.667
+  },
+  {
+   "name": "Ruy Lopez: Exchange Variation",
+   "eco": "C68",
+   "plies": 7,
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Bxc6",
+   "coverage": 0.762
+  },
+  {
+   "name": "Ruy Lopez: Morphy Defense",
+   "eco": "C70",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6",
+   "coverage": 0.81
+  },
+  {
+   "name": "Ruy Lopez",
+   "eco": "C60",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Bb5",
+   "coverage": 0.857
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.905
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.952
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Ruy Lopez",
+  "confirmed": true
+ }
 }

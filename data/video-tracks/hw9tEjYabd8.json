@@ -267,5 +267,64 @@
    "fen": "rnb1kbnr/pp3ppp/1q2p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5"
   }
  ],
- "forks": []
+ "forks": [],
+ "notes": [
+  {
+   "id": "vn-advance-e6-take-the-structure-without-paying-for-it",
+   "line": "e4 e6 d4 d5 e5 c5 Nf3 Qb6 Bd3 Nc6 dxc5",
+   "teaches": "When the opponent is about to capture in the centre anyway, consider capturing FIRST. The structure that results is the same one they were aiming for — except you reach it without conceding the pawn, and the capture lands with tempo if their queen is standing where the pawn arrives.",
+   "explains": "Taking on c5 reaches the structure the position was heading for, and the pawn now attacks the queen on b6, so the tempo comes back immediately. The gambit that this line usually concedes has simply not been paid.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "b6"
+    }
+   ],
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/2PpP3/8/3B1N2/PPP2PPP/RNBQK2R b KQkq - 0 6",
+   "t": 60,
+   "ply": 11,
+   "source": "yt:hw9tEjYabd8"
+  }
+ ],
+ "openings": [
+  {
+   "name": "French Defense: Advance Variation, Nimzowitsch System",
+   "eco": "C02",
+   "plies": 7,
+   "line": "e4 e6 d4 d5 e5 c5 Nf3",
+   "coverage": 0.857
+  },
+  {
+   "name": "French Defense: Advance Variation",
+   "eco": "C02",
+   "plies": 5,
+   "line": "e4 e6 d4 d5 e5",
+   "coverage": 0.929
+  },
+  {
+   "name": "French Defense: Normal Variation",
+   "eco": "C00",
+   "plies": 3,
+   "line": "e4 e6 d4",
+   "coverage": 0.964
+  },
+  {
+   "name": "French Defense",
+   "eco": "C00",
+   "plies": 2,
+   "line": "e4 e6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "French Defense: Advance Variation",
+  "confirmed": true
+ }
 }

@@ -335,5 +335,46 @@
     }
    ]
   }
+ ],
+ "notes": [
+  {
+   "id": "vn-symmetric-exchange-develop-the-side-you-intend-to-castle-into",
+   "line": "e4 Nf6 Nc3 d5 exd5 Nxd5 Nxd5 Qxd5 Nf3 Bg4",
+   "teaches": "Decide which way the king is going BEFORE choosing developing squares, then bring out the pieces on that wing first. Castling long is only fast if the queenside is already clear, and each of those developing moves should also ask a question — a bishop that pins on its way out buys the tempo that makes the plan work.",
+   "explains": "The bishop comes to g4 onto the knight on f3, which both develops toward the queenside plan and provokes a reply. The other queenside piece follows next move, and the king goes long behind them.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f3"
+    }
+   ],
+   "fen": "rn2kb1r/ppp1pppp/8/3q4/6b1/5N2/PPPP1PPP/R1BQKB1R w KQkq - 2 6",
+   "t": 102.5,
+   "ply": 10,
+   "source": "yt:9qWUk9eDpTg"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Alekhine Defense: Scandinavian Variation",
+   "eco": "B02",
+   "plies": 4,
+   "line": "e4 Nf6 Nc3 d5",
+   "coverage": 0.939
+  },
+  {
+   "name": "Alekhine Defense",
+   "eco": "B02",
+   "plies": 2,
+   "line": "e4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
  ]
 }
