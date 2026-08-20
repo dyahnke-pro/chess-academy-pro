@@ -1,0 +1,161 @@
+{
+ "videoId": "gG_NzjqbyYo",
+ "title": "Finding The Hippo Attack Annoying? TRY THIS!! | GM Naroditsky’s Top Theory Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 59.5,
+   "line": [
+    "e3",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 1 2",
+   "said": "how to play against it it's worth knowing how to play against it so my recommendation against 1d4 is going to be the grunfeld and the great thing about playing the grunfeld I'm actually going to make a move so that the game doesn't abort the great"
+  },
+  {
+   "ply": 3,
+   "t": 62,
+   "line": [
+    "d3"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/8/3PP3/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "recommendation against 1d4 is going to be the grunfeld and the great thing about playing the grunfeld I'm actually going to make a move so that the game doesn't abort the great thing about the grunfeld okay scratch everything that I'm about to say clearly our opponent is playing some sort of troll opening and E3 and D3 in and of itself is not that bad if white transitions into a hippo setup so the hippo setup is where yuffie and keto both of your Bishops and then put the knights on E2 and D2 but some players who really troll they go like C3 and B3 and A3 and it still is very valuable to know how to punish those setups because a lot of players they either get scared or they start stumbling on their own moves so in this game I'm gonna offer a sustainable way to punish uh whatever our opponent ends up playing so since our opponent has played D3 it no longer makes as much sense for us to stick with a grundfelder king's Indian setup right we need to play in slightly more principled fashion since our opponent is giving us an opportunity to grab the center that's precisely what we are going to do so"
+  },
+  {
+   "ply": 4,
+   "t": 125.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/8/3PP3/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "king's Indian setup right we need to play in slightly more principled fashion since our opponent is giving us an opportunity to grab the center that's precisely what we are going to do so let's transition to more principal chess and play the move E5 and obviously our next move is going to"
+  },
+  {
+   "ply": 5,
+   "t": 133,
+   "line": [
+    "a3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/8/P2PP3/1PP2PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "opportunity to grab the center that's precisely what we are going to do so let's transition to more principal chess and play the move E5 and obviously our next move is going to be D5 and our opponent continues to play in a rather dubious fashion let's grab more of the center with D5 I've had my"
+  },
+  {
+   "ply": 6,
+   "t": 141,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/P2PP3/1PP2PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "and obviously our next move is going to be D5 and our opponent continues to play in a rather dubious fashion let's grab more of the center with D5 I've had my fair share of Hippo games in previous speed runs you can kind of look around"
+  },
+  {
+   "ply": 7,
+   "t": 146.5,
+   "line": [
+    "h3"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/P2PP2P/1PP2PP1/RNBQKBNR b KQkq - 0 4",
+   "said": "in a rather dubious fashion let's grab more of the center with D5 I've had my fair share of Hippo games in previous speed runs you can kind of look around to find to find a few of them and I've tried to be consistent in terms of the setup that I offer against these incredibly off-beat openings one element of the setup that I prefer is to refrain from putting the other Knight on C6 I actually really like a setup where we play the move Pawn to C6 creating a little very solid Pawn chain and then the Knight on B8 can maneuver itself to the king side it kind of Rue Lopez style via D7 and f8 to G6 and we have all the time in the world to improve the position of our pieces because white is playing so unambitiously that we don't need to like hurry and rush to complete our development so let's start with a move that solidifies our Center and takes the sting out of the move Knight F3 what move am I thinking about here and this move goes really really well it complements the move C6 well if you're a London player you should be familiar with this type of setup where you put the bishop on D6 or in the London you"
+  },
+  {
+   "ply": 8,
+   "t": 205.5,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3pp3/8/P2PP2P/1PP2PP1/RNBQKBNR w KQkq - 1 5",
+   "said": "F3 what move am I thinking about here and this move goes really really well it complements the move C6 well if you're a London player you should be familiar with this type of setup where you put the bishop on D6 or in the London you put your Bishop on D3 and then you form"
+  },
+  {
+   "ply": 9,
+   "t": 209,
+   "line": [
+    "b3"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3pp3/8/PP1PP2P/2P2PP1/RNBQKBNR b KQkq - 0 5",
+   "said": "complements the move C6 well if you're a London player you should be familiar with this type of setup where you put the bishop on D6 or in the London you put your Bishop on D3 and then you form the pawn triangle with C3 and here we're doing much the same thing we're defending the E5 Pawn with our Bishop and we're defending the D5 Fawn with our pawn and then we get a super compact nicely positioned Center okay so we can Castle kingside we can play C6 the order of operations here is very unessential right it doesn't matter because white is not challenging our Center so I think that our best bet well we're going to start by castling I don't see a reason not to Castle kingside we're definitely not going to Castle queenside in this type of position that is uh way too adventurous we don't need to ReDiscover the wheel here so we're gonna Castle kingside"
+  },
+  {
+   "ply": 10,
+   "t": 251.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp2ppp/3b1n2/3pp3/8/PP1PP2P/2P2PP1/RNBQKBNR w KQ - 1 6",
+   "said": "reason not to Castle kingside we're definitely not going to Castle queenside in this type of position that is uh way too adventurous we don't need to ReDiscover the wheel here so we're gonna Castle kingside and presumably our opponent is going to play Bishop B2 white is playing some sort of a hippo setup but in the hippo you normally aren't advised to play the move H3 right because if White NOW plays G3 then White's created an additional Target on the king Side by playing H3 so this really is not a Savory setup At All by white but before we get to the Crux of the game when we enter the middle game it's important to temper your expectations when you're playing against these types of setups I can't tell you how many games I've seen between beginners or Club players where one side employs a very offbeat setup that you know is bad and the other side just goes directly for the throat and ends up losing the game because that kind of play backfires it's not like white is doing anything to lose the game and we need to refrain from the temptation to"
+  },
+  {
+   "ply": 11,
+   "t": 305,
+   "line": [
+    "g3"
+   ],
+   "fen": "rnbq1rk1/ppp2ppp/3b1n2/3pp3/8/PP1PP1PP/2P2P2/RNBQKBNR b KQ - 0 6",
+   "said": "know is bad and the other side just goes directly for the throat and ends up losing the game because that kind of play backfires it's not like white is doing anything to lose the game and we need to refrain from the temptation to go directly for White's throat we need to play this very patiently we need to get all our pieces out and we need to understand that breaking down these types of setups takes time and it's impossible to do it in the opening okay so white plays G3 now we're going to continue with our setup and play the move C6"
+  },
+  {
+   "ply": 12,
+   "t": 324,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp3/8/PP1PP1PP/2P2P2/RNBQKBNR w KQ - 0 7",
+   "said": "types of setups takes time and it's impossible to do it in the opening okay so white plays G3 now we're going to continue with our setup and play the move C6 now if we want to exert some pressure on the queen side there is a very kind of typical idea that we can employ at some point not necessarily immediately we also could have played that move here"
+  },
+  {
+   "ply": 13,
+   "t": 335,
+   "line": [
+    "Bb2"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp3/8/PP1PP1PP/1BP2P2/RN1QKBNR b KQ - 1 7",
+   "said": "and play the move C6 now if we want to exert some pressure on the queen side there is a very kind of typical idea that we can employ at some point not necessarily immediately we also could have played that move here and what I'm talking about is the idea of advancing the pawn down A4 and poking and prodding at the queen side now of course if we bring our Pawn down to A4 white is going to respond by playing B4 but in that case the typical follow-up is to chip away at White's Queen Side by pushing the pawn to C5 and again because the center is closed we have to realize that moving the same piece twice moving the same Pawn twice is not something that you should rule out right because there's no hurry here okay so how do we proceed so I think a lot of people would be tempted to develop this bishop to E6 or to F5 but we're actually going to leave this bishop on C8 for the time being the reason I don't like Bishop F5 is because you're walking right into G4 kingside expansion or you're walking into a potential E3 E4 Bishop E6 is a better move but I don't really see the reason for us developing it and another specific thing I don't like about Bishop E6 is that after Knight F3 Knight B to D7 white has the rather annoying move Knight G5 and we certainly don't want to give our light squared Bishop away why don't we want to give our light squared Bishop way because if you think about the middle game white is very likely to Castle kingside and one of our typical plans is going to be to put pressure on the H3 Pawn so don't be afraid to leave one of your pieces on its initial Square how should we proceed I think we should continue developing with Knight B to D7 and then"
+  },
+  {
+   "ply": 14,
+   "t": 423,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r1bq1rk1/pp1n1ppp/2pb1n2/3pp3/8/PP1PP1PP/1BP2P2/RN1QKBNR w KQ - 2 8",
+   "said": "plans is going to be to put pressure on the H3 Pawn so don't be afraid to leave one of your pieces on its initial Square how should we proceed I think we should continue developing with Knight B to D7 and then we are going to reposition the Knight to G6 by playing rookie 8 which is a good"
+  },
+  {
+   "ply": 15,
+   "t": 429.5,
+   "line": [
+    "Bg2"
+   ],
+   "fen": "r1bq1rk1/pp1n1ppp/2pb1n2/3pp3/8/PP1PP1PP/1BP2PB1/RN1QK1NR b KQ - 3 8",
+   "said": "pieces on its initial Square how should we proceed I think we should continue developing with Knight B to D7 and then we are going to reposition the Knight to G6 by playing rookie 8 which is a good move in and of itself right this move is"
+  },
+  {
+   "ply": 16,
+   "t": 432,
+   "line": [
+    "Re8"
+   ],
+   "fen": "r1bqr1k1/pp1n1ppp/2pb1n2/3pp3/8/PP1PP1PP/1BP2PB1/RN1QK1NR w KQ - 4 9",
+   "said": "we proceed I think we should continue developing with Knight B to D7 and then we are going to reposition the Knight to G6 by playing rookie 8 which is a good move in and of itself right this move is not going to hurt we're reinforcing the E5 Pawn this is called over protection"
+  },
+  {
+   "ply": 17,
+   "t": 436,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "r1bqr1k1/pp1n1ppp/2pb1n2/3pp3/8/PP1PP1PP/1BPN1PB1/R2QK1NR b KQ - 5 9",
+   "said": "we are going to reposition the Knight to G6 by playing rookie 8 which is a good move in and of itself right this move is not going to hurt we're reinforcing the E5 Pawn this is called over protection and now we are going to guide our Knight over to f8 and then toward G6"
+  },
+  {
+   "ply": 18,
+   "t": 441,
+   "line": [
+    "Nf8"
+   ],
+   "fen": "r1bqrnk1/pp3ppp/2pb1n2/3pp3/8/PP1PP1PP/1BPN1PB1/R2QK1NR w KQ - 6 10",
+   "said": "move in and of itself right this move is not going to hurt we're reinforcing the E5 Pawn this is called over protection and now we are going to guide our Knight over to f8 and then toward G6 okay Queen E2 but that changes a lot I was obviously expecting white to play Knight E2 what queen E2 signals to me is that our opponent is flirting with the idea of Castle in queenside and that is a a suicidal plan but it's not immediately obvious that castle and queen side is losing here right and if white does Castle Queen side we the Checkmate is not going to play itself we need to position ourselves in such a way that if White Castle's Queen side on the next move we are going to be ready to jump right into the attack and I've already pointed out the main attacking method on the queen side which is especially good if there is a king on that side of the board what am I talking about what should we play we're gonna play a move that basically tells our opponent don't you dare Castle queenside don't shoot dare Castle queenside because I'm gonna be ready to make mincemeat out of you A5 very good and if our opponent goes Queen side if"
+  }
+ ],
+ "forks": []
+}

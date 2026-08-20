@@ -1,0 +1,214 @@
+{
+ "videoId": "D7sbbap9lIc",
+ "title": "Four Knights Game: Scotch Variation | The Sensei Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 20,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "ladies and gentlemen let's uh let's go i'm ready okay mr vladigama and we go with e4 p45 we have decided as and we haven't faced e45 that many times"
+  },
+  {
+   "ply": 3,
+   "t": 24,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "i'm ready okay mr vladigama and we go with e4 p45 we have decided as and we haven't faced e45 that many times but if you guys remember"
+  },
+  {
+   "ply": 4,
+   "t": 26.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "okay mr vladigama and we go with e4 p45 we have decided as and we haven't faced e45 that many times but if you guys remember we made the decision to play the four night scotch which i advocate as a really good opening for"
+  },
+  {
+   "ply": 5,
+   "t": 32.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "we have decided as and we haven't faced e45 that many times but if you guys remember we made the decision to play the four night scotch which i advocate as a really good opening for beginners and intermediate players"
+  },
+  {
+   "ply": 6,
+   "t": 34.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "said": "and we haven't faced e45 that many times but if you guys remember we made the decision to play the four night scotch which i advocate as a really good opening for beginners and intermediate players because it enables you to bring all of your pieces out and it really enforces uh the ability to play with with all of your pieces it's not a gimmicky opening it's it's an opening based on very sound principles you open the center and you develop quickly and the four night"
+  },
+  {
+   "ply": 7,
+   "t": 49.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "said": "your pieces out and it really enforces uh the ability to play with with all of your pieces it's not a gimmicky opening it's it's an opening based on very sound principles you open the center and you develop quickly and the four night scotch is the move d4 in this position and it's also a pretty dangerous opening if black is not accurate he takes d4 a"
+  },
+  {
+   "ply": 9,
+   "t": 56,
+   "line": [
+    "exd4",
+    "Nxd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "said": "it's it's an opening based on very sound principles you open the center and you develop quickly and the four night scotch is the move d4 in this position and it's also a pretty dangerous opening if black is not accurate he takes d4 a lot of people okay so bishop c5"
+  },
+  {
+   "ply": 10,
+   "t": 58.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b5/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "said": "principles you open the center and you develop quickly and the four night scotch is the move d4 in this position and it's also a pretty dangerous opening if black is not accurate he takes d4 a lot of people okay so bishop c5 okay bishop c5 uh is one of the multiple possibilities in the four night scotch now white's got a couple of moves here a couple of possible moves one of them is to drop the knight back to b3 but the most principled move is to defend this knight with bishop e3 this also poses an immediate threat"
+  },
+  {
+   "ply": 11,
+   "t": 77.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b5/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 2 6",
+   "said": "four night scotch now white's got a couple of moves here a couple of possible moves one of them is to drop the knight back to b3 but the most principled move is to defend this knight with bishop e3 this also poses an immediate threat we threaten to capture the knight on c6 and win the bishop on c5 because the queen is going to be hanging okay and"
+  },
+  {
+   "ply": 12,
+   "t": 84.5,
+   "line": [
+    "Bxd4"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/8/3bP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 0 7",
+   "said": "most principled move is to defend this knight with bishop e3 this also poses an immediate threat we threaten to capture the knight on c6 and win the bishop on c5 because the queen is going to be hanging okay and this is already an inaccuracy black is just conceding the tension in the center giving us the two bishops"
+  },
+  {
+   "ply": 13,
+   "t": 91,
+   "line": [
+    "Bxd4"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/8/3BP3/2N5/PPP2PPP/R2QKB1R b KQkq - 0 7",
+   "said": "we threaten to capture the knight on c6 and win the bishop on c5 because the queen is going to be hanging okay and this is already an inaccuracy black is just conceding the tension in the center giving us the two bishops"
+  },
+  {
+   "ply": 14,
+   "t": 92.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/2n2n2/8/3BP3/2N5/PPP2PPP/R2QKB1R w KQ - 1 8",
+   "said": "and win the bishop on c5 because the queen is going to be hanging okay and this is already an inaccuracy black is just conceding the tension in the center giving us the two bishops and uh giving us you know a bigger share of the center castles now how should we proceed in this position what's our priority well first of all it's quite clear that we need to complete our development we need to do so pretty fast but the thing is i want to also preserve our two bishops right so we want to complete our development but an even bigger priority right now is to keep the two bishop advantage it's an open board we want the two bishops right now bishop c5 might come to mind but that just walks into d6 that that helps black so we retreat bishop b3"
+  },
+  {
+   "ply": 15,
+   "t": 130.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/2n2n2/8/4P3/2N1B3/PPP2PPP/R2QKB1R b KQ - 2 8",
+   "said": "is to keep the two bishop advantage it's an open board we want the two bishops right now bishop c5 might come to mind but that just walks into d6 that that helps black so we retreat bishop b3 i'm anticipating rookie 8 and after rookie 8 we'll need to find a way to"
+  },
+  {
+   "ply": 16,
+   "t": 137,
+   "line": [
+    "h6"
+   ],
+   "fen": "r1bq1rk1/pppp1pp1/2n2n1p/8/4P3/2N1B3/PPP2PPP/R2QKB1R w KQ - 0 9",
+   "said": "that just walks into d6 that that helps black so we retreat bishop b3 i'm anticipating rookie 8 and after rookie 8 we'll need to find a way to okay not ricky at h6 that kind of lets us off the hook now this is a good situation to practice deciding where to castle it's important to have that intuition so for example i look at this position and within a couple seconds i have a very good sense of where i want to castle i want to castle queenside because the moment h6 is played that's already a hook in my mind i'm seeing the potential of going g4 g5 and exploiting the hook we also have the two bishops we have a bigger share of the center all of those things is going to make a situation with opposite side castling a lot more fun for us than for our opponent because we just have better attacking and defensive capabilities so we can start with queen d2 or we can start with f3 but definitely queen d2"
+  },
+  {
+   "ply": 17,
+   "t": 181,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r1bq1rk1/pppp1pp1/2n2n1p/8/4P3/2N1B3/PPPQ1PPP/R3KB1R b KQ - 1 9",
+   "said": "castling a lot more fun for us than for our opponent because we just have better attacking and defensive capabilities so we can start with queen d2 or we can start with f3 but definitely queen d2 is i think the most flexible way to begin king h7"
+  },
+  {
+   "ply": 18,
+   "t": 184.5,
+   "line": [
+    "Kh7"
+   ],
+   "fen": "r1bq1r2/pppp1ppk/2n2n1p/8/4P3/2N1B3/PPPQ1PPP/R3KB1R w KQ - 2 10",
+   "said": "have better attacking and defensive capabilities so we can start with queen d2 or we can start with f3 but definitely queen d2 is i think the most flexible way to begin king h7 and we can't play f3 we're not worried about knight g4 because of the simple bishop f4 and then we chase the knight away from g4 so we can castle"
+  },
+  {
+   "ply": 19,
+   "t": 194,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "r1bq1r2/pppp1ppk/2n2n1p/8/4P3/2N1B3/PPPQ1PPP/2KR1B1R b - - 3 10",
+   "said": "is i think the most flexible way to begin king h7 and we can't play f3 we're not worried about knight g4 because of the simple bishop f4 and then we chase the knight away from g4 so we can castle but the move f3 isn't only played to"
+  },
+  {
+   "ply": 20,
+   "t": 197.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bq1r2/ppp2ppk/2np1n1p/8/4P3/2N1B3/PPPQ1PPP/2KR1B1R w - - 0 11",
+   "said": "and we can't play f3 we're not worried about knight g4 because of the simple bishop f4 and then we chase the knight away from g4 so we can castle but the move f3 isn't only played to stop knight g4 it's also played in order to reinforce the e4 pawn and to prepare g4 a lot of you might might wonder what the difference is between h3 and f3 and that's exactly the difference h3 doesn't support the e4 pawn uh so f3 is kind of automatic you know"
+  },
+  {
+   "ply": 21,
+   "t": 215,
+   "line": [
+    "f3"
+   ],
+   "fen": "r1bq1r2/ppp2ppk/2np1n1p/8/4P3/2N1BP2/PPPQ2PP/2KR1B1R b - - 0 11",
+   "said": "a lot of you might might wonder what the difference is between h3 and f3 and that's exactly the difference h3 doesn't support the e4 pawn uh so f3 is kind of automatic you know in in the sicilian this is called the english attack setup where you go f3 g4"
+  },
+  {
+   "ply": 22,
+   "t": 220,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2q1r2/ppp2ppk/2npbn1p/8/4P3/2N1BP2/PPPQ2PP/2KR1B1R w - - 1 12",
+   "said": "and that's exactly the difference h3 doesn't support the e4 pawn uh so f3 is kind of automatic you know in in the sicilian this is called the english attack setup where you go f3 g4 and potentially h4 now we can also consider if we if we're putting on our russian school of chess hats what move could we consider throwing in just as a an improving move that you often see in these positions we're not going to do it right now because it's unnecessary yeah so king b1 is a good idea in in many of these positions and there's nothing wrong with it inherently it's just that black has so little going for him on the queen side that i i feel more inclined to just"
+  },
+  {
+   "ply": 23,
+   "t": 245.5,
+   "line": [
+    "g4"
+   ],
+   "fen": "r2q1r2/ppp2ppk/2npbn1p/8/4P1P1/2N1BP2/PPPQ3P/2KR1B1R b - - 0 12",
+   "said": "right now because it's unnecessary yeah so king b1 is a good idea in in many of these positions and there's nothing wrong with it inherently it's just that black has so little going for him on the queen side that i i feel more inclined to just start the attack let's go g4 95 that's a good move"
+  },
+  {
+   "ply": 24,
+   "t": 249.5,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "r2q1r2/ppp2ppk/3pbn1p/4n3/4P1P1/2N1BP2/PPPQ3P/2KR1B1R w - - 1 13",
+   "said": "in in many of these positions and there's nothing wrong with it inherently it's just that black has so little going for him on the queen side that i i feel more inclined to just start the attack let's go g4 95 that's a good move that's a that's a very very good move now this is where we have to be a little bit creative when you're attacking you have to think outside the box rather than just making straightforward moves you know that uh that often lead to squandering the attack so here's how i'm thinking about this well we want to defend the panel we don't want to give up f3 if we give up f3 our entire pawn structure collapses on the king side okay so we can defend f3 in several different ways but we want to find a way to defend that pawn while also contributing to the attack in some way and if i phrase it that way then you might come up with the move queen g2 that's an excellent move i think because once we play g5 notice how the queen is going to be nicely positioned on the g file where it can partner up with the rook and exert tremendous pressure on g7 does that make sense so here we violate the rule which says you should do stuff with the least value piece because we want the queen here anyway and and now g5 is going to come with tremendous effect he can take on f3 that's possible knight f3 queen f3 bishop g4 is possible but in the ensuing position we're going to have two pieces for a rook and as i'll explain after the game the two pieces prevail in this case all right knight g8 very passive so we can play g5 as planned but after g5 he might meet that with h5 so here i think it's it's worthwhile to be very patient and to complete our development with bishop e2 now what move does bishop b2 also prepare what are we preparing with the move bishop b2 and i'm going to play the move in the interest of time we're preparing f4 absolutely notice that i'm not just you know closing my eyes and playing g5 when we first can because he's played this so passively we can afford all of the niceties of the position we can improve our position to the maximum before really stepping on the gas pedal so to speak but we will step on the gospels just a question of being patient queen f6 and i think it's time to step on the step on the gas pedal we can do that in a couple of different ways now g5 makes a lot more sense because it hits the queen absolutely we should start with g5 and we can follow up with the move f4 but i'm anticipating hg in which case we're going to play bishop takes and there will be hell to pay queen g6 well that's no good because now notice that these are unforkable spots so f4 is very likely to win at the very least a piece but possibly even the queen okay so i think a lot of people here would be tempted to take on c4 and this is where you know you really have to demonstrate um attention to detail the first instinct the first question you always ask yourself should be can i play f5 anyway and that's what i call the sam shanklin question because sam is a big fan of teaching students to do this right why did we play f4 we played it to play f5 and rather than automatically getting scared of a threat we ask ourselves can we play the move anyway well what happens if he takes the bishop and attacks our queen that seems scary well it's not because once we take his queen that's actually going to be check and that's the key detail f5 wins the game it actually wins the queen the hilarious thing is the queen is trapped and if bishop takes f5 we play e takes f5 and then if queen takes f5 we can certainly take the knight and be two pieces up but what else can we do what else do you guys see in that position yeah you look at the alignment of the queen and the king and you see the move bishop d3 which skewers uh sorry pins the queen to the king so the game is over now the best thing that black can do here is actually to take on e3 and then after fg to play f takes g6 and and take the rook but that's just a queen for a rook in a middle game which is completely winning this was an easy game i mean our opponents just played this too passively but this is what i'm talking about you know the fortnite scotch really allows you in many cases to practice a basic attacking techniques which is incredibly valuable uh in terms of building a solid foundation i mean nothing i did here was remotely uh obscure perhaps with the exception of queen g2 okay now not bishop takes c4 automatically but bishop d3 winning the queen but queen g2 is a very findable move i think you would agree with me if you know how to think about those positions queen g2 should occur to you pretty naturally okay now what should we take with we can actually take with a pawn that's the funny thing and after knight takes e3 we can play queen e4 check let's do that knight takes c3 we can play queenie for check picking off the knight again notice how i'm just not making automatic moves i'm questioning everything rather than assuming that i can't take with a certain piece i'm asking myself what happens if i do and that's how you really you know start to notice tactical detail you notice how much there is hiding under behind the scenes in a lot of these positions rookie five well we're a full queen up i'm not even gonna comment here let's play rook hg1 activate the rook and then try to mate him down the g file the other rook can come to f1 the knight can come to e4 whoops all right mouse slipped i guess he uh shouldn't give up i'm not slipped rookie one well fortunately it's not the end of the world lol that's hilarious but now let's not now slip further or else i'll give up the queen and lose that is funny i guess it pays off for him all right well we're back to uh converting the position let's play g takes h6 okay but but in all seriousness what should we do here in all seriousness what should we do now okay i'm now i'm worried i'm gonna play queen e6 by accident yeah quincy h track of course and then we just start vacuuming up all the pawns doesn't even matter which ones we take first just take all of them take this one take this one defending h2 simultaneously go back to c7 and start taking more of them okay and where should the knight go let's let's uh let's get this done at some point you know you just gotta go for his throat yeah knight d6 now of course this gives up h2 but after king c3 it's not hard to establish that uh the f7 pawn is indefensible if he moves it then we have knight f7 check winning the rook so at some point you just got to stop caring about pawns and just go for it you know just just go for the win takes okay night g5 check makes the most sense to me just getting the king out all right this is this has been this is dragged on for way too long well what should we do now what's the nicest way to convert this well queen g3 doesn't actually really do anything you know the move that i would play i'm gonna play a classy move play queen d8 the point is that this totally paralyzes him the knight can't move and the queen also protects the knight on g5 and i think in such positions people forget to use their pawns i i've seen this so many times when people convert these big material advantages they forget to use their past spots just push the passer the simplest technique simplest winning technique in many such positions is just to make more queens rather than to use the existing one just don't forget about that we can close our eyes and push the queen defense tonight that's why we put it there no but i'm serious that's that's an important idea i think i i've seen this with students you know they'll be up a queen for for let's say a rook and they'll have the possibility of just taking a bunch of puns and then making more queens don't be don't be afraid to do that now what's the fastest mate going to be who sees who sees a nice cute little mate queen takes g8 and then d8 equals queen very good boom and we can even make a rook if we want it but i think i might have auto queen on yeah definitely definitely make a rook when you can when it's mate"
+  },
+  {
+   "ply": 5,
+   "t": 799.5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "boom and we can even make a rook if we want it but i think i might have auto queen on yeah definitely definitely make a rook when you can when it's mate so bishop e3 now does anybody know what the main move is for black hair and this is a classic example of the need to keep tension a lot of 14 1500s kind of resort to releasing the tension by taking but you know that the bishop on c5 is hanging no d5 is wrong guys i mentioned this during the game d5 blunders a piece you've got to identify undefended pieces when there's an undefended pieces piece that's being x-rayed you have to be particularly you have to be particularly attentive to that the move is bishop b6 move is bishop b6 that's the main move getting the bishop onto a defendant square no d6 is bad this was played against me once if black plays d6 you can still do this and then black has look at this i had a game like this actually believe it or not when i was like 1300. yeah g6 is d6 is not the way okay so bishop d4 and bishop d4"
+  }
+ ],
+ "forks": []
+}

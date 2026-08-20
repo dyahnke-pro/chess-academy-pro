@@ -1,0 +1,269 @@
+{
+ "videoId": "vB8yLBR5lHs",
+ "title": "Budapest Gambit | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 15.5,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "1681 with black all right d4 let's see what we can do let's go knight f6 i'm feeling adventurous"
+  },
+  {
+   "ply": 3,
+   "t": 19,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "1681 with black all right d4 let's see what we can do let's go knight f6 i'm feeling adventurous i'm in a celebratory mood so let's play another budapest gambit shall we"
+  },
+  {
+   "ply": 4,
+   "t": 26,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "let's see what we can do let's go knight f6 i'm feeling adventurous i'm in a celebratory mood so let's play another budapest gambit shall we now we played this a little earlier and our opponent didn't take on e5 let's hope that they do here this is an opening that's not talked about very often anymore pretty underrated actually i think if and as i've said when you're 1700 i would already recommend having your main opening and then a sideline that's not like flat out bad but could be dubious but one that you know pretty well that you can throw out for fun and again"
+  },
+  {
+   "ply": 5,
+   "t": 53.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/3Pp3/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "said": "your main opening and then a sideline that's not like flat out bad but could be dubious but one that you know pretty well that you can throw out for fun and again you can see that people in this writing range just aren't confident facing these second tier openings which can actually be a really good thing d5 is not a great move it gives black it gives us all that we want how should this be how should we meet this well we should make a natural developing move here which also happens to exploit one of the drawbacks of d5 which is that it it gives up the c5 square we have a really nice nook"
+  },
+  {
+   "ply": 6,
+   "t": 80.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "rnbqk2r/pppp1ppp/5n2/2bPp3/2P5/8/PP2PPPP/RNBQKBNR w KQkq - 1 4",
+   "said": "this be how should we meet this well we should make a natural developing move here which also happens to exploit one of the drawbacks of d5 which is that it it gives up the c5 square we have a really nice nook on c5 that was we could stick the bishop in and then we could follow up with d6 a common common sequence and then later we could think about playing c7 c6 in"
+  },
+  {
+   "ply": 7,
+   "t": 91,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqk2r/pppp1ppp/5n2/2bPp3/2P5/2N5/PP2PPPP/R1BQKBNR b KQkq - 2 4",
+   "said": "on c5 that was we could stick the bishop in and then we could follow up with d6 a common common sequence and then later we could think about playing c7 c6 in order to cut into white's uh white's center okay so let's start by playing d6 just to anchor the bishop and"
+  },
+  {
+   "ply": 8,
+   "t": 99,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3p1n2/2bPp3/2P5/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+   "said": "common sequence and then later we could think about playing c7 c6 in order to cut into white's uh white's center okay so let's start by playing d6 just to anchor the bishop and obviously open up the other bishop this is equal i mean white is not worse here but he's not causing us any opening problems that's for sure and bishop g5 here would be a very common tactical blunder due to bishop takes f2 check of course knight a4 is not that annoying we could play bishop before check okay e4"
+  },
+  {
+   "ply": 9,
+   "t": 120.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3p1n2/2bPp3/2P1P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 5",
+   "said": "be a very common tactical blunder due to bishop takes f2 check of course knight a4 is not that annoying we could play bishop before check okay e4 this already this already is quite dubious i think because it it weakens a couple of things it weakens the d4 square which can be an outpost you know if we can ever get our knight there it also opens up that fully opens up the diagonal and our bishop is now pressuring f2 and white can no longer play e3 uh to sort of decrease the pressure and so what move comes to mind what moves should at least be considered uh even if it looks very uh very superficial but in fact it's quite hard to meet knight g4 i think we should play it ig-4 looks excellent here"
+  },
+  {
+   "ply": 10,
+   "t": 159.5,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3p4/2bPp3/2P1P1n1/2N5/PP3PPP/R1BQKBNR w KQkq - 1 6",
+   "said": "comes to mind what moves should at least be considered uh even if it looks very uh very superficial but in fact it's quite hard to meet knight g4 i think we should play it ig-4 looks excellent here the only way to defend this pawn is knight h3 but if we can get white to play knight h3 that's already a good"
+  },
+  {
+   "ply": 11,
+   "t": 165.5,
+   "line": [
+    "Nh3"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3p4/2bPp3/2P1P1n1/2N4N/PP3PPP/R1BQKB1R b KQkq - 2 6",
+   "said": "very superficial but in fact it's quite hard to meet knight g4 i think we should play it ig-4 looks excellent here the only way to defend this pawn is knight h3 but if we can get white to play knight h3 that's already a good sign in the moment in such d4 openings that the knight uh leaves f6 you should immediately start thinking about pushing that f bomb forward to f5 and trying to open up the f file but before we do that the ideal scenario in which to open up the fl would be if there would be a rook on f8 right if there's a rook on f8 we could increase the pressure on f2 a lot of you want to play queen h4 here i don't love quinn h4 because of g3 so we should make the com developing"
+  },
+  {
+   "ply": 12,
+   "t": 195.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp2ppp/3p4/2bPp3/2P1P1n1/2N4N/PP3PPP/R1BQKB1R w KQ - 3 7",
+   "said": "f8 right if there's a rook on f8 we could increase the pressure on f2 a lot of you want to play queen h4 here i don't love quinn h4 because of g3 so we should make the com developing move castles i think our opponent's gonna go bishop e2 and then we can still play f5 at least we can consider it uh because that pawn will defend the knight bishop p2 there is also queen h4 which is very very strong in that position since g3 is no longer possible f3 is also a move that we could possibly expect oh queen f6 is pretty easy to defend against white can play queen c2 for instance thank you dylan render for the raid queen f3 our opponent walking straight into f5 right and that's maybe white thinks that he's stopping f5 but obviously it's not you can play it anyway and this is even stronger this could be a a very quick game if white is not careful if white is not very careful so what are we threatening precisely we're threatening f takes c4 and knight takes f2 we've got three attackers on the f2 pawn bishop e3 ooh okay wait a minute let me think here it already feels like we have a win in this position but i i'm still looking for one there's so many tactics i mean look at how our pieces are all converging on the queen side but we have to patiently uh consider our options and actually find something hmm it's amazing it looks like there's so many different things here but got many ways to get a better position not seeing a forced win just yet so the first option would be to play f takes e4 and then after queen takes c4 the move bishop f5 comes to mind which looks like it traps the queen the queen can drop back to f3 and i don't see a particularly effective discover check there now the simplest option in that position would be just to play knight takes e3 and settle for a a very big advantage just due to the fact that we have you know a very big initiative we have a positional advantage and a tactical advantage that's very possible now we should consider other moves bishop takes c3 and then f takes e4 runs into the same issue after bishop f5 queen f3 i just don't see a an effective discovery it's possible that we should just play knight take c3 after c4 and then we should make a developing move such as knight a6 trying to get to b4 sometimes that is the way to solve these kinds of positions let's see give me another 15 seconds to think yeah i'm not seeing anything quite as appetizing as i would like so let's take on e4 maybe our opponent gets scared and plays queen g3 yeah i think we should just go for the two bishops and we'll check with an engine afterward okay we're going for the two bishops and a big advantage just positionally now you could take on h3 and try to ruin white structure but that's not worth it giving up your light squared bishop in a position like this would hurt quite a bit because then white would go bishop d3 and cause problems along the diagonals so queen h4 blunders the queen we should start with bishop f5 that's a frequent queen f3 forced only square for the queen now a lot of people struggle in this kind of situation where everybody watching this can sense that we are much better it looks like something should announce itself and yet nothing does so in such situations you can't just like panic and sort of tilt your way into some bad move sometimes the solution is just to make a calm developing move or just to improve your position in some way so for instance knight a6 is possible in that case the white can go a3 and prevent knight b4 so we could also go knight d7 and just develop the knight and connect the rooks right it's the whole thing about not every move having to uh cure covet or whatever so we're just gonna make a very zen developing move knight d7 and what often tends to happen if you play such moves they're quite annoying for the opponent and often blunders happen shortly after these kinds of moves you almost get rewarded for uh for being very patient and and making one of these just general improving moves thank you france rando yeah queen h4 is on the cards as well but right now it it runs into g3 for instance so or queen g3 so we shouldn't rush that move maybe queen h4 was better though queen h4 check i i honestly forgot that after queen g3 it's all the champagne castle's queen side there's the blunder something announced itself what is it it's not a free queen but it's it's an exchange an exchange in this position is decisive we win an exchange in the middle game that's great so our opponent rushed their development and boom bishop c2 we win the exchange and that should give us enough material to win the game pretty comfortably okay so we need to be careful about a couple of things here one thing is we need to be careful about this maneuver knight 2596 could be a little bit nasty if we're not properly prepared for it now probably the simplest approach here would be to aim for a queen trade and try to do it down the f file so let's go queen f6 to get this queen into the game and then we've got several ideas queen g6 and queen f2 both come to mind you know queen trade makes sense here given that we're up in exchange and it would facilitate our uh our oh my god what am i saying sorry i almost played it i forgot that white didn't play knight g5 jesus i'm telling you it's the champagne i in my mind white had already played knight g5 that was disaster very narrowly averted i was just testing everybody okay so instead of this what we're gonna do is go e4 and open up the e5 square for the knight and if knight takes e4 then i don't think the splendor's a queen queen takes b2 oh my goodness it's been a long day that would have been hilarious i don't think i would have been able to come back from that that's literally a full queen that's a full queen for nothing you passed you definitely passed guess the elo i mean levy would probably think this is like wow this guy's playing pretty decently oh never mind 1300 okay so here we can already play queen f2 although bishop takes h7 probably shouldn't be allowed although you know it's not dangerous in this position i think we can play knight takes c4 and start collecting stuff i think we can play knight takes c4 and start collecting stuff the reason i say bishop takes h7 is not dangerous is because after king h8 if white then plays queen h4 right trying to set up a discover check and possibly a mate against the king we simply have queen h6 that's probably what's gonna happen we have queen h6 intercepting the queen and it's important to realize that when you're up material you can't avoid calculation you you're still gonna have to sometimes you know accept a little bit of not danger even but let's take on e3 first except a little bit of counter play and refute it and that's a totally normal process of uh that happens it doesn't mean you did something wrong queen h6 ends the game immediately basically because white is no longer any attack and white's hole position collapses all it took is one move knight h7 instead of bishop takes h7 there was like knight takes b2 check i'll show that after the game only hikari karo can come back from that now that might be true oh i i didn't talk much about e4 which is a a pretty powerful move i think okay queen g3 good move for your opponent now we have many ways of winning this this kind of position um it depends on sort of the approach that that you want to take one of the better approaches is well what i'm seeing is that rook aea would be a check were it not for the knight that's sort of sitting on e3 so we can drop the knight back to f5 offering a trade and trying to get the rook to f2 that's one option but let's go rook 88 i mean let's just get the rook into the game this is the most flexible and it's also the most harmonious you know it's the most uh you know sort of representative of the kind of technique that i advocate for which is to get all your pieces into the game and be methodical and all that stuff now i think knight f5 is great because we're changing the knight for the rook in addition to knight f5 you also have the cute move knight f1 same idea trying to get rookie 3 check-in knight f1 is probably even better let's go knight f1 yeah we'll we'll go knight f1 and then the other rook could also swoop into f2 so there might be some sort of a mating attack pretty shortly yeah that rook is has seen better days yeah rookie three rook f2 our king is safe we should keep an eye on knight f7 we should keep an eye on the back rank if both of the rooks leave the eighth rank but i mean it's it's winning i really hope he goes king c4 because we're going to have a king hun then good defense by our opponent i have to say let me think for a second okay check there is a crazy line where white's king and he's going for it let's give another check king a4 and somehow white's king is not safe but not checkable for the time being and notice that i mentioned the eighth rank that was an important comment because queen c8 is a very very serious threat that's actually a mate threat so what we should do is make another patient defensive move one of the hardest things to do is to make defensive moves while you're attacking and yet that's a necessary very very necessary thing to do so we just need to move a rook either to e8 or to f8 i'm thinking rook e8 just to keep the stroke on duty of protecting f7 i have to say our opponent played this this stretch extremely well and made it difficult for us to convert but i i think we're going to be successful now we're one move away from setting up unstoppable threats for instance queen f6 is a very good move why because it threatens rook f4 like i'm see when i look at this position i'm seeing a couple of things straight away i'm seeing that the queen and the king are on the same rank so rook out setting up rook f4 could be a very good idea i'm seeing also that involving our queen in the king hunt could be good so combining those two observations yields the move queen f6 looks like a pretty mundane move but it's actually very strong as it threatens rook f4 and potentially queen d4 the other idea i'm saying is to go a6 b5 using our pawns the further the king the closer the king is toward your camp the higher the probability that you can actually use your pawns and um you know contribute to the king hut by driving the king further upward now rookie four doesn't work rookie that square is defended by a million pieces what if white goes rookie won yeah rookie one would be a very high level move we would meet that with the rook f8 i would be impressed if white finds rookie one a deflection sacrifice we cannot take it because of backrank mate but we would go rook ef-8 and that also happens to threaten a fork with a rook f4 so it sort of kills two birds with one stone our opponent will probably lose on time though yeah b5 another one of those typical moves that you should always consider just throwing your pawns at the king to open up more files and diagonals and all that stuff okay our opponent's gonna lose on time yeah the position is losing definitely losing at this point okay"
+  },
+  {
+   "ply": 7,
+   "t": 995.5,
+   "line": [],
+   "fen": "rnbqk2r/pppp1ppp/5n2/2bPp3/2P5/2N5/PP2PPPP/R1BQKBNR b KQkq - 2 4",
+   "said": "that stuff okay our opponent's gonna lose on time yeah the position is losing definitely losing at this point okay so"
+  },
+  {
+   "ply": 8,
+   "t": 998.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3p1n2/2bPp3/2P5/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+   "said": "okay our opponent's gonna lose on time yeah the position is losing definitely losing at this point okay so yeah highly anticlimactic sorry about that"
+  },
+  {
+   "ply": 9,
+   "t": 1002.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3p1n2/2bPp3/2P1P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 5",
+   "said": "losing definitely losing at this point okay so yeah highly anticlimactic sorry about that yeah so already e4 is a mistake i think"
+  },
+  {
+   "ply": 8,
+   "t": 1004,
+   "line": [],
+   "fen": "rnbqk2r/ppp2ppp/3p1n2/2bPp3/2P5/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+   "said": "losing definitely losing at this point okay so yeah highly anticlimactic sorry about that yeah so already e4 is a mistake i think and"
+  },
+  {
+   "ply": 9,
+   "t": 1006.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3p1n2/2bPp3/2P1P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 5",
+   "said": "so yeah highly anticlimactic sorry about that yeah so already e4 is a mistake i think and you know it's a mistake because it opens up this diagonal and now white has a hard time putting anything between the bishop and the pawn so we go knight g4"
+  },
+  {
+   "ply": 10,
+   "t": 1015,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3p4/2bPp3/2P1P1n1/2N5/PP3PPP/R1BQKBNR w KQkq - 1 6",
+   "said": "and you know it's a mistake because it opens up this diagonal and now white has a hard time putting anything between the bishop and the pawn so we go knight g4 knight h3 castles"
+  },
+  {
+   "ply": 12,
+   "t": 1016.5,
+   "line": [
+    "Nh3",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp2ppp/3p4/2bPp3/2P1P1n1/2N4N/PP3PPP/R1BQKB1R w KQ - 3 7",
+   "said": "and you know it's a mistake because it opens up this diagonal and now white has a hard time putting anything between the bishop and the pawn so we go knight g4 knight h3 castles now f3 could have been met with the"
+  },
+  {
+   "ply": 13,
+   "t": 1018.5,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbq1rk1/ppp2ppp/3p4/2bPp3/2P1P1n1/2N2P1N/PP4PP/R1BQKB1R b KQ - 0 7",
+   "said": "you know it's a mistake because it opens up this diagonal and now white has a hard time putting anything between the bishop and the pawn so we go knight g4 knight h3 castles now f3 could have been met with the positional move knight e3"
+  },
+  {
+   "ply": 14,
+   "t": 1021.5,
+   "line": [
+    "Ne3"
+   ],
+   "fen": "rnbq1rk1/ppp2ppp/3p4/2bPp3/2P1P3/2N1nP1N/PP4PP/R1BQKB1R w KQ - 1 8",
+   "said": "hard time putting anything between the bishop and the pawn so we go knight g4 knight h3 castles now f3 could have been met with the positional move knight e3 essentially forcing white to give up the bishop and this is a terrible situation right"
+  },
+  {
+   "ply": 16,
+   "t": 1027,
+   "line": [
+    "Bxe3",
+    "Bxe3"
+   ],
+   "fen": "rnbq1rk1/ppp2ppp/3p4/3Pp3/2P1P3/2N1bP1N/PP4PP/R2QKB1R w KQ - 0 9",
+   "said": "knight h3 castles now f3 could have been met with the positional move knight e3 essentially forcing white to give up the bishop and this is a terrible situation right because the dark squared bishop is unopposed it's controlling both of these diagonals i mean it's controlling look at how many crucial squares it's controlling and this is a terrible terrible position for white just terrible yeah one e4 is a mistake so i think our"
+  },
+  {
+   "ply": 14,
+   "t": 1043.5,
+   "line": [],
+   "fen": "rnbq1rk1/ppp2ppp/3p4/2bPp3/2P1P3/2N1nP1N/PP4PP/R1BQKB1R w KQ - 1 8",
+   "said": "it's controlling both of these diagonals i mean it's controlling look at how many crucial squares it's controlling and this is a terrible terrible position for white just terrible yeah one e4 is a mistake so i think our opponent played queen f3 probably white should"
+  },
+  {
+   "ply": 12,
+   "t": 1046.5,
+   "line": [],
+   "fen": "rnbq1rk1/ppp2ppp/3p4/2bPp3/2P1P1n1/2N4N/PP3PPP/R1BQKB1R w KQ - 3 7",
+   "said": "crucial squares it's controlling and this is a terrible terrible position for white just terrible yeah one e4 is a mistake so i think our opponent played queen f3 probably white should play bishop e2 here"
+  },
+  {
+   "ply": 13,
+   "t": 1049,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rnbq1rk1/ppp2ppp/3p4/2bPp3/2P1P1n1/2N4N/PP2BPPP/R1BQK2R b KQ - 4 7",
+   "said": "and this is a terrible terrible position for white just terrible yeah one e4 is a mistake so i think our opponent played queen f3 probably white should play bishop e2 here and then meet f5 with castles"
+  },
+  {
+   "ply": 14,
+   "t": 1051,
+   "line": [
+    "f5"
+   ],
+   "fen": "rnbq1rk1/ppp3pp/3p4/2bPpp2/2P1P1n1/2N4N/PP2BPPP/R1BQK2R w KQ - 0 8",
+   "said": "for white just terrible yeah one e4 is a mistake so i think our opponent played queen f3 probably white should play bishop e2 here and then meet f5 with castles"
+  },
+  {
+   "ply": 15,
+   "t": 1052.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp3pp/3p4/2bPpp2/2P1P1n1/2N4N/PP2BPPP/R1BQ1RK1 b - - 1 8",
+   "said": "yeah one e4 is a mistake so i think our opponent played queen f3 probably white should play bishop e2 here and then meet f5 with castles more or less getting a playable position this is not pleasant but it's something so bishop e3 we'll check after the game fe queen e4 so we decided to go for a very positional approach knight d7 and now bishop c2 wins the exchange i want to fast forward because i was explaining these moves pretty clearly let's move e4 very important concept to push a pawn your own pawn because you can't you're not allowed to push your opponent's pawns and open up a square for the knight like that concept itself is quite common positionally and i've even shown a game before on stream where one of my favorite illustrations of this exact concept which occurs quite frequently in the benoni so in this position black plays h6 and white does something kind of cool here so i think most people would probably be inclined to drop the bishop back to h4 right basically"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 12,
+   "fen": "rnbq1rk1/ppp2ppp/3p4/2bPp3/2P1P1n1/2N4N/PP3PPP/R1BQKB1R w KQ - 3 7",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "e5",
+    "d5",
+    "Bc5",
+    "Nc3",
+    "d6",
+    "e4",
+    "Ng4",
+    "Nh3",
+    "O-O"
+   ],
+   "options": [
+    {
+     "san": "f3",
+     "t": 1018.5,
+     "continuation": "f3",
+     "said": "you know it's a mistake because it opens up this diagonal and now white has a hard time putting anything between the bishop and the pawn so we go knight g4 knight h3 castles now f3 could have been met with the positional move knight e3 essentially forcing white to give up the bishop and this is a terrible situation right because the dark squared bishop is unopposed it's controlling both of these diagonals i mean it's controlling look at how many crucial squares it's controlling and this is a terrible terrible position for white just terrible yeah one e4 is a mistake so i think our opponent played queen f3 probably white should play bishop e2 here and then meet f5 with castles more or less getting a playable position this is not pleasant but it's something so bishop e3 we'll check after the game fe queen e4 so we decided to go for a very positional approach knight d7 and now bishop c2 wins the exchange i want to fast forward because i was explaining these moves pretty clearly let's move e4 very"
+    },
+    {
+     "san": "Be2",
+     "t": 1049,
+     "continuation": "Be2",
+     "said": "and this is a terrible terrible position for white just terrible yeah one e4 is a mistake so i think our opponent played queen f3 probably white should play bishop e2 here and then meet f5 with castles more or less getting a playable position this is not pleasant but it's something so bishop e3 we'll check after the game fe queen e4 so we decided to go for a very positional approach knight d7 and now bishop c2 wins the exchange i want to fast forward because i was explaining these moves pretty clearly let's move e4 very important concept to push a pawn your own pawn because you can't you're not allowed to push your opponent's pawns and open up a square for the knight like that concept itself is quite common positionally and i've even shown a game before on stream where one of my favorite illustrations of this exact concept which occurs quite frequently in the benoni so in this position black plays h6 and white does something kind of cool here so i think most people"
+    }
+   ]
+  }
+ ]
+}

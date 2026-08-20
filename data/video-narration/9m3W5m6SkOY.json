@@ -1,0 +1,187 @@
+{
+ "videoId": "9m3W5m6SkOY",
+ "title": "Refuting Unsound Attacks | Sicilian Defense: Tal Gambit | GM Naroditsky’s Top Theory Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 15,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "1500 and we go for our patented Sicilian we still have not gotten a single open system everybody is still playing the Battle of Bishop C4 I truly hope we'll get something a little bit different just for some variety even in alapan Smith more anything except the battle lyrics we've been getting Non-Stop thus far wow our opponent already okay"
+  },
+  {
+   "ply": 3,
+   "t": 37.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+   "said": "get something a little bit different just for some variety even in alapan Smith more anything except the battle lyrics we've been getting Non-Stop thus far wow our opponent already okay F4 nice so F4 is a move that we have faced I want to say something like three or four times throughout all of our speed runs and every time we have responded in exactly the same way I have explained this move at length so I won't go through the motions again we'll make the move and then I'll recap it after it's already made"
+  },
+  {
+   "ply": 4,
+   "t": 60.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "said": "exactly the same way I have explained this move at length so I won't go through the motions again we'll make the move and then I'll recap it after it's already made the move is 2d5 and this is the reason why the Grand Prix attack starts with"
+  },
+  {
+   "ply": 2,
+   "t": 64.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "through the motions again we'll make the move and then I'll recap it after it's already made the move is 2d5 and this is the reason why the Grand Prix attack starts with Knight C3 the whole purpose of going Knight C3 first is actually to prevent D5 and the way that we punish F4 is by"
+  },
+  {
+   "ply": 4,
+   "t": 72.5,
+   "line": [
+    "f4",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "said": "the move is 2d5 and this is the reason why the Grand Prix attack starts with Knight C3 the whole purpose of going Knight C3 first is actually to prevent D5 and the way that we punish F4 is by showing white that he should have gone Knight C3 first F4 is not a mistake it's a totally legitimate variation but it's considered a little bit dubious it's considered inaccurate so if white takes on D5 we are not forced to play a scandi with Queen takes D5 that goes against the whole point of the move D5 does anybody remember what the move is against Ed yeah very nice we play Knight F6 and we"
+  },
+  {
+   "ply": 5,
+   "t": 99,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pP4/5P2/8/PPPP2PP/RNBQKBNR b KQkq - 0 3",
+   "said": "we are not forced to play a scandi with Queen takes D5 that goes against the whole point of the move D5 does anybody remember what the move is against Ed yeah very nice we play Knight F6 and we actually have it on the board"
+  },
+  {
+   "ply": 7,
+   "t": 101.5,
+   "line": [
+    "Nf6",
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/5P2/2N5/PPPP2PP/R1BQKBNR b KQkq - 2 4",
+   "said": "Queen takes D5 that goes against the whole point of the move D5 does anybody remember what the move is against Ed yeah very nice we play Knight F6 and we actually have it on the board and white Primos Knight C3 he I think obviously thought we were going to play Queen takes D5 if you're looking at this for the first time you should be puzzled and you should be wondering why white can't just play C4 and secure the extra Pawn well the reason as I'll recap after the game is that black has E6 and after the trade we get tremendous positional compensation for the sacrifice Pawn as in black is flat out better there so at this point we can safely recapture the pawn on D5"
+  },
+  {
+   "ply": 8,
+   "t": 132.5,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/8/2pn4/5P2/2N5/PPPP2PP/R1BQKBNR w KQkq - 0 5",
+   "said": "compensation for the sacrifice Pawn as in black is flat out better there so at this point we can safely recapture the pawn on D5 and of course the whole point is that in the event of the trade the queen on D5 is a million times safer than it is with the Knight still on B1 because white does not have a second Knight to put on C3 and if white plays Queen takes D5 and then the move C4 then all that white does is create more massive weaknesses massive holes in the center"
+  },
+  {
+   "ply": 9,
+   "t": 155,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/8/2pn4/2B2P2/2N5/PPPP2PP/R1BQK1NR b KQkq - 1 5",
+   "said": "C3 and if white plays Queen takes D5 and then the move C4 then all that white does is create more massive weaknesses massive holes in the center okay Bishop C4 interesting play so of course I see that there is a hanging Pawn on F4 you should remember though that the spirit of this line is not necessarily to grab a bunch of Pawns and fall behind and develop and that's not really what we want to do so the kind of Russian Schoolboy inside of me says that the most prudent the most practical option here without spending too much time is just to drop the Knight back to B6 especially because after Knight B6 Bishop to B3 we have a sick move we have C4 and that virtually traps the bishop and forces white into a super awkward check on A4 and we definitely want to eliminate the light squared Bishop because the dark Squad Bishop is a terrible piece why is it a terrible piece because of the Pawn on F4 because the pawn completely hems in the bishop and also I don't like Knight takes F4 because of the response Queen F3 and things kind of become unpleasant there if you turn on the engine yeah probably black is somehow better maybe Knight F4 Queen F3 Knight back to E6 but that's an awkward move too because it blocks the bishop in so again notice that I'm largely using my intuition I'm not even really calculating Knight takes so far I'm not interested in that because it's not worth it it's not worth contorting yourself like that over a pawn that we actually want to remain on the board this Pawn is in our favor because it's completely drying up"
+  },
+  {
+   "ply": 10,
+   "t": 244,
+   "line": [
+    "Nb6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/1n6/2p5/2B2P2/2N5/PPPP2PP/R1BQK1NR w KQkq - 2 6",
+   "said": "because it's not worth it it's not worth contorting yourself like that over a pawn that we actually want to remain on the board this Pawn is in our favor because it's completely drying up White's King side play it's blocking in the bishop and it sticks out like a sore thumb let's go Knight B6 and when I say practical this is kind of what I mean we didn't spend too much time we spent a second evaluating and we just decided let's play Let's play it safe forcing the bishop to make a decision of course Bishop B5 check we probably will play Bishop to D7 encouraging the trade of light squared Bishops although Bishop B5 we could very safely play Knight C6 as well of course we are not really fearing uh Bishop takes C6 check but I think we'll go Bishop D7 the bishop doesn't have too many good squares Bishop b3c4 I mean if Bishop B2 then we simply continue our development with Knight C6 and generally what I want you to see here is that we have lovely control of this D4 Square that's the function that the C5 Pawn serves oh"
+  },
+  {
+   "ply": 11,
+   "t": 301.5,
+   "line": [
+    "Bxf7+"
+   ],
+   "fen": "rnbqkb1r/pp2pBpp/1n6/2p5/5P2/2N5/PPPP2PP/R1BQK1NR b KQkq - 0 6",
+   "said": "with Knight C6 and generally what I want you to see here is that we have lovely control of this D4 Square that's the function that the C5 Pawn serves oh my God Bishop F7 I was gonna point this move out it's not entirely stupid obviously but it's just as obviously unsound and there's no question that the sacrifice is on sound but I know that a lot of people they struggle to refute these types of sacrifices and it can be scary to face a move like this so let's"
+  },
+  {
+   "ply": 13,
+   "t": 323,
+   "line": [
+    "Kxf7",
+    "Nf3"
+   ],
+   "fen": "rnbq1b1r/pp2pkpp/1n6/2p5/5P2/2N2N2/PPPP2PP/R1BQK2R b KQ - 1 7",
+   "said": "unsound and there's no question that the sacrifice is on sound but I know that a lot of people they struggle to refute these types of sacrifices and it can be scary to face a move like this so let's delve head first into the complications Knight to F3 so there's essentially a short-term plan here and then a long-term plan the long-term plan is to carry out a maneuver that is commonly referred to as castling by hand or manual castling manual castling is just what you know the name refers to you can't castle in the conventional way because you've already moved your king so you build the castling formation from scratch you get the bishop out of the way you shift The Rook to f8 or E8 and then you tuck the king back to G8 but of course there is also a short-term strategy that has to be adopted the Knight on F3 threatens to jump into E5 does it threaten to jump into G5 not as much because Knight G5 Chuck we can tuck our King back to G8 in fact we can do the same thing after 95 but obviously we should avoid Bishop G4 like the plague that simply blunders the bishop so I don't think that we really need to do anything special here I think we just need to develop our pieces ASAP and make sure that we're not blundering any weird uh weird mates so I think the simplest move actually might even be just King G8 flat out straight away not ideal because we're blocking in a rook but we're also up a piece so we're going to have to make some concessions here I don't think it's possible for black to carry out the entire castling by hand maneuver because it takes too long and the knight's gonna jump into E5 so there's a couple of moves here there's G6 which I quite like G6 is a great move because it you know threatens to feed Kettle the bishop and get our King side out in fact I love the move G6 because what's most important here is to get our King side out that allows our King to feel relatively safe the Knight on B8 we will be able to develop later right there's no rush to play the move Knight C6 I think the classy move here is actually G6"
+  },
+  {
+   "ply": 14,
+   "t": 444,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbq1b1r/pp2pk1p/1n4p1/2p5/5P2/2N2N2/PPPP2PP/R1BQK2R w KQ - 0 8",
+   "said": "King to feel relatively safe the Knight on B8 we will be able to develop later right there's no rush to play the move Knight C6 I think the classy move here is actually G6 get your king side out so that the king"
+  },
+  {
+   "ply": 15,
+   "t": 447.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1b1r/pp2pk1p/1n4p1/2p5/5P2/2N2N2/PPPP2PP/R1BQ1RK1 b - - 1 8",
+   "said": "on B8 we will be able to develop later right there's no rush to play the move Knight C6 I think the classy move here is actually G6 get your king side out so that the king can feel a lot safer Bishop G7"
+  },
+  {
+   "ply": 16,
+   "t": 451.5,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbq3r/pp2pkbp/1n4p1/2p5/5P2/2N2N2/PPPP2PP/R1BQ1RK1 w - - 2 9",
+   "said": "Knight C6 I think the classy move here is actually G6 get your king side out so that the king can feel a lot safer Bishop G7 and yes Knight G5 check we might even bring the king back into the frying pan with King to E8 but White's running out of minor pieces what are White's attackers here one attacker that's it the bishop on C1 is never going to be able to play an active role tonight on C3 doesn't really have any prospects if white does not give a check on G5 or E5 then obviously our next move is going to be rook f8 and then we actually do manage to Castle by hand so we're trying white has to give a check here to keep an inkling of Hope alive we got a raid from Jeffrey what's up raid from gmjx welcome everybody as we do a second Speed Run game you come at a"
+  },
+  {
+   "ply": 17,
+   "t": 494.5,
+   "line": [
+    "f5"
+   ],
+   "fen": "rnbq3r/pp2pkbp/1n4p1/2p2P2/8/2N2N2/PPPP2PP/R1BQ1RK1 b - - 0 9",
+   "said": "check here to keep an inkling of Hope alive we got a raid from Jeffrey what's up raid from gmjx welcome everybody as we do a second Speed Run game you come at a good time we are playing somebody who is throwing all of his pieces at us so we're practicing how to refute on sound attacks very very hard task I have to give some kudos to our opponent this is very very creative attacking chess this is not easy to refute so what do we do here we we're facing the move F5 it looks very scary the point of the move F5 is obviously to open up the file so Bishop takes F5 would play right into White's hands Bishop takes up five would run into G4 and then if we keep gobbling White's gonna have a double check with Knight E5 and that's precisely what the worst case scenario looks like so if we are to take on F5 we should clearly take with a pawn but as I've said before any time upon captures another Pawn or a piece you need to figure out what squares are newly accessible to yourself and your opponent in this case to your opponent so after the pawn shifts from G6 to F5 the effect of that move is that the H5 square is now accessible to White's Queen so what can white try after G takes F5 well White's gonna give a check on G5 and if we drop working carelessly back to E8 then Queen H5 check suddenly becomes very nasty followed by a night Fork on F7 that's exactly how we let the attack spin out of control so after G F5 Knight G5 check we should go the other way King G8 but still Queen H5 may appear rather unpleasant there is a main thread on F7 now can we defend against that made threat we actually can we can shift Our Queen over to f8 in that situation and it appears to me that White's attack starts to fizzle out and then on the next move we could play H6 and force the Knight out of G5 but there is also a third option here uh sorry a second option because Bishop takes F5 or not counting and that is just ask yourself what if we ignore what if we just go Rook at fate and continue castling by hand as if nothing's the matter well that seems like Madness because after F takes G6 check H takes G6 aren't we giving our opponent a discovered check we are but the point is that there's no way to win anything other than a pawn the way that white can win a pawn is by giving a check on E5 and capturing on G6 but in that case our King is safer than it's been the entire game so I actually think that these options are alternatives G takes F5 is what I would call a more principled option where we're basically saying I don't buy anything you're doing I believe in the ability of my pieces to ward off the immediate attacking threats and that's actually what I want to do I want to prove to you that you can go for these types of moves and there's no reason to fear ghosts in this situation if you don't see a forced mate if you don't see a way to actually cause problems you don't need to be afraid"
+  },
+  {
+   "ply": 18,
+   "t": 668.5,
+   "line": [
+    "gxf5"
+   ],
+   "fen": "rnbq3r/pp2pkbp/1n6/2p2p2/8/2N2N2/PPPP2PP/R1BQ1RK1 w - - 0 10",
+   "said": "want to prove to you that you can go for these types of moves and there's no reason to fear ghosts in this situation if you don't see a forced mate if you don't see a way to actually cause problems you don't need to be afraid just because your king may seem"
+  },
+  {
+   "ply": 19,
+   "t": 671.5,
+   "line": [
+    "g4"
+   ],
+   "fen": "rnbq3r/pp2pkbp/1n6/2p2p2/6P1/2N2N2/PPPP3P/R1BQ1RK1 b - - 0 10",
+   "said": "reason to fear ghosts in this situation if you don't see a forced mate if you don't see a way to actually cause problems you don't need to be afraid just because your king may seem uncomfortable for a couple of moves okay G4 just loses on the spot our opponent is playing for tricks we're obviously not taking on G4 what are we doing now well we're following through on our initial plan which is to do what we have time all the time that we need to play Rook to f8 castling by hand"
+  },
+  {
+   "ply": 20,
+   "t": 687.5,
+   "line": [
+    "Rf8"
+   ],
+   "fen": "rnbq1r2/pp2pkbp/1n6/2p2p2/6P1/2N2N2/PPPP3P/R1BQ1RK1 w - - 1 11",
+   "said": "is playing for tricks we're obviously not taking on G4 what are we doing now well we're following through on our initial plan which is to do what we have time all the time that we need to play Rook to f8 castling by hand we've completed it and we're gonna win the game very shortly thereafter so yeah our opponent definitely finding some creative ideas but that sack was"
+  },
+  {
+   "ply": 11,
+   "t": 699.5,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pBpp/1n6/2p5/5P2/2N5/PPPP2PP/R1BQK1NR b KQkq - 0 6",
+   "said": "we've completed it and we're gonna win the game very shortly thereafter so yeah our opponent definitely finding some creative ideas but that sack was was just just way way way too early and you just can't you can't win chess games like that you got to develop some of your pieces again can we play Bishop takes F5 probably we could get away with it I'm not even thinking about touching that pawn get your king back to safety keep your priorities straight and on the next move we will casually take the pawn on F5 if white goes Knight H4 notice that it's White's king that's now uh Under Fire because White's pushed all of his kingside pawns forward arcing is now safer than it's ever been Knight G5 is not scary at all what should we do now well white is not exactly stopping us from recapturing the Pawn on F5 then I can guarantee you that we are going to be the one hunting down whites King soon enough some of you are proposing Queen D4 check I don't see the point of that move why why would you want to send whites King over to a safer Square the King on G1 is a vulnerability you want to keep things like this in your pocket"
+  }
+ ],
+ "forks": []
+}

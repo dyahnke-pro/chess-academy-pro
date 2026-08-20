@@ -1,0 +1,615 @@
+{
+ "videoId": "qN8kNz0_c3s",
+ "title": "Mastering the Jobava London ft. Bortnyk | Opening Lab",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 37.5,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "we're one of the first people to play which was the jababa London so the jababa London is an opening that goes well you've seen me play it a million times I play it I practice what I preach so it's D4 Knight F6 Knight C3"
+  },
+  {
+   "ply": 3,
+   "t": 40,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+   "said": "which was the jababa London so the jababa London is an opening that goes well you've seen me play it a million times I play it I practice what I preach so it's D4 Knight F6 Knight C3 or D4 D5 Knight C3 Knight F6 and Bishop"
+  },
+  {
+   "ply": 5,
+   "t": 44,
+   "line": [
+    "d5",
+    "Bf4"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "said": "goes well you've seen me play it a million times I play it I practice what I preach so it's D4 Knight F6 Knight C3 or D4 D5 Knight C3 Knight F6 and Bishop F4 this is the jabala London and we just about 30 minutes ago published a course that we've been working on for three months or so I would estimate you know yesterday I said over 50 but we kind of estimated the amount of time that we spend on this course and we came to a number closer to 100 hours on this course it includes all of Black's responses to Bishop F4 it's very very comprehensive and it is basically a total labor of love so the course is out I've never published a course before so hopefully all of the tech works we bought it ourselves to make sure that you can download the pgns easily and we were able to download them but you can check out the link and you can let me know obviously like urgently let me know if you can't access something but hopefully everything works out this is my first our first ever opening course we neither of us has ever done this before so if this turns out well and the course is popular and people like it the most importantly then hopefully this will be the start of many courses on both the opening and the middle game which is something I've wanted to do for a very long time but I learned a lot of lessons as we did this course one of which is that it's very very hard to do an opening course on your own because of the scope of analysis with this is not a video These are pgns so there's no video how is this different from a chessable course we're both super excited because we have worked on this we have worked our freaking asses off and I would never put my name in front of something that I didn't think was like Top Class content hopefully people know that by now I would most certainly never charge money for anything that I thought was not worth charging money for so I'm like super proud of the work that we did I'll talk a little bit about some of the stuff that we analyzed and give you a sneak preview the point is not to chill this out and get anybody who doesn't want to buy it to buy it this is like entirely it's just out there I want to create a very low pressure environment where if you feel like this will contribute to your play and this will materially improve your results then you should get it if not you absolutely should not get it so I I will have an unorthodox sales approach so I'll talk about this in a moment I'll tell you how to open PGN files it's easy you can do it with chess.com you can do it with leeches you don't need any additional software to open the files so everything's like meant to be as easy as possible I'll be right back I also need to run to the bathroom so then I'll talk more about the course so let's address a couple of things first first of all what is this course on we cover all of Black's responses in this position that includes C5 C6 Bishop F5 E6"
+  },
+  {
+   "ply": 6,
+   "t": 213.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqkb1r/1pp1pppp/p4n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
+   "said": "first of all what is this course on we cover all of Black's responses in this position that includes C5 C6 Bishop F5 E6 A6 G6 Knight bd7 Knight C6 Bishop G4"
+  },
+  {
+   "ply": 5,
+   "t": 214.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "said": "cover all of Black's responses in this position that includes C5 C6 Bishop F5 E6 A6 G6 Knight bd7 Knight C6 Bishop G4"
+  },
+  {
+   "ply": 6,
+   "t": 218,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 4",
+   "said": "position that includes C5 C6 Bishop F5 E6 A6 G6 Knight bd7 Knight C6 Bishop G4"
+  },
+  {
+   "ply": 5,
+   "t": 220.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "said": "C6 Bishop F5 E6 A6 G6 Knight bd7 Knight C6 Bishop G4 we also cover in depth this line which"
+  },
+  {
+   "ply": 8,
+   "t": 222.5,
+   "line": [
+    "Bf5",
+    "Bc1",
+    "Ng8"
+   ],
+   "fen": "rn1qkbnr/ppp1pppp/8/3p1b2/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 4 5",
+   "said": "A6 G6 Knight bd7 Knight C6 Bishop G4 we also cover in depth this line which is pretty popular at a high level"
+  },
+  {
+   "ply": 10,
+   "t": 225.5,
+   "line": [
+    "Nb1",
+    "Bc8"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 6 6",
+   "said": "A6 G6 Knight bd7 Knight C6 Bishop G4 we also cover in depth this line which is pretty popular at a high level these are the contents of the course what do the files look like so there is no video component which is why we looked at what chessable courses charge without video I think adjustable courses are around 50 60 so that's that was our sort of General metric I'm going to answer questions one by one so just be patient what is the skill level for the course this course is designed really for beginner to master I would like GMS to consider getting this course we held ourselves to a standard such that a GM who got this course would be happy with the analysis and would find interesting ideas in that course we also designed it with an eye toward most of the audience who we think is going to be you know beginner to intermediate obviously it's not geared for people who have just learned the rules of the game but hopefully that is kind of self-evident but really anybody a thousand and over I think can benefit from building a sustainable opening repertoire in which you actually know what you're playing and in which you can basically guarantee getting better positions or even winning positions every single game out of the opening next set of questions what about the Hans Neiman course so there's a couple of available literatures on the jabala London in existence the first is this book the jababa London and I'm going to explain how our course is different why it's necessary to make another course and why you can't just get hanza's score I mean you can get hans's course there is a book written by Simon Williams who most of you know called the chababa London system this was written in 2022. it's pretty recent this is a very basic exposition of the ideas now obviously this book is a good introduction to the system but we believe that a lot of Simon's recommendations are deviate from ours and this book is not really analysis based right it's based on giving a bunch of model games I think it's a good book but it doesn't really give you knowledge of the theory of how to play the opening um in terms of the Hans trustable course I have a criticism of the majority of chessable courses by which I don't mean to imply that the author doesn't put in tremendous effort I own a ton of chessable courses I think trustable is amazing I think most courses are really good I think hanz's course is really good but the biggest issue that I have with a lot of trustable courses is that they cover essentially the lines that occur at the top level but what Sasha and I realized when we were checking the chess.com in leeches database is that the moves that people actually play very often do not correspond in the least to the lines given in the chessable course because people don't know the theory of obscure openings and so we decided to make a course that actually focuses on we give all the best moves obviously we give the best lines we analyze them to exhaustion but we're focusing on the moves that you're likely to actually face and we indicate that clearly in all of the files so for"
+  },
+  {
+   "ply": 11,
+   "t": 408,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 7 6",
+   "said": "obviously we give the best lines we analyze them to exhaustion but we're focusing on the moves that you're likely to actually face and we indicate that clearly in all of the files so for example if you take the system with E6"
+  },
+  {
+   "ply": 14,
+   "t": 411,
+   "line": [
+    "Nf6",
+    "Bf4",
+    "e6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 8",
+   "said": "analyze them to exhaustion but we're focusing on the moves that you're likely to actually face and we indicate that clearly in all of the files so for example if you take the system with E6 the move we recommend here is Knight to"
+  },
+  {
+   "ply": 15,
+   "t": 412.5,
+   "line": [
+    "Nb5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 1 8",
+   "said": "focusing on the moves that you're likely to actually face and we indicate that clearly in all of the files so for example if you take the system with E6 the move we recommend here is Knight to B5 and black basically has three responses here let's see if you guys can name the three main responses for black in this position black has three in ways to defend C7 to our obvious one is less obvious let's see if you can name all three no E5 is not a move E5 just take Bishop B4 is one of them that's the most"
+  },
+  {
+   "ply": 16,
+   "t": 435.5,
+   "line": [
+    "Bb4+"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/4pn2/1N1p4/1b1P1B2/8/PPP1PPPP/R2QKBNR w KQkq - 2 9",
+   "said": "our obvious one is less obvious let's see if you can name all three no E5 is not a move E5 just take Bishop B4 is one of them that's the most obscure but that's what most GMS choose beef"
+  },
+  {
+   "ply": 18,
+   "t": 437.5,
+   "line": [
+    "c3",
+    "Ba5"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/4pn2/bN1p4/3P1B2/2P5/PP2PPPP/R2QKBNR w KQkq - 1 10",
+   "said": "see if you can name all three no E5 is not a move E5 just take Bishop B4 is one of them that's the most obscure but that's what most GMS choose beef Bishop before Bishop A5 there's Knight A6 and there's Bishop D6"
+  },
+  {
+   "ply": 15,
+   "t": 441,
+   "line": [],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 1 8",
+   "said": "no E5 is not a move E5 just take Bishop B4 is one of them that's the most obscure but that's what most GMS choose beef Bishop before Bishop A5 there's Knight A6 and there's Bishop D6"
+  },
+  {
+   "ply": 16,
+   "t": 442.5,
+   "line": [
+    "Na6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/n3pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR w KQkq - 2 9",
+   "said": "no E5 is not a move E5 just take Bishop B4 is one of them that's the most obscure but that's what most GMS choose beef Bishop before Bishop A5 there's Knight A6 and there's Bishop D6 so the most popular move on leeches is"
+  },
+  {
+   "ply": 15,
+   "t": 443.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 1 8",
+   "said": "no E5 is not a move E5 just take Bishop B4 is one of them that's the most obscure but that's what most GMS choose beef Bishop before Bishop A5 there's Knight A6 and there's Bishop D6 so the most popular move on leeches is"
+  },
+  {
+   "ply": 16,
+   "t": 444.5,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3bpn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR w KQkq - 2 9",
+   "said": "no E5 is not a move E5 just take Bishop B4 is one of them that's the most obscure but that's what most GMS choose beef Bishop before Bishop A5 there's Knight A6 and there's Bishop D6 so the most popular move on leeches is actually Bishop D6 this is the worst of the three moves and yet it is the most"
+  },
+  {
+   "ply": 15,
+   "t": 447.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 1 8",
+   "said": "obscure but that's what most GMS choose beef Bishop before Bishop A5 there's Knight A6 and there's Bishop D6 so the most popular move on leeches is actually Bishop D6 this is the worst of the three moves and yet it is the most popular and with full due respect to"
+  },
+  {
+   "ply": 16,
+   "t": 449.5,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3bpn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR w KQkq - 2 9",
+   "said": "Bishop before Bishop A5 there's Knight A6 and there's Bishop D6 so the most popular move on leeches is actually Bishop D6 this is the worst of the three moves and yet it is the most popular and with full due respect to Hans nothing I'm about to say is in any way intended to knock on hanza's work again hopefully will not be interpreted that way before I continue those"
+  },
+  {
+   "ply": 18,
+   "t": 457,
+   "line": [
+    "Nxd6+",
+    "cxd6"
+   ],
+   "fen": "rnbqk2r/pp3ppp/3ppn2/3p4/3P1B2/8/PPP1PPPP/R2QKBNR w KQkq - 0 10",
+   "said": "actually Bishop D6 this is the worst of the three moves and yet it is the most popular and with full due respect to Hans nothing I'm about to say is in any way intended to knock on hanza's work again hopefully will not be interpreted that way before I continue those watching from YouTube I will now authorize this course it is official it's not a scam I posted on in the YouTube Community tab about the course it's real it's not a troll it's not a scam my account was not hijacked this course is real and I'm putting my name in front of it so this move is the most common by far and Hans dedicates only one variation to this line after E3 he gives a move"
+  },
+  {
+   "ply": 19,
+   "t": 485,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqk2r/pp3ppp/3ppn2/3p4/3P1B2/4P3/PPP2PPP/R2QKBNR b KQkq - 0 10",
+   "said": "it so this move is the most common by far and Hans dedicates only one variation to this line after E3 he gives a move that's almost never played on Lee chess which is Queen to B6 and we gave Queen"
+  },
+  {
+   "ply": 20,
+   "t": 488.5,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "rnb1k2r/pp3ppp/1q1ppn2/3p4/3P1B2/4P3/PPP2PPP/R2QKBNR w KQkq - 1 11",
+   "said": "this move is the most common by far and Hans dedicates only one variation to this line after E3 he gives a move that's almost never played on Lee chess which is Queen to B6 and we gave Queen B6 but vast majority of people just end"
+  },
+  {
+   "ply": 19,
+   "t": 491,
+   "line": [],
+   "fen": "rnbqk2r/pp3ppp/3ppn2/3p4/3P1B2/4P3/PPP2PPP/R2QKBNR b KQkq - 0 10",
+   "said": "Hans dedicates only one variation to this line after E3 he gives a move that's almost never played on Lee chess which is Queen to B6 and we gave Queen B6 but vast majority of people just end"
+  },
+  {
+   "ply": 20,
+   "t": 492.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/3ppn2/3p4/3P1B2/4P3/PPP2PPP/R2QKBNR w KQ - 1 11",
+   "said": "this line after E3 he gives a move that's almost never played on Lee chess which is Queen to B6 and we gave Queen B6 but vast majority of people just end up castling and this is my problem with most decimal courses you're basically on your own in a line that's going to occur at least like 30 percent of the time so this is what we analyzed with an eye toward"
+  },
+  {
+   "ply": 21,
+   "t": 503,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/3ppn2/3p4/3P1B2/4PN2/PPP2PPP/R2QKB1R b KQ - 2 11",
+   "said": "up castling and this is my problem with most decimal courses you're basically on your own in a line that's going to occur at least like 30 percent of the time so this is what we analyzed with an eye toward actually giving you directions that are going to help you in the games you face so this line is much more common than"
+  },
+  {
+   "ply": 22,
+   "t": 509.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bq1rk1/pp3ppp/2nppn2/3p4/3P1B2/4PN2/PPP2PPP/R2QKB1R w KQ - 3 12",
+   "said": "like 30 percent of the time so this is what we analyzed with an eye toward actually giving you directions that are going to help you in the games you face so this line is much more common than black putting the queen on B6 and there's a million lines like that so that is how I would say our course deviates conceptually in terms of the actual moves we did not use hans's course at all we checked it occasionally some lines correspond obviously because in some variations there's just no room for deviation for example after C5 we both give this very sharp Dynamic new move E4 and yet our recommendations later on in this line deviate completely and we believe that we've found a lot more dangerous and more interesting lines in some of the main C5 variations"
+  },
+  {
+   "ply": 5,
+   "t": 545.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "said": "move E4 and yet our recommendations later on in this line deviate completely and we believe that we've found a lot more dangerous and more interesting lines in some of the main C5 variations in the bishop F5 lines as well"
+  },
+  {
+   "ply": 6,
+   "t": 547.5,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 2 4",
+   "said": "later on in this line deviate completely and we believe that we've found a lot more dangerous and more interesting lines in some of the main C5 variations in the bishop F5 lines as well so that's another thing to keep in mind"
+  },
+  {
+   "ply": 5,
+   "t": 548.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "said": "later on in this line deviate completely and we believe that we've found a lot more dangerous and more interesting lines in some of the main C5 variations in the bishop F5 lines as well so that's another thing to keep in mind in terms of the lack of video we thought about when we came up with the idea of making the course and that happened when Alexander was in Charlotte for a tournament you know we've known each other for a long time and we kind of hatched this idea you know let's make an opening course and what do we make it on well there's an opening that we both have been playing since 2015 since well before it was cool now everybody plays it Alexander has been playing it even before me he's one of the original players to develop a lot of the ideas you know we said all right so let's do this course and let's have a video component then we realized that like the video component takes at least another 100 hours and I personally never buy the chessable courses with the video because it's like six times as expensive and I feel like if the pgns are properly annotated then the video has limited value and what we try to do is basically textually annotate every single imported move so you're basically getting the video component in the actual file every Big Move is explained there's a ton of textual explanation we didn't explain everything and there's going to be some omissions but we tried our best to use the text to guide you in the right direction and obviously we didn't want to do an over complicated system where we charge one thing for the video and one thing without the video we just want one price you know what you're getting you get the files boom you analyze them that's it that's the next thing then I just wanted to address why you know you should play this opening like why the jabab London so I personally think that at an intermediate level this opening is one of the most underrated that you can play of course the traditional London system is super"
+  },
+  {
+   "ply": 7,
+   "t": 646,
+   "line": [
+    "Ng8",
+    "Nb1"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 3 4",
+   "said": "opening like why the jabab London so I personally think that at an intermediate level this opening is one of the most underrated that you can play of course the traditional London system is super popular now but I think it's rather Toothless and while it is likely to give you a good position you're not really playing to win the game out of the opening the big difference is that in the jabala London you're basically playing for the win right out of the"
+  },
+  {
+   "ply": 9,
+   "t": 657.5,
+   "line": [
+    "Nf6",
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 5 5",
+   "said": "popular now but I think it's rather Toothless and while it is likely to give you a good position you're not really playing to win the game out of the opening the big difference is that in the jabala London you're basically playing for the win right out of the gates in fact so much so the black has already two losing moves in this position Knight C6 loses the game"
+  },
+  {
+   "ply": 10,
+   "t": 663,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 6 6",
+   "said": "playing to win the game out of the opening the big difference is that in the jabala London you're basically playing for the win right out of the gates in fact so much so the black has already two losing moves in this position Knight C6 loses the game tonight to B5 black has no way to defend"
+  },
+  {
+   "ply": 11,
+   "t": 664.5,
+   "line": [
+    "Nb5"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 7 6",
+   "said": "opening the big difference is that in the jabala London you're basically playing for the win right out of the gates in fact so much so the black has already two losing moves in this position Knight C6 loses the game tonight to B5 black has no way to defend C7 Knight bd7"
+  },
+  {
+   "ply": 14,
+   "t": 668,
+   "line": [
+    "Qd7",
+    "Nc3",
+    "Nd8"
+   ],
+   "fen": "r1bnkb1r/pppqpppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 10 8",
+   "said": "playing for the win right out of the gates in fact so much so the black has already two losing moves in this position Knight C6 loses the game tonight to B5 black has no way to defend C7 Knight bd7 Knight B5 also loses the game so you"
+  },
+  {
+   "ply": 15,
+   "t": 669.5,
+   "line": [
+    "Nb5"
+   ],
+   "fen": "r1bnkb1r/pppqpppp/5n2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 11 8",
+   "said": "gates in fact so much so the black has already two losing moves in this position Knight C6 loses the game tonight to B5 black has no way to defend C7 Knight bd7 Knight B5 also loses the game so you have two trap lines you have a million"
+  },
+  {
+   "ply": 9,
+   "t": 672.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 5 5",
+   "said": "already two losing moves in this position Knight C6 loses the game tonight to B5 black has no way to defend C7 Knight bd7 Knight B5 also loses the game so you have two trap lines you have a million lines where black loses in under 10 moves just yesterday I played a game against an IM and uh I won in 10 moves basically he played Bishop F5 our recommendation is"
+  },
+  {
+   "ply": 11,
+   "t": 684,
+   "line": [
+    "Bf5",
+    "e3"
+   ],
+   "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 6",
+   "said": "have two trap lines you have a million lines where black loses in under 10 moves just yesterday I played a game against an IM and uh I won in 10 moves basically he played Bishop F5 our recommendation is E3 E6 Knight F3 and what's great about"
+  },
+  {
+   "ply": 13,
+   "t": 685.5,
+   "line": [
+    "e6",
+    "Nf3"
+   ],
+   "fen": "rn1qkb1r/ppp2ppp/4pn2/3p1b2/3P1B2/2N1PN2/PPP2PPP/R2QKB1R b KQkq - 1 7",
+   "said": "lines where black loses in under 10 moves just yesterday I played a game against an IM and uh I won in 10 moves basically he played Bishop F5 our recommendation is E3 E6 Knight F3 and what's great about this line is how symmetrical it looks and how deceptive it is black can lose this in like a couple of moves and what often happens is after NBD 795"
+  },
+  {
+   "ply": 15,
+   "t": 697,
+   "line": [
+    "Nbd7",
+    "Ne5"
+   ],
+   "fen": "r2qkb1r/pppn1ppp/4pn2/3pNb2/3P1B2/2N1P3/PPP2PPP/R2QKB1R b KQkq - 3 8",
+   "said": "this line is how symmetrical it looks and how deceptive it is black can lose this in like a couple of moves and what often happens is after NBD 795 a lot of players they play something"
+  },
+  {
+   "ply": 16,
+   "t": 700,
+   "line": [
+    "a6"
+   ],
+   "fen": "r2qkb1r/1ppn1ppp/p3pn2/3pNb2/3P1B2/2N1P3/PPP2PPP/R2QKB1R w KQkq - 0 9",
+   "said": "and how deceptive it is black can lose this in like a couple of moves and what often happens is after NBD 795 a lot of players they play something like A6 and already after G4 black is"
+  },
+  {
+   "ply": 17,
+   "t": 702,
+   "line": [
+    "g4"
+   ],
+   "fen": "r2qkb1r/1ppn1ppp/p3pn2/3pNb2/3P1BP1/2N1P3/PPP2P1P/R2QKB1R b KQkq - 0 9",
+   "said": "black can lose this in like a couple of moves and what often happens is after NBD 795 a lot of players they play something like A6 and already after G4 black is borderline lost this trick with G4 and H4"
+  },
+  {
+   "ply": 19,
+   "t": 707,
+   "line": [
+    "Bg6",
+    "h4"
+   ],
+   "fen": "r2qkb1r/1ppn1ppp/p3pnb1/3pN3/3P1BPP/2N1P3/PPP2P2/R2QKB1R b KQkq - 0 10",
+   "said": "a lot of players they play something like A6 and already after G4 black is borderline lost this trick with G4 and H4 is ridiculously common in the jababa London and it causes immediate catastrophic problems for black because the threat is H5 you trap the bishop that's how the game continued this is how the game went and I was"
+  },
+  {
+   "ply": 23,
+   "t": 718.5,
+   "line": [
+    "Nxe5",
+    "dxe5",
+    "Ne4",
+    "h5"
+   ],
+   "fen": "r2qkb1r/1pp2ppp/p3p1b1/3pP2P/4nBP1/2N1P3/PPP2P2/R2QKB1R b KQkq - 0 12",
+   "said": "H4 is ridiculously common in the jababa London and it causes immediate catastrophic problems for black because the threat is H5 you trap the bishop that's how the game continued this is how the game went and I was winning in 11 moves because the bishop is trapped and you'll see a lot of lines like this if black plays in any such position H6"
+  },
+  {
+   "ply": 19,
+   "t": 725.5,
+   "line": [],
+   "fen": "r2qkb1r/1ppn1ppp/p3pnb1/3pN3/3P1BPP/2N1P3/PPP2P2/R2QKB1R b KQkq - 0 10",
+   "said": "problems for black because the threat is H5 you trap the bishop that's how the game continued this is how the game went and I was winning in 11 moves because the bishop is trapped and you'll see a lot of lines like this if black plays in any such position H6"
+  },
+  {
+   "ply": 20,
+   "t": 726.5,
+   "line": [
+    "h6"
+   ],
+   "fen": "r2qkb1r/1ppn1pp1/p3pnbp/3pN3/3P1BPP/2N1P3/PPP2P2/R2QKB1R w KQkq - 0 11",
+   "said": "H5 you trap the bishop that's how the game continued this is how the game went and I was winning in 11 moves because the bishop is trapped and you'll see a lot of lines like this if black plays in any such position H6 then you take the bishop and you completely ruin the pawn structure and"
+  },
+  {
+   "ply": 22,
+   "t": 729.5,
+   "line": [
+    "Nxg6",
+    "fxg6"
+   ],
+   "fen": "r2qkb1r/1ppn2p1/p3pnpp/3p4/3P1BPP/2N1P3/PPP2P2/R2QKB1R w KQkq - 0 12",
+   "said": "this is how the game went and I was winning in 11 moves because the bishop is trapped and you'll see a lot of lines like this if black plays in any such position H6 then you take the bishop and you completely ruin the pawn structure and then you go after the G6 Pawn black is"
+  },
+  {
+   "ply": 23,
+   "t": 732,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "r2qkb1r/1ppn2p1/p3pnpp/3p4/3P1BPP/2NBP3/PPP2P2/R2QK2R b KQkq - 1 12",
+   "said": "winning in 11 moves because the bishop is trapped and you'll see a lot of lines like this if black plays in any such position H6 then you take the bishop and you completely ruin the pawn structure and then you go after the G6 Pawn black is just losing here because he's got to"
+  },
+  {
+   "ply": 24,
+   "t": 734.5,
+   "line": [
+    "Kf7"
+   ],
+   "fen": "r2q1b1r/1ppn1kp1/p3pnpp/3p4/3P1BPP/2NBP3/PPP2P2/R2QK2R w KQ - 2 13",
+   "said": "like this if black plays in any such position H6 then you take the bishop and you completely ruin the pawn structure and then you go after the G6 Pawn black is just losing here because he's got to bring the king out and now you play"
+  },
+  {
+   "ply": 25,
+   "t": 736.5,
+   "line": [
+    "Qf3"
+   ],
+   "fen": "r2q1b1r/1ppn1kp1/p3pnpp/3p4/3P1BPP/2NBPQ2/PPP2P2/R3K2R b KQ - 3 13",
+   "said": "if black plays in any such position H6 then you take the bishop and you completely ruin the pawn structure and then you go after the G6 Pawn black is just losing here because he's got to bring the king out and now you play Queen F3 pinning the pinning the king and G5 is coming next and you're completely winning out of the opening I really really think that adding this to your repertoire will help essentially guarantee fun positions better positions and you'll feel like a freaking badass next question was what happens if somebody counter researches so yeah obviously if somebody prepares diligently and like buys our course and spends another 50 hours analyzing with an engine black equalizes in the jabalon and we don't pretend at any moment in the course that this gives white an advantage if black plays perfectly black is maybe four or five lines that equalize but even in those equalizing lines we were able to find really challenging ideas so even if your opponent goes 10 12 computer moves in a row we're posing serious problems and a lot of the lines end on move 20 move 25 so we're really trying to like give players of all levels directions if you're on a lower level if you're a beginner to intermediate you're probably not going to face the best lines very"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "Bf4"
+   ],
+   "options": [
+    {
+     "san": "a6",
+     "t": 213.5,
+     "continuation": "a6",
+     "said": "first of all what is this course on we cover all of Black's responses in this position that includes C5 C6 Bishop F5 E6 A6 G6 Knight bd7 Knight C6 Bishop G4 we also cover in depth this line which is pretty popular at a high level these are the contents of the course what do the files look like so there is no video component which is why we looked at what chessable courses charge without video I think adjustable courses are around 50 60 so that's that was our sort of General metric I'm going to answer questions one by one so just be patient what is the skill level for the course this course is designed really for beginner to master I would like GMS to consider getting this course we held ourselves to a standard such that a GM who got this course would be happy with the analysis and would find interesting ideas in that course we also designed it with an eye toward most of the audience who we think is going to be you know beginner to intermediate obviously it's not geared for people who have just learned the rules of the game but hopefully that is kind of self-evident"
+    },
+    {
+     "san": "Nc6",
+     "t": 218,
+     "continuation": "Nc6",
+     "said": "position that includes C5 C6 Bishop F5 E6 A6 G6 Knight bd7 Knight C6 Bishop G4 we also cover in depth this line which is pretty popular at a high level these are the contents of the course what do the files look like so there is no video component which is why we looked at what chessable courses charge without video I think adjustable courses are around 50 60 so that's that was our sort of General metric I'm going to answer questions one by one so just be patient what is the skill level for the course this course is designed really for beginner to master I would like GMS to consider getting this course we held ourselves to a standard such that a GM who got this course would be happy with the analysis and would find interesting ideas in that course we also designed it with an eye toward most of the audience who we think is going to be you know beginner to intermediate obviously it's not geared for people who have just learned the rules of the game but hopefully that is kind of self-evident but really anybody a thousand and over I think can benefit from building a"
+    },
+    {
+     "san": "Bf5",
+     "t": 222.5,
+     "continuation": "Bf5 Bc1 Ng8",
+     "said": "A6 G6 Knight bd7 Knight C6 Bishop G4 we also cover in depth this line which is pretty popular at a high level these are the contents of the course what do the files look like so there is no video component which is why we looked at what chessable courses charge without video I think adjustable courses are around 50 60 so that's that was our sort of General metric I'm going to answer questions one by one so just be patient what is the skill level for the course this course is designed really for beginner to master I would like GMS to consider getting this course we held ourselves to a standard such that a GM who got this course would be happy with the analysis and would find interesting ideas in that course we also designed it with an eye toward most of the audience who we think is going to be you know beginner to intermediate obviously it's not geared for people who have just learned the rules of the game but hopefully that is kind of self-evident but really anybody a thousand and over I think can benefit from building a sustainable opening repertoire in which you actually know what you're playing"
+    },
+    {
+     "san": "Ng8",
+     "t": 646,
+     "continuation": "Ng8 Nb1",
+     "said": "opening like why the jabab London so I personally think that at an intermediate level this opening is one of the most underrated that you can play of course the traditional London system is super popular now but I think it's rather Toothless and while it is likely to give you a good position you're not really playing to win the game out of the opening the big difference is that in the jabala London you're basically playing for the win right out of the gates in fact so much so the black has already two losing moves in this position Knight C6 loses the game tonight to B5 black has no way to defend C7 Knight bd7 Knight B5 also loses the game so you have two trap lines you have a million lines where black loses in under 10 moves just yesterday I played a game against an IM and uh I won in 10 moves basically he played Bishop F5 our recommendation is E3 E6 Knight F3 and what's great about this line is how symmetrical it looks and how deceptive it is black can lose this in like a couple of moves and what often happens is after NBD 795 a lot of players they play something like A6 and already after G4 black is borderline lost this trick with G4 and"
+    }
+   ]
+  },
+  {
+   "ply": 15,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/1N1p4/3P1B2/8/PPP1PPPP/R2QKBNR b KQkq - 1 8",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "Bf5",
+    "Bc1",
+    "Ng8",
+    "Nb1",
+    "Bc8",
+    "Nc3",
+    "Nf6",
+    "Bf4",
+    "e6",
+    "Nb5"
+   ],
+   "options": [
+    {
+     "san": "Bb4+",
+     "t": 435.5,
+     "continuation": "Bb4+",
+     "said": "our obvious one is less obvious let's see if you can name all three no E5 is not a move E5 just take Bishop B4 is one of them that's the most obscure but that's what most GMS choose beef Bishop before Bishop A5 there's Knight A6 and there's Bishop D6 so the most popular move on leeches is actually Bishop D6 this is the worst of the three moves and yet it is the most popular and with full due respect to Hans nothing I'm about to say is in any way intended to knock on hanza's work again hopefully will not be interpreted that way before I continue those watching from YouTube I will now authorize this course it is official it's not a scam I posted on in the YouTube Community tab about the course it's real it's not a troll it's not a scam my account was not hijacked this course is real and I'm putting my name in front of it so this move is the most common by far and Hans dedicates only one variation to this line after E3 he gives a move that's almost never played on Lee chess which is Queen to B6 and we gave Queen B6 but vast majority of people just end up castling and this is my problem with most decimal courses you're basically on"
+    },
+    {
+     "san": "Na6",
+     "t": 442.5,
+     "continuation": "Na6",
+     "said": "no E5 is not a move E5 just take Bishop B4 is one of them that's the most obscure but that's what most GMS choose beef Bishop before Bishop A5 there's Knight A6 and there's Bishop D6 so the most popular move on leeches is actually Bishop D6 this is the worst of the three moves and yet it is the most popular and with full due respect to Hans nothing I'm about to say is in any way intended to knock on hanza's work again hopefully will not be interpreted that way before I continue those watching from YouTube I will now authorize this course it is official it's not a scam I posted on in the YouTube Community tab about the course it's real it's not a troll it's not a scam my account was not hijacked this course is real and I'm putting my name in front of it so this move is the most common by far and Hans dedicates only one variation to this line after E3 he gives a move that's almost never played on Lee chess which is Queen to B6 and we gave Queen B6 but vast majority of people just end up castling and this is my problem with most decimal courses you're basically on your own in a line that's going to occur at least like 30 percent of the time so this is what we analyzed with an eye toward"
+    },
+    {
+     "san": "Bd6",
+     "t": 444.5,
+     "continuation": "Bd6",
+     "said": "no E5 is not a move E5 just take Bishop B4 is one of them that's the most obscure but that's what most GMS choose beef Bishop before Bishop A5 there's Knight A6 and there's Bishop D6 so the most popular move on leeches is actually Bishop D6 this is the worst of the three moves and yet it is the most popular and with full due respect to Hans nothing I'm about to say is in any way intended to knock on hanza's work again hopefully will not be interpreted that way before I continue those watching from YouTube I will now authorize this course it is official it's not a scam I posted on in the YouTube Community tab about the course it's real it's not a troll it's not a scam my account was not hijacked this course is real and I'm putting my name in front of it so this move is the most common by far and Hans dedicates only one variation to this line after E3 he gives a move that's almost never played on Lee chess which is Queen to B6 and we gave Queen B6 but vast majority of people just end up castling and this is my problem with most decimal courses you're basically on your own in a line that's going to occur at least like 30 percent of the time so this is what we analyzed with an eye toward actually giving you directions that are"
+    }
+   ]
+  },
+  {
+   "ply": 19,
+   "fen": "rnbqk2r/pp3ppp/3ppn2/3p4/3P1B2/4P3/PPP2PPP/R2QKBNR b KQkq - 0 10",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "Bf5",
+    "Bc1",
+    "Ng8",
+    "Nb1",
+    "Bc8",
+    "Nc3",
+    "Nf6",
+    "Bf4",
+    "e6",
+    "Nb5",
+    "Bd6",
+    "Nxd6+",
+    "cxd6",
+    "e3"
+   ],
+   "options": [
+    {
+     "san": "Qb6",
+     "t": 488.5,
+     "continuation": "Qb6",
+     "said": "this move is the most common by far and Hans dedicates only one variation to this line after E3 he gives a move that's almost never played on Lee chess which is Queen to B6 and we gave Queen B6 but vast majority of people just end up castling and this is my problem with most decimal courses you're basically on your own in a line that's going to occur at least like 30 percent of the time so this is what we analyzed with an eye toward actually giving you directions that are going to help you in the games you face so this line is much more common than black putting the queen on B6 and there's a million lines like that so that is how I would say our course deviates conceptually in terms of the actual moves we did not use hans's course at all we checked it occasionally some lines correspond obviously because in some variations there's just no room for deviation for example after C5 we both give this very sharp Dynamic new move E4 and yet our recommendations later on in this line deviate completely and we believe that we've found a lot more dangerous and more interesting lines in some of the main C5 variations in the bishop F5 lines as well so that's another thing to keep in mind"
+    },
+    {
+     "san": "O-O",
+     "t": 492.5,
+     "continuation": "O-O",
+     "said": "this line after E3 he gives a move that's almost never played on Lee chess which is Queen to B6 and we gave Queen B6 but vast majority of people just end up castling and this is my problem with most decimal courses you're basically on your own in a line that's going to occur at least like 30 percent of the time so this is what we analyzed with an eye toward actually giving you directions that are going to help you in the games you face so this line is much more common than black putting the queen on B6 and there's a million lines like that so that is how I would say our course deviates conceptually in terms of the actual moves we did not use hans's course at all we checked it occasionally some lines correspond obviously because in some variations there's just no room for deviation for example after C5 we both give this very sharp Dynamic new move E4 and yet our recommendations later on in this line deviate completely and we believe that we've found a lot more dangerous and more interesting lines in some of the main C5 variations in the bishop F5 lines as well so that's another thing to keep in mind in terms of the lack of video we thought"
+    }
+   ]
+  },
+  {
+   "ply": 19,
+   "fen": "r2qkb1r/1ppn1ppp/p3pnb1/3pN3/3P1BPP/2N1P3/PPP2P2/R2QKB1R b KQkq - 0 10",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "Ng8",
+    "Nb1",
+    "Nf6",
+    "Nc3",
+    "Bf5",
+    "e3",
+    "e6",
+    "Nf3",
+    "Nbd7",
+    "Ne5",
+    "a6",
+    "g4",
+    "Bg6",
+    "h4"
+   ],
+   "options": [
+    {
+     "san": "Nxe5",
+     "t": 718.5,
+     "continuation": "Nxe5 dxe5 Ne4 h5",
+     "said": "H4 is ridiculously common in the jababa London and it causes immediate catastrophic problems for black because the threat is H5 you trap the bishop that's how the game continued this is how the game went and I was winning in 11 moves because the bishop is trapped and you'll see a lot of lines like this if black plays in any such position H6 then you take the bishop and you completely ruin the pawn structure and then you go after the G6 Pawn black is just losing here because he's got to bring the king out and now you play Queen F3 pinning the pinning the king and G5 is coming next and you're completely winning out of the opening I really really think that adding this to your repertoire will help essentially guarantee fun positions better positions and you'll feel like a freaking badass next question was what happens if somebody counter researches so yeah obviously if somebody prepares diligently and like buys our course and spends another 50 hours analyzing with an engine black equalizes in the jabalon and we don't pretend at any moment in the course that this gives white an advantage if black plays perfectly black is maybe four or five lines that equalize but even in those equalizing lines we were able to find really challenging ideas so"
+    },
+    {
+     "san": "h6",
+     "t": 726.5,
+     "continuation": "h6",
+     "said": "H5 you trap the bishop that's how the game continued this is how the game went and I was winning in 11 moves because the bishop is trapped and you'll see a lot of lines like this if black plays in any such position H6 then you take the bishop and you completely ruin the pawn structure and then you go after the G6 Pawn black is just losing here because he's got to bring the king out and now you play Queen F3 pinning the pinning the king and G5 is coming next and you're completely winning out of the opening I really really think that adding this to your repertoire will help essentially guarantee fun positions better positions and you'll feel like a freaking badass next question was what happens if somebody counter researches so yeah obviously if somebody prepares diligently and like buys our course and spends another 50 hours analyzing with an engine black equalizes in the jabalon and we don't pretend at any moment in the course that this gives white an advantage if black plays perfectly black is maybe four or five lines that equalize but even in those equalizing lines we were able to find really challenging ideas so even if your opponent goes 10 12 computer moves in a row we're posing serious problems and a lot of the lines"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,424 @@
+{
+ "videoId": "Q0CTfDwnd3A",
+ "title": "Exploding the Center | IQP | In-depth Sicilian Alapin | GM Naroditsky’s Theory Speed Run",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 31.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "should be coming out pretty regularly, and I'll be diversifying my content uh this coming month as well. So, we're playing white against very strong player, 2198. This is the the strongest opponent that we face to date. And let's"
+  },
+  {
+   "ply": 3,
+   "t": 34.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "and I'll be diversifying my content uh this coming month as well. So, we're playing white against very strong player, 2198. This is the the strongest opponent that we face to date. And let's see how the Alapin fares against a serious player of a high caliber. I"
+  },
+  {
+   "ply": 4,
+   "t": 40,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "playing white against very strong player, 2198. This is the the strongest opponent that we face to date. And let's see how the Alapin fares against a serious player of a high caliber. I think there's there's an idea that the Alapin is sort of only good at beginner to intermediate level, and I vehemently disagree with that. I think it's a tremendously dangerous weapon all the way to GM level. And e6 is one of the many sort of I wouldn't even call it a second-rate move, but it's definitely one tier behind the"
+  },
+  {
+   "ply": 3,
+   "t": 60.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "tremendously dangerous weapon all the way to GM level. And e6 is one of the many sort of I wouldn't even call it a second-rate move, but it's definitely one tier behind the two main moves, which are d5 and knight f6. And e6 is kind of a flexible move"
+  },
+  {
+   "ply": 4,
+   "t": 64.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "sort of I wouldn't even call it a second-rate move, but it's definitely one tier behind the two main moves, which are d5 and knight f6. And e6 is kind of a flexible move"
+  },
+  {
+   "ply": 5,
+   "t": 66,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "sort of I wouldn't even call it a second-rate move, but it's definitely one tier behind the two main moves, which are d5 and knight f6. And e6 is kind of a flexible move um in which black can play several different ways. The traditional response"
+  },
+  {
+   "ply": 6,
+   "t": 70.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "two main moves, which are d5 and knight f6. And e6 is kind of a flexible move um in which black can play several different ways. The traditional response here is d5. And for black to be okay with this uh for for black to play this, he has to be okay with allowing e5, which transposes into an advanced French. But since my recommendation against the French is not to play the advanced, and I've never really played it uh myself, most of the time Sicilian players with black uh even if they don't play the French, are kind of bluffing white into playing e5. And often times, neither side really knows what to do in that situation. But the more Alapin-esque way of playing this line is actually to take"
+  },
+  {
+   "ply": 7,
+   "t": 106.5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pP4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "French, are kind of bluffing white into playing e5. And often times, neither side really knows what to do in that situation. But the more Alapin-esque way of playing this line is actually to take on d5, after which black is at sort of an early crossroads. You can transpose back into uh the two d5 variation if you take with the queen, or you can kind of keep the spirit of the e6 line by taking back with the pawn. And you can already see the kind of workings of of an IQP structure, because if black takes back with the pawn, and then at some point white plays pawn takes e5, black recaptures, and then black will have uh an isolated pawn on d5, and that is the classic isolated queen pawn structure. And that is"
+  },
+  {
+   "ply": 8,
+   "t": 140,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/8/2pp4/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "said": "and then at some point white plays pawn takes e5, black recaptures, and then black will have uh an isolated pawn on d5, and that is the classic isolated queen pawn structure. And that is exactly what is going to happen. Now, one good thing about the placement of the pawn on c3 is that in this in this situation where we take on c5 and black takes back, that c3 pawn will have the effect of slowing down uh the d5 pawn and and controlling the square in front of it, which I've talked about very frequently as one of the most important things to do when you're fighting against the isolated queen pawn. You can put a knight on the square in front of it, but more importantly is to kind of is to control the square. It's more important to control a square than to put a piece on that square. Those are two different things. But pawn takes c5 immediately is decent, but it's not the best way to squeeze the most out of this position. What we would want to do in an ideal scenario, and this rule this concept also exists in openings like the Queen's Gambit, which is that you want to wait for black to move the dark-squared bishop first. Then and only then do you take on c5, because that essentially makes black lose a tempo. Black plays bishop e7, and then that bishop again takes the pawn on c5. We've garnered a tempo that we can use to develop our pieces. And so, as far as I remember, the best move and the most commonly"
+  },
+  {
+   "ply": 9,
+   "t": 213.5,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/8/1Bpp4/3P4/2P5/PP3PPP/RNBQK1NR b KQkq - 1 5",
+   "said": "tempo. Black plays bishop e7, and then that bishop again takes the pawn on c5. We've garnered a tempo that we can use to develop our pieces. And so, as far as I remember, the best move and the most commonly recommended move for white is bishop e5 check. Just developing our bishop with tempo, and asking black another"
+  },
+  {
+   "ply": 10,
+   "t": 221.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2n5/1Bpp4/3P4/2P5/PP3PPP/RNBQK1NR w KQkq - 2 6",
+   "said": "to develop our pieces. And so, as far as I remember, the best move and the most commonly recommended move for white is bishop e5 check. Just developing our bishop with tempo, and asking black another difficult question. Uh black is again at"
+  },
+  {
+   "ply": 9,
+   "t": 224,
+   "line": [],
+   "fen": "rnbqkbnr/pp3ppp/8/1Bpp4/3P4/2P5/PP3PPP/RNBQK1NR b KQkq - 1 5",
+   "said": "I remember, the best move and the most commonly recommended move for white is bishop e5 check. Just developing our bishop with tempo, and asking black another difficult question. Uh black is again at a crossroads here. Bishop d7 is is a move, but generally trades are good for the side that fights the IQP, because the fewer pieces you have, the harder it is to to essentially keep that pawn or to control. Knight c6 is the"
+  },
+  {
+   "ply": 10,
+   "t": 237,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2n5/1Bpp4/3P4/2P5/PP3PPP/RNBQK1NR w KQkq - 2 6",
+   "said": "is a move, but generally trades are good for the side that fights the IQP, because the fewer pieces you have, the harder it is to to essentially keep that pawn or to control. Knight c6 is the more topical response. And now we kind of follow the rule. We don't take on c5. Instead, we develop"
+  },
+  {
+   "ply": 11,
+   "t": 243,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2n5/1Bpp4/3P4/2P2N2/PP3PPP/RNBQK2R b KQkq - 3 6",
+   "said": "because the fewer pieces you have, the harder it is to to essentially keep that pawn or to control. Knight c6 is the more topical response. And now we kind of follow the rule. We don't take on c5. Instead, we develop our pieces and wait for a more opportune moment uh to take that pawn. The moment black develops his bishop, that would be a very good time to consider taking on c5. Okay. And so far, we're playing pretty standard moves. This is still well-known theory. And black has multiple ways that they can that they can develop their pieces."
+  },
+  {
+   "ply": 12,
+   "t": 265,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "r1bqk1nr/pp3ppp/2nb4/1Bpp4/3P4/2P2N2/PP3PPP/RNBQK2R w KQkq - 4 7",
+   "said": "Okay. And so far, we're playing pretty standard moves. This is still well-known theory. And black has multiple ways that they can that they can develop their pieces. There we go. There's bishop d6. Now, what what's funny is that we we can delay the move d takes c5 one more move. Like we can castle here, and it's not like black has any good way of resolving the tension in the center. Like black can't punish us for avoiding d takes c5 for one more move. But I want to kind of stick to uh a more traditional way of playing. And traditionally, you want to take on"
+  },
+  {
+   "ply": 13,
+   "t": 289.5,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "r1bqk1nr/pp3ppp/2nb4/1BPp4/8/2P2N2/PP3PPP/RNBQK2R b KQkq - 0 7",
+   "said": "the tension in the center. Like black can't punish us for avoiding d takes c5 for one more move. But I want to kind of stick to uh a more traditional way of playing. And traditionally, you want to take on c5 the moment that black develops their bishop. Okay, so bishop takes c5 is going to follow, and we've earned a tempo because black has"
+  },
+  {
+   "ply": 14,
+   "t": 296.5,
+   "line": [
+    "Bxc5"
+   ],
+   "fen": "r1bqk1nr/pp3ppp/2n5/1Bbp4/8/2P2N2/PP3PPP/RNBQK2R w KQkq - 0 8",
+   "said": "stick to uh a more traditional way of playing. And traditionally, you want to take on c5 the moment that black develops their bishop. Okay, so bishop takes c5 is going to follow, and we've earned a tempo because black has made an extra move with with his bishop, so now we can castle, get our king out of"
+  },
+  {
+   "ply": 15,
+   "t": 304.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk1nr/pp3ppp/2n5/1Bbp4/8/2P2N2/PP3PPP/RNBQ1RK1 b kq - 1 8",
+   "said": "bishop takes c5 is going to follow, and we've earned a tempo because black has made an extra move with with his bishop, so now we can castle, get our king out of the center. And the next big question is going to be where is our opponent going to develop his knight? There's knight e7, and there's knight f6. And they lead, broadly speaking, to similar positions, but our development is going to be based on where black positions his knight, because in response to knight f6, I I like the look of playing bishop g5, and kind of pinning that knight, and making it hard for black to move the way that he wants to. But if black develops the knight to e7, then bishop g5 makes a little bit less sense, because that would walk right into the move f6. And f6 in this particular position isn't such a weakening move. It's not something that we would want to play"
+  },
+  {
+   "ply": 16,
+   "t": 346,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n2n2/1Bbp4/8/2P2N2/PP3PPP/RNBQ1RK1 w kq - 2 9",
+   "said": "then bishop g5 makes a little bit less sense, because that would walk right into the move f6. And f6 in this particular position isn't such a weakening move. It's not something that we would want to play with uh several tempi for. Like we wouldn't want to go bishop g5, and then induce f6, and go back. So, black chooses the the traditional developing move knight f6. And here, there are several important ideas that you should be aware of when you're fighting uh the IQP. In particular, we should have a general sense of where we're putting the rest of our minor pieces. The move I don't like as well, actually, it's interesting, but we can this check on e1, I think a lot of people would be very tempted to give. But then black can simply cover with the bishop, and the f2 pawn is a major problem in these positions, because the queen can easily come out to b6. There are even some tactics where black takes on f2, and then forks the king and bishop. So, we actually would want to keep our rook on f1 in order to solidify the f2 pawn, and make sure that there are no tactical shenanigans connected with queen b6 or knight e4, uh or even bishop takes f2 check. Uh so, there's two main questions here. The first is where to position this bishop. We've kind of been deciding on g5. The second is what to do with our knight. And typically, um if you're at all familiar with IQP structures, you know that the knight in these situations often travels to b3, hits the bishop, and positions itself on a square where it can blockade the square in front of the pawn. There really aren't any other options for the development of our knight. The real decision we have to make is what order do we develop our pieces in? But I like the look of"
+  },
+  {
+   "ply": 17,
+   "t": 436.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n2n2/1Bbp2B1/8/2P2N2/PP3PPP/RN1Q1RK1 b kq - 3 9",
+   "said": "the pawn. There really aren't any other options for the development of our knight. The real decision we have to make is what order do we develop our pieces in? But I like the look of starting with bishop g5, because it restricts the knight, and immediately sets up a pin. And of course, the drawback of playing"
+  },
+  {
+   "ply": 18,
+   "t": 443,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2qk2r/pp3ppp/2n1bn2/1Bbp2B1/8/2P2N2/PP3PPP/RN1Q1RK1 w kq - 4 10",
+   "said": "make is what order do we develop our pieces in? But I like the look of starting with bishop g5, because it restricts the knight, and immediately sets up a pin. And of course, the drawback of playing"
+  },
+  {
+   "ply": 20,
+   "t": 444.5,
+   "line": [
+    "Bc1",
+    "Bc8"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n2n2/1Bbp4/8/2P2N2/PP3PPP/RNBQ1RK1 w kq - 6 11",
+   "said": "make is what order do we develop our pieces in? But I like the look of starting with bishop g5, because it restricts the knight, and immediately sets up a pin. And of course, the drawback of playing knight b to d2 first is that the bishop be temporarily blocked in by the knight. So, this just seems like a more"
+  },
+  {
+   "ply": 22,
+   "t": 449,
+   "line": [
+    "Bg5",
+    "Be6"
+   ],
+   "fen": "r2qk2r/pp3ppp/2n1bn2/1Bbp2B1/8/2P2N2/PP3PPP/RN1Q1RK1 w kq - 8 12",
+   "said": "restricts the knight, and immediately sets up a pin. And of course, the drawback of playing knight b to d2 first is that the bishop be temporarily blocked in by the knight. So, this just seems like a more harmonious way of developing. Bishop e6 instantly follows. I don't love the look of this move. Black is delaying castling, and giving us some additional options here. Like we could throw in the immediate knight e4, and put some pressure on black's minor pieces. But I really don't want to uh make too many of these adventurous moves. I want to play in a more"
+  },
+  {
+   "ply": 23,
+   "t": 469,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "r2qk2r/pp3ppp/2n1bn2/1Bbp2B1/8/2P2N2/PP1N1PPP/R2Q1RK1 b kq - 9 12",
+   "said": "us some additional options here. Like we could throw in the immediate knight e4, and put some pressure on black's minor pieces. But I really don't want to uh make too many of these adventurous moves. I want to play in a more traditional fashion to really highlight uh the techniques that we have of fighting against the IQP. White is slightly better here. Um not because black has an IQP. Like if you if you watched my speedrun videos, you know that the isolated queen pawn structure is one in which you can't make any categorical assertions about who is better. It It all depends on the placement of the other pieces. There are situations where the IQP is a great asset, and there are situations where it's a tremendous weakness. And I think that this situation resembles the latter more than it does the former, just because black's piece activity is not uh not all that impressive. Like black is pinned along this diagonal. The bishop"
+  },
+  {
+   "ply": 24,
+   "t": 510.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/pp3ppp/2n1bn2/1Bbp2B1/8/2P2N2/PP1N1PPP/R2Q1RK1 w - - 10 13",
+   "said": "that this situation resembles the latter more than it does the former, just because black's piece activity is not uh not all that impressive. Like black is pinned along this diagonal. The bishop on e6 is kind of a passive observer, and is just sort of tied down to the pawn. And most importantly, as we play knight"
+  },
+  {
+   "ply": 25,
+   "t": 519,
+   "line": [
+    "Nb3"
+   ],
+   "fen": "r2q1rk1/pp3ppp/2n1bn2/1Bbp2B1/8/1NP2N2/PP3PPP/R2Q1RK1 b - - 11 13",
+   "said": "not all that impressive. Like black is pinned along this diagonal. The bishop on e6 is kind of a passive observer, and is just sort of tied down to the pawn. And most importantly, as we play knight b3, we've been able to reach and achieve complete control of the square in front"
+  },
+  {
+   "ply": 26,
+   "t": 523.5,
+   "line": [
+    "Bb6"
+   ],
+   "fen": "r2q1rk1/pp3ppp/1bn1bn2/1B1p2B1/8/1NP2N2/PP3PPP/R2Q1RK1 w - - 12 14",
+   "said": "on e6 is kind of a passive observer, and is just sort of tied down to the pawn. And most importantly, as we play knight b3, we've been able to reach and achieve complete control of the square in front of the pawn, which means that the IQP is no longer a moving target. Um and and it's going to saddle black uh for really likely for the rest of the game, at least for the rest of the time that it exists on d5. So, now we enter a stage where we need to make sort of marginal improving moves. We need to build up our advantage, and eventually something is going to give in sort of the ideal scenario. But we have to be careful about like what exactly we do. And if you're not familiar with this structure, then it can be hard to generate helpful moves. You You might look at this and say, \"Well, I developed all my pieces. What do I do now?\" And and there are some moves that that you really want to avoid. Like for example, I think some people might want to go queen to d2 here, and connect the rooks. But queen d2 tactically runs into the response knight to e4. Um and that leads to some undesirable trades for white. It leads to undesirable tactics in general. I think the kind of low-hanging fruit that we should start with is actually to position a knight on d4. And as I mentioned earlier, it's more important to control the square in front of the pawn than it is to actually put a piece on that square. but I'm not trying to suggest that putting a piece on it is somehow a bad idea. I really like the look of knight c4 uh because that knight is sort of in a on an ideal square. It's putting some pressure on black's minor pieces, and it's just a relatively inoffensive move that we could play without thinking too much about the consequences. So, we can go knight f d4, we can go knight b d4. Uh a lot of these minor points are are less important than I think a lot of people will make them out to be. I think"
+  },
+  {
+   "ply": 27,
+   "t": 626.5,
+   "line": [
+    "Nbd4"
+   ],
+   "fen": "r2q1rk1/pp3ppp/1bn1bn2/1B1p2B1/3N4/2P2N2/PP3PPP/R2Q1RK1 b - - 13 14",
+   "said": "we can go knight f d4, we can go knight b d4. Uh a lot of these minor points are are less important than I think a lot of people will make them out to be. I think it's more natural to play knight b to d4 just to keep this other knight on the king side um where it controls, you know, some some key squares and and lends a little bit another layer of support to white's king. Okay, so knight b to d4. And already we're asking black some more straightforward questions. We're threatening to win a pawn. Like obviously we're threatening to take twice on c6. If black plays knight takes d4, which is quite likely, then we recapture with our knight. And already black black is in a little bit of trouble there. Like it's it's hard to make a move if you're playing black because the last thing you want to do is is move your queen"
+  },
+  {
+   "ply": 28,
+   "t": 664.5,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2q1rk1/pp1b1ppp/1bn2n2/1B1p2B1/3N4/2P2N2/PP3PPP/R2Q1RK1 w - - 14 15",
+   "said": "knight. And already black black is in a little bit of trouble there. Like it's it's hard to make a move if you're playing black because the last thing you want to do is is move your queen out of d8. Then we would play bishop takes f6 and completely spoil the pawn structure. Bishop d7 is a good move. That's a good move. That's a 2100 move just sort of keeping the tension and protecting this knight. So, what do we do now? Well, black is threatening to play knight takes d4, which again leads to unpleasant tactical complications. We run the risk of losing a piece in that position because of course if you play bishop takes d7 there, then black will capture on f3 and then recapture on d7 with an extra piece. So, we want to avoid those types of complications when possible. We should also keep in mind that you can sometimes successfully change the pawn structure or change the nature of your advantage from an IQP to something more dynamic. And I think this is a very instructive situation in which we can do just that. My instinct is actually to make a move that I would venture to say is unnatural to the vast majority of people. And this is a move that's probably on your radar, but you might think that it's bad because it fixes the problem of black's IQP and it seems to give away our biggest asset. But the benefit of this move, I think, is that it transforms our advantage from a strictly positional one to an actual initiative, to a situation where our superior piece activity is what gives us the biggest is what gives us our"
+  },
+  {
+   "ply": 29,
+   "t": 751,
+   "line": [
+    "Bxc6"
+   ],
+   "fen": "r2q1rk1/pp1b1ppp/1bB2n2/3p2B1/3N4/2P2N2/PP3PPP/R2Q1RK1 b - - 0 15",
+   "said": "a strictly positional one to an actual initiative, to a situation where our superior piece activity is what gives us the biggest is what gives us our advantage rather than the presence of a long-term weakness. And that is the move bishop takes c6. So, what are the minuses of this move? Well, there are two big ones. We're giving away the bishop pair, that's number one, but more importantly we're allowing b takes c6 after which the d5 pawn is no longer isolated. And b takes c6 leads to the hanging pawn structure, which perhaps some of you have heard of. And the hanging pawn structure is characterized by the presence of pawns on the c and d file that are"
+  },
+  {
+   "ply": 30,
+   "t": 781.5,
+   "line": [
+    "bxc6"
+   ],
+   "fen": "r2q1rk1/p2b1ppp/1bp2n2/3p2B1/3N4/2P2N2/PP3PPP/R2Q1RK1 w - - 0 16",
+   "said": "And b takes c6 leads to the hanging pawn structure, which perhaps some of you have heard of. And the hanging pawn structure is characterized by the presence of pawns on the c and d file that are themselves removed from any other pawn. So, there's no b pawn and there's no e pawn, so you kind of have this self-sufficient pawn island on c6 and d5, and those are called uh hanging pawns. And the way that you should kind of think about hanging pawns is that the isolated pawn has shifted from the d file to the c file. The pawn on c6 is now essentially an isolated pawn. Even though it has a neighboring pawn on d5, the pawn on d5 can't go backwards and defend c6. So, for all intents and purposes, the biggest weakness uh in the hanging pawn structure is in this position c6. And we can attack that pawn very straightforwardly by positioning"
+  },
+  {
+   "ply": 31,
+   "t": 824.5,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "r2q1rk1/p2b1ppp/1bp2n2/3pN1B1/3N4/2P5/PP3PPP/R2Q1RK1 b - - 1 16",
+   "said": "and defend c6. So, for all intents and purposes, the biggest weakness uh in the hanging pawn structure is in this position c6. And we can attack that pawn very straightforwardly by positioning our knight on e5. But knight e5 also contains a couple of other important positional threats. First of all, we're threatening to take the pawn on c6. But most importantly we're also threatening to take on d7 and then to take on f6 and completely ruin black's king side pawn structure. We can also start with bishop takes f6 because the queen can't recapture, it's defending the bishop. So, there are many many threats that we are creating by positioning our knights in the way that we do. And uh black is struggling here to keep all of the bases covered. Of course, bishop takes d4 is possible, but then we get a huge advantage. We can even recapture with a pawn. And if you just look at the way that our minor pieces are positioned there, black is borderline positionally lost in case he gives away the dark square bishop. So, it's it's hard to like, you know, quantify exactly why white is better in this position. You just have to kind of think of it as a very unpleasant position for black to play uh because there are a lot of things that he has to keep protected. Black's pieces are passive, and our minor pieces are essentially all on optimal squares. So, I think black does have a way to beat back white's initiative, but it would require finding a lot of very accurate moves. Uh so so I don't think that bishop c6 is"
+  },
+  {
+   "ply": 28,
+   "t": 906.5,
+   "line": [],
+   "fen": "r2q1rk1/pp1b1ppp/1bn2n2/1B1p2B1/3N4/2P2N2/PP3PPP/R2Q1RK1 w - - 14 15",
+   "said": "So, I think black does have a way to beat back white's initiative, but it would require finding a lot of very accurate moves. Uh so so I don't think that bishop c6 is likely to be the engine's recommendation. The engine often likes to drop the bishop back in these types of situations, but you know, given that we have a big"
+  },
+  {
+   "ply": 31,
+   "t": 914,
+   "line": [
+    "Bxc6",
+    "bxc6",
+    "Ne5"
+   ],
+   "fen": "r2q1rk1/p2b1ppp/1bp2n2/3pN1B1/3N4/2P5/PP3PPP/R2Q1RK1 b - - 1 16",
+   "said": "very accurate moves. Uh so so I don't think that bishop c6 is likely to be the engine's recommendation. The engine often likes to drop the bishop back in these types of situations, but you know, given that we have a big initiative here and this is more my style, I find this hard to resist. Okay. A lot of tactics here hanging in the air as well. Let's see what our opponent ends up choosing. The fact that he's thinking for this long is a pretty encouraging sign. Black has many ways that that they can try to fight uh this initiative. Yeah, queen e8 is actually a a pretty smart move that's being proposed in the chat because this unpins"
+  },
+  {
+   "ply": 32,
+   "t": 939.5,
+   "line": [
+    "c5"
+   ],
+   "fen": "r2q1rk1/p2b1ppp/1b3n2/2ppN1B1/3N4/2P5/PP3PPP/R2Q1RK1 w - - 0 17",
+   "said": "Black has many ways that that they can try to fight uh this initiative. Yeah, queen e8 is actually a a pretty smart move that's being proposed in the chat because this unpins the queen and attacks the knight on e5, and we'll talk about it after the game. Black plays the move that I was expecting, which is c5. And this is a very straightforward move, but this move fails tactically, if I've calculated this correctly, to a beautiful sequence. And I saw this when I played bishop takes c6. This was one of the things that we kind of had to calculate when making that move. So, when you look at this position, your instinct is probably to move the knight uh away from d4. But that's not the only thing available to us if if you listen carefully to what I just said, you should know that a possibility here is to play bishop takes f6. And queen takes f6 is still impossible. Knight takes d7 also comes with a fork. So, after bishop takes f6 g takes f6, you know, at a minimum we could just take the bishop on d7 and then move this knight away, and we could claim that we're slightly better because because black's pawn structure on the king side is damaged. But that also doesn't tell the whole story. If we waltz into that position, black could tuck the king away on h8 and actually use the g file to his advantage and generate attacking chances against our own king. But I actually think that there's a specific tactical sequence here uh that leads to very unpleasant consequence for black, although I actually need a little more time here. There's a small detail there that I missed. Hmm. Wow. Yeah, there's a crazy line. My idea was like bishop takes f6 gf, knight c6, bishop takes c6, knight takes c6, and then we have this tactic where we take on d5 and sack the queen temporarily and then give a fork on e7. I'll have to show all of this after the game. It's just impossible to to explain it verbally. So, there is one small problem with that idea, and it's actually more than a small problem. It might mean we have to deviate from the path that I had intended. Okay, so I actually think there is an issue with with my uh with my initial idea. So, in that case I think we have to resort to the more the more straightforward path here, which is which is to take on f6, take on d7, and then try to claim a small advantage based on black's weak hanging pawns and and the weak king side. Unfortunately, I think we have to go for"
+  },
+  {
+   "ply": 33,
+   "t": 1082.5,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "r2q1rk1/p2b1ppp/1b3B2/2ppN3/3N4/2P5/PP3PPP/R2Q1RK1 b - - 0 17",
+   "said": "which is which is to take on f6, take on d7, and then try to claim a small advantage based on black's weak hanging pawns and and the weak king side. Unfortunately, I think we have to go for it. Bishop takes f6. And we have to play a little bit faster here given our time situation. Hmm. Okay, let's see what our opponent does here. I mean, queen f6 loses on the spot. I'm not sure what what black is thinking about. Yeah, gf. So,"
+  },
+  {
+   "ply": 34,
+   "t": 1097,
+   "line": [
+    "gxf6"
+   ],
+   "fen": "r2q1rk1/p2b1p1p/1b3p2/2ppN3/3N4/2P5/PP3PPP/R2Q1RK1 w - - 0 18",
+   "said": "here given our time situation. Hmm. Okay, let's see what our opponent does here. I mean, queen f6 loses on the spot. I'm not sure what what black is thinking about. Yeah, gf. So, unfortunately the move knight c6 here actually fails tactically to bishop c6, knight c6, and then this move queen e8, which is like ultra advanced tactics, and I'll show this in greater depth after the game. But this is the kind of thing you just kind of either you see it or you don't. Um and and as I mentioned before, a lot of top level chess really boils down to these tactical details"
+  },
+  {
+   "ply": 35,
+   "t": 1122,
+   "line": [
+    "Nxd7"
+   ],
+   "fen": "r2q1rk1/p2N1p1p/1b3p2/2pp4/3N4/2P5/PP3PPP/R2Q1RK1 b - - 0 18",
+   "said": "and I'll show this in greater depth after the game. But this is the kind of thing you just kind of either you see it or you don't. Um and and as I mentioned before, a lot of top level chess really boils down to these tactical details that you have to spot, and it's not you know, they just exist. It's not like you can arrive at them with logical"
+  },
+  {
+   "ply": 36,
+   "t": 1128,
+   "line": [
+    "Qxd7"
+   ],
+   "fen": "r4rk1/p2q1p1p/1b3p2/2pp4/3N4/2P5/PP3PPP/R2Q1RK1 w - - 0 19",
+   "said": "before, a lot of top level chess really boils down to these tactical details that you have to spot, and it's not you know, they just exist. It's not like you can arrive at them with logical reasoning. You just have to spot them. Um and now we have to move our knight, but we have to figure out where that knight belongs. Knight f3 I don't like because then the knight will be restricted by the f6 pawn. I actually like the look of knight to c2 or even knight to e2, but we're going to settle on knight to c2 because"
+  },
+  {
+   "ply": 37,
+   "t": 1148.5,
+   "line": [
+    "Nc2"
+   ],
+   "fen": "r4rk1/p2q1p1p/1b3p2/2pp4/8/2P5/PPN2PPP/R2Q1RK1 b - - 1 19",
+   "said": "to figure out where that knight belongs. Knight f3 I don't like because then the knight will be restricted by the f6 pawn. I actually like the look of knight to c2 or even knight to e2, but we're going to settle on knight to c2 because it keeps the diagonal open for the queen. And the reason I like knight c2 the most is because the knight can reroute to e3 and continue harassing the d5 pawn, which is one of black's main weaknesses here, as is the f6 pawn. So, I still think that white is better. It's not as big of an advantage as I had hoped for, but really only one side is having fun. Now, what are some moves that we can make uh to improve our position? Well, an easy move is queen f3, which continues to target the d5 pawn, but also sets its it sets our sights on the f6 pawn. And that's a particularly good response to a move like king h8 because we don't want to leave our king unattended, especially given the the that at some later point black can play c4 and open up the bishop's diagonal. So, queen f3 is a multi-purpose move. It it attacks f6 and it defends g2 and it essentially knips any g file pressure in the bud. Now, the move I think a lot of people would play here with black is d4. I think people in across really all rating ranges would be tempted by this move, but remember that in the middle game a double a pass pawn is a double-sided thing. Like on the one hand that pawn looks dangerous, on the other hand it's still going to be isolated after the trade on d4. And we have enough pieces to where we can successfully restrain that pawn and then start attacking it. So, for instance, one easy way to fight the move d4 would be to take on d4 and then to still play the move queen to f3. Attack the f6 pawn and gain a tempo that we could use to bring our rook into the game and at that point the d4 pawn will be in dire straits. I think black will have a very hard time to defend it. Okay. So, again, a situation in which it's kind of hard for black to find a a helpful move. Maybe rook a to d8 should be considered something slow. But queen f5 would be a good example of like an impulsive move that turns out to be a blunder because it walks right into the fork. Right, knight e3 hits the queen and hits the pawn. And of course we could grab that pawn and support the knight with c4 if necessary. Well, I like positions where both sides have only one minor piece. I think they're quite instructive. And these positions are are good for like illustrating kind of important strategic and and positional ideas. I I wouldn't necessarily call this a case of like good knight against bad bishop because black's bishop isn't terrible. Black's bishop could be activated with"
+  },
+  {
+   "ply": 38,
+   "t": 1297,
+   "line": [
+    "Rfd8"
+   ],
+   "fen": "r2r2k1/p2q1p1p/1b3p2/2pp4/8/2P5/PPN2PPP/R2Q1RK1 w - - 2 20",
+   "said": "kind of important strategic and and positional ideas. I I wouldn't necessarily call this a case of like good knight against bad bishop because black's bishop isn't terrible. Black's bishop could be activated with c4. But the bigger problem in black's position is just all of the pawn weaknesses and the fact that the king is so flimsy. Okay, so rook d8 played. Black puts the other rook on d8 which surprises me a little bit. Now the king feels a little bit more even more uncomfortable. And I would start with queen f3 here. Um we could also start with knight to e3, but this move makes I think less sense now that it doesn't attack the d5 pawn. So, I think queen f3 is a more accurate way to start because at the very least it forces black to contend with the the big threat of queen takes f6 which makes the king even weaker. Okay. So, one idea that our opponent might have is just to throw caution to the wind and play d4 here anyway. And in the event that that happens, after c takes d4 c takes d4, I would be seriously considering the prospect of not taking on f6 because that leads to tremendous complications. It allows black's d pawn to run amok with d3. I still think that position is good for white. I still think that pawn is not as dangerous as it may appear given all of our pieces and how active they are, but after d4, we could also consider the simple rook a to d1 uh either before or after c takes d4. So, I think d4 is is really not not a big concern Okay, queen d6. Ooh, now that is a natural move because it protects f6, but the moment I see this move, I immediately think, well, now the knight can reach f5 with tempo. So, knight e3 becomes even more tempting than it was. And if we're concerned about d4, we could definitely start with the move rook a to d1. I think both moves are good. I think rook a d1 is the more measured Russian schoolboy approach. Okay, let's bring all pieces into the game. And later down the line that rook could actually lift itself over to the"
+  },
+  {
+   "ply": 40,
+   "t": 1410.5,
+   "line": [
+    "Qf3",
+    "Qd6"
+   ],
+   "fen": "r2r2k1/p4p1p/1b1q1p2/2pp4/8/2P2Q2/PPN2PPP/R4RK1 w - - 4 21",
+   "said": "rook a to d1. I think both moves are good. I think rook a d1 is the more measured Russian schoolboy approach. Okay, let's bring all pieces into the game. And later down the line that rook could actually lift itself over to the king side via d3. So, rook a d1 isn't just a defensive move, it's also an attacking move. But knight e3 is super juicy because knight f5 is a huge threat. It's a massive threat. And it's a massive threat because it can be accompanied by queen g4 queen g7. So, that literally could lead to checkmate really really quickly. My guess is that in response to knight e3 black is going to go king h8. But I don't see any reason why throwing this pair of moves in is is going to be bad for us. Like I don't see a universe in which that's the case. So, we'll start with knight e3. Bishop c7. Okay, so that's a one move threat. That's not scary. I think the simplest way to defend against it is g3. A couple of things to avoid here. We don't want to give an empty check on g4 because that would only help black. And the reason that would help black is because black wants to play king h8 anyway. Right, king h8 is is a move that favors black because it puts the king on a safer square. So, here we want to keep the tension with g3. And and definitely we don't want to trade queens. Like maybe I could find a Russian GM who"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 18,
+   "fen": "r2qk2r/pp3ppp/2n1bn2/1Bbp2B1/8/2P2N2/PP3PPP/RN1Q1RK1 w kq - 4 10",
+   "line": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Bb5+",
+    "Nc6",
+    "Nf3",
+    "Bd6",
+    "dxc5",
+    "Bxc5",
+    "O-O",
+    "Nf6",
+    "Bg5",
+    "Be6"
+   ],
+   "options": [
+    {
+     "san": "Bc1",
+     "t": 444.5,
+     "continuation": "Bc1 Bc8",
+     "said": "make is what order do we develop our pieces in? But I like the look of starting with bishop g5, because it restricts the knight, and immediately sets up a pin. And of course, the drawback of playing knight b to d2 first is that the bishop be temporarily blocked in by the knight. So, this just seems like a more harmonious way of developing. Bishop e6 instantly follows. I don't love the look of this move. Black is delaying castling, and giving us some additional options here. Like we could throw in the immediate knight e4, and put some pressure on black's minor pieces. But I really don't want to uh make too many of these adventurous moves. I want to play in a more traditional fashion to really highlight uh the techniques that we have of fighting against the IQP. White is slightly better here. Um not because black has an IQP. Like if you if you watched my speedrun videos, you know that the isolated queen pawn structure is one in which you can't make any categorical assertions about who is better. It It all depends on the placement of the other pieces. There are situations where the IQP is a great asset, and there are situations where it's a tremendous weakness. And I think that this situation resembles the latter more than it does the former, just because black's piece activity is not uh"
+    },
+    {
+     "san": "Nbd2",
+     "t": 469,
+     "continuation": "Nbd2",
+     "said": "us some additional options here. Like we could throw in the immediate knight e4, and put some pressure on black's minor pieces. But I really don't want to uh make too many of these adventurous moves. I want to play in a more traditional fashion to really highlight uh the techniques that we have of fighting against the IQP. White is slightly better here. Um not because black has an IQP. Like if you if you watched my speedrun videos, you know that the isolated queen pawn structure is one in which you can't make any categorical assertions about who is better. It It all depends on the placement of the other pieces. There are situations where the IQP is a great asset, and there are situations where it's a tremendous weakness. And I think that this situation resembles the latter more than it does the former, just because black's piece activity is not uh not all that impressive. Like black is pinned along this diagonal. The bishop on e6 is kind of a passive observer, and is just sort of tied down to the pawn. And most importantly, as we play knight b3, we've been able to reach and achieve complete control of the square in front of the pawn, which means that the IQP is no longer a moving target. Um and and"
+    }
+   ]
+  }
+ ]
+}

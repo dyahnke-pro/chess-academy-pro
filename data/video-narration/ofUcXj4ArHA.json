@@ -1,0 +1,433 @@
+{
+ "videoId": "ofUcXj4ArHA",
+ "title": "Scotch Gambit (AMAZING Game) | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 14.5,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "all right 2200 this is gonna be a serious game okay so we're gonna play serious openings let's play e4 e5 all right brad is already stumped"
+  },
+  {
+   "ply": 4,
+   "t": 20.5,
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "all right 2200 this is gonna be a serious game okay so we're gonna play serious openings let's play e4 e5 all right brad is already stumped"
+  },
+  {
+   "ply": 5,
+   "t": 22.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "said": "okay so we're gonna play serious openings let's play e4 e5 all right brad is already stumped i have three knight c6 bishop c4 acceler um sorry to dragon where did that come from italian there's two main moves here as i'm sure most people know bishop c5 and knight f6 the move that i've been consistently recommending in the speed run the move that i've played over the board recently is knight f6 which allows the fried"
+  },
+  {
+   "ply": 6,
+   "t": 42.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "said": "as i'm sure most people know bishop c5 and knight f6 the move that i've been consistently recommending in the speed run the move that i've played over the board recently is knight f6 which allows the fried lover so if you're playing knight f6 you have to know first and foremost the bride liver"
+  },
+  {
+   "ply": 7,
+   "t": 48,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+   "said": "recommending in the speed run the move that i've played over the board recently is knight f6 which allows the fried lover so if you're playing knight f6 you have to know first and foremost the bride liver d4 is uh another viable sideline for white that you have to know so this is the transposition to the italian i think it's called the scotch gamut technically the scotch gambit after e5 so if white"
+  },
+  {
+   "ply": 8,
+   "t": 60.5,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/2BpP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+   "said": "d4 is uh another viable sideline for white that you have to know so this is the transposition to the italian i think it's called the scotch gamut technically the scotch gambit after e5 so if white plays e5 here it's the scotch gambit"
+  },
+  {
+   "ply": 9,
+   "t": 66,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4P3/2Bp4/5N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "said": "transposition to the italian i think it's called the scotch gamut technically the scotch gambit after e5 so if white plays e5 here it's the scotch gambit in this position you can actually move the knight so like knight g494 are legitimate alternatives but you know there is a move that you have to know here which is considered to be the most reputable by far and that is d5 which is"
+  },
+  {
+   "ply": 10,
+   "t": 83.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2n2n2/3pP3/2Bp4/5N2/PPP2PPP/RNBQK2R w KQkq d6 0 6",
+   "said": "but you know there is a move that you have to know here which is considered to be the most reputable by far and that is d5 which is pretty common in you know it is most commonly known in"
+  },
+  {
+   "ply": 11,
+   "t": 89,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2n2n2/1B1pP3/3p4/5N2/PPP2PPP/RNBQK2R b KQkq - 1 6",
+   "said": "which is considered to be the most reputable by far and that is d5 which is pretty common in you know it is most commonly known in this position but it's an idea that exists elsewhere as well and now there's a crossroads so traditionally 94 has always been considered essentially the only move 94 is the main move was always considered far superior to all of the other lines but recently i stumbled on a really interesting alternative which has become quite popular in recent years and that is knight back to d7"
+  },
+  {
+   "ply": 12,
+   "t": 115,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r1bqkb1r/pppn1ppp/2n5/1B1pP3/3p4/5N2/PPP2PPP/RNBQK2R w KQkq - 2 7",
+   "said": "far superior to all of the other lines but recently i stumbled on a really interesting alternative which has become quite popular in recent years and that is knight back to d7 which on its face doesn't you know might not seem like bad or good it's just another move it's it's a retreating move now it basically covers the covers the pin so knight takes d4 is not effective here if white plays knight takes d4 well first of all we can take the pawn on e5 but we can also even take the knight on d4 and then just go c6 so what white has to do here is play bishop take c6 i'm hoping that brad might not be quite as familiar with this line and i'll be able to take him out of theory now full disclosure i don't really know the theory that well myself i know a couple of moves here but that's about it okay so we'll see what brad comes up with here bishop takes c6 is the only move that i'm familiar with okay brad castles"
+  },
+  {
+   "ply": 13,
+   "t": 164,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/pppn1ppp/2n5/1B1pP3/3p4/5N2/PPP2PPP/RNBQ1RK1 b kq - 3 7",
+   "said": "i know a couple of moves here but that's about it okay so we'll see what brad comes up with here bishop takes c6 is the only move that i'm familiar with okay brad castles i i suppose that's also possible and maybe even a transposition to the main line okay so we need to develop obviously we need to develop i think some people might be inclined to play a6 here but that's a completely unnecessary waste of time because remember white is very likely to take on c6 on their own volition so a6 would essentially you know compel way to do what he wants to do anyway so i don't really like bishop before i feel like the bishop on b4 would be very very loose bishop c5 is interesting but if we consider bishop c5 after bishop takes c6 bc knight takes d4 as you'll see uh if we go down the main line it is actually quite important to have the c5 square open for a pawn we want to be able to play c6 c5 once this uh trade occurs so we're going to play bishop out to e7"
+  },
+  {
+   "ply": 14,
+   "t": 227.5,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk2r/pppnbppp/2n5/1B1pP3/3p4/5N2/PPP2PPP/RNBQ1RK1 w kq - 4 8",
+   "said": "the c5 square open for a pawn we want to be able to play c6 c5 once this uh trade occurs so we're going to play bishop out to e7 maybe not the most principles i i don't know if castles is an inaccuracy"
+  },
+  {
+   "ply": 13,
+   "t": 234.5,
+   "line": [],
+   "fen": "r1bqkb1r/pppn1ppp/2n5/1B1pP3/3p4/5N2/PPP2PPP/RNBQ1RK1 b kq - 3 7",
+   "said": "c5 once this uh trade occurs so we're going to play bishop out to e7 maybe not the most principles i i don't know if castles is an inaccuracy compared to bishop c6 but"
+  },
+  {
+   "ply": 12,
+   "t": 235.5,
+   "line": [],
+   "fen": "r1bqkb1r/pppn1ppp/2n5/1B1pP3/3p4/5N2/PPP2PPP/RNBQK2R w KQkq - 2 7",
+   "said": "once this uh trade occurs so we're going to play bishop out to e7 maybe not the most principles i i don't know if castles is an inaccuracy compared to bishop c6 but"
+  },
+  {
+   "ply": 14,
+   "t": 236.5,
+   "line": [
+    "O-O",
+    "Be7"
+   ],
+   "fen": "r1bqk2r/pppnbppp/2n5/1B1pP3/3p4/5N2/PPP2PPP/RNBQ1RK1 w kq - 4 8",
+   "said": "to play bishop out to e7 maybe not the most principles i i don't know if castles is an inaccuracy compared to bishop c6 but if brat takes on c6 we basically transpose to uh we basically transpose to the main line hopefully everything so far making reasonable amount of sense yeah brad is good so [Music] again a crossroads here i suppose for white he's got to decide whether to take on c6 or to take on d4 or to play a neutral move such as rookie one but if i were white i i i don't really see you know the reason to delay bishop takes c6 and knight takes d4 okay well brad's taking taking his time and plays knight bd2 which i like seeing"
+  },
+  {
+   "ply": 15,
+   "t": 273,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "r1bqk2r/pppnbppp/2n5/1B1pP3/3p4/5N2/PPPN1PPP/R1BQ1RK1 b kq - 5 8",
+   "said": "see you know the reason to delay bishop takes c6 and knight takes d4 okay well brad's taking taking his time and plays knight bd2 which i like seeing that doesn't seem like a dangerous move not sure exactly why brad is holding off on bishop takes c6 now first of all it's important to establish that we cannot take on e5 because after knight takes c5 no matter which way we capture we're going to be pinned in the end so what should we do here how should we unpin ourselves well again not some people's instinct is to play a6 but we don't need to do that the better move"
+  },
+  {
+   "ply": 16,
+   "t": 301.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pppnbppp/2n5/1B1pP3/3p4/5N2/PPPN1PPP/R1BQ1RK1 w - - 6 9",
+   "said": "so what should we do here how should we unpin ourselves well again not some people's instinct is to play a6 but we don't need to do that the better move is to castle because that's a helpful developing move"
+  },
+  {
+   "ply": 17,
+   "t": 305,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1bq1rk1/pppnbppp/2n5/1B1pP3/3p4/5N2/PPPN1PPP/R1BQR1K1 b - - 7 9",
+   "said": "how should we unpin ourselves well again not some people's instinct is to play a6 but we don't need to do that the better move is to castle because that's a helpful developing move as well rookie one okay so brad defends the pawn let me think for a second here all right i think an idea is crystallizing in my mind it's a pretty risky idea but i think a very interesting one and if it works out um i think we might be able to punish white for for not uh taking on c6 and taking an e5 in time so how do i explain this move well if you look at this position from a general perspective the most annoying thing to me about the position is the presence of this pawn on e5 right this pawn is hanging over our entire position it's cutting off some arteries it's cutting off main street like we cannot get anything to the sixth rank it's a problem so we have oh we actually have perhaps an even cooler move yeah so from that perspective the idea that i have is to play f6 and try to remove this pawn from the board essentially at all costs the other really interesting movie could make and this is typical for this position is knight d to b8 back to b8 in order to reinforce the other knight on c6 and open up the pathway for the bishop which and it's not as crazy of a move as it appears but in this case i think f6 is more concrete and it just seems a little bit juicier if you will"
+  },
+  {
+   "ply": 18,
+   "t": 392.5,
+   "line": [
+    "f6"
+   ],
+   "fen": "r1bq1rk1/pppnb1pp/2n2p2/1B1pP3/3p4/5N2/PPPN1PPP/R1BQR1K1 w - - 0 10",
+   "said": "bishop which and it's not as crazy of a move as it appears but in this case i think f6 is more concrete and it just seems a little bit juicier if you will so let's go with f6 now some of you are probably thinking okay what about e6 isn't that really terrifying well once white plays e6 that pawn is going to be incredibly weak and we've got all these pieces clustered in the center we don't have to be afraid of that pawn on c6"
+  },
+  {
+   "ply": 19,
+   "t": 407.5,
+   "line": [
+    "Bxc6"
+   ],
+   "fen": "r1bq1rk1/pppnb1pp/2B2p2/3pP3/3p4/5N2/PPPN1PPP/R1BQR1K1 b - - 0 10",
+   "said": "isn't that really terrifying well once white plays e6 that pawn is going to be incredibly weak and we've got all these pieces clustered in the center we don't have to be afraid of that pawn on c6"
+  },
+  {
+   "ply": 20,
+   "t": 408.5,
+   "line": [
+    "bxc6"
+   ],
+   "fen": "r1bq1rk1/p1pnb1pp/2p2p2/3pP3/3p4/5N2/PPPN1PPP/R1BQR1K1 w - - 0 11",
+   "said": "isn't that really terrifying well once white plays e6 that pawn is going to be incredibly weak and we've got all these pieces clustered in the center we don't have to be afraid of that pawn on c6 okay so brad takes we take back and notice that if white plays knight takes d4 now we play knight takes e5 and r knight then simultaneously guards the c6 square and our bishop comes out just in time to defend the e6 square otherwise there would be a knight fork so if white takes on f6 we take back with a bishop in order to keep d4 protect i don't want to give away the d4 pawn if we don't have to we're going to try to cling to this pawn if possible now this pull this you know this might not be the way we played here with f6 might not be great uh but i think it's interesting and it's and it's quite challenging okay it's quite possible that f6 is a mistake it's quite possible that knight db8"
+  },
+  {
+   "ply": 21,
+   "t": 452.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bq1rk1/p1pnb1pp/2p1Pp2/3p4/3p4/5N2/PPPN1PPP/R1BQR1K1 b - - 0 11",
+   "said": "might not be great uh but i think it's interesting and it's and it's quite challenging okay it's quite possible that f6 is a mistake it's quite possible that knight db8 is the best move and i think brad has just played correctly there with with um e6 there was one thing that i missed yeah um i missed one key detail unfortunately but it's it's really not i don't think it's the end of the world so what should we do where should we go um the issue is that if we go knight c5 then we allow knight takes d4 and then it's legitimately hard to get to the e61 so i think what we should do here is get this knight instead to e5"
+  },
+  {
+   "ply": 22,
+   "t": 482,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "r1bq1rk1/p1p1b1pp/2p1Pp2/3pn3/3p4/5N2/PPPN1PPP/R1BQR1K1 w - - 1 12",
+   "said": "um the issue is that if we go knight c5 then we allow knight takes d4 and then it's legitimately hard to get to the e61 so i think what we should do here is get this knight instead to e5 now if white takes twice on e5 which is not unlikely i mean brad might do that then the king on g1 is not going to be very well defended i mean there's going to be no more pieces surrounding the king and i feel like if we activate our bishops we'll be able to get attacking chances against the king we'll also get this open f-file for for ourselves i feel like this is the best practical decision there is a very unfortunate line that i didn't fully account for but we'll cross that bridge if we get there we'll cross that bridge if we get there so brad taking taking his time no i agree i mean practically speaking the scotch gambit and brad plays"
+  },
+  {
+   "ply": 23,
+   "t": 526,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bq1rk1/p1p1b1pp/2p1Pp2/3pn3/3N4/8/PPPN1PPP/R1BQR1K1 b - - 0 12",
+   "said": "but we'll cross that bridge if we get there we'll cross that bridge if we get there so brad taking taking his time no i agree i mean practically speaking the scotch gambit and brad plays correctly yeah yeah there was something i missed there unfortunately i'm not in the best form at the moment so what what was i okay so we're gonna have to go probably for a psac which is very speculative but i don't really see an alternative so what did i miss i thought that after c5 would just win the pawn i thought after c5 would just win the plan unfortunately there's an insane"
+  },
+  {
+   "ply": 24,
+   "t": 551,
+   "line": [
+    "c5"
+   ],
+   "fen": "r1bq1rk1/p1p1b1pp/4Pp2/2ppn3/3N4/8/PPPN1PPP/R1BQR1K1 w - - 0 13",
+   "said": "really see an alternative so what did i miss i thought that after c5 would just win the pawn i thought after c5 would just win the plan unfortunately there's an insane line here that i failed to calculate i'm quite sure brad will see it at this point does anybody see what i'm talking no not rook takes c5 or q5 there's just f takes c5 now rookie 5 fp5 knight c6 queen d6 there's absolutely nothing f4 is also completely innocuous we take the knight and then we can take the pawn on e6 knight c6 blunders the knight our knight is still defending that square knight f5 is the move and the point is that after bishop takes e6 does anybody see the follow-up there i only calculate it up until bishop takes c6 i don't know if i can really blame myself for that too much because this is a pretty crazy sequence so knight f5 bishop takes e6 so a lot of you guys are saying f4 and jumping the gun the knight is going to be hanging on f5 knot knight takes g7 but knight takes e7 that looks dumb right why are you know what's dangerous about that but after queen takes e7 white has the move f4 i hope everybody's still visualizing that position so knight f5 bishop takes e6 knight takes bishop queen takes knight and then white plays f4 thank you routinian grand master opinion for the raid"
+  },
+  {
+   "ply": 25,
+   "t": 628,
+   "line": [
+    "Nf5"
+   ],
+   "fen": "r1bq1rk1/p1p1b1pp/4Pp2/2ppnN2/8/8/PPPN1PPP/R1BQR1K1 b - - 1 13",
+   "said": "still visualizing that position so knight f5 bishop takes e6 knight takes bishop queen takes knight and then white plays f4 thank you routinian grand master opinion for the raid and after we move our knight black white plays f5 and wins our bishop somehow um so this is actually trouble so i think it makes sense to veer off i think it makes sense to veer off but there's no good weight of your off either yeah i got completely outplayed can i say um let's think so i saw in that in that resulting position of p sac we can give away the knight for another pawn and then get a big pawn center it's not sound it's bad for black but it presents pretty decent practical chances i think yeah we can also play g6 here which is my second candidate mode g6 might actually be the best move g6 knight takes e7 queen takes c7 and although it's not amazing we might also end up winning the e6 pawn and then in that case everything is justified yeah let's go with g6 i think that's the"
+  },
+  {
+   "ply": 26,
+   "t": 693,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bq1rk1/p1p1b2p/4Ppp1/2ppnN2/8/8/PPPN1PPP/R1BQR1K1 w - - 0 14",
+   "said": "and although it's not amazing we might also end up winning the e6 pawn and then in that case everything is justified yeah let's go with g6 i think that's the most prudent continuation black might not even be worse here honestly black might not even be worse here but does everybody see what i missed again bish i missed that after bishop takes c6 knight takes c7 queen takes c7 there is the move pawn f4 even though white has nothing developed somehow we lose the piece because we lose the move the knight then white plays f5 and the rook on e1 is pinning the bishop on e6"
+  },
+  {
+   "ply": 25,
+   "t": 722.5,
+   "line": [],
+   "fen": "r1bq1rk1/p1p1b1pp/4Pp2/2ppnN2/8/8/PPPN1PPP/R1BQR1K1 b - - 1 13",
+   "said": "nothing developed somehow we lose the piece because we lose the move the knight then white plays f5 and the rook on e1 is pinning the bishop on e6 and there's another line there that's even crazier i'll show that i'll show it after the game"
+  },
+  {
+   "ply": 27,
+   "t": 727.5,
+   "line": [
+    "g6",
+    "Nh6+"
+   ],
+   "fen": "r1bq1rk1/p1p1b2p/4PppN/2ppn3/8/8/PPPN1PPP/R1BQR1K1 b - - 1 14",
+   "said": "and the rook on e1 is pinning the bishop on e6 and there's another line there that's even crazier i'll show that i'll show it after the game okay so knight h6 checked by brad see this move i think might be a mistake i preliminarily i don't know i didn't consider this move at all but it just seems to me that the knight is stuck on the rim this is not you know what conquered this just doesn't seem that scary so where should we go with our king well definitely we should step up to g7 at"
+  },
+  {
+   "ply": 28,
+   "t": 747.5,
+   "line": [
+    "Kg7"
+   ],
+   "fen": "r1bq1r2/p1p1b1kp/4PppN/2ppn3/8/8/PPPN1PPP/R1BQR1K1 w - - 2 15",
+   "said": "but it just seems to me that the knight is stuck on the rim this is not you know what conquered this just doesn't seem that scary so where should we go with our king well definitely we should step up to g7 at least making contact with the knight on on h6 right that's not going to hurt in addition"
+  },
+  {
+   "ply": 29,
+   "t": 754,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bq1r2/p1p1b1kp/4PppN/2ppn3/8/5N2/PPP2PPP/R1BQR1K1 b - - 3 15",
+   "said": "this just doesn't seem that scary so where should we go with our king well definitely we should step up to g7 at least making contact with the knight on on h6 right that's not going to hurt in addition we know that after king h8 we create the"
+  },
+  {
+   "ply": 32,
+   "t": 755.5,
+   "line": [
+    "Rg8",
+    "Nd2",
+    "Kf8"
+   ],
+   "fen": "r1bq1kr1/p1p1b2p/4PppN/2ppn3/8/8/PPPN1PPP/R1BQR1K1 w - - 6 17",
+   "said": "where should we go with our king well definitely we should step up to g7 at least making contact with the knight on on h6 right that's not going to hurt in addition we know that after king h8 we create the potential for a night fork on f7 why allow that extra source of tactical"
+  },
+  {
+   "ply": 34,
+   "t": 762,
+   "line": [
+    "Nf3",
+    "Rg7"
+   ],
+   "fen": "r1bq1k2/p1p1b1rp/4PppN/2ppn3/8/5N2/PPP2PPP/R1BQR1K1 w - - 8 18",
+   "said": "on h6 right that's not going to hurt in addition we know that after king h8 we create the potential for a night fork on f7 why allow that extra source of tactical uh problems right okay so i gotta think for a second i there's some very interesting lines here to calculate so this is a highly complex position now um there's a highly complex position first of all i think it's important to establish the knight cannot move at the moment but if we play g5 to cut the knight off then we give the knight the monster f5 square so the most simple move let's start with the simple one what happens if we play bishop takes e6 well probably brad is going to take on e5 we take back and then white takes on e5 again and then our bishop on e6 is hanging and in that resulting position we can move our queen up to defend the bishop but then brad will move his queen up to e2 and both of my bishops are all of a sudden gonna end up in trouble man some of these tactics are just pretty mind-boggling like i i can't believe that that some of this is causing us problems but it is now we might still have to go for that line because i don't see an alternative at the moment okay so i have to think about something man it's like nothing works thanks takes takes there no hmm so if we play queen d6 then there's bishop f4 that's the problem windy 6 bishop f4 okay now i just have to think in silence for a second i think i know what we have to do it's very scary though i do this with a heavy heart we might get checkmated i think what we need to do is just drop the knight back to c6 and i'll explain more after the game but this is obviously a very serious game so i i'm gonna have to do some things in silence and some things i'm gonna have to accelerate hope you guys understand i promise that nothing will be left unexplained like all of these weird moves that i'm making i'll explain fully after the game thank you ground zero msq for this up now one idea that we have here one idea that we have here is to push this pawn up to d4 and who can tell me what the follow-up is to that move why would we want to push the pawn to d4 so ultimately our goal of course is to win the e6 pawn in a good version so d4 how do we follow up we follow up with queen d5 this is a classic idea right clearing the square away with the pawn the square is occupied by a pawn you want it to be occupied by a piece so you push the pawn forward and then you get your piece there um we also are flirting with the idea of going f5 and trapping the knight on h6 so i'm expecting brad to drop this knight back to g4"
+  },
+  {
+   "ply": 36,
+   "t": 935,
+   "line": [
+    "Nf7",
+    "Nc6"
+   ],
+   "fen": "r1bq1k2/p1p1bNrp/2n1Ppp1/2pp4/8/5N2/PPP2PPP/R1BQR1K1 w - - 10 19",
+   "said": "forward and then you get your piece there um we also are flirting with the idea of going f5 and trapping the knight on h6 so i'm expecting brad to drop this knight back to g4 while he's still oh there's knight f7 jesus i completely missed that i guess we have to cycle the exchange now because after queen e8 bishop h6 we lose the exchange in an even worse version yeah we have to take that we have a pawn for the exchange it's not the end of the world yeah this is brad is on another level this game um this is not the end of the world though it's not the position is not lost it's we're worse no doubt about it but not not losing and and still there there's ideas of going before queenie for some reason i completely forgot that f7 is accessible to the knight"
+  },
+  {
+   "ply": 40,
+   "t": 972.5,
+   "line": [
+    "Bf4",
+    "Rxf7",
+    "exf7",
+    "Kxf7"
+   ],
+   "fen": "r1bq4/p1p1bk1p/2n2pp1/2pp4/5B2/5N2/PPP2PPP/R2QR1K1 w - - 0 21",
+   "said": "it's we're worse no doubt about it but not not losing and and still there there's ideas of going before queenie for some reason i completely forgot that f7 is accessible to the knight great developing move threatens potentially bishop takes c7 i mean i think we should probably end up going d4 and queen d5 anyway"
+  },
+  {
+   "ply": 42,
+   "t": 987,
+   "line": [
+    "c3",
+    "d4"
+   ],
+   "fen": "r1bq4/p1p1bk1p/2n2pp1/2p5/3p1B2/2P2N2/PP3PPP/R2QR1K1 w - - 0 22",
+   "said": "threatens potentially bishop takes c7 i mean i think we should probably end up going d4 and queen d5 anyway eah c3 is correct yeah c3 is correct i guess i mean this is losing but yes queen d5 we can try this is not resignable but it's lost i mean if white is as accurate as he has been there's no chances here"
+  },
+  {
+   "ply": 44,
+   "t": 1004,
+   "line": [
+    "cxd4",
+    "Qd5"
+   ],
+   "fen": "r1b5/p1p1bk1p/2n2pp1/2pq4/3P1B2/5N2/PP3PPP/R2QR1K1 w - - 1 23",
+   "said": "yes queen d5 we can try this is not resignable but it's lost i mean if white is as accurate as he has been there's no chances here yeah i mean this is this is losing for sure cdcd we gotta take c7 is hanging i realized that that's that the least of our problems is that c7 is saying we got to get our pieces out here i mean we're down in exchange for virtually no compensation well the goal here is to develop our pieces first i think we should start by developing our pieces and then see what happens i'm most worried about brad just taking on c7 here i mean a very classy even classier move would be to go rook c1 that's like a gm of rook c1 just get the rook onto a good square and then we might want to fianchetto our bishop instead at least try to create some you know inkling of tactical ideas down the long diagonal and maybe the time can become an issue for him here although i i hate to win speedrun games like on time like i basically want to rule that out but you know obviously um queen b3 is possible so some of you are looking at this saying why doesn't white trade queens queen b3 is possible but just because you've got an end game doesn't mean that um you know that an extra exchange is going to be that easy to convert you know when b3 we could go bishop e6 for example we still have a passer so even in the end game it's not going to be elementary for white 2 to convert this extra exchange i really want to analyze this game because i i was playing moves that i was"
+  },
+  {
+   "ply": 46,
+   "t": 1097,
+   "line": [
+    "Rc1",
+    "cxd4"
+   ],
+   "fen": "r1b5/p1p1bk1p/2n2pp1/3q4/3p1B2/5N2/PP3PPP/2RQR1K1 w - - 0 24",
+   "said": "we still have a passer so even in the end game it's not going to be elementary for white 2 to convert this extra exchange i really want to analyze this game because i i was playing moves that i was quite sure correct correct but clearly i did something wrong somewhere okay well we gotta go bishop b7 we gotta get this bishop out somewhere and this is as good of a square as any because it protects the knight on c6 no but this move is even better than bishop takes c7 i mean you guys okay and queen b3 no this is like exquisite um we have to take"
+  },
+  {
+   "ply": 50,
+   "t": 1128,
+   "line": [
+    "Qb3",
+    "Qxb3",
+    "axb3",
+    "Bb7"
+   ],
+   "fen": "r7/pbp1bk1p/2n2pp1/8/3p1B2/1P3N2/1P3PPP/2R1R1K1 w - - 1 26",
+   "said": "no but this move is even better than bishop takes c7 i mean you guys okay and queen b3 no this is like exquisite um we have to take yeah the problem is if we defend this pawn we lose that pawn so we might as well defend the d-pawn that's the only pawn that gives us any chances at all and uh okay bishop c7 rook d7 we can keep trying i've saved worse positions than this you know in my in my career this is salvageable time is becoming a bit of an issue here for white"
+  },
+  {
+   "ply": 52,
+   "t": 1155.5,
+   "line": [
+    "Rc4",
+    "Rd8"
+   ],
+   "fen": "3r4/pbp1bk1p/2n2pp1/8/2Rp1B2/1P3N2/1P3PPP/4R1K1 w - - 3 27",
+   "said": "positions than this you know in my in my career this is salvageable time is becoming a bit of an issue here for white it's a great move that's a phenomenal move no this can go g5 maybe chase the bishop away yeah i'm various i mean to be completely honest i'm not all that disappointed with my play i i really don't feel like i didn't need anything egregious i i don't know where my mistake was it seemed i mean maybe f6"
+  },
+  {
+   "ply": 15,
+   "t": 1182.5,
+   "line": [],
+   "fen": "r1bqk2r/pppnbppp/2n5/1B1pP3/3p4/5N2/PPPN1PPP/R1BQ1RK1 b kq - 5 8",
+   "said": "disappointed with my play i i really don't feel like i didn't need anything egregious i i don't know where my mistake was it seemed i mean maybe f6 in retrospect was a little over"
+  },
+  {
+   "ply": 18,
+   "t": 1184.5,
+   "line": [
+    "f6",
+    "Re1",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pppnb1pp/2n2p2/1B1pP3/3p4/5N2/PPPN1PPP/R1BQR1K1 w - - 2 10",
+   "said": "i really don't feel like i didn't need anything egregious i i don't know where my mistake was it seemed i mean maybe f6 in retrospect was a little over ambitious maybe i should have gone knight db8 but gosh this looks like it has to be i don't know it's hard to say we'll we'll look with an engine now it's still not over i'm trying to the way that i'm trying to approach this position is to take the magnus carlson method basically of uh one move at a time like you try to create problems for your opponent on every move and survive one more move one more move get the opponent low on time and eventually hopefully something is going to give so for the moment if we lose the d4 pawn then it's resignable for the moment we still have the d4 pawn so for the moment we can still breathe and perhaps we can even push the pawn on d3 in order to support it with a knight on b4 and you know he's starting to get a little bit low on time"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 15,
+   "fen": "r1bqk2r/pppnbppp/2n5/1B1pP3/3p4/5N2/PPPN1PPP/R1BQ1RK1 b kq - 5 8",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "d4",
+    "exd4",
+    "e5",
+    "d5",
+    "Bb5",
+    "Nd7",
+    "O-O",
+    "Be7",
+    "Nbd2"
+   ],
+   "options": [
+    {
+     "san": "O-O",
+     "t": 301.5,
+     "continuation": "O-O",
+     "said": "so what should we do here how should we unpin ourselves well again not some people's instinct is to play a6 but we don't need to do that the better move is to castle because that's a helpful developing move as well rookie one okay so brad defends the pawn let me think for a second here all right i think an idea is crystallizing in my mind it's a pretty risky idea but i think a very interesting one and if it works out um i think we might be able to punish white for for not uh taking on c6 and taking an e5 in time so how do i explain this move well if you look at this position from a general perspective the most annoying thing to me about the position is the presence of this pawn on e5 right this pawn is hanging over our entire position it's cutting off some arteries it's cutting off main street like we cannot get anything to the sixth rank it's a problem so we have oh we actually have perhaps an even cooler move yeah so from that perspective the idea"
+    },
+    {
+     "san": "f6",
+     "t": 1184.5,
+     "continuation": "f6 Re1 O-O",
+     "said": "i really don't feel like i didn't need anything egregious i i don't know where my mistake was it seemed i mean maybe f6 in retrospect was a little over ambitious maybe i should have gone knight db8 but gosh this looks like it has to be i don't know it's hard to say we'll we'll look with an engine now it's still not over i'm trying to the way that i'm trying to approach this position is to take the magnus carlson method basically of uh one move at a time like you try to create problems for your opponent on every move and survive one more move one more move get the opponent low on time and eventually hopefully something is going to give so for the moment if we lose the d4 pawn then it's resignable for the moment we still have the d4 pawn so for the moment we can still breathe and perhaps we can even push the pawn on d3 in order to support it with a knight on b4 and you know he's starting to get a little bit low on time"
+    }
+   ]
+  }
+ ]
+}

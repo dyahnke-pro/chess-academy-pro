@@ -1,0 +1,598 @@
+{
+ "videoId": "YzI6qI-33_U",
+ "title": "Understanding the Accelerated Dragon!! | Open Sicilian | GM Naroditsky's Theory Speed Run",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 195.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] okay we're black against Pavlov am from Belarus 1865. definitely a good player hopefully we don't get aborted nope very good okay so we're finally I feel like it's been ages since we've had a black game"
+  },
+  {
+   "ply": 3,
+   "t": 198.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "1865. definitely a good player hopefully we don't get aborted nope very good okay so we're finally I feel like it's been ages since we've had a black game hopefully it will finally be able to get a Mainline accelerated dragon now we"
+  },
+  {
+   "ply": 4,
+   "t": 202,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "hopefully we don't get aborted nope very good okay so we're finally I feel like it's been ages since we've had a black game hopefully it will finally be able to get a Mainline accelerated dragon now we have faced the rosalimo a couple times"
+  },
+  {
+   "ply": 5,
+   "t": 205.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "good okay so we're finally I feel like it's been ages since we've had a black game hopefully it will finally be able to get a Mainline accelerated dragon now we have faced the rosalimo a couple times and now we're facing the open Sicilian"
+  },
+  {
+   "ply": 6,
+   "t": 207,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "good okay so we're finally I feel like it's been ages since we've had a black game hopefully it will finally be able to get a Mainline accelerated dragon now we have faced the rosalimo a couple times and now we're facing the open Sicilian which is music to my ears I think this"
+  },
+  {
+   "ply": 7,
+   "t": 208.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "it's been ages since we've had a black game hopefully it will finally be able to get a Mainline accelerated dragon now we have faced the rosalimo a couple times and now we're facing the open Sicilian which is music to my ears I think this"
+  },
+  {
+   "ply": 8,
+   "t": 209.5,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "game hopefully it will finally be able to get a Mainline accelerated dragon now we have faced the rosalimo a couple times and now we're facing the open Sicilian which is music to my ears I think this is only our second accelerated dragon of the entire speedrun"
+  },
+  {
+   "ply": 9,
+   "t": 215,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 5",
+   "said": "have faced the rosalimo a couple times and now we're facing the open Sicilian which is music to my ears I think this is only our second accelerated dragon of the entire speedrun in the first one uh we faced the marozzi"
+  },
+  {
+   "ply": 8,
+   "t": 217.5,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "and now we're facing the open Sicilian which is music to my ears I think this is only our second accelerated dragon of the entire speedrun in the first one uh we faced the marozzi bind which is the move C4 and in that game I demonstrated a sideline system that I find to be very effective at the intermediate level where you basically play Knight F6 before fion Kettering the bishop but I'll review that after the"
+  },
+  {
+   "ply": 9,
+   "t": 233.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 5",
+   "said": "game I demonstrated a sideline system that I find to be very effective at the intermediate level where you basically play Knight F6 before fion Kettering the bishop but I'll review that after the game right now we're facing Knight C3 which is of course the other main line so here we don't have the space for any Shenanigans we start by developing our"
+  },
+  {
+   "ply": 10,
+   "t": 242,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 6",
+   "said": "bishop but I'll review that after the game right now we're facing Knight C3 which is of course the other main line so here we don't have the space for any Shenanigans we start by developing our Bishop putting immediate pressure on the"
+  },
+  {
+   "ply": 11,
+   "t": 246.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 3 6",
+   "said": "game right now we're facing Knight C3 which is of course the other main line so here we don't have the space for any Shenanigans we start by developing our Bishop putting immediate pressure on the Knight and white develops their Bishop to E3 which is the continuation of the main line a lot of players a lot of"
+  },
+  {
+   "ply": 10,
+   "t": 251.5,
+   "line": [],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 6",
+   "said": "Shenanigans we start by developing our Bishop putting immediate pressure on the Knight and white develops their Bishop to E3 which is the continuation of the main line a lot of players a lot of newer players they tend to take on C6 in this position which is an immediate big concession and it's a big concession because it allows black to capture toward the center the B file can be used by Black's Rook to pressure the B2 Pawn particularly if White Castle's Queen side and it's much easier to prepare the central brake d75"
+  },
+  {
+   "ply": 11,
+   "t": 272,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 3 6",
+   "said": "toward the center the B file can be used by Black's Rook to pressure the B2 Pawn particularly if White Castle's Queen side and it's much easier to prepare the central brake d75 so Bishop B3 is a no-brainer at the higher levels and now there is an important moment because if you're a Mainline Dragon player then you can go D6 here but the drawback of D6 from an accelerated Dragon standpoint is that it allows white to transition into a Mainline dragon with the move F3 so the way to keep this uniquely accelerated Dragon style is to first"
+  },
+  {
+   "ply": 12,
+   "t": 297.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 4 7",
+   "said": "is that it allows white to transition into a Mainline dragon with the move F3 so the way to keep this uniquely accelerated Dragon style is to first develop the Knight to F6 you actually do not push any of your Center pawns until later in the game potentially even until four or five moves from now yeah and our opponent finally settles into a bit of a think so the main move here is Bishop F1 to C4 this is the most ambitious developing"
+  },
+  {
+   "ply": 13,
+   "t": 322.5,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPPQ1PPP/R3KB1R b KQkq - 5 7",
+   "said": "yeah and our opponent finally settles into a bit of a think so the main move here is Bishop F1 to C4 this is the most ambitious developing move Queen D2 uh is not a main line it's a sideline and as far as I know it's not a particularly good sideline either so let's think about this move for a second Queen D2 well generally in all Dragon setups any time the queen is moved from D1 you should immediately be considering the move Knight to G4 because if you can trade your knight for White's dark squid Bishop then Your Dragon Dark squared Bishop operates uncontested which is virtually always a good thing that's an advantage for you so if you can root out if you can root out the dark squared Bishop you almost instantly get a good position but it's not always that simple because after Knight G4 white cannot move the bishop because then he loses the Knight on D4 which is attacked twice what white can do after Knight G4 is take on C6 which as we've already discussed is generally a concession but after we recapture white can shift the dark squared Bishop over to D4 and while giving away your knight for the bishop is good trading dark squared Bishops in Dragon setups isn't always that great that's a lot more double edged than giving away your knight for the bishop so in that resulting position we have to come up with a response and I have a really interesting idea I already have to settle into a bit of a think here so there's some interesting tactics that occur after Bishop D4 there yeah of course in that position first of all after Knight takes C6 we can play DC and engineer a queen trade but that seems like a pretty boring option which leads to a largely symmetrical end game that seems pretty anti-climactic we also have the possibility of striking at the center with the move D5 so I'm actually struggling this is definitely something to look up after the game I'm struggling to figure out a satisfactory response after Knight G4 Knight takes C6 BC and Bishop D4 because if you play E5 in that position the bishop slides one square further to C5 and as a result we're not able to Castle and we're not able to kick the bishop away with D6 because that square will be defended twice by the queen and by the bishop by the queen and by the bishop so let's think about this for a couple more moments give me 30 seconds in silence definitely something I should know but something I I've never checked Queen D2 here has never been played against me you know what I think we should do what I think we should do is not overreact or do anything crazy I think we should just Castle I think when in doubt you should just continue your development I'm not sure how to assess Knight G4 and as we've discussed you do not want to play D6 because that enables white to transition into the dragon with F3 now why what is the rationale behind keeping your Pawn on D7 well the idea is that if white"
+  },
+  {
+   "ply": 14,
+   "t": 502.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPPQ1PPP/R3KB1R w KQ - 6 8",
+   "said": "discussed you do not want to play D6 because that enables white to transition into the dragon with F3 now why what is the rationale behind keeping your Pawn on D7 well the idea is that if white insists on playing a Mainline Dragon setup then you will be able to play D5 in one Fell Swoop and that is often"
+  },
+  {
+   "ply": 15,
+   "t": 510.5,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPPQ1PPP/2KR1B1R b - - 7 8",
+   "said": "the rationale behind keeping your Pawn on D7 well the idea is that if white insists on playing a Mainline Dragon setup then you will be able to play D5 in one Fell Swoop and that is often you know without any question a good thing for black now white has done what I thought he would do he's castled queenside and there's a good reason that you need to play F3 in the mainline dragon that is indeed to avoid Knight G4 how has the situation changed as a result of White's last move well one thing I'm noticing is that the king and the queen are now aligned what does that entail well we need to recalculate Knight G4 because just because a move doesn't work in one position doesn't mean it doesn't work in another so what happens if we play Knight G4 here well the bishop still can't move so if y takes on C6 and then plays Bishop D4 we have something very exciting in that resulting position we have the bishop pin we have Bishop to H6 pinning the queen and the King now that doesn't win the queen because white can block that pin with the move F4 F to F4 but if we keep calculating I think black has a winning move after F4 very good so after F4 who can spot blacks ensuing Crusher it literally ends the game after F4 E5 very good Pawnee 7 to E5 hitting the pawn on F4 and threatening Bishop takes F4 but also attacking the bishop on D4 it's a double attack it's a simple double attack and white loses at least a piece so the coast is clear we can go Knight"
+  },
+  {
+   "ply": 16,
+   "t": 594,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "r1bq1rk1/pp1pppbp/2n3p1/8/3NP1n1/2N1B3/PPPQ1PPP/2KR1B1R w - - 8 9",
+   "said": "hitting the pawn on F4 and threatening Bishop takes F4 but also attacking the bishop on D4 it's a double attack it's a simple double attack and white loses at least a piece so the coast is clear we can go Knight G4 and we spent a lot of time on these couple moves so we'll have to speed up a little bit now after Knight C6 BC Bishop D4 Bishop H6 White's relative relatively speaking best move is to drop the bishop back to E3 but then we get sort of an ideal scenario we take with the Knight we ruin White's Pawn structure that is"
+  },
+  {
+   "ply": 17,
+   "t": 617,
+   "line": [
+    "Nxc6"
+   ],
+   "fen": "r1bq1rk1/pp1pppbp/2N3p1/8/4P1n1/2N1B3/PPPQ1PPP/2KR1B1R b - - 0 9",
+   "said": "H6 White's relative relatively speaking best move is to drop the bishop back to E3 but then we get sort of an ideal scenario we take with the Knight we ruin White's Pawn structure that is"
+  },
+  {
+   "ply": 18,
+   "t": 618.5,
+   "line": [
+    "bxc6"
+   ],
+   "fen": "r1bq1rk1/p2pppbp/2p3p1/8/4P1n1/2N1B3/PPPQ1PPP/2KR1B1R w - - 0 10",
+   "said": "best move is to drop the bishop back to E3 but then we get sort of an ideal scenario we take with the Knight we ruin White's Pawn structure that is like a dream scenario for us the other thing that our opponent can do is move the bishop along this diagonal but as I've mentioned at the start when White Castle's Queen side and the B file is open like this it often spells almost immediate Doom for white because we get such an easy attack down the B file for instance if he plays Bishop F4 we can't go Rook B8 because that square is controlled but what we can do is deploy Our Queen to B6 that's another positive benefit of putting the Knight on G4 it actually attacks the F2 Pawn which is a really easy thing to miss so Queen B6 seems like a great move to consider but it's far from the only possible way to develop our attack we also could very well consider the move E5 trying to chase the bishop away from that diagonal and also enabling us to play Rook B8 and we could even play the move Queen d8 A5 which is a more typical attacking move in the dragon setup uh when the B file is closed but Bishop D4 is such a natural move and"
+  },
+  {
+   "ply": 19,
+   "t": 683,
+   "line": [
+    "Bd4"
+   ],
+   "fen": "r1bq1rk1/p2pppbp/2p3p1/8/3BP1n1/2N5/PPPQ1PPP/2KR1B1R b - - 1 10",
+   "said": "to play Rook B8 and we could even play the move Queen d8 A5 which is a more typical attacking move in the dragon setup uh when the B file is closed but Bishop D4 is such a natural move and he plays it and here we go Bishop G7 to"
+  },
+  {
+   "ply": 20,
+   "t": 687.5,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "r1bq1rk1/p2ppp1p/2p3pb/8/3BP1n1/2N5/PPPQ1PPP/2KR1B1R w - - 2 11",
+   "said": "typical attacking move in the dragon setup uh when the B file is closed but Bishop D4 is such a natural move and he plays it and here we go Bishop G7 to H6 will respond instantly let's see if"
+  },
+  {
+   "ply": 21,
+   "t": 690.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1bq1rk1/p2ppp1p/2p3pb/8/3BPPn1/2N5/PPPQ2PP/2KR1B1R b - - 0 11",
+   "said": "uh when the B file is closed but Bishop D4 is such a natural move and he plays it and here we go Bishop G7 to H6 will respond instantly let's see if our opponent smells a rat he doesn't he goes F4 he walks right into the losing line so again this is the position we were talking about if you're you know watching on YouTube and you had a hard time visualizing the line we were talking about earlier this is the exact position in which I asked everybody to find the move so again the queen is pinned and this is the natural move E5 should occur to you"
+  },
+  {
+   "ply": 22,
+   "t": 711,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bq1rk1/p2p1p1p/2p3pb/4p3/3BPPn1/2N5/PPPQ2PP/2KR1B1R w - - 0 12",
+   "said": "time visualizing the line we were talking about earlier this is the exact position in which I asked everybody to find the move so again the queen is pinned and this is the natural move E5 should occur to you pretty much automatically because you should notice that the F4 Pawn has to be attacked and the best way to attack something is with another Pawn and this is the power of the pin the fact that the pawns simply cannot move it's as if the pawn on F4 doesn't exist and okay the game is not totally over White can cut his losses well not really but the best way to cut the losses is to play Bishop takes E5 and after Knight takes E5 to not recapture the Knight but that's an incredibly depressing outcome we're up a full piece and we'll still have to demonstrate a good deal of technique the Knight on E5 in the resulting position is not that easy to evacuate to safety because it's only Escape square is back through G4 and potentially white could cover that square with H3 so we'll have to finesse that a little bit to make sure that all our pieces reach home base safely but that's a secondary problem clearly black is winning and some people would just resign here Bishop Queen E2 okay that doesn't help that doesn't help but we need to be very careful we need to avoid a very tempting but wrong move so the tempting thing to do here is to say well before taking the bishop we might as well snag the pawn and F4 with check but you actually have to calculate that right there's a lot going on here you can't just make a move based on General considerations and if you look at that carefully after King B1 it turns out that Bishop takes F4 is a grave mistake because if we take on D4 then white will take the Knight and then if we take White's night the that Bishop that we put on F4 is now hanging so we should keep the bishop on H6 and take on D4 immediately now if Queen takes Knight then we take whitesnite and we're chilling we absolutely do not need this F4 Pawn unless of course white takes on D4 in that case we will take on F4 with check not a single one of those arrows has been drawn correctly but you get the point yeah queen queen E2 merely hastens White's defeat yeah this is going to be a total disaster because this Pawn on C3 is such a destructive force it's essentially used as a battering ram forcibly shattering White's protective cover on the queen side so our ensuing attack is going to be decisive within five moves I think if we play our cards right because if white plays B3 which I think is most people's natural reaction to a pawn like this well that doesn't help because we have the lobster mate if we can get our Queen to A3 and we can get our Queen to A3 either via E7 or via A5 either move works and that basically ends the game immediately the king I guess could run into the center but remember the white is down a piece to begin with so there's not much to talk about here if white plays BC then White's Queen side is completely shattered and we could attack that C3 Pawn with a move like Queen d8 to F6 simultaneously hitting F4 as well or queen A5 which I would assume is the more natural move if white does not respond which is in fact what our opponent has done here I would not recommend hastily taking on B2 this is an important attacking point now again when you're up a piece you can basically do whatever the heck you want but if we want to play clinically you this Pawn is a great asset we want white to be the one to play BC because after CB black white can use that pawn as an umbrella I call it the sort of umbrella defensive method you've probably seen it before and essentially tucked the king under the pawn where it'll be much much harder for us to get to the King which is using our own Pawn as a protective cover and that's the most effective protective cover because you cannot capture your own Pawn so what is the best way to force white to take on C3 or to play B3 we want to get white essentially to decide how he wants to play on the queen side so that we could in turn properly arrange our attacking forces well we could play Rook B8 but I think leading with the queen is an even better idea because we know that the queen is the piece in this case that can deliver the Checkmate if white plays B3 so my preferred move is Queen to B6 we are threatening made in one but there is a secondary threat which can be very easy to miss and that is Queen to E3 check when you're attacking you have to pay attention to both sides of the board right and Hess points this out a lot very often players kind of subconsciously section off the board and only look at moves on the side of the board where they're attacking but you always have to keep the entire board in your kind of Mind's Eye okay so let's try to find the fastest path to Checkmate here if we play the move Queen to B4 then the bad news for us is that that is not immediate made because white can move the D Rook away and then if we deliver a check on A3 the king is able to run away through the center now it's not going to run away for long we could then for example we could take the pawn on A2 or we could even play the move D5 and open up the other Bishop a discovery on White's Queen but let's see if there's an if there's a more efficient way for us to Checkmate so we could throw in the check on E3 Force the king back toward B1 and then drop the queen back to C5 how about that well frustratingly white still isn't mated there white can play King A1 Queen A3 and Rook D1 to B1 which is a classic way of Defending against the lobster mating motif so in that resulting position after Rook B1 it actually might be even harder to Checkmate the white king than it would be if the king were to hide in the center so let's think about this for a second maybe there's a middle ground that we could adopt here I have an interesting idea of course all of this is completely winning and you know this is all very hypothetical because we're up a piece and we could always just resort to the simple strategy of taking all of our opponents like Queen E3 and queen takes F4 even that would be winning but why prolong the game when we could go straight for checkmate so I think what we should do here hmm it's interesting because it's so winning but I'm trying to be surgically precise here and it's not that simple actually okay here's what we're gonna do we are going to start with the move Queen to C5 we're gonna start with a flexible move Queen to C5 yeah we could also play A5 A4 and open up the a file we could also play a5a4 and open up the Eightfold this is hard it's hard to be ultra precise in a completely winning position because there's so many appetizing options Rook F1 okay now what we're going to do and by the way we could still give that check on E3 but I guess then Queen C5 white can just repeat moves my idea here was to delay the check on A3 because the king wants to go here anyway so that would kind of be a waste of a move instead if we're anticipating the white king running toward the center well logically the best thing to do would be to open up the center right if we can open up the center let's say open up the D file then the king will not find any measure of relief on D1 so I think it's a perfect opportunity for us to play D5 and an instructive moment because a lot of players would kind of automatically deliver this check you can deliver this check anytime you want so what's the purpose of delivering it now especially when the king is particularly vulnerable on the Square and the F Pawn is still pinned just kind of valuable otherwise white could have met this move without five all right now well let's continue the opening up at the center we don't have to move our Bishop again don't play automatically when you're this close to Checkmate you can just play D take C4 because we're not afraid of Queen takes H6 why does no other attackers on the king side so in that case we just play e takes D3 and the game is over or we could play Queen a three check and Bishop G4 check we could look for a force mate there as well but we don't need to but we don't need to Bishop C4 okay now note that our Rooks are still disconnected so Rook to d8 here would be a blunder the queen is aimed at that square always keep that in mind right when your Rooks are not connected you should be ultra careful about moving your Rooks in general there is a really cool idea that we could play here it's a pretty sexy sequence let me just calculate it for a second before I talk about how I found it now the position is completely winning everything wins here from the simple Bishop to G7 to a check on A3 and I'm sure there's some mating sequence there but I actually think I see a forced mate and it's a really really nice concept so thinking logically right let's work backwards to figure this move out Queen A3 would be Checkmate if the white king did not have access to the D file to the D1 Square so it would be very very nice if we could play Rook to d8 and if we could play Rook to d8 then Queen A3 would be an Unstoppable threat white would have simply no way to prevent the black queen from reaching A1 so well what's stopping us from playing Rook d8 it's the fact that the Rooks are disconnected which means that moving the bishop out makes a lot of sense but we don't just want to move it out anywhere because that gives wet a Tempo we would like to make a move that forces white to react to it and then play Rook d8 and as many of you are noticing the best way to do that is Bishop to G4 yeah and as a matter of fact what's kind of cool about this move is that if white takes the bishop we could play Rook 88 we could even play Queen A3 check and I'm calculating a force made in that line I think there's a force made in that line as well King d8 uh King D1 Rook d a check King E1 Queen C1 check but why bother why bother especially when this move is you know waiting for us on a golden platter doesn't matter which Rook by the way absolutely does not matter but I'm keeping this Rook on f8 so that Bishop takes F7 is less of a headache not that it would be a headache there either well Rook d8 Queen takes da was check that's the problem if we had played Rook T8 first queen takes Rook would have been a check and White's only way to Stave off Checkmate is Bishop D3 but in that position we could end the game probably even Rook takes D3 is forced mate I mean everything wins there but we have kind of a nice Manning sequence if we really want to be fancy now obviously King B1 Queen A3 is Unstoppable man and that is a pattern that everybody should be familiar with I know Hikaru refers to it as Lobster pincermate that's kind of caught on and the kind of tactics that revolve around the lobster pins are made are are really important to understand and um just to point out that Bishop D3 here the fastest mate is in fact Rook takes D3 Pawn takes D3 Queen E3 check again you can spot the mating patterns here King B1 and you don't even need to take the pawn just go Queen D2 and again it's the lobster pincer made on B2 that's totally Unstoppable white gets David off but you just take the rug even faster is C2 check this is made in two it's actually made in two yeah this is made in two or King B2 C1 equals Queen mate Discovery the Queens defend each other so a very easy game it was unfortunate that our opponent blundered this quickly but still more successful experiences with the accelerated dragon and again we're we're seeing that it's the Sicilian that nobody studies at this"
+  },
+  {
+   "ply": 3,
+   "t": 1455,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "so a very easy game it was unfortunate that our opponent blundered this quickly but still more successful experiences with the accelerated dragon and again we're we're seeing that it's the Sicilian that nobody studies at this level and when you're on your own in a sicilian bad things tend to happen to you okay so let's have a quick look um and again you know that I can't we don't have a guarantee that all the games are going to be equally interesting but hopefully the the post game analysis makes them worth it okay just a moment so this is the first time that we have faced Knight to C3 previously we faced the morosi bind which is what most Grandmasters play against the accelerated and you might remember that my recommendation here is not Bishop G7 but instead to start with Knight F6 already setting a trap if white tries to punish you by taking and going E5 you have a fork on the king in the pawn so of course Knight C3 is standard then you trade and play D6 you do things in a slightly weird move order in order to lure the queen onto a vulnerable Square why is it vulnerable because when you feed and keto the bishop you're you're often going to gain a Tempo because the queen is going to have to move out of the potential Discovery if I remember correctly our first game in the open Sicilian went something like our opponent went here and I think in this position our opponent went Bishop to E3 which is a big positional mistake who can remind me why it's a big positional mistake and this is also on theme it's not that we have a win we can't win the queen here but we go Knight G4 this is kind of a no-brainer if you're an accelerated player because again trading the Knight for the bishop is almost always a good thing we have uncontested control of Key Dark squares in the center I think we played Bishop B6 here and we kind of won a nice positional game so you could refresh your memory that game is on YouTube as well here uh in this position after castles White's main move is I'm pretty sure to move the queen back Queen D3 Queen D3 and then to develop the bishop and white is slightly better if he handles this very precisely but it's still a very playable position where it's pretty easy to learn a lot of the ideas anyways this is beside the"
+  },
+  {
+   "ply": 7,
+   "t": 1589,
+   "line": [
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "better if he handles this very precisely but it's still a very playable position where it's pretty easy to learn a lot of the ideas anyways this is beside the point we're facing Knight C3 Bishop E3"
+  },
+  {
+   "ply": 9,
+   "t": 1590,
+   "line": [
+    "g6",
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 5",
+   "said": "better if he handles this very precisely but it's still a very playable position where it's pretty easy to learn a lot of the ideas anyways this is beside the point we're facing Knight C3 Bishop E3"
+  },
+  {
+   "ply": 11,
+   "t": 1591.5,
+   "line": [
+    "Bg7",
+    "Be3"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 3 6",
+   "said": "but it's still a very playable position where it's pretty easy to learn a lot of the ideas anyways this is beside the point we're facing Knight C3 Bishop E3 after Knight F6 the move Queen D2 which"
+  },
+  {
+   "ply": 12,
+   "t": 1592.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 4 7",
+   "said": "but it's still a very playable position where it's pretty easy to learn a lot of the ideas anyways this is beside the point we're facing Knight C3 Bishop E3 after Knight F6 the move Queen D2 which"
+  },
+  {
+   "ply": 13,
+   "t": 1594,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPPQ1PPP/R3KB1R b KQkq - 5 7",
+   "said": "but it's still a very playable position where it's pretty easy to learn a lot of the ideas anyways this is beside the point we're facing Knight C3 Bishop E3 after Knight F6 the move Queen D2 which I honestly yeah have never come across and I'm looking at the engine and seeing that castles is indeed the correct move"
+  },
+  {
+   "ply": 14,
+   "t": 1599,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPPQ1PPP/R3KB1R w KQ - 6 8",
+   "said": "the ideas anyways this is beside the point we're facing Knight C3 Bishop E3 after Knight F6 the move Queen D2 which I honestly yeah have never come across and I'm looking at the engine and seeing that castles is indeed the correct move so we made the correct decision here now why am I avoiding recommending the"
+  },
+  {
+   "ply": 18,
+   "t": 1604.5,
+   "line": [
+    "Nd1",
+    "Re8",
+    "Qc3",
+    "Kh8"
+   ],
+   "fen": "r1bqr2k/pp1pppbp/2n2np1/8/3NP3/2Q1B3/PPP2PPP/R2NKB1R w KQ - 10 10",
+   "said": "I honestly yeah have never come across and I'm looking at the engine and seeing that castles is indeed the correct move so we made the correct decision here now why am I avoiding recommending the mainline Dragon well the mainline dragon and the accelerated Dragon are two completely different animals although the same animal they're the Dragon but in terms of the positions that they produce they could not be more different essentially the only similarities that you feel in Canada the bishop in when I say Mainline Dragon some people might not know what I mean so what I mean is"
+  },
+  {
+   "ply": 3,
+   "t": 1624.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "the same animal they're the Dragon but in terms of the positions that they produce they could not be more different essentially the only similarities that you feel in Canada the bishop in when I say Mainline Dragon some people might not know what I mean so what I mean is"
+  },
+  {
+   "ply": 4,
+   "t": 1625.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "but in terms of the positions that they produce they could not be more different essentially the only similarities that you feel in Canada the bishop in when I say Mainline Dragon some people might not know what I mean so what I mean is the sort of traditional Dragon where you play D6 D4 and this is the entry point to the"
+  },
+  {
+   "ply": 8,
+   "t": 1631,
+   "line": [
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "said": "you feel in Canada the bishop in when I say Mainline Dragon some people might not know what I mean so what I mean is the sort of traditional Dragon where you play D6 D4 and this is the entry point to the"
+  },
+  {
+   "ply": 9,
+   "t": 1632,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "you feel in Canada the bishop in when I say Mainline Dragon some people might not know what I mean so what I mean is the sort of traditional Dragon where you play D6 D4 and this is the entry point to the nidorf which is A6 which I could have recommended and the dragon is G6 it's"
+  },
+  {
+   "ply": 10,
+   "t": 1636,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "not know what I mean so what I mean is the sort of traditional Dragon where you play D6 D4 and this is the entry point to the nidorf which is A6 which I could have recommended and the dragon is G6 it's not that it's been refuted it hasn't been refuted but it's a ridiculously risky opening and you have to know loads and loads of theory and you could still get checkmated even if you know loads and loads of theory also it's theoretical standing right now is pretty dubious and there have been a lot of"
+  },
+  {
+   "ply": 11,
+   "t": 1652.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 1 6",
+   "said": "risky opening and you have to know loads and loads of theory and you could still get checkmated even if you know loads and loads of theory also it's theoretical standing right now is pretty dubious and there have been a lot of analysis done in the main lines so I"
+  },
+  {
+   "ply": 12,
+   "t": 1654.5,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/pp2ppbp/3p1np1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 2 7",
+   "said": "and loads of theory and you could still get checkmated even if you know loads and loads of theory also it's theoretical standing right now is pretty dubious and there have been a lot of analysis done in the main lines so I think players are more likely to study the dragon from White's perspective than the accelerated dragon and the key distinction is that in the the mainline Dragon white plays F3"
+  },
+  {
+   "ply": 13,
+   "t": 1666.5,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqk2r/pp2ppbp/3p1np1/8/3NP3/2N1BP2/PPP3PP/R2QKB1R b KQkq - 0 7",
+   "said": "think players are more likely to study the dragon from White's perspective than the accelerated dragon and the key distinction is that in the the mainline Dragon white plays F3 and the main line goes Knight C6 Queen"
+  },
+  {
+   "ply": 14,
+   "t": 1669.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqk2r/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPP3PP/R2QKB1R w KQkq - 1 8",
+   "said": "the dragon from White's perspective than the accelerated dragon and the key distinction is that in the the mainline Dragon white plays F3 and the main line goes Knight C6 Queen D2 castles and you normally get opposite"
+  },
+  {
+   "ply": 16,
+   "t": 1672,
+   "line": [
+    "Qd2",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/R3KB1R w KQ - 3 9",
+   "said": "the accelerated dragon and the key distinction is that in the the mainline Dragon white plays F3 and the main line goes Knight C6 Queen D2 castles and you normally get opposite"
+  },
+  {
+   "ply": 17,
+   "t": 1673.5,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/2KR1B1R b - - 4 9",
+   "said": "and the key distinction is that in the the mainline Dragon white plays F3 and the main line goes Knight C6 Queen D2 castles and you normally get opposite side Catholic this is one main line and"
+  },
+  {
+   "ply": 16,
+   "t": 1675.5,
+   "line": [],
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/R3KB1R w KQ - 3 9",
+   "said": "the mainline Dragon white plays F3 and the main line goes Knight C6 Queen D2 castles and you normally get opposite side Catholic this is one main line and then the other Main Line white first"
+  },
+  {
+   "ply": 17,
+   "t": 1677,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2BNP3/2N1BP2/PPPQ2PP/R3K2R b KQ - 4 9",
+   "said": "and the main line goes Knight C6 Queen D2 castles and you normally get opposite side Catholic this is one main line and then the other Main Line white first develops the bishop to C4 to stop D5 I think this is called the Hugo slot attack but in this line where black"
+  },
+  {
+   "ply": 16,
+   "t": 1683,
+   "line": [],
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/R3KB1R w KQ - 3 9",
+   "said": "side Catholic this is one main line and then the other Main Line white first develops the bishop to C4 to stop D5 I think this is called the Hugo slot attack but in this line where black"
+  },
+  {
+   "ply": 18,
+   "t": 1684.5,
+   "line": [
+    "O-O-O",
+    "d5"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2n2np1/3p4/3NP3/2N1BP2/PPPQ2PP/2KR1B1R w - - 0 10",
+   "said": "side Catholic this is one main line and then the other Main Line white first develops the bishop to C4 to stop D5 I think this is called the Hugo slot attack but in this line where black plays D5 this might be familiar to some"
+  },
+  {
+   "ply": 20,
+   "t": 1687,
+   "line": [
+    "exd5",
+    "Nxd5"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2n3p1/3n4/3N4/2N1BP2/PPPQ2PP/2KR1B1R w - - 0 11",
+   "said": "then the other Main Line white first develops the bishop to C4 to stop D5 I think this is called the Hugo slot attack but in this line where black plays D5 this might be familiar to some people who are watching this as the main line the most popular line nowadays"
+  },
+  {
+   "ply": 22,
+   "t": 1690,
+   "line": [
+    "Nxc6",
+    "bxc6"
+   ],
+   "fen": "r1bq1rk1/p3ppbp/2p3p1/3n4/8/2N1BP2/PPPQ2PP/2KR1B1R w - - 0 12",
+   "said": "think this is called the Hugo slot attack but in this line where black plays D5 this might be familiar to some people who are watching this as the main line the most popular line nowadays white plays Bishop to D4 there's that"
+  },
+  {
+   "ply": 23,
+   "t": 1691.5,
+   "line": [
+    "Bd4"
+   ],
+   "fen": "r1bq1rk1/p3ppbp/2p3p1/3n4/3B4/2N2P2/PPPQ2PP/2KR1B1R b - - 1 12",
+   "said": "think this is called the Hugo slot attack but in this line where black plays D5 this might be familiar to some people who are watching this as the main line the most popular line nowadays white plays Bishop to D4 there's that idea again where white tries to take Black's fiancado Bishop out of commission and often black is forced to"
+  },
+  {
+   "ply": 24,
+   "t": 1699,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bq1rk1/p4pbp/2p3p1/3np3/3B4/2N2P2/PPPQ2PP/2KR1B1R w - - 0 13",
+   "said": "people who are watching this as the main line the most popular line nowadays white plays Bishop to D4 there's that idea again where white tries to take Black's fiancado Bishop out of commission and often black is forced to make this very undesirable move E5 closing down the diagonal for the bishop"
+  },
+  {
+   "ply": 25,
+   "t": 1702,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bq1rk1/p4pbp/2p3p1/2Bnp3/8/2N2P2/PPPQ2PP/2KR1B1R b - - 1 13",
+   "said": "white plays Bishop to D4 there's that idea again where white tries to take Black's fiancado Bishop out of commission and often black is forced to make this very undesirable move E5 closing down the diagonal for the bishop and this takes a lot of the fun out of the Dragon this line that you see right here is incredibly popular among white players and white is considered to be better in in this line that's not really subject to debate and black often sacrifices this exchange by the way although Anish giri in his"
+  },
+  {
+   "ply": 26,
+   "t": 1721.5,
+   "line": [
+    "Re8"
+   ],
+   "fen": "r1bqr1k1/p4pbp/2p3p1/2Bnp3/8/2N2P2/PPPQ2PP/2KR1B1R w - - 2 14",
+   "said": "players and white is considered to be better in in this line that's not really subject to debate and black often sacrifices this exchange by the way although Anish giri in his chest level course recommends the relatively rare move rookie 8 but that's beside the point"
+  },
+  {
+   "ply": 4,
+   "t": 1728.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "and black often sacrifices this exchange by the way although Anish giri in his chest level course recommends the relatively rare move rookie 8 but that's beside the point as we go back to the accelerated Dragon the thing that's most important to understand and this is a trap which even Bobby Fischer fell into white could essentially try to get the same type of position and play the move F3 I think a lot of players do make this move at a lower level and after castles white plays the move Queen D2 what is the difference well the difference is that we have not committed to the move D6 so we can save a Tempo on that move and play D5 in one Fell Swoop this exact position would occur in the mainline Dragon but it would be white to move in this position and white would take on D5 with black to move there are no problems at all you can play Knight takes Knight and after well after Queen takes night you have a simple Discovery Knight takes C4 and black is much better and if Bishop takes Knight then you take the pawn on e4 and clearly Black's position is very very comfortable here I think something like Queen A5 yields a great position white structure is damaged our pieces are"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 3,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3"
+   ],
+   "options": [
+    {
+     "san": "Nc6",
+     "t": 202,
+     "continuation": "Nc6",
+     "said": "hopefully we don't get aborted nope very good okay so we're finally I feel like it's been ages since we've had a black game hopefully it will finally be able to get a Mainline accelerated dragon now we have faced the rosalimo a couple times and now we're facing the open Sicilian which is music to my ears I think this is only our second accelerated dragon of the entire speedrun in the first one uh we faced the marozzi bind which is the move C4 and in that game I demonstrated a sideline system that I find to be very effective at the intermediate level where you basically play Knight F6 before fion Kettering the bishop but I'll review that after the game right now we're facing Knight C3 which is of course the other main line so here we don't have the space for any Shenanigans we start by developing our Bishop putting immediate pressure on the Knight and white develops their Bishop to E3 which is the continuation of the main line a lot of players a lot of newer players they tend to take on C6 in this position which is an immediate big concession and it's a big concession because it allows black to capture toward the center the B file can be used"
+    },
+    {
+     "san": "d6",
+     "t": 1625.5,
+     "continuation": "d6",
+     "said": "but in terms of the positions that they produce they could not be more different essentially the only similarities that you feel in Canada the bishop in when I say Mainline Dragon some people might not know what I mean so what I mean is the sort of traditional Dragon where you play D6 D4 and this is the entry point to the nidorf which is A6 which I could have recommended and the dragon is G6 it's not that it's been refuted it hasn't been refuted but it's a ridiculously risky opening and you have to know loads and loads of theory and you could still get checkmated even if you know loads and loads of theory also it's theoretical standing right now is pretty dubious and there have been a lot of analysis done in the main lines so I think players are more likely to study the dragon from White's perspective than the accelerated dragon and the key distinction is that in the the mainline Dragon white plays F3 and the main line goes Knight C6 Queen D2 castles and you normally get opposite side Catholic this is one main line and then the other Main Line white first develops the bishop to C4 to stop D5 I think this is called the Hugo slot attack but in this line where black plays D5 this might be familiar to some"
+    }
+   ]
+  },
+  {
+   "ply": 14,
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPPQ1PPP/R3KB1R w KQ - 6 8",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "Be3",
+    "Nf6",
+    "Qd2",
+    "O-O"
+   ],
+   "options": [
+    {
+     "san": "O-O-O",
+     "t": 510.5,
+     "continuation": "O-O-O",
+     "said": "the rationale behind keeping your Pawn on D7 well the idea is that if white insists on playing a Mainline Dragon setup then you will be able to play D5 in one Fell Swoop and that is often you know without any question a good thing for black now white has done what I thought he would do he's castled queenside and there's a good reason that you need to play F3 in the mainline dragon that is indeed to avoid Knight G4 how has the situation changed as a result of White's last move well one thing I'm noticing is that the king and the queen are now aligned what does that entail well we need to recalculate Knight G4 because just because a move doesn't work in one position doesn't mean it doesn't work in another so what happens if we play Knight G4 here well the bishop still can't move so if y takes on C6 and then plays Bishop D4 we have something very exciting in that resulting position we have the bishop pin we have Bishop to H6 pinning the queen and the King now that doesn't win the queen because white can block that pin with the move F4 F to F4 but if we keep calculating I think black has a winning move after F4"
+    },
+    {
+     "san": "Nd1",
+     "t": 1604.5,
+     "continuation": "Nd1 Re8 Qc3 Kh8",
+     "said": "I honestly yeah have never come across and I'm looking at the engine and seeing that castles is indeed the correct move so we made the correct decision here now why am I avoiding recommending the mainline Dragon well the mainline dragon and the accelerated Dragon are two completely different animals although the same animal they're the Dragon but in terms of the positions that they produce they could not be more different essentially the only similarities that you feel in Canada the bishop in when I say Mainline Dragon some people might not know what I mean so what I mean is the sort of traditional Dragon where you play D6 D4 and this is the entry point to the nidorf which is A6 which I could have recommended and the dragon is G6 it's not that it's been refuted it hasn't been refuted but it's a ridiculously risky opening and you have to know loads and loads of theory and you could still get checkmated even if you know loads and loads of theory also it's theoretical standing right now is pretty dubious and there have been a lot of analysis done in the main lines so I think players are more likely to study the dragon from White's perspective than the accelerated dragon and the key distinction is that in the"
+    }
+   ]
+  },
+  {
+   "ply": 16,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/3NP3/2N1BP2/PPPQ2PP/R3KB1R w KQ - 3 9",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "g6",
+    "Be3",
+    "Bg7",
+    "f3",
+    "Nc6",
+    "Qd2",
+    "O-O"
+   ],
+   "options": [
+    {
+     "san": "O-O-O",
+     "t": 1673.5,
+     "continuation": "O-O-O",
+     "said": "and the key distinction is that in the the mainline Dragon white plays F3 and the main line goes Knight C6 Queen D2 castles and you normally get opposite side Catholic this is one main line and then the other Main Line white first develops the bishop to C4 to stop D5 I think this is called the Hugo slot attack but in this line where black plays D5 this might be familiar to some people who are watching this as the main line the most popular line nowadays white plays Bishop to D4 there's that idea again where white tries to take Black's fiancado Bishop out of commission and often black is forced to make this very undesirable move E5 closing down the diagonal for the bishop and this takes a lot of the fun out of the Dragon this line that you see right here is incredibly popular among white players and white is considered to be better in in this line that's not really subject to debate and black often sacrifices this exchange by the way although Anish giri in his chest level course recommends the relatively rare move rookie 8 but that's beside the point as we go back to the accelerated Dragon the thing that's most important to understand and this is a trap which even"
+    },
+    {
+     "san": "Bc4",
+     "t": 1677,
+     "continuation": "Bc4",
+     "said": "and the main line goes Knight C6 Queen D2 castles and you normally get opposite side Catholic this is one main line and then the other Main Line white first develops the bishop to C4 to stop D5 I think this is called the Hugo slot attack but in this line where black plays D5 this might be familiar to some people who are watching this as the main line the most popular line nowadays white plays Bishop to D4 there's that idea again where white tries to take Black's fiancado Bishop out of commission and often black is forced to make this very undesirable move E5 closing down the diagonal for the bishop and this takes a lot of the fun out of the Dragon this line that you see right here is incredibly popular among white players and white is considered to be better in in this line that's not really subject to debate and black often sacrifices this exchange by the way although Anish giri in his chest level course recommends the relatively rare move rookie 8 but that's beside the point as we go back to the accelerated Dragon the thing that's most important to understand and this is a trap which even Bobby Fischer fell into white could"
+    }
+   ]
+  }
+ ]
+}

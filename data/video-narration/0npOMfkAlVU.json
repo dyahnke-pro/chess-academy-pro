@@ -1,0 +1,264 @@
+{
+ "videoId": "0npOMfkAlVU",
+ "title": "Beginner To Master | Chess Speedrun | Najdorf Sicilian | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "okay this is a longer game so we can really dig deep and talk about a lot of concepts here okay so what should we play um let's uh let's play another sicilian shall we and hopefully we'll get a chance to repeat the night or maybe we'll play we'll play another night off let's play sicilian [Music] all right yeah let's play a night off"
+  },
+  {
+   "ply": 3,
+   "t": 31.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "[Music] all right yeah let's play a night off now does anybody i basically just gave it away how does the night or go what move does black play in this position so yeah d6 now we've mostly been playing the accelerated dragon which i which i'm teaching to charlie uh in the"
+  },
+  {
+   "ply": 4,
+   "t": 47,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "the night or go what move does black play in this position so yeah d6 now we've mostly been playing the accelerated dragon which i which i'm teaching to charlie uh in the speed run but uh lately we've experimented a little"
+  },
+  {
+   "ply": 5,
+   "t": 49.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "position so yeah d6 now we've mostly been playing the accelerated dragon which i which i'm teaching to charlie uh in the speed run but uh lately we've experimented a little bit with the night or now we take this"
+  },
+  {
+   "ply": 6,
+   "t": 52,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "so yeah d6 now we've mostly been playing the accelerated dragon which i which i'm teaching to charlie uh in the speed run but uh lately we've experimented a little bit with the night or now we take this is the open sitlian knight f6 and after knight c3 we have"
+  },
+  {
+   "ply": 8,
+   "t": 54.5,
+   "line": [
+    "Nxd4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "said": "the accelerated dragon which i which i'm teaching to charlie uh in the speed run but uh lately we've experimented a little bit with the night or now we take this is the open sitlian knight f6 and after knight c3 we have several possible moves g6 is the traditional dragon uh there is knight c6"
+  },
+  {
+   "ply": 9,
+   "t": 59,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "speed run but uh lately we've experimented a little bit with the night or now we take this is the open sitlian knight f6 and after knight c3 we have several possible moves g6 is the traditional dragon uh there is knight c6 that is the rouser or the classical sicilian there's e6 there's e5 e5 is not great but uh the night or"
+  },
+  {
+   "ply": 10,
+   "t": 69,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "traditional dragon uh there is knight c6 that is the rouser or the classical sicilian there's e6 there's e5 e5 is not great but uh the night or is a special place in sicilian players as hearts and that is the move a6 a6 and as we've discussed the the sort of most uh immediate idea is to cover the b5 square right to stop the bishop the knight from"
+  },
+  {
+   "ply": 11,
+   "t": 82,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
+   "said": "as hearts and that is the move a6 a6 and as we've discussed the the sort of most uh immediate idea is to cover the b5 square right to stop the bishop the knight from going to b5 and chess ninja plays bishop tuna bishop b2 is one of the most popular responses to the night or fade is considered to be among white's quietest options so it's okay quiet should be taken within the proper context that doesn't mean the position is boring the position is still very interesting but the reason this is considered to be relatively quiet in comparison is because white actually wants to castle short whereas in many lines bishop g5 bishop b3 white actually"
+  },
+  {
+   "ply": 10,
+   "t": 112,
+   "line": [],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "doesn't mean the position is boring the position is still very interesting but the reason this is considered to be relatively quiet in comparison is because white actually wants to castle short whereas in many lines bishop g5 bishop b3 white actually castles long so you have opposite side castling now um neither flares are split"
+  },
+  {
+   "ply": 11,
+   "t": 121,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
+   "said": "lines bishop g5 bishop b3 white actually castles long so you have opposite side castling now um neither flares are split between two categories the categories roughly are e6 players and then e5 players so e6 leads to a structure called the cheveningen structure i'll talk about this after the game but i have always been an e5 player and"
+  },
+  {
+   "ply": 12,
+   "t": 136,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/3NP3/2N5/PPP1BPPP/R1BQK2R w KQkq - 0 7",
+   "said": "roughly are e6 players and then e5 players so e6 leads to a structure called the cheveningen structure i'll talk about this after the game but i have always been an e5 player and those of you who do not play the night or this move might seem very strange i don't remember if i talked about it i think i did talk about it in the context of another move so uh maybe some of you guys were there for my previous uh previous explanation but if you weren't and you don't you're not an eidorf player uh if if this move doesn't seem weird to you then you're doing something wrong why does this move look like a big positional mistake at first no it's no this is the theoretical move why does this look like a big positional mistake what does it weaken yeah so it weakens"
+  },
+  {
+   "ply": 13,
+   "t": 172,
+   "line": [
+    "Nb3"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQK2R b KQkq - 1 7",
+   "said": "why does this move look like a big positional mistake at first no it's no this is the theoretical move why does this look like a big positional mistake what does it weaken yeah so it weakens d6 and correspondingly weakens the d5 square but this is why i don't recommend the night off to beginners but this is precisely why because you have to violate these rules these basic positional rules and it's like you have to earn the right to violate them you can only violate them if you know them and for beginners it's more important to practice applying the rules before you practice violate them violating them if you practice violating them first you never practice applying them and you build essentially what will ultimately turn out to be a rotten foundation but in this game i will attempt to explain kind of by degrees why this is justifiable to play five there isn't one single reason why black gets away with the movie five it's a very complex prop it's a very complex network of different reasons so first of all we have to develop our pieces that is the same in any opening we have to develop our pieces in particular we need to get our king out of the center so bishop e6 is possible uh and bishop e7 is also possible the main move is bishop e7"
+  },
+  {
+   "ply": 14,
+   "t": 235.5,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rnbqk2r/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQK2R w KQkq - 2 8",
+   "said": "opening we have to develop our pieces in particular we need to get our king out of the center so bishop e6 is possible uh and bishop e7 is also possible the main move is bishop e7 you basically want to prepare castling as early as possible and also this bishop on c8 potentially might be fianchettoed on b7 the first of the very constellation of reasons why d5 square is not the end of the world is that what black is a lot of pieces that can contest the d5 square in particular you could put the bishop on e6 and this knight on f6 can be supported by its brother on d7 so you can basically have two pieces directly one piece indirectly controlling the d5 square which makes it"
+  },
+  {
+   "ply": 15,
+   "t": 266.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbqk2r/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1RK1 b kq - 3 8",
+   "said": "put the bishop on e6 and this knight on f6 can be supported by its brother on d7 so you can basically have two pieces directly one piece indirectly controlling the d5 square which makes it incredibly hard for white to actually get a knight on t5 and establish it there in practice because black is not a game practice because black has all of these pieces clustered on the king side i hope that kind of makes sense so here we castle again we delay the"
+  },
+  {
+   "ply": 16,
+   "t": 282.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/1p2bppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1RK1 w - - 4 9",
+   "said": "establish it there in practice because black is not a game practice because black has all of these pieces clustered on the king side i hope that kind of makes sense so here we castle again we delay the development of this bishop let's see what white does and that's reason number one why the weakness of the d5 square is not as devastating as it may appear the second sort of broad set of reasons consists in the fact that and bear with me for a second here black has counter play on essentially both sides of the board and one of the sources of black's counterplay is this b-pawn advance to b4 so even though d5 may be weak uh it is often counter-balanced by black's counterplay on both sides of the board and hopefully we'll get a chance to spell that out concretely that doesn't mean that games have not been lost because a knight has landed on d5 and sat there until the rest of the game i will even show you a game that i played where i mishandled the position mishandled it and i allowed a knight on d5 and i lost the game that's the danger of playing the night off that's not to say d5 square is not important okay now it is finally time to deploy the bishop to e6 and add another protector to the d5 square queen d3 by the way is indeed a legitimate move in this in this position that is a line but let's see how he follows it up yeah so i'll explain i'll explain the move e6 after the game the chevening against structure i used to play but i never really liked it and i'll explain some of the reasons why one of the reasons why is that okay so bishop g5 what should we do now i've already explained the general set of moves that black normally plays in this position what do you guys think should be preferred here yeah so the move is knight bd7 is correct and we get the situation where it's very hard to dislodge a knight from f6 if y takes then then we will simply take back yeah good and now as i explained we have all four of our miners clustered together in the center which is actually kind of a good thing and we are ready to begin queen side operations queenside operations can refer to two specific different things the first i okay that and see that's the issue got to be careful about this thing because this can yeah so dropping the knight is is chest ninja i'm going to take it um of course i could give him i could not take the knight and stuff but i don't really believe in that he'll get another chance to play me um i think that this is also something instructive and i'm going to make a lesson out of this i know i might sound obnoxious but part of the benefit of and charlie will experience is part of the benefit of playing something most people don't play at a level where people mostly play e5 is that people get these unfamiliar positions and unfamiliar positions result in blunders that's not a coincidence that's just something that generally tends to happen okay but let's continue playing we're up a piece that's great but that doesn't mean we shouldn't continue making night or flight moves thank you grounded 132. could anybody propose a typical sicilian move here we can activate one of our other pieces and put it on a very nice little square yeah so let the knights stay on d7 the knights are kind of good here yeah rook aca those of you who play the sicilian i mean this is just such a typical move applying pressure on the night many times you do want to sacrifice the exchange on c3 that is also a legitimate idea but here we won't need to do that because world of peace it also is not a bad idea at some point to tickle the bishop with h6 just to create a little bit of love to our king maybe ask the bishop what it wants to do and in the meantime as he's thinking thank you guys once again thank you very very much we've got three thousand plus at this late hour um watching watching the speeder and i appreciate everybody's support a great deal and it it's been it's been awesome it's been a great stream and we'll be finishing up very soon but let's try to finish this game off in style thank you dayton pergai for the prime okay so bishop drops back to d2 on its own volition and uh it it should not take you guys long to see that it x-rays the queen uh there might not be any specific threat that that results from this x-ray but i don't want to play with fire uh i certainly don't want to play with fire i want to move this queen away where do we move this queen away we have several good squares but since we already put a rook on c8 we know that the c file is is a nice uh a nice let's just say hilton marry it in in suites for the queen and the rook uh in in the night or if this is very common you put the queen on c7 and the rook on c8 right the queen and the rook staying staying in a nice little holiday nc file and uh you might look at this and say well what does this do exactly why are we doubling in the seafarer we're not attacking the knight like what are you doing the night is not hanging the pawn is perfectly capable of defending this night well again this is where the concept of pressure comes in and pressure is a very misunderstood concept by a lot of people pressure refers to a sort of a less uh concrete and more abstract state of the position where a particular piece let's say cannot move because if it moves then uh pieces fall behind it so the knight for example is under pressure right knight cannot move because the c2 pawn would have fallen that's why white plays rook a to c1 uh he's trying to perhaps free up the knight on on c3 although the knight has nowhere to go um yeah there's many good moves here we can play bishop c4 and trade the bishops but um again there's no particular need to do that let's actually play typical night or moves there is one more typical night or move that we have not yet played it is also a move on the queen side i mentioned this move we can expand and create a stronghold not d5 d5 would blend to the pawn but the move b5 yeah b5 expanding on the queen side creating a sort of i would say almost an outpost on c4 where we can actually bring the knight to c4 if we wanted to or the bishop or even the queen and also do not forget the queen now has access to the b7 square from where it could pressure the e4 pawn so we have probably 10 possible ways of playing this position they're all good so don't think that your proposed line is necessarily bad because i'm choosing this i'm just trying to play more night or flight style yes if you get them if you have amazon prime you can subscribe to one channel per month for free i'm always honored when you choose my channel but zero obligation okay um we might play for d5 sarah no we absolutely might thank you andrew andrew's friend jonathan with the prime no actually we will play for a d5 so and pal ctv thanks for the prime sorry to pressure you guys okay no sarab you're absolutely right the ultimate goal here is to play d5 that's exactly what we're doing and in order to prepare d5 in the best possible way what kinds of moves might you guys propose the first is knight b6 to prepare d5 yeah uh but but the problem with the move knight b6 is uh but but be careful right he's played the move b3 guys so that knight on b6 is not going to have prospects in terms of coming to c4 it's only going to be preparing d5 let's do something a little bit more flexible thank you axina and snapweave both subbing let's do something a little bit more flexible i like the move queen b7 this is more flexible because yes it prepares d5 but it also is a standalone good move it just pressures the e4 pawn and we're actually threatening to play knight c5 here we're actually threatening to play knight c5 here so this concept of flexibility i've talked about many times you have a particular idea choose the most flexible way of executing it which means choose the move that even if your idea were to fail even if the roof were to come off and you were to realize that your plan is crap the move that you played to prepare that plan is in and of itself a healthy move that's not always going to be possible but when possible you want to try to do that thank you aksinha for two months and snapweave both more subs we love subs thank you thank you okay and let's see 4 000 viewers jesus louise geez louise i was planning to end that one okay so this is okay i'm trekkie monster and waynok priming both so what should we do should we go for d5 or is there a better move yeah we are endowed with tremendous opportunities here let's go knight c5 one two three i'm just being a jerk okay knight takes c4 and we win the pawn and now we can go d5 in the best possible version okay so what should we take on e4 with and both pieces are fine but what do you guys think yeah so um i'm always torn on how to present whether or not you should trade when you're up material but the way i'll put it is this way if you can trade without any concessions and you are up a piece by all so let's trade the queens because that simplifies our task why does this force a trade because he cannot move the queen away he would drop his bishop so he has to trade in one where the other also knight takes d4 as you guys are pointing out just a tiny bit uncomfortable the fact that the knight will be pinned the queen is undefended white has no way to exploit that because you can play d5 on the next move and support the knight and and cut out the pin but nonetheless queen takes e4 is is great we didn't even need to play d5 we just win the pawn okay so he chest ninja does opt to give up the bishop but now he's two pieces down i think he's he wants this but this is going to be very easily dealt with by our army of pieces we're actually potentially going to win a third piece and he resigns good game chess ninja that was very nice uh of course you know knight a5 was was the blunder and and you played well in in the first part of the opening but after this it was very very hard really to do anything significant nonetheless thanks for continuing to play thanks for being resilient um and uh we have a lot of things nonetheless to discuss think of the w with the prime so the night of right now bishop e2 is once again known as a relatively"
+  },
+  {
+   "ply": 11,
+   "t": 940,
+   "line": [],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
+   "said": "resilient um and uh we have a lot of things nonetheless to discuss think of the w with the prime so the night of right now bishop e2 is once again known as a relatively quiet move uh anatoly karpov gary kasparov's arch nemesis one of the strongest positional players in history was a champion of the bishop e2 move uh because it's kind of the right balance of tactics and positional chess it's still night or so it's still tactical but it's more positional than like bishop e3 or bishop g5 thank you lawrence selafonte with the prime let me show you"
+  },
+  {
+   "ply": 12,
+   "t": 965,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2ppn2/8/3NP3/2N5/PPP1BPPP/R1BQK2R w KQkq - 0 7",
+   "said": "of tactics and positional chess it's still night or so it's still tactical but it's more positional than like bishop e3 or bishop g5 thank you lawrence selafonte with the prime let me show you guys one of my most painful experiences with the movie six and through the lens of this game through the through the prism of this tragedy that i suffered in the 2006 pan-american championships in ecuador against jorge quarry who now is a grandmaster from peru he's rated over 26.50 but back then we were both uh bright-eyed and bushy-tailed 2000s i will show you guys why i personally never you know i never vibed to this move let me just find this game and i like showing my games you know from from the old days just to give you guys a little bit of a personal touch you know what makes me think of openings the way that i do what were the formative experiences in in my chess in my early chess career okay pan american championships ecuador i got third place in that tournament but this was i had two losses out of nine games both were in the night offshore again one against ray robson won against jorge cory the game against jorge was significantly more and anonymous with a five dollar donation thank you for the instructional videos you are very welcome my friend thank you so much for the five dollar boo nation you can see that i played the chevening again and uh a lot of people look at this and say well wait a second this is the same as going e5 but we aren't weakening the d5 square so what the heck is the drawback of this move well there's a couple of drawbacks and the first of them is that you obstruct the bishop so you basically limit the development of the bishop the bishop kind of has to be in keto itself at some point or you have to find some sort of alternate arrangement on d7 that's a whole problem uh and the second part problem is that the pawn on e6 as you guys will see is actually a target and it's a target due to the very very typical plan of white eventually going up f4 f5 draft 95 thank you for the three months the third problem and this is what corey emphasizes in the game is that black is very very cramped and because black is cramped it's going to be very hard uh to defend against certain types of king side attacks when you go e5 you make it literally harder for white to bring about any kind of attack watch how this game proceeds i seem to do everything normally that's why this game basically ended my shivan game career because i just made normal development moves okay castle knight c6 okay he goes out for queen c7 normal okay rookie a bishop f8 that's a typical defensive idea now i played rogue b8 to prepare b5 you know i seem to be playing normal sitalian moves knight a5 to get to c4 here i went g6 to try to blunt the queen and now look at what he does he goes e5 this move would not have been possible if black spawn was on e5 and in this position corey plays an absolutely sick move this is actually correct this is a sexy move and it wins the game on the frickin spot it comes absolutely a bolt from the blue i thought i was fine here and this is a bolt from the blue a super instructive move because it turns out that all of black's pieces are sort of cramped on the bottom rows the king is incredibly weak which means that white can actually just slam a knight onto d5 very good sam or uh baslon b aslan one thank you for the prime sorry thank you for the tier one and the game is over he takes d5 bishop takes d5 and look at the pressure the black is exerting on the f7 pawn the problem is that if black takes on e5 with the knight then to add insult to injury rook takes f7 as possible the knight cannot take because if queen takes c7 winning the queen black has to give up a queen and he's still gonna get checkmated so this is just horrible and i played rookie five bishop f7 now knight e6 again exploiting the undefended queen thank you another sub fatal left thanks for the prime queen queen c6 he plays rook takes the i mean this is just nasty stuff now the rook loses its support i play brook takes e6 and he just starts taking everything queen e5 track intermediate move queen takes b8 bishop f7 wins another piece and now wins another piece and i resign so he literally demolished me and i was a dirty little bastard i mean bishop b5 at the end by the way hoping for rook takes c5 queen f1 checkmate but a guy of jorge cory's caliber nope queen takes the five checks simple uh liquidation takes takes takes takes and he's up a rock so that was an absolutely brutal game i lost a couple more like these two so i was like all right no more no more chemin again in the shivan and again the reason that i struggled in it is not because it's bad the chevening again even to this day is considered to be fine although e5 is definitely the favorite move among among strong grandmasters at this point but gary kasparov lady6 it's what i would define as a come to papa system there are certain systems within openings that i would define as come to papa systems that's systems where you basically you know you adopt the the karate kid stands and you're like just come to papa these are like the bumper cars right you just put these out here e6 and d6 come to papa go f5 go e5 i don't want him to come to papa i want to be the one coming to papa okay so that's personally why i don't like e6 to me it's too provocative i don't like playing in uh this provocative of a style and i prefer to uh have a little bit more more space than myself thank you all perico2 for the for the prime so does that make sense that's partially why uh that's basically why i i don't like the chevening again and this game influenced me and i played the final schmann again in my life in in 2006 ever since then i've played e5 with uh with a good amount of success um yeah and this is also kind of the reason that a lot of people don't like the french you get similar types of positions all right so e5 knight b3 bishop bishop e7"
+  },
+  {
+   "ply": 14,
+   "t": 1329.5,
+   "line": [
+    "Nb3",
+    "e5"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQK2R w KQkq - 0 8",
+   "said": "um yeah and this is also kind of the reason that a lot of people don't like the french you get similar types of positions all right so e5 knight b3 bishop bishop e7 castles castles queen d3 bishop e6 now"
+  },
+  {
+   "ply": 18,
+   "t": 1332.5,
+   "line": [
+    "Kf1",
+    "Ke7",
+    "Rg1",
+    "Rg8"
+   ],
+   "fen": "rnbq1br1/1p2kppp/p2p1n2/4p3/4P3/1NN5/PPP1BPPP/R1BQ1KR1 w - - 4 10",
+   "said": "reason that a lot of people don't like the french you get similar types of positions all right so e5 knight b3 bishop bishop e7 castles castles queen d3 bishop e6 now queen d3 is a legitimate move but the best way to follow up with the move queen d3 the point of this move the point of this move is to over protect the e4 pawn and over protection essentially means that you are freeing up a piece that was previously protecting a pawn now that piece is free to move about the cabin the captain has turned off the seatbelt sign the captain has turned off the seat belt sign for the c3 knight it no longer is charged with defending the e41 which means that it could go to d5 now obviously putting a knight on d5 here is does not come with quite the same effect as putting the knight on d5 when black cannot take it here black can take on d5 and you get a very interesting structure where white starts attacking on the queen side black starts attacking on the king side and you get this kind of very combative play on either side of the board i don't want to delve into this too deeply you just get an interesting position queen d3 is one of many possible lines in this position okay but bishop g5 is fine of course knight a5 i get why you play this move it is a typical move in these positions sadly it just doesn't uh pass muster here of course because of the queen thank you page aix for the prime and i think that um maybe rook rook sorry not rook c1 but maybe rook d1 or maybe something peaceful like h3 should have been preferred although black already has a very comfortable game after b5 maybe you could also play a4 that's another very typical night or move for white to prevent b5 okay i actually like a4 i think that would have been white's best move and the game continues uh blackberry's rook c8 you know and and and you go back and forth so this is this is just a position uh okay one moment yeah so does that make sense right uh a4 is what i would prefer now here everything else is very simple queen c7 we play the flexible move we get the knight to e4 and uh and we we take the second piece and we win the game so after knight takes a5 uh after queen takes a5 there was nothing really interesting that happened um but yeah i mean what i would recommend for you ninja if you want to keep playing this line there is a move here where you play f4"
+  },
+  {
+   "ply": 19,
+   "t": 1472.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "rnbq1br1/1p2kppp/p2p1n2/4p3/4PP2/1NN5/PPP1B1PP/R1BQ1KR1 b - - 0 10",
+   "said": "takes a5 there was nothing really interesting that happened um but yeah i mean what i would recommend for you ninja if you want to keep playing this line there is a move here where you play f4 oh wow look at that synchronization kishan 2 asking the same question just as i mentioned that this was possible that was pretty cool um yeah so f4 is possible in this position but it doesn't quite come with the same effect as f4 when the pawn is on e6 and here you can actually take on f4"
+  },
+  {
+   "ply": 20,
+   "t": 1494,
+   "line": [
+    "exf4"
+   ],
+   "fen": "rnbq1br1/1p2kppp/p2p1n2/8/4Pp2/1NN5/PPP1B1PP/R1BQ1KR1 w - - 0 11",
+   "said": "um yeah so f4 is possible in this position but it doesn't quite come with the same effect as f4 when the pawn is on e6 and here you can actually take on f4 bishop takes f4"
+  },
+  {
+   "ply": 21,
+   "t": 1495.5,
+   "line": [
+    "Bxf4"
+   ],
+   "fen": "rnbq1br1/1p2kppp/p2p1n2/8/4PB2/1NN5/PPP1B1PP/R2Q1KR1 b - - 0 11",
+   "said": "position but it doesn't quite come with the same effect as f4 when the pawn is on e6 and here you can actually take on f4 bishop takes f4 and you get a very very typical structure where it may appear that the pawn on d6 now is very weak but the pawn on d6 just like we've heard the expression bad bishops defend good pawns well bad pawns defend good squares and the pawn on d6 uh is a supporting pawn for a piece that could appear on what square and we can get that piece there right now i can even show you you know i i've done this many times before so here's here's a very simple example from from one of my games uh warm milking thank you for the prime so what square am i talking about first of all what square am i talking about first of all so this pawn yeah e5 and we can get the knight there by playing knight c6 95 and that knight on e5 is solid as a rock now have i done something like this before in one of my games absolutely this idea of taking on f4 and then putting a knight on e5 is about as old as the hills i mean it literally is one of the main one of the formative one of the main night of ideas in this variation so here for example in just one moment you guys will see me applying this id in one of my old games all right so here we see one of my old games from 2008 you guys can see bishop b2e5 at this point i had already transitioned you get a4 in this position which is also a variation we go knight bd7 roxy hear me here is me playing the typical moves ipd7 roxy and f4 and you guys will never guess what i did in this position you guys will never get what guess what two moves i played in this position as old as the lens it's almost as if we just talked about how to respond to f4 in the night or yeah knight takes e4 nah girl he takes f4 95 beautiful getting the knight onto this very beautiful square and he did take the knight but now essentially as a result of him taking the knight this bishop on e7 which lay dormant now gets a very juicy square on b4 and black gets a very nice end game position which i ultimately um was able to convert into a win so uh so so so that actually is one of the key ideas to know for black if you play in the night or is to take on f4 and put a knight on on e5 that's uh very traditional very classical and uh now there's nothing wrong with that it's just old school idea okay uh that was a little overview of the bishop e2 night or there's so much more to talk about bishop e2 is"
+  },
+  {
+   "ply": 11,
+   "t": 1669,
+   "line": [],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
+   "said": "classical and uh now there's nothing wrong with that it's just old school idea okay uh that was a little overview of the bishop e2 night or there's so much more to talk about bishop e2 is a vast line i'm pretty sure there have been books written about bishop e2 alone and there is a you know there is a ton of sub variations that each feature their own uh their own signature thank you jay daradanos and i actually played one of the nicest games i've ever played in the bishop 2 line with black against alexander shabolov uh when i was rated about 2350 i beat shabulov on the black side of of this line with black having played e5"
+  },
+  {
+   "ply": 12,
+   "t": 1703.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/3NP3/2N5/PPP1BPPP/R1BQK2R w KQkq - 0 7",
+   "said": "alexander shabolov uh when i was rated about 2350 i beat shabulov on the black side of of this line with black having played e5 and um you know once i switched from the chevening again it was like i was blind but but but now i see so yeah i i played a super nice game against tribal and that really inspired me to keep playing the night or um okay puffy rad thank you for the two one man these subs are just flying in and that's exactly what i like to see puffy rat says hey daniel i've been really enjoying your speed on content you've definitely been opening my eyes with your clear explanatory style thank you so much well thank you that is a very sweet message 7676 as we creep up once again on 8 000 subs that is just ridiculous guys i am just beyond spoiled i can show you the game against shabala if people are interested in the game or i can maybe play one last speed on game what do people think do you want to see the game against shabala really quickly i'm happy to show it uh i don't know i don't think i've shown it on stream before okay you want the speedrun game all right speedrun it is let's play who shall we"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 11,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "a6",
+    "Be2"
+   ],
+   "options": [
+    {
+     "san": "e5",
+     "t": 136,
+     "continuation": "e5",
+     "said": "roughly are e6 players and then e5 players so e6 leads to a structure called the cheveningen structure i'll talk about this after the game but i have always been an e5 player and those of you who do not play the night or this move might seem very strange i don't remember if i talked about it i think i did talk about it in the context of another move so uh maybe some of you guys were there for my previous uh previous explanation but if you weren't and you don't you're not an eidorf player uh if if this move doesn't seem weird to you then you're doing something wrong why does this move look like a big positional mistake at first no it's no this is the theoretical move why does this look like a big positional mistake what does it weaken yeah so it weakens d6 and correspondingly weakens the d5 square but this is why i don't recommend the night off to beginners but this is precisely why because you have to violate these rules these basic positional rules and it's like you have to earn the right to violate them you can only violate them if you know them and for beginners it's more important to practice applying the rules before you practice violate them violating them if you practice violating them first"
+    },
+    {
+     "san": "e6",
+     "t": 965,
+     "continuation": "e6",
+     "said": "of tactics and positional chess it's still night or so it's still tactical but it's more positional than like bishop e3 or bishop g5 thank you lawrence selafonte with the prime let me show you guys one of my most painful experiences with the movie six and through the lens of this game through the through the prism of this tragedy that i suffered in the 2006 pan-american championships in ecuador against jorge quarry who now is a grandmaster from peru he's rated over 26.50 but back then we were both uh bright-eyed and bushy-tailed 2000s i will show you guys why i personally never you know i never vibed to this move let me just find this game and i like showing my games you know from from the old days just to give you guys a little bit of a personal touch you know what makes me think of openings the way that i do what were the formative experiences in in my chess in my early chess career okay pan american championships ecuador i got third place in that tournament but this was i had two losses out of nine games both were in the night offshore again one against ray robson won against"
+    }
+   ]
+  }
+ ]
+}

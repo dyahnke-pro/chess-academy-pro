@@ -1,0 +1,132 @@
+{
+ "videoId": "f8alAsVJRc8",
+ "title": "The Value of Retreating Moves | Sicilian Defense | GM Naroditsky’s Theory Speed Run",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 29,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] okay let's go let me get the white pieces no we got the black pieces against meridad from Iran and we get another Sicilian this speedrun has been defined by just the and there"
+  },
+  {
+   "ply": 3,
+   "t": 34,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "said": "pieces no we got the black pieces against meridad from Iran and we get another Sicilian this speedrun has been defined by just the and there we go again I mean nobody goes into the open Sicilian and this has been very eye-opening even at this level I mean it's very high level people are still playing all sorts of Sidelines Bishop C4 immediately is a move that we faced in a slightly different mood order we have faced"
+  },
+  {
+   "ply": 2,
+   "t": 51,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "it's very high level people are still playing all sorts of Sidelines Bishop C4 immediately is a move that we faced in a slightly different mood order we have faced Knight F3 Knight C6 and there a ton of people earlier on in the speedrun have gone Bishop C4 as we know it's a"
+  },
+  {
+   "ply": 3,
+   "t": 58,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "said": "a move that we faced in a slightly different mood order we have faced Knight F3 Knight C6 and there a ton of people earlier on in the speedrun have gone Bishop C4 as we know it's a completely innocuous move basically playing the Italian against the Sicilian uh is not really going to cut it and the main reason why is concerned with our ability to play E6 right why is the bishop developed here when black plays E5 wants to make contact with the F7 Pawn but when we have the capacity to play E6 and shut this bishop out the move makes very little sense but we don't need to play E6 immediately White's not threatening Bishop takes F7 so first I think it's a good idea to"
+  },
+  {
+   "ply": 4,
+   "t": 85,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+   "said": "Pawn but when we have the capacity to play E6 and shut this bishop out the move makes very little sense but we don't need to play E6 immediately White's not threatening Bishop takes F7 so first I think it's a good idea to bring our Knight out and in response to Knight F3 okay A3 so"
+  },
+  {
+   "ply": 5,
+   "t": 89,
+   "line": [
+    "a3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/P7/1PPP1PPP/RNBQK1NR b KQkq - 0 3",
+   "said": "move makes very little sense but we don't need to play E6 immediately White's not threatening Bishop takes F7 so first I think it's a good idea to bring our Knight out and in response to Knight F3 okay A3 so clearly this this might be some sort of preparation but I highly doubt that it is in any case the best way to respond to such play is to follow principles to a t right if you follow principles and you develop your pieces there's only so much that your opponent can do to you so what I would propose here is the simplest possible approach just bring the other night out to F6 and white"
+  },
+  {
+   "ply": 6,
+   "t": 114,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/P7/1PPP1PPP/RNBQK1NR w KQkq - 1 4",
+   "said": "you develop your pieces there's only so much that your opponent can do to you so what I would propose here is the simplest possible approach just bring the other night out to F6 and white can't even play E5 because that square is developed defended that's why we played Knight C6 first Knight C3 okay"
+  },
+  {
+   "ply": 7,
+   "t": 119,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/P1N5/1PPP1PPP/R1BQK1NR b KQkq - 2 4",
+   "said": "what I would propose here is the simplest possible approach just bring the other night out to F6 and white can't even play E5 because that square is developed defended that's why we played Knight C6 first Knight C3 okay now there's a couple of possible approaches some of you might be attracted to the center fork trick which I've talked at length about Knight takes E4 Knight takes E4 and then you win back the minor piece with D5 which is by the way a typical trick in this variation of the Sicilian but here specifically I think it might be a little bit premature um and it and it leads to unnecessary complications so I think a simpler approach is just to play the movie six"
+  },
+  {
+   "ply": 8,
+   "t": 149,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/P1N5/1PPP1PPP/R1BQK1NR w KQkq - 0 5",
+   "said": "Sicilian but here specifically I think it might be a little bit premature um and it and it leads to unnecessary complications so I think a simpler approach is just to play the movie six now and of course we are preparing to expand in the center with D5 and the idea of Knight takes E4 does not go anywhere we can still very much apply that idea it just depends on how white"
+  },
+  {
+   "ply": 9,
+   "t": 159.5,
+   "line": [
+    "Ba2"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/4P3/P1N5/BPPP1PPP/R1BQK1NR b KQkq - 1 5",
+   "said": "approach is just to play the movie six now and of course we are preparing to expand in the center with D5 and the idea of Knight takes E4 does not go anywhere we can still very much apply that idea it just depends on how white develops okay Bishop A2 now of course we don't have the the center fork trick anymore but I think that we should continue calmly expanding in the center there's there's many ways that you can play a position like this and oftentimes it's you know a matter of taste you don't have to go D5 because in the Sicilian you're not expected to occupy the center with your pawns you could even go D6 you could play this in a more conventionally sicilian-esque type of way then white will be likely to play Knight F3 and ultimately white could play the move d4 and you transpose back into some sort of Sicilian or white just has this terrible Bishop on A2 that's biting on granite but in this speedrun we're trying to play principal chess we're trying to actively punish our opponents and go for the advantage when we're facing a second or third string opening and so that of course involves"
+  },
+  {
+   "ply": 10,
+   "t": 212,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/4P3/P1N5/BPPP1PPP/R1BQK1NR w KQkq - 0 6",
+   "said": "we're trying to play principal chess we're trying to actively punish our opponents and go for the advantage when we're facing a second or third string opening and so that of course involves playing the move D5 and grabbing control of the center and trying to take it to"
+  },
+  {
+   "ply": 11,
+   "t": 216,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pP4/8/P1N5/BPPP1PPP/R1BQK1NR b KQkq - 0 6",
+   "said": "we're trying to actively punish our opponents and go for the advantage when we're facing a second or third string opening and so that of course involves playing the move D5 and grabbing control of the center and trying to take it to our opponent it takes we take back with"
+  },
+  {
+   "ply": 12,
+   "t": 217,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/8/P1N5/BPPP1PPP/R1BQK1NR w KQkq - 0 7",
+   "said": "opponents and go for the advantage when we're facing a second or third string opening and so that of course involves playing the move D5 and grabbing control of the center and trying to take it to our opponent it takes we take back with a pawn and we already have a very pleasant pleasant position I I wouldn't say that black is much better maybe slightly better just because we have better control of the center but that's about it right White's position is still Ultra solid and there's no need for us"
+  },
+  {
+   "ply": 13,
+   "t": 231.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/8/P1N2N2/BPPP1PPP/R1BQK2R b KQkq - 1 7",
+   "said": "pleasant pleasant position I I wouldn't say that black is much better maybe slightly better just because we have better control of the center but that's about it right White's position is still Ultra solid and there's no need for us to you know to overdo it Knight F3 okay so typically the priority is to develop our King side because well because our King is in the center and with his last move white has signaled a Readiness to Castle quickly and put a rook on E1 we don't want our King in the center when that happens but there's a subtlety to keep in mind which is that white also signals his intent to play D4 and the move d4 may not seem like a big deal but if you just nonchalantly Sleepwalk into cd494 well then you get an iqp structure where white controls the square in front of it and you justify the placement of this bishop which is of course now aimed at the D5 Pawn if that pawn were to become isolated that might be a bigger problem so the answer could be to play D4 ourselves but that also has the very serious drawback of expanding the diagonal for the bishop so I think D4 is"
+  }
+ ],
+ "forks": []
+}

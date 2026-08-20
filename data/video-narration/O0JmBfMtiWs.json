@@ -1,0 +1,157 @@
+{
+ "videoId": "O0JmBfMtiWs",
+ "title": "The Power of Counterplay: Exploiting Weaknesses | Alapin Sicilian | GM Naroditsky’s Theory Speed Run",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 15,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "foreign [Music] that is quite a handful mouthful of a name and let's see if we finally get another Main Line accelerated Dragon not fight"
+  },
+  {
+   "ply": 4,
+   "t": 19,
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "that is quite a handful mouthful of a name and let's see if we finally get another Main Line accelerated Dragon not fight six and C3 so we're again we're facing"
+  },
+  {
+   "ply": 5,
+   "t": 20.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "that is quite a handful mouthful of a name and let's see if we finally get another Main Line accelerated Dragon not fight six and C3 so we're again we're facing the elephant and this is very interesting we're facing a version of the elephant that does not allow us to play the line that I recommended so the line that I recommended has a bit of a flaw you might remember that in response"
+  },
+  {
+   "ply": 2,
+   "t": 34,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "the elephant and this is very interesting we're facing a version of the elephant that does not allow us to play the line that I recommended so the line that I recommended has a bit of a flaw you might remember that in response to the standard alopin I recommend it D5 e takes D5 and then Knight F6 obviously"
+  },
+  {
+   "ply": 5,
+   "t": 40.5,
+   "line": [
+    "c3",
+    "Nc6",
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 2 3",
+   "said": "play the line that I recommended so the line that I recommended has a bit of a flaw you might remember that in response to the standard alopin I recommend it D5 e takes D5 and then Knight F6 obviously with a knight already on C6 if we play D5 then we kind of have to recapture with the queen so it's just that this particular version of the elephant is rare most people play it straight away so here we're gonna have to play a different line we're gonna have to play either Knight F6 E5 Knight to D5 or we're gonna have to play D5 and get into that main line or we we can play the move E5 which I know is a very interesting sideline it's gained in popularity recently but the only downside is that I don't know it very well um in terms of my own knowledge I know Knight F6 a lot better than the move E5 and E5 white is better with best play but it can be very hard to prove it if you're not super well versed in elephant Theory let's risk it let's see what happens let's go E5 I'm just interested"
+  },
+  {
+   "ply": 6,
+   "t": 89.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n5/2p1p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "and E5 white is better with best play but it can be very hard to prove it if you're not super well versed in elephant Theory let's risk it let's see what happens let's go E5 I'm just interested in my ability to improvise let's see if we can out Fox our opponent in territory that will hopefully be new to both of us so E5 is a very risky move conceptually for two reasons first of all and mainly it creates a big hole on D5 but in many Sicilian lines we like to arrange our"
+  },
+  {
+   "ply": 7,
+   "t": 110,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n5/2p1p3/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "so E5 is a very risky move conceptually for two reasons first of all and mainly it creates a big hole on D5 but in many Sicilian lines we like to arrange our pawns on C5 and E5 the whole on D5 is really not the end of the universe because that's Square can be pretty effectively protected by a bunch of the minor pieces in the night off by the way you also see black play E5 and weaken that square and live to tell the tale D4 is one of White's two main moves the other one is Bishop F1 to C4 kind of"
+  },
+  {
+   "ply": 6,
+   "t": 129.5,
+   "line": [],
+   "fen": "r1bqkbnr/pp1p1ppp/2n5/2p1p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "effectively protected by a bunch of the minor pieces in the night off by the way you also see black play E5 and weaken that square and live to tell the tale D4 is one of White's two main moves the other one is Bishop F1 to C4 kind of playing this Italian style here white"
+  },
+  {
+   "ply": 7,
+   "t": 133,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n5/2p1p3/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "you also see black play E5 and weaken that square and live to tell the tale D4 is one of White's two main moves the other one is Bishop F1 to C4 kind of playing this Italian style here white strikes at the center this is the main line and this leads by force to a kind of mass trade in the center we we could play D6 here but that affords white the option of forcing an end game that's really undesirable for black so we kind of have no choice we play CD CD we play"
+  },
+  {
+   "ply": 8,
+   "t": 148.5,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n5/4p3/3pP3/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "of mass trade in the center we we could play D6 here but that affords white the option of forcing an end game that's really undesirable for black so we kind of have no choice we play CD CD we play Ed this is this is the theory that I"
+  },
+  {
+   "ply": 10,
+   "t": 153,
+   "line": [
+    "cxd4",
+    "exd4"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n5/8/3pP3/5N2/PP3PPP/RNBQKB1R w KQkq - 0 6",
+   "said": "play D6 here but that affords white the option of forcing an end game that's really undesirable for black so we kind of have no choice we play CD CD we play Ed this is this is the theory that I know"
+  },
+  {
+   "ply": 11,
+   "t": 154,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n5/8/3NP3/8/PP3PPP/RNBQKB1R b KQkq - 0 6",
+   "said": "option of forcing an end game that's really undesirable for black so we kind of have no choice we play CD CD we play Ed this is this is the theory that I know and the what I would compare this position to is a scotch the only difference being that the C pawns are gone we literally have a scotch opening like E4 E5 Knight F3 Knight C6 D4 Ed Knight D4 with the c pawns absent no question that that favors white a little bit and the reason that favors white is because this D6 square is now quite a bit tender so if we were to play Bishop to C5 which by the way is what I like to play against the standard Scotch white has the additional move Knight to F5 and it appears to me that the weakness of the D6 Square might justify that line for white we might still have to play it but there is a move which I like quite a bit more which is Knight to F6 I think Knight F6"
+  },
+  {
+   "ply": 12,
+   "t": 202.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n2n2/8/3NP3/8/PP3PPP/RNBQKB1R w KQkq - 1 7",
+   "said": "appears to me that the weakness of the D6 Square might justify that line for white we might still have to play it but there is a move which I like quite a bit more which is Knight to F6 I think Knight F6 doesn't have the same problem white has no time to play Knight F5 here because the E4 Pawn is hanging so we get kind of a scotch a slightly worse version for black but this is very much playable I think Knight C3"
+  },
+  {
+   "ply": 13,
+   "t": 215.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n2n2/8/3NP3/2N5/PP3PPP/R1BQKB1R b KQkq - 2 7",
+   "said": "white has no time to play Knight F5 here because the E4 Pawn is hanging so we get kind of a scotch a slightly worse version for black but this is very much playable I think Knight C3 okay so now in the mainline four night Scotch which we've kind of transposed to Black's main move is Bishop to B4 I think this move makes a lot of sense here as well because we're trying to put pressure on the E4 Pawn there's also a very interesting move Knight takes E4 which I'll talk a little bit about after the game but I don't want to risk it and I think we should play straightforward chess here let's start with Bishop B4 and then we'll check the theory after the game yeah white has to prove the advantage here because we're treating this like a four night Scotch which incidentally is my recommendation for white and if we were to add the C pawns White's main move as Knight takes Knight Pawn takes Knight and then the Bishop from F1 comes out typically in this line to D3 in order to support the E4 Pawn because the pawn needs another supporter we're threatening Knight takes E4 that's why we that's why we bring our Bishop out specifically to B4 in this line note that white can't play"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 2,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 19,
+     "continuation": "Nf3 Nc6",
+     "said": "that is quite a handful mouthful of a name and let's see if we finally get another Main Line accelerated Dragon not fight six and C3 so we're again we're facing the elephant and this is very interesting we're facing a version of the elephant that does not allow us to play the line that I recommended so the line that I recommended has a bit of a flaw you might remember that in response to the standard alopin I recommend it D5 e takes D5 and then Knight F6 obviously with a knight already on C6 if we play D5 then we kind of have to recapture with the queen so it's just that this particular version of the elephant is rare most people play it straight away so here we're gonna have to play a different line we're gonna have to play either Knight F6 E5 Knight to D5 or we're gonna have to play D5 and get into that main line or we we can play the move E5 which I know is a very interesting sideline it's gained in popularity recently but the only downside is that I don't know it very well um in terms of my own knowledge I know Knight F6 a lot better than the move E5 and E5 white is better with best play"
+    },
+    {
+     "san": "c3",
+     "t": 40.5,
+     "continuation": "c3 Nc6 Nf3",
+     "said": "play the line that I recommended so the line that I recommended has a bit of a flaw you might remember that in response to the standard alopin I recommend it D5 e takes D5 and then Knight F6 obviously with a knight already on C6 if we play D5 then we kind of have to recapture with the queen so it's just that this particular version of the elephant is rare most people play it straight away so here we're gonna have to play a different line we're gonna have to play either Knight F6 E5 Knight to D5 or we're gonna have to play D5 and get into that main line or we we can play the move E5 which I know is a very interesting sideline it's gained in popularity recently but the only downside is that I don't know it very well um in terms of my own knowledge I know Knight F6 a lot better than the move E5 and E5 white is better with best play but it can be very hard to prove it if you're not super well versed in elephant Theory let's risk it let's see what happens let's go E5 I'm just interested in my ability to improvise let's see if we can out Fox our opponent in territory that will hopefully be new to both of us so E5 is a very risky move conceptually"
+    }
+   ]
+  }
+ ]
+}

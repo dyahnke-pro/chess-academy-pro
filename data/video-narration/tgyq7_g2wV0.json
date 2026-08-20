@@ -1,0 +1,218 @@
+{
+ "videoId": "tgyq7_g2wV0",
+ "title": "Developing W/ Flexibility | Master Class | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 7,
+   "line": [
+    "d4",
+    "e5",
+    "e4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "all right guys we're playing white against joe john tara 34. hopefully we get a chance to play another danish let's see d4 come on take my pawn hopefully we get take my [Music] no knight c6 see that they're not"
+  },
+  {
+   "ply": 4,
+   "t": 22.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "said": "take my [Music] no knight c6 see that they're not playing they're not going for the danish now knight c6 is fine i mean that's not a terrible move and i know that for a lot of beginners there is a general temptation to do two things the first is to trade when traits are possible thank you beastmaster the second is to push funds the move d5 is super tempting here it grabs a lot of space but it's actually not as good as it looks because it closes down the center i'll explain what that means after the game one second like what does that mean definitionally but it basically means there's a lot of pawns that are clogging up the center and with the white pieces muff can see because he's thinking of the prime what we want to try to do is open the center up as much as possible in the center is open there are more opportunities to attack there's more opportunities for tactics that shouldn't be surprising so we're just going to go"
+  },
+  {
+   "ply": 5,
+   "t": 76,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4P3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "we want to try to do is open the center up as much as possible in the center is open there are more opportunities to attack there's more opportunities for tactics that shouldn't be surprising so we're just going to go ahead and take the pawn"
+  },
+  {
+   "ply": 6,
+   "t": 78,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "is open the center up as much as possible in the center is open there are more opportunities to attack there's more opportunities for tactics that shouldn't be surprising so we're just going to go ahead and take the pawn ow um there's a couple of options now um there's a couple of options some of you might be thinking f4 is very tempting to chase away the knight what would be the drawback of the move f4 who can explain to me conceptually because doesn't isn't it good to chase away the knight and grab space in the center it opens up the king right it allows these options like when h4 f4 is not a bad move it also makes it harder for us to develop this bishop actively so instead of playing a move like this let's just develop our pieces what does that mean what should we do here and it's true that this knight on e5 is a good knight it's centralized so what can we do about it so we can play knight c3 and i would start by playing knight c3"
+  },
+  {
+   "ply": 7,
+   "t": 127,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 4",
+   "said": "and it's true that this knight on e5 is a good knight it's centralized so what can we do about it so we can play knight c3 and i would start by playing knight c3 i would see what he does and then either go knight f3 because we're fine with the trade or maybe go bishop f4 to chase them right see that's what it means to develop flexibly we're waiting for him to show how he wants to position okay that tells us a"
+  },
+  {
+   "ply": 8,
+   "t": 140,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/3p4/4n3/4P3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5",
+   "said": "i would see what he does and then either go knight f3 because we're fine with the trade or maybe go bishop f4 to chase them right see that's what it means to develop flexibly we're waiting for him to show how he wants to position okay that tells us a lot that's a pretty passive move now he can't develop his bishop and now um we can already develop a general plan of action okay so we can play that f3 and that's a perfectly good move what other scheme of development can you guys propose so and i'm looking in particular for like a set of moves here that have an ultimate nice potato for president you're the man so you already need to start thinking about which way we want to castle and because he's so passive because trying to play aggressively with white we're often going to be castling alongside castling long which is as i'll explain more risky generally than castling sure because the king is less protected but it's also more conducive to attacking for for several reasons one of which is that black will usually castle short and then you'll basically have carte blanche to just push all of your puns without fear that your king is going to get more and more weak so let's do that let's play bishop out"
+  },
+  {
+   "ply": 9,
+   "t": 208.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/3p4/4n3/4P3/2N1B3/PPP2PPP/R2QKBNR b KQkq - 1 5",
+   "said": "that black will usually castle short and then you'll basically have carte blanche to just push all of your puns without fear that your king is going to get more and more weak so let's do that let's play bishop out to e3 then we're gonna play queen d2 we're just going to castle long we're going to see what happens so h okay so bishop g4 is a very common"
+  },
+  {
+   "ply": 10,
+   "t": 217,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "r2qkbnr/ppp2ppp/3p4/4n3/4P1b1/2N1B3/PPP2PPP/R2QKBNR w KQkq - 2 6",
+   "said": "get more and more weak so let's do that let's play bishop out to e3 then we're gonna play queen d2 we're just going to castle long we're going to see what happens so h okay so bishop g4 is a very common slight mistake because it allows us now to secure our e4 pawn with tempo what am i talking about here z term thank you"
+  },
+  {
+   "ply": 11,
+   "t": 230,
+   "line": [
+    "f3"
+   ],
+   "fen": "r2qkbnr/ppp2ppp/3p4/4n3/4P1b1/2N1BP2/PPP3PP/R2QKBNR b KQkq - 0 6",
+   "said": "slight mistake because it allows us now to secure our e4 pawn with tempo what am i talking about here z term thank you yeah and f3 is a move that i know will cause some confusion because didn't i just say that pushing the f bond causes weakness while things have changed"
+  },
+  {
+   "ply": 12,
+   "t": 239,
+   "line": [
+    "Bh5"
+   ],
+   "fen": "r2qkbnr/ppp2ppp/3p4/4n2b/4P3/2N1BP2/PPP3PP/R2QKBNR w KQkq - 1 7",
+   "said": "yeah and f3 is a move that i know will cause some confusion because didn't i just say that pushing the f bond causes weakness while things have changed and because we are so close to castling"
+  },
+  {
+   "ply": 13,
+   "t": 240,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r2qkbnr/ppp2ppp/3p4/4n2b/4P3/2N1BP2/PPPQ2PP/R3KBNR b KQkq - 2 7",
+   "said": "yeah and f3 is a move that i know will cause some confusion because didn't i just say that pushing the f bond causes weakness while things have changed and because we are so close to castling long this move turns from a liability into a huge asset"
+  },
+  {
+   "ply": 14,
+   "t": 244,
+   "line": [
+    "c5"
+   ],
+   "fen": "r2qkbnr/pp3ppp/3p4/2p1n2b/4P3/2N1BP2/PPPQ2PP/R3KBNR w KQkq - 0 8",
+   "said": "yeah and f3 is a move that i know will cause some confusion because didn't i just say that pushing the f bond causes weakness while things have changed and because we are so close to castling long this move turns from a liability into a huge asset because not only does it cover the e4 pawn building upon chain but potentially it helps prepare g4 which is a way that we could start attacking on the kingston okay so c5 is a bad move for many reasons one of which is that he's not developing a piece another reason you know shades of the last game is that the d5 square is now very juicy outpost for the night but let's not do anything until we've"
+  },
+  {
+   "ply": 15,
+   "t": 271,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "r2qkbnr/pp3ppp/3p4/2p1n2b/4P3/2N1BP2/PPPQ2PP/2KR1BNR b kq - 1 8",
+   "said": "he's not developing a piece another reason you know shades of the last game is that the d5 square is now very juicy outpost for the night but let's not do anything until we've castled castling is going to make make it much"
+  },
+  {
+   "ply": 16,
+   "t": 273,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r2qkb1r/pp3ppp/3p1n2/2p1n2b/4P3/2N1BP2/PPPQ2PP/2KR1BNR w kq - 2 9",
+   "said": "another reason you know shades of the last game is that the d5 square is now very juicy outpost for the night but let's not do anything until we've castled castling is going to make make it much easier uh to operate we because we won't have to worry about our king now let's operate what kinds of moves come to mind here there's many possibilities now if we were to play this by the book if we were to do what i had set out to do when i castled long we would not give this check we would actually go g4 let's attack on"
+  },
+  {
+   "ply": 17,
+   "t": 296,
+   "line": [
+    "g4"
+   ],
+   "fen": "r2qkb1r/pp3ppp/3p1n2/2p1n2b/4P1P1/2N1BP2/PPPQ3P/2KR1BNR b kq - 0 9",
+   "said": "were to play this by the book if we were to do what i had set out to do when i castled long we would not give this check we would actually go g4 let's attack on the king side using our pawns let's chase his pieces away watch what happens watch what happens g4 okay"
+  },
+  {
+   "ply": 18,
+   "t": 304.5,
+   "line": [
+    "Bxg4"
+   ],
+   "fen": "r2qkb1r/pp3ppp/3p1n2/2p1n3/4P1b1/2N1BP2/PPPQ3P/2KR1BNR w kq - 0 10",
+   "said": "would not give this check we would actually go g4 let's attack on the king side using our pawns let's chase his pieces away watch what happens watch what happens g4 okay well that was pretty quick uh benefit it"
+  },
+  {
+   "ply": 20,
+   "t": 306.5,
+   "line": [
+    "fxg4",
+    "Nfxg4"
+   ],
+   "fen": "r2qkb1r/pp3ppp/3p4/2p1n3/4P1n1/2N1B3/PPPQ3P/2KR1BNR w kq - 0 11",
+   "said": "we would actually go g4 let's attack on the king side using our pawns let's chase his pieces away watch what happens watch what happens g4 okay well that was pretty quick uh benefit it takes g4 now and only now we've won a piece time to time for us to develop our"
+  },
+  {
+   "ply": 21,
+   "t": 313,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "r2qkb1r/pp3ppp/3p4/1Bp1n3/4P1n1/2N1B3/PPPQ3P/2KR2NR b kq - 1 11",
+   "said": "watch what happens g4 okay well that was pretty quick uh benefit it takes g4 now and only now we've won a piece time to time for us to develop our bishop now he's got to cover with his knight if he knows what's good oh"
+  },
+  {
+   "ply": 22,
+   "t": 319,
+   "line": [
+    "Ke7"
+   ],
+   "fen": "r2q1b1r/pp2kppp/3p4/1Bp1n3/4P1n1/2N1B3/PPPQ3P/2KR2NR w - - 2 12",
+   "said": "takes g4 now and only now we've won a piece time to time for us to develop our bishop now he's got to cover with his knight if he knows what's good oh okay this is going to get juicy guys what should we do this is going to get juicy"
+  },
+  {
+   "ply": 23,
+   "t": 328,
+   "line": [
+    "Nd5+"
+   ],
+   "fen": "r2q1b1r/pp2kppp/3p4/1BpNn3/4P1n1/4B3/PPPQ3P/2KR2NR b - - 3 12",
+   "said": "he knows what's good oh okay this is going to get juicy guys what should we do this is going to get juicy"
+  },
+  {
+   "ply": 24,
+   "t": 332.5,
+   "line": [
+    "Ke6"
+   ],
+   "fen": "r2q1b1r/pp3ppp/3pk3/1BpNn3/4P1n1/4B3/PPPQ3P/2KR2NR w - - 4 13",
+   "said": "what should we do this is going to get juicy okay so this is where things get confusing for a lot of players because a lot of people i know so look at this position where's the mate man i can't find the mate maybe i give a check on f4 with the knight it just steps back to you so i mean you know what do i do here what you need to do is you need to think backward you need to reverse engineer the mating position and think about it this way the king has no squares you would agree with me on that bishop covers this knight covers this so the bishop and the knight are essential to the mating mechanism we don't want to move either of these pieces instead you want to try to involve a third piece if you involve a third piece and you give a check from anywhere it's going to be made as long as it doesn't interfere with these two pieces in good piece to involve in this event is a screwdriver piece like a knight a piece that can sort of wiggle in around the edges and deliver quick checks and so we're going to go oh knight h3 he pre-moves"
+  },
+  {
+   "ply": 26,
+   "t": 388.5,
+   "line": [
+    "Nh3",
+    "Nxe3"
+   ],
+   "fen": "r2q1b1r/pp3ppp/3pk3/1BpNn3/4P3/4n2N/PPPQ3P/2KR3R w - - 0 14",
+   "said": "in good piece to involve in this event is a screwdriver piece like a knight a piece that can sort of wiggle in around the edges and deliver quick checks and so we're going to go oh knight h3 he pre-moves knight takes e3 and that knight is heading to f4 that is checkmate"
+  },
+  {
+   "ply": 27,
+   "t": 394.5,
+   "line": [
+    "Nhf4#"
+   ],
+   "fen": "r2q1b1r/pp3ppp/3pk3/1BpNn3/4PN2/4n3/PPPQ3P/2KR3R b - - 1 14",
+   "said": "that can sort of wiggle in around the edges and deliver quick checks and so we're going to go oh knight h3 he pre-moves knight takes e3 and that knight is heading to f4 that is checkmate now black could have stopped this actually with a particularly nice defensive move we would have still been completely winning let's analyze um so knight c6 is our opponent's move now this transposes into what's called the nimzovich defense save that name i've talked about him in the five minute speed run aaron nimsovich he's occupying prime position our dramatis personae he's pretty significant uh character in the development of chess this is called the nimzovich defense it's pretty obscure but it's not that bad and we basically transpose now i could go knight f3 this would be the scotch um the scotch usually arises via this move motor so it's a transposition in another word you'll often hear gm's throw around transposition that just means a position that has been reached transposition right it's it's it's been reached through a different move order um so this position can be reached through the move whether we reached it"
+  }
+ ],
+ "forks": []
+}

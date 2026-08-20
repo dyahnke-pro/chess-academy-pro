@@ -1,0 +1,370 @@
+{
+ "videoId": "Twv9FExvwSw",
+ "title": "English Opening (Reversed Sicilian)  | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 26.5,
+   "line": [
+    "c4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "ten minute game we're over 1600 let's go okay so we haven't faced the english yet and um i'm gonna play this in principled fashion let's go e5 let's play the reverse sicilian for sba thank you for"
+  },
+  {
+   "ply": 3,
+   "t": 28.5,
+   "line": [
+    "g3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/6P1/PP1PPP1P/RNBQKBNR b KQkq - 0 2",
+   "said": "let's go okay so we haven't faced the english yet and um i'm gonna play this in principled fashion let's go e5 let's play the reverse sicilian for sba thank you for the prime now as you might know we play the alep and sicilian with white against the sicilian and the reverse allopin is a very much viable system against the english"
+  },
+  {
+   "ply": 4,
+   "t": 45,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/2P5/6P1/PP1PPP1P/RNBQKBNR w KQkq - 0 3",
+   "said": "as you might know we play the alep and sicilian with white against the sicilian and the reverse allopin is a very much viable system against the english"
+  },
+  {
+   "ply": 5,
+   "t": 46,
+   "line": [
+    "Bg2"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/2P5/6P1/PP1PPPBP/RNBQK1NR b KQkq - 1 3",
+   "said": "we play the alep and sicilian with white against the sicilian and the reverse allopin is a very much viable system against the english um and it's quite theoretical it's very"
+  },
+  {
+   "ply": 4,
+   "t": 48,
+   "line": [],
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/2P5/6P1/PP1PPP1P/RNBQKBNR w KQkq - 0 3",
+   "said": "against the sicilian and the reverse allopin is a very much viable system against the english um and it's quite theoretical it's very popular in a recent date in recent times"
+  },
+  {
+   "ply": 5,
+   "t": 49.5,
+   "line": [
+    "Bg2"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/2P5/6P1/PP1PPPBP/RNBQK1NR b KQkq - 1 3",
+   "said": "against the sicilian and the reverse allopin is a very much viable system against the english um and it's quite theoretical it's very popular in a recent date in recent times bishop g2 is already inaccurate white is supposed to strike at the"
+  },
+  {
+   "ply": 4,
+   "t": 54,
+   "line": [],
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/2P5/6P1/PP1PPP1P/RNBQKBNR w KQkq - 0 3",
+   "said": "viable system against the english um and it's quite theoretical it's very popular in a recent date in recent times bishop g2 is already inaccurate white is supposed to strike at the center or go knight f3 now this allows us to go d5 and control the center we"
+  },
+  {
+   "ply": 6,
+   "t": 57.5,
+   "line": [
+    "Bg2",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p5/3pp3/2P5/6P1/PP1PPPBP/RNBQK1NR w KQkq - 0 4",
+   "said": "um and it's quite theoretical it's very popular in a recent date in recent times bishop g2 is already inaccurate white is supposed to strike at the center or go knight f3 now this allows us to go d5 and control the center we basically play this as if we're on the"
+  },
+  {
+   "ply": 8,
+   "t": 60,
+   "line": [
+    "cxd5",
+    "cxd5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/8/3pp3/8/6P1/PP1PPPBP/RNBQK1NR w KQkq - 0 5",
+   "said": "popular in a recent date in recent times bishop g2 is already inaccurate white is supposed to strike at the center or go knight f3 now this allows us to go d5 and control the center we basically play this as if we're on the white side of an elephant"
+  },
+  {
+   "ply": 9,
+   "t": 62.5,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/8/3pp3/8/4P1P1/PP1P1PBP/RNBQK1NR b KQkq - 0 5",
+   "said": "bishop g2 is already inaccurate white is supposed to strike at the center or go knight f3 now this allows us to go d5 and control the center we basically play this as if we're on the white side of an elephant oop g3 and e3 so a very passive setup by our opponent here very passive setup by our opponent here um which doesn't necessitate anything in particular on our part just uh normal development i think will suffice knight c6 knight f6"
+  },
+  {
+   "ply": 10,
+   "t": 81.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2n5/3pp3/8/4P1P1/PP1P1PBP/RNBQK1NR w KQkq - 1 6",
+   "said": "here um which doesn't necessitate anything in particular on our part just uh normal development i think will suffice knight c6 knight f6 it doesn't really matter which pieces we developed first here"
+  },
+  {
+   "ply": 11,
+   "t": 86.5,
+   "line": [
+    "a3"
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2n5/3pp3/8/P3P1P1/1P1P1PBP/RNBQK1NR b KQkq - 0 6",
+   "said": "in particular on our part just uh normal development i think will suffice knight c6 knight f6 it doesn't really matter which pieces we developed first here pronoun's pushing a heck of a lot of pawns"
+  },
+  {
+   "ply": 12,
+   "t": 89.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/3pp3/8/P3P1P1/1P1P1PBP/RNBQK1NR w KQkq - 1 7",
+   "said": "just uh normal development i think will suffice knight c6 knight f6 it doesn't really matter which pieces we developed first here pronoun's pushing a heck of a lot of pawns let's go knight f6"
+  },
+  {
+   "ply": 13,
+   "t": 92,
+   "line": [
+    "Ne2"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/3pp3/8/P3P1P1/1P1PNPBP/RNBQK2R b KQkq - 2 7",
+   "said": "knight c6 knight f6 it doesn't really matter which pieces we developed first here pronoun's pushing a heck of a lot of pawns let's go knight f6 knight e2 now some of you may know that i like to play e4 in such positions but if you play e4 prematurely well what's the downside white might go d3 and it might be hard to sustain that pawn on e4 so that makes sense if you play it without sufficient development it's going to potentially might backfire d5 being a weakness is not such a big problem because we're defending it well bishop e6 queen d7 and long castle is an idea but with the c file being open and with white having uh quite easy pawn pressure i don't think we should be castling queen side here at least i i feel like it's needlessly risky um we could give e4 a shot and see what happens but i prefer conventional simple development so where should this bishop go we can go to e6 safeguard pawn on d5"
+  },
+  {
+   "ply": 14,
+   "t": 145.5,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2qkb1r/pp3ppp/2n1bn2/3pp3/8/P3P1P1/1P1PNPBP/RNBQK2R w KQkq - 3 8",
+   "said": "risky um we could give e4 a shot and see what happens but i prefer conventional simple development so where should this bishop go we can go to e6 safeguard pawn on d5 very conservative move but um"
+  },
+  {
+   "ply": 15,
+   "t": 149,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2qkb1r/pp3ppp/2n1bn2/3pp3/8/P3P1P1/1P1PNPBP/RNBQ1RK1 b kq - 4 8",
+   "said": "happens but i prefer conventional simple development so where should this bishop go we can go to e6 safeguard pawn on d5 very conservative move but um you know that there's no need to you know rediscover the wheel and distribute the code vaccine all at once now we have a couple of approaches that we could take here we could definitely go h5 um we could play queen d7 i like the move queen d7 a lot as a way to start"
+  },
+  {
+   "ply": 16,
+   "t": 170,
+   "line": [
+    "Qd7"
+   ],
+   "fen": "r3kb1r/pp1q1ppp/2n1bn2/3pp3/8/P3P1P1/1P1PNPBP/RNBQ1RK1 w kq - 5 9",
+   "said": "and distribute the code vaccine all at once now we have a couple of approaches that we could take here we could definitely go h5 um we could play queen d7 i like the move queen d7 a lot as a way to start because it's very flexible we're"
+  },
+  {
+   "ply": 17,
+   "t": 172.5,
+   "line": [
+    "Nbc3"
+   ],
+   "fen": "r3kb1r/pp1q1ppp/2n1bn2/3pp3/8/P1N1P1P1/1P1PNPBP/R1BQ1RK1 b kq - 6 9",
+   "said": "once now we have a couple of approaches that we could take here we could definitely go h5 um we could play queen d7 i like the move queen d7 a lot as a way to start because it's very flexible we're preparing bishop h3 in some cases but we're not necessarily committing to anything in particular okay now once again there's this is one of those positions i'm struggling to communicate this where there are so many different ways you can develop and play and all of them are probably approximately equivalent but once again we're adhering to the the general strategy of completing our development before embarking on anything specific so i'd like to develop this bishop well where should we develop it one thing to keep in mind is that white is very likely to play d4 and then after e4 you might notice that white's knight might jump onto f4 that's quite an annoying square so by playing bishop d6"
+  },
+  {
+   "ply": 18,
+   "t": 216,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "r3k2r/pp1q1ppp/2nbbn2/3pp3/8/P1N1P1P1/1P1PNPBP/R1BQ1RK1 w kq - 7 10",
+   "said": "is very likely to play d4 and then after e4 you might notice that white's knight might jump onto f4 that's quite an annoying square so by playing bishop d6 we're preempting that we're preparing to take that knight b4"
+  },
+  {
+   "ply": 19,
+   "t": 219.5,
+   "line": [
+    "b4"
+   ],
+   "fen": "r3k2r/pp1q1ppp/2nbbn2/3pp3/1P6/P1N1P1P1/3PNPBP/R1BQ1RK1 b kq - 0 10",
+   "said": "and then after e4 you might notice that white's knight might jump onto f4 that's quite an annoying square so by playing bishop d6 we're preempting that we're preparing to take that knight b4 right now i think it's high time for us let's let's go with the attacking approach i think we've completed our development i think now we could go for the attacking approach let's go h5 and i'm not worried about b5"
+  },
+  {
+   "ply": 20,
+   "t": 232.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "r3k2r/pp1q1pp1/2nbbn2/3pp2p/1P6/P1N1P1P1/3PNPBP/R1BQ1RK1 w kq - 0 11",
+   "said": "right now i think it's high time for us let's let's go with the attacking approach i think we've completed our development i think now we could go for the attacking approach let's go h5 and i'm not worried about b5 we just drop our knight back this is a paper tiger let's go h5 h4 you know the drill we've had a million games in the hippo where we've we've won precisely in this way the purpose of this is to open the h file then bishop h3 will come and uh white's position collapses very"
+  },
+  {
+   "ply": 21,
+   "t": 248.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r3k2r/pp1q1pp1/2nbbn2/3pp2p/1P1P4/P1N1P1P1/4NPBP/R1BQ1RK1 b kq - 0 11",
+   "said": "let's go h5 h4 you know the drill we've had a million games in the hippo where we've we've won precisely in this way the purpose of this is to open the h file then bishop h3 will come and uh white's position collapses very very quickly so d4 we want to play e4 we"
+  },
+  {
+   "ply": 22,
+   "t": 251,
+   "line": [
+    "e4"
+   ],
+   "fen": "r3k2r/pp1q1pp1/2nbbn2/3p3p/1P1Pp3/P1N1P1P1/4NPBP/R1BQ1RK1 w kq - 0 12",
+   "said": "had a million games in the hippo where we've we've won precisely in this way the purpose of this is to open the h file then bishop h3 will come and uh white's position collapses very very quickly so d4 we want to play e4 we want to close down the center"
+  },
+  {
+   "ply": 23,
+   "t": 253.5,
+   "line": [
+    "f3"
+   ],
+   "fen": "r3k2r/pp1q1pp1/2nbbn2/3p3p/1P1Pp3/P1N1PPP1/4N1BP/R1BQ1RK1 b kq - 0 12",
+   "said": "way the purpose of this is to open the h file then bishop h3 will come and uh white's position collapses very very quickly so d4 we want to play e4 we want to close down the center okay f3 pretty good stuff by our opponent but i feel like it's too slow so we need to figure out whether we need to respond to the tension in the center so obviously there's a certain temptation to play h4 but if you look more carefully you'll see that we're just giving up the e4 pawn for nothing so it's it's worth taking on f3 first"
+  },
+  {
+   "ply": 24,
+   "t": 278.5,
+   "line": [
+    "exf3"
+   ],
+   "fen": "r3k2r/pp1q1pp1/2nbbn2/3p3p/1P1P4/P1N1PpP1/4N1BP/R1BQ1RK1 w kq - 0 13",
+   "said": "so obviously there's a certain temptation to play h4 but if you look more carefully you'll see that we're just giving up the e4 pawn for nothing so it's it's worth taking on f3 first and then"
+  },
+  {
+   "ply": 25,
+   "t": 280.5,
+   "line": [
+    "Bxf3"
+   ],
+   "fen": "r3k2r/pp1q1pp1/2nbbn2/3p3p/1P1P4/P1N1PBP1/4N2P/R1BQ1RK1 b kq - 0 13",
+   "said": "temptation to play h4 but if you look more carefully you'll see that we're just giving up the e4 pawn for nothing so it's it's worth taking on f3 first and then and then going h4 to open up the h file yeah we could play bishop h3 but that's unnecessary"
+  },
+  {
+   "ply": 26,
+   "t": 287,
+   "line": [
+    "h4"
+   ],
+   "fen": "r3k2r/pp1q1pp1/2nbbn2/3p4/1P1P3p/P1N1PBP1/4N2P/R1BQ1RK1 w kq - 0 14",
+   "said": "so it's it's worth taking on f3 first and then and then going h4 to open up the h file yeah we could play bishop h3 but that's unnecessary bishop h3 is unnecessary let's keep our bishop here to defend the pawn on d5 and now we're very close to opening the h file and once we open the h file"
+  },
+  {
+   "ply": 27,
+   "t": 296,
+   "line": [
+    "Kg2"
+   ],
+   "fen": "r3k2r/pp1q1pp1/2nbbn2/3p4/1P1P3p/P1N1PBP1/4N1KP/R1BQ1R2 b kq - 1 14",
+   "said": "unnecessary bishop h3 is unnecessary let's keep our bishop here to defend the pawn on d5 and now we're very close to opening the h file and once we open the h file i mean stuff is going to happen stuff is going to go down now that's a blunder that's just a panic move i think our opponent trying to go rook h1 but forgetting about bishop h3"
+  },
+  {
+   "ply": 28,
+   "t": 307,
+   "line": [
+    "Bh3+"
+   ],
+   "fen": "r3k2r/pp1q1pp1/2nb1n2/3p4/1P1P3p/P1N1PBPb/4N1KP/R1BQ1R2 w kq - 2 15",
+   "said": "and once we open the h file i mean stuff is going to happen stuff is going to go down now that's a blunder that's just a panic move i think our opponent trying to go rook h1 but forgetting about bishop h3 which now wins in exchange"
+  },
+  {
+   "ply": 29,
+   "t": 317,
+   "line": [
+    "Kf2"
+   ],
+   "fen": "r3k2r/pp1q1pp1/2nb1n2/3p4/1P1P3p/P1N1PBPb/4NK1P/R1BQ1R2 b kq - 3 15",
+   "said": "rook h1 but forgetting about bishop h3 which now wins in exchange oh hippo violation i only understood that now jesus king f2 well it's worth throwing in h takes g3 check"
+  },
+  {
+   "ply": 30,
+   "t": 326.5,
+   "line": [
+    "hxg3+"
+   ],
+   "fen": "r3k2r/pp1q1pp1/2nb1n2/3p4/1P1P4/P1N1PBpb/4NK1P/R1BQ1R2 w kq - 0 16",
+   "said": "oh hippo violation i only understood that now jesus king f2 well it's worth throwing in h takes g3 check just to open the h file just to open the the h12 because later our rook may infiltrate to h2"
+  },
+  {
+   "ply": 31,
+   "t": 333,
+   "line": [
+    "Nxg3"
+   ],
+   "fen": "r3k2r/pp1q1pp1/2nb1n2/3p4/1P1P4/P1N1PBNb/5K1P/R1BQ1R2 b kq - 0 16",
+   "said": "well it's worth throwing in h takes g3 check just to open the h file just to open the the h12 because later our rook may infiltrate to h2"
+  },
+  {
+   "ply": 32,
+   "t": 335,
+   "line": [
+    "Bxf1"
+   ],
+   "fen": "r3k2r/pp1q1pp1/2nb1n2/3p4/1P1P4/P1N1PBN1/5K1P/R1BQ1b2 w kq - 0 17",
+   "said": "it's worth throwing in h takes g3 check just to open the h file just to open the the h12 because later our rook may infiltrate to h2 now we take on f1 and we're just taking everything here okay that's another blunder our opponent totally collapsing here uh he should have taken with the knight should have taken the knight but then we would have played queen out to f5 which is obviously crushing as well and rook takes h2 that's it nothing remains of white's king's side and resigns that was pretty smooth that was pretty smooth so notice how how much easier it was to attack once we completed our development at the start of the game"
+  },
+  {
+   "ply": 3,
+   "t": 368.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/6P1/PP1PPP1P/RNBQKBNR b KQkq - 0 2",
+   "said": "and resigns that was pretty smooth that was pretty smooth so notice how how much easier it was to attack once we completed our development at the start of the game so yeah it the thing about the english"
+  },
+  {
+   "ply": 2,
+   "t": 369.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "and resigns that was pretty smooth that was pretty smooth so notice how how much easier it was to attack once we completed our development at the start of the game so yeah it the thing about the english is that white has a couple of ways that that they can um arrange uh the pieces white can play the"
+  },
+  {
+   "ply": 3,
+   "t": 381,
+   "line": [
+    "g3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/6P1/PP1PPP1P/RNBQKBNR b KQkq - 0 2",
+   "said": "is that white has a couple of ways that that they can um arrange uh the pieces white can play the immediate g3 which is sort of the traditional english and here c6 is a very good line"
+  },
+  {
+   "ply": 4,
+   "t": 385.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/2P5/6P1/PP1PPP1P/RNBQKBNR w KQkq - 0 3",
+   "said": "that they can um arrange uh the pieces white can play the immediate g3 which is sort of the traditional english and here c6 is a very good line but white can also start with knight c3 and here c6 is not very good because of d4 here c6 is not very good because of d4 so here you need a different line and most people end up playing knight f6 although bishop b4 is also a move here but after knight f6 g3 i have to check but i think c6 here"
+  },
+  {
+   "ply": 6,
+   "t": 407.5,
+   "line": [
+    "Nc3",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp1p1ppp/2p2n2/4p3/2P5/2N3P1/PP1PPP1P/R1BQKBNR w KQkq - 2 4",
+   "said": "and most people end up playing knight f6 although bishop b4 is also a move here but after knight f6 g3 i have to check but i think c6 here is still possible so i'll look into this and i will make a video you know with black against the english but i'll need to do some research and see whether c6 here is viable or not not very well versed in these lines i myself have played bishop before in this position but this is this is a very kind of hard to analyze line lots of sub variations and it's you know it's not all that fun so anyways um but you can see that c6 threw him in for a loop and uh e3 is just this is just some sort of you know weird hippo where pawns have been traded and um white is down a bunch of tempe so it's just not not viable at all and of course we could have played e4 we could have played e4 with the idea of going 95 and clamping down on his light squares but then after d3 i was a little bit concerned that again that this pawn"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 4,
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/4p3/2P5/6P1/PP1PPP1P/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c4",
+    "e5",
+    "g3",
+    "c6"
+   ],
+   "options": [
+    {
+     "san": "Bg2",
+     "t": 46,
+     "continuation": "Bg2",
+     "said": "we play the alep and sicilian with white against the sicilian and the reverse allopin is a very much viable system against the english um and it's quite theoretical it's very popular in a recent date in recent times bishop g2 is already inaccurate white is supposed to strike at the center or go knight f3 now this allows us to go d5 and control the center we basically play this as if we're on the white side of an elephant oop g3 and e3 so a very passive setup by our opponent here very passive setup by our opponent here um which doesn't necessitate anything in particular on our part just uh normal development i think will suffice knight c6 knight f6 it doesn't really matter which pieces we developed first here pronoun's pushing a heck of a lot of pawns let's go knight f6 knight e2 now some of you may know that i like to play e4 in such positions but if you play e4 prematurely well what's the downside white might go d3 and it might be hard to sustain that"
+    },
+    {
+     "san": "Nc3",
+     "t": 407.5,
+     "continuation": "Nc3 Nf6",
+     "said": "and most people end up playing knight f6 although bishop b4 is also a move here but after knight f6 g3 i have to check but i think c6 here is still possible so i'll look into this and i will make a video you know with black against the english but i'll need to do some research and see whether c6 here is viable or not not very well versed in these lines i myself have played bishop before in this position but this is this is a very kind of hard to analyze line lots of sub variations and it's you know it's not all that fun so anyways um but you can see that c6 threw him in for a loop and uh e3 is just this is just some sort of you know weird hippo where pawns have been traded and um white is down a bunch of tempe so it's just not not viable at all and of course we could have played e4 we could have played e4 with the idea of going 95 and clamping down on his light squares but then after d3 i was a little bit concerned that again that this pawn"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,269 @@
+{
+ "videoId": "OE2pJpVVzYw",
+ "title": "Beginner To Master | Chess Speedrun | Scotch Game | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 11.5,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] so let's play e4 that that is the move that most people actually play and e5 so knight f3"
+  },
+  {
+   "ply": 3,
+   "t": 14,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "[Music] so let's play e4 that that is the move that most people actually play and e5 so knight f3 and i unfortunately i can't satisfy everybody in terms of like the opening that we play i know people play different stuff"
+  },
+  {
+   "ply": 4,
+   "t": 20,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "that most people actually play and e5 so knight f3 and i unfortunately i can't satisfy everybody in terms of like the opening that we play i know people play different stuff trust me i know that but i like to showcase different openings and how to play them and an opening that i've wanted to play today is the scotch uh yeah i do give rarity"
+  },
+  {
+   "ply": 5,
+   "t": 30.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "that we play i know people play different stuff trust me i know that but i like to showcase different openings and how to play them and an opening that i've wanted to play today is the scotch uh yeah i do give rarity to subs uh and the scotch is the move d4 in this position now this gotcha is an opening that i do recommend to beginners among the openings i recommend is that the only one uh because the scotch in the words of my friend peter peter who streams at the head of the charlotte chess center who streams at charlotte chess center because he's asleep i will allow myself to say something nice about him which normally isn't the case when he's in the stream check out history just uh instructional streams twice a"
+  },
+  {
+   "ply": 6,
+   "t": 60.5,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "charlotte chess center who streams at charlotte chess center because he's asleep i will allow myself to say something nice about him which normally isn't the case when he's in the stream check out history just uh instructional streams twice a week uh and they're really good so give them a follow trust me if you're interested in chess improvement it is definitely worth it uh i don't put my name behind a lot of people but uh he's he's great at explaining concepts and stuff so uh supporting you know by a follow he would really appreciate but um essentially the scotch teaches"
+  },
+  {
+   "ply": 7,
+   "t": 82.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "people but uh he's he's great at explaining concepts and stuff so uh supporting you know by a follow he would really appreciate but um essentially the scotch teaches you to play with all of your pieces because what the move d4 does is it opens up the center and think of it this way when the center is closed you kind of have a crutch it's important to know how to play when the center is closed when the center is closed there's"
+  },
+  {
+   "ply": 8,
+   "t": 97,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/2np4/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "because what the move d4 does is it opens up the center and think of it this way when the center is closed you kind of have a crutch it's important to know how to play when the center is closed when the center is closed there's less likelihood of blundering pieces there is less let's just say head-to-head combat between the pieces when the center is open it teaches you the importance of having all of your pieces on good squares it teaches you the importance of active development and it allows you uh to you know basically you get punished for your mistakes which when you're a beginner is kind of important so d6 is kind of passive that's not a terrible move but what makes this move passive who can explain to me why this is a passive move the reason is quite simple because the good thing about this move is it opens up one bishop but in opening up one bishop it blocks the other you've got to be careful about that it blocks the dark squared bishop so now it can only come to e7 which is not the sexiest square it's a it's a serviceable square it's not terrible which is why this move is not terrible but it's not uh you know 10 out of 10 kind of square 10 out of 10"
+  },
+  {
+   "ply": 7,
+   "t": 151.5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "to e7 which is not the sexiest square it's a it's a serviceable square it's not terrible which is why this move is not terrible but it's not uh you know 10 out of 10 kind of square 10 out of 10 square would be bishop c5 which is one of the main moves or knight to f6 which is the other what should we do"
+  },
+  {
+   "ply": 8,
+   "t": 157,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/2np4/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "terrible which is why this move is not terrible but it's not uh you know 10 out of 10 kind of square 10 out of 10 square would be bishop c5 which is one of the main moves or knight to f6 which is the other what should we do well let's just develop our knight no"
+  },
+  {
+   "ply": 9,
+   "t": 158.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/2np4/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 5",
+   "said": "but it's not uh you know 10 out of 10 kind of square 10 out of 10 square would be bishop c5 which is one of the main moves or knight to f6 which is the other what should we do well let's just develop our knight no rocket science here and now we need to develop our bishops now where would this bishop go where do you guys propose assuming that he develops his knight which i think he will but even if he doesn't in general where should this bishop go yeah so there's two squares that you guys should be considering that's the squares b5 and c4 so"
+  },
+  {
+   "ply": 10,
+   "t": 180,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 6",
+   "said": "but even if he doesn't in general where should this bishop go yeah so there's two squares that you guys should be considering that's the squares b5 and c4 so i like the move bishop b5 less and i know that this will be surprising to a lot of people because people really like pins and you should like pens but not all pins are effective and the problem with bishop to b5 is that he's going to unpin himself with bishop to d7 and that pin is going to be kind of empty right there's going to be no more pin and that bishop on b5 is going to be sort of staring at the knight and the trade is not particularly good instead let's drop our bishop on c4"
+  },
+  {
+   "ply": 11,
+   "t": 211.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 3 6",
+   "said": "and that pin is going to be kind of empty right there's going to be no more pin and that bishop on b5 is going to be sort of staring at the knight and the trade is not particularly good instead let's drop our bishop on c4 and this bishop is quite a bit better because it has the sustained pressure that it's mounting on the f7 pawn now again chess is a gradual game you're not gonna checkmate anybody with one developing move so it's not like we are threatening to take the pawn on f7 we are applying long-term pressure on it we are basically setting up for a potential attack which may involve this bishop it's controlling a lot of squares and he goes g6 to fianchetto his bishop"
+  },
+  {
+   "ply": 12,
+   "t": 236.5,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkb1r/ppp2p1p/2np1np1/8/2BNP3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 7",
+   "said": "like we are threatening to take the pawn on f7 we are applying long-term pressure on it we are basically setting up for a potential attack which may involve this bishop it's controlling a lot of squares and he goes g6 to fianchetto his bishop now let's consider this bishop where should this bishop go where should this bishop go h we have an even sexier move though oh we have an even sexier move though okay but this is kind of advanced but it's it's it's really cool you guys want me to do it want me to walk you through the logic now the correct the sort of the development of bishop to g5 but let me try to explain how i see this rather than just playing the moves do you guys see the position of the queens in the starting position the queens are and i call this a standoff a standoff is when two pieces are facing each other but there's more than one piece blocking them if there's only one piece blocking them and it's your piece it's a it's an x-ray now when the two pieces are at a standoff there is a tactical potential if the position opens up if the pieces between them somehow disappear then the pieces are going to be directly facing each other so i notice that the queens are in a standoff not only are the queens in a standoff but black's queen is defended by two pieces it is defended first of all by the knight and second of all by the king hypothetically how can i get this king out of e8 can i decoy this king from its defense of the d8 queen of the queen yeah bishop f7 but not immediately if a situation arises when the queens are staring at each other i could do that can i get the knight out of c6 so i need i need two more things i need to get the knight out of c6 let's take it"
+  },
+  {
+   "ply": 13,
+   "t": 331.5,
+   "line": [
+    "Nxc6"
+   ],
+   "fen": "r1bqkb1r/ppp2p1p/2Np1np1/8/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 7",
+   "said": "yeah bishop f7 but not immediately if a situation arises when the queens are staring at each other i could do that can i get the knight out of c6 so i need i need two more things i need to get the knight out of c6 let's take it and there's only one thing preventing me from being able to take on f7 and that is the d6 pawn and to the rescue comes another decoy sacrifice where we play knight where we play the move e5 attacking the knight"
+  },
+  {
+   "ply": 15,
+   "t": 343.5,
+   "line": [
+    "bxc6",
+    "e5"
+   ],
+   "fen": "r1bqkb1r/p1p2p1p/2pp1np1/4P3/2B5/2N5/PPP2PPP/R1BQK2R b KQkq - 0 8",
+   "said": "and there's only one thing preventing me from being able to take on f7 and that is the d6 pawn and to the rescue comes another decoy sacrifice where we play knight where we play the move e5 attacking the knight and if he doesn't take our pawn then this pawn is going to wreak havoc if he does then we play bishop captures f7"
+  },
+  {
+   "ply": 16,
+   "t": 353.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/p1p2p1p/2p2np1/3pP3/2B5/2N5/PPP2PPP/R1BQK2R w KQkq - 0 9",
+   "said": "move e5 attacking the knight and if he doesn't take our pawn then this pawn is going to wreak havoc if he does then we play bishop captures f7 and he doesn't and we'll talk about this distracting the king from the queen he didn't have to take the bishop there but his position would have been ruined regardless okay so abraham goes goes uh d5 counter attacking harbish now should we take the knight and those of you who are often in my stream know that when i ask that question i'm oh actually we have a better move and tobias found it so we can in general we should because that opens up the position but let's put it this way we have a better way of taking that knight the better way of taking that knight good job tobias is is the move bishop g5 so conceptually"
+  },
+  {
+   "ply": 17,
+   "t": 391,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1bqkb1r/p1p2p1p/2p2np1/3pP1B1/2B5/2N5/PPP2PPP/R2QK2R b KQkq - 1 9",
+   "said": "that opens up the position but let's put it this way we have a better way of taking that knight the better way of taking that knight good job tobias is is the move bishop g5 so conceptually we should take the knight but we should do it with the bishop which would fork uh if he takes our bishop then we can actually take his knight immediately but we can also take his queen first and then that bishop is going to be forking the rook and the queen or the rook of the cane but in general the reason that we should take the knight when our opponent is less developed than we are"
+  },
+  {
+   "ply": 16,
+   "t": 410.5,
+   "line": [],
+   "fen": "r1bqkb1r/p1p2p1p/2p2np1/3pP3/2B5/2N5/PPP2PPP/R1BQK2R w KQkq - 0 9",
+   "said": "actually take his knight immediately but we can also take his queen first and then that bishop is going to be forking the rook and the queen or the rook of the cane but in general the reason that we should take the knight when our opponent is less developed than we are and here he's got both of his bishops undeveloped and he's not even close to castling the side that is the furthest away from castling is the side that often stands to lose when the center is opened why because when the center is opened"
+  },
+  {
+   "ply": 18,
+   "t": 425.5,
+   "line": [
+    "Bg5",
+    "Be7"
+   ],
+   "fen": "r1bqk2r/p1p1bp1p/2p2np1/3pP1B1/2B5/2N5/PPP2PPP/R2QK2R w KQkq - 2 10",
+   "said": "undeveloped and he's not even close to castling the side that is the furthest away from castling is the side that often stands to lose when the center is opened why because when the center is opened that e file can often be used to check an exposed king bishop to e7 what should we take the knight with remember our bishop is hanging we got to be careful what should we take the night with we should take the night with a pawn if we take the night with a bishop he takes our bishop and then he takes the other bishop and material is equal if we take the pawn"
+  },
+  {
+   "ply": 19,
+   "t": 448.5,
+   "line": [
+    "exf6"
+   ],
+   "fen": "r1bqk2r/p1p1bp1p/2p2Pp1/3p2B1/2B5/2N5/PPP2PPP/R2QK2R b KQkq - 0 10",
+   "said": "what should we take the night with we should take the night with a pawn if we take the night with a bishop he takes our bishop and then he takes the other bishop and material is equal if we take the pawn then he can at most only get a pawn for the bishop if he takes the bishop then we're going to take his bishop and we are going to remain up a piece so yeah okay now now we should trade"
+  },
+  {
+   "ply": 20,
+   "t": 458,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "r1bqk2r/p1p2p1p/2p2bp1/3p2B1/2B5/2N5/PPP2PPP/R2QK2R w KQkq - 0 11",
+   "said": "material is equal if we take the pawn then he can at most only get a pawn for the bishop if he takes the bishop then we're going to take his bishop and we are going to remain up a piece so yeah okay now now we should trade"
+  },
+  {
+   "ply": 21,
+   "t": 460,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "r1bqk2r/p1p2p1p/2p2Bp1/3p4/2B5/2N5/PPP2PPP/R2QK2R b KQkq - 0 11",
+   "said": "then he can at most only get a pawn for the bishop if he takes the bishop then we're going to take his bishop and we are going to remain up a piece so yeah okay now now we should trade and now we need to move our bishop away after he takes with the queen we need to move our bishop away from c4 because it was getting attacked uh where should we move it it doesn't"
+  },
+  {
+   "ply": 22,
+   "t": 470,
+   "line": [
+    "Qxf6"
+   ],
+   "fen": "r1b1k2r/p1p2p1p/2p2qp1/3p4/2B5/2N5/PPP2PPP/R2QK2R w KQkq - 0 12",
+   "said": "and now we need to move our bishop away after he takes with the queen we need to move our bishop away from c4 because it was getting attacked uh where should we move it it doesn't really matter uh this is a less essential decision let's just drop it"
+  },
+  {
+   "ply": 23,
+   "t": 474,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "r1b1k2r/p1p2p1p/2p2qp1/3p4/8/2NB4/PPP2PPP/R2QK2R b KQkq - 1 12",
+   "said": "after he takes with the queen we need to move our bishop away from c4 because it was getting attacked uh where should we move it it doesn't really matter uh this is a less essential decision let's just drop it out to d3 so it's sort of in the vicinity of the king in casey castled and of course we also need to castle castle castle"
+  },
+  {
+   "ply": 25,
+   "t": 482,
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "fen": "r1b2rk1/p1p2p1p/2p2qp1/3p4/8/2NB4/PPP2PPP/R2Q1RK1 b - - 3 13",
+   "said": "really matter uh this is a less essential decision let's just drop it out to d3 so it's sort of in the vicinity of the king in casey castled and of course we also need to castle castle castle and we are up a piece now is the conversion stage we are converting our advantage in being up a piece is in sort of grand master terms a decisive"
+  },
+  {
+   "ply": 26,
+   "t": 491.5,
+   "line": [
+    "Qg5"
+   ],
+   "fen": "r1b2rk1/p1p2p1p/2p3p1/3p2q1/8/2NB4/PPP2PPP/R2Q1RK1 w - - 4 14",
+   "said": "castle castle and we are up a piece now is the conversion stage we are converting our advantage in being up a piece is in sort of grand master terms a decisive advantage now as i've explained during my initial speed run there are two fundamental methods overarching methods of converting an extra piece or more the first is to trade as many pieces as possible try what you're essentially aiming for in the end is getting a situation where you just have your extra piece and a bunch of pawns against your opponent's king and a bunch of pawns that makes it easier because then that extra piece is just going to like have target practice against the pawns and that's going to be easier to win the second method is to use your extra piece as kind of another soccer player and mount an attack against the opposing king which by definition is going to be good because you have more pieces in the attack you literally have more pieces here we can try to apply either method we can play queen to c1 we can play queen to c1 and threaten the queen trade or we can try to open up the ken now the method that is usually taught by coaches is the trade method but i actually want to push back on that slightly what often happens to players is they try too hard to trade all of the pieces and in doing so they forget that the you know they make a mistake here we're actually going to attack black's game now to attack black's king we need to open up some files around it and so the move f4 followed by f5 trying"
+  },
+  {
+   "ply": 27,
+   "t": 570,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1b2rk1/p1p2p1p/2p3p1/3p2q1/5P2/2NB4/PPP3PP/R2Q1RK1 b - - 0 14",
+   "said": "know they make a mistake here we're actually going to attack black's game now to attack black's king we need to open up some files around it and so the move f4 followed by f5 trying to open that f-file which would offer us an avenue to black's king that seems to me to be the best move sorry that was a long explanation my bad but uh hopefully that makes sense just remember that trading pieces is not the only way of converting an advantage uh trying to attack your opponent's king is also a full-fledged alternative method of converting many positions oftentimes it's better it's just quicker and it's it's it's more effective"
+  },
+  {
+   "ply": 29,
+   "t": 598.5,
+   "line": [
+    "Qf6",
+    "f5"
+   ],
+   "fen": "r1b2rk1/p1p2p1p/2p2qp1/3p1P2/8/2NB4/PPP3PP/R2Q1RK1 b - - 0 15",
+   "said": "uh trying to attack your opponent's king is also a full-fledged alternative method of converting many positions oftentimes it's better it's just quicker and it's it's it's more effective and f5 we shove this pawn to f5 we sacrifice it take my pawn by all means if he takes it with his pawn he ruins the pawn structure around his king if he takes it with a bishop then we take his bishop and once again he's going to end up having to take with a pawn if he doesn't take with a pawn okay now he may be"
+  },
+  {
+   "ply": 30,
+   "t": 615,
+   "line": [
+    "g5"
+   ],
+   "fen": "r1b2rk1/p1p2p1p/2p2q2/3p1Pp1/8/2NB4/PPP3PP/R2Q1RK1 w - - 0 16",
+   "said": "with his pawn he ruins the pawn structure around his king if he takes it with a bishop then we take his bishop and once again he's going to end up having to take with a pawn if he doesn't take with a pawn okay now he may be making a weakness now we need to apply something i taught you guys a little bit earlier we ask after an important move like this how has the position changed what squares are now available to some of our pieces if we look very carefully ah the g5 the move g5 opens up the h5 square for our queen which is a great attacking position i'm gonna have to play a little bit faster uh just because i don't have much time okay so bishop takes f5 is a blunder but black is is kind of losing anyway now we have one two attackers on that square and only one defender let's take with a rook we take with a rook to involve the rook in the attack although we could have taken to the bishop and the game is over we're up two pieces and we're checkmating him check that is not a scary check not all checks are scary we just tuck the king away in the corner our king is perfectly safe and we are up two pieces and we're gonna use them to deliver checkmate"
+  }
+ ],
+ "forks": []
+}

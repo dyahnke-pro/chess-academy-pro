@@ -1,0 +1,185 @@
+{
+ "videoId": "PmStO-m1Eu4",
+ "title": "Unveiling the Power of the Exchange | Sicilian Defense  | GM Naroditsky’s Theory Speed Run",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 19.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "to the speedrun compilation as we start the game quick apology for the previous video I know there were some audio issues hopefully they'll be fixed for this video and we're facing a 2160 with black let's get a sicilian going now one thing"
+  },
+  {
+   "ply": 3,
+   "t": 22.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "to the speedrun compilation as we start the game quick apology for the previous video I know there were some audio issues hopefully they'll be fixed for this video and we're facing a 2160 with black let's get a sicilian going now one thing I was discussing on my regular stream is that as we get to the tail end of the speed run you know 2100 plus I started developing an inclination for playing the Sicilians that I know best in the openings that I know best and of course my recommendation for beginner to intermediate players as a kind of Gateway Sicilian is the accelerated dragon with Knight C6 but um I got a lot of requests particularly from higher higher rated viewers to play at least one night orphan to play the Sicilian that I know best to give you kind of a window into what uh you know"
+  },
+  {
+   "ply": 4,
+   "t": 57,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "dragon with Knight C6 but um I got a lot of requests particularly from higher higher rated viewers to play at least one night orphan to play the Sicilian that I know best to give you kind of a window into what uh you know opening knowledge looks like at a GM level I did this in the last Speed Run game with the French and I am actually going to play the move D6 here now we're"
+  },
+  {
+   "ply": 5,
+   "t": 65.5,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
+   "said": "Sicilian that I know best to give you kind of a window into what uh you know opening knowledge looks like at a GM level I did this in the last Speed Run game with the French and I am actually going to play the move D6 here now we're not even facing the open Sicilian anyway so it's kind of a moot point we would have likely faced the rosalimo after"
+  },
+  {
+   "ply": 3,
+   "t": 73,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "level I did this in the last Speed Run game with the French and I am actually going to play the move D6 here now we're not even facing the open Sicilian anyway so it's kind of a moot point we would have likely faced the rosalimo after Knight C6 which I just don't know as well from Black's perspective so Bishop B5 check is what I actually"
+  },
+  {
+   "ply": 5,
+   "t": 78,
+   "line": [
+    "d6",
+    "Bb5+"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
+   "said": "not even facing the open Sicilian anyway so it's kind of a moot point we would have likely faced the rosalimo after Knight C6 which I just don't know as well from Black's perspective so Bishop B5 check is what I actually play with white it's called the Moscow variation I've also heard it uh referred to as the the canal variation after the Spanish Grandmaster Esteban canal so there's three possibilities here I won't talk about Queen D7 there's Knight to C6 which is considered the the most dubious but also potentially the most rewarding of the options Bishop D7 is considered to be the most solid continuation it often leads to dry and drab positions Bishop D7 results in a lot of draws the line that I think strikes the balance between being sharp and offering winning chances uh while also not being"
+  },
+  {
+   "ply": 6,
+   "t": 115.5,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r1bqkbnr/pp1npppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 4",
+   "said": "often leads to dry and drab positions Bishop D7 results in a lot of draws the line that I think strikes the balance between being sharp and offering winning chances uh while also not being objectively dubious is Knight to D7 and this is the choice of most top players"
+  },
+  {
+   "ply": 7,
+   "t": 119,
+   "line": [
+    "a4"
+   ],
+   "fen": "r1bqkbnr/pp1npppp/3p4/1Bp5/P3P3/5N2/1PPP1PPP/RNBQK2R b KQkq - 0 4",
+   "said": "Bishop D7 results in a lot of draws the line that I think strikes the balance between being sharp and offering winning chances uh while also not being objectively dubious is Knight to D7 and this is the choice of most top players who try to play for a win here with black um I play it myself so I'm gonna bring the gain down just a little bit and this move A4 uh was virtually unknown up until a couple of months ago when I feel like everybody started playing it at my level and my theory is that this isn't some sort of chessable course um according to people in the chat this is what Wesley so recommends in a new testable course I have never been particularly impressed uh with this A4 variation it's Ultra positional and a lot of people just kind of blindly follow the stressable recommendation then they get a middle game and they kind of have no idea what to do so in response to A4 we start by simply"
+  },
+  {
+   "ply": 8,
+   "t": 162.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pp1npppp/3p1n2/1Bp5/P3P3/5N2/1PPP1PPP/RNBQK2R w KQkq - 1 5",
+   "said": "variation it's Ultra positional and a lot of people just kind of blindly follow the stressable recommendation then they get a middle game and they kind of have no idea what to do so in response to A4 we start by simply developing our Knight and making the more natural move this forces white to decide on a way of defending the E4 pawn and the plus of inducing Knight C3 is that if white puts a knight on C3 y will not be able to play this position Al up and style with C3 and D4 which actually is a very common way that you follow up in a lot of variations of of the Moscow and so our opponent does play Knight C3"
+  },
+  {
+   "ply": 9,
+   "t": 185.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/pp1npppp/3p1n2/1Bp5/P3P3/2N2N2/1PPP1PPP/R1BQK2R b KQkq - 2 5",
+   "said": "not be able to play this position Al up and style with C3 and D4 which actually is a very common way that you follow up in a lot of variations of of the Moscow and so our opponent does play Knight C3 so here we're gonna likely transpose into an open Sicilian structure not an open Sicilian theoretically but an open Sicilian structure will be reached if white plays uh d2d4 and you might look at this and say well why don't we play E5 here and prevent white from playing T4 well E5 is a very positionally dubious move I don't think it's terrible but I don't like weakening the D5 square like that I don't see this necessity in doing so because we actually welcome the move d4 that basically gets us into the night or structure that we wanted to reach um and so the way we want to play here is E6"
+  },
+  {
+   "ply": 10,
+   "t": 224.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkb1r/pp1n1ppp/3ppn2/1Bp5/P3P3/2N2N2/1PPP1PPP/R1BQK2R w KQkq - 0 6",
+   "said": "like that I don't see this necessity in doing so because we actually welcome the move d4 that basically gets us into the night or structure that we wanted to reach um and so the way we want to play here is E6 and E6 is uh the sort of gen move I've talked about the shivanagan structure uh previously it's a sicilian structure where black basically has pawns on E6 and D6 as as opposed to a lot of other variation where variations where black plays E5 and I'll contextualize this all after the game for people who don't play the night or if or don't play the Sicilian and you're hearing all these terms don't worry I'll Define all of them carefully and clearly after the game we want to talk about the shaven again E6 versus E5 but the basic idea is that we're waiting for white to play D4 and of course white could also keep the center closed well I"
+  },
+  {
+   "ply": 11,
+   "t": 264.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/pp1n1ppp/3ppn2/1Bp5/P3P3/2N2N2/1PPP1PPP/R1BQ1RK1 b kq - 1 6",
+   "said": "game we want to talk about the shaven again E6 versus E5 but the basic idea is that we're waiting for white to play D4 and of course white could also keep the center closed well I could play this more modestly with C3 let's continue developing our pieces"
+  },
+  {
+   "ply": 12,
+   "t": 266.5,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk2r/pp1nbppp/3ppn2/1Bp5/P3P3/2N2N2/1PPP1PPP/R1BQ1RK1 w kq - 2 7",
+   "said": "E6 versus E5 but the basic idea is that we're waiting for white to play D4 and of course white could also keep the center closed well I could play this more modestly with C3 let's continue developing our pieces with Bishop E7 but D3 is obviously not a scary move and we can essentially do whatever we can play D5 ourselves so the more ambitious players they kind of automatically play D4 I had this from the white side in an OTB game a couple months ago I I tried this uh myself for white and I was just not impressed with with the resulting position after D4 maybe the engine gives a small advantage but we get exactly the kind of Sicilian structure that we want so rajo asks why"
+  },
+  {
+   "ply": 13,
+   "t": 300,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqk2r/pp1nbppp/3ppn2/1Bp5/P2PP3/2N2N2/1PP2PPP/R1BQ1RK1 b kq - 0 7",
+   "said": "with the resulting position after D4 maybe the engine gives a small advantage but we get exactly the kind of Sicilian structure that we want so rajo asks why not A6 so A6 is a move that we can play whenever we want to play it the bishop on B5 is not really a nuisance and you might say well but doesn't it pressure the night but the Knight on D7 is the most well-defended piece on the board so we're essentially saving the move Asics for a rainy day when we play this move I really want it to count so I'm kind of waiting for the perfect scenario in"
+  },
+  {
+   "ply": 14,
+   "t": 320.5,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "r1bqk2r/pp1nbppp/3ppn2/1B6/P2pP3/2N2N2/1PP2PPP/R1BQ1RK1 w kq - 0 8",
+   "said": "the night but the Knight on D7 is the most well-defended piece on the board so we're essentially saving the move Asics for a rainy day when we play this move I really want it to count so I'm kind of waiting for the perfect scenario in which to play A6 it's the concept of you know like the threat is stronger than the execution you could play it and it wouldn't really change the nature of the position too much but I I like the the concept of keeping the tension for for as long as possible and in some situations the bishop on B5 is actually a misplaced piece believe it or not because in a lot of Sicilians you"
+  },
+  {
+   "ply": 15,
+   "t": 342.5,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r1bqk2r/pp1nbppp/3ppn2/1B6/P2QP3/2N2N2/1PP2PPP/R1B2RK1 b kq - 0 8",
+   "said": "position too much but I I like the the concept of keeping the tension for for as long as possible and in some situations the bishop on B5 is actually a misplaced piece believe it or not because in a lot of Sicilians you actually want to keep the B5 Square open for the Knight so for instance if we were to park Our Queen on C7 that would be a perfect instance in which white doesn't want the bishop on B5 white wants the ability to play Knight B5 so white might even move the bishop away on his own power to which we might reply A6 to cover the B5 square but long story short we don't need to play A6 unless we really want to and this might be a good time to play it but I don't see a reason"
+  },
+  {
+   "ply": 16,
+   "t": 373,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp1nbppp/3ppn2/1B6/P2QP3/2N2N2/1PP2PPP/R1B2RK1 w - - 1 9",
+   "said": "to cover the B5 square but long story short we don't need to play A6 unless we really want to and this might be a good time to play it but I don't see a reason why we can't first uh castle and complete our tank side development okay so now we have the open Sicilian Shivan again structure with a couple of modifications um of course there's a queen on Z4 rather than a knight as is more customary in open Sicilians and there is a bishop on B5 which is also quite rare in uh in most Sicilians of course in the night or if this is impossible because black plays Asics straight away um now when you look at this position and you're not familiar with uh the way that the Sicilian works you you'll be forgiven for concluding that white is much better spatially positionally you might look at the D6 pawn and say well this is a big weakness it can be pretty easily attacked if white just piles up on it but the magic of the Sicilian is that very often on the surface black suffers from all these positional weaknesses um and it looks like white can do anything that they want but the more you analyze the more you realize that Black's position is like wildly robust it's very hard to break down and in that way I would lump the Sicilian with the king's Indian which is a very different opening from a situational standpoint but it's got the same charm where you look at a lot of the positions and you think well black is super cramped and black has more weaknesses but concreely dynamically black is a lot of hidden ideas that redeem uh our position so one of those ideas is obviously that Bishop F4 here can be met with E5 and that drops a minor piece another redeeming element of Black's position is that while the pieces are lumped together and while we are cramped everything is sort of Defending each other like the Knight is defended the other night is very well defended and the D6 Pawn is much much harder to get to than it appears so we already mentioned Bishop F4 some of you were suggesting Bishop takes D7 and Knight B5 okay but even if white plays that we can just move the D7 Bishop out of the way and it's very very easy to defend the D6 Pawn let alone in some cases we can push push D5 and that often creates complications that are favorable for black so should black aim for D5 no no we shouldn't aim to force D5 through but if a good opportunity presents itself then D5 can be a legitimate Central breakthrough okay so our opponent is gone into the"
+  },
+  {
+   "ply": 17,
+   "t": 519.5,
+   "line": [
+    "Rd1"
+   ],
+   "fen": "r1bq1rk1/pp1nbppp/3ppn2/1B6/P2QP3/2N2N2/1PP2PPP/R1BR2K1 b - - 2 9",
+   "said": "shouldn't aim to force D5 through but if a good opportunity presents itself then D5 can be a legitimate Central breakthrough okay so our opponent is gone into the tank Rook T1 which I think is the best move reasonable put piling pressure on the spawn so we have a couple of options so again we can play an A6 but I think that we should delay that move one move further and complete the sort of stock Sicilian setup there's one move that's missing which would complete our kind of shivanagan setup and I've already mentioned this move and it's it's Queen C7 and this is not a very"
+  },
+  {
+   "ply": 18,
+   "t": 545,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "r1b2rk1/ppqnbppp/3ppn2/1B6/P2QP3/2N2N2/1PP2PPP/R1BR2K1 w - - 3 10",
+   "said": "and complete the sort of stock Sicilian setup there's one move that's missing which would complete our kind of shivanagan setup and I've already mentioned this move and it's it's Queen C7 and this is not a very deep move it's just a developing move I mean our Queen is better placed on C7 because it's x-raying the C2 Pawn it's you know another defender on D6 and it's ready in in certain cases to jump into C5 uh in case white screen departs D4 we've got a sicilian that started out as a Moscow variation or Canal attack and"
+  },
+  {
+   "ply": 5,
+   "t": 570,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
+   "said": "jump into C5 uh in case white screen departs D4 we've got a sicilian that started out as a Moscow variation or Canal attack and kind of morphed into an open Sicilian structure so this gives us a chance to talk at length about the kind of typical ideas here for black and we're probably still into in uh Wesley's chessable course I would guess like this position probably has been reached many times before particularly in the last year or so but clearly our opponent is is on their own so Bishop D7 Bishop D7 Knight B5 is particularly bad now because the C2 Pawn will hang and that's partially why we put the queen on C7 and the C2 Pawn is very very hard to defend which means that oftentimes the Knight is actually tied down to C3 okay so every move I say this we can play A6 and I think now is finally a good time to to force white to commit a placement of the bishop so either white will have to give us the bishop pair which is good or or why we'll have to move the bishop away from B5 and this gives us a little bit more breathing room we'll be able to"
+  }
+ ],
+ "forks": []
+}

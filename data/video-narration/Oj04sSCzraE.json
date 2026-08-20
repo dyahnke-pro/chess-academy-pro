@@ -1,0 +1,124 @@
+{
+ "videoId": "Oj04sSCzraE",
+ "title": "Mastering the Maróczy Bind | Sicilian Defense | GM Naroditsky’s Top Theory Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 20.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] let's go we got no time to waste let's get another speedrun game in 1729 with black Luke c24 okay good luck Luke hopefully we get a a juicy game and"
+  },
+  {
+   "ply": 3,
+   "t": 22,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "get another speedrun game in 1729 with black Luke c24 okay good luck Luke hopefully we get a a juicy game and hopefully we get a main line accelerated"
+  },
+  {
+   "ply": 4,
+   "t": 23,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "get another speedrun game in 1729 with black Luke c24 okay good luck Luke hopefully we get a a juicy game and hopefully we get a main line accelerated Dragon we will our I'm maybe needlessly"
+  },
+  {
+   "ply": 5,
+   "t": 24.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "black Luke c24 okay good luck Luke hopefully we get a a juicy game and hopefully we get a main line accelerated Dragon we will our I'm maybe needlessly"
+  },
+  {
+   "ply": 7,
+   "t": 26.5,
+   "line": [
+    "cxd4",
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "okay good luck Luke hopefully we get a a juicy game and hopefully we get a main line accelerated Dragon we will our I'm maybe needlessly excited but this is only our second Main"
+  },
+  {
+   "ply": 8,
+   "t": 28,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "okay good luck Luke hopefully we get a a juicy game and hopefully we get a main line accelerated Dragon we will our I'm maybe needlessly excited but this is only our second Main"
+  },
+  {
+   "ply": 9,
+   "t": 29.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "said": "hopefully we get a a juicy game and hopefully we get a main line accelerated Dragon we will our I'm maybe needlessly excited but this is only our second Main Line excited and this is amazing because we actually get a marozzi bind and the marozzi bind is the reason why the majority of people who refuse to play The Accelerated Dragon what they most fear and for very good reason is the marozzi bind the Marazzi bind is it's both A variation and a structure and the structure that it refers to uh is specifically Sicilian structures with a white Pawn on e4 and a white Pawn on C4 why is it called a bind well because these pawns are both aiming at the D5 square and if you watched my previous video you will know that one of the main ideas of the accelerated dragon is to push D5 and liberate Black's pieces open up the center now this move becomes virtually impossible why is it called marozzi uh Gaza marozzi was a Hungarian player lived I think in the second half of the 19th century one of the top probably top 10 top 15 in the world at his Peak and you know he sort of developed and described uh this this concept we stand on the shoulders of giants now the variation that I want to show you against the morosi bind is a very dangerous sideline that slips through the cracks very often um you might assume that Bishop G7 here is automatic right I mean why would you not feed encounter your bishop and yet there is a sideline which I think is more dangerous and more practical for uh newer players and intermediate players and this immediately challenges white in the sense that it gives black chances to fight for an advantage so what you do is you actually start with Knight F6 you"
+  },
+  {
+   "ply": 10,
+   "t": 120.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pp1ppp1p/2n2np1/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 1 6",
+   "said": "newer players and intermediate players and this immediately challenges white in the sense that it gives black chances to fight for an advantage so what you do is you actually start with Knight F6 you delay the fiancettoing of the bishop and this move should make sense to everybody here immediately attacking the E4 Pawn and an important side note is that if white takes on C6 and then plays E5 and tries to push this Knight out of F6 this is a very common trap black has a check"
+  },
+  {
+   "ply": 11,
+   "t": 138.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/pp1ppp1p/2n2np1/8/2PNP3/2N5/PP3PPP/R1BQKB1R b KQkq - 2 6",
+   "said": "and an important side note is that if white takes on C6 and then plays E5 and tries to push this Knight out of F6 this is a very common trap black has a check on A5 I'll show that on the board after the game picking up the E5 font so this works out tactically now here's step two and step two might seem odd to people who've never seen this line before now you take on D4 and you you send Dwight's"
+  },
+  {
+   "ply": 12,
+   "t": 153,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkb1r/pp1ppp1p/5np1/8/2PnP3/2N5/PP3PPP/R1BQKB1R w KQkq - 0 7",
+   "said": "the game picking up the E5 font so this works out tactically now here's step two and step two might seem odd to people who've never seen this line before now you take on D4 and you you send Dwight's Queen into the center and again this"
+  },
+  {
+   "ply": 13,
+   "t": 157.5,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r1bqkb1r/pp1ppp1p/5np1/8/2PQP3/2N5/PP3PPP/R1B1KB1R b KQkq - 0 7",
+   "said": "and step two might seem odd to people who've never seen this line before now you take on D4 and you you send Dwight's Queen into the center and again this should look very dangerous to you because you're allowing your knight to get pinned and E5 might seem like a very dangerous threat but concretely this works out for black and because of E5 it's important to refrain from Bishop G7 here because that walks into E5 so here you throw in the move D6 and you do that"
+  },
+  {
+   "ply": 14,
+   "t": 175.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkb1r/pp2pp1p/3p1np1/8/2PQP3/2N5/PP3PPP/R1B1KB1R w KQkq - 0 8",
+   "said": "works out for black and because of E5 it's important to refrain from Bishop G7 here because that walks into E5 so here you throw in the move D6 and you do that in order to well obviously you're opening up the bishop but you're also halting the progress of White's epon white can still play E5 but then you just take it and if white trades Queens then yeah our King has lost castling rides but it's not worth the price of a pawn for white to get that position this is yeah this is one of the main lines but it's definitely considered a sideline in comparison to Bishop G7 here"
+  },
+  {
+   "ply": 9,
+   "t": 202.5,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "said": "rides but it's not worth the price of a pawn for white to get that position this is yeah this is one of the main lines but it's definitely considered a sideline in comparison to Bishop G7 here which is the most popular move anything that's not the sort of direct path I call a sideline sideline doesn't mean it's not commonly played this means it's less popular than the main line now what is the high level idea of taking on D4 it's actually very simple after we find keto the bishop Arc the White Queen is in our crosshairs so we're trying to gain essentially a tempo for development by forcing White's Queen onto an awkward spot So eventually after we go Bishop G7 white screen is going to have to back out of D4 there might not be an immediate threat of a discovered attack in fact there isn't but after we complete our development there will be and we're going to gain a very important tempo for our development and it's always not always easy for white to find a good spot for the queen moving it all the way back to D1 you know that's kind of um lame and the queen just doesn't have all that many good squares these types of structures so"
+  }
+ ],
+ "forks": []
+}

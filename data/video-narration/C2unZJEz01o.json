@@ -1,0 +1,605 @@
+{
+ "videoId": "C2unZJEz01o",
+ "title": "Strategic Warfare!! | Barry Attack vs King's Indian Defense | GM Naroditsky's Theory Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 22.5,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "10-minute game for those watching on YouTube it is a little bit late I've been streaming for a while and when we do 10-minute games I'm generally a little bit more to the point during the game itself and then after the game I really spell out some of my thought"
+  },
+  {
+   "ply": 3,
+   "t": 24.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 2 2",
+   "said": "YouTube it is a little bit late I've been streaming for a while and when we do 10-minute games I'm generally a little bit more to the point during the game itself and then after the game I really spell out some of my thought processes because I just don't have the time to do it quite like I do and it's 15 plus 10 so we're going to play a"
+  },
+  {
+   "ply": 4,
+   "t": 31.5,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 3",
+   "said": "game itself and then after the game I really spell out some of my thought processes because I just don't have the time to do it quite like I do and it's 15 plus 10 so we're going to play a Kings Indian I've switched completely to"
+  },
+  {
+   "ply": 5,
+   "t": 34.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/3P4/2N2N2/PPP1PPPP/R1BQKB1R b KQkq - 1 3",
+   "said": "really spell out some of my thought processes because I just don't have the time to do it quite like I do and it's 15 plus 10 so we're going to play a Kings Indian I've switched completely to my real opening repertoire at this later stage of the speedrun okay so Knight C3 is the entry point to the jababa London or the Barry system we want to play D5"
+  },
+  {
+   "ply": 6,
+   "t": 44.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/3P4/2N2N2/PPP1PPPP/R1BQKB1R w KQkq - 0 4",
+   "said": "my real opening repertoire at this later stage of the speedrun okay so Knight C3 is the entry point to the jababa London or the Barry system we want to play D5 here to prevent white for move ordering us into a perk which for the purposes of this speedrun we do not play and we have"
+  },
+  {
+   "ply": 7,
+   "t": 50,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/3P1B2/2N2N2/PPP1PPPP/R2QKB1R b KQkq - 1 4",
+   "said": "is the entry point to the jababa London or the Barry system we want to play D5 here to prevent white for move ordering us into a perk which for the purposes of this speedrun we do not play and we have transposed into the jababa London or as the old name is the the berry system I think the berry system is specifically the jababa system kind of against the G6 setup okay so we start by fing our"
+  },
+  {
+   "ply": 8,
+   "t": 64,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B2/2N2N2/PPP1PPPP/R2QKB1R w KQkq - 2 5",
+   "said": "the old name is the the berry system I think the berry system is specifically the jababa system kind of against the G6 setup okay so we start by fing our Bishop E3 this is all very standard Fair"
+  },
+  {
+   "ply": 9,
+   "t": 66,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/3P1B2/2N1PN2/PPP2PPP/R2QKB1R b KQkq - 0 5",
+   "said": "the old name is the the berry system I think the berry system is specifically the jababa system kind of against the G6 setup okay so we start by fing our Bishop E3 this is all very standard Fair let's complete our kingside development"
+  },
+  {
+   "ply": 10,
+   "t": 68.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/3p4/3P1B2/2N1PN2/PPP2PPP/R2QKB1R w KQ - 1 6",
+   "said": "think the berry system is specifically the jababa system kind of against the G6 setup okay so we start by fing our Bishop E3 this is all very standard Fair let's complete our kingside development with castles and Bishop B2 white plays"
+  },
+  {
+   "ply": 11,
+   "t": 70,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/3p4/3P1B2/2N1PN2/PPP1BPPP/R2QK2R b KQ - 2 6",
+   "said": "think the berry system is specifically the jababa system kind of against the G6 setup okay so we start by fing our Bishop E3 this is all very standard Fair let's complete our kingside development with castles and Bishop B2 white plays it in a very kind of quieter uh Tamer manner um after the game I'll show you what uh my recommendation is in the jababa London it it's connected with an early Pawn push so white has a very positional way of playing this system and a very tactical way of playing this system and white is playing it much more strategically much more quietly so black has a million different ways to disarm the berry system I'm going to play in a very kind of solid straightforward manner um I think we're going to start with the move C6 just solidifying the"
+  },
+  {
+   "ply": 12,
+   "t": 102.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/2p2np1/3p4/3P1B2/2N1PN2/PPP1BPPP/R2QK2R w KQ - 0 7",
+   "said": "has a million different ways to disarm the berry system I'm going to play in a very kind of solid straightforward manner um I think we're going to start with the move C6 just solidifying the center in some situations preparing"
+  },
+  {
+   "ply": 13,
+   "t": 106.5,
+   "line": [
+    "h4"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/2p2np1/3p4/3P1B1P/2N1PN2/PPP1BPP1/R2QK2R b KQ - 0 7",
+   "said": "very kind of solid straightforward manner um I think we're going to start with the move C6 just solidifying the center in some situations preparing Queen B6 and white actually does play H4 so he's combining two different ideas on the one hand was playing Bishop B2 to fool me into a false sense of security and then suddenly launching the attack with H4 okay very dangerous so how are we going to respond to this well the typical method is to play H5 stopping"
+  },
+  {
+   "ply": 14,
+   "t": 127.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "rnbq1rk1/pp2ppb1/2p2np1/3p3p/3P1B1P/2N1PN2/PPP1BPP1/R2QK2R w KQ - 0 8",
+   "said": "and then suddenly launching the attack with H4 okay very dangerous so how are we going to respond to this well the typical method is to play H5 stopping the progress of White's H Pawn so let's go H5 Knight"
+  },
+  {
+   "ply": 15,
+   "t": 132,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "rnbq1rk1/pp2ppb1/2p2np1/3pN2p/3P1B1P/2N1P3/PPP1BPP1/R2QK2R b KQ - 1 8",
+   "said": "we going to respond to this well the typical method is to play H5 stopping the progress of White's H Pawn so let's go H5 Knight E5 okay in some situations preparing a quick G4 we have to get this Knight off"
+  },
+  {
+   "ply": 16,
+   "t": 137.5,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r1bq1rk1/pp1nppb1/2p2np1/3pN2p/3P1B1P/2N1P3/PPP1BPP1/R2QK2R w KQ - 2 9",
+   "said": "the progress of White's H Pawn so let's go H5 Knight E5 okay in some situations preparing a quick G4 we have to get this Knight off the board ASAP so Knight bd7 is pretty standard in this position yeah otherwise white sometimes very quickly plays G4 and crashes through on the king side and before we know it we could get checkmated now if white plays G4 my intention is Knight takes E5 D takes E5 Knight takes G4 so we're in time to eliminate the G Pawn while keeping the king side intact okay so typically jababa London players like to keep the tension in a position like this and make a move like Queen D2 of course once white plays H4 it becomes very evident that in 99% of cases white is going to Castle Queen side so we're going to get"
+  },
+  {
+   "ply": 17,
+   "t": 178,
+   "line": [
+    "f3"
+   ],
+   "fen": "r1bq1rk1/pp1nppb1/2p2np1/3pN2p/3P1B1P/2N1PP2/PPP1B1P1/R2QK2R b KQ - 0 9",
+   "said": "tension in a position like this and make a move like Queen D2 of course once white plays H4 it becomes very evident that in 99% of cases white is going to Castle Queen side so we're going to get an opposite side castling type position with attacks on both sides of the board F3 very good move preparing G4 our opponent is demonstrating fantastic knowledge of typical ideas in the system okay so what are we going to do now we can play Queen B6 and hit the B2 Pawn that comes to mind uh we can position the queen also on A5 we could release the tension and trade on E5 and try to trade as many pieces as possible I'm going to implement a Crea idea we're going to take on"
+  },
+  {
+   "ply": 18,
+   "t": 211,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bq1rk1/pp2ppb1/2p2np1/3pn2p/3P1B1P/2N1PP2/PPP1B1P1/R2QK2R w KQ - 0 10",
+   "said": "the queen also on A5 we could release the tension and trade on E5 and try to trade as many pieces as possible I'm going to implement a Crea idea we're going to take on E5 and one of the drawbacks of the move"
+  },
+  {
+   "ply": 19,
+   "t": 213,
+   "line": [
+    "Bxe5"
+   ],
+   "fen": "r1bq1rk1/pp2ppb1/2p2np1/3pB2p/3P3P/2N1PP2/PPP1B1P1/R2QK2R b KQ - 0 10",
+   "said": "the tension and trade on E5 and try to trade as many pieces as possible I'm going to implement a Crea idea we're going to take on E5 and one of the drawbacks of the move F3 of course is that it creates a weakness on E3 this Pawn is now a weakness and I'm going to play a pretty"
+  },
+  {
+   "ply": 20,
+   "t": 223,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "r1bq1rk1/pp2pp2/2p2npb/3pB2p/3P3P/2N1PP2/PPP1B1P1/R2QK2R w KQ - 1 11",
+   "said": "E5 and one of the drawbacks of the move F3 of course is that it creates a weakness on E3 this Pawn is now a weakness and I'm going to play a pretty unconventional move Bishop to H6 which within the framework of just attacking the E3 Pawn should make a lot of sense to this Pawn has become weak so we're deploying our Bishop and attacking it but generally uh a lot of players find it kind of awkward to move your Bishop away from mitzan kto spot and often times it is kind of oddly odd to put your Bishop on H6 but in this case I think it makes a lot of sense especially because if white pushes E4 then in the future White's going to have a very hard time castling Queen side because our Bishop is going to be holding C1 so I think E4 is way over ambitious if white plays Queen D2 which is the standard way of defending the pawn then our Bishop is going to be exerting rather nasty long-term pressure on this de diagonal okay Queen D2 is played Queen"
+  },
+  {
+   "ply": 21,
+   "t": 272,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r1bq1rk1/pp2pp2/2p2npb/3pB2p/3P3P/2N1PP2/PPPQB1P1/R3K2R b KQ - 2 11",
+   "said": "plays Queen D2 which is the standard way of defending the pawn then our Bishop is going to be exerting rather nasty long-term pressure on this de diagonal okay Queen D2 is played Queen D2 is played so we need to take this opportunity and prepare for the case in which White Castle Queens side which I think is likely to be our opponent's next move well if White Castle's Queens side then ideally we would want to develop something resembling an attack on the queen side so preemptively I think a move that might discourage white"
+  },
+  {
+   "ply": 22,
+   "t": 293.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1bq1rk1/p3pp2/2p2npb/1p1pB2p/3P3P/2N1PP2/PPPQB1P1/R3K2R w KQ - 0 12",
+   "said": "next move well if White Castle's Queens side then ideally we would want to develop something resembling an attack on the queen side so preemptively I think a move that might discourage white from castling Queen side is B5 just throwing our pawns down the board and trying to it's kind of like in baseball what's the term when you're um when you're leading and you've stepped away from the base kind of preparing for the pitch to happen th this is what I would compare B5 to of course white has not castled Queen side yet so if white doesn't Castle Queen side then B5 might seem like a useless move but it's not a very harmful move it also grabs space on the queen side we're not really making any concessions by playing B5 but if white does Castle Queen side then we get an extra Tempo we've already gotten our attack started if that makes sense and every Tempo is crucial in a situation where the kings are castled to opposite sides of the board because presumably White's going to try to get G4 going and then things are going to get really really crazy so we have no time to waste we have no time to waste yeah I don't even watch baseball I just think that might have been a relatable analogy to some people yeah to lead off I think is the term so our opponent is taking their time Bishop D3 nice move move I'm"
+  },
+  {
+   "ply": 23,
+   "t": 357.5,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "r1bq1rk1/p3pp2/2p2npb/1p1pB2p/3P3P/2NBPP2/PPPQ2P1/R3K2R b KQ - 1 12",
+   "said": "we have no time to waste yeah I don't even watch baseball I just think that might have been a relatable analogy to some people yeah to lead off I think is the term so our opponent is taking their time Bishop D3 nice move move I'm assuming that they're preparing to meet with Knight E2 that's a very highle move okay so what are the options here we can drop our own Knight back to D7 and try to get rid of this annoying Bishop then Bishop F4 we can trade on F4 and try to ruin White's Pawn structure we can do something much more tactical like a move like C5 just leading to complete pandemonium on the board I like pandemonium so not the worst option in the world we can play B4 Knight E2 and then C5 aha so that actually might not be such a bad option B4 Knight E2 and then C5 just trying to stake as big of a claim in the center as possible Knight D7 Bishop F4 Bishop G7 to prepare E5 is also very interesting then we have to reckon with G4 E5 takes takes G takes H5 looks a little bit risky I don't like it Knight D7 Bishop F4 Bishop F4 e takes F4 also looks pretty sterile okay so in that case in that case let's go crazy let's go B4 chasing away the Knight and"
+  },
+  {
+   "ply": 24,
+   "t": 431,
+   "line": [
+    "b4"
+   ],
+   "fen": "r1bq1rk1/p3pp2/2p2npb/3pB2p/1p1P3P/2NBPP2/PPPQ2P1/R3K2R w KQ - 0 13",
+   "said": "Knight D7 Bishop F4 Bishop F4 e takes F4 also looks pretty sterile okay so in that case in that case let's go crazy let's go B4 chasing away the Knight and also forcing our opponent to make a decision yeah Knight E2 and now the"
+  },
+  {
+   "ply": 25,
+   "t": 436.5,
+   "line": [
+    "Ne2"
+   ],
+   "fen": "r1bq1rk1/p3pp2/2p2npb/3pB2p/1p1P3P/3BPP2/PPPQN1P1/R3K2R b KQ - 1 13",
+   "said": "that case in that case let's go crazy let's go B4 chasing away the Knight and also forcing our opponent to make a decision yeah Knight E2 and now the"
+  },
+  {
+   "ply": 26,
+   "t": 438.5,
+   "line": [
+    "c5"
+   ],
+   "fen": "r1bq1rk1/p3pp2/5npb/2ppB2p/1p1P3P/3BPP2/PPPQN1P1/R3K2R w KQ - 0 14",
+   "said": "that case in that case let's go crazy let's go B4 chasing away the Knight and also forcing our opponent to make a decision yeah Knight E2 and now the followup C5 so first of all why did we start with B4 well first of all we wanted to expand on the queen side"
+  },
+  {
+   "ply": 27,
+   "t": 446,
+   "line": [
+    "c3"
+   ],
+   "fen": "r1bq1rk1/p3pp2/5npb/2ppB2p/1p1P3P/2PBPP2/PP1QN1P1/R3K2R b KQ - 0 14",
+   "said": "decision yeah Knight E2 and now the followup C5 so first of all why did we start with B4 well first of all we wanted to expand on the queen side second of all we were threatening C4 which would trap the bishop there C3 so our opponent is playing this kind of like a London system I'm going to take"
+  },
+  {
+   "ply": 28,
+   "t": 453.5,
+   "line": [
+    "bxc3"
+   ],
+   "fen": "r1bq1rk1/p3pp2/5npb/2ppB2p/3P3P/2pBPP2/PP1QN1P1/R3K2R w KQ - 0 15",
+   "said": "start with B4 well first of all we wanted to expand on the queen side second of all we were threatening C4 which would trap the bishop there C3 so our opponent is playing this kind of like a London system I'm going to take on C3 in order to fully discourage white"
+  },
+  {
+   "ply": 29,
+   "t": 456,
+   "line": [
+    "bxc3"
+   ],
+   "fen": "r1bq1rk1/p3pp2/5npb/2ppB2p/3P3P/2PBPP2/P2QN1P1/R3K2R b KQ - 0 15",
+   "said": "wanted to expand on the queen side second of all we were threatening C4 which would trap the bishop there C3 so our opponent is playing this kind of like a London system I'm going to take on C3 in order to fully discourage white from castling Queens side so what we've essentially done is we've opened up the queen side and we now have prevented white from being able to Castle to this side of the board which would now be complete Madness uh because the B file is open and it's going to be very very easy for us to get to White's King now we're going to implement the second idea"
+  },
+  {
+   "ply": 30,
+   "t": 476,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r1bq1rk1/p2npp2/6pb/2ppB2p/3P3P/2PBPP2/P2QN1P1/R3K2R w KQ - 1 16",
+   "said": "white from being able to Castle to this side of the board which would now be complete Madness uh because the B file is open and it's going to be very very easy for us to get to White's King now we're going to implement the second idea that I mentioned Knight back to D7 and we're going to try to open up the center why am I trying to open up the center now well because White's King is kind of stuck in the center white can Castle King side but then the H4 Pawn is going"
+  },
+  {
+   "ply": 31,
+   "t": 489.5,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r1bq1rk1/p2npp2/6pb/2pp3p/3P1B1P/2PBPP2/P2QN1P1/R3K2R b KQ - 2 16",
+   "said": "we're going to try to open up the center why am I trying to open up the center now well because White's King is kind of stuck in the center white can Castle King side but then the H4 Pawn is going to be a major liability white can Castle"
+  },
+  {
+   "ply": 32,
+   "t": 491,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bq1rk1/p2nppb1/6p1/2pp3p/3P1B1P/2PBPP2/P2QN1P1/R3K2R w KQ - 3 17",
+   "said": "we're going to try to open up the center why am I trying to open up the center now well because White's King is kind of stuck in the center white can Castle King side but then the H4 Pawn is going to be a major liability white can Castle Queen side but as I've already mentioned it's going to be very very easy to pick off White's King in that case if white gets stuck in the center and we're able to open the center up um then we're going to be able to ultimately get to White's King this is what I'm trying to do by dropping my knight back to D7 and now my Bishop back to its initial F and GTO Square we are trying to prepare E7 E5 which would completely blast open the center it would also open up the"
+  },
+  {
+   "ply": 33,
+   "t": 519,
+   "line": [
+    "Rd1"
+   ],
+   "fen": "r1bq1rk1/p2nppb1/6p1/2pp3p/3P1B1P/2PBPP2/P2QN1P1/3RK2R b K - 4 17",
+   "said": "do by dropping my knight back to D7 and now my Bishop back to its initial F and GTO Square we are trying to prepare E7 E5 which would completely blast open the center it would also open up the diagonal for our Bishop and I think it would lead to very very positive consequences Rogue D1 so clearly our opponent is aware of what our idea is and he is trying to discourage us from pushing E5 do we want to push E5 anyway or do we want to make another Preparatory move well that's a good question so what happens if we play E5 D takes E5 Knight takes E5 there is this weird move Bishop E4 uh in that position and that D5 Pawn is going to crumble a little bit so maybe we want to prepare E5 for one more move yeah I think we want to go Bishop B7 we want to go"
+  },
+  {
+   "ply": 34,
+   "t": 558,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "r2q1rk1/pb1nppb1/6p1/2pp3p/3P1B1P/2PBPP2/P2QN1P1/3RK2R w K - 5 18",
+   "said": "and that D5 Pawn is going to crumble a little bit so maybe we want to prepare E5 for one more move yeah I think we want to go Bishop B7 we want to go Bishop B7 which may seem stupid if taken in isolation like why are we putting the bishop on a square where it's just biting on granite but in light of the line that I just spelled out this move should make sense to after we push E5 and the trade happens we want to make sure that the D5 Pawn isn't a soft target uh for White's heavy pieces along the default okay G4 now things are going"
+  },
+  {
+   "ply": 35,
+   "t": 581,
+   "line": [
+    "g4"
+   ],
+   "fen": "r2q1rk1/pb1nppb1/6p1/2pp3p/3P1BPP/2PBPP2/P2QN3/3RK2R b K - 0 18",
+   "said": "line that I just spelled out this move should make sense to after we push E5 and the trade happens we want to make sure that the D5 Pawn isn't a soft target uh for White's heavy pieces along the default okay G4 now things are going to really really heat up and now I'm going to have to play silently very very likely because things are going to get very very tactical takes H5 then we can push E5 it feels really good for black uh we can also start with E5 but then after takes takes takes takes G takes H5 feels really scary so we could get checkmated here I'm not completely not um ruling out the"
+  },
+  {
+   "ply": 36,
+   "t": 608.5,
+   "line": [
+    "hxg4"
+   ],
+   "fen": "r2q1rk1/pb1nppb1/6p1/2pp4/3P1BpP/2PBPP2/P2QN3/3RK2R w K - 0 19",
+   "said": "E5 but then after takes takes takes takes G takes H5 feels really scary so we could get checkmated here I'm not completely not um ruling out the possibility that we get mated but if I"
+  },
+  {
+   "ply": 37,
+   "t": 611.5,
+   "line": [
+    "fxg4"
+   ],
+   "fen": "r2q1rk1/pb1nppb1/6p1/2pp4/3P1BPP/2PBP3/P2QN3/3RK2R b K - 0 19",
+   "said": "takes G takes H5 feels really scary so we could get checkmated here I'm not completely not um ruling out the possibility that we get mated but if I play accurately I hope that that's not"
+  },
+  {
+   "ply": 38,
+   "t": 615,
+   "line": [
+    "e5"
+   ],
+   "fen": "r2q1rk1/pb1n1pb1/6p1/2ppp3/3P1BPP/2PBP3/P2QN3/3RK2R w K - 0 20",
+   "said": "we could get checkmated here I'm not completely not um ruling out the possibility that we get mated but if I play accurately I hope that that's not going to happen because now we're opening up the center we are striking away at White's very well protected Pawn on D4 and now things are really really heating up time situation is totally fine we've got four minutes that's plenty of time and we're forcing our opponent to make another decision okay"
+  },
+  {
+   "ply": 39,
+   "t": 632.5,
+   "line": [
+    "Bg3"
+   ],
+   "fen": "r2q1rk1/pb1n1pb1/6p1/2ppp3/3P2PP/2PBP1B1/P2QN3/3RK2R b K - 1 20",
+   "said": "on D4 and now things are really really heating up time situation is totally fine we've got four minutes that's plenty of time and we're forcing our opponent to make another decision okay Bishop G3 excellent now we could play Rook E8 and keep the tension we could snap off a pawn but I'm going to go with"
+  },
+  {
+   "ply": 40,
+   "t": 642,
+   "line": [
+    "Re8"
+   ],
+   "fen": "r2qr1k1/pb1n1pb1/6p1/2ppp3/3P2PP/2PBP1B1/P2QN3/3RK2R w K - 2 21",
+   "said": "opponent to make another decision okay Bishop G3 excellent now we could play Rook E8 and keep the tension we could snap off a pawn but I'm going to go with my gut here I'm going to go with my gut and we're going to play Rook E8 just kind of keeping the tension and obviously preparing to play e takes D4 in some cases putting the rook in an x-ray with the King Castle's King side"
+  },
+  {
+   "ply": 41,
+   "t": 653.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2qr1k1/pb1n1pb1/6p1/2ppp3/3P2PP/2PBP1B1/P2QN3/3R1RK1 b - - 3 21",
+   "said": "my gut here I'm going to go with my gut and we're going to play Rook E8 just kind of keeping the tension and obviously preparing to play e takes D4 in some cases putting the rook in an x-ray with the King Castle's King side okay so our opponent is clearly like abandoning his Ambitions of checkmating us on the king side and instead prioritizing King safety which is probably the right thing to do yeah I kind of underestimated that move wow okay so takes takes Knight F6 maybe we could go Knight F6 straight away that actually might be a really"
+  },
+  {
+   "ply": 42,
+   "t": 674.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r2qr1k1/pb3pb1/5np1/2ppp3/3P2PP/2PBP1B1/P2QN3/3R1RK1 w - - 4 22",
+   "said": "do yeah I kind of underestimated that move wow okay so takes takes Knight F6 maybe we could go Knight F6 straight away that actually might be a really smart alternative yes I really like the straight the immediate Knight F6 there are some tactics that stand behind this move that I'll spell out after the game obviously Bishop takes E5 is probably what most people have their eyes on and you're probably wondering what happens if white simply snaps this Pawn off the board okay G5 um Knight"
+  },
+  {
+   "ply": 43,
+   "t": 695,
+   "line": [
+    "g5"
+   ],
+   "fen": "r2qr1k1/pb3pb1/5np1/2ppp1P1/3P3P/2PBP1B1/P2QN3/3R1RK1 b - - 0 22",
+   "said": "move that I'll spell out after the game obviously Bishop takes E5 is probably what most people have their eyes on and you're probably wondering what happens if white simply snaps this Pawn off the board okay G5 um Knight G4 comes to mind Knight H5 also makes sense so what happens Knight G4 maybe D takes C5 mm Knight H5 or Knight G4 okay have to start playing a little faster here yeah let's go Knight G4 trying to"
+  },
+  {
+   "ply": 44,
+   "t": 713,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "r2qr1k1/pb3pb1/6p1/2ppp1P1/3P2nP/2PBP1B1/P2QN3/3R1RK1 w - - 1 23",
+   "said": "sense so what happens Knight G4 maybe D takes C5 mm Knight H5 or Knight G4 okay have to start playing a little faster here yeah let's go Knight G4 trying to go after the E3 Pawn trying to go after the E3 Pawn Maybe Knight H5 and queen D7 would have been a better idea but whatever it's too late yeah Knight G4 probably a mistake would be my guess but still I don't think such a bad move Bishop B5 okay fantastic so we can"
+  },
+  {
+   "ply": 45,
+   "t": 730.5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r2qr1k1/pb3pb1/6p1/1Bppp1P1/3P2nP/2P1P1B1/P2QN3/3R1RK1 b - - 2 23",
+   "said": "would have been a better idea but whatever it's too late yeah Knight G4 probably a mistake would be my guess but still I don't think such a bad move Bishop B5 okay fantastic so we can play e takes D3 or E uh e takes D4 but what is the purpose of that why can't we"
+  },
+  {
+   "ply": 46,
+   "t": 740.5,
+   "line": [
+    "Re7"
+   ],
+   "fen": "r2q2k1/pb2rpb1/6p1/1Bppp1P1/3P2nP/2P1P1B1/P2QN3/3R1RK1 w - - 3 24",
+   "said": "move Bishop B5 okay fantastic so we can play e takes D3 or E uh e takes D4 but what is the purpose of that why can't we just calmly bring our Rook up to E7 also solidifying the F7 Pawn which is very"
+  },
+  {
+   "ply": 47,
+   "t": 749.5,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "r2q2k1/pb2rpb1/6p1/1BPpp1P1/6nP/2P1P1B1/P2QN3/3R1RK1 b - - 0 24",
+   "said": "what is the purpose of that why can't we just calmly bring our Rook up to E7 also solidifying the F7 Pawn which is very valuable okay he takes the pawn very good now it would be very nice to win this Pawn back how can we do that well we can do it with the queen queen C7 or queen C8 I think makes the most sense"
+  },
+  {
+   "ply": 48,
+   "t": 759.5,
+   "line": [
+    "Qc8"
+   ],
+   "fen": "r1q3k1/pb2rpb1/6p1/1BPpp1P1/6nP/2P1P1B1/P2QN3/3R1RK1 w - - 1 25",
+   "said": "valuable okay he takes the pawn very good now it would be very nice to win this Pawn back how can we do that well we can do it with the queen queen C7 or queen C8 I think makes the most sense let's go Queen C8 and there are more tactics that hide behind this move now if white pushes C6 then after the trade on C6 white is unable to take on D5 at the end of the line because after the trade we'll pick up the pawn on E3 with a fork so that's actually the reason that I didn't play Rook C8 as I'll describe after the game so I think White's position is very close to falling apart because once we pick up the pawn on C5 not only do we have a fully intact Center and excellent peace coordination both of our Bishops are fan ketto but also White's pawns are just so so weak here okay so he does"
+  },
+  {
+   "ply": 52,
+   "t": 801,
+   "line": [
+    "c6",
+    "Qxc6",
+    "Bxc6",
+    "Bxc6"
+   ],
+   "fen": "r5k1/p3rpb1/2b3p1/3pp1P1/6nP/2P1P1B1/P2QN3/3R1RK1 w - - 0 27",
+   "said": "pick up the pawn on C5 not only do we have a fully intact Center and excellent peace coordination both of our Bishops are fan ketto but also White's pawns are just so so weak here okay so he does play C6 trading and Bishop F2 yeah but"
+  },
+  {
+   "ply": 53,
+   "t": 804.5,
+   "line": [
+    "Bf2"
+   ],
+   "fen": "r5k1/p3rpb1/2b3p1/3pp1P1/6nP/2P1P3/P2QNB2/3R1RK1 b - - 1 27",
+   "said": "peace coordination both of our Bishops are fan ketto but also White's pawns are just so so weak here okay so he does play C6 trading and Bishop F2 yeah but now we're very close to being winning so he wants to take on D5 let's make sure that this Pawn is solidified let's go Rook d8 protecting the D5 Pawn also"
+  },
+  {
+   "ply": 54,
+   "t": 813.5,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "3r2k1/p3rpb1/2b3p1/3pp1P1/6nP/2P1P3/P2QNB2/3R1RK1 w - - 2 28",
+   "said": "play C6 trading and Bishop F2 yeah but now we're very close to being winning so he wants to take on D5 let's make sure that this Pawn is solidified let's go Rook d8 protecting the D5 Pawn also bringing the Rook into the game I'm expecting E4 here and then we're going to double up on the defile and try to blast through in the center yeah black is borderline winning here I just think strategically because of how many weaknesses white has in in their position know this is just really really good if I can keep my clock under control I think I'm going to win I should say we're going to win Royal we"
+  },
+  {
+   "ply": 55,
+   "t": 839,
+   "line": [
+    "Ng3"
+   ],
+   "fen": "3r2k1/p3rpb1/2b3p1/3pp1P1/6nP/2P1P1N1/P2Q1B2/3R1RK1 b - - 3 28",
+   "said": "strategically because of how many weaknesses white has in in their position know this is just really really good if I can keep my clock under control I think I'm going to win I should say we're going to win Royal we Knight G3 okay very good E4 maybe yeah E4 is a thought not sure it's the best"
+  },
+  {
+   "ply": 56,
+   "t": 846.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p1nP/2P1P1N1/P2Q1B2/3R1RK1 w - - 0 29",
+   "said": "control I think I'm going to win I should say we're going to win Royal we Knight G3 okay very good E4 maybe yeah E4 is a thought not sure it's the best move but it does open up the bishop and it also creates uh potential strongholds for our Knight which can now Circle back to E5 and then"
+  },
+  {
+   "ply": 57,
+   "t": 856.5,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p1nP/2P1P1N1/P2Q1B2/2R2RK1 b - - 1 29",
+   "said": "move but it does open up the bishop and it also creates uh potential strongholds for our Knight which can now Circle back to E5 and then ooh very juicy squares here okay let's go Knight E5 very very juicy squares are"
+  },
+  {
+   "ply": 58,
+   "t": 861.5,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "3r2k1/p3rpb1/2b3p1/3pn1P1/4p2P/2P1P1N1/P2Q1B2/2R2RK1 w - - 2 30",
+   "said": "for our Knight which can now Circle back to E5 and then ooh very juicy squares here okay let's go Knight E5 very very juicy squares are being accessed by our Knight and then the queen can drive in along the white squares as well looks like white is starting to crumble here white is starting to crumble yeah Knight F3"
+  },
+  {
+   "ply": 60,
+   "t": 875.5,
+   "line": [
+    "Kg2",
+    "Nf3"
+   ],
+   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p2P/2P1PnN1/P2Q1BK1/2R2R2 w - - 4 31",
+   "said": "being accessed by our Knight and then the queen can drive in along the white squares as well looks like white is starting to crumble here white is starting to crumble yeah Knight F3 Outpost also hitting the pawn on H4 which we can capture with check and we"
+  },
+  {
+   "ply": 61,
+   "t": 880,
+   "line": [
+    "Qe2"
+   ],
+   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p2P/2P1PnN1/P3QBK1/2R2R2 b - - 5 31",
+   "said": "squares as well looks like white is starting to crumble here white is starting to crumble yeah Knight F3 Outpost also hitting the pawn on H4 which we can capture with check and we are going to capture this Pawn not"
+  },
+  {
+   "ply": 62,
+   "t": 882,
+   "line": [
+    "Nxh4+"
+   ],
+   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p2n/2P1P1N1/P3QBK1/2R2R2 w - - 0 32",
+   "said": "starting to crumble here white is starting to crumble yeah Knight F3 Outpost also hitting the pawn on H4 which we can capture with check and we are going to capture this Pawn not because it's a free Pawn but mainly because also now the G5 Pawn is a huge weakness and I'm seeing a mating construction where the queen can get to"
+  },
+  {
+   "ply": 63,
+   "t": 892,
+   "line": [
+    "Kh3"
+   ],
+   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p2n/2P1P1NK/P3QB2/2R2R2 b - - 1 32",
+   "said": "are going to capture this Pawn not because it's a free Pawn but mainly because also now the G5 Pawn is a huge weakness and I'm seeing a mating construction where the queen can get to H3 okay so can we go Queen E6 here doesn't even really matter we don't need to engage in these complications we can"
+  },
+  {
+   "ply": 64,
+   "t": 898,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p3/2P1PnNK/P3QB2/2R2R2 w - - 2 33",
+   "said": "weakness and I'm seeing a mating construction where the queen can get to H3 okay so can we go Queen E6 here doesn't even really matter we don't need to engage in these complications we can just simply go back to F3 okay I'm not"
+  },
+  {
+   "ply": 65,
+   "t": 901.5,
+   "line": [
+    "Rh1"
+   ],
+   "fen": "3r2k1/p3rpb1/2b3p1/3p2P1/4p3/2P1PnNK/P3QB2/2R4R b - - 3 33",
+   "said": "construction where the queen can get to H3 okay so can we go Queen E6 here doesn't even really matter we don't need to engage in these complications we can just simply go back to F3 okay I'm not worried about anything that happens on the H file because there's no attack so now what we're going to do is we're going to give a check the G5 Pawn is not"
+  },
+  {
+   "ply": 68,
+   "t": 912,
+   "line": [
+    "Bd7+",
+    "Kg2",
+    "Be6"
+   ],
+   "fen": "3r2k1/p3rpb1/4b1p1/3p2P1/4p3/2P1PnN1/P3QBK1/2R4R w - - 6 35",
+   "said": "worried about anything that happens on the H file because there's no attack so now what we're going to do is we're going to give a check the G5 Pawn is not going anywhere so instead we're going to go in for the kill we're going to deploy Our Queen to G4 creating the possibility for a future discovered attack against White's Queen our Bishop is going to come to E5 and put even more pressure on the Knight and if necessary our King can"
+  },
+  {
+   "ply": 70,
+   "t": 927.5,
+   "line": [
+    "Kf1",
+    "Bg4"
+   ],
+   "fen": "3r2k1/p3rpb1/6p1/3p2P1/4p1b1/2P1PnN1/P3QB2/2R2K1R w - - 8 36",
+   "said": "Our Queen to G4 creating the possibility for a future discovered attack against White's Queen our Bishop is going to come to E5 and put even more pressure on the Knight and if necessary our King can always Escape through the center okay let's get the bishop involved Bishop B5 and I think White's resistance is coming to an end because Rook G1 there's a check on H3 that wins the game yeah Rook G1 so obviously we're not"
+  },
+  {
+   "ply": 72,
+   "t": 940,
+   "line": [
+    "Rg1",
+    "Be5"
+   ],
+   "fen": "3r2k1/p3rp2/6p1/3pb1P1/4p1b1/2P1PnN1/P3QB2/2R2KR1 w - - 10 37",
+   "said": "let's get the bishop involved Bishop B5 and I think White's resistance is coming to an end because Rook G1 there's a check on H3 that wins the game yeah Rook G1 so obviously we're not taking the rook and blundering our Queen we are doing check and let's be accurate"
+  },
+  {
+   "ply": 74,
+   "t": 946.5,
+   "line": [
+    "Rg2",
+    "Bh3"
+   ],
+   "fen": "3r2k1/p3rp2/6p1/3pb1P1/4p3/2P1PnNb/P3QBR1/2R2K2 w - - 12 38",
+   "said": "to an end because Rook G1 there's a check on H3 that wins the game yeah Rook G1 so obviously we're not taking the rook and blundering our Queen we are doing check and let's be accurate here what is the accurate win let's spend 30 seconds but make sure that we don't give white any unnecessary chances so I see at least two different ways to win we can go Knight back to H4 but an even more accurate way to win I think is to play Bishop takes G3 and then Queen"
+  },
+  {
+   "ply": 78,
+   "t": 963.5,
+   "line": [
+    "Nf5",
+    "Bd6",
+    "Ng3",
+    "Bxg3"
+   ],
+   "fen": "3r2k1/p3rp2/6p1/3p2P1/4p3/2P1Pnbb/P3QBR1/2R2K2 w - - 0 40",
+   "said": "don't give white any unnecessary chances so I see at least two different ways to win we can go Knight back to H4 but an even more accurate way to win I think is to play Bishop takes G3 and then Queen H1 takes C1 as I've talked about many many times before in the speedrun when you're trying to finish off an attack don't fixate on Checkmate very often you can use the weakness of the King as a springboard to winning material so often the natural conclusion of a successful attack is actually not mate uh per se it's just like winning a decisive amount of material I think the same thing goes here so we have two ways to play here I would try to cover the H file just to make sure that nothing happens so we can go Rook B7 and try to get the Rook to B2 but I really like the move I really like the move King to G7 um just making sure that we get the Rook to the H file and then we get the other Rook over to the B file so division of labor and eventually a Checkmate is going to materialize a Checkmate is going to materialize here I think he might resign white literally cannot move because of the presence of this Knight okay so let's get one Rook to the H file and we're just a couple accurate"
+  }
+ ],
+ "forks": []
+}

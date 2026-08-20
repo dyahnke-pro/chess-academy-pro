@@ -1,0 +1,347 @@
+{
+ "videoId": "C6vYlx-lS6g",
+ "title": "The Glek System Explained | GM Naroditsky Theory Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 31.5,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "really appreciate it um and without further ado let's get this show on the road 2229c srix good luck and here we go um let me know if my audio is sufficient I hope I'm not peaking welcome YouTubers to another speedrun game and we are off"
+  },
+  {
+   "ply": 3,
+   "t": 40,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "good luck and here we go um let me know if my audio is sufficient I hope I'm not peaking welcome YouTubers to another speedrun game and we are off now"
+  },
+  {
+   "ply": 4,
+   "t": 41.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "um let me know if my audio is sufficient I hope I'm not peaking welcome YouTubers to another speedrun game and we are off now never mind I was going to say as promised uh I'm"
+  },
+  {
+   "ply": 3,
+   "t": 45,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "I hope I'm not peaking welcome YouTubers to another speedrun game and we are off now never mind I was going to say as promised uh I'm going to start playing my my actual repertoire uh which includes the real Lopez that is my main opening what I"
+  },
+  {
+   "ply": 4,
+   "t": 54,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "I was going to say as promised uh I'm going to start playing my my actual repertoire uh which includes the real Lopez that is my main opening what I want to play here since we're facing Knight F6 is not the Belgrade Gambit not"
+  },
+  {
+   "ply": 5,
+   "t": 58,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "going to start playing my my actual repertoire uh which includes the real Lopez that is my main opening what I want to play here since we're facing Knight F6 is not the Belgrade Gambit not the four night Scotch but an opening that I have been playing and analyzing"
+  },
+  {
+   "ply": 6,
+   "t": 60.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "said": "repertoire uh which includes the real Lopez that is my main opening what I want to play here since we're facing Knight F6 is not the Belgrade Gambit not the four night Scotch but an opening that I have been playing and analyzing pretty extensively I would say for about two years um this is in my opinion an incredibly underrated weapon and I say weapon uh as a very particular choice of words I think it is a weapon I think it's a dangerous system um and it's a system that flies under the radar and a lot of black players because they don't study it they don't really know how to position their pieces uh and so you are seriously contending for an advantage with this move it's called the gleck system it's named after Igor gleck uh who is he's still alive he's a Russian Grandmaster I think he's in his 60s now and at his Peak he was in the 2600s now he's you know uh coaching so he's in the 2400s and gleck uh I want"
+  },
+  {
+   "ply": 7,
+   "t": 105.5,
+   "line": [
+    "g3"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 0 4",
+   "said": "he's a Russian Grandmaster I think he's in his 60s now and at his Peak he was in the 2600s now he's you know uh coaching so he's in the 2400s and gleck uh I want to say in the 80s and 90s but I really don't know exactly when he developed and really fleshed out a lot of the ideas of this system which in which you play G3 now there are several move orders uh through which you can reach the gleck system you can play Knight C3 and G3 you"
+  },
+  {
+   "ply": 2,
+   "t": 120.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "don't know exactly when he developed and really fleshed out a lot of the ideas of this system which in which you play G3 now there are several move orders uh through which you can reach the gleck system you can play Knight C3 and G3 you can play Knight F3 and G3 but the basic idea of the guac is the finquet of the bishop against uh in the king pawns game I'm not gonna introduce any specific ideas until we we find out which setup our opponent chooses because a lot will depend on where black chooses to position the d-pawn there are systems where black plays D6 usually after developing the bishop outside the pawn chain which I think is what our opponent is aiming to do most books recommend the"
+  },
+  {
+   "ply": 6,
+   "t": 150.5,
+   "line": [
+    "Nc3",
+    "Nc6",
+    "Nf3",
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "said": "depend on where black chooses to position the d-pawn there are systems where black plays D6 usually after developing the bishop outside the pawn chain which I think is what our opponent is aiming to do most books recommend the"
+  },
+  {
+   "ply": 7,
+   "t": 151.5,
+   "line": [
+    "g3"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 0 4",
+   "said": "position the d-pawn there are systems where black plays D6 usually after developing the bishop outside the pawn chain which I think is what our opponent is aiming to do most books recommend the more principled counter Central strike D5 and that leads to a completely different type of position of course some ideas are shared uh but there's a"
+  },
+  {
+   "ply": 8,
+   "t": 159,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R w KQkq - 1 5",
+   "said": "is aiming to do most books recommend the more principled counter Central strike D5 and that leads to a completely different type of position of course some ideas are shared uh but there's a"
+  },
+  {
+   "ply": 9,
+   "t": 160,
+   "line": [
+    "Bg2"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 2 5",
+   "said": "is aiming to do most books recommend the more principled counter Central strike D5 and that leads to a completely different type of position of course some ideas are shared uh but there's a big distinction between the open Center"
+  },
+  {
+   "ply": 10,
+   "t": 162,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R w KQkq - 0 6",
+   "said": "more principled counter Central strike D5 and that leads to a completely different type of position of course some ideas are shared uh but there's a big distinction between the open Center and closed Center position so our opponent chooses uh the line which I think is the most popular if you actually check the database most people who don't really know what to do with black they develop in precisely this manner now the first step to playing the guac system is to complete our King side development and play the move D3 this is sort of stage one uh this is rather self-explanatory and you can start with a variety of different move orders I like to start with D3 because it's a"
+  },
+  {
+   "ply": 11,
+   "t": 186,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/4P3/2NP1NP1/PPP2PBP/R1BQK2R b KQkq - 0 6",
+   "said": "now the first step to playing the guac system is to complete our King side development and play the move D3 this is sort of stage one uh this is rather self-explanatory and you can start with a variety of different move orders I like to start with D3 because it's a little bit more flexible you're kind of delaying castling"
+  },
+  {
+   "ply": 12,
+   "t": 189.5,
+   "line": [
+    "h6"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/2np1n1p/2b1p3/4P3/2NP1NP1/PPP2PBP/R1BQK2R w KQkq - 0 7",
+   "said": "development and play the move D3 this is sort of stage one uh this is rather self-explanatory and you can start with a variety of different move orders I like to start with D3 because it's a little bit more flexible you're kind of delaying castling okay H6 is a move that you often see played by black we are not really intending to play Bishop G5 in any case but H6 is a pretty healthy move that uh that people kind of default to um okay so now we Castle"
+  },
+  {
+   "ply": 13,
+   "t": 205.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/2np1n1p/2b1p3/4P3/2NP1NP1/PPP2PBP/R1BQ1RK1 b kq - 1 7",
+   "said": "played by black we are not really intending to play Bishop G5 in any case but H6 is a pretty healthy move that uh that people kind of default to um okay so now we Castle and black castles okay so now we enter"
+  },
+  {
+   "ply": 14,
+   "t": 206.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/ppp2pp1/2np1n1p/2b1p3/4P3/2NP1NP1/PPP2PBP/R1BQ1RK1 w - - 2 8",
+   "said": "intending to play Bishop G5 in any case but H6 is a pretty healthy move that uh that people kind of default to um okay so now we Castle and black castles okay so now we enter stage two we have essentially completed our kingside development and there is a branching off point we have two main ways of playing the Glock system one is uh A variation that the computer doesn't approve of but that I have played with great success online and that is the system connected with the move Bishop E3 but the way that Igor gleck intended uh for people to play this position is to set up a king's Indian like plan where you prepare the f2f4 pawn strike and start attacking on the king's side um that is usually done by playing H3 moving the king to H2 and that is of course in order to unpin the F Pawn then moving the Knight away from F3 usually backwards to D2 and finally you're ready to push F to F4 this is the traditional uh way of playing the gleck and this is actually the line that is chosen usually by by the computer the second type of system involves playing Bishop E3 and posing black with the Dilemma of whether black wants to trade Bishops on E3 and if you play the re Lopez or the Italian you should know that with the semi-openf file uh White gets some serious attacking chances connected with the Knight transfer Tab 5 and other various attacking ideas I want to play the main"
+  },
+  {
+   "ply": 15,
+   "t": 282,
+   "line": [
+    "h3"
+   ],
+   "fen": "r1bq1rk1/ppp2pp1/2np1n1p/2b1p3/4P3/2NP1NPP/PPP2PB1/R1BQ1RK1 b - - 0 8",
+   "said": "you should know that with the semi-openf file uh White gets some serious attacking chances connected with the Knight transfer Tab 5 and other various attacking ideas I want to play the main line in this game just as an introductory because it is sort of an introduction to the gleck system so let's play them of H3 of course by playing H3 we are not committing to"
+  },
+  {
+   "ply": 16,
+   "t": 290.5,
+   "line": [
+    "a5"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/2np1n1p/p1b1p3/4P3/2NP1NPP/PPP2PB1/R1BQ1RK1 w - - 0 9",
+   "said": "attacking ideas I want to play the main line in this game just as an introductory because it is sort of an introduction to the gleck system so let's play them of H3 of course by playing H3 we are not committing to anything in particular H3 in and of itself is a pretty healthy improving move but with our next move we already have to indicate our intentions right the time has come for us to choose whether we're playing Bishop E3 or whether we're playing H2 now A5 is a pretty impressive move our opponent is kind of crossing their T's and dotting their eyes um we can push A4 we can push A4 but in Blitz Games the way that I have liked to play this system is to allow black to push A4 and so let's play King H2 and then stop"
+  },
+  {
+   "ply": 17,
+   "t": 324.5,
+   "line": [
+    "Kh2"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/2np1n1p/p1b1p3/4P3/2NP1NPP/PPP2PBK/R1BQ1R2 b - - 1 9",
+   "said": "um we can push A4 we can push A4 but in Blitz Games the way that I have liked to play this system is to allow black to push A4 and so let's play King H2 and then stop the pawn with A3 or even sometimes allow black to play A3 which is not that dangerous because we can push B3 so let's go King H2 and continue preparing uh the the main gleck plan with an eventual f2f4 so hopefully I was able to you know explain in relatively clear terms what the what the Zen of this opening is and again that is to push F4 and you might be sitting there and saying okay I get it I get what we're preparing why are we preparing what is so great about the move F4 and that's a deeper question that I'll tackle after the game and maybe I'll get a chance to demonstrate that depending on how our opponent responds now most people uh even most GMS they end up playing Bishop E6 because that is the only reasonable Square for blacks Bishop of course Bishop D7 is possible but that's quite passive and after Bishop D6 we will indeed drop our Knight back to D2 and we will finally be ready to push F4 um I think in response to the move A4 grabbing space on the queen side like I said we're gonna freeze Black's pawns with A3 and of course the pawn on A4 will then be a long-term weakness that can be targeted by the Knight uh if black plays Bishop E6 and queen D7 that doesn't actually threaten anything and that is one of the positive byproducts of the move King H2 which is that the H3 Pawn is now safely protected so if black constructs the classic battery we won't need to waste the tempo to defend the H3 Pawn right"
+  },
+  {
+   "ply": 18,
+   "t": 408,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "r1bq1rk1/1pp1npp1/3p1n1p/p1b1p3/4P3/2NP1NPP/PPP2PBK/R1BQ1R2 w - - 2 10",
+   "said": "one of the positive byproducts of the move King H2 which is that the H3 Pawn is now safely protected so if black constructs the classic battery we won't need to waste the tempo to defend the H3 Pawn right 97 now 97 is a relatively unconventional move I don't think it's a bad move but I think it changes in large part how we choose to tackle this position now I'd point out that by playing H3 and King H2 like I said earlier we're still not particularly it's not committal what we're doing right we can change up our plans we don't we still don't have to push f2f4 we can Resort back to even a move like Bishop E3 would not be bad here we're not going to play that now what do I see when I look at the move 90 so 97 clearly relinquishes Black's grip over the D4 Square that's the drawback of the Knight transfer to G6 and so a very thematic way to try to punish black would be to push D4 ourselves I mean again if you're a real Lopez player you you know to look for the D4 Pawn strike in various moments so D4 forces the exchange because after D4 if the bishop drops back we went upon the D4 e takes D4 Knight takes D4 that is also a structure that I've had a lot in the Glock system and because of our Pawn on e4 we have a slightly Superior control over the center and I think white has a minuscule minuscule Advantage after D4 so that's one candidate move the other candidate move is to play Knight D2 and to follow through on our plan with F4 um presumably presumably after Knight D2 black intends to play Knight G6 then we would push F4 black would maybe trade on F4 and does anybody see what potentially nasty move uh black could face us with in in that position not actually not that dangerous but it's a move to be aware of in that situation it's the smooth Knight G6 to H4 and the H4 square is a little bit nasty because it targets our Bishop on G2 and we certainly don't want to give our Bishop away because then our King is left without protection so we would have to drop our Bishop back to H1 in that position and things look a little bit flimsy on the king side in that situation so it's potentially rewarding because if we can push that forward we can get the attack going on the king side you can actually Crush black uh in those situations but it does come with a certain degree of risk because yes we do we do weaken our Kings significantly by pushing F4 but let me take 30 seconds to think about this in silence we're deciding between D4 and Knight D2 here I think I know what people want me to play yeah I think okay Knight H4 also was proposed by but Knight H4 yeah Knight H4 is possible but then black plays Knight G6 then we could maybe play Knight F5 so that's also kind of an interesting way to treat this position we could also play Knight G1 we could absolutely play Knight G1 here uh no why not because the benefit of Knight G1 over Knight D2 is that it leaves the diagonal open for the bishop the drawback of Knight G1 is that it's a little bit more passive and it undevelops the Knight maybe after Knight she won black could play a move like D5 and Counter-Strike in the center it's a hard decision to make a 97 is not a move that I'm familiar with so I'm uh I myself am a little bit confused"
+  },
+  {
+   "ply": 19,
+   "t": 590,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "r1bq1rk1/1pp1npp1/3p1n1p/p1b1p3/4P3/2NP2PP/PPPN1PBK/R1BQ1R2 b - - 3 10",
+   "said": "undevelops the Knight maybe after Knight she won black could play a move like D5 and Counter-Strike in the center it's a hard decision to make a 97 is not a move that I'm familiar with so I'm uh I myself am a little bit confused but let's try it let's try Knight D2 let's let's uh play according to the textbook and let's see if Mr gleck knew what he was talking about and if I lose I can blame it on gleck like he he proposed this plan of Knight D2 F4 and he didn't know what he was talking about um after the game we'll explore the"
+  },
+  {
+   "ply": 18,
+   "t": 606,
+   "line": [],
+   "fen": "r1bq1rk1/1pp1npp1/3p1n1p/p1b1p3/4P3/2NP1NPP/PPP2PBK/R1BQ1R2 w - - 2 10",
+   "said": "textbook and let's see if Mr gleck knew what he was talking about and if I lose I can blame it on gleck like he he proposed this plan of Knight D2 F4 and he didn't know what he was talking about um after the game we'll explore the other options um we'll explore there was a reason I didn't play D4 the reason for those who are curious what what swayed my decision not to play D4 it was this line e takes D4 Knight takes D4 and then see if you can find an active way for black to fight for the center what move in that position might potentially be nasty because it kind of liquidates the position so after after Deport e takes D4 Knight takes D4 what might have dissuated me from that"
+  },
+  {
+   "ply": 20,
+   "t": 633,
+   "line": [
+    "Nd2",
+    "Ng6"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/3p1nnp/p1b1p3/4P3/2NP2PP/PPPN1PBK/R1BQ1R2 w - - 4 11",
+   "said": "fight for the center what move in that position might potentially be nasty because it kind of liquidates the position so after after Deport e takes D4 Knight takes D4 what might have dissuated me from that yeah D5 D5 in that position I'll show it after the game okay so let's just close"
+  },
+  {
+   "ply": 21,
+   "t": 637,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/3p1nnp/p1b1p3/4PP2/2NP2PP/PPPN2BK/R1BQ1R2 b - - 0 11",
+   "said": "position so after after Deport e takes D4 Knight takes D4 what might have dissuated me from that yeah D5 D5 in that position I'll show it after the game okay so let's just close our eyes and push F4 we've made all of the necessary arrangements one important tactical Insight after ef4 gf4 and we could pre-move gf4 but no need to do that after ef4 gf4 perhaps some of you notice that there is this move Knight G4 check and after H takes G4 Queen H4 looks like Checkmate but it's not and that is the power of the fiancado bishop it could always block a check on H3 okay and that's actually crucially crucially important uh because it makes the whole line work okay so let me say that again e takes F4 G takes F4 Knight F6 to G4 check H takes G4 Queen d8 to H4 check and that would be mate were it not for Bishop H3 and Bishop takes G4 in that position remember that our Queen on D1 also guards the G4 Pawn so the tactics don't really work out for black now a useful question to ask in such unfamiliar positions is what would my next move be that helps you develop an insight for what direction you kind of want to steer the game in and a lot depends on whether black lazy takes F4 that really changes the tenor of the position but if black doesn't play e takes F4 then we're very likely going to play one of two moves either we're gonna reposition the Knight back to F3 in order to open up the bishop and increase our presence on the king side but more likely we're gonna push F5 and if you're a king's Indian player then this structure with D3 E4 and F5 uh should be quite familiar and you might be wondering well isn't Kings Indian a black opening and it is but the pawn structure is much the same as is the fiancaro bishop and after F5 the"
+  },
+  {
+   "ply": 22,
+   "t": 736.5,
+   "line": [
+    "exf4"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/3p1nnp/p1b5/4Pp2/2NP2PP/PPPN2BK/R1BQ1R2 w - - 0 12",
+   "said": "should be quite familiar and you might be wondering well isn't Kings Indian a black opening and it is but the pawn structure is much the same as is the fiancaro bishop and after F5 the position largely plays itself but that"
+  },
+  {
+   "ply": 23,
+   "t": 737.5,
+   "line": [
+    "gxf4"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/3p1nnp/p1b5/4PP2/2NP3P/PPPN2BK/R1BQ1R2 b - - 0 12",
+   "said": "should be quite familiar and you might be wondering well isn't Kings Indian a black opening and it is but the pawn structure is much the same as is the fiancaro bishop and after F5 the position largely plays itself but that will remain behind the scenes okay there"
+  },
+  {
+   "ply": 24,
+   "t": 739.5,
+   "line": [
+    "Nh4"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/3p1n1p/p1b5/4PP1n/2NP3P/PPPN2BK/R1BQ1R2 w - - 1 13",
+   "said": "be wondering well isn't Kings Indian a black opening and it is but the pawn structure is much the same as is the fiancaro bishop and after F5 the position largely plays itself but that will remain behind the scenes okay there we go Knight H4 now why can't we give up this bishop why is it such a bad idea well it weakens the king no what do I mean by that what it really weakens is the H3 Pawn right if we allow black to take on G2 then in the long run we're going to pay the price for that for sure and black could even then play the move Queen to D7 and set up this relatively nasty battery against the bishop but I just realized that after Bishop H1 black could still play Queen D7 but in that position we can push F5 in that position we can push F5 and we can slice off this battery I missed Queen D7 I miss queen D7 hopefully we"
+  },
+  {
+   "ply": 25,
+   "t": 774.5,
+   "line": [
+    "Bh1"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/3p1n1p/p1b5/4PP1n/2NP3P/PPPN3K/R1BQ1R1B b - - 2 13",
+   "said": "that after Bishop H1 black could still play Queen D7 but in that position we can push F5 in that position we can push F5 and we can slice off this battery I missed Queen D7 I miss queen D7 hopefully we don't get mated here the margins are thin in this line as you can see as you can see them okay wow our"
+  },
+  {
+   "ply": 26,
+   "t": 782,
+   "line": [
+    "Qd7"
+   ],
+   "fen": "r1b2rk1/1ppq1pp1/3p1n1p/p1b5/4PP1n/2NP3P/PPPN3K/R1BQ1R1B w - - 3 14",
+   "said": "can slice off this battery I missed Queen D7 I miss queen D7 hopefully we don't get mated here the margins are thin in this line as you can see as you can see them okay wow our opponent is really uh testing us but F5"
+  },
+  {
+   "ply": 27,
+   "t": 784,
+   "line": [
+    "f5"
+   ],
+   "fen": "r1b2rk1/1ppq1pp1/3p1n1p/p1b2P2/4P2n/2NP3P/PPPN3K/R1BQ1R1B b - - 0 14",
+   "said": "Queen D7 I miss queen D7 hopefully we don't get mated here the margins are thin in this line as you can see as you can see them okay wow our opponent is really uh testing us but F5 there we go and now the knight's in trouble and now the Knight on H4 is in trouble by the way F5 was an only move if not"
+  },
+  {
+   "ply": 26,
+   "t": 793,
+   "line": [],
+   "fen": "r1b2rk1/1ppq1pp1/3p1n1p/p1b5/4PP1n/2NP3P/PPPN3K/R1BQ1R1B w - - 3 14",
+   "said": "as you can see them okay wow our opponent is really uh testing us but F5 there we go and now the knight's in trouble and now the Knight on H4 is in trouble by the way F5 was an only move if not for F5 we can resign because this is a mate in one threat this is a maiden one threat why do I say that the Knight on"
+  },
+  {
+   "ply": 27,
+   "t": 801,
+   "line": [
+    "f5"
+   ],
+   "fen": "r1b2rk1/1ppq1pp1/3p1n1p/p1b2P2/4P2n/2NP3P/PPPN3K/R1BQ1R1B b - - 0 14",
+   "said": "and now the Knight on H4 is in trouble by the way F5 was an only move if not for F5 we can resign because this is a mate in one threat this is a maiden one threat why do I say that the Knight on that H4 is in trouble because well we control G6 but it's interesting black could even play Knight G6 here in fact I would seriously consider that move if I were Black Knight G6 why can't we take the night well then we reopen the battery and queen takes H3 is Checkmate because the king doesn't have the G1 Square it's controlled by the black Bishop but still if by any chance black moves the queen away from D7 then the Knight on H4 will be in more trouble which is not to say that our next move is guaranteed to be Queen E1 our next move might very well be Knight F3 opening up the bishop and lending a little bit of support to the king I don't see a great move here for black maybe there is some tactical something tactical but we'll see I I'm a little bit scared I'm not gonna lie I'm definitely a little scared here a little dose of fear is selfie in chess this is why Amman plays Queenie one first yeah we could have played Queenie"
+  },
+  {
+   "ply": 20,
+   "t": 854.5,
+   "line": [],
+   "fen": "r1bq1rk1/1pp2pp1/3p1nnp/p1b1p3/4P3/2NP2PP/PPPN1PBK/R1BQ1R2 w - - 4 11",
+   "said": "we'll see I I'm a little bit scared I'm not gonna lie I'm definitely a little scared here a little dose of fear is selfie in chess this is why Amman plays Queenie one first yeah we could have played Queenie one maybe maybe Queen E1 was more was more prudent yeah probably it was to play Queen E1 here okay G5 but I don't I don't think black has anything and remember with the black system it's an opening that may appear passive because you're doing a lot of things on the last couple of ranks so what you have to understand is that if you I think the right word is unfurl if you unfurl your pieces the attack on the king sides comes very very quickly and I think that's very likely to happen here so G5 very understandable move I think our opponent is trying to reinforce the Knight on H4 and this changes our approach now it it doesn't make any any more sense to attack the Knight on H4 because that Knight is essentially unattackable instead we should trade it off why should we trade it up because this Knight is in in our grill right it's preventing us from operating on the king's side um yeah made in one that's kind of funny and you already should be primed to consider this move and this move is Knight to F3 of course we are trying to force the trade of knights here uh we're threatening Knight takes H4 and then Bishop takes H6 Etc and if black acquiesces to the trade then I think we're gonna take back with the queen in order to get our Queen into an attacking position on the king side and then these pawns on H6 and G5 will be very eminently targetable by our pieces but also by the H3 Pawn which can move up to H4 and be used as a battering ram to try to shatter Black's kingside pawns notice that Black's position is a lot more passive than ours because we have this epic Pawn chain where that pawn and F5 is almost like a plug that's preventing black from effectively carrying his forces over to the king side so once we start our King side attack it might end up being decisive in the span of a couple moves I like that this is over my head's a standard average but I want you to tell me exactly what is over your head like what specifically have I said that hasn't been clear and if so you can ask me to repeat it or explain it more clearly in the chat um and I'd be happy to okay Knight G6 which I mentioned right this is this is a possible move and it's a very ingenious move but it also might be a blunder we need to calculate now F take G6 Queen takes H3 as Checkmate but the reason it's Checkmate is because the G1 square is controlled by the black Bishop so once I make that observation you should immediately think ah but what if we start with D4 and we chase this bishop away and then once the bishop moves away then what if we take the plunge and take the Knight on G6 well black plays Queen takes H3 check and we play King G1 and it's still very very scary but maybe we get away with it I need to calculate that myself for a bit I'm inclined not to go for it but because we're trying to play principal chess I owe it to the chats to try to calculate this out I don't like it though my intuition tells me not to go for it by the way because we have other maybe we even played D4 and then make a different move but let's think Knight takes G5 I don't like that we could just play Bishop G2 for example and secure this Pawn hmm could play D4 and Bishop G2 could play Bishop G2 and D4 I'm spoiled for Choice here I like okay let's start with D4 let's start with D4 okay why am I starting with D4 because this is a relatively non-committal move and I say relatively that's an important asterisk what is the drawback of the move d4 who can tell me what what is the only drawback of this move I'll explain after the game because there's a lot of variations there that scare me yeah we weaken the E4 Pawn now we weaken the E4 Pawn but the E4 Pawn is still nicely protected by the Knight and it's an easy pawn to defend when you when you're assessing whether it's worth creating a weakness one of the questions you should be asking is well how easy is it to defend that weakness with pieces and it's quite easy right if necessary we could bring our Queen up to D3 we can move our Rook to E1 it's not like this Pawn on e4 is about to collapse and our whole position collapses with it no okay now I would like to reinforce the threat of f takes G6 to reinforce that threat we need to protect the H3 Pawn to protect the H3 Pawn we need to move our Bishop up to G2 that would reinforce the threat and force this Knight to move by forcing this Knight to move we make it more possible for us to play H4 or even sacrifice a knight on G5 which you should already be thinking about because that's a very thematic and typical type of sacrifice we could even consider in a classical game I would be considering Knight takes G5 here although it's a little bit speculative but it might actually be the best move so let me let me devote a little bit a little bit of time to that Knight takes G5 HD Bishop G5 Knight H7 Bishop H6 actually that looks like it works the more I look at it the more I realize that just looks completely overwhelming and then we've got Knight D5 on top of that no it's I think it just works I think this should be the best move yeah I'm I'm actually very confident that we can get away with this very confident that we can get away with this and there's many components to it too much to delve into with six minutes on the clock but one of the big things to realize is that this is not such a big sacrifice and I wish that this was this were explained more often to beginner players and newer players which is that not all sacrifices are created equal not all sacrifices are the same level of commitment sacrificing a rook is very different from sacrificing a minor piece for two pawns which is what we're doing here sacking a minor piece for two pawns is barely even a sacrifice which means that the threshold for proving to yourself that this is worth going for is much more much less strict if you can con if you can evaluate the sacrifice and you come to the conclusion that you have a very strong attack and likely that attack will lead to Victory you can go ahead and Sack which is exactly what I did here I think this is GG but I didn't calculate as heavily as I would if I were sacrificing a rook because there the margins are a lot thinner if the sacrifice fails you're likely to lose the game pretty quickly okay I'm belaboring an obvious point but just keep that in mind this is GG in just a couple of moves I think so all that I calculated was H takes G5 Bishop takes G5 Knight F6 drops back to H7 and the bishop moves into H6 that's where I stopped my calculation and evaluated the position and that position to me looks completely winning almost resignable in a classical game no he's not going to Res at this level I don't think anybody's gonna resign nor should he nor do I want him to that would Rob us of the opportunity to demonstrate attacking principles which I think can be very instructive okay so Bishop takes G5 uh Knight H7 yes very nice okay so first things first we need to move our Bishop okay well technically we also have this cute move we have this cute move Knight D5 I wonder if anybody saw this Knight D5 is a is a cute move because Knight takes G5 Knight F6 check but your emphasis in such positions should not be on writing a tactics book or trying to be fancy it should be on making very simple functional moves Your Instinct should be to play very simple chess and it's much simpler and much it lends much more clarity to the position to move the bishop away but the other reason is that we want to keep the G file open we want to move the bishop because we want to be able to put a rook on G1 or a queen on G4 and to pin this Knight okay um all right just a moment okay rookie so we're spoiled for Choice here I think in this position white has a couple of ways to win what is the bottom line the bottom line is that we want to be able to threaten F takes G6 and we want to threaten that in order to move Force this Knight to move and we want to force this Knight to move so that we could deliver a devastating check on G1 so we want to defend the H3 Pawn how should we defend it well Bishop G2 is how we wanted to do it earlier the drawback of Bishop G2 is that it covers up the G file and we want to be able to go Rook G1 Queen H5 is interesting but might run into Knight F6 right we don't necessarily want to lead with our Queen although Queen H5 Knight F6 Queen G5 probably wins the game yeah Queen H5 Knight F6 Queen G5 and if the Knight moves back to H7 there the queen can drop back to G3 or even to G2 for instance I just didn't want to allow Bishop takes D4 I didn't want to allow Bishop takes D4 letting the bishop enter the defense Queen G4 also allows Knight F6 also allows Bishop takes D4 you know what move I think is on no one's radar but it's actually a very accurate move is the move Queen up to D3 and I know that looks doesn't look like the sexiest attacking move but what it does is it guards the H Pawn laterally and it guards the D4 Pawn so it keeps Black's Bishop away from the defense okay so Queen D3 to me is my first instinct here actually Queen D3 probably not the best move though I think Queen H5 might be stronger but Queen H5 maybe is a little bit too concrete for my tastes let's go for Queen D3 yeah it's a nice move because the queen on D3 is so well placed it's out of the way of the other pieces it's guarding H3 so we're threatening to take the Knight and restore material equality and here's another positive byproduct of this move what I'm noticing is that the queen is aiming diagonally at the G6 Pawn so after we take on G6 who can tell me how we can involve the queen directly into the attack without moving it without moving it yeah E5 exactly exactly E5 E5 is exactly right and then the queen diagonally attacks uh the G6 the G6 Pawn Queens don't move like that yeah Queen E5 is not exactly how a queen moves our opponent is thinking but the position is essentially hopeless I mean we have to demonstrate some accuracy but once we re-establish material equality I feel like the attack will then essentially play itself of gfg5 of course Rook G1 is threatened as well the attack is completely overwhelming because look at Black's pieces on the queen side Black's pieces are entirely out of the game and Black's Queen is entirely out of the game black just doesn't have enough beef uh black just didn't have enough beef on the king side to even come close to defending what we're gonna throw at him so one good test of your understanding attacking understanding is do you look at this position and are you on the same page with me that this is completely winning like do do you conceptualize without calculating a single variation why White's position is completely winning that's a good question ask yourself to test your intuition okay Knight f8 okay what now so of course we can take the Knight rather can anybody provide an even stronger alternative borrowing an idea from a little bit earlier is there a move that we could throw in that doesn't cost us anything yeah Knight D5 looks fantastic Knight T5 looks fantastic we can play it without calculating because we're threatening the fork on F6 and then on the next move we could take on G6 now there are two ways that I could see us winning this game and converting this Advantage I've talked about this at length before which is that when people what are the limitations that people have when they're attacking one of the biggest ones is that when people attack they get into what I call Checkmate mode you know and you in your mind the the success condition of the attack is only Checkmate in your mind unless you find a Checkmate the attack will have failed that is very much not the case and you need to be comfortable in many cases converting an attack into something like a decisive material advantage just basically taking a bunch of pieces that could very well be the best way to convert your attack into a win winning material using your opponent's king in order to as a vehicle to winning a bunch of material that could be a much easier way at times of winning the game than searching for some Checkmate okay so we should talk less and move more F takes G6 obviously we recapture the Knight and the reason I'm saying that is everybody should be seeing that Knight F6 is now possibility of a fork and if if necessary we have in our pocket the option of winning the exchange on E8 and then the attack of course goes nowhere continues so we've got that simple win in our pocket but I'm going to try to be a lot more precise than that I'm going to be try to be a lot more precise than that okay black is cooked black is completely cooked now when I say this I don't mean that you shouldn't look for checkmate right we should look for checkmate and I think a Checkmate exists give me a second I have to calculate there's one variation to sort sort out here okay just a moment aha I think I found something really pretty well really pretty I think it's an exaggeration but quite pretty let's start with Knight F6 check now how do I can visual how do I conceptualize this position well we have Knight takes theater in our pocket but what I'm seeing is that the black king is out of squares any situation where a king is out of squares by definition you should be searching for mating patterns now what is missing what is missing on the king side that would enable a mating pattern well it's the presence of the queen well what's the ideal Square for the queen it's clearly H5 but here's the interesting thing Queen F3 I think is not the most accurate move although Queen F3 is good but Queen F3 allows Bishop takes D4 and if we play Queen H5 in that position black can play Bishop takes F6 and suddenly you need to work a little bit more on the attack and we do the same thing but prevent Bishop takes D4 and this has been the theme of this attack uh throughout which is to keep this bishop out of the game out of the defense because this bishop is essentially the only piece that has the capacity to disrupt our attack with Bishop takes D4 so we play Queen D1 you play Queen D1 and queen H5 to my eyes is basically Unstoppable there was one variation to calculate which is uh the move Rook to E6 of course black can Target the Knight with the Rook now Rook E6 we still play Queen H5 and who can tell me who can tell me in this position after Queen H5 Rook takes F6 what is the simplest move after Rook takes F6 I mean there are multiple ways to win Bishop nope not Bishop f8 that doesn't do anything that would squander the attack that's not mate if Rook takes F6 the G8 square is accessible for the black king be careful own blunder Bishop G5 Bishop back to G5 again winning material King G8 Bishop takes F6 and it's checkmate or we win all of Black's pieces or or we could even we could even play Rook takes F6 that's probably the most clinical move as Rook takes F6 but I like Bishop G5 because it's so prosaic and prosaic is good prosaic is always good Bishop takes F6 most attacks are conducted precisely in this manner with simple you know wholesome moves okay now here it's a purely academic Rook G1 is I think the simplest move black wants to play Queen takes H3 and give up a rook so we'll be up a rook in the end game there it's completely winning right Rook G1 by the way threatens Queen h8 checkmate if we wanted to play clinically here if we wanted to go for checkmate rather than an end game up a rook the move I would play in a classical game is Rook F5 why in order to slice off uh the Queen's access to H3 and then move the other Rook over to G1 or after Rook F5 to play the move Queen H6 unfortunately after Rook F5 there is King f8 but I see a beautiful checkmate and I can't resist I'm gonna try to go for it okay let's go Rook F5 Bang there is a beautiful mate here if black follows the line that I think he's gonna follow of course what I would recommend to anybody is the move Rook q1 because Rook G1 guarantees Victory that's the beauty of that move Rook G1 guarantees that you're gonna win the game Rook up five is the move that you know a grand master would play because Victory is already guaranteed we're up in exchange we're not risking anything with a move like Rook F5 so Queen H6 of course Queen H6 Queen takes H3 check that's what I'm saying Queen H6 Queen takes H3 and we still have to win that end game up a full Rook likely our opponent would have resigned after Queen H6 but since the the theme of this game is attack I want to finish it off with something pretty okay King f8 Rook G1 why Rook G1 because we're trying to bring all of our pieces into the attack but this also sets up a very pretty idea I'm hoping for King E8 I'm hoping for King E8 that will allow me to demonstrate the uh the cool idea and you should start thinking about what it might be after King E8 hopefully everybody finds the move it's not hard yeah yeah Queen h8 check classic deflection right you're deflecting the Knight and then Rook comes into G8 with Checkmate notice that in that situation the queen on D7 and I love mating patterns where the enemy pieces are blocking the Escape path for the king I think those have a particular kind of Elegance the queen on D7 blocks the Escape for the for the king Jack it's double checking because you got to be sure it's Checkmate right Knight f8 and what's the winning idea what's the winning idea there are several of them but there is one that's prettier than the others so Rook G8 is mating Rook G8 is mating but if you want to be even prettier you can play the move Rook H5 what are we setting up what are we setting up here we're setting up an Unstoppable threat of Queen takes f8 and Rook h8 how do I know to look for this well anytime there's a bishop on F6 that gives rise to all of these combinations that involve like a rook on HD and a bishop on F6 this is just simple acquaintance with basic mating patterns that's what helps you find moves like this it's slow but black can't do anything he's out of pieces now again I'm not pretending that this is some sort of beautiful like this is necessary it's all bs anyway because we're up a million pieces to begin with none of this was truly truly necessary shotgun D5 wins the queen and ends the game okay time to resign we can I was gonna say we can even play Queen E8 here and then e takes D5 and queen takes D7 so it didn't end in Checkmate it ended in US winning all of our opponents pieces nice game I'm confused can you explain again from starts finish that is exactly what we do in the speed run so again at a higher level my"
+  },
+  {
+   "ply": 7,
+   "t": 2020,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 0 4",
+   "said": "it ended in US winning all of our opponents pieces nice game I'm confused can you explain again from starts finish that is exactly what we do in the speed run so again at a higher level my reasoning is harder to understand for newer players but now we go back with a fine tooth comb and I will try to explain things in a more basic level okay so the good thing about the Glick system is that you can play it against the pet shop right you can play Knight C3 and essentially most people are gonna go Knight C6 um that's that's the good thing about the gleck if you play it it's it's a weapon against uh both the pet shop as well as the main Knight C6 let me pull up uh chat because I have my second monitors chess based on it now let me just copy this game into chess space so I can run the engine when necessary how Theory heavy is it not very Theory heavy it's pretty conceptual there is there is some Theory and I'm going to introduce you guys to some of my analysis in the Glock system um is this equal with best play for black obviously I'm not pretending that this gives white an advantage black has several ways to equalize but it gives"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 2,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 40,
+     "continuation": "Nf3",
+     "said": "good luck and here we go um let me know if my audio is sufficient I hope I'm not peaking welcome YouTubers to another speedrun game and we are off now never mind I was going to say as promised uh I'm going to start playing my my actual repertoire uh which includes the real Lopez that is my main opening what I want to play here since we're facing Knight F6 is not the Belgrade Gambit not the four night Scotch but an opening that I have been playing and analyzing pretty extensively I would say for about two years um this is in my opinion an incredibly underrated weapon and I say weapon uh as a very particular choice of words I think it is a weapon I think it's a dangerous system um and it's a system that flies under the radar and a lot of black players because they don't study it they don't really know how to position their pieces uh and so you are seriously contending for an advantage with this move it's called the gleck system it's named after Igor gleck uh who is he's still alive he's a Russian Grandmaster I think he's in his 60s now and at his Peak he was in"
+    },
+    {
+     "san": "Nc3",
+     "t": 150.5,
+     "continuation": "Nc3 Nc6 Nf3 Nf6",
+     "said": "depend on where black chooses to position the d-pawn there are systems where black plays D6 usually after developing the bishop outside the pawn chain which I think is what our opponent is aiming to do most books recommend the more principled counter Central strike D5 and that leads to a completely different type of position of course some ideas are shared uh but there's a big distinction between the open Center and closed Center position so our opponent chooses uh the line which I think is the most popular if you actually check the database most people who don't really know what to do with black they develop in precisely this manner now the first step to playing the guac system is to complete our King side development and play the move D3 this is sort of stage one uh this is rather self-explanatory and you can start with a variety of different move orders I like to start with D3 because it's a little bit more flexible you're kind of delaying castling okay H6 is a move that you often see played by black we are not really intending to play Bishop G5 in any case but H6 is a pretty healthy move that uh that people kind of default to um okay so now we Castle and black castles okay so now we enter stage two we have essentially completed"
+    }
+   ]
+  }
+ ]
+}

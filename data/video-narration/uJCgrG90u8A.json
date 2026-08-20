@@ -1,0 +1,563 @@
+{
+ "videoId": "uJCgrG90u8A",
+ "title": "Beginner To Master | Viewer Games | Chess Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 25,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] now let us play a sicilian oh my gosh momo with another five gifted"
+  },
+  {
+   "ply": 3,
+   "t": 26.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "[Music] now let us play a sicilian oh my gosh momo with another five gifted holy smokes man now um those of you who have been yeah we are we'll i'll play you two demon you're the freaking man uh those of you have been following my five minute speed run know that which sicilian is what i essentially played almost exclusively i will not play the sicilian i will play the night or this time now i recommend for people in like the 14 1500 range the accelerated dragon with knight c6"
+  },
+  {
+   "ply": 4,
+   "t": 57,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "played almost exclusively i will not play the sicilian i will play the night or this time now i recommend for people in like the 14 1500 range the accelerated dragon with knight c6 here assuming that alex plays d4 which is the open sicilian i'm going to play the night or i actually played the night or yeah he"
+  },
+  {
+   "ply": 5,
+   "t": 63,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "like the 14 1500 range the accelerated dragon with knight c6 here assuming that alex plays d4 which is the open sicilian i'm going to play the night or i actually played the night or yeah he does i played the night off as my main"
+  },
+  {
+   "ply": 6,
+   "t": 64.5,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "like the 14 1500 range the accelerated dragon with knight c6 here assuming that alex plays d4 which is the open sicilian i'm going to play the night or i actually played the night or yeah he does i played the night off as my main opening from the time i was about"
+  },
+  {
+   "ply": 7,
+   "t": 66.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "dragon with knight c6 here assuming that alex plays d4 which is the open sicilian i'm going to play the night or i actually played the night or yeah he does i played the night off as my main opening from the time i was about 1600 to the time i was 2500. knight f6 and who can tell me what move"
+  },
+  {
+   "ply": 8,
+   "t": 71.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "said": "is the open sicilian i'm going to play the night or i actually played the night or yeah he does i played the night off as my main opening from the time i was about 1600 to the time i was 2500. knight f6 and who can tell me what move"
+  },
+  {
+   "ply": 9,
+   "t": 74,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "i actually played the night or yeah he does i played the night off as my main opening from the time i was about 1600 to the time i was 2500. knight f6 and who can tell me what move signals the night or if this is not yet the night off because here there are uh four actually one could say four main three main sicilian lines and then two sidelines a6 is the night or i will explain everything after the game just because it will take me a while um just because it will take me a while to fully flesh out all of the details um but i will say uh in kant to put things in context one sec keyboard is that to put things in context g6 is the dragon knight c6 is the rouser or the classical sicilian e6 is the cheveningen and e5 not a great move is called the cut now or thank you camelizer so we play the night earth"
+  },
+  {
+   "ply": 10,
+   "t": 116.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "g6 is the dragon knight c6 is the rouser or the classical sicilian e6 is the cheveningen and e5 not a great move is called the cut now or thank you camelizer so we play the night earth we play the knight orb now essentially the simple way to think about a6 is that it covers the b5 square so no bishop b5 check and not only does it cover the b5 square it also potentially prepares the move b7 and b5 grabbing space on the queen side"
+  },
+  {
+   "ply": 11,
+   "t": 133,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N2P2/PPP3PP/R1BQKB1R b KQkq - 0 6",
+   "said": "we play the knight orb now essentially the simple way to think about a6 is that it covers the b5 square so no bishop b5 check and not only does it cover the b5 square it also potentially prepares the move b7 and b5 grabbing space on the queen side that is actually one of the main ideas across most sitalians f3 is called the english attack and here is where i'm going to play a move that may confuse a lot of people so prepare to be confused for the essentially the entirety of this game but i will explain everything does anybody know what the main move is here for black in fact black has two main moves 100 and one bit so we can play the move e6 that leads to the chevening against structure but the move that i grew up playing is"
+  },
+  {
+   "ply": 12,
+   "t": 159,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/3NP3/2N2P2/PPP3PP/R1BQKB1R w KQkq - 0 7",
+   "said": "does anybody know what the main move is here for black in fact black has two main moves 100 and one bit so we can play the move e6 that leads to the chevening against structure but the move that i grew up playing is e5 attacking the knight why is this move confusing on the surface what is this what is the drawback the obvious drawback of this move what is the sort of what what jumps out at you immediately when it weakens not only the d6 pawn but also look at the hole that it creates on d5 and those two things as we know frequently go hand in hand the pawn and then the square in front of of the pawn um both become very weak um but uh"
+  },
+  {
+   "ply": 13,
+   "t": 188,
+   "line": [
+    "Nb3"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/4P3/1NN2P2/PPP3PP/R1BQKB1R b KQkq - 1 7",
+   "said": "and those two things as we know frequently go hand in hand the pawn and then the square in front of of the pawn um both become very weak um but uh the hard thing to understand about utility is what exactly it is that you get in return for this week pawn and this week's square and it's hard for me to explain this in words that's why the sicilian is such a concrete and theoretical opening because there are so many tactical ideas there's so many subtleties and the combination of these ideas and subtleties constitute blacks one could say compensation for the weak pawn and the weak square now first of all we need to deal with the development of this bishop and we develop it to e6 in order to at"
+  },
+  {
+   "ply": 14,
+   "t": 223,
+   "line": [
+    "Be6"
+   ],
+   "fen": "rn1qkb1r/1p3ppp/p2pbn2/4p3/4P3/1NN2P2/PPP3PP/R1BQKB1R w KQkq - 2 8",
+   "said": "subtleties constitute blacks one could say compensation for the weak pawn and the weak square now first of all we need to deal with the development of this bishop and we develop it to e6 in order to at least lend some cover to the d5 square so that he cannot establish a blockade on d5 if he plays knight t5 we can take on d5 and he would have to replace that with a pawn which is not very desirable so bishop g5"
+  },
+  {
+   "ply": 15,
+   "t": 238,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rn1qkb1r/1p3ppp/p2pbn2/4p1B1/4P3/1NN2P2/PPP3PP/R2QKB1R b KQkq - 3 8",
+   "said": "he cannot establish a blockade on d5 if he plays knight t5 we can take on d5 and he would have to replace that with a pawn which is not very desirable so bishop g5 is actually not the main move bishop b3 is the main move this creates a pin how should we unpin ourselves what is like the simplest move here no need to reinvent the wheel we simply need to develop our other two pieces now h6 would be possible but actually i would argue that h6 is inaccurate why because if we play h6 right he drops his bishop back to h4 and there's a problem the problem is that when we castle this pawn on h6 is going to act as a hook which white can exploit by putting the pawn eventually on g5 so we don't actually want to"
+  },
+  {
+   "ply": 16,
+   "t": 270.5,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rn1qk2r/1p2bppp/p2pbn2/4p1B1/4P3/1NN2P2/PPP3PP/R2QKB1R w KQkq - 4 9",
+   "said": "the problem is that when we castle this pawn on h6 is going to act as a hook which white can exploit by putting the pawn eventually on g5 so we don't actually want to uh shuffle our king's side pawns we want to leave that pawn structure intact because we are going to castle short so bishop comes to e7 and as often happens when we weaken the d5 square this knight on b8 actually wants to go out to d7 in fact"
+  },
+  {
+   "ply": 17,
+   "t": 284,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "rn1qk2r/1p2bppp/p2pbn2/4p1B1/4P3/1NN2P2/PPPQ2PP/R3KB1R b KQkq - 5 9",
+   "said": "to leave that pawn structure intact because we are going to castle short so bishop comes to e7 and as often happens when we weaken the d5 square this knight on b8 actually wants to go out to d7 in fact that's what we are going to do the"
+  },
+  {
+   "ply": 18,
+   "t": 286,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r2qk2r/1p1nbppp/p2pbn2/4p1B1/4P3/1NN2P2/PPPQ2PP/R3KB1R w KQkq - 6 10",
+   "said": "because we are going to castle short so bishop comes to e7 and as often happens when we weaken the d5 square this knight on b8 actually wants to go out to d7 in fact that's what we are going to do the reason why is that the knights now are in this configuration which"
+  },
+  {
+   "ply": 19,
+   "t": 289,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "r2qk2r/1p1nbppp/p2pbn2/4p1B1/4P3/1NN2P2/PPPQ2PP/2KR1B1R b kq - 7 10",
+   "said": "bishop comes to e7 and as often happens when we weaken the d5 square this knight on b8 actually wants to go out to d7 in fact that's what we are going to do the reason why is that the knights now are in this configuration which you guys should be familiar with they"
+  },
+  {
+   "ply": 20,
+   "t": 292,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/1p1nbppp/p2pbn2/4p1B1/4P3/1NN2P2/PPPQ2PP/2KR1B1R w - - 8 11",
+   "said": "d5 square this knight on b8 actually wants to go out to d7 in fact that's what we are going to do the reason why is that the knights now are in this configuration which you guys should be familiar with they defend each other and now we officially have both castled on opposite sides let the nador fun begin now it is actually easy now to see why bishop g5 is inaccurate what is white's main attacking weapon a main attacking plan in the english attack like how does white usually attack here and again no need to reinvent the wheel it's pretty straightforward yeah"
+  },
+  {
+   "ply": 21,
+   "t": 314,
+   "line": [
+    "h4"
+   ],
+   "fen": "r2q1rk1/1p1nbppp/p2pbn2/4p1B1/4P2P/1NN2P2/PPPQ2P1/2KR1B1R b - - 0 11",
+   "said": "is inaccurate what is white's main attacking weapon a main attacking plan in the english attack like how does white usually attack here and again no need to reinvent the wheel it's pretty straightforward yeah pawn storm so h4 is one move but the other is g4 g5 and what's the problem here thank you uncle robs the problem is that the bishop on g5 is simply in the way of the pawn if the bishop were on e3 white could do this in one fell swoop here he might have to move the bishop away from g5 and every tempo is crucial absolutely crucial in positions like these now alex has very sensibly started with the move h4 we have to start attacking on the queen side and here is where the move a6 comes in handy what should black now do yes rav b5 is absolutely right we play b5"
+  },
+  {
+   "ply": 22,
+   "t": 347.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "r2q1rk1/3nbppp/p2pbn2/1p2p1B1/4P2P/1NN2P2/PPPQ2P1/2KR1B1R w - - 0 12",
+   "said": "the move h4 we have to start attacking on the queen side and here is where the move a6 comes in handy what should black now do yes rav b5 is absolutely right we play b5 and um we play b5 and we both are attacking on either side of the board now black wants to play b4 a5 a4 the actual way of attacking in the night or thank you andy starr appreciate the tier one the actual way of attacking in the night or is not particularly hard to understand we are using our pawns to essentially get rid of pieces that"
+  },
+  {
+   "ply": 23,
+   "t": 376.5,
+   "line": [
+    "g4"
+   ],
+   "fen": "r2q1rk1/3nbppp/p2pbn2/1p2p1B1/4P1PP/1NN2P2/PPPQ4/2KR1B1R b - - 0 12",
+   "said": "night or thank you andy starr appreciate the tier one the actual way of attacking in the night or is not particularly hard to understand we are using our pawns to essentially get rid of pieces that surround each side's king white uses his pawns to break apart my own structure and make holes but as we are going to see alex is going to pay a very steep price for this bishop being on g5 here you can see how much it blocks the pawn from coming to g5 and this tempo is going to be absolutely crucial we go b4"
+  },
+  {
+   "ply": 24,
+   "t": 396,
+   "line": [
+    "b4"
+   ],
+   "fen": "r2q1rk1/3nbppp/p2pbn2/4p1B1/1p2P1PP/1NN2P2/PPPQ4/2KR1B1R w - - 0 13",
+   "said": "but as we are going to see alex is going to pay a very steep price for this bishop being on g5 here you can see how much it blocks the pawn from coming to g5 and this tempo is going to be absolutely crucial we go b4 i hope this is making sense by the way because i've never played this opening there's so much to talk about i'm not necessarily being"
+  },
+  {
+   "ply": 25,
+   "t": 403.5,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r2q1rk1/3nbppp/p2pbn2/3Np1B1/1p2P1PP/1N3P2/PPPQ4/2KR1B1R b - - 1 13",
+   "said": "tempo is going to be absolutely crucial we go b4 i hope this is making sense by the way because i've never played this opening there's so much to talk about i'm not necessarily being overly coherent but i hope that i'm at least making remote sense here in terms of why i'm doing what i'm doing okay so knight d5 now we don't want to let this knight marinate on d5 uh because it's it's an annoying piece so we want to take it with what should we take that night should we take it with our knight or should we take it with our bishop again the reasoning is very simple we take it no we don't take knight takes now we take with the bishop because if we take with the knight then he takes back and look at this bishop on e6 very carefully that bishop is going to be trapped and then the bishop on g5 is not lost because it's defended by the h-bond so we take with the bishop"
+  },
+  {
+   "ply": 26,
+   "t": 443,
+   "line": [
+    "Bxd5"
+   ],
+   "fen": "r2q1rk1/3nbppp/p2p1n2/3bp1B1/1p2P1PP/1N3P2/PPPQ4/2KR1B1R w - - 0 14",
+   "said": "with the knight then he takes back and look at this bishop on e6 very carefully that bishop is going to be trapped and then the bishop on g5 is not lost because it's defended by the h-bond so we take with the bishop and then after he takes back that pawn on d5 is almost like a dental filling it plays into our hands because"
+  },
+  {
+   "ply": 27,
+   "t": 451,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r2q1rk1/3nbppp/p2p1n2/3Pp1B1/1p4PP/1N3P2/PPPQ4/2KR1B1R b - - 0 14",
+   "said": "is not lost because it's defended by the h-bond so we take with the bishop and then after he takes back that pawn on d5 is almost like a dental filling it plays into our hands because it closes up the center it closes up the weakness and by closing up the weakness it also closes up the other weakness the pawn on d6 it's still weak from a sort of general standpoint but it's now inaccessible because the d file was the"
+  },
+  {
+   "ply": 28,
+   "t": 465.5,
+   "line": [
+    "a5"
+   ],
+   "fen": "r2q1rk1/3nbppp/3p1n2/p2Pp1B1/1p4PP/1N3P2/PPPQ4/2KR1B1R w - - 0 15",
+   "said": "it closes up the weakness and by closing up the weakness it also closes up the other weakness the pawn on d6 it's still weak from a sort of general standpoint but it's now inaccessible because the d file was the main avenue through which white exerted pressure on that pawn now we continue our attack with a5 followed by a4 this is why i play the night or guys as you can as you know it fits my style like a glove uh because it offers very sharp positions in virtually every game virtually every line"
+  },
+  {
+   "ply": 29,
+   "t": 484,
+   "line": [
+    "Kb1"
+   ],
+   "fen": "r2q1rk1/3nbppp/3p1n2/p2Pp1B1/1p4PP/1N3P2/PPPQ4/1K1R1B1R b - - 1 15",
+   "said": "followed by a4 this is why i play the night or guys as you can as you know it fits my style like a glove uh because it offers very sharp positions in virtually every game virtually every line"
+  },
+  {
+   "ply": 30,
+   "t": 485,
+   "line": [
+    "a4"
+   ],
+   "fen": "r2q1rk1/3nbppp/3p1n2/3Pp1B1/pp4PP/1N3P2/PPPQ4/1K1R1B1R w - - 0 16",
+   "said": "followed by a4 this is why i play the night or guys as you can as you know it fits my style like a glove uh because it offers very sharp positions in virtually every game virtually every line a4 now king b1 is a good move alex moves his king aside tries to bring it to a safer square"
+  },
+  {
+   "ply": 31,
+   "t": 489.5,
+   "line": [
+    "Nc1"
+   ],
+   "fen": "r2q1rk1/3nbppp/3p1n2/3Pp1B1/pp4PP/5P2/PPPQ4/1KNR1B1R b - - 1 16",
+   "said": "like a glove uh because it offers very sharp positions in virtually every game virtually every line a4 now king b1 is a good move alex moves his king aside tries to bring it to a safer square the problem is we are a little bit further advanced in our attack than alex is in his although i have to say the position remains very complicated now we are not going to succeed simply by moving our pawns we also need to bring in the beef we need to bring in the cavalry we need to bring in the beef and we do that first and foremost by moving away the queen uh where should we put that queen so this pawn is actually hanging i don't necessarily want to give that one up yeah let's go queen b6 this also"
+  },
+  {
+   "ply": 32,
+   "t": 518,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "r4rk1/3nbppp/1q1p1n2/3Pp1B1/pp4PP/5P2/PPPQ4/1KNR1B1R w - - 2 17",
+   "said": "to bring in the beef and we do that first and foremost by moving away the queen uh where should we put that queen so this pawn is actually hanging i don't necessarily want to give that one up yeah let's go queen b6 this also connects the rooks and allows this rook to come over to c8 um you guys might say well isn't it a good idea to sack this pawn uh because you know it opens up the b file but that's not quite as simple as it may appear i don't see a need to engage in this when queen b6 is a perfectly good move"
+  },
+  {
+   "ply": 33,
+   "t": 536.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "r4rk1/3nbppp/1q1p1n2/3Pp1BP/pp4P1/5P2/PPPQ4/1KNR1B1R b - - 0 17",
+   "said": "idea to sack this pawn uh because you know it opens up the b file but that's not quite as simple as it may appear i don't see a need to engage in this when queen b6 is a perfectly good move now we can actually go b3"
+  },
+  {
+   "ply": 34,
+   "t": 541,
+   "line": [
+    "b3"
+   ],
+   "fen": "r4rk1/3nbppp/1q1p1n2/3Pp1BP/p5P1/1p3P2/PPPQ4/1KNR1B1R w - - 0 18",
+   "said": "file but that's not quite as simple as it may appear i don't see a need to engage in this when queen b6 is a perfectly good move now we can actually go b3 and i'll explain the details the finer details behind this move after the game but it should make sense what we're doing right now we're opening up the"
+  },
+  {
+   "ply": 36,
+   "t": 547.5,
+   "line": [
+    "cxb3",
+    "axb3"
+   ],
+   "fen": "r4rk1/3nbppp/1q1p1n2/3Pp1BP/6P1/1p3P2/PP1Q4/1KNR1B1R w - - 0 19",
+   "said": "perfectly good move now we can actually go b3 and i'll explain the details the finer details behind this move after the game but it should make sense what we're doing right now we're opening up the position we are sacrificing upon in order to open up files surrounding"
+  },
+  {
+   "ply": 37,
+   "t": 550.5,
+   "line": [
+    "Nxb3"
+   ],
+   "fen": "r4rk1/3nbppp/1q1p1n2/3Pp1BP/6P1/1N3P2/PP1Q4/1K1R1B1R b - - 0 19",
+   "said": "and i'll explain the details the finer details behind this move after the game but it should make sense what we're doing right now we're opening up the position we are sacrificing upon in order to open up files surrounding white's king we are now going to use these files and mount a frontal assault against white's king in fact there is already a very tempting sacrifice that must be considered further sacrifice queen a6 would monitor the queen but what should we do and i actually need to charge my keyboard so just give me a second as you think about the move so the move is actually sacrificing on a2 and let's do it let us sacrifice on a2 what are we doing we are cutting the"
+  },
+  {
+   "ply": 38,
+   "t": 584,
+   "line": [
+    "Rxa2"
+   ],
+   "fen": "5rk1/3nbppp/1q1p1n2/3Pp1BP/6P1/1N3P2/rP1Q4/1K1R1B1R w - - 0 20",
+   "said": "think about the move so the move is actually sacrificing on a2 and let's do it let us sacrifice on a2 what are we doing we are cutting the legs off from the knight so what we are and we are also opening up the afl so if our king takes a2 we are going to go rook a8 check we're going to chase away the king then we're going to recapture the knight with our queen which"
+  },
+  {
+   "ply": 39,
+   "t": 596,
+   "line": [
+    "Kxa2"
+   ],
+   "fen": "5rk1/3nbppp/1q1p1n2/3Pp1BP/6P1/1N3P2/KP1Q4/3R1B1R b - - 0 20",
+   "said": "legs off from the knight so what we are and we are also opening up the afl so if our king takes a2 we are going to go rook a8 check we're going to chase away the king then we're going to recapture the knight with our queen which leads to a situation look at how weak"
+  },
+  {
+   "ply": 40,
+   "t": 597,
+   "line": [
+    "Ra8+"
+   ],
+   "fen": "r5k1/3nbppp/1q1p1n2/3Pp1BP/6P1/1N3P2/KP1Q4/3R1B1R w - - 1 21",
+   "said": "legs off from the knight so what we are and we are also opening up the afl so if our king takes a2 we are going to go rook a8 check we're going to chase away the king then we're going to recapture the knight with our queen which leads to a situation look at how weak the king is the a file is completely wide open we are threatening a very nasty check we are only an exchange down and this is the point that i really want to clarify to everybody no matter what your rating is sacrifices exist on a sliding scale not all sacrifices are the same sacrificing a queen is not should not be mentioned in the same breath of sacrificing an exchange why because here even if our attack backfires even if we don't quote unquote succeed the game is not going to be over okay i have a piece for a rook that is not the end of the world even if we screw up and the attack fails so you shouldn't be too scared alex says balls yeah this is a ballsy decision for sure but i'm without even calculating i can basically tell that this attack has enough firepower to succeed because look at how many pieces are in the attack we have a roku queen"
+  },
+  {
+   "ply": 42,
+   "t": 651,
+   "line": [
+    "Kb1",
+    "Qxb3"
+   ],
+   "fen": "r5k1/3nbppp/3p1n2/3Pp1BP/6P1/1q3P2/1P1Q4/1K1R1B1R w - - 0 22",
+   "said": "a ballsy decision for sure but i'm without even calculating i can basically tell that this attack has enough firepower to succeed because look at how many pieces are in the attack we have a roku queen this knight on d7 may seem to be outside the zone of the attack but how can it quickly and efficiently re-enter the attack what can we do to re-enter the attack with a knight we can go not re-enter just enter i mean the knight never really entered the attack in the first place i don't know what i'm talking about um so knight c5 is the move yes knight c5 is um the move and then from c5 the knight can further go um he says do i have a move uh alex the problem is i can't type in the chat on this account i have my chat sort of disabled uh but i think white is actually in trouble here the more i look at this position the more i see that white does not have the ability to bring enough defenders i think computer the computer will probably find some way to defend against this attack but the night off is a very human opening it puts very human problems in front of your opponent and it's actually withstood the test of computers as well which is a fun fact um look at that sub count f3 is hanging as well great point we can worst come stores take on f3 and"
+  },
+  {
+   "ply": 43,
+   "t": 723,
+   "line": [
+    "Qc3"
+   ],
+   "fen": "r5k1/3nbppp/3p1n2/3Pp1BP/6P1/1qQ2P2/1P6/1K1R1B1R b - - 1 22",
+   "said": "withstood the test of computers as well which is a fun fact um look at that sub count f3 is hanging as well great point we can worst come stores take on f3 and cause this entire pawn train to collapse and alex speaking of collapse queen c3 makes sense you're trying to get rid of the queen but you are taking the defender off of the rook on d1 queen takes d1 check that wins the rook back now we are up a piece this pawn on d5 is also going to fall"
+  },
+  {
+   "ply": 44,
+   "t": 739,
+   "line": [
+    "Qxd5"
+   ],
+   "fen": "r5k1/3nbppp/3p1n2/3qp1BP/6P1/2Q2P2/1P6/1K1R1B1R w - - 0 23",
+   "said": "makes sense you're trying to get rid of the queen but you are taking the defender off of the rook on d1 queen takes d1 check that wins the rook back now we are up a piece this pawn on d5 is also going to fall the game is over let's have some fun with history i'm going to tell you guys a little bit about the night or so bishop c1 let's not um take our own feed off the gas pedal what should we take on d5"
+  },
+  {
+   "ply": 45,
+   "t": 755,
+   "line": [
+    "Bc1"
+   ],
+   "fen": "r5k1/3nbppp/3p1n2/3qp2P/6P1/2Q2P2/1P6/1KBR1B1R b - - 1 23",
+   "said": "let's have some fun with history i'm going to tell you guys a little bit about the night or so bishop c1 let's not um take our own feed off the gas pedal what should we take on d5 with should we take with the knight or should we take with the queen what do you guys say definitely yeah definitely in the night the queen is perfectly placed on d1 it's picture perfect why move it why move it from its amazing square where it's sort of pinning the bishop and controlling f3 and pinning the other"
+  },
+  {
+   "ply": 48,
+   "t": 775.5,
+   "line": [
+    "Qd2",
+    "Qxd2",
+    "Nd5"
+   ],
+   "fen": "r5k1/3nbppp/3p4/3np2P/6P1/5P2/1P1Q4/1KBR1B1R w - - 1 25",
+   "said": "what do you guys say definitely yeah definitely in the night the queen is perfectly placed on d1 it's picture perfect why move it why move it from its amazing square where it's sort of pinning the bishop and controlling f3 and pinning the other way too now we have a choice we can treat queens sure it's uh that leads to a relatively straightforwardly winning position we have to be careful there are traps here if we take on f3 mindlessly then we allow bishop g2 which skewers the queen to the knight so careful instead let's dip the queen back to b3 queen a4 is the same idea but why sacrifice back the again and again and again when you have an idea spend five seconds asking yourself if you don't have a simpler way to execute that idea without giving up the essence of that idea which is not to say that queen a4 is necessarily bad probably black is winning there but you want to minimize the the margin of error that doesn't mean you don't want to take risks that's not what i'm saying but what i'm saying is that when you have the same way to do something without sacrificing that often makes sense okay queen d3 again we can trade queens but there is a far more straightforward and efficient win what can we do fork town is right we have a night in the vicinity of an open king and so we deliver the fork good game alex actually you played very well up until uh that point when i played rook takes a2 let's pack let's uh delve"
+  },
+  {
+   "ply": 3,
+   "t": 846.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "fork town is right we have a night in the vicinity of an open king and so we deliver the fork good game alex actually you played very well up until uh that point when i played rook takes a2 let's pack let's uh delve into this game let me pull up chess space and let you guys know a little bit about the history of the night or so who is the night or named after the night or is named after miguel neidorf uh originally moy schneider polish grand master moved to argentina to escape uh prosecution during world war ii had a very long and successful career as a grandmaster and of course uh stands behind the night but as often happens we ask ourselves the question was neither of the first person to play the night or drama role please was miguel night or the first person to play the night off and when was the night our first played the answer is actually no nairob was not even close to the first person to play the night of night or first played it in 1939 and the night off was first played in 1899 by pertz halawa in a correspondence game a russian obscure russian correspondence player was the first to play the night off in 1899 it was not played over the board until 1926 when french grand master savioli itartakauer or also originally russian tartakover later immigrated to france uh kind of a very colorful chess figure grandmaster writer he actually was the first person to play the night over the board it was not until 1939 13 years later after approximately 15 times of the night of being played didn't miguel night or actually play it in a game against a danish player in the olympiad in 1939. the cool little stuff here right uh again just because it's called the night or doesn't mean knight or was the first person to play it now essentially"
+  },
+  {
+   "ply": 5,
+   "t": 952.5,
+   "line": [
+    "d6",
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "little stuff here right uh again just because it's called the night or doesn't mean knight or was the first person to play it now essentially um in this position right"
+  },
+  {
+   "ply": 8,
+   "t": 955,
+   "line": [
+    "cxd4",
+    "Nxd4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "said": "again just because it's called the night or doesn't mean knight or was the first person to play it now essentially um in this position right"
+  },
+  {
+   "ply": 9,
+   "t": 956,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "again just because it's called the night or doesn't mean knight or was the first person to play it now essentially um in this position right in this position well they named it after him i think largely because night or um and what you have to understand here is that it's not that there is a committee of p some people may think there's a round table committee of like chess sages with long beards i mean let's name this opening oh well we have five shots of sky and night or fat whatever that's the first name i see okay okay that sounds good um that's not how it happens i think the naming of opening is a fascinating process it sort of happens by consensus through the years um it's not that there is a specific committee that made so one possibility is that neither was the first person to play the night or in the way that we play it now the people who played it before him were sort of experimenting they weren't familiar with some of these main ideas such as e5 whereas night or himself displayed a far greater understanding he actually analyzed this and analyzed it very deeply so that's one possibility sorry to drone on for so long i i hope this is not too too boring we're talking about the etymology of openings i think it's actually kind of interesting um but it's one of the most reputable openings in existence it is played at"
+  },
+  {
+   "ply": 10,
+   "t": 1027,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "drone on for so long i i hope this is not too too boring we're talking about the etymology of openings i think it's actually kind of interesting um but it's one of the most reputable openings in existence it is played at all levels it is played very very frequently at the highest levels and has been for over 50 years uh and that is a very surefire sign of a"
+  },
+  {
+   "ply": 9,
+   "t": 1036.5,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "openings in existence it is played at all levels it is played very very frequently at the highest levels and has been for over 50 years uh and that is a very surefire sign of a good opening uh now g6 is the dragon as you guys know"
+  },
+  {
+   "ply": 10,
+   "t": 1040,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "all levels it is played very very frequently at the highest levels and has been for over 50 years uh and that is a very surefire sign of a good opening uh now g6 is the dragon as you guys know that is the dragon e6 is called the"
+  },
+  {
+   "ply": 9,
+   "t": 1043,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "highest levels and has been for over 50 years uh and that is a very surefire sign of a good opening uh now g6 is the dragon as you guys know that is the dragon e6 is called the"
+  },
+  {
+   "ply": 10,
+   "t": 1044,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/3ppn2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "years uh and that is a very surefire sign of a good opening uh now g6 is the dragon as you guys know that is the dragon e6 is called the cheveningen knight c6 is the classical situain or the rouser and then there are a variety of very"
+  },
+  {
+   "ply": 9,
+   "t": 1052,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "that is the dragon e6 is called the cheveningen knight c6 is the classical situain or the rouser and then there are a variety of very rare alternatives there's bishop to d7 which"
+  },
+  {
+   "ply": 10,
+   "t": 1055,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "rn1qkb1r/pp1bpppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 3 6",
+   "said": "cheveningen knight c6 is the classical situain or the rouser and then there are a variety of very rare alternatives there's bishop to d7 which is actually not a very not a bad move and there's e5 which is not considered to be very good it's premature and by the way e5 uh is premature precisely because white delivers a check on b5 a very nasty check so that's the bottom line rationale of"
+  },
+  {
+   "ply": 14,
+   "t": 1069,
+   "line": [
+    "Ba6",
+    "Bc8",
+    "Bf1",
+    "a6"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 8",
+   "said": "and there's e5 which is not considered to be very good it's premature and by the way e5 uh is premature precisely because white delivers a check on b5 a very nasty check so that's the bottom line rationale of the move a6 you are taking away this important square from white's pieces both his knights and his bishop and you are preparing an eventual queen side expansion with the move b5 so it's a pretty load-bearing move you are also very flexible right you don't commit to a system of development that in and of itself is worth its weight in gold the other systems here"
+  },
+  {
+   "ply": 9,
+   "t": 1089.5,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "move b5 so it's a pretty load-bearing move you are also very flexible right you don't commit to a system of development that in and of itself is worth its weight in gold the other systems here have the drawback of committing a particular piece to a particular square g6 already informs white that you're"
+  },
+  {
+   "ply": 10,
+   "t": 1095,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pp2pp1p/3p1np1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "commit to a system of development that in and of itself is worth its weight in gold the other systems here have the drawback of committing a particular piece to a particular square g6 already informs white that you're going to fianchetto thank you l3o e6 is also inflexible because playing e5 after that would be a waste of a tempo knight c6 is also inflexible because guess what in the night or if the knight frequently comes out to d7 as it did in the game and then the rare moves are just kind of awkward so um i hope that kind of makes generals i don't want to speak too generally about the night or because it is such a specific opening and such a theoretical opening by the way the first person to have this position in the year 1890 bird henry edward byrd one of the strongest british players of the 19th century uh played the dragon actually for the first time in 1890 and uh then the chevening game became popular so the night off wasn't really popular until the 50s okay anyways enough history let's get to the the meat let's get to the meat now here's the thing that makes the night or so incredibly complicated it is the simple"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 9,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "a6",
+     "t": 116.5,
+     "continuation": "a6",
+     "said": "g6 is the dragon knight c6 is the rouser or the classical sicilian e6 is the cheveningen and e5 not a great move is called the cut now or thank you camelizer so we play the night earth we play the knight orb now essentially the simple way to think about a6 is that it covers the b5 square so no bishop b5 check and not only does it cover the b5 square it also potentially prepares the move b7 and b5 grabbing space on the queen side that is actually one of the main ideas across most sitalians f3 is called the english attack and here is where i'm going to play a move that may confuse a lot of people so prepare to be confused for the essentially the entirety of this game but i will explain everything does anybody know what the main move is here for black in fact black has two main moves 100 and one bit so we can play the move e6 that leads to the chevening against structure but the move that i grew up playing is e5 attacking the knight why is this move confusing on the surface what is this what is the drawback the obvious drawback of this move what is the sort of what what jumps out at you immediately when it weakens not only the d6 pawn but also look at the hole that it creates on d5"
+    },
+    {
+     "san": "g6",
+     "t": 1040,
+     "continuation": "g6",
+     "said": "all levels it is played very very frequently at the highest levels and has been for over 50 years uh and that is a very surefire sign of a good opening uh now g6 is the dragon as you guys know that is the dragon e6 is called the cheveningen knight c6 is the classical situain or the rouser and then there are a variety of very rare alternatives there's bishop to d7 which is actually not a very not a bad move and there's e5 which is not considered to be very good it's premature and by the way e5 uh is premature precisely because white delivers a check on b5 a very nasty check so that's the bottom line rationale of the move a6 you are taking away this important square from white's pieces both his knights and his bishop and you are preparing an eventual queen side expansion with the move b5 so it's a pretty load-bearing move you are also very flexible right you don't commit to a system of development that in and of itself is worth its weight in gold the other systems here have the drawback of committing a particular piece to a particular square g6 already informs white that you're going to fianchetto thank you l3o e6 is also inflexible because playing e5"
+    },
+    {
+     "san": "e6",
+     "t": 1044,
+     "continuation": "e6",
+     "said": "years uh and that is a very surefire sign of a good opening uh now g6 is the dragon as you guys know that is the dragon e6 is called the cheveningen knight c6 is the classical situain or the rouser and then there are a variety of very rare alternatives there's bishop to d7 which is actually not a very not a bad move and there's e5 which is not considered to be very good it's premature and by the way e5 uh is premature precisely because white delivers a check on b5 a very nasty check so that's the bottom line rationale of the move a6 you are taking away this important square from white's pieces both his knights and his bishop and you are preparing an eventual queen side expansion with the move b5 so it's a pretty load-bearing move you are also very flexible right you don't commit to a system of development that in and of itself is worth its weight in gold the other systems here have the drawback of committing a particular piece to a particular square g6 already informs white that you're going to fianchetto thank you l3o e6 is also inflexible because playing e5 after that would be a waste of a tempo knight c6 is also inflexible because"
+    },
+    {
+     "san": "Bd7",
+     "t": 1055,
+     "continuation": "Bd7",
+     "said": "cheveningen knight c6 is the classical situain or the rouser and then there are a variety of very rare alternatives there's bishop to d7 which is actually not a very not a bad move and there's e5 which is not considered to be very good it's premature and by the way e5 uh is premature precisely because white delivers a check on b5 a very nasty check so that's the bottom line rationale of the move a6 you are taking away this important square from white's pieces both his knights and his bishop and you are preparing an eventual queen side expansion with the move b5 so it's a pretty load-bearing move you are also very flexible right you don't commit to a system of development that in and of itself is worth its weight in gold the other systems here have the drawback of committing a particular piece to a particular square g6 already informs white that you're going to fianchetto thank you l3o e6 is also inflexible because playing e5 after that would be a waste of a tempo knight c6 is also inflexible because guess what in the night or if the knight frequently comes out to d7 as it did in the game and then the rare moves are just kind of awkward so um i hope that kind of makes"
+    }
+   ]
+  }
+ ]
+}

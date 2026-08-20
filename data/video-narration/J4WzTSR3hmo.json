@@ -1,0 +1,213 @@
+{
+ "videoId": "J4WzTSR3hmo",
+ "title": "NEW SPEEDRUN!!! Fly to a Higher Elo | French, Nimzowitsch | Top Gun Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 15,
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "let's begin guys let's begin rankford airport we are underway okay ladies and gentlemen this is our fourth speedrun for those watching on YouTube the premise of this speedrun is going to be a focus on openings we are going to I'm going to play the openings that I officially recommend to the majority of players beginner and intermediate throughout the speeder and I will stick to the same openings and in our game analysis we're going to focus more heavily on opening Theory and developing the recommended repertoire I will be making opening mistakes but in every game we are going to put the accent on making sure that we are developing our opening knowledge and against the French as those of you who watched previous speedruns know I"
+  },
+  {
+   "ply": 3,
+   "t": 60,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "are going to put the accent on making sure that we are developing our opening knowledge and against the French as those of you who watched previous speedruns know I recommend the nimsovich French that's the official name"
+  },
+  {
+   "ply": 4,
+   "t": 62.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n1p3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "said": "sure that we are developing our opening knowledge and against the French as those of you who watched previous speedruns know I recommend the nimsovich French that's the official name for the first 10 15 games we're going to get almost no opening Theory and that in and of itself is all is also very instructive because if you're a beginner watching this you should know how to punish typical openings that beginners play even if they're not theoretical so already the move Knight C6 is a non-theoretical move it's obviously not the the main move the main move is is D5 but it's important already at the outset"
+  },
+  {
+   "ply": 3,
+   "t": 85,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "punish typical openings that beginners play even if they're not theoretical so already the move Knight C6 is a non-theoretical move it's obviously not the the main move the main move is is D5 but it's important already at the outset let me just enable arrows it's important already at the outset to avoid assuming"
+  },
+  {
+   "ply": 4,
+   "t": 91.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n1p3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "said": "non-theoretical move it's obviously not the the main move the main move is is D5 but it's important already at the outset let me just enable arrows it's important already at the outset to avoid assuming that just because a move like Knight C6 is played you're you're somehow like already winning against most of these you know random developing moves you want to just respond by developing your pieces of course D5 is possible but we don't have any of our pieces developed yet I think D5 is a little bit too concrete I think the simplest is just to"
+  },
+  {
+   "ply": 5,
+   "t": 111,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n1p3/8/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 2 3",
+   "said": "want to just respond by developing your pieces of course D5 is possible but we don't have any of our pieces developed yet I think D5 is a little bit too concrete I think the simplest is just to continue our development with Knight F3 and when we get more pieces out we'll start contemplating moves like D5 or E5 in response to Knight F6 actually E5 might be more reasonable so our opponent is thinking D6 all right and again a passive setup by our"
+  },
+  {
+   "ply": 6,
+   "t": 129,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/2npp3/8/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "in response to Knight F6 actually E5 might be more reasonable so our opponent is thinking D6 all right and again a passive setup by our opponent but nothing egregiously bad okay and we have many ways that that we can quote-unquote punish such a setup the most simple move is Knight C3 some of you are thinking let's control more of the center with the move C4 also a totally reasonable move it depends on your taste some people like a greater share of the center some people like more of an emphasis on peace development since we're playing 1e4 I think it's more in the spirit of E4 openings to not play C4 when you play C4 that's almost like playing one D4 and 2c4 we're gonna play this as absolutely primitively as"
+  },
+  {
+   "ply": 7,
+   "t": 166.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/2npp3/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 4",
+   "said": "more in the spirit of E4 openings to not play C4 when you play C4 that's almost like playing one D4 and 2c4 we're gonna play this as absolutely primitively as possible just go Knight C3 okay our"
+  },
+  {
+   "ply": 8,
+   "t": 168,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2nppn2/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 2 5",
+   "said": "play C4 when you play C4 that's almost like playing one D4 and 2c4 we're gonna play this as absolutely primitively as possible just go Knight C3 okay our opponent basically pre-moves Knight F6 as you might know in such positions I like for the bishop to come out to D3 the reason I like the D3 square is"
+  },
+  {
+   "ply": 9,
+   "t": 177,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2nppn2/8/3PP3/2NB1N2/PPP2PPP/R1BQK2R b KQkq - 3 5",
+   "said": "possible just go Knight C3 okay our opponent basically pre-moves Knight F6 as you might know in such positions I like for the bishop to come out to D3 the reason I like the D3 square is it does a couple of things it reinforces upon an E4 but also when black Castle's King side we can push this Pawn out to E5 and the bishop is going to be aiming at the H7 Pawn now if you're kind of newer to chess you might say well okay I can see that but isn't that pawn and now that square going to be protected well it is going to be protected by by the black kick from GA but there's a typical idea where uh that's called a battery where the bishop remains on D3 and the queen later travels to the E4 Square now if you can visualize that in your head Bishop on E3 Queen on e4 when black is castled kingside these two pieces are aiming at the H7 square and that is a major mate threat so even though black has removed the pawn from H6 it doesn't mean the black has fixed a problem on the underlying Square so don't confuse there's like two separate things there's weak pawns but even if a pawn moves away the square itself might also be valuable as it is here okay so we should continue our development and we should do so just by by castling kingside I mean we're making"
+  },
+  {
+   "ply": 11,
+   "t": 243,
+   "line": [
+    "h6",
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/ppp2pp1/2nppn1p/8/3PP3/2NB1N2/PPP2PPP/R1BQ1RK1 b kq - 1 6",
+   "said": "there's like two separate things there's weak pawns but even if a pawn moves away the square itself might also be valuable as it is here okay so we should continue our development and we should do so just by by castling kingside I mean we're making the most standard developing moves of magical we're not afraid of the move Knight to B4 90 before is a sort of it's not even a threat but we can always move the bishop back and then chase the Knight away with A3 okay B6 so at this point the move what what strikes me about the move B6 is that our opponent is not taking care of of his or her kingside development right the bishop remains on f8 and you know they're not even moving their Bishop out to D7 and this just seems to be something that we we can try to punish now I say this word punish and I'll say this word a lot as we climb the sort of initial ranks what does it mean to punish slow development or bad development in the opening well generally what you should associate that word with is opening up the center when you open up the center you open up files and you open up direct Pathways not only to your opponent's king but mostly mostly it's your opponents King and also to your opponents loose loose pieces so a lot of you might be tempted by the move Bishop B5 here painting the Knight now that the Knight is unprotected but how is black going to defend against Bishop B5 and a question geared more to our newer players who should be not afraid to contribute in the chat it's okay to make mistakes that's the point of the speed run uh to make typical mistakes and discuss them so what happens after Bishop B5 so you might think ah I read about this move this is called a fianchetto that's where you open up a little square for your Bishop but Bishop B7 is a mistake after Bishop B5 because the Knight is going to be pinned we can advance the pawn to D5 I'll show this after the game and the Knight on C6 is lost so after Bishop B5 can you defend the Knight and simultaneously unpin it you can you can bring the bishop out to D7 it turns out that the move Bishop B5 is then kind of a waste of a tempo let's refrain from that move and let's instead focus on opening up the center when black pushes these pawns to D6 and E6 he creates Hooks and a hook is kind of a pawn that you can use as Dynamite you can advance your own Pawn up to a certain square and it creates the effect of dynamiting the center it forces your opponent to either trade opening up a file or allow you to trade for their Pawn either way the Center opens up the king is weakened so what move resembles that kind of dynamiting operation there's actually two moves that get the job done but only one of them opens up the file that we really want to open which is the e-file yeah let's go D5"
+  },
+  {
+   "ply": 13,
+   "t": 398.5,
+   "line": [
+    "b6",
+    "d5"
+   ],
+   "fen": "r1bqkb1r/p1p2pp1/1pnppn1p/3P4/4P3/2NB1N2/PPP2PPP/R1BQ1RK1 b kq - 0 7",
+   "said": "that kind of dynamiting operation there's actually two moves that get the job done but only one of them opens up the file that we really want to open which is the e-file yeah let's go D5 and this is a super typical operation this is the process of opening up the center if black plays e takes D5 we have two Defenders on the Square black has two attackers this move is safe even if it was a pawn sacrifice we'd still play it because this e-file is the pathway the direct Pathway to Black's King and this is why it's so important to Castle early"
+  },
+  {
+   "ply": 14,
+   "t": 419,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r1bqkb1r/p1p2pp1/1pnp1n1p/3p4/4P3/2NB1N2/PPP2PPP/R1BQ1RK1 w kq - 0 8",
+   "said": "Defenders on the Square black has two attackers this move is safe even if it was a pawn sacrifice we'd still play it because this e-file is the pathway the direct Pathway to Black's King and this is why it's so important to Castle early okay we obviously take back with the"
+  },
+  {
+   "ply": 15,
+   "t": 421,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r1bqkb1r/p1p2pp1/1pnp1n1p/3P4/8/2NB1N2/PPP2PPP/R1BQ1RK1 b kq - 0 8",
+   "said": "attackers this move is safe even if it was a pawn sacrifice we'd still play it because this e-file is the pathway the direct Pathway to Black's King and this is why it's so important to Castle early okay we obviously take back with the pawn and we have achieved a major step toward winning this game and I'll explain after the game like why I knew"
+  },
+  {
+   "ply": 16,
+   "t": 429.5,
+   "line": [
+    "Nb4"
+   ],
+   "fen": "r1bqkb1r/p1p2pp1/1p1p1n1p/3P4/1n6/2NB1N2/PPP2PPP/R1BQ1RK1 w kq - 1 9",
+   "said": "is why it's so important to Castle early okay we obviously take back with the pawn and we have achieved a major step toward winning this game and I'll explain after the game like why I knew to play D5 and not E5 but for now let's continue night before now we sort of need to conceptualize our objective here so our primary objective is is to keep Black's King locked in the center the worst case scenario is to allow black to play Bishop out to E7 and Castle kingside not that that necessarily solves all of Black's problems but ideally we would like to keep Black's King confined to the center it's hard to shoot at a moving Target and if the king escapes to the king side it's going to be much harder to set up the attack we'll have to start from Square zero okay so how do we prevent black from castling it seems inevitable that Bishop E7 is going to happen and Bishop E7 is inevitable we can't prevent that move what we can say is okay we can put the Rook on E1 that's a check Bishop will come out to E7 the bishop is pinned and then we just apply more pressure on the bishop and by doing so we force black skin to remain in the center as a Defender so how do we do that well we play rookie one check and then we put the queen on E2 we create another battery we stack these two pieces and we aim putting pressure on the bishop but before we do that let's throw in the move Bishop B5"
+  },
+  {
+   "ply": 17,
+   "t": 501,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "r1bqkb1r/p1p2pp1/1p1p1n1p/1B1P4/1n6/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 2 9",
+   "said": "one check and then we put the queen on E2 we create another battery we stack these two pieces and we aim putting pressure on the bishop but before we do that let's throw in the move Bishop B5 check just so that we don't have to deal with a headache of this trade I also like our light squared Bishop I think it's a valuable piece because it's controlling and pressuring all of these weak light squares that have been weakened with the move B6 and even if you're newer to the game you"
+  },
+  {
+   "ply": 18,
+   "t": 519,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2qkb1r/p1pb1pp1/1p1p1n1p/1B1P4/1n6/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 3 10",
+   "said": "Bishop I think it's a valuable piece because it's controlling and pressuring all of these weak light squares that have been weakened with the move B6 and even if you're newer to the game you should kind of intuitively understand what that means right the move B6 literally creates holes all over the queen side and so it's worth preserving the light squid Bishop well now we need to follow through on our plan but we need to be very precise in how we accomplish it and now that I'm thinking about this situation more soberly I realize that we can basically win a piece and the way that we can win a piece I'll make the first move without explaining"
+  },
+  {
+   "ply": 19,
+   "t": 545,
+   "line": [
+    "Bxd7+"
+   ],
+   "fen": "r2qkb1r/p1pB1pp1/1p1p1n1p/3P4/1n6/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 10",
+   "said": "precise in how we accomplish it and now that I'm thinking about this situation more soberly I realize that we can basically win a piece and the way that we can win a piece I'll make the first move without explaining the first move is just to grab on D7 Black's best move is actually King takes D7 I don't see anybody making this move essentially under 2000 yeah Queen takes"
+  },
+  {
+   "ply": 20,
+   "t": 554.5,
+   "line": [
+    "Qxd7"
+   ],
+   "fen": "r3kb1r/p1pq1pp1/1p1p1n1p/3P4/1n6/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 11",
+   "said": "make the first move without explaining the first move is just to grab on D7 Black's best move is actually King takes D7 I don't see anybody making this move essentially under 2000 yeah Queen takes D7 and how did I see that what did I see the E file being open is not the only thing that I notice there's also the question of this Knight on B4 you might look at this and say okay well there's an item before why is it so interesting but Knight on B4 is incredibly vulnerable because minor pieces that are just sort of sitting on your side of the board are vulnerable to attacks by Pawns and you should have this instinct to push the Knight away with the move A3 and you should want to"
+  },
+  {
+   "ply": 21,
+   "t": 583,
+   "line": [
+    "a3"
+   ],
+   "fen": "r3kb1r/p1pq1pp1/1p1p1n1p/3P4/1n6/P1N2N2/1PP2PPP/R1BQ1RK1 b kq - 0 11",
+   "said": "vulnerable because minor pieces that are just sort of sitting on your side of the board are vulnerable to attacks by Pawns and you should have this instinct to push the Knight away with the move A3 and you should want to do that regardless of what your follow-up is but you'll notice that the Knight has to go back to A6 I mean it can take the pawn but then white like loses the Knight and after the night goes back to Asics one of the most important acronyms that I've shared in previous speed runs and I will try not to repeat myself too many times I'm assuming that you have seen the previous speed runs lpdo loose pieces drop off pieces that are not defended by any pawns or any other pieces are massive"
+  },
+  {
+   "ply": 22,
+   "t": 611.5,
+   "line": [
+    "Na6"
+   ],
+   "fen": "r3kb1r/p1pq1pp1/np1p1n1p/3P4/8/P1N2N2/1PP2PPP/R1BQ1RK1 w kq - 1 12",
+   "said": "to repeat myself too many times I'm assuming that you have seen the previous speed runs lpdo loose pieces drop off pieces that are not defended by any pawns or any other pieces are massive liabilities and when you combine a loose piece with a wide open King you get a double attack or a fork the king can be checked and the loose piece can be simultaneously attacked I've already pointed out the correct move in another context now you should see that the night is weak the king is exposed that's Fork Central and a ready-made Fork"
+  },
+  {
+   "ply": 23,
+   "t": 634,
+   "line": [
+    "Qe2+"
+   ],
+   "fen": "r3kb1r/p1pq1pp1/np1p1n1p/3P4/8/P1N2N2/1PP1QPPP/R1B2RK1 b kq - 2 12",
+   "said": "checked and the loose piece can be simultaneously attacked I've already pointed out the correct move in another context now you should see that the night is weak the king is exposed that's Fork Central and a ready-made Fork exists with Queen E2 check forget the e-file instead we just win the Knight on A6 and we will be up a full piece notice the sort of flexibility in my thinking I was starting out by contemplating how to"
+  },
+  {
+   "ply": 18,
+   "t": 645,
+   "line": [],
+   "fen": "r2qkb1r/p1pb1pp1/1p1p1n1p/1B1P4/1n6/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 3 10",
+   "said": "exists with Queen E2 check forget the e-file instead we just win the Knight on A6 and we will be up a full piece notice the sort of flexibility in my thinking I was starting out by contemplating how to prevent black from castling as I was doing that I noticed that there's this one check and there's Queen E2 check both moves operating down the E file but I also noticed a second flaw in Black's position the fact that the night on before was incredibly vulnerable and those two observations led me to find the fork and we won the Knight and we essentially when the game were up a full piece we have let black Castle though so there's a downside but it was worth it was worth winning the piece once again when you win a piece from a very general standpoint there are there are sort of two ways to convert a material advantage now this is also something I've talked about at length the typical prescribed method is to simplify the logic behind that is that the more pieces you trade the more the more tangible your material advantage is going to be I think the analogy that I've made previously is if"
+  }
+ ],
+ "forks": []
+}

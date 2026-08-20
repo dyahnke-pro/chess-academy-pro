@@ -1,0 +1,492 @@
+{
+ "videoId": "CXvo1dMF1Qs",
+ "title": "Taking Down the Benko Gambit!! | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 16.5,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "okay 2188 we're actually playing really strong opponent again i've i've been playing d4 a little bit more on the speed run so let's go d4 i could play london i mean i could play london but there's just so much material available on the london that i think mainlines"
+  },
+  {
+   "ply": 3,
+   "t": 23,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "opponent again i've i've been playing d4 a little bit more on the speed run so let's go d4 i could play london i mean i could play london but there's just so much material available on the london that i think mainlines are a better use of our time so let's go c4 yeah i could play a catalan okay benoni"
+  },
+  {
+   "ply": 4,
+   "t": 29,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "let's go d4 i could play london i mean i could play london but there's just so much material available on the london that i think mainlines are a better use of our time so let's go c4 yeah i could play a catalan okay benoni minoni we're gonna go d5"
+  },
+  {
+   "ply": 5,
+   "t": 32,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "said": "could play london but there's just so much material available on the london that i think mainlines are a better use of our time so let's go c4 yeah i could play a catalan okay benoni minoni we're gonna go d5 and a benko gambit"
+  },
+  {
+   "ply": 6,
+   "t": 35,
+   "line": [
+    "b5"
+   ],
+   "fen": "rnbqkb1r/p2ppppp/5n2/1ppP4/2P5/8/PP2PPPP/RNBQKBNR w KQkq - 0 4",
+   "said": "are a better use of our time so let's go c4 yeah i could play a catalan okay benoni minoni we're gonna go d5 and a benko gambit okay so bangkok gambit i i don't know that well i'm gonna play an old line that my coach taught me years ago a rare move now of course c takes b5 is is topical that that's what the books recommend but i'm going to play an old soviet line which"
+  },
+  {
+   "ply": 7,
+   "t": 51,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "rnbqkb1r/p2ppppp/5n2/1ppP4/2P5/8/PP1NPPPP/R1BQKBNR b KQkq - 1 4",
+   "said": "that well i'm gonna play an old line that my coach taught me years ago a rare move now of course c takes b5 is is topical that that's what the books recommend but i'm going to play an old soviet line which is knight d2 this is not a well-known move at all but it but it has some teeth the point is to meet b take c4 with e4 so you're almost reversing the gambit and you're sacking"
+  },
+  {
+   "ply": 8,
+   "t": 62,
+   "line": [
+    "bxc4"
+   ],
+   "fen": "rnbqkb1r/p2ppppp/5n2/2pP4/2p5/8/PP1NPPPP/R1BQKBNR w KQkq - 0 5",
+   "said": "going to play an old soviet line which is knight d2 this is not a well-known move at all but it but it has some teeth the point is to meet b take c4 with e4 so you're almost reversing the gambit and you're sacking"
+  },
+  {
+   "ply": 9,
+   "t": 63,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqkb1r/p2ppppp/5n2/2pP4/2p1P3/8/PP1N1PPP/R1BQKBNR b KQkq - 0 5",
+   "said": "is knight d2 this is not a well-known move at all but it but it has some teeth the point is to meet b take c4 with e4 so you're almost reversing the gambit and you're sacking upon yourself of course it's temporary because we're going to win this pawn"
+  },
+  {
+   "ply": 10,
+   "t": 66,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkb1r/p3pppp/3p1n2/2pP4/2p1P3/8/PP1N1PPP/R1BQKBNR w KQkq - 0 6",
+   "said": "it but it has some teeth the point is to meet b take c4 with e4 so you're almost reversing the gambit and you're sacking upon yourself of course it's temporary because we're going to win this pawn back yeah and nobody knows the correct move here which i'll talk about after the game the correct move is actually c3"
+  },
+  {
+   "ply": 9,
+   "t": 70.5,
+   "line": [],
+   "fen": "rnbqkb1r/p2ppppp/5n2/2pP4/2p1P3/8/PP1N1PPP/R1BQKBNR b KQkq - 0 5",
+   "said": "meet b take c4 with e4 so you're almost reversing the gambit and you're sacking upon yourself of course it's temporary because we're going to win this pawn back yeah and nobody knows the correct move here which i'll talk about after the game the correct move is actually c3 to give the punt back in order to damage"
+  },
+  {
+   "ply": 10,
+   "t": 76,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkb1r/p3pppp/3p1n2/2pP4/2p1P3/8/PP1N1PPP/R1BQKBNR w KQkq - 0 6",
+   "said": "because we're going to win this pawn back yeah and nobody knows the correct move here which i'll talk about after the game the correct move is actually c3 to give the punt back in order to damage white's pawn structure now we take on c4"
+  },
+  {
+   "ply": 11,
+   "t": 77.5,
+   "line": [
+    "Bxc4"
+   ],
+   "fen": "rnbqkb1r/p3pppp/3p1n2/2pP4/2B1P3/8/PP1N1PPP/R1BQK1NR b KQkq - 0 6",
+   "said": "back yeah and nobody knows the correct move here which i'll talk about after the game the correct move is actually c3 to give the punt back in order to damage white's pawn structure now we take on c4 of course with the bishop because otherwise the pawn on e4 hanks and white is a slight but stable advantage here"
+  },
+  {
+   "ply": 12,
+   "t": 85.5,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/p3pp1p/3p1np1/2pP4/2B1P3/8/PP1N1PPP/R1BQK1NR w KQkq - 0 7",
+   "said": "white's pawn structure now we take on c4 of course with the bishop because otherwise the pawn on e4 hanks and white is a slight but stable advantage here g6 cool well we have to develop our pieces there's not much to say here knight gf3 but it's"
+  },
+  {
+   "ply": 13,
+   "t": 91,
+   "line": [
+    "Ngf3"
+   ],
+   "fen": "rnbqkb1r/p3pp1p/3p1np1/2pP4/2B1P3/5N2/PP1N1PPP/R1BQK2R b KQkq - 1 7",
+   "said": "otherwise the pawn on e4 hanks and white is a slight but stable advantage here g6 cool well we have to develop our pieces there's not much to say here knight gf3 but it's a good version of a bononi for now maybe it was worth playing h3 first to stop bishop g4 i'm not too concerned about bishop g4 though knight bd7 okay"
+  },
+  {
+   "ply": 14,
+   "t": 100,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r1bqkb1r/p2npp1p/3p1np1/2pP4/2B1P3/5N2/PP1N1PPP/R1BQK2R w KQkq - 2 8",
+   "said": "we have to develop our pieces there's not much to say here knight gf3 but it's a good version of a bononi for now maybe it was worth playing h3 first to stop bishop g4 i'm not too concerned about bishop g4 though knight bd7 okay again no real threats here we should castle"
+  },
+  {
+   "ply": 15,
+   "t": 105.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/p2npp1p/3p1np1/2pP4/2B1P3/5N2/PP1N1PPP/R1BQ1RK1 b kq - 3 8",
+   "said": "it was worth playing h3 first to stop bishop g4 i'm not too concerned about bishop g4 though knight bd7 okay again no real threats here we should castle"
+  },
+  {
+   "ply": 16,
+   "t": 108,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bqk2r/p2nppbp/3p1np1/2pP4/2B1P3/5N2/PP1N1PPP/R1BQ1RK1 w kq - 4 9",
+   "said": "to stop bishop g4 i'm not too concerned about bishop g4 though knight bd7 okay again no real threats here we should castle there's this idea in in the benko and it also exists in the benoni to play knight g4 and then transfer the knight over to e5 so it would make sense here i think for us to play the move h3 to restrict the knight on f6 and then maybe make a move like queen c2 to solidify solidify the center lend a little bit more support to the pawn on e4 the problem we ultimately want to solve here with white is we want to deploy this bishop onto b2 but we need to be careful of course because if we play b3 now we run into tactics with knight takes c4 so at some point we're gonna play rook b1 then b3 and bishop b2 let's start with the move"
+  },
+  {
+   "ply": 17,
+   "t": 148,
+   "line": [
+    "h3"
+   ],
+   "fen": "r1bqk2r/p2nppbp/3p1np1/2pP4/2B1P3/5N1P/PP1N1PP1/R1BQ1RK1 b kq - 0 9",
+   "said": "but we need to be careful of course because if we play b3 now we run into tactics with knight takes c4 so at some point we're gonna play rook b1 then b3 and bishop b2 let's start with the move h3 yeah now i think rookie one of course is"
+  },
+  {
+   "ply": 18,
+   "t": 150.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/p2nppbp/3p1np1/2pP4/2B1P3/5N1P/PP1N1PP1/R1BQ1RK1 w - - 1 10",
+   "said": "because if we play b3 now we run into tactics with knight takes c4 so at some point we're gonna play rook b1 then b3 and bishop b2 let's start with the move h3 yeah now i think rookie one of course is is is is very good the move rookie one is always a good move to throw in we could also play rook b1 and straight away we could solve the problem of the bishop so we've got a bunch of different choices here i like rookie one a lot too let's go rookie one let's just keep keep improving our"
+  },
+  {
+   "ply": 19,
+   "t": 169,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1bq1rk1/p2nppbp/3p1np1/2pP4/2B1P3/5N1P/PP1N1PP1/R1BQR1K1 b - - 2 10",
+   "said": "could also play rook b1 and straight away we could solve the problem of the bishop so we've got a bunch of different choices here i like rookie one a lot too let's go rookie one let's just keep keep improving our position perhaps later in the game we could play e5 knight p6 yeah yeah this is how you"
+  },
+  {
+   "ply": 20,
+   "t": 175,
+   "line": [
+    "Nb6"
+   ],
+   "fen": "r1bq1rk1/p3ppbp/1n1p1np1/2pP4/2B1P3/5N1P/PP1N1PP1/R1BQR1K1 w - - 3 11",
+   "said": "so we've got a bunch of different choices here i like rookie one a lot too let's go rookie one let's just keep keep improving our position perhaps later in the game we could play e5 knight p6 yeah yeah this is how you should play this with black so now i like the concept potentially of giving away this bishop this bishop is not very good in this particular line we could also play bishop b5 bishop c6 that would be a possibility in general i like to move queen c2 because if if black takes the bishop then we take back with the knight and we have easy prospects for our dark squared bishop i don't love giving black the bishop pair but on the other hand it's really would be a big help for us if if we could deploy our knight to c4 so it's a trade-off let's go queen c2 knight fd7 okay an ft7 okay that i don't think is the best move because that makes it hard for black to play e6 later in the game now i think we should move our bishop where should we move it well the typical square is f1 we could also move it to b5 and after inducing a6 we could then move it back to f1 let's do that let's go to b5 let's try to be a little bit annoying we should also accelerate our pace here a little bit yeah i also like the idea of going a4 a5 because a5 actually traps he goes a5 himself okay now here's the setup that we are going to adopt we're going to play a4 and fix the pawn in place and then rather than going rook b1 b3 bishop b2 we have a second very interesting maneuver let's take this we have another very interesting setup which is to play rook a3 swing this rook to the center to e3 for example or maybe d3 and then play b3 not 100 sold on this idea myself but let's try to play creatively now we also can play b3 here if necessary the rook will look terrible on a3 we could bring it back to a1 the position is closed we don't need to conquer everest on every move e6 but this kind of justifies the idea of rook a3 so now i think we should take i think we should take okay and now so we could go with d3 then black goes d5 we take and go b3 that looks pretty decent because white's black's pawns in the resulting position are going to be pretty flimsy they're going to be i like that idea let's go rook d3 now it looks like we're giving black control of the center but i'm banking on the fact that black is gonna have to invest a lot of resources to maintain that center also the move d5 gives this the center it gives the rook on e1 really good prospects oh yeah queen d3 oh queen d3 would have won the pawn wouldn't it oh no it wouldn't have actually quindy 3 queen c8 and we can't take on d6 because of knight c4 but i missed i didn't follow my own advice i i didn't notice the rook was undefended no knight c4 doesn't win a pawn knight c4 he can go queen c7 for example queen e7 okay that doesn't change our strategy we go b3 actually queen e7 might be inaccurate because now black can no longer play d5 at least for the time being 95 okay obviously we trade white is better here no question about it okay now we could play bishop b2 now rather than than rushing with that move i think we can throw in an improving move before we play bishop b2 what is that improving move we can also chase the bishop out of e5 which in turn weakens the d6 pawn so let's go knight f3 okay bishop or knight t7 so now how am i thinking about this position well it's clear that our our overarching plan here is to attack the d6 pawn and to put pressure on black center as a whole so we need to figure out which pieces are not working to their fullest potential in that regard we could trade on e5 that's not a bad idea actually i think the bishop is better in that resulting position than the knight but the other move i like is is rook e to d1 simply to increase the pressure on the d6 pawn so the two candidate candidate moves here are taking the downside of taking is that black takes back with a knight and hits our rook i don't want to lose that tempo that's that's kind of annoying to me so let's go with the second candidate move rook e to d1 yeah and on the next move if we get a chance we can maybe take on e5 or we could play bishop b2 and continue softening up the d6 one this is an unpleasant position for black rook b6 that's a great move though our opponent doing what he can to generate activity okay now i'm really really tempted to take that bishop i'm really tempted to take that and then swing the rook to g3 so division of labor one rook attacks d6 the other rook pressure is the king let's do it we might not have another chance let's do it let's go rook g3 and on the next move we're finally i think going to develop the bishop to b2 so we've got a nice position we've got four minutes so i i will have to speed up a little bit bishop queen f6 queen f6 so f4 is a very tempting move because knight c6 rook takes oh then he has knight d4 there's tactics there yeah so probably should be two makes the most sense queen f4 important position here to play accurately and bishop h6 is also very interesting let's go let's go to h6 now there's a couple of subtleties here to to bear in mind one of which is that if black goes rook f's okay rook b8 not expecting that for whatever reason because the pressure on this pawn is not very serious all right what do we do now queen d2 looks really interesting that would hit the pawn on a5 it would also pressure d6 let's go queen d2 just continuing to kind of oh and i forgot about f4 but f4 he had knight f7 so that would have been subpar my bad yeah i'm thank you jamil j so sorry i was a little bit distracted i appreciate it c4 okay i think we have to take knight takes and then go queen e2 for example yeah let's take it okay queen e2 makes a lot of sense here attacking the knight let's do it rook beach oh rook b2 i missed that but that's that's a blunder that's a blunder and this is a classic example of making an assumption about the position false assumption about the position because he thinks that queen takes d4 is impossible thinks that queen takes c4 is impossible but then there's queen takes f2 right and that looks like may but it's not made because we just have king h2 we just have king h2 and the rook on g3 defends the pawn on g2 i don't see a follow-up there well if he takes to the rook then there's nothing we just got queen d4 for instance forcing the queen trade yeah king h1 is also good in h1 queen takes g3 and we can take on e6 good catch that is mate okay and he resigns that's a bit of a disappointing finale but i i would say that that's partially a result of all the pressure that we put on black lackluster final for sure but it was an interesting middle game"
+  },
+  {
+   "ply": 3,
+   "t": 623,
+   "line": [],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "okay and he resigns that's a bit of a disappointing finale but i i would say that that's partially a result of all the pressure that we put on black lackluster final for sure but it was an interesting middle game a lot to to delve into something i said earlier probably a couple of maybe 200 300 points ago which is that the games of course become a lot more technical and it becomes a lot harder to explain certain things in two or three sentences so that's why i offload a lot of that to after the game so if you're 14 1500 or less then you really want to pay more attention to the way i explain stuff after the game and you want to make sure that you understand the basics of why i made the moves i made um rather than you know for example freaking out about like why i didn't play one particular move over another like in many cases there are viable alternatives yeah yeah i was i was just there so the"
+  },
+  {
+   "ply": 4,
+   "t": 666.5,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "um rather than you know for example freaking out about like why i didn't play one particular move over another like in many cases there are viable alternatives yeah yeah i was i was just there so the benko gambit"
+  },
+  {
+   "ply": 5,
+   "t": 668.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "said": "freaking out about like why i didn't play one particular move over another like in many cases there are viable alternatives yeah yeah i was i was just there so the benko gambit"
+  },
+  {
+   "ply": 6,
+   "t": 670,
+   "line": [
+    "b5"
+   ],
+   "fen": "rnbqkb1r/p2ppppp/5n2/1ppP4/2P5/8/PP2PPPP/RNBQKBNR w KQkq - 0 4",
+   "said": "like why i didn't play one particular move over another like in many cases there are viable alternatives yeah yeah i was i was just there so the benko gambit is a very interesting opening it's it's an underrated opening but there's one major like fundamental flaw with having the benko as your main opening which is that it's very very easy to avoid it like white can go knight f3 move two and you can't play the benko the same"
+  },
+  {
+   "ply": 3,
+   "t": 690,
+   "line": [],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "flaw with having the benko as your main opening which is that it's very very easy to avoid it like white can go knight f3 move two and you can't play the benko the same problem if you play the budapest gambit like you're gonna have to learn something on top of the benko thank you mgn7 now this what you can do here is you you can play c5 d5 and now b5 so this is a viable system i don't remember apparently this is called the spielman indian pseudo-benko variation but to my knowledge this is not considered very good for black theoretically i think bishop g5 here is supposed to give white a pretty hefty advantage you could analyze this on your own maybe this is uh tenable um but a lot of banker players do this to avoid having to learn a completely different opening but anyways knight f6 we played c4 c5"
+  },
+  {
+   "ply": 4,
+   "t": 736,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "uh tenable um but a lot of banker players do this to avoid having to learn a completely different opening but anyways knight f6 we played c4 c5 d5"
+  },
+  {
+   "ply": 5,
+   "t": 737.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "said": "um but a lot of banker players do this to avoid having to learn a completely different opening but anyways knight f6 we played c4 c5 d5 now if you're a white player who wants"
+  },
+  {
+   "ply": 4,
+   "t": 739.5,
+   "line": [],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "to avoid having to learn a completely different opening but anyways knight f6 we played c4 c5 d5 now if you're a white player who wants to avoid the benoni in the benko you can also play the move e3 here it's quite"
+  },
+  {
+   "ply": 5,
+   "t": 743.5,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "but anyways knight f6 we played c4 c5 d5 now if you're a white player who wants to avoid the benoni in the benko you can also play the move e3 here it's quite passive but it's very very solid you also have the move knight f3 so"
+  },
+  {
+   "ply": 4,
+   "t": 747.5,
+   "line": [],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "d5 now if you're a white player who wants to avoid the benoni in the benko you can also play the move e3 here it's quite passive but it's very very solid you also have the move knight f3 so"
+  },
+  {
+   "ply": 5,
+   "t": 749,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "said": "d5 now if you're a white player who wants to avoid the benoni in the benko you can also play the move e3 here it's quite passive but it's very very solid you also have the move knight f3 so there are ways that you can avoid the bononi and the benko if you're if you're white okay so d5 b5"
+  },
+  {
+   "ply": 9,
+   "t": 755,
+   "line": [
+    "b6",
+    "d5",
+    "b5",
+    "Ng1"
+   ],
+   "fen": "rnbqkb1r/p2ppppp/5n2/1ppP4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 1 5",
+   "said": "passive but it's very very solid you also have the move knight f3 so there are ways that you can avoid the bononi and the benko if you're if you're white okay so d5 b5 and here there are a gazillion different viable setups now what shanklin recommends in his uh course and what has been recommended i think in books of the past couple of years is this line which has really caused the benko to"
+  },
+  {
+   "ply": 11,
+   "t": 770.5,
+   "line": [
+    "a6",
+    "cxb5"
+   ],
+   "fen": "rnbqkb1r/3ppppp/p4n2/1PpP4/8/8/PP2PPPP/RNBQKBNR b KQkq - 0 6",
+   "said": "setups now what shanklin recommends in his uh course and what has been recommended i think in books of the past couple of years is this line which has really caused the benko to stop being played at a grand master level if you if you check gm games the benco has gotten very very rare and it's generally accepted that this line gives white a pretty big advantage and if i'm not mistaken this line is"
+  },
+  {
+   "ply": 13,
+   "t": 785.5,
+   "line": [
+    "g6",
+    "bxa6"
+   ],
+   "fen": "rnbqkb1r/3ppp1p/P4np1/2pP4/8/8/PP2PPPP/RNBQKBNR b KQkq - 0 7",
+   "said": "level if you if you check gm games the benco has gotten very very rare and it's generally accepted that this line gives white a pretty big advantage and if i'm not mistaken this line is basically knight c3 bishop takes a6 and now the move e4"
+  },
+  {
+   "ply": 15,
+   "t": 789,
+   "line": [
+    "Bxa6",
+    "Nc3"
+   ],
+   "fen": "rn1qkb1r/3ppp1p/b4np1/2pP4/8/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 8",
+   "said": "rare and it's generally accepted that this line gives white a pretty big advantage and if i'm not mistaken this line is basically knight c3 bishop takes a6 and now the move e4"
+  },
+  {
+   "ply": 19,
+   "t": 790.5,
+   "line": [
+    "Ne4",
+    "e3",
+    "Nf6",
+    "e4"
+   ],
+   "fen": "rn1qkb1r/3ppp1p/b4np1/2pP4/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 10",
+   "said": "and it's generally accepted that this line gives white a pretty big advantage and if i'm not mistaken this line is basically knight c3 bishop takes a6 and now the move e4 now the move e4 you allow"
+  },
+  {
+   "ply": 20,
+   "t": 794.5,
+   "line": [
+    "Bxf1"
+   ],
+   "fen": "rn1qkb1r/3ppp1p/5np1/2pP4/4P3/2N5/PP3PPP/R1BQKbNR w KQkq - 0 11",
+   "said": "white a pretty big advantage and if i'm not mistaken this line is basically knight c3 bishop takes a6 and now the move e4 now the move e4 you allow bishop takes f1 king takes f1 and the"
+  },
+  {
+   "ply": 21,
+   "t": 795.5,
+   "line": [
+    "Kxf1"
+   ],
+   "fen": "rn1qkb1r/3ppp1p/5np1/2pP4/4P3/2N5/PP3PPP/R1BQ1KNR b kq - 0 11",
+   "said": "and if i'm not mistaken this line is basically knight c3 bishop takes a6 and now the move e4 now the move e4 you allow bishop takes f1 king takes f1 and the general idea is that you fiancado the king on g2 and the king is going to be quite safe there and"
+  },
+  {
+   "ply": 22,
+   "t": 803,
+   "line": [
+    "d6"
+   ],
+   "fen": "rn1qkb1r/4pp1p/3p1np1/2pP4/4P3/2N5/PP3PPP/R1BQ1KNR w kq - 0 12",
+   "said": "now the move e4 you allow bishop takes f1 king takes f1 and the general idea is that you fiancado the king on g2 and the king is going to be quite safe there and according to modern engines it seems that black does not have sufficient compensation for the pawn that doesn't mean that you"
+  },
+  {
+   "ply": 23,
+   "t": 809.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rn1qkb1r/4pp1p/3p1np1/2pP4/4P3/2N2N2/PP3PPP/R1BQ1K1R b kq - 1 12",
+   "said": "king on g2 and the king is going to be quite safe there and according to modern engines it seems that black does not have sufficient compensation for the pawn that doesn't mean that you can't play this that doesn't mean that"
+  },
+  {
+   "ply": 24,
+   "t": 811,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rn1qk2r/4ppbp/3p1np1/2pP4/4P3/2N2N2/PP3PPP/R1BQ1K1R w kq - 2 13",
+   "said": "quite safe there and according to modern engines it seems that black does not have sufficient compensation for the pawn that doesn't mean that you can't play this that doesn't mean that at a 1600 level"
+  },
+  {
+   "ply": 25,
+   "t": 813.5,
+   "line": [
+    "g3"
+   ],
+   "fen": "rn1qk2r/4ppbp/3p1np1/2pP4/4P3/2N2NP1/PP3P1P/R1BQ1K1R b kq - 0 13",
+   "said": "quite safe there and according to modern engines it seems that black does not have sufficient compensation for the pawn that doesn't mean that you can't play this that doesn't mean that at a 1600 level you know this is untenable it just means that magnus carlsen is not going to play it with black against geary so this line this line is considered"
+  },
+  {
+   "ply": 27,
+   "t": 820.5,
+   "line": [
+    "O-O",
+    "Kg2"
+   ],
+   "fen": "rn1q1rk1/4ppbp/3p1np1/2pP4/4P3/2N2NP1/PP3PKP/R1BQ3R b - - 2 14",
+   "said": "for the pawn that doesn't mean that you can't play this that doesn't mean that at a 1600 level you know this is untenable it just means that magnus carlsen is not going to play it with black against geary so this line this line is considered better for white you might wonder like what even the point of the benko gamut is like it doesn't just give way to protected past pawn it does but when the bengal works it it really is an amazing opening like when this pawn sacrifice yields serious queen side counter play you can win some really really pretty and smooth games in the benko but i want to give you a a taste of what the benko looks like when it actually works like what does black's queen side attack actually look like i had a game years ago in the king's indian but i applied the benko gambit idea so he got a position that was very very similar to something that would come out of a benko and my opponent played it very poorly which you know allowed me to illustrate some of the basic ideas of the benko so this is from the world youth 2013. this was a king's indian of course because that's what i play um i have three castles bishop e3 same-ish variation a6 and here i am i was preparing for the game and i came up with a with an interesting line knight fd7 weird-looking move the point is you go c5 and you open up the bishop accentuating the pressure you'll see what the point of a6 is in a second so here he goes knight castles knight c6 and already bad play by white he goes d5 this gives me the bishop pair i mean now i go knight e5 and he has to keep his bishop on d3 otherwise i win the pawn on c4 knight c1 knight takes uh oh no and i go b5 i actually want b5 right here and right now leading to the benko gamut structure cb5 now i take the bishop and now i take the pawn and we get this position but in comparison to the actual benko like this is incomparably favorable for black because we've got this monster bishop on g7 we've got the bishop pair and you'll see how important that is in a second and the initiative develops by itself we go bishop a6 now white should have gone a4 here and defended the night but instead he drops back bang queen a5 this is the world's best mango queen c2 rook fba just accumulating all of the pieces on the queen side rook ft1 and now it's already time for concrete measures i actually found an idea that just wins the game right away so bishop takes d3 you give away the bishop what is the point who can tell me what subsequent maneuver gives black insurmountable pressure yeah exactly so the point is to get the knight to c4 you go 95 with tempo then you bring the knight to c4 the bishop has to drop back to c1 now i considered the tactic knight takes b2 but i rejected it because at the end of the line okay black is better but this is not this is not convincing enough this is not convincing enough so rather than caching this is a very common mistake cashing in too quickly rather than accumulating the pressure and cashing in at an appropriate moment so i found a really strong move here that leads to the collapse of white's position and that's the simple queen before i mean you just attack the b2 pawn white can't play b3 because the knight hangs rook b won the knight hangs as well it's totally crushing so white played a3 and now we stick the queen on to b3 trade rook a2 double on b8 and now when i win the pawn on b2 it's completely winning a4 knight takes b2 this is this is over because the rook easily stops white's pawn okay he went knight a7 and we just push yeah nice tactics here by the way rook takes a4 if knight takes c2 then rook c4 and bishop b2 was unstoppable winning the knight t3 rook a1 trade king f2 and bishop b2 white resigned easy game i think i i usually you know i'm not a time trouble junkie but i usually take most of my time this game i think i only took like 30 40 minutes uh because all of the moves are really really natural can you show the whole line that is bad for black in the banco yeah so well i just did the line that's that's considered um considered bad for black is so a6 b oops not b6 b6 is a move also ba thank you keep proxy now g6 is more popular than bishop takes a6 is the pawn's not going anywhere it transposes into each other bishop takes a6 and the move is e4 and this is still very popular if you look this up online you'll still see a ton of gm games from 2022 even but um yeah e3 is also a good sideline that's true but but if you if you check with a strong engine light is better that's not really up for debate but again i need to hammer this point home because it's i think often mistransmitted by people which is that if you listen to magnus talking about a line he says well this line is worse for black that doesn't mean you can't play it and i know many like people in the 1800 2000 range who are successful banco players if you're a tactical player this if you like gambits this is a great opening um to play anywhere under gm level so just because something is untenable at a 2750 level in fact the king's indian i would say is basically untenable at that level even i play it full time um so just keep that straight in your mind but i didn't go for this line because i don't know it um or i don't know the subsequent"
+  },
+  {
+   "ply": 7,
+   "t": 1182.5,
+   "line": [],
+   "fen": "rnbqkb1r/p2ppppp/1p3n2/2pP4/2P5/5N2/PP2PPPP/RNBQKB1R b KQkq - 0 4",
+   "said": "even i play it full time um so just keep that straight in your mind but i didn't go for this line because i don't know it um or i don't know the subsequent there's a lot of theory after that obviously so we played this old line that my coach taught me knight d2 bc and e4 uh knight d2 is not common at all it's probably the sixth seventh most common move but the benko is very good at teaching you like basic gambit strategy and positional ideas because all of the pressure occurs on the queen side you have to learn how to pressure the side of the board that the opponent's king is not on okay so d6 is to my knowledge maybe the theory has changed i mean maybe this is fine now but the way i remember it is c3 is the best move b takes c3 and now uh g6 yeah this is the main line g6 c4 d6 bishop b2 bishop g7 and you get a position like this i think this is probably close to equal but it's pretty easy to play this for white knight gf3 and bishop d3 and i just think that white's development here is very natural so this is a quick and easy line that you can play he didn't play that he plays d6 now we play bishop takes c4 why c3 what is the purpose of the move see through the purpose of the move is that you're going to lose that pawn anyway so you might as well damage you might as well damage white structure while you're at it classic idea in so many different lines using you're already going to lose a pawn so you give it away for to ruin your opponent's structure maybe"
+  },
+  {
+   "ply": 2,
+   "t": 1270,
+   "line": [],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "damage white structure while you're at it classic idea in so many different lines using you're already going to lose a pawn so you give it away for to ruin your opponent's structure maybe the most famous"
+  },
+  {
+   "ply": 3,
+   "t": 1271.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 2 2",
+   "said": "it classic idea in so many different lines using you're already going to lose a pawn so you give it away for to ruin your opponent's structure maybe the most famous instance of this is in the fianchetto grunfeld"
+  },
+  {
+   "ply": 7,
+   "t": 1274,
+   "line": [
+    "g6",
+    "g3",
+    "Bg7",
+    "Bg2"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/3P4/5NP1/PPP1PPBP/RNBQK2R b KQkq - 2 4",
+   "said": "lines using you're already going to lose a pawn so you give it away for to ruin your opponent's structure maybe the most famous instance of this is in the fianchetto grunfeld in the symmetrical fiance grunfeld there's a line you've seen me play and probably where white goes knight a3 and black ghost c3 giving away the c pawn this way to create some weaknesses in white structure isn't there an important argument that this strengthens white's center uh yes but white center is strong and that's true but everything's a trade-off like the logic is that the damage is permanent to the pawn structure whereas the center is pretty strong anyway you don't really care that there's another pawn in the center here okay anyways so d6 bishop c4 g6 knight gf3 and bd7 so i think white is slightly better here uh good development so we played h3 to avoid the idea of knight g4 and knight e5 so we we restrict the knight on f6 castles and this is one of those positions which often occurs in d4 openings now d4 openings overall i think"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 2,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "options": [
+    {
+     "san": "c4",
+     "t": 23,
+     "continuation": "c4",
+     "said": "opponent again i've i've been playing d4 a little bit more on the speed run so let's go d4 i could play london i mean i could play london but there's just so much material available on the london that i think mainlines are a better use of our time so let's go c4 yeah i could play a catalan okay benoni minoni we're gonna go d5 and a benko gambit okay so bangkok gambit i i don't know that well i'm gonna play an old line that my coach taught me years ago a rare move now of course c takes b5 is is topical that that's what the books recommend but i'm going to play an old soviet line which is knight d2 this is not a well-known move at all but it but it has some teeth the point is to meet b take c4 with e4 so you're almost reversing the gambit and you're sacking upon yourself of course it's temporary because we're going to win this pawn back yeah and nobody knows the correct move here which i'll talk about after the game the correct move is actually c3 to give the punt back in order to damage white's pawn structure now we take on c4 of course with the bishop because otherwise the pawn on e4 hanks and white is a slight but stable advantage here"
+    },
+    {
+     "san": "Nf3",
+     "t": 1271.5,
+     "continuation": "Nf3",
+     "said": "it classic idea in so many different lines using you're already going to lose a pawn so you give it away for to ruin your opponent's structure maybe the most famous instance of this is in the fianchetto grunfeld in the symmetrical fiance grunfeld there's a line you've seen me play and probably where white goes knight a3 and black ghost c3 giving away the c pawn this way to create some weaknesses in white structure isn't there an important argument that this strengthens white's center uh yes but white center is strong and that's true but everything's a trade-off like the logic is that the damage is permanent to the pawn structure whereas the center is pretty strong anyway you don't really care that there's another pawn in the center here okay anyways so d6 bishop c4 g6 knight gf3 and bd7 so i think white is slightly better here uh good development so we played h3 to avoid the idea of knight g4 and knight e5 so we we restrict the knight on f6 castles and this is one of those positions which often occurs in d4"
+    }
+   ]
+  },
+  {
+   "ply": 4,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "c5"
+   ],
+   "options": [
+    {
+     "san": "d5",
+     "t": 32,
+     "continuation": "d5",
+     "said": "could play london but there's just so much material available on the london that i think mainlines are a better use of our time so let's go c4 yeah i could play a catalan okay benoni minoni we're gonna go d5 and a benko gambit okay so bangkok gambit i i don't know that well i'm gonna play an old line that my coach taught me years ago a rare move now of course c takes b5 is is topical that that's what the books recommend but i'm going to play an old soviet line which is knight d2 this is not a well-known move at all but it but it has some teeth the point is to meet b take c4 with e4 so you're almost reversing the gambit and you're sacking upon yourself of course it's temporary because we're going to win this pawn back yeah and nobody knows the correct move here which i'll talk about after the game the correct move is actually c3 to give the punt back in order to damage white's pawn structure now we take on c4 of course with the bishop because otherwise the pawn on e4 hanks and white is a slight but stable advantage here g6 cool well we have to develop our pieces there's not much to say here knight gf3 but it's"
+    },
+    {
+     "san": "e3",
+     "t": 743.5,
+     "continuation": "e3",
+     "said": "but anyways knight f6 we played c4 c5 d5 now if you're a white player who wants to avoid the benoni in the benko you can also play the move e3 here it's quite passive but it's very very solid you also have the move knight f3 so there are ways that you can avoid the bononi and the benko if you're if you're white okay so d5 b5 and here there are a gazillion different viable setups now what shanklin recommends in his uh course and what has been recommended i think in books of the past couple of years is this line which has really caused the benko to stop being played at a grand master level if you if you check gm games the benco has gotten very very rare and it's generally accepted that this line gives white a pretty big advantage and if i'm not mistaken this line is basically knight c3 bishop takes a6 and now the move e4 now the move e4 you allow bishop takes f1 king takes f1 and the general idea is that you fiancado the king on g2 and the king is going to be quite safe there and according to modern engines"
+    },
+    {
+     "san": "Nf3",
+     "t": 749,
+     "continuation": "Nf3",
+     "said": "d5 now if you're a white player who wants to avoid the benoni in the benko you can also play the move e3 here it's quite passive but it's very very solid you also have the move knight f3 so there are ways that you can avoid the bononi and the benko if you're if you're white okay so d5 b5 and here there are a gazillion different viable setups now what shanklin recommends in his uh course and what has been recommended i think in books of the past couple of years is this line which has really caused the benko to stop being played at a grand master level if you if you check gm games the benco has gotten very very rare and it's generally accepted that this line gives white a pretty big advantage and if i'm not mistaken this line is basically knight c3 bishop takes a6 and now the move e4 now the move e4 you allow bishop takes f1 king takes f1 and the general idea is that you fiancado the king on g2 and the king is going to be quite safe there and according to modern engines it seems that black does not have sufficient compensation for the pawn that doesn't mean that you"
+    }
+   ]
+  }
+ ]
+}

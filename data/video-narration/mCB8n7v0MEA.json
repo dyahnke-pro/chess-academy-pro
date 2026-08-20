@@ -1,0 +1,586 @@
+{
+ "videoId": "mCB8n7v0MEA",
+ "title": "Sicilian - Grand Prix Attack | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 346,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "was that was easy 16 13 from azerbaijan as zekka okay e4 well um let's i i feel like playing another accelerated dragon oh no never mind"
+  },
+  {
+   "ply": 3,
+   "t": 348,
+   "line": [
+    "f4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+   "said": "that was easy 16 13 from azerbaijan as zekka okay e4 well um let's i i feel like playing another accelerated dragon oh no never mind white plays four this is really good uh this is a move which if you're a sicilian player you should definitely know how to respond to it i i don't know if it has a formal name i think i informally refer to it as the accelerated grand prix because in the general grand prix white plays knight c3 and the way that you quote unquote punish this and i want to emphasize that this move is not a reputation of f4 but this is what what is recommended in most"
+  },
+  {
+   "ply": 4,
+   "t": 372,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "said": "accelerated grand prix because in the general grand prix white plays knight c3 and the way that you quote unquote punish this and i want to emphasize that this move is not a reputation of f4 but this is what what is recommended in most uh opening books and i believe it's the"
+  },
+  {
+   "ply": 5,
+   "t": 374.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2ppP3/5P2/8/PPPP2PP/RNBQKBNR b KQkq - 0 3",
+   "said": "and the way that you quote unquote punish this and i want to emphasize that this move is not a reputation of f4 but this is what what is recommended in most uh opening books and i believe it's the best movement that is d5 now i've i've had this before in a speed"
+  },
+  {
+   "ply": 4,
+   "t": 376.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "said": "and the way that you quote unquote punish this and i want to emphasize that this move is not a reputation of f4 but this is what what is recommended in most uh opening books and i believe it's the best movement that is d5 now i've i've had this before in a speed run he takes d5 you don't take with the queen you play knight f6 this is quite common in such positions e5 essentially"
+  },
+  {
+   "ply": 5,
+   "t": 384.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2ppP3/5P2/8/PPPP2PP/RNBQKBNR b KQkq - 0 3",
+   "said": "uh opening books and i believe it's the best movement that is d5 now i've i've had this before in a speed run he takes d5 you don't take with the queen you play knight f6 this is quite common in such positions e5 essentially allows you to get a good french type of structure so what should we do here what is the the almost automatic response in such situations not e6 no no no e6 literally transposes to a french first we get the bishop outside the"
+  },
+  {
+   "ply": 6,
+   "t": 399.5,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "rn1qkbnr/pp2pppp/8/2ppPb2/5P2/8/PPPP2PP/RNBQKBNR w KQkq - 1 4",
+   "said": "structure so what should we do here what is the the almost automatic response in such situations not e6 no no no e6 literally transposes to a french first we get the bishop outside the punching you guys know that first we get the bishop outside the pawn chain right then we play e6 otherwise everybody would do this this would transpose into a french"
+  },
+  {
+   "ply": 7,
+   "t": 412,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rn1qkbnr/pp2pppp/8/2ppPb2/5P2/5N2/PPPP2PP/RNBQKB1R b KQkq - 2 4",
+   "said": "punching you guys know that first we get the bishop outside the pawn chain right then we play e6 otherwise everybody would do this this would transpose into a french okay and we don't have to rush with these six we don't have to rush rush with e6 we can start with knight cc it's"
+  },
+  {
+   "ply": 8,
+   "t": 416,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2qkbnr/pp2pppp/2n5/2ppPb2/5P2/5N2/PPPP2PP/RNBQKB1R w KQkq - 3 5",
+   "said": "right then we play e6 otherwise everybody would do this this would transpose into a french okay and we don't have to rush with these six we don't have to rush rush with e6 we can start with knight cc it's not like white's not gonna play e6 let's get our knight out first"
+  },
+  {
+   "ply": 9,
+   "t": 420,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r2qkbnr/pp2pppp/2n5/1BppPb2/5P2/5N2/PPPP2PP/RNBQK2R b KQkq - 4 5",
+   "said": "everybody would do this this would transpose into a french okay and we don't have to rush with these six we don't have to rush rush with e6 we can start with knight cc it's not like white's not gonna play e6 let's get our knight out first this should be fine now are we worried about the prospect of bishop take c6 check well i wouldn't necessarily say the answer is no uh and as i'll show you guys after the game this pawn structure specifically is often quite problematic for black and this is something that is very unique to these positions so i'll flesh that out after the game through the lens of perhaps an over the board game what is an elegant and active way to take the sting out of bishop take c6 well what does it mean to take this thing out of this move it means to prepare to capture with a piece queen b6 definitely"
+  },
+  {
+   "ply": 10,
+   "t": 455.5,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "r3kbnr/pp2pppp/1qn5/1BppPb2/5P2/5N2/PPPP2PP/RNBQK2R w KQkq - 5 6",
+   "said": "perhaps an over the board game what is an elegant and active way to take the sting out of bishop take c6 well what does it mean to take this thing out of this move it means to prepare to capture with a piece queen b6 definitely yeah no d5 there okay so now we take"
+  },
+  {
+   "ply": 12,
+   "t": 459.5,
+   "line": [
+    "Bxc6+",
+    "Qxc6"
+   ],
+   "fen": "r3kbnr/pp2pppp/2q5/2ppPb2/5P2/5N2/PPPP2PP/RNBQK2R w KQkq - 0 7",
+   "said": "take the sting out of bishop take c6 well what does it mean to take this thing out of this move it means to prepare to capture with a piece queen b6 definitely yeah no d5 there okay so now we take with the queen and everything is groovy we have preserved our pawn structure and now it's time for us to develop our king side"
+  },
+  {
+   "ply": 13,
+   "t": 469.5,
+   "line": [
+    "d3"
+   ],
+   "fen": "r3kbnr/pp2pppp/2q5/2ppPb2/5P2/3P1N2/PPP3PP/RNBQK2R b KQkq - 0 7",
+   "said": "yeah no d5 there okay so now we take with the queen and everything is groovy we have preserved our pawn structure and now it's time for us to develop our king side"
+  },
+  {
+   "ply": 14,
+   "t": 470.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "r3kbnr/pp3ppp/2q1p3/2ppPb2/5P2/3P1N2/PPP3PP/RNBQK2R w KQkq - 0 8",
+   "said": "with the queen and everything is groovy we have preserved our pawn structure and now it's time for us to develop our king side d3 okay let's uh let's go e6 now the one issue in such situations is that"
+  },
+  {
+   "ply": 15,
+   "t": 475.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r3kbnr/pp3ppp/2q1p3/2ppPb2/5P2/3P1N2/PPP3PP/RNBQ1RK1 b kq - 1 8",
+   "said": "and now it's time for us to develop our king side d3 okay let's uh let's go e6 now the one issue in such situations is that if you would want to go knight f6 but you can't so if you're a caracon player then you generally know how to approach the question of where to develop these where does the night of bishop belong because there's not a lot of real estate on the king side that um you know there's just not a lot of room there so there's a couple of ways that you can address this and the sort of textbook method is to start by going 97 knight g6 and then going bishop b7 but there are also a couple of other methods um some of them a little bit more creative i don't like g6 because fianchettoing the bishop is just biting on granite on e5 the more creative method is to get the knight out to h6 and the bishop on e7 uh the drawback of that is that white can go h3 and kind of put the knight out of commission but i'm going to show you guys a really cool idea an idea that i think is really cool and we'll start"
+  },
+  {
+   "ply": 16,
+   "t": 529,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r3k1nr/pp2bppp/2q1p3/2ppPb2/5P2/3P1N2/PPP3PP/RNBQ1RK1 w kq - 2 9",
+   "said": "e7 uh the drawback of that is that white can go h3 and kind of put the knight out of commission but i'm going to show you guys a really cool idea an idea that i think is really cool and we'll start with the move bishop b7 so we'll start with the most flexible developing move and uh as we discussed so"
+  },
+  {
+   "ply": 17,
+   "t": 534.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "r3k1nr/pp2bppp/2q1p3/2ppPb2/5P2/2PP1N2/PP4PP/RNBQ1RK1 b kq - 0 9",
+   "said": "of commission but i'm going to show you guys a really cool idea an idea that i think is really cool and we'll start with the move bishop b7 so we'll start with the most flexible developing move and uh as we discussed so knight h6 allows h3 right and the knight is out of commission but if you watch for example hikaru play uh the gurganidze you might know that black is a very particular kind of move that is often played in such structures uh it grabs space and it also prepares something important what am i talking about and that is the move h5"
+  },
+  {
+   "ply": 18,
+   "t": 557.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "r3k1nr/pp2bpp1/2q1p3/2ppPb1p/5P2/2PP1N2/PP4PP/RNBQ1RK1 w kq - 0 10",
+   "said": "particular kind of move that is often played in such structures uh it grabs space and it also prepares something important what am i talking about and that is the move h5 so this does a couple of things it prepares the move knight h6"
+  },
+  {
+   "ply": 19,
+   "t": 562.5,
+   "line": [
+    "h3"
+   ],
+   "fen": "r3k1nr/pp2bpp1/2q1p3/2ppPb1p/5P2/2PP1N1P/PP4P1/RNBQ1RK1 b kq - 0 10",
+   "said": "uh it grabs space and it also prepares something important what am i talking about and that is the move h5 so this does a couple of things it prepares the move knight h6 which uh we are now going to play"
+  },
+  {
+   "ply": 20,
+   "t": 564.5,
+   "line": [
+    "Nh6"
+   ],
+   "fen": "r3k2r/pp2bpp1/2q1p2n/2ppPb1p/5P2/2PP1N1P/PP4P1/RNBQ1RK1 w kq - 1 11",
+   "said": "something important what am i talking about and that is the move h5 so this does a couple of things it prepares the move knight h6 which uh we are now going to play and let me now explain why now if the pawn was not on h5 here if the pawn was on h7 a little thought experiment what move would be possible now for white nasty little move if the pawn was on h7 right now instead of on h5 what could white do"
+  },
+  {
+   "ply": 21,
+   "t": 580.5,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "r3k2r/pp2bpp1/2q1p2n/2ppPbNp/5P2/2PP3P/PP4P1/RNBQ1RK1 b kq - 2 11",
+   "said": "pawn was not on h5 here if the pawn was on h7 a little thought experiment what move would be possible now for white nasty little move if the pawn was on h7 right now instead of on h5 what could white do why would be able to go g4 with the pawn being on h5 it's prevented it's preventing g4 and it is allowing a further regrouping of pieces think about the snide on h6 where do you really want it what little re reshuffling can you propose here again if you watch if you're familiar with these structures you should know about this bishop yeah bishop g6 and knight f5"
+  },
+  {
+   "ply": 22,
+   "t": 605,
+   "line": [
+    "Bg6"
+   ],
+   "fen": "r3k2r/pp2bpp1/2q1p1bn/2ppP1Np/5P2/2PP3P/PP4P1/RNBQ1RK1 w kq - 3 12",
+   "said": "reshuffling can you propose here again if you watch if you're familiar with these structures you should know about this bishop yeah bishop g6 and knight f5 exactly i guess why i can play g white can play g4 here but that allows us to open the h file and i feel like the white king is going to be so exposed there that we don't have to worry about this move does that make sense why does the knight belong in f5 well it's just really good there and we can also push this pawn down to h4 perhaps we should have done that earlier we could have done that earlier and that completely prevents g4 because of the possibility of on passant okay that is a"
+  },
+  {
+   "ply": 23,
+   "t": 632.5,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "r3k2r/pp2bpp1/2q1p1bn/2ppP1Np/5P2/2PP3P/PP1N2P1/R1BQ1RK1 b kq - 4 12",
+   "said": "belong in f5 well it's just really good there and we can also push this pawn down to h4 perhaps we should have done that earlier we could have done that earlier and that completely prevents g4 because of the possibility of on passant okay that is a blunder why knight d2 is just a blunder yeah thing"
+  },
+  {
+   "ply": 24,
+   "t": 641,
+   "line": [
+    "Bxd3"
+   ],
+   "fen": "r3k2r/pp2bpp1/2q1p2n/2ppP1Np/5P2/2Pb3P/PP1N2P1/R1BQ1RK1 w kq - 0 13",
+   "said": "completely prevents g4 because of the possibility of on passant okay that is a blunder why knight d2 is just a blunder yeah thing thank you for the center pawn we will take it gladly and we can drop back and proceed with our plan gladly take that pawn"
+  },
+  {
+   "ply": 25,
+   "t": 650.5,
+   "line": [
+    "Rf2"
+   ],
+   "fen": "r3k2r/pp2bpp1/2q1p2n/2ppP1Np/5P2/2Pb3P/PP1N1RP1/R1BQ2K1 b kq - 1 13",
+   "said": "thank you for the center pawn we will take it gladly and we can drop back and proceed with our plan gladly take that pawn if you want to be really accurate you might say well we don't even really have to bring the bishop back to g6 this bishop on e3 is perfectly safe it can be supported by the move c4 or they can move back toward this diagonal um but we don't need to i actually don't like but actually no let me think about this for a second i don't love the immediate c4 although boom boom boom we'll play it"
+  },
+  {
+   "ply": 26,
+   "t": 678,
+   "line": [
+    "c4"
+   ],
+   "fen": "r3k2r/pp2bpp1/2q1p2n/3pP1Np/2p2P2/2Pb3P/PP1N1RP1/R1BQ2K1 w kq - 0 14",
+   "said": "like but actually no let me think about this for a second i don't love the immediate c4 although boom boom boom we'll play it yeah let's play it but it i okay this is very concrete i don't like it positionally but i think it works out tactically can somebody explain to me why i might be reluctant about playing this move from a positional standpoint what is the drawback and yes it threatens bishop c5 i see that but what is the drawback of this move from a positional standpoint it weakens the d4 square it creates a big hole on d4 now if you can defend that hole with your pieces and you can make sure of that then this is fine and it took me a while to figure out that we can there we"
+  },
+  {
+   "ply": 27,
+   "t": 711,
+   "line": [
+    "Ndf3"
+   ],
+   "fen": "r3k2r/pp2bpp1/2q1p2n/3pP1Np/2p2P2/2Pb1N1P/PP3RP1/R1BQ2K1 b kq - 1 14",
+   "said": "it weakens the d4 square it creates a big hole on d4 now if you can defend that hole with your pieces and you can make sure of that then this is fine and it took me a while to figure out that we can there we go our opponent tries to exploit it what should we do i know a lot of you are attempted by bishop c5 it's the right idea but you don't want to give the bishop up for the knight this dark squared bishop is very valuable look at how many weak dark squares white actually has instead we bring the knight to f5 just"
+  },
+  {
+   "ply": 28,
+   "t": 727,
+   "line": [
+    "Nf5"
+   ],
+   "fen": "r3k2r/pp2bpp1/2q1p3/3pPnNp/2p2P2/2Pb1N1P/PP3RP1/R1BQ2K1 w kq - 2 15",
+   "said": "i know a lot of you are attempted by bishop c5 it's the right idea but you don't want to give the bishop up for the knight this dark squared bishop is very valuable look at how many weak dark squares white actually has instead we bring the knight to f5 just in time we bring the knight to f5 just in time the move that i was trying to calculate for the record is g4 in this position i think we're doing well after g4 but i had to work that out and so in a over the board game i wouldn't go c4 i would i would wait for a more"
+  },
+  {
+   "ply": 29,
+   "t": 745.5,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r3k2r/pp2bpp1/2q1p3/3pPnNp/2pN1P2/2Pb3P/PP3RP1/R1BQ2K1 b kq - 3 15",
+   "said": "for the record is g4 in this position i think we're doing well after g4 but i had to work that out and so in a over the board game i wouldn't go c4 i would i would wait for a more opportune moment to play that this is a very instructive moment because i can get i'm sure that most of you are probably thinking okay now we should take but i actually think we can squeeze more out of this position um without taking nd4 why do i how do i know that why do i say that because if you take on d4 then the diagonal is plugged by the pawn whereas if we can get this knight off of d4 the threat of bishop c5 is going to become incredibly strong now bishop c5 immediately blunders the queen so do we want to play queen c5 no well we want the bishop on c5 so we want the queen on b6"
+  },
+  {
+   "ply": 30,
+   "t": 781.5,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "r3k2r/pp2bpp1/1q2p3/3pPnNp/2pN1P2/2Pb3P/PP3RP1/R1BQ2K1 w kq - 4 16",
+   "said": "d4 the threat of bishop c5 is going to become incredibly strong now bishop c5 immediately blunders the queen so do we want to play queen c5 no well we want the bishop on c5 so we want the queen on b6 why does it check on a4 it's not scary just go king f8 does this make sense this logic makes sense now we're threatening knight takes d4 and queen takes before knight f3 okay"
+  },
+  {
+   "ply": 31,
+   "t": 795,
+   "line": [
+    "Ngf3"
+   ],
+   "fen": "r3k2r/pp2bpp1/1q2p3/3pPn1p/2pN1P2/2Pb1N1P/PP3RP1/R1BQ2K1 b kq - 5 16",
+   "said": "why does it check on a4 it's not scary just go king f8 does this make sense this logic makes sense now we're threatening knight takes d4 and queen takes before knight f3 okay intensify intensify now the move is bishop c5 now"
+  },
+  {
+   "ply": 32,
+   "t": 800.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r3k2r/pp3pp1/1q2p3/2bpPn1p/2pN1P2/2Pb1N1P/PP3RP1/R1BQ2K1 w kq - 6 17",
+   "said": "does this make sense this logic makes sense now we're threatening knight takes d4 and queen takes before knight f3 okay intensify intensify now the move is bishop c5 now we're threatening to win a second pawn on d4 and we've got white basically tied up in knots"
+  },
+  {
+   "ply": 33,
+   "t": 809.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r3k2r/pp3pp1/1q2p3/2bpPn1p/2pN1P2/2PbBN1P/PP3RP1/R2Q2K1 b kq - 7 17",
+   "said": "intensify now the move is bishop c5 now we're threatening to win a second pawn on d4 and we've got white basically tied up in knots"
+  },
+  {
+   "ply": 34,
+   "t": 811,
+   "line": [
+    "Nxe3"
+   ],
+   "fen": "r3k2r/pp3pp1/1q2p3/2bpP2p/2pN1P2/2PbnN1P/PP3RP1/R2Q2K1 w kq - 0 18",
+   "said": "we're threatening to win a second pawn on d4 and we've got white basically tied up in knots bishop e3 we take it we take those bishops and this is what happens right when you put a sufficient amount of pressure on players in this rating range generally you'll see you know these these kinds of blunders um and that's not entirely uncommon and it's totally normal okay so yeah so f4 the move is d5 and there is"
+  },
+  {
+   "ply": 4,
+   "t": 835,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "said": "um and that's not entirely uncommon and it's totally normal okay so yeah so f4 the move is d5 and there is quite a bit of theory here if you"
+  },
+  {
+   "ply": 5,
+   "t": 837.5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pP4/5P2/8/PPPP2PP/RNBQKBNR b KQkq - 0 3",
+   "said": "and that's not entirely uncommon and it's totally normal okay so yeah so f4 the move is d5 and there is quite a bit of theory here if you actually look at books and stuff he takes d5 uh you go knight f6 you try to take this"
+  },
+  {
+   "ply": 6,
+   "t": 841,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/5P2/8/PPPP2PP/RNBQKBNR w KQkq - 1 4",
+   "said": "okay so yeah so f4 the move is d5 and there is quite a bit of theory here if you actually look at books and stuff he takes d5 uh you go knight f6 you try to take this pawn on your own terms and if white goes c4 then i've i"
+  },
+  {
+   "ply": 7,
+   "t": 844.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/2P2P2/8/PP1P2PP/RNBQKBNR b KQkq - 0 4",
+   "said": "yeah so f4 the move is d5 and there is quite a bit of theory here if you actually look at books and stuff he takes d5 uh you go knight f6 you try to take this pawn on your own terms and if white goes c4 then i've i"
+  },
+  {
+   "ply": 8,
+   "t": 846.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/4pn2/2pP4/2P2P2/8/PP1P2PP/RNBQKBNR w KQkq - 0 5",
+   "said": "quite a bit of theory here if you actually look at books and stuff he takes d5 uh you go knight f6 you try to take this pawn on your own terms and if white goes c4 then i've i definitely have a speedrun game with this opening i think our opponent went c4 so you can dig around on search by opening but after e6 the basic idea is that black has tremendous"
+  },
+  {
+   "ply": 10,
+   "t": 857.5,
+   "line": [
+    "dxe6",
+    "Bxe6"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/4bn2/2p5/2P2P2/8/PP1P2PP/RNBQKBNR w KQkq - 0 6",
+   "said": "definitely have a speedrun game with this opening i think our opponent went c4 so you can dig around on search by opening but after e6 the basic idea is that black has tremendous compensation for the pawn and as i explained in that earlier video uh black's compensation hinges on three primary things um let's see if you guys can name all three reasons that i have in mind and there are different ways of looking at this position so it's not like there's a clear like okay this is how it is this is how i think about the position development is not really one of them so that's an interesting way that my intuition differs from yours because white is going to get his king side developed right why can go knight f3 bishop to castles"
+  },
+  {
+   "ply": 11,
+   "t": 892,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/4bn2/2p5/2P2P2/5N2/PP1P2PP/RNBQKB1R b KQkq - 1 6",
+   "said": "development is not really one of them so that's an interesting way that my intuition differs from yours because white is going to get his king side developed right why can go knight f3 bishop to castles so the development advantage is going to be diluted in the next couple of moves so"
+  },
+  {
+   "ply": 10,
+   "t": 898.5,
+   "line": [],
+   "fen": "rn1qkb1r/pp3ppp/4bn2/2p5/2P2P2/8/PP1P2PP/RNBQKBNR w KQkq - 0 6",
+   "said": "because white is going to get his king side developed right why can go knight f3 bishop to castles so the development advantage is going to be diluted in the next couple of moves so first thing is the backward d pawn and that more importantly this d4 square is a giant weakness right as long as we have control over d4 we're making it very hard for white to develop um the second thing is the open king yes and why is it open because there's a pawn enough for and it's sticking out like a sore thumb so even if white castles king side white's king is not going to be entirely out of the woods and the fact that the pawn is on f4 it doesn't just weaken the king i think a lot of people don't fully understand that it creates spillover effects"
+  },
+  {
+   "ply": 12,
+   "t": 929.5,
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "fen": "r2qkb1r/pp3ppp/2n1bn2/2p5/2P2P2/5N2/PP1P2PP/RNBQKB1R w KQkq - 2 7",
+   "said": "like a sore thumb so even if white castles king side white's king is not going to be entirely out of the woods and the fact that the pawn is on f4 it doesn't just weaken the king i think a lot of people don't fully understand that it creates spillover effects"
+  },
+  {
+   "ply": 13,
+   "t": 930.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r2qkb1r/pp3ppp/2n1bn2/2p5/2P2P2/2N2N2/PP1P2PP/R1BQKB1R b KQkq - 3 7",
+   "said": "castles king side white's king is not going to be entirely out of the woods and the fact that the pawn is on f4 it doesn't just weaken the king i think a lot of people don't fully understand that it creates spillover effects on other pieces for example if you think about a move like bishop b3"
+  },
+  {
+   "ply": 16,
+   "t": 933.5,
+   "line": [
+    "Ke7",
+    "d3",
+    "Rg8"
+   ],
+   "fen": "r2q1br1/pp2kppp/2n1bn2/2p5/2P2P2/2NP1N2/PP4PP/R1BQKB1R w KQ - 1 9",
+   "said": "going to be entirely out of the woods and the fact that the pawn is on f4 it doesn't just weaken the king i think a lot of people don't fully understand that it creates spillover effects on other pieces for example if you think about a move like bishop b3"
+  },
+  {
+   "ply": 17,
+   "t": 934.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r2q1br1/pp2kppp/2n1bn2/2p5/2P2P2/2NPBN2/PP4PP/R2QKB1R b KQ - 2 9",
+   "said": "and the fact that the pawn is on f4 it doesn't just weaken the king i think a lot of people don't fully understand that it creates spillover effects on other pieces for example if you think about a move like bishop b3 now it's always going to run into knight"
+  },
+  {
+   "ply": 18,
+   "t": 936,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "r2q1br1/pp2kppp/2n1b3/2p5/2P2Pn1/2NPBN2/PP4PP/R2QKB1R w KQ - 3 10",
+   "said": "doesn't just weaken the king i think a lot of people don't fully understand that it creates spillover effects on other pieces for example if you think about a move like bishop b3 now it's always going to run into knight g4 because there's no pawn on f2 to anchor that bishop so it weakens the whole center makes it hard for white to put pieces in the center and it makes it hard for white to get this bishop"
+  },
+  {
+   "ply": 20,
+   "t": 946,
+   "line": [
+    "Bc1",
+    "Nf6"
+   ],
+   "fen": "r2q1br1/pp2kppp/2n1bn2/2p5/2P2P2/2NP1N2/PP4PP/R1BQKB1R w KQ - 5 11",
+   "said": "now it's always going to run into knight g4 because there's no pawn on f2 to anchor that bishop so it weakens the whole center makes it hard for white to put pieces in the center and it makes it hard for white to get this bishop somewhere active so that's reason number two and then reason number three is is just that white's light squared"
+  },
+  {
+   "ply": 13,
+   "t": 953.5,
+   "line": [],
+   "fen": "r2qkb1r/pp3ppp/2n1bn2/2p5/2P2P2/2N2N2/PP1P2PP/R1BQKB1R b KQkq - 3 7",
+   "said": "put pieces in the center and it makes it hard for white to get this bishop somewhere active so that's reason number two and then reason number three is is just that white's light squared bishop is terrible it it's perpetually and both of white's bishops are terrible you could you could put it that way both of them are staring at pawns on the fourth rank so this is a good way you know this i think"
+  },
+  {
+   "ply": 12,
+   "t": 965,
+   "line": [],
+   "fen": "r2qkb1r/pp3ppp/2n1bn2/2p5/2P2P2/5N2/PP1P2PP/RNBQKB1R w KQkq - 2 7",
+   "said": "bishop is terrible it it's perpetually and both of white's bishops are terrible you could you could put it that way both of them are staring at pawns on the fourth rank so this is a good way you know this i think this is a good kind of thing to do is"
+  },
+  {
+   "ply": 7,
+   "t": 967.5,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/2P2P2/8/PP1P2PP/RNBQKBNR b KQkq - 0 4",
+   "said": "and both of white's bishops are terrible you could you could put it that way both of them are staring at pawns on the fourth rank so this is a good way you know this i think this is a good kind of thing to do is just to look at a position see if you can really deconstruct it and break it down into its component elements like black gets compensation for the pawn or you flip on the engine you see that"
+  },
+  {
+   "ply": 9,
+   "t": 976,
+   "line": [
+    "e6",
+    "dxe6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/4Pn2/2p5/2P2P2/8/PP1P2PP/RNBQKBNR b KQkq - 0 5",
+   "said": "this is a good way you know this i think this is a good kind of thing to do is just to look at a position see if you can really deconstruct it and break it down into its component elements like black gets compensation for the pawn or you flip on the engine you see that okay it shows a slight advantage for"
+  },
+  {
+   "ply": 10,
+   "t": 977.5,
+   "line": [
+    "Bxe6"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/4bn2/2p5/2P2P2/8/PP1P2PP/RNBQKBNR w KQkq - 0 6",
+   "said": "this is a good kind of thing to do is just to look at a position see if you can really deconstruct it and break it down into its component elements like black gets compensation for the pawn or you flip on the engine you see that okay it shows a slight advantage for black and you really try to figure out why that is conceptually good um but i won't delve further into the"
+  },
+  {
+   "ply": 5,
+   "t": 985,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/8/2pP4/5P2/8/PPPP2PP/RNBQKBNR b KQkq - 0 3",
+   "said": "black gets compensation for the pawn or you flip on the engine you see that okay it shows a slight advantage for black and you really try to figure out why that is conceptually good um but i won't delve further into the"
+  },
+  {
+   "ply": 6,
+   "t": 986,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/5P2/8/PPPP2PP/RNBQKBNR w KQkq - 1 4",
+   "said": "you flip on the engine you see that okay it shows a slight advantage for black and you really try to figure out why that is conceptually good um but i won't delve further into the theory of this line white doesn't have to go c4 white also has bishop b5 check"
+  },
+  {
+   "ply": 7,
+   "t": 990.5,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/1BpP4/5P2/8/PPPP2PP/RNBQK1NR b KQkq - 2 4",
+   "said": "black and you really try to figure out why that is conceptually good um but i won't delve further into the theory of this line white doesn't have to go c4 white also has bishop b5 check here and knight c3 and you can do your own research but after e5 bishop f5 this is"
+  },
+  {
+   "ply": 6,
+   "t": 995.5,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/5P2/8/PPPP2PP/RNBQKBNR w KQkq - 1 4",
+   "said": "um but i won't delve further into the theory of this line white doesn't have to go c4 white also has bishop b5 check here and knight c3 and you can do your own research but after e5 bishop f5 this is already really really good and and this is essentially a french with a pawn on f4 which is very much subpar and a bishop outside the pawn chain both of which are in black's favor obviously all right so let me see if i can find a a cautionary tale of what happens when you leave when you allow when you allow white to take on c6 and ruin your pawn structure okay let me see if i can find an example of this okay so two two pretty good players you can see white's a gm um and basically they get the structure they get the structure right and and what happens here is that first of all white goes e5 in this position which causes tremendous problems in black structure right it breaks up the whole pawn structure if you take it this is incredibly ugly so white just clamps down in the position but after black goes d5 we get the exact structure that we could have got in the game and here's what white does knight a4 typical move in such positions f6 bishop b3 what is white doing thank you favela white is putting pressure on the c5 pawn why is that important because it makes it incredibly look how stock black is black can't go knight b6 black can't get the light-skirt bishop out i can't move the dark squared bishop it's just incredibly hard to move around here because of these you know this host of weaknesses on the you know in in the um on the queen side and what black tries to take on e5 but then after the mass trade queen f2 queen f3 is a nice move eventually white takes on c5 and look at this monster knight sitting on that outpost and although black's pawn structure visually looks better white's got this absolute monster knight there's a pawn on a6 that's weak sorry white doesn't take it and white ends up black ends up giving up the exchange but losing the game rather quickly afterwards hopefully that makes this is not not an ideal illustration but i think it shows you the sort of the spirit of what i'm trying to say um and so for that reason we decided to go queen b6 why allow this so like if you think about it white can apply many of the same ideas that we just saw bishop b3 knight bd2 knight b3 and start pressuring the spawn on c5 and if you ever go d4 in a position like this you create big light square weaknesses so queen b6 now does that mean you always have to be afraid of this no the structure isn't necessarily bad but here there was just no need so yeah here we go bishop e7 um and we adopt this h5 idea knight h6 bishop g6 knight f5 you see this often in the caricon if if you're a caracon player um if you're a caracon player you should definitely be aware of this idea again i can show you a gazillion examples of this particular transformation of this particular setup in fact i think i actually played a game myself where i faced this yeah so this is where i first learned about this this game so this is a game that i played in 2011. against a peruvian peruvian grandmaster and as you can see it was a karo khan it was in advance and guess what he did knight h6 i was unfamiliar with this move back then he didn't play h5 um so he played it without h5 but bishop g6 and then knight f5 so you can see it here and who can explain to me why g4 is not scary in this position like why is h5 unnecessary well first of all black castle's king side so he didn't want to ruin the king side but more importantly there is simply knight h4 and white has created a lot of holes on the king side i later did play jeep in fact i did play g4 on the very next move but after knight h4 i ended up getting in a lot of trouble on the king side because the thing is like f4 f6 and now the king side is opened and he sticks a bishop on e4 eventually so he put me under a lot of pressure although i managed to save the draw good stuff there and back to the game yeah so h3 here we go h5 because we don't have to castle king's side yet we can just keep our king in the center bishop back he blunders the pawn which helps our cause i think i myself would have probably gone knight f5 um but yeah we decided on this approach and uh queen b6 is an important move so again if we take it and go queen b6 then white goes bishop b3 and your bishop on e7 doesn't really have a home he could have taken quinn h5 where oh here but then we have bishop c5 no that was the point of c4 i thought so not we can't really do it concretely queen b6 knight f3 bishop c5 and uh after bishop d3 no but then we take the rook the rook is hanging the rook is saying um yeah so so the key thing to establish here is whether we can keep these squares under control and when i realize that i can this is this is a move that took me a second to find i also had to ensure that queen a4 isn't dangerous because of king fa because otherwise you actually drop a rook so this is important okay obviously bishop b3 eases our our cause but that's that's that um a lot of a lot of uh positional concepts to flesh out in this game even though it was short but yeah c5 f4 you want to go d5"
+  },
+  {
+   "ply": 3,
+   "t": 1330.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+   "said": "eases our our cause but that's that's that um a lot of a lot of uh positional concepts to flesh out in this game even though it was short but yeah c5 f4 you want to go d5 straight away"
+  },
+  {
+   "ply": 4,
+   "t": 1331.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "said": "that's that's that um a lot of a lot of uh positional concepts to flesh out in this game even though it was short but yeah c5 f4 you want to go d5 straight away and knight c3 which is the actual grand prix you can either go knight c6 or d6 or e6 depending on so here depending on which which sicilian you play against the open sicilian you want to calibrate your response to knight c3 because a lot of tricky people they'll go knight c3 and if you're a night off player for example knight c6 they'll suddenly go knight f3 like wait a minute i didn't sign up for this right you go d6 you get move ordered into a rouser so if you're a knight or flare traditionally you're supposed to go d6 or a6 here so that if white goes knight f3 you can go knight f6 and preserve uh the the the night or setup or if you're a dragon player same thing if you're a dragon player you can actually go g6 immediately uh why not h4 to strengthen the knife because we weren't afraid of g4 that was the point yeah getting movement is annoying and so"
+  },
+  {
+   "ply": 2,
+   "t": 1379.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "you're a dragon player same thing if you're a dragon player you can actually go g6 immediately uh why not h4 to strengthen the knife because we weren't afraid of g4 that was the point yeah getting movement is annoying and so that's one of the ways you can fine-tune your repertoire to make sure that you're not susceptible to getting reordered so that's what i'll say okay guys i am going to call it a night i'm tired thank you guys thanks for now have a good one see you tomorrow"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 4,
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e4",
+    "c5",
+    "f4",
+    "d5"
+   ],
+   "options": [
+    {
+     "san": "e5",
+     "t": 374.5,
+     "continuation": "e5",
+     "said": "and the way that you quote unquote punish this and i want to emphasize that this move is not a reputation of f4 but this is what what is recommended in most uh opening books and i believe it's the best movement that is d5 now i've i've had this before in a speed run he takes d5 you don't take with the queen you play knight f6 this is quite common in such positions e5 essentially allows you to get a good french type of structure so what should we do here what is the the almost automatic response in such situations not e6 no no no e6 literally transposes to a french first we get the bishop outside the punching you guys know that first we get the bishop outside the pawn chain right then we play e6 otherwise everybody would do this this would transpose into a french okay and we don't have to rush with these six we don't have to rush rush with e6 we can start with knight cc it's not like white's not gonna play e6 let's get our knight out first this should be fine now are we worried about the prospect of bishop take c6 check well i wouldn't necessarily say the answer is no uh and as i'll show you guys after the game this pawn structure specifically is"
+    },
+    {
+     "san": "exd5",
+     "t": 837.5,
+     "continuation": "exd5",
+     "said": "and that's not entirely uncommon and it's totally normal okay so yeah so f4 the move is d5 and there is quite a bit of theory here if you actually look at books and stuff he takes d5 uh you go knight f6 you try to take this pawn on your own terms and if white goes c4 then i've i definitely have a speedrun game with this opening i think our opponent went c4 so you can dig around on search by opening but after e6 the basic idea is that black has tremendous compensation for the pawn and as i explained in that earlier video uh black's compensation hinges on three primary things um let's see if you guys can name all three reasons that i have in mind and there are different ways of looking at this position so it's not like there's a clear like okay this is how it is this is how i think about the position development is not really one of them so that's an interesting way that my intuition differs from yours because white is going to get his king side developed right why can go knight f3 bishop to castles so the development advantage is going to be diluted in the next couple of moves"
+    }
+   ]
+  },
+  {
+   "ply": 6,
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/5P2/8/PPPP2PP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "e4",
+    "c5",
+    "f4",
+    "d5",
+    "exd5",
+    "Nf6"
+   ],
+   "options": [
+    {
+     "san": "c4",
+     "t": 844.5,
+     "continuation": "c4",
+     "said": "yeah so f4 the move is d5 and there is quite a bit of theory here if you actually look at books and stuff he takes d5 uh you go knight f6 you try to take this pawn on your own terms and if white goes c4 then i've i definitely have a speedrun game with this opening i think our opponent went c4 so you can dig around on search by opening but after e6 the basic idea is that black has tremendous compensation for the pawn and as i explained in that earlier video uh black's compensation hinges on three primary things um let's see if you guys can name all three reasons that i have in mind and there are different ways of looking at this position so it's not like there's a clear like okay this is how it is this is how i think about the position development is not really one of them so that's an interesting way that my intuition differs from yours because white is going to get his king side developed right why can go knight f3 bishop to castles so the development advantage is going to be diluted in the next couple of moves so first thing is the backward d pawn and that more importantly this d4 square is a giant weakness"
+    },
+    {
+     "san": "Bb5+",
+     "t": 990.5,
+     "continuation": "Bb5+",
+     "said": "black and you really try to figure out why that is conceptually good um but i won't delve further into the theory of this line white doesn't have to go c4 white also has bishop b5 check here and knight c3 and you can do your own research but after e5 bishop f5 this is already really really good and and this is essentially a french with a pawn on f4 which is very much subpar and a bishop outside the pawn chain both of which are in black's favor obviously all right so let me see if i can find a a cautionary tale of what happens when you leave when you allow when you allow white to take on c6 and ruin your pawn structure okay let me see if i can find an example of this okay so two two pretty good players you can see white's a gm um and basically they get the structure they get the structure right and and what happens here is that first of all white goes e5 in this position which causes tremendous problems in black structure right it breaks up the whole pawn structure if you take it"
+    }
+   ]
+  }
+ ]
+}
