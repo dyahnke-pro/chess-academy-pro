@@ -643,6 +643,23 @@ THREE WRONG READINGS TO NOT REPEAT:
 - "32 pieces means it never moved" — a bad discriminator: this line has no capture until ply
   10, so 32 pieces is consistent with plies 0-9.
 
+**THE SPINE IS THE DB'S, NOT THE TAUGHT LINE'S.** `openings-lichess.json` holds exactly ONE
+entry on this prefix — "Vienna Game: Stanley Variation, Meitner-Mieses Gambit", **9 plies**
+(`e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5`) — while `repertoire.json`'s Copycat runs 15. The
+walkthrough builds from the DB plus extension moves and dies at ply 11, two past the DB's end.
+
+**CONSEQUENCE OF THIS SESSION'S OWN WORK:** the beats authored for plies 12-15 are
+UNREACHABLE from `/coach/teach`, because the tree ends around 11. They ARE reachable from the
+opening tab, whose Watch plays the full taught pgn. So the Copycat fix helps the tab and does
+not help the coach — the coach needs the tree extended, or the spine sourced from the taught
+line, which is a separate decision (G3: the DB owns the moves).
+
+**PHASE NEVER BECOMES `leaf`.** The leaf panel renders unconditionally once phase is `leaf`
+(`hasStages` gates only the Continue button, `CoachTeachPage.tsx:11194`). It never rendered,
+so the runner is returning at ply 11 WITHOUT scheduling any transition — matching the
+documented failure where a callback bails on `if (ctrl.cancelled || !isCurrent()) return;`
+and strands the phase. That is the thing to fix: a lesson must always land in leaf/fork.
+
 - [ ] Root-cause ply 11 -> 12 specifically. Phase stays `narrating`, panel renders its chrome
       with NO narration body, no fork panel, no leaf panel, zero console errors.
       Suspects: the node's children shape at the check/capture boundary; a stale token in the
