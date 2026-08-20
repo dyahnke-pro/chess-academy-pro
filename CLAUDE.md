@@ -2901,6 +2901,36 @@ engine-checked so it does not leave the student worse than ≈ −1.0 except as 
 honest gambit showcase. A fork is a normal variation once added; nothing about
 its origin exempts it.
 
+### 🔒🔒 A DOWNLOAD IS 360p AND OVERSIZE FILES ARE SPLIT, NEVER SKIPPED (David 2026-08-20: *"file size too big on a lot of DLs. we need a way to split them up."*)
+
+Two size limits bound the harvest, and confusing them cost a whole round of
+lessons:
+
+- **GitHub refuses a blob over 100MB**, and the `video-drop` branch is how the
+  videos reach the session. So an oversized lesson cannot be pushed at all.
+- The old command "handled" that with **`--max-filesize 99M`**, which is not a
+  fix — yt-dlp simply ABORTS the download and the loop reports success. The
+  lesson is dropped on the floor silently, which is the failure mode this file
+  keeps re-learning under other names.
+
+The fix has two halves, and BOTH belong in every future download command:
+
+1. **Ask for 360p (`-f 134`), not 480p.** The scanner reads the BOARD, and 30 of
+   the banked tracks were built at 360p (square ≈45px) and tracked fine —
+   `harvest-local.sh` scales the geometry by frame width automatically, so
+   nothing else changes. 480p was never buying accuracy; it was buying roughly
+   double the bytes, on David's metered connection. Chain:
+   `-f "134/396/135/bestvideo[height<=480]/bestvideo"`.
+2. **Split what is still oversize.** `split -b 95M drop/$id.mp4 drop/$id.mp4.part-`
+   on his side; `harvest-local.sh` `cat`s the parts back before scanning. The
+   concatenation is byte-exact, so ffmpeg reads the rejoined file unchanged. The
+   sweep also enumerates `*.mp4.part-aa`, or a split lesson is invisible to it.
+
+Do NOT go below 360p. At 240p a board is ~17px per square and the reader's
+colour margins stop separating pieces from squares — the same class of failure
+as the theme-specific ±25 margin, and it fails by tracking a WRONG line rather
+than refusing.
+
 ### 🔒🔒 SESSION LESSONS — 2026-08-19/20 (locked at David's request: *"add all that you have learned to md notes"*)
 
 **TOOL OUTPUT DOES NOT REACH DAVID. PASTE IT INTO THE REPLY.** He asked to see a

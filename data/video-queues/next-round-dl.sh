@@ -1,39 +1,35 @@
 #!/bin/bash
-# NEXT ROUND — 24 Naroditsky lessons, then push them to the video-drop branch.
+# ROUND 7 — the last 16 unharvested Naroditsky lessons on openings we teach.
+# Every taught opening now has at least one track, so this round is depth on the
+# four still-thin ones (Scotch, Caro-Kann, King's Indian, French).
 #
-# Picked by which TAUGHT opening still has no track, one video per opening before
-# any opening gets a second (scripts/video-align/next-round.mjs). Eight of these
-# openings have zero video coverage today: Accelerated Dragon, Pirc, Budapest,
-# Alekhine, Slav, Benko, open games, Najdorf.
+# TWO SIZE FIXES, because the last round lost lessons to file size:
 #
-# Run from the video-drop clone. Expects: yt-dlp, deno (npm i -g deno, for the
-# n-challenge), and fresh cookies at /tmp/yt-cookies.txt — export them from a
-# browser window you do NOT sign out of afterwards, since signing out rotates
-# them dead.
-#
-# One at a time with jittered gaps: four at a time got the IP bot-checked after
-# ~40 videos, and the cookies were never the problem, the request RATE was.
+# 1. 360p, NOT 480p. `-f 134` first. The scanner reads the BOARD, and 30 of the
+#    banked tracks were built at 360p (square 45px) and tracked fine — the
+#    geometry scales by width automatically. 480p was never buying accuracy, it
+#    was buying roughly double the bytes, on David's data.
+# 2. ANYTHING STILL OVER 95MB IS SPLIT, NOT SKIPPED. GitHub refuses a blob over
+#    100MB, and the drop branch is how these travel — so the old
+#    `--max-filesize 99M` did not solve the size problem, it just dropped the
+#    lesson on the floor and reported success. `split -b 95M` here, `cat` in
+#    harvest-local.sh: the join is byte-exact, ffmpeg reads the rejoined file
+#    unchanged.
 set -u
-# The working shape, from the run that landed the first drop (David 2026-08-19):
-# the NIGHTLY binary (stock yt-dlp 403s on the media fetch even when the webpage
-# and player API come back fine), -4 to pin IPv4, and the bare video id after `--`
-# so an id beginning with a dash is not read as a flag.
-#
-# NO COOKIES — David 2026-08-19: they are not needed from his home IP. The
-# cookie dance in the older notes was a datacenter-IP problem, and carrying it
-# over adds an hour-long expiry to a command that does not need one.
-# It BREAKS on the first failure rather than walking the rest of the list into a
-# limiter that has already said no.
 mkdir -p drop
-for id in qhHtJcXkkfg l65FZlRkWcM k7R9Omne_1Y 9qWUk9eDpTg WmCImz1fv5s CXvo1dMF1Qs \
-          uJCgrG90u8A 0npOMfkAlVU mCB8n7v0MEA EN72rn5tVYI KwbAHRLJ1RY Ybg_2qbKXdA \
-          IMBSR0A9nJs ieznxMQccW0 D7sbbap9lIc WQFcuBCL1F4 Qewug63GIqc Twv9FExvwSw \
-          jwFOi039eeg hw9tEjYabd8 Gk7MNomOOSA Zko_JUK06vM vB8yLBR5lHs QxHsw4ZS2Ts; do
-  test -f "drop/$id.mp4" && continue
+for id in 7xgOCneMX8s Z5QLUtjiGFg 9JUlD51s6zE 8O4UG9NtUoM zmdiLoeqFyU 898k4qkY0vg \
+          ciTwGjksQWs -t1i9fKUUiI VOQ7DlsATuc 3XUh57mV8a8 NqtT3roFaBs H0Fln-ujA3w \
+          ofUcXj4ArHA NQQnQ9X9dL8 1GSLXUHTrzc OE2pJpVVzYw; do
+  ls "drop/$id.mp4" "drop/$id.mp4.part-aa" >/dev/null 2>&1 && continue
   echo "=== $id"
   ./yt-dlp-nightly --remote-components ejs:npm -4 --socket-timeout 30 --retries 15 \
-    -f "135/396/bestvideo[height<=480]/bestvideo" --max-filesize 99M \
-    -o "drop/$id.mp4" -- "$id" || { echo "STOPPED at $id"; break; }
-  sleep $((60 + RANDOM % 60))
+    -f "134/396/135/bestvideo[height<=480]/bestvideo" \
+    -o "drop/$id.mp4" -- "$id" || echo "FAILED $id (continuing)"
+  # Split only what would be rejected. Most 360p lessons land well under this.
+  if [ -f "drop/$id.mp4" ] && [ "$(stat -f%z "drop/$id.mp4" 2>/dev/null || stat -c%s "drop/$id.mp4")" -gt 99000000 ]; then
+    echo "    splitting (over 95MB)"
+    split -b 95M "drop/$id.mp4" "drop/$id.mp4.part-" && rm -f "drop/$id.mp4"
+  fi
+  sleep 5
 done
-git add drop && git commit -m "videos: next round" && git push origin video-drop
+git add drop && git commit -m "videos: round 7" && git push origin video-drop

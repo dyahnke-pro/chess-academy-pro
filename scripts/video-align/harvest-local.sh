@@ -34,12 +34,29 @@ mkdir -p "$GRIDS" data/video-pending
 ids=("$@")
 if [ ${#ids[@]} -eq 0 ]; then
   ids=()
-  for f in "$SRC"/*.mp4 "$SRC"/*.webm; do [ -e "$f" ] || continue; ids+=("$(basename "${f%.*}")"); done
+  # `*.mp4.part-aa` is listed too, or a split lesson is invisible to the sweep:
+  # the id lives in the basename before `.mp4`, and only the FIRST part is read
+  # so a four-part video enqueues once.
+  for f in "$SRC"/*.mp4 "$SRC"/*.webm "$SRC"/*.mp4.part-aa; do
+    [ -e "$f" ] || continue
+    b=$(basename "$f"); b=${b%.part-aa}; ids+=("${b%.*}")
+  done
+  [ ${#ids[@]} -gt 0 ] && ids=($(printf '%s\n' "${ids[@]}" | awk '!seen[$0]++'))
 fi
 
 for id in "${ids[@]}"; do
   if [ -f "data/video-tracks/$id.json" ] || [ -f "data/video-pending/$id.json" ]; then
     echo "SKIP     $id (already banked)"; continue
+  fi
+  # SPLIT FILES ARRIVE IN PARTS, BECAUSE GITHUB REFUSES A BLOB OVER 100MB.
+  # The drop branch is how the videos get here, so a 105MB lesson simply cannot
+  # be pushed — the round-5 command papered over that with `--max-filesize 99M`,
+  # which silently skipped those lessons instead of splitting them. `split -b 95M`
+  # on his side, `cat` on this side: the concatenation is byte-exact, so the
+  # rejoined mp4 is the file yt-dlp wrote and ffmpeg reads it unchanged.
+  if ls "$SRC/$id".mp4.part-* >/dev/null 2>&1; then
+    echo "JOIN     $id ($(ls "$SRC/$id".mp4.part-* | wc -l) parts)"
+    cat "$SRC/$id".mp4.part-* > "$SRC/$id.mp4" && rm -f "$SRC/$id".mp4.part-*
   fi
   f=$(ls "$SRC/$id".mp4 "$SRC/$id".webm 2>/dev/null | head -1)
   if [ -z "$f" ]; then echo "MISSING  $id (not in $SRC)"; continue; fi
