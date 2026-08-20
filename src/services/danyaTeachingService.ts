@@ -1799,6 +1799,26 @@ export function spokenBeatText(note: DanyaNote): string {
 
   const explains = (note.explains ?? '').trim();
   if (!explains) return '';
+
+  // A HAND-WRITTEN NOTE SPEAKS BOTH HALVES, AND SKIPS THE PRUNING (David
+  // 2026-08-20: "both, but the narrations should be enough. again i do not want
+  // the computed voice with the hand written narrations").
+  //
+  // This is the other half of suppressing the computed sentence on these plies.
+  // Once nothing follows the note, the note has to carry the beat alone — and
+  // `explains` alone is the board fact with the POINT of it left in a field
+  // nobody speaks. Facts first, then the point, which is the house voice.
+  //
+  // The pruning below exists for the FARMED corpus: mid-clause openers,
+  // unbalanced parentheses, stranded back-references — the wreckage of cutting
+  // speech into sentences. Hand-written prose is written whole and every board
+  // claim in it is chess.js-checked, so running that repair over it can only
+  // damage it.
+  if (note.origin === 'handwritten') {
+    const idea = (note.teaches ?? '').trim();
+    return idea ? `${explains} ${idea}` : explains;
+  }
+
   const sentences = explains.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) ?? [explains];
   // A truncated distillation artifact, not a sentence: begins mid-clause
   // (", Bd2, Be2) lead to…") or closes a parenthesis it never opened. David

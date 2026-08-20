@@ -70,3 +70,32 @@ describe('the origin flag on a real spliced note', () => {
     expect(seen, 'no hand-written note spliced at any of its own positions').toBe(true);
   });
 });
+
+// THE NOTE HAS TO CARRY THE BEAT ALONE.
+//
+// David 2026-08-20: *"both, but the narrations should be enough. again i do not
+// want the computed voice with the hand written narrations."*
+//
+// Once the computed sentence is suppressed on a hand-written ply, speaking only
+// `explains` would leave the POINT of the move in a field nobody says out loud.
+// Facts first, then the point — the house voice.
+describe('what a hand-written note says out loud', () => {
+  it('speaks the board fact AND the idea', async () => {
+    const { spokenBeatText } = await import('./danyaTeachingService');
+    const { ALL_NOTES } = await import('./danyaTeachingService');
+    const n = ALL_NOTES.find((x) => x.origin === 'handwritten' && x.lineSan?.length && x.teaches?.trim());
+    expect(n, 'no hand-written note with an idea to speak').toBeTruthy();
+    const said = spokenBeatText(n!);
+    expect(said).toContain(n!.explains.trim());
+    expect(said, 'the idea is left unspoken — the beat has nothing following it now').toContain(n!.teaches.trim());
+  });
+
+  it('leaves farmed notes on the pruned explains-only path', async () => {
+    const { spokenBeatText, ALL_NOTES } = await import('./danyaTeachingService');
+    const f = ALL_NOTES.find((x) => x.origin === 'farmed' && x.lineSan?.length && x.teaches?.trim() && x.explains?.trim());
+    expect(f).toBeTruthy();
+    // Farmed prose still leads a generated sentence, so stacking both halves
+    // here is the 544-char beat David objected to on 2026-08-05.
+    expect(spokenBeatText(f!)).not.toContain(f!.teaches.trim());
+  });
+});
