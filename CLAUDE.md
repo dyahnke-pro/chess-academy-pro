@@ -2544,6 +2544,72 @@ move openings up, never down. To find a genuine Tier-2 test case: assert
 `noteAtPosition(prefix, fen)` returns a note that survives
 `gradeNarrationText`. Do not guess from the opening's name.
 
+### 🔒🔒 THE FALLBACK CHAIN, IN FULL — baked, then the OPENING TAB's hand-written narration, then computed (David 2026-08-20: *"Baking happens when you reword the narrations from the video. If there are no reworded corpus notes than it falls to handwritten narrations from the opening tab. If we don't have those than third tier is computed narrations."* and *"Narrations should be baked. If not baked they won't fire. No LLM or TTS for walkthrough teachings."*)
+
+The tier list above is correct and INCOMPLETE — it predates the opening-tab
+tier, and a session that reads only that list will not know why a lesson goes
+silent. Written out in full, best to worst, this is what a walkthrough ply is
+narrated from:
+
+1. **BAKED** — `bakedNarrationFor` → `src/data/walkthrough-narrations.json`.
+   Baking is REWORDING THE NARRATION FROM THE VIDEO, done offline and gated,
+   never at runtime. **23 openings today, and Vienna is not one of them.**
+2. **THE OPENING TAB'S HAND-WRITTEN NARRATION** — `lessonBeatAt`
+   (`lessonBeatNarration.ts`), the 3,780 hand-authored beats across 821
+   registered `LessonScript`s, indexed BY POSITION so the coach can reach the
+   teaching that was previously locked behind an opening id. This is the tier
+   that fills the gap when nothing is baked.
+3. **COMPUTED** — code writes the teaching from the DB moves and the board.
+   The floor, and it must ALWAYS catch: a lesson that reaches a ply with no
+   baked prose and no beat must still narrate and advance.
+
+**NO LLM AND NO TTS DECIDE A WALKTHROUGH TEACHING.** The prose is baked, or
+hand-written, or computed — all three exist before the lesson runs. TTS only
+voices it, so a walkthrough must never depend on a synthesis round-trip to
+know what to say or when to advance.
+
+**A LESSON THAT GOES QUIET IS A BROKEN CHAIN, NOT A CONTENT GAP.** Measured on
+prod 2026-08-20, the Vienna Copycat narrates 11 nodes and then sits in the
+`narrating` phase for as long as you leave it — identical at a 600s and a 1500s
+budget, with ZERO console errors and zero page errors, under both
+`blockTtsNetwork` and `muteTtsForAudit` (the mute resolves the speak promise on
+a text-proportional delay, so the hang is not the voice gate). Silence with no
+error is the signature: the runner's callbacks bail on `if (ctrl.cancelled ||
+!isCurrent()) return;` without scheduling anything, so a stale token strands the
+phase forever. Tier 3 is what should have caught it. When a lesson stops, ask
+which tier was supposed to speak at that ply before assuming the content is
+missing.
+
+**HOW TO MEASURE A LINE'S TIER-2 COVERAGE** (do this before concluding anything
+about a lesson): replay the line and call `lessonBeatAt(fen, seen)` per ply. Do
+NOT measure against `data/video-notes` — that is the hand-written VIDEO corpus,
+a different index, and measuring the wrong one produced a confident "zero notes
+on the Copycat" that was false. Vienna, measured properly: main 12/44, Vienna
+Gambit 9/14, Frankenstein-Dracula 12/22, **Copycat 5/15 — beats at plies 2, 3,
+4, 7 and 15, and the lesson dies inside the gap between 7 and 15.**
+
+### 🔒🔒 A LINE IS ADDED BECAUSE WE CAN TEACH IT — NEVER BECAUSE IT UNLOCKS A NOTE (David 2026-08-20: *"Why do we have a new lines created from a video with no narrations?"*)
+
+The fork pipeline rescues a STRANDED NOTE by adding the video's line as a
+branch. Its unit is one note at one ply; the thing it adds is a 24-30 ply LINE.
+So each rescued note buys twenty-odd plies that have nothing hand-written to say
+about them, and `fork-check` never asks the question that matters — it vets
+master-game count, student score, middlegame depth and which notes get
+unlocked, and NEVER whether the line will have anything to teach.
+
+**Add narration coverage to the veto.** Before adding any line, replay it and
+count the plies carrying baked prose or a `lessonBeatAt` hit. A line that comes
+in mostly un-narrated is a new opening tab with no teaching in it — the exact
+"structure ships, teaching doesn't" failure this file keeps recording. A
+stranded note is not worth a silent variation: leave it to free play and review,
+which is where it already fires.
+
+Corollary, and the reason this matters beyond one pipeline: **the coach
+walkthrough should follow the SAME lines the opening tab teaches**, forking at
+the same variations, so every fork lands on a position the tab has hand-written
+narration for. A line the coach walks that the tab does not teach is a line with
+no tier-2 coverage by construction.
+
 ### 🔒🔒 A NOTE IS SELECTED BY POSITION, NEVER BY NAME — and every number below was re-measured 2026-08-04 (David, emphatic: *"All narrations need to be deterministically found and handed to llm in the package. There is no room for false narrations on this app! Ever!!"* and *"The problem is NOT the gate… Gates are back ups that should never fire. Fix the package or how the position is chosen."*).
 
 **THE RULE: a corpus note may be spoken at a ply only if the note's own taught
