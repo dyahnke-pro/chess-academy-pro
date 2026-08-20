@@ -327,6 +327,35 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
     if (Array.isArray(tree.punish) && tree.punish.length > 0) {
       tree.punish = repairPunishStage(tree.punish).kept;
     }
+    // ── GEMS ARE ATTACHED HERE, NOT GENERATED ──────────────────────────────
+    //
+    // David 2026-08-20: "The walkthrough prebuilds the lesson so they need to
+    // be built in at run time."
+    //
+    // `tree.punish` was filled only by BACKGROUND stage generation, so gems
+    // arrived after the lesson had already walked past the positions they fire
+    // at — which is the other half of why a gem fork has never been seen. That
+    // wait buys nothing: a gem needs no LLM and no network. It is curated,
+    // engine-verified at mining time, and chess.js-validated on conversion, so
+    // it is a synchronous local lookup.
+    //
+    // This boundary is the right home because EVERY tree passes through it —
+    // fresh generation and cache reads alike — so a tree cached before this
+    // shipped picks the gems up on its next read instead of needing a bump.
+    //
+    // Seeded AFTER the repair pass deliberately: the repairs exist to police
+    // model-generated stage entries, and a gem is neither generated nor
+    // shaped like one.
+    if (tree.openingName) {
+      const gems = gemPunishLessonsForOpeningName(tree.openingName);
+      if (gems.length > 0) {
+        const existing = new Set((tree.punish ?? []).map((l) => `${l.setupMoves.join(' ')}|${l.inaccuracy}`));
+        const fresh = gems.filter((g) => !existing.has(`${g.setupMoves.join(' ')}|${g.inaccuracy}`));
+        // Gems lead: they are the hand-narrated, engine-tiered weapons, and the
+        // trap queue speaks in order.
+        if (fresh.length > 0) tree.punish = [...fresh, ...(tree.punish ?? [])];
+      }
+    }
   } catch {
     // A repair throwing on wildly-malformed data must not break the read
     // — the per-consumer validity guards still protect the UI.
