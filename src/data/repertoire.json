@@ -698,6 +698,11 @@
         "name": "Najdorf: Anti-Najdorf (6.a4)",
         "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 a4 Nc6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Nd5",
         "explanation": "The Anti-Najdorf 6.a4 directly prevents Black's queenside expansion with ...b5, which is the soul of many Najdorf lines. Without the ...b5 lever, Black must find alternative plans, typically opting for ...Nc6 and ...e5 with a more restrained positional approach. White gains lasting queenside space and the d5 outpost becomes easier to maintain since Black's usual ...b5 challenge is off the table. Black compensates by building a solid central structure, but the resulting positions tend to favor White's strategic plans with Be3, Nd5, and slow maneuvering."
+      },
+      {
+        "name": "Najdorf: Scheveningen Small Centre (6.Be2 e6)",
+        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e6 O-O Be7 f4 O-O Kh1 Qc7 a4 Nc6 Be3 Re8 Bf3 Rb8",
+        "explanation": "Holding the pawn on e6 instead of pushing it two squares keeps the centre small and keeps the important squares covered \u2014 d5 and f5 are both guarded, so the knight on d4 has no outpost to jump into and nowhere better to stand. Black finishes developing before picking a side of the board: the king goes into the corner, the queen steps to c7 to look down the half-open c-file, and the rooks take b8 and e8. White claims the kingside space with the f-pawn and tucks the king away on h1. Black's play comes against the centre and down the queenside once every piece has a job."
       }
     ],
     "trapLines": [],
@@ -793,6 +798,16 @@
         "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Be2 O-O O-O d5 exd5 Nxd5 Nxc6 bxc6 Bd4 Nxc3 Bxc3 Bxc3 Qxd8 Rxd8 bxc3 Bf5 Bf3 e6 Bxc6 Bxc2 Rfe1 Rac8",
         "explanation": "White's bishop belongs on c4 in this structure for one reason: it argues against ...d5, the break that solves Black's whole opening. The quiet Be2 declines that argument, so the break comes at once and everything frees. The trades that follow are chosen rather than forced \u2014 ...Nxc3 hits queen and bishop together, so White's recapture damages the queenside, and Black's remaining pieces arrive on targets: the bishop to f5 with tempo on c2, then the rooks lining up on the c-file where the damaged pawn stands behind the bishop.",
         "shortExplanation": "Be2 does not stop ...d5, so Black breaks at once and plays for the damaged queenside."
+      },
+      {
+        "name": "Yugoslav Attack: the ...d5 Break",
+        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O O-O-O d5 exd5 Nxd5 Nxc6 bxc6 Bd4 e5 Bc5 Be6 Ne4 Re8",
+        "explanation": "The queen's knight comes out before the rook does, and that changes what Black is racing for. The moment White commits the king to the queenside, the central break arrives: the knights come off on c6, the b-pawn recaptures, and the half-open b-file is left pointing straight at the king on c1. White plants the bishop on d4 to challenge the dragon bishop down the long diagonal, and pushing the e-pawn answers both problems at once \u2014 the bishop is attacked and the diagonal is shut. What remains is the Dragon's honest bargain: White storms with the h- and g-pawns, while Black already has the open file and a knight parked on d5."
+      },
+      {
+        "name": "Accelerated Dragon: Mar\u00f3czy with the early ...Nxd4",
+        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4 Nf6 Nc3 Nxd4 Qxd4 d6 Be2 Bg7 Be3 O-O Qd2 Be6 Rc1 Qa5 f3 Rfc8 b3 a6 Na4 Qxd2+ Kxd2 Nd7",
+        "explanation": "Trading the knights at once invites the queen to d4, and Black is happy to let her come: the knight on f6 blocks the long diagonal, so there is nothing to hit her with yet, and Black simply builds \u2014 the pawn to d6, the bishop to g7 \u2014 while White has to prop the queen up with the bishop on e3 before doing anything else. The bind is the real subject here. Pawns on c4 and e4 take d5 away, so Black plays on the squares the bind cannot cover: a rook swings to the c-file, the queen steps out to a5 and offers the trade, and once the queens come off the knight reroutes through d7 toward c5 \u2014 which is exactly why White's knight goes out to a4 to guard that square."
       }
     ],
     "trapLines": [],

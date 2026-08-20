@@ -3150,33 +3150,72 @@ Coverage counts therefore ORDER the harvest queue and never trim it
 (`next-round.mjs`). The only video excluded is one naming no opening the app
 teaches, which has nowhere for a note to attach at all.
 
-### 🔒🔒 THE SESSION DOES NOT DOWNLOAD VIDEOS — DAVID DOES (David 2026-08-19, emphatic: *"last session burned through my data in 15 minutes!!! TWICE!!!!!"*)
+### 🔒🔒 THE SESSION DOWNLOADS THE VIDEOS — David does not (David 2026-08-20: *"i want you to take over DLing youtube videos on Terminal and completing narrations"*). REVERSES the 2026-08-19 hand-off rule.
 
-Two sessions ran the harvest loop from the container and burned David's data
-allowance twice, fifteen minutes each. A 480p lesson is ~50MB and the loop pulls
-them back to back, so an unsupervised harvest is gigabytes before anyone looks at
-it. **Never run `yt-dlp` on video from a session** — not `harvest.sh`, not
-`harvest/download-queue.sh`, not `supervisor.sh`, not a hand-rolled loop, and not
-"just one to check the geometry."
+The old rule sent every download to David's own machine because two sessions had
+burned his data allowance twice in fifteen minutes. That reasoning does not apply
+to a REMOTE session: the bytes come off the container's connection, not his. So
+the harvest is the session's job again, end to end — pick the videos, pull them,
+scan, track, hand-write the notes.
 
-What a session DOES instead: pick WHICH videos are worth his bandwidth
-(`scripts/video-align/next-round.mjs` — gap-first, so the round goes at taught
-openings with no track rather than a seventh upload about one already covered),
-emit a paste-ready script, and hand it to David to run on his own connection.
-Then scan, track and hand-write against what he brings back.
+**The data-burn discipline still stands, for a different reason.** A 480p lesson
+is ~50MB and back-to-back pulls are how the IP earns a rate flag (2026-08-18 —
+see `pot-server.sh`). Serial, one at a time, a real sleep between videos, and on
+the first 403 you STOP rather than retry: every retry refreshes the flag. The
+loop deletes each video after scanning, so disk stays flat.
 
-Subtitles are the one exception worth knowing about — a VTT is ~500KB against a
-video's ~50MB — but they are still a per-video network pull, so batch them into
-the same handoff rather than looping them from a session.
+**CAPTIONS ARE COOKIE-FREE FROM A SESSION — measured 2026-08-20.** Every player
+client hits "Sign in to confirm you're not a bot" from this container's IP except
+`web_embedded`, which walks straight past it. It offers no real video format
+(storyboards only), so yt-dlp refuses before it ever reaches the caption track
+unless you tell it not to:
 
-**DOWNLOAD RECIPE** (cookies expire fast; re-export from a window you do NOT
-sign out of, since signing out rotates them):
-`yt-dlp --cookies /tmp/yt.txt --remote-components ejs:npm -f 135 -o v.mp4 <url>`
+```bash
+yt-dlp --extractor-args "youtube:player_client=web_embedded" \
+  --ignore-no-formats-error --write-auto-sub --skip-download \
+  --sub-format vtt --sub-langs en -o "/tmp/vtt/%(id)s.%(ext)s" -- "<id>"
+```
+
+`harvest/transcript-queue.sh` runs exactly this and needs nothing from David.
+Captions gate every note (`videoNoteCaptions.test.ts`), so a session that cannot
+download video is still not a stalled session — bank the channel's transcripts.
+
+**VIDEO NEEDS COOKIES, AND ONLY DAVID CAN MINT THEM.** The bot check fires at the
+EXTRACTION stage, before any format is chosen, so nothing downstream can route
+around it: not `-4`, not the nightly, not `--remote-components ejs:npm`, and **not
+the PO-token server** (tried 2026-08-20 — it cures the 403 at the DOWNLOAD stage,
+which is a different wall; the extraction check is IP reputation and it does not
+touch it). His Mac never sees this because a residential IP is not challenged.
+
+So the one thing to ask him for is a cookie file, and it is worth asking for
+early: export `cookies.txt` (Netscape format) from a signed-in YouTube window he
+does NOT then sign out of — signing out rotates the session and the file dies
+with "cookies are no longer valid". Write it to `/tmp/yt.txt`, **never** commit
+it. Then the session downloads:
+
+```bash
+yt-dlp --cookies /tmp/yt.txt --remote-components ejs:npm -4 \
+  --socket-timeout 30 --retries 15 \
+  -f "135/396/bestvideo[height<=480]/bestvideo" --max-filesize 250M \
+  -o "drop/<id>.mp4" -- "<id>"
+```
+
 Video-only DASH sidesteps the SABR wall that 403s every progressive format.
-Needs `npm i -g deno` for the n-challenge. Format 135 is missing on some uploads
-— fall back `-f "135/396/bestvideo[height<=480]/bestvideo"`. Scan with
+Format 135 is missing on some uploads, hence the fallback chain. Scan with
 `scan_stream.py` (frames piped from ffmpeg, never written to disk; the file-based
 scanner needs ~2.6GB per lesson and does not survive a batch).
+
+**A FRESH CONTAINER HAS NONE OF THE TOOLCHAIN.** Install it before diagnosing
+anything:
+
+```bash
+python3 -m pip install --break-system-packages --pre -U yt-dlp   # nightly
+apt-get update && apt-get install -y ffmpeg                      # update FIRST
+curl -fsSL https://deno.land/install.sh | DENO_INSTALL=/usr/local sh -s -- -y
+```
+
+`apt-get install ffmpeg` without the `update` fails on 404s for stale package
+versions and reads like a broken mirror.
 
 **SPEEDRUN UPLOADS ARE IN SCOPE — the whole channel is reachable, not just the 5
 opening-labs.** Three of them tracked 0-4 plies and it looked like a format

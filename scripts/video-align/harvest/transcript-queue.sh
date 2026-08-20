@@ -31,7 +31,14 @@ while read -r id; do
   [ -z "$id" ] && continue
   [ -f "$OUT/$id.vtt.gz" ] && continue
 
-  if yt-dlp --cookies /tmp/yt-cookies.txt --remote-components ejs:npm \
+  # NO COOKIES NEEDED. Measured 2026-08-20: the `web_embedded` player client
+  # walks past the "sign in to confirm you're not a bot" check that every other
+  # client hits from a datacenter IP. It serves no usable video format — hence
+  # --ignore-no-formats-error, since yt-dlp otherwise refuses before it ever
+  # reaches the caption track — but the caption track itself comes back in full.
+  # So the transcript half of this pipeline is self-serve from a session.
+  if yt-dlp --extractor-args "youtube:player_client=web_embedded" \
+       --ignore-no-formats-error --no-warnings \
        --write-auto-sub --skip-download --sub-format vtt --sub-langs en \
        -o "/tmp/vtt/%(id)s.%(ext)s" \
        "https://www.youtube.com/watch?v=$id" > /tmp/vtt/"$id".log 2>&1; then
