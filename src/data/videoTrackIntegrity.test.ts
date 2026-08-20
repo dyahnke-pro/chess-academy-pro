@@ -280,8 +280,15 @@ describe('video tracks', () => {
     //
     // So the verdict is required to be recorded. Without this, an unresolved
     // flag looks identical to a resolved one and the distinction rots.
+    // A TITLE THAT NAMES NO OPENING IS OUTSIDE THIS CONTRACT, not exempt from
+    // it. `checkTitle` now records `{claims: null, unverifiable}` for marketing
+    // titles ("Master Class | Controlling Center") instead of writing nothing,
+    // because an ABSENT verdict reads as a passed one — 6 banked tracks sat in
+    // that state. Those entries claim nothing, so the board cannot have failed
+    // to back them and there is no disagreement for a person to settle. Every
+    // title that DOES name an opening is still held to the full requirement.
     const unresolved = tracks
-      .filter((t) => t.titleCheck && !t.titleCheck.confirmed && !t.titleCheck.verdict)
+      .filter((t) => t.titleCheck?.claims && !t.titleCheck.confirmed && !t.titleCheck.verdict)
       .map((t) => `${t.videoId} claims "${t.titleCheck?.claims}"`);
     expect(unresolved, `unconfirmed titles with no hand verdict:\n${unresolved.join('\n')}`)
       .toEqual([]);

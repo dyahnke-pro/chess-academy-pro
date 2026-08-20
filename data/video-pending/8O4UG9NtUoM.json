@@ -328,6 +328,7 @@
  ],
  "titleCheck": {
   "claims": "French Defense",
-  "confirmed": false
+  "confirmed": true,
+  "viaParent": "French Defense: Rubinstein Variation"
  }
 }

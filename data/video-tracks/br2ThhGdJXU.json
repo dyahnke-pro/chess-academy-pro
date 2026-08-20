@@ -1105,9 +1105,9 @@
   }
  ],
  "titleCheck": {
-  "claims": "stream VOD; opponent picks the defense",
-  "confirmed": true,
-  "checkedBy": "hand 2026-08-19 — mid-track board-truth eyeballed: settled ply62 t=1696 exact endgame; 65% checkpoint was Nfd2/Bf4 rewind churn"
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
  },
  "openings": [
   {

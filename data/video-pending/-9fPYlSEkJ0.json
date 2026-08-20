@@ -1,6 +1,6 @@
 {
  "videoId": "-9fPYlSEkJ0",
- "title": "",
+ "title": "Master Class | Philosophy of Fianchetto | Chess Speedrun | Grandmaster Naroditsky",
  "creator": "naroditsky",
  "trackedAt": "2026-08-20",
  "geometry": {
@@ -254,5 +254,10 @@
    "line": "d4",
    "coverage": 1
   }
- ]
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

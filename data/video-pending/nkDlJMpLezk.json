@@ -225,6 +225,8 @@
  ],
  "titleCheck": {
   "claims": "Sicilian Defense: Alapin Variation",
-  "confirmed": false
+  "confirmed": false,
+  "verdict": "mistracked",
+  "checkedBy": "mistracked — hand 2026-08-20: titled an Alapin Sicilian; the tracker followed Slav Defense lines. No notes written."
  }
 }

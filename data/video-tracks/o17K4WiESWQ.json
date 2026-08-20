@@ -366,9 +366,9 @@
   }
  ],
  "titleCheck": {
-  "claims": "stream VOD; opponent picks the defense",
-  "confirmed": true,
-  "checkedBy": "hand 2026-08-19 — mid-track board-truth eyeballed: ply29 t=1566 exact (g6 thorn pawn highlighted)"
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
  },
  "openings": [
   {

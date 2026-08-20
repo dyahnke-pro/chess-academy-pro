@@ -1237,9 +1237,9 @@
   }
  ],
  "titleCheck": {
-  "claims": "stream VOD; opponent picks the defense",
-  "confirmed": true,
-  "checkedBy": "hand 2026-08-19 — mid-track board-truth eyeballed: ply90 t=909 Kxd3 highlight confirms; Kc1/Ne3/pawns match"
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
  },
  "openings": [
   {

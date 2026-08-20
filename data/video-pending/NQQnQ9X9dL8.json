@@ -149,6 +149,8 @@
  ],
  "titleCheck": {
   "claims": "Scotch Game",
-  "confirmed": false
+  "confirmed": false,
+  "verdict": "mistracked",
+  "checkedBy": "mistracked — hand 2026-08-20: titled a Scotch (1.e4 e5); the tracker followed a Rapport-Jobava/Indian game (1.d4). No notes written."
  }
 }

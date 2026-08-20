@@ -129,10 +129,26 @@ const checkTitle = (track, openings) => {
   // Does it claim an opening at all? Marketing titles ("Opening Blunders!!")
   // often do not, and silence is not a disagreement.
   const claims = openingFromTitle(title, ALL_DB_NAMES);
-  if (!claims) return null;
+  // AN ABSENT VERDICT READS AS A PASSED ONE, so say so explicitly. Returning
+  // null here left `titleCheck` unwritten, and a track with no field is
+  // indistinguishable from one that was checked and cleared — which is exactly
+  // how notes get written over a track nobody verified. Measured 2026-08-20: 6
+  // of the 35 banked tracks were in this state, all of them marketing titles
+  // that name no opening ("Master Class | Controlling Center", "Never Play
+  // F6!"). Silence is still not a disagreement; it is now a RECORDED silence.
+  if (!claims) return { claims: null, confirmed: null, unverifiable: 'title names no opening' };
   // Could it be describing one of the openings this lesson actually played?
   const matched = openingFromTitle(title, openings.map((o) => o.name));
-  return matched ? { claims: matched, confirmed: true } : { claims, confirmed: false };
+  if (matched) return { claims: matched, confirmed: true };
+  // A TITLE MAY BE LESS SPECIFIC THAN THE LINE, and that is agreement, not a
+  // mistrack: "French Defense" over a lesson that played "French Defense:
+  // Rubinstein Variation" is exactly right, and flagging it buries the real
+  // mistracks in noise. Confirm when a played opening is a CHILD of the claim
+  // (its name extends the claimed one) — never the reverse, since a lesson that
+  // played the parent has not demonstrated the specific line a title claims.
+  const child = openings.find((o) => o.name.toLowerCase().startsWith(`${claims.toLowerCase()}:`));
+  if (child) return { claims, confirmed: true, viaParent: child.name };
+  return { claims, confirmed: false };
 };
 
 const write = process.argv.includes('--write');
@@ -146,7 +162,7 @@ for (const file of readdirSync(TRACK_DIR).filter((f) => f.endsWith('.json') && f
   if (openings.length > 4) console.log(`   … and ${openings.length - 4} shallower`);
 
   const titleCheck = checkTitle(track, openings);
-  if (titleCheck && !titleCheck.confirmed) {
+  if (titleCheck && titleCheck.claims && !titleCheck.confirmed) {
     console.log(`   ⚠ TITLE UNCONFIRMED — claims "${titleCheck.claims}", which this lesson never played`);
   }
 

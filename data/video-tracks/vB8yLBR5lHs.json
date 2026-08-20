@@ -341,5 +341,10 @@
    "line": "d4",
    "coverage": 1
   }
- ]
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

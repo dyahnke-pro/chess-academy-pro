@@ -664,9 +664,9 @@
   }
  ],
  "titleCheck": {
-  "claims": "Glek + anti-Philidor (stream VOD; opponent picks the defense)",
-  "confirmed": true,
-  "checkedBy": "hand 2026-08-19 — board-truth eyeballed at t=2372 vs replayed Qxg5 position, every square matched"
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
  },
  "notes": [
   {
