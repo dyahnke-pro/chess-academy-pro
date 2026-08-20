@@ -606,7 +606,16 @@ generates, so it never calls the LLM. Every gen-rev bump re-exposes every device
 
 ## PHASES
 
-### P0 — prep (no build; removes blockers) — IN PROGRESS
+### P0 — prep — DONE except captions
+- [x] Verdicts: every track in both dirs now carries one (was: 6 with none, which read as passed).
+      Caught 2 real mistracks (`NQQnQ9X9dL8` Scotch->Jobava, `nkDlJMpLezk` Alapin->Slav) before
+      any prose was written over them. Pending: 26 confirmed / 0 unconfirmed / 3 mistracked /
+      6 unverifiable-by-title / 0 none.
+- [ ] NEW: `/api/audit-stream` answered `storage: memory` with 0 events where it was `redis`
+      earlier the same day — in-memory is per-instance, so reads miss the instance that wrote.
+      It is not a usable instrument until that is understood. Use PostHog for anything historical.
+
+### P0 (original list) — prep (no build; removes blockers) — IN PROGRESS
 - [ ] Bank captions for the 20 download-list videos that lack them. Cookie-free:
       `yt-dlp --extractor-args "youtube:player_client=web_embedded" --ignore-no-formats-error
        --write-auto-sub --skip-download --sub-format vtt --sub-langs en`
@@ -615,10 +624,34 @@ generates, so it never calls the LLM. Every gen-rev bump re-exposes every device
       Run `map-openings.mjs`; an absent verdict must never be read as passed.
       NEVER write notes against a mistracked track.
 
-### P1 — the stall (do before tier-1; a deterministic lesson that can't finish is just a reliable failure)
-- [ ] Root-cause: does generation hang on the LLM round-trip, on the 429'd explorer call, or
-      on the runner's token guard? Evidence so far: no console error, no advance, budget
-      irrelevant (11 nodes at 600s AND 1500s), TTS instrument irrelevant (block AND mute both stall).
+### P1 — the stall — MEASURED 2026-08-20, and it is NOT what three earlier readings said
+**The lesson ADVANCES, then stops dead at ply 11.** Measured by matching the rendered board
+against every ply of the taught line, sampling every 10s:
+
+    10s ply 0 | 51s ply 1 | 61s ply 2 | 91s ply 3 | 131s ply 4 | 161s ply 5 | 211s ply 6
+    231s ply 7 | 251s ply 8 | 281s ply 9 | 311s ply 10 | 331s ply 11 | ... ply 11 for 5+ more minutes
+
+Ply 11 is `Kd1`, immediately after `Qxf2+` — the line's FIRST capture and first check. Beats
+exist on BOTH sides of that boundary (plies 8-14 all have hand-written beats since this
+session), so a missing beat is NOT the cause.
+
+THREE WRONG READINGS TO NOT REPEAT:
+- "still stalled from the start" — no: it walks 11 plies first.
+- "it is a regeneration loop" — no: the board advances monotonically and never resets. The
+  6 `/api/llm/` calls are BACKGROUND STAGE GENERATION (concepts/findMove/drill/punish), not
+  the walkthrough regenerating.
+- "32 pieces means it never moved" — a bad discriminator: this line has no capture until ply
+  10, so 32 pieces is consistent with plies 0-9.
+
+- [ ] Root-cause ply 11 -> 12 specifically. Phase stays `narrating`, panel renders its chrome
+      with NO narration body, no fork panel, no leaf panel, zero console errors.
+      Suspects: the node's children shape at the check/capture boundary; a stale token in the
+      runner bailing `if (ctrl.cancelled || !isCurrent()) return;` without scheduling anything.
+- [ ] **PACING IS REAL AND MUST BE BUDGETED FOR.** ~20-40s per ply, so a 15-ply lesson is
+      ~10 MINUTES. Every audit that gave it 9 minutes reported a false stall. Budget audits
+      from the ply count, never a flat timeout.
+- [ ] NOTE: the 7 Copycat beats added this session make the lesson LONGER (full beats replace
+      short computed prose). Correct for teaching, but it lengthens the run.
 - [ ] A lesson must ALWAYS fall through to computed narration rather than sit silent.
 - [ ] Fix the picker line spoken twice (David flagged; not yet diagnosed).
 
