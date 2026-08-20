@@ -2335,11 +2335,6 @@
         "name": "Fischer Variation (4.e3 b6)",
         "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 e3 b6 Bd3 Bb7 Nf3 O-O O-O d5 cxd5 exd5 a3 Bd6 b4 Nbd7 Qb3 a5",
         "explanation": "Fischer's plan with ...b6 and ...Bb7 develops the light-squared bishop before committing to a pawn structure. The bishop on b7 controls e4 and the long diagonal. Black delays ...d5 until the bishop is actively placed, then plays ...d5 followed by ...c5 to challenge the center. This flexible approach avoids the main theoretical battlegrounds while maintaining all of Black's strategic options."
-      },
-      {
-        "name": "Bd2 Line (4.Bd2)",
-        "pgn": "d4 Nf6 c4 e6 Nc3 Bb4 Bd2 O-O a3 Bxc3",
-        "explanation": "The bishop comes to d2 so the pin can be broken without any doubled pawns, and the honest reply is to take anyway. Black castles first and waits; when the a-pawn asks, the bishop comes off on c3. White recaptures with a piece and keeps a clean structure, which is the point of the whole set-up \u2014 but the knight that was guarding e4 has left the board, and from here the centre square is something White has to contest rather than something a knight simply holds."
       }
     ],
     "warningLines": []

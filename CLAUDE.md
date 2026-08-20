@@ -2588,27 +2588,40 @@ on the Copycat" that was false. Vienna, measured properly: main 12/44, Vienna
 Gambit 9/14, Frankenstein-Dracula 12/22, **Copycat 5/15 — beats at plies 2, 3,
 4, 7 and 15, and the lesson dies inside the gap between 7 and 15.**
 
-### 🔒🔒 A LINE IS ADDED BECAUSE WE CAN TEACH IT — NEVER BECAUSE IT UNLOCKS A NOTE (David 2026-08-20: *"Why do we have a new lines created from a video with no narrations?"*)
+### 🔒🔒 WE DO NOT ADD A LINE FOR ONE NOTE — AND AN ADDED LINE IS NOT DONE UNTIL IT IS BAKED (David 2026-08-20: *"Have they just not been baked yet?"* and *"We do not add lines for only one note."*)
 
-The fork pipeline rescues a STRANDED NOTE by adding the video's line as a
-branch. Its unit is one note at one ply; the thing it adds is a 24-30 ply LINE.
-So each rescued note buys twenty-odd plies that have nothing hand-written to say
-about them, and `fork-check` never asks the question that matters — it vets
-master-game count, student score, middlegame depth and which notes get
-unlocked, and NEVER whether the line will have anything to teach.
+Two different failures, and a session that confuses them deletes good work.
 
-**Add narration coverage to the veto.** Before adding any line, replay it and
-count the plies carrying baked prose or a `lessonBeatAt` hit. A line that comes
-in mostly un-narrated is a new opening tab with no teaching in it — the exact
-"structure ships, teaching doesn't" failure this file keeps recording. A
-stranded note is not worth a silent variation: leave it to free play and review,
-which is where it already fires.
+**AN UNBAKED LINE IS NOT AN UN-TEACHABLE LINE.** A line added by the fork
+pipeline comes FROM a video, and that video's words are already banked against
+its positions in `data/video-narration/<id>.json`. Measured over the 13 lines
+added 2026-08-20: they carry the teacher's spoken words on **9 to 21 plies
+each** (Yugoslav …d5 21/28, English 3.g3 20/21, Rossolimo 19/23, Barry 17/19)
+plus 1-6 hand-written notes. They are silent in Watch and Learn only because
+nobody has REWORDED them into a bake yet. The fix is to bake them, never to
+revert them — a session that looks at the runtime silence, does not check the
+video coverage, and proposes deleting the lines is destroying work that is one
+offline step from being finished. (That session was this one; the measurement
+above is what corrected it.)
 
-Corollary, and the reason this matters beyond one pipeline: **the coach
-walkthrough should follow the SAME lines the opening tab teaches**, forking at
-the same variations, so every fork lands on a position the tab has hand-written
-narration for. A line the coach walks that the tab does not teach is a line with
-no tier-2 coverage by construction.
+**THE RULE THAT DOES BIND: never add a line to rescue ONE note.** Of those 13,
+twelve unlocked 2-6 notes and carry near-complete video coverage; ONE (`Bd2
+Line (4.Bd2)`, a single note) was added for exactly one note and was removed.
+Before adding any fork line, count BOTH: the hand-written notes it unlocks AND
+the plies whose positions have banked spoken words. One note and nothing else is
+a curiosity — leave it to free play and review, where it already fires.
+
+**AND ADDING THE LINE IS HALF THE JOB.** `fork-check` vets master-game count,
+student score, middlegame depth and notes-unlocked — it never asks whether the
+line will have anything to SAY at runtime, so a line can pass every gate and
+still narrate from the computed floor. Adding a line without scheduling its bake
+is how the openings tab grows tabs that teach nothing. Bake it in the same pass,
+or do not add it.
+
+**Corollary — the coach walkthrough should follow the SAME lines the opening tab
+teaches**, forking at the same variations, so every fork lands on a position the
+tab has hand-written narration for. A line the coach walks that the tab does not
+teach has no tier-2 coverage by construction.
 
 ### 🔒🔒 A NOTE IS SELECTED BY POSITION, NEVER BY NAME — and every number below was re-measured 2026-08-04 (David, emphatic: *"All narrations need to be deterministically found and handed to llm in the package. There is no room for false narrations on this app! Ever!!"* and *"The problem is NOT the gate… Gates are back ups that should never fire. Fix the package or how the position is chosen."*).
 
