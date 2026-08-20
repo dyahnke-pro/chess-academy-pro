@@ -228,7 +228,17 @@ async function main() {
       // at 30s on cold runners while identical checks passed minutes
       // apart — CLAUDE.md's own cold-seed guidance is 45-60s. Past
       // 75s is a genuine stall worth failing.
-      await waitUntil(() => visible('all-tab-ready').then((v) => v), 75_000);
+      // POLL PRESENCE, NOT VISIBILITY. The sentinel renders with
+      // `className="contents"` — CSS `display: contents` produces NO layout
+      // box, so Playwright's isVisible() reports false for it FOREVER, however
+      // long the seed takes. This wait therefore always burned its full budget
+      // and returned false, and the ECO checks ran against whatever happened to
+      // be on screen. Measured 2026-08-20 against live prod: the groups DO
+      // render (~30s after a cold click), so the seven failures this produced
+      // were the instrument's, not the app's. Count the sentinel instead, and
+      // confirm the first real group has a box before asserting on it.
+      await waitUntil(async () => (await countSel('[data-testid="all-tab-ready"]')) > 0, 90_000);
+      await waitUntil(async () => (await countSel('[data-testid="eco-group-A"]')) > 0, 30_000);
     },
     SETTLE_SHORT,
     [
