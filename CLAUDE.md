@@ -3210,9 +3210,16 @@ anything:
 
 ```bash
 python3 -m pip install --break-system-packages --pre -U yt-dlp   # nightly
+python3 -m pip install --break-system-packages numpy Pillow      # the scanner
 apt-get update && apt-get install -y ffmpeg                      # update FIRST
 curl -fsSL https://deno.land/install.sh | DENO_INSTALL=/usr/local sh -s -- -y
 ```
+
+`numpy`/`Pillow` are not optional and their absence is DISGUISED: without them
+`scan_stream.py` dies before it reads a pixel, `harvest-local.sh` catches the
+non-zero exit as a geometry refusal, and the lesson is filed under
+`needs-hand-geometry` — a verdict about the video, recorded for a missing
+import. Read the scan log before believing a refusal.
 
 `apt-get install ffmpeg` without the `update` fails on 404s for stale package
 versions and reads like a broken mirror.
