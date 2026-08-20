@@ -2901,6 +2901,47 @@ engine-checked so it does not leave the student worse than ≈ −1.0 except as 
 honest gambit showcase. A fork is a normal variation once added; nothing about
 its origin exempts it.
 
+### 🔒🔒 THE FORK PIPELINE IS HOW A STRANDED NOTE IS RESCUED — RUN IT, DON'T IMPROVISE (locked 2026-08-19 after a session hand-rolled a lesser version of work that already existed)
+
+An off-line note is SILENT in Watch and Learn. The fix is to add the video's
+line as a BRANCH at the position where it leaves our spine, which makes the
+teaching audible without moving the spine an inch. Four committed scripts do
+this and they are a PIPELINE — run them in order rather than inventing
+something adjacent:
+
+    fork-plan.mjs        what to add: every off-line note, grouped by the taught
+                         line it diverges from and the ply it diverges at
+    build-opening-spine  how the line continues, from master data
+    fork-check.mjs       is it fit, and WHAT DOES IT BUY (which notes it unlocks)
+    line-profile.mjs     where a flagged line goes wrong, ply by ply
+
+**`fork-check`'s veto is binding.** It reports master game counts at the fork,
+and a branch played in 4 master games against a main move played in 637 is not
+an alternative — it is a curiosity. Those notes stay free-play and review
+material; adding the line anyway teaches a move nobody plays. It also reports
+the student's score past the fork, which catches the branch that is legal, deep,
+and loses.
+
+**A fork at ply 0-3 is a different opening, not an alternative** — `fork-plan`
+reports those separately and they are never added.
+
+**Notes cluster, so count VARIATIONS not notes.** Six stranded Alekhine notes
+needed two variations between them: they sit at successive plies of the same
+branch. Read the plan grouped by host before estimating the work.
+
+**Worked example (2026-08-19):** the Four Pawns Attack had five notes stranded
+past ply 15. `fork-check` passed two branches off ply 17 (…Be7 Be2, then the
+…a5/…d5 squeeze and the …f6 break — 24-25 plies, both reaching a middlegame,
+`Be7` the main master move at 329 games, student score flat at 44% vs 43%) and
+VETOED the third (…Qd7, 4 master games). Adding the two vetted variations moved
+all five notes onto a taught line; the vetoed one was left alone.
+
+**Naming the fork in the narration is a SEPARATE, lesser thing and is not a
+substitute.** `videoForks.ts` emits the lesson's own rewind-derived options into
+the corpus and Learn appends one "there are other tries here" sentence — that
+tells the student a choice exists. It does NOT make a stranded note audible.
+Only adding the variation does that.
+
 ### 🔒🔒 A NOTE IS ANCHORED ONTO THE TAUGHT LINE — THE LINE IS NEVER BENT TOWARD THE NOTE (David 2026-08-17, LOCKED: *"I like the plan. Lock it in"*)
 
 A note anchored where the lesson never goes is **silent in Watch and Learn**. It

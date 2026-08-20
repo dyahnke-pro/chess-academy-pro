@@ -54,6 +54,7 @@ import authoredRepertoire from '../data/repertoire.json';
 import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
+import { forkSentence } from './videoForks';
 import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
 import { detectTactics } from './tacticsDetector';
 import { stageArrayHasUsableEntry } from './stageEntryValidity';
@@ -1192,6 +1193,21 @@ export interface SplicedNote {
 export function spliceNarration(teaching: SplicedNote, generated: string): string {
   if (teaching.handwritten) return teaching.text;
   return generated.trim() ? `${teaching.text} ${generated}` : teaching.text;
+}
+
+/** Append the lesson's own "other tries here" sentence, when it showed one.
+ *
+ *  LEARN NAMES THE FORK; REVIEW WALKS IT (David 2026-08-17: "i want Learn with
+ *  coach to touch on them as well so the user knows there are other options at
+ *  certain forks/positions"). One sentence, no continuations — a lesson that
+ *  recites every branch is the wordiness already objected to once.
+ *
+ *  The move the lesson goes on to play is excluded: the student is about to see
+ *  it, so calling it an alternative confuses rather than informs. */
+function withFork(text: string, fen: string, playedNext?: string): string {
+  const sentence = forkSentence(fen, playedNext);
+  if (!sentence) return text;
+  return text.trim() ? `${text} ${sentence}` : sentence;
 }
 
 export function noteArrowSourceAt(
@@ -2369,7 +2385,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         // A FARMED note still LEADS the generated prose rather than replacing
         // it: those are distillations of speech, thinner and not written to
         // carry a ply alone. Same treatment for the baked tier above.
-        return spliceNarration(teaching, generated);
+        return withFork(spliceNarration(teaching, generated), p.fen, positions[i + 1]?.san);
       }
       // TIER 3 — THE HAND-WRITTEN PROSE, BEFORE ANYTHING COMPUTED.
       //

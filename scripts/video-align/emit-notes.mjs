@@ -186,11 +186,58 @@ for (const file of readdirSync(TRACK_DIR).filter((f) => f.endsWith('.json') && f
   perVideo.push(`${track.videoId} (${track.notes.length}) -> ${subject}`);
 }
 
+// ── THE FORKS — the "other lines" the lesson actually showed ────────────────
+//
+// David 2026-08-17: a teacher rewinds for one reason, to go back and show a
+// different option, so the recovered rewinds ARE the alternative-lines content,
+// already grouped by position and each carrying the timestamp where it is
+// explained. 405 of them across 90 lessons sat in the tracks reaching nothing
+// until this emitted them.
+//
+// WHY THESE MAY BE PUT IN FRONT OF A STUDENT: the options are the moves that
+// APPEARED ON SCREEN. "There are three tries here" is a claim about the video,
+// and the video is the evidence — nothing to hallucinate. Asking a model what
+// else could be played produces fluent, sometimes-wrong lines with nothing to
+// check them against.
+//
+// Two things are checked here rather than trusted. Every option must be LEGAL
+// at the fork's own position, because a fork whose options are not playable is
+// a mistrack, not a lesson. And the position must be SPECIFIC — the same
+// openings-through measure the notes use, not a ply-depth rule: a fork after
+// 1.e4 e5 would fire in every open game in the app, which is the doctrine's
+// "a generic fork is not a fork" measured rather than guessed.
+const forks = [];
+for (const file of readdirSync(TRACK_DIR).filter((f) => f.endsWith('.json') && f !== 'by-opening.json')) {
+  const track = JSON.parse(readFileSync(join(TRACK_DIR, file), 'utf8'));
+  if (track.titleCheck?.verdict === 'mistracked') continue;
+  for (const fork of track.forks ?? []) {
+    const key = (fork.fen ?? '').split(' ').slice(0, 2).join(' ');
+    if (!key || (openingsThrough.get(key) ?? 0) > GENERIC_LIMIT) continue;
+    const legal = [];
+    for (const opt of fork.options ?? []) {
+      const c = new Chess(fork.fen);
+      try { if (!c.move(opt.san)) continue; } catch { continue; }
+      legal.push({ san: opt.san, t: opt.t, continuation: opt.continuation ?? opt.san });
+    }
+    // One option is not a fork — it is the move the lesson played.
+    if (legal.length < 2) continue;
+    forks.push({
+      fen: fork.fen,
+      lineSan: fork.line ?? [],
+      ply: fork.ply,
+      options: legal,
+      source: `yt:${track.videoId}`,
+    });
+  }
+}
+
 const bundle = {
   generatedAt: new Date().toISOString().slice(0, 10),
   videosDistilled: perVideo.length,
   noteCount: notes.length,
+  forkCount: forks.length,
   notes,
+  forks,
 };
 
 console.log(perVideo.map((s) => `  ${s}`).join('\n'));
