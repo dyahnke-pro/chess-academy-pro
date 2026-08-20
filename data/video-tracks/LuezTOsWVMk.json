@@ -154,5 +154,57 @@
    "fen": "rn1q1rk1/1bp2ppp/pp1bpn2/3pN3/3P1B2/2NBP3/PPP2PPP/R2Q1RK1 w - - 2 9"
   }
  ],
- "forks": []
+ "forks": [],
+ "notes": [
+  {
+   "id": "vn-jobava-build-the-little-box-behind-the-bishop",
+   "line": "d4 Nf6 Nc3 d5 Bf4 a6 e3",
+   "teaches": "A system opening earns its keep by having one setup that answers several replies. Get the bishop outside the pawn chain FIRST, then close the box behind it: the modest pawn move holds the centre pawn and gives the bishop a retreat, so whichever of the three or four standard replies appears, the same structure meets it.",
+   "explains": "The pawn to e3 props up the pawn on d4 and covers the square behind the bishop on f4. Nothing is committed, and the setup is now the same against every reply the position allows.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    },
+    {
+     "kind": "defends",
+     "square": "f4"
+    }
+   ],
+   "fen": "rnbqkb1r/1pp1pppp/p4n2/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 4",
+   "t": 65.5,
+   "ply": 7,
+   "source": "yt:LuezTOsWVMk"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Rapport-Jobava System",
+   "eco": "D01",
+   "plies": 5,
+   "line": "d4 Nf6 Nc3 d5 Bf4",
+   "coverage": 0.8
+  },
+  {
+   "name": "Queen's Pawn Game: Chigorin Variation",
+   "eco": "A45",
+   "plies": 4,
+   "line": "d4 Nf6 Nc3 d5",
+   "coverage": 0.867
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ]
 }

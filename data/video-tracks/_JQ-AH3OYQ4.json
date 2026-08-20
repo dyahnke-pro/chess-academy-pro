@@ -320,5 +320,49 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-owens-answer-the-pin-with-a-square-not-a-pawn",
+   "line": "e4 b6 d4 Bb7 Nc3 e6 Bd3 Bb4 Ne2",
+   "teaches": "Facing a pin on the queen's knight, spending a pawn move to prevent it weakens the squares the pin was aiming at anyway. Develop instead, and keep the modest square beside the king in reserve for the OTHER knight: when the pin arrives, that knight takes it, the pinned one is free, and no pawn has been touched. Answer a pin with a square, not with a pawn.",
+   "explains": "The king's knight goes to e2 rather than its natural square, so the knight on c3 is no longer the only thing holding the centre and the pin has nothing to win. The pawn move that would have chased the bishop was never needed.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "c3"
+    },
+    {
+     "kind": "defends",
+     "square": "d4"
+    }
+   ],
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 3 5",
+   "t": 89.5,
+   "ply": 9,
+   "source": "yt:_JQ-AH3OYQ4"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Owen Defense",
+   "eco": "B00",
+   "plies": 2,
+   "line": "e4 b6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Ruy Lopez: Morphy Defense",
+  "confirmed": false,
+  "verdict": "track-right-title-half-covered",
+  "checkedBy": "hand 2026-08-20 — track-right-title-half-covered — the title names two games (\"Owen's Defense + Ruy Lopez\") and the tracker followed the Owen's, 1.e4 b6 2.d4 Bb7. The Ruy half is elsewhere in the video and is not tracked; the notes are written on the Owen's only."
+ }
 }

@@ -1,28 +1,28 @@
 [
  {
-  "id": "vn-vienna-gambit-hit-the-bishop-and-build-the-centre",
-  "line": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Bc5 d4",
-  "teaches": "When a piece plants itself on the square in front of your centre, the pawn move that both attacks it and builds the centre is worth more than any developing move. One push does two jobs: the intruder has to decide, and the pawn it now stands beside is defended by the one that just arrived.",
-  "explains": "The pawn to d4 hits the bishop on c5 and props up the pawn on e5 that the gambit won. The bishop must move or trade, and either way the big centre is the thing that remains.",
+  "id": "vn-vienna-gambit-develop-onto-the-square-you-must-hold",
+  "line": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Bc5",
+  "teaches": "A pawn move in front of the king takes a square away from its own side. Develop the bishop onto the diagonal that runs at that square: it defends the square your own knight wants to land on and threatens to use it at the same time, so one developing move is both the threat and the insurance.",
+  "explains": "The bishop settles on c5 looking down the diagonal at f2 and at g1 behind it. The knight already sitting in the centre now has a fork square that is covered, and the pawn move that opened the diagonal cannot be taken back.",
   "reasons": [
    {
-    "kind": "attacks",
-    "square": "c5"
+    "kind": "controls",
+    "square": "f2"
    },
    {
-    "kind": "defends",
-    "square": "e5"
+    "kind": "controls",
+    "square": "g1"
    }
   ]
  },
  {
-  "id": "vn-vienna-gambit-answer-the-pin-with-the-piece-that-unpins",
-  "line": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Bc5 d4 Bb4 Bd2",
-  "teaches": "A pin on the knight holding your centre is answered by developing the piece that breaks it, not by moving the knight. Interposing a bishop both unpins and offers a trade the pinner did not ask for \u2014 and the piece you develop was going to that side of the board anyway.",
-  "explains": "The bishop comes to d2, defending the knight on c3 and standing between it and the king so the pin no longer bites. The knight is free to move again and the centre keeps its guard.",
+  "id": "vn-vienna-gambit-break-the-rule-the-advance-invited",
+  "line": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Bc5 d4 Bb4",
+  "teaches": "A central advance that gains space with tempo also opens a diagonal behind it, and the piece it just chased is often the one that should use it. Moving the same bishop twice breaks the rule about developing everything once \u2014 the rule assumes the second square is no better than the first, and here it pins the knight holding the centre.",
+  "explains": "The bishop steps to b4 pinning the knight on c3 against the king behind it. The pawn move that chased it off the other diagonal is exactly what opened this one.",
   "reasons": [
    {
-    "kind": "defends",
+    "kind": "attacks",
     "square": "c3"
    }
   ]

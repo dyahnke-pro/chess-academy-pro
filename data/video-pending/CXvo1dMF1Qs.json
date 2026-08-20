@@ -454,6 +454,6 @@
  ],
  "titleCheck": {
   "verdict": "mistracked",
-  "checkedBy": "hand 2026-08-19 — mistracked — titled a Benko; the track has a knight retreating to g1 on move five and most plies unanchorable. No notes written; re-track per section geometry or drop."
+  "checkedBy": "hand 2026-08-20 — mistracked — titled a Benko; the default geometry tracked a knight retreating to g1 on move five, and a hand re-read at 374,0,60 tracked a different game entirely (d4 Nf6 Nf3 g6 g3 Bg7 Bg2). The Benko section needs a per-section geometry read. No notes written."
  }
 }

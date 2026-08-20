@@ -249,5 +249,89 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-najdorf-choose-the-structure-not-just-the-move",
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e6",
+   "teaches": "Some moves are a choice of MOVE and some are a choice of STRUCTURE, and this pawn is the second kind. Playing it to the sixth rank keeps the centre flexible and the light squares guarded; pushing it a square further seizes space and concedes one square permanently. Neither is better — but pick knowingly, because everything you do for the next twenty moves follows from it.",
+   "explains": "The pawn steps to e6, covering d5 and f5 — the two squares a knight would love in front of this structure. The centre stays fluid and nothing has been conceded.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "d5"
+    },
+    {
+     "kind": "controls",
+     "square": "f5"
+    }
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2ppn2/8/3NP3/2N5/PPP1BPPP/R1BQK2R w KQkq - 0 7",
+   "t": 965,
+   "ply": 12,
+   "source": "yt:0npOMfkAlVU"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Najdorf Variation, Opocensky Variation, Traditional Line",
+   "eco": "B92",
+   "plies": 16,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e5 Nb3 Be7 O-O O-O",
+   "coverage": 0.05
+  },
+  {
+   "name": "Sicilian Defense: Scheveningen Variation, Classical Variation",
+   "eco": "B84",
+   "plies": 12,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e6",
+   "coverage": 0.3
+  },
+  {
+   "name": "Sicilian Defense: Najdorf Variation, Opocensky Variation",
+   "eco": "B92",
+   "plies": 11,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2",
+   "coverage": 0.6
+  },
+  {
+   "name": "Sicilian Defense: Najdorf Variation",
+   "eco": "B90",
+   "plies": 10,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6",
+   "coverage": 0.65
+  },
+  {
+   "name": "Sicilian Defense: Modern Variations, Main Line",
+   "eco": "B54",
+   "plies": 8,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6",
+   "coverage": 0.75
+  },
+  {
+   "name": "Sicilian Defense: Modern Variations",
+   "eco": "B50",
+   "plies": 4,
+   "line": "e4 c5 Nf3 d6",
+   "coverage": 0.9
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Najdorf Variation",
+  "confirmed": true
+ }
 }

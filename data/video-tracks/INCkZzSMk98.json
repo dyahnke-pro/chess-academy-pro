@@ -382,5 +382,57 @@
     }
    ]
   }
+ ],
+ "notes": [
+  {
+   "id": "vn-scandi-modern-take-the-pawn-the-blocker-abandoned",
+   "line": "e4 d5 exd5 Nf6 Bb5+ Bd7 Be2 e6 dxe6",
+   "teaches": "When a piece has been forced onto a square by a check, look at what it stopped guarding before assuming the position is balanced. A blocker interposed under duress often stands in front of the very pawn it used to defend — and the capture that looks like it invites a recapture is simply a free pawn.",
+   "explains": "Taking on e6 hits the bishop that the check forced onto d7 and the pawn on f7 together. The bishop is standing where it cannot help, so nothing recaptures on comfortable terms.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d7"
+    },
+    {
+     "kind": "attacks",
+     "square": "f7"
+    }
+   ],
+   "fen": "rn1qkb1r/pppb1ppp/4Pn2/8/8/8/PPPPBPPP/RNBQK1NR b KQkq - 0 5",
+   "t": 75,
+   "ply": 9,
+   "source": "yt:INCkZzSMk98"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Scandinavian Defense: Panov Transfer",
+   "eco": "B01",
+   "plies": 6,
+   "line": "e4 d5 exd5 Nf6 c4 c6",
+   "coverage": 0.079
+  },
+  {
+   "name": "Scandinavian Defense: Modern Variation",
+   "eco": "B01",
+   "plies": 4,
+   "line": "e4 d5 exd5 Nf6",
+   "coverage": 0.947
+  },
+  {
+   "name": "Scandinavian Defense",
+   "eco": "B01",
+   "plies": 2,
+   "line": "e4 d5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
  ]
 }

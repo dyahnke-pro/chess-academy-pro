@@ -1,8 +1,8 @@
 {
  "generatedAt": "2026-08-20",
- "videosDistilled": 131,
- "noteCount": 319,
- "forkCount": 388,
+ "videosDistilled": 152,
+ "noteCount": 340,
+ "forkCount": 418,
  "notes": [
   {
    "id": "vn-advance-e6-cover-the-check-square-before-the-trade",
@@ -125,99 +125,164 @@
    }
   },
   {
-   "id": "vn-giuoco-block-with-the-piece-that-asks-for-the-trade",
+   "id": "vn-najdorf-choose-the-structure-not-just-the-move",
    "lineSan": [
     "e4",
-    "e5",
+    "c5",
     "Nf3",
-    "Nc6",
-    "Bc4",
-    "Bc5",
-    "c3",
-    "Nf6",
+    "d6",
     "d4",
-    "exd4",
     "cxd4",
-    "Bb4+",
-    "Bd2"
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "a6",
+    "Be2",
+    "e6"
    ],
-   "opening": "Italian Game: Classical Variation, Greco Gambit, Traditional Line",
+   "opening": "Sicilian Defense: Najdorf Variation, Opocensky Variation",
    "phase": "opening",
-   "explains": "The bishop interposes on d2 and hits the bishop that gave the check. The check has produced nothing, and the piece that gave it now has a decision to make.",
-   "teaches": "Blocking a check with a piece that immediately attacks the checking piece turns a defensive move into an offer. The opponent must decide whether to trade off their active bishop or move it a second time, and either answer costs them the tempo the check was supposed to win.",
+   "explains": "The pawn steps to e6, covering d5 and f5 — the two squares a knight would love in front of this structure. The centre stays fluid and nothing has been conceded.",
+   "teaches": "Some moves are a choice of MOVE and some are a choice of STRUCTURE, and this pawn is the second kind. Playing it to the sixth rank keeps the centre flexible and the light squares guarded; pushing it a square further seizes space and concedes one square permanently. Neither is better — but pick knowingly, because everything you do for the next twenty moves follows from it.",
    "plans": "",
    "concepts": [],
    "sources": [
-    "yt:1671V8LrEwk"
+    "yt:0npOMfkAlVU"
    ],
    "positionSource": "high",
    "reasons": [
-    {
-     "kind": "attacks",
-     "square": "b4"
-    }
-   ],
-   "forkOf": {
-    "atLine": [
-     "e4",
-     "e5",
-     "Nf3",
-     "Nc6",
-     "Bc4",
-     "Bc5",
-     "c3",
-     "Nf6",
-     "d4",
-     "exd4",
-     "cxd4",
-     "Bb4+"
-    ],
-    "taughtMove": "Nc3",
-    "alternative": "Bd2",
-    "lineName": "Italian Game / Giuoco Piano: Main Line with Nc3"
-   }
-  },
-  {
-   "id": "vn-giuoco-develop-at-the-grabber-instead-of-recapturing",
-   "lineSan": [
-    "e4",
-    "e5",
-    "Nf3",
-    "Nc6",
-    "Bc4",
-    "Bc5",
-    "c3",
-    "Nf6",
-    "d4",
-    "exd4",
-    "cxd4",
-    "Bb4+",
-    "Bd2",
-    "Nxe4",
-    "Nc3"
-   ],
-   "opening": "Italian Game: Classical Variation, Greco Gambit, Traditional Line",
-   "phase": "opening",
-   "explains": "The knight comes out to c3 attacking the knight sitting on e4 and covering d5 and b5 on the way. The pawn is not being taken back; the piece that took it is being asked what it intends to do next.",
-   "teaches": "When a piece takes a central pawn and is not yet safe, the move that wins time is not the recapture — it is the developing move that ATTACKS the piece which took. Recapturing settles the position; developing with a threat keeps the intruder loose, and every move they spend rescuing it is a move you spend bringing another piece out.",
-   "plans": "",
-   "concepts": [],
-   "sources": [
-    "yt:1671V8LrEwk"
-   ],
-   "positionSource": "high",
-   "reasons": [
-    {
-     "kind": "attacks",
-     "square": "e4"
-    },
     {
      "kind": "controls",
      "square": "d5"
     },
     {
      "kind": "controls",
-     "square": "b5"
+     "square": "f5"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "c5",
+     "Nf3",
+     "d6",
+     "d4",
+     "cxd4",
+     "Nxd4",
+     "Nf6",
+     "Nc3",
+     "a6",
+     "Be2"
+    ],
+    "taughtMove": "e5",
+    "alternative": "e6",
+    "lineName": "Sicilian: Najdorf"
+   }
+  },
+  {
+   "id": "vn-giuoco-check-before-you-retreat",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "c3",
+    "Nf6",
+    "d4",
+    "exd4",
+    "cxd4",
+    "Bb4+"
+   ],
+   "opening": "Italian Game: Classical Variation, Greco Gambit, Traditional Line",
+   "phase": "opening",
+   "explains": "The bishop goes to b4 with check rather than back down the diagonal. The reply is forced, and the tempo that buys is what makes the counter-strike in the centre possible next move.",
+   "teaches": "When a pawn advance attacks your bishop, the instinct is to move it back — and retreating hands the centre over for nothing. Look for a check first: the same bishop steps sideways with tempo instead of backwards without one, and the move you buy is the one that either takes the pawn or strikes back in the middle. A retreat is a move spent; a check is a move earned.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:1671V8LrEwk"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e1"
+    }
+   ]
+  },
+  {
+   "id": "vn-three-knights-after-a-sacrifice-finish-developing-first",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Bc5",
+    "Bc4",
+    "d6",
+    "Nxe5",
+    "dxe5",
+    "d3"
+   ],
+   "opening": "Three Knights Opening",
+   "phase": "opening",
+   "explains": "The modest pawn to d3 holds the pawn on e4 and opens the diagonal for the last minor piece, with the bishop on c4 already defended. Nothing is threatened and nothing needs to be: the position is being made solid before it is made sharp.",
+   "teaches": "A piece down, the temptation is to look for the refutation immediately. There usually isn't one yet. The moves that make a sacrifice work are the boring ones — hold the centre, get the king safe — because the compensation is TIME, and time is only worth something once the pieces that spend it are on the board.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:1PI3xfMiUE4"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    },
+    {
+     "kind": "defends",
+     "square": "c4"
+    }
+   ]
+  },
+  {
+   "id": "vn-three-knights-an-early-queen-sortie-helps-the-defender",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Bc5",
+    "Bc4",
+    "d6",
+    "Nxe5",
+    "dxe5",
+    "d3",
+    "Qf6",
+    "O-O"
+   ],
+   "opening": "Three Knights Opening",
+   "phase": "opening",
+   "explains": "Castling puts the rook on f1 and defends the pawn on f2 the queen was eyeing. The threat is answered by a move that was needed anyway.",
+   "teaches": "An opponent who brings the queen out early to threaten mate is doing your work for you when you are behind on material. Castle: the king reaches safety, a rook joins the defence of the square being attacked, and the queen that came out to threaten now has to be spent retreating. Answer an early queen with development, never with panic.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:1PI3xfMiUE4"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "f2"
+    },
+    {
+     "kind": "defends",
+     "square": "f1"
     }
    ]
   },
@@ -284,7 +349,7 @@
    ]
   },
   {
-   "id": "vn-fourpawns-pin-the-defender-before-castling-long",
+   "id": "vn-fourpawns-develop-so-the-knight-jump-has-an-answer",
    "lineSan": [
     "e4",
     "Nf6",
@@ -300,15 +365,12 @@
     "Nc6",
     "Be3",
     "Bf5",
-    "Nc3",
-    "Qd7",
-    "Nf3",
-    "Bg4"
+    "Nc3"
    ],
    "opening": "Alekhine Defense: Four Pawns Attack, Main Line",
    "phase": "opening",
-   "explains": "The bishop steps to g4 pinning the knight on f3 against the pressure behind it and staying defended by the queen on d7. The knight is the piece holding the centre together, and it can no longer move freely.",
-   "teaches": "Before committing the king to a wing, put a question to the piece guarding the centre you intend to attack. A bishop that pins a knight to nothing in particular still ties it to the defence, and the pin is worth far more once your rooks are about to arrive on the file it stands on.",
+   "explains": "The knight comes to c3, holding d5 and b5 and clearing the way for the rook to swing to the c-file if the enemy knight hops in. It is the developing move that answers a move that has not happened.",
+   "teaches": "Develop in the order that keeps an answer ready for the opponent's most annoying jump. A knight coming to the square beside your queenside pawns is only a problem while the rook behind them is still at home — bring the other pieces out in the sequence that leaves that rook one move from covering it, and the jump stops being a threat before it is played.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -317,54 +379,46 @@
    "positionSource": "high",
    "reasons": [
     {
-     "kind": "attacks",
-     "square": "f3"
+     "kind": "controls",
+     "square": "d5"
+    },
+    {
+     "kind": "controls",
+     "square": "b5"
     }
    ]
   },
   {
-   "id": "vn-fourpawns-push-on-the-side-the-king-has-gone-to",
+   "id": "vn-scandi-qa5-the-free-question-to-a-loose-bishop",
    "lineSan": [
     "e4",
-    "Nf6",
-    "e5",
-    "Nd5",
-    "d4",
-    "d6",
-    "c4",
-    "Nb6",
-    "f4",
-    "dxe5",
-    "fxe5",
-    "Nc6",
-    "Be3",
-    "Bf5",
+    "d5",
+    "exd5",
+    "Qxd5",
     "Nc3",
-    "Qd7",
-    "Nf3",
+    "Qa5",
+    "g3",
+    "Nf6",
+    "Bg2",
     "Bg4",
-    "Be2",
-    "O-O-O",
-    "c5"
+    "Nge2",
+    "c6",
+    "h3"
    ],
-   "opening": "Alekhine Defense: Four Pawns Attack, Main Line",
+   "opening": "Scandinavian Defense: Main Line",
    "phase": "opening",
-   "explains": "The pawn steps to c5 hitting the knight on b6 and taking d6 in hand, on the very wing the king has just castled to. The knight has to move, and the file behind the pawn is the one that leads to the king.",
-   "teaches": "Once the kings have gone to opposite wings, a pawn move on the side the enemy king chose is worth more than the same move anywhere else — it gains space, gains a tempo on a piece, and opens the line your attack will travel down. Push where their king is, and prefer the push that comes with a threat so they cannot ignore it.",
+   "explains": "The pawn to h3 puts the question to the bishop on g4. Whatever it decides, the square it is standing on stops being available to it, and nothing in the position is weakened by the pawn move.",
+   "teaches": "A rook's-pawn step that asks a bishop to declare itself is worth playing almost without calculation: either it takes — handing you the pair and a recapture toward the centre — or it retreats and you have gained the square for free. The move costs a tempo and removes a piece's best option permanently, which is a good trade in any slow position.",
    "plans": "",
    "concepts": [],
    "sources": [
-    "yt:1rcEbI44WqE"
+    "yt:1zfJ7ABoh8k"
    ],
    "positionSource": "high",
    "reasons": [
     {
      "kind": "attacks",
-     "square": "b6"
-    },
-    {
-     "kind": "controls",
-     "square": "d6"
+     "square": "g4"
     }
    ]
   },
@@ -445,6 +499,46 @@
    ]
   },
   {
+   "id": "vn-open-e5-recapture-with-the-queen-when-nothing-chases-it",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "d6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Nxd4",
+    "Qxd4"
+   ],
+   "opening": "Three Knights Opening",
+   "phase": "opening",
+   "explains": "The queen recaptures on d4 in the middle of the board, holding the pawn on e4 and the knight on c3 and looking down at d6 and g7. The advance that would normally hit her would weaken the square in front of it, so she is not going anywhere.",
+   "teaches": "The rule against an early queen is really a rule against a queen that can be CHASED. Count what could attack her before deciding: if the pawn breaks that would hit her are unavailable or weakening, the centre is the best square on the board and the recapture that puts her there is simply best. Rules describe positions; check whether this one is described.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:2cZZQyrF_HU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    },
+    {
+     "kind": "defends",
+     "square": "c3"
+    },
+    {
+     "kind": "attacks",
+     "square": "g7"
+    }
+   ]
+  },
+  {
    "id": "vn-scandi-check-that-gets-in-the-way",
    "lineSan": [
     "e4",
@@ -497,6 +591,42 @@
      "kind": "deprives",
      "from": "b8",
      "square": "d7"
+    }
+   ]
+  },
+  {
+   "id": "vn-fantasy-decline-the-move-that-invites-a-liquidation",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "dxe4",
+    "fxe4",
+    "e5",
+    "Nf3",
+    "Bg4",
+    "Bc4"
+   ],
+   "opening": "Caro-Kann Defense: Maróczy Variation",
+   "phase": "opening",
+   "explains": "The bishop takes the diagonal at f7 rather than the quiet pawn move, which would have allowed a trade on f3 followed by a capture in the centre. Development is finished on a square whose value does not depend on a calculation.",
+   "teaches": "When a natural-looking move lets the opponent trade into your centre with tempo, prefer the developing move whose consequences you can see to the end. Not every position needs the theoretically best try — a sound piece on a good square beats a sharper move whose compensation you would be hunting for afterwards.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:475QvJRimkI"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f7"
+    },
+    {
+     "kind": "controls",
+     "square": "d5"
     }
    ]
   },
@@ -1229,6 +1359,68 @@
    ],
    "positionSource": "high",
    "structural": "promotion secured by occupying the queening square with the queen before the pawn asks for it"
+  },
+  {
+   "id": "vn-kid-averbakh-development-that-is-really-prophylaxis",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6",
+    "Be2",
+    "O-O",
+    "Bg5"
+   ],
+   "opening": "King's Indian Defense: Averbakh Variation, Flexible Defense",
+   "phase": "opening",
+   "explains": "The bishop lands on g5 pinning the knight on f6 against the queen behind it. The central pawn push this setup exists to play is still legal, and it now runs into the pin rather than into a defence.",
+   "teaches": "The best developing moves do a second job the opponent notices only when they try their plan. Pinning the knight that would support the central break does not forbid the break — it makes it cost a pawn and an ending. Ask of every developing square: which of their ideas does this quietly discourage?",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:8wVtlbPj9bo"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    }
+   ]
+  },
+  {
+   "id": "vn-advance-e6-do-not-commit-a-piece-to-an-assumed-plan",
+   "lineSan": [
+    "e4",
+    "e6",
+    "e5",
+    "c5",
+    "d4",
+    "d5",
+    "Nf3",
+    "Bd7"
+   ],
+   "opening": "French Defense: Advance Variation, Nimzowitsch System",
+   "phase": "opening",
+   "explains": "The bishop steps to d7 in anticipation of a pawn move that has not been played, and it takes d7 away from the knight on b8 at the same time. Nothing has been gained yet and one option has been spent.",
+   "teaches": "Playing a move because you assume what the opponent will do next is how a piece ends up on a square chosen by a plan that never happens. Wait one move: the same bishop has several futures depending on which setup appears, and committing early throws all but one of them away — and this square blocks the knight that wanted it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:9XUJ2GmQ2CU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "deprives",
+     "from": "b8",
+     "square": "d7"
+    }
+   ]
   },
   {
    "id": "vn-unsoundsac-develop-instead-of-chasing-the-attack",
@@ -3159,6 +3351,40 @@
    ]
   },
   {
+   "id": "vn-scandi-modern-take-the-pawn-the-blocker-abandoned",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Be2",
+    "e6",
+    "dxe6"
+   ],
+   "opening": "Scandinavian Defense: Modern Variation",
+   "phase": "opening",
+   "explains": "Taking on e6 hits the bishop that the check forced onto d7 and the pawn on f7 together. The bishop is standing where it cannot help, so nothing recaptures on comfortable terms.",
+   "teaches": "When a piece has been forced onto a square by a check, look at what it stopped guarding before assuming the position is balanced. A blocker interposed under duress often stands in front of the very pawn it used to defend — and the capture that looks like it invites a recapture is simply a free pawn.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:INCkZzSMk98"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d7"
+    },
+    {
+     "kind": "attacks",
+     "square": "f7"
+    }
+   ]
+  },
+  {
    "id": "vn-bind-hold-the-clamp-or-open-the-centre",
    "lineSan": [
     "c4",
@@ -3959,6 +4185,71 @@
    ]
   },
   {
+   "id": "vn-grandprix-punish-the-early-bishop-with-the-central-break",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Bc4",
+    "Nc6",
+    "f4",
+    "e6",
+    "Nf3",
+    "d5"
+   ],
+   "opening": "Sicilian Defense: Bowdler Attack",
+   "phase": "opening",
+   "explains": "The pawn to d5 attacks the bishop on c4 and the pawn on e4 together. The bishop's diagonal is now a wall of its own making, and it has to retreat before anything else happens.",
+   "teaches": "A bishop developed early to the square that eyes f7 is committed before it knows what the centre will look like. The answer is the central pawn break played with TEMPO: it hits the bishop and the centre pawn in one move, so the piece that came out first is the piece that has to move twice.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:LYStFYLTCno"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c4"
+    },
+    {
+     "kind": "attacks",
+     "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-jobava-build-the-little-box-behind-the-bishop",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "d5",
+    "Bf4",
+    "a6",
+    "e3"
+   ],
+   "opening": "Rapport-Jobava System",
+   "phase": "opening",
+   "explains": "The pawn to e3 props up the pawn on d4 and covers the square behind the bishop on f4. Nothing is committed, and the setup is now the same against every reply the position allows.",
+   "teaches": "A system opening earns its keep by having one setup that answers several replies. Get the bishop outside the pawn chain FIRST, then close the box behind it: the modest pawn move holds the centre pawn and gives the bishop a retreat, so whichever of the three or four standard replies appears, the same structure meets it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:LuezTOsWVMk"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    },
+    {
+     "kind": "defends",
+     "square": "f4"
+    }
+   ]
+  },
+  {
    "id": "vn-flank-b3-attack-the-defender-of-the-pawn-you-are-eyeing",
    "lineSan": [
     "b3",
@@ -4019,6 +4310,61 @@
      "square": "g5"
     }
    ]
+  },
+  {
+   "id": "vn-kid-fourpawns-strike-the-centre-that-looks-unstrikeable",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6",
+    "f4",
+    "O-O",
+    "Nf3",
+    "e5"
+   ],
+   "opening": "King's Indian Defense: Four Pawns Attack",
+   "phase": "opening",
+   "explains": "The pawn steps to e5 attacking the pawns on d4 and f4 at once, with the fianchettoed bishop already looking down the long diagonal at the same square. Whatever the centre does about it, it stops being a wall.",
+   "teaches": "The bigger the pawn centre, the more of it is loose. A wall of pawns supports itself only where the pawns are, and striking at the point where two of them touch forces a resolution while your pieces are already aimed at it. Castle first, then hit — a centre that has to make a decision is not a centre that is squeezing you.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:MmF7dhysiAQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d4"
+    },
+    {
+     "kind": "attacks",
+     "square": "f4"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "d4",
+     "Nf6",
+     "c4",
+     "g6",
+     "Nc3",
+     "Bg7",
+     "e4",
+     "d6",
+     "f4",
+     "O-O",
+     "Nf3"
+    ],
+    "taughtMove": "c5",
+    "alternative": "e5",
+    "lineName": "King's Indian Defence / Four Pawns Attack"
+   }
   },
   {
    "id": "vn-fourpawns-recapture-that-keeps-the-file-shut",
@@ -4632,6 +4978,44 @@
    ]
   },
   {
+   "id": "vn-philidor-take-the-centre-the-passive-move-conceded",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "d6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3"
+   ],
+   "opening": "Philidor Defense: Exchange Variation",
+   "phase": "opening",
+   "explains": "The knight comes to c3 holding the pawn on e4 and covering d5 and b5. Both centre files are settled, the knight in the middle is supported, and Black's position is sound and short of space.",
+   "teaches": "A defence that props the centre pawn with the d-pawn instead of a piece concedes space without losing anything — so there is nothing to refute, only something to collect. Strike in the middle, recapture with a piece, and finish developing: the advantage is that every one of your pieces has a square and one of theirs does not.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:QOb_ElHrC14"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    },
+    {
+     "kind": "controls",
+     "square": "d5"
+    },
+    {
+     "kind": "controls",
+     "square": "b5"
+    }
+   ]
+  },
+  {
    "id": "vn-advance-e6-break-the-rule-when-you-can-name-the-route",
    "lineSan": [
     "e4",
@@ -4814,6 +5198,90 @@
     {
      "kind": "controls",
      "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-vienna-gambit-develop-onto-the-square-you-must-hold",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4",
+    "d5",
+    "fxe5",
+    "Nxe4",
+    "Nf3",
+    "Bc5"
+   ],
+   "opening": "Vienna Game: Vienna Gambit, Main Line",
+   "phase": "opening",
+   "explains": "The bishop settles on c5 looking down the diagonal at f2 and at g1 behind it. The knight already sitting in the centre now has a fork square that is covered, and the pawn move that opened the diagonal cannot be taken back.",
+   "teaches": "A pawn move in front of the king takes a square away from its own side. Develop the bishop onto the diagonal that runs at that square: it defends the square your own knight wants to land on and threatens to use it at the same time, so one developing move is both the threat and the insurance.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:RehhbTF00qQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "f2"
+    },
+    {
+     "kind": "controls",
+     "square": "g1"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "e5",
+     "Nc3",
+     "Nf6",
+     "f4",
+     "d5",
+     "fxe5",
+     "Nxe4",
+     "Nf3"
+    ],
+    "taughtMove": "Be7",
+    "alternative": "Bc5",
+    "lineName": "Vienna Game / Vienna Gambit"
+   }
+  },
+  {
+   "id": "vn-vienna-gambit-break-the-rule-the-advance-invited",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4",
+    "d5",
+    "fxe5",
+    "Nxe4",
+    "Nf3",
+    "Bc5",
+    "d4",
+    "Bb4"
+   ],
+   "opening": "Vienna Game: Vienna Gambit, Main Line",
+   "phase": "opening",
+   "explains": "The bishop steps to b4 pinning the knight on c3 against the king behind it. The pawn move that chased it off the other diagonal is exactly what opened this one.",
+   "teaches": "A central advance that gains space with tempo also opens a diagonal behind it, and the piece it just chased is often the one that should use it. Moving the same bishop twice breaks the rule about developing everything once — the rule assumes the second square is no better than the first, and here it pins the knight holding the centre.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:RehhbTF00qQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c3"
     }
    ]
   },
@@ -5229,6 +5697,38 @@
     {
      "kind": "attacks",
      "square": "f3"
+    }
+   ]
+  },
+  {
+   "id": "vn-giuoco-open-the-file-the-grabbing-piece-stands-on",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "d4",
+    "exd4",
+    "O-O",
+    "Nxe4",
+    "Re1"
+   ],
+   "opening": "Italian Game: Scotch Gambit, Anderssen Attack",
+   "phase": "opening",
+   "explains": "The rook drops onto e1 behind the knight that has just taken in the centre. The knight is attacked and has no easy retreat, so the reply is dictated rather than chosen.",
+   "teaches": "When a piece takes a pawn in the centre, look at the FILE it is now standing on before deciding whether the pawn was worth anything. A rook swung behind it costs nothing, develops, and forces the intruder to be defended by a move the opponent did not want to make — which is the tempo the pawn was traded for.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:TvgWwc1dBb8"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e4"
     }
    ]
   },
@@ -5680,38 +6180,7 @@
    ]
   },
   {
-   "id": "vn-slav-a6-pin-the-knight-that-holds-the-centre",
-   "lineSan": [
-    "d4",
-    "c6",
-    "c4",
-    "d5",
-    "Nf3",
-    "Nf6",
-    "Nc3",
-    "a6",
-    "g3",
-    "Bg4"
-   ],
-   "opening": "Slav Defense: Modern Line",
-   "phase": "opening",
-   "explains": "The bishop comes out to g4 onto the knight on f3, which is the piece holding the centre together while the other bishop takes the long diagonal.",
-   "teaches": "Against a fianchetto setup the long diagonal is the opponent's best asset, so trade or tie down the pieces that make it work. Pinning the knight that supports the centre does both jobs at once: it slows the break they need and it offers a trade they must decide about before castling.",
-   "plans": "",
-   "concepts": [],
-   "sources": [
-    "yt:WmCImz1fv5s"
-   ],
-   "positionSource": "high",
-   "reasons": [
-    {
-     "kind": "attacks",
-     "square": "f3"
-    }
-   ]
-  },
-  {
-   "id": "vn-slav-a6-keep-the-pin-rather-than-resolve-it",
+   "id": "vn-slav-a6-centralize-instead-of-answering-the-pin",
    "lineSan": [
     "d4",
     "c6",
@@ -5723,13 +6192,12 @@
     "a6",
     "g3",
     "Bg4",
-    "Ne5",
-    "Bh5"
+    "Ne5"
    ],
    "opening": "Slav Defense: Modern Line",
    "phase": "opening",
-   "explains": "The bishop slides to h5, staying on the diagonal and now leaning on the pawn on e2. Nothing has been traded, and the advanced knight still has to be defended or moved again.",
-   "teaches": "When a knight jumps forward to break a pin, stepping back along the same diagonal is usually better than taking. Capturing hands them a developed piece and a repaired structure; retreating keeps the tension, and the knight that jumped has to justify a square it cannot hold.",
+   "explains": "The knight jumps to e5 instead of being propped up, attacking the bishop that came to pin it along with the pawns on c6 and f7. The bishop has to move again, and the knight is now the best-placed piece on the board.",
+   "teaches": "A bishop that comes out to pin a knight has committed itself to one diagonal — and if the knight can step FORWARD instead of being defended, the pin is answered by the piece it was aiming at. Before treating a pin as something to solve, check whether the pinned piece has a square in the middle where it hits more than it is worth.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -5739,7 +6207,15 @@
    "reasons": [
     {
      "kind": "attacks",
-     "square": "e2"
+     "square": "g4"
+    },
+    {
+     "kind": "attacks",
+     "square": "c6"
+    },
+    {
+     "kind": "attacks",
+     "square": "f7"
     }
    ]
   },
@@ -6134,6 +6610,46 @@
    ]
   },
   {
+   "id": "vn-three-knights-tuck-the-king-and-hold-the-centre",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Bc5",
+    "Nxe5",
+    "Bxf2+",
+    "Kxf2",
+    "Nxe5",
+    "d4",
+    "Qf6+",
+    "Kg1",
+    "Ng6",
+    "Be3"
+   ],
+   "opening": "Three Knights Opening",
+   "phase": "opening",
+   "explains": "The bishop comes to e3 holding the pawn on d4 and covering the king's corner behind it. The king has stepped off the open file, the checks are finished, and the extra piece is still on the board.",
+   "teaches": "A king dragged out by a sacrifice is not in danger once it has a square to tuck into and the checks run out. Walk it to safety by hand, then develop the piece that props up the centre — the attacker who spent material on the exposure has to show a threat before you have finished, and here there is none.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ZcnmkrOqh8s"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    },
+    {
+     "kind": "defends",
+     "square": "g1"
+    }
+   ]
+  },
+  {
    "id": "vn-panov-develop-onto-the-pawn-that-will-become-the-target",
    "lineSan": [
     "e4",
@@ -6332,6 +6848,40 @@
     {
      "kind": "attacks",
      "square": "c3"
+    }
+   ]
+  },
+  {
+   "id": "vn-owens-answer-the-pin-with-a-square-not-a-pawn",
+   "lineSan": [
+    "e4",
+    "b6",
+    "d4",
+    "Bb7",
+    "Nc3",
+    "e6",
+    "Bd3",
+    "Bb4",
+    "Ne2"
+   ],
+   "opening": "Owen Defense",
+   "phase": "opening",
+   "explains": "The king's knight goes to e2 rather than its natural square, so the knight on c3 is no longer the only thing holding the centre and the pin has nothing to win. The pawn move that would have chased the bishop was never needed.",
+   "teaches": "Facing a pin on the queen's knight, spending a pawn move to prevent it weakens the squares the pin was aiming at anyway. Develop instead, and keep the modest square beside the king in reserve for the OTHER knight: when the pin arrives, that knight takes it, the pinned one is free, and no pawn has been touched. Answer a pin with a square, not with a pawn.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:_JQ-AH3OYQ4"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "c3"
+    },
+    {
+     "kind": "defends",
+     "square": "d4"
     }
    ]
   },
@@ -7587,6 +8137,78 @@
    ]
   },
   {
+   "id": "vn-fantasy-the-sacrifice-that-collects-the-pinned-bishop",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "dxe4",
+    "fxe4",
+    "e5",
+    "Nf3",
+    "Bg4",
+    "Bc4",
+    "Nf6",
+    "Bxf7+"
+   ],
+   "opening": "Caro-Kann Defense: Maróczy Variation",
+   "phase": "opening",
+   "explains": "The bishop takes on f7 with check, and the king has to recapture. The knight that follows arrives with check too, so there is never a move spare to save the bishop that is left hanging on the other side of the board.",
+   "teaches": "Before developing a piece to a natural square, count what is holding the square in front of your king. A bishop taken on f7 is only a sacrifice if the follow-up does not come back — when the king is dragged out with check and a knight fork or a loose piece waits behind it, the material returns and the king does not go home.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:i8G7wozMNcU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e8"
+    }
+   ]
+  },
+  {
+   "id": "vn-fantasy-collect-the-piece-the-checks-were-buying",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "dxe4",
+    "fxe4",
+    "e5",
+    "Nf3",
+    "Bg4",
+    "Bc4",
+    "Nf6",
+    "Bxf7+",
+    "Kxf7",
+    "Nxe5+",
+    "Kg8",
+    "Nxg4"
+   ],
+   "opening": "Caro-Kann Defense: Maróczy Variation",
+   "phase": "opening",
+   "explains": "The knight now stands on g4, holding the piece the two checks made unsavable, and it bears down on the knight on f6 from there. The enemy king sits on g8 having lost the right to castle.",
+   "teaches": "A short forcing sequence is worth calculating to the END, not to the exciting move. The point of a check is rarely the check — it is that the opponent has no time to attend to the piece you are really going for. Count the material at the last quiet position, and if it comes out level with their king displaced, the sequence was sound.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:i8G7wozMNcU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    }
+   ]
+  },
+  {
    "id": "vn-budapest-check-that-carries-a-trap",
    "lineSan": [
     "d4",
@@ -8053,6 +8675,41 @@
    ],
    "positionSource": "high",
    "reasons": [
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ]
+  },
+  {
+   "id": "vn-london-decline-the-pawn-the-theory-wants-you-to-take",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "Bf4",
+    "c5",
+    "e3",
+    "cxd4",
+    "exd4",
+    "Qb6",
+    "Nc3",
+    "d6"
+   ],
+   "opening": "Indian Defense: Accelerated London System",
+   "phase": "opening",
+   "explains": "The modest pawn to d6 covers c5 and e5 and gets on with the position while the queen keeps eyeing the loose pawn. Nothing has been cashed in and the threat has not gone away.",
+   "teaches": "A queen sortie that eyes a loose pawn is strongest as a THREAT, not as a capture. Taking usually enters the one line the opponent has actually studied, where their development is the compensation. Leave the pawn hanging, make a useful move, and keep them solving the problem instead of following their preparation.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:j2PgJHNFH0c"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "c5"
+    },
     {
      "kind": "controls",
      "square": "e5"
@@ -9689,6 +10346,72 @@
    ]
   },
   {
+   "id": "vn-open-e5-decline-the-queen-trade-onto-a-square-with-a-job",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "d6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Nxd4",
+    "Qxd4",
+    "Qf6",
+    "Qe3"
+   ],
+   "opening": "Three Knights Opening",
+   "phase": "opening",
+   "explains": "The queen steps to e3, still holding the pawn on e4 and now covering the dark squares in front of it. The trade is refused without giving the opponent the recapture that would have brought a piece out.",
+   "teaches": "When a queen trade is offered, the choice is not just yes or no — it is which square you decline ONTO. Taking would develop their knight for them with the recapture; stepping aside is only better if the new square keeps everything defended and stays out of the way of your own development. Decline onto a working square or take on your own terms; never just move.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:nRdpLwXRIk4"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-tarrasch-block-your-own-bishop-to-keep-the-centre",
+   "lineSan": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nd2",
+    "Nf6",
+    "e5",
+    "Nfd7",
+    "Bd3",
+    "c5",
+    "c3"
+   ],
+   "opening": "French Defense: Tarrasch Variation, Closed Variation",
+   "phase": "opening",
+   "explains": "The pawn to c3 holds d4 against the challenge, which is only possible because the knight went to the other square and left the c-pawn its move. The centre stays intact and the second knight will take over the defence.",
+   "teaches": "Developing a knight to the square that blocks your own bishop looks like a beginner's error and is a deliberate trade: it keeps the c-pawn free, so when the centre is challenged you can prop it with a pawn instead of dissolving it. You give up a diagonal for a move or two and keep the whole centre — decide which of the two the position is about.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ngKFZPlhP2c"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    }
+   ]
+  },
+  {
    "id": "vn-bowdler-bishop-that-holds-the-light-squares",
    "lineSan": [
     "e4",
@@ -10202,6 +10925,46 @@
    ]
   },
   {
+   "id": "vn-fourknights-scotch-the-trade-that-hands-over-the-centre",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Nxd4",
+    "Qxd4"
+   ],
+   "opening": "Four Knights Game: Scotch Variation",
+   "phase": "opening",
+   "explains": "The queen recaptures on d4 in the centre, holding the pawn on e4 and the knight on c3 while eyeing the knight on f6 and the pawn on a7. The trade removed a defender and gave the queen the best square on the board.",
+   "teaches": "Trading a knight in the centre because it is 'just a trade' is how a position quietly goes wrong. Count what stands there afterwards: if the recapture puts their queen in the middle where nothing can chase her, you have spent a developed piece to improve the strongest piece they own. A trade is only equal when the square it leaves behind is.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:qbin8r7EErE"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    },
+    {
+     "kind": "attacks",
+     "square": "f6"
+    },
+    {
+     "kind": "attacks",
+     "square": "a7"
+    }
+   ]
+  },
+  {
    "id": "vn-fianchetto-pressure-recount-the-centre-after-their-pawn-move",
    "lineSan": [
     "e4",
@@ -10439,7 +11202,26 @@
      "kind": "attacks",
      "square": "f7"
     }
-   ]
+   ],
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "c5",
+     "Nf3",
+     "Nc6",
+     "d4",
+     "cxd4",
+     "Nxd4",
+     "g6",
+     "Nc3",
+     "Bg7",
+     "Be3",
+     "Nf6"
+    ],
+    "taughtMove": "Be2",
+    "alternative": "Bc4",
+    "lineName": "Sicilian: Dragon / Accelerated Dragon: quiet Be2 and the ...d5 break"
+   }
   },
   {
    "id": "vn-accdragon-two-ways-to-handle-the-fianchetto",
@@ -12797,6 +13579,36 @@
    "source": "yt:-Am8glebGwQ"
   },
   {
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "a6",
+    "Be2"
+   ],
+   "ply": 11,
+   "options": [
+    {
+     "san": "e5",
+     "t": 136,
+     "continuation": "e5"
+    },
+    {
+     "san": "e6",
+     "t": 965,
+     "continuation": "e6"
+    }
+   ],
+   "source": "yt:0npOMfkAlVU"
+  },
+  {
    "fen": "r1bqk2r/pppp1ppp/2n5/8/1bBPn3/5N2/PP1B1PPP/RN1QK2R w KQkq - 0 8",
    "lineSan": [
     "e4",
@@ -12828,6 +13640,52 @@
     }
    ],
    "source": "yt:1671V8LrEwk"
+  },
+  {
+   "fen": "r4rk1/pp2nppp/8/2b4q/2BnP1b1/2NP2B1/PPPQ2PP/R4R1K b - - 6 14",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Bc5",
+    "Bc4",
+    "d6",
+    "Nxe5",
+    "dxe5",
+    "d3",
+    "Qf6",
+    "O-O",
+    "Nge7",
+    "Kh1",
+    "O-O",
+    "f4",
+    "exf4",
+    "Bxf4",
+    "Qg6",
+    "Bxc7",
+    "Bg4",
+    "Qd2",
+    "Nd4",
+    "Be5",
+    "Qh5",
+    "Bg3"
+   ],
+   "ply": 27,
+   "options": [
+    {
+     "san": "Qg6",
+     "t": 316,
+     "continuation": "Qg6 Bc7"
+    },
+    {
+     "san": "Ng6",
+     "t": 331.5,
+     "continuation": "Ng6"
+    }
+   ],
+   "source": "yt:1PI3xfMiUE4"
   },
   {
    "fen": "rnbqkb1r/pp1ppppp/8/7Q/4n3/8/PPPP1PPP/RNB1KBNR b KQkq - 1 4",
@@ -12931,6 +13789,442 @@
    "source": "yt:1Rejj6niwvo"
   },
   {
+   "fen": "rn2kb1r/ppp1pppp/5n2/q7/6b1/2N3P1/PPPP1PBP/R1BQK1NR w KQkq - 3 6",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "g3",
+    "Nf6",
+    "Bg2",
+    "Bg4"
+   ],
+   "ply": 10,
+   "options": [
+    {
+     "san": "Nge2",
+     "t": 184.5,
+     "continuation": "Nge2"
+    },
+    {
+     "san": "h3",
+     "t": 859,
+     "continuation": "h3 c6 Nge2 Bh5"
+    }
+   ],
+   "source": "yt:1zfJ7ABoh8k"
+  },
+  {
+   "fen": "rn2kb1r/pp2pppp/2p2n2/q6b/8/2N3PP/PPPPNPB1/R1BQK2R w KQkq - 1 8",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "g3",
+    "Nf6",
+    "Bg2",
+    "Bg4",
+    "Nge2",
+    "c6",
+    "h3",
+    "Bh5"
+   ],
+   "ply": 14,
+   "options": [
+    {
+     "san": "O-O",
+     "t": 232.5,
+     "continuation": "O-O"
+    },
+    {
+     "san": "b4",
+     "t": 865.5,
+     "continuation": "b4"
+    }
+   ],
+   "source": "yt:1zfJ7ABoh8k"
+  },
+  {
+   "fen": "rn2kb1r/pp2pppp/2p2n2/q6b/1P6/2N3PP/P1PPNPB1/R1BQK2R b KQkq - 0 8",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "g3",
+    "Nf6",
+    "Bg2",
+    "Bg4",
+    "h3",
+    "c6",
+    "Nge2",
+    "Bh5",
+    "b4"
+   ],
+   "ply": 15,
+   "options": [
+    {
+     "san": "Qxb4",
+     "t": 873.5,
+     "continuation": "Qxb4"
+    },
+    {
+     "san": "Qc7",
+     "t": 884,
+     "continuation": "Qc7"
+    }
+   ],
+   "source": "yt:1zfJ7ABoh8k"
+  },
+  {
+   "fen": "r3kb1r/pp1npppp/2p2n2/q6b/8/2NP2PP/PPP1NPB1/R1BQ1RK1 b kq - 0 9",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "g3",
+    "Nf6",
+    "Bg2",
+    "Bg4",
+    "Nge2",
+    "c6",
+    "h3",
+    "Bh5",
+    "O-O",
+    "Nbd7",
+    "d3"
+   ],
+   "ply": 17,
+   "options": [
+    {
+     "san": "O-O-O",
+     "t": 251,
+     "continuation": "O-O-O"
+    },
+    {
+     "san": "e6",
+     "t": 915,
+     "continuation": "e6"
+    }
+   ],
+   "source": "yt:1zfJ7ABoh8k"
+  },
+  {
+   "fen": "2kr1b1r/pp1npppp/2p2n2/q6b/1P6/2NP2PP/P1P1NPB1/R1BQ1RK1 b - - 0 10",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "g3",
+    "Nf6",
+    "Bg2",
+    "Bg4",
+    "Nge2",
+    "c6",
+    "h3",
+    "Bh5",
+    "O-O",
+    "Nbd7",
+    "d3",
+    "O-O-O",
+    "b4"
+   ],
+   "ply": 19,
+   "options": [
+    {
+     "san": "Qc7",
+     "t": 315,
+     "continuation": "Qc7"
+    },
+    {
+     "san": "Qxb4",
+     "t": 1476.5,
+     "continuation": "Qxb4"
+    }
+   ],
+   "source": "yt:1zfJ7ABoh8k"
+  },
+  {
+   "fen": "r3k2r/pp1nbppp/2p1pn2/q6b/8/P1NP2PP/1PP1NPB1/R1BQ1RK1 w kq - 1 11",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "g3",
+    "Nf6",
+    "Bg2",
+    "Bg4",
+    "h3",
+    "c6",
+    "Nge2",
+    "Bh5",
+    "O-O",
+    "Nbd7",
+    "d3",
+    "e6",
+    "a3",
+    "Be7"
+   ],
+   "ply": 20,
+   "options": [
+    {
+     "san": "b4",
+     "t": 927,
+     "continuation": "b4 Bxb4"
+    },
+    {
+     "san": "Be3",
+     "t": 937,
+     "continuation": "Be3"
+    }
+   ],
+   "source": "yt:1zfJ7ABoh8k"
+  },
+  {
+   "fen": "2kr1b1r/pp1npppp/2p2n2/7b/1q6/2NP2PP/P1P1NPB1/R1BQ1RK1 w - - 0 11",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "g3",
+    "Nf6",
+    "Bg2",
+    "Bg4",
+    "h3",
+    "c6",
+    "Nge2",
+    "Bh5",
+    "O-O",
+    "Nbd7",
+    "d3",
+    "O-O-O",
+    "b4",
+    "Qxb4"
+   ],
+   "ply": 20,
+   "options": [
+    {
+     "san": "Rb1",
+     "t": 1481,
+     "continuation": "Rb1"
+    },
+    {
+     "san": "g4",
+     "t": 1510,
+     "continuation": "g4"
+    }
+   ],
+   "source": "yt:1zfJ7ABoh8k"
+  },
+  {
+   "fen": "2kr1b1r/ppqnpppp/5n2/1Pp4b/P7/2NP2PP/2P1NPB1/R1BQ1RK1 b - - 0 12",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "g3",
+    "Nf6",
+    "Bg2",
+    "Bg4",
+    "Nge2",
+    "c6",
+    "h3",
+    "Bh5",
+    "O-O",
+    "Nbd7",
+    "d3",
+    "O-O-O",
+    "b4",
+    "Qc7",
+    "b5",
+    "c5",
+    "a4"
+   ],
+   "ply": 23,
+   "options": [
+    {
+     "san": "b6",
+     "t": 341.5,
+     "continuation": "b6"
+    },
+    {
+     "san": "e6",
+     "t": 1571,
+     "continuation": "e6 a5 Be7"
+    }
+   ],
+   "source": "yt:1zfJ7ABoh8k"
+  },
+  {
+   "fen": "2kr3r/ppqnbppp/4pn2/PPp4b/8/2NP2PP/2P1NPB1/R1BQ1RK1 w - - 1 14",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "g3",
+    "Nf6",
+    "Bg2",
+    "Bg4",
+    "h3",
+    "c6",
+    "Nge2",
+    "Bh5",
+    "O-O",
+    "Nbd7",
+    "d3",
+    "O-O-O",
+    "b4",
+    "Qc7",
+    "b5",
+    "c5",
+    "a4",
+    "e6",
+    "a5",
+    "Be7"
+   ],
+   "ply": 26,
+   "options": [
+    {
+     "san": "b6",
+     "t": 1574,
+     "continuation": "b6"
+    },
+    {
+     "san": "a6",
+     "t": 1600.5,
+     "continuation": "a6"
+    },
+    {
+     "san": "Bd2",
+     "t": 1898,
+     "continuation": "Bd2 b6 Bf4 Bf8"
+    }
+   ],
+   "source": "yt:1zfJ7ABoh8k"
+  },
+  {
+   "fen": "2kr3r/p1qn1ppp/1p1bpn2/PPp4b/5B2/2NP2PP/2P1NPB1/R2Q1RK1 w - - 2 15",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "g3",
+    "Nf6",
+    "Bg2",
+    "Bg4",
+    "Nge2",
+    "c6",
+    "h3",
+    "Bh5",
+    "O-O",
+    "Nbd7",
+    "d3",
+    "O-O-O",
+    "b4",
+    "Qc7",
+    "b5",
+    "c5",
+    "a4",
+    "b6",
+    "a5",
+    "e6",
+    "Bf4",
+    "Bd6"
+   ],
+   "ply": 28,
+   "options": [
+    {
+     "san": "Bxd6",
+     "t": 424.5,
+     "continuation": "Bxd6 Qxd6"
+    },
+    {
+     "san": "axb6",
+     "t": 1909.5,
+     "continuation": "axb6"
+    }
+   ],
+   "source": "yt:1zfJ7ABoh8k"
+  },
+  {
+   "fen": "2kr1b1r/p1qn1ppp/1p2pn2/PPp4b/5B2/2NP2PP/2P1NPB1/R2Q1RK1 w - - 2 16",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qa5",
+    "g3",
+    "Nf6",
+    "Bg2",
+    "Bg4",
+    "h3",
+    "c6",
+    "Nge2",
+    "Bh5",
+    "O-O",
+    "Nbd7",
+    "d3",
+    "O-O-O",
+    "b4",
+    "Qc7",
+    "b5",
+    "c5",
+    "a4",
+    "e6",
+    "a5",
+    "Be7",
+    "Bd2",
+    "b6",
+    "Bf4",
+    "Bf8"
+   ],
+   "ply": 30,
+   "options": [
+    {
+     "san": "Bd6",
+     "t": 1903.5,
+     "continuation": "Bd6 Be7 Bf4 Bd6"
+    },
+    {
+     "san": "Be3",
+     "t": 1946,
+     "continuation": "Be3 e5"
+    }
+   ],
+   "source": "yt:1zfJ7ABoh8k"
+  },
+  {
    "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
    "lineSan": [
     "e4",
@@ -12951,6 +14245,43 @@
     }
    ],
    "source": "yt:3Qw4AL8RDOw"
+  },
+  {
+   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP3/2P2b2/PP4PP/RNB1QRK1 w kq - 0 10",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "dxe4",
+    "fxe4",
+    "e5",
+    "Nf3",
+    "Bg4",
+    "Bc4",
+    "Nd7",
+    "O-O",
+    "Ngf6",
+    "c3",
+    "Bh5",
+    "Qe1",
+    "Bxf3"
+   ],
+   "ply": 18,
+   "options": [
+    {
+     "san": "Rxf3",
+     "t": 402.5,
+     "continuation": "Rxf3"
+    },
+    {
+     "san": "Bg5",
+     "t": 555.5,
+     "continuation": "Bg5 Bd6 Rxf3"
+    }
+   ],
+   "source": "yt:475QvJRimkI"
   },
   {
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
@@ -13629,6 +14960,37 @@
     }
    ],
    "source": "yt:8urm2D1HhX8"
+  },
+  {
+   "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+   "lineSan": [
+    "e4",
+    "e6",
+    "e5",
+    "c5",
+    "d4",
+    "d5",
+    "Nf3",
+    "Bd7",
+    "Bd3",
+    "Nc6",
+    "O-O",
+    "cxd4"
+   ],
+   "ply": 12,
+   "options": [
+    {
+     "san": "Bf4",
+     "t": 92,
+     "continuation": "Bf4 Qb6"
+    },
+    {
+     "san": "Re1",
+     "t": 821.5,
+     "continuation": "Re1"
+    }
+   ],
+   "source": "yt:9XUJ2GmQ2CU"
   },
   {
    "fen": "2kr1b1r/ppp2ppp/2n5/3qp3/6b1/3PBN2/PPP1BPPP/R2Q1RK1 b - - 1 9",
@@ -15204,6 +16566,29 @@
    "source": "yt:IMBSR0A9nJs"
   },
   {
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+   "lineSan": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6"
+   ],
+   "ply": 4,
+   "options": [
+    {
+     "san": "Bb5+",
+     "t": 51.5,
+     "continuation": "Bb5+"
+    },
+    {
+     "san": "c4",
+     "t": 847,
+     "continuation": "c4"
+    }
+   ],
+   "source": "yt:INCkZzSMk98"
+  },
+  {
    "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/2P1P3/5N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4",
    "lineSan": [
     "c4",
@@ -16210,6 +17595,72 @@
    "source": "yt:MWMloBpKuVg"
   },
   {
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPPP2/2N2N2/PP4PP/R1BQKB1R b KQ - 2 6",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6",
+    "f4",
+    "O-O",
+    "Nf3"
+   ],
+   "ply": 11,
+   "options": [
+    {
+     "san": "e5",
+     "t": 61.5,
+     "continuation": "e5"
+    },
+    {
+     "san": "c5",
+     "t": 618.5,
+     "continuation": "c5"
+    }
+   ],
+   "source": "yt:MmF7dhysiAQ"
+  },
+  {
+   "fen": "rnbq1rk1/pp3pbp/3p1np1/2pP4/4PP2/2N2N2/PP2B1PP/R1BQK2R b KQ - 0 9",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6",
+    "f4",
+    "O-O",
+    "Nf3",
+    "c5",
+    "d5",
+    "e6",
+    "Be2",
+    "exd5",
+    "cxd5"
+   ],
+   "ply": 17,
+   "options": [
+    {
+     "san": "b5",
+     "t": 644.5,
+     "continuation": "b5"
+    },
+    {
+     "san": "Nbd7",
+     "t": 898.5,
+     "continuation": "Nbd7"
+    }
+   ],
+   "source": "yt:MmF7dhysiAQ"
+  },
+  {
    "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
    "lineSan": [
     "e4",
@@ -16453,6 +17904,154 @@
     }
    ],
    "source": "yt:QxHsw4ZS2Ts"
+  },
+  {
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4PP2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 3",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "d5",
+     "t": 99.5,
+     "continuation": "d5"
+    },
+    {
+     "san": "d6",
+     "t": 1593,
+     "continuation": "d6"
+    },
+    {
+     "san": "exf4",
+     "t": 1607,
+     "continuation": "exf4"
+    }
+   ],
+   "source": "yt:RehhbTF00qQ"
+  },
+  {
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/5p2/2N5/PPPP2PP/R1BQKBNR b KQkq - 0 4",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4",
+    "exf4",
+    "e5"
+   ],
+   "ply": 7,
+   "options": [
+    {
+     "san": "Ng8",
+     "t": 1612,
+     "continuation": "Ng8"
+    },
+    {
+     "san": "Qe7",
+     "t": 1655.5,
+     "continuation": "Qe7"
+    }
+   ],
+   "source": "yt:RehhbTF00qQ"
+  },
+  {
+   "fen": "rnbqkbnr/pppp1ppp/8/4P3/5p2/2N5/PPPP2PP/R1BQKBNR w KQkq - 1 5",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4",
+    "exf4",
+    "e5",
+    "Ng8"
+   ],
+   "ply": 8,
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 1614.5,
+     "continuation": "Nf3"
+    },
+    {
+     "san": "d4",
+     "t": 1620.5,
+     "continuation": "d4"
+    }
+   ],
+   "source": "yt:RehhbTF00qQ"
+  },
+  {
+   "fen": "rnbqk2r/ppp2ppp/8/3pP3/1b1Pn3/2N2N2/PPPB2PP/R2QKB1R b KQkq - 2 7",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4",
+    "d5",
+    "fxe5",
+    "Nxe4",
+    "Nf3",
+    "Bc5",
+    "d4",
+    "Bb4",
+    "Bd2"
+   ],
+   "ply": 13,
+   "options": [
+    {
+     "san": "Nxd2",
+     "t": 252,
+     "continuation": "Nxd2 Qxd2"
+    },
+    {
+     "san": "c5",
+     "t": 2116.5,
+     "continuation": "c5"
+    }
+   ],
+   "source": "yt:RehhbTF00qQ"
+  },
+  {
+   "fen": "rnbqk2r/ppp2ppp/8/3pP3/1b1P4/2N2N2/PPPQ2PP/R3KB1R b KQkq - 0 8",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nf6",
+    "f4",
+    "d5",
+    "fxe5",
+    "Nxe4",
+    "Nf3",
+    "Bc5",
+    "d4",
+    "Bb4",
+    "Bd2",
+    "Nxd2",
+    "Qxd2"
+   ],
+   "ply": 15,
+   "options": [
+    {
+     "san": "Be6",
+     "t": 338,
+     "continuation": "Be6"
+    },
+    {
+     "san": "Bf5",
+     "t": 2103.5,
+     "continuation": "Bf5"
+    }
+   ],
+   "source": "yt:RehhbTF00qQ"
   },
   {
    "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
@@ -19335,6 +20934,91 @@
    "source": "yt:YzI6qI-33_U"
   },
   {
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Bc5",
+    "Nxe5"
+   ],
+   "ply": 7,
+   "options": [
+    {
+     "san": "Bxf2+",
+     "t": 64.5,
+     "continuation": "Bxf2+"
+    },
+    {
+     "san": "Nxe5",
+     "t": 651.5,
+     "continuation": "Nxe5 d4"
+    }
+   ],
+   "source": "yt:ZcnmkrOqh8s"
+  },
+  {
+   "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/3PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nxe5",
+    "Bc5",
+    "Nc3",
+    "Nxe5",
+    "d4"
+   ],
+   "ply": 9,
+   "options": [
+    {
+     "san": "Bd6",
+     "t": 664,
+     "continuation": "Bd6"
+    },
+    {
+     "san": "Bxd4",
+     "t": 675.5,
+     "continuation": "Bxd4"
+    }
+   ],
+   "source": "yt:ZcnmkrOqh8s"
+  },
+  {
+   "fen": "r1bqk1nr/pppp1ppp/8/4b3/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nxe5",
+    "Bc5",
+    "Nc3",
+    "Nxe5",
+    "d4",
+    "Bd6",
+    "dxe5",
+    "Bxe5"
+   ],
+   "ply": 12,
+   "options": [
+    {
+     "san": "Bd3",
+     "t": 704.5,
+     "continuation": "Bd3"
+    },
+    {
+     "san": "Be2",
+     "t": 724,
+     "continuation": "Be2"
+    }
+   ],
+   "source": "yt:ZcnmkrOqh8s"
+  },
+  {
    "fen": "rnbq1rk1/pppp1ppp/5n2/2b5/3NP3/2N5/PPP2PPP/R1BQKB1R w KQ - 1 6",
    "lineSan": [
     "e4",
@@ -19462,6 +21146,38 @@
     }
    ],
    "source": "yt:_4xbS0Crtic"
+  },
+  {
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/3PP3/P1NB4/1PP2PPP/R1BQK2R b KQkq - 0 7",
+   "lineSan": [
+    "e4",
+    "b6",
+    "d4",
+    "Bb7",
+    "Nc3",
+    "e6",
+    "Bd3",
+    "Bb4",
+    "Ne2",
+    "Nf6",
+    "a3",
+    "Bxc3+",
+    "Nxc3"
+   ],
+   "ply": 13,
+   "options": [
+    {
+     "san": "O-O",
+     "t": 107.5,
+     "continuation": "O-O"
+    },
+    {
+     "san": "d6",
+     "t": 477,
+     "continuation": "d6"
+    }
+   ],
+   "source": "yt:_JQ-AH3OYQ4"
   },
   {
    "fen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
@@ -21152,6 +22868,64 @@
    "source": "yt:h-9MlTRN-fk"
   },
   {
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "dxe4",
+     "t": 43.5,
+     "continuation": "dxe4"
+    },
+    {
+     "san": "Qb6",
+     "t": 529,
+     "continuation": "Qb6"
+    },
+    {
+     "san": "e6",
+     "t": 610,
+     "continuation": "e6"
+    }
+   ],
+   "source": "yt:i8G7wozMNcU"
+  },
+  {
+   "fen": "rnb1k1nr/pp3ppp/1qp5/2bpP3/4P3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 1 6",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "f3",
+    "Qb6",
+    "Nc3",
+    "e5",
+    "dxe5",
+    "Bc5"
+   ],
+   "ply": 10,
+   "options": [
+    {
+     "san": "Nge2",
+     "t": 549.5,
+     "continuation": "Nge2"
+    },
+    {
+     "san": "Na4",
+     "t": 556.5,
+     "continuation": "Na4"
+    }
+   ],
+   "source": "yt:i8G7wozMNcU"
+  },
+  {
    "fen": "r1bqkb1r/pppp1ppp/2n5/4P3/2P3n1/5N2/PP2PPPP/RNBQKB1R w KQkq - 3 5",
    "lineSan": [
     "d4",
@@ -22840,6 +24614,40 @@
     }
    ],
    "source": "yt:mCzuNeWLYBs"
+  },
+  {
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "lineSan": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "Nd2"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "Nf6",
+     "t": 34.5,
+     "continuation": "Nf6"
+    },
+    {
+     "san": "Be7",
+     "t": 800,
+     "continuation": "Be7 Nb1 Bb4+ Nc3"
+    },
+    {
+     "san": "Bb4",
+     "t": 808,
+     "continuation": "Bb4"
+    },
+    {
+     "san": "c5",
+     "t": 830,
+     "continuation": "c5"
+    }
+   ],
+   "source": "yt:ngKFZPlhP2c"
   },
   {
    "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",

@@ -1,0 +1,14 @@
+[
+ {
+  "id": "vn-open-e5-decline-the-queen-trade-onto-a-square-with-a-job",
+  "line": "e4 e5 Nf3 Nc6 Nc3 d6 d4 exd4 Nxd4 Nxd4 Qxd4 Qf6 Qe3",
+  "teaches": "When a queen trade is offered, the choice is not just yes or no \u2014 it is which square you decline ONTO. Taking would develop their knight for them with the recapture; stepping aside is only better if the new square keeps everything defended and stays out of the way of your own development. Decline onto a working square or take on your own terms; never just move.",
+  "explains": "The queen steps to e3, still holding the pawn on e4 and now covering the dark squares in front of it. The trade is refused without giving the opponent the recapture that would have brought a piece out.",
+  "reasons": [
+   {
+    "kind": "defends",
+    "square": "e4"
+   }
+  ]
+ }
+]

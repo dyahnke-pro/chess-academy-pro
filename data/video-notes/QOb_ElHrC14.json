@@ -1,0 +1,22 @@
+[
+ {
+  "id": "vn-philidor-take-the-centre-the-passive-move-conceded",
+  "line": "e4 e5 Nf3 d6 d4 exd4 Nxd4 Nf6 Nc3",
+  "teaches": "A defence that props the centre pawn with the d-pawn instead of a piece concedes space without losing anything \u2014 so there is nothing to refute, only something to collect. Strike in the middle, recapture with a piece, and finish developing: the advantage is that every one of your pieces has a square and one of theirs does not.",
+  "explains": "The knight comes to c3 holding the pawn on e4 and covering d5 and b5. Both centre files are settled, the knight in the middle is supported, and Black's position is sound and short of space.",
+  "reasons": [
+   {
+    "kind": "defends",
+    "square": "e4"
+   },
+   {
+    "kind": "controls",
+    "square": "d5"
+   },
+   {
+    "kind": "controls",
+    "square": "b5"
+   }
+  ]
+ }
+]

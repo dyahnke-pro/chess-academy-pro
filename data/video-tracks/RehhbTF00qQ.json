@@ -738,5 +738,91 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-vienna-gambit-develop-onto-the-square-you-must-hold",
+   "line": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Bc5",
+   "teaches": "A pawn move in front of the king takes a square away from its own side. Develop the bishop onto the diagonal that runs at that square: it defends the square your own knight wants to land on and threatens to use it at the same time, so one developing move is both the threat and the insurance.",
+   "explains": "The bishop settles on c5 looking down the diagonal at f2 and at g1 behind it. The knight already sitting in the centre now has a fork square that is covered, and the pawn move that opened the diagonal cannot be taken back.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "f2"
+    },
+    {
+     "kind": "controls",
+     "square": "g1"
+    }
+   ],
+   "fen": "rnbqk2r/ppp2ppp/8/2bpP3/4n3/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 2 6",
+   "t": 163.5,
+   "ply": 10,
+   "source": "yt:RehhbTF00qQ"
+  },
+  {
+   "id": "vn-vienna-gambit-break-the-rule-the-advance-invited",
+   "line": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Bc5 d4 Bb4",
+   "teaches": "A central advance that gains space with tempo also opens a diagonal behind it, and the piece it just chased is often the one that should use it. Moving the same bishop twice breaks the rule about developing everything once — the rule assumes the second square is no better than the first, and here it pins the knight holding the centre.",
+   "explains": "The bishop steps to b4 pinning the knight on c3 against the king behind it. The pawn move that chased it off the other diagonal is exactly what opened this one.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c3"
+    }
+   ],
+   "fen": "rnbqk2r/ppp2ppp/8/3pP3/1b1Pn3/2N2N2/PPP3PP/R1BQKB1R w KQkq - 1 7",
+   "t": 190.5,
+   "ply": 12,
+   "source": "yt:RehhbTF00qQ"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Vienna Game: Vienna Gambit, Accepted",
+   "eco": "C29",
+   "plies": 9,
+   "line": "e4 e5 Nc3 Nf6 f4 exf4 e5 Ng8 Nf3",
+   "coverage": 0.019
+  },
+  {
+   "name": "Vienna Game: Vienna Gambit, Main Line",
+   "eco": "C29",
+   "plies": 6,
+   "line": "e4 e5 Nc3 Nf6 f4 d5",
+   "coverage": 0.731
+  },
+  {
+   "name": "Vienna Game: Vienna Gambit",
+   "eco": "C29",
+   "plies": 5,
+   "line": "e4 e5 Nc3 Nf6 f4",
+   "coverage": 0.942
+  },
+  {
+   "name": "Vienna Game: Falkbeer Variation",
+   "eco": "C26",
+   "plies": 4,
+   "line": "e4 e5 Nc3 Nf6",
+   "coverage": 0.962
+  },
+  {
+   "name": "Vienna Game",
+   "eco": "C25",
+   "plies": 3,
+   "line": "e4 e5 Nc3",
+   "coverage": 0.981
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Vienna Game: Vienna Gambit",
+  "confirmed": true
+ }
 }

@@ -1441,5 +1441,53 @@
     }
    ]
   }
+ ],
+ "notes": [
+  {
+   "id": "vn-scandi-qa5-the-free-question-to-a-loose-bishop",
+   "line": "e4 d5 exd5 Qxd5 Nc3 Qa5 g3 Nf6 Bg2 Bg4 Nge2 c6 h3",
+   "teaches": "A rook's-pawn step that asks a bishop to declare itself is worth playing almost without calculation: either it takes — handing you the pair and a recapture toward the centre — or it retreats and you have gained the square for free. The move costs a tempo and removes a piece's best option permanently, which is a good trade in any slow position.",
+   "explains": "The pawn to h3 puts the question to the bishop on g4. Whatever it decides, the square it is standing on stops being available to it, and nothing in the position is weakened by the pawn move.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "g4"
+    }
+   ],
+   "fen": "rn2kb1r/pp2pppp/2p2n2/q7/6b1/2N3PP/PPPPNPB1/R1BQK2R b KQkq - 0 7",
+   "t": 201.5,
+   "ply": 13,
+   "source": "yt:1zfJ7ABoh8k"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Scandinavian Defense: Main Line",
+   "eco": "B01",
+   "plies": 6,
+   "line": "e4 d5 exd5 Qxd5 Nc3 Qa5",
+   "coverage": 0.969
+  },
+  {
+   "name": "Scandinavian Defense: Mieses-Kotroc Variation",
+   "eco": "B01",
+   "plies": 4,
+   "line": "e4 d5 exd5 Qxd5",
+   "coverage": 0.99
+  },
+  {
+   "name": "Scandinavian Defense",
+   "eco": "B01",
+   "plies": 2,
+   "line": "e4 d5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
  ]
 }

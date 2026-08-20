@@ -758,39 +758,23 @@
  "forks": [],
  "notes": [
   {
-   "id": "vn-fourpawns-pin-the-defender-before-castling-long",
-   "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 Qd7 Nf3 Bg4",
-   "teaches": "Before committing the king to a wing, put a question to the piece guarding the centre you intend to attack. A bishop that pins a knight to nothing in particular still ties it to the defence, and the pin is worth far more once your rooks are about to arrive on the file it stands on.",
-   "explains": "The bishop steps to g4 pinning the knight on f3 against the pressure behind it and staying defended by the queen on d7. The knight is the piece holding the centre together, and it can no longer move freely.",
+   "id": "vn-fourpawns-develop-so-the-knight-jump-has-an-answer",
+   "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3",
+   "teaches": "Develop in the order that keeps an answer ready for the opponent's most annoying jump. A knight coming to the square beside your queenside pawns is only a problem while the rook behind them is still at home — bring the other pieces out in the sequence that leaves that rook one move from covering it, and the jump stops being a threat before it is played.",
+   "explains": "The knight comes to c3, holding d5 and b5 and clearing the way for the rook to swing to the c-file if the enemy knight hops in. It is the developing move that answers a move that has not happened.",
    "reasons": [
     {
-     "kind": "attacks",
-     "square": "f3"
-    }
-   ],
-   "fen": "r3kb1r/pppqpppp/1nn5/4P3/2PP2b1/2N1BN2/PP4PP/R2QKB1R w KQkq - 7 10",
-   "t": 144.5,
-   "ply": 18,
-   "source": "yt:1rcEbI44WqE"
-  },
-  {
-   "id": "vn-fourpawns-push-on-the-side-the-king-has-gone-to",
-   "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3 Qd7 Nf3 Bg4 Be2 O-O-O c5",
-   "teaches": "Once the kings have gone to opposite wings, a pawn move on the side the enemy king chose is worth more than the same move anywhere else — it gains space, gains a tempo on a piece, and opens the line your attack will travel down. Push where their king is, and prefer the push that comes with a threat so they cannot ignore it.",
-   "explains": "The pawn steps to c5 hitting the knight on b6 and taking d6 in hand, on the very wing the king has just castled to. The knight has to move, and the file behind the pawn is the one that leads to the king.",
-   "reasons": [
-    {
-     "kind": "attacks",
-     "square": "b6"
+     "kind": "controls",
+     "square": "d5"
     },
     {
      "kind": "controls",
-     "square": "d6"
+     "square": "b5"
     }
    ],
-   "fen": "2kr1b1r/pppqpppp/1nn5/2P1P3/3P2b1/2N1BN2/PP2B1PP/R2QK2R b KQ - 0 11",
-   "t": 244,
-   "ply": 21,
+   "fen": "r2qkb1r/ppp1pppp/1nn5/4Pb2/2PP4/2N1B3/PP4PP/R2QKBNR b KQkq - 4 8",
+   "t": 120.5,
+   "ply": 15,
    "source": "yt:1rcEbI44WqE"
   }
  ],

@@ -15,7 +15,7 @@
   "id": "vn-fantasy-collect-the-piece-the-checks-were-buying",
   "line": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nf6 Bxf7+ Kxf7 Nxe5+ Kg8 Nxg4",
   "teaches": "A short forcing sequence is worth calculating to the END, not to the exciting move. The point of a check is rarely the check \u2014 it is that the opponent has no time to attend to the piece you are really going for. Count the material at the last quiet position, and if it comes out level with their king displaced, the sequence was sound.",
-  "explains": "The knight takes on g4, collecting the piece the two checks made unsavable, and it hits the knight on f6 on arrival. Material is level again and the enemy king has lost the right to castle.",
+  "explains": "The knight now stands on g4, holding the piece the two checks made unsavable, and it bears down on the knight on f6 from there. The enemy king sits on g8 having lost the right to castle.",
   "reasons": [
    {
     "kind": "attacks",

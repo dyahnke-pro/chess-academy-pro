@@ -221,5 +221,50 @@
    "fen": "r4rk1/pp2ppbp/1q1p1np1/3P1b2/1n3B2/2N4P/PPP1BPP1/1R1QNRK1 b - - 2 12"
   }
  ],
- "forks": []
+ "forks": [],
+ "notes": [
+  {
+   "id": "vn-london-decline-the-pawn-the-theory-wants-you-to-take",
+   "line": "d4 Nf6 Bf4 c5 e3 cxd4 exd4 Qb6 Nc3 d6",
+   "teaches": "A queen sortie that eyes a loose pawn is strongest as a THREAT, not as a capture. Taking usually enters the one line the opponent has actually studied, where their development is the compensation. Leave the pawn hanging, make a useful move, and keep them solving the problem instead of following their preparation.",
+   "explains": "The modest pawn to d6 covers c5 and e5 and gets on with the position while the queen keeps eyeing the loose pawn. Nothing has been cashed in and the threat has not gone away.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "c5"
+    },
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ],
+   "fen": "rnb1kb1r/pp2pppp/1q1p1n2/8/3P1B2/2N5/PPP2PPP/R2QKBNR w KQkq - 0 6",
+   "t": 49,
+   "ply": 10,
+   "source": "yt:j2PgJHNFH0c"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Indian Defense: Accelerated London System",
+   "eco": "A45",
+   "plies": 3,
+   "line": "d4 Nf6 Bf4",
+   "coverage": 0.958
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ]
 }

@@ -272,5 +272,75 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-grandprix-punish-the-early-bishop-with-the-central-break",
+   "line": "e4 c5 Bc4 Nc6 f4 e6 Nf3 d5",
+   "teaches": "A bishop developed early to the square that eyes f7 is committed before it knows what the centre will look like. The answer is the central pawn break played with TEMPO: it hits the bishop and the centre pawn in one move, so the piece that came out first is the piece that has to move twice.",
+   "explains": "The pawn to d5 attacks the bishop on c4 and the pawn on e4 together. The bishop's diagonal is now a wall of its own making, and it has to retreat before anything else happens.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c4"
+    },
+    {
+     "kind": "attacks",
+     "square": "e4"
+    }
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2pp4/2B1PP2/5N2/PPPP2PP/RNBQK2R w KQkq - 0 5",
+   "t": 85.5,
+   "ply": 8,
+   "source": "yt:LYStFYLTCno"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Grand Prix Attack",
+   "eco": "B23",
+   "plies": 5,
+   "line": "e4 c5 Nc3 Nc6 f4",
+   "coverage": 0.083
+  },
+  {
+   "name": "Sicilian Defense: Closed, Traditional",
+   "eco": "B23",
+   "plies": 4,
+   "line": "e4 c5 Nc3 Nc6",
+   "coverage": 0.083
+  },
+  {
+   "name": "Sicilian Defense: Bowdler Attack",
+   "eco": "B20",
+   "plies": 3,
+   "line": "e4 c5 Bc4",
+   "coverage": 0.833
+  },
+  {
+   "name": "Sicilian Defense: Closed",
+   "eco": "B23",
+   "plies": 3,
+   "line": "e4 c5 Nc3",
+   "coverage": 0.125
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Grand Prix Attack",
+  "confirmed": true
+ }
 }

@@ -367,5 +367,54 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-fantasy-decline-the-move-that-invites-a-liquidation",
+   "line": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4",
+   "teaches": "When a natural-looking move lets the opponent trade into your centre with tempo, prefer the developing move whose consequences you can see to the end. Not every position needs the theoretically best try — a sound piece on a good square beats a sharper move whose compensation you would be hunting for afterwards.",
+   "explains": "The bishop takes the diagonal at f7 rather than the quiet pawn move, which would have allowed a trade on f3 followed by a capture in the centre. Development is finished on a square whose value does not depend on a calculation.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f7"
+    },
+    {
+     "kind": "controls",
+     "square": "d5"
+    }
+   ],
+   "fen": "rn1qkbnr/pp3ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R b KQkq - 3 6",
+   "t": 129,
+   "ply": 11,
+   "source": "yt:475QvJRimkI"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Caro-Kann Defense: Maróczy Variation",
+   "eco": "B12",
+   "plies": 5,
+   "line": "e4 c6 d4 d5 f3",
+   "coverage": 0.938
+  },
+  {
+   "name": "Caro-Kann Defense",
+   "eco": "B10",
+   "plies": 2,
+   "line": "e4 c6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Caro-Kann Defense",
+  "confirmed": true
+ }
 }

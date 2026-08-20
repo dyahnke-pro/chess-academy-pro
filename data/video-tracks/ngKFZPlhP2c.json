@@ -356,5 +356,85 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-tarrasch-block-your-own-bishop-to-keep-the-centre",
+   "line": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3",
+   "teaches": "Developing a knight to the square that blocks your own bishop looks like a beginner's error and is a deliberate trade: it keeps the c-pawn free, so when the centre is challenged you can prop it with a pawn instead of dissolving it. You give up a diagonal for a move or two and keep the whole centre — decide which of the two the position is about.",
+   "explains": "The pawn to c3 holds d4 against the challenge, which is only possible because the knight went to the other square and left the c-pawn its move. The centre stays intact and the second knight will take over the defence.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    }
+   ],
+   "fen": "rnbqkb1r/pp1n1ppp/4p3/2ppP3/3P4/2PB4/PP1N1PPP/R1BQK1NR b KQkq - 0 6",
+   "t": 60,
+   "ply": 11,
+   "source": "yt:ngKFZPlhP2c"
+  }
+ ],
+ "openings": [
+  {
+   "name": "French Defense: Tarrasch Variation, Open System, Euwe-Keres Line",
+   "eco": "C07",
+   "plies": 7,
+   "line": "e4 e6 d4 d5 Nd2 c5 Ngf3",
+   "coverage": 0.038
+  },
+  {
+   "name": "French Defense: Tarrasch Variation, Closed Variation",
+   "eco": "C05",
+   "plies": 6,
+   "line": "e4 e6 d4 d5 Nd2 Nf6",
+   "coverage": 0.615
+  },
+  {
+   "name": "French Defense: Tarrasch Variation, Morozevich Variation",
+   "eco": "C03",
+   "plies": 6,
+   "line": "e4 e6 d4 d5 Nd2 Be7",
+   "coverage": 0.077
+  },
+  {
+   "name": "French Defense: Tarrasch Variation, Open System",
+   "eco": "C07",
+   "plies": 6,
+   "line": "e4 e6 d4 d5 Nd2 c5",
+   "coverage": 0.077
+  },
+  {
+   "name": "French Defense: Tarrasch Variation",
+   "eco": "C03",
+   "plies": 5,
+   "line": "e4 e6 d4 d5 Nd2",
+   "coverage": 0.885
+  },
+  {
+   "name": "French Defense: Normal Variation",
+   "eco": "C00",
+   "plies": 3,
+   "line": "e4 e6 d4",
+   "coverage": 0.962
+  },
+  {
+   "name": "French Defense",
+   "eco": "C00",
+   "plies": 2,
+   "line": "e4 e6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "French Defense: Tarrasch Variation",
+  "confirmed": true
+ }
 }

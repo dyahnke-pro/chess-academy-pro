@@ -182,5 +182,61 @@
    "fen": "r4rk1/pp1qbppp/3p1n2/2p1P1B1/2Q5/2N5/PPP2PPP/2KR3R b - - 0 12"
   }
  ],
- "forks": []
+ "forks": [],
+ "notes": [
+  {
+   "id": "vn-open-e5-recapture-with-the-queen-when-nothing-chases-it",
+   "line": "e4 e5 Nf3 Nc6 Nc3 d6 d4 exd4 Nxd4 Nxd4 Qxd4",
+   "teaches": "The rule against an early queen is really a rule against a queen that can be CHASED. Count what could attack her before deciding: if the pawn breaks that would hit her are unavailable or weakening, the centre is the best square on the board and the recapture that puts her there is simply best. Rules describe positions; check whether this one is described.",
+   "explains": "The queen recaptures on d4 in the middle of the board, holding the pawn on e4 and the knight on c3 and looking down at d6 and g7. The advance that would normally hit her would weaken the square in front of it, so she is not going anywhere.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    },
+    {
+     "kind": "defends",
+     "square": "c3"
+    },
+    {
+     "kind": "attacks",
+     "square": "g7"
+    }
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/3p4/8/3QP3/2N5/PPP2PPP/R1B1KB1R b KQkq - 0 6",
+   "t": 58.5,
+   "ply": 11,
+   "source": "yt:2cZZQyrF_HU"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Three Knights Opening",
+   "eco": "C46",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Nc3",
+   "coverage": 0.842
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.895
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.947
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ]
 }

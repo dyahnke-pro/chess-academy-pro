@@ -610,5 +610,77 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-three-knights-tuck-the-king-and-hold-the-centre",
+   "line": "e4 e5 Nf3 Nc6 Nc3 Bc5 Nxe5 Bxf2+ Kxf2 Nxe5 d4 Qf6+ Kg1 Ng6 Be3",
+   "teaches": "A king dragged out by a sacrifice is not in danger once it has a square to tuck into and the checks run out. Walk it to safety by hand, then develop the piece that props up the centre — the attacker who spent material on the exposure has to show a threat before you have finished, and here there is none.",
+   "explains": "The bishop comes to e3 holding the pawn on d4 and covering the king's corner behind it. The king has stepped off the open file, the checks are finished, and the extra piece is still on the board.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    },
+    {
+     "kind": "defends",
+     "square": "g1"
+    }
+   ],
+   "fen": "r1b1k1nr/pppp1ppp/5qn1/8/3PP3/2N1B3/PPP3PP/R2Q1BKR b kq - 4 8",
+   "t": 194.5,
+   "ply": 15,
+   "source": "yt:ZcnmkrOqh8s"
+  }
+ ],
+ "openings": [
+  {
+   "name": "King's Pawn Game: Busch-Gass Gambit, Chiodini Gambit",
+   "eco": "C40",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Nxe5 Bc5",
+   "coverage": 0.18
+  },
+  {
+   "name": "Three Knights Opening",
+   "eco": "C46",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Nc3",
+   "coverage": 0.78
+  },
+  {
+   "name": "Irish Gambit",
+   "eco": "C44",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Nxe5",
+   "coverage": 0.18
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.96
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.98
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Four Knights Game: Scotch Variation",
+  "confirmed": false,
+  "verdict": "track-sound",
+  "checkedBy": "hand 2026-08-20 — track-sound — the title names the Bc5 sideline (\"Four Knights Scotch; Bc5!?\") and the board plays exactly that: 3...Bc5 4.Nxe5 Bxf2+. The resolver matched the mainline name instead of the sideline the title calls out."
+ }
 }

@@ -480,5 +480,92 @@
    "fen": "2r2rk1/1p1b1pb1/3p1n1P/q1nPp1p1/p3P1P1/2N2PN1/PP1QBK2/1R5R b - - 0 22"
   }
  ],
- "forks": []
+ "forks": [],
+ "notes": [
+  {
+   "id": "vn-kid-averbakh-development-that-is-really-prophylaxis",
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Bg5",
+   "teaches": "The best developing moves do a second job the opponent notices only when they try their plan. Pinning the knight that would support the central break does not forbid the break — it makes it cost a pawn and an ending. Ask of every developing square: which of their ideas does this quietly discourage?",
+   "explains": "The bishop lands on g5 pinning the knight on f6 against the queen behind it. The central pawn push this setup exists to play is still legal, and it now runs into the pin rather than into a defence.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    }
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PPP3/2N5/PP2BPPP/R2QK1NR b KQ - 3 6",
+   "t": 129,
+   "ply": 11,
+   "source": "yt:8wVtlbPj9bo"
+  }
+ ],
+ "openings": [
+  {
+   "name": "King's Indian Defense: Averbakh Variation, Flexible Defense",
+   "eco": "E73",
+   "plies": 12,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Bg5 h6",
+   "coverage": 0.783
+  },
+  {
+   "name": "King's Indian Defense: Averbakh Variation",
+   "eco": "E73",
+   "plies": 11,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2 O-O Bg5",
+   "coverage": 0.804
+  },
+  {
+   "name": "King's Indian Defense: Normal Variation, Standard Development",
+   "eco": "E73",
+   "plies": 9,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Be2",
+   "coverage": 0.848
+  },
+  {
+   "name": "King's Indian Defense: Normal Variation",
+   "eco": "E70",
+   "plies": 7,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4",
+   "coverage": 0.891
+  },
+  {
+   "name": "King's Indian Defense",
+   "eco": "E61",
+   "plies": 5,
+   "line": "d4 Nf6 c4 g6 Nc3",
+   "coverage": 0.935
+  },
+  {
+   "name": "Indian Defense: West Indian Defense",
+   "eco": "E60",
+   "plies": 4,
+   "line": "d4 Nf6 c4 g6",
+   "coverage": 0.957
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.978
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "King's Indian Defense: Averbakh Variation",
+  "confirmed": true
+ }
 }

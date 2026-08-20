@@ -294,5 +294,53 @@
    "fen": "r1bqkbnr/ppp2ppp/2np4/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4"
   }
  ],
- "forks": []
+ "forks": [],
+ "notes": [
+  {
+   "id": "vn-open-e5-decline-the-queen-trade-onto-a-square-with-a-job",
+   "line": "e4 e5 Nf3 Nc6 Nc3 d6 d4 exd4 Nxd4 Nxd4 Qxd4 Qf6 Qe3",
+   "teaches": "When a queen trade is offered, the choice is not just yes or no — it is which square you decline ONTO. Taking would develop their knight for them with the recapture; stepping aside is only better if the new square keeps everything defended and stays out of the way of your own development. Decline onto a working square or take on your own terms; never just move.",
+   "explains": "The queen steps to e3, still holding the pawn on e4 and now covering the dark squares in front of it. The trade is refused without giving the opponent the recapture that would have brought a piece out.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    }
+   ],
+   "fen": "r1b1kbnr/ppp2ppp/3p1q2/8/4P3/2N1Q3/PPP2PPP/R1B1KB1R b KQkq - 2 7",
+   "t": 115.5,
+   "ply": 13,
+   "source": "yt:nRdpLwXRIk4"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Three Knights Opening",
+   "eco": "C46",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Nc3",
+   "coverage": 0.939
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.97
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ]
 }

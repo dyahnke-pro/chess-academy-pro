@@ -487,5 +487,96 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-kid-fourpawns-strike-the-centre-that-looks-unstrikeable",
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4 O-O Nf3 e5",
+   "teaches": "The bigger the pawn centre, the more of it is loose. A wall of pawns supports itself only where the pawns are, and striking at the point where two of them touch forces a resolution while your pieces are already aimed at it. Castle first, then hit — a centre that has to make a decision is not a centre that is squeezing you.",
+   "explains": "The pawn steps to e5 attacking the pawns on d4 and f4 at once, with the fianchettoed bishop already looking down the long diagonal at the same square. Whatever the centre does about it, it stops being a wall.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d4"
+    },
+    {
+     "kind": "attacks",
+     "square": "f4"
+    }
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPPP2/2N2N2/PP4PP/R1BQKB1R w KQ - 0 7",
+   "t": 61.5,
+   "ply": 12,
+   "source": "yt:MmF7dhysiAQ"
+  }
+ ],
+ "openings": [
+  {
+   "name": "King's Indian Defense: Four Pawns Attack, Normal Attack",
+   "eco": "E77",
+   "plies": 15,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4 O-O Nf3 c5 d5 e6 Be2",
+   "coverage": 0.325
+  },
+  {
+   "name": "King's Indian Defense: Four Pawns Attack, Dynamic Attack",
+   "eco": "E76",
+   "plies": 13,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4 O-O Nf3 c5 d5",
+   "coverage": 0.425
+  },
+  {
+   "name": "King's Indian Defense: Four Pawns Attack",
+   "eco": "E76",
+   "plies": 9,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f4",
+   "coverage": 0.875
+  },
+  {
+   "name": "King's Indian Defense: Normal Variation",
+   "eco": "E70",
+   "plies": 7,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4",
+   "coverage": 0.9
+  },
+  {
+   "name": "King's Indian Defense",
+   "eco": "E61",
+   "plies": 5,
+   "line": "d4 Nf6 c4 g6 Nc3",
+   "coverage": 0.95
+  },
+  {
+   "name": "Indian Defense: West Indian Defense",
+   "eco": "E60",
+   "plies": 4,
+   "line": "d4 Nf6 c4 g6",
+   "coverage": 0.975
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.975
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "King's Indian Defense: Four Pawns Attack",
+  "confirmed": true
+ }
 }

@@ -347,5 +347,65 @@
     }
    ]
   }
- ]
+ ],
+ "notes": [
+  {
+   "id": "vn-advance-e6-do-not-commit-a-piece-to-an-assumed-plan",
+   "line": "e4 e6 e5 c5 d4 d5 Nf3 Bd7",
+   "teaches": "Playing a move because you assume what the opponent will do next is how a piece ends up on a square chosen by a plan that never happens. Wait one move: the same bishop has several futures depending on which setup appears, and committing early throws all but one of them away — and this square blocks the knight that wanted it.",
+   "explains": "The bishop steps to d7 in anticipation of a pawn move that has not been played, and it takes d7 away from the knight on b8 at the same time. Nothing has been gained yet and one option has been spent.",
+   "reasons": [
+    {
+     "kind": "deprives",
+     "from": "b8",
+     "square": "d7"
+    }
+   ],
+   "fen": "rn1qkbnr/pp1b1ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
+   "t": 37.5,
+   "ply": 8,
+   "source": "yt:9XUJ2GmQ2CU"
+  }
+ ],
+ "openings": [
+  {
+   "name": "French Defense: Advance Variation, Nimzowitsch System",
+   "eco": "C02",
+   "plies": 7,
+   "line": "e4 e6 e5 c5 d4 d5 Nf3",
+   "coverage": 0.938
+  },
+  {
+   "name": "French Defense: Advance Variation",
+   "eco": "C02",
+   "plies": 6,
+   "line": "e4 e6 e5 c5 d4 d5",
+   "coverage": 0.969
+  },
+  {
+   "name": "French Defense: Steinitz Attack",
+   "eco": "C00",
+   "plies": 3,
+   "line": "e4 e6 e5",
+   "coverage": 0.969
+  },
+  {
+   "name": "French Defense",
+   "eco": "C00",
+   "plies": 2,
+   "line": "e4 e6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "French Defense: Steinitz Attack",
+  "confirmed": true
+ }
 }

@@ -411,5 +411,62 @@
     }
    ]
   }
+ ],
+ "notes": [
+  {
+   "id": "vn-fantasy-the-sacrifice-that-collects-the-pinned-bishop",
+   "line": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nf6 Bxf7+",
+   "teaches": "Before developing a piece to a natural square, count what is holding the square in front of your king. A bishop taken on f7 is only a sacrifice if the follow-up does not come back — when the king is dragged out with check and a knight fork or a loose piece waits behind it, the material returns and the king does not go home.",
+   "explains": "The bishop takes on f7 with check, and the king has to recapture. The knight that follows arrives with check too, so there is never a move spare to save the bishop that is left hanging on the other side of the board.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e8"
+    }
+   ],
+   "fen": "rn1qkb1r/pp3Bpp/2p2n2/4p3/3PP1b1/5N2/PPP3PP/RNBQK2R b KQkq - 0 7",
+   "t": 179.5,
+   "ply": 13,
+   "source": "yt:i8G7wozMNcU"
+  },
+  {
+   "id": "vn-fantasy-collect-the-piece-the-checks-were-buying",
+   "line": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3 Bg4 Bc4 Nf6 Bxf7+ Kxf7 Nxe5+ Kg8 Nxg4",
+   "teaches": "A short forcing sequence is worth calculating to the END, not to the exciting move. The point of a check is rarely the check — it is that the opponent has no time to attend to the piece you are really going for. Count the material at the last quiet position, and if it comes out level with their king displaced, the sequence was sound.",
+   "explains": "The knight now stands on g4, holding the piece the two checks made unsavable, and it bears down on the knight on f6 from there. The enemy king sits on g8 having lost the right to castle.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    }
+   ],
+   "fen": "rn1q1bkr/pp4pp/2p2n2/8/3PP1N1/8/PPP3PP/RNBQK2R b KQ - 0 9",
+   "t": 189.5,
+   "ply": 17,
+   "source": "yt:i8G7wozMNcU"
+  }
+ ],
+ "openings": [
+  {
+   "name": "Caro-Kann Defense: Maróczy Variation",
+   "eco": "B12",
+   "plies": 5,
+   "line": "e4 c6 d4 d5 f3",
+   "coverage": 0.909
+  },
+  {
+   "name": "Caro-Kann Defense",
+   "eco": "B10",
+   "plies": 2,
+   "line": "e4 c6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
  ]
 }

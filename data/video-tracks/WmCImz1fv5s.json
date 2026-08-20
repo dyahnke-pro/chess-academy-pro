@@ -125,35 +125,27 @@
  "forks": [],
  "notes": [
   {
-   "id": "vn-slav-a6-pin-the-knight-that-holds-the-centre",
-   "line": "d4 c6 c4 d5 Nf3 Nf6 Nc3 a6 g3 Bg4",
-   "teaches": "Against a fianchetto setup the long diagonal is the opponent's best asset, so trade or tie down the pieces that make it work. Pinning the knight that supports the centre does both jobs at once: it slows the break they need and it offers a trade they must decide about before castling.",
-   "explains": "The bishop comes out to g4 onto the knight on f3, which is the piece holding the centre together while the other bishop takes the long diagonal.",
+   "id": "vn-slav-a6-centralize-instead-of-answering-the-pin",
+   "line": "d4 c6 c4 d5 Nf3 Nf6 Nc3 a6 g3 Bg4 Ne5",
+   "teaches": "A bishop that comes out to pin a knight has committed itself to one diagonal — and if the knight can step FORWARD instead of being defended, the pin is answered by the piece it was aiming at. Before treating a pin as something to solve, check whether the pinned piece has a square in the middle where it hits more than it is worth.",
+   "explains": "The knight jumps to e5 instead of being propped up, attacking the bishop that came to pin it along with the pawns on c6 and f7. The bishop has to move again, and the knight is now the best-placed piece on the board.",
    "reasons": [
     {
      "kind": "attacks",
-     "square": "f3"
-    }
-   ],
-   "fen": "rn1qkb1r/1p2pppp/p1p2n2/3p4/2PP2b1/2N2NP1/PP2PP1P/R1BQKB1R w KQkq - 1 6",
-   "t": 92.5,
-   "ply": 10,
-   "source": "yt:WmCImz1fv5s"
-  },
-  {
-   "id": "vn-slav-a6-keep-the-pin-rather-than-resolve-it",
-   "line": "d4 c6 c4 d5 Nf3 Nf6 Nc3 a6 g3 Bg4 Ne5 Bh5",
-   "teaches": "When a knight jumps forward to break a pin, stepping back along the same diagonal is usually better than taking. Capturing hands them a developed piece and a repaired structure; retreating keeps the tension, and the knight that jumped has to justify a square it cannot hold.",
-   "explains": "The bishop slides to h5, staying on the diagonal and now leaning on the pawn on e2. Nothing has been traded, and the advanced knight still has to be defended or moved again.",
-   "reasons": [
+     "square": "g4"
+    },
     {
      "kind": "attacks",
-     "square": "e2"
+     "square": "c6"
+    },
+    {
+     "kind": "attacks",
+     "square": "f7"
     }
    ],
-   "fen": "rn1qkb1r/1p2pppp/p1p2n2/3pN2b/2PP4/2N3P1/PP2PP1P/R1BQKB1R w KQkq - 3 7",
-   "t": 113,
-   "ply": 12,
+   "fen": "rn1qkb1r/1p2pppp/p1p2n2/3pN3/2PP2b1/2N3P1/PP2PP1P/R1BQKB1R b KQkq - 2 6",
+   "t": 107.5,
+   "ply": 11,
    "source": "yt:WmCImz1fv5s"
   }
  ],
