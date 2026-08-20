@@ -49,6 +49,7 @@ import { materialBalance } from './materialClaimValidator';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
+import { lessonBeatAt } from './lessonBeatNarration';
 import { authoredNoteAt, authoredEntryFor } from './authoredOpeningNotes';
 import authoredRepertoire from '../data/repertoire.json';
 import { deriveNarrationArrows } from './narrationArrows';
@@ -1201,6 +1202,11 @@ export interface SplicedNote {
   /** Hand-written notes SUPPRESS the generated prose on their ply; farmed ones
    *  still lead it. See the splice site for why the two are treated apart. */
   handwritten: boolean;
+  /** The corpus note's id. Returned so a caller that ends up NOT speaking this
+   *  note can put it back — retrieval marks a note seen on the way out, and a
+   *  note consumed but never spoken is the silent-starvation failure this file
+   *  has already hit once from the other direction. */
+  id: string;
 }
 
 /** How a spliced note and the model's generated sentence combine on one ply.
@@ -1270,7 +1276,7 @@ export function noteArrowSourceAt(
     const graded = gradeNarrationText(spokenBeatText(note), fen, 'openingGenerator.noteArrows');
     if (!graded?.trim()) return null;
     seenIds.add(note.id);
-    return { text: graded, handwritten: note.origin === 'handwritten' };
+    return { text: graded, handwritten: note.origin === 'handwritten', id: note.id };
   } catch {
     return null; // the corpus is a bonus, never a blocker
   }
@@ -2200,6 +2206,20 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     // hand a note to the deepest ply it touches instead of the first.
     // [0] = the branch move itself, [1 + j] = extension move j.
     const branchNoteSources: Array<string | null> = [];
+    /** Whether each branch ply's source is HAND-WRITTEN — a corpus note written
+     *  by hand, or an opening tab's own beat. Those replace the generated line
+     *  instead of leading it, exactly as on the spine. */
+    const branchNoteWritten: boolean[] = [];
+    // Per-branch, because branches are alternatives to each other — one beat may
+    // legitimately teach on two of them, the same rule `branchNoteIds` follows.
+    //
+    // The seed from the spine's set is defensive, not load-bearing: branches are
+    // assembled BEFORE the spine's PASS 1, so it is empty here. It costs nothing
+    // and stops a spine paragraph repeating on a branch if that order ever
+    // changes. Overlap is near-impossible anyway — a branch position is the
+    // terminus plus more moves, so it can only collide with a spine board
+    // through a transposition.
+    const branchBeatIds = new Set<string>(lessonBeatIds);
     // CODE-COMPUTED arrows for [b.san, ...extensionMoves], replayed
     // from the spine terminus. branchSeq[0] = b.san's replayed move;
     // branchSeq[1 + j] = extensionMoves[j]'s.
@@ -2215,14 +2235,37 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     }
     const branchSans = [b.san, ...b.extensionMoves];
     for (let k = 0; k < branchSeq.length; k += 1) {
-      branchNoteSources.push(
-        noteArrowSourceAt(
-          [...spineSans, ...branchSans.slice(0, k + 1)],
-          branchSeq[k].fen,
-          branchNoteIds,
-          entry.canonicalName,
-        )?.text ?? null,
+      const fen = branchSeq[k].fen;
+      const teaching = noteArrowSourceAt(
+        [...spineSans, ...branchSans.slice(0, k + 1)],
+        fen,
+        branchNoteIds,
+        entry.canonicalName,
       );
+      // Same tier order as the spine: hand-written corpus note, then the
+      // opening tab's beat, then the farmed note. The tabs' VARIATION lessons
+      // are keyed to exactly these branches, so this is where their coverage
+      // is densest — a branch used to get one thin farmed sentence where a
+      // whole authored beat was sitting unreachable.
+      if (teaching?.handwritten) {
+        branchNoteSources.push(teaching.text);
+        branchNoteWritten.push(true);
+        continue;
+      }
+      const beat = lessonBeatAt(fen, branchBeatIds);
+      if (beat) {
+        const graded = gradeNarrationText(beat.text, fen, 'openingGenerator.lessonBeat.branch');
+        if (graded?.trim()) {
+          if (teaching) branchNoteIds.delete(teaching.id);
+          branchBeatIds.add(beat.id);
+          branchBeatLessons.push(beat.lessonKey);
+          branchNoteSources.push(graded);
+          branchNoteWritten.push(true);
+          continue;
+        }
+      }
+      branchNoteSources.push(teaching?.text ?? null);
+      branchNoteWritten.push(false);
     }
     // The branch's first move belongs to the side whose turn it is
     // after the canonical's last ply. Position[i].ply = i, so after
@@ -2262,7 +2305,10 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       // square the narration never named — the lead-the-eye defect.
       const extNote = baked ? null : branchNoteSources[j + 1] ?? null;
       const text = extNote
-        ? (extGenerated ? `${extNote} ${extGenerated}` : extNote)
+        ? spliceNarration(
+            { text: extNote, handwritten: branchNoteWritten[j + 1] ?? false, id: '' },
+            extGenerated,
+          )
         : extGenerated;
       const shortText =
         typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
@@ -2357,6 +2403,19 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // captured BEFORE the house-voice reword so the arrows can never drift with
   // the model's phrasing (G0, see `noteArrowSourceAt`). null = ungrounded ply.
   const plyNoteText: Array<string | null> = positions.map(() => null);
+  // The opening tabs' hand-written beats: which ply each spoke on, its short
+  // cue, and the plies whose text must survive PASS 2 untouched (see the lock
+  // at the reword call). `lessonBeatIds` is run-level dedupe — a walkthrough
+  // that rewinds or transposes back to a board must not re-read the paragraph.
+  const lessonBeatIds = new Set<string>();
+  const lockedPlies = new Set<number>();
+  const plyShortText: Array<string | undefined> = positions.map(() => undefined);
+  const beatsSpoke: Array<{ ply: number; lessonKey: string }> = [];
+  /** Beats that spoke on a BRANCH or one of its extension plies, rather than on
+   *  the spine — reported separately because the two answer different questions:
+   *  the spine number says whether the main line is taught, the branch number
+   *  says whether the "other tries" are. */
+  const branchBeatLessons: string[] = [];
   // PASS 1 — assemble each ply's raw material.
   //
   // THE NOTE LEADS (David 2026-08-04: "corpus notes are primary for teach me x
@@ -2396,6 +2455,41 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       if (baked) return fallback;
       const prefix = positions.slice(0, i + 1).map((q) => q.san);
       const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName);
+      // TIER 2 — THE OPENING TAB'S OWN HAND-WRITTEN BEAT (David 2026-08-20:
+      // "Use the hand written narrations from opening tabs").
+      //
+      // 821 registered LessonScripts carry 3,780 two-register beats, every one
+      // hand-authored against the board and held to `narrationAccuracy` at
+      // build time — and the coach could not reach a word of it, because the
+      // tab loads its lesson by OPENING ID and a walkthrough has only a board.
+      // `lessonBeatAt` closes that by replaying each beat's own moves into a
+      // FEN, so the beat is offered at the position it was written for and
+      // nowhere else. It lands on 38.7% of taught plies.
+      //
+      // It outranks a FARMED note (a distillation of speech, thinner, not
+      // written to carry a ply alone) and yields to a HAND-WRITTEN corpus note,
+      // which is per-move and newer. When it displaces a farmed note that note
+      // is put BACK — retrieval consumed it on the way out, and a note marked
+      // spoken but never spoken is silently lost for the rest of the lesson.
+      if (!teaching?.handwritten) {
+        const beat = lessonBeatAt(p.fen, lessonBeatIds);
+        if (beat) {
+          if (teaching) splicedNoteIds.delete(teaching.id);
+          lessonBeatIds.add(beat.id);
+          const gradedBeat = gradeNarrationText(beat.text, p.fen, 'openingGenerator.lessonBeat');
+          if (gradedBeat?.trim()) {
+            plyNoteText[i] = gradedBeat;
+            lockedPlies.add(i);
+            beatsSpoke.push({ ply: i, lessonKey: beat.lessonKey });
+            if (beat.short) plyShortText[i] = beat.short;
+            return withFork(gradedBeat, p.fen, positions[i + 1]?.san);
+          }
+          // Refused by the board-truth gate. Un-mark it so the next pass over
+          // this position may try again, and fall through to the tiers below
+          // rather than going silent on a ply that has other material.
+          lessonBeatIds.delete(beat.id);
+        }
+      }
       if (teaching) {
         plyNoteText[i] = teaching.text;
         // A HAND-WRITTEN NOTE IS THE WHOLE NARRATION FOR ITS PLY (David
@@ -2456,6 +2550,26 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // the difference either, because PASS 2 rewords the authored sentence into
   // the house voice and no literal phrase survives to match on. So say it out
   // loud: which variation spoke, at which ply, in its pre-reword words.
+  // SAY WHETHER THE TABS' NARRATION REACHED THE COACH. This tier is invisible
+  // from the outside once PASS 2 runs — except that it does not run on these
+  // plies, which is itself the thing worth being able to confirm from a prod
+  // audit rather than inferring from phrasing.
+  void logAppAudit({
+    kind: 'coach-surface-migrated',
+    category: 'subsystem',
+    source: 'openingGenerator.lessonBeatTier',
+    summary:
+      beatsSpoke.length > 0
+        ? `opening-tab beats spoke on ${beatsSpoke.length}/${positions.length} spine ply(s) + ${branchBeatLessons.length} branch ply(s) of "${entry.canonicalName}"`
+        : `opening-tab beats silent on "${entry.canonicalName}" — no lesson teaches any position on this spine`,
+    details: JSON.stringify({
+      plies: beatsSpoke.map((b) => b.ply),
+      lessons: Array.from(new Set(beatsSpoke.map((b) => b.lessonKey))),
+      branchPlies: branchBeatLessons.length,
+      branchLessons: Array.from(new Set(branchBeatLessons)),
+    }),
+  });
+
   if (authoredSpoke.length > 0) {
     void logAppAudit({
       kind: 'coach-surface-migrated',
@@ -2514,7 +2628,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       const arrowSans = positions.map((p, i) =>
         groundedSegmentArrows(plyNoteText[i], rawPlyTexts[i], p).spans.map((sp) => sp.san),
       );
-      finalPlyTexts = await rewordNarrationInHouseVoice(positions, rawPlyTexts, arrowSans);
+      finalPlyTexts = await rewordNarrationInHouseVoice(positions, rawPlyTexts, arrowSans, lockedPlies);
     }
   } catch (err) {
     void logAppAudit({
@@ -2532,7 +2646,11 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     const shortText =
       typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
         ? ideaEntry.shortText.trim()
-        : undefined;
+        // A beat that spoke brings its own authored Learn cue with it. Both
+        // registers were written together against the same board, so taking the
+        // prose without the cue would leave Learn narrating a generated line
+        // over hand-written Watch prose.
+        : plyShortText[i];
     const node: WalkthroughTreeNode = {
       san: p.san,
       movedBy: p.movedBy,
@@ -2728,6 +2846,12 @@ async function rewordNarrationInHouseVoice(
    *  SAN. Handed to the model as a requirement, never as a suggestion — see
    *  the arrow contract below. */
   arrowSans: string[][] = [],
+  /** Plies whose text is already hand-written, verified, and in the house voice
+   *  — the opening tabs' own masterclass beats. They are still SHOWN to the
+   *  model so the lines around them stay coherent, but the model's version of
+   *  them is discarded. Same reasoning the baked tier is exempted for: text that
+   *  has already passed the accuracy gate in its final form can only drift. */
+  lockedPlies: Set<number> = new Set(),
 ): Promise<string[]> {
   if (rawTexts.length === 0) return rawTexts;
   const script = rawTexts
@@ -2758,6 +2882,7 @@ Return STRICT JSON: {"lines": [string, ...]} with EXACTLY ${rawTexts.length} ent
   let kept = 0;
   let dropped = 0;
   const out = rawTexts.map((raw, i) => {
+    if (lockedPlies.has(i)) return raw;
     const candidate = typeof lines[i] === 'string' ? lines[i].trim() : '';
     if (!candidate) return raw;
     const graded = gradeNarrationText(candidate, positions[i].fen, 'openingGenerator.houseVoiceReword');

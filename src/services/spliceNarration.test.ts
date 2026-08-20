@@ -16,13 +16,13 @@ const GENERATED = 'Nc3 develops toward the centre.';
 
 describe('splicing a note with the generated sentence', () => {
   it('drops the generated sentence when the note is hand-written', () => {
-    const out = spliceNarration({ text: 'The bishop holds d4.', handwritten: true }, GENERATED);
+    const out = spliceNarration({ text: 'The bishop holds d4.', handwritten: true, id: 'test-note' }, GENERATED);
     expect(out).toBe('The bishop holds d4.');
     expect(out).not.toContain(GENERATED);
   });
 
   it('keeps a hand-written note whole even with nothing generated', () => {
-    expect(spliceNarration({ text: 'The bishop holds d4.', handwritten: true }, '')).toBe('The bishop holds d4.');
+    expect(spliceNarration({ text: 'The bishop holds d4.', handwritten: true, id: 'test-note' }, '')).toBe('The bishop holds d4.');
   });
 
   // Farmed notes are distillations of speech — thinner, and not written to
@@ -30,12 +30,12 @@ describe('splicing a note with the generated sentence', () => {
   // it. Without this the change would silently halve the app's coverage:
   // hand-written notes reach 131 lessons, farmed notes reach the rest.
   it('still leads the generated sentence when the note is farmed', () => {
-    const out = spliceNarration({ text: 'A common plan here.', handwritten: false }, GENERATED);
+    const out = spliceNarration({ text: 'A common plan here.', handwritten: false, id: 'test-note' }, GENERATED);
     expect(out).toBe(`A common plan here. ${GENERATED}`);
   });
 
   it('does not leave a dangling space when a farmed note has nothing to lead', () => {
-    expect(spliceNarration({ text: 'A common plan here.', handwritten: false }, '   ')).toBe('A common plan here.');
+    expect(spliceNarration({ text: 'A common plan here.', handwritten: false, id: 'test-note' }, '   ')).toBe('A common plan here.');
   });
 });
 
