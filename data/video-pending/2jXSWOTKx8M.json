@@ -1024,5 +1024,74 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Four Knights Game: Scotch Variation, Belgrade Gambit",
+   "eco": "C47",
+   "plies": 9,
+   "line": "e4 Nc6 Nf3 e5 Nc3 Nf6 d4 exd4 Nd5",
+   "coverage": 0.922
+  },
+  {
+   "name": "Four Knights Game: Scotch Variation Accepted",
+   "eco": "C47",
+   "plies": 8,
+   "line": "e4 Nc6 Nf3 e5 Nc3 Nf6 d4 exd4",
+   "coverage": 0.933
+  },
+  {
+   "name": "Four Knights Game: Scotch Variation",
+   "eco": "C47",
+   "plies": 7,
+   "line": "e4 Nc6 Nf3 e5 Nc3 Nf6 d4",
+   "coverage": 0.944
+  },
+  {
+   "name": "Four Knights Game",
+   "eco": "C47",
+   "plies": 6,
+   "line": "e4 Nc6 Nf3 e5 Nc3 Nf6",
+   "coverage": 0.956
+  },
+  {
+   "name": "Three Knights Opening",
+   "eco": "C46",
+   "plies": 5,
+   "line": "e4 Nc6 Nf3 e5 Nc3",
+   "coverage": 0.967
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 Nc6 Nf3 e5",
+   "coverage": 0.978
+  },
+  {
+   "name": "Nimzowitsch Defense: Declined Variation",
+   "eco": "B00",
+   "plies": 3,
+   "line": "e4 Nc6 Nf3",
+   "coverage": 0.989
+  },
+  {
+   "name": "Nimzowitsch Defense",
+   "eco": "B00",
+   "plies": 2,
+   "line": "e4 Nc6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Four Knights Game: Scotch Variation, Belgrade Gambit",
+  "confirmed": true
+ }
 }

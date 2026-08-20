@@ -146,5 +146,46 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Portsmouth Gambit",
+   "eco": "B30",
+   "plies": 5,
+   "line": "e4 c5 Nf3 Nc6 b4",
+   "coverage": 0.1
+  },
+  {
+   "name": "Sicilian Defense: Old Sicilian",
+   "eco": "B30",
+   "plies": 4,
+   "line": "e4 c5 Nf3 Nc6",
+   "coverage": 0.2
+  },
+  {
+   "name": "Sicilian Defense: Wing Gambit",
+   "eco": "B20",
+   "plies": 3,
+   "line": "e4 c5 b4",
+   "coverage": 0.6
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Wing Gambit",
+  "confirmed": true
+ }
 }

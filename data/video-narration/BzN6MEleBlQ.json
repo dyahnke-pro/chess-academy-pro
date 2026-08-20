@@ -10,7 +10,7 @@
     "d5"
    ],
    "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "said": "[Music] 12 36 okay we're going E4 I forgot to do 10 plus 5 but it's fine all right so we're facing a scandy of course we"
+   "said": "[Music] 12 36 okay we're going E4 I forgot to do 10 plus 5 but it's fine all right so we're"
   },
   {
    "ply": 3,
@@ -19,7 +19,7 @@
     "exd5"
    ],
    "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
-   "said": "[Music] 12 36 okay we're going E4 I forgot to do 10 plus 5 but it's fine all right so we're facing a scandy of course we take and"
+   "said": "facing a scandy of course we"
   },
   {
    "ply": 4,
@@ -28,7 +28,7 @@
     "Qxd5"
    ],
    "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3",
-   "said": "[Music] 12 36 okay we're going E4 I forgot to do 10 plus 5 but it's fine all right so we're facing a scandy of course we take and um yeah so multiple options in the scandy D4 is far less common but also a good move but of course Everybody Plays"
+   "said": "take and um yeah so multiple options in the scandy"
   },
   {
    "ply": 5,
@@ -37,7 +37,7 @@
     "Nc3"
    ],
    "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
-   "said": "take and um yeah so multiple options in the scandy D4 is far less common but also a good move but of course Everybody Plays Knight C3 so that's what we're going to"
+   "said": "D4 is far less common but also a good move but of course Everybody Plays Knight C3 so that's what we're going to"
   },
   {
    "ply": 6,
@@ -46,7 +46,7 @@
     "Qa5"
    ],
    "fen": "rnb1kbnr/ppp1pppp/8/q7/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4",
-   "said": "um yeah so multiple options in the scandy D4 is far less common but also a good move but of course Everybody Plays Knight C3 so that's what we're going to do so um I want to teach you guys a a setup against the scandy which is uh quite uncommon and it's going to come quite as a surprise to some people uh most people play D4 some of you might uh be aware of this trappy move B4 I'm going to make a move which might cause a lot of you to roll your eyes like is this really that great uh but hopefully I'll be able to show you that it's an easy system uh and it's one that's pretty heavy on on good positional principles and that's the move G3"
+   "said": "do so um I want to teach you guys a a setup against the scandy which is uh quite uncommon and it's going to come quite as a surprise to some people uh most people play D4 some of you might uh be aware of this trappy move B4 I'm going to make a move which might cause a"
   },
   {
    "ply": 7,
@@ -55,7 +55,7 @@
     "g3"
    ],
    "fen": "rnb1kbnr/ppp1pppp/8/q7/8/2N3P1/PPPP1P1P/R1BQKBNR b KQkq - 0 4",
-   "said": "lot of you to roll your eyes like is this really that great uh but hopefully I'll be able to show you that it's an easy system uh and it's one that's pretty heavy on on good positional principles and that's the move G3 preparing uh to fan ketto and as you might imagine once you f andto the Knight comes to E2 in order to not"
+   "said": "lot of you to roll your eyes like is this really that great uh but hopefully I'll be able to show you that it's an easy system uh and it's one that's pretty heavy on on good positional principles and that's the move G3 preparing uh to fan ketto and as you"
   },
   {
    "ply": 9,
@@ -65,7 +65,7 @@
     "Bg2"
    ],
    "fen": "rnb1kbnr/pp2pppp/2p5/q7/8/2N3P1/PPPP1PBP/R1BQK1NR b KQkq - 1 5",
-   "said": "pretty heavy on on good positional principles and that's the move G3 preparing uh to fan ketto and as you might imagine once you f andto the Knight comes to E2 in order to not obstruct the bishop now it might seem like the bishop is also biting on granite you know why are we getting it to G2 and that's where the second component of this setup is going to come in this bishop as you'll see assuming the game goes along normal lines is"
+   "said": "might imagine once you f andto the Knight comes to E2 in order to not obstruct the bishop now it might seem like the bishop is also biting on granite you know why are we getting it to G2 and that's where the second"
   },
   {
    "ply": 10,
@@ -74,7 +74,7 @@
     "Nf6"
    ],
    "fen": "rnb1kb1r/pp2pppp/2p2n2/q7/8/2N3P1/PPPP1PBP/R1BQK1NR w KQkq - 2 6",
-   "said": "obstruct the bishop now it might seem like the bishop is also biting on granite you know why are we getting it to G2 and that's where the second component of this setup is going to come in this bishop as you'll see assuming the game goes along normal lines is"
+   "said": "component of this setup is going to come in this bishop as you'll see assuming the game goes along normal lines is"
   },
   {
    "ply": 11,
@@ -83,7 +83,7 @@
     "Nge2"
    ],
    "fen": "rnb1kb1r/pp2pppp/2p2n2/q7/8/2N3P1/PPPPNPBP/R1BQK2R b KQkq - 3 6",
-   "said": "like the bishop is also biting on granite you know why are we getting it to G2 and that's where the second component of this setup is going to come in this bishop as you'll see assuming the game goes along normal lines is actually going to become a very good piece because white is a plan that it that involves trying to break down the C Pawn and get this bishop to operate at its full potential all right so for now we're just developing castles um D3 just all the normal"
+   "said": "actually going to become a very good piece because white is a plan that it that involves trying to break down the C Pawn and get this bishop to operate at"
   },
   {
    "ply": 13,
@@ -93,7 +93,7 @@
     "O-O"
    ],
    "fen": "rnb1kb1r/pp3ppp/2p2n2/q3p3/8/2N3P1/PPPPNPBP/R1BQ1RK1 b kq - 1 7",
-   "said": "Pawn and get this bishop to operate at its full potential all right so for now we're just developing castles um D3 just all the normal developing moves nothing much to say here now once we complete our development that's when I'll I'll show you guys the main plan associated with this line now usually people play E6 I'm not as familiar with the move E5 and E5"
+   "said": "its full potential all right so for now we're just developing castles um D3 just all the normal developing moves nothing much to say here now once we complete our development that's when I'll I'll show"
   },
   {
    "ply": 14,
@@ -102,7 +102,7 @@
     "Bb4"
    ],
    "fen": "rnb1k2r/pp3ppp/2p2n2/q3p3/1b6/2N3P1/PPPPNPBP/R1BQ1RK1 w kq - 2 8",
-   "said": "here now once we complete our development that's when I'll I'll show you guys the main plan associated with this line now usually people play E6 I'm not as familiar with the move E5 and E5 could allow us to play D4 and challenge the center okay Bishop B4 is not a great move cuz it in fact it walks right into a move that we would have played anyway what am I talking about I mean it's a natural reaction to Bishop B4 yeah E5 is a little bit Loosey Goosey yeah of course A3 does not threaten a"
+   "said": "you guys the main plan associated with this line now usually people play E6 I'm not as familiar with the move E5 and E5 could allow us to play D4 and challenge the center okay Bishop B4 is not a great move cuz it in fact it walks right into a move that we would have played anyway"
   },
   {
    "ply": 15,
@@ -111,7 +111,7 @@
     "a3"
    ],
    "fen": "rnb1k2r/pp3ppp/2p2n2/q3p3/1b6/P1N3P1/1PPPNPBP/R1BQ1RK1 b kq - 0 8",
-   "said": "a move that we would have played anyway what am I talking about I mean it's a natural reaction to Bishop B4 yeah E5 is a little bit Loosey Goosey yeah of course A3 does not threaten a takes B4 but okay he takes anyway all"
+   "said": "what am I talking about I mean it's a natural reaction to Bishop B4 yeah E5 is a little bit Loosey Goosey yeah of course A3 does not threaten a"
   },
   {
    "ply": 16,
@@ -120,7 +120,7 @@
     "Bxc3"
    ],
    "fen": "rnb1k2r/pp3ppp/2p2n2/q3p3/8/P1b3P1/1PPPNPBP/R1BQ1RK1 w kq - 0 9",
-   "said": "what am I talking about I mean it's a natural reaction to Bishop B4 yeah E5 is a little bit Loosey Goosey yeah of course A3 does not threaten a takes B4 but okay he takes anyway all right so neither BC nor DC is worth ruining the pawn structure we take with"
+   "said": "takes B4 but okay he takes anyway all right so neither BC nor DC is worth"
   },
   {
    "ply": 17,
@@ -129,7 +129,7 @@
     "Nxc3"
    ],
    "fen": "rnb1k2r/pp3ppp/2p2n2/q3p3/8/P1N3P1/1PPP1PBP/R1BQ1RK1 b kq - 0 9",
-   "said": "yeah of course A3 does not threaten a takes B4 but okay he takes anyway all right so neither BC nor DC is worth ruining the pawn structure we take with the Knight and you might start thinking about what it is that we're preparing with A3 what is this enigmatic plan and if you ask yourself that in that way you should be able to understand what the plan is the plan is to ultimately push this B Pawn to B5 um and or organize kind of a a classic you could call it I suppose a minority attack although it's"
+   "said": "ruining the pawn structure we take with the Knight and you might start thinking about what it is that we're preparing with A3 what is this enigmatic plan and if you ask yourself that in that way you should be able to understand what the"
   },
   {
    "ply": 18,
@@ -138,7 +138,7 @@
     "Bg4"
    ],
    "fen": "rn2k2r/pp3ppp/2p2n2/q3p3/6b1/P1N3P1/1PPP1PBP/R1BQ1RK1 w kq - 1 10",
-   "said": "should be able to understand what the plan is the plan is to ultimately push this B Pawn to B5 um and or organize kind of a a classic you could call it I suppose a minority attack although it's not similar to to the minority attack in the Queen's Gambit mostly you're trying to get this bishop to fire on all cylinders Bishop G4 okay so we don't want to play F3 we definitely don't want to play Bishop F3 we want to play Queen"
+   "said": "plan is the plan is to ultimately push this B Pawn to B5 um and or organize kind of a a classic you could call it I suppose a minority attack although it's not similar to to the minority attack in the Queen's Gambit mostly you're trying to get this bishop to fire on all"
   },
   {
    "ply": 19,
@@ -147,7 +147,7 @@
     "Qe1"
    ],
    "fen": "rn2k2r/pp3ppp/2p2n2/q3p3/6b1/P1N3P1/1PPP1PBP/R1B1QRK1 b kq - 2 10",
-   "said": "the Queen's Gambit mostly you're trying to get this bishop to fire on all cylinders Bishop G4 okay so we don't want to play F3 we definitely don't want to play Bishop F3 we want to play Queen to E1 and later on we can chase the bishop away with H3 than you Brigadier pudding for the prime now another important note is let's say black castles are we necessarily in a huge rush to play before and sometimes this is forgotten by people just because you know what your plan is doesn't necessarily mean you have to do it immediately it's totally fine to complete your development first and only"
+   "said": "cylinders Bishop G4 okay so we don't want to play F3 we definitely don't want to play Bishop F3 we want to play Queen to E1 and later on we can chase the bishop away with H3 than you Brigadier pudding for the prime now another important note is let's say black castles are we necessarily in a huge"
   },
   {
    "ply": 20,
@@ -156,7 +156,7 @@
     "O-O"
    ],
    "fen": "rn3rk1/pp3ppp/2p2n2/q3p3/6b1/P1N3P1/1PPP1PBP/R1B1QRK1 w - - 3 11",
-   "said": "rush to play before and sometimes this is forgotten by people just because you know what your plan is doesn't necessarily mean you have to do it immediately it's totally fine to complete your development first and only you know go through carry out the main plan when you're ready and this is a great example of that you could play B4 but I like a more patient approach with"
+   "said": "rush to play before and sometimes this is forgotten by people just because you know what your plan is doesn't necessarily mean you have to do it immediately it's totally fine to complete your development first and only you know go through carry out the main"
   },
   {
    "ply": 21,
@@ -165,7 +165,7 @@
     "d3"
    ],
    "fen": "rn3rk1/pp3ppp/2p2n2/q3p3/6b1/P1NP2P1/1PP2PBP/R1B1QRK1 b - - 0 11",
-   "said": "complete your development first and only you know go through carry out the main plan when you're ready and this is a great example of that you could play B4 but I like a more patient approach with D3 and who knows maybe black will do something that will uh necessitate an alternate approach you don't want to uh you know Reveal Your your hand too soon especially when there's no way to stop before I mean C5 is horrendous and does our work for us not to mention it's a blunder yeah maybe bishop G5 first maybe we'll want to attack on the King on on the king side now Black's best move here is Knight B to D7 completing his development which I assume is going to be played yeah I don't want to play Bishop D2 though in a way Bishop D2 is counterproductive because the problem"
+   "said": "plan when you're ready and this is a great example of that you could play B4 but I like a more patient approach with D3 and who knows maybe black will do something that will uh necessitate an alternate approach you don't want to uh you know Reveal Your your hand too soon especially when there's no way to stop before I mean C5 is horrendous and does our work for us not to mention it's a blunder yeah maybe bishop G5 first maybe we'll want to attack on the King on on the king side now Black's best move here"
   },
   {
    "ply": 22,
@@ -174,7 +174,7 @@
     "Re8"
    ],
    "fen": "rn2r1k1/pp3ppp/2p2n2/q3p3/6b1/P1NP2P1/1PP2PBP/R1B1QRK1 w - - 1 12",
-   "said": "is Knight B to D7 completing his development which I assume is going to be played yeah I don't want to play Bishop D2 though in a way Bishop D2 is counterproductive because the problem with Bishop D2 is that it helps Black's Queen get away from A5 right think about that and that defeats part of the purpose of B4 which is that it's a move with Tempo so definitely now we want to"
+   "said": "is Knight B to D7 completing his development which I assume is going to be played yeah I don't want to play Bishop D2 though in a way Bishop D2 is counterproductive because the problem with Bishop D2 is that it helps Black's Queen get away from A5 right think about"
   },
   {
    "ply": 23,
@@ -183,7 +183,7 @@
     "b4"
    ],
    "fen": "rn2r1k1/pp3ppp/2p2n2/q3p3/1P4b1/P1NP2P1/2P2PBP/R1B1QRK1 b - - 0 12",
-   "said": "with Bishop D2 is that it helps Black's Queen get away from A5 right think about that and that defeats part of the purpose of B4 which is that it's a move with Tempo so definitely now we want to play B4 and B4 also opens up a a very attractive at least to me developing Square for the bishop on B2 double Fe and kto what is this bishop going to be doing here it's going to be applying pressure on the E5 Pawn of course the Knight on C3 eventually is going to move and that's an important uh point to make a lot of people hesitate to put a piece on a square where it's covered by another one of your pieces generally speaking that is not a problem because ultimately you know that this knight uh is going to move either to E4 or maybe it won't move uh but the bishop has a lot of potential energy to borrow you know the term that I really like to use in such situations no yes so Queen A6 is a very"
+   "said": "that and that defeats part of the purpose of B4 which is that it's a move with Tempo so definitely now we want to play B4 and B4 also opens up a a very attractive at least to me developing Square for the bishop on B2 double Fe and kto what is this bishop going to be doing here it's going to be applying pressure on the E5 Pawn of course the Knight on C3 eventually is going to move and that's an important uh point to make a lot of people hesitate to put a piece on a square where it's covered by another one of your pieces generally speaking that is not a problem because ultimately you know that this knight uh"
   },
   {
    "ply": 24,
@@ -192,7 +192,7 @@
     "Qa6"
    ],
    "fen": "rn2r1k1/pp3ppp/q1p2n2/4p3/1P4b1/P1NP2P1/2P2PBP/R1B1QRK1 w - - 1 13",
-   "said": "is going to move either to E4 or maybe it won't move uh but the bishop has a lot of potential energy to borrow you know the term that I really like to use in such situations no yes so Queen A6 is a very strange move I assume he's trying to prevent B5 but this queen is going to be off sides um and of course we can reinforce B5 by playing a later A4 uh why not kick the bishop asks some of you yeah G3 is totally fine I don't necessarily see a reason for or against it uh the bishop is not truly bothering me on G4 and one very let's I don't really know to be honest I guess I guess"
+   "said": "is going to move either to E4 or maybe it won't move uh but the bishop has a lot of potential energy to borrow you know the term that I really like to use in such situations no yes so Queen A6 is a very strange move I assume he's trying to prevent B5 but this queen is going to be off sides um and of course we can reinforce B5 by playing a later A4 uh why not kick the bishop asks some of you yeah G3 is totally fine I don't"
   },
   {
    "ply": 25,
@@ -201,7 +201,7 @@
     "h3"
    ],
    "fen": "rn2r1k1/pp3ppp/q1p2n2/4p3/1P4b1/P1NP2PP/2P2PB1/R1B1QRK1 b - - 0 13",
-   "said": "necessarily see a reason for or against it uh the bishop is not truly bothering me on G4 and one very let's I don't really know to be honest I guess I guess we can throw it in just for some and to see where he goes just to force black to make a decision I'm not I don't feel strongly for or against H3 I think it's fine but it's not necessary and in fact I would I wouldn't play it in a classical game because it lets his Bishop reposition to a slightly better Square what is the bishop doing on F5 what might he later be able to prepare who can tell me and this is you know not a mistake but it's a little bit concerning later on if he plays this correctly so when Black's Bishop lands on F5 what do we have to watch for yeah we have to watch for E4 later on we have a queen on E1 there is an x-ray uh but of course E4 is not possible immediately because we have one two three four Defenders and assuming the bishop moves to F5 there's one two three attackers and it's very hard for black to reinforce that score one more time because the queen is so out of the game it can't get to E7 easily thank you VP for the 25 months"
+   "said": "necessarily see a reason for or against it uh the bishop is not truly bothering me on G4 and one very let's I don't really know to be honest I guess I guess we can throw it in just for some and to see where he goes just to force black to make a decision I'm not I don't feel strongly for or against H3 I think it's fine but it's not necessary and in fact I would I wouldn't play it in a classical game because it lets his Bishop reposition to a slightly better Square what is the bishop doing on F5 what might he later be able to prepare who can tell me and this is you know not a mistake but it's a little bit concerning later on if he plays this correctly so when Black's Bishop lands on F5 what do we have to watch for yeah we have to watch for E4 later on we have a queen on E1 there is an x-ray uh but of course E4 is not possible immediately because we have one two three four Defenders and assuming the bishop moves to F5 there's one two three attackers and it's very"
   },
   {
    "ply": 26,
@@ -210,7 +210,7 @@
     "Bh5"
    ],
    "fen": "rn2r1k1/pp3ppp/q1p2n2/4p2b/1P6/P1NP2PP/2P2PB1/R1B1QRK1 w - - 1 14",
-   "said": "hard for black to reinforce that score one more time because the queen is so out of the game it can't get to E7 easily thank you VP for the 25 months okay Bishop H5 is something I like to see and now let's complete our"
+   "said": "hard for black to reinforce that score one more time because the queen is so out of the game it can't get to E7 easily thank you VP for the 25 months"
   },
   {
    "ply": 27,
@@ -219,14 +219,14 @@
     "Bb2"
    ],
    "fen": "rn2r1k1/pp3ppp/q1p2n2/4p2b/1P6/P1NP2PP/1BP2PB1/R3QRK1 b - - 2 14",
-   "said": "out of the game it can't get to E7 easily thank you VP for the 25 months okay Bishop H5 is something I like to see and now let's complete our development with Bishop B2 I know that some of you might have"
+   "said": "okay Bishop H5 is something I like to see and now let's complete our development with Bishop"
   },
   {
    "ply": 26,
    "t": 400.5,
    "line": [],
    "fen": "rn2r1k1/pp3ppp/q1p2n2/4p2b/1P6/P1NP2PP/2P2PB1/R1B1QRK1 w - - 1 14",
-   "said": "okay Bishop H5 is something I like to see and now let's complete our development with Bishop B2 I know that some of you might have been attracted to Bishop G5 but that's not a dangerous move because black can"
+   "said": "B2 I know that some of you might have been attracted to Bishop G5 but that's"
   },
   {
    "ply": 28,
@@ -236,7 +236,7 @@
     "e4"
    ],
    "fen": "rn2r1k1/pp3ppp/q1p2n2/7b/1P2p3/P1NP2PP/1BP2PB1/R3QRK1 w - - 0 15",
-   "said": "okay Bishop H5 is something I like to see and now let's complete our development with Bishop B2 I know that some of you might have been attracted to Bishop G5 but that's not a dangerous move because black can go Knight bd7 you go4 anyway which definitely doesn't make sense here now one really interesting thing we could do just a little bit of practice in not stopping the calculation prematurely whenever you have a bishop on a long diagonal you have to sort of at least be aware of the potential of building a battery so imagine a future where the Knight on F6 is gone from the board what becomes possible and the Knight on C3 is also gone from the board what move becomes possible let's do a little bit of hypothetical thinking that's actually going to turn to reality Queen C3 and queen C3 is a really nasty battery it forces an incredibly weakening move like F6 so how do you guys think we should capture this Pawn now taking with the pawn and then playing F4 E5 is one very powerful approach but I like Knight takes C4"
+   "said": "not a dangerous move because black can go Knight bd7 you go4 anyway which definitely doesn't make sense here now one really interesting thing we could do just a little bit of practice in not stopping the calculation prematurely whenever you have a bishop on a long diagonal you have to sort of at least be aware of the potential of building a battery so imagine a future where the Knight on F6 is gone from the board what becomes possible and the Knight on C3 is also gone from the board what move becomes possible let's do a little bit of hypothetical thinking that's actually going to turn to reality Queen C3 and queen C3 is a really nasty battery it forces an incredibly weakening move like F6 so how"
   },
   {
    "ply": 29,
@@ -245,7 +245,7 @@
     "Nxe4"
    ],
    "fen": "rn2r1k1/pp3ppp/q1p2n2/7b/1P2N3/P2P2PP/1BP2PB1/R3QRK1 b - - 0 15",
-   "said": "do you guys think we should capture this Pawn now taking with the pawn and then playing F4 E5 is one very powerful approach but I like Knight takes C4 which probably in the grand scheme of things is worse than D takes C4 but I want to emphasize an idea now do we take"
+   "said": "do you guys think we should capture this Pawn now taking with the pawn and then playing F4 E5 is one very powerful approach but I like Knight takes C4 which probably in the grand scheme of things is worse than D takes C4 but I"
   },
   {
    "ply": 30,
@@ -254,7 +254,7 @@
     "Nxe4"
    ],
    "fen": "rn2r1k1/pp3ppp/q1p5/7b/1P2n3/P2P2PP/1BP2PB1/R3QRK1 w - - 0 16",
-   "said": "playing F4 E5 is one very powerful approach but I like Knight takes C4 which probably in the grand scheme of things is worse than D takes C4 but I want to emphasize an idea now do we take automatically with a pawn do we take automatically with a pawn what do you guys say say about Bishop takes C4 does Bishop takes C4 lose the bishop to F5 no it does not no it does not because of Queen C3 setting a trap this is how you set traps you make moves that are good on their own Merit and I can almost guarantee you that F5 is going to happen in fact"
+   "said": "want to emphasize an idea now do we take automatically with a pawn do we take automatically with a pawn what do you guys say say about Bishop takes C4 does Bishop takes C4 lose the bishop to F5 no it does not no it does not because"
   },
   {
    "ply": 31,
@@ -263,7 +263,7 @@
     "Bxe4"
    ],
    "fen": "rn2r1k1/pp3ppp/q1p5/7b/1P2B3/P2P2PP/1BP2P2/R3QRK1 b - - 0 16",
-   "said": "of Queen C3 setting a trap this is how you set traps you make moves that are good on their own Merit and I can almost guarantee you that F5 is going to happen in fact probably pretty fast after Bishop takes E4 the same goes for moves like Bishop F3 here we go Queen C3 threatening mate and in the event of F5 it's a total disaster because Black's going to lose that pawn okay well this is this is hard"
+   "said": "of Queen C3 setting a trap this is how you set traps you make moves that are good on their own Merit and I can almost guarantee you that F5 is going to happen in fact probably pretty fast after Bishop takes E4 the same goes for moves like Bishop F3 here we go Queen C3 threatening mate"
   },
   {
    "ply": 32,
@@ -272,7 +272,7 @@
     "Rxe4"
    ],
    "fen": "rn4k1/pp3ppp/q1p5/7b/1P2r3/P2P2PP/1BP2P2/R3QRK1 w - - 0 17",
-   "said": "E4 the same goes for moves like Bishop F3 here we go Queen C3 threatening mate and in the event of F5 it's a total disaster because Black's going to lose that pawn okay well this is this is hard to predict Rook takes C4 okay thanks for that well I guess I was wrong what can I say not a profit yeah that was unpredictable though and not in the sense of somebody who's unpredictable like nonpredictable okay now what are subsequent moves here let's take okay well this is just total collapse yeah that was not not the greatest thank you sabam meno for the prime it's not good when you you know play the whole game without developing Queen side I mean that just went down the drain very very"
+   "said": "and in the event of F5 it's a total disaster because Black's going to lose that pawn okay well this is this is hard to predict Rook takes C4 okay thanks for that well I guess I was wrong what can I say not a profit yeah that was unpredictable though and not in the sense of somebody who's unpredictable like nonpredictable okay now what are subsequent moves here let's take okay well this is just total collapse yeah that was not not the greatest thank you sabam meno for the"
   },
   {
    "ply": 4,
@@ -290,7 +290,7 @@
     "Nc3"
    ],
    "fen": "rnb1kbnr/ppp1pppp/8/q7/8/2N3P1/PPPP1P1P/R1BQKBNR b KQkq - 2 4",
-   "said": "prime it's not good when you you know play the whole game without developing Queen side I mean that just went down the drain very very quickly okay so G3 is one of several good and in my opinion underrated systems against the"
+   "said": ""
   },
   {
    "ply": 9,
@@ -300,7 +300,7 @@
     "Bg2"
    ],
    "fen": "rnb1kbnr/pp2pppp/2p5/q7/8/2N3P1/PPPP1PBP/R1BQK1NR b KQkq - 1 5",
-   "said": "side I mean that just went down the drain very very quickly okay so G3 is one of several good and in my opinion underrated systems against the"
+   "said": "good and in my opinion underrated systems against the"
   },
   {
    "ply": 11,
@@ -310,7 +310,7 @@
     "Nge2"
    ],
    "fen": "rnb1kb1r/pp2pppp/2p2n2/q7/8/2N3P1/PPPPNPBP/R1BQK2R b KQkq - 3 6",
-   "said": "drain very very quickly okay so G3 is one of several good and in my opinion underrated systems against the"
+   "said": ""
   },
   {
    "ply": 12,
@@ -319,14 +319,14 @@
     "e5"
    ],
    "fen": "rnb1kb1r/pp3ppp/2p2n2/q3p3/8/2N3P1/PPPPNPBP/R1BQK2R w KQkq - 0 7",
-   "said": "quickly okay so G3 is one of several good and in my opinion underrated systems against the"
+   "said": ""
   },
   {
    "ply": 10,
    "t": 569.5,
    "line": [],
    "fen": "rnb1kb1r/pp2pppp/2p2n2/q7/8/2N3P1/PPPP1PBP/R1BQK1NR w KQkq - 2 6",
-   "said": "good and in my opinion underrated systems against the scandy all right so E5 is possible but if if I remember correctly generally"
+   "said": "scandy all right so E5 is possible but if if I remember correctly generally"
   },
   {
    "ply": 11,
@@ -335,7 +335,7 @@
     "Nge2"
    ],
    "fen": "rnb1kb1r/pp2pppp/2p2n2/q7/8/2N3P1/PPPPNPBP/R1BQK2R b KQkq - 3 6",
-   "said": "good and in my opinion underrated systems against the scandy all right so E5 is possible but if if I remember correctly generally speaking black you know goes Bishop F5"
+   "said": "speaking black you know goes Bishop F5"
   },
   {
    "ply": 12,
@@ -344,7 +344,7 @@
     "Bf5"
    ],
    "fen": "rn2kb1r/pp2pppp/2p2n2/q4b2/8/2N3P1/PPPPNPBP/R1BQK2R w KQkq - 4 7",
-   "said": "good and in my opinion underrated systems against the scandy all right so E5 is possible but if if I remember correctly generally speaking black you know goes Bishop F5 and then and then puts the pawn on E6 in"
+   "said": "and then and then puts the pawn on E6 in"
   },
   {
    "ply": 14,
@@ -354,14 +354,14 @@
     "e6"
    ],
    "fen": "rn2kb1r/pp3ppp/2p1pn2/q4b2/8/2N3P1/PPPPNPBP/R1BQ1RK1 w kq - 0 8",
-   "said": "scandy all right so E5 is possible but if if I remember correctly generally speaking black you know goes Bishop F5 and then and then puts the pawn on E6 in the scandy uh it's not necessarily about controlling the most amount of squares but rather building up a very solid Center as John will be the first to tell you but I think JN is probably a bigger specialist in this line than I am and it might be that E5 is a reasonable move as well thank you Dr Spud okay so anyways E5 castles Bishop B4 is already"
+   "said": "the scandy uh it's not necessarily about controlling the most amount of squares but rather building up a very solid Center as John will be the first to tell you but I think JN is probably a bigger"
   },
   {
    "ply": 13,
    "t": 595,
    "line": [],
    "fen": "rn2kb1r/pp2pppp/2p2n2/q4b2/8/2N3P1/PPPPNPBP/R1BQ1RK1 b kq - 5 7",
-   "said": "you but I think JN is probably a bigger specialist in this line than I am and it might be that E5 is a reasonable move as well thank you Dr Spud okay so anyways E5 castles Bishop B4 is already inaccurate it walks right into A3 I would probably get the bishop out to D6 but but Bishop C5 I think a lot of people would be tempted to play what should why do here John bartholomy what should I do in this position on the topic of flexibility right yeah most of the time you want to play D3 but if the bishop is landing here either you want to go A3 and Rook B1 to prepare B4 that's very valid um but I'm thinking of another move I'm thinking of D4 um the bishop kind of walks into to this and after ed4 Knight D4 black is facing very concrete problems white has two very nasty threats one tactical one positional can you guys name both of them well no both of them are sort of semi tactical one of them is Knight B3 and if you calculate further you'll see that Knight B3 doesn't merely trade Knight for Bishop which is a very good trade I guess Queen B4 stays in the game because if Queen B6 and Knight A4 wins"
+   "said": "specialist in this line than I am and it might be that E5 is a reasonable move as well thank you Dr Spud okay so anyways E5 castles Bishop B4 is already inaccurate it walks right into A3 I would probably get the bishop out to D6 but but Bishop C5 I think a lot of people would be tempted to play what should why do here John bartholomy what should I do in this position on the topic of flexibility right yeah most of the time you want to play D3 but if the bishop is landing here either you want to go A3 and Rook B1 to prepare B4 that's very valid um but I'm thinking of another move I'm thinking of D4 um the bishop kind of walks into to this and after ed4 Knight D4 black is facing very concrete problems white has two very nasty threats one tactical one positional can you guys name both of them well no both of them are sort of semi tactical one of them is Knight B3 and if you calculate further you'll see that Knight B3 doesn't merely trade Knight for Bishop which is a very good trade I guess Queen B4 stays in the game because if Queen B6 and Knight A4 wins"
   }
  ],
  "forks": [

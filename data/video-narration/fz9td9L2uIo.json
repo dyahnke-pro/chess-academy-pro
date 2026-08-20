@@ -11,7 +11,7 @@
     "e4"
    ],
    "fen": "rnbqkbnr/pp1ppppp/2p5/8/2P1P3/8/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
-   "said": "we're probably gonna get black here nice and um as as we had decided let's play the karaoke and see uh sorry let me just transition sorry yeah okay i think we're good now okay so c4 this is the first time we are encountering this move this is a move clearly white is preparing and grabbing the d5 square as immediately as possible but uh that doesn't mean we don't play d5 we still play d5"
+   "said": "we're probably gonna get black here nice and um as as we had decided let's play the karaoke and see uh sorry let me just transition sorry yeah okay i think we're good now okay so c4 this is the first time we are encountering this move this is a move clearly white"
   },
   {
    "ply": 4,
@@ -20,7 +20,7 @@
     "d5"
    ],
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
-   "said": "is preparing and grabbing the d5 square as immediately as possible but uh that doesn't mean we don't play d5 we still play d5 this is a very likely to transpose into the pawn off the pawn of attack after e d cd and d4 white can also grab the pawn twice that's a different line what structure are both of these variations likely to lead to and it's three letters the classic and i'm already wow flame is ahead of the game iqp is correct so we're likely going to get on iqp but because he's thinking that tells me maybe he hasn't seen this or not is not too familiar with the car con we will see"
+   "said": "is preparing and grabbing the d5 square as immediately as possible but uh that doesn't mean we don't play d5 we still play d5 this is a very likely to transpose into the pawn off the pawn of attack after e d cd and d4 white can also grab the pawn twice that's a different line what structure are both of these variations likely to lead to and it's three letters the classic and i'm already wow flame"
   },
   {
    "ply": 6,
@@ -39,7 +39,7 @@
     "e5"
    ],
    "fen": "rnbqkbnr/pp2pppp/8/3pP3/8/8/PP1P1PPP/RNBQKBNR b KQkq - 0 4",
-   "said": "so we're likely going to get on iqp but because he's thinking that tells me maybe he hasn't seen this or not is not too familiar with the car con we will see take stakes and e5 okay that is definitely not the way to play for many reasons one of which is that he basically again gives us an ideal french so in such situations we normally want to bring the bishop out to f5 and then go e6 but here we don't need to rush with bishop f5 we can also uh well what else can we how else can we develop what's well that ideal french is a french where our bishop is outside the pawn chain we can go knight c6 demon mentions the interesting possibility of going d4 which is an idea that does exist in certain positions similar to this one the point of that is that we prevent white from going d4 we essentially sever the connection between the d and the e pawns but but after d4 we also give the bishop a nice developing square on c4 it's possible but let's not be too adventurous here i just want to go"
+   "said": "okay that is definitely not the way to play for many reasons one of which is that he basically again gives us an ideal french so in such situations we normally want to bring the bishop out to f5 and then go e6 but here we don't need to rush with bishop f5 we can also uh well what else can we how else can we develop what's well that ideal french is a french where our bishop is outside the pawn chain we can go knight c6 demon mentions the interesting possibility of going d4 which is an idea that does exist in certain positions similar to this one the point of that is that we prevent white from going d4 we essentially sever the connection between"
   },
   {
    "ply": 8,
@@ -48,7 +48,7 @@
     "Nc6"
    ],
    "fen": "r1bqkbnr/pp2pppp/2n5/3pP3/8/8/PP1P1PPP/RNBQKBNR w KQkq - 1 5",
-   "said": "the d and the e pawns but but after d4 we also give the bishop a nice developing square on c4 it's possible but let's not be too adventurous here i just want to go knight c6 and bishop f5 no reason for us to refrain from an ideal french setup when it's handed to us like this what's up dukaia good to see you yeah bishop f5 is right so bishop f5"
+   "said": "the d and the e pawns but but after d4 we also give the bishop a nice developing square on c4 it's possible but let's not be too adventurous here i just want to go knight c6 and bishop f5 no reason for us to refrain from an ideal french setup when it's handed to us like this what's"
   },
   {
    "ply": 10,
@@ -58,7 +58,7 @@
     "Bf5"
    ],
    "fen": "r2qkbnr/pp2pppp/2n5/3pPb2/3P4/8/PP3PPP/RNBQKBNR w KQkq - 1 6",
-   "said": "ideal french setup when it's handed to us like this what's up dukaia good to see you yeah bishop f5 is right so bishop f5 and french players are like completely in paradise here literally in advanced french with the bishop on f5 there is one semi drawback which is that in the french we have pawns on c5 and c3 and it is true that here uh we've already traded on d4 so the knight has this natural developing square on c3 but if you weigh the pros and cons it's there isn't even a comparison the fact that the bishop is outside the pawn chain gives black a very comfortable position i don't think black is better here i think the position is still equal but white is the one who's got to be a little bit more careful to preserve that equality make sure his pawn chain doesn't collapse so here"
+   "said": "up dukaia good to see you yeah bishop f5 is right so bishop f5 and french players are like completely in paradise here literally in advanced french with the bishop on f5 there is one semi drawback which is that in the french we have pawns on c5 and c3 and it is true that here uh we've already traded on d4 so the knight has this natural developing square on c3 but if you weigh the pros and cons it's there isn't even a comparison the fact that the bishop is outside the"
   },
   {
    "ply": 11,
@@ -67,7 +67,7 @@
     "Nc3"
    ],
    "fen": "r2qkbnr/pp2pppp/2n5/3pPb2/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 6",
-   "said": "pawn chain gives black a very comfortable position i don't think black is better here i think the position is still equal but white is the one who's got to be a little bit more careful to preserve that equality make sure his pawn chain doesn't collapse so here of course we play e6"
+   "said": "pawn chain gives black a very comfortable position i don't think black is better here i think the position is still equal but white is the one who's got to be a little bit more careful to preserve that equality make sure his pawn chain doesn't collapse so here"
   },
   {
    "ply": 12,
@@ -76,7 +76,7 @@
     "e6"
    ],
    "fen": "r2qkbnr/pp3ppp/2n1p3/3pPb2/3P4/2N5/PP3PPP/R1BQKBNR w KQkq - 0 7",
-   "said": "comfortable position i don't think black is better here i think the position is still equal but white is the one who's got to be a little bit more careful to preserve that equality make sure his pawn chain doesn't collapse so here of course we play e6 yeah well sprinkles even when there is a pawn on c3 there's also pawn on c5 they cancel each other out that's an important point the presence of pawns on c5 and c3 does not make the d4 pawn technically any weaker or stronger there's one more attacker and one more defender it's just that black is the one who holds the power black is the one who knocks black can decide when to take on d4 a and b the knight on b1 doesn't have the developing square c3 which is in black's advantage okay i hope that makes sense so a lot of players will have a very hard time figuring out what to do here with white yeah g4 is interesting but it's not dangerous g4 h4 will just go h5 and prevent white from going h5 it's not and white will overextend himself even further in that case and create even more weaknesses okay let's see and you can tell that he's a little bit out of his depth here which is why these openings like the karo khan and uh you shouldn't play the hillbilly attack openings like the karo khan or"
+   "said": "of course we play e6 yeah well sprinkles even when there is a pawn on c3 there's also pawn on c5 they cancel each other out that's an important point the presence of pawns on c5 and c3 does not make the d4 pawn technically any weaker or stronger there's one more attacker and one more defender it's just that black is the one who holds the power black is the one who knocks black can decide when to take on d4 a and b the knight on b1 doesn't have the developing square c3 which is in black's advantage okay i hope that makes sense so a lot of players will have a very hard time figuring out what to do here with white yeah g4 is interesting but it's not dangerous g4 h4 will just go h5 and prevent white from going h5 it's not and white will overextend himself even further in that case and create even more weaknesses okay let's see and you can tell that"
   },
   {
    "ply": 13,
@@ -85,7 +85,7 @@
     "Nf3"
    ],
    "fen": "r2qkbnr/pp3ppp/2n1p3/3pPb2/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 7",
-   "said": "he's a little bit out of his depth here which is why these openings like the karo khan and uh you shouldn't play the hillbilly attack openings like the karo khan or the french can be uh quite effective even you know at this level because it's not that they haven't seen it before it's just that perhaps it's not quite as well studied all right so what to do here first of all it's worthwhile to ask ourselves the question why not night before threatening knight c2 knight c2 is not so easy to stop but there is a reason we don't want to go knight b4 and yes we want to go queen b6 just like in the french because unfortunately knight b4 exposes the king to a check on b5 we certainly don't want to bring the king up so we'll just have to go back with a knight who wants to do that queen a4 is the same concept when a4 is also very possible also forces the knight back to c6 so we bring the queen out to b6 just"
+   "said": "he's a little bit out of his depth here which is why these openings like the karo khan and uh you shouldn't play the hillbilly attack openings like the karo khan or the french can be uh quite effective even you know at this level because it's not that they haven't seen it before it's just that perhaps it's not quite as well studied all right so what to do here first of all it's worthwhile to ask ourselves the question why not night before threatening knight c2 knight c2 is not so easy to stop but there is a reason we don't want to go knight b4 and yes we want to go queen b6 just like in the french because unfortunately knight b4 exposes the king to a check on b5 we certainly don't want"
   },
   {
    "ply": 14,
@@ -94,7 +94,7 @@
     "Qb6"
    ],
    "fen": "r3kbnr/pp3ppp/1qn1p3/3pPb2/3P4/2N2N2/PP3PPP/R1BQKB1R w KQkq - 2 8",
-   "said": "to bring the king up so we'll just have to go back with a knight who wants to do that queen a4 is the same concept when a4 is also very possible also forces the knight back to c6 so we bring the queen out to b6 just like we do in the french putting significant pressure on the d4 pawn unlike in the front well unlike in the french our bishop is on f5 if one is even to talk about a drawback to this it is that this knight on uh we're gonna have to be a little bit creative about how we choose to develop this knife on g8 in the french we often go to f5 here the bishop is on f5"
+   "said": "to bring the king up so we'll just have to go back with a knight who wants to do that queen a4 is the same concept when a4 is also very possible also forces the knight back to c6 so we bring the queen out to b6 just like we do in the french putting significant pressure on the d4 pawn unlike in the front well unlike in the french our bishop is on f5 if one is even to talk about a drawback"
   },
   {
    "ply": 15,
@@ -103,7 +103,7 @@
     "Be2"
    ],
    "fen": "r3kbnr/pp3ppp/1qn1p3/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R b KQkq - 3 8",
-   "said": "to this it is that this knight on uh we're gonna have to be a little bit creative about how we choose to develop this knife on g8 in the french we often go to f5 here the bishop is on f5 so we'll need to manage that situation it's something i've talked about before because it's a situation that does arise quite frequently in the karaoke and there are two or three ways of resolving this the first is sometimes people go knight age six in order to leave space for the dark squared bishop and then castles uh in parallel to that you can play either knight cheese knight h6 or 97 and then what maneuver can you suggest thank you gifting to d kyle what maneuver can you suggest to vacate that yeah five square for the knight that's what we're going to do here i want to just demonstrate this and we're going to demonstrate this yeah bishop g6 and 97 knight f5 we can start with bishop g6 i like starting with either 97 or knight h6 now if you look at knight h6 you should be curious as to why i'm not afraid of bishop takes h6 let's play knight h6 i hope he takes on"
+   "said": "to this it is that this knight on uh we're gonna have to be a little bit creative about how we choose to develop this knife on g8 in the french we often go to f5 here the bishop is on f5 so we'll need to manage that situation it's something i've talked about before because it's a situation that does arise quite frequently in the karaoke and there are two or three ways of resolving this the first is sometimes people go knight age six in order to leave space for the dark squared bishop and then castles uh in parallel to that you can play either knight cheese knight h6 or 97 and then what maneuver can you suggest thank you gifting to d kyle what maneuver can you suggest to vacate that yeah five square for the knight that's what we're going to do here i want to just demonstrate this and we're going to demonstrate this yeah bishop g6 and 97 knight f5 we can start with bishop g6"
   },
   {
    "ply": 16,
@@ -112,7 +112,7 @@
     "Nh6"
    ],
    "fen": "r3kb1r/pp3ppp/1qn1p2n/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R w KQkq - 4 9",
-   "said": "i like starting with either 97 or knight h6 now if you look at knight h6 you should be curious as to why i'm not afraid of bishop takes h6 let's play knight h6 i hope he takes on h6 so that i can demonstrate this if you've been watching the speed run for a while however you'll know that i showed a game"
+   "said": "i like starting with either 97 or knight h6 now if you look at knight h6 you should be curious as to why i'm not afraid of bishop takes h6 let's play knight h6 i hope he takes on h6 so that i can demonstrate this if you've"
   },
   {
    "ply": 17,
@@ -121,7 +121,7 @@
     "Na4"
    ],
    "fen": "r3kb1r/pp3ppp/1qn1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQK2R b KQkq - 5 9",
-   "said": "be curious as to why i'm not afraid of bishop takes h6 let's play knight h6 i hope he takes on h6 so that i can demonstrate this if you've been watching the speed run for a while however you'll know that i showed a game that i played myself with white against a julio brown as an eager grandmaster from peru where uh i i sort of talked about why it's not dangerous the bottom line is because his dark squared bishop is a very important defensive piece without it the pawn on d4 becomes a lot harder to defend his entire position becomes a lot looser than a4 okay that's fine we can go queen a5 check but then bishop d2 the same goes for bishop before chuck bishop before chuck looks good but he just goes bishop d2 and i don't think the trade of dark squared bishops is good for us it's good if he gets his dark squared bishop and trades it for our knight but i want a key part archer bishop so there's no need here to do anything crazy just drop the queen back to c7 or d8"
+   "said": "been watching the speed run for a while however you'll know that i showed a game that i played myself with white against a julio brown as an eager grandmaster from peru where uh i i sort of talked about why it's not dangerous the bottom line is because his dark squared bishop is a very important defensive piece without it the pawn on d4 becomes a lot harder to defend his entire position becomes a lot looser than a4 okay that's fine we can go queen a5 check but then bishop d2 the same goes for bishop before chuck bishop before chuck looks good but he just goes bishop d2 and i don't think the trade of dark squared bishops is good for us"
   },
   {
    "ply": 18,
@@ -139,7 +139,7 @@
     "O-O"
    ],
    "fen": "r3kb1r/ppq2ppp/2n1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQ1RK1 b kq - 7 10",
-   "said": "i want a key part archer bishop so there's no need here to do anything crazy just drop the queen back to c7 or d8 queen c7 is what we're going to play now let's begin by developing our bishop to"
+   "said": ""
   },
   {
    "ply": 20,
@@ -148,7 +148,7 @@
     "Be7"
    ],
    "fen": "r3k2r/ppq1bppp/2n1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQ1RK1 w kq - 8 11",
-   "said": "there's no need here to do anything crazy just drop the queen back to c7 or d8 queen c7 is what we're going to play now let's begin by developing our bishop to e7 okay now let's complete our regrouping"
+   "said": "let's begin by developing our bishop to e7"
   },
   {
    "ply": 21,
@@ -157,7 +157,7 @@
     "Bd2"
    ],
    "fen": "r3k2r/ppq1bppp/2n1p2n/3pPb2/N2P4/5N2/PP1BBPPP/R2Q1RK1 b kq - 9 11",
-   "said": "just drop the queen back to c7 or d8 queen c7 is what we're going to play now let's begin by developing our bishop to e7 okay now let's complete our regrouping going bishop g6 and then knight f5"
+   "said": "okay now let's complete our regrouping"
   },
   {
    "ply": 22,
@@ -166,7 +166,7 @@
     "Bg6"
    ],
    "fen": "r3k2r/ppq1bppp/2n1p1bn/3pP3/N2P4/5N2/PP1BBPPP/R2Q1RK1 w kq - 10 12",
-   "said": "let's begin by developing our bishop to e7 okay now let's complete our regrouping going bishop g6 and then knight f5"
+   "said": "going bishop g6 and then knight f5"
   },
   {
    "ply": 24,
@@ -176,7 +176,7 @@
     "Nf5"
    ],
    "fen": "r3k2r/ppq1bppp/2n1p1b1/3pPn2/N2P4/P4N2/1P1BBPPP/R2Q1RK1 w kq - 1 13",
-   "said": "let's begin by developing our bishop to e7 okay now let's complete our regrouping going bishop g6 and then knight f5 everything is in perfect place now our knight has a home our bishop is a home all of our pieces are developed save our king we're going to castle and then we're going to embark on the middle game i have to compliment my opponent he's he's handling this very well um i don't"
+   "said": "everything is in perfect place now our knight has a home our bishop is a home all of our pieces are developed save our king we're going to castle"
   },
   {
    "ply": 25,
@@ -185,7 +185,7 @@
     "Be3"
    ],
    "fen": "r3k2r/ppq1bppp/2n1p1b1/3pPn2/N2P4/P3BN2/1P2BPPP/R2Q1RK1 b kq - 2 13",
-   "said": "knight has a home our bishop is a home all of our pieces are developed save our king we're going to castle and then we're going to embark on the middle game i have to compliment my opponent he's he's handling this very well um i don't think we're better but we have a very comfortable position okay so first of all do we want to take on e3 the case for that would be that we sort of ruin this pawn structure but is it a good idea to take on e3 no it isn't for two reasons the first is that that bishop isn't going anywhere it's going to be there on e3 for us if we want to take it at a later point the second reason why open up the f-file for him why eliminate a knight that's putting the d4 pawn under significant pressure so instead let's begin by castling"
+   "said": "and then we're going to embark on the middle game i have to compliment my opponent he's he's handling this very well um i don't think we're better but we have a very comfortable position okay so first of all do we want to take on e3 the case for that would be that we sort of ruin this pawn structure but is it a good idea to take on e3 no it isn't for two reasons the first is that that bishop isn't going anywhere it's going to be there on e3 for us if we want to"
   },
   {
    "ply": 26,
@@ -194,7 +194,7 @@
     "O-O"
    ],
    "fen": "r4rk1/ppq1bppp/2n1p1b1/3pPn2/N2P4/P3BN2/1P2BPPP/R2Q1RK1 w - - 3 14",
-   "said": "take it at a later point the second reason why open up the f-file for him why eliminate a knight that's putting the d4 pawn under significant pressure so instead let's begin by castling that's the most flexible move and the very typical idea french players should be more than familiar with this idea what's a typical follow-up you know every the pressure has reached"
+   "said": "take it at a later point the second reason why open up the f-file for him why eliminate a knight that's putting the d4 pawn under significant pressure so instead let's begin by castling that's the most flexible move and the very typical idea french players"
   },
   {
    "ply": 27,
@@ -203,7 +203,7 @@
     "Nc3"
    ],
    "fen": "r4rk1/ppq1bppp/2n1p1b1/3pPn2/3P4/P1N1BN2/1P2BPPP/R2Q1RK1 b - - 4 14",
-   "said": "that's the most flexible move and the very typical idea french players should be more than familiar with this idea what's a typical follow-up you know every the pressure has reached its apex how do we take it to the next level what's the move the move is of course f6 the move is f6 and i see no reason to well i do see a reason to hold off on that move if he goes f6 no actually no i don't let's go f6 let's"
+   "said": "should be more than familiar with this idea what's a typical follow-up you know every the pressure has reached its apex how do we take it to the next level what's the move the move is of course f6 the move is f6 and i see no reason"
   },
   {
    "ply": 28,
@@ -212,7 +212,7 @@
     "f6"
    ],
    "fen": "r4rk1/ppq1b1pp/2n1ppb1/3pPn2/3P4/P1N1BN2/1P2BPPP/R2Q1RK1 w - - 0 15",
-   "said": "the move is f6 and i see no reason to well i do see a reason to hold off on that move if he goes f6 no actually no i don't let's go f6 let's play f6 let's open up the center there's some subtleties here that i could talk about but let's keep things"
+   "said": "to well i do see a reason to hold off on that move if he goes f6 no actually no i don't let's go f6 let's play f6 let's open up the center there's some subtleties here that i"
   },
   {
    "ply": 29,
@@ -221,7 +221,7 @@
     "Nb5"
    ],
    "fen": "r4rk1/ppq1b1pp/2n1ppb1/1N1pPn2/3P4/P3BN2/1P2BPPP/R2Q1RK1 b - - 1 15",
-   "said": "that move if he goes f6 no actually no i don't let's go f6 let's play f6 let's open up the center there's some subtleties here that i could talk about but let's keep things pretty simple with f6 okay knight b5 attacking the queen where should we go where should we go we can go to b8 that's okay but i kind of like the possibility of"
+   "said": "could talk about but let's keep things pretty simple with f6 okay knight b5 attacking the queen where should we go where should we go"
   },
   {
    "ply": 30,
@@ -230,7 +230,7 @@
     "Qb6"
    ],
    "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P3BN2/1P2BPPP/R2Q1RK1 w - - 2 16",
-   "said": "should we go where should we go we can go to b8 that's okay but i kind of like the possibility of dragging the queen back to b6 because it sort of pins the knight to the pawn it reinforces the pressure on d4 after ef6 bishop f6 look at how many of our pieces will be trained on that pawn i just feel like his position will be very close to collapsing with so many pieces trained on that d4 pawn if he doesn't take we either go a6 or remember nothing has happened to the possibility of taking the bishop and then taking the pawn that is why we held off on that move so that we are holding this over his head there's a very funny subtlety that i just realized with the move a6 after a6 knight c3 is it possible to take on b2"
+   "said": "we can go to b8 that's okay but i kind of like the possibility of dragging the queen back to b6 because it sort of pins the knight to the pawn it reinforces the pressure on d4 after ef6 bishop f6 look at how many of our pieces will be trained on that pawn i just feel like his position will be very close to collapsing with so many pieces trained on that d4 pawn if he doesn't take we either go a6 or remember nothing has happened to the possibility of taking the bishop and then taking the pawn that is why we held off on that move"
   },
   {
    "ply": 31,
@@ -239,14 +239,14 @@
     "Bd3"
    ],
    "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 b - - 3 16",
-   "said": "so that we are holding this over his head there's a very funny subtlety that i just realized with the move a6 after a6 knight c3 is it possible to take on b2 i missed this at first uh i'll be completely honest so imagine if we had played a6 he played knight c3 taken there's this pattern of going knight a4 well rook b1 blunders the knight on c3 but why is that a pin because that knight on c3 is going to be hanging what i meant is that knight a4 traps the queen that's a puzzle rush theme all right so he's got bishop d3 and now"
+   "said": "so that we are holding this over his head there's a very funny subtlety that i just realized with the move a6 after a6 knight c3 is it possible to take on b2 i missed this at first uh i'll be completely honest so imagine if we had played a6 he played knight c3 taken there's this pattern of going knight a4 well rook b1 blunders the knight on c3"
   },
   {
    "ply": 30,
    "t": 647,
    "line": [],
    "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P3BN2/1P2BPPP/R2Q1RK1 w - - 2 16",
-   "said": "well rook b1 blunders the knight on c3 but why is that a pin because that knight on c3 is going to be hanging what i meant is that knight a4 traps the queen that's a puzzle rush theme all right so he's got bishop d3 and now"
+   "said": "but why is that a pin because that knight on c3 is going to be hanging what i meant is that knight a4 traps the queen that's a puzzle rush theme all right so he's got bishop d3 and now"
   },
   {
    "ply": 31,
@@ -255,7 +255,7 @@
     "Bd3"
    ],
    "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 b - - 3 16",
-   "said": "but why is that a pin because that knight on c3 is going to be hanging what i meant is that knight a4 traps the queen that's a puzzle rush theme all right so he's got bishop d3 and now it is time for us to collect the harvest in what order should we do things now what you guys should see is that the most obvious move here is to take on e5 and after d takes c5 to take the bishop when his position collapses f takes e3 queen takes e3 we're gonna win at least upon probably also a piece but okay so f takes e5 from that perspective is good but after f takes c5 does white have any additional options does white have any additional options after f65 he has bishop takes f5 let's continue calculating bishop takes f5 bishop takes f5 and he can take back on e5 is that good for white or are we missing something so what i'm saying is takes takes takes takes what happens at the end bingo everybody should be able to see that position the knight on b5 is hanging that's why it's so important to note down all the type 1 and type 2 undefended pieces precisely because you get these"
+   "said": "it is time for us to collect the harvest in what order should we do things now what you guys should see is that the most obvious move here is to take on e5 and after d takes c5 to take the bishop when his position collapses f takes e3 queen takes e3 we're gonna win at least upon probably also a piece but okay so f takes e5 from that perspective is good but after f takes c5 does white have any additional options does white have any additional options after f65 he has bishop takes f5 let's continue calculating bishop takes f5 bishop takes f5 and he can take back on e5 is that good for white or are we missing something so what i'm saying is takes takes takes takes what happens at the end bingo"
   },
   {
    "ply": 32,
@@ -264,14 +264,14 @@
     "fxe5"
    ],
    "fen": "r4rk1/pp2b1pp/1qn1p1b1/1N1ppn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 w - - 0 17",
-   "said": "everybody should be able to see that position the knight on b5 is hanging that's why it's so important to note down all the type 1 and type 2 undefended pieces precisely because you get these variations that's one of the most common reasons for blundering or miscalculating is forgetting that a piece hangs at the end of a line if you notice that it's vulnerable straight away it'll be easier not to forget about it later benjamin to the ray party of 53 welcome everybody tail end of my stream guys i still appreciate it though we're doing some speed running and having a great time thank you blackjack for the prime we are in the midst of a karaoke game that is looking very very promising doesn't that give white an attack on the queen well no the bishop is gone and if white takes d takes c5 then we take black white's bishop on e3 and his position collapses i hope that makes sense so either he takes the knight to stop knight takes c3 and then his knight hangs or he takes on e5 and allows knight takes e3 and that's the reason why i didn't want"
+   "said": "everybody should be able to see that position the knight on b5 is hanging that's why it's so important to note down all the type 1 and type 2 undefended pieces precisely because you get these variations that's one of the most common reasons for blundering or miscalculating is forgetting that a piece hangs at the end of a line if you notice that it's vulnerable straight away it'll be easier not to forget about it later benjamin to the ray party of 53 welcome everybody tail end of my stream guys i still appreciate it though we're doing some speed running and having a great time thank you blackjack for the prime we are in the midst of a karaoke game that is looking very very promising doesn't that give white an attack on the queen well no the bishop is gone and if white takes d takes c5 then we take black white's bishop on e3 and his position collapses i hope that makes sense"
   },
   {
    "ply": 31,
    "t": 764,
    "line": [],
    "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 b - - 3 16",
-   "said": "so either he takes the knight to stop knight takes c3 and then his knight hangs or he takes on e5 and allows knight takes e3 and that's the reason why i didn't want to play a6 first this knight while it may seem like a bone in our throat it's actually an asset it's a very big asset because it burdens white's defenders it burdens the bishop now the bishop is not free to do other things white is busted"
+   "said": "so either he takes the knight to stop knight takes c3 and then his knight hangs or he takes on e5 and allows knight takes e3 and that's the reason why i didn't want to play a6 first this knight while it may seem like a bone in our throat it's actually an asset it's a very big asset because it burdens"
   },
   {
    "ply": 32,
@@ -280,7 +280,7 @@
     "fxe5"
    ],
    "fen": "r4rk1/pp2b1pp/1qn1p1b1/1N1ppn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 w - - 0 17",
-   "said": "bone in our throat it's actually an asset it's a very big asset because it burdens white's defenders it burdens the bishop now the bishop is not free to do other things white is busted white is really busted cyrux thank you for the prime on all of the support today by the way is so much appreciated guys thank you i'll talk about that later though let's see what he does is opening white's f file now fine because we also have an open rook yeah so that's one way of looking at it we have an open rook but it doesn't matter it's a moot point because we're winning a piece right you're winning a piece uh it's like you know someone offers you a lottery ticket and says this is the winning lottery ticket but but there's a catch it's like what's the catch well um you know you're here's the envelope with the lottery ticket but you're gonna get a little paper cut while opening it do you still want that lottery ticket like nah man that's terrible i don't want to get a paper cut uh so you know you open the f file that's a weird analogy i this is only at 4 am while i make such an analogy but you get what i'm saying it's a moot point and that's sort of that's the definition of a moot point a cow's opinion yeah concrete stuff outweighs uh these positional advantages okay but i think you understood the meaning of the analogy it's like we give him the f file but that's so unimportant in comparison to what we get in return which is an extra piece and you always have to weigh those things right oh well if it's the 18th century that's not good all right we got a hype train skog's three with a pram thank you sir nothing looking for am i trained he's stunned well he's busted because we're here we go demon with a 10 damn girl demon with the 10 and chaser work with the prime on fire thank you i really appreciate it demon okay now we're talking about paper cuts that seems to be a fun topic of conversation i think everybody has their like paper cut story it's really confusing to me that we are fine with having the white bishop blocked for most of the game whereas before we were talking about not blocking their pieces wait a minute whoa wait a minute which piece are we blocking here what do you mean the white bishop blocked in the king's indian attack game but you mean we were fine with blocking it in the king's indian game but you're saying that before i i was railing on about how you shouldn't block your pieces right is that what your what the dissonance is or is it something specific to this game or is it just a general question about other games i think you just walked away you may have just walked away thank you slave for 100. it applies here in the beginning of the game"
+   "said": "white's defenders it burdens the bishop now the bishop is not free to do other things white is busted white is really busted cyrux thank you for the prime on all of the support today by the way is so much appreciated guys thank you i'll talk about that later though let's see what he does is opening white's f file now fine because we also have an open rook yeah so that's one way of looking at it we have an open rook but it doesn't matter it's a moot point because we're winning a piece right you're winning a piece uh it's like you know someone offers you a lottery ticket and says this is the winning lottery ticket but but there's a catch it's like what's the catch well um you know you're here's the envelope with the lottery ticket but you're gonna get a little paper cut while opening it do you still want that lottery ticket like nah man that's terrible i don't want to get a paper cut uh so you know you open the f file that's a weird analogy i this is only at 4 am while i make such an analogy but you get what i'm saying it's a moot point and that's sort of that's the definition of a moot point a cow's opinion yeah concrete stuff outweighs uh these positional advantages okay but i think you understood the meaning of the analogy it's like we give him the f file but that's so unimportant in comparison to what we get in return which is an extra piece and you always have to weigh those things right oh well if it's the 18th century that's not good all right we got a hype train skog's three with a pram thank you sir nothing looking for am i trained he's stunned well he's busted because we're here we go demon with a 10 damn girl demon with the 10 and chaser work with the prime on fire thank you i really appreciate it demon okay now we're talking about paper cuts that seems to be a fun topic of conversation i think everybody has their like paper cut story it's really confusing to me that we are fine with having the white bishop blocked for most of the game whereas before we were talking about not blocking their pieces wait a minute whoa wait a minute which piece are we blocking here what do you mean the white bishop blocked in the king's indian attack game but you mean we were fine with blocking it in the king's indian game but you're saying that before i i was railing on about how you shouldn't block your pieces right is that what your what the dissonance is or is it something specific to this game or is it just a general question about other games i think you just walked away you may have just walked away thank you slave for 100."
   },
   {
    "ply": 16,
@@ -294,7 +294,7 @@
    "t": 1013,
    "line": [],
    "fen": "r3kbnr/pp3ppp/1qn1p3/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R b KQkq - 3 8",
-   "said": "it applies here in the beginning of the game where does it apply like you mean knight g7 the possibility of going knight g7 sorry i'm not trying to be difficult i'm just not sure where where it is that here we're we're like not okay with blocking a piece b-town that's a pretty good that's a pretty good spot to place the the divider line yeah well that's pretty interesting okay um so let's have a look at the game you guys have been behaving yourselves all right thanks again demon for those 10. uh oh and as i speak another five from j rin damn girl all right now we're talking thank you jayren for the five really appreciate it so we have a karo gun c6 d4 and c4 is reasonable but after cd so after edc d"
+   "said": "sorry i'm not trying to be difficult i'm just not sure where where it is that here we're we're like not okay with blocking a piece b-town that's a pretty good that's a pretty good spot to place the the divider line yeah well that's pretty interesting okay um so let's have a look at the game you guys have been behaving yourselves all right thanks again demon for those 10. uh oh and as i speak another five from j rin damn girl all right now we're talking thank you jayren for the five really appreciate it so we have a karo gun c6 d4 and c4 is reasonable but after cd so after edc d"
   }
  ],
  "forks": []

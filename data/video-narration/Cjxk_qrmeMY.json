@@ -10,7 +10,7 @@
     "Nf6"
    ],
    "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
-   "said": "let's play a night or we're going to play a night off i fee i'm in a knight or foot right now i want to play knight no d4 there we go okay so we've been experimenting let's go to f6 now let's decide what to do kay let's play something interesting okay let's play something interesting i'm gonna play something interesting whatever i'm thinking i'm not gonna play king's indian we've done that a lot that would be boring grunfeld i can entertain a grenfeld yeah let's do a grunfeld g6 let's do a"
+   "said": "let's play a night or we're going to play a night off i fee i'm in a knight or foot right now i want to play knight no d4 there we go okay so we've been experimenting let's go to f6 now let's decide what to do kay let's play something interesting okay let's play something interesting i'm gonna play something interesting whatever i'm thinking i'm not gonna play"
   },
   {
    "ply": 4,
@@ -20,7 +20,7 @@
     "g6"
    ],
    "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
-   "said": "kay let's play something interesting okay let's play something interesting i'm gonna play something interesting whatever i'm thinking i'm not gonna play king's indian we've done that a lot that would be boring grunfeld i can entertain a grenfeld yeah let's do a grunfeld g6 let's do a grumpfeld and of course the gronfeld in contrast"
+   "said": "king's indian we've done that a lot that would be boring grunfeld i can entertain a grenfeld yeah let's do a grunfeld g6 let's do a grumpfeld"
   },
   {
    "ply": 5,
@@ -29,7 +29,7 @@
     "Nc3"
    ],
    "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
-   "said": "whatever i'm thinking i'm not gonna play king's indian we've done that a lot that would be boring grunfeld i can entertain a grenfeld yeah let's do a grunfeld g6 let's do a grumpfeld and of course the gronfeld in contrast to the king's indian is d5 here rather than d6 the grunfeld"
+   "said": "and of course the gronfeld in contrast to the king's indian is d5 here rather than d6 the grunfeld"
   },
   {
    "ply": 6,
@@ -38,7 +38,7 @@
     "d5"
    ],
    "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
-   "said": "entertain a grenfeld yeah let's do a grunfeld g6 let's do a grumpfeld and of course the gronfeld in contrast to the king's indian is d5 here rather than d6 the grunfeld is one of those openings that just is universally considered to be one of the best objective defenses against d4 nobody has found an advantage against the ground field anywhere the downside of it is that the amount of theory that you have to remember as black if you want to play this at a"
+   "said": "is one of those openings that just is universally considered to be one of the best objective defenses against d4"
   },
   {
    "ply": 7,
@@ -47,7 +47,7 @@
     "Bf4"
    ],
    "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP1B2/2N5/PP2PPPP/R2QKBNR b KQkq - 1 4",
-   "said": "best objective defenses against d4 nobody has found an advantage against the ground field anywhere the downside of it is that the amount of theory that you have to remember as black if you want to play this at a professional level is absolutely out of this world now you don't have to know this there you can play the grunfeld and not know that much but someone like mvl who plays the grunfeld and the night or you can understand the amount of maintenance work that you have to put in so i'll explain the general ideas afterward the bottom line is that we're grabbing control of the center and we're we're combining the king's indian ness of the fianchetto but instead of letting y play e4 we're proactively playing d5 all right so bishop f4 is a legitimate uh continuation now we don't want to take this pawn that's not in the spirit of the gruntful the point is not to grab the pawn the point is to develop very quickly so that we could attack white's center it's also a hyper modern opening so we go bishop g7 here"
+   "said": "nobody has found an advantage against the ground field anywhere the downside of it is that the amount of theory that you have to remember as black if you want to play this at a professional level is absolutely out of this world now you don't have to know this there you can play the grunfeld and not know that much but someone like mvl who plays the grunfeld and the night or you can understand the amount of maintenance work that you have to put in so i'll explain the general ideas afterward the bottom line is that we're grabbing control of the center and we're we're combining the king's indian ness of the fianchetto but instead of letting y play e4 we're proactively playing d5 all right so bishop f4 is a legitimate uh continuation now we don't want to"
   },
   {
    "ply": 8,
@@ -56,7 +56,7 @@
     "Bg7"
    ],
    "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP1B2/2N5/PP2PPPP/R2QKBNR w KQkq - 2 5",
-   "said": "take this pawn that's not in the spirit of the gruntful the point is not to grab the pawn the point is to develop very quickly so that we could attack white's center it's also a hyper modern opening so we go bishop g7 here yeah we go bishop g7 so c6 is unnecessary we are okay with white we are okay with bringing our queen out to d5 we are totally okay with that knight"
+   "said": "take this pawn that's not in the spirit of the gruntful the point is not to grab the pawn the point is to develop very quickly so that we could attack white's center it's also a hyper modern opening so we go bishop g7 here yeah we go bishop g7 so c6 is"
   },
   {
    "ply": 9,
@@ -65,7 +65,7 @@
     "cxd5"
    ],
    "fen": "rnbqk2r/ppp1ppbp/5np1/3P4/3P1B2/2N5/PP2PPPP/R2QKBNR b KQkq - 0 5",
-   "said": "yeah we go bishop g7 so c6 is unnecessary we are okay with white we are okay with bringing our queen out to d5 we are totally okay with that knight takes d5"
+   "said": "unnecessary we are okay with white we are okay with bringing our queen out to d5 we are totally okay with that knight"
   },
   {
    "ply": 10,
@@ -74,14 +74,14 @@
     "Nxd5"
    ],
    "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/3P1B2/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
-   "said": "yeah we go bishop g7 so c6 is unnecessary we are okay with white we are okay with bringing our queen out to d5 we are totally okay with that knight takes d5 you're joking okay no bishop f4 is is a legitimate line cd in com in combination with this is not great because now now"
+   "said": "takes d5 you're joking okay"
   },
   {
    "ply": 6,
    "t": 1189,
    "line": [],
    "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
-   "said": "no bishop f4 is is a legitimate line cd in com in combination with this is not great because now now white's main continuation is to take and then play e4 but with the bishop on f4 the bishop"
+   "said": "no bishop f4 is is a legitimate line cd in com in combination with this is not great because now now white's main continuation is to take and then play e4"
   },
   {
    "ply": 10,
@@ -93,7 +93,7 @@
     "Nxd5"
    ],
    "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/3P1B2/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
-   "said": "no bishop f4 is is a legitimate line cd in com in combination with this is not great because now now white's main continuation is to take and then play e4 but with the bishop on f4 the bishop will be hanging so he's mixed up two lines now his center immediately comes under some fire"
+   "said": "but with the bishop on f4 the bishop will be hanging so he's mixed up two lines now his center immediately comes under"
   },
   {
    "ply": 11,
@@ -102,7 +102,7 @@
     "Bg3"
    ],
    "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/3P4/2N3B1/PP2PPPP/R2QKBNR b KQkq - 1 6",
-   "said": "then play e4 but with the bishop on f4 the bishop will be hanging so he's mixed up two lines now his center immediately comes under some fire okay bishop g3 is is i think correct and one of the things that makes the grunfeld both fun to play but also hard to play is the the tactical alertness i'll explain that after the game uh dark knight rises the answer is i mean kind of but we would sacrifice it um so let me just let me write that down yeah so what makes the grunt felt so hard to play among other things is that you have to be on your toes and on your heels constantly for uh these all these tactical ideas that you have to be aware of and one of them is is the understanding that these centralized pieces are um are integral to black's central strategy and there's a constant uh attempt here a lot more tactically than in the king's indian the king's indian you're playing the long game you're not really assaulting white center here you are and the way that you are is often by playing various moves like c5 or knight c6 you're constantly attacking white center and white can lose some very quick games if he doesn't develop very precisely so between c5 and knight c6 which of the two moves do you guys think i should play which of them seems to be a more effective way to immediately harass white's center it's c5 because knight c6 can be met with e3 creating a pawn train but c5 is very strong because if he takes what happens if he"
+   "said": "some fire okay bishop g3 is is i think correct and one of the things that makes the grunfeld both fun to play but also hard to play is the the tactical alertness i'll explain that after the game uh dark knight rises the answer is i mean kind of but we would sacrifice it um so let me just let me write that down yeah so what makes the grunt felt so hard to play among other things is that you have to be on your toes and on your heels constantly for uh these all these tactical ideas that you have to be aware of and one of them is is the understanding that these centralized pieces are um are integral to black's central strategy and there's a constant uh attempt here a lot more tactically than in the king's indian the king's indian you're playing the long game you're not really assaulting white center here you are and the way that you are is often by playing various moves like c5 or knight c6 you're constantly attacking white center and white can lose some very quick games if he doesn't develop very precisely so between c5 and knight c6 which of the two moves do you guys think i should play which of them seems to be a more effective way"
   },
   {
    "ply": 12,
@@ -111,7 +111,7 @@
     "c5"
    ],
    "fen": "rnbqk2r/pp2ppbp/6p1/2pn4/3P4/2N3B1/PP2PPPP/R2QKBNR w KQkq - 0 7",
-   "said": "to immediately harass white's center it's c5 because knight c6 can be met with e3 creating a pawn train but c5 is very strong because if he takes what happens if he simply takes on c5 what happens if he plays dc so we play knight take c3 okay so he can trade queens and then he loses a piece because he cannot take back bishop takes c3 happens for king the king and the rook and you might say well no problem he can play e3 here right depend upon but after the trade he gets an isolated queen pawn and we're blockading the square in front of it which is great for us that's a phenomenal position for black what he should do is probably take the knight first and then take the pawn"
+   "said": "to immediately harass white's center it's c5 because knight c6 can be met with e3 creating a pawn train but c5 is very strong because if he takes what happens if he simply takes on c5 what happens if he plays dc so we play knight take c3 okay so he can trade queens and then he loses a piece because he cannot take back bishop takes c3 happens for king the king and the rook and you might say well no problem he can play e3 here right depend upon but after the trade he gets an isolated"
   },
   {
    "ply": 13,
@@ -129,7 +129,7 @@
     "Nxc3"
    ],
    "fen": "rnbqk2r/pp2ppbp/6p1/2P5/8/2n3B1/PP2PPPP/R2QKBNR w KQkq - 0 8",
-   "said": "square in front of it which is great for us that's a phenomenal position for black what he should do is probably take the knight first and then take the pawn he takes the pawn so unless i miscalculated here we are in great shape knight takes c3 wins basically wins the game"
+   "said": "miscalculated here we are in great shape"
   },
   {
    "ply": 16,
@@ -139,7 +139,7 @@
     "Kxd8"
    ],
    "fen": "rnbk3r/pp2ppbp/6p1/2P5/8/2n3B1/PP2PPPP/R3KBNR w KQ - 0 9",
-   "said": "what he should do is probably take the knight first and then take the pawn he takes the pawn so unless i miscalculated here we are in great shape knight takes c3 wins basically wins the game yeah he miscalculated something i don't know what it is maybe he thought he had a check here but then we take that's it that was a nice introduction to the grunfeld and you can see you know when faced with openings that they're familiar with people in this rating range really you know don't always handle things well and"
+   "said": "knight takes c3 wins basically wins the game yeah he miscalculated something i don't know what it is maybe he thought he had a check here but then we take that's it that was a nice introduction to the grunfeld"
   },
   {
    "ply": 17,
@@ -157,7 +157,7 @@
     "Bxc3+"
    ],
    "fen": "rnbk3r/pp2pp1p/6p1/2P5/8/2b3B1/P3PPPP/R3KBNR w KQ - 0 10",
-   "said": "and you can see you know when faced with openings that they're familiar with people in this rating range really you know don't always handle things well and he takes so he he makes things worse but at this point it's already over it is very difficult to play the grenfell you it's not a kind of opening you pick up casually which is why at the high level there aren't as many people who play it full time not because it's bad but because"
+   "said": "at this point it's already over it is very difficult to play the grenfell you it's not a kind of opening"
   },
   {
    "ply": 20,
@@ -167,7 +167,7 @@
     "Bxa1"
    ],
    "fen": "rnbk3r/pp2pp1p/6p1/2P5/8/6B1/P3PPPP/b2K1BNR w - - 0 11",
-   "said": "it is very difficult to play the grenfell you it's not a kind of opening you pick up casually which is why at the high level there aren't as many people who play it full time not because it's bad but because there is just"
+   "said": "you pick up casually which is why at the high level there aren't as many people who play it full time not because it's bad but because"
   },
   {
    "ply": 21,
@@ -176,7 +176,7 @@
     "Kc1"
    ],
    "fen": "rnbk3r/pp2pp1p/6p1/2P5/8/6B1/P3PPPP/b1K2BNR b - - 1 11",
-   "said": "it is very difficult to play the grenfell you it's not a kind of opening you pick up casually which is why at the high level there aren't as many people who play it full time not because it's bad but because there is just such a vast amount of theory to remember"
+   "said": "there is just such a vast amount of theory to remember"
   },
   {
    "ply": 22,
@@ -185,7 +185,7 @@
     "Nc6"
    ],
    "fen": "r1bk3r/pp2pp1p/2n3p1/2P5/8/6B1/P3PPPP/b1K2BNR w - - 2 12",
-   "said": "it is very difficult to play the grenfell you it's not a kind of opening you pick up casually which is why at the high level there aren't as many people who play it full time not because it's bad but because there is just such a vast amount of theory to remember okay let's get our knight out"
+   "said": "okay let's get our knight out"
   },
   {
    "ply": 23,
@@ -194,7 +194,7 @@
     "e4"
    ],
    "fen": "r1bk3r/pp2pp1p/2n3p1/2P5/4P3/6B1/P4PPP/b1K2BNR b - - 0 12",
-   "said": "which is why at the high level there aren't as many people who play it full time not because it's bad but because there is just such a vast amount of theory to remember okay let's get our knight out e4 okay so we need to just develop our pieces perhaps get the king out of the center this bishop on ca where should we put it what seems to be a good approach to developing this bishop and in the grunfeld even when we're not up a rook this is a good square for the bishop it's not g4 bishop g4 doesn't do anything that's what you need to understand it's it's not about developing a piece as far into your opponent's territory as possible but it's more about understanding what the role should be"
+   "said": "e4 okay so we need to just develop our pieces perhaps get the king out of the center this bishop on ca where should we put it what seems to be a good approach to developing this bishop and in the grunfeld even when we're not up a rook this is a good square for the bishop"
   },
   {
    "ply": 24,
@@ -203,7 +203,7 @@
     "Be6"
    ],
    "fen": "r2k3r/pp2pp1p/2n1b1p1/2P5/4P3/6B1/P4PPP/b1K2BNR w - - 1 13",
-   "said": "it's not g4 bishop g4 doesn't do anything that's what you need to understand it's it's not about developing a piece as far into your opponent's territory as possible but it's more about understanding what the role should be this attacks a2 it's sort of centralized it prevents white's bishop from coming out to c4 which is really nice this should be five we can take the pawn"
+   "said": "it's not g4 bishop g4 doesn't do anything that's what you need to understand it's it's not about developing a piece as far into your opponent's territory as possible but it's more about understanding what the role should be this attacks a2 it's sort of centralized it prevents white's bishop from coming"
   },
   {
    "ply": 25,
@@ -212,7 +212,7 @@
     "Bb5"
    ],
    "fen": "r2k3r/pp2pp1p/2n1b1p1/1BP5/4P3/6B1/P4PPP/b1K3NR b - - 2 13",
-   "said": "possible but it's more about understanding what the role should be this attacks a2 it's sort of centralized it prevents white's bishop from coming out to c4 which is really nice this should be five we can take the pawn but we don't need to since we're up a rook i would i would much rather prioritize peace play as you often do in the grenfell and there's many good moves here one approach is to target the c5 pawn and to realize that the c5 pawn is a conduit toward his king so we can begin by playing rook to see it we could have"
+   "said": "out to c4 which is really nice this should be five we can take the pawn but we don't need to since we're up a rook i would i would much rather prioritize peace play as you often do in the grenfell"
   },
   {
    "ply": 26,
@@ -221,7 +221,7 @@
     "Rc8"
    ],
    "fen": "2rk3r/pp2pp1p/2n1b1p1/1BP5/4P3/6B1/P4PPP/b1K3NR w - - 3 14",
-   "said": "and there's many good moves here one approach is to target the c5 pawn and to realize that the c5 pawn is a conduit toward his king so we can begin by playing rook to see it we could have also got knight d4 but let's uh let's cook up knight d4 so it's stronger when it is played rook c8 nice job sweet d and then we're going to go knight d4 rook takes the puff we're going to go for a mating attack here we're not even going to bother with all of the trades well i"
+   "said": "and there's many good moves here one approach is to target the c5 pawn and to realize that the c5 pawn is a conduit toward his king so we can begin by playing rook to see it we could have also got knight d4 but let's uh let's cook up knight d4 so it's stronger when it is played rook c8 nice job sweet d and then we're"
   },
   {
    "ply": 27,
@@ -230,7 +230,7 @@
     "Nf3"
    ],
    "fen": "2rk3r/pp2pp1p/2n1b1p1/1BP5/4P3/5NB1/P4PPP/b1K4R b - - 4 14",
-   "said": "let's cook up knight d4 so it's stronger when it is played rook c8 nice job sweet d and then we're going to go knight d4 rook takes the puff we're going to go for a mating attack here we're not even going to bother with all of the trades well i guess we are yeah let's go knight d4"
+   "said": "going to go knight d4 rook takes the puff we're going to go for a mating attack here we're not even going to bother with all of the trades well i guess we are yeah let's go knight d4"
   },
   {
    "ply": 28,
@@ -239,7 +239,7 @@
     "Nd4"
    ],
    "fen": "2rk3r/pp2pp1p/4b1p1/1BP5/3nP3/5NB1/P4PPP/b1K4R w - - 5 15",
-   "said": "when it is played rook c8 nice job sweet d and then we're going to go knight d4 rook takes the puff we're going to go for a mating attack here we're not even going to bother with all of the trades well i guess we are yeah let's go knight d4 anyway right bishop can come back to capture the knight notice that he does have rook d1 if he wants it but then we take on c5 just in time eliminating this bishop um when is it good to learn the grunfeld well first of all you don't have to learn it at any level i've i played it only a couple of times in"
+   "said": "anyway right bishop can come back to capture the knight notice that he does have rook d1 if he wants it but then we take on c5 just in time"
   },
   {
    "ply": 29,
@@ -248,7 +248,7 @@
     "Nxd4"
    ],
    "fen": "2rk3r/pp2pp1p/4b1p1/1BP5/3NP3/6B1/P4PPP/b1K4R b - - 0 15",
-   "said": "time eliminating this bishop um when is it good to learn the grunfeld well first of all you don't have to learn it at any level i've i played it only a couple of times in tournament play"
+   "said": "eliminating this bishop um when is it good to learn the grunfeld well first of all you don't have to learn it at any level i've i played it only a couple of times in tournament play"
   },
   {
    "ply": 30,
@@ -257,7 +257,7 @@
     "Bxd4"
    ],
    "fen": "2rk3r/pp2pp1p/4b1p1/1BP5/3bP3/6B1/P4PPP/2K4R w - - 0 16",
-   "said": "um when is it good to learn the grunfeld well first of all you don't have to learn it at any level i've i played it only a couple of times in tournament play and i never really you know had the discipline to learn the theory it's it's it fits my style but i would say if you want to learn it i would say at a minimum two thousand i i wouldn't i wouldn't"
+   "said": "and i never really you know had the discipline to learn the theory it's it's it fits my style"
   },
   {
    "ply": 31,
@@ -266,7 +266,7 @@
     "Rd1"
    ],
    "fen": "2rk3r/pp2pp1p/4b1p1/1BP5/3bP3/6B1/P4PPP/2KR4 b - - 1 16",
-   "said": "had the discipline to learn the theory it's it's it fits my style but i would say if you want to learn it i would say at a minimum two thousand i i wouldn't i wouldn't play it unless here"
+   "said": "but i would say if you want to learn it i would say at a minimum two thousand i i wouldn't i wouldn't play it unless here"
   },
   {
    "ply": 32,
@@ -275,7 +275,7 @@
     "Rxc5+"
    ],
    "fen": "3k3r/pp2pp1p/4b1p1/1Br5/3bP3/6B1/P4PPP/2KR4 w - - 0 17",
-   "said": "had the discipline to learn the theory it's it's it fits my style but i would say if you want to learn it i would say at a minimum two thousand i i wouldn't i wouldn't play it unless here honestly unless you're you're 2000 and over i think it's it's so theoretical it's so um concrete that you know i just don't think it's worth it you might win some quick games if you learn it earlier but you'll be building the wrong habits then i think that's just my opinion but svidler's chest of course i mean if you want to pick it up and you're 1700"
+   "said": "honestly unless you're you're 2000 and over i think it's it's so theoretical it's so um concrete that you know i just don't think it's worth"
   },
   {
    "ply": 33,
@@ -284,7 +284,7 @@
     "Kb1"
    ],
    "fen": "3k3r/pp2pp1p/4b1p1/1Br5/3bP3/6B1/P4PPP/1K1R4 b - - 1 17",
-   "said": "it you might win some quick games if you learn it earlier but you'll be building the wrong habits then i think that's just my opinion but svidler's chest of course i mean if you want to pick it up and you're 1700 don't let my words stop you don't say"
+   "said": "it you might win some quick games if you learn it earlier but you'll be building the wrong habits then i think that's just my opinion but svidler's chest of course i mean if you want to pick it up and you're 1700"
   },
   {
    "ply": 34,
@@ -293,7 +293,7 @@
     "Rxb5+"
    ],
    "fen": "3k3r/pp2pp1p/4b1p1/1r6/3bP3/6B1/P4PPP/1K1R4 w - - 0 18",
-   "said": "if you learn it earlier but you'll be building the wrong habits then i think that's just my opinion but svidler's chest of course i mean if you want to pick it up and you're 1700 don't let my words stop you don't say well daniel said this"
+   "said": "don't let my words stop you don't say"
   },
   {
    "ply": 35,
@@ -302,7 +302,7 @@
     "Kc2"
    ],
    "fen": "3k3r/pp2pp1p/4b1p1/1r6/3bP3/6B1/P1K2PPP/3R4 b - - 1 18",
-   "said": "i think that's just my opinion but svidler's chest of course i mean if you want to pick it up and you're 1700 don't let my words stop you don't say well daniel said this use your own judgment you've got to be in charge of your own chess development i'm not you know i don't know the secrets of the universe all right so what should we do we i don't think we can save this bishop i don't think we can save this bishop which is kind of funny if we go rook b4 here to develop to defend the bishop what will white do what will white do if we play rook before just as a quick tactical question not well a three guy's a three just rook a4 a3 you're rushing he just resigns a3 there's two options"
+   "said": "well daniel said this use your own judgment you've got to be in charge of your own chess development i'm not you know i don't know the secrets of the universe all right so what should we do we i don't think we can save this bishop i don't think we can save this bishop which is kind of funny if we go rook b4 here to develop to defend the bishop what will white do what will white do"
   },
   {
    "ply": 37,
@@ -312,7 +312,7 @@
     "a3"
    ],
    "fen": "3k3r/pp2pp1p/4b1p1/8/1r1bP3/P5B1/2K2PPP/3R4 b - - 0 19",
-   "said": "if we play rook before just as a quick tactical question not well a three guy's a three just rook a4 a3 you're rushing he just resigns a3 there's two options first of all is just rook a4 second of all we can stick the bishop on b3 with check the move is bishop e5 bishop b5 attacks the rook and attacks the bishop but what will we do well probably f6 is a good move walk the king over to f7 put the rook on c8 and win easily all right so the grunfeld little history as usual"
+   "said": "if we play rook before just as a quick tactical question not well a three guy's a three just rook a4 a3 you're rushing he just resigns a3 there's two options first of all is just rook a4 second of all we can stick the bishop on b3 with check the move is bishop e5 bishop b5 attacks the rook and attacks the bishop but what will we do well probably f6 is a good move walk the king over to f7 put the rook on c8 and win"
   },
   {
    "ply": 35,
@@ -326,7 +326,7 @@
    "t": 1617,
    "line": [],
    "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
-   "said": "so the grunfeld little history as usual grunfeld was a uh i think german i'm not sure what his nationality was maybe austrian aaron grunfeld a very long chest career you know very strong chess player and uh theoretician obviously developed the gruntful developed other openings as well um and this was probably around the year the first time it was played was 1855. the second time it was played was by alex it was by alekhine alekhine was the second player to play it and then grenfell played it uh three times in 1922. austrian he was austrian now the funny thing is grenfell plated to beat to beat alec grenfell played it to beat alekhine in vienna 1922 which is quite amazing to beat al qaeda with black granfield was the first person to really show the main ideas though when alekhine played it he just was sort of screwing around thank you bag of candles then alakine played it in 1923 and and beat somebody and grunfeld continued to play it um sort of throughout and alakine really took a liking to it so um it caught on as early as the 1930s lots of people started playing it bobbinic people understood that this was a very serious opening and white players also understood that"
+   "said": "grunfeld was a uh i think german i'm not sure what his nationality was maybe austrian aaron grunfeld a very long chest career you know very strong chess player and uh theoretician obviously developed the gruntful developed other openings as well um and this was probably around the year the first time it was played was 1855. the second time it was played was by alex it was by alekhine alekhine was the second player to play it and then grenfell played it uh three times in 1922. austrian he was austrian now the funny thing is grenfell plated to beat to beat alec grenfell played it to beat alekhine in vienna 1922 which is quite amazing to beat al qaeda with black granfield was the first person to really show the main ideas though when alekhine played it he just was sort of screwing around thank you bag of candles then alakine played it in 1923 and and beat somebody and grunfeld continued to play it um sort of throughout and alakine really took a liking to it so"
   },
   {
    "ply": 7,
@@ -335,7 +335,7 @@
     "cxd5"
    ],
    "fen": "rnbqkb1r/ppp1pp1p/5np1/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4",
-   "said": "um it caught on as early as the 1930s lots of people started playing it bobbinic people understood that this was a very serious opening and white players also understood that the best way to meet it"
+   "said": "um it caught on as early as the 1930s lots of people started playing it bobbinic people understood that this was a very serious opening and white players also understood that"
   },
   {
    "ply": 8,
@@ -344,7 +344,7 @@
     "Nxd5"
    ],
    "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
-   "said": "um it caught on as early as the 1930s lots of people started playing it bobbinic people understood that this was a very serious opening and white players also understood that the best way to meet it was to take and immediately control the"
+   "said": "the best way to meet it"
   },
   {
    "ply": 9,
@@ -353,7 +353,7 @@
     "e4"
    ],
    "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3PP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 5",
-   "said": "lots of people started playing it bobbinic people understood that this was a very serious opening and white players also understood that the best way to meet it was to take and immediately control the center with e4 so in contrast to the"
+   "said": "was to take and immediately control the center with e4 so in contrast to the"
   },
   {
    "ply": 11,
@@ -363,7 +363,7 @@
     "bxc3"
    ],
    "fen": "rnbqkb1r/ppp1pp1p/6p1/8/3PP3/2P5/P4PPP/R1BQKBNR b KQkq - 0 6",
-   "said": "bobbinic people understood that this was a very serious opening and white players also understood that the best way to meet it was to take and immediately control the center with e4 so in contrast to the king's indian what's the similarity similarity is you're giving white control of the center right unequivocally white stingy california i think of the three months white has control of the center and and it is a hyper modern opening in the sense that you develop your pieces you feel ghetto your bishop"
+   "said": "king's indian what's the similarity similarity is you're giving white control of the center right unequivocally white stingy"
   },
   {
    "ply": 12,
@@ -372,7 +372,7 @@
     "Bg7"
    ],
    "fen": "rnbqk2r/ppp1ppbp/6p1/8/3PP3/2P5/P4PPP/R1BQKBNR w KQkq - 1 7",
-   "said": "you're giving white control of the center right unequivocally white stingy california i think of the three months white has control of the center and and it is a hyper modern opening in the sense that you develop your pieces you feel ghetto your bishop with an eye toward eventually attacking the center from a distance and the main instrument of attack in the center is of course this move c5 c5 aims to break down the pawn on d4 and in addition to c5 black has knight"
+   "said": "california i think of the three months white has control of the center and and it is a hyper modern opening in the sense that you develop your pieces you feel ghetto your bishop with an eye toward eventually attacking the center from a distance and the main instrument of attack in the center is of course this move c5"
   },
   {
    "ply": 14,
@@ -382,14 +382,14 @@
     "c5"
    ],
    "fen": "rnbqk2r/pp2ppbp/6p1/2p5/3PP3/2P2N2/P4PPP/R1BQKB1R w KQkq - 0 8",
-   "said": "the center from a distance and the main instrument of attack in the center is of course this move c5 c5 aims to break down the pawn on d4 and in addition to c5 black has knight c6 and bishop g4 and all these ways to turn up the dial and attack the pawn on d4 and try to get it to move the for that reason white's main line is"
+   "said": "c5 aims to break down the pawn on d4 and in addition to c5 black has knight c6 and bishop g4 and all these ways to turn up the dial and attack the pawn"
   },
   {
    "ply": 12,
    "t": 1743,
    "line": [],
    "fen": "rnbqk2r/ppp1ppbp/6p1/8/3PP3/2P5/P4PPP/R1BQKBNR w KQkq - 1 7",
-   "said": "and in addition to c5 black has knight c6 and bishop g4 and all these ways to turn up the dial and attack the pawn on d4 and try to get it to move the for that reason white's main line is"
+   "said": "on d4 and try to get it to move the for that reason white's main line is"
   },
   {
    "ply": 13,
@@ -398,7 +398,7 @@
     "Bc4"
    ],
    "fen": "rnbqk2r/ppp1ppbp/6p1/8/2BPP3/2P5/P4PPP/R1BQK1NR b KQkq - 2 7",
-   "said": "c6 and bishop g4 and all these ways to turn up the dial and attack the pawn on d4 and try to get it to move the for that reason white's main line is to go bishop c4 c592 this is the old main line it still"
+   "said": "to go bishop c4"
   },
   {
    "ply": 15,
@@ -408,7 +408,7 @@
     "Ne2"
    ],
    "fen": "rnbqk2r/pp2ppbp/6p1/2p5/2BPP3/2P5/P3NPPP/R1BQK2R b KQkq - 1 8",
-   "said": "to turn up the dial and attack the pawn on d4 and try to get it to move the for that reason white's main line is to go bishop c4 c592 this is the old main line it still is very much reputable what's the point of this the point of this is that if black"
+   "said": "c592 this is the old main line it still is very much reputable what's the point of"
   },
   {
    "ply": 16,
@@ -417,7 +417,7 @@
     "Bg4"
    ],
    "fen": "rn1qk2r/pp2ppbp/6p1/2p5/2BPP1b1/2P5/P3NPPP/R1BQK2R w KQkq - 2 9",
-   "said": "the for that reason white's main line is to go bishop c4 c592 this is the old main line it still is very much reputable what's the point of this the point of this is that if black goes bishop g4 at some point white's going to have f3 making sure"
+   "said": "this the point of this is that if black goes bishop g4 at some point"
   },
   {
    "ply": 17,
@@ -426,28 +426,28 @@
     "f3"
    ],
    "fen": "rn1qk2r/pp2ppbp/6p1/2p5/2BPP1b1/2P2P2/P3N1PP/R1BQK2R b KQkq - 0 9",
-   "said": "to go bishop c4 c592 this is the old main line it still is very much reputable what's the point of this the point of this is that if black goes bishop g4 at some point white's going to have f3 making sure that the knight is intact and making sure that the pawn on d4 is well protected this bishop will come out to e3 now if i please e5 then this pole pawns chain is going to be overextended so black's going to take and go knight c6 and attack this and you'll have a hole on d5 the black can occupy so there's a lot of nuance here that i"
+   "said": "white's going to have f3 making sure that the knight is intact and making sure that the pawn on d4 is well protected this bishop will come out to e3"
   },
   {
    "ply": 13,
    "t": 1780.5,
    "line": [],
    "fen": "rnbqk2r/ppp1ppbp/6p1/8/2BPP3/2P5/P4PPP/R1BQK1NR b KQkq - 2 7",
-   "said": "now if i please e5 then this pole pawns chain is going to be overextended so black's going to take and go knight c6 and attack this and you'll have a hole on d5 the black can occupy so there's a lot of nuance here that i won't get into um what if they take your e-pawn not sure where okay i won't get into the nuance bishop f4 is"
+   "said": "now if i please e5 then this pole pawns chain is going to be overextended so black's going to take and go knight c6 and attack this and you'll have a hole on d5 the black can occupy so there's a lot of nuance here that i won't get into um what if they take your e-pawn"
   },
   {
    "ply": 8,
    "t": 1792.5,
    "line": [],
    "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
-   "said": "won't get into um what if they take your e-pawn not sure where okay i won't get into the nuance bishop f4 is"
+   "said": "not sure where okay i won't get into the nuance bishop f4 is"
   },
   {
    "ply": 7,
    "t": 1794,
    "line": [],
    "fen": "rnbqkb1r/ppp1pp1p/5np1/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4",
-   "said": "um what if they take your e-pawn not sure where okay i won't get into the nuance bishop f4 is i think it's called the it's called the brinkman attack and the best way to continue for white is just to play e3 not to take the pawn at all this is the proper theoretical continuation generally speaking black castles and oftentimes black goes c5 ground field is a very tactical opening you often sacrifice two pawns and go like this things get crazy so there is probably nine or 10 reputable counters to the grenfell which is mind-boggling but our opponent takes and we had a"
+   "said": "i think it's called the it's called the brinkman attack and the best way to continue for white is just to play e3 not to take the pawn at all this is the proper theoretical continuation generally speaking black castles and oftentimes black goes c5 ground field is a very tactical opening you often sacrifice two pawns and go like this things get crazy so there is"
   },
   {
    "ply": 10,
@@ -458,7 +458,7 @@
     "Nxd5"
    ],
    "fen": "rnbqk2r/ppp1ppbp/6p1/3n4/3P1B2/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
-   "said": "probably nine or 10 reputable counters to the grenfell which is mind-boggling but our opponent takes and we had a question about taking on c7 now if you don't know"
+   "said": "probably nine or 10 reputable counters to the grenfell which is mind-boggling but our opponent takes and we had a question about"
   },
   {
    "ply": 13,
@@ -469,7 +469,7 @@
     "Bxc7"
    ],
    "fen": "rnb1k2r/ppB1ppbp/6p1/3q4/3P4/8/PP2PPPP/R2QKBNR b KQkq - 0 7",
-   "said": "probably nine or 10 reputable counters to the grenfell which is mind-boggling but our opponent takes and we had a question about taking on c7 now if you don't know anything about the grenfell you might believe that the best approach is just"
+   "said": "taking on c7 now if you don't know anything about the grenfell you might"
   },
   {
    "ply": 14,
@@ -478,14 +478,14 @@
     "Bxd4"
    ],
    "fen": "rnb1k2r/ppB1pp1p/6p1/3q4/3b4/8/PP2PPPP/R2QKBNR w KQkq - 0 8",
-   "said": "mind-boggling but our opponent takes and we had a question about taking on c7 now if you don't know anything about the grenfell you might believe that the best approach is just to take the pawn back but a gruntful player won't do that gruntful player will say"
+   "said": "believe that the best approach is just to take the pawn back but a gruntful player won't do that"
   },
   {
    "ply": 13,
    "t": 1841.5,
    "line": [],
    "fen": "rnb1k2r/ppB1ppbp/6p1/3q4/3P4/8/PP2PPPP/R2QKBNR b KQkq - 0 7",
-   "said": "taking on c7 now if you don't know anything about the grenfell you might believe that the best approach is just to take the pawn back but a gruntful player won't do that gruntful player will say i would much rather develop my pieces quickly and go for a quick attack on the king then bend over backwards to win the spawn back so black and just castle"
+   "said": "gruntful player will say i would much rather develop my pieces quickly and go for a quick attack on the king"
   },
   {
    "ply": 14,
@@ -494,7 +494,7 @@
     "O-O"
    ],
    "fen": "rnb2rk1/ppB1ppbp/6p1/3q4/3P4/8/PP2PPPP/R2QKBNR w KQ - 1 8",
-   "said": "i would much rather develop my pieces quickly and go for a quick attack on the king then bend over backwards to win the spawn back so black and just castle or go knight c6 and this bishop is also very awkward you're gonna have to waste the tempo bringing the bishop back for example e3 e3"
+   "said": "then bend over backwards to win the spawn back so black and just castle or go knight c6 and this bishop is also very awkward you're gonna have to waste"
   },
   {
    "ply": 15,
@@ -503,7 +503,7 @@
     "e3"
    ],
    "fen": "rnb2rk1/ppB1ppbp/6p1/3q4/3P4/4P3/PP3PPP/R2QKBNR b KQ - 0 8",
-   "said": "then bend over backwards to win the spawn back so black and just castle or go knight c6 and this bishop is also very awkward you're gonna have to waste the tempo bringing the bishop back for example e3 e3 let's say knight c6 and"
+   "said": "the tempo bringing the bishop back for example e3 e3"
   },
   {
    "ply": 16,
@@ -512,7 +512,7 @@
     "Nc6"
    ],
    "fen": "r1b2rk1/ppB1ppbp/2n3p1/3q4/3P4/4P3/PP3PPP/R2QKBNR w KQ - 1 9",
-   "said": "back so black and just castle or go knight c6 and this bishop is also very awkward you're gonna have to waste the tempo bringing the bishop back for example e3 e3 let's say knight c6 and"
+   "said": "let's say knight c6 and"
   },
   {
    "ply": 17,
@@ -521,7 +521,7 @@
     "Nf3"
    ],
    "fen": "r1b2rk1/ppB1ppbp/2n3p1/3q4/3P4/4PN2/PP3PPP/R2QKB1R b KQ - 2 9",
-   "said": "or go knight c6 and this bishop is also very awkward you're gonna have to waste the tempo bringing the bishop back for example e3 e3 let's say knight c6 and you know in a situation like this black could already consider e5 blasting open"
+   "said": "you know in a situation like this black"
   },
   {
    "ply": 18,
@@ -530,21 +530,21 @@
     "e5"
    ],
    "fen": "r1b2rk1/ppB2pbp/2n3p1/3qp3/3P4/4PN2/PP3PPP/R2QKB1R w KQ - 0 10",
-   "said": "very awkward you're gonna have to waste the tempo bringing the bishop back for example e3 e3 let's say knight c6 and you know in a situation like this black could already consider e5 blasting open the center you guys kind of get the point black gets full compensation for the pawn"
+   "said": "could already consider e5 blasting open the center"
   },
   {
    "ply": 13,
    "t": 1872,
    "line": [],
    "fen": "rnb1k2r/ppB1ppbp/6p1/3q4/3P4/8/PP2PPPP/R2QKBNR b KQkq - 0 7",
-   "said": "let's say knight c6 and you know in a situation like this black could already consider e5 blasting open the center you guys kind of get the point black gets full compensation for the pawn there are lines in the grunfeld where black sacrifices upon or sometimes even two pawns for this kind of quick development now 2000 is a number i'm really pulling out of my behind and you know you can try it out you can see how it how it treats you and whether you're succeeding with it you can get svidler's course when it's on sale and and try your luck it's not going to hurt okay well mvl plays it because he's a machine mvl and svidler are probably the top two super gm grunfeld specialists all right so our opponent plays bishop g3 we go c5"
+   "said": "you guys kind of get the point black gets full compensation for the pawn there are lines in the grunfeld where black sacrifices upon or sometimes even two pawns for this kind of quick development now 2000 is a number i'm really pulling out of my behind and you know you can try it out you can see how it how it treats you and whether you're succeeding with it you can get svidler's course when it's on sale and and try your luck it's not going to hurt okay well mvl plays it because he's a machine"
   },
   {
    "ply": 12,
    "t": 1916.5,
    "line": [],
    "fen": "rnb1k2r/ppp1ppbp/6p1/3q4/3P1B2/8/PP2PPPP/R2QKBNR w KQkq - 0 7",
-   "said": "mvl and svidler are probably the top two super gm grunfeld specialists all right so our opponent plays bishop g3 we go c5 he should have taken the knight first and then taken the pawn"
+   "said": "mvl and svidler are probably the top two super gm grunfeld specialists all right so our opponent plays bishop g3 we go c5 he should have taken the knight first"
   },
   {
    "ply": 15,
@@ -555,7 +555,7 @@
     "dxc5"
    ],
    "fen": "rnb1k2r/pp2ppbp/6p1/2Pq4/8/6B1/PP2PPPP/R2QKBNR b KQkq - 0 8",
-   "said": "super gm grunfeld specialists all right so our opponent plays bishop g3 we go c5 he should have taken the knight first and then taken the pawn and in this position black has black has"
+   "said": "and then taken the pawn"
   },
   {
    "ply": 16,
@@ -564,7 +564,7 @@
     "Qxc5"
    ],
    "fen": "rnb1k2r/pp2ppbp/6p1/2q5/8/6B1/PP2PPPP/R2QKBNR w KQkq - 0 9",
-   "said": "specialists all right so our opponent plays bishop g3 we go c5 he should have taken the knight first and then taken the pawn and in this position black has black has solved all the opening problems rook c1"
+   "said": "and in this position black has black has"
   },
   {
    "ply": 17,
@@ -573,7 +573,7 @@
     "Rc1"
    ],
    "fen": "rnb1k2r/pp2ppbp/6p1/2q5/8/6B1/PP2PPPP/2RQKBNR b Kkq - 1 9",
-   "said": "all right so our opponent plays bishop g3 we go c5 he should have taken the knight first and then taken the pawn and in this position black has black has solved all the opening problems rook c1 it's important to recognize that you have this check but after queen d2"
+   "said": "solved all the opening problems rook c1 it's important to recognize that you"
   },
   {
    "ply": 18,
@@ -582,7 +582,7 @@
     "Qa5+"
    ],
    "fen": "rnb1k2r/pp2ppbp/6p1/q7/8/6B1/PP2PPPP/2RQKBNR w Kkq - 2 10",
-   "said": "he should have taken the knight first and then taken the pawn and in this position black has black has solved all the opening problems rook c1 it's important to recognize that you have this check but after queen d2"
+   "said": "have this check but after queen d2"
   },
   {
    "ply": 19,
@@ -591,7 +591,7 @@
     "Qd2"
    ],
    "fen": "rnb1k2r/pp2ppbp/6p1/q7/8/6B1/PP1QPPPP/2R1KBNR b Kkq - 3 10",
-   "said": "he should have taken the knight first and then taken the pawn and in this position black has black has solved all the opening problems rook c1 it's important to recognize that you have this check but after queen d2 i mean black is slightly better here"
+   "said": "i mean black is slightly better here"
   },
   {
    "ply": 22,
@@ -602,14 +602,14 @@
     "Nc6"
    ],
    "fen": "r1b1k2r/pp2ppbp/2n3p1/8/8/6B1/PP1KPPPP/2R2BNR w kq - 1 12",
-   "said": "and in this position black has black has solved all the opening problems rook c1 it's important to recognize that you have this check but after queen d2 i mean black is slightly better here i've got a beautiful bishop the king is weak but white can play so i i feel like this is what he should have done to limit the damage but after yeah after dc knight c3 the game is over"
+   "said": "i've got a beautiful bishop the king is weak but white can play so i i feel like this is what he should"
   },
   {
    "ply": 14,
    "t": 1942,
    "line": [],
    "fen": "rnb1k2r/pp2ppbp/6p1/2pq4/3P4/6B1/PP2PPPP/R2QKBNR w KQkq - 0 8",
-   "said": "i mean black is slightly better here i've got a beautiful bishop the king is weak but white can play so i i feel like this is what he should have done to limit the damage but after yeah after dc knight c3 the game is over any questions about this game well magnus has a much wider repertoire than mvl and vl plays grenfell night almost exclusively yeah magnus plays everything and magnus's repertoire is closer to what most super gms do now mvl is very uncommon at the top level is ambient at a disadvantage well that's the big question right the answer was to that was no but things have turned starting with tata steel recently where people started beating him in the night or and the power of preparation has gotten to the point where you know people like fabi's team works for months to to break down mbl's repertoire is incredible it's survived for many many years he's won tons of games in the grunfeld and the night or but you know he might have to widen his repertoire a little bit to make himself a little more unpredictable so it's it's not a one or a zero"
+   "said": "have done to limit the damage but after yeah after dc knight c3 the game is over any questions about this game well magnus has a much wider repertoire than mvl and vl plays grenfell night almost exclusively yeah magnus plays everything and magnus's repertoire is closer to what most super gms do now mvl is very uncommon at the top level is ambient at a disadvantage well that's the big question right the answer was to that was no but things have turned starting with tata steel recently where people started beating him in the night or and the power of preparation has gotten to the point where you know people like fabi's team works for months to to break down mbl's repertoire is incredible it's survived for many many years he's won tons of games in the grunfeld and the night or but you know he might have to widen his repertoire a little bit to make himself a little more unpredictable so it's it's not a one or a zero"
   }
  ],
  "forks": [

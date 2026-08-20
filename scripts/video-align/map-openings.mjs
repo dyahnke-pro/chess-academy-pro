@@ -178,11 +178,29 @@ for (const file of readdirSync(TRACK_DIR).filter((f) => f.endsWith('.json') && f
     // it — the verdict on the "Scotch Game" upload vanished the moment this
     // script ran again, which would have put the build straight back into the
     // unresolved pile it had already been rescued from.
+    // ANY prior verdict survives — not just one whose `claims` still match.
+    // Requiring the match guarded the machine-vs-machine case and missed the
+    // one that matters: a HAND verdict is written as {verdict, checkedBy} with
+    // no `claims` field at all, so `undefined === "Benko Gambit"` was false and
+    // the human judgement was replaced — by the OPPOSITE conclusion. The Benko
+    // was hand-checked as `mistracked` ("No notes written") and a re-run turned
+    // it into `confirmed: true`, which is how a bad track gets notes written
+    // over it. When the machine now disagrees with a standing verdict it says
+    // so in `machineClaims` instead of overwriting; nothing is lost and the
+    // disagreement is visible to whoever looks next.
     if (titleCheck) {
       const prior = track.titleCheck ?? {};
-      track.titleCheck = prior.verdict && prior.claims === titleCheck.claims
-        ? { ...titleCheck, verdict: prior.verdict, checkedBy: prior.checkedBy }
-        : titleCheck;
+      if (prior.verdict) {
+        const disagrees = prior.claims && prior.claims !== titleCheck.claims;
+        track.titleCheck = {
+          ...titleCheck,
+          verdict: prior.verdict,
+          checkedBy: prior.checkedBy,
+          ...(disagrees ? { priorClaims: prior.claims } : {}),
+        };
+      } else {
+        track.titleCheck = titleCheck;
+      }
     }
     writeFileSync(path, JSON.stringify(track, null, 1));
   }

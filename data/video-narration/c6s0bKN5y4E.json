@@ -19,7 +19,7 @@
     "Bb2"
    ],
    "fen": "rnbqkbnr/ppp1pppp/3p4/8/8/1P6/PBPPPPPP/RN1QKBNR b KQkq - 1 2",
-   "said": "you don't play b3 to occupy most of the center you do it to attack the center with pieces if that makes sense all right so b3 d6 is fine i mean there's nothing wrong with that move provided that he accompanies it with e5 that's a"
+   "said": "with that move provided that he"
   },
   {
    "ply": 4,
@@ -28,14 +28,14 @@
     "e5"
    ],
    "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/8/1P6/PBPPPPPP/RN1QKBNR w KQkq - 0 3",
-   "said": "center you do it to attack the center with pieces if that makes sense all right so b3 d6 is fine i mean there's nothing wrong with that move provided that he accompanies it with e5 that's a legitimate way to play um but h5 is obviously completely unhinged and funny thing is the move a5 in this position is a legitimate line people have played it grandmasters i've faced it myself in a rapid and over the board rapid game and the idea is to undermine the you know the pawn chain with a4 but i think that white is probably slightly better here and the best move against a5 is actually c4 c4 is not an easy move to play if you don't if you haven't analyzed this the point against a4 is not to take it that ruins your pawn structure but to go b4 to go b4 and then a3 and then this pawn is going to end up being a big weakness so just as a little theoretical side"
+   "said": "accompanies it with e5 that's a legitimate way to play um but h5 is obviously completely unhinged and funny thing is the move a5 in this position is a legitimate line people have played it grandmasters i've faced it myself in a rapid and over the board rapid game and the idea is to undermine the you know the pawn chain with a4 but i think that white is probably slightly better here and the best move against a5 is actually c4 c4 is not an easy move to play if you don't if you haven't analyzed this the point"
   },
   {
    "ply": 3,
    "t": 1113,
    "line": [],
    "fen": "rnbqkbnr/ppp1pppp/3p4/8/8/1P6/PBPPPPPP/RN1QKBNR b KQkq - 1 2",
-   "said": "against a4 is not to take it that ruins your pawn structure but to go b4 to go b4 and then a3 and then this pawn is going to end up being a big weakness so just as a little theoretical side note so"
+   "said": "against a4 is not to take it that ruins your pawn structure but to go b4 to go b4 and then a3 and then this pawn is going to end up being a big weakness so just as a little theoretical side"
   },
   {
    "ply": 4,
@@ -44,7 +44,7 @@
     "h5"
    ],
    "fen": "rnbqkbnr/ppp1ppp1/3p4/7p/8/1P6/PBPPPPPP/RN1QKBNR w KQkq - 0 3",
-   "said": "is not to take it that ruins your pawn structure but to go b4 to go b4 and then a3 and then this pawn is going to end up being a big weakness so just as a little theoretical side note so bishop b2 h5 e3 a5 we decided to play it"
+   "said": "note so bishop b2 h5 e3 a5 we decided to play it"
   },
   {
    "ply": 7,
@@ -55,7 +55,7 @@
     "e3"
    ],
    "fen": "rnbqkbnr/1pp1ppp1/3p4/p6p/8/PP2P3/1BPP1PPP/RN1QKBNR b KQkq - 0 4",
-   "said": "to go b4 and then a3 and then this pawn is going to end up being a big weakness so just as a little theoretical side note so bishop b2 h5 e3 a5 we decided to play it more simply with a3 but yes in in over the board game i play c4 here just so you guys know okay so a3 and again the idea against a4 is to go"
+   "said": "more simply with a3 but yes in in over the board game i play c4 here"
   },
   {
    "ply": 8,
@@ -64,7 +64,7 @@
     "a4"
    ],
    "fen": "rnbqkbnr/1pp1ppp1/3p4/7p/p7/PP2P3/1BPP1PPP/RN1QKBNR w KQkq - 0 5",
-   "said": "more simply with a3 but yes in in over the board game i play c4 here just so you guys know okay so a3 and again the idea against a4 is to go before now who can explain to me"
+   "said": "just so you guys know okay so a3 and again the idea against a4 is to go"
   },
   {
    "ply": 9,
@@ -73,14 +73,14 @@
     "b4"
    ],
    "fen": "rnbqkbnr/1pp1ppp1/3p4/7p/pP6/P3P3/1BPP1PPP/RN1QKBNR b KQkq - 0 5",
-   "said": "more simply with a3 but yes in in over the board game i play c4 here just so you guys know okay so a3 and again the idea against a4 is to go before now who can explain to me"
+   "said": "before now who can explain to me"
   },
   {
    "ply": 8,
    "t": 1130,
    "line": [],
    "fen": "rnbqkbnr/1pp1ppp1/3p4/7p/p7/PP2P3/1BPP1PPP/RN1QKBNR w KQkq - 0 5",
-   "said": "but yes in in over the board game i play c4 here just so you guys know okay so a3 and again the idea against a4 is to go before now who can explain to me why the move bishop b5 check doesn't win"
+   "said": "why the move bishop b5 check doesn't win"
   },
   {
    "ply": 9,
@@ -89,7 +89,7 @@
     "Bb5+"
    ],
    "fen": "rnbqkbnr/1pp1ppp1/3p4/1B5p/p7/PP2P3/1BPP1PPP/RN1QK1NR b KQkq - 1 5",
-   "said": "c4 here just so you guys know okay so a3 and again the idea against a4 is to go before now who can explain to me why the move bishop b5 check doesn't win a pawn ot bishop d7 although bishop d7 is not bishop d7 although bishop d7 is possible but the move is c6 just"
+   "said": "a pawn"
   },
   {
    "ply": 10,
@@ -98,7 +98,7 @@
     "c6"
    ],
    "fen": "rnbqkbnr/1p2ppp1/2pp4/1B5p/p7/PP2P3/1BPP1PPP/RN1QK1NR w KQkq - 0 6",
-   "said": "ot bishop d7 although bishop d7 is not bishop d7 although bishop d7 is possible but the move is c6 just remember this little trap remember this little"
+   "said": "ot bishop d7 although bishop d7 is not bishop d7 although bishop d7 is possible but the move is c6 just remember"
   },
   {
    "ply": 11,
@@ -107,7 +107,7 @@
     "Bxa4"
    ],
    "fen": "rnbqkbnr/1p2ppp1/2pp4/7p/B7/PP2P3/1BPP1PPP/RN1QK1NR b KQkq - 0 6",
-   "said": "ot bishop d7 although bishop d7 is not bishop d7 although bishop d7 is possible but the move is c6 just remember this little trap remember this little"
+   "said": "this little trap remember this little"
   },
   {
    "ply": 12,
@@ -116,14 +116,14 @@
     "b5"
    ],
    "fen": "rnbqkbnr/4ppp1/2pp4/1p5p/B7/PP2P3/1BPP1PPP/RN1QK1NR w KQkq - 0 7",
-   "said": "ot bishop d7 although bishop d7 is not bishop d7 although bishop d7 is possible but the move is c6 just remember this little trap remember this little trap if you encounter your bishop this bishop doesn't have a passageway back to b3 so that's a good thing to remember bishop b5 c6 is fine"
+   "said": "trap if you encounter your bishop this bishop doesn't have a passageway"
   },
   {
    "ply": 8,
    "t": 1161.5,
    "line": [],
    "fen": "rnbqkbnr/1pp1ppp1/3p4/7p/p7/PP2P3/1BPP1PPP/RN1QKBNR w KQkq - 0 5",
-   "said": "remember this little trap remember this little trap if you encounter your bishop this bishop doesn't have a passageway back to b3 so that's a good thing to remember bishop b5 c6 is fine now you might look at this and say wait a second what if i take the pawn first"
+   "said": "back to b3 so that's a good thing to remember bishop b5 c6 is fine now you might look at this and say wait"
   },
   {
    "ply": 9,
@@ -132,7 +132,7 @@
     "bxa4"
    ],
    "fen": "rnbqkbnr/1pp1ppp1/3p4/7p/P7/P3P3/1BPP1PPP/RN1QKBNR b KQkq - 0 5",
-   "said": "this bishop doesn't have a passageway back to b3 so that's a good thing to remember bishop b5 c6 is fine now you might look at this and say wait a second what if i take the pawn first and the point here is black will not do"
+   "said": "a second what if i take the pawn first and the point here is black will not do"
   },
   {
    "ply": 10,
@@ -141,7 +141,7 @@
     "Rxa4"
    ],
    "fen": "1nbqkbnr/1pp1ppp1/3p4/7p/r7/P3P3/1BPP1PPP/RN1QKBNR w KQk - 0 6",
-   "said": "back to b3 so that's a good thing to remember bishop b5 c6 is fine now you might look at this and say wait a second what if i take the pawn first and the point here is black will not do this and blunder his exchange"
+   "said": "this and blunder his exchange"
   },
   {
    "ply": 11,
@@ -150,14 +150,14 @@
     "Bb5+"
    ],
    "fen": "1nbqkbnr/1pp1ppp1/3p4/1B5p/r7/P3P3/1BPP1PPP/RN1QK1NR b KQk - 1 6",
-   "said": "so that's a good thing to remember bishop b5 c6 is fine now you might look at this and say wait a second what if i take the pawn first and the point here is black will not do this and blunder his exchange but the fact is these pawns are horrible"
+   "said": ""
   },
   {
    "ply": 9,
    "t": 1172.5,
    "line": [],
    "fen": "rnbqkbnr/1pp1ppp1/3p4/7p/P7/P3P3/1BPP1PPP/RN1QKBNR b KQkq - 0 5",
-   "said": "bishop b5 c6 is fine now you might look at this and say wait a second what if i take the pawn first and the point here is black will not do this and blunder his exchange but the fact is these pawns are horrible black doesn't even have to"
+   "said": "but the fact is these pawns are horrible"
   },
   {
    "ply": 10,
@@ -166,7 +166,7 @@
     "Nf6"
    ],
    "fen": "rnbqkb1r/1pp1ppp1/3p1n2/7p/P7/P3P3/1BPP1PPP/RN1QKBNR w KQkq - 1 6",
-   "said": "now you might look at this and say wait a second what if i take the pawn first and the point here is black will not do this and blunder his exchange but the fact is these pawns are horrible black doesn't even have to win the pawn back it's just that you you're saddled with these weaknesses the rest of the game and it's well worth a pawn that black's probably going to win back anyway so anyways knight f6 knight f3 c6 now we occupy the center with d4 knight b to d7 bishop comes out actively to d3 and the move b5 is what with the straw that broke the camel's back if i was black here i would go g6 or e6 and just rush to develop my pieces now we just say let's step on id4 he correctly played e6 here because if he had just developed his bishop who can tell me what white should do here black is almost losing already and this has to do with him playing h5 which weakens the g6 square that's something which if you're tactically sharp you would have noticed immediately we go e5 and after 95 what's the key move and this is going to be absolutely painful just crunch crunching through his position e6"
+   "said": "black doesn't even have to win the pawn back it's just that you you're saddled with these weaknesses the rest of the game and it's well worth a pawn that black's probably going to win back anyway so anyways knight f6 knight f3 c6 now we occupy the center with d4 knight b to d7 bishop comes out actively to d3 and the move b5 is what with the straw that broke the camel's back if i was black here i would go g6 or e6 and just rush to develop my pieces now we just say let's step on id4 he correctly played e6 here because if he had just developed his bishop who can tell me what white should do here black is almost losing already and this has to do with him playing h5 which weakens the g6 square that's something which if you're tactically sharp you would have noticed immediately we go e5 and after 95 what's the key move and this is going to be absolutely painful just crunch crunching through his position e6"
   }
  ],
  "forks": [

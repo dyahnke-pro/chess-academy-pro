@@ -10,7 +10,7 @@
     "c5"
    ],
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "said": "okay we're playing at 1163 so a slightly weaker opponent but there's nothing wrong with that and that doesn't mean we can't play an instructive game so we start the game with a sicilian as we've done thus far in the speed run and at this level we're probably not"
+   "said": "okay we're playing at 1163 so a slightly weaker opponent but there's nothing wrong with that and that doesn't mean we can't play an instructive game so we start the game with a sicilian as we've done thus far in the speed run"
   },
   {
    "ply": 3,
@@ -19,7 +19,7 @@
     "Nf3"
    ],
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
-   "said": "there's nothing wrong with that and that doesn't mean we can't play an instructive game so we start the game with a sicilian as we've done thus far in the speed run and at this level we're probably not going to face an open Sicilian we're very likely to face kind of the Italian against the Sicilian with Bishop C4 or Bishop B5 or one of those offbeat Sicilians but we continue down the main path with Knight"
+   "said": "and at this level we're probably not going to face an open Sicilian we're very likely to face kind of the Italian against the"
   },
   {
    "ply": 4,
@@ -28,7 +28,7 @@
     "Nc6"
    ],
    "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
-   "said": "an open Sicilian we're very likely to face kind of the Italian against the Sicilian with Bishop C4 or Bishop B5 or one of those offbeat Sicilians but we continue down the main path with Knight to C6 initiating The Accelerated dragon in the event of D4 we take it and play"
+   "said": "Sicilian with Bishop C4 or Bishop B5 or one of those offbeat Sicilians but we continue down the main path with Knight to C6 initiating The Accelerated dragon"
   },
   {
    "ply": 5,
@@ -37,7 +37,7 @@
     "Bc4"
    ],
    "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
-   "said": "Sicilian with Bishop C4 or Bishop B5 or one of those offbeat Sicilians but we continue down the main path with Knight to C6 initiating The Accelerated dragon in the event of D4 we take it and play G6 and as predicted white plays the move Bishop C4 now the reason this move is so popular at a sort of post beginner level is largely because players don't study the Sicilian and they kind of default to the moves that they make against E5 so if you play the Italian against D5 you're likely to play the same moves against the Sicilian and the reason that Bishop C4 is ineffective against this particular setup is very simple and it can be encapsulated in one word and that word is well two words E6 right the old the reason you don't put the bishop on C4 here is because E6 blunts the bishop and then later on D5 could come with Tempo but D5 isn't altogether necessary what's important is to realize that E6 completely blunts the bishop and makes it look kind of dumb so we start by playing E6 now can you"
+   "said": "in the event of D4 we take it and play G6 and as predicted white plays the move Bishop C4 now the reason this move is so popular at a sort of post beginner level is largely because players don't study the Sicilian and they kind of default to the moves that they make against E5 so if you play the Italian against D5 you're likely to play the same moves against the Sicilian and the reason that Bishop C4 is ineffective against this particular setup is very simple and it can be encapsulated in one word and that word is well two words E6 right the old the reason you don't put the bishop on C4 here is because E6 blunts the bishop and then later on D5 could come with Tempo but D5 isn't"
   },
   {
    "ply": 6,
@@ -46,14 +46,14 @@
     "e6"
    ],
    "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
-   "said": "altogether necessary what's important is to realize that E6 completely blunts the bishop and makes it look kind of dumb so we start by playing E6 now can you play G6 here can you play this like you"
+   "said": "altogether necessary what's important is to realize that E6 completely blunts the bishop and makes it look kind of dumb so we start by playing E6 now can you"
   },
   {
    "ply": 5,
    "t": 117,
    "line": [],
    "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
-   "said": "altogether necessary what's important is to realize that E6 completely blunts the bishop and makes it look kind of dumb so we start by playing E6 now can you play G6 here can you play this like you would an accelerator Dragon absolutely nothing wrong with the move G6 but we're gonna play this very thematically and"
+   "said": "play G6 here can you play this like you would an accelerator Dragon absolutely"
   },
   {
    "ply": 6,
@@ -62,7 +62,7 @@
     "e6"
    ],
    "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
-   "said": "so we start by playing E6 now can you play G6 here can you play this like you would an accelerator Dragon absolutely nothing wrong with the move G6 but we're gonna play this very thematically and again I'm trying to be as principled as possible I'm trying to really punish bad"
+   "said": "nothing wrong with the move G6 but we're gonna play this very thematically and again I'm trying to be as principled as"
   },
   {
    "ply": 7,
@@ -71,7 +71,7 @@
     "c3"
    ],
    "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 0 4",
-   "said": "would an accelerator Dragon absolutely nothing wrong with the move G6 but we're gonna play this very thematically and again I'm trying to be as principled as possible I'm trying to really punish bad opening play as much as possible white plays the move C3 okay so this is kind of a souped-up elephant I'm assuming that our opponent is preparing D4 and here we have a million ways that we can handle this position if we want to try to squeeze the most out of our uh if we want to really punish white fully for playing Bishop C4 it makes sense for us to play the move D5 here and occupy some of the center especially because that move occurs with Tempo an interesting alternative would be to start with Knight F6 but the drawback of playing Knight F6 is that E5 is a tad bit annoying right E5 forces the Knight off of F6 in the knife to jump for example to G4 but then white attaches uh the pawns together with D4 and we get into this kind of weird concrete struggle that there is absolutely no reason to engage in if we're playing Black so the position is not better for black we're not better here uh but we equalize very very easily after the straightforward move D5 which we're gonna play"
+   "said": "possible I'm trying to really punish bad opening play as much as possible white plays the move C3 okay so this is kind of a souped-up elephant I'm assuming that our opponent is preparing D4 and here we have a million ways that we can handle this position if we want to try to squeeze the most out of our uh if we want to really punish white fully for playing Bishop C4 it makes sense for us to play the move D5 here and occupy some of the center especially because that move occurs with Tempo an interesting alternative would be to start with Knight F6 but the drawback of playing Knight F6 is that E5 is a tad bit annoying right E5 forces the Knight off of F6 in the knife to jump for example to G4 but then white attaches uh the pawns together with D4 and we get into this kind of weird concrete struggle that"
   },
   {
    "ply": 8,
@@ -80,7 +80,7 @@
     "d5"
    ],
    "fen": "r1bqkbnr/pp3ppp/2n1p3/2pp4/2B1P3/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 0 5",
-   "said": "there is absolutely no reason to engage in if we're playing Black so the position is not better for black we're not better here uh but we equalize very very easily after the straightforward move D5 which we're gonna play and we can pre-move e takes D5 but I'm trying to avoid pre-moves in the speed run yeah so D5 is very straightforward we are getting control of the center and doing it with tempo so our opponent's sinking into a bit of a thing here and of course white is not strictly forced to play 865 but there are no"
+   "said": "there is absolutely no reason to engage in if we're playing Black so the position is not better for black we're not better here uh but we equalize very very easily after the straightforward move D5 which we're gonna play and we can pre-move e takes D5 but I'm trying to avoid pre-moves in the speed run yeah so D5 is very straightforward we"
   },
   {
    "ply": 9,
@@ -98,7 +98,7 @@
     "exd5"
    ],
    "fen": "r1bqkbnr/pp3ppp/2n5/2pp4/2B5/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 0 6",
-   "said": "doing it with tempo so our opponent's sinking into a bit of a thing here and of course white is not strictly forced to play 865 but there are no viable Alternatives there we go we have an exchange of Pawns in the center and here the order of operations is going to be pretty important in what order do we develop our minor pieces and where do we put them I think a lot of players actually struggle uh with these types of positions specifically because you've got three minor pieces to develop and it's easy to get overwhelmed uh as to like which pieces to develop first and where they should go because they can go to a lot of different places now we shouldn't make any hard and fast decisions until we understand where the bishop is going because the placement of"
+   "said": "viable Alternatives there we go we have an exchange of Pawns in the center and here the order of operations is going to be pretty important in what order do we develop our minor pieces and where do we put them I think a lot of players actually struggle uh with these types of positions specifically because you've got three minor pieces to develop and it's easy to get overwhelmed uh as to like which pieces to develop first and"
   },
   {
    "ply": 11,
@@ -107,7 +107,7 @@
     "Bb3"
    ],
    "fen": "r1bqkbnr/pp3ppp/2n5/2pp4/8/1BP2N2/PP1P1PPP/RNBQK2R b KQkq - 1 6",
-   "said": "where they should go because they can go to a lot of different places now we shouldn't make any hard and fast decisions until we understand where the bishop is going because the placement of the light skirt Bishop is going to influence our development and there we have it Bishop B3 is a case in point against other Bishop moves we would have been very likely to deploy the dark squared Bishop to D6 and then move in the Knight to E7 here we can't do it in that order because Bishop D6 simply drops the pawn on D5 right so you might see well then we should play the move Bishop to E7 but Bishop B7 is kind of a weird way to start I mean you're taught to develop Knights before Bishops I don't think there's anything inherently wrong with Bishop E7 I just think it's a lot more natural to start by developing the G8 Knight now where should we move it well that's a pretty obvious question Knight ge7 makes the least amount of sense of any development move because it completely blocks in the dark squared Bishop right so Knight F6 here seems very natural and you just you don't need to ReDiscover the wheel in these types of positions just bring"
+   "said": "where they should go because they can go to a lot of different places now we shouldn't make any hard and fast decisions until we understand where the bishop is going because the placement of the light skirt Bishop is going to influence our development and there we have it Bishop B3 is a case in point against other Bishop moves we would have been very likely to deploy the dark squared Bishop to D6 and then move in the Knight to E7 here we can't do it in that order because Bishop D6 simply drops the pawn on D5 right so you might see well then we should play the move Bishop to E7 but Bishop B7 is kind of a weird way to start I mean you're taught to develop Knights before Bishops I don't think there's anything inherently wrong with Bishop E7 I just think it's a lot more natural to start by developing the G8 Knight now where should we move it well that's a pretty obvious question Knight ge7 makes the least amount of sense of any development move because it completely blocks in the"
   },
   {
    "ply": 12,
@@ -116,7 +116,7 @@
     "Nf6"
    ],
    "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/8/1BP2N2/PP1P1PPP/RNBQK2R w KQkq - 2 7",
-   "said": "dark squared Bishop right so Knight F6 here seems very natural and you just you don't need to ReDiscover the wheel in these types of positions just bring your pieces out and put them on normal squares Knight F6 Bishop B7 castles the other Bishop can go out to G4 I mean development is an art in some"
+   "said": "dark squared Bishop right so Knight F6 here seems very natural and you just you don't need to ReDiscover the wheel in these types of positions just bring your pieces out and put them on normal squares Knight F6 Bishop B7 castles the"
   },
   {
    "ply": 13,
@@ -125,7 +125,7 @@
     "c4"
    ],
    "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/2P5/1B3N2/PP1P1PPP/RNBQK2R b KQkq - 0 7",
-   "said": "in these types of positions just bring your pieces out and put them on normal squares Knight F6 Bishop B7 castles the other Bishop can go out to G4 I mean development is an art in some ways but in other ways it's all about just like using your common sense okay C4 and this is of course the first step in the wrong direction for our opponent it's a weird move which I think conceptually our opponent is trying to contest our control of the center but in reality um he's helping he's helping us and it's it's an incredibly weakening move C4 we can react to this move in a variety of ways I think most of you are very tempted by the move d4 why is the move d4 tempting well in general it's always tempting to move upon forward and you might notice that D4 takes away the C3 Square from White's Knight so that's a good thing and D4 is a good move but there's also a serious case to be made here for taking on C4 and you might say I don't like this move because it plays into White's hands and it allows white to recapture with the bishop and open up this diagonal well the diagonal isn't that important because after we deploy our Dark Sword bishop and Castle is white really going to develop that much pressure on F7 like white doesn't have any other pieces developed and the good thing about DC is that it essentially leaves white with a very weak backward Pawn on D2 and with the D file open it's going to be easier in the long run I'm talking like really long run 10 to 15 moves from now to put more pressure on the D2 Pawn it's going to be easier for us to do that so D4 is a good move conceptually but it keeps the center very closed and I'm not necessarily the biggest fan of that especially because we're trying to play in the spirit of the opening and In the Sicilian we like open Center positions so we're actually going to make a decision I think a lot of you might find"
+   "said": "other Bishop can go out to G4 I mean development is an art in some ways but in other ways it's all about just like using your common sense okay C4 and this is of course the first step in the wrong direction for our opponent it's a weird move which I think conceptually our opponent is trying to contest our control of the center but in reality um he's helping he's helping us and it's it's an incredibly weakening move C4 we can react to this move in a variety of ways I think most of you are very tempted by the move d4 why is the move d4 tempting well in general it's always tempting to move upon forward and you might notice that D4 takes away the C3 Square from White's Knight so that's a good thing and D4 is a good move but there's also a serious case to be made here for taking on C4 and you might say I don't like this move because it plays into White's hands and it allows white to recapture with the bishop and open up this diagonal well the diagonal isn't that important because after we deploy our Dark Sword bishop and Castle is white really going to develop that much pressure on F7 like white doesn't have any other pieces developed and the good thing about DC is that it essentially leaves white with a very weak backward Pawn on D2 and with the D file open it's going to be easier in the long run I'm talking like really long run 10 to 15 moves from now to put more pressure on the D2 Pawn it's going to be easier for us to do that so D4 is a good move conceptually but it keeps the center very closed and I'm not"
   },
   {
    "ply": 14,
@@ -134,7 +134,7 @@
     "dxc4"
    ],
    "fen": "r1bqkb1r/pp3ppp/2n2n2/2p5/2p5/1B3N2/PP1P1PPP/RNBQK2R w KQkq - 0 8",
-   "said": "necessarily the biggest fan of that especially because we're trying to play in the spirit of the opening and In the Sicilian we like open Center positions so we're actually going to make a decision I think a lot of you might find questionable and we're going to take on C4 but hopefully I've explained my logic well enough and now we're going to bring"
+   "said": "necessarily the biggest fan of that especially because we're trying to play in the spirit of the opening and In the Sicilian we like open Center positions so we're actually going to make a decision I think a lot of you might find questionable and we're going to take on C4 but hopefully I've explained my logic"
   },
   {
    "ply": 15,
@@ -143,7 +143,7 @@
     "Bxc4"
    ],
    "fen": "r1bqkb1r/pp3ppp/2n2n2/2p5/2B5/5N2/PP1P1PPP/RNBQK2R b KQkq - 0 8",
-   "said": "so we're actually going to make a decision I think a lot of you might find questionable and we're going to take on C4 but hopefully I've explained my logic well enough and now we're going to bring out the dark Squad bishop and the reason we bring out the dark squared Bishop is because the top priority here should be to Castle well why should the priority be to Castle because if you look at White's development White's next two moves are very likely to be Castle's King side and then rookie one check and we don't want our King stuck in the center uh when that Rook moves into E1 we don't want to have to deal with that so we've got Bishop E7 and Bishop D6 from the perspective of activity Bishop D6 is the more active developing Square they might see well but Bishop D6 allows white to push D4 and eradicate the weakness and this is where you actually just need to calculate you need to be familiar with the typical Motif as it turns out Bishop d64 does not work for white because if you imagine everything trades on D4 and then you have Bishop D6 to B4 check a very common Motif that you have to be familiar with uh picking up white screen so for this reason we're going to bring"
+   "said": "well enough and now we're going to bring out the dark Squad bishop and the reason we bring out the dark squared Bishop is because the top priority here should be to Castle well why should the priority be to Castle because if you look at White's development White's next two moves are very likely to be Castle's King side and then rookie one check and we don't want our King stuck in the center uh when that Rook moves into E1 we don't want to have to deal with that so we've got Bishop E7 and Bishop D6 from the perspective of activity Bishop D6 is the more active developing Square they might see well but Bishop D6 allows white to push D4 and eradicate the weakness and this is where you actually just need to calculate you need to be familiar with the typical Motif as it turns out Bishop d64 does not work for white because if you imagine everything trades on D4 and"
   },
   {
    "ply": 16,
@@ -152,7 +152,7 @@
     "Bd6"
    ],
    "fen": "r1bqk2r/pp3ppp/2nb1n2/2p5/2B5/5N2/PP1P1PPP/RNBQK2R w KQkq - 1 9",
-   "said": "then you have Bishop D6 to B4 check a very common Motif that you have to be familiar with uh picking up white screen so for this reason we're going to bring our Bishop out to the most active possible Square exploiting the fact that white really can never play D4 and white can't play"
+   "said": "then you have Bishop D6 to B4 check a very common Motif that you have to be familiar with uh picking up white screen so for this reason we're going to bring our Bishop out to the most active possible Square"
   },
   {
    "ply": 17,
@@ -161,7 +161,7 @@
     "O-O"
    ],
    "fen": "r1bqk2r/pp3ppp/2nb1n2/2p5/2B5/5N2/PP1P1PPP/RNBQ1RK1 b kq - 2 9",
-   "said": "uh picking up white screen so for this reason we're going to bring our Bishop out to the most active possible Square exploiting the fact that white really can never play D4 and white can't play D4 even after they Castle"
+   "said": "exploiting the fact that white really can never play D4 and white can't play"
   },
   {
    "ply": 18,
@@ -170,7 +170,7 @@
     "O-O"
    ],
    "fen": "r1bq1rk1/pp3ppp/2nb1n2/2p5/2B5/5N2/PP1P1PPP/RNBQ1RK1 w - - 3 10",
-   "said": "so for this reason we're going to bring our Bishop out to the most active possible Square exploiting the fact that white really can never play D4 and white can't play D4 even after they Castle which is very important and for the very same reason not Bishop B4 check this time but of course Bishop takes H2 check in the end and this is an incredibly common blunder"
+   "said": "D4 even after they Castle which is very important and for the very same reason not Bishop B4 check this"
   },
   {
    "ply": 19,
@@ -179,7 +179,7 @@
     "d3"
    ],
    "fen": "r1bq1rk1/pp3ppp/2nb1n2/2p5/2B5/3P1N2/PP3PPP/RNBQ1RK1 b - - 0 10",
-   "said": "D4 even after they Castle which is very important and for the very same reason not Bishop B4 check this time but of course Bishop takes H2 check in the end and this is an incredibly common blunder at this level now our opponent is playing well D3 is a good move and here we need to basically combine development with prophylaxis right there's two options here that I see for black the first option is to develop the bishop to G4 well I cannot draw that Arrow Bishop G4 the second option A more prophylactic approach I think Petrosian would play the second move is to play H6 to stop White's Bishop from coming out to be equivalent G5 square and I really like H6 I feel like moves like H6 they really make it difficult for newer players to operate when you take away uh you know their their intentions so let's"
+   "said": "time but of course Bishop takes H2 check in the end and this is an incredibly common blunder at this level now our opponent is playing well D3 is a good move and here we need to basically combine development with prophylaxis right there's two options here that I see for black the first option is to develop the bishop to G4 well I cannot draw that Arrow Bishop G4 the second option A more prophylactic approach I think Petrosian would play the second move is to play H6 to stop White's Bishop from coming out to be equivalent G5 square and I really"
   },
   {
    "ply": 20,
@@ -188,7 +188,7 @@
     "h6"
    ],
    "fen": "r1bq1rk1/pp3pp1/2nb1n1p/2p5/2B5/3P1N2/PP3PPP/RNBQ1RK1 w - - 0 11",
-   "said": "like H6 I feel like moves like H6 they really make it difficult for newer players to operate when you take away uh you know their their intentions so let's throw in the move H6 thank you mail it out for Prime we're preventing Bishop G5 now some of you might might be wondering are we not worried about a sacrifice on H6 right are we not worried that we're weakening the king side well the answer is no because again white barely has any"
+   "said": "like H6 I feel like moves like H6 they really make it difficult for newer players to operate when you take away uh you know their their intentions so let's throw in the move H6 thank you mail it out for Prime we're preventing Bishop G5 now some of you might might be wondering are we not"
   },
   {
    "ply": 21,
@@ -197,7 +197,7 @@
     "Nc3"
    ],
    "fen": "r1bq1rk1/pp3pp1/2nb1n1p/2p5/2B5/2NP1N2/PP3PPP/R1BQ1RK1 b - - 1 11",
-   "said": "thank you mail it out for Prime we're preventing Bishop G5 now some of you might might be wondering are we not worried about a sacrifice on H6 right are we not worried that we're weakening the king side well the answer is no because again white barely has any pieces developed and with our pieces developed very actively there's just no reason that this sacrifice is going to work like Bishop takes H6 here we just play G takes H6 and we can always bring the king up to G7 on the next move to support the H6 Pawn so of course now we play Bishop G4 all"
+   "said": "worried about a sacrifice on H6 right are we not worried that we're weakening the king side well the answer is no because again white barely has any pieces developed and with our pieces developed very actively there's just no reason that this sacrifice is going to"
   },
   {
    "ply": 22,
@@ -206,14 +206,14 @@
     "Bg4"
    ],
    "fen": "r2q1rk1/pp3pp1/2nb1n1p/2p5/2B3b1/2NP1N2/PP3PPP/R1BQ1RK1 w - - 2 12",
-   "said": "work like Bishop takes H6 here we just play G takes H6 and we can always bring the king up to G7 on the next move to support the H6 Pawn so of course now we play Bishop G4 all right so Bishop G4 I'm not even really explaining were there any other tempting"
+   "said": "work like Bishop takes H6 here we just play G takes H6 and we can always bring the king up to G7 on the next move to support the H6 Pawn so of course now we play Bishop G4 all right so Bishop G4 I'm not even really"
   },
   {
    "ply": 21,
    "t": 596.5,
    "line": [],
    "fen": "r1bq1rk1/pp3pp1/2nb1n1p/2p5/2B5/2NP1N2/PP3PPP/R1BQ1RK1 b - - 1 11",
-   "said": "the king up to G7 on the next move to support the H6 Pawn so of course now we play Bishop G4 all right so Bishop G4 I'm not even really explaining were there any other tempting squares well perhaps you could say the bishop F5 pressures the pawn on Z3 but I"
+   "said": "explaining were there any other tempting squares well perhaps you could say the"
   },
   {
    "ply": 22,
@@ -222,7 +222,7 @@
     "Bg4"
    ],
    "fen": "r2q1rk1/pp3pp1/2nb1n1p/2p5/2B3b1/2NP1N2/PP3PPP/R1BQ1RK1 w - - 2 12",
-   "said": "so of course now we play Bishop G4 all right so Bishop G4 I'm not even really explaining were there any other tempting squares well perhaps you could say the bishop F5 pressures the pawn on Z3 but I find the PIN to be a lot more juicy here especially because um and and by the way in our previous Speed Run game in the E4 B6 Speed Run I discussed this a little bit it's a situation where white actually can't easily get rid of the PIN now if you move the queen you allow Bishop takes F3 ruining the structure if the pawn was not on D3 then white would be able to slide the bishop back to E2 this is a very common technique for dealing with pins and it's not the most active move but it would allow the Knight to move freely as it stands there's no Bishop E2 so what are we threatening here with black we have a massive positional threat here and perhaps not even as much a positional threat as a tactical threat and that is the typical move Knight C6 to D4 we're threatening to jump into D4 or to E5 either way and either way white will be unable to prevent us from capturing on F3 and completely ruining White's kingside Pawn structure which you know I'm sure you've"
+   "said": "bishop F5 pressures the pawn on Z3 but I find the PIN to be a lot more juicy here especially because um and and by the way in our previous Speed Run game in the E4 B6 Speed Run I discussed this a little bit it's a situation where white actually can't easily get rid of the PIN now if you move the queen you allow Bishop takes F3 ruining the structure if the pawn was not on D3 then white would be able to slide the bishop back to E2 this is a very common technique for dealing with pins and it's not the most active move but it would allow the Knight to move freely as it stands there's no Bishop E2 so what are we threatening here with black we have a massive positional threat here and perhaps not even as much a positional threat as a tactical threat and that is the typical move Knight C6 to D4 we're threatening to jump into D4 or to E5 either way and either way white will be unable to prevent us from capturing on F3 and completely ruining White's kingside Pawn structure which you know I'm sure you've"
   }
  ],
  "forks": []

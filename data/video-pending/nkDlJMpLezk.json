@@ -178,5 +178,53 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Slav Defense: Chebanenko Variation",
+   "eco": "D15",
+   "plies": 8,
+   "line": "d4 d5 c4 c6 Nc3 Nf6 Nf3 a6",
+   "coverage": 0.077
+  },
+  {
+   "name": "Slav Defense: Three Knights Variation",
+   "eco": "D15",
+   "plies": 7,
+   "line": "d4 d5 c4 c6 Nc3 Nf6 Nf3",
+   "coverage": 0.077
+  },
+  {
+   "name": "Slav Defense",
+   "eco": "D10",
+   "plies": 4,
+   "line": "d4 d5 c4 c6",
+   "coverage": 0.154
+  },
+  {
+   "name": "Queen's Pawn Game: Accelerated London System",
+   "eco": "D00",
+   "plies": 3,
+   "line": "d4 d5 Bf4",
+   "coverage": 0.769
+  },
+  {
+   "name": "Queen's Gambit",
+   "eco": "D06",
+   "plies": 3,
+   "line": "d4 d5 c4",
+   "coverage": 0.154
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Alapin Variation",
+  "confirmed": false
+ }
 }

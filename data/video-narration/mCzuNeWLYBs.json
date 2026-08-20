@@ -10,7 +10,7 @@
     "c6"
    ],
    "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "said": "the purpose of the opening is to bring your pieces out the object of the game of chess is to checkmate the king as you guys know uh checkmate is a situation where the king is being attacked and has no squares to go to so he plays the karo khan which is the name of this opening where he plays c6 let's play d4 so we grab the center with"
+   "said": "the purpose of the opening is to bring your pieces out the object of the game of chess is to checkmate the king as you guys know uh checkmate is a situation where the king is being attacked and has no squares to go to so he plays the karo khan which is the name of this opening where"
   },
   {
    "ply": 3,
@@ -19,7 +19,7 @@
     "d4"
    ],
    "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
-   "said": "where the king is being attacked and has no squares to go to so he plays the karo khan which is the name of this opening where he plays c6 let's play d4 so we grab the center with our pawns and he's probably going to do the same"
+   "said": "he plays c6 let's play d4 so we grab the center with our pawns"
   },
   {
    "ply": 4,
@@ -28,7 +28,7 @@
     "d5"
    ],
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
-   "said": "so he plays the karo khan which is the name of this opening where he plays c6 let's play d4 so we grab the center with our pawns and he's probably going to do the same d5 now almost all chess openings have names they can be named after people they can be named after cities or chess players or even mythical beings most of the time they're named after people so caro was a person and khan was a person so it's hyphenated karo khan and uh black controls the center with his pawn and if you notice black is attacking our pawn on e4 so we need to do something with that um white has a bunch of possible options here we could get the knight out to c3 we could play e5 that's the advanced karo khan thank you unconventional or we could take on d5 but one line that often flies under the radar is what's called the fantasy variation i'm a big fan of it i recommend it to a lot of beginners and club players the fantasy variation is the move f3"
+   "said": "and he's probably going to do the same d5 now almost all chess openings have names they can be named after people they can be named after cities or chess players or even mythical beings most of the time they're named after people so caro was a person and khan was a person so it's hyphenated karo khan and uh black controls the center with his pawn and if you notice black is attacking our pawn on e4 so we need to do something with that um white has a bunch of possible options here we could get the knight out to c3 we could play e5 that's the advanced karo khan thank you unconventional or we could take on d5 but one line that often flies under the"
   },
   {
    "ply": 5,
@@ -37,7 +37,7 @@
     "f3"
    ],
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
-   "said": "radar is what's called the fantasy variation i'm a big fan of it i recommend it to a lot of beginners and club players the fantasy variation is the move f3 which just defends the pawn on e4 you're not allowing black to win your pawn and the purpose of the fantasy is to preserve your pawn center the purpose of the fantasy is to preserve your pawn center um yeah i i actually don't know how it got the name fantasy variation so our"
+   "said": "radar is what's called the fantasy variation i'm a big fan of it i recommend it to a lot of beginners and club players the fantasy variation is the move f3 which just defends the pawn on e4 you're not allowing black to win your pawn and the purpose of the fantasy is to preserve your pawn center"
   },
   {
    "ply": 6,
@@ -46,7 +46,7 @@
     "dxe4"
    ],
    "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
-   "said": "preserve your pawn center the purpose of the fantasy is to preserve your pawn center um yeah i i actually don't know how it got the name fantasy variation so our opponent takes on e4 and believe it or not that's not a mistake but if he doesn't follow this up correctly it's going to end up being a bad move so here we have a pawn trade we've got two"
+   "said": "the purpose of the fantasy is to preserve your pawn center um yeah i i actually don't know how it got the name fantasy variation so our opponent takes on e4 and believe it or not that's not a mistake but if he"
   },
   {
    "ply": 7,
@@ -55,7 +55,7 @@
     "fxe4"
    ],
    "fen": "rnbqkbnr/pp2pppp/2p5/8/3PP3/8/PPP3PP/RNBQKBNR b KQkq - 0 4",
-   "said": "the name fantasy variation so our opponent takes on e4 and believe it or not that's not a mistake but if he doesn't follow this up correctly it's going to end up being a bad move so here we have a pawn trade we've got two pawns in the center and he does follow"
+   "said": "doesn't follow this up correctly it's going to end up being a bad move so here we have a pawn trade we've got two"
   },
   {
    "ply": 8,
@@ -64,7 +64,7 @@
     "e5"
    ],
    "fen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/8/PPP3PP/RNBQKBNR w KQkq - 0 5",
-   "said": "opponent takes on e4 and believe it or not that's not a mistake but if he doesn't follow this up correctly it's going to end up being a bad move so here we have a pawn trade we've got two pawns in the center and he does follow it up correctly with the e5 so [Music] this may seem if you're looking at this for the first time like a blunder it may seem like wait a second we can just take the pawn with our pawn but as i indicated it's very very important in the opening not to forget that if you don't develop any of your pieces you're going to end up in trouble this is a great example of this if we just blindly take the pawn who can tell me what black plays in that position how does black punish the greediness after d takes e5 isn't it weak to move upon protecting the diagonal no e5 is pretty common the king is going to castle probably yeah queen h4 check is correct so this check on h4 with the queen is called a fork a fork is when one piece attacks two or more pieces at the same time including the king so the queen will be checking the king and attacking this pawn on e4 at the same time so we need to prevent black's queen from coming to h from coming to h4 in order to do that we don't just want to do that by pushing out a pawn we want to do that by developing a piece and that can be accomplished with knight f3"
+   "said": "pawns in the center and he does follow it up correctly with the e5 so [Music] this may seem if you're looking at this for the first time like a blunder it may seem like wait a second we can just take the pawn with our pawn but as i indicated it's very very important in the opening not to forget that if you don't develop any of your pieces you're going to end up in trouble this is a great example of this if we just blindly take the pawn who can tell me what black plays in that position how does black punish the greediness after d takes e5 isn't it weak to move upon protecting the diagonal no e5 is pretty common the king is going to castle probably yeah queen h4 check is correct so this check on h4 with the queen is called a fork a fork is when one piece attacks two or more pieces at the same time including the king so the queen will be checking the king and attacking this pawn on e4 at the same time so we need to prevent black's"
   },
   {
    "ply": 9,
@@ -82,7 +82,7 @@
     "Bg4"
    ],
    "fen": "rn1qkbnr/pp3ppp/2p5/4p3/3PP1b1/5N2/PPP3PP/RNBQKB1R w KQkq - 2 6",
-   "said": "to do that by pushing out a pawn we want to do that by developing a piece and that can be accomplished with knight f3 of course black can take our pawn on d4 bishop to g4 instead by our opponent now he develops the bishop still taking on e5 is not a great idea now the reason isn't that he has a check on h4 because he doesn't but d takes e5 also allows a queen trade which is very unpleasant that brings our king out into the center we don't want to do that now if we think about this for a second um okay is black actually threatening anything maybe he wants to take the pawn but that's not such a big deal our goal in this position is to develop our pieces as actively as possible and to very quickly prepare castling the king castling is is a move and chess when the king is tucked into the this side of the board if you think about where to put this bishop you have a couple of squares there's e2 there's d3 there's c4 what is the most active square for the bishop 420 from alcohol synonymous thank you the move is bishop c4 because the bishop"
+   "said": "bishop to g4 instead by our opponent now he develops the bishop still taking on e5 is not a great idea now the reason isn't that he has a check on h4 because he doesn't but d takes e5 also allows a queen trade which is very unpleasant that brings our king out into the center we don't want to do that now if we think about this for a second um okay is black actually threatening anything maybe he wants to take the pawn but that's not such a big deal our goal in this position is to develop our pieces as actively as possible and to very quickly prepare castling the king castling is is a move and chess when the king is tucked into the this side of the board if you think about where to put this bishop you have a couple of squares"
   },
   {
    "ply": 11,
@@ -91,7 +91,7 @@
     "Bc4"
    ],
    "fen": "rn1qkbnr/pp3ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R b KQkq - 3 6",
-   "said": "there's e2 there's d3 there's c4 what is the most active square for the bishop 420 from alcohol synonymous thank you the move is bishop c4 because the bishop immediately aims at the f7 square this is the weakest pawn slash the weakest square on the chessboard very good um and this is a super sharp opening there's a lot going on we want to castle we also have some sacrifices at the ready on f7 it goes"
+   "said": "there's e2 there's d3 there's c4 what is the most active square for the bishop 420 from alcohol synonymous thank you the move is bishop c4 because the bishop immediately aims at the f7 square this is the weakest pawn slash the weakest square on the chessboard very good"
   },
   {
    "ply": 12,
@@ -100,7 +100,7 @@
     "Nd7"
    ],
    "fen": "r2qkbnr/pp1n1ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R w KQkq - 4 7",
-   "said": "square on the chessboard very good um and this is a super sharp opening there's a lot going on we want to castle we also have some sacrifices at the ready on f7 it goes knight to d7 that is correct and now we need to complete our development by castling"
+   "said": "um and this is a super sharp opening there's a lot going on we want to castle we also have some sacrifices at the ready on f7 it goes knight to d7 that is correct and now we need to complete our"
   },
   {
    "ply": 13,
@@ -109,7 +109,7 @@
     "O-O"
    ],
    "fen": "r2qkbnr/pp1n1ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQ1RK1 b kq - 5 7",
-   "said": "we want to castle we also have some sacrifices at the ready on f7 it goes knight to d7 that is correct and now we need to complete our development by castling now we want to complete well not complete our development but continue our development by castling this is the karo khan um now which you guys should notice particularly if you know you're not too familiar with chess or with these lines notice how we're both bringing our pieces out and notice how the bishop on c4 is aiming at this pawn and the rook that's sitting here on f1 is also aiming at that pawn now obviously there's a knight in the way but the knight is easy to move that's our knight we can move it and if we move our knight that f7 pawn is going to be under a lot of fire so black has to be super careful here thank you all of pals gifting to puree fish okay so our plan in the next couple of moves is going to be to pile up in every way that we can on this f7 pawn yeah that would be me tangido yeah and by the way guys those of you again who are not as familiar uh if you're not following that's okay because after the game i'm going to go through every move very slowly and i'm going to explain all of the logic uh and that's going to be more oriented toward beginners because i know a lot of you are sticking around from charlie's stream i really appreciate that and i know it can be hard to follow when i'm making moves quickly so i try to cater to"
+   "said": "development by castling now we want to complete well not complete our development but continue our development by castling this is the karo khan um now which you guys should notice particularly if you know you're not too familiar with chess or with these lines notice how we're both bringing our pieces out and notice how the bishop on c4 is aiming at this pawn and the rook that's sitting here on f1 is also aiming at that pawn now obviously there's a knight in the way but the knight is easy to move that's our knight we can move it and if we move our knight that f7 pawn is going to be under a lot of fire so black has to be super careful here thank you all of pals gifting to puree fish okay so our plan in the next couple of moves is going to be to pile up in every way that we can on this f7 pawn yeah that would be me tangido yeah and by the way guys those of you again who are not as familiar uh if you're not following that's okay because after the game i'm going to go through every move very slowly and i'm going to explain all of the logic uh and"
   },
   {
    "ply": 14,
@@ -118,7 +118,7 @@
     "Bd6"
    ],
    "fen": "r2qk1nr/pp1n1ppp/2pb4/4p3/2BPP1b1/5N2/PPP3PP/RNBQ1RK1 w kq - 6 8",
-   "said": "that's going to be more oriented toward beginners because i know a lot of you are sticking around from charlie's stream i really appreciate that and i know it can be hard to follow when i'm making moves quickly so i try to cater to all levels all right this is a mistake so what he's done just now is a big mistake why is it a mistake because he doesn't defend the pawn that i've highlighted in in blue that pawn which i had previously indicated is not very well protected it's only defended by the king and the king is a very bad defender because once the king is out in the open there's a greater probability of checkmating it and we have a very typical idea that allows me to get a crushing attack against this king we sacrifice the bishop on f7 to sacrifice a piece means"
+   "said": "that's going to be more oriented toward beginners because i know a lot of you are sticking around from charlie's stream i really appreciate that and i know it can be hard to follow when i'm making moves quickly so i try to cater to all levels all right this is a mistake so what he's done just now is a big mistake why is it a mistake because he doesn't defend the pawn that i've highlighted in in blue that pawn which i had previously indicated is not very well protected it's only defended by the king and the king is a very bad defender because once the king"
   },
   {
    "ply": 15,
@@ -127,7 +127,7 @@
     "Bxf7+"
    ],
    "fen": "r2qk1nr/pp1n1Bpp/2pb4/4p3/3PP1b1/5N2/PPP3PP/RNBQ1RK1 b kq - 0 8",
-   "said": "is out in the open there's a greater probability of checkmating it and we have a very typical idea that allows me to get a crushing attack against this king we sacrifice the bishop on f7 to sacrifice a piece means to give it away bishops are obviously stronger than pawns so we have given up a bishop for a pawn but we've gotten something in return as you guys will see this is totally crushing now when he takes our bishop with his king which he doesn't have to do but if he does he moves into the path of this rook what does that mean that means if we move away the night it's going to be a check that's called a discover check so we're going to move the knight away that rook is going to be checking the king and we're going to get a crushing attack and we're going to win his bishop back at the same time and we're going to win his bit when his bishop back at the same time so if i were black i would go king to e7 i wouldn't take the bishop although he's still losing yeah discover checks are among the most are among the strongest ideas that you have at your disposal when you move a piece out of the way of another piece and that results in check you can wreak total havoc in your opponent um so this is awesome among us yeah oh because there's some overlap in terminology so this is absolutely crushing i hope i'm making sense by the way he can either move the king past the bishop or he can take the bishop he's taking his time either way this is crushing crashing crushing king f8"
+   "said": "is out in the open there's a greater probability of checkmating it and we have a very typical idea that allows me to get a crushing attack against this king we sacrifice the bishop on f7 to sacrifice a piece means to give it away bishops are obviously stronger than pawns so we have given up a bishop for a pawn but we've gotten something in return as you guys will see this is totally crushing now when he takes our bishop with his king which he doesn't have to do but if he does he moves into the path of this rook what does that mean that means if we move away the night it's going to be a check that's called a discover check so we're going to move the knight away that rook is going to be checking the king and we're going to get a crushing attack and we're going to win his bishop back at the same time and we're going to win his bit when his bishop back at the same time so if i were black i would go king to e7 i wouldn't take the bishop although he's still losing yeah discover checks are among the most are among the strongest ideas that you have at your disposal when you move a piece out of the way of another piece and that results in check you can wreak total havoc in your opponent um so this is awesome among us yeah oh because there's some overlap in terminology"
   },
   {
    "ply": 16,
@@ -136,7 +136,7 @@
     "Kf8"
    ],
    "fen": "r2q1knr/pp1n1Bpp/2pb4/4p3/3PP1b1/5N2/PPP3PP/RNBQ1RK1 w - - 1 9",
-   "said": "so this is absolutely crushing i hope i'm making sense by the way he can either move the king past the bishop or he can take the bishop he's taking his time either way this is crushing crashing crushing king f8 so he moves the bish of the king and i call this the umbrella method he uses the bishop almost as an umbrella uh hiding behind it which is kind of annoying and we got to do something about it so what should we do about it um well there's a couple of things see the problem is if that bishop were in there then we would be able to move the knight with a discovered check if we move the knight here then we will drop our queen and we don't want to give away our queen if we take his knight with our bishop he's going to take with the king and the king is going to be sheltered from any discovered checks so we got to tone things down a little bit we got to take a step back and say all right let's make a simple move let's get our bishop away from uh away from f7 but then comes the next question where should we put this bishop you can put this bishop on b3 you can put it on c4 but if you're already bringing the bishop back perhaps we can distract him perhaps we can make a move that forces him to react and by reacting he's going to be unable to get this king away from f8 what square am i talking about yeah so either bishop h5 or even better bishop to e6 that's a"
+   "said": "so this is absolutely crushing i hope i'm making sense by the way he can either move the king past the bishop or he can take the bishop he's taking his time either way this is crushing crashing crushing king f8 so he moves the bish of the king and i call this the umbrella method he uses the bishop almost as an umbrella uh hiding behind it which is kind of annoying and we got to do something about it so what should we do about it um well there's a couple of things see the problem is if that bishop were in there then we would be able to move the knight with a discovered check if we move the knight here then we will drop our queen and we don't want to give away our queen if we take his knight with our bishop he's going to take with the king and the king is going to be sheltered from any discovered checks so we got to tone things down a little bit we got to take a step back and say all right let's make a simple move let's get our bishop away from uh away from f7 but then comes the next question where should we put this bishop you can put this bishop on b3 you can put it on c4 but if you're already bringing the bishop back perhaps we can distract him perhaps we can make a move that forces him to react and by reacting he's going to be unable"
   },
   {
    "ply": 17,
@@ -145,7 +145,7 @@
     "Be6"
    ],
    "fen": "r2q1knr/pp1n2pp/2pbB3/4p3/3PP1b1/5N2/PPP3PP/RNBQ1RK1 b - - 2 9",
-   "said": "to get this king away from f8 what square am i talking about yeah so either bishop h5 or even better bishop to e6 that's a pretty sexy move we're sacrificing our bishop again but if he takes it then his king is going to be directly in the line of fire of the rook that's the bottom line he can defend with bishop takes knight that would probably be the best move but he's still going to be in very big trouble goes"
+   "said": "to get this king away from f8 what square am i talking about yeah so either bishop h5 or even better bishop to e6 that's a pretty sexy move we're sacrificing our bishop again but if he takes it then his king is going to be directly in the line of fire"
   },
   {
    "ply": 18,
@@ -154,7 +154,7 @@
     "Ngf6"
    ],
    "fen": "r2q1k1r/pp1n2pp/2pbBn2/4p3/3PP1b1/5N2/PPP3PP/RNBQ1RK1 w - - 3 10",
-   "said": "going to be directly in the line of fire of the rook that's the bottom line he can defend with bishop takes knight that would probably be the best move but he's still going to be in very big trouble goes knight f6 that's a good thought he covers up the rook but he forgets about his bishop now we just take his"
+   "said": "of the rook that's the bottom line he can defend with bishop takes knight that would probably be the best move but he's still going to be in very big trouble goes knight f6 that's a good thought he covers up the rook but he forgets"
   },
   {
    "ply": 19,
@@ -163,7 +163,7 @@
     "Bxg4"
    ],
    "fen": "r2q1k1r/pp1n2pp/2pb1n2/4p3/3PP1B1/5N2/PPP3PP/RNBQ1RK1 b - - 0 10",
-   "said": "with bishop takes knight that would probably be the best move but he's still going to be in very big trouble goes knight f6 that's a good thought he covers up the rook but he forgets about his bishop now we just take his bishop he loses a piece if he takes back then he exposes himself once again to a discovered check so hopefully this is making some sense another thing to notice this king and this queen where are they located they are a night's distance away"
+   "said": "about his bishop now we just take his bishop he loses a piece if he takes back then he exposes himself once again to a discovered check so hopefully this is making some sense"
   },
   {
    "ply": 20,
@@ -172,7 +172,7 @@
     "Nxg4"
    ],
    "fen": "r2q1k1r/pp1n2pp/2pb4/4p3/3PP1n1/5N2/PPP3PP/RNBQ1RK1 w - - 0 11",
-   "said": "discovered check so hopefully this is making some sense another thing to notice this king and this queen where are they located they are a night's distance away so already you should be envisioning a scenario where this knight lands on that green square because that will be a fork to the king of the queen that will win the queen now we need to ask ourselves how the knight can get there how can the knight get to this green square as quickly as possible the blue square whatever quickly as possible well we can go to g5 that's a check"
+   "said": "another thing to notice this king and this queen where are they located they are a night's distance away so already you should be envisioning a scenario where this knight lands on that green square because that will be a fork to the king of the queen that will win the queen"
   },
   {
    "ply": 21,
@@ -181,7 +181,7 @@
     "Ng5+"
    ],
    "fen": "r2q1k1r/pp1n2pp/2pb4/4p1N1/3PP1n1/8/PPP3PP/RNBQ1RK1 b - - 1 11",
-   "said": "the queen now we need to ask ourselves how the knight can get there how can the knight get to this green square as quickly as possible the blue square whatever quickly as possible well we can go to g5 that's a check if the king moves then he loses the knight and checkmate will follow if he covers that check with his knight as he just"
+   "said": "now we need to ask ourselves how the knight can get there how can the knight get to this green square as quickly as possible the blue square whatever quickly as possible well we can go to g5 that's a check if the king moves then he loses the knight"
   },
   {
    "ply": 22,
@@ -190,7 +190,7 @@
     "Ngf6"
    ],
    "fen": "r2q1k1r/pp1n2pp/2pb1n2/4p1N1/3PP3/8/PPP3PP/RNBQ1RK1 w - - 2 12",
-   "said": "possible the blue square whatever quickly as possible well we can go to g5 that's a check if the king moves then he loses the knight and checkmate will follow if he covers that check with his knight as he just did then there's a fork 96 check and the"
+   "said": "and checkmate will follow if he covers that check with his knight as he just"
   },
   {
    "ply": 23,
@@ -199,7 +199,7 @@
     "Ne6+"
    ],
    "fen": "r2q1k1r/pp1n2pp/2pbNn2/4p3/3PP3/8/PPP3PP/RNBQ1RK1 b - - 3 12",
-   "said": "that's a check if the king moves then he loses the knight and checkmate will follow if he covers that check with his knight as he just did then there's a fork 96 check and the game is basically over we want his queen when you lose your queen in chess for no uh compensation or no other pieces the game is basically over oh it's thank you for the five gifted i really appreciate it"
+   "said": "did then there's a fork 96 check and the game is basically over we want his queen when you lose your queen in chess for no uh compensation or no other"
   },
   {
    "ply": 24,
@@ -208,7 +208,7 @@
     "Ke7"
    ],
    "fen": "r2q3r/pp1nk1pp/2pbNn2/4p3/3PP3/8/PPP3PP/RNBQ1RK1 w - - 4 13",
-   "said": "game is basically over we want his queen when you lose your queen in chess for no uh compensation or no other pieces the game is basically over oh it's thank you for the five gifted i really appreciate it taking his queen"
+   "said": "pieces the game is basically over oh it's thank you for the five gifted i really appreciate it taking his queen"
   },
   {
    "ply": 26,
@@ -218,7 +218,7 @@
     "Raxd8"
    ],
    "fen": "3r3r/pp1nk1pp/2pb1n2/4p3/3PP3/8/PPP3PP/RNBQ1RK1 w - - 0 14",
-   "said": "when you lose your queen in chess for no uh compensation or no other pieces the game is basically over oh it's thank you for the five gifted i really appreciate it taking his queen and now we are up a full queen for a piece how should we proceed we should simply complete our development nothing particularly crazy uh that we should do here uh before we do anything this pawn on d4 uh i want to make sure that it's well protected so um we can take on e5 but that would open up a little file for his rook could we perhaps support this pawn with another pawn is that possible can we try that how can we do that we can play the move c3 c3 just to build up a little pawn"
+   "said": "and now we are up a full queen for a piece how should we proceed we should simply complete our development nothing particularly crazy uh that we should do here uh before we do anything this pawn on d4 uh i want to make sure that it's well protected so um we can take on e5 but that would open"
   },
   {
    "ply": 27,
@@ -227,7 +227,7 @@
     "c3"
    ],
    "fen": "3r3r/pp1nk1pp/2pb1n2/4p3/3PP3/2P5/PP4PP/RNBQ1RK1 b - - 0 14",
-   "said": "up a little file for his rook could we perhaps support this pawn with another pawn is that possible can we try that how can we do that we can play the move c3 c3 just to build up a little pawn chain making sure that our center remains intact some of you may say wait a second doesn't he take this free pawn over here well if he does that i'll talk about what we can do okay i know there's a lot to talk about it"
+   "said": "up a little file for his rook could we perhaps support this pawn with another pawn is that possible can we try that how can we do that we can play the move c3 c3 just to build up a little pawn chain making sure that our center remains intact some of you may say wait a second doesn't he take this free pawn over here"
   },
   {
    "ply": 28,
@@ -236,7 +236,7 @@
     "Rdf8"
    ],
    "fen": "5r1r/pp1nk1pp/2pb1n2/4p3/3PP3/2P5/PP4PP/RNBQ1RK1 w - - 1 15",
-   "said": "remains intact some of you may say wait a second doesn't he take this free pawn over here well if he does that i'll talk about what we can do okay i know there's a lot to talk about it goes rook d to fa thank you call me for the prime all right so he can test the the file and uh all we need to do now our center is safe we need to complete our development look at the bishop look at the knight they're still on their initial squares uh that's not a good thing they're not doing anything first we need to deal with the bishop what can the bishop do well the bishop has a super nice square on g5 where it's pinning the knight and a pin is a situation where one piece"
+   "said": "well if he does that i'll talk about what we can do okay i know there's a lot to talk about it goes rook d to fa thank you call me for the prime all right so he can test the the file and uh all we need to do now our center is safe we need to complete our development look at the bishop look at the knight they're still on their initial squares"
   },
   {
    "ply": 29,
@@ -245,7 +245,7 @@
     "Bg5"
    ],
    "fen": "5r1r/pp1nk1pp/2pb1n2/4p1B1/3PP3/2P5/PP4PP/RN1Q1RK1 b - - 2 15",
-   "said": "uh that's not a good thing they're not doing anything first we need to deal with the bishop what can the bishop do well the bishop has a super nice square on g5 where it's pinning the knight and a pin is a situation where one piece is creating a situation where another piece can't really move the knight literally cannot move because you cannot expose your king to an attack and that's called a pin thank you shamrock 69 for the five and the support today has been unreal thank you folks i appreciate it shamrock you are the man and another sub holy pals gifting to parker bone thank you for the fat 10 gift subs love it nah it's easy my job is easy given this level of support so bishop to g5 we still have to develop our knight we're going to bring it out here to d2 and maybe later on to c4 so another thing to point out when you're up material and in chess when you say material that just means the overall collection of pieces you have so if you're up material that means you have more pieces than your opponent not necessarily literally but you could"
+   "said": "uh that's not a good thing they're not doing anything first we need to deal with the bishop what can the bishop do well the bishop has a super nice square on g5 where it's pinning the knight and a pin is a situation where one piece is creating a situation where another piece can't really move the knight literally cannot move because you cannot expose your king to an attack and that's called a pin thank you shamrock 69 for the five and the support today has been unreal thank you folks i appreciate it shamrock you are the man and another sub holy pals gifting to parker bone thank you for the fat 10 gift subs love it nah it's easy my job is easy given this level of support so bishop to g5 we still have to develop our knight we're going to bring it out here to d2 and maybe later on to c4 so another thing to point out when you're up material and in chess"
   },
   {
    "ply": 30,
@@ -254,7 +254,7 @@
     "h6"
    ],
    "fen": "5r1r/pp1nk1p1/2pb1n1p/4p1B1/3PP3/2P5/PP4PP/RN1Q1RK1 w - - 0 16",
-   "said": "when you say material that just means the overall collection of pieces you have so if you're up material that means you have more pieces than your opponent not necessarily literally but you could have a queen and your opponent could have a knight for that queen and you're still up material so when you're up material a very common piece of chess wisdom says that you should trade pieces um and the analogy that i've thought of is like if a soccer player gets a red card and he gets ejected from the game um you have 11 players against 10 right and then some genie walks up to you and says i'm going to make you an offer you remove 10 players on your team and the opposing team removes 10 players on their team but of course one of their players got a red card so you get a situation where it's literally one player against zero and would you take that deal if you were the team with 11 players obviously you would it would be easy to score a goal um and when you're up a queen if you trade all of the other pieces you're literally just going to have a queen and maybe some pawns against a king and some pawns and that's much easier to win than if there's a bunch of other pieces complicating the game i know it's a far-fetched analogy but maybe it helps people see why this is inherently good so in this situation we have a possibility of trading two equivalent pieces we can trade a bishop for a night the question is do we want to do that well if we follow that advice yes we should bishop takes knight thank"
+   "said": "when you say material that just means the overall collection of pieces you have so if you're up material that means you have more pieces than your opponent not necessarily literally but you could have a queen and your opponent could have a knight for that queen and you're still up material so when you're up material a very common piece of chess wisdom says that you should trade pieces um and the analogy that i've thought of is like if a soccer player gets a red card and he gets ejected from the game um you have 11 players against 10 right and then some genie walks up to you and says i'm going to make you an offer you remove 10 players on your team and the opposing team removes 10 players on their team but of course one of their players got a red card so you get a situation where it's literally one player against zero and would you take that deal if you were the team with 11 players obviously you would it would be easy to score a goal um and when you're up a queen if you trade all of the other pieces you're literally just going to have a queen and maybe some pawns against a king and some pawns and that's much easier to win than if there's a bunch of other pieces complicating the game i know it's a far-fetched analogy but maybe it helps people see why this is"
   },
   {
    "ply": 31,
@@ -263,7 +263,7 @@
     "Bxf6+"
    ],
    "fen": "5r1r/pp1nk1p1/2pb1B1p/4p3/3PP3/2P5/PP4PP/RN1Q1RK1 b - - 0 16",
-   "said": "inherently good so in this situation we have a possibility of trading two equivalent pieces we can trade a bishop for a night the question is do we want to do that well if we follow that advice yes we should bishop takes knight thank you top landers for the five i cannot keep up with all these subs this is crazy all right knight takes f6"
+   "said": "inherently good so in this situation we have a possibility of trading two equivalent pieces we can trade a bishop for a night the question is do we want to do that well if we follow that advice yes we should bishop takes knight thank you top landers for the five i cannot"
   },
   {
    "ply": 32,
@@ -272,7 +272,7 @@
     "Nxf6"
    ],
    "fen": "5r1r/pp2k1p1/2pb1n1p/4p3/3PP3/2P5/PP4PP/RN1Q1RK1 w - - 0 17",
-   "said": "for a night the question is do we want to do that well if we follow that advice yes we should bishop takes knight thank you top landers for the five i cannot keep up with all these subs this is crazy all right knight takes f6 now we still need to develop this knight right we still need to develop this knight let's do that let's go knight d2"
+   "said": "keep up with all these subs this is crazy all right knight takes f6 now we still need to develop this knight"
   },
   {
    "ply": 33,
@@ -281,7 +281,7 @@
     "Nd2"
    ],
    "fen": "5r1r/pp2k1p1/2pb1n1p/4p3/3PP3/2P5/PP1N2PP/R2Q1RK1 b - - 1 17",
-   "said": "you top landers for the five i cannot keep up with all these subs this is crazy all right knight takes f6 now we still need to develop this knight right we still need to develop this knight let's do that let's go knight d2 we also protect the pawn so his knight can't take it his knight can't take the pawn because it's protected all right um so if we have a queen for two pieces should we exchange other pieces yeah you could now when i share chess wisdom and again this is more geared toward those of you who don't have much chess experience um when i share these pieces of advice you got to understand that this isn't always the case there are situations when trading is bad even if you're up a queen so there are exceptions to the rules but when you're just starting to play chess the best thing to do thank you for the sub kcp the best thing to do is to learn the principles and the rules because they're going to guide your play they're going to make you a little bit less overwhelmed and then when you get better and better and more experienced you start learning about when the rules have exceptions and you know you start learning more deeper rules and stuff like that now notice that we have a queen for a bishop why do you keep referring to the horses at night because in chess this is called the knight it is literally a horse but uh the proper term for it is a knight so we can do a couple of different things look at our queen is the queen doing anything right now our extra queen isn't doing anything i don't like that situation it's a pony"
+   "said": "right we still need to develop this knight let's do that let's go knight d2 we also protect the pawn so his knight can't take it his knight can't take the pawn because it's protected all right um so if we have a queen for two pieces should we exchange other pieces yeah you could now when i share chess wisdom and again this is more geared toward those of you who don't have much chess experience um when i share these pieces of advice you got to understand that this isn't always the case there are situations when trading is bad even if you're up a queen so there are exceptions to the rules but when you're just starting to play chess the best thing to do thank you for the sub kcp the best thing to do is to learn the principles and the rules because they're going to guide your play they're going to make you a little bit less overwhelmed and then when you get better and better and more experienced you start learning about when the rules have exceptions and you know you start learning more deeper rules and stuff like that now notice that we have a queen for a bishop why do you keep referring to the horses at night because in chess this is called the knight it is literally a horse but uh the proper term for it is a knight"
   },
   {
    "ply": 34,
@@ -290,7 +290,7 @@
     "g5"
    ],
    "fen": "5r1r/pp2k3/2pb1n1p/4p1p1/3PP3/2P5/PP1N2PP/R2Q1RK1 w - - 0 18",
-   "said": "so we can do a couple of different things look at our queen is the queen doing anything right now our extra queen isn't doing anything i don't like that situation it's a pony yeah exactly according to hicaro okay so he's played g5 this doesn't do very much um now another important concept in chess is the concept of a weak square this is a little bit advanced but a weak square is a square that cannot be protected by pawns so by playing g5 he's created a very big weak square and one of your pieces that occupies that square is called an outpost an outpost is a piece that occupies a very weak square so notice how his two pawns have passed the sixth rank and so this f5 square is weak it's not protected by any pawns and it cannot be protected by any pawns because pawns cannot go backward these two pawns are protecting these squares on the fourth rank but not the squares on the fifth rank so we need to ask ourselves can we get a piece to this square and the answer is yes we can put a rook here"
+   "said": "so we can do a couple of different things look at our queen is the queen doing anything right now our extra queen isn't doing anything i don't like that situation it's a pony yeah exactly according to hicaro okay so he's played g5 this doesn't do very much um now another important concept in chess is the concept of a weak square this is a little bit advanced but a weak square is a square that cannot be protected by pawns so by playing g5 he's created a very big weak square and one of your pieces that occupies that square is called an outpost an outpost is a piece that occupies a very weak square so notice how his two pawns have passed the sixth rank and so this f5 square is weak it's not protected by any pawns and it cannot be protected by any pawns because pawns cannot go backward these two pawns"
   },
   {
    "ply": 35,
@@ -299,14 +299,14 @@
     "Rf5"
    ],
    "fen": "5r1r/pp2k3/2pb1n1p/4pRp1/3PP3/2P5/PP1N2PP/R2Q2K1 b - - 1 18",
-   "said": "are protecting these squares on the fourth rank but not the squares on the fifth rank so we need to ask ourselves can we get a piece to this square and the answer is yes we can put a rook here what is the rook doing the rook is attacking the e5 pawn we're trying to get him to take our d4 pawn if he does that i'll explain why that's good for us we could have also tried to put the knight on that outpost we could have done what's called a knight maneuver"
+   "said": "are protecting these squares on the fourth rank but not the squares on the fifth rank so we need to ask ourselves can we get a piece to this square and the answer is yes we can put a rook here what is the rook doing the rook is attacking the e5 pawn we're trying to get him to take our d4 pawn if he does"
   },
   {
    "ply": 34,
    "t": 1008,
    "line": [],
    "fen": "5r1r/pp2k3/2pb1n1p/4p1p1/3PP3/2P5/PP1N2PP/R2Q1RK1 w - - 0 18",
-   "said": "attacking the e5 pawn we're trying to get him to take our d4 pawn if he does that i'll explain why that's good for us we could have also tried to put the knight on that outpost we could have done what's called a knight maneuver maneuver is just a sequence of moves"
+   "said": "that i'll explain why that's good for us we could have also tried to put the knight on that outpost we could have done what's called a knight maneuver"
   },
   {
    "ply": 36,
@@ -316,14 +316,14 @@
     "exd4"
    ],
    "fen": "5r1r/pp2k3/2pb1n1p/5Rp1/3pP3/2P5/PP1N2PP/R2Q2K1 w - - 0 19",
-   "said": "get him to take our d4 pawn if he does that i'll explain why that's good for us we could have also tried to put the knight on that outpost we could have done what's called a knight maneuver maneuver is just a sequence of moves with one piece um knight c4 knight e3 knight f5 that"
+   "said": "maneuver is just a sequence of moves with one piece"
   },
   {
    "ply": 34,
    "t": 1013,
    "line": [],
    "fen": "5r1r/pp2k3/2pb1n1p/4p1p1/3PP3/2P5/PP1N2PP/R2Q1RK1 w - - 0 18",
-   "said": "that i'll explain why that's good for us we could have also tried to put the knight on that outpost we could have done what's called a knight maneuver maneuver is just a sequence of moves with one piece um knight c4 knight e3 knight f5 that was also possible but this is even"
+   "said": "um knight c4 knight e3 knight f5 that"
   },
   {
    "ply": 36,
@@ -333,7 +333,7 @@
     "exd4"
    ],
    "fen": "5r1r/pp2k3/2pb1n1p/5Rp1/3pP3/2P5/PP1N2PP/R2Q2K1 w - - 0 19",
-   "said": "knight on that outpost we could have done what's called a knight maneuver maneuver is just a sequence of moves with one piece um knight c4 knight e3 knight f5 that was also possible but this is even faster so he's taken the pawn and many of you guys might be tempted to take back but in chess you always got to look for better moves even when there's a tempting move if you notice the bishop and the knight they're unforkable squares they're one square apart we've had the situation before we can't give a night fork but the knight is not the only piece that can give a fork here we play the move e5 the bishop and"
+   "said": "was also possible but this is even faster so he's taken the pawn and many of you guys might be tempted to take back but in chess you always got to look for better moves even when there's"
   },
   {
    "ply": 37,
@@ -342,7 +342,7 @@
     "e5"
    ],
    "fen": "5r1r/pp2k3/2pb1n1p/4PRp1/3p4/2P5/PP1N2PP/R2Q2K1 b - - 0 19",
-   "said": "a tempting move if you notice the bishop and the knight they're unforkable squares they're one square apart we've had the situation before we can't give a night fork but the knight is not the only piece that can give a fork here we play the move e5 the bishop and the knight are hanging and the rook most importantly is defending that pawn so his bishop can't take it his bishop can't take it i know that many of you are i i'm not usually at this level of simplicity but i i you know i know there's a lot of people from from charlie's stream and stuff so i'm i'm sorry to those of you who you know for whom this is really basic uh you know once we continue the speedrun we'll be back at like 1800 and stuff thanks for being chill about it"
+   "said": "a tempting move if you notice the bishop and the knight they're unforkable squares they're one square apart we've had the situation before we can't give a night fork but the knight is not the only piece that can give a fork here we play the move e5 the bishop and the knight are hanging and the rook most importantly is defending that pawn so his bishop can't take it his bishop can't take it i know that many of you are i i'm not usually at this level of simplicity but i i you know i know there's a lot of people from from charlie's stream and"
   },
   {
    "ply": 38,
@@ -351,7 +351,7 @@
     "dxc3"
    ],
    "fen": "5r1r/pp2k3/2pb1n1p/4PRp1/8/2p5/PP1N2PP/R2Q2K1 w - - 0 20",
-   "said": "stuff so i'm i'm sorry to those of you who you know for whom this is really basic uh you know once we continue the speedrun we'll be back at like 1800 and stuff thanks for being chill about it appreciate it okay so he's taken our pawn now we can recapture his pawn but that would not be a good idea because then the bishop could move out to c5 and deliver a check we would have to move our king and then he could move his knight and then you know the fork kind of evaporates so instead of that"
+   "said": "stuff so i'm i'm sorry to those of you who you know for whom this is really basic uh you know once we continue the speedrun we'll be back at like 1800 and stuff thanks for being chill about it appreciate it okay so he's taken our pawn now we can recapture his pawn but that would not be a good idea because then the bishop could move out"
   },
   {
    "ply": 39,
@@ -360,7 +360,7 @@
     "exd6+"
    ],
    "fen": "5r1r/pp2k3/2pP1n1p/5Rp1/8/2p5/PP1N2PP/R2Q2K1 b - - 0 20",
-   "said": "because then the bishop could move out to c5 and deliver a check we would have to move our king and then he could move his knight and then you know the fork kind of evaporates so instead of that we want to take either his bishop or his knight first that's a check he has to respond to the check and then we can deal with this pawn"
+   "said": "to c5 and deliver a check we would have to move our king and then he could move his knight and then you know the fork kind of evaporates so instead of that we want to take either his bishop or his knight first that's a check"
   },
   {
    "ply": 40,
@@ -369,7 +369,7 @@
     "Kxd6"
    ],
    "fen": "5r1r/pp6/2pk1n1p/5Rp1/8/2p5/PP1N2PP/R2Q2K1 w - - 0 21",
-   "said": "then you know the fork kind of evaporates so instead of that we want to take either his bishop or his knight first that's a check he has to respond to the check and then we can deal with this pawn but we don't even have to deal with the pawn again notice how i'm always looking for a better move i'm seeing the tempting move which is just to take the pawn back but then i'm saying wait a second is there anything better in this position and i'm noticing that the queen is x-raying the king so this knight could move out and deliver a discovered check not just any discover check it could deliver a double check double check is when two pieces are checking the king at once and the double checks are great because they cannot be blocked when you deliver a double check the king has to move and so this is a great example of a"
+   "said": "he has to respond to the check and then we can deal with this pawn but we don't even have to deal with the pawn again notice how i'm always looking for a better move i'm seeing the tempting move which is just to take the pawn back but then i'm saying wait a second is there anything better in this position and i'm noticing that the queen is x-raying the king so this knight could move out and deliver a discovered check not just any discover check it could deliver a double"
   },
   {
    "ply": 41,
@@ -378,7 +378,7 @@
     "Ne4+"
    ],
    "fen": "5r1r/pp6/2pk1n1p/5Rp1/4N3/2p5/PP4PP/R2Q2K1 b - - 1 21",
-   "said": "check double check is when two pieces are checking the king at once and the double checks are great because they cannot be blocked when you deliver a double check the king has to move and so this is a great example of a double check the knight is checking the king and the queen is checking the king so the king has to move and we're going to ensnare the king in a mating attack or"
+   "said": "check double check is when two pieces are checking the king at once and the double checks are great because they cannot be blocked when you deliver a double check the king has to move and so this is a great example of a double check the knight is checking the king and the queen is checking the king"
   },
   {
    "ply": 42,
@@ -387,7 +387,7 @@
     "Kc7"
    ],
    "fen": "5r1r/ppk5/2p2n1p/5Rp1/4N3/2p5/PP4PP/R2Q2K1 w - - 2 22",
-   "said": "has to move and so this is a great example of a double check the knight is checking the king and the queen is checking the king so the king has to move and we're going to ensnare the king in a mating attack or we're going to win a bunch of other pieces all right so in this position we could take a free night but before we even take that knight we could make yet another intermediate move what other intermediate move could we make to bring another piece into attacking position yeah so the great move queen d6 that's a"
+   "said": "so the king has to move and we're going to ensnare the king in a mating attack or we're going to win a bunch of other pieces all right so in this position we could take a free night but before we even take that knight we"
   },
   {
    "ply": 43,
@@ -396,7 +396,7 @@
     "Qd6+"
    ],
    "fen": "5r1r/ppk5/2pQ1n1p/5Rp1/4N3/2p5/PP4PP/R5K1 b - - 3 22",
-   "said": "but before we even take that knight we could make yet another intermediate move what other intermediate move could we make to bring another piece into attacking position yeah so the great move queen d6 that's a check he can't take the queen because it's protected by the knight he's got to move the king back then we take the knight and the game is basically going to be over um because we're going to be up a queen a knight and we're going to have a mating attack so okay so just king b6"
+   "said": "could make yet another intermediate move what other intermediate move could we make to bring another piece into attacking position yeah so the great move queen d6 that's a check he can't take the queen because it's protected by the knight he's got to move the king back then we take the knight"
   },
   {
    "ply": 44,
@@ -405,7 +405,7 @@
     "Kb6"
    ],
    "fen": "5r1r/pp6/1kpQ1n1p/5Rp1/4N3/2p5/PP4PP/R5K1 w - - 4 23",
-   "said": "move the king back then we take the knight and the game is basically going to be over um because we're going to be up a queen a knight and we're going to have a mating attack so okay so just king b6 um yeah so we could go after the king immediately we could go for checkmate but let's play it simple let's just take"
+   "said": "and the game is basically going to be over um because we're going to be up a queen a knight and we're going to have a mating attack so okay so just king b6 um yeah so we could go after the king"
   },
   {
    "ply": 45,
@@ -414,7 +414,7 @@
     "Nxf6"
    ],
    "fen": "5r1r/pp6/1kpQ1N1p/5Rp1/8/2p5/PP4PP/R5K1 b - - 0 23",
-   "said": "okay so just king b6 um yeah so we could go after the king immediately we could go for checkmate but let's play it simple let's just take a free night and then go for checkmate after that okay i'm gonna have to run to the uh bathroom real fast after this game guys"
+   "said": "immediately we could go for checkmate but let's play it simple let's just take a free night and then go for checkmate after that"
   },
   {
    "ply": 46,
@@ -423,7 +423,7 @@
     "cxb2"
    ],
    "fen": "5r1r/pp6/1kpQ1N1p/5Rp1/8/8/Pp4PP/R5K1 w - - 0 24",
-   "said": "but let's play it simple let's just take a free night and then go for checkmate after that okay i'm gonna have to run to the uh bathroom real fast after this game guys so you're gonna have to give me 30 seconds i'm gonna make it quick so what should we do now we have checkmate in two moves we have checkmated two you know what i'm gonna run to the bathroom during the game so i'm gonna let you guys think about the mate i'll be back in one minute you have one minute to find the checkmate when i'm back i will do the big reveal white to play and check made in two moves it's a pretty nice one time for the reveal john the raid thank you time for the reveal guys check on d7"
+   "said": "okay i'm gonna have to run to the uh bathroom real fast after this game guys so you're gonna have to give me 30 seconds i'm gonna make it quick so what should we do now we have checkmate in two moves we have checkmated two you know what i'm gonna run to the bathroom during the game so i'm gonna let you guys think about the mate i'll be back in one minute you have one minute to find the checkmate when i'm back i will do the big reveal"
   },
   {
    "ply": 47,
@@ -432,7 +432,7 @@
     "Nd7+"
    ],
    "fen": "5r1r/pp1N4/1kpQ3p/5Rp1/8/8/Pp4PP/R5K1 b - - 1 24",
-   "said": "white to play and check made in two moves it's a pretty nice one time for the reveal john the raid thank you time for the reveal guys check on d7 that's a check to the king the king has to move and then"
+   "said": "white to play and check made in two moves it's a pretty nice one time for the reveal john the raid thank you time for the reveal guys check on d7 that's a check to the king the king has"
   },
   {
    "ply": 48,
@@ -441,7 +441,7 @@
     "Ka6"
    ],
    "fen": "5r1r/pp1N4/k1pQ3p/5Rp1/8/8/Pp4PP/R5K1 w - - 2 25",
-   "said": "time for the reveal john the raid thank you time for the reveal guys check on d7 that's a check to the king the king has to move and then the queen and this is the move that's hard to see thank you john welcome guys i got a charlie raid earlier this chat is hopping right now i think you're at empty for the four months boom goes the dynamite thank you ocho mom peso and that's a checkmate why is it a checkmate"
+   "said": "to move and then the queen and this is the move that's hard to see thank you john welcome guys i got a charlie raid earlier this chat is hopping right now i think you're at empty for the four months"
   },
   {
    "ply": 49,
@@ -450,14 +450,14 @@
     "Qa3#"
    ],
    "fen": "5r1r/pp1N4/k1p4p/5Rp1/8/Q7/Pp4PP/R5K1 b - - 3 25",
-   "said": "this chat is hopping right now i think you're at empty for the four months boom goes the dynamite thank you ocho mom peso and that's a checkmate why is it a checkmate because the king can't go to this side of the board that rook covers the king the knight covers this square and the queen is actually doing the checking thank you big alex for the bits and clark payne for the three months i appreciate it um knight d5 would not have been made in"
+   "said": "boom goes the dynamite thank you ocho mom peso and that's a checkmate why is it a checkmate because the king can't go to this side of the board that rook covers the king the knight covers this square and the queen is actually doing the checking"
   },
   {
    "ply": 46,
    "t": 1266.5,
    "line": [],
    "fen": "5r1r/pp6/1kpQ1N1p/5Rp1/8/8/Pp4PP/R5K1 w - - 0 24",
-   "said": "the knight covers this square and the queen is actually doing the checking thank you big alex for the bits and clark payne for the three months i appreciate it um knight d5 would not have been made in"
+   "said": "thank you big alex for the bits and clark payne for the three months i appreciate it um knight d5 would not have been made in"
   },
   {
    "ply": 47,
@@ -466,7 +466,7 @@
     "Nd5+"
    ],
    "fen": "5r1r/pp6/1kpQ3p/3N1Rp1/8/8/Pp4PP/R5K1 b - - 1 24",
-   "said": "the knight covers this square and the queen is actually doing the checking thank you big alex for the bits and clark payne for the three months i appreciate it um knight d5 would not have been made in two because if we did this and the knight blocks the rook's axis to b5"
+   "said": "two because if we did this and the knight"
   },
   {
    "ply": 49,
@@ -476,7 +476,7 @@
     "Qa3+"
    ],
    "fen": "5r1r/pp6/k1p4p/3N1Rp1/8/Q7/Pp4PP/R5K1 b - - 3 25",
-   "said": "thank you big alex for the bits and clark payne for the three months i appreciate it um knight d5 would not have been made in two because if we did this and the knight blocks the rook's axis to b5"
+   "said": "blocks the rook's axis to b5"
   },
   {
    "ply": 50,
@@ -485,14 +485,14 @@
     "Kb5"
    ],
    "fen": "5r1r/pp6/2p4p/1k1N1Rp1/8/Q7/Pp4PP/R5K1 w - - 4 26",
-   "said": "for the bits and clark payne for the three months i appreciate it um knight d5 would not have been made in two because if we did this and the knight blocks the rook's axis to b5 alright so let's quickly go over the game good game good game overcast i"
+   "said": "alright so let's quickly go over the"
   },
   {
    "ply": 49,
    "t": 1276,
    "line": [],
    "fen": "5r1r/pp6/k1p4p/3N1Rp1/8/Q7/Pp4PP/R5K1 b - - 3 25",
-   "said": "um knight d5 would not have been made in two because if we did this and the knight blocks the rook's axis to b5 alright so let's quickly go over the game good game good game overcast i appreciate it yeah we're getting so much support here i love seeing this now by the way i'll just do a little bit of a pitch if you're from charlie stream you like this kind of content you want to get into chess there's a lot of resources out there these days online one of them i have a youtube channel you can just search up my name on youtube and this type of speed run where i play these slow games and explain all the moves there's over 50 of those types of videos on my youtube together with other content so i would be honored if you gave me a sub um but only if obviously if you like this kind of content and you want more of it no pressure um thank you well i i don't compare to charlie um but you know but but uh i try my best to make videos for beginners for intermediate players so wherever you are on the chess experience level um there's gonna be videos for you okay and now i will stop annoying you"
+   "said": "game good game good game overcast i appreciate it yeah we're getting so much support here i love seeing this now by the way i'll just do a little bit of a pitch if you're from charlie stream you like this kind of content you want to get into chess there's a lot of resources out there these days online one of them i have a youtube channel you can just search up my name on youtube and this type of speed run where i play these slow games and explain all the moves there's over 50 of those types of videos on my youtube together with other content so i would be honored if you gave me a sub um but only if obviously if you like this kind of content and you want more of it no pressure um thank you well i i don't compare to charlie um but you know but but uh i try my best to make videos for beginners for intermediate players so wherever you are on the chess experience level um there's gonna be videos for you okay and now i will stop annoying you"
   }
  ],
  "forks": [

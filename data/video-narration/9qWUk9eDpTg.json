@@ -19,7 +19,7 @@
     "Nc3"
    ],
    "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 2 2",
-   "said": "And E4. Okay, let's play Let's play an Alekhine. Which is just a generally underrated opening at this level, I think. Okay, but unfortunately, our opponent plays knight c3, so he doesn't go into you know, the main line of E5. So, here there are two choices. E5 transposes into the Vienna, but if you want to play like a genuine Alekhine player, then you should play d5"
+   "said": "Okay, but unfortunately, our opponent plays knight c3, so he doesn't go into you know, the main line of E5."
   },
   {
    "ply": 4,
@@ -28,7 +28,7 @@
     "d5"
    ],
    "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
-   "said": "you know, the main line of E5. So, here there are two choices. E5 transposes into the Vienna, but if you want to play like a genuine Alekhine player, then you should play d5 and transpose into a a favorable version of the Scandi."
+   "said": "So, here there are two choices. E5 transposes into the Vienna, but if you want to play like a genuine Alekhine player, then you should play d5 and transpose into a a favorable version"
   },
   {
    "ply": 5,
@@ -37,7 +37,7 @@
     "exd5"
    ],
    "fen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 0 3",
-   "said": "transposes into the Vienna, but if you want to play like a genuine Alekhine player, then you should play d5 and transpose into a a favorable version of the Scandi. Like if you're a genuine Alekhine player, you go for this position."
+   "said": "of the Scandi. Like if you're a genuine Alekhine"
   },
   {
    "ply": 6,
@@ -46,7 +46,7 @@
     "Nxd5"
    ],
    "fen": "rnbqkb1r/ppp1pppp/8/3n4/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 4",
-   "said": "want to play like a genuine Alekhine player, then you should play d5 and transpose into a a favorable version of the Scandi. Like if you're a genuine Alekhine player, you go for this position. E D5 knight D5. Bishop c4, the knight drops back to b6 with tempo. He takes on d5, okay."
+   "said": "player, you go for this position. E D5 knight D5."
   },
   {
    "ply": 7,
@@ -55,7 +55,7 @@
     "Nxd5"
    ],
    "fen": "rnbqkb1r/ppp1pppp/8/3N4/8/8/PPPP1PPP/R1BQKBNR b KQkq - 0 4",
-   "said": "of the Scandi. Like if you're a genuine Alekhine player, you go for this position. E D5 knight D5. Bishop c4, the knight drops back to b6 with tempo. He takes on d5, okay."
+   "said": "Bishop c4, the knight drops back to b6 with tempo. He takes on d5, okay."
   },
   {
    "ply": 8,
@@ -64,7 +64,7 @@
     "Qxd5"
    ],
    "fen": "rnb1kb1r/ppp1pppp/8/3q4/8/8/PPPP1PPP/R1BQKBNR w KQkq - 0 5",
-   "said": "of the Scandi. Like if you're a genuine Alekhine player, you go for this position. E D5 knight D5. Bishop c4, the knight drops back to b6 with tempo. He takes on d5, okay. This doesn't seem too impressive to me."
+   "said": ""
   },
   {
    "ply": 9,
@@ -73,7 +73,7 @@
     "Nf3"
    ],
    "fen": "rnb1kb1r/ppp1pppp/8/3q4/8/5N2/PPPP1PPP/R1BQKB1R b KQkq - 1 5",
-   "said": "Like if you're a genuine Alekhine player, you go for this position. E D5 knight D5. Bishop c4, the knight drops back to b6 with tempo. He takes on d5, okay. This doesn't seem too impressive to me. Alekhine, yeah. And in this position, we we kind of have like a Scandi, but white can't go knight c3 because that knight is gone. So, the queen is actually quite safe in the center. And I don't know exactly what the theory is here. I think black has many different ways of developing pieces. Like we can play a little bit more positionally, we can play g6 bishop g7, but I think if we want to play very ambitiously, we can aim for a long castle. I think we can aim for a long castle, and we can do that just by developing the the the queen side pieces as quickly as possible, yeah? So, the bishop will come to g4 and the knight will come to c6. And then we're going to castle queen side. So, I think we can start with bishop g4"
+   "said": "This doesn't seem too impressive to me. Alekhine, yeah. And in this position, we we kind of have like a Scandi, but white can't go knight c3 because that knight is gone. So, the queen is actually quite safe in the center. And I don't know exactly what the theory is here. I think black has many different ways of developing pieces. Like we can play a little bit more positionally, we can play g6 bishop g7, but I think if we want to play very ambitiously, we can aim for a long castle. I think we can aim for a long castle, and we can do that just by developing the the the queen side pieces as quickly"
   },
   {
    "ply": 10,
@@ -82,7 +82,7 @@
     "Bg4"
    ],
    "fen": "rn2kb1r/ppp1pppp/8/3q4/6b1/5N2/PPPP1PPP/R1BQKB1R w KQkq - 2 6",
-   "said": "as possible, yeah? So, the bishop will come to g4 and the knight will come to c6. And then we're going to castle queen side. So, I think we can start with bishop g4 just to try to induce bishop b2. Now,"
+   "said": "as possible, yeah? So, the bishop will come to g4 and the knight will come to c6. And then we're going to castle queen side. So, I think we can start with bishop g4"
   },
   {
    "ply": 12,
@@ -92,7 +92,7 @@
     "Nc6"
    ],
    "fen": "r3kb1r/ppp1pppp/2n5/3q4/6b1/5N2/PPPPBPPP/R1BQK2R w KQkq - 4 7",
-   "said": "and the knight will come to c6. And then we're going to castle queen side. So, I think we can start with bishop g4 just to try to induce bishop b2. Now, knight c6. And then we castle queen side. Bang."
+   "said": "just to try to induce bishop b2. Now, knight c6."
   },
   {
    "ply": 14,
@@ -102,7 +102,7 @@
     "O-O-O"
    ],
    "fen": "2kr1b1r/ppp1pppp/2n5/3q4/6b1/3P1N2/PPP1BPPP/R1BQK2R w KQ - 1 8",
-   "said": "side. So, I think we can start with bishop g4 just to try to induce bishop b2. Now, knight c6. And then we castle queen side. Bang. And I think black has a very nice position because we can also play e5 to control more of the center. So, there's an upside and a downside to"
+   "said": "And then we castle queen side. Bang. And I think black has a very nice position because we can also play e5 to"
   },
   {
    "ply": 15,
@@ -111,7 +111,7 @@
     "O-O"
    ],
    "fen": "2kr1b1r/ppp1pppp/2n5/3q4/6b1/3P1N2/PPP1BPPP/R1BQ1RK1 b - - 2 8",
-   "said": "knight c6. And then we castle queen side. Bang. And I think black has a very nice position because we can also play e5 to control more of the center. So, there's an upside and a downside to going e5 here. We could go more modestly e6 and then play Bishop d6 in order to hit the h2 pawn. But, given that white has positioned his pawn quite passively with d3, I think e5 makes a lot of sense to grab"
+   "said": "control more of the center. So, there's an upside and a downside to going e5 here. We could go more modestly e6 and then play Bishop d6 in order to hit the h2"
   },
   {
    "ply": 16,
@@ -120,7 +120,7 @@
     "e5"
    ],
    "fen": "2kr1b1r/ppp2ppp/2n5/3qp3/6b1/3P1N2/PPP1BPPP/R1BQ1RK1 w - - 0 9",
-   "said": "and then play Bishop d6 in order to hit the h2 pawn. But, given that white has positioned his pawn quite passively with d3, I think e5 makes a lot of sense to grab as much space in the center as possible. Bishop e3."
+   "said": "pawn. But, given that white has positioned his pawn quite passively with d3, I think e5 makes a lot of sense to grab as much space in the center as possible."
   },
   {
    "ply": 17,
@@ -129,7 +129,7 @@
     "Be3"
    ],
    "fen": "2kr1b1r/ppp2ppp/2n5/3qp3/6b1/3PBN2/PPP1BPPP/R2Q1RK1 b - - 1 9",
-   "said": "pawn. But, given that white has positioned his pawn quite passively with d3, I think e5 makes a lot of sense to grab as much space in the center as possible. Bishop e3. Now, let's make uh"
+   "said": "Bishop e3."
   },
   {
    "ply": 18,
@@ -138,14 +138,14 @@
     "Kb8"
    ],
    "fen": "1k1r1b1r/ppp2ppp/2n5/3qp3/6b1/3PBN2/PPP1BPPP/R2Q1RK1 w - - 2 10",
-   "said": "pawn quite passively with d3, I think e5 makes a lot of sense to grab as much space in the center as possible. Bishop e3. Now, let's make uh Well, actually a king b8 walks into a very strange tactic, knight takes e5. Okay, so I want to play king b8 at some point. That's just something we'll keep in mind. I think we should keep expanding. I think we should keep expanding"
+   "said": "Now, let's make uh Well, actually a king b8 walks into a very strange tactic, knight takes e5. Okay, so I want to play king b8 at some"
   },
   {
    "ply": 17,
    "t": 156.5,
    "line": [],
    "fen": "2kr1b1r/ppp2ppp/2n5/3qp3/6b1/3PBN2/PPP1BPPP/R2Q1RK1 b - - 1 9",
-   "said": "very strange tactic, knight takes e5. Okay, so I want to play king b8 at some point. That's just something we'll keep in mind. I think we should keep expanding. I think we should keep expanding uh and perhaps play the move f5."
+   "said": "point. That's just something we'll keep in mind. I think we should keep expanding. I think we should keep expanding uh and perhaps play the move f5."
   },
   {
    "ply": 18,
@@ -154,7 +154,7 @@
     "f5"
    ],
    "fen": "2kr1b1r/ppp3pp/2n5/3qpp2/6b1/3PBN2/PPP1BPPP/R2Q1RK1 w - - 0 10",
-   "said": "Okay, so I want to play king b8 at some point. That's just something we'll keep in mind. I think we should keep expanding. I think we should keep expanding uh and perhaps play the move f5. Just expanding on the king side. Yeah, Bishop d6 is also possible. This is one of those positions where you know, there's like three or four moves that I think are about equivalent in strength. And so, you shouldn't spend, you know, too long trying to nitpick. You should just make natural moves in such a position. Yeah, the Bishop is probably going to come out to d6 in order to overprotect the e5 pawn and in the case we ever go e4, it's going to be a good idea to keep the Bishop on d6. He goes knight g5,"
+   "said": "Just expanding on the king side. Yeah, Bishop d6 is also possible. This is one of those positions where you know, there's like three or four moves that I think are about equivalent in strength. And so, you shouldn't spend, you know, too long trying to nitpick. You should just make natural moves in"
   },
   {
    "ply": 19,
@@ -163,7 +163,7 @@
     "Ng5"
    ],
    "fen": "2kr1b1r/ppp3pp/2n5/3qppN1/6b1/3PB3/PPP1BPPP/R2Q1RK1 b - - 1 10",
-   "said": "such a position. Yeah, the Bishop is probably going to come out to d6 in order to overprotect the e5 pawn and in the case we ever go e4, it's going to be a good idea to keep the Bishop on d6. He goes knight g5, which I thought white would play. Okay, we'll take the Bishop on e2."
+   "said": "such a position. Yeah, the Bishop is probably going to come out to d6 in order to overprotect the e5 pawn and in the case we ever go e4, it's going to be a good idea to keep the Bishop on d6. He goes knight g5, which I thought white would play."
   },
   {
    "ply": 20,
@@ -172,7 +172,7 @@
     "Bxe2"
    ],
    "fen": "2kr1b1r/ppp3pp/2n5/3qppN1/8/3PB3/PPP1bPPP/R2Q1RK1 w - - 0 11",
-   "said": "the e5 pawn and in the case we ever go e4, it's going to be a good idea to keep the Bishop on d6. He goes knight g5, which I thought white would play. Okay, we'll take the Bishop on e2. And what should we do now? What move should we make now? Yeah, we should just play h6. Yeah, get the knight kick the knight out of g5. My My guess is that our opponent might"
+   "said": "Okay, we'll take the Bishop on e2. And what should we do now? What move should we make now? Yeah, we should just play h6."
   },
   {
    "ply": 23,
@@ -183,7 +183,7 @@
     "Qc2"
    ],
    "fen": "2kr1b1r/ppp3p1/2n4p/3qppN1/2P5/3PB3/PPQ1bPPP/R4RK1 b - - 1 12",
-   "said": "And what should we do now? What move should we make now? Yeah, we should just play h6. Yeah, get the knight kick the knight out of g5. My My guess is that our opponent might be intending c4, but c4 I believe just blunders a pawn due to queen takes d3 and there is no fork because the queen on e2 hangs. And this is like a classic concept, c4 queen takes d3 and if he queen trades, then knight f7 is no longer a fork."
+   "said": "Yeah, get the knight kick the knight out of g5. My My guess is that our opponent might be intending c4, but c4 I believe just blunders a pawn due to queen takes d3 and there is no fork because the queen on e2 hangs."
   },
   {
    "ply": 26,
@@ -194,7 +194,7 @@
     "Qd5"
    ],
    "fen": "2kr1b1r/ppp3p1/2n4p/3qpp2/8/3PBN2/PPQ1bPPP/R4RK1 w - - 2 14",
-   "said": "fork because the queen on e2 hangs. And this is like a classic concept, c4 queen takes d3 and if he queen trades, then knight f7 is no longer a fork. Okay, so the knight goes back to f3. Okay. So, who can propose a good move now? One good move is to complete our development with Bishop D6. But, as many of you guys are indicating, I like the"
+   "said": "And this is like a classic concept, c4 queen takes d3 and if he queen trades, then knight f7 is no longer a fork. Okay, so the knight goes back to f3. Okay. So, who can propose a good move now?"
   },
   {
    "ply": 30,
@@ -206,7 +206,7 @@
     "g5"
    ],
    "fen": "2kr1b1r/ppp5/2n4p/3qppp1/8/3PBN2/PPQ1bPPP/R4RK1 w - - 0 16",
-   "said": "Okay, so the knight goes back to f3. Okay. So, who can propose a good move now? One good move is to complete our development with Bishop D6. But, as many of you guys are indicating, I like the move G5, continuing to expand on the king side, starting to shove our pawns down the board, and we're creating also a nice development square for our dark-squared Bishop on G7. Now, you might say, \"Well, isn't the Bishop on G7 just sort of staring at our own pawn?\" Well, yes, it is, but it's also really solidifying our position. And like I said earlier, at some point, we might push our E pawn down at E4. That's not an unlikely possibility, and if that happens, then we would love for our Bishop to be sitting on the long diagonal. And also, our pawns are just doing a great job of controlling a bunch of"
+   "said": "One good move is to complete our development with Bishop D6. But, as many of you guys are indicating, I like the move G5, continuing to expand on the king side, starting to shove our pawns down the board, and we're creating also a nice development square for our dark-squared Bishop on G7. Now, you might say, \"Well, isn't the Bishop on G7 just sort of staring at our own pawn?\" Well, yes, it is, but it's also really solidifying our position. And like I said earlier, at some point, we might push our E pawn down at E4."
   },
   {
    "ply": 31,
@@ -215,7 +215,7 @@
     "Ne1"
    ],
    "fen": "2kr1b1r/ppp5/2n4p/3qppp1/8/3PB3/PPQ1bPPP/R3NRK1 b - - 1 16",
-   "said": "That's not an unlikely possibility, and if that happens, then we would love for our Bishop to be sitting on the long diagonal. And also, our pawns are just doing a great job of controlling a bunch of different squares. So, I think what's important in this position is for us to play without hurrying. We need to keep improving, and we shouldn't push our pawns for no reason and prematurely. So, for example, a move that I don't particularly like is F4, because it gives away this E4 square, which is a stronghold that white can use to keep the pawns at bay. So, what I do like here is either Bishop D6, as mentioned earlier, or Bishop G7. I think either move is good, but let's play Bishop D6. Let's let's"
+   "said": "That's not an unlikely possibility, and if that happens, then we would love for our Bishop to be sitting on the long diagonal. And also, our pawns are just doing a great job of controlling a bunch of different squares. So, I think what's important in this position is for us to play without hurrying. We need to keep improving, and we shouldn't push our pawns for no reason and prematurely. So, for example, a move that I don't particularly like is F4, because it gives away this E4 square, which is a stronghold that white"
   },
   {
    "ply": 32,
@@ -224,7 +224,7 @@
     "Bd6"
    ],
    "fen": "2kr3r/ppp5/2nb3p/3qppp1/8/3PB3/PPQ1bPPP/R3NRK1 w - - 2 17",
-   "said": "can use to keep the pawns at bay. So, what I do like here is either Bishop D6, as mentioned earlier, or Bishop G7. I think either move is good, but let's play Bishop D6. Let's let's arrange our pieces more more in the center. Yeah, Bishop D6 just seems a little bit more harmonious to me. Now, notice that we're we're not afraid of C4. We're absolutely unafraid of C4. Bishop"
+   "said": "can use to keep the pawns at bay. So, what I do like here is either Bishop D6, as mentioned earlier, or Bishop G7. I think either move is good, but let's play Bishop D6. Let's let's arrange our pieces more more in the center. Yeah, Bishop D6 just seems a"
   },
   {
    "ply": 33,
@@ -233,7 +233,7 @@
     "Bd2"
    ],
    "fen": "2kr3r/ppp5/2nb3p/3qppp1/8/3P4/PPQBbPPP/R3NRK1 b - - 3 17",
-   "said": "arrange our pieces more more in the center. Yeah, Bishop D6 just seems a little bit more harmonious to me. Now, notice that we're we're not afraid of C4. We're absolutely unafraid of C4. Bishop back to D2. Okay. So, now I can guarantee that knight D4 is probably on your mind right now, but I actually don't want to play that move. Why not? Because it it you have the immediate dopamine hit of attacking the queen, but then the queen drops back to D1. And what's going to happen then is that white's going to play C3 and kick the knight away. And weirdly, this is going to help white, cuz the queen from D1 can then activate to A4. So, rather than doing anything immediate, let's continue improving our"
+   "said": "little bit more harmonious to me. Now, notice that we're we're not afraid of C4. We're absolutely unafraid of C4. Bishop back to D2. Okay. So, now I can guarantee that knight D4 is probably on your mind right now, but I actually don't want to play that move. Why not? Because it it you have the immediate dopamine hit of attacking the queen, but then the queen drops back to D1. And what's going to happen then is that white's going to play C3 and kick the knight away."
   },
   {
    "ply": 34,
@@ -242,7 +242,7 @@
     "Rhe8"
    ],
    "fen": "2krr3/ppp5/2nb3p/3qppp1/8/3P4/PPQBbPPP/R3NRK1 w - - 4 18",
-   "said": "And weirdly, this is going to help white, cuz the queen from D1 can then activate to A4. So, rather than doing anything immediate, let's continue improving our position by bringing another piece into the center, rook H E8. Bishop C3, okay."
+   "said": "And weirdly, this is going to help white, cuz the queen from D1 can then activate to A4. So, rather than doing anything immediate, let's continue improving our position by bringing another piece into"
   },
   {
    "ply": 35,
@@ -251,7 +251,7 @@
     "Bc3"
    ],
    "fen": "2krr3/ppp5/2nb3p/3qppp1/8/2BP4/PPQ1bPPP/R3NRK1 b - - 5 18",
-   "said": "activate to A4. So, rather than doing anything immediate, let's continue improving our position by bringing another piece into the center, rook H E8. Bishop C3, okay. So, our opponent is just kind of going back and forth, giving us all of the time in the world to make as many improvements to our position as we can possibly manage. There's one more thing we haven't fully done yet. Now, I like the move G4. Now, I like the move G4 because it takes"
+   "said": "the center, rook H E8. Bishop C3, okay. So, our opponent is just kind of going back and forth, giving us all of the time in the world to make as many improvements to our"
   },
   {
    "ply": 36,
@@ -260,7 +260,7 @@
     "g4"
    ],
    "fen": "2krr3/ppp5/2nb3p/3qpp2/6p1/2BP4/PPQ1bPPP/R3NRK1 w - - 0 19",
-   "said": "to make as many improvements to our position as we can possibly manage. There's one more thing we haven't fully done yet. Now, I like the move G4. Now, I like the move G4 because it takes away the F3 square from white's pieces. And why is that important? Because that's the knight on E1's only square. Now, the knight on E1 is totally out of commission, and we have this idea, which is slow, but still quite dangerous, of pushing"
+   "said": "position as we can possibly manage. There's one more thing we haven't fully done yet. Now, I like the move G4. Now, I like the move G4 because it takes away the F3 square from white's pieces. And why is that important? Because that's the knight on E1's only square. Now, the"
   },
   {
    "ply": 37,
@@ -269,7 +269,7 @@
     "Rd1"
    ],
    "fen": "2krr3/ppp5/2nb3p/3qpp2/6p1/2BP4/PPQ1bPPP/3RNRK1 b - - 1 19",
-   "said": "why is that important? Because that's the knight on E1's only square. Now, the knight on E1 is totally out of commission, and we have this idea, which is slow, but still quite dangerous, of pushing the H pawn down the board. Which I think that we should now apply because we've made all of the improvements to our position, and now we can actually start attacking."
+   "said": "knight on E1 is totally out of commission, and we have this idea, which is slow, but still quite dangerous, of pushing the H pawn down the board. Which I think that we should now apply"
   },
   {
    "ply": 38,
@@ -278,7 +278,7 @@
     "h5"
    ],
    "fen": "2krr3/ppp5/2nb4/3qpp1p/6p1/2BP4/PPQ1bPPP/3RNRK1 w - - 0 20",
-   "said": "is slow, but still quite dangerous, of pushing the H pawn down the board. Which I think that we should now apply because we've made all of the improvements to our position, and now we can actually start attacking. Let's play H5. D4 is not a threat cuz that square is under our control. And we're Yeah, so save the questions for for after the"
+   "said": "because we've made all of the improvements to our position, and now we can actually start attacking. Let's play H5. D4 is not a threat cuz that square is under our control."
   },
   {
    "ply": 39,
@@ -287,7 +287,7 @@
     "g3"
    ],
    "fen": "2krr3/ppp5/2nb4/3qpp1p/6p1/2BP2P1/PPQ1bP1P/3RNRK1 b - - 0 20",
-   "said": "Let's play H5. D4 is not a threat cuz that square is under our control. And we're Yeah, so save the questions for for after the game. He goes G3. Okay, now there are a bunch of tempting moves in this position. Hmm. So, conceptually, this is a super interesting Ooh. The the there's a interesting subtlety here. Yeah, we should definitely play"
+   "said": "And we're Yeah, so save the questions for for after the game. He goes G3. Okay, now there are a bunch of tempting moves in this position. Hmm."
   },
   {
    "ply": 40,
@@ -296,7 +296,7 @@
     "h4"
    ],
    "fen": "2krr3/ppp5/2nb4/3qpp2/6pp/2BP2P1/PPQ1bP1P/3RNRK1 w - - 0 21",
-   "said": "So, conceptually, this is a super interesting Ooh. The the there's a interesting subtlety here. Yeah, we should definitely play H4. We should definitely play H4. I was calculating what happens after knight G2, which I think white is going to play. Because if if if white takes on H4, then clearly we've benefited from from what has happened."
+   "said": "So, conceptually, this is a super interesting Ooh. The the there's a interesting subtlety here. Yeah, we should definitely play H4. We should definitely play H4. I was calculating what happens after knight G2, which I think white is going to play. Because if if if white takes on H4, then"
   },
   {
    "ply": 41,
@@ -305,7 +305,7 @@
     "Ng2"
    ],
    "fen": "2krr3/ppp5/2nb4/3qpp2/6pp/2BP2P1/PPQ1bPNP/3R1RK1 b - - 1 21",
-   "said": "Because if if if white takes on H4, then clearly we've benefited from from what has happened. No, the bishop on D6 is quite good. Yeah, knight G2. Now, I think it's very important to play accurately. So, I think a lot of you are probably thinking, let's go H3 and checkmate him on G2. But, if you calculate the actual variation, then there's a bit of an issue, which is that after H3, white goes knight E3. And our queen cannot stay on this diagonal. Every square is defended. E4, I'll do it in a different color. F3 and G2 and H1 are all protected. So, we're going to have to drop our queen back to F7. That's totally not the end of the world, but it's going to take a while for us to get our queen back to D5. And I'll show you why I find that to be concerning. So, we have a very smart move here. Instead of going H3 immediately, we first play the move knight D4, which"
+   "said": "clearly we've benefited from from what has happened. No, the bishop on D6 is quite good. Yeah, knight G2. Now, I think it's very important to play accurately. So, I think a lot of you are probably thinking, let's go H3 and checkmate him on G2. But, if you calculate the actual variation, then there's a bit of an issue, which is that after H3, white goes knight E3. And our queen cannot stay on this diagonal. Every square is defended. E4, I'll do it in a different color. F3 and G2 and H1 are all protected. So, we're going to have to drop our queen back to F7. That's totally not the end of the world,"
   },
   {
    "ply": 42,

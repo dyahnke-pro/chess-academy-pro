@@ -295,5 +295,39 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "French Defense: Rubinstein Variation",
+   "eco": "C10",
+   "plies": 6,
+   "line": "d4 d5 Nc3 e6 e4 dxe4",
+   "coverage": 0.071
+  },
+  {
+   "name": "French Defense: Paulsen Variation",
+   "eco": "C10",
+   "plies": 5,
+   "line": "d4 d5 Nc3 e6 e4",
+   "coverage": 0.929
+  },
+  {
+   "name": "Queen's Pawn Game: Chigorin Variation",
+   "eco": "D00",
+   "plies": 3,
+   "line": "d4 d5 Nc3",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "French Defense",
+  "confirmed": false
+ }
 }

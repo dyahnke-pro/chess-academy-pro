@@ -19,7 +19,7 @@
     "Nf3"
    ],
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
-   "said": "[Music] 1674 pretty pretty high rated opponent here"
+   "said": ""
   },
   {
    "ply": 4,
@@ -28,7 +28,7 @@
     "d6"
    ],
    "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
-   "said": "[Music] 1674 pretty pretty high rated opponent here 4 e5 and let's see how the okay so e4 e5 and let's see how the okay so never mind there's not not going to be four knights there's going to be a philadel what do we do in this position there's two good moves and oftentimes they transpose into each other so the way to quote-unquote punish the philidor of course this is not a reputation but this is the way to get an advantage is"
+   "said": "4 e5 and let's see how the okay so e4 e5 and let's see how the okay so never mind there's not not going to be four knights there's going to be a philadel what do we do in this position there's two good moves and oftentimes"
   },
   {
    "ply": 5,
@@ -37,7 +37,7 @@
     "d4"
    ],
    "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
-   "said": "what do we do in this position there's two good moves and oftentimes they transpose into each other so the way to quote-unquote punish the philidor of course this is not a reputation but this is the way to get an advantage is to strike in the center with d4"
+   "said": "they transpose into each other so the way to quote-unquote punish the philidor of course this is not a reputation but this is the way to get an advantage is to strike in the center with d4"
   },
   {
    "ply": 6,
@@ -46,7 +46,7 @@
     "exd4"
    ],
    "fen": "rnbqkbnr/ppp2ppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
-   "said": "there's two good moves and oftentimes they transpose into each other so the way to quote-unquote punish the philidor of course this is not a reputation but this is the way to get an advantage is to strike in the center with d4"
+   "said": ""
   },
   {
    "ply": 7,
@@ -55,7 +55,7 @@
     "Nxd4"
    ],
    "fen": "rnbqkbnr/ppp2ppp/3p4/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
-   "said": "there's two good moves and oftentimes they transpose into each other so the way to quote-unquote punish the philidor of course this is not a reputation but this is the way to get an advantage is to strike in the center with d4 knight takes d4 and we have better control of the center grade"
+   "said": "knight takes d4 and we have"
   },
   {
    "ply": 9,
@@ -65,7 +65,7 @@
     "Nc3"
    ],
    "fen": "rnbqkb1r/ppp2ppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
-   "said": "way to quote-unquote punish the philidor of course this is not a reputation but this is the way to get an advantage is to strike in the center with d4 knight takes d4 and we have better control of the center grade position"
+   "said": "better control of the center grade position"
   },
   {
    "ply": 10,
@@ -74,7 +74,7 @@
     "Be7"
    ],
    "fen": "rnbqk2r/ppp1bppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 3 6",
-   "said": "of course this is not a reputation but this is the way to get an advantage is to strike in the center with d4 knight takes d4 and we have better control of the center grade position and okay so there's multiple setups here that are considered quite good one is to put the bishop on f4 and then play queen d2 but there's a setup that kind of flies under the radar which i think is extremely nasty for black and that is to thank you about that is to fianchetto"
+   "said": "and okay so there's multiple setups here that are considered quite good one is to put the bishop on f4 and then play queen d2 but there's a setup that"
   },
   {
    "ply": 11,
@@ -83,7 +83,7 @@
     "g3"
    ],
    "fen": "rnbqk2r/ppp1bppp/3p1n2/8/3NP3/2N3P1/PPP2P1P/R1BQKB1R b KQkq - 0 6",
-   "said": "one is to put the bishop on f4 and then play queen d2 but there's a setup that kind of flies under the radar which i think is extremely nasty for black and that is to thank you about that is to fianchetto the bishop g3"
+   "said": "kind of flies under the radar which i think is extremely nasty for black and that is to thank you about that is to fianchetto the bishop g3"
   },
   {
    "ply": 12,
@@ -92,7 +92,7 @@
     "O-O"
    ],
    "fen": "rnbq1rk1/ppp1bppp/3p1n2/8/3NP3/2N3P1/PPP2P1P/R1BQKB1R w KQ - 1 7",
-   "said": "play queen d2 but there's a setup that kind of flies under the radar which i think is extremely nasty for black and that is to thank you about that is to fianchetto the bishop g3 g3 bishop g2"
+   "said": "g3 bishop g2"
   },
   {
    "ply": 13,
@@ -101,7 +101,7 @@
     "Bg2"
    ],
    "fen": "rnbq1rk1/ppp1bppp/3p1n2/8/3NP3/2N3P1/PPP2PBP/R1BQK2R b KQ - 2 7",
-   "said": "play queen d2 but there's a setup that kind of flies under the radar which i think is extremely nasty for black and that is to thank you about that is to fianchetto the bishop g3 g3 bishop g2 and the idea is basically that the bishop collaborates with the pawn and makes it very difficult for black to free himself in the center with d5"
+   "said": "and the idea is basically that the bishop collaborates with the pawn and makes it very difficult for black to"
   },
   {
    "ply": 14,
@@ -110,7 +110,7 @@
     "c5"
    ],
    "fen": "rnbq1rk1/pp2bppp/3p1n2/2p5/3NP3/2N3P1/PPP2PBP/R1BQK2R w KQ - 0 8",
-   "said": "and the idea is basically that the bishop collaborates with the pawn and makes it very difficult for black to free himself in the center with d5 so i i like the end getting my bishop in the filter okay c5 so classic classic move uh but i think it's a mistake why is it a mistake no it's a positional positional error it creates a backward pawn on d6 that pawn was already kind of weak now it's backward and correspondingly it creates a very weak square on d2 not on d5 now with that in mind where should we put the knight this is a pretty important decision we shouldn't just throw it on a random square we should try to make the knight work for us as efficiently as we can so knight f5 allows bishop takes f5 i'm not sure this trade is in our benefit i like 92 because from here the knight"
+   "said": "free himself in the center with d5 so i i like the end getting my bishop in the filter okay c5 so classic classic move uh but i think it's a mistake why is it a mistake no it's a positional positional error it creates a backward pawn on d6 that pawn was already kind of weak now it's backward and correspondingly it creates a very weak square on d2 not on d5 now with that in mind where should we put the knight this is a pretty important decision we shouldn't just throw it on a random"
   },
   {
    "ply": 15,
@@ -119,7 +119,7 @@
     "Nde2"
    ],
    "fen": "rnbq1rk1/pp2bppp/3p1n2/2p5/4P3/2N3P1/PPP1NPBP/R1BQK2R b KQ - 1 8",
-   "said": "square we should try to make the knight work for us as efficiently as we can so knight f5 allows bishop takes f5 i'm not sure this trade is in our benefit i like 92 because from here the knight can go to f4 and obviously control the d5 square i think this is a"
+   "said": "square we should try to make the knight work for us as efficiently as we can so knight f5 allows bishop takes f5 i'm not sure this trade is in our benefit i like 92 because from here the knight can go to f4 and obviously"
   },
   {
    "ply": 16,
@@ -128,7 +128,7 @@
     "Nc6"
    ],
    "fen": "r1bq1rk1/pp2bppp/2np1n2/2p5/4P3/2N3P1/PPP1NPBP/R1BQK2R w KQ - 2 9",
-   "said": "as efficiently as we can so knight f5 allows bishop takes f5 i'm not sure this trade is in our benefit i like 92 because from here the knight can go to f4 and obviously control the d5 square i think this is a better square than b3 now do we need to rush with knight f4 is this something we need to do right this moment no first it makes sense to complete our"
+   "said": "control the d5 square i think this is a better square than b3 now do we need to rush with knight f4 is"
   },
   {
    "ply": 17,
@@ -137,7 +137,7 @@
     "O-O"
    ],
    "fen": "r1bq1rk1/pp2bppp/2np1n2/2p5/4P3/2N3P1/PPP1NPBP/R1BQ1RK1 b - - 3 9",
-   "said": "can go to f4 and obviously control the d5 square i think this is a better square than b3 now do we need to rush with knight f4 is this something we need to do right this moment no first it makes sense to complete our development let's castle and it would also make sense to play h3"
+   "said": "this something we need to do right this moment no first it makes sense to complete our development let's castle"
   },
   {
    "ply": 18,
@@ -146,7 +146,7 @@
     "Bg4"
    ],
    "fen": "r2q1rk1/pp2bppp/2np1n2/2p5/4P1b1/2N3P1/PPP1NPBP/R1BQ1RK1 w - - 4 10",
-   "said": "now do we need to rush with knight f4 is this something we need to do right this moment no first it makes sense to complete our development let's castle and it would also make sense to play h3 okay bishop g4 so we're not too worried about bishop takes c2 that's not that scary um if we were worried about it we could play f3 here but i don't particularly want to play f3 let's play h3 to chase the bishop away"
+   "said": "and it would also make sense to play h3 okay bishop g4 so we're not too worried about bishop takes c2 that's not that scary"
   },
   {
    "ply": 19,
@@ -155,7 +155,7 @@
     "h3"
    ],
    "fen": "r2q1rk1/pp2bppp/2np1n2/2p5/4P1b1/2N3PP/PPP1NPB1/R1BQ1RK1 b - - 0 10",
-   "said": "so we're not too worried about bishop takes c2 that's not that scary um if we were worried about it we could play f3 here but i don't particularly want to play f3 let's play h3 to chase the bishop away if bishop takes c2 happens what should"
+   "said": "um if we were worried about it we could play f3 here but i don't particularly want to play f3 let's play h3 to chase the bishop away"
   },
   {
    "ply": 20,
@@ -164,7 +164,7 @@
     "Bxe2"
    ],
    "fen": "r2q1rk1/pp2bppp/2np1n2/2p5/4P3/2N3PP/PPP1bPB1/R1BQ1RK1 w - - 0 11",
-   "said": "um if we were worried about it we could play f3 here but i don't particularly want to play f3 let's play h3 to chase the bishop away if bishop takes c2 happens what should we take with interesting question because both pieces can recapture but there is one recapture that i like a little bit more than the other let's see what people come up with here and these are already like high level positional decisions that you know as a 1700 you should start learning how to make yeah i like the idea of taking with the knight if we take with the queen you're kind of walking into knight d4 with tempo it's not the end of the world but"
+   "said": "if bishop takes c2 happens what should we take with interesting question because both pieces can recapture but there is one recapture that i like a little bit more than the other let's see what people come up with here and these are already like high level positional decisions that you know as a"
   },
   {
    "ply": 21,
@@ -173,7 +173,7 @@
     "Nxe2"
    ],
    "fen": "r2q1rk1/pp2bppp/2np1n2/2p5/4P3/6PP/PPP1NPB1/R1BQ1RK1 b - - 0 11",
-   "said": "1700 you should start learning how to make yeah i like the idea of taking with the knight if we take with the queen you're kind of walking into knight d4 with tempo it's not the end of the world but it's also a little bit unpleasant and we're still not allowing d5 here we've got three defenders on that square and only two attackers queen b6"
+   "said": "1700 you should start learning how to make yeah i like the idea of taking with the knight if we take with the queen you're kind of walking into knight d4 with tempo it's not the end of the world but it's also a little bit unpleasant and we're still not allowing d5 here we've"
   },
   {
    "ply": 22,
@@ -182,7 +182,7 @@
     "Qb6"
    ],
    "fen": "r4rk1/pp2bppp/1qnp1n2/2p5/4P3/6PP/PPP1NPB1/R1BQ1RK1 w - - 1 12",
-   "said": "kind of walking into knight d4 with tempo it's not the end of the world but it's also a little bit unpleasant and we're still not allowing d5 here we've got three defenders on that square and only two attackers queen b6 so a really good setup here is not only to reroute the knight to f4 as some people are indicating but also to limit the to restrict the knight on c6 as much as possible how do we restrict that knight a concept i've talked about on many occasions this particular pawn arrangement we play the move c3 right now the pawn"
+   "said": "got three defenders on that square and only two attackers queen b6 so a really good setup here is not only to reroute the knight to f4 as some people are indicating but also to limit the to restrict the"
   },
   {
    "ply": 23,
@@ -191,7 +191,7 @@
     "c3"
    ],
    "fen": "r4rk1/pp2bppp/1qnp1n2/2p5/4P3/2P3PP/PP2NPB1/R1BQ1RK1 b - - 0 12",
-   "said": "but also to limit the to restrict the knight on c6 as much as possible how do we restrict that knight a concept i've talked about on many occasions this particular pawn arrangement we play the move c3 right now the pawn is controlling the knights to advance advancing squares"
+   "said": "knight on c6 as much as possible how do we restrict that knight a concept i've talked about on many occasions this particular pawn arrangement we play the move c3 right now the pawn is controlling the knights to advance"
   },
   {
    "ply": 24,
@@ -200,21 +200,21 @@
     "Ne5"
    ],
    "fen": "r4rk1/pp2bppp/1q1p1n2/2p1n3/4P3/2P3PP/PP2NPB1/R1BQ1RK1 w - - 1 13",
-   "said": "we restrict that knight a concept i've talked about on many occasions this particular pawn arrangement we play the move c3 right now the pawn is controlling the knights to advance advancing squares 95 this is kind of aimless now we could go f4 but then that would deprive the knight of that square i think f4 is too hasty um now we want to develop our bishop it would be nice to develop our bishop let's say to e3 or even to g5 but we can't do that because we dropped the b2 pawn okay so you might be thinking about b3 but we all we can actually make a move that prepares to connect the rooks and it also defends the b2 pawn so it kind of kills two birds with one stone it's it's a harmonious move and that's queen c2 and it prepares a couple of different things it prepares the move rook d1 which reinforces our control over the d5 square and rook on d1 is better than a queen on d1 and it gets the queen out of the way and of course it frees up the bishop okay knight c4 pointless i mean black is preventing us from getting our bishop but we can play b3 whenever we want to chase the knight away um but we don't have to rush and this is something i want to emphasize we don't have to rush with b3 how can we improve our position instead let's practice not rushing attempting move how can we improve our position i've already mentioned this move swag fun thank you okay so knight f4 is one idea but let's try to play as flexibly as possible let's let's start with rook d1 and you can see that this knight is not causing us any damage right we can play b3 at any moment all right i think that was a good time to play before i just wanted to emphasize that there was no rush but now that i've emphasized let's go b3 i'm i'm tired of this knight let's get it out of there now we continue our development now where should we put our bishop well you could put it on g5 and trade for the knight on f6 and try to get your knight to d5 that's one approach but giving black the dark squared bishop here i think is a little bit imprudent because we'd be left with a not a great light squirt bishop i don't see a need to give away our bishop let's just go bishop e3 let's develop it too a nice square word x-rays the queen okay queen c6 and now i think it's it's a good opportunity we have a good opportunity to reinforce our control over the d5 square what am i talking about how do what does that mean reinforce our control over the d5 square so knight f4 yes is a possibility but but i'm also thinking of the move pawn c4 using our pawns to clamp down even further on that square and now the knight has an even nicer path through c3 it doesn't interfere with the f pawn in case we want to play f4 right so this is a little bit more harmonious now i know you're looking at this probably saying aren't we afraid of weakening the the d4 square and the answer is no because we have a bishop that guards and we have a rook that guards it okay knight b4 i'm going to speed up a little bit here we're just going to move our queen can move it to b2 we can move it to e2 it doesn't really matter doesn't really matter let's move it to e2 and now let's focus on continuing to improve our position putting more pressure in the center what plan what very typical plan allows us to increase the pressure turn up the pressure dial in the center what am i thinking about g4 g5 yeah g4 g5 is interesting but you know let's let's be a little bit more russian school of chess about this yeah doubling rooks let's go rook d2 rook d1 i'm not committing to anything yet i'm playing as flexibly as possible i haven't really pushed any of my pawns yet okay black is doing the same i don't care about this knight can remain there for all at once it's not worrying at all now if he doubles his rooks okay that's not a great move yeah resigns okay i don't know what where that came from but this is what happens when you put a lot of pressure on somebody right people people kind of buckle under the pressure yeah that is a weird of a strange one i guess he thought that i moved the rook away from a1 so a2 is hanging now but it's not very strange strange move um not much to say about this game i mean this was a pretty classic philidor so we"
+   "said": "advancing squares 95 this is kind of aimless now we could go f4 but then that would deprive the knight of that square i think f4 is too hasty um now we want to develop our bishop it would be nice to develop our bishop let's say to e3 or even to g5 but we can't do that because we dropped the b2 pawn okay so you might be thinking about b3 but we all we can actually make a move that prepares to connect the rooks and it also defends the b2 pawn so it kind of kills two birds with one stone it's it's a harmonious move and that's queen c2 and it prepares a couple of different things it prepares the move rook d1 which reinforces our control over the d5 square and rook on d1 is better than a queen on d1 and it gets the queen out of the way and of course it frees up the bishop okay knight c4 pointless i mean black is preventing us from getting our bishop but we can play b3 whenever we want to chase the knight away um but we don't have to rush and this is something i want to emphasize we don't have to rush with b3 how can we improve our position instead let's practice not rushing attempting move how can we improve our position i've already mentioned this move swag fun thank you okay so knight f4 is one idea but let's try to play as flexibly as possible let's let's start with rook d1 and you can see that this knight is not causing us any damage right we can play b3 at any moment all right i think that was a good time to play before i just wanted to emphasize that there was no rush but now that i've emphasized let's go b3 i'm i'm tired of this knight let's get it out of there now we continue our development now where should we put our bishop well you could put it on g5 and trade for the knight on f6 and try to get your knight to d5 that's one approach but giving black the dark squared bishop here i think is a little bit imprudent because we'd be left with a not a great light squirt bishop i don't see a need to give away our bishop let's just go bishop e3 let's develop it too a nice square word x-rays the queen okay queen c6 and now i think it's it's a good opportunity we have a good opportunity to reinforce our control over the d5 square what am i talking about how do what does that mean reinforce our control over the d5 square so knight f4 yes is a possibility but but i'm also thinking of the move pawn c4 using our pawns to clamp down even further on that square and now the knight has an even nicer path through c3 it doesn't interfere with the f pawn in case we want to play f4 right so this is a little bit more harmonious now i know you're looking at this probably saying aren't we afraid of weakening the the d4 square and the answer is no because we have a bishop that guards and we have a rook that guards it okay knight b4 i'm going to speed up a little bit here we're just going to move our queen can move it to b2 we can move it to e2 it doesn't really matter doesn't really matter let's move it to e2 and now let's focus on continuing to improve our position putting more pressure in the center what plan what very typical plan allows us to increase the pressure turn up the pressure dial in the center what am i thinking about g4 g5 yeah g4 g5 is interesting but you know let's let's be a little bit more russian school of chess about this yeah doubling rooks let's go rook d2 rook d1 i'm not committing to anything yet i'm playing as flexibly as possible i haven't really pushed any of my pawns yet okay black is doing the same i don't care about this knight can remain there for all at once it's not worrying at all now if he doubles his rooks okay that's not a great move yeah resigns okay i don't know what where that came from but this is what happens when you put a lot of pressure on somebody right people people kind of buckle under the pressure yeah that is a weird of a strange one i guess he thought that i moved the rook away"
   },
   {
    "ply": 5,
    "t": 470,
    "line": [],
    "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
-   "said": "from a1 so a2 is hanging now but it's not very strange strange move um not much to say about this game i mean this was a pretty classic philidor so we played g3 you guys can check this on your own but i know that d5 is a move here and i'm not sure what the evaluation is i know d5 e5 knight g4 is a line i think white's supposed to be better here but this needs to be checked if you want to play g3 but most people don't know about this so they end up castling and c5 is already a mistake i would say a lot of people under 2000 tend to play c5 in such positions and this is the same exact"
+   "said": "from a1 so a2 is hanging now but it's not very strange strange move um not much to say about this game i mean this was a pretty classic philidor so we played g3 you guys can check this on your own but i know that d5 is a move here and i'm not sure what the evaluation is i know d5 e5 knight g4 is a line i think white's supposed to be better here but this needs to be checked if you want to play g3"
   },
   {
    "ply": 3,
    "t": 497.5,
    "line": [],
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
-   "said": "but most people don't know about this so they end up castling and c5 is already a mistake i would say a lot of people under 2000 tend to play c5 in such positions and this is the same exact let's call it the same syndrome"
+   "said": "but most people don't know about this so they end up castling and c5 is already a mistake i would say a lot of people under 2000 tend to play c5 in such positions and this is the same exact"
   },
   {
    "ply": 4,
@@ -223,7 +223,7 @@
     "Nc6"
    ],
    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
-   "said": "but most people don't know about this so they end up castling and c5 is already a mistake i would say a lot of people under 2000 tend to play c5 in such positions and this is the same exact let's call it the same syndrome that causes people to play c5 in this position a lot of people play c5 here and i still think fundamentally it's it's connected to this urge to attack something right you're pushing a pod and you're creating a threat and it's just people not realizing that creating a threat is not an inherently good thing right it has nothing to do with in order to judge a move it's not enough to say that it creates a threat it can be a good thing but it can also be an incredibly harmful thing that makes sense they want the presence in the center but this move is an illusion it doesn't actually control the center it actually weakens the center so be very careful about and the only reason you would play c5 is if you could follow up with d5 and break through in the center i mean this just creates a massive hole on d5 now we did a couple of things so we took with a knight in order not to allow this move with tempo and this centralizes the knight so why is this also a good move because it centralized the knight and also i was already gearing up to play c3 and restricting the knight okay"
+   "said": "let's call it the same syndrome that causes people to play c5 in this position a lot of people play c5 here and i still think fundamentally it's it's connected to this urge to attack something right you're pushing a pod and you're creating a threat and it's just people not realizing that creating a threat is not an inherently good thing right it has nothing to do with in order to judge a move it's not enough to say that it creates a threat it can be a good thing but it can also be an incredibly harmful thing that makes sense they want the presence in the center but this move is an illusion it doesn't actually control the center it actually weakens the center so be very careful about and the only reason you would play c5 is if you could follow up with d5 and break through in the center i mean this just creates a massive hole on d5 now we did a couple of things so we took with a knight in order not to allow this move with tempo and this centralizes the knight so why is this also a good move because it centralized the knight and also i was already gearing up to play c3 and restricting the knight okay"
   }
  ],
  "forks": [

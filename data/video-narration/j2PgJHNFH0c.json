@@ -19,7 +19,7 @@
     "Bf4"
    ],
    "fen": "rnbqkb1r/pppppppp/5n2/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
-   "said": "21 let's do it black d4 okay let's go let's go kid let's let's go kid okay no okay you know what we're going to do we're going to test our opponent on a line of the london that i played against gotta and it's a line that a lot of people"
+   "said": "okay no okay you know what we're going to do we're going to test our opponent on"
   },
   {
    "ply": 4,
@@ -28,7 +28,7 @@
     "c5"
    ],
    "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
-   "said": "okay no okay you know what we're going to do we're going to test our opponent on a line of the london that i played against gotta and it's a line that a lot of people still don't know so we start with c5"
+   "said": "a line of the london that i played against gotta and it's a line that a lot of people still don't know"
   },
   {
    "ply": 5,
@@ -37,7 +37,7 @@
     "e3"
    ],
    "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
-   "said": "okay you know what we're going to do we're going to test our opponent on a line of the london that i played against gotta and it's a line that a lot of people still don't know so we start with c5 then we take on d4 and you quickly go"
+   "said": "so we start with c5"
   },
   {
    "ply": 6,
@@ -46,7 +46,7 @@
     "cxd4"
    ],
    "fen": "rnbqkb1r/pp1ppppp/5n2/8/3p1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 4",
-   "said": "we're going to test our opponent on a line of the london that i played against gotta and it's a line that a lot of people still don't know so we start with c5 then we take on d4 and you quickly go queen b6 the very very tricky line"
+   "said": "then we take on d4 and you quickly go"
   },
   {
    "ply": 8,
@@ -56,7 +56,7 @@
     "Qb6"
    ],
    "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/8/PPP2PPP/RN1QKBNR w KQkq - 1 5",
-   "said": "a line of the london that i played against gotta and it's a line that a lot of people still don't know so we start with c5 then we take on d4 and you quickly go queen b6 the very very tricky line against"
+   "said": "queen b6 the very very tricky line"
   },
   {
    "ply": 9,
@@ -65,7 +65,7 @@
     "Nc3"
    ],
    "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/2N5/PPP2PPP/R2QKBNR b KQkq - 2 5",
-   "said": "and it's a line that a lot of people still don't know so we start with c5 then we take on d4 and you quickly go queen b6 the very very tricky line against inexperienced london player so he knows that he goes knight c3 obviously if you know the first thing about this line do not take on b2 that leads to a very theoretical line that's good for white eric rosen has analyzed that but what we do here is we actually go d6 and"
+   "said": "against inexperienced london player so he knows that he goes knight c3 obviously if you know the first thing about this line do not take on b2 that leads to a very"
   },
   {
    "ply": 10,
@@ -74,7 +74,7 @@
     "d6"
    ],
    "fen": "rnb1kb1r/pp2pppp/1q1p1n2/8/3P1B2/2N5/PPP2PPP/R2QKBNR w KQkq - 0 6",
-   "said": "obviously if you know the first thing about this line do not take on b2 that leads to a very theoretical line that's good for white eric rosen has analyzed that but what we do here is we actually go d6 and the zen behind this line is that we have essentially lord we have lured the knight on c3 and london"
+   "said": "theoretical line that's good for white eric rosen has analyzed that but what we do here is we actually go d6 and the zen behind this line"
   },
   {
    "ply": 11,
@@ -83,7 +83,7 @@
     "Rb1"
    ],
    "fen": "rnb1kb1r/pp2pppp/1q1p1n2/8/3P1B2/2N5/PPP2PPP/1R1QKBNR b Kkq - 1 6",
-   "said": "eric rosen has analyzed that but what we do here is we actually go d6 and the zen behind this line is that we have essentially lord we have lured the knight on c3 and london players do not like positioning the knight on c3 most london players they much prefer for there to be a pawn on c3 in my experience watching students play this playing this myself you get you know a lot of london players just falter really quickly in these types of structures so the best thing to do in terms of developing the dark squared bishop what should we do with it what seems to be natural to you guys definitely fianchetto because if you play e6 you block the other bishop and even after you play e6 the bishop has nowhere to go so so here"
+   "said": "is that we have essentially lord we have lured the knight on c3 and london players do not like positioning the knight on c3 most london players they much prefer for there to be a pawn on c3 in my experience watching students play this playing this myself you get you know a lot of london players just falter really quickly in these types of structures so the best thing to do in terms of developing the dark squared bishop what should we do with it what seems to"
   },
   {
    "ply": 12,
@@ -92,7 +92,7 @@
     "g6"
    ],
    "fen": "rnb1kb1r/pp2pp1p/1q1p1np1/8/3P1B2/2N5/PPP2PPP/1R1QKBNR w Kkq - 0 7",
-   "said": "be natural to you guys definitely fianchetto because if you play e6 you block the other bishop and even after you play e6 the bishop has nowhere to go so so here you definitely want to fianchetto and then you want to castle and develop"
+   "said": "be natural to you guys definitely fianchetto because if you play e6 you block the other bishop and even after you play e6 the bishop has nowhere to go so so here you definitely want to fianchetto"
   },
   {
    "ply": 14,
@@ -102,7 +102,7 @@
     "Bg7"
    ],
    "fen": "rnb1k2r/pp2ppbp/1q1p1np1/8/3P1B2/2N2N2/PPP2PPP/1R1QKB1R w Kkq - 2 8",
-   "said": "other bishop and even after you play e6 the bishop has nowhere to go so so here you definitely want to fianchetto and then you want to castle and develop the knights of c6 all the all the normal moves so i'm going to play them very quickly i'm not going to spend too much time"
+   "said": "and then you want to castle and develop the knights of c6 all the all the normal moves so i'm going to play them very"
   },
   {
    "ply": 16,
@@ -112,7 +112,7 @@
     "O-O"
    ],
    "fen": "rnb2rk1/pp2ppbp/1q1p1np1/8/3P1B2/2N2N2/PPP1BPPP/1R1QK2R w K - 4 9",
-   "said": "you definitely want to fianchetto and then you want to castle and develop the knights of c6 all the all the normal moves so i'm going to play them very quickly i'm not going to spend too much time here"
+   "said": "quickly i'm not going to spend too much time here"
   },
   {
    "ply": 17,
@@ -121,7 +121,7 @@
     "O-O"
    ],
    "fen": "rnb2rk1/pp2ppbp/1q1p1np1/8/3P1B2/2N2N2/PPP1BPPP/1R1Q1RK1 b - - 5 9",
-   "said": "and then you want to castle and develop the knights of c6 all the all the normal moves so i'm going to play them very quickly i'm not going to spend too much time here okay so there's basically a couple ways to play this type of position there's a couple different viable setups in my experience you can now the immediate the immediate knight c6 is a little bit inaccurate because it runs into the move d5 and that sends then it's not a big deal but allowing d5 with tempo is unnecessary so i would prefer to develop the light squared bishop first now you might where do we develop it well you can put it on f5 or you can put it on g4 if you put it on g4 white will probably play h3 we will trade the bishop for white's knight and then develop our knight to c6 pressuring d4 but i do not particularly like to give up the bishop pair in these types of positions so"
+   "said": "okay so there's basically a couple ways to play this type of position there's a couple different viable setups in my experience you can now the immediate the immediate knight c6 is a little bit inaccurate because it runs into the move d5 and that sends then it's not a big deal but allowing d5 with tempo is unnecessary so i would prefer to develop the light squared bishop first now you might where do we develop it well you can put it on f5 or you can put it on g4 if you put it on g4 white will probably play h3 we will"
   },
   {
    "ply": 18,
@@ -130,7 +130,7 @@
     "Bf5"
    ],
    "fen": "rn3rk1/pp2ppbp/1q1p1np1/5b2/3P1B2/2N2N2/PPP1BPPP/1R1Q1RK1 w - - 6 10",
-   "said": "trade the bishop for white's knight and then develop our knight to c6 pressuring d4 but i do not particularly like to give up the bishop pair in these types of positions so and i'll flesh that out a little bit further after the game so let's go bishop to f5 instead and take a sip of my water and pause the video and if you're just along the show congratulations you found the move no but knight h4 is but again a move like knight h4 you're succumbing to one move itis one one vitus has two forms it's when you make a move because it creates a"
+   "said": "trade the bishop for white's knight and then develop our knight to c6 pressuring d4 but i do not particularly like to give up the bishop pair in these types of positions so and i'll flesh that out a little bit further after the game so let's go bishop to f5 instead and take a sip of my water and pause the video and if you're just along the show congratulations you found the move"
   },
   {
    "ply": 19,
@@ -139,7 +139,7 @@
     "h3"
    ],
    "fen": "rn3rk1/pp2ppbp/1q1p1np1/5b2/3P1B2/2N2N1P/PPP1BPP1/1R1Q1RK1 b - - 0 10",
-   "said": "no but knight h4 is but again a move like knight h4 you're succumbing to one move itis one one vitus has two forms it's when you make a move because it creates a threat and when you make a when you're afraid of a move because that move carries the threat okay so so we still so now after knight c6 d5 we have the additional option of going knight to b4 which leads to some tactical complications that i will flesh out after the game but for now i will say that oh wait wait let me calculate that there there there oh no let's do it let's do it let's go"
+   "said": "no but knight h4 is but again a move like knight h4 you're succumbing to one move itis one one vitus has two forms it's when you make a move because it creates a threat and when you make a when you're afraid of a move because that move carries the threat okay so so we still so now after knight c6 d5 we have the additional option of going knight to b4 which leads to some tactical complications that i will"
   },
   {
    "ply": 20,
@@ -148,7 +148,7 @@
     "Nc6"
    ],
    "fen": "r4rk1/pp2ppbp/1qnp1np1/5b2/3P1B2/2N2N1P/PPP1BPP1/1R1Q1RK1 w - - 1 11",
-   "said": "flesh out after the game but for now i will say that oh wait wait let me calculate that there there there oh no let's do it let's do it let's go knight c6 i i saw an interesting line in case in case y goes d5 here which is not a given because again most london players like they don't necessarily like to make moves like d5 which are very committal but he does"
+   "said": "flesh out after the game but for now i will say that oh wait wait let me calculate that there there there oh no let's do it let's do it let's go knight c6 i i saw an interesting line in case in case y goes d5 here which is not a given because again most london players like"
   },
   {
    "ply": 21,
@@ -157,7 +157,7 @@
     "d5"
    ],
    "fen": "r4rk1/pp2ppbp/1qnp1np1/3P1b2/5B2/2N2N1P/PPP1BPP1/1R1Q1RK1 b - - 0 11",
-   "said": "case y goes d5 here which is not a given because again most london players like they don't necessarily like to make moves like d5 which are very committal but he does and let's go knight before that's the"
+   "said": "they don't necessarily like to make moves like d5 which are very committal but he does"
   },
   {
    "ply": 22,
@@ -166,7 +166,7 @@
     "Nb4"
    ],
    "fen": "r4rk1/pp2ppbp/1q1p1np1/3P1b2/1n3B2/2N2N1P/PPP1BPP1/1R1Q1RK1 w - - 1 12",
-   "said": "case y goes d5 here which is not a given because again most london players like they don't necessarily like to make moves like d5 which are very committal but he does and let's go knight before that's the whole point of putting the bishop on f5 in order to attack c2 and win a tempo now the move that initially dissuaded me from playing bishop f5 from playing knight c6 rather is this move knight f3 to d4 which defends the pawn on c2 and simultaneously puts pressure on the bishop on f5 but after knight d4 i discovered what i think is a good move so let's see what white does most players in the 17 1800 ranger probably go rook b1 to c1 which is incredibly passive and a bad move now if i were you i would start thinking what you would do against the move knight d4 91 okay close but very passive"
+   "said": "and let's go knight before that's the whole point of putting the bishop on f5 in order to attack c2 and win a tempo now the move that initially dissuaded me from playing bishop f5 from playing knight c6 rather is this move knight f3 to d4 which defends the pawn on c2 and simultaneously puts pressure on the bishop on f5 but after knight d4 i discovered what i think is a good move so let's see what white does"
   },
   {
    "ply": 23,
@@ -175,7 +175,7 @@
     "Ne1"
    ],
    "fen": "r4rk1/pp2ppbp/1q1p1np1/3P1b2/1n3B2/2N4P/PPP1BPP1/1R1QNRK1 b - - 2 12",
-   "said": "most players in the 17 1800 ranger probably go rook b1 to c1 which is incredibly passive and a bad move now if i were you i would start thinking what you would do against the move knight d4 91 okay close but very passive let's try to deconstruct this position logically black has more act we have more active pieces but if we if we waste time or we dilly dally white's going to play a3 on the next move and what we want to try to avoid is a situation where we just have to bring our knight back to asics that is far from the end of the world that's okay so if we can't avoid that situation that's fine but we should try if possible to make a move that creates a threat i might say well what is white's biggest weakness the white's biggest weakness is clearly the d5 pawn can we try to attack it it's not as easy as it seems because if you play queen a5 which a lot of you are suggesting white can defend the pawn with his bishop bishop c4 or bishop f3 and i don't see exactly what we have achieved here i also like the look of knight e4 i really like the look of knight e4 but knight e4 amazingly white can still go through that's a little bit unlucky oh we lose a piece there wow wow there's some crazy lines no i think i i think the best thing to do for us is to come to terms with the fact that we're going to go knight a6 that which is okay and there's no reason to freak out here let's just go with c8"
+   "said": "most players in the 17 1800 ranger probably go rook b1 to c1 which is incredibly passive and a bad move now if i were you i would start thinking what you would do against the move knight d4 91 okay close but very passive let's try to deconstruct this position logically black has more act we have more active pieces but if we if we waste time or we dilly dally white's going to play a3 on the next move and what we want to try to avoid is a situation where we just have to bring our knight back to asics that is far from the end of the world that's okay so if we can't avoid that situation that's fine but we should try if possible to make a move that creates a threat i might say well what is white's biggest weakness the white's biggest weakness is clearly the d5 pawn can we try to attack it it's not as easy as it seems because if you play queen a5 which a lot of you are suggesting white can defend the pawn with his bishop bishop c4 or bishop f3 and i don't see exactly what we have achieved here i also like the look of knight e4 i really like the look of knight e4 but knight e4 amazingly white can still go through that's a little bit unlucky oh we lose a piece there wow"
   },
   {
    "ply": 24,
@@ -184,7 +184,7 @@
     "Rac8"
    ],
    "fen": "2r2rk1/pp2ppbp/1q1p1np1/3P1b2/1n3B2/2N4P/PPP1BPP1/1R1QNRK1 w - - 3 13",
-   "said": "wow there's some crazy lines no i think i i think the best thing to do for us is to come to terms with the fact that we're going to go knight a6 that which is okay and there's no reason to freak out here let's just go with c8 let's just cover c8 let's improve our position"
+   "said": "wow there's some crazy lines no i think i i think the best thing to do for us is to come to terms with the fact that we're going to go knight a6 that which is okay and there's no reason to freak out here let's just go with c8 let's just cover c8 let's improve our"
   },
   {
    "ply": 25,
@@ -193,7 +193,7 @@
     "a3"
    ],
    "fen": "2r2rk1/pp2ppbp/1q1p1np1/3P1b2/1n3B2/P1N4P/1PP1BPP1/1R1QNRK1 b - - 0 13",
-   "said": "do for us is to come to terms with the fact that we're going to go knight a6 that which is okay and there's no reason to freak out here let's just go with c8 let's just cover c8 let's improve our position bring our knight back to a6"
+   "said": "position"
   },
   {
    "ply": 26,
@@ -202,7 +202,7 @@
     "Na6"
    ],
    "fen": "2r2rk1/pp2ppbp/nq1p1np1/3P1b2/5B2/P1N4P/1PP1BPP1/1R1QNRK1 w - - 1 14",
-   "said": "do for us is to come to terms with the fact that we're going to go knight a6 that which is okay and there's no reason to freak out here let's just go with c8 let's just cover c8 let's improve our position bring our knight back to a6 and then we can redeploy the knight to c5 and one of the points that i want to make through the prism of this game is that"
+   "said": "bring our knight back to a6 and then we can redeploy the knight to c5 and one of the points that i want to"
   },
   {
    "ply": 27,
@@ -211,7 +211,7 @@
     "Be3"
    ],
    "fen": "2r2rk1/pp2ppbp/nq1p1np1/3P1b2/8/P1N1B2P/1PP1BPP1/1R1QNRK1 b - - 2 14",
-   "said": "position bring our knight back to a6 and then we can redeploy the knight to c5 and one of the points that i want to make through the prism of this game is that people become super afraid of of moves like knight a6 when there's no reason to be afraid we will improve the night shortly except i also just blundered upon that's just great i completely forgot about this pawn i should have should have put the other rook on ca that was a complete"
+   "said": "make through the prism of this game is that people become super afraid of of moves like knight a6 when there's no reason to be afraid we will improve the night shortly except i also just blundered"
   },
   {
    "ply": 28,
@@ -220,14 +220,14 @@
     "Qa5"
    ],
    "fen": "2r2rk1/pp2ppbp/n2p1np1/q2P1b2/8/P1N1B2P/1PP1BPP1/1R1QNRK1 w - - 3 15",
-   "said": "shortly except i also just blundered upon that's just great i completely forgot about this pawn i should have should have put the other rook on ca that was a complete lapse in judgment yeah for white can simply take the spawn it's it's really not the end of the world it's far from the end of the world to lose a7 but no reason i should have given that away i should have just gone rook fc i i just"
+   "said": "upon that's just great i completely forgot about this pawn i should have should have put the other rook on ca that was a complete lapse in judgment yeah for white can simply take the spawn it's it's really not the end of the world it's far from the end of the world to"
   },
   {
    "ply": 23,
    "t": 404.5,
    "line": [],
    "fen": "r4rk1/pp2ppbp/1q1p1np1/3P1b2/1n3B2/2N4P/PPP1BPP1/1R1QNRK1 b - - 2 12",
-   "said": "yeah for white can simply take the spawn it's it's really not the end of the world it's far from the end of the world to lose a7 but no reason i should have given that away i should have just gone rook fc i i just forgot that that pawn hangs should have gone rook fc8 so that the other rook defends a7 let's see if white takes it we'll pretend this is a gambit this is a sacrifice this is sacrifice bishop f3 he doesn't take it but we're in a bit of an awkward spot here we're in a bit of an awkward spot because knight c5 runs into b4 i i feel like i've misplayed this we'll have to look after the game we need to breathe some new life into this position okay let me let me think we can sack the exchange on c3 that's an interesting idea but it is very dubious i'm not sure that we get enough comp we can play rook c4 maybe let's go rook c4 let's try to harass him just just sort of a move that that you know just trying to get get stuff going a little bit annoy him just gotta play chess here bishop back to e2 now sacking the exchange actually is much more appealing and then playing knight takes d5"
+   "said": "lose a7 but no reason i should have given that away i should have just gone rook fc i i just forgot that that pawn hangs should have gone rook fc8 so that the other rook defends a7 let's see if white takes it we'll pretend this is a gambit this is a sacrifice this is sacrifice bishop f3 he doesn't take it but we're in a bit of an awkward spot here we're in a bit of an awkward spot because knight c5 runs into b4 i i feel like i've misplayed this we'll have to look after the game we need to breathe some new life into this position okay let me let me think we can sack the exchange on c3 that's an interesting idea but it is very dubious i'm not sure that we get enough comp we can play rook c4 maybe let's go rook c4 let's try to harass him just just sort of a move that that you know just trying to get get stuff going a little bit annoy him just gotta play chess here bishop back to e2 now sacking the exchange actually is much more appealing and then playing knight takes d5"
   }
  ],
  "forks": []

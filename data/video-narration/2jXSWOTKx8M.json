@@ -10,7 +10,7 @@
     "Nc6"
    ],
    "fen": "r1bqkbnr/pppppppp/2n5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2",
-   "said": "Dan LM okay here we go we're doing ten plus five so a bit of a compromise between 15 plus 10 and 10 plus zero okay so we're facing the NIMS of each opening which is Knight C6 and Knight C6 in most cases has fairly little what is called in chess independent value you'll hear this phrase in opening books and basically that means if an opening has little independent value then it generally transposes into another opening now if white plays D4 then you get an independent opening but it's much easier"
+   "said": "Dan LM okay here we go we're doing ten plus five so a bit of a compromise between 15 plus 10 and 10 plus zero okay so we're facing the NIMS of each opening which is Knight C6 and Knight C6 in most cases has fairly little what is called in chess independent value you'll hear this phrase in opening books and basically"
   },
   {
    "ply": 3,
@@ -19,7 +19,7 @@
     "Nf3"
    ],
    "fen": "r1bqkbnr/pppppppp/2n5/8/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 2 2",
-   "said": "that means if an opening has little independent value then it generally transposes into another opening now if white plays D4 then you get an independent opening but it's much easier and more convenient to play Knight F3 here because most of the time black"
+   "said": "that means if an opening has little independent value then it generally transposes into another opening now if white plays D4 then you get an independent opening but it's much easier and more convenient to play Knight F3"
   },
   {
    "ply": 4,
@@ -28,7 +28,7 @@
     "e5"
    ],
    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
-   "said": "independent value then it generally transposes into another opening now if white plays D4 then you get an independent opening but it's much easier and more convenient to play Knight F3 here because most of the time black plays E5 and then you don't have to learn a separate opening we can just play our normal stuff okay I think I'm in the mood for another Belgrade Gambit I'm in the mood for another Belgrade Gambit let's go for it"
+   "said": "here because most of the time black plays E5 and then you don't have to learn a separate opening we can just play our normal stuff"
   },
   {
    "ply": 5,
@@ -37,14 +37,14 @@
     "Nc3"
    ],
    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 1 3",
-   "said": "plays E5 and then you don't have to learn a separate opening we can just play our normal stuff okay I think I'm in the mood for another Belgrade Gambit I'm in the mood for another Belgrade Gambit let's go for it and see how it holds up at a relatively high level let's go Knight C3 now so far we've played the four night scotch and we've played the Vienna of course you cannot play the Vienna if you play two Knight F3 black plays E5 so"
+   "said": "okay I think I'm in the mood for another Belgrade Gambit I'm in the mood for another Belgrade Gambit let's go for it and see how it holds up at a relatively high level let's go Knight C3 now so far we've played the four night"
   },
   {
    "ply": 4,
    "t": 71,
    "line": [],
    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
-   "said": "and see how it holds up at a relatively high level let's go Knight C3 now so far we've played the four night scotch and we've played the Vienna of course you cannot play the Vienna if you play two Knight F3 black plays E5 so that is the one downside is the Vienna"
+   "said": "scotch and we've played the Vienna of course you cannot play the Vienna if you play two Knight F3 black plays E5 so"
   },
   {
    "ply": 6,
@@ -54,7 +54,7 @@
     "Nf6"
    ],
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 2 4",
-   "said": "high level let's go Knight C3 now so far we've played the four night scotch and we've played the Vienna of course you cannot play the Vienna if you play two Knight F3 black plays E5 so that is the one downside is the Vienna has been eliminated let's see how the Belgrade Gambit fares at this level"
+   "said": "that is the one downside is the Vienna has been eliminated let's see how the"
   },
   {
    "ply": 7,
@@ -63,7 +63,7 @@
     "d4"
    ],
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
-   "said": "course you cannot play the Vienna if you play two Knight F3 black plays E5 so that is the one downside is the Vienna has been eliminated let's see how the Belgrade Gambit fares at this level let's go D4 probably black is going to take now we have also faced the move Bishop D4 which is kind of a bishop B4 which is kind of an old move which is an old move and I will not remember how to play against it I remember Bishop before we played D5 which is apparently wrong so if he plays Bishop before we will try to recollect the theory I think Bishop before Knight takes C5 was the line"
+   "said": "Belgrade Gambit fares at this level let's go D4 probably black is going to take now we have also faced the move Bishop D4 which is kind of a bishop B4 which is kind of an old move which is an old move and I will not remember how to play against it I remember Bishop before"
   },
   {
    "ply": 8,
@@ -72,7 +72,7 @@
     "exd4"
    ],
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
-   "said": "play against it I remember Bishop before we played D5 which is apparently wrong so if he plays Bishop before we will try to recollect the theory I think Bishop before Knight takes C5 was the line okay 84 and of course the Belgrade"
+   "said": "we played D5 which is apparently wrong so if he plays Bishop before we will try to recollect the theory I think Bishop before Knight takes C5 was the line okay 84 and of course the Belgrade"
   },
   {
    "ply": 9,
@@ -81,7 +81,7 @@
     "Nd5"
    ],
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/3N4/3pP3/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 5",
-   "said": "we played D5 which is apparently wrong so if he plays Bishop before we will try to recollect the theory I think Bishop before Knight takes C5 was the line okay 84 and of course the Belgrade Gambit which is Knight D5 which we've already played once so I'll insert the link if you're watching on YouTube I'll put the link to our previous Belgrade Gambit game in that game yeah we faced"
+   "said": "Gambit which is Knight D5 which we've already played once so I'll insert the link if you're watching on YouTube I'll"
   },
   {
    "ply": 10,
@@ -90,14 +90,14 @@
     "Nb4"
    ],
    "fen": "r1bqkb1r/pppp1ppp/5n2/3N4/1n1pP3/5N2/PPP2PPP/R1BQKB1R w KQkq - 2 6",
-   "said": "okay 84 and of course the Belgrade Gambit which is Knight D5 which we've already played once so I'll insert the link if you're watching on YouTube I'll put the link to our previous Belgrade Gambit game in that game yeah we faced we faced I think the immediate D6 I'll"
+   "said": "put the link to our previous Belgrade Gambit game in that game yeah we faced"
   },
   {
    "ply": 9,
    "t": 115,
    "line": [],
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/3N4/3pP3/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 5",
-   "said": "Gambit which is Knight D5 which we've already played once so I'll insert the link if you're watching on YouTube I'll put the link to our previous Belgrade Gambit game in that game yeah we faced we faced I think the immediate D6 I'll check I'll check what we faced in the previous Belgium now night before"
+   "said": "we faced I think the immediate D6 I'll"
   },
   {
    "ply": 10,
@@ -106,7 +106,7 @@
     "Nb4"
    ],
    "fen": "r1bqkb1r/pppp1ppp/5n2/3N4/1n1pP3/5N2/PPP2PPP/R1BQKB1R w KQkq - 2 6",
-   "said": "Gambit game in that game yeah we faced we faced I think the immediate D6 I'll check I'll check what we faced in the previous Belgium now night before essentially tells me that black knows what he's doing black knows what they're doing if he plays Knight before because this is a move which is commonly recommended I guess in books and the engine likes this move but when I was analyzing the Belgrade I found that white has a very interesting weapon which doesn't look like anything special but I think it rejuvenates the line so against night before you take the Knight"
+   "said": "check I'll check what we faced in the previous Belgium now night before essentially tells me that black knows what he's doing black knows what they're doing if he plays Knight before because this is a move which is commonly recommended I guess in books and the"
   },
   {
    "ply": 11,
@@ -115,7 +115,7 @@
     "Nxf6+"
    ],
    "fen": "r1bqkb1r/pppp1ppp/5N2/8/1n1pP3/5N2/PPP2PPP/R1BQKB1R b KQkq - 0 6",
-   "said": "engine likes this move but when I was analyzing the Belgrade I found that white has a very interesting weapon which doesn't look like anything special but I think it rejuvenates the line so against night before you take the Knight on F6 and first of all against Queen takes F6 God forbid do not take on D4 obviously because there's a simple tactic Queen takes D4 Queen takes D4 and Knight C takes C2 picks up the piece so"
+   "said": "engine likes this move but when I was analyzing the Belgrade I found that white has a very interesting weapon which doesn't look like anything special but I think it rejuvenates the line so against night before you take the Knight on F6 and first of all against Queen takes F6 God forbid do not take on D4 obviously because there's a simple"
   },
   {
    "ply": 12,
@@ -124,7 +124,7 @@
     "Qxf6"
    ],
    "fen": "r1b1kb1r/pppp1ppp/5q2/8/1n1pP3/5N2/PPP2PPP/R1BQKB1R w KQkq - 0 7",
-   "said": "on F6 and first of all against Queen takes F6 God forbid do not take on D4 obviously because there's a simple tactic Queen takes D4 Queen takes D4 and Knight C takes C2 picks up the piece so we need to chase the Knight away with A3"
+   "said": "tactic Queen takes D4 Queen takes D4 and Knight C takes C2 picks up the piece so"
   },
   {
    "ply": 13,
@@ -133,7 +133,7 @@
     "a3"
    ],
    "fen": "r1b1kb1r/pppp1ppp/5q2/8/1n1pP3/P4N2/1PP2PPP/R1BQKB1R b KQkq - 0 7",
-   "said": "takes F6 God forbid do not take on D4 obviously because there's a simple tactic Queen takes D4 Queen takes D4 and Knight C takes C2 picks up the piece so we need to chase the Knight away with A3 and now you play okay the Knight has to drop back to C6 it's the only reasonable square and in this position there is this like I I hesitate to call it a computer move because it is just a developing move but there are some subtleties behind this move that must be"
+   "said": "we need to chase the Knight away with A3 and now you play okay the Knight has to drop back to C6 it's the only reasonable square and in this position there is"
   },
   {
    "ply": 14,
@@ -142,7 +142,7 @@
     "Nc6"
    ],
    "fen": "r1b1kb1r/pppp1ppp/2n2q2/8/3pP3/P4N2/1PP2PPP/R1BQKB1R w KQkq - 1 8",
-   "said": "square and in this position there is this like I I hesitate to call it a computer move because it is just a developing move but there are some subtleties behind this move that must be understood for this move to be appreciated and I've played this in in uh casual Blitz and stuff so if you watch my stream often you you this might be familiar to you if you're looking at this for the first time with white first of all it may seem like there's no good way to reclaim the pawn and it is true you're basically playing this Gambit style um you will only reclaim the pawn if black plays the move D6 so our goal is to meet D6 with the move Bishop to B5 but for the time being we still need to develop our Bishop so we play this with"
+   "said": "this like I I hesitate to call it a computer move because it is just a developing move but there are some subtleties behind this move that must be understood for this move to be appreciated and I've played this in in uh casual Blitz and stuff so if you watch my stream often you you this might be familiar to you if you're looking at this for the first time with white first of all it may seem like there's no good way to reclaim the pawn and it is true you're basically playing this Gambit style um you will only reclaim the pawn if"
   },
   {
    "ply": 15,
@@ -151,7 +151,7 @@
     "Bd3"
    ],
    "fen": "r1b1kb1r/pppp1ppp/2n2q2/8/3pP3/P2B1N2/1PP2PPP/R1BQK2R b KQkq - 2 8",
-   "said": "black plays the move D6 so our goal is to meet D6 with the move Bishop to B5 but for the time being we still need to develop our Bishop so we play this with Bishop D3 which is kind of a flexible move and what this move signals to you is that we are not trying to actively win the spawn back unless black black plays D6 then we play Bishop B5 which is a very convenient move and the reason it's"
+   "said": "black plays the move D6 so our goal is to meet D6 with the move Bishop to B5 but for the time being we still need to develop our Bishop so we play this with Bishop D3 which is kind of a flexible move and what this move signals to you is that we are not trying to actively win"
   },
   {
    "ply": 17,
@@ -161,7 +161,7 @@
     "Bb5"
    ],
    "fen": "r1b1kb1r/ppp2ppp/2np1q2/1B6/3pP3/P4N2/1PP2PPP/R1BQK2R b KQkq - 1 9",
-   "said": "Bishop D3 which is kind of a flexible move and what this move signals to you is that we are not trying to actively win the spawn back unless black black plays D6 then we play Bishop B5 which is a very convenient move and the reason it's a very convenient move is because it pins the Knight and now we are ready to recapture this Pawn hopefully with a small Advantage now black has a computer line here that gives black a good position but I have encountered maybe one GM who's played this and he is"
+   "said": "the spawn back unless black black plays D6 then we play Bishop B5 which is a very convenient move and the reason it's a very convenient move is because it pins the Knight and now we are ready to recapture this Pawn hopefully with a small Advantage now black has a computer"
   },
   {
    "ply": 18,
@@ -170,7 +170,7 @@
     "Bg4"
    ],
    "fen": "r3kb1r/ppp2ppp/2np1q2/1B6/3pP1b1/P4N2/1PP2PPP/R1BQK2R w KQkq - 2 10",
-   "said": "pins the Knight and now we are ready to recapture this Pawn hopefully with a small Advantage now black has a computer line here that gives black a good position but I have encountered maybe one GM who's played this and he is playing all of the top computer moves"
+   "said": "line here that gives black a good position but I have encountered maybe one GM who's played this and he is"
   },
   {
    "ply": 19,
@@ -179,7 +179,7 @@
     "Qxd4"
    ],
    "fen": "r3kb1r/ppp2ppp/2np1q2/1B6/3QP1b1/P4N2/1PP2PPP/R1B1K2R b KQkq - 0 10",
-   "said": "recapture this Pawn hopefully with a small Advantage now black has a computer line here that gives black a good position but I have encountered maybe one GM who's played this and he is playing all of the top computer moves here Queen takes D4 and here the computer line is Bishop E7 in all of my experience playing online maybe like two or three people have played like this it's very very rare to know this line and it's not like black is better in the sense that oh you know um white has nothing to play for and you"
+   "said": "playing all of the top computer moves here Queen takes D4 and here the computer line is Bishop E7 in all of my experience playing online maybe like two or three people have"
   },
   {
    "ply": 20,
@@ -188,7 +188,7 @@
     "Qxd4"
    ],
    "fen": "r3kb1r/ppp2ppp/2np4/1B6/3qP1b1/P4N2/1PP2PPP/R1B1K2R w KQkq - 0 11",
-   "said": "maybe like two or three people have played like this it's very very rare to know this line and it's not like black is better in the sense that oh you know um white has nothing to play for and you see he plays Queen takes D4 and we get"
+   "said": "played like this it's very very rare to know this line and it's not like black is better in the sense that oh you know um white has nothing to play for and you see he plays Queen takes D4 and we get"
   },
   {
    "ply": 21,
@@ -197,7 +197,7 @@
     "Nxd4"
    ],
    "fen": "r3kb1r/ppp2ppp/2np4/1B6/3NP1b1/P7/1PP2PPP/R1B1K2R b KQkq - 0 11",
-   "said": "played like this it's very very rare to know this line and it's not like black is better in the sense that oh you know um white has nothing to play for and you see he plays Queen takes D4 and we get into an end game and this end game I"
+   "said": "into an end game and this end game I"
   },
   {
    "ply": 22,
@@ -206,7 +206,7 @@
     "Bd7"
    ],
    "fen": "r3kb1r/pppb1ppp/2np4/1B6/3NP3/P7/1PP2PPP/R1B1K2R w KQkq - 1 12",
-   "said": "played like this it's very very rare to know this line and it's not like black is better in the sense that oh you know um white has nothing to play for and you see he plays Queen takes D4 and we get into an end game and this end game I think is very pleasant for white and I really like that we get an end game because we haven't had that many end games like longer end games in the speedrun so I really can try to dig deep and and try to explain how I try to outplay good players in the end game not that I'm particularly good at it but I'll do my best so of course the end game should be equal here but maybe white has a smidge I think we are just a tiny bit better why are we a tiny bit better well there's two reasons the first is we have slightly better control of the center but the main reason is that after we capture on C6 and we have to decide what we're capturing with we will somewhat damage Black's Queen Side Pawn structure we can play Bishop takes C6 or we can play Knight takes C6 we don't have to take on C6 we can play this move Bishop E3 just keeping the status quo which is also a reasonable move but I don't like it um I think we should take the opportunity to damage black spawn structure and I think we should do it"
+   "said": "think is very pleasant for white and I really like that we get an end game because we haven't had that many end games like longer end games in the speedrun so I really can try to dig deep and and try to explain how I try to outplay good players in the end game not that I'm particularly good at it but I'll do my best so of course the end game should be equal here but maybe white has a smidge I think we are just a tiny bit better why are we a tiny bit better well there's two reasons the first is we have slightly better control of the center but the main reason is that after we capture on C6 and we have to decide what we're capturing with we will somewhat damage Black's Queen Side Pawn structure we can play Bishop takes C6 or we can play Knight takes C6 we don't have to"
   },
   {
    "ply": 23,
@@ -215,14 +215,14 @@
     "Nxc6"
    ],
    "fen": "r3kb1r/pppb1ppp/2Np4/1B6/4P3/P7/1PP2PPP/R1B1K2R b KQkq - 0 12",
-   "said": "take on C6 we can play this move Bishop E3 just keeping the status quo which is also a reasonable move but I don't like it um I think we should take the opportunity to damage black spawn structure and I think we should do it with the Knight this may be less appealing to you because BC now comes with the tempo but I don't want to just hand over the bishop here just like that I don't want to hand over the bishop pair and I don't want to hand over uncontested control of the light squares so for example if we had taken with the"
+   "said": "take on C6 we can play this move Bishop E3 just keeping the status quo which is also a reasonable move but I don't like it um I think we should take the opportunity to damage black spawn structure and I think we should do it with the Knight this may be less appealing to you because BC now comes with the tempo but I don't want to just hand over the bishop here just like that I don't want"
   },
   {
    "ply": 22,
    "t": 318,
    "line": [],
    "fen": "r3kb1r/pppb1ppp/2np4/1B6/3NP3/P7/1PP2PPP/R1B1K2R w KQkq - 1 12",
-   "said": "because BC now comes with the tempo but I don't want to just hand over the bishop here just like that I don't want to hand over the bishop pair and I don't want to hand over uncontested control of the light squares so for example if we had taken with the bishop after BC black would be able to"
+   "said": "to hand over the bishop pair and I don't want to hand over uncontested control of the light squares so for example if we had taken with the bishop after BC black would be able to"
   },
   {
    "ply": 24,
@@ -232,14 +232,14 @@
     "bxc6"
    ],
    "fen": "r3kb1r/p1pb1ppp/2pp4/1B6/4P3/P7/1PP2PPP/R1B1K2R w KQkq - 0 13",
-   "said": "I don't want to just hand over the bishop here just like that I don't want to hand over the bishop pair and I don't want to hand over uncontested control of the light squares so for example if we had taken with the bishop after BC black would be able to"
+   "said": ""
   },
   {
    "ply": 22,
    "t": 320.5,
    "line": [],
    "fen": "r3kb1r/pppb1ppp/2np4/1B6/3NP3/P7/1PP2PPP/R1B1K2R w KQkq - 1 12",
-   "said": "I don't want to just hand over the bishop here just like that I don't want to hand over the bishop pair and I don't want to hand over uncontested control of the light squares so for example if we had taken with the bishop after BC black would be able to play C5 and chase this Knight out of the center and then maybe even F5 expanding on the king side so I like the concept"
+   "said": "play C5 and chase this Knight out of the center and then maybe even F5 expanding"
   },
   {
    "ply": 24,
@@ -249,7 +249,7 @@
     "bxc6"
    ],
    "fen": "r3kb1r/p1pb1ppp/2pp4/1B6/4P3/P7/1PP2PPP/R1B1K2R w KQkq - 0 13",
-   "said": "the light squares so for example if we had taken with the bishop after BC black would be able to play C5 and chase this Knight out of the center and then maybe even F5 expanding on the king side so I like the concept of leaving the Bishops on the board and here we have another choice and all of these decisions that we're about to make are not essential they are not essential in the sense that if you make the wrong move here you're screwed I absolutely don't think that I think that you just need to follow your intuition and not spend too long on these calls first let's play Bishop D3 I liked the"
+   "said": "on the king side so I like the concept of leaving the Bishops on the board and here we have another choice and all of these decisions that we're about to make are not essential they are not essential in the sense that if you make"
   },
   {
    "ply": 25,
@@ -258,14 +258,14 @@
     "Bd3"
    ],
    "fen": "r3kb1r/p1pb1ppp/2pp4/8/4P3/P2B4/1PP2PPP/R1B1K2R b KQkq - 1 13",
-   "said": "make are not essential they are not essential in the sense that if you make the wrong move here you're screwed I absolutely don't think that I think that you just need to follow your intuition and not spend too long on these calls first let's play Bishop D3 I liked the look of Bishop A6 but after Bishop A6"
+   "said": "the wrong move here you're screwed I absolutely don't think that I think that you just need to follow your intuition and not spend too long on these calls first let's play Bishop D3 I liked the"
   },
   {
    "ply": 24,
    "t": 347,
    "line": [],
    "fen": "r3kb1r/p1pb1ppp/2pp4/1B6/4P3/P7/1PP2PPP/R1B1K2R w KQkq - 0 13",
-   "said": "the wrong move here you're screwed I absolutely don't think that I think that you just need to follow your intuition and not spend too long on these calls first let's play Bishop D3 I liked the look of Bishop A6 but after Bishop A6 Rook B8 it felt to me that this bishop was not doing enough and it was also not supporting the E4 Pawn which is one of the main sort of elements of our"
+   "said": "look of Bishop A6 but after Bishop A6 Rook B8 it felt to me that this bishop"
   },
   {
    "ply": 25,
@@ -274,7 +274,7 @@
     "Bd3"
    ],
    "fen": "r3kb1r/p1pb1ppp/2pp4/8/4P3/P2B4/1PP2PPP/R1B1K2R b KQkq - 1 13",
-   "said": "first let's play Bishop D3 I liked the look of Bishop A6 but after Bishop A6 Rook B8 it felt to me that this bishop was not doing enough and it was also not supporting the E4 Pawn which is one of the main sort of elements of our position so it makes sense for this Pawn to be well protected now this bishop may look bad to you but okay remember that a piece can play a defensive role and that doesn't mean it's a bad piece so don't be dismissive about the fact that the"
+   "said": "was not doing enough and it was also not supporting the E4 Pawn which is one of the main sort of elements of our position so it makes sense for this Pawn to be well protected now this bishop may look bad to you but okay remember that a"
   },
   {
    "ply": 26,
@@ -283,7 +283,7 @@
     "Be7"
    ],
    "fen": "r3k2r/p1pbbppp/2pp4/8/4P3/P2B4/1PP2PPP/R1B1K2R w KQkq - 2 14",
-   "said": "position so it makes sense for this Pawn to be well protected now this bishop may look bad to you but okay remember that a piece can play a defensive role and that doesn't mean it's a bad piece so don't be dismissive about the fact that the Bishop's not controlling squares therefore it's a bad Bishop not really and Bishop C4 I didn't like because of"
+   "said": "piece can play a defensive role and that doesn't mean it's a bad piece so don't be dismissive about the fact that the Bishop's not controlling squares therefore it's a bad Bishop not really"
   },
   {
    "ply": 28,
@@ -293,7 +293,7 @@
     "Bf8"
    ],
    "fen": "r3kb1r/p1pb1ppp/2pp4/1B6/4P3/P7/1PP2PPP/R1B1K2R w KQkq - 4 15",
-   "said": "piece can play a defensive role and that doesn't mean it's a bad piece so don't be dismissive about the fact that the Bishop's not controlling squares therefore it's a bad Bishop not really and Bishop C4 I didn't like because of Bishop E6 and we want to avoid trades if"
+   "said": "and Bishop C4 I didn't like because of Bishop E6 and we want to avoid trades if"
   },
   {
    "ply": 30,
@@ -303,7 +303,7 @@
     "Be7"
    ],
    "fen": "r3k2r/p1pbbppp/2pp4/8/4P3/P2B4/1PP2PPP/R1B1K2R w KQkq - 6 16",
-   "said": "doesn't mean it's a bad piece so don't be dismissive about the fact that the Bishop's not controlling squares therefore it's a bad Bishop not really and Bishop C4 I didn't like because of Bishop E6 and we want to avoid trades if possible now let's continue our development so let's consider where we put this bishop I like the look of Bishop E3 in order to put some pressure on the A7 Pawn let's go Bishop E3 we are not committing"
+   "said": "possible now let's continue our development so let's consider where we put this bishop I like the look of"
   },
   {
    "ply": 31,
@@ -312,7 +312,7 @@
     "Be3"
    ],
    "fen": "r3k2r/p1pbbppp/2pp4/8/4P3/P2BB3/1PP2PPP/R3K2R b KQkq - 7 16",
-   "said": "possible now let's continue our development so let's consider where we put this bishop I like the look of Bishop E3 in order to put some pressure on the A7 Pawn let's go Bishop E3 we are not committing to the placement of our King just yet which is a deliberate by Design because I don't know what black is going to do so depending on how black is going to position their pieces I'm going to decide whether we're going kingside or"
+   "said": "Bishop E3 in order to put some pressure on the A7 Pawn let's go Bishop E3 we are not committing to the placement of our King just yet which is a deliberate by Design because"
   },
   {
    "ply": 32,
@@ -321,7 +321,7 @@
     "Bf6"
    ],
    "fen": "r3k2r/p1pb1ppp/2pp1b2/8/4P3/P2BB3/1PP2PPP/R3K2R w KQkq - 8 17",
-   "said": "which is a deliberate by Design because I don't know what black is going to do so depending on how black is going to position their pieces I'm going to decide whether we're going kingside or queen side or staying in the center which is also possible because it's the end game but I don't think so I think my fault they're a little bit too many pieces here for us to stay in the center I would be a little bit worried if we stayed in the center that black would put a rook on E8 and we would start pressing us so okay so this is a good case in point Bishop F6 so we have a move here that simultaneously develops our King and protects this B2 pawn and I think it's worth taking this opportunity"
+   "said": "I don't know what black is going to do so depending on how black is going to position their pieces I'm going to decide whether we're going kingside or queen side or staying in the center which is also possible because it's the end game but I don't think so I think my fault they're a little bit too many pieces here for us to stay in the center I would be a little bit worried if we stayed in the center that black would"
   },
   {
    "ply": 33,
@@ -330,7 +330,7 @@
     "O-O-O"
    ],
    "fen": "r3k2r/p1pb1ppp/2pp1b2/8/4P3/P2BB3/1PP2PPP/2KR3R b kq - 9 17",
-   "said": "put a rook on E8 and we would start pressing us so okay so this is a good case in point Bishop F6 so we have a move here that simultaneously develops our King and protects this B2 pawn and I think it's worth taking this opportunity Castle queenside this also puts the Rook on a nice square right D1 Square and what does The Rook on D1 doing well it's x-raying the bishop and you have to realize already at this stage I'll say that this end game cannot be won quickly black is way too solid for you to expect that we're gonna develop a winning advantage in five moves we're probably not even gonna develop winning advantage in 10 moves maybe at all you have to play very gradually you have to make small improving moves and you have to be okay with settling in for a long end game so first thing is like a mentality"
+   "said": "put a rook on E8 and we would start pressing us so okay so this is a good case in point Bishop F6 so we have a move here that simultaneously develops our King and protects this B2 pawn and I think it's worth taking this opportunity Castle queenside this also puts the Rook on a nice square right D1 Square and what does The Rook on D1 doing well it's x-raying the bishop and you have to realize already at this stage I'll say that this end game cannot be won quickly black is way too solid for you to expect that we're gonna develop a winning"
   },
   {
    "ply": 34,
@@ -339,7 +339,7 @@
     "Rb8"
    ],
    "fen": "1r2k2r/p1pb1ppp/2pp1b2/8/4P3/P2BB3/1PP2PPP/2KR3R w k - 10 18",
-   "said": "advantage in five moves we're probably not even gonna develop winning advantage in 10 moves maybe at all you have to play very gradually you have to make small improving moves and you have to be okay with settling in for a long end game so first thing is like a mentality issue Rook B8 okay there is a funny trick where we can play Bishop A7 but the problem is black as Bishop takes B2 check if Rook takes B2 we would have this move E5 there but it's a moot point okay so we can go B3"
+   "said": "advantage in five moves we're probably not even gonna develop winning advantage in 10 moves maybe at all you have to play very gradually you have to make small improving moves and you have to be okay with settling in for a long end game so first thing is like a mentality issue Rook B8 okay there is a funny trick where we can play Bishop A7 but the problem is black as"
   },
   {
    "ply": 35,
@@ -348,14 +348,14 @@
     "c3"
    ],
    "fen": "1r2k2r/p1pb1ppp/2pp1b2/8/4P3/P1PBB3/1P3PPP/2KR3R b k - 0 18",
-   "said": "issue Rook B8 okay there is a funny trick where we can play Bishop A7 but the problem is black as Bishop takes B2 check if Rook takes B2 we would have this move E5 there but it's a moot point okay so we can go B3"
+   "said": "Bishop takes B2 check if Rook takes B2 we would have this move E5 there but it's a moot point okay so we can go B3"
   },
   {
    "ply": 34,
    "t": 469,
    "line": [],
    "fen": "1r2k2r/p1pb1ppp/2pp1b2/8/4P3/P2BB3/1PP2PPP/2KR3R w k - 10 18",
-   "said": "there is a funny trick where we can play Bishop A7 but the problem is black as Bishop takes B2 check if Rook takes B2 we would have this move E5 there but it's a moot point okay so we can go B3 can go C3 B3 actually doesn't look as bad I don't think it's as bad as it looks you know what the what the plus side of B3 is so after we play B3 black is likely to play A5 I think to develop defend the pawn and then we can build this uh this Pawn chain with A4 and the benefit of the move A4 is that it fixes Black's Pawn on a dark square and one of the things that we want to do in this end game is create long-term weaknesses the more long-term weaknesses we create the the better you know our long-term chances become um we can also play C3 which also has the major benefit of blunting this bishop and and reducing the influence of Black's Bishop so both B3 and C3 makes sense I don't like B4 as much I feel like that's a little bit too committal I although you know B4 also a case could be made for that move B3 Bishop C3 is a little bit scary yeah that's what worries me okay"
+   "said": "can go C3 B3 actually doesn't look as bad I don't think it's as bad as it looks you know what the what the plus side of B3 is so after we play B3 black is likely to play A5 I think to develop defend the pawn and then we can build this uh this Pawn chain with A4 and the benefit of the move A4 is that it fixes Black's Pawn on a dark square and one of the things that we want to do in this end game is create long-term weaknesses the more long-term weaknesses we create the the better you know our long-term chances become um we can also play C3 which also has the major benefit of blunting this bishop and and reducing the influence of Black's Bishop so both B3 and C3 makes sense I don't like B4 as much I feel"
   },
   {
    "ply": 35,
@@ -364,14 +364,14 @@
     "c3"
    ],
    "fen": "1r2k2r/p1pb1ppp/2pp1b2/8/4P3/P1PBB3/1P3PPP/2KR3R b k - 0 18",
-   "said": "like that's a little bit too committal I although you know B4 also a case could be made for that move B3 Bishop C3 is a little bit scary yeah that's what worries me okay hmm"
+   "said": "like that's a little bit too committal I although you know B4 also a case could be made for that move B3 Bishop C3 is a little bit scary yeah that's what worries me okay"
   },
   {
    "ply": 34,
    "t": 529,
    "line": [],
    "fen": "1r2k2r/p1pb1ppp/2pp1b2/8/4P3/P2BB3/1PP2PPP/2KR3R w k - 10 18",
-   "said": "although you know B4 also a case could be made for that move B3 Bishop C3 is a little bit scary yeah that's what worries me okay hmm I don't know what to play here let me think B3 Bishop C3 is annoying but we have ways to deal with it we can play Bishop E2 and with D3 for example very very hard decision very hard decision the problem also with C3 is that we create a long time yeah let's go B3 let's go B3"
+   "said": "hmm I don't know what to play here let me think B3 Bishop C3 is annoying but we have ways to deal with it we can play Bishop E2 and with D3 for example very very"
   },
   {
    "ply": 35,
@@ -380,14 +380,14 @@
     "b3"
    ],
    "fen": "1r2k2r/p1pb1ppp/2pp1b2/8/4P3/PP1BB3/2P2PPP/2KR3R b k - 0 18",
-   "said": "ways to deal with it we can play Bishop E2 and with D3 for example very very hard decision very hard decision the problem also with C3 is that we create a long time yeah let's go B3 let's go B3 let's go B3 by the way this is not my intuition I'm going against my intuition my intuition is to play C3"
+   "said": "hard decision very hard decision the problem also with C3 is that we create a long time yeah let's go B3 let's go B3 let's go B3 by the way this is not my"
   },
   {
    "ply": 34,
    "t": 553,
    "line": [],
    "fen": "1r2k2r/p1pb1ppp/2pp1b2/8/4P3/P2BB3/1PP2PPP/2KR3R w k - 10 18",
-   "said": "problem also with C3 is that we create a long time yeah let's go B3 let's go B3 let's go B3 by the way this is not my intuition I'm going against my intuition my intuition is to play C3 like in a bullet game I play C3 for sure but I feel like when I approach this"
+   "said": "intuition I'm going against my intuition my intuition is to play C3 like in a bullet game I play C3 for sure"
   },
   {
    "ply": 35,
@@ -396,14 +396,14 @@
     "b3"
    ],
    "fen": "1r2k2r/p1pb1ppp/2pp1b2/8/4P3/PP1BB3/2P2PPP/2KR3R b k - 0 18",
-   "said": "let's go B3 by the way this is not my intuition I'm going against my intuition my intuition is to play C3 like in a bullet game I play C3 for sure but I feel like when I approach this more deeply I want to avoid creating long-term weaknesses of our own and one"
+   "said": "but I feel like when I approach this more deeply I want to avoid creating"
   },
   {
    "ply": 34,
    "t": 562,
    "line": [],
    "fen": "1r2k2r/p1pb1ppp/2pp1b2/8/4P3/P2BB3/1PP2PPP/2KR3R w k - 10 18",
-   "said": "my intuition is to play C3 like in a bullet game I play C3 for sure but I feel like when I approach this more deeply I want to avoid creating long-term weaknesses of our own and one of the deciding factors for me against C3 okay we go A4 and we fix the pawn is"
+   "said": "long-term weaknesses of our own and one of the deciding factors for me against"
   },
   {
    "ply": 37,
@@ -414,14 +414,14 @@
     "b3"
    ],
    "fen": "1r2k2r/2pb1ppp/2pp1b2/p7/P3P3/1P1BB3/2P2PPP/2KR3R b k - 0 19",
-   "said": "like in a bullet game I play C3 for sure but I feel like when I approach this more deeply I want to avoid creating long-term weaknesses of our own and one of the deciding factors for me against C3 okay we go A4 and we fix the pawn is that when we play C3 the B2 Pawn becomes"
+   "said": "C3 okay we go A4 and we fix the pawn is"
   },
   {
    "ply": 34,
    "t": 569.5,
    "line": [],
    "fen": "1r2k2r/p1pb1ppp/2pp1b2/8/4P3/P2BB3/1PP2PPP/2KR3R w k - 10 18",
-   "said": "more deeply I want to avoid creating long-term weaknesses of our own and one of the deciding factors for me against C3 okay we go A4 and we fix the pawn is that when we play C3 the B2 Pawn becomes a long-term weakness and black has this plan that involves doubling Rooks on the B file and applying pressure on it which I don't really want to allow here are pawns on the queen side are very healthy"
+   "said": "that when we play C3 the B2 Pawn becomes a long-term weakness and black has this plan that involves doubling Rooks on the"
   },
   {
    "ply": 37,
@@ -432,7 +432,7 @@
     "b3"
    ],
    "fen": "1r2k2r/2pb1ppp/2pp1b2/p7/P3P3/1P1BB3/2P2PPP/2KR3R b k - 0 19",
-   "said": "that when we play C3 the B2 Pawn becomes a long-term weakness and black has this plan that involves doubling Rooks on the B file and applying pressure on it which I don't really want to allow here are pawns on the queen side are very healthy now we should keep in mind that there's a very typical plan in such structures that should be we should be very Vigilant about trying to either prevent or take this thing out of in some situations does anybody know how this Pawn structure can be dealt with by black in in some situations yeah so there's this typical plan which involves trying to break apart uh the pawn chain right and you're probably familiar with the general concept of breaking apart a pawn chain here black could try to advance the pawn to C4 not right now but"
+   "said": "B file and applying pressure on it which I don't really want to allow here are pawns on the queen side are very healthy now we should keep in mind that there's a very typical plan in such structures that should be we should be very Vigilant about trying to either prevent or take this thing out of in some situations does anybody know how this Pawn structure can be dealt with by black in in some situations yeah so"
   },
   {
    "ply": 38,
@@ -441,7 +441,7 @@
     "Bc3"
    ],
    "fen": "1r2k2r/2pb1ppp/2pp4/p7/P3P3/1PbBB3/2P2PPP/2KR3R w k - 1 20",
-   "said": "there's this typical plan which involves trying to break apart uh the pawn chain right and you're probably familiar with the general concept of breaking apart a pawn chain here black could try to advance the pawn to C4 not right now but in general and if we have to play B take C4 then we get our own weakness on A4 and the B file opens up okay Bishop C3 play all right so here I really like the concept of Bishop C4 and Rook D3 let's do it Bishop C4 and Rook D3 trying"
+   "said": "there's this typical plan which involves trying to break apart uh the pawn chain right and you're probably familiar with the general concept of breaking apart a pawn chain here black could try to advance the pawn to C4 not right now but in general and if we have to play B take C4 then we get our own weakness on A4 and the B file opens up okay Bishop C3 play all right so here I really like the"
   },
   {
    "ply": 39,
@@ -450,14 +450,14 @@
     "Bc4"
    ],
    "fen": "1r2k2r/2pb1ppp/2pp4/p7/P1B1P3/1Pb1B3/2P2PPP/2KR3R b k - 2 20",
-   "said": "C4 then we get our own weakness on A4 and the B file opens up okay Bishop C3 play all right so here I really like the concept of Bishop C4 and Rook D3 let's do it Bishop C4 and Rook D3 trying to smoke the bishop out of C3 now you might say well why didn't we play Bishop"
+   "said": "concept of Bishop C4 and Rook D3 let's do it Bishop C4 and Rook D3 trying to smoke the bishop out of C3 now you"
   },
   {
    "ply": 38,
    "t": 627,
    "line": [],
    "fen": "1r2k2r/2pb1ppp/2pp4/p7/P3P3/1PbBB3/2P2PPP/2KR3R w k - 1 20",
-   "said": "concept of Bishop C4 and Rook D3 let's do it Bishop C4 and Rook D3 trying to smoke the bishop out of C3 now you might say well why didn't we play Bishop D2 but trading dark squid Bishops is not preferable because then the A5 Pawn will be unattackable and you want to avoid unattackable weaknesses we have to try to keep our dark squared Bishop alive in"
+   "said": "might say well why didn't we play Bishop D2 but trading dark squid Bishops is not preferable because then the A5 Pawn will be unattackable and you want to avoid"
   },
   {
    "ply": 39,
@@ -466,7 +466,7 @@
     "Bc4"
    ],
    "fen": "1r2k2r/2pb1ppp/2pp4/p7/P1B1P3/1Pb1B3/2P2PPP/2KR3R b k - 2 20",
-   "said": "might say well why didn't we play Bishop D2 but trading dark squid Bishops is not preferable because then the A5 Pawn will be unattackable and you want to avoid unattackable weaknesses we have to try to keep our dark squared Bishop alive in order to be able later on in the game to attack the weakness on A5 um and Bishop E6 right is what I was worried about previously but here Bishop B6 we could even play Rook D3 straight away using some nice little tactics because then if black plays Bishop C4 we play Rook C3 and we skewer the bishop to the C pod so Bishop E6 Rook D3 okay black and play Bishop B4 but then the bishop is out of the game and we can try to keep the bishop out of the game if the bishop goes back let's say to E5 or F6 and already we can take on E6 and try to go Bishop D2 and try to tie down the Rook to A8 and when we tie down a piece we can then start playing on the other side of the board with the understanding that our opponent doesn't have sufficient resources to address whatever's happening on the other side because we're tying him down to a long-term weakness on the queen side okay so already I like the I like the way this game is going I like the progress that we're making here and we're posing some difficult decisions to Black okay Rook D3 Bishop B6"
+   "said": "unattackable weaknesses we have to try to keep our dark squared Bishop alive in order to be able later on in the game to attack the weakness on A5 um and Bishop E6 right is what I was worried about previously but here Bishop B6 we could even play Rook D3 straight away using some nice little tactics because then if black plays Bishop C4 we play Rook C3 and we skewer the bishop to the C pod so Bishop E6 Rook D3 okay black and play Bishop B4 but then the bishop is out of the game and we can try to keep the bishop out of the game if the bishop goes back let's say to E5 or F6 and already we can take on E6 and try to go Bishop D2 and try to tie down the Rook to A8 and when we tie down a piece we can then start playing on the other side of the board with the understanding that our opponent doesn't have sufficient resources to address whatever's happening on the other side because we're tying him down to a"
   },
   {
    "ply": 40,
@@ -475,7 +475,7 @@
     "Be6"
    ],
    "fen": "1r2k2r/2p2ppp/2ppb3/p7/P1B1P3/1Pb1B3/2P2PPP/2KR3R w k - 3 21",
-   "said": "long-term weakness on the queen side okay so already I like the I like the way this game is going I like the progress that we're making here and we're posing some difficult decisions to Black okay Rook D3 Bishop B6 okay now Rook D3"
+   "said": "long-term weakness on the queen side okay so already I like the I like the way this game is going I like the progress that we're making here and we're posing some difficult decisions to Black okay Rook D3 Bishop B6"
   },
   {
    "ply": 41,
@@ -484,7 +484,7 @@
     "Rd3"
    ],
    "fen": "1r2k2r/2p2ppp/2ppb3/p7/P1B1P3/1PbRB3/2P2PPP/2K4R b k - 4 21",
-   "said": "long-term weakness on the queen side okay so already I like the I like the way this game is going I like the progress that we're making here and we're posing some difficult decisions to Black okay Rook D3 Bishop B6 okay now Rook D3 and this is even trickier right because we're we're giving him a chance to make a tactical error Bishop takes C4 we play Rook takes C3 and we win the C6 pawn and remember the key rule when we've got"
+   "said": "okay now Rook D3 and this is even trickier right because we're we're giving him a chance to make a tactical error Bishop takes C4 we play"
   },
   {
    "ply": 42,
@@ -493,7 +493,7 @@
     "Bb4"
    ],
    "fen": "1r2k2r/2p2ppp/2ppb3/p7/PbB1P3/1P1RB3/2P2PPP/2K4R w k - 5 22",
-   "said": "and this is even trickier right because we're we're giving him a chance to make a tactical error Bishop takes C4 we play Rook takes C3 and we win the C6 pawn and remember the key rule when we've got opposite called Bishops the opposite Court Bishop positions are not drawn with Rooks on the board uh so you should you should not be worried about that at all all right let's think so we have to take"
+   "said": "Rook takes C3 and we win the C6 pawn and remember the key rule when we've got opposite called Bishops the opposite Court Bishop positions are not drawn with Rooks on the board"
   },
   {
    "ply": 43,
@@ -502,7 +502,7 @@
     "Bxe6"
    ],
    "fen": "1r2k2r/2p2ppp/2ppB3/p7/Pb2P3/1P1RB3/2P2PPP/2K4R b k - 0 22",
-   "said": "opposite called Bishops the opposite Court Bishop positions are not drawn with Rooks on the board uh so you should you should not be worried about that at all all right let's think so we have to take okay so King B2 almost Min tempo for"
+   "said": "uh so you should you should not be worried about that at all all right let's think so we have to take"
   },
   {
    "ply": 44,
@@ -511,7 +511,7 @@
     "fxe6"
    ],
    "fen": "1r2k2r/2p3pp/2ppp3/p7/Pb2P3/1P1RB3/2P2PPP/2K4R w k - 0 23",
-   "said": "the opposite Court Bishop positions are not drawn with Rooks on the board uh so you should you should not be worried about that at all all right let's think so we have to take okay so King B2 almost Min tempo for Tempo black survives this C4 is interesting but I don't like it C3 Bishop A3 King C2 D5 wow honestly I overlooked that sequence still think white is better though okay think think Bishop D4 as possible but then black castles again don't like it hmm I thinking B2 we have to play this very slowly ah I have an idea okay"
+   "said": "okay so King B2 almost Min tempo for Tempo black survives this C4 is interesting but I don't like it C3 Bishop A3 King C2 D5 wow honestly I overlooked that sequence still think white is better though okay think think Bishop D4 as possible but then black castles again"
   },
   {
    "ply": 45,
@@ -527,7 +527,7 @@
    "t": 758.5,
    "line": [],
    "fen": "1r2k2r/2p3pp/2ppp3/p7/Pb2P3/1P1RB3/2P2PPP/2K4R w k - 0 23",
-   "said": "I thinking B2 we have to play this very slowly ah I have an idea okay I think we should begin"
+   "said": ""
   },
   {
    "ply": 45,
@@ -536,7 +536,7 @@
     "Kb2"
    ],
    "fen": "1r2k2r/2p3pp/2ppp3/p7/Pb2P3/1P1RB3/1KP2PPP/7R b k - 1 23",
-   "said": "I thinking B2 we have to play this very slowly ah I have an idea okay I think we should begin yes I think we should go King B2 for starters I don't like F4 in this I mean this gets very subtle this this is going to get very positional and when I say that you know what do I mean by that I mean it's a lot of what what I'm about to do is based on like understanding peace placement and it's not based on variation so when you ask a question in the post game analysis too don't expect me to say oh the reason I didn't do this is because of x y and z"
+   "said": "yes I think we should go King B2 for starters I don't like F4 in this I mean this gets very subtle this this is going to get very positional and when I say that you know what do I mean by that I mean it's a lot of what what I'm about to do is based on"
   },
   {
    "ply": 46,
@@ -545,7 +545,7 @@
     "d5"
    ],
    "fen": "1r2k2r/2p3pp/2p1p3/p2p4/Pb2P3/1P1RB3/1KP2PPP/7R w k - 0 24",
-   "said": "like understanding peace placement and it's not based on variation so when you ask a question in the post game analysis too don't expect me to say oh the reason I didn't do this is because of x y and z a lot of this has to do with my feeling"
+   "said": "like understanding peace placement and it's not based on variation so when you ask a question in the post game analysis too don't expect me to say oh the reason I didn't do this is because of x y and z"
   },
   {
    "ply": 47,
@@ -554,14 +554,14 @@
     "f3"
    ],
    "fen": "1r2k2r/2p3pp/2p1p3/p2p4/Pb2P3/1P1RBP2/1KP3PP/7R b k - 0 24",
-   "said": "it's not based on variation so when you ask a question in the post game analysis too don't expect me to say oh the reason I didn't do this is because of x y and z a lot of this has to do with my feeling"
+   "said": "a lot of this has to do with my feeling"
   },
   {
    "ply": 46,
    "t": 789,
    "line": [],
    "fen": "1r2k2r/2p3pp/2p1p3/p2p4/Pb2P3/1P1RB3/1KP2PPP/7R w k - 0 24",
-   "said": "ask a question in the post game analysis too don't expect me to say oh the reason I didn't do this is because of x y and z a lot of this has to do with my feeling of where the pieces belong and where we"
+   "said": "of where the pieces belong and where we"
   },
   {
    "ply": 47,
@@ -570,14 +570,14 @@
     "f3"
    ],
    "fen": "1r2k2r/2p3pp/2p1p3/p2p4/Pb2P3/1P1RBP2/1KP3PP/7R b k - 0 24",
-   "said": "too don't expect me to say oh the reason I didn't do this is because of x y and z a lot of this has to do with my feeling of where the pieces belong and where we can maximize our advantage so D5 F3 this is actually the reason why I did not want to push up for I wanted to reserve"
+   "said": "can maximize our advantage so D5 F3 this"
   },
   {
    "ply": 45,
    "t": 797.5,
    "line": [],
    "fen": "1r2k2r/2p3pp/2ppp3/p7/Pb2P3/1P1RB3/1KP2PPP/7R b k - 1 23",
-   "said": "a lot of this has to do with my feeling of where the pieces belong and where we can maximize our advantage so D5 F3 this is actually the reason why I did not want to push up for I wanted to reserve the possibility of defending the pawn"
+   "said": "is actually the reason why I did not want to push up for I wanted to reserve"
   },
   {
    "ply": 47,
@@ -587,7 +587,7 @@
     "f3"
    ],
    "fen": "1r2k2r/2p3pp/2p1p3/p2p4/Pb2P3/1P1RBP2/1KP3PP/7R b k - 0 24",
-   "said": "a lot of this has to do with my feeling of where the pieces belong and where we can maximize our advantage so D5 F3 this is actually the reason why I did not want to push up for I wanted to reserve the possibility of defending the pawn with F3 now I'm seeing two things this bishop on B4 is pissing me off but playing the move C3 is a very bad idea because not only do we soften up our B3 Pawn but we we will no longer be able to play Bishop to D2 and attack the A5 Pawn so my idea is to switch from attacking"
+   "said": "the possibility of defending the pawn with F3 now I'm seeing two things this bishop on B4 is pissing me off but playing the move C3 is a very bad idea"
   },
   {
    "ply": 48,
@@ -596,7 +596,7 @@
     "O-O"
    ],
    "fen": "1r3rk1/2p3pp/2p1p3/p2p4/Pb2P3/1P1RBP2/1KP3PP/7R w - - 1 25",
-   "said": "playing the move C3 is a very bad idea because not only do we soften up our B3 Pawn but we we will no longer be able to play Bishop to D2 and attack the A5 Pawn so my idea is to switch from attacking the A5 Pawn to piling up on the second weakness that black has which is the C6 Pawn I'm liking the look of Bishop to D2 eventually in order to try to trade off the bishop so that we can eventually put a rook on C3 and attack black down the C file but to do all of that we need to"
+   "said": "because not only do we soften up our B3 Pawn but we we will no longer be able to play Bishop to D2 and attack the A5 Pawn so my idea is to switch from attacking the A5 Pawn to piling up on the second weakness that black has which is the C6 Pawn I'm liking the look of Bishop to D2"
   },
   {
    "ply": 49,
@@ -605,7 +605,7 @@
     "Rhd1"
    ],
    "fen": "1r3rk1/2p3pp/2p1p3/p2p4/Pb2P3/1P1RBP2/1KP3PP/3R4 b - - 2 25",
-   "said": "Pawn I'm liking the look of Bishop to D2 eventually in order to try to trade off the bishop so that we can eventually put a rook on C3 and attack black down the C file but to do all of that we need to bring all our pieces into the game so let's start with Rook hdd1 which is sort of like a neutral move I want to see what black ends up doing here um we're not attacking the D5 phone that's not the point of this move we're just sort of generally bringing the Rook into the game okay and I'm trying to prevent black from expanding on the queen side with C5 or E5 by preemptively piling up on the d-pawn so we're trying to immobilize Flex Pawn structure so I believe that white is better here but not much I think it's a slight Edge for us and if black plays well he should draw this but it's a difficult position for black to play because he's got a lot of weaknesses he's got these weaknesses on the queen side we've got a super compact Pawn structure with no weaknesses and we've got a lot of ways that we can try to improve our position here"
+   "said": "eventually in order to try to trade off the bishop so that we can eventually put a rook on C3 and attack black down the C file but to do all of that we need to bring all our pieces into the game so let's start with Rook hdd1 which is sort of like a neutral move I want to see what black ends up doing here um we're not attacking the D5 phone that's not the point of this move we're just sort of generally bringing the Rook into the game okay and I'm trying to prevent black from expanding on the queen side with C5 or E5 by preemptively piling up on the d-pawn so we're trying to immobilize Flex Pawn structure so I believe that white is better here but not much I think it's a slight Edge for us and if black plays well he should draw this but it's a difficult position"
   },
   {
    "ply": 50,
@@ -614,7 +614,7 @@
     "h6"
    ],
    "fen": "1r3rk1/2p3p1/2p1p2p/p2p4/Pb2P3/1P1RBP2/1KP3PP/3R4 w - - 0 26",
-   "said": "for black to play because he's got a lot of weaknesses he's got these weaknesses on the queen side we've got a super compact Pawn structure with no weaknesses and we've got a lot of ways that we can try to improve our position here H6 now here the idea that I was mentioning earlier is Bishop D2 how does Bishop D2 work well when we play Bishop D2 and black trades on D2 We then reserve the possibility of playing Rook C3 and sticking The Rook on this Prime real estate on C5 so I really think Bishop D2 is a Worthy worthy try but the drawback of Bishop D2 is that black can take and stick The Rook on the second rank Rook F2 and we have to address that concretely but I think that concretely works out for us let's"
+   "said": "for black to play because he's got a lot of weaknesses he's got these weaknesses on the queen side we've got a super compact Pawn structure with no weaknesses and we've got a lot of ways that we can try to improve our position here H6 now here the idea that I was mentioning earlier is Bishop D2 how does Bishop D2 work well when we play Bishop D2 and black trades on D2 We then reserve the possibility of playing Rook C3 and sticking The Rook on this Prime real estate on C5 so I really think Bishop D2 is a Worthy"
   },
   {
    "ply": 51,
@@ -623,7 +623,7 @@
     "Bd2"
    ],
    "fen": "1r3rk1/2p3p1/2p1p2p/p2p4/Pb2P3/1P1R1P2/1KPB2PP/3R4 b - - 1 26",
-   "said": "worthy try but the drawback of Bishop D2 is that black can take and stick The Rook on the second rank Rook F2 and we have to address that concretely but I think that concretely works out for us let's quickly go Bishop D2 and see let's let's pose this problem to Black and the way we're trying to play is also to pose a lot of decisions and dilemmas for black which given the clock situation is a very unpleasant way of playing okay so we're playing Bishop D2 okay he"
+   "said": "worthy try but the drawback of Bishop D2 is that black can take and stick The Rook on the second rank Rook F2 and we have to address that concretely but I think that concretely works out for us let's quickly go Bishop D2 and see let's let's pose this problem to Black and the way we're trying to play is also to pose a lot of decisions and dilemmas"
   },
   {
    "ply": 52,
@@ -632,7 +632,7 @@
     "Kf7"
    ],
    "fen": "1r3r2/2p2kp1/2p1p2p/p2p4/Pb2P3/1P1R1P2/1KPB2PP/3R4 w - - 2 27",
-   "said": "and the way we're trying to play is also to pose a lot of decisions and dilemmas for black which given the clock situation is a very unpleasant way of playing okay so we're playing Bishop D2 okay he doesn't react doesn't react but can't we now take yeah I think we should take now"
+   "said": "for black which given the clock situation is a very unpleasant way of playing okay so we're playing Bishop D2 okay he doesn't react doesn't react but can't we now take yeah"
   },
   {
    "ply": 53,
@@ -641,7 +641,7 @@
     "Bxb4"
    ],
    "fen": "1r3r2/2p2kp1/2p1p2p/p2p4/PB2P3/1P1R1P2/1KP3PP/3R4 b - - 0 27",
-   "said": "situation is a very unpleasant way of playing okay so we're playing Bishop D2 okay he doesn't react doesn't react but can't we now take yeah I think we should take now yeah we should definitely take okay and"
+   "said": "I think we should take now"
   },
   {
    "ply": 54,
@@ -650,7 +650,7 @@
     "Rxb4"
    ],
    "fen": "5r2/2p2kp1/2p1p2p/p2p4/Pr2P3/1P1R1P2/1KP3PP/3R4 w - - 0 28",
-   "said": "playing okay so we're playing Bishop D2 okay he doesn't react doesn't react but can't we now take yeah I think we should take now yeah we should definitely take okay and now now we our plan has succeeded and we can try to attack this C6 Pawn with the move Rook C3 and try to get the"
+   "said": "yeah we should definitely take okay and now now we our plan has succeeded and we can try to attack this C6 Pawn"
   },
   {
    "ply": 55,
@@ -659,7 +659,7 @@
     "Rc3"
    ],
    "fen": "5r2/2p2kp1/2p1p2p/p2p4/Pr2P3/1PR2P2/1KP3PP/3R4 b - - 1 28",
-   "said": "I think we should take now yeah we should definitely take okay and now now we our plan has succeeded and we can try to attack this C6 Pawn with the move Rook C3 and try to get the Rook to C5 and then maybe even try to get the other Rook to C3 and then we really start massaging Black's weaknesses you know really gets unpleasant there now of course why am I not worried you might wonder about D take C4 because I'm intuitively just understanding that black has three pawns we can pick off all of them and black will only at most be able to take the E4 punt so I'm not even really calculating D takes E4 I am assuming that Rook B6 here is absolutely forced then let's go"
+   "said": "with the move Rook C3 and try to get the Rook to C5 and then maybe even try to get the other Rook to C3 and then we really start massaging Black's weaknesses you know really gets unpleasant there now of course why am I not worried you might wonder about D take C4 because I'm intuitively just understanding that black has three pawns"
   },
   {
    "ply": 57,
@@ -669,7 +669,7 @@
     "Rc5"
    ],
    "fen": "5r2/2p2kp1/1rp1p2p/p1Rp4/P3P3/1P3P2/1KP3PP/3R4 b - - 3 29",
-   "said": "we can pick off all of them and black will only at most be able to take the E4 punt so I'm not even really calculating D takes E4 I am assuming that Rook B6 here is absolutely forced then let's go Rook C5 because that's a pretty automatic move it's not going to hurt us to attack another weakness on A5 still I think the position is not much better for us I think we're still within the realm of slightly better but the situation is starting to shift and black is losing the threat of the game you can feel it he cooperated he basically cooperated with us"
+   "said": "we can pick off all of them and black will only at most be able to take the E4 punt so I'm not even really calculating D takes E4 I am assuming that Rook B6 here is absolutely forced then let's go Rook C5 because that's a pretty automatic move it's not going to hurt us to attack another weakness on A5 still I think the position is not much better for us I think we're still within the"
   },
   {
    "ply": 58,
@@ -678,7 +678,7 @@
     "Ra6"
    ],
    "fen": "5r2/2p2kp1/r1p1p2p/p1Rp4/P3P3/1P3P2/1KP3PP/3R4 w - - 4 30",
-   "said": "think the position is not much better for us I think we're still within the realm of slightly better but the situation is starting to shift and black is losing the threat of the game you can feel it he cooperated he basically cooperated with us and by cooperating with us he's given us everything that we want and now I think Rook A6 is another mistake I think it was better to play Rook A8 now I'm asking myself the question first of all what happens if we play Rook D3 and I'm rejecting this move because black is in time to get his King over to D7 and then our Rooks are just sort of staring at the pawn we need to create more weaknesses we need to apply the principle not necessarily of two weaknesses but the principle of more weaknesses and we need to ask ourselves okay can we open up another theater of the game and the answer is yes let's start with E"
+   "said": "realm of slightly better but the situation is starting to shift and black is losing the threat of the game you can feel it he cooperated he basically cooperated with us and by cooperating with us he's given us everything that we want and now I think Rook A6 is another mistake I think it was better to play Rook A8 now I'm asking myself the question first of all what happens if we play Rook D3 and I'm rejecting this move because black is in time to get his King over to D7 and then our Rooks are just sort of staring at the pawn we need to create more"
   },
   {
    "ply": 59,
@@ -687,7 +687,7 @@
     "exd5"
    ],
    "fen": "5r2/2p2kp1/r1p1p2p/p1RP4/P7/1P3P2/1KP3PP/3R4 b - - 0 30",
-   "said": "weaknesses we need to apply the principle not necessarily of two weaknesses but the principle of more weaknesses and we need to ask ourselves okay can we open up another theater of the game and the answer is yes let's start with E takes D5 let's start with E takes D5 if CD then we win the pawn and we're grooving and now we can break apart the"
+   "said": "weaknesses we need to apply the principle not necessarily of two weaknesses but the principle of more weaknesses and we need to ask ourselves okay can we open up another theater of the game and the answer is yes let's start with E takes D5 let's start with E takes D5 if"
   },
   {
    "ply": 60,
@@ -696,7 +696,7 @@
     "exd5"
    ],
    "fen": "5r2/2p2kp1/r1p4p/p1Rp4/P7/1P3P2/1KP3PP/3R4 w - - 0 31",
-   "said": "okay can we open up another theater of the game and the answer is yes let's start with E takes D5 let's start with E takes D5 if CD then we win the pawn and we're grooving and now we can break apart the pawn chain with C4"
+   "said": "CD then we win the pawn and we're grooving and now we can break apart the"
   },
   {
    "ply": 61,
@@ -705,7 +705,7 @@
     "c4"
    ],
    "fen": "5r2/2p2kp1/r1p4p/p1Rp4/P1P5/1P3P2/1K4PP/3R4 b - - 0 31",
-   "said": "and the answer is yes let's start with E takes D5 let's start with E takes D5 if CD then we win the pawn and we're grooving and now we can break apart the pawn chain with C4 and the point of C4 is first of all to remove this Pawn on D5 which is restricting our rook and second of all to open up more prospects for our Rooks so C4 is kind of a no-brainer move it should be logical it should be a logical move to you it should strike you as logical because when black takes our Rook on D1 has a lot better prospects and we're threatening Rook D7 there at this point I think white is much much better maybe even technically winning already maybe even technically winning but to win this is actually very difficult because it's a rook end game and Rook end games one mistake and you accidentally let your opponent get active and you know I don't need to lecture you on this this is a known fact yeah it's coming together nicely here and our opponent I think is sensing that that the game is slipping away from so"
+   "said": "pawn chain with C4 and the point of C4 is first of all to remove this Pawn on D5 which is restricting our rook and second of all to open up more prospects for our Rooks so C4 is kind of a no-brainer move it should be logical it should be a logical move to you it should strike you as logical because when black takes our Rook on D1 has a lot better prospects and we're threatening Rook D7 there at this point I think white is much much better maybe even technically winning already maybe even technically winning but to win this is actually very difficult because it's a rook end game and Rook end games one mistake and you"
   },
   {
    "ply": 62,
@@ -723,7 +723,7 @@
     "cxd5+"
    ],
    "fen": "5r2/2p3p1/r1p1k2p/p1RP4/P7/1P3P2/1K4PP/3R4 b - - 0 32",
-   "said": "lecture you on this this is a known fact yeah it's coming together nicely here and our opponent I think is sensing that that the game is slipping away from so he's giving up a pawn well I will oblige I will take it yeah and King D6 I saw this line so here we have a choice of"
+   "said": "I will take it yeah and King D6 I saw"
   },
   {
    "ply": 64,
@@ -732,7 +732,7 @@
     "Kd6"
    ],
    "fen": "5r2/2p3p1/r1pk3p/p1RP4/P7/1P3P2/1K4PP/3R4 w - - 1 33",
-   "said": "yeah it's coming together nicely here and our opponent I think is sensing that that the game is slipping away from so he's giving up a pawn well I will oblige I will take it yeah and King D6 I saw this line so here we have a choice of two two options the first is maybe a move that he missed which is Rook takes C6 check and we reach a technical position as a result where we're up a pawn we have a three on Two And we should probably be able to convert that into a win but we should briefly check if there's anything better and the only other move is Rook D to C1 C takes D5 Rook takes C7 that hits the G7 pun that's a more tactical way of playing that's a more ambitious way of playing I think I'm trying to win with both Rooks on the board it's kind of hard to say which is the better option here let me think I think both options are very appealing obviously but more calculation is required in the in the latter option okay let's go with the uh let's go with"
+   "said": "this line so here we have a choice of two two options the first is maybe a move that he missed which is Rook takes C6 check and we reach a technical position as a result where we're up a pawn we have a three on Two And we should probably be able to convert that into a win but we should briefly check if there's anything better and the only other move is Rook D to C1 C takes D5 Rook takes C7 that hits the G7 pun that's a more tactical way of playing that's a more ambitious way of playing I think I'm trying to win with both Rooks on the board it's kind of hard to say which is the better option here let me"
   },
   {
    "ply": 65,
@@ -751,7 +751,7 @@
     "dxc6+"
    ],
    "fen": "5r2/2p3p1/2Pk3p/p7/P7/1P3P2/1K4PP/3R4 b - - 0 34",
-   "said": "I think both options are very appealing obviously but more calculation is required in the in the latter option okay let's go with the uh let's go with the calmer option rook c60c and now our"
+   "said": ""
   },
   {
    "ply": 68,
@@ -760,7 +760,7 @@
     "Kxc6"
    ],
    "fen": "5r2/2p3p1/2k4p/p7/P7/1P3P2/1K4PP/3R4 w - - 0 35",
-   "said": "obviously but more calculation is required in the in the latter option okay let's go with the uh let's go with the calmer option rook c60c and now our general plan is to do two things first of all we need to monitor the activity of our pieces and probably we should start with King C3 but maybe even not maybe we should start with the move rookie one you know why because if we play King C3 then black will play this annoying little move rookie 8 and black will constantly be threatening to to infiltrate with with his Rook to E2 now if we start with the move Rook to E1"
+   "said": "general plan is to do two things first of all we need to monitor the activity of our pieces and probably we should start with King C3 but maybe even not maybe we should start with the move rookie one you know why because if we"
   },
   {
    "ply": 69,
@@ -769,7 +769,7 @@
     "Re1"
    ],
    "fen": "5r2/2p3p1/2k4p/p7/P7/1P3P2/1K4PP/4R3 b - - 1 35",
-   "said": "play King C3 then black will play this annoying little move rookie 8 and black will constantly be threatening to to infiltrate with with his Rook to E2 now if we start with the move Rook to E1 black can of course play Rook to d8 and probably will but then we can bring our King up to C3 and we've got the perfect setup because we are essentially very safely and securely controlling all of the infiltration squares and then we can work on stage two or phase two of our plan and phase two of our plan is to start very carefully and judiciously advancing our King side pawns with two AIMS in mind of course to create a pass"
+   "said": "play King C3 then black will play this annoying little move rookie 8 and black will constantly be threatening to to infiltrate with with his Rook to E2 now if we start with the move Rook to E1 black can of course play Rook to d8 and probably will but then we can bring our King up to C3 and we've got the perfect setup because we are essentially very safely and securely controlling all of the infiltration squares and then we"
   },
   {
    "ply": 70,
@@ -778,7 +778,7 @@
     "Rf5"
    ],
    "fen": "8/2p3p1/2k4p/p4r2/P7/1P3P2/1K4PP/4R3 w - - 2 36",
-   "said": "can work on stage two or phase two of our plan and phase two of our plan is to start very carefully and judiciously advancing our King side pawns with two AIMS in mind of course to create a pass Pawn eventually but also to restrict the activity of blackstroke and to soften up black spawns okay so I think we should"
+   "said": "can work on stage two or phase two of our plan and phase two of our plan is to start very carefully and judiciously advancing our King side pawns with two AIMS in mind of course to create a pass Pawn eventually but also to restrict the"
   },
   {
    "ply": 71,
@@ -787,7 +787,7 @@
     "Re4"
    ],
    "fen": "8/2p3p1/2k4p/p4r2/P3R3/1P3P2/1K4PP/8 b - - 3 36",
-   "said": "AIMS in mind of course to create a pass Pawn eventually but also to restrict the activity of blackstroke and to soften up black spawns okay so I think we should go rookie four for starters and and centralize our Rook let's centralize our Rook also we're potentially preparing B4 and why is B4 good because B4 creates an"
+   "said": "activity of blackstroke and to soften up black spawns okay so I think we should go rookie four for starters and and centralize our Rook let's centralize our"
   },
   {
    "ply": 72,
@@ -796,7 +796,7 @@
     "Kd6"
    ],
    "fen": "8/2p3p1/3k3p/p4r2/P3R3/1P3P2/1K4PP/8 w - - 4 37",
-   "said": "black spawns okay so I think we should go rookie four for starters and and centralize our Rook let's centralize our Rook also we're potentially preparing B4 and why is B4 good because B4 creates an outside passer okay so we can play King C3 here first but then baby block will play C5 so we have an important very important moment if we want to play before we should do it now if we don't then it's fine to go King C3 and I think we don't I think we're okay going King C3 here I don't mind him going C5 yeah let's go King C3"
+   "said": "Rook also we're potentially preparing B4 and why is B4 good because B4 creates an outside passer okay so we can play King C3 here first but then baby block will play C5 so we have an important very important moment if we want to play before we should do"
   },
   {
    "ply": 73,
@@ -805,7 +805,7 @@
     "Kc3"
    ],
    "fen": "8/2p3p1/3k3p/p4r2/P3R3/1PK2P2/6PP/8 b - - 5 37",
-   "said": "if we want to play before we should do it now if we don't then it's fine to go King C3 and I think we don't I think we're okay going King C3 here I don't mind him going C5 yeah let's go King C3 because if black plays C5 I feel like the pawn on A5 will be a long-term weakness and rather than trading it we can actually try to win it with our Rook we can try to win it by going around with our Rook and we can also go into B5 with our King so C5 weakens the queen side quite a bit and I'm just it's just not a scary move if he attacks the h-bond we can defend it very easily we can play H4 that's partially why we put the Rook on e4 we can even play H3 it doesn't matter Rook G5 we can play G4 so this frontal attack"
+   "said": "it now if we don't then it's fine to go King C3 and I think we don't I think we're okay going King C3 here I don't mind him going C5 yeah let's go King C3 because if black plays C5 I feel like the pawn on A5 will be a long-term weakness and rather than trading it we can actually try to win it with our Rook we can try to win it by going around with our Rook and we can also go into B5 with our King so C5 weakens the queen side quite a bit and I'm just it's just not a scary move"
   },
   {
    "ply": 74,
@@ -814,7 +814,7 @@
     "h5"
    ],
    "fen": "8/2p3p1/3k4/p4r1p/P3R3/1PK2P2/6PP/8 w - - 0 38",
-   "said": "if he attacks the h-bond we can defend it very easily we can play H4 that's partially why we put the Rook on e4 we can even play H3 it doesn't matter Rook G5 we can play G4 so this frontal attack on our pawns is never going to lead to success okay now again we can play B4 and this time it's a lot more appealing with our King a little bit more active but I don't see a reason why we cannot start by locking up Black's pawns here"
+   "said": "if he attacks the h-bond we can defend it very easily we can play H4 that's partially why we put the Rook on e4 we can even play H3 it doesn't matter Rook G5 we can play G4 so this frontal attack on our pawns is never going to lead to success okay now again we can play B4 and this time it's a lot more appealing"
   },
   {
    "ply": 75,
@@ -823,7 +823,7 @@
     "h4"
    ],
    "fen": "8/2p3p1/3k4/p4r1p/P3R2P/1PK2P2/6P1/8 b - - 0 38",
-   "said": "on our pawns is never going to lead to success okay now again we can play B4 and this time it's a lot more appealing with our King a little bit more active but I don't see a reason why we cannot start by locking up Black's pawns here with H4 maybe I allowed G5 maybe that was a bad idea I don't know but then maybe B4 already yeah G5 probably a mistake by me to"
+   "said": "with our King a little bit more active but I don't see a reason why we cannot start by locking up Black's pawns here with H4 maybe I allowed G5 maybe that"
   },
   {
    "ply": 76,
@@ -832,7 +832,7 @@
     "g5"
    ],
    "fen": "8/2p5/3k4/p4rpp/P3R2P/1PK2P2/6P1/8 w - - 0 39",
-   "said": "start by locking up Black's pawns here with H4 maybe I allowed G5 maybe that was a bad idea I don't know but then maybe B4 already yeah G5 probably a mistake by me to allow G5 probably a mistake but maybe not maybe just before and we win yeah I think just"
+   "said": "was a bad idea I don't know but then maybe B4 already yeah G5 probably a mistake by me to allow G5 probably a mistake but maybe not maybe"
   },
   {
    "ply": 77,
@@ -841,7 +841,7 @@
     "b4"
    ],
    "fen": "8/2p5/3k4/p4rpp/PP2R2P/2K2P2/6P1/8 b - - 0 39",
-   "said": "maybe B4 already yeah G5 probably a mistake by me to allow G5 probably a mistake but maybe not maybe just before and we win yeah I think just before let's go B4 let's go let's create the passer why am I creating a passer now well my logic is this after the trade we're gonna take with our King to keep our King as active as possible and we will already be very close to"
+   "said": "just before and we win yeah I think just before let's go B4 let's go let's create the passer why am I creating a passer now well my logic is this after the trade we're"
   },
   {
    "ply": 79,
@@ -851,7 +851,7 @@
     "Kxb4"
    ],
    "fen": "8/2p5/3k4/5rpp/PK2R2P/5P2/6P1/8 b - - 0 40",
-   "said": "passer why am I creating a passer now well my logic is this after the trade we're gonna take with our King to keep our King as active as possible and we will already be very close to being able to play A5 and starting to promote our a pawn but I'm also looking over at the Kingston and I'm saying okay if black plays G takes H4 we play Rook takes H4 and then we will be very very close to creating another pass spawn on the king side and if we get two past spawns on both sides of the board with a minute on the clock I mean if black"
+   "said": "gonna take with our King to keep our King as active as possible and we will already be very close to being able to play A5 and starting to promote our a pawn but I'm also looking over at the Kingston and I'm saying okay if black plays G takes H4 we play Rook takes H4 and then we will be very very"
   },
   {
    "ply": 80,
@@ -860,7 +860,7 @@
     "gxh4"
    ],
    "fen": "8/2p5/3k4/5r1p/PK2R2p/5P2/6P1/8 w - - 0 41",
-   "said": "if black plays G takes H4 we play Rook takes H4 and then we will be very very close to creating another pass spawn on the king side and if we get two past spawns on both sides of the board with a minute on the clock I mean if black defends this Kudos okay here we go we"
+   "said": "close to creating another pass spawn on the king side and if we get two past spawns on both sides of the board with a minute on the clock I mean if black defends this Kudos okay here we go we"
   },
   {
    "ply": 81,
@@ -869,7 +869,7 @@
     "Rxh4"
    ],
    "fen": "8/2p5/3k4/5r1p/PK5R/5P2/6P1/8 b - - 0 41",
-   "said": "takes H4 and then we will be very very close to creating another pass spawn on the king side and if we get two past spawns on both sides of the board with a minute on the clock I mean if black defends this Kudos okay here we go we already have a passer and here's the second one we have two passers on both"
+   "said": "already have a passer and here's the"
   },
   {
    "ply": 82,
@@ -878,7 +878,7 @@
     "Kc6"
    ],
    "fen": "8/2p5/2k5/5r1p/PK5R/5P2/6P1/8 w - - 1 42",
-   "said": "the king side and if we get two past spawns on both sides of the board with a minute on the clock I mean if black defends this Kudos okay here we go we already have a passer and here's the second one we have two passers on both sides of the board this has to be winning this has to be winning but how do we actually convert this check here what if we push should we push should we push now or should we push later we can also push F4 by the way and then try to walk our King up to C4 and D4 but I don't like that idea not easy not easy at all to convert this A5 is probably a mistake okay"
+   "said": "second one we have two passers on both sides of the board this has to be winning this has to be winning but how do we actually convert this check here what if we push should we push should we push now or should we push later we can also push F4 by the way and then try to walk our King"
   },
   {
    "ply": 83,
@@ -896,7 +896,7 @@
     "Rg5"
    ],
    "fen": "8/2p5/2k5/6rp/P1K4R/5P2/6P1/8 w - - 3 43",
-   "said": "this A5 is probably a mistake okay go like this like looking C4 G5 this guy is very good yeah I might be losing the thread a little bit here but I still think we're winning before maybe yeah let's go G4"
+   "said": "G5 this guy is very good yeah I might be losing the thread a"
   },
   {
    "ply": 85,
@@ -905,7 +905,7 @@
     "g4"
    ],
    "fen": "8/2p5/2k5/6rp/P1K3PR/5P2/8/8 b - - 0 43",
-   "said": "G5 this guy is very good yeah I might be losing the thread a little bit here but I still think we're winning before maybe yeah let's go G4 and now Rook G4 and I should be winning"
+   "said": "little bit here but I still think we're winning before maybe yeah let's go G4"
   },
   {
    "ply": 87,
@@ -915,7 +915,7 @@
     "Rxg4"
    ],
    "fen": "8/2p5/2k5/6r1/P1K3R1/5P2/8/8 b - - 0 44",
-   "said": "G5 this guy is very good yeah I might be losing the thread a little bit here but I still think we're winning before maybe yeah let's go G4 and now Rook G4 and I should be winning here this should be winning this should be winning but it's going to be hard to convert it should be winning I think practically speaking because we have two passwords and we'll lock is only one but he's playing this I have to commend"
+   "said": "and now Rook G4 and I should be winning here this should be winning this should be winning but it's going to be hard to convert it should be winning I think"
   },
   {
    "ply": 89,
@@ -925,7 +925,7 @@
     "Kd3"
    ],
    "fen": "8/2p5/2k5/2r5/P5R1/3K1P2/8/8 b - - 2 45",
-   "said": "here this should be winning this should be winning but it's going to be hard to convert it should be winning I think practically speaking because we have two passwords and we'll lock is only one but he's playing this I have to commend our opponent it's playing this incredibly well but still I mean King D3"
+   "said": "practically speaking because we have two passwords and we'll lock is only one but he's playing this I have to commend our opponent it's playing this incredibly well"
   },
   {
    "ply": 90,
@@ -934,7 +934,7 @@
     "Ra5"
    ],
    "fen": "8/2p5/2k5/r7/P5R1/3K1P2/8/8 w - - 3 46",
-   "said": "practically speaking because we have two passwords and we'll lock is only one but he's playing this I have to commend our opponent it's playing this incredibly well but still I mean King D3 okay check probably or maybe aha maybe we can play like this"
+   "said": "but still I mean King D3 okay check probably"
   },
   {
    "ply": 91,
@@ -943,7 +943,7 @@
     "Rd4"
    ],
    "fen": "8/2p5/2k5/r7/P2R4/3K1P2/8/8 b - - 4 46",
-   "said": "but he's playing this I have to commend our opponent it's playing this incredibly well but still I mean King D3 okay check probably or maybe aha maybe we can play like this and cut off the king essentially trying to cut off the king here cut off the king man I mean if he defends this I'll"
+   "said": "or maybe aha maybe we can play like this and cut off the king essentially trying"
   },
   {
    "ply": 92,
@@ -952,7 +952,7 @@
     "Re5"
    ],
    "fen": "8/2p5/2k5/4r3/P2R4/3K1P2/8/8 w - - 5 47",
-   "said": "or maybe aha maybe we can play like this and cut off the king essentially trying to cut off the king here cut off the king man I mean if he defends this I'll be very impressed nicely done yeah for rookie one I mean this is all correct I think of our opponent let's try rookie four I'm gonna"
+   "said": "to cut off the king here cut off the king man I mean if he defends this I'll be very impressed nicely done yeah for rookie one I mean"
   },
   {
    "ply": 93,
@@ -961,7 +961,7 @@
     "Re4"
    ],
    "fen": "8/2p5/2k5/4r3/P3R3/3K1P2/8/8 b - - 6 47",
-   "said": "to cut off the king here cut off the king man I mean if he defends this I'll be very impressed nicely done yeah for rookie one I mean this is all correct I think of our opponent let's try rookie four I'm gonna torture black here now"
+   "said": "this is all correct I think of our opponent let's try rookie four I'm gonna"
   },
   {
    "ply": 94,
@@ -970,7 +970,7 @@
     "Rd5+"
    ],
    "fen": "8/2p5/2k5/3r4/P3R3/3K1P2/8/8 w - - 7 48",
-   "said": "be very impressed nicely done yeah for rookie one I mean this is all correct I think of our opponent let's try rookie four I'm gonna torture black here now I feel like this is a draw"
+   "said": "torture black here now I feel like this is a draw"
   },
   {
    "ply": 95,
@@ -979,7 +979,7 @@
     "Ke3"
    ],
    "fen": "8/2p5/2k5/3r4/P3R3/4KP2/8/8 b - - 8 48",
-   "said": "this is all correct I think of our opponent let's try rookie four I'm gonna torture black here now I feel like this is a draw and very confidently too like I feel like I got I'm getting outplayed out out understanding here but still very difficult because we're gonna start playing F4 we're gonna start playing F4 okay King B6 let's go F4 man it's still"
+   "said": "and very confidently too like I feel like I got I'm getting outplayed out out understanding here"
   },
   {
    "ply": 96,
@@ -988,7 +988,7 @@
     "Kb6"
    ],
    "fen": "8/2p5/1k6/3r4/P3R3/4KP2/8/8 w - - 9 49",
-   "said": "and very confidently too like I feel like I got I'm getting outplayed out out understanding here but still very difficult because we're gonna start playing F4 we're gonna start playing F4 okay King B6 let's go F4 man it's still"
+   "said": "but still very difficult because we're gonna start playing F4 we're gonna start playing F4 okay King B6 let's go F4 man it's still"
   },
   {
    "ply": 97,
@@ -997,7 +997,7 @@
     "f4"
    ],
    "fen": "8/2p5/1k6/3r4/P3RP2/4K3/8/8 b - - 0 49",
-   "said": "understanding here but still very difficult because we're gonna start playing F4 we're gonna start playing F4 okay King B6 let's go F4 man it's still very hard to hold this very hard to hold and I have some really tricky ideas like if he plays C5 I think he loses I think if you play C5 he loses most people would play C5 here I mean this is like an automatic move yeah check I think we"
+   "said": "very hard to hold this very hard to hold and I have some really tricky ideas like if he plays C5 I think he loses I think"
   },
   {
    "ply": 99,
@@ -1007,7 +1007,7 @@
     "Re6+"
    ],
    "fen": "8/8/1k2R3/2pr4/P4P2/4K3/8/8 b - - 1 50",
-   "said": "very hard to hold this very hard to hold and I have some really tricky ideas like if he plays C5 I think he loses I think if you play C5 he loses most people would play C5 here I mean this is like an automatic move yeah check I think we win now check and then Rook back to E5 yeah I think we win now no no I think he played incredibly well"
+   "said": "if you play C5 he loses most people would play C5 here I mean this is like an automatic move yeah check I think we win now check and then Rook back to E5"
   },
   {
    "ply": 101,
@@ -1017,7 +1017,7 @@
     "Re5"
    ],
    "fen": "8/8/8/k1prR3/P4P2/4K3/8/8 b - - 3 51",
-   "said": "an automatic move yeah check I think we win now check and then Rook back to E5 yeah I think we win now no no I think he played incredibly well but I I think this is just a good endgame player um is it winning takes okay we haven't cut off this should be a win we have him cut off this should be winning okay I have five yeah this should be winning it's a Lucina position it's basically a Lucina position yeah this is Classic this is a Lucina position there is a game in the in the Women's World Cup where this exact end game was featured today this is really interesting and this is okay it's not even a Lucina black is so freaking cut off that black is not even close to exiting this pawn and we basically just push the pawn we basically just pushed the pawn check black starts checking us from behind it doesn't matter we go the basic idea here is you go to f8 you go to f8 you push F7 and then you get a Lucina but you don't even need those you know let me think what is the easiest way to win this let me think for a second the easiest way to win this is not even to"
+   "said": "yeah I think we win now no no I think he played incredibly well but I I think this is just a good endgame player um is it winning takes okay we haven't cut off this should be a win we have him cut off this should be winning okay I have five yeah this should be winning it's a Lucina position it's basically a Lucina position yeah this is Classic this is a Lucina position there is a game in the in the Women's World Cup where this exact end game was featured today this is really interesting and this is okay it's not even a Lucina black is so freaking cut off that black is not even close to exiting this pawn and we basically just push the pawn we basically just pushed the pawn check black starts checking us from behind it doesn't matter we go the basic idea here is you go to f8 you go to f8 you push F7 and then you get a Lucina but you don't even need those you know let me think what is the easiest way to win this let me think for a second the easiest way to win this is not even to"
   }
  ],
  "forks": [

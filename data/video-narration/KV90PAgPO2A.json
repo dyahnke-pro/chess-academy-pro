@@ -10,7 +10,7 @@
     "c6"
    ],
    "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "said": "Kanto Brestal from Poland. Let's go with an E4 and well, um, we're basically Well, that's that's sweet. I I appreciate it. Well, you're part of the reason very few people do. Okay, so oh, next level. We're facing the Caro-Kann. How dare he play something that I play with black? Okay. So, what do we do against the Caro-Kann if we want to play want to play a sharp line. We we can play the Narrow-Kann. We can play the Narrow-Kann. So, okay, so we're going to go D4. We're not"
+   "said": "Kanto Brestal from Poland. Let's go with an E4 and well, um, we're basically Well, that's that's sweet. I I appreciate it. Well, you're part of the reason very few people do. Okay, so oh, next level. We're facing the Caro-Kann. How dare he play something that I play with black?"
   },
   {
    "ply": 3,
@@ -19,7 +19,7 @@
     "d4"
    ],
    "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
-   "said": "Okay. So, what do we do against the Caro-Kann if we want to play want to play a sharp line. We we can play the Narrow-Kann. We can play the Narrow-Kann. So, okay, so we're going to go D4. We're not going to play the Narrow-Kann. I'll show you what that is."
+   "said": "Okay. So, what do we do against the Caro-Kann if we want to play want to play a sharp line. We we can play the Narrow-Kann. We can play the Narrow-Kann. So, okay, so we're going to go D4. We're not going to play the Narrow-Kann. I'll show"
   },
   {
    "ply": 4,
@@ -28,7 +28,7 @@
     "d5"
    ],
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
-   "said": "want to play a sharp line. We we can play the Narrow-Kann. We can play the Narrow-Kann. So, okay, so we're going to go D4. We're not going to play the Narrow-Kann. I'll show you what that is. Um, but the classic way of um of getting this into a sharp position, the traditional old-school way, um, is to go for the Panov Attack. And the Panov Attack is to take on D5. This"
+   "said": "you what that is. Um, but the classic way of um of getting this into a sharp position, the traditional old-school way,"
   },
   {
    "ply": 5,
@@ -37,7 +37,7 @@
     "exd5"
    ],
    "fen": "rnbqkbnr/pp2pppp/2p5/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
-   "said": "of getting this into a sharp position, the traditional old-school way, um, is to go for the Panov Attack. And the Panov Attack is to take on D5. This is the Exchange Caro. This is a gateway to very peaceful lines, but the but the"
+   "said": "um, is to go for the Panov Attack. And the Panov Attack is to take on D5. This is the Exchange Caro. This is a gateway"
   },
   {
    "ply": 6,
@@ -46,7 +46,7 @@
     "cxd5"
    ],
    "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
-   "said": "of getting this into a sharp position, the traditional old-school way, um, is to go for the Panov Attack. And the Panov Attack is to take on D5. This is the Exchange Caro. This is a gateway to very peaceful lines, but the but the way to make this very interesting and tactical, not to suggest that the Exchange with Bishop D3, which is the main Exchange, is not interesting. It's a great line. It's not that tactical though. Boom, C4. Immediately contesting"
+   "said": "to very peaceful lines, but the but the way to make this very interesting and tactical, not to suggest that the"
   },
   {
    "ply": 7,
@@ -55,7 +55,7 @@
     "c4"
    ],
    "fen": "rnbqkbnr/pp2pppp/8/3p4/2PP4/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
-   "said": "way to make this very interesting and tactical, not to suggest that the Exchange with Bishop D3, which is the main Exchange, is not interesting. It's a great line. It's not that tactical though. Boom, C4. Immediately contesting the center. This should make sense, right? You're trying to get rid of this pawn. And you're developing your pieces"
+   "said": "Exchange with Bishop D3, which is the main Exchange, is not interesting. It's a great line. It's not that tactical though. Boom, C4. Immediately contesting the center. This should make sense,"
   },
   {
    "ply": 8,
@@ -64,7 +64,7 @@
     "Nf6"
    ],
    "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/8/PP3PPP/RNBQKBNR w KQkq - 1 5",
-   "said": "Exchange with Bishop D3, which is the main Exchange, is not interesting. It's a great line. It's not that tactical though. Boom, C4. Immediately contesting the center. This should make sense, right? You're trying to get rid of this pawn. And you're developing your pieces"
+   "said": "right? You're trying to get rid of this pawn. And you're developing your pieces"
   },
   {
    "ply": 9,
@@ -73,7 +73,7 @@
     "Nc3"
    ],
    "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 5",
-   "said": "main Exchange, is not interesting. It's a great line. It's not that tactical though. Boom, C4. Immediately contesting the center. This should make sense, right? You're trying to get rid of this pawn. And you're developing your pieces with an eye toward pressuring this pawn."
+   "said": "with an eye toward pressuring this pawn."
   },
   {
    "ply": 10,
@@ -82,7 +82,7 @@
     "dxc4"
    ],
    "fen": "rnbqkb1r/pp2pppp/5n2/8/2pP4/2N5/PP3PPP/R1BQKBNR w KQkq - 0 6",
-   "said": "a great line. It's not that tactical though. Boom, C4. Immediately contesting the center. This should make sense, right? You're trying to get rid of this pawn. And you're developing your pieces with an eye toward pressuring this pawn. He takes it. Okay, so he relents. And now this leads to one of the most well-studied and most famous structures of all time, the IQP. The Isolated Queen Pawn structure. Why"
+   "said": "He takes it. Okay, so he relents. And now this leads to one of the most well-studied and most famous structures"
   },
   {
    "ply": 11,
@@ -91,7 +91,7 @@
     "Bxc4"
    ],
    "fen": "rnbqkb1r/pp2pppp/5n2/8/2BP4/2N5/PP3PPP/R1BQK1NR b KQkq - 0 6",
-   "said": "with an eye toward pressuring this pawn. He takes it. Okay, so he relents. And now this leads to one of the most well-studied and most famous structures of all time, the IQP. The Isolated Queen Pawn structure. Why is it called that? Well, because there's"
+   "said": "of all time, the IQP. The Isolated Queen Pawn structure. Why"
   },
   {
    "ply": 12,
@@ -100,7 +100,7 @@
     "Bf5"
    ],
    "fen": "rn1qkb1r/pp2pppp/5n2/5b2/2BP4/2N5/PP3PPP/R1BQK1NR w KQkq - 1 7",
-   "said": "He takes it. Okay, so he relents. And now this leads to one of the most well-studied and most famous structures of all time, the IQP. The Isolated Queen Pawn structure. Why is it called that? Well, because there's a pawn on D4 and it is isolated. What does that What does that mean? Means there are no neighboring pawns, right? There's no pawn on C2. There's no pawn on E2. We've given both of them up. And a lot of people approach this from the perspective of is the IQP good or bad? And if there was an answer to that, then this wouldn't be so well studied. The IQP Whether the IQP is good or bad depends entirely on the circumstances. It is neither good nor bad. It And that's the magic of it is it depends entirely on on what else is going on in the position. It can be It can be the reason you win the game. It can be the reason you lose the game. It was the winter of despair. It was the summer of butcher the Dickens quote. He He just um chatted me move, okay? He He just um chatted me move, okay? So, we shall move. Yes, Queen B3 is Okay, so Bishop F5 is a mistake. Um they get to have grace for the tier one. This is a classic fork. I mean, you guys are most A lot of you're familiar with this idea. It's just a fork. It's a fork against two pawns and we're going to take this one. Thank you. Yeah, knight B7. And we shouldn't go crazy. Like this is the moment when a lot of people go off a cliff and they're like, \"I'm going to just mess him up. I'm going to knight B5"
+   "said": "is it called that? Well, because there's a pawn on D4 and it is isolated. What does that What does that mean? Means there are no neighboring pawns, right? There's no pawn on C2. There's no pawn on E2. We've given both of them up. And a lot of people approach this from the perspective of is the IQP good or bad? And if there was an answer to that, then this wouldn't be so well studied. The IQP Whether the IQP is good or bad depends entirely on the circumstances. It is neither good nor bad. It And that's the magic of it is it depends entirely on on what else is going on in the position. It can be It can be the reason you win the game. It can be the reason you lose the game. It was the winter of despair. It was the summer of butcher the Dickens quote. He He just um chatted me move, okay? He He just um chatted me move, okay? So, we shall move. Yes, Queen B3 is Okay, so Bishop F5 is a mistake. Um they get to have grace for the tier one. This is a classic fork. I mean, you guys are most A lot of you're familiar with this idea. It's just a fork. It's a fork against two pawns and we're going to take this one. Thank you."
   },
   {
    "ply": 16,
@@ -112,7 +112,7 @@
     "e6"
    ],
    "fen": "r2qkb1r/pp1n1ppp/4pn2/1Q3b2/2BP4/2N5/PP3PPP/R1B1K1NR w KQkq - 0 9",
-   "said": "Yeah, knight B7. And we shouldn't go crazy. Like this is the moment when a lot of people go off a cliff and they're like, \"I'm going to just mess him up. I'm going to knight B5 and I'm going to stick my knight head into C7.\" You need to be careful here because we haven't completed our development, particularly our kingside development and oh, he will regret this. And so, let's instead of doing anything rash, let's focus on completing our development mindfully. We can go Bishop F4 to prevent um to prevent him from going rook B8. That's possible, but he's not threatening rook rook Well, he's not really threatening a rook B8 because Well, because we're going to take the pawn on A7. So, what's the simplest developing What's the most meat and potatoes developing I'm going to literally think this out just to annoy him. No, I'm just kidding."
+   "said": "Yeah, knight B7. And we shouldn't go crazy. Like this is the moment when a lot of people go off a cliff and they're like, \"I'm going to just mess him up. I'm going to knight B5 and I'm going to stick my knight head into C7.\" You need to be careful here because we haven't completed our development, particularly our kingside development and oh, he will regret this. And so, let's instead of doing anything rash, let's focus on completing our development mindfully. We can go Bishop F4 to prevent um to prevent him from going rook B8. That's possible, but he's not threatening rook rook Well, he's not really threatening a rook B8 because Well, because we're going to"
   },
   {
    "ply": 20,
@@ -124,21 +124,21 @@
     "Qd8"
    ],
    "fen": "r2qkb1r/pp1n1ppp/4pn2/5b2/2BP4/2N2N2/PP3PPP/R1B1K2R w KQkq - 2 11",
-   "said": "take the pawn on A7. So, what's the simplest developing What's the most meat and potatoes developing I'm going to literally think this out just to annoy him. No, I'm just kidding. Okay. No, don't do that. And I have some stories about it. He does go rook B8. So, obviously, when we look at this carefully, and what you got to be careful about this is that your queen doesn't get like trapped in a repetition. Like he keeps chasing the queen and he's actually close to that. It's kind of funny that he's he's actually Well, the thing is I'm actually had to calculate this. Sorry, I'm thinking. Because he's This is a funny paradox where he's probably not seen half of this. But there's a crazy line I just calculated which I'll show you after the game. I think we can take the pawn. I think we're safe to take the pawn and the alternative would have been to go to A6 which would have been the safer option. That was just fine. But I think we're good. I think he's not going to repeat moves. And I'm not trying to do this to be fancy. I'm just honestly trying to make sure he's not going to make a draw by repeating moves and attacking the queen permanently. And again, assuming now what was I calculating? I was calculating the move rook to A8 continuing to harass the queen. I assume that he he's going to if I'm getting the right read on him, I think he's probably going to do that. Um but what he should do he goes rook B4. Okay, so he goes for the bishop which is not scary at all. Because this bishop can be easily moved. And not only can it be moved, it can be moved in a way that makes him regret his previous move because this rook on B4 is really misplaced. Now I a lot of you have the instinct to move back which is understandable. But let's think about all of the squares available to us and if we do that we say, \"Oh, wait a second. I have the B5 square. It's a great square protected by the knight. It's not amazing the fact that it's only protected by one piece. What is amazing? A, the fact that we're pinning his knight to his king and he's not even developed yet and B, look at this rook. How are you getting back good, sir? Um well, you're not and we're threatening A3. That's basically going to trap the rook. He's going to have one more square. But that's uh ticking time bomb there. Now if you really want to play five-head moves, if you really want to play five-head moves, you we A3 is not even obligatory. Although, we're going to play this very simple. As I I've I've said today way too many times, meat and potatoes. Let's go A3. And I'll show you after the game. Let me write this down just so I don't forget. There is a nice move instead of this, too. Okay, Bishop B8 makes sense. Okay. Um again, it's a surface level threat. Totally understandable why he played it. And we can move our queen to a variety of places. It doesn't particularly matter. Queen B7 is fine. I mean, I wouldn't move the Well, actually, perhaps it's good to move the queen Yeah, it's a great move, actually. I I didn't give it the benefit of the doubt initially. Queen B7 is actually amazing because it pins the rook. So, remember that pins are are two-sided street. Um when you move your queen to B7, it may seem like you are pinning yourself, but you're also pinning the rook. A piece of higher value can x-ray a piece of lower value. And that's important here because the rook is going to be under If it goes to B3, it's going to be undefended. What does that tell us? Well, then we can take the knight with check. We can expose the uh the attack on the rook. Yeah, but Queen takes D7 is bad because, remember, his knight is defended by the other knight. So, that would blunder the queen. And Bishop takes D7 would be ineffective for a similar reason. It would actually open up the gates for his rook to come back. We don't want that. We want the gates to be closed. So, if if I were black here, I would take the bishop. At the very least, he should try to get something for his rook. Otherwise, he's going to lose a full rook. Well, if he castles, we're Remember, we're attacking his rook. He's welcome to castle, but we're going to take his rook. And Queen C5 I liked. I actually was going to propose it, but but it it's spicy, but he goes rook b3, and then we have to do additional work to trap his rook, which would be fine. And we shouldn't necessarily play games with a queen like that. I mean, okay, he goes rook b3, and as you guys can see, we can take the knight. That's check. We're not blundering our queen. That's check. Check supersedes that. And we can take his rook, and now the game is basically over. His queen side is no more. Thank you, and PrafftyW is now a sub, which is even more important. Yeah, so now let's castle. Let's complete our development. He is building up a battery on h2. He's actually playing quite well, I have to say. He's he's making good moves. But uh let's not toy with his battery. That's a serious battery here. Let's not Let's not play games. So, what's the simplest way to not play games? What does that mean? How can we avoid the games? Yeah, let's just go g3. Now, I understand that that's a bit weakening becau- it is weakening, right? We are weakening the light squares. In fact, we're allowing a move like this. But we are up a rook, and he's got no pieces on the king side other than the bishop to inflict any kind of serious damage. There's no It's not like he's got his queen on the king side, and he's going to lobster pincer checkmate us. That's not what's happening here. And we're also Yes, so that the other important thing is we're preparing bishop f4. So, this is this comes back to something I called one of the most overrated rules, which is not to push pawns in front of your king. It's a good rule. It's a good rule of thumb. But it needs to be taken in moderation. Moves like h3 or g3 are often less weakening than they seem, particularly when you're you're to achieve a very important goal. You can't do one thing without making some concessions. And I think that this is a good example of that, right? If I was like 7 years younger, I would like type move to him, but there's no no need for that. Yeah, I mean it's not essential to make luft, but it's not bad. I don't mind it. If I was like 16 in high school, I'd totally do that, but sometimes taking the higher road is good, particularly because I'm the one smurfing here. Okay. Yeah, luft is okay, bishop g4, good move again attacking the knight. He's making a lot of good moves and a lot of good threats. So again, good idea not to immediately assume we should move the knight. We need to consider what else we can do. And if we simply open up the possibility of not moving the knight, but instead doing bishop f4, right? The move we prepared attacking his queen. Getting our last piece out and we're well on the way to victory here. Okay. So Yeah, I can totally totally do that. Yeah, I Yeah, like I went to Phil's and then I went to Kale Kale Express this morning in San Fran and it was awesome. So let's go to 85. Let's just start trading everything. Let's start trading everything. Okay. Yeah, this is just this is just over. I mean, we're up a rook. He's got some some threats here that need to be that need to be watched for, but largely it is it is it is completely winning. Yeah, no more IQP, by the way. Yeah, that's a good point. All right, that's our IQP has lived out its life. It's retired to the beaches of I don't know. It's just retired to the Seychelles and it's it's enjoying good life now on E5. Thank you, Evarday PVR, for the tier one. And um Yeah, yeah, we are playing a GM. Yeah, well, I have to get the permission from chess.com so they can go back through my games and refund the ratings, but um you know, yeah, but I'm not actually I mean, you don't technically need the permit I mean, I think I can open a second account. I'm not I'm not forbidden from doing that. So, I don't think that you you need to declare. There's no rule that you need to declare your title. Um I don't think that's a rule that's written. Now, one could argue that it's dirty to to do this, but I also think people shouldn't make too big of a deal out of out of it. I mean, of course, it's easy for me to say that, but it's also just objectively not a big deal. This doesn't happen so many times to people that All right, I played another I'm I played another one of those GMs today. Oh my god, they're like, \"Yeah, I know. They're killing me. Like, I can't log into chess.com without meeting these hordes of GMs smurfing on the 10-minute pool.\" So, he's putting the bishop on F3. And the thing is the thing is This is actually a delicate situation. Why? Because if he puts his queen on H3 right now we're going to lose. He's going to lobster pincer mate us on G2. And that can be a little bit is concerning. So, we need to deal with this bishop. How do we deal with it? Well, some of you may notice the x-ray that we have over the bishop. So, there's an impulse immediately to move this knight away. And there's an impulse to move the knight forward, right? We want to move it forward. But, think about it this way. The knight on B5 is that knight really serving the purpose of defending the king? And that's as we could understand the key uh here is to is to you know, all hands on deck. All hands on deck. So, if you think about where this knight could go instead we could drop it back to E2. That looks like an ugly move. It looks very unappealing. But we could actually bring it over to F4. What would that do? Well, his queen is limited in the squares that it could go to to keep the bishop protected. And queen G4 is the only logical square. But, then after knight F4 we are controlling the square that his queen wants to go to. And we actually want to play H3 ourselves and knock the queen away from his defensive of the bishop. And this actually is another byproduct. He simply takes, which makes our job so much easier. And now uh we no longer have the bishop to worry about. Our king is perfectly safe and we can just start pushing the pawn and winning the game immediately. Okay. Yeah, let's take the pawn actually and we can you know, the lord has come for our IQP. But, now we're going to come for black's king very shortly thereafter. And let's go ace. Okay, so we're also going to come after black's queen and he's going to resign. Good game. Good game for sure. Nice when you were never in trouble. Good to know. Okay, other than when you told us to"
+   "said": "take the pawn on A7. So, what's the simplest developing What's the most meat and potatoes developing I'm going to literally think this out just to annoy him. No, I'm just kidding. Okay. No, don't do that. And I have some stories about it. He does go rook B8. So, obviously, when we look at this carefully, and what you got to be careful about this is that your queen doesn't get like trapped in a repetition. Like he keeps chasing the queen and he's actually close to that. It's kind of funny that he's he's actually Well, the thing is I'm actually had to calculate this. Sorry, I'm thinking. Because he's This is a funny paradox where he's probably not seen half of this. But there's a crazy line I just calculated which I'll show you after the game. I think we can take the pawn. I think we're safe to take the pawn and the alternative would have been to go to A6 which would have been the safer option. That was just fine. But I think we're good. I think he's not going to repeat moves. And I'm not trying to do this to be fancy. I'm just honestly trying to make sure he's not going to make a draw by repeating moves and attacking the queen permanently. And again, assuming now what was I calculating? I was calculating the move rook to A8 continuing to harass the queen. I assume that he he's going to if I'm getting the right read on him, I think he's probably going to do that. Um but what he should do he goes rook B4. Okay, so he goes for the bishop which is not scary at all. Because this bishop can be easily moved. And not only can it be moved, it can be moved in a way that makes him regret his previous move because this rook on B4 is really misplaced. Now I a lot of you have the instinct to move back which is understandable. But let's think about all of the squares available to us and if we do that we say, \"Oh, wait a second. I have the B5 square. It's a great square protected by the knight. It's not amazing the fact that it's only protected by one piece. What is amazing? A, the fact that we're pinning his knight to his king and he's not even developed yet and B, look at this rook. How are you getting back good, sir? Um well, you're not and we're threatening A3. That's basically going to trap the rook. He's going to have one more square. But that's uh ticking time bomb there. Now if you really want to play five-head moves, if you really want to play five-head moves, you we A3 is not even obligatory. Although, we're going to play this very simple. As I I've I've said today way too many times, meat and potatoes. Let's go A3. And I'll show you after the game. Let me write this down just so I don't forget. There is a nice move instead of this, too. Okay, Bishop B8 makes sense. Okay. Um again, it's a surface level threat. Totally understandable why he played it. And we can move our queen to a variety of places. It doesn't particularly matter. Queen B7 is fine. I mean, I wouldn't move the Well, actually, perhaps it's good to move the queen Yeah, it's a great move, actually. I I didn't give it the benefit of the doubt initially. Queen B7 is actually amazing because it pins the rook. So, remember that pins are are two-sided street. Um when you move your queen to B7, it may seem like you are pinning yourself, but you're also pinning the rook. A piece of higher value can x-ray a piece of lower value. And that's important here because the rook is going to be under If it goes to B3, it's going to be undefended. What does that tell us? Well, then we can take the knight with check. We can expose the uh the attack on the rook. Yeah, but Queen takes D7 is bad because, remember, his knight is defended by the other knight. So, that would blunder the queen. And Bishop takes D7 would be ineffective for a similar reason. It would actually open up the gates for his rook to come back. We don't want that. We want the gates to be closed. So, if if I were black here, I would take the bishop. At the very least, he should try to get something for his rook. Otherwise, he's going to lose a full rook. Well, if he castles, we're Remember, we're attacking his rook. He's welcome to castle, but we're going to take his rook. And Queen C5 I liked. I actually was going to propose it, but but it it's spicy, but he goes rook b3, and then we have to do additional work to trap his rook, which would be fine. And we shouldn't necessarily play games with a queen like that. I mean, okay, he goes rook b3, and as you guys can see, we can take the knight. That's check. We're not blundering our queen. That's check. Check supersedes that. And we can take his rook, and now the game is basically over. His queen side is no more. Thank you, and PrafftyW is now a sub, which is even more important. Yeah, so now let's castle. Let's complete our development. He is building up a battery on h2. He's actually playing quite well, I have to say. He's he's making good moves. But uh let's not toy with his battery. That's a serious battery here. Let's not Let's not play games. So, what's the simplest way to not play games? What does that mean? How can we avoid the games? Yeah, let's just go g3. Now, I understand that that's a bit weakening becau- it is weakening, right? We are weakening the light squares. In fact, we're allowing a move like this. But we are up a rook, and he's got no pieces on the king side other than the bishop to inflict any kind of serious damage. There's no It's not like he's got his queen on the king side, and he's going to lobster pincer checkmate us. That's not what's happening here. And we're also Yes, so that the other important thing is we're preparing bishop f4. So, this is this comes back to something I called one of the most overrated rules, which is not to push pawns in front of your king. It's a good rule. It's a good rule of thumb. But it needs to be taken in moderation. Moves like h3 or g3 are often less weakening than they seem, particularly when you're you're to achieve a very important goal. You can't do one thing without making some concessions. And I think that this is a good example of that, right? If I was like 7 years younger, I would like type move to him, but there's no no need for that. Yeah, I mean it's not essential to make luft, but it's not bad. I don't mind it. If I was like 16 in high school, I'd totally do that, but sometimes taking the higher road is good, particularly because I'm the one smurfing here. Okay. Yeah, luft is okay, bishop g4, good move again attacking the knight. He's making a lot of good moves and a lot of good threats. So again, good idea not to immediately assume we should move the knight. We need to consider what else we can do. And if we simply open up the possibility of not moving the knight, but instead doing bishop f4, right? The move we prepared attacking his queen. Getting our last piece out and we're well on the way to victory here. Okay. So Yeah, I can totally totally do that. Yeah, I Yeah, like I went to Phil's and then I went to Kale Kale Express this morning in San Fran and it was awesome. So let's go to 85. Let's just start trading everything. Let's start trading everything. Okay. Yeah, this is just this is just over. I mean, we're up a rook. He's got some some threats here that need to be that need to be watched for, but largely it is it is it is completely winning. Yeah, no more IQP, by the way. Yeah, that's a good point. All right, that's our IQP has lived out its life. It's retired to the beaches of I don't know. It's just retired to the Seychelles and it's it's enjoying good life now on E5. Thank you, Evarday PVR, for the tier one. And um Yeah, yeah, we are playing a GM. Yeah, well, I have to get the permission from chess.com so they can go back through my games and refund the ratings, but um you know, yeah, but I'm not actually I mean, you don't technically need the permit I mean, I think I can open a second account. I'm not I'm not forbidden from doing that. So, I don't think that you you need to declare. There's no rule that you need to declare your title. Um I don't think that's a rule that's written. Now, one could argue that it's dirty to to do this, but I also think people shouldn't make too big of a deal out of out of it. I mean, of course, it's easy for me to say that, but it's also just objectively not a big deal. This doesn't happen so many times to people that All right, I played another I'm I played another one of those GMs today. Oh my god, they're like, \"Yeah, I know. They're killing me. Like, I can't log into chess.com without meeting these hordes of GMs smurfing on the 10-minute pool.\" So, he's putting the bishop on F3. And the thing is the thing is This is actually a delicate situation. Why? Because if he puts his queen on H3 right now we're going to lose. He's going to lobster pincer mate us on G2. And that can be a little bit is concerning. So, we need to deal with this bishop. How do we deal with it? Well, some of you may notice the x-ray that we have over the bishop. So, there's an impulse immediately to move this knight away. And there's an impulse to move the knight forward, right? We want to move it forward. But, think about it this way. The knight on B5 is that knight really serving the purpose of defending the king? And that's as we could understand the key uh here is to is to you know, all hands on deck. All hands on deck. So, if you think about where this knight could go instead we could drop it back to E2. That looks like an ugly move. It looks very unappealing. But we could actually bring it over to F4. What would that do? Well, his queen is limited in the squares that it could go to to keep the bishop protected. And queen G4 is the only logical square. But, then after knight F4 we are controlling the square that his queen wants to go to. And we actually want to play H3 ourselves and knock the queen away from his defensive of the bishop. And this actually is another byproduct. He simply takes, which makes our job so much easier. And now uh we no longer have the bishop to worry about. Our king is perfectly safe and we can just start pushing the pawn and winning the game immediately. Okay. Yeah, let's take the pawn actually and we can you know, the lord has come for our IQP. But, now we're going to come for black's king very shortly"
   },
   {
    "ply": 3,
    "t": 921,
    "line": [],
    "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
-   "said": "thereafter. And let's go ace. Okay, so we're also going to come after black's queen and he's going to resign. Good game. Good game for sure. Nice when you were never in trouble. Good to know. Okay, other than when you told us to move."
+   "said": "thereafter. And let's go ace. Okay, so we're also going to come after black's queen and he's going to resign. Good game. Good game for sure. Nice when you were never in trouble. Good to know. Okay, other than when you told us to"
   },
   {
    "ply": 2,
    "t": 922,
    "line": [],
    "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "said": "we're also going to come after black's queen and he's going to resign. Good game. Good game for sure. Nice when you were never in trouble. Good to know. Okay, other than when you told us to move. Now, the Panov again"
+   "said": "move. Now, the Panov again"
   },
   {
    "ply": 6,
@@ -150,7 +150,7 @@
     "cxd5"
    ],
    "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
-   "said": "game. Good game for sure. Nice when you were never in trouble. Good to know. Okay, other than when you told us to move. Now, the Panov again When I'm talking about these opening variations, you shouldn't be thinking good and bad. You should be thinking more, okay, these are the kinds of positions that these typically lead to. Uh yeah, and Bishop D3 is is the Exchange"
+   "said": "When I'm talking about these opening variations, you shouldn't be thinking good and bad. You should be thinking more, okay, these are the kinds of positions that these typically lead to."
   },
   {
    "ply": 7,
@@ -159,7 +159,7 @@
     "Bd3"
    ],
    "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/3B4/PPP2PPP/RNBQK1NR b KQkq - 1 4",
-   "said": "variations, you shouldn't be thinking good and bad. You should be thinking more, okay, these are the kinds of positions that these typically lead to. Uh yeah, and Bishop D3 is is the Exchange Caro. That's a great line. You basically build up a little bit of a pawn chain."
+   "said": "Uh yeah, and Bishop D3 is is the Exchange Caro. That's a great line. You basically"
   },
   {
    "ply": 9,
@@ -169,14 +169,14 @@
     "c3"
    ],
    "fen": "r1bqkbnr/pp2pppp/2n5/3p4/3P4/2PB4/PP3PPP/RNBQK1NR b KQkq - 0 5",
-   "said": "more, okay, these are the kinds of positions that these typically lead to. Uh yeah, and Bishop D3 is is the Exchange Caro. That's a great line. You basically build up a little bit of a pawn chain. Then you develop your pieces normally, and it's a pretty peaceful line. And it's actually the the recommendation of some books, like white this is one of white's best chances to get an edge. And a lot of GMs play it, but the Panov is"
+   "said": "build up a little bit of a pawn chain. Then you develop your pieces normally, and it's a pretty peaceful line. And it's actually the the recommendation of"
   },
   {
    "ply": 6,
    "t": 954,
    "line": [],
    "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
-   "said": "Then you develop your pieces normally, and it's a pretty peaceful line. And it's actually the the recommendation of some books, like white this is one of white's best chances to get an edge. And a lot of GMs play it, but the Panov is"
+   "said": "some books, like white this is one of white's best chances to get an edge. And a lot of GMs play it, but the Panov is"
   },
   {
    "ply": 7,
@@ -185,7 +185,7 @@
     "c4"
    ],
    "fen": "rnbqkbnr/pp2pppp/8/3p4/2PP4/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
-   "said": "and it's a pretty peaceful line. And it's actually the the recommendation of some books, like white this is one of white's best chances to get an edge. And a lot of GMs play it, but the Panov is very very old line. And let's see when it was first played. I actually have a book on Panov. Panov was a very obscure I mean, very I assume few people will know who Panov was, or have heard of the player Panov in a context other than the Panov Caro-Kann. There it is. I found it. It's very stubborn. It's hiding. But I found it. Um So, I told you guys about this. So, in in Soviet Russia in the 1980s and the 70s, there was a series called the you know, black book series and it was because the the covers were dark black and then there was the just the chess player on it. And they basically was dedicated to all these Soviet players who are not very well known, but their best games were annotated. And um and it was it they were annotated by top grandmasters. They were commissioned to annotate the games to raise awareness of more obscure players. Um and these were phenomenal books. They're hard to get, and I have most of them. And there was one on Panov. So, this is this says Vasily Panov. And that's that's what he looked like. Did I Not someone you probably wanted to piss off at the chessboard. He just seemed like he's about to complain to the arbiter about his opponent like wiping his nose too much, but yeah, anyways, um I shouldn't be picking on on good old Panov. Yeah, so Vasily Panov, he died he was born 1906 and died 1973. Biography, lots of pictures, him giving a simul. And obviously his like objective greatest contribution was the Panov and there's this young Panov here. That's young That's young Panov. Okay, not that anybody care like I'm showing the young Panov looked like when he was 20. But you can kind of see. Yeah, he had I feel like he had that face all the time. Okay. So Yeah. Well, you know, um he hadn't invented the Panov yet, so he was he was not happy. He was not fulfilled until he invented the Panov. Yeah, no no no definitely he's got the he's got that look. Um but the Panov itself was first played in the year It's first played in the year 1844. Wow. Long time ago, long before Panov was born. So it's been around and as always is the case the guy whom the opening was named after is rarely and Alekhine played it like a million times. Panov did play it a couple times. But it's it's very murky how these openings get named. And it also could have been that he wrote an article on on on this opening in some journal and it got it basically what the equivalent of going viral in like the '50s. So it's it's sort of hard to fully describe. Okay, so in the Panov, okay, DC is not"
+   "said": "very very old line. And let's see when it was first played. I actually have a book on Panov. Panov was a very obscure I mean, very I assume few people will know who Panov was, or have heard of the player Panov in a context other than the Panov Caro-Kann. There it is. I found it. It's very stubborn. It's hiding. But I found it. Um So, I told you guys about this. So, in in Soviet Russia in the 1980s and the 70s, there was a series called the you know, black book series and it was because the the covers were dark black and then there was the just the chess player on it. And they basically was dedicated to all these Soviet players who are not very well known, but their best games were annotated. And um and it was it they were annotated by top grandmasters. They were commissioned to annotate the games to raise awareness of more obscure players. Um and these were phenomenal books. They're hard to get, and I have most of them. And there was one on Panov. So, this is this says Vasily Panov. And that's that's what he looked like. Did I Not someone you probably wanted to piss off at the chessboard. He just seemed like he's about to complain to the arbiter about his opponent like wiping his nose too much, but yeah, anyways, um I shouldn't be picking on on good old Panov. Yeah, so Vasily Panov, he died he was born 1906 and died 1973. Biography, lots of pictures, him giving a simul. And obviously his like objective greatest contribution was the Panov and there's this young Panov here. That's young That's young Panov. Okay, not that anybody care like I'm showing the young Panov looked like when he was 20. But you can kind of see. Yeah, he had I feel like he had that face all the time. Okay. So Yeah. Well, you know, um he hadn't invented the Panov yet, so he was he was not happy. He was not fulfilled until he invented the Panov. Yeah, no no no definitely he's got the he's got that look. Um but the Panov itself was first played in the year It's first played in the year 1844. Wow. Long time ago, long before Panov was born. So it's been around and as always is the case the guy whom the opening was named after is rarely and Alekhine played it like a million times. Panov did play it a couple times. But it's it's very murky how these openings get named. And it also could have been that he wrote an article on on on this opening"
   },
   {
    "ply": 8,
@@ -194,7 +194,7 @@
     "Nf6"
    ],
    "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/8/PP3PPP/RNBQKBNR w KQkq - 1 5",
-   "said": "in some journal and it got it basically what the equivalent of going viral in like the '50s. So it's it's sort of hard to fully describe. Okay, so in the Panov, okay, DC is not bad, but it's not great. He should just"
+   "said": "in some journal and it got it basically what the equivalent of going viral in like the '50s. So it's it's sort of hard to fully describe. Okay, so in the Panov, okay, DC is not"
   },
   {
    "ply": 10,
@@ -204,14 +204,14 @@
     "dxc4"
    ],
    "fen": "rnbqkb1r/pp2pppp/5n2/8/2pP4/2N5/PP3PPP/R1BQKBNR w KQkq - 0 6",
-   "said": "what the equivalent of going viral in like the '50s. So it's it's sort of hard to fully describe. Okay, so in the Panov, okay, DC is not bad, but it's not great. He should just"
+   "said": "bad, but it's not great. He should just"
   },
   {
    "ply": 9,
    "t": 1149.5,
    "line": [],
    "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 5",
-   "said": "like the '50s. So it's it's sort of hard to fully describe. Okay, so in the Panov, okay, DC is not bad, but it's not great. He should just develop. And I'm not I'm just I'm a little bit"
+   "said": "develop."
   },
   {
    "ply": 10,
@@ -220,14 +220,14 @@
     "Nc6"
    ],
    "fen": "r1bqkb1r/pp2pppp/2n2n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR w KQkq - 3 6",
-   "said": "fully describe. Okay, so in the Panov, okay, DC is not bad, but it's not great. He should just develop. And I'm not I'm just I'm a little bit I'm fried. So, I'm not going to go full deep into like the IQP positions, but I will do that probably"
+   "said": "And I'm not I'm just I'm a little bit I'm fried. So, I'm not going to go full deep into like the IQP"
   },
   {
    "ply": 9,
    "t": 1160,
    "line": [],
    "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 5",
-   "said": "develop. And I'm not I'm just I'm a little bit I'm fried. So, I'm not going to go full deep into like the IQP positions, but I will do that probably tomorrow. But, the bottom line is that by taking"
+   "said": "positions, but I will do that probably tomorrow."
   },
   {
    "ply": 10,
@@ -236,7 +236,7 @@
     "Nc6"
    ],
    "fen": "r1bqkb1r/pp2pppp/2n2n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR w KQkq - 3 6",
-   "said": "develop. And I'm not I'm just I'm a little bit I'm fried. So, I'm not going to go full deep into like the IQP positions, but I will do that probably tomorrow. But, the bottom line is that by taking"
+   "said": "But, the bottom line is that by taking"
   },
   {
    "ply": 11,
@@ -245,7 +245,7 @@
     "cxd5"
    ],
    "fen": "r1bqkb1r/pp2pppp/2n2n2/3P4/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 0 6",
-   "said": "And I'm not I'm just I'm a little bit I'm fried. So, I'm not going to go full deep into like the IQP positions, but I will do that probably tomorrow. But, the bottom line is that by taking on C4, he is helping me develop. And this square that I've highlighted in it in red is crucial because the person who's got And this is the shortest and the easiest way to understand who's better in an IQP position is to look at who has control"
+   "said": "on C4, he is helping me develop. And this square that I've highlighted in it in red is crucial because the person who's got"
   },
   {
    "ply": 13,
@@ -255,14 +255,14 @@
     "Bc4"
    ],
    "fen": "rnbqkb1r/pp2pppp/5n2/3P4/2BP4/2N5/PP3PPP/R1BQK1NR b KQkq - 2 7",
-   "said": "this square that I've highlighted in it in red is crucial because the person who's got And this is the shortest and the easiest way to understand who's better in an IQP position is to look at who has control"
+   "said": "And this is the shortest and the easiest way to understand who's better in an IQP position is to look at who has control"
   },
   {
    "ply": 11,
    "t": 1177,
    "line": [],
    "fen": "r1bqkb1r/pp2pppp/2n2n2/3P4/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 0 6",
-   "said": "this square that I've highlighted in it in red is crucial because the person who's got And this is the shortest and the easiest way to understand who's better in an IQP position is to look at who has control of the square in front of the pawn. If white has of the square in front of the IQP pawn, white's generally going to be good. If black is blockading the square in front of the IQP pawn, generally with his knight, often times black will be in good shape. And that is a very cheap like cheap and and un-nuanced way of looking, but if if you need like an emergency way of evaluating an IQP position, you should do that. Okay. But, bishop F5 is bad for reasons that have nothing to do with the IQP, uh but rather reasons that have to do with these two pawns being very weak. And we win one of them. So, I want to go straight to the moment where I was talking about. Now, isolated queen's pawn IQP is an abbreviation. If he kept harassing the queen, how would we have evacuated this on sort of annoying predicament? Well, what we would have done is we would have gone to C6, and he continues to harass. He can go rook B6. Then we go to A4. Then he can go to B4."
+   "said": "of the square in front of the pawn. If white has of the square in front of the IQP pawn, white's generally going to be good. If black is blockading the square in front of the IQP pawn, generally with his knight, often times black will be in good shape. And that is a very cheap like cheap and and un-nuanced way of looking, but if if you need like an emergency way of evaluating an IQP position, you should do that. Okay. But, bishop F5 is bad for reasons that have nothing to do with the IQP, uh but rather reasons that have to do with these two pawns being very weak. And we win one of them. So, I want to go straight to the moment where I was talking about. Now, isolated queen's pawn IQP is an abbreviation. If he kept harassing the queen, how would we have evacuated this on sort of annoying predicament? Well, what we would have done is we would have gone to C6, and he continues to harass. He can go rook B6. Then we go to A4. Then he can go to B4."
   }
  ],
  "forks": [

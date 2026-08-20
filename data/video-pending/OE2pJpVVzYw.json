@@ -252,5 +252,39 @@
    "fen": "r1b2rk1/p1p2p1p/2p2q2/3p1Pp1/8/2NB4/PPP3PP/R2Q1RK1 w - - 0 16"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Scotch Game",
+   "eco": "C44",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 d4",
+   "coverage": 0.885
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.923
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.962
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Scotch Game",
+  "confirmed": true
+ }
 }

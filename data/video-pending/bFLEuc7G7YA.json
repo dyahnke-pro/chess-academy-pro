@@ -745,5 +745,67 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Alapin Variation, Smith-Morra Declined",
+   "eco": "B22",
+   "plies": 8,
+   "line": "e4 c5 d4 cxd4 c3 Nf6 e5 Nd5",
+   "coverage": 0.313
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit Declined, Alapin Formation",
+   "eco": "B21",
+   "plies": 6,
+   "line": "e4 c5 d4 cxd4 c3 Nf6",
+   "coverage": 0.354
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit Declined, Push Variation",
+   "eco": "B21",
+   "plies": 6,
+   "line": "e4 c5 d4 cxd4 c3 d3",
+   "coverage": 0.104
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit Declined, Scandinavian Formation",
+   "eco": "B21",
+   "plies": 6,
+   "line": "e4 c5 d4 cxd4 c3 d5",
+   "coverage": 0.083
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit",
+   "eco": "B21",
+   "plies": 3,
+   "line": "e4 c5 d4",
+   "coverage": 0.604
+  },
+  {
+   "name": "Sicilian Defense: Alapin Variation",
+   "eco": "B22",
+   "plies": 3,
+   "line": "e4 c5 c3",
+   "coverage": 0.375
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Alapin Variation, Smith-Morra Declined",
+  "confirmed": true
+ }
 }

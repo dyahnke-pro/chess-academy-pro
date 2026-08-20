@@ -10,7 +10,7 @@
     "e5"
    ],
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "said": "control for with the speedrun but nobody's i want to find a game so there we go a thousand okay we're going with e4 okay e4 e5 and once again i'm gonna play an opening that i i recommend to"
+   "said": "control for with the speedrun but nobody's i want to find a game so there we go a thousand okay we're going with e4 okay e4 e5 and once again i'm gonna play an opening"
   },
   {
    "ply": 3,
@@ -19,7 +19,7 @@
     "Nf3"
    ],
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
-   "said": "thousand okay we're going with e4 okay e4 e5 and once again i'm gonna play an opening that i i recommend to uh to some beginners uh as a way of practicing getting all of"
+   "said": "that i i recommend to uh to some beginners"
   },
   {
    "ply": 4,
@@ -28,7 +28,7 @@
     "Nc6"
    ],
    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
-   "said": "okay e4 e5 and once again i'm gonna play an opening that i i recommend to uh to some beginners uh as a way of practicing getting all of your pieces out i mean i know it sounds very very uh banal to say that when you learn a very specific opening system oftentimes you the fundamentals get kind of buried uh beneath all of the theory that you learn and that opening is the four night"
+   "said": "uh as a way of practicing getting all of your pieces out i mean i know it sounds very very uh banal to say that when you learn a very specific opening system"
   },
   {
    "ply": 5,
@@ -37,7 +37,7 @@
     "Nc3"
    ],
    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
-   "said": "very uh banal to say that when you learn a very specific opening system oftentimes you the fundamentals get kind of buried uh beneath all of the theory that you learn and that opening is the four night scotch so you start by playing the four knights knight c3 knight f6 and then you play d4 which is the scotch this is called the four knight scotch now it's not just one of those boring openings that beginners play it's also an opening that's very popular at the highest level and it's quite dangerous for black if black is not very precise with the theory so we're not compromising on on ambition of bishop c5 is"
+   "said": "oftentimes you the fundamentals get kind of buried uh beneath all of the theory that you learn and that opening is the four night scotch so you start by playing the four knights knight c3 knight f6 and then you play d4 which is the scotch this is called the four knight scotch now it's not just one of those boring openings that beginners play it's also an opening that's very popular at the"
   },
   {
    "ply": 6,
@@ -46,7 +46,7 @@
     "Bc5"
    ],
    "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
-   "said": "an opening that's very popular at the highest level and it's quite dangerous for black if black is not very precise with the theory so we're not compromising on on ambition of bishop c5 is a well-known inaccuracy in this line who can tell me the reason why and it's very important to go for this line without fearing certain responses that i'm going to talk about after the stream and the move is knight takes e5"
+   "said": "highest level and it's quite dangerous for black if black is not very precise with the theory so we're not compromising on on ambition of bishop c5 is a well-known inaccuracy in this line who can tell me the reason why"
   },
   {
    "ply": 7,
@@ -55,7 +55,7 @@
     "Nxe5"
    ],
    "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
-   "said": "and it's very important to go for this line without fearing certain responses that i'm going to talk about after the stream and the move is knight takes e5 the move that i think a lot of people fear is bishop takes f2 check and in general this is a big reason why people don't go for this type of idea in many positions but bishop takes f2 it turns out is not only not scary but essentially losing"
+   "said": "and it's very important to go for this line without fearing certain responses that i'm going to talk about after the stream and the move is knight takes e5 the move that i think a lot of people fear is bishop takes f2 check and in general this is a big reason why"
   },
   {
    "ply": 8,
@@ -64,14 +64,14 @@
     "Nxe5"
    ],
    "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 0 5",
-   "said": "fear is bishop takes f2 check and in general this is a big reason why people don't go for this type of idea in many positions but bishop takes f2 it turns out is not only not scary but essentially losing"
+   "said": "people don't go for this type of idea in many positions but bishop takes f2 it turns out is not only not scary but essentially losing"
   },
   {
    "ply": 7,
    "t": 106,
    "line": [],
    "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
-   "said": "and in general this is a big reason why people don't go for this type of idea in many positions but bishop takes f2 it turns out is not only not scary but essentially losing for black and i'll talk about that"
+   "said": "for black"
   },
   {
    "ply": 8,
@@ -80,7 +80,7 @@
     "Nxe5"
    ],
    "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 0 5",
-   "said": "people don't go for this type of idea in many positions but bishop takes f2 it turns out is not only not scary but essentially losing for black and i'll talk about that after the game okay pawn d4 forking back"
+   "said": "and i'll talk about that after the game okay pawn d4 forking back"
   },
   {
    "ply": 9,
@@ -89,7 +89,7 @@
     "d4"
    ],
    "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/3PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
-   "said": "but bishop takes f2 it turns out is not only not scary but essentially losing for black and i'll talk about that after the game okay pawn d4 forking back to the miners yeah and what's gonna happen here is black has to choose which of these pieces to give away um what black should do as as many of you know is go bishop d6 that is the traditional and the best response to this kind of idea what a lot of people do here is they play bishop takes d4 kind of instinctively and that's very bad because you don't want to give away the bishop this early in the game and then the queen starts skewering the knight and black could end up just losing the game there very quickly let's see how he reacts bishop b6 okay that's"
+   "said": "to the miners yeah and what's gonna happen here is black has to choose which of these pieces to give away um what black should do as as many of you know is go bishop d6 that is the traditional and the best response to this kind of idea what a lot of people do here is they play bishop takes d4 kind of instinctively and that's very"
   },
   {
    "ply": 10,
@@ -98,7 +98,7 @@
     "Bb6"
    ],
    "fen": "r1bqk1nr/pppp1ppp/1b6/4n3/3PP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
-   "said": "bad because you don't want to give away the bishop this early in the game and then the queen starts skewering the knight and black could end up just losing the game there very quickly let's see how he reacts bishop b6 okay that's also not great because black is not even gonna get a pawn for"
+   "said": "bad because you don't want to give away the bishop this early in the game and then the queen starts skewering the knight and black could end up just losing the game there very quickly let's see how he reacts bishop b6 okay that's also not great because"
   },
   {
    "ply": 11,
@@ -107,7 +107,7 @@
     "dxe5"
    ],
    "fen": "r1bqk1nr/pppp1ppp/1b6/4P3/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 6",
-   "said": "the queen starts skewering the knight and black could end up just losing the game there very quickly let's see how he reacts bishop b6 okay that's also not great because black is not even gonna get a pawn for the uh for the fork"
+   "said": "black is not even gonna get a pawn for the uh"
   },
   {
    "ply": 12,
@@ -116,7 +116,7 @@
     "d6"
    ],
    "fen": "r1bqk1nr/ppp2ppp/1b1p4/4P3/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
-   "said": "bishop b6 okay that's also not great because black is not even gonna get a pawn for the uh for the fork okay so d6 all right so we have a choice here we can take on d6 we can also be fancy we can play a fancy move here that sets a little bit of a trap who can tell me what move i'm thinking about i mean anytime there's a standoff between the kings between the queens and the kings are uncastled you should be thinking about this idea uh when your opponent's pieces are not very well developed and one way of thinking about this is that the queen is undefended by anything other than the king so let's go bishop c4 if he takes c5"
+   "said": "for the fork okay so d6 all right so we have a choice here we can take on d6 we can also be fancy we can play a fancy move here that sets a little bit of a trap who can tell me what move i'm thinking about i mean anytime there's a standoff between the kings between the queens and"
   },
   {
    "ply": 13,
@@ -125,7 +125,7 @@
     "Bc4"
    ],
    "fen": "r1bqk1nr/ppp2ppp/1b1p4/4P3/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 7",
-   "said": "the kings are uncastled you should be thinking about this idea uh when your opponent's pieces are not very well developed and one way of thinking about this is that the queen is undefended by anything other than the king so let's go bishop c4 if he takes c5 we play bishop takes f7 check now this isn't just a cheap trap we're also developing one of our pieces to a really good square and he falls right"
+   "said": "the kings are uncastled you should be thinking about this idea uh when your opponent's pieces are not very well developed and one way of thinking about this is that the queen is undefended by anything other than the king so let's go bishop c4 if he takes c5 we play bishop takes f7 check"
   },
   {
    "ply": 14,
@@ -134,7 +134,7 @@
     "dxe5"
    ],
    "fen": "r1bqk1nr/ppp2ppp/1b6/4p3/2B1P3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 8",
-   "said": "other than the king so let's go bishop c4 if he takes c5 we play bishop takes f7 check now this isn't just a cheap trap we're also developing one of our pieces to a really good square and he falls right"
+   "said": "now this isn't just a cheap trap we're also developing one of our pieces to a really good square and he falls right"
   },
   {
    "ply": 15,
@@ -143,7 +143,7 @@
     "Bxf7+"
    ],
    "fen": "r1bqk1nr/ppp2Bpp/1b6/4p3/4P3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 8",
-   "said": "other than the king so let's go bishop c4 if he takes c5 we play bishop takes f7 check now this isn't just a cheap trap we're also developing one of our pieces to a really good square and he falls right into it she takes f7 if king takes f7 whoa he's going right"
+   "said": "into it she takes f7"
   },
   {
    "ply": 16,
@@ -152,7 +152,7 @@
     "Kxf7"
    ],
    "fen": "r1bq2nr/ppp2kpp/1b6/4p3/4P3/2N5/PPP2PPP/R1BQK2R w KQ - 0 9",
-   "said": "we play bishop takes f7 check now this isn't just a cheap trap we're also developing one of our pieces to a really good square and he falls right into it she takes f7 if king takes f7 whoa he's going right"
+   "said": "if king takes f7 whoa he's going right"
   },
   {
    "ply": 17,
@@ -161,14 +161,14 @@
     "Qxd8"
    ],
    "fen": "r1bQ2nr/ppp2kpp/1b6/4p3/4P3/2N5/PPP2PPP/R1B1K2R b KQ - 0 9",
-   "said": "we play bishop takes f7 check now this isn't just a cheap trap we're also developing one of our pieces to a really good square and he falls right into it she takes f7 if king takes f7 whoa he's going right into it now one thing you have to be very careful about is to make sure if the white king was on e2 here if our king was on e2 we would fall right into bishop g4 check um but but it's not right and that's the one thing you have to check when you essentially when you perform this combination that was pretty one-sided nine move game the only thing i really have to talk about here is the moment we took on e5"
+   "said": "into it now one thing you have to be very careful about is to make sure if the white king was on e2 here if our king was on e2 we would fall right into bishop g4 check um but but it's not right and that's the one thing you have to check when you"
   },
   {
    "ply": 6,
    "t": 232,
    "line": [],
    "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
-   "said": "essentially when you perform this combination that was pretty one-sided nine move game the only thing i really have to talk about here is the moment we took on e5 thank you bismo funyuns for the prime now reasons people are afraid to take on"
+   "said": "essentially when you perform this combination that was pretty one-sided nine move game the only thing i really have to talk about here is the moment we took on e5 thank you bismo funyuns for the prime"
   },
   {
    "ply": 7,
@@ -177,7 +177,7 @@
     "Nxe5"
    ],
    "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
-   "said": "the only thing i really have to talk about here is the moment we took on e5 thank you bismo funyuns for the prime now reasons people are afraid to take on e5 one reason i've heard from some students is a move like queen f6 which"
+   "said": "now reasons people are afraid to take on e5 one reason i've heard from some"
   },
   {
    "ply": 8,
@@ -186,7 +186,7 @@
     "Qf6"
    ],
    "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 1 5",
-   "said": "the only thing i really have to talk about here is the moment we took on e5 thank you bismo funyuns for the prime now reasons people are afraid to take on e5 one reason i've heard from some students is a move like queen f6 which looks like it forks the knight in the pawn this fork is very easy to defend against with the prosaic knight f3 you can just"
+   "said": "students is a move like queen f6 which looks like it forks the knight in the pawn"
   },
   {
    "ply": 9,
@@ -195,14 +195,14 @@
     "Nf3"
    ],
    "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 2 5",
-   "said": "e5 one reason i've heard from some students is a move like queen f6 which looks like it forks the knight in the pawn this fork is very easy to defend against with the prosaic knight f3 you can just drop the knight back you could also go knight d3 although i"
+   "said": "this fork is very easy to defend against with the prosaic knight f3 you can just drop the knight back"
   },
   {
    "ply": 8,
    "t": 252,
    "line": [],
    "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 1 5",
-   "said": "looks like it forks the knight in the pawn this fork is very easy to defend against with the prosaic knight f3 you can just drop the knight back you could also go knight d3 although i like this move a little bit less even"
+   "said": "you could also go knight d3 although i like this move a little bit less even"
   },
   {
    "ply": 9,
@@ -211,7 +211,7 @@
     "Nd3"
    ],
    "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b5/4P3/2NN4/PPPP1PPP/R1BQKB1R b KQkq - 2 5",
-   "said": "looks like it forks the knight in the pawn this fork is very easy to defend against with the prosaic knight f3 you can just drop the knight back you could also go knight d3 although i like this move a little bit less even though it hits the bishop it blocks our own bishop and i feel like this and it blocks the other bishop so knight on d3 is quite awkward another reason is queen h4 people get"
+   "said": "though it hits the bishop it blocks our own bishop and i feel like this and it blocks the other bishop so knight on d3"
   },
   {
    "ply": 11,
@@ -221,7 +221,7 @@
     "Ne5"
    ],
    "fen": "r1b1k1nr/pppp1ppp/2n5/2b1N3/4P2q/2N5/PPPP1PPP/R1BQKB1R b KQkq - 4 6",
-   "said": "you could also go knight d3 although i like this move a little bit less even though it hits the bishop it blocks our own bishop and i feel like this and it blocks the other bishop so knight on d3 is quite awkward another reason is queen h4 people get scared of this move and here we can either go g3 or we can go knight d3 here unfortunately we can't go knight f3 i like the move g3 here queen has to come back and then"
+   "said": "is quite awkward another reason is queen h4 people get scared of this move and here we can either go g3 or we can go knight d3 here unfortunately we can't"
   },
   {
    "ply": 13,
@@ -231,14 +231,14 @@
     "g3"
    ],
    "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b1N3/4P3/2N3P1/PPPP1P1P/R1BQKB1R b KQkq - 0 7",
-   "said": "scared of this move and here we can either go g3 or we can go knight d3 here unfortunately we can't go knight f3 i like the move g3 here queen has to come back and then we can play knight f3 and fiance our bishop since we've already gone g3"
+   "said": "go knight f3 i like the move g3 here queen has to come back and then we can play knight f3 and fiance our bishop since we've already gone g3"
   },
   {
    "ply": 7,
    "t": 283.5,
    "line": [],
    "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
-   "said": "i like the move g3 here queen has to come back and then we can play knight f3 and fiance our bishop since we've already gone g3 okay and the third reason is bishop takes f2"
+   "said": "okay and the third reason is bishop takes f2"
   },
   {
    "ply": 8,
@@ -247,7 +247,7 @@
     "Bxf2+"
    ],
    "fen": "r1bqk1nr/pppp1ppp/2n5/4N3/4P3/2N5/PPPP1bPP/R1BQKB1R w KQkq - 0 5",
-   "said": "queen has to come back and then we can play knight f3 and fiance our bishop since we've already gone g3 okay and the third reason is bishop takes f2 check thank you roger spacky for the prime the thing to understand about this"
+   "said": "check thank you roger spacky for the"
   },
   {
    "ply": 10,
@@ -257,7 +257,7 @@
     "Nxe5"
    ],
    "fen": "r1bqk1nr/pppp1ppp/8/4n3/4P3/2N5/PPPP1KPP/R1BQ1B1R w kq - 0 6",
-   "said": "bishop since we've already gone g3 okay and the third reason is bishop takes f2 check thank you roger spacky for the prime the thing to understand about this position is that white's king is temporarily weak we are going to castle by hand we're going to move the bishop out go rook f1 can't you one not a problem daniel dan for the gift on the other hand what's not temporary is our control"
+   "said": "prime the thing to understand about this position is that white's king is temporarily weak we are going to castle by hand we're going to move the bishop out go rook f1"
   },
   {
    "ply": 11,
@@ -266,7 +266,7 @@
     "d4"
    ],
    "fen": "r1bqk1nr/pppp1ppp/8/4n3/3PP3/2N5/PPP2KPP/R1BQ1B1R b kq - 0 6",
-   "said": "position is that white's king is temporarily weak we are going to castle by hand we're going to move the bishop out go rook f1 can't you one not a problem daniel dan for the gift on the other hand what's not temporary is our control over the center and our development advantage we're gonna go d4 all of these checks are not scary queen f6 check we just tuck our king back on"
+   "said": "can't you one not a problem daniel dan for the gift on the other hand what's not temporary is our control over the center and our development advantage we're gonna go d4"
   },
   {
    "ply": 13,
@@ -276,7 +276,7 @@
     "Kg1"
    ],
    "fen": "r1b1k1nr/pppp1ppp/5q2/4n3/3PP3/2N5/PPP3PP/R1BQ1BKR b kq - 2 7",
-   "said": "can't you one not a problem daniel dan for the gift on the other hand what's not temporary is our control over the center and our development advantage we're gonna go d4 all of these checks are not scary queen f6 check we just tuck our king back on g1 and what's going to happen is that okay"
+   "said": "all of these checks are not scary queen f6 check we just tuck our king back on g1"
   },
   {
    "ply": 16,
@@ -287,7 +287,7 @@
     "Ng6"
    ],
    "fen": "r1bqk1nr/pppp1ppp/6n1/8/3PP3/2N5/PPP2KPP/R1BQ1B1R w kq - 5 9",
-   "said": "hand what's not temporary is our control over the center and our development advantage we're gonna go d4 all of these checks are not scary queen f6 check we just tuck our king back on g1 and what's going to happen is that okay black kind of has to drop the knight back now we start the process let's say bishop d3 or bishop c4 uh i would probably prefer bishop d3"
+   "said": "and what's going to happen is that okay black kind of has to drop the knight back now we start the process let's say"
   },
   {
    "ply": 17,
@@ -296,7 +296,7 @@
     "Bd3"
    ],
    "fen": "r1bqk1nr/pppp1ppp/6n1/8/3PP3/2NB4/PPP2KPP/R1BQ3R b kq - 6 9",
-   "said": "g1 and what's going to happen is that okay black kind of has to drop the knight back now we start the process let's say bishop d3 or bishop c4 uh i would probably prefer bishop d3 just to solidify our center let's say black plays d6"
+   "said": "bishop d3 or bishop c4 uh i would probably prefer bishop d3 just to solidify our center"
   },
   {
    "ply": 18,
@@ -305,7 +305,7 @@
     "d6"
    ],
    "fen": "r1bqk1nr/ppp2ppp/3p2n1/8/3PP3/2NB4/PPP2KPP/R1BQ3R w kq - 0 10",
-   "said": "back now we start the process let's say bishop d3 or bishop c4 uh i would probably prefer bishop d3 just to solidify our center let's say black plays d6 because if black plays knight f6 here what very powerful move can we respond with yeah e5 sends the knight back to g8 which is why probably black will play d6 and then we play rook f1 king g1 and"
+   "said": "let's say black plays d6 because if black plays knight f6 here what very powerful move can we respond with"
   },
   {
    "ply": 19,
@@ -324,7 +324,7 @@
     "Kg1"
    ],
    "fen": "r1bqk2r/ppp2ppp/3p1nn1/8/3PP3/2NB4/PPP3PP/R1BQ1RK1 b kq - 3 11",
-   "said": "yeah e5 sends the knight back to g8 which is why probably black will play d6 and then we play rook f1 king g1 and here's the thing not only did we castle by hand but the fact that the f-file is open is good for white so bishop takes f2 actually did us a favor and the reason it's good for white is"
+   "said": "here's the thing not only did we castle by hand but the fact that the f-file is open is good for white so bishop takes"
   },
   {
    "ply": 22,
@@ -333,7 +333,7 @@
     "O-O"
    ],
    "fen": "r1bq1rk1/ppp2ppp/3p1nn1/8/3PP3/2NB4/PPP3PP/R1BQ1RK1 w - - 4 12",
-   "said": "and then we play rook f1 king g1 and here's the thing not only did we castle by hand but the fact that the f-file is open is good for white so bishop takes f2 actually did us a favor and the reason it's good for white is because after bishop g5"
+   "said": "f2 actually did us a favor and the reason it's good for white is"
   },
   {
    "ply": 23,
@@ -342,7 +342,7 @@
     "Bg5"
    ],
    "fen": "r1bq1rk1/ppp2ppp/3p1nn1/6B1/3PP3/2NB4/PPP3PP/R2Q1RK1 b - - 5 12",
-   "said": "here's the thing not only did we castle by hand but the fact that the f-file is open is good for white so bishop takes f2 actually did us a favor and the reason it's good for white is because after bishop g5 uh the pressure on the knight becomes instantly unbearable we're threatening bishop takes ft destroying black's pawn cover thank you shogun for the five really appreciate it understood thank you st law official and lots of subs now"
+   "said": "because after bishop g5 uh the pressure on the knight becomes instantly unbearable we're threatening bishop takes ft destroying black's pawn"
   },
   {
    "ply": 26,
@@ -353,14 +353,14 @@
     "Kh8"
    ],
    "fen": "r1bqr2k/ppp2ppp/3p1nn1/8/3PP3/2NB4/PPP3PP/R1BQ1RK1 w - - 8 14",
-   "said": "uh the pressure on the knight becomes instantly unbearable we're threatening bishop takes ft destroying black's pawn cover thank you shogun for the five really appreciate it understood thank you st law official and lots of subs now somebody mentioned one point i want to"
+   "said": "cover thank you shogun for the five really appreciate it understood thank you st law official and lots of subs now"
   },
   {
    "ply": 17,
    "t": 371.5,
    "line": [],
    "fen": "r1bqk1nr/pppp1ppp/6n1/8/3PP3/2NB4/PPP2KPP/R1BQ3R b kq - 6 9",
-   "said": "instantly unbearable we're threatening bishop takes ft destroying black's pawn cover thank you shogun for the five really appreciate it understood thank you st law official and lots of subs now somebody mentioned one point i want to address which is that on queen f6 check"
+   "said": "somebody mentioned one point i want to"
   },
   {
    "ply": 19,
@@ -370,7 +370,7 @@
     "Bf1"
    ],
    "fen": "r1bqk1nr/pppp1ppp/8/4n3/3PP3/2N5/PPP2KPP/R1BQ1B1R b kq - 8 10",
-   "said": "cover thank you shogun for the five really appreciate it understood thank you st law official and lots of subs now somebody mentioned one point i want to address which is that on queen f6 check"
+   "said": "address which is that on queen f6 check"
   },
   {
    "ply": 20,
@@ -379,7 +379,7 @@
     "Qf6+"
    ],
    "fen": "r1b1k1nr/pppp1ppp/5q2/4n3/3PP3/2N5/PPP2KPP/R1BQ1B1R w kq - 9 11",
-   "said": "cover thank you shogun for the five really appreciate it understood thank you st law official and lots of subs now somebody mentioned one point i want to address which is that on queen f6 check king g1"
+   "said": ""
   },
   {
    "ply": 21,
@@ -388,7 +388,7 @@
     "Kg1"
    ],
    "fen": "r1b1k1nr/pppp1ppp/5q2/4n3/3PP3/2N5/PPP3PP/R1BQ1BKR b kq - 10 11",
-   "said": "really appreciate it understood thank you st law official and lots of subs now somebody mentioned one point i want to address which is that on queen f6 check king g1 isn't it the case that the rook on h1 is going to be hemmed in and yes it is the case but we're going to get that rook out thank you chaos shield after knight g6"
+   "said": "king g1 isn't it the case that the rook on h1 is going to be hemmed in and yes it is the case but we're going"
   },
   {
    "ply": 22,
@@ -397,7 +397,7 @@
     "Ng6"
    ],
    "fen": "r1b1k1nr/pppp1ppp/5qn1/8/3PP3/2N5/PPP3PP/R1BQ1BKR w kq - 11 12",
-   "said": "king g1 isn't it the case that the rook on h1 is going to be hemmed in and yes it is the case but we're going to get that rook out thank you chaos shield after knight g6 we can proceed with knight d5 for"
+   "said": "to get that rook out thank you chaos shield after knight g6"
   },
   {
    "ply": 23,
@@ -406,7 +406,7 @@
     "Nd5"
    ],
    "fen": "r1b1k1nr/pppp1ppp/5qn1/3N4/3PP3/8/PPP3PP/R1BQ1BKR b kq - 12 12",
-   "said": "king g1 isn't it the case that the rook on h1 is going to be hemmed in and yes it is the case but we're going to get that rook out thank you chaos shield after knight g6 we can proceed with knight d5 for forcing the queen back to d8"
+   "said": "we can proceed with knight d5 for forcing the queen back to d8"
   },
   {
    "ply": 24,
@@ -415,7 +415,7 @@
     "Qd8"
    ],
    "fen": "r1bqk1nr/pppp1ppp/6n1/3N4/3PP3/8/PPP3PP/R1BQ1BKR w kq - 13 13",
-   "said": "going to be hemmed in and yes it is the case but we're going to get that rook out thank you chaos shield after knight g6 we can proceed with knight d5 for forcing the queen back to d8 and um [Music] you know there's no huge urgency to get the rook out of h1 it's not like it's necessary at this very moment but if you wanted to get the rook out you could again play bishop d3"
+   "said": "and um [Music] you know there's no huge urgency to get the rook"
   },
   {
    "ply": 25,
@@ -424,7 +424,7 @@
     "Bd3"
    ],
    "fen": "r1bqk1nr/pppp1ppp/6n1/3N4/3PP3/3B4/PPP3PP/R1BQ2KR b kq - 14 13",
-   "said": "you know there's no huge urgency to get the rook out of h1 it's not like it's necessary at this very moment but if you wanted to get the rook out you could again play bishop d3 let's say black plays d6"
+   "said": "out of h1 it's not like it's necessary at this very moment but if you wanted to get the rook out you could again play bishop d3"
   },
   {
    "ply": 26,
@@ -433,7 +433,7 @@
     "d6"
    ],
    "fen": "r1bqk1nr/ppp2ppp/3p2n1/3N4/3PP3/3B4/PPP3PP/R1BQ2KR w kq - 0 14",
-   "said": "the rook out of h1 it's not like it's necessary at this very moment but if you wanted to get the rook out you could again play bishop d3 let's say black plays d6 then if you wanted he could play h3"
+   "said": "let's say black plays d6"
   },
   {
    "ply": 27,
@@ -442,7 +442,7 @@
     "h3"
    ],
    "fen": "r1bqk1nr/ppp2ppp/3p2n1/3N4/3PP3/3B3P/PPP3P1/R1BQ2KR b kq - 0 14",
-   "said": "out of h1 it's not like it's necessary at this very moment but if you wanted to get the rook out you could again play bishop d3 let's say black plays d6 then if you wanted he could play h3 let's say black plays c6 chases our"
+   "said": "then if you wanted he could play h3"
   },
   {
    "ply": 28,
@@ -451,7 +451,7 @@
     "c6"
    ],
    "fen": "r1bqk1nr/pp3ppp/2pp2n1/3N4/3PP3/3B3P/PPP3P1/R1BQ2KR w kq - 0 15",
-   "said": "at this very moment but if you wanted to get the rook out you could again play bishop d3 let's say black plays d6 then if you wanted he could play h3 let's say black plays c6 chases our"
+   "said": "let's say black plays c6 chases our"
   },
   {
    "ply": 29,
@@ -460,7 +460,7 @@
     "Nc3"
    ],
    "fen": "r1bqk1nr/pp3ppp/2pp2n1/8/3PP3/2NB3P/PPP3P1/R1BQ2KR b kq - 1 15",
-   "said": "get the rook out you could again play bishop d3 let's say black plays d6 then if you wanted he could play h3 let's say black plays c6 chases our knight back and then develops"
+   "said": "knight back and then develops"
   },
   {
    "ply": 30,
@@ -469,7 +469,7 @@
     "Nf6"
    ],
    "fen": "r1bqk2r/pp3ppp/2pp1nn1/8/3PP3/2NB3P/PPP3P1/R1BQ2KR w kq - 2 16",
-   "said": "get the rook out you could again play bishop d3 let's say black plays d6 then if you wanted he could play h3 let's say black plays c6 chases our knight back and then develops his own knight and go king h2 and then"
+   "said": "his own knight and go king h2 and then"
   },
   {
    "ply": 31,
@@ -478,21 +478,21 @@
     "Kh2"
    ],
    "fen": "r1bqk2r/pp3ppp/2pp1nn1/8/3PP3/2NB3P/PPP3PK/R1BQ3R b kq - 3 16",
-   "said": "play bishop d3 let's say black plays d6 then if you wanted he could play h3 let's say black plays c6 chases our knight back and then develops his own knight and go king h2 and then rook f1 yeah we spent a couple of moves so black wasted so many tempi moving back and forth that this is totally justified and we still have the center and we have uh we have everything we we could possibly need here okay"
+   "said": "rook f1 yeah we spent a couple of moves so black wasted so many tempi moving back and forth that this is totally justified and we still have the center and we have"
   },
   {
    "ply": 23,
    "t": 433.5,
    "line": [],
    "fen": "r1b1k1nr/pppp1ppp/5qn1/3N4/3PP3/8/PPP3PP/R1BQ1BKR b kq - 12 12",
-   "said": "we still have the center and we have uh we have everything we we could possibly need here okay i thought people in the chat were worried about something"
+   "said": "uh we have everything we we could possibly need here okay"
   },
   {
    "ply": 7,
    "t": 442.5,
    "line": [],
    "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
-   "said": "okay i thought people in the chat were worried about something oh prime okay nice yeah definitely sub with prime knight takes e5 d4 the proper"
+   "said": "i thought people in the chat were worried about something oh prime okay nice yeah definitely sub"
   },
   {
    "ply": 9,
@@ -502,7 +502,7 @@
     "d4"
    ],
    "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/3PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
-   "said": "i thought people in the chat were worried about something oh prime okay nice yeah definitely sub with prime knight takes e5 d4 the proper way is bishop d6 to respond to this d"
+   "said": "with prime knight takes e5 d4 the proper way is bishop d6 to respond to this d"
   },
   {
    "ply": 10,
@@ -511,7 +511,7 @@
     "Bd6"
    ],
    "fen": "r1bqk1nr/pppp1ppp/3b4/4n3/3PP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
-   "said": "i thought people in the chat were worried about something oh prime okay nice yeah definitely sub with prime knight takes e5 d4 the proper way is bishop d6 to respond to this d takes e5 bishop takes c5"
+   "said": ""
   },
   {
    "ply": 12,
@@ -521,7 +521,7 @@
     "Bxe5"
    ],
    "fen": "r1bqk1nr/pppp1ppp/8/4b3/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
-   "said": "worried about something oh prime okay nice yeah definitely sub with prime knight takes e5 d4 the proper way is bishop d6 to respond to this d takes e5 bishop takes c5 and why this better we have a pawn in the center black doesn't we have a slight development advantage this bishop"
+   "said": "takes e5 bishop takes c5 and why this better we have a pawn in"
   },
   {
    "ply": 13,
@@ -530,21 +530,21 @@
     "Bc4"
    ],
    "fen": "r1bqk1nr/pppp1ppp/8/4b3/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 7",
-   "said": "way is bishop d6 to respond to this d takes e5 bishop takes c5 and why this better we have a pawn in the center black doesn't we have a slight development advantage this bishop on e5 is quite awkward it can be attacked with the move f4 later he rated nc17 male blue 420 and ant source all subbing with a prime there we go so this is just very very pleasant for white cocky 16 thank you for the prime"
+   "said": "the center black doesn't we have a slight development advantage this bishop on e5 is quite awkward it can be attacked with the move f4 later he rated nc17 male blue 420 and ant source all"
   },
   {
    "ply": 12,
    "t": 473,
    "line": [],
    "fen": "r1bqk1nr/pppp1ppp/8/4b3/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
-   "said": "attacked with the move f4 later he rated nc17 male blue 420 and ant source all subbing with a prime there we go so this is just very very pleasant for white cocky 16 thank you for the prime amazing bishop b6 is the first mistake it gives"
+   "said": "subbing with a prime there we go so this is just very very pleasant for white cocky 16 thank you for the prime amazing"
   },
   {
    "ply": 10,
    "t": 476.5,
    "line": [],
    "fen": "r1bqk1nr/pppp1ppp/3b4/4n3/3PP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
-   "said": "subbing with a prime there we go so this is just very very pleasant for white cocky 16 thank you for the prime amazing bishop b6 is the first mistake it gives up upon for no compensation and after d6 bishop c4 comes the second mistake he takes e5 how should black play here well he should go 97 and castle i mean at least uh limit the losses to a pawn and of course here he should go king e7 this is the last chance to stay in the game who can tell me uh a good move here for white it's actually not so easy for white to play accurately in this position there's a lot of tempting moves here and some of them aren't as good as they look white's best move is to sub with prime yeah but let's say white's second best move well knight d5 gives up the bishop bishop g5 check looks like it wins the game but black can block with a knight so this is not as impressive as it looks other attempts bishop takes g8 is fine but then black can trade queens and then take on g and we got an end game do we really want an end game when the king is this week so what do we need to do here we need to avoid the queen trade"
+   "said": "bishop b6 is the first mistake it gives up upon for no compensation and after d6 bishop c4 comes the second mistake he takes e5 how should black play here well he should go 97 and castle i mean at least uh limit the losses to a pawn and of course here he should go king e7 this is the last chance to stay in the game who can tell me uh a good move here for white it's actually not so easy for white to play accurately in this position there's a lot of tempting moves here and some of them aren't as good as they look white's best move is to sub with prime yeah but let's say white's second best move well knight d5 gives up the bishop bishop g5 check looks like it wins the game but black can block with a knight so this is not as impressive as it looks other attempts bishop takes g8 is fine but then black can trade queens and then take on g and we got an end game do we really want an end game when the king is this week so what do we need to do here we need to avoid the queen trade"
   }
  ],
  "forks": [

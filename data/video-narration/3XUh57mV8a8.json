@@ -19,7 +19,7 @@
     "Nc3"
    ],
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
-   "said": "ali rio helves from columbia okay e4 so let's play let's play traditional let's play e5 okay knight c3 so this could be a lot of different things our move is knight f6"
+   "said": "okay knight c3 so this could be a lot of"
   },
   {
    "ply": 4,
@@ -28,7 +28,7 @@
     "Nf6"
    ],
    "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 3",
-   "said": "okay e4 so let's play let's play traditional let's play e5 okay knight c3 so this could be a lot of different things our move is knight f6 this could be the vienna okay no it's knight of three it's the"
+   "said": "different things our move is knight f6 this could be the vienna"
   },
   {
    "ply": 5,
@@ -37,7 +37,7 @@
     "Nf3"
    ],
    "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
-   "said": "okay e4 so let's play let's play traditional let's play e5 okay knight c3 so this could be a lot of different things our move is knight f6 this could be the vienna okay no it's knight of three it's the four nights knight c6"
+   "said": "okay no it's knight of three it's the"
   },
   {
    "ply": 6,
@@ -46,7 +46,7 @@
     "Nc6"
    ],
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
-   "said": "okay knight c3 so this could be a lot of different things our move is knight f6 this could be the vienna okay no it's knight of three it's the four nights knight c6 and the four night scotch so this is"
+   "said": "four nights knight c6"
   },
   {
    "ply": 7,
@@ -55,7 +55,7 @@
     "d4"
    ],
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
-   "said": "okay knight c3 so this could be a lot of different things our move is knight f6 this could be the vienna okay no it's knight of three it's the four nights knight c6 and the four night scotch so this is interesting we're actually facing a four night scotch which uh is is quite rare we're usually on the other end of it now i'll show you guys a line which is a little bit less uh well known than the main line but which i think is uh no worse this is actually what i play in my over the board games and my in my actual blitz games so as as you know we play takes d4 here and who can remind me"
+   "said": "and the four night scotch so this is interesting we're actually facing a four night scotch which uh is is quite rare we're usually on the other end of it now i'll show you guys a line which is a little bit less uh well known than the"
   },
   {
    "ply": 8,
@@ -64,7 +64,7 @@
     "exd4"
    ],
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
-   "said": "main line but which i think is uh no worse this is actually what i play in my over the board games and my in my actual blitz games so as as you know we play takes d4 here and who can remind me what the main move is after knight takes"
+   "said": "main line but which i think is uh no worse this is actually what i play in my over the board games and my in my actual blitz games so as as you know we play takes d4 here and who can remind me"
   },
   {
    "ply": 9,
@@ -73,7 +73,7 @@
     "Nxd4"
    ],
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
-   "said": "uh no worse this is actually what i play in my over the board games and my in my actual blitz games so as as you know we play takes d4 here and who can remind me what the main move is after knight takes d4 so what is the most popular move in this position the move that is recommended in most books in most videos it's the move bishop f8 to b4 yeah so the development of the bishop to b4 and that leads to the main line with knight takes c6 and then bishop d3 etc but the move that i like is bishop c5"
+   "said": "what the main move is after knight takes d4 so what is the most popular move in this position the move that is recommended in most books in most videos it's the move bishop f8"
   },
   {
    "ply": 10,
@@ -82,7 +82,7 @@
     "Bc5"
    ],
    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b5/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
-   "said": "in most videos it's the move bishop f8 to b4 yeah so the development of the bishop to b4 and that leads to the main line with knight takes c6 and then bishop d3 etc but the move that i like is bishop c5 which might strike you as even more natural but it is not the main move it's it's the second most popular move and it's very reputable but it's not actually as popular as bishop before and some people don't know it quite as well and i like to choose my repertoire and build it around these moves that are not sidelines but not quite the most popular move to make it a little bit less likely"
+   "said": "to b4 yeah so the development of the bishop to b4 and that leads to the main line with knight takes c6 and then bishop d3 etc but the move that i like is bishop c5 which might strike you as even more natural but it is not the main move it's it's the second most popular move and it's very reputable but it's not actually as popular as bishop before and some"
   },
   {
    "ply": 11,
@@ -91,7 +91,7 @@
     "Nxc6"
    ],
    "fen": "r1bqk2r/pppp1ppp/2N2n2/2b5/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 6",
-   "said": "actually as popular as bishop before and some people don't know it quite as well and i like to choose my repertoire and build it around these moves that are not sidelines but not quite the most popular move to make it a little bit less likely that my opponent knows what to do so knight takes c6 obviously not dc which would allow the queen trade and would get our king deprived of castling rights and ruin our structure we play bc"
+   "said": "people don't know it quite as well and i like to choose my repertoire and build it around these moves that are not sidelines but not quite the most popular move to make it a little bit less likely that my opponent knows what to do so knight takes c6"
   },
   {
    "ply": 12,
@@ -100,7 +100,7 @@
     "bxc6"
    ],
    "fen": "r1bqk2r/p1pp1ppp/2p2n2/2b5/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
-   "said": "that my opponent knows what to do so knight takes c6 obviously not dc which would allow the queen trade and would get our king deprived of castling rights and ruin our structure we play bc in these positions"
+   "said": "obviously not dc which would allow the queen trade and would get our king deprived of castling rights and ruin our structure we play bc in these positions"
   },
   {
    "ply": 13,
@@ -109,7 +109,7 @@
     "Bg5"
    ],
    "fen": "r1bqk2r/p1pp1ppp/2p2n2/2b3B1/4P3/2N5/PPP2PPP/R2QKB1R b KQkq - 1 7",
-   "said": "knight takes c6 obviously not dc which would allow the queen trade and would get our king deprived of castling rights and ruin our structure we play bc in these positions and bishop g5 so bishop g5 is one of many possible moves nothing particularly special about it one thing to understand is that white isn't really threatening e5 at this point for many reasons one of which is that if we castle which is what we're gonna do"
+   "said": "and bishop g5 so bishop g5 is one of many possible moves nothing particularly special about it one thing to understand is that"
   },
   {
    "ply": 14,
@@ -118,7 +118,7 @@
     "O-O"
    ],
    "fen": "r1bq1rk1/p1pp1ppp/2p2n2/2b3B1/4P3/2N5/PPP2PPP/R2QKB1R w KQ - 2 8",
-   "said": "it one thing to understand is that white isn't really threatening e5 at this point for many reasons one of which is that if we castle which is what we're gonna do e5 can be met with rook f8 to e8 right and we pin the pawn and because white is so underdeveloped there's no way that he's gonna keep this pawn alive and then on the next move we can play d6 in order to prevent e5 once and for all but as long as y does not develop the"
+   "said": "white isn't really threatening e5 at this point for many reasons one of which is that if we castle which is what we're gonna do e5 can be met with rook f8 to e8 right and we pin the pawn and because white is so underdeveloped there's no way that he's gonna keep this pawn alive and then"
   },
   {
    "ply": 15,
@@ -127,7 +127,7 @@
     "Be2"
    ],
    "fen": "r1bq1rk1/p1pp1ppp/2p2n2/2b3B1/4P3/2N5/PPP1BPPP/R2QK2R b KQ - 3 8",
-   "said": "and we pin the pawn and because white is so underdeveloped there's no way that he's gonna keep this pawn alive and then on the next move we can play d6 in order to prevent e5 once and for all but as long as y does not develop the bishop you don't need to worry about e5 being a thing okay now e5 is kind of a thing so do we go h6 a lot of people wonder like do we throw this in how do i know now in many cases it doesn't really matter in this particular instance i like throwing an h6 and there is a"
+   "said": "on the next move we can play d6 in order to prevent e5 once and for all but as long as y does not develop the bishop you don't need to worry about e5 being a thing okay now e5 is kind of a thing so do we go h6 a lot of people wonder"
   },
   {
    "ply": 16,
@@ -136,7 +136,7 @@
     "h6"
    ],
    "fen": "r1bq1rk1/p1pp1pp1/2p2n1p/2b3B1/4P3/2N5/PPP1BPPP/R2QK2R w KQ - 0 9",
-   "said": "so do we go h6 a lot of people wonder like do we throw this in how do i know now in many cases it doesn't really matter in this particular instance i like throwing an h6 and there is a specific reason for that and the reason for that is that after we go d6 and then"
+   "said": "like do we throw this in how do i know now in many cases it doesn't really matter in this particular instance i like throwing an h6 and there is a specific reason for that and the reason"
   },
   {
    "ply": 17,
@@ -145,7 +145,7 @@
     "Bh4"
    ],
    "fen": "r1bq1rk1/p1pp1pp1/2p2n1p/2b5/4P2B/2N5/PPP1BPPP/R2QK2R b KQ - 1 9",
-   "said": "like do we throw this in how do i know now in many cases it doesn't really matter in this particular instance i like throwing an h6 and there is a specific reason for that and the reason for that is that after we go d6 and then"
+   "said": "for that is that after we go d6 and then"
   },
   {
    "ply": 18,
@@ -154,7 +154,7 @@
     "d6"
    ],
    "fen": "r1bq1rk1/p1p2pp1/2pp1n1p/2b5/4P2B/2N5/PPP1BPPP/R2QK2R w KQ - 0 10",
-   "said": "like do we throw this in how do i know now in many cases it doesn't really matter in this particular instance i like throwing an h6 and there is a specific reason for that and the reason for that is that after we go d6 and then we go rookie 8 we have potentially the possibility of winning"
+   "said": "we go rookie 8 we have potentially the"
   },
   {
    "ply": 19,
@@ -163,7 +163,7 @@
     "O-O"
    ],
    "fen": "r1bq1rk1/p1p2pp1/2pp1n1p/2b5/4P2B/2N5/PPP1BPPP/R2Q1RK1 b - - 1 10",
-   "said": "like throwing an h6 and there is a specific reason for that and the reason for that is that after we go d6 and then we go rookie 8 we have potentially the possibility of winning the e4 pawn by playing g5 right so i kind of like that concept okay so rookie 8 is good we can also go queen e7 and try to get the queen to the center with the queen e5 many ways of playing such a position but i like traditional move rook eight"
+   "said": "possibility of winning the e4 pawn by playing g5 right so i kind of like that concept okay so rookie 8 is good we can also go"
   },
   {
    "ply": 20,
@@ -172,7 +172,7 @@
     "Re8"
    ],
    "fen": "r1bqr1k1/p1p2pp1/2pp1n1p/2b5/4P2B/2N5/PPP1BPPP/R2Q1RK1 w - - 2 11",
-   "said": "okay so rookie 8 is good we can also go queen e7 and try to get the queen to the center with the queen e5 many ways of playing such a position but i like traditional move rook eight let's play it old school this is like very old school bishop f3"
+   "said": "queen e7 and try to get the queen to the center with the queen e5 many ways of playing such a position but i like traditional move rook eight let's play it old school"
   },
   {
    "ply": 21,
@@ -181,7 +181,7 @@
     "Bf3"
    ],
    "fen": "r1bqr1k1/p1p2pp1/2pp1n1p/2b5/4P2B/2N2B2/PPP2PPP/R2Q1RK1 b - - 3 11",
-   "said": "center with the queen e5 many ways of playing such a position but i like traditional move rook eight let's play it old school this is like very old school bishop f3 okay so at this point we already have a very interesting possibility of going g5 and then meeting bishop g3 with g4 and after bishop e2 actually taking that pawn on e4 which is quite risky but also very very interesting and one thing that i want to prove to you as we hit 1800 is that on the one hand king safety is the most important phenomenon and the most important factor in any position on the other hand you shouldn't always worry all that much about pushing pawns in front of your own king and what i will try to show you here hopefully i will get away with this"
+   "said": "this is like very old school bishop f3 okay so at this point we already have a very interesting possibility of going g5 and then meeting bishop g3 with g4 and after bishop e2 actually taking that pawn on e4 which is quite risky but also very very interesting and one thing that i want to prove to you as we hit 1800 is that on the one hand king"
   },
   {
    "ply": 22,
@@ -190,7 +190,7 @@
     "g5"
    ],
    "fen": "r1bqr1k1/p1p2p2/2pp1n1p/2b3p1/4P2B/2N2B2/PPP2PPP/R2Q1RK1 w - - 0 12",
-   "said": "safety is the most important phenomenon and the most important factor in any position on the other hand you shouldn't always worry all that much about pushing pawns in front of your own king and what i will try to show you here hopefully i will get away with this is that just because you've pushed pawns in front of your king doesn't mean"
+   "said": "safety is the most important phenomenon and the most important factor in any position on the other hand you shouldn't always worry all that much about pushing pawns in front of your own king and what i will try to show you here hopefully i will get away with this is that just because you've pushed pawns in"
   },
   {
    "ply": 23,
@@ -199,7 +199,7 @@
     "Bg3"
    ],
    "fen": "r1bqr1k1/p1p2p2/2pp1n1p/2b3p1/4P3/2N2BB1/PPP2PPP/R2Q1RK1 b - - 1 12",
-   "said": "you shouldn't always worry all that much about pushing pawns in front of your own king and what i will try to show you here hopefully i will get away with this is that just because you've pushed pawns in front of your king doesn't mean that your opponent is automatically"
+   "said": "front of your king doesn't mean that your opponent is automatically"
   },
   {
    "ply": 24,
@@ -208,7 +208,7 @@
     "g4"
    ],
    "fen": "r1bqr1k1/p1p2p2/2pp1n1p/2b5/4P1p1/2N2BB1/PPP2PPP/R2Q1RK1 w - - 0 13",
-   "said": "about pushing pawns in front of your own king and what i will try to show you here hopefully i will get away with this is that just because you've pushed pawns in front of your king doesn't mean that your opponent is automatically going to checkmate you so let's go through this line g4 bishop b2 and we're going to snag the pawn on e4 and i'm going to try to prove to you that our king is essentially in no"
+   "said": "going to checkmate you so let's go through this line g4 bishop b2 and we're going to snag the"
   },
   {
    "ply": 25,
@@ -217,7 +217,7 @@
     "e5"
    ],
    "fen": "r1bqr1k1/p1p2p2/2pp1n1p/2b1P3/6p1/2N2BB1/PPP2PPP/R2Q1RK1 b - - 0 13",
-   "said": "that your opponent is automatically going to checkmate you so let's go through this line g4 bishop b2 and we're going to snag the pawn on e4 and i'm going to try to prove to you that our king is essentially in no danger whoa e5 that is not a move i expected and i don't think it's a particularly good move it might avoid material losses but i think it gives us a very nice end game potentially so what should we do should we take on e5 or should we take the bishop let's not get disoriented all right don't get disoriented what does e5 actually accomplish well it opens the bishop's diagonal and threatens bishop takes c6 so we should definitely take the bishop"
+   "said": "pawn on e4 and i'm going to try to prove to you that our king is essentially in no danger whoa e5 that is not a move i expected and i don't think it's a particularly good move it might avoid material losses but i think it gives us a very nice end game potentially so what should we do should we take on e5 or"
   },
   {
    "ply": 26,
@@ -226,7 +226,7 @@
     "gxf3"
    ],
    "fen": "r1bqr1k1/p1p2p2/2pp1n1p/2b1P3/8/2N2pB1/PPP2PPP/R2Q1RK1 w - - 0 14",
-   "said": "should we take the bishop let's not get disoriented all right don't get disoriented what does e5 actually accomplish well it opens the bishop's diagonal and threatens bishop takes c6 so we should definitely take the bishop okay now"
+   "said": "should we take the bishop let's not get disoriented all right don't get disoriented what does e5 actually accomplish well it opens the bishop's diagonal and threatens bishop takes c6 so we should definitely take the bishop"
   },
   {
    "ply": 27,
@@ -235,7 +235,7 @@
     "exf6"
    ],
    "fen": "r1bqr1k1/p1p2p2/2pp1P1p/2b5/8/2N2pB1/PPP2PPP/R2Q1RK1 b - - 0 14",
-   "said": "disoriented all right don't get disoriented what does e5 actually accomplish well it opens the bishop's diagonal and threatens bishop takes c6 so we should definitely take the bishop okay now um the brazen move would be f takes g2 but leaving this pawn on f6 is perhaps a little bit too brazen even for me i wouldn't want to leave the spot on f6 because it creates the potential for a lobster pincer mate um let's play it safe and let's play queen takes f6 let's get"
+   "said": "okay now um the brazen move would be f takes g2 but leaving this pawn on f6 is perhaps a little bit too brazen even for me i wouldn't want to leave the spot"
   },
   {
    "ply": 28,
@@ -244,7 +244,7 @@
     "Qxf6"
    ],
    "fen": "r1b1r1k1/p1p2p2/2pp1q1p/2b5/8/2N2pB1/PPP2PPP/R2Q1RK1 w - - 0 15",
-   "said": "for me i wouldn't want to leave the spot on f6 because it creates the potential for a lobster pincer mate um let's play it safe and let's play queen takes f6 let's get rid of that pawn get a good position let's not bother with bs queen takes f3 and this is what i meant when i said we're going to get a good end game because what we're going to do now is we're going to trade queens"
+   "said": "on f6 because it creates the potential for a lobster pincer mate um let's play it safe and let's play queen takes f6 let's get rid of that pawn get a good position let's not bother with bs queen takes f3"
   },
   {
    "ply": 30,
@@ -254,7 +254,7 @@
     "Qxd6"
    ],
    "fen": "r1b1r1k1/p1p2p2/2pq3p/2b5/8/2N2pB1/PPP2PPP/R4RK1 w - - 0 16",
-   "said": "and let's play queen takes f6 let's get rid of that pawn get a good position let's not bother with bs queen takes f3 and this is what i meant when i said we're going to get a good end game because what we're going to do now is we're going to trade queens absolutely"
+   "said": "and this is what i meant when i said we're going to get a good end game because what we're going to do now is we're going to trade queens absolutely"
   },
   {
    "ply": 31,
@@ -263,7 +263,7 @@
     "gxf3"
    ],
    "fen": "r1b1r1k1/p1p2p2/2pq3p/2b5/8/2N2PB1/PPP2P1P/R4RK1 b - - 0 16",
-   "said": "let's not bother with bs queen takes f3 and this is what i meant when i said we're going to get a good end game because what we're going to do now is we're going to trade queens absolutely the white's king side pawn structure is ruined now you could say that our queen side pawn structure is ruined but our queen side pawn structures is quite compact whereas the king's side structure is just terrible now we need to develop actively right we need to figure out where white wants to put put his pieces and we need to develop accordingly i think a lot of you are tempted by bishop h3 but that's actually not a great move that's a step in the wrong direction because it allows the rook to get active rook f1 which is something that white wants to do anyway and if you look very carefully at what y wants to do you'll notice that the c3 knight has a very nice square on e4 why is that a nice squirrel because it's centralized it's anchored by a pawn and the knight threatens to jump into f6 so the way that we want to develop to stop"
+   "said": "the white's king side pawn structure is ruined now you could say that our queen side pawn structure is ruined but our queen side pawn structures is quite compact whereas the king's side structure is just terrible now we need to develop actively right we need to figure out where white wants to put put his pieces and we need to develop accordingly i think a lot of you are tempted by bishop h3 but that's actually not a great move that's a step in the wrong direction because it allows the rook to get active rook f1 which is something that white wants to do anyway and if you look very carefully at what y wants to"
   },
   {
    "ply": 32,
@@ -272,14 +272,14 @@
     "Bf5"
    ],
    "fen": "r3r1k1/p1p2p2/2pq3p/2b2b2/8/2N2PB1/PPP2P1P/R4RK1 w - - 1 17",
-   "said": "do you'll notice that the c3 knight has a very nice square on e4 why is that a nice squirrel because it's centralized it's anchored by a pawn and the knight threatens to jump into f6 so the way that we want to develop to stop that is by going bishop f5 yeah bishop f5 stops knight e4 d5 would hang c7 i didn't want to give"
+   "said": "do you'll notice that the c3 knight has a very nice square on e4 why is that a nice squirrel because it's centralized it's anchored by a pawn and the knight threatens to jump into f6 so the way that we want to develop to stop that is by going bishop f5 yeah bishop f5 stops knight e4"
   },
   {
    "ply": 31,
    "t": 352,
    "line": [],
    "fen": "r1b1r1k1/p1p2p2/2pq3p/2b5/8/2N2PB1/PPP2P1P/R4RK1 b - - 0 16",
-   "said": "centralized it's anchored by a pawn and the knight threatens to jump into f6 so the way that we want to develop to stop that is by going bishop f5 yeah bishop f5 stops knight e4 d5 would hang c7 i didn't want to give up a pawn in general d5 would be preferable but in this case we can develop"
+   "said": "d5 would hang c7 i didn't want to give up a pawn in general d5 would be preferable but in"
   },
   {
    "ply": 32,
@@ -288,7 +288,7 @@
     "Bf5"
    ],
    "fen": "r3r1k1/p1p2p2/2pq3p/2b2b2/8/2N2PB1/PPP2P1P/R4RK1 w - - 1 17",
-   "said": "the way that we want to develop to stop that is by going bishop f5 yeah bishop f5 stops knight e4 d5 would hang c7 i didn't want to give up a pawn in general d5 would be preferable but in this case we can develop while preventing 94 and also"
+   "said": "this case we can develop while preventing 94 and also"
   },
   {
    "ply": 33,
@@ -297,7 +297,7 @@
     "Ne4"
    ],
    "fen": "r3r1k1/p1p2p2/2pq3p/2b2b2/4N3/5PB1/PPP2P1P/R4RK1 b - - 2 17",
-   "said": "f5 stops knight e4 d5 would hang c7 i didn't want to give up a pawn in general d5 would be preferable but in this case we can develop while preventing 94 and also while attacking ct okay our opponent does it anyway just giving up a pawn"
+   "said": "while attacking ct okay our opponent"
   },
   {
    "ply": 34,
@@ -306,7 +306,7 @@
     "Bxe4"
    ],
    "fen": "r3r1k1/p1p2p2/2pq3p/2b5/4b3/5PB1/PPP2P1P/R4RK1 w - - 0 18",
-   "said": "up a pawn in general d5 would be preferable but in this case we can develop while preventing 94 and also while attacking ct okay our opponent does it anyway just giving up a pawn"
+   "said": "does it anyway just giving up a pawn"
   },
   {
    "ply": 36,
@@ -316,7 +316,7 @@
     "Rxe4"
    ],
    "fen": "r5k1/p1p2p2/2pq3p/2b5/4r3/6B1/PPP2P1P/R4RK1 w - - 0 19",
-   "said": "in general d5 would be preferable but in this case we can develop while preventing 94 and also while attacking ct okay our opponent does it anyway just giving up a pawn obviously we will take it and now we have control over the e-file as well"
+   "said": "obviously we will take it and now we have control over the e-file as well"
   },
   {
    "ply": 37,
@@ -325,7 +325,7 @@
     "Rfe1"
    ],
    "fen": "r5k1/p1p2p2/2pq3p/2b5/4r3/6B1/PPP2P1P/R3R1K1 b - - 1 19",
-   "said": "while preventing 94 and also while attacking ct okay our opponent does it anyway just giving up a pawn obviously we will take it and now we have control over the e-file as well so we don't want to trade on e1 i think some people would make you know the mistake of thinking oh i can simplify right but but simplify on your own terms and how do you set up your own terms f5 is a tempting move that's f5 is possible but i don't see the point of playing f5 in light of the fact that we can double"
+   "said": "so we don't want to trade on e1 i think some people would make you know the mistake of thinking oh i can simplify right but but simplify on your own terms"
   },
   {
    "ply": 38,
@@ -334,7 +334,7 @@
     "Rae8"
    ],
    "fen": "4r1k1/p1p2p2/2pq3p/2b5/4r3/6B1/PPP2P1P/R3R1K1 w - - 2 20",
-   "said": "simplify on your own terms and how do you set up your own terms f5 is a tempting move that's f5 is possible but i don't see the point of playing f5 in light of the fact that we can double rooks on e8 and keep control of the e-file thank you coaster card okay so"
+   "said": "and how do you set up your own terms f5 is a tempting move that's f5 is possible but i don't see the point of playing f5 in light of the fact that we can double rooks on e8 and keep control of the"
   },
   {
    "ply": 39,
@@ -343,7 +343,7 @@
     "Kf1"
    ],
    "fen": "4r1k1/p1p2p2/2pq3p/2b5/4r3/6B1/PPP2P1P/R3RK2 b - - 3 20",
-   "said": "and how do you set up your own terms f5 is a tempting move that's f5 is possible but i don't see the point of playing f5 in light of the fact that we can double rooks on e8 and keep control of the e-file thank you coaster card okay so this is an interesting moment right we can trade up all the rooks we can trade four pair four rooks is that bishop end game winning well probably it is right bishop end games up upon are often winning but they're not comparable to pawn end games so i've i've encountered bishop end games like that which are not easily winning so i would find a middle ground here and i would say okay if white really wants to trade rooks we can let him do it but while white is busy trading rooks and going rookie one we are going to improve our position now in the context of an endgame what does it mean to improve your position well it basically means bringing your king up that's the top priority let's go king g7 and get this"
+   "said": "e-file thank you coaster card okay so this is an interesting moment right we can trade up all the rooks we can trade four pair four rooks is that bishop end game winning well probably it is right bishop end games up upon are often winning but they're not comparable to pawn end games so i've i've encountered bishop end games like that which are not easily winning so i would find a middle ground here and i would say okay if white really wants to trade rooks we can let him do it but"
   },
   {
    "ply": 40,
@@ -352,7 +352,7 @@
     "Kg7"
    ],
    "fen": "4r3/p1p2pk1/2pq3p/2b5/4r3/6B1/PPP2P1P/R3RK2 w - - 4 21",
-   "said": "while white is busy trading rooks and going rookie one we are going to improve our position now in the context of an endgame what does it mean to improve your position well it basically means bringing your king up that's the top priority let's go king g7 and get this king up into the center f5 or maybe e6 d5 and if our opponent makes it draw in that bishop end game congratulations right but at least we're going to make improving moves while our opponent is busy trading rooks"
+   "said": "while white is busy trading rooks and going rookie one we are going to improve our position now in the context of an endgame what does it mean to improve your position well it basically means bringing your king up that's the top priority let's go king g7 and get this king up into the center f5 or maybe e6 d5 and if our opponent makes it draw in that bishop end game congratulations"
   },
   {
    "ply": 42,
@@ -362,7 +362,7 @@
     "Rxe4"
    ],
    "fen": "8/p1p2pk1/2pq3p/2b5/4r3/6B1/PPP2P1P/R4K2 w - - 0 22",
-   "said": "d5 and if our opponent makes it draw in that bishop end game congratulations right but at least we're going to make improving moves while our opponent is busy trading rooks hopefully that logic makes sense okay so now we're going to trade we have"
+   "said": "right but at least we're going to make improving moves while our opponent is busy trading rooks hopefully that logic makes sense"
   },
   {
    "ply": 43,
@@ -371,7 +371,7 @@
     "Re1"
    ],
    "fen": "8/p1p2pk1/2pq3p/2b5/4r3/6B1/PPP2P1P/4RK2 b - - 1 22",
-   "said": "and if our opponent makes it draw in that bishop end game congratulations right but at least we're going to make improving moves while our opponent is busy trading rooks hopefully that logic makes sense okay so now we're going to trade we have no i mean f5 is possible but then y can go f3 i don't see the point in dilly dallying"
+   "said": "okay so now we're going to trade we have no i mean f5 is possible but then y can"
   },
   {
    "ply": 44,
@@ -380,7 +380,7 @@
     "Rxe1+"
    ],
    "fen": "8/p1p2pk1/2pq3p/2b5/8/6B1/PPP2P1P/4rK2 w - - 0 23",
-   "said": "busy trading rooks hopefully that logic makes sense okay so now we're going to trade we have no i mean f5 is possible but then y can go f3 i don't see the point in dilly dallying any further"
+   "said": "go f3 i don't see the point in dilly dallying"
   },
   {
    "ply": 45,
@@ -389,7 +389,7 @@
     "Kxe1"
    ],
    "fen": "8/p1p2pk1/2pq3p/2b5/8/6B1/PPP2P1P/4K3 b - - 0 23",
-   "said": "hopefully that logic makes sense okay so now we're going to trade we have no i mean f5 is possible but then y can go f3 i don't see the point in dilly dallying any further okay so now this is a very instructive moment actually because it's very easy to miss an opportunity to play a good move here if you look carefully at the bishop right white wants to play the move c2 c3 why what is that going to accomplish what that's going to accomplish is it's going to keep the bishop essentially confined on this diagonal why because well the bishop can't really escape and you can't really go d5 and bishop d6 because c7 is going to hang so you currently have an opportunity to get this bishop into the center but this opportunity may never occur again because white wants to play c3 now maybe our opponent doesn't play c3 but we shouldn't operate under that assumption i like the move bishop c5 to d4 and if"
+   "said": "any further okay so now this is a very instructive moment actually because it's very easy to miss an opportunity to play a good move here if you look carefully at the bishop right white wants to play the move c2 c3 why what is that going to accomplish what that's going to accomplish is it's going to keep the bishop essentially confined on this diagonal why because well the bishop can't really escape and you can't really go d5 and bishop d6 because c7 is going to hang so you currently have an opportunity to get"
   },
   {
    "ply": 46,
@@ -398,7 +398,7 @@
     "Bd4"
    ],
    "fen": "8/p1p2pk1/2pq3p/8/3b4/6B1/PPP2P1P/4K3 w - - 1 24",
-   "said": "this bishop into the center but this opportunity may never occur again because white wants to play c3 now maybe our opponent doesn't play c3 but we shouldn't operate under that assumption i like the move bishop c5 to d4 and if c3 happens we can reroute the bishop into the center with bishop e5 and hopefully that makes more sense now you might say wait a minute after bishop e5 there doesn't white have the"
+   "said": "this bishop into the center but this opportunity may never occur again because white wants to play c3 now maybe our opponent doesn't play c3 but we shouldn't operate under that assumption i like the move bishop c5 to d4 and if c3 happens we can reroute the bishop into the center with bishop e5"
   },
   {
    "ply": 47,
@@ -407,7 +407,7 @@
     "c3"
    ],
    "fen": "8/p1p2pk1/2pq3p/8/3b4/2P3B1/PP3P1P/4K3 b - - 0 24",
-   "said": "c3 happens we can reroute the bishop into the center with bishop e5 and hopefully that makes more sense now you might say wait a minute after bishop e5 there doesn't white have the move f4 and he does but f4 is actually"
+   "said": "and hopefully that makes more sense now you might say wait a minute after bishop e5 there doesn't white have the"
   },
   {
    "ply": 48,
@@ -416,7 +416,7 @@
     "Be5"
    ],
    "fen": "8/p1p2pk1/2pq3p/4b3/8/2P3B1/PP3P1P/4K3 w - - 1 25",
-   "said": "c3 happens we can reroute the bishop into the center with bishop e5 and hopefully that makes more sense now you might say wait a minute after bishop e5 there doesn't white have the move f4 and he does but f4 is actually more harmful than it is good because it pushes the pawn out to a dark square"
+   "said": "move f4 and he does but f4 is actually more harmful than it is good because it"
   },
   {
    "ply": 49,
@@ -425,7 +425,7 @@
     "Ke2"
    ],
    "fen": "8/p1p2pk1/2pq3p/4b3/8/2P3B1/PP2KP1P/8 b - - 2 25",
-   "said": "now you might say wait a minute after bishop e5 there doesn't white have the move f4 and he does but f4 is actually more harmful than it is good because it pushes the pawn out to a dark square okay king e2 wow now this allows us to transition into a pawn end game and most fun end games up upon are going to be winning this one i think is probably no exception i mean it's i wouldn't be 100 sure that it's winning but i i'm sort of 90 sure that it's winning yeah we're just gonna trade i mean i i'm"
+   "said": "pushes the pawn out to a dark square okay king e2 wow now this allows us to transition into a pawn end game and most fun end games up upon are going to be winning this one i think is probably no"
   },
   {
    "ply": 50,
@@ -434,7 +434,7 @@
     "Bxg3"
    ],
    "fen": "8/p1p2pk1/2pq3p/8/8/2P3b1/PP2KP1P/8 w - - 0 26",
-   "said": "winning this one i think is probably no exception i mean it's i wouldn't be 100 sure that it's winning but i i'm sort of 90 sure that it's winning yeah we're just gonna trade i mean i i'm my intuition is telling me that despite despite the fact that our pawn structure"
+   "said": "exception i mean it's i wouldn't be 100 sure that it's winning but i i'm sort of 90 sure that it's winning yeah we're just gonna trade i mean i i'm my intuition is telling me that despite"
   },
   {
    "ply": 51,
@@ -443,7 +443,7 @@
     "hxg3"
    ],
    "fen": "8/p1p2pk1/2pq3p/8/8/2P3P1/PP2KP2/8 b - - 0 26",
-   "said": "i wouldn't be 100 sure that it's winning but i i'm sort of 90 sure that it's winning yeah we're just gonna trade i mean i i'm my intuition is telling me that despite despite the fact that our pawn structure is kind of ruined here nonetheless i like i like our chances here now our top priority right now is obviously to"
+   "said": "despite the fact that our pawn structure is kind of ruined here nonetheless"
   },
   {
    "ply": 52,
@@ -452,7 +452,7 @@
     "Kf6"
    ],
    "fen": "8/p1p2p2/2pq1k1p/8/8/2P3P1/PP2KP2/8 w - - 1 27",
-   "said": "my intuition is telling me that despite despite the fact that our pawn structure is kind of ruined here nonetheless i like i like our chances here now our top priority right now is obviously to get our king into the center that is and this is very fitting because i'm currently doing a series on pawn on him"
+   "said": "i like i like our chances here now our top priority right now is obviously to get our king into the center that is and"
   },
   {
    "ply": 53,
@@ -461,7 +461,7 @@
     "Kf3"
    ],
    "fen": "8/p1p2p2/2pq1k1p/8/8/2P2KP1/PP3P2/8 b - - 2 27",
-   "said": "is kind of ruined here nonetheless i like i like our chances here now our top priority right now is obviously to get our king into the center that is and this is very fitting because i'm currently doing a series on pawn on him so i better prove my metal okay so now we need to figure out first and foremost what the potential for us is to create past pawns and what i see is that we have the potential of going c5 followed by d5 and d4 so we don't have to worry about"
+   "said": "this is very fitting because i'm currently doing a series on pawn on him so i better prove my metal okay so now we need to figure out first and foremost what the potential for us is to create past pawns"
   },
   {
    "ply": 54,
@@ -470,7 +470,7 @@
     "Ke5"
    ],
    "fen": "8/p1p2p2/2pq3p/4k3/8/2P2KP1/PP3P2/8 w - - 3 28",
-   "said": "past pawns and what i see is that we have the potential of going c5 followed by d5 and d4 so we don't have to worry about white's king heading toward the king side right we don't have to worry about that because the moment that white goes king g4 we will play c5 and we will initiate the process of creating a past pawn"
+   "said": "and what i see is that we have the potential of going c5 followed by d5 and d4 so we don't have to worry about white's king heading toward the king side right we don't have to worry about that because the moment that white goes king g4 we will play c5 and we will initiate the"
   },
   {
    "ply": 55,
@@ -479,7 +479,7 @@
     "Kg4"
    ],
    "fen": "8/p1p2p2/2pq3p/4k3/6K1/2P3P1/PP3P2/8 b - - 4 28",
-   "said": "side right we don't have to worry about that because the moment that white goes king g4 we will play c5 and we will initiate the process of creating a past pawn"
+   "said": "process of creating a past pawn"
   },
   {
    "ply": 56,
@@ -488,14 +488,14 @@
     "c5"
    ],
    "fen": "8/p1p2p2/3q3p/2p1k3/6K1/2P3P1/PP3P2/8 w - - 0 29",
-   "said": "king g4 we will play c5 and we will initiate the process of creating a past pawn okay there we go we're going to go c5 now in the video i have this rule about"
+   "said": "okay there we go we're going to go c5 now"
   },
   {
    "ply": 55,
    "t": 598.5,
    "line": [],
    "fen": "8/p1p2p2/2pq3p/4k3/6K1/2P3P1/PP3P2/8 b - - 4 28",
-   "said": "king g4 we will play c5 and we will initiate the process of creating a past pawn okay there we go we're going to go c5 now in the video i have this rule about pushing the perspective password which is the d-pad this is a slight exception"
+   "said": "in the video i have this rule about pushing the perspective password which"
   },
   {
    "ply": 57,
@@ -505,14 +505,14 @@
     "Kh5"
    ],
    "fen": "8/p1p2p2/3q3p/2p1k2K/8/2P3P1/PP3P2/8 b - - 1 29",
-   "said": "process of creating a past pawn okay there we go we're going to go c5 now in the video i have this rule about pushing the perspective password which is the d-pad this is a slight exception"
+   "said": "is the d-pad this is a slight exception"
   },
   {
    "ply": 55,
    "t": 602.5,
    "line": [],
    "fen": "8/p1p2p2/2pq3p/4k3/6K1/2P3P1/PP3P2/8 b - - 4 28",
-   "said": "process of creating a past pawn okay there we go we're going to go c5 now in the video i have this rule about pushing the perspective password which is the d-pad this is a slight exception to the rule because it's a very unusual structure very unusual structure if you go d5 you will be subject to a deep freeze black white is going to go b4 and then you're not going to be able to go c5 normally these pawns aren't doubled so that's not a problem"
+   "said": "to the rule because it's a very unusual structure very unusual structure if you go d5 you will be subject to a deep freeze black"
   },
   {
    "ply": 57,
@@ -522,7 +522,7 @@
     "Kh5"
    ],
    "fen": "8/p1p2p2/3q3p/2p1k2K/8/2P3P1/PP3P2/8 b - - 1 29",
-   "said": "will be subject to a deep freeze black white is going to go b4 and then you're not going to be able to go c5 normally these pawns aren't doubled so that's not a problem so now we go d5 and there isn't even a"
+   "said": "white is going to go b4 and then you're not going to be able to go c5 normally these pawns aren't doubled so that's not a problem so now we go d5 and there isn't even a"
   },
   {
    "ply": 58,
@@ -531,7 +531,7 @@
     "Qd5"
    ],
    "fen": "8/p1p2p2/7p/2pqk2K/8/2P3P1/PP3P2/8 w - - 2 30",
-   "said": "white is going to go b4 and then you're not going to be able to go c5 normally these pawns aren't doubled so that's not a problem so now we go d5 and there isn't even a pawn race to speak of the game is over we're just gonna go d4 the white has gone completely wrong off the rails here and our opponent didn't stop to ask himself how black can create past bonds he just sort of assumed that we can't do it"
+   "said": "pawn race to speak of the game is over we're just gonna go d4 the white has gone completely wrong off"
   },
   {
    "ply": 59,
@@ -540,7 +540,7 @@
     "f4+"
    ],
    "fen": "8/p1p2p2/7p/2pqk2K/5P2/2P3P1/PP6/8 b - - 0 30",
-   "said": "gonna go d4 the white has gone completely wrong off the rails here and our opponent didn't stop to ask himself how black can create past bonds he just sort of assumed that we can't do it and and so i don't think he put any amount of thought into this idea okay we can just go king e4 it doesn't"
+   "said": "the rails here and our opponent didn't stop to ask himself how black can create past bonds he just sort of assumed that we can't do it and and so i don't think he put any"
   },
   {
    "ply": 60,
@@ -549,7 +549,7 @@
     "Ke4+"
    ],
    "fen": "8/p1p2p2/7p/2pq3K/4kP2/2P3P1/PP6/8 w - - 1 31",
-   "said": "stop to ask himself how black can create past bonds he just sort of assumed that we can't do it and and so i don't think he put any amount of thought into this idea okay we can just go king e4 it doesn't really matter we're obviously going to win the pawn race there really isn't even a pawn race by the time white wins f7 we're going to be"
+   "said": "amount of thought into this idea okay we can just go king e4 it doesn't really matter we're obviously going to win the pawn race"
   },
   {
    "ply": 61,
@@ -558,7 +558,7 @@
     "Kxh6"
    ],
    "fen": "8/p1p2p2/7K/2pq4/4kP2/2P3P1/PP6/8 b - - 0 31",
-   "said": "and and so i don't think he put any amount of thought into this idea okay we can just go king e4 it doesn't really matter we're obviously going to win the pawn race there really isn't even a pawn race by the time white wins f7 we're going to be promoting our pawn"
+   "said": "there really isn't even a pawn race by the time white wins f7 we're going to be"
   },
   {
    "ply": 62,
@@ -567,7 +567,7 @@
     "Qd4"
    ],
    "fen": "8/p1p2p2/7K/2p5/3qkP2/2P3P1/PP6/8 w - - 1 32",
-   "said": "amount of thought into this idea okay we can just go king e4 it doesn't really matter we're obviously going to win the pawn race there really isn't even a pawn race by the time white wins f7 we're going to be promoting our pawn and if you want to be super clinical about it after king g7 you can even play"
+   "said": "promoting our pawn and if you want to be super clinical"
   },
   {
    "ply": 64,
@@ -577,7 +577,7 @@
     "cxd4"
    ],
    "fen": "8/p1p2p2/7K/8/3pkP2/6P1/PP6/8 w - - 0 33",
-   "said": "okay we can just go king e4 it doesn't really matter we're obviously going to win the pawn race there really isn't even a pawn race by the time white wins f7 we're going to be promoting our pawn and if you want to be super clinical about it after king g7 you can even play the move f5 like you can if you want not"
+   "said": "about it after king g7 you can even play the move f5 like you can if you want not"
   },
   {
    "ply": 65,
@@ -586,7 +586,7 @@
     "Kg7"
    ],
    "fen": "8/p1p2pK1/8/8/3pkP2/6P1/PP6/8 b - - 1 33",
-   "said": "there really isn't even a pawn race by the time white wins f7 we're going to be promoting our pawn and if you want to be super clinical about it after king g7 you can even play the move f5 like you can if you want not even give up not even give up a single pawn"
+   "said": "even give up"
   },
   {
    "ply": 66,
@@ -595,7 +595,7 @@
     "f5"
    ],
    "fen": "8/p1p3K1/8/5p2/3pkP2/6P1/PP6/8 w - - 0 34",
-   "said": "the time white wins f7 we're going to be promoting our pawn and if you want to be super clinical about it after king g7 you can even play the move f5 like you can if you want not even give up not even give up a single pawn and if white goes g4 then you play f takes g4 and the f1 isn't even going anywhere then we have like trousers but both pawns are unstoppable f5 is is clinical now we go d3"
+   "said": "not even give up a single pawn and if white goes g4 then you play f takes g4 and the f1 isn't even going anywhere then we have like trousers but"
   },
   {
    "ply": 68,
@@ -605,7 +605,7 @@
     "d3"
    ],
    "fen": "8/p1p5/6K1/5p2/4kP2/3p2P1/PP6/8 w - - 0 35",
-   "said": "not even give up a single pawn and if white goes g4 then you play f takes g4 and the f1 isn't even going anywhere then we have like trousers but both pawns are unstoppable f5 is is clinical now we go d3 and g4 we can take it"
+   "said": "both pawns are unstoppable f5 is is clinical now we go d3"
   },
   {
    "ply": 70,
@@ -615,7 +615,7 @@
     "fxg4"
    ],
    "fen": "8/p1p5/6K1/8/4kPp1/3p4/PP6/8 w - - 0 36",
-   "said": "and if white goes g4 then you play f takes g4 and the f1 isn't even going anywhere then we have like trousers but both pawns are unstoppable f5 is is clinical now we go d3 and g4 we can take it and the hilarious thing is after f5 we can push either of our passengers right"
+   "said": "and g4 we can take it and the hilarious thing is after f5 we"
   },
   {
    "ply": 71,
@@ -624,7 +624,7 @@
     "f5"
    ],
    "fen": "8/p1p5/6K1/5P2/4k1p1/3p4/PP6/8 b - - 0 36",
-   "said": "anywhere then we have like trousers but both pawns are unstoppable f5 is is clinical now we go d3 and g4 we can take it and the hilarious thing is after f5 we can push either of our passengers right we can play g3 because we promote check or the simpler option is to go d2 d1 queen"
+   "said": "can push either of our passengers right we can play g3 because we promote check or"
   },
   {
    "ply": 72,
@@ -633,7 +633,7 @@
     "d2"
    ],
    "fen": "8/p1p5/6K1/5P2/4k1p1/8/PP1p4/8 w - - 0 37",
-   "said": "and g4 we can take it and the hilarious thing is after f5 we can push either of our passengers right we can play g3 because we promote check or the simpler option is to go d2 d1 queen and i know some beginner players struggle with these types of situations there is a more laborious way of winning this then there's an easier way of winning this particular position right the easy way is to basically say okay i'm going to"
+   "said": "the simpler option is to go d2 d1 queen and i know some beginner players struggle with these types of situations there is a"
   },
   {
    "ply": 76,
@@ -645,7 +645,7 @@
     "Rd6+"
    ],
    "fen": "8/p1p2P2/3r2K1/8/4k1p1/8/PP6/8 w - - 1 39",
-   "said": "struggle with these types of situations there is a more laborious way of winning this then there's an easier way of winning this particular position right the easy way is to basically say okay i'm going to give up my queen for the pawn and then i'm going to promote my other pawn"
+   "said": "more laborious way of winning this then there's an easier way of winning this particular position right the easy way is to basically say okay i'm going to give up my queen for the pawn and then"
   },
   {
    "ply": 77,
@@ -654,14 +654,14 @@
     "Kg7"
    ],
    "fen": "8/p1p2PK1/3r4/8/4k1p1/8/PP6/8 b - - 2 39",
-   "said": "there is a more laborious way of winning this then there's an easier way of winning this particular position right the easy way is to basically say okay i'm going to give up my queen for the pawn and then i'm going to promote my other pawn but if you want to be super clinical you need to use the technique that is uh essentially imagine that there was nothing left on the board except a queen in this pawn then the position would be drawn because of stalemate concepts here you don't have to worry about stalemate concepts so you actually don't have to give up your queen for the pawn you can use your queen to essentially shepherd the white king off of the pawn so a good solid kind of simple positional game and we're winning more of these as we hit you know 1800 so yeah bishop c5 is a good is a good"
+   "said": "i'm going to promote my other pawn but if you want to be super clinical you need to use the technique that is uh essentially imagine that there was nothing left on the board except a queen in this pawn then the position would be drawn because of stalemate concepts here you don't have to worry about stalemate concepts so you actually don't have to give up your queen for the pawn you can use your queen to essentially shepherd the white king off of the pawn"
   },
   {
    "ply": 10,
    "t": 739.5,
    "line": [],
    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b5/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
-   "said": "so a good solid kind of simple positional game and we're winning more of these as we hit you know 1800 so yeah bishop c5 is a good is a good line if you're if you're an e5 flare knight c knight takes c6 is one of many possibilities bishop e3 being another"
+   "said": "so a good solid kind of simple positional game and we're winning more of these as we hit you know 1800 so yeah bishop c5 is a good is a good line if you're if you're an e5 flare"
   },
   {
    "ply": 11,
@@ -670,14 +670,14 @@
     "Be3"
    ],
    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b5/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 2 6",
-   "said": "and we're winning more of these as we hit you know 1800 so yeah bishop c5 is a good is a good line if you're if you're an e5 flare knight c knight takes c6 is one of many possibilities bishop e3 being another possibility bishop e3 is another possibility um and i believe the most popular line there is also knight f5 there's also knight of five here so this is a theoretical line you"
+   "said": "knight c knight takes c6 is one of many possibilities bishop e3 being another possibility bishop e3 is another possibility um and i believe the most popular line"
   },
   {
    "ply": 10,
    "t": 759,
    "line": [],
    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b5/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
-   "said": "possibility bishop e3 is another possibility um and i believe the most popular line there is also knight f5 there's also knight of five here so this is a theoretical line you can you can do some research yourself um okay so take stakes bishop g5 is"
+   "said": "there is also knight f5 there's also knight of five here so this is a theoretical line you can you can do some research yourself"
   },
   {
    "ply": 12,
@@ -687,7 +687,7 @@
     "bxc6"
    ],
    "fen": "r1bqk2r/p1pp1ppp/2p2n2/2b5/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
-   "said": "there is also knight f5 there's also knight of five here so this is a theoretical line you can you can do some research yourself um okay so take stakes bishop g5 is"
+   "said": "um okay so take stakes bishop g5 is"
   },
   {
    "ply": 13,
@@ -696,14 +696,14 @@
     "Bg5"
    ],
    "fen": "r1bqk2r/p1pp1ppp/2p2n2/2b3B1/4P3/2N5/PPP2PPP/R2QKB1R b KQkq - 1 7",
-   "said": "there is also knight f5 there's also knight of five here so this is a theoretical line you can you can do some research yourself um okay so take stakes bishop g5 is again one of many possible variations"
+   "said": "again one of many possible"
   },
   {
    "ply": 12,
    "t": 768.5,
    "line": [],
    "fen": "r1bqk2r/p1pp1ppp/2p2n2/2b5/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
-   "said": "knight f5 there's also knight of five here so this is a theoretical line you can you can do some research yourself um okay so take stakes bishop g5 is again one of many possible variations bishop d3 is the main line bishop d3 is"
+   "said": "variations"
   },
   {
    "ply": 13,
@@ -712,7 +712,7 @@
     "Bd3"
    ],
    "fen": "r1bqk2r/p1pp1ppp/2p2n2/2b5/4P3/2NB4/PPP2PPP/R1BQK2R b KQkq - 1 7",
-   "said": "can you can do some research yourself um okay so take stakes bishop g5 is again one of many possible variations bishop d3 is the main line bishop d3 is the most popular move and then the line goes d6"
+   "said": "bishop d3 is the main line bishop d3 is the most popular move"
   },
   {
    "ply": 14,
@@ -721,14 +721,14 @@
     "d6"
    ],
    "fen": "r1bqk2r/p1p2ppp/2pp1n2/2b5/4P3/2NB4/PPP2PPP/R1BQK2R w KQkq - 0 8",
-   "said": "again one of many possible variations bishop d3 is the main line bishop d3 is the most popular move and then the line goes d6 and this is the main difference between putting the bishop on c5 and and putting it on b4 like when you put the bishop on b4"
+   "said": "and then the line goes d6 and this is the main difference between putting the bishop on c5 and and putting"
   },
   {
    "ply": 9,
    "t": 784,
    "line": [],
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
-   "said": "the most popular move and then the line goes d6 and this is the main difference between putting the bishop on c5 and and putting it on b4 like when you put the bishop on b4 you're basically not i mean d6 is a move"
+   "said": "it on b4 like when you put the bishop on b4 you're basically not i mean d6 is a move"
   },
   {
    "ply": 13,
@@ -740,7 +740,7 @@
     "Bd3"
    ],
    "fen": "r1bqk2r/p1pp1ppp/2p2n2/8/1b2P3/2NB4/PPP2PPP/R1BQK2R b KQkq - 1 7",
-   "said": "and this is the main difference between putting the bishop on c5 and and putting it on b4 like when you put the bishop on b4 you're basically not i mean d6 is a move here but d5 is what almost everybody"
+   "said": "here but d5 is what almost everybody"
   },
   {
    "ply": 14,
@@ -749,14 +749,14 @@
     "d5"
    ],
    "fen": "r1bqk2r/p1p2ppp/2p2n2/3p4/1b2P3/2NB4/PPP2PPP/R1BQK2R w KQkq - 0 8",
-   "said": "and this is the main difference between putting the bishop on c5 and and putting it on b4 like when you put the bishop on b4 you're basically not i mean d6 is a move here but d5 is what almost everybody plays when you put the bishop on c5 on the other hand you're going for d6 so in any"
+   "said": "plays when you put the bishop on c5 on the"
   },
   {
    "ply": 13,
    "t": 793.5,
    "line": [],
    "fen": "r1bqk2r/p1pp1ppp/2p2n2/8/1b2P3/2NB4/PPP2PPP/R1BQK2R b KQkq - 1 7",
-   "said": "like when you put the bishop on b4 you're basically not i mean d6 is a move here but d5 is what almost everybody plays when you put the bishop on c5 on the other hand you're going for d6 so in any"
+   "said": "other hand you're going for d6 so in any"
   },
   {
    "ply": 15,
@@ -766,14 +766,14 @@
     "Bf1"
    ],
    "fen": "r1bqk2r/p1pp1ppp/2p2n2/2b5/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 3 8",
-   "said": "you're basically not i mean d6 is a move here but d5 is what almost everybody plays when you put the bishop on c5 on the other hand you're going for d6 so in any case bishop g5 is a move"
+   "said": ""
   },
   {
    "ply": 13,
    "t": 796.5,
    "line": [],
    "fen": "r1bqk2r/p1pp1ppp/2p2n2/8/1b2P3/2NB4/PPP2PPP/R1BQK2R b KQkq - 1 7",
-   "said": "you're basically not i mean d6 is a move here but d5 is what almost everybody plays when you put the bishop on c5 on the other hand you're going for d6 so in any case bishop g5 is a move so we castle bishop e2 we throw in h6"
+   "said": "case bishop g5 is a move"
   },
   {
    "ply": 17,
@@ -785,14 +785,14 @@
     "Bg5"
    ],
    "fen": "r1bq1rk1/p1pp1ppp/2p2n2/2b3B1/4P3/2N5/PPP2PPP/R2QKB1R b KQ - 5 9",
-   "said": "here but d5 is what almost everybody plays when you put the bishop on c5 on the other hand you're going for d6 so in any case bishop g5 is a move so we castle bishop e2 we throw in h6"
+   "said": "so we castle bishop e2 we throw in h6"
   },
   {
    "ply": 15,
    "t": 799.5,
    "line": [],
    "fen": "r1bqk2r/p1pp1ppp/2p2n2/2b5/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 3 8",
-   "said": "here but d5 is what almost everybody plays when you put the bishop on c5 on the other hand you're going for d6 so in any case bishop g5 is a move so we castle bishop e2 we throw in h6"
+   "said": ""
   },
   {
    "ply": 19,
@@ -804,14 +804,14 @@
     "Be2"
    ],
    "fen": "r1bq1rk1/p1pp1pp1/2p2n1p/2b3B1/4P3/2N5/PPP1BPPP/R2QK2R b KQ - 3 10",
-   "said": "plays when you put the bishop on c5 on the other hand you're going for d6 so in any case bishop g5 is a move so we castle bishop e2 we throw in h6 and i think bishop b2 is already"
+   "said": "and i think bishop b2 is already"
   },
   {
    "ply": 17,
    "t": 802.5,
    "line": [],
    "fen": "r1bqk2r/p1pp1pp1/2p2n1p/2b3B1/4P3/2N5/PPP2PPP/R2QKB1R b KQkq - 1 9",
-   "said": "when you put the bishop on c5 on the other hand you're going for d6 so in any case bishop g5 is a move so we castle bishop e2 we throw in h6 and i think bishop b2 is already inaccurate i think our opponent didn't realize that the e4 pawn constitutes a a pretty serious weakness here and i think that had he known that he would have played bishop d3 which sort of supports the pawn so we go h6 we go rookie we go d6 we go"
+   "said": "inaccurate i think our opponent didn't realize that the e4 pawn constitutes a a pretty serious weakness here and i think that"
   },
   {
    "ply": 21,
@@ -823,7 +823,7 @@
     "Be2"
    ],
    "fen": "r1bq1rk1/p1p2pp1/2pp1n1p/2b5/4P2B/2N5/PPP1BPPP/R2QK2R b KQ - 3 11",
-   "said": "serious weakness here and i think that had he known that he would have played bishop d3 which sort of supports the pawn so we go h6 we go rookie we go d6 we go rookie a we make all the typical moves"
+   "said": "had he known that he would have played bishop d3 which sort of supports the pawn so we go h6 we go rookie we go d6 we go"
   },
   {
    "ply": 23,
@@ -833,14 +833,14 @@
     "O-O"
    ],
    "fen": "r1bqr1k1/p1p2pp1/2pp1n1p/2b5/4P2B/2N5/PPP1BPPP/R2Q1RK1 b - - 5 12",
-   "said": "serious weakness here and i think that had he known that he would have played bishop d3 which sort of supports the pawn so we go h6 we go rookie we go d6 we go rookie a we make all the typical moves and bishop f3"
+   "said": "rookie a we make all the typical moves"
   },
   {
    "ply": 21,
    "t": 821.5,
    "line": [],
    "fen": "r1bq1rk1/p1p2pp1/2pp1n1p/2b5/4P2B/2N5/PPP1BPPP/R2QK2R b KQ - 3 11",
-   "said": "and i think that had he known that he would have played bishop d3 which sort of supports the pawn so we go h6 we go rookie we go d6 we go rookie a we make all the typical moves and bishop f3"
+   "said": "and bishop f3"
   },
   {
    "ply": 23,
@@ -850,21 +850,21 @@
     "O-O"
    ],
    "fen": "r1bqr1k1/p1p2pp1/2pp1n1p/2b5/4P2B/2N5/PPP1BPPP/R2Q1RK1 b - - 5 12",
-   "said": "had he known that he would have played bishop d3 which sort of supports the pawn so we go h6 we go rookie we go d6 we go rookie a we make all the typical moves and bishop f3 is probably a mistake assuming"
+   "said": "is probably a mistake assuming"
   },
   {
    "ply": 21,
    "t": 824,
    "line": [],
    "fen": "r1bq1rk1/p1p2pp1/2pp1n1p/2b5/4P2B/2N5/PPP1BPPP/R2QK2R b KQ - 3 11",
-   "said": "bishop d3 which sort of supports the pawn so we go h6 we go rookie we go d6 we go rookie a we make all the typical moves and bishop f3 is probably a mistake assuming that this is objectively sound and i think it is objectively sound what about h6 e5"
+   "said": "that this is objectively sound and i think it is objectively sound"
   },
   {
    "ply": 15,
    "t": 834.5,
    "line": [],
    "fen": "r1bqk2r/p1pp1ppp/2p2n2/2b5/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 3 8",
-   "said": "is probably a mistake assuming that this is objectively sound and i think it is objectively sound what about h6 e5 well h6e5 just loses the pawn takes takes takes we just went upon like at the end of the day 85 is never dangerous"
+   "said": "what about h6 e5 well h6e5 just loses the pawn takes takes takes"
   },
   {
    "ply": 19,
@@ -876,7 +876,7 @@
     "Be2"
    ],
    "fen": "r1bq1rk1/p1pp1pp1/2p2n1p/2b3B1/4P3/2N5/PPP1BPPP/R2QK2R b KQ - 3 10",
-   "said": "what about h6 e5 well h6e5 just loses the pawn takes takes takes we just went upon like at the end of the day 85 is never dangerous so how should white have played here i"
+   "said": "we just went upon like at the end of the day 85 is never dangerous"
   },
   {
    "ply": 23,
@@ -888,7 +888,7 @@
     "O-O"
    ],
    "fen": "r1bqr1k1/p1p2pp1/2pp1n1p/2b5/4P2B/2N5/PPP1BPPP/R2Q1RK1 b - - 1 12",
-   "said": "well h6e5 just loses the pawn takes takes takes we just went upon like at the end of the day 85 is never dangerous so how should white have played here i don't actually know i mean at this point white is a very hard time keeping this pawn what is a very hard time keeping this one maybe a move like king h1 would be best you know this is a grand master move your bishop d3 i mean king h1 is interesting because after g5 bishop g394 the idea is to win back the pawn with bishop f3 although here there's rook d4 attacking the queen so this all looks pretty nasty min suggest bishop d3 kind of"
+   "said": "so how should white have played here i don't actually know i mean at this point white is a very hard time keeping this pawn what is a very hard time keeping this one maybe a move like king h1 would be best you know this is a grand master move your bishop d3 i mean king h1 is interesting because after g5 bishop g394"
   },
   {
    "ply": 24,
@@ -904,7 +904,7 @@
    "t": 873,
    "line": [],
    "fen": "r1bqr1k1/p1p2pp1/2pp1n1p/2b5/4P2B/2N5/PPP1BPPP/R2Q1RK1 b - - 1 12",
-   "said": "is to win back the pawn with bishop f3 although here there's rook d4 attacking the queen so this all looks pretty nasty min suggest bishop d3 kind of apologizing for playing bishop e2 initially and this is actually transposed into a line that has 10 games in the database"
+   "said": "playing bishop e2 initially and this is actually transposed into a line that has"
   },
   {
    "ply": 25,
@@ -914,7 +914,7 @@
     "Bd3"
    ],
    "fen": "r1bqr1k1/p1p2pp1/2pp1n1p/8/1b2P2B/2NB4/PPP2PPP/R2Q1RK1 b - - 3 13",
-   "said": "suggest bishop d3 kind of apologizing for playing bishop e2 initially and this is actually transposed into a line that has 10 games in the database bishop b4 f4 i think this might even be sevi and caruana from the us championship so bishop d3 was best"
+   "said": "10 games in the database bishop b4 f4 i think this might even be sevi and caruana from the us"
   },
   {
    "ply": 27,
@@ -924,7 +924,7 @@
     "Be2"
    ],
    "fen": "r1bqr1k1/p1p2pp1/2pp1n1p/2b5/4P2B/2N5/PPP1BPPP/R2Q1RK1 b - - 5 14",
-   "said": "actually transposed into a line that has 10 games in the database bishop b4 f4 i think this might even be sevi and caruana from the us championship so bishop d3 was best um"
+   "said": "championship so bishop d3 was best"
   },
   {
    "ply": 29,
@@ -934,7 +934,7 @@
     "Bf3"
    ],
    "fen": "r1bqr1k1/p1p2p2/2pp1n1p/2b3p1/4P2B/2N2B2/PPP2PPP/R2Q1RK1 b - - 1 15",
-   "said": "10 games in the database bishop b4 f4 i think this might even be sevi and caruana from the us championship so bishop d3 was best um of course lol back to pushing all the pawns in"
+   "said": "um of course"
   },
   {
    "ply": 31,
@@ -944,14 +944,14 @@
     "Bg3"
    ],
    "fen": "r1bqr1k1/p1p2p2/2pp1n1p/2b5/4P1p1/2N2BB1/PPP2PPP/R2Q1RK1 b - - 1 16",
-   "said": "10 games in the database bishop b4 f4 i think this might even be sevi and caruana from the us championship so bishop d3 was best um of course lol back to pushing all the pawns in front of my king after this game so e5 is sort of sort of"
+   "said": "lol back to pushing all the pawns in front of my king after this game so e5"
   },
   {
    "ply": 25,
    "t": 894,
    "line": [],
    "fen": "r1bqr1k1/p1p2pp1/2pp1n1p/8/1b2P2B/2NB4/PPP2PPP/R2Q1RK1 b - - 3 13",
-   "said": "sevi and caruana from the us championship so bishop d3 was best um of course lol back to pushing all the pawns in front of my king after this game so e5 is sort of sort of uh makes our job easy bishop e2 we play knight takes d4 yeah and like this position is a classic situation where yeah we pushed all these pawns in front of our king but how is white actually going to to to exploit that right i ask this question so often in lessons when i have like a student says oh i don't like this because of x y and z um okay but how is white going to attack like give me a move right now you might say okay bishop d3 big whoop you just come back with your rook then you can move your queen into g5 and if anything black can be the one to attack on the king's side you're going to go h5 h4 and this bishop is going to be in trouble the white bishop belongs on d3 like that is our one of our opponent's main mistakes is not to put it there um does that make sense like queen d2 you can even go queen g5 here okay i guess i guess bishop f4 is quite annoying but"
+   "said": "is sort of sort of uh makes our job easy bishop e2 we play knight takes d4 yeah and like this position is a classic situation where yeah we pushed all these pawns in front of our king but how is white actually going to to to exploit that right i ask this question so often in lessons when i have like a student says oh i don't like this because of x y and z um okay but how is white going to attack like give me a move right now you might say okay bishop d3 big whoop you just come back with your rook then you can move your queen into g5 and if anything black can be the one to attack on the king's side you're going to go h5 h4 and this bishop is going to be in trouble the white bishop belongs on d3 like that is our one of our opponent's main mistakes is not to put it there um does that make sense like queen d2 you can even go queen g5 here okay i guess i guess bishop f4 is quite annoying but"
   }
  ],
  "forks": [

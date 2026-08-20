@@ -571,5 +571,32 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Caro-Kann Defense: Exchange Variation",
+   "eco": "B13",
+   "plies": 5,
+   "line": "e4 c6 d4 d5 exd5",
+   "coverage": 0.943
+  },
+  {
+   "name": "Caro-Kann Defense",
+   "eco": "B10",
+   "plies": 2,
+   "line": "e4 c6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Caro-Kann Defense: Exchange Variation",
+  "confirmed": true
+ }
 }

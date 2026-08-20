@@ -112,4 +112,14 @@ for id in "${ids[@]}"; do
   fi
   rm -f "$GRIDS/$id.grids.json"
 done
+# BANKING A TRACK IS NOT FINISHING IT. `build.mjs` writes the moves; the opening
+# resolution and the TITLE CHECK come from map-openings, and until it runs the
+# bank holds tracks with no `openings` and no `titleCheck` at all. That matters
+# more than tidiness: the title check is what catches a MISTRACKED build (titled
+# a Scotch, tracked a Jobava), and CLAUDE.md forbids writing notes over one. A
+# session that banked 34 lessons and stopped here left every one of them
+# indistinguishable from a verified track.
+echo "--- resolving openings + title checks for the bank ---"
+VIDEO_TRACK_DIR=data/video-pending node scripts/video-align/map-openings.mjs --write \
+  | tail -1 || echo "map-openings FAILED — the bank has tracks with no titleCheck"
 echo "=== HARVEST-LOCAL DONE ==="

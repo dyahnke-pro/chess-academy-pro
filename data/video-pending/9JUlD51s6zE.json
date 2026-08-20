@@ -283,5 +283,74 @@
    "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "King's Indian Defense: Sämisch Variation, Bobotsov-Korchnoi-Petrosian Variation",
+   "eco": "E81",
+   "plies": 11,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Nge2",
+   "coverage": 0.7
+  },
+  {
+   "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+   "eco": "E81",
+   "plies": 10,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O",
+   "coverage": 0.733
+  },
+  {
+   "name": "King's Indian Defense: Sämisch Variation",
+   "eco": "E80",
+   "plies": 9,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3",
+   "coverage": 0.767
+  },
+  {
+   "name": "King's Indian Defense: Normal Variation",
+   "eco": "E70",
+   "plies": 7,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4",
+   "coverage": 0.833
+  },
+  {
+   "name": "King's Indian Defense",
+   "eco": "E61",
+   "plies": 5,
+   "line": "d4 Nf6 c4 g6 Nc3",
+   "coverage": 0.9
+  },
+  {
+   "name": "Indian Defense: West Indian Defense",
+   "eco": "E60",
+   "plies": 4,
+   "line": "d4 Nf6 c4 g6",
+   "coverage": 0.933
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.967
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "King's Indian Defense",
+  "confirmed": true
+ }
 }

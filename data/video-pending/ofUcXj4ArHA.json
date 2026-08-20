@@ -401,5 +401,67 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Scotch Game: Scotch Gambit, Advance Variation",
+   "eco": "C44",
+   "plies": 9,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 e5",
+   "coverage": 0.838
+  },
+  {
+   "name": "Scotch Game: Scotch Gambit, Dubois Réti Defense",
+   "eco": "C44",
+   "plies": 8,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4",
+   "coverage": 0.865
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Open Variation",
+   "eco": "C56",
+   "plies": 7,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4",
+   "coverage": 0.892
+  },
+  {
+   "name": "Italian Game: Two Knights Defense",
+   "eco": "C55",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6",
+   "coverage": 0.919
+  },
+  {
+   "name": "Italian Game",
+   "eco": "C50",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Bc4",
+   "coverage": 0.946
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.973
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.973
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Scotch Game: Scotch Gambit, Advance Variation",
+  "confirmed": true
+ }
 }

@@ -2980,6 +2980,52 @@ FEN is an unrelated mid-game board. It is a computed discriminator, not a check
 on the record's shape, and it is what lets a gem fork out of a lesson and snap
 back. Measured after wiring: 105 of 376 taught lines now fire a gem.
 
+### 🔒🔒 SESSION LESSONS — 2026-08-20 (the four defects a "green" harvest was hiding)
+
+Every one of these passed its own tests and looked finished. They are recorded
+because each was invisible from the thing the session was watching.
+
+**A MACHINE PASS NEVER OVERWRITES A HAND VERDICT.** `map-openings --write`
+replaced the Benko's hand-written `mistracked` verdict ("No notes written") with
+an automated `confirmed: true` — inverting a human judgement into permission to
+write notes over a bad track. A guard already existed and was subtly wrong: it
+kept a prior verdict only when `prior.claims === titleCheck.claims`, and a HAND
+record is written as `{verdict, checkedBy}` with no `claims` field, so
+`undefined === "Benko Gambit"` was false and the judgement was discarded. It now
+preserves ANY standing verdict and reports a machine disagreement in
+`machineClaims` rather than overwriting. When you add a guard, check it against
+the record a HUMAN writes, not only the one the script writes.
+
+**BUMP `WALKTHROUGH_GEN_REV` IN THE SAME COMMIT THAT CHANGES WHAT A BEAT SAYS.**
+Commit 939c45a shipped hand-written opening-tab beats into walkthroughs and left
+the rev alone, so every device holding a tree stamped with the old rev would have
+served the old prose forever — the feature invisible in production while its
+unit tests passed, because those call `lessonBeatAt` directly and never touch the
+cache. That is the THIRD time this exact failure is recorded in this file, and
+the paragraph arguing for it sits directly above the constant. A narration change
+whose tests bypass the cache cannot be verified by those tests.
+
+**A PAIRING WINDOW MUST PARTITION THE TIMELINE, NOT OVERLAP IT.**
+`pair-narration`'s 12s lead-in assumed the teacher pauses that long between
+moves; the measured median gap across the bank is SIX seconds. So the lead-in
+reached back past the previous position 67% of the time, 60% of positions
+repeated half the previous position's words, and 5.6% were ≥90% duplicates —
+re-running the corpus's original disease (teaching spoken at one position handed
+over as though it described another) inside the artifact built to prevent it.
+The lead-in is now a CEILING on half the gap, so windows are disjoint: duplication
+went to zero, coverage held at 95.8%, and the 36% of "words" that vanished were
+never new words at all. **A word count is not a coverage measure when windows
+can overlap.**
+
+**BANKING A TRACK IS NOT FINISHING IT.** `build.mjs` writes the moves;
+`map-openings` writes the `openings` resolution AND the `titleCheck`. Banking 34
+lessons without it left every one indistinguishable from a verified track — and
+the title check immediately caught two genuine mistracks (titled a Scotch,
+tracked a Jobava; titled an Alapin, tracked a Slav). `harvest-local.sh` now runs
+it after the sweep. Note that a track whose title names no opening gets NO
+verdict at all, which currently looks identical to never having been checked;
+treat an absent `titleCheck` as unverified, never as passed.
+
 ### 🔒🔒 A NOTE IS WRITTEN FROM THE CAPTIONS — NO TRANSCRIPT, NO NOTE (David 2026-08-20: *"make sure to be getting the narrations from the captions"*, then *"recheck all of your work from this session to make sure you didnt miss any other captions"*)
 
 The board tells you what is TRUE at a position. The transcript tells you which

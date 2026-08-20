@@ -116,5 +116,39 @@
    "fen": "r1b1k2r/pp2bppp/2n1pn2/2qp4/5B2/P1N1PN2/1PPQ1PPP/R3KB1R w KQkq - 6 11"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Rapport-Jobava System",
+   "eco": "D01",
+   "plies": 5,
+   "line": "d4 Nf6 Nc3 d5 Bf4",
+   "coverage": 0.818
+  },
+  {
+   "name": "Queen's Pawn Game: Chigorin Variation",
+   "eco": "A45",
+   "plies": 4,
+   "line": "d4 Nf6 Nc3 d5",
+   "coverage": 0.909
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Scotch Game",
+  "confirmed": false
+ }
 }

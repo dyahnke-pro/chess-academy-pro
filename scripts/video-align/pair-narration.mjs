@@ -42,7 +42,16 @@ const TRANSCRIPTS = 'data/video-transcripts';
 const OUT_DIR = 'data/video-narration';
 
 /** A lead-in, in seconds, before the position settles. The move's REASON is
- *  typically spoken while the teacher reaches for the piece. */
+ *  typically spoken while the teacher reaches for the piece.
+ *
+ *  IT IS A CEILING, NOT A FIXED REACH-BACK — see `windows()`. A flat 12s
+ *  assumed the teacher pauses that long between moves. Measured across the
+ *  whole bank the median gap between settled positions is SIX seconds, so the
+ *  lead-in reached back past the previous position 67% of the time: 60% of
+ *  positions repeated at least half the previous position's words and 5.6%
+ *  were ≥90% duplicates. That silently re-runs the corpus's original disease
+ *  in a new place — teaching spoken at one position handed to a writer as
+ *  though it described another. */
 const LEAD_IN = 12;
 /** How long to keep listening past a move when it is the last one tracked. */
 const TAIL = 60;
@@ -94,19 +103,38 @@ const said = (cues, from, to) =>
  *  it. Forks carry their own timestamps and are paired the same way — a fork
  *  option's words are the teacher explaining that specific alternative, which
  *  is exactly the "other lines" content the forks exist to capture. */
+/** Window boundaries that PARTITION the timeline — every second of speech is
+ *  owned by exactly one position, so a writer reading a position's words is
+ *  never reading the previous move's teaching.
+ *
+ *  The lead-in splits each gap rather than reaching back a fixed distance:
+ *  `min(LEAD_IN, gap / 2)`. Where the teacher lingers the full 12s still
+ *  applies, which is where it was wanted; where moves come fast each position
+ *  keeps the words spoken over it and cedes only the run-up to the next. Half
+ *  the gap, not all of it, because handing the whole gap forward starves the
+ *  position the words were actually spoken over. */
+function windows(moves) {
+  const starts = moves.map((m, i) => {
+    if (i === 0) return m.t - LEAD_IN;
+    const gap = m.t - moves[i - 1].t;
+    return m.t - Math.min(LEAD_IN, Math.max(gap / 2, 0));
+  });
+  return moves.map((m, i) => ({
+    from: starts[i],
+    to: i + 1 < moves.length ? starts[i + 1] : m.t + TAIL,
+  }));
+}
+
 export function pairTrack(track, cues) {
   const moves = [...track.moves].sort((a, b) => a.t - b.t);
-  const paired = moves.map((m, i) => {
-    const next = moves[i + 1];
-    const to = next ? next.t : m.t + TAIL;
-    return {
-      ply: m.ply,
-      t: m.t,
-      line: m.line,
-      fen: m.fen,
-      said: said(cues, m.t - LEAD_IN, to),
-    };
-  });
+  const win = windows(moves);
+  const paired = moves.map((m, i) => ({
+    ply: m.ply,
+    t: m.t,
+    line: m.line,
+    fen: m.fen,
+    said: said(cues, win[i].from, win[i].to),
+  }));
 
   const forks = (track.forks ?? []).map((f) => ({
     ply: f.ply,

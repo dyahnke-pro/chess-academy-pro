@@ -547,5 +547,28 @@
     }
    ]
   }
+ ],
+ "openings": [
+  {
+   "name": "Fried Fox Defense",
+   "eco": "B00",
+   "plies": 4,
+   "line": "e4 f6 d4 Kf7",
+   "coverage": 0.957
+  },
+  {
+   "name": "Barnes Defense",
+   "eco": "B00",
+   "plies": 2,
+   "line": "e4 f6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
  ]
 }

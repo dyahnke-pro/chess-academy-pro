@@ -333,5 +333,39 @@
    "fen": "3rkb1r/p2q1ppp/Pp2p3/2pnP3/6Q1/N1P5/1P3PPP/R1B2RK1 w k - 5 18"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Alapin Variation, Stoltz Attack",
+   "eco": "B22",
+   "plies": 11,
+   "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3",
+   "coverage": 0.719
+  },
+  {
+   "name": "Sicilian Defense: Alapin Variation",
+   "eco": "B22",
+   "plies": 3,
+   "line": "e4 c5 c3",
+   "coverage": 0.969
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Alapin Variation, Stoltz Attack",
+  "confirmed": true
+ }
 }

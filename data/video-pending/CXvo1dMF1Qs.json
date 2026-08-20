@@ -453,7 +453,88 @@
   }
  ],
  "titleCheck": {
+  "claims": "Benko Gambit",
+  "confirmed": true,
   "verdict": "mistracked",
   "checkedBy": "hand 2026-08-20 — mistracked — titled a Benko; the default geometry tracked a knight retreating to g1 on move five, and a hand re-read at 374,0,60 tracked a different game entirely (d4 Nf6 Nf3 g6 g3 Bg7 Bg2). The Benko section needs a per-section geometry read. No notes written."
- }
+ },
+ "openings": [
+  {
+   "name": "Benko Gambit Accepted: King Walk Variation",
+   "eco": "A59",
+   "plies": 27,
+   "line": "d4 Nf6 c4 c5 Nf3 b6 d5 b5 Ng1 a6 cxb5 g6 bxa6 Bxa6 Nc3 Ne4 e3 Nf6 e4 Bxf1 Kxf1 d6 Nf3 Bg7 g3 O-O Kg2",
+   "coverage": 0.029
+  },
+  {
+   "name": "Benko Gambit Declined: Quiet Line",
+   "eco": "A57",
+   "plies": 7,
+   "line": "d4 Nf6 c4 c5 d5 b5 Nd2",
+   "coverage": 0.4
+  },
+  {
+   "name": "Benko Gambit",
+   "eco": "A57",
+   "plies": 6,
+   "line": "d4 Nf6 c4 c5 d5 b5",
+   "coverage": 0.429
+  },
+  {
+   "name": "English Opening: Symmetrical Variation, Anti-Benoni Variation",
+   "eco": "A31",
+   "plies": 5,
+   "line": "d4 Nf6 c4 c5 Nf3",
+   "coverage": 0.371
+  },
+  {
+   "name": "Indian Defense: Przepiorka Variation",
+   "eco": "A49",
+   "plies": 5,
+   "line": "d4 Nf6 Nf3 g6 g3",
+   "coverage": 0.029
+  },
+  {
+   "name": "Benoni Defense",
+   "eco": "A56",
+   "plies": 4,
+   "line": "d4 Nf6 c4 c5",
+   "coverage": 0.886
+  },
+  {
+   "name": "East Indian Defense",
+   "eco": "A48",
+   "plies": 4,
+   "line": "d4 Nf6 Nf3 g6",
+   "coverage": 0.029
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.914
+  },
+  {
+   "name": "Indian Defense: Knights Variation",
+   "eco": "A46",
+   "plies": 3,
+   "line": "d4 Nf6 Nf3",
+   "coverage": 0.057
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ]
 }

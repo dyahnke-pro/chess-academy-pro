@@ -1028,5 +1028,60 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Four Knights Game: Scotch Variation Accepted",
+   "eco": "C47",
+   "plies": 8,
+   "line": "e4 e5 Nc3 Nf6 Nf3 Nc6 d4 exd4",
+   "coverage": 0.928
+  },
+  {
+   "name": "Four Knights Game: Scotch Variation",
+   "eco": "C47",
+   "plies": 7,
+   "line": "e4 e5 Nc3 Nf6 Nf3 Nc6 d4",
+   "coverage": 0.94
+  },
+  {
+   "name": "Four Knights Game",
+   "eco": "C47",
+   "plies": 6,
+   "line": "e4 e5 Nc3 Nf6 Nf3 Nc6",
+   "coverage": 0.952
+  },
+  {
+   "name": "Petrov's Defense: Three Knights Game",
+   "eco": "C42",
+   "plies": 5,
+   "line": "e4 e5 Nc3 Nf6 Nf3",
+   "coverage": 0.964
+  },
+  {
+   "name": "Vienna Game: Falkbeer Variation",
+   "eco": "C26",
+   "plies": 4,
+   "line": "e4 e5 Nc3 Nf6",
+   "coverage": 0.976
+  },
+  {
+   "name": "Vienna Game",
+   "eco": "C25",
+   "plies": 3,
+   "line": "e4 e5 Nc3",
+   "coverage": 0.988
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Four Knights Game: Scotch Variation",
+  "confirmed": true
+ }
 }

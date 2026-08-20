@@ -19,14 +19,14 @@
     "Nf3"
    ],
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
-   "said": "[Music] okay so e4 um we play e5 on the speed run uh right now i'm playing kind of the most basic openings and in chess the most basic openings are the ones where"
+   "said": "uh right now i'm playing kind of the"
   },
   {
    "ply": 2,
    "t": 27.5,
    "line": [],
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "said": "okay so e4 um we play e5 on the speed run uh right now i'm playing kind of the most basic openings and in chess the most basic openings are the ones where you essentially copy your opponent's move e4 e5 or d4 d5 knight f3"
+   "said": "most basic openings and in chess the most basic openings are the ones where you essentially copy your opponent's move e4 e5 or d4 d5"
   },
   {
    "ply": 3,
@@ -35,7 +35,7 @@
     "Nf3"
    ],
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
-   "said": "uh right now i'm playing kind of the most basic openings and in chess the most basic openings are the ones where you essentially copy your opponent's move e4 e5 or d4 d5 knight f3 okay so we of course play knight c6 and"
+   "said": "knight f3 okay so we of course play knight c6 and"
   },
   {
    "ply": 4,
@@ -44,7 +44,7 @@
     "Nc6"
    ],
    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
-   "said": "most basic openings and in chess the most basic openings are the ones where you essentially copy your opponent's move e4 e5 or d4 d5 knight f3 okay so we of course play knight c6 and"
+   "said": ""
   },
   {
    "ply": 5,
@@ -53,7 +53,7 @@
     "Bb5"
    ],
    "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
-   "said": "most basic openings are the ones where you essentially copy your opponent's move e4 e5 or d4 d5 knight f3 okay so we of course play knight c6 and bishop b5 this is the roy lopez also known as the spanish game this move right here is the most popular opening at the highest levels of chess it's been around for over 500 years in fact it's named after a priest who lived in the 1500s who was really the first not the first to mention this opening in chess literature but the first to sort of extol the virtues of bishop e5 now those of you new to chess what white is doing here is developing their pieces in the opening stage of the game you have to get your pieces out of their initial positions and put them on squares where they are essentially doing something as to what that something is well there's a lot of things that pieces could be doing they could be attacking uh the king which is ultimately the goal of chess but they they could be doing a bunch of other stuff that like putting pressure on pawns and that is what this bishop is doing it's putting pressure on the knight the knight is defending the pawn and so in a indirect way white is putting pressure on the pawn now we are going to follow the main line of the roy lopez we are going to play the move a6 to chase the bishop away from b5 now white has to decide is he going to"
+   "said": "bishop b5 this is the roy lopez also known as the spanish game this move right here is the most popular opening at the highest levels of chess it's been around for over 500 years in fact it's named after a priest who lived in the 1500s who was really the first not the first to mention this opening in chess literature but the first to sort of extol the virtues of bishop e5 now those of you new to chess what white is doing here is developing their pieces in the opening stage of the game you have to get your pieces out of their initial positions and put them on squares where they are essentially doing something as to what that something is well there's a lot of things that pieces could be doing they could be attacking uh the king which is ultimately the goal of chess but they they could be doing a bunch of other stuff that like putting pressure on pawns and that is what this bishop is doing it's putting pressure on the knight the knight is defending the pawn and so in a indirect way white is putting pressure on the pawn now we are"
   },
   {
    "ply": 6,
@@ -62,7 +62,7 @@
     "a6"
    ],
    "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
-   "said": "going to follow the main line of the roy lopez we are going to play the move a6 to chase the bishop away from b5 now white has to decide is he going to take on c6 or is he going to drop the bishop back to a4 bishop takes c6 is called the exchange variation and those of you from charlie's channel who are you know new to chess you might be wondering wait a second what happens if white takes the knight we take back and then white grabs this pawn with his knight right aren't we blundering upon well as i've showed before this is actually a trap and a lot of"
+   "said": "going to follow the main line of the roy lopez we are going to play the move a6 to chase the bishop away from b5 now white has to decide is he going to take on c6 or is he going to drop the bishop back to a4 bishop takes c6 is called the exchange variation and those of you from charlie's channel who are you know new to chess you might be wondering wait a second what happens if white takes the"
   },
   {
    "ply": 7,
@@ -71,7 +71,7 @@
     "Bxc6"
    ],
    "fen": "r1bqkbnr/1ppp1ppp/p1B5/4p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 4",
-   "said": "knight we take back and then white grabs this pawn with his knight right aren't we blundering upon well as i've showed before this is actually a trap and a lot of beginner players aren't aware of it he does take on c6 which is a legitimate move but let's say let's see if white follows up by taking this pawn on e5 so which pawn do we take with yeah queen d4 very good which pawn do we take with here well in order for us to be able to play queen d4 in order for us to be able to move this queen out to d4"
+   "said": "knight we take back and then white grabs this pawn with his knight right aren't we blundering upon well as i've showed before this is actually a trap and a lot of beginner players aren't aware of it he does take on c6 which is a legitimate move but let's say let's see if white follows up by taking this pawn on e5 so which pawn do we take with"
   },
   {
    "ply": 8,
@@ -80,14 +80,14 @@
     "dxc6"
    ],
    "fen": "r1bqkbnr/1pp2ppp/p1p5/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
-   "said": "yeah queen d4 very good which pawn do we take with here well in order for us to be able to play queen d4 in order for us to be able to move this queen out to d4 we have to take with the d-pawn now there is a rule that you should usually take toward the center i think that rule is highly overrated but you're often taught that when you recapture a piece with a pawn you want to do it in the direction of the center which would be b take c6 but um you always have to weigh the pros and"
+   "said": "yeah queen d4 very good which pawn do we take with here well in order for us to be able to play queen d4 in order for us to be able to move this queen out to d4 we have to take with the d-pawn now there is a rule that you should usually take toward the center i think that rule is highly overrated but you're often taught that when you recapture a piece"
   },
   {
    "ply": 7,
    "t": 178.5,
    "line": [],
    "fen": "r1bqkbnr/1ppp1ppp/p1B5/4p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 4",
-   "said": "is highly overrated but you're often taught that when you recapture a piece with a pawn you want to do it in the direction of the center which would be b take c6 but um you always have to weigh the pros and cons of a move even if a move quote unquote follows the rules that doesn't mean it's necessarily good what d take"
+   "said": "with a pawn you want to do it in the direction of the center which would be b take c6 but um you always have to weigh the pros and cons of a move even if a move quote unquote follows the rules that doesn't"
   },
   {
    "ply": 8,
@@ -96,7 +96,7 @@
     "dxc6"
    ],
    "fen": "r1bqkbnr/1pp2ppp/p1p5/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
-   "said": "direction of the center which would be b take c6 but um you always have to weigh the pros and cons of a move even if a move quote unquote follows the rules that doesn't mean it's necessarily good what d take c6 does is that it opens up the bishop which allows us to more quickly develop that bishop to an active square and more importantly it takes the sting out of knight takes c5 because we bring our queen up to d4 and as i'll show after the game and again those of you new to the speedrun after the game i basically go through all of the moves i answer everybody's questions and i talk about some of the important things that didn't happen because i don't expect everybody to just visualize stuff in your head and to our"
+   "said": "mean it's necessarily good what d take c6 does is that it opens up the bishop which allows us to more quickly develop that bishop to an active square and more importantly it takes the sting out of knight takes c5 because we bring our queen up to d4 and as i'll show after the game and again those of you new to the speedrun after the game i basically go"
   },
   {
    "ply": 9,
@@ -105,7 +105,7 @@
     "O-O"
    ],
    "fen": "r1bqkbnr/1pp2ppp/p1p5/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 5",
-   "said": "through all of the moves i answer everybody's questions and i talk about some of the important things that didn't happen because i don't expect everybody to just visualize stuff in your head and to our opponent's credit he knows not to take the ponte castles he castles and now of course we have to do something about the e5 pawn which is now hanging knight takes e5 is now a threat we have to defend the spawn we have many ways of defending it many many different ways we can defend it directly with a move like f6 or bishop d6 and we can also defend it indirectly with uh the move bishop to g4 pinning the knight to the queen all of these are legitimate moves that i am going to play the move that really is the old main line this is the the move that throughout chess history has been considered to be the most solid response to the exchange variation of the rue lopez and that is the move f6 and i know never play f6 this violates"
+   "said": "through all of the moves i answer everybody's questions and i talk about some of the important things that didn't happen because i don't expect everybody to just visualize stuff in your head and to our opponent's credit he knows not to take the ponte castles he castles and now of course we have to do something about the e5 pawn which is now hanging knight takes e5 is now a threat we have to defend the spawn we have many ways of defending it many many different ways we can defend it directly with a move like f6 or bishop d6 and we can also defend it indirectly with uh the move bishop to g4 pinning the knight to the queen all of these are legitimate moves that i am going to play the move that really is the old main line this is the"
   },
   {
    "ply": 10,
@@ -114,7 +114,7 @@
     "f6"
    ],
    "fen": "r1bqkbnr/1pp3pp/p1p2p2/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 6",
-   "said": "the move that throughout chess history has been considered to be the most solid response to the exchange variation of the rue lopez and that is the move f6 and i know never play f6 this violates the sort of very basic rules of chess development because not only does you know it's ben feingold cringing"
+   "said": "the move that throughout chess history has been considered to be the most solid response to the exchange variation of the rue lopez and that is the move f6 and i know never play f6 this violates the sort of very basic rules"
   },
   {
    "ply": 11,
@@ -123,14 +123,14 @@
     "d4"
    ],
    "fen": "r1bqkbnr/1pp3pp/p1p2p2/4p3/3PP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 6",
-   "said": "and i know never play f6 this violates the sort of very basic rules of chess development because not only does you know it's ben feingold cringing but also"
+   "said": "of chess development because not only does you know it's ben feingold cringing but also"
   },
   {
    "ply": 10,
    "t": 276,
    "line": [],
    "fen": "r1bqkbnr/1pp3pp/p1p2p2/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 6",
-   "said": "and i know never play f6 this violates the sort of very basic rules of chess development because not only does you know it's ben feingold cringing but also where is this night gonna go are we do we just not care about developing our knight well that's why i'm playing this move because i want to explain a couple"
+   "said": "where is this night gonna go are we do we just not care about developing our"
   },
   {
    "ply": 11,
@@ -139,7 +139,7 @@
     "d4"
    ],
    "fen": "r1bqkbnr/1pp3pp/p1p2p2/4p3/3PP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 6",
-   "said": "does you know it's ben feingold cringing but also where is this night gonna go are we do we just not care about developing our knight well that's why i'm playing this move because i want to explain a couple of specific properties of this position that make the move f6 not only possible but also quite effective now d4 is the correct move and this is an important moment this is an important moment if we take on d4 right we are essentially playing into white's hands because we're opening up the center and because we played this move f6 right and you should be understanding this even if you're a total beginner right when you play a move like f6 you are physically weakening the position of your king in addition we have not yet developed a single one of our pieces the piece that we did develop has been exchanged which means that it is quite important to keep the center as closed down as possible or better yet it would be very nice if we could trade queens because by trading queens you're making it less likely that your opponent is going to checkmate you so what should we do here who can tell me the best move for black and it's a move that i just mentioned a move ago now it's time for bishop g4 now we get our bishop out to g4"
+   "said": "knight well that's why i'm playing this move because i want to explain a couple of specific properties of this position that make the move f6 not only possible but also quite effective now d4 is the correct move and this is an important moment this is an important moment if we take on d4 right we are essentially playing into white's hands because we're opening up the center and because we played this move f6 right and you should be understanding this even if you're a total beginner right when you play a move like f6 you are physically weakening the position of your king in addition we have not yet developed a single one of our pieces the piece that we did develop has been exchanged which means that it is quite important to keep the center as closed down as possible or better yet it would be very nice if we could trade queens because by trading queens you're making it less likely that your opponent"
   },
   {
    "ply": 12,
@@ -148,7 +148,7 @@
     "Bg4"
    ],
    "fen": "r2qkbnr/1pp3pp/p1p2p2/4p3/3PP1b1/5N2/PPP2PPP/RNBQ1RK1 w kq - 1 7",
-   "said": "is going to checkmate you so what should we do here who can tell me the best move for black and it's a move that i just mentioned a move ago now it's time for bishop g4 now we get our bishop out to g4 the idea is that we pin the knight and when i say pin a pin is a situation where you have a p such as a bishop usually a bishop and the bishop pins the knight on f3"
+   "said": "is going to checkmate you so what should we do here who can tell me the best move for black and it's a move that i just mentioned a move ago now it's time for bishop g4 now we get our bishop out to g4 the idea is that we pin the knight and when i say pin a pin is a situation"
   },
   {
    "ply": 13,
@@ -157,14 +157,14 @@
     "c3"
    ],
    "fen": "r2qkbnr/1pp3pp/p1p2p2/4p3/3PP1b1/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 7",
-   "said": "the idea is that we pin the knight and when i say pin a pin is a situation where you have a p such as a bishop usually a bishop and the bishop pins the knight on f3 which means that the knight cannot move because behind the knight stands a more valuable piece okay c3 that is also a good move um had white taken on e5 we would have"
+   "said": "where you have a p such as a bishop usually a bishop and the bishop pins the knight on f3 which means that the knight cannot move because behind the knight stands a more valuable piece okay c3 that is also a"
   },
   {
    "ply": 12,
    "t": 366.5,
    "line": [],
    "fen": "r2qkbnr/1pp3pp/p1p2p2/4p3/3PP1b1/5N2/PPP2PPP/RNBQ1RK1 w kq - 1 7",
-   "said": "which means that the knight cannot move because behind the knight stands a more valuable piece okay c3 that is also a good move um had white taken on e5 we would have traded queens and then recaptured and i'll talk a little bit about this end game after the game the move c3"
+   "said": "good move um had white taken on e5 we would have traded queens and then recaptured and i'll talk a"
   },
   {
    "ply": 13,
@@ -173,7 +173,7 @@
     "c3"
    ],
    "fen": "r2qkbnr/1pp3pp/p1p2p2/4p3/3PP1b1/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 7",
-   "said": "good move um had white taken on e5 we would have traded queens and then recaptured and i'll talk a little bit about this end game after the game the move c3 reinforces reinforces the d4 pawn and now what we have to do with black is develop our pieces right again there's nothing extraordinary that we can do but we do have a really cool move here which i remember analyzing the main line this what most people play is bishop d6 what most people play is bishop d6 and that's what we're going to do as well because in the speed run we try to play"
+   "said": "little bit about this end game after the game the move c3 reinforces reinforces the d4 pawn and now what we have to do with black is develop our pieces right again there's nothing extraordinary that we can do but we do have a really cool move here which i remember analyzing the main"
   },
   {
    "ply": 14,
@@ -182,7 +182,7 @@
     "Bd6"
    ],
    "fen": "r2qk1nr/1pp3pp/p1pb1p2/4p3/3PP1b1/2P2N2/PP3PPP/RNBQ1RK1 w kq - 1 8",
-   "said": "line this what most people play is bishop d6 what most people play is bishop d6 and that's what we're going to do as well because in the speed run we try to play solid you know simple chess but bishop d6 is not the move that i actually play in my over the board games i will show the move that i play after the game all right thank you uh for the sub me on"
+   "said": "line this what most people play is bishop d6 what most people play is bishop d6 and that's what we're going to do as well because in the speed run we try to play solid you know simple chess but bishop d6 is not the move that i actually play in my over the board games i will show"
   },
   {
    "ply": 15,
@@ -191,7 +191,7 @@
     "Nbd2"
    ],
    "fen": "r2qk1nr/1pp3pp/p1pb1p2/4p3/3PP1b1/2P2N2/PP1N1PPP/R1BQ1RK1 b kq - 2 8",
-   "said": "solid you know simple chess but bishop d6 is not the move that i actually play in my over the board games i will show the move that i play after the game all right thank you uh for the sub me on the gravy knight bd2 all right so our opponent continues playing very well he could he continues to develop his pieces and we should continue to develop our pieces so what move am i talking about what does it mean for us to develop our pieces here well we need to develop the knight from g8 that's our last remaining piece that is preventing us from castling knight h6 looks pretty awkward you don't necess you don't usually want to develop your knights to the rim you want to develop your knights toward"
+   "said": "the move that i play after the game all right thank you uh for the sub me on the gravy knight bd2 all right so our opponent continues playing very well he could he continues to develop his pieces and we should continue to develop our pieces so what move am i talking about what does it mean for us to develop our"
   },
   {
    "ply": 16,
@@ -200,7 +200,7 @@
     "Ne7"
    ],
    "fen": "r2qk2r/1pp1n1pp/p1pb1p2/4p3/3PP1b1/2P2N2/PP1N1PPP/R1BQ1RK1 w kq - 3 9",
-   "said": "pieces here well we need to develop the knight from g8 that's our last remaining piece that is preventing us from castling knight h6 looks pretty awkward you don't necess you don't usually want to develop your knights to the rim you want to develop your knights toward the center and so we go 97. and so we go 97 yeah our opponent is playing all of the top theoretical moves"
+   "said": "pieces here well we need to develop the knight from g8 that's our last remaining piece that is preventing us from castling knight h6 looks pretty awkward you don't necess you don't usually want to develop your knights to the rim you want to develop your knights toward the center and so we go 97. and so we go 97 yeah our opponent is"
   },
   {
    "ply": 17,
@@ -209,7 +209,7 @@
     "h3"
    ],
    "fen": "r2qk2r/1pp1n1pp/p1pb1p2/4p3/3PP1b1/2P2N1P/PP1N1PP1/R1BQ1RK1 b kq - 0 9",
-   "said": "your knights to the rim you want to develop your knights toward the center and so we go 97. and so we go 97 yeah our opponent is playing all of the top theoretical moves um so we'll see at what point he deviates h3 now when you're a beginner uh there's often a temptation to trade pieces when you have the chance so a lot of people are thinking well we should take the knight on f3 but there's actually no need to take the knight on f3 because this bishop on g4 right i mentioned that it was pinning white's knight on f3 to the queen so this is a pretty valuable bishop and so we can simply drop our bishop back to h5"
+   "said": "playing all of the top theoretical moves um so we'll see at what point he deviates h3 now when you're a beginner uh there's often a temptation to trade pieces when you have the chance so a lot of people are thinking well we should take the knight on f3 but there's"
   },
   {
    "ply": 18,
@@ -218,7 +218,7 @@
     "Bh5"
    ],
    "fen": "r2qk2r/1pp1n1pp/p1pb1p2/4p2b/3PP3/2P2N1P/PP1N1PP1/R1BQ1RK1 w kq - 1 10",
-   "said": "actually no need to take the knight on f3 because this bishop on g4 right i mentioned that it was pinning white's knight on f3 to the queen so this is a pretty valuable bishop and so we can simply drop our bishop back to h5 preserving preserving the pin against the knight remember that retreating moves are never inherently bad just because they're retrieving moves sometimes they're good sometimes they're bad in this case it is perfectly acceptable to play bishop h5 now again as a beginner you might be looking at this and saying well wait a minute what if white plays pawn to g4"
+   "said": "actually no need to take the knight on f3 because this bishop on g4 right i mentioned that it was pinning white's knight on f3 to the queen so this is a pretty valuable bishop and so we can simply drop our bishop back to h5 preserving preserving the pin against the knight remember that retreating moves are never inherently bad just because they're retrieving moves"
   },
   {
    "ply": 19,
@@ -234,7 +234,7 @@
    "t": 502.5,
    "line": [],
    "fen": "r2qk2r/1pp1n1pp/p1pb1p2/4p2b/3PP3/2P2N1P/PP1N1PP1/R1BQ1RK1 w kq - 1 10",
-   "said": "bad in this case it is perfectly acceptable to play bishop h5 now again as a beginner you might be looking at this and saying well wait a minute what if white plays pawn to g4 what if white chases that bishop away well a move like g4 is a move where you push upon in front of your own king when you push pawns in front of your own king the king becomes more exposed and those pawns become easier to attack so g4 would be playing right into our hands"
+   "said": "well a move like g4 is a move where you push upon in front of your own king when you push pawns in front of your own king"
   },
   {
    "ply": 19,
@@ -243,7 +243,7 @@
     "dxe5"
    ],
    "fen": "r2qk2r/1pp1n1pp/p1pb1p2/4P2b/4P3/2P2N1P/PP1N1PP1/R1BQ1RK1 b kq - 0 10",
-   "said": "push upon in front of your own king when you push pawns in front of your own king the king becomes more exposed and those pawns become easier to attack so g4 would be playing right into our hands all right so"
+   "said": "the king becomes more exposed and those pawns become easier to attack so g4 would be playing right into our hands"
   },
   {
    "ply": 20,
@@ -252,7 +252,7 @@
     "fxe5"
    ],
    "fen": "r2qk2r/1pp1n1pp/p1pb4/4p2b/4P3/2P2N1P/PP1N1PP1/R1BQ1RK1 w kq - 0 11",
-   "said": "you push pawns in front of your own king the king becomes more exposed and those pawns become easier to attack so g4 would be playing right into our hands all right so d e we simply take back with the f one and i think here queen b3 is the theoretical move if i'm not mistaken i already don't know the theory here so um let's see what our opponent does"
+   "said": "all right so d e we simply take back with the f one and i think here queen b3 is"
   },
   {
    "ply": 21,
@@ -261,7 +261,7 @@
     "Nc4"
    ],
    "fen": "r2qk2r/1pp1n1pp/p1pb4/4p2b/2N1P3/2P2N1P/PP3PP1/R1BQ1RK1 b kq - 1 11",
-   "said": "and i think here queen b3 is the theoretical move if i'm not mistaken i already don't know the theory here so um let's see what our opponent does knight c4 is also very good all right well um let's figure out what to do in this position let's figure out what to do in this position the problem that i'm seeing is that oh there's no problem i think we just castle i think we just castle and we are not"
+   "said": "the theoretical move if i'm not mistaken i already don't know the theory here so um let's see what our opponent does knight c4 is also very good all right well um let's figure out what to do in this position"
   },
   {
    "ply": 22,
@@ -270,7 +270,7 @@
     "O-O"
    ],
    "fen": "r2q1rk1/1pp1n1pp/p1pb4/4p2b/2N1P3/2P2N1P/PP3PP1/R1BQ1RK1 w - - 2 12",
-   "said": "position let's figure out what to do in this position the problem that i'm seeing is that oh there's no problem i think we just castle i think we just castle and we are not blundering our bishop because our c7 pawn is guarding that bishop on d6 all right so far i think we're still following main line theory now what's happening here in this position what's going on well you might notice that by castling we're exerting more pressure on the rook on the knight on f3 and in fact we were still pitting that knight but queen b3 is a very powerful move what it does is that it sets up an x-ray against our king the second thing that it does is that it unpins the knight which means that the knight can now move without fear of losing white's queen now what is our top priority here well our priority is to get rid of this x-ray and x-ray leads to a discovered check in many cases white is threatening to take on d6 with the knight and that will be checked that's a devastating check so you might say well let's move our king"
+   "said": "let's figure out what to do in this position the problem that i'm seeing is that oh there's no problem i think we just castle i think we just castle and we are not blundering our bishop because our c7 pawn is guarding that bishop on d6 all right so far i think we're still following main line theory now what's happening here in this position what's going on well you might notice that by castling we're exerting more pressure on the rook on the knight on f3 and in fact we were still pitting that knight but queen b3 is a very powerful move what it does is that it sets up an x-ray against our king the second thing that it does is that it unpins the knight which means that the knight can now move without fear of losing white's queen now what is our top priority here well our priority is to get rid of this x-ray and x-ray leads to a discovered check in many cases white is threatening to take on d6 with the knight and that will be checked that's a devastating check so you might say well let's move our king"
   }
  ],
  "forks": []

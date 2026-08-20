@@ -932,5 +932,53 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Alapin Variation, Barmen Defense, Modern Line",
+   "eco": "B22",
+   "plies": 10,
+   "line": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 Bg4",
+   "coverage": 0.219
+  },
+  {
+   "name": "Sicilian Defense: Delayed Alapin Variation",
+   "eco": "B22",
+   "plies": 10,
+   "line": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6",
+   "coverage": 0.233
+  },
+  {
+   "name": "Sicilian Defense: Alapin Variation, Barmen Defense",
+   "eco": "B22",
+   "plies": 6,
+   "line": "e4 c5 c3 d5 exd5 Qxd5",
+   "coverage": 0.945
+  },
+  {
+   "name": "Sicilian Defense: Alapin Variation",
+   "eco": "B22",
+   "plies": 3,
+   "line": "e4 c5 c3",
+   "coverage": 0.986
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Alapin Variation",
+  "confirmed": true
+ }
 }

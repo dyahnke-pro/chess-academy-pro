@@ -10,7 +10,7 @@
     "c5"
    ],
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "said": "[Music] against a 1744 and obviously as is our custom we play E4 we'll dedicate this to chigoran for those watching on YouTube I um just spent a while going in a little chess history tangent and talking about Mikhail chiguran one of the top players of the 19th century world champion Contender one of the strongest tactical players of his day okay we're facing the Sicilian once again"
+   "said": "[Music] against a 1744 and obviously as is our custom we play E4 we'll dedicate this to chigoran for those watching on YouTube I um just spent a while going in a little chess history tangent and talking about Mikhail chiguran one of the top players"
   },
   {
    "ply": 3,
@@ -19,7 +19,7 @@
     "c3"
    ],
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
-   "said": "Mikhail chiguran one of the top players of the 19th century world champion Contender one of the strongest tactical players of his day okay we're facing the Sicilian once again we play the allopin and the Elephant by the way himself was probably top 20 in the world uh not"
+   "said": "of the 19th century world champion Contender one of the strongest tactical players of his day okay we're facing the Sicilian once again we play the allopin and the Elephant by"
   },
   {
    "ply": 4,
@@ -28,7 +28,7 @@
     "Nc6"
    ],
    "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 1 3",
-   "said": "Contender one of the strongest tactical players of his day okay we're facing the Sicilian once again we play the allopin and the Elephant by the way himself was probably top 20 in the world uh not close to a world champion but also lived in the same time I think as shigorn and steinitson was a contemporary and you know contributed tremendously to opening theory he was mostly an opening theoretician I think from Lithuania originally but also a strong player okay so Knight C6 is one of the most common responses to the elephant but it is already believe it or not a serious inaccuracy I wouldn't go so far as to call it a mistake if black follows up correctly then black can essentially turn this into a viable system but if black makes one more inaccuracy things can actually get disastrously bad within five six moves now our response to Knight C6 is obvious why do we play C3 well we play that to prepare D4 Knight C6 doesn't actually prevent D4 we have enough Defenders on that square so we"
+   "said": "the way himself was probably top 20 in the world uh not close to a world champion but also lived in the same time I think as shigorn and steinitson was a contemporary and you know contributed tremendously to opening theory he was mostly an opening theoretician I think from Lithuania originally but also a strong player okay so Knight C6 is one of the most common responses to the elephant but it is already believe it or not a serious inaccuracy I wouldn't go so far as to call it a mistake if black follows up correctly then black can essentially turn this into a viable system but if black makes one more inaccuracy things can actually get disastrously bad within"
   },
   {
    "ply": 5,
@@ -37,7 +37,7 @@
     "d4"
    ],
    "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
-   "said": "five six moves now our response to Knight C6 is obvious why do we play C3 well we play that to prepare D4 Knight C6 doesn't actually prevent D4 we have enough Defenders on that square so we start by grabbing control of the center and in short the reason that the Knight on C6 is often misplaced in these lines"
+   "said": "five six moves now our response to Knight C6 is obvious why do we play C3 well we play that to prepare D4 Knight C6 doesn't actually prevent D4 we have enough Defenders on that square so we start by grabbing control of the center"
   },
   {
    "ply": 6,
@@ -46,7 +46,7 @@
     "cxd4"
    ],
    "fen": "r1bqkbnr/pp1ppppp/2n5/8/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
-   "said": "well we play that to prepare D4 Knight C6 doesn't actually prevent D4 we have enough Defenders on that square so we start by grabbing control of the center and in short the reason that the Knight on C6 is often misplaced in these lines is is actually quite simple first of all"
+   "said": "and in short the reason that the Knight on C6 is often misplaced in these lines"
   },
   {
    "ply": 7,
@@ -55,7 +55,7 @@
     "cxd4"
    ],
    "fen": "r1bqkbnr/pp1ppppp/2n5/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
-   "said": "enough Defenders on that square so we start by grabbing control of the center and in short the reason that the Knight on C6 is often misplaced in these lines is is actually quite simple first of all we recapture it with a pawn we're essentially threatening to push the spawn down to D5 and without the support of a pawn shell this is why as I've explained before it's a bad idea to bring your pieces out without moving your pawns because then your pawns start tossing those pieces around and the pieces just don't have any footholds in the center and ultimately could even get trapped or driven back to their initial squares which could be a disaster given the extent of our central control so for instance after D5 I know it's black to move but just for the sake of illustration d595 right we follow up with F4 and there you kind of see that the Knight on E5 has to move all the way back to G6 and it's going to be tremendously hard for black and those resulting positions to get the other pieces out a big mistake here would be to play Knight F6 this would actually throw oil onto the fire because in that line after D5 95 F4 Knight G6 we actually play E5 and the only square that the Knight on F6 will have is to go back to G8 because both G4 and H5 are covered by White's Queen good example of quote unquote violating opening principles and moving only your pawns but here it's obviously Justified because we're tossing Black's pieces around we're playing with tempo so already a very dangerous situation for black I had an eight move game that I played when I was 1800 that I'll show quickly after this game in that game my opponent played E6 in this position the best move theoretically is D5 black needs to counter strike in the center but after D5 we get a very very theoretical continuation in which black and I once again lose and flame out in just a couple of moves so according to the engine D5 is strongest here but black needs to know exactly what to do in the resulting position to avoid getting you know smashed in the center and driven out of the gym yeah after D5 we take so in short we either play our own Pawn to D5 grabbing more control of the center and chasing the Knight away the second approach is just to develop our pieces Knight C3 and Knight F3 which uh is always a decent alternative and if black plays D5 then we will take on D5 and a common Instinct for players is of course to meet D5 with E5 but who can explain positionally and you know again if you're watching on YouTube something you can figure out why all our opponent is"
+   "said": "is is actually quite simple first of all we recapture it with a pawn we're essentially threatening to push the spawn down to D5 and without the support of a pawn shell this is why as I've explained before it's a bad idea to bring your pieces out without moving your pawns because then your pawns start tossing those pieces around and the pieces just don't have any footholds in the center and ultimately could even get trapped or driven back to their initial squares which could be a disaster given the extent of our central control so for instance after D5 I know it's black to move but just for the sake of illustration d595 right we follow up with F4 and there you kind of see that the Knight on E5 has to move all the way back to G6 and it's going to be tremendously hard for black and those resulting positions to get the other pieces out a big mistake here would be to play Knight F6 this would actually throw oil onto the fire because in that line after D5 95 F4 Knight G6 we actually play E5 and the only square that the Knight on F6 will have is to go back to G8 because both G4 and H5 are covered by White's Queen good example of quote unquote violating opening principles and moving only your pawns but here it's obviously Justified because we're tossing Black's pieces around we're playing with tempo so already a very dangerous situation for black I had an eight move game that I played when I was 1800 that I'll show quickly after this game in that game my opponent played E6 in this position the best move theoretically is D5 black needs to counter strike in the center but after D5 we get a very very theoretical continuation in which black and I once again lose and flame out in just a couple of moves so according to the engine D5 is strongest here but black needs to know exactly what to do in the resulting position to avoid getting you know smashed in the center and driven out of the gym yeah after D5 we take so in short we either play our own Pawn to D5 grabbing more control of the center and chasing the Knight away the second approach is just to develop our pieces Knight C3 and Knight F3 which uh is always a decent alternative and if black plays D5"
   },
   {
    "ply": 8,
@@ -64,7 +64,7 @@
     "d5"
    ],
    "fen": "r1bqkbnr/pp2pppp/2n5/3p4/3PP3/8/PP3PPP/RNBQKBNR w KQkq - 0 5",
-   "said": "then we will take on D5 and a common Instinct for players is of course to meet D5 with E5 but who can explain positionally and you know again if you're watching on YouTube something you can figure out why all our opponent is thinking okay D5 on the board very nice why is E5 not accurate here because you might especially if you play the advanced French you might say well this is just like an advanced French but there is a key difference in the French the black Pond is already on E6 so black has what we call the French Bishop the light squared Bishop which always experiences problems after E5 here black gets essentially a very very good French or a good Karo Khan getting the bishop out to F5 and only then locking up the center with E6 so you don't want to get into a French where you've let the light squared Bishop out that's an inferior version it's not losing for white or anything like that but it doesn't pose serious problems so long story short we take on"
+   "said": "then we will take on D5 and a common Instinct for players is of course to meet D5 with E5 but who can explain positionally and you know again if you're watching on YouTube something you can figure out why all our opponent is thinking okay D5 on the board very nice why is E5 not accurate here because you might especially if you play the advanced French you might say well this is just like an advanced French but there is a key difference in the French the black Pond is already on E6 so black has what we call the French Bishop the light squared Bishop which always experiences problems after E5 here black gets essentially a very very good French or a good Karo Khan getting the bishop out to F5 and only then locking up the center with E6 so"
   },
   {
    "ply": 9,
@@ -82,14 +82,14 @@
     "Qxd5"
    ],
    "fen": "r1b1kbnr/pp2pppp/2n5/3q4/3P4/8/PP3PPP/RNBQKBNR w KQkq - 0 6",
-   "said": "Bishop out that's an inferior version it's not losing for white or anything like that but it doesn't pose serious problems so long story short we take on D5 and we transpose into a line that could also be reached with a different move order in fact it normally is reached with the move order D5 here move"
+   "said": "could also be reached with a different move order in fact it normally is"
   },
   {
    "ply": 3,
    "t": 305,
    "line": [],
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
-   "said": "like that but it doesn't pose serious problems so long story short we take on D5 and we transpose into a line that could also be reached with a different move order in fact it normally is reached with the move order D5 here move 2 trade D4 trade and Knight C6 so you can follow in your head that line and you will see that the same position is reached a very common mistake for inexperienced players to play Knight C3 right the instinct to attack the queen unfortunately this is not a scandi and you have to notice that the D4 Pawn is hanging it's got two attackers on it and only one Defender so we first and foremost need to protect that pawn while developing our other night Knight F3 and if you stumble into this opening without theoretical knowledge this should actually look very scary especially if black puts the bishop on G4 because it may seem that we have absolutely no chance of keeping the pawn on D4 alive and what's interesting is that after Bishop G4 we actually sacrificed that pawn but we do it strategically and develop a massive initiative I'll show you some really really cool resulting lines and maybe we'll even get them on the board so after Bishop G4 Knight C3 is the move trying to force the queen out of the center and conceptually the one big thing to know here is that if the queen is driven back from D5 we can ourselves then Advance the pawn to D5 and that can lead immediately to catastrophic consequences because black is so underdeveloped on the king side that if we're able to push our Pawn to D5 and drive the Knight back there is a check on B5 there's a queen check on A4 and that could all be totally deadly if black is not very cautious yeah and this is already an iqp structure iqp a common abbreviation for isolated Queen Pawn isolated meaning that there are no neighboring Pawns um no C Pawn no e-pawn both of those pawns have been traded or transformed the C Pawn still exists it's just now the d-pawn right this originally was the pawn that sat on C3 yeah so black has like three major continuations here that are considered legitimate according to Theory Bishop G4 is very popular but to my knowledge a bad move objectively and if white responds accurately black already gets in serious trouble but you basically have to know exactly what to do here with white as far as I know the objectively best continuation the one that reduces the damage is actually the very modest move E6 which is not a move a lot of people want to play because it closes down the bishop but the move E6 lends another support to the D5 Square so that after we bring our Knight out and the queen moves back the move D5 doesn't come with as much effect black can just take it okay Bishop G4 played and I love that we're getting this because this is a super important line and if you're an alopin player you're gonna get this a lot in online play and you're gonna get this in over the board play as well so again I like to approach this from the perspective of someone who hasn't seen this position before because that gives you insight into what your intuition is likely to be and that gives you a better chance to remember counter-intuitive moves right when you know what the intuitive move is and you know that that it's wrong you can make a memory marker in that regard so to me there's a pin on the night and there's an instinct I think for a lot of people to play Bishop E2 especially because if black takes on F3 and takes on D4 he loses the queen because Bishop takes c6's check eliminating the defender I'll show all of this on the board after the game the issue with Bishop E2 isn't that it's wrong tactically it's that it's slow and it allows black to bring the pawn out to E6 and prepare himself for the uh inevitable Knight C3 so we need to cut out the middleman here and we need to go directly for the queen while black still has not gone E6 we need to play Knight C3 straight away now if you look carefully at this move it may seem that black has a very compelling response and as a hint this response does not involve moving the queen if black moves the queen he's busted and we already know what to do we're going to push D5 essentially automatically and black and lose there in like another three moves there is this weird move Bishop takes Knight right and it leads to a bunch of chaos if we take the queen then black takes Our Queen and if we recapture the bishop with our King then not only have we lost our castling rights but that Knight on D5 can be targeted with long castles the Knight is hanging the pawn on D4 is surely going to be lost there and that doesn't seem appetizing in the least now you could say but wait a second after Bishop takes F3 Knight takes Queen Bishop takes Queen we don't have to recapture the bishop we can give a fork on C7 but that is also problematic because if you extend the line King d8 Knight takes A8 you don't even need to calculate any further to understand that that position is not all roses for white because the Knight on A8 isn't really getting out and if black is able to track that Knight down and win it then black will have two pieces for The Rook which given the fact that the Rooks are still you know on their initial spots is not a Rosy option for white so in response to Bishop takes F3 this is one of the lines you have to memorize you simply have to memorize it you also have to understand it but if you want to be a good elephant player this is one of the lines you should start with and I will uh it's a shame that our opponent didn't take on F3 but that's okay it remains behind the scenes and it will await us in our post game analysis this is just as important to know how to refute Queen to A5 okay so as already indicated our Instinct here and we just need to double check that this move is still good but I still think it is is to play D5 right why why the urgency to push the pawn because if we allow black to play E6 then D5 loses a lot of its a lot a lot of its effect because it just allows black to trade on D5 and we are unable to kick the Knight out of C6 why is it important to kick the Knight out of C6 well first of all because it is nowhere good to go and second of all because once the Knight moves away from C6 we have an incredibly nasty check on B5 that could actually Force the king to move to d8 and that's a complete disaster especially with the King side entirely undeveloped so definitely we go D5 here and we do that without a second thought I think black and probably worm his way out of this and avoid an immediate disaster with some computer play but practically speaking Black's position is already borderline lost and these are bold words but hopefully I can back that up with the course of the game yeah so some of you are rightly noticing that black does not have to move the night away and black can make this very sneaky move long castle with the idea of pinning the d-pawn to the queen and D takes C6 would be very unwise because we lose the queen with check but after one Castle it's important to note two things the first is that the black king on C8 is incredibly vulnerable not because castling long is inherently dangerous although it is but because the C file is open and not only is it open it's very easy for us to get a rook to see one and everybody should understand why getting a rook to C1 would be so dangerous to Black right The Rook has a direct line of fire to the king and the King might simply not make it all the way into the corner and even if it does there are other Horrors that await the King on A8 I'll show you a good illustration of this after the game one of my earliest alapan wins and sort of Fondest Memories a game from the the under 10 world youth in 2005 against a player who is now a very strong GM himself so Castle King's uh Queen side is is not scary and neither is Rook to d8 Rook to d8 temporarily defends the Knight but we could very easily reinforce renew the threat of D take C6 we can do that in many different ways we can simply move the queen out of the pin we can go Queen B3 we can also block the pin with a move like Bishop D2 which is also very productive because it sets up our own x-ray against the queen so bad news here for black and I think our opponent recognizes it takes on F3 okay so here let's try to play as precisely as possible let's try to go for the kill quickly without allowing any additional options so again the intuitive response is Queen takes F3 unless there is a good reason you don't want to damage your kingside Pawn structure not that we're afraid to get checkmated but you know if Queen takes F3 is good then we should play it now does Queen takes F3 have any downsides well as I see it it has only one sort of downside that we need to reckon with which is that Queen takes F3 allows the Knight to jump into the center with Tempo with either Knight D4 or Knight E5 and Knight D4 might seem like the scarier move to you because the Knight also threatens to travel onward to C2 but let's look concretely Queen takes F3 Knight D4 is not actually dangerous at all because the queen can centralize to E4 preventing Knight C2 because it covers the score and simultaneously attacking the Knight the Knight actually doesn't have anywhere to go because it's completely restricted by The Pawn on D5 Queen takes F3 Knight E5 might actually be a more resilient move for black but similarly it's not dangerous it hits Our Queen yes but we could move our Queen up to F5 or even play the same move Queen E4 so the upside of playing GF here and spoiler alert I think either move is possible and I'm actually not sure which one is better GF is cool because after the Knight moves the Knight has nowhere to go with Tempo so after the night moves let's say to the same E5 Square we could bring our Bishop out with check and virtually Force the king to move into the center which is a total disaster or if the Knight would have to block similarly looks very very ugly so I like GTX F3 I like Queen takes F3 Queen takes F3 is the more positionally sound move the move that you would play if you wanted to to play with an abundance of caution I'm actually not sure I'll think about this for like a couple moments GF 95 we could also go Queen B3 there attacking B7 both options look incredibly juicy this is a very good problem to have but I do have a gut feeling I have a gut feeling and I can't fully explain it my gut feeling is that Queen takes F3 is better and and it's just it's just an intuitive sense and there are there is like one consideration that justifies that which I'll talk about after the game but I don't want to delve too deeply into it okay so 95 is the instant response by our opponent and now okay two options that I like Queen E4 and queen to F5 both moves hit the Knight and both moves bring the queen to a more active spot now Queen F5 I think I like more for one main reason after Queen to E4 the Knight let's say drops back to D7 and that Queen on e4 is gonna be vulnerable to Knight G to F6 and the way that we screw this up with white is we allow black to get his entire King side out quickly and if that happens and black is able to Castle kingside which sounds incredibly distant but it's not actually that many moves away we can't fall asleep here because how many moves does black need one two three and on the fourth block is already ready to castle that's not forever so we don't want to give black Tempo moves for no reason Bishop B5 would be a very instructive mistake because if Queen takes B5 Desperado Knight takes B5 Knight takes F3 and importantly that's a check right we can't go Knight C7 there because our King is in check we have to recapture the Knight and the worst thing we could do here is allow a queen trade also very good is to play Queen G3 lovely move as well Queen G3 uh is is fantastic too because it keeps the queen out of the weeds and it keeps it out of the way of White's pieces and also out of the way of Black's pieces right the queen on G3 can basically not be attacked at all so let me think about this again for just a second Queen G3 versus queen F5 is what I'm trying to decide between and there's some calculation to do there we have five there there there's a cool idea there that I'm wrestling with not sure how strong it is not strong not sure how strong it is so there there there D6 gosh that looks very juicy as well hmm yeah in a classical game I'd probably go Queen G3 but I'm agonizing I really want to play this accurately because I want to finish the game before move 20 if possible hmm okay let's adhere to a rule that I have shared before in previous speed runs which originally comes from Yasser Sarah one yeah yes and Yasser introduced this to me like many years ago when he talked about using the queen as a supporting actress that's like the terminology that he used and I have a chess.com article based on that and the idea is simple right when we think of how our Queen should participate in an attack we often think that the queen should be on the front lines right it should be right in your opponent's Grill but the queen is a lot it's the ultimate long-range piece so oftentimes it might be a bit counter-intuitive but keeping the queen in the shadows directing to the attack from a distance can often be a lot more effective simply because the queen is such a valuable piece that you want to keep your main War general you know behind safe Lions to avoid a situation where the queen starts stumbling around and allowing dempo moves well Queen G3 to that end seems like a perfect spot for the queen because it's doing a lot of stuff stacking the Knight is pressuring G7 it's potentially can infiltrate to C7 if the black queen moves obviously um it's also discouraging black from castling Queen side but it's essentially as I said earlier unattackable whereas on F5 the queen may seem to be doing more but it is very much attackable right it might walk into G6 and again I don't want to give like any developmental Tempo moves so hopefully the general logic makes sense there are some specific lines I looked at there um which I'll which I'll share afterward Knight D7 okay so it would be very very nice if we could play Knight to B5 because Knight C7 would be very hard to stop unfortunately that's illegal and in general this pin is annoying me the queen on A5 is Black's only good piece and it I think is sensible to take the sting out of it so as as tempted as some people may be by Bishop B5 which I know is on the tip of some people's tongue great move by the way nothing wrong with it but Bishop B5 black develops the Knight to F6 and just the pin against the Knight alone isn't going to win us the game it's hard to pressure that D7 Knight another time so let's make a more modest looking move Bishop to D2 but I think this really allows us to fulfill the potential of our pieces it threatens Knight B5 that's the direct threat attacking the queen discovered attack and the Knight C7 is Unstoppable so black already has to do something against that threat probably move the queen back which gives us another Tempo that we can use either to play Bishop E5 or maybe to still play Knight B5 which is still very dangerous even if it doesn't attack the queen depending on what white does black does will will decide on a subsequent course of action now I'm positive if you're following the game with an engine that I'm not playing perfectly I have no doubt about that and it's hard to play perfectly in a position where you've got like five or six tempting options on each move you shouldn't expect yourself to play perfectly you should expect yourself to make reasonable moves which almost always will lead to a positive conclusion even if you don't play perfectly this was a genius move by our opponent that I completely missed this is a incredible idea that our opponent just uncovered and the idea is to meet Knight B5 with Queen takes Bishop check King takes Queen and 94 check picks up the White Queen and as a result attacks The Rook on H1 which will force us to recapture on G3 and again we are trying to avoid the end game like a plague so this is the importance of double checking that your opponent's move doesn't in fact prevent your main idea right at this level 1700 plus most of the time people are gonna see one move threats so your instincts should always be to double check now let's not panic right you see that it's easy to panic let's root out the source of the problem the source of the problem is this e-force Square so can we defend that square but not a move like F3 which doesn't do anything else can we develop a piece and protect that square I like the simple move Bishop D3 yeah it gets the bishop out and it reinforces the threat of Knight B5 and in general the way that we're playing is such that we're preparing for the worst case scenario right you shouldn't sacrifice pieces without need you shouldn't do crazy stuff unless you need to and the way we're playing like even if the worst case scenario comes to pass and black finds some way to Castle kingside guess what it's really not the end of the world we still have the bishop pair we still have a strong Pawn in the center that we'll be able to defend and black still has problems with coordinating other pieces so we're trying to win the game quickly but we're also making moves that are independently good and those are the types of moves you should strive for to avoid you know crashing and burning in a winning position sometimes you you have to go for the sack and sometimes you have to go for the the risky continuation but here we've got the luxury of making these types of moves they're not always the you know gonna win you the beauty prize but they're gonna win you a lot of games yeah black intake D5 but I don't care about that we're just gonna Castle we're just gonna keep developing and we're gonna eat the king alive eventually once The Rook comes into the open file once The Rook comes to E1 that King on E8 is just going to be complete and utter toast also what I like is that Knight takes D5 opens up the D file and you could say well how does that matter at all well it doesn't on the next move but it will in three moves because after we Castle we could bring the a rook over to D1 what's on the D file well that Knight on D7 that we actually started with that was our initial concept that night later on could be just victimized massacred with a move like Bishop B5 and combined with the Rook on D1 you could kind of Envision a scenario where the pressure against the Knight becomes instantly unbearable foreign now another thing that I kind of keep repeating like a broken record is that when you play in this way and you put pressure from the very first moves even if object even if a computer could survive for another 50 moves and turn the game around notice what's happening he's taking loads of time on every move and almost certainly a blunder is going to come to to expedite the process in the next couple of moves I think we are winning objectively but likely our opponent's going to help us out just because the pressure is so unbearable what should black do here I think black is toast Queen B6 so patience is the order of the day and I think I think Knight B5 is very very tempting that was our initial idea but it no longer comes with Tempo it no longer attacks the queen and so Knight B5 black and meat perhaps with Knight takes D5 which I don't really see the need to allow so what is a good patient simple move that we could play relatively fast keeps all of our advantages and just prepares you know major major problems on the evening yeah just castle castle King side I think some of you might be wondering if we can Castle queenside but again no need no need to be fancy that King on C1 because of the semi-open C file two can play at that game why allow black counter-plan activity along the C file Castle kingside is uh you know much more prudent here talk that King away and now the e-file is a direct line of access against the black king and we have the Machinery to exploit it I'm expecting G6 and there we will have to be very accurate because black will be only two moves away from castling but I think that gives us just enough time to generate threats before the king is able to escape no long castle for white is fine the White's not going to get checkmated there it's just annoying A6 okay the problem is our opponent is trying to cover things with a Band-Aid but like the whole you know the whole world is exploding here for black you know he shot down one balloon but there's others so what do we do now now that we can't go in ip5 we can try to play like tall we can try to play like tall and go D6 and it's it's a tempting move because if you can open the E file that looks like absolute death to the black king the issue is that after D6 black can meet that with E6 a move that's very commonly overlooked right actually pushing the pawn past your Pawn and what might end up happening is that we actually lose the D6 pawn and we still don't get to open the e-file again we need to play it very simple here the simple moves are by far the strongest in these types of overwhelming positions you just need to accumulate and accumulate and eventually you need to sense the moment when you know the sort of slow moves allow you to find some sort of concrete combination but right now we still have low hanging fruit that we can pick off and Rook fe1 is just such a you know an example just putting the Rook on the same file as our as the enemy King and preparing to launch some Shenanigans against the E7 Pawn now by the way D6 is more tempting but still D6 we should not rush because of E6 something to really take away from this game right a very common mistake D6 E6 and suddenly we've actually improved Black's Pawn shell okay Queen takes B2 is obviously possible but you know pinching a dinosaur is how you should think of it we really could not care less about a corner Pawn yeah that attacks the bishop but these are just one move threats that can be easily addressed we probably have some tactical win against Queen takes B2 maybe Queen C7 is winning something like that but we wouldn't even have to do that we'll talk after the game about it okay so this is where we really need to hunker down because we have two moves we have three minutes on the clock so I'll have to speed up and we need to find some way to prevent Bishop G7 and Castle's kingside preferably without going crazy so let me think about this for a minute because I don't I don't see it yet but I'm sure it'll it'll occur to us I have one idea I have sort of a backup option I have a backup option but I want to find something really pretty okay man I have a cool idea but it doesn't quite do the trick okay we could double on the E file but black will gladly give up the E7 Pawn in order to castle that's not you know that's that's not how our Rome was built hmm there's a line that almost results in mate but again keyword being almost 94 Knight takes C4 rookie for Bishop B7 I'm genuinely calculating by the way I'm not trying to be you know pretend that I'm looking and I've already found it I haven't found it yet I think we're gonna go for the backup option and the backup option might be the best move in the position so let me play the move just because of the time and again if you're sort of feeling lost we'll talk after the game more more deeply Bishop to E3 hit the queen counter-intuitive in its appearance because we blocked the e-file but remember when you block a file with your own piece right you are in control of your own pieces this is a Frankfurt airport Type move I'm trying to force the queen onto a worse spot in the event of Queen takes B2 we're gonna put the bishop on D4 this is ultimately likely the final destination for the bishop why D4 well because it's on the long diagonal it's pressuring the Knight and it's really adding strain uh to the position to Black's position but it really depends on where the queen goes the queen doesn't have a lot of squares actually surprisingly it does not Queen D6 maybe but then we can even play Bishop F4 Queen back to d8 the king is fully boxed in Knight H5 our opponent trying to be fancy but ultimately I think this just loses the game on the spot and again and again I think this is a theme of this game that's going to ultimately be a big takeaway when you're trying to win games it's easy to walk into the impression that every attack is supposed to be beautiful and every attack is culminated with a sacrifice and we probably could do that if we wanted to but we're playing the speedrun to win games efficiently and for me to show how to win games efficiently and there's a very efficient win here first thing you have to calculate when both Queens are hanging there's a checklist first item on the checklist can we move our Queen away with check thereby winning the queen no right well we can play Queen B8 but that doesn't help second thing can we Desperado Our Queen can we give our Queen up for something and then take our opponent screen no we can take the pawn but that makes no sense our opponent just recaptures and ultimately we just lose a piece third thing what happens if we actually take our opponent's Queen and then try to move that piece away with Tempo this is what we have Bishop takes B6 as many of you are pointing out after Knight takes G3 if we take the Knight then black is chilling but can we move the bishop away with tempo essentially resulting in a double attack and I'm kind of guiding you toward the right move Bishop D4 is very simple and you know this is the kind of move that you find intuitively with enough tactical practice boring Bland but utterly and completely winning because we're gonna win at least a minor piece or maybe even a rook and that's it we take on G3 and the greatest thing is that if black moves The Rook then black loses the ability to Castle kingside and it's not like just because the Queens are off the board our attack dissipates I mean we have a million pieces left and I can almost guarantee you that unless our opponent resigns which is likely the game is probably going to end in some sort of checkmate likely along the e-file we've reached our final destination which is D4 kind of fitting yeah so our opponent does decide I see what what he's trying to do I think F6 is the idea trying to trap the bishop ingenious and under different circumstances I think this would be the way to go but here I think we can use tactics essentially to keep the bishop alive for long enough until we find a way to extricate it so I love people's instincts here right there is a move that we have patiently refrained from because it's been ineffective until now but now I think is the time for that move and the the general reason why is that Black's Pawn structure is now the weakest it has been for the whole game but now I think it's time to really step on the gas pedal but there's a more specific reason this move is strong and and I'm talking here about the move D6 so there's a couple of additional benefits to this move and one of them is that we get a monster Square for one of our pieces that square is good in and of itself but that square also allows us to win back uh actually win the Knight on H5 everybody should be aware of the move G4 here G4 is very strong were it not for Knight to F4 so wouldn't it be nice if we could cover the F4 Square what could we do it with well we could do it with the Knight and that's why we pushed the Deep on carving out a Central Square the bishop can take D6 which is an annoying move because it covers C7 but now we play G4 and the Knight is trapped the Knight is trapped Knight F4 Knight takes F4 and the B Pawn is pinned so black should move the king out of the way and yes black will win the bishop on h8 but we win in return the Knight and we are up a full rook in the resulting position which is an easy technical win so we couldn't move the bishop out on its own because G7 was covered but what we could do is use our other active pieces to win the Knight on H5 which is ironically like the piece that's restricting the bishop you have seven good job by our opponent by the way to find a couple of good resources but it's not going to help so let's get down to business here things that I notice we could take G6 it really doesn't matter I mean I'm not worried about GH that's just a random Corner pawn and actually that further weakens the light squares so the the Russian Schoolboy move here would be to identify these two minor pieces the bishop and the Knight what can we say about them well first of all they're on the same file second of all they're undefended thirdly you should notice the black's King on F7 is tremendously vulnerable so a nice move here a Sleek move would actually be to First bring the Rook into D1 a lot of you would be tempted by Bishop C4 which might even be the best move but I like to play in this kind of nifty classy way we bring the Rook into the game and we are setting up all sorts of shenanigans against these two minor pieces how are we going to put them into effect well we're going to bring the bishop out of the way and simultaneously that's going to create threats against the black king so where can we go well actually I really like the look of H6 here setting up a potential mating net why H6 well that pawn is like a free play in American football where like we don't care if we lose it so we might as well use it while it's still alive and it might actually uh end the game still alive what are we depriving the black king of well the G7 score we're actually entombing the black king in the center and not allowing it as an escape hatch to H6 now it's finally time for the move that perhaps you wanted to play earlier and that's Bishop C4 setting up the threat of a discovered check against the black king and now we end the game with what very very simple tactic it's not the bishop that we end up winning it's actually not even the night well it might be the night it's The Rook which is also undefended that's why we put the Rook under one to set up this tactic Knight takes F6 I hope my internet doesn't go out that would be sad Knight takes F6 and the game is over and what's hilarious is that if King E7 is played which it is not only is the H6 Pawn going to be alive for the rest of the game but it's going to win the game for us and the simplest way to play you have 10 seconds you're starting to panic get the pieces off the board right trade everything that'll greatly simplify your task takes takes and now we're looking at these two pawns when you have a far Advanced Pawn in the end game it can be a great weakness in the middle game but a great asset in the end game because that pawn is a future Queen Bishop G8 is a slam dunk move winning H7 then we step away with our Bishop promote the pawn and win the game yeah that's it I think resignation is uh imminent and our opponent resigns GG 29 moves but a lot happened in those 29 moves okay let's have a look 1750 is what we end up with yeah definitely I could go down the"
+   "said": "reached with the move order D5 here move 2 trade D4 trade and Knight C6 so you can follow in your head that line and you will see that the same position is reached a very common mistake for inexperienced players to play Knight C3 right the instinct to attack the queen unfortunately this is not a scandi and you have to notice that the D4 Pawn is hanging it's got two attackers on it and only one Defender so we first and foremost need to protect that pawn while developing our other night Knight F3 and if you stumble into this opening without theoretical knowledge this should actually look very scary especially if black puts the bishop on G4 because it may seem that we have absolutely no chance of keeping the pawn on D4 alive and what's interesting is that after Bishop G4 we actually sacrificed that pawn but we do it strategically and develop a massive initiative I'll show you some really really cool resulting lines and maybe we'll even get them on the board so after Bishop G4 Knight C3 is the move trying to force the queen out of the center and conceptually the one big thing to know here is that if the queen is driven back from D5 we can ourselves then Advance the pawn to D5 and that can lead immediately to catastrophic consequences because black is so underdeveloped on the king side that if we're able to push our Pawn to D5 and drive the Knight back there is a check on B5 there's a queen check on A4 and that could all be totally deadly if black is not very cautious yeah and this is already an iqp structure iqp a common abbreviation for isolated Queen Pawn isolated meaning that there are no neighboring Pawns um no C Pawn no e-pawn both of those pawns have been traded or transformed the C Pawn still exists it's just now the d-pawn right this originally was the pawn that sat on C3 yeah so black has like three major continuations here that are considered legitimate according to Theory Bishop G4 is very popular but to my knowledge a bad move objectively and if white responds accurately black already gets in serious trouble but you basically have to know exactly what to do here with white as far as I know the objectively best continuation the one that reduces the damage is actually the very modest move E6 which is not a move a lot of people want to play because it closes down the bishop but the move E6 lends another support to the D5 Square so that after we bring our Knight out and the queen moves back the move D5 doesn't come with as much effect black can just take it okay Bishop G4 played and I love that we're getting this because this is a super important line and if you're an alopin player you're gonna get this a lot in online play and you're gonna get this in over the board play as well so again I like to approach this from the perspective of someone who hasn't seen this position before because that gives you insight into what your intuition is likely to be and that gives you a better chance to remember counter-intuitive moves right when you know what the intuitive move is and you know that that it's wrong you can make a memory marker in that regard so to me there's a pin on the night and there's an instinct I think for a lot of people to play Bishop E2 especially because if black takes on F3 and takes on D4 he loses the queen because Bishop takes c6's check eliminating the defender I'll show all of this on the board after the game the issue with Bishop E2 isn't that it's wrong tactically it's that it's slow and it allows black to bring the pawn out to E6 and prepare himself for the uh inevitable Knight C3 so we need to cut out the middleman here and we need to go directly for the queen while black still has not gone E6 we need to play Knight C3 straight away now if you look carefully at this move it may seem that black has a very compelling response and as a hint this response does not involve moving the queen if black moves the queen he's busted and we already know what to do we're going to push D5 essentially automatically and black and lose there in like another three moves there is this weird move Bishop takes Knight right and it leads to a bunch of chaos if we take the queen then black takes Our Queen and if we recapture the bishop with our King then not only have we lost our castling rights but that Knight on D5 can be targeted with long castles the Knight is hanging the pawn on D4 is surely going to be lost there and that doesn't seem appetizing in the least now you could say but wait a second after Bishop takes F3 Knight takes Queen Bishop takes Queen we don't have to recapture the bishop we can give a fork on C7 but that is also problematic because if you extend the line King d8 Knight takes A8 you don't even need to calculate any further to understand that that position is not all roses for white because the Knight on A8 isn't really getting out and if black is able to track that Knight down and win it then black will have two pieces for The Rook which given the fact that the Rooks are still you know on their initial spots is not a Rosy option for white so in response to Bishop takes F3 this is one of the lines you have to memorize you simply have to memorize it you also have to understand it but if you want to be a good elephant player this is one of the lines you should start with and I will uh it's a shame that our opponent didn't take on F3 but that's okay it remains behind the scenes and it will await us in our post game analysis this is just as important to know how to refute Queen to A5 okay so as already indicated our Instinct here and we just need to double check that this move is still good but I still think it is is to play D5 right why why the urgency to push the pawn because if we allow black to play E6 then D5 loses a lot of its a lot a lot of its effect because it just allows black to trade on D5 and we are unable to kick the Knight out of C6 why is it important to kick the Knight out of C6 well first of all because it is nowhere good to go and second of all because once the Knight moves away from C6 we have an incredibly nasty check on B5 that could actually Force the king to move to d8 and that's a complete disaster especially with the King side entirely undeveloped so definitely we go D5 here and we do that without a second thought I think black and probably worm his way out of this and avoid an immediate disaster with some computer play but practically speaking Black's position is already borderline lost and these are bold words but hopefully I can back that up with the course of the game yeah so some of you are rightly noticing that black does not have to move the night away and black can make this very sneaky move long castle with the idea of pinning the d-pawn to the queen and D takes C6 would be very unwise because we lose the queen with check but after one Castle it's important to note two things the first is that the black king on C8 is incredibly vulnerable not because castling long is inherently dangerous although it is but because the C file is open and not only is it open it's very easy for us to get a rook to see one and everybody should understand why getting a rook to C1 would be so dangerous to Black right The Rook has a direct line of fire to the king and the King might simply not make it all the way into the corner and even if it does there are other Horrors that await the King on A8 I'll show you a good illustration of this after the game one of my earliest alapan wins and sort of Fondest Memories a game from the the under 10 world youth in 2005 against a player who is now a very strong GM himself so Castle King's uh Queen side is is not scary and neither is Rook to d8 Rook to d8 temporarily defends the Knight but we could very easily reinforce renew the threat of D take C6 we can do that in many different ways we can simply move the queen out of the pin we can go Queen B3 we can also block the pin with a move like Bishop D2 which is also very productive because it sets up our own x-ray against the queen so bad news here for black and I think our opponent recognizes it takes on F3 okay so here let's try to play as precisely as possible let's try to go for the kill quickly without allowing any additional options so again the intuitive response is Queen takes F3 unless there is a good reason you don't want to damage your kingside Pawn structure not that we're afraid to get checkmated but you know if Queen takes F3 is good then we should play it now does Queen takes F3 have any downsides well as I see it it has only one sort of downside that we need to reckon with which is that Queen takes F3 allows the Knight to jump into the center with Tempo with either Knight D4 or Knight E5 and Knight D4 might seem like the scarier move to you because the Knight also threatens to travel onward to C2 but let's look concretely Queen takes F3 Knight D4 is not actually dangerous at all because the queen can centralize to E4 preventing Knight C2 because it covers the score and simultaneously attacking the Knight the Knight actually doesn't have anywhere to go because it's completely restricted by The Pawn on D5 Queen takes F3 Knight E5 might actually be a more resilient move for black but similarly it's not dangerous it hits Our Queen yes but we could move our Queen up to F5 or even play the same move Queen E4 so the upside of playing GF here and spoiler alert I think either move is possible and I'm actually not sure which one is better GF is cool because after the Knight moves the Knight has nowhere to go with Tempo so after the night moves let's say to the same E5 Square we could bring our Bishop out with check and virtually Force the king to move into the center which is a total disaster or if the Knight would have to block similarly looks very very ugly so I like GTX F3 I like Queen takes F3 Queen takes F3 is the more positionally sound move the move that you would play if you wanted to to play with an abundance of caution I'm actually not sure I'll think about this for like a couple moments GF 95 we could also go Queen B3 there attacking B7 both options look incredibly juicy this is a very good problem to have but I do have a gut feeling I have a gut feeling and I can't fully explain it my gut feeling is that Queen takes F3 is better and and it's just it's just an intuitive sense and there are there is like one consideration that justifies that which I'll talk about after the game but I don't want to delve too deeply into it okay so 95 is the instant response by our opponent and now okay two options that I like Queen E4 and queen to F5 both moves hit the Knight and both moves bring the queen to a more active spot now Queen F5 I think I like more for one main reason after Queen to E4 the Knight let's say drops back to D7 and that Queen on e4 is gonna be vulnerable to Knight G to F6 and the way that we screw this up with white is we allow black to get his entire King side out quickly and if that happens and black is able to Castle kingside which sounds incredibly distant but it's not actually that many moves away we can't fall asleep here because how many moves does black need one two three and on the fourth block is already ready to castle that's not forever so we don't want to give black Tempo moves for no reason Bishop B5 would be a very instructive mistake because if Queen takes B5 Desperado Knight takes B5 Knight takes F3 and importantly that's a check right we can't go Knight C7 there because our King is in check we have to recapture the Knight and the worst thing we could do here is allow a queen trade also very good is to play Queen G3 lovely move as well Queen G3 uh is is fantastic too because it keeps the queen out of the weeds and it keeps it out of the way of White's pieces and also out of the way of Black's pieces right the queen on G3 can basically not be attacked at all so let me think about this again for just a second Queen G3 versus queen F5 is what I'm trying to decide between and there's some calculation to do there we have five there there there's a cool idea there that I'm wrestling with not sure how strong it is not strong not sure how strong it is so there there there D6 gosh that looks very juicy as well hmm yeah in a classical game I'd probably go Queen G3 but I'm agonizing I really want to play this accurately because I want to finish the game before move 20 if possible hmm okay let's adhere to a rule that I have shared before in previous speed runs which originally comes from Yasser Sarah one yeah yes and Yasser introduced this to me like many years ago when he talked about using the queen as a supporting actress that's like the terminology that he used and I have a chess.com article based on that and the idea is simple right when we think of how our Queen should participate in an attack we often think that the queen should be on the front lines right it should be right in your opponent's Grill but the queen is a lot it's the ultimate long-range piece so oftentimes it might be a bit counter-intuitive but keeping the queen in the shadows directing to the attack from a distance can often be a lot more effective simply because the queen is such a valuable piece that you want to keep your main War general you know behind safe Lions to avoid a situation where the queen starts stumbling around and allowing dempo moves well Queen G3 to that end seems like a perfect spot for the queen because it's doing a lot of stuff stacking the Knight is pressuring G7 it's potentially can infiltrate to C7 if the black queen moves obviously um it's also discouraging black from castling Queen side but it's essentially as I said earlier unattackable whereas on F5 the queen may seem to be doing more but it is very much attackable right it might walk into G6 and again I don't want to give like any developmental Tempo moves so hopefully the general logic makes sense there are some specific lines I looked at there um which I'll which I'll share afterward Knight D7 okay so it would be very very nice if we could play Knight to B5 because Knight C7 would be very hard to stop unfortunately that's illegal and in general this pin is annoying me the queen on A5 is Black's only good piece and it I think is sensible to take the sting out of it so as as tempted as some people may be by Bishop B5 which I know is on the tip of some people's tongue great move by the way nothing wrong with it but Bishop B5 black develops the Knight to F6 and just the pin against the Knight alone isn't going to win us the game it's hard to pressure that D7 Knight another time so let's make a more modest looking move Bishop to D2 but I think this really allows us to fulfill the potential of our pieces it threatens Knight B5 that's the direct threat attacking the queen discovered attack and the Knight C7 is Unstoppable so black already has to do something against that threat probably move the queen back which gives us another Tempo that we can use either to play Bishop E5 or maybe to still play Knight B5 which is still very dangerous even if it doesn't attack the queen depending on what white does black does will will decide on a subsequent course of action now I'm positive if you're following the game with an engine that I'm not playing perfectly I have no doubt about that and it's hard to play perfectly in a position where you've got like five or six tempting options on each move you shouldn't expect yourself to play perfectly you should expect yourself to make reasonable moves which almost always will lead to a positive conclusion even if you don't play perfectly this was a genius move by our opponent that I completely missed this is a incredible idea that our opponent just uncovered and the idea is to meet Knight B5 with Queen takes Bishop check King takes Queen and 94 check picks up the White Queen and as a result attacks The Rook on H1 which will force us to recapture on G3 and again we are trying to avoid the end game like a plague so this is the importance of double checking that your opponent's move doesn't in fact prevent your main idea right at this level 1700 plus most of the time people are gonna see one move threats so your instincts should always be to double check now let's not panic right you see that it's easy to panic let's root out the source of the problem the source of the problem is this e-force Square so can we defend that square but not a move like F3 which doesn't do anything else can we develop a piece and protect that square I like the simple move Bishop D3 yeah it gets the bishop out and it reinforces the threat of Knight B5 and in general the way that we're playing is such that we're preparing for the worst case scenario right you shouldn't sacrifice pieces without need you shouldn't do crazy stuff unless you need to and the way we're playing like even if the worst case scenario comes to pass and black finds some way to Castle kingside guess what it's really not the end of the world we still have the bishop pair we still have a strong Pawn in the center that we'll be able to defend and black still has problems with coordinating other pieces so we're trying to win the game quickly but we're also making moves that are independently good and those are the types of moves you should strive for to avoid you know crashing and burning in a winning position sometimes you you have to go for the sack and sometimes you have to go for the the risky continuation but here we've got the luxury of making these types of moves they're not always the you know gonna win you the beauty prize but they're gonna win you a lot of games yeah black intake D5 but I don't care about that we're just gonna Castle we're just gonna keep developing and we're gonna eat the king alive eventually once The Rook comes into the open file once The Rook comes to E1 that King on E8 is just going to be complete and utter toast also what I like is that Knight takes D5 opens up the D file and you could say well how does that matter at all well it doesn't on the next move but it will in three moves because after we Castle we could bring the a rook over to D1 what's on the D file well that Knight on D7 that we actually started with that was our initial concept that night later on could be just victimized massacred with a move like Bishop B5 and combined with the Rook on D1 you could kind of Envision a scenario where the pressure against the Knight becomes instantly unbearable foreign now another thing that I kind of keep repeating like a broken record is that when you play in this way and you put pressure from the very first moves even if object even if a computer could survive for another 50 moves and turn the game around notice what's happening he's taking loads of time on every move and almost certainly a blunder is going to come to to expedite the process in the next couple of moves I think we are winning objectively but likely our opponent's going to help us out just because the pressure is so unbearable what should black do here I think black is toast Queen B6 so patience is the order of the day and I think I think Knight B5 is very very tempting that was our initial idea but it no longer comes with Tempo it no longer attacks the queen and so Knight B5 black and meat perhaps with Knight takes D5 which I don't really see the need to allow so what is a good patient simple move that we could play relatively fast keeps all of our advantages and just prepares you know major major problems on the evening yeah just castle castle King side I think some of you might be wondering if we can Castle queenside but again no need no need to be fancy that King on C1 because of the semi-open C file two can play at that game why allow black counter-plan activity along the C file Castle kingside is uh you know much more prudent here talk that King away and now the e-file is a direct line of access against the black king and we have the Machinery to exploit it I'm expecting G6 and there we will have to be very accurate because black will be only two moves away from castling but I think that gives us just enough time to generate threats before the king is able to escape no long castle for white is fine the White's not going to get checkmated there it's just annoying A6 okay the problem is our opponent is trying to cover things with a Band-Aid but like the whole you know the whole world is exploding here for black you know he shot down one balloon but there's others so what do we do now now that we can't go in ip5 we can try to play like tall we can try to play like tall and go D6 and it's it's a tempting move because if you can open the E file that looks like absolute death to the black king the issue is that after D6 black can meet that with E6 a move that's very commonly overlooked right actually pushing the pawn past your Pawn and what might end up happening is that we actually lose the D6 pawn and we still don't get to open the e-file again we need to play it very simple here the simple moves are by far the strongest in these types of overwhelming positions you just need to accumulate and accumulate and eventually you need to sense the moment when you know the sort of slow moves allow you to find some sort of concrete combination but right now we still have low hanging fruit that we can pick off and Rook fe1 is just such a you know an example just putting the Rook on the same file as our as the enemy King and preparing to launch some Shenanigans against the E7 Pawn now by the way D6 is more tempting but still D6 we should not rush because of E6 something to really take away from this game right a very common mistake D6 E6 and suddenly we've actually improved Black's Pawn shell okay Queen takes B2 is obviously possible but you know pinching a dinosaur is how you should think of it we really could not care less about a corner Pawn yeah that attacks the bishop but these are just one move threats that can be easily addressed we probably have some tactical win against Queen takes B2 maybe Queen C7 is winning something like that but we wouldn't even have to do that we'll talk after the game about it okay so this is where we really need to hunker down because we have two moves we have three minutes on the clock so I'll have to speed up and we need to find some way to prevent Bishop G7 and Castle's kingside preferably without going crazy so let me think about this for a minute because I don't I don't see it yet but I'm sure it'll it'll occur to us I have one idea I have sort of a backup option I have a backup option but I want to find something really pretty okay man I have a cool idea but it doesn't quite do the trick okay we could double on the E file but black will gladly give up the E7 Pawn in order to castle that's not you know that's that's not how our Rome was built hmm there's a line that almost results in mate but again keyword being almost 94 Knight takes C4 rookie for Bishop B7 I'm genuinely calculating by the way I'm not trying to be you know pretend that I'm looking and I've already found it I haven't found it yet I think we're gonna go for the backup option and the backup option might be the best move in the position so let me play the move just because of the time and again if you're sort of feeling lost we'll talk after the game more more deeply Bishop to E3 hit the queen counter-intuitive in its appearance because we blocked the e-file but remember when you block a file with your own piece right you are in control of your own pieces this is a Frankfurt airport Type move I'm trying to force the queen onto a worse spot in the event of Queen takes B2 we're gonna put the bishop on D4 this is ultimately likely the final destination for the bishop why D4 well because it's on the long diagonal it's pressuring the Knight and it's really adding strain uh to the position to Black's position but it really depends on where the queen goes the queen doesn't have a lot of squares actually surprisingly it does not Queen D6 maybe but then we can even play Bishop F4 Queen back to d8 the king is fully boxed in Knight H5 our opponent trying to be fancy but ultimately I think this just loses the game on the spot and again and again I think this is a theme of this game that's going to ultimately be a big takeaway when you're trying to win games it's easy to walk into the impression that every attack is supposed to be beautiful and every attack is culminated with a sacrifice and we probably could do that if we wanted to but we're playing the speedrun to win games efficiently and for me to show how to win games efficiently and there's a very efficient win here first thing you have to calculate when both Queens are hanging there's a checklist first item on the checklist can we move our Queen away with check thereby winning the queen no right well we can play Queen B8 but that doesn't help second thing can we Desperado Our Queen can we give our Queen up for something and then take our opponent screen no we can take the pawn but that makes no sense our opponent just recaptures and ultimately we just lose a piece third thing what happens if we actually take our opponent's Queen and then try to move that piece away with Tempo this is what we have Bishop takes B6 as many of you are pointing out after Knight takes G3 if we take the Knight then black is chilling but can we move the bishop away with tempo essentially resulting in a double attack and I'm kind of guiding you toward the right move Bishop D4 is very simple and you know this is the kind of move that you find intuitively with enough tactical practice boring Bland but utterly and completely winning because we're gonna win at least a minor piece or maybe even a rook and that's it we take on G3 and the greatest thing is that if black moves The Rook then black loses the ability to Castle kingside and it's not like just because the Queens are off the board our attack dissipates I mean we have a million pieces left and I can almost guarantee you that unless our opponent resigns which is likely the game is probably going to end in some sort of checkmate likely along the e-file we've reached our final destination which is D4 kind of fitting yeah so our opponent does decide I see what what he's trying to do I think F6 is the idea trying to trap the bishop ingenious and under different circumstances I think this would be the way to go but here I think we can use tactics essentially to keep the bishop alive for long enough until we find a way to extricate it so I love people's instincts here right there is a move that we have patiently refrained from because it's been ineffective until now but now I think is the time for that move and the the general reason why is that Black's Pawn structure is now the weakest it has been for the whole game but now I think it's time to really step on the gas pedal but there's a more specific reason this move is strong and and I'm talking here about the move D6 so there's a couple of additional benefits to this move and one of them is that we get a monster Square for one of our pieces that square is good in and of itself but that square also allows us to win back uh actually win the Knight on H5 everybody should be aware of the move G4 here G4 is very strong were it not for Knight to F4 so wouldn't it be nice if we could cover the F4 Square what could we do it with well we could do it with the Knight and that's why we pushed the Deep on carving out a Central Square the bishop can take D6 which is an annoying move because it covers C7 but now we play G4 and the Knight is trapped the Knight is trapped Knight F4 Knight takes F4 and the B Pawn is pinned so black should move the king out of the way and yes black will win the bishop on h8 but we win in return the Knight and we are up a full rook in the resulting position which is an easy technical win so we couldn't move the bishop out on its own because G7 was covered but what we could do is use our other active pieces to win the Knight on H5 which is ironically like the piece that's restricting the bishop you have seven good job by our opponent by the way to find a couple of good resources but it's not going to help so let's get down to business here things that I notice we could take G6 it really doesn't matter I mean I'm not worried about GH that's just a random Corner pawn and actually that further weakens the light squares so the the Russian Schoolboy move here would be to identify these two minor pieces the bishop and the Knight what can we say about them well first of all they're on the same file second of all they're undefended thirdly you should notice the black's King on F7 is tremendously vulnerable so a nice move here a Sleek move would actually be to First bring the Rook into D1 a lot of you would be tempted by Bishop C4 which might even be the best move but I like to play in this kind of nifty classy way we bring the Rook into the game and we are setting up all sorts of shenanigans against these two minor pieces how are we going to put them into effect well we're going to bring the bishop out of the way and simultaneously that's going to create threats against the black king so where can we go well actually I really like the look of H6 here setting up a potential mating net why H6 well that pawn is like a free play in American football where like we don't care if we lose it so we might as well use it while it's still alive and it might actually uh end the game still alive what are we depriving the black king of well the G7 score we're actually entombing the black king in the center and not allowing it as an escape hatch to H6 now it's finally time for the move that perhaps you wanted to play earlier and that's Bishop C4 setting up the threat of a discovered check against the black king and now we end the game with what very very simple tactic it's not the bishop that we end up winning it's actually not even the night well it might be the night it's The Rook which is also undefended that's why we put the Rook under one to set up this tactic Knight takes F6 I hope my internet doesn't go out that would be sad Knight takes F6 and the game is over and what's hilarious is that if King E7 is played which it is not only is the H6 Pawn going to be alive for the rest of the game but it's going to win the game for us and the simplest way to play you have 10 seconds you're starting to panic get the pieces off the board right trade everything that'll greatly simplify your task takes takes and now we're looking at these two pawns when you have a far Advanced Pawn in the end game it can be a great weakness in the middle game but a great asset in the end game because that pawn is a future Queen Bishop G8 is a slam dunk move winning H7 then we step away with our Bishop promote the pawn and win the game yeah that's it I think resignation is uh imminent and our opponent resigns GG 29"
   },
   {
    "ply": 4,
@@ -98,7 +98,7 @@
     "Nc6"
    ],
    "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 1 3",
-   "said": "moves but a lot happened in those 29 moves okay let's have a look 1750 is what we end up with yeah definitely I could go down the theoretical Rabbit Hole here but I will give you the sort of General summary without bugging ourselves down to uh too much into the weeds because again we'll have plenty of time to talk more about the theory so Knight C6 and D4 and the first branching off point"
+   "said": "moves but a lot happened in those 29 moves okay let's have a look 1750 is what we end up with yeah definitely I could go down the theoretical Rabbit Hole here but I will give you the sort of General summary without bugging ourselves down"
   },
   {
    "ply": 5,
@@ -107,7 +107,7 @@
     "d4"
    ],
    "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
-   "said": "to uh too much into the weeds because again we'll have plenty of time to talk more about the theory so Knight C6 and D4 and the first branching off point is is here after the trade so our"
+   "said": "to uh too much into the weeds because again we'll have plenty of time to talk more about the theory so Knight C6 and D4 and the first branching off point"
   },
   {
    "ply": 7,
@@ -117,7 +117,7 @@
     "cxd4"
    ],
    "fen": "r1bqkbnr/pp1ppppp/2n5/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
-   "said": "to uh too much into the weeds because again we'll have plenty of time to talk more about the theory so Knight C6 and D4 and the first branching off point is is here after the trade so our opponent played the main move which is D5 very common at like a 12 1300 level"
+   "said": "is is here after the trade so our opponent played the main move which is"
   },
   {
    "ply": 8,
@@ -126,7 +126,7 @@
     "e6"
    ],
    "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/3PP3/8/PP3PPP/RNBQKBNR w KQkq - 0 5",
-   "said": "more about the theory so Knight C6 and D4 and the first branching off point is is here after the trade so our opponent played the main move which is D5 very common at like a 12 1300 level is the move E6 and as a little bit of inspiration I want to start by showing you my my like one of my shortest games shortest tournament in this classical game and against a 1757 I was rated 1873 13 moves I exaggerated slightly but but still maybe it was a very one-sided game that illustrates that the danger of playing this line with black and the power of White's well-developed pieces so this was in Vegas a tournament that I played many many years in a row my opponent was Jeff Schroeder I gave this game in my um method Series so some of you will probably be familiar with it and as you can see we got this position now you should take my next moves with a grain of salt because the best move in this position according to the engine the move that I'll talk more about is the immediate D5 just immediately striking at the center instead I I took a slower approach I played Knight F3 which is fine it keeps an advantage but I try to give you the objectively best options Knight F6 by my opponent Knight C3 and here believe it or not a decisive Mistake by black the only way to essentially stay alive was to play well either Bishop before or D5 here I was planning E5 and this is a great version of an of an advanced French because now the bishop is locked on C8 and in the advanced French you're not supposed to give the White Knight the C3 developing Square so white is much better here but the game would have continued Bishop B Simon is one of those automatic developing moves which shows in sort of an unfamiliarity with with White's main idea here and before my opponent knew it he's losing dead lost in two more moves so what does white do based on what you already know about this position yeah very good D5 D5 this is much stronger than E5 which yields the D5 square and black is able to Halt the progress of White's pawns D5 is much stronger my opponent trades doesn't change anything and D6 simply ends the game if the bishop drops back there's Queen E2 check and the game is over black has to make the pathetic Bishop E7 and the rest you can figure out on your own my opponent tried one trick takes a knight C2 check but I could not care less about that Rook because the bishop comes out pre-move rookie one and that's it Black's King is is utterly 94 was tried but rookie one is my response not even taking the Knight like preparing to take over the rooken it's mate like in a thousand different ways here and he resigned it almost looks like black barely made any moves in this game and yet that's just what happens when you don't develop accurately and you don't grab the center with your Pawns so that was like a nice inspiring game um that inspired me to continue playing the albumin in terms of actual opening Theory and let me confirm this with stockfish 15 but I'm pretty sure that this still stands the best move here Knight F3 is second best but D5 is even stronger and it's"
+   "said": "D5 very common at like a 12 1300 level is the move E6 and as a little bit of inspiration I want to start by showing you my my like one of my shortest games shortest tournament in this classical game and against a 1757 I was rated 1873 13 moves I exaggerated slightly but but still maybe it was a very one-sided game that illustrates that the danger of playing this line with black and the power of White's well-developed pieces so this was in Vegas a tournament that I played many many years in a row my opponent was Jeff Schroeder I gave this game in my um method Series so some of you will probably be familiar with it and as you can see we got this position now you should take my next moves with a grain of salt because the best move in this position according to the engine the move that I'll talk more about is the immediate D5 just immediately striking at the center instead I I took a slower approach I played Knight F3 which is fine it keeps an advantage but I try to give you the objectively best options Knight F6 by my opponent Knight C3 and here believe it or not a decisive Mistake by black the only way to essentially stay alive was to play well either Bishop before or D5 here I was planning E5 and this is a great version of an of an advanced French because now the bishop is locked on C8 and in the advanced French you're not supposed to give the White Knight the C3 developing Square so white is much better here but the game would have continued Bishop B Simon is one of those automatic developing moves which shows in sort of an unfamiliarity with with White's main idea here and before my opponent knew it he's losing dead lost in two more moves so what does white do based on what you already know about this position yeah very good D5 D5 this is much stronger than E5 which yields the D5 square and black is able to Halt the progress of White's pawns D5 is much stronger my opponent trades doesn't change anything and D6 simply ends the game if the bishop drops back there's Queen E2 check and the game is over black has to make the pathetic Bishop E7 and the rest you can figure out on your own my opponent tried one trick takes a knight C2 check but I could not care less about that Rook because the bishop comes out pre-move rookie one and that's it Black's King is is utterly 94 was tried but rookie one is my response not even taking the Knight like preparing to take over the rooken it's mate like in a thousand different ways here and he resigned it almost looks like black barely made any moves in this game and yet that's just what happens when you don't develop accurately and you don't grab the center with your Pawns so that was like a nice inspiring game um that inspired me to continue playing the albumin in terms of actual opening Theory and let me confirm"
   },
   {
    "ply": 9,
@@ -135,7 +135,7 @@
     "d5"
    ],
    "fen": "r1bqkbnr/pp1p1ppp/2n1p3/3P4/4P3/8/PP3PPP/RNBQKBNR b KQkq - 0 5",
-   "said": "this with stockfish 15 but I'm pretty sure that this still stands the best move here Knight F3 is second best but D5 is even stronger and it's it's a similar idea to the game not not quite as clear-cut so if black takes it we take back"
+   "said": "this with stockfish 15 but I'm pretty sure that this still stands the best move here Knight F3 is second best but D5 is even stronger and it's it's a similar idea to the game not not"
   },
   {
    "ply": 11,
@@ -145,7 +145,7 @@
     "exd5"
    ],
    "fen": "r1bqkbnr/pp1p1ppp/2n5/3P4/8/8/PP3PPP/RNBQKBNR b KQkq - 0 6",
-   "said": "the best move here Knight F3 is second best but D5 is even stronger and it's it's a similar idea to the game not not quite as clear-cut so if black takes it we take back and the Knight essentially is nowhere good to go if black plays Knight to E5"
+   "said": "quite as clear-cut so if black takes it we take back and the Knight essentially is nowhere"
   },
   {
    "ply": 12,
@@ -154,7 +154,7 @@
     "Ne5"
    ],
    "fen": "r1bqkbnr/pp1p1ppp/8/3Pn3/8/8/PP3PPP/RNBQKBNR w KQkq - 1 7",
-   "said": "it's a similar idea to the game not not quite as clear-cut so if black takes it we take back and the Knight essentially is nowhere good to go if black plays Knight to E5 then now we finally develop our pieces"
+   "said": "good to go if black plays Knight to E5 then now we finally develop our pieces"
   },
   {
    "ply": 13,
@@ -163,7 +163,7 @@
     "Nc3"
    ],
    "fen": "r1bqkbnr/pp1p1ppp/8/3Pn3/8/2N5/PP3PPP/R1BQKBNR b KQkq - 2 7",
-   "said": "we take back and the Knight essentially is nowhere good to go if black plays Knight to E5 then now we finally develop our pieces we just go Knight C3 and there's a million ways for black to lose the game quickly if Knight F6 we actually push D6"
+   "said": "we just go Knight C3 and there's a million ways for black to lose the game"
   },
   {
    "ply": 14,
@@ -172,7 +172,7 @@
     "Nf6"
    ],
    "fen": "r1bqkb1r/pp1p1ppp/5n2/3Pn3/8/2N5/PP3PPP/R1BQKBNR w KQkq - 3 8",
-   "said": "good to go if black plays Knight to E5 then now we finally develop our pieces we just go Knight C3 and there's a million ways for black to lose the game quickly if Knight F6 we actually push D6"
+   "said": "quickly if Knight F6 we actually push D6"
   },
   {
    "ply": 15,
@@ -181,7 +181,7 @@
     "d6"
    ],
    "fen": "r1bqkb1r/pp1p1ppp/3P1n2/4n3/8/2N5/PP3PPP/R1BQKBNR b KQkq - 0 8",
-   "said": "then now we finally develop our pieces we just go Knight C3 and there's a million ways for black to lose the game quickly if Knight F6 we actually push D6 here it's very scary looking move because you might be afraid to lose your D6 spawn but if black tries to pick it off with"
+   "said": "here it's very scary looking move because you"
   },
   {
    "ply": 16,
@@ -190,7 +190,7 @@
     "Qb6"
    ],
    "fen": "r1b1kb1r/pp1p1ppp/1q1P1n2/4n3/8/2N5/PP3PPP/R1BQKBNR w KQkq - 1 9",
-   "said": "million ways for black to lose the game quickly if Knight F6 we actually push D6 here it's very scary looking move because you might be afraid to lose your D6 spawn but if black tries to pick it off with his Queen the Knight comes in just in"
+   "said": "might be afraid to lose your D6 spawn but if black tries to pick it off with"
   },
   {
    "ply": 17,
@@ -199,7 +199,7 @@
     "Nb5"
    ],
    "fen": "r1b1kb1r/pp1p1ppp/1q1P1n2/1N2n3/8/8/PP3PPP/R1BQKBNR b KQkq - 2 9",
-   "said": "quickly if Knight F6 we actually push D6 here it's very scary looking move because you might be afraid to lose your D6 spawn but if black tries to pick it off with his Queen the Knight comes in just in time and Knight C7 is a devastating threat black has to move the king out of the way of the fork King d8 now we bring our"
+   "said": "his Queen the Knight comes in just in time and Knight C7 is a devastating"
   },
   {
    "ply": 18,
@@ -208,7 +208,7 @@
     "Kd8"
    ],
    "fen": "r1bk1b1r/pp1p1ppp/1q1P1n2/1N2n3/8/8/PP3PPP/R1BQKBNR w KQ - 3 10",
-   "said": "but if black tries to pick it off with his Queen the Knight comes in just in time and Knight C7 is a devastating threat black has to move the king out of the way of the fork King d8 now we bring our"
+   "said": "threat black has to move the king out of the way of the fork King d8 now we bring our"
   },
   {
    "ply": 19,
@@ -217,7 +217,7 @@
     "Be3"
    ],
    "fen": "r1bk1b1r/pp1p1ppp/1q1P1n2/1N2n3/8/4B3/PP3PPP/R2QKBNR b KQ - 4 10",
-   "said": "his Queen the Knight comes in just in time and Knight C7 is a devastating threat black has to move the king out of the way of the fork King d8 now we bring our Bishop into the game attacking the queen and the line that I looked at is Queen A5 Chuck Bishop drops back"
+   "said": "Bishop into the game attacking the queen and the line that I looked at is Queen"
   },
   {
    "ply": 21,
@@ -227,7 +227,7 @@
     "Bd2"
    ],
    "fen": "r1bk1b1r/pp1p1ppp/3P1n2/qN2n3/8/8/PP1B1PPP/R2QKBNR b KQ - 6 11",
-   "said": "threat black has to move the king out of the way of the fork King d8 now we bring our Bishop into the game attacking the queen and the line that I looked at is Queen A5 Chuck Bishop drops back and after the queen moves back only"
+   "said": "A5 Chuck Bishop drops back and after the queen moves back only"
   },
   {
    "ply": 22,
@@ -236,7 +236,7 @@
     "Qb6"
    ],
    "fen": "r1bk1b1r/pp1p1ppp/1q1P1n2/1N2n3/8/8/PP1B1PPP/R2QKBNR w KQ - 7 12",
-   "said": "way of the fork King d8 now we bring our Bishop into the game attacking the queen and the line that I looked at is Queen A5 Chuck Bishop drops back and after the queen moves back only square is B6 uh incredibly strong here is ridiculous computer move lovely computer move A3"
+   "said": "square is B6 uh incredibly strong here is ridiculous"
   },
   {
    "ply": 23,
@@ -245,7 +245,7 @@
     "a3"
    ],
    "fen": "r1bk1b1r/pp1p1ppp/1q1P1n2/1N2n3/8/P7/1P1B1PPP/R2QKBNR b KQ - 0 12",
-   "said": "A5 Chuck Bishop drops back and after the queen moves back only square is B6 uh incredibly strong here is ridiculous computer move lovely computer move A3 this is one of those freaking moves that shows you who's boss what the heck is the idea well who can figure it out what is the idea of this move the idea is actually twofold which is kind of cool first of all we need to talk about"
+   "said": "computer move lovely computer move A3 this is one of those freaking moves that shows you who's boss what the heck is the idea well who can"
   },
   {
    "ply": 24,
@@ -254,14 +254,14 @@
     "Bxd6"
    ],
    "fen": "r1bk3r/pp1p1ppp/1q1b1n2/1N2n3/8/P7/1P1B1PPP/R2QKBNR w KQ - 0 13",
-   "said": "shows you who's boss what the heck is the idea well who can figure it out what is the idea of this move the idea is actually twofold which is kind of cool first of all we need to talk about Bishop takes D6 second of all and we'll"
+   "said": "figure it out what is the idea of this move the idea is actually twofold which is kind of cool first of all we need to talk about Bishop takes D6 second of all and we'll"
   },
   {
    "ply": 23,
    "t": 2543,
    "line": [],
    "fen": "r1bk1b1r/pp1p1ppp/1q1P1n2/1N2n3/8/P7/1P1B1PPP/R2QKBNR b KQ - 0 12",
-   "said": "what the heck is the idea well who can figure it out what is the idea of this move the idea is actually twofold which is kind of cool first of all we need to talk about Bishop takes D6 second of all and we'll"
+   "said": ""
   },
   {
    "ply": 24,
@@ -270,7 +270,7 @@
     "a6"
    ],
    "fen": "r1bk1b1r/1p1p1ppp/pq1P1n2/1N2n3/8/P7/1P1B1PPP/R2QKBNR w KQ - 0 13",
-   "said": "figure it out what is the idea of this move the idea is actually twofold which is kind of cool first of all we need to talk about Bishop takes D6 second of all and we'll start with this we should talk about A6 what's the idea of A3 yeah very good we returned to E3"
+   "said": "start with this we should talk about A6 what's the idea of A3"
   },
   {
    "ply": 25,
@@ -279,7 +279,7 @@
     "Be3"
    ],
    "fen": "r1bk1b1r/1p1p1ppp/pq1P1n2/1N2n3/8/P3B3/1P3PPP/R2QKBNR b KQ - 1 13",
-   "said": "Bishop takes D6 second of all and we'll start with this we should talk about A6 what's the idea of A3 yeah very good we returned to E3 and after Queen A5 we now have the move"
+   "said": "yeah very good we returned to E3"
   },
   {
    "ply": 27,
@@ -289,14 +289,14 @@
     "b4"
    ],
    "fen": "r1bk1b1r/1p1p1ppp/p2P1n2/qN2n3/1P6/P3B3/5PPP/R2QKBNR b KQ - 0 14",
-   "said": "start with this we should talk about A6 what's the idea of A3 yeah very good we returned to E3 and after Queen A5 we now have the move before the queen is simply trapped black has to give it away and if the queen"
+   "said": "and after Queen A5 we now have the move before the queen is simply trapped black"
   },
   {
    "ply": 25,
    "t": 2559,
    "line": [],
    "fen": "r1bk1b1r/1p1p1ppp/pq1P1n2/1N2n3/8/P3B3/1P3PPP/R2QKBNR b KQ - 1 13",
-   "said": "yeah very good we returned to E3 and after Queen A5 we now have the move before the queen is simply trapped black has to give it away and if the queen goes the other way then it's attacked by"
+   "said": "has to give it away and if the queen"
   },
   {
    "ply": 26,
@@ -305,7 +305,7 @@
     "Qc6"
    ],
    "fen": "r1bk1b1r/1p1p1ppp/p1qP1n2/1N2n3/8/P3B3/1P3PPP/R2QKBNR w KQ - 2 14",
-   "said": "yeah very good we returned to E3 and after Queen A5 we now have the move before the queen is simply trapped black has to give it away and if the queen goes the other way then it's attacked by"
+   "said": "goes the other way then it's attacked by"
   },
   {
    "ply": 27,
@@ -314,7 +314,7 @@
     "Rc1"
    ],
    "fen": "r1bk1b1r/1p1p1ppp/p1qP1n2/1N2n3/8/P3B3/1P3PPP/2RQKBNR b K - 3 14",
-   "said": "yeah very good we returned to E3 and after Queen A5 we now have the move before the queen is simply trapped black has to give it away and if the queen goes the other way then it's attacked by The Rook it cannot catch a break check"
+   "said": "The Rook it cannot catch a break check"
   },
   {
    "ply": 28,
@@ -323,7 +323,7 @@
     "Qd5"
    ],
    "fen": "r1bk1b1r/1p1p1ppp/p2P1n2/1N1qn3/8/P3B3/1P3PPP/2RQKBNR w K - 4 15",
-   "said": "and after Queen A5 we now have the move before the queen is simply trapped black has to give it away and if the queen goes the other way then it's attacked by The Rook it cannot catch a break check and this is uh just totally totally"
+   "said": ""
   },
   {
    "ply": 31,
@@ -334,14 +334,14 @@
     "Nc7+"
    ],
    "fen": "r1b1kb1r/1pNp1ppp/pB1P1n2/3qn3/8/P7/1P3PPP/2RQKBNR b K - 7 16",
-   "said": "and after Queen A5 we now have the move before the queen is simply trapped black has to give it away and if the queen goes the other way then it's attacked by The Rook it cannot catch a break check and this is uh just totally totally crushing black plays Bishop takes D6 the second"
+   "said": "and this is uh just totally totally crushing"
   },
   {
    "ply": 23,
    "t": 2570,
    "line": [],
    "fen": "r1bk1b1r/pp1p1ppp/1q1P1n2/1N2n3/8/P7/1P1B1PPP/R2QKBNR b KQ - 0 12",
-   "said": "goes the other way then it's attacked by The Rook it cannot catch a break check and this is uh just totally totally crushing black plays Bishop takes D6 the second"
+   "said": "black plays Bishop takes D6 the second"
   },
   {
    "ply": 24,
@@ -350,7 +350,7 @@
     "Bxd6"
    ],
    "fen": "r1bk3r/pp1p1ppp/1q1b1n2/1N2n3/8/P7/1P1B1PPP/R2QKBNR w KQ - 0 13",
-   "said": "goes the other way then it's attacked by The Rook it cannot catch a break check and this is uh just totally totally crushing black plays Bishop takes D6 the second idea of A3 comes into play"
+   "said": "idea of A3 comes into play"
   },
   {
    "ply": 25,
@@ -359,7 +359,7 @@
     "Nxd6"
    ],
    "fen": "r1bk3r/pp1p1ppp/1q1N1n2/4n3/8/P7/1P1B1PPP/R2QKBNR b KQ - 0 13",
-   "said": "and this is uh just totally totally crushing black plays Bishop takes D6 the second idea of A3 comes into play here we take and it may seem like Bishop A5 check"
+   "said": "here we take"
   },
   {
    "ply": 26,
@@ -368,7 +368,7 @@
     "Qxd6"
    ],
    "fen": "r1bk3r/pp1p1ppp/3q1n2/4n3/8/P7/1P1B1PPP/R2QKBNR w KQ - 0 14",
-   "said": "crushing black plays Bishop takes D6 the second idea of A3 comes into play here we take and it may seem like Bishop A5 check"
+   "said": "and it may seem like Bishop A5 check"
   },
   {
    "ply": 27,
@@ -377,7 +377,7 @@
     "Ba5+"
    ],
    "fen": "r1bk3r/pp1p1ppp/3q1n2/B3n3/8/P7/1P3PPP/R2QKBNR b KQ - 1 14",
-   "said": "crushing black plays Bishop takes D6 the second idea of A3 comes into play here we take and it may seem like Bishop A5 check wins the queen but not just yet black"
+   "said": "wins the queen but not just yet black"
   },
   {
    "ply": 28,
@@ -386,7 +386,7 @@
     "Ke7"
    ],
    "fen": "r1b4r/pp1pkppp/3q1n2/B3n3/8/P7/1P3PPP/R2QKBNR w KQ - 2 15",
-   "said": "black plays Bishop takes D6 the second idea of A3 comes into play here we take and it may seem like Bishop A5 check wins the queen but not just yet black has King E7 and now we drop back to B4"
+   "said": "has King E7 and now we drop back to B4"
   },
   {
    "ply": 29,
@@ -395,14 +395,14 @@
     "Bb4"
    ],
    "fen": "r1b4r/pp1pkppp/3q1n2/4n3/1B6/P7/1P3PPP/R2QKBNR b KQ - 3 15",
-   "said": "idea of A3 comes into play here we take and it may seem like Bishop A5 check wins the queen but not just yet black has King E7 and now we drop back to B4 so the square itself the fact that it's protected now is important we either put the bishop or the pawn on B4 and in both cases win Black's Queen and you're joking giant Knight really cool idea I love these Quiet Moves but what I love"
+   "said": "so the square itself the fact that it's protected now is important we either put the bishop or the pawn on B4 and in both"
   },
   {
    "ply": 22,
    "t": 2594,
    "line": [],
    "fen": "r1bk1b1r/pp1p1ppp/1q1P1n2/1N2n3/8/8/PP1B1PPP/R2QKBNR w KQ - 7 12",
-   "said": "so the square itself the fact that it's protected now is important we either put the bishop or the pawn on B4 and in both cases win Black's Queen and you're joking giant Knight really cool idea I love these Quiet Moves but what I love about them is that you can understand exactly why they're played after the"
+   "said": "cases win Black's Queen and you're joking giant Knight really cool idea I love these Quiet Moves but what I love about them is that you can understand"
   },
   {
    "ply": 23,
@@ -411,14 +411,14 @@
     "a3"
    ],
    "fen": "r1bk1b1r/pp1p1ppp/1q1P1n2/1N2n3/8/P7/1P1B1PPP/R2QKBNR b KQ - 0 12",
-   "said": "the bishop or the pawn on B4 and in both cases win Black's Queen and you're joking giant Knight really cool idea I love these Quiet Moves but what I love about them is that you can understand exactly why they're played after the lines are displayed but it's hard to figure it out if if you don't know this idea to begin with A3 is is just amazing"
+   "said": "exactly why they're played after the lines are displayed but it's hard to figure it out if if you don't know this"
   },
   {
    "ply": 22,
    "t": 2604.5,
    "line": [],
    "fen": "r1bk1b1r/pp1p1ppp/1q1P1n2/1N2n3/8/8/PP1B1PPP/R2QKBNR w KQ - 7 12",
-   "said": "love these Quiet Moves but what I love about them is that you can understand exactly why they're played after the lines are displayed but it's hard to figure it out if if you don't know this idea to begin with A3 is is just amazing and it's the best move it's not you know"
+   "said": "idea to begin with A3 is is just amazing and it's the best move it's not you know"
   },
   {
    "ply": 24,
@@ -428,7 +428,7 @@
     "Ke8"
    ],
    "fen": "r1b1kb1r/pp1p1ppp/1q1P1n2/1N2n3/8/8/PP3PPP/R1BQKBNR w KQ - 9 13",
-   "said": "about them is that you can understand exactly why they're played after the lines are displayed but it's hard to figure it out if if you don't know this idea to begin with A3 is is just amazing and it's the best move it's not you know no no dispute about that"
+   "said": "no no dispute about that"
   },
   {
    "ply": 25,
@@ -437,14 +437,14 @@
     "Nc3"
    ],
    "fen": "r1b1kb1r/pp1p1ppp/1q1P1n2/4n3/8/2N5/PP3PPP/R1BQKBNR b KQ - 10 13",
-   "said": "exactly why they're played after the lines are displayed but it's hard to figure it out if if you don't know this idea to begin with A3 is is just amazing and it's the best move it's not you know no no dispute about that so the top engine move is actually"
+   "said": ""
   },
   {
    "ply": 11,
    "t": 2610.5,
    "line": [],
    "fen": "r1bqkbnr/pp1p1ppp/2n5/3P4/8/8/PP3PPP/RNBQKBNR b KQkq - 0 6",
-   "said": "lines are displayed but it's hard to figure it out if if you don't know this idea to begin with A3 is is just amazing and it's the best move it's not you know no no dispute about that so the top engine move is actually"
+   "said": "so the top engine move is actually"
   },
   {
    "ply": 12,
@@ -453,7 +453,7 @@
     "Bb4+"
    ],
    "fen": "r1bqk1nr/pp1p1ppp/2n5/3P4/1b6/8/PP3PPP/RNBQKBNR w KQkq - 1 7",
-   "said": "figure it out if if you don't know this idea to begin with A3 is is just amazing and it's the best move it's not you know no no dispute about that so the top engine move is actually Bishop check here trying to develop a Tempo we cover"
+   "said": "Bishop check here trying to develop a Tempo we cover"
   },
   {
    "ply": 13,
@@ -462,7 +462,7 @@
     "Nc3"
    ],
    "fen": "r1bqk1nr/pp1p1ppp/2n5/3P4/1b6/2N5/PP3PPP/R1BQKBNR b KQkq - 2 7",
-   "said": "and it's the best move it's not you know no no dispute about that so the top engine move is actually Bishop check here trying to develop a Tempo we cover with the Knight and here again Knight E5 is likely"
+   "said": "with the Knight and here again Knight E5 is likely"
   },
   {
    "ply": 14,
@@ -471,7 +471,7 @@
     "Ne5"
    ],
    "fen": "r1bqk1nr/pp1p1ppp/8/3Pn3/1b6/2N5/PP3PPP/R1BQKBNR w KQkq - 3 8",
-   "said": "so the top engine move is actually Bishop check here trying to develop a Tempo we cover with the Knight and here again Knight E5 is likely and we just bring the other night out to"
+   "said": ""
   },
   {
    "ply": 15,
@@ -480,7 +480,7 @@
     "Nf3"
    ],
    "fen": "r1bqk1nr/pp1p1ppp/8/3Pn3/1b6/2N2N2/PP3PPP/R1BQKB1R b KQkq - 4 8",
-   "said": "Bishop check here trying to develop a Tempo we cover with the Knight and here again Knight E5 is likely and we just bring the other night out to F3 trying to get rid of getting rid of Black's only active piece D6 drops uh the bishop this is a common allopin idea so remember it if black takes it then we take with the"
+   "said": "and we just bring the other night out to F3 trying to get rid of getting rid of Black's only active piece D6 drops uh"
   },
   {
    "ply": 16,
@@ -489,21 +489,21 @@
     "Nxf3+"
    ],
    "fen": "r1bqk1nr/pp1p1ppp/8/3P4/1b6/2N2n2/PP3PPP/R1BQKB1R w KQkq - 0 9",
-   "said": "F3 trying to get rid of getting rid of Black's only active piece D6 drops uh the bishop this is a common allopin idea so remember it if black takes it then we take with the queen and we just have a tremendous position here we've got this Monster Pawn on D5 and we've got you know fantastic development for our pieces for instance Bishop D3 castles castles D6 it looks like black is sort of out of the woods but he's not I mean the pin against the Knight is deadly the Bishops aiming at H7 the Queen's pressuring the Knight black still hasn't completed their development and this is just a complete and total disaster it's around plus two according to the engine that's if black plays perfectly so you can dig around here on your own suffice it to say the D5 the position is"
+   "said": "the bishop this is a common allopin idea so remember it if black takes it then we take with the queen and we just have a tremendous position here we've got this Monster Pawn on D5 and we've got you know fantastic development for our pieces for instance Bishop D3 castles castles D6 it looks like black is sort of out of the woods but he's not I mean the pin against the Knight is deadly the Bishops aiming at H7 the Queen's pressuring the Knight black still hasn't completed their"
   },
   {
    "ply": 9,
    "t": 2667.5,
    "line": [],
    "fen": "r1bqkbnr/pp1p1ppp/2n1p3/3P4/4P3/8/PP3PPP/RNBQKBNR b KQkq - 0 5",
-   "said": "development and this is just a complete and total disaster it's around plus two according to the engine that's if black plays perfectly so you can dig around here on your own suffice it to say the D5 the position is pretty easy to play as long as you know to push the pawn to D6 with the Knight having already come out to C3 all right so that's the rundown of E6 at"
+   "said": "development and this is just a complete and total disaster it's around plus two according to the engine that's if black plays perfectly so you can dig around here on your own suffice it to say the D5 the position is pretty easy to play as long as you know to push the pawn to D6 with the Knight"
   },
   {
    "ply": 7,
    "t": 2676.5,
    "line": [],
    "fen": "r1bqkbnr/pp1ppppp/2n5/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
-   "said": "suffice it to say the D5 the position is pretty easy to play as long as you know to push the pawn to D6 with the Knight having already come out to C3 all right so that's the rundown of E6 at a lower level you often see the move Knight to F6 and as I hinted at uh"
+   "said": "having already come out to C3 all right so that's the rundown of E6 at a lower level you often see the move"
   },
   {
    "ply": 8,
@@ -512,7 +512,7 @@
     "Nf6"
    ],
    "fen": "r1bqkb1r/pp1ppppp/2n2n2/8/3PP3/8/PP3PPP/RNBQKBNR w KQkq - 1 5",
-   "said": "to push the pawn to D6 with the Knight having already come out to C3 all right so that's the rundown of E6 at a lower level you often see the move Knight to F6 and as I hinted at uh during the game here again you go D5 and"
+   "said": "Knight to F6 and as I hinted at uh"
   },
   {
    "ply": 9,
@@ -521,7 +521,7 @@
     "d5"
    ],
    "fen": "r1bqkb1r/pp1ppppp/2n2n2/3P4/4P3/8/PP3PPP/RNBQKBNR b KQkq - 0 5",
-   "said": "all right so that's the rundown of E6 at a lower level you often see the move Knight to F6 and as I hinted at uh during the game here again you go D5 and"
+   "said": "during the game here again you go D5 and"
   },
   {
    "ply": 10,
@@ -530,7 +530,7 @@
     "Ne5"
    ],
    "fen": "r1bqkb1r/pp1ppppp/5n2/3Pn3/4P3/8/PP3PPP/RNBQKBNR w KQkq - 1 6",
-   "said": "a lower level you often see the move Knight to F6 and as I hinted at uh during the game here again you go D5 and a great illustration of why you have to push Pawns in the opening is this line where white plays out four"
+   "said": "a great illustration of why you have to push Pawns in the opening is this line"
   },
   {
    "ply": 11,
@@ -539,7 +539,7 @@
     "f4"
    ],
    "fen": "r1bqkb1r/pp1ppppp/5n2/3Pn3/4PP2/8/PP4PP/RNBQKBNR b KQkq - 0 6",
-   "said": "Knight to F6 and as I hinted at uh during the game here again you go D5 and a great illustration of why you have to push Pawns in the opening is this line where white plays out four forcing the Knight back another pawn"
+   "said": "where white plays out four"
   },
   {
    "ply": 12,
@@ -548,7 +548,7 @@
     "Ng6"
    ],
    "fen": "r1bqkb1r/pp1ppppp/5nn1/3P4/4PP2/8/PP4PP/RNBQKBNR w KQkq - 1 7",
-   "said": "during the game here again you go D5 and a great illustration of why you have to push Pawns in the opening is this line where white plays out four forcing the Knight back another pawn"
+   "said": "forcing the Knight back another pawn"
   },
   {
    "ply": 13,
@@ -557,7 +557,7 @@
     "e5"
    ],
    "fen": "r1bqkb1r/pp1ppppp/5nn1/3PP3/5P2/8/PP4PP/RNBQKBNR b KQkq - 0 7",
-   "said": "during the game here again you go D5 and a great illustration of why you have to push Pawns in the opening is this line where white plays out four forcing the Knight back another pawn move forces the other Knight back and"
+   "said": "move forces the other Knight back and"
   },
   {
    "ply": 14,
@@ -566,7 +566,7 @@
     "Ng8"
    ],
    "fen": "r1bqkbnr/pp1ppppp/6n1/3PP3/5P2/8/PP4PP/RNBQKBNR w KQkq - 1 8",
-   "said": "a great illustration of why you have to push Pawns in the opening is this line where white plays out four forcing the Knight back another pawn move forces the other Knight back and just look at how disastrous this"
+   "said": "just look at how disastrous this"
   },
   {
    "ply": 15,
@@ -575,7 +575,7 @@
     "Nc3"
    ],
    "fen": "r1bqkbnr/pp1ppppp/6n1/3PP3/5P2/2N5/PP4PP/R1BQKBNR b KQkq - 2 8",
-   "said": "push Pawns in the opening is this line where white plays out four forcing the Knight back another pawn move forces the other Knight back and just look at how disastrous this position is black literally cannot move and there's a really lovely line after D6 black tries to establish some sort of"
+   "said": "position is black literally cannot move"
   },
   {
    "ply": 16,
@@ -584,7 +584,7 @@
     "d6"
    ],
    "fen": "r1bqkbnr/pp2pppp/3p2n1/3PP3/5P2/2N5/PP4PP/R1BQKBNR w KQkq - 0 9",
-   "said": "move forces the other Knight back and just look at how disastrous this position is black literally cannot move and there's a really lovely line after D6 black tries to establish some sort of presence in the end game another ridiculous cracked out computer idea watch this E6"
+   "said": "and there's a really lovely line after D6 black tries to establish some sort of presence in the end game another"
   },
   {
    "ply": 17,
@@ -593,7 +593,7 @@
     "e6"
    ],
    "fen": "r1bqkbnr/pp2pppp/3pP1n1/3P4/5P2/2N5/PP4PP/R1BQKBNR b KQkq - 0 9",
-   "said": "and there's a really lovely line after D6 black tries to establish some sort of presence in the end game another ridiculous cracked out computer idea watch this E6 now this just looks like a flat out blunder F takes E6 D6 Bishop E6 and you"
+   "said": "ridiculous cracked out computer idea watch this E6 now this just looks like a flat out"
   },
   {
    "ply": 20,
@@ -604,7 +604,7 @@
     "fxe6"
    ],
    "fen": "r2qkbnr/pp2p1pp/3pp1n1/8/5P2/2N5/PP4PP/R1BQKBNR w KQkq - 0 11",
-   "said": "presence in the end game another ridiculous cracked out computer idea watch this E6 now this just looks like a flat out blunder F takes E6 D6 Bishop E6 and you might say oh there's a fork but no F5 is"
+   "said": "blunder F takes E6 D6 Bishop E6 and you"
   },
   {
    "ply": 21,
@@ -613,7 +613,7 @@
     "f5"
    ],
    "fen": "r2qkbnr/pp2p1pp/3pp1n1/5P2/8/2N5/PP4PP/R1BQKBNR b KQkq - 0 11",
-   "said": "presence in the end game another ridiculous cracked out computer idea watch this E6 now this just looks like a flat out blunder F takes E6 D6 Bishop E6 and you might say oh there's a fork but no F5 is"
+   "said": "might say oh there's a fork but no F5 is"
   },
   {
    "ply": 22,
@@ -622,14 +622,14 @@
     "exf5"
    ],
    "fen": "r2qkbnr/pp2p1pp/3p2n1/5p2/8/2N5/PP4PP/R1BQKBNR w KQkq - 0 12",
-   "said": "ridiculous cracked out computer idea watch this E6 now this just looks like a flat out blunder F takes E6 D6 Bishop E6 and you might say oh there's a fork but no F5 is unprotected that's not the idea the idea"
+   "said": "unprotected that's not the idea the idea"
   },
   {
    "ply": 20,
    "t": 2726.5,
    "line": [],
    "fen": "r2qkbnr/pp2p1pp/3pp1n1/8/5P2/2N5/PP4PP/R1BQKBNR w KQkq - 0 11",
-   "said": "watch this E6 now this just looks like a flat out blunder F takes E6 D6 Bishop E6 and you might say oh there's a fork but no F5 is unprotected that's not the idea the idea is to follow up with H4"
+   "said": ""
   },
   {
    "ply": 21,
@@ -638,7 +638,7 @@
     "h4"
    ],
    "fen": "r2qkbnr/pp2p1pp/3pp1n1/8/5P1P/2N5/PP4P1/R1BQKBNR b KQkq - 0 11",
-   "said": "now this just looks like a flat out blunder F takes E6 D6 Bishop E6 and you might say oh there's a fork but no F5 is unprotected that's not the idea the idea is to follow up with H4 threatening H5 no problem the Knight will move except it can't move it has nowhere to go after H5 and if black halts the progress of"
+   "said": "is to follow up with H4 threatening H5 no problem the Knight will move except"
   },
   {
    "ply": 22,
@@ -647,7 +647,7 @@
     "h5"
    ],
    "fen": "r2qkbnr/pp2p1p1/3pp1n1/7p/5P1P/2N5/PP4P1/R1BQKBNR w KQkq - 0 12",
-   "said": "is to follow up with H4 threatening H5 no problem the Knight will move except it can't move it has nowhere to go after H5 and if black halts the progress of the pawn then the Knight is unprotected which means we could bring the bishop"
+   "said": "it can't move it has nowhere to go after H5 and if black halts the progress of the pawn then the Knight is unprotected"
   },
   {
    "ply": 23,
@@ -656,7 +656,7 @@
     "Bd3"
    ],
    "fen": "r2qkbnr/pp2p1p1/3pp1n1/7p/5P1P/2NB4/PP4P1/R1BQK1NR b KQkq - 1 12",
-   "said": "threatening H5 no problem the Knight will move except it can't move it has nowhere to go after H5 and if black halts the progress of the pawn then the Knight is unprotected which means we could bring the bishop out developing with tempo if black defends with the King then we have a"
+   "said": "which means we could bring the bishop out developing with tempo if black"
   },
   {
    "ply": 25,
@@ -666,14 +666,14 @@
     "f5"
    ],
    "fen": "r2q1bnr/pp2pkp1/3pp1n1/5P1p/7P/2NB4/PP4P1/R1BQK1NR b KQ - 0 13",
-   "said": "H5 and if black halts the progress of the pawn then the Knight is unprotected which means we could bring the bishop out developing with tempo if black defends with the King then we have a fork if black goes to Bishop F7 then suddenly the bishop misdirects to B5 and we win the queen so just the energy in White's position here is is amazing so another line torns or shreds"
+   "said": "defends with the King then we have a fork if black goes to Bishop F7 then suddenly the bishop misdirects to B5 and we win the queen"
   },
   {
    "ply": 7,
    "t": 2759.5,
    "line": [],
    "fen": "r1bqkbnr/pp1ppppp/2n5/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
-   "said": "suddenly the bishop misdirects to B5 and we win the queen so just the energy in White's position here is is amazing so another line torns or shreds um and last thing I'll point out is is the"
+   "said": "so just the energy in White's position here is is amazing so another line torns or shreds"
   },
   {
    "ply": 8,
@@ -682,7 +682,7 @@
     "d6"
    ],
    "fen": "r1bqkbnr/pp2pppp/2np4/8/3PP3/8/PP3PPP/RNBQKBNR w KQkq - 0 5",
-   "said": "so just the energy in White's position here is is amazing so another line torns or shreds um and last thing I'll point out is is the move D6 also very common at sort of the you know beginner to intermediate level and again you go D5 and here it's it's a"
+   "said": "um and last thing I'll point out is is the move D6 also very common at sort of the"
   },
   {
    "ply": 9,
@@ -691,7 +691,7 @@
     "d5"
    ],
    "fen": "r1bqkbnr/pp2pppp/2np4/3P4/4P3/8/PP3PPP/RNBQKBNR b KQkq - 0 5",
-   "said": "um and last thing I'll point out is is the move D6 also very common at sort of the you know beginner to intermediate level and again you go D5 and here it's it's a"
+   "said": "you know beginner to intermediate level and again you go D5 and here it's it's a"
   },
   {
    "ply": 10,
@@ -700,7 +700,7 @@
     "Ne5"
    ],
    "fen": "r1bqkbnr/pp2pppp/3p4/3Pn3/4P3/8/PP3PPP/RNBQKBNR w KQkq - 1 6",
-   "said": "um and last thing I'll point out is is the move D6 also very common at sort of the you know beginner to intermediate level and again you go D5 and here it's it's a little bit less clear-cut after F4 but"
+   "said": "little bit less clear-cut after F4 but"
   },
   {
    "ply": 11,
@@ -709,7 +709,7 @@
     "f4"
    ],
    "fen": "r1bqkbnr/pp2pppp/3p4/3Pn3/4PP2/8/PP4PP/RNBQKBNR b KQkq - 0 6",
-   "said": "move D6 also very common at sort of the you know beginner to intermediate level and again you go D5 and here it's it's a little bit less clear-cut after F4 but still the black's position is horrendous"
+   "said": ""
   },
   {
    "ply": 12,
@@ -718,7 +718,7 @@
     "Nd7"
    ],
    "fen": "r1bqkbnr/pp1npppp/3p4/3P4/4PP2/8/PP4PP/RNBQKBNR w KQkq - 1 7",
-   "said": "you know beginner to intermediate level and again you go D5 and here it's it's a little bit less clear-cut after F4 but still the black's position is horrendous absolutely horrendous and the one thing"
+   "said": "still the black's position is horrendous absolutely horrendous and the one thing"
   },
   {
    "ply": 13,
@@ -727,7 +727,7 @@
     "Nc3"
    ],
    "fen": "r1bqkbnr/pp1npppp/3p4/3P4/4PP2/2N5/PP4PP/R1BQKBNR b KQkq - 2 7",
-   "said": "you know beginner to intermediate level and again you go D5 and here it's it's a little bit less clear-cut after F4 but still the black's position is horrendous absolutely horrendous and the one thing you should remember is that if black"
+   "said": ""
   },
   {
    "ply": 14,
@@ -736,7 +736,7 @@
     "g6"
    ],
    "fen": "r1bqkbnr/pp1npp1p/3p2p1/3P4/4PP2/2N5/PP4PP/R1BQKBNR w KQkq - 0 8",
-   "said": "little bit less clear-cut after F4 but still the black's position is horrendous absolutely horrendous and the one thing you should remember is that if black tries to fianchetto the bishop with G6 you can actually prevent this and who can spot a move that again violates the general opening principle but makes perfect sense now that you're aware of how dangerous the progress of the epon can be yeah Queen D4 is automatic either"
+   "said": "you should remember is that if black tries to fianchetto the bishop with G6 you can actually prevent this and who can spot a move that again violates the"
   },
   {
    "ply": 15,
@@ -745,7 +745,7 @@
     "Qd4"
    ],
    "fen": "r1bqkbnr/pp1npp1p/3p2p1/3P4/3QPP2/2N5/PP4PP/R1B1KBNR b KQkq - 1 8",
-   "said": "can spot a move that again violates the general opening principle but makes perfect sense now that you're aware of how dangerous the progress of the epon can be yeah Queen D4 is automatic either forcing F6 or in the event of Knight f65"
+   "said": "general opening principle but makes perfect sense now that you're aware of how dangerous the progress of the epon can be yeah Queen D4 is automatic either forcing F6 or in the event of Knight f65"
   },
   {
    "ply": 17,
@@ -755,7 +755,7 @@
     "e5"
    ],
    "fen": "r1bqkb1r/pp1npp1p/3p1np1/3PP3/3Q1P2/2N5/PP4PP/R1B1KBNR b KQkq - 0 9",
-   "said": "general opening principle but makes perfect sense now that you're aware of how dangerous the progress of the epon can be yeah Queen D4 is automatic either forcing F6 or in the event of Knight f65 losing the game on the spot"
+   "said": "losing the game on the spot"
   },
   {
    "ply": 18,
@@ -764,14 +764,14 @@
     "g5"
    ],
    "fen": "r1bqkb1r/pp1npp1p/3p1n2/3PP1p1/3Q1P2/2N5/PP4PP/R1B1KBNR w KQkq - 0 10",
-   "said": "perfect sense now that you're aware of how dangerous the progress of the epon can be yeah Queen D4 is automatic either forcing F6 or in the event of Knight f65 losing the game on the spot uh for Black Knight h5e6 and then always there's a check at the end because D7 is covered black loses everything here not just a piece but also the rook in the corner so yeah this is why Knight C6 is not a good move"
+   "said": "uh for Black Knight h5e6 and then always there's a check at the end because D7 is covered black loses everything here not just a"
   },
   {
    "ply": 8,
    "t": 2823.5,
    "line": [],
    "fen": "r1bqkbnr/pp2pppp/2np4/8/3PP3/8/PP3PPP/RNBQKBNR w KQkq - 0 5",
-   "said": "because D7 is covered black loses everything here not just a piece but also the rook in the corner so yeah this is why Knight C6 is not a good move our opponent plays D5 trade and Knight"
+   "said": "piece but also the rook in the corner so yeah this is why Knight C6 is not a good move our opponent plays D5 trade and Knight"
   },
   {
    "ply": 12,
@@ -783,7 +783,7 @@
     "Qxd5"
    ],
    "fen": "r1b1kbnr/pp2pppp/2n5/3q4/3P4/5N2/PP3PPP/RNBQKB1R w KQkq - 0 7",
-   "said": "piece but also the rook in the corner so yeah this is why Knight C6 is not a good move our opponent plays D5 trade and Knight F3 now there are many many lines here that I could talk I could talk about this for an hour all I will mention here is the bishop takes F3 line which I'll"
+   "said": "F3 now there are many many lines here that I could talk I could talk about"
   },
   {
    "ply": 14,
@@ -793,7 +793,7 @@
     "Bg4"
    ],
    "fen": "r3kbnr/pp2pppp/2n5/3q4/3P2b1/2N2N2/PP3PPP/R1BQKB1R w KQkq - 2 8",
-   "said": "our opponent plays D5 trade and Knight F3 now there are many many lines here that I could talk I could talk about this for an hour all I will mention here is the bishop takes F3 line which I'll"
+   "said": "this for an hour all I will mention here is the bishop takes F3 line which I'll"
   },
   {
    "ply": 18,
@@ -805,14 +805,14 @@
     "Bxf3"
    ],
    "fen": "r3kbnr/pp2pppp/2n5/3q4/3P4/2N2b2/PP3PPP/R1BQKB1R w KQkq - 0 10",
-   "said": "F3 now there are many many lines here that I could talk I could talk about this for an hour all I will mention here is the bishop takes F3 line which I'll show in a moment this is sort of the main takeaway because here it's important to recognize that if you turn on the engine it will give you a misleading assessment you need to keep the engine on at a high depth to figure out the best continuation so here it's important to listen carefully the only other move here that occurs frequently is E5 white responds with Knight C3 and black pins the Knight with Bishop to B4 this is nothing to be afraid of we just go Bishop D2 ending the pin renewing the threat against the queen and essentially forcing the trade and getting the bishop pair right this is just a better position for white because the bishop aims at G7 and if black plays E4 then we dive forward to E5 and this is considered to be slightly better for white there is nothing insane here white is slightly better because of the bishop pair and you know the pawn and E4 can be weak I think Knight E7 is the main line then the queen delivers a check and actually the new recommendation in the chess level course I think is Queen to B4 here aiming at the Knight and preventing black from castling short you can keep analyzing this on your own uh you can find this in the in the chessable course that recently came out on the alopin uh but white species are coming out at a furious tempo so E5 is not you know a big problem but a common line"
+   "said": "show in a moment this is sort of the main takeaway because here it's important to recognize that if you turn on the engine it will give you a misleading assessment you need to keep the engine on at a high depth to figure out the best continuation so here it's important to listen carefully the only other move here that occurs frequently is E5 white responds with Knight C3 and black pins the Knight with Bishop to B4 this is nothing to be afraid of we just go Bishop D2 ending the pin renewing the threat against the queen and essentially forcing the trade and getting the bishop pair right this is just a better position for white because the bishop aims at G7 and if black plays E4 then we dive forward to E5 and this is considered to be slightly better for white there is nothing insane here white is slightly better because of the bishop pair and you know the pawn and E4 can be weak I think Knight E7 is the main line then the queen delivers a check and actually the new recommendation in the chess level course I think is Queen to B4 here aiming at the Knight and preventing black from castling short you can keep analyzing this on your own uh"
   },
   {
    "ply": 12,
    "t": 2915,
    "line": [],
    "fen": "r1b1kbnr/pp2pppp/2n5/3q4/3P4/5N2/PP3PPP/RNBQKB1R w KQkq - 0 7",
-   "said": "you can find this in the in the chessable course that recently came out on the alopin uh but white species are coming out at a furious tempo so E5 is not you know a big problem but a common line and finally the last part of our opening"
+   "said": "you can find this in the in the chessable course that recently came out on the alopin uh but white species are coming out at a furious tempo so E5 is not you know a big problem but a common line"
   },
   {
    "ply": 14,
@@ -822,7 +822,7 @@
     "Bg4"
    ],
    "fen": "r3kbnr/pp2pppp/2n5/3q4/3P2b1/2N2N2/PP3PPP/R1BQKB1R w KQkq - 2 8",
-   "said": "on the alopin uh but white species are coming out at a furious tempo so E5 is not you know a big problem but a common line and finally the last part of our opening overview before we get to the game is Bishop takes F3 which you will"
+   "said": "and finally the last part of our opening overview before we get to the game is"
   },
   {
    "ply": 18,
@@ -834,7 +834,7 @@
     "Bxf3"
    ],
    "fen": "r3kbnr/pp2pppp/2n5/3q4/3P4/2N2b2/PP3PPP/R1BQKB1R w KQkq - 0 10",
-   "said": "so E5 is not you know a big problem but a common line and finally the last part of our opening overview before we get to the game is Bishop takes F3 which you will definitely meet if you play the albumin often so here the best move is to"
+   "said": "Bishop takes F3 which you will definitely meet if you play the albumin"
   },
   {
    "ply": 19,
@@ -843,7 +843,7 @@
     "gxf3"
    ],
    "fen": "r3kbnr/pp2pppp/2n5/3q4/3P4/2N2P2/PP3P1P/R1BQKB1R b KQkq - 0 10",
-   "said": "a common line and finally the last part of our opening overview before we get to the game is Bishop takes F3 which you will definitely meet if you play the albumin often so here the best move is to recapture with the pawn now this looks like a flat out blunder because well that's the whole point of"
+   "said": "often so here the best move is to recapture with the pawn now this looks like a flat out blunder"
   },
   {
    "ply": 20,
@@ -852,7 +852,7 @@
     "Qxd4"
    ],
    "fen": "r3kbnr/pp2pppp/2n5/8/3q4/2N2P2/PP3P1P/R1BQKB1R w KQkq - 0 11",
-   "said": "Bishop takes F3 which you will definitely meet if you play the albumin often so here the best move is to recapture with the pawn now this looks like a flat out blunder because well that's the whole point of Black's move black takes D4 and now you do something absolutely crazy this is impossible to find if you aren't aware of it beforehand you trade Queens"
+   "said": "because well that's the whole point of Black's move black takes D4 and now you do something absolutely crazy this is impossible to find if you aren't aware"
   },
   {
    "ply": 22,
@@ -862,7 +862,7 @@
     "Nxd4"
    ],
    "fen": "r3kbnr/pp2pppp/8/8/3n4/2N2P2/PP3P1P/R1B1KB1R w KQkq - 0 12",
-   "said": "Black's move black takes D4 and now you do something absolutely crazy this is impossible to find if you aren't aware of it beforehand you trade Queens looks like total self-sabotage and now not only do you not defend C2 you play this move Knight to B5"
+   "said": "of it beforehand you trade Queens looks like total self-sabotage"
   },
   {
    "ply": 23,
@@ -871,7 +871,7 @@
     "Nb5"
    ],
    "fen": "r3kbnr/pp2pppp/8/1N6/3n4/5P2/PP3P1P/R1B1KB1R b KQkq - 1 12",
-   "said": "impossible to find if you aren't aware of it beforehand you trade Queens looks like total self-sabotage and now not only do you not defend C2 you play this move Knight to B5 yeah very good I see a couple of you are familiar with this line not entirely I know this is pretty well known by this point and I can check if there are any games there are a lot of games yeah there's over 100 games here so this is a well-known line and it's been well known ever since 1959 believe it or not it was first played so it's it's not exactly a novelty and this is just incredibly problematic for black so what's going on here well first thing we should notice is that Knight C2 check"
+   "said": "and now not only do you not defend C2 you play this move Knight to B5 yeah very good I see a couple of you are familiar with this line not entirely I know this is pretty well known by this point and I can check if there are any games there are a lot of games yeah there's over 100 games here so this is a well-known line and it's been well known ever since 1959 believe it or not it was"
   },
   {
    "ply": 24,
@@ -880,7 +880,7 @@
     "Nc2+"
    ],
    "fen": "r3kbnr/pp2pppp/8/1N6/8/5P2/PPn2P1P/R1B1KB1R w KQkq - 2 13",
-   "said": "first played so it's it's not exactly a novelty and this is just incredibly problematic for black so what's going on here well first thing we should notice is that Knight C2 check allows the white to carry out his main"
+   "said": "first played so it's it's not exactly a novelty and this is just incredibly problematic for black so what's going on here well first thing we should notice is that Knight C2 check"
   },
   {
    "ply": 25,
@@ -889,7 +889,7 @@
     "Kd1"
    ],
    "fen": "r3kbnr/pp2pppp/8/1N6/8/5P2/PPn2P1P/R1BK1B1R b kq - 3 13",
-   "said": "novelty and this is just incredibly problematic for black so what's going on here well first thing we should notice is that Knight C2 check allows the white to carry out his main idea King D1 Knight takes A1"
+   "said": "allows the white to carry out his main idea King D1"
   },
   {
    "ply": 26,
@@ -898,7 +898,7 @@
     "Nxa1"
    ],
    "fen": "r3kbnr/pp2pppp/8/1N6/8/5P2/PP3P1P/n1BK1B1R w kq - 0 14",
-   "said": "so what's going on here well first thing we should notice is that Knight C2 check allows the white to carry out his main idea King D1 Knight takes A1 obviously we counter Fork The Rook on"
+   "said": "Knight takes A1"
   },
   {
    "ply": 27,
@@ -907,7 +907,7 @@
     "Nc7+"
    ],
    "fen": "r3kbnr/ppN1pppp/8/8/8/5P2/PP3P1P/n1BK1B1R b kq - 1 14",
-   "said": "well first thing we should notice is that Knight C2 check allows the white to carry out his main idea King D1 Knight takes A1 obviously we counter Fork The Rook on A8 and you might say and this is actually the most popular continuation among humans Knight takes a eight and"
+   "said": "obviously we counter Fork The Rook on A8 and you might say and this is"
   },
   {
    "ply": 29,
@@ -917,7 +917,7 @@
     "Nxa8"
    ],
    "fen": "N4bnr/pp1kpppp/8/8/8/5P2/PP3P1P/n1BK1B1R b - - 0 15",
-   "said": "idea King D1 Knight takes A1 obviously we counter Fork The Rook on A8 and you might say and this is actually the most popular continuation among humans Knight takes a eight and now most people here with black play a move like E6 and you might say well"
+   "said": "actually the most popular continuation among humans Knight takes a eight and now most people here with black play a"
   },
   {
    "ply": 30,
@@ -926,7 +926,7 @@
     "e6"
    ],
    "fen": "N4bnr/pp1k1ppp/4p3/8/8/5P2/PP3P1P/n1BK1B1R w - - 0 16",
-   "said": "A8 and you might say and this is actually the most popular continuation among humans Knight takes a eight and now most people here with black play a move like E6 and you might say well Black's gonna go around and win white snide and White's probably gonna win black snide and White's just gonna be down upon but it's not that simple because you can use your Bishops to prevent Black's King from making it to B8 you give one check and after King CA"
+   "said": "move like E6 and you might say well Black's gonna go around and win white snide and White's probably gonna win black snide and White's just gonna be down upon but it's not that simple"
   },
   {
    "ply": 31,
@@ -935,7 +935,7 @@
     "Bb5+"
    ],
    "fen": "N4bnr/pp1k1ppp/4p3/1B6/8/5P2/PP3P1P/n1BK3R b - - 1 16",
-   "said": "snide and White's probably gonna win black snide and White's just gonna be down upon but it's not that simple because you can use your Bishops to prevent Black's King from making it to B8 you give one check and after King CA very important move Bishop out to F4"
+   "said": "because you can use your Bishops to prevent Black's King from making it to B8 you give one check and after King CA"
   },
   {
    "ply": 33,
@@ -945,7 +945,7 @@
     "Bf4"
    ],
    "fen": "N1k2bnr/pp3ppp/4p3/1B6/5B2/5P2/PP3P1P/n2K3R b - - 3 17",
-   "said": "because you can use your Bishops to prevent Black's King from making it to B8 you give one check and after King CA very important move Bishop out to F4 preventing King B8 and opening up an Escape Route for the Knight although you don't need to go Knight C7 you're already winning here a 2390 walked into this with black in 2007 he played G5 trying to deflect the"
+   "said": "very important move Bishop out to F4 preventing King B8 and opening up an Escape Route for the Knight although you don't need to go Knight C7 you're"
   },
   {
    "ply": 34,
@@ -954,7 +954,7 @@
     "g5"
    ],
    "fen": "N1k2bnr/pp3p1p/4p3/1B4p1/5B2/5P2/PP3P1P/n2K3R w - - 0 18",
-   "said": "preventing King B8 and opening up an Escape Route for the Knight although you don't need to go Knight C7 you're already winning here a 2390 walked into this with black in 2007 he played G5 trying to deflect the bishop obviously white stays on the"
+   "said": "already winning here a 2390 walked into this with black in 2007 he played G5 trying to deflect the"
   },
   {
    "ply": 35,
@@ -963,14 +963,14 @@
     "Bg3"
    ],
    "fen": "N1k2bnr/pp3p1p/4p3/1B4p1/8/5PB1/PP3P1P/n2K3R b - - 1 18",
-   "said": "don't need to go Knight C7 you're already winning here a 2390 walked into this with black in 2007 he played G5 trying to deflect the bishop obviously white stays on the diagonal Bishop G3 this is a novelty by the way for some reason white played Bishop takes G5 in"
+   "said": "bishop obviously white stays on the diagonal Bishop G3"
   },
   {
    "ply": 34,
    "t": 3041.5,
    "line": [],
    "fen": "N1k2bnr/pp3p1p/4p3/1B4p1/5B2/5P2/PP3P1P/n2K3R w - - 0 18",
-   "said": "2007 he played G5 trying to deflect the bishop obviously white stays on the diagonal Bishop G3 this is a novelty by the way for some reason white played Bishop takes G5 in"
+   "said": "this is a novelty by the way for some reason white played Bishop takes G5 in"
   },
   {
    "ply": 35,
@@ -979,7 +979,7 @@
     "Bg3"
    ],
    "fen": "N1k2bnr/pp3p1p/4p3/1B4p1/8/5PB1/PP3P1P/n2K3R b - - 1 18",
-   "said": "2007 he played G5 trying to deflect the bishop obviously white stays on the diagonal Bishop G3 this is a novelty by the way for some reason white played Bishop takes G5 in the game but Bishop G3 is ending Bishop"
+   "said": "the game but Bishop G3 is ending Bishop"
   },
   {
    "ply": 36,
@@ -988,7 +988,7 @@
     "Bg7"
    ],
    "fen": "N1k3nr/pp3pbp/4p3/1B4p1/8/5PB1/PP3P1P/n2K3R w - - 2 19",
-   "said": "bishop obviously white stays on the diagonal Bishop G3 this is a novelty by the way for some reason white played Bishop takes G5 in the game but Bishop G3 is ending Bishop G7 King moves out of the way attacking the"
+   "said": "G7"
   },
   {
    "ply": 37,
@@ -997,7 +997,7 @@
     "Ke2"
    ],
    "fen": "N1k3nr/pp3pbp/4p3/1B4p1/8/5PB1/PP2KP1P/n6R b - - 3 19",
-   "said": "diagonal Bishop G3 this is a novelty by the way for some reason white played Bishop takes G5 in the game but Bishop G3 is ending Bishop G7 King moves out of the way attacking the Knight if the Knight moves the Knight is"
+   "said": "King moves out of the way attacking the Knight if the Knight moves the Knight is"
   },
   {
    "ply": 39,
@@ -1007,7 +1007,7 @@
     "Rc1"
    ],
    "fen": "N1k3nr/pp3pbp/4p3/1B4p1/8/5PB1/PPn1KP1P/2R5 b - - 5 20",
-   "said": "reason white played Bishop takes G5 in the game but Bishop G3 is ending Bishop G7 King moves out of the way attacking the Knight if the Knight moves the Knight is pinned in one and if black comes to the rescue then"
+   "said": "pinned in one"
   },
   {
    "ply": 42,
@@ -1018,7 +1018,7 @@
     "Na1"
    ],
    "fen": "N1k3nr/pp3p1p/4p3/1B4p1/8/5PB1/Pb2KP1P/n6R w - - 2 22",
-   "said": "the game but Bishop G3 is ending Bishop G7 King moves out of the way attacking the Knight if the Knight moves the Knight is pinned in one and if black comes to the rescue then the winning line is Rogue B1 attacking"
+   "said": "and if black comes to the rescue then"
   },
   {
    "ply": 43,
@@ -1027,7 +1027,7 @@
     "Rb1"
    ],
    "fen": "N1k3nr/pp3p1p/4p3/1B4p1/8/5PB1/Pb2KP1P/nR6 b - - 3 22",
-   "said": "G7 King moves out of the way attacking the Knight if the Knight moves the Knight is pinned in one and if black comes to the rescue then the winning line is Rogue B1 attacking the bishop forcing him back and once the bishop moves back another"
+   "said": "the winning line is Rogue B1 attacking the bishop forcing him back"
   },
   {
    "ply": 44,
@@ -1036,7 +1036,7 @@
     "Bg7"
    ],
    "fen": "N1k3nr/pp3pbp/4p3/1B4p1/8/5PB1/P3KP1P/nR6 w - - 4 23",
-   "said": "Knight if the Knight moves the Knight is pinned in one and if black comes to the rescue then the winning line is Rogue B1 attacking the bishop forcing him back and once the bishop moves back another"
+   "said": "and once the bishop moves back another"
   },
   {
    "ply": 45,
@@ -1045,7 +1045,7 @@
     "Rc1+"
    ],
    "fen": "N1k3nr/pp3pbp/4p3/1B4p1/8/5PB1/P3KP1P/n1R5 b - - 5 23",
-   "said": "pinned in one and if black comes to the rescue then the winning line is Rogue B1 attacking the bishop forcing him back and once the bishop moves back another check on C1 and at this point we switch from trying"
+   "said": "check on C1"
   },
   {
    "ply": 47,
@@ -1055,14 +1055,14 @@
     "Rc7"
    ],
    "fen": "N2k2nr/ppR2pbp/4p3/1B4p1/8/5PB1/P3KP1P/n7 b - - 7 24",
-   "said": "and if black comes to the rescue then the winning line is Rogue B1 attacking the bishop forcing him back and once the bishop moves back another check on C1 and at this point we switch from trying to win the Knight to trying to win the king the king is now under a checkmating attack just look at how White's pieces have gathered even the Knight can participate in the attack and I'll leave it up to you to finish this off but it's already totally totally winning it's plus seven so this is just one of many important"
+   "said": "and at this point we switch from trying to win the Knight to trying to win the king the king is now under a checkmating attack just look at how White's pieces have gathered even the Knight can participate in the attack and I'll leave"
   },
   {
    "ply": 29,
    "t": 3083.5,
    "line": [],
    "fen": "N4bnr/pp1kpppp/8/8/8/5P2/PP3P1P/n1BK1B1R b - - 0 15",
-   "said": "have gathered even the Knight can participate in the attack and I'll leave it up to you to finish this off but it's already totally totally winning it's plus seven so this is just one of many important lines here the only other line that I'll give for now is E5 right black can try to prevent the"
+   "said": "it up to you to finish this off but it's already totally totally winning it's plus seven so this is just one of many important lines here the only other line that I'll give for now"
   },
   {
    "ply": 30,
@@ -1071,7 +1071,7 @@
     "e5"
    ],
    "fen": "N4bnr/pp1k1ppp/8/4p3/8/5P2/PP3P1P/n1BK1B1R w - - 0 16",
-   "said": "already totally totally winning it's plus seven so this is just one of many important lines here the only other line that I'll give for now is E5 right black can try to prevent the white Bishop from moving out to F4 the thing is E5 leaves this diagonal open"
+   "said": "is E5 right black can try to prevent the white Bishop from moving out to F4 the"
   },
   {
    "ply": 31,
@@ -1080,7 +1080,7 @@
     "Bh3+"
    ],
    "fen": "N4bnr/pp1k1ppp/8/4p3/8/5P1B/PP3P1P/n1BK3R b - - 1 16",
-   "said": "lines here the only other line that I'll give for now is E5 right black can try to prevent the white Bishop from moving out to F4 the thing is E5 leaves this diagonal open and we immediately exploit it and again the king just cannot make its way to B8"
+   "said": "thing is E5 leaves this diagonal open and we immediately exploit it and again"
   },
   {
    "ply": 32,
@@ -1089,7 +1089,7 @@
     "Kd6"
    ],
    "fen": "N4bnr/pp3ppp/3k4/4p3/8/5P1B/PP3P1P/n1BK3R w - - 2 17",
-   "said": "white Bishop from moving out to F4 the thing is E5 leaves this diagonal open and we immediately exploit it and again the king just cannot make its way to B8 and here I think F4 is best undermining"
+   "said": "the king just cannot make its way to B8 and here I think F4 is best undermining"
   },
   {
    "ply": 33,
@@ -1098,7 +1098,7 @@
     "f4"
    ],
    "fen": "N4bnr/pp3ppp/3k4/4p3/5P2/7B/PP3P1P/n1BK3R b - - 0 17",
-   "said": "thing is E5 leaves this diagonal open and we immediately exploit it and again the king just cannot make its way to B8 and here I think F4 is best undermining the pawn then bringing the bishop out"
+   "said": "the pawn then bringing the bishop out"
   },
   {
    "ply": 35,
@@ -1108,7 +1108,7 @@
     "Be3"
    ],
    "fen": "N4bnr/pp3ppp/3k4/8/4pP2/4B2B/PP3P1P/n2K3R b - - 1 18",
-   "said": "and we immediately exploit it and again the king just cannot make its way to B8 and here I think F4 is best undermining the pawn then bringing the bishop out and on the next move we just play King to D2"
+   "said": "and on the next move we just play King"
   },
   {
    "ply": 37,
@@ -1118,7 +1118,7 @@
     "Kd2"
    ],
    "fen": "N4b1r/pp3ppp/3k1n2/8/4pP2/4B2B/PP1K1P1P/n6R b - - 3 19",
-   "said": "the king just cannot make its way to B8 and here I think F4 is best undermining the pawn then bringing the bishop out and on the next move we just play King to D2 and the Knight on A1 is lost but more importantly after Bishop E7 another"
+   "said": "to D2 and the Knight on A1 is lost but more"
   },
   {
    "ply": 38,
@@ -1127,7 +1127,7 @@
     "Be7"
    ],
    "fen": "N6r/pp2bppp/3k1n2/8/4pP2/4B2B/PP1K1P1P/n6R w - - 4 20",
-   "said": "the pawn then bringing the bishop out and on the next move we just play King to D2 and the Knight on A1 is lost but more importantly after Bishop E7 another beautiful detail can anybody spot White's best move in this position and it's obviously it's not to take the Knight because then black is finally out of the woods again we generate chances against Black's King all of a sudden"
+   "said": "importantly after Bishop E7 another beautiful detail can anybody spot White's best move in this position and it's obviously it's not to take the Knight because then black is finally out of the woods again"
   },
   {
    "ply": 39,
@@ -1136,7 +1136,7 @@
     "Rc1"
    ],
    "fen": "N6r/pp2bppp/3k1n2/8/4pP2/4B2B/PP1K1P1P/n1R5 b - - 5 20",
-   "said": "not to take the Knight because then black is finally out of the woods again we generate chances against Black's King all of a sudden yeah Rook C1 threatening Bishop C5 and preparing Knight C7 so if black takes check"
+   "said": "we generate chances against Black's King all of a sudden yeah Rook C1 threatening Bishop C5 and preparing"
   },
   {
    "ply": 40,
@@ -1145,7 +1145,7 @@
     "Rxa8"
    ],
    "fen": "r7/pp2bppp/3k1n2/8/4pP2/4B2B/PP1K1P1P/n1R5 w - - 0 21",
-   "said": "all of a sudden yeah Rook C1 threatening Bishop C5 and preparing Knight C7 so if black takes check"
+   "said": "Knight C7 so if black takes check"
   },
   {
    "ply": 42,
@@ -1155,7 +1155,7 @@
     "Kc7"
    ],
    "fen": "r7/ppk1bppp/5n2/2B5/4pP2/7B/PP1K1P1P/n1R5 w - - 2 22",
-   "said": "all of a sudden yeah Rook C1 threatening Bishop C5 and preparing Knight C7 so if black takes check then we grab"
+   "said": "then we grab"
   },
   {
    "ply": 43,
@@ -1164,7 +1164,7 @@
     "Bxe7+"
    ],
    "fen": "r7/ppk1Bppp/5n2/8/4pP2/7B/PP1K1P1P/n1R5 b - - 0 22",
-   "said": "all of a sudden yeah Rook C1 threatening Bishop C5 and preparing Knight C7 so if black takes check then we grab and then we grab on A1 and we win the"
+   "said": ""
   },
   {
    "ply": 44,
@@ -1173,7 +1173,7 @@
     "Kb6"
    ],
    "fen": "r7/pp2Bppp/1k3n2/8/4pP2/7B/PP1K1P1P/n1R5 w - - 1 23",
-   "said": "yeah Rook C1 threatening Bishop C5 and preparing Knight C7 so if black takes check then we grab and then we grab on A1 and we win the"
+   "said": "and then we grab on A1 and we win the"
   },
   {
    "ply": 45,
@@ -1182,28 +1182,28 @@
     "Rxa1"
    ],
    "fen": "r7/pp2Bppp/1k3n2/8/4pP2/7B/PP1K1P1P/R7 b - - 0 23",
-   "said": "yeah Rook C1 threatening Bishop C5 and preparing Knight C7 so if black takes check then we grab and then we grab on A1 and we win the game we're up a piece so that's how you punish E6 and E5 there is a lot more Theory even in this position but this video is going to go"
+   "said": "game we're up a piece"
   },
   {
    "ply": 29,
    "t": 3154.5,
    "line": [],
    "fen": "N4bnr/pp1kpppp/8/8/8/5P2/PP3P1P/n1BK1B1R b - - 0 15",
-   "said": "game we're up a piece so that's how you punish E6 and E5 there is a lot more Theory even in this position but this video is going to go on forever and something tells me we're gonna get this again and the whole philosophy of the speedrun is that I give you the theory and sort of bite-sized chunks and ultimately there will be videos dedicated to Theory so it's not like you know we'll never revisit this again but as I always say you're more than welcome to set this up on hs.com leeches engine whatever uh and and just analyze on your own look up the games and you can learn a lot that way"
+   "said": "so that's how you punish E6 and E5 there is a lot more Theory even in this position but this video is going to go on forever and something tells me we're gonna get this again and the whole philosophy of the speedrun is that I give you the theory and sort of bite-sized chunks and ultimately there will be videos dedicated to Theory so it's not like you know we'll never"
   },
   {
    "ply": 26,
    "t": 3183,
    "line": [],
    "fen": "r3kbnr/pp2pppp/8/1N6/8/5P2/PP3P1P/n1BK1B1R w kq - 0 14",
-   "said": "revisit this again but as I always say you're more than welcome to set this up on hs.com leeches engine whatever uh and and just analyze on your own look up the games and you can learn a lot that way you don't just have to rely on what I tell you I'm trying to give you the main stuff but you can carry the analysis forward on your own in any case after a knight to B5 black"
+   "said": "revisit this again but as I always say you're more than welcome to set this up on hs.com leeches engine whatever uh and and just analyze on your own look up the games and you can learn a lot that way you don't just have to rely on what I tell you I'm trying to give you the main stuff but you can carry the analysis"
   },
   {
    "ply": 22,
    "t": 3191,
    "line": [],
    "fen": "r3kbnr/pp2pppp/8/8/3n4/2N2P2/PP3P1P/R1B1KB1R w KQkq - 0 12",
-   "said": "and just analyze on your own look up the games and you can learn a lot that way you don't just have to rely on what I tell you I'm trying to give you the main stuff but you can carry the analysis forward on your own in any case after a knight to B5 black"
+   "said": "forward on your own in any case after a knight to B5 black"
   },
   {
    "ply": 24,
@@ -1213,7 +1213,7 @@
     "Nxb5"
    ],
    "fen": "r3kbnr/pp2pppp/8/1n6/8/5P2/PP3P1P/R1B1KB1R w KQkq - 0 13",
-   "said": "you don't just have to rely on what I tell you I'm trying to give you the main stuff but you can carry the analysis forward on your own in any case after a knight to B5 black can also take on B5 but the king here is"
+   "said": "can also take on B5 but the king here is"
   },
   {
    "ply": 26,
@@ -1223,7 +1223,7 @@
     "Kd8"
    ],
    "fen": "r2k1bnr/pp2pppp/8/1B6/8/5P2/PP3P1P/R1B1K2R w KQ - 1 14",
-   "said": "tell you I'm trying to give you the main stuff but you can carry the analysis forward on your own in any case after a knight to B5 black can also take on B5 but the king here is under just tremendous fire The Rook is"
+   "said": ""
   },
   {
    "ply": 27,
@@ -1232,7 +1232,7 @@
     "Ke2"
    ],
    "fen": "r2k1bnr/pp2pppp/8/1B6/8/5P2/PP2KP1P/R1B4R b - - 2 14",
-   "said": "stuff but you can carry the analysis forward on your own in any case after a knight to B5 black can also take on B5 but the king here is under just tremendous fire The Rook is coming to D1 and Black's lack of development absolutely kills him so for instance here here then we bring the"
+   "said": "under just tremendous fire The Rook is coming to D1 and Black's lack of"
   },
   {
    "ply": 29,
@@ -1242,7 +1242,7 @@
     "Rd1+"
    ],
    "fen": "r2k1b1r/pp2pppp/5n2/1B6/8/5P2/PP2KP1P/R1BR4 b - - 4 15",
-   "said": "can also take on B5 but the king here is under just tremendous fire The Rook is coming to D1 and Black's lack of development absolutely kills him so for instance here here then we bring the"
+   "said": "development absolutely kills him so for instance here here then we bring the"
   },
   {
    "ply": 31,
@@ -1252,7 +1252,7 @@
     "Bf4"
    ],
    "fen": "r1k2b1r/pp2pppp/5n2/1B6/5B2/5P2/PP2KP1P/R2R4 b - - 6 16",
-   "said": "under just tremendous fire The Rook is coming to D1 and Black's lack of development absolutely kills him so for instance here here then we bring the bishop out and it's literally made in three because Rook C1 is Unstoppable and"
+   "said": "bishop out and it's literally made in three because Rook C1 is Unstoppable and"
   },
   {
    "ply": 33,
@@ -1262,14 +1262,14 @@
     "Ba6#"
    ],
    "fen": "r1k2b1r/p3pppp/Bp3n2/8/5B2/5P2/PP2KP1P/R2R4 b - - 1 17",
-   "said": "coming to D1 and Black's lack of development absolutely kills him so for instance here here then we bring the bishop out and it's literally made in three because Rook C1 is Unstoppable and this is also bowden's mate so plenty of lines like this I think the"
+   "said": "this is also bowden's mate"
   },
   {
    "ply": 23,
    "t": 3215.5,
    "line": [],
    "fen": "r3kbnr/pp2pppp/8/1N6/3n4/5P2/PP3P1P/R1B1KB1R b KQkq - 1 12",
-   "said": "bishop out and it's literally made in three because Rook C1 is Unstoppable and this is also bowden's mate so plenty of lines like this I think the best move for black is to drop back to"
+   "said": "so plenty of lines like this I think the"
   },
   {
    "ply": 24,
@@ -1278,7 +1278,7 @@
     "Ne6"
    ],
    "fen": "r3kbnr/pp2pppp/4n3/1N6/8/5P2/PP3P1P/R1B1KB1R w KQkq - 2 13",
-   "said": "bishop out and it's literally made in three because Rook C1 is Unstoppable and this is also bowden's mate so plenty of lines like this I think the best move for black is to drop back to E6 and now we play quick F4 F5"
+   "said": "best move for black is to drop back to"
   },
   {
    "ply": 25,
@@ -1287,7 +1287,7 @@
     "f4"
    ],
    "fen": "r3kbnr/pp2pppp/4n3/1N6/5P2/8/PP3P1P/R1B1KB1R b KQkq - 0 13",
-   "said": "this is also bowden's mate so plenty of lines like this I think the best move for black is to drop back to E6 and now we play quick F4 F5 and the line goes on but we will revisit this at a later point in the game our opponent did none of that and essentially gave us exactly what we wanted right away Rook Queen A5 D5 and I already think that black is is just in huge huge trouble I don't know what black should do if black plays Knight E5 then we give this check on B5 to essentially Force the Knight out of E5 and this is just crushing again good position to sort of dig around in on your own remember that Rook d8 here is very strongly met with Bishop D2 unpinning the pawn and setting up the X-ray according to the engine black actually had to give away the exchange and this was the only way to somewhat stay alive although here I think a very good move for white would be to essentially Force the queen trade with with Queen to B3 and in the resulting end game white is not up that much material it's in exchange for a pawn but if you look at"
+   "said": "E6 and now we play quick F4 F5 and the line goes on but we will revisit this at a later point in the game our opponent did none of that and essentially gave us exactly what we wanted right away Rook Queen A5 D5 and I already think that black is is just in huge huge trouble I don't know what black should do if black plays Knight E5 then we give this check on B5 to essentially Force the Knight out of E5 and this is just crushing again good position to sort of dig around in on your own remember that Rook d8 here is very strongly met with Bishop D2 unpinning the pawn and setting up the X-ray according to the engine black actually had to give away the exchange and this was the only way to somewhat stay alive although here I think a very good move for white would be to essentially Force the queen trade with with Queen to B3 and in the resulting end game white is not up that much material it's in exchange for a pawn but if you look at"
   }
  ],
  "forks": [

@@ -420,10 +420,19 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // from August, which is the argument for bumping WITH the change rather than
 // after noticing.
 //
+// 2026-08-20: bumped for the hand-written opening-tab beats (`lessonBeatAt`,
+// commit 939c45a). That change altered what a walkthrough SPEAKS but shipped
+// without a bump, so every device holding a tree stamped `2026-08-18-note-forks`
+// would have served the old prose forever — the feature invisible in production
+// while its unit tests passed, because those call the function directly and
+// never go through the cache. That is the failure the paragraph above describes
+// happening for the third time; the bump belongs in the SAME commit as any
+// change to what a beat says.
+//
 // One bump for all sixteen notes, per the locked cost rule: a bump regenerates
 // prose into new strings that miss the TTS clip cache, so batching keeps that to
 // a single synthesis bill instead of one per lesson written.
-const WALKTHROUGH_GEN_REV = '2026-08-18-note-forks';
+const WALKTHROUGH_GEN_REV = '2026-08-20-lesson-beats';
 
 export async function getCachedOpening(
   name: string,

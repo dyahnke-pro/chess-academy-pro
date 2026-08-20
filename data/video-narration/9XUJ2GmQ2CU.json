@@ -10,7 +10,7 @@
     "e6"
    ],
    "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "said": "[Music] 1742 okay so we're really moving up in the ranks and a french you guys know those of you who've been around for a while which line i like to play against the french name it in peter's honor so i play e5 it's traditionally called the steinitz variation and in this"
+   "said": "[Music] 1742 okay so we're really moving up in the ranks and a french you guys know those of you who've been around for a while which line i like to play against the french"
   },
   {
    "ply": 6,
@@ -22,7 +22,7 @@
     "d5"
    ],
    "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq d6 0 4",
-   "said": "around for a while which line i like to play against the french name it in peter's honor so i play e5 it's traditionally called the steinitz variation and in this position who can tell me what move i am a big fan of knight f3 yeah knight f3 okay so bishop our opponent basically pre-moves bishop d7 thinking that we're going to play c3 but we're actually not"
+   "said": "name it in peter's honor so i play e5 it's traditionally called the steinitz variation and in this position who can tell me what move i am a big fan of knight f3 yeah knight f3"
   },
   {
    "ply": 8,
@@ -32,7 +32,7 @@
     "Bd7"
    ],
    "fen": "rn1qkbnr/pp1b1ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
-   "said": "position who can tell me what move i am a big fan of knight f3 yeah knight f3 okay so bishop our opponent basically pre-moves bishop d7 thinking that we're going to play c3 but we're actually not and i looked at this position a little bit and if we really want to take it to black here okay there's a couple of ways that we can play this but the traditional idea here is to play bishop d3 that's essentially how we position our pieces i'll show you some other alternatives after the game and the point of the steinitz is that you leave the pawn on deep where you don't play c3 at all you just conserve"
+   "said": "okay so bishop our opponent basically pre-moves bishop d7 thinking that we're going to play c3 but we're actually not and i looked at this position a little bit and if we really want to take it to black here okay there's a couple of ways that we can play this but the traditional idea here is to play"
   },
   {
    "ply": 10,
@@ -42,7 +42,7 @@
     "Nc6"
    ],
    "fen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R w KQkq - 4 6",
-   "said": "bishop d3 that's essentially how we position our pieces i'll show you some other alternatives after the game and the point of the steinitz is that you leave the pawn on deep where you don't play c3 at all you just conserve time on that move and you make all of the normal french"
+   "said": "bishop d3 that's essentially how we position our pieces i'll show you some other alternatives after the game and the point of the steinitz is that you leave the pawn on deep where you don't play c3 at all you just conserve time on that move"
   },
   {
    "ply": 11,
@@ -51,7 +51,7 @@
     "O-O"
    ],
    "fen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 5 6",
-   "said": "position our pieces i'll show you some other alternatives after the game and the point of the steinitz is that you leave the pawn on deep where you don't play c3 at all you just conserve time on that move and you make all of the normal french moves except you don't play c3 you give up this pawn which is captured and the"
+   "said": "and you make all of the normal french moves except you don't play c3 you give"
   },
   {
    "ply": 12,
@@ -60,7 +60,7 @@
     "cxd4"
    ],
    "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
-   "said": "you leave the pawn on deep where you don't play c3 at all you just conserve time on that move and you make all of the normal french moves except you don't play c3 you give up this pawn which is captured and the whole system revolves around this e5 pawn and we need to over protect it we need to really defend it with everything that we've got and then eventually as you might remember we tend to recover this pawn by getting the knight from d2 to b3 but before we play knight bd2 it's a good idea to go bishop f4 and over protect the pawn so we don't have to worry about it queen b6 and"
+   "said": "up this pawn which is captured and the whole system revolves around this e5 pawn and we need to over protect it we need to really defend it with everything that we've got and then eventually as you might"
   },
   {
    "ply": 14,
@@ -70,7 +70,7 @@
     "Qb6"
    ],
    "fen": "r3kbnr/pp1b1ppp/1qn1p3/3pP3/3p1B2/3B1N2/PPP2PPP/RN1Q1RK1 w kq - 2 8",
-   "said": "remember we tend to recover this pawn by getting the knight from d2 to b3 but before we play knight bd2 it's a good idea to go bishop f4 and over protect the pawn so we don't have to worry about it queen b6 and another important property of the steines variation is that we like for example here i think some of you might want to play b3 but that's a really bad move because we want the b3 square for our knight and your instinct here should not be to defend the pawn on b2 what should we do instead how should we proceed we shouldn't defend it at all you have to realize that if black captures on b2 we're going to be able to play rook b1 and because black is so poorly developed"
+   "said": "remember we tend to recover this pawn by getting the knight from d2 to b3 but before we play knight bd2 it's a good idea to go bishop f4 and over protect the pawn so we don't have to worry about it queen b6 and another important property of the steines variation is that we like for example here i think some of you might want to play b3 but that's a really bad move because we want the b3 square for our knight and your instinct here should not be to defend the pawn on"
   },
   {
    "ply": 15,
@@ -79,7 +79,7 @@
     "Nbd2"
    ],
    "fen": "r3kbnr/pp1b1ppp/1qn1p3/3pP3/3p1B2/3B1N2/PPPN1PPP/R2Q1RK1 b kq - 3 8",
-   "said": "b2 what should we do instead how should we proceed we shouldn't defend it at all you have to realize that if black captures on b2 we're going to be able to play rook b1 and because black is so poorly developed opening up the b file will result in total disaster for black we don't even have to calculate this move it's just intuitively going to be really really bad so we go knight b2 anyway and then we go knight b3 rookie one we make all of the standard moves and eventually we go after the d4 pawn but we're under we're in no rush to capture it uh it's not poisoned per se it's not like i've"
+   "said": "b2 what should we do instead how should we proceed we shouldn't defend it at all you have to realize that if black captures on b2 we're going to be able to play rook b1 and because black is so poorly developed opening up the b file will result in total disaster for black we don't even have to calculate this move it's just intuitively going to be really really bad so we go knight b2 anyway and then we go knight b3 rookie one we make all"
   },
   {
    "ply": 16,
@@ -88,7 +88,7 @@
     "Nb4"
    ],
    "fen": "r3kbnr/pp1b1ppp/1q2p3/3pP3/1n1p1B2/3B1N2/PPPN1PPP/R2Q1RK1 w kq - 4 9",
-   "said": "we go knight b3 rookie one we make all of the standard moves and eventually we go after the d4 pawn but we're under we're in no rush to capture it uh it's not poisoned per se it's not like i've calculated the win night before okay that's a good move um but it doesn't fundamentally change our approach uh we're fine giving away this bishop so in this system it's actually okay to to give this"
+   "said": "of the standard moves and eventually we go after the d4 pawn but we're under we're in no rush to capture it uh it's not poisoned per se it's not like i've calculated the win night before okay that's a good move um but it doesn't fundamentally change our approach"
   },
   {
    "ply": 17,
@@ -97,7 +97,7 @@
     "Nb3"
    ],
    "fen": "r3kbnr/pp1b1ppp/1q2p3/3pP3/1n1p1B2/1N1B1N2/PPP2PPP/R2Q1RK1 b kq - 5 9",
-   "said": "that's a good move um but it doesn't fundamentally change our approach uh we're fine giving away this bishop so in this system it's actually okay to to give this bishop away it's not ideal but it's we can survive without the bishop and our opponent continues to abandon um the king side their king side development so this could potentially be costly if if this continues for very long what's up mr feingold okay so what did we take with well um in the in the name of opening up first of all queen takes d3 loses to bishop b5 so from that perspective we have to play cd but in addition we would play cd anyway because we've opened the c file for potentially for a rook so far our"
+   "said": "uh we're fine giving away this bishop so in this system it's actually okay to to give this bishop away it's not ideal but it's we can survive without the bishop and our opponent continues to abandon um the king side their king side development so this could potentially be costly if if this continues for very long what's up mr feingold okay so what did we take with well um in the in the name of opening up first"
   },
   {
    "ply": 19,
@@ -116,7 +116,7 @@
     "Rc8"
    ],
    "fen": "2r1kbnr/pp1b1ppp/1q2p3/3pP3/3p1B2/1N1P1N2/PP3PPP/R2Q1RK1 w k - 1 11",
-   "said": "so from that perspective we have to play cd but in addition we would play cd anyway because we've opened the c file for potentially for a rook so far our opponent i have to say is playing really really well rook c8 okay so this is a good example of where i wouldn't necessarily rush to take on on d4 i mean we can play knight b takes d4 there's nothing wrong with that but um i think it might be worth contesting contesting the c file first so let's go rook c1 first and then this pawn on d4 is is not going anywhere we're going to capture it at our leisure okay 97 good stuff by our opponent okay so now i think it's a good opportunity to take the pawn on d4 the question is which night do we take with which night do we take with"
+   "said": "really well rook c8 okay so this is a good example of where i wouldn't necessarily rush to take on on d4 i mean we can play knight b takes d4 there's nothing wrong with that but um i think it might be worth contesting contesting the c file first so let's go rook c1 first and then this pawn on d4 is is not going anywhere we're going to capture it at our leisure"
   },
   {
    "ply": 22,
@@ -126,7 +126,7 @@
     "Ne7"
    ],
    "fen": "2r1kb1r/pp1bnppp/1q2p3/3pP3/3p1B2/1N1P1N2/PP3PPP/2RQ1RK1 w k - 3 12",
-   "said": "okay 97 good stuff by our opponent okay so now i think it's a good opportunity to take the pawn on d4 the question is which night do we take with which night do we take with oh am i loud i'm loud sorry i leaned in by accident sorry about that yeah sorry that was my bad i'm sorry so we can play knight f takes d4 or we can play knight b takes d4 so we're going to take with the f knight we're gonna take with the up knight and okay there's a couple of reasons first of all this knight on b3 can potentially jump into c5 and apply queen side pressure in addition i'm thinking ahead to something that we can do on the king side um which is that if we drop our bishop back to e3 which i think we're going to do right"
+   "said": "okay 97 good stuff by our opponent okay so now i think it's a good opportunity to take the pawn on d4 the question is which night do we take with which night do we take with oh am i loud i'm loud sorry i leaned in by accident sorry about that yeah sorry that was my bad i'm sorry so we can play knight f takes d4 or we can play knight b takes d4 so we're going to take with the f knight we're gonna take with the up knight and okay there's a couple of reasons first of all this knight on b3 can potentially jump into c5 and apply"
   },
   {
    "ply": 24,
@@ -136,7 +136,7 @@
     "Nc6"
    ],
    "fen": "2r1kb1r/pp1b1ppp/1qn1p3/3pP3/3N1B2/1N1P4/PP3PPP/2RQ1RK1 w k - 1 13",
-   "said": "queen side pressure in addition i'm thinking ahead to something that we can do on the king side um which is that if we drop our bishop back to e3 which i think we're going to do right now i think we're going to do that right now"
+   "said": "queen side pressure in addition i'm thinking ahead to something that we can do on the king side um which is that if we drop our bishop back to e3 which i think we're going to do right now"
   },
   {
    "ply": 25,
@@ -145,7 +145,7 @@
     "Be3"
    ],
    "fen": "2r1kb1r/pp1b1ppp/1qn1p3/3pP3/3N4/1N1PB3/PP3PPP/2RQ1RK1 b k - 2 13",
-   "said": "something that we can do on the king side um which is that if we drop our bishop back to e3 which i think we're going to do right now i think we're going to do that right now what potential king side plan can you indicate that you know potentially gives us a nice play i'm not saying we're going to do that on the next move or anything like that it's just something to consider yeah so moving the f pawn pushing f4 f5 could could potentially be um something something to think about so we're pinning i mean we're x-raying the queen right now we have a nice position and we've got control over the center central squares um yeah i'm also struggling a little bit if knight takes c5 i think we have a really sexy move though if if blackface knight takes e5 we have a really really cool discovery can anybody indicate the square to me gets it knight c6 we put our own knight on c6 queen is attacked as is the knight so knight takes e5 we play knight cc okay queen a6 queen a6 that's an interesting move"
+   "said": "i think we're going to do that right now what potential king side plan can you indicate that you know potentially gives us a nice play i'm not saying we're going to do that on the next move or anything like that it's just something to consider yeah so moving the f pawn pushing f4 f5 could could potentially be um something something to think about so we're pinning i mean we're x-raying the queen right now we have a nice position and we've got control over the center central squares um yeah i'm also struggling a little bit if knight takes c5 i think we have a really sexy move though if if blackface knight takes e5 we have a really really cool discovery can anybody indicate the square to me gets it knight c6 we put our own knight"
   },
   {
    "ply": 26,
@@ -154,7 +154,7 @@
     "Qa6"
    ],
    "fen": "2r1kb1r/pp1b1ppp/q1n1p3/3pP3/3N4/1N1PB3/PP3PPP/2RQ1RK1 w k - 3 14",
-   "said": "on c6 queen is attacked as is the knight so knight takes e5 we play knight cc okay queen a6 queen a6 that's an interesting move so now i think black is threatening knight takes c5 now we need to react to that now i think we need to react to that yeah we can play f4 we can play f4 but i think the simpler thing is to is to take on c6 i think now is the time to"
+   "said": "on c6 queen is attacked as is the knight so knight takes e5 we play knight cc okay queen a6 queen a6 that's an interesting move so now i think black is threatening knight takes c5 now we need to react to that now i think we need to react to that"
   },
   {
    "ply": 27,
@@ -163,14 +163,14 @@
     "Nxc6"
    ],
    "fen": "2r1kb1r/pp1b1ppp/q1N1p3/3pP3/8/1N1PB3/PP3PPP/2RQ1RK1 b k - 0 14",
-   "said": "knight takes c5 now we need to react to that now i think we need to react to that yeah we can play f4 we can play f4 but i think the simpler thing is to is to take on c6 i think now is the time to take on c6 is knight c5 possible yeah knight c5 was also possible it was an interesting move these types of positions there is going to be a lot of options um you should just realize that this is one of those like i don't know how to define it maybe one day when i'll write a book i'll think of different categorizations this is one of those positions where it's like there's usually going to be three or four possibilities on every move and they're all going to be approximately equivalent and it's it's these are hard positions to play how do i decide i mean i take c6 is just simple right what's the simplest way to deal with knight takes e5 well i"
+   "said": "yeah we can play f4 we can play f4 but i think the simpler thing is to is to take on c6 i think now is the time to take on c6 is knight c5 possible yeah knight c5 was also possible it was an interesting move these types of positions there is going to be a lot of options um you should just realize that this is one of those like i don't know how to define it maybe one day when i'll write a book i'll think of different categorizations this is one of those positions where it's like there's usually going to be three or four possibilities on every"
   },
   {
    "ply": 26,
    "t": 386.5,
    "line": [],
    "fen": "2r1kb1r/pp1b1ppp/q1n1p3/3pP3/3N4/1N1PB3/PP3PPP/2RQ1RK1 w k - 3 14",
-   "said": "move and they're all going to be approximately equivalent and it's it's these are hard positions to play how do i decide i mean i take c6 is just simple right what's the simplest way to deal with knight takes e5 well i think it's just to trade knights this also just gives us another tempo right this gives us another tempo and our other knight could potentially go to d4 if necessary or to c5 but it's like that paradox about the looks like our opponent might forfeit no now he's reconnected it's like that paradox about the animal who who looks at two or like the horse or whatever looks at two hay fields that look identical you know the horse is never going to choose because there's no reason to make one decision over another you just eventually have to use your intuition and make a decision so again we have many options a2 is hanging it's not the pawn that we have to defend i mean we can sacrifice it if we find something compelling we can sacrifice it if we find something compelling and i think i have found something relatively compelling you know what i like here yeah again i mean even i'm struggling to"
+   "said": "move and they're all going to be approximately equivalent and it's it's these are hard positions to play how do i decide i mean i take c6 is just simple right what's the simplest way to deal with knight takes e5 well i think it's just to trade knights this also just gives us another tempo right this gives us another tempo and our other knight could potentially go to d4 if necessary or to c5 but it's like that paradox about the looks like our opponent might forfeit no now he's reconnected it's like that paradox about the animal who who looks at two or like the horse or whatever looks at two hay fields that look identical you know the horse is never going to choose because there's no reason to make one decision over another you just eventually have to use your intuition and make a decision so again we have many options a2 is hanging it's not the pawn that we have"
   },
   {
    "ply": 28,
@@ -180,7 +180,7 @@
     "Bxc6"
    ],
    "fen": "2r1kb1r/pp3ppp/q1b1p3/3pP3/8/1N1PB3/PP3PPP/2RQ1RK1 w k - 0 15",
-   "said": "to defend i mean we can sacrifice it if we find something compelling we can sacrifice it if we find something compelling and i think i have found something relatively compelling you know what i like here yeah again i mean even i'm struggling to make a decision here we've got knight d4 knight c5 so many different moves thank you all double chicken but let's play it simple let's put this other knight on d4 let's just start by bringing our knight into the center now you might be looking at this and saying i don't understand what the heck i'm intending after queen takes a2 i'll open yin on a secret i don't actually know exactly what i want to do after queen takes two but i'm getting the sense that taking that pawn with the bishop still not developed is this is where my intuition is firing and saying that my intuitive neuron is just saying okay there's just no way that"
+   "said": "to defend i mean we can sacrifice it if we find something compelling we can sacrifice it if we find something compelling and i think i have found something relatively compelling you know what i like here yeah again i mean even i'm struggling to make a decision here we've got knight d4 knight c5 so many different moves thank you all double chicken but let's play it simple let's put this other knight on d4 let's just start by bringing our knight into the center now you might be looking at this and saying i don't understand what the heck i'm intending after queen takes a2 i'll open yin on a secret i don't actually know exactly what i want to do after queen takes two but i'm"
   },
   {
    "ply": 30,
@@ -190,7 +190,7 @@
     "Qxa2"
    ],
    "fen": "2r1kb1r/pp3ppp/2b1p3/3pP3/3N4/3PB3/qP3PPP/2RQ1RK1 w k - 0 16",
-   "said": "getting the sense that taking that pawn with the bishop still not developed is this is where my intuition is firing and saying that my intuitive neuron is just saying okay there's just no way that black should be able to get away with this and i actually think that white has a very simple and very powerful move here i'm going to give you a hint this move threatens to trap the queen this move threatens to trap black's queen and it also connects the rook so it's also a load-bearing helpful move not b3 guys that b3 doesn't threaten to trap the queen because rook a1 there is still the b2 square we need to actually defend the b2 pawn so let's think logically why does rook a1 not trap the queen well it's because of queen takes b2 but playing b3 doesn't actually cover the b2 square the problem isn't that the pawn is hanging it's that the b2 square is accessible to the black queen so i'm thinking of either queen e2 or queen d2 how do we decide between those two moves well i'm actually going to play queen e2 which i'm positive is not what most people are thinking and the reason i want to keep the queen on e2 is because in the event that the bishop moves away from f8 i want to be able to reposition the queen onto g4 in order to hit the g7 pawn does that make sense now here we can win the pawn back by playing rook a1 so that's one possibility but we don't have to we can also play f4 which is what i want to do"
+   "said": "getting the sense that taking that pawn with the bishop still not developed is this is where my intuition is firing and saying that my intuitive neuron is just saying okay there's just no way that black should be able to get away with this and i actually think that white has a very simple and very powerful move here i'm going to give you a hint this move threatens to trap the queen this move threatens to trap black's queen and it also connects the rook so it's also a load-bearing helpful move not b3 guys that b3 doesn't threaten to trap the queen because rook a1 there is still the b2 square we need to actually defend the b2 pawn so let's think logically why does rook a1 not trap the queen well it's because of queen takes b2 but playing b3 doesn't actually cover the b2 square the problem isn't that the pawn is hanging it's that the b2 square is accessible to the black queen so i'm thinking of either queen e2 or queen d2 how do we decide between those two moves well i'm actually going to play queen e2 which i'm positive is not what most people are thinking and the reason i want to keep the queen on e2 is because in the event that the bishop moves away from f8 i want to be able to reposition the queen onto g4 in order to hit the g7 pawn does that"
   },
   {
    "ply": 33,
@@ -201,7 +201,7 @@
     "Qe2"
    ],
    "fen": "2r1kb1r/pp3ppp/2b1p3/q2pP3/3N1P2/3PB3/1P2Q1PP/2R2RK1 b k - 2 17",
-   "said": "make sense now here we can win the pawn back by playing rook a1 so that's one possibility but we don't have to we can also play f4 which is what i want to do we can play up four and start going after black's kingside trying to punish black for not having developed his um or her bishop right and by the time black gets the bishop we're already going to have our pawn and f5 and does anybody really care about this a2 pawn does that really materially impact the course of the game at least for the next 20 moves no right"
+   "said": "make sense now here we can win the pawn back by playing rook a1 so that's one possibility but we don't have to we can also play f4 which is what i want to do we can play up four and start going after black's kingside trying to punish black for not having developed his um or her bishop right and by the time black gets the"
   },
   {
    "ply": 34,
@@ -210,7 +210,7 @@
     "Bb4"
    ],
    "fen": "2r1k2r/pp3ppp/2b1p3/q2pP3/1b1N1P2/3PB3/1P2Q1PP/2R2RK1 w k - 3 18",
-   "said": "bishop we're already going to have our pawn and f5 and does anybody really care about this a2 pawn does that really materially impact the course of the game at least for the next 20 moves no right it doesn't we just push our f pawn"
+   "said": "bishop we're already going to have our pawn and f5 and does anybody really care about this a2 pawn does that really materially impact the course of the game at least for the next 20 moves no right"
   },
   {
    "ply": 35,
@@ -219,7 +219,7 @@
     "f5"
    ],
    "fen": "2r1k2r/pp3ppp/2b1p3/q2pPP2/1b1N4/3PB3/1P2Q1PP/2R2RK1 b k - 0 18",
-   "said": "pawn and f5 and does anybody really care about this a2 pawn does that really materially impact the course of the game at least for the next 20 moves no right it doesn't we just push our f pawn and and you know we enjoy our life now this guy is is definitely you know i would say underrated but i think we still have a great position okay so now what should we do well we've got options we can play f6 but the simplest i think is just to take on e6 and open up as"
+   "said": "it doesn't we just push our f pawn and and you know we enjoy our life now this guy is is definitely you know i would say underrated but i think we still have a great position okay so now"
   },
   {
    "ply": 37,
@@ -229,7 +229,7 @@
     "fxe6"
    ],
    "fen": "2r2rk1/pp3ppp/2b1P3/q2pP3/1b1N4/3PB3/1P2Q1PP/2R2RK1 b - - 0 19",
-   "said": "would say underrated but i think we still have a great position okay so now what should we do well we've got options we can play f6 but the simplest i think is just to take on e6 and open up as many files and avenues on the king's"
+   "said": "what should we do well we've got options we can play f6 but the simplest i think is just to take on e6 and open up as many files and avenues on the king's"
   },
   {
    "ply": 38,
@@ -238,7 +238,7 @@
     "fxe6"
    ],
    "fen": "2r2rk1/pp4pp/2b1p3/q2pP3/1b1N4/3PB3/1P2Q1PP/2R2RK1 w - - 0 20",
-   "said": "still have a great position okay so now what should we do well we've got options we can play f6 but the simplest i think is just to take on e6 and open up as many files and avenues on the king's side as possible and just take twice on"
+   "said": "side as possible and just take twice on"
   },
   {
    "ply": 39,
@@ -247,7 +247,7 @@
     "Nxe6"
    ],
    "fen": "2r2rk1/pp4pp/2b1N3/q2pP3/1b6/3PB3/1P2Q1PP/2R2RK1 b - - 0 20",
-   "said": "what should we do well we've got options we can play f6 but the simplest i think is just to take on e6 and open up as many files and avenues on the king's side as possible and just take twice on e6 and essentially force the rook to move and now we've restored we've restored material equality okay there is an annoying move bishop d7 in this position but already i'm thinking of various sacrifices so what do i see when i look at this position well one thing i notice is that the rook on c8 is undefended"
+   "said": "e6 and essentially force the rook to move and now we've restored we've restored material equality okay there is an annoying move bishop d7"
   },
   {
    "ply": 41,
@@ -257,7 +257,7 @@
     "Rxf1"
    ],
    "fen": "2r3k1/pp4pp/2b1N3/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 b - - 0 21",
-   "said": "okay there is an annoying move bishop d7 in this position but already i'm thinking of various sacrifices so what do i see when i look at this position well one thing i notice is that the rook on c8 is undefended so in the event that the pawn on g7 disappears i'm looking at various forking ideas like queen shoe for damn i'm also looking at a really interesting sacrifice oh man i think i see something"
+   "said": "in this position but already i'm thinking of various sacrifices so what do i see when i look at this position well one thing i notice is that the rook on c8 is undefended so in the event that the pawn on g7 disappears i'm looking at various forking ideas like queen shoe for damn"
   },
   {
    "ply": 42,
@@ -266,7 +266,7 @@
     "Bd7"
    ],
    "fen": "2r3k1/pp1b2pp/4N3/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 w - - 1 22",
-   "said": "so in the event that the pawn on g7 disappears i'm looking at various forking ideas like queen shoe for damn i'm also looking at a really interesting sacrifice oh man i think i see something really cool i think i see something really cool i think we can just hammer away at black's king position this is what's called a demolition sacrifice we sacrifice a piece"
+   "said": "i'm also looking at a really interesting sacrifice oh man i think i see something really cool i think i see something really cool i think we can just hammer away at"
   },
   {
    "ply": 43,
@@ -275,7 +275,7 @@
     "Nxg7"
    ],
    "fen": "2r3k1/pp1b2Np/8/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 b - - 0 22",
-   "said": "really cool i think i see something really cool i think we can just hammer away at black's king position this is what's called a demolition sacrifice we sacrifice a piece in order to demolish the pawn structure the pawn cover around the king and now we use our remaining pieces to blast through now we have a really really nice follow-up here now you might say well is it queen g4 check no it's not because that's hanging so one possibility is to go queen h5 i'm"
+   "said": "black's king position this is what's called a demolition sacrifice we sacrifice a piece in order to demolish the pawn structure the pawn cover around the king and now we use our remaining pieces to"
   },
   {
    "ply": 44,
@@ -284,7 +284,7 @@
     "Kxg7"
    ],
    "fen": "2r5/pp1b2kp/8/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 w - - 0 23",
-   "said": "and now we use our remaining pieces to blast through now we have a really really nice follow-up here now you might say well is it queen g4 check no it's not because that's hanging so one possibility is to go queen h5 i'm positive that some of you are thinking of that move and i think that's a great move but i think we have an even better move now if you look at how you can even access the king what are the various avenues through which you can access the king one of the things you might notice is that you can do it from d4 right we can play bishop d4 now the problem with bishop d4 is that it's a little too slow you give black a chance to play bishop e6 and blockade the pawn so you always have to think about inverting the move order right an idea doesn't work you think what if i play the second move first that leads you to e6 clearing the path for the bishop and it's very and now we play bishop d4 check and it's actually just checkmate on the next move basically this was a very nice attack and it was a very quick attack right it was if if we consider f4 to be the start of the attack it really only took seven moves we broke open the the center and the king side and then we crashed through"
+   "said": "blast through now we have a really really nice follow-up here now you might say well is it queen g4 check no it's not because that's hanging so one possibility is to go queen h5 i'm positive that some of you are thinking of that move and i think that's a great move but i think we have an even better move now if you look at how you can even access the king what are the various avenues through which you can access the king one of the things you might notice is that you can do it from d4 right we can play bishop d4 now the problem with bishop d4 is that it's a little too slow you give black a chance to play bishop e6 and blockade the pawn so you always have to think about inverting the move order right an idea doesn't work you think what if i play the second move first that leads you to e6 clearing the path for the bishop and it's very and now we play bishop d4 check and it's actually just checkmate on the next move basically"
   },
   {
    "ply": 47,
@@ -295,7 +295,7 @@
     "Bd4+"
    ],
    "fen": "2r5/pp4kp/4b3/q2p4/1b1B4/3P4/1P2Q1PP/5RK1 b - - 1 24",
-   "said": "this was a very nice attack and it was a very quick attack right it was if if we consider f4 to be the start of the attack it really only took seven moves we broke open the the center and the king side and then we crashed through this was nice and queen takes e6 is"
+   "said": "this was a very nice attack and it was a very quick attack right it was if if we consider f4 to be the start of the attack it really only took seven moves we broke open the the center and the king side and then we crashed through"
   },
   {
    "ply": 48,
@@ -304,14 +304,14 @@
     "Kg8"
    ],
    "fen": "2r3k1/pp5p/4b3/q2p4/1b1B4/3P4/1P2Q1PP/5RK1 w - - 2 25",
-   "said": "very quick attack right it was if if we consider f4 to be the start of the attack it really only took seven moves we broke open the the center and the king side and then we crashed through this was nice and queen takes e6 is literally checkmate it's not even like it's literally made okay cool cool that was a nice game so again i i'm not going to delve too deeply into the opening intricacies of the steines variation because i've had previous speed on games where i i spell this out very deeply um bishop d7 is possible and and here again you can transpose into the advanced french main line with c3 but we decided to preserve the integrity of the steinnes variation that should be the one thing i'll point out i think some of you might look at this and say well aren't you afraid of c4 and the answer is no actually c4 benefits white and why is that true well that's true conceptually because because what is the point of black's entire play in the advanced french why is black doing what he's doing well it's to attack the d4 pawn everything that black generally does in the main line of the advance is to attack the d4 pawn so by baiting c4 we're taking the pressure off of d4 we're investing two tempe big whoop right bishop d3 bishop two we spent one tempo the center is closed but now we can fully divert our efforts to playing on the king side now it's not as simple as i'm describing it i don't think c4 is actually a bad move because black gets a lot of development and it's this is not to suggest that white is an easy time attacking the king side but at the very least we don't have to worry about the pressure on this pawn that's the conceptual underpinning of that"
+   "said": "this was nice and queen takes e6 is literally checkmate it's not even like it's literally made okay cool cool that was a nice game so again i i'm not going to delve too deeply into the opening intricacies of the steines variation because i've had previous speed on games where i i spell this out very deeply um bishop d7 is possible and and here again you can transpose into the advanced french main line with c3 but we decided to preserve the integrity of the steinnes variation that should be the one thing i'll point out i think some of you might look at this and say well aren't you afraid of c4 and the answer is no actually c4 benefits white and why is that true well that's true conceptually because because what is the point of black's entire play in the advanced french why is black doing what he's doing well it's to attack the d4 pawn everything that black generally does in the main line of the advance is to attack the d4 pawn so by baiting c4 we're taking the pressure off of d4 we're investing two tempe big whoop right bishop d3 bishop two we spent one tempo the center is closed but now we can fully divert our efforts to playing on the king side now it's not as simple as i'm describing it i don't think c4 is actually a bad move because black gets a lot of development"
   },
   {
    "ply": 8,
    "t": 803,
    "line": [],
    "fen": "rn1qkbnr/pp1b1ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
-   "said": "and it's this is not to suggest that white is an easy time attacking the king side but at the very least we don't have to worry about the pressure on this pawn that's the conceptual underpinning of that and in general i think a lot of people are very reluctant to like go forward and then go back but that's a totally normal part of chess at a high level okay so knight c6 castles our opponent finally takes on d4"
+   "said": "and it's this is not to suggest that white is an easy time attacking the king side but at the very least we don't have to worry about the pressure on this pawn that's the conceptual underpinning of that and in general i think a lot of people are very reluctant to like go forward and then go back but that's a totally"
   },
   {
    "ply": 12,
@@ -323,7 +323,7 @@
     "cxd4"
    ],
    "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
-   "said": "are very reluctant to like go forward and then go back but that's a totally normal part of chess at a high level okay so knight c6 castles our opponent finally takes on d4 transposing into one of the main lines so we play bishop f4 you can also play rookie one i saw"
+   "said": "normal part of chess at a high level okay so knight c6 castles our opponent finally takes on d4 transposing into"
   },
   {
    "ply": 13,
@@ -332,7 +332,7 @@
     "Re1"
    ],
    "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQR1K1 b kq - 1 7",
-   "said": "normal part of chess at a high level okay so knight c6 castles our opponent finally takes on d4 transposing into one of the main lines so we play bishop f4 you can also play rookie one i saw some of you were proposing that rookie one is a viable alternative maybe even a better move maybe even a better move i think i confused stuff a little bit here because bishop f4 does allow queen b6 aiming at the pawn so knight bd2 knight before i'm actually seeing one game here 22-11 against 1985 you can see from opening explorer so it takes we're still following that game and and here in that game black blade knight e7 no it's not josh no no it's way too early just because the center is closed doesn't mean that both sides of the board are closed so now i think we made an important decision after rook c8 so first of all notice that we're not rushing with knight takes d4 because that pawn's not going anywhere and then notice which knight we took with this knight f takes d4 decision was very very important because we paved the way for the pawn to to move forward later on in the game and we keep this knight on b3 in order to have the"
+   "said": "one of the main lines so we play bishop f4 you can also play rookie one i saw some of you were proposing that rookie one is a viable alternative maybe even a better move maybe even a better move i think i confused stuff a little bit here because bishop f4 does allow queen b6 aiming at the pawn so knight bd2 knight before i'm actually seeing one game here 22-11 against 1985 you can see from opening explorer so it takes we're still following that game and and here in that game black blade knight e7 no it's not josh no no it's way too early just because the center is closed doesn't mean that both sides of the board are closed so now i think we made an important decision after rook c8 so first of all notice that we're not rushing with knight takes d4 because that pawn's not going anywhere and then notice which knight we took with this knight f takes d4 decision was very very important because we paved the way for the pawn to to move forward later on in the game and we keep this knight on b3 in order to have the"
   }
  ],
  "forks": [

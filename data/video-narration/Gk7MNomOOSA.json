@@ -10,7 +10,7 @@
     "Nf6"
    ],
    "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
-   "said": "let's get this show on the road man 2079 we're playing in 2021 okay let's do a let's do a nimzo slash queens indian"
+   "said": "let's get this show on the road man 2079 we're playing in 2021 okay let's do a"
   },
   {
    "ply": 4,
@@ -20,7 +20,7 @@
     "e6"
    ],
    "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
-   "said": "let's get this show on the road man 2079 we're playing in 2021 okay let's do a let's do a nimzo slash queens indian that's not something that we have played"
+   "said": "let's do a nimzo slash queens indian"
   },
   {
    "ply": 5,
@@ -29,7 +29,7 @@
     "Nc3"
    ],
    "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
-   "said": "we're playing in 2021 okay let's do a let's do a nimzo slash queens indian that's not something that we have played often but it is my second opening after"
+   "said": "that's not something that we have played often but it is my second opening after"
   },
   {
    "ply": 6,
@@ -38,7 +38,7 @@
     "Bb4"
    ],
    "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
-   "said": "we're playing in 2021 okay let's do a let's do a nimzo slash queens indian that's not something that we have played often but it is my second opening after"
+   "said": ""
   },
   {
    "ply": 7,
@@ -47,7 +47,7 @@
     "Bd2"
    ],
    "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP1BPPPP/R2QKBNR b KQkq - 3 4",
-   "said": "2021 okay let's do a let's do a nimzo slash queens indian that's not something that we have played often but it is my second opening after the king's indian okay bishop d2 so bishop d2 okay bishop d2 is a move it's not considered theoretically topical it's quite passive but it's been gaining some popularity actually recently so the nimso indian is a very easy opening"
+   "said": "the king's indian okay bishop d2 so bishop d2 okay bishop d2 is a move it's not considered theoretically topical"
   },
   {
    "ply": 8,
@@ -56,7 +56,7 @@
     "O-O"
    ],
    "fen": "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/2N5/PP1BPPPP/R2QKBNR w KQ - 4 5",
-   "said": "bishop d2 okay bishop d2 is a move it's not considered theoretically topical it's quite passive but it's been gaining some popularity actually recently so the nimso indian is a very easy opening"
+   "said": "it's quite passive but it's been gaining some popularity actually recently so the nimso indian is a very easy opening"
   },
   {
    "ply": 9,
@@ -65,7 +65,7 @@
     "a3"
    ],
    "fen": "rnbq1rk1/pppp1ppp/4pn2/8/1bPP4/P1N5/1P1BPPPP/R2QKBNR b KQ - 0 5",
-   "said": "not considered theoretically topical it's quite passive but it's been gaining some popularity actually recently so the nimso indian is a very easy opening to pick up you basically just develop your pieces and then there are a couple of specific setups that you should know okay so a3 we take on c3 that's kind of the point"
+   "said": "to pick up you basically just develop your pieces and then there are a couple of specific"
   },
   {
    "ply": 10,
@@ -74,7 +74,7 @@
     "Bxc3"
    ],
    "fen": "rnbq1rk1/pppp1ppp/4pn2/8/2PP4/P1b5/1P1BPPPP/R2QKBNR w KQ - 0 6",
-   "said": "the nimso indian is a very easy opening to pick up you basically just develop your pieces and then there are a couple of specific setups that you should know okay so a3 we take on c3 that's kind of the point of the nimzo indian it we're making it"
+   "said": "setups that you should know okay so a3 we take on c3 that's kind of the point"
   },
   {
    "ply": 11,
@@ -83,7 +83,7 @@
     "Bxc3"
    ],
    "fen": "rnbq1rk1/pppp1ppp/4pn2/8/2PP4/P1B5/1P2PPPP/R2QKBNR b KQ - 0 6",
-   "said": "to pick up you basically just develop your pieces and then there are a couple of specific setups that you should know okay so a3 we take on c3 that's kind of the point of the nimzo indian it we're making it harder for white to occupy the center with e2e4 by weakening white's control over the e4 square and we do that by taking out the knight on c3 off the board so one of the the most typical nimzo indian setups involves positioning your pieces as follows you play b6 bishop b7"
+   "said": "of the nimzo indian it we're making it harder for white to occupy the center with e2e4 by weakening white's control over the e4 square and we do that by taking out the"
   },
   {
    "ply": 12,
@@ -92,7 +92,7 @@
     "b6"
    ],
    "fen": "rnbq1rk1/p1pp1ppp/1p2pn2/8/2PP4/P1B5/1P2PPPP/R2QKBNR w KQ - 0 7",
-   "said": "by weakening white's control over the e4 square and we do that by taking out the knight on c3 off the board so one of the the most typical nimzo indian setups involves positioning your pieces as follows you play b6 bishop b7 and then d6 knight bd7 so you create these little holes for your pieces"
+   "said": "knight on c3 off the board so one of the the most typical nimzo indian setups involves positioning your pieces as follows you play b6 bishop b7 and then d6 knight bd7 so you create"
   },
   {
    "ply": 13,
@@ -101,7 +101,7 @@
     "e3"
    ],
    "fen": "rnbq1rk1/p1pp1ppp/1p2pn2/8/2PP4/P1B1P3/1P3PPP/R2QKBNR b KQ - 0 7",
-   "said": "the most typical nimzo indian setups involves positioning your pieces as follows you play b6 bishop b7 and then d6 knight bd7 so you create these little holes for your pieces"
+   "said": "these little holes for your pieces"
   },
   {
    "ply": 14,
@@ -110,7 +110,7 @@
     "Bb7"
    ],
    "fen": "rn1q1rk1/pbpp1ppp/1p2pn2/8/2PP4/P1B1P3/1P3PPP/R2QKBNR w KQ - 1 8",
-   "said": "the most typical nimzo indian setups involves positioning your pieces as follows you play b6 bishop b7 and then d6 knight bd7 so you create these little holes for your pieces and that is considered one of the most"
+   "said": ""
   },
   {
    "ply": 15,
@@ -119,7 +119,7 @@
     "Nf3"
    ],
    "fen": "rn1q1rk1/pbpp1ppp/1p2pn2/8/2PP4/P1B1PN2/1P3PPP/R2QKB1R b KQ - 2 8",
-   "said": "involves positioning your pieces as follows you play b6 bishop b7 and then d6 knight bd7 so you create these little holes for your pieces and that is considered one of the most solid setups available in the nimzo indian so the move d5 here would be fine but not very not really in the spirit of the nimzo indian so we are going to play this in the spirit in the"
+   "said": "and that is considered one of the most solid setups available in the nimzo indian so the move d5 here"
   },
   {
    "ply": 16,
@@ -128,7 +128,7 @@
     "d6"
    ],
    "fen": "rn1q1rk1/pbp2ppp/1p1ppn2/8/2PP4/P1B1PN2/1P3PPP/R2QKB1R w KQ - 0 9",
-   "said": "solid setups available in the nimzo indian so the move d5 here would be fine but not very not really in the spirit of the nimzo indian so we are going to play this in the spirit in the names of indian we're going to play d6"
+   "said": "would be fine but not very not really in the spirit of the nimzo indian so we are going to play this in the spirit in the"
   },
   {
    "ply": 17,
@@ -137,7 +137,7 @@
     "Be2"
    ],
    "fen": "rn1q1rk1/pbp2ppp/1p1ppn2/8/2PP4/P1B1PN2/1P2BPPP/R2QK2R b KQ - 1 9",
-   "said": "available in the nimzo indian so the move d5 here would be fine but not very not really in the spirit of the nimzo indian so we are going to play this in the spirit in the names of indian we're going to play d6"
+   "said": "names of indian we're going to play d6"
   },
   {
    "ply": 18,
@@ -146,7 +146,7 @@
     "Nbd7"
    ],
    "fen": "r2q1rk1/pbpn1ppp/1p1ppn2/8/2PP4/P1B1PN2/1P2BPPP/R2QK2R w KQ - 2 10",
-   "said": "move d5 here would be fine but not very not really in the spirit of the nimzo indian so we are going to play this in the spirit in the names of indian we're going to play d6 and knight pd7 and this is a very very common and very solid setup"
+   "said": "and knight pd7 and this is"
   },
   {
    "ply": 19,
@@ -155,7 +155,7 @@
     "O-O"
    ],
    "fen": "r2q1rk1/pbpn1ppp/1p1ppn2/8/2PP4/P1B1PN2/1P2BPPP/R2Q1RK1 b - - 3 10",
-   "said": "the spirit of the nimzo indian so we are going to play this in the spirit in the names of indian we're going to play d6 and knight pd7 and this is a very very common and very solid setup because there are no weaknesses you know now we have to continue improving our position we positioned our pieces on the squares we were supposed to position them and now there are a couple of subsequent follow-up plans so one of them is to play something like queen to e7 and then push e6 e5 but a more aggressive idea that i really like involves playing the move knight to"
+   "said": "a very very common and very solid setup because there are no weaknesses you know now we have to continue improving our position we positioned our pieces on the squares we were supposed to position them and now there are a couple of subsequent"
   },
   {
    "ply": 20,
@@ -164,14 +164,14 @@
     "Ne4"
    ],
    "fen": "r2q1rk1/pbpn1ppp/1p1pp3/8/2PPn3/P1B1PN2/1P2BPPP/R2Q1RK1 w - - 4 11",
-   "said": "follow-up plans so one of them is to play something like queen to e7 and then push e6 e5 but a more aggressive idea that i really like involves playing the move knight to e4 which is a pretty natural move and then following up with f5 i mean this is an idea that you should be very familiar with if you're you know over 1500 for example 94 and f5 this is a ubiquitous idea across many different openings rook 8 d1 now of course we have the option of eliminating of subtracting white's bishop from the board one week we one way we could play this is to take the bishop and then actually get the other knight around to e4 another pretty classic classic concept i don't feel strongly about that one way or the other the bishop on c3 does have a pretty bright future especially if white pushes d5 at some point so it it might be worth taking that bishop off the board even though our knight on e4 is a strong piece but we're just gonna get the other knight to the same square so it's not like we're really giving away the knight we're just replacing one knight with the other unless he plays knight d2 which would be a pretty passive move but it would take the sting out of 94. okay queen c2 i don't see a reason for us to refrain from shoving the other knight into the outpost knight d2 okay that was his idea now we need to use some tactics in order to preserve this knight on e4 does anybody see a way that we could create a situation in which white cannot take on e4 yeah so we play queen g5 this is a a classic move and this this is a couple of ideas we're threatening obviously we're threatening okay and white immediately blunders yeah white white makes it unfun ooh but there is one thing after king h1 i think i see a much sexier move than knight f2 check so we're hoping he resigned yeah i was hoping he wouldn't resign let's see let's start with that actually does anybody see does anybody see the most efficient way to check mate after king h1 so queen takes e2 wins obviously knight f2 check wins but nike three check i think is the fastest mate h takes g3 and rook f6 with rook h6 to follow there is no smothered mate because white can give up an exchange on f2 but this is a pretty situation where despite it being white to move there's just nothing that he can do just remember this this is a classic mechanism like white can put a rook on f2 we'll just take it yeah so this is mate pretty underwhelming game we didn't really get a chance to do anything yeah so the nimzo indian is one of those openings that kind of flies under the"
+   "said": "follow-up plans so one of them is to play something like queen to e7 and then push e6 e5 but a more aggressive idea that i really like involves playing the move knight to e4 which is a pretty natural move and then following up with f5 i mean this is an idea that you should be very familiar with if you're you know over 1500 for example 94 and f5 this is a ubiquitous idea across many different openings rook 8 d1 now of course we have the option of eliminating of subtracting white's bishop from the board one week we one way we could play this is to take the bishop and then actually get the other knight around to e4 another pretty classic classic concept i don't feel strongly about that one way or the other the bishop on c3 does have a pretty bright future especially if white pushes d5 at some point so it it might be worth taking that bishop off the board even though our knight on e4 is a strong piece but we're just gonna get the other knight to the same square so it's not like we're really giving away the knight we're just replacing one knight with the other unless he plays knight d2 which would be a pretty passive move but it would take the sting out of 94. okay queen c2 i don't see a reason for us to refrain from shoving the other knight into the outpost knight d2 okay that was his idea now we need to use some tactics in order to preserve this knight on e4 does anybody see a way that we could create a situation in which white cannot take on e4 yeah so we play queen g5 this is a a classic move and this this is a couple of ideas we're threatening obviously we're threatening okay and white immediately blunders yeah white white makes it unfun ooh but there is one thing after king h1 i think i see a much sexier move than knight f2 check so we're hoping he resigned yeah i was hoping he wouldn't resign let's see let's start with that actually does anybody see does anybody see the most efficient way to check mate after king h1 so queen takes e2 wins obviously knight f2 check wins but nike three check i think is the fastest mate h takes g3 and rook f6 with rook h6 to follow there is no smothered mate because white can give up an exchange on f2 but this is a pretty situation where despite it being white to move there's just nothing that he can do just remember this this is a classic mechanism like white can put a rook on f2 we'll just"
   },
   {
    "ply": 4,
    "t": 277,
    "line": [],
    "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
-   "said": "take it yeah so this is mate pretty underwhelming game we didn't really get a chance to do anything yeah so the nimzo indian is one of those openings that kind of flies under the radar like i don't think there's a chessable course for the nimzo indian even though it's it's definitely top three in terms of like objectively best openings especially when it's paired with something good against knight f3 so"
+   "said": "take it yeah so this is mate pretty underwhelming game we didn't really get a chance to do anything yeah so the nimzo indian is one of those openings that kind of flies under the radar like i don't think there's a chessable course for the nimzo indian even though"
   },
   {
    "ply": 5,
@@ -180,7 +180,7 @@
     "Nf3"
    ],
    "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
-   "said": "radar like i don't think there's a chessable course for the nimzo indian even though it's it's definitely top three in terms of like objectively best openings especially when it's paired with something good against knight f3 so against knight f3 you can play a bunch of different things you can play bogo indian you can still give this check"
+   "said": "it's it's definitely top three in terms of like objectively best openings especially when it's paired with something good against knight f3 so against knight f3 you can play a bunch"
   },
   {
    "ply": 6,
@@ -189,14 +189,14 @@
     "Bb4+"
    ],
    "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4",
-   "said": "of like objectively best openings especially when it's paired with something good against knight f3 so against knight f3 you can play a bunch of different things you can play bogo indian you can still give this check the queen's indian is b6 and then you"
+   "said": "of different things you can play bogo indian you can still give this check"
   },
   {
    "ply": 5,
    "t": 298,
    "line": [],
    "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
-   "said": "of like objectively best openings especially when it's paired with something good against knight f3 so against knight f3 you can play a bunch of different things you can play bogo indian you can still give this check the queen's indian is b6 and then you"
+   "said": "the queen's indian is b6 and then you"
   },
   {
    "ply": 6,
@@ -205,14 +205,14 @@
     "b6"
    ],
    "fen": "rnbqkb1r/p1pp1ppp/1p2pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 4",
-   "said": "especially when it's paired with something good against knight f3 so against knight f3 you can play a bunch of different things you can play bogo indian you can still give this check the queen's indian is b6 and then you can play"
+   "said": ""
   },
   {
    "ply": 5,
    "t": 300.5,
    "line": [],
    "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
-   "said": "something good against knight f3 so against knight f3 you can play a bunch of different things you can play bogo indian you can still give this check the queen's indian is b6 and then you can play d5"
+   "said": "can play"
   },
   {
    "ply": 6,
@@ -221,7 +221,7 @@
     "d5"
    ],
    "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 4",
-   "said": "against knight f3 you can play a bunch of different things you can play bogo indian you can still give this check the queen's indian is b6 and then you can play d5 and after knight c3 bishop before is the"
+   "said": "d5 and after knight c3 bishop before is the"
   },
   {
    "ply": 8,
@@ -231,14 +231,14 @@
     "Bb4"
    ],
    "fen": "rnbqk2r/ppp2ppp/4pn2/3p4/1bPP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 2 5",
-   "said": "of different things you can play bogo indian you can still give this check the queen's indian is b6 and then you can play d5 and after knight c3 bishop before is the rogozin which has been extremely popular in in the last few years"
+   "said": "rogozin which has been extremely popular in in the last few years"
   },
   {
    "ply": 4,
    "t": 314,
    "line": [],
    "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
-   "said": "and after knight c3 bishop before is the rogozin which has been extremely popular in in the last few years and of course white can also play the catalan which is a big reason that a lot"
+   "said": "and of course white can also play the catalan which is a big reason that a lot"
   },
   {
    "ply": 5,
@@ -247,7 +247,7 @@
     "g3"
    ],
    "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/6P1/PP2PP1P/RNBQKBNR b KQkq - 0 3",
-   "said": "rogozin which has been extremely popular in in the last few years and of course white can also play the catalan which is a big reason that a lot of people don't play the nimzo indian they don't like facing the catalan but honestly the catalan at like a level"
+   "said": "of people don't play the nimzo indian they don't like facing the catalan but"
   },
   {
    "ply": 7,
@@ -257,7 +257,7 @@
     "Nf3"
    ],
    "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/5NP1/PP2PP1P/RNBQKB1R b KQkq - 1 4",
-   "said": "and of course white can also play the catalan which is a big reason that a lot of people don't play the nimzo indian they don't like facing the catalan but honestly the catalan at like a level below 2500 is not that scary like all you really need to do if you are black against the catalan is choose a setup and learn it there's like five or six different variations that all lead to uh very very decent positions for black and the simplest is probably to play the main line to play bishop e7"
+   "said": "honestly the catalan at like a level below 2500 is not that scary like all you really need to do if you are black against the catalan is choose a setup and learn it there's like five or six different variations that all"
   },
   {
    "ply": 8,
@@ -266,7 +266,7 @@
     "Be7"
    ],
    "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/5NP1/PP2PP1P/RNBQKB1R w KQkq - 2 5",
-   "said": "or six different variations that all lead to uh very very decent positions for black and the simplest is probably to play the main line to play bishop e7 castles and then d take c4 and if you"
+   "said": "lead to uh very very decent positions for black and the simplest is probably to play the main line to play bishop e7 castles and then d take c4 and if you"
   },
   {
    "ply": 12,
@@ -278,14 +278,14 @@
     "O-O"
    ],
    "fen": "rnbq1rk1/ppp1bppp/4pn2/8/2pP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 2 7",
-   "said": "lead to uh very very decent positions for black and the simplest is probably to play the main line to play bishop e7 castles and then d take c4 and if you want to play like the pros uh recently does anybody know uh let's see who has who is in tune with top level chess what move in this position is extremely popular nowadays whereas it was never even a move before does anybody know yeah b5 and the reason that this has never been a move is because of a4 and this was always considered very bad because it was considered forced that black had to play b4 you cannot afford your entire pawn structure to be destroyed like this and you cannot play a6 because there were kings and yet these people did play bishop or a6 or bishop b7 and this line has become ridiculously popular recently and it turns out that if white just grabs the pawns first of all white cannot take here because if a takes b5 the rook is exposed and if white takes ba6 knight a6 queen c4 and after bishop d5 black gets a pretty big initiative in return for the pawn and this line basically equalizes so this is worth exploring if you need a line with black against the catalan there's a lot more to this obviously like white can avoid this by playing queen a4 but this allows black to enter the favorable main line a6 queen takes c4 and b5 the reason people started playing queen c2 is that after a6 a4 became extremely popular like this move became the way to fight for an advantage whereas earlier people had been taking automatically on c4 and getting into this variation uh which is now considered completely fine for black but there's still a lot to a lot to learn here um so definitely you should learn the catalan if you're a nimzo player"
+   "said": "want to play like the pros uh recently does anybody know uh let's see who has who is in tune with top level chess what move in this position is extremely popular nowadays whereas it was never even a move before does anybody know yeah b5 and the reason that this has never been a move is because of a4 and this was always considered very bad because it was considered forced that black had to play b4 you cannot afford your entire pawn structure to be destroyed like this and you cannot play a6 because there were kings and yet these people did play bishop or a6 or bishop b7 and this line has become ridiculously popular recently and it turns out that if white just grabs the pawns first of all white cannot take here because if a takes b5 the rook is exposed and if white takes ba6 knight a6 queen c4 and after bishop d5 black gets a pretty big initiative in return for the pawn and this line basically equalizes so this is worth exploring if you need a line with black against the catalan there's a lot more to this obviously like white can avoid this by playing queen a4 but this allows black to enter the favorable main line a6 queen takes c4 and b5 the reason people started playing queen c2 is that after a6 a4 became extremely popular like this move became the way to fight for an advantage whereas earlier people had been taking automatically on"
   },
   {
    "ply": 5,
    "t": 451.5,
    "line": [],
    "fen": "rnbqkb1r/pppp1ppp/4pn2/8/2PP4/6P1/PP2PP1P/RNBQKBNR b KQkq - 0 3",
-   "said": "c4 and getting into this variation uh which is now considered completely fine for black but there's still a lot to a lot to learn here um so definitely you should learn the catalan if you're a nimzo player and then you should learn the nimzo proper because it's it's pretty vast brandon played e3 against me in the tournament which is the rubenstein variation probably the most reputable line queen c2 is the kind of more ambitious variation and you know there's a bunch of other moves bishop d2 and our opponent played bishop g5 is the leningrad variation g3 here is"
+   "said": "c4 and getting into this variation uh which is now considered completely fine for black but there's still a lot to a lot to learn here um so definitely you should learn the catalan if you're a nimzo player and then you should learn the nimzo proper because it's it's pretty vast brandon played e3 against me in the tournament which is the rubenstein variation probably the most reputable line"
   },
   {
    "ply": 7,
@@ -295,14 +295,14 @@
     "Nc3"
    ],
    "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N3P1/PP2PP1P/R1BQKBNR b KQkq - 2 4",
-   "said": "line queen c2 is the kind of more ambitious variation and you know there's a bunch of other moves bishop d2 and our opponent played bishop g5 is the leningrad variation g3 here is possible of course white can play knight"
+   "said": "queen c2 is the kind of more ambitious variation and you know there's a bunch of other moves bishop d2 and our opponent played bishop g5 is the leningrad variation g3 here is possible of course white can play knight"
   },
   {
    "ply": 6,
    "t": 476,
    "line": [],
    "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/6P1/PP2PP1P/RNBQKBNR w KQkq - 1 4",
-   "said": "variation and you know there's a bunch of other moves bishop d2 and our opponent played bishop g5 is the leningrad variation g3 here is possible of course white can play knight f3 and then black has the option of transposing into the ragosan with d5 uh and there's the move f3 which i've played with white there's the move a3 which is quite similar to f3 yeah i mean there's there's a ton to learn if you're an mso player but the good thing about playing the nimso is that most of the time you can kind of improvise and if you know the main setups if you like understand where the pieces and where the pieces usually go then you can generally get a decent position against most lines and one of those very typical setups is indeed to take the knight and the idea of bishop d2 of course is to take back with the bishop to keep the integrity of the queenside pawn structure and then we play b6 and black is slightly worse in this setup like i don't dispute that the engine usually gives like 0.4.5 in these types of positions but it's really really solid like black has no weaknesses every piece is doing something and it's very easy to play"
+   "said": "f3 and then black has the option of transposing into the ragosan with d5 uh and there's the move f3 which i've played with white there's the move a3 which is quite similar to f3 yeah i mean there's there's a ton to learn if you're an mso player but the good thing about playing the nimso is that most of the time you can kind of improvise and if you know the main setups if you like understand where the pieces and where the pieces usually go then you can generally get a decent position against most lines and one of those very typical setups is indeed to take the knight and the idea of bishop d2 of course is to take back with the bishop to keep the integrity of the queenside pawn structure and then we play b6 and black is slightly worse in this setup like i don't dispute that the engine usually gives like 0.4.5 in these types of positions but it's really really solid like black has no weaknesses every piece is doing something and it's very easy to play"
   }
  ],
  "forks": [

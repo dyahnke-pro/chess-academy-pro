@@ -136,5 +136,63 @@
     }
    ]
   }
+ ],
+ "openings": [
+  {
+   "name": "Danish Gambit Accepted: Copenhagen Defense",
+   "eco": "C21",
+   "plies": 10,
+   "line": "d4 e5 e4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 Bb4+",
+   "coverage": 0.125
+  },
+  {
+   "name": "Danish Gambit Accepted: Schlechter Defense",
+   "eco": "C21",
+   "plies": 10,
+   "line": "d4 e5 e4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 d5",
+   "coverage": 0.125
+  },
+  {
+   "name": "Danish Gambit Accepted",
+   "eco": "C21",
+   "plies": 6,
+   "line": "d4 e5 e4 exd4 c3 dxc3",
+   "coverage": 0.75
+  },
+  {
+   "name": "Danish Gambit",
+   "eco": "C21",
+   "plies": 5,
+   "line": "d4 e5 e4 exd4 c3",
+   "coverage": 0.75
+  },
+  {
+   "name": "Center Game Accepted",
+   "eco": "C21",
+   "plies": 4,
+   "line": "d4 e5 e4 exd4",
+   "coverage": 0.875
+  },
+  {
+   "name": "Center Game",
+   "eco": "C20",
+   "plies": 3,
+   "line": "d4 e5 e4",
+   "coverage": 1
+  },
+  {
+   "name": "Englund Gambit",
+   "eco": "A40",
+   "plies": 2,
+   "line": "d4 e5",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
  ]
 }

@@ -245,5 +245,14 @@
    "fen": "2r2rk1/pp4pp/1b2pp2/1P1pn2q/5Bn1/N1P3PN/P2QPP1P/2R2RK1 w - - 9 16"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ]
 }
