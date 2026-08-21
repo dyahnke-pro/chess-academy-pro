@@ -399,5 +399,32 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Englund Gambit: Main Line",
+   "eco": "A40",
+   "plies": 6,
+   "line": "d4 e5 dxe5 Nc6 Nf3 Qe7",
+   "coverage": 0.667
+  },
+  {
+   "name": "Englund Gambit",
+   "eco": "A40",
+   "plies": 2,
+   "line": "d4 e5",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Englund Gambit",
+  "confirmed": true
+ }
 }

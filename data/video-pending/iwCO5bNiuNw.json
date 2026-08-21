@@ -103,5 +103,26 @@
    "fen": "r1bqk2r/p1p2ppp/2pp1n2/8/4P3/P7/PBP2PPP/RN1QKB1R w KQkq - 0 8"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.9
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

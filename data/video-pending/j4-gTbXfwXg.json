@@ -303,5 +303,33 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Alekhine Defense: Normal Variation",
+   "eco": "B02",
+   "plies": 4,
+   "line": "e4 Nf6 e5 Nd5",
+   "coverage": 0.96
+  },
+  {
+   "name": "Alekhine Defense",
+   "eco": "B02",
+   "plies": 2,
+   "line": "e4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

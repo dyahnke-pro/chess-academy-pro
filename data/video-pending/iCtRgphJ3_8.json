@@ -144,5 +144,60 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Pterodactyl Defense: Eastern, Pterodactyl",
+   "eco": "B06",
+   "plies": 8,
+   "line": "d4 g6 e4 Bg7 Nc3 c5 dxc5 Qa5",
+   "coverage": 0.143
+  },
+  {
+   "name": "Pterodactyl Defense: Eastern, Rhamphorhynchus",
+   "eco": "B06",
+   "plies": 7,
+   "line": "d4 g6 e4 Bg7 Nc3 c5 dxc5",
+   "coverage": 0.143
+  },
+  {
+   "name": "Modern Defense: Modern Pterodactyl",
+   "eco": "B06",
+   "plies": 6,
+   "line": "d4 g6 e4 Bg7 Nc3 c5",
+   "coverage": 0.286
+  },
+  {
+   "name": "Modern Defense: Standard Line",
+   "eco": "B06",
+   "plies": 5,
+   "line": "d4 g6 e4 Bg7 Nc3",
+   "coverage": 0.429
+  },
+  {
+   "name": "Modern Defense",
+   "eco": "B06",
+   "plies": 4,
+   "line": "d4 g6 e4 Bg7",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game: Modern Defense",
+   "eco": "A40",
+   "plies": 2,
+   "line": "d4 g6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Modern Defense",
+  "confirmed": true
+ }
 }

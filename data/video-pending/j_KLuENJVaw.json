@@ -802,5 +802,26 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Modern Defense",
+   "eco": "B06",
+   "plies": 2,
+   "line": "e4 g6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

@@ -23,6 +23,14 @@
    "coverage": 1,
    "subject": true,
    "forks": 4
+  },
+  {
+   "videoId": "jPhLlZ4_c1A",
+   "eco": "A01",
+   "plies": 2,
+   "coverage": 1,
+   "subject": true,
+   "forks": 0
   }
  ],
  "Nimzo-Larsen Attack": [
@@ -49,6 +57,14 @@
    "coverage": 1,
    "subject": false,
    "forks": 4
+  },
+  {
+   "videoId": "jPhLlZ4_c1A",
+   "eco": "A01",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
   }
  ],
  "Queen's Pawn Game": [
@@ -403,6 +419,54 @@
    "coverage": 1,
    "subject": false,
    "forks": 3
+  },
+  {
+   "videoId": "hv0P9kotpJw",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "hyAhvdIvtzQ",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "iCtRgphJ3_8",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "iQQDU3H7vaU",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "ii1vl5wLPWU",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "k9EmWn_MvQc",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": true,
+   "forks": 0
   },
   {
    "videoId": "kvpSIPdCvmw",
@@ -797,6 +861,14 @@
    "coverage": 0.977,
    "subject": true,
    "forks": 6
+  },
+  {
+   "videoId": "i9lgxqlkUgQ",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.97,
+   "subject": false,
+   "forks": 6
   }
  ],
  "King's Knight Opening": [
@@ -943,6 +1015,30 @@
    "coverage": 0.989,
    "subject": false,
    "forks": 6
+  },
+  {
+   "videoId": "i9lgxqlkUgQ",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.985,
+   "subject": false,
+   "forks": 6
+  },
+  {
+   "videoId": "iFdoGDFnT3c",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.95,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "iwCO5bNiuNw",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.9,
+   "subject": true,
+   "forks": 0
   }
  ],
  "King's Pawn Game": [
@@ -1627,6 +1723,70 @@
    "forks": 4
   },
   {
+   "videoId": "hzotV0aslmY",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "i9lgxqlkUgQ",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 6
+  },
+  {
+   "videoId": "iFdoGDFnT3c",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "iXZDALKuDEc",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "iwCO5bNiuNw",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "j4-gTbXfwXg",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "jL_wSA6EeY8",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "j_KLuENJVaw",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
+  },
+  {
    "videoId": "ktoa6lk6qNk",
    "eco": "B00",
    "plies": 1,
@@ -1675,6 +1835,22 @@
    "coverage": 0.58,
    "subject": false,
    "forks": 6
+  },
+  {
+   "videoId": "i9lgxqlkUgQ",
+   "eco": "C47",
+   "plies": 15,
+   "coverage": 0.194,
+   "subject": false,
+   "forks": 6
+  },
+  {
+   "videoId": "iFdoGDFnT3c",
+   "eco": "C47",
+   "plies": 7,
+   "coverage": 0.85,
+   "subject": true,
+   "forks": 0
   }
  ],
  "Four Knights Game": [
@@ -1709,6 +1885,22 @@
    "coverage": 0.58,
    "subject": false,
    "forks": 6
+  },
+  {
+   "videoId": "i9lgxqlkUgQ",
+   "eco": "C47",
+   "plies": 14,
+   "coverage": 0.194,
+   "subject": false,
+   "forks": 6
+  },
+  {
+   "videoId": "iFdoGDFnT3c",
+   "eco": "C47",
+   "plies": 6,
+   "coverage": 0.85,
+   "subject": false,
+   "forks": 0
   }
  ],
  "Petrov's Defense: Three Knights Game": [
@@ -1719,6 +1911,14 @@
    "coverage": 0.98,
    "subject": false,
    "forks": 0
+  },
+  {
+   "videoId": "iFdoGDFnT3c",
+   "eco": "C42",
+   "plies": 5,
+   "coverage": 0.9,
+   "subject": false,
+   "forks": 0
   }
  ],
  "Petrov's Defense": [
@@ -1727,6 +1927,14 @@
    "eco": "C42",
    "plies": 4,
    "coverage": 0.98,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "iFdoGDFnT3c",
+   "eco": "C42",
+   "plies": 4,
+   "coverage": 0.95,
    "subject": false,
    "forks": 0
   }
@@ -2443,6 +2651,22 @@
    "coverage": 1,
    "subject": true,
    "forks": 5
+  },
+  {
+   "videoId": "iCtRgphJ3_8",
+   "eco": "B06",
+   "plies": 4,
+   "coverage": 1,
+   "subject": true,
+   "forks": 2
+  },
+  {
+   "videoId": "j_KLuENJVaw",
+   "eco": "B06",
+   "plies": 2,
+   "coverage": 1,
+   "subject": true,
+   "forks": 3
   }
  ],
  "Caro-Kann Defense": [
@@ -2493,6 +2717,14 @@
    "coverage": 1,
    "subject": false,
    "forks": 1
+  },
+  {
+   "videoId": "iQQDU3H7vaU",
+   "eco": "B12",
+   "plies": 3,
+   "coverage": 1,
+   "subject": true,
+   "forks": 3
   }
  ],
  "King's Indian Defense: Fianchetto Variation, Immediate Fianchetto": [
@@ -2774,6 +3006,14 @@
    "plies": 5,
    "coverage": 0.591,
    "subject": false,
+   "forks": 6
+  },
+  {
+   "videoId": "i9lgxqlkUgQ",
+   "eco": "C46",
+   "plies": 5,
+   "coverage": 0.97,
+   "subject": true,
    "forks": 6
   }
  ],
@@ -3093,6 +3333,14 @@
    "coverage": 0.955,
    "subject": false,
    "forks": 1
+  },
+  {
+   "videoId": "iCtRgphJ3_8",
+   "eco": "B06",
+   "plies": 5,
+   "coverage": 0.429,
+   "subject": false,
+   "forks": 2
   }
  ],
  "Ruy Lopez: Steinitz Defense": [
@@ -3449,6 +3697,14 @@
    "coverage": 0.12,
    "subject": false,
    "forks": 3
+  },
+  {
+   "videoId": "j4-gTbXfwXg",
+   "eco": "B02",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
   }
  ],
  "Nimzowitsch Defense: Declined Variation": [
@@ -3515,6 +3771,14 @@
    "forks": 4
   },
   {
+   "videoId": "iXZDALKuDEc",
+   "eco": "B00",
+   "plies": 7,
+   "coverage": 0.87,
+   "subject": true,
+   "forks": 2
+  },
+  {
    "videoId": "tgyq7_g2wV0",
    "eco": "B00",
    "plies": 7,
@@ -3531,6 +3795,14 @@
    "coverage": 0.947,
    "subject": false,
    "forks": 4
+  },
+  {
+   "videoId": "iXZDALKuDEc",
+   "eco": "B00",
+   "plies": 4,
+   "coverage": 0.957,
+   "subject": false,
+   "forks": 2
   },
   {
    "videoId": "tgyq7_g2wV0",
@@ -3581,6 +3853,14 @@
    "coverage": 1,
    "subject": false,
    "forks": 1
+  },
+  {
+   "videoId": "iXZDALKuDEc",
+   "eco": "C20",
+   "plies": 3,
+   "coverage": 0.978,
+   "subject": false,
+   "forks": 2
   },
   {
    "videoId": "kvpSIPdCvmw",
@@ -4065,6 +4345,14 @@
    "coverage": 0.927,
    "subject": false,
    "forks": 0
+  },
+  {
+   "videoId": "ii1vl5wLPWU",
+   "eco": "B00",
+   "plies": 3,
+   "coverage": 1,
+   "subject": true,
+   "forks": 0
   }
  ],
  "King's Pawn Game: Wayward Queen Attack": [
@@ -4245,6 +4533,14 @@
    "coverage": 0.984,
    "subject": false,
    "forks": 5
+  },
+  {
+   "videoId": "i9lgxqlkUgQ",
+   "eco": "C25",
+   "plies": 11,
+   "coverage": 0.209,
+   "subject": false,
+   "forks": 6
   }
  ],
  "Rapport-Jobava System": [
@@ -4479,6 +4775,14 @@
    "coverage": 1,
    "subject": false,
    "forks": 1
+  },
+  {
+   "videoId": "iCtRgphJ3_8",
+   "eco": "A40",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
   }
  ],
  "King's Knight Opening: Konstantinopolsky": [
@@ -4523,6 +4827,22 @@
    "coverage": 1,
    "subject": false,
    "forks": 1
+  },
+  {
+   "videoId": "hv0P9kotpJw",
+   "eco": "A40",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "hyAhvdIvtzQ",
+   "eco": "A40",
+   "plies": 2,
+   "coverage": 1,
+   "subject": true,
+   "forks": 3
   },
   {
    "videoId": "kvpSIPdCvmw",
@@ -5931,6 +6251,154 @@
    "coverage": 0.889,
    "subject": false,
    "forks": 3
+  }
+ ],
+ "Englund Gambit: Main Line": [
+  {
+   "videoId": "hv0P9kotpJw",
+   "eco": "A40",
+   "plies": 6,
+   "coverage": 0.667,
+   "subject": true,
+   "forks": 2
+  },
+  {
+   "videoId": "hyAhvdIvtzQ",
+   "eco": "A40",
+   "plies": 6,
+   "coverage": 0.243,
+   "subject": false,
+   "forks": 3
+  }
+ ],
+ "Englund Gambit: Felbecker Gambit": [
+  {
+   "videoId": "hyAhvdIvtzQ",
+   "eco": "A40",
+   "plies": 6,
+   "coverage": 0.189,
+   "subject": false,
+   "forks": 3
+  }
+ ],
+ "Scandinavian Defense: Valencian Variation": [
+  {
+   "videoId": "hzotV0aslmY",
+   "eco": "B01",
+   "plies": 6,
+   "coverage": 0.875,
+   "subject": true,
+   "forks": 1
+  }
+ ],
+ "Scandinavian Defense: Main Line": [
+  {
+   "videoId": "hzotV0aslmY",
+   "eco": "B01",
+   "plies": 6,
+   "coverage": 0.025,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "Scandinavian Defense: Mieses-Kotroc Variation": [
+  {
+   "videoId": "hzotV0aslmY",
+   "eco": "B01",
+   "plies": 4,
+   "coverage": 0.95,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "Scandinavian Defense": [
+  {
+   "videoId": "hzotV0aslmY",
+   "eco": "B01",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "Vienna Game: Max Lange Defense": [
+  {
+   "videoId": "i9lgxqlkUgQ",
+   "eco": "C25",
+   "plies": 12,
+   "coverage": 0.209,
+   "subject": false,
+   "forks": 6
+  }
+ ],
+ "King's Pawn Game: Busch-Gass Gambit": [
+  {
+   "videoId": "i9lgxqlkUgQ",
+   "eco": "C40",
+   "plies": 8,
+   "coverage": 0.224,
+   "subject": false,
+   "forks": 6
+  }
+ ],
+ "Pterodactyl Defense: Eastern, Pterodactyl": [
+  {
+   "videoId": "iCtRgphJ3_8",
+   "eco": "B06",
+   "plies": 8,
+   "coverage": 0.143,
+   "subject": false,
+   "forks": 2
+  }
+ ],
+ "Pterodactyl Defense: Eastern, Rhamphorhynchus": [
+  {
+   "videoId": "iCtRgphJ3_8",
+   "eco": "B06",
+   "plies": 7,
+   "coverage": 0.143,
+   "subject": false,
+   "forks": 2
+  }
+ ],
+ "Modern Defense: Modern Pterodactyl": [
+  {
+   "videoId": "iCtRgphJ3_8",
+   "eco": "B06",
+   "plies": 6,
+   "coverage": 0.286,
+   "subject": false,
+   "forks": 2
+  }
+ ],
+ "Nimzowitsch Defense: Kennedy Variation, Paulsen Attack": [
+  {
+   "videoId": "iXZDALKuDEc",
+   "eco": "B00",
+   "plies": 7,
+   "coverage": 0.022,
+   "subject": false,
+   "forks": 2
+  }
+ ],
+ "Alekhine Defense: Normal Variation": [
+  {
+   "videoId": "j4-gTbXfwXg",
+   "eco": "B02",
+   "plies": 4,
+   "coverage": 0.96,
+   "subject": true,
+   "forks": 2
+  }
+ ],
+ "St. George Defense": [
+  {
+   "videoId": "jL_wSA6EeY8",
+   "eco": "B00",
+   "plies": 2,
+   "coverage": 1,
+   "subject": true,
+   "forks": 1
   }
  ],
  "Danish Gambit Accepted: Copenhagen Defense": [

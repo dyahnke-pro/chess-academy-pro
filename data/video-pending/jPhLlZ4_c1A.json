@@ -182,5 +182,26 @@
    "fen": "2kr1b1r/1ppbqpp1/p1p5/3n3p/P1N1pP2/1P2P3/1BPPN1PP/R3QRK1 b - - 2 12"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Nimzo-Larsen Attack: Modern Variation",
+   "eco": "A01",
+   "plies": 2,
+   "line": "b3 e5",
+   "coverage": 1
+  },
+  {
+   "name": "Nimzo-Larsen Attack",
+   "eco": "A01",
+   "plies": 1,
+   "line": "b3",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

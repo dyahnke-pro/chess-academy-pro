@@ -408,5 +408,47 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Scandinavian Defense: Valencian Variation",
+   "eco": "B01",
+   "plies": 6,
+   "line": "e4 d5 exd5 Qxd5 Nc3 Qd8",
+   "coverage": 0.875
+  },
+  {
+   "name": "Scandinavian Defense: Main Line",
+   "eco": "B01",
+   "plies": 6,
+   "line": "e4 d5 exd5 Qxd5 Nc3 Qa5",
+   "coverage": 0.025
+  },
+  {
+   "name": "Scandinavian Defense: Mieses-Kotroc Variation",
+   "eco": "B01",
+   "plies": 4,
+   "line": "e4 d5 exd5 Qxd5",
+   "coverage": 0.95
+  },
+  {
+   "name": "Scandinavian Defense",
+   "eco": "B01",
+   "plies": 2,
+   "line": "e4 d5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

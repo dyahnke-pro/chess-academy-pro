@@ -25,6 +25,7 @@
 import { Chess, type Move } from 'chess.js';
 import puzzleData from '../data/puzzles.json';
 import { extractMentionedSquares, MAX_CANDIDATE_HIGHLIGHTS, type LineMove } from './arrowEngine';
+import { computeTacticalRead } from './tacticalRead';
 import { getCoachChatResponse, getCoachStructuredResponse } from './coachApi';
 import {
   validateMoveLegality,
@@ -441,7 +442,47 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // unit test passed — the tests call the splice directly and never touch the
 // cache. That failure is recorded three times in CLAUDE.md; this is the bump
 // that keeps it from being a fourth.
-const WALKTHROUGH_GEN_REV = '2026-08-21-handwritten-notes-batch';
+/** How many student-to-move positions get a computed tempting move per lesson.
+ *  Each costs one engine call per eye-catching legal move, so this is the cost
+ *  dial: six covers the opening decisions where a but-turn actually teaches
+ *  without turning generation into an engine session. */
+const TEMPTING_MAX_POSITIONS = 6;
+/** Reduced depth for the tempting scan. The question is "is this move clearly
+ *  worse", not "what is the exact eval" — a 120cp gap is visible early, and the
+ *  refutation line is played out at this depth too. */
+const TEMPTING_DEPTH = 12;
+
+/** Which spine plies get asked for a tempting move.
+ *
+ *  PARITY IS THE WHOLE RISK HERE, which is why it is a pure function with its
+ *  own test rather than a filter buried in the generator. The but-turn teaches
+ *  the STUDENT off a move THEY would reach for; computing it at the opponent's
+ *  decisions produces facts nobody can act on, and the failure is silent — the
+ *  engine runs, labels appear, and every one of them warns the student about a
+ *  move it is not their turn to play.
+ *
+ *  A position's `movedBy` is the side that JUST moved, so the side to move next
+ *  is the other one. The student faces the decision exactly when the opponent
+ *  just moved. */
+export function temptingCandidatePlies(
+  positions: Array<{ movedBy: 'white' | 'black' }>,
+  studentSide: 'white' | 'black',
+  max: number,
+): number[] {
+  const out: number[] = [];
+  for (const [idx, p] of positions.entries()) {
+    if (p.movedBy === studentSide) continue; // student just moved → opponent decides next
+    out.push(idx);
+    if (out.length >= max) break;
+  }
+  return out;
+}
+
+// 2026-08-21 (third bump this day — the batching rule says one per DEPLOY, and
+// these three ship together): the tier-3 system prompt now carries the measured
+// Danya arc, so every generated beat's prose changes. A cached tree stamped with
+// the previous rev would serve the old register for ever.
+const WALKTHROUGH_GEN_REV = '2026-08-21-danya-arc';
 
 export async function getCachedOpening(
   name: string,
@@ -1882,6 +1923,56 @@ async function generateOpeningFromDbNarration(
   const studentSide = faceContext
     ? (baseStudentSide === 'white' ? 'black' : 'white')
     : baseStudentSide;
+  // ── THE TEMPTING MOVE, COMPUTED (David 2026-08-21: "the common/easy move
+  // needs to be computed. make sure it's wired as it is now") ────────────────
+  //
+  // The but-turn is the house voice's signature beat and it needs one fact:
+  // the move a student would WANT to play here, and the line that refutes it.
+  // Nothing else in this generator produces it, so before this the model either
+  // skipped the beat or invented the move — and inventing it means inventing a
+  // line and an evaluation, which is the G0.1 violation the rule names first.
+  //
+  // `computeTacticalRead` computes it honestly: it scores every legal move for
+  // EYE-APPEAL (captures, checks, promotions, central knight/bishop moves — what
+  // actually draws a human), evaluates each, and keeps the most appealing one
+  // that is clearly worse than best. Then it plays out the refutation.
+  //
+  // BOUNDED ON PURPOSE. That is one engine call per candidate move per position,
+  // so running it on a whole spine would cost hundreds. The but-turn only teaches
+  // on the STUDENT'S OWN decisions — warning them off a move the opponent might
+  // play teaches nothing — so this asks only at student-to-move plies, caps the
+  // count, and runs at reduced depth. Everything is best-effort: no engine (SSR,
+  // tests, a dead worker) means no tempting facts, which means the prompt's gate
+  // keeps the model off the beat rather than letting it improvise.
+  const temptingByPly = new Map<number, string>();
+  if (!faceContext) {
+    try {
+      const { stockfishEngine } = await import('./stockfishEngine');
+      const candidateIdx = temptingCandidatePlies(
+        positions.map((p) => ({ movedBy: p.movedBy })),
+        studentSide === 'white' ? 'white' : 'black',
+        TEMPTING_MAX_POSITIONS,
+      );
+      for (const idx of candidateIdx) {
+        const p = positions[idx];
+        const read = await computeTacticalRead(p.fen, {
+          engine: stockfishEngine,
+          depth: TEMPTING_DEPTH,
+          findTempting: true,
+        });
+        if (!read?.tempting) continue;
+        const ref = read.tempting.refutation.slice(0, 3).map((r) => r.san).join(' ');
+        temptingByPly.set(
+          idx,
+          `TEMPTING here: ${read.tempting.san} (the ${read.tempting.appeal} — but ${(read.tempting.evalDropCp / 100).toFixed(1)} worse)${ref ? `, refuted by ${ref}` : ''}`,
+        );
+      }
+    } catch {
+      // No engine in this environment. The beat is simply unavailable — never
+      // approximated. See the gate in the system prompt.
+    }
+  }
+
   const moveLabels = positions
     .map((p, idx) => {
       const moveNum = Math.floor(p.ply / 2) + 1;
@@ -1895,7 +1986,8 @@ async function generateOpeningFromDbNarration(
         ? 'material even'
         : bal > 0 ? `WHITE is up ${bal} point${bal === 1 ? '' : 's'} of material`
           : `BLACK is up ${-bal} point${bal === -1 ? '' : 's'} of material`;
-      return `${idx + 1}. ${dotted}${p.san}  (after this move FEN: ${p.fen}; ${matNote})`;
+      const tempting = temptingByPly.get(idx);
+      return `${idx + 1}. ${dotted}${p.san}  (after this move FEN: ${p.fen}; ${matNote})${tempting ? `\n     ${tempting}` : ''}`;
     })
     .join('\n');
   // Branches sit at the position AFTER the canonical's last move.
@@ -1913,6 +2005,26 @@ async function generateOpeningFromDbNarration(
   const lessonFraming = faceContext
     ? `a walkthrough of "${entry.canonicalName}" — the canonical White (or attacking side) counter to "${faceContext.originalDisplayName}". The student is the side PLAYING this counter (learning to face the named opening from the opposite perspective), not the side being countered.`
     : `a walkthrough of "${entry.canonicalName}".`;
+  // THE DANYA ARC (David 2026-08-21: "when the computer narrates it gets used").
+  //
+  // The style rules below are the measured teaching spec
+  // (docs/plans/2026-08-21-danya-teaching-dna.md) applied to the tier-3 computed
+  // path. What is deliberately GATED here is the BUT-TURN: it is his signature
+  // beat and it needs a fact this generator does not yet compute — the move a
+  // student would want to play, plus its refutation.
+  //
+  // `tacticalRead.ts` computes exactly that (GAP 1, closed there), but it needs
+  // an engine and this generator has none: a position label carries SAN, FEN and
+  // the material ledger, nothing more. So rather than tell the model to use the
+  // but-turn a third of the time and let it pick the tempting move itself — which
+  // is inventing a line and an eval, the precise G0 violation G0.1 exists to kill
+  // — the prompt teaches the shape and forbids using it unsupplied.
+  //
+  // REMAINING WORK, stated so it is not mistaken for done: feed a `tacticalRead`
+  // per KEYSTONE position into `moveLabels` (not every ply — the engine cost is
+  // real and the keystones are where the turn belongs), then relax the gate to
+  // "use it wherever a tempting move is supplied". Until then the computed path
+  // gets the arc, the register and the discipline, but not the signature beat.
   const systemPrompt = `You are a warm, world-class chess coach — think Daniel Naroditsky sitting right next to the student, teaching this opening. Narrate ${lessonFraming} Output ONLY a JSON object matching the schema. The move sequence and positions are PROVIDED — do NOT invent or alter them. Your only job is to write the coach commentary plus optional visualization arrows.
 
 HOUSE VOICE (David 2026-07-05 — the ENTIRE repertoire should feel like Naroditsky is teaching it, not a database dumping annotations):
@@ -1926,6 +2038,20 @@ WHY DISCIPLINE (David 2026-07-19 — "be careful not to overstate the why, I don
 - A normal developing move is allowed to be just that. If a move is routine, say so plainly ("Castles kingside — all very natural") rather than inventing a deep hidden purpose. A tag that says "this needs no theory" is itself useful information; a fabricated deep reason is not.
 - Anchor the reason to something on the board: a specific square, pawn, piece, or line. If you can't name what the reason points AT, don't state it.
 - MATERIAL ACCOUNTING IS COMPUTED, NOT YOURS TO JUDGE: every move below carries a computed material note ("material even" / "BLACK is up 1 point"). Any statement about who is up or down material, an extra pawn, or material being level MUST match that note for the move being narrated — including hypotheticals ("once White takes X" must describe the accounting that capture actually produces). Never claim a piece "stays home" or "is kept back" on the very move where that piece develops.
+
+THE ARC — a lesson is not flat (measured over 147 lessons / 7,360 narrated positions; spec: docs/plans/2026-08-21-danya-teaching-dna.md):
+- OPEN on the tension, CALCULATE through the middle, LAND A VERDICT at the end. Concrete calculation stays hot throughout; the evaluation verdict nearly doubles in the final tenth of the lesson. Student-level meta ("a lot of people play X here") bookends — intro and wrap, rarely in between.
+- The principle is the PAYOFF, never the premise. Reach for a general rule only AFTER a concrete line has earned it. Concrete beats abstract about five to one.
+- DELIGHT IS A SPIKE, NOT A DRIP. "Beautiful", "lovely", "I love this move" — at most ONCE in a whole lesson, on a genuinely special moment. A drip of it reads as fake within three beats.
+- ASK BEFORE YOU REVEAL. If you pose a question ("what should we do here?"), you answer it in the same breath. Never a quiz with no key.
+- MODEL THINKING, NOT OMNISCIENCE — BUT NEVER FAKE IT. You may weigh or hesitate ONLY where the position is genuinely double-edged. You may NEVER hedge over something stated as fact below. If the material ledger says a side is up a piece, say so plainly; do not say "this looks winning".
+
+THE BUT-TURN — his signature device, and the ONE thing you may not manufacture:
+- The shape is: voice the move the student would WANT to play, then turn on it with the concrete refutation. It is his most frequent move (about one position in three, present in all 147 lessons) and it is why the lesson teaches instead of lectures.
+- A move line below may carry a computed "TEMPTING here: <move> … refuted by <line>". That move was chosen by the engine — scored for what draws a human eye (a capture, a check, a promotion, a natural central developing move), confirmed to be clearly worse than best, and refuted with a real line. WHERE ONE IS GIVEN, USE IT: that beat is exactly where the but-turn belongs, and it is the most valuable sentence in the lesson.
+- WHERE NONE IS GIVEN, DO NOT MANUFACTURE ONE. Picking a "natural-looking move" yourself and asserting why it fails means inventing a line and an evaluation — the exact failure this prompt exists to prevent. No tempting move supplied means no but-turn on that beat. Silence is a legal move.
+- Voice it as a turn, not a warning label: name the move the way a student would think of it, then turn. "You'd love to just take on e5 here — but then the knight comes to d5 and the pawn is falling anyway." Never "the tempting move is X, which loses to Y".
+- The same limit governs the CONTRAST frame generally: contrast one supplied fact against another supplied fact, never against a line you thought of.
 
 STRUCTURAL BEATS (the tape's keystone shape — use on the defining/keystone moves, not routine ones):
 - Shape a keystone's WHY as: the TRIGGER that makes the plan apply (a structure, a pawn event like "once the center locks", or a piece placement) → the concrete PLAN as a square-by-square route ("the knight travels f3→d2→c4", not "the knight improves") → the ONE weakness it TARGETS, stated with "because" ("a monster on c4 because d6 can never challenge it"). Optionally add the rule then its exception ("you almost always meet …c6 with a4 — but here b4 is fine because…").
