@@ -1,8 +1,8 @@
 {
  "generatedAt": "2026-08-21",
- "videosDistilled": 190,
- "noteCount": 484,
- "forkCount": 497,
+ "videosDistilled": 191,
+ "noteCount": 498,
+ "forkCount": 499,
  "notes": [
   {
    "id": "vn-advance-e6-cover-the-check-square-before-the-trade",
@@ -17177,6 +17177,572 @@
    }
   },
   {
+   "id": "vn-alapin-c3-the-healthy-anti-sicilian",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation",
+   "phase": "opening",
+   "explains": "The little pawn to c3 prepares to build the centre with d4 next, declining the sharp open lines the defence invites. The positions that result are calm and structurally sound, easy to handle without memorised theory.",
+   "teaches": "Against a sharp defence you do not have to enter its main battlegrounds. A modest move that prepares a broad centre sidesteps reams of theory and steers toward a healthy, understandable structure, and choosing the setup you know cold over the one that is objectively most critical is sound practical play, especially while you are improving.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:uJro3yCDEgk"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "d4"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "c5"
+    ],
+    "taughtMove": "Nf3",
+    "alternative": "c3",
+    "lineName": "Sicilian: Najdorf"
+   }
+  },
+  {
+   "id": "vn-alapin-take-on-d5-head-for-the-isolani",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation",
+   "phase": "opening",
+   "explains": "Capturing on d5 rather than advancing past it steers toward an isolated-pawn structure instead of a closed advance. Both are playable; this is the mapped, principled path where White knows exactly what to aim at.",
+   "teaches": "When a defence offers you a choice of structures, pick the one whose plans you know cold. Trading in the centre here heads for a well-mapped isolated-pawn middlegame with clear plans for both sides, rather than the locked, manoeuvring game that pushing past would bring.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:uJro3yCDEgk"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e6"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "c5",
+     "c3",
+     "e6",
+     "d4",
+     "d5"
+    ],
+    "taughtMove": "e5",
+    "alternative": "exd5",
+    "lineName": "Sicilian: Alapin / Alapin: 2...e6 Solid (French Structure)"
+   }
+  },
+  {
+   "id": "vn-alapin-blockade-the-square-in-front",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation",
+   "phase": "opening",
+   "explains": "The position is steering toward an isolated pawn on d5, and the key battleground is the square just ahead of it. White will trade on c5 to leave that pawn alone, then plant a piece in front of it and blockade.",
+   "teaches": "The way to fight an isolated pawn is to own the square directly in front of it: blockade it, pile up on it, and trade pieces toward an endgame where it falls. Know that plan before the pawn is even isolated, so every developing move already points at that square.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:uJro3yCDEgk"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-alapin-develop-first-dont-rush-the-trade",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation",
+   "phase": "opening",
+   "explains": "The knight comes to f3, developing and covering the centre while White keeps the tension. There is no hurry to trade on c5 — better to wait until that trade also costs the opponent a move.",
+   "teaches": "When your plan is to win a structural battle, there is no rush to release the pawn tension. Develop first and keep the option open; the timing of the key trade matters more than making it at once, and waiting can even cost the opponent a tempo.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:uJro3yCDEgk"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    },
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ]
+  },
+  {
+   "id": "vn-alapin-check-develops-with-tempo",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation",
+   "phase": "opening",
+   "explains": "The bishop develops to b5 with check, so it comes into play while the opponent has to react. Any trade that follows will cost the opponent development rather than White.",
+   "teaches": "A developing move that arrives with a check is a free tempo: you bring a piece out while the opponent must stop and answer it instead of pursuing their own plan. Prefer the developing move that also asks a question.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:uJro3yCDEgk"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-alapin-trade-and-castle-when-slightly-better",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Bf1",
+    "Bc8",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation",
+   "phase": "opening",
+   "explains": "Instead of retreating, White takes on d7, swapping a pair of minor pieces and clearing the path to castle. The position stays sound and a shade better for White.",
+   "teaches": "When you already hold a small, safe edge, simplicity has value. Trading the checking bishop off rather than retreating it keeps your structure intact and gets you straight on with castling, and a lasting little advantage is easier to convert with fewer pieces to go wrong.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:uJro3yCDEgk"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-alapin-safety-before-action",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Bf1",
+    "Bc8",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+",
+    "Nbxd7",
+    "O-O"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation",
+   "phase": "opening",
+   "explains": "White castles into the main line of this structure, everything developed and the king safe before the central trade. The edge lies in the coming pressure against the isolated pawn.",
+   "teaches": "With a quiet structural edge, king safety comes before action. Castle, complete development, and only then turn to the pawn tension — a small, durable advantage is converted by patience, not by rushing the critical break.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:uJro3yCDEgk"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-alapin-time-the-trade-to-gain-a-tempo",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Bf1",
+    "Bc8",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+",
+    "Nbxd7",
+    "O-O",
+    "Be7",
+    "dxc5"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation",
+   "phase": "opening",
+   "explains": "Now that the dark-squared bishop has gone to e7, White trades on c5 so that recapturing costs the opponent a move. Black is left with the isolated d-pawn White has been aiming at all along.",
+   "teaches": "Time your key trade for the moment it also gains something. The same capture made a move later, once the opponent has committed a piece, forces them to recapture and lose a tempo — patience turns an equal trade into a small profit.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:uJro3yCDEgk"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-alapin-a-natural-recapture-walks-into-a-check",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Bf1",
+    "Bc8",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+",
+    "Nbxd7",
+    "O-O",
+    "Be7",
+    "dxc5",
+    "Bxc5",
+    "Re1+"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation",
+   "phase": "opening",
+   "explains": "The rook swings to e1 with check, exploiting the open e-file that the bishop's recapture left behind. The check is the first move of a forcing line that wins material.",
+   "teaches": "A natural-looking recapture can walk into a tactic. Before you take, check whether the resulting position hands the opponent a forcing sequence — here taking with the bishop instead of the knight left the king on an open file, and a rook check begins a combination.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:uJro3yCDEgk"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-alapin-count-the-loose-pieces-before-grabbing",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Bf1",
+    "Bc8",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+",
+    "Nbxd7",
+    "O-O",
+    "Be7",
+    "dxc5",
+    "Bxc5",
+    "Re1+",
+    "Ne4"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation",
+   "phase": "opening",
+   "explains": "Black has blocked the check with the knight, but it no longer guards d5, so the queen can snap that pawn. The forcing line that follows nets two minor pieces for a rook, because the loose knight cannot be saved once the dust settles.",
+   "teaches": "When the opponent blocks a check by moving a piece off a defence, look for the in-between capture. Counting which pieces are suddenly loose, rather than automatically retreating or trading, is what turns a check into a winning combination.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:uJro3yCDEgk"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-alapin-two-pieces-beat-a-rook-with-coordination",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Bf1",
+    "Bc8",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+",
+    "Nbxd7",
+    "O-O",
+    "Be7",
+    "dxc5",
+    "Bxc5",
+    "Re1+",
+    "Ne4",
+    "Qxd5",
+    "Bxf2+",
+    "Kf1",
+    "Bxe1",
+    "Qxe4+",
+    "Qe7",
+    "Qxe7+",
+    "Kxe7",
+    "Kxe1"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation",
+   "phase": "middlegame",
+   "explains": "The smoke clears with two minor pieces against a rook and a material plus. The winning method is patient coordination: bring the king out, develop the queenside, and let the two pieces dominate the open board.",
+   "teaches": "Two minor pieces usually outweigh a rook, and the way to prove it is to keep pieces on the board and coordinate them. Activate the king, finish development, and let the pair work together — do not rush the conversion before everything is in play.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:uJro3yCDEgk"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-alapin-a-temporary-pin-is-no-pin",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Bf1",
+    "Bc8",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+",
+    "Nbxd7",
+    "O-O",
+    "Be7",
+    "dxc5",
+    "Bxc5",
+    "Re1+",
+    "Ne4",
+    "Qxd5",
+    "Bxf2+",
+    "Kf1",
+    "Bxe1",
+    "Qxe4+",
+    "Qe7",
+    "Qxe7+",
+    "Kxe7",
+    "Kxe1",
+    "Rhe8",
+    "Be3"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation",
+   "phase": "middlegame",
+   "explains": "The bishop steps to e3 to deny the knight the c5 square. Walking into the pin against the king looks risky and is not: if the king moves off the file, King-to-f2 next both unpins and defends the bishop.",
+   "teaches": "A pin you can break by force is not a real pin. Calculate the concrete reply before you shy away — if a simple move next turn unpins and holds everything, the pinning idea is an illusion and should not stop the move you want to play.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:uJro3yCDEgk"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "c5"
+    }
+   ]
+  },
+  {
+   "id": "vn-alapin-the-king-is-a-piece-in-the-endgame",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Bf1",
+    "Bc8",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+",
+    "Nbxd7",
+    "O-O",
+    "Be7",
+    "dxc5",
+    "Bxc5",
+    "Re1+",
+    "Ne4",
+    "Qxd5",
+    "Bxf2+",
+    "Kf1",
+    "Bxe1",
+    "Qxe4+",
+    "Qe7",
+    "Qxe7+",
+    "Kxe7",
+    "Kxe1",
+    "Rhe8",
+    "Be3",
+    "Kf8",
+    "Kf2"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation",
+   "phase": "middlegame",
+   "explains": "King to f2 breaks the pin and defends the bishop, freeing the knight to head for the centre. With the king active and the pieces beginning to coordinate, the extra minor piece starts to tell.",
+   "teaches": "In an endgame the king is a fighting piece — march it toward the action. Here the step forward escapes the pin and clears the way for the knight to reroute to the centre; centralising the king is half the technique when you are up a piece.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:uJro3yCDEgk"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e3"
+    }
+   ]
+  },
+  {
+   "id": "vn-alapin-push-a-pawn-with-a-plan",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Bf1",
+    "Bc8",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+",
+    "Nbxd7",
+    "O-O",
+    "Be7",
+    "dxc5",
+    "Bxc5",
+    "Re1+",
+    "Ne4",
+    "Qxd5",
+    "Bxf2+",
+    "Kf1",
+    "Bxe1",
+    "Qxe4+",
+    "Qe7",
+    "Qxe7+",
+    "Kxe7",
+    "Kxe1",
+    "Rhe8",
+    "Be3",
+    "Kf8",
+    "Kf2",
+    "Ne5",
+    "Nxe5",
+    "Rxe5",
+    "Nd2",
+    "Rae8",
+    "Re1",
+    "f5",
+    "Nf3",
+    "Rb5",
+    "b4"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation",
+   "phase": "middlegame",
+   "explains": "The b-pawn goes to b4, taking queenside space and preparing a permanent home for the bishop on c5, rather than passively guarding from behind. The advance defends and improves at once.",
+   "teaches": "A pawn move in an endgame should serve a plan, not merely defend. Advancing to grab space and build a secure outpost for a piece beats the passive move that does one defensive job and nothing more — see the bigger picture before you reach for the automatic move.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:uJro3yCDEgk"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "c5"
+    }
+   ]
+  },
+  {
    "id": "vn-fianchettokid-luft-that-is-really-prophylaxis",
    "lineSan": [
     "Nf3",
@@ -33144,6 +33710,108 @@
     }
    ],
    "source": "yt:uJCgrG90u8A"
+  },
+  {
+   "fen": "rn1qkb1r/pp1b1ppp/5n2/1Bpp4/3P4/2P2N2/PP3PPP/RNBQK2R w KQkq - 4 7",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7"
+   ],
+   "ply": 12,
+   "options": [
+    {
+     "san": "Bf1",
+     "t": 177.5,
+     "continuation": "Bf1 Bc8"
+    },
+    {
+     "san": "Bxd7+",
+     "t": 187,
+     "continuation": "Bxd7+"
+    }
+   ],
+   "source": "yt:uJro3yCDEgk"
+  },
+  {
+   "fen": "4rk2/p5pp/1p6/5r2/1P3B2/2P2N2/P4KPP/3R4 w - - 1 27",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Bf1",
+    "Bc8",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+",
+    "Nbxd7",
+    "O-O",
+    "Be7",
+    "dxc5",
+    "Bxc5",
+    "Re1+",
+    "Ne4",
+    "Qxd5",
+    "Bxf2+",
+    "Kf1",
+    "Bxe1",
+    "Qxe4+",
+    "Qe7",
+    "Qxe7+",
+    "Kxe7",
+    "Kxe1",
+    "Rhe8",
+    "Be3",
+    "Kf8",
+    "Kf2",
+    "Ne5",
+    "Nxe5",
+    "Rxe5",
+    "Nd2",
+    "Rae8",
+    "Re1",
+    "f5",
+    "Nf3",
+    "Rb5",
+    "b4",
+    "b6",
+    "Rd1",
+    "f4",
+    "Bxf4",
+    "Rf5"
+   ],
+   "ply": 52,
+   "options": [
+    {
+     "san": "Bg3",
+     "t": 686.5,
+     "continuation": "Bg3"
+    },
+    {
+     "san": "g3",
+     "t": 706,
+     "continuation": "g3"
+    }
+   ],
+   "source": "yt:uJro3yCDEgk"
   },
   {
    "fen": "rnbq1rk1/ppp2ppp/3p4/2bPp3/2P1P1n1/2N4N/PP3PPP/R1BQKB1R w KQ - 3 7",

@@ -1,0 +1,100 @@
+[
+ {
+  "id": "vn-alapin-c3-the-healthy-anti-sicilian",
+  "line": "e4 c5 c3",
+  "teaches": "Against a sharp defence you do not have to enter its main battlegrounds. A modest move that prepares a broad centre sidesteps reams of theory and steers toward a healthy, understandable structure, and choosing the setup you know cold over the one that is objectively most critical is sound practical play, especially while you are improving.",
+  "explains": "The little pawn to c3 prepares to build the centre with d4 next, declining the sharp open lines the defence invites. The positions that result are calm and structurally sound, easy to handle without memorised theory.",
+  "reasons": [ { "kind": "controls", "square": "d4" } ]
+ },
+ {
+  "id": "vn-alapin-take-on-d5-head-for-the-isolani",
+  "line": "e4 c5 c3 e6 d4 d5 exd5",
+  "teaches": "When a defence offers you a choice of structures, pick the one whose plans you know cold. Trading in the centre here heads for a well-mapped isolated-pawn middlegame with clear plans for both sides, rather than the locked, manoeuvring game that pushing past would bring.",
+  "explains": "Capturing on d5 rather than advancing past it steers toward an isolated-pawn structure instead of a closed advance. Both are playable; this is the mapped, principled path where White knows exactly what to aim at.",
+  "reasons": [ { "kind": "attacks", "square": "e6" } ]
+ },
+ {
+  "id": "vn-alapin-blockade-the-square-in-front",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5",
+  "teaches": "The way to fight an isolated pawn is to own the square directly in front of it: blockade it, pile up on it, and trade pieces toward an endgame where it falls. Know that plan before the pawn is even isolated, so every developing move already points at that square.",
+  "explains": "The position is steering toward an isolated pawn on d5, and the key battleground is the square just ahead of it. White will trade on c5 to leave that pawn alone, then plant a piece in front of it and blockade.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-develop-first-dont-rush-the-trade",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3",
+  "teaches": "When your plan is to win a structural battle, there is no rush to release the pawn tension. Develop first and keep the option open; the timing of the key trade matters more than making it at once, and waiting can even cost the opponent a tempo.",
+  "explains": "The knight comes to f3, developing and covering the centre while White keeps the tension. There is no hurry to trade on c5 — better to wait until that trade also costs the opponent a move.",
+  "reasons": [ { "kind": "defends", "square": "d4" }, { "kind": "controls", "square": "e5" } ]
+ },
+ {
+  "id": "vn-alapin-check-develops-with-tempo",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+",
+  "teaches": "A developing move that arrives with a check is a free tempo: you bring a piece out while the opponent must stop and answer it instead of pursuing their own plan. Prefer the developing move that also asks a question.",
+  "explains": "The bishop develops to b5 with check, so it comes into play while the opponent has to react. Any trade that follows will cost the opponent development rather than White.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-trade-and-castle-when-slightly-better",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+",
+  "teaches": "When you already hold a small, safe edge, simplicity has value. Trading the checking bishop off rather than retreating it keeps your structure intact and gets you straight on with castling, and a lasting little advantage is easier to convert with fewer pieces to go wrong.",
+  "explains": "Instead of retreating, White takes on d7, swapping a pair of minor pieces and clearing the path to castle. The position stays sound and a shade better for White.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-safety-before-action",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O",
+  "teaches": "With a quiet structural edge, king safety comes before action. Castle, complete development, and only then turn to the pawn tension — a small, durable advantage is converted by patience, not by rushing the critical break.",
+  "explains": "White castles into the main line of this structure, everything developed and the king safe before the central trade. The edge lies in the coming pressure against the isolated pawn.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-time-the-trade-to-gain-a-tempo",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5",
+  "teaches": "Time your key trade for the moment it also gains something. The same capture made a move later, once the opponent has committed a piece, forces them to recapture and lose a tempo — patience turns an equal trade into a small profit.",
+  "explains": "Now that the dark-squared bishop has gone to e7, White trades on c5 so that recapturing costs the opponent a move. Black is left with the isolated d-pawn White has been aiming at all along.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-a-natural-recapture-walks-into-a-check",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+",
+  "teaches": "A natural-looking recapture can walk into a tactic. Before you take, check whether the resulting position hands the opponent a forcing sequence — here taking with the bishop instead of the knight left the king on an open file, and a rook check begins a combination.",
+  "explains": "The rook swings to e1 with check, exploiting the open e-file that the bishop's recapture left behind. The check is the first move of a forcing line that wins material.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-count-the-loose-pieces-before-grabbing",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4",
+  "teaches": "When the opponent blocks a check by moving a piece off a defence, look for the in-between capture. Counting which pieces are suddenly loose, rather than automatically retreating or trading, is what turns a check into a winning combination.",
+  "explains": "Black has blocked the check with the knight, but it no longer guards d5, so the queen can snap that pawn. The forcing line that follows nets two minor pieces for a rook, because the loose knight cannot be saved once the dust settles.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-two-pieces-beat-a-rook-with-coordination",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4 Qxd5 Bxf2+ Kf1 Bxe1 Qxe4+ Qe7 Qxe7+ Kxe7 Kxe1",
+  "teaches": "Two minor pieces usually outweigh a rook, and the way to prove it is to keep pieces on the board and coordinate them. Activate the king, finish development, and let the pair work together — do not rush the conversion before everything is in play.",
+  "explains": "The smoke clears with two minor pieces against a rook and a material plus. The winning method is patient coordination: bring the king out, develop the queenside, and let the two pieces dominate the open board.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-a-temporary-pin-is-no-pin",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4 Qxd5 Bxf2+ Kf1 Bxe1 Qxe4+ Qe7 Qxe7+ Kxe7 Kxe1 Rhe8 Be3",
+  "teaches": "A pin you can break by force is not a real pin. Calculate the concrete reply before you shy away — if a simple move next turn unpins and holds everything, the pinning idea is an illusion and should not stop the move you want to play.",
+  "explains": "The bishop steps to e3 to deny the knight the c5 square. Walking into the pin against the king looks risky and is not: if the king moves off the file, King-to-f2 next both unpins and defends the bishop.",
+  "reasons": [ { "kind": "controls", "square": "c5" } ]
+ },
+ {
+  "id": "vn-alapin-the-king-is-a-piece-in-the-endgame",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4 Qxd5 Bxf2+ Kf1 Bxe1 Qxe4+ Qe7 Qxe7+ Kxe7 Kxe1 Rhe8 Be3 Kf8 Kf2",
+  "teaches": "In an endgame the king is a fighting piece — march it toward the action. Here the step forward escapes the pin and clears the way for the knight to reroute to the centre; centralising the king is half the technique when you are up a piece.",
+  "explains": "King to f2 breaks the pin and defends the bishop, freeing the knight to head for the centre. With the king active and the pieces beginning to coordinate, the extra minor piece starts to tell.",
+  "reasons": [ { "kind": "defends", "square": "e3" } ]
+ },
+ {
+  "id": "vn-alapin-push-a-pawn-with-a-plan",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4 Qxd5 Bxf2+ Kf1 Bxe1 Qxe4+ Qe7 Qxe7+ Kxe7 Kxe1 Rhe8 Be3 Kf8 Kf2 Ne5 Nxe5 Rxe5 Nd2 Rae8 Re1 f5 Nf3 Rb5 b4",
+  "teaches": "A pawn move in an endgame should serve a plan, not merely defend. Advancing to grab space and build a secure outpost for a piece beats the passive move that does one defensive job and nothing more — see the bigger picture before you reach for the automatic move.",
+  "explains": "The b-pawn goes to b4, taking queenside space and preparing a permanent home for the bishop on c5, rather than passively guarding from behind. The advance defends and improves at once.",
+  "reasons": [ { "kind": "controls", "square": "c5" } ]
+ }
+]
