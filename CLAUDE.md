@@ -3057,6 +3057,38 @@ settled positions → 325, 49 plies → 153 once measured). Find the start frame
 SEARCHING; never assume t=0 (David: *"he starts most times with old games"*), and
 note that an old-game intro's positions belong to THAT game, not the lesson.
 
+**THERE ARE TWO BOARD LAYOUTS, AND ONE OF THEM WAS PARKING VIDEOS WHOLESALE
+(2026-08-21).** `harvest-local.sh` knew exactly one: board on the RIGHT beside
+the webcam (`370,-2,60` at 854 wide), which is what every banked track used. A
+second layout — board on the LEFT, camera and game header stacked on the right,
+wooden theme, the 2019-era uploads — reads NOTHING under those numbers, and 78
+videos had been parked in `needs-hand-geometry.txt` on that basis. Opened by eye,
+the first one sat at `3,3,44` on a 640-wide frame, which is `4,4,58.7` at 854.
+The sweep now tries the right-board numbers, then the left-board numbers, and
+only then parks. **Trying both risks nothing** — `scan_stream --calibrated`
+confirms geometry against the start position, so the wrong layout REFUSES rather
+than tracking a false line. That is the same property that makes a single
+hand-read safe, and it does not weaken by being tried twice.
+
+**BUT GEOMETRY IS ONLY THE FIRST GATE, AND A REFUSAL AFTER IT MEANS SOMETHING
+ELSE.** Two of the recovered left-board videos still came up empty for different
+reasons, and both are worth recognising before re-reading pixels again:
+`D0AlZuN14Fw` CALIBRATED at `3,3,44` and produced 2,812 grids, yet tracked only
+4 moves — the grids were read, so that is a colour/theme problem, not a
+placement one. `D8yxw4t4F3A` refused outright at the same numbers because the
+video opens on an ENDGAME and rewinds; `calibrate` searches sampled frames for
+the START position and there was none in the sample. Neither is fixed by moving
+the grid. Read the scan log before assuming the numbers are wrong.
+
+**NEVER EDIT A SHELL SCRIPT THAT IS CURRENTLY RUNNING.** Bash re-reads the file
+from a byte offset as it executes, so an edit under a live instance makes it
+resume mid-token: patching `harvest-local.sh` mid-sweep killed the running batch
+with `syntax error near unexpected token` at a line that is perfectly valid in
+the file (`bash -n` passed the whole time). The next batch spawned a fresh
+process from the good file and self-healed, so it cost one batch — but the error
+message points at the file, which is exactly the wrong place to look. Copy the
+script, edit the copy, and swap it in when the run ends.
+
 **A MISTRACKED VIDEO IS USUALLY TWO PIXELS OF GEOMETRY, NOT A LOST LESSON —
 RE-READ IT BEFORE WRITING IT OFF (2026-08-21).** `CXvo1dMF1Qs` was hand-verdicted
 mistracked and sat unusable for a day; it was the ONLY Benko and Benoni source in
