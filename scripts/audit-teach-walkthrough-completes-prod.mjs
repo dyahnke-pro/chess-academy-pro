@@ -146,7 +146,18 @@ try {
   console.log(`  reached the leaf : ${reached}`);
   for (const [k, n] of [...api.entries()].sort()) console.log(`  ${String(n).padStart(4)}x ${k}`);
   if (report.llmCallsDuringWalkthrough.length) {
-    console.log('  🚨 the walkthrough called an LLM at runtime — teachings must be baked, hand-written, or computed');
+    // A DIAGNOSTIC, NOT A FAILURE. Tier 3 — computed narration — USES the model:
+    // code decides the facts and the model phrases them, which is G0 working, not
+    // G0 broken (David 2026-08-21: "tier 3 are the computed narrations that use
+    // the llm"). These calls write the lesson's FRAMING (intro, outro, ideas,
+    // branch teasers) whenever the opening is not fully baked WITH its fork
+    // branches, so an opening with a baked main spine still shows them.
+    //
+    // The earlier wording here called it a defect and cost a session real time
+    // re-plumbing a generator that was behaving correctly. The fix for a line
+    // sitting on tier 3 is to BAKE it — move it UP the tiers — never to stop the
+    // floor from working. The verdict below reads off reachedLeaf alone.
+    console.log(`  note: ${report.llmCallsDuringWalkthrough.length} runtime LLM call site(s) — this line is on tier 3 (computed framing); bake it to move it up`);
   }
   console.log(`  report: ${dir}/report.json`);
   console.log(reached ? '  RESULT: PASS' : '  RESULT: FAIL — the walk never ended');
