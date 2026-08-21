@@ -1,0 +1,38 @@
+[
+  {
+    "id": "vn-alapin-e6-the-third-option-that-offers-a-transposition",
+    "line": "e4 c5 c3 e6",
+    "teaches": "A third-choice move can still be a good practical one when its point is to offer the opponent a transposition they may not want. Choose by what it makes THEM decide, not by its ranking.",
+    "explains": "The modest pawn to e6 is the third option here, behind the two main central replies. Its interesting property is what it offers next move: once White builds the centre, Black can push the d-pawn and turn the game into a locked pawn chain where White's e-pawn has advanced past and both sides play on the wings. Some White players are delighted by that structure; others never play it at all, and this move makes them say which.",
+    "reasons": [
+      {
+        "kind": "controls",
+        "square": "d5"
+      }
+    ]
+  },
+  {
+    "id": "vn-alapin-e6-build-the-centre-and-let-them-choose",
+    "line": "e4 c5 c3 e6 d4",
+    "teaches": "Occupy the centre when your opponent's last move invited it. A big centre is only a commitment if you have already decided how to answer the strike against it.",
+    "explains": "The pawn takes the centre alongside its neighbour, hitting c5. This is the obvious continuation and it hands the choice straight back: Black can push the d-pawn and steer toward the locked chain, or leave it and keep the open game. Either way White wants to know which reply is coming before playing this, because the answer to the d-pawn push is where the two roads separate.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "c5"
+      }
+    ]
+  },
+  {
+    "id": "vn-alapin-e6-take-instead-of-pushing-past",
+    "line": "e4 c5 c3 e6 d4 d5",
+    "teaches": "When an advance would transpose into an opening you do not play, look for the capture that keeps the game in your own territory. Trading is not passive when it steers the position toward theory you actually know.",
+    "explains": "The pawn arrives on d5 and White faces the fork in the road. Pushing past locks the chain and gives the game a completely different character. The alternative is simply to take, which is the recommended route for anyone who does not want that structure: White is reckoned slightly better in the position that follows, and after Black recaptures with the queen the game transposes into the well-worn lines where the queen comes out early and gets chased.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "e4"
+      }
+    ]
+  }
+]
