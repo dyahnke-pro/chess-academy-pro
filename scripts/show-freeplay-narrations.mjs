@@ -19,6 +19,7 @@
  *   [PLIES=30] node scripts/show-freeplay-narrations.mjs
  */
 import { Chess } from 'chess.js';
+import { spawn } from 'node:child_process';
 import { mkdir, writeFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import { launchAuditBrowser } from './audit-lib/engine.mjs';
@@ -27,6 +28,25 @@ import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.app';
 const PLIES = Number(process.env.PLIES || 30);
+const SF = process.env.STOCKFISH_PATH || '/usr/games/stockfish';
+const STUDENT_DEPTH = Number(process.env.STUDENT_DEPTH || 14);
+
+/** The student plays REAL Stockfish (full strength) so the game is sound and
+ *  tactic-rich — a fair board for the DNA devices (but-turn, calculation,
+ *  multi-reason why) to have genuine chances. Returns the best move in UCI. */
+function bestMoveUci(fen) {
+  return new Promise((res) => {
+    const sf = spawn(SF);
+    let best = null;
+    sf.stdout.on('data', (d) => {
+      const m = /bestmove (\S+)/.exec(d.toString());
+      if (m) { best = m[1]; sf.kill(); res(best); }
+    });
+    sf.on('error', () => res(null));
+    sf.stdin.write(`position fen ${fen}\ngo depth ${STUDENT_DEPTH}\n`);
+    setTimeout(() => { try { sf.kill(); } catch { /* */ } res(best); }, 12_000);
+  });
+}
 const OUT = join('audit-reports', `freeplay-narrations-${new Date().toISOString().replace(/[:.]/g, '-')}`);
 
 /** Pull the spoken text out of an audit entry's summary (`… "the text"`) or,
@@ -118,16 +138,25 @@ async function clearFirstRunOverlays(page) {
     .first().click({ timeout: 2500 }).catch(() => {});
 }
 
-/** Play a real game on the Learn board; return the SAN move list. */
+/** Play a real game on the Learn board; return the SAN move list. The STUDENT
+ *  (the side we drive) plays a short opening book then full-strength Stockfish;
+ *  the COACH replies through the app's own rating-limited engine. */
 async function playGame(page, plies) {
   const mirror = new Chess();
-  const OPENING = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'c3', 'Nf6', 'd3', 'd6', 'O-O', 'O-O'];
+  // A sharp, natural opening for the student side so tactics arise early.
+  const OPENING = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'b4', 'Bxb4', 'c3', 'Ba5', 'd4'];
   const moves = [];
   let lastTs = Date.now() - 1;
   for (let i = 0; i < plies && !mirror.isGameOver(); i += 1) {
     const scripted = OPENING[moves.length];
     const legal = mirror.moves({ verbose: true });
-    const pick = (scripted && legal.find((m) => m.san === scripted)) || bestPlausible(mirror, legal);
+    let pick = scripted && legal.find((m) => m.san === scripted);
+    if (!pick) {
+      const uci = await bestMoveUci(mirror.fen());
+      pick = uci && legal.find((m) => m.from === uci.slice(0, 2) && m.to === uci.slice(2, 4)
+        && (uci.length < 5 || (m.promotion ?? '') === uci[4]));
+    }
+    if (!pick) pick = bestPlausible(mirror, legal);
     if (!pick) break;
     try {
       await page.locator(`[data-square="${pick.from}"]`).click({ force: true, timeout: 8000 });
@@ -187,6 +216,41 @@ const main = async () => {
     if (e.fen) lines.push(`    fen: ${e.fen}`);
     lines.push(`    "${text}"`);
   }
+  // ── ROUGH DNA TALLY (heuristic — a signal, not a grader) ─────────────────
+  // Over the DISTINCT narration lines (drop the compute→package→speak echoes),
+  // count how often each Naroditsky device appears. Answers "does it follow the
+  // teaching DNA" quantitatively against the measured pattern spec.
+  const distinct = [];
+  const seenText = new Set();
+  for (const e of spoken) {
+    const t = saidText(e);
+    if (!t || t.length < 8) continue;
+    const key = t.slice(0, 40).toLowerCase();
+    if (seenText.has(key)) continue;
+    seenText.add(key);
+    distinct.push(t);
+  }
+  const rx = {
+    'but-turn':        /\b(but|however)\b.*\b(fails|runs into|refut|drops|loses|doesn.?t|falls apart)\b|tempt|you.?d (love|want) to|looks (natural|tempting|good)|seductive/i,
+    'calculation':     /\bif\b[^.]*\bthen\b|\band if\b|→|\bfollowed by\b|[NBRQK]?[a-h]?x?[a-h][1-8][+#]?\b.*\b(and|then)\b.*[NBRQK]?[a-h]?x?[a-h][1-8]/,
+    'multi-reason':    /,\s.*\band\b.*,|;.*\band\b/,
+    'uncertainty':     /\b(unclear|murky|roughly|about equal|hard to say|double-edged|may|might|probably|likely|it.?s not obvious)\b/i,
+    'opponent-intent': /\b(they want|he wants|she wants|watch out|threat|is coming)\b/i,
+    'naming/pattern':  /\b(the same idea|pattern|fork|pin|skewer|outpost|battery|passed pawn|the .* mate)\b/i,
+  };
+  const tally = Object.fromEntries(Object.entries(rx).map(([k, re]) =>
+    [k, distinct.filter((t) => re.test(t)).length]));
+  const pct = (n) => distinct.length ? `${Math.round((100 * n) / distinct.length)}%` : '—';
+
+  lines.push('');
+  lines.push('─'.repeat(78));
+  lines.push(`DNA TALLY (heuristic) over ${distinct.length} distinct narration lines:`);
+  lines.push('  device            count   share    DNA target');
+  const targets = { 'but-turn': '~33% (all 147 videos)', 'calculation': '~28% (beats principle 5:1)', 'multi-reason': 'avg 3.4 reasons/move', 'uncertainty': '~21%', 'opponent-intent': 'present (prophylaxis ~2%)', 'naming/pattern': '~8%' };
+  for (const [k, n] of Object.entries(tally)) {
+    lines.push(`  ${k.padEnd(17)} ${String(n).padStart(4)}   ${pct(n).padStart(5)}    ${targets[k]}`);
+  }
+
   const transcript = lines.join('\n');
   await writeFile(join(OUT, 'transcript.txt'), transcript, 'utf8');
   await writeFile(join(OUT, 'raw-spoken.json'), JSON.stringify(spoken, null, 2), 'utf8');
