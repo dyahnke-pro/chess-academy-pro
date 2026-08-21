@@ -2977,6 +2977,32 @@ settled positions → 325, 49 plies → 153 once measured). Find the start frame
 SEARCHING; never assume t=0 (David: *"he starts most times with old games"*), and
 note that an old-game intro's positions belong to THAT game, not the lesson.
 
+**A MISTRACKED VIDEO IS USUALLY TWO PIXELS OF GEOMETRY, NOT A LOST LESSON —
+RE-READ IT BEFORE WRITING IT OFF (2026-08-21).** `CXvo1dMF1Qs` was hand-verdicted
+mistracked and sat unusable for a day; it was the ONLY Benko and Benoni source in
+the whole bank, so two opening families had zero coverage because of one bad
+track. The default geometry for 854x480 is `370,-2,60`. The board on that upload
+is at `371,0,60.4`. That is it — `y0` off by two pixels, and the scanner read a
+grid one square out and tracked a different game entirely.
+
+The procedure, which takes about five minutes:
+1. Materialise the video again from the drop branch (`git cat-file blob`).
+2. Pull a frame with ffmpeg somewhere in the opening and LOOK at it. Read the
+   file letters and rank numbers off the image; that gives x0 and the square size
+   directly. Do not compute, do not detect — CLAUDE.md already says two detectors
+   died this way.
+3. Sample a spread of early frames (`for t in 8 10 12 …`) and run
+   `calibrate.py <x0> <y0> <sq> frames/*.png`. It SEARCHES them for the start
+   position and refuses geometry that does not reproduce it, so a wrong read
+   fails loudly instead of tracking a false line. **A refusal usually means your
+   frames are past the start position, not that your numbers are wrong** — the
+   game here was already three plies in by t=24.
+4. Re-scan with the confirmed numbers.
+
+So: when a track is marked mistracked, check whether it is the only source for an
+opening before accepting the verdict. Re-reading the geometry is cheap; the
+content behind it may not be replaceable.
+
 **A NOTE MAY ONLY CITE A POSITION THE VIDEO SHOWED.** Gate:
 `src/data/videoTrackIntegrity.test.ts` (ship-check) — every recorded FEN must be
 exactly what its moves produce, every fork option must be legal at its fork, and
