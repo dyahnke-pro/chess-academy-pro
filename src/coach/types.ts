@@ -123,6 +123,11 @@ export interface LiveState {
    *  the grounding pipeline falls back to the master-play top move when
    *  absent. See docs/plans/2026-06-10-coach-chat-grounding-inversion.md. */
   engineBestMoveUci?: string;
+  /** Engine MultiPV top lines (white-POV evals) for the current FEN. When
+   *  present, the grounded best-move answer can open with the tempting-but-
+   *  wrong move (Danya's but-turn), derived latency-safe from these lines.
+   *  Additive: absent = no but-turn. Threaded to `grounding.engineTopLines`. */
+  engineTopLines?: ReadonlyArray<{ moves: string[]; evaluation: number }>;
   /** The move the student just played, with the reasons for it that CODE
    *  verified on the board it was played from (`reasonVoice.reasonLineFor`).
    *

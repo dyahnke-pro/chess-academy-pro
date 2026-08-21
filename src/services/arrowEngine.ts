@@ -260,7 +260,7 @@ export async function injectCandidateArrows(
   text: string,
   fen: string,
   analyze: MultipvAnalyzer,
-  opts?: { excludeSan?: string; suppressSans?: string[]; spokenText?: string },
+  opts?: { excludeSan?: string; spokenText?: string },
 ): Promise<{ text: string; injected: { san: string; color: ArrowColor }[] }> {
   // Strip any pre-existing markers (we re-derive every arrow) but
   // preserve newlines — only collapse the double-spaces a stripped
@@ -275,20 +275,6 @@ export async function injectCandidateArrows(
   // but same-squares mention is still dropped.
   const excludeArrow = opts?.excludeSan ? resolveSanToArrow(opts.excludeSan, [fen]) : null;
   const excludeKey = excludeArrow ? `${excludeArrow.from}-${excludeArrow.to}` : null;
-
-  // SUPPRESSED moves are the student's OWN mistake-moves the prose names as a
-  // trap ("you'd be tempted by Nxe4, but…") — the tactical-read but-turn. By
-  // MultiPV rank they may sit at #2/#3 and would otherwise draw a YELLOW
-  // "decent alternative" arrow, telling the student to play the losing move
-  // (David 2026-08-01: "the arrows are hallucinating! BAD MOVES!!"). Doctrine
-  // (David 2026-07-06): a student's own bad move gets NO arrow — we never point
-  // at it. Suppress by resolved geometry, like the exclude set. This is NOT the
-  // red-threat exception, which is only the OPPONENT's forcing danger.
-  const suppressKeys = new Set<string>();
-  for (const s of opts?.suppressSans ?? []) {
-    const a = resolveSanToArrow(s, [fen]);
-    if (a) suppressKeys.add(`${a.from}-${a.to}`);
-  }
 
   let ranked: RankedCandidate[] = [];
   try {
@@ -324,7 +310,6 @@ export async function injectCandidateArrows(
     if (!arrow) continue;
     const key = `${arrow.from}-${arrow.to}`;
     if (key === excludeKey) continue; // the move already on the board — skip
-    if (suppressKeys.has(key)) continue; // a named trap/mistake move — never arrow it
     if (seen.has(key)) continue;
     seen.add(key);
     resolved.push({ san, from: arrow.from, to: arrow.to, rank: rankOf(arrow) });
@@ -368,7 +353,7 @@ export async function injectCandidateArrows(
       const forcing = resolveForcingMove(san, fen);
       if (!forcing) continue;
       const key = `${forcing.from}-${forcing.to}`;
-      if (key === excludeKey || suppressKeys.has(key) || drawnKeys.has(key)) continue; // played move / suppressed trap / already drawn
+      if (key === excludeKey || drawnKeys.has(key)) continue; // played move / already drawn
       const rank = rankOf(forcing);
       if (rank === 1 || rank === 2 || rank === 3) continue; // a suggestion, not a threat
       drawnKeys.add(key);

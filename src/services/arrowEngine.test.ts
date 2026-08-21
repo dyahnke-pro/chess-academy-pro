@@ -150,25 +150,6 @@ describe('injectCandidateArrows', () => {
     expect(injected.some((i) => i.san === 'Nc3')).toBe(true);
   });
 
-  it('SUPPRESSES a named trap move — the tactical-read but-turn (David 2026-08-21)', async () => {
-    // The coach names the seductive Nc3 as a trap ("tempted by Nc3, but…").
-    // It ranks #2, so without suppression it draws a yellow "play this" arrow.
-    // suppressSans drops it entirely; the sound Nf3 keeps its green arrow.
-    const analyze = async (): Promise<RankedCandidate[]> => [
-      { from: 'g1', to: 'f3', rank: 1 },
-      { from: 'b1', to: 'c3', rank: 2 },
-    ];
-    const { text, injected } = await injectCandidateArrows(
-      'The move is Nf3. You might be tempted by Nc3, but it runs into trouble.',
-      start,
-      analyze,
-      { suppressSans: ['Nc3'] },
-    );
-    expect(text).not.toContain('b1-c3'); // the trap move — never arrowed
-    expect(injected.some((i) => i.san === 'Nc3')).toBe(false);
-    expect(text).toContain('[BOARD: arrow:g1-f3:green]'); // the sound move keeps its arrow
-  });
-
   it('DROPS a #2/#3 arrow when the move is far worse than #1 by eval (David 2026-08-21)', async () => {
     // Nc3 ranks #2 but is 150cp worse than Nf3 — a mistake, not a real
     // alternative. It must NOT draw a yellow arrow even when named in prose.
