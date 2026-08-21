@@ -612,5 +612,33 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Queen's Gambit Declined",
+   "eco": "D30",
+   "plies": 4,
+   "line": "d4 d5 c4 e6",
+   "coverage": 0.965
+  },
+  {
+   "name": "Queen's Gambit",
+   "eco": "D06",
+   "plies": 3,
+   "line": "d4 d5 c4",
+   "coverage": 0.982
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

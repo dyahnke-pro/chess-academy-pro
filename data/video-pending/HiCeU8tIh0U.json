@@ -141,5 +141,26 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "King's Pawn Game: Wayward Queen Attack",
+   "eco": "C20",
+   "plies": 3,
+   "line": "e4 e5 Qh5",
+   "coverage": 0.889
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

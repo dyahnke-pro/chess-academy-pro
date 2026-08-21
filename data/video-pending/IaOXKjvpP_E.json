@@ -425,5 +425,40 @@
    "fen": "r3r2k/3b1q1n/pp1p1ppp/2pPP3/P1P2P1P/1P2R3/2B3N1/Q3R1K1 b - - 0 32"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Moscow Variation",
+   "eco": "B51",
+   "plies": 5,
+   "line": "e4 c5 Nf3 d6 Bb5+",
+   "coverage": 0.959
+  },
+  {
+   "name": "Sicilian Defense: Modern Variations",
+   "eco": "B50",
+   "plies": 4,
+   "line": "e4 c5 Nf3 d6",
+   "coverage": 0.959
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

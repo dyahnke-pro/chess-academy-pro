@@ -1,8 +1,8 @@
 {
  "generatedAt": "2026-08-21",
- "videosDistilled": 181,
- "noteCount": 467,
- "forkCount": 482,
+ "videosDistilled": 182,
+ "noteCount": 470,
+ "forkCount": 483,
  "notes": [
   {
    "id": "vn-advance-e6-cover-the-check-square-before-the-trade",
@@ -4567,6 +4567,110 @@
      ]
     }
    ]
+  },
+  {
+   "id": "vn-benoni-strike-the-centre-from-the-wing",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "c5"
+   ],
+   "opening": "Benoni Defense",
+   "phase": "opening",
+   "explains": "The pawn to c5 hits d4 and asks it to make up its mind. Trading gives Black comfortable play, holding the tension is playable, and pushing past is the critical answer — and each of the three is a different opening. Black is choosing a fight over the centre rather than an occupation of it.",
+   "teaches": "Hitting a central pawn with a wing pawn invites it to advance past you. That is the trade: you concede space in return for a target you can chew on for the rest of the game.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:CXvo1dMF1Qs"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d4"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "d4",
+     "Nf6",
+     "c4"
+    ],
+    "taughtMove": "e6",
+    "alternative": "c5",
+    "lineName": "Catalan Opening"
+   }
+  },
+  {
+   "id": "vn-benoni-the-push-that-takes-the-squares",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "c5",
+    "d5"
+   ],
+   "opening": "Benoni Defense",
+   "phase": "opening",
+   "explains": "The pawn goes past to d5, taking c6 and e6 — the two squares Black's knight and light-squared bishop would most like. This is the critical continuation. Black now has a real choice about how to undermine that pawn, and one of those choices is to offer a pawn on the queenside to open lines against it.",
+   "teaches": "Advancing a central pawn past its neighbour buys squares and costs flexibility. It is right when the squares it takes are the ones the opponent's pieces need.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:CXvo1dMF1Qs"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e6"
+    },
+    {
+     "kind": "controls",
+     "square": "c6"
+    }
+   ]
+  },
+  {
+   "id": "vn-benko-the-gambit-and-the-old-way-to-decline-it",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "c5",
+    "d5",
+    "b5"
+   ],
+   "opening": "Benoni Defense",
+   "phase": "opening",
+   "explains": "The pawn to b5 hits c4 and offers itself. The point is not the pawn: taking it opens the a- and b-files, and Black's rooks and the bishop on the long diagonal will press down them for the rest of the game — often long into an endgame, and often a pawn down without minding. Taking is what the books recommend and is entirely topical. There is also an old and little-known knight retreat to d2, which meets the capture on c4 by striking in the centre instead — almost reversing the gambit, offering a pawn back, and regaining it. It has teeth precisely because nobody has seen it.",
+   "teaches": "When a gambit offers a pawn to open two files, taking it is not automatically the test. A rare declining move that hands the pawn straight back on your own terms can leave the gambiteer with nothing to show for the structure.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:CXvo1dMF1Qs"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c4"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "d4",
+     "Nf6",
+     "c4",
+     "c5",
+     "d5"
+    ],
+    "taughtMove": "e6",
+    "alternative": "b5",
+    "lineName": "Benoni Defence"
+   }
   },
   {
    "id": "vn-counterstrike-hit-the-centre-the-moment-it-overreaches",
@@ -21217,6 +21321,34 @@
     }
    ],
    "source": "yt:C4xtj2rc0_k"
+  },
+  {
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "lineSan": [
+    "d4",
+    "Nf6",
+    "c4",
+    "c5"
+   ],
+   "ply": 4,
+   "options": [
+    {
+     "san": "d5",
+     "t": 32,
+     "continuation": "d5"
+    },
+    {
+     "san": "e3",
+     "t": 743.5,
+     "continuation": "e3"
+    },
+    {
+     "san": "Nf3",
+     "t": 749,
+     "continuation": "Nf3"
+    }
+   ],
+   "source": "yt:CXvo1dMF1Qs"
   },
   {
    "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",

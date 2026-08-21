@@ -422,5 +422,33 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Rat Defense: Small Center Defense",
+   "eco": "C00",
+   "plies": 4,
+   "line": "e4 d6 d4 e6",
+   "coverage": 0.943
+  },
+  {
+   "name": "Pirc Defense",
+   "eco": "B00",
+   "plies": 2,
+   "line": "e4 d6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

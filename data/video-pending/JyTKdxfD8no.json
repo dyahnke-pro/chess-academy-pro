@@ -789,5 +789,32 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Vienna Game: Anderssen Defense",
+   "eco": "C25",
+   "plies": 4,
+   "line": "e4 e5 Nc3 Bc5",
+   "coverage": 0.968
+  },
+  {
+   "name": "Vienna Game",
+   "eco": "C25",
+   "plies": 3,
+   "line": "e4 e5 Nc3",
+   "coverage": 0.984
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Vienna Game: Fyfe Gambit",
+  "confirmed": false
+ }
 }

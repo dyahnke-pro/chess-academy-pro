@@ -162,5 +162,40 @@
    "fen": "r1q1kr2/p1p1Qp2/1pb1p3/2n1P1Bp/4p3/2N1P3/PPP2PPP/3R1RK1 b q - 8 16"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Rapport-Jobava System",
+   "eco": "D01",
+   "plies": 5,
+   "line": "d4 Nf6 Nc3 d5 Bf4",
+   "coverage": 0.938
+  },
+  {
+   "name": "Queen's Pawn Game: Chigorin Variation",
+   "eco": "A45",
+   "plies": 4,
+   "line": "d4 Nf6 Nc3 d5",
+   "coverage": 0.938
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

@@ -580,5 +580,39 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Nimzowitsch Defense: Williams Variation",
+   "eco": "B00",
+   "plies": 4,
+   "line": "e4 Nc6 Nf3 d6",
+   "coverage": 0.967
+  },
+  {
+   "name": "Nimzowitsch Defense: Declined Variation",
+   "eco": "B00",
+   "plies": 3,
+   "line": "e4 Nc6 Nf3",
+   "coverage": 0.983
+  },
+  {
+   "name": "Nimzowitsch Defense",
+   "eco": "B00",
+   "plies": 2,
+   "line": "e4 Nc6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Grand Prix Attack",
+  "confirmed": false
+ }
 }

@@ -2,13 +2,13 @@
  "videoId": "CXvo1dMF1Qs",
  "title": "Taking Down the Benko Gambit!! | The Sensei Speedrun | GM Naroditsky",
  "creator": "naroditsky",
- "trackedAt": "2026-08-19",
+ "trackedAt": "2026-08-21",
  "geometry": {
-  "x0": 370,
-  "y0": -2,
-  "square": 60,
+  "x0": 371,
+  "y0": 0,
+  "square": 60.4,
   "orientation": "white",
-  "source": "confirmed against the start position by calibrate_section"
+  "source": "hand re-read 2026-08-21 — confirmed against the start position at t=7.5s by calibrate_section"
  },
  "sampling": {
   "fps": 2,
@@ -84,7 +84,7 @@
    "fen": "rnbqkb1r/p2ppppp/5n2/2pP4/2p1P3/8/PP1N1PPP/R1BQKBNR b KQkq - 0 5"
   },
   {
-   "t": 66,
+   "t": 66.5,
    "ply": 10,
    "line": [
     "d6"
@@ -162,7 +162,7 @@
    "fen": "r1bqk2r/p2nppbp/3p1np1/2pP4/2B1P3/5N1P/PP1N1PP1/R1BQ1RK1 b kq - 0 9"
   },
   {
-   "t": 150.5,
+   "t": 150,
    "ply": 18,
    "line": [
     "O-O"
@@ -208,7 +208,7 @@
    "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3"
   },
   {
-   "t": 670,
+   "t": 670.5,
    "ply": 6,
    "line": [
     "b5"
@@ -452,12 +452,6 @@
    ]
   }
  ],
- "titleCheck": {
-  "claims": "Benko Gambit",
-  "confirmed": true,
-  "verdict": "mistracked",
-  "checkedBy": "hand 2026-08-20 — mistracked — titled a Benko; the default geometry tracked a knight retreating to g1 on move five, and a hand re-read at 374,0,60 tracked a different game entirely (d4 Nf6 Nf3 g6 g3 Bg7 Bg2). The Benko section needs a per-section geometry read. No notes written."
- },
  "openings": [
   {
    "name": "Benko Gambit Accepted: King Walk Variation",
@@ -535,6 +529,66 @@
    "plies": 1,
    "line": "d4",
    "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Benko Gambit",
+  "confirmed": true,
+  "verdict": "re-tracked",
+  "checkedBy": "hand 2026-08-21 — the earlier 'mistracked' verdict was CORRECT for the geometry it was read with (854x480 default 370,-2,60). The board on this upload is at 371,0,60.4 — y0 off by two pixels, which put the grid a square out and tracked a different game. Re-scanned with the confirmed geometry: 48 plies, title check now confirms Benko Gambit. CAVEAT: the DEEP line still contains a tracking artefact (a knight retreating f3->g1 around ply 9), so notes are written ONLY on the clean opening anchors (plies 2-6, d4 Nf6 c4 c5 d5 b5) and never on the ply-19+ lines."
+ },
+ "notes": [
+  {
+   "id": "vn-benoni-strike-the-centre-from-the-wing",
+   "line": "d4 Nf6 c4 c5",
+   "teaches": "Hitting a central pawn with a wing pawn invites it to advance past you. That is the trade: you concede space in return for a target you can chew on for the rest of the game.",
+   "explains": "The pawn to c5 hits d4 and asks it to make up its mind. Trading gives Black comfortable play, holding the tension is playable, and pushing past is the critical answer — and each of the three is a different opening. Black is choosing a fight over the centre rather than an occupation of it.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d4"
+    }
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "t": 29,
+   "ply": 4,
+   "source": "yt:CXvo1dMF1Qs"
+  },
+  {
+   "id": "vn-benoni-the-push-that-takes-the-squares",
+   "line": "d4 Nf6 c4 c5 d5",
+   "teaches": "Advancing a central pawn past its neighbour buys squares and costs flexibility. It is right when the squares it takes are the ones the opponent's pieces need.",
+   "explains": "The pawn goes past to d5, taking c6 and e6 — the two squares Black's knight and light-squared bishop would most like. This is the critical continuation. Black now has a real choice about how to undermine that pawn, and one of those choices is to offer a pawn on the queenside to open lines against it.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e6"
+    },
+    {
+     "kind": "controls",
+     "square": "c6"
+    }
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2pP4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "t": 32,
+   "ply": 5,
+   "source": "yt:CXvo1dMF1Qs"
+  },
+  {
+   "id": "vn-benko-the-gambit-and-the-old-way-to-decline-it",
+   "line": "d4 Nf6 c4 c5 d5 b5",
+   "teaches": "When a gambit offers a pawn to open two files, taking it is not automatically the test. A rare declining move that hands the pawn straight back on your own terms can leave the gambiteer with nothing to show for the structure.",
+   "explains": "The pawn to b5 hits c4 and offers itself. The point is not the pawn: taking it opens the a- and b-files, and Black's rooks and the bishop on the long diagonal will press down them for the rest of the game — often long into an endgame, and often a pawn down without minding. Taking is what the books recommend and is entirely topical. There is also an old and little-known knight retreat to d2, which meets the capture on c4 by striking in the centre instead — almost reversing the gambit, offering a pawn back, and regaining it. It has teeth precisely because nobody has seen it.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c4"
+    }
+   ],
+   "fen": "rnbqkb1r/p2ppppp/5n2/1ppP4/2P5/8/PP2PPPP/RNBQKBNR w KQkq - 0 4",
+   "t": 35,
+   "ply": 6,
+   "source": "yt:CXvo1dMF1Qs"
   }
  ]
 }

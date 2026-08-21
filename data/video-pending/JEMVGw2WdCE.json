@@ -1088,5 +1088,75 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "King's Indian Defense: Sämisch Variation, Sämisch Gambit",
+   "eco": "E81",
+   "plies": 12,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O Be3 c5",
+   "coverage": 0.857
+  },
+  {
+   "name": "King's Indian Defense: Sämisch Variation, Normal Defense",
+   "eco": "E81",
+   "plies": 10,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O",
+   "coverage": 0.886
+  },
+  {
+   "name": "King's Indian Defense: Sämisch Variation",
+   "eco": "E80",
+   "plies": 9,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3",
+   "coverage": 0.9
+  },
+  {
+   "name": "King's Indian Defense: Normal Variation",
+   "eco": "E70",
+   "plies": 7,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4",
+   "coverage": 0.929
+  },
+  {
+   "name": "King's Indian Defense",
+   "eco": "E61",
+   "plies": 5,
+   "line": "d4 Nf6 c4 g6 Nc3",
+   "coverage": 0.957
+  },
+  {
+   "name": "Indian Defense: West Indian Defense",
+   "eco": "E60",
+   "plies": 4,
+   "line": "d4 Nf6 c4 g6",
+   "coverage": 0.971
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.986
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

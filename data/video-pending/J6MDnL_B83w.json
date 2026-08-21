@@ -543,5 +543,68 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "King's Indian Defense: Zinnowitz Variation",
+   "eco": "E90",
+   "plies": 11,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Bg5 O-O Nf3",
+   "coverage": 0.8
+  },
+  {
+   "name": "King's Indian Defense: Accelerated Averbakh Variation",
+   "eco": "E70",
+   "plies": 9,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Bg5",
+   "coverage": 0.857
+  },
+  {
+   "name": "King's Indian Defense: Normal Variation",
+   "eco": "E70",
+   "plies": 7,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4",
+   "coverage": 0.914
+  },
+  {
+   "name": "King's Indian Defense",
+   "eco": "E61",
+   "plies": 5,
+   "line": "d4 Nf6 c4 g6 Nc3",
+   "coverage": 0.943
+  },
+  {
+   "name": "Indian Defense: West Indian Defense",
+   "eco": "E60",
+   "plies": 4,
+   "line": "d4 Nf6 c4 g6",
+   "coverage": 0.971
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.971
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

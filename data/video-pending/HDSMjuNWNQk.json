@@ -254,5 +254,26 @@
    "fen": "3q1rk1/1p1nbppp/1n2p3/1p1pN3/2pP1BP1/2P1P3/1PB2P1P/3Q1RK1 w - - 1 17"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Queen's Pawn Game: Accelerated London System",
+   "eco": "D00",
+   "plies": 3,
+   "line": "d4 d5 Bf4",
+   "coverage": 0.966
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }
