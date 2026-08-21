@@ -804,5 +804,71 @@
     }
    ]
   }
+ ],
+ "notes": [
+  {
+   "id": "vn-pirc-take-the-centre-they-are-conceding",
+   "line": "e4 d6 d4",
+   "teaches": "When the opponent declines to contest the centre with pawns, take it — and understand you are being invited. The space is real; so is the fact that it will be shot at.",
+   "explains": "The pawn takes the second central square and holds e5. Black has deliberately not put a pawn alongside it, which is the whole design of this defence: concede the middle, develop behind it, and then undermine it from a distance. White gets the space and the obligation that comes with it.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "t": 38.5,
+   "ply": 3,
+   "source": "yt:CnODsrMCQQg"
+  },
+  {
+   "id": "vn-pirc-the-move-order-that-names-the-opening",
+   "line": "e4 d6 d4 Nf6 Nc3 g6",
+   "teaches": "Two defences can reach the same position and still be different openings, because the difference is which moves they DELAY. Watch what the opponent has not played yet.",
+   "explains": "The knight came out first and only now does the pawn step to g6, taking f5 and preparing the bishop's home on the long diagonal. That order is what makes this the defence it is. Its close cousin plays the flank pawn on move one instead and often puts off the knight entirely, going for a queenside pawn advance first — the two transpose constantly, and the move the opponent is withholding tells you which one you are really in.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "f5"
+    }
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "t": 904.5,
+   "ply": 6,
+   "source": "yt:CnODsrMCQQg"
+  },
+  {
+   "id": "vn-pirc-the-most-aggressive-not-the-best",
+   "line": "e4 d6 d4 Nf6 Nc3 g6 f4",
+   "teaches": "The most principled try and the objectively best move are not always the same move. Choose the aggressive one for what it demands of the opponent, and know you are choosing a theory load.",
+   "explains": "The f-pawn joins the centre and White now has three abreast, holding e5 twice over. For several decades this has been regarded as the most principled way to fight for an advantage here — not necessarily the strongest move, but the most aggressive one, and it carries an enormous amount of theory behind it. The pawns look overwhelming and that is exactly what Black is playing against.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PPP2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 4",
+   "t": 907,
+   "ply": 7,
+   "source": "yt:CnODsrMCQQg"
+  },
+  {
+   "id": "vn-pirc-the-bishop-behind-its-own-knight",
+   "line": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7",
+   "teaches": "A fianchettoed bishop aimed at the centre is not yet attacking it if a piece of your own stands in the way. The plan is to move the blocker with tempo — until then the pressure is potential, not real.",
+   "explains": "The bishop takes the long diagonal and, for the moment, holds its own knight on f6 rather than hitting anything. That is the point: the pressure down the diagonal only becomes real once the knight steps aside, and Black will look to arrange that at a moment when it costs White something. Everything in this structure runs on that delayed threat.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "f6"
+    }
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PPP2/2N5/PPP3PP/R1BQKBNR w KQkq - 1 5",
+   "t": 922,
+   "ply": 8,
+   "source": "yt:CnODsrMCQQg"
+  }
  ]
 }
