@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, speakTemptingTurn, tacticalReadFacts, namedTacticClause,
+  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, speakTemptingTurn, tacticalReadFacts, voiceRejectsBestMove, namedTacticClause,
   type TacticalRead,
 } from './tacticalRead';
 import type { PvEngine, PvPly } from './pvPlayback';
@@ -231,5 +231,20 @@ describe('tacticalReadFacts (facts for the voice model, not prose)', () => {
     expect(facts).toContain('up a piece');       // verdict
     // it is FACTS, not the frozen template prose
     expect(facts).not.toContain('You’d love to');
+  });
+});
+
+describe('voiceRejectsBestMove (recommendation guard)', () => {
+  it('trips when the model argues against the best move', () => {
+    expect(voiceRejectsBestMove('Verdict: avoid the flashy Be2; solidify instead.', 'Be2')).toBe(true);
+    expect(voiceRejectsBestMove('The fork here is an illusion in practice; the stronger idea is to keep pressure.', 'Be2')).toBe(true);
+    expect(voiceRejectsBestMove('Be2 is a mistake here.', 'Be2')).toBe(true);
+  });
+  it('passes a faithful read that endorses the best move', () => {
+    expect(voiceRejectsBestMove('Instead, Be2 is the quiet venom, forking f3 and d1. You stand clearly better.', 'Be2')).toBe(false);
+    expect(voiceRejectsBestMove('Qd4+ forks the rook and king; you win a piece.', 'Qd4+')).toBe(false);
+  });
+  it('is a no-op without a best move', () => {
+    expect(voiceRejectsBestMove('anything at all', null)).toBe(false);
   });
 });

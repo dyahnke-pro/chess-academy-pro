@@ -417,4 +417,26 @@ export const TACTICAL_READ_DIRECTIVES =
   + 'do NOT name a tactic or mate pattern (e.g. "back-rank mate", "smothered '
   + 'mate", "fork") unless it appears in the facts, and do NOT assert where any '
   + 'piece sits unless its square is given. When unsure, describe the move’s '
-  + 'effect, not a named pattern.';
+  + 'effect, not a named pattern. The best/correct move given in the facts is '
+  + 'engine-verified and IS the answer — voice it as correct; NEVER suggest '
+  + 'avoiding it, call it an illusion or a mistake, or propose a different plan '
+  + 'instead. Only the TEMPTING move is the one to turn against.';
+
+/** True when the voiced text argues AGAINST the engine's best move — the model
+ *  second-guessing the grounded recommendation (e.g. "avoid Be2", "the fork is
+ *  an illusion"). The board grader catches false SQUARES, not a rejected
+ *  RECOMMENDATION; this does. Callers fall back to the deterministic template
+ *  when it trips. */
+export function voiceRejectsBestMove(text: string, bestMoveSan: string | null): boolean {
+  if (!bestMoveSan) return false;
+  const t = text.toLowerCase();
+  const san = bestMoveSan.replace(/[+#]/g, '').toLowerCase().replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  // "avoid / don't play / steer clear of <best>" — a direct steer away from it.
+  if (new RegExp(`\\b(avoid|don.?t play|do not play|steer clear of|resist|skip)\\b[^.]*\\b${san}\\b`).test(t)) return true;
+  // "<best> is an illusion / a mistake / wrong / dubious …"
+  if (new RegExp(`\\b${san}\\b[^.]*\\b(is|would be|seems|looks)\\b[^.]*\\b(an? )?(illusion|mistake|blunder|wrong|bad|dubious|premature|trap)\\b`).test(t)) return true;
+  // generic "the tactic is an illusion / doesn't work … instead / solidify".
+  if (/\b(illusion|does not work|doesn.?t work|falls short|not the answer)\b/.test(t)
+      && /\b(instead|stronger idea|better idea|solidify)\b/.test(t)) return true;
+  return false;
+}
