@@ -2607,8 +2607,39 @@ budget, with ZERO console errors and zero page errors, under both
 a text-proportional delay, so the hang is not the voice gate). Silence with no
 error is the signature.
 
-**NARROWED 2026-08-21, and the instrument that did it was the AUDIT-STREAM, not
-the DOM.** Four sessions had now guessed at this from Playwright alone (slow /
+🚨 **SOLVED 2026-08-21, AND IT WAS THE AUDIT, NOT THE PRODUCT. Everything below
+this paragraph is the record of four sessions chasing a bug that did not exist —
+read it as a lesson about instruments, not about the runner.**
+
+The Vienna Copycat walk reaches ply 11, finds **1 of 5 punish lessons** at that
+position, speaks *"Hold on — a common mistake here is…"* and sets phase
+`trap-prompt`. Then it waits, correctly, for the student to accept or skip the
+trap. `audit-teach-walkthrough-completes-prod.mjs` polled for
+`walkthrough-leaf-panel` and NOTHING else, so it never pressed the button, waited
+out its 600s budget and printed "the walk never ended". **The walk had ended. It
+was waiting.** The fix was three selectors in the audit's poll loop (skip the
+trap — accepting forks into a punish lesson, a different surface than this audit
+measures), and it now reports which prompts it answered and when.
+
+**THE LESSON, WHICH THIS FILE ALREADY CONTAINED:** *"a fire-and-forget scripted
+bot that assumes a fixed happy-path flow is NOT an audit — it stalls the moment a
+prompt it didn't anticipate appears."* That rule was written after the 2026-07-24
+full-play bot stalled on the end-of-Watch continue prompt. The same defect, on a
+different prompt, then cost four more sessions — each of which trusted the
+audit's verdict and went looking in the product. **When an audit reports that
+nothing happened, the FIRST hypothesis is that the audit is not driving the
+surface, not that the surface is broken.** Check what the app is WAITING FOR
+before you debug why it stopped.
+
+**AND A FIX BUILT ON A WRONG DIAGNOSIS IS STILL A WRONG FIX.** This session
+rewrote the gem aside's settle logic to remove a fragile timer-identity guard,
+on the theory that it was stranding the walk. The rewrite is defensible on its
+own merits and it is kept — but it fixed NOTHING, the audit failed identically
+after it deployed, and the regression test written for it passes on the unfixed
+code. Both facts were visible before shipping and both were reported; do not let
+a plausible mechanism substitute for a measurement that names the actual stop.
+
+**HOW IT WAS FINALLY NAMED — the AUDIT-STREAM, not the DOM.** Four sessions had now guessed at this from Playwright alone (slow /
 TTS mock / missing narration / a stale run token) and every guess was wrong.
 Pulling `/api/audit-stream` after the run answered it in one read: the LAST
 narration event of a 600s Vienna Copycat walk is

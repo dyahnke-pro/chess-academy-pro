@@ -68,6 +68,7 @@ page.on('pageerror', (e) => errs.push(String(e).slice(0, 200)));
 page.on('console', (m) => { if (m.type() === 'error') errs.push(m.text().slice(0, 200)); });
 
 let picked = false, reached = false, elapsed = 0;
+const prompts = [];
 try {
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 60_000 });
   try { await page.locator('[data-testid="ai-consent-allow"]').click({ timeout: 8_000 }); } catch { /* consent already given */ }
@@ -84,17 +85,55 @@ try {
     picked = true;
   } catch { /* no picker tile — the lesson may start on the main line */ }
 
-  const step = 45_000;
+  // ANSWER THE PROMPTS. A WALK THAT IS WAITING IS NOT A WALK THAT IS STUCK.
+  //
+  // This loop used to poll for the leaf panel and nothing else, so the first
+  // time the lesson asked the student a question it sat there until the budget
+  // ran out and the audit reported "the walk never ended". It did end — it was
+  // waiting for a button. On the Vienna Copycat the lesson reaches ply 11, finds
+  // 1 of 5 punish lessons at that position, speaks "Hold on — a common mistake
+  // here is…" and sets phase `trap-prompt`; the audit-stream shows exactly that
+  // and nothing after it. FOUR separate sessions read that silence as a product
+  // stall and went looking for a bug in the runner. There wasn't one.
+  //
+  // That is the failure CLAUDE.md already names: *"a fire-and-forget scripted
+  // bot that assumes a fixed happy-path flow is NOT an audit — it stalls the
+  // moment a prompt it didn't anticipate appears."* So the loop now presses what
+  // appears, and it presses SKIP on the trap: accepting forks the walk into a
+  // punish lesson, which is a different surface and not what this audit is
+  // measuring — the contract here is that the MAIN LINE reaches its end.
+  //
+  // Every dismissal is counted and reported, because "answered 3 prompts on the
+  // way" is a materially different run from "answered none" and a silent click
+  // would hide which one happened.
+  const PROMPTS = [
+    ['trap-prompt', '[data-testid="walkthrough-trap-skip"]'],
+    ['choose-mode', '[data-testid="walkthrough-choose-walkthrough"]'],
+    ['page-help', '[data-testid="page-help-close"]'],
+  ];
+  const step = 5_000;
   for (elapsed = step; elapsed <= BUDGET_MS; elapsed += step) {
     await page.waitForTimeout(step);
     const leaf = await page.locator('[data-testid="walkthrough-leaf-panel"]').count();
     const body = await page.locator('body').innerText().catch(() => '');
     if (leaf > 0 || /Watch the middlegame and endgame/i.test(body)) { reached = true; break; }
+    for (const [name, sel] of PROMPTS) {
+      const el = page.locator(sel).first();
+      if (await el.count().catch(() => 0)) {
+        // force: the board animates continuously, so Playwright's stability
+        // check times out on a click a human could make regardless.
+        await el.click({ timeout: 5_000, force: true }).then(
+          () => { prompts.push(`${name}@${Math.round(elapsed / 1000)}s`); },
+          () => undefined,
+        );
+      }
+    }
   }
 } finally {
   const report = {
     base: BASE, opening: OPENING, variation: VARIATION,
     pickedVariationTile: picked, reachedLeaf: reached, waitedMs: Math.min(elapsed, BUDGET_MS),
+    promptsAnswered: prompts,
     llmCallsDuringWalkthrough: [...api.entries()].filter(([k]) => /llm|deepseek|anthropic/i.test(k)),
     apiCalls: Object.fromEntries(api), nonOk: [...new Set(bad)].slice(0, 20), consoleErrors: [...new Set(errs)].slice(0, 20),
   };
@@ -103,6 +142,7 @@ try {
   writeFileSync(`${dir}/report.json`, JSON.stringify(report, null, 2));
   console.log(`[walkthrough-completes] ${OPENING} / ${VARIATION}`);
   console.log(`  picked tile      : ${picked}`);
+  console.log(`  prompts answered : ${prompts.length ? prompts.join(', ') : 'none'}`);
   console.log(`  reached the leaf : ${reached}`);
   for (const [k, n] of [...api.entries()].sort()) console.log(`  ${String(n).padStart(4)}x ${k}`);
   if (report.llmCallsDuringWalkthrough.length) {
