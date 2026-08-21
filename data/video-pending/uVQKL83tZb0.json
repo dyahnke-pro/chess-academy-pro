@@ -827,5 +827,61 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Ruy Lopez: Bird Variation",
+   "eco": "C61",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bb5 Nd4",
+   "coverage": 0.94
+  },
+  {
+   "name": "Ruy Lopez",
+   "eco": "C60",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Bb5",
+   "coverage": 0.952
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.952
+  },
+  {
+   "name": "King's Gambit Accepted",
+   "eco": "C33",
+   "plies": 4,
+   "line": "e4 e5 f4 exf4",
+   "coverage": 0.012
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.964
+  },
+  {
+   "name": "King's Gambit",
+   "eco": "C30",
+   "plies": 3,
+   "line": "e4 e5 f4",
+   "coverage": 0.024
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

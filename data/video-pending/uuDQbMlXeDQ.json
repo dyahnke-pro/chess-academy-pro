@@ -221,5 +221,54 @@
    "fen": "rn3rk1/pp3ppp/4b3/2b5/5N2/4PN2/Pq3PPP/R2QKB1R b KQ - 1 12"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Queen's Gambit Declined: Harrwitz Attack, Main Line",
+   "eco": "D37",
+   "plies": 14,
+   "line": "d4 d5 c4 e6 Nf3 Nf6 Nc3 Be7 Bf4 O-O e3 c5 dxc5 Bxc5",
+   "coverage": 0.591
+  },
+  {
+   "name": "Queen's Gambit Declined: Harrwitz Attack",
+   "eco": "D37",
+   "plies": 9,
+   "line": "d4 d5 c4 e6 Nf3 Nf6 Nc3 Be7 Bf4",
+   "coverage": 0.773
+  },
+  {
+   "name": "Queen's Gambit Declined: Three Knights Variation",
+   "eco": "D37",
+   "plies": 7,
+   "line": "d4 d5 c4 e6 Nf3 Nf6 Nc3",
+   "coverage": 0.864
+  },
+  {
+   "name": "Queen's Gambit Declined",
+   "eco": "D30",
+   "plies": 4,
+   "line": "d4 d5 c4 e6",
+   "coverage": 0.955
+  },
+  {
+   "name": "Queen's Gambit",
+   "eco": "D06",
+   "plies": 3,
+   "line": "d4 d5 c4",
+   "coverage": 0.955
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

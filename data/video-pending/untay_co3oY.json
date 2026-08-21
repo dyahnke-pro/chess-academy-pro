@@ -730,5 +730,32 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "East Indian Defense",
+   "eco": "A48",
+   "plies": 4,
+   "line": "Nf3 Nf6 d4 g6",
+   "coverage": 0.961
+  },
+  {
+   "name": "Indian Defense: Knights Variation",
+   "eco": "A46",
+   "plies": 3,
+   "line": "Nf3 Nf6 d4",
+   "coverage": 0.98
+  },
+  {
+   "name": "Zukertort Opening",
+   "eco": "A04",
+   "plies": 1,
+   "line": "Nf3",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Torre Attack: Wagner Gambit",
+  "confirmed": false
+ }
 }

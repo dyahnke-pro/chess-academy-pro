@@ -1517,5 +1517,109 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Lasker-Pelikan Variation, Retreat Variation",
+   "eco": "B33",
+   "plies": 15,
+   "line": "e4 c5 Nc3 Nc6 Nb1 Nb8 d4 cxd4 Qxd4 Nc6 Qd1 Nf6 Nc3 e5 Nf3",
+   "coverage": 0.042
+  },
+  {
+   "name": "Sicilian Defense: Kan Variation, Knight Variation",
+   "eco": "B43",
+   "plies": 13,
+   "line": "e4 c5 Nc3 Nc6 Nb1 Nb8 Nf3 e6 d4 cxd4 Nxd4 a6 Nc3",
+   "coverage": 0.017
+  },
+  {
+   "name": "Sicilian Defense: Kan Variation",
+   "eco": "B41",
+   "plies": 12,
+   "line": "e4 c5 Nc3 Nc6 Nb1 Nb8 Nf3 e6 d4 cxd4 Nxd4 a6",
+   "coverage": 0.025
+  },
+  {
+   "name": "Sicilian Defense: Closed, Anti-Sveshnikov Variation, with d6",
+   "eco": "B30",
+   "plies": 10,
+   "line": "e4 c5 Nc3 Nc6 Nf3 e5 Bc4 d6 d3 Be7",
+   "coverage": 0.008
+  },
+  {
+   "name": "Sicilian Defense: French Variation, Open",
+   "eco": "B40",
+   "plies": 10,
+   "line": "e4 c5 Nc3 Nc6 Nb1 Nb8 Nf3 e6 d4 cxd4",
+   "coverage": 0.025
+  },
+  {
+   "name": "Sicilian Defense: Alapin Variation, Barmen Defense",
+   "eco": "B22",
+   "plies": 10,
+   "line": "e4 c5 Nc3 Nc6 Nb1 Nb8 c3 d5 exd5 Qxd5",
+   "coverage": 0.076
+  },
+  {
+   "name": "Sicilian Defense: French Variation",
+   "eco": "B40",
+   "plies": 8,
+   "line": "e4 c5 Nc3 Nc6 Nb1 Nb8 Nf3 e6",
+   "coverage": 0.034
+  },
+  {
+   "name": "Sicilian Defense: Alapin Variation",
+   "eco": "B22",
+   "plies": 7,
+   "line": "e4 c5 Nc3 Nc6 Nb1 Nb8 c3",
+   "coverage": 0.084
+  },
+  {
+   "name": "Sicilian Defense: Grand Prix Attack",
+   "eco": "B23",
+   "plies": 5,
+   "line": "e4 c5 Nc3 Nc6 f4",
+   "coverage": 0.008
+  },
+  {
+   "name": "Sicilian Defense: Closed, Traditional",
+   "eco": "B23",
+   "plies": 4,
+   "line": "e4 c5 Nc3 Nc6",
+   "coverage": 0.723
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit",
+   "eco": "B21",
+   "plies": 3,
+   "line": "e4 c5 d4",
+   "coverage": 0.261
+  },
+  {
+   "name": "Sicilian Defense: Closed",
+   "eco": "B23",
+   "plies": 3,
+   "line": "e4 c5 Nc3",
+   "coverage": 0.731
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Alapin Variation, Smith-Morra Declined",
+  "confirmed": false
+ }
 }

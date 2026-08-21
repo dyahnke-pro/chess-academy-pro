@@ -482,7 +482,7 @@ export function temptingCandidatePlies(
 // these three ship together): the tier-3 system prompt now carries the measured
 // Danya arc, so every generated beat's prose changes. A cached tree stamped with
 // the previous rev would serve the old register for ever.
-const WALKTHROUGH_GEN_REV = '2026-08-21-danya-arc';
+const WALKTHROUGH_GEN_REV = '2026-08-21-danya-arc-copycat-bake';
 
 export async function getCachedOpening(
   name: string,
