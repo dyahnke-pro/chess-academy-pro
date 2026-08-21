@@ -3070,6 +3070,31 @@ confirms geometry against the start position, so the wrong layout REFUSES rather
 than tracking a false line. That is the same property that makes a single
 hand-read safe, and it does not weaken by being tried twice.
 
+**A THIRD LAYOUT: THE CO-STREAM BOARD (2026-08-21).** Board on the right again
+but LARGER and pushed down under a player bar — the match/co-stream uploads
+("2-Hour Match with GM ...", event broadcasts). On a 640-wide frame it sits at
+`320,20,40`, which is `427,26.7,53.4` at 854, and it is now the third candidate.
+`cGGsU9WRObY` went from a refusal to **5,779 grids and a 40-ply track** on those
+numbers alone. The candidate list is three HAND-READ layouts and it must never
+become a detector — two of those have died here already. What makes trying them
+safe is unchanged: the start-position confirmation refuses the wrong one.
+
+**READ THE PIXELS, DON'T ESTIMATE THEM, WHEN THE EYE READ WON'T CONFIRM.** For
+that third layout the eye gave `329,8,38` and calibrate refused it six ways. A
+luminance-transition scan across one mid-board row and one file settled it in
+seconds — boundaries at 320/360/399/440/479/520/559/600 across, 20/60/100/…/340
+down, so `320,20,40` exactly. That is MEASUREMENT of a boundary you can already
+see, the same class of thing as measuring the colour classes, not a fit that
+guesses where a board might be. Do it inline when a read won't confirm; do not
+commit it as a script.
+
+**AND `calibrate.py` REFUSING IS OFTEN YOUR FRAME SAMPLE, NOT YOUR NUMBERS.** The
+measured `320,20,40` was still refused against 75 frames spanning fifty minutes,
+because a two-hour blitz match shows the start position for only a few seconds
+per game and a 40-second sampling grid walks straight past it. `scan_stream`
+samples at 2fps and found it immediately. When a hand read looks right and
+calibrate says no, tighten the sample before touching the numbers.
+
 **BUT GEOMETRY IS ONLY THE FIRST GATE, AND A REFUSAL AFTER IT MEANS SOMETHING
 ELSE.** Two of the recovered left-board videos still came up empty for different
 reasons, and both are worth recognising before re-reading pixels again:
@@ -3080,14 +3105,17 @@ video opens on an ENDGAME and rewinds; `calibrate` searches sampled frames for
 the START position and there was none in the sample. Neither is fixed by moving
 the grid. Read the scan log before assuming the numbers are wrong.
 
-**NEVER EDIT A SHELL SCRIPT THAT IS CURRENTLY RUNNING.** Bash re-reads the file
+**NEVER EDIT A SHELL SCRIPT THAT IS CURRENTLY RUNNING — `mv` A NEW FILE OVER IT
+INSTEAD.** Bash re-reads the file
 from a byte offset as it executes, so an edit under a live instance makes it
 resume mid-token: patching `harvest-local.sh` mid-sweep killed the running batch
 with `syntax error near unexpected token` at a line that is perfectly valid in
 the file (`bash -n` passed the whole time). The next batch spawned a fresh
 process from the good file and self-healed, so it cost one batch — but the error
-message points at the file, which is exactly the wrong place to look. Copy the
-script, edit the copy, and swap it in when the run ends.
+message points at the file, which is exactly the wrong place to look. Write the
+new version to a temp file and `mv` it into place: `mv` replaces the inode, and
+a running shell keeps reading the one it opened, so the swap is safe even
+mid-run and the next process picks up the new file.
 
 **A MISTRACKED VIDEO IS USUALLY TWO PIXELS OF GEOMETRY, NOT A LOST LESSON —
 RE-READ IT BEFORE WRITING IT OFF (2026-08-21).** `CXvo1dMF1Qs` was hand-verdicted

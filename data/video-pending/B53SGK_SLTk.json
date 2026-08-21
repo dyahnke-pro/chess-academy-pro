@@ -232,5 +232,40 @@
    "fen": "r3k2r/1p2b1p1/p2p2q1/2pPpbnp/2P5/1PN3PP/PB3PBK/R2Q1R2 w kq - 3 20"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: French Variation, Westerinen Attack",
+   "eco": "B40",
+   "plies": 5,
+   "line": "e4 c5 Nf3 e6 b3",
+   "coverage": 0.96
+  },
+  {
+   "name": "Sicilian Defense: French Variation",
+   "eco": "B40",
+   "plies": 4,
+   "line": "e4 c5 Nf3 e6",
+   "coverage": 0.96
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

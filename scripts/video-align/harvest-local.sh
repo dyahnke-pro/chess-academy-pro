@@ -88,7 +88,13 @@ for id in "${ids[@]}"; do
   if [ -n "${GEO_X:-}${GEO_Y:-}${GEO_S:-}" ]; then
     CANDS="${GEO_X:-370},${GEO_Y:--2},${GEO_S:-60}"
   else
-    CANDS="370,-2,60 4,4,58.7"
+    # THREE HAND-READ LAYOUTS, in descending order of how many tracks each
+    # has produced. Read off a frame by eye and CONFIRMED against the start
+    # position; this list is not a detector and must never become one.
+    #   1. lab/speedrun  — board right, beside the webcam
+    #   2. 2019 uploads  — board left, wooden theme, header stacked right
+    #   3. co-stream     — board right, larger, below a player bar (640: 320,20,40)
+    CANDS="370,-2,60 4,4,58.7 427,26.7,53.4"
   fi
 
   scanned=0

@@ -346,5 +346,54 @@
    "fen": "n1rqr1k1/3b1ppp/N4b2/1B1p4/5B2/1P6/P2Q1PPP/2R2RK1 w - - 3 21"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Scotch Game: Mieses Variation",
+   "eco": "C45",
+   "plies": 11,
+   "line": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6 Nxc6 bxc6 e5",
+   "coverage": 0.769
+  },
+  {
+   "name": "Scotch Game: Schmidt Variation",
+   "eco": "C45",
+   "plies": 8,
+   "line": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Nf6",
+   "coverage": 0.846
+  },
+  {
+   "name": "Scotch Game",
+   "eco": "C44",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 d4",
+   "coverage": 0.923
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.949
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.974
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

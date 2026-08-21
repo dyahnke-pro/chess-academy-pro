@@ -442,5 +442,33 @@
    "fen": "r1b1kb1r/ppp2ppp/2npp3/3nP3/3P4/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 7"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "French Defense: Knight Variation",
+   "eco": "C00",
+   "plies": 3,
+   "line": "e4 e6 Nf3",
+   "coverage": 0.98
+  },
+  {
+   "name": "French Defense",
+   "eco": "C00",
+   "plies": 2,
+   "line": "e4 e6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

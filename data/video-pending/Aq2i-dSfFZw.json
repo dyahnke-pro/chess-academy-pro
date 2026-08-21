@@ -501,5 +501,26 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Dutch Defense",
+   "eco": "A80",
+   "plies": 2,
+   "line": "d4 f5",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

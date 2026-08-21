@@ -455,5 +455,33 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Tarrasch Defense: Symmetrical Variation",
+   "eco": "D32",
+   "plies": 10,
+   "line": "d4 d5 Nf3 e6 e3 c5 c4 Nc6 Nc3 Nf6",
+   "coverage": 0.742
+  },
+  {
+   "name": "Queen's Pawn Game: Zukertort Variation",
+   "eco": "D02",
+   "plies": 3,
+   "line": "d4 d5 Nf3",
+   "coverage": 0.968
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }
