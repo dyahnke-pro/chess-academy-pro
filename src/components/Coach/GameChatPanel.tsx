@@ -809,6 +809,12 @@ export const GameChatPanel = forwardRef<GameChatPanelHandle, GameChatPanelProps>
             tactics: gameChatTactics,
             enginePlan,
             engineBestMoveUci: cachedSf?.bestMove,
+            // MultiPV top lines → when the student ASKS on Play (or any surface
+            // using this panel), the best-move answer opens with the tempting
+            // but-turn, derived latency-safe from lines already computed. Play
+            // stays silent until asked; this only feeds the answer, not volunteered
+            // narration. Absent = no but-turn (additive, no regression).
+            engineTopLines: cachedSf?.topLines ?? undefined,
             evalCp: cachedSf && !cachedSf.isMate ? cachedSf.evaluation : undefined,
             evalMateIn: cachedSf?.isMate ? (cachedSf.mateIn ?? undefined) : undefined,
             // The move just played, already verified against the board it was

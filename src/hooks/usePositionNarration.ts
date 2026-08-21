@@ -246,7 +246,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       // The tempting move is a FACT, not a finished sentence — the model phrases
       // the but-turn in its own words (varied), never a frozen template.
       const requiredTempting = tempting
-        ? ` COMPUTED FACT: the student is likely tempted to play ${tempting.san} (${tempting.appeal})${tempting.replySan ? `, but it fails to ${tempting.replySan}` : ', but it does not hold'}. Before you reveal the best move, work this in as the "you'd want to, but…" turn — in your own words, do not quote this verbatim.`
+        ? ` COMPUTED FACT: the student is likely tempted to play ${tempting.san} (${tempting.appeal})${tempting.replySan ? `, but it fails to ${tempting.replySan}` : ', but it does not hold'}. Before you reveal the best move, work this in as the "you'd want to, but…" turn — in your own words, do not quote this verbatim. Name ONLY moves that appear in the computed facts above; never introduce a move of your own.`
         : '';
 
       // THE CORPUS LEADS (David 2026-08-13: "narrations follow the corpus,
