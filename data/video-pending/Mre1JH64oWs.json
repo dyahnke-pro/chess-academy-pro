@@ -1,0 +1,231 @@
+{
+ "videoId": "Mre1JH64oWs",
+ "title": "Reverse Hippo Attack | The Sensei Speedrun | GM Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 1877,
+  "settledPositions": null
+ },
+ "plies": 23,
+ "rewinds": 3,
+ "moves": [
+  {
+   "t": 20.5,
+   "ply": 2,
+   "line": [
+    "e3",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 22,
+   "ply": 3,
+   "line": [
+    "d3"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/3PP3/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 25.5,
+   "ply": 4,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPP2PPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 27,
+   "ply": 5,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR b KQkq - 1 3"
+  },
+  {
+   "t": 35.5,
+   "ply": 6,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR w KQkq - 2 4"
+  },
+  {
+   "t": 37.5,
+   "ply": 7,
+   "line": [
+    "h3"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/3PP2P/PPPN1PP1/R1BQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 61,
+   "ply": 8,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3pp3/8/3PP2P/PPPN1PP1/R1BQKBNR w KQkq - 1 5"
+  },
+  {
+   "t": 63,
+   "ply": 9,
+   "line": [
+    "a3"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3pp3/8/P2PP2P/1PPN1PP1/R1BQKBNR b KQkq - 0 5"
+  },
+  {
+   "t": 69,
+   "ply": 10,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/P2PP2P/1PPN1PP1/R1BQKBNR w KQkq - 0 6"
+  },
+  {
+   "t": 72.5,
+   "ply": 11,
+   "line": [
+    "b3"
+   ],
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/2PN1PP1/R1BQKBNR b KQkq - 0 6"
+  },
+  {
+   "t": 84,
+   "ply": 12,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/2PN1PP1/R1BQKBNR w KQ - 1 7"
+  },
+  {
+   "t": 85.5,
+   "ply": 13,
+   "line": [
+    "Bb2"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/1BPN1PP1/R2QKBNR b KQ - 2 7"
+  },
+  {
+   "t": 112.5,
+   "ply": 14,
+   "line": [
+    "Re8"
+   ],
+   "fen": "rnbqr1k1/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/1BPN1PP1/R2QKBNR w KQ - 3 8"
+  },
+  {
+   "t": 118.5,
+   "ply": 15,
+   "line": [
+    "g4"
+   ],
+   "fen": "rnbqr1k1/pp3ppp/2pb1n2/3pp3/6P1/PP1PP2P/1BPN1P2/R2QKBNR b KQ - 0 8"
+  },
+  {
+   "t": 153,
+   "ply": 16,
+   "line": [
+    "Na6"
+   ],
+   "fen": "r1bqr1k1/pp3ppp/n1pb1n2/3pp3/6P1/PP1PP2P/1BPN1P2/R2QKBNR w KQ - 1 9"
+  },
+  {
+   "t": 157.5,
+   "ply": 18,
+   "line": [
+    "Bg2",
+    "Nc7"
+   ],
+   "fen": "r1bqr1k1/ppn2ppp/2pb1n2/3pp3/6P1/PP1PP2P/1BPN1PB1/R2QK1NR w KQ - 3 10"
+  },
+  {
+   "t": 328.5,
+   "ply": 2,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 331,
+   "ply": 5,
+   "line": [
+    "d3",
+    "e5",
+    "Nd2"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR b KQkq - 1 3"
+  },
+  {
+   "t": 333,
+   "ply": 7,
+   "line": [
+    "Nf6",
+    "h3"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/3PP2P/PPPN1PP1/R1BQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 335.5,
+   "ply": 5,
+   "line": [],
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR b KQkq - 1 3"
+  },
+  {
+   "t": 343.5,
+   "ply": 6,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR w KQkq - 2 4"
+  },
+  {
+   "t": 346.5,
+   "ply": 8,
+   "line": [
+    "h3",
+    "f5"
+   ],
+   "fen": "r1bqkbnr/ppp3pp/2n5/3ppp2/8/3PP2P/PPPN1PP1/R1BQKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 357.5,
+   "ply": 6,
+   "line": [],
+   "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR w KQkq - 2 4"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "e3",
+    "d5",
+    "d3",
+    "e5",
+    "Nd2"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "Nf6",
+     "t": 35.5,
+     "continuation": "Nf6"
+    },
+    {
+     "san": "Nc6",
+     "t": 343.5,
+     "continuation": "Nc6"
+    }
+   ]
+  }
+ ]
+}
