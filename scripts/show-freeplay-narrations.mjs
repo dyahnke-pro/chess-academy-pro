@@ -186,6 +186,35 @@ const main = async () => {
   const pageErrors = [];
   page.on('pageerror', (e) => pageErrors.push(String(e)));
 
+  // LLM FORWARD (branch-on-localhost mode): vite dev doesn't serve the
+  // /api/llm/deepseek proxy, so the coach can't voice. Forward those POSTs to a
+  // working origin (prod) from the NODE side — the branch code runs locally, only
+  // the LLM HTTP round-trip goes to prod, so the narration is REAL voiced output
+  // of the branch's computed facts. Set LLM_FORWARD_ORIGIN=https://chess-academy-pro.vercel.app.
+  const fwd = process.env.LLM_FORWARD_ORIGIN;
+  if (fwd) {
+    let fwdOk = 0; let fwdErr = 0;
+    await page.route('**/api/llm/**', async (route) => {
+      const req = route.request();
+      try {
+        const res = await fetch(`${fwd}${new URL(req.url()).pathname}`, {
+          method: req.method(),
+          headers: { ...req.headers(), host: new URL(fwd).host },
+          body: req.postData() ?? undefined,
+        });
+        const body = await res.text();
+        fwdOk += 1;
+        await route.fulfill({ status: res.status, body, headers: { 'content-type': res.headers.get('content-type') ?? 'application/json' } });
+      } catch (e) {
+        fwdErr += 1;
+        await route.abort();
+        void e;
+      }
+    });
+    console.log(`[freeplay-narr] LLM forward → ${fwd}/api/llm (node-side)`);
+    process.on('exit', () => console.log(`[freeplay-narr] LLM forward: ${fwdOk} ok, ${fwdErr} err`));
+  }
+
   await page.goto(`${BASE}/coach/teach`, { waitUntil: 'domcontentloaded', timeout: 120_000 });
   await page.waitForTimeout(20_000);      // deferred seed + engine warm
   await clearFirstRunOverlays(page);
