@@ -1,26 +1,24 @@
 cd ~/video-drop && mkdir -p drop && n=0
-for f in $(ls drop/*.mp4 too-big/*.mp4 2>/dev/null); do
-  b=$(basename "$f")
-  if [ "$(stat -f%z "$f" 2>/dev/null || stat -c%s "$f")" -gt 99000000 ]; then
-    echo "split $b"; split -b 95M "$f" "drop/$b.part-" && rm -f "$f"
-  elif [ "${f%%/*}" = "too-big" ]; then mv "$f" drop/; fi
-done
-git add drop && git commit -q -m "videos: bank the 16 already downloaded" && git push origin video-drop
-for id in opvsrx5TCdU SV-y9Ai7QkA ac2evoOBWko 7ntWn4K1_E4 TYKVZpAy5Ow d6tZXETpqT0 \
-          6JsSbmpj7UQ R2skmBe07aQ RUYbO35XVCE wn7jKtpg2dg Vy6j7N_Wh0o n5BL4u1QpfY \
-          HF8cvN3ZKtU vosZEy6YML0 d-MNpi_zPr0 -PSQS88VdZU VBxmm4zzC1g 8QxDmN_BMaU \
-          25w0mYsx_Lk Ytkf3qZTj74 HiCeU8tIh0U 3knyQ8z7lrQ aEKSPFwvFoY PHAmfkkrSSs \
-          js6ZLkfXwEg HVKBVYhxpEY hzotV0aslmY 33EpuPv4ULw QJ3YfBMrVls nsG9XSdGkj8 \
-          uuDQbMlXeDQ Wgl8OsI1dB4 qlEZdH3nEZs 8EZYSq6c_hg WM0vlYWi33I iwCO5bNiuNw \
-          oH407-a1v-4 xoS71OW-Re0 lWVZLZdQHcY cdEASsRLWcg J6MDnL_B83w OwrIaWwPJvM \
-          U8zArIhxato ii1vl5wLPWU FqVMAv3wKes qW-mT-FbLnA OkjaIVnXg9o WwRujiYpgq0 \
-          ZlIq20_wnho iQQDU3H7vaU woqgGKERnps FPI9J8_LmJQ wdHXvOBC8bw n781_V5I0ac \
-          9Iu56-1zzfI hyAhvdIvtzQ 3UqPa5eV2e0 bIxvPbhuTpo 7uxRcomJo7I VEwKZo8l7yY \
-          CfCoA7jQu84 W6nkqNrWVrk gOKiOKPv-X0 7f2sPY2U204 CpaJYTaDHM0 j4-gTbXfwXg \
-          EfHnGTCO1s4 uVQKL83tZb0 E0cMsom-N7E 1AMYr01rkHE JEMVGw2WdCE Z4WjtjMl3j8 \
-          Nu5BrqlnACs SziecWG-v0c SXsVWpN8e1A HDSMjuNWNQk 26ZXZEiudhA xQ-L0aZ24FA \
-          NQYFSC5TCnE n64LCdoBzaU 6BHS8KMqLkU dJYcXok1_wQ SDIQje8v5SY kqgaZ8Tfhyk \
-          7Tueff34xjA pXBR9CxK3lQ fg3i2Yl_vqQ ndNfx0HHcLk s3ea8V8twrY S-PGKHRQM5o; do
+for id in IHjt6amFgyE 38QzSkFRn4E zhfOsKtD2vk VeHyQWutHPQ JwmxAagJ7bQ fc8rxAMb7xI \
+          U9ZVpNscIGg -Y5bZoD6TM0 3nyxVHwDCTY 4_Ev1a1_2Mg 4Vbr9EQoGd4 wBbeP1w-NTQ \
+          BmFrJuPdwxE 0LxFKZyaD-I 8L-cDJJBbxc yfcdobOQxcw _sp6jBv0EWA oqbLgvN8DCs \
+          sqpNZmRg7oc zEkwjGCA2M4 EPS51oKRgpU XvyJvuj8NdM 4T9-0D4SnMk 4ajr7LFi170 \
+          A-HTpnOfVcE Nl9vUi1_ha0 UN41NRg5Ul4 5EzQZ6y0shc j_KLuENJVaw fGBhk9oqdbg \
+          i9lgxqlkUgQ QVw89_6fh2Y untay_co3oY rgLTiUZAWQY UXKY-hKJs6Q CQFSXmfxMV8 \
+          MMELgpZ4CeQ vtY88mBc088 WSEAjQgHpYs USDQ8LIjaCo HywK8lbZ2wQ 0ipLPOAN_m8 \
+          CnODsrMCQQg 4X7vf-KZoo0 -rqPeGKVPbA vzv3q4umREk Dp2q1lzUVlQ JyTKdxfD8no \
+          aoWDLhcoQtE vKq803uJdos OTPaZw39P-8 mhUoe2JBxco QUqq7wSLE78 W0Lw4ox_n_M \
+          Gu1jnDjEXT8 iyl_vVXeFuI mEZHigJCtls oRK7XLhGz_c n3FufrVltsc Fxjthnv7mBQ \
+          VWeZ8m34BSk qTKk-cGcTZ4 CCLlstRUbAc hUZo3_gKm7k 7MmwcJxi0eA olIn0oJccHI \
+          mKKDE17DkjY owTm2uYWym4 g7AcF_hQhvg CCTg_izVejI utYiiAb1Ngg WFmNYreKao8 \
+          QnaMCHgQln8 -4hTQEnwa7s AtNlFBWBWPw emogd1h6o9A qLeCxfMLyU4 3dnTa3IoD9g \
+          _JUvx36zOYw jvb442ddQVE OxFLGd4gIK0 1EV8XLSZsho 9hotlaRRkD0 0EjyaQ15IGQ \
+          JXcULXtKu1Q KPFxQ-DpG3E Pd5MZajzxh0 JzGMXud3GWE VkAqhxUJjrw _zT8aWZh2x0 \
+          wR42fihChx4 tB9rc9bJ63o yjPqeSZ36yo T4OkBqvhhGo zeAd9hezn-A m0zMjxe2Vgc \
+          iuNHBypLG_4 h0hCWHzzgoE 5M0c_EwRQiI EBVoRuZdlVY iFdoGDFnT3c 6-d45BL5GoY \
+          yAF1Bpa4m5Q -MtlVsMGiCo NFUuaZsR2S8 y5eb3xaRRPA JykOxC_6nEk eJVzSXsZ10I \
+          IaOXKjvpP_E g36Y1YDdqoQ rg4NhBBW2pc uEYlq0M3ao8 T6IeD5ldw3s 3ELlDt_zN1E \
+          jbQeUOZwhd4 EGkjoDqXcTY Kmzyo4mF_Gg KDTzgRAD8-Y dzuHSFA_Z2s AeDEjalJkq0; do
   if [ -f "drop/$id.mp4" ] || ls "drop/$id.mp4.part-"* >/dev/null 2>&1; then echo "have $id"; continue; fi
   echo "=== $id"
   ./yt-dlp-nightly --remote-components ejs:npm -4 --socket-timeout 30 --retries 15 \
