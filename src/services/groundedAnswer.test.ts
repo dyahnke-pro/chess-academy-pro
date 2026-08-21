@@ -10,6 +10,30 @@ import type { ConceptEntry } from './chessConceptService';
 // real eval. The LLM only voices this; it never reasons. These tests prove
 // the assembler never fabricates and always grounds on the real board.
 describe('assembleMoveEvalAnswer', () => {
+
+  it('opens with the tempting but-turn when top lines are given', () => {
+    // Black to move; best is Ng4+ (e5g4). A cheaper top line grabs on f3
+    // (e5f3, Nxf3+) — eye-catching capture-with-check, clearly worse.
+    const fen = '1r2qb1k/3b2pn/3p1r2/ppp1nP1p/4P2P/P1P1BNQ1/1PBN3K/3R2R1 b - - 2 27';
+    const a = assembleMoveEvalAnswer({
+      fen, bestMoveUci: 'e5g4', evalCp: -445, studentColor: 'black',
+      topLines: [
+        { moves: ['e5g4', 'g1h1', 'g4e3'], evaluation: -445 },
+        { moves: ['e5f3', 'd2f3'], evaluation: 180 },
+      ],
+    });
+    expect(a).not.toBeNull();
+    expect(a!.facts).toContain('tempted by is Nxf3+');
+    expect(a!.facts).toContain('fails to Nxf3');
+    expect(a!.facts.indexOf('Nxf3+')).toBeLessThan(a!.facts.indexOf('Ng4+')); // but-turn opens
+    expect(a!.temptingSans).toEqual(['Nxf3+', 'Nxf3']);
+  });
+
+  it('omits the but-turn when no top lines are given (additive, no regression)', () => {
+    const a = assembleMoveEvalAnswer({ fen: START, bestMoveUci: 'g1f3', evalCp: 30 });
+    expect(a!.facts).not.toContain('tempted by');
+    expect(a!.temptingSans).toBeUndefined();
+  });
   const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
   it('grounds the best move as a real SAN + arrow from the engine UCI', () => {

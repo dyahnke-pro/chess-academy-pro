@@ -4836,6 +4836,9 @@ export function CoachTeachPage(): JSX.Element {
       // grounding even OFF-BOOK positions the master-play DB can't cover. Only
       // when the cached analysis is for THIS exact FEN (same gate as the eval).
       engineBestMoveUci: cachedAnalysis?.bestMove || undefined,
+      // MultiPV top lines → enables the tempting but-turn in the best-move answer
+      // (derived latency-safe from lines already computed). Absent = no but-turn.
+      engineTopLines: cachedAnalysis?.topLines ?? undefined,
       // Step-by-step move narration: the engine-driven reply (coachReplyPlayed
       // defined) OR a typed "I played X. Your move." report, outside a
       // walkthrough. Tells the grounding pipeline this turn is move discussion
