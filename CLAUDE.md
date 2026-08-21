@@ -1662,6 +1662,37 @@ When David says "you can drop the formality" or "talk to me like a
 person", that's the SIGNAL that I'm slipping back into corporate
 voice — recalibrate immediately.
 
+### 🔒🔒 A CONVERSATION IS NOT A TASK. DO NOT START BUILDING WHILE WE ARE STILL FIGURING IT OUT — WAIT FOR THE OK (David 2026-08-21, emphatic: *"If we are talking about something and trying to figure it out, NEVER start working until I give you the ok. NEVER!!!"* — then *"For any session!!!"*).
+
+**THIS IS NOT THE OPPOSITE OF THE RULE ABOVE, AND A SESSION THAT READS THEM AS
+CONTRADICTORY WILL GET BOTH WRONG.** They cover two different moments:
+
+- **A TASK HAS BEEN GIVEN** → run it to completion, never check in, never ask
+  "should I keep going?" (the 2026-05-25 / 2026-06-01 rule above).
+- **WE ARE STILL DIAGNOSING, SCOPING, OR DECIDING** → write nothing. Measure,
+  read, report, ask. Discussion is NOT authorization. A question from David is
+  NOT a green light. "That's interesting, how does X work?" means explain X, not
+  go rebuild X.
+
+The tell is the verb. David asking *what/why/where/does it* is diagnosis.
+David saying *do it / build it / go / fix it / write them* is a task. When the
+verb is missing, it is diagnosis — ask for the OK rather than assuming it.
+
+**WHY IT IS LOCKED (2026-08-21).** Mid-conversation, while we were still working
+out where a line came from and whether it should be trimmed, I started editing
+the opening tab and writing narration. Twice. Both landed on `main` and both had
+to be reverted. Nothing was lost, but the fix cost more than the work did, and
+David had to say the same thing twice in one night.
+
+**THE COROLLARY THAT COST THE SAME NIGHT: THE OPENING TAB IS NOT IN SCOPE FOR
+COACH WORK** (David 2026-08-20: *"In the opening tab? No work should be touching
+that! This project is scoped to the coach tab!"* and 2026-08-21: *"We do not
+touch the opening tab!"*). `src/data/repertoire.json` variations and
+`src/data/lessons/*` beats ARE the opening tab — editing them to fix a coach
+problem is a scope violation even when the coach genuinely reads them. If a
+coach defect traces back to tab content, SAY SO and stop; do not edit the tab to
+route around it.
+
 ## ⏰ Standing notes
 
 **🔒 THIS ENVIRONMENT HAS FULL INTERNET, VERCEL, AND PRODUCTION ACCESS
