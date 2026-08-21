@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, speakTemptingTurn, tacticalReadFacts, voiceRejectsBestMove, namedTacticClause,
+  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, speakTemptingTurn, tacticalReadFacts, voiceRejectsBestMove, lineOutcomeClause, namedTacticClause,
   type TacticalRead,
 } from './tacticalRead';
 import type { PvEngine, PvPly } from './pvPlayback';
@@ -246,5 +246,16 @@ describe('voiceRejectsBestMove (recommendation guard)', () => {
   });
   it('is a no-op without a best move', () => {
     expect(voiceRejectsBestMove('anything at all', null)).toBe(false);
+  });
+});
+
+describe('lineOutcomeClause (review outcome)', () => {
+  it('names a decisive terminus from the student seat', () => {
+    expect(lineOutcomeClause(-445, 'black')).toContain('up a piece');
+    expect(lineOutcomeClause(500, 'white')).toContain('winning material advantage');
+  });
+  it('stays silent on a level or unclear terminus (no false claim)', () => {
+    expect(lineOutcomeClause(30, 'white')).toBeNull();
+    expect(lineOutcomeClause(-600, 'white')).toBeNull();
   });
 });

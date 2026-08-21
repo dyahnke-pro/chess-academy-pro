@@ -440,3 +440,16 @@ export function voiceRejectsBestMove(text: string, bestMoveSan: string | null): 
       && /\b(instead|stronger idea|better idea|solidify)\b/.test(t)) return true;
   return false;
 }
+
+/** Review-register OUTCOME clause: where a projected line LANDS, from the
+ *  student's seat — the verdict `render()` never states (it narrates the moves,
+ *  not the result). "…and that leaves you a full piece up." Retrospective voice.
+ *  Null on a roughly-level or unclear terminus (nothing decisive to claim). */
+export function lineOutcomeClause(rootEvalCpWhite: number, studentColor: 'white' | 'black'): string | null {
+  const studentCp = toStudentCp(rootEvalCpWhite, studentColor);
+  const v = summarizeVerdict(studentCp, null);
+  if (v.kind === 'equal' || v.kind === 'edge') return null; // no decisive outcome to name
+  // v.text reads "a decisive edge — up a piece" / "a winning material advantage".
+  const with_ = v.text.startsWith('a ') ? `with ${v.text}` : v.text;
+  return `And that leaves you ${with_}.`;
+}
