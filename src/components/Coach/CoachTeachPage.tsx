@@ -242,6 +242,7 @@ import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from 
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
+import { temptingFromAnalysis } from '../../services/tacticalRead';
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText, gradeBorrowedTeaching, takeBorrowedProbeStats } from '../../services/coachAnswerGates';
@@ -4797,6 +4798,26 @@ export function CoachTeachPage(): JSX.Element {
           ? opts.replyAnalysis.analysis
           : null;
     const studentColor = fenTurn === 'white' ? 'w' : 'b';
+    // TACTICAL-READ ENHANCEMENT (David 2026-08-21): the Danya "but-turn" for the
+    // automatic free-play narration (tier 3). When the student now faces a
+    // position that has an eye-catching move which actually FAILS, name it as a
+    // WARNING so the computed narration can teach the seductive-move trap the way
+    // he does. Purely additive — it never becomes a recommendation, and the
+    // existing engine-move directive still wins. Latency-safe: derived from the
+    // MultiPV lines already cached (no engine await). `fenTurn` is the student's
+    // side to move at `fen` (the position after the coach's reply). Board-true:
+    // the move + its refutation come straight from the engine lines; a fallback
+    // read-aloud is second person, never "the student".
+    const temptingRead =
+      cachedAnalysis?.topLines && cachedAnalysis.topLines.length >= 2
+        ? temptingFromAnalysis(fen, cachedAnalysis.topLines, fenTurn)
+        : null;
+    const temptingFact = temptingRead
+      ? `You might be tempted by ${temptingRead.san} here` +
+        (temptingRead.replySan
+          ? `, but it runs into ${temptingRead.replySan}. `
+          : `, but it does not hold. `)
+      : '';
     // Rating proxy = puzzleRating (1200 fresh, drifts up/down with
     // adaptive puzzles). Drives lookahead depth via
     // `getTacticLookahead` — 4 plies once the student crosses 1400.
@@ -4867,7 +4888,7 @@ export function CoachTeachPage(): JSX.Element {
           // read aloud, and David heard "The student played f4. The coach
           // replied d5." spoken AT him (2026-08-07).
           ? `You played ${text.replace(/^i\s+played\s+/i, '').replace(/\.$/, '')}; I answered ${opts.coachReplyPlayed}. ` +
-            (opts?.coachReplyFact ?? '')
+            (opts?.coachReplyFact ?? '') + (temptingFact ? ` ${temptingFact}` : '')
           : undefined,
       moveNarrationDirectives:
         !walkthrough.isActive && opts?.coachReplyPlayed && opts.coachReplyPlayed.length > 0
@@ -4881,6 +4902,13 @@ export function CoachTeachPage(): JSX.Element {
             // favoring my opponent" — every beat opened praising MY reply).
             + 'Open with the IMPORTANT TEACHING MOMENT for the STUDENT: what my reply threatens AGAINST them and how to meet it, or the plan THEY should be playing for. NEVER praise my reply or dwell on why my move is strong — the beat is about the student\'s position and their best answer. Then prompt their move. '
             + 'If the facts name the student\'s strongest reply, recommend ONLY that move — never any other.'
+            // Tactical-read but-turn: when the facts name a move "you might be
+            // tempted by … but it runs into …", it is a WARNING to teach, never
+            // a candidate — mention it as the trap to avoid, then still point to
+            // the engine move as the answer.
+            + (temptingFact
+              ? ' If the facts name a move the student is "tempted by" that fails, present it ONLY as the seductive trap to avoid — never recommend it — then give the sound continuation.'
+              : '')
             + (opts?.instantSpokenText
               ? ` Already spoken aloud as the move landed: "${opts.instantSpokenText}" — never repeat or rephrase those lines; build PAST them.`
               : '')
