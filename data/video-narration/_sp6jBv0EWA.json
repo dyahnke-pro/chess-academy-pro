@@ -1,0 +1,222 @@
+{
+ "videoId": "_sp6jBv0EWA",
+ "title": "Queen's Gambit Declined | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 27,
+   "line": [
+    "c4",
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "speedrun game i generally accommodated c4 english defense now there are many ways to face the english defense since we play the queen's gambit declined against d4 in the speed run let's play e6 and those of you who play"
+  },
+  {
+   "ply": 3,
+   "t": 36,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "the queen's gamut decline as your main opening this is how you want to meet c4"
+  },
+  {
+   "ply": 2,
+   "t": 37.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "you don't even really have to study it separately because e6 virtually guarantees a transition into queen's gamut decline"
+  },
+  {
+   "ply": 3,
+   "t": 48,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "because you're gonna play d5 on the next move make sense so d4 d5 and we have"
+  },
+  {
+   "ply": 4,
+   "t": 49,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "transposed into queen's game declined now you don't have to play e6 of course the principled move is e5 and that leads to the reverse sicilian structure which"
+  },
+  {
+   "ply": 5,
+   "t": 63,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "said": "um which has been very extensively studied and which you've seen in my blitz games okay knight c3 thousand bits from proceed thank you"
+  },
+  {
+   "ply": 6,
+   "t": 68,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": "okay knight f6 let's play it traditionally let's play the traditional queen's"
+  },
+  {
+   "ply": 7,
+   "t": 73.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 3 4",
+   "said": "gambit declined bishop g5 and now those of you who have paid particularly careful"
+  },
+  {
+   "ply": 8,
+   "t": 82,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5",
+   "said": "attention know that i like a tricky move knight b to d7 which is the main line and it also sets a trap like i've told you guys i've seen very good players fall into this trap and that trap happens after cded knight takes d5 that loses a piece and i'll show that after the game one more time but take my word for it queen c2 already i think inaccurate already inaccurate um and we we have multiple ways that well not really an act queen c2 is okay but i think the better more accurate way of playing is either e3 or knight f3 focusing on development when i see the move queen c2 the first thing i notice is that it leaves the d4 pawn unattended and if you know anything about these queen scam decline structures you'll know that one of black's main ideas in such positions is to do what and we're going to play this move here it's a very principled move"
+  },
+  {
+   "ply": 10,
+   "t": 147,
+   "line": [
+    "Qc2",
+    "c5"
+   ],
+   "fen": "r1bqkb1r/pp1n1ppp/4pn2/2pp2B1/2PP4/2N5/PPQ1PPPP/R3KBNR w KQkq - 0 6",
+   "said": "it's a little bit more aggressive than how we've handled these positions in the speed run but we're going to give it a shot yeah the move is c5 creating the pawn square and hopefully everybody can see the drawback of queen c2 which is that i mean we're threatening c takes d4 and more importantly if white plays d takes c5 we are not just gonna passively recapture what would we have done in response to d take c5 what would we have done again exploiting the drawback of queen c2 we would have played d4 we would have advanced our pawn to d4 exactly rook d1 now here we want to play much in the same vein right the fact that gains gain senses that d4 needs to be defended but he doesn't defend it with the right piece the rook is not a good defender how should we proceed how should we proceed so a lot of you guys are thinking okay let's reinforce the attack on the d4 pawn but that's not the approach that i would take here what i would say is we can take d4 we force the rook onto d4 and then we can attack that rook while developing our other pieces and as you'll see that actually leads to okay never mind knight whoa knight b5 that's actually probably the best move which is kind of funny i think rook takes d4 would have landed white in serious trouble okay now now we got to be very careful uh what what should you notice when you look at this position well one thing you should notice is the c7 square right you have to be very careful not to leave that square unattended if you play queen a5 check here which i know entices some of you then after bishop d2 black is in a bit of trouble we can't really take a2 because then we have a loud knight c7 check right so the best approach here is a different development move and some of you have named it i like bishop before developing the bishop with check essentially forcing white's bishop back to d2 okay now we have another choice this is a very complex position actually as it turned out turns out we can do several different things here we can do several different things here um so some of you are proposing a5 which i understand the appeal of that but after bishop takes a takes notice that white will have knight d6 check i don't want to allow that check so we can take the bishop first of all we can take the bishop uh but the other thing that we can do is drop this bishop back let's say just to e7 then essentially say that we have gotten white's bishop onto a very awkward square right we can play bishop b7 and then we can castle and perhaps that's not the absolute most that we can squeeze out of the position but it's something but it's something but if we're already playing bishop e7 if we're already deciding to move the bishop back what how should we do it what is the nicest square for the bishop along this diagonal now if we're already moving the bishop back we might as well make it harder for white to recapture d4 right is that logical so let's play bishop c5 let's play bishop c5 and at least let's try to harass him a little bit knight f3 okay so now the approach should be the following what i want you guys to see is that the king is out of squares that's the first thing that i notice when i look at this position is that the king is out of squares okay the second thing that i notice is that i'm noticing mating patterns on f2 so for instance if we had a knight on e4 and the pawn disappeared from d4 we would be threatening checkmate so immediately i'm thinking of and we're gonna play the move knight e4 which believe it or not indirectly defends against knight b takes d4 what will we do if gaines takes on d4 with a knight and this is not unlikely to happen not not entirely unlikely we will go e5 we will go e5 chase the knight away and white will end up losing that knight because he can't move it he'll get checkmated on f2 now again i'm not explaining everything super clearly here i'm expecting some of you to be confused this is just a complicated position there's no way around it so i won't be able to capture absolutely everything but i'm doing my best b4 excellent move though by gains excellent move and this forces us to move our bishop yeah a lot of you see d3 which we could consider but after d3 white plays e takes d3 although no we can play d3 no no we can play d3 i i missed a detail there that i just saw spicy game for sure queen d3 bishop f2 is checkmate so white basically has to play okay well that's unfortunate but i'm gonna go ahead and check madam whoops all right gaines i mean you're already in trouble here but i actually think white is in a lot in much better shape than people realize after he takes d3 so this was tunnel vision right this is tunnel vision i think you spotted the queen and again if i may be so forward i think the reason this happens is still fear of your queen being attacked and this is something to work on for everybody like below 1300 it's like when your opponent attacks your queen the first thing you need to do is not panic the second thing you need to do is to remind yourself not to tunnel vision that attack to see what else your opponent's move does right he takes d3 is the move bishop takes f2 king e2 and this is actually a interesting scenario the knight is hanging and if we simply move the knight then we lose the bishop so what does black have to do here what does black have to do here knight takes d2 exactly okay but here white can recapture with the queen now the bishop is hanging we have to move it we should probably move it back to b6 and now what kind of moves can white make here who can propose a nice move here for white no it's okay i mean you actually played not so badly in the opening this is interesting let's analyze your knight d6 check now this move is not that scary for black because white white's pieces are so passive that uh a move like king f8 is totally fine for black it's not like black king is in any danger here notice that black's king is in no danger at all in f8 but the game goes on i mean queen f4 is an attempt although black can simply block the mate threat with queen f6 and ultimately black is up upon here white's king is in"
+  },
+  {
+   "ply": 7,
+   "t": 557.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 3 4",
+   "said": "shambles so we are much better but the game goes on the game goes i know b4 was very good it was really the only move but there's a lot to unpack in the first couple of moves so"
+  },
+  {
+   "ply": 8,
+   "t": 558.5,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5",
+   "said": "first of all the trap"
+  },
+  {
+   "ply": 11,
+   "t": 560.5,
+   "line": [
+    "cxd5",
+    "exd5",
+    "Nxd5"
+   ],
+   "fen": "r1bqkb1r/pppn1ppp/5n2/3N2B1/3P4/8/PP2PPPP/R2QKBNR b KQkq - 0 6",
+   "said": "is of course and i'm sure everybody knows this knight takes they might have shown this before okay i don't like the phrase everybody"
+  },
+  {
+   "ply": 12,
+   "t": 572.5,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r1bqkb1r/pppn1ppp/8/3n2B1/3P4/8/PP2PPPP/R2QKBNR w KQkq - 0 7",
+   "said": "knows it because you know i know some of you don't but and that's okay but black plays knight takes d5"
+  },
+  {
+   "ply": 13,
+   "t": 574.5,
+   "line": [
+    "Bxd8"
+   ],
+   "fen": "r1bBkb1r/pppn1ppp/8/3n4/3P4/8/PP2PPPP/R2QKBNR b KQkq - 0 7",
+   "said": "oh blunders the queen no it doesn't"
+  },
+  {
+   "ply": 14,
+   "t": 577,
+   "line": [
+    "Bb4+"
+   ],
+   "fen": "r1bBk2r/pppn1ppp/8/3n4/1b1P4/8/PP2PPPP/R2QKBNR w KQkq - 1 8",
+   "said": "bishop b4 check this trap exists in many different variations by the way not just here it exists it exists across the"
+  },
+  {
+   "ply": 15,
+   "t": 583.5,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r1bBk2r/pppn1ppp/8/3n4/1b1P4/8/PP1QPPPP/R3KBNR b KQkq - 2 8",
+   "said": "board white is forced to play queen d2"
+  },
+  {
+   "ply": 18,
+   "t": 586.5,
+   "line": [
+    "Bxd2+",
+    "Kxd2",
+    "Kxd8"
+   ],
+   "fen": "r1bk3r/pppn1ppp/8/3n4/3P4/8/PP1KPPPP/R4BNR w - - 0 10",
+   "said": "and when the smoke clears black is up a piece actually my brother caught at 1500 on this trap so"
+  },
+  {
+   "ply": 8,
+   "t": 599,
+   "line": [],
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5",
+   "said": "something to file away um but games queen c2 is inaccurate because you leave the d4 pawn unattended"
+  },
+  {
+   "ply": 9,
+   "t": 605.5,
+   "line": [
+    "e3"
+   ],
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/3p2B1/2PP4/2N1P3/PP3PPP/R2QKBNR b KQkq - 0 5",
+   "said": "and the clinical move here for white is e3 the theoretical move i should say is e3 e3 and then quickly developing your pieces i have nothing to apologize for you gave us a lot to analyze and then quickly developing the king side this is mainline theory after queen c2 c5 the situation gets very spicy now i'm sure that there is some theory here so you guys especially youtube people can run stockfish and probably stalkers will laugh at me but i think c5 is a very unpleasant move to face now who can tell me what the most solid way of defending d4 is what is the most solid way of defending this pawn and generally when i say solid and defense in the same sentence you should be thinking i want to defend a pawn with another pawn right defending a pawn with another pawn is going to guarantee at least a decently solid position and so i think e3 is the wisest move here i think e3 is the wisest move c d e d and"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 8,
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5",
+   "line": [
+    "c4",
+    "e6",
+    "d4",
+    "d5",
+    "Nc3",
+    "Nf6",
+    "Bg5",
+    "Nbd7"
+   ],
+   "options": [
+    {
+     "san": "Qc2",
+     "t": 147,
+     "continuation": "Qc2 c5",
+     "said": "it's a little bit more aggressive than how we've handled these positions in the speed run but we're going to give it a shot yeah the move is c5 creating the pawn square and hopefully everybody can see the drawback of queen c2 which is that i mean we're threatening c takes d4 and more importantly if white plays d takes c5 we are not just gonna passively recapture what would we have done in response to d take c5 what would we have done again exploiting the drawback of queen c2 we would have played d4 we would have advanced our pawn to d4 exactly rook d1 now here we want to play much in the same vein right the fact that gains gain senses that d4 needs to be defended but he doesn't defend it with the right piece the rook is not a good defender how should we proceed how should we proceed so a lot of you guys are thinking okay let's reinforce the attack on the d4 pawn but that's not the approach that i would take here what i would say is we can take d4 we force the rook onto d4 and then we can attack that rook while developing our other pieces"
+    },
+    {
+     "san": "cxd5",
+     "t": 560.5,
+     "continuation": "cxd5 exd5 Nxd5",
+     "said": "the game goes i know b4 was very good it was really the only move but there's a lot to unpack in the first couple of moves so first of all the trap is of course and i'm sure everybody knows this knight takes they might have shown this before okay i don't like the phrase everybody knows it because you know i know some of you don't but and that's okay but black plays knight takes d5 oh blunders the queen no it doesn't bishop b4 check this trap exists in many different variations by the way not just here it exists it exists across the board white is forced to play queen d2 and when the smoke clears black is up a piece actually my brother caught at 1500 on this trap so something to file away um but games queen c2 is inaccurate because you leave the d4 pawn unattended and the clinical move here for white is e3 the theoretical move i should say is e3 e3 and then quickly developing your pieces i have nothing to apologize for you gave us a lot to analyze and then quickly developing the king side this is mainline theory after queen c2 c5 the situation gets"
+    },
+    {
+     "san": "e3",
+     "t": 605.5,
+     "continuation": "e3",
+     "said": "something to file away um but games queen c2 is inaccurate because you leave the d4 pawn unattended and the clinical move here for white is e3 the theoretical move i should say is e3 e3 and then quickly developing your pieces i have nothing to apologize for you gave us a lot to analyze and then quickly developing the king side this is mainline theory after queen c2 c5 the situation gets very spicy now i'm sure that there is some theory here so you guys especially youtube people can run stockfish and probably stalkers will laugh at me but i think c5 is a very unpleasant move to face now who can tell me what the most solid way of defending d4 is what is the most solid way of defending this pawn and generally when i say solid and defense in the same sentence you should be thinking i want to defend a pawn with another pawn right defending a pawn with another pawn is going to guarantee at least a decently solid position and so i think e3 is the wisest move here i think e3 is the wisest move c d e d and"
+    }
+   ]
+  }
+ ]
+}

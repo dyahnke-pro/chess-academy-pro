@@ -1,0 +1,829 @@
+{
+ "videoId": "Nl9vUi1_ha0",
+ "title": "Forks & Board Awareness!! | Glek + Scandi | Develop Your Instincts | GM Naroditsky's DYI Speedrun",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 71.5,
+   "line": [
+    "e4",
+    "e5",
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "this game is because we finally got a GLE system we finally got a gleck system which is why I really do want to play this game so just uh to bring everybody up to speed uh we played the Four"
+  },
+  {
+   "ply": 7,
+   "t": 73,
+   "line": [
+    "Nc6",
+    "g3",
+    "Nf6",
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 2 4",
+   "said": "Knights I played G3 which is my official recommendation this speedrun this is the"
+  },
+  {
+   "ply": 8,
+   "t": 78.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R w KQkq - 3 5",
+   "said": "GLE system those who've watched my speedrun uh already have kind of a good"
+  },
+  {
+   "ply": 10,
+   "t": 84,
+   "line": [
+    "Bg2",
+    "Ng4"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQK2R w KQkq - 5 6",
+   "said": "base of understanding of what this is after Bishop G2 our opponent plays kind of a very typical response at this level which is Knight to G4 and if you're"
+  },
+  {
+   "ply": 11,
+   "t": 95,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQ1RK1 b kq - 6 6",
+   "said": "unfamiliar with this it may seem very intimidating but of course we can simply castle and in most of these positions Knight takes F2 followed by Bishop takes"
+  },
+  {
+   "ply": 12,
+   "t": 104,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2np4/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQ1RK1 w kq - 0 7",
+   "said": "F2 leads to a position in which we have two pieces for a rook uh and a pawn but in the middle game the Rooks are simply not mobilized they're not deployed and so the two pieces dominate hopefully I'll have a chance to demonstrate that so black plays D6 and we have a choice here of course"
+  },
+  {
+   "ply": 13,
+   "t": 128,
+   "line": [
+    "h3"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2np4/2b1p3/4P1n1/2N2NPP/PPPP1PB1/R1BQ1RK1 b kq - 0 7",
+   "said": "we can play H3 and Chase the Knight out of G4 there is not necessarily a hurry to play this move we can also play the move D3 but there is really no reason to wait let's go H3 let's Force black to"
+  },
+  {
+   "ply": 14,
+   "t": 135,
+   "line": [
+    "Nh6"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2np3n/2b1p3/4P3/2N2NPP/PPPP1PB1/R1BQ1RK1 w kq - 1 8",
+   "said": "commit because black now has to make a decision our opponent drops back to H6 which is a slightly odd Square for the Knight now immediately when I see the move Knight H6 two things come to mind I think our opponent's idea is probably to quickly play F7 F5 which is a poten"
+  },
+  {
+   "ply": 15,
+   "t": 162,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2np3n/2b1p3/4P3/2NP1NPP/PPP2PB1/R1BQ1RK1 b kq - 0 8",
+   "said": "suicidal move given that Black's King is stuck in the center so we don't really need to change our strategy here we play the same moves that we normally play in the GLE system which is what I like about this opening we simply play the move D3 uh preparing to complete our development and creating the positional"
+  },
+  {
+   "ply": 16,
+   "t": 168,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/ppp2ppp/2np3n/2b1p3/4P3/2NP1NPP/PPP2PB1/R1BQ1RK1 w - - 1 9",
+   "said": "threat of Bishop takes H6 which our opponent completely ignores now those of you who watched the speedrun a lot know that I always put an emphasis on not overestimating uh the impact of Pawn structure so so in this situation Bishop"
+  },
+  {
+   "ply": 17,
+   "t": 192,
+   "line": [
+    "Bxh6"
+   ],
+   "fen": "r1bq1rk1/ppp2ppp/2np3B/2b1p3/4P3/2NP1NPP/PPP2PB1/R2Q1RK1 b - - 0 9",
+   "said": "takes H6 is not a move that I would necessarily play automatically but the reason it's good is not because it ruins Black's Pawn structure per se but rather because Black's King is Castle to the same side so incidentally if black had"
+  },
+  {
+   "ply": 15,
+   "t": 197,
+   "line": [],
+   "fen": "r1bqk2r/ppp2ppp/2np3n/2b1p3/4P3/2NP1NPP/PPP2PB1/R1BQ1RK1 b kq - 0 8",
+   "said": "played a move like Bishop B6 I would have been a lot more hesitant to take on"
+  },
+  {
+   "ply": 18,
+   "t": 201,
+   "line": [
+    "O-O",
+    "Bxh6",
+    "gxh6"
+   ],
+   "fen": "r1bq1rk1/ppp2p1p/2np3p/2b1p3/4P3/2NP1NPP/PPP2PB1/R2Q1RK1 w - - 0 10",
+   "said": "H6 because black has castled to this side of the board this is much more effective now of course we have a very easily attackable Target on H6"
+  },
+  {
+   "ply": 19,
+   "t": 215,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r1bq1rk1/ppp2p1p/2np3p/2b1p3/4P3/2NP1NPP/PPPQ1PB1/R4RK1 b - - 1 10",
+   "said": "and there is kind of a low hanging fruit move that we could play in order to attack that Target which is Queen to D2 uh this move is predicated on a very important tactical detail which is very commonly overlooked uh by newer players in the gleck queen F6 uh is I think a"
+  },
+  {
+   "ply": 20,
+   "t": 235,
+   "line": [
+    "Qf6"
+   ],
+   "fen": "r1b2rk1/ppp2p1p/2np1q1p/2b1p3/4P3/2NP1NPP/PPPQ1PB1/R4RK1 w - - 2 11",
+   "said": "lot of players Instinct right to play Queen F6 get the queen into the game and it walks right into this very nasty knight jump to D5 which hits C7 this is"
+  },
+  {
+   "ply": 21,
+   "t": 236,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1b2rk1/ppp2p1p/2np1q1p/2bNp3/4P3/3P1NPP/PPPQ1PB1/R4RK1 b - - 3 11",
+   "said": "exactly what happens notice the power of our Bishop on G2 it's protect the Knight it's protecting the pawn on H3 and it's keeping our King"
+  },
+  {
+   "ply": 22,
+   "t": 250,
+   "line": [
+    "Qg6"
+   ],
+   "fen": "r1b2rk1/ppp2p1p/2np2qp/2bNp3/4P3/3P1NPP/PPPQ1PB1/R4RK1 w - - 4 12",
+   "said": "safe so this Knight D5 move is just a a menace in many different types of positions but it's not the end of the story because what does what threat does the move Queen G6 create well those of you who have a keen tactical eye should notice that it creates the threat of Queen takes G3 but we have an incredible resource here we have an incredible resource here now what do I see when I I look at the move Queen G6 now maybe some of you are noticing a move like Knight H4 but that's not what I'm talking about anytime you have a situation where the king and the queen are un forkable squares and the forking square is accessible to your knight you need to start you need to put your Tactical cap on you need to put your Tactical thinking cap on because if in some alternate reality we can deflect this knight from C6 we basically have a win"
+  },
+  {
+   "ply": 23,
+   "t": 304,
+   "line": [
+    "b4"
+   ],
+   "fen": "r1b2rk1/ppp2p1p/2np2qp/2bNp3/1P2P3/3P1NPP/P1PQ1PB1/R4RK1 b - - 0 12",
+   "said": "in our pocket and the moment I say that some of you maybe were thinking Knight takes C5 well obviously that doesn't work it's a good thought but black and take with the pawn but we can play the move B4 and I have the perfect"
+  },
+  {
+   "ply": 24,
+   "t": 307,
+   "line": [
+    "Bb6"
+   ],
+   "fen": "r1b2rk1/ppp2p1p/1bnp2qp/3Np3/1P2P3/3P1NPP/P1PQ1PB1/R4RK1 w - - 1 13",
+   "said": "illustration our opponent is completely"
+  },
+  {
+   "ply": 25,
+   "t": 308.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1b2rk1/ppp2p1p/1bnp2qp/1P1Np3/4P3/3P1NPP/P1PQ1PB1/R4RK1 b - - 0 13",
+   "said": "unsuspecting here he doesn't realize"
+  },
+  {
+   "ply": 26,
+   "t": 311.5,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r1b2rk1/ppp2p1p/1b1p2qp/1P1Np3/3nP3/3P1NPP/P1PQ1PB1/R4RK1 w - - 1 14",
+   "said": "that something's the matter missing the"
+  },
+  {
+   "ply": 27,
+   "t": 312.5,
+   "line": [
+    "Ne7+"
+   ],
+   "fen": "r1b2rk1/ppp1Np1p/1b1p2qp/1P2p3/3nP3/3P1NPP/P1PQ1PB1/R4RK1 b - - 2 14",
+   "said": "fork on E7 and we win the game so this is a great introduction to whole board awareness uh whole board awareness WBA is the acronym which is of course the ability to appreciate that you can do something on one side of the board that impacts the game on another side of the board so this move B why is it hard to see well partially because it happens on the queen side where nothing's really going on but you have to understand that that all three sides of the board the Queen"
+  },
+  {
+   "ply": 7,
+   "t": 354,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 2 4",
+   "said": "side the center and the King side are intricately connected and our opponent immediately resigns how about that so a quick overview of the first GLE system but definitely not the last once again"
+  },
+  {
+   "ply": 3,
+   "t": 355.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "apologies for the disconnection for"
+  },
+  {
+   "ply": 4,
+   "t": 357,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "those watching on YouTube so the GLE"
+  },
+  {
+   "ply": 7,
+   "t": 360,
+   "line": [
+    "g3",
+    "Nf6",
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 2 4",
+   "said": "system uh is initiated with uh the move G3 now in previous speedruns I made a couple of other recommendations in particular I was recommending the for Knight Scotch with D4 which I still stand by I think it's a great opening and we had a lot of success with it but I think it's time for me to to change things up a little bit and I think the GLE system is a great opening at all levels it's going to bring us a lot of success uh at this level because players don't come across this opening often and start floundering almost immediately I"
+  },
+  {
+   "ply": 9,
+   "t": 402.5,
+   "line": [
+    "Bc5",
+    "Bg2"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 4 5",
+   "said": "have in mind a perfect illustration of this very same concept in rather uncanny fashion yeah so Knight G4 castles is already a serious inaccuracy because it"
+  },
+  {
+   "ply": 10,
+   "t": 403.5,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQK2R w KQkq - 5 6",
+   "said": ""
+  },
+  {
+   "ply": 11,
+   "t": 405,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQ1RK1 b kq - 6 6",
+   "said": "simply helps us develop now I've had a"
+  },
+  {
+   "ply": 9,
+   "t": 408,
+   "line": [],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 4 5",
+   "said": "couple of videos on the gleck where I exposed you to a little bit of theory for now I will just remind you of a"
+  },
+  {
+   "ply": 10,
+   "t": 418,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R w KQ - 5 6",
+   "said": "couple of important introductory points the first is that Castle's kingside is a m akake in this position this is a mistake that has been committed by very strong GMS it's a fairly unknown concept what is White's what is the way to"
+  },
+  {
+   "ply": 11,
+   "t": 440.5,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1N3/4P3/2N3P1/PPPP1PBP/R1BQK2R b KQ - 0 6",
+   "said": "punish Castle's King side and punish in quotes of course the position is still close to equal but white is now contending for an advantage it's the center fork trick you play Knight takes C5 and I've already talked about this at"
+  },
+  {
+   "ply": 12,
+   "t": 444.5,
+   "line": [
+    "Bxf2+"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/2n2n2/4N3/4P3/2N3P1/PPPP1bBP/R1BQK2R w KQ - 0 7",
+   "said": "length Bishop takes F2 is nothing to fear particularly here because we're so"
+  },
+  {
+   "ply": 13,
+   "t": 447,
+   "line": [
+    "Kxf2"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/2n2n2/4N3/4P3/2N3P1/PPPP1KBP/R1BQ3R b - - 0 7",
+   "said": ""
+  },
+  {
+   "ply": 14,
+   "t": 448,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/5n2/4n3/4P3/2N3P1/PPPP1KBP/R1BQ3R w - - 0 8",
+   "said": "close to completing uh the manual Castle"
+  },
+  {
+   "ply": 15,
+   "t": 453.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/5n2/4n3/3PP3/2N3P1/PPP2KBP/R1BQ3R b - - 0 8",
+   "said": "here we can even play the move d4 just grabbing control of the center and not"
+  },
+  {
+   "ply": 16,
+   "t": 457,
+   "line": [
+    "Neg4+"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/5n2/8/3PP1n1/2N3P1/PPP2KBP/R1BQ3R w - - 1 9",
+   "said": "fearing this paper tiger check on G4"
+  },
+  {
+   "ply": 17,
+   "t": 460,
+   "line": [
+    "Kg1"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/5n2/8/3PP1n1/2N3P1/PPP3BP/R1BQ2KR b - - 2 9",
+   "said": "because we just hide our King away on G1 and we're already threatening to win a piece with E5 Black's Knights are just terribly placed and this is this is just"
+  },
+  {
+   "ply": 10,
+   "t": 473.5,
+   "line": [],
+   "fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R w KQ - 5 6",
+   "said": "unacceptably bad so Bishop F2 is not something to be afraid of therefore Black's best response is Knight takes C5"
+  },
+  {
+   "ply": 12,
+   "t": 475.5,
+   "line": [
+    "Nxe5",
+    "Nxe5"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/5n2/2b1n3/4P3/2N3P1/PPPP1PBP/R1BQK2R w KQ - 0 7",
+   "said": "D4 and Bishop to D6 which is of course"
+  },
+  {
+   "ply": 14,
+   "t": 477,
+   "line": [
+    "d4",
+    "Bd6"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/3b1n2/4n3/3PP3/2N3P1/PPP2PBP/R1BQK2R w KQ - 1 8",
+   "said": "the very sort of typical way of maintaining the Bishops but here already"
+  },
+  {
+   "ply": 17,
+   "t": 489.5,
+   "line": [
+    "dxe5",
+    "Bxe5",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/5n2/4b3/4P3/2N3P1/PPP2PBP/R1BQ1RK1 b - - 1 9",
+   "said": "black is in a little bit of trouble because after d takes E5 Bishop takes E5 Castle's King side we have uh Superior control of the center and what I want you to notice here is how the bishop and the pawn on e4 are operating as one unit right you might look at this bishop and say it's a pretty bad Bishop but think of the bishop and a pawn and the pawn as"
+  },
+  {
+   "ply": 18,
+   "t": 515.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bq1rk1/ppp2ppp/3p1n2/4b3/4P3/2N3P1/PPP2PBP/R1BQ1RK1 w - - 0 10",
+   "said": "one team what is this team doing it's clamping down on the D5 Square ensuring that black is not going to be able to free themselves with the move D5 so most people in this position they play the move D6 and in this position white has an incredibly powerful response you should pause the video if you're watching on YouTube and try to come up with this move I have featured this in a"
+  },
+  {
+   "ply": 19,
+   "t": 535,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1bq1rk1/ppp2ppp/3p1n2/4b3/4PP2/2N3P1/PPP3BP/R1BQ1RK1 b - - 0 10",
+   "said": "previous video but it's definitely good to to review this line because it's going to happen in your games so it's not F4 it's not F4 because black is able"
+  },
+  {
+   "ply": 20,
+   "t": 536.5,
+   "line": [
+    "Bxc3"
+   ],
+   "fen": "r1bq1rk1/ppp2ppp/3p1n2/8/4PP2/2b3P1/PPP3BP/R1BQ1RK1 w - - 0 11",
+   "said": "to play Bishop takes C3 and this is okay"
+  },
+  {
+   "ply": 21,
+   "t": 538.5,
+   "line": [
+    "bxc3"
+   ],
+   "fen": "r1bq1rk1/ppp2ppp/3p1n2/8/4PP2/2P3P1/P1P3BP/R1BQ1RK1 b - - 0 11",
+   "said": ""
+  },
+  {
+   "ply": 22,
+   "t": 539.5,
+   "line": [
+    "Re8"
+   ],
+   "fen": "r1bqr1k1/ppp2ppp/3p1n2/8/4PP2/2P3P1/P1P3BP/R1BQ1RK1 w - - 1 12",
+   "said": "but it's nothing special the move is Knight to E2 which is actually incredibly strong why is it so strong because you're threatening F4 trapping the bishop black is still unable to play D5 because you can simply take the pawn and in order to you know create space for the bishop black has to play a very awkward move like Knight D7 and now you can just play a move like C3 Bishop E3 Queen C2 you just have a very stable Advantage here for white for example Knight you can play Bishop B3 harassing the Knight and Black's pieces are not able to find particularly good squares if black plays Bishop B6 you start driving the pawns down the board out four and E5 is super strong now the Knight is loose black is in huge trouble so this is good and if black plays Bishop takes C3 straight away then"
+  },
+  {
+   "ply": 21,
+   "t": 603,
+   "line": [],
+   "fen": "r1bq1rk1/ppp2ppp/3p1n2/8/4PP2/2P3P1/P1P3BP/R1BQ1RK1 b - - 0 11",
+   "said": "despite the outwardly ugly Pawn structure we have the bishop pair and we have uncontested control of the dark squares so after a move like F4 I think that White's position is still slightly better Rook E8 now we can play this move"
+  },
+  {
+   "ply": 23,
+   "t": 607,
+   "line": [
+    "Re8",
+    "e5"
+   ],
+   "fen": "r1bqr1k1/ppp2ppp/3p1n2/4P3/5P2/2P3P1/P1P3BP/R1BQ1RK1 b - - 0 12",
+   "said": "E5 very typical gleck idea F4 and E5 and"
+  },
+  {
+   "ply": 24,
+   "t": 610.5,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bqr1k1/ppp2ppp/5n2/4p3/5P2/2P3P1/P1P3BP/R1BQ1RK1 w - - 0 13",
+   "said": ""
+  },
+  {
+   "ply": 27,
+   "t": 613,
+   "line": [
+    "Qxd8",
+    "Rxd8",
+    "fxe5"
+   ],
+   "fen": "r1br2k1/ppp2ppp/5n2/4P3/8/2P3P1/P1P3BP/R1B2RK1 b - - 0 14",
+   "said": "in the end game White's Bishop pair is really really scary beautiful Bishop on G2 the other Bishop is coming out to G5"
+  },
+  {
+   "ply": 28,
+   "t": 621,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1br2k1/ppp2ppp/8/3nP3/8/2P3P1/P1P3BP/R1B2RK1 w - - 1 15",
+   "said": "and it's very easy for black to uh to"
+  },
+  {
+   "ply": 29,
+   "t": 624,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1br2k1/ppp2ppp/8/3nP1B1/8/2P3P1/P1P3BP/R4RK1 b - - 2 15",
+   "said": "make another mistake and now things are getting even worse after Bishop G5 so this is also quite good for white there"
+  },
+  {
+   "ply": 11,
+   "t": 631,
+   "line": [],
+   "fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1N3/4P3/2N3P1/PPPP1PBP/R1BQK2R b KQ - 0 6",
+   "said": "is more to analyze here but we'll get to it we'll have plenty of opportunities"
+  },
+  {
+   "ply": 9,
+   "t": 632.5,
+   "line": [],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 4 5",
+   "said": "this is why Black's best move in this"
+  },
+  {
+   "ply": 10,
+   "t": 634.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R w KQkq - 0 6",
+   "said": "position is to play D6 and then we play"
+  },
+  {
+   "ply": 11,
+   "t": 638,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/4P3/2NP1NP1/PPP2PBP/R1BQK2R b KQkq - 0 6",
+   "said": "D3 and I'm sure that we're going to get"
+  },
+  {
+   "ply": 9,
+   "t": 642,
+   "line": [],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 4 5",
+   "said": "this position multiple times so this is beyond the scope of the current game in"
+  },
+  {
+   "ply": 11,
+   "t": 645,
+   "line": [
+    "Ng4",
+    "O-O"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQ1RK1 b kq - 6 6",
+   "said": "the game we Face Knight G4 we Castle in response if you're a newer player"
+  },
+  {
+   "ply": 12,
+   "t": 650.5,
+   "line": [
+    "Nxf2"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P3/2N2NP1/PPPP1nBP/R1BQ1RK1 w kq - 0 7",
+   "said": "watching this on YouTube you should be very comfortable with the notion that"
+  },
+  {
+   "ply": 13,
+   "t": 654,
+   "line": [
+    "Rxf2"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P3/2N2NP1/PPPP1RBP/R1BQ2K1 b kq - 0 7",
+   "said": "Knight takes F2 and Bishop F2 is really"
+  },
+  {
+   "ply": 15,
+   "t": 656,
+   "line": [
+    "Bxf2+",
+    "Kxf2"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n5/4p3/4P3/2N2NP1/PPPP1KBP/R1BQ4 b kq - 0 8",
+   "said": "bad for black so does it make sense to people when I say that this position is almost winning for white does that make"
+  },
+  {
+   "ply": 16,
+   "t": 669.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/2n5/4p3/4P3/2N2NP1/PPPP1KBP/R1BQ4 w - - 1 9",
+   "said": "intuitive sense the evaluation according to the engine is about plus 2.5 so why is it so overwhelming for white this position because from a material perspective it's equal black"
+  },
+  {
+   "ply": 17,
+   "t": 676,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/2n5/4p3/3PP3/2N2NP1/PPP2KBP/R1BQ4 b - - 0 9",
+   "said": "has a pawn and a rook for the two pieces but after white starts opening up the center essentially white is up to minor pieces because Black's Rooks are"
+  },
+  {
+   "ply": 18,
+   "t": 684,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/2n5/8/3pP3/2N2NP1/PPP2KBP/R1BQ4 w - - 0 10",
+   "said": "completely out of the game and if black let's say plays e takes D4 Knight takes"
+  },
+  {
+   "ply": 21,
+   "t": 687.5,
+   "line": [
+    "Nxd4",
+    "Nxd4",
+    "Qxd4"
+   ],
+   "fen": "r1bq1rk1/pppp1ppp/8/8/3QP3/2N3P1/PPP2KBP/R1B5 b - - 0 11",
+   "said": "D4 Knight D4 Queen D4 Black's Rooks are not getting into the game anytime soon while White's minor pieces are already"
+  },
+  {
+   "ply": 22,
+   "t": 697,
+   "line": [
+    "f5"
+   ],
+   "fen": "r1bq1rk1/pppp2pp/8/5p2/3QP3/2N3P1/PPP2KBP/R1B5 w - - 0 12",
+   "said": "jumping into dominant Central posts black and try a move like F5 but we're"
+  },
+  {
+   "ply": 23,
+   "t": 700.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bq1rk1/pppp2pp/8/4Pp2/3Q4/2N3P1/PPP2KBP/R1B5 b - - 0 12",
+   "said": "not going to allow black to open up the f file and this exacerbates things even"
+  },
+  {
+   "ply": 11,
+   "t": 707.5,
+   "line": [],
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQ1RK1 b kq - 6 6",
+   "said": "further so this is a pretty important rudimentary concept this is almost never dangerous there are some exceptions but"
+  },
+  {
+   "ply": 13,
+   "t": 713,
+   "line": [
+    "d6",
+    "h3"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2np4/2b1p3/4P1n1/2N2NPP/PPPP1PB1/R1BQ1RK1 b kq - 0 7",
+   "said": "this is not one of them so D6 we chase away the Knight with H3 Knight H6 we"
+  },
+  {
+   "ply": 15,
+   "t": 718,
+   "line": [
+    "Nh6",
+    "d3"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2np3n/2b1p3/4P3/2NP1NPP/PPP2PB1/R1BQ1RK1 b kq - 0 8",
+   "said": "open up the bishop with D3 and and"
+  },
+  {
+   "ply": 16,
+   "t": 721.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/ppp2ppp/2np3n/2b1p3/4P3/2NP1NPP/PPP2PB1/R1BQ1RK1 w - - 1 9",
+   "said": "important moment or black Castle's King side so we didn't actually have to rush"
+  },
+  {
+   "ply": 19,
+   "t": 726,
+   "line": [
+    "Bxh6",
+    "gxh6",
+    "Qd2"
+   ],
+   "fen": "r1bq1rk1/ppp2p1p/2np3p/2b1p3/4P3/2NP1NPP/PPPQ1PB1/R4RK1 b - - 1 10",
+   "said": "with Bishop takes H6 but I think this is the simplest way to play now in this position I think black's only way to"
+  },
+  {
+   "ply": 20,
+   "t": 731,
+   "line": [
+    "Kg7"
+   ],
+   "fen": "r1bq1r2/ppp2pkp/2np3p/2b1p3/4P3/2NP1NPP/PPPQ1PB1/R4RK1 w - - 2 11",
+   "said": "hold the game would have been King to G7 King to G7 is not an easy move to play I think newer players have a hard time using their King for defensive purposes"
+  },
+  {
+   "ply": 21,
+   "t": 742.5,
+   "line": [
+    "Kh2"
+   ],
+   "fen": "r1bq1r2/ppp2pkp/2np3p/2b1p3/4P3/2NP1NPP/PPPQ1PBK/R4R2 b - - 3 11",
+   "said": "now what would we have done in response to King G7 well we would have moved our own King up to H2 and this is also a very thematic move in the gleck which gets out of the pin and prepares this plan where we move the Knight out of the"
+  },
+  {
+   "ply": 22,
+   "t": 762,
+   "line": [
+    "f5"
+   ],
+   "fen": "r1bq1r2/ppp3kp/2np3p/2b1pp2/4P3/2NP1NPP/PPPQ1PBK/R4R2 w - - 0 12",
+   "said": "way and then push our F Pawn two squares in order to open up the king side black is essentially powerless against this plan black can play F5 themselves but"
+  },
+  {
+   "ply": 23,
+   "t": 763.5,
+   "line": [
+    "exf5"
+   ],
+   "fen": "r1bq1r2/ppp3kp/2np3p/2b1pP2/8/2NP1NPP/PPPQ1PBK/R4R2 b - - 0 12",
+   "said": "that merely helps us open up the king"
+  },
+  {
+   "ply": 25,
+   "t": 767,
+   "line": [
+    "Bxf5",
+    "Na4"
+   ],
+   "fen": "r2q1r2/ppp3kp/2np3p/2b1pb2/N7/3P1NPP/PPPQ1PBK/R4R2 b - - 1 13",
+   "said": "side for example we can take and play Knight A4 to root out this bishop and the engine is giving about plus two"
+  },
+  {
+   "ply": 21,
+   "t": 777,
+   "line": [],
+   "fen": "r1bq1r2/ppp2pkp/2np3p/2b1p3/4P3/2NP1NPP/PPPQ1PBK/R4R2 b - - 3 11",
+   "said": "which which makes sense so this is just a really really bad position for black our opponent walked into Knight D5 and now we get to the CR moment in the game how do you find a mo like well I have I think the perfect illustration of this let me see if I can pull up this game again we didn't get to even like the tip of the iceberg because we'll have plenty more opportunities to do that I'm just trying to give you kind of a conceptual overview of of the gleck and we'll have plenty of opportunities to delve into the S of thetical particulars okay here we go so this is a game that I played a long time ago in 2007 tells you how old I am and this game illustrates a very similar concept to uh B4 in the speedrun game so it's a crazy position that occurred out of a sveshnikov sicilian and in this position white has a very very nice winning concept if you're paying attention to how I'm presenting this game the move should already be kind of announcing itself so you might see the move but try to understand the"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 9,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 4 5",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "g3",
+    "Nf6",
+    "Nc3",
+    "Bc5",
+    "Bg2"
+   ],
+   "options": [
+    {
+     "san": "Ng4",
+     "t": 403.5,
+     "continuation": "Ng4",
+     "said": "have in mind a perfect illustration of this very same concept in rather uncanny fashion yeah so Knight G4 castles is already a serious inaccuracy because it simply helps us develop now I've had a couple of videos on the gleck where I exposed you to a little bit of theory for now I will just remind you of a couple of important introductory points the first is that Castle's kingside is a m akake in this position this is a mistake that has been committed by very strong GMS it's a fairly unknown concept what is White's what is the way to punish Castle's King side and punish in quotes of course the position is still close to equal but white is now contending for an advantage it's the center fork trick you play Knight takes C5 and I've already talked about this at length Bishop takes F2 is nothing to fear particularly here because we're so close to completing uh the manual Castle here we can even play the move d4 just grabbing control of the center and not fearing this paper tiger check on G4 because we just hide our King away on G1 and we're already threatening to win a piece with E5 Black's Knights are just"
+    },
+    {
+     "san": "O-O",
+     "t": 418,
+     "continuation": "O-O",
+     "said": "couple of videos on the gleck where I exposed you to a little bit of theory for now I will just remind you of a couple of important introductory points the first is that Castle's kingside is a m akake in this position this is a mistake that has been committed by very strong GMS it's a fairly unknown concept what is White's what is the way to punish Castle's King side and punish in quotes of course the position is still close to equal but white is now contending for an advantage it's the center fork trick you play Knight takes C5 and I've already talked about this at length Bishop takes F2 is nothing to fear particularly here because we're so close to completing uh the manual Castle here we can even play the move d4 just grabbing control of the center and not fearing this paper tiger check on G4 because we just hide our King away on G1 and we're already threatening to win a piece with E5 Black's Knights are just terribly placed and this is this is just unacceptably bad so Bishop F2 is not something to be afraid of therefore Black's best response is Knight takes C5 D4 and Bishop to D6 which is of course"
+    },
+    {
+     "san": "d6",
+     "t": 634.5,
+     "continuation": "d6",
+     "said": "make another mistake and now things are getting even worse after Bishop G5 so this is also quite good for white there is more to analyze here but we'll get to it we'll have plenty of opportunities this is why Black's best move in this position is to play D6 and then we play D3 and I'm sure that we're going to get this position multiple times so this is beyond the scope of the current game in the game we Face Knight G4 we Castle in response if you're a newer player watching this on YouTube you should be very comfortable with the notion that Knight takes F2 and Bishop F2 is really bad for black so does it make sense to people when I say that this position is almost winning for white does that make intuitive sense the evaluation according to the engine is about plus 2.5 so why is it so overwhelming for white this position because from a material perspective it's equal black has a pawn and a rook for the two pieces but after white starts opening up the center essentially white is up to minor pieces because Black's Rooks are completely out of the game and if black let's say plays e takes D4 Knight takes D4 Knight D4 Queen D4 Black's Rooks are not getting into the game anytime soon while White's minor pieces are already jumping into dominant Central posts"
+    }
+   ]
+  },
+  {
+   "ply": 11,
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQ1RK1 b kq - 6 6",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "g3",
+    "Nf6",
+    "Nc3",
+    "Bc5",
+    "Bg2",
+    "Ng4",
+    "O-O"
+   ],
+   "options": [
+    {
+     "san": "d6",
+     "t": 104,
+     "continuation": "d6",
+     "said": "unfamiliar with this it may seem very intimidating but of course we can simply castle and in most of these positions Knight takes F2 followed by Bishop takes F2 leads to a position in which we have two pieces for a rook uh and a pawn but in the middle game the Rooks are simply not mobilized they're not deployed and so the two pieces dominate hopefully I'll have a chance to demonstrate that so black plays D6 and we have a choice here of course we can play H3 and Chase the Knight out of G4 there is not necessarily a hurry to play this move we can also play the move D3 but there is really no reason to wait let's go H3 let's Force black to commit because black now has to make a decision our opponent drops back to H6 which is a slightly odd Square for the Knight now immediately when I see the move Knight H6 two things come to mind I think our opponent's idea is probably to quickly play F7 F5 which is a poten suicidal move given that Black's King is stuck in the center so we don't really need to change our strategy here we play the same moves that we normally play in the GLE system which is what I like about this opening we simply play the move D3 uh preparing to complete our"
+    },
+    {
+     "san": "Nxf2",
+     "t": 650.5,
+     "continuation": "Nxf2",
+     "said": "this position multiple times so this is beyond the scope of the current game in the game we Face Knight G4 we Castle in response if you're a newer player watching this on YouTube you should be very comfortable with the notion that Knight takes F2 and Bishop F2 is really bad for black so does it make sense to people when I say that this position is almost winning for white does that make intuitive sense the evaluation according to the engine is about plus 2.5 so why is it so overwhelming for white this position because from a material perspective it's equal black has a pawn and a rook for the two pieces but after white starts opening up the center essentially white is up to minor pieces because Black's Rooks are completely out of the game and if black let's say plays e takes D4 Knight takes D4 Knight D4 Queen D4 Black's Rooks are not getting into the game anytime soon while White's minor pieces are already jumping into dominant Central posts black and try a move like F5 but we're not going to allow black to open up the f file and this exacerbates things even further so this is a pretty important rudimentary concept this is almost never dangerous there are some exceptions but"
+    }
+   ]
+  },
+  {
+   "ply": 19,
+   "fen": "r1bq1rk1/ppp2p1p/2np3p/2b1p3/4P3/2NP1NPP/PPPQ1PB1/R4RK1 b - - 1 10",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "g3",
+    "Nf6",
+    "Nc3",
+    "Bc5",
+    "Bg2",
+    "Ng4",
+    "O-O",
+    "d6",
+    "h3",
+    "Nh6",
+    "d3",
+    "O-O",
+    "Bxh6",
+    "gxh6",
+    "Qd2"
+   ],
+   "options": [
+    {
+     "san": "Qf6",
+     "t": 235,
+     "continuation": "Qf6",
+     "said": "in the gleck queen F6 uh is I think a lot of players Instinct right to play Queen F6 get the queen into the game and it walks right into this very nasty knight jump to D5 which hits C7 this is exactly what happens notice the power of our Bishop on G2 it's protect the Knight it's protecting the pawn on H3 and it's keeping our King safe so this Knight D5 move is just a a menace in many different types of positions but it's not the end of the story because what does what threat does the move Queen G6 create well those of you who have a keen tactical eye should notice that it creates the threat of Queen takes G3 but we have an incredible resource here we have an incredible resource here now what do I see when I I look at the move Queen G6 now maybe some of you are noticing a move like Knight H4 but that's not what I'm talking about anytime you have a situation where the king and the queen are un forkable squares and the forking square is accessible to your knight you need to start you need to put your Tactical cap on you need to put your Tactical thinking cap on because if in some alternate reality we can deflect this knight from C6 we basically have a win in our pocket and the moment I say that"
+    },
+    {
+     "san": "Kg7",
+     "t": 731,
+     "continuation": "Kg7",
+     "said": "important moment or black Castle's King side so we didn't actually have to rush with Bishop takes H6 but I think this is the simplest way to play now in this position I think black's only way to hold the game would have been King to G7 King to G7 is not an easy move to play I think newer players have a hard time using their King for defensive purposes now what would we have done in response to King G7 well we would have moved our own King up to H2 and this is also a very thematic move in the gleck which gets out of the pin and prepares this plan where we move the Knight out of the way and then push our F Pawn two squares in order to open up the king side black is essentially powerless against this plan black can play F5 themselves but that merely helps us open up the king side for example we can take and play Knight A4 to root out this bishop and the engine is giving about plus two which which makes sense so this is just a really really bad position for black our opponent walked into Knight D5 and now we get to the CR moment in the game how do you find a mo like well I have I think the perfect illustration of this let me see if I can pull up this game again we didn't get to even like the tip of the iceberg because we'll have plenty"
+    }
+   ]
+  }
+ ]
+}

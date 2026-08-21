@@ -1,0 +1,910 @@
+{
+ "videoId": "uVQKL83tZb0",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2065",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 13,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] so we are playing white here this time let's play e4 it's not been refuted per se but it's it's not as good as it"
+  },
+  {
+   "ply": 3,
+   "t": 14,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "used to be really okay so we're going to"
+  },
+  {
+   "ply": 5,
+   "t": 16.5,
+   "line": [
+    "Nc6",
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "said": "play the rye lopez the rye lopez bishop"
+  },
+  {
+   "ply": 6,
+   "t": 18.5,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/8/1B2p3/3nP3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "said": "b5 and he plays knight d4 that is the bird that's called the bird defense um"
+  },
+  {
+   "ply": 7,
+   "t": 31,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/8/1B2p3/3NP3/8/PPPP1PPP/RNBQK2R b KQkq - 0 4",
+   "said": "now what is the idea of this move well he's attacking our bishop so obviously we um we want to take the knight"
+  },
+  {
+   "ply": 8,
+   "t": 34,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/8/1B6/3pP3/8/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+   "said": "and what we want to understand here is that we don't want to change our strategy just because he's played a weird line okay we want to play normally we want to"
+  },
+  {
+   "ply": 9,
+   "t": 49,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/8/1B6/3pP3/8/PPPP1PPP/RNBQ1RK1 b kq - 1 5",
+   "said": "play like we would normally play and what does that really mean that means we simply need to complete our development so let's castle"
+  },
+  {
+   "ply": 10,
+   "t": 50.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/8/1Bb5/3pP3/8/PPPP1PPP/RNBQ1RK1 w kq - 2 6",
+   "said": "and now we have a bit of a problem this this pawn on d4 is is super annoying so we have several ways of dealing or trying to deal with a spun the first is to go c3 to try to undermine that pawn but we actually don't have to do that i can use that pawn as an asset what do i mean by that well look at this bishop for a second guys you see that it's just like staring at this pawn so we can use this pawn to our advantage as long as we can find"
+  },
+  {
+   "ply": 11,
+   "t": 89,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/8/1Bb5/3pP3/3P4/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+   "said": "a way to develop this knight we can't go knight c3 that's problem of the pawn so could somebody devise a method of developing the knight without going c3 and helping him activate his bishop we can go d3 and where can we get this knight we"
+  },
+  {
+   "ply": 12,
+   "t": 93.5,
+   "line": [
+    "Qh4"
+   ],
+   "fen": "r1b1k1nr/pppp1ppp/8/1Bb5/3pP2q/3P4/PPP2PPP/RNBQ1RK1 w kq - 1 7",
+   "said": "can go to d2 and then we can go to f3 so he goes queen h4 there are some traps here that we need to be aware of but um"
+  },
+  {
+   "ply": 13,
+   "t": 103,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "r1b1k1nr/pppp1ppp/8/1Bb5/3pP2q/3P4/PPPN1PPP/R1BQ1RK1 b kq - 2 7",
+   "said": "i think the coast is mostly clear for now i don't see a reason we can't go knight two he's not threatening checkmate or anything of that sort"
+  },
+  {
+   "ply": 14,
+   "t": 107,
+   "line": [
+    "c6"
+   ],
+   "fen": "r1b1k1nr/pp1p1ppp/2p5/1Bb5/3pP2q/3P4/PPPN1PPP/R1BQ1RK1 w kq - 0 8",
+   "said": "go c6 and where should we put this bishop first of all we don't actually have to move it immediately we have a intermediate move but we can't move the"
+  },
+  {
+   "ply": 15,
+   "t": 121,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1b1k1nr/pp1p1ppp/2p5/2b5/2BpP2q/3P4/PPPN1PPP/R1BQ1RK1 b kq - 1 8",
+   "said": "bishop where should we put it well we have a4 and c4 we should definitely put it to c4 because at least the bishop is doing something here on a4"
+  },
+  {
+   "ply": 16,
+   "t": 124.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/2pp4/2b5/2BpP2q/3P4/PPPN1PPP/R1BQ1RK1 w kq - 0 9",
+   "said": "it's biting on granite my favorite expression"
+  },
+  {
+   "ply": 17,
+   "t": 126.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/2pp4/2b5/2BpP2q/3P1N2/PPP2PPP/R1BQ1RK1 b kq - 1 9",
+   "said": "now we can complete our maneuver knight f3 okay"
+  },
+  {
+   "ply": 18,
+   "t": 129,
+   "line": [
+    "Qh5"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/2pp4/2b4q/2BpP3/3P1N2/PPP2PPP/R1BQ1RK1 w kq - 2 10",
+   "said": "and now um i'm actually gonna do something that might make some people roll their eyes so what is what does black want here what what does black want so black wants uh bishop g4 that would be a very nasty pin there are several ways that we can go about preventing this the obvious move is h3 but can somebody explain to me why i don't"
+  },
+  {
+   "ply": 19,
+   "t": 165,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/2pp4/2b3Nq/2BpP3/3P4/PPP2PPP/R1BQ1RK1 b kq - 3 10",
+   "said": "want to play h3 and could somebody propose an alternative this is a case where i'm actually going to go into an end game something people think i don't like doing but there is a time and a place for that we go knight because h3 creates a hook and that hook is particularly disastrous because his queen is already positioned to"
+  },
+  {
+   "ply": 23,
+   "t": 178.5,
+   "line": [
+    "Ke7",
+    "Bxf7",
+    "Qxd1",
+    "Rxd1"
+   ],
+   "fen": "r1b3nr/pp2kBpp/2pp4/2b3N1/3pP3/3P4/PPP2PPP/R1BR2K1 b - - 0 12",
+   "said": "attack us now very good job you guys we don't take the queen we have an intermediate move bishop f7 now we take the queen and we are up upon"
+  },
+  {
+   "ply": 24,
+   "t": 181,
+   "line": [
+    "h6"
+   ],
+   "fen": "r1b3nr/pp2kBp1/2pp3p/2b3N1/3pP3/3P4/PPP2PPP/R1BR2K1 w - - 0 13",
+   "said": "he thinks he's won a piece but he hasn't if we move the knight he takes the bishop but i've foreseen this it's okay"
+  },
+  {
+   "ply": 25,
+   "t": 192.5,
+   "line": [
+    "Bxg8"
+   ],
+   "fen": "r1b3Br/pp2k1p1/2pp3p/2b3N1/3pP3/3P4/PPP2PPP/R1BR2K1 b - - 0 13",
+   "said": "we do what we take g8 now i want to make it clear this position is actually not"
+  },
+  {
+   "ply": 27,
+   "t": 196,
+   "line": [
+    "Rxg8",
+    "Nf3"
+   ],
+   "fen": "r1b3r1/pp2k1p1/2pp3p/2b5/3pP3/3P1N2/PPP2PPP/R1BR2K1 b - - 1 14",
+   "said": "that much better for us because he's got very active development but because it's"
+  },
+  {
+   "ply": 28,
+   "t": 199,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "r5r1/pp2k1p1/2pp3p/2b5/3pP1b1/3P1N2/PPP2PPP/R1BR2K1 w - - 2 15",
+   "said": "an end game we don't have to worry too much about the fact that his pieces are active now he's pinning us i don't like this pin but at the same"
+  },
+  {
+   "ply": 29,
+   "t": 211,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r5r1/pp2k1p1/2pp3p/2b5/3pP1b1/3P1N2/PPP2PPP/R1B1R1K1 b - - 3 15",
+   "said": "time i don't want to go h3 and lose time so what i'm going to do is i'm going to move the rook out of the way if he takes my knight i will explain to you guys why that's actually not bad for us at all we are we are better"
+  },
+  {
+   "ply": 30,
+   "t": 225,
+   "line": [
+    "g5"
+   ],
+   "fen": "r5r1/pp2k3/2pp3p/2b3p1/3pP1b1/3P1N2/PPP2PPP/R1B1R1K1 w - - 0 16",
+   "said": "in this position clearly he doesn't have enough for the pawn if he doesn't take the knight then we can move this knight out of the way which is exactly what we're going to do"
+  },
+  {
+   "ply": 31,
+   "t": 226.5,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "r5r1/pp2k3/2pp3p/2b3p1/3pP1b1/3P4/PPPN1PPP/R1B1R1K1 b - - 1 16",
+   "said": "let's move the knight out of the way now isn't this passive"
+  },
+  {
+   "ply": 32,
+   "t": 230.5,
+   "line": [
+    "Raf8"
+   ],
+   "fen": "5rr1/pp2k3/2pp3p/2b3p1/3pP1b1/3P4/PPPN1PPP/R1B1R1K1 w - - 2 17",
+   "said": "well there's slightly different rules in the end game he thinks he's attacking us but because there are no queens we don't really have anything to be afraid of that doesn't mean we need to"
+  },
+  {
+   "ply": 33,
+   "t": 243.5,
+   "line": [
+    "Nb3"
+   ],
+   "fen": "5rr1/pp2k3/2pp3p/2b3p1/3pP1b1/1N1P4/PPP2PPP/R1B1R1K1 b - - 3 17",
+   "said": "we don't have to play actively but we can kind of casually develop our pieces without panicking so let's get this knight to b3"
+  },
+  {
+   "ply": 35,
+   "t": 247,
+   "line": [
+    "Bb6",
+    "Bd2"
+   ],
+   "fen": "5rr1/pp2k3/1bpp3p/6p1/3pP1b1/1N1P4/PPPB1PPP/R3R1K1 b - - 5 18",
+   "said": "in order to pave the way for the development of our bishop we're just developing our pieces here nothing crazy and uh let's see what he does so we have a particular idea here we have a particular idea here what is this idea can anybody see what we're kind of threatening"
+  },
+  {
+   "ply": 36,
+   "t": 274.5,
+   "line": [
+    "Bc7"
+   ],
+   "fen": "5rr1/ppb1k3/2pp3p/6p1/3pP1b1/1N1P4/PPPB1PPP/R3R1K1 w - - 6 19",
+   "said": "what i'm looking at here ladies and gentlemen is the bishop this bishop is um thank you uh great show yep e5 is the idea this bishop is kind of passive it doesn't have a lot of prospects so by playing e5 which we can do right now and that's not"
+  },
+  {
+   "ply": 37,
+   "t": 276,
+   "line": [
+    "e5"
+   ],
+   "fen": "5rr1/ppb1k3/2pp3p/4P1p1/3p2b1/1N1P4/PPPB1PPP/R3R1K1 b - - 0 19",
+   "said": ""
+  },
+  {
+   "ply": 38,
+   "t": 278.5,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "5rr1/ppb1k3/2p4p/4p1p1/3p2b1/1N1P4/PPPB1PPP/R3R1K1 w - - 0 20",
+   "said": "blundering upon and he thinks it is but if we're very attentive i've told you guys many times when the king and the rook"
+  },
+  {
+   "ply": 39,
+   "t": 287,
+   "line": [
+    "Bb4+"
+   ],
+   "fen": "5rr1/ppb1k3/2p4p/4p1p1/1B1p2b1/1N1P4/PPP2PPP/R3R1K1 b - - 1 20",
+   "said": "are on the same diagonal we need to be very attentive to that and we can exploit that by playing bishop before he's probably going to block with his fish in about two seconds and uh then we need to anticipate a"
+  },
+  {
+   "ply": 41,
+   "t": 301.5,
+   "line": [
+    "Kd7",
+    "Bxf8"
+   ],
+   "fen": "5Br1/ppbk4/2p4p/4p1p1/3p2b1/1N1P4/PPP2PPP/R3R1K1 b - - 0 21",
+   "said": "particular tactical idea if he blocks with our bishop that bishop is now the pin piece no he gives up the exchange well thank you"
+  },
+  {
+   "ply": 42,
+   "t": 303,
+   "line": [
+    "Rxf8"
+   ],
+   "fen": "5r2/ppbk4/2p4p/4p1p1/3p2b1/1N1P4/PPP2PPP/R3R1K1 w - - 0 22",
+   "said": "very much sir now let's look at this knife for a second this knight has done its job on b3 can anybody find for us a good square"
+  },
+  {
+   "ply": 43,
+   "t": 314,
+   "line": [
+    "Nc5+"
+   ],
+   "fen": "5r2/ppbk4/2p4p/2N1p1p1/3p2b1/3P4/PPP2PPP/R3R1K1 b - - 1 22",
+   "said": "for that night where can this night travel to bingo and ultimately where can it park"
+  },
+  {
+   "ply": 44,
+   "t": 317,
+   "line": [
+    "Kc8"
+   ],
+   "fen": "2k2r2/ppb5/2p4p/2N1p1p1/3p2b1/3P4/PPP2PPP/R3R1K1 w - - 2 23",
+   "said": "24-hour parking"
+  },
+  {
+   "ply": 45,
+   "t": 319.5,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "2k2r2/ppb5/2p4p/4p1p1/3pN1b1/3P4/PPP2PPP/R3R1K1 b - - 3 23",
+   "said": "beautiful look at the square knight e4 it's unassailable he can trade this"
+  },
+  {
+   "ply": 47,
+   "t": 324,
+   "line": [
+    "b6",
+    "f3"
+   ],
+   "fen": "2k2r2/p1b5/1pp4p/4p1p1/3pN1b1/3P1P2/PPP3PP/R3R1K1 b - - 0 24",
+   "said": "bishop for it but that's good for us let him do it we're up in exchange"
+  },
+  {
+   "ply": 49,
+   "t": 328.5,
+   "line": [
+    "Be6",
+    "Re2"
+   ],
+   "fen": "2k2r2/p1b5/1pp1b2p/4p1p1/3pN3/3P1P2/PPP1R1PP/R5K1 b - - 2 25",
+   "said": "now the win is going to be relatively simple what we're going to have to do is we're first going to have to bring all our pieces in let's not forget to do"
+  },
+  {
+   "ply": 51,
+   "t": 336.5,
+   "line": [
+    "Bd5",
+    "Rae1"
+   ],
+   "fen": "2k2r2/p1b5/1pp4p/3bp1p1/3pN3/3P1P2/PPP1R1PP/4R1K1 b - - 4 26",
+   "said": "that that means doubling the rooks and now our plan is going to be to identify a"
+  },
+  {
+   "ply": 53,
+   "t": 341.5,
+   "line": [
+    "Bxe4",
+    "Rxe4"
+   ],
+   "fen": "2k2r2/p1b5/1pp4p/4p1p1/3pR3/3P1P2/PPP3PP/4R1K1 b - - 0 27",
+   "said": "weakness in his position and attack it well he's doing a lot of our work for us now when you're up in exchange you need"
+  },
+  {
+   "ply": 54,
+   "t": 347,
+   "line": [
+    "Kd7"
+   ],
+   "fen": "5r2/p1bk4/1pp4p/4p1p1/3pR3/3P1P2/PPP3PP/4R1K1 w - - 1 28",
+   "said": "to emphasize why the rooks are good the rooks are good in an open position so we need to open up"
+  },
+  {
+   "ply": 55,
+   "t": 356,
+   "line": [
+    "h4"
+   ],
+   "fen": "5r2/p1bk4/1pp4p/4p1p1/3pR2P/3P1P2/PPP3P1/4R1K1 b - - 0 28",
+   "said": "the position the rooks are not going to win the game by themselves so we're now going to have to open up some lines for the rooks and our long-term plan is going to be to infiltrate let's say the seventh rank"
+  },
+  {
+   "ply": 57,
+   "t": 369,
+   "line": [
+    "c5",
+    "hxg5"
+   ],
+   "fen": "5r2/p1bk4/1p5p/2p1p1P1/3pR3/3P1P2/PPP3P1/4R1K1 b - - 0 29",
+   "said": "and either win a bunch of his pawns or force the trade of another pair of rooks something's going to happen now we need to get a rook to the h file we can't do"
+  },
+  {
+   "ply": 59,
+   "t": 373.5,
+   "line": [
+    "hxg5",
+    "Kf2"
+   ],
+   "fen": "5r2/p1bk4/1p6/2p1p1p1/3pR3/3P1P2/PPP2KP1/4R3 b - - 1 30",
+   "said": "that we need to get our king out of the way and this is also good because"
+  },
+  {
+   "ply": 60,
+   "t": 376,
+   "line": [
+    "Rf4"
+   ],
+   "fen": "8/p1bk4/1p6/2p1p1p1/3pRr2/3P1P2/PPP2KP1/4R3 w - - 2 31",
+   "said": "okay well great he's helping us trade"
+  },
+  {
+   "ply": 61,
+   "t": 377,
+   "line": [
+    "Rxf4"
+   ],
+   "fen": "8/p1bk4/1p6/2p1p1p1/3p1R2/3P1P2/PPP2KP1/4R3 b - - 0 31",
+   "said": "everything"
+  },
+  {
+   "ply": 62,
+   "t": 379,
+   "line": [
+    "gxf4"
+   ],
+   "fen": "8/p1bk4/1p6/2p1p3/3p1p2/3P1P2/PPP2KP1/4R3 w - - 0 32",
+   "said": "and now we're going to complete our plan"
+  },
+  {
+   "ply": 63,
+   "t": 380,
+   "line": [
+    "Rh1"
+   ],
+   "fen": "8/p1bk4/1p6/2p1p3/3p1p2/3P1P2/PPP2KP1/7R b - - 1 32",
+   "said": "by getting our rook to the seventh rank"
+  },
+  {
+   "ply": 65,
+   "t": 387,
+   "line": [
+    "Kc6",
+    "Rh7"
+   ],
+   "fen": "8/p1b4R/1pk5/2p1p3/3p1p2/3P1P2/PPP2KP1/8 b - - 3 33",
+   "said": "and then we're going to have to do one more thing in order to win the game we need to involve the king how do we do"
+  },
+  {
+   "ply": 66,
+   "t": 393.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "8/2b4R/ppk5/2p1p3/3p1p2/3P1P2/PPP2KP1/8 w - - 0 34",
+   "said": "that how do we make get our king deep into his position"
+  },
+  {
+   "ply": 67,
+   "t": 400.5,
+   "line": [
+    "g4"
+   ],
+   "fen": "8/2b4R/ppk5/2p1p3/3p1pP1/3P1P2/PPP2K2/8 b - g3 0 34",
+   "said": "i'm going to show you guys an even more elegant plan yeah so g3 or g4 we could have gotten our king through g1"
+  },
+  {
+   "ply": 69,
+   "t": 403.5,
+   "line": [
+    "fxg3+",
+    "Kxg3"
+   ],
+   "fen": "8/2b4R/ppk5/2p1p3/3p4/3P1PK1/PPP5/8 b - - 0 35",
+   "said": "to h2 he's gonna play e4 and i've seen that and then we have a"
+  },
+  {
+   "ply": 70,
+   "t": 408,
+   "line": [
+    "e4+"
+   ],
+   "fen": "8/2b4R/ppk5/2p5/3pp3/3P1PK1/PPP5/8 w - - 0 36",
+   "said": "beautiful right yes what does white have in this position the concept of transforming your advantage"
+  },
+  {
+   "ply": 71,
+   "t": 420.5,
+   "line": [
+    "Rxc7+"
+   ],
+   "fen": "8/2R5/ppk5/2p5/3pp3/3P1PK1/PPP5/8 b - - 0 36",
+   "said": "think about it carefully what can we do rook takes c7 so f4 would be winning but i want to show you guys a different kind of win we sacrifice back our"
+  },
+  {
+   "ply": 73,
+   "t": 423.5,
+   "line": [
+    "Kxc7",
+    "fxe4"
+   ],
+   "fen": "8/2k5/pp6/2p5/3pP3/3P2K1/PPP5/8 b - - 0 37",
+   "said": "exchange in order to get a pawn end game the reason we're winning this pawn in"
+  },
+  {
+   "ply": 76,
+   "t": 428.5,
+   "line": [
+    "Kd7",
+    "Kf4",
+    "Ke6"
+   ],
+   "fen": "8/8/pp2k3/2p5/3pPK2/3P4/PPP5/8 w - - 3 39",
+   "said": "game is because not only are we up a pawn but we have a protected past pawn and we can basically treat this like a"
+  },
+  {
+   "ply": 77,
+   "t": 433.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "8/8/pp2k3/2p1P3/3p1K2/3P4/PPP5/8 b - - 0 39",
+   "said": "king in pawn end game all we have to do is get his king"
+  },
+  {
+   "ply": 78,
+   "t": 436.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "8/8/p3k3/1pp1P3/3p1K2/3P4/PPP5/8 w - - 0 40",
+   "said": "out of e6 he's going to be perpetually in zugsvan here"
+  },
+  {
+   "ply": 79,
+   "t": 438,
+   "line": [
+    "Ke4"
+   ],
+   "fen": "8/8/p3k3/1pp1P3/3pK3/3P4/PPP5/8 b - - 1 40",
+   "said": "he's going to run out of pond moves he's"
+  },
+  {
+   "ply": 80,
+   "t": 442,
+   "line": [
+    "a5"
+   ],
+   "fen": "8/8/4k3/ppp1P3/3pK3/3P4/PPP5/8 w - - 0 41",
+   "said": "going to keep pushing his pawns no problem and the simplest is to put our pawns out"
+  },
+  {
+   "ply": 81,
+   "t": 443.5,
+   "line": [
+    "b3"
+   ],
+   "fen": "8/8/4k3/ppp1P3/3pK3/1P1P4/P1P5/8 b - - 0 41",
+   "said": "here as bumpers to stop his pawns from progressing further we want to exhaust his pawn moves once"
+  },
+  {
+   "ply": 82,
+   "t": 456.5,
+   "line": [
+    "a4"
+   ],
+   "fen": "8/8/4k3/1pp1P3/p2pK3/1P1P4/P1P5/8 w - - 0 42",
+   "said": "he exhausts his pawn moves you you guys will see what happens so once he exhausts his pawn moves yeah we don't even have to do anything"
+  },
+  {
+   "ply": 83,
+   "t": 458.5,
+   "line": [
+    "bxa4"
+   ],
+   "fen": "8/8/4k3/1pp1P3/P2pK3/3P4/P1P5/8 b - - 0 42",
+   "said": "but let me take just to accelerate the process"
+  },
+  {
+   "ply": 85,
+   "t": 463,
+   "line": [
+    "bxa4",
+    "a3"
+   ],
+   "fen": "8/8/4k3/2p1P3/p2pK3/P2P4/2P5/8 b - - 0 43",
+   "said": "he's going to be in soog's vong that is a situation where every single move by the opponent harms his position in some way we have opposition but that's not the"
+  },
+  {
+   "ply": 86,
+   "t": 474.5,
+   "line": [
+    "Kd7"
+   ],
+   "fen": "8/3k4/8/2p1P3/p2pK3/P2P4/2P5/8 w - - 1 44",
+   "said": "important part he has no choice but to move his king back why because his only other pawn move gives up upon and now how do we exploit the fact that his king has just moved away very very simple chess"
+  },
+  {
+   "ply": 87,
+   "t": 484,
+   "line": [
+    "Kd5"
+   ],
+   "fen": "8/3k4/8/2pKP3/p2p4/P2P4/2P5/8 b - - 2 44",
+   "said": "king to t5 zugsvan comes from the german word for move"
+  },
+  {
+   "ply": 88,
+   "t": 488.5,
+   "line": [
+    "Ke7"
+   ],
+   "fen": "8/4k3/8/2pKP3/p2p4/P2P4/2P5/8 w - - 3 45",
+   "said": "trouble literally that's what my brother's fiance said she speaks german"
+  },
+  {
+   "ply": 89,
+   "t": 489.5,
+   "line": [
+    "Kxc5"
+   ],
+   "fen": "8/4k3/8/2K1P3/p2p4/P2P4/2P5/8 b - - 0 45",
+   "said": ""
+  },
+  {
+   "ply": 91,
+   "t": 492.5,
+   "line": [
+    "Ke6",
+    "Kxd4"
+   ],
+   "fen": "8/8/4k3/4P3/p2K4/P2P4/2P5/8 b - - 0 46",
+   "said": "now we're going to come around take all the pawns how do we win this position"
+  },
+  {
+   "ply": 92,
+   "t": 495.5,
+   "line": [
+    "Ke7"
+   ],
+   "fen": "8/4k3/8/4P3/p2K4/P2P4/2P5/8 w - - 1 47",
+   "said": ""
+  },
+  {
+   "ply": 93,
+   "t": 496.5,
+   "line": [
+    "Kd5"
+   ],
+   "fen": "8/4k3/8/3KP3/p7/P2P4/2P5/8 b - - 2 47",
+   "said": "uh we don't even need to go around for"
+  },
+  {
+   "ply": 94,
+   "t": 498,
+   "line": [
+    "Kd7"
+   ],
+   "fen": "8/3k4/8/3KP3/p7/P2P4/2P5/8 w - - 3 48",
+   "said": "this bun no need for that we simply"
+  },
+  {
+   "ply": 95,
+   "t": 499,
+   "line": [
+    "d4"
+   ],
+   "fen": "8/3k4/8/3KP3/p2P4/P7/2P5/8 b - - 0 48",
+   "said": "advance our pawns the only thing we need"
+  },
+  {
+   "ply": 97,
+   "t": 502,
+   "line": [
+    "Ke7",
+    "e6"
+   ],
+   "fen": "8/4k3/4P3/3K4/p2P4/P7/2P5/8 b - - 0 49",
+   "said": "to watch for a stalemate that's why in such positions even when"
+  },
+  {
+   "ply": 99,
+   "t": 506,
+   "line": [
+    "Kf6",
+    "Kd6"
+   ],
+   "fen": "8/8/3KPk2/8/p2P4/P7/2P5/8 b - - 2 50",
+   "said": "you're low on time try not to pre-move now the red carpet has been rolled out"
+  },
+  {
+   "ply": 101,
+   "t": 508.5,
+   "line": [
+    "Kf5",
+    "e7"
+   ],
+   "fen": "8/4P3/3K4/5k2/p2P4/P7/2P5/8 b - - 0 51",
+   "said": "at some point i will do a little lecture on end games and basic end games and here we have checkmate in two move we have a beautiful well not a beautiful we have a very pretty mate"
+  },
+  {
+   "ply": 105,
+   "t": 524,
+   "line": [
+    "Ke4",
+    "e8=R+",
+    "Kxd4",
+    "Re5"
+   ],
+   "fen": "8/8/3K4/4R3/p2k4/P7/2P5/8 b - - 1 53",
+   "said": "who can tell me the check made in two moves who sees it before i run out of time queen e5 is move one and what's the second move don't worry"
+  },
+  {
+   "ply": 107,
+   "t": 530,
+   "line": [
+    "Kc4",
+    "Rc5+"
+   ],
+   "fen": "8/8/3K4/2R5/p1k5/P7/2P5/8 b - - 3 54",
+   "said": "guys i've got good internet and i see checkmate don't worry it was all under control even if it wasn't made i'd have enough time to win watch me jinx in my internet disconnect i have a problem with att 500 bits thank"
+  },
+  {
+   "ply": 16,
+   "t": 553,
+   "line": [],
+   "fen": "r1b1k1nr/pp3ppp/2pp4/2b5/2BpP2q/3P4/PPPN1PPP/R1BQ1RK1 w kq - 0 9",
+   "said": "you so much all right um no you guys are great i'm loving the engagement no no no this is nothing thank you okay so let's look at the game that was an interesting game"
+  },
+  {
+   "ply": 6,
+   "t": 558,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/8/1B2p3/3nP3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "said": "so the variation of the rye lopez that our opponent played is called the bird it was named after i think harry harry bird was a a 19th century player he was very good"
+  },
+  {
+   "ply": 10,
+   "t": 573.5,
+   "line": [
+    "Ba6",
+    "Nc6",
+    "Bf1",
+    "Nb8"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 8 6",
+   "said": "and he liked these unorthodox openings um this move was first played in the year uh 1848 now the idea of this move the idea of"
+  },
+  {
+   "ply": 8,
+   "t": 580.5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/B1n5/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 5",
+   "said": "playing like this is um is is to stop white's knight from developing to c3 right and that's sort of the normal development square for the night there's also a little trap here that a lot of people really really like"
+  },
+  {
+   "ply": 12,
+   "t": 596.5,
+   "line": [
+    "Bb5",
+    "Nd4",
+    "Nxd4",
+    "exd4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/8/1B6/3pP3/8/PPPP1PPP/RNBQK2R w KQkq - 0 7",
+   "said": "and that trap is um let me actually remember what this trap is so if white goes d no if white goes like c3 here black has"
+  },
+  {
+   "ply": 14,
+   "t": 599,
+   "line": [
+    "c3",
+    "Qg5"
+   ],
+   "fen": "r1b1kbnr/pppp1ppp/8/1B4q1/3pP3/2P5/PP1P1PPP/RNBQK2R w KQkq - 1 8",
+   "said": "queen g5 and this is kind of a fork like"
+  },
+  {
+   "ply": 9,
+   "t": 603.5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 7 5",
+   "said": "this is a bit of a trappy opening which is why we castle and that's the biggest piece of advice i have to beginners um which is that like when your opponent does something weird your your defaults should be to play in accordance with basic chess principles and you're not going to go too wrong if you do that don't panic when your opponent does something weird just try to follow basic principles okay um so he plays our opponent plays bishop c5 and just to reiterate we can't go knight c3 that would blunder the knight so we have two approaches here we can go c3 but the reason i didn't like this move is because if we then take on d4 and say ah now we can develop our knight to the good square we'll look at this bishop this bishop is on a great diagonal it's on an outpost and we're going to have a very hard time dislodging this bishop so instead we find alternate arrangements we ran an airbnb for that knight which is on the city of f3 and we simply get the knight there on f3 it's also going to exert pressure on the d4 pawn queen h4 is not a great move because it actually helps us get the knight to f3 with tempo so connor raider asks a good question don't we want to go f4 yeah f4 would be fine jesse good to see you man 20 months f4 uh so an outpost is a square deep in the enemy's territory usually which is unassailable by any pawn so an outpost the key to the definition of an outpost is that it cannot be attacked by any pots the the piece that's occupying an outpost cannot be attacked by any pawns um okay so f4 is a good move but it creates the potential for one of his pieces to occupy an outpost which outpost does this create and black can eventually try to get one of his pieces to that outpost but uh yeah look i mean imagine if his knight gets to e3 you guys see how annoying that would be and he can get that get it there pretty quickly now i'm not saying that's going to necessarily happen white can try to prevent it but this would create its own problems this would weaken the king's side so i'm not saying never create an outpost for your opponent but when if you do create an outpost for your opponent you have to be extremely careful and you have to make sure that uh that your opponent cannot access that outpost anytime soon if your opponent can't access that outpost anytime soon then it's very much justified to create a weakness or an outpost let me give you guys one of my favorite examples i've i've shown this position on stream before but um i want to show it again because of how important this is i call this in the book that i was working on the concept of inaccessibility if a square is inaccessible to one of your opponent's pieces then it's fine creating a weakness your moves don't have to look pretty you have to be realistic first and foremost so let me load up that game if you guys just give me a moment there we go so this is the game as you guys can see between two very strong grand masters uh sargassian and tomaszewski white is armenian black is russian one of the strongest players in russia 2013. this position occurred on the board now uh let me cut you guys through a little bit of the grunt work material is equal it's an unremarkable position but what is going on where is the action at well looking at this position for a couple of seconds could somebody tell me what is white's main plan in this position you got to put on your sherlock holmes hat and say well what has white been doing the last couple of moves what has been doing the last couple of moves well white has been attacking on the queen side and white wants to orchestrate the b5 pawn break white wants to go b5 and crash through on the queen side but there is a problem with the move b5 black has a counter idea that is incredibly annoying after black captures black and strike using a principle that we just discussed when your opponent plays on the flank where do you want to play you want to play in the center what is that annoying idea boom goes the dynamite e5 passes it to the man and guess what white has this really really weak pawn on e3 and if the e file is opened no there's some unpleasant stuff that could start happening with white spawns right that's not something we want to allow can white prevent black from playing e5 and is it a good idea to do that and this is where the really cool thing happens let me control z a bunch of times to load the rest of the game so white can play what move yes that's what white did you guys might look at this and say for a second wait a minute which incredibly weak square does this create that's e4 imagine if whites if black's knight got to e4 that would be the were the freaking most sexiest outposts of all time this knight would make a tinder account and that app would crash given the number of matches it would have from except from other knights i mean that night is literally the best night in the history of knights but the thing is and this is where inaccessibility comes in that knight has no way of getting there because the g5 square is covered by white spawn and the d6 square the other freeway is covered by white's other pawn in order to get to e4 this is like a math question how many moves does the knight actually need to get to e4 in like non-blunder ways one two three now you gotta move the king away four five you got to move the queen away six seven and maybe i missed a faster way eight and by the way when the knight gets to f6 you could play bishop h4 and and trade it because it can't move it needs eight moves and that is an eternity in the in a chess game it needs eight moves to get to e4 that's crazy the time that that happens well uh we're gonna you know earth is gonna turn into you know we're all going to die by then then the next generation is going to be inhabiting the earth so that's an eternity in a chess game and in that time white's going to attack on the queen's side so what happens in the game black doesn't even try to get the knight to e4 chelsea spaghetti with five the 220 am hype raising my t to you now you guys might look at say okay i get it i get it but what about the bishop doesn't f4 lock the bishop on g3 uh and it does but can somebody find alternate arrangements for the bishop how is that bishop eventually going to get into the game through what avenue bingo death star absolutely bishop b1 and then it can either go through a5 or it can go to like square like b4 and actually bishop h4 happens in the game so he finds an even different avenue bishop h4 happens and now the bishop is totally fine the bishop is at least controlling some squares but e1 would have also been a good idea and uh eventually white won the game now the game lasted for many more moves the game was very complicated and i want to make it clear that this doesn't like win the game or anything this is a game between two very strong grand masters but eventually white won the game and i think that this was the critical moment so inaccessibility is a super super important concept in a lot of positions if your opponent can't access the square don't be afraid to weaken it that would be sort of the condensed version of that advice i can show you i can show you examples from my games where i applied that advice uh sort of word for word and um just to give you a very simple illustration of it so this is my game from 2008 i was 2300 against uh one of my first coaches actually got trouble really really nice guy 2000 and this position occurred on the board now black has just played the move g5 trying to carve out the e5 square for his knight this is the concept of carving out we've talked about it so if white takes on g5 you might be like wait a second you win the pawn no you don't you don't win the pawn because now the night is pinned well by this point i'm higher than my coach no no you may thank you for the raid of the party of 38 welcome guys but what did i do i can block without five but wait a second i hear you saying doesn't this now weaken the e5 square isn't this doesn't this do black spitting for him well it does but this square is not very accessible because i have a knight on f3 that's defending that square and it's virtually impossible to um no nema yeah thank you and it's virtually impossible to get this knight out of f3 you can't go g4 because that square is protected so it's the same principle the square on e5 is weak but i don't care about that and what's good about this move is that his bishop is now paralyzed it cannot develop and with that black is just collapsing here i go h4 and i won the game in a couple of moves so that's why the move f4 in comparison is less good because here the square on e3 is very much accessible to black space so we played knight f3 knight g5 that's the key move right trading queens stopping him from getting his bishop to g4 and also this is based on a nice tactical uh detail which is that we can make an intermezzo or intermediate move bishop takes f7 rook takes d1 we're up a pawn and we don't lose a piece because the bishop takes g8 why not bishop takes f7 here because you can take with the queen he doesn't have to take with the king i know what you wanted to do to do there but he takes with the queen okay so now we're up upon last thing i really want to talk about because our opponent collapsed very very quickly uh bishop takes f3 three wise it's not dangerous the reason this isn't dangerous is because the queens have been traded so we don't have to worry about our king being weak in fact uh you know to the contrary this actually helps us in a sense we can put our king on g2 and that king protects f3 and if necessary our pawn could reposition to f4 where it's very nicely defended by the bishop so we don't have to worry about him doing anything attacking winning the pawn we're still up upon yes it's not very nice to have this pawn structure but remember we are up a pawn so white is still solidly better here so uh instead he goes g5 we reposition our knight to b3 so that uh we don't have to worry about bishop takes f3 now the key move e5 this one is the game noticing that this king and the rook are on the same diagonal and we are x-raying his king so we're combining these two tactical patterns we could have also it occurs to me now just captured the free pawn on d4 that would have also been possible but this is more thematic more resilient was bishop d6 but now we play rook takes c5 check he can't capture the rook because of the pin we take his bishop and now actually a very important move in this position how do we make sure that we're going to snag this pawn on d4 yes i was the one i'm that one way rookie four loose pieces drop off attacking the rook attacking the pawn this is a fork we're gonna be up two pawns and we're gonna win the end game so this is easy enough we would have been winning here the way that he played though he just gives up an exchange we get our knight to a beautiful square i wouldn't necessarily call this an outpost but it's sort of a semi-outpost because it's not in his territory and now we open up files right we're up in exchange our rooks need files in order to show their strength now our king needs to get into the game and finally this little tactic rook takes c7 by the way as i mentioned we could have gone king ju1 and gotten the long way this would have been totally fine because our opponent has no counter play okay why not knight takes d4 instead of bishop before bishop before wins the exchange right so or at least it forces a favorable trade black cannot make a draw here black is already losing so this is a simple tactic winning the end game why did i take with the f pawn the reason that i took with the f pawn is because this would have been winning but i didn't want to allow him to create a pass pawn no magnus could not make a draw against me in this position there's nobody not even a computer could make a draw against me in this position because it's completely lost and also you know um you know magnus is is really good but uh we uh you know we can i can i can get him even in even an unclear position sometimes so yeah this is winning magnus would draw against gary that's for sure geary would draw anybody in any position okay um so i'm not going to play the stafford gambit because and i don't mean to lecture people but really the the zen of the speed run is not to put too much emphasis on opening traps but rather to work on building understanding also i've put a youtube video on refuting the stafford so i wouldn't be true to my word if i were now to double back and play the staffer but hopefully somebody plays it against me and actually we've already gotten one staffer okay let's do one or two more games i need to run to the restroom sorry can you explain the rucksack well the thing is if we don't sacrifice the rook we let him establish a protected past pawn on e3 we are still winning here that's fine but it's annoying and we are basically liquidating into a winning pawn end game and the reason we are winning is because number one we're up upon number two this is a protected pass spawn the best kind of fast pawn and uh you guys might be wondering well do i know exactly how i'm going to win have i calculated all the way to the end no this is where pattern recognition comes in it's not that i've calculated here it's just that i know this type of position because i've had them before and i know how it's going to go approximately i know for example that we are going to win by forcing our opponent into zug's bomb it's it's hard for me to explain but hopefully that kind of makes sense why did you immediately push it well i didn't push it immediately i brought my king in first and it's not unprotected it's protected right think of a protected passpond as being on a checkpoint you know those video games where you can reach a checkpoint you don't want to you want to cross the level eventually you don't want to be on that checkpoint forever but it's good to have that checkpoint you know you can go back to it you don't you know you don't have to worry about the pawn at least until you push it does that make sense let's go e4 okay so he plays an alakan we've we've encountered this once yesterday and this guy actually plays the main line now as i explained yesterday um in in my discussion of the alkyne it's important to find a balance between controlling the center on the one hand but not controlling too much of it and developing your pieces so what we need to do here let's take on g6 and it's a we don't want to go b4 we don't want to go a4 we just want to develop all right it's important to find that balance so that our center is nicely controlled in terms of developing to control our center where should we put this bishop yeah royajo you're good bishop b3 is correct why bishop b3 in order to reinforce that pawn on on d4 so that when he plays bishop g7 knight c6 he's not attacking it now we had a question earlier by ryan ellis about when to prevent a pin this is a good time to do it um what should we do if we go knight f3 he can go bishop g4 how do we prevent that from happening and i'll explain after the game why we want to do this for now i just want people to tell me how yeah let's play h3 so we play h3 so that bishop g4 is not a thing after the game i'll explain why it's good this is not a thing okay now we can develop our bishop okay he's playing instantly now do we need to um do we need to do anything in the center do we need to go d5 is it a good idea to go d5 or can we just continue developing who can so if you count the number of attackers and defenders we have one two three and three attackers we actually don't need to do anything we can just castle we don't need to respond to this let him be the one to worry about resolving the central tension if he takes on d4 um okay thank you for the pawn oh he wants this maybe he wants maybe f5 but that's not dangerous okay he just wandered upon you see what happens when we force him to resolve the tension okay he develops with tempo but uh we can just move our knight back no problem we are now fully developed and knight before very clear what his intentions are he wants to put a knight on c2 that would not be the end of the world how can we prevent that from happening in the first place uh no need to allow this kind of annoying idea so not bishop d3 that would blow under the bishop but rook c1 if he goes knight ct we can just take we get two pieces for a rock now let's get uh dispose of this knight with a3 let's get it back and now here's the thing i mentioned okay now we just take two pieces for a rook he does take c4 in the end but two pieces for a rook in the middle game is basically total dominance so do we want to trade bishop for night here do we want to take on c4 don't think about the way that i'm asking that question just think about it independently of how see you guys learn this all from high school when a teacher asks do you want to do this do you want to do that it's always no but i'm not like that okay we actually do and the logic is simple look at this knight it's the only active piece he has it's annoying it's pressuring our bishop it's pressuring the pawn get out of here and now if we look at the rook that's undefended i want my knight to get on d5 ah juicy central square i can't do that immediately because he's pinning us can we unpin ourselves with tempo yes we absolutely can and i didn't just put it on any square i put it on a square where it also pressures that pawn if he brings his queen out to defend both he's going to get juiced with knight d5 fossilized i guess is the word 95 anyway now he's got to bring his king over in order to prevent the pin or the fork rather now what should we do how do we reinforce the threat of 97 and it's time for us to deploy one of our pieces that's already done its job bishop g5 97 threatens not to win his queen but to win in exchange because he'll be able to capture the knight but will capture the rook and we will be up a piece in the end bishop g5 accomplishes another thing when you make a move and it has a threat remember to also check what else that move accomplishes so you don't miss an opportunity to do something in case he stops the threat this bishop also controls the dark squares around his king and we can use that to go knight f6 check in case he prevents the other threat sloppy player thank you and what would knight f6 chuck accomplish it would force the trade of bishops and what kind of mate do you immediately think of when the fiancato bishop disappears from the board now it's time to borrow my favorite of the xvc vocabulary the lobster pins remain bishop on f6 queen on h6 it can also be done with a pawn do you guys see how i'm not actually calculating any variations but i've already determined a lot of stuff about the position that can help me make decisions it's not all about he goes there i go here it's also about making the right observations that can be just as effective okay so we're gonna go knight f6 and try to set that up the lobster pins are made a very good move for him here would be rook c1 i'd be impressed if he finds it let's see and after the game i will explain why this would be a good move let's see if he finds it first of all no okay so rookie six is also good though so now um the motivation behind this move is very clear he wants to attack the bishop and he does and we need to move the bishop why not have we failed in our idea of delivering lobster mystery not really right we've still weakened his dark squares it's just that we just can't deliver that specific checkmate so now let's just very calmly bring our bishop back to e3 and let's re re-uh structure our attacking setup okay so this pawn on d5 immediately catches my eye because the queen x-rays it if we could get this rook out of c4 which we can with the move knight to d2 we're gonna win that pawn okay and we can now talk our queen away on a2 we still threaten the pawn boom yes he can win this pawn but that's not the important part because guess what look at this queen remember i said the dark squares around his king are weak i hope nobody's forgotten about that because it's check made in two moves in in uh two or three moves depending on where he goes three moves i guess basically check he can't go here because of the queen he resigns because if he brings the king to the e file this is going to fossil and fossilize them just winning a screen with checkmate so very simple straightforward game and we didn't do that much calculation so he played the aloe kind and it was theory up until like this point technically rook c1 is the main move but we decided we played it more logically h3 and f3 now why is it important to go h3 because there is one particular extenuating circumstance that makes this a little bit annoying for white what does black have in this position and it's kind of an annoying idea in the alkyne specifically yeah he can take on f3 and that's why like hyper modern openings are annoying because we have to be very careful about our center so because of this specific idea we could go b3 i hear you guys saying well why can't we just go b3 then we can but that would weaken the knight and the knight is in the crosshairs of the bishop i don't like leaving pieces unprotected like that uh so you know you know what i mean i don't want to set him up for some sort of tactic later okay so we're developing he goes e5 and this is what people don't do enough uh basically doing nothing uh right rook c1 it's a little complicated it's like theory but i guess well basically the the idea is to go rook c1 and b3 that's the theory and b3 is a move that people should understand by now you're reinforcing the pawn but the idea of rook c1 first is precisely so that the knight on c3 is protected so that if the pawn moves from d4 he won't have bishop take c3 that's basically the rationale behind it does that make sense basically in the 1920s 100 years ago a group of people came together across europe they included a guy named richard retzi uh they included a guy named diola breyer from hungary they were from hungary germany austria uh and they later came to be known as"
+  },
+  {
+   "ply": 2,
+   "t": 1998.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "the hyper modernists what did they say they were laughed at initially they were laughed out of tournaments they said look everybody's talking about how you have to occupy the center with pawns that's why the king's gambit thank you"
+  },
+  {
+   "ply": 3,
+   "t": 1999.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+   "said": "zazian yayo that's why the king's gamut was so"
+  },
+  {
+   "ply": 4,
+   "t": 2003.5,
+   "line": [
+    "exf4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "said": "popular because in the 1800s it was all about controlling the center with the pawns that was considered to be the most sacrosanct the most important chess principle was that you had to occupy the center of the ponz very important the russians said it and you know the british said it in the olsen and then the hypermonitors come along and they say wait a second i don't think we need to occupy the center with pawns let's propose a different way of playing what we're going to do is we are going to let people let our opponents occupy the center with pawns and then we're going to attack those pawns from a distance with our pieces and basically what we're going to bank on is the fact that they over extend themselves they won't be able to support those pawns because their center is too big the roman empire is going to start to collapse and they developed openings like the modern where you basically provoke your opponent into grabbing as much of the center as possible and then you snipe at that center with your pieces the king's indian also part of that category okay so i don't know if that description makes sense i'm really oversimplifying"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 2,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 14,
+     "continuation": "Nf3",
+     "said": "[Music] so we are playing white here this time let's play e4 it's not been refuted per se but it's it's not as good as it used to be really okay so we're going to play the rye lopez the rye lopez bishop b5 and he plays knight d4 that is the bird that's called the bird defense um now what is the idea of this move well he's attacking our bishop so obviously we um we want to take the knight and what we want to understand here is that we don't want to change our strategy just because he's played a weird line okay we want to play normally we want to play like we would normally play and what does that really mean that means we simply need to complete our development so let's castle and now we have a bit of a problem this this pawn on d4 is is super annoying so we have several ways of dealing or trying to deal with a spun the first is to go c3 to try to undermine that pawn but we actually don't have to do that i can use that pawn as an asset what do i mean by that well look at this bishop for a second guys you see that it's just like staring at this pawn so we can use this"
+    },
+    {
+     "san": "f4",
+     "t": 1999.5,
+     "continuation": "f4",
+     "said": "what did they say they were laughed at initially they were laughed out of tournaments they said look everybody's talking about how you have to occupy the center with pawns that's why the king's gambit thank you zazian yayo that's why the king's gamut was so popular because in the 1800s it was all about controlling the center with the pawns that was considered to be the most sacrosanct the most important chess principle was that you had to occupy the center of the ponz very important the russians said it and you know the british said it in the olsen and then the hypermonitors come along and they say wait a second i don't think we need to occupy the center with pawns let's propose a different way of playing what we're going to do is we are going to let people let our opponents occupy the center with pawns and then we're going to attack those pawns from a distance with our pieces and basically what we're going to bank on is the fact that they over extend themselves they won't be able to support those pawns because their center is too big the roman empire is going to start to collapse and they developed openings like the modern where you basically provoke your opponent into grabbing as much of the center as possible and then you snipe at that center with your pieces the king's indian also part of that category okay"
+    }
+   ]
+  },
+  {
+   "ply": 6,
+   "fen": "r1bqkbnr/pppp1ppp/8/1B2p3/3nP3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "Nd4"
+   ],
+   "options": [
+    {
+     "san": "Nxd4",
+     "t": 31,
+     "continuation": "Nxd4",
+     "said": "and he plays knight d4 that is the bird that's called the bird defense um now what is the idea of this move well he's attacking our bishop so obviously we um we want to take the knight and what we want to understand here is that we don't want to change our strategy just because he's played a weird line okay we want to play normally we want to play like we would normally play and what does that really mean that means we simply need to complete our development so let's castle and now we have a bit of a problem this this pawn on d4 is is super annoying so we have several ways of dealing or trying to deal with a spun the first is to go c3 to try to undermine that pawn but we actually don't have to do that i can use that pawn as an asset what do i mean by that well look at this bishop for a second guys you see that it's just like staring at this pawn so we can use this pawn to our advantage as long as we can find a way to develop this knight we can't go knight c3 that's problem of the pawn so could somebody devise a method of developing the knight without going c3 and helping him activate his bishop we can go d3 and where can we get this knight we"
+    },
+    {
+     "san": "Ba6",
+     "t": 573.5,
+     "continuation": "Ba6 Nc6 Bf1 Nb8",
+     "said": "bird was a a 19th century player he was very good and he liked these unorthodox openings um this move was first played in the year uh 1848 now the idea of this move the idea of playing like this is um is is to stop white's knight from developing to c3 right and that's sort of the normal development square for the night there's also a little trap here that a lot of people really really like and that trap is um let me actually remember what this trap is so if white goes d no if white goes like c3 here black has queen g5 and this is kind of a fork like this is a bit of a trappy opening which is why we castle and that's the biggest piece of advice i have to beginners um which is that like when your opponent does something weird your your defaults should be to play in accordance with basic chess principles and you're not going to go too wrong if you do that don't panic when your opponent does something weird just try to follow basic principles okay um so he plays our opponent plays bishop c5 and just to reiterate we can't go knight c3 that would blunder the"
+    }
+   ]
+  },
+  {
+   "ply": 8,
+   "fen": "r1bqkbnr/pppp1ppp/8/1B6/3pP3/8/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "Nd4",
+    "Nxd4",
+    "exd4"
+   ],
+   "options": [
+    {
+     "san": "O-O",
+     "t": 49,
+     "continuation": "O-O",
+     "said": "just because he's played a weird line okay we want to play normally we want to play like we would normally play and what does that really mean that means we simply need to complete our development so let's castle and now we have a bit of a problem this this pawn on d4 is is super annoying so we have several ways of dealing or trying to deal with a spun the first is to go c3 to try to undermine that pawn but we actually don't have to do that i can use that pawn as an asset what do i mean by that well look at this bishop for a second guys you see that it's just like staring at this pawn so we can use this pawn to our advantage as long as we can find a way to develop this knight we can't go knight c3 that's problem of the pawn so could somebody devise a method of developing the knight without going c3 and helping him activate his bishop we can go d3 and where can we get this knight we can go to d2 and then we can go to f3 so he goes queen h4 there are some traps here that we need to be aware of but um i think the coast is mostly clear for now i don't see a reason we can't go knight two he's not threatening checkmate or anything of that sort go c6 and where should we put this"
+    },
+    {
+     "san": "c3",
+     "t": 599,
+     "continuation": "c3 Qg5",
+     "said": "that a lot of people really really like and that trap is um let me actually remember what this trap is so if white goes d no if white goes like c3 here black has queen g5 and this is kind of a fork like this is a bit of a trappy opening which is why we castle and that's the biggest piece of advice i have to beginners um which is that like when your opponent does something weird your your defaults should be to play in accordance with basic chess principles and you're not going to go too wrong if you do that don't panic when your opponent does something weird just try to follow basic principles okay um so he plays our opponent plays bishop c5 and just to reiterate we can't go knight c3 that would blunder the knight so we have two approaches here we can go c3 but the reason i didn't like this move is because if we then take on d4 and say ah now we can develop our knight to the good square we'll look at this bishop this bishop is on a great diagonal it's on an outpost and we're going to have a very hard time dislodging this bishop so instead we find alternate arrangements we ran an airbnb for that knight which is on the city of f3 and we simply get the knight there on f3 it's also"
+    }
+   ]
+  }
+ ]
+}

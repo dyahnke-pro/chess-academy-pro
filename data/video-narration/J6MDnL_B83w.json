@@ -1,0 +1,587 @@
+{
+ "videoId": "J6MDnL_B83w",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1450",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 13.5,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "all right d oh i need to connect my headphones"
+  },
+  {
+   "ply": 4,
+   "t": 20,
+   "line": [
+    "c4",
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "okay we're gonna play king's indian defense now the king's indian defenses"
+  },
+  {
+   "ply": 6,
+   "t": 22,
+   "line": [
+    "Nc3",
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": ""
+  },
+  {
+   "ply": 7,
+   "t": 23,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "i've explained many times uh the point is that you basically give"
+  },
+  {
+   "ply": 8,
+   "t": 31.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "said": "up control of the center and in return"
+  },
+  {
+   "ply": 9,
+   "t": 33,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/6B1/2PPP3/2N5/PP3PPP/R2QKBNR b KQkq - 1 5",
+   "said": "you develop pieces to attack the center from a distance in order to make the king's indian work"
+  },
+  {
+   "ply": 10,
+   "t": 39.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PPP3/2N5/PP3PPP/R2QKBNR w KQ - 2 6",
+   "said": "properly you need to first complete your development quickly so let's castle"
+  },
+  {
+   "ply": 11,
+   "t": 40.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PPP3/2N2N2/PP3PPP/R2QKB1R b KQ - 3 6",
+   "said": "and now the time for the time has come to well the knight from f3 defends the fun on g4 so what comes to mind in terms of attacking that pawn on d4 directly or indirectly there are several"
+  },
+  {
+   "ply": 12,
+   "t": 70.5,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "rn1q1rk1/ppp1ppbp/3p1np1/6B1/2PPP1b1/2N2N2/PP3PPP/R2QKB1R w KQ - 4 7",
+   "said": "several ways of accomplishing this you could play bashu g4 right you could you could trade this bishop for the night and soften up white's defense over the d4 pawn this is not a typical king's indian move but"
+  },
+  {
+   "ply": 13,
+   "t": 74,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rn1q1rk1/ppp1ppbp/3p1np1/6B1/2PPP1b1/2NB1N2/PP3PPP/R2QK2R b KQ - 5 7",
+   "said": "uh it does illustrate one of the key themes now a lot of people here would take the knight but there's no hurry because we have the night pinned we could take him at a moment of our convenience thank you hisholina for the raid so how should we continue to press on this pawn on d4"
+  },
+  {
+   "ply": 14,
+   "t": 99.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/2np1np1/6B1/2PPP1b1/2NB1N2/PP3PPP/R2QK2R w KQ - 6 8",
+   "said": "with our pieces in the spirit of this line which is to use pieces to pressure the center from a distance c5 is possible we can strike with the pawn but let's use our pieces thank you so much he selena hi selena for the 75"
+  },
+  {
+   "ply": 15,
+   "t": 103.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/2np1np1/6B1/2PPP1b1/2NB1N2/PP3PPP/R2Q1RK1 b - - 7 8",
+   "said": "party raid he's castled so he simply ignores the threats that we"
+  },
+  {
+   "ply": 16,
+   "t": 110,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/3p1np1/6B1/2PnP1b1/2NB1N2/PP3PPP/R2Q1RK1 w - - 0 9",
+   "said": "have posed on his center so we can take on d4 because of the pin he cannot take back and uh he's essentially bust i mean"
+  },
+  {
+   "ply": 17,
+   "t": 117.5,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/3p1Bp1/8/2PnP1b1/2NB1N2/PP3PPP/R2Q1RK1 b - - 0 9",
+   "said": "busted he lost the central pawn and now he makes matters worse by taking on f6 now if we were extra fancy here uh what would we do in this position we can take on well we can take on f6 with the bishop we can take back but what intermediate move can we also consider making yeah so a lot of you guys got caught in the trap when you make a move such as knight takes f3 you have to calculate it"
+  },
+  {
+   "ply": 19,
+   "t": 152,
+   "line": [
+    "Bxf3",
+    "gxf3"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/3p1Bp1/8/2PnP3/2NB1P2/PP3P1P/R2Q1RK1 b - - 0 10",
+   "said": "make an intermediate move you have to calculate it if you play knight takes f3 allow gf then that pawn from f3 is going to attack the bishop on g4 and uh we're going to lose a piece so believe it or not we play bishop takes f3 he pl he plays pawn takes f3 he doesn't"
+  },
+  {
+   "ply": 20,
+   "t": 158,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "r2q1rk1/ppp1pp1p/3p1bp1/8/2PnP3/2NB1P2/PP3P1P/R2Q1RK1 w - - 0 11",
+   "said": "attack anything now we can take on f6 and we have ruined the structure around his king now we are also now we are also"
+  },
+  {
+   "ply": 21,
+   "t": 167.5,
+   "line": [
+    "Kh1"
+   ],
+   "fen": "r2q1rk1/ppp1pp1p/3p1bp1/8/2PnP3/2NB1P2/PP3P1P/R2Q1R1K b - - 1 11",
+   "said": "up upon his king side is ruined and we can exploit either the first thing or the second thing uh it really depends on what we want to do now one approach that a lot of people struggle with is the queen side attack uh it's it's hard for black to do"
+  },
+  {
+   "ply": 22,
+   "t": 190,
+   "line": [
+    "Qd7"
+   ],
+   "fen": "r4rk1/pppqpp1p/3p1bp1/8/2PnP3/2NB1P2/PP3P1P/R2Q1R1K w - - 2 12",
+   "said": "anything specific on the king's side yet yeah but we're going to keep that in mind unless you guys have any ideas in terms of activating pieces and you guys do which is queen d7"
+  },
+  {
+   "ply": 23,
+   "t": 193,
+   "line": [
+    "f4"
+   ],
+   "fen": "r4rk1/pppqpp1p/3p1bp1/8/2PnPP2/2NB4/PP3P1P/R2Q1R1K b - - 0 12",
+   "said": "now there was also an idea of pressuring the queen side but let's go for the"
+  },
+  {
+   "ply": 24,
+   "t": 195,
+   "line": [
+    "Qh3"
+   ],
+   "fen": "r4rk1/ppp1pp1p/3p1bp1/8/2PnPP2/2NB3q/PP3P1P/R2Q1R1K w - - 1 13",
+   "said": "brute force approach"
+  },
+  {
+   "ply": 25,
+   "t": 198.5,
+   "line": [
+    "f5"
+   ],
+   "fen": "r4rk1/ppp1pp1p/3p1bp1/5P2/2PnP3/2NB3q/PP3P1P/R2Q1R1K b - - 0 13",
+   "said": "let me just write this down especially because he's ignored completely the threats so what do we do here"
+  },
+  {
+   "ply": 26,
+   "t": 210.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r4rk1/ppp1pp1p/3p1bp1/5P2/2P1P3/2NB1n1q/PP3P1P/R2Q1R1K w - - 1 14",
+   "said": "what do we do in this position yeah we win as queen because there is no stopping checkmate on h2 bishop e5 by the way would have been worse and very important to indicate that in such situations there is often only one correct option and you have to operate under that assumption"
+  },
+  {
+   "ply": 29,
+   "t": 238.5,
+   "line": [
+    "Qxf3",
+    "Qxf3+",
+    "Kg1"
+   ],
+   "fen": "r4rk1/ppp1pp1p/3p1bp1/5P2/2P1P3/2NB1q2/PP3P1P/R4RK1 b - - 1 15",
+   "said": "okay so let's see tommy queen takes f1 exactly okay he's resigned okay so first things first why is the move bishop e5"
+  },
+  {
+   "ply": 25,
+   "t": 240.5,
+   "line": [],
+   "fen": "r4rk1/ppp1pp1p/3p1bp1/5P2/2PnP3/2NB3q/PP3P1P/R2Q1R1K b - - 0 13",
+   "said": "worse in this position why does this not"
+  },
+  {
+   "ply": 26,
+   "t": 241.5,
+   "line": [
+    "Be5"
+   ],
+   "fen": "r4rk1/ppp1pp1p/3p2p1/4bP2/2PnP3/2NB3q/PP3P1P/R2Q1R1K w - - 1 14",
+   "said": "lead to checkmate inevitably checkmate on h2 it is worse"
+  },
+  {
+   "ply": 27,
+   "t": 248,
+   "line": [
+    "f4"
+   ],
+   "fen": "r4rk1/ppp1pp1p/3p2p1/4bP2/2PnPP2/2NB3q/PP5P/R2Q1R1K b - - 0 14",
+   "said": "because white can play f4 now you have to remember a very crucial thing i call this the three ways of stopping a threat and numbers two and three people forget about all the time let's say that a peace or a pawn is threatened you're attacking a knight you're attacking upon what are the ways of defending against this threat the first is to move that piece or that pawn and to shift it to a different location sorry four ways to defend against a piece or a pawn uh there that you move it to a different location okay obvious the second is to defend it with another piece or a pawn so those two methods are very obvious to people but the third and the fourth are not the third is to intercept one of the attackers"
+  },
+  {
+   "ply": 26,
+   "t": 307.5,
+   "line": [],
+   "fen": "r4rk1/ppp1pp1p/3p2p1/4bP2/2PnP3/2NB3q/PP3P1P/R2Q1R1K w - - 1 14",
+   "said": "the third is to intercept one of the attackers i think it's called interference so you interfere with the bishop's control over h2 and then the fourth what is most commonly forgotten about is setting an est equal or stronger threat by which you refer to a threat that obviously is equal in value or even stronger so if your knight is attacked and you respond to that threat by attacking your opponent's queen you are setting an est and every time one of your pieces or fonts is threatened you don't need to go down the checklist and like see okay can i apply method three can i apply method four generally the solution presents itself intuitively but if you're in a situation where you don't see a defense against the threat remember to kind of look under the under the third and fourth categories because there you can you can find some stuff that otherwise your brain would not have indicated okay method five is resign method five"
+  },
+  {
+   "ply": 6,
+   "t": 368,
+   "line": [],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": "is just to not move the piece and just to allow it obviously but i'm mostly talking about pairing the threat okay now in terms of the game itself in terms of the game itself i've already introduced uh king's indian concepts now in the mainline kings indian generally"
+  },
+  {
+   "ply": 9,
+   "t": 386.5,
+   "line": [
+    "e4",
+    "d6",
+    "Bg5"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/6B1/2PPP3/2N5/PP3PPP/R2QKBNR b KQkq - 1 5",
+   "said": "black plays the move e5 and you will see this for example in the main line of the king's indian uh which is referred to knight f3 castles bishop two this is called the classical variation or the main line black plays e5 to strike in the center and uh this is not upon blunder because if fight takes twice on e5 then the king's indian bishop comes into play and what is the way to win the pawn back with interest uh the king's indian hinges on this very tactic working otherwise the whole king's indian would be invalidated knight takes c4 exposing the attack on the knight now you might study this position carefully and say wait a second we have a situation with two hanging pieces i have talked about this ituation before in a situation where situation before in a situation where you have two hanging pieces you need to look for a desperado with one of the pieces where you give that piece away for as much as you can and then you take the other piece so here the move knight takes f7 comes to mind it seems to win a pawn because if you now take this knight then white will take yours and white will be up upon but the reality is knight takes f7 loses a piece it loses a piece because black has an intermediate move or more precisely two intermediate moves so one of them is the more meaningful one can anybody spot how black wins a piece here yeah you simply play bishop takes c3 now you can swap the queens just to eliminate the fluff you take the"
+  },
+  {
+   "ply": 11,
+   "t": 484.5,
+   "line": [
+    "O-O",
+    "Nf3"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PPP3/2N2N2/PP3PPP/R2QKB1R b KQ - 3 6",
+   "said": "knight and then this knight on e4 is unharmed this is actually a very important variation that justifies the existence of the king's indian so here you might ask why did i not play e5"
+  },
+  {
+   "ply": 12,
+   "t": 487,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p1B1/2PPP3/2N2N2/PP3PPP/R2QKB1R w KQ - 0 7",
+   "said": "and if you compare this position to this position you'll see that instead of the bishop on e2 there is a bishop on g5"
+  },
+  {
+   "ply": 16,
+   "t": 504,
+   "line": [
+    "dxe5",
+    "dxe5",
+    "Qxd8",
+    "Rxd8"
+   ],
+   "fen": "rnbr2k1/ppp2pbp/5np1/4p1B1/2P1P3/2N2N2/PP3PPP/R3KB1R w KQ - 0 9",
+   "said": "that bishop is creating a potential pin this pin becomes a reality if i play e5 and this is a very unpleasant thing to allow because very simply white can play"
+  },
+  {
+   "ply": 17,
+   "t": 506,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "rnbr2k1/ppp2pbp/5np1/3Np1B1/2P1P3/5N2/PP3PPP/R3KB1R b KQ - 1 9",
+   "said": "knight d5 or white can even play bishop takes f6 bishop takes f695 and white wins because it's a fork on f6 and on c7 black cannot save both things at the"
+  },
+  {
+   "ply": 11,
+   "t": 523.5,
+   "line": [],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PPP3/2N2N2/PP3PPP/R2QKB1R b KQ - 3 6",
+   "said": "same time and he is losing so that is why you have to be very flexible in the opening you cannot put your head down and dogmatically make the same moves regardless of your opponent's opening scheme you have to look at what he's"
+  },
+  {
+   "ply": 12,
+   "t": 536.5,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "rn1q1rk1/ppp1ppbp/3p1np1/6B1/2PPP1b1/2N2N2/PP3PPP/R2QKB1R w KQ - 4 7",
+   "said": "played and you have to decide accordingly uh what you play so knight so that's why we decided on bishop g4 knight c6 a more concrete"
+  },
+  {
+   "ply": 14,
+   "t": 538,
+   "line": [
+    "Bd3",
+    "Nc6"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/2np1np1/6B1/2PPP1b1/2NB1N2/PP3PPP/R2QK2R w KQ - 6 8",
+   "said": "approach a piece based approach toward attacking d4 uh yes is ac if you landed in the situation you were trying to make the most of it you would you would take on d5 and um you know you can you can try to coordinate your pieces although this is very bad because white also gets"
+  },
+  {
+   "ply": 12,
+   "t": 568,
+   "line": [],
+   "fen": "rn1q1rk1/ppp1ppbp/3p1np1/6B1/2PPP1b1/2N2N2/PP3PPP/R2QKB1R w KQ - 4 7",
+   "said": "his rook to c1 uh and so his rook also has immediate prospects um okay so for that reason uh e5 is bad and so we decided to do"
+  },
+  {
+   "ply": 14,
+   "t": 572.5,
+   "line": [
+    "Bd3",
+    "Nc6"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/2np1np1/6B1/2PPP1b1/2NB1N2/PP3PPP/R2QK2R w KQ - 6 8",
+   "said": "this now he castled that was very bad he"
+  },
+  {
+   "ply": 15,
+   "t": 575,
+   "line": [
+    "d5"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/2np1np1/3P2B1/2P1P1b1/2NB1N2/PP3PPP/R2QK2R b KQ - 0 8",
+   "said": "should have probably played d5 as babzin is indicating and then i would"
+  },
+  {
+   "ply": 16,
+   "t": 578,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/3p1np1/3Pn1B1/2P1P1b1/2NB1N2/PP3PPP/R2QK2R w KQ - 1 9",
+   "said": "have played knight e5 uh and uh remember to always well exploit the pin i mean otherwise"
+  },
+  {
+   "ply": 17,
+   "t": 587.5,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/3p1np1/3Pn1B1/2P1P1b1/2N2N2/PP2BPPP/R2QK2R b KQ - 2 9",
+   "said": "why are you pinning your opponent's pieces if he drops his bishop back to e2 we can"
+  },
+  {
+   "ply": 18,
+   "t": 588.5,
+   "line": [
+    "Bxf3"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/3p1np1/3Pn1B1/2P1P3/2N2b2/PP2BPPP/R2QK2R w KQ - 0 10",
+   "said": "take on f3"
+  },
+  {
+   "ply": 20,
+   "t": 592,
+   "line": [
+    "Bxf3",
+    "Nxc4"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/3p1np1/3P2B1/2n1P3/2N2B2/PP3PPP/R2QK2R w KQ - 0 11",
+   "said": "now if he takes of the bishop he drops a pawn so he has to take with a pawn"
+  },
+  {
+   "ply": 18,
+   "t": 593.5,
+   "line": [],
+   "fen": "r2q1rk1/ppp1ppbp/3p1np1/3Pn1B1/2P1P3/2N2b2/PP2BPPP/R2QK2R w KQ - 0 10",
+   "said": ""
+  },
+  {
+   "ply": 19,
+   "t": 595,
+   "line": [
+    "gxf3"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/3p1np1/3Pn1B1/2P1P3/2N2P2/PP2BP1P/R2QK2R b KQ - 0 10",
+   "said": "and now he's basically really permanently weakened both his king side and his center"
+  },
+  {
+   "ply": 20,
+   "t": 603,
+   "line": [
+    "c6"
+   ],
+   "fen": "r2q1rk1/pp2ppbp/2pp1np1/3Pn1B1/2P1P3/2N2P2/PP2BP1P/R2QK2R w KQ - 0 11",
+   "said": "and we can play c6 and deploy the queen through b6 we have a very very good position here uh and a very big initiative because white is nowhere to castle if he castles king side his kingside is ruined if he castles queen side"
+  },
+  {
+   "ply": 15,
+   "t": 625,
+   "line": [],
+   "fen": "r2q1rk1/ppp1ppbp/2np1np1/3P2B1/2P1P1b1/2NB1N2/PP3PPP/R2QK2R b KQ - 0 8",
+   "said": "then the bishop on g7 is going to be incredibly powerful and it's going to be a very strong agent of attack um okay so this is very good now he blundered upon we made this intermediate move to ruin his king side and then the last thing to talk about is if we did not want to play on the king side and we wanted to play on the queen side how could we have done that well you know what's the thing about playing on the queen side uh people you know what i think people should do is is think of attacks on the king and attacks on the queen side in a similar way you think about attacking the king often you think about a pawn storm you think about pawns advancing forward and provoking weaknesses in the opponent's position and it's much the same with a queen side attack except it can be a little bit harder to prepare these pawn moves hey hi selena and in this case the move c6 comes to mind the idea of c6 is to play a6 and then to play b5 expanding on the queen side so it's sort of like a queenside pawn storm except it takes a little bit longer to prepare yeah so it's it's a typical idea in the king's indian actually uh because yeah you'll see it in many different types of positions okay so this would have also been very possible and combined with the extra pawn block is in terrific shape here any questions yeah the king's indian is not that hard to learn"
+  },
+  {
+   "ply": 8,
+   "t": 722.5,
+   "line": [],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "said": "on an initial level but it's very hard to master thank you tanto i'm very happy to hear that thank you for the sub man okay guys one last game because i'm exhausted i do have a recommendation for opening theory um i imagine that most of you happen to own a copy of the uh recent it's this is a recent book uh the handbook the recent book uh it's it's in german but i recommend it so much i think you should get it even though it's in german it's pretty recent uh it's got analysis of the philidor so it's got a lot of analysis actually zooka tour did call it outdated yesterday but okay so let's play this is the handbook of openings so it's an it's an opening book that was originally published in like 1870 and i have the edition republished in"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 11,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PPP3/2N2N2/PP3PPP/R2QKB1R b KQ - 3 6",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6",
+    "Bg5",
+    "O-O",
+    "Nf3"
+   ],
+   "options": [
+    {
+     "san": "Bg4",
+     "t": 70.5,
+     "continuation": "Bg4",
+     "said": "several ways of accomplishing this you could play bashu g4 right you could you could trade this bishop for the night and soften up white's defense over the d4 pawn this is not a typical king's indian move but uh it does illustrate one of the key themes now a lot of people here would take the knight but there's no hurry because we have the night pinned we could take him at a moment of our convenience thank you hisholina for the raid so how should we continue to press on this pawn on d4 with our pieces in the spirit of this line which is to use pieces to pressure the center from a distance c5 is possible we can strike with the pawn but let's use our pieces thank you so much he selena hi selena for the 75 party raid he's castled so he simply ignores the threats that we have posed on his center so we can take on d4 because of the pin he cannot take back and uh he's essentially bust i mean busted he lost the central pawn and now he makes matters worse by taking on f6 now if we were extra fancy here uh what would we do in this position we can take on well we can take on f6 with the bishop we can take back but"
+    },
+    {
+     "san": "e5",
+     "t": 487,
+     "continuation": "e5",
+     "said": "unharmed this is actually a very important variation that justifies the existence of the king's indian so here you might ask why did i not play e5 and if you compare this position to this position you'll see that instead of the bishop on e2 there is a bishop on g5 that bishop is creating a potential pin this pin becomes a reality if i play e5 and this is a very unpleasant thing to allow because very simply white can play knight d5 or white can even play bishop takes f6 bishop takes f695 and white wins because it's a fork on f6 and on c7 black cannot save both things at the same time and he is losing so that is why you have to be very flexible in the opening you cannot put your head down and dogmatically make the same moves regardless of your opponent's opening scheme you have to look at what he's played and you have to decide accordingly uh what you play so knight so that's why we decided on bishop g4 knight c6 a more concrete approach a piece based approach toward attacking d4 uh yes is ac if you landed in the situation you were trying to make the"
+    }
+   ]
+  },
+  {
+   "ply": 14,
+   "fen": "r2q1rk1/ppp1ppbp/2np1np1/6B1/2PPP1b1/2NB1N2/PP3PPP/R2QK2R w KQ - 6 8",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6",
+    "Bg5",
+    "O-O",
+    "Nf3",
+    "Bg4",
+    "Bd3",
+    "Nc6"
+   ],
+   "options": [
+    {
+     "san": "O-O",
+     "t": 103.5,
+     "continuation": "O-O",
+     "said": "use pieces to pressure the center from a distance c5 is possible we can strike with the pawn but let's use our pieces thank you so much he selena hi selena for the 75 party raid he's castled so he simply ignores the threats that we have posed on his center so we can take on d4 because of the pin he cannot take back and uh he's essentially bust i mean busted he lost the central pawn and now he makes matters worse by taking on f6 now if we were extra fancy here uh what would we do in this position we can take on well we can take on f6 with the bishop we can take back but what intermediate move can we also consider making yeah so a lot of you guys got caught in the trap when you make a move such as knight takes f3 you have to calculate it make an intermediate move you have to calculate it if you play knight takes f3 allow gf then that pawn from f3 is going to attack the bishop on g4 and uh we're going to lose a piece so believe it or not we play bishop takes f3 he pl he plays pawn takes f3 he doesn't attack anything now we can take on f6 and we have ruined the structure around his king now we are also now we are also"
+    },
+    {
+     "san": "d5",
+     "t": 575,
+     "continuation": "d5",
+     "said": "um okay so for that reason uh e5 is bad and so we decided to do this now he castled that was very bad he should have probably played d5 as babzin is indicating and then i would have played knight e5 uh and uh remember to always well exploit the pin i mean otherwise why are you pinning your opponent's pieces if he drops his bishop back to e2 we can take on f3 now if he takes of the bishop he drops a pawn so he has to take with a pawn and now he's basically really permanently weakened both his king side and his center and we can play c6 and deploy the queen through b6 we have a very very good position here uh and a very big initiative because white is nowhere to castle if he castles king side his kingside is ruined if he castles queen side then the bishop on g7 is going to be incredibly powerful and it's going to be a very strong agent of attack um okay so this is very good now he blundered upon we made this intermediate move to ruin his king side and then the last thing to talk about is if we did not want to play on"
+    }
+   ]
+  },
+  {
+   "ply": 18,
+   "fen": "r2q1rk1/ppp1ppbp/3p1np1/3Pn1B1/2P1P3/2N2b2/PP2BPPP/R2QK2R w KQ - 0 10",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6",
+    "Bg5",
+    "O-O",
+    "Nf3",
+    "Bg4",
+    "Bd3",
+    "Nc6",
+    "d5",
+    "Ne5",
+    "Be2",
+    "Bxf3"
+   ],
+   "options": [
+    {
+     "san": "Bxf3",
+     "t": 592,
+     "continuation": "Bxf3 Nxc4",
+     "said": "well exploit the pin i mean otherwise why are you pinning your opponent's pieces if he drops his bishop back to e2 we can take on f3 now if he takes of the bishop he drops a pawn so he has to take with a pawn and now he's basically really permanently weakened both his king side and his center and we can play c6 and deploy the queen through b6 we have a very very good position here uh and a very big initiative because white is nowhere to castle if he castles king side his kingside is ruined if he castles queen side then the bishop on g7 is going to be incredibly powerful and it's going to be a very strong agent of attack um okay so this is very good now he blundered upon we made this intermediate move to ruin his king side and then the last thing to talk about is if we did not want to play on the king side and we wanted to play on the queen side how could we have done that well you know what's the thing about playing on the queen side uh people you know what i think people should do is is think of attacks on the king and attacks on the queen side in a similar way you think about"
+    },
+    {
+     "san": "gxf3",
+     "t": 595,
+     "continuation": "gxf3",
+     "said": "why are you pinning your opponent's pieces if he drops his bishop back to e2 we can take on f3 now if he takes of the bishop he drops a pawn so he has to take with a pawn and now he's basically really permanently weakened both his king side and his center and we can play c6 and deploy the queen through b6 we have a very very good position here uh and a very big initiative because white is nowhere to castle if he castles king side his kingside is ruined if he castles queen side then the bishop on g7 is going to be incredibly powerful and it's going to be a very strong agent of attack um okay so this is very good now he blundered upon we made this intermediate move to ruin his king side and then the last thing to talk about is if we did not want to play on the king side and we wanted to play on the queen side how could we have done that well you know what's the thing about playing on the queen side uh people you know what i think people should do is is think of attacks on the king and attacks on the queen side in a similar way you think about attacking the king often you think about a pawn storm you"
+    }
+   ]
+  },
+  {
+   "ply": 25,
+   "fen": "r4rk1/ppp1pp1p/3p1bp1/5P2/2PnP3/2NB3q/PP3P1P/R2Q1R1K b - - 0 13",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6",
+    "Bg5",
+    "O-O",
+    "Nf3",
+    "Bg4",
+    "Bd3",
+    "Nc6",
+    "O-O",
+    "Nxd4",
+    "Bxf6",
+    "Bxf3",
+    "gxf3",
+    "Bxf6",
+    "Kh1",
+    "Qd7",
+    "f4",
+    "Qh3",
+    "f5"
+   ],
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 210.5,
+     "continuation": "Nf3",
+     "said": "because he's ignored completely the threats so what do we do here what do we do in this position yeah we win as queen because there is no stopping checkmate on h2 bishop e5 by the way would have been worse and very important to indicate that in such situations there is often only one correct option and you have to operate under that assumption okay so let's see tommy queen takes f1 exactly okay he's resigned okay so first things first why is the move bishop e5 worse in this position why does this not lead to checkmate inevitably checkmate on h2 it is worse because white can play f4 now you have to remember a very crucial thing i call this the three ways of stopping a threat and numbers two and three people forget about all the time let's say that a peace or a pawn is threatened you're attacking a knight you're attacking upon what are the ways of defending against this threat the first is to move"
+    },
+    {
+     "san": "Be5",
+     "t": 241.5,
+     "continuation": "Be5",
+     "said": "exactly okay he's resigned okay so first things first why is the move bishop e5 worse in this position why does this not lead to checkmate inevitably checkmate on h2 it is worse because white can play f4 now you have to remember a very crucial thing i call this the three ways of stopping a threat and numbers two and three people forget about all the time let's say that a peace or a pawn is threatened you're attacking a knight you're attacking upon what are the ways of defending against this threat the first is to move that piece or that pawn and to shift it to a different location sorry four ways to defend against a piece or a pawn uh there that you move it to a different location okay obvious the second is to defend it with another piece or a pawn so those two methods are very obvious to people but the third and the fourth are not the third is to intercept one of the attackers the third is to intercept one of the attackers i think it's called"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,1122 @@
+{
+ "videoId": "OoiSIESd-rU",
+ "title": "PogChamps 3 Training for Black | MoistCr1TiKaL | Pt. 2",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 28.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "and we just really cement things and then next time we'll transition to white because we have we have some time does that sound good works for me okay because the sicilian is a pretty serious opening i really want to make sure that we're covering everything okay [Music] so um we'll we'll reconstruct what it is exactly that people do against you now i'm seeing this 52 games knight f3 and uh the second most common move is bishop c4 where you've responded"
+  },
+  {
+   "ply": 4,
+   "t": 64.5,
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "correctly to um every time yeah so i'm just looking to see if there's anything dangerous that was played against you okay so knight f3 now knight c6 okay so 27 games uh d4"
+  },
+  {
+   "ply": 5,
+   "t": 72.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "said": "11 games bishop c4 let's quickly review bishop c4"
+  },
+  {
+   "ply": 6,
+   "t": 74.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "said": "good now most people have gone d3"
+  },
+  {
+   "ply": 7,
+   "t": 78,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+   "said": "against you"
+  },
+  {
+   "ply": 8,
+   "t": 82,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 1 5",
+   "said": "h the rule of thumb i don't i know in uh the rule of thumb i don't i know in this position i don't bring up the g pawn next right exactly nicely done you don't bring up e6 and g6 at the same"
+  },
+  {
+   "ply": 9,
+   "t": 98,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p3B1/2B1P3/3P1N2/PPP2PPP/RN1QK2R b KQkq - 2 5",
+   "said": "time so here it's a slightly different strategy okay so so um bishop g5 has been played three times again so you won all three games okay uh chase it away first right oh you can you don't you don't necessarily have to"
+  },
+  {
+   "ply": 10,
+   "t": 109.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp2B1/2B1P3/3P1N2/PPP2PPP/RN1QK2R w KQkq - 0 6",
+   "said": "but uh you can go ahead and control the center now okay so i'd still just want to play this anyway yep"
+  },
+  {
+   "ply": 11,
+   "t": 110.5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pP2B1/2B5/3P1N2/PPP2PPP/RN1QK2R b KQkq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 112,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp2B1/2B5/3P1N2/PPP2PPP/RN1QK2R w KQkq - 0 7",
+   "said": "and how are you gonna deal with this pin uh if he takes the pawn i take the bishop"
+  },
+  {
+   "ply": 13,
+   "t": 120.5,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp2B1/8/1B1P1N2/PPP2PPP/RN1QK2R b KQkq - 1 7",
+   "said": "if not then i just let's say bishop b3 um i just bring up the the f7 right f7 bishop breaking yeah"
+  },
+  {
+   "ply": 14,
+   "t": 131,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk2r/pp2bppp/2n2n2/2pp2B1/8/1B1P1N2/PPP2PPP/RN1QK2R w KQkq - 2 8",
+   "said": "bishop b7 exactly there should be seven then you castle then you can actually this bishop so this would be a great example of"
+  },
+  {
+   "ply": 15,
+   "t": 140,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqk2r/pp2bppp/2n2n2/2pp2B1/8/1BNP1N2/PPP2PPP/R2QK2R b KQkq - 3 8",
+   "said": "not actually getting this bishop to g4 although you can if he goes knight c3 you notice that he's putting pressure pretty serious pressure on this pawn so where would you put this bishop to"
+  },
+  {
+   "ply": 18,
+   "t": 156,
+   "line": [
+    "Be6",
+    "O-O",
+    "O-O"
+   ],
+   "fen": "r2q1rk1/pp2bppp/2n1bn2/2pp2B1/8/1BNP1N2/PPP2PPP/R2Q1RK1 w - - 6 10",
+   "said": "remedy that just over to e6 and then let's say that both sides castle and let's say that white plays a move like"
+  },
+  {
+   "ply": 19,
+   "t": 157.5,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r2q1rk1/pp2bppp/2n1bn2/2pp2B1/8/1BNP1N2/PPP2PPP/R2QR1K1 b - - 7 10",
+   "said": "rookie one so one really good plan here in this position is to try to get b5 and how can you prepare that move"
+  },
+  {
+   "ply": 20,
+   "t": 179,
+   "line": [
+    "a6"
+   ],
+   "fen": "r2q1rk1/1p2bppp/p1n1bn2/2pp2B1/8/1BNP1N2/PPP2PPP/R2QR1K1 w - - 0 11",
+   "said": "by dropping that bishop back no so remember that the best way to prepare a pawn move is usually with another pawn move let's just go a6 first a6 and does the purpose of b5 make sense yeah we're trying to chase the knight right well and we're also"
+  },
+  {
+   "ply": 22,
+   "t": 186.5,
+   "line": [
+    "h3",
+    "b5"
+   ],
+   "fen": "r2q1rk1/4bppp/p1n1bn2/1ppp2B1/8/1BNP1N1P/PPP2PP1/R2QR1K1 w - - 0 12",
+   "said": "trying to trap the bishop so let's just make some random moves"
+  },
+  {
+   "ply": 24,
+   "t": 188.5,
+   "line": [
+    "Kh1",
+    "c4"
+   ],
+   "fen": "r2q1rk1/4bppp/p1n1bn2/1p1p2B1/2p5/1BNP1N1P/PPP2PP1/R2QR2K w - - 0 13",
+   "said": "you're actually trying to trap the bishop another narrative super shooter"
+  },
+  {
+   "ply": 26,
+   "t": 192,
+   "line": [
+    "dxc4",
+    "dxc4"
+   ],
+   "fen": "r2q1rk1/4bppp/p1n1bn2/1p4B1/2p5/1BN2N1P/PPP2PP1/R2QR2K w - - 0 14",
+   "said": "here and uh d64 the bishop is trapped"
+  },
+  {
+   "ply": 22,
+   "t": 197,
+   "line": [],
+   "fen": "r2q1rk1/4bppp/p1n1bn2/1ppp2B1/8/1BNP1N1P/PPP2PP1/R2QR1K1 w - - 0 12",
+   "said": "but uh okay so i imagine though most people when they see this then i didn't notice it but i i would guess they'll"
+  },
+  {
+   "ply": 23,
+   "t": 205.5,
+   "line": [
+    "a3"
+   ],
+   "fen": "r2q1rk1/4bppp/p1n1bn2/1ppp2B1/8/PBNP1N1P/1PP2PP1/R2QR1K1 b - - 0 12",
+   "said": "just push that a pawn next yeah you mean they'll they'll play a3 yeah but uh that's that's i think what most people"
+  },
+  {
+   "ply": 24,
+   "t": 213,
+   "line": [
+    "c4"
+   ],
+   "fen": "r2q1rk1/4bppp/p1n1bn2/1p1p2B1/2p5/PBNP1N1P/1PP2PP1/R2QR1K1 w - - 0 13",
+   "said": "will do but the thing is um after you play c4 anyway although you"
+  },
+  {
+   "ply": 25,
+   "t": 215.5,
+   "line": [
+    "dxc4"
+   ],
+   "fen": "r2q1rk1/4bppp/p1n1bn2/1p1p2B1/2P5/PBN2N1P/1PP2PP1/R2QR1K1 b - - 0 13",
+   "said": "don't trap their bishop you can see that this"
+  },
+  {
+   "ply": 27,
+   "t": 217.5,
+   "line": [
+    "dxc4",
+    "Ba2"
+   ],
+   "fen": "r2q1rk1/4bppp/p1n1bn2/1p4B1/2p5/P1N2N1P/BPP2PP1/R2QR1K1 b - - 1 14",
+   "said": "bishop is completely buried yeah it's it's literally and it's staring at the pawn chain"
+  },
+  {
+   "ply": 28,
+   "t": 228,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "r4rk1/2q1bppp/p1n1bn2/1p4B1/2p5/P1N2N1P/BPP2PP1/R2QR1K1 w - - 2 15",
+   "said": "if it goes to b1 it's going to be staring at them so bla white is virtually playing without a piece you can play queen c7 then rook d8 and this is again a concept that you know a couple of months ago i wouldn't have bothered bringing up but now i think you can wrap your head around it so like when you can make your opponent's pieces this passive"
+  },
+  {
+   "ply": 23,
+   "t": 253.5,
+   "line": [],
+   "fen": "r2q1rk1/4bppp/p1n1bn2/1ppp2B1/8/PBNP1N1P/1PP2PP1/R2QR1K1 b - - 0 12",
+   "said": "uh for a prolonged period of time that's a pretty big deal because they're basically playing without that piece that makes sense and uh yeah so there's a good example of this in in classical chess but we'll talk about that later so that's uh"
+  },
+  {
+   "ply": 4,
+   "t": 261.5,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "that's perfect now let's transition to to the main move"
+  },
+  {
+   "ply": 5,
+   "t": 262.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "d4 go ahead okay so d4"
+  },
+  {
+   "ply": 6,
+   "t": 265,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "c takes d4 knight takes d4 27 games"
+  },
+  {
+   "ply": 7,
+   "t": 270,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": ""
+  },
+  {
+   "ply": 8,
+   "t": 271.5,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "yep and now 16 people played knight"
+  },
+  {
+   "ply": 9,
+   "t": 275,
+   "line": [
+    "Nxc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2N3p1/8/4P3/8/PPP2PPP/RNBQKB1R b KQkq - 0 5",
+   "said": "takes c6 that's the most common move"
+  },
+  {
+   "ply": 10,
+   "t": 276.5,
+   "line": [
+    "bxc6"
+   ],
+   "fen": "r1bqkbnr/p2ppp1p/2p3p1/8/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 0 6",
+   "said": "that's played against you yeah and um right knight c6 now bc is correct now eight people go"
+  },
+  {
+   "ply": 11,
+   "t": 289.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/p2ppp1p/2p3p1/8/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 6",
+   "said": "knight c3 and uh that's the most common move it's still just cheating right just"
+  },
+  {
+   "ply": 12,
+   "t": 290.5,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 7",
+   "said": "being carrying the bishop now three games bishop d2 three games bishop c4 okay bishop c4 is the more i see what"
+  },
+  {
+   "ply": 13,
+   "t": 302.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 3 7",
+   "said": "you're saying i think so bishop c4 is the more uh active move so i can't bring my knight up to where i want it because he"
+  },
+  {
+   "ply": 14,
+   "t": 309.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/p2pppbp/2p2np1/8/2B1P3/2N5/PPP2PPP/R1BQK2R w KQkq - 4 8",
+   "said": "just pushes that pawn and i can't take that pawn so i'd have right so this"
+  },
+  {
+   "ply": 15,
+   "t": 311,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqk2r/p2pppbp/2p2np1/4P3/2B5/2N5/PPP2PPP/R1BQK2R b KQkq - 0 8",
+   "said": "is exactly the situation which you want to avoid yeah now if you accidentally played into this situation something that we talked about earlier"
+  },
+  {
+   "ply": 16,
+   "t": 323.5,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "r1bqk2r/p2pppbp/2p3p1/4P3/2B3n1/2N5/PPP2PPP/R1BQK2R w KQkq - 1 9",
+   "said": "uh you actually have a very cool idea here that can help you get out of this you can play knight g4 and this is only possible because there's a bishop on c4 now queen takes g4 what's the point all i can see is pushing that d pawn to attack the queen good and attack what else the pawn um think again you can win the piece back"
+  },
+  {
+   "ply": 14,
+   "t": 358.5,
+   "line": [],
+   "fen": "r1bqk2r/p2pppbp/2p2np1/8/2B1P3/2N5/PPP2PPP/R1BQK2R w KQkq - 4 8",
+   "said": "oh i see i put okay if he on poissants i win the queen okay pushing up to d5 good and then you win the bishop back so that's a crazy idea but what i wanted to say is"
+  },
+  {
+   "ply": 15,
+   "t": 359.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqk2r/p2pppbp/2p2np1/4P3/2B5/2N5/PPP2PPP/R1BQK2R b KQkq - 0 8",
+   "said": "even if you're you've allowed this and"
+  },
+  {
+   "ply": 16,
+   "t": 363,
+   "line": [
+    "Ng8"
+   ],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/4P3/2B5/2N5/PPP2PPP/R1BQK2R w KQkq - 1 9",
+   "said": "you don't have niger for you can always bring the knight back to ga and it's not easy to just checkmate black the knight can then redeploy itself through h6 and f5"
+  },
+  {
+   "ply": 11,
+   "t": 374,
+   "line": [],
+   "fen": "r1bqkbnr/p2ppp1p/2p3p1/8/4P3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 6",
+   "said": "okay so my point is you're going to [&nbsp;__&nbsp;] up once in a while in these positions and sometimes just bringing the piece back"
+  },
+  {
+   "ply": 13,
+   "t": 382,
+   "line": [
+    "Bg7",
+    "Bc4"
+   ],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 3 7",
+   "said": "is better than you know panicking and giving it up for example so where do i want to go then from here"
+  },
+  {
+   "ply": 14,
+   "t": 386.5,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "r1b1k1nr/p1qpppbp/2p3p1/8/2B1P3/2N5/PPP2PPP/R1BQK2R w KQkq - 4 8",
+   "said": "so you have two options here one the best move is to play queen c7 and the purpose of this move is to cover"
+  },
+  {
+   "ply": 15,
+   "t": 394.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1b1k1nr/p1qpppbp/2p3p1/8/2B1P3/2N5/PPP2PPP/R1BQ1RK1 b kq - 5 8",
+   "said": "the e5 square with the queen they're probably going to castle and here"
+  },
+  {
+   "ply": 16,
+   "t": 397,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1b1k2r/p1qpppbp/2p2np1/8/2B1P3/2N5/PPP2PPP/R1BQ1RK1 w kq - 6 9",
+   "said": "you go knight f6 and e5 is no not"
+  },
+  {
+   "ply": 18,
+   "t": 399,
+   "line": [
+    "e5",
+    "Qxe5"
+   ],
+   "fen": "r1b1k2r/p2pppbp/2p2np1/4q3/2B5/2N5/PPP2PPP/R1BQ1RK1 w kq - 0 10",
+   "said": "possible because of queen takes c5"
+  },
+  {
+   "ply": 16,
+   "t": 401,
+   "line": [],
+   "fen": "r1b1k2r/p1qpppbp/2p2np1/8/2B1P3/2N5/PPP2PPP/R1BQ1RK1 w kq - 6 9",
+   "said": "now if they try to prepare e5 with the"
+  },
+  {
+   "ply": 17,
+   "t": 403,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1b1k2r/p1qpppbp/2p2np1/8/2B1PP2/2N5/PPP3PP/R1BQ1RK1 b kq - 0 9",
+   "said": "move f4 can you prevent e5 once again with your"
+  },
+  {
+   "ply": 18,
+   "t": 411.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1b1k2r/p1q1ppbp/2pp1np1/8/2B1PP2/2N5/PPP3PP/R1BQ1RK1 w kq - 0 10",
+   "said": "pawns this time yeah i can just bring up the d pawn exactly and now e5 isn't even that dangerous because the knight is the g4 square now you're gonna castle remember that when they take on on c6 they open up the b file for you so you can always play the move rook to b8 and then you can slowly"
+  },
+  {
+   "ply": 13,
+   "t": 434.5,
+   "line": [],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 3 7",
+   "said": "prepare the pawn break d5 that makes sense so yeah you actually the funny thing is against uh you actually did play knight f6 here"
+  },
+  {
+   "ply": 14,
+   "t": 435.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/p2pppbp/2p2np1/8/2B1P3/2N5/PPP2PPP/R1BQK2R w KQkq - 4 8",
+   "said": "three times and nobody played e5"
+  },
+  {
+   "ply": 13,
+   "t": 438,
+   "line": [],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 3 7",
+   "said": "but um now you're going to make sure that you play queen c7 and yeah bishop so against bishop d2 which is a very awkward move i mean knight f6 here actually is okay because after e5 what additional square does the knight"
+  },
+  {
+   "ply": 17,
+   "t": 463.5,
+   "line": [
+    "d6",
+    "Bf1",
+    "d5",
+    "Bd2"
+   ],
+   "fen": "r1bqk1nr/p3ppbp/2p3p1/3p4/4P3/2N5/PPPB1PPP/R2QKB1R b KQkq - 1 9",
+   "said": "now have no this is d5 yeah but still i wouldn't really bother with this move now uh the one of the reasons bishop d2 is bad is because the queen blocks the connection to d5 so you can just play the move d5 and after it takes takes if they give you a check on b5 how can you block this check with the bishop does that give up the d5 pawn oh yeah because now it's not defended by the queen are you sure about that i think look at the whole board look at what pieces are left undefended oh then i just went as bishop you just"
+  },
+  {
+   "ply": 12,
+   "t": 498.5,
+   "line": [],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 7",
+   "said": "went especially and if he takes your bishop after bishop d7 i take with the queen defending exactly very nice so that um that's basically the lay of the land against these moves the last thing that was played against you more than once is bishop to d3"
+  },
+  {
+   "ply": 13,
+   "t": 507,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/2NB4/PPP2PPP/R1BQK2R b KQkq - 3 7",
+   "said": "and uh here once again you have a choice and both times you played the movie five now you know that that's a bit of a mistake"
+  },
+  {
+   "ply": 14,
+   "t": 511,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk1nr/p3ppbp/2pp2p1/8/4P3/2NB4/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "said": "um so here you can play the move d6 and then knight f6"
+  },
+  {
+   "ply": 13,
+   "t": 516,
+   "line": [],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/2NB4/PPP2PPP/R1BQK2R b KQkq - 3 7",
+   "said": "or you could play queen queen up to c7 that's also fine"
+  },
+  {
+   "ply": 14,
+   "t": 517,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "r1b1k1nr/p1qpppbp/2p3p1/8/4P3/2NB4/PPP2PPP/R1BQK2R w KQkq - 4 8",
+   "said": "right so the key is to prevent e5 first and then develop the knight"
+  },
+  {
+   "ply": 13,
+   "t": 528,
+   "line": [],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/2NB4/PPP2PPP/R1BQK2R b KQkq - 3 7",
+   "said": "so would you prefer me stopping that with the queen or with the d-pawn usually i'll i'll put it this way i'll"
+  },
+  {
+   "ply": 14,
+   "t": 530.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk1nr/p3ppbp/2pp2p1/8/4P3/2NB4/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "said": "make it easier and say with the d-pawn there is a specific reason that after"
+  },
+  {
+   "ply": 12,
+   "t": 533,
+   "line": [],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 7",
+   "said": "bishop to c4"
+  },
+  {
+   "ply": 13,
+   "t": 535,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 3 7",
+   "said": "queen c7 is is marginally more accurate"
+  },
+  {
+   "ply": 14,
+   "t": 537,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk1nr/p3ppbp/2pp2p1/8/2B1P3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "said": "but you know what you can play d6 here anyway"
+  },
+  {
+   "ply": 13,
+   "t": 545.5,
+   "line": [],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 3 7",
+   "said": "this is fine this is fine and then knight f6 and castles so just stop it with the d-pawn and if they try to enforce it somehow then remember that you always have this in"
+  },
+  {
+   "ply": 7,
+   "t": 552.5,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "your pocket makes sense great uh so"
+  },
+  {
+   "ply": 8,
+   "t": 554,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "now let's briefly review the moves that are not knight takes c6 um six games knight c3 actually nine"
+  },
+  {
+   "ply": 9,
+   "t": 561.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 5",
+   "said": "games because you transpose continue"
+  },
+  {
+   "ply": 10,
+   "t": 564.5,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 6",
+   "said": "and now once again a couple of people took on c6 and three games continued"
+  },
+  {
+   "ply": 11,
+   "t": 570.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 3 6",
+   "said": "bishop e3 and and three times you played this movie five which we now talk through is it wrong uh in this position i still"
+  },
+  {
+   "ply": 12,
+   "t": 578,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 4 7",
+   "said": "want to just develop this because you can't push that pawn right now right so the one person that you played this against this was the game that we actually um played together"
+  },
+  {
+   "ply": 13,
+   "t": 599,
+   "line": [
+    "Nxc6"
+   ],
+   "fen": "r1bqk2r/pp1pppbp/2N2np1/8/4P3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 0 7",
+   "said": "was f4 and if they play f4 to prepare e5 you do what d pawn very nice now the only time that you have to allow e5 they can play knight takes c6"
+  },
+  {
+   "ply": 15,
+   "t": 601.5,
+   "line": [
+    "bxc6",
+    "e5"
+   ],
+   "fen": "r1bqk2r/p2pppbp/2p2np1/4P3/8/2N1B3/PPP2PPP/R2QKB1R b KQkq - 0 8",
+   "said": "b takes c6 and they can play the movie 5. and this is the one line that you have to like memorize because i'm pretty sure that this is going to happen"
+  },
+  {
+   "ply": 16,
+   "t": 617.5,
+   "line": [
+    "Ng8"
+   ],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/4P3/8/2N1B3/PPP2PPP/R2QKB1R w KQkq - 1 9",
+   "said": "against people who are slightly more advanced at this stuff now here you actually drop your knight back this is theory you actually dropped your knight back to g8 and uh black is actually in very good shape here trust me um i know it looks horrible at"
+  },
+  {
+   "ply": 17,
+   "t": 631,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/4P3/5P2/2N1B3/PPP3PP/R2QKB1R b KQkq - 0 9",
+   "said": "first but you see that this spawn is hanging most people are going to defend the pawn by playing f4 but now this knight can go where you can go h6 exactly and from h6 where"
+  },
+  {
+   "ply": 18,
+   "t": 642,
+   "line": [
+    "Nh6"
+   ],
+   "fen": "r1bqk2r/p2pppbp/2p3pn/4P3/5P2/2N1B3/PPP3PP/R2QKB1R w KQkq - 1 10",
+   "said": "can it go f5 potentially you can you can chill on h6 now how are you going to break into this pawn chain to make sure that this bishop is once again active"
+  },
+  {
+   "ply": 19,
+   "t": 654.5,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r1bqk2r/p2pppbp/2p3pn/4P3/5P2/2N1B3/PPP1B1PP/R2QK2R b KQkq - 2 10",
+   "said": "um is it just pushing the d pod again you're a natural okay but first i would castle so let's say they developed their bishop i would first castle to make sure the king is"
+  },
+  {
+   "ply": 20,
+   "t": 656.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/p2pppbp/2p3pn/4P3/5P2/2N1B3/PPP1B1PP/R2QK2R w KQ - 3 11",
+   "said": "safe"
+  },
+  {
+   "ply": 21,
+   "t": 658.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/p2pppbp/2p3pn/4P3/5P2/2N1B3/PPP1B1PP/R2Q1RK1 b - - 4 11",
+   "said": "then after castles you can either bring your knight into the game immediately"
+  },
+  {
+   "ply": 22,
+   "t": 661,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bq1rk1/p3ppbp/2pp2pn/4P3/5P2/2N1B3/PPP1B1PP/R2Q1RK1 w - - 0 12",
+   "said": "but there's no hurry the knight is fine on h6 i would play d6 here"
+  },
+  {
+   "ply": 23,
+   "t": 668,
+   "line": [
+    "exd6"
+   ],
+   "fen": "r1bq1rk1/p3ppbp/2pP2pn/8/5P2/2N1B3/PPP1B1PP/R2Q1RK1 b - - 0 12",
+   "said": "and when he takes i take with pawn right"
+  },
+  {
+   "ply": 24,
+   "t": 669,
+   "line": [
+    "exd6"
+   ],
+   "fen": "r1bq1rk1/p4pbp/2pp2pn/8/5P2/2N1B3/PPP1B1PP/R2Q1RK1 w - - 0 13",
+   "said": "yeah take with the pawn and then notice that the e file is also open so you can bring the rook to okay that sounds good no i mean"
+  },
+  {
+   "ply": 8,
+   "t": 680,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "i can just sense that you you have good understanding in these positions there's a lot more to talk about but"
+  },
+  {
+   "ply": 6,
+   "t": 682,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "that's basically everything that's been played against you in the accelerated um ludwig played bishop b5 and you"
+  },
+  {
+   "ply": 7,
+   "t": 694,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "beat him and okay so what i'm noticing really the only thing i'm noticing"
+  },
+  {
+   "ply": 8,
+   "t": 695,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "you do consistently wrong is this move e5 so against ludwig"
+  },
+  {
+   "ply": 9,
+   "t": 701,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/1B6/3NP3/8/PPP2PPP/RNBQK2R b KQkq - 1 5",
+   "said": "what happened was he played here which is a bit of an empty move"
+  },
+  {
+   "ply": 10,
+   "t": 705.5,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/1B6/3NP3/8/PPP2PPP/RNBQK2R w KQkq - 2 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 707,
+   "line": [
+    "Be3",
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/1B6/3NP3/4B3/PPP2PPP/RN1QK2R w KQkq - 4 7",
+   "said": ""
+  },
+  {
+   "ply": 13,
+   "t": 708,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/1B6/3NP3/2N1B3/PPP2PPP/R2QK2R b KQkq - 5 7",
+   "said": "so it was this this this now you castled he castled"
+  },
+  {
+   "ply": 15,
+   "t": 713.5,
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/1B6/3NP3/2N1B3/PPP2PPP/R2Q1RK1 b - - 7 8",
+   "said": "and uh guess what move you played yeah you played e5 oh i pushed the pawn yeah but what should you do here and this is a bit tougher because you can't really play d6"
+  },
+  {
+   "ply": 17,
+   "t": 737,
+   "line": [
+    "a6",
+    "Ba4"
+   ],
+   "fen": "r1bq1rk1/1p1pppbp/p1n2np1/8/B2NP3/2N1B3/PPP2PPP/R2Q1RK1 b - - 1 9",
+   "said": "so what do you think you should do here with black is it just chase the bishop away exactly go ahead now if the bishop moves back then i'm still just wanting to push it"
+  },
+  {
+   "ply": 19,
+   "t": 741.5,
+   "line": [
+    "b5",
+    "Bb3"
+   ],
+   "fen": "r1bq1rk1/3pppbp/p1n2np1/1p6/3NP3/1BN1B3/PPP2PPP/R2Q1RK1 b - - 1 10",
+   "said": "right and here's the thing now that you've played the move b5 your bishop on c8 can can go where i can go to b7 and that's the double fiance the bishop exerts pressure on the pawn that's an ideal scenario uh if the bishop moves backward then you can play b5 but you can also now play d6"
+  },
+  {
+   "ply": 5,
+   "t": 768,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "and get the bishop out this way so very simple emphasis on development for preventing e5 and you almost never play e5 yourself or even e6 yeah i just need to remember that i think and and practice you know you're doing everything right you just need a lot of practice games what we're gonna do also next time is we're gonna delve a little bit deeper into some of these games um and talk about some middle game ideas but for now i want you to really master the opening moves which you're in the process of doing let's talk a little bit about d4 um because you mentioned that you were struggling a little bit against this move uh i don't know what my stats are on it but in almost every well pretty much every game over the last two days i play what levy taught which was going pretty much the exact same brazilian on this side okay and that's called the dutch yeah the dutch your stats are actually quite good here so let's just uh review i definitely like that choice it's a very uh it's an opening that's similar in in spirit to what you're playing with the accelerated dragon so although it's it's a bit of a less cool name yeah i think the accelerated dragon just sounds so nice but the dutch is a bit of a dubious reputation but wrongly so it's actually very solid"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 4,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6"
+   ],
+   "options": [
+    {
+     "san": "Bc4",
+     "t": 72.5,
+     "continuation": "Bc4",
+     "said": "okay so knight f3 now knight c6 okay so 27 games uh d4 11 games bishop c4 let's quickly review bishop c4 good now most people have gone d3 against you h the rule of thumb i don't i know in uh the rule of thumb i don't i know in this position i don't bring up the g pawn next right exactly nicely done you don't bring up e6 and g6 at the same time so here it's a slightly different strategy okay so so um bishop g5 has been played three times again so you won all three games okay uh chase it away first right oh you can you don't you don't necessarily have to but uh you can go ahead and control the center now okay so i'd still just want to play this anyway yep and how are you gonna deal with this pin uh if he takes the pawn i take the bishop if not then i just let's say bishop b3 um i just bring up the the f7 right f7 bishop breaking yeah bishop b7 exactly there should be seven then you castle then you can"
+    },
+    {
+     "san": "d4",
+     "t": 262.5,
+     "continuation": "d4",
+     "said": "a good example of this in in classical chess but we'll talk about that later so that's uh that's perfect now let's transition to to the main move d4 go ahead okay so d4 c takes d4 knight takes d4 27 games yep and now 16 people played knight takes c6 that's the most common move that's played against you yeah and um right knight c6 now bc is correct now eight people go knight c3 and uh that's the most common move it's still just cheating right just being carrying the bishop now three games bishop d2 three games bishop c4 okay bishop c4 is the more i see what you're saying i think so bishop c4 is the more uh active move so i can't bring my knight up to where i want it because he just pushes that pawn and i can't take that pawn so i'd have right so this is exactly the situation which you want to avoid yeah now if you accidentally played into this situation something that we talked about earlier uh you actually have a very cool idea here that can help you get out of this you"
+    }
+   ]
+  },
+  {
+   "ply": 8,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6"
+   ],
+   "options": [
+    {
+     "san": "Nxc6",
+     "t": 275,
+     "continuation": "Nxc6",
+     "said": "go ahead okay so d4 c takes d4 knight takes d4 27 games yep and now 16 people played knight takes c6 that's the most common move that's played against you yeah and um right knight c6 now bc is correct now eight people go knight c3 and uh that's the most common move it's still just cheating right just being carrying the bishop now three games bishop d2 three games bishop c4 okay bishop c4 is the more i see what you're saying i think so bishop c4 is the more uh active move so i can't bring my knight up to where i want it because he just pushes that pawn and i can't take that pawn so i'd have right so this is exactly the situation which you want to avoid yeah now if you accidentally played into this situation something that we talked about earlier uh you actually have a very cool idea here that can help you get out of this you can play knight g4 and this is only possible because there's a bishop on c4 now queen takes g4 what's the point"
+    },
+    {
+     "san": "Nc3",
+     "t": 561.5,
+     "continuation": "Nc3",
+     "said": "makes sense great uh so now let's briefly review the moves that are not knight takes c6 um six games knight c3 actually nine games because you transpose continue and now once again a couple of people took on c6 and three games continued bishop e3 and and three times you played this movie five which we now talk through is it wrong uh in this position i still want to just develop this because you can't push that pawn right now right so the one person that you played this against this was the game that we actually um played together was f4 and if they play f4 to prepare e5 you do what d pawn very nice now the only time that you have to allow e5 they can play knight takes c6 b takes c6 and they can play the movie 5. and this is the one line that you have to like memorize because i'm pretty sure that this is going to happen against people who are slightly more advanced at this stuff now here you actually drop your knight back this is theory you actually dropped your knight back to g8 and uh black is actually in very good"
+    },
+    {
+     "san": "Bb5",
+     "t": 701,
+     "continuation": "Bb5",
+     "said": "beat him and okay so what i'm noticing really the only thing i'm noticing you do consistently wrong is this move e5 so against ludwig what happened was he played here which is a bit of an empty move so it was this this this now you castled he castled and uh guess what move you played yeah you played e5 oh i pushed the pawn yeah but what should you do here and this is a bit tougher because you can't really play d6 so what do you think you should do here with black is it just chase the bishop away exactly go ahead now if the bishop moves back then i'm still just wanting to push it right and here's the thing now that you've played the move b5 your bishop on c8 can can go where i can go to b7 and that's the double fiance the bishop exerts pressure on the pawn that's an ideal scenario uh if the bishop moves backward then you can play b5 but you can also now play d6 and get the bishop out this way so very simple emphasis on development"
+    }
+   ]
+  },
+  {
+   "ply": 12,
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 7",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6",
+    "Nxc6",
+    "bxc6",
+    "Nc3",
+    "Bg7"
+   ],
+   "options": [
+    {
+     "san": "Bc4",
+     "t": 302.5,
+     "continuation": "Bc4",
+     "said": "being carrying the bishop now three games bishop d2 three games bishop c4 okay bishop c4 is the more i see what you're saying i think so bishop c4 is the more uh active move so i can't bring my knight up to where i want it because he just pushes that pawn and i can't take that pawn so i'd have right so this is exactly the situation which you want to avoid yeah now if you accidentally played into this situation something that we talked about earlier uh you actually have a very cool idea here that can help you get out of this you can play knight g4 and this is only possible because there's a bishop on c4 now queen takes g4 what's the point all i can see is pushing that d pawn to attack the queen good and attack what else the pawn um think again you can win the piece back oh i see i put okay if he on poissants i win the queen okay pushing up to d5 good and then you win the bishop back so that's a crazy idea but what i wanted to say is even if you're you've allowed this and you don't have niger for you can always"
+    },
+    {
+     "san": "Bd3",
+     "t": 507,
+     "continuation": "Bd3",
+     "said": "that um that's basically the lay of the land against these moves the last thing that was played against you more than once is bishop to d3 and uh here once again you have a choice and both times you played the movie five now you know that that's a bit of a mistake um so here you can play the move d6 and then knight f6 or you could play queen queen up to c7 that's also fine right so the key is to prevent e5 first and then develop the knight so would you prefer me stopping that with the queen or with the d-pawn usually i'll i'll put it this way i'll make it easier and say with the d-pawn there is a specific reason that after bishop to c4 queen c7 is is marginally more accurate but you know what you can play d6 here anyway this is fine this is fine and then knight f6 and castles so just stop it with the d-pawn and if they try to enforce it somehow then remember that you always have this in your pocket makes sense great uh so now let's briefly review the moves that are not knight takes c6 um six games knight c3 actually nine games because you transpose continue and now once again a couple of people took on c6 and three games continued"
+    }
+   ]
+  },
+  {
+   "ply": 13,
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 3 7",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6",
+    "Nxc6",
+    "bxc6",
+    "Nc3",
+    "Bg7",
+    "Bc4"
+   ],
+   "options": [
+    {
+     "san": "Nf6",
+     "t": 309.5,
+     "continuation": "Nf6",
+     "said": "you're saying i think so bishop c4 is the more uh active move so i can't bring my knight up to where i want it because he just pushes that pawn and i can't take that pawn so i'd have right so this is exactly the situation which you want to avoid yeah now if you accidentally played into this situation something that we talked about earlier uh you actually have a very cool idea here that can help you get out of this you can play knight g4 and this is only possible because there's a bishop on c4 now queen takes g4 what's the point all i can see is pushing that d pawn to attack the queen good and attack what else the pawn um think again you can win the piece back oh i see i put okay if he on poissants i win the queen okay pushing up to d5 good and then you win the bishop back so that's a crazy idea but what i wanted to say is even if you're you've allowed this and you don't have niger for you can always bring the knight back to ga and it's not easy to just checkmate black the knight can then redeploy itself through h6 and f5"
+    },
+    {
+     "san": "Qc7",
+     "t": 386.5,
+     "continuation": "Qc7",
+     "said": "in these positions and sometimes just bringing the piece back is better than you know panicking and giving it up for example so where do i want to go then from here so you have two options here one the best move is to play queen c7 and the purpose of this move is to cover the e5 square with the queen they're probably going to castle and here you go knight f6 and e5 is no not possible because of queen takes c5 now if they try to prepare e5 with the move f4 can you prevent e5 once again with your pawns this time yeah i can just bring up the d pawn exactly and now e5 isn't even that dangerous because the knight is the g4 square now you're gonna castle remember that when they take on on c6 they open up the b file for you so you can always play the move rook to b8 and then you can slowly prepare the pawn break d5 that makes sense so yeah you actually the funny thing is against uh you actually did play knight f6 here three times and nobody played e5 but um now you're going to make sure that you play queen c7 and yeah bishop so against bishop d2 which is a very awkward move i mean"
+    },
+    {
+     "san": "d6",
+     "t": 463.5,
+     "continuation": "d6 Bf1 d5 Bd2",
+     "said": "now have no this is d5 yeah but still i wouldn't really bother with this move now uh the one of the reasons bishop d2 is bad is because the queen blocks the connection to d5 so you can just play the move d5 and after it takes takes if they give you a check on b5 how can you block this check with the bishop does that give up the d5 pawn oh yeah because now it's not defended by the queen are you sure about that i think look at the whole board look at what pieces are left undefended oh then i just went as bishop you just went especially and if he takes your bishop after bishop d7 i take with the queen defending exactly very nice so that um that's basically the lay of the land against these moves the last thing that was played against you more than once is bishop to d3 and uh here once again you have a choice and both times you played the movie five now you know that that's a bit of a mistake um so here you can play the move d6 and then knight f6 or you could play queen queen up to c7 that's also fine right so the key is to prevent e5 first and then develop the knight"
+    }
+   ]
+  },
+  {
+   "ply": 13,
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/2NB4/PPP2PPP/R1BQK2R b KQkq - 3 7",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6",
+    "Nxc6",
+    "bxc6",
+    "Nc3",
+    "Bg7",
+    "Bd3"
+   ],
+   "options": [
+    {
+     "san": "d6",
+     "t": 511,
+     "continuation": "d6",
+     "said": "the last thing that was played against you more than once is bishop to d3 and uh here once again you have a choice and both times you played the movie five now you know that that's a bit of a mistake um so here you can play the move d6 and then knight f6 or you could play queen queen up to c7 that's also fine right so the key is to prevent e5 first and then develop the knight so would you prefer me stopping that with the queen or with the d-pawn usually i'll i'll put it this way i'll make it easier and say with the d-pawn there is a specific reason that after bishop to c4 queen c7 is is marginally more accurate but you know what you can play d6 here anyway this is fine this is fine and then knight f6 and castles so just stop it with the d-pawn and if they try to enforce it somehow then remember that you always have this in your pocket makes sense great uh so now let's briefly review the moves that are not knight takes c6 um six games knight c3 actually nine games because you transpose continue and now once again a couple of people took on c6 and three games continued bishop e3 and and three times you played this"
+    },
+    {
+     "san": "Qc7",
+     "t": 517,
+     "continuation": "Qc7",
+     "said": "and both times you played the movie five now you know that that's a bit of a mistake um so here you can play the move d6 and then knight f6 or you could play queen queen up to c7 that's also fine right so the key is to prevent e5 first and then develop the knight so would you prefer me stopping that with the queen or with the d-pawn usually i'll i'll put it this way i'll make it easier and say with the d-pawn there is a specific reason that after bishop to c4 queen c7 is is marginally more accurate but you know what you can play d6 here anyway this is fine this is fine and then knight f6 and castles so just stop it with the d-pawn and if they try to enforce it somehow then remember that you always have this in your pocket makes sense great uh so now let's briefly review the moves that are not knight takes c6 um six games knight c3 actually nine games because you transpose continue and now once again a couple of people took on c6 and three games continued bishop e3 and and three times you played this movie five which we now talk through is it wrong uh in this position i still want to just develop this"
+    }
+   ]
+  },
+  {
+   "ply": 15,
+   "fen": "r1bqk2r/p2pppbp/2p2np1/4P3/2B5/2N5/PPP2PPP/R1BQK2R b KQkq - 0 8",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6",
+    "Nxc6",
+    "bxc6",
+    "Nc3",
+    "Bg7",
+    "Bc4",
+    "Nf6",
+    "e5"
+   ],
+   "options": [
+    {
+     "san": "Ng4",
+     "t": 323.5,
+     "continuation": "Ng4",
+     "said": "to avoid yeah now if you accidentally played into this situation something that we talked about earlier uh you actually have a very cool idea here that can help you get out of this you can play knight g4 and this is only possible because there's a bishop on c4 now queen takes g4 what's the point all i can see is pushing that d pawn to attack the queen good and attack what else the pawn um think again you can win the piece back oh i see i put okay if he on poissants i win the queen okay pushing up to d5 good and then you win the bishop back so that's a crazy idea but what i wanted to say is even if you're you've allowed this and you don't have niger for you can always bring the knight back to ga and it's not easy to just checkmate black the knight can then redeploy itself through h6 and f5 okay so my point is you're going to [&nbsp;__&nbsp;] up once in a while in these positions and sometimes just bringing the piece back is better than you know panicking and giving it up for example so where do i want to go then from here"
+    },
+    {
+     "san": "Ng8",
+     "t": 363,
+     "continuation": "Ng8",
+     "said": "oh i see i put okay if he on poissants i win the queen okay pushing up to d5 good and then you win the bishop back so that's a crazy idea but what i wanted to say is even if you're you've allowed this and you don't have niger for you can always bring the knight back to ga and it's not easy to just checkmate black the knight can then redeploy itself through h6 and f5 okay so my point is you're going to [&nbsp;__&nbsp;] up once in a while in these positions and sometimes just bringing the piece back is better than you know panicking and giving it up for example so where do i want to go then from here so you have two options here one the best move is to play queen c7 and the purpose of this move is to cover the e5 square with the queen they're probably going to castle and here you go knight f6 and e5 is no not possible because of queen takes c5 now if they try to prepare e5 with the move f4 can you prevent e5 once again with your pawns this time yeah i can just bring up the d pawn exactly and now e5 isn't even that dangerous because the knight is the g4 square now you're gonna castle remember that when they take on on c6 they open up the b file for you so you can always play the move rook to b8 and then you can slowly"
+    }
+   ]
+  },
+  {
+   "ply": 16,
+   "fen": "r1b1k2r/p1qpppbp/2p2np1/8/2B1P3/2N5/PPP2PPP/R1BQ1RK1 w kq - 6 9",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "g6",
+    "Nxc6",
+    "bxc6",
+    "Nc3",
+    "Bg7",
+    "Bc4",
+    "Qc7",
+    "O-O",
+    "Nf6"
+   ],
+   "options": [
+    {
+     "san": "e5",
+     "t": 399,
+     "continuation": "e5 Qxe5",
+     "said": "and the purpose of this move is to cover the e5 square with the queen they're probably going to castle and here you go knight f6 and e5 is no not possible because of queen takes c5 now if they try to prepare e5 with the move f4 can you prevent e5 once again with your pawns this time yeah i can just bring up the d pawn exactly and now e5 isn't even that dangerous because the knight is the g4 square now you're gonna castle remember that when they take on on c6 they open up the b file for you so you can always play the move rook to b8 and then you can slowly prepare the pawn break d5 that makes sense so yeah you actually the funny thing is against uh you actually did play knight f6 here three times and nobody played e5 but um now you're going to make sure that you play queen c7 and yeah bishop so against bishop d2 which is a very awkward move i mean knight f6 here actually is okay because after e5 what additional square does the knight now have no this is d5 yeah but still i wouldn't really bother with this move now uh the one of the reasons bishop d2 is"
+    },
+    {
+     "san": "f4",
+     "t": 403,
+     "continuation": "f4",
+     "said": "the e5 square with the queen they're probably going to castle and here you go knight f6 and e5 is no not possible because of queen takes c5 now if they try to prepare e5 with the move f4 can you prevent e5 once again with your pawns this time yeah i can just bring up the d pawn exactly and now e5 isn't even that dangerous because the knight is the g4 square now you're gonna castle remember that when they take on on c6 they open up the b file for you so you can always play the move rook to b8 and then you can slowly prepare the pawn break d5 that makes sense so yeah you actually the funny thing is against uh you actually did play knight f6 here three times and nobody played e5 but um now you're going to make sure that you play queen c7 and yeah bishop so against bishop d2 which is a very awkward move i mean knight f6 here actually is okay because after e5 what additional square does the knight now have no this is d5 yeah but still i wouldn't really bother with this move now uh the one of the reasons bishop d2 is bad is because the queen blocks the connection to d5 so"
+    }
+   ]
+  },
+  {
+   "ply": 22,
+   "fen": "r2q1rk1/4bppp/p1n1bn2/1ppp2B1/8/1BNP1N1P/PPP2PP1/R2QR1K1 w - - 0 12",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "e6",
+    "d3",
+    "Nf6",
+    "Bg5",
+    "d5",
+    "exd5",
+    "exd5",
+    "Bb3",
+    "Be7",
+    "Nc3",
+    "Be6",
+    "O-O",
+    "O-O",
+    "Re1",
+    "a6",
+    "h3",
+    "b5"
+   ],
+   "options": [
+    {
+     "san": "Kh1",
+     "t": 188.5,
+     "continuation": "Kh1 c4",
+     "said": "purpose of b5 make sense yeah we're trying to chase the knight right well and we're also trying to trap the bishop so let's just make some random moves you're actually trying to trap the bishop another narrative super shooter here and uh d64 the bishop is trapped but uh okay so i imagine though most people when they see this then i didn't notice it but i i would guess they'll just push that a pawn next yeah you mean they'll they'll play a3 yeah but uh that's that's i think what most people will do but the thing is um after you play c4 anyway although you don't trap their bishop you can see that this bishop is completely buried yeah it's it's literally and it's staring at the pawn chain if it goes to b1 it's going to be staring at them so bla white is virtually playing without a piece you can play queen c7 then rook d8 and this is again a concept that you know a couple of months ago i wouldn't have bothered bringing up but now i think you can wrap your head around it so like when you can make your opponent's pieces this passive uh for a prolonged period of time that's a pretty big deal because they're basically playing without that piece"
+    },
+    {
+     "san": "a3",
+     "t": 205.5,
+     "continuation": "a3",
+     "said": "but uh okay so i imagine though most people when they see this then i didn't notice it but i i would guess they'll just push that a pawn next yeah you mean they'll they'll play a3 yeah but uh that's that's i think what most people will do but the thing is um after you play c4 anyway although you don't trap their bishop you can see that this bishop is completely buried yeah it's it's literally and it's staring at the pawn chain if it goes to b1 it's going to be staring at them so bla white is virtually playing without a piece you can play queen c7 then rook d8 and this is again a concept that you know a couple of months ago i wouldn't have bothered bringing up but now i think you can wrap your head around it so like when you can make your opponent's pieces this passive uh for a prolonged period of time that's a pretty big deal because they're basically playing without that piece that makes sense and uh yeah so there's a good example of this in in classical chess but we'll talk about that later so that's uh that's perfect now let's transition to to the main move d4 go ahead okay so d4"
+    }
+   ]
+  }
+ ]
+}

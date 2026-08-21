@@ -1,0 +1,141 @@
+{
+ "videoId": "91lZ8sfu-XU",
+ "title": "Defeating A Colle System | The Sensei Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 22,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "we are playing black and this game won't quite push us over 1500 but it'll come very close okay d4 good all right let's play let's deviate a little bit from the queen's gamut let's go knight f6 i'm i'm feeling a little bit more adventurous"
+  },
+  {
+   "ply": 3,
+   "t": 25,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/4P3/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "okay e3 okay so basically e3 is a call in uh this you know here it makes"
+  },
+  {
+   "ply": 4,
+   "t": 32,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/4P3/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "it it makes sense to go d5 and transpose to"
+  },
+  {
+   "ply": 5,
+   "t": 37.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2P1P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "a queen's pawn game setup all right c3 this is a traditional kali setup now there's two ways to play this for white why can play f4 and go for the reverse stone wall or white can go bishop d3 and go for the"
+  },
+  {
+   "ply": 4,
+   "t": 58.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/4P3/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "kali but c3 is inaccurate and it's important to detect these subtleties in the opening so why is it inaccurate because it turns out that white should actually go bishop d3"
+  },
+  {
+   "ply": 5,
+   "t": 63,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2P1P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "straight away by going c3 white is giving us an extra opportunity to do what to develop a piece onto a particularly"
+  },
+  {
+   "ply": 6,
+   "t": 72.5,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P4/2P1P3/PP3PPP/RNBQKBNR w KQkq - 1 4",
+   "said": "nice square now we can play bishop f5 and in the in the event of bishop d3 well that bishop trade favors"
+  },
+  {
+   "ply": 7,
+   "t": 77,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P4/2PBP3/PP3PPP/RNBQK1NR b KQkq - 2 4",
+   "said": "favors black the whole point of the kali is to preserve the light square bishop not to trade it now in fact we don't have to rush with bishop takes d3 and we have a very nice positional move which i think some of you might not see intuitively i think a lot of you might be thinking about bishop g6 but there is another way of preserving the tension and offering"
+  },
+  {
+   "ply": 8,
+   "t": 111,
+   "line": [
+    "e6"
+   ],
+   "fen": "rn1qkb1r/ppp2ppp/4pn2/3p1b2/3P4/2PBP3/PP3PPP/RNBQK1NR w KQkq - 0 5",
+   "said": "a change of pawn structure which i really i mean the resulting pawn structure i really like so g6 is close but not g6 but rather e6 yeah so e6 is the move i i enjoy here and in the event of a trade we've got"
+  },
+  {
+   "ply": 9,
+   "t": 116.5,
+   "line": [
+    "Bxf5"
+   ],
+   "fen": "rn1qkb1r/ppp2ppp/4pn2/3p1B2/3P4/2P1P3/PP3PPP/RNBQK1NR b KQkq - 0 5",
+   "said": "this massive massive oh there we go"
+  },
+  {
+   "ply": 10,
+   "t": 118.5,
+   "line": [
+    "exf5"
+   ],
+   "fen": "rn1qkb1r/ppp2ppp/5n2/3p1p2/3P4/2P1P3/PP3PPP/RNBQK1NR w KQkq - 0 6",
+   "said": "excellent i'm glad i'm glad he took because now i can explain what to do in the structure okay queen d3 that's a good move we need to be careful tactically tactically we need to be careful for one move because if we go g6 uh those with a sharp tactical eye might see that queen b5 check is a threat for king the king of the pawn same after knight e4 there's queen b5 check so we have to play queen d7 to defend both at the same time now again we need to be careful for a couple of moves the knight is coming to e5 now you might go you can go knight c6 but if if you'll remember i don't particularly like to block the c pawn in queen's pawn game openings so i would much prefer to go bishop d6 here and if 95 we just take it and then for example go 94 that's not a good trade for white okay castles we also castle and then we can play rook e8 just to prevent just to prevent 95 and clamp even further down on the center and this is going to be the whole zen of our strategy is the fact that it's hard for white to free himself good players know how to handle these positions with white but you know i think in the 14 1500 range people aren't very good at dealing with being cramped that's a good move actually bishop a3 is the idea this is one of the best ideas against this setup okay well what are we going to do now well we can make several improving moves i mentioned rookie eight i also like the possibility of centralizing the knight on e4 that's pretty self-explanatory we could go c5 at some point but in fact i prefer to put the pawn on c6 i feel like c5 defeats the purpose of this idea remember that when you have a clamp on the center like this opening up the center really goes against what it is you're trying to do it gives your opponent more breathing room so i like either rookie 8 or 94 but i think the most flexible move here is rookie 8 and if he goes bishop a3 i'll be pretty impressed ricky h is getting getting the rook on a good square no g6 is not bad you could certainly throw in g6 but it's also not really necessary our queen is doing a totally fine job of defending pawn okay so is knight e4 still possible is it still good can he take it is it is absolutely still good because if he takes it we take with a fork then i think that we'll play c6 in order to protect the d5 pawn and you might be asking that what do we do with the b89 we'll figure out a spot for the position is closed we don't need to develop all of our pieces at once we'll figure out a route for the night for instance if we play pawn c6 we can go knight a6 back to c7 i'm sure you've seen that particular way of developing before okay let's go c6 reinforcing the d5 pawn the other approach we could take is the queen has done its job on d7 now it just looks awkward there we can move the queen aside to a different square and then open up the d7 square for the knight that to me is is more palatable than going knight a6 now where should you move the queen we've already talked about this concept the primary point of moving the queen is to open up the d7 square for the knight but if you're already moving the queen you might as well try to accomplish something else remember that white's king in such positions is not the safest piece you know the white is really passive so if we actually start an attack we could potentially uh you know that could be a way to way to play so i like queen e6 yeah queen e7 or queen e6 but i particularly like queen e6 because the queen could swing to h6 you could do a queen lift i'm not saying we will i'm saying that we might do it under a slightly different set of circumstances so this brings me to an important point i'll talk more about this after the game just because we're playing positionally doesn't mean that you can't attack i think some people have a misconception about this which is that oh and in this situation i need to play positionally but you can do both at the same time you could play positionally and and then decide to at the right moment transition to an attack against the king that's totally normal c4 in fact i think that's what we're going to do right now i think we've fully improved our position right we've put our knight on a great square we've developed our pieces let's go what are we waiting for time for the queen lifts win h6 now we're not worried about the trade the trade opens up the c file but if you notice we have all of the squares on the c file well protected so i'm not worried about his queen infiltrating it's not possible we're defending them oh this is great for us this this just closes things down even further and it unties our hands for kingside action and now stuff i mean winter is coming for his king trust me g5 might run into g3 okay goes g3 anyway now in such situations when you're attacking like this you need to think in terms of drawbacks what is the drawback of the move g3 and can we explain it the answer is well you tell me what's the drawback of that move it weakens age three so let's put our monkey hats on our monkey brain on can we exploit it well yeah i think we can right we can put a queen on h3 why is that good because once we have a queen on h3 we can then bring this knight to g4 and that creates a situation which i'm sure you've seen before where essentially white is totally helpless and and this one flimsy knight on f3 is saving white from death in addition you might be familiar with ideas of sacrificing on g3 in certain positions although here it's not as appetizing so there's multiple approaches here we could also lift our rook to h6 but the best thing we could do here is is to go knight d knight df6 knight knight g4 now you might say well why do we need to play queen hd why can't we just go knight f6 immediately and you can you can certainly go knight df6 here the problem is that white sometimes can go h4 and keep our queen out of of h3 is it necessary to respond to this movement somewhere or we can continue accomplishing our plan it's not a terrible move if he follows it up correctly i'll put it that way now let's continue knight df6 we take a second to to see if this does anything it really doesn't and then we continue knight df3 we play knight shoot for anyway and white's position totally collapses okay well we could play knight g4 anyway although i guess we give up f5 there but it doesn't matter as i'll show you guys the reality is that the f5 pawn is totally unimportant here and this leads me to a very important topic of discussion which is these situations in general with the queen on h3 and the knight on g4 are important it's important to understand them from a tactical standpoint the question is what do we want to accomplish here with black what is our objective how do how are we going to win this game well we're going to win this game by distracting the knight from f3 right we need to get this knight off of f3 somehow okay well you might consider how you can do that you can really only do that with a knight uh and as you guys are correctly indicating as soon as you know what to do you see the move it's knight g5 now our opponent is playing very resiliently he can go 91 he can make it difficult for us okay no he didn't make it difficult for us made it easy for us made it easy for us but it was already over let me start from the end what would happen if white goes knight g to e1 so in such situations it's also important to be flexible right one of the objectives is to get rid of the knight on f3 but there is also a brute force approach we can ultimately crash through by overloading the h2 pawn and there's an idea that didn't go anywhere that idea is just to play rookie six the knight's chilling on g5 and if queen takes f5 happens well the simplest win is knight takes f3 knight takes f3 and again switching back to the other idea noticing the alignment of the queen and the the knight and going north f6 and this simply wins the night followed by checkmate but uh if he doesn't take on f5 then we go rook h6 and knight takes h2 and there's one important or not important but there's one cool idea knight takes h2 knight takes chief oh i guess i guess this is made but i've seen cases where people drop the knight back to f3 this is also a cool tactic in queen h1"
+  },
+  {
+   "ply": 5,
+   "t": 671.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2P1P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "this is all very easy it's like target practice because there's no no counter play that was pretty uh pretty straightforward so c3 is not a great move"
+  },
+  {
+   "ply": 6,
+   "t": 674,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P4/2P1P3/PP3PPP/RNBQKBNR w KQkq - 1 4",
+   "said": "straight away it allows us to get the bishop out to f5"
+  },
+  {
+   "ply": 8,
+   "t": 677,
+   "line": [
+    "Bd3",
+    "e6"
+   ],
+   "fen": "rn1qkb1r/ppp2ppp/4pn2/3p1b2/3P4/2PBP3/PP3PPP/RNBQK1NR w KQkq - 0 5",
+   "said": "and hopefully through the lens of this game you were able to understand why i like this setup"
+  },
+  {
+   "ply": 10,
+   "t": 681,
+   "line": [
+    "Bxf5",
+    "exf5"
+   ],
+   "fen": "rn1qkb1r/ppp2ppp/5n2/3p1p2/3P4/2P1P3/PP3PPP/RNBQK1NR w KQkq - 0 6",
+   "said": "why i like these pawns it's like a marotzi bind shifted over and ultimately i think that our opponent played well initially i think this was good this was good the way that white needs to handle this is to really open up the position as quickly as possible b3 was even this was good this is where our opponent started going wrong now as i said i think the correct move is bishop a3 here the point is that this bishop on d6 is an excellent piece it's guarding e5 and it's also aiming at the king so by playing bishop a3 while it's offering a trade black can't really do anything about it we would have played sorry no c6 doesn't work that one is a pawn we could play g6 here and then white trades and i still think black is slightly better but if white goes c4 and then knight c3 i think that white's got a pretty reasonable position here and it's certainly not going to result in checkmate no but here's the thing is savage muffin"
+  }
+ ],
+ "forks": []
+}

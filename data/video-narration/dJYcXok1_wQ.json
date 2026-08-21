@@ -1,0 +1,728 @@
+{
+ "videoId": "dJYcXok1_wQ",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2275",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1372.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "all right i guess we can do one more i guess we can do one more okay matilda we're playing the same guy okay um let's play a sicilian let's go back to an accelerated dragon which"
+  },
+  {
+   "ply": 3,
+   "t": 1375.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "oh my god proper 25 after everything"
+  },
+  {
+   "ply": 4,
+   "t": 1377.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": ""
+  },
+  {
+   "ply": 5,
+   "t": 1381,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "said": "that happened this morning"
+  },
+  {
+   "ply": 6,
+   "t": 1383,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "said": "wow thank you proper 25"
+  },
+  {
+   "ply": 7,
+   "t": 1385.5,
+   "line": [
+    "Bxc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2B3p1/2p5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 4",
+   "said": "holy smokes oh distracting me from the game i see what you're doing now i see what you're doing now damn girl now what what do we take the bishop with here"
+  },
+  {
+   "ply": 8,
+   "t": 1406,
+   "line": [
+    "dxc6"
+   ],
+   "fen": "r1bqkbnr/pp2pp1p/2p3p1/2p5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+   "said": "and we actually have had a game like this before which way do we take the bishop we so actually most people think b takes but we actually take with the d pawn as i've explained previously"
+  },
+  {
+   "ply": 9,
+   "t": 1408,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bqkbnr/pp2pp1p/2p3p1/2p5/4P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "said": "and there are several reasons for this it's complicated but first of all we're opening the bishop and that's"
+  },
+  {
+   "ply": 10,
+   "t": 1419,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/pp2ppbp/2p3p1/2p5/4P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 1 6",
+   "said": "uh that's a pretty important thing also we're sort of increasing our control over the d file well thank you prophet you are"
+  },
+  {
+   "ply": 11,
+   "t": 1421,
+   "line": [
+    "h3"
+   ],
+   "fen": "r1bqk1nr/pp2ppbp/2p3p1/2p5/4P3/3P1N1P/PPP2PP1/RNBQK2R b KQkq - 0 6",
+   "said": "very sweet and in order to increase our control over the d4 square specifically"
+  },
+  {
+   "ply": 12,
+   "t": 1428.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqk1nr/pp3pbp/2p3p1/2p1p3/4P3/3P1N1P/PPP2PP1/RNBQK2R w KQkq - 0 7",
+   "said": "uh the move that we play here is e5 which is a move that confused a lot of people the last time we played it"
+  },
+  {
+   "ply": 13,
+   "t": 1436,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r1bqk1nr/pp3pbp/2p3p1/2p1p3/4P3/3PBN1P/PPP2PP1/RN1QK2R b KQkq - 1 7",
+   "said": "because it seems to block in the bishop and i totally get that"
+  },
+  {
+   "ply": 14,
+   "t": 1437.5,
+   "line": [
+    "b6"
+   ],
+   "fen": "r1bqk1nr/p4pbp/1pp3p1/2p1p3/4P3/3PBN1P/PPP2PP1/RN1QK2R w KQkq - 0 8",
+   "said": "uh but i'll sort of put this into context after the game remember the"
+  },
+  {
+   "ply": 15,
+   "t": 1443,
+   "line": [
+    "a4"
+   ],
+   "fen": "r1bqk1nr/p4pbp/1pp3p1/2p1p3/P3P3/3PBN1P/1PP2PP1/RN1QK2R b KQkq - 0 8",
+   "said": "expression bad bishops defend good pawns that is a"
+  },
+  {
+   "ply": 16,
+   "t": 1444,
+   "line": [
+    "a5"
+   ],
+   "fen": "r1bqk1nr/5pbp/1pp3p1/p1p1p3/P3P3/3PBN1P/1PP2PP1/RN1QK2R w KQkq - 0 9",
+   "said": "very important expression and that expression helps us understand why this move is justified so let's go"
+  },
+  {
+   "ply": 17,
+   "t": 1454,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "r1bqk1nr/5pbp/1pp3p1/p1p1p3/P3P3/3PBN1P/1PPN1PP1/R2QK2R b KQkq - 1 9",
+   "said": "a5 let's stop him from expanding on the queen side now we"
+  },
+  {
+   "ply": 18,
+   "t": 1455,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "r1bqk2r/4npbp/1pp3p1/p1p1p3/P3P3/3PBN1P/1PPN1PP1/R2QK2R w KQkq - 2 10",
+   "said": "want to develop this knight to e7 we don't want to put it on f6 because that"
+  },
+  {
+   "ply": 19,
+   "t": 1460,
+   "line": [
+    "Nc4"
+   ],
+   "fen": "r1bqk2r/4npbp/1pp3p1/p1p1p3/P1N1P3/3PBN1P/1PP2PP1/R2QK2R b KQkq - 3 10",
+   "said": "would just blunder the pawn okay so i'm going to do the same thing i"
+  },
+  {
+   "ply": 20,
+   "t": 1463,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "r1b1k2r/2q1npbp/1pp3p1/p1p1p3/P1N1P3/3PBN1P/1PP2PP1/R2QK2R w KQkq - 4 11",
+   "said": "did in the previous game we go queen to c7 to defend the pawn on e5"
+  },
+  {
+   "ply": 22,
+   "t": 1468.5,
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "fen": "r1b2rk1/2q1npbp/1pp3p1/p1p1p3/P1N1P3/3PBN1P/1PP2PP1/R2Q1RK1 w - - 6 12",
+   "said": "and this there's a certain kings indiana component to this game in that what is black's main idea here"
+  },
+  {
+   "ply": 23,
+   "t": 1478,
+   "line": [
+    "b4"
+   ],
+   "fen": "r1b2rk1/2q1npbp/1pp3p1/p1p1p3/PPN1P3/3PBN1P/2P2PP1/R2Q1RK1 b - - 0 12",
+   "said": "what is one of black's main ideas here how are we going to attack the king side okay b4 is actually a really really strong move yeah so we want to play f5 but i"
+  },
+  {
+   "ply": 24,
+   "t": 1486.5,
+   "line": [
+    "axb4"
+   ],
+   "fen": "r1b2rk1/2q1npbp/1pp3p1/2p1p3/PpN1P3/3PBN1P/2P2PP1/R2Q1RK1 w - - 0 13",
+   "said": "actually forgot about this idea he just uh well actually is it though okay so so"
+  },
+  {
+   "ply": 25,
+   "t": 1489.5,
+   "line": [
+    "a5"
+   ],
+   "fen": "r1b2rk1/2q1npbp/1pp3p1/P1p1p3/1pN1P3/3PBN1P/2P2PP1/R2Q1RK1 b - - 0 13",
+   "said": "there's some interesting stuff that happens so he breaks through with a5 um that's a pretty interesting idea i'm not sure how good it is i'm not sure how good it is i think it's actually really really good let me think"
+  },
+  {
+   "ply": 26,
+   "t": 1514,
+   "line": [
+    "bxa5"
+   ],
+   "fen": "r1b2rk1/2q1npbp/2p3p1/p1p1p3/1pN1P3/3PBN1P/2P2PP1/R2Q1RK1 w - - 0 14",
+   "said": "um yeah so the thing is if we attack the knife we go b5 then he goes knight to b6 attacks the rook and then he wins c5 so let's actually take the pawn let's take the pawn"
+  },
+  {
+   "ply": 27,
+   "t": 1517,
+   "line": [
+    "Bxc5"
+   ],
+   "fen": "r1b2rk1/2q1npbp/2p3p1/p1B1p3/1pN1P3/3P1N1P/2P2PP1/R2Q1RK1 b - - 0 14",
+   "said": "and um black is probably worse here but it's not clear so now uh white is like not threatening anything horrible white"
+  },
+  {
+   "ply": 28,
+   "t": 1535.5,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r4rk1/2q1npbp/2p1b1p1/p1B1p3/1pN1P3/3P1N1P/2P2PP1/R2Q1RK1 w - - 1 15",
+   "said": "has all of these little mini threats it would be too early to play f5 because our rooks are not connected and our bishop has not developed so let's develop our bishop and let's see how he plays this but basically we want to prioritize completing our development here because our position is kind of flimsy if that makes sense and so we need to complete the development as much as as much as possible thanks again prophet thanks trav man you are absolute beasts it's called the rosso limo yeah so we're currently up upon he can play bishop d6 and win the pawn back but it's you know it's not um it's not clear who benefits from that because we also have a passport on a5 and stuff so uh it's a very very complex position lots to take into account here uh let's see how he decides to play this thank you um mq so i'm getting a lot of christmas presents here early and that is honestly awesome so appreciate it well bishop b6 we go queen b7 so we're not trying to cling to our extra pawn here thank you chris g s y for the prime we're not trying to cling to our extra fun what we're trying to do is give away the pond with interest that is a a thing that i want people to understand when you are up upon one of the one of the benefits of being up upon is that you can give it back with interest you can give it back"
+  },
+  {
+   "ply": 29,
+   "t": 1629.5,
+   "line": [
+    "Nb6"
+   ],
+   "fen": "r4rk1/2q1npbp/1Np1b1p1/p1B1p3/1p2P3/3P1N1P/2P2PP1/R2Q1RK1 b - - 2 15",
+   "said": "at the right moment uh and you can give it back and gain something in return if that makes sense and this is what we're essentially trying to do here so i would definitely prefer bishop d6 and bishop takes e5 here he's burning a lot of clock trying to find the best way to do this and i think he's failed to do that because he is attacking art rook where should we put our rook"
+  },
+  {
+   "ply": 30,
+   "t": 1648,
+   "line": [
+    "Ra6"
+   ],
+   "fen": "5rk1/2q1npbp/rNp1b1p1/p1B1p3/1p2P3/3P1N1P/2P2PP1/R2Q1RK1 w - - 3 16",
+   "said": "where should we put a rook this is not a very complicated question because yeah we just go rook a6 we attack the knight we are threatening to take it"
+  },
+  {
+   "ply": 31,
+   "t": 1654,
+   "line": [
+    "Na4"
+   ],
+   "fen": "5rk1/2q1npbp/r1p1b1p1/p1B1p3/Np2P3/3P1N1P/2P2PP1/R2Q1RK1 b - - 4 16",
+   "said": "radio math thank you for the two months i appreciate it okay so he's done something really weird here right he just drops his knight's a4 he doesn't recapture the pawn now we can go about improving our"
+  },
+  {
+   "ply": 32,
+   "t": 1669,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "3r2k1/2q1npbp/r1p1b1p1/p1B1p3/Np2P3/3P1N1P/2P2PP1/R2Q1RK1 w - - 5 17",
+   "said": "position so what i don't like about this position is this pin this pin is annoying me because the knight can't move let's get the rook out of the pin let's also put it on a file where it x-rays"
+  },
+  {
+   "ply": 33,
+   "t": 1674,
+   "line": [
+    "Re1"
+   ],
+   "fen": "3r2k1/2q1npbp/r1p1b1p1/p1B1p3/Np2P3/3P1N1P/2P2PP1/R2QR1K1 b - - 6 17",
+   "said": "the queen okay now um let's just go h6 create some"
+  },
+  {
+   "ply": 34,
+   "t": 1677,
+   "line": [
+    "h6"
+   ],
+   "fen": "3r2k1/2q1npb1/r1p1b1pp/p1B1p3/Np2P3/3P1N1P/2P2PP1/R2QR1K1 w - - 0 18",
+   "said": "love for the king and also cover the g5"
+  },
+  {
+   "ply": 35,
+   "t": 1680,
+   "line": [
+    "Qc1"
+   ],
+   "fen": "3r2k1/2q1npb1/r1p1b1pp/p1B1p3/Np2P3/3P1N1P/2P2PP1/R1Q1R1K1 b - - 1 18",
+   "said": "square okay so now we need to find a way to basically push his pieces away from uh no problem okay we're no problem at all yeah so like i may be this is actually not so easy i see what"
+  },
+  {
+   "ply": 36,
+   "t": 1707.5,
+   "line": [
+    "Kh7"
+   ],
+   "fen": "3r4/2q1npbk/r1p1b1pp/p1B1p3/Np2P3/3P1N1P/2P2PP1/R1Q1R1K1 w - - 2 19",
+   "said": "he's trying to do here f5 is see i'll explain this after the game f5 our position is way too fragile to allow for something like f5 and i'll sort of flesh that out after the game let's go king h7 here okay let's preemptively uh defend the h6 pawn so that if he"
+  },
+  {
+   "ply": 37,
+   "t": 1714.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "3r4/2q1npbk/r1p1b1pp/p3p3/Np2P3/3PBN1P/2P2PP1/R1Q1R1K1 b - - 3 19",
+   "said": "plays bishop e3 which he does uh he's not attacking the pawn and we actually have a tempo here to do what we want to do and what white is threatening here to go knight c5 we move our rook away and he cripples"
+  },
+  {
+   "ply": 38,
+   "t": 1733,
+   "line": [
+    "Qc8"
+   ],
+   "fen": "2qr4/4npbk/r1p1b1pp/p3p3/Np2P3/3PBN1P/2P2PP1/R1Q1R1K1 w - - 4 20",
+   "said": "our pawn structure with knight takes e6 how can we preempt that yeah we can consider actually i really like weed c8 for several reasons part of it is that i support the bishop on e6 and"
+  },
+  {
+   "ply": 40,
+   "t": 1738,
+   "line": [
+    "Nc5",
+    "Ra8"
+   ],
+   "fen": "r1qr4/4npbk/2p1b1pp/p1N1p3/1p2P3/3PBN1P/2P2PP1/R1Q1R1K1 w - - 6 21",
+   "said": "another part of it is that you can definitely consider a sack on h3 although you know when we do sack on h3 we will"
+  },
+  {
+   "ply": 41,
+   "t": 1746.5,
+   "line": [
+    "Nxe6"
+   ],
+   "fen": "r1qr4/4npbk/2p1N1pp/p3p3/1p2P3/3PBN1P/2P2PP1/R1Q1R1K1 b - - 0 21",
+   "said": "only have a queen in the attack and that's a danger zone kind of thing"
+  },
+  {
+   "ply": 42,
+   "t": 1747.5,
+   "line": [
+    "Qxe6"
+   ],
+   "fen": "r2r4/4npbk/2p1q1pp/p3p3/1p2P3/3PBN1P/2P2PP1/R1Q1R1K1 w - - 0 22",
+   "said": "okay so he takes we take"
+  },
+  {
+   "ply": 43,
+   "t": 1748.5,
+   "line": [
+    "Bb6"
+   ],
+   "fen": "r2r4/4npbk/1Bp1q1pp/p3p3/1p2P3/3P1N1P/2P2PP1/R1Q1R1K1 b - - 1 22",
+   "said": "okay bishop b6 okay rook db8 maybe"
+  },
+  {
+   "ply": 44,
+   "t": 1753,
+   "line": [
+    "Rdb8"
+   ],
+   "fen": "rr6/4npbk/1Bp1q1pp/p3p3/1p2P3/3P1N1P/2P2PP1/R1Q1R1K1 w - - 2 23",
+   "said": "okay he wants to take this way but then"
+  },
+  {
+   "ply": 45,
+   "t": 1756.5,
+   "line": [
+    "Rxa5"
+   ],
+   "fen": "rr6/4npbk/1Bp1q1pp/R3p3/1p2P3/3P1N1P/2P2PP1/2Q1R1K1 b - - 0 23",
+   "said": "his bishop becomes kind of trapped okay if we take on b6 by"
+  },
+  {
+   "ply": 47,
+   "t": 1763,
+   "line": [
+    "Rxa5",
+    "Bxa5"
+   ],
+   "fen": "1r6/4npbk/2p1q1pp/B3p3/1p2P3/3P1N1P/2P2PP1/2Q1R1K1 b - - 0 24",
+   "said": "the way he takes our rook so we have to take okay so let's try to trap his bishop here and in order to trap his bishop"
+  },
+  {
+   "ply": 48,
+   "t": 1776.5,
+   "line": [
+    "c5"
+   ],
+   "fen": "1r6/4npbk/4q1pp/B1p1p3/1p2P3/3P1N1P/2P2PP1/2Q1R1K1 w - - 0 25",
+   "said": "uh we need to make sure that the pawn on b4 is safely protected how can we safely protect that pawn yeah we can go c5 we also incidentally"
+  },
+  {
+   "ply": 49,
+   "t": 1780.5,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "1r6/4npbk/4q1pp/B1p1p3/1p2P3/3P3P/2PN1PP1/2Q1R1K1 b - - 1 25",
+   "said": "create the threat of knight c6 okay so he finds a really really good move um"
+  },
+  {
+   "ply": 50,
+   "t": 1788,
+   "line": [
+    "Qa6"
+   ],
+   "fen": "1r6/4npbk/q5pp/B1p1p3/1p2P3/3P3P/2PN1PP1/2Q1R1K1 w - - 2 26",
+   "said": "but hmm okay let's go queen to a6 let's swing the queen around let's first swing the queen around and then we'll go knight c6"
+  },
+  {
+   "ply": 52,
+   "t": 1797.5,
+   "line": [
+    "Nc4",
+    "Nc6"
+   ],
+   "fen": "1r6/5pbk/q1n3pp/B1p1p3/1pN1P3/3P3P/2P2PP1/2Q1R1K1 w - - 4 27",
+   "said": "he potentially can tuck his bishop away like this but let's see if he does that"
+  },
+  {
+   "ply": 54,
+   "t": 1801.5,
+   "line": [
+    "Bc7",
+    "Rc8"
+   ],
+   "fen": "2r5/2B2pbk/q1n3pp/2p1p3/1pN1P3/3P3P/2P2PP1/2Q1R1K1 w - - 6 28",
+   "said": "yeah this is where these people have actually become incredibly good"
+  },
+  {
+   "ply": 55,
+   "t": 1805.5,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "2r5/5pbk/q1nB2pp/2p1p3/1pN1P3/3P3P/2P2PP1/2Q1R1K1 b - - 7 28",
+   "said": "yeah he finds a way to get out of this now he's attacking the pawn"
+  },
+  {
+   "ply": 56,
+   "t": 1809.5,
+   "line": [
+    "Qb5"
+   ],
+   "fen": "2r5/5pbk/2nB2pp/1qp1p3/1pN1P3/3P3P/2P2PP1/2Q1R1K1 w - - 8 29",
+   "said": "now he's attacking the pawn we need to defend it let's defend it with our queen and then we can try to centralize our knight with knight to d4 let's see if he allows us to do that"
+  },
+  {
+   "ply": 57,
+   "t": 1822.5,
+   "line": [
+    "Qb2"
+   ],
+   "fen": "2r5/5pbk/2nB2pp/1qp1p3/1pN1P3/3P3P/1QP2PP1/4R1K1 b - - 9 29",
+   "said": "perhaps okay well glad glad you have so knight c4 doesn't actually work how do we prepare an it4 ah but he wants"
+  },
+  {
+   "ply": 58,
+   "t": 1829,
+   "line": [
+    "Ra8"
+   ],
+   "fen": "r7/5pbk/2nB2pp/1qp1p3/1pN1P3/3P3P/1QP2PP1/4R1K1 w - - 10 30",
+   "said": "this now let's go rookie let's let's occupy the file let's occupy the file let's not"
+  },
+  {
+   "ply": 59,
+   "t": 1834.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "r7/5pbk/2nB2pp/1qp1p3/1pN1P3/2PP3P/1Q3PP1/4R1K1 b - - 0 30",
+   "said": "let him go rook a1 okay b3 or c so we could play b3 but then he goes for b1 and then he attacks the pawn which is"
+  },
+  {
+   "ply": 60,
+   "t": 1848.5,
+   "line": [
+    "Ra4"
+   ],
+   "fen": "8/5pbk/2nB2pp/1qp1p3/rpN1P3/2PP3P/1Q3PP1/4R1K1 w - - 1 31",
+   "said": "not a pleasant outcome so let's ignore this let's ignore this and let's uh let's try to double on the a file let's try to double on the eightfold i'm gonna"
+  },
+  {
+   "ply": 62,
+   "t": 1854,
+   "line": [
+    "Rb1",
+    "Qa6"
+   ],
+   "fen": "8/5pbk/q1nB2pp/2p1p3/rpN1P3/2PP3P/1Q3PP1/1R4K1 w - - 3 32",
+   "said": "have to play a little bit faster guys because i'm very low on time so let's uh let's play a little bit faster but what"
+  },
+  {
+   "ply": 63,
+   "t": 1861,
+   "line": [
+    "Bxc5"
+   ],
+   "fen": "8/5pbk/q1n3pp/2B1p3/rpN1P3/2PP3P/1Q3PP1/1R4K1 b - - 0 32",
+   "said": "i'm trying to do here is jogging for position oh and blended one"
+  },
+  {
+   "ply": 64,
+   "t": 1862.5,
+   "line": [
+    "Ra2"
+   ],
+   "fen": "8/5pbk/q1n3pp/2B1p3/1pN1P3/2PP3P/rQ3PP1/1R4K1 w - - 1 33",
+   "said": "now this guy is like a absolute beast this guy is an absolute monster um he's"
+  },
+  {
+   "ply": 68,
+   "t": 1869.5,
+   "line": [
+    "Qa3",
+    "bxc3",
+    "Qxc3",
+    "Qa4"
+   ],
+   "fen": "8/5pbk/2n3pp/2B1p3/q1N1P3/2QP3P/r4PP1/1R4K1 w - - 1 35",
+   "said": "he's playing like one here i'm basically trying to jock you for a position on the queen side i've actually wanted a pawn here he's refuted that flawlessly and um this is getting very complicated"
+  },
+  {
+   "ply": 70,
+   "t": 1889,
+   "line": [
+    "Qb3",
+    "Qxb3"
+   ],
+   "fen": "8/5pbk/2n3pp/2B1p3/2N1P3/1q1P3P/r4PP1/1R4K1 w - - 0 36",
+   "said": "okay so that's another super annoying move yeah honestly he's completely outplayed me here so"
+  },
+  {
+   "ply": 71,
+   "t": 1890.5,
+   "line": [
+    "Rxb3"
+   ],
+   "fen": "8/5pbk/2n3pp/2B1p3/2N1P3/1R1P3P/r4PP1/6K1 b - - 0 36",
+   "said": "i'm just losing in this position well"
+  },
+  {
+   "ply": 72,
+   "t": 1891.5,
+   "line": [
+    "Nd8"
+   ],
+   "fen": "3n4/5pbk/6pp/2B1p3/2N1P3/1R1P3P/r4PP1/6K1 w - - 1 37",
+   "said": "not losing but now i'm going to try to get my knight to e6"
+  },
+  {
+   "ply": 73,
+   "t": 1899.5,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "3n4/5pbk/3B2pp/4p3/2N1P3/1R1P3P/r4PP1/6K1 b - - 2 37",
+   "said": "and i'm gonna try to get that knight around to f4 ultimately no these guys are like insane honestly okay i'm gonna have to"
+  },
+  {
+   "ply": 74,
+   "t": 1903,
+   "line": [
+    "f6"
+   ],
+   "fen": "3n4/6bk/3B1ppp/4p3/2N1P3/1R1P3P/r4PP1/6K1 w - - 0 38",
+   "said": "play f6 to defend the pawn on e5"
+  },
+  {
+   "ply": 75,
+   "t": 1910,
+   "line": [
+    "Ne3"
+   ],
+   "fen": "3n4/6bk/3B1ppp/4p3/4P3/1R1PN2P/r4PP1/6K1 b - - 1 38",
+   "said": "yeah i need to be focusing a little bit but i mean i'm still winning most games"
+  },
+  {
+   "ply": 76,
+   "t": 1911.5,
+   "line": [
+    "Ne6"
+   ],
+   "fen": "8/6bk/3Bnppp/4p3/4P3/1R1PN2P/r4PP1/6K1 w - - 2 39",
+   "said": "pretty handily but some sometimes these guys"
+  },
+  {
+   "ply": 77,
+   "t": 1915.5,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "8/6bk/3Bnppp/3Np3/4P3/1R1P3P/r4PP1/6K1 b - - 3 39",
+   "said": "are like incredible"
+  },
+  {
+   "ply": 78,
+   "t": 1917.5,
+   "line": [
+    "Ra7"
+   ],
+   "fen": "8/r5bk/3Bnppp/3Np3/4P3/1R1P3P/5PP1/6K1 w - - 4 40",
+   "said": "sometimes these guys are like absolutely incredibly strong"
+  },
+  {
+   "ply": 80,
+   "t": 1923,
+   "line": [
+    "Be7",
+    "f5"
+   ],
+   "fen": "8/r3B1bk/4n1pp/3Npp2/4P3/1R1P3P/5PP1/6K1 w - - 0 41",
+   "said": "not like 2 300. i'm not expecting them to be weak but you know i actually kind of have forgotten how good these people are"
+  },
+  {
+   "ply": 81,
+   "t": 1934,
+   "line": [
+    "Rb6"
+   ],
+   "fen": "8/r3B1bk/1R2n1pp/3Npp2/4P3/3P3P/5PP1/6K1 b - - 1 41",
+   "said": "so knight f6 is a really good move here for example the the problem is uh he he's he's just"
+  },
+  {
+   "ply": 82,
+   "t": 1935.5,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "8/r3B1bk/1R4pp/3Npp2/3nP3/3P3P/5PP1/6K1 w - - 2 42",
+   "said": "too slow he's he's taking like five seconds for a"
+  },
+  {
+   "ply": 86,
+   "t": 1942,
+   "line": [
+    "Nf6+",
+    "Bxf6",
+    "Bxf6",
+    "Rd7"
+   ],
+   "fen": "8/3r3k/1R3Bpp/4pp2/3nP3/3P3P/5PP1/6K1 w - - 1 44",
+   "said": "move here but he's finding absolute best moves like every move"
+  },
+  {
+   "ply": 90,
+   "t": 1946.5,
+   "line": [
+    "Bg7",
+    "Nb3",
+    "Bxe5",
+    "Nc1"
+   ],
+   "fen": "8/3r3k/1R4pp/4Bp2/4P3/3P3P/5PP1/2n3K1 w - - 1 46",
+   "said": "uh he's just gonna not probably i hope not make it here"
+  },
+  {
+   "ply": 91,
+   "t": 1948.5,
+   "line": [
+    "Kf1"
+   ],
+   "fen": "8/3r3k/1R4pp/4Bp2/4P3/3P3P/5PP1/2n2K2 b - - 2 46",
+   "said": "so we're going to get the knight to see one and attack the spawn rook b oh my god he might make me there i think he might have had mate actually okay we're gonna give him a check okay here to stop the king's progression yeah okay so that wasn't great um again to give you guys a sense the accuracy in this game very bad yeah my mind was bad it was 92.6 for my opponent 74.2 for us"
+  },
+  {
+   "ply": 6,
+   "t": 1994.5,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "said": "so not not one of my best games um but you know really good play by my opponent honestly well again well let's not speculate um i"
+  },
+  {
+   "ply": 9,
+   "t": 1996,
+   "line": [
+    "Bxc6",
+    "dxc6",
+    "d3"
+   ],
+   "fen": "r1bqkbnr/pp2pp1p/2p3p1/2p5/4P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "said": "think he played like a gm but but he played legitimately so he found"
+  },
+  {
+   "ply": 11,
+   "t": 2001,
+   "line": [
+    "Bg7",
+    "h3"
+   ],
+   "fen": "r1bqk1nr/pp2ppbp/2p3p1/2p5/4P3/3P1N1P/PPP2PP1/RNBQK2R b KQkq - 0 6",
+   "said": "some incredibly strong ideas"
+  },
+  {
+   "ply": 9,
+   "t": 2003.5,
+   "line": [],
+   "fen": "r1bqkbnr/pp2pp1p/2p3p1/2p5/4P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "said": "all right so basically"
+  },
+  {
+   "ply": 12,
+   "t": 2007,
+   "line": [
+    "Bg7",
+    "h3",
+    "e5"
+   ],
+   "fen": "r1bqk1nr/pp3pbp/2p3p1/2p1p3/4P3/3P1N1P/PPP2PP1/RNBQK2R w KQkq - 0 7",
+   "said": "okay no but his opening was incredibly good so basically this move b4 is super strong and this is actually a very thematic breakthrough in this line well i would say this i think my opponent played on a gm level throughout the game not just not just in the opening uh or not just in the end of the game but he outplayed me from a position where i thought that black was close to winning he found a way to get his bishop out so it was really back and forth so thematic thematic comes from the word theme and when i talk about a thematic idea um i'm talking about an idea that commonly occurs in this type of position maybe not specifically in this position although i'm sure probably it has but it occurs commonly in these types of positions in fact i could make a chess-based search as i'm peeing i'm going to let chess base do its work and i promise that i will find for you guys several grandmaster game examples of"
+  }
+ ],
+ "forks": []
+}

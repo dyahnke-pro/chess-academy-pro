@@ -1,0 +1,345 @@
+{
+ "videoId": "R2skmBe07aQ",
+ "title": "Beginner To Master | Chess Speedrun | 1100 | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 45.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] so 1300 we are playing no chance ever thank you for the tier one okay so we're going to play the sicilian let's play the uh accelerated dragon"
+  },
+  {
+   "ply": 4,
+   "t": 52,
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "um let's play the accelerated dragon which i i highly recommend for players in sort of the 1300 rating range okay so"
+  },
+  {
+   "ply": 5,
+   "t": 57,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "said": "bishop c4 now we face this move a great deal of times it's like the italian against the sicilian but uh that doesn't work that way and what"
+  },
+  {
+   "ply": 6,
+   "t": 71,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "said": "is the reason why this is not as good as the italian yeah the move is e6 blunting the bishop right blunting the bishop and potentially preparing d5 now"
+  },
+  {
+   "ply": 7,
+   "t": 78.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 1 4",
+   "said": "oh ho eva x taffy with 5 000 bits holy shoot oh my goodness"
+  },
+  {
+   "ply": 8,
+   "t": 87.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 2 5",
+   "said": "wow amazing amazing okay we're going to the developer tonight thank you eva x toffee big time bomb holy smokes okay"
+  },
+  {
+   "ply": 7,
+   "t": 94.5,
+   "line": [],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 1 4",
+   "said": "so we didn't play d5 because that would"
+  },
+  {
+   "ply": 9,
+   "t": 95.5,
+   "line": [
+    "Nf6",
+    "e5"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p1P3/2B5/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 0 5",
+   "said": "blend okay e5 now this is going to blow your guys minds black to play there is a very cool move and this move"
+  },
+  {
+   "ply": 10,
+   "t": 111,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2ppP3/2B5/2N2N2/PPPP1PPP/R1BQK2R w KQkq d6 0 6",
+   "said": "actually becomes possible when there is a bishop on c4 like very specifically you need to associate bishop on c4 with the possibility of playing d5 after the game i will show uh the opening where this happens most frequently but there's actually many different openings where this idea manifests itself"
+  },
+  {
+   "ply": 11,
+   "t": 130.5,
+   "line": [
+    "exf6"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n1pP2/2pp4/2B5/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 0 6",
+   "said": "so we're occupying the center now if he takes my knight then we're going to take his bishop and a very interesting pawn structure arises there's a lot to unpack there because for you guys you might be looking at this okay great he takes so"
+  },
+  {
+   "ply": 12,
+   "t": 133.5,
+   "line": [
+    "dxc4"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n1pP2/2p5/2p5/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 7",
+   "said": "you know this will not remain behind the scenes now you guys might be looking at this and saying wait a minute"
+  },
+  {
+   "ply": 14,
+   "t": 142,
+   "line": [
+    "fxg7",
+    "Bxg7"
+   ],
+   "fen": "r1bqk2r/pp3pbp/2n1p3/2p5/2p5/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 8",
+   "said": "double pawns ruined kingside pawn structure like what's good about this well if you look a little bit deeper you guys know that i always like to de-emphasize pawn"
+  },
+  {
+   "ply": 15,
+   "t": 150.5,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r1bqk2r/pp3pbp/2n1p3/2p5/2p1N3/5N2/PPPP1PPP/R1BQK2R b KQkq - 1 8",
+   "said": "structure or or rather put it in improper context"
+  },
+  {
+   "ply": 14,
+   "t": 152,
+   "line": [],
+   "fen": "r1bqk2r/pp3pbp/2n1p3/2p5/2p5/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 0 8",
+   "said": "now what i want you to understand here first of all it's hard for white to develop his bishop if white plays d3 then we take on d3"
+  },
+  {
+   "ply": 15,
+   "t": 165,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r1bqk2r/pp3pbp/2n1p3/2p5/2p1N3/5N2/PPPP1PPP/R1BQK2R b KQkq - 1 8",
+   "said": "white is forced to capture back and then the pawn on d3 is a sitting duck second of all we have the two bishops which in an open position is really good one of these bishops is already like pre-developed onto a really good square and our pawns you could look at them and say they're weak but i look at them and i say well they're actually very strong as i said they are stopping white's"
+  },
+  {
+   "ply": 16,
+   "t": 190.5,
+   "line": [
+    "b6"
+   ],
+   "fen": "r1bqk2r/p4pbp/1pn1p3/2p5/2p1N3/5N2/PPPP1PPP/R1BQK2R w KQkq - 0 9",
+   "said": "white from really controlling any share of the center okay so c5 is being attacked how do we defend this pawn while also preparing to develop this bishop beautiful nice job guys b6 killing two birds with one stone we want to fianchetto the other bishop and at the same time we're protecting our upon"
+  },
+  {
+   "ply": 17,
+   "t": 203,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bqk2r/p4pbp/1pn1p3/2p5/2p1N3/3P1N2/PPP2PPP/R1BQK2R b KQkq - 0 9",
+   "said": "queen to d5 also would have been possible by the way just bro whoa 584 coming over from grandmaster's hands and hamilton welcome guys you coming a great time because we're doing our 10-minute speed run"
+  },
+  {
+   "ply": 18,
+   "t": 213.5,
+   "line": [
+    "cxd3"
+   ],
+   "fen": "r1bqk2r/p4pbp/1pn1p3/2p5/4N3/3p1N2/PPP2PPP/R1BQK2R w KQkq - 0 10",
+   "said": "trying to pack this with instructional content and this is just what we needed somehow welcome everybody thank you so much i'm on eric not sure who was"
+  },
+  {
+   "ply": 19,
+   "t": 216.5,
+   "line": [
+    "cxd3"
+   ],
+   "fen": "r1bqk2r/p4pbp/1pn1p3/2p5/4N3/3P1N2/PP3PPP/R1BQK2R b KQkq - 0 10",
+   "said": "streaming really appreciate it welcome chess bros hope you guys stick around all right so we're right in the middle of our first speedrun game let's jump right in really appreciate it okay so as i mentioned many times um it's important to be flexible in chess right so um you have to be able to change your strategy at a moment's notice but the funny thing is the move i initially intended was bishop to a6 to attack the pawn does anybody see what's wrong with the move bishop a6 thank you magno and we're actually going to end up playing bishop b7 here but what is wrong with bishop a6 which looks very natural it's queen a4 queen a4 kind of forks these two undefended pieces and"
+  },
+  {
+   "ply": 20,
+   "t": 268,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "r2qk2r/pb3pbp/1pn1p3/2p5/4N3/3P1N2/PP3PPP/R1BQK2R w KQkq - 1 11",
+   "said": "the way you need to see this is okay the knight is undefended you guys know that you have to be obsessed with undefended pieces and when you put another piece on an undefended square that needs to set the alarm bells ring so instead let's just play bishop b7 as originally intended then we're gonna castle and we can potentially play night before and target this weak pawn"
+  },
+  {
+   "ply": 21,
+   "t": 283,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r2qk2r/pb3pbp/1pn1p3/2p5/4NB2/3P1N2/PP3PPP/R2QK2R b KQkq - 2 11",
+   "said": "okay so everything should be pretty clear so far um take a couple of bites of curry okay what should we do now what should we do now"
+  },
+  {
+   "ply": 22,
+   "t": 301.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/pb3pbp/1pn1p3/2p5/4NB2/3P1N2/PP3PPP/R2QK2R w KQ - 3 12",
+   "said": "so what is being threatened first of all what is being threatened this knight d6 but we don't actually specifically need to defend against knight e6 by castling we take the sting out of it i like that expression taking this thing out of it we don't literally stop him from going knight t6 but it's no longer a fork"
+  },
+  {
+   "ply": 23,
+   "t": 316,
+   "line": [
+    "Nfg5"
+   ],
+   "fen": "r2q1rk1/pb3pbp/1pn1p3/2p3N1/4NB2/3P4/PP3PPP/R2QK2R b KQ - 4 12",
+   "said": "it's no longer a fork we can reposition our bishop to a6 and in the event of okay so knight g5 and this move looks scary it looks very intimidating looks like he's attacking us the reality is um if if we look very carefully at what it is exactly that he's threatening we find that uh his position has no leg to stand on first of all we could go h6 but what i want to make very clear is we don't need to do that we can go directly for the counter attack now bishop takes b2 would be bad and i'll talk about this after the game basically the reason is cs queen h5 so we need to keep the bishop for defensive purposes but that is enough so if we wanted to counter-attack what"
+  },
+  {
+   "ply": 24,
+   "t": 360,
+   "line": [
+    "Nb4"
+   ],
+   "fen": "r2q1rk1/pb3pbp/1p2p3/2p3N1/1n2NB2/3P4/PP3PPP/R2QK2R w KQ - 5 13",
+   "said": "should we do well we have to figure out what is weak the d3 pawn is white's biggest weakness right i think you guys would all agree with that so let's actually target that pawn if he goes queen h5 which i think is quite likely what you guys will see is that his position falls apart really really quickly i take on d3 with check then i easily disarm his attack and then i win a piece um now knight d4"
+  },
+  {
+   "ply": 25,
+   "t": 385,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/pb3pbp/1p2p3/2p3N1/1n2NB2/3P4/PP3PPP/R2Q1RK1 b - - 6 13",
+   "said": "doesn't actually accomplish all that much it doesn't threaten anything i like knight before more it's more purposeful if that makes sense um and white is already in trouble because okay so he castles which is correct now what should we take on d3 with the knight or the queen and both moves are probably okay"
+  },
+  {
+   "ply": 26,
+   "t": 397.5,
+   "line": [
+    "h6"
+   ],
+   "fen": "r2q1rk1/pb3pb1/1p2p2p/2p3N1/1n2NB2/3P4/PP3PPP/R2Q1RK1 w - - 0 14",
+   "said": "um but let's actually annoy let's annoy the crap out of him first i'm going to go h6 i'm going to say get out of here then i'm going to take with the queen actually it depends what he does right if he moves his knight to f3 then knight takes d3 actually attacks two pieces at once it attacks the knight which has now lost its defender and it attacks the bishop so i don't think he can save both pieces but this is annoying because we're basically showing him who's best my guess is he's gonna play this move if i have the right read on his style that doesn't actually work though and we need to remember something i talked"
+  },
+  {
+   "ply": 27,
+   "t": 443,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r2q1rk1/pb3pb1/1p2p2p/2p5/1n2NB2/3P1N2/PP3PPP/R2Q1RK1 b - - 1 14",
+   "said": "about when i went over the greek gift sacrifice to find the refutation so when he goes it wait let's wait for what he does because i don't want to ramble on and on if he doesn't go queen h but my guess is he went oh he goes back"
+  },
+  {
+   "ply": 28,
+   "t": 444.5,
+   "line": [
+    "Nxd3"
+   ],
+   "fen": "r2q1rk1/pb3pb1/1p2p2p/2p5/4NB2/3n1N2/PP3PPP/R2Q1RK1 w - - 0 15",
+   "said": "okay knight takes d3 right so does this move make sense to everybody we are attacking"
+  },
+  {
+   "ply": 27,
+   "t": 451,
+   "line": [],
+   "fen": "r2q1rk1/pb3pb1/1p2p2p/2p5/1n2NB2/3P1N2/PP3PPP/R2Q1RK1 b - - 1 14",
+   "said": "the bishop and then the knight on e4 was previously protected by the pawn"
+  },
+  {
+   "ply": 28,
+   "t": 453.5,
+   "line": [
+    "Nxd3"
+   ],
+   "fen": "r2q1rk1/pb3pb1/1p2p2p/2p5/4NB2/3n1N2/PP3PPP/R2Q1RK1 w - - 0 15",
+   "said": "so now it has lost its defender so there's a couple of ways that he can temporarily save his piece one of them is knight d6 counter-attacking my bishop that doesn't actually work and we'll talk about it if he plays it uh let me write this down in case he doesn't if he plays bishop to d6 then uh we still take the knight we'll we're gonna have two pieces for a rook and an extra pawn and we're gonna have complete peace domination so we're to be winning although we're not going to be up in peace hey it's easy no the first speedrun is still on going i'm 2300 but uh in parallel we're basically starting a 10-minute speed run as well or slower on as some purists speed-run purists want to call it i'm fine with it"
+  },
+  {
+   "ply": 29,
+   "t": 504,
+   "line": [
+    "Rb1"
+   ],
+   "fen": "r2q1rk1/pb3pb1/1p2p2p/2p5/4NB2/3n1N2/PP3PPP/1R1Q1RK1 b - - 1 15",
+   "said": "so everything i'm doing should make perfect sense to you guys and um white is completely lost there he simply as i said he has no leg to stand on so the key thing that you guys should be mulling over okay so he literally gives us a menu black caviar or five guys or in and out five guys in and"
+  },
+  {
+   "ply": 30,
+   "t": 514.5,
+   "line": [
+    "Bxe4"
+   ],
+   "fen": "r2q1rk1/p4pb1/1p2p2p/2p5/4bB2/3n1N2/PP3PPP/1R1Q1RK1 w - - 0 16",
+   "said": "out five guys in and outs uh five guys five guys five guys because the rook on b1 is hanging it literally doesn't matter we can take either piece in and out is my california jam though the reason i take with a bishop actually okay so now we got to be a little bit careful right i know a lot of you are like wait a second we can take the bishop no no no slow down because he's attacking our bishop do we want to give up this beautiful beast no no no no we want to defend this bishop but we don't just want to defend it with any old move we want to defend it in a way that also coordinates our the maximum amount of pieces now this is the habit that i want you guys to get into right bishop g6 is fine f5 is very good f5 defends the bishop of the pawn but even better is the move queen to d5 right uh magic toaster very good because this creates a battery against his knight we are now kind of threatening to ruin his pawn structure or force a queen trade with a move bishop takes f3 we're connecting the rooks and and just generally we're we're solidifying our advantage if that makes sense f5 is also good and many roads lead to rome in such a position so i don't want to make it seem like i'm choosing the only winning move or anything like that this is just one way of approaching the position black to play and win the game this as some people said this seems to allow a pin but there's one very important tactical detail this is not a pin against the king the knight literally is not paralyzed and knight takes f4 is a very simple move counter-attacking his queen if he takes our queen then we take his with check even if it wasn't checked it would still be good five guys in and out this time we're going to give some how much to in and out his position is completely collapsed he is down 480 million pieces and the game is oh my goodness we are just vacuum cleaner"
+  },
+  {
+   "ply": 6,
+   "t": 631.5,
+   "line": [],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "said": "is on vacuum cleaner is on okay so let's walk over the game so bishop c4 is is not amazing but it's not terrible either so knight"
+  },
+  {
+   "ply": 9,
+   "t": 637,
+   "line": [
+    "e5",
+    "Nf6",
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p1P3/2B5/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 2 5",
+   "said": "f6 e5 d5 so the opening where this happens most famously is in the scotch gambit and the scotch or the scotch italian that's like a mixture of the scotch and the italian and after knight f6 e5 the move d5 uh is the main theoretical continuation ratings get refunded"
+  },
+  {
+   "ply": 2,
+   "t": 663.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "uh does that make sense so this leads to a very theoretical line but basically that's the same exact concept okay so instead of d5 we can also go after the pawn yeah so this is okay uh we can actually try to win this bond with this move queen c7 but i wanted to illustrate the move d5 so he takes f6 now he should have probably taken on passant but then he's basically moved his epon three times only to trade it for a d-pawn that's only moved once we have better control of the center than he does and uh this bishop we're gonna fianchetto so this is a great position for black all right if that makes sense i still think you should have done that because this position is already quite bad for white uh to recap some of the reasons that white is worse here first of all look at these puns they're doubled but doubled pawns can actually operate in tandem kind of like partners in stopping white from controlling the center it's not easy for white to actually attack either of these pawns if he goes queen to e2 and he says all right i'm going to win this pawn well no no you're not because black can counter attack this pawn and force the queen back to d1"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 6,
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "e6"
+   ],
+   "options": [
+    {
+     "san": "Nc3",
+     "t": 78.5,
+     "continuation": "Nc3",
+     "said": "the italian yeah the move is e6 blunting the bishop right blunting the bishop and potentially preparing d5 now oh ho eva x taffy with 5 000 bits holy shoot oh my goodness wow amazing amazing okay we're going to the developer tonight thank you eva x toffee big time bomb holy smokes okay so we didn't play d5 because that would blend okay e5 now this is going to blow your guys minds black to play there is a very cool move and this move actually becomes possible when there is a bishop on c4 like very specifically you need to associate bishop on c4 with the possibility of playing d5 after the game i will show uh the opening where this happens most frequently but there's actually many different openings where this idea manifests itself so we're occupying the center now if he takes my knight then we're going to take his bishop and a very interesting pawn structure arises there's a lot to unpack there because for you guys you might be looking at this okay great he takes so you know this will not remain behind the scenes now you guys might be looking at this and saying wait a minute double pawns ruined kingside pawn"
+    },
+    {
+     "san": "e5",
+     "t": 637,
+     "continuation": "e5 Nf6 Nc3",
+     "said": "okay so let's walk over the game so bishop c4 is is not amazing but it's not terrible either so knight f6 e5 d5 so the opening where this happens most famously is in the scotch gambit and the scotch or the scotch italian that's like a mixture of the scotch and the italian and after knight f6 e5 the move d5 uh is the main theoretical continuation ratings get refunded uh does that make sense so this leads to a very theoretical line but basically that's the same exact concept okay so instead of d5 we can also go after the pawn yeah so this is okay uh we can actually try to win this bond with this move queen c7 but i wanted to illustrate the move d5 so he takes f6 now he should have probably taken on passant but then he's basically moved his epon three times only to trade it for a d-pawn that's only moved once we have better control of the center than he does and uh this bishop we're gonna fianchetto so this is a great position for black all right if that makes sense i still"
+    }
+   ]
+  }
+ ]
+}

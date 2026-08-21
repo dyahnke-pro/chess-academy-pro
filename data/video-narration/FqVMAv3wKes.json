@@ -1,0 +1,357 @@
+{
+ "videoId": "FqVMAv3wKes",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1550",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 819,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "queen d4 check yeah 100 4 000 subs i can't even believe we're uttering those words we're playing a guy who is 1641 acos she's robles let's go e5 again"
+  },
+  {
+   "ply": 4,
+   "t": 823,
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "and let's go with a classical"
+  },
+  {
+   "ply": 5,
+   "t": 827.5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "said": "okay um let me disable the alerts for a second oh five thousand bits oh my lands"
+  },
+  {
+   "ply": 6,
+   "t": 835,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "said": "what is this another bomb i can't even"
+  },
+  {
+   "ply": 7,
+   "t": 837.5,
+   "line": [
+    "Ba4"
+   ],
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "said": "keep up with this five thousand bits from jam let's go"
+  },
+  {
+   "ply": 8,
+   "t": 842,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 5",
+   "said": "knight f6 this is the main line of the"
+  },
+  {
+   "ply": 9,
+   "t": 845,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 3 5",
+   "said": "rye lopez it should be familiar to most people um"
+  },
+  {
+   "ply": 10,
+   "t": 846,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk2r/1pppbppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 4 6",
+   "said": "these are just the main moves we're"
+  },
+  {
+   "ply": 11,
+   "t": 851,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1bqk2r/1pppbppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQR1K1 b kq - 5 6",
+   "said": "developing our pieces the normal squares and at this point he's threatening to capture our knight"
+  },
+  {
+   "ply": 12,
+   "t": 858.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1bqk2r/2ppbppp/p1n2n2/1p2p3/B3P3/5N2/PPPP1PPP/RNBQR1K1 w kq - 0 7",
+   "said": "and capture on e5 so the time has come for us to remove the bishop from its post on a4"
+  },
+  {
+   "ply": 13,
+   "t": 861.5,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "r1bqk2r/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 b kq - 1 7",
+   "said": "now we need to open up our own bishop"
+  },
+  {
+   "ply": 14,
+   "t": 865.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk2r/2p1bppp/p1np1n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 w kq - 0 8",
+   "said": "and so we play the move d6 to support the center and open up the bishop this is still well within the range of the main line"
+  },
+  {
+   "ply": 15,
+   "t": 873.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "r1bqk2r/2p1bppp/p1np1n2/1p2p3/4P3/1BP2N2/PP1P1PPP/RNBQR1K1 b kq - 0 8",
+   "said": "of the rye lopez thank you the giovanni 95 for the tier"
+  },
+  {
+   "ply": 16,
+   "t": 875,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/1BP2N2/PP1P1PPP/RNBQR1K1 w - - 1 9",
+   "said": "one i appreciate it now we castle and the main move here is"
+  },
+  {
+   "ply": 17,
+   "t": 879.5,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/1BPP1N2/PP3PPP/RNBQR1K1 b - - 0 9",
+   "said": "h3 so he plays d3 which which is a move it's not the most active mode but it is a move and um and and and there's many ways for"
+  },
+  {
+   "ply": 18,
+   "t": 899,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "r2q1rk1/2p1bppp/p1np1n2/1p2p3/4P1b1/1BPP1N2/PP3PPP/RNBQR1K1 w - - 1 10",
+   "said": "black here to develop my pieces right we can develop this bishop to g4 we can well bishop g4 isn't as good as it seems i'm gonna play this move even though it's not as good as it seems and after"
+  },
+  {
+   "ply": 19,
+   "t": 904,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "r2q1rk1/2p1bppp/p1np1n2/1p2p3/4P1b1/1BPP1N2/PP1N1PPP/R1BQR1K1 b - - 2 10",
+   "said": "the game i'm going to explain why bishop g4 maybe he'll show us now i'm gonna go knight to well no actually let's go what should we do here should we do"
+  },
+  {
+   "ply": 22,
+   "t": 919,
+   "line": [
+    "Na5",
+    "Bc2",
+    "c5"
+   ],
+   "fen": "r2q1rk1/4bppp/p2p1n2/npp1p3/4P1b1/2PP1N2/PPBN1PPP/R1BQR1K1 w - - 0 12",
+   "said": "let's get this bishop out of this annoying little square on b3 we're gonna go knight a5 we're going to expand on the queen side with c5 it's very typical idea"
+  },
+  {
+   "ply": 23,
+   "t": 923,
+   "line": [
+    "Nf1"
+   ],
+   "fen": "r2q1rk1/4bppp/p2p1n2/npp1p3/4P1b1/2PP1N2/PPB2PPP/R1BQRNK1 b - - 1 12",
+   "said": "now if he knows what he's doing we're"
+  },
+  {
+   "ply": 24,
+   "t": 924,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2q1rk1/4bppp/p1np1n2/1pp1p3/4P1b1/2PP1N2/PPB2PPP/R1BQRNK1 w - - 2 13",
+   "said": "going to bring our knight back into the game he'll get his knight to g3"
+  },
+  {
+   "ply": 25,
+   "t": 927,
+   "line": [
+    "Ne3"
+   ],
+   "fen": "r2q1rk1/4bppp/p1np1n2/1pp1p3/4P1b1/2PPNN2/PPB2PPP/R1BQR1K1 b - - 3 13",
+   "said": "and that's exactly why the pin isn't as effective here"
+  },
+  {
+   "ply": 26,
+   "t": 933,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2q1rk1/4bppp/p1npbn2/1pp1p3/4P3/2PPNN2/PPB2PPP/R1BQR1K1 w - - 4 14",
+   "said": "he played this perfectly he's forcing our bishop back and we could have put a bishop there in the first place"
+  },
+  {
+   "ply": 27,
+   "t": 937,
+   "line": [
+    "d4"
+   ],
+   "fen": "r2q1rk1/4bppp/p1npbn2/1pp1p3/3PP3/2P1NN2/PPB2PPP/R1BQR1K1 b - - 0 14",
+   "said": "so we wasted a couple of time you know he's playing this incredibly well d4 is"
+  },
+  {
+   "ply": 28,
+   "t": 941.5,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "r2q1rk1/4bppp/p1npbn2/1p2p3/3pP3/2P1NN2/PPB2PPP/R1BQR1K1 w - - 0 15",
+   "said": "good now we're going to take and the other"
+  },
+  {
+   "ply": 29,
+   "t": 946.5,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "r2q1rk1/4bppp/p1npbn2/1p2p3/3PP3/4NN2/PPB2PPP/R1BQR1K1 b - - 0 15",
+   "said": "problem that we're encountering here is that he's threatening a fork with d5"
+  },
+  {
+   "ply": 30,
+   "t": 952,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r2q1rk1/4bppp/p1npbn2/1p6/3pP3/4NN2/PPB2PPP/R1BQR1K1 w - - 0 16",
+   "said": "so we're gonna have to take on d4 but now what we're left with"
+  },
+  {
+   "ply": 31,
+   "t": 956.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r2q1rk1/4bppp/p1npbn2/1p6/3NP3/4N3/PPB2PPP/R1BQR1K1 b - - 0 16",
+   "said": "is a not sure i like this time"
+  },
+  {
+   "ply": 32,
+   "t": 958.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r2q1rk1/4bppp/p2pbn2/1p6/3nP3/4N3/PPB2PPP/R1BQR1K1 w - - 0 17",
+   "said": "consumption but what we're left with is a weak pawn on"
+  },
+  {
+   "ply": 33,
+   "t": 962,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r2q1rk1/4bppp/p2pbn2/1p6/3QP3/4N3/PPB2PPP/R1B1R1K1 b - - 0 17",
+   "said": "d6 a giovanni 95 with five gifted subs so what do we need to do in this position what we need to do in this position is activate the bishop on e7 it's"
+  },
+  {
+   "ply": 34,
+   "t": 975.5,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r2q1rk1/3nbppp/p2pb3/1p6/3QP3/4N3/PPB2PPP/R1B1R1K1 w - - 1 18",
+   "said": "currently kind of passive and so we'll need to put it on f6 but to do that we need to move the knight away from d7 thank you the giovanni 95 it just keeps going and going"
+  },
+  {
+   "ply": 35,
+   "t": 983,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r2q1rk1/3nbppp/p2pb3/1p1N4/3QP3/8/PPB2PPP/R1B1R1K1 b - - 2 18",
+   "said": "uh this is incredible stuff here okay so he goes knight d5"
+  },
+  {
+   "ply": 36,
+   "t": 985.5,
+   "line": [
+    "Bxd5"
+   ],
+   "fen": "r2q1rk1/3nbppp/p2p4/1p1b4/3QP3/8/PPB2PPP/R1B1R1K1 w - - 0 19",
+   "said": "let's get rid of that knight that was an annoying night let's get rid of it"
+  },
+  {
+   "ply": 37,
+   "t": 988.5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r2q1rk1/3nbppp/p2p4/1p1P4/3Q4/8/PPB2PPP/R1B1R1K1 b - - 0 19",
+   "said": ""
+  },
+  {
+   "ply": 38,
+   "t": 989.5,
+   "line": [
+    "Bf6"
+   ],
+   "fen": "r2q1rk1/3n1ppp/p2p1b2/1p1P4/3Q4/8/PPB2PPP/R1B1R1K1 w - - 1 20",
+   "said": "and now we can put our bishop on a very nice square on a very nice diagonal yeah gem jam is indeed the greatest ever"
+  },
+  {
+   "ply": 40,
+   "t": 1000.5,
+   "line": [
+    "Qd3",
+    "g6"
+   ],
+   "fen": "r2q1rk1/3n1p1p/p2p1bp1/1p1P4/8/3Q4/PPB2PPP/R1B1R1K1 w - - 0 21",
+   "said": "g6 okay blunting his influence over the diagonal obviously he was threatening checkmate oh thank sorry ac7iomin now this knight on d7 where can we put it where should it where does it belong where does this knife belong it belongs either on c5 or it belongs on e5 either of those two squares are fine and when you have a situation like this where you have two possible moves you're not sure which one to make it often makes sense to make a third move something a little bit more flexible so that we can only develop our knight when we're absolutely sure of where we want to put it that's why i'm going to play the move rook to c8 deploying our rook to an open file because maybe i want to put the knight on e5 maybe i want to put it on c5 i don't know uh it depends on what he's going to do so that's why we're going to hold off on that decision for a second okay by the way queen a5 also something to point out here which would fork his his rook and his pawn on a2 that's another possibility in the future uh yeah we wanted you want to be flexible and trust you don't want to put all of your cards on the table in one go yeah 95 knight c4 is the idea okay so now it's definitely time for a little for guruski attacking the rook attacking the pawn using our queen and uh this is uh this is just starting to collapse for him now look at how our pieces are positioned i still haven't moved my knife from d7 because i haven't needed to you know there's there's been no need to do that uh instead and i just got my queen trapped i just got i could have gotten my queen trap but that was not so simple because of 95 that would that would have been pretty close okay what do we do how do we play we'll talk about that after the game he failed to spot a very big chance here what should now what i'm seeing whoa oh my goodness what this is this is unbelievable unbelievable 41 from polar bear bc as i play 95 this was the moment for it and we've got him tied up but look at this man go are we at 3 900 we are this is actually legendary and i don't know what to say this is legendary tonight might be the night this is incredible we're going to go rook to c3 getting his queen dislodging it from its attack over the rook look at how all of our pieces are operating at their full capacity doubling now on the c file we're going to go after this pawn on d5 what's our sub count now 3900 board has been frozen my bad guys sorry sorry sorry sorry i know and that's a glitch that i need to fix uh that's an obs glitch my apologies for that so we're just gonna bring our queen back now he's gone rook to c1 he's gone rook to c1 what should we do here how do we exploit the drawback of that previous move very simple solution we don't need to trade see this is where people go wrong they're like okay i need to trade rooks you don't need to do anything this rook is perfectly well protected so we can just take the pawn this might be a record of some sort we're at 39 i mean i don't know what to say now we can take the rook of course if he takes our queen then we take his we don't want to allow the queen to come to c8 so let's go queen c4 a trade is in our favor because we're up two pounds that end game is going to be completely winning uh that end game is going to be"
+  },
+  {
+   "ply": 23,
+   "t": 1238,
+   "line": [],
+   "fen": "r2q1rk1/4bppp/p2p1n2/npp1p3/4P1b1/2PP1N2/PPB2PPP/R1BQRNK1 b - - 1 12",
+   "said": "completely winning and so he resigns that's a good resignation uh and that was a pretty simple game with one exception i think i made a key blunder that could have been exploited by him let's go straight to that moment now"
+  },
+  {
+   "ply": 17,
+   "t": 1241,
+   "line": [],
+   "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/1BPP1N2/PP3PPP/RNBQR1K1 b - - 0 9",
+   "said": "as i've explained previously"
+  },
+  {
+   "ply": 18,
+   "t": 1242,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "r2q1rk1/2p1bppp/p1np1n2/1p2p3/4P1b1/1BPP1N2/PP3PPP/RNBQR1K1 w - - 1 10",
+   "said": "as i've explained previously how should you judge a pin the way that you should judge a pin is if a the pinned piece right the knight on f3 is defended by a pawn then by definition the pin is going to be less scary"
+  },
+  {
+   "ply": 17,
+   "t": 1272.5,
+   "line": [],
+   "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/1BPP1N2/PP3PPP/RNBQR1K1 b - - 0 9",
+   "said": "if this knight was not defended by a pawn the pen would be more scary so you shouldn't rush to always assume the best square for a piece is somewhere where it pins an opposing piece so i would have considered putting this bishop on e6 to blunt the influence of the bishop on v3 and uh what ended up happening is that he attacked our bishop and if you if we had dropped it to h5 we would have potentially allowed the knight to get into this very very nasty square on f5 and that would have been followed for example with bishop to g5 so it's okay we got our bishop back to e6 but now he's struck with d4 so what were we talking about here before i got rudely interrupted well i cried for four thousand i'm not a big crier um that's just one thing i'm just not big on so we activated the knight then the bishop the one moment i wanted to focus on in this game i very sloppily grabbed the pawn on a2 and ladies and gentlemen the move bishop b3 would have well actually oh there's a way out this oh this is cool this would have trapped the queen the queen has nowhere to go if i take the rook that's defended but black has a way to counter-attack"
+  }
+ ],
+ "forks": []
+}

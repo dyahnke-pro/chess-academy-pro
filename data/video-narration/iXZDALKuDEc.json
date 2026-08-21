@@ -1,0 +1,537 @@
+{
+ "videoId": "iXZDALKuDEc",
+ "title": "Master Class | Danish Declined! | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 6.5,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "so we're playing white against weak move wake so we're going to play very aggressively we still haven't had the chance to play"
+  },
+  {
+   "ply": 3,
+   "t": 7.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "a legitimate danish gambit"
+  },
+  {
+   "ply": 4,
+   "t": 12.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "said": "let's hope that we ah still know the finished game but he goes knight c6 okay so what do we do in this position we've already been in this situation before and the instinct though that a lot of people have here is to play d5 and i've previously explained why that's not my"
+  },
+  {
+   "ply": 5,
+   "t": 47.5,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4P3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "favorite move um and the short reason is that it closes down the center knight f3 transposes into a scotch but i think the best move is actually just to take the pawn right why well first of all this opens"
+  },
+  {
+   "ply": 6,
+   "t": 53,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "up the center second of all this knight on e5 is actually not very well placed it's very susceptible to a bunch of different attacking moves one of which is f4 but f4 isn't the best move it's a very common type of instinct again to simply attack the knight thank you chester but it's not the best because f4 is very weakening it weakens the king and it uh doesn't allow the bishop to develop naturally so let's develop very flexibly um that knight is in the center but it has no support so we have a couple of ways to go about this let's start with the most flexible move let's develop a piece that we know we want to develop anyway we know we'll develop this piece"
+  },
+  {
+   "ply": 7,
+   "t": 104.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 4",
+   "said": "eventually which piece am i talking about here these are kind of complicated concepts that relate to development but they're very important yeah so it's knight c3 yeah because knight f3 is already quite"
+  },
+  {
+   "ply": 8,
+   "t": 110.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/4n3/4P3/2N5/PPP2PPP/R1BQKBNR w KQkq - 2 5",
+   "said": "committal right we offer the trade of knights we don't know if we want to do that yet okay now the situation has changed the movement f6 has actually informed us about what we want to do next thank you aliki potato believe it or not a move that previously was very weakening is now super good now the issue with black's is that he's developed his two knights without moving out any pawns and when that happens the reason you move pawns out is not only to open up your pieces it's"
+  },
+  {
+   "ply": 9,
+   "t": 146.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/4n3/4PP2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 5",
+   "said": "also to give that exoskeleton to your position when all you do is develop pieces without pawns those pieces become unstable and those pieces can be attacked by pawns and i'm sure that a lot of you guys have seen instances of what we're about to do many times we go f4 but isn't this move weakening well it"
+  },
+  {
+   "ply": 11,
+   "t": 158,
+   "line": [
+    "Nc6",
+    "e5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4P3/5P2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 6",
+   "said": "still is a little bit weakening but now it's associated with a very strong follow-up and that is e5 sending this knight back to g8 and it is definitely worth it uh worth a little weakening and also we occupy a lot of the center does that make sense so"
+  },
+  {
+   "ply": 12,
+   "t": 182,
+   "line": [
+    "Ng8"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4P3/5P2/2N5/PPP3PP/R1BQKBNR w KQkq - 1 7",
+   "said": "he has to go knight g8 losing a ton of tempe then we bring our knight out and his position looks very very grim he's not lost or anything yawn 42 thank you for gifting to house party thank you guys i really appreciate it okay so how will i try to castle"
+  },
+  {
+   "ply": 13,
+   "t": 189.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4P3/5P2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 2 7",
+   "said": "queenside i don't know yet um it depends on how he plays this his"
+  },
+  {
+   "ply": 14,
+   "t": 191.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/2np4/4P3/5P2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 0 8",
+   "said": "best move would be this guy is playing pretty well now here's another tip for you guys um i think people sometimes when you have an initiative right or you have a development advantage naturally people try to avoid the end game but there are situations where going into an end game does not necessarily lessen your initiative or the chances that you're going to attack the king there are situations where um where end games are actually just a natural follow-up to how you're playing the fact that you're trading queens doesn't necessarily mean that you no"
+  },
+  {
+   "ply": 15,
+   "t": 242.5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/2np4/1B2P3/5P2/2N2N2/PPP3PP/R1BQK2R b KQkq - 1 8",
+   "said": "longer have any attacking potential we have a lot of pieces that aren't the queen so this is a great example of that thank you herba gurba we can make a development move that does allow a queen trade but in the event of that"
+  },
+  {
+   "ply": 16,
+   "t": 246.5,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2qkbnr/pppb1ppp/2np4/1B2P3/5P2/2N2N2/PPP3PP/R1BQK2R w KQkq - 2 9",
+   "said": "queen trade um he would have lost his castling rights and his king would have been a sitting duck instead he goes bishop d7 okay so we're actually just going to"
+  },
+  {
+   "ply": 18,
+   "t": 259.5,
+   "line": [
+    "O-O",
+    "dxe5"
+   ],
+   "fen": "r2qkbnr/pppb1ppp/2n5/1B2p3/5P2/2N2N2/PPP3PP/R1BQ1RK1 w kq - 0 10",
+   "said": "castle because the king will still have a nice pawn shell the fact that we put the fact that we move the f pawn doesn't make this king particularly unsafe"
+  },
+  {
+   "ply": 19,
+   "t": 265.5,
+   "line": [
+    "fxe5"
+   ],
+   "fen": "r2qkbnr/pppb1ppp/2n5/1B2P3/8/2N2N2/PPP3PP/R1BQ1RK1 b kq - 0 10",
+   "said": "right and he's doing us a big favor by opening up that f"
+  },
+  {
+   "ply": 20,
+   "t": 270,
+   "line": [
+    "Bc5+"
+   ],
+   "fen": "r2qk1nr/pppb1ppp/2n5/1Bb1P3/8/2N2N2/PPP3PP/R1BQ1RK1 w kq - 1 11",
+   "said": "file thank you very much now his king is"
+  },
+  {
+   "ply": 21,
+   "t": 271,
+   "line": [
+    "Kh1"
+   ],
+   "fen": "r2qk1nr/pppb1ppp/2n5/1Bb1P3/8/2N2N2/PPP3PP/R1BQ1R1K b kq - 2 11",
+   "said": "going to be in trouble he gives us a check and it appears that actually black will develop his pieces before we do but that doesn't matter because the f file is now open and his development is very haphazard super passive that pawn on f7 is going to be the vehicle through which we"
+  },
+  {
+   "ply": 22,
+   "t": 299.5,
+   "line": [
+    "Nge7"
+   ],
+   "fen": "r2qk2r/pppbnppp/2n5/1Bb1P3/8/2N2N2/PPP3PP/R1BQ1R1K w kq - 3 12",
+   "said": "developed a very quick attack against this king i hope this makes sense so far i know there's a lot of specific questions about what we're doing here and i'll answer most of those after the game he goes knight g7 yeah this guy is definitely definitely good now when we reach these types of situations we need to be super careful about how we go about this knight g5 is the most tempting move but when you make a move like night g5 we all have to ask ourselves what is this leave behind how does that change the position and remember that you do have an isolated pawn here let's not forget that so what does knight g5 allow what nasty response and light is still good there but it's not you know i don't think there's a need to calculate this black can play knight takes e5 and that knight defends the f7 pawn so we have to be very methodical about how we're actually approaching this question um and instead of knight g5 we can look around the board and say well what development moves can we make"
+  },
+  {
+   "ply": 23,
+   "t": 362,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r2qk2r/pppbnppp/2n5/1Bb1P3/4N3/5N2/PPP3PP/R1BQ1R1K b kq - 4 12",
+   "said": "what active moves can we play first thing that my i but like my mind's eye sees is this bishop on c5 right and bishop on c5 is undefended let's start with the move 94 centralizing the knight and attacking the bishop i think that's a good starting point so don't overthink these kinds of moves i'm not like coming up with some crazy idea i'm just improving the position of my pieces this is probably not even the best move right i'm not even searching too hard for the quote-unquote best but i'm just trying to find a good way to continue the initiative there's many good moves here all right then we're going to follow up"
+  },
+  {
+   "ply": 25,
+   "t": 400.5,
+   "line": [
+    "Bf5",
+    "Nxc5"
+   ],
+   "fen": "r2qk2r/ppp1nppp/2n5/1BN1Pb2/8/5N2/PPP3PP/R1BQ1R1K b kq - 0 13",
+   "said": "probably by developing this bishops best score for the bishop is very clearly g5 pinning the knight yeah even bishop h6 would be interesting but we okay so immediately he blunders the knight knight takes c5"
+  },
+  {
+   "ply": 26,
+   "t": 415,
+   "line": [
+    "a6"
+   ],
+   "fen": "r2qk2r/1pp1nppp/p1n5/1BN1Pb2/8/5N2/PPP3PP/R1BQ1R1K w kq - 0 14",
+   "said": "okay guys there's nobody should ever be sending anybody hate messages and uh that goes without saying it's not welcome in this community yeah i mean if anybody gets those"
+  },
+  {
+   "ply": 27,
+   "t": 431.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r2qk2r/1pp1nppp/p1n5/2N1Pb2/2B5/5N2/PPP3PP/R1BQ1R1K b kq - 1 14",
+   "said": "messages that's just not right there's trolls but um yeah so bishop bishop back to c4 and we're basically winning okay so yeah uh gave her a moment i that that's a great question why didn't we take the queen immediately"
+  },
+  {
+   "ply": 29,
+   "t": 457.5,
+   "line": [
+    "Qxd1",
+    "Rxd1"
+   ],
+   "fen": "r3k2r/1pp1nppp/p1n5/2N1Pb2/2B5/5N2/PPP3PP/R1BR3K b kq - 0 15",
+   "said": "um and that relates to the notion of whether it is a good idea to trade when you're up material it is a super contentious question because there's a"
+  },
+  {
+   "ply": 30,
+   "t": 464,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r4rk1/1pp1nppp/p1n5/2N1Pb2/2B5/5N2/PPP3PP/R1BR3K w - - 1 16",
+   "said": "lot of i would almost say contradictory opinions on on this question right of whether you're trading and i always say the sort of the same thing i think that a lot of coaches and chess content creators over emphasize the notion that you should trade when you're up material trading when you're a material is not inherently a good thing it usually is a good thing to simplify because when you're up a rook um winning a position where you have a rook against a king is usually going to be easier than winning a position when there's a bunch of other pieces on the board that's self-evident but a lot of players turn this into i"
+  },
+  {
+   "ply": 31,
+   "t": 515,
+   "line": [
+    "c3"
+   ],
+   "fen": "r4rk1/1pp1nppp/p1n5/2N1Pb2/2B5/2P2N2/PP4PP/R1BR3K b - - 0 16",
+   "said": "have to simplify when i'm up material and it's very easy i see a lot of blunders that come from ignoring other features of the position in the hopes of simplifying let's defend upon and i also see a lot of beginners"
+  },
+  {
+   "ply": 32,
+   "t": 518.5,
+   "line": [
+    "Rfd8"
+   ],
+   "fen": "r2r2k1/1pp1nppp/p1n5/2N1Pb2/2B5/2P2N2/PP4PP/R1BR3K w - - 1 17",
+   "said": "particularly be blind to attacking opportunities um"
+  },
+  {
+   "ply": 33,
+   "t": 528,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r2r2k1/1pp1nppp/p1n5/2N1PbB1/2B5/2P2N2/PP4PP/R2R3K b - - 2 17",
+   "said": "again because they're trying to simplify so try to evaluate it on a case-by-case basis a lot of the time if you have a good opportunity to simplify"
+  },
+  {
+   "ply": 34,
+   "t": 540.5,
+   "line": [
+    "Bc2"
+   ],
+   "fen": "r2r2k1/1pp1nppp/p1n5/2N1P1B1/2B5/2P2N2/PPb3PP/R2R3K w - - 3 18",
+   "said": "you should go for it but at the same time if you feel like you can go for checkmate that is often a far more effective way to end the game fast okay so here for example"
+  },
+  {
+   "ply": 35,
+   "t": 549.5,
+   "line": [
+    "Rxd8+"
+   ],
+   "fen": "r2R2k1/1pp1nppp/p1n5/2N1P1B1/2B5/2P2N2/PPb3PP/R6K b - - 0 18",
+   "said": "you know i have a trade i have an opportunity to trade rooks yeah why not okay we're giving up the d file"
+  },
+  {
+   "ply": 36,
+   "t": 553,
+   "line": [
+    "Rxd8"
+   ],
+   "fen": "3r2k1/1pp1nppp/p1n5/2N1P1B1/2B5/2P2N2/PPb3PP/R6K w - - 0 19",
+   "said": "that's not a big deal though it's an end"
+  },
+  {
+   "ply": 37,
+   "t": 555,
+   "line": [
+    "Nxb7"
+   ],
+   "fen": "3r2k1/1Np1nppp/p1n5/4P1B1/2B5/2P2N2/PPb3PP/R6K b - - 0 19",
+   "said": "game particularly because we can take another pawn the same goes for that"
+  },
+  {
+   "ply": 39,
+   "t": 561.5,
+   "line": [
+    "Rd1+",
+    "Rxd1"
+   ],
+   "fen": "6k1/1Np1nppp/p1n5/4P1B1/2B5/2P2N2/PPb3PP/3R3K b - - 0 20",
+   "said": "advice i shared which is that um which is that you shouldn't take too many extra pawns when you're already up a bunch of pieces that should also be taken in its proper"
+  },
+  {
+   "ply": 43,
+   "t": 577.5,
+   "line": [
+    "Bd3",
+    "Bxd3",
+    "h6",
+    "Bxa6"
+   ],
+   "fen": "6k1/1Np1npp1/B1n4p/4P1B1/8/2P2N2/PP4PP/3R3K b - - 0 22",
+   "said": "context if there are free pawns that you can take without any consequences then absolutely you should take more stuff"
+  },
+  {
+   "ply": 47,
+   "t": 578.5,
+   "line": [
+    "Nc8",
+    "Bf6",
+    "N8e7",
+    "Bxe7"
+   ],
+   "fen": "6k1/1Np1Bpp1/B1n4p/4P3/8/2P2N2/PP4PP/3R3K b - - 0 24",
+   "said": "okay so again now we're simplifying"
+  },
+  {
+   "ply": 48,
+   "t": 582.5,
+   "line": [
+    "Nxe7"
+   ],
+   "fen": "6k1/1Np1npp1/B6p/4P3/8/2P2N2/PP4PP/3R3K w - - 0 25",
+   "said": ""
+  },
+  {
+   "ply": 49,
+   "t": 584.5,
+   "line": [
+    "Nc5"
+   ],
+   "fen": "6k1/2p1npp1/B6p/2N1P3/8/2P2N2/PP4PP/3R3K b - - 1 25",
+   "said": "yeah if you're someone who crafted any kind of eightfold message you should be very"
+  },
+  {
+   "ply": 50,
+   "t": 592.5,
+   "line": [
+    "Nf5"
+   ],
+   "fen": "6k1/2p2pp1/B6p/2N1Pn2/8/2P2N2/PP4PP/3R3K w - - 2 26",
+   "said": "much ashamed of yourself"
+  },
+  {
+   "ply": 51,
+   "t": 596.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "6k1/2p2pp1/B3P2p/2N2n2/8/2P2N2/PP4PP/3R3K b - - 0 26",
+   "said": "and yeah that's that okay so let's go here"
+  },
+  {
+   "ply": 52,
+   "t": 619,
+   "line": [
+    "Ne3"
+   ],
+   "fen": "6k1/2p2pp1/B3P2p/2N5/8/2P1nN2/PP4PP/3R3K w - - 1 27",
+   "said": "then we're gonna move the bishop back and then we're gonna win this pawn and the game is over we're up a piece these kinds of end games the general conversion process to identify a past pawn and promote it what passpon should we identify and how should we go about promoting it not the hardest question i've ever asked you guys"
+  },
+  {
+   "ply": 53,
+   "t": 640,
+   "line": [
+    "e7"
+   ],
+   "fen": "6k1/2p1Ppp1/B6p/2N5/8/2P1nN2/PP4PP/3R3K b - - 0 27",
+   "said": "because particularly in light of his last move all right e7 is correct e7 is correct digital cosmos he's a little bit underrated but but you know we want a pretty convincing game when the game is over notice that bishop a4 would stop the bomb but this knight on c5 is defending that square and here is oh no he doesn't resign thank you for the 300 chest down"
+  },
+  {
+   "ply": 54,
+   "t": 681.5,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "6k1/2p1Ppp1/B6p/2N5/6n1/2P2N2/PP4PP/3R3K w - - 1 28",
+   "said": "yeah he was playing he was playing fine although he was already in pretty big trouble at that point okay you resign now exactly okay we make a queen he doesn't resign ow the most efficient mate is to bring now the most efficient mate is to bring this bishop down to d3 which forces him to weaken his king even further then we're gonna mop up this pawn swoop in with the bishop and checkmate him on h7 actually there is an even faster mate than bishop takes g6 could somebody find it what is the fastest mate 6 400 wow and dikaya thanks for being patient all happy to get a game in with you before we analyze yeah knight e6 and queen g7 goodbye oh he's got to check i missed that doesn't really matter and he has another check so i guess he can prolong it for two more moves okay um dakaio down for down for a game if you're still up yeah you can challenge me on the all my lands account yeah he found the best move knight f2 a hillbilly attack from its most famous"
+  },
+  {
+   "ply": 2,
+   "t": 767.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "specialists all right in the meantime we can start analyzing so okay yeah even gm's tunnel vision no totally that's a big big problem"
+  },
+  {
+   "ply": 3,
+   "t": 771.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "so knight c6d takes c5 right so just to"
+  },
+  {
+   "ply": 6,
+   "t": 775.5,
+   "line": [
+    "Nc6",
+    "dxe5",
+    "Nxe5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "respond to this notion that the knight"
+  },
+  {
+   "ply": 7,
+   "t": 776.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 4",
+   "said": "is in the center right why let's make a general statement here why is it even good for a piece to be in the center what is it about the center that makes a piece good right or makes a piece more likely to be good what's what it has to do with square control right a piece is in the center mathematically speaking it just controls more squares particularly in knight but controlling squares is not an inherently good thing right it's a good thing because it generally makes the piece more active but it it you know when you're on move four"
+  },
+  {
+   "ply": 8,
+   "t": 821,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/3p4/4n3/4P3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5",
+   "said": "there aren't any weak squares right square the weaknesses the position hasn't yet been well defined so it's a little bit less meaningful for a piece to be in the center that's why you'll see some beginners go 95 in a"
+  },
+  {
+   "ply": 9,
+   "t": 822,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/3p4/3Nn3/4P3/8/PPP2PPP/R1BQKBNR b KQkq - 1 5",
+   "said": "position like this right because you're taught to put your pieces"
+  },
+  {
+   "ply": 10,
+   "t": 826.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2pp4/3Nn3/4P3/8/PPP2PPP/R1BQKBNR w KQkq - 0 6",
+   "said": "in the center but because your opponent has a lot of resources to kick away pieces"
+  },
+  {
+   "ply": 8,
+   "t": 833,
+   "line": [],
+   "fen": "r1bqkbnr/ppp2ppp/3p4/4n3/4P3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5",
+   "said": "it's more important to develop quickly rather than position your pieces in the center 100 bits thank you absolutely the destiny dodge thank you"
+  },
+  {
+   "ply": 6,
+   "t": 838.5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "now the other reason is that i can play"
+  },
+  {
+   "ply": 7,
+   "t": 840,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
+   "said": "a move like knight f3 and i can essentially offer a trade and if you trade knights then you have moved this night one two three times trading it for a night that's only moved once that way you lose two moves that's not a good thing right and this queen is kind of nicely placed on f3 okay so i hope that makes sense knight c3 knight f6 now we play f4 and e5 now though this knight is a sitting duck knight g8 and time your questions to where we are in the game so if you have a question about this position this is where you should ask it d6 that's correct he's breaking into our pawns and um here's a good question for you guys if he would have played bishop before should we go bishop d2 is it a good idea to go bishop d2 and remove the pen what do you guys think can we do we should do a poll on this actually this is a pretty important concept"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 6,
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "e4",
+    "e5",
+    "d4",
+    "Nc6",
+    "dxe5",
+    "Nxe5"
+   ],
+   "options": [
+    {
+     "san": "Nc3",
+     "t": 104.5,
+     "continuation": "Nc3",
+     "said": "eventually which piece am i talking about here these are kind of complicated concepts that relate to development but they're very important yeah so it's knight c3 yeah because knight f3 is already quite committal right we offer the trade of knights we don't know if we want to do that yet okay now the situation has changed the movement f6 has actually informed us about what we want to do next thank you aliki potato believe it or not a move that previously was very weakening is now super good now the issue with black's is that he's developed his two knights without moving out any pawns and when that happens the reason you move pawns out is not only to open up your pieces it's also to give that exoskeleton to your position when all you do is develop pieces without pawns those pieces become unstable and those pieces can be attacked by pawns and i'm sure that a lot of you guys have seen instances of what we're about to do many times we go f4 but isn't this move weakening well it still is a little bit weakening but now it's associated with a very strong follow-up and that is e5 sending this knight back to g8 and it is definitely worth it uh worth a little weakening and also we"
+    },
+    {
+     "san": "Nf3",
+     "t": 840,
+     "continuation": "Nf3",
+     "said": "pieces it's more important to develop quickly rather than position your pieces in the center 100 bits thank you absolutely the destiny dodge thank you now the other reason is that i can play a move like knight f3 and i can essentially offer a trade and if you trade knights then you have moved this night one two three times trading it for a night that's only moved once that way you lose two moves that's not a good thing right and this queen is kind of nicely placed on f3 okay so i hope that makes sense knight c3 knight f6 now we play f4 and e5 now though this knight is a sitting duck knight g8 and time your questions to where we are in the game so if you have a question about this position this is where you should ask it d6 that's correct he's breaking into our pawns and um here's a good question for you guys if he would have played bishop before should we go bishop d2 is it a good idea to go bishop d2 and remove the pen what do you guys think can we do we should do a poll on this actually this is a pretty important concept"
+    }
+   ]
+  },
+  {
+   "ply": 7,
+   "fen": "r1bqkbnr/pppp1ppp/8/4n3/4P3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 4",
+   "line": [
+    "e4",
+    "e5",
+    "d4",
+    "Nc6",
+    "dxe5",
+    "Nxe5",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "Nf6",
+     "t": 110.5,
+     "continuation": "Nf6",
+     "said": "that relate to development but they're very important yeah so it's knight c3 yeah because knight f3 is already quite committal right we offer the trade of knights we don't know if we want to do that yet okay now the situation has changed the movement f6 has actually informed us about what we want to do next thank you aliki potato believe it or not a move that previously was very weakening is now super good now the issue with black's is that he's developed his two knights without moving out any pawns and when that happens the reason you move pawns out is not only to open up your pieces it's also to give that exoskeleton to your position when all you do is develop pieces without pawns those pieces become unstable and those pieces can be attacked by pawns and i'm sure that a lot of you guys have seen instances of what we're about to do many times we go f4 but isn't this move weakening well it still is a little bit weakening but now it's associated with a very strong follow-up and that is e5 sending this knight back to g8 and it is definitely worth it uh worth a little weakening and also we occupy a lot of the center does that make sense so"
+    },
+    {
+     "san": "d6",
+     "t": 821,
+     "continuation": "d6",
+     "said": "there aren't any weak squares right square the weaknesses the position hasn't yet been well defined so it's a little bit less meaningful for a piece to be in the center that's why you'll see some beginners go 95 in a position like this right because you're taught to put your pieces in the center but because your opponent has a lot of resources to kick away pieces it's more important to develop quickly rather than position your pieces in the center 100 bits thank you absolutely the destiny dodge thank you now the other reason is that i can play a move like knight f3 and i can essentially offer a trade and if you trade knights then you have moved this night one two three times trading it for a night that's only moved once that way you lose two moves that's not a good thing right and this queen is kind of nicely placed on f3 okay so i hope that makes sense knight c3 knight f6 now we play f4 and e5 now though this knight is a sitting duck knight g8 and time your questions to where we are in the game so if you have a question about this position this is where you should ask it d6 that's correct he's breaking into our pawns and um here's a good question for you"
+    }
+   ]
+  }
+ ]
+}

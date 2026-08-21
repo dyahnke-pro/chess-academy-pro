@@ -1,0 +1,423 @@
+{
+ "videoId": "CfCoA7jQu84",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1950",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 866.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "to be black so maybe i'll have a chance to play the karo khan o we're playing white again i don't no we're playing white again i don't know why i'm white in three games in a row and"
+  },
+  {
+   "ply": 3,
+   "t": 867.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "sidsilian's ringing well we've been"
+  },
+  {
+   "ply": 4,
+   "t": 869,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "doing well with the alvin and another e6"
+  },
+  {
+   "ply": 5,
+   "t": 870.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 6,
+   "t": 872,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqkbnr/1p1p1ppp/p3p3/2p5/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "and this guy plays the same thing that"
+  },
+  {
+   "ply": 7,
+   "t": 876.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/1p1p1ppp/p3p3/2pP4/4P3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "the last guy just played maybe he's watching the stream maybe he's gonna play the exact same game"
+  },
+  {
+   "ply": 8,
+   "t": 878.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/1p3ppp/p2pp3/2pP4/4P3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "said": "okay this is getting kind of weird"
+  },
+  {
+   "ply": 9,
+   "t": 881,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/1p3ppp/p2pp3/2pP4/4P3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 1 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 883.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/1p3ppp/p2p4/2pPp3/4P3/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 11,
+   "t": 884.5,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqkbnr/1p3ppp/p2p4/2pPp3/4P3/2PB1N2/PP3PPP/RNBQK2R b KQkq - 1 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 886.5,
+   "line": [
+    "h6"
+   ],
+   "fen": "rnbqkbnr/1p3pp1/p2p3p/2pPp3/4P3/2PB1N2/PP3PPP/RNBQK2R w KQkq - 0 7",
+   "said": "yeah that's i'm pretty sure nope that guy played bishop g4 this guy improves"
+  },
+  {
+   "ply": 13,
+   "t": 895.5,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "rnbqkbnr/1p3pp1/p2p3p/2pPp3/4P3/2PB1N2/PP1N1PPP/R1BQK2R b KQkq - 1 7",
+   "said": "with h6 if this is a coincidence this might be the biggest coincidence i've ever seen but we're not gonna"
+  },
+  {
+   "ply": 14,
+   "t": 897,
+   "line": [
+    "g5"
+   ],
+   "fen": "rnbqkbnr/1p3p2/p2p3p/2pPp1p1/4P3/2PB1N2/PP1N1PPP/R1BQK2R w KQkq - 0 8",
+   "said": "change our okay so he goes g5 all right so i think it's a different guy now the move g5 i see this often at at this level he's trying to intimidate us but what"
+  },
+  {
+   "ply": 15,
+   "t": 916.5,
+   "line": [
+    "Nf1"
+   ],
+   "fen": "rnbqkbnr/1p3p2/p2p3p/2pPp1p1/4P3/2PB1N2/PP3PPP/R1BQKN1R b KQkq - 1 8",
+   "said": "i'm going to ask here is which weaknesses have been created as a consequence of the move g5 and immediately you should spot the f5 square particularly in the context of the last game so it makes sense to conduct the very same plan moving the knight either to g3"
+  },
+  {
+   "ply": 16,
+   "t": 923.5,
+   "line": [
+    "g4"
+   ],
+   "fen": "rnbqkbnr/1p3p2/p2p3p/2pPp3/4P1p1/2PB1N2/PP3PPP/R1BQKN1R w KQkq - 0 9",
+   "said": "or e3 even though we're not dislodging a bishop from g4 now we're accessing the f5 square whoa okay so i'm going to make a very"
+  },
+  {
+   "ply": 17,
+   "t": 934.5,
+   "line": [
+    "Ng1"
+   ],
+   "fen": "rnbqkbnr/1p3p2/p2p3p/2pPp3/4P1p1/2PB4/PP3PPP/R1BQKNNR b KQkq - 1 9",
+   "said": "interesting move guys and i'm going to make this move first and then i'm going to explain it later i'm going to go knight to g1"
+  },
+  {
+   "ply": 18,
+   "t": 937.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "rnbqkbnr/1p3p2/p2p4/2pPp2p/4P1p1/2PB4/PP3PPP/R1BQKNNR w KQkq - 0 10",
+   "said": "and after the game i'll talk about the concept of retreating which is misunderstood by a lot of people what am i doing my end goal is to get a knight to f5 and in order to get the knight to f5"
+  },
+  {
+   "ply": 19,
+   "t": 959.5,
+   "line": [
+    "Ne3"
+   ],
+   "fen": "rnbqkbnr/1p3p2/p2p4/2pPp2p/4P1p1/2PBN3/PP3PPP/R1BQK1NR b KQkq - 1 10",
+   "said": "well i have two goals first is to get the knights f5 the second is to open up the position because he's moved nothing but his pawns okay so i'm going to try to you know accomplish both coals with my next couple of moves knight's e3 now this"
+  },
+  {
+   "ply": 20,
+   "t": 965.5,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "rnbqkb1r/1p2np2/p2p4/2pPp2p/4P1p1/2PBN3/PP3PPP/R1BQK1NR w KQkq - 2 11",
+   "said": "should make sense to you guys why did i go knight you won why the hell did i go at you could somebody explain to me what this knight could possibly be doing on g1 i'll give you a"
+  },
+  {
+   "ply": 21,
+   "t": 977,
+   "line": [
+    "h3"
+   ],
+   "fen": "rnbqkb1r/1p2np2/p2p4/2pPp2p/4P1p1/2PBN2P/PP3PP1/R1BQK1NR b KQkq - 0 11",
+   "said": "hint it's supporting a particular type of move it's supporting the move h3 which is conducive to the goal of opening up the"
+  },
+  {
+   "ply": 22,
+   "t": 984,
+   "line": [
+    "gxh3"
+   ],
+   "fen": "rnbqkb1r/1p2np2/p2p4/2pPp2p/4P3/2PBN2p/PP3PP1/R1BQK1NR w KQkq - 0 12",
+   "said": "center or opening up the position in general here the king side and now we deploy the knight to h3 but"
+  },
+  {
+   "ply": 23,
+   "t": 986,
+   "line": [
+    "Nxh3"
+   ],
+   "fen": "rnbqkb1r/1p2np2/p2p4/2pPp2p/4P3/2PBN2N/PP3PP1/R1BQK2R b KQkq - 0 12",
+   "said": "aren't knights on the rim grim well they"
+  },
+  {
+   "ply": 24,
+   "t": 987,
+   "line": [
+    "Ng6"
+   ],
+   "fen": "rnbqkb1r/1p3p2/p2p2n1/2pPp2p/4P3/2PBN2N/PP3PP1/R1BQK2R w KQkq - 1 13",
+   "said": "are except this knight has prospects of coming to g5 and i have succeeded in"
+  },
+  {
+   "ply": 25,
+   "t": 997,
+   "line": [
+    "Nf5"
+   ],
+   "fen": "rnbqkb1r/1p3p2/p2p2n1/2pPpN1p/4P3/2PB3N/PP3PP1/R1BQK2R b KQkq - 2 13",
+   "said": "opening up the atrial given the sorry state of his development um this is a a a very positive thing and now my second goal has been accomplished i've gotten the other knight to f5 he can certainly take the knight but guess what i'll take back with the pawn i'll chase away his knight and and i might even drive that pawn down to f6 now normally i've talked about this before you want to make sure that when you establish an outpost on a square you can"
+  },
+  {
+   "ply": 26,
+   "t": 1028,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rnbqk2r/1p2bp2/p2p2n1/2pPpN1p/4P3/2PB3N/PP3PP1/R1BQK2R w KQkq - 3 14",
+   "said": "recapture that outpost with a piece but there are exceptions to the rule and this is an exception because he's so poorly developed that what i'm just trying to do is keep the flames roaring you know and keep the position as open as possible okay this guy's actually not playing terribly i mean his opening is not good but it's not as easy to refute as it seems okay alan t 17 17. thank you for the sub what should we do look very carefully at at the various sort of elements of the position when he's played in such a shoddy manner we need to start looking for ways to go for the kill yeah we have a fork this is a type one"
+  },
+  {
+   "ply": 29,
+   "t": 1067,
+   "line": [
+    "Ng7+",
+    "Kf8",
+    "Nxh5"
+   ],
+   "fen": "rnbq1k1r/1p2bp2/p2p2n1/2pPp2N/4P3/2PB3N/PP3PP1/R1BQK2R b KQ - 0 15",
+   "said": "undefended pawn right which means that we should actually pay attention to it particularly since we're making contact with it and we can just go around and take it and normally i don't like to go pond grabbing like this but we can totally get away with it here because of our absolute domination development-wise and also we"
+  },
+  {
+   "ply": 30,
+   "t": 1074.5,
+   "line": [
+    "Nh4"
+   ],
+   "fen": "rnbq1k1r/1p2bp2/p2p4/2pPp2N/4P2n/2PB3N/PP3PP1/R1BQK2R w KQ - 1 16",
+   "said": "open up the h-file who knows maybe one day we'll checkmate them down that h-file um am i making a prophecy here well maybe okay that h4 how do we deal with this how do we deal with this move which"
+  },
+  {
+   "ply": 31,
+   "t": 1092.5,
+   "line": [
+    "g3"
+   ],
+   "fen": "rnbq1k1r/1p2bp2/p2p4/2pPp2N/4P2n/2PB2PN/PP3P2/R1BQK2R b KQ - 0 16",
+   "said": "again may look intimidating but we can very easily shut it down so we don't even need to defend the spawn we can just move the pawn up to g3 and the check on g2 is not scary because he traps his own knight he's gonna have to drop his knife back to g6 if i'm"
+  },
+  {
+   "ply": 32,
+   "t": 1106,
+   "line": [
+    "Ng6"
+   ],
+   "fen": "rnbq1k1r/1p2bp2/p2p2n1/2pPp2N/4P3/2PB2PN/PP3P2/R1BQK2R w KQ - 1 17",
+   "said": "considering this correctly okay and now let's deploy our queen and x-ray his king am i worried about the knight on h5 i'm keeping an eye on it because it is also a type 2 undefended piece so if he dislodges my queen from f3 he might win the night but i don't see that happening because of how passive he is i just don't see that happening okay um let me think for a second what should we do well bishop g5 launders a piece so we do want to develop the bishop where should we develop it just develop it to e3 right we don't need to reinvent the wheel here we can just bring it out and we can castle long to link up the rooks which is what we're going to do now we're basically ready to start attacking on the king's side finally we've completed our development now we need to find a way to uh to get things to get the get things going okay let's drop the bishop back he's attacked it and this is no problem right again his entire campaign is running on intimidating us but the reality is he doesn't even have any attackers this move isn't even dangerous so i know a lot of people want to go king b1 or a3 we don't need to do any of that we can basically jump right into the attack against his king with what move we have waited very patiently for this move to appear on the board knight to g5 attacking f7 threatening checkmate much like in the last game if you guys remember we kind of goaded him into giving up control of the dark squares and that's an intermediate step uh because that in and of itself is not going to give us what is going to give us checkmate now is a move like knight f6 we're gonna we're gonna meet him on the dark squares here might have six if he had a bishop would have been easier to defend now he's just collapsing all over the place queen a1 check and always be shut down with bishop b1 not to mention that the king has an open escape on d2 so it takes takes in fact queen a1 check he's probably going to play and what should we do should we go bishop b1 should we move the king okay actually here now we should start looking for mates let me think hmm oh there's a very pretty idea so we need to start looking for patterns and first of all there is a piece that we can put queen h5 is exactly what i'm thinking i'm gonna keep this move shrouded in mystery for the time being hopefully he gives us a chance to uh to demonstrate a very nice concept but you guys can see how close we are to delivering all sorts of mates there's one particular threat which may lay hidden under the surface hopefully he gives us a chance to reveal it okay what should we do now queen king to d2 of course uh attacking the queen eh yeah this is again if you have that notebook with the themes the attacking tactical themes this is something that you should be very much aware of uh i don't know exactly what it's called but it's it's like an arabian mate or something along those lines no matter where he goes we checkmate him where the knight in the rook come by and the bishop guards the knight nice little idea checkmate we don't actually use the discover check we just made them in the same way so nice hook mate is what it's called"
+  },
+  {
+   "ply": 10,
+   "t": 1326,
+   "line": [],
+   "fen": "rnbqkbnr/1p3ppp/p2p4/2pPp3/4P3/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 6",
+   "said": "very nice okay so a simple game given that he basically did a lot of work for us i still think maybe he was watching the stream"
+  },
+  {
+   "ply": 13,
+   "t": 1334,
+   "line": [
+    "Nbd2",
+    "h6",
+    "Bd3"
+   ],
+   "fen": "rnbqkbnr/1p3pp1/p2p3p/2pPp3/4P3/2PB1N2/PP1N1PPP/R1BQK2R b KQkq - 1 7",
+   "said": "um but yeah so essentially"
+  },
+  {
+   "ply": 14,
+   "t": 1335.5,
+   "line": [
+    "g5"
+   ],
+   "fen": "rnbqkbnr/1p3p2/p2p3p/2pPp1p1/4P3/2PB1N2/PP1N1PPP/R1BQK2R w KQkq - 0 8",
+   "said": "what happened so he went g5 and he weakens the the f5 square permanently which is why"
+  },
+  {
+   "ply": 17,
+   "t": 1347.5,
+   "line": [
+    "Ng1",
+    "g4",
+    "Nf1"
+   ],
+   "fen": "rnbqkbnr/1p3p2/p2p3p/2pPp3/4P1p1/2PB4/PP3PPP/R1BQKNNR b KQkq - 1 9",
+   "said": "this move is so terrible and now we get the night over now knight g1 right this move should make more sense uh should make more sense now um in in"
+  },
+  {
+   "ply": 16,
+   "t": 1355.5,
+   "line": [],
+   "fen": "rnbqkbnr/1p3p2/p2p3p/2pPp3/4P1p1/2PB4/PP1N1PPP/R1BQK1NR w KQkq - 0 9",
+   "said": "light of what happened in the game and so what i wanted to point out is that"
+  },
+  {
+   "ply": 17,
+   "t": 1356.5,
+   "line": [
+    "Nf1"
+   ],
+   "fen": "rnbqkbnr/1p3p2/p2p3p/2pPp3/4P1p1/2PB4/PP3PPP/R1BQKNNR b KQkq - 1 9",
+   "said": "again remember the soccer player's analogy right if you have if you're down material that's not a bad thing if the material you do have on the board is leonel messi type material the same thing goes here the knight on g1 is not inherently bad because it's on g1 the knight is a very specific role and that's why i always advocate to look at pieces in terms of what role they are fulfilling rather than how they look or how many squares they're controlling it is true that when a piece controls a lot of squares it's more likely to be good than a piece that's not controlling a lot of squares but that's far from always the case thank you so much mr alma i appreciate it and this is exactly such an instance because the knight has a very specific"
+  },
+  {
+   "ply": 16,
+   "t": 1409.5,
+   "line": [],
+   "fen": "rnbqkbnr/1p3p2/p2p3p/2pPp3/4P1p1/2PB4/PP1N1PPP/R1BQK1NR w KQkq - 0 9",
+   "said": "role its role is to prepare the move h3 in order to rip apart that h file so that we have that artery eventually to reach us king two things first of all why is it necessary to have the knight on g1 there why can't we play h3 now like can somebody explain to me why h3 is not as effective here and um like why why is h3 not effective here because well because it's covered by the bishop the file is still closed"
+  },
+  {
+   "ply": 17,
+   "t": 1441.5,
+   "line": [
+    "Nf1"
+   ],
+   "fen": "rnbqkbnr/1p3p2/p2p3p/2pPp3/4P1p1/2PB4/PP3PPP/R1BQKNNR b KQkq - 1 9",
+   "said": "one could argue that the g-file is open but wouldn't you guys agree that the h-pawn is now weak and you know i kind of weaken my own king so it's just not the same but there's a secondary reason that i played nycha which is that eventually if h3 falls through if black finds a way to stop it this knight from g1 can deploy itself to g3 and combine with the other knight on e3 and then both knights would control f5 okay so it's kind of a twisty little maneuver but sometimes you need to go back in order to go forward again i've written an article on this on unchest.com i have a lot of favorite examples where you see moves like knight b1 um and and that's just a very commonplace thing very very commonplace thing the most famous example ever i would say of um one second what was that game was it rubenstein against let me try to remember the game i think it was ruben stein against nimzovich so very famous game 1926. nimzovich of course both of these players are kind of like the founders of modern positional chess and in this position nimzovich played one of the most famous maneuvers of all time now i've hinted at what the first move is but who can tell me not only the first move but what the idea is of this maneuver thank you extrav appreciate the 2am hype guys um building our way toward greater and greater hunts yeah so nimzovich basically notices um nimzovich basically notices the knight on g3 and he says well uh the knight on g3 isn't doing much because i would love to put it on e4 but but that square is controlled i'd love to put it on h5 but it could get chased away with g6 and it's a relatively close position so knights should be good in close positions and what he finds is the move knight to h1 and as the arrows indicate the knight is simply going to g5 now in getting there it's going to have to pass some danger zones right first it comes to h1 a very ugly square and h3 also might look ugly because it's on the rim right but that doesn't matter because ultimately the knight is going to discover the fountain of youth now in the actual game because of the complexities of the game he only put his knight to g5 on move 30 but it came with tremendous effect and he swung his queen back the rest of the game was actually very pretty as well actually tremendously instructed he won a piece and then very fittingly that night end of the game on a beautiful no less beautiful square on c4 we can do a piece path and you guys will see like all of the nice travels but i'll do that later the engine i think likes knight h1 i'm not actually sure but i think it's the top engine move and that's the thing with these games these players were not just like randomly making these moves which we now praise they were actually good yeah so night each one is good it's it's it's one of the top moves it's not as clear-cut as like as perhaps the commentators of the day made them out to be but from a practical perspective it's still incredibly instructive okay so not to make it big not to belabor the point but just wanted to indicate this and so here we go with h3 knight is redeployed and the knight wins us the game okay it's the other night to be sure so knight g7 check knight takes hy wins the pawn get out of here queen f3 deploying the queen completing our development we're not afraid of the attack because black has simply no pieces in the attack and now knight g5 immediately jumping in with the other knight so very similar to nimzovich right the knight from g1 comes out to g5 it's the same actual it's the same square that's actually kind of cool it's the same path in the same square uh nimzobitro's path was knight h1 um it was it was um knight h1 f2 h3 g5 here we go knight g1 h3 g5 immediately so it's kind of cool bishop takes takes dark squares are weakened we swing the knight to f6 and using that h file and using this very famous tactical pattern we deliver the checkmate um okay i i mean by the way the losses uh were deliberate to stabilize my rating one of them was against the cheater that was my only quote-unquote genuine loss and uh yeah so was the draw i think any questions any questions on this game this is made by the way also usually people say that plans require more than three moves shouldn't be pursued well i've kind of said that um i don't know if it's like a common piece of wisdom i know i've advocated that to my students uh so how do i know when to violate this isn't this plan like going to take forever so how do we"
+  },
+  {
+   "ply": 15,
+   "t": 1737,
+   "line": [],
+   "fen": "rnbqkbnr/1p3p2/p2p3p/2pPp1p1/4P3/2PB4/PP1N1PPP/R1BQK1NR b KQkq - 1 8",
+   "said": "know thank you for the five bucks dumb tweet uh and again you need to exercise your judgment chess gape artist thank you for the tier one and the reason that i think i can get away with this is because of what he's done in the opening he's"
+  },
+  {
+   "ply": 17,
+   "t": 1738,
+   "line": [
+    "g4",
+    "Nf1"
+   ],
+   "fen": "rnbqkbnr/1p3p2/p2p3p/2pPp3/4P1p1/2PB4/PP3PPP/R1BQKNNR b KQkq - 1 9",
+   "said": "pushed only his pawns which means that he doesn't have the firepower necessary to punish me and i can take my time on something right he's done nothing but weaken his positions by the time he he he completes his development that gives me more than enough cushion to orchestrate a plan that in another type of position might have taken too long okay um no i cannot beat stock fish eight and neither can anybody why not queen g4 instead of g3 so well queen g4 would have blotted the queen right that's a it's a little botox gambit never travel or never win a chess tournament again i don't know what to think about that or upon only openings that were viable yes they are it depends so i can show you an example in the alakine defense if black plays knight c6 in this position now the main move is d6 knight c6 is a big mistake white can basically win the game only pushing his pawns for the first"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 10,
+   "fen": "rnbqkbnr/1p3ppp/p2p4/2pPp3/4P3/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 6",
+   "line": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "a6",
+    "d5",
+    "d6",
+    "Nf3",
+    "e5"
+   ],
+   "options": [
+    {
+     "san": "Bd3",
+     "t": 884.5,
+     "continuation": "Bd3",
+     "said": "the last guy just played maybe he's watching the stream maybe he's gonna play the exact same game okay this is getting kind of weird yeah that's i'm pretty sure nope that guy played bishop g4 this guy improves with h6 if this is a coincidence this might be the biggest coincidence i've ever seen but we're not gonna change our okay so he goes g5 all right so i think it's a different guy now the move g5 i see this often at at this level he's trying to intimidate us but what i'm going to ask here is which weaknesses have been created as a consequence of the move g5 and immediately you should spot the f5 square particularly in the context of the last game so it makes sense to conduct the very same plan moving the knight either to g3 or e3 even though we're not dislodging a bishop from g4 now we're accessing the f5 square whoa okay so i'm going to make a very interesting move guys and i'm going to make this move first and then i'm going to explain it later i'm going to go knight to g1 and after the game i'll talk about the concept of retreating which is misunderstood by a lot of people what am i doing my end goal is to get a"
+    },
+    {
+     "san": "Nbd2",
+     "t": 1334,
+     "continuation": "Nbd2 h6 Bd3",
+     "said": "okay so a simple game given that he basically did a lot of work for us i still think maybe he was watching the stream um but yeah so essentially what happened so he went g5 and he weakens the the f5 square permanently which is why this move is so terrible and now we get the night over now knight g1 right this move should make more sense uh should make more sense now um in in light of what happened in the game and so what i wanted to point out is that again remember the soccer player's analogy right if you have if you're down material that's not a bad thing if the material you do have on the board is leonel messi type material the same thing goes here the knight on g1 is not inherently bad because it's on g1 the knight is a very specific role and that's why i always advocate to look at pieces in terms of what role they are fulfilling rather than how they look or how many squares they're controlling it is true that when a piece controls a lot of squares it's more likely to be good than a piece that's not controlling a lot of squares but that's far from always the case thank you so much mr alma i appreciate it"
+    }
+   ]
+  },
+  {
+   "ply": 14,
+   "fen": "rnbqkbnr/1p3p2/p2p3p/2pPp1p1/4P3/2PB1N2/PP1N1PPP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "a6",
+    "d5",
+    "d6",
+    "Nf3",
+    "e5",
+    "Bd3",
+    "h6",
+    "Nbd2",
+    "g5"
+   ],
+   "options": [
+    {
+     "san": "Nf1",
+     "t": 916.5,
+     "continuation": "Nf1",
+     "said": "level he's trying to intimidate us but what i'm going to ask here is which weaknesses have been created as a consequence of the move g5 and immediately you should spot the f5 square particularly in the context of the last game so it makes sense to conduct the very same plan moving the knight either to g3 or e3 even though we're not dislodging a bishop from g4 now we're accessing the f5 square whoa okay so i'm going to make a very interesting move guys and i'm going to make this move first and then i'm going to explain it later i'm going to go knight to g1 and after the game i'll talk about the concept of retreating which is misunderstood by a lot of people what am i doing my end goal is to get a knight to f5 and in order to get the knight to f5 well i have two goals first is to get the knights f5 the second is to open up the position because he's moved nothing but his pawns okay so i'm going to try to you know accomplish both coals with my next couple of moves knight's e3 now this should make sense to you guys why did i go knight you won why the hell did i go at you could somebody explain to me what this knight could possibly be doing on g1 i'll give you a hint it's supporting a particular type of move it's supporting the move h3 which is"
+    },
+    {
+     "san": "Ng1",
+     "t": 1347.5,
+     "continuation": "Ng1 g4 Nf1",
+     "said": "what happened so he went g5 and he weakens the the f5 square permanently which is why this move is so terrible and now we get the night over now knight g1 right this move should make more sense uh should make more sense now um in in light of what happened in the game and so what i wanted to point out is that again remember the soccer player's analogy right if you have if you're down material that's not a bad thing if the material you do have on the board is leonel messi type material the same thing goes here the knight on g1 is not inherently bad because it's on g1 the knight is a very specific role and that's why i always advocate to look at pieces in terms of what role they are fulfilling rather than how they look or how many squares they're controlling it is true that when a piece controls a lot of squares it's more likely to be good than a piece that's not controlling a lot of squares but that's far from always the case thank you so much mr alma i appreciate it and this is exactly such an instance because the knight has a very specific role its role is to prepare the move h3 in order to rip apart that h file so that we have that artery eventually to reach us king"
+    }
+   ]
+  }
+ ]
+}

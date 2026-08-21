@@ -1,0 +1,611 @@
+{
+ "videoId": "gpHLc41XR04",
+ "title": "What is the Difference Between FM & GM?",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 3708,
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "inclusive 10 months i think this just wins yeah i shouldn't go e4 i should go see"
+  },
+  {
+   "ply": 4,
+   "t": 3715,
+   "line": [
+    "Nf3",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "something else"
+  },
+  {
+   "ply": 6,
+   "t": 3717.5,
+   "line": [
+    "d3",
+    "g6"
+   ],
+   "fen": "rnbqkbnr/pp2pp1p/2p3p1/3p4/4P3/3P1N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": ""
+  },
+  {
+   "ply": 7,
+   "t": 3721.5,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rnbqkbnr/pp2pp1p/2p3p1/3p4/4P3/3P1N2/PPP1BPPP/RNBQK2R b KQkq - 1 4",
+   "said": "okay let's play like a philidor structure a quiet positional"
+  },
+  {
+   "ply": 9,
+   "t": 3724,
+   "line": [
+    "Bg7",
+    "O-O"
+   ],
+   "fen": "rnbqk1nr/pp2ppbp/2p3p1/3p4/4P3/3P1N2/PPP1BPPP/RNBQ1RK1 b kq - 3 5",
+   "said": "i don't mind that"
+  },
+  {
+   "ply": 10,
+   "t": 3732.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqk1nr/pp3pbp/2p3p1/3pp3/4P3/3P1N2/PPP1BPPP/RNBQ1RK1 w kq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 11,
+   "t": 3736,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "rnbqk1nr/pp3pbp/2p3p1/3pp3/4P3/3P1N2/PPPNBPPP/R1BQ1RK1 b kq - 1 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 3737.5,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "rnbqk2r/pp2npbp/2p3p1/3pp3/4P3/3P1N2/PPPNBPPP/R1BQ1RK1 w kq - 2 7",
+   "said": ""
+  },
+  {
+   "ply": 13,
+   "t": 3741,
+   "line": [
+    "b3"
+   ],
+   "fen": "rnbqk2r/pp2npbp/2p3p1/3pp3/4P3/1P1P1N2/P1PNBPPP/R1BQ1RK1 b kq - 0 7",
+   "said": ""
+  },
+  {
+   "ply": 15,
+   "t": 3743,
+   "line": [
+    "O-O",
+    "a4"
+   ],
+   "fen": "rnbq1rk1/pp2npbp/2p3p1/3pp3/P3P3/1P1P1N2/2PNBPPP/R1BQ1RK1 b - - 0 8",
+   "said": "all right so let's go b3 maybe bishop a3 maybe a4 bishop a3"
+  },
+  {
+   "ply": 17,
+   "t": 3751,
+   "line": [
+    "a5",
+    "Bb2"
+   ],
+   "fen": "rnbq1rk1/1p2npbp/2p3p1/p2pp3/P3P3/1P1P1N2/1BPNBPPP/R2Q1RK1 b - - 1 9",
+   "said": "b2 first a4 to grab some space yeah donations uh through paypal are obviously 100"
+  },
+  {
+   "ply": 18,
+   "t": 3758,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbq1rk1/1p2npbp/2p3p1/p3p3/P2pP3/1P1P1N2/1BPNBPPP/R2Q1RK1 w - - 0 10",
+   "said": ""
+  },
+  {
+   "ply": 19,
+   "t": 3760,
+   "line": [
+    "Nc4"
+   ],
+   "fen": "rnbq1rk1/1p2npbp/2p3p1/p3p3/P1NpP3/1P1P1N2/1BP1BPPP/R2Q1RK1 b - - 1 10",
+   "said": ""
+  },
+  {
+   "ply": 20,
+   "t": 3765,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r1bq1rk1/1p1nnpbp/2p3p1/p3p3/P1NpP3/1P1P1N2/1BP1BPPP/R2Q1RK1 w - - 2 11",
+   "said": "all right so now we need to figure out how to play here i think c3 is generally"
+  },
+  {
+   "ply": 22,
+   "t": 3773,
+   "line": [
+    "c3",
+    "c5"
+   ],
+   "fen": "r1bq1rk1/1p1nnpbp/6p1/p1p1p3/P1NpP3/1PPP1N2/1B2BPPP/R2Q1RK1 w - - 0 12",
+   "said": "considered the idea here"
+  },
+  {
+   "ply": 23,
+   "t": 3776,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "r1bq1rk1/1p1nnpbp/6p1/p1p1p3/P1NPP3/1P1P1N2/1B2BPPP/R2Q1RK1 b - - 0 12",
+   "said": ""
+  },
+  {
+   "ply": 25,
+   "t": 3783,
+   "line": [
+    "exd4",
+    "Rc1"
+   ],
+   "fen": "r1bq1rk1/1p1nnpbp/6p1/p1p5/P1NpP3/1P1P1N2/1B2BPPP/2RQ1RK1 b - - 1 13",
+   "said": ""
+  },
+  {
+   "ply": 26,
+   "t": 3786.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bq1rk1/1p1n1pbp/2n3p1/p1p5/P1NpP3/1P1P1N2/1B2BPPP/2RQ1RK1 w - - 2 14",
+   "said": ""
+  },
+  {
+   "ply": 27,
+   "t": 3789,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1bq1rk1/1p1n1pbp/2n3p1/p1p5/P1NpP3/1P1P1N2/1B2BPPP/2RQR1K1 b - - 3 14",
+   "said": ""
+  },
+  {
+   "ply": 29,
+   "t": 3799.5,
+   "line": [
+    "b6",
+    "Bf1"
+   ],
+   "fen": "r1bq1rk1/3n1pbp/1pn3p1/p1p5/P1NpP3/1P1P1N2/1B3PPP/2RQRBK1 b - - 1 15",
+   "said": "if you're retooling my position like this makes sense getting the bishop to a civilized square"
+  },
+  {
+   "ply": 31,
+   "t": 3802,
+   "line": [
+    "Ba6",
+    "g3"
+   ],
+   "fen": "r2q1rk1/3n1pbp/bpn3p1/p1p5/P1NpP3/1P1P1NP1/1B3P1P/2RQRBK1 b - - 0 16",
+   "said": ""
+  },
+  {
+   "ply": 32,
+   "t": 3810,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "r2q1rk1/3n1p1p/bpn3pb/p1p5/P1NpP3/1P1P1NP1/1B3P1P/2RQRBK1 w - - 1 17",
+   "said": ""
+  },
+  {
+   "ply": 33,
+   "t": 3812.5,
+   "line": [
+    "Rb1"
+   ],
+   "fen": "r2q1rk1/3n1p1p/bpn3pb/p1p5/P1NpP3/1P1P1NP1/1B3P1P/1R1QRBK1 b - - 2 17",
+   "said": ""
+  },
+  {
+   "ply": 34,
+   "t": 3818,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "r4rk1/2qn1p1p/bpn3pb/p1p5/P1NpP3/1P1P1NP1/1B3P1P/1R1QRBK1 w - - 3 18",
+   "said": ""
+  },
+  {
+   "ply": 35,
+   "t": 3819,
+   "line": [
+    "Bg2"
+   ],
+   "fen": "r4rk1/2qn1p1p/bpn3pb/p1p5/P1NpP3/1P1P1NP1/1B3PBP/1R1QR1K1 b - - 4 18",
+   "said": ""
+  },
+  {
+   "ply": 36,
+   "t": 3820,
+   "line": [
+    "Rae8"
+   ],
+   "fen": "4rrk1/2qn1p1p/bpn3pb/p1p5/P1NpP3/1P1P1NP1/1B3PBP/1R1QR1K1 w - - 5 19",
+   "said": "okay now who benefits in the event of a bishop"
+  },
+  {
+   "ply": 37,
+   "t": 3824.5,
+   "line": [
+    "Bc1"
+   ],
+   "fen": "4rrk1/2qn1p1p/bpn3pb/p1p5/P1NpP3/1P1P1NP1/5PBP/1RBQR1K1 b - - 6 19",
+   "said": "trade it's probably me because my lights both of my bishops are bad"
+  },
+  {
+   "ply": 39,
+   "t": 3828,
+   "line": [
+    "Bxc1",
+    "Rxc1"
+   ],
+   "fen": "4rrk1/2qn1p1p/bpn3p1/p1p5/P1NpP3/1P1P1NP1/5PBP/2RQR1K1 b - - 0 20",
+   "said": "actually"
+  },
+  {
+   "ply": 40,
+   "t": 3831,
+   "line": [
+    "Bxc4"
+   ],
+   "fen": "4rrk1/2qn1p1p/1pn3p1/p1p5/P1bpP3/1P1P1NP1/5PBP/2RQR1K1 w - - 0 21",
+   "said": ""
+  },
+  {
+   "ply": 41,
+   "t": 3832,
+   "line": [
+    "bxc4"
+   ],
+   "fen": "4rrk1/2qn1p1p/1pn3p1/p1p5/P1PpP3/3P1NP1/5PBP/2RQR1K1 b - - 0 21",
+   "said": ""
+  },
+  {
+   "ply": 43,
+   "t": 3837,
+   "line": [
+    "Nb4",
+    "Qd2"
+   ],
+   "fen": "4rrk1/2qn1p1p/1p4p1/p1p5/PnPpP3/3P1NP1/3Q1PBP/2R1R1K1 b - - 2 22",
+   "said": ""
+  },
+  {
+   "ply": 44,
+   "t": 3838.5,
+   "line": [
+    "Kg7"
+   ],
+   "fen": "4rr2/2qn1pkp/1p4p1/p1p5/PnPpP3/3P1NP1/3Q1PBP/2R1R1K1 w - - 3 23",
+   "said": ""
+  },
+  {
+   "ply": 45,
+   "t": 3842.5,
+   "line": [
+    "h4"
+   ],
+   "fen": "4rr2/2qn1pkp/1p4p1/p1p5/PnPpP2P/3P1NP1/3Q1PB1/2R1R1K1 b - - 0 23",
+   "said": ""
+  },
+  {
+   "ply": 46,
+   "t": 3852,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "4rr2/2q2pkp/1p4p1/p1p1n3/PnPpP2P/3P1NP1/3Q1PB1/2R1R1K1 w - - 1 24",
+   "said": "well i'm going to try to make the bishop better i mean right now it's staring at the fun"
+  },
+  {
+   "ply": 49,
+   "t": 3855,
+   "line": [
+    "Nxe5",
+    "Qxe5",
+    "f4"
+   ],
+   "fen": "4rr2/5pkp/1p4p1/p1p1q3/PnPpPP1P/3P2P1/3Q2B1/2R1R1K1 b - - 0 25",
+   "said": ""
+  },
+  {
+   "ply": 50,
+   "t": 3864.5,
+   "line": [
+    "Qe6"
+   ],
+   "fen": "4rr2/5pkp/1p2q1p1/p1p5/PnPpPP1P/3P2P1/3Q2B1/2R1R1K1 w - - 1 26",
+   "said": ""
+  },
+  {
+   "ply": 51,
+   "t": 3868,
+   "line": [
+    "e5"
+   ],
+   "fen": "4rr2/5pkp/1p2q1p1/p1p1P3/PnPp1P1P/3P2P1/3Q2B1/2R1R1K1 b - - 0 26",
+   "said": "he's biting on granite but not anymore not anymore"
+  },
+  {
+   "ply": 52,
+   "t": 3875,
+   "line": [
+    "f6"
+   ],
+   "fen": "4rr2/6kp/1p2qpp1/p1p1P3/PnPp1P1P/3P2P1/3Q2B1/2R1R1K1 w - - 0 27",
+   "said": "now our bishop is good we've got other problems to worry about this pawn is weak this knight is very strong"
+  },
+  {
+   "ply": 53,
+   "t": 3890.5,
+   "line": [
+    "Kh2"
+   ],
+   "fen": "4rr2/6kp/1p2qpp1/p1p1P3/PnPp1P1P/3P2P1/3Q2BK/2R1R3 b - - 1 27",
+   "said": "so how do we want to do this king h2 maybe just get the king out of the danger zone maybe we can start yeah let's go k2 try to solidify the position"
+  },
+  {
+   "ply": 54,
+   "t": 3897.5,
+   "line": [
+    "fxe5"
+   ],
+   "fen": "4rr2/6kp/1p2q1p1/p1p1p3/PnPp1P1P/3P2P1/3Q2BK/2R1R3 w - - 0 28",
+   "said": "gotta donate 10 bucks from justin on anything thank you appreciate that"
+  },
+  {
+   "ply": 55,
+   "t": 3900.5,
+   "line": [
+    "Rxe5"
+   ],
+   "fen": "4rr2/6kp/1p2q1p1/p1p1R3/PnPp1P1P/3P2P1/3Q2BK/2R5 b - - 0 28",
+   "said": ""
+  },
+  {
+   "ply": 56,
+   "t": 3901.5,
+   "line": [
+    "Qd7"
+   ],
+   "fen": "4rr2/3q2kp/1p4p1/p1p1R3/PnPp1P1P/3P2P1/3Q2BK/2R5 w - - 1 29",
+   "said": "tip"
+  },
+  {
+   "ply": 57,
+   "t": 3904,
+   "line": [
+    "Rce1"
+   ],
+   "fen": "4rr2/3q2kp/1p4p1/p1p1R3/PnPp1P1P/3P2P1/3Q2BK/4R3 b - - 2 29",
+   "said": "i'm sure he will appreciate the free pawn i just gave him"
+  },
+  {
+   "ply": 58,
+   "t": 3913.5,
+   "line": [
+    "Rxe5"
+   ],
+   "fen": "5r2/3q2kp/1p4p1/p1p1r3/PnPp1P1P/3P2P1/3Q2BK/4R3 w - - 0 30",
+   "said": ""
+  },
+  {
+   "ply": 59,
+   "t": 3918.5,
+   "line": [
+    "fxe5"
+   ],
+   "fen": "5r2/3q2kp/1p4p1/p1p1P3/PnPp3P/3P2P1/3Q2BK/4R3 b - - 0 30",
+   "said": ""
+  },
+  {
+   "ply": 58,
+   "t": 3920,
+   "line": [],
+   "fen": "5r2/3q2kp/1p4p1/p1p1r3/PnPp1P1P/3P2P1/3Q2BK/4R3 w - - 0 30",
+   "said": ""
+  },
+  {
+   "ply": 59,
+   "t": 3922.5,
+   "line": [
+    "fxe5"
+   ],
+   "fen": "5r2/3q2kp/1p4p1/p1p1P3/PnPp3P/3P2P1/3Q2BK/4R3 b - - 0 30",
+   "said": ""
+  },
+  {
+   "ply": 60,
+   "t": 3927,
+   "line": [
+    "Qxa4"
+   ],
+   "fen": "5r2/6kp/1p4p1/p1p1P3/qnPp3P/3P2P1/3Q2BK/4R3 w - - 0 31",
+   "said": "a little bit worried about this move i guess we'll cross that bridge when we get there it takes wow"
+  },
+  {
+   "ply": 61,
+   "t": 3929.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "5r2/6kp/1p2P1p1/p1p5/qnPp3P/3P2P1/3Q2BK/4R3 b - - 0 31",
+   "said": "really riley"
+  },
+  {
+   "ply": 60,
+   "t": 3931,
+   "line": [],
+   "fen": "5r2/6kp/1p4p1/p1p1P3/qnPp3P/3P2P1/3Q2BK/4R3 w - - 0 31",
+   "said": "see probably like the karpov move is a"
+  },
+  {
+   "ply": 61,
+   "t": 3952.5,
+   "line": [
+    "Re2"
+   ],
+   "fen": "5r2/6kp/1p4p1/p1p1P3/qnPp3P/3P2P1/3QR1BK/8 b - - 1 31",
+   "said": "rookie two here just to stop"
+  },
+  {
+   "ply": 62,
+   "t": 3962,
+   "line": [
+    "Qb3"
+   ],
+   "fen": "5r2/6kp/1p4p1/p1p1P3/1nPp3P/1q1P2P1/3QR1BK/8 w - - 2 32",
+   "said": ""
+  },
+  {
+   "ply": 63,
+   "t": 3963,
+   "line": [
+    "e6"
+   ],
+   "fen": "5r2/6kp/1p2P1p1/p1p5/1nPp3P/1q1P2P1/3QR1BK/8 b - - 0 32",
+   "said": "i think he's winning yeah i was worried about that move"
+  },
+  {
+   "ply": 64,
+   "t": 3971.5,
+   "line": [
+    "Re8"
+   ],
+   "fen": "4r3/6kp/1p2P1p1/p1p5/1nPp3P/1q1P2P1/3QR1BK/8 w - - 1 33",
+   "said": ""
+  },
+  {
+   "ply": 65,
+   "t": 3974.5,
+   "line": [
+    "Qf4"
+   ],
+   "fen": "4r3/6kp/1p2P1p1/p1p5/1nPp1Q1P/1q1P2P1/4R1BK/8 b - - 2 33",
+   "said": "okay i think he bought a bluff no maybe here"
+  },
+  {
+   "ply": 66,
+   "t": 3986,
+   "line": [
+    "Re7"
+   ],
+   "fen": "8/4r1kp/1p2P1p1/p1p5/1nPp1Q1P/1q1P2P1/4R1BK/8 w - - 3 34",
+   "said": ""
+  },
+  {
+   "ply": 67,
+   "t": 3991,
+   "line": [
+    "Qd6"
+   ],
+   "fen": "8/4r1kp/1p1QP1p1/p1p5/1nPp3P/1q1P2P1/4R1BK/8 b - - 4 34",
+   "said": "somewhat now i'm just winning yes this queen is excluding okay now it's plus two for a win so maybe this is a good time to abort okay i'm gonna give him another game make it even he likes this structure yeah i think he probably was winning at some point there this is an old line which i'm playing very incompetently"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 60,
+   "fen": "5r2/6kp/1p4p1/p1p1P3/qnPp3P/3P2P1/3Q2BK/4R3 w - - 0 31",
+   "line": [
+    "e4",
+    "c6",
+    "Nf3",
+    "d5",
+    "d3",
+    "g6",
+    "Be2",
+    "Bg7",
+    "O-O",
+    "e5",
+    "Nbd2",
+    "Ne7",
+    "b3",
+    "O-O",
+    "a4",
+    "a5",
+    "Bb2",
+    "d4",
+    "Nc4",
+    "Nd7",
+    "c3",
+    "c5",
+    "cxd4",
+    "exd4",
+    "Rc1",
+    "Nc6",
+    "Re1",
+    "b6",
+    "Bf1",
+    "Ba6",
+    "g3",
+    "Bh6",
+    "Rb1",
+    "Qc7",
+    "Bg2",
+    "Rae8",
+    "Bc1",
+    "Bxc1",
+    "Rxc1",
+    "Bxc4",
+    "bxc4",
+    "Nb4",
+    "Qd2",
+    "Kg7",
+    "h4",
+    "Ne5",
+    "Nxe5",
+    "Qxe5",
+    "f4",
+    "Qe6",
+    "e5",
+    "f6",
+    "Kh2",
+    "fxe5",
+    "Rxe5",
+    "Qd7",
+    "Rce1",
+    "Rxe5",
+    "fxe5",
+    "Qxa4"
+   ],
+   "options": [
+    {
+     "san": "e6",
+     "t": 3929.5,
+     "continuation": "e6",
+     "said": "a little bit worried about this move i guess we'll cross that bridge when we get there it takes wow really riley see probably like the karpov move is a rookie two here just to stop i think he's winning yeah i was worried about that move okay i think he bought a bluff no maybe here"
+    },
+    {
+     "san": "Re2",
+     "t": 3952.5,
+     "continuation": "Re2",
+     "said": "see probably like the karpov move is a rookie two here just to stop i think he's winning yeah i was worried about that move okay i think he bought a bluff no maybe here somewhat now i'm just winning yes this queen is excluding okay now it's plus two for a win so maybe this is a good time to abort okay i'm gonna give him another game make it even"
+    }
+   ]
+  }
+ ]
+}

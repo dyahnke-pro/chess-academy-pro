@@ -1,0 +1,545 @@
+{
+ "videoId": "KAH-POAsnyE",
+ "title": "Master Class | Blackmar–Diemer Gambit | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 6.5,
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "let's continue agl galloper okay so 1d4 we've been playing the queen's gamma"
+  },
+  {
+   "ply": 3,
+   "t": 9.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "declined okay so e4 is the blackmart dammer gambit you will um thank you on micro for the prime you will see this at you know the beginner level you'll even"
+  },
+  {
+   "ply": 4,
+   "t": 27,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/3Pp3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "occasionally see this at a high level and the best um the best way to respond to the black martial is to take this pawn"
+  },
+  {
+   "ply": 5,
+   "t": 39.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/3Pp3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "he's probably gonna probably going to go f3 that's okay nice c3 so"
+  },
+  {
+   "ply": 6,
+   "t": 46,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 2 4",
+   "said": "um let me remember so now we go knight f6 we defend the pawn he's going to go f3 he's probably going to go f3"
+  },
+  {
+   "ply": 7,
+   "t": 64,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/8/3Pp3/2N2P2/PPP3PP/R1BQKBNR b KQkq - 0 4",
+   "said": "all right i guess he doesn't really know how to continue the point of the black martimer is kind of a smith mora on the opposite side of the board right if you've seen the smith more in the situation yeah he does go after me so let me try to remember something guys give me a second please yeah so in the name of playing very solidly taking the pawn on f3 is not the best it is the best move from a computer perspective white does not have enough compensation for the pawn period okay but very often when you want to disarm a gambit you want to do something that's in the middle right you want to give away the pawn but in return get something resembling a development advantage so let's forget about this bond for a second we don't we don't need to do anything with it"
+  },
+  {
+   "ply": 8,
+   "t": 115.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/8/3Pp3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 1 5",
+   "said": "what development move can you guys offer so there's bishop f5 and i'll explain why that's not not as good as it looks afterward but the move that i propose is knight c6 it actually does counter attack the pawn white has the move d5 here which"
+  },
+  {
+   "ply": 9,
+   "t": 127.5,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/8/3PpB2/2N2P2/PPP3PP/R2QKBNR b KQkq - 2 5",
+   "said": "would force this knight to move and would slide into the e5 square which is a knight up okay he goes bishop f4 so he's insisting on sacrificing the pawn"
+  },
+  {
+   "ply": 10,
+   "t": 139,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/5n2/8/3npB2/2N2P2/PPP3PP/R2QKBNR w KQkq - 0 6",
+   "said": "and that is not a good move it it allows us now to take the pawn on d4 and there's no reason not to take the spawn right he's just his center has collapsed he's giving up way too many pawns here"
+  },
+  {
+   "ply": 11,
+   "t": 150,
+   "line": [
+    "Nb5"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/5n2/1N6/3npB2/5P2/PPP3PP/R2QKBNR b KQkq - 1 6",
+   "said": "right so we're being very flexible in our thinking process right knight b5 okay so he's trying to be intimidating like he's making moves that may look a little bit scary the calculation allows you to take the staying out of moves like these all the time okay so the first question the obvious question is can we take the night is there any reason not to take the night thank you great broken chair the only reason that i would even think about it is well he can take the queen"
+  },
+  {
+   "ply": 12,
+   "t": 188,
+   "line": [
+    "Nxb5"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/5n2/1n6/4pB2/5P2/PPP3PP/R2QKBNR w KQkq - 0 7",
+   "said": "and deprive us of castling rights but again he's down two pawns he's trading a lot of pieces and just because our king is on d it doesn't mean we're going to get checkmated so we're going to take on b5 and maybe he's attracted to the concept of taking"
+  },
+  {
+   "ply": 13,
+   "t": 193,
+   "line": [
+    "Qxd8+"
+   ],
+   "fen": "r1bQkb1r/ppp1pppp/5n2/1n6/4pB2/5P2/PPP3PP/R3KBNR b KQkq - 0 7",
+   "said": "with check nope he takes the queen and he"
+  },
+  {
+   "ply": 14,
+   "t": 194,
+   "line": [
+    "Kxd8"
+   ],
+   "fen": "r1bk1b1r/ppp1pppp/5n2/1n6/4pB2/5P2/PPP3PP/R3KBNR w KQ - 0 8",
+   "said": ""
+  },
+  {
+   "ply": 15,
+   "t": 199,
+   "line": [
+    "O-O-O+"
+   ],
+   "fen": "r1bk1b1r/ppp1pppp/5n2/1n6/4pB2/5P2/PPP3PP/2KR1BNR b - - 1 8",
+   "said": "is going to take that now maybe he'll castle yeah i was about to say that now this is a common mistake right he thinks he's going to make an in-between move and then you know leisurely take the"
+  },
+  {
+   "ply": 16,
+   "t": 212,
+   "line": [
+    "Nd6"
+   ],
+   "fen": "r1bk1b1r/ppp1pppp/3n1n2/8/4pB2/5P2/PPP3PP/2KR1BNR w - - 2 9",
+   "said": "knight but he's missed that we can simultaneously move this knight and defend against the check at the same time that is basically the game we're up two"
+  },
+  {
+   "ply": 17,
+   "t": 220.5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bk1b1r/ppp1pppp/3n1n2/1B6/4pB2/5P2/PPP3PP/2KR2NR b - - 3 9",
+   "said": "pawns now and uh and a piece bishop okay so he played anymore but while i cannot take this bishop this move loses any of its use okay so now we need"
+  },
+  {
+   "ply": 18,
+   "t": 237.5,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2k1b1r/pppbpppp/3n1n2/1B6/4pB2/5P2/PPP3PP/2KR2NR w - - 4 10",
+   "said": "to focus as we always do on developing our pieces and not forgetting about our development even though it's an endgame let me just play bishop d7 here offering the trade of bishops again if if there is a key if there's a clear"
+  },
+  {
+   "ply": 19,
+   "t": 248,
+   "line": [
+    "Bxd7"
+   ],
+   "fen": "r2k1b1r/pppBpppp/3n1n2/8/4pB2/5P2/PPP3PP/2KR2NR b - - 0 10",
+   "said": "path to simplification when you're up you know when you're up material then you should go"
+  },
+  {
+   "ply": 20,
+   "t": 251,
+   "line": [
+    "Kxd7"
+   ],
+   "fen": "r4b1r/pppkpppp/3n1n2/8/4pB2/5P2/PPP3PP/2KR2NR w - - 0 11",
+   "said": "go forward king takes d7 then we're"
+  },
+  {
+   "ply": 21,
+   "t": 255.5,
+   "line": [
+    "Nh3"
+   ],
+   "fen": "r4b1r/pppkpppp/3n1n2/8/4pB2/5P1N/PPP3PP/2KR3R b - - 1 11",
+   "said": "going to play e6 and bishop b7 and again you shouldn't overthink that"
+  },
+  {
+   "ply": 22,
+   "t": 259,
+   "line": [
+    "exf3"
+   ],
+   "fen": "r4b1r/pppkpppp/3n1n2/8/5B2/5p1N/PPP3PP/2KR3R w - - 0 12",
+   "said": "the technique here actually now let's take on f3 now that he's moved his"
+  },
+  {
+   "ply": 23,
+   "t": 261.5,
+   "line": [
+    "gxf3"
+   ],
+   "fen": "r4b1r/pppkpppp/3n1n2/8/5B2/5P1N/PPP4P/2KR3R b - - 0 12",
+   "said": "knight away from g1 you know a very classy move here would be what what would be sort of the most clinical move"
+  },
+  {
+   "ply": 24,
+   "t": 279,
+   "line": [
+    "h6"
+   ],
+   "fen": "r4b1r/pppkppp1/3n1n1p/8/5B2/5P1N/PPP4P/2KR3R w - - 0 13",
+   "said": "so i would propose h6 right i would ask myself where is this knight going it's probably going to g5 let's stop it from going to g5 not"
+  },
+  {
+   "ply": 25,
+   "t": 282.5,
+   "line": [
+    "Rhe1"
+   ],
+   "fen": "r4b1r/pppkppp1/3n1n1p/8/5B2/5P1N/PPP4P/2KRR3 b - - 1 13",
+   "said": "necessary but clinical now we can proceed with the development"
+  },
+  {
+   "ply": 26,
+   "t": 283.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "r4b1r/pppk1pp1/3npn1p/8/5B2/5P1N/PPP4P/2KRR3 w - - 0 14",
+   "said": "of this bishop we could have also gone g5 and fiance"
+  },
+  {
+   "ply": 27,
+   "t": 290.5,
+   "line": [
+    "Re2"
+   ],
+   "fen": "r4b1r/pppk1pp1/3npn1p/8/5B2/5P1N/PPP1R2P/2KR4 b - - 1 14",
+   "said": "that would have been possible yeah but"
+  },
+  {
+   "ply": 28,
+   "t": 291.5,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r6r/pppkbpp1/3npn1p/8/5B2/5P1N/PPP1R2P/2KR4 w - - 2 15",
+   "said": "it it okay there should be seven then we'll bring a rook to d8 and step aside with the king so this is super straightforward play"
+  },
+  {
+   "ply": 30,
+   "t": 304,
+   "line": [
+    "Nf2",
+    "Rad8"
+   ],
+   "fen": "3r3r/pppkbpp1/3npn1p/8/5B2/5P2/PPP1RN1P/2KR4 w - - 4 16",
+   "said": "that's why i'm playing fast this is something that you get with practice right technique and converting advantages"
+  },
+  {
+   "ply": 31,
+   "t": 307,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "3r3r/pppkbpp1/3npn1p/8/4NB2/5P2/PPP1R2P/2KR4 b - - 5 16",
+   "said": "of this kind something that just"
+  },
+  {
+   "ply": 32,
+   "t": 309,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "3r3r/pppkbpp1/3np2p/8/4nB2/5P2/PPP1R2P/2KR4 w - - 0 17",
+   "said": "involves you practicing getting the intuition for"
+  },
+  {
+   "ply": 33,
+   "t": 313.5,
+   "line": [
+    "Rxe4"
+   ],
+   "fen": "3r3r/pppkbpp1/3np2p/8/4RB2/5P2/PPP4P/2KR4 b - - 0 17",
+   "said": "these kinds of positions"
+  },
+  {
+   "ply": 34,
+   "t": 314.5,
+   "line": [
+    "Kc8"
+   ],
+   "fen": "2kr3r/ppp1bpp1/3np2p/8/4RB2/5P2/PPP4P/2KR4 w - - 1 18",
+   "said": "all right king c6 is also fine but because we're up a piece again we don't have to bring our king to"
+  },
+  {
+   "ply": 35,
+   "t": 326.5,
+   "line": [
+    "Bxd6"
+   ],
+   "fen": "2kr3r/ppp1bpp1/3Bp2p/8/4R3/5P2/PPP4P/2KR4 b - - 0 18",
+   "said": "the center the sort of standard endgame rules aren't as important yeah so i i basically this the the"
+  },
+  {
+   "ply": 36,
+   "t": 329,
+   "line": [
+    "Rxd6"
+   ],
+   "fen": "2k4r/ppp1bpp1/3rp2p/8/4R3/5P2/PPP4P/2KR4 w - - 0 19",
+   "said": "20 the original speed run we've sort of ended at a rating of about 23.70 which we were"
+  },
+  {
+   "ply": 37,
+   "t": 337.5,
+   "line": [
+    "Red4"
+   ],
+   "fen": "2k4r/ppp1bpp1/3rp2p/8/3R4/5P2/PPP4P/2KR4 b - - 1 19",
+   "said": "going to go to 2500 but unfortunately i'm encountering a ton of cheaters in the five-minute pool at"
+  },
+  {
+   "ply": 38,
+   "t": 343.5,
+   "line": [
+    "Rhd8"
+   ],
+   "fen": "2kr4/ppp1bpp1/3rp2p/8/3R4/5P2/PPP4P/2KR4 w - - 2 20",
+   "said": "that level so i feel like you know we've played"
+  },
+  {
+   "ply": 39,
+   "t": 349.5,
+   "line": [
+    "Rxd6"
+   ],
+   "fen": "2kr4/ppp1bpp1/3Rp2p/8/8/5P2/PPP4P/2KR4 b - - 0 20",
+   "said": "enough high level games to satisfy the higher rated guys among you"
+  },
+  {
+   "ply": 40,
+   "t": 350.5,
+   "line": [
+    "Rxd6"
+   ],
+   "fen": "2k5/ppp1bpp1/3rp2p/8/8/5P2/PPP4P/2KR4 w - - 0 21",
+   "said": "but um this i think is what"
+  },
+  {
+   "ply": 42,
+   "t": 354,
+   "line": [
+    "Rxd6",
+    "Bxd6"
+   ],
+   "fen": "2k5/ppp2pp1/3bp2p/8/8/5P2/PPP4P/2K5 w - - 0 22",
+   "said": "will really help us round off this notion of a speeder now we have more"
+  },
+  {
+   "ply": 43,
+   "t": 359,
+   "line": [
+    "b4"
+   ],
+   "fen": "2k5/ppp2pp1/3bp2p/8/1P6/5P2/P1P4P/2K5 b - - 0 22",
+   "said": "time to talk about the game itself during the game"
+  },
+  {
+   "ply": 44,
+   "t": 360.5,
+   "line": [
+    "Bxh2"
+   ],
+   "fen": "2k5/ppp2pp1/4p2p/8/1P6/5P2/P1P4b/2K5 w - - 0 23",
+   "said": "and i'm not commenting on these moves because i'm doing obvious stuff"
+  },
+  {
+   "ply": 45,
+   "t": 364,
+   "line": [
+    "c4"
+   ],
+   "fen": "2k5/ppp2pp1/4p2p/8/1PP5/5P2/P6b/2K5 b - - 0 23",
+   "said": "and i'll answer after the game so"
+  },
+  {
+   "ply": 46,
+   "t": 365,
+   "line": [
+    "h5"
+   ],
+   "fen": "2k5/ppp2pp1/4p3/7p/1PP5/5P2/P6b/2K5 w - - 0 24",
+   "said": ""
+  },
+  {
+   "ply": 47,
+   "t": 368.5,
+   "line": [
+    "Kd1"
+   ],
+   "fen": "2k5/ppp2pp1/4p3/7p/1PP5/5P2/P6b/3K4 b - - 1 24",
+   "said": "this will also all be on youtube all"
+  },
+  {
+   "ply": 48,
+   "t": 369.5,
+   "line": [
+    "h4"
+   ],
+   "fen": "2k5/ppp2pp1/4p3/8/1PP4p/5P2/P6b/3K4 w - - 0 25",
+   "said": "right now we're just going to push this"
+  },
+  {
+   "ply": 50,
+   "t": 372.5,
+   "line": [
+    "Ke1",
+    "h3"
+   ],
+   "fen": "2k5/ppp2pp1/4p3/8/1PP5/5P1p/P6b/4K3 w - - 0 26",
+   "said": "pawn"
+  },
+  {
+   "ply": 52,
+   "t": 377,
+   "line": [
+    "Kf1",
+    "Bf4"
+   ],
+   "fen": "2k5/ppp2pp1/4p3/8/1PP2b2/5P1p/P7/5K2 w - - 2 27",
+   "said": "and we're going to step aside at the bishop now what would be the fastest"
+  },
+  {
+   "ply": 53,
+   "t": 379,
+   "line": [
+    "Kf2"
+   ],
+   "fen": "2k5/ppp2pp1/4p3/8/1PP2b2/5P1p/P4K2/8 b - - 3 27",
+   "said": "method of winning from this point on who can propose a plan obviously it's weird to talk about a plan here we're up 100 pieces and pawns but what can you guys suggest here okay so we don't need to use our king actually we don't need to use our king"
+  },
+  {
+   "ply": 54,
+   "t": 413,
+   "line": [
+    "f5"
+   ],
+   "fen": "2k5/ppp3p1/4p3/5p2/1PP2b2/5P1p/P4K2/8 w - - 0 28",
+   "said": "all we need to do is realize that this bishop and this pawn aren't quite enough to tackle the king bishop e3 he can go king g3 but we can simply make another pass upon google f5 g5 g4"
+  },
+  {
+   "ply": 55,
+   "t": 417,
+   "line": [
+    "a4"
+   ],
+   "fen": "2k5/ppp3p1/4p3/5p2/PPP2b2/5P1p/5K2/8 b - - 0 28",
+   "said": "and the two connected passers in"
+  },
+  {
+   "ply": 56,
+   "t": 418,
+   "line": [
+    "g5"
+   ],
+   "fen": "2k5/ppp5/4p3/5pp1/PPP2b2/5P1p/5K2/8 w - - 0 29",
+   "said": "combination with the bishop are enough material to force promotion"
+  },
+  {
+   "ply": 58,
+   "t": 422,
+   "line": [
+    "c5",
+    "g4"
+   ],
+   "fen": "2k5/ppp5/4p3/2P2p2/PP3bp1/5P1p/5K2/8 w - - 0 30",
+   "said": "we don't need to use our king at all"
+  },
+  {
+   "ply": 59,
+   "t": 424.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "2k5/ppp5/4p3/1PP2p2/P4bp1/5P1p/5K2/8 b - - 0 30",
+   "said": ""
+  },
+  {
+   "ply": 60,
+   "t": 425.5,
+   "line": [
+    "g3+"
+   ],
+   "fen": "2k5/ppp5/4p3/1PP2p2/P4b2/5Ppp/5K2/8 w - - 0 31",
+   "said": "g3 and watch what happens right now the"
+  },
+  {
+   "ply": 61,
+   "t": 429,
+   "line": [
+    "Kg1"
+   ],
+   "fen": "2k5/ppp5/4p3/1PP2p2/P4b2/5Ppp/8/6K1 b - - 1 31",
+   "said": "one thing you don't want to do is play h2 which allows the king to blockade the pawns himself"
+  },
+  {
+   "ply": 62,
+   "t": 441.5,
+   "line": [
+    "Be3+"
+   ],
+   "fen": "2k5/ppp5/4p3/1PP2p2/P7/4bPpp/8/6K1 w - - 2 32",
+   "said": "what we do want to do is do what we can go either g2 or even slightly more precise to go bishop e3 check first then go g2 and g1 right"
+  },
+  {
+   "ply": 64,
+   "t": 447,
+   "line": [
+    "Kh1",
+    "g2+"
+   ],
+   "fen": "2k5/ppp5/4p3/1PP2p2/P7/4bP1p/6p1/7K w - - 0 33",
+   "said": ""
+  },
+  {
+   "ply": 65,
+   "t": 449.5,
+   "line": [
+    "Kh2"
+   ],
+   "fen": "2k5/ppp5/4p3/1PP2p2/P7/4bP1p/6pK/8 b - - 1 33",
+   "said": "right g1 queen and the fastest mate is"
+  },
+  {
+   "ply": 66,
+   "t": 450.5,
+   "line": [
+    "g1=N"
+   ],
+   "fen": "2k5/ppp5/4p3/1PP2p2/P7/4bP1p/7K/6n1 w - - 0 34",
+   "said": "to realize that this square is the mating square we can prevent the king from going any further and then deliver checkmate on g3 white has plenty of pawn moves so there's no stalemate okay so let's talk about the game and then we'll end the stream now in the black mirror diamer white also sometimes goes f3 immediately and life pro tip the best move for black hair is to counter strike in the center with e5 this is the refutation um and the point is that if d takes e5 you simply take the queen and not only do you you know not only is white now uncastled but you can go knight c6 and you develop your knight quickly you attack this pawn white is in very big trouble here and what you also have to realize folks is that when people play a gambit gotta"
+  }
+ ],
+ "forks": []
+}

@@ -1,0 +1,749 @@
+{
+ "videoId": "uJro3yCDEgk",
+ "title": "Alapin Sicilian | The Sensei Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 27.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] we're gonna get 40 points for a win our rating our rating gain is going to slow slow up though okay so we we already know what we're playing against the sicilian"
+  },
+  {
+   "ply": 3,
+   "t": 44,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "i recommend this to every beginner player either the grand prix attack or the c3 sicilian it's been a while since we've played the aleppin it really has so let's let's go back to the elephant and see how it works against the 1600 why am i so obsessed with the elephant because again it's a very positionally healthy opening"
+  },
+  {
+   "ply": 4,
+   "t": 68.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "you are immediately contesting the center and when you play through the center you automatically get basically points for playing good fundamentals e6 okay so now d4"
+  },
+  {
+   "ply": 5,
+   "t": 70.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "yeah so e6 is a very common response and"
+  },
+  {
+   "ply": 6,
+   "t": 74,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "d5 so here we have a choice we can go e5 and transpose the game into an advanced french if you play the french rather if you play the advance this makes a lot of sense because our opponent might not be intentionally"
+  },
+  {
+   "ply": 7,
+   "t": 96.5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pP4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "getting the game into a french but for the purposes of this of this game we're going to go for the more traditional aleppin way of playing which is to take on d5 with the pawn giving black the choice of what to"
+  },
+  {
+   "ply": 8,
+   "t": 103.5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/8/2pp4/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "said": "recapture with okay pawn takes now which type of structure is this heading toward those of you who've watched my speeder and games in my stream know that this is heading toward what's called an iqp structure isolated queens pawn because at some point we're going to probably take on c5 and black is going to be left with an isolated pawn on d5 oh is there any rush to take on c5 do we need to do that now me we do not and for the time being we can develop"
+  },
+  {
+   "ply": 9,
+   "t": 143.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/8/2pp4/3P4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 1 5",
+   "said": "our pieces and oftentimes the rule of thumb in such positions is to wait for black to develop the dark squared bishop and only then to take on c5 in order to make black lose a tempo so let's begin by playing knight f3 then we can play bishop b5 check and"
+  },
+  {
+   "ply": 10,
+   "t": 148,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 2 6",
+   "said": "castle and only when the bishop from f8 moves then we're going to take on c5"
+  },
+  {
+   "ply": 11,
+   "t": 155.5,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/5n2/1Bpp4/3P4/2P2N2/PP3PPP/RNBQK2R b KQkq - 3 6",
+   "said": "okay so i like the idea of giving a check and developing with tempo in general trades are going to be in"
+  },
+  {
+   "ply": 12,
+   "t": 163.5,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "rn1qkb1r/pp1b1ppp/5n2/1Bpp4/3P4/2P2N2/PP3PPP/RNBQK2R w KQkq - 4 7",
+   "said": "favor of the side that plays against the iqp because you know the more pieces are traded the weaker the pawn becomes"
+  },
+  {
+   "ply": 14,
+   "t": 177.5,
+   "line": [
+    "Bf1",
+    "Bc8"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 6 8",
+   "said": "yeah so i'll talk about b6 after the game v6 is not scary i mean yes he's going to avoid the iqp structure but it's going to come at the"
+  },
+  {
+   "ply": 16,
+   "t": 185.5,
+   "line": [
+    "Bb5+",
+    "Bd7"
+   ],
+   "fen": "rn1qkb1r/pp1b1ppp/5n2/1Bpp4/3P4/2P2N2/PP3PPP/RNBQK2R w KQkq - 8 9",
+   "said": "cost of development okay and i'll talk about c4 as well so"
+  },
+  {
+   "ply": 17,
+   "t": 187,
+   "line": [
+    "Bxd7+"
+   ],
+   "fen": "rn1qkb1r/pp1B1ppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQK2R b KQkq - 0 9",
+   "said": "let's trade and then let's castle"
+  },
+  {
+   "ply": 19,
+   "t": 194.5,
+   "line": [
+    "Nbxd7",
+    "O-O"
+   ],
+   "fen": "r2qkb1r/pp1n1ppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQ1RK1 b kq - 1 10",
+   "said": "this is the main line what he's going for so white's going to be slightly better"
+  },
+  {
+   "ply": 20,
+   "t": 200,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r2qk2r/pp1nbppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQ1RK1 w kq - 2 11",
+   "said": "nothing major but it's going to give us a chance to play to show some fundamentals okay bishop e7 now the reason black has played this"
+  },
+  {
+   "ply": 21,
+   "t": 213.5,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "r2qk2r/pp1nbppp/5n2/2Pp4/8/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 11",
+   "said": "very well is because he's positioned his knight so that on d takes c5 you can take with the knight but we still want to take we still want to get the iqp structure even though it means we haven't won a tempo"
+  },
+  {
+   "ply": 20,
+   "t": 222.5,
+   "line": [],
+   "fen": "r2qk2r/pp1nbppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQ1RK1 w kq - 2 11",
+   "said": "95 i don't really know why 95 is so impressive 95 black and just castle all"
+  },
+  {
+   "ply": 21,
+   "t": 228.5,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "r2qk2r/pp1nbppp/5n2/2Pp4/8/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 11",
+   "said": "right that's not nothing nothing crazy there but there's a point that i repeat a lot assuming he takes on c5 i don't know what he's thinking about bishop c5 allows rookie one check which black certainly does not want to allow yeah i know a lot of people are wondering about b6 that's something i'm going to talk about after the game now assuming that black plays knight takes c5 perhaps you can think about where we"
+  },
+  {
+   "ply": 22,
+   "t": 264,
+   "line": [
+    "Bxc5"
+   ],
+   "fen": "r2qk2r/pp1n1ppp/5n2/2bp4/8/2P2N2/PP3PPP/RNBQ1RK1 w kq - 0 12",
+   "said": "want this bishop to be developed of the three feasible squares e3 f4 and g5 all of which by the way are completely reasonable ways to develop the bishop wow he does take with the bishop on c5 okay i really don't understand this move um now there's one important detail ricky one check i i have a feeling that he's cooked up the move knight e4 in response rookie one check knight e4 what does white have in that position without this move his idea would be very reasonable"
+  },
+  {
+   "ply": 23,
+   "t": 301.5,
+   "line": [
+    "Re1+"
+   ],
+   "fen": "r2qk2r/pp1n1ppp/5n2/2bp4/8/2P2N2/PP3PPP/RNBQR1K1 b kq - 1 12",
+   "said": "not bishop g5 no this is after after rookie one check 94. after rookie one check knight e4 we can play queen takes d5 okay so let's make the move on the board he's also disconnected rookie one check now if knight e4 black loses contact with the d5 pawn we play queen takes d5 now bear with me here black can play bishop takes f2 check right pins pieces protect so we can't take that bishop bishop takes f2 looks very strong"
+  },
+  {
+   "ply": 24,
+   "t": 332,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r2qk2r/pp1n1ppp/8/2bp4/4n3/2P2N2/PP3PPP/RNBQR1K1 w kq - 2 13",
+   "said": "so knight e4 queen takes d5 bishop takes f2 check but keep calculating we move our king aside to f1 black takes the rook with the bishop and this is going to happen and then what do we do in that position"
+  },
+  {
+   "ply": 26,
+   "t": 339,
+   "line": [
+    "Qxd5",
+    "Bxf2+"
+   ],
+   "fen": "r2qk2r/pp1n1ppp/8/3Q4/4n3/2P2N2/PP3bPP/RNB1R1K1 w kq - 0 14",
+   "said": "it's gonna be two pieces for a rook yeah it's gonna be two pieces for a rook"
+  },
+  {
+   "ply": 27,
+   "t": 340,
+   "line": [
+    "Kf1"
+   ],
+   "fen": "r2qk2r/pp1n1ppp/8/3Q4/4n3/2P2N2/PP3bPP/RNB1RK2 b kq - 1 14",
+   "said": "and that's of course very good for us"
+  },
+  {
+   "ply": 29,
+   "t": 348.5,
+   "line": [
+    "Bxe1",
+    "Qxe4+"
+   ],
+   "fen": "r2qk2r/pp1n1ppp/8/8/4Q3/2P2N2/PP4PP/RNB1bK2 b kq - 0 15",
+   "said": "this is exactly what happened bishop takes e1 queen takes e4 check he can play queen e7 it doesn't matter then we're going to trade queens and then pick up the bishop and we're going"
+  },
+  {
+   "ply": 30,
+   "t": 360.5,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r3k2r/pp1nqppp/8/8/4Q3/2P2N2/PP4PP/RNB1bK2 w kq - 1 16",
+   "said": "to have two pieces for a rook not crazy hard to calculate right"
+  },
+  {
+   "ply": 31,
+   "t": 361.5,
+   "line": [
+    "Qxe7+"
+   ],
+   "fen": "r3k2r/pp1nQppp/8/8/8/2P2N2/PP4PP/RNB1bK2 b kq - 0 16",
+   "said": "take the queen"
+  },
+  {
+   "ply": 33,
+   "t": 364.5,
+   "line": [
+    "Kxe7",
+    "Kxe1"
+   ],
+   "fen": "r6r/pp1nkppp/8/8/8/2P2N2/PP4PP/RNB1K3 b - - 0 17",
+   "said": "and then of course we want to take the bishop with the king our knight is perfectly well positioned on f3 and now we have two pieces for a rook we have a material advantage and we should be able to convert it"
+  },
+  {
+   "ply": 34,
+   "t": 379.5,
+   "line": [
+    "Rhe8"
+   ],
+   "fen": "r3r3/pp1nkppp/8/8/8/2P2N2/PP4PP/RNB1K3 w - - 1 18",
+   "said": "what's up man we should be able to convert it pretty handily okay so first order of business well there's actually two things we need to be careful about the first is we have a couple of weak squares in our position we have a hole on d3 that the knight can try to get to the e file is currently under black's control so not everything is hunky-dory"
+  },
+  {
+   "ply": 35,
+   "t": 409.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r3r3/pp1nkppp/8/8/8/2P1BN2/PP4PP/RN2K3 b - - 2 18",
+   "said": "here we have to be cautious what i like is the idea of starting with either king f2 but what i like even more is preventing black from going knight c5 by playing bishop e3 now am i not worried about stepping into the pin actually no i'm not because if the king moves away then we can respond with king f2 getting out of the pin and defending the bishop very concrete right just calculate and these types of concrete calculations always supersede your general worry like oh i'm walking into a pin but it's a completely temporary pin we're going to play king f2 on the next move"
+  },
+  {
+   "ply": 37,
+   "t": 449.5,
+   "line": [
+    "Kf8",
+    "Kf2"
+   ],
+   "fen": "r3rk2/pp1n1ppp/8/8/8/2P1BN2/PP3KPP/RN6 b - - 4 19",
+   "said": "so our our plan of action king f2 knight b to d2 and then maybe perhaps we can get our knight to the center with knight c4 we can get our rook into the game once we get all of our pieces into the game black is going to have a very hard time holding things together there is a nice move here knight f6 which would force us to be accurate but"
+  },
+  {
+   "ply": 38,
+   "t": 463,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "r3rk2/pp3ppp/8/4n3/8/2P1BN2/PP3KPP/RN6 w - - 5 20",
+   "said": "i'm not afraid of it okay 95 uh as i always say when you've got how do"
+  },
+  {
+   "ply": 39,
+   "t": 475,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r3rk2/pp3ppp/8/4N3/8/2P1B3/PP3KPP/RN6 b - - 0 20",
+   "said": "you evaluate two pieces for a rook generally speaking there's one very important rule of thumb let's trade which is that the presence of an"
+  },
+  {
+   "ply": 40,
+   "t": 479.5,
+   "line": [
+    "Rxe5"
+   ],
+   "fen": "r4k2/pp3ppp/8/4r3/8/2P1B3/PP3KPP/RN6 w - - 0 21",
+   "said": "additional pair of rooks favors the side of the two pieces so if you took the a1 and a8 rooks off the board white would still be much better but it would be a little bit less clear-cut the presence of the rooks allows us to keep the minor pieces anchored right we don't have to worry about the minor pieces getting tangled up we can use our rook to defend against"
+  },
+  {
+   "ply": 41,
+   "t": 510.5,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "r4k2/pp3ppp/8/4r3/8/2P1B3/PP1N1KPP/R7 b - - 1 21",
+   "said": "uh side to side rook moves okay so how should we continue thank you jacqueline for the prime let's begin by developing our knight i think that's a pretty reasonable approach knight d2"
+  },
+  {
+   "ply": 42,
+   "t": 513.5,
+   "line": [
+    "Rae8"
+   ],
+   "fen": "4rk2/pp3ppp/8/4r3/8/2P1B3/PP1N1KPP/R7 w - - 2 22",
+   "said": "and then our bishop is attacked we got to be careful we cannot move it because of rookie 2. knight c4"
+  },
+  {
+   "ply": 43,
+   "t": 524,
+   "line": [
+    "Re1"
+   ],
+   "fen": "4rk2/pp3ppp/8/4r3/8/2P1B3/PP1N1KPP/4R3 b - - 3 22",
+   "said": "would allow rook e4 and get into unpleasantness so we bring our rook into the game with rookie one good stuff and then we're ready to play knight f3 and chase the rook away from e5"
+  },
+  {
+   "ply": 44,
+   "t": 544.5,
+   "line": [
+    "f5"
+   ],
+   "fen": "4rk2/pp4pp/8/4rp2/8/2P1B3/PP1N1KPP/4R3 w - - 0 23",
+   "said": "yeah we could have gotten the knight to d4 in a variety of ways but it seems as good as any f5 okay great uh threatening f4"
+  },
+  {
+   "ply": 45,
+   "t": 553,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "4rk2/pp4pp/8/4rp2/8/2P1BN2/PP3KPP/4R3 b - - 1 23",
+   "said": "but the move knight f3 comes with tempo so we don't have to worry about f4"
+  },
+  {
+   "ply": 46,
+   "t": 562.5,
+   "line": [
+    "Rb5"
+   ],
+   "fen": "4rk2/pp4pp/8/1r3p2/8/2P1BN2/PP3KPP/4R3 w - - 2 24",
+   "said": "now knight a3 was also fine i don't think it really matters okay rook b5 this is an instructive moment i think a lot of people would go b3 uh automatically but i made this point in the last game the same thing about luft right when you're"
+  },
+  {
+   "ply": 47,
+   "t": 583,
+   "line": [
+    "b4"
+   ],
+   "fen": "4rk2/pp4pp/8/1r3p2/1P6/2P1BN2/P4KPP/4R3 b - - 0 24",
+   "said": "pushing your pawns and and you're pushing your pawns for a reason you want to see the bigger picture right v3 is not the only way to defend the b-pawn and as somebody mentioned i really like the idea of going b4 to create an anchor point for the bishop on c5"
+  },
+  {
+   "ply": 48,
+   "t": 600,
+   "line": [
+    "b6"
+   ],
+   "fen": "4rk2/p5pp/1p6/1r3p2/1P6/2P1BN2/P4KPP/4R3 w - - 0 25",
+   "said": "why not knights you mean knight d4 because knight d4 would blunder oh my keyboard died one sec knight d4 would blunder the pawn on b2 uh b6 this gets my tactical senses bubbling because the rook is almost trapped although i don't see a way to physically trap it if our pawn was on a3 we'd be able to go c4 here okay so i have a i have a clever move in mind folks a4 would trap the rook if it weren't for rook d5 and immediately you should come up with a move immediately you should"
+  },
+  {
+   "ply": 49,
+   "t": 637.5,
+   "line": [
+    "Rd1"
+   ],
+   "fen": "4rk2/p5pp/1p6/1r3p2/1P6/2P1BN2/P4KPP/3R4 b - - 1 25",
+   "said": "come up with a move now some of you might think okay let's go c4 then but i already talked about it c4 blunders the b pawn so we go rook d1 we repurpose our rook we guard the d5 square now we're threatening a4 and i don't think he has a defense against it simple enough right oh yeah i guess black has to play f4 and give up a pawn but open up the rook's pathway i mean"
+  },
+  {
+   "ply": 50,
+   "t": 665,
+   "line": [
+    "f4"
+   ],
+   "fen": "4rk2/p5pp/1p6/1r6/1P3p2/2P1BN2/P4KPP/3R4 w - - 0 26",
+   "said": "that's kind of desperation okay uh kudos to our opponent he sees it but"
+  },
+  {
+   "ply": 51,
+   "t": 667,
+   "line": [
+    "Bxf4"
+   ],
+   "fen": "4rk2/p5pp/1p6/1r6/1P3B2/2P2N2/P4KPP/3R4 b - - 0 26",
+   "said": "now we have another pawn to the good"
+  },
+  {
+   "ply": 52,
+   "t": 678,
+   "line": [
+    "Rf5"
+   ],
+   "fen": "4rk2/p5pp/1p6/5r2/1P3B2/2P2N2/P4KPP/3R4 w - - 1 27",
+   "said": "and we're ready to infiltrate with rook d7 on top of everything else rook f5 okay we can go bishop g3 can go bishop e3"
+  },
+  {
+   "ply": 53,
+   "t": 686.5,
+   "line": [
+    "Bg3"
+   ],
+   "fen": "4rk2/p5pp/1p6/5r2/1P6/2P2NB1/P4KPP/3R4 b - - 2 27",
+   "said": "it truly does not matter um bishop g3 maybe g5"
+  },
+  {
+   "ply": 52,
+   "t": 687.5,
+   "line": [],
+   "fen": "4rk2/p5pp/1p6/5r2/1P3B2/2P2N2/P4KPP/3R4 w - - 1 27",
+   "said": "yeah we could go i don't like bishop d6 though because that puts the bishop in the way of the rook just because the move is a check right you shouldn't necessarily"
+  },
+  {
+   "ply": 53,
+   "t": 706,
+   "line": [
+    "g3"
+   ],
+   "fen": "4rk2/p5pp/1p6/5r2/1P3B2/2P2NP1/P4K1P/3R4 b - - 0 27",
+   "said": "uh you shouldn't necessarily be inclined to play it you know what i like here i like to move pawn g3 i like the move g3 because it keeps the bishop solidified we're defending against g5 that which is never going to be a problem if he goes h6 we go h4 that's the typical typical"
+  },
+  {
+   "ply": 54,
+   "t": 725.5,
+   "line": [
+    "Rf7"
+   ],
+   "fen": "4rk2/p4rpp/1p6/8/1P3B2/2P2NP1/P4K1P/3R4 w - - 1 28",
+   "said": "kind of sequence right and i know it's a little scary to have your pieces on the same file like this but if you think concretely white's black's only way to kick them away is g5 and if g5 is taken care of then there's no problems okay now let's get down to business we have upon majority on the queen side you know what that means that means we should the fastest way to win here is to create a pass pawn and promote it"
+  },
+  {
+   "ply": 55,
+   "t": 754.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "4rk2/p4rpp/1p6/8/1PP2B2/5NP1/P4K1P/3R4 b - - 0 28",
+   "said": "in how should we do that well not a4 right a4 is not the good way to create a pass pawn because even if we play a5 black just ignores us what we want to do is go c4 and here black cannot stop c5"
+  },
+  {
+   "ply": 54,
+   "t": 763,
+   "line": [],
+   "fen": "4rk2/p4rpp/1p6/8/1P3B2/2P2NP1/P4K1P/3R4 w - - 1 28",
+   "said": "so an easy way to determine which one to push right is is to just compare where your extra pawn actually is located"
+  },
+  {
+   "ply": 56,
+   "t": 765.5,
+   "line": [
+    "c4",
+    "Rc8"
+   ],
+   "fen": "2r2k2/p4rpp/1p6/8/1PP2B2/5NP1/P4K1P/3R4 w - - 1 29",
+   "said": ""
+  },
+  {
+   "ply": 54,
+   "t": 767.5,
+   "line": [],
+   "fen": "4rk2/p4rpp/1p6/8/1P3B2/2P2NP1/P4K1P/3R4 w - - 1 28",
+   "said": "right it's not on the a file it's down to the default it's the c pawn that's"
+  },
+  {
+   "ply": 56,
+   "t": 772,
+   "line": [
+    "c4",
+    "Rc8"
+   ],
+   "fen": "2r2k2/p4rpp/1p6/8/1PP2B2/5NP1/P4K1P/3R4 w - - 1 29",
+   "said": "the pawn you want to push what's the move now using a little bit of tactics let's not automatically assume that this"
+  },
+  {
+   "ply": 57,
+   "t": 782,
+   "line": [
+    "c5"
+   ],
+   "fen": "2r2k2/p4rpp/1p6/2P5/1P3B2/5NP1/P4K1P/3R4 b - - 0 29",
+   "said": "pawn has to be defended if you think a little bit tactically you can see the move c5 is possible here after black takes we'll have bishop d6 shack with a fork classic classic stuff that happens when your bishop is so active"
+  },
+  {
+   "ply": 58,
+   "t": 809,
+   "line": [
+    "Kg8"
+   ],
+   "fen": "2r3k1/p4rpp/1p6/2P5/1P3B2/5NP1/P4K1P/3R4 w - - 1 30",
+   "said": "so a lot of a lot of you are probably wondering why i haven't put the rook behind the pawn because i don't need to my my minor pieces are perfectly capable of supervising this pawn um king g8 is a nice move though so there's attempting to move 95 in this position which i don't like because after the rook moves he's going to be threatening g5 well c6 no c6 rook takes c6 and then if knight e5 he's got roxy to check so now is a perfect time to protect this pawn with a rook where do we want to do it from now normally i agree the rule is"
+  },
+  {
+   "ply": 59,
+   "t": 853,
+   "line": [
+    "Rd5"
+   ],
+   "fen": "2r3k1/p4rpp/1p6/2PR4/1P3B2/5NP1/P4K1P/8 b - - 2 30",
+   "said": "rook behind pawns normally that's true in this particular instance though i don't think that's strictly necessary i don't want to give away the d file i'm really happy with our defile control let's go rook d5 hopefully the logic makes sense right i feel like controlling the d file here is even more important than uh putting the rook behind the pawn there's no rush to push the pawn here we can gather our pieces we can play the move h4 which i would really like to do in order to permanently prevent g5 so that our knight could move without having to worry about it thank you t-market for the prime another thing we could do is go knight"
+  },
+  {
+   "ply": 61,
+   "t": 895.5,
+   "line": [
+    "bxc5",
+    "bxc5"
+   ],
+   "fen": "2r3k1/p4rpp/8/2PR4/5B2/5NP1/P4K1P/8 b - - 0 31",
+   "said": "to d4 so that the rook defends the g5 square and so g5 is once again not a problem thank you t market yeah i like knight t4 followed by c6 okay takes we take with the pawn of course and i would imagine he's gonna go rook b7 yeah he's defending well but we're grinding him down okay so there comes a point um in the conversion of these types of end games where you have to be ready to give away a couple of pawns at times in order to"
+  },
+  {
+   "ply": 62,
+   "t": 924.5,
+   "line": [
+    "Rb7"
+   ],
+   "fen": "2r3k1/pr4pp/8/2PR4/5B2/5NP1/P4K1P/8 w - - 1 32",
+   "said": "promote your passer and that moment is going to arrive in in the event of rook b7 there we go i'm thinking about a tactical move what am i thinking of what move am i thinking about here and you should always check in such situations whether or not you can't push the pawn because when you've got minors on active squares using forks and pins you're frequently going to be able to justify pushing the pawn so let's consider c6 for a second okay well that looks like it blunders the pawn but look"
+  },
+  {
+   "ply": 63,
+   "t": 959,
+   "line": [
+    "c6"
+   ],
+   "fen": "2r3k1/pr4pp/2P5/3R4/5B2/5NP1/P4K1P/8 b - - 0 32",
+   "said": "a little bit further c6 rook takes c6 what do we have we've got rook d8 check driving the king out and then 95 and we pick up the rook so we can safely go c6 here now of course black can also give us a check on b2 and then take the pawn in a2 but our pawn is so close to c7 we do not give a rat's ass about the pawn on a2 because our pawn is essentially home free it's always a judgment call right you don't want to start giving away so what often happens is that you see a way to promote your pawn and"
+  },
+  {
+   "ply": 64,
+   "t": 993,
+   "line": [
+    "Rb2+"
+   ],
+   "fen": "2r3k1/p5pp/2P5/3R4/5B2/5NP1/Pr3K1P/8 w - - 1 33",
+   "said": "you start pushing it and you start giving away your other puns what you have to be careful about is a situation where your opponent takes all of your pawns then gives away the rook for the passer and then at the end you get a situation where you've got like"
+  },
+  {
+   "ply": 65,
+   "t": 994,
+   "line": [
+    "Ke3"
+   ],
+   "fen": "2r3k1/p5pp/2P5/3R4/5B2/4KNP1/Pr5P/8 b - - 2 33",
+   "said": "night against four pawns in this case i have two minor pieces so it's not like black is going to be able to to give away his rook for one of them c7 is coming so black can either take the pawn on a2 or go rook c2 in which case we play c7 and black's gonna have to give the rook up for the pawn and that's just gonna"
+  },
+  {
+   "ply": 64,
+   "t": 1027,
+   "line": [],
+   "fen": "2r3k1/p5pp/2P5/3R4/5B2/5NP1/Pr3K1P/8 w - - 1 33",
+   "said": "leave us with a full extra night yvonne thank you for being in hypers why did i go king e3 i don't like going king g1 in these situations in any of these situations"
+  },
+  {
+   "ply": 66,
+   "t": 1037,
+   "line": [
+    "Ke3",
+    "Rc2"
+   ],
+   "fen": "2r3k1/p5pp/2P5/3R4/5B2/4KNP1/P1r4P/8 w - - 3 34",
+   "said": "because it locks the king on the first rank and it and it creates potential for ladder maid and i don't want that okay c7 obviously"
+  },
+  {
+   "ply": 67,
+   "t": 1038.5,
+   "line": [
+    "c7"
+   ],
+   "fen": "2r3k1/p1P3pp/8/3R4/5B2/4KNP1/P1r4P/8 b - - 0 34",
+   "said": "here we can play very quickly and the game is over"
+  },
+  {
+   "ply": 68,
+   "t": 1048.5,
+   "line": [
+    "Kf7"
+   ],
+   "fen": "2r5/p1P2kpp/8/3R4/5B2/4KNP1/P1r4P/8 w - - 1 35",
+   "said": ""
+  },
+  {
+   "ply": 69,
+   "t": 1051,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "2rR4/p1P2kpp/8/8/5B2/4KNP1/P1r4P/8 b - - 2 35",
+   "said": "and rook d8 perhaps not the most accurate perhaps we"
+  },
+  {
+   "ply": 68,
+   "t": 1056,
+   "line": [],
+   "fen": "2r5/p1P2kpp/8/3R4/5B2/4KNP1/P1r4P/8 w - - 1 35",
+   "said": "could have uh finessed this a little bit and gone rook d7 check and then gotten the knight around"
+  },
+  {
+   "ply": 69,
+   "t": 1062.5,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "2rR4/p1P2kpp/8/8/5B2/4KNP1/P1r4P/8 b - - 2 35",
+   "said": "i don't care we we know that we can win a full piece let's go for it he says gg [Music] oh i'm not able to send chat messages because i don't have like a full full account for the speed run and resignation okay great stuff let's have a quick look-see"
+  },
+  {
+   "ply": 5,
+   "t": 1093.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "and then we'll end for today um yeah so we had an elephant we traded everything was totally fine and totally natural up until dc uh bishop takes c5 was just bad when i take c5 i want to come back to the point about iqp's the point i've drilled into your head is that when you're facing an isolated queen pawn the crucial thing is to have as vast control of the square in front of the pawn as possible you want to control the square in front of it blockade it and so the move knight d4 comes to mind but we know you don't have to rush to put a knight on d4 you are you're already controlling the square and you can control it even further by playing bishop e3 and then getting the knight out to b2 out to d2 so this is the setup i would adopt here and then when the time is right you can put a bishop on d4 or a knight on d4 white is slightly better okay bishop c5 of course we give a check now if he had gone back to e7 of the bishop let's see if people can apply the lesson we learned from the one of the first speedrun games what would you do here"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 12,
+   "fen": "rn1qkb1r/pp1b1ppp/5n2/1Bpp4/3P4/2P2N2/PP3PPP/RNBQK2R w KQkq - 4 7",
+   "line": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7"
+   ],
+   "options": [
+    {
+     "san": "Bf1",
+     "t": 177.5,
+     "continuation": "Bf1 Bc8",
+     "said": "because you know the more pieces are traded the weaker the pawn becomes yeah so i'll talk about b6 after the game v6 is not scary i mean yes he's going to avoid the iqp structure but it's going to come at the cost of development okay and i'll talk about c4 as well so let's trade and then let's castle this is the main line what he's going for so white's going to be slightly better nothing major but it's going to give us a chance to play to show some fundamentals okay bishop e7 now the reason black has played this very well is because he's positioned his knight so that on d takes c5 you can take with the knight but we still want to take we still want to get the iqp structure even though it means we haven't won a tempo 95 i don't really know why 95 is so impressive 95 black and just castle all right that's not nothing nothing crazy there but there's a point that i repeat a lot assuming he takes on c5 i don't know what he's thinking about bishop c5"
+    },
+    {
+     "san": "Bxd7+",
+     "t": 187,
+     "continuation": "Bxd7+",
+     "said": "v6 is not scary i mean yes he's going to avoid the iqp structure but it's going to come at the cost of development okay and i'll talk about c4 as well so let's trade and then let's castle this is the main line what he's going for so white's going to be slightly better nothing major but it's going to give us a chance to play to show some fundamentals okay bishop e7 now the reason black has played this very well is because he's positioned his knight so that on d takes c5 you can take with the knight but we still want to take we still want to get the iqp structure even though it means we haven't won a tempo 95 i don't really know why 95 is so impressive 95 black and just castle all right that's not nothing nothing crazy there but there's a point that i repeat a lot assuming he takes on c5 i don't know what he's thinking about bishop c5 allows rookie one check which black certainly does not want to allow yeah i know a lot of people are wondering about b6 that's something i'm going to talk about after the game"
+    }
+   ]
+  },
+  {
+   "ply": 52,
+   "fen": "4rk2/p5pp/1p6/5r2/1P3B2/2P2N2/P4KPP/3R4 w - - 1 27",
+   "line": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Bf1",
+    "Bc8",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+",
+    "Nbxd7",
+    "O-O",
+    "Be7",
+    "dxc5",
+    "Bxc5",
+    "Re1+",
+    "Ne4",
+    "Qxd5",
+    "Bxf2+",
+    "Kf1",
+    "Bxe1",
+    "Qxe4+",
+    "Qe7",
+    "Qxe7+",
+    "Kxe7",
+    "Kxe1",
+    "Rhe8",
+    "Be3",
+    "Kf8",
+    "Kf2",
+    "Ne5",
+    "Nxe5",
+    "Rxe5",
+    "Nd2",
+    "Rae8",
+    "Re1",
+    "f5",
+    "Nf3",
+    "Rb5",
+    "b4",
+    "b6",
+    "Rd1",
+    "f4",
+    "Bxf4",
+    "Rf5"
+   ],
+   "options": [
+    {
+     "san": "Bg3",
+     "t": 686.5,
+     "continuation": "Bg3",
+     "said": "and we're ready to infiltrate with rook d7 on top of everything else rook f5 okay we can go bishop g3 can go bishop e3 it truly does not matter um bishop g3 maybe g5 yeah we could go i don't like bishop d6 though because that puts the bishop in the way of the rook just because the move is a check right you shouldn't necessarily uh you shouldn't necessarily be inclined to play it you know what i like here i like to move pawn g3 i like the move g3 because it keeps the bishop solidified we're defending against g5 that which is never going to be a problem if he goes h6 we go h4 that's the typical typical kind of sequence right and i know it's a little scary to have your pieces on the same file like this but if you think concretely white's black's only way to kick them away is g5 and if g5 is taken care of then there's no problems okay now let's get down to business we have upon majority on the queen side you know what that means that means we should the fastest way to win here is to create a pass pawn and promote it in how should we do that well not a4 right a4 is not the good way"
+    },
+    {
+     "san": "g3",
+     "t": 706,
+     "continuation": "g3",
+     "said": "just because the move is a check right you shouldn't necessarily uh you shouldn't necessarily be inclined to play it you know what i like here i like to move pawn g3 i like the move g3 because it keeps the bishop solidified we're defending against g5 that which is never going to be a problem if he goes h6 we go h4 that's the typical typical kind of sequence right and i know it's a little scary to have your pieces on the same file like this but if you think concretely white's black's only way to kick them away is g5 and if g5 is taken care of then there's no problems okay now let's get down to business we have upon majority on the queen side you know what that means that means we should the fastest way to win here is to create a pass pawn and promote it in how should we do that well not a4 right a4 is not the good way to create a pass pawn because even if we play a5 black just ignores us what we want to do is go c4 and here black cannot stop c5 so an easy way to determine which one to push right is is to just compare where your extra pawn actually is located"
+    }
+   ]
+  }
+ ]
+}

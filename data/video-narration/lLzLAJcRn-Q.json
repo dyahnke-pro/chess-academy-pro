@@ -1,0 +1,1301 @@
+{
+ "videoId": "lLzLAJcRn-Q",
+ "title": "Snuffing the Stafford Gambit | Busting the Gambits with GM Naro",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 152,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "before we jump in now with that being said let's go straight in now the stafford gambit uh is a gambit for black that begins rather innocuously white goes e4 black goes e5 and black starts with"
+  },
+  {
+   "ply": 3,
+   "t": 153.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": ""
+  },
+  {
+   "ply": 4,
+   "t": 154.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "knight f6 which is uh called the russian game or petrov's defense petrov defense which is named after alexander petrov 19th century"
+  },
+  {
+   "ply": 5,
+   "t": 169.5,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "master from russia who sort of developed this i even i think he actually wrote a book on the petrov and after knight takes e5 now black's main"
+  },
+  {
+   "ply": 6,
+   "t": 173.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/3p1n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "move here is to go d6"
+  },
+  {
+   "ply": 8,
+   "t": 175.5,
+   "line": [
+    "Nf3",
+    "Nxe4"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/3p4/8/4n3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "knight f3 and knight takes c4 and the ironic thing about this and you'll understand why it's ironic uh shortly is that the petrov itself this position is actually very"
+  },
+  {
+   "ply": 5,
+   "t": 195,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "very peaceful it's one of the most solid positional openings out there uh and yet the stafford gambit is one of the trickiest openings out there so instead of playing d6 um instead of playing d6 and i'm actually"
+  },
+  {
+   "ply": 6,
+   "t": 201.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
+   "said": "looking at the year in which the stafford gambit was first played in 1857 uh howard staunton who uh was and not howard stafford howard staunton i'm not actually sure oh i see why it's called the stafford game but in 1950 uh someone named stafford actually played it but that wasn't the first person to play howard staunton one of the strongest players in the 19th century sometimes even called the unofficial world champion uh essayed this line for the first time i was going to say stafford was the first person to win in this line but that's also not true in 1905 um a gentleman named jonas uh one with the staff again but i guess stafford uh maybe wrote some sort of trees i'll look this up after after i create the video anyways we're dealing with uh the stafford gambit not um writing a biography of uh"
+  },
+  {
+   "ply": 7,
+   "t": 262,
+   "line": [
+    "Nxc6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2N2n2/8/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "mr stafford or matthew stafford i was gonna wear a matthew stafford jersey before making this video well you guys know how lazy i am in any case black sacrifices upon he doesn't recapture and this move knight c6 appears to be"
+  },
+  {
+   "ply": 6,
+   "t": 265,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
+   "said": "plainly absurd at first glance because"
+  },
+  {
+   "ply": 7,
+   "t": 266,
+   "line": [
+    "Nxc6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2N2n2/8/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "not only is black not even trying to recapture the pawn he's basically giving white the center he's doubling his pawns and it appears that when white supports the e4 pawn with d3 he's gonna be a healthy pun up and that's exactly why"
+  },
+  {
+   "ply": 8,
+   "t": 294,
+   "line": [
+    "dxc6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "people like the stafford gambit and that's exactly what makes it so dangerous it appears to be uh you know total malarkey total hogwash and yet it's not now in the classical stafford black takes d takes c6 and the idea of this move is to open up uh this bishop on c8 and this is where we can see that the stafford gamut actually is uh positionally understandable black has a lead in development now this may sound laughable but it's not a lead in development is never laughable and it always contains a certain degree of danger um in addition to this black's got very sort of free development for his"
+  },
+  {
+   "ply": 7,
+   "t": 332.5,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2N2n2/8/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "pieces for his bishops and so white has to take this opening very very seriously as many uh have already found out now if black plays b takes e6 which is not a"
+  },
+  {
+   "ply": 8,
+   "t": 334,
+   "line": [
+    "bxc6"
+   ],
+   "fen": "r1bqkb1r/p1pp1ppp/2p2n2/8/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "move that you'll you're likely to face but you know what i'm going to try to do in this video series is actually be as thorough as possible and i will have sort of a tldr summary at the end which uh the timestamp of which i'll link in the description below uh but i highly recommend for serious players to look at the whole video i'm i'm not going to go for you know five minutes or six minutes i'm gonna go for as long as it takes to cover all the pertinent lines and my emphasis is always on helping people who are serious and willing to invest time because i think that that is what it takes to become good and to learn these lines so again i'll try to be thorough uh and at the same time i'll try to be"
+  },
+  {
+   "ply": 9,
+   "t": 389,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/p1pp1ppp/2p2n2/8/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 1 5",
+   "said": "succinct in the sense that you know i i won't show 30 move lines i'll i'll end when i think that it's pretty clear that we've done our job so with that in my b takes e6 we simply develop our knight i think the only way that black can try"
+  },
+  {
+   "ply": 10,
+   "t": 392,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/p1p2ppp/2p2n2/3p4/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "to make this work is by playing d5"
+  },
+  {
+   "ply": 9,
+   "t": 395,
+   "line": [],
+   "fen": "r1bqkb1r/p1pp1ppp/2p2n2/8/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 1 5",
+   "said": "uh bishop b4 has been tried once um"
+  },
+  {
+   "ply": 10,
+   "t": 396.5,
+   "line": [
+    "Bb4"
+   ],
+   "fen": "r1bqk2r/p1pp1ppp/2p2n2/8/1b2P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 2 6",
+   "said": "and and against this move white can just"
+  },
+  {
+   "ply": 11,
+   "t": 400,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqk2r/p1pp1ppp/2p2n2/4P3/1b6/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 6",
+   "said": "play e5"
+  },
+  {
+   "ply": 12,
+   "t": 402.5,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r1b1k2r/p1ppqppp/2p2n2/4P3/1b6/2N5/PPPP1PPP/R1BQKB1R w KQkq - 1 7",
+   "said": "so you know i i i dug around here i tried queen e7 and i think the simplest is just to play queen e2 reinforcing uh the threat of taking the knight if knight d5 white captures and now of course white can't play d4"
+  },
+  {
+   "ply": 7,
+   "t": 427.5,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2N2n2/8/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "because the plot is spin but what white can do is go c3 and then go d4 he's a healthy pawn up and he's actually threatening uh to fork the pawn on the bishop with queen b5 so for that reason after b takes c6"
+  },
+  {
+   "ply": 9,
+   "t": 429.5,
+   "line": [
+    "bxc6",
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/p1pp1ppp/2p2n2/8/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 1 5",
+   "said": "knight c3 black should try d5 and again"
+  },
+  {
+   "ply": 10,
+   "t": 431,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/p1p2ppp/2p2n2/3p4/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 11,
+   "t": 433.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkb1r/p1p2ppp/2p2n2/3pP3/8/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 6",
+   "said": "the simplest is to just drive a wedge into black's position e5"
+  },
+  {
+   "ply": 12,
+   "t": 436,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r1bqkb1r/p1pn1ppp/2p5/3pP3/8/2N5/PPPP1PPP/R1BQKB1R w KQkq - 1 7",
+   "said": "and d4 black is essentially lost here if"
+  },
+  {
+   "ply": 13,
+   "t": 437,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/p1pn1ppp/2p5/3pP3/3P4/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 7",
+   "said": ""
+  },
+  {
+   "ply": 14,
+   "t": 439.5,
+   "line": [
+    "c5"
+   ],
+   "fen": "r1bqkb1r/p1pn1ppp/8/2ppP3/3P4/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 8",
+   "said": "he tries to undermine white's center"
+  },
+  {
+   "ply": 15,
+   "t": 441.5,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r1bqkb1r/p1pn1ppp/8/2pNP3/3P4/8/PPP2PPP/R1BQKB1R b KQkq - 0 8",
+   "said": "we just go knight takes d5 there's nothing to worry about here"
+  },
+  {
+   "ply": 17,
+   "t": 443.5,
+   "line": [
+    "cxd4",
+    "Qxd4"
+   ],
+   "fen": "r1bqkb1r/p1pn1ppp/8/3NP3/3Q4/8/PPP2PPP/R1B1KB1R b KQkq - 0 9",
+   "said": "and um the rest you know i always encourage you to sort of dig around on"
+  },
+  {
+   "ply": 18,
+   "t": 452,
+   "line": [
+    "Nb6"
+   ],
+   "fen": "r1bqkb1r/p1p2ppp/1n6/3NP3/3Q4/8/PPP2PPP/R1B1KB1R w KQkq - 1 10",
+   "said": "your own but this is completely lost there's one funny line here i tried knight b6 now white has to be careful you don't want to take the knight because the queen is pinned"
+  },
+  {
+   "ply": 20,
+   "t": 458.5,
+   "line": [
+    "Bb5+",
+    "Bd7"
+   ],
+   "fen": "r2qkb1r/p1pb1ppp/1n6/1B1NP3/3Q4/8/PPP2PPP/R1B1K2R w KQkq - 3 11",
+   "said": "so you give a check on b5 now there's a million things you could do"
+  },
+  {
+   "ply": 21,
+   "t": 463,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r2qkb1r/p1pb1ppp/1n6/1B1NP1B1/3Q4/8/PPP2PPP/R3K2R b KQkq - 4 11",
+   "said": "but the strongest move is actually to go bishop g5 i actually think this is a comical effect bishop b5 bishop g5"
+  },
+  {
+   "ply": 22,
+   "t": 467.5,
+   "line": [
+    "Qxg5"
+   ],
+   "fen": "r3kb1r/p1pb1ppp/1n6/1B1NP1q1/3Q4/8/PPP2PPP/R3K2R w KQkq - 0 12",
+   "said": "and after queen takes g5 we play knight"
+  },
+  {
+   "ply": 23,
+   "t": 470,
+   "line": [
+    "Nxc7+"
+   ],
+   "fen": "r3kb1r/p1Nb1ppp/1n6/1B2P1q1/3Q4/8/PPP2PPP/R3K2R b KQkq - 0 12",
+   "said": "takes c7"
+  },
+  {
+   "ply": 25,
+   "t": 472,
+   "line": [
+    "Kd8",
+    "Nxa8"
+   ],
+   "fen": "N2k1b1r/p2b1ppp/1n6/1B2P1q1/3Q4/8/PPP2PPP/R3K2R b KQ - 0 13",
+   "said": "and knight takes a8 and we're just crushing it"
+  },
+  {
+   "ply": 26,
+   "t": 476.5,
+   "line": [
+    "Nxa8"
+   ],
+   "fen": "n2k1b1r/p2b1ppp/8/1B2P1q1/3Q4/8/PPP2PPP/R3K2R w KQ - 0 14",
+   "said": "everything is falling of course if knight eighth and queen d7 now i know all of your games are gonna"
+  },
+  {
+   "ply": 7,
+   "t": 482,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2N2n2/8/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "end this way no they're not bc is exceedingly rare everybody's gonna play dc"
+  },
+  {
+   "ply": 9,
+   "t": 486,
+   "line": [
+    "dxc6",
+    "d3"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 5",
+   "said": "now we play d3 and one of the appeals of the stafford"
+  },
+  {
+   "ply": 10,
+   "t": 492.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 6",
+   "said": "is contained in black's next move so black plays bishop c5"
+  },
+  {
+   "ply": 9,
+   "t": 495,
+   "line": [],
+   "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 5",
+   "said": "that's the only serious move bishop d6"
+  },
+  {
+   "ply": 10,
+   "t": 496.5,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2pb1n2/8/4P3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 6",
+   "said": "is the other move that has been tried"
+  },
+  {
+   "ply": 11,
+   "t": 500,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2pb1n2/8/4P3/3P4/PPP1BPPP/RNBQK2R b KQkq - 2 6",
+   "said": "does absolutely nothing we are simply a"
+  },
+  {
+   "ply": 12,
+   "t": 504.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/2pb1n2/7p/4P3/3P4/PPP1BPPP/RNBQK2R w KQkq - 0 7",
+   "said": "central pawn up bishop e2 h5 is we'll see that h5 is a very common move in the stafford but"
+  },
+  {
+   "ply": 13,
+   "t": 510.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/2pb1n2/6Bp/4P3/3P4/PPP1BPPP/RN1QK2R b KQkq - 1 7",
+   "said": "combining it with bishop d6 makes no sense because after bishop g5 white is out of the woods he can castle he can develop his knight"
+  },
+  {
+   "ply": 9,
+   "t": 517.5,
+   "line": [],
+   "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 5",
+   "said": "he's in good shape so bishop c5 is the move now i think for"
+  },
+  {
+   "ply": 10,
+   "t": 519.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 6",
+   "said": "most people the appeal of the stafford"
+  },
+  {
+   "ply": 11,
+   "t": 522.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2p2n2/2b3B1/4P3/3P4/PPP2PPP/RN1QKB1R b KQkq - 2 6",
+   "said": "is contained in the smooth bishop g5 which to the untrained eye seems relatively reasonable and in fact uh a quick search reals that five people have fallen for this over the board including one person in may of this year 1900 so again this is not to be sneezed at and"
+  },
+  {
+   "ply": 12,
+   "t": 549,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2p5/2b3B1/4n3/3P4/PPP2PPP/RN1QKB1R w KQkq - 0 7",
+   "said": "you know if you're doing this to train i would encourage you again mother style here to pause the video and if you're simply along for the ride uh the move here is uh knight captures e4 uh bishop captures a d eight a bishop"
+  },
+  {
+   "ply": 13,
+   "t": 551.5,
+   "line": [
+    "Bxd8"
+   ],
+   "fen": "r1bBk2r/ppp2ppp/2p5/2b5/4n3/3P4/PPP2PPP/RN1QKB1R b KQkq - 0 7",
+   "said": ""
+  },
+  {
+   "ply": 14,
+   "t": 553.5,
+   "line": [
+    "Bxf2+"
+   ],
+   "fen": "r1bBk2r/ppp2ppp/2p5/8/4n3/3P4/PPP2bPP/RN1QKB1R w KQkq - 0 8",
+   "said": "captures f2 and we have illegals made here on the"
+  },
+  {
+   "ply": 15,
+   "t": 555,
+   "line": [
+    "Ke2"
+   ],
+   "fen": "r1bBk2r/ppp2ppp/2p5/8/4n3/3P4/PPP1KbPP/RN1Q1B1R b kq - 1 8",
+   "said": ""
+  },
+  {
+   "ply": 16,
+   "t": 556.5,
+   "line": [
+    "Bg4#"
+   ],
+   "fen": "r2Bk2r/ppp2ppp/2p5/8/4n1b1/3P4/PPP1KbPP/RN1Q1B1R w kq - 2 9",
+   "said": "board uh so this is a form of legals made actually that is delivered by black"
+  },
+  {
+   "ply": 12,
+   "t": 562,
+   "line": [],
+   "fen": "r1bqk2r/ppp2ppp/2p5/2b3B1/4n3/3P4/PPP2PPP/RN1QKB1R w KQkq - 0 7",
+   "said": "and uh after 94 white has to backpedal"
+  },
+  {
+   "ply": 13,
+   "t": 564.5,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2p5/2b3B1/4P3/8/PPP2PPP/RN1QKB1R b KQkq - 0 7",
+   "said": "and i didn't actually analyze this but i"
+  },
+  {
+   "ply": 14,
+   "t": 568,
+   "line": [
+    "Bxf2+"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2p5/6B1/4P3/8/PPP2bPP/RN1QKB1R w KQkq - 0 8",
+   "said": "think bishop f2 actually wins the queen"
+  },
+  {
+   "ply": 13,
+   "t": 570.5,
+   "line": [],
+   "fen": "r1bqk2r/ppp2ppp/2p5/2b3B1/4P3/8/PPP2PPP/RN1QKB1R b KQkq - 0 7",
+   "said": "black doesn't even have to recapture on g5 but we're not going to look at this for too"
+  },
+  {
+   "ply": 10,
+   "t": 574.5,
+   "line": [],
+   "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 6",
+   "said": "long there are a lot of traps in the stafford if you want to look at all of them again eric rosen does an amazing job laying out the majority of the tricks available to black if white"
+  },
+  {
+   "ply": 11,
+   "t": 595,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP1BPPP/RNBQK2R b KQkq - 2 6",
+   "said": "is not extremely well prepared well after watching this video you will be now the move that i suggest in this in this position is is bishop e2 uh the motivation behind it is very simple you're developing your bishop you are potentially preparing to castle although i say the word potentially with an emphasis because it's going to be very important to play this properly to delay castling and you're also covering the g4 square so you're stopping or taking the sting rather out"
+  },
+  {
+   "ply": 12,
+   "t": 625.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/2p2n2/2b4p/4P3/3P4/PPP1BPPP/RNBQK2R w KQkq - 0 7",
+   "said": "of the move knight to g4 now of course this move has been analyzed by staffordights and and their recommendation which is going to be the move we sort of spend the majority of our time on is in very much in the spirit of the stafford h5 there are a handful of other moves that have been tried most of them are not serious let's quickly run through the alternatives if black castles well that's completely contrary to the spirit of the staffer we castle and we can play bishop g5 and again in these types of positions you're a pawn up you can do anything you want you can bring the knight around to f3 you can put it on c3 you know this is well outside the scope of of this video black no longer has any play he's in big trouble so instead of castling black can also try bishop e6 that's sort of the same thing black can't just develop his pieces uh because here we're going to go c3 and once we look at the main line this move c3 is going to acquire a particular kind of meaning so you'll understand why this move is played and then we develop the knight to d2 and bring around bring it around to f3 and then we're ready to castle so again this is not serious if he plays queen d6 that walks right into c3 because now if he castles we can play d4 and e5 winning the knight so i mean this"
+  },
+  {
+   "ply": 16,
+   "t": 702.5,
+   "line": [
+    "Bxh5",
+    "Nh7",
+    "Bg4",
+    "Qh4"
+   ],
+   "fen": "r1b1k2r/ppp2ppn/2p5/2b5/4P1Bq/3P4/PPP2PPP/RNBQK2R w KQkq - 3 9",
+   "said": "is all just ridiculous but i wanted to make sure we're covering this just in case the only serious alternative to h5 is the immediate knight g4 followed by queen h4 this is something i can see some players doing it's been tried twice over the board and here i recommend the move queen f3 i think that's not the only move we can castle but i think this is the most practical because someone who plays the stafford is definitely not going to want to get an end game upon down he's going to want a"
+  },
+  {
+   "ply": 20,
+   "t": 731.5,
+   "line": [
+    "Be3",
+    "Bxg4",
+    "Qxg4",
+    "Qxg4"
+   ],
+   "fen": "r3k2r/ppp2ppn/2p5/2b5/4P1q1/3PB3/PPP2PPP/RN2K2R w KQkq - 0 11",
+   "said": "combative position and so i've chosen line specifically taylor to taking the sting out of the staffer that way so with that in mind queen takes g4 is absurd we just take the queen we go bishop e3"
+  },
+  {
+   "ply": 22,
+   "t": 733.5,
+   "line": [
+    "Nc3",
+    "Be7"
+   ],
+   "fen": "r3k2r/ppp1bppn/2p5/8/4P1q1/2NPB3/PPP2PPP/R3K2R w KQkq - 2 12",
+   "said": "we go knight c3 and we are up upon for no compensation um just to point out i analyzed this a"
+  },
+  {
+   "ply": 26,
+   "t": 742.5,
+   "line": [
+    "f3",
+    "Qe6",
+    "h4",
+    "O-O-O"
+   ],
+   "fen": "2kr3r/ppp1bppn/2p1q3/8/4P2P/2NPBP2/PPP3P1/R3K2R w KQ - 1 14",
+   "said": "little bit further i looked at this line and now i think a very good idea is to play the move h4 just to stop black from expanding on the king side with g5 so a little finesse there but you can play this in many different ways and and white is in great shape so for that reason bishop takes g4 is to be expected and now we go queen g3 threatening the queen trade black probably will decline we go h3 chasing the bishop away two possibilities here if the bishop drops back we snag upon and now we play the most annoying move of all time we play queen g5 and like yeah yeah you can just see the reaction of the saffronites facing this move and we're attacking the queen attacking the bishop and i by the way m i have played the stafford myself so you know i i respect this opening please don't get the wrong impression from this i'm just having some fun and the point is actually if black goes rook g8 it may appear that black is going to recover the g2 pawn but to the"
+  },
+  {
+   "ply": 16,
+   "t": 808,
+   "line": [],
+   "fen": "r1b1k2r/ppp2ppn/2p5/2b5/4P1Bq/3P4/PPP2PPP/RNBQK2R w KQkq - 3 9",
+   "said": "rescue comes bishop f6 trapping the rook in the corner and the game is over so for that reason just to repeat this after knight g4 takes queen h4 we defend against mate takes queen g3"
+  },
+  {
+   "ply": 19,
+   "t": 811.5,
+   "line": [
+    "Qf3",
+    "Bxg4",
+    "Qg3"
+   ],
+   "fen": "r3k2r/ppp2ppn/2p5/2b5/4P1bq/3P2Q1/PPP2PPP/RNB1K2R b KQkq - 1 10",
+   "said": "threatening the queen trade chasing the"
+  },
+  {
+   "ply": 20,
+   "t": 813,
+   "line": [
+    "Qh5"
+   ],
+   "fen": "r3k2r/ppp2ppn/2p5/2b4q/4P1b1/3P2Q1/PPP2PPP/RNB1K2R w KQkq - 2 11",
+   "said": "bishop away black has to move bishop d1 which is very much in the spirit of the"
+  },
+  {
+   "ply": 24,
+   "t": 822,
+   "line": [
+    "h3",
+    "Bd1",
+    "Nc3",
+    "Bxc2"
+   ],
+   "fen": "r3k2r/ppp2ppn/2p5/2b4q/4P3/2NP2QP/PPb2PP1/R1B1K2R w KQkq - 0 13",
+   "said": "line but it doesn't do much we go knight c3 and uh if black takes on c2 uh well here"
+  },
+  {
+   "ply": 25,
+   "t": 825.5,
+   "line": [
+    "Kd2"
+   ],
+   "fen": "r3k2r/ppp2ppn/2p5/2b4q/4P3/2NP2QP/PPbK1PP1/R1B4R b kq - 1 13",
+   "said": "we can just go king d2 trapping uh and let me just verify this trapping the uh bishop you gotta verify"
+  },
+  {
+   "ply": 24,
+   "t": 837.5,
+   "line": [],
+   "fen": "r3k2r/ppp2ppn/2p5/2b4q/4P3/2NP2QP/PPb2PP1/R1B1K2R w KQkq - 0 13",
+   "said": "everything yeah that's the correct move um and uh the game is simply over here the bishop can sacrifice itself we play"
+  },
+  {
+   "ply": 26,
+   "t": 839.5,
+   "line": [
+    "Kd2",
+    "Bxd3"
+   ],
+   "fen": "r3k2r/ppp2ppn/2p5/2b4q/4P3/2Nb2QP/PP1K1PP1/R1B4R w kq - 0 14",
+   "said": ""
+  },
+  {
+   "ply": 27,
+   "t": 840.5,
+   "line": [
+    "Kxd3"
+   ],
+   "fen": "r3k2r/ppp2ppn/2p5/2b4q/4P3/2NK2QP/PP3PP1/R1B4R b kq - 0 14",
+   "said": "king d3 and i know some people might be saying oh i don't want to get the king"
+  },
+  {
+   "ply": 28,
+   "t": 847,
+   "line": [
+    "O-O-O+"
+   ],
+   "fen": "2kr3r/ppp2ppn/2p5/2b4q/4P3/2NK2QP/PP3PP1/R1B4R w - - 1 15",
+   "said": "to d3 well you know what this is nothing i mean castle's king c2"
+  },
+  {
+   "ply": 29,
+   "t": 848,
+   "line": [
+    "Kc2"
+   ],
+   "fen": "2kr3r/ppp2ppn/2p5/2b4q/4P3/2N3QP/PPK2PP1/R1B4R b - - 2 15",
+   "said": "we'll see another line like this absolutely nothing white consolidates so for that reason bishop b4 is to be expected now we get our bishop out to d2 uh bishop takes c3 um and after rook takes d1 white is finally out of the woods and black is in huge trouble i analyzed the line a little bit further bishop e5 queen g4 uh we trade queens and the funny thing is after rook b1 bishop d4 you don't want to take on b7 because black's gonna go bishop b6 and the rook's gonna be trapped but after c3 and king e2 white is completely winning despite the material equality which is interesting because if you think about it carefully and we go g5 followed by rook h4 we're going to double on the h file i mean look at white's pawns white spawns are just gonna run through black's position first of all i mean not to mention the fact that black can't defend h7 so if you plug this into a computer it'll literally give an evaluation of plus four plus five and well that's not an exaggeration because white's completely winning here so again knight 4 is exceedingly rare but as i mentioned i want to be fully thorough i want to cover every possibility"
+  },
+  {
+   "ply": 12,
+   "t": 933,
+   "line": [],
+   "fen": "r1bqk2r/ppp2pp1/2p2n2/2b4p/4P3/3P4/PPP1BPPP/RNBQK2R w KQkq - 0 7",
+   "said": "and so now you're armed against knight g4 as well which brings us to the main line h5 so h5 is the move that is most popular it's recommended by everyone and it is the move that you are by far"
+  },
+  {
+   "ply": 13,
+   "t": 947,
+   "line": [
+    "c3"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/2p2n2/2b4p/4P3/2PP4/PP2BPPP/RNBQK2R b KQkq - 0 7",
+   "said": "likeliest to face against someone who knows what he's doing now we play the move c3 and this is the main move that you have to"
+  },
+  {
+   "ply": 12,
+   "t": 954.5,
+   "line": [],
+   "fen": "r1bqk2r/ppp2pp1/2p2n2/2b4p/4P3/3P4/PPP1BPPP/RNBQK2R w KQkq - 0 7",
+   "said": "remember if you take one thing away from this video it is to play c3 before you castle castle"
+  },
+  {
+   "ply": 13,
+   "t": 958.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/2p2n2/2b4p/4P3/3P4/PPP1BPPP/RNBQ1RK1 b kq - 1 7",
+   "said": "is very common and it gets quite in huge"
+  },
+  {
+   "ply": 14,
+   "t": 962.5,
+   "line": [
+    "Qd6"
+   ],
+   "fen": "r1b1k2r/ppp2pp1/2pq1n2/2b4p/4P3/3P4/PPP1BPPP/RNBQ1RK1 w kq - 2 8",
+   "said": "trouble after either queen d6 or even worse knight g4 and i'm not"
+  },
+  {
+   "ply": 18,
+   "t": 965,
+   "line": [
+    "Bg4",
+    "Qd8",
+    "Be2",
+    "Ng4"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/2p5/2b4p/4P1n1/3P4/PPP1BPPP/RNBQ1RK1 w kq - 6 10",
+   "said": "going to delve into the details"
+  },
+  {
+   "ply": 20,
+   "t": 970,
+   "line": [
+    "h3",
+    "Qd6"
+   ],
+   "fen": "r1b1k2r/ppp2pp1/2pq4/2b4p/4P1n1/3P3P/PPP1BPP1/RNBQ1RK1 w kq - 1 11",
+   "said": "here but you can probably see and you can establish this on your own eric rosen has also won many games like this"
+  },
+  {
+   "ply": 22,
+   "t": 979,
+   "line": [
+    "Bxg4",
+    "hxg4"
+   ],
+   "fen": "r1b1k2r/ppp2pp1/2pq4/2b5/4P1p1/3P3P/PPP2PP1/RNBQ1RK1 w kq - 0 12",
+   "said": "this is actually already almost devastating for white well if you take with the bishop you take this way if you take with the pawn there's a lot of mates like this here so"
+  },
+  {
+   "ply": 18,
+   "t": 985.5,
+   "line": [],
+   "fen": "r1bqk2r/ppp2pp1/2p5/2b4p/4P1n1/3P4/PPP1BPPP/RNBQ1RK1 w kq - 6 10",
+   "said": "you can again you can analyze this on your own do not castle do not castle and"
+  },
+  {
+   "ply": 21,
+   "t": 987,
+   "line": [
+    "Re1",
+    "Nf6",
+    "Kh1"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/2p2n2/2b4p/4P3/3P4/PPP1BPPP/RNBQR2K b kq - 9 11",
+   "said": "the most important piece of advice do"
+  },
+  {
+   "ply": 13,
+   "t": 992,
+   "line": [],
+   "fen": "r1bqk2r/ppp2pp1/2p2n2/2b4p/4P3/3P4/PPP1BPPP/RNBQ1RK1 b kq - 1 7",
+   "said": "not cast go c3 the idea of c3 should be self-evident if you're kind of fully engaged you should realize that you're kind of preparing potentially to play d4 and slice off the bishop's control over the f2 square now you might be concerned that it weakens the d3 pawn but black doesn't have any puns left in the center to exploit that with so that is not a problem now this move has also been analyzed and the move that you're most likely to face the only sensible move is bishop b6 if black doesn't play bishop b6 the only other move i even analyzed was knight g4 and knight g4 is very simply met with d4 followed by h3 followed by bishop g5 so there's really nothing that black can do here other than to play bishop b6 against d4 d4 is a huge threat but you don't even have to rush with it um i suppose that bishop e6 is is a remote possibility here and again d4 followed by bishop g5 is a very foolproof method let's say d4 bishop g5 and again 92 to follow the rest is up to you but white has gotten rid of all danger he's winning here it's again plus three plus four or something absurd so bishop b6 the idea is prophylaxis against d4 d4 is no longer possible it drops upon which is why we play the move knight to d2 um supporting the pawn on e4 preemptively uh and technically i believe that 92 well this is still not a novelty this has happened actually once in 2016 in an over the board game and in that game black played the move knight g4 which i believe to be the main line i think that this is the only move that poses any real d well danger is the wrong word white is winning at the end of the line but this is the most important move to remember again if black develops this doesn't do anything we go knight f3 bringing the knight to a good square and now we always meet knight g4 with d4 i analyzed this further queen d6h3 and castles i thought maybe black can try this and here one important thing to remember is we can go b4 to stop c5 and and then we can go queen c2 and just sort of develop normally and at some point we can take the knight so one thing to remember is that i i tried something like this you know what if black tries to attack well at this point we can already take the knight and the thing is once we've moved the queen from the first rank we can get this knight around to f1 and consolidate white is up a full piece for zero compensation and i want to make a side note mention that you're not going to always avoid your opponent giving you a check i mean sometimes you have to accept that yes your king is going to be on f2 but you're going to be up a full piece for no compensation that's just a risk that you have to be willing to take if you play one e4 so you know i'm not going to teach you to avoid everything at the price of of of losing the advantage i mean so this is very far-fetched but just wanted to make sure we have that covered queen d6 is another try it's sort of a staffordy sort of move here actually a very good idea is to play a4 preliminarily knight c4 comes to mind but once the queen moves black can actually take with the a pawn he can get the a file for his rook at least something so that's why it's a very good idea to play a4 threatening to trap the bishop basically forcing a6 or a5 now we go knight c4 and he has to take with a c pawn that's even worse we don't even give him that now we castle look at this beautiful position bishop can come out to e3 f4 you name it white is basically winning here so knight g4 is the only serious attempt now why'd we play c3 we didn't play c3 just to you know screw around we played it to play d4 which is what we do here there's a couple of concrete lines here the game that i mentioned continued queen h4 that is the most tempting move if black tries to undermine white center with c5 we almost always meet this move with knight c4 and after cd we eliminate the bishop and our center is fully intact if he tries queen h4 now again this is all just one move threats which we easily defend against and white is completely winning we're going to chase the knight away go bishop e3 now we're not going to go bishop f3 we're gonna bishop b3 and we're gonna be winning if he goes queen f6 again castles queen h4 all this is nothing we can go knight f3 we didn't go h3 it literally doesn't matter remember that if he goes queen f6 and then c5 we go knight c4 that is an automatic reaction and we will review these ideas at the end for that reason queen h4 to provoke g3 makes the most sense queen h3 meets with a very tragic fate bishop f1 uh you didn't need me to tell you this queen f6 is the game actually queen e7 was the game continuation and this is maybe the only line that i would suggest you memorize where it's a good idea to go a4 for the same reason we did it previously and now you can go knight c4 so this is not an intuitive move um and the reason it's not intuitive is because it seems to blunder um a pawn but it doesn't take long to establish we just go f3 and black can try queen d5 to keep the contact with the rook otherwise he loses the knight but now we take the bishop and go c4 you can find all of this over the board it's not that hard but i would still suggest that you review this line three or four times just go back in the video replay this line um of course why wouldn't people just watch this video 15 times it's amazing video so i didn't need any need to tell you they were going to do that anyway so for that reason queen f6 makes the most sense and as per usual we go knight f3 um white is completely winning here the move that i tried is h4 this doesn't do anything we just take it and if the rook takes we have bishop g5 winning the rook i tried queen e7 here and i concluded the line by saying h3 if knight f6 you can go e5 and you can basically do anything you want here queen c2 would be probably a reasonable move rook g1 there's a million moves that lead to a completely winning position um and completely winning is an overstatement but let's just say basically objectively winning and again queen c2 solid move then you can develop your bishop castle long white is not only have two pawns look at black's position it is in ruins other than h4 i really don't see what black can do because if he just develops his bishop now we can just go h3 um and um well this is just uh is it horrendous horrendous for for black we don't even have to again i would say h3 followed by queen c2 don't rush with bishop g5 then we can just play bishop e3 and uh and either c4 c5 or we can castle there's just a million different ideas um and again i would encourage you to sort of dig around in these types of positions if you really really want to"
+  },
+  {
+   "ply": 10,
+   "t": 1420,
+   "line": [],
+   "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 6",
+   "said": "do a good job on this you want to make sure that you know all the relevant ideas black castles then we go bishop g5 winning the rook so that essentially is the entire stafford gamut now i tried to be as comprehensive as possible i am sure that i missed some sidelines here and there but by and large i hope that i covered all of the necessary ideas now if you've come here and you don't have 25 minutes to burn you want the tldr version here we go i am going to project on the screen now"
+  },
+  {
+   "ply": 3,
+   "t": 1447.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "the main ideas of the stafford for white that you can be reading as i walk through the main lines once again um so let's go again from the start the stafford"
+  },
+  {
+   "ply": 5,
+   "t": 1449,
+   "line": [
+    "Nf6",
+    "Nxe5"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "starts out as the petrov then black"
+  },
+  {
+   "ply": 6,
+   "t": 1451,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R w KQkq - 1 4",
+   "said": "plays knight c6 okay we take the knight we go d3 he goes"
+  },
+  {
+   "ply": 9,
+   "t": 1455,
+   "line": [
+    "Nxc6",
+    "dxc6",
+    "d3"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 5",
+   "said": "bishop c5 we go bishop e2 to stop knight"
+  },
+  {
+   "ply": 10,
+   "t": 1456.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 1459,
+   "line": [
+    "Be2",
+    "Ng4"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/3P4/PPP1BPPP/RNBQK2R w KQkq - 3 7",
+   "said": "g4 if he goes knight g4 anyway we take and bring the queen out and then we basically force the queen train he's not going to do that he's going to play h5 now we don't castle h5 wants us to castle we go c3 in order to"
+  },
+  {
+   "ply": 14,
+   "t": 1480.5,
+   "line": [
+    "c3",
+    "h5"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/2p5/2b4p/4P1n1/2PP4/PP2BPPP/RNBQK2R w KQkq - 0 8",
+   "said": "prepare d4 and in order to have that as a move we can play against uh various other moves if he goes knight g4 for example boom d4 the only move to"
+  },
+  {
+   "ply": 13,
+   "t": 1485,
+   "line": [],
+   "fen": "r1bqk2r/ppp2ppp/2p5/2b5/4P1n1/2PP4/PP2BPPP/RNBQK2R b KQkq - 0 7",
+   "said": "stop d4 against everything else we play d4 bishop b6 is the only move against which we don't play d4 well why don't we play d4 it blunders"
+  },
+  {
+   "ply": 16,
+   "t": 1498,
+   "line": [
+    "h5",
+    "Nd2",
+    "Bb6"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/1bp5/7p/4P1n1/2PP4/PP1NBPPP/R1BQK2R w KQkq - 2 9",
+   "said": "the pawn how do we defend the pawn boom knight d2 very logical knight g4 is by far the most logical otherwise we play either knight f3 or if he brings his queen out to d6 that"
+  },
+  {
+   "ply": 20,
+   "t": 1512,
+   "line": [
+    "a3",
+    "Qd6",
+    "a4",
+    "Nf6"
+   ],
+   "fen": "r1b1k2r/ppp2pp1/1bpq1n2/7p/P3P3/2PP4/1P1NBPPP/R1BQK2R w KQkq - 1 11",
+   "said": "walks right into knight c4 but remember and i made this point don't play knight c4 immediately although you can of course a4 first is a great idea uh as i"
+  },
+  {
+   "ply": 24,
+   "t": 1519,
+   "line": [
+    "Qb3",
+    "Ba5",
+    "Qb6",
+    "axb6"
+   ],
+   "fen": "r1b1k2r/1pp2pp1/1ppq1n2/b6p/P3P3/2PP4/1P1NBPPP/R1B1K2R w KQkq - 0 13",
+   "said": "indicated uh on point three and now knight c4 so that he doesn't take with the a pawn just winning for white after knight g4"
+  },
+  {
+   "ply": 16,
+   "t": 1523.5,
+   "line": [],
+   "fen": "r1bqk2r/ppp2pp1/1bp5/7p/4P1n1/2PP4/PP1NBPPP/R1BQK2R w KQkq - 2 9",
+   "said": "again"
+  },
+  {
+   "ply": 17,
+   "t": 1525,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/1bp5/7p/3PP1n1/2P5/PP1NBPPP/R1BQK2R b KQkq - 0 9",
+   "said": "cutting cutting him off with d4 we're never afraid of c5 because of knight c4"
+  },
+  {
+   "ply": 19,
+   "t": 1527.5,
+   "line": [
+    "c5",
+    "Nc4"
+   ],
+   "fen": "r1bqk2r/ppp2pp1/1b6/2p4p/2NPP1n1/2P5/PP2BPPP/R1BQK2R b KQkq - 1 10",
+   "said": ""
+  },
+  {
+   "ply": 17,
+   "t": 1530,
+   "line": [],
+   "fen": "r1bqk2r/ppp2pp1/1bp5/7p/3PP1n1/2P5/PP1NBPPP/R1BQK2R b KQkq - 0 9",
+   "said": "and if he goes queen h4 if he goes queen f6 all of this are one move threats"
+  },
+  {
+   "ply": 19,
+   "t": 1533,
+   "line": [
+    "Qh4",
+    "g3"
+   ],
+   "fen": "r1b1k2r/ppp2pp1/1bp5/7p/3PP1nq/2P3P1/PP1NBP1P/R1BQK2R b KQkq - 0 10",
+   "said": "we defend against him accordingly here's"
+  },
+  {
+   "ply": 21,
+   "t": 1534,
+   "line": [
+    "Qf6",
+    "Nf3"
+   ],
+   "fen": "r1b1k2r/ppp2pp1/1bp2q2/7p/3PP1n1/2P2NP1/PP2BP1P/R1BQK2R b KQkq - 2 11",
+   "said": "that move knight f3 again"
+  },
+  {
+   "ply": 22,
+   "t": 1539,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r1b1k2r/ppp1qpp1/1bp5/7p/3PP1n1/2P2NP1/PP2BP1P/R1BQK2R w KQkq - 3 12",
+   "said": "if h4 we take it if he goes queen a7 trying to hit our pawn boom boom boom boom and i mean we send this to blow"
+  },
+  {
+   "ply": 16,
+   "t": 1553,
+   "line": [],
+   "fen": "r1bqk2r/ppp2pp1/1bp5/7p/4P1n1/2PP4/PP1NBPPP/R1BQK2R w KQkq - 2 9",
+   "said": "this to smithereens now it's very important not to get too cocky i am quite sure that black can find some sort of tricks and traps here although i've tried to basically cover everything but essentially after queen h4 g3 and knight f3 g takes h4 my official line ends here with a very very overwhelming advantage uh for white and as you can see and let me just remove these arrows and then so just so you can see the position purely now you can see point one delay castling um until we have played c3 in knight t2 since until we've made all the preparations meet knight g4 with d4 eliminate black's bishop you can read all the points yourselves don't be afraid to take a hanging knight on g4 white should not fear c5 due to knight c4 i think that hits on most of the points and uh again you're welcome to do some of your own analysis um i do not promise that i found the absolute best line everywhere in fact you don't need me to just plug all these moves into the computer what i've tried to find are practical lines that are not always strictly speaking the top choice of the computer although everything here is computer"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4N3/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nxe5"
+   ],
+   "options": [
+    {
+     "san": "d6",
+     "t": 173.5,
+     "continuation": "d6",
+     "said": "master from russia who sort of developed this i even i think he actually wrote a book on the petrov and after knight takes e5 now black's main move here is to go d6 knight f3 and knight takes c4 and the ironic thing about this and you'll understand why it's ironic uh shortly is that the petrov itself this position is actually very very peaceful it's one of the most solid positional openings out there uh and yet the stafford gambit is one of the trickiest openings out there so instead of playing d6 um instead of playing d6 and i'm actually looking at the year in which the stafford gambit was first played in 1857 uh howard staunton who uh was and not howard stafford howard staunton i'm not actually sure oh i see why it's called the stafford game but in 1950 uh someone named stafford actually played it but that wasn't the first person to play howard staunton one of the strongest players in the 19th century sometimes even called the unofficial world champion uh essayed this line for the first time i was going to say stafford was the first person to win"
+    },
+    {
+     "san": "Nc6",
+     "t": 201.5,
+     "continuation": "Nc6",
+     "said": "and yet the stafford gambit is one of the trickiest openings out there so instead of playing d6 um instead of playing d6 and i'm actually looking at the year in which the stafford gambit was first played in 1857 uh howard staunton who uh was and not howard stafford howard staunton i'm not actually sure oh i see why it's called the stafford game but in 1950 uh someone named stafford actually played it but that wasn't the first person to play howard staunton one of the strongest players in the 19th century sometimes even called the unofficial world champion uh essayed this line for the first time i was going to say stafford was the first person to win in this line but that's also not true in 1905 um a gentleman named jonas uh one with the staff again but i guess stafford uh maybe wrote some sort of trees i'll look this up after after i create the video anyways we're dealing with uh the stafford gambit not um writing a biography of uh mr stafford or matthew stafford i was gonna wear a matthew stafford jersey before making this video well you guys know how lazy i am in any case black sacrifices upon he doesn't recapture and"
+    }
+   ]
+  },
+  {
+   "ply": 7,
+   "fen": "r1bqkb1r/pppp1ppp/2N2n2/8/4P3/8/PPPP1PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nxe5",
+    "Nc6",
+    "Nxc6"
+   ],
+   "options": [
+    {
+     "san": "dxc6",
+     "t": 294,
+     "continuation": "dxc6",
+     "said": "people like the stafford gambit and that's exactly what makes it so dangerous it appears to be uh you know total malarkey total hogwash and yet it's not now in the classical stafford black takes d takes c6 and the idea of this move is to open up uh this bishop on c8 and this is where we can see that the stafford gamut actually is uh positionally understandable black has a lead in development now this may sound laughable but it's not a lead in development is never laughable and it always contains a certain degree of danger um in addition to this black's got very sort of free development for his pieces for his bishops and so white has to take this opening very very seriously as many uh have already found out now if black plays b takes e6 which is not a move that you'll you're likely to face but you know what i'm going to try to do in this video series is actually be as thorough as possible and i will have sort of a tldr summary at the end which uh the timestamp of which i'll link in the description below uh but i highly recommend for serious players to look at the whole video"
+    },
+    {
+     "san": "bxc6",
+     "t": 334,
+     "continuation": "bxc6",
+     "said": "pieces for his bishops and so white has to take this opening very very seriously as many uh have already found out now if black plays b takes e6 which is not a move that you'll you're likely to face but you know what i'm going to try to do in this video series is actually be as thorough as possible and i will have sort of a tldr summary at the end which uh the timestamp of which i'll link in the description below uh but i highly recommend for serious players to look at the whole video i'm i'm not going to go for you know five minutes or six minutes i'm gonna go for as long as it takes to cover all the pertinent lines and my emphasis is always on helping people who are serious and willing to invest time because i think that that is what it takes to become good and to learn these lines so again i'll try to be thorough uh and at the same time i'll try to be succinct in the sense that you know i i won't show 30 move lines i'll i'll end when i think that it's pretty clear that we've done our job so with that in my b takes e6 we simply develop our knight i think the only way that black can try to make this work is by playing d5"
+    }
+   ]
+  },
+  {
+   "ply": 9,
+   "fen": "r1bqkb1r/p1pp1ppp/2p2n2/8/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nxe5",
+    "Nc6",
+    "Nxc6",
+    "bxc6",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "d5",
+     "t": 392,
+     "continuation": "d5",
+     "said": "you know i i won't show 30 move lines i'll i'll end when i think that it's pretty clear that we've done our job so with that in my b takes e6 we simply develop our knight i think the only way that black can try to make this work is by playing d5 uh bishop b4 has been tried once um and and against this move white can just play e5 so you know i i i dug around here i tried queen e7 and i think the simplest is just to play queen e2 reinforcing uh the threat of taking the knight if knight d5 white captures and now of course white can't play d4 because the plot is spin but what white can do is go c3 and then go d4 he's a healthy pawn up and he's actually threatening uh to fork the pawn on the bishop with queen b5 so for that reason after b takes c6 knight c3 black should try d5 and again the simplest is to just drive a wedge into black's position e5 and d4 black is essentially lost here if he tries to undermine white's center we just go knight takes d5 there's nothing to worry about here and um the rest you know i always encourage you to sort of dig around on your own but this is completely lost there's one funny line here i tried knight b6 now white has to be"
+    },
+    {
+     "san": "Bb4",
+     "t": 396.5,
+     "continuation": "Bb4",
+     "said": "so with that in my b takes e6 we simply develop our knight i think the only way that black can try to make this work is by playing d5 uh bishop b4 has been tried once um and and against this move white can just play e5 so you know i i i dug around here i tried queen e7 and i think the simplest is just to play queen e2 reinforcing uh the threat of taking the knight if knight d5 white captures and now of course white can't play d4 because the plot is spin but what white can do is go c3 and then go d4 he's a healthy pawn up and he's actually threatening uh to fork the pawn on the bishop with queen b5 so for that reason after b takes c6 knight c3 black should try d5 and again the simplest is to just drive a wedge into black's position e5 and d4 black is essentially lost here if he tries to undermine white's center we just go knight takes d5 there's nothing to worry about here and um the rest you know i always encourage you to sort of dig around on your own but this is completely lost there's one funny line here i tried knight b6 now white has to be careful you don't want to take the knight because the queen is pinned"
+    }
+   ]
+  },
+  {
+   "ply": 9,
+   "fen": "r1bqkb1r/ppp2ppp/2p2n2/8/4P3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nxe5",
+    "Nc6",
+    "Nxc6",
+    "dxc6",
+    "d3"
+   ],
+   "options": [
+    {
+     "san": "Bc5",
+     "t": 492.5,
+     "continuation": "Bc5",
+     "said": "bc is exceedingly rare everybody's gonna play dc now we play d3 and one of the appeals of the stafford is contained in black's next move so black plays bishop c5 that's the only serious move bishop d6 is the other move that has been tried does absolutely nothing we are simply a central pawn up bishop e2 h5 is we'll see that h5 is a very common move in the stafford but combining it with bishop d6 makes no sense because after bishop g5 white is out of the woods he can castle he can develop his knight he's in good shape so bishop c5 is the move now i think for most people the appeal of the stafford is contained in the smooth bishop g5 which to the untrained eye seems relatively reasonable and in fact uh a quick search reals that five people have fallen for this over the board including one person in may of this year 1900 so again this is not to be sneezed at and you know if you're doing this to train i would encourage you again mother style here to pause the video and if you're simply along for the ride uh the move here is uh knight captures e4 uh bishop captures a d eight a bishop"
+    },
+    {
+     "san": "Bd6",
+     "t": 496.5,
+     "continuation": "Bd6",
+     "said": "now we play d3 and one of the appeals of the stafford is contained in black's next move so black plays bishop c5 that's the only serious move bishop d6 is the other move that has been tried does absolutely nothing we are simply a central pawn up bishop e2 h5 is we'll see that h5 is a very common move in the stafford but combining it with bishop d6 makes no sense because after bishop g5 white is out of the woods he can castle he can develop his knight he's in good shape so bishop c5 is the move now i think for most people the appeal of the stafford is contained in the smooth bishop g5 which to the untrained eye seems relatively reasonable and in fact uh a quick search reals that five people have fallen for this over the board including one person in may of this year 1900 so again this is not to be sneezed at and you know if you're doing this to train i would encourage you again mother style here to pause the video and if you're simply along for the ride uh the move here is uh knight captures e4 uh bishop captures a d eight a bishop captures f2 and we have illegals made here on the board uh"
+    }
+   ]
+  },
+  {
+   "ply": 10,
+   "fen": "r1bqk2r/ppp2ppp/2p2n2/2b5/4P3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 6",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nxe5",
+    "Nc6",
+    "Nxc6",
+    "dxc6",
+    "d3",
+    "Bc5"
+   ],
+   "options": [
+    {
+     "san": "Bg5",
+     "t": 522.5,
+     "continuation": "Bg5",
+     "said": "the woods he can castle he can develop his knight he's in good shape so bishop c5 is the move now i think for most people the appeal of the stafford is contained in the smooth bishop g5 which to the untrained eye seems relatively reasonable and in fact uh a quick search reals that five people have fallen for this over the board including one person in may of this year 1900 so again this is not to be sneezed at and you know if you're doing this to train i would encourage you again mother style here to pause the video and if you're simply along for the ride uh the move here is uh knight captures e4 uh bishop captures a d eight a bishop captures f2 and we have illegals made here on the board uh so this is a form of legals made actually that is delivered by black and uh after 94 white has to backpedal and i didn't actually analyze this but i think bishop f2 actually wins the queen black doesn't even have to recapture on g5 but we're not going to look at this for too long there are a lot of traps in the stafford if you want to look at all of them again eric rosen does an amazing job laying out the majority of the tricks"
+    },
+    {
+     "san": "Be2",
+     "t": 595,
+     "continuation": "Be2",
+     "said": "available to black if white is not extremely well prepared well after watching this video you will be now the move that i suggest in this in this position is is bishop e2 uh the motivation behind it is very simple you're developing your bishop you are potentially preparing to castle although i say the word potentially with an emphasis because it's going to be very important to play this properly to delay castling and you're also covering the g4 square so you're stopping or taking the sting rather out of the move knight to g4 now of course this move has been analyzed by staffordights and and their recommendation which is going to be the move we sort of spend the majority of our time on is in very much in the spirit of the stafford h5 there are a handful of other moves that have been tried most of them are not serious let's quickly run through the alternatives if black castles well that's completely contrary to the spirit of the staffer we castle and we can play bishop g5 and again in these types of positions you're a pawn up you can do anything you want you can bring the knight around to f3 you can put it on c3 you know this is well outside the scope of of this video"
+    }
+   ]
+  },
+  {
+   "ply": 12,
+   "fen": "r1bqk2r/ppp2ppp/2p5/2b3B1/4n3/3P4/PPP2PPP/RN1QKB1R w KQkq - 0 7",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nxe5",
+    "Nc6",
+    "Nxc6",
+    "dxc6",
+    "d3",
+    "Bc5",
+    "Bg5",
+    "Nxe4"
+   ],
+   "options": [
+    {
+     "san": "Bxd8",
+     "t": 551.5,
+     "continuation": "Bxd8",
+     "said": "you know if you're doing this to train i would encourage you again mother style here to pause the video and if you're simply along for the ride uh the move here is uh knight captures e4 uh bishop captures a d eight a bishop captures f2 and we have illegals made here on the board uh so this is a form of legals made actually that is delivered by black and uh after 94 white has to backpedal and i didn't actually analyze this but i think bishop f2 actually wins the queen black doesn't even have to recapture on g5 but we're not going to look at this for too long there are a lot of traps in the stafford if you want to look at all of them again eric rosen does an amazing job laying out the majority of the tricks available to black if white is not extremely well prepared well after watching this video you will be now the move that i suggest in this in this position is is bishop e2 uh the motivation behind it is very simple you're developing your bishop you are potentially preparing to castle although i say the word potentially with an emphasis because it's going to be very important to play this properly to delay castling and you're also"
+    },
+    {
+     "san": "dxe4",
+     "t": 564.5,
+     "continuation": "dxe4",
+     "said": "captures f2 and we have illegals made here on the board uh so this is a form of legals made actually that is delivered by black and uh after 94 white has to backpedal and i didn't actually analyze this but i think bishop f2 actually wins the queen black doesn't even have to recapture on g5 but we're not going to look at this for too long there are a lot of traps in the stafford if you want to look at all of them again eric rosen does an amazing job laying out the majority of the tricks available to black if white is not extremely well prepared well after watching this video you will be now the move that i suggest in this in this position is is bishop e2 uh the motivation behind it is very simple you're developing your bishop you are potentially preparing to castle although i say the word potentially with an emphasis because it's going to be very important to play this properly to delay castling and you're also covering the g4 square so you're stopping or taking the sting rather out of the move knight to g4 now of course this move has been analyzed by staffordights and and their recommendation which is going to be the move we sort of spend the"
+    }
+   ]
+  },
+  {
+   "ply": 12,
+   "fen": "r1bqk2r/ppp2pp1/2p2n2/2b4p/4P3/3P4/PPP1BPPP/RNBQK2R w KQkq - 0 7",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nxe5",
+    "Nc6",
+    "Nxc6",
+    "dxc6",
+    "d3",
+    "Bc5",
+    "Be2",
+    "h5"
+   ],
+   "options": [
+    {
+     "san": "Bxh5",
+     "t": 702.5,
+     "continuation": "Bxh5 Nh7 Bg4 Qh4",
+     "said": "is all just ridiculous but i wanted to make sure we're covering this just in case the only serious alternative to h5 is the immediate knight g4 followed by queen h4 this is something i can see some players doing it's been tried twice over the board and here i recommend the move queen f3 i think that's not the only move we can castle but i think this is the most practical because someone who plays the stafford is definitely not going to want to get an end game upon down he's going to want a combative position and so i've chosen line specifically taylor to taking the sting out of the staffer that way so with that in mind queen takes g4 is absurd we just take the queen we go bishop e3 we go knight c3 and we are up upon for no compensation um just to point out i analyzed this a little bit further i looked at this line and now i think a very good idea is to play the move h4 just to stop black from expanding on the king side with g5 so a little finesse there but you can play this in many different ways and and white is in great shape so for that reason bishop takes g4 is to be expected and now we go queen g3 threatening the queen trade black probably will decline we go"
+    },
+    {
+     "san": "c3",
+     "t": 947,
+     "continuation": "c3",
+     "said": "everyone and it is the move that you are by far likeliest to face against someone who knows what he's doing now we play the move c3 and this is the main move that you have to remember if you take one thing away from this video it is to play c3 before you castle castle is very common and it gets quite in huge trouble after either queen d6 or even worse knight g4 and i'm not going to delve into the details here but you can probably see and you can establish this on your own eric rosen has also won many games like this this is actually already almost devastating for white well if you take with the bishop you take this way if you take with the pawn there's a lot of mates like this here so you can again you can analyze this on your own do not castle do not castle and the most important piece of advice do not cast go c3 the idea of c3 should be self-evident if you're kind of fully engaged you should realize that you're kind of preparing potentially to play d4 and slice off the bishop's control over the f2 square now you might be concerned that it weakens the d3 pawn but"
+    },
+    {
+     "san": "O-O",
+     "t": 958.5,
+     "continuation": "O-O",
+     "said": "this is the main move that you have to remember if you take one thing away from this video it is to play c3 before you castle castle is very common and it gets quite in huge trouble after either queen d6 or even worse knight g4 and i'm not going to delve into the details here but you can probably see and you can establish this on your own eric rosen has also won many games like this this is actually already almost devastating for white well if you take with the bishop you take this way if you take with the pawn there's a lot of mates like this here so you can again you can analyze this on your own do not castle do not castle and the most important piece of advice do not cast go c3 the idea of c3 should be self-evident if you're kind of fully engaged you should realize that you're kind of preparing potentially to play d4 and slice off the bishop's control over the f2 square now you might be concerned that it weakens the d3 pawn but black doesn't have any puns left in the center to exploit that with so that is not a problem now this move has also been analyzed and the move that you're most likely to face the only"
+    }
+   ]
+  },
+  {
+   "ply": 16,
+   "fen": "r1b1k2r/ppp2ppn/2p5/2b5/4P1Bq/3P4/PPP2PPP/RNBQK2R w KQkq - 3 9",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nxe5",
+    "Nc6",
+    "Nxc6",
+    "dxc6",
+    "d3",
+    "Bc5",
+    "Be2",
+    "h5",
+    "Bxh5",
+    "Nh7",
+    "Bg4",
+    "Qh4"
+   ],
+   "options": [
+    {
+     "san": "Be3",
+     "t": 731.5,
+     "continuation": "Be3 Bxg4 Qxg4 Qxg4",
+     "said": "combative position and so i've chosen line specifically taylor to taking the sting out of the staffer that way so with that in mind queen takes g4 is absurd we just take the queen we go bishop e3 we go knight c3 and we are up upon for no compensation um just to point out i analyzed this a little bit further i looked at this line and now i think a very good idea is to play the move h4 just to stop black from expanding on the king side with g5 so a little finesse there but you can play this in many different ways and and white is in great shape so for that reason bishop takes g4 is to be expected and now we go queen g3 threatening the queen trade black probably will decline we go h3 chasing the bishop away two possibilities here if the bishop drops back we snag upon and now we play the most annoying move of all time we play queen g5 and like yeah yeah you can just see the reaction of the saffronites facing this move and we're attacking the queen attacking the bishop and i by the way m i have played the stafford myself so you know i i respect this opening please don't get the wrong impression from this i'm just having some fun and the point is actually if black goes"
+    },
+    {
+     "san": "Qf3",
+     "t": 811.5,
+     "continuation": "Qf3 Bxg4 Qg3",
+     "said": "game is over so for that reason just to repeat this after knight g4 takes queen h4 we defend against mate takes queen g3 threatening the queen trade chasing the bishop away black has to move bishop d1 which is very much in the spirit of the line but it doesn't do much we go knight c3 and uh if black takes on c2 uh well here we can just go king d2 trapping uh and let me just verify this trapping the uh bishop you gotta verify everything yeah that's the correct move um and uh the game is simply over here the bishop can sacrifice itself we play king d3 and i know some people might be saying oh i don't want to get the king to d3 well you know what this is nothing i mean castle's king c2 we'll see another line like this absolutely nothing white consolidates so for that reason bishop b4 is to be expected now we get our bishop out to d2 uh bishop takes c3 um and after rook takes d1 white is finally out of the woods and black is in huge trouble i analyzed the line a little bit further bishop e5 queen g4 uh we trade queens and the funny thing"
+    }
+   ]
+  },
+  {
+   "ply": 16,
+   "fen": "r1bqk2r/ppp2pp1/1bp5/7p/4P1n1/2PP4/PP1NBPPP/R1BQK2R w KQkq - 2 9",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nxe5",
+    "Nc6",
+    "Nxc6",
+    "dxc6",
+    "d3",
+    "Bc5",
+    "Be2",
+    "Ng4",
+    "c3",
+    "h5",
+    "Nd2",
+    "Bb6"
+   ],
+   "options": [
+    {
+     "san": "a3",
+     "t": 1512,
+     "continuation": "a3 Qd6 a4 Nf6",
+     "said": "logical otherwise we play either knight f3 or if he brings his queen out to d6 that walks right into knight c4 but remember and i made this point don't play knight c4 immediately although you can of course a4 first is a great idea uh as i indicated uh on point three and now knight c4 so that he doesn't take with the a pawn just winning for white after knight g4 again cutting cutting him off with d4 we're never afraid of c5 because of knight c4 and if he goes queen h4 if he goes queen f6 all of this are one move threats we defend against him accordingly here's that move knight f3 again if h4 we take it if he goes queen a7 trying to hit our pawn boom boom boom boom and i mean we send this to blow this to smithereens now it's very important not to get too cocky i am quite sure that black can find some sort of tricks and traps here although i've tried to basically cover everything but essentially after queen h4 g3 and knight f3 g takes h4 my official line ends here with a very very overwhelming advantage uh for white and as you can see and let me just remove these arrows and then so just so you can see"
+    },
+    {
+     "san": "d4",
+     "t": 1525,
+     "continuation": "d4",
+     "said": "a4 first is a great idea uh as i indicated uh on point three and now knight c4 so that he doesn't take with the a pawn just winning for white after knight g4 again cutting cutting him off with d4 we're never afraid of c5 because of knight c4 and if he goes queen h4 if he goes queen f6 all of this are one move threats we defend against him accordingly here's that move knight f3 again if h4 we take it if he goes queen a7 trying to hit our pawn boom boom boom boom and i mean we send this to blow this to smithereens now it's very important not to get too cocky i am quite sure that black can find some sort of tricks and traps here although i've tried to basically cover everything but essentially after queen h4 g3 and knight f3 g takes h4 my official line ends here with a very very overwhelming advantage uh for white and as you can see and let me just remove these arrows and then so just so you can see the position purely now you can see point one delay castling um until we have played c3 in knight t2 since until we've made all the preparations meet knight g4 with d4 eliminate black's bishop you can read all the"
+    }
+   ]
+  },
+  {
+   "ply": 17,
+   "fen": "r1bqk2r/ppp2pp1/1bp5/7p/3PP1n1/2P5/PP1NBPPP/R1BQK2R b KQkq - 0 9",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nxe5",
+    "Nc6",
+    "Nxc6",
+    "dxc6",
+    "d3",
+    "Bc5",
+    "Be2",
+    "Ng4",
+    "c3",
+    "h5",
+    "Nd2",
+    "Bb6",
+    "d4"
+   ],
+   "options": [
+    {
+     "san": "c5",
+     "t": 1527.5,
+     "continuation": "c5 Nc4",
+     "said": "indicated uh on point three and now knight c4 so that he doesn't take with the a pawn just winning for white after knight g4 again cutting cutting him off with d4 we're never afraid of c5 because of knight c4 and if he goes queen h4 if he goes queen f6 all of this are one move threats we defend against him accordingly here's that move knight f3 again if h4 we take it if he goes queen a7 trying to hit our pawn boom boom boom boom and i mean we send this to blow this to smithereens now it's very important not to get too cocky i am quite sure that black can find some sort of tricks and traps here although i've tried to basically cover everything but essentially after queen h4 g3 and knight f3 g takes h4 my official line ends here with a very very overwhelming advantage uh for white and as you can see and let me just remove these arrows and then so just so you can see the position purely now you can see point one delay castling um until we have played c3 in knight t2 since until we've made all the preparations meet knight g4 with d4 eliminate black's bishop you can read all the points yourselves don't be afraid to take a hanging knight on g4"
+    },
+    {
+     "san": "Qh4",
+     "t": 1533,
+     "continuation": "Qh4 g3",
+     "said": "again cutting cutting him off with d4 we're never afraid of c5 because of knight c4 and if he goes queen h4 if he goes queen f6 all of this are one move threats we defend against him accordingly here's that move knight f3 again if h4 we take it if he goes queen a7 trying to hit our pawn boom boom boom boom and i mean we send this to blow this to smithereens now it's very important not to get too cocky i am quite sure that black can find some sort of tricks and traps here although i've tried to basically cover everything but essentially after queen h4 g3 and knight f3 g takes h4 my official line ends here with a very very overwhelming advantage uh for white and as you can see and let me just remove these arrows and then so just so you can see the position purely now you can see point one delay castling um until we have played c3 in knight t2 since until we've made all the preparations meet knight g4 with d4 eliminate black's bishop you can read all the points yourselves don't be afraid to take a hanging knight on g4 white should not fear c5 due to knight c4 i think that hits on most of the points"
+    }
+   ]
+  },
+  {
+   "ply": 18,
+   "fen": "r1bqk2r/ppp2pp1/2p5/2b4p/4P1n1/3P4/PPP1BPPP/RNBQ1RK1 w kq - 6 10",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nf6",
+    "Nxe5",
+    "Nc6",
+    "Nxc6",
+    "dxc6",
+    "d3",
+    "Bc5",
+    "Be2",
+    "h5",
+    "O-O",
+    "Qd6",
+    "Bg4",
+    "Qd8",
+    "Be2",
+    "Ng4"
+   ],
+   "options": [
+    {
+     "san": "h3",
+     "t": 970,
+     "continuation": "h3 Qd6",
+     "said": "is very common and it gets quite in huge trouble after either queen d6 or even worse knight g4 and i'm not going to delve into the details here but you can probably see and you can establish this on your own eric rosen has also won many games like this this is actually already almost devastating for white well if you take with the bishop you take this way if you take with the pawn there's a lot of mates like this here so you can again you can analyze this on your own do not castle do not castle and the most important piece of advice do not cast go c3 the idea of c3 should be self-evident if you're kind of fully engaged you should realize that you're kind of preparing potentially to play d4 and slice off the bishop's control over the f2 square now you might be concerned that it weakens the d3 pawn but black doesn't have any puns left in the center to exploit that with so that is not a problem now this move has also been analyzed and the move that you're most likely to face the only sensible move is bishop b6 if black doesn't play bishop b6 the only other move i even analyzed was knight g4 and knight g4 is very simply met with d4"
+    },
+    {
+     "san": "Re1",
+     "t": 987,
+     "continuation": "Re1 Nf6 Kh1",
+     "said": "devastating for white well if you take with the bishop you take this way if you take with the pawn there's a lot of mates like this here so you can again you can analyze this on your own do not castle do not castle and the most important piece of advice do not cast go c3 the idea of c3 should be self-evident if you're kind of fully engaged you should realize that you're kind of preparing potentially to play d4 and slice off the bishop's control over the f2 square now you might be concerned that it weakens the d3 pawn but black doesn't have any puns left in the center to exploit that with so that is not a problem now this move has also been analyzed and the move that you're most likely to face the only sensible move is bishop b6 if black doesn't play bishop b6 the only other move i even analyzed was knight g4 and knight g4 is very simply met with d4 followed by h3 followed by bishop g5 so there's really nothing that black can do here other than to play bishop b6 against d4 d4 is a huge threat but you don't even have to rush with it um i suppose that bishop e6 is is a remote possibility"
+    }
+   ]
+  }
+ ]
+}

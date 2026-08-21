@@ -1,0 +1,341 @@
+{
+ "videoId": "aEKSPFwvFoY",
+ "title": "Grandmaster Naroditsky Chess Speedrun Pt. 4",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 807,
+   "line": [
+    "e3",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "queen d4 he could have stopped the matrix okay we're playing at 800. that's actually the first time we are playing in 800 so let's uh focus and hopefully this game is going to go well he goes e3 again one of those moves where we just respond by occupying the center this is kind of a reverse french i think it's"
+  },
+  {
+   "ply": 3,
+   "t": 816.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/2N1P3/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
+   "said": "called van i'll take questions after this game okay knight c3 so again he does random"
+  },
+  {
+   "ply": 4,
+   "t": 821.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/2N1P3/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+   "said": "stuff and we're just going to occupy the center the queen is defending the pawn it's okay it's my pleasure to do this but i always appreciate support subs everything is always appreciated"
+  },
+  {
+   "ply": 5,
+   "t": 836.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/3P4/2N1P3/PPP2PPP/R1BQKBNR b KQkq - 0 3",
+   "said": "never expected please don't feel guilty for just being a helpful viewer that is also very much appreciated but i do obviously um greatly i'm very very grateful for all of the support as well okay so he goes"
+  },
+  {
+   "ply": 6,
+   "t": 850.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/3p4/3Pp3/2N1P3/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": "d4 now charm i think for the prime now this is a good example of playing with a close center i am going to close the center and i'm going to show you guys how to"
+  },
+  {
+   "ply": 7,
+   "t": 857,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/1B1p4/3Pp3/2N1P3/PPP2PPP/R1BQK1NR b KQkq - 1 4",
+   "said": "play with a closed center i'm going to give you guys an introduction to playing with a closed center now he gives us a check which is actually a completely empty check which allows us to actually support our center how can we block this check how can we block this check and simultaneously"
+  },
+  {
+   "ply": 9,
+   "t": 878.5,
+   "line": [
+    "c6",
+    "Be2"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p5/3p4/3Pp3/2N1P3/PPP1BPPP/R1BQK1NR b KQkq - 1 5",
+   "said": "give some support to the center yeah c6 and we're getting get out of there get out of there and we get a nice little pawn chain that's basically giving us a small advantage now let's continue developing let's first develop this bishop where do you guys think we should put this bishop thank you kimble s and bits where should we put this"
+  },
+  {
+   "ply": 10,
+   "t": 894.5,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "rnbqk1nr/pp3ppp/2pb4/3p4/3Pp3/2N1P3/PPP1BPPP/R1BQK1NR w KQkq - 2 6",
+   "said": "bishop um d6 is right so a lot of people want to put it on b4 um and i will explain after the game"
+  },
+  {
+   "ply": 11,
+   "t": 900.5,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "rnbqk1nr/pp3ppp/2pb4/3p4/3Pp1B1/2N1P3/PPP2PPP/R1BQK1NR b KQkq - 3 6",
+   "said": "why bishop b4 is bad or it's not bad but it's not great he goes bishop g4 and what he wants is that if we take the bishop he gets his queen out and that queen is going to attack g7 do"
+  },
+  {
+   "ply": 12,
+   "t": 917.5,
+   "line": [
+    "f5"
+   ],
+   "fen": "rnbqk1nr/pp4pp/2pb4/3p1p2/3Pp1B1/2N1P3/PPP2PPP/R1BQK1NR w KQkq - 0 7",
+   "said": "we need to take his bishop a lot of people suggesting f5 which sends the bishop back that is a fantastic move get out of g4 we could"
+  },
+  {
+   "ply": 11,
+   "t": 920.5,
+   "line": [],
+   "fen": "rnbqk1nr/pp3ppp/2pb4/3p4/3Pp1B1/2N1P3/PPP2PPP/R1BQK1NR b KQkq - 3 6",
+   "said": "have also simply developed our knight to f6 and"
+  },
+  {
+   "ply": 13,
+   "t": 922.5,
+   "line": [
+    "f5",
+    "Bh5+"
+   ],
+   "fen": "rnbqk1nr/pp4pp/2pb4/3p1p1B/3Pp3/2N1P3/PPP2PPP/R1BQK1NR b KQkq - 1 7",
+   "said": "made him take our bishop he's giving us"
+  },
+  {
+   "ply": 14,
+   "t": 926,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqk1nr/pp5p/2pb2p1/3p1p1B/3Pp3/2N1P3/PPP2PPP/R1BQK1NR w KQkq - 0 8",
+   "said": "a check it's not doing anything other"
+  },
+  {
+   "ply": 15,
+   "t": 928,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rnbqk1nr/pp5p/2pb2p1/3p1p2/3Pp3/2N1P3/PPP1BPPP/R1BQK1NR b KQkq - 1 8",
+   "said": "than helping us develop a very nice pawn chain now let's continue developing how do we continue developing"
+  },
+  {
+   "ply": 16,
+   "t": 942,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqk2r/pp5p/2pb1np1/3p1p2/3Pp3/2N1P3/PPP1BPPP/R1BQK1NR w KQkq - 2 9",
+   "said": "nothing no rocket science here we just continue developing we've got a nice pawn pyramid let's continue developing with knight f6"
+  },
+  {
+   "ply": 17,
+   "t": 943.5,
+   "line": [
+    "Nh3"
+   ],
+   "fen": "rnbqk2r/pp5p/2pb1np1/3p1p2/3Pp3/2N1P2N/PPP1BPPP/R1BQK2R b KQkq - 3 9",
+   "said": "knight h3 we're going to castle okay"
+  },
+  {
+   "ply": 18,
+   "t": 945.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp5p/2pb1np1/3p1p2/3Pp3/2N1P2N/PPP1BPPP/R1BQK2R w KQ - 4 10",
+   "said": "nothing no rocket cycle knight g5 again"
+  },
+  {
+   "ply": 19,
+   "t": 947.5,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "rnbq1rk1/pp5p/2pb1np1/3p1pN1/3Pp3/2N1P3/PPP1BPPP/R1BQK2R b KQ - 5 10",
+   "said": "he's making moves that aim to intimidate us but they actually do"
+  },
+  {
+   "ply": 20,
+   "t": 954.5,
+   "line": [
+    "h6"
+   ],
+   "fen": "rnbq1rk1/pp6/2pb1npp/3p1pN1/3Pp3/2N1P3/PPP1BPPP/R1BQK2R w KQ - 0 11",
+   "said": "absolutely nothing how do we get this knight out of here let's go h6 and get"
+  },
+  {
+   "ply": 21,
+   "t": 956.5,
+   "line": [
+    "Ne6"
+   ],
+   "fen": "rnbq1rk1/pp6/2pbNnpp/3p1p2/3Pp3/2N1P3/PPP1BPPP/R1BQK2R b KQ - 1 11",
+   "said": "that knight oh my god okay so he"
+  },
+  {
+   "ply": 22,
+   "t": 958.5,
+   "line": [
+    "Bxe6"
+   ],
+   "fen": "rn1q1rk1/pp6/2pbbnpp/3p1p2/3Pp3/2N1P3/PPP1BPPP/R1BQK2R w KQ - 0 12",
+   "said": "blunders his knight he's his mistake is that he's not actually developing he's just moving the"
+  },
+  {
+   "ply": 23,
+   "t": 965,
+   "line": [
+    "f3"
+   ],
+   "fen": "rn1q1rk1/pp6/2pbbnpp/3p1p2/3Pp3/2N1PP2/PPP1B1PP/R1BQK2R b KQ - 0 12",
+   "said": "same piece over and over again that's not okay now he offers us to open the center should we open the center yes or no are we ready to open up the center now that we are up a piece we absolutely are ladies and gentlemen we absolutely are"
+  },
+  {
+   "ply": 24,
+   "t": 992,
+   "line": [
+    "exf3"
+   ],
+   "fen": "rn1q1rk1/pp6/2pbbnpp/3p1p2/3P4/2N1Pp2/PPP1B1PP/R1BQK2R w KQ - 0 13",
+   "said": "because we have not only an extra piece and as you guys know one of the fundamental principles of operating with extra material is that you want the centers to be open for that material to show itself the second thing is that we have most of our pieces developed"
+  },
+  {
+   "ply": 25,
+   "t": 995,
+   "line": [
+    "Bxf3"
+   ],
+   "fen": "rn1q1rk1/pp6/2pbbnpp/3p1p2/3P4/2N1PB2/PPP3PP/R1BQK2R b KQ - 0 13",
+   "said": "and his pieces are super passive he takes with a bishop by taking with the bishop he leaves the"
+  },
+  {
+   "ply": 26,
+   "t": 1002,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "rn1q1rk1/pp6/2pbb1pp/3p1p2/3Pn3/2N1PB2/PPP3PP/R1BQK2R w KQ - 1 14",
+   "said": "e4 square extremely weak so let's put a knight there what other move do we prepare by playing knight e4"
+  },
+  {
+   "ply": 27,
+   "t": 1005,
+   "line": [
+    "Bxe4"
+   ],
+   "fen": "rn1q1rk1/pp6/2pbb1pp/3p1p2/3PB3/2N1P3/PPP3PP/R1BQK2R b KQ - 0 14",
+   "said": "and what pawn do we take with what pawn do we actually take with"
+  },
+  {
+   "ply": 28,
+   "t": 1013.5,
+   "line": [
+    "fxe4"
+   ],
+   "fen": "rn1q1rk1/pp6/2pbb1pp/3p4/3Pp3/2N1P3/PPP3PP/R1BQK2R w KQ - 0 15",
+   "said": "and this is very important guys we take with the f pawn to stop him from castling yes beautiful we take with the f1 to stop him from"
+  },
+  {
+   "ply": 29,
+   "t": 1019.5,
+   "line": [
+    "Rf1"
+   ],
+   "fen": "rn1q1rk1/pp6/2pbb1pp/3p4/3Pp3/2N1P3/PPP3PP/R1BQKR2 b Q - 1 15",
+   "said": "guessing now the king only one is gonna hunt it down let's go after him how what does that mean how do we go after him how do we go after him um"
+  },
+  {
+   "ply": 30,
+   "t": 1036.5,
+   "line": [
+    "Qh4+"
+   ],
+   "fen": "rn3rk1/pp6/2pbb1pp/3p4/3Pp2q/2N1P3/PPP3PP/R1BQKR2 w Q - 2 16",
+   "said": "we we can trade the rooks that would be fine but there is a far better and far more effective which is screenage spread out very good check if he goes g3 to cover the check we are just gonna take that pawn on h2 but we're gonna do that only after a preliminary move"
+  },
+  {
+   "ply": 31,
+   "t": 1056,
+   "line": [
+    "g3"
+   ],
+   "fen": "rn3rk1/pp6/2pbb1pp/3p4/3Pp2q/2N1P1P1/PPP4P/R1BQKR2 b Q - 0 16",
+   "said": "we're gonna see let's see what he does he should actually move his king out and try to escape he's completely lost here and after king d2 i'm gonna make a very instructive move okay so what move should we play before taking the pawn in order to draw his"
+  },
+  {
+   "ply": 32,
+   "t": 1064,
+   "line": [
+    "Rxf1+"
+   ],
+   "fen": "rn4k1/pp6/2pbb1pp/3p4/3Pp2q/2N1P1P1/PPP4P/R1BQKr2 w Q - 0 17",
+   "said": "king closer to the center of action let us first take the rook we're not doing that to trade"
+  },
+  {
+   "ply": 33,
+   "t": 1068.5,
+   "line": [
+    "Kxf1"
+   ],
+   "fen": "rn4k1/pp6/2pbb1pp/3p4/3Pp2q/2N1P1P1/PPP4P/R1BQ1K2 b - - 0 17",
+   "said": "we're doing that to get us king a little bit closer to the king side and now we're going to"
+  },
+  {
+   "ply": 34,
+   "t": 1073,
+   "line": [
+    "Qxh2"
+   ],
+   "fen": "rn4k1/pp6/2pbb1pp/3p4/3Pp3/2N1P1P1/PPP4q/R1BQ1K2 w - - 0 18",
+   "said": "take the pawn on h2 what is our next move going to be how are we going to actually deliver the checkmate nerd nation is suggesting a beautiful idea we know according to one of our key principles that in situations when we're close to"
+  },
+  {
+   "ply": 35,
+   "t": 1094,
+   "line": [
+    "Ke1"
+   ],
+   "fen": "rn4k1/pp6/2pbb1pp/3p4/3Pp3/2N1P1P1/PPP4q/R1BQK3 b - - 1 18",
+   "said": "checkmating our opponent one thing that people often forget is to involve all of the pieces in this case look at this rook on a where does that rook belong okay we don't actually need the rook here we have enough pieces to finish them off where is the mate i want people to find the mating sequence it's made of two"
+  },
+  {
+   "ply": 36,
+   "t": 1108.5,
+   "line": [
+    "Bxg3+"
+   ],
+   "fen": "rn4k1/pp6/2p1b1pp/3p4/3Pp3/2N1P1b1/PPP4q/R1BQK3 w - - 0 19",
+   "said": "and in fact there's many ways the rook is sad because it doesn't participate but we don't need it to participate we take it's not mate he goes king f1 where is"
+  },
+  {
+   "ply": 37,
+   "t": 1111,
+   "line": [
+    "Kf1"
+   ],
+   "fen": "rn4k1/pp6/2p1b1pp/3p4/3Pp3/2N1P1b1/PPP4q/R1BQ1K2 b - - 1 19",
+   "said": "the mate i want people to give me two possibilities for checkmate what are two checkmating moves queen f2 is one and what's the other"
+  },
+  {
+   "ply": 38,
+   "t": 1125.5,
+   "line": [
+    "Bh3#"
+   ],
+   "fen": "rn4k1/pp6/2p3pp/3p4/3Pp3/2N1P1bb/PPP4q/R1BQ1K2 w - - 2 20",
+   "said": "i'm going to make the other move because it's very elegant come on guys what's the other one bishop h3 is beautiful mate game over okay so let's deconstruct what happened in this game this is our introduction to playing with the close center the center didn't say close for long now the funny thing is it would actually have been hard to keep the center open because had we played knight c6 in order to defend the pawn what would be the problem with the move knight c6 what would be the problem with this move what would be the problem with this one this is kind of like a reversed french with an extra tempo for y yeah d takes c and if we take there are more attackers on d5 than there are defenders and so knight takes d5 drops the central pawn there's no need for for us to allow this and uh and so for that reason um and so for that reason we have to decide what to do we can take on e4 but we decided to go e4 okay so for the high rateds among you and i know you guys are very patiently watching and i know not everything is interesting a relatively high level"
+  }
+ ],
+ "forks": []
+}

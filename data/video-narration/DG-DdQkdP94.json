@@ -1,0 +1,487 @@
+{
+ "videoId": "DG-DdQkdP94",
+ "title": "Famous Game Analysis + Live Chess | Moistcr1tikal / Penguinz0",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 61,
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "that that didn't mean he didn't have brilliancies and this game was one of them so it starts out actually with d4 and um rubenstein played d5 and here white gave up the game i mean again this this move was so brilliant it was over it was over after that i don't think i need to show you the rest of the game do i"
+  },
+  {
+   "ply": 3,
+   "t": 76,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 1 2",
+   "said": "um no i mean that seems like a pretty big mic drop yeah it is it is so we have a queen's pawn opening rally plays knight f3 rubenstein plays"
+  },
+  {
+   "ply": 4,
+   "t": 79,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 3",
+   "said": "e6 just uh reinforcing the pawn on d5 oops i cannot draw that"
+  },
+  {
+   "ply": 5,
+   "t": 85.5,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3P4/4PN2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "arrow rod levy plays e3 he does the same thing now what are the drawbacks of both of these moves like what is the downside of developing like this oh yeah blocks your bishop bingo yeah blocks the bishop which you know"
+  },
+  {
+   "ply": 6,
+   "t": 103,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3P4/4PN2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "that doesn't mean both of them are stupid it's just a way of developing that's a little bit more conservative so c5 rubinstein contesting the center"
+  },
+  {
+   "ply": 7,
+   "t": 106.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/2PP4/4PN2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "these this is rubenstein of course i recognize these moves daniel of course i mean your long-lost freaking"
+  },
+  {
+   "ply": 8,
+   "t": 115.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2pp4/2PP4/4PN2/PP3PPP/RNBQKB1R w KQkq - 1 5",
+   "said": "friend rubenstein um so c4 knight c6 knight c3 knight f6"
+  },
+  {
+   "ply": 9,
+   "t": 117,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2pp4/2PP4/2N1PN2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "now you have this little"
+  },
+  {
+   "ply": 10,
+   "t": 118,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2PP4/2N1PN2/PP3PPP/R1BQKB1R w KQkq - 3 6",
+   "said": "box in the center box of pawns which looks very complicated but really it's not because everything is defended by everything you see that"
+  },
+  {
+   "ply": 11,
+   "t": 133,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2Pp4/2P5/2N1PN2/PP3PPP/R1BQKB1R b KQkq - 0 6",
+   "said": "this pawn defends this pawn this bishop defends this one so neither side wants to flinch but ratliffy does he takes on c5 he says i'm going to get rid of this tension"
+  },
+  {
+   "ply": 12,
+   "t": 136.5,
+   "line": [
+    "Bxc5"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n1pn2/2bp4/2P5/2N1PN2/PP3PPP/R1BQKB1R w KQkq - 0 7",
+   "said": "okay rubenstein plays bishop takes c5 and here rod levy plays the move"
+  },
+  {
+   "ply": 13,
+   "t": 139,
+   "line": [
+    "a3"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n1pn2/2bp4/2P5/P1N1PN2/1P3PPP/R1BQKB1R b KQkq - 0 7",
+   "said": "a3 what do you think he's prepared he's preparing a certain move what is he preparing"
+  },
+  {
+   "ply": 14,
+   "t": 148.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bqk2r/1p3ppp/p1n1pn2/2bp4/2P5/P1N1PN2/1P3PPP/R1BQKB1R w KQkq - 0 8",
+   "said": "b4 exactly so rubenstein plays a6 and you'll see the point of this move in"
+  },
+  {
+   "ply": 15,
+   "t": 152,
+   "line": [
+    "b4"
+   ],
+   "fen": "r1bqk2r/1p3ppp/p1n1pn2/2bp4/1PP5/P1N1PN2/5PPP/R1BQKB1R b KQkq - 0 8",
+   "said": "a second after b4 bishop d6"
+  },
+  {
+   "ply": 16,
+   "t": 153.5,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "r1bqk2r/1p3ppp/p1nbpn2/3p4/1PP5/P1N1PN2/5PPP/R1BQKB1R w KQkq - 1 9",
+   "said": "you see that he's discouraging white from attacking the knight by playing b5 because black is going to take on b5 and open up the a file okay do you remember your game against one uh you rob do you kind of vaguely remember a trap that we had talked about beforehand and you actually won his queen with that trap now you got to move over to wrong but you got the trap correct rubenstein in his annotations the great rubenstein writing in latin and i and i quote"
+  },
+  {
+   "ply": 17,
+   "t": 196,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r1bqk2r/1p3ppp/p1nbpn2/3P4/1P6/P1N1PN2/5PPP/R1BQKB1R b KQkq - 0 9",
+   "said": "writes and here i took us the examples from one charlieus against the irabus"
+  },
+  {
+   "ply": 19,
+   "t": 198,
+   "line": [
+    "exd5",
+    "Nxd5"
+   ],
+   "fen": "r1bqk2r/1p3ppp/p1nb1n2/3N4/1P6/P3PN2/5PPP/R1BQKB1R b KQkq - 0 10",
+   "said": "that's great so after c takes d5e takes d5 knight takes d5 why is white not just getting a free pawn uh because we deliver um don't you dare get the move order wrong oh you just gotta give me a minute sure take your time"
+  },
+  {
+   "ply": 20,
+   "t": 230,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r1bqk2r/1p3ppp/p1nb4/3n4/1P6/P3PN2/5PPP/R1BQKB1R w KQkq - 0 11",
+   "said": "so undefended pieces drop off you know the theme i think you're just trying to get the order right is that right yeah i can't i don't remember it what okay so so here's the thing first you take his knight and then this queen on d5 is a sitting duck how can you exploit it you deliver the check on b4 from here"
+  },
+  {
+   "ply": 19,
+   "t": 241,
+   "line": [],
+   "fen": "r1bqk2r/1p3ppp/p1nb1n2/3N4/1P6/P3PN2/5PPP/R1BQKB1R b KQkq - 0 10",
+   "said": "bingo and then you take the queen now against europe i think you did this"
+  },
+  {
+   "ply": 20,
+   "t": 242.5,
+   "line": [
+    "Bxb4+"
+   ],
+   "fen": "r1bqk2r/1p3ppp/p1n2n2/3N4/1b6/P3PN2/5PPP/R1BQKB1R w KQkq - 0 11",
+   "said": "first it was something along that along those lines now what is the problem with taking the pawn first just to the topic of like the order of things"
+  },
+  {
+   "ply": 21,
+   "t": 253,
+   "line": [
+    "Nxb4"
+   ],
+   "fen": "r1bqk2r/1p3ppp/p1n2n2/8/1N6/P3PN2/5PPP/R1BQKB1R b KQkq - 0 11",
+   "said": "okay yeah yeah because i mean you can just immediately take the bishop back right exactly either with his knight or with"
+  },
+  {
+   "ply": 20,
+   "t": 255,
+   "line": [],
+   "fen": "r1bqk2r/1p3ppp/p1n2n2/3N4/1b6/P3PN2/5PPP/R1BQKB1R w KQkq - 0 11",
+   "said": "his pawn and all you do is win the pawn back so for that reason rob levy goes bishop b2 fianchettoing his bishop robinstein castles thanks for the sub mr"
+  },
+  {
+   "ply": 16,
+   "t": 276,
+   "line": [],
+   "fen": "r1bqk2r/1p3ppp/p1nbpn2/3p4/1PP5/P1N1PN2/5PPP/R1BQKB1R w KQkq - 1 9",
+   "said": "bayless and queen d2 by ron levy so i'm going fast through the opening because i want to get to sort of the fun part um oh sorry my badge so actually raleigh didn't even take this pawn at all he he just left it on d5 he goes bishop"
+  },
+  {
+   "ply": 19,
+   "t": 284,
+   "line": [
+    "Bb2",
+    "O-O",
+    "Qd2"
+   ],
+   "fen": "r1bq1rk1/1p3ppp/p1nbpn2/3p4/1PP5/P1N1PN2/1B1Q1PPP/R3KB1R b KQ - 4 10",
+   "said": "uh b2 castles queen d2 i mean they're just bringing their pieces out is this sort of making sense thus far"
+  },
+  {
+   "ply": 20,
+   "t": 289.5,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/3p4/1PP5/P1N1PN2/1B1Q1PPP/R3KB1R w KQ - 5 11",
+   "said": "yeah pretty standard stuff queen e7 by rubenstein connecting his rooks"
+  },
+  {
+   "ply": 21,
+   "t": 293,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/3p4/1PP5/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 6 11",
+   "said": "potentially in bishop d3 by rolody now take a look at this bishop on c8 can you develop it much like white's developed his except can you do all of that by force so he doesn't play b6 here he finds a way to develop the bishop to b7 by and winning time at the same time"
+  },
+  {
+   "ply": 22,
+   "t": 319,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1p1p4/1PP5/P1NBPN2/1B1Q1PPP/R3K2R w KQ - 0 12",
+   "said": "and to like do it all with tempo if that makes sense did you start by pushing that pawn to b5 instead well first you want to do something before you do that right because here"
+  },
+  {
+   "ply": 23,
+   "t": 321,
+   "line": [
+    "cxb5"
+   ],
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1P1p4/1P6/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 0 12",
+   "said": "white's going to take the free pawn"
+  },
+  {
+   "ply": 21,
+   "t": 323.5,
+   "line": [],
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/3p4/1PP5/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 6 11",
+   "said": "so b5 plays into his line but you need to do what first and you can flip the board by the way we're going to look at this from black's perspective for the most part so so you should flip the board okay so b5 is the second move of the line what do we have to do first to make sure white can't take the pawn we need to bring the bishop to d7 instead well we're trying to develop the bishop to b7 oh i see okay so you're right in thinking that b5 is the right idea"
+  },
+  {
+   "ply": 22,
+   "t": 366,
+   "line": [
+    "dxc4"
+   ],
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/8/1Pp5/P1NBPN2/1B1Q1PPP/R3K2R w KQ - 0 12",
+   "said": "but again it's your resistance to trading i feel like that's a thing don't be so against taking pawns and pieces in order to get stuff done so you just take on c4 then to start exactly because you go"
+  },
+  {
+   "ply": 23,
+   "t": 368.5,
+   "line": [
+    "Bxc4"
+   ],
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/8/1PB5/P1N1PN2/1B1Q1PPP/R3K2R b KQ - 0 12",
+   "said": "you lure the bishop here now you play b5"
+  },
+  {
+   "ply": 24,
+   "t": 369.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1p6/1PB5/P1N1PN2/1B1Q1PPP/R3K2R w KQ - 0 13",
+   "said": "and you attack the bishop"
+  },
+  {
+   "ply": 25,
+   "t": 374.5,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1p6/1P6/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 1 13",
+   "said": "so white has to waste another move moving the bishop back you see what i'm saying"
+  },
+  {
+   "ply": 26,
+   "t": 377.5,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "r4rk1/1b2qppp/p1nbpn2/1p6/1P6/P1NBPN2/1B1Q1PPP/R3K2R w KQ - 2 14",
+   "said": "bishop b7 now we have basically a symmetrical position except there's one"
+  },
+  {
+   "ply": 25,
+   "t": 383,
+   "line": [],
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1p6/1P6/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 1 13",
+   "said": "small drawback or sorry i bet he doesn't play bishop b7 yet you see this queen on d2 can we make it uncomfortable"
+  },
+  {
+   "ply": 26,
+   "t": 403,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "r1br2k1/4qppp/p1nbpn2/1p6/1P6/P1NBPN2/1B1Q1PPP/R3K2R w KQ - 2 14",
+   "said": "can we make this queen uncomfortable we can pin the bishop to it absolutely x-ray uh we can bring yeah we can bring our rook over to d8 as he did now this is also just a good move because the rook is occupying an open file and you'll see that this was actually a serious mistake from white putting the queen on d2 so white wastes another move with queen e2 and after bishop b7 castles rubinstein makes another move that perhaps intuitively you wouldn't like to make because it offers a trade i see this bishop on b7 you see how both of these bishops are x-raying white's king now the problem is that this bishop is being blocked in by black's knight and the other problem is that white has this knight on f3 which defends the area surrounding white's king can you eliminate both problems with one move well before i do that i wanted to ask a question oh never mind i was going to say why wouldn't we greek gift sacrifice it's guarded by the knight exactly well let's set up that rig of sacrifice by taking the knight out of the picture yeah so we need to move the knight first here so i'm guessing he probably moved the knight over to e5 setting up a trade with knight bingo that's exactly right"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 16,
+   "fen": "r1bqk2r/1p3ppp/p1nbpn2/3p4/1PP5/P1N1PN2/5PPP/R1BQKB1R w KQkq - 1 9",
+   "line": [
+    "d4",
+    "d5",
+    "Nf3",
+    "e6",
+    "e3",
+    "c5",
+    "c4",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "dxc5",
+    "Bxc5",
+    "a3",
+    "a6",
+    "b4",
+    "Bd6"
+   ],
+   "options": [
+    {
+     "san": "cxd5",
+     "t": 196,
+     "continuation": "cxd5",
+     "said": "writes and here i took us the examples from one charlieus against the irabus that's great so after c takes d5e takes d5 knight takes d5 why is white not just getting a free pawn uh because we deliver um don't you dare get the move order wrong oh you just gotta give me a minute sure take your time so undefended pieces drop off you know the theme i think you're just trying to get the order right is that right yeah i can't i don't remember it what okay so so here's the thing first you take his knight and then this queen on d5 is a sitting duck how can you exploit it you deliver the check on b4 from here bingo and then you take the queen now against europe i think you did this first it was something along that along those lines now what is the problem with taking the pawn first just to the topic of like the order of things okay yeah yeah because i mean you can just immediately take the bishop back right exactly either with his knight or with"
+    },
+    {
+     "san": "Bb2",
+     "t": 284,
+     "continuation": "Bb2 O-O Qd2",
+     "said": "um oh sorry my badge so actually raleigh didn't even take this pawn at all he he just left it on d5 he goes bishop uh b2 castles queen d2 i mean they're just bringing their pieces out is this sort of making sense thus far yeah pretty standard stuff queen e7 by rubenstein connecting his rooks potentially in bishop d3 by rolody now take a look at this bishop on c8 can you develop it much like white's developed his except can you do all of that by force so he doesn't play b6 here he finds a way to develop the bishop to b7 by and winning time at the same time and to like do it all with tempo if that makes sense did you start by pushing that pawn to b5 instead well first you want to do something before you do that right because here white's going to take the free pawn so b5 plays into his line but you need to do what first and you can flip the board by the way we're going to look at this from black's perspective for the most part so so you should flip the board okay so b5 is the second move of the line what do we have to do first to make sure white can't take the pawn we need to bring the bishop to d7"
+    }
+   ]
+  },
+  {
+   "ply": 19,
+   "fen": "r1bqk2r/1p3ppp/p1nb1n2/3N4/1P6/P3PN2/5PPP/R1BQKB1R b KQkq - 0 10",
+   "line": [
+    "d4",
+    "d5",
+    "Nf3",
+    "e6",
+    "e3",
+    "c5",
+    "c4",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "dxc5",
+    "Bxc5",
+    "a3",
+    "a6",
+    "b4",
+    "Bd6",
+    "cxd5",
+    "exd5",
+    "Nxd5"
+   ],
+   "options": [
+    {
+     "san": "Nxd5",
+     "t": 230,
+     "continuation": "Nxd5",
+     "said": "so undefended pieces drop off you know the theme i think you're just trying to get the order right is that right yeah i can't i don't remember it what okay so so here's the thing first you take his knight and then this queen on d5 is a sitting duck how can you exploit it you deliver the check on b4 from here bingo and then you take the queen now against europe i think you did this first it was something along that along those lines now what is the problem with taking the pawn first just to the topic of like the order of things okay yeah yeah because i mean you can just immediately take the bishop back right exactly either with his knight or with his pawn and all you do is win the pawn back so for that reason rob levy goes bishop b2 fianchettoing his bishop robinstein castles thanks for the sub mr bayless and queen d2 by ron levy so i'm going fast through the opening because i want to get to sort of the fun part um oh sorry my badge so actually raleigh didn't even take this pawn at all he he just left it on d5 he goes bishop uh b2 castles queen d2 i mean they're just bringing their pieces out is this sort of making sense thus far yeah pretty standard stuff queen e7 by"
+    },
+    {
+     "san": "Bxb4+",
+     "t": 242.5,
+     "continuation": "Bxb4+",
+     "said": "and then this queen on d5 is a sitting duck how can you exploit it you deliver the check on b4 from here bingo and then you take the queen now against europe i think you did this first it was something along that along those lines now what is the problem with taking the pawn first just to the topic of like the order of things okay yeah yeah because i mean you can just immediately take the bishop back right exactly either with his knight or with his pawn and all you do is win the pawn back so for that reason rob levy goes bishop b2 fianchettoing his bishop robinstein castles thanks for the sub mr bayless and queen d2 by ron levy so i'm going fast through the opening because i want to get to sort of the fun part um oh sorry my badge so actually raleigh didn't even take this pawn at all he he just left it on d5 he goes bishop uh b2 castles queen d2 i mean they're just bringing their pieces out is this sort of making sense thus far yeah pretty standard stuff queen e7 by rubenstein connecting his rooks potentially in bishop d3 by rolody now take a look at this bishop on c8 can you develop it much like white's developed his except can you do all of that by force so he doesn't play b6 here"
+    }
+   ]
+  },
+  {
+   "ply": 21,
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/3p4/1PP5/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 6 11",
+   "line": [
+    "d4",
+    "d5",
+    "Nf3",
+    "e6",
+    "e3",
+    "c5",
+    "c4",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "dxc5",
+    "Bxc5",
+    "a3",
+    "a6",
+    "b4",
+    "Bd6",
+    "Bb2",
+    "O-O",
+    "Qd2",
+    "Qe7",
+    "Bd3"
+   ],
+   "options": [
+    {
+     "san": "b5",
+     "t": 319,
+     "continuation": "b5",
+     "said": "and to like do it all with tempo if that makes sense did you start by pushing that pawn to b5 instead well first you want to do something before you do that right because here white's going to take the free pawn so b5 plays into his line but you need to do what first and you can flip the board by the way we're going to look at this from black's perspective for the most part so so you should flip the board okay so b5 is the second move of the line what do we have to do first to make sure white can't take the pawn we need to bring the bishop to d7 instead well we're trying to develop the bishop to b7 oh i see okay so you're right in thinking that b5 is the right idea but again it's your resistance to trading i feel like that's a thing don't be so against taking pawns and pieces in order to get stuff done so you just take on c4 then to start exactly because you go you lure the bishop here now you play b5 and you attack the bishop so white has to waste another move moving the bishop back you see what i'm saying bishop b7 now we have basically a symmetrical position except there's one"
+    },
+    {
+     "san": "dxc4",
+     "t": 366,
+     "continuation": "dxc4",
+     "said": "but again it's your resistance to trading i feel like that's a thing don't be so against taking pawns and pieces in order to get stuff done so you just take on c4 then to start exactly because you go you lure the bishop here now you play b5 and you attack the bishop so white has to waste another move moving the bishop back you see what i'm saying bishop b7 now we have basically a symmetrical position except there's one small drawback or sorry i bet he doesn't play bishop b7 yet you see this queen on d2 can we make it uncomfortable can we make this queen uncomfortable we can pin the bishop to it absolutely x-ray uh we can bring yeah we can bring our rook over to d8 as he did now this is also just a good move because the rook is occupying an open file and you'll see that this was actually a serious mistake from white putting the queen on d2 so white wastes another move with queen e2 and after bishop b7 castles rubinstein makes another move that perhaps intuitively you wouldn't like to make because it offers a trade i see this bishop on b7 you see how both of these bishops"
+    }
+   ]
+  },
+  {
+   "ply": 25,
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1p6/1P6/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 1 13",
+   "line": [
+    "d4",
+    "d5",
+    "Nf3",
+    "e6",
+    "e3",
+    "c5",
+    "c4",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "dxc5",
+    "Bxc5",
+    "a3",
+    "a6",
+    "b4",
+    "Bd6",
+    "Bb2",
+    "O-O",
+    "Qd2",
+    "Qe7",
+    "Bd3",
+    "dxc4",
+    "Bxc4",
+    "b5",
+    "Bd3"
+   ],
+   "options": [
+    {
+     "san": "Bb7",
+     "t": 377.5,
+     "continuation": "Bb7",
+     "said": "exactly because you go you lure the bishop here now you play b5 and you attack the bishop so white has to waste another move moving the bishop back you see what i'm saying bishop b7 now we have basically a symmetrical position except there's one small drawback or sorry i bet he doesn't play bishop b7 yet you see this queen on d2 can we make it uncomfortable can we make this queen uncomfortable we can pin the bishop to it absolutely x-ray uh we can bring yeah we can bring our rook over to d8 as he did now this is also just a good move because the rook is occupying an open file and you'll see that this was actually a serious mistake from white putting the queen on d2 so white wastes another move with queen e2 and after bishop b7 castles rubinstein makes another move that perhaps intuitively you wouldn't like to make because it offers a trade i see this bishop on b7 you see how both of these bishops are x-raying white's king now the problem is that this bishop is being blocked in by black's knight and the other problem is that white has this knight on f3 which defends the area surrounding white's king"
+    },
+    {
+     "san": "Rd8",
+     "t": 403,
+     "continuation": "Rd8",
+     "said": "can we make this queen uncomfortable we can pin the bishop to it absolutely x-ray uh we can bring yeah we can bring our rook over to d8 as he did now this is also just a good move because the rook is occupying an open file and you'll see that this was actually a serious mistake from white putting the queen on d2 so white wastes another move with queen e2 and after bishop b7 castles rubinstein makes another move that perhaps intuitively you wouldn't like to make because it offers a trade i see this bishop on b7 you see how both of these bishops are x-raying white's king now the problem is that this bishop is being blocked in by black's knight and the other problem is that white has this knight on f3 which defends the area surrounding white's king can you eliminate both problems with one move well before i do that i wanted to ask a question oh never mind i was going to say why wouldn't we greek gift sacrifice it's guarded by the knight exactly well let's set up that rig of sacrifice by taking the knight out of the picture yeah so we need to move the knight first here so i'm guessing he probably moved the knight over to e5 setting up a trade with knight bingo that's exactly right"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,443 @@
+{
+ "videoId": "hzotV0aslmY",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 750",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 15.5,
+   "line": [
+    "e4",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] okay so we got an 800 and we're gonna play e4 as always please save your questions until after the game ends and we have a"
+  },
+  {
+   "ply": 3,
+   "t": 18.5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "scandi okay we have a scandy which we have not had yet now the scandi is not a bad opening per"
+  },
+  {
+   "ply": 5,
+   "t": 29.5,
+   "line": [
+    "Qxd5",
+    "Nc3"
+   ],
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "se but at this level we've talked about the fact that it's very difficult to play of course knight c3 is the move developing"
+  },
+  {
+   "ply": 6,
+   "t": 34.5,
+   "line": [
+    "Qd8"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4",
+   "said": "with tempo and now black has several um several retreats he goes queen back to d8 how do we continue to play what do we do"
+  },
+  {
+   "ply": 7,
+   "t": 43.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "what do we do we can develop our knight but let's occupy the center first by playing d4 so that he doesn't play e5 or"
+  },
+  {
+   "ply": 8,
+   "t": 46.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/ppp1pppp/2n5/8/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "c5 and goes knight c6 okay well he's attacking our pawn we"
+  },
+  {
+   "ply": 9,
+   "t": 54,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/ppp1pppp/2n5/8/3P4/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "could play d5 but we're trying to adhere to basic principles here so let's play knight f3"
+  },
+  {
+   "ply": 10,
+   "t": 59,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/8/3P4/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 3 6",
+   "said": "and defend the pawn while developing our knights now this is a situation where it's time to violate some principles that we have laid out we could absolutely continue developing but look at this knight on c6 he's moved to squeen around and about so many times that we actually can afford to bend some of the rules and really harass him a little bit because he hasn't developed any of his central pawns and there is a very clear drawback of that what can we do"
+  },
+  {
+   "ply": 11,
+   "t": 98.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/3P4/8/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "said": "what can we do in this position ladies and gentlemen how do we punish the fact that he hasn't moved a single pawn in the center yeah d5 now can black take on d5 note we have two defenders and two attackers"
+  },
+  {
+   "ply": 12,
+   "t": 105,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/2n5/3n4/8/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "said": "which means he cannot take on d well he does"
+  },
+  {
+   "ply": 13,
+   "t": 107,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/2n5/3N4/8/5N2/PPP2PPP/R1BQKB1R b KQkq - 0 7",
+   "said": "and see a lot of people just don't count the defenders and attackers of their same number of attackers and defenders"
+  },
+  {
+   "ply": 11,
+   "t": 114.5,
+   "line": [],
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/3P4/8/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "said": "and you cannot take the pawn because if you think about it the knight is an attacker but as soon as"
+  },
+  {
+   "ply": 14,
+   "t": 115.5,
+   "line": [
+    "Nxd5",
+    "Nxd5",
+    "Bg4"
+   ],
+   "fen": "r2qkb1r/ppp1pppp/2n5/3N4/6b1/5N2/PPP2PPP/R1BQKB1R w KQkq - 1 8",
+   "said": "it takes the pawn it's no longer an attacker okay we're off a piece it's a perfect"
+  },
+  {
+   "ply": 15,
+   "t": 124.5,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r2qkb1r/ppp1pppp/2n5/3N4/6b1/5N2/PPP1BPPP/R1BQK2R b KQkq - 2 8",
+   "said": "time to practice converting an advantage after the game i'll explain what happens after night before so let's develop our bishop and unpin"
+  },
+  {
+   "ply": 16,
+   "t": 136.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "r2qkb1r/ppp2ppp/2n5/3Np3/6b1/5N2/PPP1BPPP/R1BQK2R w KQkq - 0 9",
+   "said": "ourselves as i talk about many times there's two ways a broadly speaking of converting a material advantage you can trade pieces or you can use that extra piece or whatever you have to attack but first"
+  },
+  {
+   "ply": 17,
+   "t": 146,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2qkb1r/ppp2ppp/2n5/3Np3/6b1/5N2/PPP1BPPP/R1BQ1RK1 b kq - 1 9",
+   "said": "and foremost before we even decide on a plan we need to complete our development okay a lot of people get in trouble because they forget that even though you might be up a piece"
+  },
+  {
+   "ply": 18,
+   "t": 158.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r2qk2r/ppp2ppp/2n5/2bNp3/6b1/5N2/PPP1BPPP/R1BQ1RK1 w kq - 2 10",
+   "said": "fantastic job but you still need to complete your development you need to stick to fundamentals even though you might be up a piece now goes bishop c5 how do we play here where do you guys think that we should position this bishop"
+  },
+  {
+   "ply": 19,
+   "t": 175,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r2qk2r/ppp2ppp/2n5/2bNp3/6b1/4BN2/PPP1BPPP/R2Q1RK1 b kq - 3 10",
+   "said": "and simultaneously perhaps follow up on one of these two methodologies carl marksmanship i completely agree bishop e3 is a great move let's disarm his bishop and we're not against the trade because we're up a piece if he takes and again guys please save"
+  },
+  {
+   "ply": 20,
+   "t": 191,
+   "line": [
+    "Bxe3"
+   ],
+   "fen": "r2qk2r/ppp2ppp/2n5/3Np3/6b1/4bN2/PPP1BPPP/R2Q1RK1 w kq - 0 11",
+   "said": "your questions until after the game i promise to get to all of them what if he takes on e3 with his bishop do you guys see on the basis of our discussion of the two methodologies of converting a material advantage what should we take with riemann thinks"
+  },
+  {
+   "ply": 21,
+   "t": 203.5,
+   "line": [
+    "Nxe3"
+   ],
+   "fen": "r2qk2r/ppp2ppp/2n5/4p3/6b1/4NN2/PPP1BPPP/R2Q1RK1 b kq - 0 11",
+   "said": "we should take with the knight so what's the case for taking with the knight exactly yeah everybody's on the same page we force the queen trade essentially"
+  },
+  {
+   "ply": 22,
+   "t": 208,
+   "line": [
+    "e4"
+   ],
+   "fen": "r2qk2r/ppp2ppp/2n5/8/4p1b1/4NN2/PPP1BPPP/R2Q1RK1 w kq - 0 12",
+   "said": "because we're simultaneously attacking the okay so he's just like he's counter-attacking our knight so in what order should we do things here what should we do like in what order should we do and what is it that we should even do"
+  },
+  {
+   "ply": 23,
+   "t": 227.5,
+   "line": [
+    "Qxd8+"
+   ],
+   "fen": "r2Qk2r/ppp2ppp/2n5/8/4p1b1/4NN2/PPP1BPPP/R4RK1 b kq - 0 12",
+   "said": "and clutch too i guess your question will be answered so what do we do let's let's treat queens first let's get rid of this trade first let's trade queens although we don't have to do that we could have"
+  },
+  {
+   "ply": 25,
+   "t": 234,
+   "line": [
+    "Rxd8",
+    "Nxg4"
+   ],
+   "fen": "3rk2r/ppp2ppp/2n5/8/4p1N1/5N2/PPP1BPPP/R4RK1 b k - 0 13",
+   "said": "taken on g4 first but i'm trying to be as methodical as possible then we take knight takes g4 he has to take our"
+  },
+  {
+   "ply": 27,
+   "t": 238.5,
+   "line": [
+    "exf3",
+    "Bxf3"
+   ],
+   "fen": "3rk2r/ppp2ppp/2n5/8/6N1/5B2/PPP2PPP/R4RK1 b k - 0 14",
+   "said": "knight boom we've traded queens we've won upon"
+  },
+  {
+   "ply": 28,
+   "t": 243,
+   "line": [
+    "O-O"
+   ],
+   "fen": "3r1rk1/ppp2ppp/2n5/8/6N1/5B2/PPP2PPP/R4RK1 w - - 1 15",
+   "said": "we're up a full piece and it's clear that we have now chosen the second method which is to trade as many pieces as possible without ruining any part of our advantage or our position so in the spirit of that that method what"
+  },
+  {
+   "ply": 29,
+   "t": 265,
+   "line": [
+    "Bxc6"
+   ],
+   "fen": "3r1rk1/ppp2ppp/2B5/8/6N1/8/PPP2PPP/R4RK1 b - - 0 15",
+   "said": "do we do how does white continue here we can play this move very safely rook t1 is good but why don't we first take the knight we have a chance for another trade does it ruin our position or make a"
+  },
+  {
+   "ply": 30,
+   "t": 269.5,
+   "line": [
+    "bxc6"
+   ],
+   "fen": "3r1rk1/p1p2ppp/2p5/8/6N1/8/PPP2PPP/R4RK1 w - - 0 16",
+   "said": "concession nope to the contrary it ruins his pawn structure now let's go"
+  },
+  {
+   "ply": 31,
+   "t": 273,
+   "line": [
+    "Rad1"
+   ],
+   "fen": "3r1rk1/p1p2ppp/2p5/8/6N1/8/PPP2PPP/3R1RK1 b - - 1 16",
+   "said": "rookie to d1 trying to initiate a rogue trade now in"
+  },
+  {
+   "ply": 32,
+   "t": 278.5,
+   "line": [
+    "Rxd1"
+   ],
+   "fen": "5rk1/p1p2ppp/2p5/8/6N1/8/PPP2PPP/3r1RK1 w - - 0 17",
+   "said": "such positions and we've talked about this before and he's doing our bidding"
+  },
+  {
+   "ply": 33,
+   "t": 280.5,
+   "line": [
+    "Rxd1"
+   ],
+   "fen": "5rk1/p1p2ppp/2p5/8/6N1/8/PPP2PPP/3R2K1 b - - 0 17",
+   "said": "for us it's a very good idea to invest a single"
+  },
+  {
+   "ply": 34,
+   "t": 283.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "5rk1/p1p2pp1/2p5/7p/6N1/8/PPP2PPP/3R2K1 w - - 0 18",
+   "said": "tempo and make what kind of move let's move"
+  },
+  {
+   "ply": 35,
+   "t": 286.5,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "5rk1/p1p2pp1/2p5/4N2p/8/8/PPP2PPP/3R2K1 b - - 1 18",
+   "said": "the night away and attack his pawn what kind of move is a really good idea in such positions"
+  },
+  {
+   "ply": 36,
+   "t": 291,
+   "line": [
+    "g5"
+   ],
+   "fen": "5rk1/p1p2p2/2p5/4N1pp/8/8/PPP2PPP/3R2K1 w - - 0 19",
+   "said": "to take care of our future self flight square makes space for the king we can do that in many different ways we don't have to always play only h3"
+  },
+  {
+   "ply": 37,
+   "t": 304.5,
+   "line": [
+    "Nxc6"
+   ],
+   "fen": "5rk1/p1p2p2/2N5/6pp/8/8/PPP2PPP/3R2K1 b - - 0 19",
+   "said": "we can already play f3 we can move the king out okay we don't have to do all that but first let's take the free pawn and i'm not saying we need to do that immediately"
+  },
+  {
+   "ply": 38,
+   "t": 308.5,
+   "line": [
+    "Re8"
+   ],
+   "fen": "4r1k1/p1p2p2/2N5/6pp/8/8/PPP2PPP/3R2K1 w - - 1 20",
+   "said": "okay so this is a great example of choosing how to make loft what does our opponent want and how do we prevent it and actually i'll give you guys a hint"
+  },
+  {
+   "ply": 39,
+   "t": 325.5,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "3Rr1k1/p1p2p2/2N5/6pp/8/8/PPP2PPP/6K1 b - - 2 20",
+   "said": "we don't even need to make luft we don't even need to make loft we can kill all of the birds with one stone by going to e this is a move you need to play very carefully right if it weren't for the pin he would"
+  },
+  {
+   "ply": 38,
+   "t": 331.5,
+   "line": [],
+   "fen": "4r1k1/p1p2p2/2N5/6pp/8/8/PPP2PPP/3R2K1 w - - 1 20",
+   "said": "checkmate us if we didn't have this move i would actually play king f1 in order to simultaneously guard against"
+  },
+  {
+   "ply": 39,
+   "t": 338,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "3Rr1k1/p1p2p2/2N5/6pp/8/8/PPP2PPP/6K1 b - - 2 20",
+   "said": "the threat of rookie two again every single move guys you're trying to accomplish as much as possible"
+  },
+  {
+   "ply": 43,
+   "t": 343.5,
+   "line": [
+    "Kg7",
+    "Nxa7",
+    "Kf8",
+    "Rxe8+"
+   ],
+   "fen": "4Rk2/N1p2p2/8/6pp/8/8/PPP2PPP/6K1 b - - 0 22",
+   "said": "so it's and now i'm just gonna take the pawn and we're gonna win but it"
+  },
+  {
+   "ply": 44,
+   "t": 345.5,
+   "line": [
+    "Kxe8"
+   ],
+   "fen": "4k3/N1p2p2/8/6pp/8/8/PPP2PPP/6K1 w - - 0 23",
+   "said": "essentially when you have an idea do not play the first move that accomplishes that idea try to find the best way of accomplishing that so what do we do how do we win a"
+  },
+  {
+   "ply": 46,
+   "t": 364,
+   "line": [
+    "Kf1",
+    "f5"
+   ],
+   "fen": "4k3/N1p5/8/5ppp/8/8/PPP2PPP/5K2 w - - 0 24",
+   "said": "position like this some people struggle with this what's going to be the plan the first thing in such positions my recommendation bring the king up first bring the king out then either promote upon or distract his king and promote a pun"
+  },
+  {
+   "ply": 2,
+   "t": 376.5,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "i'm going to talk a little bit about how to win such positions okay so this candy right now the main"
+  },
+  {
+   "ply": 4,
+   "t": 377.5,
+   "line": [
+    "exd5",
+    "Qxd5"
+   ],
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "line in the scandi is queen a5 that's"
+  },
+  {
+   "ply": 5,
+   "t": 378.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
+   "said": ""
+  },
+  {
+   "ply": 6,
+   "t": 380,
+   "line": [
+    "Qa5"
+   ],
+   "fen": "rnb1kbnr/ppp1pppp/8/q7/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4",
+   "said": "the traditional mainland queen d8 is a move an entire book has been written about this now he goes knight c6 which is already the first mistake and the first critical moment occurs here obviously everybody's wondering what the hell do we do if knight before happens um what do we do uh yeah i'll talk about that kasparov i actually missed that move but i think we have stuff we can do there's a couple of things that we can do here right um i like to move bishop to c4 to defend the pawn and then we can excommunicate that knight by playing a3 you guys might be but wait a minute he goes bishop f5 this is so annoying he's attacking the pawn at this point and this is a slightly higher level piece of advice we're already at 800. you have to distinguish between activity and pseudo activity pseudo activity is sort of a position which looks really really unpleasant but in reality it's all an illusion you can easily defend whatever your opponent is attacking and then push all of his pieces away in one fell swoop he is attacking c2 let's defend c2 by"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "e4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "Qd8",
+     "t": 34.5,
+     "continuation": "Qd8",
+     "said": "se but at this level we've talked about the fact that it's very difficult to play of course knight c3 is the move developing with tempo and now black has several um several retreats he goes queen back to d8 how do we continue to play what do we do what do we do we can develop our knight but let's occupy the center first by playing d4 so that he doesn't play e5 or c5 and goes knight c6 okay well he's attacking our pawn we could play d5 but we're trying to adhere to basic principles here so let's play knight f3 and defend the pawn while developing our knights now this is a situation where it's time to violate some principles that we have laid out we could absolutely continue developing but look at this knight on c6 he's moved to squeen around and about so many times that we actually can afford to bend some of the rules and really harass him a little bit because he hasn't developed any of his central pawns and there is a very clear drawback of that what can we do what can we do in this position ladies and gentlemen how do we punish the fact that he hasn't moved"
+    },
+    {
+     "san": "Qa5",
+     "t": 380,
+     "continuation": "Qa5",
+     "said": "or distract his king and promote a pun i'm going to talk a little bit about how to win such positions okay so this candy right now the main line in the scandi is queen a5 that's the traditional mainland queen d8 is a move an entire book has been written about this now he goes knight c6 which is already the first mistake and the first critical moment occurs here obviously everybody's wondering what the hell do we do if knight before happens um what do we do uh yeah i'll talk about that kasparov i actually missed that move but i think we have stuff we can do there's a couple of things that we can do here right um i like to move bishop to c4 to defend the pawn and then we can excommunicate that knight by playing a3 you guys might be but wait a minute he goes bishop f5 this is so annoying he's attacking the pawn at this point and this is a slightly higher level piece of advice we're already at 800. you have to distinguish between activity and pseudo activity pseudo activity is sort of a position which looks really really unpleasant but in reality it's all an illusion you can easily defend whatever your opponent is attacking and then push all of his pieces away in one fell swoop he is attacking c2 let's defend c2 by"
+    }
+   ]
+  }
+ ]
+}

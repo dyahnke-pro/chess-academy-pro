@@ -1,0 +1,651 @@
+{
+ "videoId": "3nyxVHwDCTY",
+ "title": "Patience Pays Off!! | Anti-Sicilian, Alapin, King's Indian | GM Naroditsky's DYI Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 2455,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "lower levels well then you just develop naturally and you have the full Center okay guys one last five minute game and then we'll call it a knight let's go let's jump in and get black here in a king's Indian okay let's"
+  },
+  {
+   "ply": 4,
+   "t": 2456.5,
+   "line": [
+    "c4",
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "go"
+  },
+  {
+   "ply": 6,
+   "t": 2458,
+   "line": [
+    "g3",
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/6P1/PP2PP1P/RNBQKBNR w KQkq - 1 4",
+   "said": "so we have a faneto fan ketto Kings"
+  },
+  {
+   "ply": 7,
+   "t": 2459,
+   "line": [
+    "Bg2"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/6P1/PP2PPBP/RNBQK1NR b KQkq - 2 4",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 2461.5,
+   "line": [
+    "d6",
+    "Nf3",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/5NP1/PP2PPBP/RNBQK2R w KQ - 2 6",
+   "said": "Indian D6 okay so we're clearly facing more"
+  },
+  {
+   "ply": 11,
+   "t": 2462.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 3 6",
+   "said": "serious opposition now and if you're a Kings Indian player you can expect to start facing more mainstream lines uh you know at the sort of 17 1800 level the fian ketto is often recommended as one of the reliable ways to grab a small but steady advantage in the Kings Indian I don't really think that's true I think black has actually several ways to several compell ways to fight for equality and it really depends on what you want uh what kind of position you want as black I'm going to Showcase several ways of responding to the fan ketto in the speedrun in this game I'm going to play the variation that I used uh to play over the board up until I sort of became an IM this variation"
+  },
+  {
+   "ply": 12,
+   "t": 2518,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r1bq1rk1/pppnppbp/3p1np1/8/2PP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 4 7",
+   "said": "brought me a lot of success it's got a tremendous amount of practical value and at this level it's going to work like a charm and it's also the sort of traditional way of playing the Kings Indian which of course is to prepare E5 and you do that by playing Knight B to"
+  },
+  {
+   "ply": 13,
+   "t": 2521,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bq1rk1/pppnppbp/3p1np1/3P4/2P5/5NP1/PP2PPBP/RNBQ1RK1 b - - 0 7",
+   "said": "D7 okay so D5 is not a principle continuation and it's a little bit premature white has the cart before the horse horse because you don't need to play E5 anymore basically the drawback of this move is that the king's Indian Bishop is now very happy and the pawn on D5 can be chipped away at at the right"
+  },
+  {
+   "ply": 14,
+   "t": 2551,
+   "line": [
+    "Nb6"
+   ],
+   "fen": "r1bq1rk1/ppp1ppbp/1n1p1np1/3P4/2P5/5NP1/PP2PPBP/RNBQ1RK1 w - - 1 8",
+   "said": "moment pushing C6 now C6 in this position actually loses a pawn and it's a good idea to figure out why but one way that we can kind of circumvent the obstacles is to put the Knight on B6 typically you don't want to do that in the king's Indian but here the extenuating circumstances that white is unable to play B3 actually very much"
+  },
+  {
+   "ply": 15,
+   "t": 2567.5,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "r1bq1rk1/ppp1ppbp/1n1p1np1/3P4/2P5/5NP1/PP1NPPBP/R1BQ1RK1 b - - 2 8",
+   "said": "on theme because we're able to move this Knight away or take on D5 and yeah it's not so easy for white to defend this Pawn white plays Knight B to D2 now the bishop on C1 is completely locked out white still can't play B3 and"
+  },
+  {
+   "ply": 16,
+   "t": 2584.5,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2q1rk1/pppbppbp/1n1p1np1/3P4/2P5/5NP1/PP1NPPBP/R1BQ1RK1 w - - 3 9",
+   "said": "our plan now is going to be to prepare the move C6 and fight for total control over the center so our move here is very logical we play Bishop to D7 of course"
+  },
+  {
+   "ply": 17,
+   "t": 2589,
+   "line": [
+    "Rb1"
+   ],
+   "fen": "r2q1rk1/pppbppbp/1n1p1np1/3P4/2P5/5NP1/PP1NPPBP/1RBQ1RK1 b - - 4 9",
+   "said": "we create the potential for Queen to C8 and Bishop H3 as well now if you wanted to make a draw you could play Bishop to F5 and force The Rook back to A1 but as a matter of fact the bishop on F5 can be a pretty misplaced piece because not"
+  },
+  {
+   "ply": 18,
+   "t": 2613,
+   "line": [
+    "a5"
+   ],
+   "fen": "r2q1rk1/1ppbppbp/1n1p1np1/p2P4/2P5/5NP1/PP1NPPBP/1RBQ1RK1 w - - 0 10",
+   "said": "only can It allow white to push E4 with Tempo but the knight from F3 can sometimes jump to D4 and harass that Bishop um we've got a pretty vast choice of moves here but I like the move A5 preventing white from pushing B4 and"
+  },
+  {
+   "ply": 19,
+   "t": 2618,
+   "line": [
+    "e4"
+   ],
+   "fen": "r2q1rk1/1ppbppbp/1n1p1np1/p2P4/2P1P3/5NP1/PP1N1PBP/1RBQ1RK1 b - - 0 10",
+   "said": "encouraging white to play B3 which would be a blunder now let's continue with our"
+  },
+  {
+   "ply": 20,
+   "t": 2620,
+   "line": [
+    "c6"
+   ],
+   "fen": "r2q1rk1/1p1bppbp/1npp1np1/p2P4/2P1P3/5NP1/PP1N1PBP/1RBQ1RK1 w - - 0 11",
+   "said": "plan and go C6 we can also play E6 in the future and"
+  },
+  {
+   "ply": 21,
+   "t": 2627.5,
+   "line": [
+    "b3"
+   ],
+   "fen": "r2q1rk1/1p1bppbp/1npp1np1/p2P4/2P1P3/1P3NP1/P2N1PBP/1RBQ1RK1 b - - 0 11",
+   "said": "really put the heat on this Pawn we can also play A4 and put the heat on White's Queens Side Pawn chain which is what I'm"
+  },
+  {
+   "ply": 22,
+   "t": 2637,
+   "line": [
+    "a4"
+   ],
+   "fen": "r2q1rk1/1p1bppbp/1npp1np1/3P4/p1P1P3/1P3NP1/P2N1PBP/1RBQ1RK1 w - - 0 12",
+   "said": "going to A4 maybe there's B4 ah but then we can play CD I like it let's go A4 so notice that we're using our pawns"
+  },
+  {
+   "ply": 23,
+   "t": 2646,
+   "line": [
+    "Bb2"
+   ],
+   "fen": "r2q1rk1/1p1bppbp/1npp1np1/3P4/p1P1P3/1P3NP1/PB1N1PBP/1R1Q1RK1 b - - 1 12",
+   "said": "and we keep poking and prodding at White's sort of queenside Pawn chain White's not budging he's playing really well I think it's probably a good idea"
+  },
+  {
+   "ply": 24,
+   "t": 2650.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "r2q1rk1/1p1b1pbp/1npp1np1/3Pp3/p1P1P3/1P3NP1/PB1N1PBP/1R1Q1RK1 w - e6 0 13",
+   "said": "now to play E5 try to shut down this dark squ bishop and get the more traditional Kings Indian structure in the center this is what you should be"
+  },
+  {
+   "ply": 25,
+   "t": 2665,
+   "line": [
+    "b4"
+   ],
+   "fen": "r2q1rk1/1p1b1pbp/1npp1np1/3Pp3/pPP1P3/5NP1/PB1N1PBP/1R1Q1RK1 b - - 0 13",
+   "said": "kind of familiar with and now you might say well should we start preparing F7 F5 well it really depends on what white does white plays B4"
+  },
+  {
+   "ply": 26,
+   "t": 2670.5,
+   "line": [
+    "a3"
+   ],
+   "fen": "r2q1rk1/1p1b1pbp/1npp1np1/3Pp3/1PP1P3/p4NP1/PB1N1PBP/1R1Q1RK1 w - - 0 14",
+   "said": "trying to shove this Pawn down to C5 let's shove our own Pawn up to"
+  },
+  {
+   "ply": 27,
+   "t": 2674.5,
+   "line": [
+    "Bc3"
+   ],
+   "fen": "r2q1rk1/1p1b1pbp/1npp1np1/3Pp3/1PP1P3/p1B2NP1/P2N1PBP/1R1Q1RK1 b - - 1 14",
+   "said": "A3 creating a nice little window of"
+  },
+  {
+   "ply": 28,
+   "t": 2675.5,
+   "line": [
+    "Na4"
+   ],
+   "fen": "r2q1rk1/1p1b1pbp/2pp1np1/3Pp3/nPP1P3/p1B2NP1/P2N1PBP/1R1Q1RK1 w - - 2 15",
+   "said": "Escape for our Knight which we're going to exploit immediately Knight to A4 with Tempo and notice that this Pawn tension"
+  },
+  {
+   "ply": 29,
+   "t": 2685.5,
+   "line": [
+    "Ba1"
+   ],
+   "fen": "r2q1rk1/1p1b1pbp/2pp1np1/3Pp3/nPP1P3/p4NP1/P2N1PBP/BR1Q1RK1 b - - 3 15",
+   "said": "is um something that you should"
+  },
+  {
+   "ply": 30,
+   "t": 2687,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r2q1rk1/1p1b1pbp/3p1np1/3pp3/nPP1P3/p4NP1/P2N1PBP/BR1Q1RK1 w - - 0 16",
+   "said": "monitor because we're going to take on D5 at exactly the most inconvenient moment for white why is this the most"
+  },
+  {
+   "ply": 31,
+   "t": 2697,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r2q1rk1/1p1b1pbp/3p1np1/3Pp3/nP2P3/p4NP1/P2N1PBP/BR1Q1RK1 b - - 0 16",
+   "said": "inconvenient moment well for two reasons White's pieces have been really pushed back and also no matter how white takes there's going to be new Vistas that are"
+  },
+  {
+   "ply": 32,
+   "t": 2704,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r2q1rk1/1p3pbp/3p1np1/1b1Pp3/nP2P3/p4NP1/P2N1PBP/BR1Q1RK1 w - - 1 17",
+   "said": "available for our minor pieces in this case our Bishop has this lovely Square"
+  },
+  {
+   "ply": 33,
+   "t": 2708,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r2q1rk1/1p3pbp/3p1np1/1b1Pp3/nP2P3/p4NP1/P2N1PBP/BR1QR1K1 b - - 2 17",
+   "said": "we have also the C file at our disposal and now it's like pure King's Indian action where as long as you're"
+  },
+  {
+   "ply": 34,
+   "t": 2718,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "r2q1rk1/1p3pbp/3p2p1/1b1Pp3/nP2P1n1/p4NP1/P2N1PBP/BR1QR1K1 w - - 3 18",
+   "said": "activating and improving the activity of one of your pieces you're doing something right so I'm going to play this mysterious looking move Knight to G4 what the heck is the point of this"
+  },
+  {
+   "ply": 35,
+   "t": 2729.5,
+   "line": [
+    "Rb3"
+   ],
+   "fen": "r2q1rk1/1p3pbp/3p2p1/1b1Pp3/nP2P1n1/pR3NP1/P2N1PBP/B2QR1K1 b - - 4 18",
+   "said": "move can't why just go H3 and Chase the Knight away one thing I'm noticing is that the light Bishop is guarding this F1 Square so I'm actually setting up a really nasty"
+  },
+  {
+   "ply": 36,
+   "t": 2734.5,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "r4rk1/1p3pbp/1q1p2p1/1b1Pp3/nP2P1n1/pR3NP1/P2N1PBP/B2QR1K1 w - - 5 19",
+   "said": "attack on the F2 Pawn here we can just go Queen to B6 and as you can convince yourself white has no way to defend this Pawn without giving up at least in"
+  },
+  {
+   "ply": 38,
+   "t": 2749.5,
+   "line": [
+    "Rb1",
+    "Qd8"
+   ],
+   "fen": "r2q1rk1/1p3pbp/3p2p1/1b1Pp3/nP2P1n1/p4NP1/P2N1PBP/BR1QR1K1 w - - 7 20",
+   "said": "exchange that's how quickly this became lost for white of course now you should not notice that H3 is met by Knight takes F2 and then Queen B6 check and I'll show you the followup after the because the dark squir Bishop actually"
+  },
+  {
+   "ply": 40,
+   "t": 2765,
+   "line": [
+    "Rb3",
+    "Qb6"
+   ],
+   "fen": "r4rk1/1p3pbp/1q1p2p1/1b1Pp3/nP2P1n1/pR3NP1/P2N1PBP/B2QR1K1 w - - 9 21",
+   "said": "does often get involved perhaps an unexpected way to those who are not familiar with Kings Indian minutia white is busted"
+  },
+  {
+   "ply": 41,
+   "t": 2774.5,
+   "line": [
+    "Ree3"
+   ],
+   "fen": "r4rk1/1p3pbp/1q1p2p1/1b1Pp3/nP2P1n1/pR2RNP1/P2N1PBP/B2Q2K1 b - - 10 21",
+   "said": "here white is busted"
+  },
+  {
+   "ply": 42,
+   "t": 2778,
+   "line": [
+    "Nxe3"
+   ],
+   "fen": "r4rk1/1p3pbp/1q1p2p1/1b1Pp3/nP2P3/pR2nNP1/P2N1PBP/B2Q2K1 w - - 0 22",
+   "said": "here okay now again you can choose to be pedantic but I'm not going to I'm just going to grab the Rook while I can now"
+  },
+  {
+   "ply": 43,
+   "t": 2780.5,
+   "line": [
+    "Rxe3"
+   ],
+   "fen": "r4rk1/1p3pbp/1q1p2p1/1b1Pp3/nP2P3/p3RNP1/P2N1PBP/B2Q2K1 b - - 0 22",
+   "said": "this other Knight on A4 can jump into B2"
+  },
+  {
+   "ply": 44,
+   "t": 2787,
+   "line": [
+    "Nb2"
+   ],
+   "fen": "r4rk1/1p3pbp/1q1p2p1/1b1Pp3/1P2P3/p3RNP1/Pn1N1PBP/B2Q2K1 w - - 1 23",
+   "said": "it's probably a good idea to do that because the A3 Pawn is hanging the point of this move is not to really establish an outpost it's to get white to get rid"
+  },
+  {
+   "ply": 45,
+   "t": 2795,
+   "line": [
+    "Qb3"
+   ],
+   "fen": "r4rk1/1p3pbp/1q1p2p1/1b1Pp3/1P2P3/pQ2RNP1/Pn1N1PBP/B5K1 b - - 2 23",
+   "said": "of the dark squired Bishop okay now I think it's a good time to occupy the SE"
+  },
+  {
+   "ply": 46,
+   "t": 2801.5,
+   "line": [
+    "Rfc8"
+   ],
+   "fen": "r1r3k1/1p3pbp/1q1p2p1/1b1Pp3/1P2P3/pQ2RNP1/Pn1N1PBP/B5K1 w - - 3 24",
+   "said": "file we can also try to trap the queen but there's no rush to do that let's just get the Rook into the action I'm"
+  },
+  {
+   "ply": 47,
+   "t": 2805,
+   "line": [
+    "Bxb2"
+   ],
+   "fen": "r1r3k1/1p3pbp/1q1p2p1/1b1Pp3/1P2P3/pQ2RNP1/PB1N1PBP/6K1 b - - 0 24",
+   "said": "largely playing"
+  },
+  {
+   "ply": 48,
+   "t": 2807.5,
+   "line": [
+    "axb2"
+   ],
+   "fen": "r1r3k1/1p3pbp/1q1p2p1/1b1Pp3/1P2P3/1Q2RNP1/Pp1N1PBP/6K1 w - - 0 25",
+   "said": "instinctively yeah I've given away the"
+  },
+  {
+   "ply": 49,
+   "t": 2809,
+   "line": [
+    "Qxb2"
+   ],
+   "fen": "r1r3k1/1p3pbp/1q1p2p1/1b1Pp3/1P2P3/4RNP1/PQ1N1PBP/6K1 b - - 0 25",
+   "said": "pawn but the moment you've gotten rid of your opponent's dark squirt Bishop you"
+  },
+  {
+   "ply": 50,
+   "t": 2815.5,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "r1r3k1/1p3p1p/1q1p2pb/1b1Pp3/1P2P3/4RNP1/PQ1N1PBP/6K1 w - - 1 26",
+   "said": "should be trying to optimize the activity of your own dark squirt bishop and this can be done by putting the bishop on H6 very very typical move in the king's Indian to play Bishop H6 at"
+  },
+  {
+   "ply": 51,
+   "t": 2828,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1r3k1/1p3p1p/1q1p2pb/1b1Pp3/1P2P3/5NP1/PQ1N1PBP/4R1K1 b - - 2 26",
+   "said": "the right moment not just when there's a rook on E3 in many other situations as well now the C2 Square looks very juicy I'm also keeping an eye on the a file"
+  },
+  {
+   "ply": 52,
+   "t": 2837,
+   "line": [
+    "Qa7"
+   ],
+   "fen": "r1r3k1/qp3p1p/3p2pb/1b1Pp3/1P2P3/5NP1/PQ1N1PBP/4R1K1 w - - 3 27",
+   "said": "which we're controlling with with our other Rook so a really sexy retreating move here is Queen to A7 really using every square inch of the"
+  },
+  {
+   "ply": 53,
+   "t": 2846.5,
+   "line": [
+    "Ra1"
+   ],
+   "fen": "r1r3k1/qp3p1p/3p2pb/1b1Pp3/1P2P3/5NP1/PQ1N1PBP/R5K1 b - - 4 27",
+   "said": "of the queen side to our favor just look at how White's completely paralyzed here Rook a 1 he's at our mercy and now of"
+  },
+  {
+   "ply": 54,
+   "t": 2852,
+   "line": [
+    "Qa3"
+   ],
+   "fen": "r1r3k1/1p3p1p/3p2pb/1b1Pp3/1P2P3/q4NP1/PQ1N1PBP/R5K1 w - - 5 28",
+   "said": "course simplification is the order of the day let's go Queen A3 looks like it might prolong the game but in fact it's going to shorten it because without the queen on the board White's minor pieces are totally incapable of handling the tasks that are in front of them our other Rook will INF infiltrate to C2 and"
+  },
+  {
+   "ply": 55,
+   "t": 2876.5,
+   "line": [
+    "Qb1"
+   ],
+   "fen": "r1r3k1/1p3p1p/3p2pb/1b1Pp3/1P2P3/q4NP1/P2N1PBP/RQ4K1 b - - 6 28",
+   "said": "something's going to give just easy moves no calculation required yeah White's White's crumbling here on all sides now we have another Nifty little move we can play Bishop to D3 you might be tempted by this move but it's just a one"
+  },
+  {
+   "ply": 56,
+   "t": 2886,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r1r3k1/1p3p1p/3p2pb/3Pp3/1P2P3/q4NP1/P2NbPBP/RQ4K1 w - - 7 29",
+   "said": "move threat a niftier way to approach is the position is Bishop to E2 because if we we can entice this Knight away from D2 we'll be able to deliver a check on C1 and pick up"
+  },
+  {
+   "ply": 57,
+   "t": 2903.5,
+   "line": [
+    "Bh3"
+   ],
+   "fen": "r1r3k1/1p3p1p/3p2pb/3Pp3/1P2P3/q4NPB/P2NbP1P/RQ4K1 b - - 8 29",
+   "said": "White's Queen so we're threatening Bishop takes F3 now our other Rook can also come into C3 so with every move we're just tightening the screws and tightening the"
+  },
+  {
+   "ply": 58,
+   "t": 2907,
+   "line": [
+    "Bxf3"
+   ],
+   "fen": "r1r3k1/1p3p1p/3p2pb/3Pp3/1P2P3/q4bPB/P2N1P1P/RQ4K1 w - - 0 30",
+   "said": "screws and eventually I just going to start losing all of their pieces okay time for Bishop takes F3 time to collect"
+  },
+  {
+   "ply": 59,
+   "t": 2911.5,
+   "line": [
+    "Bxc8"
+   ],
+   "fen": "r1B3k1/1p3p1p/3p2pb/3Pp3/1P2P3/q4bP1/P2N1P1P/RQ4K1 b - - 0 30",
+   "said": "the Harvest we can take either minor"
+  },
+  {
+   "ply": 60,
+   "t": 2912.5,
+   "line": [
+    "Rxc8"
+   ],
+   "fen": "2r3k1/1p3p1p/3p2pb/3Pp3/1P2P3/q4bP1/P2N1P1P/RQ4K1 w - - 0 31",
+   "said": "piece in that position but let's take Bishop on C8 this is just faster and once again after Knight F3 we can"
+  },
+  {
+   "ply": 61,
+   "t": 2927,
+   "line": [
+    "Qe1"
+   ],
+   "fen": "2r3k1/1p3p1p/3p2pb/3Pp3/1P2P3/q4bP1/P2N1P1P/R3Q1K1 b - - 1 31",
+   "said": "actually take the Knight but Rook C1 is perhaps more consistent with our idea okay now I think the simplest by"
+  },
+  {
+   "ply": 62,
+   "t": 2931.5,
+   "line": [
+    "Bxd2"
+   ],
+   "fen": "2r3k1/1p3p1p/3p2p1/3Pp3/1P2P3/q4bP1/P2b1P1P/R3Q1K1 w - - 0 32",
+   "said": "far is simplification and if you can grab a"
+  },
+  {
+   "ply": 64,
+   "t": 2934,
+   "line": [
+    "Qxd2",
+    "Bxe4"
+   ],
+   "fen": "2r3k1/1p3p1p/3p2p1/3Pp3/1P2b3/q5P1/P2Q1P1P/R5K1 w - - 0 33",
+   "said": "free Pawn making space for the queen then you should B takes E4 and swing the"
+  },
+  {
+   "ply": 66,
+   "t": 2939,
+   "line": [
+    "Re1",
+    "Qf3"
+   ],
+   "fen": "2r3k1/1p3p1p/3p2p1/3Pp3/1P2b3/5qP1/P2Q1P1P/4R1K1 w - - 2 34",
+   "said": "queen over to the the king side and just"
+  },
+  {
+   "ply": 68,
+   "t": 2943.5,
+   "line": [
+    "Rxe4",
+    "Qxe4"
+   ],
+   "fen": "2r3k1/1p3p1p/3p2p1/3Pp3/1P2q3/6P1/P2Q1P1P/6K1 w - - 0 35",
+   "said": "like um I intended the game ends with a short but sweet kingside attack and a rook infiltration on"
+  },
+  {
+   "ply": 69,
+   "t": 2954,
+   "line": [
+    "f3"
+   ],
+   "fen": "2r3k1/1p3p1p/3p2p1/3Pp3/1P2q3/5PP1/P2Q3P/6K1 b - - 0 35",
+   "said": "C2 nice game a lot of insights that I could share for this game I don't want to go"
+  },
+  {
+   "ply": 70,
+   "t": 2956,
+   "line": [
+    "Qd4+"
+   ],
+   "fen": "2r3k1/1p3p1p/3p2p1/3Pp3/1P1q4/5PP1/P2Q3P/6K1 w - - 1 36",
+   "said": "on for much longer here so I'm going to cut this pretty short and limit myself"
+  },
+  {
+   "ply": 72,
+   "t": 2960,
+   "line": [
+    "Qxd4",
+    "exd4"
+   ],
+   "fen": "2r3k1/1p3p1p/3p2p1/3P4/1P1p4/5PP1/P6P/6K1 w - - 0 37",
+   "said": "to a few of high Lev"
+  },
+  {
+   "ply": 74,
+   "t": 2961.5,
+   "line": [
+    "Kf2",
+    "Rc2+"
+   ],
+   "fen": "6k1/1p3p1p/3p2p1/3P4/1P1p4/5PP1/P1r2K1P/8 w - - 2 38",
+   "said": "remarks but this is a game that I would"
+  },
+  {
+   "ply": 76,
+   "t": 2963,
+   "line": [
+    "Ke1",
+    "d3"
+   ],
+   "fen": "6k1/1p3p1p/3p2p1/3P4/1P6/3p1PP1/P1r4P/4K3 w - - 0 39",
+   "said": "definitely encourage you to analyze on your own good game to our opponent definitely not easy and I definitely had to huff and puff before the house came"
+  },
+  {
+   "ply": 11,
+   "t": 2980,
+   "line": [],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 3 6",
+   "said": "down you know using both sides of the board the A and the C file um but just a couple of quick remarks now my sort of quote unquote official recommendation in the kid is going to be to play C6 and Bishop to F5 but more on this later Knight B to D7 is an old school move and I will say right away that if white knows of theory like at the GM level in classical chest is considered to be better after E5 E4 which is the main line however that should not stop you from playing a line at your level especially if it carries a lot of practical value my results in Blitz even at my level are really really good and your results in classical with this move can also be fantastic if you learn it well so the idea of this move is to prepare E5 and the line that I'm going to recommend if white goes into the main line is actually to now play the move C6 and if white responds with the most popular move we're deploying the queen to A5 in this line a lot of you might have seen me play this line in Blitz it carries a tremendous amount of Venom and it's beyond the scope of this game for"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 36,
+   "fen": "r4rk1/1p3pbp/1q1p2p1/1b1Pp3/nP2P1n1/pR3NP1/P2N1PBP/B2QR1K1 w - - 5 19",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "g3",
+    "Bg7",
+    "Bg2",
+    "d6",
+    "Nf3",
+    "O-O",
+    "O-O",
+    "Nbd7",
+    "d5",
+    "Nb6",
+    "Nbd2",
+    "Bd7",
+    "Rb1",
+    "a5",
+    "e4",
+    "c6",
+    "b3",
+    "a4",
+    "Bb2",
+    "e5",
+    "b4",
+    "a3",
+    "Bc3",
+    "Na4",
+    "Ba1",
+    "cxd5",
+    "cxd5",
+    "Bb5",
+    "Re1",
+    "Ng4",
+    "Rb3",
+    "Qb6"
+   ],
+   "options": [
+    {
+     "san": "Rb1",
+     "t": 2749.5,
+     "continuation": "Rb1 Qd8",
+     "said": "yourself white has no way to defend this Pawn without giving up at least in exchange that's how quickly this became lost for white of course now you should not notice that H3 is met by Knight takes F2 and then Queen B6 check and I'll show you the followup after the because the dark squir Bishop actually does often get involved perhaps an unexpected way to those who are not familiar with Kings Indian minutia white is busted here white is busted here okay now again you can choose to be pedantic but I'm not going to I'm just going to grab the Rook while I can now this other Knight on A4 can jump into B2 it's probably a good idea to do that because the A3 Pawn is hanging the point of this move is not to really establish an outpost it's to get white to get rid of the dark squired Bishop okay now I think it's a good time to occupy the SE file we can also try to trap the queen but there's no rush to do that let's just get the Rook into the action I'm largely playing instinctively yeah I've given away the pawn but the moment you've gotten rid of"
+    },
+    {
+     "san": "Ree3",
+     "t": 2774.5,
+     "continuation": "Ree3",
+     "said": "familiar with Kings Indian minutia white is busted here white is busted here okay now again you can choose to be pedantic but I'm not going to I'm just going to grab the Rook while I can now this other Knight on A4 can jump into B2 it's probably a good idea to do that because the A3 Pawn is hanging the point of this move is not to really establish an outpost it's to get white to get rid of the dark squired Bishop okay now I think it's a good time to occupy the SE file we can also try to trap the queen but there's no rush to do that let's just get the Rook into the action I'm largely playing instinctively yeah I've given away the pawn but the moment you've gotten rid of your opponent's dark squirt Bishop you should be trying to optimize the activity of your own dark squirt bishop and this can be done by putting the bishop on H6 very very typical move in the king's Indian to play Bishop H6 at the right moment not just when there's a rook on E3 in many other situations as well now the C2 Square looks very juicy I'm also keeping an eye on the a file which we're controlling with with our"
+    }
+   ]
+  }
+ ]
+}

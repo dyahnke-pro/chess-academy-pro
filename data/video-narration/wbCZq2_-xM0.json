@@ -1,0 +1,545 @@
+{
+ "videoId": "wbCZq2_-xM0",
+ "title": "St. George's Defense | The Sensei Speedrun | GM Naro",
+ "moves": [
+  {
+   "ply": 4,
+   "t": 944.5,
+   "line": [
+    "d4",
+    "a6",
+    "e4",
+    "b5"
+   ],
+   "fen": "rnbqkbnr/2pppppp/p7/1p6/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "think is is incomparably worse h6 g5 uh the mirror line on the other side of the board is basically losing because it creates too many king side weaknesses"
+  },
+  {
+   "ply": 5,
+   "t": 945.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/2pppppp/p7/1p6/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 3",
+   "said": ""
+  },
+  {
+   "ply": 4,
+   "t": 946.5,
+   "line": [],
+   "fen": "rnbqkbnr/2pppppp/p7/1p6/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "o so yeah the setup i like is knight f3 and"
+  },
+  {
+   "ply": 6,
+   "t": 948,
+   "line": [
+    "Nf3",
+    "Bb7"
+   ],
+   "fen": "rn1qkbnr/1bpppppp/p7/1p6/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 4",
+   "said": "generally black plays bishop b7 bishop"
+  },
+  {
+   "ply": 7,
+   "t": 950,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rn1qkbnr/1bpppppp/p7/1p6/3PP3/3B1N2/PPP2PPP/RNBQK2R b KQkq - 3 4",
+   "said": "d3 e6 this is the main line actually"
+  },
+  {
+   "ply": 8,
+   "t": 951,
+   "line": [
+    "e6"
+   ],
+   "fen": "rn1qkbnr/1bpp1ppp/p3p3/1p6/3PP3/3B1N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+   "said": "and i guess you could check what uh you know what people recommend"
+  },
+  {
+   "ply": 9,
+   "t": 961.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1qkbnr/1bpp1ppp/p3p3/1p6/3PP3/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 1 5",
+   "said": "on youtube i'm sure there are tutorial videos yeah now castles"
+  },
+  {
+   "ply": 10,
+   "t": 962.5,
+   "line": [
+    "c5"
+   ],
+   "fen": "rn1qkbnr/1b1p1ppp/p3p3/1pp5/3PP3/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 6",
+   "said": "black generally plays c5 and i like this"
+  },
+  {
+   "ply": 11,
+   "t": 964,
+   "line": [
+    "c3"
+   ],
+   "fen": "rn1qkbnr/1b1p1ppp/p3p3/1pp5/3PP3/2PB1N2/PP3PPP/RNBQ1RK1 b kq - 0 6",
+   "said": "setup the sort of allopin-esque setup with pawns on c3 and d4 and e4 you know this kind of aesthetic i like very hard for black to do anything in regards to our center does that make sense and and the way that you expand your thinking here is as you depart from beginner level you have to understand to be start becoming more flexible"
+  },
+  {
+   "ply": 7,
+   "t": 998.5,
+   "line": [],
+   "fen": "rn1qkbnr/1bpppppp/p7/1p6/3PP3/3B1N2/PPP2PPP/RNBQK2R b KQkq - 3 4",
+   "said": "with peace development right don't marry yourself to the idea of putting knights on c3 and f3 every single game understand that the knight on d2 can be just as effective so i won't delve too too far into the"
+  },
+  {
+   "ply": 10,
+   "t": 1000,
+   "line": [
+    "Bc8",
+    "Bf1",
+    "d6"
+   ],
+   "fen": "rnbqkbnr/2p1pppp/p2p4/1p6/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 6",
+   "said": "theoretical discussion here d6 bishop d3"
+  },
+  {
+   "ply": 11,
+   "t": 1001.5,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqkbnr/2p1pppp/p2p4/1p6/3PP3/3B1N2/PPP2PPP/RNBQK2R b KQkq - 1 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 1002.5,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkbnr/2p1pp1p/p2p2p1/1p6/3PP3/3B1N2/PPP2PPP/RNBQK2R w KQkq - 0 7",
+   "said": "we played anyway"
+  },
+  {
+   "ply": 15,
+   "t": 1004,
+   "line": [
+    "a4",
+    "Bg7",
+    "O-O"
+   ],
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/1p6/P2PP3/3B1N2/1PP2PPP/RNBQ1RK1 b kq - 2 8",
+   "said": "and a4 very important positional idea"
+  },
+  {
+   "ply": 16,
+   "t": 1007,
+   "line": [
+    "b4"
+   ],
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/8/Pp1PP3/3B1N2/1PP2PPP/RNBQ1RK1 w kq - 0 9",
+   "said": "now how should we respond in the event of b4 what should we do here and there are several ways that we could play this but there is one move i like"
+  },
+  {
+   "ply": 17,
+   "t": 1022,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/8/Pp1PP3/2PB1N2/1P3PPP/RNBQ1RK1 b kq - 0 9",
+   "said": "to play in such positions which is to prevent black from playing a5 yeah so one way we can do this is go c3 c3 is a great move here"
+  },
+  {
+   "ply": 19,
+   "t": 1025.5,
+   "line": [
+    "bxc3",
+    "bxc3"
+   ],
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/8/P2PP3/2PB1N2/5PPP/RNBQ1RK1 b kq - 0 10",
+   "said": "and in the event of the trade who does the opening of the b file favor well it favors the more active the player with the more active pieces right it's white we have an easier job getting a rook to the b file than black does but i also like the move a5 here which prevents black from playing a5 and if black plays c5 i mean he really overextends himself in this position he has this diagonal as we can kind of see that this is very very flimsy now the"
+  },
+  {
+   "ply": 15,
+   "t": 1059.5,
+   "line": [],
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/1p6/P2PP3/3B1N2/1PP2PPP/RNBQ1RK1 b kq - 2 8",
+   "said": "pawn on a6 is also kind of a long-term weakness it's being stared at by the bishop okay so i don't again not to delve too deeply into this but just remember this concept of a4 when black has pawns on a6 and b5"
+  },
+  {
+   "ply": 16,
+   "t": 1072.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqk1nr/4ppbp/p1pp2p1/1p6/P2PP3/3B1N2/1PP2PPP/RNBQ1RK1 w kq - 0 9",
+   "said": "and of course vice versa um c6 is just a blunder a takes b5 and of"
+  },
+  {
+   "ply": 19,
+   "t": 1075.5,
+   "line": [
+    "axb5",
+    "cxb5",
+    "Bxb5+"
+   ],
+   "fen": "rnbqk1nr/4ppbp/p2p2p1/1B6/3PP3/5N2/1PP2PPP/RNBQ1RK1 b kq - 0 10",
+   "said": "course the point is bishop takes b5 check and uh because of the x-ray black like a screw you can't take back"
+  },
+  {
+   "ply": 23,
+   "t": 1089.5,
+   "line": [
+    "Nc6",
+    "Bd3",
+    "a5",
+    "c3"
+   ],
+   "fen": "r1bqk1nr/4ppbp/2np2p1/p7/3PP3/2PB1N2/1P3PPP/RNBQ1RK1 b kq - 0 12",
+   "said": "but um a5 is exacerbates the issue even further because it just creates another weakness and at this point already it's a very difficult position for black pawn down"
+  },
+  {
+   "ply": 25,
+   "t": 1094,
+   "line": [
+    "Bd7",
+    "Bg5"
+   ],
+   "fen": "r2qk1nr/3bppbp/2np2p1/p5B1/3PP3/2PB1N2/1P3PPP/RN1Q1RK1 b kq - 2 13",
+   "said": "weak pawn on a5 it's very very difficult to defend such positions"
+  },
+  {
+   "ply": 26,
+   "t": 1096.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r2qk2r/3bppbp/2np1np1/p5B1/3PP3/2PB1N2/1P3PPP/RN1Q1RK1 w kq - 3 14",
+   "said": "excelsior yeah i guess"
+  },
+  {
+   "ply": 27,
+   "t": 1097.5,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "r2qk2r/3bppbp/2np1np1/p5B1/3PP3/2PB1N2/1P1N1PPP/R2Q1RK1 b kq - 4 14",
+   "said": ""
+  },
+  {
+   "ply": 29,
+   "t": 1100.5,
+   "line": [
+    "O-O",
+    "Re1"
+   ],
+   "fen": "r2q1rk1/3bppbp/2np1np1/p5B1/3PP3/2PB1N2/1P1N1PPP/R2QR1K1 b - - 6 15",
+   "said": "anyways rookie one everything we did here should"
+  },
+  {
+   "ply": 31,
+   "t": 1102,
+   "line": [
+    "Re8",
+    "h3"
+   ],
+   "fen": "r2qr1k1/3bppbp/2np1np1/p5B1/3PP3/2PB1N1P/1P1N1PP1/R2QR1K1 b - - 0 16",
+   "said": "be completely clear to literally everybody i mean if you have any questions about"
+  },
+  {
+   "ply": 32,
+   "t": 1110.5,
+   "line": [
+    "Kh8"
+   ],
+   "fen": "r2qr2k/3bppbp/2np1np1/p5B1/3PP3/2PB1N1P/1P1N1PP1/R2QR1K1 w - - 1 17",
+   "said": "why we played the way we did here feel free but hopefully it was pretty clear"
+  },
+  {
+   "ply": 33,
+   "t": 1112,
+   "line": [
+    "Nc4"
+   ],
+   "fen": "r2qr2k/3bppbp/2np1np1/p5B1/2NPP3/2PB1N1P/1P3PP1/R2QR1K1 b - - 2 17",
+   "said": "yeah now knight c4 right preparing e5 but in the right way this is a good"
+  },
+  {
+   "ply": 32,
+   "t": 1115.5,
+   "line": [],
+   "fen": "r2qr2k/3bppbp/2np1np1/p5B1/3PP3/2PB1N1P/1P1N1PP1/R2QR1K1 w - - 1 17",
+   "said": "thing to think about if you have a pawn break think about what it is that you want to recapture with right what piece do you ultimately want to end up on e5 right is it the pawn is it the rook well it's def usually the answer to that question when in doubt it's the knight his knights in"
+  },
+  {
+   "ply": 33,
+   "t": 1140.5,
+   "line": [
+    "Nc4"
+   ],
+   "fen": "r2qr2k/3bppbp/2np1np1/p5B1/2NPP3/2PB1N1P/1P3PP1/R2QR1K1 b - - 2 17",
+   "said": "the center are you know in terms of pieces that are centralized knights get the most return on investment when they're centralized versus other pieces that's why we go knight c4"
+  },
+  {
+   "ply": 35,
+   "t": 1143.5,
+   "line": [
+    "Rb8",
+    "e5"
+   ],
+   "fen": "1r1qr2k/3bppbp/2np1np1/p3P1B1/2NP4/2PB1N1P/1P3PP1/R2QR1K1 b - - 0 18",
+   "said": "e5 and this is a terrible position for"
+  },
+  {
+   "ply": 39,
+   "t": 1145.5,
+   "line": [
+    "Nxe5",
+    "Ncxe5",
+    "dxe5",
+    "Nxe5"
+   ],
+   "fen": "1r1qr2k/3bppbp/5np1/p3N1B1/3P4/2PB3P/1P3PP1/R2QR1K1 b - - 0 20",
+   "said": "black he's already almost lost"
+  },
+  {
+   "ply": 40,
+   "t": 1149.5,
+   "line": [
+    "Rf8"
+   ],
+   "fen": "1r1q1r1k/3bppbp/5np1/p3N1B1/3P4/2PB3P/1P3PP1/R2QR1K1 w - - 1 21",
+   "said": "more resilient would have been to play rook f8 obviously not missing the fork"
+  },
+  {
+   "ply": 41,
+   "t": 1154.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "1r1q1r1k/3bppbp/5np1/p3N1B1/2BP4/2P4P/1P3PP1/R2QR1K1 b - - 2 21",
+   "said": "but uh we would have gone bishop c4 quite possibly and this puts more pressure on f7 that's a terrible"
+  },
+  {
+   "ply": 40,
+   "t": 1160.5,
+   "line": [],
+   "fen": "1r1q1r1k/3bppbp/5np1/p3N1B1/3P4/2PB3P/1P3PP1/R2QR1K1 w - - 1 21",
+   "said": "position for black terrible bishop b6 the only important tactical"
+  },
+  {
+   "ply": 44,
+   "t": 1165,
+   "line": [
+    "Bh4",
+    "Re8",
+    "Bxf6",
+    "Be6"
+   ],
+   "fen": "1r1qr2k/4ppbp/4bBp1/p3N3/3P4/2PB3P/1P3PP1/R2QR1K1 w - - 1 23",
+   "said": "moment in this game was bishop takes f6 just a subtlety right and a lot of people would automatically play knight c6 but training yourself to"
+  },
+  {
+   "ply": 46,
+   "t": 1174,
+   "line": [
+    "Nc6",
+    "Qd5"
+   ],
+   "fen": "1r2r2k/4ppbp/2N1bBp1/p2q4/3P4/2PB3P/1P3PP1/R2QR1K1 w - - 3 24",
+   "said": "pay attention to on defended pieces and by the way bishop takes f6 now it's too"
+  },
+  {
+   "ply": 50,
+   "t": 1176.5,
+   "line": [
+    "Na7",
+    "Qb7",
+    "Nc6",
+    "Qxc6"
+   ],
+   "fen": "1r2r2k/4ppbp/2q1bBp1/p7/3P4/2PB3P/1P3PP1/R2QR1K1 w - - 0 26",
+   "said": "late for that because black can now take the knight um but training yourself to pay attention to undefended pieces at all times and and not rushing into tempting moves i mean that's really all that it takes right because once i alerted you to the fact that black had resource here everybody saw queen d5 and once i told you don't play knight c6 automatically you guys saw this idea uh but that you know that's the you have to remember to train yourself to do that yourself okay bishop f6 bishop f6 knight c6 and um the rest of the game is i think quite clear without analysis queen e3 is a nice move defending h3 offering the queen trade weaponized queen trade right using the queen trade as a weapon to force your your opponent's queen off of a good square and then doubling on the a file hitting and targeting the biggest weakness um muller i saw your question the first time but unfortunately that's an impossible question for me to answer because it is two questions of this nature until which elo is this decisive that decisive it's extremely relative losing a pawn is not a monolithic concept ha being upon down in a pawn end game is completely different from losing a pawn in the opening right and losing a pawn in this opening is completely different from losing a pawn in another opening so like it's an unanswerable question uh because it really depends on where the circumstances in which you lose upon but if you know if i have to give you a ballpark really under 1500 you shouldn't worry too much about losing a pawn i would say once you've hit 2000 that's when losing a pawn kind of becomes a disaster and at my level losing a pawn can just be instantly decisive but even at my level you know you can lose upon and recover it's not like gm's convert every pawn up position not even every piece up position is converted by gm's i mean famously bronstein and batman played a world championship match where bronstein won a rook and failed to convert it so it's not like gm's are immune from difficulty converting positions and i don't think of it that way like oh you hit this level and then you're never going to have trouble with any of this ever again it's not how it works david bronstein by the way great player probably not as familiar of a name to most people in the chat so this position occurred on the board um bot vinegar has just gotten knight a4 bronstein drops his bishop back to a7 blundering a very nice tactic b6 bishop takes a4 b7 look at this and it's over bishop takes b3 you make a new queen white is currently up in exchange and both bishops are hanging at the same time it's a complete completely winning position um and bronstein said i became terribly angry with myself and instead of resigning the game which is what the auditorium buzzing like a beehive was expecting i gathered my nerves into a single ball and began quickly moving the remaining pieces as though nothing had happened someone turned out that one one of the players was full of energy and was eager for a battle to the death while the other had demobilized his will and was indifferently awaiting his opponent's resignation that's a great quote the subsequent course of the game showed just how important the psychological state of a chess player is after all the man with his weaknesses is the main thing in chess the rest being merely pitiful attachments i don't know what that means i'd have to read the original queen b5 and bronstein just like activates his pieces let's flip the board the queen ia8 is is not trapped black can't really trap it because it's got a it's got several escape routes but it currently can't untrap itself on its own so bob any kind of panics right the simple castle short would have won the game black just has one try white tucks the king away on h1 and this is this is game over because it's only a matter of time before white extricates the queen but dominick decides to give up an exchange in order to get his queen out of the game and he ends up also giving up the pawn on d5 and then he offers a queen trade but he gives up another pawn to trade queens and now bronstein has built up a pretty impressive uh little pawn phalanx in the center white is still winning obviously on two pawns for the piece only but bobinick failed to convert the send game i mean it's a very interesting end game ultimately bronstein just completely outplayed him you just made a lot more progress than white and at some point bob nick even had losing chances and and here botvinnik offered to draw in this completely unclear position where even bronstein can try to play for a win you know and this is not this is one of a million of such examples that i could show you and once we traded queens yeah the only other thing bishop d5 right again weaponizing the trade posing a completely devastating i guess ultimatum i'm not sure what you're referring to kavita you mean taking blacks knight like this"
+  },
+  {
+   "ply": 46,
+   "t": 1493,
+   "line": [],
+   "fen": "1r2r2k/4ppbp/2N1bBp1/p2q4/3P4/2PB3P/1P3PP1/R2QR1K1 w - - 3 24",
+   "said": "line where we took the knight on f6 like why the immediate knight c6 wasn't a good idea yeah so here black has queen d5 and first of all if you say okay now i'll take on f6"
+  },
+  {
+   "ply": 50,
+   "t": 1496.5,
+   "line": [
+    "Na7",
+    "Qb7",
+    "Nc6",
+    "Qxc6"
+   ],
+   "fen": "1r2r2k/4ppbp/2q1bBp1/p7/3P4/2PB3P/1P3PP1/R2QR1K1 w - - 0 26",
+   "said": "and then i'll take the rook no that doesn't work anymore because black doesn't have to take the bishop black"
+  },
+  {
+   "ply": 46,
+   "t": 1497.5,
+   "line": [],
+   "fen": "1r2r2k/4ppbp/2N1bBp1/p2q4/3P4/2PB3P/1P3PP1/R2QR1K1 w - - 3 24",
+   "said": "can take the knight and obviously the"
+  },
+  {
+   "ply": 50,
+   "t": 1499,
+   "line": [
+    "Na7",
+    "Qb7",
+    "Nc6",
+    "Qxc6"
+   ],
+   "fen": "1r2r2k/4ppbp/2q1bBp1/p7/3P4/2PB3P/1P3PP1/R2QR1K1 w - - 0 26",
+   "said": "king defends the bishop and white white"
+  },
+  {
+   "ply": 52,
+   "t": 1502.5,
+   "line": [
+    "Bxg7+",
+    "Kxg7"
+   ],
+   "fen": "1r2r3/4ppkp/2q1b1p1/p7/3P4/2PB3P/1P3PP1/R2QR1K1 w - - 0 27",
+   "said": "is still better we're up a pawn but not more than that right number one"
+  },
+  {
+   "ply": 46,
+   "t": 1506,
+   "line": [],
+   "fen": "1r2r2k/4ppbp/2N1bBp1/p2q4/3P4/2PB3P/1P3PP1/R2QR1K1 w - - 3 24",
+   "said": "number two if you take on b8 black takes on g5 and the problem is that the knight hangs and because of this x-ray i'm sure you see that bishop takes h3 is a pretty nasty threat here now it's not the end of the world but another thing that hurts white is that if you move the knight back to c6 again the knight is undefended so instead of bishop takes h3 black can even play bishop d5 even better and this wins the night because of the mate threat simultaneous with the threat of taking the knight right see what i'm saying so it's just annoying it's just very very annoying so you would have to play knight a6 presumably and then you'd have to deal with bishop takes h3 and it's a whole hassle all right guys i'll see you tomorrow bye everybody [Music] you"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 7,
+   "fen": "rn1qkbnr/1bpppppp/p7/1p6/3PP3/3B1N2/PPP2PPP/RNBQK2R b KQkq - 3 4",
+   "line": [
+    "d4",
+    "a6",
+    "e4",
+    "b5",
+    "Nf3",
+    "Bb7",
+    "Bd3"
+   ],
+   "options": [
+    {
+     "san": "e6",
+     "t": 951,
+     "continuation": "e6",
+     "said": "the board is basically losing because it creates too many king side weaknesses o so yeah the setup i like is knight f3 and generally black plays bishop b7 bishop d3 e6 this is the main line actually and i guess you could check what uh you know what people recommend on youtube i'm sure there are tutorial videos yeah now castles black generally plays c5 and i like this setup the sort of allopin-esque setup with pawns on c3 and d4 and e4 you know this kind of aesthetic i like very hard for black to do anything in regards to our center does that make sense and and the way that you expand your thinking here is as you depart from beginner level you have to understand to be start becoming more flexible with peace development right don't marry yourself to the idea of putting knights on c3 and f3 every single game understand that the knight on d2 can be just as effective so i won't delve too too far into the theoretical discussion here d6 bishop d3 we played anyway and a4 very important positional idea now how should we respond in the event of b4 what should we do here and there are"
+    },
+    {
+     "san": "Bc8",
+     "t": 1000,
+     "continuation": "Bc8 Bf1 d6",
+     "said": "don't marry yourself to the idea of putting knights on c3 and f3 every single game understand that the knight on d2 can be just as effective so i won't delve too too far into the theoretical discussion here d6 bishop d3 we played anyway and a4 very important positional idea now how should we respond in the event of b4 what should we do here and there are several ways that we could play this but there is one move i like to play in such positions which is to prevent black from playing a5 yeah so one way we can do this is go c3 c3 is a great move here and in the event of the trade who does the opening of the b file favor well it favors the more active the player with the more active pieces right it's white we have an easier job getting a rook to the b file than black does but i also like the move a5 here which prevents black from playing a5 and if black plays c5 i mean he really overextends himself in this position he has this diagonal as we can kind of see that this is very very flimsy now the pawn on a6 is also kind of a long-term weakness it's being stared at by the bishop okay so i don't again not to delve too deeply"
+    }
+   ]
+  },
+  {
+   "ply": 15,
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/1p6/P2PP3/3B1N2/1PP2PPP/RNBQ1RK1 b kq - 2 8",
+   "line": [
+    "d4",
+    "a6",
+    "e4",
+    "b5",
+    "Nf3",
+    "Bb7",
+    "Bd3",
+    "Bc8",
+    "Bf1",
+    "d6",
+    "Bd3",
+    "g6",
+    "a4",
+    "Bg7",
+    "O-O"
+   ],
+   "options": [
+    {
+     "san": "b4",
+     "t": 1007,
+     "continuation": "b4",
+     "said": "so i won't delve too too far into the theoretical discussion here d6 bishop d3 we played anyway and a4 very important positional idea now how should we respond in the event of b4 what should we do here and there are several ways that we could play this but there is one move i like to play in such positions which is to prevent black from playing a5 yeah so one way we can do this is go c3 c3 is a great move here and in the event of the trade who does the opening of the b file favor well it favors the more active the player with the more active pieces right it's white we have an easier job getting a rook to the b file than black does but i also like the move a5 here which prevents black from playing a5 and if black plays c5 i mean he really overextends himself in this position he has this diagonal as we can kind of see that this is very very flimsy now the pawn on a6 is also kind of a long-term weakness it's being stared at by the bishop okay so i don't again not to delve too deeply into this but just remember this concept of a4 when black has pawns on a6 and b5 and of course vice versa"
+    },
+    {
+     "san": "c6",
+     "t": 1072.5,
+     "continuation": "c6",
+     "said": "into this but just remember this concept of a4 when black has pawns on a6 and b5 and of course vice versa um c6 is just a blunder a takes b5 and of course the point is bishop takes b5 check and uh because of the x-ray black like a screw you can't take back but um a5 is exacerbates the issue even further because it just creates another weakness and at this point already it's a very difficult position for black pawn down weak pawn on a5 it's very very difficult to defend such positions excelsior yeah i guess anyways rookie one everything we did here should be completely clear to literally everybody i mean if you have any questions about why we played the way we did here feel free but hopefully it was pretty clear yeah now knight c4 right preparing e5 but in the right way this is a good thing to think about if you have a pawn break think about what it is that you want to recapture with right what piece do you ultimately want to end up on e5 right is it the pawn is it the rook well it's def usually the answer to that question when in doubt it's the knight his knights in the center are you know in terms of pieces that are centralized knights"
+    }
+   ]
+  },
+  {
+   "ply": 40,
+   "fen": "1r1q1r1k/3bppbp/5np1/p3N1B1/3P4/2PB3P/1P3PP1/R2QR1K1 w - - 1 21",
+   "line": [
+    "d4",
+    "a6",
+    "e4",
+    "b5",
+    "Nf3",
+    "Bb7",
+    "Bd3",
+    "Bc8",
+    "Bf1",
+    "d6",
+    "Bd3",
+    "g6",
+    "a4",
+    "Bg7",
+    "O-O",
+    "c6",
+    "axb5",
+    "cxb5",
+    "Bxb5+",
+    "Nc6",
+    "Bd3",
+    "a5",
+    "c3",
+    "Bd7",
+    "Bg5",
+    "Nf6",
+    "Nbd2",
+    "O-O",
+    "Re1",
+    "Re8",
+    "h3",
+    "Kh8",
+    "Nc4",
+    "Rb8",
+    "e5",
+    "Nxe5",
+    "Ncxe5",
+    "dxe5",
+    "Nxe5",
+    "Rf8"
+   ],
+   "options": [
+    {
+     "san": "Bc4",
+     "t": 1154.5,
+     "continuation": "Bc4",
+     "said": "e5 and this is a terrible position for black he's already almost lost more resilient would have been to play rook f8 obviously not missing the fork but uh we would have gone bishop c4 quite possibly and this puts more pressure on f7 that's a terrible position for black terrible bishop b6 the only important tactical moment in this game was bishop takes f6 just a subtlety right and a lot of people would automatically play knight c6 but training yourself to pay attention to on defended pieces and by the way bishop takes f6 now it's too late for that because black can now take the knight um but training yourself to pay attention to undefended pieces at all times and and not rushing into tempting moves i mean that's really all that it takes right because once i alerted you to the fact that black had resource here everybody saw queen d5 and once i told you don't play knight c6 automatically you guys saw this idea uh but that you know that's the you have to remember to train yourself to do that yourself okay bishop f6 bishop f6 knight c6 and um the rest of the game is i think quite clear without analysis"
+    },
+    {
+     "san": "Bh4",
+     "t": 1165,
+     "continuation": "Bh4 Re8 Bxf6 Be6",
+     "said": "but uh we would have gone bishop c4 quite possibly and this puts more pressure on f7 that's a terrible position for black terrible bishop b6 the only important tactical moment in this game was bishop takes f6 just a subtlety right and a lot of people would automatically play knight c6 but training yourself to pay attention to on defended pieces and by the way bishop takes f6 now it's too late for that because black can now take the knight um but training yourself to pay attention to undefended pieces at all times and and not rushing into tempting moves i mean that's really all that it takes right because once i alerted you to the fact that black had resource here everybody saw queen d5 and once i told you don't play knight c6 automatically you guys saw this idea uh but that you know that's the you have to remember to train yourself to do that yourself okay bishop f6 bishop f6 knight c6 and um the rest of the game is i think quite clear without analysis queen e3 is a nice move defending h3 offering the queen trade weaponized queen trade right using the queen trade as a weapon to force your your opponent's queen off of a good square"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,453 @@
+{
+ "videoId": "HVKBVYhxpEY",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 720",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1004.5,
+   "line": [
+    "e4",
+    "d6"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "them apparently let's see what he does okay he might not make a move now again all ratings are refunded i will abort in 15 okay he goes d6 so he goes for what's called"
+  },
+  {
+   "ply": 3,
+   "t": 1007,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "the perk opening he allows white to gain control of the center this is not a bad opening if black plays well but at the level of"
+  },
+  {
+   "ply": 4,
+   "t": 1022.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3pp3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "my opponent most people who play this move are not fully aware of how to play this and they get in trouble very quickly i'm gonna try to show you okay so this is of the category of openings that people play to try to intimidate you to throw you out of your comfort zone you guys remember that when we see an opening like this we need to abide very strictly by opening principles if we do"
+  },
+  {
+   "ply": 5,
+   "t": 1047.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3pp3/8/2PPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "that we're not going to get in a lot of trouble there's a couple of ways to play this we can control the center even more with our pawns or we can begin developing our pieces either strategy is good normally in such situations we have prioritized development but since we're rated a little bit higher let me show you how i would actually play so i would actually play the move c4 expanding our central control but"
+  },
+  {
+   "ply": 6,
+   "t": 1069.5,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "rn1qkbnr/pppb1ppp/3pp3/8/2PPP3/8/PP3PPP/RNBQKBNR w KQkq - 1 4",
+   "said": "because our center is so vast okay and this is where people run into a lot of trouble so listen carefully people get too fixated on on expanding the center and forget that they need to support it with their pieces so i would not play f4 which would not be a bad move but that would overexpand my center it's"
+  },
+  {
+   "ply": 7,
+   "t": 1083,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rn1qkbnr/pppb1ppp/3pp3/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 4",
+   "said": "more important to start developing than to keep expanding and expanding and expanding so let's get our night out and start enhancing our control over the center he's developing terribly i mean"
+  },
+  {
+   "ply": 8,
+   "t": 1089.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rn1qkb1r/pppb1ppp/3ppn2/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 3 5",
+   "said": "you guys can see he's just playing so passively and f4 is good here but again i would"
+  },
+  {
+   "ply": 9,
+   "t": 1098.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rn1qkb1r/pppb1ppp/3ppn2/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 4 5",
+   "said": "probably play f4 but let's practice sound positional principles so let's continue developing"
+  },
+  {
+   "ply": 10,
+   "t": 1104,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rn1qk2r/pppbbppp/3ppn2/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 5 6",
+   "said": "okay he his clock wasn't running for some reason he's played bishop e7 and i really lagged whoa"
+  },
+  {
+   "ply": 11,
+   "t": 1110.5,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rn1qk2r/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 6 6",
+   "said": "okay so something froze there okay let's continue sorry i don't know what was going on anyways i lost a bunch of time there was some server lag bishop d3 we're gonna keep developing now notice what i want you guys to"
+  },
+  {
+   "ply": 12,
+   "t": 1129.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQK2R w KQ - 7 7",
+   "said": "notice what i want you guys to notice is that is that he's developing very powerfully we're continuing to develop where people really struggle is in"
+  },
+  {
+   "ply": 13,
+   "t": 1131.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQ1RK1 b - - 8 7",
+   "said": "transforming in transforming their space advantage into something more tangible so if you are among those people i want you to look carefully and we have not a lot of time here on the clock so i'm going to play a little bit faster but i want to look carefully at how i actually do that everything is nicely developed other than this bishop but what do we do with that how do we actually make stuff happen out of that well normally when i say make stuff happen what i really mean is we need to expand in the center and we need to start attacking on one of the flanks which of the flanks do you think we're going to start attacking on why did we put this bishop on d3 why do we put this bishop on d3 how might we open that bishop up and what kind of stuff are we going to be looking for when we do that bingo we're going to be looking to play e5 and when we play e5 those of you"
+  },
+  {
+   "ply": 14,
+   "t": 1196,
+   "line": [
+    "c5"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/3ppn2/2p5/2PPP3/2NB1N2/PP3PPP/R1BQ1RK1 w - - 0 8",
+   "said": "familiar with the greek gift sacrifice there's one thing to bear in mind which is incredibly important which is that when you are doing the greek gift sacrifice and after the game before i leave"
+  },
+  {
+   "ply": 15,
+   "t": 1198.5,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/3ppn2/2P5/2P1P3/2NB1N2/PP3PPP/R1BQ1RK1 b - - 0 8",
+   "said": "i'm going to talk about let me take first just to avoid the central tension"
+  },
+  {
+   "ply": 17,
+   "t": 1202,
+   "line": [
+    "dxc5",
+    "e5"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/4pn2/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 b - - 0 9",
+   "said": "and then i'll play e5 the greek gift sacrifice starts with bishop takes h7 followed by knight g5"
+  },
+  {
+   "ply": 18,
+   "t": 1211.5,
+   "line": [
+    "Nh5"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/4p3/2p1P2n/2P5/2NB1N2/PP3PPP/R1BQ1RK1 w - - 1 10",
+   "said": "here black has a bishop on e7 guys so one of the preconditions for the greek gift is that the g5 square has to be uncovered by your opponent here it is covered so we can't do the great gift but we can do something else and what i want you guys to understand is that even though you might be thinking of attacking you should always be looking for more simple ways to win such as just winning your opponent's material so here mike is seeing the move i look"
+  },
+  {
+   "ply": 19,
+   "t": 1247.5,
+   "line": [
+    "g4"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/4p3/2p1P2n/2P3P1/2NB1N2/PP3P1P/R1BQ1RK1 b - - 0 10",
+   "said": "at this night i see whoa whoa whoa whoa where is this knight it's on the rim does this knight have any escape squares no it doesn't knight f6 ef knight f4 bishop f4 so we can just trap the knife by playing g4 i'm violating a rule here daniel aren't you pushing a pawn in front of your king you just said this was bad this is an exception to the rule because i'm winning a darn knight if he had more pieces on the king side okay maybe i would have done this with a lot of reservations"
+  },
+  {
+   "ply": 21,
+   "t": 1273,
+   "line": [
+    "Nf6",
+    "exf6"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/4pP2/2p5/2P3P1/2NB1N2/PP3P1P/R1BQ1RK1 b - - 0 11",
+   "said": "but he doesn't have anything on the king's side this is the consequences of him developing his pieces terribly the consequences of that is that he is not able to exploit the fact that i pushed upon in front of my king he has to give up his knight"
+  },
+  {
+   "ply": 22,
+   "t": 1274.5,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "rn1q1rk1/pp1b1ppp/4pb2/2p5/2P3P1/2NB1N2/PP3P1P/R1BQ1RK1 w - - 0 12",
+   "said": "let's continue attacking how do we continue well in order to attack this pawn we need to bring some pieces into the game in particular i'm looking at this"
+  },
+  {
+   "ply": 23,
+   "t": 1288.5,
+   "line": [
+    "g5"
+   ],
+   "fen": "rn1q1rk1/pp1b1ppp/4pb2/2p3P1/2P5/2NB1N2/PP3P1P/R1BQ1RK1 b - - 0 12",
+   "said": "knight on c3 where can we put this knight yeah g5 is good g5 is good let's go g5 let's actually push the bishop away and if he takes on c3 that plays into our hands that actually is a trade which is good"
+  },
+  {
+   "ply": 24,
+   "t": 1301,
+   "line": [
+    "Bd4"
+   ],
+   "fen": "rn1q1rk1/pp1b1ppp/4p3/2p3P1/2Pb4/2NB1N2/PP3P1P/R1BQ1RK1 w - - 1 13",
+   "said": "for us and we get rid of one of the defenders surrounding his king which is also good okay well let's take"
+  },
+  {
+   "ply": 25,
+   "t": 1302.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "rn1q1rk1/pp1b1ppp/4p3/2p3P1/2PN4/2NB4/PP3P1P/R1BQ1RK1 b - - 0 13",
+   "said": "the bishop thank you for giving it to us"
+  },
+  {
+   "ply": 26,
+   "t": 1304,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rn1q1rk1/pp1b1ppp/4p3/6P1/2Pp4/2NB4/PP3P1P/R1BQ1RK1 w - - 0 14",
+   "said": "and now very important not to play queen h5 that would be a very tempting move and it"
+  },
+  {
+   "ply": 27,
+   "t": 1311.5,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "rn1q1rk1/pp1b1ppp/4p3/6P1/2PpN3/3B4/PP3P1P/R1BQ1RK1 b - - 1 14",
+   "said": "would be a very bad one because he plays g6 so let's get 94 in just centralizing the knight now we're going to get the queen to h5 and we are going to accumulate the pieces around our opponent's kit um he actually probably should take on e4 and go g6 but you know he's on his last legs here uh and the question is is he going to defend as tenaciously as possible or um well or is he going to succumb quickly what are we threatening in this position i have a feeling that he might miss this i have a feeling that he might play moves to just e5 if i know these players what are we threatening very good guys knight f6 how do you find a move like this it's simple you see h7 you know that you're trying to attack that square what's stopping this from being checkmate obviously it's the fact that we have a knight here obstructing the bishop so knight f6 now i see that it's not entirely made he can still take with the knight if he takes with a knight he defends h7 we take the knight he's got to go g6 and what kind of mate am i already thinking about what kind of mate am i already thinking about after he goes g6 i want the name of this mate bingo lobster instrument can i make can i made him immediately with queen h6 don't rush guys very important to be disciplined can i play queen h6 no you cannot because of queen takes f6 that's okay i saw that so what we're going to do is we're going to drop the queen back then we're going to bring the bishop out and now we're threatening the lobster pincermate he has to go h5 in order to defend he doesn't so let's lobster rip into him you see how clear when you're up a piece and you're attacking like this you're not always in a hurry thank you flyerton good to see you my friend good to see you my friend and this will be the last game of the stream guys and i will return around 1am or so for another hour to continue the speed run bishop takes f6 and we can actually pre-move queen g7 because because there is just no defense now very quickly what if he had played h5 in order to block the queen's at brock block the queen's access to h6 well here's how i think of this position do you guys see the relationship between the bishop and the queen okay this relationship is a very important one i have told you guys about it before when there is a relationship like this called an x-ray a piece staring at the queen in particular through the lens of another piece you immediately and everybody's seeing this so quickly that's incredible you immediately need to start thinking okay if i play f7 that's going to be a check i'm going to win a queen and so you can play bishop takes g6 sacrificing one bishop f takes g6 f7 and you win the queen but daniel you didn't give lobster pinch remain i thought you wanted to give lobster pincer mate well that's where the notion of flexibility comes in okay you have to be flexible as to the objective of your attack winning a queen i think nobody would disagree with me is a pretty good result of an attack so that's why it's so important to be open-minded to what it is you're trying to accomplish okay so that's what i would do if he doesn't take the bishop then the road is clear you can play queen takes h5 or bishop h5 the king is wide open and at your"
+  },
+  {
+   "ply": 28,
+   "t": 1513,
+   "line": [
+    "Bc6"
+   ],
+   "fen": "rn1q1rk1/pp3ppp/2b1p3/6P1/2PpN3/3B4/PP3P1P/R1BQ1RK1 w - - 2 15",
+   "said": "leisure you could basically give the lobster pins or mate all right shinigami thank you so much for the seven months amazing stuff going on and that's basically what i did now let's quickly go over the game i do have to run"
+  },
+  {
+   "ply": 7,
+   "t": 1517.5,
+   "line": [],
+   "fen": "rn1qkbnr/pppb1ppp/3pp3/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 4",
+   "said": "uh but let's quickly go over the game i thought i had a little bit more time but that's okay i might be back guys um i think that everything i did in the"
+  },
+  {
+   "ply": 11,
+   "t": 1526,
+   "line": [
+    "Be7",
+    "Bd3",
+    "Nf6",
+    "Nf3"
+   ],
+   "fen": "rn1qk2r/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 6 6",
+   "said": "opening should make sense to you guys i played bishop d3 because i'm anticipating him castling"
+  },
+  {
+   "ply": 13,
+   "t": 1533,
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQ1RK1 b - - 8 7",
+   "said": "and i want to play e5 and open up the bishop's control of the h7 square thank"
+  },
+  {
+   "ply": 16,
+   "t": 1534.5,
+   "line": [
+    "c5",
+    "dxc5",
+    "dxc5"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/4pn2/2p5/2P1P3/2NB1N2/PP3PPP/R1BQ1RK1 w - - 0 9",
+   "said": "you hortback so much appreciate it um and here i played e5 and what would i"
+  },
+  {
+   "ply": 17,
+   "t": 1538,
+   "line": [
+    "e5"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/4pn2/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 b - - 0 9",
+   "said": "have done had he played 98 which is a"
+  },
+  {
+   "ply": 18,
+   "t": 1540,
+   "line": [
+    "Ne8"
+   ],
+   "fen": "rn1qnrk1/pp1bbppp/4p3/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 w - - 1 10",
+   "said": "better move how do we actually proceed uh with the attack now one thing that i want to make"
+  },
+  {
+   "ply": 20,
+   "t": 1551.5,
+   "line": [
+    "Bxh7+",
+    "Kxh7"
+   ],
+   "fen": "rn1qnr2/pp1bbppk/4p3/2p1P3/2P5/2N2N2/PP3PPP/R1BQ1RK1 w - - 0 11",
+   "said": "very clear is that when we have a pawn on h7 like this when we try to greek gift as i said"
+  },
+  {
+   "ply": 21,
+   "t": 1553.5,
+   "line": [
+    "Ng5+"
+   ],
+   "fen": "rn1qnr2/pp1bbppk/4p3/2p1P1N1/2P5/2N5/PP3PPP/R1BQ1RK1 b - - 1 11",
+   "said": "we can't do this because g5 is under"
+  },
+  {
+   "ply": 22,
+   "t": 1554.5,
+   "line": [
+    "Bxg5"
+   ],
+   "fen": "rn1qnr2/pp1b1ppk/4p3/2p1P1b1/2P5/2N5/PP3PPP/R1BQ1RK1 w - - 0 12",
+   "said": "black's control that is the litmus test for determining when a greek gift sacrifice works sometimes it works even when there is a piece defending the square that is a"
+  },
+  {
+   "ply": 18,
+   "t": 1570,
+   "line": [],
+   "fen": "rn1qnrk1/pp1bbppp/4p3/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 w - - 1 10",
+   "said": "complicated scenario which i will go to go through later but i want to talk about the notion of a battery batteries are when two pieces are stacked either on top of each other or on the same diagonal usually the most effective batteries are going to be doubled rooks which is a type of battery or the most famous battery a queen and a bishop on the same diagonal do we want it to be like this no we don't because when we have a queen bishop batter we normally want to lead with the queen why do we want to lead with the queen because white threatens checkmate and if we juxtapose that with this position this is a serious threat but it's not a threat of checkmate there are exceptions to the rules"
+  },
+  {
+   "ply": 22,
+   "t": 1614,
+   "line": [
+    "Be4",
+    "Nc6",
+    "Qd3",
+    "g6"
+   ],
+   "fen": "r2qnrk1/pp1bbp1p/2n1p1p1/2p1P3/2P1B3/2NQ1N2/PP3PPP/R1B2RK1 w - - 0 12",
+   "said": "sometimes the situation is chaotic so you want your queen behind a wall of defenders here his pieces are so passive that we can set up the battery with total impunity now wait a second we set up the battery big whoop he just defends but the point of the battery isn't to deliver checkmate right we think he's going to defend against checkmate but when he plays g6 he introduces more"
+  },
+  {
+   "ply": 24,
+   "t": 1632.5,
+   "line": [
+    "Bh6",
+    "Ng7"
+   ],
+   "fen": "r2q1rk1/pp1bbpnp/2n1p1pB/2p1P3/2P1B3/2NQ1N2/PP3PPP/R4RK1 w - - 2 13",
+   "said": "weaknesses on the king side this is how you attack which we can then exploit by putting our pieces on better squares now we can do a bunch of different things we can get the knight over to f6 and again this position smells of a lobster pins are made so what i want to make very clear is that attacking is not about finding one idea and then getting super disappointed when this idea doesn't work it's about orchestrating ideas and when these ideas don't work in the sense of delivering mate we think okay well how is this idea weakened his position how do we develop new ideas that stack on top of what it is that we were trying to do in the first place riemann asks a great question what about bishop c6 to stop queen e4 well there's a couple of things we could do here we could go rook d1 to create the pin against the screen we could attack on multiple angles and guess what if he plays queen b6 we can already think about playing knight g5 because we ask ourselves what is the drawback of his queen move well gets the screen away from its control of g5 so we can play knight g5 to open up the queen's access to h5 this is all part of the art of attacking chess attacking is incredibly difficult that is a skill we master over the course of many years"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 7,
+   "fen": "rn1qkbnr/pppb1ppp/3pp3/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 4",
+   "line": [
+    "e4",
+    "d6",
+    "d4",
+    "e6",
+    "c4",
+    "Bd7",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "Nf6",
+     "t": 1089.5,
+     "continuation": "Nf6",
+     "said": "than to keep expanding and expanding and expanding so let's get our night out and start enhancing our control over the center he's developing terribly i mean you guys can see he's just playing so passively and f4 is good here but again i would probably play f4 but let's practice sound positional principles so let's continue developing okay he his clock wasn't running for some reason he's played bishop e7 and i really lagged whoa okay so something froze there okay let's continue sorry i don't know what was going on anyways i lost a bunch of time there was some server lag bishop d3 we're gonna keep developing now notice what i want you guys to notice what i want you guys to notice is that is that he's developing very powerfully we're continuing to develop where people really struggle is in transforming in transforming their space advantage into something more tangible so if you are among those people i want you to look carefully and we have not a lot of time here on the clock so i'm going to play a little bit faster but i want to look carefully at how i actually do that everything is nicely developed other"
+    },
+    {
+     "san": "Be7",
+     "t": 1526,
+     "continuation": "Be7 Bd3 Nf6 Nf3",
+     "said": "to run uh but let's quickly go over the game i thought i had a little bit more time but that's okay i might be back guys um i think that everything i did in the opening should make sense to you guys i played bishop d3 because i'm anticipating him castling and i want to play e5 and open up the bishop's control of the h7 square thank you hortback so much appreciate it um and here i played e5 and what would i have done had he played 98 which is a better move how do we actually proceed uh with the attack now one thing that i want to make very clear is that when we have a pawn on h7 like this when we try to greek gift as i said we can't do this because g5 is under black's control that is the litmus test for determining when a greek gift sacrifice works sometimes it works even when there is a piece defending the square that is a complicated scenario which i will go to go through later but i want to talk about the notion of a battery batteries are when two pieces are stacked either on top of each other or on the same diagonal usually the most effective batteries are going to be doubled rooks which is a type of battery or the most famous battery a queen and a bishop on the same diagonal do we want it to be like this no we"
+    }
+   ]
+  },
+  {
+   "ply": 17,
+   "fen": "rn1q1rk1/pp1bbppp/4pn2/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 b - - 0 9",
+   "line": [
+    "e4",
+    "d6",
+    "d4",
+    "e6",
+    "c4",
+    "Bd7",
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "Be7",
+    "Bd3",
+    "O-O",
+    "O-O",
+    "c5",
+    "dxc5",
+    "dxc5",
+    "e5"
+   ],
+   "options": [
+    {
+     "san": "Nh5",
+     "t": 1211.5,
+     "continuation": "Nh5",
+     "said": "and then i'll play e5 the greek gift sacrifice starts with bishop takes h7 followed by knight g5 here black has a bishop on e7 guys so one of the preconditions for the greek gift is that the g5 square has to be uncovered by your opponent here it is covered so we can't do the great gift but we can do something else and what i want you guys to understand is that even though you might be thinking of attacking you should always be looking for more simple ways to win such as just winning your opponent's material so here mike is seeing the move i look at this night i see whoa whoa whoa whoa where is this knight it's on the rim does this knight have any escape squares no it doesn't knight f6 ef knight f4 bishop f4 so we can just trap the knife by playing g4 i'm violating a rule here daniel aren't you pushing a pawn in front of your king you just said this was bad this is an exception to the rule because i'm winning a darn knight if he had more pieces on the king side okay maybe i would have done this with a lot of reservations but he doesn't have anything on the king's side this is the consequences of him developing his pieces terribly the consequences of that is that he is not able to exploit the fact that i pushed upon"
+    },
+    {
+     "san": "Ne8",
+     "t": 1540,
+     "continuation": "Ne8",
+     "said": "anticipating him castling and i want to play e5 and open up the bishop's control of the h7 square thank you hortback so much appreciate it um and here i played e5 and what would i have done had he played 98 which is a better move how do we actually proceed uh with the attack now one thing that i want to make very clear is that when we have a pawn on h7 like this when we try to greek gift as i said we can't do this because g5 is under black's control that is the litmus test for determining when a greek gift sacrifice works sometimes it works even when there is a piece defending the square that is a complicated scenario which i will go to go through later but i want to talk about the notion of a battery batteries are when two pieces are stacked either on top of each other or on the same diagonal usually the most effective batteries are going to be doubled rooks which is a type of battery or the most famous battery a queen and a bishop on the same diagonal do we want it to be like this no we don't because when we have a queen bishop batter we normally want to lead with the queen why do we want to lead with the queen because white threatens checkmate and if we juxtapose that with this position this is a serious threat but it's not a"
+    }
+   ]
+  },
+  {
+   "ply": 18,
+   "fen": "rn1qnrk1/pp1bbppp/4p3/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 w - - 1 10",
+   "line": [
+    "e4",
+    "d6",
+    "d4",
+    "e6",
+    "c4",
+    "Bd7",
+    "Nc3",
+    "Be7",
+    "Bd3",
+    "Nf6",
+    "Nf3",
+    "O-O",
+    "O-O",
+    "c5",
+    "dxc5",
+    "dxc5",
+    "e5",
+    "Ne8"
+   ],
+   "options": [
+    {
+     "san": "Bxh7+",
+     "t": 1551.5,
+     "continuation": "Bxh7+ Kxh7",
+     "said": "better move how do we actually proceed uh with the attack now one thing that i want to make very clear is that when we have a pawn on h7 like this when we try to greek gift as i said we can't do this because g5 is under black's control that is the litmus test for determining when a greek gift sacrifice works sometimes it works even when there is a piece defending the square that is a complicated scenario which i will go to go through later but i want to talk about the notion of a battery batteries are when two pieces are stacked either on top of each other or on the same diagonal usually the most effective batteries are going to be doubled rooks which is a type of battery or the most famous battery a queen and a bishop on the same diagonal do we want it to be like this no we don't because when we have a queen bishop batter we normally want to lead with the queen why do we want to lead with the queen because white threatens checkmate and if we juxtapose that with this position this is a serious threat but it's not a threat of checkmate there are exceptions to the rules sometimes the situation is chaotic so you want your queen behind a wall of defenders here his pieces are so passive that we can set up the battery with"
+    },
+    {
+     "san": "Be4",
+     "t": 1614,
+     "continuation": "Be4 Nc6 Qd3 g6",
+     "said": "sometimes the situation is chaotic so you want your queen behind a wall of defenders here his pieces are so passive that we can set up the battery with total impunity now wait a second we set up the battery big whoop he just defends but the point of the battery isn't to deliver checkmate right we think he's going to defend against checkmate but when he plays g6 he introduces more weaknesses on the king side this is how you attack which we can then exploit by putting our pieces on better squares now we can do a bunch of different things we can get the knight over to f6 and again this position smells of a lobster pins are made so what i want to make very clear is that attacking is not about finding one idea and then getting super disappointed when this idea doesn't work it's about orchestrating ideas and when these ideas don't work in the sense of delivering mate we think okay well how is this idea weakened his position how do we develop new ideas that stack on top of what it is that we were trying to do in the first place riemann asks a great question what about bishop c6 to stop queen e4 well there's a couple of things we could do here we could go rook d1 to create the pin against the screen we could attack on multiple angles and guess what if he plays queen b6 we can already think about playing knight"
+    }
+   ]
+  }
+ ]
+}

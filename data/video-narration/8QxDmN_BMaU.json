@@ -1,0 +1,144 @@
+{
+ "videoId": "8QxDmN_BMaU",
+ "title": "Beginner To Master | Chess Speedrun | King's Gambit | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1268.5,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "so our king's gambit experiment uh turned out pretty darn well now the king's gambit has been around since the 16th century king's gamut has been around essentially"
+  },
+  {
+   "ply": 3,
+   "t": 1270,
+   "line": [
+    "f4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+   "said": "forever okay literally as long as"
+  },
+  {
+   "ply": 2,
+   "t": 1274.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "chess in europe has been around so is the king's gambit the first recorded game played in the king's game it was by ray lopez so ry lopez did not only play the rail lopez he played in 1560 in rome an italian player named giovanni dakutri leonardo not leonardo da vinci uh although leonardo da vinci probably played maybe played chess i don't know um but he played a guy named the chew tree i think it's pronounced c"
+  },
+  {
+   "ply": 4,
+   "t": 1313.5,
+   "line": [
+    "f4",
+    "d6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "said": "in italian that shoe tree and ry lopez absolutely demolished him in a queen's gambit uh the game between ray lopez and the chew tree continued as follows black in the game played d6 that's like an old-fashioned move declining the declining the king's gambit it's not a great move um because it's really really passive ry"
+  },
+  {
+   "ply": 8,
+   "t": 1326.5,
+   "line": [
+    "Bc4",
+    "Bg4",
+    "Nf3",
+    "c6"
+   ],
+   "fen": "rn1qkbnr/pp3ppp/2pp4/4p3/2B1PPb1/5N2/PPPP2PP/RNBQK2R w KQkq - 0 5",
+   "said": "lopez played bishop c4 c6 and knight f3 bishop g4 and black is already in big trouble f takes"
+  },
+  {
+   "ply": 10,
+   "t": 1329.5,
+   "line": [
+    "fxe5",
+    "dxe5"
+   ],
+   "fen": "rn1qkbnr/pp3ppp/2p5/4p3/2B1P1b1/5N2/PPPP2PP/RNBQK2R w KQkq - 0 6",
+   "said": "e5 d takes e5 and what very typical tactical move did white now play um you can see that uh rye lopez was"
+  },
+  {
+   "ply": 13,
+   "t": 1344.5,
+   "line": [
+    "Bxf7+",
+    "Kxf7",
+    "Nxe5+"
+   ],
+   "fen": "rn1q1bnr/pp3kpp/2p5/4N3/4P1b1/8/PPPP2PP/RNBQK2R b KQ - 0 7",
+   "said": "quite good actually he wrote a book on chess but leonardo da chuchi was just not not a very good player bishop f7 95 i think we'll forgive him he lived in"
+  },
+  {
+   "ply": 14,
+   "t": 1345.5,
+   "line": [
+    "Ke8"
+   ],
+   "fen": "rn1qkbnr/pp4pp/2p5/4N3/4P1b1/8/PPPP2PP/RNBQK2R w KQ - 1 8",
+   "said": "the 1500s queen takes g4 and now queen e6"
+  },
+  {
+   "ply": 18,
+   "t": 1350,
+   "line": [
+    "Qf3",
+    "Be6",
+    "Qf6",
+    "Nxf6"
+   ],
+   "fen": "rn1qkb1r/pp4pp/2p1bn2/4N3/4P3/8/PPPP2PP/RNB1K2R w KQ - 0 10",
+   "said": "white to play and win the game in the fastest way rye lopez played a perfect game i think he was cheating i i think i think uh ry lopez might have been cheating guys to be honest he might have been using uh socks stockfish uh 0.0001 queen ca queen d8 queen takes d8 king takes d and knight f7 knight takes a train um so he he's notorious he got banned yeah he he absolutely got banned so"
+  },
+  {
+   "ply": 3,
+   "t": 1389,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+   "said": "he was using houdini exactly so that's the game between ray lopez and leonardo that was the first ever recorded game featuring the king's gambit uh what's impressive about this by the way is that f4 is not an intuitive move let's get something very straight the intuitive move here is knight f3 f4 actually like weakens white's king it took some cojones to play a move like this and uh the fact that a lot of these early players were willing to do that is is squarely to their credit uh we shouldn't take that for granted then it was played in 1590 by an italian player named giulio polario and palario also crushed his opponent a guy named busnardo and then the famous geokino graco a player who i've mentioned several times he was an italian living in the early 17th century in the 1600s and he actually formalized some of the analysis of the king's gambit uh he did a lot of work on it and then the king's gambit was wildly popular as you guys know morphe's day in the 1800s everybody was playing it it was all the rage it was for a time more popular than any other opening and then slowly but surely italian rye lopez the scotch all of those openings started becoming more popular king's game it really fell out of favor probably in the first half of the 1900s people started realizing that black had many ways to play against it and if black was very precise then white would be the one struggling for equality and then when computers came around uh what should be pointed out the king's gambit has not i repeat it has not been refuted black is not winning uh black does not have a big advantage but i believe that black has several ways to get let's just say a very comfortable position and more importantly black has several ways to take the sting out of the king's gambit if if white still got an attacking position people would be okay with it but black has ways to play against it that really takes the fun out of it that's that's what that's the reason it"
+  },
+  {
+   "ply": 6,
+   "t": 1511,
+   "line": [
+    "d6",
+    "Nf3",
+    "exf4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/8/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 4",
+   "said": "fell out of favor okay so finally hope you guys enjoyed that little history he takes up four knight f3 um d6 is one of the possible moves here for sure let me check on its popularity so d6 is the second most popular move and now i played d4"
+  },
+  {
+   "ply": 8,
+   "t": 1528.5,
+   "line": [
+    "d4",
+    "g5"
+   ],
+   "fen": "rnbqkbnr/ppp2p1p/3p4/6p1/3PPp2/5N2/PPP3PP/RNBQKB1R w KQkq - 0 5",
+   "said": "and g5 of course you have to keep the pawn otherwise this doesn't make any sense and the move bishop c4 is actually rare yes you guys are correct h4 is the main line here h4 and this"
+  },
+  {
+   "ply": 9,
+   "t": 1530,
+   "line": [
+    "h4"
+   ],
+   "fen": "rnbqkbnr/ppp2p1p/3p4/6p1/3PPp1P/5N2/PPP3P1/RNBQKB1R b KQkq - 0 5",
+   "said": ""
+  },
+  {
+   "ply": 11,
+   "t": 1532,
+   "line": [
+    "g4",
+    "Ng5"
+   ],
+   "fen": "rnbqkbnr/ppp2p1p/3p4/6N1/3PPppP/8/PPP3P1/RNBQKB1R b KQkq - 1 6",
+   "said": "is actually a sacrifice line h4 g4 knight g5 and you might look at this and say well wait a second actually no knight g1 knight g1 knight g5 is possible mauro zevich played knight g5 knight g5 is interesting but probably unsound uh but the move is actually knight back to g1 the whole point is that you've softened up the f4 pawn to such a degree that you can undevelop your knight if you take this pawn then it all is justified in the end but i was out of book i decided to play a pretty natural move bishop c4 and according to the computer um no there's nothing particularly wrong with this move now if black had played g4 i fully intended to sacrifice the knight in castle and this is a kind of a variety of what's called mutzio's gambit i think the actual muzio gambit is in a slightly different version but the spirit of the gambit is kept sound because you can see how many pieces white has developed and how weak black's king is i think from a practical perspective if black doesn't know the theory this is"
+  }
+ ],
+ "forks": []
+}

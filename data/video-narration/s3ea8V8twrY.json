@@ -1,0 +1,246 @@
+{
+ "videoId": "s3ea8V8twrY",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | Want To Cheat? Get Flagged!",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 14,
+   "line": [
+    "e4",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "all right we got an opponent 24 39 let's go let's go e4"
+  },
+  {
+   "ply": 3,
+   "t": 16.5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": ""
+  },
+  {
+   "ply": 5,
+   "t": 19,
+   "line": [
+    "Qxd5",
+    "Nc3"
+   ],
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "and uh we're playing as candy okay so knight c3 is the move"
+  },
+  {
+   "ply": 6,
+   "t": 20.5,
+   "line": [
+    "Qd8"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4",
+   "said": "boy g-hub subbing himself thank you for the tier one okay so queen d8 is is one of the possible retreating"
+  },
+  {
+   "ply": 8,
+   "t": 31,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/8/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "moves by by the queen and uh the move here is of course to play d4 and to develop our pieces normally"
+  },
+  {
+   "ply": 9,
+   "t": 33,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/8/3P4/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "knight f3"
+  },
+  {
+   "ply": 11,
+   "t": 36,
+   "line": [
+    "c6",
+    "Bc4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/2BP4/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 6",
+   "said": "bishop out to c4 we seek the most active"
+  },
+  {
+   "ply": 12,
+   "t": 37.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "rnbqkb1r/p3pppp/2p2n2/1p6/2BP4/2N2N2/PPP2PPP/R1BQK2R w KQkq - 0 7",
+   "said": "squares for our pieces now b5 is already pretty weird"
+  },
+  {
+   "ply": 13,
+   "t": 42.5,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "rnbqkb1r/p3pppp/2p2n2/1p6/3P4/1BN2N2/PPP2PPP/R1BQK2R b KQkq - 1 7",
+   "said": "and i'm not entirely sure you know what"
+  },
+  {
+   "ply": 14,
+   "t": 43.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkb1r/p4ppp/2p1pn2/1p6/3P4/1BN2N2/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "said": "this move achieves other than create"
+  },
+  {
+   "ply": 15,
+   "t": 49,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbqkb1r/p4ppp/2p1pn2/1p6/3P4/1BN2N2/PPP2PPP/R1BQ1RK1 b kq - 1 8",
+   "said": "some weaknesses so let's complete our development let's"
+  },
+  {
+   "ply": 16,
+   "t": 50,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rnbqk2r/p3bppp/2p1pn2/1p6/3P4/1BN2N2/PPP2PPP/R1BQ1RK1 w kq - 2 9",
+   "said": "castle now where should this bishop go where does the bishop on c1 belong in these kinds of positions so we just need to find the most active"
+  },
+  {
+   "ply": 17,
+   "t": 69.5,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "rnbqk2r/p3bppp/2p1pn2/1p6/3P1B2/1BN2N2/PPP2PPP/R2Q1RK1 b kq - 3 9",
+   "said": "square and in my in my to in my view the most active square well y f4 i mean we can put it on f4 g5 yeah bishop f4 is a good move because it also supports the move knight e5"
+  },
+  {
+   "ply": 19,
+   "t": 71.5,
+   "line": [
+    "O-O",
+    "Ne5"
+   ],
+   "fen": "rnbq1rk1/p3bppp/2p1pn2/1p2N3/3P1B2/1BN5/PPP2PPP/R2Q1RK1 b - - 5 10",
+   "said": "we're going to slam our knight into the center and the bishop does a nice job making sure that that knight is is more stable i also like the g5 score for the bishop"
+  },
+  {
+   "ply": 20,
+   "t": 87.5,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "rnbq1rk1/p3bppp/2p1p3/1p1nN3/3P1B2/1BN5/PPP2PPP/R2Q1RK1 w - - 6 11",
+   "said": "so so why not white is slightly better here it's not not like black's position isn't terrible okay so he plays knight to knight to d5 now it's tempting to take the knight here but that would give him an improved"
+  },
+  {
+   "ply": 21,
+   "t": 100.5,
+   "line": [
+    "Bg3"
+   ],
+   "fen": "rnbq1rk1/p3bppp/2p1p3/1p1nN3/3P4/1BN3B1/PPP2PPP/R2Q1RK1 b - - 7 11",
+   "said": "center and uh this is one of those situations where you just have to keep the tension so we're just going to drop the bishop back and i don't mind it if he takes on c3"
+  },
+  {
+   "ply": 22,
+   "t": 107.5,
+   "line": [
+    "Nxc3"
+   ],
+   "fen": "rnbq1rk1/p3bppp/2p1p3/1p2N3/3P4/1Bn3B1/PPP2PPP/R2Q1RK1 w - - 0 12",
+   "said": "and seemingly ruins my pawn structure so after the game okay"
+  },
+  {
+   "ply": 23,
+   "t": 108.5,
+   "line": [
+    "bxc3"
+   ],
+   "fen": "rnbq1rk1/p3bppp/2p1p3/1p2N3/3P4/1BP3B1/P1P2PPP/R2Q1RK1 b - - 0 12",
+   "said": "it won't yeah i won't have to do it after the game i'll explain it during the game why is this uh deficient pawn structure not actually as deficient as it looks well there's a couple of things first of all he's gotten rid of his knight which means that if we look at this bishop on b3 it now is operating relatively uncontested along this diagonal the second thing is and i've explained this on several occasions there is a visual deficiency"
+  },
+  {
+   "ply": 25,
+   "t": 143,
+   "line": [
+    "a5",
+    "a4"
+   ],
+   "fen": "rnbq1rk1/4bppp/2p1p3/pp2N3/P2P4/1BP3B1/2P2PPP/R2Q1RK1 b - - 0 13",
+   "said": "in this pawn structure but on the other hand we have a lot of pawns in the center and they are defending each other so on the one hand this may look bad but it's actually a very solid pawn structure okay so we should play a4 we shouldn't let him uh trap our bishop let's go a4"
+  },
+  {
+   "ply": 26,
+   "t": 150.5,
+   "line": [
+    "Ba6"
+   ],
+   "fen": "rn1q1rk1/4bppp/b1p1p3/pp2N3/P2P4/1BP3B1/2P2PPP/R2Q1RK1 w - - 1 14",
+   "said": "and um rook bishop a6 okay so he clearly creates an x-ray against my rook what should we do how should we respond to this move very simple again no need to overthink it"
+  },
+  {
+   "ply": 27,
+   "t": 168,
+   "line": [
+    "Re1"
+   ],
+   "fen": "rn1q1rk1/4bppp/b1p1p3/pp2N3/P2P4/1BP3B1/2P2PPP/R2QR1K1 b - - 2 14",
+   "said": "all right brandon i'll play one game and then and then i'll be ready for you yeah so simply rookie one and now you should immediately start thinking about various sacrifices and in particular what sacrifice or semi sacrifice am i thinking about here uh"
+  },
+  {
+   "ply": 28,
+   "t": 186.5,
+   "line": [
+    "c5"
+   ],
+   "fen": "rn1q1rk1/4bppp/b3p3/ppp1N3/P2P4/1BP3B1/2P2PPP/R2QR1K1 w - - 0 15",
+   "said": "looking at these pawns on e6 and on f7 these pawns are quite a bit unprotected i mean they're they protect each other but that's right about it um so there's a very thematic idea here which is to take on f7 to remove the"
+  },
+  {
+   "ply": 29,
+   "t": 194,
+   "line": [
+    "Nxf7"
+   ],
+   "fen": "rn1q1rk1/4bNpp/b3p3/ppp5/P2P4/1BP3B1/2P2PPP/R2QR1K1 b - - 0 15",
+   "said": "defender on the e6 pawn in fact let's do it knight takes f7 i'm going to do that pretty intuitively because at the very least at the very very least we are going to get uh two pawns and a"
+  },
+  {
+   "ply": 31,
+   "t": 207.5,
+   "line": [
+    "Rxf7",
+    "Bxe6"
+   ],
+   "fen": "rn1q2k1/4brpp/b3B3/ppp5/P2P4/2P3B1/2P2PPP/R2QR1K1 b - - 0 16",
+   "said": "rook for two pieces which is already a good amount of material but uh my bet is that we're going to get more than that if i play this correctly thank you software house for the prime because if we look around the board you"
+  },
+  {
+   "ply": 32,
+   "t": 226.5,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "rn1q2k1/1b2brpp/4B3/ppp5/P2P4/2P3B1/2P2PPP/R2QR1K1 w - - 1 17",
+   "said": "guys should notice the rook on a what can we say about that rook well that rook is undefended which means that what are we threatening here in addition to just taking the rook what how what follow-up okay so he defends against that but what follow-up were we threatening we were threatening a fork on f3 yes all right now we really have a have a wide choice and we have to figure out what our priorities are now it seems to me it seems to me that it probably makes sense to try to get this rook uh and attack this rook as much as possible while we have the chance we don't want to take on f7 prematurely because that rook isn't going anywhere it's pinned so let's go let's go queen h5 let's get the queen out and let's put even more pressure on this rock hopefully that's going to lead to something good and this concept is a very important one the fact that we're not in a hurry to take the rook a lot of people would grab that rook first and think later but uh we obviously don't need to do that because we're not in a hurry and now um again we have several approaches to this position we are still not in a hurry so we can take other stuff first let's play a takes b5 first and notice that this pawn on b5 stops his knight from getting out to a6 or c6 so he's completely paralyzed on the king side we have three pawns now and um you know and bishop takes f7 is going to come at some point we still don't need to take we can still move our queen and we're still going to be able to take his rook at our convenience now we have a very crafty move with our queen very clever little move to e2 could somebody tell me what the idea is of this move why are we bringing the queen specifically to e2 and not to say g4 or h3 or d1 what are we accomplishing with this move thank you caulisten life yeah so we're looking out at that bishop he has to move the bishop but now we think about well what is he weakened by playing bishop f6 what is he left unattended or at least relatively unattended if we think about it we ask ourselves that question well notice that the queen is overloaded because on the one hand the queen is tasked with defending um f7 on the other hand it kind of has to take on c5 so dc is a very simple move here which kind of overloads the queen and uh he can take on c5 i mean i don't see a checkmate there but in the event that he does we can just bring the rook in and then we can take on f7 and just crush him in the center and on the king side so he can also play bishop takes c3 i know perhaps some of you are worried about this move okay so he does play queen 65. now notice that we still have not taken his rook and i look at the rook on a1 and i say this rook could be occupying a super juicy open file on d1 which we're gonna do and only on the next move when all of our pieces are in the game are we going to take his rook and go after his king we had other ways to win i think we could have taken immediately and done queen e8 and bishop takes b8 i'll show that after the game but i think this is the most clinical method because it ensures uh that all of our pieces are in the attack which gives us almost this kind of insurance right if something doesn't work out uh it's it's a good idea to have all of your pieces involved because then you're going to have quite an abundance of of resources in case what you wanted to do initially isn't as good as you may have thought okay so now we can do what we were planning to do on the previous move we take on f7 and now between these two checks queen e6 or queen eight which one do you guys think i should give well queen eight is not checkmate but queen e8 is the better move and the reason for that is a very simple one we want to put the rook on d7 but we can't he has got a knight on b8 that's guarding that square but we can actually just take that knight we simply win the night but the point of that move isn't so much to win the night although that's a nice um byproduct of that the point is to get that get our rook to d7 which is going to be the killer blow to black's king so black is absolutely busted here he's out of defensive pieces and his king is just toast not to mention he's now down in exchange so he just left his center unattended and that's what happens when you do that okay queen g5 we still have to be careful uh because he is threatening checkmate in one move now what would be the simplest winning move here and i always advocate for this rather than going headfirst into the complications we have a very simple move here that doesn't require any calculation and it wins the game on the spot so and the move here is well it's not f3 f3 is a little bit too passive if we look at this bishop we can notice that it's undefended the bishop on b7 is undefended and um we can either play rook d7 rook takes b7 but i even like queen between d7 and queens xb7 because that wins the bishop um you know and attacks the rook on 88 at the same time so queen d7"
+  },
+  {
+   "ply": 2,
+   "t": 519.5,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "and her resignation from black brandon i'll be ready in just a second so that's basically that um and that was a nice game i mean that wasn't anything extraordinary but it was candy we developed all of our pieces okay we developed all of our pieces so so b5 is already a little bit dubious uh because while this move does grab space on the queen side it has a there's a negative part to it which is that it creates a backward pawn on c6 and it saddles him with these queen side weaknesses which actually later came back to bite him so e6 also i would probably develop my bishop uh behind the well in front of the pawn chain before playing e6 so he developed a little bit passively although he didn't do anything terribly wrong um 95 95 and here was i think the first critical moment i think a lot of people would be tempted to take on d5 but this you know this actually helps black bring another pawn into the center it shuts down the bishop look at my bishop now it's just biting on this d5 pawn and black builds up this very nice pawn chain and um you know white doesn't really have anything to show for maybe white is"
+  }
+ ],
+ "forks": []
+}

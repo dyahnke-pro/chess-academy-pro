@@ -1,0 +1,375 @@
+{
+ "videoId": "AdTD0EhCW7A",
+ "title": "ludwig / Moistcr1tikal | GM Hess / GM Naroditsky | Hand & Brain",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 177,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "i am i'm pretty sure you have we're right i feel like ron weasley i'm gonna go with that e5 this time"
+  },
+  {
+   "ply": 3,
+   "t": 182,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "uh tonight night"
+  },
+  {
+   "ply": 4,
+   "t": 184,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "pawn pawn"
+  },
+  {
+   "ply": 5,
+   "t": 187,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 6,
+   "t": 189,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "really going to this line charlie has some excitement"
+  },
+  {
+   "ply": 7,
+   "t": 192,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "um you've they're the best brand i've ever had hmm the speed wow that would be oh my eval bar is open"
+  },
+  {
+   "ply": 8,
+   "t": 216,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "said": "okay i got to close out my bathroom wait yes that was mine [Laughter] at the top right wait did you stamp yesterday or not yet yeah of course i did i said uh i said night oh sorry seriously deviating from your game against knight"
+  },
+  {
+   "ply": 9,
+   "t": 223,
+   "line": [
+    "Nxc6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2N2n2/8/4P3/8/PPP2PPP/RNBQKB1R b KQkq - 0 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 225,
+   "line": [
+    "bxc6"
+   ],
+   "fen": "r1bqkb1r/p1pp1ppp/2p2n2/8/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 0 6",
+   "said": "pawn [Music] [&nbsp;__&nbsp;] i forget"
+  },
+  {
+   "ply": 11,
+   "t": 241,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkb1r/p1pp1ppp/2p2n2/4P3/8/8/PPP2PPP/RNBQKB1R b KQkq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 246,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1bqkb1r/p1pp1ppp/2p5/3nP3/8/8/PPP2PPP/RNBQKB1R w KQkq - 1 7",
+   "said": ""
+  },
+  {
+   "ply": 13,
+   "t": 254,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "r1bqkb1r/p1pp1ppp/2p5/3nP3/8/3B4/PPP2PPP/RNBQK2R b KQkq - 2 7",
+   "said": ""
+  },
+  {
+   "ply": 14,
+   "t": 262.5,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk2r/p1ppbppp/2p5/3nP3/8/3B4/PPP2PPP/RNBQK2R w KQkq - 3 8",
+   "said": "oh and i think i know i'm very excited i think i remember it i think i remembered"
+  },
+  {
+   "ply": 15,
+   "t": 273.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "r1bqk2r/p1ppbppp/2p5/3nP3/2P5/3B4/PP3PPP/RNBQK2R b KQkq - 0 8",
+   "said": "i certainly don't this is not typically how i play it i'm lost right now that was the intention yeah now we've got you right where we"
+  },
+  {
+   "ply": 16,
+   "t": 281.5,
+   "line": [
+    "Nb6"
+   ],
+   "fen": "r1bqk2r/p1ppbppp/1np5/4P3/2P5/3B4/PP3PPP/RNBQK2R w KQkq - 1 9",
+   "said": "want you exactly um"
+  },
+  {
+   "ply": 15,
+   "t": 282.5,
+   "line": [],
+   "fen": "r1bqk2r/p1ppbppp/2p5/3nP3/2P5/3B4/PP3PPP/RNBQK2R b KQkq - 0 8",
+   "said": ""
+  },
+  {
+   "ply": 16,
+   "t": 291,
+   "line": [
+    "Nb6"
+   ],
+   "fen": "r1bqk2r/p1ppbppp/1np5/4P3/2P5/3B4/PP3PPP/RNBQK2R w KQkq - 1 9",
+   "said": ""
+  },
+  {
+   "ply": 17,
+   "t": 308,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqk2r/p1ppbppp/1np5/4P3/2P5/2NB4/PP3PPP/R1BQK2R b KQkq - 2 9",
+   "said": "let's accept thanks everybody for the subs appreciate it guys i think we i think we have to hit the"
+  },
+  {
+   "ply": 18,
+   "t": 315,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/p1ppbppp/1np5/4P3/2P5/2NB4/PP3PPP/R1BQK2R w KQ - 3 10",
+   "said": "king move here all right king"
+  },
+  {
+   "ply": 19,
+   "t": 317.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/p1ppbppp/1np5/4P3/2P5/2NB4/PP3PPP/R1BQ1RK1 b - - 4 10",
+   "said": ""
+  },
+  {
+   "ply": 20,
+   "t": 324,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bq1rk1/p1p1bppp/1np5/3pP3/2P5/2NB4/PP3PPP/R1BQ1RK1 w - d6 0 11",
+   "said": "i believe the next order of business is pawn sounds fantastic to me"
+  },
+  {
+   "ply": 21,
+   "t": 338,
+   "line": [
+    "exd6"
+   ],
+   "fen": "r1bq1rk1/p1p1bppp/1npP4/8/2P5/2NB4/PP3PPP/R1BQ1RK1 b - - 0 11",
+   "said": "i did say pawn okay you just said it as if you maybe were repeating them or"
+  },
+  {
+   "ply": 22,
+   "t": 346,
+   "line": [
+    "cxd6"
+   ],
+   "fen": "r1bq1rk1/p3bppp/1npp4/8/2P5/2NB4/PP3PPP/R1BQ1RK1 w - - 0 12",
+   "said": "no i think we have to take back with the pawn here fixes uh our pawn structure a little bit no more double pawns bishop"
+  },
+  {
+   "ply": 23,
+   "t": 366,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r1bq1rk1/p3bppp/1npp4/8/2P2B2/2NB4/PP3PPP/R2Q1RK1 b - - 1 12",
+   "said": "oh that is an interesting bishop to be moving um"
+  },
+  {
+   "ply": 24,
+   "t": 379.5,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2q1rk1/p3bppp/1nppb3/8/2P2B2/2NB4/PP3PPP/R2Q1RK1 w - - 2 13",
+   "said": "i think we need to start moving our bishop now as well waiting for a lot to say it's a cowardly move"
+  },
+  {
+   "ply": 25,
+   "t": 394,
+   "line": [
+    "b3"
+   ],
+   "fen": "r2q1rk1/p3bppp/1nppb3/8/2P2B2/1PNB4/P4PPP/R2Q1RK1 b - - 0 13",
+   "said": ""
+  },
+  {
+   "ply": 26,
+   "t": 411,
+   "line": [
+    "d5"
+   ],
+   "fen": "r2q1rk1/p3bppp/1np1b3/3p4/2P2B2/1PNB4/P4PPP/R2Q1RK1 w - - 0 14",
+   "said": "ah i think we go on here on yes all right happy to accommodate that sir okay when you say things like that i get a nice little smile on my face it's the right one yeah i'm always on i'm always encouraging man i would say in this circumstance it would be beneficial to move"
+  },
+  {
+   "ply": 27,
+   "t": 444.5,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r2q1rk1/p3bppp/1np1b3/3P4/5B2/1PNB4/P4PPP/R2Q1RK1 b - - 0 14",
+   "said": "and now i think it would be beneficial to to move [Laughter] to move you were expecting the move to"
+  },
+  {
+   "ply": 28,
+   "t": 471,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r2q1rk1/p3bppp/1n2b3/3p4/5B2/1PNB4/P4PPP/R2Q1RK1 w - - 0 15",
+   "said": "announce itself after the end of that yes like an anime scene of course i'm thinking i'm thinking we we go pawn okay queen oh goodness what a disgusting move [Laughter]"
+  },
+  {
+   "ply": 29,
+   "t": 487.5,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r2q1rk1/p3bppp/1n2b3/3p4/5B2/1PNB4/P2Q1PPP/R4RK1 b - - 1 15",
+   "said": "how dare you suggest that i recapture something there's a lot of things i like about this position i think daniel do i like things about"
+  },
+  {
+   "ply": 30,
+   "t": 504,
+   "line": [
+    "Bf6"
+   ],
+   "fen": "r2q1rk1/p4ppp/1n2bb2/3p4/5B2/1PNB4/P2Q1PPP/R4RK1 w - - 2 16",
+   "said": "this position you like a lot of things about this position man okay so what i'm looking at is bishop yeah i like a lot of things about the"
+  },
+  {
+   "ply": 31,
+   "t": 515.5,
+   "line": [
+    "Rac1"
+   ],
+   "fen": "r2q1rk1/p4ppp/1n2bb2/3p4/5B2/1PNB4/P2Q1PPP/2R2RK1 b - - 3 16",
+   "said": "fact that you like a lot of things about it um i'm thinking i still like where where my heart's at"
+  },
+  {
+   "ply": 32,
+   "t": 530.5,
+   "line": [
+    "Rc8"
+   ],
+   "fen": "2rq1rk1/p4ppp/1n2bb2/3p4/5B2/1PNB4/P2Q1PPP/2R2RK1 w - - 4 17",
+   "said": "here i'm thinking this is gonna be a rook from us as well okay tonya i'm i'm thinking that you might be at the end of your [&nbsp;__&nbsp;] rope your business is that so"
+  },
+  {
+   "ply": 33,
+   "t": 558,
+   "line": [
+    "Nb5"
+   ],
+   "fen": "2rq1rk1/p4ppp/1n2bb2/1N1p4/5B2/1P1B4/P2Q1PPP/2R2RK1 b - - 5 17",
+   "said": "loud is that so you don't know the first thing about it that's god damn right because we're gonna make a night move oh shoot i miss that oh god yo well done you missed it because love is goated yeah yeah cracked this is a pretty high level game right here i do think what i wanted to do still works um i could i could be wrong i'm probably wrong um wait don't be in your own head charlie oh that was still encouraging you're you're very supportive it was nice no beating your head [&nbsp;__&nbsp;] [Laughter] eat dirt let's go is this good cop bad cop i think and and i i could i could be way off my rocker here but i think what we want no i don't think i'm going insane oh god um come on charles get foxy come out there and play i know what i want don't don't call me crazy i want a pawn move you're so crazy you're the craziest"
+  },
+  {
+   "ply": 34,
+   "t": 638,
+   "line": [
+    "a6"
+   ],
+   "fen": "2rq1rk1/5ppp/pn2bb2/1N1p4/5B2/1P1B4/P2Q1PPP/2R2RK1 w - - 0 18",
+   "said": "person i've ever seen or heard of my entire life i think i think that is yeah i don't think this works now that i've said where you had another mind a night move"
+  },
+  {
+   "ply": 35,
+   "t": 652,
+   "line": [
+    "Nc7"
+   ],
+   "fen": "2rq1rk1/2N2ppp/pn2bb2/3p4/5B2/1P1B4/P2Q1PPP/2R2RK1 b - - 1 18",
+   "said": "oh my i i knew that's where we were going geez we're happy we ended there yeah we won't be able to handle the complications expected that was expected uh so you would call them complications then yes yes i wouldn't use that nomenclature i think what's happened here is he's fallen for our trap right exactly the white gambit which is i think a night move crazy enough crazy as it sounds oh"
+  },
+  {
+   "ply": 36,
+   "t": 701,
+   "line": [
+    "Na8"
+   ],
+   "fen": "n1rq1rk1/2N2ppp/p3bb2/3p4/5B2/1P1B4/P2Q1PPP/2R2RK1 w - - 2 19",
+   "said": "a night move yes there's many all right how should we do this [Laughter] i think we might go yeah look at that aggressive aggressive sally is that what you're thinking that's not a bad news though i think is that what you were ironically that was exactly like that actually was what i had mine trading off the strongest fees you know yeah that's not a bad move need i remind you of the marvin marvin yeah i've learned a lot right ludwig's learning about this because sardoche should have done this you know according to all the commentaries when he's playing that match so that he's important he might forgotten though i would like to do i kind of want to get a bit [&nbsp;__&nbsp;] nuts just get wild just get hog wild right now dude [&nbsp;__&nbsp;] wild"
+  },
+  {
+   "ply": 37,
+   "t": 780.5,
+   "line": [
+    "Nxa6"
+   ],
+   "fen": "n1rq1rk1/5ppp/N3bb2/3p4/5B2/1P1B4/P2Q1PPP/2R2RK1 b - - 0 19",
+   "said": "that sound means there's a four-minute think that's about to accompany it i know that sound very well i've started doing that on my streams actually like it helps with getting the juices flowing it changes saliva to brain cells it's like starting the car yeah i'm starting to i'm starting to overload here i had some good ideas get up warm up the engine yeah i gotta get her revved up again get the juice in"
+  },
+  {
+   "ply": 38,
+   "t": 836.5,
+   "line": [
+    "Re8"
+   ],
+   "fen": "n1rqr1k1/5ppp/N3bb2/3p4/5B2/1P1B4/P2Q1PPP/2R2RK1 w - - 1 20",
+   "said": "the tank i think what i want okay yeah yeah we can we can we can we can accommodate that you can certainly accommodate that i think i want to make a"
+  },
+  {
+   "ply": 39,
+   "t": 850,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "n1rqr1k1/5ppp/N3bb2/1B1p4/5B2/1P6/P2Q1PPP/2R2RK1 b - - 2 20",
+   "said": "[&nbsp;__&nbsp;] bishop move"
+  },
+  {
+   "ply": 40,
+   "t": 857,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "n1rqr1k1/3b1ppp/N4b2/1B1p4/5B2/1P6/P2Q1PPP/2R2RK1 w - - 3 21",
+   "said": "and then i would also like to make a bishop move all right hold up i gotta sit in the tank for a second here please take all the six minutes here i muted myself dude if blood finds queen takes d5 that's crazy lot is playing really well he's making a lot of really really good moves here i mean charlie's playing decently but i didn't expect knight b5 actually that was insane"
+  }
+ ],
+ "forks": []
+}

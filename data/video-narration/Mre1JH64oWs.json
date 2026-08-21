@@ -1,0 +1,240 @@
+{
+ "videoId": "Mre1JH64oWs",
+ "title": "Reverse Hippo Attack | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 20.5,
+   "line": [
+    "e3",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "we are 1688 let's see if we can cross 1700 and we have a black game against the 1699. great e3 okay so e3 is not in and of itself a bad move the way that i like to respond is is by playing d5 okay d3 so"
+  },
+  {
+   "ply": 3,
+   "t": 22,
+   "line": [
+    "d3"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/3PP3/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "this is probably going to be a hippo"
+  },
+  {
+   "ply": 4,
+   "t": 25.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 5,
+   "t": 27,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "kay knight d2 yeah this is this is okay knight d2 yeah this is this is seems like a reverse hippo i'm not going to go through you know our preferred"
+  },
+  {
+   "ply": 6,
+   "t": 35.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "said": "setup again i'm just going to play the moves you know those of you who have been"
+  },
+  {
+   "ply": 7,
+   "t": 37.5,
+   "line": [
+    "h3"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/3PP2P/PPPN1PP1/R1BQKBNR b KQkq - 0 4",
+   "said": "watching carefully know that i like a particular arrangement of pieces which involves not putting the knight on c6 but who can tell me real fast what is the sort of defining characteristic"
+  },
+  {
+   "ply": 8,
+   "t": 61,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3pp3/8/3PP2P/PPPN1PP1/R1BQKBNR w KQkq - 1 5",
+   "said": "of the setup that i like to adopt against these types of openings i like to play them upon c6 and the point and we can play it immediately and then put the bishop on d6 or we can start with bishop d6 and then play c6"
+  },
+  {
+   "ply": 9,
+   "t": 63,
+   "line": [
+    "a3"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3pp3/8/P2PP2P/1PPN1PP1/R1BQKBNR b KQkq - 0 5",
+   "said": "okay or we can castle first it really doesn't matter i don't know what white's"
+  },
+  {
+   "ply": 10,
+   "t": 69,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/P2PP2P/1PPN1PP1/R1BQKBNR w KQkq - 0 6",
+   "said": "doing it's this isn't even a hippo but that doesn't change our setup we're still going to go with our our preferred"
+  },
+  {
+   "ply": 11,
+   "t": 72.5,
+   "line": [
+    "b3"
+   ],
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/2PN1PP1/R1BQKBNR b KQkq - 0 6",
+   "said": "setup and the point of c6 is to build a pawn chain so that when white fianchetto is their bishop"
+  },
+  {
+   "ply": 12,
+   "t": 84,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/2PN1PP1/R1BQKBNR w KQ - 1 7",
+   "said": "it uh stares right you know it's biting on granite okay so let's castle"
+  },
+  {
+   "ply": 13,
+   "t": 85.5,
+   "line": [
+    "Bb2"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/1BPN1PP1/R2QKBNR b KQ - 2 7",
+   "said": "now you might ask well what do we do about this knight and once again if you've watched carefully you know that very often this knight goes to d7 and then it swings around via f8 to g6 so as not to block the bishop now in order to get this knight to g6 what additional move"
+  },
+  {
+   "ply": 14,
+   "t": 112.5,
+   "line": [
+    "Re8"
+   ],
+   "fen": "rnbqr1k1/pp3ppp/2pb1n2/3pp3/8/PP1PP2P/1BPN1PP1/R2QKBNR w KQ - 3 8",
+   "said": "might we want to make and i think we're going to make this move now because it's a very flexible move and we don't know exactly how it's going to develop uh his king side so i i think it it makes sense to start with a flexible move rookie and just reinforcing the center and depending on"
+  },
+  {
+   "ply": 15,
+   "t": 118.5,
+   "line": [
+    "g4"
+   ],
+   "fen": "rnbqr1k1/pp3ppp/2pb1n2/3pp3/6P1/PP1PP2P/1BPN1P2/R2QKBNR b KQ - 0 8",
+   "said": "how white positions uh his or her pieces okay so g4 so this is actually not such a bad setup that our opponent is adopting it's kind of like a hippo on steroids and um we have to be very careful if we go knight bd7 we can get our knight trapped why can go g5 there so in that sense rookie might have been not the most accurate move um and there's many ways that we can"
+  },
+  {
+   "ply": 16,
+   "t": 153,
+   "line": [
+    "Na6"
+   ],
+   "fen": "r1bqr1k1/pp3ppp/n1pb1n2/3pp3/6P1/PP1PP2P/1BPN1P2/R2QKBNR w KQ - 1 9",
+   "said": "that we can go around that i'm gonna do something a little bit that looks a little bit strange rather than developing the knight to beat to d7 we're gonna develop it to a6 and then bring it back into the center via c7"
+  },
+  {
+   "ply": 18,
+   "t": 157.5,
+   "line": [
+    "Bg2",
+    "Nc7"
+   ],
+   "fen": "r1bqr1k1/ppn2ppp/2pb1n2/3pp3/6P1/PP1PP2P/1BPN1PB1/R2QK1NR w KQ - 3 10",
+   "said": "we're gonna do this if that makes sense and then later the knight can go out to e6 at jess thank you for the tier one now what what move on the queen side should we make at some point let's play it now which grabs space it prevents certain um expansion ideas on the queen side yeah so let's throw an a5 just just for uh just for fun and also it discourages white from castling queen side because if white castle's queen side now um we'd drop our knight back to d7 that's why we left this square open that's why we didn't put the other knight to d7 and we're not worried and white's not threatening h5 i'm not worried about the quote-unquote attack with that being said we shouldn't leave these knights here forever especially because the bishop is blocked so what i'd like to do now is i'd like to be able to meet knight f3 with bishop g4 so what we're going to do is get our knight to c5 which is a nice central square we're not afraid of b4 because of knight a4 we're not afraid of d4 that's a really bad move because some genius decided to put their rook on e8 okay but this opens up the e file and this plays right into our hands now we might ask how can we exploit the e file yeah we have this x-ray going against the queen well one of the best ways to exploit an x-ray is to put a knight on a square that was formerly defended by this pawn so we have a couple of moves like that we can go knight b5 but i think an even sexier approach is to go knight seven e6 and then try to get this knight over to f4 which is the sort of you know prime real estate you know mansion in malibu kind of square knife f4 yeah i'll definitely explain after the game why i'm not worried about the king side attack and this usually leads to further tactics just putting the knight on f4 in many types of positions you can almost guarantee yourself that you are going to have some sort of a tactic to follow and sure enough if you look very carefully you identify the undefended pieces you'll find the move well either knight to d3 it doesn't really matter we can bring this knight to d3 and not only do we win a pawn but we totally just destroy white's uh queen side pawn cover and we force the king to move so we do a lot of good things in one okay now that is total self-destruction and this is a great example of not playing automatically most people here would immediately grab the bishop on b2 but one of the things you have to start doing you know as a 1700 thank you chess dojo for the raid is is you just always got to look for a better move right you don't want to play automatically unless you're low on time and just by me saying that i think most of you already see the possibility of winning the queen of bishop g4 just by not playing automatically you're"
+  },
+  {
+   "ply": 2,
+   "t": 328.5,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/4P3/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "already opening your eyes to a lot of these additional option options and this was a total collapse by white at the end but it was already back now i will admit that i probably didn't play"
+  },
+  {
+   "ply": 5,
+   "t": 331,
+   "line": [
+    "d3",
+    "e5",
+    "Nd2"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "ideally in the opening"
+  },
+  {
+   "ply": 7,
+   "t": 333,
+   "line": [
+    "Nf6",
+    "h3"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/3PP2P/PPPN1PP1/R1BQKBNR b KQkq - 0 4",
+   "said": "and"
+  },
+  {
+   "ply": 5,
+   "t": 335.5,
+   "line": [],
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "if i were playing a classical game if i were playing a game at my level"
+  },
+  {
+   "ply": 6,
+   "t": 343.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "said": "i would probably adopt a slightly different setup i would probably go knight c6"
+  },
+  {
+   "ply": 8,
+   "t": 346.5,
+   "line": [
+    "h3",
+    "f5"
+   ],
+   "fen": "r1bqkbnr/ppp3pp/2n5/3ppp2/8/3PP2P/PPPN1PP1/R1BQKBNR w KQkq - 0 5",
+   "said": "and then bring the pawn to f5 and play sort of an austrian attack setup if we think of this as a reverse perk this is"
+  },
+  {
+   "ply": 6,
+   "t": 357.5,
+   "line": [],
+   "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "said": "essentially just an austrian attack setup but i wanted to be consistent with the setup that i've adopted previously and so we decided to play the one with bishop d6 and c6 not that there's anything wrong with this this is still very solid yeah i have speed run games on the perk so you can definitely check that out okay so first interesting moment is here again don't go knight bd7 because of g5 so that's why we we found an alternate route for the knight to c7 now why was i not afraid let's take this moment why was i not afraid of the king side attack well first of all um you can think of it this way there is a very long delta between sorry that's the wrong word there's a very wide gap between g5 and eight pawns on g5 and h4 don't mean that you're gonna get checkmated i think a lot of players especially beginners they think that at the moment that somebody plays h4 g4 they're already checkmated that's it you can administer the last rights and you know you can shovel dirt on yourself but there's a very very long time before white actually converts this into anything"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/3PP3/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "e3",
+    "d5",
+    "d3",
+    "e5",
+    "Nd2"
+   ],
+   "options": [
+    {
+     "san": "Nf6",
+     "t": 35.5,
+     "continuation": "Nf6",
+     "said": "kay knight d2 yeah this is this is okay knight d2 yeah this is this is seems like a reverse hippo i'm not going to go through you know our preferred setup again i'm just going to play the moves you know those of you who have been watching carefully know that i like a particular arrangement of pieces which involves not putting the knight on c6 but who can tell me real fast what is the sort of defining characteristic of the setup that i like to adopt against these types of openings i like to play them upon c6 and the point and we can play it immediately and then put the bishop on d6 or we can start with bishop d6 and then play c6 okay or we can castle first it really doesn't matter i don't know what white's doing it's this isn't even a hippo but that doesn't change our setup we're still going to go with our our preferred setup and the point of c6 is to build a pawn chain so that when white fianchetto is their bishop it uh stares right you know it's biting on granite okay so let's castle now you might ask well what do we do about this knight and once again if you've watched carefully you know that very often this knight goes to d7 and then it swings around via f8 to g6 so as not to block"
+    },
+    {
+     "san": "Nc6",
+     "t": 343.5,
+     "continuation": "Nc6",
+     "said": "and if i were playing a classical game if i were playing a game at my level i would probably adopt a slightly different setup i would probably go knight c6 and then bring the pawn to f5 and play sort of an austrian attack setup if we think of this as a reverse perk this is essentially just an austrian attack setup but i wanted to be consistent with the setup that i've adopted previously and so we decided to play the one with bishop d6 and c6 not that there's anything wrong with this this is still very solid yeah i have speed run games on the perk so you can definitely check that out okay so first interesting moment is here again don't go knight bd7 because of g5 so that's why we we found an alternate route for the knight to c7 now why was i not afraid let's take this moment why was i not afraid of the king side attack well first of all um you can think of it this way there is a very long delta between sorry that's the wrong word there's a very wide gap between g5 and eight pawns on g5 and h4 don't mean that you're gonna get checkmated i think a lot of players especially beginners they think that at the moment that"
+    }
+   ]
+  }
+ ]
+}

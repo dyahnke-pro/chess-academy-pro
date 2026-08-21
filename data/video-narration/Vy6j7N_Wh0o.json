@@ -1,0 +1,392 @@
+{
+ "videoId": "Vy6j7N_Wh0o",
+ "title": "Beginner To Master | Chess Speedrun | 1440 | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1389,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "up a full piece for no compensation white is undeveloped this is lost so good resignation from gigahertz oh you got it now comes the hard part he's gotta play well okay so what opening am i going to play you guys tell me"
+  },
+  {
+   "ply": 3,
+   "t": 1394.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "and i'm not giving you a choice in the matter i want somebody to tell me what opening i'm going to play and i've already determined it"
+  },
+  {
+   "ply": 4,
+   "t": 1400,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "kings it guys kings indian come on king's indian kings freaking indian is the opening of course now i've explained if you go back through my speed run at various points i've explained the king's indian a little bit better"
+  },
+  {
+   "ply": 5,
+   "t": 1427,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5P2/PP2P1PP/RNBQKBNR b KQkq - 0 3",
+   "said": "uh but basically what is the fundamental app good luck man thanks again for your support what is the fundamental point of the kings indian what you're doing and i've explained this several times it's a hyper modern opening um i'll tell the story of it once again later but basically you're letting white control the center so f3 is a legitimate"
+  },
+  {
+   "ply": 6,
+   "t": 1446,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/5P2/PP2P1PP/RNBQKBNR w KQkq - 1 4",
+   "said": "move this is called the sameish variation the idea of f3 is to play e4 uh but we don't need to do anything about that that's the point of the king's indian we simply fianchetto our bishop and"
+  },
+  {
+   "ply": 7,
+   "t": 1451,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/5P2/PP4PP/RNBQKBNR b KQkq - 0 4",
+   "said": "white's main move here is e4 now we don't want to allow e5 how do we not allow e5 here"
+  },
+  {
+   "ply": 8,
+   "t": 1459.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/5P2/PP4PP/RNBQKBNR w KQkq - 0 5",
+   "said": "like what is the next king's indian move we play this yeah so d6 and and then we castle and we complete"
+  },
+  {
+   "ply": 10,
+   "t": 1462,
+   "line": [
+    "Nc3",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR w KQ - 2 6",
+   "said": "our development"
+  },
+  {
+   "ply": 11,
+   "t": 1464,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2NB1P2/PP4PP/R1BQK1NR b KQ - 3 6",
+   "said": "and now bishop d3 is already a bit of a mistake this is a very instructive mistake let me write this down now the reason bishop d3 is inaccurate and this goes to the very heart of the of why the king's indian is such an annoying opening to deal with it's very easy for white to neglect his center so this pawn on d4 look at it very carefully guys you see that white has severed the connection between the queen and the pawn how do we target that pawn and this is a trick question because normally in the"
+  },
+  {
+   "ply": 12,
+   "t": 1506,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/2PPP3/2NB1P2/PP4PP/R1BQK1NR w KQ - 4 7",
+   "said": "king's indian what black does is uses his pawns the problem with c5 or e5 is that white's just gonna go d5 white's just gonna push the pawn through knight c6 is the move but you guys look at this wait wait a second"
+  },
+  {
+   "ply": 13,
+   "t": 1510,
+   "line": [
+    "Nge2"
+   ],
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/2PPP3/2NB1P2/PP2N1PP/R1BQK2R b KQ - 5 7",
+   "said": "white still goes d5 okay i'll explain that after the game now what can we find another way to attack this fun"
+  },
+  {
+   "ply": 14,
+   "t": 1524.5,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r1bq1rk1/pppnppbp/2np2p1/8/2PPP3/2NB1P2/PP2N1PP/R1BQK2R w KQ - 6 8",
+   "said": "james r with a sub thank you so much we actually can not e5 not yet not yet move the knight back boom goes the dynamite we're attacking"
+  },
+  {
+   "ply": 15,
+   "t": 1528,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r1bq1rk1/pppnppbp/2np2p1/8/2PPP3/2NBBP2/PP2N1PP/R2QK2R b KQ - 7 8",
+   "said": "the pawn now why did we do this and finally we"
+  },
+  {
+   "ply": 16,
+   "t": 1531,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bq1rk1/pppn1pbp/2np2p1/4p3/2PPP3/2NBBP2/PP2N1PP/R2QK2R w KQ - 0 9",
+   "said": "play the movie five"
+  },
+  {
+   "ply": 17,
+   "t": 1532.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bq1rk1/pppn1pbp/2np2p1/3Pp3/2P1P3/2NBBP2/PP2N1PP/R2QK2R b KQ - 0 9",
+   "said": "after the game but basically you guys can understand why i played 97 the"
+  },
+  {
+   "ply": 13,
+   "t": 1538.5,
+   "line": [],
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/2PPP3/2NB1P2/PP2N1PP/R1BQK2R b KQ - 5 7",
+   "said": "reason i played knight d7 in comparison to e5 d5 here is that this"
+  },
+  {
+   "ply": 17,
+   "t": 1540,
+   "line": [
+    "e5",
+    "d5",
+    "Nd7",
+    "Be3"
+   ],
+   "fen": "r1bq1rk1/pppn1pbp/2np2p1/3Pp3/2P1P3/2NBBP2/PP2N1PP/R2QK2R b KQ - 2 9",
+   "said": "bishop now comes alive bad bishops defend good pawns what square does this bishop x-ray defend what square does this knight"
+  },
+  {
+   "ply": 18,
+   "t": 1554.5,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r1bq1rk1/pppn1pbp/3p2p1/3Pp3/2PnP3/2NBBP2/PP2N1PP/R2QK2R w KQ - 3 10",
+   "said": "occupy central square the bishop supports t4 boom goes the dynamite 94. queen d2"
+  },
+  {
+   "ply": 19,
+   "t": 1557,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r1bq1rk1/pppn1pbp/3p2p1/3Pp3/2PnP3/2NBBP2/PP1QN1PP/R3K2R b KQ - 4 10",
+   "said": "now let's think this knight on d7 it's blocking the bishop where can we plant that night 24 hour"
+  },
+  {
+   "ply": 20,
+   "t": 1573.5,
+   "line": [
+    "Nc5"
+   ],
+   "fen": "r1bq1rk1/ppp2pbp/3p2p1/2nPp3/2PnP3/2NBBP2/PP1QN1PP/R3K2R w KQ - 5 11",
+   "said": "parking these parking spots cost a million dollars in manhattan hey move to charlotte knight c5 absolutely look at these knights look at the pressure they're exerting on black's fish name that right robert"
+  },
+  {
+   "ply": 21,
+   "t": 1583,
+   "line": [
+    "Bb1"
+   ],
+   "fen": "r1bq1rk1/ppp2pbp/3p2p1/2nPp3/2PnP3/2N1BP2/PP1QN1PP/RB2K2R b KQ - 6 11",
+   "said": "oh san fran don't don't tell me that that leads to some traumatic memories i could write a book about looking for parking in san francisco okay now this should be one is a really good move there's maybe one is a really good move he's attacking the knight because he's threatening with three pieces it's defended by only two pieces now here's the thing and this is where i'm gonna blow your guys's mind we don't need to defend this knight we can let him take and in the time that he is spending taking that pawn we can coordinate our forces and prepare"
+  },
+  {
+   "ply": 22,
+   "t": 1623.5,
+   "line": [
+    "f5"
+   ],
+   "fen": "r1bq1rk1/ppp3bp/3p2p1/2nPpp2/2PnP3/2N1BP2/PP1QN1PP/RB2K2R w KQ - 0 12",
+   "said": "to attack how do we do that i want people to generate some ideas"
+  },
+  {
+   "ply": 23,
+   "t": 1627.5,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "r1bq1rk1/ppp3bp/3p2pB/2nPpp2/2PnP3/2N2P2/PP1QN1PP/RB2K2R b KQ - 1 12",
+   "said": "beautiful f5 we are already we're activating the the vacuum cleaner and he panics bishop h6 i understand why he does this but this is a blunder what is this this is a type 2 undefended piece guys type 2 undefended piece protected by only one other piece now we need to combine that observation and another observation the moment f3 is played you guys have to allocate part of your brain to understanding that this diagonal has been weakened"
+  },
+  {
+   "ply": 15,
+   "t": 1665.5,
+   "line": [],
+   "fen": "r1bq1rk1/ppp2pbp/2np1np1/3Pp3/2P1P3/2NB1P2/PP2N1PP/R1BQK2R b KQ - 0 8",
+   "said": "which means ultimately a queen could appear on h4 there's a lot of king's indian tricks associated with the queen landing on h4 once we move the knight away from f6 that's another positive byproduct the queen now has a direct line to the h4 square boom and we win the bishop and the game is over i'm sorry midnight i'm not treating you any better because you gifted 50 freaking subs and more 100 subs did i say brain well not your"
+  },
+  {
+   "ply": 6,
+   "t": 1693,
+   "line": [],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/5P2/PP2P1PP/RNBQKBNR w KQkq - 1 4",
+   "said": "brain robert ah i'm sorry midnight okay so basically yeah now the move bishop d3 is it's not a big"
+  },
+  {
+   "ply": 10,
+   "t": 1697.5,
+   "line": [
+    "e4",
+    "d6",
+    "Nc3",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR w KQ - 2 6",
+   "said": "mistake but it's an inaccuracy"
+  },
+  {
+   "ply": 11,
+   "t": 1698.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N1BP2/PP4PP/R2QKBNR b KQ - 3 6",
+   "said": "the main move is bishop e3 now the thing about the same issues it's one of the only lines in the king's indian where white actually castles queen side that's the main line that's the main line white actually castles queen side okay now bishop d3 is a bit counterproductive because this pawn becomes weak so if you go e5 or c5 it allows white to close down the center which we don't want to happen now after knight c6"
+  },
+  {
+   "ply": 15,
+   "t": 1733,
+   "line": [
+    "Nbd7",
+    "d5",
+    "Ne5",
+    "Bc1"
+   ],
+   "fen": "r1bq1rk1/ppp1ppbp/3p1np1/3Pn3/2P1P3/2N2P2/PP4PP/R1BQKBNR b KQ - 2 8",
+   "said": "you guys should be looking at this and saying wait a second can't white go d5 anyway okay can't why go d5 anyway you would go knight e5 pressuring the bishop let's say the bishop drops back to f1 i want you guys to use the method of comparison compare this position to this position what differences do you spot here what differences do you spot between this position and this position this position this position i feel like it's an eye test or something yeah so the knight is developed um it's it's not if so on the one hand there's a pawn on e5 on the one hand there's a pawn on e5 on the other hand there is a knight on e5 okay so what this basic and there's another difference the pawn on is on e7 not on e5 so what you can do here is you can chip away at the d5 pawn you can play e6 and c6"
+  },
+  {
+   "ply": 16,
+   "t": 1793,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bq1rk1/ppp2pbp/3ppnp1/3Pn3/2P1P3/2N2P2/PP4PP/R1BQKBNR w KQ - 0 9",
+   "said": "and you can chip away at this pawn what happens when you chip away at the spawn you want the center to get opened because white's the one who's created all of these weaknesses by playing f3 does that logic make sense does that logic make sense so by playing e6 and c6 you're able to rip open the center and you're able to exploit these negative externalities that were created when um when black essentially when white played f3 which is a very risky move positionally speaking let me let's see if i can find any illustrative games where i show you this happening let me see one second guys let me do a quick chess-based search here too to put this into perspective i hope i'm making sense by the way okay against luke grand master hungaski against fide master liu recent game august 2020 internet ournament i want somebody to tell me tournament i want somebody to tell me the next two moves that black plays and i won't tell you unless i get another 100 subs like oh my god yeah i'll talk about the inside green filter in a second e6 you guys great audience e6 c6 he rips open the center boom d5 that would not have been possible with white spawn on d5 and he go i mean just white resign they look at this king it's all over the place a1 queen 18 move game grand master defeated that's how dangerous this can be now admittedly admittedly uh"
+  },
+  {
+   "ply": 14,
+   "t": 1885,
+   "line": [],
+   "fen": "r1bq1rk1/ppp1ppbp/3p1np1/3Pn3/2P1P3/2N1BP2/PP4PP/R2QKBNR w KQ - 1 8",
+   "said": "this is not usual but i want you guys to really see how effective it can be to open up the center and the king's indian he got murked for that reason this is the move knight c6 97 same concept if d5 then 95 and actually the bishop cannot even move"
+  },
+  {
+   "ply": 5,
+   "t": 1893,
+   "line": [],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5P2/PP2P1PP/RNBQKBNR b KQkq - 0 3",
+   "said": "so we're going to take the bishop so the thing is uh midnight rhino what specifically"
+  },
+  {
+   "ply": 6,
+   "t": 1896.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/5P2/PP2P1PP/RNBQKBNR w KQkq - 0 4",
+   "said": "about the anti-grunfeld like what happens if i play d5 is that what concerns you because d5 is"
+  },
+  {
+   "ply": 5,
+   "t": 1903,
+   "line": [],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5P2/PP2P1PP/RNBQKBNR b KQkq - 0 3",
+   "said": "the grunfeld and i used to play this with white so i can give you a couple pieces of advice but i want to know exactly what you're asking about now midnight plays knight g2 and bishop e3 correctly now knight d4 and now f5 so by the way there's a very sexy line you guys want to see a very sexy line unfortunately it doesn't work now what you should notice queen and the rook are unfortable positions what sexy move does black have here using the two knights converting them into a tactic your brain should be signaling these yeah knight b3 so takes takes it's a fork what is the problem with this does anybody see the problem with this particular idea any more subs coming well that's not for me to decide there have been there we go harmonic diverging to your warning boom boom and the knight is trapped ah otherwise we win an exchange otherwise we win an exchange so instead we play the move f5 what we're doing is we're preparing for white to capture twice on d4 this is probably what"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5P2/PP2P1PP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "f3"
+   ],
+   "options": [
+    {
+     "san": "Bg7",
+     "t": 1446,
+     "continuation": "Bg7",
+     "said": "control the center so f3 is a legitimate move this is called the sameish variation the idea of f3 is to play e4 uh but we don't need to do anything about that that's the point of the king's indian we simply fianchetto our bishop and white's main move here is e4 now we don't want to allow e5 how do we not allow e5 here like what is the next king's indian move we play this yeah so d6 and and then we castle and we complete our development and now bishop d3 is already a bit of a mistake this is a very instructive mistake let me write this down now the reason bishop d3 is inaccurate and this goes to the very heart of the of why the king's indian is such an annoying opening to deal with it's very easy for white to neglect his center so this pawn on d4 look at it very carefully guys you see that white has severed the connection between the queen and the pawn how do we target that pawn and this is a trick question because normally in the king's indian what black does is uses his pawns the problem with c5 or e5 is that white's just gonna go d5 white's just gonna push the pawn through"
+    },
+    {
+     "san": "d5",
+     "t": 1896.5,
+     "continuation": "d5",
+     "said": "concept if d5 then 95 and actually the bishop cannot even move so we're going to take the bishop so the thing is uh midnight rhino what specifically about the anti-grunfeld like what happens if i play d5 is that what concerns you because d5 is the grunfeld and i used to play this with white so i can give you a couple pieces of advice but i want to know exactly what you're asking about now midnight plays knight g2 and bishop e3 correctly now knight d4 and now f5 so by the way there's a very sexy line you guys want to see a very sexy line unfortunately it doesn't work now what you should notice queen and the rook are unfortable positions what sexy move does black have here using the two knights converting them into a tactic your brain should be signaling these yeah knight b3 so takes takes it's a fork what is the problem with this does anybody see the problem with this particular idea any more subs coming well that's not for me to decide there have been there we go harmonic diverging to your warning boom boom and the knight is trapped ah otherwise we win an exchange otherwise we win an exchange so instead"
+    }
+   ]
+  },
+  {
+   "ply": 10,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR w KQ - 2 6",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "f3",
+    "Bg7",
+    "e4",
+    "d6",
+    "Nc3",
+    "O-O"
+   ],
+   "options": [
+    {
+     "san": "Bd3",
+     "t": 1464,
+     "continuation": "Bd3",
+     "said": "we don't want to allow e5 how do we not allow e5 here like what is the next king's indian move we play this yeah so d6 and and then we castle and we complete our development and now bishop d3 is already a bit of a mistake this is a very instructive mistake let me write this down now the reason bishop d3 is inaccurate and this goes to the very heart of the of why the king's indian is such an annoying opening to deal with it's very easy for white to neglect his center so this pawn on d4 look at it very carefully guys you see that white has severed the connection between the queen and the pawn how do we target that pawn and this is a trick question because normally in the king's indian what black does is uses his pawns the problem with c5 or e5 is that white's just gonna go d5 white's just gonna push the pawn through knight c6 is the move but you guys look at this wait wait a second white still goes d5 okay i'll explain that after the game now what can we find another way to attack this fun james r with a sub thank you so much we actually can not e5 not yet not yet move the knight back"
+    },
+    {
+     "san": "Be3",
+     "t": 1698.5,
+     "continuation": "Be3",
+     "said": "so basically yeah now the move bishop d3 is it's not a big mistake but it's an inaccuracy the main move is bishop e3 now the thing about the same issues it's one of the only lines in the king's indian where white actually castles queen side that's the main line that's the main line white actually castles queen side okay now bishop d3 is a bit counterproductive because this pawn becomes weak so if you go e5 or c5 it allows white to close down the center which we don't want to happen now after knight c6 you guys should be looking at this and saying wait a second can't white go d5 anyway okay can't why go d5 anyway you would go knight e5 pressuring the bishop let's say the bishop drops back to f1 i want you guys to use the method of comparison compare this position to this position what differences do you spot here what differences do you spot between this position and this position this position this position i feel like it's an eye test or something"
+    }
+   ]
+  },
+  {
+   "ply": 13,
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/2PPP3/2NB1P2/PP2N1PP/R1BQK2R b KQ - 5 7",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "f3",
+    "Bg7",
+    "e4",
+    "d6",
+    "Nc3",
+    "O-O",
+    "Bd3",
+    "Nc6",
+    "Nge2"
+   ],
+   "options": [
+    {
+     "san": "Nd7",
+     "t": 1524.5,
+     "continuation": "Nd7",
+     "said": "attack this fun james r with a sub thank you so much we actually can not e5 not yet not yet move the knight back boom goes the dynamite we're attacking the pawn now why did we do this and finally we play the movie five after the game but basically you guys can understand why i played 97 the reason i played knight d7 in comparison to e5 d5 here is that this bishop now comes alive bad bishops defend good pawns what square does this bishop x-ray defend what square does this knight occupy central square the bishop supports t4 boom goes the dynamite 94. queen d2 now let's think this knight on d7 it's blocking the bishop where can we plant that night 24 hour parking these parking spots cost a million dollars in manhattan hey move to charlotte knight c5 absolutely look at these knights look at the pressure they're exerting on black's fish name that right robert oh san fran don't don't tell me that that leads to some traumatic memories"
+    },
+    {
+     "san": "e5",
+     "t": 1540,
+     "continuation": "e5 d5 Nd7 Be3",
+     "said": "now why did we do this and finally we play the movie five after the game but basically you guys can understand why i played 97 the reason i played knight d7 in comparison to e5 d5 here is that this bishop now comes alive bad bishops defend good pawns what square does this bishop x-ray defend what square does this knight occupy central square the bishop supports t4 boom goes the dynamite 94. queen d2 now let's think this knight on d7 it's blocking the bishop where can we plant that night 24 hour parking these parking spots cost a million dollars in manhattan hey move to charlotte knight c5 absolutely look at these knights look at the pressure they're exerting on black's fish name that right robert oh san fran don't don't tell me that that leads to some traumatic memories i could write a book about looking for parking in san francisco okay now this should be one is a really good move there's maybe one is a really good move he's attacking the knight because he's threatening with three pieces it's defended by only two pieces now here's the thing and this is where"
+    }
+   ]
+  }
+ ]
+}

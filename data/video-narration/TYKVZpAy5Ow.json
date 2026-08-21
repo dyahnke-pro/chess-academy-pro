@@ -1,0 +1,1108 @@
+{
+ "videoId": "TYKVZpAy5Ow",
+ "title": "Toughest Game Yet!! Danya Is Sweating?!! | Halloween Gambit | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 14.5,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "okay E4 let's play yeah let's play E5 which is what we have been playing the last couple of games"
+  },
+  {
+   "ply": 3,
+   "t": 19.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "which is sort of the premise of the speedrun that"
+  },
+  {
+   "ply": 4,
+   "t": 21.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "we're playing classical openings"
+  },
+  {
+   "ply": 5,
+   "t": 23,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "all right four nights not my favorite"
+  },
+  {
+   "ply": 6,
+   "t": 26.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "said": "opening to play against but it is what it is"
+  },
+  {
+   "ply": 7,
+   "t": 32,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "said": "oh the board is messed up apology apologies there we go okay so we have a Four Knights and Knight takes C5 the Halloween Gambit actually not such a bad line and it's it doesn't get enough coverage in books and stuff you have to know how to play"
+  },
+  {
+   "ply": 8,
+   "t": 54,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/4n3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 0 5",
+   "said": "against it and I haven't reviewed in a very long time but we are going to play A variation of it that allows us to avoid much of the theory so we accept the Halloween Gambit"
+  },
+  {
+   "ply": 9,
+   "t": 56,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/4n3/3PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "said": "and white plays D4 now if we analyze with an engine and I honestly forgot what the best line is I think the best line according to the engine is to keep the extra piece how do you keep the extra piece you drop the Knight back to C6 white pushes E5 and then you tuck the other Knight away to its initial Square G8 and according to Modern Theory white does not have enough compensation for the sacrifice Knight but I will be honest I'm totally out of my league in this line and my guess is that our opponent has analyzed it so we are going"
+  },
+  {
+   "ply": 10,
+   "t": 98,
+   "line": [
+    "Ng6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5nn1/8/3PP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "said": "to dodge the theorem we're going to dodge the most dangerous parts of the Lion uh yeah maybe Knight G6 is the line maybe Knight G6 actually Knight G6 is the move that I want to play but not because we're going to keep the Knight"
+  },
+  {
+   "ply": 11,
+   "t": 104,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5nn1/4P3/3P4/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "said": "we're actually going to sacrifice the Knight back and that's the good thing about facing these types of gambits if you're not sure what to do remember it you can always give the piece back up and what you can gain in return is a"
+  },
+  {
+   "ply": 12,
+   "t": 118.5,
+   "line": [
+    "Bb4"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/5nn1/4P3/1b1P4/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 7",
+   "said": "bunch of developments so we don't have to move the Knight on F6 at all we can simply continue as though nothing is the matter we played Bishop before"
+  },
+  {
+   "ply": 13,
+   "t": 121,
+   "line": [
+    "exf6"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/5Pn1/8/1b1P4/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 7",
+   "said": "developing our Bishop to a good Square then we play Queen take step six and I"
+  },
+  {
+   "ply": 14,
+   "t": 123,
+   "line": [
+    "Qxf6"
+   ],
+   "fen": "r1b1k2r/pppp1ppp/5qn1/8/1b1P4/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 8",
+   "said": "have a hard time believing the black could possibly be worse in this position and people are confirming that Knight 26 is indeed the line and remember that psychologically Gambit players hate of line where you sack the piece back and you take a lot of the life out of the position Queenie to check okay that's a very risky move uh because one thing that we could do here is move our King to d8 in order to make space for The Rook to move into E8 but we've been playing this in a very kind of positional style so the the Soviet Schoolboy move would be Queen E6 or queen E7 but Queen E6 I like a lot because then we're gonna play Queen E6 because efy trades we can take toward the center with our F Pawn and as a result of that we can open up the f file so that when we Castle later on we'll put pressure on the F2 Pawn so we're going to play this in a very solid style also after Queen takes C6 we can take with the d-pawn and try to do the same thing to the D4 Pawn Bishop D2 all right so classic standoff between"
+  },
+  {
+   "ply": 17,
+   "t": 203,
+   "line": [
+    "Bd2",
+    "Qe6+",
+    "Qe2"
+   ],
+   "fen": "r1b1k2r/pppp1ppp/4q1n1/8/1b1P4/2N5/PPPBQPPP/R3KB1R b KQkq - 3 9",
+   "said": "the queens and in such situations you want to avoid being the one to release the tension and to help your opponent develop we don't want to take on E2 that would be a pretty senseless move it would simply help white develop his Bishop instead we want to continue developing we want a castle and this okay Queen takes C6 it's hard to say what we should take with originally I wanted to take with the F Pawn but the problem with taking with"
+  },
+  {
+   "ply": 20,
+   "t": 229.5,
+   "line": [
+    "O-O",
+    "Qxe6",
+    "dxe6"
+   ],
+   "fen": "r1b2rk1/ppp2ppp/4p1n1/8/1b1P4/2N5/PPPB1PPP/R3KB1R w KQ - 0 11",
+   "said": "the F Pawn is that our Bishop on CD is like hey what the heck like how am I getting out when you've got these pawns on D7 and E6 so again in the interest of playing as solid as possible let's actually take with the d-pawn which"
+  },
+  {
+   "ply": 21,
+   "t": 233.5,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "r1b2rk1/ppp2ppp/4p1n1/8/1b1P4/2N5/PPPB1PPP/2KR1B1R b - - 1 11",
+   "said": "opens up the D file number one number two it is now much easier to develop the light squared Bishop to D7 give the bishop a little bit of air the position"
+  },
+  {
+   "ply": 22,
+   "t": 243,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r4rk1/pppb1ppp/4p1n1/8/1b1P4/2N5/PPPB1PPP/2KR1B1R w - - 2 12",
+   "said": "is completely equal here how are we going to win this we're gonna win this by being patient and first we're going to win this by developing our pieces so"
+  },
+  {
+   "ply": 23,
+   "t": 248,
+   "line": [
+    "a3"
+   ],
+   "fen": "r4rk1/pppb1ppp/4p1n1/8/1b1P4/P1N5/1PPB1PPP/2KR1B1R b - - 0 12",
+   "said": "Bishop D7 comes next A3 and we could trade on C3 we could trade on C3 I think that's a very sensible decision in fact I think"
+  },
+  {
+   "ply": 24,
+   "t": 267,
+   "line": [
+    "Bxc3"
+   ],
+   "fen": "r4rk1/pppb1ppp/4p1n1/8/3P4/P1b5/1PPB1PPP/2KR1B1R w - - 0 13",
+   "said": "it's a very interesting decision to trade here most people wouldn't do it most people would not take on C3 but I'm going to prove to you guys that this has a lot of Venom leaving white"
+  },
+  {
+   "ply": 25,
+   "t": 269.5,
+   "line": [
+    "Bxc3"
+   ],
+   "fen": "r4rk1/pppb1ppp/4p1n1/8/3P4/P1B5/1PP2PPP/2KR1B1R b - - 0 13",
+   "said": "without a knight in this type of"
+  },
+  {
+   "ply": 26,
+   "t": 271,
+   "line": [
+    "Bc6"
+   ],
+   "fen": "r4rk1/ppp2ppp/2b1p1n1/8/3P4/P1B5/1PP2PPP/2KR1B1R w - - 1 14",
+   "said": "position let's play Bishop C6 getting"
+  },
+  {
+   "ply": 27,
+   "t": 273.5,
+   "line": [
+    "Rg1"
+   ],
+   "fen": "r4rk1/ppp2ppp/2b1p1n1/8/3P4/P1B5/1PP2PPP/2KR1BR1 b - - 2 14",
+   "said": "the bishop to the long diagonal is a line that is a lot of Venom because my point is that the bishop on C3 is a very bad piece we are going to be basically launching a campaign against the bishop"
+  },
+  {
+   "ply": 28,
+   "t": 293,
+   "line": [
+    "Rfd8"
+   ],
+   "fen": "r2r2k1/ppp2ppp/2b1p1n1/8/3P4/P1B5/1PP2PPP/2KR1BR1 w - - 3 15",
+   "said": "on C3 and our overall plan is going to be to pile up on the D4 Pawn which seems like one of the most well-defended bastions and blacks in White's position but we're gonna double our Rooks and"
+  },
+  {
+   "ply": 29,
+   "t": 296,
+   "line": [
+    "g3"
+   ],
+   "fen": "r2r2k1/ppp2ppp/2b1p1n1/8/3P4/P1B3P1/1PP2P1P/2KR1BR1 b - - 0 15",
+   "said": "then we're gonna try to get the Knight to F5 and before you know it that pawn"
+  },
+  {
+   "ply": 30,
+   "t": 300,
+   "line": [
+    "Rd7"
+   ],
+   "fen": "r5k1/pppr1ppp/2b1p1n1/8/3P4/P1B3P1/1PP2P1P/2KR1BR1 w - - 1 16",
+   "said": "on D4 let's start doubling Rooks is going to become a Sitting Duck if white does not address it we're going to start playing a little bit faster here because our opponent is playing very confidently and very quickly let's start doubling"
+  },
+  {
+   "ply": 31,
+   "t": 322.5,
+   "line": [
+    "Bh3"
+   ],
+   "fen": "r5k1/pppr1ppp/2b1p1n1/8/3P4/P1B3PB/1PP2P1P/2KR2R1 b - - 2 16",
+   "said": "our Rooks the position I would say is still equal and like I said in the previous Speed Run video or two videos ago knowing how to outplay good players from these types of positions is an incredibly important skill"
+  },
+  {
+   "ply": 32,
+   "t": 328,
+   "line": [
+    "Rad8"
+   ],
+   "fen": "3r2k1/pppr1ppp/2b1p1n1/8/3P4/P1B3PB/1PP2P1P/2KR2R1 w - - 3 17",
+   "said": "Bishop H3 okay I don't see what this threatens so I think we can continue with our plan Rook 88 I okay Rook h e"
+  },
+  {
+   "ply": 33,
+   "t": 332,
+   "line": [
+    "Rge1"
+   ],
+   "fen": "3r2k1/pppr1ppp/2b1p1n1/8/3P4/P1B3PB/1PP2P1P/2KRR3 b - - 4 17",
+   "said": "one all right so now it's time for us to take care of this Knight this Knight is"
+  },
+  {
+   "ply": 34,
+   "t": 339,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "3r2k1/ppprnppp/2b1p3/8/3P4/P1B3PB/1PP2P1P/2KRR3 w - - 5 18",
+   "said": "going to head back toward E7 and then either to D5 into the center or to F5 if the sir if the opportunity"
+  },
+  {
+   "ply": 36,
+   "t": 352,
+   "line": [
+    "f4",
+    "Nd5"
+   ],
+   "fen": "3r2k1/pppr1ppp/2b1p3/3n4/3P1P2/P1B3PB/1PP4P/2KRR3 w - - 1 19",
+   "said": "presents itself if the opportunity presents itself I see a little trap okay wait but Knight D5 maybe runs into F5 Knight T5 maybe runs into F5 so let me think about this for a second you know what would be a good move in this position"
+  },
+  {
+   "ply": 40,
+   "t": 376,
+   "line": [
+    "Re2",
+    "h5",
+    "Re5",
+    "Ne7"
+   ],
+   "fen": "3r2k1/ppprnpp1/2b1p3/4R2p/3P1P2/P1B3PB/1PP4P/2KR4 w - - 2 21",
+   "said": "you know what what I think would be a very good move is H5 in order to prevent white from playing G4 we're trying to make it impossible for white to push F5 so we're playing along the light Square so we're going to set up a light Square blockade which may seem like a very passive approach but we're trying to keep White's pawns as immobile as possible so now we go G6 we make it very hard for white to push his spawns on the king's side notice also that Rook takes E6 is nothing to fear because we simply take back and at the end white loses the light skirt Bishop so our Pawn structure is incredibly watertight we're we're doing fine here I mean our opponent is playing very well he's not he's not bending just yet but we're gonna try to keep applying pressure and applying pressure and eventually I think"
+  },
+  {
+   "ply": 42,
+   "t": 424,
+   "line": [
+    "b3",
+    "g6"
+   ],
+   "fen": "3r2k1/ppprnp2/2b1p1p1/4R2p/3P1P2/PPB3PB/2P4P/2KR4 w - - 0 22",
+   "said": "White's gonna give out so what am I thinking about in this position well what I'm thinking about is that how nice would it be if our Knight had the C6 Square it would be very nice if our Knight had a C6 card because it would apply even more pressure on the D4 Pawn a lot of people would go Knight D5 here but that's a bit of a dead end I would prefer for the Knight to move into"
+  },
+  {
+   "ply": 46,
+   "t": 448,
+   "line": [
+    "Ba1",
+    "b6",
+    "Bb2",
+    "Bb7"
+   ],
+   "fen": "3r2k1/pbprnp2/1p2p1p1/4R2p/3P1P2/PP4PB/1BP4P/2KR4 w - - 2 24",
+   "said": "C6 how can we do that well we can play Bishop F3 but that has a drawback it allows Rook D3 with Tempo I don't want to allow a Tempo instead we're going to build a square for the bishop we're going to play B6 and we're going to drop the bishop back to B7 in order to be able to play Knight C6 and the other"
+  },
+  {
+   "ply": 47,
+   "t": 456,
+   "line": [
+    "c4"
+   ],
+   "fen": "3r2k1/pbprnp2/1p2p1p1/4R2p/2PP1P2/PP4PB/1B5P/2KR4 b - - 0 24",
+   "said": "benefit of this is that we can now push our C Pawn up to C5 if necessary okay ooh this is almost a blunder but somehow white survives after Knight"
+  },
+  {
+   "ply": 48,
+   "t": 472,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "3r2k1/pbpr1p2/1pn1p1p1/4R2p/2PP1P2/PP4PB/1B5P/2KR4 w - - 1 25",
+   "said": "C6 rookie 4. man very fortunate there if we play C5 white as D5 okay let's go Knight C6 anyway of course Knight A5 is a move but the problem is rookie 4 Knight A5 flight is rookie three very very fortunate for the"
+  },
+  {
+   "ply": 49,
+   "t": 489,
+   "line": [
+    "Re4"
+   ],
+   "fen": "3r2k1/pbpr1p2/1pn1p1p1/7p/2PPRP2/PP4PB/1B5P/2KR4 b - - 2 25",
+   "said": "white has these these moves yeah rookie 4 we might want to repeat moves and then get our Knight to F5 maybe that's a better approach yeah he finds the move another another problem is that D5 could be very unpleasant here"
+  },
+  {
+   "ply": 50,
+   "t": 506,
+   "line": [
+    "Rd6"
+   ],
+   "fen": "3r2k1/pbp2p2/1pnrp1p1/7p/2PPRP2/PP4PB/1B5P/2KR4 w - - 3 26",
+   "said": "D5 could be very unpleasant here okay let's go Rook D6 let's play Rook D6 yeah maybe what I did with H5 G6 was a mistake because it has of course we can the dark square is quite quite extensively so I underestimated that we're gonna have to spin our way out of that"
+  },
+  {
+   "ply": 51,
+   "t": 534.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "3r2k1/pbp2p2/1pnrp1p1/3P3p/2P1RP2/PP4PB/1B5P/2KR4 b - - 0 26",
+   "said": "yeah I'm quite concerned about D5 here which I honestly totally forgot about just like totally forgot the D5 is an idea yeah we have to be very careful not to get mated there but we have resources okay wow yeah this guy is this guy is very strong"
+  },
+  {
+   "ply": 52,
+   "t": 545,
+   "line": [
+    "Na5"
+   ],
+   "fen": "3r2k1/pbp2p2/1p1rp1p1/n2P3p/2P1RP2/PP4PB/1B5P/2KR4 w - - 1 27",
+   "said": "Knight A5 was my initial idea but okay let's do let's do it let's play Knight A5 yeah very very strong player let's play Knight A5"
+  },
+  {
+   "ply": 53,
+   "t": 566.5,
+   "line": [
+    "Bf6"
+   ],
+   "fen": "3r2k1/pbp2p2/1p1rpBp1/n2P3p/2P1RP2/PP4PB/7P/2KR4 b - - 2 27",
+   "said": "the problem is that there's this rookie eight idea so we can never leave The Rook we have to keep one regarding the seventh rank at all times or the eighth rank at all times which really limits our options Bishop F6 okay so if we play Knight takes B3 check wait a minute that that looks like a mistake but I we need to calculate here so if we play e takes D5 Bishop takes d8 D takes E4 Rook takes D6 C takes D6 we are upon up I think black is better there"
+  },
+  {
+   "ply": 54,
+   "t": 601,
+   "line": [
+    "exd5"
+   ],
+   "fen": "3r2k1/pbp2p2/1p1r1Bp1/n2p3p/2P1RP2/PP4PB/7P/2KR4 w - - 0 28",
+   "said": "so that's one option we can play Ed if we play Knight takes B3 check the king moves to B2 we play Knight C5 Bishop takes the 894 and white takes on C7 at the end of the line so we have to play e takes D5 I'll show these lines"
+  },
+  {
+   "ply": 55,
+   "t": 610,
+   "line": [
+    "Bxd8"
+   ],
+   "fen": "3B2k1/pbp2p2/1p1r2p1/n2p3p/2P1RP2/PP4PB/7P/2KR4 b - - 0 28",
+   "said": "after the game but we're running very low on time here so I'm gonna start playing quite fast okay do you take C4"
+  },
+  {
+   "ply": 56,
+   "t": 611,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "3B2k1/pbp2p2/1p1r2p1/n6p/2P1pP2/PP4PB/7P/2KR4 w - - 0 29",
+   "said": ""
+  },
+  {
+   "ply": 57,
+   "t": 613.5,
+   "line": [
+    "Rxd6"
+   ],
+   "fen": "3B2k1/pbp2p2/1p1R2p1/n6p/2P1pP2/PP4PB/7P/2K5 b - - 0 29",
+   "said": "Rook takes D6 CD"
+  },
+  {
+   "ply": 58,
+   "t": 614.5,
+   "line": [
+    "cxd6"
+   ],
+   "fen": "3B2k1/pb3p2/1p1p2p1/n6p/2P1pP2/PP4PB/7P/2K5 w - - 0 30",
+   "said": "the good thing about this is that Knight on A5 which we positioned there is a"
+  },
+  {
+   "ply": 59,
+   "t": 622.5,
+   "line": [
+    "Kc2"
+   ],
+   "fen": "3B2k1/pb3p2/1p1p2p1/n6p/2P1pP2/PP4PB/2K4P/8 b - - 1 30",
+   "said": "monster piece it's a monster piece because it's attacking B3 and it's giving what does it give us it gives us a Tempo what can we use this Tempo to do well we can use this Tempo to do a bunch of different things we can push E3 although we run the risk of losing that pawn the other thing we can do is bring our King closer to f8 we can also play the move F5 which I really like what F5 does is it solidifies it solidifies the entire Pawn chain but the drawback of F5 is that white has Bishop C7 attacking D6 and if we play D5 there white has the crazy move C5"
+  },
+  {
+   "ply": 60,
+   "t": 667.5,
+   "line": [
+    "Kf8"
+   ],
+   "fen": "3B1k2/pb3p2/1p1p2p1/n6p/2P1pP2/PP4PB/2K4P/8 w - - 2 31",
+   "said": "using the undefended nature of the Knight so we actually are going to go the problem with King f8 is that he's got Bishop F6 but I think this is better than nothing"
+  },
+  {
+   "ply": 61,
+   "t": 672.5,
+   "line": [
+    "Bf6"
+   ],
+   "fen": "5k2/pb3p2/1p1p1Bp1/n6p/2P1pP2/PP4PB/2K4P/8 b - - 3 31",
+   "said": "incredible tactics for white oh yeah wow okay so let's go"
+  },
+  {
+   "ply": 62,
+   "t": 688,
+   "line": [
+    "Ke8"
+   ],
+   "fen": "4k3/pb3p2/1p1p1Bp1/n6p/2P1pP2/PP4PB/2K4P/8 w - - 4 32",
+   "said": "let me think about this I'm I'm debating between King Y8 and EFA and D5 cooking here let's bring the king a little bit closer"
+  },
+  {
+   "ply": 64,
+   "t": 693,
+   "line": [
+    "Kc3",
+    "d5"
+   ],
+   "fen": "4k3/pb3p2/1p3Bp1/n2p3p/2P1pP2/PPK3PB/7P/8 w - - 0 33",
+   "said": "and if King if King C3 will go D5 yeah here we'll go D5 no he's totally legit it's just a very strong player not as I've said not every single game"
+  },
+  {
+   "ply": 66,
+   "t": 713.5,
+   "line": [
+    "cxd5",
+    "Bxd5"
+   ],
+   "fen": "4k3/p4p2/1p3Bp1/n2b3p/4pP2/PPK3PB/7P/8 w - - 0 34",
+   "said": "is going to be equally smooth sometimes I'm going to make mistakes and I'm gonna have to get out of them obviously black is playing for a win here we're up a pawn but White's Bishops are incredibly strong and he's up a lot"
+  },
+  {
+   "ply": 68,
+   "t": 720.5,
+   "line": [
+    "b4",
+    "Nc6"
+   ],
+   "fen": "4k3/p4p2/1pn2Bp1/3b3p/1P2pP2/P1K3PB/7P/8 w - - 1 35",
+   "said": "of time so this is going to be a big challenge to win let's go back to C6 now I'm concerned about B5"
+  },
+  {
+   "ply": 69,
+   "t": 728,
+   "line": [
+    "a4"
+   ],
+   "fen": "4k3/p4p2/1pn2Bp1/3b3p/PP2pP2/2K3PB/7P/8 b - - 0 35",
+   "said": "okay for probably even better so e3b5"
+  },
+  {
+   "ply": 70,
+   "t": 740,
+   "line": [
+    "e3"
+   ],
+   "fen": "4k3/p4p2/1pn2Bp1/3b3p/PP3P2/2K1p1PB/7P/8 w - - 0 36",
+   "said": "maybe a five but no he then goes B5 now let's go E3 let's see what happens let's play E3 because if black plays if white plays B5 the one positive of inducing that move is that it fixes the pawns on a light Square so that if the king moves away we can play Bishop B3 it's not all bad here"
+  },
+  {
+   "ply": 71,
+   "t": 771,
+   "line": [
+    "b5"
+   ],
+   "fen": "4k3/p4p2/1pn2Bp1/1P1b3p/P4P2/2K1p1PB/7P/8 b - - 0 36",
+   "said": "I wouldn't say I'm in trouble here I think the position is probably equal but it's going to be very hard to win this with black I don't think black is worse we have an extra passed Pawn on E3 for goodness sake but yeah"
+  },
+  {
+   "ply": 72,
+   "t": 774,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "4k3/p3np2/1p3Bp1/1P1b3p/P4P2/2K1p1PB/7P/8 w - - 1 37",
+   "said": "let's go 97. move the Knight away and here's the point if White NOW plays King D4 or King D3 we have the move Bishop to B3 what I'm worried about is A5 and that is a super high level move A5 in order to to"
+  },
+  {
+   "ply": 73,
+   "t": 801.5,
+   "line": [
+    "Be5"
+   ],
+   "fen": "4k3/p3np2/1p4p1/1P1bB2p/P4P2/2K1p1PB/7P/8 b - - 2 37",
+   "said": "shatter Black's Queen Side Pawn structure using the strength of the Bishops B takes A5 Bishop D4 and the A7 Pawn is in trouble Bishop E5 also very strong going for B8"
+  },
+  {
+   "ply": 74,
+   "t": 810.5,
+   "line": [
+    "e2"
+   ],
+   "fen": "4k3/p3np2/1p4p1/1P1bB2p/P4P2/2K3PB/4p2P/8 w - - 0 38",
+   "said": "okay I think it's time for E2 and Bishop B3 let's do it bailout"
+  },
+  {
+   "ply": 75,
+   "t": 815.5,
+   "line": [
+    "Kd2"
+   ],
+   "fen": "4k3/p3np2/1p4p1/1P1bB2p/P4P2/6PB/3Kp2P/8 b - - 1 38",
+   "said": "and we can try Bishop C4 which is a very ambitious move let me calculate Bishop C4 Bishop B8 Knight D5 also interesting by the way if we play Bishop B3"
+  },
+  {
+   "ply": 76,
+   "t": 840,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "4k3/p3np2/1p4p1/1P2B2p/P4P2/1b4PB/3Kp2P/8 w - - 2 39",
+   "said": "white plays Bishop B8 we take y takes there's no way we're winning the game if that happens but I don't see an alternative let's do it"
+  },
+  {
+   "ply": 77,
+   "t": 842.5,
+   "line": [
+    "Bb8"
+   ],
+   "fen": "1B2k3/p3np2/1p4p1/1P5p/P4P2/1b4PB/3Kp2P/8 b - - 3 39",
+   "said": ""
+  },
+  {
+   "ply": 78,
+   "t": 844.5,
+   "line": [
+    "Bxa4"
+   ],
+   "fen": "1B2k3/p3np2/1p4p1/1P5p/b4P2/6PB/3Kp2P/8 w - - 0 40",
+   "said": ""
+  },
+  {
+   "ply": 80,
+   "t": 848.5,
+   "line": [
+    "Bxa7",
+    "Nd5"
+   ],
+   "fen": "4k3/B4p2/1p4p1/1P1n3p/b4P2/6PB/3Kp2P/8 w - - 1 41",
+   "said": "yeah very well played my opponent I have to say let's try Knight T5"
+  },
+  {
+   "ply": 82,
+   "t": 858.5,
+   "line": [
+    "Bg2",
+    "Ne3"
+   ],
+   "fen": "4k3/B4p2/1p4p1/1P5p/b4P2/4n1P1/3Kp1BP/8 w - - 3 42",
+   "said": "there are still some tricks there are still some tricks but the problem is there's Bishop G2 wow one more trick that I have up my sleeve"
+  },
+  {
+   "ply": 84,
+   "t": 865,
+   "line": [
+    "Bc6+",
+    "Ke7"
+   ],
+   "fen": "8/B3kp2/1pB3p1/1P5p/b4P2/4n1P1/3Kp2P/8 w - - 5 43",
+   "said": ""
+  },
+  {
+   "ply": 85,
+   "t": 872.5,
+   "line": [
+    "Bxb6"
+   ],
+   "fen": "8/4kp2/1BB3p1/1P5p/b4P2/4n1P1/3Kp2P/8 b - - 0 43",
+   "said": ""
+  },
+  {
+   "ply": 86,
+   "t": 874,
+   "line": [
+    "Nc4+"
+   ],
+   "fen": "8/4kp2/1BB3p1/1P5p/b1n2P2/6P1/3Kp2P/8 w - - 1 44",
+   "said": ""
+  },
+  {
+   "ply": 88,
+   "t": 879,
+   "line": [
+    "Kxe2",
+    "Nxb6"
+   ],
+   "fen": "8/4kp2/1nB3p1/1P5p/b4P2/6P1/4K2P/8 w - - 0 45",
+   "said": "it's amazing I mean he plays perfectly up until the very last and then wonders of Peace but wait this is far from over I have to focus guys and what people"
+  },
+  {
+   "ply": 89,
+   "t": 882,
+   "line": [
+    "Kf3"
+   ],
+   "fen": "8/4kp2/1nB3p1/1P5p/b4P2/5KP1/7P/8 b - - 1 45",
+   "said": "watching on YouTube I apologize in"
+  },
+  {
+   "ply": 90,
+   "t": 883.5,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "8/4kp2/1nB3p1/1P5p/5P2/1b3KP1/7P/8 w - - 2 46",
+   "said": "advance for the sparse explanations here but I I really need to"
+  },
+  {
+   "ply": 91,
+   "t": 889.5,
+   "line": [
+    "Ke4"
+   ],
+   "fen": "8/4kp2/1nB3p1/1P5p/4KP2/1b4P1/7P/8 b - - 3 46",
+   "said": "focus here to try to win this this is far from Easy even though we're"
+  },
+  {
+   "ply": 92,
+   "t": 897,
+   "line": [
+    "Kd6"
+   ],
+   "fen": "8/5p2/1nBk2p1/1P5p/4KP2/1b4P1/7P/8 w - - 4 47",
+   "said": "up a piece it's one of those positions as you understand where the pawn on B5 is tying down or nine and"
+  },
+  {
+   "ply": 93,
+   "t": 903,
+   "line": [
+    "Be8"
+   ],
+   "fen": "4B3/5p2/1n1k2p1/1P5p/4KP2/1b4P1/7P/8 b - - 5 47",
+   "said": "a half 46 seconds so yeah and he continues to play incredibly"
+  },
+  {
+   "ply": 94,
+   "t": 904.5,
+   "line": [
+    "Be6"
+   ],
+   "fen": "4B3/5p2/1n1kb1p1/1P5p/4KP2/6P1/7P/8 w - - 6 48",
+   "said": "well here"
+  },
+  {
+   "ply": 96,
+   "t": 909.5,
+   "line": [
+    "h3",
+    "Ke7"
+   ],
+   "fen": "4B3/4kp2/1n2b1p1/1P5p/4KP2/6PP/8/8 w - - 1 49",
+   "said": "yeah but H3 is another mistake because we suddenly dropped back to E7 attacking the bishop"
+  },
+  {
+   "ply": 98,
+   "t": 921.5,
+   "line": [
+    "Bc6",
+    "Bxh3"
+   ],
+   "fen": "8/4kp2/1nB3p1/1P5p/4KP2/6Pb/8/8 w - - 0 50",
+   "said": "attacking the bishop and now we're going to take on H3 in the next move and then we're going to be up a full piece but I have no time so this is going to be a"
+  },
+  {
+   "ply": 99,
+   "t": 925.5,
+   "line": [
+    "Ke5"
+   ],
+   "fen": "8/4kp2/1nB3p1/1P2K2p/5P2/6Pb/8/8 b - - 1 50",
+   "said": "tall order"
+  },
+  {
+   "ply": 100,
+   "t": 926.5,
+   "line": [
+    "f6+"
+   ],
+   "fen": "8/4k3/1nB2pp1/1P2K2p/5P2/6Pb/8/8 w - - 0 51",
+   "said": "six"
+  },
+  {
+   "ply": 102,
+   "t": 929,
+   "line": [
+    "Kd4",
+    "Kd6"
+   ],
+   "fen": "8/8/1nBk1pp1/1P5p/3K1P2/6Pb/8/8 w - - 2 52",
+   "said": ""
+  },
+  {
+   "ply": 104,
+   "t": 932.5,
+   "line": [
+    "Be4",
+    "Bf5"
+   ],
+   "fen": "8/8/1n1k1pp1/1P3b1p/3KBP2/6P1/8/8 w - - 4 53",
+   "said": "it should be a bishop F5 okay we complete five anyway"
+  },
+  {
+   "ply": 106,
+   "t": 935,
+   "line": [
+    "Bf3",
+    "Bd7"
+   ],
+   "fen": "8/3b4/1n1k1pp1/1P5p/3K1P2/5BP1/8/8 w - - 6 54",
+   "said": ""
+  },
+  {
+   "ply": 108,
+   "t": 938,
+   "line": [
+    "Be4",
+    "f5"
+   ],
+   "fen": "8/3b4/1n1k2p1/1P3p1p/3KBP2/6P1/8/8 w - - 0 55",
+   "said": ""
+  },
+  {
+   "ply": 110,
+   "t": 940.5,
+   "line": [
+    "Bd3",
+    "Nd5"
+   ],
+   "fen": "8/3b4/3k2p1/1P1n1p1p/3K1P2/3B2P1/8/8 w - - 2 56",
+   "said": ""
+  },
+  {
+   "ply": 112,
+   "t": 946,
+   "line": [
+    "Be2",
+    "Nf6"
+   ],
+   "fen": "8/3b4/3k1np1/1P3p1p/3K1P2/6P1/4B3/8 w - - 4 57",
+   "said": "maybe not the best way I'm playing this but okay Knight F6 we want to go Knight"
+  },
+  {
+   "ply": 113,
+   "t": 951.5,
+   "line": [
+    "b6"
+   ],
+   "fen": "8/3b4/1P1k1np1/5p1p/3K1P2/6P1/4B3/8 b - - 0 57",
+   "said": "E4"
+  },
+  {
+   "ply": 114,
+   "t": 954,
+   "line": [
+    "Bc6"
+   ],
+   "fen": "8/8/1Pbk1np1/5p1p/3K1P2/6P1/4B3/8 w - - 1 58",
+   "said": ""
+  },
+  {
+   "ply": 116,
+   "t": 961.5,
+   "line": [
+    "Ba6",
+    "Ne4"
+   ],
+   "fen": "8/8/BPbk2p1/5p1p/3KnP2/6P1/8/8 w - - 3 59",
+   "said": "let's go here stop the pawn"
+  },
+  {
+   "ply": 118,
+   "t": 964,
+   "line": [
+    "b7",
+    "Kc7"
+   ],
+   "fen": "8/1Pk5/B1b3p1/5p1p/3KnP2/6P1/8/8 w - - 1 60",
+   "said": "ow we go 94 anyway the point is B7 we now we go 94 anyway the point is B7 we can stop it with King C7"
+  },
+  {
+   "ply": 120,
+   "t": 969,
+   "line": [
+    "Ke5",
+    "Nxg3"
+   ],
+   "fen": "8/1Pk5/B1b3p1/4Kp1p/5P2/6n1/8/8 w - - 0 61",
+   "said": "and now we're going to take G3 and we're going to Simply push h4h3h2"
+  },
+  {
+   "ply": 122,
+   "t": 974,
+   "line": [
+    "Kf6",
+    "h4"
+   ],
+   "fen": "8/1Pk5/B1b2Kp1/5p2/5P1p/6n1/8/8 w - - 0 62",
+   "said": "and we win wow that was probably the"
+  },
+  {
+   "ply": 123,
+   "t": 979.5,
+   "line": [
+    "Kxg6"
+   ],
+   "fen": "8/1Pk5/B1b3K1/5p2/5P1p/6n1/8/8 b - - 0 62",
+   "said": "closest speedrun game we've had thus far outside of course of my games against"
+  },
+  {
+   "ply": 124,
+   "t": 981,
+   "line": [
+    "h3"
+   ],
+   "fen": "8/1Pk5/B1b3K1/5p2/5P2/6np/8/8 w - - 0 63",
+   "said": "cheaters because this guy's very clearly legit just like an amazingly played game and the thing that I'll begin with the thing that and I'm definitely not proud of my level of play that was a couple of misjudgments and a couple of like flat out misses I'm just gonna flat out say that my level of play was not super high this game which also makes it instructive because I'll be able to explain like what exactly I missed in my"
+  },
+  {
+   "ply": 9,
+   "t": 1019.5,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/4n3/3PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "said": "defense it is late I'm running out of gas but I'll do my best to to shed some light on what happened as we analyze so first of all I don't think I have ever faced the Halloween Gambit so I never studied it you know I'm an E5 player but I've never studied this"
+  },
+  {
+   "ply": 11,
+   "t": 1025,
+   "line": [
+    "Ng6",
+    "e5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5nn1/4P3/3P4/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "said": "properly and I was afraid to play Knight G8"
+  },
+  {
+   "ply": 12,
+   "t": 1026,
+   "line": [
+    "Ng8"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/6n1/4P3/3P4/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 7",
+   "said": "because there is a good amount of theory here I don't know what White's main move"
+  },
+  {
+   "ply": 13,
+   "t": 1035.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/6n1/4P3/2BP4/2N5/PPP2PPP/R1BQK2R b KQkq - 2 7",
+   "said": "is and the engine gives minus 1.5 but I know that looks like Bishop C4 is the line"
+  },
+  {
+   "ply": 14,
+   "t": 1040,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/6n1/3pP3/2BP4/2N5/PPP2PPP/R1BQK2R w KQkq d6 0 8",
+   "said": "and now apparently you're supposed to sacrifice one of the pawns back"
+  },
+  {
+   "ply": 15,
+   "t": 1044,
+   "line": [
+    "Bxd5"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/6n1/3BP3/3P4/2N5/PPP2PPP/R1BQK2R b KQkq - 0 8",
+   "said": "why are you supposed to do that in order to open up the center and help yourself"
+  },
+  {
+   "ply": 14,
+   "t": 1052,
+   "line": [],
+   "fen": "r1bqkbnr/ppp2ppp/6n1/3pP3/2BP4/2N5/PPP2PPP/R1BQK2R w KQkq d6 0 8",
+   "said": "develop your pieces more effectively so it looks like yeah D5 is a very common type of idea in such positions to sack"
+  },
+  {
+   "ply": 15,
+   "t": 1057,
+   "line": [
+    "Bxd5"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/6n1/3BP3/3P4/2N5/PPP2PPP/R1BQK2R b KQkq - 0 8",
+   "said": "one of the pawns and after Bishop takes D5 two games continued C6 Bishop B3"
+  },
+  {
+   "ply": 16,
+   "t": 1059,
+   "line": [
+    "c6"
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2p3n1/3BP3/3P4/2N5/PPP2PPP/R1BQK2R w KQkq - 0 9",
+   "said": ""
+  },
+  {
+   "ply": 18,
+   "t": 1061,
+   "line": [
+    "Bb3",
+    "Bb4"
+   ],
+   "fen": "r1bqk1nr/pp3ppp/2p3n1/4P3/1b1P4/1BN5/PPP2PPP/R1BQK2R w KQkq - 2 10",
+   "said": "Bishop B4 and I think it's it's"
+  },
+  {
+   "ply": 19,
+   "t": 1063,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk1nr/pp3ppp/2p3n1/4P3/1b1P4/1BN5/PPP2PPP/R1BQ1RK1 b kq - 3 10",
+   "said": ""
+  },
+  {
+   "ply": 20,
+   "t": 1066,
+   "line": [
+    "Bxc3"
+   ],
+   "fen": "r1bqk1nr/pp3ppp/2p3n1/4P3/3P4/1Bb5/PPP2PPP/R1BQ1RK1 w kq - 0 11",
+   "said": "pretty obvious that in this position white has"
+  },
+  {
+   "ply": 22,
+   "t": 1068,
+   "line": [
+    "bxc3",
+    "N8e7"
+   ],
+   "fen": "r1bqk2r/pp2nppp/2p3n1/4P3/3P4/1BP5/P1P2PPP/R1BQ1RK1 w kq - 1 12",
+   "said": "insufficient compensation for the two for the piece white has two pawns but"
+  },
+  {
+   "ply": 23,
+   "t": 1077.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1bqk2r/pp2nppp/2p3n1/4P3/3P1P2/1BP5/P1P3PP/R1BQ1RK1 b kq - 0 12",
+   "said": "notice that we have control over all the light squares so even if white plays F4 by the way the engine recommends H5"
+  },
+  {
+   "ply": 24,
+   "t": 1079,
+   "line": [
+    "h5"
+   ],
+   "fen": "r1bqk2r/pp2npp1/2p3n1/4P2p/3P1P2/1BP5/P1P3PP/R1BQ1RK1 w kq - 0 13",
+   "said": "which is similar to what we did in the game then we put the bishop on F5 and you have total dominance over all the light squares uh on the king side so"
+  },
+  {
+   "ply": 12,
+   "t": 1095.5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/6n1/4P3/3P4/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 7",
+   "said": "it's impossible for white to push F5 but we decided to give the piece back which I think is the totally valid approach the engine doesn't love this"
+  },
+  {
+   "ply": 10,
+   "t": 1100.5,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/5nn1/8/3PP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "said": ""
+  },
+  {
+   "ply": 9,
+   "t": 1102,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/4n3/3PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "said": "what's interesting I think is that if you are giving the piece back"
+  },
+  {
+   "ply": 10,
+   "t": 1105,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3PP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "said": "after Knight C6 E5"
+  },
+  {
+   "ply": 11,
+   "t": 1107,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4P3/3P4/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 1112,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3PP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "said": "yeah I don't know if the way that we did it was the best way to give the piece back maybe not but anyways Queen takes F6 and queen E2 is actually I think in retrospect a very strong move because if white doesn't play Queen E2 then we get to Castle and we get to play D5 and the position is dead equal for example if white plays Bishop C4 then I was planning a very strong move in this position a strong positional move C6 C6 castles D5 everything is groovy rookie one Bishop E6 were fully developed we're happy black is probably even better in this position what's the point in controlling light dark source and games well okay Square control is inherently good and I'll have videos eventually on Square control and what that means but if you look at this concrete position don't overthink it the point of controlling F5 is to prevent white from playing F5 and rolling you off the board and the point of controlling G4 is to prevent white from playing G4 which"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 9,
+   "fen": "r1bqkb1r/pppp1ppp/5n2/4n3/3PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "Nxe5",
+    "Nxe5",
+    "d4"
+   ],
+   "options": [
+    {
+     "san": "Ng6",
+     "t": 98,
+     "continuation": "Ng6",
+     "said": "to dodge the theorem we're going to dodge the most dangerous parts of the Lion uh yeah maybe Knight G6 is the line maybe Knight G6 actually Knight G6 is the move that I want to play but not because we're going to keep the Knight we're actually going to sacrifice the Knight back and that's the good thing about facing these types of gambits if you're not sure what to do remember it you can always give the piece back up and what you can gain in return is a bunch of developments so we don't have to move the Knight on F6 at all we can simply continue as though nothing is the matter we played Bishop before developing our Bishop to a good Square then we play Queen take step six and I have a hard time believing the black could possibly be worse in this position and people are confirming that Knight 26 is indeed the line and remember that psychologically Gambit players hate of line where you sack the piece back and you take a lot of the life out of the position Queenie to check okay that's a very risky move uh because one thing that we could do here is move our King to d8 in order to make space for The Rook to move into E8 but we've been playing this in a very kind of positional style so the the Soviet Schoolboy move would be Queen E6"
+    },
+    {
+     "san": "Nc6",
+     "t": 1105,
+     "continuation": "Nc6",
+     "said": "which I think is the totally valid approach the engine doesn't love this what's interesting I think is that if you are giving the piece back after Knight C6 E5 yeah I don't know if the way that we did it was the best way to give the piece back maybe not but anyways Queen takes F6 and queen E2 is actually I think in retrospect a very strong move because if white doesn't play Queen E2 then we get to Castle and we get to play D5 and the position is dead equal for example if white plays Bishop C4 then I was planning a very strong move in this position a strong positional move C6 C6 castles D5 everything is groovy rookie one Bishop E6 were fully developed we're happy black is probably even better in this position what's the point in controlling light dark source and games well okay Square control is inherently good and I'll have videos eventually on Square control and what that means but if you look at this concrete position don't overthink it the point of controlling F5 is to prevent white from"
+    }
+   ]
+  },
+  {
+   "ply": 11,
+   "fen": "r1bqkb1r/pppp1ppp/5nn1/4P3/3P4/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "Nxe5",
+    "Nxe5",
+    "d4",
+    "Ng6",
+    "e5"
+   ],
+   "options": [
+    {
+     "san": "Bb4",
+     "t": 118.5,
+     "continuation": "Bb4",
+     "said": "you're not sure what to do remember it you can always give the piece back up and what you can gain in return is a bunch of developments so we don't have to move the Knight on F6 at all we can simply continue as though nothing is the matter we played Bishop before developing our Bishop to a good Square then we play Queen take step six and I have a hard time believing the black could possibly be worse in this position and people are confirming that Knight 26 is indeed the line and remember that psychologically Gambit players hate of line where you sack the piece back and you take a lot of the life out of the position Queenie to check okay that's a very risky move uh because one thing that we could do here is move our King to d8 in order to make space for The Rook to move into E8 but we've been playing this in a very kind of positional style so the the Soviet Schoolboy move would be Queen E6 or queen E7 but Queen E6 I like a lot because then we're gonna play Queen E6 because efy trades we can take toward the center with our F Pawn and as a result of that we can open up the f file so that when we Castle later on we'll put pressure on the F2 Pawn so we're going to play this"
+    },
+    {
+     "san": "Ng8",
+     "t": 1026,
+     "continuation": "Ng8",
+     "said": "first of all I don't think I have ever faced the Halloween Gambit so I never studied it you know I'm an E5 player but I've never studied this properly and I was afraid to play Knight G8 because there is a good amount of theory here I don't know what White's main move is and the engine gives minus 1.5 but I know that looks like Bishop C4 is the line and now apparently you're supposed to sacrifice one of the pawns back why are you supposed to do that in order to open up the center and help yourself develop your pieces more effectively so it looks like yeah D5 is a very common type of idea in such positions to sack one of the pawns and after Bishop takes D5 two games continued C6 Bishop B3 Bishop B4 and I think it's it's pretty obvious that in this position white has insufficient compensation for the two for the piece white has two pawns but notice that we have control over all the light squares so even if white plays F4 by the way the engine recommends H5 which is similar to what we did in the game then we put the bishop on F5 and you have total dominance over all the"
+    }
+   ]
+  }
+ ]
+}

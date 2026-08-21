@@ -1,0 +1,883 @@
+{
+ "videoId": "CnODsrMCQQg",
+ "title": "Punishing Strategic Blunders & Winning | Austrian Attack, Hippo | GM Naroditsky's DYI Chess Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 37.5,
+   "line": [
+    "e4",
+    "d6"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "level while it lasts. I think this is really where we played the most instructive games for the widest uh possible audience. So, I hope you enjoy. Hope we get some instructive games in. And we are facing a perk or pierce."
+  },
+  {
+   "ply": 3,
+   "t": 38.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": ""
+  },
+  {
+   "ply": 4,
+   "t": 41,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3pp3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "Never mind. We are facing a um unnamed, you know, it's like when you take the uh exit from the freeway and goo, you know, like whatever maps you use just says unnamed road. It's like unnamed opening. So, this could become a hippo, which is the name usually given to the double fian ghetto setup, or it could become like some troll opening. Now, we faced this by now a million times across the speedruns, these various versions of like nonsense"
+  },
+  {
+   "ply": 5,
+   "t": 79,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3pp3/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "openings. Our strategy, broadly speaking, does not change. We're developing naturally. Um, I've shown people various different setups, various ways that you can maximize your advantage. I think the simplest is just"
+  },
+  {
+   "ply": 6,
+   "t": 83,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqkbnr/1pp2ppp/p2pp3/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": "to play knight C3 and then to go from there. A6. Okay. So, there's like two big"
+  },
+  {
+   "ply": 4,
+   "t": 88,
+   "line": [],
+   "fen": "rnbqkbnr/ppp2ppp/3pp3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "decisions that you can make here. The first is whether to play C4 or not. But since we're not uh one D4 players, I"
+  },
+  {
+   "ply": 6,
+   "t": 96.5,
+   "line": [
+    "Nc3",
+    "a6"
+   ],
+   "fen": "rnbqkbnr/1pp2ppp/p2pp3/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": "think that uh we'll refrain from this move. The second big question is whether we play F4 or not. And I'm always very bearish on I think it's bearish on whether to play F4. I don't love this move unless unless you really feel like"
+  },
+  {
+   "ply": 7,
+   "t": 116,
+   "line": [
+    "f4"
+   ],
+   "fen": "rnbqkbnr/1pp2ppp/p2pp3/8/3PPP2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 4",
+   "said": "you can knock your opponent out in the center. I like to play without F4. In this case, however, I do want to play F4 because from an objective standpoint, it is a really good move. And, you know, I"
+  },
+  {
+   "ply": 8,
+   "t": 123,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkbnr/1pp2p1p/p2pp1p1/8/3PPP2/2N5/PPP3PP/R1BQKBNR w KQkq - 0 5",
+   "said": "want to give people an understanding of how to play different types of positions, even if I personally like have my preferences. So, black is now viettoing the king's bishop. So, he's playing a kind of pier down a couple of tempe. What I will say and I'll sort of flesh this out a little bit after the game. We do not have to"
+  },
+  {
+   "ply": 9,
+   "t": 151,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/1pp2p1p/p2pp1p1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 1 5",
+   "said": "prevent B5. Uh even if black were to play properly in the per oftentimes you can allow the pawn to get to B5. It is not a big deal. It is not worth spending a tempo playing A4. We just keep developing that F3 and then the light"
+  },
+  {
+   "ply": 10,
+   "t": 154.5,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk1nr/1pp2pbp/p2pp1p1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 2 6",
+   "said": "squareed bishop always in this line"
+  },
+  {
+   "ply": 11,
+   "t": 155.5,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqk1nr/1pp2pbp/p2pp1p1/8/3PPP2/2NB1N2/PPP3PP/R1BQK2R b KQkq - 3 6",
+   "said": "comes out to D3. This is just sort of the standard Austrian attack"
+  },
+  {
+   "ply": 12,
+   "t": 160,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "rnbqk2r/1pp1npbp/p2pp1p1/8/3PPP2/2NB1N2/PPP3PP/R1BQK2R w KQkq - 4 7",
+   "said": "setup. Castles king side. All very"
+  },
+  {
+   "ply": 13,
+   "t": 162,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbqk2r/1pp1npbp/p2pp1p1/8/3PPP2/2NB1N2/PPP3PP/R1BQ1RK1 b kq - 5 7",
+   "said": "straightforward."
+  },
+  {
+   "ply": 14,
+   "t": 165,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/1pp1npbp/p2pp1p1/8/3PPP2/2NB1N2/PPP3PP/R1BQ1RK1 w - - 6 8",
+   "said": "Okay, so we have a great position. We have a good center. Black is sort of moving toward a hippo setup. So, black's setup is not horrendous like we faced worse. It's also not very good, and it's definitely something that we want to seek to punish in the early middle game. Again, when you have a position like this, there's going to be multiple ways based on your preferences to prosecute"
+  },
+  {
+   "ply": 15,
+   "t": 201,
+   "line": [
+    "Qe1"
+   ],
+   "fen": "rnbq1rk1/1pp1npbp/p2pp1p1/8/3PPP2/2NB1N2/PPP3PP/R1B1QRK1 b - - 7 8",
+   "said": "the advantage. Like there isn't just going to be one correct super like strictly correct way to play. I like this maneuver a lot that we've implemented in many openings. Queen to E1. I really like this move because it's"
+  },
+  {
+   "ply": 16,
+   "t": 206.5,
+   "line": [
+    "Nbc6"
+   ],
+   "fen": "r1bq1rk1/1pp1npbp/p1npp1p1/8/3PPP2/2NB1N2/PPP3PP/R1B1QRK1 w - - 8 9",
+   "said": "a flexible move. We're not really committing to anything, but we're really eyeing this queen H4 move just like you would in the Grand Prix attack here. An instructive moment. What would you like, pause the video if you're watching and you ask yourself, what would you play here with white? I bet you that the"
+  },
+  {
+   "ply": 17,
+   "t": 228,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bq1rk1/1pp1npbp/p1npp1p1/4P3/3P1P2/2NB1N2/PPP3PP/R1B1QRK1 b - - 0 9",
+   "said": "majority of you would just automatically go bishop E3. In my opinion, there is a more challenging move, which is actually to play E5. Um, the logic is okay, we are probably going to be attacked on the"
+  },
+  {
+   "ply": 18,
+   "t": 237,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bq1rk1/1pp1npbp/p1n1p1p1/4p3/3P1P2/2NB1N2/PPP3PP/R1B1QRK1 w - - 0 10",
+   "said": "king's side. That's probably going to be the the area of attack. So, like, broadly speaking, closing the center or keeping the center"
+  },
+  {
+   "ply": 17,
+   "t": 244.5,
+   "line": [],
+   "fen": "r1bq1rk1/1pp1npbp/p1npp1p1/4P3/3P1P2/2NB1N2/PPP3PP/R1B1QRK1 b - - 0 9",
+   "said": "semi-cloed is a good idea. But also, the positional benefits of this move are tremendous. We're forcing, you know, we're locking this bishop out of the game and we're really exploiting the"
+  },
+  {
+   "ply": 18,
+   "t": 252,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bq1rk1/1pp1npbp/p1n1p1p1/4p3/3P1P2/2NB1N2/PPP3PP/R1B1QRK1 w - - 0 10",
+   "said": "fact that we played F4. So F D takes C5 is great for us. Obviously, we need to"
+  },
+  {
+   "ply": 19,
+   "t": 254.5,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bq1rk1/1pp1npbp/p1n1p1p1/4P3/5P2/2NB1N2/PPP3PP/R1B1QRK1 b - - 0 10",
+   "said": "take with the D pawn, otherwise we drop the pawn. This bishop is out of the game. And I'm already looking at the D file."
+  },
+  {
+   "ply": 20,
+   "t": 265.5,
+   "line": [
+    "Nf5"
+   ],
+   "fen": "r1bq1rk1/1pp2pbp/p1n1p1p1/4Pn2/5P2/2NB1N2/PPP3PP/R1B1QRK1 w - - 1 11",
+   "said": "I'm looking at the D file because the black queen is very cramped. So if we can quickly get a rook to that square, that looks really awesome. I'm also"
+  },
+  {
+   "ply": 21,
+   "t": 275.5,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r1bq1rk1/1pp2pbp/p1n1p1p1/4Pn2/4NP2/3B1N2/PPP3PP/R1B1QRK1 b - - 2 11",
+   "said": "looking at the F6 square. Serious weakness. We can play knight e4. In fact, let's start with knight e4 because we're also stopping the move knight b4 by doing so. And I really like moves that combine aggressive ideas with prophylactic ideas. Those are really annoying for the opponent. I think black"
+  },
+  {
+   "ply": 22,
+   "t": 300.5,
+   "line": [
+    "Ncd4"
+   ],
+   "fen": "r1bq1rk1/1pp2pbp/p3p1p1/4Pn2/3nNP2/3B1N2/PPP3PP/R1B1QRK1 w - - 3 12",
+   "said": "is going to go queen e7. That would be my guess. But um I'm not Idris Uman. Knight cd4. Okay. So again, white's position is borderline winning here. I think um and one very kind of underrated training tool I think that you can use in terms of like working with engines uh fruitfully is at various points you know and like when you're analyzing a game ask yourself like to roughly estimate the anal the evaluation of the position what do you think the assessment is in terms of like computer assessment then turn on the computer and see how many times you're in the correct ballpark and if you're completely in the wrong ballpark or you think like black's winning when white's winning, that's a good chance to, you know, potentially figure out some blind spots in your understanding. So, this would be a good moment to like collectively guess the"
+  },
+  {
+   "ply": 23,
+   "t": 362,
+   "line": [
+    "c3"
+   ],
+   "fen": "r1bq1rk1/1pp2pbp/p3p1p1/4Pn2/3nNP2/2PB1N2/PP4PP/R1B1QRK1 b - - 0 12",
+   "said": "email. I'm going to guess plus two. So, this is move 12 white. And then after the game, we're going to check. Okay, let's go C3. Yeah, let's go C3. Kicking the knight away, covering the D4 square. And of course, if he trades on F3, the rook will then defend the bishop. Now, this is a risky kind of move that needs to be supported by very concrete thinking because we're flirting with disaster. Of course, I'm not, but I've looked at it carefully. But when you"
+  },
+  {
+   "ply": 24,
+   "t": 393.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bq1rk1/1pp2pbp/p1n1p1p1/4Pn2/4NP2/2PB1N2/PP4PP/R1B1QRK1 w - - 1 13",
+   "said": "allow discoveries of this sort, you got to make sure that you've cons considered all of the knight jumps, including moves like knight B3, which actually probably I would play with black if I had to generate the most practical chances. He goes back to C6. Great. Now, like newer players, they will very often like"
+  },
+  {
+   "ply": 25,
+   "t": 404,
+   "line": [
+    "Bc2"
+   ],
+   "fen": "r1bq1rk1/1pp2pbp/p1n1p1p1/4Pn2/4NP2/2P2N2/PPB3PP/R1B1QRK1 b - - 2 13",
+   "said": "blunder the bishop in this case. Remember, when you push a pawn, okay, bishop is undefended. Let's bring it back. We have all the time in the"
+  },
+  {
+   "ply": 26,
+   "t": 408.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1bq1rk1/2p2pbp/p1n1p1p1/1p2Pn2/4NP2/2P2N2/PPB3PP/R1B1QRK1 w - - 0 14",
+   "said": "world. And I think we're we're ready to"
+  },
+  {
+   "ply": 27,
+   "t": 412.5,
+   "line": [
+    "g4"
+   ],
+   "fen": "r1bq1rk1/2p2pbp/p1n1p1p1/1p2Pn2/4NPP1/2P2N2/PPB4P/R1B1QRK1 b - - 0 14",
+   "said": "chase this knight out of F5. Let's go G4. Now, nobody should be watching this thinking, wow, like why is he pushing pawns in front of his king? Look at black's position. Like there is no"
+  },
+  {
+   "ply": 28,
+   "t": 427.5,
+   "line": [
+    "Nh6"
+   ],
+   "fen": "r1bq1rk1/2p2pbp/p1n1p1pn/1p2P3/4NPP1/2P2N2/PPB4P/R1B1QRK1 w - - 1 15",
+   "said": "hypothetical universe where if we attack with any kind of even like remote competence, we're going to pay uh for"
+  },
+  {
+   "ply": 29,
+   "t": 431,
+   "line": [
+    "h3"
+   ],
+   "fen": "r1bq1rk1/2p2pbp/p1n1p1pn/1p2P3/4NPP1/2P2N1P/PPB5/R1B1QRK1 b - - 0 15",
+   "said": "this kind of move. Let's go H3. Also, black is weak in the C5 square, which we don't even probably need. I mean, this is just black is in zukong basically. Like this is now it's"
+  },
+  {
+   "ply": 30,
+   "t": 454,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "r2q1rk1/1bp2pbp/p1n1p1pn/1p2P3/4NPP1/2P2N1P/PPB5/R1B1QRK1 w - - 1 16",
+   "said": "like plus five probably and we have so many ways to play, but I like patient buildup. So, like what's our next move going to be? Actually, there is a there is a semi-tactical move here that we could play. I think that's very strong. Yeah, this I think this move is just winning actually. So, the patient approach is bishop E3. Bishop E3, rook D1. Nothing wrong with it. But there is a more tactically minded approach, I think, to go for a quick knockout. So, G5 is the right idea, but it's the wrong order, right? So, G5, the problem with this move is it gives black this big stronghold on F5. And if we then give a check on F6, I'm of course not going to take your knight. So G5 is not a move you want to play unless you have to. So think about what I said. I said wrong order. What does that mean? Wrong order of what? That contains a hint as to the correct move."
+  },
+  {
+   "ply": 31,
+   "t": 509,
+   "line": [
+    "Nf6+"
+   ],
+   "fen": "r2q1rk1/1bp2pbp/p1n1pNpn/1p2P3/5PP1/2P2N1P/PPB5/R1B1QRK1 b - - 2 16",
+   "said": "So F5 actually is very strong as well, I think. Yeah, but you don't even need F5. Okay, folks. So the idea proposed is G5 and knight F6. Start with knight f6 check. Exactly. Start with knight f6. If black takes"
+  },
+  {
+   "ply": 32,
+   "t": 518,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "r2q1rk1/1bp2p1p/p1n1pbpn/1p2P3/5PP1/2P2N1P/PPB5/R1B1QRK1 w - - 0 17",
+   "said": "twice, then we play g5 picking up the knight. Otherwise, we're threatening queen h4, winning on the spot or or f5."
+  },
+  {
+   "ply": 35,
+   "t": 523.5,
+   "line": [
+    "exf6",
+    "Qxf6",
+    "g5"
+   ],
+   "fen": "r4rk1/1bp2p1p/p1n1pqpn/1p4P1/5P2/2P2N1P/PPB5/R1B1QRK1 b - - 0 18",
+   "said": "So, black basically has to give up this. I think this was the only move. But this is a full extra piece and all the dark squares. And okay, queen G7 I think is"
+  },
+  {
+   "ply": 36,
+   "t": 540.5,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r4rk1/1bp1qp1p/p1n1p1pn/1p4P1/5P2/2P2N1P/PPB5/R1B1QRK1 w - - 1 19",
+   "said": "forced but he might resign. Yeah, this is probably plus five"
+  },
+  {
+   "ply": 37,
+   "t": 541.5,
+   "line": [
+    "gxh6"
+   ],
+   "fen": "r4rk1/1bp1qp1p/p1n1p1pP/1p6/5P2/2P2N1P/PPB5/R1B1QRK1 b - - 0 19",
+   "said": "at least. Yeah. Or so this type of"
+  },
+  {
+   "ply": 38,
+   "t": 548,
+   "line": [
+    "Qc5+"
+   ],
+   "fen": "r4rk1/1bp2p1p/p1n1p1pP/1pq5/5P2/2P2N1P/PPB5/R1B1QRK1 w - - 1 20",
+   "said": "position because black is down a piece and potentially getting mated in the"
+  },
+  {
+   "ply": 39,
+   "t": 549.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r4rk1/1bp2p1p/p1n1p1pP/1pq5/5P2/2P1BN1P/PPB5/R3QRK1 b - - 2 20",
+   "said": "long run. Okay, queen H5 is what I'm expecting. Again, to remind you of something, um, one of the basic points"
+  },
+  {
+   "ply": 40,
+   "t": 561.5,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r4rk1/1bp1qp1p/p1n1p1pP/1p6/5P2/2P1BN1P/PPB5/R3QRK1 w - - 3 21",
+   "said": "of the speeder is like my comments is are generally geared toward the level that we're currently at. So, for 1750, I'm talking in a way that I think will be targeted to 1750s approximately. So, if you're 1750 and you're watching this, you're in that ballpark, you should feel like if you had this position with white against me with plenty of time, like in a classical game, you should feel like"
+  },
+  {
+   "ply": 41,
+   "t": 590.5,
+   "line": [
+    "Qf2"
+   ],
+   "fen": "r4rk1/1bp1qp1p/p1n1p1pP/1p6/5P2/2P1BN1P/PPB2Q2/R4RK1 b - - 4 21",
+   "said": "you would be able to convert like at least 50% of the time. And you should feel pretty comfortable like, okay, I know where the pieces are going and I feel like I can do this pretty much with my eyes closed. Let's go queen F2 to set up bishop C5 and coordinate the rooks."
+  },
+  {
+   "ply": 42,
+   "t": 597,
+   "line": [
+    "Rfd8"
+   ],
+   "fen": "r2r2k1/1bp1qp1p/p1n1p1pP/1p6/5P2/2P1BN1P/PPB2Q2/R4RK1 w - - 5 22",
+   "said": "So I want to remind you of a of a topic that I haven't really broached since we were beginner level which is when you are up a decisive amount of material right there's these two approaches to winning broadly speaking the approach one is what's often taught trade all the pieces go into an endame because it's easier to convert approach number two is like use your extra piece to play for checkmate and the correct approach is usually going to be a balance of the two here I'm basically not even thinking about just like the first approach because if you look at the dark squares like it's a crime against humanity to just like seek out the queen trade with a move like queen H4. This is a move that will prolong the winning uh"
+  },
+  {
+   "ply": 43,
+   "t": 649,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r2r2k1/1bp1qp1p/p1n1p1pP/1pB5/5P2/2P2N1P/PPB2Q2/R4RK1 b - - 6 22",
+   "said": "path by like a million years. Instead we have so many like exciting attacking opportunities here. Bishop E4 is an excellent move. I like bishop C5, asking the queen um politely where it's going to"
+  },
+  {
+   "ply": 44,
+   "t": 656.5,
+   "line": [
+    "Qf6"
+   ],
+   "fen": "r2r2k1/1bp2p1p/p1n1pqpP/1pB5/5P2/2P2N1P/PPB2Q2/R4RK1 w - - 7 23",
+   "said": "go. And it may seem like we're sending"
+  },
+  {
+   "ply": 45,
+   "t": 660.5,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "r2r2k1/1bp2p1p/p1n1pqpP/1pB3N1/5P2/2P4P/PPB2Q2/R4RK1 b - - 8 23",
+   "said": "the queen to a better square, but now I'm going to go knight G5. And I have this nasty little idea to drop back to E4. And then the queen really starts feeling uncomfortable. Yeah, this is not not great for black. If knight E7, we have an even better move. Think about what you're going to play. If black goes knight e7, black might go e5 also, but that"
+  },
+  {
+   "ply": 46,
+   "t": 695.5,
+   "line": [
+    "Rac8"
+   ],
+   "fen": "2rr2k1/1bp2p1p/p1n1pqpP/1pB3N1/5P2/2P4P/PPB2Q2/R4RK1 w - - 9 24",
+   "said": "opens up this diagonal. Yeah, this is where I'm tempted to start. Yeah. Rook a c8. Okay,"
+  },
+  {
+   "ply": 47,
+   "t": 699.5,
+   "line": [
+    "Rae1"
+   ],
+   "fen": "2rr2k1/1bp2p1p/p1n1pqpP/1pB3N1/5P2/2P4P/PPB2Q2/4RRK1 b - - 10 24",
+   "said": "guess what? If you want to make a power move, just like let's dance together. Like, you're not going to do anything. I'm going to get my last piece into the game. Why"
+  },
+  {
+   "ply": 48,
+   "t": 715,
+   "line": [
+    "Rd5"
+   ],
+   "fen": "2r3k1/1bp2p1p/p1n1pqpP/1pBr2N1/5P2/2P4P/PPB2Q2/4RRK1 w - - 11 25",
+   "said": "not? Because why not? But why do we need to rush anything here? Enjoy the moment. You're winning. Enjoy the process. Rook"
+  },
+  {
+   "ply": 49,
+   "t": 721.5,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "2r3k1/1bp2p1p/p1n1pqpP/1pBr4/4NP2/2P4P/PPB2Q2/4RRK1 b - - 12 25",
+   "said": "D5. Okay, we can go knight E4 as planned. I think knight E4"
+  },
+  {
+   "ply": 53,
+   "t": 723.5,
+   "line": [
+    "Rd6",
+    "Ng5",
+    "Rdd8",
+    "Ra1"
+   ],
+   "fen": "2rr2k1/1bp2p1p/p1n1pqpP/1pB3N1/5P2/2P4P/PPB2Q2/R4RK1 b - - 16 27",
+   "said": "actually would have been stronger here,"
+  },
+  {
+   "ply": 57,
+   "t": 726,
+   "line": [
+    "Rd7",
+    "Ne4",
+    "Rd5",
+    "Rae1"
+   ],
+   "fen": "2r3k1/1bp2p1p/p1n1pqpP/1pBr4/4NP2/2P4P/PPB2Q2/4RRK1 b - - 20 29",
+   "said": "but I wanted to prove a point because now he has queen D8. Not that that changes anything."
+  },
+  {
+   "ply": 58,
+   "t": 733.5,
+   "line": [
+    "Qd8"
+   ],
+   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pBr4/4NP2/2P4P/PPB2Q2/4RRK1 w - - 21 30",
+   "said": "So, how do I think about this position? What's the goal? What is the ideal for white? The ideal to me is if we can manage to put a knight on F6, that's going to be devastating. What's preventing the knight from getting to F6, black's queen? How do we chase away black's queen? Well, we can't. Um, like,"
+  },
+  {
+   "ply": 59,
+   "t": 762,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pBr4/4NP2/1BP4P/PP3Q2/4RRK1 b - - 22 30",
+   "said": "can we set up a hypothetical? Well, if the rook were gone, we would have rook to D1 and the queen would potentially be trapped. What's the move? move is bishop B3 trying to force the rook away from the D"
+  },
+  {
+   "ply": 60,
+   "t": 769,
+   "line": [
+    "Rh5"
+   ],
+   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pB4r/4NP2/1BP4P/PP3Q2/4RRK1 w - - 23 31",
+   "said": "file. Now on my opponent's turn, what I'm doing is I'm sort of Okay, never"
+  },
+  {
+   "ply": 61,
+   "t": 770.5,
+   "line": [
+    "Rd1"
+   ],
+   "fen": "2rq2k1/1bp2p1p/p1n1p1pP/1pB4r/4NP2/1BP4P/PP3Q2/3R1RK1 b - - 24 31",
+   "said": "mind. Scratch that. He's played rook H5. Okay, very instructive moment if he"
+  },
+  {
+   "ply": 62,
+   "t": 778.5,
+   "line": [
+    "Qh4"
+   ],
+   "fen": "2r3k1/1bp2p1p/p1n1p1pP/1pB4r/4NP1q/1BP4P/PP3Q2/3R1RK1 w - - 25 32",
+   "said": "plays queen H4. Instructive moment if he plays queen H4. Okay, so I just said that queen trade is a crime against meaning. What I meant by that is not like the act of trading queens should be ruled out in"
+  },
+  {
+   "ply": 63,
+   "t": 798,
+   "line": [
+    "Qxh4"
+   ],
+   "fen": "2r3k1/1bp2p1p/p1n1p1pP/1pB4r/4NP1Q/1BP4P/PP6/3R1RK1 b - - 0 32",
+   "said": "any situation. It's like seeking out the queen trade uh at the expense of your attack should be, you know, is not the optimal way to win here. The queen trade"
+  },
+  {
+   "ply": 65,
+   "t": 801,
+   "line": [
+    "Rxh4",
+    "Nf6+"
+   ],
+   "fen": "2r3k1/1bp2p1p/p1n1pNpP/1pB5/5P1r/1BP4P/PP6/3R1RK1 b - - 1 33",
+   "said": "is in service of the attack. We're the attack continues in the endame. We're"
+  },
+  {
+   "ply": 66,
+   "t": 806,
+   "line": [
+    "Kh8"
+   ],
+   "fen": "2r4k/1bp2p1p/p1n1pNpP/1pB5/5P1r/1BP4P/PP6/3R1RK1 w - - 2 34",
+   "said": "actually likelier to deliver checkmate here than we would be with the queens on"
+  },
+  {
+   "ply": 67,
+   "t": 809,
+   "line": [
+    "Rd7"
+   ],
+   "fen": "2r4k/1bpR1p1p/p1n1pNpP/1pB5/5P1r/1BP4P/PP6/5RK1 b - - 3 34",
+   "said": "the board because the rook comes in and checkmate is like a couple of moves away. Um we're going to take F6. It"
+  },
+  {
+   "ply": 69,
+   "t": 815.5,
+   "line": [
+    "Rxh6",
+    "Rxf7"
+   ],
+   "fen": "2r4k/1bp2R1p/p1n1pNpr/1pB5/5P2/1BP4P/PP6/5RK1 b - - 0 35",
+   "said": "doesn't matter that he's taken H6. This is still going to be checkmate. very very quickly. Actually, knight D8. There's a beautiful mate. I really hope he goes knight D8, but I don't think he will. Reverse psychology. Otherwise, bishop B6. I mean, anything wins. This is just like rook D1, rook D7. Bishop F8 also"
+  },
+  {
+   "ply": 70,
+   "t": 848,
+   "line": [
+    "Rxh3"
+   ],
+   "fen": "2r4k/1bp2R1p/p1n1pNp1/1pB5/5P2/1BP4r/PP6/5RK1 w - - 0 36",
+   "said": "wins. Yeah. Yeah. Black has spent this entire game and like I don't understand the prevalence of these types of openings at like the you know relatively decent"
+  },
+  {
+   "ply": 71,
+   "t": 850,
+   "line": [
+    "Bxe6"
+   ],
+   "fen": "2r4k/1bp2R1p/p1n1BNp1/1pB5/5P2/2P4r/PP6/5RK1 b - - 0 36",
+   "said": "level just like massochism to play like D6 E6. Don't do that. If you wanna if you're serious about your improvement, you should play real"
+  },
+  {
+   "ply": 72,
+   "t": 879,
+   "line": [
+    "Rg3+"
+   ],
+   "fen": "2r4k/1bp2R1p/p1n1BNp1/1pB5/5P2/2P3r1/PP6/5RK1 w - - 1 37",
+   "said": "openings, you know, like meme openings are fun for a game or two here and there, but they should never be your main opening. Okay, I hope he resigns like where this is dragging on. Whatever. King"
+  },
+  {
+   "ply": 73,
+   "t": 881,
+   "line": [
+    "Kf2"
+   ],
+   "fen": "2r4k/1bp2R1p/p1n1BNp1/1pB5/5P2/2P3r1/PP3K2/5R2 b - - 2 37",
+   "said": ""
+  },
+  {
+   "ply": 74,
+   "t": 883,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "2r4k/1bp2R1p/p3BNp1/1pB1n3/5P2/2P3r1/PP3K2/5R2 w - - 3 38",
+   "said": "F2 and we have checkmate in one. Very nice. Okay, just a moment."
+  },
+  {
+   "ply": 75,
+   "t": 889,
+   "line": [
+    "Rxh7#"
+   ],
+   "fen": "2r4k/1bp4R/p3BNp1/1pB1n3/5P2/2P3r1/PP3K2/5R2 b - - 0 38",
+   "said": "So there isn't much to say uh really. I"
+  },
+  {
+   "ply": 3,
+   "t": 891,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "think I explained most stuff during the game, but we have a couple things to"
+  },
+  {
+   "ply": 4,
+   "t": 894.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3pp3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "check that point where we guess the evaluation. So I don't really have much"
+  },
+  {
+   "ply": 6,
+   "t": 897,
+   "line": [
+    "Nc3",
+    "a6"
+   ],
+   "fen": "rnbqkbnr/1pp2ppp/p2pp3/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": "to say on the opening. Um essentially"
+  },
+  {
+   "ply": 3,
+   "t": 900.5,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "like uh the actual puritz is knight f6,"
+  },
+  {
+   "ply": 4,
+   "t": 902.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "said": "knight c3, g6. This is the puritz. And"
+  },
+  {
+   "ply": 6,
+   "t": 904.5,
+   "line": [
+    "Nc3",
+    "g6"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": ""
+  },
+  {
+   "ply": 7,
+   "t": 907,
+   "line": [
+    "f4"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PPP2/2N5/PPP3PP/R1BQKBNR b KQkq - 0 4",
+   "said": "here like if you play f4, this is called the Austrian attack. This is like for several decades now considered really the most principled fight uh way to"
+  },
+  {
+   "ply": 8,
+   "t": 922,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PPP2/2N5/PPP3PP/R1BQKBNR w KQkq - 1 5",
+   "said": "fight for an advantage. I don't think it's necessarily the best the best move, but it's sort of the most aggressive. And there's a ton of theory here. Um I"
+  },
+  {
+   "ply": 3,
+   "t": 928,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "won't delve into it right now. Separately, there is an opening called the modern where black plays G6 on the first move. The modern is like the cousin of the puritz and it can"
+  },
+  {
+   "ply": 7,
+   "t": 939.5,
+   "line": [
+    "g6",
+    "f4",
+    "Bg7",
+    "Nc3"
+   ],
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PPP2/2N5/PPP3PP/R1BQKBNR b KQkq - 2 4",
+   "said": "transpose into the puritz if black plays like d6 and knight f6. But very often, black delays the move knight f6 and"
+  },
+  {
+   "ply": 8,
+   "t": 942.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqk1nr/1pp1ppbp/p2p2p1/8/3PPP2/2N5/PPP3PP/R1BQKBNR w KQkq - 0 5",
+   "said": "plays a6, which is sort of what our opponent tried to do, but he played this horrid move e6. And here I mentioned"
+  },
+  {
+   "ply": 9,
+   "t": 952.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqk1nr/1pp1ppbp/p2p2p1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R b KQkq - 1 5",
+   "said": "early in the game that we don't always need to stop b5. This is a great example like knight f3 here is is best. And we"
+  },
+  {
+   "ply": 10,
+   "t": 956,
+   "line": [
+    "b5"
+   ],
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/1p6/3PPP2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 11,
+   "t": 957,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/1p6/3PPP2/2NB1N2/PPP3PP/R1BQK2R b KQkq - 1 6",
+   "said": "just continue developing in spite of black's expansion on the queen side"
+  },
+  {
+   "ply": 12,
+   "t": 962,
+   "line": [
+    "b4"
+   ],
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/8/1p1PPP2/2NB1N2/PPP3PP/R1BQK2R w KQkq - 0 7",
+   "said": "because a move like b4 is not going to"
+  },
+  {
+   "ply": 13,
+   "t": 964.5,
+   "line": [
+    "Ne2"
+   ],
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/8/1p1PPP2/3B1N2/PPP1N1PP/R1BQK2R b KQkq - 1 7",
+   "said": "cause any damage. It's like pinching a dinosaur. In fact, it helps white uh mass our forces on the king side. The"
+  },
+  {
+   "ply": 11,
+   "t": 972.5,
+   "line": [],
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/1p6/3PPP2/2NB1N2/PPP3PP/R1BQK2R b KQkq - 1 6",
+   "said": "knight wants to be on G3. So, in fact, like very often, white will play A4 to provoke B4 in this position. Um, in any"
+  },
+  {
+   "ply": 10,
+   "t": 982.5,
+   "line": [],
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/1p6/3PPP2/2N2N2/PPP3PP/R1BQKB1R w KQkq - 0 6",
+   "said": "case, black plays this like really weird setup. We go for the Austrian attack setup. And here, I think I explain E5 pretty well. Anybody have questions on this move E5? Pretty easy to understand. It's not a big like super committal move. One thing that I did overlook, I'll be honest, I did miss that black can play knight B4. This does sour my like enthusiasm for this a little bit. Knight B4 is a slightly annoying move because white will be forced to give up the bishop here. There is actually a pretty instructive maneuver. You can play bishop E4 and then go back to D3. Of course, the point is to induce D5 and close up the center completely. And although this may look ugly, it's actually a very standard structure like in the Jbava London. This is actually not a bad structure at all. Why? Because if black carries out the typical plan C5, white has this lovely, you know, reformation D, not the Protestant reformation, but the pawn structure reformation DC and D4. And now we can like safely continue"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 3,
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "e4",
+    "d6",
+    "d4"
+   ],
+   "options": [
+    {
+     "san": "e6",
+     "t": 41,
+     "continuation": "e6",
+     "said": "really where we played the most instructive games for the widest uh possible audience. So, I hope you enjoy. Hope we get some instructive games in. And we are facing a perk or pierce. Never mind. We are facing a um unnamed, you know, it's like when you take the uh exit from the freeway and goo, you know, like whatever maps you use just says unnamed road. It's like unnamed opening. So, this could become a hippo, which is the name usually given to the double fian ghetto setup, or it could become like some troll opening. Now, we faced this by now a million times across the speedruns, these various versions of like nonsense openings. Our strategy, broadly speaking, does not change. We're developing naturally. Um, I've shown people various different setups, various ways that you can maximize your advantage. I think the simplest is just to play knight C3 and then to go from there. A6. Okay. So, there's like two big decisions that you can make here. The first is whether to play C4 or not. But since we're not uh one D4 players, I think that uh we'll refrain from this move. The second big question is whether we play F4 or not. And I'm always very bearish on I think it's bearish on"
+    },
+    {
+     "san": "Nf6",
+     "t": 902.5,
+     "continuation": "Nf6",
+     "said": "think I explained most stuff during the game, but we have a couple things to check that point where we guess the evaluation. So I don't really have much to say on the opening. Um essentially like uh the actual puritz is knight f6, knight c3, g6. This is the puritz. And here like if you play f4, this is called the Austrian attack. This is like for several decades now considered really the most principled fight uh way to fight for an advantage. I don't think it's necessarily the best the best move, but it's sort of the most aggressive. And there's a ton of theory here. Um I won't delve into it right now. Separately, there is an opening called the modern where black plays G6 on the first move. The modern is like the cousin of the puritz and it can transpose into the puritz if black plays like d6 and knight f6. But very often, black delays the move knight f6 and plays a6, which is sort of what our opponent tried to do, but he played this horrid move e6. And here I mentioned early in the game that we don't always need to stop b5. This is a great example like knight f3 here is is best. And we just continue developing in spite of black's expansion on the queen side because a move like b4 is not going to"
+    },
+    {
+     "san": "g6",
+     "t": 939.5,
+     "continuation": "g6 f4 Bg7 Nc3",
+     "said": "Separately, there is an opening called the modern where black plays G6 on the first move. The modern is like the cousin of the puritz and it can transpose into the puritz if black plays like d6 and knight f6. But very often, black delays the move knight f6 and plays a6, which is sort of what our opponent tried to do, but he played this horrid move e6. And here I mentioned early in the game that we don't always need to stop b5. This is a great example like knight f3 here is is best. And we just continue developing in spite of black's expansion on the queen side because a move like b4 is not going to cause any damage. It's like pinching a dinosaur. In fact, it helps white uh mass our forces on the king side. The knight wants to be on G3. So, in fact, like very often, white will play A4 to provoke B4 in this position. Um, in any case, black plays this like really weird setup. We go for the Austrian attack setup. And here, I think I explain E5 pretty well. Anybody have questions on this move E5? Pretty easy to understand. It's not a big like super committal move. One thing that I did overlook, I'll be honest, I did miss that black can play"
+    }
+   ]
+  },
+  {
+   "ply": 49,
+   "fen": "2r3k1/1bp2p1p/p1n1pqpP/1pBr4/4NP2/2P4P/PPB2Q2/4RRK1 b - - 12 25",
+   "line": [
+    "e4",
+    "d6",
+    "d4",
+    "e6",
+    "Nc3",
+    "a6",
+    "f4",
+    "g6",
+    "Nf3",
+    "Bg7",
+    "Bd3",
+    "Ne7",
+    "O-O",
+    "O-O",
+    "Qe1",
+    "Nbc6",
+    "e5",
+    "dxe5",
+    "dxe5",
+    "Nf5",
+    "Ne4",
+    "Ncd4",
+    "c3",
+    "Nc6",
+    "Bc2",
+    "b5",
+    "g4",
+    "Nh6",
+    "h3",
+    "Bb7",
+    "Nf6+",
+    "Bxf6",
+    "exf6",
+    "Qxf6",
+    "g5",
+    "Qe7",
+    "gxh6",
+    "Qc5+",
+    "Be3",
+    "Qe7",
+    "Qf2",
+    "Rfd8",
+    "Bc5",
+    "Qf6",
+    "Ng5",
+    "Rac8",
+    "Rae1",
+    "Rd5",
+    "Ne4"
+   ],
+   "options": [
+    {
+     "san": "Rd6",
+     "t": 723.5,
+     "continuation": "Rd6 Ng5 Rdd8 Ra1",
+     "said": "to rush anything here? Enjoy the moment. You're winning. Enjoy the process. Rook D5. Okay, we can go knight E4 as planned. I think knight E4 actually would have been stronger here, but I wanted to prove a point because now he has queen D8. Not that that changes anything. So, how do I think about this position? What's the goal? What is the ideal for white? The ideal to me is if we can manage to put a knight on F6, that's going to be devastating. What's preventing the knight from getting to F6, black's queen? How do we chase away black's queen? Well, we can't. Um, like, can we set up a hypothetical? Well, if the rook were gone, we would have rook to D1 and the queen would potentially be trapped. What's the move? move is bishop B3 trying to force the rook away from the D file. Now on my opponent's turn, what I'm doing is I'm sort of Okay, never mind. Scratch that. He's played rook H5. Okay, very instructive moment if he plays queen H4. Instructive moment if he plays queen H4. Okay, so I just said that queen trade is a crime against meaning. What I"
+    },
+    {
+     "san": "Qd8",
+     "t": 733.5,
+     "continuation": "Qd8",
+     "said": "actually would have been stronger here, but I wanted to prove a point because now he has queen D8. Not that that changes anything. So, how do I think about this position? What's the goal? What is the ideal for white? The ideal to me is if we can manage to put a knight on F6, that's going to be devastating. What's preventing the knight from getting to F6, black's queen? How do we chase away black's queen? Well, we can't. Um, like, can we set up a hypothetical? Well, if the rook were gone, we would have rook to D1 and the queen would potentially be trapped. What's the move? move is bishop B3 trying to force the rook away from the D file. Now on my opponent's turn, what I'm doing is I'm sort of Okay, never mind. Scratch that. He's played rook H5. Okay, very instructive moment if he plays queen H4. Instructive moment if he plays queen H4. Okay, so I just said that queen trade is a crime against meaning. What I meant by that is not like the act of trading queens should be ruled out in any situation. It's like seeking out the queen trade uh at the expense of your attack should be, you know, is not the"
+    }
+   ]
+  }
+ ]
+}

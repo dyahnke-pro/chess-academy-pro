@@ -1,0 +1,383 @@
+{
+ "videoId": "OMpuTbOzyoc",
+ "title": "Master Class | Smith–Morra Gambit Declined | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 985.5,
+   "line": [
+    "d4",
+    "c5",
+    "e4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "like marotzi bind type structure so this position resembles a merotzi bind i've played this a couple of times over the board with black black is solid here but slightly worse now the difference between here and the danish well the difference is that"
+  },
+  {
+   "ply": 4,
+   "t": 986.5,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 5,
+   "t": 987.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "black's black hasn't moved his pawn he's moved"
+  },
+  {
+   "ply": 7,
+   "t": 993.5,
+   "line": [
+    "dxc3",
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4",
+   "said": "to cpun instead so you don't play bishop c4 or that's that's not what you do that's uh that's like a sicilian danish but that that's no longer as effective because"
+  },
+  {
+   "ply": 5,
+   "t": 1004,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "blacks central pawns are intact okay um let me see so yeah the smith war is a classic opening where players at the top don't play it and so you might think well what's wrong with it and nothing is wrong with it it's not been refuted and even if you don't end up playing this myth moral learning it and understanding the ideas can be a very very good shortcut uh to getting better at attacking and understanding sacrifices so"
+  },
+  {
+   "ply": 6,
+   "t": 1041.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "again um mark didn't pay me to say this we had a match in the more but i uh i'm a big fan of this opening for for many different reasons now d6 is another way of declining it"
+  },
+  {
+   "ply": 7,
+   "t": 1044,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "which is not terrible but clearly black is going to be worse i"
+  },
+  {
+   "ply": 8,
+   "t": 1045,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqkbnr/1p2pppp/p2p4/8/3PP3/8/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "said": "mean he's giving us the full control of the center and uh he's giving us very nice peace development so you know it black is not losing here like this is"
+  },
+  {
+   "ply": 9,
+   "t": 1066.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/1p2pppp/p2p4/8/3PP3/2N5/PP3PPP/R1BQKBNR b KQkq - 1 5",
+   "said": "not a disaster but we have a very pleasant position okay"
+  },
+  {
+   "ply": 10,
+   "t": 1067.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 2 6",
+   "said": ""
+  },
+  {
+   "ply": 11,
+   "t": 1069,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3PP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 3 6",
+   "said": "so nice c3 knight f6 knight f3 b5"
+  },
+  {
+   "ply": 12,
+   "t": 1070.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 7",
+   "said": "um and b5 is a is a nice move i like the"
+  },
+  {
+   "ply": 10,
+   "t": 1076.5,
+   "line": [],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 2 6",
+   "said": "way he handled this and in retrospect it might have made"
+  },
+  {
+   "ply": 11,
+   "t": 1078,
+   "line": [
+    "a4"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/P2PP3/2N5/1P3PPP/R1BQKBNR b KQkq - 0 6",
+   "said": "sense to play a4 i don't love playing this move you know it creates a little hole on b4 and stuff"
+  },
+  {
+   "ply": 10,
+   "t": 1087,
+   "line": [],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 2 6",
+   "said": "but maybe it made sense to prevent b5 that's just one thing to consider knight f3 b5 bishop d3 so we get our"
+  },
+  {
+   "ply": 13,
+   "t": 1089.5,
+   "line": [
+    "Bd3",
+    "b5",
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 1 7",
+   "said": "bishop out in order to support the four pawn"
+  },
+  {
+   "ply": 14,
+   "t": 1095,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "rn1qkb1r/1b2pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R w KQkq - 2 8",
+   "said": "thank you i love hearing that tk thank you for the sub earlier bishop b7 and again in such positions on every"
+  },
+  {
+   "ply": 15,
+   "t": 1103.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rn1qkb1r/1b2pppp/p2p1n2/1p2P3/3P4/2NB1N2/PP3PPP/R1BQK2R b KQkq - 0 8",
+   "said": "move you have to start asking yourself the question do i want to play e5 do i want to strike in the center and here the answer is no because"
+  },
+  {
+   "ply": 17,
+   "t": 1112,
+   "line": [
+    "dxe5",
+    "dxe5"
+   ],
+   "fen": "rn1qkb1r/1b2pppp/p4n2/1p2P3/8/2NB1N2/PP3PPP/R1BQK2R b KQkq - 0 9",
+   "said": "it doesn't do all that much d takes e5 d takes e5 and whenever you push a central pawn there's a square that is left"
+  },
+  {
+   "ply": 18,
+   "t": 1115.5,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "rn1qkb1r/1b2pppp/p7/1p1nP3/8/2NB1N2/PP3PPP/R1BQK2R w KQkq - 1 10",
+   "said": "behind in this case the square is d5 knight d5 black is fine um and then black has cement the outpost"
+  },
+  {
+   "ply": 19,
+   "t": 1124.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rn1qkb1r/1b2pppp/p3P3/1p1n4/8/2NB1N2/PP3PPP/R1BQK2R b KQkq - 0 10",
+   "said": "or the e6 white could try something like e6 here sacrificing the pawn to slow down the development of black's bishop but i felt like this was a little bit over"
+  },
+  {
+   "ply": 14,
+   "t": 1134.5,
+   "line": [],
+   "fen": "rn1qkb1r/1b2pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R w KQkq - 2 8",
+   "said": "the top but you could definitely have a look at it on your own with a computer uh maybe e5 was in fact the way to punish this"
+  },
+  {
+   "ply": 13,
+   "t": 1143.5,
+   "line": [],
+   "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 1 7",
+   "said": "can you show us what you do after b4 before where before here"
+  },
+  {
+   "ply": 14,
+   "t": 1144.5,
+   "line": [
+    "b4"
+   ],
+   "fen": "rnbqkb1r/4pppp/p2p1n2/8/1p1PP3/2NB1N2/PP3PPP/R1BQK2R w KQkq - 0 8",
+   "said": "oh yeah so b4 here you go queen a4 check and this is easy this just wins the pawn because knight c6 is not possible before here queen a4 check knight c6 who can tell me white's best move this is a classic application of you know the sam shanklin question not moving the knight from c3 just because it's being attacked go d5 easy to calculate bc dc and uh you're threatening c7 you're threatening the bishop white is just totally crushing here so"
+  },
+  {
+   "ply": 13,
+   "t": 1188,
+   "line": [],
+   "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 1 7",
+   "said": "that's pretty simple but even if you didn't have this move i mean just moving the knight is fine this pawn now becomes a very big weakness um so knight c6 was not possible here i assume you're asking why because if queen takes c6 just take the knight that square is not defended okay"
+  },
+  {
+   "ply": 16,
+   "t": 1194.5,
+   "line": [
+    "Nbd7",
+    "Rg1",
+    "Bb7"
+   ],
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK1R1 w Qkq - 4 9",
+   "said": "so rookie one uh we decided to play e6 that's a good move now black can still play b4 here um and if you have an understanding of the smith mora"
+  },
+  {
+   "ply": 18,
+   "t": 1216.5,
+   "line": [
+    "Nb1",
+    "b4"
+   ],
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/8/1p1PP3/3B1N2/PP3PPP/RNBQK1R1 w Qkq - 0 10",
+   "said": "i think it's easier to play these types of positions with white what i would have done here there's two approaches you can take a very positional approach and you can make a move here that's going to look terrible to most people that's just to drop the knight back to b1 now what's the motivate what's the logic here well again something i said earlier is important which is that our position is under no immediate duress we've got the center the center is well defended black's development is okay but quite passive"
+  },
+  {
+   "ply": 19,
+   "t": 1245,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/8/1p1PP3/2NB1N2/PP3PPP/R1BQK1R1 b Qkq - 1 10",
+   "said": "and so we can afford the luxury of rerouting our pieces as we see fit so as many of you are indicating the move b4 creates a somewhat of a hole on c4 it creates an entire complex of weaknesses that surround the pawn and the pawn itself"
+  },
+  {
+   "ply": 18,
+   "t": 1256.5,
+   "line": [],
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/8/1p1PP3/3B1N2/PP3PPP/RNBQK1R1 w Qkq - 0 10",
+   "said": "is quite weak itself so everything around the pawn as well as the pawn is weak and that knight on b1 after preliminarily developing the bishop so this move doesn't block it we can get the knight over to c4 or we can get the knight over to b3 uh and potentially even stick that knight on a5 so moving pawns like this on the queen side unless you have a very compelling reason to do so can backfire in a very big way i don't know if that makes sense"
+  },
+  {
+   "ply": 19,
+   "t": 1287.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/8/1p1PP3/2NB1N2/PP3PPP/R1BQK1R1 b Qkq - 1 10",
+   "said": "so um knight d5 is the tactical approach knight b1 is the positional approach and the point of the tactical approach okay is that we sacrifice upon what do we get in return for the pawn well we clearly we get the e file and what's killing black here is the fact that he he hasn't developed his king side so white can literally just jump on him and i don't think black's gonna be able to uh to carry his king away from the center so what move seems very logical here yeah knight g5 knight u5 is just a classic way of attacking and then queen h5 and you're just converging on black here and um this is crushing this is i mean"
+  },
+  {
+   "ply": 21,
+   "t": 1343,
+   "line": [
+    "e6",
+    "Nd5"
+   ],
+   "fen": "r2qkb1r/1b1n1ppp/p2ppn2/3N4/1p1PP3/3B1N2/PP3PPP/R1BQK1R1 b Qkq - 1 11",
+   "said": "even without analyzing anything this just seems totally overwhelming okay so you have a positional approach you have a tactical approach now i probably wouldn't even take this knight if i were black i would either go e6 and just jettison the pawn or uh maybe go a5 first to defend it although that is kind of um that is kind of iffy so rookie one he goes e6 we go a3 now we stop b4 because it's not the b4 was dangerous i just want to eliminate the headache of having to deal with it on every move oh that's more than the rare occasion so bishop f4 h3 rook c1 roxy at h3 this is all normal and now h6 and again when you develop passively you have to be a lot more careful about making these types of passive move about making these types of weakening moves and if i were black i would play rookie 8 here instead and after rookie a h6 becomes a lot more doable because for example let's make a random move for white after h6 queen d2 here black can successfully parry the threat of bishop takes h6 with what move"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d4",
+    "c5",
+    "e4",
+    "cxd4",
+    "c3"
+   ],
+   "options": [
+    {
+     "san": "dxc3",
+     "t": 993.5,
+     "continuation": "dxc3 Bc4",
+     "said": "but slightly worse now the difference between here and the danish well the difference is that black's black hasn't moved his pawn he's moved to cpun instead so you don't play bishop c4 or that's that's not what you do that's uh that's like a sicilian danish but that that's no longer as effective because blacks central pawns are intact okay um let me see so yeah the smith war is a classic opening where players at the top don't play it and so you might think well what's wrong with it and nothing is wrong with it it's not been refuted and even if you don't end up playing this myth moral learning it and understanding the ideas can be a very very good shortcut uh to getting better at attacking and understanding sacrifices so again um mark didn't pay me to say this we had a match in the more but i uh i'm a big fan of this opening for for many different reasons now d6 is another way of declining it which is not terrible but clearly black is going to be worse i mean he's giving us the full control of the center and uh he's giving us very nice peace development so you know"
+    },
+    {
+     "san": "d6",
+     "t": 1041.5,
+     "continuation": "d6",
+     "said": "again um mark didn't pay me to say this we had a match in the more but i uh i'm a big fan of this opening for for many different reasons now d6 is another way of declining it which is not terrible but clearly black is going to be worse i mean he's giving us the full control of the center and uh he's giving us very nice peace development so you know it black is not losing here like this is not a disaster but we have a very pleasant position okay so nice c3 knight f6 knight f3 b5 um and b5 is a is a nice move i like the way he handled this and in retrospect it might have made sense to play a4 i don't love playing this move you know it creates a little hole on b4 and stuff but maybe it made sense to prevent b5 that's just one thing to consider knight f3 b5 bishop d3 so we get our bishop out in order to support the four pawn thank you i love hearing that tk thank you for the sub earlier bishop b7 and again in such positions on every move you have to start asking yourself"
+    }
+   ]
+  },
+  {
+   "ply": 10,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 2 6",
+   "line": [
+    "d4",
+    "c5",
+    "e4",
+    "cxd4",
+    "c3",
+    "d6",
+    "cxd4",
+    "a6",
+    "Nc3",
+    "Nf6"
+   ],
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 1069,
+     "continuation": "Nf3",
+     "said": "not a disaster but we have a very pleasant position okay so nice c3 knight f6 knight f3 b5 um and b5 is a is a nice move i like the way he handled this and in retrospect it might have made sense to play a4 i don't love playing this move you know it creates a little hole on b4 and stuff but maybe it made sense to prevent b5 that's just one thing to consider knight f3 b5 bishop d3 so we get our bishop out in order to support the four pawn thank you i love hearing that tk thank you for the sub earlier bishop b7 and again in such positions on every move you have to start asking yourself the question do i want to play e5 do i want to strike in the center and here the answer is no because it doesn't do all that much d takes e5 d takes e5 and whenever you push a central pawn there's a square that is left behind in this case the square is d5 knight d5 black is fine um and then black has cement the outpost or the e6 white could try something like e6 here sacrificing the pawn to slow down the development of black's bishop but i felt like this was a little bit over"
+    },
+    {
+     "san": "a4",
+     "t": 1078,
+     "continuation": "a4",
+     "said": "so nice c3 knight f6 knight f3 b5 um and b5 is a is a nice move i like the way he handled this and in retrospect it might have made sense to play a4 i don't love playing this move you know it creates a little hole on b4 and stuff but maybe it made sense to prevent b5 that's just one thing to consider knight f3 b5 bishop d3 so we get our bishop out in order to support the four pawn thank you i love hearing that tk thank you for the sub earlier bishop b7 and again in such positions on every move you have to start asking yourself the question do i want to play e5 do i want to strike in the center and here the answer is no because it doesn't do all that much d takes e5 d takes e5 and whenever you push a central pawn there's a square that is left behind in this case the square is d5 knight d5 black is fine um and then black has cement the outpost or the e6 white could try something like e6 here sacrificing the pawn to slow down the development of black's bishop but i felt like this was a little bit over the top but you could definitely have a look at it on your own with a computer uh maybe e5 was in fact the way to"
+    },
+    {
+     "san": "Bd3",
+     "t": 1089.5,
+     "continuation": "Bd3 b5 Nf3",
+     "said": "playing this move you know it creates a little hole on b4 and stuff but maybe it made sense to prevent b5 that's just one thing to consider knight f3 b5 bishop d3 so we get our bishop out in order to support the four pawn thank you i love hearing that tk thank you for the sub earlier bishop b7 and again in such positions on every move you have to start asking yourself the question do i want to play e5 do i want to strike in the center and here the answer is no because it doesn't do all that much d takes e5 d takes e5 and whenever you push a central pawn there's a square that is left behind in this case the square is d5 knight d5 black is fine um and then black has cement the outpost or the e6 white could try something like e6 here sacrificing the pawn to slow down the development of black's bishop but i felt like this was a little bit over the top but you could definitely have a look at it on your own with a computer uh maybe e5 was in fact the way to punish this can you show us what you do after b4 before where before here oh yeah so b4 here you go queen a4 check and this is easy this just wins the pawn because knight c6 is not possible"
+    }
+   ]
+  },
+  {
+   "ply": 13,
+   "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "d4",
+    "c5",
+    "e4",
+    "cxd4",
+    "c3",
+    "d6",
+    "cxd4",
+    "a6",
+    "Nc3",
+    "Nf6",
+    "Bd3",
+    "b5",
+    "Nf3"
+   ],
+   "options": [
+    {
+     "san": "Bb7",
+     "t": 1095,
+     "continuation": "Bb7",
+     "said": "but maybe it made sense to prevent b5 that's just one thing to consider knight f3 b5 bishop d3 so we get our bishop out in order to support the four pawn thank you i love hearing that tk thank you for the sub earlier bishop b7 and again in such positions on every move you have to start asking yourself the question do i want to play e5 do i want to strike in the center and here the answer is no because it doesn't do all that much d takes e5 d takes e5 and whenever you push a central pawn there's a square that is left behind in this case the square is d5 knight d5 black is fine um and then black has cement the outpost or the e6 white could try something like e6 here sacrificing the pawn to slow down the development of black's bishop but i felt like this was a little bit over the top but you could definitely have a look at it on your own with a computer uh maybe e5 was in fact the way to punish this can you show us what you do after b4 before where before here oh yeah so b4 here you go queen a4 check and this is easy this just wins the pawn because knight c6 is not possible before here queen a4 check knight c6 who can tell me white's best move"
+    },
+    {
+     "san": "b4",
+     "t": 1144.5,
+     "continuation": "b4",
+     "said": "but you could definitely have a look at it on your own with a computer uh maybe e5 was in fact the way to punish this can you show us what you do after b4 before where before here oh yeah so b4 here you go queen a4 check and this is easy this just wins the pawn because knight c6 is not possible before here queen a4 check knight c6 who can tell me white's best move this is a classic application of you know the sam shanklin question not moving the knight from c3 just because it's being attacked go d5 easy to calculate bc dc and uh you're threatening c7 you're threatening the bishop white is just totally crushing here so that's pretty simple but even if you didn't have this move i mean just moving the knight is fine this pawn now becomes a very big weakness um so knight c6 was not possible here i assume you're asking why because if queen takes c6 just take the knight that square is not defended okay so rookie one uh we decided to play e6 that's a good move now black can still play b4 here um and if you have an understanding of the smith mora"
+    },
+    {
+     "san": "Nbd7",
+     "t": 1194.5,
+     "continuation": "Nbd7 Rg1 Bb7",
+     "said": "weakness um so knight c6 was not possible here i assume you're asking why because if queen takes c6 just take the knight that square is not defended okay so rookie one uh we decided to play e6 that's a good move now black can still play b4 here um and if you have an understanding of the smith mora i think it's easier to play these types of positions with white what i would have done here there's two approaches you can take a very positional approach and you can make a move here that's going to look terrible to most people that's just to drop the knight back to b1 now what's the motivate what's the logic here well again something i said earlier is important which is that our position is under no immediate duress we've got the center the center is well defended black's development is okay but quite passive and so we can afford the luxury of rerouting our pieces as we see fit so as many of you are indicating the move b4 creates a somewhat of a hole on c4 it creates an entire complex of weaknesses that surround the pawn and the pawn itself is quite weak itself so everything around the pawn as well as the pawn is"
+    }
+   ]
+  }
+ ]
+}

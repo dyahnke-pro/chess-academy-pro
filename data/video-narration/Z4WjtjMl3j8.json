@@ -1,0 +1,576 @@
+{
+ "videoId": "Z4WjtjMl3j8",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2120",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1103,
+   "line": [
+    "e4",
+    "g6"
+   ],
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "knight we go c2 and we win the game okay moving right along 200 bits thank you moriyam gm we're playing a gm okay now let's play the modern uh i've played"
+  },
+  {
+   "ply": 3,
+   "t": 1104.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "this i think once before i want to"
+  },
+  {
+   "ply": 4,
+   "t": 1105.5,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "said": "showcase how to play"
+  },
+  {
+   "ply": 5,
+   "t": 1107.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 2 3",
+   "said": "hyper modern openings now this is the"
+  },
+  {
+   "ply": 6,
+   "t": 1110,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "sort of cousin of the perk it often"
+  },
+  {
+   "ply": 7,
+   "t": 1111.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq - 1 4",
+   "said": "transposes into the perk and he plays bishop c4 okay"
+  },
+  {
+   "ply": 8,
+   "t": 1117,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2BPP3/5N2/PPP2PPP/RNBQK2R w KQkq - 2 5",
+   "said": "so uh in this position we of course want to develop the knights"
+  },
+  {
+   "ply": 9,
+   "t": 1118.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2BPP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 3 5",
+   "said": "uh yeah what is wrong with this move ladies and gentlemen"
+  },
+  {
+   "ply": 10,
+   "t": 1132.5,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p2p1/8/2BPn3/5N2/PPP2PPP/RNBQ1RK1 w kq - 0 6",
+   "said": "and maybe i should have done this against celshan trusted myself correct you know practice what i preach thank you ladies and gentlemen for the free pawn no reason not to take it he just uh"
+  },
+  {
+   "ply": 11,
+   "t": 1139.5,
+   "line": [
+    "Re1"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p2p1/8/2BPn3/5N2/PPP2PPP/RNBQR1K1 b kq - 1 6",
+   "said": "auto-piloted it don't autopilot when your opponent plays unusual openings now very important to react accurately here how should we react what are the possibilities here there are several"
+  },
+  {
+   "ply": 12,
+   "t": 1152,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/6p1/3p4/2BPn3/5N2/PPP2PPP/RNBQR1K1 w kq - 0 7",
+   "said": "good ways we can play d5 to cement the knight on the e4 square and i actually quite like this move"
+  },
+  {
+   "ply": 13,
+   "t": 1154,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/6p1/1B1p4/3Pn3/5N2/PPP2PPP/RNBQR1K1 b kq - 1 7",
+   "said": "okay we can build up a little pawn chain"
+  },
+  {
+   "ply": 14,
+   "t": 1159.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/1B1p4/3Pn3/5N2/PPP2PPP/RNBQR1K1 w kq - 0 8",
+   "said": "or we can cover with the bishop but let's build up the pawn chain"
+  },
+  {
+   "ply": 15,
+   "t": 1161.5,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/3p4/3Pn3/3B1N2/PPP2PPP/RNBQR1K1 b kq - 1 8",
+   "said": "now what should we do here what would be in the spirit well actually okay so here's where a lot of people would slip up a lot of people would be tempted i think to play bishop f5 but the problem with bishop f5 i called it is why does this very nasty move knight"
+  },
+  {
+   "ply": 16,
+   "t": 1191.5,
+   "line": [
+    "f5"
+   ],
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1p2/3Pn3/3B1N2/PPP2PPP/RNBQR1K1 w kq - 0 9",
+   "said": "to h4 okay and um that knight attacks the bishop and the entire construction threatens to topple over so let's invite harry nelson pillsbury and let's let mr pillsbury do some talking this is the pillsbury knight remember what i always say pawns are the"
+  },
+  {
+   "ply": 17,
+   "t": 1209.5,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1pN1/3Pn3/3B4/PPP2PPP/RNBQR1K1 b kq - 1 9",
+   "said": "best defender of a piece when a pawn defends a piece that piece is very stable why can try to go f3 in the future but guess what white's already castled so a move like f3 might end up in disaster do we take the knight do we have to do anything here at all"
+  },
+  {
+   "ply": 18,
+   "t": 1220,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp2p1bp/2p3p1/3p1pN1/3Pn3/3B4/PPP2PPP/RNBQR1K1 w - - 2 10",
+   "said": ""
+  },
+  {
+   "ply": 19,
+   "t": 1222.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbq1rk1/pp2p1bp/2p3p1/3p1pN1/3Pn3/2PB4/PP3PPP/RNBQR1K1 b - - 0 10",
+   "said": "just castle just develop same spirit okay now we have a very good move what am i saying here i'm seeing the knight this is a type two undefended piece uh which means that"
+  },
+  {
+   "ply": 20,
+   "t": 1235.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbq1rk1/pp4bp/2p3p1/3pppN1/3Pn3/2PB4/PP3PPP/RNBQR1K1 w - - 0 11",
+   "said": "it's only protected by one piece so what my brain immediately notices here is the fact that the queen x-rays the knight through the lens of the pawn let's move that pawn out simultaneously"
+  },
+  {
+   "ply": 21,
+   "t": 1241,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbq1rk1/pp4bp/2p3p1/3pppN1/3Pn3/2PB1P2/PP4PP/RNBQR1K1 b - - 0 11",
+   "said": "occupying the center that's the great thing about the pill oh"
+  },
+  {
+   "ply": 22,
+   "t": 1242,
+   "line": [
+    "Nxg5"
+   ],
+   "fen": "rnbq1rk1/pp4bp/2p3p1/3pppn1/3P4/2PB1P2/PP4PP/RNBQR1K1 w - - 0 12",
+   "said": "thank you for the night okay this guy is really not having his best day he blunders the knight but already white was basically lost"
+  },
+  {
+   "ply": 5,
+   "t": 1255.5,
+   "line": [],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 2 3",
+   "said": "and that is the game okay well that was a quickie it won't take us long to analyze so"
+  },
+  {
+   "ply": 8,
+   "t": 1257,
+   "line": [
+    "Nf6",
+    "Bc4",
+    "d6"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2BPP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+   "said": "queen e2 here by the way is is the main move um as far as i know you you do need to defend the pawn uh that is not a bad"
+  },
+  {
+   "ply": 12,
+   "t": 1271,
+   "line": [
+    "Rf1",
+    "d5",
+    "Rg1",
+    "Nxe4"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/6p1/3p4/2BPn3/5N2/PPP2PPP/RNBQK1R1 w Qkq - 0 7",
+   "said": "idea but uh our opponent yielded yield to that part now the only really important moment here was this position"
+  },
+  {
+   "ply": 14,
+   "t": 1274.5,
+   "line": [
+    "Bd3",
+    "c6"
+   ],
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/3p4/3Pn3/3B1N2/PPP2PPP/RNBQK1R1 w Qkq - 0 8",
+   "said": "i'm sure bishop f5 was fine but"
+  },
+  {
+   "ply": 16,
+   "t": 1277.5,
+   "line": [
+    "Nh4",
+    "Bf5"
+   ],
+   "fen": "rn1qk2r/pp2ppbp/2p3p1/3p1b2/3Pn2N/3B4/PPP2PPP/RNBQK1R1 w Qkq - 2 9",
+   "said": "uh i was a little bit scared of the move knight h4 guys what's the problem here with black why"
+  },
+  {
+   "ply": 18,
+   "t": 1287,
+   "line": [
+    "Nxf5",
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/pp2ppbp/2p3p1/3p1N2/3Pn3/3B4/PPP2PPP/RNBQK1R1 w Q - 1 10",
+   "said": "is this even an issue well the problem is let's say we castle right he plays knight takes f5 yeah and we have to get this very nasty"
+  },
+  {
+   "ply": 20,
+   "t": 1292,
+   "line": [
+    "c3",
+    "gxf5"
+   ],
+   "fen": "rn1q1rk1/pp2ppbp/2p5/3p1p2/3Pn3/2PB4/PP3PPP/RNBQK1R1 w Q - 0 11",
+   "said": "pawn structure you might argue well isn't this a pillsbury knight well it is but now we've given him like this h5"
+  },
+  {
+   "ply": 16,
+   "t": 1300,
+   "line": [],
+   "fen": "rn1qk2r/pp2ppbp/2p3p1/3p1b2/3Pn2N/3B4/PPP2PPP/RNBQK1R1 w Qkq - 2 9",
+   "said": "square for his queen no need to to ruin our pawn structure like that so knight h4 is not a big issue"
+  },
+  {
+   "ply": 18,
+   "t": 1304.5,
+   "line": [
+    "Nf3",
+    "Bc8"
+   ],
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/3p4/3Pn3/3B1N2/PPP2PPP/RNBQK1R1 w Qkq - 4 10",
+   "said": "um but f5 is a more stable way to defend"
+  },
+  {
+   "ply": 16,
+   "t": 1306,
+   "line": [],
+   "fen": "rn1qk2r/pp2ppbp/2p3p1/3p1b2/3Pn2N/3B4/PPP2PPP/RNBQK1R1 w Qkq - 2 9",
+   "said": "the knight in my opinion so knight g5 we simply castle obviously"
+  },
+  {
+   "ply": 20,
+   "t": 1310,
+   "line": [
+    "Nf3",
+    "Bc8",
+    "Ng5",
+    "f5"
+   ],
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1pN1/3Pn3/3B4/PPP2PPP/RNBQK1R1 w Qkq - 0 11",
+   "said": "we don't take the knight that would defeat the whole purpose"
+  },
+  {
+   "ply": 23,
+   "t": 1312,
+   "line": [
+    "Bd2",
+    "Nxg5",
+    "Bxg5"
+   ],
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1pB1/3P4/3B4/PPP2PPP/RN1QK1R1 b Qkq - 0 12",
+   "said": "of putting it on e4 in fact that would be very bad for black"
+  },
+  {
+   "ply": 18,
+   "t": 1316,
+   "line": [],
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/3p4/3Pn3/3B1N2/PPP2PPP/RNBQK1R1 w Qkq - 4 10",
+   "said": "and if he goes f3 uh we actually just"
+  },
+  {
+   "ply": 22,
+   "t": 1317.5,
+   "line": [
+    "Ng5",
+    "f5",
+    "f3",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp2p1bp/2p3p1/3p1pN1/3Pn3/3B1P2/PPP3PP/RNBQK1R1 w Q - 1 12",
+   "said": "take on d4 with devastating consequences to the king"
+  },
+  {
+   "ply": 24,
+   "t": 1324,
+   "line": [
+    "Rf1",
+    "Bxd4"
+   ],
+   "fen": "rnbq1rk1/pp2p2p/2p3p1/3p1pN1/3bn3/3B1P2/PPP3PP/RNBQKR2 w Q - 0 13",
+   "said": "the funny thing is if the king goes to f1 do we actually have to move the knight here what would what would be black's best move in other words borrowing from the game what you guys should see here is the fact that the rook is x-raying the king which means that the funny thing is he actually is not threatening the night we can still go e5"
+  },
+  {
+   "ply": 20,
+   "t": 1352,
+   "line": [],
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1pN1/3Pn3/3B4/PPP2PPP/RNBQK1R1 w Qkq - 0 11",
+   "said": "as if nothing was going on because if he takes he's literally going to get checkmated in the center of the board that's literally what's going to happen so this is a disaster he played c3 and now e5 is a simple tactic extending the attack on the knight if he takes we take with the f-pawn to open the f-file we have a brilliant pawn mass"
+  },
+  {
+   "ply": 24,
+   "t": 1364.5,
+   "line": [
+    "Bxe4",
+    "e5",
+    "c3",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp4bp/2p3p1/3pppN1/3PB3/2P5/PP3PPP/RNBQK1R1 w Q - 1 13",
+   "said": "and we're up upon horrible position for roy but he at least should have done this after bishop takes c4 we of course also take with the f pawn we don't take with a d-pawn cause that"
+  },
+  {
+   "ply": 19,
+   "t": 1372,
+   "line": [],
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/3p2N1/3Pn3/3B4/PPP2PPP/RNBQK1R1 b Qkq - 5 10",
+   "said": "would also open up this diagonal the h6 would be the same idea in spirit but it wouldn't carry the the benefit of opening up the center and that's what's important about that move is that does that make sense guys okay so let me see here"
+  },
+  {
+   "ply": 21,
+   "t": 1403.5,
+   "line": [
+    "f5",
+    "Nf3"
+   ],
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1p2/3Pn3/3B1N2/PPP2PPP/RNBQK1R1 b Qkq - 1 11",
+   "said": "okay any questions how about d5 instead of d6 what if he tries to cement his knight on e5 it's a pretty weak square well if he tries to cement his knight on e5 we can we can assail it with knight d7"
+  },
+  {
+   "ply": 23,
+   "t": 1405,
+   "line": [
+    "Nd7",
+    "Ne5"
+   ],
+   "fen": "r1bqk2r/pp1np1bp/2p3p1/3pNp2/3Pn3/3B4/PPP2PPP/RNBQK1R1 b Qkq - 3 12",
+   "said": "right we have plenty of pieces that are guarding that square that's a great"
+  },
+  {
+   "ply": 18,
+   "t": 1413.5,
+   "line": [],
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/3p4/3Pn3/3B1N2/PPP2PPP/RNBQK1R1 w Qkq - 4 10",
+   "said": "point and we have to factor that when you play a move like f5 you absolutely have to factor in the fact that you're weakening e5 right and um that's just something you have to notice but we notice it because we have plenty of pieces that are defending that square so type one undefended piece right type one undefended piece is a piece that is not defended by any"
+  },
+  {
+   "ply": 20,
+   "t": 1442.5,
+   "line": [
+    "Bf4",
+    "f5"
+   ],
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1p2/3PnB2/3B1N2/PPP2PPP/RN1QK1R1 w Qkq - 0 11",
+   "said": "other pieces or pawns a defended piece is a piece that is defended by either a pawn or more than one pieces okay we call that he's defended bishop on f4 would be a type one undefended piece nothing is defending it clear type two undefended piece a piece that is only protected by exactly one other piece and not a pawn right so for example here um i'm looking bishop on g7 is type one could you name a black piece that is a type two undefended piece i love el shawn he's great he's a very very nice guy and very classy and you know rook on h8 yes now here's the thing guys not every night on v8 this idea loses its meaning if you indiscriminately kind of point to every piece and think ah this piece is important you have to exercise your judgment in terms of identifying the type two undefended pieces that might be vulnerable like the knight on v8 is not vulnerable well it could be but i would say the rook on eight shade is less vulnerable than the knight of the bishop right uh the knight is made contact with the"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 2 3",
+   "line": [
+    "e4",
+    "g6",
+    "d4",
+    "Bg7",
+    "Nf3"
+   ],
+   "options": [
+    {
+     "san": "d6",
+     "t": 1110,
+     "continuation": "d6",
+     "said": "now let's play the modern uh i've played this i think once before i want to showcase how to play hyper modern openings now this is the sort of cousin of the perk it often transposes into the perk and he plays bishop c4 okay so uh in this position we of course want to develop the knights uh yeah what is wrong with this move ladies and gentlemen and maybe i should have done this against celshan trusted myself correct you know practice what i preach thank you ladies and gentlemen for the free pawn no reason not to take it he just uh auto-piloted it don't autopilot when your opponent plays unusual openings now very important to react accurately here how should we react what are the possibilities here there are several good ways we can play d5 to cement the knight on the e4 square and i actually quite like this move okay we can build up a little pawn chain or we can cover with the bishop but let's build up the pawn chain now what should we do here what would be in the spirit well actually okay so here's where a lot of people would slip up"
+    },
+    {
+     "san": "Nf6",
+     "t": 1257,
+     "continuation": "Nf6 Bc4 d6",
+     "said": "he blunders the knight but already white was basically lost and that is the game okay well that was a quickie it won't take us long to analyze so queen e2 here by the way is is the main move um as far as i know you you do need to defend the pawn uh that is not a bad idea but uh our opponent yielded yield to that part now the only really important moment here was this position i'm sure bishop f5 was fine but uh i was a little bit scared of the move knight h4 guys what's the problem here with black why is this even an issue well the problem is let's say we castle right he plays knight takes f5 yeah and we have to get this very nasty pawn structure you might argue well isn't this a pillsbury knight well it is but now we've given him like this h5 square for his queen no need to to ruin our pawn structure like that so knight h4 is not a big issue um but f5 is a more stable way to defend the knight in my opinion so knight g5 we simply castle obviously we don't take the knight that would defeat the whole purpose of putting it on e4 in fact that would be very bad for black and if he goes f3 uh we actually just"
+    }
+   ]
+  },
+  {
+   "ply": 8,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2BPP3/5N2/PPP2PPP/RNBQK2R w KQkq - 2 5",
+   "line": [
+    "e4",
+    "g6",
+    "d4",
+    "Bg7",
+    "Nf3",
+    "d6",
+    "Bc4",
+    "Nf6"
+   ],
+   "options": [
+    {
+     "san": "O-O",
+     "t": 1118.5,
+     "continuation": "O-O",
+     "said": "hyper modern openings now this is the sort of cousin of the perk it often transposes into the perk and he plays bishop c4 okay so uh in this position we of course want to develop the knights uh yeah what is wrong with this move ladies and gentlemen and maybe i should have done this against celshan trusted myself correct you know practice what i preach thank you ladies and gentlemen for the free pawn no reason not to take it he just uh auto-piloted it don't autopilot when your opponent plays unusual openings now very important to react accurately here how should we react what are the possibilities here there are several good ways we can play d5 to cement the knight on the e4 square and i actually quite like this move okay we can build up a little pawn chain or we can cover with the bishop but let's build up the pawn chain now what should we do here what would be in the spirit well actually okay so here's where a lot of people would slip up a lot of people would be tempted i think to play bishop f5 but the problem with bishop f5 i called it"
+    },
+    {
+     "san": "Rf1",
+     "t": 1271,
+     "continuation": "Rf1 d5 Rg1 Nxe4",
+     "said": "as far as i know you you do need to defend the pawn uh that is not a bad idea but uh our opponent yielded yield to that part now the only really important moment here was this position i'm sure bishop f5 was fine but uh i was a little bit scared of the move knight h4 guys what's the problem here with black why is this even an issue well the problem is let's say we castle right he plays knight takes f5 yeah and we have to get this very nasty pawn structure you might argue well isn't this a pillsbury knight well it is but now we've given him like this h5 square for his queen no need to to ruin our pawn structure like that so knight h4 is not a big issue um but f5 is a more stable way to defend the knight in my opinion so knight g5 we simply castle obviously we don't take the knight that would defeat the whole purpose of putting it on e4 in fact that would be very bad for black and if he goes f3 uh we actually just take on d4 with devastating consequences to the king the funny thing is if the king goes to f1 do we actually have to move the knight here what would what would be black's best move in other words borrowing from the game"
+    }
+   ]
+  },
+  {
+   "ply": 14,
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/3p4/3Pn3/3B1N2/PPP2PPP/RNBQK1R1 w Qkq - 0 8",
+   "line": [
+    "e4",
+    "g6",
+    "d4",
+    "Bg7",
+    "Nf3",
+    "Nf6",
+    "Bc4",
+    "d6",
+    "Rf1",
+    "d5",
+    "Rg1",
+    "Nxe4",
+    "Bd3",
+    "c6"
+   ],
+   "options": [
+    {
+     "san": "Nh4",
+     "t": 1277.5,
+     "continuation": "Nh4 Bf5",
+     "said": "idea but uh our opponent yielded yield to that part now the only really important moment here was this position i'm sure bishop f5 was fine but uh i was a little bit scared of the move knight h4 guys what's the problem here with black why is this even an issue well the problem is let's say we castle right he plays knight takes f5 yeah and we have to get this very nasty pawn structure you might argue well isn't this a pillsbury knight well it is but now we've given him like this h5 square for his queen no need to to ruin our pawn structure like that so knight h4 is not a big issue um but f5 is a more stable way to defend the knight in my opinion so knight g5 we simply castle obviously we don't take the knight that would defeat the whole purpose of putting it on e4 in fact that would be very bad for black and if he goes f3 uh we actually just take on d4 with devastating consequences to the king the funny thing is if the king goes to f1 do we actually have to move the knight here what would what would be black's best move in other words borrowing from the game what you guys should see here is the fact that the rook is x-raying the king which means that"
+    },
+    {
+     "san": "Ng5",
+     "t": 1317.5,
+     "continuation": "Ng5 f5 f3 O-O",
+     "said": "the knight in my opinion so knight g5 we simply castle obviously we don't take the knight that would defeat the whole purpose of putting it on e4 in fact that would be very bad for black and if he goes f3 uh we actually just take on d4 with devastating consequences to the king the funny thing is if the king goes to f1 do we actually have to move the knight here what would what would be black's best move in other words borrowing from the game what you guys should see here is the fact that the rook is x-raying the king which means that the funny thing is he actually is not threatening the night we can still go e5 as if nothing was going on because if he takes he's literally going to get checkmated in the center of the board that's literally what's going to happen so this is a disaster he played c3 and now e5 is a simple tactic extending the attack on the knight if he takes we take with the f-pawn to open the f-file we have a brilliant pawn mass and we're up upon horrible position for roy but he at least should have done this after bishop takes c4 we of course also take with the f pawn we don't take with a d-pawn cause that would also open up this diagonal the h6 would be the same idea in spirit but it wouldn't carry the the benefit of opening up the center and"
+    },
+    {
+     "san": "Bf4",
+     "t": 1442.5,
+     "continuation": "Bf4 f5",
+     "said": "other pieces or pawns a defended piece is a piece that is defended by either a pawn or more than one pieces okay we call that he's defended bishop on f4 would be a type one undefended piece nothing is defending it clear type two undefended piece a piece that is only protected by exactly one other piece and not a pawn right so for example here um i'm looking bishop on g7 is type one could you name a black piece that is a type two undefended piece i love el shawn he's great he's a very very nice guy and very classy and you know rook on h8 yes now here's the thing guys not every night on v8 this idea loses its meaning if you indiscriminately kind of point to every piece and think ah this piece is important you have to exercise your judgment in terms of identifying the type two undefended pieces that might be vulnerable like the knight on v8 is not vulnerable well it could be but i would say the rook on eight shade is less vulnerable than the knight of the bishop right uh the knight is made contact with the"
+    }
+   ]
+  },
+  {
+   "ply": 16,
+   "fen": "rn1qk2r/pp2ppbp/2p3p1/3p1b2/3Pn2N/3B4/PPP2PPP/RNBQK1R1 w Qkq - 2 9",
+   "line": [
+    "e4",
+    "g6",
+    "d4",
+    "Bg7",
+    "Nf3",
+    "Nf6",
+    "Bc4",
+    "d6",
+    "Rf1",
+    "d5",
+    "Rg1",
+    "Nxe4",
+    "Bd3",
+    "c6",
+    "Nh4",
+    "Bf5"
+   ],
+   "options": [
+    {
+     "san": "Nxf5",
+     "t": 1287,
+     "continuation": "Nxf5 O-O",
+     "said": "uh i was a little bit scared of the move knight h4 guys what's the problem here with black why is this even an issue well the problem is let's say we castle right he plays knight takes f5 yeah and we have to get this very nasty pawn structure you might argue well isn't this a pillsbury knight well it is but now we've given him like this h5 square for his queen no need to to ruin our pawn structure like that so knight h4 is not a big issue um but f5 is a more stable way to defend the knight in my opinion so knight g5 we simply castle obviously we don't take the knight that would defeat the whole purpose of putting it on e4 in fact that would be very bad for black and if he goes f3 uh we actually just take on d4 with devastating consequences to the king the funny thing is if the king goes to f1 do we actually have to move the knight here what would what would be black's best move in other words borrowing from the game what you guys should see here is the fact that the rook is x-raying the king which means that the funny thing is he actually is not threatening the night we can still go e5 as if nothing was going on because if he takes he's literally going to get checkmated in the center of the board"
+    },
+    {
+     "san": "Nf3",
+     "t": 1304.5,
+     "continuation": "Nf3 Bc8",
+     "said": "but now we've given him like this h5 square for his queen no need to to ruin our pawn structure like that so knight h4 is not a big issue um but f5 is a more stable way to defend the knight in my opinion so knight g5 we simply castle obviously we don't take the knight that would defeat the whole purpose of putting it on e4 in fact that would be very bad for black and if he goes f3 uh we actually just take on d4 with devastating consequences to the king the funny thing is if the king goes to f1 do we actually have to move the knight here what would what would be black's best move in other words borrowing from the game what you guys should see here is the fact that the rook is x-raying the king which means that the funny thing is he actually is not threatening the night we can still go e5 as if nothing was going on because if he takes he's literally going to get checkmated in the center of the board that's literally what's going to happen so this is a disaster he played c3 and now e5 is a simple tactic extending the attack on the knight if he takes we take with the f-pawn to open the f-file we have a brilliant pawn mass and we're up upon horrible position for roy but he at least should have done this after bishop"
+    }
+   ]
+  },
+  {
+   "ply": 20,
+   "fen": "rnbqk2r/pp2p1bp/2p3p1/3p1pN1/3Pn3/3B4/PPP2PPP/RNBQK1R1 w Qkq - 0 11",
+   "line": [
+    "e4",
+    "g6",
+    "d4",
+    "Bg7",
+    "Nf3",
+    "Nf6",
+    "Bc4",
+    "d6",
+    "Rf1",
+    "d5",
+    "Rg1",
+    "Nxe4",
+    "Bd3",
+    "c6",
+    "Nh4",
+    "Bf5",
+    "Nf3",
+    "Bc8",
+    "Ng5",
+    "f5"
+   ],
+   "options": [
+    {
+     "san": "Bd2",
+     "t": 1312,
+     "continuation": "Bd2 Nxg5 Bxg5",
+     "said": "knight h4 is not a big issue um but f5 is a more stable way to defend the knight in my opinion so knight g5 we simply castle obviously we don't take the knight that would defeat the whole purpose of putting it on e4 in fact that would be very bad for black and if he goes f3 uh we actually just take on d4 with devastating consequences to the king the funny thing is if the king goes to f1 do we actually have to move the knight here what would what would be black's best move in other words borrowing from the game what you guys should see here is the fact that the rook is x-raying the king which means that the funny thing is he actually is not threatening the night we can still go e5 as if nothing was going on because if he takes he's literally going to get checkmated in the center of the board that's literally what's going to happen so this is a disaster he played c3 and now e5 is a simple tactic extending the attack on the knight if he takes we take with the f-pawn to open the f-file we have a brilliant pawn mass and we're up upon horrible position for roy but he at least should have done this after bishop takes c4 we of course also take with the f pawn we don't take with a d-pawn cause that would also open up this diagonal the h6 would be the same idea in spirit"
+    },
+    {
+     "san": "Bxe4",
+     "t": 1364.5,
+     "continuation": "Bxe4 e5 c3 O-O",
+     "said": "extending the attack on the knight if he takes we take with the f-pawn to open the f-file we have a brilliant pawn mass and we're up upon horrible position for roy but he at least should have done this after bishop takes c4 we of course also take with the f pawn we don't take with a d-pawn cause that would also open up this diagonal the h6 would be the same idea in spirit but it wouldn't carry the the benefit of opening up the center and that's what's important about that move is that does that make sense guys okay so let me see here okay any questions how about d5 instead of d6 what if he tries to cement his knight on e5 it's a pretty weak square well if he tries to cement his knight on e5 we can we can assail it with knight d7 right we have plenty of pieces that are guarding that square that's a great point and we have to factor that when you play a move like f5 you absolutely have to factor in the fact that you're weakening e5 right and um that's just something you have to notice but we notice it because we have plenty of pieces that are defending that square"
+    }
+   ]
+  }
+ ]
+}

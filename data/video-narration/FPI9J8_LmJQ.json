@@ -1,0 +1,358 @@
+{
+ "videoId": "FPI9J8_LmJQ",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1720",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1151,
+   "line": [
+    "d4",
+    "d6"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "um and the last thing i did of course was open up the position open up the king side because his pieces are so passive that's basically our main principle all right so let's once again try to get a london system in uh and this time he plays d6 so i"
+  },
+  {
+   "ply": 3,
+   "t": 1155,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 2",
+   "said": "suppose we can technically still play the london"
+  },
+  {
+   "ply": 4,
+   "t": 1156,
+   "line": [
+    "f5"
+   ],
+   "fen": "rnbqkbnr/ppp1p1pp/3p4/5p2/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+   "said": "f5 okay so he transposes into a dutch and uh if you're a london player then"
+  },
+  {
+   "ply": 5,
+   "t": 1168.5,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkbnr/ppp1p1pp/3p4/5p2/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+   "said": "then there's no particular way that you should respond differently to the dutch you should play the typical london system moves and in"
+  },
+  {
+   "ply": 6,
+   "t": 1170.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp1p1pp/3p1n2/5p2/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 1 4",
+   "said": "the london you develop your bishop to f4"
+  },
+  {
+   "ply": 7,
+   "t": 1173.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/ppp1p1pp/3p1n2/5p2/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 2 4",
+   "said": "i think most people probably have seen"
+  },
+  {
+   "ply": 8,
+   "t": 1175,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r1bqkb1r/pppnp1pp/3p1n2/5p2/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 3 5",
+   "said": "this opening before now um there are several things that we can do uh in order to respond i think accurately to the fact that our opponent is playing the dutch the move f5 if you think about it from a general perspective it weakens this diagonal right it moves upon out which means he's going to have a difficult time castling if and only if"
+  },
+  {
+   "ply": 9,
+   "t": 1206.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkb1r/pppnp1pp/3p1n2/5p2/2BP1B2/4PN2/PPP2PPP/RN1QK2R b KQkq - 4 5",
+   "said": "we do what where should we develop one of our pieces in order to in order to delay and and sort of try to slow down his development let's go bishop c4 so"
+  },
+  {
+   "ply": 10,
+   "t": 1211.5,
+   "line": [
+    "Nb6"
+   ],
+   "fen": "r1bqkb1r/ppp1p1pp/1n1p1n2/5p2/2BP1B2/4PN2/PPP2PPP/RN1QK2R w KQkq - 5 6",
+   "said": "not only does this slow down castling but it also makes it very hard well it"
+  },
+  {
+   "ply": 11,
+   "t": 1212.5,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "r1bqkb1r/ppp1p1pp/1n1p1n2/5p2/3P1B2/1B2PN2/PPP2PPP/RN1QK2R b KQkq - 6 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 1214.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/1n1ppn2/5p2/3P1B2/1B2PN2/PPP2PPP/RN1QK2R w KQkq - 0 7",
+   "said": "makes it harder for him to go e6 he manages to do it but now we have in our pocket the idea"
+  },
+  {
+   "ply": 13,
+   "t": 1222,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/ppp3pp/1n1ppn2/5p2/3P1B2/1B2PN2/PPP2PPP/RN1Q1RK1 b kq - 1 7",
+   "said": "of going knight g5 but let's not do that immediately let's complete our development let's be patient"
+  },
+  {
+   "ply": 15,
+   "t": 1224,
+   "line": [
+    "Be7",
+    "h3"
+   ],
+   "fen": "r1bqk2r/ppp1b1pp/1n1ppn2/5p2/3P1B2/1B2PN1P/PPP2PP1/RN1Q1RK1 b kq - 0 8",
+   "said": "that's what you do in the london system h3 is also a very typical move"
+  },
+  {
+   "ply": 16,
+   "t": 1225.5,
+   "line": [
+    "h6"
+   ],
+   "fen": "r1bqk2r/ppp1b1p1/1n1ppn1p/5p2/3P1B2/1B2PN1P/PPP2PP1/RN1Q1RK1 w kq - 0 9",
+   "said": "giving the bishop the h2 square and now"
+  },
+  {
+   "ply": 17,
+   "t": 1233,
+   "line": [
+    "c4"
+   ],
+   "fen": "r1bqk2r/ppp1b1p1/1n1ppn1p/5p2/2PP1B2/1B2PN1P/PP3PP1/RN1Q1RK1 b kq - 0 9",
+   "said": "we need to start expanding on the queen side so let's do that by playing c4 very typical move in d4 openings aren't we blunting the bishop i see some of you guys looking at this aren't we blunting our bishop well we kind of are but what i'm banking on is that eventually we're going to be able to play c5 we're going to reopen the diagonal for the bishop and we're going to increase the queenside pawn pressure we're going to turn the dial up on the queen side okay so right now we're just developing or grabbing space and of course he can castle we can't permanently stop him from castling but we're going to discourage it because he's always going to have to deal with this kind of pressure thank you xemias for the for the prime and channel for the 100 bits um okay so kay um now let's see what what happens okay um now let's see what what happens here"
+  },
+  {
+   "ply": 18,
+   "t": 1292.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/ppp1b1p1/1n1ppn1p/5p2/2PP1B2/1B2PN1P/PP3PP1/RN1Q1RK1 w - - 1 10",
+   "said": "so let's see what happens here he's deep in thought i mean i think he's yeah so he decides to castle"
+  },
+  {
+   "ply": 19,
+   "t": 1294.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bq1rk1/ppp1b1p1/1n1ppn1p/5p2/2PP1B2/1BN1PN1P/PP3PP1/R2Q1RK1 b - - 2 10",
+   "said": "now we're going to continue our development with knight to c3 uh and and slowly but surely we're going to prepare either the c5 pawn break or we could"
+  },
+  {
+   "ply": 20,
+   "t": 1308.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bq1rk1/1pp1b1p1/pn1ppn1p/5p2/2PP1B2/1BN1PN1P/PP3PP1/R2Q1RK1 w - - 0 11",
+   "said": "also try to prepare the e4 pawn break in order to make it easier for us to attack the e6 pawn he goes a6 that's kind of an empty move now in in the interest of preparing c5 what kind of move can we consider which may potentially help us prepare c5 and"
+  },
+  {
+   "ply": 21,
+   "t": 1328,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "r1bq1rk1/1pp1b1p1/pn1ppn1p/5p2/2PP1B2/1BN1PN1P/PP3PP1/2RQ1RK1 b - - 1 11",
+   "said": "this is a very typical move in such positions again you want to make sure that you're playing to take care of your future self uh it's not all about immediate threats because somebody might"
+  },
+  {
+   "ply": 22,
+   "t": 1330.5,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2q1rk1/1ppbb1p1/pn1ppn1p/5p2/2PP1B2/1BN1PN1P/PP3PP1/2RQ1RK1 w - - 2 12",
+   "said": "look at this move and say well wait a minute you're not preparing c5 because there's the knight on cp i know that but we're doing it in the long run and i'm going to share with you guys a very interesting plan in this position what would make it easier for us to prepare c5 right well wouldn't it be nice ladies and gentlemen to have a pawn on b4 i mean then c5 would be much easier now why can't we play b4 well there's a bishop on b3 and if we move"
+  },
+  {
+   "ply": 23,
+   "t": 1367,
+   "line": [
+    "a3"
+   ],
+   "fen": "r2q1rk1/1ppbb1p1/pn1ppn1p/5p2/2PP1B2/PBN1PN1P/1P3PP1/2RQ1RK1 b - - 0 12",
+   "said": "the bishop to c2 well we would get it off the main diagonal and the bishop would miss the party and we would blunder the c4 knight so how do we solve this problem we need to get this bishop to a different square we can't get it to a2 but we can play a3 get the bishop back and then send the pawn forward and i'll show you guys an example from one of my games where i lost to a very similar idea and i've learned this idea from that game"
+  },
+  {
+   "ply": 25,
+   "t": 1391,
+   "line": [
+    "Qe8",
+    "Ba2"
+   ],
+   "fen": "r3qrk1/1ppbb1p1/pn1ppn1p/5p2/2PP1B2/P1N1PN1P/BP3PP1/2RQ1RK1 b - - 2 13",
+   "said": "and i haven't forgotten it since so this is a pretty depositional idea and it's going to make it very hard for him to stop c5 even if he goes a5 it's still gonna be hard for him to stop b4 so let's proceed with our plan"
+  },
+  {
+   "ply": 26,
+   "t": 1397,
+   "line": [
+    "Nc8"
+   ],
+   "fen": "r1n1qrk1/1ppbb1p1/p2ppn1p/5p2/2PP1B2/P1N1PN1P/BP3PP1/2RQ1RK1 w - - 3 14",
+   "said": "okay and guess what we are ready to play c5 and finally to reopen this bishop on a2"
+  },
+  {
+   "ply": 28,
+   "t": 1404.5,
+   "line": [
+    "b4",
+    "b5"
+   ],
+   "fen": "r1n1qrk1/2pbb1p1/p2ppn1p/1p3p2/1PPP1B2/P1N1PN1P/B4PP1/2RQ1RK1 w - - 0 15",
+   "said": "so it's a long-term process oh and he actually kind of helps us do it"
+  },
+  {
+   "ply": 29,
+   "t": 1406,
+   "line": [
+    "c5"
+   ],
+   "fen": "r1n1qrk1/2pbb1p1/p2ppn1p/1pP2p2/1P1P1B2/P1N1PN1P/B4PP1/2RQ1RK1 b - - 0 15",
+   "said": "he's trying to carve out the d5 score but the d5 square is very well protected by our pieces we shouldn't worry about"
+  },
+  {
+   "ply": 30,
+   "t": 1419.5,
+   "line": [
+    "Bc6"
+   ],
+   "fen": "r1n1qrk1/2p1b1p1/p1bppn1p/1pP2p2/1P1P1B2/P1N1PN1P/B4PP1/2RQ1RK1 w - - 1 16",
+   "said": "him getting a knight there precisely because the bishop and our knight are guarding that square okay bishop c6 what should we do now paying very careful attention to the drawbacks of this move and this is exactly why we tried to open up the bishop that's working like"
+  },
+  {
+   "ply": 31,
+   "t": 1437,
+   "line": [
+    "Bxe6+"
+   ],
+   "fen": "r1n1qrk1/2p1b1p1/p1bpBn1p/1pP2p2/1P1P1B2/P1N1PN1P/5PP1/2RQ1RK1 b - - 0 16",
+   "said": "a knife through butter what can we do what has he left unattended boom goes the dynamite we can just take on e6"
+  },
+  {
+   "ply": 32,
+   "t": 1439,
+   "line": [
+    "Kh8"
+   ],
+   "fen": "r1n1qr1k/2p1b1p1/p1bpBn1p/1pP2p2/1P1P1B2/P1N1PN1P/5PP1/2RQ1RK1 w - - 1 17",
+   "said": "well who said we can't take two puns who"
+  },
+  {
+   "ply": 33,
+   "t": 1442,
+   "line": [
+    "Bxf5"
+   ],
+   "fen": "r1n1qr1k/2p1b1p1/p1bp1n1p/1pP2B2/1P1P1B2/P1N1PN1P/5PP1/2RQ1RK1 b - - 0 17",
+   "said": "said we can't take two"
+  },
+  {
+   "ply": 34,
+   "t": 1444.5,
+   "line": [
+    "Bxf3"
+   ],
+   "fen": "r1n1qr1k/2p1b1p1/p2p1n1p/1pP2B2/1P1P1B2/P1N1Pb1P/5PP1/2RQ1RK1 w - - 0 18",
+   "said": "free puns okay i'm not sure why this trade is helpful for him but now we're attacking the rook i'm very hungry okay so how should we go about managing our massive position here obviously we're dominating here but a lot of people struggle with this moment and and understandably so so one thing that i want to one one idea that i have right if you look at this king very carefully he doesn't have a light squared bishop what does that mean that means that if we build a battery with our bishop and our queen he's going to have a very hard time stopping it because he's not going to be able to put a light squared bishop in the face of our bishop now you guys already know that if you think about queen bishop batteries the queen in front of the bishop is a lot more powerful because the queen could be the one delivering the maid so let's bring our bishop back to b1 i'm not threatening queen e4 i know that square is defended but it's the same exact principle as earlier i'm anticipating that in the future we might try to get this knight out of f6 and or what is the other thing we can do we could just circumvent it we could just bring the queen to c2 then we could try to get rid of the knight and then guess what we're gonna try to end this game by delivering a checkmate on h7 look at his knight on a7 by the way fantastic piece okay so we're why not queen d3 doesn't matter either move is good queen d3 maybe he'll put a rook on d8 and x-ray the queen so the queen is a long distance piece all right let's get the bishop up to e5 we are actually poised to take the knight on it but we don't need to do it yet and this is something i want to emphasize to people we don't need to hurry with something that's not going anywhere even if we don't get to take this knight he's permanently weakened at the diagonal now we have a really strong move here which basically ends the game we have several moves that basically end the game one is well if we take on f6 he's going to take with the bishop and his queen continues to defend the square on h7 so what we can do is go 94 and what we're threatening to do is take twice on f6 eventually his queen is going to have to recapture and then the h7 square is free for our queen he correctly goes queen to g7 now how can we add some tabasco sauce to this knight on f6 can we can we find a way to pressure that knight in another way and there's no more pieces that can do that immediately so we're going to have to open up some files let's add that tabasco sauce f4 we're trying to open if he goes g4 then we can just take on g4 remember his queen is tied down to the h7 square it can't defend it cannot move anywhere because the moment it moves uh we are going to take on f6 with a knight and we're going to travel with our queen to h7 boom and guess which square we're going to deliver boom and that's it he doesn't boom boom boom and we're going to mate him on h7 exactly as we thought initially because well it's not a surprise when we were building that battery he already didn't have anything to stop us with okay he's gonna give up his rook but that doesn't matter now he's down a rook and he can't even take twice on f6 here either okay we're gonna bring that final rook into the game remember the key principle even when you're up material don't forget to employ all of your pieces okay and i hope you guys don't mind if i munch on some armenian bread here okay we he resigns so a nice game rook f8 was not course mate guys if you got to be very careful with the sacrifices because the rook on e7 guards age seven and so this is not checkmate and this is something i have shared with people you might be watching my blitz games and assume uh you know you want to sacrifice in every position"
+  },
+  {
+   "ply": 2,
+   "t": 1670,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "but sometimes if you're agonizing over whether to sacrifice you got to realize you're up a rook what's the necessity what's the need in doing something that might backfire so sometimes it's worth playing with an abundance of caution what happened in this game we you ask"
+  },
+  {
+   "ply": 3,
+   "t": 1672,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 2",
+   "said": "questions now this is the postmortem the autopsy we go over the game i explain some of the decisions and you guys can ask questions i can't get to every question but i can do my best"
+  },
+  {
+   "ply": 4,
+   "t": 1691.5,
+   "line": [
+    "f5"
+   ],
+   "fen": "rnbqkbnr/ppp1p1pp/3p4/5p2/3P1B2/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+   "said": "okay uh so the game started with the london system bishop f4 he transposed from the perk into the dutch with f5 thank you fire dude for the prime i appreciate it and i know a lot of"
+  },
+  {
+   "ply": 5,
+   "t": 1697,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkbnr/ppp1p1pp/3p4/5p2/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 6,
+   "t": 1698,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp1p1pp/3p1n2/5p2/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 1 4",
+   "said": "people are fans of the london system"
+  },
+  {
+   "ply": 7,
+   "t": 1700,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/ppp1p1pp/3p1n2/5p2/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 2 4",
+   "said": "so i decided to play it i got some youtube comments requesting that"
+  },
+  {
+   "ply": 8,
+   "t": 1705,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r1bqkb1r/pppnp1pp/3p1n2/5p2/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 3 5",
+   "said": "uh the london system is fine as a beginner"
+  },
+  {
+   "ply": 9,
+   "t": 1708,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkb1r/pppnp1pp/3p1n2/5p2/2BP1B2/4PN2/PPP2PPP/RN1QK2R b KQkq - 4 5",
+   "said": "now bishop c4 so generally in the london"
+  },
+  {
+   "ply": 8,
+   "t": 1710,
+   "line": [],
+   "fen": "r1bqkb1r/pppnp1pp/3p1n2/5p2/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 3 5",
+   "said": "and i will explain this through the lens of d4 d5 zaryani thank you for the prime the line it is an opening where white goes bishop f4 and then generally establishes a stronghold on the d4 square he puts pawns on e3 and d3 creating this pawn triangle and then the bishop the dark the light square bishop generally goes in the middle of the pawn triangle but one thing that's very important to understand when you're playing an opening that that's what i call a schematic opening an opening where you play the same set of moves over and over again you want to be very very careful because sometimes your opponent does something which requires you to think outside the box and play a move which is normally not part of the opening setup this is exactly that kind of case right normally in the london as i just explained the bishop goes either to d3 or to e2 but this is an extenuating situation because he's played f5 he's weakened this diagonal so now we we dynamically react by developing the bishop to c4 and controlling this diagonal i hope that makes sense"
+  }
+ ],
+ "forks": []
+}

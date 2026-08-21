@@ -1,0 +1,105 @@
+{
+ "videoId": "USDQ8LIjaCo",
+ "title": "Mastering Powerful Chess Openings | Acc Grand Prix, Fantasy, Philidor | GM Naroditsky's DYI Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 601.5,
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "is great the McDonald attack or whatever not great don't play F4 let's do one more 10-minute game okay White against cam truo let's go E4 great so we get to play a fantasy"
+  },
+  {
+   "ply": 3,
+   "t": 602.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "variation which um has not been my only recommendation against the Caro I think"
+  },
+  {
+   "ply": 4,
+   "t": 612,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "I've also been advocating for E takes D5 but I kind of miss the fantasy so"
+  },
+  {
+   "ply": 5,
+   "t": 613,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 6,
+   "t": 615.5,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+   "said": "let's do it I feel like a lot of people"
+  },
+  {
+   "ply": 7,
+   "t": 617,
+   "line": [
+    "fxe4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3PP3/8/PPP3PP/RNBQKBNR b KQkq - 0 4",
+   "said": "have been demonstrating pretty good theoretical knowledge in the fantasy but"
+  },
+  {
+   "ply": 8,
+   "t": 620,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2p5/3PP3/8/PPP3PP/RNBQKBNR w KQkq - 0 5",
+   "said": "not yet I think when you hit like 2,200 people start showing pretty good knowledge at this level the fantasy is still like like forced win for white so"
+  },
+  {
+   "ply": 7,
+   "t": 641.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3PP3/8/PPP3PP/RNBQKBNR b KQkq - 0 4",
+   "said": "C5 is it tells me that our opponent is like aware of the general concepts but isn't aware of the right execution C5 is not the right way to strike at the center the main move here for black of course is E5 to which we respond Knight F3 and that is its own Theory C5 is like"
+  },
+  {
+   "ply": 8,
+   "t": 647.5,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2p5/3PP3/8/PPP3PP/RNBQKBNR w KQkq - 0 5",
+   "said": "a bon but like much worse than a regular"
+  },
+  {
+   "ply": 9,
+   "t": 653.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pP4/4P3/8/PPP3PP/RNBQKBNR b KQkq - 0 5",
+   "said": "Bon down several tempy of course our"
+  },
+  {
+   "ply": 10,
+   "t": 655,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pP4/4P3/8/PPP3PP/RNBQKBNR w KQkq - 0 6",
+   "said": "response is D5 so black is trying to play this kind of Bon Style but because he's lacking in development um if we play this carefully we can put black in very very serious trouble we also can play um we also can get into serious trouble ourselves if we are not careful um now because our F Pawn is gone right we have to look at this position through a very specific lens we have to remember that the F Pawn is gone that bears consequences and so Queen H4 check is always in play in these situations a similar open where this is a thing is the Four Knights Aline like if white plays the Four Knights Aline as I'll show you after the game you always have to watch out for a check on H4 just like last game so we don't actually need to play C4 which I assume is probably a lot of people's Instinct response because black is not like attacking this Pawn Yeah just Knight F3 and in general our biggest Advantage here as white it's not the fact that we have a Pawn on D5 okay"
+  }
+ ],
+ "forks": []
+}

@@ -1,0 +1,135 @@
+{
+ "videoId": "hGOKlDmY4ig",
+ "title": "Analyzing Fabiano Caruana | Kings Indian",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 669.5,
+   "line": [
+    "c4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "and moves like bishop takes c3 do occur in other types of openings like for example uh there is a there's a line in the english defense let me see if i can remember there's a line in the symmetrical english defense"
+  },
+  {
+   "ply": 3,
+   "t": 670.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2P5/5N2/PP1PPPPP/RNBQKB1R b KQkq - 1 2",
+   "said": ""
+  },
+  {
+   "ply": 4,
+   "t": 671.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P5/5N2/PP1PPPPP/RNBQKB1R w KQkq - 2 3",
+   "said": "where white plays d4 take stakes black"
+  },
+  {
+   "ply": 5,
+   "t": 673,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 7,
+   "t": 674.5,
+   "line": [
+    "cxd4",
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/2PN4/8/PP2PPPP/RNBQKB1R b KQkq - 0 4",
+   "said": "plays g6"
+  },
+  {
+   "ply": 8,
+   "t": 675.5,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PN4/8/PP2PPPP/RNBQKB1R w KQkq - 0 5",
+   "said": "knight c3 bishop g bishop g7"
+  },
+  {
+   "ply": 9,
+   "t": 676.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PN4/2N5/PP2PPPP/R1BQKB1R b KQkq - 1 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 678,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/2PN4/2N5/PP2PPPP/R1BQKB1R w KQkq - 2 6",
+   "said": ""
+  },
+  {
+   "ply": 11,
+   "t": 681,
+   "line": [
+    "Nc2"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/2P5/2N5/PPN1PPPP/R1BQKB1R b KQkq - 3 6",
+   "said": "knight c2 and in this position uh this used to be a very popular line but along"
+  },
+  {
+   "ply": 12,
+   "t": 686.5,
+   "line": [
+    "Bxc3+"
+   ],
+   "fen": "r1bqk1nr/pp1ppp1p/2n3p1/8/2P5/2b5/PPN1PPPP/R1BQKB1R w KQkq - 0 7",
+   "said": "came people like bobby fischer and they started taking on c3"
+  },
+  {
+   "ply": 13,
+   "t": 690,
+   "line": [
+    "bxc3"
+   ],
+   "fen": "r1bqk1nr/pp1ppp1p/2n3p1/8/2P5/2P5/P1N1PPPP/R1BQKB1R b KQkq - 0 7",
+   "said": "which at first sight looks oh crazy how can you give up such a bishop you create a hole on g7 and in bug house this would be unthinkable but it turns out that the weaknesses in white's uh"
+  },
+  {
+   "ply": 14,
+   "t": 711,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pp1ppp1p/2n2np1/8/2P5/2P5/P1N1PPPP/R1BQKB1R w KQkq - 1 8",
+   "said": "uh a lot basically justify this entire approach and it also turns out that white can't really exploit the weakness of black's dark squares because the knight quickly comes out to f6 uh and even if black castles just"
+  },
+  {
+   "ply": 15,
+   "t": 715.5,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "r1bqk2r/pp1ppp1p/2n2npB/8/2P5/2P5/P1N1PPPP/R2QKB1R b KQkq - 2 8",
+   "said": "because white puts the bishop on h6 that doesn't mean anything inherently"
+  },
+  {
+   "ply": 16,
+   "t": 718.5,
+   "line": [
+    "Qa5"
+   ],
+   "fen": "r1b1k2r/pp1ppp1p/2n2npB/q7/2P5/2P5/P1N1PPPP/R2QKB1R w KQkq - 3 9",
+   "said": "the bishop just kind of chills there but not in a good way it's not really doing anything and it turns out the whites pawns are kind of beginning to collapse so that's only one of many variations where this move bishop takes c3 does occur and is very well known so if we were to compare that situation to fabi's capture then we can kind of see one i would say specific similarity which is that if you look at white's bind particularly that e4 pawn the e4 pawn is really weakened as a result of this trade thank you chase for quick okay the e4 pawn is actually quite weak it's defended now only by the bishop and it's never a good idea when a piece is very much tied down to the defense of a pawn and if you think about it this knight on d7 let's not forget where it's going this knight is going to c5 where it's going to actually attack this pawn on e4 and um white's bishop you know bishops are obviously very uh very versatile pieces"
+  }
+ ],
+ "forks": []
+}

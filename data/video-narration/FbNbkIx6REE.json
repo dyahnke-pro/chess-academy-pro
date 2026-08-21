@@ -1,0 +1,531 @@
+{
+ "videoId": "FbNbkIx6REE",
+ "title": "Daniels First Int. Tourney (Police Called) | Learning The Scotch | Moistcr1tikal / Penguinz0",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 945.5,
+   "line": [
+    "e4",
+    "e5",
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "where black just loses very quickly people are not going to know it as well as they know the italian so you're gonna win a lot of games with it if you learn it properly okay this sounds good to me it starts on a familiar note e4 e5 knight f3 knight c6"
+  },
+  {
+   "ply": 4,
+   "t": 947,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "and now there's two ways to to reach it the the move order that i personally"
+  },
+  {
+   "ply": 5,
+   "t": 960.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "like um that i think is is a little bit more pure is the move knight to c3 okay"
+  },
+  {
+   "ply": 6,
+   "t": 968.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "said": "and black 99.9 of the time we'll play the move knight f6 there are some people who play bishop"
+  },
+  {
+   "ply": 5,
+   "t": 970.5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "c5 here this is already kind of a mistake and here you have a really cool little tactic that i'm sure you have run across"
+  },
+  {
+   "ply": 7,
+   "t": 981.5,
+   "line": [
+    "Bc5",
+    "Nxe5"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "said": "this before i'm going to show you what it is you take on e5 with the knight"
+  },
+  {
+   "ply": 8,
+   "t": 985,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 0 5",
+   "said": "and you don't blunder the knight how do you recover it uh i i was going to say you deliver a check and win it but there's no checks to deliver i think i"
+  },
+  {
+   "ply": 9,
+   "t": 1021,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/3PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "said": "know what kind of tactics you need to keep solving the forks are a little bit you know they need to be crisper i don't is it just the pawn fork it is d4 okay you got to win the when the pick but what you get in return is that you get huge piece development black has been [&nbsp;__&nbsp;] around with his pieces so black needs to regain that pawn right he"
+  },
+  {
+   "ply": 11,
+   "t": 1035,
+   "line": [
+    "Bxd4",
+    "Qxd4"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/8/4n3/3QP3/2N5/PPP2PPP/R1B1KB1R b KQkq - 0 6",
+   "said": "if you take one of his pieces you're going to be a pawn up so normally black does something like bishop takes d4 you play queen takes d4 you're skewering the knight to the pawn"
+  },
+  {
+   "ply": 12,
+   "t": 1039,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk1nr/ppp2ppp/3p4/4n3/3QP3/2N5/PPP2PPP/R1B1KB1R w KQkq - 0 7",
+   "said": "and if black defends the knight with d6 white is essentially winning now with well you can dislodge this knight from e5 how can you do that and then win"
+  },
+  {
+   "ply": 13,
+   "t": 1053,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1bqk1nr/ppp2ppp/3p4/4n3/3QPP2/2N5/PPP3PP/R1B1KB1R b KQkq - 0 7",
+   "said": "that pawn on g7 i just play a pawn move so i'm bringing pawn uh f4 right bingo he goes he's got to move his knight and then you take on g7 you're in great shape you might even win that rook"
+  },
+  {
+   "ply": 7,
+   "t": 1059.5,
+   "line": [],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "said": "at the end so just remember this idea of taking on e5 with the knight when his bishop is on c5"
+  },
+  {
+   "ply": 8,
+   "t": 1064,
+   "line": [
+    "Qf6"
+   ],
+   "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 1 5",
+   "said": "if he responds with queen f6 um all uh moist critical versus xqc um yeah what comes to mind in terms well he's hitting the pawn on f2 and hitting the knight on e on e5 can you defend both at the same time and solidify your extra pawn"
+  },
+  {
+   "ply": 9,
+   "t": 1103,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "it's simpler than you think it is like it's one of these retreating moves that you might have a little bit of trouble with because it's a retreat yeah it's because it's just bringing the knight back to f3 right right exactly bringing the knight back to f3 then you keep developing you can hit that queen with knight d5"
+  },
+  {
+   "ply": 5,
+   "t": 1110,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "that's a move that recurs pretty often in the scotch so bishop c5 is basically"
+  },
+  {
+   "ply": 6,
+   "t": 1111,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "said": "[&nbsp;__&nbsp;] nobody's really gonna do that"
+  },
+  {
+   "ply": 7,
+   "t": 1114.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "said": "and now you play the move d4 um again the vast majority of people"
+  },
+  {
+   "ply": 8,
+   "t": 1120.5,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "said": "are going to capture on d4 with the pawn um there's really no other good or even common moves in this"
+  },
+  {
+   "ply": 7,
+   "t": 1130.5,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "said": "position the only move that you have to kind of know is bishop to b4 and this is a little bit theoretical uh which i don't"
+  },
+  {
+   "ply": 9,
+   "t": 1144.5,
+   "line": [
+    "Bb4",
+    "Nxe5"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4N3/1b1PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "said": "love but you're gonna encounter this so infrequently that if you even know one move in this position you're gonna throw people off which is knight takes e5 okay should be logical to you just taking the pawn now black can reclaim the pawn with what move"
+  },
+  {
+   "ply": 10,
+   "t": 1157.5,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n5/4N3/1b1Pn3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "using the pin that he has just created what move can black now play yeah he just takes e4 he takes e4 now you bring your queen out to f3 defending the knight hitting his knight threatening checkmate black's move is essentially force he has to do the same thing that you would have done in that other position right bring his knight back to f6 now he's he's attacking d4 can you develop one of your pieces in or and simultaneously guard d4 yeah i'm bringing bishop to e3 bringing bishop to e3 then you bring the bishop to d3 and later on maybe next session we'll look at a classical game that shows you how to play in these types of positions"
+  },
+  {
+   "ply": 9,
+   "t": 1203.5,
+   "line": [],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4N3/1b1PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "said": "with symmetrical pawns on d4 and d5 and that's going to clarify a lot of the common strategies for you okay uh but for now um we'll keep our eyes on the prize i want to kind of give you the lay of the land so here you take on e5 of the night if he takes back first and then takes place"
+  },
+  {
+   "ply": 12,
+   "t": 1206.5,
+   "line": [
+    "Nxe5",
+    "dxe5",
+    "Nxe4"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/8/4P3/1b2n3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7",
+   "said": "knight takes c4 do you remember our coverage of the pin variation so you said it was [&nbsp;__&nbsp;] right it was [&nbsp;__&nbsp;] and i mean i don't expect you to remember the moves but this position is reached in theory do you remember the the actual move that white plays here to refute it i'll give you a hint white hits that knight on e4 and he hits the pawn on g7 oh yeah you just bring the queen out to g4 there you go yep and then if i take c do you remember the move knight takes c3 you don't take the knight obviously because black takes and forks at rook that would be a shitty idea just the next movie i'm just taking"
+  },
+  {
+   "ply": 6,
+   "t": 1263,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "said": "you're just taking the pawn right bingo take the pawn on g7 then you play a3 etc etc so here the idea is borrowed it's well not bar it's the same idea so take stakes takes queen g4 same exact concept but slightly different whoa mr llamo 712 ray thank you so much mr lama appreciate the huge raid wow now the pressure's really on charlie you better find the right moves or you're going to make me look bad which ultimately there's no you got to be a good teacher yeah well that pressure's on you man is it well we'll see about that so here you actually have a choice you could take the pawn on g7 simpler actually would be to snap off this bishop cutting well you're really cutting black's nuts off because without this bishop black is riddled with weaknesses knight d5 and now where where do you park your queen i think there's a name for this um where you like swing back and forth like a grandfather clock where should the queen now land wiper like a windshield wiper the windshield wiper perfect well that's a shitty name don't you ever use that again do you just bring it back over to g4 to threaten that pawn again excuse me copyright charlie trademark 2020. the genius charlie bring it back to g4 and if black castles another pin variation theme this is something you should see quickly white to play and pick off an exchange or deliver checkmate yeah so i'm just bringing the bishop out there to c4 that attacks the night he moves the knight away i don't know why you're so attracted by there this is a very common tactic x-ray um yeah so i'm just bringing the bishop out to h6 bingo he's got to play g6 now you take"
+  },
+  {
+   "ply": 7,
+   "t": 1370,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "said": "the rook then you bring the bishop to c4 castle etc i was a little too early but yeah so you see it good so this is all you need to know in this line i mean bishop b4 is not common so e takes d4 is what you're going to see"
+  },
+  {
+   "ply": 9,
+   "t": 1373,
+   "line": [
+    "exd4",
+    "Nxd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "said": "most often and you play knight takes d4 now what is the general rationale behind doing this well by playing d4 you're opening up a really nice development square for your bishop you're bringing the knights out onto onto good squares i mean what could be terrible about that right it should be pretty logical to you yeah that makes sense so black has essentially three moves that we're going to look at the main move is bishop to b4 pinning your knight this move looks scary but we'll talk about how you respond to that the second move is bishop to c5 and and we'll look at more than three moves it's just that today i don't want"
+  },
+  {
+   "ply": 10,
+   "t": 1418,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "to bog you down too much so the third move that we're going to look at is a demonstration move through the lens of which i'm going to show you kind of the common ideas in this line now black can also take the knight on d4"
+  },
+  {
+   "ply": 9,
+   "t": 1419,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "said": "which is not a great idea because then your queen comes out into a very active"
+  },
+  {
+   "ply": 10,
+   "t": 1424,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "square we'll talk about that too the move that we'll use for demonstration purposes is just d6 now why is this move shitty from a positional point of view what is it block you can't develop your f bishop tile bishop you gotta just develop it to like e7 which is a pretty shitty square now where would you develop your f1"
+  },
+  {
+   "ply": 11,
+   "t": 1451.5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B6/3NP3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 6",
+   "said": "bishop uh we wouldn't we don't get a whole lot out of pinning the knight i just play the pawn so yeah so we just want to put the bishop back on c4 right well if we pin the knight how does he defend the pin"
+  },
+  {
+   "ply": 12,
+   "t": 1457,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/2np1n2/1B6/3NP3/2N5/PPP2PPP/R1BQK2R w KQkq - 2 7",
+   "said": "oh you could just break it with a bishop yeah he breaks it with the bishop right well he can't play the pawn because then"
+  },
+  {
+   "ply": 14,
+   "t": 1461,
+   "line": [
+    "Bf1",
+    "Bc8"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 4 8",
+   "said": "you take twice so he breaks it with the bishop he plays bishop c4 instead"
+  },
+  {
+   "ply": 15,
+   "t": 1462,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 5 8",
+   "said": "bishop e7 newcastle he castles"
+  },
+  {
+   "ply": 18,
+   "t": 1468,
+   "line": [
+    "Ke7",
+    "O-O",
+    "Rg8"
+   ],
+   "fen": "r1bq1br1/ppp1kppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQ1RK1 w - - 8 10",
+   "said": "and here you have several very much viable ways of developing your pieces but this position allows you to make exactly the kinds of maintenance moves that perhaps you normally struggle with now i would delay the development of the c1 bishop because i want to see what black does first does that kind of make sense i don't want to decide where i put the bishop maybe it'll be e3 maybe g5 but let's see what black does first so what's a normal good"
+  },
+  {
+   "ply": 19,
+   "t": 1501.5,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1bq1br1/ppp1kppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQR1K1 b - - 9 10",
+   "said": "solid maintenance move bringing one of the pieces in you did it in your warm-up game that's also very flexible it's a movie no it's gonna be good yeah just e1 with the rook right exactly now can you give me another one of those"
+  },
+  {
+   "ply": 18,
+   "t": 1503,
+   "line": [],
+   "fen": "r1bq1br1/ppp1kppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQ1RK1 w - - 8 10",
+   "said": "moves which prevents one of his pieces from developing to its most active square this is a prophylactic move i'm looking for it covers a very important square yeah so i want to right now it's that pawn right we don't want the knight on e4 so we protect or no that's protected that is already protected what we're"
+  },
+  {
+   "ply": 19,
+   "t": 1536.5,
+   "line": [
+    "h3"
+   ],
+   "fen": "r1bq1br1/ppp1kppp/2np1n2/8/2BNP3/2N4P/PPP2PP1/R1BQ1RK1 b - - 0 10",
+   "said": "looking at is where could he put his ca bishop most actively and how do we take that square away from him yeah it's going to g4 with that bishop ryden so we just push that h pawn we do i like the move h3 now the last thing that we'll talk about for now and then this bishop can come out to g5"
+  },
+  {
+   "ply": 20,
+   "t": 1549,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bq1br1/ppp1kppp/3p1n2/8/2BnP3/2N4P/PPP2PP1/R1BQ1RK1 w - - 0 11",
+   "said": "the rook to e1 you get a very harmonious free better position now a lot of people i'm pretty sure i'm calling it we'll take on d4 and"
+  },
+  {
+   "ply": 22,
+   "t": 1553,
+   "line": [
+    "Qxd4",
+    "c5"
+   ],
+   "fen": "r1bq1br1/pp2kppp/3p1n2/2p5/2BQP3/2N4P/PPP2PP1/R1B2RK1 w - - 0 12",
+   "said": "they'll follow up with c5 that's the instinct that you had in that warm-up game but this is actually a horrible idea because can you now tell me what weakness what long-term weakness does this move create which you can then attack that pawn on d6 does not have a pawn to defend it anymore so once you drop your queen to d3 can you give me two moves that put as much pressure as possible on that d6 pawn develop your pieces with an eye toward attacking that pawn we have bishop to f4 attacking the pawn directly and we have knight to oh no yeah we have knight two p5 potentially although again you know what i feel about how i feel about these knight moves to the side yeah in a situation like this knight b5 would be an advisable it would drop the e4 pawn so you want to keep your knights unless you have a very good reason not to you want to keep your knights controlling important central square so i'm looking for a different move here a more harmonious move okay um"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "Nf6",
+     "t": 968.5,
+     "continuation": "Nf6",
+     "said": "pure is the move knight to c3 okay and black 99.9 of the time we'll play the move knight f6 there are some people who play bishop c5 here this is already kind of a mistake and here you have a really cool little tactic that i'm sure you have run across this before i'm going to show you what it is you take on e5 with the knight and you don't blunder the knight how do you recover it uh i i was going to say you deliver a check and win it but there's no checks to deliver i think i know what kind of tactics you need to keep solving the forks are a little bit you know they need to be crisper i don't is it just the pawn fork it is d4 okay you got to win the when the pick but what you get in return is that you get huge piece development black has been [&nbsp;__&nbsp;] around with his pieces so black needs to regain that pawn right he"
+    },
+    {
+     "san": "Bc5",
+     "t": 981.5,
+     "continuation": "Bc5 Nxe5",
+     "said": "c5 here this is already kind of a mistake and here you have a really cool little tactic that i'm sure you have run across this before i'm going to show you what it is you take on e5 with the knight and you don't blunder the knight how do you recover it uh i i was going to say you deliver a check and win it but there's no checks to deliver i think i know what kind of tactics you need to keep solving the forks are a little bit you know they need to be crisper i don't is it just the pawn fork it is d4 okay you got to win the when the pick but what you get in return is that you get huge piece development black has been [&nbsp;__&nbsp;] around with his pieces so black needs to regain that pawn right he if you take one of his pieces you're going to be a pawn up so normally black does something like bishop takes d4 you play queen takes d4 you're skewering the knight to the pawn and if black defends the knight with d6 white is essentially winning now"
+    }
+   ]
+  },
+  {
+   "ply": 7,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Bc5",
+    "Nxe5"
+   ],
+   "options": [
+    {
+     "san": "Nxe5",
+     "t": 985,
+     "continuation": "Nxe5",
+     "said": "mistake and here you have a really cool little tactic that i'm sure you have run across this before i'm going to show you what it is you take on e5 with the knight and you don't blunder the knight how do you recover it uh i i was going to say you deliver a check and win it but there's no checks to deliver i think i know what kind of tactics you need to keep solving the forks are a little bit you know they need to be crisper i don't is it just the pawn fork it is d4 okay you got to win the when the pick but what you get in return is that you get huge piece development black has been [&nbsp;__&nbsp;] around with his pieces so black needs to regain that pawn right he if you take one of his pieces you're going to be a pawn up so normally black does something like bishop takes d4 you play queen takes d4 you're skewering the knight to the pawn and if black defends the knight with d6 white is essentially winning now with well you can dislodge this knight from e5 how can you do that and then win"
+    },
+    {
+     "san": "Qf6",
+     "t": 1064,
+     "continuation": "Qf6",
+     "said": "right bingo he goes he's got to move his knight and then you take on g7 you're in great shape you might even win that rook at the end so just remember this idea of taking on e5 with the knight when his bishop is on c5 if he responds with queen f6 um all uh moist critical versus xqc um yeah what comes to mind in terms well he's hitting the pawn on f2 and hitting the knight on e on e5 can you defend both at the same time and solidify your extra pawn it's simpler than you think it is like it's one of these retreating moves that you might have a little bit of trouble with because it's a retreat yeah it's because it's just bringing the knight back to f3 right right exactly bringing the knight back to f3 then you keep developing you can hit that queen with knight d5 that's a move that recurs pretty often in the scotch so bishop c5 is basically [&nbsp;__&nbsp;] nobody's really gonna do that and now you play the move d4 um again the vast majority of people are going to capture on d4 with the pawn um there's really no other"
+    }
+   ]
+  },
+  {
+   "ply": 7,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "d4"
+   ],
+   "options": [
+    {
+     "san": "exd4",
+     "t": 1120.5,
+     "continuation": "exd4",
+     "said": "in the scotch so bishop c5 is basically [&nbsp;__&nbsp;] nobody's really gonna do that and now you play the move d4 um again the vast majority of people are going to capture on d4 with the pawn um there's really no other good or even common moves in this position the only move that you have to kind of know is bishop to b4 and this is a little bit theoretical uh which i don't love but you're gonna encounter this so infrequently that if you even know one move in this position you're gonna throw people off which is knight takes e5 okay should be logical to you just taking the pawn now black can reclaim the pawn with what move using the pin that he has just created what move can black now play yeah he just takes e4 he takes e4 now you bring your queen out to f3 defending the knight hitting his knight threatening checkmate black's move is essentially force he has to do the same thing that you would have done in that other position right bring his knight back to f6 now he's he's attacking d4 can you develop one of your pieces in or and simultaneously guard d4 yeah i'm bringing bishop to e3 bringing"
+    },
+    {
+     "san": "Bb4",
+     "t": 1144.5,
+     "continuation": "Bb4 Nxe5",
+     "said": "and this is a little bit theoretical uh which i don't love but you're gonna encounter this so infrequently that if you even know one move in this position you're gonna throw people off which is knight takes e5 okay should be logical to you just taking the pawn now black can reclaim the pawn with what move using the pin that he has just created what move can black now play yeah he just takes e4 he takes e4 now you bring your queen out to f3 defending the knight hitting his knight threatening checkmate black's move is essentially force he has to do the same thing that you would have done in that other position right bring his knight back to f6 now he's he's attacking d4 can you develop one of your pieces in or and simultaneously guard d4 yeah i'm bringing bishop to e3 bringing bishop to e3 then you bring the bishop to d3 and later on maybe next session we'll look at a classical game that shows you how to play in these types of positions with symmetrical pawns on d4 and d5 and that's going to clarify a lot of the common strategies for you okay uh but for now um we'll keep our eyes on the prize i want to kind of give you the lay of the land so here you take on e5 of the night if he"
+    }
+   ]
+  },
+  {
+   "ply": 9,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4N3/1b1PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "d4",
+    "Bb4",
+    "Nxe5"
+   ],
+   "options": [
+    {
+     "san": "Nxe4",
+     "t": 1157.5,
+     "continuation": "Nxe4",
+     "said": "okay should be logical to you just taking the pawn now black can reclaim the pawn with what move using the pin that he has just created what move can black now play yeah he just takes e4 he takes e4 now you bring your queen out to f3 defending the knight hitting his knight threatening checkmate black's move is essentially force he has to do the same thing that you would have done in that other position right bring his knight back to f6 now he's he's attacking d4 can you develop one of your pieces in or and simultaneously guard d4 yeah i'm bringing bishop to e3 bringing bishop to e3 then you bring the bishop to d3 and later on maybe next session we'll look at a classical game that shows you how to play in these types of positions with symmetrical pawns on d4 and d5 and that's going to clarify a lot of the common strategies for you okay uh but for now um we'll keep our eyes on the prize i want to kind of give you the lay of the land so here you take on e5 of the night if he takes back first and then takes place knight takes c4 do you remember our coverage of the pin variation so you said it was [&nbsp;__&nbsp;] right it was [&nbsp;__&nbsp;] and i mean i don't expect you to remember the moves but"
+    },
+    {
+     "san": "Nxe5",
+     "t": 1206.5,
+     "continuation": "Nxe5 dxe5 Nxe4",
+     "said": "that's going to clarify a lot of the common strategies for you okay uh but for now um we'll keep our eyes on the prize i want to kind of give you the lay of the land so here you take on e5 of the night if he takes back first and then takes place knight takes c4 do you remember our coverage of the pin variation so you said it was [&nbsp;__&nbsp;] right it was [&nbsp;__&nbsp;] and i mean i don't expect you to remember the moves but this position is reached in theory do you remember the the actual move that white plays here to refute it i'll give you a hint white hits that knight on e4 and he hits the pawn on g7 oh yeah you just bring the queen out to g4 there you go yep and then if i take c do you remember the move knight takes c3 you don't take the knight obviously because black takes and forks at rook that would be a shitty idea just the next movie i'm just taking you're just taking the pawn right bingo take the pawn on g7 then you play a3 etc etc so here the idea is borrowed it's well not bar it's the same idea so take stakes takes queen g4 same exact concept"
+    }
+   ]
+  },
+  {
+   "ply": 10,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "d6"
+   ],
+   "options": [
+    {
+     "san": "Bb5",
+     "t": 1451.5,
+     "continuation": "Bb5",
+     "said": "bishop uh we wouldn't we don't get a whole lot out of pinning the knight i just play the pawn so yeah so we just want to put the bishop back on c4 right well if we pin the knight how does he defend the pin oh you could just break it with a bishop yeah he breaks it with the bishop right well he can't play the pawn because then you take twice so he breaks it with the bishop he plays bishop c4 instead bishop e7 newcastle he castles and here you have several very much viable ways of developing your pieces but this position allows you to make exactly the kinds of maintenance moves that perhaps you normally struggle with now i would delay the development of the c1 bishop because i want to see what black does first does that kind of make sense i don't want to decide where i put the bishop maybe it'll be e3 maybe g5 but let's see what black does first so what's a normal good solid maintenance move bringing one of the pieces in you did it in your warm-up game that's also very flexible it's a movie no it's gonna be good yeah just e1 with the rook right exactly now can you give me another one of those moves which prevents one of his pieces from developing to its most active square"
+    },
+    {
+     "san": "Bc4",
+     "t": 1462,
+     "continuation": "Bc4",
+     "said": "knight how does he defend the pin oh you could just break it with a bishop yeah he breaks it with the bishop right well he can't play the pawn because then you take twice so he breaks it with the bishop he plays bishop c4 instead bishop e7 newcastle he castles and here you have several very much viable ways of developing your pieces but this position allows you to make exactly the kinds of maintenance moves that perhaps you normally struggle with now i would delay the development of the c1 bishop because i want to see what black does first does that kind of make sense i don't want to decide where i put the bishop maybe it'll be e3 maybe g5 but let's see what black does first so what's a normal good solid maintenance move bringing one of the pieces in you did it in your warm-up game that's also very flexible it's a movie no it's gonna be good yeah just e1 with the rook right exactly now can you give me another one of those moves which prevents one of his pieces from developing to its most active square this is a prophylactic move i'm looking for it covers a very important square yeah so i want to right now it's that pawn right we don't want the knight on e4 so we protect or"
+    }
+   ]
+  },
+  {
+   "ply": 18,
+   "fen": "r1bq1br1/ppp1kppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQ1RK1 w - - 8 10",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "d6",
+    "Bb5",
+    "Bd7",
+    "Bf1",
+    "Bc8",
+    "Bc4",
+    "Ke7",
+    "O-O",
+    "Rg8"
+   ],
+   "options": [
+    {
+     "san": "Re1",
+     "t": 1501.5,
+     "continuation": "Re1",
+     "said": "solid maintenance move bringing one of the pieces in you did it in your warm-up game that's also very flexible it's a movie no it's gonna be good yeah just e1 with the rook right exactly now can you give me another one of those moves which prevents one of his pieces from developing to its most active square this is a prophylactic move i'm looking for it covers a very important square yeah so i want to right now it's that pawn right we don't want the knight on e4 so we protect or no that's protected that is already protected what we're looking at is where could he put his ca bishop most actively and how do we take that square away from him yeah it's going to g4 with that bishop ryden so we just push that h pawn we do i like the move h3 now the last thing that we'll talk about for now and then this bishop can come out to g5 the rook to e1 you get a very harmonious free better position now a lot of people i'm pretty sure i'm calling it we'll take on d4 and they'll follow up with c5 that's the instinct that you had in that warm-up game but this is actually a horrible idea because can you now tell me what weakness what long-term weakness does this move create"
+    },
+    {
+     "san": "h3",
+     "t": 1536.5,
+     "continuation": "h3",
+     "said": "looking at is where could he put his ca bishop most actively and how do we take that square away from him yeah it's going to g4 with that bishop ryden so we just push that h pawn we do i like the move h3 now the last thing that we'll talk about for now and then this bishop can come out to g5 the rook to e1 you get a very harmonious free better position now a lot of people i'm pretty sure i'm calling it we'll take on d4 and they'll follow up with c5 that's the instinct that you had in that warm-up game but this is actually a horrible idea because can you now tell me what weakness what long-term weakness does this move create which you can then attack that pawn on d6 does not have a pawn to defend it anymore so once you drop your queen to d3 can you give me two moves that put as much pressure as possible on that d6 pawn develop your pieces with an eye toward attacking that pawn we have bishop to f4 attacking the pawn directly and we have knight to oh no yeah we have knight two p5 potentially although again you know what i feel about how i feel about these knight moves to the side yeah in a situation like this knight b5"
+    }
+   ]
+  }
+ ]
+}

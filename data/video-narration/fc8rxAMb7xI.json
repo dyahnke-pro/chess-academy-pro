@@ -1,0 +1,688 @@
+{
+ "videoId": "fc8rxAMb7xI",
+ "title": "Rapid Chess Clinic | Sicilian Defense Winning Strategies | GM Naroditsky's DYI Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 43,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "luck let's get the show on the road or not a difficult position there's 20 candidate moves okay I'll get okay there we go our opponent has made a decision one"
+  },
+  {
+   "ply": 3,
+   "t": 45.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2P1P3/8/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "E4 okay C4 now this is a move that probably is not on most people's radar I mean maybe you faced it but chances are you don't know much about it it looks very ugly because it creates a well it creates a massive hole on D4 but as I've kind of said before you want to be careful about assuming that moves"
+  },
+  {
+   "ply": 4,
+   "t": 78,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq - 1 3",
+   "said": "like these lose they definitely don't lose and if White follows up uh accurately then C4 is actually a pretty legitimate sideline uh which can contain some Venom believe it or not now our followup is pretty obvious we should start with Knight C6 really just clamping down on this D4 square one"
+  },
+  {
+   "ply": 5,
+   "t": 85,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/2N5/PP1P1PPP/R1BQKBNR b KQkq - 2 3",
+   "said": "thing that we should avoid with black is is to play E5 we shouldn't just pair it white setup um as is often the case we have a choice of different Pawn structures that we could apply I think that you know the experienced Sicilian players who are watching this are probably inclined to play G6 and I think this is the standard way to play We Go G6 we F K the bishop and we just increase our control over the D4 square but that's definitely not the only"
+  },
+  {
+   "ply": 6,
+   "t": 123,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/2P1P3/2N5/PP1P1PPP/R1BQKBNR w KQkq - 0 4",
+   "said": "viable setup we can also play E6 and we can try to carry out uh the D7 D5 Pawn break as quickly as possible what do we want to do in this game yeah let's go G6 let's play more conventionally and again remember that"
+  },
+  {
+   "ply": 7,
+   "t": 126.5,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/2P1P3/2NP4/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "you don't have to be a dragon player to play the move G6 right it doesn't matter"
+  },
+  {
+   "ply": 8,
+   "t": 133,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/2P1P3/2NP4/PP3PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "what Sicilian you play this should be a pretty logical move fening the bishop here should make sense independent of"
+  },
+  {
+   "ply": 9,
+   "t": 137,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/2P1P3/2NP1N2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "what type of Sicilian uh you play against the open Sicilian okay now here we have a secondary choice of where to develop this Knight on G8 so the obvious developing square is F6 but the drawback of developing the Knight to F6 is that we are somewhat decreasing our clamp on the D on the D4 Square so we could also carry out what uh I've heard as referred to as the bot vinic setup now the bot vinic setup involves basically putting the G8 Knight on E7 so playing the move E6 putting the Knight on E7 and the"
+  },
+  {
+   "ply": 10,
+   "t": 182.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NP1N2/PP3PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "point is that the Knight and the bishop are nicely cooperating um and the bishop is still unobstructed on the long diagonal both setups are totally fine uh it's a good idea to start with a move D6 so we're going to start by making the moves we know that we need to play"
+  },
+  {
+   "ply": 11,
+   "t": 191.5,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NP1N2/PP2BPPP/R1BQK2R b KQkq - 1 6",
+   "said": "anyway and based on what white does we'll decide uh where we want to deploy this KN okay Bishop E2 so white is playing kind of standard developing moves before we choose a developing Square for our Knight I think it's a good idea here to initiate a favorable trade now our entire kind of play revolves around constantly increasing our control over the D4 Square and the point is not necessarily to put a knight on D4 right it's more important to control a square than it is uh to put a piece on that square sometimes putting a piece on that square is good but that's not really our goal just yet so what's a good way for us to increase our control over this Square well you can do it in two ways you can add attackers or you can remove Defenders of a certain Square"
+  },
+  {
+   "ply": 12,
+   "t": 242,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "r2qk1nr/pp2ppbp/2np2p1/2p5/2P1P1b1/2NP1N2/PP2BPPP/R1BQK2R w KQkq - 2 7",
+   "said": "um and that second method is what people often forget about right they think about moves like Queen B6 or E5 but the Knight on can also be dealt with with the move Bishop G4 and that is the move we're going to play and of course we"
+  },
+  {
+   "ply": 13,
+   "t": 251,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2qk1nr/pp2ppbp/2np2p1/2p5/2P1P1b1/2NP1N2/PP2BPPP/R1BQ1RK1 b kq - 3 7",
+   "said": "want to take on F3 now you might say well aren't we giving up the bishop air you know we're making two moves with the same piece in the opening yeah that's true but because the center is closed"
+  },
+  {
+   "ply": 14,
+   "t": 261,
+   "line": [
+    "Bxf3"
+   ],
+   "fen": "r2qk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NP1b2/PP2BPPP/R1BQ1RK1 w kq - 0 8",
+   "said": "and because we have a bigger priority in this situation that kind of supersedes these General opening rules um we don't"
+  },
+  {
+   "ply": 15,
+   "t": 265,
+   "line": [
+    "Bxf3"
+   ],
+   "fen": "r2qk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NP1B2/PP3PPP/R1BQ1RK1 b kq - 0 8",
+   "said": "have any problems with our development our king is not going to get stuck in the center so it should be pretty obvious to you that we're not going to get punished for you know this small"
+  },
+  {
+   "ply": 16,
+   "t": 279,
+   "line": [
+    "e6"
+   ],
+   "fen": "r2qk1nr/pp3pbp/2npp1p1/2p5/2P1P3/2NP1B2/PP3PPP/R1BQ1RK1 w kq - 0 9",
+   "said": "opening violation now we're going to finish up the bot venic setup we're going to go E6 and we're going to put the Knight on E7 and our pieces are going to be really nice and harmonious another thing you might"
+  },
+  {
+   "ply": 17,
+   "t": 290.5,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r2qk1nr/pp3pbp/2npp1p1/2p5/2P1PB2/2NP1B2/PP3PPP/R2Q1RK1 b kq - 1 9",
+   "said": "notice is that we're combining the moves E6 and G6 In the Sicilian and on previous speedruns you might have heard me say that this is one of the cardinal"
+  },
+  {
+   "ply": 18,
+   "t": 296,
+   "line": [
+    "Nge7"
+   ],
+   "fen": "r2qk2r/pp2npbp/2npp1p1/2p5/2P1PB2/2NP1B2/PP3PPP/R2Q1RK1 w kq - 2 10",
+   "said": "sins uh of the Sicilian but again this is a completely different scenario I was referring to situations in which the center is open right in which white"
+  },
+  {
+   "ply": 19,
+   "t": 307.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r2qk2r/pp2npbp/2npp1p1/2p3B1/2P1P3/2NP1B2/PP3PPP/R2Q1RK1 b kq - 3 10",
+   "said": "can access the D6 Square this is not one of those situations the center is completely closed you know that principle does not apply at all okay"
+  },
+  {
+   "ply": 20,
+   "t": 311.5,
+   "line": [
+    "h6"
+   ],
+   "fen": "r2qk2r/pp2npb1/2npp1pp/2p3B1/2P1P3/2NP1B2/PP3PPP/R2Q1RK1 w kq - 0 11",
+   "said": "let's go H6 let's see where this bishop"
+  },
+  {
+   "ply": 21,
+   "t": 315.5,
+   "line": [
+    "Bh4"
+   ],
+   "fen": "r2qk2r/pp2npb1/2npp1pp/2p5/2P1P2B/2NP1B2/PP3PPP/R2Q1RK1 b kq - 1 11",
+   "said": "uh wants to park itself get Bishop H4 and now we have an interesting kind of dilemma again because we have a nice positional advantage and because we have a clamp on this D4 Square uh there's going to be many good ways to play a position like this so if you're watching this and your intuition is suggesting one move and then I end up playing another move it doesn't mean that your idea is bad the way that I'm going to play this is perhaps going to strike you as a little bit loose or a little bit too risky but uh hopefully I'll show you"
+  },
+  {
+   "ply": 22,
+   "t": 355.5,
+   "line": [
+    "g5"
+   ],
+   "fen": "r2qk2r/pp2npb1/2npp2p/2p3p1/2P1P2B/2NP1B2/PP3PPP/R2Q1RK1 w kq - 0 12",
+   "said": "that this is in fact not risky at all and this isn't even tactical the way I'm about to play is motivated by positional considerations and not by a desire to just like Checkmate our opponent what move am I hinting at I'm hitting at the move G5 and again the point of G5 is very POS"
+  },
+  {
+   "ply": 23,
+   "t": 363,
+   "line": [
+    "Bg3"
+   ],
+   "fen": "r2qk2r/pp2npb1/2npp2p/2p3p1/2P1P3/2NP1BB1/PP3PPP/R2Q1RK1 b kq - 1 12",
+   "said": "we're not trying to go H5 and build a pawn storm that would be nice but we're unable to make that move the point of G5"
+  },
+  {
+   "ply": 24,
+   "t": 368.5,
+   "line": [
+    "Ng6"
+   ],
+   "fen": "r2qk2r/pp3pb1/2npp1np/2p3p1/2P1P3/2NP1BB1/PP3PPP/R2Q1RK1 w kq - 2 13",
+   "said": "is to carve out this G6 Square for our Knight and notice how we're playing on"
+  },
+  {
+   "ply": 25,
+   "t": 374,
+   "line": [
+    "Bh5"
+   ],
+   "fen": "r2qk2r/pp3pb1/2npp1np/2p3pB/2P1P3/2NP2B1/PP3PPP/R2Q1RK1 b kq - 3 13",
+   "said": "the dark squares Bishop H5 okay that's fine maybe white wants to take on G6 but that's not really a a tactical threat maybe it's a positional threat we have several ways"
+  },
+  {
+   "ply": 26,
+   "t": 393.5,
+   "line": [
+    "Nf4"
+   ],
+   "fen": "r2qk2r/pp3pb1/2npp2p/2p3pB/2P1Pn2/2NP2B1/PP3PPP/R2Q1RK1 w kq - 4 14",
+   "said": "that we can deal with this we can put this Knight on F4 we can play Knight G to E5 let me think about this for a second yeah I like the look of Knight F4 I like the look of Knight F4 we're trying to get sort of the perfect material imbalance we're trying to get"
+  },
+  {
+   "ply": 27,
+   "t": 406.5,
+   "line": [
+    "Nb5"
+   ],
+   "fen": "r2qk2r/pp3pb1/2npp2p/1Np3pB/2P1Pn2/3P2B1/PP3PPP/R2Q1RK1 b kq - 5 14",
+   "said": "opposite colored Bishops to really emphasize the weakness of the dark squares for white so Knight B5 not sure what this move does I mean we can play A6 and push the Knight away we could take on B2 probably although that's not"
+  },
+  {
+   "ply": 28,
+   "t": 425.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "r2qk2r/1p3pb1/p1npp2p/1Np3pB/2P1Pn2/3P2B1/PP3PPP/R2Q1RK1 w kq - 0 15",
+   "said": "really in the spirit of the position I mean I don't see why we would go Pawn grabbing here I think A6 is safer and simpler and probably just better so let's go A6 let's go A6 I think the Knight simply has to go back to C3 and we're going to continue playing"
+  },
+  {
+   "ply": 29,
+   "t": 439.5,
+   "line": [
+    "Bxf4"
+   ],
+   "fen": "r2qk2r/1p3pb1/p1npp2p/1Np3pB/2P1PB2/3P4/PP3PPP/R2Q1RK1 b kq - 0 15",
+   "said": "positionally and increasing our bind over the center Bishop takes F4 okay so our"
+  },
+  {
+   "ply": 30,
+   "t": 443.5,
+   "line": [
+    "gxf4"
+   ],
+   "fen": "r2qk2r/1p3pb1/p1npp2p/1Np4B/2P1Pp2/3P4/PP3PPP/R2Q1RK1 w kq - 0 16",
+   "said": "opponent plays an Intero we take back on F4 of course we don't want to take the"
+  },
+  {
+   "ply": 29,
+   "t": 445.5,
+   "line": [],
+   "fen": "r2qk2r/1p3pb1/p1npp2p/1Np3pB/2P1PB2/3P4/PP3PPP/R2Q1RK1 b kq - 0 15",
+   "said": "Knight here because we give up the"
+  },
+  {
+   "ply": 31,
+   "t": 447.5,
+   "line": [
+    "gxf4",
+    "Nc3"
+   ],
+   "fen": "r2qk2r/1p3pb1/p1npp2p/2p4B/2P1Pp2/2NP4/PP3PPP/R2Q1RK1 b kq - 1 16",
+   "said": "bishop here and white could have taken C"
+  },
+  {
+   "ply": 29,
+   "t": 449.5,
+   "line": [],
+   "fen": "r2qk2r/1p3pb1/p1npp2p/1Np3pB/2P1PB2/3P4/PP3PPP/R2Q1RK1 b kq - 0 15",
+   "said": "takes B5 leading to some unnecessary"
+  },
+  {
+   "ply": 31,
+   "t": 452.5,
+   "line": [
+    "gxf4",
+    "Nc3"
+   ],
+   "fen": "r2qk2r/1p3pb1/p1npp2p/2p4B/2P1Pp2/2NP4/PP3PPP/R2Q1RK1 b kq - 1 16",
+   "said": "complications now I goes back to C3 now as I've said many times anytime you have a trade you need to reassess the situation briefly and you need to quickly ask yourself okay what new squares are available for our pieces how"
+  },
+  {
+   "ply": 32,
+   "t": 475.5,
+   "line": [
+    "Qg5"
+   ],
+   "fen": "r3k2r/1p3pb1/p1npp2p/2p3qB/2P1Pp2/2NP4/PP3PPP/R2Q1RK1 w kq - 2 17",
+   "said": "has the situation changed and if you do that kind of mindfully you should immediately see that you have access to a really juicy post for your queen and that post is G5 Queen to G5 really solidifying all of the pawns adding pressure to the bishop and hinting at the possibility of an attack"
+  },
+  {
+   "ply": 33,
+   "t": 490.5,
+   "line": [
+    "Qf3"
+   ],
+   "fen": "r3k2r/1p3pb1/p1npp2p/2p3qB/2P1Pp2/2NP1Q2/PP3PPP/R4RK1 b kq - 3 17",
+   "said": "down the G file later in the game in terms of where we're keeping our King we're keeping it in the center because it's a perfectly safe place to be there's nothing uh there's no danger looming in the center but eventually we could Castle Queen side if if need be now I'm starting to smell blood this is"
+  },
+  {
+   "ply": 34,
+   "t": 507.5,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r3k2r/1p3pb1/p2pp2p/2p3qB/2PnPp2/2NP1Q2/PP3PPP/R4RK1 w kq - 4 18",
+   "said": "clearly a panic move a panic reaction by white which walks right into either Knight D4 or Knight E5 but Knight D4 is is more thematic that's been the that we've been setting up for a while now I contradicting myself earlier I said the point isn't necessarily to put the piece on The Outpost yeah but here clearly this is not a move that's going to harm our position and white is really on the"
+  },
+  {
+   "ply": 35,
+   "t": 535.5,
+   "line": [
+    "Qd1"
+   ],
+   "fen": "r3k2r/1p3pb1/p2pp2p/2p3qB/2PnPp2/2NP4/PP3PPP/R2Q1RK1 b kq - 5 18",
+   "said": "verge here of collapsing I think Queen H3 is probably the best move maybe white can go Queen G4 yeah we could also have gone Knight E5 I think both moves are fantastic Queen back to D1 F excellent now again many ways that we can play but I see a pretty lowrisk move that we could play just to set up uh"
+  },
+  {
+   "ply": 36,
+   "t": 555.5,
+   "line": [
+    "Rg8"
+   ],
+   "fen": "r3k1r1/1p3pb1/p2pp2p/2p3qB/2PnPp2/2NP4/PP3PPP/R2Q1RK1 w q - 6 19",
+   "said": "tactical possibilities in the long run F3 some of you might be tempted by doesn't work white just plays Bishop takes F3 Knight takes F3 Queen takes F3 that doesn't work I like the move Rook G8 and this is the kind of move that people really need to learn how to make"
+  },
+  {
+   "ply": 37,
+   "t": 562.5,
+   "line": [
+    "Bf3"
+   ],
+   "fen": "r3k1r1/1p3pb1/p2pp2p/2p3q1/2PnPp2/2NP1B2/PP3PPP/R2Q1RK1 b q - 7 19",
+   "said": "am I creating a threat technically not right black doesn't threaten anything yet but you're setting stuff up right you're building up the attack you're bringing pieces into into position and pretty soon you'll find that something will materialize how do we continue"
+  },
+  {
+   "ply": 38,
+   "t": 583.5,
+   "line": [
+    "Be5"
+   ],
+   "fen": "r3k1r1/1p3p2/p2pp2p/2p1b1q1/2PnPp2/2NP1B2/PP3PPP/R2Q1RK1 w q - 8 20",
+   "said": "bringing pieces into position what does that even mean well in order to increase our domination over the G file it would be nice to get this bishop out of the way let's put it on E5 this also"
+  },
+  {
+   "ply": 37,
+   "t": 585.5,
+   "line": [],
+   "fen": "r3k1r1/1p3pb1/p2pp2p/2p3q1/2PnPp2/2NP1B2/PP3PPP/R2Q1RK1 b q - 7 19",
+   "said": "prevents white from seeking desperation counterplay with a move like E5 which is very easy to forget about right white"
+  },
+  {
+   "ply": 38,
+   "t": 596.5,
+   "line": [
+    "Be5"
+   ],
+   "fen": "r3k1r1/1p3p2/p2pp2p/2p1b1q1/2PnPp2/2NP1B2/PP3PPP/R2Q1RK1 w q - 8 20",
+   "said": "can open up the center even at the cost of a pawn which would complicate the winning process notice how we've achieved complete dark Square domination Knight bishop and queen all on dark squares White's Bishop totally helpless white can't go Knight E2 because we take the bishop it obstructs the connection between the queen and the bishop this would be a very common blunder at this"
+  },
+  {
+   "ply": 39,
+   "t": 622.5,
+   "line": [
+    "a3"
+   ],
+   "fen": "r3k1r1/1p3p2/p2pp2p/2p1b1q1/2PnPp2/P1NP1B2/1P3PPP/R2Q1RK1 b q - 0 20",
+   "said": "level to go Knight E2 and that that just blunders mate our next move can be long castles and then we can start thinking about sacrifices and you know mating operations A3 I don't care about that"
+  },
+  {
+   "ply": 40,
+   "t": 624.5,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "2kr2r1/1p3p2/p2pp2p/2p1b1q1/2PnPp2/P1NP1B2/1P3PPP/R2Q1RK1 w - - 1 21",
+   "said": "let's just Castle there is no way I mean"
+  },
+  {
+   "ply": 41,
+   "t": 626.5,
+   "line": [
+    "b4"
+   ],
+   "fen": "2kr2r1/1p3p2/p2pp2p/2p1b1q1/1PPnPp2/P1NP1B2/5PPP/R2Q1RK1 b - - 0 21",
+   "said": "B4 blunders a piece actually but even if it didn't it'll take literal ages for white to even get a threat on the Queen's side I mean how many moves does"
+  },
+  {
+   "ply": 42,
+   "t": 646,
+   "line": [
+    "Nxf3+"
+   ],
+   "fen": "2kr2r1/1p3p2/p2pp2p/2p1b1q1/1PP1Pp2/P1NP1n2/5PPP/R2Q1RK1 w - - 0 22",
+   "said": "white need to start the attack I don't think it's even hypothetically possible like Rook B1 B5 will just go A5 but here the simplest is just to pick up the piece let's go Knight takes F3 and Bishop takes"
+  },
+  {
+   "ply": 44,
+   "t": 650.5,
+   "line": [
+    "Qxf3",
+    "Bxc3"
+   ],
+   "fen": "2kr2r1/1p3p2/p2pp2p/2p3q1/1PP1Pp2/P1bP1Q2/5PPP/R4RK1 w - - 0 23",
+   "said": "C3 and now we're going to play with maximum Simplicity simplify the position"
+  },
+  {
+   "ply": 45,
+   "t": 657.5,
+   "line": [
+    "Rac1"
+   ],
+   "fen": "2kr2r1/1p3p2/p2pp2p/2p3q1/1PP1Pp2/P1bP1Q2/5PPP/2R2RK1 b - - 1 23",
+   "said": "so Queen to G4 is on my Horizon okay obviously Rook C1 hits the bishop Bop"
+  },
+  {
+   "ply": 46,
+   "t": 660.5,
+   "line": [
+    "Bd4"
+   ],
+   "fen": "2kr2r1/1p3p2/p2pp2p/2p3q1/1PPbPp2/P2P1Q2/5PPP/2R2RK1 w - - 2 24",
+   "said": "let's recentralize it onto D4 and that's"
+  },
+  {
+   "ply": 47,
+   "t": 664,
+   "line": [
+    "b5"
+   ],
+   "fen": "2kr2r1/1p3p2/p2pp2p/1Pp3q1/2PbPp2/P2P1Q2/5PPP/2R2RK1 b - - 0 24",
+   "said": "it okay B5 we can just go A5 close up"
+  },
+  {
+   "ply": 48,
+   "t": 665,
+   "line": [
+    "a5"
+   ],
+   "fen": "2kr2r1/1p3p2/3pp2p/pPp3q1/2PbPp2/P2P1Q2/5PPP/2R2RK1 w - - 0 25",
+   "said": "the queen side and here okay I just said"
+  },
+  {
+   "ply": 49,
+   "t": 667.5,
+   "line": [
+    "a4"
+   ],
+   "fen": "2kr2r1/1p3p2/3pp2p/pPp3q1/P1PbPp2/3P1Q2/5PPP/2R2RK1 b - - 0 25",
+   "said": "that I'll play Queen G4 but I see a"
+  },
+  {
+   "ply": 50,
+   "t": 672.5,
+   "line": [
+    "Qh4"
+   ],
+   "fen": "2kr2r1/1p3p2/3pp2p/pPp5/P1PbPp1q/3P1Q2/5PPP/2R2RK1 w - - 1 26",
+   "said": "better option I think Queen to H4 is a more efficient path to Victory and our goal here is to double on the G file Rook G5 Rook G8 maybe Rook"
+  },
+  {
+   "ply": 51,
+   "t": 689.5,
+   "line": [
+    "b6"
+   ],
+   "fen": "2kr2r1/1p3p2/1P1pp2p/p1p5/P1PbPp1q/3P1Q2/5PPP/2R2RK1 b - - 0 26",
+   "said": "H5 we also have a really pretty tactical threat that we've posed here good opportunity for people to practice your tactical awareness yeah we can play it now it's actually maybe it's unnecessary I'm not going to do it but uh you should at least notice this idea yeah actually it doesn't work what that's kind of funny I don't think it works Rook G3 hgfg and you should see that Queen takes G3 is impossible we just take the queen and the F Pawn is pinned but Rook G3 hgfg white slides The Rook out of F1 and this is another super important important defensive them sometimes when"
+  },
+  {
+   "ply": 52,
+   "t": 733,
+   "line": [
+    "Rg5"
+   ],
+   "fen": "2kr4/1p3p2/1P1pp2p/p1p3r1/P1PbPp1q/3P1Q2/5PPP/2R2RK1 w - - 1 27",
+   "said": "the evacuation route is created it's incredibly hard to actually deliver Checkmate because the white king is going to move along the light squares to E2 and we've sacrificed an entire Rook so this is unnecessary let's go Rook G5 and let's follow up with our initial"
+  },
+  {
+   "ply": 53,
+   "t": 739.5,
+   "line": [
+    "Rb1"
+   ],
+   "fen": "2kr4/1p3p2/1P1pp2p/p1p3r1/P1PbPp1q/3P1Q2/5PPP/1R3RK1 b - - 2 27",
+   "said": "idea Rook B1 now you don't want to"
+  },
+  {
+   "ply": 54,
+   "t": 743,
+   "line": [
+    "Rdg8"
+   ],
+   "fen": "2k3r1/1p3p2/1P1pp2p/p1p3r1/P1PbPp1q/3P1Q2/5PPP/1R3RK1 w - - 3 28",
+   "said": "entirely ignore what your opponent is doing but here we can't White's not doing anything that's it the game is over crashing through and at this point there's a million ways to do it but the simplest is just Rook takes G2 that's bound to lead to Checkmate just uh yeah GG also Rook H5 by the way is a more subtle way perhaps even more powerful an efficient way to bring about Victory"
+  },
+  {
+   "ply": 5,
+   "t": 778,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/2N5/PP1P1PPP/R1BQKBNR b KQkq - 2 3",
+   "said": "Rook H5 and you should be asking yourself well what happens if white goes H3 white simply resigns simple game we didn't do anything in this game that should cause you any surprise like we played simple textbook positional chess nothing crazy nothing outlandish and you know white was unable to deal with the weakness he created on the second move let's go through that pretty quickly I mean there there isn't too much uh to explain but"
+  },
+  {
+   "ply": 7,
+   "t": 810,
+   "line": [
+    "Nb8",
+    "Nb1"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2P1P3/8/PP1P1PPP/RNBQKBNR b KQkq - 4 4",
+   "said": "nevertheless just a moment now here's a very important clarification here's a very important clarification is the move C4 a mistake no I I don't think that you can consider this a mistake per se however if you do a search for the move C4 you will see that the top rated player who's played this move is let's see just a moment here I'm going to tell you the answer to that question it's been played by bador jababa Lenard Dominguez Dragon solak Turkish GM Sebastian ma a million GMS have played this move OTB but the the point is that if a GM is playing this move it means that they know exactly how to follow up but if a 1200 is playing this move it means that they don't know what they're doing because if white simply follows up with regular developing moves and is not specifically aware of the correct way to follow up White's going to get cooked so it is a decent line if white is like a"
+  },
+  {
+   "ply": 8,
+   "t": 868,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq - 5 5",
+   "said": "specialist right it's a surprise weapon but the way that our opponent played it you know clearly indicates that this was not like preconceived preparation if that makes sense okay so Knight C6 Knight C 3 G6 this is the main line and"
+  },
+  {
+   "ply": 10,
+   "t": 870.5,
+   "line": [
+    "Nc3",
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/2P1P3/2N5/PP1P1PPP/R1BQKBNR w KQkq - 0 6",
+   "said": "the way that most GMS play it is that"
+  },
+  {
+   "ply": 11,
+   "t": 874.5,
+   "line": [
+    "g3"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/2P1P3/2N3P1/PP1P1P1P/R1BQKBNR b KQkq - 0 6",
+   "said": "they go G3 and they basically try to try to get this into like English opening"
+  },
+  {
+   "ply": 12,
+   "t": 882.5,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/2P1P3/2N3P1/PP1P1P1P/R1BQKBNR w KQkq - 1 7",
+   "said": "territory um Bishop G7 this is the main line 3,000 games Bishop G2 and the"
+  },
+  {
+   "ply": 13,
+   "t": 886,
+   "line": [
+    "Bg2"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/2P1P3/2N3P1/PP1P1PBP/R1BQK1NR b KQkq - 2 7",
+   "said": "engine eval here is is equality black"
+  },
+  {
+   "ply": 14,
+   "t": 891,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2N3P1/PP1P1PBP/R1BQK1NR w KQkq - 0 8",
+   "said": "can do a bunch of different things I me D6 for example now typically white plays"
+  },
+  {
+   "ply": 15,
+   "t": 894.5,
+   "line": [
+    "Nge2"
+   ],
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2N3P1/PP1PNPBP/R1BQK2R b KQkq - 1 8",
+   "said": "Knight G2 and actually it's white who plays the binic setup here at least the people who know what they're doing"
+  },
+  {
+   "ply": 16,
+   "t": 901,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pp2ppbp/2np1np1/2p5/2P1P3/2N3P1/PP1PNPBP/R1BQK2R w KQkq - 2 9",
+   "said": "and typically black will respond with Knight F6 castles um castles and we get this"
+  },
+  {
+   "ply": 18,
+   "t": 907,
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/2p5/2P1P3/2N3P1/PP1PNPBP/R1BQ1RK1 w - - 4 10",
+   "said": "interesting position where black is very comfortable game but white is not worse"
+  },
+  {
+   "ply": 19,
+   "t": 915.5,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/2p5/2P1P3/2NP2P1/PP2NPBP/R1BQ1RK1 b - - 0 10",
+   "said": "if white is accurate here now who can tell me what is Black's textbook plan in this type of situation and this is a plan that is applicable in many many different openings you know you should you should kind of understand this based on white"
+  },
+  {
+   "ply": 20,
+   "t": 938.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bq1rk1/1p2ppbp/p1np1np1/2p5/2P1P3/2NP2P1/PP2NPBP/R1BQ1RK1 w - - 0 11",
+   "said": "structure no what is Black's plan yeah White's plan is like F4 H3 G4 what is Black's plan here typically yeah A6 B5 so typically Black's plan is to play A6 and prepare B7 B5 and prepare the Queens side attack now you might ask well in what other openings is this plan applied I can give you a million examples in the closed Sicilian for example which is Knight C3 and G3 same opening except White's Pawn is on C2 one of Black's main ideas in fact my favorite line against the closed Sicilian is is the move Rook B8 here just immediately preparing this this B7 B5 Pawn storm in the king's Indian attack it's also a very very typical plan and it can be very effective let me show you an example just to show you the universality of this idea okay so here he played the king's Indian attack I like the setup with C5 we basically transposed into a similar position and here you can see the elements that I applied uh in the Speed game Rook B8 now I decided to give up my light skirt Bishop because it's kind of a burden and there we go Knight back opening up the diagonal and A6 here we"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/2N5/PP1P1PPP/R1BQKBNR b KQkq - 2 3",
+   "line": [
+    "e4",
+    "c5",
+    "c4",
+    "Nc6",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "g6",
+     "t": 123,
+     "continuation": "g6",
+     "said": "viable setup we can also play E6 and we can try to carry out uh the D7 D5 Pawn break as quickly as possible what do we want to do in this game yeah let's go G6 let's play more conventionally and again remember that you don't have to be a dragon player to play the move G6 right it doesn't matter what Sicilian you play this should be a pretty logical move fening the bishop here should make sense independent of what type of Sicilian uh you play against the open Sicilian okay now here we have a secondary choice of where to develop this Knight on G8 so the obvious developing square is F6 but the drawback of developing the Knight to F6 is that we are somewhat decreasing our clamp on the D on the D4 Square so we could also carry out what uh I've heard as referred to as the bot vinic setup now the bot vinic setup involves basically putting the G8 Knight on E7 so playing the move E6 putting the Knight on E7 and the point is that the Knight and the bishop are nicely cooperating um and the bishop is still unobstructed on the long diagonal both setups are totally fine uh it's a good idea to start with a move D6"
+    },
+    {
+     "san": "Nb8",
+     "t": 810,
+     "continuation": "Nb8 Nb1",
+     "said": "nevertheless just a moment now here's a very important clarification here's a very important clarification is the move C4 a mistake no I I don't think that you can consider this a mistake per se however if you do a search for the move C4 you will see that the top rated player who's played this move is let's see just a moment here I'm going to tell you the answer to that question it's been played by bador jababa Lenard Dominguez Dragon solak Turkish GM Sebastian ma a million GMS have played this move OTB but the the point is that if a GM is playing this move it means that they know exactly how to follow up but if a 1200 is playing this move it means that they don't know what they're doing because if white simply follows up with regular developing moves and is not specifically aware of the correct way to follow up White's going to get cooked so it is a decent line if white is like a specialist right it's a surprise weapon but the way that our opponent played it you know clearly indicates that this was not like preconceived preparation if that makes sense okay so Knight C6 Knight C 3 G6 this is the main line and"
+    }
+   ]
+  },
+  {
+   "ply": 6,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/2P1P3/2N5/PP1P1PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "e4",
+    "c5",
+    "c4",
+    "Nc6",
+    "Nc3",
+    "g6"
+   ],
+   "options": [
+    {
+     "san": "d3",
+     "t": 126.5,
+     "continuation": "d3",
+     "said": "can try to carry out uh the D7 D5 Pawn break as quickly as possible what do we want to do in this game yeah let's go G6 let's play more conventionally and again remember that you don't have to be a dragon player to play the move G6 right it doesn't matter what Sicilian you play this should be a pretty logical move fening the bishop here should make sense independent of what type of Sicilian uh you play against the open Sicilian okay now here we have a secondary choice of where to develop this Knight on G8 so the obvious developing square is F6 but the drawback of developing the Knight to F6 is that we are somewhat decreasing our clamp on the D on the D4 Square so we could also carry out what uh I've heard as referred to as the bot vinic setup now the bot vinic setup involves basically putting the G8 Knight on E7 so playing the move E6 putting the Knight on E7 and the point is that the Knight and the bishop are nicely cooperating um and the bishop is still unobstructed on the long diagonal both setups are totally fine uh it's a good idea to start with a move D6 so we're going to start by making the moves we know that we need to play"
+    },
+    {
+     "san": "g3",
+     "t": 874.5,
+     "continuation": "g3",
+     "said": "not like preconceived preparation if that makes sense okay so Knight C6 Knight C 3 G6 this is the main line and the way that most GMS play it is that they go G3 and they basically try to try to get this into like English opening territory um Bishop G7 this is the main line 3,000 games Bishop G2 and the engine eval here is is equality black can do a bunch of different things I me D6 for example now typically white plays Knight G2 and actually it's white who plays the binic setup here at least the people who know what they're doing and typically black will respond with Knight F6 castles um castles and we get this interesting position where black is very comfortable game but white is not worse if white is accurate here now who can tell me what is Black's textbook plan in this type of situation and this is a plan that is applicable in many many different openings you know you should you should kind of understand this based on white structure no what is Black's plan yeah White's plan is like F4 H3 G4 what is Black's plan here typically yeah A6 B5"
+    }
+   ]
+  }
+ ]
+}

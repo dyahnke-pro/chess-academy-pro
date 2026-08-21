@@ -1,0 +1,373 @@
+{
+ "videoId": "9Iu56-1zzfI",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1830",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 41,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] okay we are playing our first 2000 guys we have not played a 2000 and i'm going"
+  },
+  {
+   "ply": 3,
+   "t": 42,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "to play the c3 sittilian which"
+  },
+  {
+   "ply": 4,
+   "t": 43.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "i've recommended to people in this raiding range for a while thank you eric"
+  },
+  {
+   "ply": 5,
+   "t": 48,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "for the thousand so he goes d6 which is not the best line"
+  },
+  {
+   "ply": 6,
+   "t": 49.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2p5/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 1 4",
+   "said": "against because it allows us to control the center"
+  },
+  {
+   "ply": 7,
+   "t": 56,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2p5/3PP3/2PB4/PP3PPP/RNBQK1NR b KQkq - 2 4",
+   "said": "now he attacks the pawn on e4 which means that we need to defend it by deploying our bishop and there's a couple of subtleties to be"
+  },
+  {
+   "ply": 8,
+   "t": 62.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/3PP3/2PB4/PP3PPP/RNBQK1NR w KQkq - 3 5",
+   "said": "aware of here particularly if he goes knight c6 yeah"
+  },
+  {
+   "ply": 9,
+   "t": 65.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/3PP3/2PB1N2/PP3PPP/RNBQK2R b KQkq - 4 5",
+   "said": "so we we develop our knight to defend d4 now bishop g4 here looks very"
+  },
+  {
+   "ply": 10,
+   "t": 70,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2nppn2/2p5/3PP3/2PB1N2/PP3PPP/RNBQK2R w KQkq - 0 6",
+   "said": "intimidating i'll explain it after the game he goes e6 which is very very passive a very passive development by"
+  },
+  {
+   "ply": 11,
+   "t": 77,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2nppn2/2p5/3PP3/2PB1N2/PP3PPP/RNBQ1RK1 b kq - 1 6",
+   "said": "our opponent there's nothing special that we need to do"
+  },
+  {
+   "ply": 12,
+   "t": 78,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk2r/pp2bppp/2nppn2/2p5/3PP3/2PB1N2/PP3PPP/RNBQ1RK1 w kq - 2 7",
+   "said": "to play against that but um one well there's there's basically two ways of playing here we can open up the"
+  },
+  {
+   "ply": 13,
+   "t": 92.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1bqk2r/pp2bppp/2nppn2/2p3B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 b kq - 3 7",
+   "said": "center with dc which would make a lot of sense or we can play sort of flexibly we can play bishop g5 now let's do it by the book let's just"
+  },
+  {
+   "ply": 15,
+   "t": 95,
+   "line": [
+    "O-O",
+    "Nbd2"
+   ],
+   "fen": "r1bq1rk1/pp2bppp/2nppn2/2p3B1/3PP3/2PB1N2/PP1N1PPP/R2Q1RK1 b - - 5 8",
+   "said": "develop all of our pieces knight b to d2 that is the downside of the allopin you can't get the knight to c3 but that's okay i mean the knight is fine here and it also buttresses the pawn on e4 so we're definitely better we've got a nice pawn center he's"
+  },
+  {
+   "ply": 18,
+   "t": 115.5,
+   "line": [
+    "cxd4",
+    "cxd4",
+    "e5"
+   ],
+   "fen": "r1bq1rk1/pp2bppp/2np1n2/4p1B1/3PP3/3B1N2/PP1N1PPP/R2Q1RK1 w - - 0 10",
+   "said": "probably going to go d5 and try to lock up the center but he's going to be left with a lot of positional weaknesses and and he's going to be very cramped so a successful it goes e5 now a lot of people struggle with this scenario right how do we make a decision between d e d5 and and you need to use kind of"
+  },
+  {
+   "ply": 19,
+   "t": 133,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bq1rk1/pp2bppp/2np1n2/3Pp1B1/4P3/3B1N2/PP1N1PPP/R2Q1RK1 b - - 0 10",
+   "said": "your intuition here right d e would open up the position to his favor it would allow him to go d e and attack our bishop so we go d5 we keep the center closed and our"
+  },
+  {
+   "ply": 20,
+   "t": 135,
+   "line": [
+    "Nb4"
+   ],
+   "fen": "r1bq1rk1/pp2bppp/3p1n2/3Pp1B1/1n2P3/3B1N2/PP1N1PPP/R2Q1RK1 w - - 1 11",
+   "said": "space advantage here should in theory um you know it it should cost him now there's"
+  },
+  {
+   "ply": 21,
+   "t": 148,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r1bq1rk1/pp2bppp/3p1n2/3Pp1B1/1n2P3/5N2/PP1NBPPP/R2Q1RK1 b - - 2 11",
+   "said": "actually a tactical detail here that i failed to anticipate let's see if he finds it let's see if"
+  },
+  {
+   "ply": 22,
+   "t": 150.5,
+   "line": [
+    "Nfxd5"
+   ],
+   "fen": "r1bq1rk1/pp2bppp/3p4/3np1B1/1n2P3/5N2/PP1NBPPP/R2Q1RK1 w - - 0 12",
+   "said": "yeah he does knight d5 so i actually missed this move"
+  },
+  {
+   "ply": 23,
+   "t": 155.5,
+   "line": [
+    "Bxe7"
+   ],
+   "fen": "r1bq1rk1/pp2Bppp/3p4/3np3/1n2P3/5N2/PP1NBPPP/R2Q1RK1 b - - 0 12",
+   "said": "uh but that's okay and this is the good thing about being positionally better"
+  },
+  {
+   "ply": 24,
+   "t": 158.5,
+   "line": [
+    "Nxe7"
+   ],
+   "fen": "r1bq1rk1/pp2nppp/3p4/4p3/1n2P3/5N2/PP1NBPPP/R2Q1RK1 w - - 0 13",
+   "said": "you can blunder upon and you can still be fine because he's opened up the d file how can we put pressure on the pawn on d6"
+  },
+  {
+   "ply": 25,
+   "t": 169.5,
+   "line": [
+    "Nc4"
+   ],
+   "fen": "r1bq1rk1/pp2nppp/3p4/4p3/1nN1P3/5N2/PP2BPPP/R2Q1RK1 b - - 1 13",
+   "said": "what can we do to put pressure on this pawn we can go knight to c4 no disaster has happened we've still got a good position uh but this is a very instructive mistake that i just made they're"
+  },
+  {
+   "ply": 26,
+   "t": 181,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2q1rk1/pp2nppp/3pb3/4p3/1nN1P3/5N2/PP2BPPP/R2Q1RK1 w - - 2 14",
+   "said": "blundering that move uh and i've even we've even had this before on the other side okay so we win back the pawn with with"
+  },
+  {
+   "ply": 27,
+   "t": 183,
+   "line": [
+    "Nxd6"
+   ],
+   "fen": "r2q1rk1/pp2nppp/3Nb3/4p3/1n2P3/5N2/PP2BPPP/R2Q1RK1 b - - 0 14",
+   "said": "our knight and the position is about equal and i'll show you guys after the game how i could have done better than this uh if he pushes with d5 we would have taken and then the e5 pawn would have been hanging okay so let's see what he does we're also attacking by the way the e5 pawn"
+  },
+  {
+   "ply": 28,
+   "t": 211,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "r4rk1/ppq1nppp/3Nb3/4p3/1n2P3/5N2/PP2BPPP/R2Q1RK1 w - - 1 15",
+   "said": "he's got a nice knight on b4 though to counterbalance that the best move here would definitely be queen to b6 preparing to sizzle down that knight with rookie to die in that case we need to evacuate this knight it goes queen to c7 not i believe not the most accurate move what does this allow us to do why is this queen on c7 not ideally placed well there's several things we could do we could go knight to b5 with tempo and actually most people here would go"
+  },
+  {
+   "ply": 29,
+   "t": 240,
+   "line": [
+    "Nb5"
+   ],
+   "fen": "r4rk1/ppq1nppp/4b3/1N2p3/1n2P3/5N2/PP2BPPP/R2Q1RK1 b - - 2 15",
+   "said": "for rook c1 but here's the thing guys the knight on d6 is the vulnerable piece here so instead of using this get out of jail free card to activate our rook which we could do later let's go knight to b5 let's evacuate our knight because that's priority number one chess is all about priorities what is"
+  },
+  {
+   "ply": 30,
+   "t": 246.5,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "r4rk1/pp2nppp/1q2b3/1N2p3/1n2P3/5N2/PP2BPPP/R2Q1RK1 w - - 3 16",
+   "said": "the top priority it's actually to get the night out guess what we can do now something we couldn't have done earlier if this night was in trouble now it's"
+  },
+  {
+   "ply": 31,
+   "t": 258,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r4rk1/pp2nppp/1q2b3/1N2N3/1n2P3/8/PP2BPPP/R2Q1RK1 b - - 0 16",
+   "said": "not in trouble it's defended and i think he's forgotten what has he forgotten about he's forgotten that the pawn is hanging and now we're over up upon uh so yeah so sometimes chess is about resisting the temptation right to do something by the book"
+  },
+  {
+   "ply": 32,
+   "t": 276.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "r4rk1/1p2nppp/pq2b3/1N2N3/1n2P3/8/PP2BPPP/R2Q1RK1 w - - 0 17",
+   "said": "and to prioritize if he takes on a2 he's going to lose material and i'll show that after the game okay he goes a6 so he chases 2-2 think"
+  },
+  {
+   "ply": 33,
+   "t": 281,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r4rk1/1p2nppp/pq2b3/4N3/1n2P3/2N5/PP2BPPP/R2Q1RK1 b - - 1 17",
+   "said": "he chases them sure no problem we'll get the knight back to c3 and even safer square"
+  },
+  {
+   "ply": 34,
+   "t": 286,
+   "line": [
+    "Rad8"
+   ],
+   "fen": "3r1rk1/1p2nppp/pq2b3/4N3/1n2P3/2N5/PP2BPPP/R2Q1RK1 w - - 2 18",
+   "said": "he's probably gonna yeah rook d8 now we got to be careful right if we go queen to e1 we walk into a fork so where can we put our queen such that it remains hey ruin thank you where should we put our queen such that it remains active we should go to a4 we apply pressure on the knights okay queen c1 would have also been possible this is just a little bit more active okay so let's see what he ends up doing um he goes queen to c5 all right he's attacking this knight he's not actually attacking it though uh because the b4 knight would hang uh we need to make a move here that would help the smoke clear a little bit and we we need to use the opportunity of the fact that the knight on e5 is not really hanging that knight on b4 is what's causing a lot of problems for us snyder before is like you guys can see that it's cramping me down a little bit so can we just forcibly get it out of there how can we forcibly get this b4 knight out yeah let's go e3 i'm not really attacking the knight so much as i'm compelling him to go for this trade remember that we're up a pawn so trades in general are good for us what's also good for us is that he no longer has his strongest piece now he's sort of forked he's got to probably drop his queen back and uh he's losing the compensation that he had for the pawn although we still have a couple problems to solve and he drops the knight actually he blunders the knight uh because you know he kind of just panicked there so very complicated 20 moves here that you know sometimes things end like this now here we have a we have a nice little trick i'm going to make the first move and if he takes on b2 i want you guys to tell me the second move we can win immediately with a very very typical tactical idea noticing that the queen is making contact with the rook which means that we can get our own rook to d8 and he simply cannot defend this rook he has to go for the backrank checkmate or he has to give up the rook neither of which is appetizing and so we've beaten her first two thousand yeah he was good uh this guy put up a big resistance particularly since i made a tactical error but uh okay so he's gonna continue playing um let's take with the rook and we can continue you know harvesting the garden here where the rook takes f7 because he cannot take the queen is pinned if he takes the knight we take his bishop and that's another trade and that's beneficial for us now he's seen that he takes on e2 but i've calculated one step further can you guys find the mate in two moves bingo as rosev sees it who else sees it queen to f5 he can't cover because the penny's got to drop his king back and we're gonna fade his checkmate okay so a good game a sloppy one but nonetheless okay so let's see what he what he ends up doing okay he's disconnected i think he's not very happy he thought he had me but you know you can't give up gotta keep keep pounding keep grinding"
+  },
+  {
+   "ply": 8,
+   "t": 494,
+   "line": [],
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/3PP3/2PB4/PP3PPP/RNBQK1NR w KQkq - 3 5",
+   "said": "okay so just quickly sorry about this game this game so he played d6 right which gives us control of the center this is a line i've even played with black"
+  },
+  {
+   "ply": 9,
+   "t": 495,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/3PP3/2PB1N2/PP3PPP/RNBQK2R b KQkq - 4 5",
+   "said": "now if he goes bishop g4 we go d5"
+  },
+  {
+   "ply": 10,
+   "t": 497,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "r2qkb1r/pp2pppp/2np1n2/2p5/3PP1b1/2PB1N2/PP3PPP/RNBQK2R w KQkq - 5 6",
+   "said": ""
+  },
+  {
+   "ply": 11,
+   "t": 498.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "r2qkb1r/pp2pppp/2np1n2/2pP4/4P1b1/2PB1N2/PP3PPP/RNBQK2R b KQkq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 499.5,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "r2qkb1r/pp2pppp/3p1n2/2pPn3/4P1b1/2PB1N2/PP3PPP/RNBQK2R w KQkq - 1 7",
+   "said": "and 95 here may look very good but white has a very very nice idea in this position and a typical one right when this diagonal is open what"
+  },
+  {
+   "ply": 16,
+   "t": 515,
+   "line": [
+    "Bb5+",
+    "Bd7",
+    "Nxe5",
+    "Bxb5"
+   ],
+   "fen": "r2qkb1r/pp2pppp/3p1n2/1bpPN3/4P3/2P5/PP3PPP/RNBQK2R w KQkq - 0 9",
+   "said": "becomes possible knight takes e5 bingo we're not blundering the queen we're setting this up and when the smoke clears we're up a piece this happens in so many different openings it happens in the queen's gambit some of you guys might be familiar with the famous queen's gambit version where you play knight bd7"
+  },
+  {
+   "ply": 10,
+   "t": 538,
+   "line": [],
+   "fen": "r2qkb1r/pp2pppp/2np1n2/2p5/3PP1b1/2PB1N2/PP3PPP/RNBQK2R w KQkq - 5 6",
+   "said": "you seem to blunder the pawn but the reality is you have bishop before winning his queen back then you capture the bishop and you're up a piece same exact concept so that's why we allowed ourselves that now my mistake i think one of my key mistakes was actually the funny thing is i don't think i should have developed the bishop to g5 because it ended up being a big liability i actually think i should have probably just taken got queen e2 and then put a rook on d1 to x-ray his queen potentially even gone e5 to cement my central control we've seen time and time again this bishop on g5 when it faces off with the bishop on e7 it gets into trouble precisely for the reason that my opponent displayed which is knight takes d5 and this very same knight defends the bishop if we take the knight he takes the bishop and that bishop is protected i've even done this once in a classical game against an im who blundered this um couldn't we have just yeah we could have taken on f6 we should have uh but this basically relinquishes whatever you know whatever idea of an advantage i had because it gives black the two bishops he can then redeploy his bishop and prepare f5 so black has a good position here"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 9,
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/3PP3/2PB1N2/PP3PPP/RNBQK2R b KQkq - 4 5",
+   "line": [
+    "e4",
+    "c5",
+    "c3",
+    "d6",
+    "d4",
+    "Nf6",
+    "Bd3",
+    "Nc6",
+    "Nf3"
+   ],
+   "options": [
+    {
+     "san": "e6",
+     "t": 70,
+     "continuation": "e6",
+     "said": "and there's a couple of subtleties to be aware of here particularly if he goes knight c6 yeah so we we develop our knight to defend d4 now bishop g4 here looks very intimidating i'll explain it after the game he goes e6 which is very very passive a very passive development by our opponent there's nothing special that we need to do to play against that but um one well there's there's basically two ways of playing here we can open up the center with dc which would make a lot of sense or we can play sort of flexibly we can play bishop g5 now let's do it by the book let's just develop all of our pieces knight b to d2 that is the downside of the allopin you can't get the knight to c3 but that's okay i mean the knight is fine here and it also buttresses the pawn on e4 so we're definitely better we've got a nice pawn center he's probably going to go d5 and try to lock up the center but he's going to be left with a lot of positional weaknesses and and he's going to be very cramped so a successful it goes e5 now a lot of people struggle with this scenario right how do we make a decision between d e d5 and and you need to use kind of your intuition here right d e would open up the position to his favor it would allow him to go d e and attack our"
+    },
+    {
+     "san": "Bg4",
+     "t": 497,
+     "continuation": "Bg4",
+     "said": "okay so just quickly sorry about this game this game so he played d6 right which gives us control of the center this is a line i've even played with black now if he goes bishop g4 we go d5 and 95 here may look very good but white has a very very nice idea in this position and a typical one right when this diagonal is open what becomes possible knight takes e5 bingo we're not blundering the queen we're setting this up and when the smoke clears we're up a piece this happens in so many different openings it happens in the queen's gambit some of you guys might be familiar with the famous queen's gambit version where you play knight bd7 you seem to blunder the pawn but the reality is you have bishop before winning his queen back then you capture the bishop and you're up a piece same exact concept so that's why we allowed ourselves that now my mistake i think one of my key mistakes was actually the funny thing is i don't think i should have developed the bishop to g5 because it ended up being a big liability i actually think i should have probably just taken got queen e2 and then put a rook on d1 to x-ray his queen potentially even gone e5"
+    }
+   ]
+  }
+ ]
+}

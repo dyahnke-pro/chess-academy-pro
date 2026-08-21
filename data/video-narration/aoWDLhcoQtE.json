@@ -1,0 +1,441 @@
+{
+ "videoId": "aoWDLhcoQtE",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1770",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 924.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "thank you and appreciate your support man okay so we're black against dion reyes and let's go with another situation let's see if we can"
+  },
+  {
+   "ply": 3,
+   "t": 927,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2P1P3/8/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "okay so c4 is is not a great move um because it weakens and we've already"
+  },
+  {
+   "ply": 4,
+   "t": 936,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq - 1 3",
+   "said": "faced this move once it weakens the d4 square which we can of course occupy by developing our knight and if we're"
+  },
+  {
+   "ply": 5,
+   "t": 937.5,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/3P4/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "thinking about where to develop this bishop should we proceed with g6 as if this were an accelerated dragon"
+  },
+  {
+   "ply": 6,
+   "t": 951.5,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/2P1P3/3P4/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "should we do that yes or should we instead maybe get the bishop yeah absolutely we should because that's conducive to the fact that we are"
+  },
+  {
+   "ply": 8,
+   "t": 953.5,
+   "line": [
+    "Nc3",
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/2P1P3/2NP4/PP3PPP/R1BQKBNR w KQkq - 2 5",
+   "said": "now controlling the d4 square with even"
+  },
+  {
+   "ply": 10,
+   "t": 956,
+   "line": [
+    "Be3",
+    "d6"
+   ],
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NPB3/PP3PPP/R2QKBNR w KQkq - 0 6",
+   "said": "greater strength"
+  },
+  {
+   "ply": 11,
+   "t": 959,
+   "line": [
+    "h3"
+   ],
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR b KQkq - 0 6",
+   "said": "uh so oftentimes you have to decide are we sticking to the main sort of the the main setup and oftentimes the answer is yes now if you guys remember the last time we faced this i made a point about where to develop this knight one possibility thank you wheels for the prime is to develop it to f6 but"
+  },
+  {
+   "ply": 12,
+   "t": 986,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqk1nr/pp3pbp/2npp1p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR w KQkq - 0 7",
+   "said": "the counter argument to that would be the fact that that knight would then block the bishop's control of the d4 square and i pointed out previously that this knight can sometimes go to e7 this looks a little bit weird but this"
+  },
+  {
+   "ply": 14,
+   "t": 990,
+   "line": [
+    "Nge2",
+    "Nge7"
+   ],
+   "fen": "r1bqk2r/pp2npbp/2npp1p1/2p5/2P1P3/2NPB2P/PP2NPP1/R2QKB1R w KQkq - 2 8",
+   "said": "is actually a very typical setup which we are going to adopt in order to let"
+  },
+  {
+   "ply": 15,
+   "t": 992.5,
+   "line": [
+    "g4"
+   ],
+   "fen": "r1bqk2r/pp2npbp/2npp1p1/2p5/2P1P1P1/2NPB2P/PP2NP2/R2QKB1R b KQkq - 0 8",
+   "said": "this bishop keep d4 under control in fact let's reap"
+  },
+  {
+   "ply": 16,
+   "t": 995.5,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r1bqk2r/pp2npbp/3pp1p1/2p5/2PnP1P1/2NPB2P/PP2NP2/R2QKB1R w KQkq - 1 9",
+   "said": "the rewards of that we're going to put"
+  },
+  {
+   "ply": 17,
+   "t": 998,
+   "line": [
+    "Bg2"
+   ],
+   "fen": "r1bqk2r/pp2npbp/3pp1p1/2p5/2PnP1P1/2NPB2P/PP2NPB1/R2QK2R b KQkq - 2 9",
+   "said": "that knight on the outpost and uh we can support it with the other"
+  },
+  {
+   "ply": 18,
+   "t": 1000,
+   "line": [
+    "Nec6"
+   ],
+   "fen": "r1bqk2r/pp3pbp/2npp1p1/2p5/2PnP1P1/2NPB2P/PP2NPB1/R2QK2R w KQkq - 3 10",
+   "said": "night that's part of the reason why i"
+  },
+  {
+   "ply": 19,
+   "t": 1002.5,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r1bqk2r/pp3pbp/2npp1p1/2p5/2PnP1P1/2NPB2P/PP1QNPB1/R3K2R b KQkq - 4 10",
+   "said": "really like this look at now our two nights both of them guarding each other and now we simply need to add some tabasco sauce okay how should"
+  },
+  {
+   "ply": 20,
+   "t": 1017,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp3pbp/2npp1p1/2p5/2PnP1P1/2NPB2P/PP1QNPB1/R3K2R w KQ - 5 11",
+   "said": "we what do i mean by that well first of all we haven't completed our development before we jump the gun on anything let's castle to make sure our king is safe"
+  },
+  {
+   "ply": 21,
+   "t": 1018.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp3pbp/2npp1p1/2p5/2PnP1P1/2NPB2P/PP1QNPB1/R4RK1 b - - 6 11",
+   "said": "and now we have several ways to to proceed uh and and this is not an easy position to play well in overrated thank you for the prime so one"
+  },
+  {
+   "ply": 22,
+   "t": 1042,
+   "line": [
+    "f5"
+   ],
+   "fen": "r1bq1rk1/pp4bp/2npp1p1/2p2p2/2PnP1P1/2NPB2P/PP1QNPB1/R4RK1 w - - 0 12",
+   "said": "possibility is to go f5 and try to open the position up and the logic behind that is that we have a beautiful knight on d4 we have better placed pieces than our opponent and as we've talked about on many occasions when we have better place pieces than our opponent it's often time to open up the center this is a risky strategy because we're"
+  },
+  {
+   "ply": 23,
+   "t": 1051,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1bq1rk1/pp4bp/2npp1p1/2p2p2/2PnPPP1/2NPB2P/PP1QN1B1/R4RK1 b - - 0 12",
+   "said": "doing it in front of our own king but remember he's also pushed out his pawn to g4 which has created for us a"
+  },
+  {
+   "ply": 24,
+   "t": 1054.5,
+   "line": [
+    "fxg4"
+   ],
+   "fen": "r1bq1rk1/pp4bp/2npp1p1/2p5/2PnPPp1/2NPB2P/PP1QN1B1/R4RK1 w - - 0 13",
+   "said": "hook how can we now attack this hook with one of our pieces"
+  },
+  {
+   "ply": 25,
+   "t": 1062.5,
+   "line": [
+    "hxg4"
+   ],
+   "fen": "r1bq1rk1/pp4bp/2npp1p1/2p5/2PnPPP1/2NPB3/PP1QN1B1/R4RK1 b - - 0 13",
+   "said": "very logical this is how you attack we can attack this pawn on g4 by deploying"
+  },
+  {
+   "ply": 26,
+   "t": 1065.5,
+   "line": [
+    "Qh4"
+   ],
+   "fen": "r1b2rk1/pp4bp/2npp1p1/2p5/2PnPPPq/2NPB3/PP1QN1B1/R4RK1 w - - 1 14",
+   "said": "what piece boom now he can push that"
+  },
+  {
+   "ply": 27,
+   "t": 1067.5,
+   "line": [
+    "g5"
+   ],
+   "fen": "r1b2rk1/pp4bp/2npp1p1/2p3P1/2PnPP1q/2NPB3/PP1QN1B1/R4RK1 b - - 0 14",
+   "said": "pawn even further he does but he continues to overextend himself and when i say overextend himself what i mean is that his pawns are going to be a"
+  },
+  {
+   "ply": 28,
+   "t": 1081,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p1p1P1/2PnPP1q/2NPB3/PP1QN1B1/R4RK1 w - - 0 15",
+   "said": "lot harder to defend if we can find a way to strike and you guys have found a way to strike with the move e5 you know we're trying to shatter his"
+  },
+  {
+   "ply": 29,
+   "t": 1088.5,
+   "line": [
+    "Bf2"
+   ],
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p1p1P1/2PnPP1q/2NP4/PP1QNBB1/R4RK1 b - - 1 15",
+   "said": "defenses this is a very risky strategy that i'm adopting here it might backfire i don't think it will but it might uh"
+  },
+  {
+   "ply": 30,
+   "t": 1090.5,
+   "line": [
+    "Qg4"
+   ],
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p1p1P1/2PnPPq1/2NP4/PP1QNBB1/R4RK1 w - - 2 16",
+   "said": "because we're also weakening you know i'm also weakening my position"
+  },
+  {
+   "ply": 31,
+   "t": 1099.5,
+   "line": [
+    "Kh2"
+   ],
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p1p1P1/2PnPPq1/2NP4/PP1QNBBK/R4R2 b - - 3 16",
+   "said": "but if you can see this knight on d4 we're already reaping the rewards of that because knight f3 was a huge threat and um well what should we do now king h2 is not a good move he's sort of lost the threat of the game here and the"
+  },
+  {
+   "ply": 32,
+   "t": 1118.5,
+   "line": [
+    "exf4"
+   ],
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p3P1/2PnPpq1/2NP4/PP1QNBBK/R4R2 w - - 0 17",
+   "said": "reason is because he's weakened himself to such an extent that uh now his pawns well we don't need to go knight f3 there's no need for that we can simply play e takes f4 that pawn is going to go all the way to f3 it's going to send this bishop back and then we're going to have queen h3 once"
+  },
+  {
+   "ply": 33,
+   "t": 1129.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p3P1/2PNPpq1/2NP4/PP1Q1BBK/R4R2 b - - 0 17",
+   "said": "again it's one of those situations where there's no need to go for something crazy we can simply take the free pawn"
+  },
+  {
+   "ply": 34,
+   "t": 1131,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1b2rk1/pp4bp/3p2p1/2p3P1/2PnPpq1/2NP4/PP1Q1BBK/R4R2 w - - 0 18",
+   "said": "recapture with the knight now aren't we allowing him to remove that knight from"
+  },
+  {
+   "ply": 35,
+   "t": 1136.5,
+   "line": [
+    "Bxd4"
+   ],
+   "fen": "r1b2rk1/pp4bp/3p2p1/2p3P1/2PBPpq1/2NP4/PP1Q2BK/R4R2 b - - 0 18",
+   "said": "the board well we are but uh look at the dark squares now around his king in fact we don't have to"
+  },
+  {
+   "ply": 36,
+   "t": 1143,
+   "line": [
+    "Bxd4"
+   ],
+   "fen": "r1b2rk1/pp5p/3p2p1/2p3P1/2PbPpq1/2NP4/PP1Q2BK/R4R2 w - - 0 19",
+   "said": "take back immediately although probably we should we could have also given a check first but his king is completely cornered so"
+  },
+  {
+   "ply": 37,
+   "t": 1150.5,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1b2rk1/pp5p/3p2p1/2pN2P1/2PbPpq1/3P4/PP1Q2BK/R4R2 b - - 1 19",
+   "said": "we're threatening queen h4 that's basically checkmate in two moves yep and his king cannot"
+  },
+  {
+   "ply": 38,
+   "t": 1153.5,
+   "line": [
+    "Qh3+"
+   ],
+   "fen": "r1b2rk1/pp5p/3p2p1/2pN2P1/2PbPp2/3P3q/PP1Q2BK/R4R2 w - - 2 20",
+   "said": "escape to g1 so you can see how quickly his position collapsed because he just moved too many pawns out in front of his king and that ends the game and"
+  },
+  {
+   "ply": 3,
+   "t": 1170.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2P1P3/8/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "uh basically very simple and logical strategy that we adhere to now c4 is not such a bad move if white knows how to"
+  },
+  {
+   "ply": 5,
+   "t": 1173,
+   "line": [
+    "Nc6",
+    "d3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/3P4/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "follow it up but he didn't do it very"
+  },
+  {
+   "ply": 8,
+   "t": 1174.5,
+   "line": [
+    "g6",
+    "Nc3",
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/2P1P3/2NP4/PP3PPP/R1BQKBNR w KQkq - 2 5",
+   "said": "well bishop g7 now this is called the botanic"
+  },
+  {
+   "ply": 11,
+   "t": 1176.5,
+   "line": [
+    "h3",
+    "d6",
+    "Be3"
+   ],
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR b KQkq - 1 6",
+   "said": "setup e6"
+  },
+  {
+   "ply": 12,
+   "t": 1178,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqk1nr/pp3pbp/2npp1p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR w KQkq - 0 7",
+   "said": "right once again the reason that um that"
+  },
+  {
+   "ply": 11,
+   "t": 1179,
+   "line": [],
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR b KQkq - 1 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 1181.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pp2ppbp/2np1np1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR w KQkq - 2 7",
+   "said": "we don't go knight f6 so the knight f6 would be completely fine uh is because we relinquish partly our control over the d4 square the bishop is now not very happy so we find an alternate arrangement for the knight it rents an airbnb you know instead of uh instead of the bishop doesn't want a roommate here so we let the bishop keep its control over the d4 square and here my opponent missed perhaps his biggest chance to get out of the situation what should white have done here to rid himself of his main weakness thank you evan for the 11 months appreciate it and the subs just keep on going yeah he should have gone d4 himself just absolving himself over the weakness now our pieces are very nicely i like this position for black because my pieces are super harmonious the knights are linked but you know he can develop and we get sort of an accelerated dragon kind of position thank you for the hundred probably about fifty percent with elliressa over the years uh i could try queen b6 here but it's not the same thing i like your thinking though demon here's the main difference"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 8,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/2P1P3/2NP4/PP3PPP/R1BQKBNR w KQkq - 2 5",
+   "line": [
+    "e4",
+    "c5",
+    "c4",
+    "Nc6",
+    "d3",
+    "g6",
+    "Nc3",
+    "Bg7"
+   ],
+   "options": [
+    {
+     "san": "Be3",
+     "t": 956,
+     "continuation": "Be3 d6",
+     "said": "should we do that yes or should we instead maybe get the bishop yeah absolutely we should because that's conducive to the fact that we are now controlling the d4 square with even greater strength uh so oftentimes you have to decide are we sticking to the main sort of the the main setup and oftentimes the answer is yes now if you guys remember the last time we faced this i made a point about where to develop this knight one possibility thank you wheels for the prime is to develop it to f6 but the counter argument to that would be the fact that that knight would then block the bishop's control of the d4 square and i pointed out previously that this knight can sometimes go to e7 this looks a little bit weird but this is actually a very typical setup which we are going to adopt in order to let this bishop keep d4 under control in fact let's reap the rewards of that we're going to put that knight on the outpost and uh we can support it with the other night that's part of the reason why i really like this look at now our two nights both of them guarding each other and now we simply need to add some tabasco sauce okay how should we what do i mean by that well first of all we haven't completed our development before we jump the gun on anything let's"
+    },
+    {
+     "san": "h3",
+     "t": 1176.5,
+     "continuation": "h3 d6 Be3",
+     "said": "strategy that we adhere to now c4 is not such a bad move if white knows how to follow it up but he didn't do it very well bishop g7 now this is called the botanic setup e6 right once again the reason that um that we don't go knight f6 so the knight f6 would be completely fine uh is because we relinquish partly our control over the d4 square the bishop is now not very happy so we find an alternate arrangement for the knight it rents an airbnb you know instead of uh instead of the bishop doesn't want a roommate here so we let the bishop keep its control over the d4 square and here my opponent missed perhaps his biggest chance to get out of the situation what should white have done here to rid himself of his main weakness thank you evan for the 11 months appreciate it and the subs just keep on going yeah he should have gone d4 himself just absolving himself over the weakness now our pieces are very nicely i like this position for black because my pieces are super harmonious the knights are linked but you know he can develop and we get sort of an accelerated dragon kind of position thank you for the hundred probably about fifty percent with elliressa over the years uh i could try queen b6"
+    }
+   ]
+  },
+  {
+   "ply": 11,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR b KQkq - 0 6",
+   "line": [
+    "e4",
+    "c5",
+    "c4",
+    "Nc6",
+    "d3",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "Be3",
+    "d6",
+    "h3"
+   ],
+   "options": [
+    {
+     "san": "e6",
+     "t": 986,
+     "continuation": "e6",
+     "said": "the counter argument to that would be the fact that that knight would then block the bishop's control of the d4 square and i pointed out previously that this knight can sometimes go to e7 this looks a little bit weird but this is actually a very typical setup which we are going to adopt in order to let this bishop keep d4 under control in fact let's reap the rewards of that we're going to put that knight on the outpost and uh we can support it with the other night that's part of the reason why i really like this look at now our two nights both of them guarding each other and now we simply need to add some tabasco sauce okay how should we what do i mean by that well first of all we haven't completed our development before we jump the gun on anything let's castle to make sure our king is safe and now we have several ways to to proceed uh and and this is not an easy position to play well in overrated thank you for the prime so one possibility is to go f5 and try to open the position up and the logic behind that is that we have a beautiful knight on d4 we have better placed pieces than our opponent and as we've talked about on many occasions when we have better place pieces than our opponent it's often time to open up the center"
+    },
+    {
+     "san": "Nf6",
+     "t": 1181.5,
+     "continuation": "Nf6",
+     "said": "such a bad move if white knows how to follow it up but he didn't do it very well bishop g7 now this is called the botanic setup e6 right once again the reason that um that we don't go knight f6 so the knight f6 would be completely fine uh is because we relinquish partly our control over the d4 square the bishop is now not very happy so we find an alternate arrangement for the knight it rents an airbnb you know instead of uh instead of the bishop doesn't want a roommate here so we let the bishop keep its control over the d4 square and here my opponent missed perhaps his biggest chance to get out of the situation what should white have done here to rid himself of his main weakness thank you evan for the 11 months appreciate it and the subs just keep on going yeah he should have gone d4 himself just absolving himself over the weakness now our pieces are very nicely i like this position for black because my pieces are super harmonious the knights are linked but you know he can develop and we get sort of an accelerated dragon kind of position thank you for the hundred probably about fifty percent with elliressa over the years uh i could try queen b6 here but it's not the same thing i like your thinking though demon here's the main difference"
+    }
+   ]
+  }
+ ]
+}

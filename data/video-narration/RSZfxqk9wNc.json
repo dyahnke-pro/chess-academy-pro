@@ -1,0 +1,259 @@
+{
+ "videoId": "RSZfxqk9wNc",
+ "title": "Master Class | Danish ACCEPTED!! | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 41,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": ""
+  },
+  {
+   "ply": 3,
+   "t": 44,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "okay and we have been playing the danish no need to deviate we have been getting winning positions out of the opening every game"
+  },
+  {
+   "ply": 4,
+   "t": 51.5,
+   "line": [
+    "exd4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "um and this continues to stump most people below 1300 but now we see another e"
+  },
+  {
+   "ply": 5,
+   "t": 54.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "takes d4 so c3 um dc and bishop c4 enters the danish"
+  },
+  {
+   "ply": 6,
+   "t": 66.5,
+   "line": [
+    "dxc3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "um black doesn't have to take on c3 and we've encountered yes so he does take on c3 and here we see players"
+  },
+  {
+   "ply": 7,
+   "t": 68,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4",
+   "said": "finally beginning to enter the main lines right around 1200 uh you know standard rating on chess.com i would say is the very rough threshold when we start"
+  },
+  {
+   "ply": 8,
+   "t": 82,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "rnb1kbnr/ppppqppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR w KQkq - 2 5",
+   "said": "seeing more of the main lines than the sidelines um and hudson oh i'm happy to do it okay so queen e7 but as i say that um our opponent plays a very strange move so i think that obviously black is targeting the pawn but this is not a good way to do it because no other pieces are developed so what should i do"
+  },
+  {
+   "ply": 9,
+   "t": 109,
+   "line": [
+    "Nxc3"
+   ],
+   "fen": "rnb1kbnr/ppppqppp/8/8/2B1P3/2N5/PP3PPP/R1BQK1NR b KQkq - 0 5",
+   "said": "here i mean no need to reinvent the wheel we have an obvious move yeah just knight takes c3 of course and now we've got two pieces developed this queen on e7"
+  },
+  {
+   "ply": 10,
+   "t": 114.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnb1kbnr/pp1pqppp/2p5/8/2B1P3/2N5/PP3PPP/R1BQK1NR w KQkq - 0 6",
+   "said": "i've actually noticed this as a pattern a lot of players at this level really like to put the queen on e7 and that that is one of the most pernicious developing moves you could make because you are obstructing the development of the bishop and that's a big problem and that queen is also incredibly vulnerable the one thing that justifies it potentially is the fact that it x-rays the pawn right thinking deep dick and if we were to just go knight f3 here nonchalantly which is the obvious developing move"
+  },
+  {
+   "ply": 11,
+   "t": 152.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnb1kbnr/pp1pqppp/2p5/8/2B1P3/2N2N2/PP3PPP/R1BQK2R b KQkq - 1 6",
+   "said": "then d5 happens right that's the entire concept is this actually dangerous no because we are we have such a big lead in development that we actually want black to play d5 we want black to open up the center for us"
+  },
+  {
+   "ply": 12,
+   "t": 158.5,
+   "line": [
+    "h6"
+   ],
+   "fen": "rnb1kbnr/pp1pqpp1/2p4p/8/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 0 7",
+   "said": "i hope that our opponent will play d5 so i can show you okay so he doesn't he continues to push response this is going to be a complete disaster um you you can't abandon your development like this um and this will"
+  },
+  {
+   "ply": 13,
+   "t": 173,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnb1kbnr/pp1pqpp1/2p4p/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 b kq - 1 7",
+   "said": "backfire in about three three to four moves so what should we do we should just castle and we've been through this a million times right there's no need to go crazy with any kind of sacrifices simply by"
+  },
+  {
+   "ply": 14,
+   "t": 180.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnb1kbnr/pp2qpp1/2pp3p/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 0 8",
+   "said": "completing your development you are already doing yourself a huge favor now this is where we need to demonstrate a little bit of creativity um d6 is not a bad move this is a luxury lesser evil we have two approaches here we have what i would define as the sort of straightforward brute force approach where we just try to sacrifice and blast open the center and that would involve doing what that would involve playing e5 and in the event of d5 just sacrificing on d5 i feel like that's a little bit unclear i'm not convinced by that so i have another idea now you guys should all notice as do i that there's a queen and a king on the same file i've"
+  },
+  {
+   "ply": 15,
+   "t": 230,
+   "line": [
+    "Re1"
+   ],
+   "fen": "rnb1kbnr/pp2qpp1/2pp3p/8/2B1P3/2N2N2/PP3PPP/R1BQR1K1 b kq - 1 8",
+   "said": "told you to pay attention to that very carefully when it occurs and that may seem like a moot point because there is a pawn on e4 if there was no pawn anymore we would play rookie one but we can try to yeah exactly we can play rookie one and as those of you with a keen tactical eye we'll notice knight d5 is uh thank you devil of all knight d5 is what we're setting up here okay among other things among other things like e5 like if he goes knight f6 which is quite likely actually because he might be like okay let's finally develop our pieces he walks ironically the moment he starts developing is precisely the decisive mistake although really the decisive mistake has already been committed i don't think there's any getting there's any way to get out of this"
+  },
+  {
+   "ply": 16,
+   "t": 273,
+   "line": [
+    "Be6"
+   ],
+   "fen": "rn2kbnr/pp2qpp1/2ppb2p/8/2B1P3/2N2N2/PP3PPP/R1BQR1K1 w kq - 2 9",
+   "said": "yeah rookie rookie one is very patient it's very very strong it sets up knight d5 c d e d just spins the queen and it makes e5 a whole lot stronger all right bishop e6 okay good move good move what should we do in response you guys already know well why did we play rookie one we played it in order to set up bishop b3 you guys are playing you know like a very old you know chess professor bishop but this is a london system um remember why we played rookie one we played rookie one in order to sacrifice a knight on d5 which isn't even a sacrifice because if you play c takes d5 then"
+  },
+  {
+   "ply": 17,
+   "t": 320,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "rn2kbnr/pp2qpp1/2ppb2p/3N4/2B1P3/5N2/PP3PPP/R1BQR1K1 b kq - 3 9",
+   "said": "there's e takes d5 now if we played the e5 here that would mix up two plans it would allow d5 and we wouldn't have any clear way forward right and i'll show that after the game knight d5 i think is the principal move here well let me just write this down e5 is a"
+  },
+  {
+   "ply": 18,
+   "t": 327.5,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "rn2kbnr/pp2qpp1/3pb2p/3p4/2B1P3/5N2/PP3PPP/R1BQR1K1 w kq - 0 10",
+   "said": "is is interesting and he immediately takes which is"
+  },
+  {
+   "ply": 19,
+   "t": 330,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rn2kbnr/pp2qpp1/3pb2p/3P4/2B5/5N2/PP3PPP/R1BQR1K1 b kq - 0 10",
+   "said": "disastrous because after e takes d5 this bishop is going to be lost and once we take that bishop the entire position just totally collapses collapses in on itself i mean i hope this makes sense i hope that the concept behind knight d5 makes sense we're just trying to open up the the e file and just because he's put a bishop there doesn't mean uh that that this entire operation is not worth pursuing is very much worth pursuing he he just doesn't have any pieces out that's as simple as that there's no other way to define it um and we might be down upon i'm not even counting the funds i don't care doesn't matter um this is game over"
+  },
+  {
+   "ply": 20,
+   "t": 380,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rn2kb1r/pp2qpp1/3pbn1p/3P4/2B5/5N2/PP3PPP/R1BQR1K1 w kq - 1 11",
+   "said": "you you can't get away with something you just can't do that and the entire time the queen on e7 this placement of the queen just kills him because he can't get the bishop out he gets skewered by the rook and"
+  },
+  {
+   "ply": 21,
+   "t": 381,
+   "line": [
+    "dxe6"
+   ],
+   "fen": "rn2kb1r/pp2qpp1/3pPn1p/8/2B5/5N2/PP3PPP/R1BQR1K1 b kq - 0 11",
+   "said": "yeah and he can't avoid just losing his queen he takes f7 check"
+  },
+  {
+   "ply": 22,
+   "t": 391,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "rn2kb1r/pp2qpp1/3pP2p/8/2B1n3/5N2/PP3PPP/R1BQR1K1 w kq - 1 12",
+   "said": "um now this idea of knight d5 okay so knight e4"
+  },
+  {
+   "ply": 23,
+   "t": 394,
+   "line": [
+    "Rxe4"
+   ],
+   "fen": "rn2kb1r/pp2qpp1/3pP2p/8/2B1R3/5N2/PP3PPP/R1BQ2K1 b kq - 0 12",
+   "said": "i mean just take it uh he wants this okay so i see what he wants actually that doesn't really help although it's a creative defensive approach i should have probably taken on f7 first not that it matters"
+  },
+  {
+   "ply": 24,
+   "t": 414,
+   "line": [
+    "f6"
+   ],
+   "fen": "rn2kb1r/pp2q1p1/3pPp1p/8/2B1R3/5N2/PP3PPP/R1BQ2K1 w kq - 0 13",
+   "said": "um not that it matters okay i can peasant f6 so if you really want the bamboo stick kind of move here right the first thing i i see just and my brain is trained to look for this are these dark squares right the dark squares are so juicy how do we exploit them that what do we exploit them with first of all um 100 bits thank you yeah oh knights are you know the premier piece to exploit weak squares with knights are the screwdriver of chess you can just chisel your way into um you know these these small spaces and um in combination with the queen the"
+  },
+  {
+   "ply": 25,
+   "t": 468.5,
+   "line": [
+    "Nh4"
+   ],
+   "fen": "rn2kb1r/pp2q1p1/3pPp1p/8/2B1R2N/8/PP3PPP/R1BQ2K1 b kq - 1 13",
+   "said": "knight is an absolutely lethal tandem the light squares are really really good oh did i say dark squares yeah i meant the light squares that is a sexy move indeed and you'll see this often in more"
+  },
+  {
+   "ply": 26,
+   "t": 470.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r3kb1r/pp2q1p1/2npPp1p/8/2B1R2N/8/PP3PPP/R1BQ2K1 w kq - 2 14",
+   "said": "double-sided positions you know this idea of getting the knights of one of these squares it doesn't even matter where we go um we can go for his rook"
+  },
+  {
+   "ply": 27,
+   "t": 486,
+   "line": [
+    "Ng6"
+   ],
+   "fen": "r3kb1r/pp2q1p1/2npPpNp/8/2B1R3/8/PP3PPP/R1BQ2K1 b kq - 3 14",
+   "said": "but we don't even have to we can go directly for head on apply directly to the forehead we'll go for his rook here just because i don't know i think it'll make him resign faster"
+  },
+  {
+   "ply": 29,
+   "t": 494,
+   "line": [
+    "Qc7",
+    "Nxh8"
+   ],
+   "fen": "r3kb1N/ppq3p1/2npPp1p/8/2B1R3/8/PP3PPP/R1BQ2K1 b q - 0 15",
+   "said": "but this kind of stuff it really doesn't matter you don't you don't need to you know drive yourself crazy trying to find the computer continuation just take his rook we're up a rook and a piece and it's time for him to resign all right check yeah now he's got to go to d8 we can give him a check on f7 although that would be quite uh kind of counterproductive because that would allow him to tuck his king on c8 the best would be to get the queen into f7 that way we would be threatening immediate checkmate right yeah and we'll i'll all as i always do i'll answer the questions after the game let's finish our development here bishop f4 he correctly goes king c8 the funny thing is the game drags on a little while longer um and this is yeah okay no i mean there's no mate but you know like how do we actually win this position some of you may choose to take his pawns here and just promote that's possible knight g6 is possible i always like to move like rook c1 just bringing all the pieces in and that's a good good rule to live by just the more pieces you bring in to the attack no matter how many extra pieces you have the better off you're going to be in the end so okay g5 just drop the bishop back and i know it looks like why are we not mating him faster as my first coach would always say do they record on the results score sheet how many moves the game took and you know it was a rhetorical question obviously and i was supposed to say no and the sentiment was supposed to be that you know you're supposed to be patient and how you convert these positions okay of course i understand that but even but even for a 1200 i think this is a resignable position o i mean this is just rook c6 is coming no i mean this is just rook c6 is coming in this is a pin ot much to talk about in this position ot much to talk about in this position okay i mean the funny thing okay so let's find the fastest mate no let's not let's just take all of his pieces thank you ror 2008 18. i'm just gonna exchange yeah queen b6 queen b7 and b4s mate yeah i mean okay come on queen b7 get over here"
+  },
+  {
+   "ply": 2,
+   "t": 706.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "all right finally we deliver checkmate um play this out to see if i was reportable yes oh my lands we got reported so this is a very big mistake and i think the impulse is is understandable queen e7 isn't always bad and ryan i'll i'll play you next um i'll play you next and then we'll and that'll be my final game but uh you know the damage that this move does is is tremendous particularly given that you're already behind in development now a little bit later i will talk about the proper way of playing here but not right now so knight c3 c6 that is actually not a bad move and okay so let's talk for a second about d5 right we can't take on d5 we drop the bishop back d take c4 a lot of people would reject this because black wins a second pawn but you have to see the bigger picture here black is opening up the center which is a great thing for white it's black is also helping you open up this bishop so what would be white's like simplest move here and literally you just play according to the formula you know what to do and there's a bishop on b3"
+  }
+ ],
+ "forks": []
+}

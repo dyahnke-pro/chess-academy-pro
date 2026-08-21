@@ -1,0 +1,568 @@
+{
+ "videoId": "7f2sPY2U204",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2000",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 3.5,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "and we're playing tijuna okay well we're gonna play another king's indian since i just spent so long"
+  },
+  {
+   "ply": 4,
+   "t": 5.5,
+   "line": [
+    "c4",
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "talking about it we might as well play it"
+  },
+  {
+   "ply": 6,
+   "t": 10,
+   "line": [
+    "Nc3",
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": ""
+  },
+  {
+   "ply": 8,
+   "t": 12.5,
+   "line": [
+    "e4",
+    "d6"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "said": "hank you everybody once again for the thank you everybody once again for the tremendous support and all these subs"
+  },
+  {
+   "ply": 10,
+   "t": 17,
+   "line": [
+    "Nf3",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R w KQ - 2 6",
+   "said": "and all the hype it's it's awesome"
+  },
+  {
+   "ply": 12,
+   "t": 26,
+   "line": [
+    "Be2",
+    "e5"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "said": "[Music] okay so this guy plays the main line and"
+  },
+  {
+   "ply": 13,
+   "t": 28,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 1 7",
+   "said": "i'm actually going to play a very"
+  },
+  {
+   "ply": 14,
+   "t": 34.5,
+   "line": [
+    "exd4"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/8/2PpP3/2N2N2/PP2BPPP/R1BQ1RK1 w - - 0 8",
+   "said": "interesting line that i myself like to play that's the movie he takes d4 so in effect we've gotten the marotzi by"
+  },
+  {
+   "ply": 15,
+   "t": 37.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/8/2PNP3/2N5/PP2BPPP/R1BQ1RK1 b - - 0 8",
+   "said": "instructor from the last game"
+  },
+  {
+   "ply": 16,
+   "t": 39.5,
+   "line": [
+    "Re8"
+   ],
+   "fen": "rnbqr1k1/ppp2pbp/3p1np1/8/2PNP3/2N5/PP2BPPP/R1BQ1RK1 w - - 1 9",
+   "said": "but there's one key difference i have"
+  },
+  {
+   "ply": 17,
+   "t": 43.5,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqr1k1/ppp2pbp/3p1np1/8/2PNP3/2N2P2/PP2B1PP/R1BQ1RK1 b - - 0 9",
+   "said": "the pawn on c7 rather than on e7 what difference does that make well that gives me a direct line of fire to the e4 pawn how do i build on that direct line if i"
+  },
+  {
+   "ply": 18,
+   "t": 64,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqr1k1/pp3pbp/2pp1np1/8/2PNP3/2N2P2/PP2B1PP/R1BQ1RK1 w - - 0 10",
+   "said": "what breakthrough can i prepare and this is also the main line thank you yo aguan 21. what is the sort of typical idea c65 that's the main line season now knight c6 there is also possible"
+  },
+  {
+   "ply": 19,
+   "t": 69,
+   "line": [
+    "Kh1"
+   ],
+   "fen": "rnbqr1k1/pp3pbp/2pp1np1/8/2PNP3/2N2P2/PP2B1PP/R1BQ1R1K b - - 1 10",
+   "said": "but the move c6 is the sort of combative line king h1 he knows the the best move now what we're supposed to"
+  },
+  {
+   "ply": 20,
+   "t": 76,
+   "line": [
+    "Nh5"
+   ],
+   "fen": "rnbqr1k1/pp3pbp/2pp2p1/7n/2PNP3/2N2P2/PP2B1PP/R1BQ1R1K w - - 2 11",
+   "said": "do here is go knight out to h5 this should not surprise anybody who's been paying attention"
+  },
+  {
+   "ply": 21,
+   "t": 84.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "rnbqr1k1/pp3pbp/2pp2p1/7n/2PNP3/2N1BP2/PP2B1PP/R2Q1R1K b - - 3 11",
+   "said": "to the previous king's indian game this opens up possibilities like queen h4 and it opens up one more very important possibility he's put his bishop on a square where"
+  },
+  {
+   "ply": 22,
+   "t": 102.5,
+   "line": [
+    "f5"
+   ],
+   "fen": "rnbqr1k1/pp4bp/2pp2p1/5p1n/2PNP3/2N1BP2/PP2B1PP/R2Q1R1K w - - 0 12",
+   "said": "it's type one undefended we have a rook on e8 that's x-raying it how could we combine the two bring those together f5 bingo we want to drive this pawn into f4 that creates a stronghold for the knight on g3 and i'll explain"
+  },
+  {
+   "ply": 23,
+   "t": 113,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "rnbqr1k1/pp4bp/2pp2p1/5p1n/2PNP3/2N1BP2/PP1QB1PP/R4R1K b - - 1 12",
+   "said": "how to use that assuming he doesn't go crazy here okay so he's prevented f4 he me we ask ourselves straight away the sam shankland question what happens if we do it anyway can we"
+  },
+  {
+   "ply": 24,
+   "t": 132.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "rnbqr1k1/pp4bp/2pp2p1/7n/2PNPp2/2N1BP2/PP1QB1PP/R4R1K w - - 0 13",
+   "said": "play f4 anyway yes or no no says mrsupio we can because if he takes it then we"
+  },
+  {
+   "ply": 25,
+   "t": 135.5,
+   "line": [
+    "Bf2"
+   ],
+   "fen": "rnbqr1k1/pp4bp/2pp2p1/7n/2PNPp2/2N2P2/PP1QBBPP/R4R1K b - - 1 13",
+   "said": "take and then he takes he drops his knight on t4 now the"
+  },
+  {
+   "ply": 26,
+   "t": 139.5,
+   "line": [
+    "Be5"
+   ],
+   "fen": "rnbqr1k1/pp5p/2pp2p1/4b2n/2PNPp2/2N2P2/PP1QBBPP/R4R1K w - - 2 14",
+   "said": "typical move is to centralize our bishop on e5 it's a nice central outpost and there"
+  },
+  {
+   "ply": 27,
+   "t": 146.5,
+   "line": [
+    "Nc2"
+   ],
+   "fen": "rnbqr1k1/pp5p/2pp2p1/4b2n/2P1Pp2/2N2P2/PPNQBBPP/R4R1K b - - 3 14",
+   "said": "is a particular sacrifice here that we are beginning to eye and we actually can apply it immediately what am i talking about this is a very"
+  },
+  {
+   "ply": 28,
+   "t": 161.5,
+   "line": [
+    "Ng3+"
+   ],
+   "fen": "rnbqr1k1/pp5p/2pp2p1/4b3/2P1Pp2/2N2Pn1/PPNQBBPP/R4R1K w - - 4 15",
+   "said": "very typical idea in this position it's not d5 anymore he's clamped down on that it is the move knight to g3 check after"
+  },
+  {
+   "ply": 29,
+   "t": 164.5,
+   "line": [
+    "Kg1"
+   ],
+   "fen": "rnbqr1k1/pp5p/2pp2p1/4b3/2P1Pp2/2N2Pn1/PPNQBBPP/R4RK1 b - - 5 15",
+   "said": "the game i will unpack this properly so it may seem that we should take the rook on f1 but here's the thing guys and i'm going"
+  },
+  {
+   "ply": 30,
+   "t": 183,
+   "line": [
+    "Qh4"
+   ],
+   "fen": "rnb1r1k1/pp5p/2pp2p1/4b3/2P1Pp1q/2N2Pn1/PPNQBBPP/R4RK1 w - - 6 16",
+   "said": "to blow your mind um taking the rook is what i would do against another grandmaster but we are going to go for checkmate ladies and gentlemen and i'm going to"
+  },
+  {
+   "ply": 31,
+   "t": 186,
+   "line": [
+    "Bd4"
+   ],
+   "fen": "rnb1r1k1/pp5p/2pp2p1/4b3/2PBPp1q/2N2Pn1/PPNQB1PP/R4RK1 b - - 7 16",
+   "said": "try to apply okay well he's actually going to prevent it sort of hmm let me think"
+  },
+  {
+   "ply": 32,
+   "t": 198.5,
+   "line": [
+    "Nxf1"
+   ],
+   "fen": "rnb1r1k1/pp5p/2pp2p1/4b3/2PBPp1q/2N2P2/PPNQB1PP/R4nK1 w - - 0 17",
+   "said": "yeah so bishop d4 was a really really good move and i will explain everything after the game but let us take the exchange so"
+  },
+  {
+   "ply": 33,
+   "t": 202,
+   "line": [
+    "Bxf1"
+   ],
+   "fen": "rnb1r1k1/pp5p/2pp2p1/4b3/2PBPp1q/2N2P2/PPNQ2PP/R4BK1 b - - 0 17",
+   "said": "that we don't forfeit this opportunity now we've won the exchange and we need to abide by the key principle that i always talk about which is that when you've won material the number one cause"
+  },
+  {
+   "ply": 34,
+   "t": 220,
+   "line": [
+    "Be6"
+   ],
+   "fen": "rn2r1k1/pp5p/2ppb1p1/4b3/2PBPp1q/2N2P2/PPNQ2PP/R4BK1 w - - 1 18",
+   "said": "of disaster after winning material is to forget to continue applying basic principles such as continuing your development so let's not forget to continue our the best move here for him would be c5"
+  },
+  {
+   "ply": 36,
+   "t": 224.5,
+   "line": [
+    "Bxe5",
+    "dxe5"
+   ],
+   "fen": "rn2r1k1/pp5p/2p1b1p1/4p3/2P1Pp1q/2N2P2/PPNQ2PP/R4BK1 w - - 0 19",
+   "said": "but he helps us out by trading pieces get cementing our pawn structure all we need to do here to consolidate"
+  },
+  {
+   "ply": 37,
+   "t": 233.5,
+   "line": [
+    "Qd6"
+   ],
+   "fen": "rn2r1k1/pp5p/2pQb1p1/4p3/2P1Pp1q/2N2P2/PPN3PP/R4BK1 b - - 1 19",
+   "said": "our advantage is to develop the knight bring the rook to d8 can we do that here or do we need to defend the pawn can we do both what should black do here"
+  },
+  {
+   "ply": 38,
+   "t": 246,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r3r1k1/pp1n3p/2pQb1p1/4p3/2P1Pp1q/2N2P2/PPN3PP/R4BK1 w - - 2 20",
+   "said": "take a moment to tell me the best move in this position knight d7 anyway exactly and we can always smoke this queen out by playing queen to e7 in fact that's what we're going to do on the next move"
+  },
+  {
+   "ply": 39,
+   "t": 256.5,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "r3r1k1/ppQn3p/2p1b1p1/4p3/2P1Pp1q/2N2P2/PPN3PP/R4BK1 b - - 3 20",
+   "said": "yeah we're up in exchange he goes queen c7 he's going hunting for our pawns"
+  },
+  {
+   "ply": 40,
+   "t": 265.5,
+   "line": [
+    "Qd8"
+   ],
+   "fen": "r2qr1k1/ppQn3p/2p1b1p1/4p3/2P1Pp2/2N2P2/PPN3PP/R4BK1 w - - 4 21",
+   "said": "um that's actually a very good move and here's what i'm gonna do i'm gonna go queen to d8 wait a minute"
+  },
+  {
+   "ply": 41,
+   "t": 269,
+   "line": [
+    "Qxd8"
+   ],
+   "fen": "r2Qr1k1/pp1n3p/2p1b1p1/4p3/2P1Pp2/2N2P2/PPN3PP/R4BK1 b - - 0 21",
+   "said": "daniel you're blundering the pawn no oh he takes the queen thank you what"
+  },
+  {
+   "ply": 42,
+   "t": 270.5,
+   "line": [
+    "Raxd8"
+   ],
+   "fen": "3rr1k1/pp1n3p/2p1b1p1/4p3/2P1Pp2/2N2P2/PPN3PP/R4BK1 w - - 0 22",
+   "said": "would i have done"
+  },
+  {
+   "ply": 43,
+   "t": 272.5,
+   "line": [
+    "Kf2"
+   ],
+   "fen": "3rr1k1/pp1n3p/2p1b1p1/4p3/2P1Pp2/2N2P2/PPN2KPP/R4B2 b - - 1 22",
+   "said": "against queen b7 i was planning to trade queens with queen b6 okay now those of you who are paying very careful attention"
+  },
+  {
+   "ply": 44,
+   "t": 289.5,
+   "line": [
+    "Nc5"
+   ],
+   "fen": "3rr1k1/pp5p/2p1b1p1/2n1p3/2P1Pp2/2N2P2/PPN2KPP/R4B2 w - - 2 23",
+   "said": "well what should we do where should we put this knight those of you paying attention to the previous king's indian game should now know that nothing happened to this idea we're threatening a check on d2 which would win the night"
+  },
+  {
+   "ply": 45,
+   "t": 296.5,
+   "line": [
+    "Rd1"
+   ],
+   "fen": "3rr1k1/pp5p/2p1b1p1/2n1p3/2P1Pp2/2N2P2/PPN2KPP/3R1B2 b - - 3 23",
+   "said": "and how can we cement the knight who would like to remind me okay well he's i don't think he's aware that he's down in exchange we're going to put the other rook on d8 we can always play a5"
+  },
+  {
+   "ply": 49,
+   "t": 309.5,
+   "line": [
+    "a5",
+    "Rxd8",
+    "Rxd8",
+    "Ke1"
+   ],
+   "fen": "3r2k1/1p5p/2p1b1p1/p1n1p3/2P1Pp2/2N2P2/PPN3PP/4KB2 b - - 1 25",
+   "said": "to prevent him from chasing our night away in fact that is what we are going to do just because it's an end game doesn't mean that the typical middle game ideas don't apply let's not forget"
+  },
+  {
+   "ply": 50,
+   "t": 311,
+   "line": [
+    "Kf7"
+   ],
+   "fen": "3r4/1p3k1p/2p1b1p1/p1n1p3/2P1Pp2/2N2P2/PPN3PP/4KB2 w - - 2 26",
+   "said": "now to bring our king into the picture"
+  },
+  {
+   "ply": 52,
+   "t": 317.5,
+   "line": [
+    "Be2",
+    "g5"
+   ],
+   "fen": "3r4/1p3k1p/2p1b3/p1n1p1p1/2P1Pp2/2N2P2/PPN1B1PP/4K3 w - - 0 27",
+   "said": "if he goes a3 how do we promote and now let's begin to attack the king side same"
+  },
+  {
+   "ply": 54,
+   "t": 321.5,
+   "line": [
+    "h3",
+    "h5"
+   ],
+   "fen": "3r4/1p3k2/2p1b3/p1n1p1pp/2P1Pp2/2N2P1P/PPN1B1P1/4K3 w - - 0 28",
+   "said": "we're playing this as if it's a middle game because the same ideas apply"
+  },
+  {
+   "ply": 55,
+   "t": 323,
+   "line": [
+    "b3"
+   ],
+   "fen": "3r4/1p3k2/2p1b3/p1n1p1pp/2P1Pp2/1PN2P1P/P1N1B1P1/4K3 b - - 0 28",
+   "said": ""
+  },
+  {
+   "ply": 56,
+   "t": 324,
+   "line": [
+    "Kf6"
+   ],
+   "fen": "3r4/1p6/2p1bk2/p1n1p1pp/2P1Pp2/1PN2P1P/P1N1B1P1/4K3 w - - 1 29",
+   "said": "uh other than bringing our king into the"
+  },
+  {
+   "ply": 57,
+   "t": 327,
+   "line": [
+    "Nd1"
+   ],
+   "fen": "3r4/1p6/2p1bk2/p1n1p1pp/2P1Pp2/1P3P1P/P1N1B1P1/3NK3 b - - 2 29",
+   "said": "game which uh so because the same ideas apply how do we proceed on the king's side what do we do look at this position it's like a textbook king's indian position"
+  },
+  {
+   "ply": 58,
+   "t": 342,
+   "line": [
+    "g4"
+   ],
+   "fen": "3r4/1p6/2p1bk2/p1n1p2p/2P1Ppp1/1P3P1P/P1N1B1P1/3NK3 w - - 0 30",
+   "said": "that c6 pawn protecting d5 absolutely we should push the pawn now this does a couple things it breaks through"
+  },
+  {
+   "ply": 60,
+   "t": 347,
+   "line": [
+    "hxg4",
+    "hxg4"
+   ],
+   "fen": "3r4/1p6/2p1bk2/p1n1p3/2P1Ppp1/1P3P2/P1N1B1P1/3NK3 w - - 0 31",
+   "said": "we have a pathway should we want it for the king to get all the way to g3 that would be sort of the like"
+  },
+  {
+   "ply": 61,
+   "t": 351.5,
+   "line": [
+    "Nf2"
+   ],
+   "fen": "3r4/1p6/2p1bk2/p1n1p3/2P1Ppp1/1P3P2/P1N1BNP1/4K3 b - - 1 31",
+   "said": "russian school of but but instead we'll"
+  },
+  {
+   "ply": 62,
+   "t": 353,
+   "line": [
+    "g3"
+   ],
+   "fen": "3r4/1p6/2p1bk2/p1n1p3/2P1Pp2/1P3Pp1/P1N1BNP1/4K3 w - - 0 32",
+   "said": "go g3 but aren't you locking up the position isn't that good for white actually no i"
+  },
+  {
+   "ply": 63,
+   "t": 359.5,
+   "line": [
+    "Nd1"
+   ],
+   "fen": "3r4/1p6/2p1bk2/p1n1p3/2P1Pp2/1P3Pp1/P1N1B1P1/3NK3 b - - 1 32",
+   "said": "want you guys to pay very careful attention to the g2 pawn some of you i know are tempted by this move it doesn't work let's find a more methodical way to to apply pressure on that pawn what should"
+  },
+  {
+   "ply": 64,
+   "t": 375,
+   "line": [
+    "Rh8"
+   ],
+   "fen": "7r/1p6/2p1bk2/p1n1p3/2P1Pp2/1P3Pp1/P1N1B1P1/3NK3 w - - 2 33",
+   "said": "we do how how do we maneuver one of our pieces which has already done its job on its current location and that's another key thing this is flexibility of thinking"
+  },
+  {
+   "ply": 65,
+   "t": 379.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "7r/1p6/2p1bk2/p1n1p3/2P1Pp2/1PN2Pp1/P1N1B1P1/4K3 b - - 3 33",
+   "said": "oftentimes people get like almost emotionally attached"
+  },
+  {
+   "ply": 66,
+   "t": 382.5,
+   "line": [
+    "Rh2"
+   ],
+   "fen": "8/1p6/2p1bk2/p1n1p3/2P1Pp2/1PN2Pp1/P1N1B1Pr/4K3 w - - 4 34",
+   "said": "to like the placement of one particular"
+  },
+  {
+   "ply": 67,
+   "t": 385.5,
+   "line": [
+    "Bf1"
+   ],
+   "fen": "8/1p6/2p1bk2/p1n1p3/2P1Pp2/1PN2Pp1/P1N3Pr/4KB2 b - - 5 34",
+   "said": "piece but you gotta understand that it's done its job and now we always remember to look at the undefended pieces"
+  },
+  {
+   "ply": 68,
+   "t": 396,
+   "line": [
+    "Bh3"
+   ],
+   "fen": "8/1p6/2p2k2/p1n1p3/2P1Pp2/1PN2Ppb/P1N3Pr/4KB2 w - - 6 35",
+   "said": "the knight on c2 is undefended we also pay attention to the x-rays and as you guys beautiful job guys bishop h3 textbook style idea forcing the pawn out then we're going to take the knight and promote our pawn or force him to give up his bishop for it the game is over yep you guys are uh"
+  },
+  {
+   "ply": 69,
+   "t": 418,
+   "line": [
+    "Ne2"
+   ],
+   "fen": "8/1p6/2p2k2/p1n1p3/2P1Pp2/1P3Ppb/P1N1N1Pr/4KB2 b - - 7 35",
+   "said": "very very sharp at this ungodly hour and uh i love to see it so that just ends the game okay well here we just take on g2"
+  },
+  {
+   "ply": 70,
+   "t": 420.5,
+   "line": [
+    "Bxg2"
+   ],
+   "fen": "8/1p6/2p2k2/p1n1p3/2P1Pp2/1P3Pp1/P1N1N1br/4KB2 w - - 0 36",
+   "said": ""
+  },
+  {
+   "ply": 71,
+   "t": 423.5,
+   "line": [
+    "Ng1"
+   ],
+   "fen": "8/1p6/2p2k2/p1n1p3/2P1Pp2/1P3Pp1/P1N3br/4KBN1 b - - 1 36",
+   "said": "and okay knight you one doesn't actually"
+  },
+  {
+   "ply": 72,
+   "t": 426.5,
+   "line": [
+    "Bxf1"
+   ],
+   "fen": "8/1p6/2p2k2/p1n1p3/2P1Pp2/1P3Pp1/P1N4r/4KbN1 w - - 0 37",
+   "said": "attack anything so we can just take"
+  },
+  {
+   "ply": 74,
+   "t": 431.5,
+   "line": [
+    "Kxf1",
+    "Rxc2"
+   ],
+   "fen": "8/1p6/2p2k2/p1n1p3/2P1Pp2/1P3Pp1/P1r5/5KN1 w - - 0 38",
+   "said": "and um now the knight is lost boom over we're gonna send our knight forward and check madam or promote our pawn one of many ways and he resigns"
+  },
+  {
+   "ply": 10,
+   "t": 443.5,
+   "line": [],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R w KQ - 2 6",
+   "said": "very nice game and uh sort of clearly showed the king's indian ideas now king h1 is a good prophylactic move right because he's getting his king out from potential ideas like this the best move here for white is to go g4 and this is theory this sends the knight back to f6 which is what i had planned to do right at weakens the king's side but white has this crazy night at five night sacrifice which um which gel fund actually developed a couple years ago and this has thrown very serious doubts thank you see don for five bucks this has thrown very serious doubts on the sort of objective value of this line there's a lot of analysis here but by and large uh galfond won a very nice game here and uh to that to this date this line hasn't really recovered but this is kind of what i'm saying right just because it's not viable at a grand master level doesn't mean you shouldn't play it and i want to make that very clear so f5 very typical idea and to show you guys um"
+  }
+ ],
+ "forks": []
+}

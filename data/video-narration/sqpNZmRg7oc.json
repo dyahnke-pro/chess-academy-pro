@@ -1,0 +1,160 @@
+{
+ "videoId": "sqpNZmRg7oc",
+ "title": "Grandmaster Naroditsky | Ruy Lopez & Philidor | Chess History",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 1369.5,
+   "line": [
+    "e4",
+    "d5",
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "you guys ready for one last game all right after consulting the ancient texts i'm ready to destroy a 1600 this time who plays the scandinavian"
+  },
+  {
+   "ply": 4,
+   "t": 1371.5,
+   "line": [
+    "Qxd5"
+   ],
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "okay now in the scandinavian we know"
+  },
+  {
+   "ply": 5,
+   "t": 1375,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "already that knight c3 is the best move to attack the queen and"
+  },
+  {
+   "ply": 6,
+   "t": 1378,
+   "line": [
+    "Qd8"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4",
+   "said": "develop a knight"
+  },
+  {
+   "ply": 7,
+   "t": 1379.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "now we occupy the center with d4"
+  },
+  {
+   "ply": 8,
+   "t": 1382,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5",
+   "said": ""
+  },
+  {
+   "ply": 9,
+   "t": 1385,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3P4/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 1388,
+   "line": [
+    "b5"
+   ],
+   "fen": "rnbqkbnr/p3pppp/2p5/1p6/3P4/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "and now we follow the ancient wisdom of petrov who said to develop the knight uh to f3 first i don't think we played this guy actually i disagree now he's just moving his pawns and there is no particular way in which we should respond no no we did not play this guy the last time uh there is no particular way that"
+  },
+  {
+   "ply": 11,
+   "t": 1416.5,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqkbnr/p3pppp/2p5/1p6/3P4/2NB1N2/PPP2PPP/R1BQK2R b KQkq - 1 6",
+   "said": "we should respond to this other than to continue development uh are you sure we played him well i'm looking at my game history i don't see him but anyways bishop d3 is simple"
+  },
+  {
+   "ply": 12,
+   "t": 1419.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/p3pppp/2p2n2/1p6/3P4/2NB1N2/PPP2PPP/R1BQK2R w KQkq - 2 7",
+   "said": "oh it's just the overlay hasn't changed there we go"
+  },
+  {
+   "ply": 13,
+   "t": 1429,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbqkb1r/p3pppp/2p2n2/1p6/3P4/2NB1N2/PPP2PPP/R1BQ1RK1 b kq - 3 7",
+   "said": "the over that's so weird it contained the name of the last opponent but the the moves are transmitted"
+  },
+  {
+   "ply": 14,
+   "t": 1431.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkb1r/p4ppp/2p1pn2/1p6/3P4/2NB1N2/PPP2PPP/R1BQ1RK1 w kq - 0 8",
+   "said": "transmitting correctly okay so"
+  },
+  {
+   "ply": 15,
+   "t": 1435,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "rnbqkb1r/p4ppp/2p1pn2/1p2N3/3P4/2NB4/PPP2PPP/R1BQ1RK1 b kq - 1 8",
+   "said": "let's centralize the knight that was"
+  },
+  {
+   "ply": 16,
+   "t": 1437.5,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "rn1qkb1r/pb3ppp/2p1pn2/1p2N3/3P4/2NB4/PPP2PPP/R1BQ1RK1 w kq - 2 9",
+   "said": "really funny"
+  },
+  {
+   "ply": 17,
+   "t": 1439,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rn1qkb1r/pb3ppp/2p1pn2/1p2N1B1/3P4/2NB4/PPP2PPP/R2Q1RK1 b kq - 3 9",
+   "said": "and develop our bishop so right now i'm just developing all my pieces i'm not doing anything crazy"
+  },
+  {
+   "ply": 18,
+   "t": 1444.5,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rn1qk2r/pb2bppp/2p1pn2/1p2N1B1/3P4/2NB4/PPP2PPP/R2Q1RK1 w kq - 4 10",
+   "said": "which is why i'm moving fast okay now what should we do in this yeah i was like what what should we do in this position let's bring our queen out to f3 which is a very typical way to apply pressure on his position notice that i'm also giving up the d4 pawn and there is a reason that i'm doing that and the reason that i'm doing that is because he's so poorly developed if he takes on d4 with his queen his queen is going to be incredibly vulnerable to attack now what should we do in this position we can win a pawn it's the right lopez demon that's right lopez loose pieces drop off boom if he takes we take the bishop whose pieces drop off that's a free pawn there's no reason not to take it okay he goes knight d5 so he attacks the bishop let's take it now we do need to move the knight away so let's move it back to c3 okay so we're up upon we're in good shape he's probably gonna go here nope he's gonna go f6 okay now what should we do in this situation and i'll give you guys a hint we can create a counter threat against his pawn on h7 because we have a bishop on t3 that's very very strong a lot of people might think the move is queen h5 but be very very careful because if we oh we got another oh my goodness oh my lance got another one from gem jam another 10 000 are you kidding me i will have a good night we're gonna go queen h3 so that g6 doesn't come with tempo what a day this has been and culminating in two bombs dropped by jen jim now we're going to move our night away now that we've provoked the weaknesses in his king side and king h8 pin what does this tell us about what we should do thank you so much what should we do here boom if he will take his opponent on g6 yes and the game is almost over that is the second and again we do the same thing we did earlier we just take a pawn and we drop the bishop back okay now we have a really nice tactic how do i see this tactic what i'm seeing is that the queen defends the pawn on h7 against checkmate we know that when the queen defends a pawn that's not a good situation we can take a third pun and if he takes the queen oh sorry if he takes the knight we can take on h7 and the game will be boy and lodge the game will be over now he's going to go knight 97 now most people here would take the rook the the thing about this is we can do a lot more than take the rook we can do a lot better because we have this h file open we can attack down that h file following the ancient wisdom of the greats with knight takes h7 we don't need to take bishop takes h7 because if bishop h7 would give up the knight and that same knight can be used to go to h7 himself and completely winning we are up four pawns and we are crushing him with an attack okay now let's find the checkmate he has also given up his rook but there is mate in two moves how do we find the checkmate we realize that we can move the night away with a discover check our second mission in this position is to cover the g8 square because after we move the knight that is going to be his only escape square for the king and that's how you often when you're discovering a check and you want to checkmate your opponent's king the way that you want to think about the discoveries can i move my piece away such that that very same piece somehow contributes the mating mechanism as you guys can see the move is knight"
+  },
+  {
+   "ply": 3,
+   "t": 1674.5,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "f6 check the game is over it's mate very simple game we just developed our pieces and this is why i don't recommend opening such as the scandi to a lot of players in the intermediate range because they tend to do stuff like this giving us a huge lead in development the one thing i'd like to talk about is what would have happened if we had if he had gone queen takes d4 now when you look at this move the immediate thing you should notice is the relationship between the queens so if this bishop could move away with check then that would win the queen so you need to find a tactic in order to force the king onto a square where you could deliver check to this looks like a complicated combination but the logic behind it no pun intended is very simple you're just trying to get the king onto a square or you can deliver the discovery check so he couldn't do this and that meant he had to allow us to continue putting our pieces on very good squares now we play knight takes b5 using the fact that the bishop is unprotected we drop the knight back we attack h7 if he had taken the knight we take it check and checkmate is very simple we can even checkmate with a pawn"
+  }
+ ],
+ "forks": []
+}
