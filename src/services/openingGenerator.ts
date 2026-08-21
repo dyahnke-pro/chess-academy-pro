@@ -429,10 +429,19 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // happening for the third time; the bump belongs in the SAME commit as any
 // change to what a beat says.
 //
-// One bump for all sixteen notes, per the locked cost rule: a bump regenerates
+// One bump for the whole batch, per the locked cost rule: a bump regenerates
 // prose into new strings that miss the TTS clip cache, so batching keeps that to
 // a single synthesis bill instead of one per lesson written.
-const WALKTHROUGH_GEN_REV = '2026-08-21-revert-opening-tab';
+//
+// 2026-08-21 (second bump, same day, deliberately batched into one deploy): 74
+// hand-written notes across 13 lessons were emitted into the shipped corpus
+// (340 -> 423). Those notes SPLICE INTO BEATS at generation time, so a device
+// holding a tree stamped with the previous rev would serve the old prose for
+// ever and the whole distil pass would be invisible in production while every
+// unit test passed — the tests call the splice directly and never touch the
+// cache. That failure is recorded three times in CLAUDE.md; this is the bump
+// that keeps it from being a fourth.
+const WALKTHROUGH_GEN_REV = '2026-08-21-handwritten-notes-batch';
 
 export async function getCachedOpening(
   name: string,

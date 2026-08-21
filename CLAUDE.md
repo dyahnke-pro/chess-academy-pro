@@ -3199,6 +3199,30 @@ the wrong one is a false claim. Describe the STRUCTURE instead — "a locked paw
 chain where White's e-pawn has advanced past" — which is true wherever it is
 spoken.
 
+**WRITING A NOTE IS TWO THIRDS OF THE JOB — `emit-notes.mjs --write` IS THE
+REST.** `attach-notes` puts the note into `data/video-tracks/<id>.json`, which is
+a RECORD; nothing in the running app opens that directory. The app reads
+`src/data/video-teachings.json`, and only `node scripts/video-align/emit-notes.mjs
+--write` puts it there. A note that stops at the track passes `check-notes`,
+passes `attach-notes`, passes `videoTrackIntegrity`, and is never spoken.
+
+**AND THE NOTES SPLICE INTO BEATS AT GENERATION TIME, so emitting them means
+bumping `WALKTHROUGH_GEN_REV` in the SAME commit.** Skip it and every device
+holding a cached tree serves the old prose for ever — the whole pass invisible in
+production while its unit tests stay green, because those call the splice
+directly and never touch the cache. Batch a day's note work into ONE bump; a bump
+regenerates prose into new strings that miss the TTS clip cache and bills for the
+re-synthesis.
+
+**`videoNoteSplice.test.ts` FAILS A NOTE THAT ARRIVES GUTTED, and the cause is
+always the same sentence shape:** prose about a HYPOTHETICAL line that names
+squares as though they were on the board — "the knight on c6 defends it", "a pawn
+on c3", "the bishop on c5". The board-truth grader cuts claim by claim against the
+position AS IT IS, so those clauses vanish and the note reaches the student halved.
+Seven of one batch's notes hit this. The fix is never to weaken the grader: describe
+the alternative STRUCTURALLY ("the other bishop square changes the plan to the
+modest advance") and keep named squares for pieces that are actually there.
+
 **A track with no teachable captions gets NO notes, and that is a finish, not a
 debt.** Some lessons' only on-line anchors are the generic openers, with banter
 or chess history over them rather than teaching. Writing filler there to clear
