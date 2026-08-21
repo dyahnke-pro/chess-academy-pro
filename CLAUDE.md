@@ -51,6 +51,86 @@ live in the LEAF `src/services/groundedAnswer.ts`; the chokepoint is
 `voiceFacts`; the wiring template is the best-move interception in
 `getCoachChatResponse`. Don't reinvent — extend the pattern.
 
+### 🔒🔒 G0.1 — NARRATION IS COMPUTE-THEN-PHRASE, FOR THE MODEL *AND* FOR CLAUDE. Gaps in the computation get CLOSED, never papered over in prose (David 2026-08-21, LOCKED: "save this somewhere so it can NEVER BE OVERLOOKED").
+
+This is G0 made operational for narration authoring — the single architecture
+for how every teaching sentence in the app comes to exist. It binds two authors
+identically:
+
+1. **The runtime LLM (DeepSeek) "sound like Danya" path** — it is handed the
+   SAME deterministic fact package the coach already builds, plus the Danya
+   voice system prompt (`docs/plans/2026-08-21-danya-voice-system-prompt.md`) as
+   its style prompt. **It REWORDS the facts; it NEVER SOURCES them.** Handing it
+   an opening name and asking it to produce the line/eval/why from its own
+   knowledge is the exact G0 violation this rule exists to kill — and for a
+   non-Danya opening there is no corpus note behind it, so nothing catches a
+   hallucination but the board-truth grader after the fact.
+
+2. **CLAUDE authoring hand-written narrations** — held to the IDENTICAL rule
+   (David 2026-08-21: *"the same goes for you… have access to the same
+   deterministic computations so you fully understand the mathematical
+   complexities and then phrase them in his teaching style"*). I do NOT eyeball
+   the board and reach for a plausible-sounding reason. I pull the fact package
+   FIRST, understand what is actually true, verify every claim on the board with
+   chess.js, and only then phrase it in his register. Each reason I write must be
+   independently true for THAT board — the multi-reason rule: code decides WHICH
+   reasons apply, I only phrase them.
+
+**THE STANDING ORDER (David 2026-08-21): if authoring a Danya-voice note needs a
+fact the computation layer does not produce, that is a GAP — flag it, we close
+it, and the new computer is ADDED to the computed-narration inputs.** We never
+route around a missing computation by letting the model (or me) invent the fact
+in prose. Close the gap in code; then phrase from it.
+
+**The fact-computers that already exist (author FROM these):**
+`explainBestMoveGrounded` (`groundedAnswer.ts` — why the best move is best),
+`detectTactics` (`tacticsDetector.ts` — fork/pin/skewer/hanging + exact squares),
+`computePvLine` / `PlyFacts` (`coachFeatureService.ts` — the engine line + per-ply
+facts), `boardConcepts` (`boardConcepts.ts` — structural tags), the opening-ideas
+narrator (`coachFeatureService.ts`), `noteAtPosition` / `lessonBeatAt` (existing
+teaching at a position). chess.js is the board-truth check on every claim.
+
+**IDENTIFIED GAPS (David 2026-08-21 — to be closed and folded into the computed
+inputs; ranked by how much of the Danya toolkit they unblock):**
+
+- **GAP 1 — THE TEMPTING-BUT-WRONG MOVE ("the seductive move"). Biggest gap.**
+  His #1 device is the BUT-TURN (~33% of positions, ALL 147 videos) and its
+  cousin SELF-CORRECTION (~14%). Both require knowing the move the STUDENT would
+  *want* to play here AND its concrete refutation line. We compute the BEST move
+  and detected tactics — but nothing computes "the natural-looking move a player
+  at rating R reaches for, plus the line that refutes it." Without it the
+  affirm→but→refute rhythm cannot be generated without the model inventing the
+  tempting move (a G0 violation). The parts exist (slipDetector, the amateur
+  explorer's common human move, engine refutation) but are not assembled into a
+  fact the narrator receives.
+- **GAP 2 — MULTI-REASON DECOMPOSITION.** `explainBestMoveGrounded` returns a
+  single prose string (bestClause + costClause), not a LIST of atomic reasons
+  each naming its own squares and each independently board-checkable. The locked
+  multi-reason rule (avg 3.4 reasons/move) needs the structured list so free-play
+  can filter which reasons are still true on a SIMILAR board and speak only
+  those. A prose blob cannot be filtered — it forces silence or a false claim.
+- **GAP 3 — OPPONENT-INTENT / PROPHYLAXIS ("what does he want?").** No free-move /
+  null-move threat computer that returns "if the opponent got a free move, here
+  is what they'd do and the square it targets." Needed for the PROPHYLAXIS frame
+  (low frequency, ~2%, but load-bearing — he models the opponent before choosing)
+  and for naming the threat in the student-level-meta frame.
+- **GAP 4 — CONCEPT TAGS → TEACHABLE FACTS.** `boardConcepts` emits coarse tags
+  ("knight-outpost", "open-file") but not WHICH square, WHY (e.g. no enemy pawn
+  can challenge the outpost), or the PLAN the feature implies — and it is missing
+  several named concepts in his vocabulary (backward pawn, weak square generally,
+  minority attack, space advantage, pawn-chain base, half-open file, IQP-as-such).
+  Naming the pattern is his transferable takeaway (~8%): upgrade tag → {square,
+  why, implied plan}.
+- **GAP 5 — THE UNCERTAINTY SIGNAL.** Nothing computes "is this genuinely
+  unclear" (spread of top engine moves within a small cp band / eval volatility).
+  He hedges honestly ~21% of the time but ONLY where it's actually murky. Without
+  a computed murkiness signal the model hedges everywhere or nowhere. Hedge the
+  judgment calls, state the facts plainly — the signal is what tells them apart.
+
+The measured Danya pattern spec is `docs/plans/2026-08-21-danya-teaching-dna.md`;
+the voice prompt is `docs/plans/2026-08-21-danya-voice-system-prompt.md`.
+
+
 ### G1. 3-INSTRUMENT post-deploy audit after EVERY build — NON-NEGOTIABLE (David 2026-05-28, locked).
 
 After every push that lands on `main`, run the post-deploy audit
