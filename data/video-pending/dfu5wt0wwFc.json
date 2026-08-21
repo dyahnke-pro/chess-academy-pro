@@ -1451,5 +1451,82 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Accelerated Dragon, Modern Variation",
+   "eco": "B34",
+   "plies": 9,
+   "line": "e4 c5 d4 Nc6 Ne2 cxd4 Nxd4 g6 Nc3",
+   "coverage": 0.173
+  },
+  {
+   "name": "Sicilian Defense: Accelerated Dragon",
+   "eco": "B32",
+   "plies": 8,
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6",
+   "coverage": 0.01
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit Accepted",
+   "eco": "B21",
+   "plies": 6,
+   "line": "e4 c5 d4 cxd4 c3 dxc3",
+   "coverage": 0.133
+  },
+  {
+   "name": "Sicilian Defense: Open",
+   "eco": "B32",
+   "plies": 5,
+   "line": "e4 c5 Nf3 Nc6 d4",
+   "coverage": 0.031
+  },
+  {
+   "name": "Sicilian Defense: Old Sicilian",
+   "eco": "B30",
+   "plies": 4,
+   "line": "e4 c5 Nf3 Nc6",
+   "coverage": 0.459
+  },
+  {
+   "name": "Sicilian Defense: Alapin Variation",
+   "eco": "B22",
+   "plies": 3,
+   "line": "e4 c5 c3",
+   "coverage": 0.01
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit",
+   "eco": "B21",
+   "plies": 3,
+   "line": "e4 c5 d4",
+   "coverage": 0.398
+  },
+  {
+   "name": "Sicilian Defense: Bowdler Attack",
+   "eco": "B20",
+   "plies": 3,
+   "line": "e4 c5 Bc4",
+   "coverage": 0.112
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

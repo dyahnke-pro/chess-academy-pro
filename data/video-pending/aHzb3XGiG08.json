@@ -277,5 +277,54 @@
    "fen": "r4rk1/2p3pp/p1qppb2/1p6/n2PP3/P1P1BN1P/3Q1PP1/2R2RK1 b - - 2 21"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Ruy Lopez: Morphy Defense, Anderssen Variation",
+   "eco": "C77",
+   "plies": 9,
+   "line": "e4 e5 Nf3 Nc6 Bb5 Nf6 Ba4 a6 d3",
+   "coverage": 0.903
+  },
+  {
+   "name": "Ruy Lopez: Berlin Defense",
+   "eco": "C65",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bb5 Nf6",
+   "coverage": 0.903
+  },
+  {
+   "name": "Ruy Lopez",
+   "eco": "C60",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Bb5",
+   "coverage": 0.935
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.935
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.968
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

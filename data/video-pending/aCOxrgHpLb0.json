@@ -485,5 +485,47 @@
    "fen": "6k1/pp3p1p/2b1q1p1/2P5/1P6/P4P2/6PP/4RB1K b - - 0 33"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "English Opening: Symmetrical Variation, Anti-Benoni Variation",
+   "eco": "A31",
+   "plies": 5,
+   "line": "d4 Nf6 c4 c5 Nf3",
+   "coverage": 0.964
+  },
+  {
+   "name": "Benoni Defense",
+   "eco": "A56",
+   "plies": 4,
+   "line": "d4 Nf6 c4 c5",
+   "coverage": 0.982
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.982
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

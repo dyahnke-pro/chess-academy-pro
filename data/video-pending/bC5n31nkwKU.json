@@ -1078,5 +1078,82 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Italian Game: Two Knights Defense, Polerio Defense, Suhle Defense",
+   "eco": "C59",
+   "plies": 16,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+ c6 dxc6 bxc6 Be2 h6",
+   "coverage": 0.743
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Polerio Defense, Bishop Check Line",
+   "eco": "C58",
+   "plies": 11,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5 Bb5+",
+   "coverage": 0.871
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Polerio Defense",
+   "eco": "C58",
+   "plies": 10,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5",
+   "coverage": 0.886
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Knight Attack, Normal Variation",
+   "eco": "C57",
+   "plies": 8,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5",
+   "coverage": 0.914
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Knight Attack",
+   "eco": "C57",
+   "plies": 7,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5",
+   "coverage": 0.929
+  },
+  {
+   "name": "Italian Game: Two Knights Defense",
+   "eco": "C55",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6",
+   "coverage": 0.943
+  },
+  {
+   "name": "Italian Game",
+   "eco": "C50",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Bc4",
+   "coverage": 0.957
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.971
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.986
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

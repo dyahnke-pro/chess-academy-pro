@@ -197,5 +197,33 @@
    "fen": "rn2r1k1/5pbp/1q1Pp1p1/5b2/ppBP1NP1/8/PP3P1P/R1BQR1K1 w - - 0 20"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Hyperaccelerated Dragon",
+   "eco": "B27",
+   "plies": 4,
+   "line": "e4 c5 Nf3 g6",
+   "coverage": 0.9
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

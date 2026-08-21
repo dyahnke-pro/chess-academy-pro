@@ -188,5 +188,54 @@
    "fen": "r2qk2r/2p2p2/p1np1n1p/1pb1p1pb/4P2B/1BNP1N1P/PPP2PP1/R2Q1RK1 w kq - 0 12"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Ruy Lopez: Morphy Defense, Tarrasch Variation",
+   "eco": "C77",
+   "plies": 9,
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 Nc3",
+   "coverage": 0.667
+  },
+  {
+   "name": "Ruy Lopez: Morphy Defense",
+   "eco": "C70",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6",
+   "coverage": 0.81
+  },
+  {
+   "name": "Ruy Lopez",
+   "eco": "C60",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Bb5",
+   "coverage": 0.857
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.905
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.952
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

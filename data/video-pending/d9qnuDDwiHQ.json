@@ -268,5 +268,54 @@
    "fen": "r3kb1r/pp3p1p/2np1pp1/8/4P3/1bN5/PP1Q1PPP/2KR1B1R w kq - 0 12"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Richter-Rauzer Variation, Dragon Variation",
+   "eco": "B60",
+   "plies": 12,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nc6 Nc3 Nf6 Bg5 g6",
+   "coverage": 0.69
+  },
+  {
+   "name": "Sicilian Defense: Richter-Rauzer Variation",
+   "eco": "B60",
+   "plies": 11,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nc6 Nc3 Nf6 Bg5",
+   "coverage": 0.724
+  },
+  {
+   "name": "Sicilian Defense: Classical Variation",
+   "eco": "B56",
+   "plies": 10,
+   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nc6 Nc3 Nf6",
+   "coverage": 0.759
+  },
+  {
+   "name": "Sicilian Defense: Modern Variations",
+   "eco": "B50",
+   "plies": 4,
+   "line": "e4 c5 Nf3 d6",
+   "coverage": 0.931
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }
