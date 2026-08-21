@@ -148,6 +148,20 @@ export function pickTempting(
   return { san: top.san, uci: top.uci, appeal: top.appeal, evalDropCp: Math.round(bestStudentCp - top.studentCp) };
 }
 
+/** Review/Learn enrichment: name the decisive tactic in an already-computed line
+ *  down to its PIECES — "The point — knight on e3 forks the rook on d1 and the
+ *  bishop on c2." `render`/`plyFactsClause` only say "lands a fork"; this names
+ *  WHAT it forks. Null when the line lands no named tactic. Pure — reuses the
+ *  caller's line, no extra engine time. */
+export function namedTacticClause(plies: PvPly[]): string | null {
+  const kt = pickKeyTactic(plies);
+  if (!kt || kt.squares.length === 0) return null;
+  const desc = kt.description.length > 0
+    ? kt.description[0].toLowerCase() + kt.description.slice(1)
+    : kt.type;
+  return `The point — ${desc}.`;
+}
+
 // ── ENGINE-WIRED ASSEMBLER ──────────────────────────────────────────────────
 
 /** Mate-plies for the student, if the line ends in mate they deliver. */

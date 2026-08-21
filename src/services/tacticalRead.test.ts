@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp,
+  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, namedTacticClause,
   type TacticalRead,
 } from './tacticalRead';
 import type { PvEngine, PvPly } from './pvPlayback';
@@ -106,5 +106,24 @@ describe('computeTacticalRead (engine-injected)', () => {
     expect(read.checkPlies).toContain(0);                       // Ng4+ is check
     expect(read.keyTactic?.type).toBe('fork');
     expect(read.keyTactic?.description.toLowerCase()).toContain('fork');
+  });
+});
+
+describe('namedTacticClause', () => {
+  it('names the pieces the fork hits, lowercased for mid-sentence use', () => {
+    const fenAfter = '1r2qb1k/3b2p1/3p1r2/ppp1nP1p/4P2P/P1P1nNQ1/1PBN3K/3R2R1 w - - 0 29';
+    const clause = namedTacticClause([{
+      san: 'Nxe3', uci: 'g4e3', moverColor: 'black', fenBefore: '', fenAfter,
+      facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 },
+    }]);
+    expect(clause).toMatch(/^The point — knight on e3 forks/);
+    expect(clause).toContain('d1');
+    expect(clause).toContain('c2');
+  });
+  it('returns null when the line lands no named tactic', () => {
+    expect(namedTacticClause([{
+      san: 'Be2', uci: 'f1e2', moverColor: 'white', fenBefore: '', fenAfter: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPBPPP/RNBQK1NR b KQkq - 0 1',
+      facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 },
+    }])).toBeNull();
   });
 });
