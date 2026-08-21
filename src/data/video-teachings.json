@@ -1,8 +1,8 @@
 {
  "generatedAt": "2026-08-21",
- "videosDistilled": 188,
- "noteCount": 480,
- "forkCount": 494,
+ "videosDistilled": 189,
+ "noteCount": 482,
+ "forkCount": 496,
  "notes": [
   {
    "id": "vn-advance-e6-cover-the-check-square-before-the-trade",
@@ -7874,6 +7874,89 @@
      "square": "a7"
     }
    ]
+  },
+  {
+   "id": "vn-pirc-austrian-take-the-broad-centre-and-hold-it",
+   "lineSan": [
+    "e4",
+    "d6",
+    "d4",
+    "Nf6",
+    "Nc3",
+    "g6",
+    "f4",
+    "Bg7",
+    "Nf3"
+   ],
+   "opening": "Pirc Defense: Austrian Attack, Weiss Variation",
+   "phase": "opening",
+   "explains": "The knight develops to f3, guarding the d4-pawn and covering e5 so the wide row of central pawns stays firmly in hand. The defence has conceded the middle deliberately, and every piece brought up to hold it makes that concession harder to justify.",
+   "teaches": "A broad pawn centre is a genuine asset, not an overextension, so long as you can hold it, and against a defence that hands you the middle on purpose the way to punish that choice is to take the space and keep it defended. The opponent means to let you build big and then chip away at it, so make every central pawn count and support it before it is challenged.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:OkjaIVnXg9o"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    },
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ]
+  },
+  {
+   "id": "vn-pirc-austrian-bishop-to-d3-not-into-the-fork",
+   "lineSan": [
+    "e4",
+    "d6",
+    "d4",
+    "Nf6",
+    "Nc3",
+    "g6",
+    "f4",
+    "Bg7",
+    "Nf3",
+    "O-O",
+    "Bd3"
+   ],
+   "opening": "Pirc Defense: Austrian Attack, Weiss Variation",
+   "phase": "opening",
+   "explains": "The bishop goes to d3 rather than the more natural-looking square a file over, and from d3 it defends the e4-pawn so the knight cannot simply be taken. The active square would have invited a central pawn break that strikes two pieces at once; the modest square sidesteps it and keeps the centre solid.",
+   "teaches": "The most natural developing square is not always the safe one. When an active post walks the piece into a central break that hits two of your men at once, the quieter square that defends your centre is worth more than the extra aggression. Check what your opponent's freeing pawn push would hit before you commit the piece.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:OkjaIVnXg9o"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "d6",
+     "d4",
+     "Nf6",
+     "Nc3",
+     "g6",
+     "f4",
+     "Bg7",
+     "Nf3",
+     "O-O"
+    ],
+    "taughtMove": "e5",
+    "alternative": "Bd3",
+    "lineName": "Pirc Defence / Austrian Attack with e5 c5"
+   }
   },
   {
    "id": "vn-belgrade-remove-the-guard",
@@ -24776,6 +24859,95 @@
     }
    ],
    "source": "yt:NqtT3roFaBs"
+  },
+  {
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PPP2/2N2N2/PPP3PP/R1BQKB1R w KQ - 3 6",
+   "lineSan": [
+    "e4",
+    "d6",
+    "d4",
+    "Nf6",
+    "Nc3",
+    "g6",
+    "f4",
+    "Bg7",
+    "Nf3",
+    "O-O"
+   ],
+   "ply": 10,
+   "options": [
+    {
+     "san": "Bd3",
+     "t": 69.5,
+     "continuation": "Bd3"
+    },
+    {
+     "san": "Bc4",
+     "t": 694,
+     "continuation": "Bc4"
+    }
+   ],
+   "source": "yt:OkjaIVnXg9o"
+  },
+  {
+   "fen": "r1b2k2/p3pp1p/1p4p1/2pP4/4B3/1R4bP/P1PN2P1/5K1R b - - 1 21",
+   "lineSan": [
+    "e4",
+    "d6",
+    "d4",
+    "Nf6",
+    "Nc3",
+    "g6",
+    "f4",
+    "Bg7",
+    "Nf3",
+    "O-O",
+    "Bd3",
+    "Nbd7",
+    "e5",
+    "dxe5",
+    "fxe5",
+    "Ng4",
+    "h3",
+    "Nh6",
+    "Bf4",
+    "c5",
+    "d5",
+    "Qb6",
+    "Qd2",
+    "Qxb2",
+    "Rb1",
+    "Qa3",
+    "Rb3",
+    "Qa5",
+    "Bxh6",
+    "Nxe5",
+    "Nxe5",
+    "Bxe5",
+    "Bxf8",
+    "Bg3+",
+    "Kf1",
+    "Kxf8",
+    "Ne4",
+    "Qxd2",
+    "Nxd2",
+    "b6",
+    "Be4"
+   ],
+   "ply": 41,
+   "options": [
+    {
+     "san": "Rb8",
+     "t": 375.5,
+     "continuation": "Rb8 Rxg3"
+    },
+    {
+     "san": "Bc7",
+     "t": 394,
+     "continuation": "Bc7"
+    }
+   ],
+   "source": "yt:OkjaIVnXg9o"
   },
   {
    "fen": "r1bqkb1r/pppp1pp1/2n2n1p/3N4/3pP3/5N2/PPP2PPP/R1BQKB1R w KQkq - 0 6",

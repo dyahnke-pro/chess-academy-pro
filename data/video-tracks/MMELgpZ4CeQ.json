@@ -676,7 +676,9 @@
  ],
  "titleCheck": {
   "claims": "Caro-Kann Defense",
-  "confirmed": false
+  "confirmed": false,
+  "verdict": "track-sound",
+  "checkedBy": "hand 2026-08-21 — multi-topic speedrun title (\"Glek, Pirc/Caro-Kann\"); the tracked board is the Four Knights Glek System (e4 e5 Nf3 Nc6 Nc3 Nf6 g3, 90.7% coverage), which is the first topic named. Caro-Kann is one of several openings the video covers, not the game this track follows."
  },
  "notes": [
   {
