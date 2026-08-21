@@ -69,16 +69,41 @@ for id in "${ids[@]}"; do
   # already-banked 360p tracks used. The scan still CONFIRMS against the start
   # position, so a wrong scale refuses rather than tracking a false line.
   W=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$f" 2>/dev/null)
-  if [ -n "${W:-}" ] && [ "$W" -gt 0 ] 2>/dev/null; then
-    read -r GX GY GS <<< "$(awk -v w="$W" -v x="${GEO_X:-370}" -v y="${GEO_Y:--2}" -v s="${GEO_S:-60}" \
-      'BEGIN{r=w/854; printf "%.4f %.4f %.4f", x*r, y*r, s*r}')"
-  else
-    GX=${GEO_X:-370}; GY=${GEO_Y:--2}; GS=${GEO_S:-60}
-  fi
-  GEO="$GX $GY $GS"
+  [ -n "${W:-}" ] && [ "$W" -gt 0 ] 2>/dev/null || W=854
 
-  if ! python3 scripts/video-align/scan_stream.py "$f" "$GRIDS/$id.grids.json" $GEO 2 --calibrated \
-       > "$GRIDS/$id.scan.log" 2>&1; then
+  # TWO LAYOUTS, NOT ONE. The numbers above put the board on the RIGHT, next to
+  # the webcam — that is the lab/speedrun layout and it is what every banked
+  # track used. A second layout puts the board on the LEFT with the camera and
+  # the game header stacked on the right, and under the right-board numbers it
+  # reads NOTHING: 78 videos were parked for hand geometry on 2026-08-21, and
+  # the first one opened by eye (D0AlZuN14Fw, a Naroditsky-Ortiz Suarez lesson)
+  # was a left-board upload sitting at 3,3,44 on a 640-wide frame. Read at 854
+  # that is 4,4,58.7, which is the second candidate below.
+  #
+  # Trying both costs nothing and risks nothing: scan_stream --calibrated
+  # CONFIRMS the geometry against the start position, so the wrong layout
+  # REFUSES rather than tracking a false line. That is the same property that
+  # makes a single hand-read safe; it does not weaken by being tried twice.
+  # An explicit GEO_X/GEO_Y/GEO_S still pins one layout and skips the search.
+  if [ -n "${GEO_X:-}${GEO_Y:-}${GEO_S:-}" ]; then
+    CANDS="${GEO_X:-370},${GEO_Y:--2},${GEO_S:-60}"
+  else
+    CANDS="370,-2,60 4,4,58.7"
+  fi
+
+  scanned=0
+  for cand in $CANDS; do
+    IFS=, read -r CX CY CS <<< "$cand"
+    read -r GX GY GS <<< "$(awk -v w="$W" -v x="$CX" -v y="$CY" -v s="$CS" \
+      'BEGIN{r=w/854; printf "%.4f %.4f %.4f", x*r, y*r, s*r}')"
+    GEO="$GX $GY $GS"
+    if python3 scripts/video-align/scan_stream.py "$f" "$GRIDS/$id.grids.json" $GEO 2 --calibrated \
+         > "$GRIDS/$id.scan.log" 2>&1; then
+      scanned=1; break
+    fi
+  done
+
+  if [ "$scanned" -ne 1 ]; then
     # A refusal is the scanner declining geometry it cannot confirm against the
     # start position — park it for a hand read rather than tracking a false line.
     echo "SCAN-REF $id :: $(tail -1 "$GRIDS/$id.scan.log" | cut -c1-70)"
