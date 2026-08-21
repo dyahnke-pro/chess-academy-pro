@@ -1,0 +1,314 @@
+{
+ "videoId": "U7pqt57VwuU",
+ "title": "Attacking F7 Early W/ Theory | QGA | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 756,
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "look how easy this game was just because we knew like two moves of theory that's why when you hit like 1800 if you're a london player or you play sidelines you should cont you should consider at least attempting to learn the main lines i feel like there's been this trend in the last few years where pardon my french but everybody shits on main lines you know main lines are dumb they're not worth studying there's a reason they're the main lines to begin with and the reason is that"
+  },
+  {
+   "ply": 4,
+   "t": 787,
+   "line": [
+    "c4",
+    "dxc4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "if your opponent doesn't know them you can actually basically just win the game out of the opening consistently so it's worth taking a stab at it so yeah e3 is the second move you can also start"
+  },
+  {
+   "ply": 5,
+   "t": 789,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "said": "with knight f3"
+  },
+  {
+   "ply": 4,
+   "t": 791,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "queen a4 check is not good because the point here is not just to win the pawn back you also have to develop your pieces while you're doing it you don't want to do it with your queen yeah a channel demonetized you don't want to do it with your queen"
+  },
+  {
+   "ply": 5,
+   "t": 814,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "said": "uh it's it's a move like queen a4 check has been played before even by some gm's but it's definitely not the most critical amon thank you knight f3 is the most popular mode knight f3 knight f6"
+  },
+  {
+   "ply": 6,
+   "t": 815,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/8/2pP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4",
+   "said": ""
+  },
+  {
+   "ply": 7,
+   "t": 816,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/8/2pP4/4PN2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "and now e3 this is the positional version knight c3 is not that good"
+  },
+  {
+   "ply": 8,
+   "t": 821,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/8/2pP4/4PN2/PP3PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "and then e6 you might be aware of like"
+  },
+  {
+   "ply": 9,
+   "t": 822.5,
+   "line": [
+    "Bxc4"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/8/2BP4/4PN2/PP3PPP/RNBQK2R b KQkq - 0 5",
+   "said": "this line and now black has"
+  },
+  {
+   "ply": 10,
+   "t": 825,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/4pn2/2p5/2BP4/4PN2/PP3PPP/RNBQK2R w KQkq - 0 6",
+   "said": "the main move is c5 and you get this type of position you"
+  },
+  {
+   "ply": 11,
+   "t": 829,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/4pn2/2p5/2BP4/4PN2/PP3PPP/RNBQ1RK1 b kq - 1 6",
+   "said": "very often get iqp structure out of queen's gamma decline queensland accepted but after cded you already have an isolated queen pond structure"
+  },
+  {
+   "ply": 4,
+   "t": 843,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "um is there a problem with knight c3 yeah so people asking about knight c3 here"
+  },
+  {
+   "ply": 5,
+   "t": 844,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "said": "it is a move it is it is definitely a move um hmm i'm not sure off the top of my head"
+  },
+  {
+   "ply": 6,
+   "t": 856.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/8/2pP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": "why it's like not played more often i want to say"
+  },
+  {
+   "ply": 7,
+   "t": 859,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/8/2pP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 3 4",
+   "said": "you have a knight f6 i guess you can play knight f3"
+  },
+  {
+   "ply": 9,
+   "t": 862.5,
+   "line": [
+    "Ng8",
+    "Ng1"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 5 5",
+   "said": "yeah i'm not sure i'd have to consult like a source on this me i know e5 is"
+  },
+  {
+   "ply": 10,
+   "t": 866,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/2pP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 6",
+   "said": "the move oh maybe it is e5 maybe it is e5 yeah thank you for letting me know i see i don't know this is like out of my league it is e5 e5 is a very very typical idea"
+  },
+  {
+   "ply": 11,
+   "t": 889,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/4P3/2p5/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 6",
+   "said": "in uh these types of positions you're using the fact that you have um you're using the fact that you have an extra pawn to basically use that pawn as a bargaining chip and if d takes c5 happens this trait is obviously undesirable for"
+  },
+  {
+   "ply": 13,
+   "t": 897,
+   "line": [
+    "Qxd1+",
+    "Nxd1"
+   ],
+   "fen": "rnb1kbnr/ppp2ppp/8/4P3/2p5/8/PP2PPPP/R1BNKBNR b KQkq - 0 7",
+   "said": "white because you've got to take either with the knight of the king both are awkward and clearly this position is not"
+  },
+  {
+   "ply": 14,
+   "t": 898.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1b1kbnr/ppp2ppp/2n5/4P3/2p5/8/PP2PPPP/R1BNKBNR w KQkq - 1 8",
+   "said": "impressive for why you also have a weak pawn on e5"
+  },
+  {
+   "ply": 2,
+   "t": 906.5,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "by the way the same concept is applied in the blackmart dmr gambit after uh e4 d takes e4 f3"
+  },
+  {
+   "ply": 5,
+   "t": 909.5,
+   "line": [
+    "e4",
+    "dxe4",
+    "f3"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/3Pp3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "said": "who can tell me on the basis of what we just discussed what is a very good and solid move here"
+  },
+  {
+   "ply": 6,
+   "t": 923,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/4p3/3Pp3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+   "said": "for black yeah there is a difference and i'll explain in a second yeah e5 right same concept just e5 de"
+  },
+  {
+   "ply": 7,
+   "t": 924.5,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/4P3/4p3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 4",
+   "said": "queen d1 you get the king into the"
+  },
+  {
+   "ply": 9,
+   "t": 926,
+   "line": [
+    "Qxd1+",
+    "Kxd1"
+   ],
+   "fen": "rnb1kbnr/ppp2ppp/8/4P3/4p3/5P2/PPP3PP/RNBK1BNR b kq - 0 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 928,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1b1kbnr/ppp2ppp/2n5/4P3/4p3/5P2/PPP3PP/RNBK1BNR w kq - 1 6",
+   "said": "center and you just get a great position so just re file that idea away like pushing the ear c pawn and using the queen trade as a bargaining chip like as a tool to discourage your opponent from taking pride in this in the c3 sicilian there is also a line like this so in the c3 sicilian there is a line where black actually takes and goes e5 now this isn't great um but the point is after d e black just plays queen d1 and knight c6 and i actually lost the game i know i'm spending a while on this but i really want to hammer home this point these types of end games are very unpleasant and i did lose a game like this many years ago and it sort of stuck with me that even up upon these positions are often not worth going for this is a game from when i was 1700. yeah so basically um this isn't anything super impressive or anything just just want to hammer home the point"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 2,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "options": [
+    {
+     "san": "c4",
+     "t": 787,
+     "continuation": "c4 dxc4",
+     "said": "if your opponent doesn't know them you can actually basically just win the game out of the opening consistently so it's worth taking a stab at it so yeah e3 is the second move you can also start with knight f3 queen a4 check is not good because the point here is not just to win the pawn back you also have to develop your pieces while you're doing it you don't want to do it with your queen yeah a channel demonetized you don't want to do it with your queen uh it's it's a move like queen a4 check has been played before even by some gm's but it's definitely not the most critical amon thank you knight f3 is the most popular mode knight f3 knight f6 and now e3 this is the positional version knight c3 is not that good and then e6 you might be aware of like this line and now black has the main move is c5 and you get this type of position you very often get iqp structure out of queen's gamma decline queensland accepted but after cded you already have an isolated queen pond structure um is there a problem with knight c3 yeah so people asking about knight c3 here it is a move it is it is definitely a move"
+    },
+    {
+     "san": "e4",
+     "t": 909.5,
+     "continuation": "e4 dxe4 f3",
+     "said": "impressive for why you also have a weak pawn on e5 by the way the same concept is applied in the blackmart dmr gambit after uh e4 d takes e4 f3 who can tell me on the basis of what we just discussed what is a very good and solid move here for black yeah there is a difference and i'll explain in a second yeah e5 right same concept just e5 de queen d1 you get the king into the center and you just get a great position so just re file that idea away like pushing the ear c pawn and using the queen trade as a bargaining chip like as a tool to discourage your opponent from taking pride in this in the c3 sicilian there is also a line like this so in the c3 sicilian there is a line where black actually takes and goes e5 now this isn't great um but the point is after d e black just plays queen d1 and knight c6 and i actually lost the game i know i'm spending a while on this but i really want to hammer home this point these types of end games are very"
+    }
+   ]
+  },
+  {
+   "ply": 4,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d4",
+    "d5",
+    "c4",
+    "dxc4"
+   ],
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 789,
+     "continuation": "Nf3",
+     "said": "can actually basically just win the game out of the opening consistently so it's worth taking a stab at it so yeah e3 is the second move you can also start with knight f3 queen a4 check is not good because the point here is not just to win the pawn back you also have to develop your pieces while you're doing it you don't want to do it with your queen yeah a channel demonetized you don't want to do it with your queen uh it's it's a move like queen a4 check has been played before even by some gm's but it's definitely not the most critical amon thank you knight f3 is the most popular mode knight f3 knight f6 and now e3 this is the positional version knight c3 is not that good and then e6 you might be aware of like this line and now black has the main move is c5 and you get this type of position you very often get iqp structure out of queen's gamma decline queensland accepted but after cded you already have an isolated queen pond structure um is there a problem with knight c3 yeah so people asking about knight c3 here it is a move it is it is definitely a move um"
+    },
+    {
+     "san": "Nc3",
+     "t": 844,
+     "continuation": "Nc3",
+     "said": "accepted but after cded you already have an isolated queen pond structure um is there a problem with knight c3 yeah so people asking about knight c3 here it is a move it is it is definitely a move um hmm i'm not sure off the top of my head why it's like not played more often i want to say you have a knight f6 i guess you can play knight f3 yeah i'm not sure i'd have to consult like a source on this me i know e5 is the move oh maybe it is e5 maybe it is e5 yeah thank you for letting me know i see i don't know this is like out of my league it is e5 e5 is a very very typical idea in uh these types of positions you're using the fact that you have um you're using the fact that you have an extra pawn to basically use that pawn as a bargaining chip and if d takes c5 happens this trait is obviously undesirable for white because you've got to take either with the knight of the king both are awkward and clearly this position is not impressive for why you also have a weak pawn on e5 by the way the same concept is applied"
+    }
+   ]
+  },
+  {
+   "ply": 5,
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "d4",
+    "d5",
+    "c4",
+    "dxc4",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "Nf6",
+     "t": 856.5,
+     "continuation": "Nf6",
+     "said": "it is it is definitely a move um hmm i'm not sure off the top of my head why it's like not played more often i want to say you have a knight f6 i guess you can play knight f3 yeah i'm not sure i'd have to consult like a source on this me i know e5 is the move oh maybe it is e5 maybe it is e5 yeah thank you for letting me know i see i don't know this is like out of my league it is e5 e5 is a very very typical idea in uh these types of positions you're using the fact that you have um you're using the fact that you have an extra pawn to basically use that pawn as a bargaining chip and if d takes c5 happens this trait is obviously undesirable for white because you've got to take either with the knight of the king both are awkward and clearly this position is not impressive for why you also have a weak pawn on e5 by the way the same concept is applied in the blackmart dmr gambit after uh e4 d takes e4 f3 who can tell me on the basis of what we just discussed what is a very good and solid move here for black"
+    },
+    {
+     "san": "e5",
+     "t": 866,
+     "continuation": "e5",
+     "said": "often i want to say you have a knight f6 i guess you can play knight f3 yeah i'm not sure i'd have to consult like a source on this me i know e5 is the move oh maybe it is e5 maybe it is e5 yeah thank you for letting me know i see i don't know this is like out of my league it is e5 e5 is a very very typical idea in uh these types of positions you're using the fact that you have um you're using the fact that you have an extra pawn to basically use that pawn as a bargaining chip and if d takes c5 happens this trait is obviously undesirable for white because you've got to take either with the knight of the king both are awkward and clearly this position is not impressive for why you also have a weak pawn on e5 by the way the same concept is applied in the blackmart dmr gambit after uh e4 d takes e4 f3 who can tell me on the basis of what we just discussed what is a very good and solid move here for black yeah there is a difference and i'll explain in a second yeah e5 right same concept just e5 de queen d1 you get the king into the"
+    }
+   ]
+  }
+ ]
+}

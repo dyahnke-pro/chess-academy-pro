@@ -1,0 +1,274 @@
+{
+ "videoId": "uuDQbMlXeDQ",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1170",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 4048,
+  "settledPositions": null
+ },
+ "plies": 25,
+ "rewinds": 2,
+ "moves": [
+  {
+   "t": 537.5,
+   "ply": 2,
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 541,
+   "ply": 4,
+   "line": [
+    "c4",
+    "e6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 545.5,
+   "ply": 6,
+   "line": [
+    "Nf3",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4"
+  },
+  {
+   "t": 556,
+   "ply": 7,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 3 4"
+  },
+  {
+   "t": 565,
+   "ply": 8,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 4 5"
+  },
+  {
+   "t": 576.5,
+   "ply": 9,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP1B2/2N2N2/PP2PPPP/R2QKB1R b KQkq - 5 5"
+  },
+  {
+   "t": 580,
+   "ply": 10,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2PP1B2/2N2N2/PP2PPPP/R2QKB1R w KQ - 6 6"
+  },
+  {
+   "t": 596,
+   "ply": 11,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2PP1B2/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 6"
+  },
+  {
+   "t": 604.5,
+   "ply": 12,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbq1rk1/pp2bppp/4pn2/2pp4/2PP1B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 7"
+  },
+  {
+   "t": 621,
+   "ply": 14,
+   "line": [
+    "dxc5",
+    "Bxc5"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/4pn2/2bp4/2P2B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 8"
+  },
+  {
+   "t": 624,
+   "ply": 15,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/4pn2/2bP4/5B2/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 8"
+  },
+  {
+   "t": 625,
+   "ply": 16,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/5n2/2bp4/5B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 9"
+  },
+  {
+   "t": 632.5,
+   "ply": 17,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/5n2/2bp2B1/8/2N1PN2/PP3PPP/R2QKB1R b KQ - 1 9"
+  },
+  {
+   "t": 654,
+   "ply": 18,
+   "line": [
+    "Be6"
+   ],
+   "fen": "rn1q1rk1/pp3ppp/4bn2/2bp2B1/8/2N1PN2/PP3PPP/R2QKB1R w KQ - 2 10"
+  },
+  {
+   "t": 666.5,
+   "ply": 19,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "rn1q1rk1/pp3ppp/4bB2/2bp4/8/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 10"
+  },
+  {
+   "t": 671.5,
+   "ply": 20,
+   "line": [
+    "Qxf6"
+   ],
+   "fen": "rn3rk1/pp3ppp/4bq2/2bp4/8/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 11"
+  },
+  {
+   "t": 681,
+   "ply": 21,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "rn3rk1/pp3ppp/4bq2/2bN4/8/4PN2/PP3PPP/R2QKB1R b KQ - 0 11"
+  },
+  {
+   "t": 700,
+   "ply": 22,
+   "line": [
+    "Qxb2"
+   ],
+   "fen": "rn3rk1/pp3ppp/4b3/2bN4/8/4PN2/Pq3PPP/R2QKB1R w KQ - 0 12"
+  },
+  {
+   "t": 702,
+   "ply": 21,
+   "line": [],
+   "fen": "rn3rk1/pp3ppp/4bq2/2bN4/8/4PN2/PP3PPP/R2QKB1R b KQ - 0 11"
+  },
+  {
+   "t": 709.5,
+   "ply": 22,
+   "line": [
+    "Qxb2"
+   ],
+   "fen": "rn3rk1/pp3ppp/4b3/2bN4/8/4PN2/Pq3PPP/R2QKB1R w KQ - 0 12"
+  },
+  {
+   "t": 710.5,
+   "ply": 23,
+   "line": [
+    "Nf4"
+   ],
+   "fen": "rn3rk1/pp3ppp/4b3/2b5/5N2/4PN2/Pq3PPP/R2QKB1R b KQ - 1 12"
+  },
+  {
+   "t": 735,
+   "ply": 24,
+   "line": [
+    "Bb4+"
+   ],
+   "fen": "rn3rk1/pp3ppp/4b3/8/1b3N2/4PN2/Pq3PPP/R2QKB1R w KQ - 2 13"
+  },
+  {
+   "t": 752.5,
+   "ply": 27,
+   "line": [
+    "Nd2",
+    "Bxd2+",
+    "Qxd2"
+   ],
+   "fen": "rn3rk1/pp3ppp/4b3/8/5N2/4P3/Pq1Q1PPP/R3KB1R b KQ - 0 14"
+  },
+  {
+   "t": 754,
+   "ply": 28,
+   "line": [
+    "Qxa1+"
+   ],
+   "fen": "rn3rk1/pp3ppp/4b3/8/5N2/4P3/P2Q1PPP/q3KB1R w K - 0 15"
+  },
+  {
+   "t": 760.5,
+   "ply": 23,
+   "line": [],
+   "fen": "rn3rk1/pp3ppp/4b3/2b5/5N2/4PN2/Pq3PPP/R2QKB1R b KQ - 1 12"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Queen's Gambit Declined: Harrwitz Attack, Main Line",
+   "eco": "D37",
+   "plies": 14,
+   "line": "d4 d5 c4 e6 Nf3 Nf6 Nc3 Be7 Bf4 O-O e3 c5 dxc5 Bxc5",
+   "coverage": 0.591
+  },
+  {
+   "name": "Queen's Gambit Declined: Harrwitz Attack",
+   "eco": "D37",
+   "plies": 9,
+   "line": "d4 d5 c4 e6 Nf3 Nf6 Nc3 Be7 Bf4",
+   "coverage": 0.773
+  },
+  {
+   "name": "Queen's Gambit Declined: Three Knights Variation",
+   "eco": "D37",
+   "plies": 7,
+   "line": "d4 d5 c4 e6 Nf3 Nf6 Nc3",
+   "coverage": 0.864
+  },
+  {
+   "name": "Queen's Gambit Declined",
+   "eco": "D30",
+   "plies": 4,
+   "line": "d4 d5 c4 e6",
+   "coverage": 0.955
+  },
+  {
+   "name": "Queen's Gambit",
+   "eco": "D06",
+   "plies": 3,
+   "line": "d4 d5 c4",
+   "coverage": 0.955
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}

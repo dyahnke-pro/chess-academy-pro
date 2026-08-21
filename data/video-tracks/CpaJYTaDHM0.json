@@ -1,0 +1,187 @@
+{
+ "videoId": "CpaJYTaDHM0",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2021",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 3834,
+  "settledPositions": null
+ },
+ "plies": 14,
+ "rewinds": 0,
+ "moves": [
+  {
+   "t": 23,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 24,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 27,
+   "ply": 5,
+   "line": [
+    "Nc6",
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3"
+  },
+  {
+   "t": 34.5,
+   "ply": 6,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+  },
+  {
+   "t": 43.5,
+   "ply": 7,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4"
+  },
+  {
+   "t": 51.5,
+   "ply": 8,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 5"
+  },
+  {
+   "t": 68,
+   "ply": 9,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B2p3/3PP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5"
+  },
+  {
+   "t": 70,
+   "ply": 10,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B6/3pP3/5N2/PPP2PPP/RNBQ1RK1 w kq - 0 6"
+  },
+  {
+   "t": 71.5,
+   "ply": 11,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B6/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 6"
+  },
+  {
+   "t": 74,
+   "ply": 12,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/2np1n2/1B6/3NP3/8/PPP2PPP/RNBQ1RK1 w kq - 1 7"
+  },
+  {
+   "t": 76.5,
+   "ply": 13,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/2np1n2/1B6/3NP3/2N5/PPP2PPP/R1BQ1RK1 b kq - 2 7"
+  },
+  {
+   "t": 80.5,
+   "ply": 14,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r2qk2r/pppbbppp/2np1n2/1B6/3NP3/2N5/PPP2PPP/R1BQ1RK1 w kq - 3 8"
+  },
+  {
+   "t": 84,
+   "ply": 15,
+   "line": [
+    "Bxc6"
+   ],
+   "fen": "r2qk2r/pppbbppp/2Bp1n2/8/3NP3/2N5/PPP2PPP/R1BQ1RK1 b kq - 0 8"
+  },
+  {
+   "t": 87,
+   "ply": 16,
+   "line": [
+    "bxc6"
+   ],
+   "fen": "r2qk2r/p1pbbppp/2pp1n2/8/3NP3/2N5/PPP2PPP/R1BQ1RK1 w kq - 0 9"
+  }
+ ],
+ "forks": [],
+ "notes": [
+  {
+   "id": "vn-ruy-the-bishop-that-asks-about-the-defender",
+   "line": "e4 e5 Nf3 Nc6 Bb5",
+   "teaches": "Attack the piece that DEFENDS, not the pawn it defends. Pressure on a defender is a question the opponent has to keep answering for the rest of the opening.",
+   "explains": "The bishop pins its attention on the knight at c6 — the piece holding e5 together. It is not winning anything: the pawn is defended and taking the knight only helps Black's structure in some lines. What it does is put a standing question to the defender, and that question is what this whole opening is built on.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c6"
+    }
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "t": 27,
+   "ply": 5,
+   "source": "yt:CpaJYTaDHM0"
+  },
+  {
+   "id": "vn-ruy-berlin-answer-a-question-with-a-question",
+   "line": "e4 e5 Nf3 Nc6 Bb5 Nf6",
+   "teaches": "When the opponent puts pressure on your position, look for a developing move that ignores it and creates pressure of its own. Counter-attack in the centre usually beats a defensive shuffle.",
+   "explains": "Instead of shoring up the queenside knight, the other knight comes out and hits e4. This is the high-level answer to the bishop, and it has a reputation for steering toward simplified positions early. That reputation is only half deserved — the endgames it produces are far from lifeless, and White has several genuinely different ways to meet it rather than heading for them.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e4"
+    }
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "t": 34.5,
+   "ply": 6,
+   "source": "yt:CpaJYTaDHM0"
+  },
+  {
+   "id": "vn-ruy-castle-and-offer-the-pawn",
+   "line": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O",
+   "teaches": "Offering a pawn you can regain is a way of asking the opponent to commit. Castling instead of defending is the move when the capture costs them time and leaves you a lead in development.",
+   "explains": "White tucks the king away rather than propping up the attacked pawn. Taking it is entirely playable for Black — this is the main road — but it hands White the initiative and a series of tempo moves against the knight that grabs it. The alternative is a quieter one-square pawn move by Black, which is passive but a perfectly legitimate old defence rather than a mistake.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "f1"
+    }
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4",
+   "t": 43.5,
+   "ply": 7,
+   "source": "yt:CpaJYTaDHM0"
+  }
+ ]
+}

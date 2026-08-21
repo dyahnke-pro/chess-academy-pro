@@ -1,0 +1,543 @@
+{
+ "videoId": "sfjI4jEY58s",
+ "title": "New Speedrun!?? | \"Def. We Play 1. E4\" | The Sensei | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 34,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] okay we got a game marcy p okay definitely we play e4 that's for sure yeah so let's begin by playing the four"
+  },
+  {
+   "ply": 3,
+   "t": 40.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "night scotch i i propose this opening as as an initial opening because"
+  },
+  {
+   "ply": 4,
+   "t": 44,
+   "line": [
+    "Qf6"
+   ],
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "essentially well first of all"
+  },
+  {
+   "ply": 3,
+   "t": 46.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "in many of these games we're not even going to get knight c6 and that problem"
+  },
+  {
+   "ply": 4,
+   "t": 49.5,
+   "line": [
+    "Qf6"
+   ],
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "is going to be solved for us this is one of those games queen f6 pretty common move at this level obviously it's bad um for many reasons uh but the main one is that black not only doesn't develop a minor piece but deprives the square of the g8 knight and reacting to such openings is is a lot easier than it seems"
+  },
+  {
+   "ply": 5,
+   "t": 83,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "right and the first step in reacting to them is generally to actually get the advantage in development and then you're going to think about opening up the center so you don't need to play d4 here right let's just go knight c3 another"
+  },
+  {
+   "ply": 4,
+   "t": 85,
+   "line": [],
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "approach would have been pawn c3 and d4"
+  },
+  {
+   "ply": 6,
+   "t": 86.5,
+   "line": [
+    "Nc3",
+    "c6"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 4",
+   "said": "but i like to play with the pieces at this basic level okay c6 already here i would think about going d4 and opening up the center because there's already an imbalance of two developed pieces to zero and obviously the queen gets vulnerable in these types of situations so oh yeah the timer is off let me just adjust the timer so this would be a great time this would be a great time to play d4 and i think that's what we're gonna do"
+  },
+  {
+   "ply": 7,
+   "t": 132.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "said": "kay okay sorry about this all right so let's go d4"
+  },
+  {
+   "ply": 8,
+   "t": 135,
+   "line": [
+    "exd4"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "said": "and let's open up the center all right he takes d4"
+  },
+  {
+   "ply": 9,
+   "t": 137.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "said": "we take with the knight we could have also played bishop g5 here but i'm"
+  },
+  {
+   "ply": 10,
+   "t": 139.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "rnb1k1nr/pp1p1ppp/2p2q2/2b5/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "said": "avoiding any complicated intermediate moves bishop c5 um what to do now how should we proceed in this position and yeah knight b3 would be an excellent"
+  },
+  {
+   "ply": 11,
+   "t": 164.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "rnb1k1nr/pp1p1ppp/2p2q2/2b5/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 2 6",
+   "said": "move yeah of course bishop b3 this is kind of a an easy developing move that also protects the knight i think a lot of beginners here would be tempted to go knight f3 um but don't hesitate to defend a piece with another piece this is one of the safest ways of defending it to have a bishop on the neighboring diagonal square"
+  },
+  {
+   "ply": 12,
+   "t": 177.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnb1k1nr/pp3ppp/2pp1q2/2b5/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 0 7",
+   "said": "all right so far we are simply developing he goes d6 okay so let's take stock of what we still need to develop we need to castle one way or the other and we need to develop our bishop from f1 what in what order do we do things well generally i like to develop the bishop first because we could actually potentially castle a queen side and i don't know which way we want to castle i want to wait and see what black does that's one of the techniques for solving"
+  },
+  {
+   "ply": 13,
+   "t": 215.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnb1k1nr/pp3ppp/2pp1q2/2b5/2BNP3/2N1B3/PPP2PPP/R2QK2R b KQkq - 1 7",
+   "said": "the problem of where to castle so let's start by developing the bishop well where do we go this square's out of the question it blunders the knight bishop b2 is always possible but to me bishop c4 is going to be the most active move in these cases"
+  },
+  {
+   "ply": 14,
+   "t": 220.5,
+   "line": [
+    "Nh6"
+   ],
+   "fen": "rnb1k2r/pp3ppp/2pp1q1n/2b5/2BNP3/2N1B3/PPP2PPP/R2QK2R w KQkq - 2 8",
+   "said": "some of you might notice the the move b5 but then we'll just drop the bishop back to b3 oh knight h6 actually not a bad move and already at this level you have to be asking yourself uh what your opponent wants and one of the triggers for that is when your opponent makes an unusual developing move whether they develop the knight to the side of the board uh or some some weird move to the side of the board something like that you have to smell a rat because oftentimes there's going to be some hidden intention and if you look carefully it's not that black wants to play bishop g4 that's not dangerous because then we just move our queen"
+  },
+  {
+   "ply": 15,
+   "t": 270.5,
+   "line": [
+    "h3"
+   ],
+   "fen": "rnb1k2r/pp3ppp/2pp1q1n/2b5/2BNP3/2N1B2P/PPP2PP1/R2QK2R b KQkq - 0 8",
+   "said": "i think that black wants to go knight g4 and that actually is dangerous because then black threatens to ruin our pawn structure and we can't move our bishop because the knight is defended now we have f3 and h3 and in 90 of cases when you choose between these two moves uh you you generally want to choose"
+  },
+  {
+   "ply": 16,
+   "t": 286.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnb2rk1/pp3ppp/2pp1q1n/2b5/2BNP3/2N1B2P/PPP2PP1/R2QK2R w KQ - 1 9",
+   "said": "h3 and since we already pushed upon on the king side it does make a lot of sense here to play queen d2"
+  },
+  {
+   "ply": 17,
+   "t": 287.5,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "rnb2rk1/pp3ppp/2pp1q1n/2b5/2BNP3/2N1B2P/PPPQ1PP1/R3K2R b KQ - 2 9",
+   "said": "and castle queenside because"
+  },
+  {
+   "ply": 18,
+   "t": 293.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "rnb2rk1/p4ppp/2pp1q1n/1pb5/2BNP3/2N1B2P/PPPQ1PP1/R3K2R w KQ - 0 10",
+   "said": "not that castle and king's side would be unsafe for our king more so that um this pawn and h3 can serve as an anchor for a further pawn that reaches g4 that's the logic all right so we have a tactic here"
+  },
+  {
+   "ply": 19,
+   "t": 317.5,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "rnb2rk1/p4ppp/2pp1q1n/1pb5/3NP3/1BN1B2P/PPPQ1PP1/R3K2R b KQ - 1 10",
+   "said": "we have a tactic but it it's very messy and i don't want to rely on these things while we're still in the beginner stage so we're just going to drop the bishop back but i'll talk about this afterwards"
+  },
+  {
+   "ply": 20,
+   "t": 323,
+   "line": [
+    "Na6"
+   ],
+   "fen": "r1b2rk1/p4ppp/n1pp1q1n/1pb5/3NP3/1BN1B2P/PPPQ1PP1/R3K2R w KQ - 2 11",
+   "said": ""
+  },
+  {
+   "ply": 21,
+   "t": 327.5,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "r1b2rk1/p4ppp/n1pp1q1n/1pb5/3NP3/1BN1B2P/PPPQ1PP1/2KR3R b - - 3 11",
+   "said": "knight a6 okay so this guy likes to develop pieces to the side of the board that doesn't affect us we castle and now we are ready at last to start attacking on the king side"
+  },
+  {
+   "ply": 22,
+   "t": 337.5,
+   "line": [
+    "Bb6"
+   ],
+   "fen": "r1b2rk1/p4ppp/nbpp1q1n/1p6/3NP3/1BN1B2P/PPPQ1PP1/2KR3R w - - 4 12",
+   "said": "you have opposite side castling oh we could have also taken this pawn i didn't even see yeah we can take it now we can take the spot on c6 i didn't even notice it um the idea of bishop b6 is probably to go c5 which itself is not very dangerous"
+  },
+  {
+   "ply": 23,
+   "t": 357,
+   "line": [
+    "Nxc6"
+   ],
+   "fen": "r1b2rk1/p4ppp/nbNp1q1n/1p6/4P3/1BN1B2P/PPPQ1PP1/2KR3R b - - 0 12",
+   "said": "remember that when pawns are pushed there very often will be other pawns that are left undefended so just always ask yourself that as well as squares but i don't see any reason for us not to take this pawn that's a free pawn it chops the the legs completely off of"
+  },
+  {
+   "ply": 24,
+   "t": 365.5,
+   "line": [
+    "Nc5"
+   ],
+   "fen": "r1b2rk1/p4ppp/1bNp1q1n/1pn5/4P3/1BN1B2P/PPPQ1PP1/2KR3R w - - 1 13",
+   "said": "black's sort of pawn phalanx now this hangs that hangs and we can start taking stuff many good moves in this position but there is one move that immediately appeals to me because it attempts to squeeze the most out of the position"
+  },
+  {
+   "ply": 25,
+   "t": 389.5,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1b2rk1/p4ppp/1bNp1q1n/1pnN4/4P3/1B2B2P/PPPQ1PP1/2KR3R b - - 2 13",
+   "said": "um a good move here would be to take the pawn on d6 a bad move would be to play knight takes b5 because that diverts the knights away from the center and it gives away the e4 pawn but a really good move would be knight d5 simply centralizing the knight attacking the queen and if you look more carefully you'll notice that the queen simply doesn't have that many good squares if he goes queen g6 there's a fork queen e6 there is a discovery but what black has to do is take the bishop first"
+  },
+  {
+   "ply": 26,
+   "t": 415,
+   "line": [
+    "Qg6"
+   ],
+   "fen": "r1b2rk1/p4ppp/1bNp2qn/1pnN4/4P3/1B2B2P/PPPQ1PP1/2KR3R w - - 3 14",
+   "said": "and then go queen e6 these are only moves but even there we've clearly achieved a lot by getting this knight into such a nice square okay queen g6 is a pretty common blunder at this level"
+  },
+  {
+   "ply": 27,
+   "t": 421,
+   "line": [
+    "Nce7+"
+   ],
+   "fen": "r1b2rk1/p3Nppp/1b1p2qn/1pnN4/4P3/1B2B2P/PPPQ1PP1/2KR3R b - - 4 14",
+   "said": "does it matter which knight you put on e7 no if you're already winning the queen and i see players doing this a lot"
+  },
+  {
+   "ply": 28,
+   "t": 426,
+   "line": [
+    "Kh8"
+   ],
+   "fen": "r1b2r1k/p3Nppp/1b1p2qn/1pnN4/4P3/1B2B2P/PPPQ1PP1/2KR3R w - - 5 15",
+   "said": "don't overthink winning moves if you have two ways to deliver a fork"
+  },
+  {
+   "ply": 29,
+   "t": 430.5,
+   "line": [
+    "Nxg6+"
+   ],
+   "fen": "r1b2r1k/p4ppp/1b1p2Nn/1pnN4/4P3/1B2B2P/PPPQ1PP1/2KR3R b - - 0 15",
+   "said": "and you're winning a full queen it's probably not going to matter you want to"
+  },
+  {
+   "ply": 30,
+   "t": 432,
+   "line": [
+    "fxg6"
+   ],
+   "fen": "r1b2r1k/p5pp/1b1p2pn/1pnN4/4P3/1B2B2P/PPPQ1PP1/2KR3R w - - 0 16",
+   "said": "compare the two moves quickly but you don't want to sit there and obsess over you know minuscule differences in two ways of winning a queen they both win a queen okay what to do now we've talked many times on the speeder and about techniques of converting an advantage when you are up a queen the best approach is oftentimes just brute force destroy your opponent's pawn structure and the game"
+  },
+  {
+   "ply": 31,
+   "t": 469.5,
+   "line": [
+    "Bxh6"
+   ],
+   "fen": "r1b2r1k/p5pp/1b1p2pB/1pnN4/4P3/1B5P/PPPQ1PP1/2KR3R b - - 0 16",
+   "said": "i would not take b6 actually i would start by by looking at black's king to see if we can't just win finish winish finish the game immediately and you know if you look at that side of the board you should see bishop takes h6 now don't think of this move as"
+  },
+  {
+   "ply": 32,
+   "t": 475.5,
+   "line": [
+    "gxh6"
+   ],
+   "fen": "r1b2r1k/p6p/1b1p2pp/1pnN4/4P3/1B5P/PPPQ1PP1/2KR3R w - - 0 17",
+   "said": "g takes h6 queen takes h6 don't tie yourself to that move always reassess the situation every time your opponent's king king side has been weakened right he's taken on h6 with a pawn which"
+  },
+  {
+   "ply": 33,
+   "t": 490.5,
+   "line": [
+    "Qc3+"
+   ],
+   "fen": "r1b2r1k/p6p/1b1p2pp/1pnN4/4P3/1BQ4P/PPP2PP1/2KR3R b - - 1 17",
+   "said": "means that pawn used to be on g7 and immediately i see that this opened up a diagonal we have checkmate queen c3 or queen d4 check doesn't matter i just played queen c3 to"
+  },
+  {
+   "ply": 34,
+   "t": 498.5,
+   "line": [
+    "Kg8"
+   ],
+   "fen": "r1b2rk1/p6p/1b1p2pp/1pnN4/4P3/1BQ4P/PPP2PP1/2KR3R w - - 2 18",
+   "said": "make sure that it wasn't on you know on the path of the bishop now the king walks right into a secondary x-ray now knight f6 is not checkmate common blunder making a double check or a discovery check forgetting that the piece that's delivering the check is blocking"
+  },
+  {
+   "ply": 35,
+   "t": 523,
+   "line": [
+    "Ne7#"
+   ],
+   "fen": "r1b2rk1/p3N2p/1b1p2pp/1pn5/4P3/1BQ4P/PPP2PP1/2KR3R b - - 3 18",
+   "said": "a formerly controlled diagonal that's a twisted way of saying that the queen controls g7 and after knight f6 you relinquish that control but the mate here is 97 this is a double check and it's a mate because the queen controls all of the king's possible escape squares this is very win-ish"
+  },
+  {
+   "ply": 2,
+   "t": 539.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "okay simple game but i think a good start to the speed run let's have a quick look um yeah my opponent played fast which is going to be pretty common at this level"
+  },
+  {
+   "ply": 4,
+   "t": 547,
+   "line": [
+    "Nf3",
+    "Qf6"
+   ],
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "i faced this move once in my career uh when i was 1600 that game ended in the only smothered mate i've ever delivered in my in my chess career"
+  },
+  {
+   "ply": 5,
+   "t": 572.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "okay one second yeah um i delivered smothered mate for the first time in my chess career and the only time thank you tom hawker so knight c3 we develop our piece"
+  },
+  {
+   "ply": 6,
+   "t": 574.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 4",
+   "said": "c6 is probably not such a bad move"
+  },
+  {
+   "ply": 5,
+   "t": 580.5,
+   "line": [],
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "because it controls the d5 square um just a little note that after knight"
+  },
+  {
+   "ply": 6,
+   "t": 582,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "said": "c6 i think a lot of people here"
+  },
+  {
+   "ply": 7,
+   "t": 586,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/3Np3/4P3/5N2/PPPP1PPP/R1BQKB1R b KQkq - 5 4",
+   "said": "would instantly go knight d5 centralizing the knight attacking the queen and the pawn one little thing i'm going to say as we just get started is that you know one move itis is i think plays a much bigger role in the beginner's thinking patterns than i previously thought because even up until 15 1600 i find that people they see a move that creates a threat and sometimes two threats and their thinking stops there because"
+  },
+  {
+   "ply": 8,
+   "t": 626.5,
+   "line": [
+    "Qd8"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/3Np3/4P3/5N2/PPPP1PPP/R1BQKB1R w KQkq - 6 5",
+   "said": "you feel like just by doing that you're you're making improvements that's very often not the case now here 95 is actually not as impressive as it may appear it's not a bad move it's not a bad move by any means but it's maybe not the best move the reason why is that now black is going to get the knight out to f6 and then black is going to offer a"
+  },
+  {
+   "ply": 10,
+   "t": 645,
+   "line": [
+    "Nc3",
+    "Qf6"
+   ],
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 8 6",
+   "said": "nitrate and you've just moved your knight twice and you might very well have to either acquiesce to a trade or retreat it back to c3 so in this position i would play the much simpler bishop c4 just continuing"
+  },
+  {
+   "ply": 11,
+   "t": 647,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 9 6",
+   "said": "my development and potentially even d3"
+  },
+  {
+   "ply": 15,
+   "t": 652.5,
+   "line": [
+    "Nb8",
+    "Bf1",
+    "c6",
+    "d4"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 8",
+   "said": "okay so c6 now we open up the center now is a great time because black has"
+  },
+  {
+   "ply": 16,
+   "t": 657,
+   "line": [
+    "exd4"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 9",
+   "said": "nothing developed yeah bishop g5 by the way was also a"
+  },
+  {
+   "ply": 17,
+   "t": 659.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/6B1/3pP3/2N2N2/PPP2PPP/R2QKB1R b KQkq - 1 9",
+   "said": "possible move just developing the bishop and hitting the queen"
+  },
+  {
+   "ply": 9,
+   "t": 664.5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 7 5",
+   "said": "but no reason to to be fancy bishop e3 bishop c4 knight h6 aiming for g4 so we prevent that now i just want to briefly explain why the move f3 where does ben feingold's statement actually come from what is the science behind f3 often being bad because we all know that he's right we joke about it but f3 often is a very big weakening move whereas something like g3 which intuitively would seem to weaken more squares isn't talked about in the same way well there's two reasons first is that f3 unlike g3 is oftentimes a tempting move for beginners because it does a couple of different things it gives a sense of comfort i think it builds up a pawn chain it defends g4 it does accomplish a lot the problem is that this diagonal that i indicated with one arrow and this with the other arrow are two of the most high trafficked diagonals on the board uh that means a lot is going on there think about how often you develop your"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "rnb1kbnr/pppp1ppp/5q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Qf6",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "c6",
+     "t": 574.5,
+     "continuation": "c6",
+     "said": "okay one second yeah um i delivered smothered mate for the first time in my chess career and the only time thank you tom hawker so knight c3 we develop our piece c6 is probably not such a bad move because it controls the d5 square um just a little note that after knight c6 i think a lot of people here would instantly go knight d5 centralizing the knight attacking the queen and the pawn one little thing i'm going to say as we just get started is that you know one move itis is i think plays a much bigger role in the beginner's thinking patterns than i previously thought because even up until 15 1600 i find that people they see a move that creates a threat and sometimes two threats and their thinking stops there because you feel like just by doing that you're you're making improvements that's very often not the case now here 95 is actually not as impressive as it may appear it's not a bad move it's not a bad move by any means but it's maybe not the best move the reason why is that now black is going to get the knight out to f6 and then black is going to offer a"
+    },
+    {
+     "san": "Nc6",
+     "t": 582,
+     "continuation": "Nc6",
+     "said": "so knight c3 we develop our piece c6 is probably not such a bad move because it controls the d5 square um just a little note that after knight c6 i think a lot of people here would instantly go knight d5 centralizing the knight attacking the queen and the pawn one little thing i'm going to say as we just get started is that you know one move itis is i think plays a much bigger role in the beginner's thinking patterns than i previously thought because even up until 15 1600 i find that people they see a move that creates a threat and sometimes two threats and their thinking stops there because you feel like just by doing that you're you're making improvements that's very often not the case now here 95 is actually not as impressive as it may appear it's not a bad move it's not a bad move by any means but it's maybe not the best move the reason why is that now black is going to get the knight out to f6 and then black is going to offer a nitrate and you've just moved your knight twice and you might very well have to either acquiesce to a trade or retreat it back to c3"
+    }
+   ]
+  },
+  {
+   "ply": 6,
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Qf6",
+    "Nc3",
+    "Nc6"
+   ],
+   "options": [
+    {
+     "san": "Nd5",
+     "t": 586,
+     "continuation": "Nd5",
+     "said": "c6 is probably not such a bad move because it controls the d5 square um just a little note that after knight c6 i think a lot of people here would instantly go knight d5 centralizing the knight attacking the queen and the pawn one little thing i'm going to say as we just get started is that you know one move itis is i think plays a much bigger role in the beginner's thinking patterns than i previously thought because even up until 15 1600 i find that people they see a move that creates a threat and sometimes two threats and their thinking stops there because you feel like just by doing that you're you're making improvements that's very often not the case now here 95 is actually not as impressive as it may appear it's not a bad move it's not a bad move by any means but it's maybe not the best move the reason why is that now black is going to get the knight out to f6 and then black is going to offer a nitrate and you've just moved your knight twice and you might very well have to either acquiesce to a trade or retreat it back to c3 so in this position i would play the much simpler bishop c4 just continuing"
+    },
+    {
+     "san": "Bc4",
+     "t": 647,
+     "continuation": "Bc4",
+     "said": "nitrate and you've just moved your knight twice and you might very well have to either acquiesce to a trade or retreat it back to c3 so in this position i would play the much simpler bishop c4 just continuing my development and potentially even d3 okay so c6 now we open up the center now is a great time because black has nothing developed yeah bishop g5 by the way was also a possible move just developing the bishop and hitting the queen but no reason to to be fancy bishop e3 bishop c4 knight h6 aiming for g4 so we prevent that now i just want to briefly explain why the move f3 where does ben feingold's statement actually come from what is the science behind f3 often being bad because we all know that he's right we joke about it but f3 often is a very big weakening move whereas something like g3 which intuitively would seem to weaken more squares isn't talked about in the same way well there's two reasons first is that f3 unlike g3 is oftentimes a tempting move for beginners because it does a couple of different things it gives a sense of comfort i think it builds up a pawn chain it defends g4 it does"
+    }
+   ]
+  },
+  {
+   "ply": 8,
+   "fen": "rnb1kbnr/pp1p1ppp/2p2q2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Qf6",
+    "Nc3",
+    "c6",
+    "d4",
+    "exd4"
+   ],
+   "options": [
+    {
+     "san": "Nxd4",
+     "t": 137.5,
+     "continuation": "Nxd4",
+     "said": "all right so let's go d4 and let's open up the center all right he takes d4 we take with the knight we could have also played bishop g5 here but i'm avoiding any complicated intermediate moves bishop c5 um what to do now how should we proceed in this position and yeah knight b3 would be an excellent move yeah of course bishop b3 this is kind of a an easy developing move that also protects the knight i think a lot of beginners here would be tempted to go knight f3 um but don't hesitate to defend a piece with another piece this is one of the safest ways of defending it to have a bishop on the neighboring diagonal square all right so far we are simply developing he goes d6 okay so let's take stock of what we still need to develop we need to castle one way or the other and we need to develop our bishop from f1 what in what order do we do things well generally i like to develop the bishop first because we could actually potentially castle a queen side"
+    },
+    {
+     "san": "Bg5",
+     "t": 659.5,
+     "continuation": "Bg5",
+     "said": "okay so c6 now we open up the center now is a great time because black has nothing developed yeah bishop g5 by the way was also a possible move just developing the bishop and hitting the queen but no reason to to be fancy bishop e3 bishop c4 knight h6 aiming for g4 so we prevent that now i just want to briefly explain why the move f3 where does ben feingold's statement actually come from what is the science behind f3 often being bad because we all know that he's right we joke about it but f3 often is a very big weakening move whereas something like g3 which intuitively would seem to weaken more squares isn't talked about in the same way well there's two reasons first is that f3 unlike g3 is oftentimes a tempting move for beginners because it does a couple of different things it gives a sense of comfort i think it builds up a pawn chain it defends g4 it does accomplish a lot the problem is that this diagonal that i indicated with one arrow and this with the other arrow are two of the most high trafficked diagonals on"
+    }
+   ]
+  }
+ ]
+}

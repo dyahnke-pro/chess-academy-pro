@@ -1,0 +1,260 @@
+{
+ "videoId": "E0cMsom-N7E",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2070 Cheater!",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 1286,
+  "settledPositions": null
+ },
+ "plies": 20,
+ "rewinds": 1,
+ "moves": [
+  {
+   "t": 1181.5,
+   "ply": 2,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2"
+  },
+  {
+   "t": 1184,
+   "ply": 4,
+   "line": [
+    "c4",
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 1189.5,
+   "ply": 8,
+   "line": [
+    "g3",
+    "Bg7",
+    "Bg2",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PP4/6P1/PP2PPBP/RNBQK1NR w KQ - 3 5"
+  },
+  {
+   "t": 1192,
+   "ply": 10,
+   "line": [
+    "Nc3",
+    "d6"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/2N3P1/PP2PPBP/R1BQK1NR w KQ - 0 6"
+  },
+  {
+   "t": 1194,
+   "ply": 11,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQK2R b KQ - 1 6"
+  },
+  {
+   "t": 1220,
+   "ply": 12,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r1bq1rk1/pppnppbp/3p1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQK2R w KQ - 2 7"
+  },
+  {
+   "t": 1222,
+   "ply": 14,
+   "line": [
+    "O-O",
+    "e5"
+   ],
+   "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 0 8"
+  },
+  {
+   "t": 1224,
+   "ply": 15,
+   "line": [
+    "e4"
+   ],
+   "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2NP1/PP3PBP/R1BQ1RK1 b - - 0 8"
+  },
+  {
+   "t": 1232,
+   "ply": 16,
+   "line": [
+    "c6"
+   ],
+   "fen": "r1bq1rk1/pp1n1pbp/2pp1np1/4p3/2PPP3/2N2NP1/PP3PBP/R1BQ1RK1 w - - 0 9"
+  },
+  {
+   "t": 1238,
+   "ply": 18,
+   "line": [
+    "h3",
+    "Qa5"
+   ],
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 w - - 1 10"
+  },
+  {
+   "t": 1241,
+   "ply": 19,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQR1K1 b - - 2 10"
+  },
+  {
+   "t": 1243.5,
+   "ply": 21,
+   "line": [
+    "exd4",
+    "Nxd4"
+   ],
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q7/2PNP3/2N3PP/PP3PB1/R1BQR1K1 b - - 0 11"
+  },
+  {
+   "t": 1245,
+   "ply": 22,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "r1b2rk1/pp3pbp/2pp1np1/q3n3/2PNP3/2N3PP/PP3PB1/R1BQR1K1 w - - 1 12"
+  },
+  {
+   "t": 1271,
+   "ply": 23,
+   "line": [
+    "Bf1"
+   ],
+   "fen": "r1b2rk1/pp3pbp/2pp1np1/q3n3/2PNP3/2N3PP/PP3P2/R1BQRBK1 b - - 2 12"
+  },
+  {
+   "t": 1276,
+   "ply": 24,
+   "line": [
+    "Re8"
+   ],
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/q3n3/2PNP3/2N3PP/PP3P2/R1BQRBK1 w - - 3 13"
+  },
+  {
+   "t": 1288.5,
+   "ply": 25,
+   "line": [
+    "Kh2"
+   ],
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/q3n3/2PNP3/2N3PP/PP3P1K/R1BQRB2 b - - 4 13"
+  },
+  {
+   "t": 1343,
+   "ply": 26,
+   "line": [
+    "Qc5"
+   ],
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/2q1n3/2PNP3/2N3PP/PP3P1K/R1BQRB2 w - - 5 14"
+  },
+  {
+   "t": 1416,
+   "ply": 27,
+   "line": [
+    "Na4"
+   ],
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/2q1n3/N1PNP3/6PP/PP3P1K/R1BQRB2 b - - 6 14"
+  },
+  {
+   "t": 1418.5,
+   "ply": 28,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r1b1r1k1/pp3pbp/2pp1np1/4n3/N1PqP3/6PP/PP3P1K/R1BQRB2 w - - 0 15"
+  },
+  {
+   "t": 1434,
+   "ply": 11,
+   "line": [],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQK2R b KQ - 1 6"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "King's Indian Defense: Fianchetto Variation, Classical Main Line",
+   "eco": "E69",
+   "plies": 17,
+   "line": "d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5 e4 c6 h3",
+   "coverage": 0.526
+  },
+  {
+   "name": "King's Indian Defense: Fianchetto Variation, Classical Variation",
+   "eco": "E68",
+   "plies": 15,
+   "line": "d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5 e4",
+   "coverage": 0.632
+  },
+  {
+   "name": "King's Indian Defense: Fianchetto Variation, Classical Fianchetto",
+   "eco": "E67",
+   "plies": 14,
+   "line": "d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5",
+   "coverage": 0.684
+  },
+  {
+   "name": "King's Indian Defense: Fianchetto Variation, Debrecen Defense",
+   "eco": "E67",
+   "plies": 12,
+   "line": "d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7",
+   "coverage": 0.737
+  },
+  {
+   "name": "King's Indian Defense: Fianchetto Variation, Immediate Fianchetto",
+   "eco": "E60",
+   "plies": 5,
+   "line": "d4 Nf6 c4 g6 g3",
+   "coverage": 0.895
+  },
+  {
+   "name": "Indian Defense: West Indian Defense",
+   "eco": "E60",
+   "plies": 4,
+   "line": "d4 Nf6 c4 g6",
+   "coverage": 0.947
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.947
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}

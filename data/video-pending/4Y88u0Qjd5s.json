@@ -249,5 +249,18 @@
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P4P1/P1PPPP1P/RNBQKBNR b KQkq - 0 2"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Hungarian Opening",
+   "eco": "A00",
+   "plies": 1,
+   "line": "g3",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Formation: Hippopotamus Attack",
+  "confirmed": false
+ }
 }

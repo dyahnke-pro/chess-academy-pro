@@ -39,13 +39,19 @@ while read -r id; do
   # So the transcript half of this pipeline is self-serve from a session.
   if yt-dlp --extractor-args "youtube:player_client=web_embedded" \
        --ignore-no-formats-error --no-warnings \
-       --write-auto-sub --skip-download --sub-format vtt --sub-langs en \
+       --write-auto-sub --skip-download --sub-format vtt --sub-langs "en.*" \
        -o "/tmp/vtt/%(id)s.%(ext)s" \
        "https://www.youtube.com/watch?v=$id" > /tmp/vtt/"$id".log 2>&1; then
-    if [ -f "/tmp/vtt/$id.en.vtt" ]; then
-      gzip -c "/tmp/vtt/$id.en.vtt" > "$OUT/$id.vtt.gz"
+    # THE LANGUAGE CODE IS NOT ALWAYS `en`. Measured 2026-08-21: _JUvx36zOYw
+    # carries its auto-captions as `en-en`, so `--sub-langs en` skipped it and
+    # the queue recorded "no english captions" for a video that has them. The
+    # request is a REGEX (hence "en.*"), and the written filename carries
+    # whatever code came back — so the pickup has to glob, not name one code.
+    vtt=$(ls /tmp/vtt/"$id".*.vtt 2>/dev/null | head -1)
+    if [ -n "$vtt" ]; then
+      gzip -c "$vtt" > "$OUT/$id.vtt.gz"
       echo "TR OK   $id ($(du -h "$OUT/$id.vtt.gz" | cut -f1))"
-      rm -f "/tmp/vtt/$id.en.vtt"
+      rm -f /tmp/vtt/"$id".*.vtt
     else
       # Auto-captions are not guaranteed to exist. That is a fact about the
       # upload, not a failure to retry — recorded so it is not attempted again.

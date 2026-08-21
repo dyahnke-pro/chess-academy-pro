@@ -1,0 +1,287 @@
+{
+ "videoId": "d9qnuDDwiHQ",
+ "title": "MoistCr1tikal DESTROYS Grandmaster",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1004.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "yeah you played you played perfectly actually so i'm pretty encouraged so for the home stretch what do you say you hop back in for one or two more games and then we'll summarize whenever you're ready ah of course jmd ms z"
+  },
+  {
+   "ply": 3,
+   "t": 1006,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "okay this is tillian uh"
+  },
+  {
+   "ply": 4,
+   "t": 1007,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "damn what was the line that you told me"
+  },
+  {
+   "ply": 5,
+   "t": 1014.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "to play here is it pushing d4 next d4 correct you want to open that's called the open literally called the open situation"
+  },
+  {
+   "ply": 7,
+   "t": 1016.5,
+   "line": [
+    "cxd4",
+    "Nxd4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": ""
+  },
+  {
+   "ply": 8,
+   "t": 1017.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp2pppp/2np4/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "said": "okay now you don't want to again this you don't want to react to this because if he takes your knight you can"
+  },
+  {
+   "ply": 9,
+   "t": 1025.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pp2pppp/2np4/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "simply take with a queen so you can just develop normally bingo now your bishops where do they"
+  },
+  {
+   "ply": 10,
+   "t": 1027.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 3 6",
+   "said": "belong isn't it f4 or yeah f4 for this bishop even more oh you mean well you mean the light squared bishop"
+  },
+  {
+   "ply": 11,
+   "t": 1047.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/6B1/3NP3/2N5/PPP2PPP/R2QKB1R b KQkq - 4 6",
+   "said": "the dark square bishop more active than f4 f4 blunders a fork to e5 so you can put it on g5 uh i see yeah okay so yeah if you put it on f4 he"
+  },
+  {
+   "ply": 12,
+   "t": 1050.5,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkb1r/pp2pp1p/2np1np1/6B1/3NP3/2N5/PPP2PPP/R2QKB1R w KQkq - 0 7",
+   "said": "he goes e5 there oh okay i don't know how to exploit that though so like think about his knight on f6 he's actually weakened his control over"
+  },
+  {
+   "ply": 13,
+   "t": 1076,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "r1bqkb1r/pp2pp1p/2np1Bp1/8/3NP3/2N5/PPP2PPP/R2QKB1R b KQkq - 0 7",
+   "said": "that knight if you take the knight on m6 notice that he has to ruin his entire pawn structure by taking it with that pawn so i would do that you think that's worth okay it is worth it because his pawn structure is going to be terrible"
+  },
+  {
+   "ply": 14,
+   "t": 1079,
+   "line": [
+    "exf6"
+   ],
+   "fen": "r1bqkb1r/pp3p1p/2np1pp1/8/3NP3/2N5/PPP2PPP/R2QKB1R w KQkq - 0 8",
+   "said": "now i would immediately prepare queen side castle because you were going to attack him on the king side and you want to tuck your king away on the queen side okay and what is the most active development for queen is it going over here to like"
+  },
+  {
+   "ply": 15,
+   "t": 1101,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r1bqkb1r/pp3p1p/2np1pp1/8/3NP3/2N5/PPPQ1PPP/R3KB1R b KQkq - 1 8",
+   "said": "f3 well your queen's defending the knight so you want to keep it on the d-file right and i would put it on t2 i would prevent black's bishop from coming out to h6 and stopping you from castling so and if he plays bishop g7 and fianchettos look at that pawn on d6 you see that"
+  },
+  {
+   "ply": 16,
+   "t": 1117,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "r1b1kb1r/pp3p1p/1qnp1pp1/8/3NP3/2N5/PPPQ1PPP/R3KB1R w KQkq - 2 9",
+   "said": "it's weak right um sorry you heard me there right yeah yeah okay okay so now uh he's attacking your knight how can you defend it"
+  },
+  {
+   "ply": 17,
+   "t": 1142,
+   "line": [
+    "Nb3"
+   ],
+   "fen": "r1b1kb1r/pp3p1p/1qnp1pp1/8/4P3/1NN5/PPPQ1PPP/R3KB1R b KQkq - 3 9",
+   "said": "where can you put it yeah i just need to move it there's nothing else i can defend it with do i just drop it back to like either well what's better well b3 would be good because that stops them from taking the pawn on b2 okay yeah just a low-key move but it's a good one thanks beast best beetle for gifting"
+  },
+  {
+   "ply": 18,
+   "t": 1153,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r3kb1r/pp3p1p/1qnpbpp1/8/4P3/1NN5/PPPQ1PPP/R3KB1R w KQkq - 4 10",
+   "said": "and look at his queen on v6 you can attack that queen in the future by playing okay actually complete the development first"
+  },
+  {
+   "ply": 19,
+   "t": 1159.5,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "r3kb1r/pp3p1p/1qnpbpp1/8/4P3/1NN5/PPPQ1PPP/2KR1B1R b kq - 5 10",
+   "said": "so now i'm castling queen side and then to attack the queen is it bringing the knight over to a4"
+  },
+  {
+   "ply": 20,
+   "t": 1166,
+   "line": [
+    "Bxb3"
+   ],
+   "fen": "r3kb1r/pp3p1p/1qnp1pp1/8/4P3/1bN5/PPPQ1PPP/2KR1B1R w kq - 0 11",
+   "said": "so that brings the knight to the rim can you send can you actually okay so first he takes this"
+  },
+  {
+   "ply": 21,
+   "t": 1176,
+   "line": [
+    "cxb3"
+   ],
+   "fen": "r3kb1r/pp3p1p/1qnp1pp1/8/4P3/1PN5/PP1Q1PPP/2KR1B1R b kq - 0 11",
+   "said": "do i take back with the c pawn or does it not really matter here doesn't c pawn is good keeping that a pawn where it closes up the a file"
+  },
+  {
+   "ply": 22,
+   "t": 1178,
+   "line": [
+    "Qxb3"
+   ],
+   "fen": "r3kb1r/pp3p1p/2np1pp1/8/4P3/1qN5/PP1Q1PPP/2KR1B1R w kq - 0 12",
+   "said": "whoa holy smokes oh my god"
+  },
+  {
+   "ply": 23,
+   "t": 1185,
+   "line": [
+    "axb3"
+   ],
+   "fen": "r3kb1r/pp3p1p/2np1pp1/8/4P3/1PN5/1P1Q1PPP/2KR1B1R b kq - 0 12",
+   "said": "jesus wow that came out of nowhere oh my god"
+  },
+  {
+   "ply": 24,
+   "t": 1188,
+   "line": [
+    "Nb4"
+   ],
+   "fen": "r3kb1r/pp3p1p/3p1pp1/8/1n2P3/1PN5/1P1Q1PPP/2KR1B1R w kq - 1 13",
+   "said": "that literally caused a physical reaction i could hear you [&nbsp;__&nbsp;] fall out of your chair there for a second i thought i'd lost you i rolled back from my desk the confidence with which this move was"
+  },
+  {
+   "ply": 25,
+   "t": 1212,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "r3kb1r/pp3p1p/3p1pp1/1B6/1n2P3/1PN5/1P1Q1PPP/2KR3R b kq - 2 13",
+   "said": "it was like with gusto okay but let's not relax you you have some developing to do deplete your development is it just b5 here for the chat yeah i'm like that mother that tells you know the child to finish their oatmeal even though you just won the lottery or something yeah she still trying to finish that"
+  },
+  {
+   "ply": 26,
+   "t": 1221.5,
+   "line": [
+    "Kd8"
+   ],
+   "fen": "r2k1b1r/pp3p1p/3p1pp1/1B6/1n2P3/1PN5/1P1Q1PPP/2KR3R w - - 3 14",
+   "said": "oatmeal this could be his like legendary line this is this could be the one the history books remember him for the secondary track sir so now you have a fork actually let's practice that thing i tortured you with previously what are the undefended pieces and pawns how can you attack two of them okay so right now undefended"
+  },
+  {
+   "ply": 27,
+   "t": 1249,
+   "line": [
+    "Qd4"
+   ],
+   "fen": "r2k1b1r/pp3p1p/3p1pp1/1B6/1n1QP3/1PN5/1P3PPP/2KR3R b - - 4 14",
+   "said": "pawns are d6 it's defended by bishop but no pawns f6 f6 is completely undefended and the knight is completely undefeated it's ready to go forks forks forks well his legendary i think really the"
+  },
+  {
+   "ply": 28,
+   "t": 1255,
+   "line": [
+    "a5"
+   ],
+   "fen": "r2k1b1r/1p3p1p/3p1pp1/pB6/1n1QP3/1PN5/1P3PPP/2KR3R w - - 0 15",
+   "said": "mistake that he made wasn't to take the okay wool but careful there's a trap that's hiding under the surface"
+  },
+  {
+   "ply": 29,
+   "t": 1262,
+   "line": [
+    "Qxf6+"
+   ],
+   "fen": "r2k1b1r/1p3p1p/3p1Qp1/pB6/1n2P3/1PN5/1P3PPP/2KR3R b - - 0 15",
+   "said": "now you can take the pawn yeah but if he moves his king out you actually can't take the rook and that is the bottom line of that's an entire point of his variation i think let's see what if he covers with the bishop that would be very sad i think he just might though i think he might unfortunately cover with his bishop"
+  },
+  {
+   "ply": 30,
+   "t": 1294,
+   "line": [
+    "Kc7"
+   ],
+   "fen": "r4b1r/1pk2p1p/3p1Qp1/pB6/1n2P3/1PN5/1P3PPP/2KR3R w - - 1 16",
+   "said": "or resign this guy's got some goofy strats i wouldn't put it by him so um well i guess i'll wait i moved to this game so you can't take the rook why uh let me see if i take rook x right oh yeah he's just gonna move bishop right yeah check on h6 so you can do the next best thing take the stuff that you can take yeah do i just want to take this pawn then yeah absolutely he's probably gonna go king to b6 and then you have kind of a sexy move all right guys what is my chat doing what are you guys drawing all right guys all right guys all right guys we're not gonna go sub only please stop we're not gonna go sub only but please stop uh we're having fun guys guys we're having fun but but let's let's stop please one one last request please stop that it's annoying or we're gonna go sub only if people can't guys i'm i don't ask a lot of you but when i ask you to stop please do okay so oh shoot okay so you have a sexy move here you can deliver a check to a4 with the knight and i want you to do that but i want you to tell me why we're not blundering the bishop once you do it you can play the move because you've got a minute okay he might think you blundered your bishop that's what i'm hoping yes he did okay checkmate find it it's just c4 red oh that's even sexier than the maid i had in mind i was thinking take the pawn with mate but that's even cooler because you dropped the piece back yes nice cool thank you for listening guys exactly which one would which one did you say queen takes b7 check me uh okay i see yeah well this is the one i saw right away i thought this was kind of cute no that's really nice i mean because the knight from the rim is defending b6 that's pretty cool that's pretty cool yeah i mean queen takes b3 made it a"
+  },
+  {
+   "ply": 26,
+   "t": 1423.5,
+   "line": [],
+   "fen": "r2k1b1r/pp3p1p/3p1pp1/1B6/1n2P3/1PN5/1P1Q1PPP/2KR3R w - - 3 14",
+   "said": "little bit easier for you but everything was pretty straightforward what do you say we do one last one for the road i'm ready so that queen play he made was that an accident or did he actually get anything out of that no zero i mean he gives up literally a"
+  },
+  {
+   "ply": 18,
+   "t": 1425,
+   "line": [],
+   "fen": "r3kb1r/pp3p1p/1qnpbpp1/8/4P3/1NN5/PPPQ1PPP/R3KB1R w KQkq - 4 10",
+   "said": ""
+  },
+  {
+   "ply": 22,
+   "t": 1427,
+   "line": [
+    "O-O-O",
+    "Qxb3",
+    "cxb3",
+    "Bxb3"
+   ],
+   "fen": "r3kb1r/pp3p1p/2np1pp1/8/4P3/1bN5/PP1Q1PPP/2KR1B1R w kq - 0 12",
+   "said": "queen for the for a pawn i think he i think it might have been a mouse left like one of those things where you accidentally like pre-move something but um no other than that i mean i i honestly have no idea what went through his mind i wonder what went through that guy's mind but we'll never find out okay e3 interesting the van crew is opening okay maybe he'll play e4 and transpose to being black oh this is a this is a real thinker it seems yeah yeah santa claus i think he's busy delivering presents to people okay nice defending the pawn this is like a reverse french basically in a position like this a lot of times what i do is just push e4 is that a good move or not it is you close up the center that's a different type of position and the next one of the next steps to improvement is"
+  }
+ ],
+ "forks": []
+}

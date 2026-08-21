@@ -1,0 +1,586 @@
+{
+ "videoId": "XvyJvuj8NdM",
+ "title": "Fast Moves and Faster Wins | Develop Your Instincts | GM Naroditsky's DYI Speedrun",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 1013,
+   "line": [
+    "d4",
+    "Nf6",
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+   "said": "And this is actually a very common trap in several different openings including the Jobava London. Um which I have a course on in the Jobava London you get something very similar from the white side where you trap black's bishop in much the same way. So, what happens in the Jobava London? Often times, let me give you a sample line. Very often, you get a situation like let me make a couple of very primitive moves. You get a situation like this with white to move. Looks like a completely unremarkable position, but white is in fact already almost winning. Now, the move should already be kind of screaming your name. Same concept, you play g4. Now, bishop e4 is blocked off by the f pawn, so that's futile. And bishop g6, you play the move h4, threatening to trap the bishop with h5. But, the whole point of this is that black has to go h6 or h5. And now, and only now do you take the bishop. And look at what happens in this case to black's pawn structure when the f pawn recaptures the bishop. Now, the e pawn is a horrible weakness, but in particular, the g pawn is essentially indefensible. In order to defend it, you have to bring your king out, and that king is going to get massacred along the f file. Um Uh someone was asking, can black take on g4? No, because we have enough defenders on that square. And in much the same way, after c3, let's flip the board again. Queen b6, b3, takes takes, knight c6, e3 e5, takes, check knight d2 knight d4 knight d3, same concept after g5, white drops back, we play h5, and the moment white plays the h pawn forward, we take on g3, crippling white's pawn structure entirely, and then e3 is going to fall, and white is completely lost. Completely lost. For example, we can play Let's see. Yeah, we can play queen takes e3 check queen e2 bishop takes d2 check. Knight takes e2, another pawn falls, and then another pawn falls, and white is completely busted. Okay? So, I explained already why white can't take on g5. If white takes with the bishop, we have knight takes e5 with a crushing attack on this knight on d2. If white plays knight takes g5, well, obviously then the knight on d2 falls. Remember that the whole overarching concept here is that the knight on d2 is essentially overloaded. Okay? Um yeah, bishop g3, you can also play g4 in order to kick the knight. This is also winning. So, that's one way for for to lose very quickly. Um and that's part of the reason that C3 is a very awkward move. After Queen B6, white has to play Queen B3. This is the best move, but white is still a little bit worse in this line. And you trade on B3, you trade on D4, and now you develop your knight to C6. White's got a lot of these weak pawns. And after E3, there's a very nice maneuver where you go knight to D5, bishop to G3,"
+  },
+  {
+   "ply": 7,
+   "t": 1187.5,
+   "line": [
+    "c6",
+    "Nb1",
+    "c5",
+    "Bf4"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 4",
+   "said": "and now you stick your knight on this lovely outpost on B4. It's threatening a fork. Uh, black has control of a lot of important squares. This is a slight advantage in the end game. So, that's C3. Now, in response to E3, you"
+  },
+  {
+   "ply": 9,
+   "t": 1190,
+   "line": [
+    "Qb6",
+    "e3"
+   ],
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/2p5/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 5",
+   "said": "still play Queen to B6. And still this is a very uncomfortable situation for white. White has to know exactly how to react in this position, otherwise, again, white's going to be worse."
+  },
+  {
+   "ply": 13,
+   "t": 1213,
+   "line": [
+    "cxd4",
+    "exd4",
+    "Qxd4",
+    "Qc1"
+   ],
+   "fen": "rnb1kb1r/pp1ppppp/5n2/8/3q1B2/8/PPP2PPP/RNQ1KBNR b KQkq - 1 7",
+   "said": "So, most people who are new to the London system and see this for the first time, well, obviously that they're thinking of moves like B3 uh or Queen C1, which actually just blunders a pawn. Queen C1 blunders a pawn. We can take that one. B3 is almost always a bad idea in the London. If white is forced to make this very weakening move, it generally means that black has succeeded. Our opening strategy has been a success. In this Sorry, I forgot to take on E4 first. CD4 ED4 and now Queen B6. My bad. Um, this is actually the line that I'm recommending. And again, Queen C1 blunders the pawn. And if white has to play the move B3, then we simply play D5, and white has a lot of these dark square holes on the queen side. Um, so the best move for white here is actually to play knight C3 and sacrifice"
+  },
+  {
+   "ply": 7,
+   "t": 1258.5,
+   "line": [],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 4",
+   "said": "the pawn, but this requires a lot of theoretical knowledge. And here, my recommendation is to play this very little move A6 to cover the B5 square and reinforce the threat of Queen takes B2. Um, now there's other lines to show, but this is where I'll limit myself for now."
+  },
+  {
+   "ply": 11,
+   "t": 1267.5,
+   "line": [
+    "Qb6",
+    "e3",
+    "cxd4",
+    "exd4"
+   ],
+   "fen": "rnb1kb1r/pp1ppppp/1q3n2/8/3P1B2/8/PPP2PPP/RN1QKBNR b KQkq - 0 6",
+   "said": "Uh, we talked about C3. We talked about E3. You trade on D4 and you play queen b6 and this is the basic idea of the move c5. Now you might be"
+  },
+  {
+   "ply": 7,
+   "t": 1271.5,
+   "line": [],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 4",
+   "said": "wondering what happens if white pushes d5."
+  },
+  {
+   "ply": 9,
+   "t": 1277,
+   "line": [
+    "d6",
+    "d5"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2pP4/5B2/8/PPP1PPPP/RN1QKBNR b KQkq - 0 5",
+   "said": "Here my recommendation is actually to play d6 followed by e5 but this is a whole different kettle of fish"
+  },
+  {
+   "ply": 7,
+   "t": 1285,
+   "line": [],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 4",
+   "said": "and we'll save this for a more advanced London game. Now let's talk about the game continuation dc knight a6. Okay."
+  },
+  {
+   "ply": 9,
+   "t": 1286.5,
+   "line": [
+    "Na6",
+    "dxc5"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/n4n2/2P5/5B2/8/PPP1PPPP/RN1QKBNR b KQkq - 0 5",
+   "said": "You're going to face this quite a bit if you play c5 with black. And in order to avoid being worse here, white has to play very very carefully."
+  },
+  {
+   "ply": 11,
+   "t": 1308,
+   "line": [
+    "Nxc5",
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/5n2/2n5/5B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 6",
+   "said": "Now most intermediate to advanced players with the white pieces here would probably play knight c3 just like our opponent did but after knight takes c5 would not play the move knight knight b5. Most intermediate players would probably play knight f3 or e3 but even in this case white is actually a little bit worse. Even if white plays"
+  },
+  {
+   "ply": 13,
+   "t": 1331.5,
+   "line": [
+    "d5",
+    "e3"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/5n2/2np4/5B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 7",
+   "said": "e3 or white plays a developing move, white is a little bit worse in this position. And the reason, for example, let's say white plays e3. Here it's important to avoid playing d5. Because if you play d5, now knight b5 is very very annoying because the bishop is linked up with the knight. Knight c7 is a big threat and in order to defend that square, we have to kind of contort ourselves and we don't want to do that. So here we play the move d6 which should make a lot of sense to you because you're fighting against this bishop on f4 and you're trying to kind of decrease its influence. So we start with the move d6. Let's say that white plays a nonchalant move like knight f3. Now you might ask, well what do we do with this bishop? Well, the perfect arrangement for that bishop is of course to fianchetto it just like we would as a king's Indian player. You play g6 and you have a fantastic position. Bishop b2 for example, bishop to g7. Castles castles and black is doing swimmingly. You've got better pieces. You've got"
+  },
+  {
+   "ply": 11,
+   "t": 1392.5,
+   "line": [],
+   "fen": "r1bqkb1r/pp1ppppp/5n2/2n5/5B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 6",
+   "said": "very very easy play. You can bring this bishop out. You could bring the rook to c8. The queen could still come to b6. And black is in an amazing position. So, this is kind of like a dragon on steroids. Now, in order for white to avoid being"
+  },
+  {
+   "ply": 9,
+   "t": 1395.5,
+   "line": [],
+   "fen": "r1bqkb1r/pp1ppppp/n4n2/2P5/5B2/8/PPP1PPPP/RN1QKBNR b KQkq - 0 5",
+   "said": "worse, um, they have to know this very computerish move f3, which most people are just not going to know."
+  },
+  {
+   "ply": 13,
+   "t": 1410,
+   "line": [
+    "d6",
+    "e4",
+    "Nxc5",
+    "f3"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/3p1n2/2n5/4PB2/5P2/PPP3PP/RN1QKBNR b KQkq - 0 7",
+   "said": "Um, and after f3, knight takes e5, the idea, of course, is to push e4. Once again, our setup remains the same. We play d6. And there's a lot of theory here that you have to know. I won't bore"
+  },
+  {
+   "ply": 9,
+   "t": 1417.5,
+   "line": [],
+   "fen": "r1bqkb1r/pp1ppppp/n4n2/2P5/5B2/8/PPP1PPPP/RN1QKBNR b KQkq - 0 5",
+   "said": "you with it right now, but here you can kind of see the psychological benefit of playing this"
+  },
+  {
+   "ply": 7,
+   "t": 1421,
+   "line": [],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 4",
+   "said": "variation against the London. You're dragging London players into territory that they're not willing to go into. Most London players want something predictable. They want a balanced, quiet position. They don't want something very tactical. And you're immediately forcing"
+  },
+  {
+   "ply": 11,
+   "t": 1445,
+   "line": [
+    "Na6",
+    "dxc5",
+    "Nxc5",
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/5n2/2n5/5B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 6",
+   "said": "the game into more of a tactical channel, which benefits you. Presumably, you like tactics. So, after dc, knight a6, knight c3 is what you're going to face most of the time. And after knight takes e5, um, black is already very, very comfortable. Now, our opponent plays"
+  },
+  {
+   "ply": 14,
+   "t": 1457,
+   "line": [
+    "Qc7",
+    "Nb5",
+    "Qa5+"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/5n2/qNn5/5B2/8/PPP1PPPP/R2QKBNR w KQkq - 4 8",
+   "said": "kind of a beginner move, knight to b5. And, um, we responded with a check on a5. Again, forcing the knight back to c3."
+  },
+  {
+   "ply": 15,
+   "t": 1463,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q1n5/5B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 5 8",
+   "said": "Otherwise, we simply take on b5. And here there is a choice of several very, very good moves. Um, the more conventional approach is to play knight"
+  },
+  {
+   "ply": 16,
+   "t": 1475,
+   "line": [
+    "Nce4"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q7/4nB2/2N5/PPP1PPPP/R2QKBNR w KQkq - 6 9",
+   "said": "f4 or even knight c to e4. The engine actually does like the move knight c to e4. And the engine gives a very interesting idea. After knight c to e4, how is white"
+  },
+  {
+   "ply": 17,
+   "t": 1482,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q7/4n3/2N5/PPPBPPPP/R2QKBNR b KQkq - 7 9",
+   "said": "going to defend the knight? Well, likely white is going to drop the bishop back to d2. And here black actually has a fork. There is a double attack that black can make in this position. Let's see who can"
+  },
+  {
+   "ply": 18,
+   "t": 1494.5,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/1q3n2/8/4n3/2N5/PPPBPPPP/R2QKBNR w KQkq - 8 10",
+   "said": "find it. Black to play and win material. Yeah, queen b6. Suddenly, you're threatening a checkmate on F2. You're threatening a Scholar's Mate. And in"
+  },
+  {
+   "ply": 20,
+   "t": 1503,
+   "line": [
+    "Nxe4",
+    "Nxe4"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/1q6/8/4n3/8/PPPBPPPP/R2QKBNR w KQkq - 0 11",
+   "said": "order to defend against it, well, white can trade on E4. That doesn't change anything. But, in order to defend"
+  },
+  {
+   "ply": 21,
+   "t": 1506,
+   "line": [
+    "e3"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/1q6/8/4n3/4P3/PPPB1PPP/R2QKBNR b KQkq - 0 11",
+   "said": "against it, white has to play E3. And now, for example, you can trade the"
+  },
+  {
+   "ply": 23,
+   "t": 1510,
+   "line": [
+    "Nxd2",
+    "Qxd2"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/1q6/8/8/4P3/PPPQ1PPP/R3KBNR b KQkq - 0 12",
+   "said": "knight for the bishop, and you can grab"
+  },
+  {
+   "ply": 24,
+   "t": 1511,
+   "line": [
+    "Qxb2"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/8/8/8/4P3/PqPQ1PPP/R3KBNR w KQkq - 0 13",
+   "said": "B2, and you have everything. You have an extra pawn. Potentially, you could take another one. And you have the bishop"
+  },
+  {
+   "ply": 15,
+   "t": 1521.5,
+   "line": [],
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q1n5/5B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 5 8",
+   "said": "pair, and white's position is completely in shambles. So, knight to E4 would have been extremely strong. Knight C to E4 would have been extremely"
+  },
+  {
+   "ply": 16,
+   "t": 1527,
+   "line": [
+    "Na4"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q7/n4B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 6 9",
+   "said": "strong. We decided to play knight to A4, going the other way. Um probably the last chance for white to"
+  },
+  {
+   "ply": 17,
+   "t": 1536,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q7/n4B2/2N5/PPPQPPPP/R3KBNR b KQkq - 7 9",
+   "said": "stay in the game would have been to play queen to D2. And in this position, if we take on B2,"
+  },
+  {
+   "ply": 18,
+   "t": 1539,
+   "line": [
+    "Nxb2"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q7/5B2/2N5/PnPQPPPP/R3KBNR w KQkq - 0 10",
+   "said": "maybe white can play E4 and cover the C4"
+  },
+  {
+   "ply": 19,
+   "t": 1540,
+   "line": [
+    "e4"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q7/4PB2/2N5/PnPQ1PPP/R3KBNR b KQkq - 0 10",
+   "said": "square, but still, white's position is very, very suspicious. Not to mention"
+  },
+  {
+   "ply": 16,
+   "t": 1550.5,
+   "line": [],
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q7/n4B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 6 9",
+   "said": "that we could just take on C3 here and ruin white's pawn structure. So, um I'm belaboring belaboring the point"
+  },
+  {
+   "ply": 17,
+   "t": 1553,
+   "line": [
+    "Be5"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q3B3/n7/2N5/PPP1PPPP/R2QKBNR b KQkq - 7 9",
+   "said": "here. Our opponent played bishop E5. Uh which is a creative move, but loses"
+  },
+  {
+   "ply": 18,
+   "t": 1559,
+   "line": [
+    "Nxb2"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q3B3/8/2N5/PnP1PPPP/R2QKBNR w KQkq - 0 10",
+   "said": "the game due to knight takes B2, and everything falls apart here. Now, the last thing I'll mention is what"
+  },
+  {
+   "ply": 19,
+   "t": 1565.5,
+   "line": [
+    "Qd4"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q3B3/3Q4/2N5/PnP1PPPP/R3KBNR b KQkq - 1 10",
+   "said": "would have been our response to the move queen to D4? What would have been our response to queen to D4? What is the fastest way for black to win the game here? See if you can"
+  },
+  {
+   "ply": 20,
+   "t": 1581,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/8/q3B3/3Qn3/2N5/PnP1PPPP/R3KBNR w KQkq - 2 11",
+   "said": "understand what it is. It's not what you probably think it is. So, it's not 94. That's a blunder"
+  },
+  {
+   "ply": 21,
+   "t": 1582,
+   "line": [
+    "Qxe4"
+   ],
+   "fen": "r1b1kb1r/pp1ppppp/8/q3B3/4Q3/2N5/PnP1PPPP/R3KBNR b KQkq - 0 11",
+   "said": "because white can play queen takes E4. Remember, the bishop defends the knight."
+  },
+  {
+   "ply": 19,
+   "t": 1586,
+   "line": [],
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q3B3/3Q4/2N5/PnP1PPPP/R3KBNR b KQkq - 1 10",
+   "said": "Now, I think a lot of you probably"
+  },
+  {
+   "ply": 20,
+   "t": 1587.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/3p1n2/q3B3/3Q4/2N5/PnP1PPPP/R3KBNR w KQkq - 0 11",
+   "said": "think, \"Oh, let's go D6 and let's chase this bishop out of the way.\" But, here"
+  },
+  {
+   "ply": 21,
+   "t": 1591,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/3p1B2/q7/3Q4/2N5/PnP1PPPP/R3KBNR b KQkq - 0 11",
+   "said": "white can buy themselves some time with bishop takes F6. So, the correct move here is actually to play E6 in order to open up the dark-squared bishop. And the takeaway here is that when you sense that you're very close to winning the game right out of the opening, the missing ingredient is often just to involve as many pieces as possible. It's not necessarily to make the tempo moves, but it's rather to involve pieces as quickly as possible. So E6 is super strong. Why is it so strong? Let's say that white plays, I don't know, knight F3. Okay? Now you play bishop to C5. And the queen simply has nowhere to go. If white drops back to D2, you drop back to C4, and white is just collapsing on all cylinders here. That's not an expression. Queen to D3, knight E5 knight E5, and now bishop to B4, attacking both of the knights at the same time. Um the queen has no other good squares. If the queen goes to the side of the board, so knight F3 bishop C5, um queen to H4,"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 7,
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 4",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "c6",
+    "Nb1",
+    "c5",
+    "Bf4"
+   ],
+   "options": [
+    {
+     "san": "Qb6",
+     "t": 1190,
+     "continuation": "Qb6 e3",
+     "said": "fork. Uh, black has control of a lot of important squares. This is a slight advantage in the end game. So, that's C3. Now, in response to E3, you still play Queen to B6. And still this is a very uncomfortable situation for white. White has to know exactly how to react in this position, otherwise, again, white's going to be worse. So, most people who are new to the London system and see this for the first time, well, obviously that they're thinking of moves like B3 uh or Queen C1, which actually just blunders a pawn. Queen C1 blunders a pawn. We can take that one. B3 is almost always a bad idea in the London. If white is forced to make this very weakening move, it generally means that black has succeeded. Our opening strategy has been a success. In this Sorry, I forgot to take on E4 first. CD4 ED4 and now Queen B6. My bad. Um, this is actually the line that I'm recommending. And again, Queen C1 blunders the pawn. And if white has to play the move B3, then we simply play D5, and white has a lot of these dark square holes on the queen side. Um, so the best move for white here is actually to play knight C3 and sacrifice the pawn, but this requires a lot of theoretical knowledge. And here, my recommendation is to play this very"
+    },
+    {
+     "san": "d6",
+     "t": 1277,
+     "continuation": "d6 d5",
+     "said": "We talked about E3. You trade on D4 and you play queen b6 and this is the basic idea of the move c5. Now you might be wondering what happens if white pushes d5. Here my recommendation is actually to play d6 followed by e5 but this is a whole different kettle of fish and we'll save this for a more advanced London game. Now let's talk about the game continuation dc knight a6. Okay. You're going to face this quite a bit if you play c5 with black. And in order to avoid being worse here, white has to play very very carefully. Now most intermediate to advanced players with the white pieces here would probably play knight c3 just like our opponent did but after knight takes c5 would not play the move knight knight b5. Most intermediate players would probably play knight f3 or e3 but even in this case white is actually a little bit worse. Even if white plays e3 or white plays a developing move, white is a little bit worse in this position. And the reason, for example, let's say white plays e3. Here it's important to avoid playing d5. Because if you play d5, now knight b5 is very very annoying because the bishop is"
+    },
+    {
+     "san": "Na6",
+     "t": 1286.5,
+     "continuation": "Na6 dxc5",
+     "said": "Here my recommendation is actually to play d6 followed by e5 but this is a whole different kettle of fish and we'll save this for a more advanced London game. Now let's talk about the game continuation dc knight a6. Okay. You're going to face this quite a bit if you play c5 with black. And in order to avoid being worse here, white has to play very very carefully. Now most intermediate to advanced players with the white pieces here would probably play knight c3 just like our opponent did but after knight takes c5 would not play the move knight knight b5. Most intermediate players would probably play knight f3 or e3 but even in this case white is actually a little bit worse. Even if white plays e3 or white plays a developing move, white is a little bit worse in this position. And the reason, for example, let's say white plays e3. Here it's important to avoid playing d5. Because if you play d5, now knight b5 is very very annoying because the bishop is linked up with the knight. Knight c7 is a big threat and in order to defend that square, we have to kind of contort ourselves and we don't want to do that. So here we play the move d6 which should"
+    }
+   ]
+  },
+  {
+   "ply": 9,
+   "fen": "r1bqkb1r/pp1ppppp/n4n2/2P5/5B2/8/PPP1PPPP/RN1QKBNR b KQkq - 0 5",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "c6",
+    "Nb1",
+    "c5",
+    "Bf4",
+    "Na6",
+    "dxc5"
+   ],
+   "options": [
+    {
+     "san": "Nxc5",
+     "t": 1308,
+     "continuation": "Nxc5 Nc3",
+     "said": "Now most intermediate to advanced players with the white pieces here would probably play knight c3 just like our opponent did but after knight takes c5 would not play the move knight knight b5. Most intermediate players would probably play knight f3 or e3 but even in this case white is actually a little bit worse. Even if white plays e3 or white plays a developing move, white is a little bit worse in this position. And the reason, for example, let's say white plays e3. Here it's important to avoid playing d5. Because if you play d5, now knight b5 is very very annoying because the bishop is linked up with the knight. Knight c7 is a big threat and in order to defend that square, we have to kind of contort ourselves and we don't want to do that. So here we play the move d6 which should make a lot of sense to you because you're fighting against this bishop on f4 and you're trying to kind of decrease its influence. So we start with the move d6. Let's say that white plays a nonchalant move like knight f3. Now you might ask, well what do we do with this bishop? Well, the perfect arrangement for that bishop is of course to fianchetto it just like we would as a king's Indian"
+    },
+    {
+     "san": "d6",
+     "t": 1410,
+     "continuation": "d6 e4 Nxc5 f3",
+     "said": "this very computerish move f3, which most people are just not going to know. Um, and after f3, knight takes e5, the idea, of course, is to push e4. Once again, our setup remains the same. We play d6. And there's a lot of theory here that you have to know. I won't bore you with it right now, but here you can kind of see the psychological benefit of playing this variation against the London. You're dragging London players into territory that they're not willing to go into. Most London players want something predictable. They want a balanced, quiet position. They don't want something very tactical. And you're immediately forcing the game into more of a tactical channel, which benefits you. Presumably, you like tactics. So, after dc, knight a6, knight c3 is what you're going to face most of the time. And after knight takes e5, um, black is already very, very comfortable. Now, our opponent plays kind of a beginner move, knight to b5. And, um, we responded with a check on a5. Again, forcing the knight back to c3. Otherwise, we simply take on b5. And here there is a choice of several very, very good moves. Um, the more conventional approach is to play knight f4 or even knight c to e4."
+    }
+   ]
+  },
+  {
+   "ply": 11,
+   "fen": "r1bqkb1r/pp1ppppp/5n2/2n5/5B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 6",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "c6",
+    "Nb1",
+    "c5",
+    "Bf4",
+    "Na6",
+    "dxc5",
+    "Nxc5",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "d5",
+     "t": 1331.5,
+     "continuation": "d5 e3",
+     "said": "e3 or white plays a developing move, white is a little bit worse in this position. And the reason, for example, let's say white plays e3. Here it's important to avoid playing d5. Because if you play d5, now knight b5 is very very annoying because the bishop is linked up with the knight. Knight c7 is a big threat and in order to defend that square, we have to kind of contort ourselves and we don't want to do that. So here we play the move d6 which should make a lot of sense to you because you're fighting against this bishop on f4 and you're trying to kind of decrease its influence. So we start with the move d6. Let's say that white plays a nonchalant move like knight f3. Now you might ask, well what do we do with this bishop? Well, the perfect arrangement for that bishop is of course to fianchetto it just like we would as a king's Indian player. You play g6 and you have a fantastic position. Bishop b2 for example, bishop to g7. Castles castles and black is doing swimmingly. You've got better pieces. You've got very very easy play. You can bring this bishop out. You could bring the rook to c8. The queen could still come to b6. And black is in an amazing position. So, this is kind of like a dragon on"
+    },
+    {
+     "san": "Qc7",
+     "t": 1457,
+     "continuation": "Qc7 Nb5 Qa5+",
+     "said": "And after knight takes e5, um, black is already very, very comfortable. Now, our opponent plays kind of a beginner move, knight to b5. And, um, we responded with a check on a5. Again, forcing the knight back to c3. Otherwise, we simply take on b5. And here there is a choice of several very, very good moves. Um, the more conventional approach is to play knight f4 or even knight c to e4. The engine actually does like the move knight c to e4. And the engine gives a very interesting idea. After knight c to e4, how is white going to defend the knight? Well, likely white is going to drop the bishop back to d2. And here black actually has a fork. There is a double attack that black can make in this position. Let's see who can find it. Black to play and win material. Yeah, queen b6. Suddenly, you're threatening a checkmate on F2. You're threatening a Scholar's Mate. And in order to defend against it, well, white can trade on E4. That doesn't change anything. But, in order to defend against it, white has to play E3. And now, for example, you can trade the knight for the bishop, and you can grab B2, and you have everything. You have an extra pawn. Potentially, you could take another one. And you have the bishop"
+    }
+   ]
+  },
+  {
+   "ply": 15,
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q1n5/5B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 5 8",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "c6",
+    "Nb1",
+    "c5",
+    "Bf4",
+    "Na6",
+    "dxc5",
+    "Nxc5",
+    "Nc3",
+    "Qc7",
+    "Nb5",
+    "Qa5+",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "Nce4",
+     "t": 1475,
+     "continuation": "Nce4",
+     "said": "here there is a choice of several very, very good moves. Um, the more conventional approach is to play knight f4 or even knight c to e4. The engine actually does like the move knight c to e4. And the engine gives a very interesting idea. After knight c to e4, how is white going to defend the knight? Well, likely white is going to drop the bishop back to d2. And here black actually has a fork. There is a double attack that black can make in this position. Let's see who can find it. Black to play and win material. Yeah, queen b6. Suddenly, you're threatening a checkmate on F2. You're threatening a Scholar's Mate. And in order to defend against it, well, white can trade on E4. That doesn't change anything. But, in order to defend against it, white has to play E3. And now, for example, you can trade the knight for the bishop, and you can grab B2, and you have everything. You have an extra pawn. Potentially, you could take another one. And you have the bishop pair, and white's position is completely in shambles. So, knight to E4 would have been extremely strong. Knight C to E4 would have been extremely strong. We decided to play knight to A4, going the other way. Um probably the last chance for white to stay in the game would have been to play queen to D2."
+    },
+    {
+     "san": "Na4",
+     "t": 1527,
+     "continuation": "Na4",
+     "said": "another one. And you have the bishop pair, and white's position is completely in shambles. So, knight to E4 would have been extremely strong. Knight C to E4 would have been extremely strong. We decided to play knight to A4, going the other way. Um probably the last chance for white to stay in the game would have been to play queen to D2. And in this position, if we take on B2, maybe white can play E4 and cover the C4 square, but still, white's position is very, very suspicious. Not to mention that we could just take on C3 here and ruin white's pawn structure. So, um I'm belaboring belaboring the point here. Our opponent played bishop E5. Uh which is a creative move, but loses the game due to knight takes B2, and everything falls apart here. Now, the last thing I'll mention is what would have been our response to the move queen to D4? What would have been our response to queen to D4? What is the fastest way for black to win the game here? See if you can understand what it is. It's not what you probably think it is. So, it's not 94. That's a blunder because white can play queen takes E4. Remember, the bishop defends the knight. Now, I think a lot of you probably"
+    }
+   ]
+  },
+  {
+   "ply": 16,
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q7/n4B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 6 9",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "c6",
+    "Nb1",
+    "c5",
+    "Bf4",
+    "Na6",
+    "dxc5",
+    "Nxc5",
+    "Nc3",
+    "Qc7",
+    "Nb5",
+    "Qa5+",
+    "Nc3",
+    "Na4"
+   ],
+   "options": [
+    {
+     "san": "Qd2",
+     "t": 1536,
+     "continuation": "Qd2",
+     "said": "strong. We decided to play knight to A4, going the other way. Um probably the last chance for white to stay in the game would have been to play queen to D2. And in this position, if we take on B2, maybe white can play E4 and cover the C4 square, but still, white's position is very, very suspicious. Not to mention that we could just take on C3 here and ruin white's pawn structure. So, um I'm belaboring belaboring the point here. Our opponent played bishop E5. Uh which is a creative move, but loses the game due to knight takes B2, and everything falls apart here. Now, the last thing I'll mention is what would have been our response to the move queen to D4? What would have been our response to queen to D4? What is the fastest way for black to win the game here? See if you can understand what it is. It's not what you probably think it is. So, it's not 94. That's a blunder because white can play queen takes E4. Remember, the bishop defends the knight. Now, I think a lot of you probably think, \"Oh, let's go D6 and let's chase this bishop out of the way.\" But, here white can buy themselves some time with bishop takes F6. So, the correct move here is actually to play E6 in order to"
+    },
+    {
+     "san": "Be5",
+     "t": 1553,
+     "continuation": "Be5",
+     "said": "square, but still, white's position is very, very suspicious. Not to mention that we could just take on C3 here and ruin white's pawn structure. So, um I'm belaboring belaboring the point here. Our opponent played bishop E5. Uh which is a creative move, but loses the game due to knight takes B2, and everything falls apart here. Now, the last thing I'll mention is what would have been our response to the move queen to D4? What would have been our response to queen to D4? What is the fastest way for black to win the game here? See if you can understand what it is. It's not what you probably think it is. So, it's not 94. That's a blunder because white can play queen takes E4. Remember, the bishop defends the knight. Now, I think a lot of you probably think, \"Oh, let's go D6 and let's chase this bishop out of the way.\" But, here white can buy themselves some time with bishop takes F6. So, the correct move here is actually to play E6 in order to open up the dark-squared bishop. And the takeaway here is that when you sense that you're very close to winning the game right out of the opening, the missing ingredient is often just to involve as many pieces as possible. It's not necessarily to make the tempo moves, but it's rather to involve pieces as quickly as possible. So E6 is super"
+    }
+   ]
+  },
+  {
+   "ply": 19,
+   "fen": "r1b1kb1r/pp1ppppp/5n2/q3B3/3Q4/2N5/PnP1PPPP/R3KBNR b KQkq - 1 10",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nc3",
+    "c6",
+    "Nb1",
+    "c5",
+    "Bf4",
+    "Na6",
+    "dxc5",
+    "Nxc5",
+    "Nc3",
+    "Qc7",
+    "Nb5",
+    "Qa5+",
+    "Nc3",
+    "Na4",
+    "Be5",
+    "Nxb2",
+    "Qd4"
+   ],
+   "options": [
+    {
+     "san": "Ne4",
+     "t": 1581,
+     "continuation": "Ne4",
+     "said": "What is the fastest way for black to win the game here? See if you can understand what it is. It's not what you probably think it is. So, it's not 94. That's a blunder because white can play queen takes E4. Remember, the bishop defends the knight. Now, I think a lot of you probably think, \"Oh, let's go D6 and let's chase this bishop out of the way.\" But, here white can buy themselves some time with bishop takes F6. So, the correct move here is actually to play E6 in order to open up the dark-squared bishop. And the takeaway here is that when you sense that you're very close to winning the game right out of the opening, the missing ingredient is often just to involve as many pieces as possible. It's not necessarily to make the tempo moves, but it's rather to involve pieces as quickly as possible. So E6 is super strong. Why is it so strong? Let's say that white plays, I don't know, knight F3. Okay? Now you play bishop to C5. And the queen simply has nowhere to go. If white drops back to D2, you drop back to C4, and white is just collapsing on all cylinders here. That's not an expression. Queen to D3, knight E5 knight E5, and now bishop to B4, attacking both of the knights at the same time."
+    },
+    {
+     "san": "d6",
+     "t": 1587.5,
+     "continuation": "d6",
+     "said": "It's not what you probably think it is. So, it's not 94. That's a blunder because white can play queen takes E4. Remember, the bishop defends the knight. Now, I think a lot of you probably think, \"Oh, let's go D6 and let's chase this bishop out of the way.\" But, here white can buy themselves some time with bishop takes F6. So, the correct move here is actually to play E6 in order to open up the dark-squared bishop. And the takeaway here is that when you sense that you're very close to winning the game right out of the opening, the missing ingredient is often just to involve as many pieces as possible. It's not necessarily to make the tempo moves, but it's rather to involve pieces as quickly as possible. So E6 is super strong. Why is it so strong? Let's say that white plays, I don't know, knight F3. Okay? Now you play bishop to C5. And the queen simply has nowhere to go. If white drops back to D2, you drop back to C4, and white is just collapsing on all cylinders here. That's not an expression. Queen to D3, knight E5 knight E5, and now bishop to B4, attacking both of the knights at the same time. Um the queen has no other good squares. If the queen goes to the side of the board, so knight F3 bishop C5,"
+    }
+   ]
+  }
+ ]
+}

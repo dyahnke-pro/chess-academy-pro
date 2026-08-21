@@ -386,5 +386,46 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation",
+   "eco": "B31",
+   "plies": 6,
+   "line": "e4 c5 Nf3 Nc6 Bb5 g6",
+   "coverage": 0.045
+  },
+  {
+   "name": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack",
+   "eco": "B30",
+   "plies": 5,
+   "line": "e4 c5 Nf3 Nc6 Bb5",
+   "coverage": 0.955
+  },
+  {
+   "name": "Sicilian Defense: Old Sicilian",
+   "eco": "B30",
+   "plies": 4,
+   "line": "e4 c5 Nf3 Nc6",
+   "coverage": 1
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Philidor Defense: Lion Variation, Bishop Sacrifice",
+  "confirmed": false
+ }
 }

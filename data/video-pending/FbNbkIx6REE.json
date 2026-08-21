@@ -1,0 +1,559 @@
+{
+ "videoId": "FbNbkIx6REE",
+ "title": "Daniels First Int. Tourney (Police Called) | Learning The Scotch | Moistcr1tikal / Penguinz0",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 4683,
+  "settledPositions": null
+ },
+ "plies": 39,
+ "rewinds": 8,
+ "moves": [
+  {
+   "t": 945.5,
+   "ply": 3,
+   "line": [
+    "e4",
+    "e5",
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 947,
+   "ply": 4,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 960.5,
+   "ply": 5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3"
+  },
+  {
+   "t": 968.5,
+   "ply": 6,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4"
+  },
+  {
+   "t": 970.5,
+   "ply": 5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3"
+  },
+  {
+   "t": 981.5,
+   "ply": 7,
+   "line": [
+    "Bc5",
+    "Nxe5"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 985,
+   "ply": 8,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 0 5"
+  },
+  {
+   "t": 1021,
+   "ply": 9,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/8/2b1n3/3PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5"
+  },
+  {
+   "t": 1035,
+   "ply": 11,
+   "line": [
+    "Bxd4",
+    "Qxd4"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/8/4n3/3QP3/2N5/PPP2PPP/R1B1KB1R b KQkq - 0 6"
+  },
+  {
+   "t": 1039,
+   "ply": 12,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk1nr/ppp2ppp/3p4/4n3/3QP3/2N5/PPP2PPP/R1B1KB1R w KQkq - 0 7"
+  },
+  {
+   "t": 1053,
+   "ply": 13,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1bqk1nr/ppp2ppp/3p4/4n3/3QPP2/2N5/PPP3PP/R1B1KB1R b KQkq - 0 7"
+  },
+  {
+   "t": 1059.5,
+   "ply": 7,
+   "line": [],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 1064,
+   "ply": 8,
+   "line": [
+    "Qf6"
+   ],
+   "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R w KQkq - 1 5"
+  },
+  {
+   "t": 1103,
+   "ply": 9,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1b1k1nr/pppp1ppp/2n2q2/2b5/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 2 5"
+  },
+  {
+   "t": 1110,
+   "ply": 5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3"
+  },
+  {
+   "t": 1111,
+   "ply": 6,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4"
+  },
+  {
+   "t": 1114.5,
+   "ply": 7,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 1120.5,
+   "ply": 8,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5"
+  },
+  {
+   "t": 1130.5,
+   "ply": 7,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 1144.5,
+   "ply": 9,
+   "line": [
+    "Bb4",
+    "Nxe5"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4N3/1b1PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5"
+  },
+  {
+   "t": 1157.5,
+   "ply": 10,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n5/4N3/1b1Pn3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6"
+  },
+  {
+   "t": 1203.5,
+   "ply": 9,
+   "line": [],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4N3/1b1PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5"
+  },
+  {
+   "t": 1206.5,
+   "ply": 12,
+   "line": [
+    "Nxe5",
+    "dxe5",
+    "Nxe4"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/8/4P3/1b2n3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 7"
+  },
+  {
+   "t": 1263,
+   "ply": 6,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4"
+  },
+  {
+   "t": 1370,
+   "ply": 7,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 1373,
+   "ply": 9,
+   "line": [
+    "exd4",
+    "Nxd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5"
+  },
+  {
+   "t": 1418,
+   "ply": 10,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6"
+  },
+  {
+   "t": 1419,
+   "ply": 9,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5"
+  },
+  {
+   "t": 1424,
+   "ply": 10,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6"
+  },
+  {
+   "t": 1451.5,
+   "ply": 11,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B6/3NP3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 6"
+  },
+  {
+   "t": 1457,
+   "ply": 12,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/2np1n2/1B6/3NP3/2N5/PPP2PPP/R1BQK2R w KQkq - 2 7"
+  },
+  {
+   "t": 1461,
+   "ply": 14,
+   "line": [
+    "Bf1",
+    "Bc8"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 4 8"
+  },
+  {
+   "t": 1462,
+   "ply": 15,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 5 8"
+  },
+  {
+   "t": 1468,
+   "ply": 18,
+   "line": [
+    "Ke7",
+    "O-O",
+    "Rg8"
+   ],
+   "fen": "r1bq1br1/ppp1kppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQ1RK1 w - - 8 10"
+  },
+  {
+   "t": 1501.5,
+   "ply": 19,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1bq1br1/ppp1kppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQR1K1 b - - 9 10"
+  },
+  {
+   "t": 1503,
+   "ply": 18,
+   "line": [],
+   "fen": "r1bq1br1/ppp1kppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQ1RK1 w - - 8 10"
+  },
+  {
+   "t": 1536.5,
+   "ply": 19,
+   "line": [
+    "h3"
+   ],
+   "fen": "r1bq1br1/ppp1kppp/2np1n2/8/2BNP3/2N4P/PPP2PP1/R1BQ1RK1 b - - 0 10"
+  },
+  {
+   "t": 1549,
+   "ply": 20,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bq1br1/ppp1kppp/3p1n2/8/2BnP3/2N4P/PPP2PP1/R1BQ1RK1 w - - 0 11"
+  },
+  {
+   "t": 1553,
+   "ply": 22,
+   "line": [
+    "Qxd4",
+    "c5"
+   ],
+   "fen": "r1bq1br1/pp2kppp/3p1n2/2p5/2BQP3/2N4P/PPP2PP1/R1B2RK1 w - - 0 12"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "Nf6",
+     "t": 968.5,
+     "continuation": "Nf6"
+    },
+    {
+     "san": "Bc5",
+     "t": 981.5,
+     "continuation": "Bc5 Nxe5"
+    }
+   ]
+  },
+  {
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1N3/4P3/2N5/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Bc5",
+    "Nxe5"
+   ],
+   "ply": 7,
+   "options": [
+    {
+     "san": "Nxe5",
+     "t": 985,
+     "continuation": "Nxe5"
+    },
+    {
+     "san": "Qf6",
+     "t": 1064,
+     "continuation": "Qf6"
+    }
+   ]
+  },
+  {
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "d4"
+   ],
+   "ply": 7,
+   "options": [
+    {
+     "san": "exd4",
+     "t": 1120.5,
+     "continuation": "exd4"
+    },
+    {
+     "san": "Bb4",
+     "t": 1144.5,
+     "continuation": "Bb4 Nxe5"
+    }
+   ]
+  },
+  {
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4N3/1b1PP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "d4",
+    "Bb4",
+    "Nxe5"
+   ],
+   "ply": 9,
+   "options": [
+    {
+     "san": "Nxe4",
+     "t": 1157.5,
+     "continuation": "Nxe4"
+    },
+    {
+     "san": "Nxe5",
+     "t": 1206.5,
+     "continuation": "Nxe5 dxe5 Nxe4"
+    }
+   ]
+  },
+  {
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "d6"
+   ],
+   "ply": 10,
+   "options": [
+    {
+     "san": "Bb5",
+     "t": 1451.5,
+     "continuation": "Bb5"
+    },
+    {
+     "san": "Bc4",
+     "t": 1462,
+     "continuation": "Bc4"
+    }
+   ]
+  },
+  {
+   "fen": "r1bq1br1/ppp1kppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQ1RK1 w - - 8 10",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "d6",
+    "Bb5",
+    "Bd7",
+    "Bf1",
+    "Bc8",
+    "Bc4",
+    "Ke7",
+    "O-O",
+    "Rg8"
+   ],
+   "ply": 18,
+   "options": [
+    {
+     "san": "Re1",
+     "t": 1501.5,
+     "continuation": "Re1"
+    },
+    {
+     "san": "h3",
+     "t": 1536.5,
+     "continuation": "h3"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Four Knights Game: Scotch Variation, Krause Gambit",
+   "eco": "C47",
+   "plies": 9,
+   "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 Bb4 Nxe5",
+   "coverage": 0.107
+  },
+  {
+   "name": "Four Knights Game: Scotch Variation Accepted",
+   "eco": "C47",
+   "plies": 8,
+   "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4",
+   "coverage": 0.429
+  },
+  {
+   "name": "Four Knights Game: Scotch Variation",
+   "eco": "C47",
+   "plies": 7,
+   "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4",
+   "coverage": 0.571
+  },
+  {
+   "name": "Four Knights Game",
+   "eco": "C47",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Nc3 Nf6",
+   "coverage": 0.607
+  },
+  {
+   "name": "Three Knights Opening",
+   "eco": "C46",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Nc3",
+   "coverage": 0.929
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.964
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}

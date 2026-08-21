@@ -1,0 +1,101 @@
+{
+ "videoId": "iwCO5bNiuNw",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1310",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "let's do it okay 1368 from russia all right so i'm"
+  },
+  {
+   "ply": 4,
+   "t": 14,
+   "line": [
+    "Nf3",
+    "Ba3"
+   ],
+   "fen": "rnbqk1nr/pppp1ppp/8/4p3/4P3/b4N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "going to jettison the bishop here with bishop a3"
+  },
+  {
+   "ply": 5,
+   "t": 17,
+   "line": [
+    "bxa3"
+   ],
+   "fen": "rnbqk1nr/pppp1ppp/8/4p3/4P3/P4N2/P1PP1PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "all right i know i know you guys will"
+  },
+  {
+   "ply": 6,
+   "t": 19,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/4p3/4P3/P4N2/P1PP1PPP/RNBQKB1R w KQkq - 1 4",
+   "said": "laugh but okay this is a serious experiment so okay i'm down a bishop all right i'm down a bishop"
+  },
+  {
+   "ply": 8,
+   "t": 29.5,
+   "line": [
+    "Bb2",
+    "d6"
+   ],
+   "fen": "r1bqk1nr/ppp2ppp/2np4/4p3/4P3/P4N2/PBPP1PPP/RN1QKB1R w KQkq - 0 5",
+   "said": "now what do i do first of all you don't want to go crazy and give up all the rest of your pieces right you're already down a piece and this is true also when"
+  },
+  {
+   "ply": 9,
+   "t": 34,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqk1nr/ppp2ppp/2np4/4p3/3PP3/P4N2/PBP2PPP/RN1QKB1R b KQkq - 0 5",
+   "said": "you blunder i see this all the time somebody blunders a piece and then they"
+  },
+  {
+   "ply": 10,
+   "t": 37,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqk1nr/ppp2ppp/2np4/8/3pP3/P4N2/PBP2PPP/RN1QKB1R w KQkq - 0 6",
+   "said": "immediately oh okay i'll sack the rook in two rooks and i'll just pretend"
+  },
+  {
+   "ply": 11,
+   "t": 40,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqk1nr/ppp2ppp/2np4/8/3NP3/P7/PBP2PPP/RN1QKB1R b KQkq - 0 6",
+   "said": "this was a sacrifice let me lose the game like two more moves"
+  },
+  {
+   "ply": 12,
+   "t": 42,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/8/3NP3/P7/PBP2PPP/RN1QKB1R w KQkq - 1 7",
+   "said": "there's no need to you know own up to"
+  },
+  {
+   "ply": 14,
+   "t": 45.5,
+   "line": [
+    "Nxc6",
+    "bxc6"
+   ],
+   "fen": "r1bqk2r/p1p2ppp/2pp1n2/8/4P3/P7/PBP2PPP/RN1QKB1R w KQkq - 0 8",
+   "said": "your blunder right don't try to pretend that you saw it and i have really funny stories with that and then sacrifice more pieces out of some sense of necessity now okay queen f3 now what does he want what does he want he wants to take on f6 and potentially he's clearly trying to trade right but let's use that to our advantage right because here's what i notice folks when he takes on f6 with his bishop that rook on a1 is a little bit weird and he's got a bunch of these dark squares right around his position that are kind of flimsy so i'm going to go queen e7 here i'm going to tempt him into taking on f6 because what i what that gives me the chance to do is take with a pawn why is taking with the pawn good doesn't it amen tie it seems like i'm ruining my pawn structure but this is actually potentially a blessing in disguise because what advantage does this pawn structure give me well first of all of course i avoid the"
+  }
+ ],
+ "forks": []
+}

@@ -1,0 +1,443 @@
+{
+ "videoId": "m6_i2xT7mgM",
+ "title": "Chess Analysis With Moistcr1tikal / Penguinz0 | Streamer Lesson",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 376.5,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "Putting your 1,000 rating at risk, but Yeah. You're going to be seeking It's about time. It's about time. I've been sitting on this glory for like a week now. Mhm. Yeah, it's that feeling of of getting a"
+  },
+  {
+   "ply": 3,
+   "t": 381.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "new TV or a new car. It's It's past."
+  },
+  {
+   "ply": 4,
+   "t": 382.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "It's like when I became a GM, you know, I thought I I thought I my life is going"
+  },
+  {
+   "ply": 5,
+   "t": 387.5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "said": "to be fulfilled, and the next morning I still I wake up and I still have to pee. So, like, all right, damn."
+  },
+  {
+   "ply": 6,
+   "t": 391,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "said": "I'm sorry to hear that. Yeah, I mean, I thought that my faculties my necessary faculties would have somehow been shut off, but they weren't."
+  },
+  {
+   "ply": 7,
+   "t": 405,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4",
+   "said": "All right, so you stumped him with a Berlin Variation. Castles. Mhm. Do I want this free pawn? That is the theoretical continuation. Um But it's it's very strong. looking at in Yeah, what I was looking at instead was knight to D4 attack bishop and or trade knight and get my pawn at D4."
+  },
+  {
+   "ply": 8,
+   "t": 435,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/1B2p3/3nP3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5",
+   "said": "I don't know which is better. That's a pretty ambitious continuation. I kind of like the the edge that brings. I think it's a little dubious, but you can go ahead and give that a shot. Yeah, that's the first thing I looked at. I just kind of like that idea. I know he's just going to take with the knight, but I also like having the pawn there. Right. And And this these next couple weeks are"
+  },
+  {
+   "ply": 9,
+   "t": 449.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/1B2p3/3nP3/2N2N2/PPPP1PPP/R1BQ1RK1 b kq - 7 5",
+   "said": "going to be an age of experimentation for you. You're going to try out new ideas that at first feel really weird cuz you're maybe not comfortable with them. You see and he he gives you a very important piece that you can now take. Yeah, so do I"
+  },
+  {
+   "ply": 10,
+   "t": 460.5,
+   "line": [
+    "Nxb5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/1n2p3/4P3/2N2N2/PPPP1PPP/R1BQ1RK1 w kq - 0 6",
+   "said": "I guess the question is do I just want the bishop then instead of the knight? Yeah, definitely. That bishop is one of his most important pieces, and he brings his knight to a very awkward square."
+  },
+  {
+   "ply": 11,
+   "t": 468,
+   "line": [
+    "Nxb5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/1N2p3/4P3/5N2/PPPP1PPP/R1BQ1RK1 b kq - 0 6",
+   "said": "And I still get a pawn out of it. You could take that pawn, but remember your pawn on E5 is hanging and you're not developed, so if I were you, I would prioritize defending that E5 pawn and"
+  },
+  {
+   "ply": 12,
+   "t": 482.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/3p1n2/1N2p3/4P3/5N2/PPPP1PPP/R1BQ1RK1 w kq - 0 7",
+   "said": "then developing ASAP. Okay. So, developing with the pawn pushing knight to D6 be effective freeing up the bishop. I think that's the most solid choice. It's not that taking the pawn would have been bad, but it would have taken a lot of precision"
+  },
+  {
+   "ply": 13,
+   "t": 491,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/3p1n2/1N2p3/3PP3/5N2/PPP2PPP/R1BQ1RK1 b kq - 0 7",
+   "said": "to handle the complications there. Okay. He's playing well. So, I kind of like the idea of just bringing bishop to D7, something not"
+  },
+  {
+   "ply": 14,
+   "t": 501.5,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/3p1n2/1N2p3/3PP3/5N2/PPP2PPP/R1BQ1RK1 w kq - 1 8",
+   "said": "imposing threatening knight, get the knight off, and then Perfectly solid choice. And remember, one thing I want you to"
+  },
+  {
+   "ply": 15,
+   "t": 509,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/3p1n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 2 8",
+   "said": "bear in mind, you don't always have to bring your bishops out to G4 and B4. Sometimes just bringing your bishop out to D7 and E7 is solid. But look at the central tension. Is he Is he threatening anything? Yeah, so right now, I take, he take with knight, I can't take back. Don't think he's going to develop his queen over his knight, wouldn't make much sense. He takes, I take, which frees up the D file."
+  },
+  {
+   "ply": 16,
+   "t": 541.5,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/3p1n2/8/3pP3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 9",
+   "said": "Um But he's threatening your pawn on E5. You see that, right? Yeah. So, you need to deal with that tension. Okay, so do I Do I just take, then? Yeah. And Okay. Again, not all trades are going to be winning for you. Some of them are just maintenance trades. Um just to Otherwise, you lose a pawn."
+  },
+  {
+   "ply": 17,
+   "t": 550,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/3p1n2/8/3QP3/2N2N2/PPP2PPP/R1B2RK1 b kq - 0 9",
+   "said": "It's either trade a pawn or lose a pawn. Okay, that makes sense, then. I guess recognizing that's going to be another thing I need to work on, then. Oh, yeah. Well, you know, I'll give you a workout shortly on all of that. Next move I was looking at was pushing C5 pawn, get the queen out, and then go back to development castle on short side here. But does playing C5 create any pawn weaknesses in your position? Does it weaken any pawns that he might potentially attack? Makes that B7 pawn weaker. B7? I would say that D6 pawn. That D6 pawn loses the protection of its of its neighboring pawn on C7. So, then I can't protect it with a pawn, only my bishop. I see. Right. That queen on D4, it's not doing that much. It's just sitting there in the center. It's being annoying, but you"
+  },
+  {
+   "ply": 18,
+   "t": 599.5,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r2qk2r/pppbbppp/3p1n2/8/3QP3/2N2N2/PPP2PPP/R1B2RK1 w kq - 1 10",
+   "said": "don't have to attend to it just yet. I would just keep developing. Okay, so then just bringing the bishop out to E7 and just castling. Yep. Exactly. Cheers. And this type of chess is also something that you need to learn to play. You know, your position doesn't look imposing, but it's solid. You have no"
+  },
+  {
+   "ply": 19,
+   "t": 620,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r2qk2r/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/R4RK1 b kq - 2 10",
+   "said": "weaknesses. You have the two bishops and he does not have a clear plan of I don't know, crashing through or doing anything specific. So, we'll see how he handles this. Yeah, this bishop play doesn't really do"
+  },
+  {
+   "ply": 20,
+   "t": 633,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/R4RK1 w - - 3 11",
+   "said": "much since it's not going to pin knight to queen or anything. So, I still just want to castle here. Yep, exactly. He is playing very well so far. I mean, he's he's displaying knowledge of you know, good opening development, but"
+  },
+  {
+   "ply": 21,
+   "t": 646,
+   "line": [
+    "Rad1"
+   ],
+   "fen": "r2q1rk1/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/3R1RK1 b - - 4 11",
+   "said": "your position is is extremely solid. So, this is one of those situations where you'd want to make a maintenance move. Okay, is there any piece that you could just bring into the game that right now isn't doing anything?"
+  },
+  {
+   "ply": 22,
+   "t": 674,
+   "line": [
+    "Re8"
+   ],
+   "fen": "r2qr1k1/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/3R1RK1 w - - 5 12",
+   "said": "Yeah, I still have that rook hanging on A8. Uh as for the best square for that, I don't really know, but I could also move my rook to E8 here. Bingo. Bingo. Bingo. That's exactly right. Okay. There are pieces that you know, I would love for that A8 rook to appear on G4. Guess what? I'd like for a filet mignon steak from Ruth's Chris to appear on my desk. I can't [&nbsp;__&nbsp;] have that right now."
+  },
+  {
+   "ply": 23,
+   "t": 693,
+   "line": [
+    "Rfe1"
+   ],
+   "fen": "r2qr1k1/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/3RR1K1 b - - 6 12",
+   "said": "Is Ruth's Chris a friend of yours or is that like a chain? That's a steakhouse. From It's a chain. Oh. I don't even know why. I've never been there. I I don't know why I said that as opposed to like Outback. That's fair. know if you're an Outback guy. I've had Outback. I used to like it when I was a kid, but not so much anymore. So, he he is playing like a GM right now, but so are you. So, again, same question. Is there any piece that perhaps a little bit passive you could make it a little bit more active or"
+  },
+  {
+   "ply": 24,
+   "t": 724.5,
+   "line": [
+    "Bc6"
+   ],
+   "fen": "r2qr1k1/ppp1bppp/2bp1n2/6B1/3QP3/2N2N2/PPP2PPP/3RR1K1 w - - 7 13",
+   "said": "perhaps bring it out onto a slightly more open diagonal? Yeah, I was looking at moving one of these bishops out here to see Bingo. That's exactly the move that I had in mind. Pressure that pawn, right?"
+  },
+  {
+   "ply": 25,
+   "t": 732.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "r2qr1k1/ppp1bppp/2bp1n2/4P1B1/3Q4/2N2N2/PPP2PPP/3RR1K1 b - - 0 13",
+   "said": "You're not threatening to take it immediately, but you're simply improving the position of your bishop. And he pushes E5."
+  },
+  {
+   "ply": 24,
+   "t": 735.5,
+   "line": [],
+   "fen": "r2qr1k1/ppp1bppp/2bp1n2/6B1/3QP3/2N2N2/PPP2PPP/3RR1K1 w - - 7 13",
+   "said": "Now,"
+  },
+  {
+   "ply": 25,
+   "t": 736.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "r2qr1k1/ppp1bppp/2bp1n2/4P1B1/3Q4/2N2N2/PPP2PPP/3RR1K1 b - - 0 13",
+   "said": "okay. So, you need to attend to the central tension. Can you do you What What is the first thing that comes to your mind? Well, taking the pawn, he'll likely just uh he'll either take it back with the knight or he'll just go in with a queen and just trade queens. But, well, he wouldn't do that, right? Cuz that's not a great position for him. Right. So,"
+  },
+  {
+   "ply": 26,
+   "t": 777,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r2qr1k1/ppp1bppp/2b2n2/4p1B1/3Q4/2N2N2/PPP2PPP/3RR1K1 w - - 0 14",
+   "said": "you've got to do what you got to do though. Like he he the decision is his whether he wants an end game, but in either case you're going to have a fine position. You have the two bishops. Yeah, so I just have to take the pawn. Yeah, I don't see much of an alternative. Now, if he if he'll play the move queen"
+  },
+  {
+   "ply": 27,
+   "t": 782.5,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r2qr1k1/ppp1bppp/2b2n2/4N1B1/3Q4/2N5/PPP2PPP/3RR1K1 b - - 0 14",
+   "said": "to C4, I'll get a little suspicious. Okay, he takes with the knight. Now, this is a situation which you normally struggle with where the correct move is something you really don't like to do, but you have to. Which is what? Play a retreating move? Well, that's a it's a there's a second thing you don't like to do, which is which is what else? Trading, right? Trading. I feel like"
+  },
+  {
+   "ply": 28,
+   "t": 815.5,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r3r1k1/ppp1bppp/2b2n2/4N1B1/3q4/2N5/PPP2PPP/3RR1K1 w - - 0 15",
+   "said": "subconsciously you refrain from trading, but the reason you should take his queen, watch what happens when you take his queen. So, you can go ahead and do that. Yeah, he has to take back with the rook. And do you see that it's it's colleague on E1 has lost the support of the rook"
+  },
+  {
+   "ply": 29,
+   "t": 821.5,
+   "line": [
+    "Rxd4"
+   ],
+   "fen": "r3r1k1/ppp1bppp/2b2n2/4N1B1/3R4/2N5/PPP2PPP/4R1K1 b - - 0 15",
+   "said": "on D4. So, now if you attack that knight on E5, it's not going to be able to move very well because you can potentially deliver back rank checkmate. Now, how can you open up that pin from E8 to E1 moving the bishop where? From E8 to E1. So, you have a rook on E8 and it's x-raying the rook on E1. Could you move that bishop?"
+  },
+  {
+   "ply": 30,
+   "t": 852,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "r3r1k1/ppp2ppp/2bb1n2/4N1B1/3R4/2N5/PPP2PPP/4R1K1 w - - 1 16",
+   "said": "have to get the knight off. Well, that you Yeah, so you need to move your bishop from E7, but where do you move it to attack the knight? That'd be D6 protected by pawn so he can't take with the rook. Right. And now you see why it was a good idea not to move that C pawn out earlier on. Yeah, I guess that's another thing I need to realize. Moving those cuz now I just fixate on just moving pawns and [&nbsp;__&nbsp;] like that when it's not that great. creating a threat is just for the sake of creating a threat just isn't that good."
+  },
+  {
+   "ply": 31,
+   "t": 883,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r3r1k1/ppp2ppp/2bb1n2/4N3/3R1B2/2N5/PPP2PPP/4R1K1 b - - 2 16",
+   "said": "It's just, you know, a threat has to have a an additional benefit other than the fact that it simply attacks a piece because Okay, what if he retreats it? You know, who's benefited? All right. Now, could you find another way to apply pressure on that knight on E5? Remember, the knight on E5 is immobilized. Yeah, so I had a cool idea that I think"
+  },
+  {
+   "ply": 32,
+   "t": 903.5,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "r3r1k1/ppp2ppp/2bb4/4N3/3R1Bn1/2N5/PPP2PPP/4R1K1 w - - 3 17",
+   "said": "pans out kind of well playing knight to G4. Bishop cuts off the rook back on that side. Beautiful. Okay, cool. Sorry I interrupted you. Do it. Absolutely do it. Now, he's got a defense here which is not a 980 level defense, but he's he's been playing well above his rating. Amazing. Knight G4. Okay, sorry. Did I just praise you? Sorry, can I strike that from the record so nobody in your chat will have heard that? I like it I like it like when you say nice things about me. Makes me feel good. Good to know. That way, I'll make sure not to do that ever again. Okay, so he's got to find a defense here cuz either other either he gets checkmated or he loses that knight on E5. He does have one defensive move. So, let's see if he finds it. I'm going to keep mum about it in case he's watching a certain stream. Dorkus Uprising. Oh, Dork Uprising. Dork, yeah. Dorkus Uprising."
+  },
+  {
+   "ply": 33,
+   "t": 971.5,
+   "line": [
+    "Nd3"
+   ],
+   "fen": "r3r1k1/ppp2ppp/2bb4/8/3R1Bn1/2NN4/PPP2PPP/4R1K1 b - - 4 17",
+   "said": "Yeah, there's a couple people on my stream whose names I was butchering. Like I pronounced the first three letters and then the last two. When like the first two and then the last three make a lot more sense. Some of them are just [&nbsp;__&nbsp;] tough, man. You just don't know what they're going for. Okay, he found it. Wow, this guy. that protects the E1 right there so I can't just go in. But, believe it or not, you have another move that you see that knight on D3 is guarding E1. So, you can move your piece out onto a square that's defended by that knight on D3, but because that knight can't move, it's actually a really good move. If you know what I'm saying. You could attack another one of his exposed pieces in the center. I guess I'm not really seeing it. So, I understand the knight can't move cuz if he does, it's a back rank checkmate. So, that knight is absolutely held down right there. Right. You could attack But, I don't see The rook on D4 is the"
+  },
+  {
+   "ply": 34,
+   "t": 1022,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r3r1k1/ppp2ppp/2b5/2b5/3R1Bn1/2NN4/PPP2PPP/4R1K1 w - - 5 18",
+   "said": "piece you can attack with one of your pieces. yeah. Because he can't take it back with the knight. So, yeah, I just bring the bishop over here to C5, right? Yes, exactly. And notice how you're skewering that rook on D4 the pawn on F2. That pawn on F2, guess what? It's"
+  },
+  {
+   "ply": 35,
+   "t": 1028.5,
+   "line": [
+    "Rxe8+"
+   ],
+   "fen": "r3R1k1/ppp2ppp/2b5/2b5/3R1Bn1/2NN4/PPP2PPP/6K1 b - - 0 18",
+   "said": "also defended by the knight. And once again, well, he takes."
+  },
+  {
+   "ply": 36,
+   "t": 1032.5,
+   "line": [
+    "Rxe8"
+   ],
+   "fen": "4r1k1/ppp2ppp/2b5/2b5/3R1Bn1/2NN4/PPP2PPP/6K1 w - - 0 19",
+   "said": "Okay, you can just take back and he still can't take your bishop. He's got to move his rook out. And then you have a real five head move"
+  },
+  {
+   "ply": 37,
+   "t": 1042.5,
+   "line": [
+    "Rc4"
+   ],
+   "fen": "4r1k1/ppp2ppp/2b5/2b5/2R2Bn1/2NN4/PPP2PPP/6K1 b - - 1 19",
+   "said": "once again exploiting the fact that his knight cannot move from D3. Okay, this guy is definitely not 980, but you're still playing well. Any ideas? So, what I Obviously, the first thing I looked at was taking that pawn on F2 with the bishop which puts it check. He has to take with the knight Okay. then he gets checkmated if he takes with the knight. Yeah, so obviously you can't take with the knight. Exactly. But, you can just move the king. But, then you've won a pawn."
+  },
+  {
+   "ply": 38,
+   "t": 1085,
+   "line": [
+    "Bxf2+"
+   ],
+   "fen": "4r1k1/ppp2ppp/2b5/8/2R2Bn1/2NN4/PPP2bPP/6K1 w - - 0 20",
+   "said": "True. Well, and the bishop's still defended by the pawn here. Right. And that's one of your issues. Sometimes you go over you know, you throw away moves where you just just won a pawn looking for something more, but here you don't have anything more. So, Yeah. you just got to do it. And after he moves his king to F1, then he's attacking your bishop. So, you're going to have to drop your bishop back."
+  },
+  {
+   "ply": 39,
+   "t": 1110,
+   "line": [
+    "Kf1"
+   ],
+   "fen": "4r1k1/ppp2ppp/2b5/8/2R2Bn1/2NN4/PPP2bPP/5K2 b - - 1 20",
+   "said": "Well, let's see if he first of all, if he even finds that move. Maybe he'll get attracted by knight takes bishop because technically you've removed one of the pawns that you know, hemmed in the king. But, now the knight takes its place. Okay, he finds it. Mhm. So, now I'm just dropping the bishop all the way back to B6"
+  },
+  {
+   "ply": 40,
+   "t": 1117,
+   "line": [
+    "Bb6"
+   ],
+   "fen": "4r1k1/ppp2ppp/1bb5/8/2R2Bn1/2NN4/PPP3PP/5K2 w - - 2 21",
+   "said": "protected by pawn. Bingo. And look for a different attack. Right. You've got pieces all trained on his king. So, despite the fact that the queens are off the board, his king is not actually out of the woods."
+  },
+  {
+   "ply": 41,
+   "t": 1132.5,
+   "line": [
+    "Bg3"
+   ],
+   "fen": "4r1k1/ppp2ppp/1bb5/8/2R3n1/2NN2B1/PPP3PP/5K2 b - - 3 21",
+   "said": "And you see that bishop on F4? Okay, well, he's just made a huge blunder. What square has he now relinquished? And this is a type of training that you've done for ages. Don't tell me you need more fork training. No, I'm looking for a fork, but I don't see it cuz that knight still protects"
+  },
+  {
+   "ply": 42,
+   "t": 1167.5,
+   "line": [
+    "Ne3+"
+   ],
+   "fen": "4r1k1/ppp2ppp/1bb5/8/2R5/2NNn1B1/PPP3PP/5K2 w - - 4 22",
+   "said": "the fork that I'm looking at. What fork are you looking at? Well, the one I was looking at attacks the Oh, never mind. That's just not even going to work. I see it. It's just this one right here. I was looking too low. Yep, 93 check. Yeah, I I looked I like a [&nbsp;__&nbsp;] idiot I looked at E5 thinking attack the rook and attack the other"
+  },
+  {
+   "ply": 43,
+   "t": 1180,
+   "line": [
+    "Kg1"
+   ],
+   "fen": "4r1k1/ppp2ppp/1bb5/8/2R5/2NNn1B1/PPP3PP/6K1 b - - 5 22",
+   "said": "knight. forks the knight. That's a that's a fantastic idea. So, Well, because I was still under the impression the knight couldn't move cuz it would be a checkmate. Right. Right,"
+  },
+  {
+   "ply": 44,
+   "t": 1182,
+   "line": [
+    "Nxc4+"
+   ],
+   "fen": "4r1k1/ppp2ppp/1bb5/8/2n5/2NN2B1/PPP3PP/6K1 w - - 0 23",
+   "said": "that makes sense. So, now you have a minute 46 and you're up a rook."
+  },
+  {
+   "ply": 45,
+   "t": 1188,
+   "line": [
+    "Nf2"
+   ],
+   "fen": "4r1k1/ppp2ppp/1bb5/8/2n5/2N3B1/PPP2NPP/6K1 b - - 1 23",
+   "said": "Let's see where he goes because Okay, now he allowed checkmate in one. Yes, this is just going right back there"
+  },
+  {
+   "ply": 46,
+   "t": 1194.5,
+   "line": [
+    "Re1#"
+   ],
+   "fen": "6k1/ppp2ppp/1bb5/8/2n5/2N3B1/PPP2NPP/4r1K1 w - - 2 24",
+   "said": "with the rook and that's checkmate. Yep, very nice. Very nice game. Um and especially kind of capped by that"
+  },
+  {
+   "ply": 32,
+   "t": 1199.5,
+   "line": [],
+   "fen": "r3r1k1/ppp2ppp/2bb4/4N3/3R1Bn1/2N5/PPP2PPP/4R1K1 w - - 3 17",
+   "said": "move knight g4. Definitely he he he played well above his rating, you know, I would say 12-1300 strength. But, you"
+  },
+  {
+   "ply": 22,
+   "t": 1209.5,
+   "line": [],
+   "fen": "r2qr1k1/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/3R1RK1 w - - 5 12",
+   "said": "know, all of these moves he found knight g4. Um and and I think this game speaks to a lot of things that you struggle with. So, it's a nice segue into into some of the work that we're going to be doing today. Yeah, being hesitant to take the queen I think was the big thing there. Right, because you feel like uh it's an end game, somehow that's a concession, but in reality there are going to be situations when you just need to bite the bullet and go and take the queen. You cannot avoid a queen trade every single game. If that makes sense. Makes sense to me. Yeah, I'm ready. all right. So, let's jump into some training positions where at various times, but they're all going to be united by the fact that you basically just need to find maintenance positional moves, good squares for your pieces, trades, you need to go for trades, you need to find a plan. You're going to struggle with this initially. I mean, it's going to be annoying, but I think you're going to come out a lot stronger, all right? Yeah, sounds good to me, man. I'm always up to improve. All right. So, let me invite you to an analysis board."
+  }
+ ],
+ "forks": []
+}

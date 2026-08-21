@@ -1,0 +1,698 @@
+{
+ "videoId": "QVw89_6fh2Y",
+ "title": "Mastering Chess Flexibility | King's Indian and Philidor | GM Naroditsky's DYI Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 23.5,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "worth worth your while we're slowly but surely climbing up to 1200 and we're playing Lucho from Switzerland okay let's go D4 and we get"
+  },
+  {
+   "ply": 3,
+   "t": 26.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "potentially I don't want to jinx it yes"
+  },
+  {
+   "ply": 4,
+   "t": 28,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "looks like we're going to get another Kings Indian"
+  },
+  {
+   "ply": 5,
+   "t": 30.5,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "and we're facing the move E3 so it's"
+  },
+  {
+   "ply": 4,
+   "t": 36,
+   "line": [],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "funny a couple of games ago this actually I think was the previous speedrun episode we faced uh this weird"
+  },
+  {
+   "ply": 5,
+   "t": 44,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "line Knight C3 and Bishop E3 and I warned people that for a while at least"
+  },
+  {
+   "ply": 6,
+   "t": 49,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/4P3/PP3PPP/RNBQKBNR w KQkq - 1 4",
+   "said": "until we hit like 15600 we're probably not going to face like the main Kings Indian lines which is why you really have to lay the groundwork in terms of"
+  },
+  {
+   "ply": 7,
+   "t": 61,
+   "line": [
+    "b3"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/1P2P3/P4PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "understanding the ideas so that you can react if your opponent throws something unexpected at you because like this particular setup is not going to be in my chessable course it's impossible to"
+  },
+  {
+   "ply": 5,
+   "t": 68,
+   "line": [],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "encapsulate all of White's possible setup because there's just a million of"
+  },
+  {
+   "ply": 4,
+   "t": 69.5,
+   "line": [],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "them and the the more important thing is to understand what setup you're going for and how to react to certain types of"
+  },
+  {
+   "ply": 7,
+   "t": 77.5,
+   "line": [
+    "b3",
+    "Bg7",
+    "e3"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/1P2P3/P4PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "setups from your opponent so white is just playing moves I mean E3 B3 that doesn't really change our reaction so"
+  },
+  {
+   "ply": 8,
+   "t": 83.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PP4/1P2P3/P4PPP/RNBQKBNR w KQ - 1 5",
+   "said": "far uh the first step is kind of to play all the standard Kings Indian moves we"
+  },
+  {
+   "ply": 9,
+   "t": 86,
+   "line": [
+    "Bb2"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PP4/1P2P3/PB3PPP/RN1QKBNR b KQ - 2 5",
+   "said": "can castle and now we have to make like the big decision which I talked about in The Last Kings Indian game so you should really watch uh the previous speedrun episode in particular like the Kings Indian game because I'm going to build off of some of that knowledge uh what I said then is that often in the Kings Indian there's like a choice at some point between playing the traditional Kings Indian move which is E7 E5 uh not immediately but to prepare like to go D6 and E5 when you like learn the Kings Indian this is what people often want to do because this is like what's shown in books but the sort of modern approach to the Kings Indian is to understand that against certain setups it's actually more efficient uh to play it kind of benon style by actually pushing C5 rather than E5 there's many reasons why you would want to do that I don't want to delve into them just the fact of the matter is that you don't want to automatically play D6 and E5 against all of your opponent setups in the last game it was actually a good idea to to play grunfeld style with D5 so you should maintain flexibility when it comes to deciding which Pawn break you should you should carry out out I think against this particular setup uh you can make a case for either going C5 or preparing E5 both seem to be pretty good in my book the benefit of C5 is that it would"
+  },
+  {
+   "ply": 10,
+   "t": 173.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/1P2P3/PB3PPP/RN1QKBNR w KQ - 0 6",
+   "said": "potentially create this standoff between the Bishops which actually could be good for us because White's King is still in the center but I also want to kind of display the typical King's Indian way of playing it so actually let's go D6 and in this game I'm going to show you how to carry out the E5 Break Even though White's already position position to Bishop on B2 presumably maybe not"
+  },
+  {
+   "ply": 11,
+   "t": 187,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/1PN1P3/PB3PPP/R2QKBNR b KQ - 1 6",
+   "said": "intentionally but our opponent's trying to discourage us from playing E5 but the great thing about the Kings Indian is you can usually Force this break uh in almost any position okay so white plays Knight C3 and actually this changes my perception a little bit so the problem with playing E5 in this position is that"
+  },
+  {
+   "ply": 12,
+   "t": 213,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PP4/1PN1P3/PB3PPP/R2QKBNR w KQ - 0 7",
+   "said": "it allows a queen trade and I don't really want to allow a queen trade not that the end game is bad but I think that we can go for more so because our opponent played Knight C3 I actually now like the move C5 a lot more and there's a pretty simple reason why which is that after white plays D5 which is kind of the standard reaction at a at a higher level like at this level we're probably"
+  },
+  {
+   "ply": 13,
+   "t": 232.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PP4/1PN1PN2/PB3PPP/R2QKB1R b KQ - 1 7",
+   "said": "going to face DT C5 uh more often which is even better for us but after white plays D5 we have this sort of tactical idea uh to jump in with the Knight to E4 and expose the bishop on B2 and potentially seiz the bishop pair so I'll show you after the game we also have the move Queen a five uh which obviously could be very very unpleasant for white and we're coming in very fast so this is kind of what I'm going to do we're going to try to put pressure on White Center"
+  },
+  {
+   "ply": 14,
+   "t": 259,
+   "line": [
+    "Qa5"
+   ],
+   "fen": "rnb2rk1/pp2ppbp/3p1np1/q1p5/2PP4/1PN1PN2/PB3PPP/R2QKB1R w KQ - 2 8",
+   "said": "but we're going to do it in a very careful way if we play Knight C6 here we're allowing white to push D5 with Tempo uh so let's Reserve that move until a little bit later and let's actually start with Queen A5 which is a very challenging move for white to face because we're already setting up the uh"
+  },
+  {
+   "ply": 15,
+   "t": 270.5,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnb2rk1/pp2ppbp/3p1np1/q1p5/2PP4/1PNBPN2/PB3PPP/R2QK2R b KQ - 3 8",
+   "said": "pretty standard idea of Knight E4 and we're kind of just playing on the queen side side and we're waiting to develop these two pieces White's played Bishop D3 so this prevents the move Knight E4 but because white didn't position their Bishop on E2 we now have"
+  },
+  {
+   "ply": 16,
+   "t": 288,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1b2rk1/pp2ppbp/2np1np1/q1p5/2PP4/1PNBPN2/PB3PPP/R2QK2R w KQ - 4 9",
+   "said": "this idea of playing Bishop G4 at the right moment so when is the right moment well it's not now because the reason we played Queen A5 is that now we can play Knight C6 and you should pause the video and see if you can figure out what our respons is going to be to D5 because we have a tactic in response"
+  },
+  {
+   "ply": 17,
+   "t": 305,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1b2rk1/pp2ppbp/2np1np1/q1pP4/2P5/1PNBPN2/PB3PPP/R2QK2R b KQ - 0 9",
+   "said": "to D5 pretty simple tactic that wins a pawn and for this reason we're starting to put serious pressure on the D4 pawn and you can kind of see how our moves are starting to come together you don't even have to pause the video you can just think along with me so you might say oh it's like knight4 which is the right"
+  },
+  {
+   "ply": 18,
+   "t": 320,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r1b2rk1/pp2ppbp/2np2p1/q1pn4/2P5/1PNBPN2/PB3PPP/R2QK2R w KQ - 0 10",
+   "said": "idea but you have a better execution like if you're already moving the Knight you might as well grab the pawn on D5 because you're just winning a pawn it's pretty easy to calculate C takes D5 we play Bishop takes C3 check the bishops"
+  },
+  {
+   "ply": 19,
+   "t": 331.5,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r1b2rk1/pp2ppbp/2np2p1/q1pP4/8/1PNBPN2/PB3PPP/R2QK2R b KQ - 0 10",
+   "said": "get traded and then White's position is in shambles boom easy clap okay so Bishop takes E3"
+  },
+  {
+   "ply": 20,
+   "t": 334.5,
+   "line": [
+    "Bxc3+"
+   ],
+   "fen": "r1b2rk1/pp2pp1p/2np2p1/q1pP4/8/1PbBPN2/PB3PPP/R2QK2R w KQ - 0 11",
+   "said": "very important that this is a check and"
+  },
+  {
+   "ply": 22,
+   "t": 338,
+   "line": [
+    "Bxc3",
+    "Qxc3+"
+   ],
+   "fen": "r1b2rk1/pp2pp1p/2np2p1/2pP4/8/1PqBPN2/P4PPP/R2QK2R w KQ - 0 12",
+   "said": "White's position collapses also white can't play Queen D2 this is a very common blunder at this level to play Queen D2 kind of reactively tilting because people don't really want to move"
+  },
+  {
+   "ply": 23,
+   "t": 352,
+   "line": [
+    "Ke2"
+   ],
+   "fen": "r1b2rk1/pp2pp1p/2np2p1/2pP4/8/1PqBPN2/P3KPPP/R2Q3R b - - 1 12",
+   "said": "their King and blunder this Rook on A1 this is like a little bit of whole board awareness okay King E2 our opponent bites the bullet but this doesn't bring much relief now often one mistake I see people make making is that when they win a little bit of material like a pawn they tend to kind of rest on their Laurels so your instinct might be to like drop back to d8 or maybe trade off the knights with Knight E5 but we have a"
+  },
+  {
+   "ply": 24,
+   "t": 380,
+   "line": [
+    "Nb4"
+   ],
+   "fen": "r1b2rk1/pp2pp1p/3p2p1/2pP4/1n6/1PqBPN2/P3KPPP/R2Q3R w - - 2 13",
+   "said": "better way to play now let's not forget our Knight is hanging but we don't want to just stop at one Pawn White's position is collapsing and we want to seize the opportunity before white consolidates so the instinctive move for me is Knight B4 it hits the pawn it pressures the bishop and this Knight is"
+  },
+  {
+   "ply": 25,
+   "t": 392,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "r1b2rk1/pp2pp1p/3p2p1/2pP4/1n6/1PqBPN2/P3KPPP/2RQ3R b - - 3 13",
+   "said": "very stable yeah this is this is really bad white is lost Rook to C1 okay now we have a really fancy move that we could play I'm trying to figure out if it's also good which is the most which is the priority I think it is also good it's actually a really sexy move"
+  },
+  {
+   "ply": 26,
+   "t": 417.5,
+   "line": [
+    "Nxa2"
+   ],
+   "fen": "r1b2rk1/pp2pp1p/3p2p1/2pP4/8/1PqBPN2/n3KPPP/2RQ3R w - - 0 14",
+   "said": "now I think some of you probably understand the idea and you might think it's Knight takes D5 but I don't love Knight takes D5 the point is if white takes the Rook we recapture with a fork but we have a better way to do it which is to take on A2 because this also hits"
+  },
+  {
+   "ply": 28,
+   "t": 420.5,
+   "line": [
+    "Rxc3",
+    "Nxc3+"
+   ],
+   "fen": "r1b2rk1/pp2pp1p/3p2p1/2pP4/8/1PnBPN2/4KPPP/3Q3R w - - 0 15",
+   "said": "The Rook our opponent takes and goes into it and now we win the game we're up"
+  },
+  {
+   "ply": 30,
+   "t": 429,
+   "line": [
+    "Kd2",
+    "Nxd1"
+   ],
+   "fen": "r1b2rk1/pp2pp1p/3p2p1/2pP4/8/1P1BPN2/3K1PPP/3n3R w - - 0 16",
+   "said": "a ton of material takes I'll go through it a little bit more slowly after the game yeah now the rest is easy we have this big Queen side majority and we have the extra"
+  },
+  {
+   "ply": 31,
+   "t": 445,
+   "line": [
+    "Rxd1"
+   ],
+   "fen": "r1b2rk1/pp2pp1p/3p2p1/2pP4/8/1P1BPN2/3K1PPP/3R4 b - - 0 16",
+   "said": "exchange so the big next step is going to be to open up some files for our Rooks okay so here we have a choice I think Bishop G4 is a great move just trading off another pair of minor pieces but if you want to win this efficiently my instinct is to open up this Rook so you might say well let's go A5 and A4"
+  },
+  {
+   "ply": 32,
+   "t": 469,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r4rk1/pp1bpp1p/3p2p1/2pP4/8/1P1BPN2/3K1PPP/3R4 w - - 1 17",
+   "said": "but if you play A5 immediately you're creating a weak Square on B5 which white could occupy with the bishop this is pedantic is it's not really going to matter here but let's start with Bishop D7 because this is going to make A5 A4"
+  },
+  {
+   "ply": 31,
+   "t": 474.5,
+   "line": [],
+   "fen": "r1b2rk1/pp2pp1p/3p2p1/2pP4/8/1P1BPN2/3K1PPP/3R4 b - - 0 16",
+   "said": "smoother would my opponent have played Bishop B5 at this level probably not but that's not the the point of the speedrun"
+  },
+  {
+   "ply": 32,
+   "t": 477.5,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r4rk1/pp1bpp1p/3p2p1/2pP4/8/1P1BPN2/3K1PPP/3R4 w - - 1 17",
+   "said": "is to build these good habits early on"
+  },
+  {
+   "ply": 33,
+   "t": 479,
+   "line": [
+    "Ra1"
+   ],
+   "fen": "r4rk1/pp1bpp1p/3p2p1/2pP4/8/1P1BPN2/3K1PPP/R7 b - - 2 17",
+   "said": ""
+  },
+  {
+   "ply": 34,
+   "t": 480.5,
+   "line": [
+    "a5"
+   ],
+   "fen": "r4rk1/1p1bpp1p/3p2p1/p1pP4/8/1P1BPN2/3K1PPP/R7 w - - 0 18",
+   "said": "now we play A5 F5 is worse because if you push the pawn to F4 you want to make"
+  },
+  {
+   "ply": 35,
+   "t": 487,
+   "line": [
+    "Bc2"
+   ],
+   "fen": "r4rk1/1p1bpp1p/3p2p1/p1pP4/8/1P2PN2/2BK1PPP/R7 b - - 1 18",
+   "said": "sure that your opponent can't just keep things locked up okay so Bishop C2 now"
+  },
+  {
+   "ply": 36,
+   "t": 490,
+   "line": [
+    "b5"
+   ],
+   "fen": "r4rk1/3bpp1p/3p2p1/pppP4/8/1P2PN2/2BK1PPP/R7 w - - 0 19",
+   "said": "obviously we should go B5 and now we're just pushing"
+  },
+  {
+   "ply": 38,
+   "t": 496,
+   "line": [
+    "Ke2",
+    "a4"
+   ],
+   "fen": "r4rk1/3bpp1p/3p2p1/1ppP4/p7/1P2PN2/2B1KPPP/R7 w - - 0 20",
+   "said": "A4 and winning the G at A4 easy creating a pass pawn and also opening up the B"
+  },
+  {
+   "ply": 40,
+   "t": 503.5,
+   "line": [
+    "bxa4",
+    "bxa4"
+   ],
+   "fen": "r4rk1/3bpp1p/3p2p1/2pP4/p7/4PN2/2B1KPPP/R7 w - - 0 21",
+   "said": "file which we're going to occupy with our other"
+  },
+  {
+   "ply": 41,
+   "t": 507.5,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "r4rk1/3bpp1p/3p2p1/2pP4/p7/4P3/2BNKPPP/R7 b - - 1 21",
+   "said": "Rook okay now our opponent might be going to C4 but I'm immediately seeing"
+  },
+  {
+   "ply": 42,
+   "t": 511.5,
+   "line": [
+    "Rfb8"
+   ],
+   "fen": "rr4k1/3bpp1p/3p2p1/2pP4/p7/4P3/2BNKPPP/R7 w - - 2 22",
+   "said": "that's not actually a problem because of Bishop to B5 pinning and potentially winning the"
+  },
+  {
+   "ply": 44,
+   "t": 518,
+   "line": [
+    "Nc4",
+    "Bb5"
+   ],
+   "fen": "rr4k1/4pp1p/3p2p1/1bpP4/p1N5/4P3/2B1KPPP/R7 w - - 4 23",
+   "said": "Knight well it doesn't win the Knight but it does trade off the Knight which"
+  },
+  {
+   "ply": 46,
+   "t": 521.5,
+   "line": [
+    "Bd3",
+    "Bxc4"
+   ],
+   "fen": "rr4k1/4pp1p/3p2p1/2pP4/p1b5/3BP3/4KPPP/R7 w - - 0 24",
+   "said": "allows our Pawn to inch forward so we're just trading I'm playing quickly here"
+  },
+  {
+   "ply": 48,
+   "t": 523.5,
+   "line": [
+    "Bxc4",
+    "a3"
+   ],
+   "fen": "rr4k1/4pp1p/3p2p1/2pP4/2B5/p3P3/4KPPP/R7 w - - 0 25",
+   "said": ""
+  },
+  {
+   "ply": 49,
+   "t": 524.5,
+   "line": [
+    "Kf3"
+   ],
+   "fen": "rr4k1/4pp1p/3p2p1/2pP4/2B5/p3PK2/5PPP/R7 b - - 1 25",
+   "said": "because everything is very simple now we want to push the pawn to A2 so we can go"
+  },
+  {
+   "ply": 50,
+   "t": 529.5,
+   "line": [
+    "Rb4"
+   ],
+   "fen": "r5k1/4pp1p/3p2p1/2pP4/1rB5/p3PK2/5PPP/R7 w - - 2 26",
+   "said": "Rook B4 we can go Rook B2 it really doesn't matter let's start with Rook B4 forcing the bishop back and then we'll"
+  },
+  {
+   "ply": 51,
+   "t": 537.5,
+   "line": [
+    "Ba2"
+   ],
+   "fen": "r5k1/4pp1p/3p2p1/2pP4/1r6/p3PK2/B4PPP/R7 b - - 3 26",
+   "said": "go up to"
+  },
+  {
+   "ply": 52,
+   "t": 538.5,
+   "line": [
+    "Rb2"
+   ],
+   "fen": "r5k1/4pp1p/3p2p1/2pP4/8/p3PK2/Br3PPP/R7 w - - 4 27",
+   "said": "B2 just time down this Rook if the bishop moves again we'll go"
+  },
+  {
+   "ply": 54,
+   "t": 544.5,
+   "line": [
+    "Bc4",
+    "a2"
+   ],
+   "fen": "r5k1/4pp1p/3p2p1/2pP4/2B5/4PK2/pr3PPP/R7 w - - 0 28",
+   "said": "A2 yeah Bishop moves again we'll go A2 and now it's easy now we could play Rook I think a lot of people they you know"
+  },
+  {
+   "ply": 55,
+   "t": 556,
+   "line": [
+    "g4"
+   ],
+   "fen": "r5k1/4pp1p/3p2p1/2pP4/2B3P1/4PK2/pr3P1P/R7 b - - 0 28",
+   "said": "they're taught that the most important thing is to trade pieces uh so they'll go Rook B1 and they'll give up the a pawn but that'll take longer to convert there's no reason for us to to give up"
+  },
+  {
+   "ply": 56,
+   "t": 564,
+   "line": [
+    "Ra4"
+   ],
+   "fen": "6k1/4pp1p/3p2p1/2pP4/r1B3P1/4PK2/pr3P1P/R7 w - - 1 29",
+   "said": "this Pawn the easier way to win is just to chase this bishop away with the other Rook Rook A4 and then to push the C Pawn"
+  },
+  {
+   "ply": 57,
+   "t": 570,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "6k1/4pp1p/3p2p1/2pP4/r5P1/3BPK2/pr3P1P/R7 b - - 2 29",
+   "said": "if necessary"
+  },
+  {
+   "ply": 58,
+   "t": 571.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "6k1/4pp1p/3p2p1/3P4/r1p3P1/3BPK2/pr3P1P/R7 w - - 0 30",
+   "said": "yeah C4 yeah this is a bit boring for like"
+  },
+  {
+   "ply": 60,
+   "t": 575.5,
+   "line": [
+    "Be4",
+    "c3"
+   ],
+   "fen": "6k1/4pp1p/3p2p1/3P4/r3B1P1/2p1PK2/pr3P1P/R7 w - - 0 31",
+   "said": "more advanced players but you know still C3 C2 and we"
+  },
+  {
+   "ply": 61,
+   "t": 581,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "6k1/4pp1p/3p2p1/3P4/r5P1/2pBPK2/pr3P1P/R7 b - - 1 31",
+   "said": ""
+  },
+  {
+   "ply": 62,
+   "t": 582.5,
+   "line": [
+    "c2"
+   ],
+   "fen": "6k1/4pp1p/3p2p1/3P4/r5P1/3BPK2/prp2P1P/R7 w - - 0 32",
+   "said": ""
+  },
+  {
+   "ply": 63,
+   "t": 585,
+   "line": [
+    "Bxc2"
+   ],
+   "fen": "6k1/4pp1p/3p2p1/3P4/r5P1/4PK2/prB2P1P/R7 b - - 0 32",
+   "said": ""
+  },
+  {
+   "ply": 64,
+   "t": 586,
+   "line": [
+    "Rxc2"
+   ],
+   "fen": "6k1/4pp1p/3p2p1/3P4/r5P1/4PK2/p1r2P1P/R7 w - - 0 33",
+   "said": ""
+  },
+  {
+   "ply": 65,
+   "t": 588,
+   "line": [
+    "h4"
+   ],
+   "fen": "6k1/4pp1p/3p2p1/3P4/r5PP/4PK2/p1r2P2/R7 b - - 0 33",
+   "said": "win okay takes takes and now the last step is just to"
+  },
+  {
+   "ply": 66,
+   "t": 589,
+   "line": [
+    "Rb4"
+   ],
+   "fen": "6k1/4pp1p/3p2p1/3P4/1r4PP/4PK2/p1r2P2/R7 w - - 1 34",
+   "said": "get this Rook to B1 we don't really care"
+  },
+  {
+   "ply": 68,
+   "t": 592,
+   "line": [
+    "h5",
+    "Rb1"
+   ],
+   "fen": "6k1/4pp1p/3p2p1/3P3P/6P1/4PK2/p1r2P2/Rr6 w - - 1 35",
+   "said": "what our opponent is"
+  },
+  {
+   "ply": 70,
+   "t": 595,
+   "line": [
+    "Rxb1",
+    "axb1=N"
+   ],
+   "fen": "6k1/4pp1p/3p2p1/3P3P/6P1/4PK2/2r2P2/1n6 w - - 0 36",
+   "said": "doing and we make a"
+  },
+  {
+   "ply": 71,
+   "t": 597,
+   "line": [
+    "hxg6"
+   ],
+   "fen": "6k1/4pp1p/3p2P1/3P4/6P1/4PK2/2r2P2/1n6 b - - 0 36",
+   "said": "queen yeah let's recapture"
+  },
+  {
+   "ply": 72,
+   "t": 598,
+   "line": [
+    "hxg6"
+   ],
+   "fen": "6k1/4pp2/3p2p1/3P4/6P1/4PK2/2r2P2/1n6 w - - 0 37",
+   "said": "and our opponent resigns cool so a pretty simple game I mean the the big blunder happened on move n but it"
+  },
+  {
+   "ply": 3,
+   "t": 613.5,
+   "line": [],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "happened because we chose the right Pawn break okay so let's quickly talk about the opening"
+  },
+  {
+   "ply": 5,
+   "t": 614.5,
+   "line": [
+    "g6",
+    "e3"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "yeah our opponent played E3 now E3 in and of itself is not a bad move um if"
+  },
+  {
+   "ply": 4,
+   "t": 619,
+   "line": [],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "White follows It Up Normally like again"
+  },
+  {
+   "ply": 5,
+   "t": 621,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "said": "the main line is Knight C3 and E4 um and"
+  },
+  {
+   "ply": 7,
+   "t": 622.5,
+   "line": [
+    "Bg7",
+    "e4"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "said": ""
+  },
+  {
+   "ply": 8,
+   "t": 624,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "said": "this is kind of the entry point to a million different King Indian variations"
+  },
+  {
+   "ply": 7,
+   "t": 631.5,
+   "line": [],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "which I talked about in the last video um E3 and B3 again if you turn on the engine it's probably like still equal uh so you shouldn't think of this as like absolutely terrible so we played D6 and our opponent played Knight C3 I was expecting Knight F3 and here I'll teach you an important idea that's going to happen again at some point now I wouldn't have necessarily played this move but actually you can play the move E5 in this position and this looks like a Flatout blunder but those of you who play the Kings Indian might know this idea in this position you can actually move the Knight away or move it up to G4 but Knight fd7 is uh more common uh and the E5 Pawn is toast you're attacking it three times you can't defend it and most importantly white can't move it because the bishop Falls uh so where is this idea most commonly applied it's most commonly applied when white plays like the zuker tort type setup or the double fian ketto with B3 if you want to play a Kings Indian setup in response which you absolutely can very often you get this"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 4,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6"
+   ],
+   "options": [
+    {
+     "san": "e3",
+     "t": 30.5,
+     "continuation": "e3",
+     "said": "Lucho from Switzerland okay let's go D4 and we get potentially I don't want to jinx it yes looks like we're going to get another Kings Indian and we're facing the move E3 so it's funny a couple of games ago this actually I think was the previous speedrun episode we faced uh this weird line Knight C3 and Bishop E3 and I warned people that for a while at least until we hit like 15600 we're probably not going to face like the main Kings Indian lines which is why you really have to lay the groundwork in terms of understanding the ideas so that you can react if your opponent throws something unexpected at you because like this particular setup is not going to be in my chessable course it's impossible to encapsulate all of White's possible setup because there's just a million of them and the the more important thing is to understand what setup you're going for and how to react to certain types of setups from your opponent so white is just playing moves I mean E3 B3 that doesn't really change our reaction so far uh the first step is kind of to play all the standard Kings Indian moves we can castle and now we have to make like the big decision which I talked about in The Last Kings Indian game so you should"
+    },
+    {
+     "san": "b3",
+     "t": 77.5,
+     "continuation": "b3 Bg7 e3",
+     "said": "encapsulate all of White's possible setup because there's just a million of them and the the more important thing is to understand what setup you're going for and how to react to certain types of setups from your opponent so white is just playing moves I mean E3 B3 that doesn't really change our reaction so far uh the first step is kind of to play all the standard Kings Indian moves we can castle and now we have to make like the big decision which I talked about in The Last Kings Indian game so you should really watch uh the previous speedrun episode in particular like the Kings Indian game because I'm going to build off of some of that knowledge uh what I said then is that often in the Kings Indian there's like a choice at some point between playing the traditional Kings Indian move which is E7 E5 uh not immediately but to prepare like to go D6 and E5 when you like learn the Kings Indian this is what people often want to do because this is like what's shown in books but the sort of modern approach to the Kings Indian is to understand that against certain setups it's actually more efficient uh to play it kind of benon style by actually pushing C5 rather than E5 there's many reasons why you would want to do that I don't want to delve into them just the fact of the matter is that you don't want to automatically play D6 and E5 against all of your opponent"
+    },
+    {
+     "san": "Nc3",
+     "t": 621,
+     "continuation": "Nc3",
+     "said": "so let's quickly talk about the opening yeah our opponent played E3 now E3 in and of itself is not a bad move um if White follows It Up Normally like again the main line is Knight C3 and E4 um and this is kind of the entry point to a million different King Indian variations which I talked about in the last video um E3 and B3 again if you turn on the engine it's probably like still equal uh so you shouldn't think of this as like absolutely terrible so we played D6 and our opponent played Knight C3 I was expecting Knight F3 and here I'll teach you an important idea that's going to happen again at some point now I wouldn't have necessarily played this move but actually you can play the move E5 in this position and this looks like a Flatout blunder but those of you who play the Kings Indian might know this idea in this position you can actually move the Knight away or move it up to G4 but Knight fd7 is uh more common uh and the E5 Pawn is toast you're attacking it three times you can't defend it and most importantly white can't move it because the bishop Falls uh so where is this idea most commonly applied it's most commonly"
+    }
+   ]
+  }
+ ]
+}

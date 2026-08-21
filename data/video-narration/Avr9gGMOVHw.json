@@ -1,0 +1,192 @@
+{
+ "videoId": "Avr9gGMOVHw",
+ "title": "Lesson with MoistCr1tikal - Predicting The Future",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 391.5,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "53 of them were the white pieces in 52 he played one to e4 so that is for sure what he's gonna play he is going to play the move 1 to e4 and you're gonna respond with 1 to e5 and now 31 games have continued this way and"
+  },
+  {
+   "ply": 3,
+   "t": 400.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "then 30 of them XGC has got Knight to f3 so that is to be expected do you see me actually making the mousse yeah I can"
+  },
+  {
+   "ply": 4,
+   "t": 405,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "see it and you're gonna respond Knight to c6 17 games in this point and XGC plays the same opening every single time"
+  },
+  {
+   "ply": 5,
+   "t": 417,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "so we will actually be able to prepare for him he plays what's called the scotch game I think acara might have taught him that he plays the move d4 okay now in one game or sorry in two"
+  },
+  {
+   "ply": 4,
+   "t": 423,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "games xqc played Bishop to c4 the Italian game and I'm gonna show you a"
+  },
+  {
+   "ply": 5,
+   "t": 438,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "said": "couple of moves in this position just to be sure maybe he Carver will prepare him or something like that let's actually start with that to get it out of the way do you know what to do in this position as black right yes um so he's threatening the f7 pawn is it just simply pushing up"
+  },
+  {
+   "ply": 6,
+   "t": 458.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "said": "so move like I don't know so he's not actually threatening it's defended by the King so actually you can just develop symmetric leadership cc5 just because he's putting pressure on it doesn't mean you wanted to necessarily"
+  },
+  {
+   "ply": 7,
+   "t": 472,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4",
+   "said": "go out of your way to defend it okay so you go Bishop c5 in this position xcc castles and now you just develop your"
+  },
+  {
+   "ply": 8,
+   "t": 474,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5",
+   "said": "knight to f6 and in this position in one of the games that reached this position xqc played the move d4 and I'm pretty"
+  },
+  {
+   "ply": 9,
+   "t": 491,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
+   "said": "sure he Cara taught him this opening which is on a low level a good opening but I'm gonna show you what to do he goes d4 okay this looks like a blunder he's not there tell me you're not seeing anything no you are you're okay this is"
+  },
+  {
+   "ply": 10,
+   "t": 500.5,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BpP3/5N2/PPP2PPP/RNBQ1RK1 w kq - 0 6",
+   "said": "a trap if you take this with the pawn he"
+  },
+  {
+   "ply": 11,
+   "t": 502,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1P3/2Bp4/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+   "said": "has the move e5 with a very nasty attack against your knight"
+  },
+  {
+   "ply": 9,
+   "t": 506.5,
+   "line": [],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
+   "said": "okay if you take with the night he takes"
+  },
+  {
+   "ply": 11,
+   "t": 508.5,
+   "line": [
+    "Nxd4",
+    "Nxe5"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/5n2/2b1N3/2BnP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+   "said": "back on e5 but there's one piece you can"
+  },
+  {
+   "ply": 9,
+   "t": 510,
+   "line": [],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
+   "said": "take with that doesn't allow him to do anything and that is what oh and actually actually I can flip the board I forgot we're facing black that should be easier for you if you actually flip the board on your ends if you hover over to the gear should have those three little buttons yep the third one is the flip board yep yes that makes sense what show take that pawn with so is it taking it with the F night there on the e4 then he takes your Bishop oh and you really good at chess you should actually take the pawn that I've highlighted it is there questions with what piece and I made it very hard for you because I've told you it's not the night and it's not the woman so it's got to be the bishop yep and it takes the bishop you take them Knight and he cannot take because the pawn is defending it with your other two and the line goes f4 d6 it's a defendant he's not gonna know that deep so basically of course he might watch the stream but if that's the length that"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 4,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6"
+   ],
+   "options": [
+    {
+     "san": "d4",
+     "t": 417,
+     "continuation": "d4",
+     "said": "to c6 17 games in this point and XGC plays the same opening every single time so we will actually be able to prepare for him he plays what's called the scotch game I think acara might have taught him that he plays the move d4 okay now in one game or sorry in two games xqc played Bishop to c4 the Italian game and I'm gonna show you a couple of moves in this position just to be sure maybe he Carver will prepare him or something like that let's actually start with that to get it out of the way do you know what to do in this position as black right yes um so he's threatening the f7 pawn is it just simply pushing up so move like I don't know so he's not actually threatening it's defended by the King so actually you can just develop symmetric leadership cc5 just because he's putting pressure on it doesn't mean you wanted to necessarily go out of your way to defend it okay so you go Bishop c5 in this position xcc castles and now you just develop your knight to f6 and in this position in one"
+    },
+    {
+     "san": "Bc4",
+     "t": 438,
+     "continuation": "Bc4",
+     "said": "Italian game and I'm gonna show you a couple of moves in this position just to be sure maybe he Carver will prepare him or something like that let's actually start with that to get it out of the way do you know what to do in this position as black right yes um so he's threatening the f7 pawn is it just simply pushing up so move like I don't know so he's not actually threatening it's defended by the King so actually you can just develop symmetric leadership cc5 just because he's putting pressure on it doesn't mean you wanted to necessarily go out of your way to defend it okay so you go Bishop c5 in this position xcc castles and now you just develop your knight to f6 and in this position in one of the games that reached this position xqc played the move d4 and I'm pretty sure he Cara taught him this opening which is on a low level a good opening but I'm gonna show you what to do he goes d4 okay this looks like a blunder he's not there tell me you're not seeing anything no you are you're okay this is"
+    }
+   ]
+  },
+  {
+   "ply": 9,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "O-O",
+    "Nf6",
+    "d4"
+   ],
+   "options": [
+    {
+     "san": "exd4",
+     "t": 500.5,
+     "continuation": "exd4",
+     "said": "goes d4 okay this looks like a blunder he's not there tell me you're not seeing anything no you are you're okay this is a trap if you take this with the pawn he has the move e5 with a very nasty attack against your knight okay if you take with the night he takes back on e5 but there's one piece you can take with that doesn't allow him to do anything and that is what oh and actually actually I can flip the board I forgot we're facing black that should be easier for you if you actually flip the board on your ends if you hover over to the gear should have those three little buttons yep the third one is the flip board yep yes that makes sense what show take that pawn with so is it taking it with the F night there on the e4 then he takes your Bishop oh and you really good at chess you should actually take the pawn that I've highlighted it is there questions with what piece and I made it very hard for you because I've told you it's not the night and it's not the woman so it's got to be the bishop yep and it takes the bishop you take them Knight and he cannot take because the pawn is defending it with your other two and the line goes f4 d6 it's a"
+    },
+    {
+     "san": "Nxd4",
+     "t": 508.5,
+     "continuation": "Nxd4 Nxe5",
+     "said": "a trap if you take this with the pawn he has the move e5 with a very nasty attack against your knight okay if you take with the night he takes back on e5 but there's one piece you can take with that doesn't allow him to do anything and that is what oh and actually actually I can flip the board I forgot we're facing black that should be easier for you if you actually flip the board on your ends if you hover over to the gear should have those three little buttons yep the third one is the flip board yep yes that makes sense what show take that pawn with so is it taking it with the F night there on the e4 then he takes your Bishop oh and you really good at chess you should actually take the pawn that I've highlighted it is there questions with what piece and I made it very hard for you because I've told you it's not the night and it's not the woman so it's got to be the bishop yep and it takes the bishop you take them Knight and he cannot take because the pawn is defending it with your other two and the line goes f4 d6 it's a defendant he's not gonna know that deep so basically of course he might watch"
+    }
+   ]
+  }
+ ]
+}

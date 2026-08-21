@@ -1,0 +1,163 @@
+{
+ "videoId": "91lZ8sfu-XU",
+ "title": "Defeating A Colle System | The Sensei Speedrun | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 1966,
+  "settledPositions": null
+ },
+ "plies": 15,
+ "rewinds": 2,
+ "moves": [
+  {
+   "t": 22,
+   "ply": 2,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2"
+  },
+  {
+   "t": 25,
+   "ply": 3,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/4P3/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 32,
+   "ply": 4,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/4P3/PPP2PPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 37.5,
+   "ply": 5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2P1P3/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 58.5,
+   "ply": 4,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/4P3/PPP2PPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 63,
+   "ply": 5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2P1P3/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 72.5,
+   "ply": 6,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P4/2P1P3/PP3PPP/RNBQKBNR w KQkq - 1 4"
+  },
+  {
+   "t": 77,
+   "ply": 7,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P4/2PBP3/PP3PPP/RNBQK1NR b KQkq - 2 4"
+  },
+  {
+   "t": 111,
+   "ply": 8,
+   "line": [
+    "e6"
+   ],
+   "fen": "rn1qkb1r/ppp2ppp/4pn2/3p1b2/3P4/2PBP3/PP3PPP/RNBQK1NR w KQkq - 0 5"
+  },
+  {
+   "t": 116.5,
+   "ply": 9,
+   "line": [
+    "Bxf5"
+   ],
+   "fen": "rn1qkb1r/ppp2ppp/4pn2/3p1B2/3P4/2P1P3/PP3PPP/RNBQK1NR b KQkq - 0 5"
+  },
+  {
+   "t": 118.5,
+   "ply": 10,
+   "line": [
+    "exf5"
+   ],
+   "fen": "rn1qkb1r/ppp2ppp/5n2/3p1p2/3P4/2P1P3/PP3PPP/RNBQK1NR w KQkq - 0 6"
+  },
+  {
+   "t": 671.5,
+   "ply": 5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2P1P3/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 674,
+   "ply": 6,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "rn1qkb1r/ppp1pppp/5n2/3p1b2/3P4/2P1P3/PP3PPP/RNBQKBNR w KQkq - 1 4"
+  },
+  {
+   "t": 677,
+   "ply": 8,
+   "line": [
+    "Bd3",
+    "e6"
+   ],
+   "fen": "rn1qkb1r/ppp2ppp/4pn2/3p1b2/3P4/2PBP3/PP3PPP/RNBQK1NR w KQkq - 0 5"
+  },
+  {
+   "t": 681,
+   "ply": 10,
+   "line": [
+    "Bxf5",
+    "exf5"
+   ],
+   "fen": "rn1qkb1r/ppp2ppp/5n2/3p1p2/3P4/2P1P3/PP3PPP/RNBQK1NR w KQkq - 0 6"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}

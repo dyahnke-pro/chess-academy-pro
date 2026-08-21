@@ -1,0 +1,330 @@
+{
+ "videoId": "aHzb3XGiG08",
+ "title": "INSANELY Close 3 0 Blitz | Daniel Naroditsky VS Alireza Firouzja",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 9998,
+  "settledPositions": null
+ },
+ "plies": 31,
+ "rewinds": 0,
+ "moves": [
+  {
+   "t": 2572.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 2574.5,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 2576,
+   "ply": 5,
+   "line": [
+    "Nc6",
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3"
+  },
+  {
+   "t": 2578.5,
+   "ply": 9,
+   "line": [
+    "Nf6",
+    "Ba4",
+    "a6",
+    "d3"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 0 5"
+  },
+  {
+   "t": 2580,
+   "ply": 10,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1bqkb1r/2pp1ppp/p1n2n2/1p2p3/B3P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 6"
+  },
+  {
+   "t": 2582.5,
+   "ply": 13,
+   "line": [
+    "Bb3",
+    "Be7",
+    "O-O"
+   ],
+   "fen": "r1bqk2r/2ppbppp/p1n2n2/1p2p3/4P3/1B1P1N2/PPP2PPP/RNBQ1RK1 b kq - 3 7"
+  },
+  {
+   "t": 2585.5,
+   "ply": 14,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk2r/2p1bppp/p1np1n2/1p2p3/4P3/1B1P1N2/PPP2PPP/RNBQ1RK1 w kq - 0 8"
+  },
+  {
+   "t": 2587,
+   "ply": 15,
+   "line": [
+    "h3"
+   ],
+   "fen": "r1bqk2r/2p1bppp/p1np1n2/1p2p3/4P3/1B1P1N1P/PPP2PP1/RNBQ1RK1 b kq - 0 8"
+  },
+  {
+   "t": 2588,
+   "ply": 16,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/1B1P1N1P/PPP2PP1/RNBQ1RK1 w - - 1 9"
+  },
+  {
+   "t": 2591.5,
+   "ply": 17,
+   "line": [
+    "a3"
+   ],
+   "fen": "r1bq1rk1/2p1bppp/p1np1n2/1p2p3/4P3/PB1P1N1P/1PP2PP1/RNBQ1RK1 b - - 0 9"
+  },
+  {
+   "t": 2593,
+   "ply": 18,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2q1rk1/2p1bppp/p1npbn2/1p2p3/4P3/PB1P1N1P/1PP2PP1/RNBQ1RK1 w - - 1 10"
+  },
+  {
+   "t": 2597,
+   "ply": 19,
+   "line": [
+    "Bxe6"
+   ],
+   "fen": "r2q1rk1/2p1bppp/p1npBn2/1p2p3/4P3/P2P1N1P/1PP2PP1/RNBQ1RK1 b - - 0 10"
+  },
+  {
+   "t": 2599,
+   "ply": 21,
+   "line": [
+    "fxe6",
+    "Nc3"
+   ],
+   "fen": "r2q1rk1/2p1b1pp/p1nppn2/1p2p3/4P3/P1NP1N1P/1PP2PP1/R1BQ1RK1 b - - 1 11"
+  },
+  {
+   "t": 2601.5,
+   "ply": 22,
+   "line": [
+    "Qe8"
+   ],
+   "fen": "r3qrk1/2p1b1pp/p1nppn2/1p2p3/4P3/P1NP1N1P/1PP2PP1/R1BQ1RK1 w - - 2 12"
+  },
+  {
+   "t": 2608,
+   "ply": 23,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "r3qrk1/2p1b1pp/p1nppn2/1p2p1N1/4P3/P1NP3P/1PP2PP1/R1BQ1RK1 b - - 3 12"
+  },
+  {
+   "t": 2617,
+   "ply": 24,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r3qrk1/2p1b1pp/p2ppn2/1p2p1N1/3nP3/P1NP3P/1PP2PP1/R1BQ1RK1 w - - 4 13"
+  },
+  {
+   "t": 2618,
+   "ply": 25,
+   "line": [
+    "Ne2"
+   ],
+   "fen": "r3qrk1/2p1b1pp/p2ppn2/1p2p1N1/3nP3/P2P3P/1PP1NPP1/R1BQ1RK1 b - - 5 13"
+  },
+  {
+   "t": 2626.5,
+   "ply": 26,
+   "line": [
+    "Bd8"
+   ],
+   "fen": "r2bqrk1/2p3pp/p2ppn2/1p2p1N1/3nP3/P2P3P/1PP1NPP1/R1BQ1RK1 w - - 6 14"
+  },
+  {
+   "t": 2630,
+   "ply": 28,
+   "line": [
+    "Nxd4",
+    "exd4"
+   ],
+   "fen": "r2bqrk1/2p3pp/p2ppn2/1p4N1/3pP3/P2P3P/1PP2PP1/R1BQ1RK1 w - - 0 15"
+  },
+  {
+   "t": 2636,
+   "ply": 29,
+   "line": [
+    "c3"
+   ],
+   "fen": "r2bqrk1/2p3pp/p2ppn2/1p4N1/3pP3/P1PP3P/1P3PP1/R1BQ1RK1 b - - 0 15"
+  },
+  {
+   "t": 2640.5,
+   "ply": 31,
+   "line": [
+    "dxc3",
+    "bxc3"
+   ],
+   "fen": "r2bqrk1/2p3pp/p2ppn2/1p4N1/4P3/P1PP3P/5PP1/R1BQ1RK1 b - - 0 16"
+  },
+  {
+   "t": 2643.5,
+   "ply": 32,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r2bqrk1/2pn2pp/p2pp3/1p4N1/4P3/P1PP3P/5PP1/R1BQ1RK1 w - - 1 17"
+  },
+  {
+   "t": 2647.5,
+   "ply": 33,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r2bqrk1/2pn2pp/p2pp3/1p6/4P3/P1PP1N1P/5PP1/R1BQ1RK1 b - - 2 17"
+  },
+  {
+   "t": 2649.5,
+   "ply": 34,
+   "line": [
+    "Nc5"
+   ],
+   "fen": "r2bqrk1/2p3pp/p2pp3/1pn5/4P3/P1PP1N1P/5PP1/R1BQ1RK1 w - - 3 18"
+  },
+  {
+   "t": 2651,
+   "ply": 35,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r2bqrk1/2p3pp/p2pp3/1pn5/4P3/P1PPBN1P/5PP1/R2Q1RK1 b - - 4 18"
+  },
+  {
+   "t": 2653.5,
+   "ply": 36,
+   "line": [
+    "Na4"
+   ],
+   "fen": "r2bqrk1/2p3pp/p2pp3/1p6/n3P3/P1PPBN1P/5PP1/R2Q1RK1 w - - 5 19"
+  },
+  {
+   "t": 2657,
+   "ply": 37,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "r2bqrk1/2p3pp/p2pp3/1p6/n3P3/P1PPBN1P/5PP1/2RQ1RK1 b - - 6 19"
+  },
+  {
+   "t": 2660,
+   "ply": 38,
+   "line": [
+    "Bf6"
+   ],
+   "fen": "r3qrk1/2p3pp/p2ppb2/1p6/n3P3/P1PPBN1P/5PP1/2RQ1RK1 w - - 7 20"
+  },
+  {
+   "t": 2665.5,
+   "ply": 39,
+   "line": [
+    "d4"
+   ],
+   "fen": "r3qrk1/2p3pp/p2ppb2/1p6/n2PP3/P1P1BN1P/5PP1/2RQ1RK1 b - - 0 20"
+  },
+  {
+   "t": 2670.5,
+   "ply": 40,
+   "line": [
+    "Qc6"
+   ],
+   "fen": "r4rk1/2p3pp/p1qppb2/1p6/n2PP3/P1P1BN1P/5PP1/2RQ1RK1 w - - 1 21"
+  },
+  {
+   "t": 2697,
+   "ply": 41,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r4rk1/2p3pp/p1qppb2/1p6/n2PP3/P1P1BN1P/3Q1PP1/2R2RK1 b - - 2 21"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Ruy Lopez: Morphy Defense, Anderssen Variation",
+   "eco": "C77",
+   "plies": 9,
+   "line": "e4 e5 Nf3 Nc6 Bb5 Nf6 Ba4 a6 d3",
+   "coverage": 0.903
+  },
+  {
+   "name": "Ruy Lopez: Berlin Defense",
+   "eco": "C65",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bb5 Nf6",
+   "coverage": 0.903
+  },
+  {
+   "name": "Ruy Lopez",
+   "eco": "C60",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Bb5",
+   "coverage": 0.935
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.935
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.968
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}

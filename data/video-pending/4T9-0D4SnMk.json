@@ -470,5 +470,39 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Indian Defense: Anti-Grünfeld, Advance Variation",
+   "eco": "E60",
+   "plies": 5,
+   "line": "d4 Nf6 d5 g6 c4",
+   "coverage": 0.927
+  },
+  {
+   "name": "Indian Defense: Pawn Push Variation",
+   "eco": "A45",
+   "plies": 3,
+   "line": "d4 Nf6 d5",
+   "coverage": 0.976
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "King's Indian Attack",
+  "confirmed": false
+ }
 }

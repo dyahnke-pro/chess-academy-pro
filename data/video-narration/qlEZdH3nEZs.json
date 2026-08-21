@@ -1,0 +1,392 @@
+{
+ "videoId": "qlEZdH3nEZs",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1220",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 416,
+   "line": [
+    "e4",
+    "g6"
+   ],
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "so let's play the next two games and then i will answer everybody's questions i promise all right let's go e4 and um okay so he's playing the modern the modern is uh"
+  },
+  {
+   "ply": 3,
+   "t": 418,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "an opening where black immediately clean"
+  },
+  {
+   "ply": 4,
+   "t": 419.5,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "said": "keto is a suspicion this is an opening that you might see me playing in blitz"
+  },
+  {
+   "ply": 5,
+   "t": 426.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 3",
+   "said": "i don't recommend it to beginners because it requires a very"
+  },
+  {
+   "ply": 6,
+   "t": 429.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqk1nr/pppp1pbp/4p1p1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": "deep understanding of well how to play against the center and you basically yield control over the center now how should we play here if we are white what do we do here and there's a very brute force approach which i would recommend which really tests uh your opponent's understanding"
+  },
+  {
+   "ply": 7,
+   "t": 460.5,
+   "line": [
+    "h4"
+   ],
+   "fen": "rnbqk1nr/pppp1pbp/4p1p1/8/3PP2P/2N5/PPP2PP1/R1BQKBNR b KQkq - 0 4",
+   "said": "black is just pushing out a lot of his pawns he's creating a lot of targets and we can actually just start attacking one of these targets well we don't want to play f4 uh but that's the right idea right we want to push up onto the h file we're actually going to play h4 uh you"
+  },
+  {
+   "ply": 8,
+   "t": 464,
+   "line": [
+    "h5"
+   ],
+   "fen": "rnbqk1nr/pppp1pb1/4p1p1/7p/3PP2P/2N5/PPP2PP1/R1BQKBNR w KQkq - 0 5",
+   "said": "guys i'm sure have well and he immediately responds with h5 but what square does h5 actually weaken where can we actually put one of our pieces now"
+  },
+  {
+   "ply": 9,
+   "t": 478.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbqk1nr/pppp1pb1/4p1p1/6Bp/3PP2P/2N5/PPP2PP1/R2QKBNR b KQkq - 1 5",
+   "said": "and this creates a thread and it essentially causes a chain reaction i mean h5 is already a mistake right so we can bring our bishop to g5"
+  },
+  {
+   "ply": 10,
+   "t": 481,
+   "line": [
+    "Bf6"
+   ],
+   "fen": "rnbqk1nr/pppp1p2/4pbp1/6Bp/3PP2P/2N5/PPP2PP1/R2QKBNR w KQkq - 2 6",
+   "said": "uh he goes bishop f6 uh and at this point i've already talked about positional concepts quite a bit and here"
+  },
+  {
+   "ply": 11,
+   "t": 491,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "rnbqk1nr/pppp1p2/4pBp1/7p/3PP2P/2N5/PPP2PP1/R2QKBNR b KQkq - 0 6",
+   "said": "i'll reinforce them by playing bishop f6 he's offering us a bishop trade which i will accept"
+  },
+  {
+   "ply": 12,
+   "t": 494,
+   "line": [
+    "Qxf6"
+   ],
+   "fen": "rnb1k1nr/pppp1p2/4pqp1/7p/3PP2P/2N5/PPP2PP1/R2QKBNR w KQkq - 0 7",
+   "said": "and by offering us a bishop trade look at his dark squares they have been tremendously weakened by this move g6 and e6"
+  },
+  {
+   "ply": 13,
+   "t": 505.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnb1k1nr/pppp1p2/4pqp1/4P2p/3P3P/2N5/PPP2PP1/R2QKBNR b KQkq - 0 7",
+   "said": "how do we cement our control over those dark squares yes beware is correct we go e5 and now the f6 square is firmly under our control"
+  },
+  {
+   "ply": 14,
+   "t": 515,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "rnb1k1nr/ppppqp2/4p1p1/4P2p/3P3P/2N5/PPP2PP1/R2QKBNR w KQkq - 1 8",
+   "said": "but let's not forget that we also need to develop our pieces uh we need to combine control over the dark squares with piece development so so let's first take a moment to complete our"
+  },
+  {
+   "ply": 15,
+   "t": 523,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnb1k1nr/ppppqp2/4p1p1/4P2p/3P3P/2NB4/PPP2PP1/R2QK1NR b KQkq - 2 8",
+   "said": "development okay let's first complete our development and i always remind people of how important that is"
+  },
+  {
+   "ply": 16,
+   "t": 526.5,
+   "line": [
+    "Nh6"
+   ],
+   "fen": "rnb1k2r/ppppqp2/4p1pn/4P2p/3P3P/2NB4/PPP2PP1/R2QK1NR w KQkq - 3 9",
+   "said": "now we're just going to go to nf3 and later"
+  },
+  {
+   "ply": 17,
+   "t": 528,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnb1k2r/ppppqp2/4p1pn/4P2p/3P3P/2NB1N2/PPP2PP1/R2QK2R b KQkq - 4 9",
+   "said": ""
+  },
+  {
+   "ply": 18,
+   "t": 530,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnb2rk1/ppppqp2/4p1pn/4P2p/3P3P/2NB1N2/PPP2PP1/R2QK2R w KQ - 5 10",
+   "said": "we're going to try to get this knight over f6 before we do that we can actually make another development move here uh with tempo and it's a great move it"
+  },
+  {
+   "ply": 19,
+   "t": 542,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "rnb2rk1/ppppqp2/4p1pn/4P2p/3P3P/2NB1N2/PPPQ1PP1/R3K2R b KQ - 6 10",
+   "said": "prepares castles long now and it attacks one of our opponent's pieces and that is the move queen to d2 and later on you can imagine that the queen can perhaps maneuver to g5 and uh start"
+  },
+  {
+   "ply": 21,
+   "t": 549.5,
+   "line": [
+    "Kg7",
+    "Ne4"
+   ],
+   "fen": "rnb2r2/ppppqpk1/4p1pn/4P2p/3PN2P/3B1N2/PPPQ1PP1/R3K2R b KQ - 8 11",
+   "said": "attacking perhaps it's the knight ants ends up on f6 and now we just uh maneuver the knight over to this"
+  },
+  {
+   "ply": 23,
+   "t": 554,
+   "line": [
+    "d6",
+    "Nf6"
+   ],
+   "fen": "rnb2r2/ppp1qpk1/3ppNpn/4P2p/3P3P/3B1N2/PPPQ1PP1/R3K2R b KQ - 1 12",
+   "said": "beautiful fortress on f6 where it's protected sorry outpost on f6 where it's protected by the pawn on e5"
+  },
+  {
+   "ply": 24,
+   "t": 562.5,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "rnb2r2/ppp1qpk1/4pNpn/4p2p/3P3P/3B1N2/PPPQ1PP1/R3K2R w KQ - 0 13",
+   "said": "pawn on e5 is protected by the pawn on d4 and that is the power of a pawn chain"
+  },
+  {
+   "ply": 25,
+   "t": 563.5,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "rnb2r2/ppp1qpk1/4pNpn/4P2p/7P/3B1N2/PPPQ1PP1/R3K2R b KQ - 0 13",
+   "said": "right it's very hard to break that up"
+  },
+  {
+   "ply": 26,
+   "t": 568,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r1b2r2/pppnqpk1/4pNpn/4P2p/7P/3B1N2/PPPQ1PP1/R3K2R w KQ - 1 14",
+   "said": "now how are we going to actually continue well knight d7 that's a very very good move for our opponents uh which i will be honest with you guys i i underestimated this move uh but but part of chess mastery is the ability to react to unforeseen developments right i didn't entirely appreciate this move myself and one of the things that players really really struggles uh"
+  },
+  {
+   "ply": 27,
+   "t": 603,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r1b2r2/pppnqpk1/4p1pn/4P2p/4N2P/3B1N2/PPPQ1PP1/R3K2R b KQ - 2 14",
+   "said": "really really struggle with is the ability to admit their mistakes the ability to just say you know what i you know i played this move and uh the move wasn't great so guess what i'm just gonna bring bring the knight back to e4 okay time to retreat uh and and uh my"
+  },
+  {
+   "ply": 28,
+   "t": 611.5,
+   "line": [
+    "b6"
+   ],
+   "fen": "r1b2r2/p1pnqpk1/1p2p1pn/4P2p/4N2P/3B1N2/PPPQ1PP1/R3K2R w KQ - 0 15",
+   "said": "long time coach for many years gregory kaidanov he called this saying sorry right sometimes you just have to say sorry"
+  },
+  {
+   "ply": 29,
+   "t": 617.5,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "r1b2r2/p1pnqpk1/1p2p1pn/4P2p/4N2P/3B1N2/PPPQ1PP1/2KR3R b - - 1 15",
+   "said": "that's a lot better than stubbornly continuing with your plan so now we're going to castle"
+  },
+  {
+   "ply": 30,
+   "t": 621,
+   "line": [
+    "a5"
+   ],
+   "fen": "r1b2r2/2pnqpk1/1p2p1pn/p3P2p/4N2P/3B1N2/PPPQ1PP1/2KR3R w - - 0 16",
+   "said": "and this queen from d2 needs to be"
+  },
+  {
+   "ply": 31,
+   "t": 623,
+   "line": [
+    "Qf4"
+   ],
+   "fen": "r1b2r2/2pnqpk1/1p2p1pn/p3P2p/4NQ1P/3B1N2/PPP2PP1/2KR3R b - - 1 16",
+   "said": "brought to a more active square in order to act as the glue that'll keep the e5 bond better defended"
+  },
+  {
+   "ply": 32,
+   "t": 631,
+   "line": [
+    "Ba6"
+   ],
+   "fen": "r4r2/2pnqpk1/bp2p1pn/p3P2p/4NQ1P/3B1N2/PPP2PP1/2KR3R w - - 2 17",
+   "said": "now we're just starting to accumulate pieces on the king side in preparation for an attack our opponent"
+  },
+  {
+   "ply": 33,
+   "t": 633.5,
+   "line": [
+    "Bxa6"
+   ],
+   "fen": "r4r2/2pnqpk1/Bp2p1pn/p3P2p/4NQ1P/5N2/PPP2PP1/2KR3R b - - 0 17",
+   "said": "is trading bishops fine i don't care"
+  },
+  {
+   "ply": 34,
+   "t": 636,
+   "line": [
+    "Rxa6"
+   ],
+   "fen": "5r2/2pnqpk1/rp2p1pn/p3P2p/4NQ1P/5N2/PPP2PP1/2KR3R w - - 0 18",
+   "said": "let's trade and how are we going to go about continuing the attack in order to continue the attack we need more pieces we have a very typical attacking mechanism that can be used to bring another piece into the attack what am i talking about it's the rl those are the initials of the strategy that we can put on the board right now we can double we can also rook lift uh both options involve our rooks i really actually like the double idea of doubling rooks on the d file why are we doubling rooks on the default well we're doubling rooks in order to attack the knight why are we trying to attack the knight because we want to get our knight to f6 just because we retreated that knight"
+  },
+  {
+   "ply": 36,
+   "t": 689,
+   "line": [
+    "Rd2",
+    "Nf5"
+   ],
+   "fen": "5r2/2pnqpk1/rp2p1p1/p3Pn1p/4NQ1P/5N2/PPPR1PP1/2K4R w - - 2 19",
+   "said": "from f6 earlier doesn't mean that that's not a good idea in the long term uh we want to put that knight on f6 that's going to be huge for our attack and in order to do that we'll have to get that knight out of d7"
+  },
+  {
+   "ply": 37,
+   "t": 690.5,
+   "line": [
+    "Rhd1"
+   ],
+   "fen": "5r2/2pnqpk1/rp2p1p1/p3Pn1p/4NQ1P/5N2/PPPR1PP1/2KR4 b - - 3 19",
+   "said": "uh we could have sacked on d7 but i didn't see a need to do that i think that would have been a little bit too drastic and now he's got to move his knight i"
+  },
+  {
+   "ply": 38,
+   "t": 705,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "3r4/2pnqpk1/rp2p1p1/p3Pn1p/4NQ1P/5N2/PPPR1PP1/2KR4 w - - 4 20",
+   "said": "don't see a way for him to defend it if he goes rick d8 we're going to have insurmountable pressure on the d file we're going to be able to explode so he's gone rook d8 typical mistake what he doesn't realize is this rook on d8 is in our cross hairs if his knight"
+  },
+  {
+   "ply": 39,
+   "t": 717.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "3r4/2pnqpk1/rp2pNp1/p3Pn1p/5Q1P/5N2/PPPR1PP1/2KR4 b - - 5 20",
+   "said": "moves from d7 will be able to capture on d8 so now a very simple tactic wins the game we go knight f6 if he takes on f6 we don't immediately grab the rook on d8 what do we do first if he takes on f6 how do we win the maximal amount of material we actually play e takes f6 check intermediate move intermediate and that's how you find intermediate moves right you don't rush into just"
+  },
+  {
+   "ply": 41,
+   "t": 749.5,
+   "line": [
+    "Raa8",
+    "Rxd7"
+   ],
+   "fen": "r2r4/2pRqpk1/1p2pNp1/p3Pn1p/5Q1P/5N2/PPP2PP1/2KR4 b - - 0 21",
+   "said": "assuming that you take the first material that presents itself you just take a second and ask yourself all right wait how can i get the most out of the position okay i can take the knight with check first and then i can take the rock and okay so now it is time to the victor"
+  },
+  {
+   "ply": 43,
+   "t": 752,
+   "line": [
+    "Rxd7",
+    "Rxd7"
+   ],
+   "fen": "r7/2pRqpk1/1p2pNp1/p3Pn1p/5Q1P/5N2/PPP2PP1/2K5 b - - 0 22",
+   "said": "belong the spoils we take on d7 not only have we won a piece but our rook is now at a prime attacking location uh in order to bring the most"
+  },
+  {
+   "ply": 44,
+   "t": 767,
+   "line": [
+    "Qb4"
+   ],
+   "fen": "r7/2pR1pk1/1p2pNp1/p3Pn1p/1q3Q1P/5N2/PPP2PP1/2K5 w - - 1 23",
+   "said": "benefit out of that location we need to involve one more piece into the attack and those dark squares okay queen before let's be on alert he's made a tricky"
+  },
+  {
+   "ply": 45,
+   "t": 771.5,
+   "line": [
+    "Qxb4"
+   ],
+   "fen": "r7/2pR1pk1/1p2pNp1/p3Pn1p/1Q5P/5N2/PPP2PP1/2K5 b - - 0 23",
+   "said": "move gotta attend to this but just because it's the end game"
+  },
+  {
+   "ply": 46,
+   "t": 775,
+   "line": [
+    "axb4"
+   ],
+   "fen": "r7/2pR1pk1/1p2pNp1/4Pn1p/1p5P/5N2/PPP2PP1/2K5 w - - 0 24",
+   "said": "doesn't mean that the attack is evaporated what move am i talking about how do we bring that final piece"
+  },
+  {
+   "ply": 47,
+   "t": 783.5,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "r7/2pR1pk1/1p2pNp1/4PnNp/1p5P/8/PPP2PP1/2K5 b - - 1 24",
+   "said": "into the attack with devastating effect knight to g5 is correct we're to take on f7 or take on e6 because the pawn is pinned"
+  },
+  {
+   "ply": 49,
+   "t": 791.5,
+   "line": [
+    "Nh6",
+    "Nxe6+"
+   ],
+   "fen": "r7/2pR1pk1/1p2NNpn/4P2p/1p5P/8/PPP2PP1/2K5 b - - 0 25",
+   "said": "and essentially the game is over we are also a piece so let's just take all of the pieces yeah intermezzo is the sort of italian way to say intermediate move uh so here there's many ways to win um one piece of general advice that i have to share with you guys in such endgames is uh the common phrase that is used here in endgames in general which is do not hurry uh that's sort of a russian kind of maxim that's that's told often to beginners and to kids do not hurry in the end game and that means several things first of all there's a tendency to play fast in the end game and second while there's a tendency to play fast on the board right there's a tendency to just try to rush your ideas but sometimes you just want to improve your position and that is the most effective way of um you know of of converting an advantage quite often let's play the last game and then we will analyze"
+  }
+ ],
+ "forks": []
+}

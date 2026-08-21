@@ -1,0 +1,487 @@
+{
+ "videoId": "zEkwjGCA2M4",
+ "title": "NEW SPEEDRUN, Episode 1!! | Develop Your Instincts | 5-Minute Blitz | GM Naroditsky's DYI Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1256.5,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "chance to to talk about this let's keep going I'll probably one more game for now playing a 1300 and we do cross 1300 with this game all right so I will go"
+  },
+  {
+   "ply": 4,
+   "t": 1258.5,
+   "line": [
+    "c4",
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "for the king Indian from the very"
+  },
+  {
+   "ply": 5,
+   "t": 1259.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "said": "beginning this time I think people will"
+  },
+  {
+   "ply": 6,
+   "t": 1260.5,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": ""
+  },
+  {
+   "ply": 7,
+   "t": 1261.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/6B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 3 4",
+   "said": "like this bishop to G5 that's kind of a"
+  },
+  {
+   "ply": 8,
+   "t": 1267.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/6B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 0 5",
+   "said": "sideline and it doesn't really change our reaction we're going to go D6 for"
+  },
+  {
+   "ply": 9,
+   "t": 1268.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/6B1/2PP4/2N2N2/PP2PPPP/R2QKB1R b KQkq - 1 5",
+   "said": "starters and there's many ways of facing this variation this is called the smithl"
+  },
+  {
+   "ply": 10,
+   "t": 1279,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PP4/2N2N2/PP2PPPP/R2QKB1R w KQ - 2 6",
+   "said": "variation uh it's a decent line there's nothing much to say about it I'm going to Castle I'm going to play this in the simplest possible way another five subs"
+  },
+  {
+   "ply": 11,
+   "t": 1280.5,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PP4/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 6",
+   "said": "from Mr"
+  },
+  {
+   "ply": 12,
+   "t": 1284.5,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p3B1/2PP4/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 7",
+   "said": "bortnik and we're going to play the move C5 contesting the center trying to open"
+  },
+  {
+   "ply": 13,
+   "t": 1287,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p3B1/2PP4/2N1PN2/PP2BPPP/R2QK2R b KQ - 1 7",
+   "said": "up the diagonal for our Bishop Bishop to"
+  },
+  {
+   "ply": 14,
+   "t": 1290,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/2p3B1/2PP4/2N1PN2/PP2BPPP/R2QK2R w KQ - 2 8",
+   "said": "E2 we're going to develop our Knight"
+  },
+  {
+   "ply": 15,
+   "t": 1292,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/2p3B1/2PP4/2N1PN2/PP2BPPP/R2Q1RK1 b - - 3 8",
+   "said": "White Castles I have to say our opponent"
+  },
+  {
+   "ply": 16,
+   "t": 1293.5,
+   "line": [
+    "h6"
+   ],
+   "fen": "r1bq1rk1/pp2ppb1/2np1npp/2p3B1/2PP4/2N1PN2/PP2BPPP/R2Q1RK1 w - - 0 9",
+   "said": "is playing the opening quite well now"
+  },
+  {
+   "ply": 17,
+   "t": 1295.5,
+   "line": [
+    "Bh4"
+   ],
+   "fen": "r1bq1rk1/pp2ppb1/2np1npp/2p5/2PP3B/2N1PN2/PP2BPPP/R2Q1RK1 b - - 1 9",
+   "said": ""
+  },
+  {
+   "ply": 18,
+   "t": 1297,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "r2q1rk1/pp2ppb1/2np1npp/2p2b2/2PP3B/2N1PN2/PP2BPPP/R2Q1RK1 w - - 2 10",
+   "said": "we're going to complete our development with Bishop F5 again the the way that I am playing this with black is not necessarily what I would do in a"
+  },
+  {
+   "ply": 19,
+   "t": 1307.5,
+   "line": [
+    "a3"
+   ],
+   "fen": "r2q1rk1/pp2ppb1/2np1npp/2p2b2/2PP3B/P1N1PN2/1P2BPPP/R2Q1RK1 b - - 0 10",
+   "said": "classical game it's just a decent setup uh that's pretty easy to play A3 okay A3 A3 okay many tempting ways that we can play this with black many many tempting"
+  },
+  {
+   "ply": 20,
+   "t": 1325.5,
+   "line": [
+    "g5"
+   ],
+   "fen": "r2q1rk1/pp2ppb1/2np1n1p/2p2bp1/2PP3B/P1N1PN2/1P2BPPP/R2Q1RK1 w - - 0 11",
+   "said": "ways that we could play this here's what we're going to do I don't know what we're going to do yet we're going to start with G5 we're going to chase away the bishop and now we're going to put"
+  },
+  {
+   "ply": 22,
+   "t": 1328.5,
+   "line": [
+    "Bg3",
+    "Ne4"
+   ],
+   "fen": "r2q1rk1/pp2ppb1/2np3p/2p2bp1/2PPn3/P1N1PNB1/1P2BPPP/R2Q1RK1 w - - 2 12",
+   "said": "the Knight on e4 and this move Knight to"
+  },
+  {
+   "ply": 24,
+   "t": 1331.5,
+   "line": [
+    "Nxe4",
+    "Bxe4"
+   ],
+   "fen": "r2q1rk1/pp2ppb1/2np3p/2p3p1/2PPb3/P3PNB1/1P2BPPP/R2Q1RK1 w - - 0 13",
+   "said": "E4 this trade is very very common in King's Indian positions because what we"
+  },
+  {
+   "ply": 25,
+   "t": 1338.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "r2q1rk1/pp2ppb1/2np3p/2pP2p1/2P1b3/P3PNB1/1P2BPPP/R2Q1RK1 b - - 0 13",
+   "said": "have achieved number one is that we have cleared the obstacles for our dark squirt Bishop which is now extremely strong the other main thing is that we have loosened White's control over the center again our opponent is handl this"
+  },
+  {
+   "ply": 26,
+   "t": 1354,
+   "line": [
+    "Nb8"
+   ],
+   "fen": "rn1q1rk1/pp2ppb1/3p3p/2pP2p1/2P1b3/P3PNB1/1P2BPPP/R2Q1RK1 w - - 1 14",
+   "said": "extremely well if we play Knight to A5 we might run into B4 so we're going to reroute the Knight back back around to"
+  },
+  {
+   "ply": 27,
+   "t": 1356,
+   "line": [
+    "Qb3"
+   ],
+   "fen": "rn1q1rk1/pp2ppb1/3p3p/2pP2p1/2P1b3/PQ2PNB1/1P2BPPP/R4RK1 b - - 2 14",
+   "said": "D7 we can ignore the attack on B7 it's a"
+  },
+  {
+   "ply": 28,
+   "t": 1357,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r2q1rk1/pp1nppb1/3p3p/2pP2p1/2P1b3/PQ2PNB1/1P2BPPP/R4RK1 w - - 3 15",
+   "said": ""
+  },
+  {
+   "ply": 29,
+   "t": 1361,
+   "line": [
+    "Rad1"
+   ],
+   "fen": "r2q1rk1/pp1nppb1/3p3p/2pP2p1/2P1b3/PQ2PNB1/1P2BPPP/3R1RK1 b - - 4 15",
+   "said": "false attack Rook a D1 and now we're going to start operations on the queen"
+  },
+  {
+   "ply": 30,
+   "t": 1368.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "r2q1rk1/1p1nppb1/p2p3p/2pP2p1/2P1b3/PQ2PNB1/1P2BPPP/3R1RK1 w - - 0 16",
+   "said": "side let's begin by playing the move A6 and preparing B5 like Knight D2 we drop"
+  },
+  {
+   "ply": 31,
+   "t": 1370,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "r2q1rk1/1p1nppb1/p2p3p/2pP2p1/2P1b3/PQ2P1B1/1P1NBPPP/3R1RK1 b - - 1 16",
+   "said": ""
+  },
+  {
+   "ply": 32,
+   "t": 1371.5,
+   "line": [
+    "Bg6"
+   ],
+   "fen": "r2q1rk1/1p1nppb1/p2p2bp/2pP2p1/2P5/PQ2P1B1/1P1NBPPP/3R1RK1 w - - 2 17",
+   "said": "the bishop back always to G6 in these"
+  },
+  {
+   "ply": 33,
+   "t": 1374,
+   "line": [
+    "Bf3"
+   ],
+   "fen": "r2q1rk1/1p1nppb1/p2p2bp/2pP2p1/2P5/PQ2PBB1/1P1N1PPP/3R1RK1 b - - 3 17",
+   "said": "types of positions Bishop F3 and I think"
+  },
+  {
+   "ply": 34,
+   "t": 1376,
+   "line": [
+    "b5"
+   ],
+   "fen": "r2q1rk1/3nppb1/p2p2bp/1ppP2p1/2P5/PQ2PBB1/1P1N1PPP/3R1RK1 w - - 0 18",
+   "said": "it's a great time for us to open up the the queen side with B5 takes takes okay"
+  },
+  {
+   "ply": 35,
+   "t": 1381,
+   "line": [
+    "Rfe1"
+   ],
+   "fen": "r2q1rk1/3nppb1/p2p2bp/1ppP2p1/2P5/PQ2PBB1/1P1N1PPP/3RR1K1 b - - 1 18",
+   "said": "he doesn't take now we're going to put a"
+  },
+  {
+   "ply": 36,
+   "t": 1383,
+   "line": [
+    "Rb8"
+   ],
+   "fen": "1r1q1rk1/3nppb1/p2p2bp/1ppP2p1/2P5/PQ2PBB1/1P1N1PPP/3RR1K1 w - - 2 19",
+   "said": "rook on B8 continuing the pressure down the B file our Knight can also jump into"
+  },
+  {
+   "ply": 37,
+   "t": 1391,
+   "line": [
+    "Be4"
+   ],
+   "fen": "1r1q1rk1/3nppb1/p2p2bp/1ppP2p1/2P1B3/PQ2P1B1/1P1N1PPP/3RR1K1 b - - 3 19",
+   "said": "E5 at some point yeah definitely white is underrated by a bit but the game is starting to turn in our favor now we"
+  },
+  {
+   "ply": 38,
+   "t": 1395,
+   "line": [
+    "bxc4"
+   ],
+   "fen": "1r1q1rk1/3nppb1/p2p2bp/2pP2p1/2p1B3/PQ2P1B1/1P1N1PPP/3RR1K1 w - - 0 20",
+   "said": "play B takes C4 opening up the file and"
+  },
+  {
+   "ply": 39,
+   "t": 1396.5,
+   "line": [
+    "Qxc4"
+   ],
+   "fen": "1r1q1rk1/3nppb1/p2p2bp/2pP2p1/2Q1B3/P3P1B1/1P1N1PPP/3RR1K1 b - - 0 20",
+   "said": "now do we want to take this bishop it's"
+  },
+  {
+   "ply": 40,
+   "t": 1402.5,
+   "line": [
+    "Rxb2"
+   ],
+   "fen": "3q1rk1/3nppb1/p2p2bp/2pP2p1/2Q1B3/P3P1B1/1r1N1PPP/3RR1K1 w - - 0 21",
+   "said": "not a bad idea but actually I am going to let them our opponent take on G6 why"
+  },
+  {
+   "ply": 41,
+   "t": 1405,
+   "line": [
+    "Bxg6"
+   ],
+   "fen": "3q1rk1/3nppb1/p2p2Bp/2pP2p1/2Q5/P3P1B1/1r1N1PPP/3RR1K1 b - - 0 21",
+   "said": ""
+  },
+  {
+   "ply": 42,
+   "t": 1406,
+   "line": [
+    "fxg6"
+   ],
+   "fen": "3q1rk1/3np1b1/p2p2pp/2pP2p1/2Q5/P3P1B1/1r1N1PPP/3RR1K1 w - - 0 22",
+   "said": "do I do that for a very simple reason we're opening up the f file and I'm already looking at these two Rooks I'm"
+  },
+  {
+   "ply": 43,
+   "t": 1415.5,
+   "line": [
+    "h3"
+   ],
+   "fen": "3q1rk1/3np1b1/p2p2pp/2pP2p1/2Q5/P3P1BP/1r1N1PP1/3RR1K1 b - - 0 22",
+   "said": "already looking at this F Pawn because the Knight is very very likely to move at some point and I'm again trying to create the preconditions for some sort of an attack down the second rank now"
+  },
+  {
+   "ply": 44,
+   "t": 1424.5,
+   "line": [
+    "Qa5"
+   ],
+   "fen": "5rk1/3np1b1/p2p2pp/q1pP2p1/2Q5/P3P1BP/1r1N1PP1/3RR1K1 w - - 1 23",
+   "said": "which piece is not playing here clearly the queen we have an excellent Square on A5 also because it attacks the Knight"
+  },
+  {
+   "ply": 45,
+   "t": 1430.5,
+   "line": [
+    "a4"
+   ],
+   "fen": "5rk1/3np1b1/p2p2pp/q1pP2p1/P1Q5/4P1BP/1r1N1PP1/3RR1K1 b - - 0 23",
+   "said": "okay we're close to winning now we're up a pawn and at this level people collapse"
+  },
+  {
+   "ply": 46,
+   "t": 1432.5,
+   "line": [
+    "Rxd2"
+   ],
+   "fen": "5rk1/3np1b1/p2p2pp/q1pP2p1/P1Q5/4P1BP/3r1PP1/3RR1K1 w - - 0 24",
+   "said": "very very quickly when when you when you put this much pressure and they already feel like the game is going down the"
+  },
+  {
+   "ply": 49,
+   "t": 1444.5,
+   "line": [
+    "Rxd2",
+    "Qxd2",
+    "Rc1"
+   ],
+   "fen": "5rk1/3np1b1/p2p2pp/2pP2p1/P1Q5/4P1BP/3q1PP1/2R3K1 b - - 1 25",
+   "said": "toilet a blunder often ensues this is GG Rook C1 there's a million ways of winning this position but I see a way to"
+  },
+  {
+   "ply": 50,
+   "t": 1451,
+   "line": [
+    "Nb6"
+   ],
+   "fen": "5rk1/4p1b1/pn1p2pp/2pP2p1/P1Q5/4P1BP/3q1PP1/2R3K1 w - - 2 26",
+   "said": "force the queen trade uh which is to play Knight B6 contact between pieces I talk about this at length anytime one of your pieces makes contact with one of"
+  },
+  {
+   "ply": 51,
+   "t": 1464.5,
+   "line": [
+    "Qc2"
+   ],
+   "fen": "5rk1/4p1b1/pn1p2pp/2pP2p1/P7/4P1BP/2Qq1PP1/2R3K1 b - - 3 26",
+   "said": "your opponent's pieces it sounds like a very primitive point but it's actually very Central to uh consistent tactical"
+  },
+  {
+   "ply": 55,
+   "t": 1467,
+   "line": [
+    "Nc4",
+    "Qb3",
+    "Nb6",
+    "Qc4"
+   ],
+   "fen": "5rk1/4p1b1/pn1p2pp/2pP2p1/P1Q5/4P1BP/3q1PP1/2R3K1 b - - 7 28",
+   "said": "Vision particularly if it's a situ"
+  },
+  {
+   "ply": 56,
+   "t": 1470,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "5rk1/3np1b1/p2p2pp/2pP2p1/P1Q5/4P1BP/3q1PP1/2R3K1 w - - 8 29",
+   "said": "pieces that's aec it Doan's going to be you should automatically consider the idea that"
+  },
+  {
+   "ply": 60,
+   "t": 1481.5,
+   "line": [
+    "Qb5",
+    "Qc2",
+    "Qb6",
+    "Nxb6"
+   ],
+   "fen": "5rk1/4p1b1/pn1p2pp/2pP2p1/P7/4P1BP/2q2PP1/2R3K1 w - - 0 31",
+   "said": "okay if I chase away the Queen White is going to have a hard time keeping the Rook protected now we can exchange we"
+  },
+  {
+   "ply": 61,
+   "t": 1483,
+   "line": [
+    "Rxc2"
+   ],
+   "fen": "5rk1/4p1b1/pn1p2pp/2pP2p1/P7/4P1BP/2R2PP1/6K1 b - - 0 31",
+   "said": "can take either Pawn let's take D5 the"
+  },
+  {
+   "ply": 62,
+   "t": 1485,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "5rk1/4p1b1/p2p2pp/2pn2p1/P7/4P1BP/2R2PP1/6K1 w - - 0 32",
+   "said": "center pawn and okay now white blers the"
+  },
+  {
+   "ply": 63,
+   "t": 1487.5,
+   "line": [
+    "Rb2"
+   ],
+   "fen": "5rk1/4p1b1/p2p2pp/2pn2p1/P7/4P1BP/1R3PP1/6K1 b - - 1 32",
+   "said": ""
+  },
+  {
+   "ply": 64,
+   "t": 1488.5,
+   "line": [
+    "Bxb2"
+   ],
+   "fen": "5rk1/4p3/p2p2pp/2pn2p1/P7/4P1BP/1b3PP1/6K1 w - - 0 33",
+   "said": "rook and the game is over okay fantastic now in the previous speedrun I didn't start out by playing the Kings Indian I was playing the grunfeld I still think that grunfeld is a great decision in this speed I've decided to play my actual repertoire and my recommendation for people who want to learn the Kings Indian want to learn openings in this speedrun is to pay more attention to the way I'm playing rather than getting to bogged down in theory particularly with the Kings Indian which is an opening that yes has a lot of theory but you also have to develop great instincts for how to play it um if you understand the ideas of the Kings Indian even if you know zero Theory you can actually play it very very decently just if you understand the setups and why the pieces are where they are okay so Bishop G5 D6 Knight F3 castles and E3 the one important point that I will make in this game in this analysis is that in the Kings Indian there are essentially two ways to strike at the center there's C5 which we played"
+  }
+ ],
+ "forks": []
+}

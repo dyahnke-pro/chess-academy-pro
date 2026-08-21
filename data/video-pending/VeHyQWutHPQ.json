@@ -1,0 +1,518 @@
+{
+ "videoId": "VeHyQWutHPQ",
+ "title": "Mastering the King's Indian Defense | Develop Your Instincts | GM Naroditsky's DYI Speedrun",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 5663,
+  "settledPositions": null
+ },
+ "plies": 56,
+ "rewinds": 2,
+ "moves": [
+  {
+   "t": 1784,
+   "ply": 2,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2"
+  },
+  {
+   "t": 1785,
+   "ply": 3,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 1786.5,
+   "ply": 5,
+   "line": [
+    "g6",
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3"
+  },
+  {
+   "t": 1788,
+   "ply": 6,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"
+  },
+  {
+   "t": 1791,
+   "ply": 7,
+   "line": [
+    "Be3"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N1B3/PP2PPPP/R2QKBNR b KQkq - 3 4"
+  },
+  {
+   "t": 1798.5,
+   "ply": 6,
+   "line": [],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"
+  },
+  {
+   "t": 1800,
+   "ply": 7,
+   "line": [
+    "Be3"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N1B3/PP2PPPP/R2QKBNR b KQkq - 3 4"
+  },
+  {
+   "t": 1827,
+   "ply": 8,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PP4/2N1B3/PP2PPPP/R2QKBNR w KQ - 4 5"
+  },
+  {
+   "t": 1828.5,
+   "ply": 9,
+   "line": [
+    "h3"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PP4/2N1B2P/PP2PPP1/R2QKBNR b KQ - 0 5"
+  },
+  {
+   "t": 1874,
+   "ply": 10,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbq1rk1/pp1pppbp/5np1/2p5/2PP4/2N1B2P/PP2PPP1/R2QKBNR w KQ - 0 6"
+  },
+  {
+   "t": 1884.5,
+   "ply": 11,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "rnbq1rk1/pp1pppbp/5np1/2P5/2P5/2N1B2P/PP2PPP1/R2QKBNR b KQ - 0 6"
+  },
+  {
+   "t": 1886.5,
+   "ply": 10,
+   "line": [],
+   "fen": "rnbq1rk1/pp1pppbp/5np1/2p5/2PP4/2N1B2P/PP2PPP1/R2QKBNR w KQ - 0 6"
+  },
+  {
+   "t": 1896.5,
+   "ply": 11,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "rnbq1rk1/pp1pppbp/5np1/2P5/2P5/2N1B2P/PP2PPP1/R2QKBNR b KQ - 0 6"
+  },
+  {
+   "t": 1902.5,
+   "ply": 12,
+   "line": [
+    "Na6"
+   ],
+   "fen": "r1bq1rk1/pp1pppbp/n4np1/2P5/2P5/2N1B2P/PP2PPP1/R2QKBNR w KQ - 1 7"
+  },
+  {
+   "t": 1922,
+   "ply": 13,
+   "line": [
+    "g3"
+   ],
+   "fen": "r1bq1rk1/pp1pppbp/n4np1/2P5/2P5/2N1B1PP/PP2PP2/R2QKBNR b KQ - 0 7"
+  },
+  {
+   "t": 1927.5,
+   "ply": 14,
+   "line": [
+    "Qa5"
+   ],
+   "fen": "r1b2rk1/pp1pppbp/n4np1/q1P5/2P5/2N1B1PP/PP2PP2/R2QKBNR w KQ - 1 8"
+  },
+  {
+   "t": 1935,
+   "ply": 15,
+   "line": [
+    "a3"
+   ],
+   "fen": "r1b2rk1/pp1pppbp/n4np1/q1P5/2P5/P1N1B1PP/1P2PP2/R2QKBNR b KQ - 0 8"
+  },
+  {
+   "t": 1949.5,
+   "ply": 16,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r1b2rk1/pp1pppbp/n5p1/q1P5/2P1n3/P1N1B1PP/1P2PP2/R2QKBNR w KQ - 1 9"
+  },
+  {
+   "t": 1976,
+   "ply": 17,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "r1b2rk1/pp1pppbp/n5p1/q1P5/2P1n3/P1N3PP/1P1BPP2/R2QKBNR b KQ - 2 9"
+  },
+  {
+   "t": 1995.5,
+   "ply": 18,
+   "line": [
+    "Nxc3"
+   ],
+   "fen": "r1b2rk1/pp1pppbp/n5p1/q1P5/2P5/P1n3PP/1P1BPP2/R2QKBNR w KQ - 0 10"
+  },
+  {
+   "t": 2008.5,
+   "ply": 19,
+   "line": [
+    "bxc3"
+   ],
+   "fen": "r1b2rk1/pp1pppbp/n5p1/q1P5/2P5/P1P3PP/3BPP2/R2QKBNR b KQ - 0 10"
+  },
+  {
+   "t": 2037,
+   "ply": 20,
+   "line": [
+    "Nxc5"
+   ],
+   "fen": "r1b2rk1/pp1pppbp/6p1/q1n5/2P5/P1P3PP/3BPP2/R2QKBNR w KQ - 0 11"
+  },
+  {
+   "t": 2047.5,
+   "ply": 21,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1b2rk1/pp1pppbp/6p1/q1n5/2P5/P1P2NPP/3BPP2/R2QKB1R b KQ - 1 11"
+  },
+  {
+   "t": 2049.5,
+   "ply": 22,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r1b2rk1/pp1pppbp/6p1/q7/2P1n3/P1P2NPP/3BPP2/R2QKB1R w KQ - 2 12"
+  },
+  {
+   "t": 2064.5,
+   "ply": 23,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "r1b2rk1/pp1pppbp/6p1/q7/2P1n3/P1P2NPP/3BPP2/2RQKB1R b K - 3 12"
+  },
+  {
+   "t": 2095.5,
+   "ply": 24,
+   "line": [
+    "Qxa3"
+   ],
+   "fen": "r1b2rk1/pp1pppbp/6p1/8/2P1n3/q1P2NPP/3BPP2/2RQKB1R w K - 0 13"
+  },
+  {
+   "t": 2101,
+   "ply": 25,
+   "line": [
+    "Bg2"
+   ],
+   "fen": "r1b2rk1/pp1pppbp/6p1/8/2P1n3/q1P2NPP/3BPPB1/2RQK2R b K - 1 13"
+  },
+  {
+   "t": 2108.5,
+   "ply": 26,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1b2rk1/pp2ppbp/3p2p1/8/2P1n3/q1P2NPP/3BPPB1/2RQK2R w K - 0 14"
+  },
+  {
+   "t": 2119.5,
+   "ply": 27,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1b2rk1/pp2ppbp/3p2p1/8/2P1n3/q1P2NPP/3BPPB1/2RQ1RK1 b - - 1 14"
+  },
+  {
+   "t": 2129.5,
+   "ply": 28,
+   "line": [
+    "Nxd2"
+   ],
+   "fen": "r1b2rk1/pp2ppbp/3p2p1/8/2P5/q1P2NPP/3nPPB1/2RQ1RK1 w - - 0 15"
+  },
+  {
+   "t": 2133,
+   "ply": 29,
+   "line": [
+    "Qxd2"
+   ],
+   "fen": "r1b2rk1/pp2ppbp/3p2p1/8/2P5/q1P2NPP/3QPPB1/2R2RK1 b - - 0 15"
+  },
+  {
+   "t": 2138.5,
+   "ply": 30,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r4rk1/pp2ppbp/3pb1p1/8/2P5/q1P2NPP/3QPPB1/2R2RK1 w - - 1 16"
+  },
+  {
+   "t": 2156.5,
+   "ply": 31,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r4rk1/pp2ppbp/3pb1p1/8/2PN4/q1P3PP/3QPPB1/2R2RK1 b - - 2 16"
+  },
+  {
+   "t": 2158.5,
+   "ply": 32,
+   "line": [
+    "Bxc4"
+   ],
+   "fen": "r4rk1/pp2ppbp/3p2p1/8/2bN4/q1P3PP/3QPPB1/2R2RK1 w - - 0 17"
+  },
+  {
+   "t": 2166,
+   "ply": 33,
+   "line": [
+    "Bxb7"
+   ],
+   "fen": "r4rk1/pB2ppbp/3p2p1/8/2bN4/q1P3PP/3QPP2/2R2RK1 b - - 0 17"
+  },
+  {
+   "t": 2167,
+   "ply": 34,
+   "line": [
+    "Rab8"
+   ],
+   "fen": "1r3rk1/pB2ppbp/3p2p1/8/2bN4/q1P3PP/3QPP2/2R2RK1 w - - 1 18"
+  },
+  {
+   "t": 2172.5,
+   "ply": 35,
+   "line": [
+    "Ra1"
+   ],
+   "fen": "1r3rk1/pB2ppbp/3p2p1/8/2bN4/q1P3PP/3QPP2/R4RK1 b - - 2 18"
+  },
+  {
+   "t": 2175.5,
+   "ply": 36,
+   "line": [
+    "Qc5"
+   ],
+   "fen": "1r3rk1/pB2ppbp/3p2p1/2q5/2bN4/2P3PP/3QPP2/R4RK1 w - - 3 19"
+  },
+  {
+   "t": 2186,
+   "ply": 37,
+   "line": [
+    "Ba6"
+   ],
+   "fen": "1r3rk1/p3ppbp/B2p2p1/2q5/2bN4/2P3PP/3QPP2/R4RK1 b - - 4 19"
+  },
+  {
+   "t": 2197.5,
+   "ply": 38,
+   "line": [
+    "Bxa6"
+   ],
+   "fen": "1r3rk1/p3ppbp/b2p2p1/2q5/3N4/2P3PP/3QPP2/R4RK1 w - - 0 20"
+  },
+  {
+   "t": 2199.5,
+   "ply": 39,
+   "line": [
+    "Rxa6"
+   ],
+   "fen": "1r3rk1/p3ppbp/R2p2p1/2q5/3N4/2P3PP/3QPP2/5RK1 b - - 0 20"
+  },
+  {
+   "t": 2202,
+   "ply": 40,
+   "line": [
+    "Rfc8"
+   ],
+   "fen": "1rr3k1/p3ppbp/R2p2p1/2q5/3N4/2P3PP/3QPP2/5RK1 w - - 1 21"
+  },
+  {
+   "t": 2210.5,
+   "ply": 41,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "1rr3k1/p3ppbp/R2p2p1/2q5/3N4/2P3PP/3QPP2/2R3K1 b - - 2 21"
+  },
+  {
+   "t": 2220,
+   "ply": 42,
+   "line": [
+    "Bxd4"
+   ],
+   "fen": "1rr3k1/p3pp1p/R2p2p1/2q5/3b4/2P3PP/3QPP2/2R3K1 w - - 0 22"
+  },
+  {
+   "t": 2253,
+   "ply": 43,
+   "line": [
+    "e3"
+   ],
+   "fen": "1rr3k1/p3pp1p/R2p2p1/2q5/3b4/2P1P1PP/3Q1P2/2R3K1 b - - 0 22"
+  },
+  {
+   "t": 2256,
+   "ply": 44,
+   "line": [
+    "Qc4"
+   ],
+   "fen": "1rr3k1/p3pp1p/R2p2p1/8/2qb4/2P1P1PP/3Q1P2/2R3K1 w - - 1 23"
+  },
+  {
+   "t": 2271.5,
+   "ply": 45,
+   "line": [
+    "Raa1"
+   ],
+   "fen": "1rr3k1/p3pp1p/3p2p1/8/2qb4/2P1P1PP/3Q1P2/R1R3K1 b - - 2 23"
+  },
+  {
+   "t": 2276,
+   "ply": 46,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "1rr3k1/p3pp1p/3p2p1/2b5/2q5/2P1P1PP/3Q1P2/R1R3K1 w - - 3 24"
+  },
+  {
+   "t": 2278.5,
+   "ply": 47,
+   "line": [
+    "Kh2"
+   ],
+   "fen": "1rr3k1/p3pp1p/3p2p1/2b5/2q5/2P1P1PP/3Q1P1K/R1R5 b - - 4 24"
+  },
+  {
+   "t": 2281,
+   "ply": 48,
+   "line": [
+    "h5"
+   ],
+   "fen": "1rr3k1/p3pp2/3p2p1/2b4p/2q5/2P1P1PP/3Q1P1K/R1R5 w - - 0 25"
+  },
+  {
+   "t": 2283,
+   "ply": 52,
+   "line": [
+    "Rd1",
+    "a5",
+    "Rdb1",
+    "Rxb1"
+   ],
+   "fen": "2r3k1/4pp2/3p2p1/p1b4p/2q5/2P1P1PP/3Q1P1K/Rr6 w - - 0 27"
+  },
+  {
+   "t": 2284,
+   "ply": 53,
+   "line": [
+    "Rxb1"
+   ],
+   "fen": "2r3k1/4pp2/3p2p1/p1b4p/2q5/2P1P1PP/3Q1P1K/1R6 b - - 0 27"
+  },
+  {
+   "t": 2289,
+   "ply": 55,
+   "line": [
+    "d5",
+    "Rb7"
+   ],
+   "fen": "2r3k1/1R2pp2/6p1/p1bp3p/2q5/2P1P1PP/3Q1P1K/8 b - - 1 28"
+  },
+  {
+   "t": 2291,
+   "ply": 58,
+   "line": [
+    "Bd6",
+    "Rxe7",
+    "Bxe7"
+   ],
+   "fen": "2r3k1/4bp2/6p1/p2p3p/2q5/2P1P1PP/3Q1P1K/8 w - - 0 30"
+  },
+  {
+   "t": 2292.5,
+   "ply": 60,
+   "line": [
+    "Qd4",
+    "Qxd4"
+   ],
+   "fen": "2r3k1/4bp2/6p1/p2p3p/3q4/2P1P1PP/5P1K/8 w - - 0 31"
+  },
+  {
+   "t": 2293.5,
+   "ply": 62,
+   "line": [
+    "exd4",
+    "a4"
+   ],
+   "fen": "2r3k1/4bp2/6p1/3p3p/p2P4/2P3PP/5P1K/8 w - - 0 32"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "King's Indian Defense",
+   "eco": "E61",
+   "plies": 5,
+   "line": "d4 Nf6 c4 g6 Nc3",
+   "coverage": 0.962
+  },
+  {
+   "name": "Indian Defense: West Indian Defense",
+   "eco": "E60",
+   "plies": 4,
+   "line": "d4 Nf6 c4 g6",
+   "coverage": 0.962
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.981
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "King's Indian Defense",
+  "confirmed": true
+ }
+}

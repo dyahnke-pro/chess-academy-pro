@@ -1,0 +1,54 @@
+[
+  {
+    "id": "vn-opensic-the-break-that-most-opponents-avoid",
+    "line": "e4 c5 Nf3 d6 d4",
+    "teaches": "Know which move your opponents actually play, not only which one theory calls best. If the principled break is rare at your level, the sidelines around it are where your preparation time belongs.",
+    "explains": "The pawn strikes at c5 and the game opens up. This is the principled continuation, and below master level it is also the one you see least — the early bishop sortie to c4, on this move or the one before, is far more common and steers into something completely different. Meeting the real break is a small event in a club game.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "c5"
+      }
+    ]
+  },
+  {
+    "id": "vn-opensic-take-but-do-not-assume-the-recapture",
+    "line": "e4 c5 Nf3 d6 d4 cxd4",
+    "teaches": "A capture with two possible recaptures is a fork in the road, not a formality. Wait to see which piece takes back before deciding what game you are in.",
+    "explains": "Black takes, and the pawn on d4 will not survive — but which White piece removes it matters. The knight recapture is the one that leads to the sharp open positions this whole line is played for; taking with the queen instead is a different game, quieter and with the queen already committed. Both are legal here, and Black does not get to choose.",
+    "reasons": [
+      {
+        "kind": "controls",
+        "square": "c3"
+      }
+    ]
+  },
+  {
+    "id": "vn-opensic-the-recapture-that-defines-the-game",
+    "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4",
+    "teaches": "A knight recapturing into the centre is worth more than the material it restores: it takes the squares the opponent's queenside expansion needs. Notice which squares before you plan around them.",
+    "explains": "The knight takes back in the middle of the board and now covers b5 and e6, the two squares Black's setup cares about most. This is the real open position — the one with a genuine mass of theory behind it, where White has something like ten separate playable schemes from a couple of moves away. Nobody learns all of it at once, and nobody needs to.",
+    "reasons": [
+      {
+        "kind": "controls",
+        "square": "b5"
+      },
+      {
+        "kind": "controls",
+        "square": "e6"
+      }
+    ]
+  },
+  {
+    "id": "vn-opensic-develop-at-the-pawn-before-choosing-a-scheme",
+    "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6",
+    "teaches": "When the opponent has many playable setups and you have one useful move, play the useful move. Developing with a hit costs nothing and makes them commit first.",
+    "explains": "The knight comes out and leans on e4. It is the move Black wants in every version of this position, so there is no reason to spend a thought on it: it develops, it asks a question, and it leaves the choice of system to White. The huge branching comes next, and it comes on White's move.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "e4"
+      }
+    ]
+  }
+]

@@ -1,0 +1,454 @@
+{
+ "videoId": "HVKBVYhxpEY",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 720",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 3457,
+  "settledPositions": null
+ },
+ "plies": 37,
+ "rewinds": 2,
+ "moves": [
+  {
+   "t": 1004.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "d6"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 1007,
+   "ply": 3,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/3p4/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 1022.5,
+   "ply": 4,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3pp3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 1047.5,
+   "ply": 5,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3pp3/8/2PPP3/8/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 1069.5,
+   "ply": 6,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "rn1qkbnr/pppb1ppp/3pp3/8/2PPP3/8/PP3PPP/RNBQKBNR w KQkq - 1 4"
+  },
+  {
+   "t": 1083,
+   "ply": 7,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rn1qkbnr/pppb1ppp/3pp3/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 4"
+  },
+  {
+   "t": 1089.5,
+   "ply": 8,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rn1qkb1r/pppb1ppp/3ppn2/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 3 5"
+  },
+  {
+   "t": 1098.5,
+   "ply": 9,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rn1qkb1r/pppb1ppp/3ppn2/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 4 5"
+  },
+  {
+   "t": 1104,
+   "ply": 10,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rn1qk2r/pppbbppp/3ppn2/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 5 6"
+  },
+  {
+   "t": 1110.5,
+   "ply": 11,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rn1qk2r/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 6 6"
+  },
+  {
+   "t": 1129.5,
+   "ply": 12,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQK2R w KQ - 7 7"
+  },
+  {
+   "t": 1131.5,
+   "ply": 13,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQ1RK1 b - - 8 7"
+  },
+  {
+   "t": 1196,
+   "ply": 14,
+   "line": [
+    "c5"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/3ppn2/2p5/2PPP3/2NB1N2/PP3PPP/R1BQ1RK1 w - - 0 8"
+  },
+  {
+   "t": 1198.5,
+   "ply": 15,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/3ppn2/2P5/2P1P3/2NB1N2/PP3PPP/R1BQ1RK1 b - - 0 8"
+  },
+  {
+   "t": 1202,
+   "ply": 17,
+   "line": [
+    "dxc5",
+    "e5"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/4pn2/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 b - - 0 9"
+  },
+  {
+   "t": 1211.5,
+   "ply": 18,
+   "line": [
+    "Nh5"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/4p3/2p1P2n/2P5/2NB1N2/PP3PPP/R1BQ1RK1 w - - 1 10"
+  },
+  {
+   "t": 1247.5,
+   "ply": 19,
+   "line": [
+    "g4"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/4p3/2p1P2n/2P3P1/2NB1N2/PP3P1P/R1BQ1RK1 b - - 0 10"
+  },
+  {
+   "t": 1273,
+   "ply": 21,
+   "line": [
+    "Nf6",
+    "exf6"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/4pP2/2p5/2P3P1/2NB1N2/PP3P1P/R1BQ1RK1 b - - 0 11"
+  },
+  {
+   "t": 1274.5,
+   "ply": 22,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "rn1q1rk1/pp1b1ppp/4pb2/2p5/2P3P1/2NB1N2/PP3P1P/R1BQ1RK1 w - - 0 12"
+  },
+  {
+   "t": 1288.5,
+   "ply": 23,
+   "line": [
+    "g5"
+   ],
+   "fen": "rn1q1rk1/pp1b1ppp/4pb2/2p3P1/2P5/2NB1N2/PP3P1P/R1BQ1RK1 b - - 0 12"
+  },
+  {
+   "t": 1301,
+   "ply": 24,
+   "line": [
+    "Bd4"
+   ],
+   "fen": "rn1q1rk1/pp1b1ppp/4p3/2p3P1/2Pb4/2NB1N2/PP3P1P/R1BQ1RK1 w - - 1 13"
+  },
+  {
+   "t": 1302.5,
+   "ply": 25,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "rn1q1rk1/pp1b1ppp/4p3/2p3P1/2PN4/2NB4/PP3P1P/R1BQ1RK1 b - - 0 13"
+  },
+  {
+   "t": 1304,
+   "ply": 26,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rn1q1rk1/pp1b1ppp/4p3/6P1/2Pp4/2NB4/PP3P1P/R1BQ1RK1 w - - 0 14"
+  },
+  {
+   "t": 1311.5,
+   "ply": 27,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "rn1q1rk1/pp1b1ppp/4p3/6P1/2PpN3/3B4/PP3P1P/R1BQ1RK1 b - - 1 14"
+  },
+  {
+   "t": 1513,
+   "ply": 28,
+   "line": [
+    "Bc6"
+   ],
+   "fen": "rn1q1rk1/pp3ppp/2b1p3/6P1/2PpN3/3B4/PP3P1P/R1BQ1RK1 w - - 2 15"
+  },
+  {
+   "t": 1517.5,
+   "ply": 7,
+   "line": [],
+   "fen": "rn1qkbnr/pppb1ppp/3pp3/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 4"
+  },
+  {
+   "t": 1526,
+   "ply": 11,
+   "line": [
+    "Be7",
+    "Bd3",
+    "Nf6",
+    "Nf3"
+   ],
+   "fen": "rn1qk2r/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 6 6"
+  },
+  {
+   "t": 1533,
+   "ply": 13,
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/pppbbppp/3ppn2/8/2PPP3/2NB1N2/PP3PPP/R1BQ1RK1 b - - 8 7"
+  },
+  {
+   "t": 1534.5,
+   "ply": 16,
+   "line": [
+    "c5",
+    "dxc5",
+    "dxc5"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/4pn2/2p5/2P1P3/2NB1N2/PP3PPP/R1BQ1RK1 w - - 0 9"
+  },
+  {
+   "t": 1538,
+   "ply": 17,
+   "line": [
+    "e5"
+   ],
+   "fen": "rn1q1rk1/pp1bbppp/4pn2/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 b - - 0 9"
+  },
+  {
+   "t": 1540,
+   "ply": 18,
+   "line": [
+    "Ne8"
+   ],
+   "fen": "rn1qnrk1/pp1bbppp/4p3/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 w - - 1 10"
+  },
+  {
+   "t": 1551.5,
+   "ply": 20,
+   "line": [
+    "Bxh7+",
+    "Kxh7"
+   ],
+   "fen": "rn1qnr2/pp1bbppk/4p3/2p1P3/2P5/2N2N2/PP3PPP/R1BQ1RK1 w - - 0 11"
+  },
+  {
+   "t": 1553.5,
+   "ply": 21,
+   "line": [
+    "Ng5+"
+   ],
+   "fen": "rn1qnr2/pp1bbppk/4p3/2p1P1N1/2P5/2N5/PP3PPP/R1BQ1RK1 b - - 1 11"
+  },
+  {
+   "t": 1554.5,
+   "ply": 22,
+   "line": [
+    "Bxg5"
+   ],
+   "fen": "rn1qnr2/pp1b1ppk/4p3/2p1P1b1/2P5/2N5/PP3PPP/R1BQ1RK1 w - - 0 12"
+  },
+  {
+   "t": 1570,
+   "ply": 18,
+   "line": [],
+   "fen": "rn1qnrk1/pp1bbppp/4p3/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 w - - 1 10"
+  },
+  {
+   "t": 1614,
+   "ply": 22,
+   "line": [
+    "Be4",
+    "Nc6",
+    "Qd3",
+    "g6"
+   ],
+   "fen": "r2qnrk1/pp1bbp1p/2n1p1p1/2p1P3/2P1B3/2NQ1N2/PP3PPP/R1B2RK1 w - - 0 12"
+  },
+  {
+   "t": 1632.5,
+   "ply": 24,
+   "line": [
+    "Bh6",
+    "Ng7"
+   ],
+   "fen": "r2q1rk1/pp1bbpnp/2n1p1pB/2p1P3/2P1B3/2NQ1N2/PP3PPP/R4RK1 w - - 2 13"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rn1qkbnr/pppb1ppp/3pp3/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 4",
+   "line": [
+    "e4",
+    "d6",
+    "d4",
+    "e6",
+    "c4",
+    "Bd7",
+    "Nc3"
+   ],
+   "ply": 7,
+   "options": [
+    {
+     "san": "Nf6",
+     "t": 1089.5,
+     "continuation": "Nf6"
+    },
+    {
+     "san": "Be7",
+     "t": 1526,
+     "continuation": "Be7 Bd3 Nf6 Nf3"
+    }
+   ]
+  },
+  {
+   "fen": "rn1q1rk1/pp1bbppp/4pn2/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 b - - 0 9",
+   "line": [
+    "e4",
+    "d6",
+    "d4",
+    "e6",
+    "c4",
+    "Bd7",
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "Be7",
+    "Bd3",
+    "O-O",
+    "O-O",
+    "c5",
+    "dxc5",
+    "dxc5",
+    "e5"
+   ],
+   "ply": 17,
+   "options": [
+    {
+     "san": "Nh5",
+     "t": 1211.5,
+     "continuation": "Nh5"
+    },
+    {
+     "san": "Ne8",
+     "t": 1540,
+     "continuation": "Ne8"
+    }
+   ]
+  },
+  {
+   "fen": "rn1qnrk1/pp1bbppp/4p3/2p1P3/2P5/2NB1N2/PP3PPP/R1BQ1RK1 w - - 1 10",
+   "line": [
+    "e4",
+    "d6",
+    "d4",
+    "e6",
+    "c4",
+    "Bd7",
+    "Nc3",
+    "Be7",
+    "Bd3",
+    "Nf6",
+    "Nf3",
+    "O-O",
+    "O-O",
+    "c5",
+    "dxc5",
+    "dxc5",
+    "e5",
+    "Ne8"
+   ],
+   "ply": 18,
+   "options": [
+    {
+     "san": "Bxh7+",
+     "t": 1551.5,
+     "continuation": "Bxh7+ Kxh7"
+    },
+    {
+     "san": "Be4",
+     "t": 1614,
+     "continuation": "Be4 Nc6 Qd3 g6"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Rat Defense: Small Center Defense",
+   "eco": "C00",
+   "plies": 4,
+   "line": "e4 d6 d4 e6",
+   "coverage": 0.943
+  },
+  {
+   "name": "Pirc Defense",
+   "eco": "B00",
+   "plies": 2,
+   "line": "e4 d6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}

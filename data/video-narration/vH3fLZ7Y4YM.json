@@ -1,0 +1,251 @@
+{
+ "videoId": "vH3fLZ7Y4YM",
+ "title": "Smith-Morra Gambit Accepted | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "okay 1793 that's pretty high rated opponent let's see how our opening repertoire fairs and we've been playing the smith"
+  },
+  {
+   "ply": 3,
+   "t": 14,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "mora exclusively"
+  },
+  {
+   "ply": 5,
+   "t": 17,
+   "line": [
+    "cxd4",
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "we are going to continue i think the smith more becomes more exciting at this"
+  },
+  {
+   "ply": 7,
+   "t": 21,
+   "line": [
+    "dxc3",
+    "Nxc3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "level because people tend to accept it"
+  },
+  {
+   "ply": 8,
+   "t": 23,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "and uh play something a little bit more conventional the move here is if i remember correctly"
+  },
+  {
+   "ply": 9,
+   "t": 33.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "for some reason i'm blanking on whether it's bishop c4 knight f3 it is it is knight f3 it's just to develop the other"
+  },
+  {
+   "ply": 10,
+   "t": 36,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/4P3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "knight and e6 so this is one of many possible systems but e6 in this position i guess we could play bishop c4 and transpose after a6 to one of the main lines now generally in the smith mora this is"
+  },
+  {
+   "ply": 11,
+   "t": 65,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R b KQkq - 1 6",
+   "said": "kind of an exception to the rule as far as i understand from my initial analysis you put the bishop on c4 regardless of whether black lays e6 or not you might say well you know it bites on granite why would we put it there and you have to see the"
+  },
+  {
+   "ply": 12,
+   "t": 69.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk1nr/pp1p1ppp/2n1p3/2b5/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 2 7",
+   "said": "bigger picture you have to develop your king side and castle quickly and often the bishop actually supports a knight sacrifice on d5"
+  },
+  {
+   "ply": 13,
+   "t": 82.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk1nr/pp1p1ppp/2n1p3/2b5/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 b kq - 3 7",
+   "said": "in addition it prevents black from playing d5 easily so the bishop is doing stuff let's castle let's develop a6 now our"
+  },
+  {
+   "ply": 14,
+   "t": 84,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bqk1nr/1p1p1ppp/p1n1p3/2b5/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 0 8",
+   "said": "opponent is playing quite inaccurately because you know i've talked about this many times the d6 square is very important to pay attention to in this position right if we can get control of that square we make it extremely difficult for black to complete their development for obvious reasons right it makes it"
+  },
+  {
+   "ply": 15,
+   "t": 118.5,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r1bqk1nr/1p1p1ppp/p1n1p3/2b5/2B1PB2/2N2N2/PP3PPP/R2Q1RK1 b kq - 1 8",
+   "said": "hard for black to push d6 so what's what could be a possible move so e5 could be a move but e5 allows d5 and our opponent is able to shove that pawn through we should play bishop f4 developing a piece and simultaneously"
+  },
+  {
+   "ply": 16,
+   "t": 122.5,
+   "line": [
+    "Nge7"
+   ],
+   "fen": "r1bqk2r/1p1pnppp/p1n1p3/2b5/2B1PB2/2N2N2/PP3PPP/R2Q1RK1 w kq - 2 9",
+   "said": "controlling the d6 square knight e7 now a very logical move would be to actually put a bishop on d6 and establish our control over that square we can do this in several different ways now we can actually go e5"
+  },
+  {
+   "ply": 17,
+   "t": 146,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqk2r/1p1pnppp/p1n1p3/2b1P3/2B2B2/2N2N2/PP3PPP/R2Q1RK1 b kq - 0 9",
+   "said": "and clamp down on this square even further by shifting the knight around to e4 the square formerly occupied by the pawn i actually like e5 a little bit more"
+  },
+  {
+   "ply": 18,
+   "t": 147,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/1p1pnppp/p1n1p3/2b1P3/2B2B2/2N2N2/PP3PPP/R2Q1RK1 w - - 1 10",
+   "said": "i feel like keeping our dark square bishop could be valuable just if we're ever to attack on the king side i feel"
+  },
+  {
+   "ply": 19,
+   "t": 154.5,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r1bq1rk1/1p1pnppp/p1n1p3/2b1P3/2B1NB2/5N2/PP3PPP/R2Q1RK1 b - - 2 10",
+   "said": "like having this bishop could be a good idea so let's go 94. look at the control that we have over that square black goes d5 we on passat"
+  },
+  {
+   "ply": 20,
+   "t": 163,
+   "line": [
+    "Ba7"
+   ],
+   "fen": "r1bq1rk1/bp1pnppp/p1n1p3/4P3/2B1NB2/5N2/PP3PPP/R2Q1RK1 w - - 3 11",
+   "said": "now we need to switch gears a little bit so we've gotten control over that square now we need to keep improving our position somehow and as part of that we need to figure out which pieces we can improve and how we can improve them and i think there are many ways to arrange"
+  },
+  {
+   "ply": 21,
+   "t": 187,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r1bq1rk1/bp1pnppp/p1n1p3/4P3/2B1NB2/5N2/PP1Q1PPP/R4RK1 b - - 4 11",
+   "said": "your pieces here and it'll take me a second to figure out the one that we want to carry out i think we should play very straightforwardly here i think we should just go queendy to connect the rooks and you know the screen on d2 is very"
+  },
+  {
+   "ply": 22,
+   "t": 191.5,
+   "line": [
+    "Ng6"
+   ],
+   "fen": "r1bq1rk1/bp1p1ppp/p1n1p1n1/4P3/2B1NB2/5N2/PP1Q1PPP/R4RK1 w - - 5 12",
+   "said": "flexible knight g6 is is not scary we can go bishop g5 to attack black's queen but remember to see the bigger picture"
+  },
+  {
+   "ply": 23,
+   "t": 204.5,
+   "line": [
+    "Bg3"
+   ],
+   "fen": "r1bq1rk1/bp1p1ppp/p1n1p1n1/4P3/2B1N3/5NB1/PP1Q1PPP/R4RK1 b - - 6 12",
+   "said": "we're trying to control the d6 square by extension we're trying to keep this pawn well defended so we should just calmly drop the bishop back to g3 now can somebody propose"
+  },
+  {
+   "ply": 24,
+   "t": 215,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1bq1rk1/b2p1ppp/p1n1p1n1/1p2P3/2B1N3/5NB1/PP1Q1PPP/R4RK1 w - - 0 13",
+   "said": "a potential idea that exploits the knight on g6 which is in fact quite misplaced yeah h4h5 is something to keep an eye on and where should the bishop go the way that i'm thinking about this is okay well the bishop has kind of done its job on this diagonal so from that perspective it would make sense to bring it back to d3 on the other hand after bishop d3 black is a very nasty move bishop b8 and it's gotten hard to defend the e5 pawn the advantage of playing bishop b3 is that we open keep open the connection between the knight and the queen so we're able to play knight d6 in response to bishop b8"
+  },
+  {
+   "ply": 25,
+   "t": 268.5,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "r1bq1rk1/b2p1ppp/p1n1p1n1/1p2P3/4N3/1B3NB1/PP1Q1PPP/R4RK1 b - - 1 13",
+   "said": "but let me think about this bishop d3 bishop b8 we could still go knight d6 in that position but it's not quite the same so let's go bishop e3 let's let's keep the queen's contact with d6 open daily"
+  },
+  {
+   "ply": 26,
+   "t": 275,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "r1b2rk1/b2p1ppp/pqn1p1n1/1p2P3/4N3/1B3NB1/PP1Q1PPP/R4RK1 w - - 2 14",
+   "said": "round i think for the raid our opponent playing very quickly we might have to speed up queen b6 i don't like that at all it doesn't do anything at all this this queen is misplaced and it leaves the king"
+  },
+  {
+   "ply": 27,
+   "t": 288,
+   "line": [
+    "Rad1"
+   ],
+   "fen": "r1b2rk1/b2p1ppp/pqn1p1n1/1p2P3/4N3/1B3NB1/PP1Q1PPP/3R1RK1 b - - 3 14",
+   "said": "uh wide open the only thing our opponent might be preparing is knight d4 so let's get the rook into the game and prevent it"
+  },
+  {
+   "ply": 28,
+   "t": 292.5,
+   "line": [
+    "Bb8"
+   ],
+   "fen": "rbb2rk1/3p1ppp/pqn1p1n1/1p2P3/4N3/1B3NB1/PP1Q1PPP/3R1RK1 w - - 4 15",
+   "said": "and now i think everything is in place and we can start attacking the conclusion bishop b8 good thing we played bishop b3 now remember something very important just because you had planned a move in one position doesn't mean that when the position changes you don't have any other defensive moves here i think we have a fantastic defensive move defensive and attacking at the same time it defends the pawn and it assembles a piece on the king side"
+  },
+  {
+   "ply": 29,
+   "t": 330,
+   "line": [
+    "Qg5"
+   ],
+   "fen": "rbb2rk1/3p1ppp/pqn1p1n1/1p2P1Q1/4N3/1B3NB1/PP3PPP/3R1RK1 b - - 5 15",
+   "said": "what am i thinking of knight f6 checks should be considered as well but you know we'll re we'll leave that for uh a different time queen g5 and if black goes h6 which is very likely because our opponent is playing quickly and superficially we shift the queen over to h5 where it's nicely tucked away defending e5 i think we're in fantastic shape and now h4 h5 is an idea that you should be already thinking of knight f6 check has now become far more of a reality now that we actually have pieces on the king side oh gorg thank you for the prime hopefully i'm explaining everything relatively understandable terms knight d6 is still possible in these types of positions we've got options we've got many many options here for how to conduct the initiative we could even play queen h5 on our own volition in order to make room for the knight to jump into g5 okay our opponent made us do it black is in big trouble i'm not sure it's totally lost but it certainly looks that way now to me once h6 is played this greatly accentuates um increases i should say the strength of knight f6 check why is that because after g takes f6 the pawn on h6 is capturable and it becomes an entry point to black's king so we can even play queen takes h6 immediately but we should probably prepare knight f6 we have time to do it black is so cramped that we have time to prepare knight f6 so we need to put a piece on a certain square such that after knight f6 e takes g takes f6 e takes f6 we have a piece that's nicely positioned for the attack now the way that most people interpret that question is okay well we need to play bishop h4 we need to increase our control over the f6 square that's not what we have to do we don't need to control the f6 square any more than we already are we will be able to play knight f6 the great attacking move here's bishop drops back to c2 in order after knight f6 to be able to capture that knight on g6 when we want to does that make sense queen b8 let's calculate knight f6 gf we're just going to play it i'm not even i don't want to calculate this is so overwhelming this is so overwhelming this has to be winning has to be yeah this is a nice move it's nothing insane but it's a very nice attacking move and now we reap the benefits of that attacking move by playing what and this is going to end the game immediately what do we do yeah we take the knight we simply take the knight fg queen takes g6 we threaten mate on h7 because we threaten mate on h7 we force black to take the knight and after he takes f6 there are uh insurmount unstoppable made threats everywhere obviously there's look at black speed look at black's pieces i mean our opponent just didn't do a good job of ever untangling and that why is that guess what he never pushed his d-pawn that's because we were controlling it from the basically from the start of the game now if you really want to be clinical in a position like this if you really want to attack like the greats what should you do before playing e takes f6 this is a no brain is something that mathematically for sure cannot hurt it can only help take the pawn come back to g6 and then play e takes f6 and you're not just trolling guess what after we do this knight g5 has become a possibility so after our opponent takes the pawn of the rook which is forced we play queen takes f6 and then knight g5 becomes okay"
+  },
+  {
+   "ply": 5,
+   "t": 552,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "well he makes it easy for us but um but but knight g5 would have been possible so let's check the theory so knight c6 knight f3 e6 yeah bishop c4 is the main move bishop c5 castles is the main move a6 so there are still 15 games in the state in the position in the database we'll take a look so bishop f4 should make sense to everybody knight g7 e5 one game in the database which was played between in that game knight g6 happened 23 25 against the 22-28 so pretty um pretty pretty decent players had this position so castles 94 bishop a7 and now we play queen d2 and moves like queen d2 are i think very um how should i put this let me think about this oftentimes you look in a position like this and you say well"
+  }
+ ],
+ "forks": []
+}

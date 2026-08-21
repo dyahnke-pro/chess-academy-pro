@@ -1,0 +1,607 @@
+{
+ "videoId": "T6IeD5ldw3s",
+ "title": "Daniel Defeats MVL 3/0 Blitz!!! | Ft. Dina Belenkaya | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 2337,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "move i think you could have it yay we're beating mvl four three amazing even mines cannot do"
+  },
+  {
+   "ply": 4,
+   "t": 2339,
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": ""
+  },
+  {
+   "ply": 5,
+   "t": 2340,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "said": "that that's right"
+  },
+  {
+   "ply": 6,
+   "t": 2341.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "said": "that's right damn girl"
+  },
+  {
+   "ply": 8,
+   "t": 2343,
+   "line": [
+    "d3",
+    "h6"
+   ],
+   "fen": "r1bqkb1r/pppp1pp1/2n2n1p/4p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+   "said": ""
+  },
+  {
+   "ply": 9,
+   "t": 2346.5,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "r1bqkb1r/pppp1pp1/2n2n1p/4p3/2B1P3/3P1N2/PPPN1PPP/R1BQK2R b KQkq - 1 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 2349,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkb1r/ppp2pp1/2np1n1p/4p3/2B1P3/3P1N2/PPPN1PPP/R1BQK2R w KQkq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 11,
+   "t": 2350,
+   "line": [
+    "Nf1"
+   ],
+   "fen": "r1bqkb1r/ppp2pp1/2np1n1p/4p3/2B1P3/3P1N2/PPP2PPP/R1BQKN1R b KQkq - 1 6",
+   "said": "daniel dropping russian pickup lines that's it instagram"
+  },
+  {
+   "ply": 13,
+   "t": 2362,
+   "line": [
+    "Be6",
+    "Bb3"
+   ],
+   "fen": "r2qkb1r/ppp2pp1/2npbn1p/4p3/4P3/1B1P1N2/PPP2PPP/R1BQKN1R b KQkq - 3 7",
+   "said": "astering complex end games practical mastering complex end games practical lessons on critical ideas and plans"
+  },
+  {
+   "ply": 14,
+   "t": 2363.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "r2qkb1r/ppp2pp1/2n1bn1p/3pp3/4P3/1B1P1N2/PPP2PPP/R1BQKN1R w KQkq - 0 8",
+   "said": "it's exactly how i would say"
+  },
+  {
+   "ply": 15,
+   "t": 2369.5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r2qkb1r/ppp2pp1/2n1bn1p/3Pp3/8/1B1P1N2/PPP2PPP/R1BQKN1R b KQkq - 0 8",
+   "said": "miles is trying to get more money for the next"
+  },
+  {
+   "ply": 16,
+   "t": 2372.5,
+   "line": [
+    "Bxd5"
+   ],
+   "fen": "r2qkb1r/ppp2pp1/2n2n1p/3bp3/8/1B1P1N2/PPP2PPP/R1BQKN1R w KQkq - 0 9",
+   "said": "world championship yay that's correct"
+  },
+  {
+   "ply": 17,
+   "t": 2374.5,
+   "line": [
+    "Ne3"
+   ],
+   "fen": "r2qkb1r/ppp2pp1/2n2n1p/3bp3/8/1B1PNN2/PPP2PPP/R1BQK2R b KQkq - 1 9",
+   "said": ""
+  },
+  {
+   "ply": 20,
+   "t": 2377,
+   "line": [
+    "Bxb3",
+    "axb3",
+    "Bc5"
+   ],
+   "fen": "r2qk2r/ppp2pp1/2n2n1p/2b1p3/8/1P1PNN2/1PP2PPP/R1BQK2R w KQkq - 1 11",
+   "said": "that's exactly it i've got a nice position i have to win"
+  },
+  {
+   "ply": 22,
+   "t": 2383,
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "fen": "r2q1rk1/ppp2pp1/2n2n1p/2b1p3/8/1P1PNN2/1PP2PPP/R1BQ1RK1 w - - 3 12",
+   "said": "this one you think it's nice yeah if i win this one i'm really going to tilt"
+  },
+  {
+   "ply": 23,
+   "t": 2384,
+   "line": [
+    "c3"
+   ],
+   "fen": "r2q1rk1/ppp2pp1/2n2n1p/2b1p3/8/1PPPNN2/1P3PPP/R1BQ1RK1 b - - 0 12",
+   "said": "him you want to tilt poor maxine i do you're"
+  },
+  {
+   "ply": 24,
+   "t": 2386.5,
+   "line": [
+    "a5"
+   ],
+   "fen": "r2q1rk1/1pp2pp1/2n2n1p/p1b1p3/8/1PPPNN2/1P3PPP/R1BQ1RK1 w - - 0 13",
+   "said": ""
+  },
+  {
+   "ply": 23,
+   "t": 2387.5,
+   "line": [],
+   "fen": "r2q1rk1/ppp2pp1/2n2n1p/2b1p3/8/1PPPNN2/1P3PPP/R1BQ1RK1 b - - 0 12",
+   "said": "so mean"
+  },
+  {
+   "ply": 24,
+   "t": 2390.5,
+   "line": [
+    "a5"
+   ],
+   "fen": "r2q1rk1/1pp2pp1/2n2n1p/p1b1p3/8/1PPPNN2/1P3PPP/R1BQ1RK1 w - - 0 13",
+   "said": "let's go it's okay"
+  },
+  {
+   "ply": 25,
+   "t": 2392,
+   "line": [
+    "Nc4"
+   ],
+   "fen": "r2q1rk1/1pp2pp1/2n2n1p/p1b1p3/2N5/1PPP1N2/1P3PPP/R1BQ1RK1 b - - 1 13",
+   "said": "no people come on magnus you know you want to play rebecca but he's online right yeah yeah maybe he's playing"
+  },
+  {
+   "ply": 26,
+   "t": 2404,
+   "line": [
+    "e4"
+   ],
+   "fen": "r2q1rk1/1pp2pp1/2n2n1p/p1b5/2N1p3/1PPP1N2/1P3PPP/R1BQ1RK1 w - - 0 14",
+   "said": "through i would see it you would see it it would say it shows yeah"
+  },
+  {
+   "ply": 28,
+   "t": 2406,
+   "line": [
+    "dxe4",
+    "Nxe4"
+   ],
+   "fen": "r2q1rk1/1pp2pp1/2n4p/p1b5/2N1n3/1PP2N2/1P3PPP/R1BQ1RK1 w - - 0 15",
+   "said": ""
+  },
+  {
+   "ply": 29,
+   "t": 2411,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r2q1rk1/1pp2pp1/2n4p/p1b5/2N1n3/1PP1BN2/1P3PPP/R2Q1RK1 b - - 1 15",
+   "said": "what don't what don't don't what peter how are you doing how's your day"
+  },
+  {
+   "ply": 31,
+   "t": 2426,
+   "line": [
+    "Bxe3",
+    "Nxe3"
+   ],
+   "fen": "r2q1rk1/1pp2pp1/2n4p/p7/4n3/1PP1NN2/1P3PPP/R2Q1RK1 b - - 0 16",
+   "said": "aren't you supposed to be working or peter never works no worries somehow he never has any work because you work for him yeah well some of us do the work so like you do the work"
+  },
+  {
+   "ply": 32,
+   "t": 2434,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r2q1rk1/1pp2pp1/2n2n1p/p7/8/1PP1NN2/1P3PPP/R2Q1RK1 w - - 1 17",
+   "said": "and uh and he just takes the percentage"
+  },
+  {
+   "ply": 31,
+   "t": 2435,
+   "line": [],
+   "fen": "r2q1rk1/1pp2pp1/2n4p/p7/4n3/1PP1NN2/1P3PPP/R2Q1RK1 b - - 0 16",
+   "said": "basically right yep so that's why you"
+  },
+  {
+   "ply": 34,
+   "t": 2437.5,
+   "line": [
+    "Qxd1",
+    "Rfxd1",
+    "Nf6"
+   ],
+   "fen": "r4rk1/1pp2pp1/2n2n1p/p7/8/1PP1NN2/1P3PPP/R2R2K1 w - - 1 18",
+   "said": "you immediately understand how it is okay the greek laugh him agnes come on wake up i see i see"
+  },
+  {
+   "ply": 35,
+   "t": 2450.5,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r4rk1/1pp2pp1/2n2n1p/p7/3N4/1PP1N3/1P3PPP/R2R2K1 b - - 2 18",
+   "said": "wake up wake up"
+  },
+  {
+   "ply": 38,
+   "t": 2455.5,
+   "line": [
+    "Nxd4",
+    "Rxd4",
+    "b6"
+   ],
+   "fen": "r4rk1/2p2pp1/1p3n1p/p7/3R4/1PP1N3/1P3PPP/R5K1 w - - 0 20",
+   "said": "no but miles can't accept your your invitation when"
+  },
+  {
+   "ply": 39,
+   "t": 2458,
+   "line": [
+    "Rad1"
+   ],
+   "fen": "r4rk1/2p2pp1/1p3n1p/p7/3R4/1PP1N3/1P3PPP/3R2K1 b - - 1 20",
+   "said": "you know you're playing vl"
+  },
+  {
+   "ply": 40,
+   "t": 2460,
+   "line": [
+    "Rfe8"
+   ],
+   "fen": "r3r1k1/2p2pp1/1p3n1p/p7/3R4/1PP1N3/1P3PPP/3R2K1 w - - 2 21",
+   "said": "no but he doesn't know that you don't think madhu shows your"
+  },
+  {
+   "ply": 41,
+   "t": 2468.5,
+   "line": [
+    "g3"
+   ],
+   "fen": "r3r1k1/2p2pp1/1p3n1p/p7/3R4/1PP1N1P1/1P3P1P/3R2K1 b - - 0 21",
+   "said": ""
+  },
+  {
+   "ply": 42,
+   "t": 2471,
+   "line": [
+    "g6"
+   ],
+   "fen": "r3r1k1/2p2p2/1p3npp/p7/3R4/1PP1N1P1/1P3P1P/3R2K1 w - - 0 22",
+   "said": ""
+  },
+  {
+   "ply": 43,
+   "t": 2479,
+   "line": [
+    "Rc4"
+   ],
+   "fen": "r3r1k1/2p2p2/1p3npp/p7/2R5/1PP1N1P1/1P3P1P/3R2K1 b - - 1 22",
+   "said": "no i think he must have watched your streams i mean he watches cicara streams so he"
+  },
+  {
+   "ply": 44,
+   "t": 2480.5,
+   "line": [
+    "Re7"
+   ],
+   "fen": "r5k1/2p1rp2/1p3npp/p7/2R5/1PP1N1P1/1P3P1P/3R2K1 w - - 2 23",
+   "said": "watches rebecca streams so he watches"
+  },
+  {
+   "ply": 43,
+   "t": 2481.5,
+   "line": [],
+   "fen": "r3r1k1/2p2p2/1p3npp/p7/2R5/1PP1N1P1/1P3P1P/3R2K1 b - - 1 22",
+   "said": "rebecca streams exactly rebecca harris i thought it was artemia at some point really yeah"
+  },
+  {
+   "ply": 44,
+   "t": 2495,
+   "line": [
+    "Re7"
+   ],
+   "fen": "r5k1/2p1rp2/1p3npp/p7/2R5/1PP1N1P1/1P3P1P/3R2K1 w - - 2 23",
+   "said": "what are we doing here okay now is putting me through the meat grinder mid grinder 57 what was the problem 66 is very"
+  },
+  {
+   "ply": 46,
+   "t": 2501,
+   "line": [
+    "Rc6",
+    "Ne8"
+   ],
+   "fen": "r3n1k1/2p1rp2/1pR3pp/p7/8/1PP1N1P1/1P3P1P/3R2K1 w - - 4 24",
+   "said": "unpleasant no it doesn't work pg7 doesn't work because of real cap six king f6195 oh"
+  },
+  {
+   "ply": 48,
+   "t": 2526.5,
+   "line": [
+    "Kg2",
+    "Kf8"
+   ],
+   "fen": "r3nk2/2p1rp2/1pR3pp/p7/8/1PP1N1P1/1P3PKP/3R4 w - - 6 25",
+   "said": "kingy six rook e1 exactly oh yeah good calculation yum now i'm busted and there goes my win streak"
+  },
+  {
+   "ply": 50,
+   "t": 2530,
+   "line": [
+    "h4",
+    "h5"
+   ],
+   "fen": "r3nk2/2p1rp2/1pR3p1/p6p/7P/1PP1N1P1/1P3PK1/3R4 w - - 0 26",
+   "said": ""
+  },
+  {
+   "ply": 51,
+   "t": 2531.5,
+   "line": [
+    "Rd4"
+   ],
+   "fen": "r3nk2/2p1rp2/1pR3p1/p6p/3R3P/1PP1N1P1/1P3PK1/8 b - - 1 26",
+   "said": ""
+  },
+  {
+   "ply": 52,
+   "t": 2533.5,
+   "line": [
+    "Re5"
+   ],
+   "fen": "r3nk2/2p2p2/1pR3p1/p3r2p/3R3P/1PP1N1P1/1P3PK1/8 w - - 2 27",
+   "said": "possible once uh"
+  },
+  {
+   "ply": 53,
+   "t": 2548,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r3nk2/2p2p2/1pR3p1/p2Nr2p/3R3P/1PP3P1/1P3PK1/8 b - - 3 27",
+   "said": ""
+  },
+  {
+   "ply": 54,
+   "t": 2556,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "3rnk2/2p2p2/1pR3p1/p2Nr2p/3R3P/1PP3P1/1P3PK1/8 w - - 4 28",
+   "said": "you gotta go here knight dixie seven ah ah"
+  },
+  {
+   "ply": 55,
+   "t": 2564.5,
+   "line": [
+    "Nxb6"
+   ],
+   "fen": "3rnk2/2p2p2/1NR3p1/p3r2p/3R3P/1PP3P1/1P3PK1/8 b - - 0 28",
+   "said": "oh it's okay i don't think it's the end of the world okay whoa"
+  },
+  {
+   "ply": 58,
+   "t": 2570.5,
+   "line": [
+    "Rxd4",
+    "cxd4",
+    "Rb5"
+   ],
+   "fen": "4nk2/2p2p2/1NR3p1/pr5p/3P3P/1P4P1/1P3PK1/8 w - - 1 30",
+   "said": "that that one i did not see species okay it's not the end of the world oh he's got this"
+  },
+  {
+   "ply": 61,
+   "t": 2574.5,
+   "line": [
+    "Nd7+",
+    "Ke7",
+    "Nc5"
+   ],
+   "fen": "4n3/2p1kp2/2R3p1/prN4p/3P3P/1P4P1/1P3PK1/8 b - - 4 31",
+   "said": "oh my god that was really good"
+  },
+  {
+   "ply": 62,
+   "t": 2576.5,
+   "line": [
+    "Rb4"
+   ],
+   "fen": "4n3/2p1kp2/2R3p1/p1N4p/1r1P3P/1P4P1/1P3PK1/8 w - - 5 32",
+   "said": "okay it's really not the end of the world yeah you gotta go d5 or d4 i gotta be"
+  },
+  {
+   "ply": 64,
+   "t": 2588,
+   "line": [
+    "Ra6",
+    "Rxd4"
+   ],
+   "fen": "4n3/2p1kp2/R5p1/p1N4p/3r3P/1P4P1/1P3PK1/8 w - - 0 33",
+   "said": "fast and i can yeah because it's faster than you usually are"
+  },
+  {
+   "ply": 66,
+   "t": 2589,
+   "line": [
+    "Rxa5",
+    "Rd2"
+   ],
+   "fen": "4n3/2p1kp2/6p1/R1N4p/7P/1P4P1/1P1r1PK1/8 w - - 1 34",
+   "said": ""
+  },
+  {
+   "ply": 67,
+   "t": 2593,
+   "line": [
+    "Na4"
+   ],
+   "fen": "4n3/2p1kp2/6p1/R6p/N6P/1P4P1/1P1r1PK1/8 b - - 2 34",
+   "said": "it's an easy thing to do"
+  },
+  {
+   "ply": 68,
+   "t": 2594,
+   "line": [
+    "Nd6"
+   ],
+   "fen": "8/2p1kp2/3n2p1/R6p/N6P/1P4P1/1P1r1PK1/8 w - - 3 35",
+   "said": ""
+  },
+  {
+   "ply": 69,
+   "t": 2598.5,
+   "line": [
+    "Re5+"
+   ],
+   "fen": "8/2p1kp2/3n2p1/4R2p/N6P/1P4P1/1P1r1PK1/8 b - - 4 35",
+   "said": "you just push them all through some baby"
+  },
+  {
+   "ply": 70,
+   "t": 2602.5,
+   "line": [
+    "Kd7"
+   ],
+   "fen": "8/2pk1p2/3n2p1/4R2p/N6P/1P4P1/1P1r1PK1/8 w - - 5 36",
+   "said": "um i mean he's a pull up where's his ear coming from"
+  },
+  {
+   "ply": 71,
+   "t": 2616,
+   "line": [
+    "Re3"
+   ],
+   "fen": "8/2pk1p2/3n2p1/7p/N6P/1P2R1P1/1P1r1PK1/8 b - - 6 36",
+   "said": "oh you wanna after that i can make it actually no that's okay it's okay we concentrate we concentrate on on the on the rook"
+  },
+  {
+   "ply": 72,
+   "t": 2618,
+   "line": [
+    "Rc2"
+   ],
+   "fen": "8/2pk1p2/3n2p1/7p/N6P/1P2R1P1/1Pr2PK1/8 w - - 7 37",
+   "said": ""
+  },
+  {
+   "ply": 73,
+   "t": 2620,
+   "line": [
+    "Rc3"
+   ],
+   "fen": "8/2pk1p2/3n2p1/7p/N6P/1PR3P1/1Pr2PK1/8 b - - 8 37",
+   "said": "considering the most important rook scene"
+  },
+  {
+   "ply": 74,
+   "t": 2621.5,
+   "line": [
+    "Rd2"
+   ],
+   "fen": "8/2pk1p2/3n2p1/7p/N6P/1PR3P1/1P1r1PK1/8 w - - 9 38",
+   "said": ""
+  },
+  {
+   "ply": 76,
+   "t": 2625,
+   "line": [
+    "Kf3",
+    "Re2"
+   ],
+   "fen": "8/2pk1p2/3n2p1/7p/N6P/1PR2KP1/1P2rP2/8 w - - 11 39",
+   "said": "oh look okay it's ring is gonna play diamond can you see eight is attached to d5 roof and then wow beautiful this is jack do you want to check could you shark is not that oh he's repeating he wants to draw you don't want to draw wow"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 31,
+   "fen": "r2q1rk1/1pp2pp1/2n4p/p7/4n3/1PP1NN2/1P3PPP/R2Q1RK1 b - - 0 16",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Nf6",
+    "d3",
+    "h6",
+    "Nbd2",
+    "d6",
+    "Nf1",
+    "Be6",
+    "Bb3",
+    "d5",
+    "exd5",
+    "Bxd5",
+    "Ne3",
+    "Bxb3",
+    "axb3",
+    "Bc5",
+    "O-O",
+    "O-O",
+    "c3",
+    "a5",
+    "Nc4",
+    "e4",
+    "dxe4",
+    "Nxe4",
+    "Be3",
+    "Bxe3",
+    "Nxe3"
+   ],
+   "options": [
+    {
+     "san": "Nf6",
+     "t": 2434,
+     "continuation": "Nf6",
+     "said": "never has any work because you work for him yeah well some of us do the work so like you do the work and uh and he just takes the percentage basically right yep so that's why you you immediately understand how it is okay the greek laugh him agnes come on wake up i see i see wake up wake up no but miles can't accept your your invitation when you know you're playing vl no but he doesn't know that you don't think madhu shows your no i think he must have watched your streams i mean he watches cicara streams so he watches rebecca streams so he watches rebecca streams exactly rebecca harris i thought it was artemia at some point really yeah what are we doing here okay now is putting me through the meat grinder mid grinder"
+    },
+    {
+     "san": "Qxd1",
+     "t": 2437.5,
+     "continuation": "Qxd1 Rfxd1 Nf6",
+     "said": "yeah well some of us do the work so like you do the work and uh and he just takes the percentage basically right yep so that's why you you immediately understand how it is okay the greek laugh him agnes come on wake up i see i see wake up wake up no but miles can't accept your your invitation when you know you're playing vl no but he doesn't know that you don't think madhu shows your no i think he must have watched your streams i mean he watches cicara streams so he watches rebecca streams so he watches rebecca streams exactly rebecca harris i thought it was artemia at some point really yeah what are we doing here okay now is putting me through the meat grinder mid grinder 57 what was the problem 66 is very"
+    }
+   ]
+  }
+ ]
+}

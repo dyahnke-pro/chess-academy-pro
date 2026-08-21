@@ -1,0 +1,877 @@
+{
+ "videoId": "j_KLuENJVaw",
+ "title": "Taming the Hippo Defense | Develop Your Instincts | GM Naroditsky's DYI Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1115,
+   "line": [
+    "e4",
+    "g6"
+   ],
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "it yourself essentially the the point is never to fall in love with a particular piece let's go on play one more game one more five minute we have white again against no name with a bunch of numbers"
+  },
+  {
+   "ply": 3,
+   "t": 1117,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "okay again we're facing a fian ketto"
+  },
+  {
+   "ply": 4,
+   "t": 1119,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pp1p/6p1/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "this time King okay D5 so this is not a move that is typically studied or mentioned it's it's not really a theor it's not a terrible move it's it's some sort of a defert scandy but typically the scandy and and the Kings fian ketto don't really go well together because"
+  },
+  {
+   "ply": 5,
+   "t": 1146,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/ppp1pp1p/6p1/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "black falls behind in development and falls behind in space and there's two ways to play this position you could push E5 uh and get kind of a French caroon structure which I don't like as much I prefer open Center position so let's take and get the scandy thank you"
+  },
+  {
+   "ply": 6,
+   "t": 1148,
+   "line": [
+    "Qxd5"
+   ],
+   "fen": "rnb1kbnr/ppp1pp1p/6p1/3q4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "bangtown California for the five Subs"
+  },
+  {
+   "ply": 7,
+   "t": 1153.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnb1kbnr/ppp1pp1p/6p1/3q4/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 4",
+   "said": "okay now you should follow your basic principles Knight C3 just like in the"
+  },
+  {
+   "ply": 8,
+   "t": 1157,
+   "line": [
+    "Qe6+"
+   ],
+   "fen": "rnb1kbnr/ppp1pp1p/4q1p1/8/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 2 5",
+   "said": "Scandinavian and our opponent is digging themselves into a major hole early on this is a really bad move it blocks the bishop it encourages us to uh increase our development advantage and here actually is an interesting moment ask yourself how would you block this check like what what is your intuition now I"
+  },
+  {
+   "ply": 9,
+   "t": 1187,
+   "line": [
+    "Be3"
+   ],
+   "fen": "rnb1kbnr/ppp1pp1p/4q1p1/8/3P4/2N1B3/PPP2PPP/R2QKBNR b KQkq - 3 5",
+   "said": "think there are several moves which are approximately equivalent but there is one move that I'm going to play which to my understanding is probably not on everyone's radar I think most people want to go Bishop B2 but I'm actually going to go Bishop E3 um and I'll explain why in more"
+  },
+  {
+   "ply": 10,
+   "t": 1189,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnb1k1nr/ppp1ppbp/4q1p1/8/3P4/2N1B3/PPP2PPP/R2QKBNR w KQkq - 4 6",
+   "said": "detail after the game in short I'm already thinking about where I want to Castle I'm already thinking about where I want to Castle and Bishop E3 is a move that supercharges our path to castling Queen side why do I want to Castle Queen side two main reasons the first is that we're going to have a lead in development and that lead in development can be converted into a direct kingside attack so I'm anticipating that Black's going to go Knight F6 and castle kingside and what I want to do is build up this Queen Bishop battery just like in the previous game and set up a kingside attack so because"
+  },
+  {
+   "ply": 11,
+   "t": 1234.5,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "rnb1k1nr/ppp1ppbp/4q1p1/8/3P4/2N1B3/PPPQ1PPP/R3KBNR b KQkq - 5 6",
+   "said": "I think we're probably going to be attacking on the king side I want to Castle to the queen side um and I don't want to pretend like I'm some Nostradamus figure but I think this is likely to take place so let's go Queen to D2 again bending the rules a little bit"
+  },
+  {
+   "ply": 12,
+   "t": 1239.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnb1k2r/ppp1ppbp/4qnp1/8/3P4/2N1B3/PPPQ1PPP/R3KBNR w KQkq - 6 7",
+   "said": "I'm not like religiously developing but at the same time I am developing this counts I'm developing my king here we"
+  },
+  {
+   "ply": 13,
+   "t": 1247.5,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "rnb1k2r/ppp1ppbp/4qnp1/8/3P4/2N1B3/PPPQ1PPP/2KR1BNR b kq - 7 7",
+   "said": "can go Knight F3 but I'm going to follow through on my Concept in Castle Queen side I'm anticipating our opponent Castle's King side and at that point we"
+  },
+  {
+   "ply": 14,
+   "t": 1261.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnb2rk1/ppp1ppbp/4qnp1/8/3P4/2N1B3/PPPQ1PPP/2KR1BNR w - - 8 8",
+   "said": "can play Bishop H6 there's nothing wrong with that move move but we also don't really have to rush it because at this point we have two big priorities we want to jump start our attack on the king"
+  },
+  {
+   "ply": 15,
+   "t": 1273,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnb2rk1/ppp1ppbp/4qnp1/8/3P4/2N1BN2/PPPQ1PPP/2KR1B1R b - - 9 8",
+   "said": "side but we haven't developed our King side yet so I'm going to take the middle ground and I'm going to start with Knight F3 you might be like well but doesn't this give black the time to"
+  },
+  {
+   "ply": 16,
+   "t": 1280.5,
+   "line": [
+    "b6"
+   ],
+   "fen": "rnb2rk1/p1p1ppbp/1p2qnp1/8/3P4/2N1BN2/PPPQ1PPP/2KR1B1R w - - 0 9",
+   "said": "either prevent Bishop H6 or maybe move this rook and well first of all neither actually ends up happening but as I'll show you after the game our development lead is so large and the Queen is so bad that it's like we can win this game in a variety of ways Bishop H6 is not the only problem that faces black so here again there's many ways that we can start start the attack and Bishop H6 is"
+  },
+  {
+   "ply": 17,
+   "t": 1313,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "rnb2rk1/p1p1ppbp/1p2qnpB/8/3P4/2N2N2/PPPQ1PPP/2KR1B1R b - - 1 9",
+   "said": "just one option another option as many of you are indicating is H4 although H4 uh meets with H5 often and then you're at a standstill so I don't like starting with H4 let's go Bishop H6 kind of as we"
+  },
+  {
+   "ply": 18,
+   "t": 1316,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "rn3rk1/pbp1ppbp/1p2qnpB/8/3P4/2N2N2/PPPQ1PPP/2KR1B1R w - - 2 10",
+   "said": "planned um and here another important moment I don't have time to focus on all the subtleties here we're running short of time but the bottom line is you don't"
+  },
+  {
+   "ply": 19,
+   "t": 1327.5,
+   "line": [
+    "Bxg7"
+   ],
+   "fen": "rn3rk1/pbp1ppBp/1p2qnp1/8/3P4/2N2N2/PPPQ1PPP/2KR1B1R b - - 0 10",
+   "said": "automatically have to take on G7 in these situations in this position I will take on G7 but something to to remember"
+  },
+  {
+   "ply": 20,
+   "t": 1330,
+   "line": [
+    "Kxg7"
+   ],
+   "fen": "rn3r2/pbp1ppkp/1p2qnp1/8/3P4/2N2N2/PPPQ1PPP/2KR1B1R w - - 0 11",
+   "said": ""
+  },
+  {
+   "ply": 18,
+   "t": 1331,
+   "line": [],
+   "fen": "rn3rk1/pbp1ppbp/1p2qnpB/8/3P4/2N2N2/PPPQ1PPP/2KR1B1R w - - 2 10",
+   "said": "if you're a newer player is that you can keep this tension and drive the pawn up to H5 and that can be much more"
+  },
+  {
+   "ply": 20,
+   "t": 1339,
+   "line": [
+    "Bxg7",
+    "Kxg7"
+   ],
+   "fen": "rn3r2/pbp1ppkp/1p2qnp1/8/3P4/2N2N2/PPPQ1PPP/2KR1B1R w - - 0 11",
+   "said": "effective because it keeps the black H Pawn prisoner now we've traded Bishops which guarantees the black will have problems with their king for a very long time but that doesn't mean we have to"
+  },
+  {
+   "ply": 21,
+   "t": 1358.5,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "rn3r2/pbp1ppkp/1p2qnp1/4N3/3P4/2N5/PPPQ1PPP/2KR1B1R b - - 1 11",
+   "said": "restrict our play to the uh King side we can also play in the center we can play against Black's Queen and that's precisely what I'm going to embark on now um I'm going to use the center of the board and try to maximize my minor piece activity Knight E5 to start preparing to uh deploy the bishop to C4"
+  },
+  {
+   "ply": 22,
+   "t": 1370.5,
+   "line": [
+    "Na6"
+   ],
+   "fen": "r4r2/pbp1ppkp/np2qnp1/4N3/3P4/2N5/PPPQ1PPP/2KR1B1R w - - 2 12",
+   "said": "and while I'm keeping an eye on Black's king that's not the only theater of action here Knight A6 no reason not to"
+  },
+  {
+   "ply": 23,
+   "t": 1372,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r4r2/pbp1ppkp/np2qnp1/4N3/2BP4/2N5/PPPQ1PPP/2KR3R b - - 3 12",
+   "said": "complete our development and at this point the queen doesn't have a lot of"
+  },
+  {
+   "ply": 24,
+   "t": 1383.5,
+   "line": [
+    "Qd6"
+   ],
+   "fen": "r4r2/pbp1ppkp/np1q1np1/4N3/2BP4/2N5/PPPQ1PPP/2KR3R w - - 4 13",
+   "said": "options I'm anticipating Queen D6 that's probably the only reasonable move here for black and yeah and here again there's going to be a million ways that we could play this position but sometimes a well-placed slow move can really be worth a thousand words and that's exactly the kind of move I'm about to make I'm looking at this Knight"
+  },
+  {
+   "ply": 25,
+   "t": 1409,
+   "line": [
+    "f3"
+   ],
+   "fen": "r4r2/pbp1ppkp/np1q1np1/4N3/2BP4/2N2P2/PPPQ2PP/2KR3R b - - 0 13",
+   "said": "and I'm saying okay where is it going well it's going to B4 but is it actually going to B4 because if black plays the move Knight B4 I'm noticing that it walks into the X-ray and allows B5 so the move I'm going to play is F3 I faked you guys out a lot of you were sure it was A3 F3 blunts the bishop and it's just a really nice move because it also blunts the Knight and now we're basically ready to run our H Pawn up the board and give Checkmate which is going to be our next step I'm kind of anticipating that our opponent gets panicky and plays Knight"
+  },
+  {
+   "ply": 26,
+   "t": 1441.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "r4r2/pb2ppkp/nppq1np1/4N3/2BP4/2N2P2/PPPQ2PP/2KR3R w - - 0 14",
+   "said": "B4 some other things that I'm keeping track of Knight B5 could end up trapping the queen under certain circumstances so particularly if we do end up playing A3 but okay forget about that C6 doesn't"
+  },
+  {
+   "ply": 27,
+   "t": 1444,
+   "line": [
+    "h4"
+   ],
+   "fen": "r4r2/pb2ppkp/nppq1np1/4N3/2BP3P/2N2P2/PPPQ2P1/2KR3R b - - 0 14",
+   "said": "change anything let's go H and there"
+  },
+  {
+   "ply": 28,
+   "t": 1446,
+   "line": [
+    "b5"
+   ],
+   "fen": "r4r2/pb2ppkp/n1pq1np1/1p2N3/2BP3P/2N2P2/PPPQ2P1/2KR3R w - - 0 15",
+   "said": "comes a point in every attack where you're basically pressing the gas pedal"
+  },
+  {
+   "ply": 29,
+   "t": 1454,
+   "line": [
+    "h5"
+   ],
+   "fen": "r4r2/pb2ppkp/n1pq1np1/1p2N2P/2BP4/2N2P2/PPPQ2P1/2KR3R b - - 0 15",
+   "said": "down and that moment has arrived and what that really means is there comes a"
+  },
+  {
+   "ply": 30,
+   "t": 1460,
+   "line": [
+    "Nxh5"
+   ],
+   "fen": "r4r2/pb2ppkp/n1pq2p1/1p2N2n/2BP4/2N2P2/PPPQ2P1/2KR3R w - - 0 16",
+   "said": "point in the attack when it's so overwhelming that you basically just start sacking pieces without even really calculating so here you might think that"
+  },
+  {
+   "ply": 31,
+   "t": 1469,
+   "line": [
+    "g4"
+   ],
+   "fen": "r4r2/pb2ppkp/n1pq2p1/1p2N2n/2BP2P1/2N2P2/PPPQ4/2KR3R b - - 0 16",
+   "said": "that translates to Rook takes H5 but that's not most accurate move I think G4 is much more straightforward our ultimate goal here is to get the queen to H6 that will trigger very quick Checkmate um to do that we we need the"
+  },
+  {
+   "ply": 32,
+   "t": 1487.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r4r2/pb2ppkp/n1pq1np1/1p2N3/2BP2P1/2N2P2/PPPQ4/2KR3R w - - 1 17",
+   "said": "services of our Rook so sacking it on H5 is a little bit unwise and well what if okay and queen H6 our opponent makes it very easy for"
+  },
+  {
+   "ply": 33,
+   "t": 1488.5,
+   "line": [
+    "Qh6+"
+   ],
+   "fen": "r4r2/pb2ppkp/n1pq1npQ/1p2N3/2BP2P1/2N2P2/PPP5/2KR3R b - - 2 17",
+   "said": "us and now the final step but a very"
+  },
+  {
+   "ply": 34,
+   "t": 1495,
+   "line": [
+    "Kg8"
+   ],
+   "fen": "r4rk1/pb2pp1p/n1pq1npQ/1p2N3/2BP2P1/2N2P2/PPP5/2KR3R w - - 3 18",
+   "said": "important step we need to deflect this Knight and there is a lot of Tactical material in chess literature that centers on this particular type of deflection a lot of typical tactical"
+  },
+  {
+   "ply": 35,
+   "t": 1514.5,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r4rk1/pb2pp1p/n1pq1npQ/1p2N3/2BPN1P1/5P2/PPP5/2KR3R b - - 4 18",
+   "said": "ideas the most common way of doing it is with another Knight there are many winning moves like G5 but the most clinical way of doing it is with another Knight in this case Knight E4 this also has the benefit of hitting the queen"
+  },
+  {
+   "ply": 34,
+   "t": 1521.5,
+   "line": [],
+   "fen": "r4rk1/pb2pp1p/n1pq1npQ/1p2N3/2BP2P1/2N2P2/PPP5/2KR3R w - - 3 18",
+   "said": "among other things yes there are other winning moves there's Knight takes G6 there is G5 although that's less clean"
+  },
+  {
+   "ply": 35,
+   "t": 1528,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r4rk1/pb2pp1p/n1pq1npQ/1p2N3/2BPN1P1/5P2/PPP5/2KR3R b - - 4 18",
+   "said": "because of Knight H5 people mess up in this situation all the time I will show you a couple of thematic games uh to enhance your understanding of this afterward I'll show you why it's more clinical this is the fastest path to Checkmate it's basically either Force M or black loses all their pieces car corch is going to be the first first game I show in the dragon because that's"
+  },
+  {
+   "ply": 36,
+   "t": 1558,
+   "line": [
+    "Rfd8"
+   ],
+   "fen": "r2r2k1/pb2pp1p/n1pq1npQ/1p2N3/2BPN1P1/5P2/PPP5/2KR3R w - - 5 19",
+   "said": "the the best illustration I think and most people haven't heard of it they've heard of carpov they heard of coroy but they're like which carpov coroi game are you going to show me okay goes oops oh"
+  },
+  {
+   "ply": 37,
+   "t": 1559,
+   "line": [
+    "Qf4"
+   ],
+   "fen": "r2r2k1/pb2pp1p/n1pq1np1/1p2N3/2BPNQP1/5P2/PPP5/2KR3R b - - 6 19",
+   "said": "my gosh my mouse slipped but it doesn't change anything I'm still totally"
+  },
+  {
+   "ply": 36,
+   "t": 1564.5,
+   "line": [],
+   "fen": "r2r2k1/pb2pp1p/n1pq1npQ/1p2N3/2BPN1P1/5P2/PPP5/2KR3R w - - 5 19",
+   "said": "winning um I had made in two moves of course Bishop F7 and uh Knight G6 but"
+  },
+  {
+   "ply": 39,
+   "t": 1570.5,
+   "line": [
+    "Qf4",
+    "bxc4",
+    "Nxd6"
+   ],
+   "fen": "r2r2k1/pb2pp1p/n1pN1np1/4N3/2pP1QP1/5P2/PPP5/2KR3R b - - 0 20",
+   "said": "somehow it okay now I'm going to have to focus for a second at 15 seconds but not"
+  },
+  {
+   "ply": 41,
+   "t": 1574.5,
+   "line": [
+    "Rxd6",
+    "g5"
+   ],
+   "fen": "r5k1/pb2pp1p/n1pr1np1/4N1P1/2pP1Q2/5P2/PPP5/2KR3R b - - 0 21",
+   "said": "to worry we're still so winning that I'm going have made in a couple moves no worries at all luckily the mouse slip"
+  },
+  {
+   "ply": 43,
+   "t": 1582.5,
+   "line": [
+    "Nb4",
+    "gxf6"
+   ],
+   "fen": "r5k1/pb2pp1p/2pr1Pp1/4N3/1npP1Q2/5P2/PPP5/2KR3R b - - 0 22",
+   "said": "was very innocuous one we're just going to take all Black's pieces and come back to H6 one nice um"
+  },
+  {
+   "ply": 45,
+   "t": 1585,
+   "line": [
+    "Rxf6",
+    "Qh6"
+   ],
+   "fen": "r5k1/pb2pp1p/2p2rpQ/4N3/1npP4/5P2/PPP5/2KR3R b - - 1 23",
+   "said": ""
+  },
+  {
+   "ply": 46,
+   "t": 1587,
+   "line": [
+    "Nxa2+"
+   ],
+   "fen": "r5k1/pb2pp1p/2p2rpQ/4N3/2pP4/5P2/nPP5/2KR3R w - - 0 24",
+   "said": "touch okay I don't care whatever go go"
+  },
+  {
+   "ply": 47,
+   "t": 1588,
+   "line": [
+    "Kb1"
+   ],
+   "fen": "r5k1/pb2pp1p/2p2rpQ/4N3/2pP4/5P2/nPP5/1K1R3R b - - 1 24",
+   "said": "away one nice little touch okay our"
+  },
+  {
+   "ply": 48,
+   "t": 1592,
+   "line": [
+    "Nc3+"
+   ],
+   "fen": "r5k1/pb2pp1p/2p2rpQ/4N3/2pP4/2n2P2/1PP5/1K1R3R w - - 2 25",
+   "said": ""
+  },
+  {
+   "ply": 49,
+   "t": 1593,
+   "line": [
+    "bxc3"
+   ],
+   "fen": "r5k1/pb2pp1p/2p2rpQ/4N3/2pP4/2P2P2/2P5/1K1R3R b - - 0 25",
+   "said": "opponent is trying to trying to flag but a noble attempt if black plays E6 okay"
+  },
+  {
+   "ply": 50,
+   "t": 1605.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "r5k1/pb3p1p/2p1prpQ/4N3/2pP4/2P2P2/2P5/1K1R3R w - - 0 26",
+   "said": "ask yourself what is the fastest Checkmate in that position okay because a lot of you um automatically take the"
+  },
+  {
+   "ply": 51,
+   "t": 1610.5,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r5k1/pb1N1p1p/2p1prpQ/8/2pP4/2P2P2/2P5/1K1R3R b - - 1 26",
+   "said": "pawn and allow the king for it your instinct should be to seal off the Escape Route that should actually be your instinct not sending the king towards the center because that can be very inefficient now we can pre-move Queen H7 mate so it's nice to give give"
+  },
+  {
+   "ply": 53,
+   "t": 1634.5,
+   "line": [
+    "Bc8",
+    "Qxh7#"
+   ],
+   "fen": "r1b3k1/p2N1p1Q/2p1prp1/8/2pP4/2P2P2/2P5/1K1R3R b - - 0 27",
+   "said": "a check but it's not always the best path forward if that makes sense okay so yeah disaster averted okay so let me"
+  },
+  {
+   "ply": 45,
+   "t": 1638,
+   "line": [],
+   "fen": "r5k1/pb2pp1p/2p2rpQ/4N3/1npP4/5P2/PPP5/2KR3R b - - 1 23",
+   "said": "start from the end here and and show you the kpov corcho game this is one of their earlier games carpov was like 21 Coro is a little older but this is their candidates match this came from a dragon Sicilian as you can probably guess and in this position it's white to play so what's going on here you can see the similarities it's the same type of construction you have this situation where if you can deflect the Knight it's basically Checkmate and it's actually much harder than it seems to find a clean way of deflecting this Knight so what are the various attempts you well the first move that a lot of you might see is well let's go Knight but often you can't just like tunnel vision a move like this you have to understand the Contex and Knight D5 here is probably bad because well first of all you can play Rook takes D5 but Rook takes C2 is the scary move and I'm just trying to remember what the problem is after King B1 the problem is also that white isn't threatening anything here or isn't threatening any any Force Checkmate let's check stockfish yeah Queen B5 and this is a draw actually because this is the important thing for people to understand first of all this is not forced mate and you just have a very messy position but Knight F6 is also not mate and here white loses because here the king escapes to E7 so sometimes uh it's not clean mate even if you deflect the Knight if the E Pawn shifts away because then it opens up this Escape Route so this is what carpov is trying to avoid um another typical uh theme another typical way to deflect the Knight is to play E5 you'll see this very very often and usually the point of this move is to open up a secondary Square for the Knight like Knight E4 this suffers from the same problem as Knight D5 it doesn't really threaten anything and black can also just eliminate the Knight with a rook and then launch his own attack and the Knight remains undeflected okay so we're at a dead end we tried the two direct attempts we need to finesse this a little bit we need to finesse this a little bit carpov finds a brilliant solution to this problem pause the video see if you can figure I mean this is legitimately I would say Master Level exercise so what comes to mind does anybody know what he played so he play starts with a move that might be on your radar he starts with a move that might be on your radar yeah G5 he starts with G5 B4 was suggested black just takes that doesn't do anything Knight F4 is too slow yeah Rook D6 all of that is Hope CH G5 so black has to take with a rook because if you move the Knight to H5 and this is always something that you have to be careful about I'm going to double check with the engine but I'm pretty sure that karpov goes Knight F4 yeah Knight F4 deflecting the Knight white threatens just to to take on H5 so black has to go Rook takes G5 and now Rook D5 is crushing brilliant move forcing The Rook trade and there's way too many threats here there's like this threat this threat black has no attack it's over so coroi is forced to play Rook takes G5 and now the critical move so you might say at first oh now you play Knight D5 that's also wrong because black and sacrificed The Exchange again the Knight remains intact what is the move here it is Rook D5 and this is the only winning sequence can't take with a knight because you get M that was the whole point if you take with a rook white plays Knight takes D5 and how does this differ from playing Knight D5 immediately now here black has this capture on C2 and you just got an incredibly messy position what karpov does is he eliminates the counterplay along the C file now his King is safe and the attack uh storms through coroi plays Rook E8 the game is not over and now a second instructive moment do not go here again this isn't mate this is a complete dead end and white isn't even better karpov plays a typical carop move Knight E F4 bringing the other Knight into the game and after Bishop C6 he plays the final brilliant move of the combination E5 so directly attacking the Knight black obviously should take on E5 what is the point of his move so a final question to people what on Earth is the point of E5 this is a brilliant final point of the combination legendary com this is not talked about enough this is an incredible sequence of moves honestly I'll give you a second to think yeah not Knight takes E7 not Knight takes C7 that doesn't do anything just Rook takes C7 the idea is well at least the cleanest mate is Knight F6 C F6 Knight H5 and suddenly and what I love about this combination the mate actually happens on the G file not the H file so you do all of this to mate on the H file and then suddenly you shift gears and deflect the pawn to mate on the G file maybe there are other ways to win you can look that up corcho takes the other Knight or takes the Knight karpov takes ef6 ef6 Queen H7 king f8 and the second idea of the move E5 is that the E file is now open now you win with queen h8 and cooi resigned because after King E7 you go Rook e no just kidding you don't you first take the bishop deflecting the queen and the final move is Rook E1 pinning The Rook to the king and forcing black to give up either the queen or The Rook so that's a little introduction to H file tactics for you yeah so G5 Rook D5 and then arguably the toughest part is actually this slow move involving the other Knight and then finding E5 is pretty incredible why couldn't he do this immediately you might ask well there's two reasons first of all black can give up the queen and this is not just desperation black has plenty of material for the queen there's a rook and a bishop and a pawn this is a draw so the point is to close off the fifth rank so that the queen doesn't have access to the H5 Square also a check to G5 um now it's pretty uncommon for this type of situation to occur where you have to you know find all this trickery in order to made on the H much more often you get a situation like this let me just find see if I can find a very simple example of what typically happens typically you don't have to deal with all this all this nonsense and you have a much cleaner cleaner type of attack shur versus leovic all right here's a nice here's a nice nice simpler example still nice but a little simpler also a dragon because in the dragon black F and ketos so you often get this type of scenario okay so this position what would you do here with with white now again a lot of you make the mistake of thinking G5 wins on the spot it does not because you allow the Knight to slide into H5 and you can't just crash through with Brute Force you're just not you're going to run out of pieces you need to deflect the knight from F6 so the goal is the same so at first you might say ah well I already know the trick it's E5 but E5 works if black plays D takes E5 this works perfectly but black will play Queen takes C5 and if you now play Knight E4 black will respond with a very coldblooded for example rook fc8 and again you reach the same problem where the king escapes through the center so often in in real games you need to finesse the stem idea a little bit which basically me often times starting with kind of a different first move to set up the idea so what why does E5 fail it fails because there's a queen on A5 so either we need to kick the queen away or we need to block it um F4 is too slow F4 is too slow yeah B4 is the clinical win B4 um some of you are saying 95 the problem is you're like you run out of pieces you need that Knight to put it on e4 so the move is B4 and now it works perfectly because the queen cannot stay on the Stag Queen E5 F4 traps the queen um this simply literally the queen is trapped um so the queen has to drop back Queen A1 check doesn't actually change anything um here yeah King D2 for example or even Knight B1 so leage dropped back to d8 and now it works perfectly E5 and Knight E4 Rook E8 and now one last finesse now it's time for G5 now it's time for G5 because Knight H5 runs into Rook H5 and Knight F6 and if you play Knight takes E4 simply F takes E4 Ed simply Rook takes D4 and black resigns because black is checkmated for instance let's say he moves the queen takes check check and mate so one of the takeaways here is that you rarely get like the absolute cleanest version of a tactic that you might see in a book and part of the fun is applying it to a specific position and understanding okay how is this different from you know the the kind of the rudimentary example uh that I saw this is one of my pet peeves with teaching in general it's like uh usually there's going to be like when a concept is taught it's not going to the application in real life is not going to be as clean as uh as when it's taught so one last example U one last example this has a slightly different twist this is a slightly different twist and then we will move on here we go um not a famous game but again a dragon type position at this point you kind of already know the drill here the point is to decide between playing Knight C5 immediately and playing uh the sequence that I've been kind of centering the lecture on which is E5 and Knight E4 um here and I'm going to spare you the hard work work if you start with knight5 black plays actually it might be possible also so maybe this is not a great example let me check with the engine just a moment I'm going to see yeah Knight D5 is winning yeah but okay so both moves are winning in this case um what I wanted to illustrate is that in the game black gives the check white moves the king away ah so actually this gets interesting apparently King F1 is a really bad move Rook d8 so here's how the game concluded here's how the game concluded black moved the Rook away white pushes G5 and black plays the move Knight H5 which loses the game to a very very pretty tactical sequence which is the reason I was showing this game in the first place white to play and win see if you can spot it see if you can spot it Rook H5 G H5 and Knight F6 boom Unstoppable mate L's mate on G7 but apparently black is winning in this position with the move Queen to A6 setting up the Discover check against the king so you might say well okay that what's the problem the king moves away now black takes the Knight and amazingly White's attack runs out of steam GF EF and you have no followup because again the king escapes so ridiculously enough the mistake that white made is to play King F1 and the cleanest winning move here is a brilliant move what is the best way to continue here I'm actually really happy we're looking at this white to play and win so the point is can you prevent The Rook from moving off of f oh the engine showed it so you see it it's B4 playing with Tempo Queen takes B4 C3 and it's just a double attack you're threatening Knight F6 and you're attacking the queen and black is out of checks so either black has to move the rook and lose a full queen or make another move and get checkmated yeah with with Knight F6 so boom boom why can't I make the move I don't know it's glitching a little bit oh there we go yeah Rook C3 Knight F6 e F6 Queen H7 yeah so here is your daily"
+  },
+  {
+   "ply": 43,
+   "t": 2385,
+   "line": [],
+   "fen": "r5k1/pb2pp1p/2pr1Pp1/4N3/1npP1Q2/5P2/PPP5/2KR3R b - - 0 22",
+   "said": "tactical lecture hope that wasn't too long-winded um but I like to give some context you know when we come across a a a theme that I think isn't really talked"
+  },
+  {
+   "ply": 37,
+   "t": 2386.5,
+   "line": [],
+   "fen": "r2r2k1/pb2pp1p/n1pq1np1/1p2N3/2BPNQP1/5P2/PPP5/2KR3R b - - 6 19",
+   "said": "about enough I like to give some real"
+  },
+  {
+   "ply": 41,
+   "t": 2389,
+   "line": [
+    "Re8",
+    "Nc3",
+    "Rf8",
+    "Qh6"
+   ],
+   "fen": "r4rk1/pb2pp1p/n1pq1npQ/1p2N3/2BP2P1/2N2P2/PPP5/2KR3R b - - 10 21",
+   "said": "life examples especially because I think when you do this in like puzzle rush you get like the easy version of it and I like to show that it's not always as"
+  },
+  {
+   "ply": 35,
+   "t": 2402.5,
+   "line": [],
+   "fen": "r4rk1/pb2pp1p/n1pq1npQ/1p2N3/2BPN1P1/5P2/PPP5/2KR3R b - - 4 18",
+   "said": "simple as for for instance the instance that uh we had in my game so in my game it was very simple you just go Knight E4 boom that's it because the queen is hanging and there's a bishop in the"
+  },
+  {
+   "ply": 7,
+   "t": 2407,
+   "line": [],
+   "fen": "rnb1kbnr/ppp1pp1p/6p1/3q4/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 4",
+   "said": "attack so as for the game there isn't much to discuss um the one thing to pay"
+  },
+  {
+   "ply": 9,
+   "t": 2412.5,
+   "line": [
+    "Qe6+",
+    "Be3"
+   ],
+   "fen": "rnb1kbnr/ppp1pp1p/4q1p1/8/3P4/2N1B3/PPP2PPP/R2QKBNR b KQkq - 3 5",
+   "said": "attention to is how I played Bishop B3"
+  },
+  {
+   "ply": 11,
+   "t": 2415.5,
+   "line": [
+    "Bg7",
+    "Qd2"
+   ],
+   "fen": "rnb1k1nr/ppp1ppbp/4q1p1/8/3P4/2N1B3/PPPQ1PPP/R3KBNR b KQkq - 5 6",
+   "said": "setting up the quick Castle Queen side"
+  },
+  {
+   "ply": 13,
+   "t": 2416.5,
+   "line": [
+    "Nf6",
+    "O-O-O"
+   ],
+   "fen": "rnb1k2r/ppp1ppbp/4qnp1/8/3P4/2N1B3/PPPQ1PPP/2KR1BNR b kq - 7 7",
+   "said": ""
+  },
+  {
+   "ply": 15,
+   "t": 2418.5,
+   "line": [
+    "O-O",
+    "Nf3"
+   ],
+   "fen": "rnb2rk1/ppp1ppbp/4qnp1/8/3P4/2N1BN2/PPPQ1PPP/2KR1B1R b - - 9 8",
+   "said": "and then the second big theme is that I"
+  },
+  {
+   "ply": 16,
+   "t": 2420,
+   "line": [
+    "b6"
+   ],
+   "fen": "rnb2rk1/p1p1ppbp/1p2qnp1/8/3P4/2N1BN2/PPPQ1PPP/2KR1B1R w - - 0 9",
+   "said": ""
+  },
+  {
+   "ply": 17,
+   "t": 2422,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "rnb2rk1/p1p1ppbp/1p2qnpB/8/3P4/2N2N2/PPPQ1PPP/2KR1B1R b - - 1 9",
+   "said": "basically combined play on the king side with play in the center so some of you"
+  },
+  {
+   "ply": 20,
+   "t": 2427,
+   "line": [
+    "Bxh6",
+    "Qxh6",
+    "Ng4"
+   ],
+   "fen": "rnb2rk1/p1p1pp1p/1p2q1pQ/8/3P2n1/2N2N2/PPP2PPP/2KR1B1R w - - 1 11",
+   "said": "were worried about this this is rarely a problem you can drop back to D2 but the"
+  },
+  {
+   "ply": 21,
+   "t": 2431,
+   "line": [
+    "Qh4"
+   ],
+   "fen": "rnb2rk1/p1p1pp1p/1p2q1p1/8/3P2nQ/2N2N2/PPP2PPP/2KR1B1R b - - 2 11",
+   "said": "better move is Queen H4 and you're threatening to win the game with Knight"
+  },
+  {
+   "ply": 25,
+   "t": 2436.5,
+   "line": [
+    "Nh6",
+    "Qg5",
+    "Ng4",
+    "Qh6"
+   ],
+   "fen": "rnb2rk1/p1p1pp1p/1p2q1pQ/8/3P2n1/2N2N2/PPP2PPP/2KR1B1R b - - 6 13",
+   "said": "G5 so this theme is usually not actually"
+  },
+  {
+   "ply": 16,
+   "t": 2442.5,
+   "line": [],
+   "fen": "rnb2rk1/p1p1ppbp/1p2qnp1/8/3P4/2N1BN2/PPPQ1PPP/2KR1B1R w - - 0 9",
+   "said": "going to result in the loss of material um so we took on"
+  },
+  {
+   "ply": 20,
+   "t": 2445,
+   "line": [
+    "Bh6",
+    "Bb7",
+    "Bxg7",
+    "Kxg7"
+   ],
+   "fen": "rn3r2/pbp1ppkp/1p2qnp1/8/3P4/2N2N2/PPPQ1PPP/2KR1B1R w - - 0 11",
+   "said": "G7 and we stick the knight in the center"
+  },
+  {
+   "ply": 21,
+   "t": 2446.5,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "rn3r2/pbp1ppkp/1p2qnp1/4N3/3P4/2N5/PPPQ1PPP/2KR1B1R b - - 1 11",
+   "said": "Knight E5 um deploying the bishop and"
+  },
+  {
+   "ply": 23,
+   "t": 2450.5,
+   "line": [
+    "Na6",
+    "Bc4"
+   ],
+   "fen": "r4r2/pbp1ppkp/np2qnp1/4N3/2BP4/2N5/PPPQ1PPP/2KR3R b - - 3 12",
+   "said": ""
+  },
+  {
+   "ply": 24,
+   "t": 2451.5,
+   "line": [
+    "Qd6"
+   ],
+   "fen": "r4r2/pbp1ppkp/np1q1np1/4N3/2BP4/2N5/PPPQ1PPP/2KR3R w - - 4 13",
+   "said": ""
+  },
+  {
+   "ply": 25,
+   "t": 2452.5,
+   "line": [
+    "f3"
+   ],
+   "fen": "r4r2/pbp1ppkp/np1q1np1/4N3/2BP4/2N2P2/PPPQ2PP/2KR3R b - - 0 13",
+   "said": "one slow move can really um make the"
+  },
+  {
+   "ply": 26,
+   "t": 2457.5,
+   "line": [
+    "Nb4"
+   ],
+   "fen": "r4r2/pbp1ppkp/1p1q1np1/4N3/1nBP4/2N2P2/PPPQ2PP/2KR3R w - - 1 14",
+   "said": "position breathe notice that we weren't afraid of Knight B4 because of Knight B5"
+  },
+  {
+   "ply": 27,
+   "t": 2459,
+   "line": [
+    "Nb5"
+   ],
+   "fen": "r4r2/pbp1ppkp/1p1q1np1/1N2N3/1nBP4/5P2/PPPQ2PP/2KR3R b - - 2 14",
+   "said": "X-ray and we pick up the Knight C6 is"
+  },
+  {
+   "ply": 31,
+   "t": 2464,
+   "line": [
+    "c6",
+    "Nc3",
+    "Na6",
+    "h4"
+   ],
+   "fen": "r4r2/pb2ppkp/nppq1np1/4N3/2BP3P/2N2P2/PPPQ2P1/2KR3R b - - 0 16",
+   "said": "meaningless and now we crash through with H4 H5 would have been met with G4"
+  },
+  {
+   "ply": 33,
+   "t": 2467,
+   "line": [
+    "h5",
+    "g4"
+   ],
+   "fen": "r4r2/pb2ppk1/nppq1np1/4N2p/2BP2PP/2N2P2/PPPQ4/2KR3R b - - 0 17",
+   "said": ""
+  },
+  {
+   "ply": 34,
+   "t": 2468.5,
+   "line": [
+    "hxg4"
+   ],
+   "fen": "r4r2/pb2ppk1/nppq1np1/4N3/2BP2pP/2N2P2/PPPQ4/2KR3R w - - 0 18",
+   "said": "this is like the very typical attacking"
+  },
+  {
+   "ply": 35,
+   "t": 2469.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "r4r2/pb2ppk1/nppq1np1/4N2P/2BP2p1/2N2P2/PPPQ4/2KR3R b - - 0 18",
+   "said": "method where you throw away all of your Pawns in order to open all the files I'm"
+  },
+  {
+   "ply": 28,
+   "t": 2478.5,
+   "line": [],
+   "fen": "r4r2/pb2ppkp/1ppq1np1/1N2N3/1nBP4/5P2/PPPQ2PP/2KR3R w - - 0 15",
+   "said": "sure we'll get more chances to do this kind of thing in the future so I won't delve too deep and now H5 giving up the bishop but opening up the H file and at this point you should know what the move would have been here here the move would have still been Knight E4 but after Queen D7 okay Queen D7 gives up the queen but Queen to C7 last question for people how would you proceed here with white what do you believe is the most clinical way of finishing the attack one more wrinkle to add to your understanding of this of this Nuance do not take the Knight because the queen laterally protects H7 I would not even play this because of Rook F7 and suddenly once The Rook gets involved it gets a little bit messy I would play the slower move that justs an attacker and overwhelms Black's defenses on the king side yeah my inclination would be to go Knight to G5 first Knight to G5 yeah and it occurred to me that black can actually maybe go E6 but this should not this should not save the game I mean I want to get another game in so I won't explore this too deeply but even a slow approach like doubling Rooks on the H5 should do the trick because it's going to set you up for some other beautiful combinations like a queen sack with track like this um the point is you"
+  },
+  {
+   "ply": 32,
+   "t": 2567,
+   "line": [
+    "Nc3",
+    "b5",
+    "h4",
+    "Na6"
+   ],
+   "fen": "r4r2/pb2ppkp/n1pq1np1/1p2N3/2BP3P/2N2P2/PPPQ2P1/2KR3R w - - 1 17",
+   "said": "don't always need to attack by sacrificing especially when your opponent is not creating any counter threats against your king um in the game we didn't need to face any of this our opponent did everything for us um obviously I M slipped here but this should have been the way that the game ended okay one more game there's a lot more that we could talk about here but again we're early in the speedrun there's no reason that we need to try to do everything in one game let's get one more in and we're facing kind of a typical uh scenario where people um don't really I mean C3 is the only legitimate move here the Smith MOA our response there would be Knight F6 declining the gimit this is just like a bad version of the center game and I think we've already faced it um so I'm not going to reex explain our opening strategy we develop our Knights first and foremost and here I'm pretty sure we reached this position in a previous speedrun game and I play the move E6 which I think is the most effective way to punish White's opening choice so the point of E6 is twofold of course we're opening up the bishop the ideal score would have been B4 but we're also"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 17,
+   "fen": "rnb2rk1/p1p1ppbp/1p2qnpB/8/3P4/2N2N2/PPPQ1PPP/2KR1B1R b - - 1 9",
+   "line": [
+    "e4",
+    "g6",
+    "d4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qe6+",
+    "Be3",
+    "Bg7",
+    "Qd2",
+    "Nf6",
+    "O-O-O",
+    "O-O",
+    "Nf3",
+    "b6",
+    "Bh6"
+   ],
+   "options": [
+    {
+     "san": "Bb7",
+     "t": 1316,
+     "continuation": "Bb7",
+     "said": "uh meets with H5 often and then you're at a standstill so I don't like starting with H4 let's go Bishop H6 kind of as we planned um and here another important moment I don't have time to focus on all the subtleties here we're running short of time but the bottom line is you don't automatically have to take on G7 in these situations in this position I will take on G7 but something to to remember if you're a newer player is that you can keep this tension and drive the pawn up to H5 and that can be much more effective because it keeps the black H Pawn prisoner now we've traded Bishops which guarantees the black will have problems with their king for a very long time but that doesn't mean we have to restrict our play to the uh King side we can also play in the center we can play against Black's Queen and that's precisely what I'm going to embark on now um I'm going to use the center of the board and try to maximize my minor piece activity Knight E5 to start preparing to uh deploy the bishop to C4 and while I'm keeping an eye on Black's king that's not the only theater of action here Knight A6 no reason not to complete our development and at this point the queen doesn't have a lot of"
+    },
+    {
+     "san": "Bxh6",
+     "t": 2427,
+     "continuation": "Bxh6 Qxh6 Ng4",
+     "said": "setting up the quick Castle Queen side and then the second big theme is that I basically combined play on the king side with play in the center so some of you were worried about this this is rarely a problem you can drop back to D2 but the better move is Queen H4 and you're threatening to win the game with Knight G5 so this theme is usually not actually going to result in the loss of material um so we took on G7 and we stick the knight in the center Knight E5 um deploying the bishop and one slow move can really um make the position breathe notice that we weren't afraid of Knight B4 because of Knight B5 X-ray and we pick up the Knight C6 is meaningless and now we crash through with H4 H5 would have been met with G4 this is like the very typical attacking method where you throw away all of your Pawns in order to open all the files I'm sure we'll get more chances to do this kind of thing in the future so I won't delve too deep and now H5 giving up the bishop but opening up the H file and at this point you should know what the move would have been here here the move would"
+    }
+   ]
+  },
+  {
+   "ply": 25,
+   "fen": "r4r2/pbp1ppkp/np1q1np1/4N3/2BP4/2N2P2/PPPQ2PP/2KR3R b - - 0 13",
+   "line": [
+    "e4",
+    "g6",
+    "d4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qe6+",
+    "Be3",
+    "Bg7",
+    "Qd2",
+    "Nf6",
+    "O-O-O",
+    "O-O",
+    "Nf3",
+    "b6",
+    "Bh6",
+    "Bb7",
+    "Bxg7",
+    "Kxg7",
+    "Ne5",
+    "Na6",
+    "Bc4",
+    "Qd6",
+    "f3"
+   ],
+   "options": [
+    {
+     "san": "c6",
+     "t": 1441.5,
+     "continuation": "c6",
+     "said": "B4 some other things that I'm keeping track of Knight B5 could end up trapping the queen under certain circumstances so particularly if we do end up playing A3 but okay forget about that C6 doesn't change anything let's go H and there comes a point in every attack where you're basically pressing the gas pedal down and that moment has arrived and what that really means is there comes a point in the attack when it's so overwhelming that you basically just start sacking pieces without even really calculating so here you might think that that translates to Rook takes H5 but that's not most accurate move I think G4 is much more straightforward our ultimate goal here is to get the queen to H6 that will trigger very quick Checkmate um to do that we we need the services of our Rook so sacking it on H5 is a little bit unwise and well what if okay and queen H6 our opponent makes it very easy for us and now the final step but a very important step we need to deflect this Knight and there is a lot of Tactical material in chess literature that centers on this particular type of"
+    },
+    {
+     "san": "Nb4",
+     "t": 2457.5,
+     "continuation": "Nb4",
+     "said": "Knight E5 um deploying the bishop and one slow move can really um make the position breathe notice that we weren't afraid of Knight B4 because of Knight B5 X-ray and we pick up the Knight C6 is meaningless and now we crash through with H4 H5 would have been met with G4 this is like the very typical attacking method where you throw away all of your Pawns in order to open all the files I'm sure we'll get more chances to do this kind of thing in the future so I won't delve too deep and now H5 giving up the bishop but opening up the H file and at this point you should know what the move would have been here here the move would have still been Knight E4 but after Queen D7 okay Queen D7 gives up the queen but Queen to C7 last question for people how would you proceed here with white what do you believe is the most clinical way of finishing the attack one more wrinkle to add to your understanding of this of this Nuance do not take the Knight because the queen laterally protects H7 I would not even play this because of Rook F7 and suddenly once The Rook gets involved it"
+    }
+   ]
+  },
+  {
+   "ply": 27,
+   "fen": "r4r2/pb2ppkp/nppq1np1/4N3/2BP3P/2N2P2/PPPQ2P1/2KR3R b - - 0 14",
+   "line": [
+    "e4",
+    "g6",
+    "d4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Qe6+",
+    "Be3",
+    "Bg7",
+    "Qd2",
+    "Nf6",
+    "O-O-O",
+    "O-O",
+    "Nf3",
+    "b6",
+    "Bh6",
+    "Bb7",
+    "Bxg7",
+    "Kxg7",
+    "Ne5",
+    "Na6",
+    "Bc4",
+    "Qd6",
+    "f3",
+    "c6",
+    "h4"
+   ],
+   "options": [
+    {
+     "san": "b5",
+     "t": 1446,
+     "continuation": "b5",
+     "said": "the queen under certain circumstances so particularly if we do end up playing A3 but okay forget about that C6 doesn't change anything let's go H and there comes a point in every attack where you're basically pressing the gas pedal down and that moment has arrived and what that really means is there comes a point in the attack when it's so overwhelming that you basically just start sacking pieces without even really calculating so here you might think that that translates to Rook takes H5 but that's not most accurate move I think G4 is much more straightforward our ultimate goal here is to get the queen to H6 that will trigger very quick Checkmate um to do that we we need the services of our Rook so sacking it on H5 is a little bit unwise and well what if okay and queen H6 our opponent makes it very easy for us and now the final step but a very important step we need to deflect this Knight and there is a lot of Tactical material in chess literature that centers on this particular type of deflection a lot of typical tactical ideas the most common way of doing it is"
+    },
+    {
+     "san": "h5",
+     "t": 2467,
+     "continuation": "h5 g4",
+     "said": "position breathe notice that we weren't afraid of Knight B4 because of Knight B5 X-ray and we pick up the Knight C6 is meaningless and now we crash through with H4 H5 would have been met with G4 this is like the very typical attacking method where you throw away all of your Pawns in order to open all the files I'm sure we'll get more chances to do this kind of thing in the future so I won't delve too deep and now H5 giving up the bishop but opening up the H file and at this point you should know what the move would have been here here the move would have still been Knight E4 but after Queen D7 okay Queen D7 gives up the queen but Queen to C7 last question for people how would you proceed here with white what do you believe is the most clinical way of finishing the attack one more wrinkle to add to your understanding of this of this Nuance do not take the Knight because the queen laterally protects H7 I would not even play this because of Rook F7 and suddenly once The Rook gets involved it gets a little bit messy I would play the slower move that justs an attacker and overwhelms Black's defenses on the king side yeah my inclination would be to go"
+    }
+   ]
+  }
+ ]
+}

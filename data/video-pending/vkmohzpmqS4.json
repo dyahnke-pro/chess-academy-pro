@@ -1,0 +1,253 @@
+{
+ "videoId": "vkmohzpmqS4",
+ "title": "PogChamps 3 In Depth Training | MoistCr1TiKaL | Pt. 1",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 5068,
+  "settledPositions": null
+ },
+ "plies": 25,
+ "rewinds": 0,
+ "moves": [
+  {
+   "t": 108,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 110,
+   "ply": 4,
+   "line": [
+    "Nf3",
+    "g6"
+   ],
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3"
+  },
+  {
+   "t": 111,
+   "ply": 5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3"
+  },
+  {
+   "t": 112.5,
+   "ply": 6,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp1p1p1p/4p1p1/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4"
+  },
+  {
+   "t": 113.5,
+   "ply": 7,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/pp1p1p1p/4p1p1/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 1 4"
+  },
+  {
+   "t": 114.5,
+   "ply": 8,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1p1p1p/2n1p1p1/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 2 5"
+  },
+  {
+   "t": 115.5,
+   "ply": 9,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkbnr/pp1p1p1p/2n1p1p1/2p1P3/2B5/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 0 5"
+  },
+  {
+   "t": 118,
+   "ply": 10,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r1bqkbnr/pp1p1p1p/4p1p1/2p1P3/2Bn4/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 1 6"
+  },
+  {
+   "t": 120,
+   "ply": 11,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bqkbnr/pp1p1p1p/4p1p1/2p1P3/2Bn4/2NP1N2/PPP2PPP/R1BQK2R b KQkq - 0 6"
+  },
+  {
+   "t": 131.5,
+   "ply": 12,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/pp1p1pbp/4p1p1/2p1P3/2Bn4/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 1 7"
+  },
+  {
+   "t": 134,
+   "ply": 13,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk1nr/pp1p1pbp/4p1p1/2p1P3/2Bn4/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 2 7"
+  },
+  {
+   "t": 137,
+   "ply": 14,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "r1bqk2r/pp1pnpbp/4p1p1/2p1P3/2Bn4/2NP1N2/PPP2PPP/R1BQ1RK1 w kq - 3 8"
+  },
+  {
+   "t": 141.5,
+   "ply": 15,
+   "line": [
+    "Na4"
+   ],
+   "fen": "r1bqk2r/pp1pnpbp/4p1p1/2p1P3/N1Bn4/3P1N2/PPP2PPP/R1BQ1RK1 b kq - 4 8"
+  },
+  {
+   "t": 145,
+   "ply": 16,
+   "line": [
+    "b6"
+   ],
+   "fen": "r1bqk2r/p2pnpbp/1p2p1p1/2p1P3/N1Bn4/3P1N2/PPP2PPP/R1BQ1RK1 w kq - 0 9"
+  },
+  {
+   "t": 148.5,
+   "ply": 17,
+   "line": [
+    "c3"
+   ],
+   "fen": "r1bqk2r/p2pnpbp/1p2p1p1/2p1P3/N1Bn4/2PP1N2/PP3PPP/R1BQ1RK1 b kq - 0 9"
+  },
+  {
+   "t": 152,
+   "ply": 18,
+   "line": [
+    "Ndc6"
+   ],
+   "fen": "r1bqk2r/p2pnpbp/1pn1p1p1/2p1P3/N1B5/2PP1N2/PP3PPP/R1BQ1RK1 w kq - 1 10"
+  },
+  {
+   "t": 163.5,
+   "ply": 19,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqk2r/p2pnpbp/1pn1p1p1/2p1P3/N1BP4/2P2N2/PP3PPP/R1BQ1RK1 b kq - 0 10"
+  },
+  {
+   "t": 165.5,
+   "ply": 20,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bqk2r/3pnpbp/ppn1p1p1/2p1P3/N1BP4/2P2N2/PP3PPP/R1BQ1RK1 w kq - 0 11"
+  },
+  {
+   "t": 188.5,
+   "ply": 21,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r1bqk2r/3pnpbp/ppn1p1p1/2p1P3/N2P4/2P2N2/PP2BPPP/R1BQ1RK1 b kq - 1 11"
+  },
+  {
+   "t": 193.5,
+   "ply": 22,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1bqk2r/3pnpbp/p1n1p1p1/1pp1P3/N2P4/2P2N2/PP2BPPP/R1BQ1RK1 w kq - 0 12"
+  },
+  {
+   "t": 197,
+   "ply": 23,
+   "line": [
+    "Nxc5"
+   ],
+   "fen": "r1bqk2r/3pnpbp/p1n1p1p1/1pN1P3/3P4/2P2N2/PP2BPPP/R1BQ1RK1 b kq - 0 12"
+  },
+  {
+   "t": 200.5,
+   "ply": 24,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/3pnpbp/p1n1p1p1/1pN1P3/3P4/2P2N2/PP2BPPP/R1BQ1RK1 w - - 1 13"
+  },
+  {
+   "t": 206,
+   "ply": 25,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1bq1rk1/3pnpbp/p1n1p1p1/1pN1P1B1/3P4/2P2N2/PP2BPPP/R2Q1RK1 b - - 2 13"
+  },
+  {
+   "t": 210.5,
+   "ply": 26,
+   "line": [
+    "Nf5"
+   ],
+   "fen": "r1bq1rk1/3p1pbp/p1n1p1p1/1pN1PnB1/3P4/2P2N2/PP2BPPP/R2Q1RK1 w - - 3 14"
+  },
+  {
+   "t": 213.5,
+   "ply": 27,
+   "line": [
+    "Bxd8"
+   ],
+   "fen": "r1bB1rk1/3p1pbp/p1n1p1p1/1pN1Pn2/3P4/2P2N2/PP2BPPP/R2Q1RK1 b - - 0 14"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Hyperaccelerated Dragon",
+   "eco": "B27",
+   "plies": 4,
+   "line": "e4 c5 Nf3 g6",
+   "coverage": 0.96
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}

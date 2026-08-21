@@ -3071,6 +3071,130 @@ settled positions → 325, 49 plies → 153 once measured). Find the start frame
 SEARCHING; never assume t=0 (David: *"he starts most times with old games"*), and
 note that an old-game intro's positions belong to THAT game, not the lesson.
 
+**THERE ARE TWO BOARD LAYOUTS, AND ONE OF THEM WAS PARKING VIDEOS WHOLESALE
+(2026-08-21).** `harvest-local.sh` knew exactly one: board on the RIGHT beside
+the webcam (`370,-2,60` at 854 wide), which is what every banked track used. A
+second layout — board on the LEFT, camera and game header stacked on the right,
+wooden theme, the 2019-era uploads — reads NOTHING under those numbers, and 78
+videos had been parked in `needs-hand-geometry.txt` on that basis. Opened by eye,
+the first one sat at `3,3,44` on a 640-wide frame, which is `4,4,58.7` at 854.
+The sweep now tries the right-board numbers, then the left-board numbers, and
+only then parks. **Trying both risks nothing** — `scan_stream --calibrated`
+confirms geometry against the start position, so the wrong layout REFUSES rather
+than tracking a false line. That is the same property that makes a single
+hand-read safe, and it does not weaken by being tried twice.
+
+**A THIRD LAYOUT: THE CO-STREAM BOARD (2026-08-21).** Board on the right again
+but LARGER and pushed down under a player bar — the match/co-stream uploads
+("2-Hour Match with GM ...", event broadcasts). On a 640-wide frame it sits at
+`320,20,40`, which is `427,26.7,53.4` at 854, and it is now the third candidate.
+`cGGsU9WRObY` went from a refusal to **5,779 grids and a 40-ply track** on those
+numbers alone. The candidate list is three HAND-READ layouts and it must never
+become a detector — two of those have died here already. What makes trying them
+safe is unchanged: the start-position confirmation refuses the wrong one.
+
+**READ THE PIXELS, DON'T ESTIMATE THEM, WHEN THE EYE READ WON'T CONFIRM.** For
+that third layout the eye gave `329,8,38` and calibrate refused it six ways. A
+luminance-transition scan across one mid-board row and one file settled it in
+seconds — boundaries at 320/360/399/440/479/520/559/600 across, 20/60/100/…/340
+down, so `320,20,40` exactly. That is MEASUREMENT of a boundary you can already
+see, the same class of thing as measuring the colour classes, not a fit that
+guesses where a board might be. Do it inline when a read won't confirm; do not
+commit it as a script.
+
+**AND `calibrate.py` REFUSING IS OFTEN YOUR FRAME SAMPLE, NOT YOUR NUMBERS.** The
+measured `320,20,40` was still refused against 75 frames spanning fifty minutes,
+because a two-hour blitz match shows the start position for only a few seconds
+per game and a 40-second sampling grid walks straight past it. `scan_stream`
+samples at 2fps and found it immediately. When a hand read looks right and
+calibrate says no, tighten the sample before touching the numbers.
+
+🚨 **THE PARKED BUCKET IS MOSTLY A THEME PROBLEM, NOT A GEOMETRY PROBLEM
+(measured 2026-08-21).** `needs-hand-geometry.txt` is named for the diagnosis
+that put videos there, and for most of them that diagnosis is WRONG. Of 93
+parked, **49 are lessons or speedruns** — the entire 16-video "Principles of
+Chess Endgames" series, several Master Classes, the Sensei speedruns — so this
+is not a bucket of stream VODs that can be written off.
+
+The evidence, on `K8QMjqu0_MY` (Master Class | Caro-Kann, 854x480, board plainly
+at `372,0,60.25` by eye): calibrate refuses it across 40 frames spanning forty
+minutes, and `scan_stream` at 2fps refuses it too. The geometry is right. What
+is wrong is the BOARD THEME. Sampling the 64 squares of one frame:
+
+| | luminance |
+|---|---|
+| empty light square | 206-209 |
+| **white piece on a dark square** | **142-194** |
+| empty dark square | 119-127 |
+| black piece | 54-86 |
+
+A white piece on a LIGHT square is therefore indistinguishable from an empty
+light square, which is the inversion this file already warns `read_board`'s
+fixed ±25 margin causes. And it is fatal EARLIER than expected, because of an
+ordering problem: `calibrate_section` measures the colour classes FROM a start
+position, but it has to find that start position using the plain uncalibrated
+read — so on a wooden board the plain read cannot recognise the start position,
+calibration never happens, and the video is refused and filed as bad geometry.
+Chicken and egg.
+
+That also explains the near-misses: `D0AlZuN14Fw` calibrated and then tracked
+4 moves out of 2,812 grids, and `2pOxIYxPr3M` / `D8yxw4t4F3A` refused outright —
+all wooden, two of them at geometry that is provably correct.
+
+**The fix is to make start-position detection theme-robust** — occupancy from a
+threshold measured off the frame's own distribution rather than a fixed margin,
+which is MEASUREMENT of the kind this file already sanctions, not a fit that
+guesses. It is a change to a load-bearing reader whose two previous
+"improvements" died, so it wants a deliberate pass rather than a patch mid-sweep.
+
+**BUT GEOMETRY IS ONLY THE FIRST GATE, AND A REFUSAL AFTER IT MEANS SOMETHING
+ELSE.** Two of the recovered left-board videos still came up empty for different
+reasons, and both are worth recognising before re-reading pixels again:
+`D0AlZuN14Fw` CALIBRATED at `3,3,44` and produced 2,812 grids, yet tracked only
+4 moves — the grids were read, so that is a colour/theme problem, not a
+placement one. `D8yxw4t4F3A` refused outright at the same numbers because the
+video opens on an ENDGAME and rewinds; `calibrate` searches sampled frames for
+the START position and there was none in the sample. Neither is fixed by moving
+the grid. Read the scan log before assuming the numbers are wrong.
+
+**NEVER EDIT A SHELL SCRIPT THAT IS CURRENTLY RUNNING — `mv` A NEW FILE OVER IT
+INSTEAD.** Bash re-reads the file
+from a byte offset as it executes, so an edit under a live instance makes it
+resume mid-token: patching `harvest-local.sh` mid-sweep killed the running batch
+with `syntax error near unexpected token` at a line that is perfectly valid in
+the file (`bash -n` passed the whole time). The next batch spawned a fresh
+process from the good file and self-healed, so it cost one batch — but the error
+message points at the file, which is exactly the wrong place to look. Write the
+new version to a temp file and `mv` it into place: `mv` replaces the inode, and
+a running shell keeps reading the one it opened, so the swap is safe even
+mid-run and the next process picks up the new file.
+
+**A MISTRACKED VIDEO IS USUALLY TWO PIXELS OF GEOMETRY, NOT A LOST LESSON —
+RE-READ IT BEFORE WRITING IT OFF (2026-08-21).** `CXvo1dMF1Qs` was hand-verdicted
+mistracked and sat unusable for a day; it was the ONLY Benko and Benoni source in
+the whole bank, so two opening families had zero coverage because of one bad
+track. The default geometry for 854x480 is `370,-2,60`. The board on that upload
+is at `371,0,60.4`. That is it — `y0` off by two pixels, and the scanner read a
+grid one square out and tracked a different game entirely.
+
+The procedure, which takes about five minutes:
+1. Materialise the video again from the drop branch (`git cat-file blob`).
+2. Pull a frame with ffmpeg somewhere in the opening and LOOK at it. Read the
+   file letters and rank numbers off the image; that gives x0 and the square size
+   directly. Do not compute, do not detect — CLAUDE.md already says two detectors
+   died this way.
+3. Sample a spread of early frames (`for t in 8 10 12 …`) and run
+   `calibrate.py <x0> <y0> <sq> frames/*.png`. It SEARCHES them for the start
+   position and refuses geometry that does not reproduce it, so a wrong read
+   fails loudly instead of tracking a false line. **A refusal usually means your
+   frames are past the start position, not that your numbers are wrong** — the
+   game here was already three plies in by t=24.
+4. Re-scan with the confirmed numbers.
+
+So: when a track is marked mistracked, check whether it is the only source for an
+opening before accepting the verdict. Re-reading the geometry is cheap; the
+content behind it may not be replaceable.
+
 **A NOTE MAY ONLY CITE A POSITION THE VIDEO SHOWED.** Gate:
 `src/data/videoTrackIntegrity.test.ts` (ship-check) — every recorded FEN must be
 exactly what its moves produce, every fork option must be legal at its fork, and

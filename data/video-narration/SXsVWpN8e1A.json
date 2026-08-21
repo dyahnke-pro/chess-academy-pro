@@ -1,0 +1,397 @@
+{
+ "videoId": "SXsVWpN8e1A",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2170",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 20,
+   "line": [
+    "c4",
+    "Nf6",
+    "d4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "[Music] ladies and gentlemen all right let's go we'll be getting some emotes any day now yes yes any day now guild wars okay let's go d4 this time let's go d4 let's play some main lines let's play"
+  },
+  {
+   "ply": 6,
+   "t": 23,
+   "line": [
+    "e6",
+    "Nc3",
+    "Bb4"
+   ],
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": "uh names this is called the nimzo indian defense now i will explain this after the game"
+  },
+  {
+   "ply": 7,
+   "t": 31.5,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N2P2/PP2P1PP/R1BQKBNR b KQkq - 0 4",
+   "said": "properly but i'm going to play a move which i play as my main line that is the move f3 the idea behind this is very simple i"
+  },
+  {
+   "ply": 8,
+   "t": 35,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/4pn2/3p4/1bPP4/2N2P2/PP2P1PP/R1BQKBNR w KQkq - 0 5",
+   "said": "want to play e4"
+  },
+  {
+   "ply": 9,
+   "t": 38.5,
+   "line": [
+    "a3"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/4pn2/3p4/1bPP4/P1N2P2/1P2P1PP/R1BQKBNR b KQkq - 0 5",
+   "said": "eric thanks for the sub now we want to go a3 to chase the fish away worrying that i will explain all of the"
+  },
+  {
+   "ply": 11,
+   "t": 43,
+   "line": [
+    "Bxc3+",
+    "bxc3"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/4pn2/3p4/2PP4/P1P2P2/4P1PP/R1BQKBNR b KQkq - 0 6",
+   "said": "theory after the game basically you get this structure now what should you guys notice about the structure what does the battle"
+  },
+  {
+   "ply": 13,
+   "t": 52.5,
+   "line": [
+    "c5",
+    "cxd5"
+   ],
+   "fen": "rnbqk2r/pp3ppp/4pn2/2pP4/3P4/P1P2P2/4P1PP/R1BQKBNR b KQkq - 0 7",
+   "said": "revolve around the battle revolves around one very specific thing very specific thing it depends which way"
+  },
+  {
+   "ply": 14,
+   "t": 56,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqk2r/pp3ppp/5n2/2pp4/3P4/P1P2P2/4P1PP/R1BQKBNR w KQkq - 0 8",
+   "said": "he takes knight takes okay is white going to make be able to play e4 is white going to be able to play for under the correct conditions i can't play e4 now even if i technically could i'm not developed so every action that i undertake from this point onwards is going to be directed at preparing e4 as fast as"
+  },
+  {
+   "ply": 15,
+   "t": 86,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqk2r/pp3ppp/5n2/2pp4/3P4/P1P1PP2/6PP/R1BQKBNR b KQkq - 0 8",
+   "said": "possible and developing this bishop is not essential to preparing e4 i need to develop the king side so that i can castle quickly so that i don't have to keep my king in the center when i do play four so let's let's see what i do e3 where am i going to put this bishop where am i going to put this bishop"
+  },
+  {
+   "ply": 17,
+   "t": 106.5,
+   "line": [
+    "O-O",
+    "Bd3"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/5n2/2pp4/3P4/P1PBPP2/6PP/R1BQK1NR b KQ - 2 9",
+   "said": "d3 then i'm going to put the knight on e2 i'm going to castle and i'm going to at some point be ready to play for this is the theoretical line black has several ways that he can go about trying to stop e4 uh but this is theory this line is not considered to be black's best but even magnus has played it before so it's it's very much legitimate and um 92 castles"
+  },
+  {
+   "ply": 19,
+   "t": 125,
+   "line": [
+    "Re8",
+    "Ne2"
+   ],
+   "fen": "rnbqr1k1/pp3ppp/5n2/2pp4/3P4/P1PBPP2/4N1PP/R1BQK2R b KQ - 4 10",
+   "said": "and i will explain afterward whether we will be ready to play e4 well if c4 then bishop b2 we don't have to worry about c4 c4 bishop c2 doesn't actually obstruct a rookie 80 stops it now where can this knight end up to prepare e4"
+  },
+  {
+   "ply": 21,
+   "t": 138.5,
+   "line": [
+    "c4",
+    "Bc2"
+   ],
+   "fen": "rnbqr1k1/pp3ppp/5n2/3p4/2pP4/P1P1PP2/2B1N1PP/R1BQK2R b KQ - 1 11",
+   "said": "where can this knight go with the express purpose of preparing e4 bingo g3 okay so it's not he does play c4 but here's the problem with the moves before he takes the pressure off of the pawn on d4 and can you guys see that now if i play e4 i also have to deal with this pawn"
+  },
+  {
+   "ply": 22,
+   "t": 154.5,
+   "line": [
+    "Be6"
+   ],
+   "fen": "rn1qr1k1/pp3ppp/4bn2/3p4/2pP4/P1P1PP2/2B1N1PP/R1BQK2R w KQ - 2 12",
+   "said": "becoming weaker once he plays c4 the pawn on d4 is better protected so i can direct all of my attention at preparing me for it would be possible to play before here but what do i need to do first"
+  },
+  {
+   "ply": 23,
+   "t": 166.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1qr1k1/pp3ppp/4bn2/3p4/2pP4/P1P1PP2/2B1N1PP/R1BQ1RK1 b - - 3 12",
+   "said": "as a good russian school boy that i am let's be patient and let's castle well space isn't important here space is a sort of okay"
+  },
+  {
+   "ply": 24,
+   "t": 180.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2qr1k1/pp3ppp/2n1bn2/3p4/2pP4/P1P1PP2/2B1N1PP/R1BQ1RK1 w - - 4 13",
+   "said": "space is like money i'll explain what i mean so finally we can consider playing e4 but let's be good russian skill voice"
+  },
+  {
+   "ply": 25,
+   "t": 196,
+   "line": [
+    "Ng3"
+   ],
+   "fen": "r2qr1k1/pp3ppp/2n1bn2/3p4/2pP4/P1P1PPN1/2B3PP/R1BQ1RK1 b - - 5 13",
+   "said": "and i guarantee you guys if we can prepare this well e4 is going to be a lot stronger so let's play knight g3 first why because ultimately the knight can go to f5 in some positions and there's nothing he can do to stop before once we play e4"
+  },
+  {
+   "ply": 26,
+   "t": 207.5,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "r2qr1k1/pp2nppp/4bn2/3p4/2pP4/P1P1PPN1/2B3PP/R1BQ1RK1 w - - 6 14",
+   "said": "we're going to just steamroll him on the king's side and i want you to watch very carefully how i go about doing that here we go"
+  },
+  {
+   "ply": 27,
+   "t": 208.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "r2qr1k1/pp2nppp/4bn2/3p4/2pPP3/P1P2PN1/2B3PP/R1BQ1RK1 b - - 0 14",
+   "said": ""
+  },
+  {
+   "ply": 28,
+   "t": 213.5,
+   "line": [
+    "Ng6"
+   ],
+   "fen": "r2qr1k1/pp3ppp/4bnn1/3p4/2pPP3/P1P2PN1/2B3PP/R1BQ1RK1 w - - 1 15",
+   "said": "yeah so time it goes okay so how do we do how do we do this there is a very typical idea here i will show you guys after this game a game in which i i applied this idea how do we make"
+  },
+  {
+   "ply": 29,
+   "t": 231,
+   "line": [
+    "e5"
+   ],
+   "fen": "r2qr1k1/pp3ppp/4bnn1/3pP3/2pP4/P1P2PN1/2B3PP/R1BQ1RK1 b - - 0 15",
+   "said": "something of this pawn of these pawns can anybody tell me yeah we just pushed the pawns boom locking this in and then boom boom now"
+  },
+  {
+   "ply": 31,
+   "t": 235,
+   "line": [
+    "Nd7",
+    "f4"
+   ],
+   "fen": "r2qr1k1/pp1n1ppp/4b1n1/3pP3/2pP1P2/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 16",
+   "said": "we're not just doing this to win a piece although he can't avoid that even if this wasn't winning a piece this would just be crushing you guys should just kind of see that now bishop g5 is a good thought but he could play h6 and notice that the knight on g6 is"
+  },
+  {
+   "ply": 32,
+   "t": 257.5,
+   "line": [
+    "f5"
+   ],
+   "fen": "r2qr1k1/pp1n2pp/4b1n1/3pPp2/2pP1P2/P1P3N1/2B3PP/R1BQ1RK1 w - f6 0 17",
+   "said": "covering the h4 square and the game is basically over so that's how effective this line can be if if black isn't very precise that's why i really play that's why i like playing and i've won a couple nice okay so five is a good move and here's the thing um what is the top item on our wish list the top item on our wish list is to eventually get our pawn to f5 and the move on poissant comes to mind"
+  },
+  {
+   "ply": 33,
+   "t": 280,
+   "line": [
+    "exf6"
+   ],
+   "fen": "r2qr1k1/pp1n2pp/4bPn1/3p4/2pP1P2/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 17",
+   "said": "but i actually am sound would be good but i'm going to play well actually yan poisson would be really good because the good thing about amphison is that if he recaptures then we have f5 winning a piece the problem without passant it is emotionally hard for me to part ways with my pawn sort of my pawn mass but uh you have to transform your advantage at some point and you you can't cling to something that's nice"
+  },
+  {
+   "ply": 34,
+   "t": 306.5,
+   "line": [
+    "Bf7"
+   ],
+   "fen": "r2qr1k1/pp1n1bpp/5Pn1/3p4/2pP1P2/P1P3N1/2B3PP/R1BQ1RK1 w - - 1 18",
+   "said": "sometimes you have to kill your darlings as they say in literature yeah i'm writing down notes to explain after the game kill your kill your darlings is a phrase my english teacher used to describe you know something you have to do in writing where sometimes you get very clingy"
+  },
+  {
+   "ply": 35,
+   "t": 313,
+   "line": [
+    "f5"
+   ],
+   "fen": "r2qr1k1/pp1n1bpp/5Pn1/3p1P2/2pP4/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 18",
+   "said": "about a phrase that you think is good and that actually holds you up in terms"
+  },
+  {
+   "ply": 37,
+   "t": 317,
+   "line": [
+    "Ngf8",
+    "fxg7"
+   ],
+   "fen": "r2qrnk1/pp1n1bPp/8/3p1P2/2pP4/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 19",
+   "said": "of expressing your thoughts better so we're just gonna like autopilot this"
+  },
+  {
+   "ply": 38,
+   "t": 318.5,
+   "line": [
+    "Kxg7"
+   ],
+   "fen": "r2qrn2/pp1n1bkp/8/3p1P2/2pP4/P1P3N1/2B3PP/R1BQ1RK1 w - - 0 20",
+   "said": "what do we do now just bash it in and this is the good thing right our pieces look at how well prepared they are to attack the king's"
+  },
+  {
+   "ply": 39,
+   "t": 333.5,
+   "line": [
+    "f6+"
+   ],
+   "fen": "r2qrn2/pp1n1bkp/5P2/3p4/2pP4/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 20",
+   "said": "side well queen g4 is tempting but actually queen g4 is a really good move yeah queen g4 is good but let's go f6 let's open up yeah this is very violent terminology i don't know where i i don't know why i'm all of a sudden"
+  },
+  {
+   "ply": 40,
+   "t": 347,
+   "line": [
+    "Kh8"
+   ],
+   "fen": "r2qrn1k/pp1n1b1p/5P2/3p4/2pP4/P1P3N1/2B3PP/R1BQ1RK1 w - - 1 21",
+   "said": "said talking about the violently queen g4 would be good but um let's let's do let's do this let's open up the mission now let's figure out exactly what we want to do queen g4 here i know it's on a lot of people's minds but let's be methodical if we go queen g4 he can play bishop g6 and he can stop i will explain knight f6 we had bishop g5 so he can stop the bleeding on the g file so what we need to do is we need to find a way to bring another piece into the attack and we need to circumvent his attack on"
+  },
+  {
+   "ply": 41,
+   "t": 383,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "r2qrn1k/pp1n1b1p/5P1B/3p4/2pP4/P1P3N1/2B3PP/R2Q1RK1 b - - 2 21",
+   "said": "the g6 square his control of it there is a different square that this pawn now controls and that is the g7 square i know you guys are why the hell is he taking well by taking on f6 he's opening up the possibility of me pinning him remember how you decide whether a pin is dangerous is there a pawn protecting the pinned piece notice that alliteration in this"
+  },
+  {
+   "ply": 44,
+   "t": 402,
+   "line": [
+    "Nxf6",
+    "Bg5",
+    "N8d7"
+   ],
+   "fen": "r2qr2k/pp1n1b1p/5n2/3p2B1/2pP4/P1P3N1/2B3PP/R2Q1RK1 w - - 2 23",
+   "said": "case there is no pawn protecting the pin piece and so that pin is going to be absolutely deadly we're just going to pile up on this night and we're going to win the night and you're going to guys are going to see piling up all i'm doing is piling up in the night winning the night transforming our advantage up a piece in the end game the game is over that's it that's all i did let's bring the rook into the game and defend the rook okay now knight f5 here doesn't work because we lose control of our rook but we want to get the knights five so we need to move the rook first where should we move the rook we can also take on h7 that's a good move but let's go rook d6 that's the most active square for the rook because if his rook moves away from e7 we can go to d7 everything i'm doing should be making sense in terms of the attack okay so now that's a good move if we take it he takes back but we're going to do that anyway because now we can take d5 that was another reason i played rook d6 um well we keep getting sub bombs okay now let's just check again i want to emphasize that in the in this situation there are"
+  },
+  {
+   "ply": 6,
+   "t": 472,
+   "line": [],
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": "so many ways to win these positions sorry let me repeat though okay so i wanted to repeat moves i didn't want to lap to double get games guild and uh that was nice thank you and he also watches my stream so f3 the f3 is called the sameish"
+  },
+  {
+   "ply": 7,
+   "t": 473,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N2P2/PP2P1PP/R1BQKBNR b KQkq - 0 4",
+   "said": "variation and by the way yes it's it's the same issue in both the king's indian and in the nimzo indian friedrich samish had a thing for the move f3 and let me tell you he introduced some very serious lines into chess oh i am kyle iron man 500 bits f3 was first played in the year uh let's see when it was first played it was first played in the year 18 i'm sorry in 1930 by rottenstein but he didn't play it well boggle you off effin bubble you above max irva world champion played f3 samish actually i this is interesting so samish actually never played f3 but a3 is also the same as should often transposes why i can go a3 first and only play f3 later this is also the sameish and this samish actually did play so he sort of played this but i'm not sure why it's necessarily called the same okay now let's unpack what happened in the game i think that for black the move knight takes d5 is better because black immediately piles up on the base of the pawn chain this is a theoretical line i've also played games here i'm not going to delve into this but e takes d5 is the old-school main line now what should black do here black's main line is essentially to find a way to trade the bishop who can tell me how black can try to trade the bishop why do you trade the bishop to make it harder for white to prepare e4 because the bishop is the main supervisor of that all operation malcolm is on fire b6 and bishop a6 now you can say well no big deal i can step aside but now look at how good black's bishop is and in a situation like this it's harder to move the knight out because of the pin so it becomes quite a bit harder to prepare before so in this situation you actually don't do anything you just castle and that's that leads to some main light theory i'll show you guys the game in the slide so what are we so c4 is a mistake because it takes the gas pedal off of the d4 pawn at least keeping that tension would have made it harder for me to prepare for and once we play e4 it's almost winning for white because this is just completely unstoppable um i almost think this is losing i just don't know what black can do about this and let me show you guys a higher level game where i actually did something very very similar and beat a very strong player with this line now the game i'm about to show you it's a little bit more complicated so i want you guys to prepare for some more a little bit more messiness than in this game okay so basically this game i played f3 and i'll talk about space's money when we actually analyze well so you can you guys can see r dot cataloo 500 bits you guys can see um what he's doing here's knight g3 and now the move bishop b2 and i want people to help me explain this move why the hell are we putting the bishop on a square where it's literally blocked in buried alive by these two pawns exactly malcolm have tucker is on fire today i've noticed you're on a roll loving the engagement my friend so basically we support 600 bits from mine called iron man 400 500 600 here we go basically it it protects d4 so if we imagine when we do play e4 and i did uh you can see that in a situation like this the pawn on d4 is uh is b is being very well protected by the bishop and the bishop has a lot of what fill in the blank the bishop has a lot of blank link using terminology that we uh that we have formulated potential energy bingo potential energy all right bishop has a lot of potential energy it's bad right now but it's doing something really good rook c8 rook 81 rookie 2 so i didn't play e4 yet and the reason i didn't play e4 is because he takes and what super nasty move does black now have this is why patience is so important you have to always be attentive to why your opponent does what they do queen c2 so now laptop plays knight f8 e4 knight g6 threatening the fork so i step away with my queen if we go e5 here he counter forks my king and my queen and rock knight f4 we just go rookie f2 and now watch what happens watch what happens [Music] so basically this gets me these incredible pawns the game went on uh he didn't resign here but black is lost uh and it took me some finessing but eventually i played e6 his king was weak i got the bishop to a good square we went into an end game i got my pawn to e7 mozart of cheese thank you i won the other pawn and he resigned here because i'm just winning f7 and the pawns won me the game that's pretty symbolic essentially this is exactly what happens here e takes f6 and f5 fg and now f6 why am i playing this move well the logical reason is to open up the bishop but if knight takes f6 we go bishop g5 and his knight is busted also like you guys should look at this position and it should be very clear to everybody that white is completely winning i mean look at just look at the amount of pieces that are in the attack you shouldn't have to always worry about exactly how you're going to make things happen um you should use your intuition here to determine that you're going to have something here i mean black's position is just on its last legs and we do the same thing we did in the game why is space like money so money is something that society assigns value to money has no inherent value i can get out a one dollar bill or a 20 bill and somebody from a completely different culture would not necessarily understand its value it's a piece of paper and it we agree that it is value so you can use it to buy stuff and that stuff potentially has inherent value um something that we can all agree is valuable like a computer most people nowadays can agree it's valuable uh and don't nitpick you understand what i'm saying space and time in chess tempi time and space is the same concept space has no inherent value unless you make something of it so just grabbing space to graph space is sometimes good but it's only good in so far as you can transform it into some other advantage and uh some people i think have a hard time with this because uh space advantage is actually one of the most innocuous types of advantages you can use it very well i'm never particularly good with a big space advantage but you can also play when you're cramped to the last two rows that's not necessarily a deal breaker to some positions okay so just wanted to make that clear um i would say when you get to extra material that is closer to an inherent value kind of thing it's normally in any position an extra piece has immediate value toward winning the game space needs to be transformed into something before it literally wins you the game okay uh anyway so the rest of the game was very simple we um we win the piece here"
+  },
+  {
+   "ply": 8,
+   "t": 909.5,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N2P2/PP2P1PP/R1BQKBNR w KQkq - 0 5",
+   "said": "and that's it we're up a piece and the game is over so i really like the same variation of the nimso and uh it's black has other ways that he can play against the c5 as possible here that's probably black's most popular"
+  },
+  {
+   "ply": 7,
+   "t": 912.5,
+   "line": [],
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N2P2/PP2P1PP/R1BQKBNR b KQkq - 0 4",
+   "said": "line in the modern day"
+  },
+  {
+   "ply": 10,
+   "t": 915,
+   "line": [
+    "d5",
+    "a3",
+    "Be7"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/P1N2P2/1P2P1PP/R1BQKBNR w KQkq - 1 6",
+   "said": "also he can drop his bishop back you can"
+  },
+  {
+   "ply": 11,
+   "t": 916,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PPP3/P1N2P2/1P4PP/R1BQKBNR b KQkq - 0 6",
+   "said": "that's the hyper modern approach you could let white have a huge center"
+  },
+  {
+   "ply": 14,
+   "t": 919.5,
+   "line": [
+    "dxe4",
+    "fxe4",
+    "e5"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/5n2/4p3/2PPP3/P1N5/1P4PP/R1BQKBNR w KQkq - 0 8",
+   "said": "and then chip away at it with a move like e5 that's another good line so i don't want to bog ourselves down"
+  },
+  {
+   "ply": 6,
+   "t": 926.5,
+   "line": [],
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": "with the theory but that was your introduction to the samish if you're a d4 player i would highly consider taking this on let's see how magnus went about preventing this stuff oh 300 bits thank you so much and it never stops thank you and c4 so here's how anand prepares it he goes g4 he gets the pawn out there first to fianchetto the bishop because this bishop will otherwise have a hard time developing carlson goes for the queen side pressure and you can see that anand does manage to organize e4 that's how he does it he puts the bishop on g2 instead of d3 anand was better in this game carlson won in the end it was a complicated game we're not going to go into it right now but um but but a non digi 4 in the end so you can see you found an alternate method of doing it let's get one last game in one last speeder in game and let's go back to playing e5 so knight f3 knight c6 and we have a four knights defense so there's many ways of playing against"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 7,
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N2P2/PP2P1PP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "c4",
+    "Nf6",
+    "d4",
+    "e6",
+    "Nc3",
+    "Bb4",
+    "f3"
+   ],
+   "options": [
+    {
+     "san": "d5",
+     "t": 35,
+     "continuation": "d5",
+     "said": "defense now i will explain this after the game properly but i'm going to play a move which i play as my main line that is the move f3 the idea behind this is very simple i want to play e4 eric thanks for the sub now we want to go a3 to chase the fish away worrying that i will explain all of the theory after the game basically you get this structure now what should you guys notice about the structure what does the battle revolve around the battle revolves around one very specific thing very specific thing it depends which way he takes knight takes okay is white going to make be able to play e4 is white going to be able to play for under the correct conditions i can't play e4 now even if i technically could i'm not developed so every action that i undertake from this point onwards is going to be directed at preparing e4 as fast as possible and developing this bishop is not essential to preparing e4 i need to develop the king side so that i can castle quickly so that i don't have to keep my king in the center when i do play four so let's let's see what i do e3 where am i going to put this bishop where am i going to put this bishop"
+    },
+    {
+     "san": "c5",
+     "t": 909.5,
+     "continuation": "c5",
+     "said": "and that's it we're up a piece and the game is over so i really like the same variation of the nimso and uh it's black has other ways that he can play against the c5 as possible here that's probably black's most popular line in the modern day also he can drop his bishop back you can that's the hyper modern approach you could let white have a huge center and then chip away at it with a move like e5 that's another good line so i don't want to bog ourselves down with the theory but that was your introduction to the samish if you're a d4 player i would highly consider taking this on let's see how magnus went about preventing this stuff oh 300 bits thank you so much and it never stops thank you and c4 so here's how anand prepares it he goes g4 he gets the pawn out there first to fianchetto the bishop because this bishop will otherwise have a hard time developing carlson goes for the queen side pressure and you can see that anand does manage to organize e4 that's how he does it he puts the bishop on g2 instead of d3 anand was better in this game carlson won in the end it was a complicated game we're not going to go into it right now but um"
+    }
+   ]
+  }
+ ]
+}

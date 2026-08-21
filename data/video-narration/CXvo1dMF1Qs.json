@@ -77,19 +77,19 @@
   },
   {
    "ply": 10,
-   "t": 66,
+   "t": 66.5,
    "line": [
     "d6"
    ],
    "fen": "rnbqkb1r/p3pppp/3p1n2/2pP4/2p1P3/8/PP1N1PPP/R1BQKBNR w KQkq - 0 6",
-   "said": "because we're going to win this pawn back yeah and nobody knows the correct"
+   "said": "because we're going to win this pawn back yeah and nobody knows the correct move here which i'll talk about after"
   },
   {
    "ply": 9,
    "t": 70.5,
    "line": [],
    "fen": "rnbqkb1r/p2ppppp/5n2/2pP4/2p1P3/8/PP1N1PPP/R1BQKBNR b KQkq - 0 5",
-   "said": "move here which i'll talk about after the game the correct move is actually c3 to give the punt back in order to damage"
+   "said": "the game the correct move is actually c3 to give the punt back in order to damage"
   },
   {
    "ply": 10,
@@ -165,7 +165,7 @@
   },
   {
    "ply": 18,
-   "t": 150.5,
+   "t": 150,
    "line": [
     "O-O"
    ],
@@ -217,7 +217,7 @@
   },
   {
    "ply": 6,
-   "t": 670,
+   "t": 670.5,
    "line": [
     "b5"
    ],

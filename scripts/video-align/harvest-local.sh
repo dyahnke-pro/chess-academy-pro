@@ -68,19 +68,31 @@ for id in "${ids[@]}"; do
   # reads nothing. Scaling by width recovers 277.5,-1.5,45, which is what the
   # already-banked 360p tracks used. The scan still CONFIRMS against the start
   # position, so a wrong scale refuses rather than tracking a false line.
-  W=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$f" 2>/dev/null)
-  if [ -n "${W:-}" ] && [ "$W" -gt 0 ] 2>/dev/null; then
+  # CONFIRM THE NUMBERS BEFORE PAYING FOR A SCAN. A scan reads every frame, so
+  # trying a geometry costs ~10 minutes and trying twelve costs two hours — which
+  # is why this used to try three hand-read layouts and park anything else.
+  # Calibration only ever needed a handful of frames, and ffmpeg seeks those in
+  # about a minute, so the search moved there: confirm-geometry sweeps the
+  # layouts plus a couple of pixels of per-encode drift and hands back one
+  # confirmed answer. Same safety as before — every candidate has to reproduce
+  # the start position, so a wrong one is refused rather than believed.
+  if [ -n "${GEO_X:-}${GEO_Y:-}${GEO_S:-}" ]; then
+    W=$(ffprobe -v error -select_streams v:0 -show_entries stream=width -of csv=p=0 "$f" 2>/dev/null)
+    [ -n "${W:-}" ] && [ "$W" -gt 0 ] 2>/dev/null || W=854
     read -r GX GY GS <<< "$(awk -v w="$W" -v x="${GEO_X:-370}" -v y="${GEO_Y:--2}" -v s="${GEO_S:-60}" \
       'BEGIN{r=w/854; printf "%.4f %.4f %.4f", x*r, y*r, s*r}')"
   else
-    GX=${GEO_X:-370}; GY=${GEO_Y:--2}; GS=${GEO_S:-60}
+    if ! GEO_CONF=$(python3 scripts/video-align/confirm-geometry.py "$f" --quiet 2>>"$GRIDS/$id.scan.log"); then
+      echo "SCAN-REF $id :: no hand-read layout reproduced the start position"
+      grep -qxF "$id" data/video-queues/needs-hand-geometry.txt 2>/dev/null || echo "$id" >> data/video-queues/needs-hand-geometry.txt
+      continue
+    fi
+    IFS=, read -r GX GY GS <<< "$GEO_CONF"
   fi
   GEO="$GX $GY $GS"
 
   if ! python3 scripts/video-align/scan_stream.py "$f" "$GRIDS/$id.grids.json" $GEO 2 --calibrated \
        > "$GRIDS/$id.scan.log" 2>&1; then
-    # A refusal is the scanner declining geometry it cannot confirm against the
-    # start position — park it for a hand read rather than tracking a false line.
     echo "SCAN-REF $id :: $(tail -1 "$GRIDS/$id.scan.log" | cut -c1-70)"
     grep -qxF "$id" data/video-queues/needs-hand-geometry.txt 2>/dev/null || echo "$id" >> data/video-queues/needs-hand-geometry.txt
     continue

@@ -1,0 +1,324 @@
+{
+ "videoId": "j4-gTbXfwXg",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2030",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1316,
+   "line": [
+    "e4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2",
+   "said": "such in such um encouraging terms i would be happy to give you guys a sense of the alakan myself so let's go right knight of six that's a great idea actually thank you"
+  },
+  {
+   "ply": 4,
+   "t": 1319.5,
+   "line": [
+    "e5",
+    "Nd5"
+   ],
+   "fen": "rnbqkb1r/pppppppp/8/3nP3/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+   "said": "okay so he plays d5 this is a serious"
+  },
+  {
+   "ply": 5,
+   "t": 1320.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/pppppppp/8/3nP3/8/5N2/PPPP1PPP/RNBQKB1R b KQkq - 2 3",
+   "said": ""
+  },
+  {
+   "ply": 6,
+   "t": 1321.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/8/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "dude okay d6"
+  },
+  {
+   "ply": 7,
+   "t": 1322.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/2B5/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "said": "and he goes bishop c4 so um this is a slightly different way of playing the alakan from white's perspective he uh prioritizes developing his pieces rather than controlling the center with his pawns uh if i remember correctly there is a p sacrifice line here with bishop takes f7 although i'm not sure this is here let me think for a second so"
+  },
+  {
+   "ply": 8,
+   "t": 1358.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/3pp3/3nP3/2B5/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+   "said": "i'm trying to remember okay so here's what we're gonna do because i'm a little bit worried there is some sort of trap line i'm going to protect that knight with my pawn i'm going to play a little bit so"
+  },
+  {
+   "ply": 9,
+   "t": 1362.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/3pp3/3nP3/2B5/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 5",
+   "said": "passive but solid passive but solid and there's something to be said for openings"
+  },
+  {
+   "ply": 10,
+   "t": 1371.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2npp3/3nP3/2B5/5N2/PPPP1PPP/RNBQ1RK1 w kq - 2 6",
+   "said": "where yes you're slightly worse you're slightly passive but it's very hard to break them now let's develop our knight and attack the pawn on e5 let's force him to decide and after e takes d6 we're going to take"
+  },
+  {
+   "ply": 11,
+   "t": 1383,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2npp3/3nP3/2BP4/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+   "said": "with our bishop now we're going to allow him to play d4 he's going to have more of the center than we do that's okay because again we have very"
+  },
+  {
+   "ply": 12,
+   "t": 1387,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2n1p3/3np3/2BP4/5N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+   "said": "very solid piece placement let's take on e5 in order to pave away the diagonal for our bishop potentially"
+  },
+  {
+   "ply": 13,
+   "t": 1394,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2n1p3/3nP3/2B5/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 7",
+   "said": "look at how nicely our knight on d5 is placed nice solid knight where should we put our bishop e7 or c5 it's a slight kind of trick question actually"
+  },
+  {
+   "ply": 14,
+   "t": 1415,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk2r/ppp1bppp/2n1p3/3nP3/2B5/5N2/PPP2PPP/RNBQ1RK1 w kq - 1 8",
+   "said": "believe it or not it's a bit of a trick question in my opinion we should actually put the bishop on isab why because if we put it on c5 we allow"
+  },
+  {
+   "ply": 15,
+   "t": 1421.5,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r1bqk2r/ppp1bppp/2n1p3/3nP3/2B2B2/5N2/PPP2PPP/RN1Q1RK1 b kq - 2 8",
+   "said": "his bishop or his knight to get to the g5 square and that ladies"
+  },
+  {
+   "ply": 16,
+   "t": 1426.5,
+   "line": [
+    "Nxf4"
+   ],
+   "fen": "r1bqk2r/ppp1bppp/2n1p3/4P3/2B2n2/5N2/PPP2PPP/RN1Q1RK1 w kq - 0 9",
+   "said": "and gentlemen is how you play the alakan defense and it wins the game by force in eight moves you can't make this stuff up i think it only happens in this speed run oh my lance"
+  },
+  {
+   "ply": 7,
+   "t": 1457,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/2B5/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "said": "here come the hundred gifts of bums after that game i mean this is just absolute mastery okay so i actually think that i didn't play this the best way let me actually check with a computer here so i was a little bit concerned"
+  },
+  {
+   "ply": 8,
+   "t": 1461,
+   "line": [
+    "Nb6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/2B5/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 5",
+   "said": ""
+  },
+  {
+   "ply": 9,
+   "t": 1463,
+   "line": [
+    "Bxf7+"
+   ],
+   "fen": "rnbqkb1r/ppp1pBpp/1n1p4/4P3/8/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 5",
+   "said": "about this move okay but that's actually"
+  },
+  {
+   "ply": 10,
+   "t": 1465,
+   "line": [
+    "Kxf7"
+   ],
+   "fen": "rnbq1b1r/ppp1pkpp/1n1p4/4P3/8/5N2/PPPP1PPP/RNBQK2R w KQ - 0 6",
+   "said": "not a move"
+  },
+  {
+   "ply": 11,
+   "t": 1466,
+   "line": [
+    "e6+"
+   ],
+   "fen": "rnbq1b1r/ppp1pkpp/1n1pP3/8/8/5N2/PPPP1PPP/RNBQK2R b KQ - 0 6",
+   "said": "oh no it was just flicking g8"
+  },
+  {
+   "ply": 12,
+   "t": 1467.5,
+   "line": [
+    "Kg8"
+   ],
+   "fen": "rnbq1bkr/ppp1p1pp/1n1pP3/8/8/5N2/PPPP1PPP/RNBQK2R w KQ - 1 7",
+   "said": ""
+  },
+  {
+   "ply": 13,
+   "t": 1469.5,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "rnbq1bkr/ppp1p1pp/1n1pP3/6N1/8/8/PPPP1PPP/RNBQK2R b KQ - 2 7",
+   "said": "and now queen eight okay this is"
+  },
+  {
+   "ply": 14,
+   "t": 1470.5,
+   "line": [
+    "Qe8"
+   ],
+   "fen": "rnb1qbkr/ppp1p1pp/1n1pP3/6N1/8/8/PPPP1PPP/RNBQK2R w KQ - 3 8",
+   "said": "actually not a thing sorry i um i messed this up a little bit e6 is"
+  },
+  {
+   "ply": 7,
+   "t": 1476,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/2B5/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "said": "not the best because it blocks the development of our bishop knight b6 is the best move and"
+  },
+  {
+   "ply": 9,
+   "t": 1481,
+   "line": [
+    "Nb6",
+    "Bb3"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/8/1B3N2/PPPP1PPP/RNBQK2R b KQkq - 3 5",
+   "said": "then what we don't want to do is go"
+  },
+  {
+   "ply": 10,
+   "t": 1484,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "rn1qkb1r/ppp1pppp/1n1p4/4P3/6b1/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 4 6",
+   "said": "bishop g4 this would be a big mistake who can tell me why this is a very typical tactic we've seen this many times before and um could somebody just remind me of"
+  },
+  {
+   "ply": 13,
+   "t": 1501,
+   "line": [
+    "Bxf7+",
+    "Kxf7",
+    "Ng5+"
+   ],
+   "fen": "rn1q1b1r/ppp1pkpp/1n1p4/4P1N1/6b1/8/PPPP1PPP/RNBQK2R b KQ - 1 7",
+   "said": "why this doesn't actually work it's bishop f7 and knight g5 and he opens up the attack on the"
+  },
+  {
+   "ply": 10,
+   "t": 1505,
+   "line": [],
+   "fen": "rn1qkb1r/ppp1pppp/1n1p4/4P3/6b1/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 4 6",
+   "said": "bishops certainly don't do that"
+  },
+  {
+   "ply": 12,
+   "t": 1506,
+   "line": [
+    "Bc4",
+    "Bc8"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/2B5/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 7",
+   "said": "but um we play d6 which is solid knight"
+  },
+  {
+   "ply": 10,
+   "t": 1508,
+   "line": [],
+   "fen": "rn1qkb1r/ppp1pppp/1n1p4/4P3/6b1/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 4 6",
+   "said": "c6 d takes d takes bishop b7 and of course bishop f4 is inexplicable what should white have done uh instead of this there are several ways that white can play here what i would have done is gone queen e2 and rook t1 trying to open up as much pressure on the knight as possible removing the knight from the board is the key to the position for white but white doesn't want to do it by taking on d5 that would actually get me a nice diagonal for my bishop so you don't want to do it in the brute force way but by going queenie to rook d1 you apply pressure on the knight and i think white is definitely in the driver's seat here i don't think white is like winning or anything like that but uh white is is definitely significantly better uh in this position so that's why you want to be careful in these openings you don't want to play them without proper knowledge thank you so much chest dojo live party at 131 unfortunately i was just about to end i'm quite out of gas i've been doing the speed run"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 7,
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/2B5/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "line": [
+    "e4",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "Nf3",
+    "d6",
+    "Bc4"
+   ],
+   "options": [
+    {
+     "san": "e6",
+     "t": 1358.5,
+     "continuation": "e6",
+     "said": "i'm trying to remember okay so here's what we're gonna do because i'm a little bit worried there is some sort of trap line i'm going to protect that knight with my pawn i'm going to play a little bit so passive but solid passive but solid and there's something to be said for openings where yes you're slightly worse you're slightly passive but it's very hard to break them now let's develop our knight and attack the pawn on e5 let's force him to decide and after e takes d6 we're going to take with our bishop now we're going to allow him to play d4 he's going to have more of the center than we do that's okay because again we have very very solid piece placement let's take on e5 in order to pave away the diagonal for our bishop potentially look at how nicely our knight on d5 is placed nice solid knight where should we put our bishop e7 or c5 it's a slight kind of trick question actually believe it or not it's a bit of a trick question in my opinion we should actually put the bishop on isab why because if we put it on c5 we allow"
+    },
+    {
+     "san": "Nb6",
+     "t": 1461,
+     "continuation": "Nb6",
+     "said": "okay so i actually think that i didn't play this the best way let me actually check with a computer here so i was a little bit concerned about this move okay but that's actually not a move oh no it was just flicking g8 and now queen eight okay this is actually not a thing sorry i um i messed this up a little bit e6 is not the best because it blocks the development of our bishop knight b6 is the best move and then what we don't want to do is go bishop g4 this would be a big mistake who can tell me why this is a very typical tactic we've seen this many times before and um could somebody just remind me of why this doesn't actually work it's bishop f7 and knight g5 and he opens up the attack on the bishops certainly don't do that but um we play d6 which is solid knight c6 d takes d takes bishop b7 and of course bishop f4 is inexplicable what should white have done uh instead of this there are several ways that white can play here what i would have done is gone queen e2"
+    }
+   ]
+  },
+  {
+   "ply": 10,
+   "fen": "rn1qkb1r/ppp1pppp/1n1p4/4P3/6b1/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 4 6",
+   "line": [
+    "e4",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "Nf3",
+    "d6",
+    "Bc4",
+    "Nb6",
+    "Bb3",
+    "Bg4"
+   ],
+   "options": [
+    {
+     "san": "Bxf7+",
+     "t": 1501,
+     "continuation": "Bxf7+ Kxf7 Ng5+",
+     "said": "and um could somebody just remind me of why this doesn't actually work it's bishop f7 and knight g5 and he opens up the attack on the bishops certainly don't do that but um we play d6 which is solid knight c6 d takes d takes bishop b7 and of course bishop f4 is inexplicable what should white have done uh instead of this there are several ways that white can play here what i would have done is gone queen e2 and rook t1 trying to open up as much pressure on the knight as possible removing the knight from the board is the key to the position for white but white doesn't want to do it by taking on d5 that would actually get me a nice diagonal for my bishop so you don't want to do it in the brute force way but by going queenie to rook d1 you apply pressure on the knight and i think white is definitely in the driver's seat here i don't think white is like winning or anything like that but uh white is is definitely significantly better uh in this position so that's why you want to be careful in these openings you don't want to play them without proper knowledge thank you so much chest dojo live party at 131 unfortunately i was just about to end i'm quite out of gas i've been doing the"
+    },
+    {
+     "san": "Bc4",
+     "t": 1506,
+     "continuation": "Bc4 Bc8",
+     "said": "why this doesn't actually work it's bishop f7 and knight g5 and he opens up the attack on the bishops certainly don't do that but um we play d6 which is solid knight c6 d takes d takes bishop b7 and of course bishop f4 is inexplicable what should white have done uh instead of this there are several ways that white can play here what i would have done is gone queen e2 and rook t1 trying to open up as much pressure on the knight as possible removing the knight from the board is the key to the position for white but white doesn't want to do it by taking on d5 that would actually get me a nice diagonal for my bishop so you don't want to do it in the brute force way but by going queenie to rook d1 you apply pressure on the knight and i think white is definitely in the driver's seat here i don't think white is like winning or anything like that but uh white is is definitely significantly better uh in this position so that's why you want to be careful in these openings you don't want to play them without proper knowledge thank you so much chest dojo live party at 131 unfortunately i was just about to end i'm quite out of gas i've been doing the speed run"
+    }
+   ]
+  }
+ ]
+}

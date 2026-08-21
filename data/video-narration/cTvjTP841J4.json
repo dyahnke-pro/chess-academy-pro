@@ -1,0 +1,311 @@
+{
+ "videoId": "cTvjTP841J4",
+ "title": "Danya Goes Super Human VS Aryan Tari | 3 0 Blitz | Dual Commentary",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 616,
+   "line": [
+    "b3",
+    "e5",
+    "Bb2"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/PBPPPPPP/RN1QKBNR b KQkq - 1 2",
+   "said": "There's nothing I can do with my bishop. Yes, good game. All right, let's try another one. Yeah, the last game didn't go well. Uh okay, let's try again."
+  },
+  {
+   "ply": 5,
+   "t": 617,
+   "line": [
+    "Nc6",
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P3N2/PBPPPPPP/RN1QKB1R b KQkq - 3 3",
+   "said": "But this time maybe we'll play a real The opening wasn't so bad, so maybe I"
+  },
+  {
+   "ply": 7,
+   "t": 621,
+   "line": [
+    "e4",
+    "Nd4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3Np3/1P6/PBPPPPPP/RN1QKB1R b KQkq - 1 4",
+   "said": "should go for it again. I'm down. I'm down if you are. I was hoping you would go bishop B5 again. Yeah, no. In your"
+  },
+  {
+   "ply": 9,
+   "t": 629.5,
+   "line": [
+    "Nf6",
+    "e3"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3Np3/1P2P3/PBPP1PPP/RN1QKB1R b KQkq - 0 5",
+   "said": "dreams."
+  },
+  {
+   "ply": 10,
+   "t": 636.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2n2n2/3p4/3Np3/1P2P3/PBPP1PPP/RN1QKB1R w KQkq - 0 6",
+   "said": "Okay, so what happens if I start with this move? What happens?"
+  },
+  {
+   "ply": 11,
+   "t": 640,
+   "line": [
+    "Nxc6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2N2n2/3p4/4p3/1P2P3/PBPP1PPP/RN1QKB1R b KQkq - 0 6",
+   "said": "Well, I'll take your knight."
+  },
+  {
+   "ply": 13,
+   "t": 643,
+   "line": [
+    "bxc6",
+    "d3"
+   ],
+   "fen": "r1bqkb1r/p1p2ppp/2p2n2/3p4/4p3/1P1PP3/PBP2PPP/RN1QKB1R b KQkq - 0 7",
+   "said": "Get the structure."
+  },
+  {
+   "ply": 15,
+   "t": 648,
+   "line": [
+    "Bb4+",
+    "Nd2"
+   ],
+   "fen": "r1bqk2r/p1p2ppp/2p2n2/3p4/1b2p3/1P1PP3/PBPN1PPP/R2QKB1R b KQkq - 2 8",
+   "said": ""
+  },
+  {
+   "ply": 16,
+   "t": 649.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/p1p2ppp/2p2n2/3p4/1b2p3/1P1PP3/PBPN1PPP/R2QKB1R w KQ - 3 9",
+   "said": "Let's give the check and pretend this is Okay, so D E94. Very high-level"
+  },
+  {
+   "ply": 17,
+   "t": 655,
+   "line": [
+    "a3"
+   ],
+   "fen": "r1bq1rk1/p1p2ppp/2p2n2/3p4/1b2p3/PP1PP3/1BPN1PPP/R2QKB1R b KQ - 0 9",
+   "said": "calculation. All right, get out of here."
+  },
+  {
+   "ply": 18,
+   "t": 671,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bq1rk1/p1p1bppp/2p2n2/3p4/4p3/PP1PP3/1BPN1PPP/R2QKB1R w KQ - 1 10",
+   "said": "That's my one station in life. Yeah, let's this."
+  },
+  {
+   "ply": 19,
+   "t": 672,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "r1bq1rk1/p1p1bppp/2p2n2/3p4/4P3/PP2P3/1BPN1PPP/R2QKB1R b KQ - 0 10",
+   "said": "All right, perfect."
+  },
+  {
+   "ply": 20,
+   "t": 676.5,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "r1bq1rk1/p1p1bppp/2p5/3p4/4n3/PP2P3/1BPN1PPP/R2QKB1R w KQ - 0 11",
+   "said": ""
+  },
+  {
+   "ply": 22,
+   "t": 679.5,
+   "line": [
+    "Nxe4",
+    "dxe4"
+   ],
+   "fen": "r1bq1rk1/p1p1bppp/2p5/8/4p3/PP2P3/1BP2PPP/R2QKB1R w KQ - 0 12",
+   "said": "Now, this is beautiful. Perfect pawn structure. Thank you, Orfis for this sub. Question always is, do I trade queens? Yeah, let's go bishop C4. I'll let you uh"
+  },
+  {
+   "ply": 24,
+   "t": 709,
+   "line": [
+    "Bc4",
+    "Bf6"
+   ],
+   "fen": "r1bq1rk1/p1p2ppp/2p2b2/8/2B1p3/PP2P3/1BP2PPP/R2QK2R w KQ - 2 13",
+   "said": "decide. You know, I'm not I hurt my pawn structure more with bishop F6? Oh god. That is the big question."
+  },
+  {
+   "ply": 26,
+   "t": 710.5,
+   "line": [
+    "Qxd8",
+    "Rxd8"
+   ],
+   "fen": "r1br2k1/p1p2ppp/2p2b2/8/2B1p3/PP2P3/1BP2PPP/R3K2R w KQ - 0 14",
+   "said": "Let's do it and hope you will not give me another end game lesson."
+  },
+  {
+   "ply": 28,
+   "t": 713,
+   "line": [
+    "Bxf6",
+    "gxf6"
+   ],
+   "fen": "r1br2k1/p1p2p1p/2p2p2/8/2B1p3/PP2P3/2P2PPP/R3K2R w KQ - 0 15",
+   "said": "You know,"
+  },
+  {
+   "ply": 29,
+   "t": 716,
+   "line": [
+    "Ke2"
+   ],
+   "fen": "r1br2k1/p1p2p1p/2p2p2/8/2B1p3/PP2P3/2P1KPPP/R6R b - - 1 15",
+   "said": "exactly what I woke up thinking."
+  },
+  {
+   "ply": 30,
+   "t": 717.5,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2r2k1/p1p2p1p/2p1bp2/8/2B1p3/PP2P3/2P1KPPP/R6R w - - 2 16",
+   "said": "Okay, now I'm transforming my double"
+  },
+  {
+   "ply": 31,
+   "t": 720,
+   "line": [
+    "Ba6"
+   ],
+   "fen": "r2r2k1/p1p2p1p/B1p1bp2/8/4p3/PP2P3/2P1KPPP/R6R b - - 3 16",
+   "said": "pawns into another Oh, you're here. Taking it. Strange transforming."
+  },
+  {
+   "ply": 33,
+   "t": 730.5,
+   "line": [
+    "Rab8",
+    "Rhd1"
+   ],
+   "fen": "1r1r2k1/p1p2p1p/B1p1bp2/8/4p3/PP2P3/2P1KPPP/R2R4 b - - 5 17",
+   "said": "Okay. Let's go here. Mhm. Still trying to transform."
+  },
+  {
+   "ply": 34,
+   "t": 733,
+   "line": [
+    "Rd6"
+   ],
+   "fen": "1r4k1/p1p2p1p/B1prbp2/8/4p3/PP2P3/2P1KPPP/R2R4 w - - 6 18",
+   "said": "Take it. Take it. Come on. Yeah, that ruins your pawn structure further. That looks like a great idea."
+  },
+  {
+   "ply": 35,
+   "t": 744.5,
+   "line": [
+    "Ke1"
+   ],
+   "fen": "1r4k1/p1p2p1p/B1prbp2/8/4p3/PP2P3/2P2PPP/R2RK3 b - - 7 18",
+   "said": "Mhm. Okay, let's go here. Open up the board. to trap the bishop bishop with rook B6."
+  },
+  {
+   "ply": 36,
+   "t": 750,
+   "line": [
+    "f5"
+   ],
+   "fen": "1r4k1/p1p2p1p/B1prb3/5p2/4p3/PP2P3/2P2PPP/R2RK3 w - - 0 19",
+   "said": "You see everything."
+  },
+  {
+   "ply": 37,
+   "t": 751,
+   "line": [
+    "g3"
+   ],
+   "fen": "1r4k1/p1p2p1p/B1prb3/5p2/4p3/PP2P1P1/2P2P1P/R2RK3 b - - 0 19",
+   "said": "He sees everything."
+  },
+  {
+   "ply": 38,
+   "t": 752.5,
+   "line": [
+    "Kg7"
+   ],
+   "fen": "1r6/p1p2pkp/B1prb3/5p2/4p3/PP2P1P1/2P2P1P/R2RK3 w - - 1 20",
+   "said": ""
+  },
+  {
+   "ply": 39,
+   "t": 754,
+   "line": [
+    "h4"
+   ],
+   "fen": "1r6/p1p2pkp/B1prb3/5p2/4p2P/PP2P1P1/2P2P2/R2RK3 b - - 0 20",
+   "said": "All right, H4. I'm going to pretend that"
+  },
+  {
+   "ply": 40,
+   "t": 755,
+   "line": [
+    "Kf6"
+   ],
+   "fen": "1r6/p1p2p1p/B1prbk2/5p2/4p2P/PP2P1P1/2P2P2/R2RK3 w - - 1 21",
+   "said": "this is useful, as you say."
+  },
+  {
+   "ply": 41,
+   "t": 760.5,
+   "line": [
+    "Be2"
+   ],
+   "fen": "1r6/p1p2p1p/2prbk2/5p2/4p2P/PP2P1P1/2P1BP2/R2RK3 b - - 2 21",
+   "said": "Yeah, let's go here. follow the end game rules here. Active"
+  },
+  {
+   "ply": 43,
+   "t": 765.5,
+   "line": [
+    "Ke5",
+    "a4"
+   ],
+   "fen": "1r6/p1p2p1p/2prb3/4kp2/P3p2P/1P2P1P1/2P1BP2/R2RK3 b - - 0 22",
+   "said": "king can't hurt, right? Yeah, that's what they say."
+  },
+  {
+   "ply": 44,
+   "t": 768.5,
+   "line": [
+    "a5"
+   ],
+   "fen": "1r6/2p2p1p/2prb3/p3kp2/P3p2P/1P2P1P1/2P1BP2/R2RK3 w - - 0 23",
+   "said": "Put the pawns on the dark squares. Now, you're going to"
+  },
+  {
+   "ply": 48,
+   "t": 773,
+   "line": [
+    "Rd5+",
+    "Bxd5",
+    "Kd2",
+    "Be6+"
+   ],
+   "fen": "1r6/2p2p1p/2prb3/p3kp2/P3p2P/1P2P1P1/2PKBP2/R7 w - - 2 25",
+   "said": "regret that move. Your pawns are going to be weak. All on white squares. I'm really intimidated by that statement. Let's go up here. Putting everything on dark squares. Just begging you to take on D6. Problem is even if you take the rook, well, let's see what you do. It's a reroute. Say what you want. Is there anything that can be done here? The answer is probably no. Yeah, no. I think it's just a fortress. King is too active. Oh, very high-level game. Right. All right, let's go here. Yeah, another one. What are you going to play this time? Castles? I liked my position the last time, so Yeah, that did go very well for you. I I don't see a reason to not go for it again."
+  }
+ ],
+ "forks": []
+}

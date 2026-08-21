@@ -1,0 +1,459 @@
+{
+ "videoId": "wrk4e6bGi1Y",
+ "title": "QGD + C3 Sicilian | The Sensei Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 707,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "this is probably the best option because it also keeps c5 relatively protected all right let's go e4 c5 and"
+  },
+  {
+   "ply": 3,
+   "t": 712.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "we're still working on c3 sicilian that's been our opening that's still our"
+  },
+  {
+   "ply": 4,
+   "t": 716.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "opening it's just it's just the best sicilian in my opinion anywhere under 1900 okay so e6 common common response"
+  },
+  {
+   "ply": 5,
+   "t": 732.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "at at this level common response at this level the movie's six and of course we played d4"
+  },
+  {
+   "ply": 6,
+   "t": 734.5,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/8/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "yeah and c takes d4 is already knackered who can explain to me why c takes d4 is"
+  },
+  {
+   "ply": 7,
+   "t": 741.5,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "inaccurate because okay this trade doesn't look bad for black there is a specific thing that this gives white which is unnecessary to allow thank you luke lex well no it doesn't give up the full center because black can play d5 and"
+  },
+  {
+   "ply": 8,
+   "t": 762,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp1p1ppp/4pn2/8/3PP3/8/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "said": "contest the center we get c3 for the night yeah we get c3 for the night and that that allows us to have almost a perfect french position assuming that our opponent plays d5 which he doesn't it goes knight f6 now here a lot of people i know would be tempted to go e5 alakan style but no need to give up the d5 square e5 black goes knight d5"
+  },
+  {
+   "ply": 9,
+   "t": 784,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pp1p1ppp/4pn2/8/3PP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 5",
+   "said": "and um you know the knight entrenches itself on that weak square so definitely in this position we want to go uh knight c3 develop bishop b4 as we'll see is nothing to be afraid of i know it probably concerns some of you that this"
+  },
+  {
+   "ply": 10,
+   "t": 796,
+   "line": [
+    "Bb4"
+   ],
+   "fen": "rnbqk2r/pp1p1ppp/4pn2/8/1b1PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 3 6",
+   "said": "move exists but it's it's not scary for specific reasons and he plays it why is it not scary again i don't necessarily want to play e5 i don't necessarily want to play 5 auto makes waves is absolutely correct not f3 we certainly don't want to play f3 that that's a very weakening move never play f3 especially in the opening thank you adriana for the raid 92 is not good because it doesn't defend against knight takes e4 you're defending the knight but not the pawn uh bishop g5 is a common mistake as well who can explain before we play bishop d3 which is correct what's wrong with bishop g5 because this is very instructive and i i explained this previously but it's important to reiterate no yeah queen a5 is annoying yeah yeah definitely queen a5 but that's not actually the reason that i was had in mind i'm not playing bishop g3 and bishop d3 unless somebody explains why bishop g5 is bad eight yeah exactly so bishop g5 black plays h6"
+  },
+  {
+   "ply": 11,
+   "t": 867,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqk2r/pp1p1ppp/4pn2/8/1b1PP3/2NB4/PP3PPP/R1BQK1NR b KQkq - 4 6",
+   "said": "this is what people often miss you might say well i just go bishop h4 no big deal well it is a big deal black then plays g5 chase is the bishop and don't forget about the e4 pawn it's going to be hanging after the bishop gets away so you don't always want to defend upon with a counter pin that can be a very flimsy way to defend"
+  },
+  {
+   "ply": 12,
+   "t": 879.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqk2r/pp1p1ppp/2n1pn2/8/1b1PP3/2NB4/PP3PPP/R1BQK1NR w KQkq - 5 7",
+   "said": "now it's not the end of the world we would have taken the knight but why give up the dark square bishop and make two moves right okay knight c6 obviously we go knight f3 we can also go knight e2 by the way 92 is not a stupid move at all"
+  },
+  {
+   "ply": 13,
+   "t": 892,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqk2r/pp1p1ppp/2n1pn2/8/1b1PP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 6 7",
+   "said": "but i'm already smelling a greek gift sacrifice here so let's go knight f3 if if i understand how this game is going to go correctly we might give it a 25 chance"
+  },
+  {
+   "ply": 14,
+   "t": 908,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n1pn2/3p4/1b1PP3/2NB1N2/PP3PPP/R1BQK2R w KQkq - 0 8",
+   "said": "of a greek gift sacrifice that is contingent on black playing d5 and then castling and going like knight d7 after d5 is played okay so of course in this position we do not want to take the pawn that allows black to take with the"
+  },
+  {
+   "ply": 15,
+   "t": 919,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n1pn2/3pP3/1b1P4/2NB1N2/PP3PPP/R1BQK2R b KQkq - 0 8",
+   "said": "knight and get an isolated queen pawn position with a blockade the move here of course is to push e5 this should be completely clear to everybody"
+  },
+  {
+   "ply": 16,
+   "t": 930.5,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n1p3/3pP3/1b1Pn3/2NB1N2/PP3PPP/R1BQK2R w KQkq - 1 9",
+   "said": "okay so 94 is the best move here and i'm yeah he plays that doesn't fully eliminate the possibility of a greek gift but it okay so we have a look i'll put it this way we have a really adventurous move here which i would hesitate to play in a speedrun but i'm going to play it anyway because it's instructive so the okay so yeah castles is the adventurous move just sacking on c3 and prioritizing development bishop d2 i don't like i i do not like giving up the dark square bishop in this position why largely because the d4 pawn is on a dark square and i want to be able to defend it with bishop e3 later on right i'm worried about that pawn"
+  },
+  {
+   "ply": 17,
+   "t": 984.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n1p3/3pP3/1b1Pn3/2NB1N2/PP3PPP/R1BQ1RK1 b kq - 2 9",
+   "said": "becoming a weakness queen c2 is the clinical move queen c2 stops all threats it's a nice little move it pressures the knight but in this house i like tactical moves so we castle and if you've played the italian if you"
+  },
+  {
+   "ply": 18,
+   "t": 992.5,
+   "line": [
+    "Nxc3"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n1p3/3pP3/1b1P4/2nB1N2/PP3PPP/R1BQ1RK1 w kq - 0 10",
+   "said": "play the main line italian you should recognize the similarity between this idea what we're doing here"
+  },
+  {
+   "ply": 19,
+   "t": 993.5,
+   "line": [
+    "bxc3"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n1p3/3pP3/1b1P4/2PB1N2/P4PPP/R1BQ1RK1 b kq - 0 10",
+   "said": ""
+  },
+  {
+   "ply": 20,
+   "t": 994.5,
+   "line": [
+    "Bxc3"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n1p3/3pP3/3P4/2bB1N2/P4PPP/R1BQ1RK1 w kq - 0 11",
+   "said": "and one of the lines in the italian which i will show after the game concludes now rugby one isn't even forced here we have yeah bishop a3 as some of you are indicating is a very much legitimate uh idea sacking the exchange but preventing black from castling and getting essentially total domination on the dark squares uh but rugby one is also an incredibly tricky move so rugby one castles perhaps allows the greek gift we'll think about it"
+  },
+  {
+   "ply": 21,
+   "t": 1037.5,
+   "line": [
+    "Rb1"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2n1p3/3pP3/3P4/2bB1N2/P4PPP/1RBQ1RK1 b kq - 1 11",
+   "said": "who can tell me rugby one knight takes d4 if you've been paying attention the previous game you should be able to tell me how knight takes d4 is refuted after rook b1 and we're going to go rook b1 we're going to go with a slightly less adventurous move nope and that's the muppet most popular wrong answer not the immediate queen a4"
+  },
+  {
+   "ply": 22,
+   "t": 1051,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqk2r/pp3ppp/4p3/3pP3/3n4/2bB1N2/P4PPP/1RBQ1RK1 w kq - 0 12",
+   "said": "check because the knight returns to c6 remember always remember this about forking a knight in a king very often the knight can return and block the fork"
+  },
+  {
+   "ply": 24,
+   "t": 1061,
+   "line": [
+    "Nxd4",
+    "Bxd4"
+   ],
+   "fen": "r1bqk2r/pp3ppp/4p3/3pP3/3b4/3B4/P4PPP/1RBQ1RK1 w kq - 0 13",
+   "said": "how do we solve this problem well think about it we can take the knight first and now actually there are two ways we can play bishop b5 check sorry no agree gift because we'll end up winning a full piece instead not the worst uh turn of events but i like this move"
+  },
+  {
+   "ply": 28,
+   "t": 1079.5,
+   "line": [
+    "Qa4+",
+    "Bd7",
+    "Qxd4",
+    "O-O"
+   ],
+   "fen": "r2q1rk1/pp1b1ppp/4p3/3pP3/3Q4/3B4/P4PPP/1RB2RK1 w - - 1 15",
+   "said": "why why do i like this more than bishop v because i want to keep this bishop right if he castle short i want to keep this bishop that bishop is going to attack the king and because we don't have the knight anymore greek gift is out of the question"
+  },
+  {
+   "ply": 29,
+   "t": 1092,
+   "line": [
+    "Rxb7"
+   ],
+   "fen": "r2q1rk1/pR1b1ppp/4p3/3pP3/3Q4/3B4/P4PPP/2B2RK1 b - - 0 15",
+   "said": "um no reason that i see not to take on b7 that's a perfectly juicy free pawn and we could have gone for a more immediate attack but you know you don't want to take that too far you don't want to go crazy you want to take what's given to you yeah we'll talk about bishop takes first we'll talk about bishop takes first that was a more resilient move rather than knight takes d4"
+  },
+  {
+   "ply": 30,
+   "t": 1129.5,
+   "line": [
+    "Bc6"
+   ],
+   "fen": "r2q1rk1/pR3ppp/2b1p3/3pP3/3Q4/3B4/P4PPP/2B2RK1 w - - 1 16",
+   "said": "so i always talk about this i feel like i'm almost obsessed over it at the start of the spirit and it's the question of how do i know when to take material and when to go for an attack given that i'm i'm already up material rick takes b7 doesn't disrupt the coordination of your pieces to the contrary right the rook on b7 is great now where should we go where should we go with the rook a lot of people i think would just drop back to b1 but you have to squeeze the most out of the retreat yeah you guys you guys have to have the right sense oh yeah first of all we can"
+  },
+  {
+   "ply": 31,
+   "t": 1158.5,
+   "line": [
+    "Rb3"
+   ],
+   "fen": "r2q1rk1/p4ppp/2b1p3/3pP3/3Q4/1R1B4/P4PPP/2B2RK1 b - - 2 16",
+   "said": "take on a7 absolutely fine but now let's go for the attack we've we've had our fill of the queen side pods let's go for the attack rook b3 bingo why because once the bishop gets away from d3 this rook is gonna swing to the"
+  },
+  {
+   "ply": 32,
+   "t": 1167.5,
+   "line": [
+    "Qa5"
+   ],
+   "fen": "r4rk1/p4ppp/2b1p3/q2pP3/3Q4/1R1B4/P4PPP/2B2RK1 w - - 3 17",
+   "said": "king's side look at black's king there's nothing around black's king it's gonna be made and especially now oh and now we've got all manner of ideas all manner of ideas oh the question here is do we want to play fancy schmancy or do we want to just win yeah you know"
+  },
+  {
+   "ply": 33,
+   "t": 1198,
+   "line": [
+    "Bxh7+"
+   ],
+   "fen": "r4rk1/p4ppB/2b1p3/q2pP3/3Q4/1R6/P4PPP/2B2RK1 b - - 0 17",
+   "said": "bishop takes h7 is not as simple as you guys think it is bishop takes h7 is not as clear cut as you guys think it is but we're gonna play it we're gonna play it and i'm gonna convince you that this is not as clear as as it is it's winning for sure we're"
+  },
+  {
+   "ply": 34,
+   "t": 1204.5,
+   "line": [
+    "Kxh7"
+   ],
+   "fen": "r4r2/p4ppk/2b1p3/q2pP3/3Q4/1R6/P4PPP/2B2RK1 w - - 0 18",
+   "said": "gonna win but these sacks can be difficult now very popular well not a mistake here but people think that queen h4 king g8 rook h3 leads to immediate checkmate it does not remember this why who can who can tell me why yeah white will win but it's not actually made and you got to be very careful about this the move f6 yeah f6 opens up this pathway for the king and although this is winning here because of the overwhelming number of pieces if you've sacrificed more than we did it could be"
+  },
+  {
+   "ply": 35,
+   "t": 1246,
+   "line": [
+    "Qh4+"
+   ],
+   "fen": "r4r2/p4ppk/2b1p3/q2pP3/7Q/1R6/P4PPP/2B2RK1 b - - 1 18",
+   "said": "a big problem so what the thing to understand is that page 3 h4 is not the only way to attack right and i would start with queen h4 check that's a flexible flexible way to"
+  },
+  {
+   "ply": 36,
+   "t": 1251,
+   "line": [
+    "Kg8"
+   ],
+   "fen": "r4rk1/p4pp1/2b1p3/q2pP3/7Q/1R6/P4PPP/2B2RK1 w - - 2 19",
+   "said": "start and what move am i thinking of in this position and this is a constructive concept of not only looking at the open files right"
+  },
+  {
+   "ply": 37,
+   "t": 1268,
+   "line": [
+    "Rg3"
+   ],
+   "fen": "r4rk1/p4pp1/2b1p3/q2pP3/7Q/6R1/P4PPP/2B2RK1 b - - 3 19",
+   "said": "not only looking at the open files looking at the semi-open files as well this pod on g7 is a pretty pitiful cover right so what i like is the move rook g3 this sets up queen f6 it sets up bishop h6 the sac on g7 is not out of the question to me this looks a lot more"
+  },
+  {
+   "ply": 36,
+   "t": 1284.5,
+   "line": [],
+   "fen": "r4rk1/p4pp1/2b1p3/q2pP3/7Q/1R6/P4PPP/2B2RK1 w - - 2 19",
+   "said": "overwhelming than starting to hunt the king after rook h3f6 a little bit less clean although as i'll show you after the game rook h3 was also completely completely winning"
+  },
+  {
+   "ply": 37,
+   "t": 1289.5,
+   "line": [
+    "Rg3"
+   ],
+   "fen": "r4rk1/p4pp1/2b1p3/q2pP3/7Q/6R1/P4PPP/2B2RK1 b - - 3 19",
+   "said": "so multiple options here for sure"
+  },
+  {
+   "ply": 38,
+   "t": 1292.5,
+   "line": [
+    "g6"
+   ],
+   "fen": "r4rk1/p4p2/2b1p1p1/q2pP3/7Q/6R1/P4PPP/2B2RK1 w - - 0 20",
+   "said": "dark squares by the way don't look at the dark squares boom boom again accuracy is crucial in these positions do not rush and make sure you're fully properly considering your opponent's defensive resources for example a lot of people would go queen f6 here leading with the queen in an attack is dangerous that can be a big mistake why why is queen f6 a mistake now rook h3 is mate on the spot queen d8 queen d8 and we got to go back"
+  },
+  {
+   "ply": 39,
+   "t": 1335,
+   "line": [
+    "Rh3"
+   ],
+   "fen": "r4rk1/p4p2/2b1p1p1/q2pP3/7Q/7R/P4PPP/2B2RK1 b - - 1 20",
+   "said": "we could play bishop g5 that would be an excellent move and bishop f6 but just because an idea wasn't applied on one move doesn't mean it can't be applied on the next idea improvement rook h3 i saw a great example of that just recently and i'll show you guys now it wins on the spot it's mate because now the move f6 allows queen h7 as he's thinking i mean the game is over it's made on the next move i'm going to pull up"
+  },
+  {
+   "ply": 40,
+   "t": 1361.5,
+   "line": [
+    "f5"
+   ],
+   "fen": "r4rk1/p7/2b1p1p1/q2pPp2/7Q/7R/P4PPP/2B2RK1 w - f6 0 21",
+   "said": "a great example of this kind of flexible thinking and a very similar theme actually in in a exercise that i recently gave to a student okay so let's finish the game so let's begin by applying that idea of idea improvement so and the concept of weak dark squares so white to play here de britson against bench bone later became a gm i'm not i'm not familiar with the player with white 1977. okay so it's white to play and win in this position let's look at this position for a second see what we can notice you should notice in particular two uh big big trump cards for white the first of course is the pawn on d6 is a monster and the second is that uh blacks dark squares are horrendously catastrophically weak um so the first movement wow you guys are are very very sharp first move is d7 and that's pretty uh pretty straightforward we advance the pawn we hit the rook black cannot take on d7 because then the queen hangs so we're there is force now the rook on the e8 is a sitting duck and we play queen f6 but the hard part comes after queen takes d7 why to play and win and i advise you to take your time there is a trap here that you have to sidestep with a very very nice move very good bishop h6 is the muppet we d4 between d4 x-ray defense g7 black is okay what we have to do is play bishop g5 first hit the rook only after the rook moves do we play bishop h6 and now queen d4 is no longer possible mate is inevitable yeah nice stuff and another nice line occurs after rook takes d7 here we cannot dislodge the rook from the from the uh d file but what you have to notice is that the back rank is now terribly weak thank you tifa gifting to maximus so bishop h6 queen d4 and very nice one and this is unstoppable black can try bishop b6 but it's not helping rook takes c6 fe 6 queen f8 made very pretty and notice that white's created luft none of this would have worked if i didn't have lift literally none of this not a single line because of constant threat of mate so lessons you know just because an idea doesn't work in one version does it mean you can't start with an intermezzo and and solve the problem"
+  },
+  {
+   "ply": 7,
+   "t": 1520,
+   "line": [],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "um and it works on the next and it doesn't mean you have to forget about it for all time okay back to the game back to the game so this is instructive yeah takes takes if"
+  },
+  {
+   "ply": 6,
+   "t": 1522.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/8/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "you watch my uh or if you bought my"
+  },
+  {
+   "ply": 7,
+   "t": 1524,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "nerdsy method i one of the shortest games i've ever played against the 1700"
+  },
+  {
+   "ply": 5,
+   "t": 1534,
+   "line": [],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "actually started exactly like this"
+  },
+  {
+   "ply": 6,
+   "t": 1535,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "the best move for black here is d5 immediately and potentially this"
+  },
+  {
+   "ply": 7,
+   "t": 1538,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "transposes into an advanced french which a lot of people don't want to play"
+  },
+  {
+   "ply": 6,
+   "t": 1540.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "but the move in the aleppo styles he"
+  },
+  {
+   "ply": 7,
+   "t": 1542.5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pP4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "takes d5 got plenty of speedrun games in this line so you can uh dig around cdcdi also have plenty of games in this position okay knight f6 is fine the best move is d5 either here or on the next move um okay so bishop b4 bishop d3 let's get to the fun part knight c6 knight f3 d5 e5 knight e4 and and yeah i was hoping for a great gift after 97 castles castles boom this is a classic like a classic greek gif knight g5 check etc and as a good exercise those of you watching on youtube i'm actually not going to analyze this deliberately see if you can set it up on a board and figure out how white wins after king g6 king h6 and king g8 and see if you can work that out without an engine okay so 94 castles um very thematic concept of giving up the c3 pawn thank you digital hobo"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4"
+   ],
+   "options": [
+    {
+     "san": "cxd4",
+     "t": 734.5,
+     "continuation": "cxd4",
+     "said": "at at this level common response at this level the movie's six and of course we played d4 yeah and c takes d4 is already knackered who can explain to me why c takes d4 is inaccurate because okay this trade doesn't look bad for black there is a specific thing that this gives white which is unnecessary to allow thank you luke lex well no it doesn't give up the full center because black can play d5 and contest the center we get c3 for the night yeah we get c3 for the night and that that allows us to have almost a perfect french position assuming that our opponent plays d5 which he doesn't it goes knight f6 now here a lot of people i know would be tempted to go e5 alakan style but no need to give up the d5 square e5 black goes knight d5 and um you know the knight entrenches itself on that weak square so definitely in this position we want to go uh knight c3 develop bishop b4 as we'll see is nothing to be afraid of i know it probably concerns some of you that this move exists but it's it's not scary for specific reasons"
+    },
+    {
+     "san": "d5",
+     "t": 1535,
+     "continuation": "d5",
+     "said": "nerdsy method i one of the shortest games i've ever played against the 1700 actually started exactly like this the best move for black here is d5 immediately and potentially this transposes into an advanced french which a lot of people don't want to play but the move in the aleppo styles he takes d5 got plenty of speedrun games in this line so you can uh dig around cdcdi also have plenty of games in this position okay knight f6 is fine the best move is d5 either here or on the next move um okay so bishop b4 bishop d3 let's get to the fun part knight c6 knight f3 d5 e5 knight e4 and and yeah i was hoping for a great gift after 97 castles castles boom this is a classic like a classic greek gif knight g5 check etc and as a good exercise those of you watching on youtube i'm actually not going to analyze this deliberately see if you can set it up on a board and figure out how white wins after king g6 king h6 and king g8 and see if you can work that out without an engine"
+    }
+   ]
+  },
+  {
+   "ply": 6,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5"
+   ],
+   "options": [
+    {
+     "san": "e5",
+     "t": 1538,
+     "continuation": "e5",
+     "said": "played against the 1700 actually started exactly like this the best move for black here is d5 immediately and potentially this transposes into an advanced french which a lot of people don't want to play but the move in the aleppo styles he takes d5 got plenty of speedrun games in this line so you can uh dig around cdcdi also have plenty of games in this position okay knight f6 is fine the best move is d5 either here or on the next move um okay so bishop b4 bishop d3 let's get to the fun part knight c6 knight f3 d5 e5 knight e4 and and yeah i was hoping for a great gift after 97 castles castles boom this is a classic like a classic greek gif knight g5 check etc and as a good exercise those of you watching on youtube i'm actually not going to analyze this deliberately see if you can set it up on a board and figure out how white wins after king g6 king h6 and king g8 and see if you can work that out without an engine okay so 94 castles um very thematic concept of giving up the"
+    },
+    {
+     "san": "exd5",
+     "t": 1542.5,
+     "continuation": "exd5",
+     "said": "the best move for black here is d5 immediately and potentially this transposes into an advanced french which a lot of people don't want to play but the move in the aleppo styles he takes d5 got plenty of speedrun games in this line so you can uh dig around cdcdi also have plenty of games in this position okay knight f6 is fine the best move is d5 either here or on the next move um okay so bishop b4 bishop d3 let's get to the fun part knight c6 knight f3 d5 e5 knight e4 and and yeah i was hoping for a great gift after 97 castles castles boom this is a classic like a classic greek gif knight g5 check etc and as a good exercise those of you watching on youtube i'm actually not going to analyze this deliberately see if you can set it up on a board and figure out how white wins after king g6 king h6 and king g8 and see if you can work that out without an engine okay so 94 castles um very thematic concept of giving up the c3 pawn thank you digital hobo"
+    }
+   ]
+  }
+ ]
+}

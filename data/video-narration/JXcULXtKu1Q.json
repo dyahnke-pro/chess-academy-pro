@@ -1,0 +1,146 @@
+{
+ "videoId": "JXcULXtKu1Q",
+ "title": "Winning Bullet Brawl!! | Daniel Naroditsky Claims VICTORY | 4.5 to 1.5 vs Hikaru! | GM Games",
+ "moves": [
+  {
+   "ply": 4,
+   "t": 701,
+   "line": [
+    "b3",
+    "Nc6",
+    "Bb2",
+    "e5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P6/PBPPPPPP/RN1QKBNR w KQkq - 0 3",
+   "said": "all right lucky as usual okay that that that that literally had zero chance of"
+  },
+  {
+   "ply": 8,
+   "t": 703.5,
+   "line": [
+    "e3",
+    "e4",
+    "f3",
+    "exf3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/8/1P2Pp2/PBPP2PP/RN1QKBNR w KQkq - 0 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 705,
+   "line": [
+    "Nxf3",
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/8/1P2PN2/PBPP2PP/RN1QKB1R w KQkq - 1 6",
+   "said": ""
+  },
+  {
+   "ply": 14,
+   "t": 706.5,
+   "line": [
+    "Bd3",
+    "Be7",
+    "Be2",
+    "d5"
+   ],
+   "fen": "r1bqk2r/ppp1bppp/2n2n2/3p4/8/1P2PN2/PBPPB1PP/RN1QK2R w KQkq - 0 8",
+   "said": "working I went F3 okay thought he would go Knight F3"
+  },
+  {
+   "ply": 15,
+   "t": 707.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqk2r/ppp1bppp/2n2n2/3p4/8/1PN1PN2/PBPPB1PP/R2QK2R b KQkq - 1 8",
+   "said": ""
+  },
+  {
+   "ply": 17,
+   "t": 709,
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/ppp1bppp/2n2n2/3p4/8/1PN1PN2/PBPPB1PP/R2Q1RK1 b - - 3 9",
+   "said": ""
+  },
+  {
+   "ply": 19,
+   "t": 712,
+   "line": [
+    "Nb8",
+    "Bb5"
+   ],
+   "fen": "rnbq1rk1/ppp1bppp/5n2/1B1p4/8/1PN1PN2/PBPP2PP/R2Q1RK1 b - - 5 10",
+   "said": ""
+  },
+  {
+   "ply": 23,
+   "t": 717,
+   "line": [
+    "Bg4",
+    "Bd3",
+    "c6",
+    "Ne2"
+   ],
+   "fen": "rn1q1rk1/pp2bppp/2p2n2/3p4/6b1/1P1BPN2/PBPPN1PP/R2Q1RK1 b - - 1 12",
+   "said": ""
+  },
+  {
+   "ply": 25,
+   "t": 718.5,
+   "line": [
+    "Nbd7",
+    "c4"
+   ],
+   "fen": "r2q1rk1/pp1nbppp/2p2n2/3p4/2P3b1/1P1BPN2/PB1PN1PP/R2Q1RK1 b - - 0 13",
+   "said": ""
+  },
+  {
+   "ply": 27,
+   "t": 722,
+   "line": [
+    "Bd6",
+    "Bc2"
+   ],
+   "fen": "r2q1rk1/pp1n1ppp/2pb1n2/3p4/2P3b1/1P2PN2/PBBPN1PP/R2Q1RK1 b - - 2 14",
+   "said": ""
+  },
+  {
+   "ply": 29,
+   "t": 724,
+   "line": [
+    "Bh5",
+    "h3"
+   ],
+   "fen": "r2q1rk1/pp1n1ppp/2pb1n2/3p3b/2P5/1P2PN1P/PBBPN1P1/R2Q1RK1 b - - 0 15",
+   "said": ""
+  },
+  {
+   "ply": 33,
+   "t": 729.5,
+   "line": [
+    "Bg6",
+    "cxd5",
+    "cxd5",
+    "Ned4"
+   ],
+   "fen": "r2q1rk1/pp1n1ppp/3b1nb1/3p4/3N4/1P2PN1P/PBBP2P1/R2Q1RK1 b - - 1 17",
+   "said": ""
+  },
+  {
+   "ply": 35,
+   "t": 731.5,
+   "line": [
+    "Bc7",
+    "Nf5"
+   ],
+   "fen": "r2q1rk1/ppbn1ppp/5nb1/3p1N2/8/1P2PN1P/PBBP2P1/R2Q1RK1 b - - 3 18",
+   "said": ""
+  }
+ ],
+ "forks": []
+}

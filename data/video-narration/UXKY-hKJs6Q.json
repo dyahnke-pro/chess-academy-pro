@@ -1,0 +1,483 @@
+{
+ "videoId": "UXKY-hKJs6Q",
+ "title": "Chess Opening Traps | Philidor, King's Indian, London, Caro-Kann | GM Naroditsky's DYI Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 13,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "we are 1214 playing 1203 from Canada cman good luck to our opponent let's go E4 for E5 okay so hopefully we get a"
+  },
+  {
+   "ply": 3,
+   "t": 15,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": ""
+  },
+  {
+   "ply": 4,
+   "t": 18,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "gleck but again we're facing the filor now this is just this is becoming a very interesting Trend I see I didn't realize this uh when I started this speedrun"
+  },
+  {
+   "ply": 3,
+   "t": 32,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "because the fidor is always pretty popular with beginner to low intermediate players but I feel like we've maybe faed Knight C6 once and we"
+  },
+  {
+   "ply": 4,
+   "t": 34.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "faced D6 a million times so I wonder if it's somebody recommending this move or people just kind of you know guessing into it pretty interesting now for the"
+  },
+  {
+   "ply": 5,
+   "t": 49,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
+   "said": "umth time we have D4 we have Bishop C4 both moves are good uh this time I'm going to go Bishop C4 just for uh for"
+  },
+  {
+   "ply": 6,
+   "t": 52.5,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rnbqk1nr/ppp1bppp/3p4/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 4",
+   "said": "Giggles Bishop E7 and again these moves are interchangeable we can go D4 here we"
+  },
+  {
+   "ply": 7,
+   "t": 59,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqk1nr/ppp1bppp/3p4/4p3/2BPP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+   "said": "can Castle but let's play principal chess and let's go D4"
+  },
+  {
+   "ply": 8,
+   "t": 61.5,
+   "line": [
+    "exd4"
+   ],
+   "fen": "rnbqk1nr/ppp1bppp/3p4/8/2BpP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+   "said": "so at this point I've kind of talked uh briefly and I think we had a game against a slightly questionable user where I explained some of the virtues of potentially taking on D4 with uh the queen one interesting subtlety is that once you have already developed your Bishop to C4 at this point in my opinion Queen takes D4 is a little bit in congruent with uh with this move and the reason is quite subtle maybe you guys can chew on this what is the reason why Queen takes D4 is less effective after you've already deployed the light squirt Bishop it's not bad to take with the queen it's just a little bit awkward and you might have to remember in the previous speed how I recommended that you deal with the move Knight C6 so basically the reason is after Queen takes D4 okay black will have to play Knight F6 when black develops the"
+  },
+  {
+   "ply": 9,
+   "t": 120,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "rnbqk1nr/ppp1bppp/3p4/8/2BNP3/8/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "said": "other Knight to C6 you want to have the option of playing this move Bishop B5 in order to pin the Knight and then eliminate the Knight so that the queen remains safe in the center but you don't want to make two moves of the same piece sorry to burn so much time but that's basically the reason when the bishop stays on F1 it can go to B5 in one move and here you would potentially be losing"
+  },
+  {
+   "ply": 8,
+   "t": 135,
+   "line": [],
+   "fen": "rnbqk1nr/ppp1bppp/3p4/8/2BpP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+   "said": "a Tempo so the reason is very concrete let's take with the Knight yeah also Queen takes D4 Bishop F6 as strategic points out is a little bit annoying just"
+  },
+  {
+   "ply": 9,
+   "t": 139,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "rnbqk1nr/ppp1bppp/3p4/8/2BNP3/8/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "said": "chasing away the queen straight away so let's take with the Knight now our Knight has moved twice that's true but"
+  },
+  {
+   "ply": 10,
+   "t": 144,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/3p1n2/8/2BNP3/8/PPP2PPP/RNBQK2R w KQkq - 1 6",
+   "said": "now it it occupies a nice Central Square"
+  },
+  {
+   "ply": 11,
+   "t": 145.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/3p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 2 6",
+   "said": "okay Knight F6 Knight C3 obviously so here I might have walked into some slightly annoying opening Theory and the"
+  },
+  {
+   "ply": 12,
+   "t": 157,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqk2r/pp2bppp/3p1n2/2p5/2BNP3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 7",
+   "said": "moment you see a bishop on C4 like this the Tactical alarm Bells should kind of be ringing okay C5 is a very typical"
+  },
+  {
+   "ply": 11,
+   "t": 158.5,
+   "line": [],
+   "fen": "rnbqk2r/ppp1bppp/3p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 2 6",
+   "said": "mistake at this level but Knight takes C4 always has to be properly calculated the center fork trick because it is"
+  },
+  {
+   "ply": 12,
+   "t": 170,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqk2r/pp2bppp/3p1n2/2p5/2BNP3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 7",
+   "said": "pretty prevalent in uh a lot of filor lines and it can be very easy to forget about but our opponent plays C5 we face this type of move in a million different positions and it's almost always a mistake with very few exceptions because it's just terribly weakening it weakens this D5 Square it creates a easily targetable backward Pawn on D6 and you know the automatic reaction is probably to drop the Knight back to F3 we don't really want to go Knight F5 because that our opponent offers a drop because that allows a trade on F5 and we grab the bishop air but we slightly harm our kingside Pawn structure and we lessen our grip on the D5 square but we actually have a really nice move here that's not intuitively obvious I think can anybody identify it we have a move"
+  },
+  {
+   "ply": 13,
+   "t": 219,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqk2r/pp2bppp/3p1n2/1Bp5/3NP3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 7",
+   "said": "here and and I'm giving you a hidden by saying that it's not obvious which should guide you in the direction of non Knight moves which really only leaves one other logical move and that's Bishop B5 check and this is a trick that you"
+  },
+  {
+   "ply": 14,
+   "t": 221.5,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "rn1qk2r/pp1bbppp/3p1n2/1Bp5/3NP3/2N5/PPP2PPP/R1BQK2R w KQkq - 2 8",
+   "said": "can use in the Sicilian as I'll show you after the game to punish a certain set of unsound lines the point is simple you want to generate the F5 Square for the Knight and you want to trade off the light squired Bishops once the Knight lands on F5 it simultaneously hits all of Black's weak spots now at this point"
+  },
+  {
+   "ply": 15,
+   "t": 248.5,
+   "line": [
+    "Nf5"
+   ],
+   "fen": "rn1qk2r/pp1bbppp/3p1n2/1Bp2N2/4P3/2N5/PPP2PPP/R1BQK2R b KQkq - 3 8",
+   "said": "we can start immediately with F5 or we can trade on D7 first let's think about this how do we want to do this I actually think it's a good idea to immediately play Knight F5 why because well it's simple if we"
+  },
+  {
+   "ply": 14,
+   "t": 254,
+   "line": [],
+   "fen": "rn1qk2r/pp1bbppp/3p1n2/1Bp5/3NP3/2N5/PPP2PPP/R1BQK2R w KQkq - 2 8",
+   "said": "take on D7 we give black a chance to"
+  },
+  {
+   "ply": 16,
+   "t": 257,
+   "line": [
+    "Nf5",
+    "Bxb5"
+   ],
+   "fen": "rn1qk2r/pp2bppp/3p1n2/1bp2N2/4P3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 9",
+   "said": "develop their pieces here the other"
+  },
+  {
+   "ply": 17,
+   "t": 259.5,
+   "line": [
+    "Nxb5"
+   ],
+   "fen": "rn1qk2r/pp2bppp/3p1n2/1Np2N2/4P3/8/PPP2PPP/R1BQK2R b KQkq - 0 9",
+   "said": "Knight immediately lands on B5 and you"
+  },
+  {
+   "ply": 16,
+   "t": 262,
+   "line": [],
+   "fen": "rn1qk2r/pp2bppp/3p1n2/1bp2N2/4P3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 9",
+   "said": "should note that I'm avoiding the"
+  },
+  {
+   "ply": 18,
+   "t": 264,
+   "line": [
+    "Nxb5",
+    "Qa5+"
+   ],
+   "fen": "rn2k2r/pp2bppp/3p1n2/qNp2N2/4P3/8/PPP2PPP/R1BQK2R w KQkq - 1 10",
+   "said": "tempting Knight takes G7 which maybe"
+  },
+  {
+   "ply": 16,
+   "t": 265.5,
+   "line": [],
+   "fen": "rn1qk2r/pp2bppp/3p1n2/1bp2N2/4P3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 9",
+   "said": "actually is good but too complicated black plays King f8 and then suddenly"
+  },
+  {
+   "ply": 18,
+   "t": 271.5,
+   "line": [
+    "Nxb5",
+    "Qa5+"
+   ],
+   "fen": "rn2k2r/pp2bppp/3p1n2/qNp2N2/4P3/8/PPP2PPP/R1BQK2R w KQkq - 1 10",
+   "said": "the the Knight is hanging so here we avoid the tactics and we simply drop the"
+  },
+  {
+   "ply": 19,
+   "t": 273.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rn2k2r/pp2bppp/3p1n2/q1p2N2/4P3/2N5/PPP2PPP/R1BQK2R b KQkq - 2 10",
+   "said": "Knight back to C3 and I think a lot of you are like well what about Knight takes C4 did I blunder this move no Knight takes C4 is going to go down in flames I think our"
+  },
+  {
+   "ply": 20,
+   "t": 289,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "rn2k2r/pp2bppp/3p4/q1p2N2/4n3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 11",
+   "said": "opponent is very likely to play it in fact Knight takes C4 is losing for many different reasons and you should kind of already start picking up on why why Black's position is losing and off the top of my head I think I see two clearly winning moves but one move essentially just wins"
+  },
+  {
+   "ply": 21,
+   "t": 310,
+   "line": [
+    "Qe2"
+   ],
+   "fen": "rn2k2r/pp2bppp/3p4/q1p2N2/4n3/2N5/PPP1QPPP/R1B1K2R b KQkq - 1 11",
+   "said": "material by force and or devastates Black's position what am I talking about here yeah very good people all seeing Queen E2 excellent job Queen E2 found of course the point is Black's Knight cannot move because of Queen takes E7 Checkmate so black essentially has only one way to Stave off immediate material loss and that's the move D5 trying to secure the Knight with the meager resources that black has and using this pin uh to protect the D5 Pawn"
+  },
+  {
+   "ply": 22,
+   "t": 342,
+   "line": [
+    "d5"
+   ],
+   "fen": "rn2k2r/pp2bppp/8/q1pp1N2/4n3/2N5/PPP1QPPP/R1B1K2R w KQkq - 0 12",
+   "said": "but this entire construction is about to fall apart spectacularly because black isn't even about to Castle because the bishop on E7 is going to hang so after D5 we don't even need to make a forcing move we can just casually get out of this pin and Black's position is going to instantly collapse so what is the easiest way of getting out of this pin Bishop D2 is possible I know a lot of you are probably thinking this but there's a more elegant way to do it right you shouldn't forget that to get out of a pin does not necessarily mean to literally put a piece between it you can actually move the piece uh that is getting pinned uh sorry the piece that the Knight is technically getting pinned I call this the pin piece"
+  },
+  {
+   "ply": 23,
+   "t": 377,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn2k2r/pp2bppp/8/q1pp1N2/4n3/2N5/PPP1QPPP/R1B2RK1 b kq - 1 12",
+   "said": "and the king um has no name it's like the dividend and the diviser I wish there were terms for like the piece that's getting pinned and then the other piece so we just Castle long story short we just Castle yeah there were other"
+  },
+  {
+   "ply": 22,
+   "t": 382,
+   "line": [],
+   "fen": "rn2k2r/pp2bppp/8/q1pp1N2/4n3/2N5/PPP1QPPP/R1B1K2R w KQkq - 0 12",
+   "said": "ways to win but you actually do have to be careful I think 97 is very sloppy and"
+  },
+  {
+   "ply": 23,
+   "t": 386.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn2k2r/pp2bppp/8/q1pp1N2/4n3/2N5/PPP1QPPP/R1B2RK1 b kq - 1 12",
+   "said": "I'll show you why afterward the penny I think I've called it the penny before yeah the pin piece and then the pin e like p i n e"
+  },
+  {
+   "ply": 22,
+   "t": 398,
+   "line": [],
+   "fen": "rn2k2r/pp2bppp/8/q1pp1N2/4n3/2N5/PPP1QPPP/R1B1K2R w KQkq - 0 12",
+   "said": "e yeah remember that in this situation the pin piece is the piece that actually can't move like which is in this case"
+  },
+  {
+   "ply": 24,
+   "t": 400,
+   "line": [
+    "O-O",
+    "g6"
+   ],
+   "fen": "rn2k2r/pp2bp1p/6p1/q1pp1N2/4n3/2N5/PPP1QPPP/R1B2RK1 w kq - 0 13",
+   "said": "the Knight okay G6 now it's time for simple chess order of operations is very important here don't play Knight takes"
+  },
+  {
+   "ply": 25,
+   "t": 412,
+   "line": [
+    "Nxe7"
+   ],
+   "fen": "rn2k2r/pp2Np1p/6p1/q1pp4/4n3/2N5/PPP1QPPP/R1B2RK1 b kq - 0 13",
+   "said": "D5 because then G takes F5 and suddenly the knight's defended by the other Pawn so the simplest win is just to take the bishop just take the bishop King takes E7 Knight takes D5 check and then we win"
+  },
+  {
+   "ply": 27,
+   "t": 420,
+   "line": [
+    "Kxe7",
+    "Nxd5+"
+   ],
+   "fen": "rn5r/pp2kp1p/6p1/q1pN4/4n3/8/PPP1QPPP/R1B2RK1 b - - 0 14",
+   "said": "the Knight and we win the game and the filor Goes Down And Flames and all of it was because of C5 by the way C5 was essentially it shouldn't have been the losing move but it was borderline losing in the context of in the context of the human chess yeah maybe like the computer can somehow stay afloat but Black's position was already in Dire Straits okay let's see what our opponent does here but Checkmate is a yeah resigns okay I'm G to load this into"
+  },
+  {
+   "ply": 10,
+   "t": 458,
+   "line": [],
+   "fen": "rnbqk2r/ppp1bppp/3p1n2/8/2BNP3/8/PPP2PPP/RNBQK2R w KQkq - 1 6",
+   "said": "chess BAS short game but I think pretty instructive a lot of important themes all right and I actually do want to check the theory here because if black had played this properly if black had"
+  },
+  {
+   "ply": 11,
+   "t": 459,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/3p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 2 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 460,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1bppp/3p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R w KQ - 3 7",
+   "said": "castled in this position white actually does need to be pretty accurate to secure a an advantage out of the opening"
+  },
+  {
+   "ply": 8,
+   "t": 470.5,
+   "line": [],
+   "fen": "rnbqk1nr/ppp1bppp/3p4/8/2BpP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+   "said": "and I want to double check the proper way to play okay so first of all as I said Queen takes D4 isn't a great idea"
+  },
+  {
+   "ply": 9,
+   "t": 472.5,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "rnbqk1nr/ppp1bppp/3p4/8/2BQP3/5N2/PPP2PPP/RNB1K2R b KQkq - 0 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 473.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/3p1n2/8/2BQP3/5N2/PPP2PPP/RNB1K2R w KQkq - 1 6",
+   "said": "because after something like Knight F6"
+  },
+  {
+   "ply": 11,
+   "t": 475,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/3p1n2/8/2BQP3/5N2/PPP2PPP/RNB2RK1 b kq - 2 6",
+   "said": "castles Knight C6 you want to be able to"
+  },
+  {
+   "ply": 12,
+   "t": 476,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqk2r/ppp1bppp/2np1n2/8/2BQP3/5N2/PPP2PPP/RNB2RK1 w kq - 3 7",
+   "said": ""
+  },
+  {
+   "ply": 13,
+   "t": 477,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqk2r/ppp1bppp/2np1n2/1B6/3QP3/5N2/PPP2PPP/RNB2RK1 b kq - 4 7",
+   "said": "play this move Bishop B5 but now you've wasted his"
+  },
+  {
+   "ply": 9,
+   "t": 481.5,
+   "line": [],
+   "fen": "rnbqk1nr/ppp1bppp/3p4/8/2BQP3/5N2/PPP2PPP/RNB1K2R b KQkq - 0 5",
+   "said": "so that's why we took with the Knight okay so Knight F6 Knight C3 castles yeah so after castles castles the theory goes castles castles Knight takes C4 is correct by black a lot of games in the database here over a 100 and a lot of grand Mastery games but white is slightly better Knight takes C4 black plays D5 and here of course the standard reaction to the center fork trick which is to preserve the bishop pair with a move Bishop D3 and after D4 Bishop E4 white is a very pleasant position just more active pieces in the center black can probably equalize with very careful play but computer is giving about point two yeah really nice Edge for uh for white here the main move is Knight to D7 trying to get the Knight to C5 or to F6 now I like the move I actually really like the move C3 here which does two things it protects the Knight for for future purposes and it sets you up very"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 8,
+   "fen": "rnbqk1nr/ppp1bppp/3p4/8/2BpP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "d6",
+    "Bc4",
+    "Be7",
+    "d4",
+    "exd4"
+   ],
+   "options": [
+    {
+     "san": "Nxd4",
+     "t": 120,
+     "continuation": "Nxd4",
+     "said": "other Knight to C6 you want to have the option of playing this move Bishop B5 in order to pin the Knight and then eliminate the Knight so that the queen remains safe in the center but you don't want to make two moves of the same piece sorry to burn so much time but that's basically the reason when the bishop stays on F1 it can go to B5 in one move and here you would potentially be losing a Tempo so the reason is very concrete let's take with the Knight yeah also Queen takes D4 Bishop F6 as strategic points out is a little bit annoying just chasing away the queen straight away so let's take with the Knight now our Knight has moved twice that's true but now it it occupies a nice Central Square okay Knight F6 Knight C3 obviously so here I might have walked into some slightly annoying opening Theory and the moment you see a bishop on C4 like this the Tactical alarm Bells should kind of be ringing okay C5 is a very typical mistake at this level but Knight takes C4 always has to be properly calculated the center fork trick because it is pretty prevalent in uh a lot of filor lines and it can be very easy to forget about but our opponent plays C5 we face this type of move in a million different positions and it's almost always a mistake with very few exceptions because it's just terribly weakening it weakens"
+    },
+    {
+     "san": "Qxd4",
+     "t": 472.5,
+     "continuation": "Qxd4",
+     "said": "does need to be pretty accurate to secure a an advantage out of the opening and I want to double check the proper way to play okay so first of all as I said Queen takes D4 isn't a great idea because after something like Knight F6 castles Knight C6 you want to be able to play this move Bishop B5 but now you've wasted his so that's why we took with the Knight okay so Knight F6 Knight C3 castles yeah so after castles castles the theory goes castles castles Knight takes C4 is correct by black a lot of games in the database here over a 100 and a lot of grand Mastery games but white is slightly better Knight takes C4 black plays D5 and here of course the standard reaction to the center fork trick which is to preserve the bishop pair with a move Bishop D3 and after D4 Bishop E4 white is a very pleasant position just more active pieces in the center black can probably equalize with very careful play but computer is giving about point two yeah really nice Edge for uh for white here the main move is Knight to D7 trying to get the Knight to C5 or to F6 now I like the move I actually really"
+    }
+   ]
+  },
+  {
+   "ply": 11,
+   "fen": "rnbqk2r/ppp1bppp/3p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 2 6",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "d6",
+    "Bc4",
+    "Be7",
+    "d4",
+    "exd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "c5",
+     "t": 157,
+     "continuation": "c5",
+     "said": "okay Knight F6 Knight C3 obviously so here I might have walked into some slightly annoying opening Theory and the moment you see a bishop on C4 like this the Tactical alarm Bells should kind of be ringing okay C5 is a very typical mistake at this level but Knight takes C4 always has to be properly calculated the center fork trick because it is pretty prevalent in uh a lot of filor lines and it can be very easy to forget about but our opponent plays C5 we face this type of move in a million different positions and it's almost always a mistake with very few exceptions because it's just terribly weakening it weakens this D5 Square it creates a easily targetable backward Pawn on D6 and you know the automatic reaction is probably to drop the Knight back to F3 we don't really want to go Knight F5 because that our opponent offers a drop because that allows a trade on F5 and we grab the bishop air but we slightly harm our kingside Pawn structure and we lessen our grip on the D5 square but we actually have a really nice move here that's not intuitively obvious I think can anybody identify it we have a move here and and I'm giving you a hidden by saying that it's not obvious which should guide you in the direction of non Knight moves which really only leaves"
+    },
+    {
+     "san": "O-O",
+     "t": 460,
+     "continuation": "O-O",
+     "said": "chess BAS short game but I think pretty instructive a lot of important themes all right and I actually do want to check the theory here because if black had played this properly if black had castled in this position white actually does need to be pretty accurate to secure a an advantage out of the opening and I want to double check the proper way to play okay so first of all as I said Queen takes D4 isn't a great idea because after something like Knight F6 castles Knight C6 you want to be able to play this move Bishop B5 but now you've wasted his so that's why we took with the Knight okay so Knight F6 Knight C3 castles yeah so after castles castles the theory goes castles castles Knight takes C4 is correct by black a lot of games in the database here over a 100 and a lot of grand Mastery games but white is slightly better Knight takes C4 black plays D5 and here of course the standard reaction to the center fork trick which is to preserve the bishop pair with a move Bishop D3 and after D4 Bishop E4 white is a very pleasant position just more active pieces in the center black can probably equalize with very careful play but computer is giving about point two yeah"
+    }
+   ]
+  }
+ ]
+}

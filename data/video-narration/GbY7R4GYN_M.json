@@ -1,0 +1,161 @@
+{
+ "videoId": "GbY7R4GYN_M",
+ "title": "Smith-Morra Gambit Accepted | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 26.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] white with a 1718 all right e4 c5 well you all know what i'm doing"
+  },
+  {
+   "ply": 3,
+   "t": 29.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "smith mora"
+  },
+  {
+   "ply": 4,
+   "t": 31.5,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 5,
+   "t": 33,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 6,
+   "t": 35,
+   "line": [
+    "dxc3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "ccepted let's see if well obviously accepted let's see if well obviously yeah accept it accept it"
+  },
+  {
+   "ply": 7,
+   "t": 36.5,
+   "line": [
+    "Nxc3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "said": ""
+  },
+  {
+   "ply": 8,
+   "t": 37.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "yes okay so we go knight f3"
+  },
+  {
+   "ply": 9,
+   "t": 40,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 41.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/4P3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "and e6 which is a pretty popular system one of the better systems that black has and those of you who have uh watched the previous speedruns and seen the mora games uh know what the theoretical move"
+  },
+  {
+   "ply": 11,
+   "t": 63.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R b KQkq - 1 6",
+   "said": "here is which is in my opinion very counter-intuitive i feel like your your brain won't really tell you to play like this but this move has some very deep ideas behind it that is to develop the bishop to c4 now the reason you might"
+  },
+  {
+   "ply": 12,
+   "t": 65.5,
+   "line": [
+    "Nge7"
+   ],
+   "fen": "r1bqkb1r/pp1pnppp/2n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 2 7",
+   "said": "not play it is because the bishop is just biting on granite to use my favorite expression but there are many cases where you suck a knight on d5 the pawn on e6 disappears and then the bishop opens up and there's other reasons you would put it on c4 i'll get into this later 97 is not the move as far as i know 97 is not the move as far as i know um but there is no direct way to punish i mean there's a couple of tempting moves that we could play the d6 square of course is what we ultimately want to try to exploit so we can play bishop out to f4 one idea to try to put it on d6 uh we can play knight b5 but if we played ip5 black could go d5 or black could go knight e7 to g6 and we're not in time to put our knight on d6 i mean we can put our knight 26 but"
+  },
+  {
+   "ply": 13,
+   "t": 125.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/pp1pnppp/2n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 b kq - 3 7",
+   "said": "it'll be captured so in such situations i feel like a lot of people spend a lot of time looking for something insane but let's practice just being straightforward and castling let's just"
+  },
+  {
+   "ply": 14,
+   "t": 127,
+   "line": [
+    "Ng6"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n1p1n1/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 4 8",
+   "said": "put this decision off knight g6 all right so um now i think it might be a good opportunity to test out you know i call this the mark esterman move so as i mentioned the idea of putting the bishop on c4 i'm sure castles is not the best move by the way but still i want to show"
+  },
+  {
+   "ply": 15,
+   "t": 155.5,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n1p1n1/3N4/2B1P3/5N2/PP3PPP/R1BQ1RK1 b kq - 5 8",
+   "said": "you that playing simple chess can still be good i think that in these positions just throwing the knight onto d5 could be a pretty interesting idea probably not objectively sound but let's see what happens let's see what happens if we just throw our knight onto d5"
+  },
+  {
+   "ply": 16,
+   "t": 165.5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n3n1/3p4/2B1P3/5N2/PP3PPP/R1BQ1RK1 w kq - 0 9",
+   "said": "the reason i don't think this is very good is because is not because of oh i think he needs a mistake oh i don't"
+  },
+  {
+   "ply": 17,
+   "t": 167,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n3n1/3P4/2B5/5N2/PP3PPP/R1BQ1RK1 b kq - 0 9",
+   "said": "think our opponent knows what's waiting for him uh oh now maybe this is unsound i don't know but i want to have some fun i want to have some fun [Music]"
+  },
+  {
+   "ply": 18,
+   "t": 193,
+   "line": [
+    "Na5"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/6n1/n2P4/2B5/5N2/PP3PPP/R1BQ1RK1 w kq - 1 10",
+   "said": "now this is not entirely a preposterous sacrifice and you shouldn't if you're thinking to yourself the sacrifice is insane i would never play like this then you're doing something wrong because you should understand sort of intuitively why the sacrifice actually has a chance of working which is that black is completely underdeveloped completely undeveloped and neither bishop is is developed so black isn't close to castling and the other thing is that the e file being wide open means that a check on e1 followed by d6 i mean white's got a wealth of of ideas that that could just end the game all right so 95 first important thing to understand is that when you're in the gambit mindset to borrow a phrase used in chat you have to realize that you're not always going to respond to a threat by uh defending against it straightforwardly so here for instance you wouldn't automatically move the bishop i think we will make a bishop move but not because we have to move the bishop we could also give a check on e1 but then black plays bishop e7 and then if we play d6 black will capture the knight on c4 and at best will only win back one of the pieces now i should want to move the bishop where should we move it well the move d7 d6 is one way the black can"
+  }
+ ],
+ "forks": []
+}

@@ -1,0 +1,563 @@
+{
+ "videoId": "x-TMzSM51Cw",
+ "title": "Master Class | Tennison Gambit | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 9.5,
+   "line": [
+    "Nf3",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/5N2/PPPPPPPP/RNBQKB1R w KQkq - 0 2",
+   "said": "let's continue and we got a black game let's play philidor oh because knight f3 never i guess we're not playing a filibar so okay well let's play d5"
+  },
+  {
+   "ply": 3,
+   "t": 11.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 0 2",
+   "said": "and wow the licits in gambit that is a very now this is a move this is called elicits and gambit"
+  },
+  {
+   "ply": 4,
+   "t": 24.5,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/4p3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "i'll talk about who listens and was after the game um now we're supposed to take the spawn"
+  },
+  {
+   "ply": 5,
+   "t": 26.5,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/6N1/4p3/8/PPPP1PPP/RNBQKB1R b KQkq - 1 3",
+   "said": "and this is a good uh let's call it this way this is a good case study and how to react to gametes let's say you've never seen this before how do we respond to this well we gotta we gotta get get a sense of the landscape here and we gotta understand okay what is the"
+  },
+  {
+   "ply": 6,
+   "t": 65,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/4p3/8/PPPP1PPP/RNBQKB1R w KQkq - 2 4",
+   "said": "knight doing well he's threatening to take the pawn and he's putting pressure on f7 our first priority generally is going to be developed naturally and the natural development move is knight f6 he's not threatening to take on f7"
+  },
+  {
+   "ply": 7,
+   "t": 68.5,
+   "line": [
+    "d3"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "we don't need to panic d3 is a move but the thing that you got to hold in the back of your head is that you can always consider giving back whatever was sacrificed uh give it back but gain something such as a more such as an easier position to play and from a practical perspective that could be just so liberating rather than trying to cling to the pawn so let's say we go d3 we start thinking we say well e takes d3 is super uh tempting right but then he's going to play bishop takes d3 and the d file is going to get opened and there's i'm going to show you guys after the game all of the traps that uh exist in that position and there are many so let's say that we wanted to play practically we wanted to give back the pawn and be very annoying what move could we play here to do that this is a bit of an anti-climactic question we don't need to do anything we should just let him take the pawn because then we're going to take his queen and we're going to get an end game that's annoying for him no you don't need to play h6 see that's an illusion we don't need to push him into taking the pot if he doesn't want to take the point it doesn't have to but allow him to take it if he wants to"
+  },
+  {
+   "ply": 8,
+   "t": 159,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "said": "so e5 is a good move to develop the bishop but even simpler just make a developing move but don't don't touch him let him let him do his thing yeah knight c6 knight c6 okay that's a very uh powerful move psychologically too because when your opponent plays a gambit not to overanalyze this but put yourself in his shoes does your opponent want a slightly worse"
+  },
+  {
+   "ply": 9,
+   "t": 182,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/6N1/4p3/2NP4/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "endgame that is like the last thing your opponent is going to want so you're you're using the psychology of gambit players against them um and okay so he goes knight c3 so he doesn't want to take it but now that we've developed the knight on c6 we could simply continue"
+  },
+  {
+   "ply": 10,
+   "t": 194.5,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "r2qkb1r/ppp1pppp/2n2n2/6N1/4p1b1/2NP4/PPP2PPP/R1BQKB1R w KQkq - 3 6",
+   "said": "developing and to continue developing what move seems very effective yeah bishop g4 but the thing is that if he plays f3 then we take on f3 and then the whole point of the move d3"
+  },
+  {
+   "ply": 12,
+   "t": 206.5,
+   "line": [
+    "f3",
+    "exf3"
+   ],
+   "fen": "r2qkb1r/ppp1pppp/2n2n2/6N1/6b1/2NP1p2/PPP3PP/R1BQKB1R w KQkq - 0 7",
+   "said": "was that we would take the pawn and we'd open up his bishop and if f3e takes f3 then his bishop and that's that's what happens"
+  },
+  {
+   "ply": 13,
+   "t": 208.5,
+   "line": [
+    "gxf3"
+   ],
+   "fen": "r2qkb1r/ppp1pppp/2n2n2/6N1/6b1/2NP1P2/PPP4P/R1BQKB1R b KQkq - 0 7",
+   "said": "look at his bishop his bishop is undeveloped look at his king now his entire structure is ruined and we got to keep our extra pawn"
+  },
+  {
+   "ply": 14,
+   "t": 216.5,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "r2qkb1r/ppp1pppp/2n2n2/5bN1/8/2NP1P2/PPP4P/R1BQKB1R w KQkq - 1 8",
+   "said": "so using this threat of and we step back no problem"
+  },
+  {
+   "ply": 15,
+   "t": 219,
+   "line": [
+    "Bh3"
+   ],
+   "fen": "r2qkb1r/ppp1pppp/2n2n2/5bN1/8/2NP1P1B/PPP4P/R1BQK2R b KQkq - 2 8",
+   "said": "using the threat of a annoying position we totally set him off kilter"
+  },
+  {
+   "ply": 16,
+   "t": 224.5,
+   "line": [
+    "Bxh3"
+   ],
+   "fen": "r2qkb1r/ppp1pppp/2n2n2/6N1/8/2NP1P1b/PPP4P/R1BQK2R w KQkq - 0 9",
+   "said": "okay so let's take and"
+  },
+  {
+   "ply": 17,
+   "t": 227,
+   "line": [
+    "Nxh3"
+   ],
+   "fen": "r2qkb1r/ppp1pppp/2n2n2/8/8/2NP1P1N/PPP4P/R1BQK2R b KQkq - 0 9",
+   "said": "in this position it makes sense to play more conservatively i think a lot of you want to go like here here but let's"
+  },
+  {
+   "ply": 18,
+   "t": 239,
+   "line": [
+    "e6"
+   ],
+   "fen": "r2qkb1r/ppp2ppp/2n1pn2/8/8/2NP1P1N/PPP4P/R1BQK2R w KQkq - 0 10",
+   "said": "let's build up a solid structure there's no need to claim more space we've already done a lot of good work here let's go e6 and develop even bishop e7"
+  },
+  {
+   "ply": 19,
+   "t": 243.5,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r2qkb1r/ppp2ppp/2n1pn2/8/5B2/2NP1P1N/PPP4P/R2QK2R b KQkq - 1 10",
+   "said": "is good um but on second thought what would be a more active developing move i'll talk about this after the game"
+  },
+  {
+   "ply": 20,
+   "t": 259,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r2qk2r/ppp2ppp/2n1pn2/2b5/5B2/2NP1P1N/PPP4P/R2QK2R w KQkq - 2 11",
+   "said": "although e5 was perfectly fine e5 was perfectly fine but i'll mention my reasons yeah lovely bishop c5 stop him from castle although i would have preferred bishop before to be honest but bishop c5 is good too because then"
+  },
+  {
+   "ply": 21,
+   "t": 273,
+   "line": [
+    "Nb5"
+   ],
+   "fen": "r2qk2r/ppp2ppp/2n1pn2/1Nb5/5B2/3P1P1N/PPP4P/R2QK2R b KQkq - 3 11",
+   "said": "he's probably going to go here and then try to castle that would be my guess and that would actually be you know knight p5 well this guy is just like you know he's really trying but"
+  },
+  {
+   "ply": 22,
+   "t": 290,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r2qk2r/ppp2ppp/2n1p3/1Nbn4/5B2/3P1P1N/PPP4P/R2QK2R w KQkq - 4 12",
+   "said": "there is a good way to defend this pawn and that is to ask ourselves this knight has departed from c3 so it's no longer controlling d5 not that we couldn't have gone 95 even with this knight here but now it's even stronger"
+  },
+  {
+   "ply": 23,
+   "t": 295.5,
+   "line": [
+    "Bg3"
+   ],
+   "fen": "r2qk2r/ppp2ppp/2n1p3/1Nbn4/8/3P1PBN/PPP4P/R2QK2R b KQkq - 5 12",
+   "said": "because it defends the spawn and well this"
+  },
+  {
+   "ply": 24,
+   "t": 299.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "r2qk2r/1pp2ppp/p1n1p3/1Nbn4/8/3P1PBN/PPP4P/R2QK2R w KQkq - 0 13",
+   "said": "knight is now on my nerves officially so get off my back please sir please go back to c3 so we could continue living our life he's probably gonna go like c4 or"
+  },
+  {
+   "ply": 25,
+   "t": 318,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r2qk2r/1pp2ppp/p1n1p3/2bn4/8/2NP1PBN/PPP4P/R2QK2R b KQkq - 1 13",
+   "said": "something he seems to be the kind of player who likes to respond aggressively i feel like the or like d4 okay no it was knight c3 my profit sense is failing me today but now he's he's created and see this is another thing that experience tells you i can sense that he's weakened his position so much that my killer instinct is firing i'm sensing something there's too many weaknesses here and that thought leads you to the thought of look at what aggressive moves could i come up with here and if you look for aggressive moves you will find one what does that move look like even more"
+  },
+  {
+   "ply": 26,
+   "t": 361.5,
+   "line": [
+    "Ne3"
+   ],
+   "fen": "r2qk2r/1pp2ppp/p1n1p3/2b5/8/2NPnPBN/PPP4P/R2QK2R w KQkq - 2 14",
+   "said": "aggressive than queen f6 think about specifically what weak squares he has in his position because he's got his pawn on f3 so this is undefended we can stick a knight in there but that is a very important follow-up move to this and we can yeah so knight d4 is gonna be the follow-up move and even if the queen is here he won't"
+  },
+  {
+   "ply": 27,
+   "t": 380,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r2qk2r/1pp2ppp/p1n1p3/2b5/8/2NPnPBN/PPPQ3P/R3K2R b KQkq - 3 14",
+   "said": "be able to take this knight because of the fork common concept right these two knights positioned in this way yeah we can still go knight t4 right and"
+  },
+  {
+   "ply": 28,
+   "t": 381,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r2qk2r/1pp2ppp/p3p3/2b5/3n4/2NPnPBN/PPPQ3P/R3K2R w KQkq - 4 15",
+   "said": "he can't castle either side the great thing about a knight here is that it prevents him from castling both ways so his king is held down in the center"
+  },
+  {
+   "ply": 29,
+   "t": 401.5,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "r2qk2r/1pp2ppp/p3p3/2b5/3n4/2NPnPBN/PPPQ3P/2R1K2R b Kkq - 5 15",
+   "said": "and the game is essentially over i mean he's just overwhelmed with threats here or overflowing with excuses i'll talk about that screws let me take down your question that's a great discussion topic but"
+  },
+  {
+   "ply": 30,
+   "t": 406,
+   "line": [
+    "Nxf3+"
+   ],
+   "fen": "r2qk2r/1pp2ppp/p3p3/2b5/8/2NPnnBN/PPPQ3P/2R1K2R w Kkq - 0 16",
+   "said": "goodbye queen i think the game will end shortly and then we'll talk about it"
+  },
+  {
+   "ply": 32,
+   "t": 425,
+   "line": [
+    "Ke2",
+    "Nxd2"
+   ],
+   "fen": "r2qk2r/1pp2ppp/p3p3/2b5/8/2NPn1BN/PPPnK2P/2R4R w kq - 0 17",
+   "said": "so on my level much less because most of the people i play i know or i've played them before so we know each other well enough where the sort of the psychological tricks go only so far um"
+  },
+  {
+   "ply": 33,
+   "t": 427,
+   "line": [
+    "Kxd2"
+   ],
+   "fen": "r2qk2r/1pp2ppp/p3p3/2b5/8/2NPn1BN/PPPK3P/2R4R b kq - 0 17",
+   "said": "you choose your openings yes based on"
+  },
+  {
+   "ply": 34,
+   "t": 432.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/1pp2ppp/p3p3/2b5/8/2NPn1BN/PPPK3P/2R4R w - - 1 18",
+   "said": "your opponents though but you know let's cast to a degree but um it's not a big deal but at this level"
+  },
+  {
+   "ply": 35,
+   "t": 441,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r2q1rk1/1pp2ppp/p3p3/2b5/4N3/3Pn1BN/PPPK3P/2R4R b - - 2 18",
+   "said": "uh you know you really do want to get a"
+  },
+  {
+   "ply": 36,
+   "t": 444,
+   "line": [
+    "Bb6"
+   ],
+   "fen": "r2q1rk1/1pp2ppp/pb2p3/8/4N3/3Pn1BN/PPPK3P/2R4R w - - 3 19",
+   "said": "read on your opponent and who your opponent seems to be but you don't want to take that too far you don't want to try to make moves only"
+  },
+  {
+   "ply": 37,
+   "t": 453,
+   "line": [
+    "Rhg1"
+   ],
+   "fen": "r2q1rk1/1pp2ppp/pb2p3/8/4N3/3Pn1BN/PPPK3P/2R3R1 b - - 4 19",
+   "said": "because you're trying to avoid a certain type of position right you you haven't you got to be careful where you take the steering wheel what should we do now"
+  },
+  {
+   "ply": 38,
+   "t": 462.5,
+   "line": [
+    "Nc4+"
+   ],
+   "fen": "r2q1rk1/1pp2ppp/pb2p3/8/2n1N3/3P2BN/PPPK3P/2R3R1 w - - 5 20",
+   "said": ""
+  },
+  {
+   "ply": 35,
+   "t": 464,
+   "line": [],
+   "fen": "r2q1rk1/1pp2ppp/p3p3/2b5/4N3/3Pn1BN/PPPK3P/2R4R b - - 2 18",
+   "said": "yeah knight c4 no i oh well knight c4 earlier was he would just move his king but now it"
+  },
+  {
+   "ply": 38,
+   "t": 465,
+   "line": [
+    "Bb6",
+    "Rhg1",
+    "Nc4+"
+   ],
+   "fen": "r2q1rk1/1pp2ppp/pb2p3/8/2n1N3/3P2BN/PPPK3P/2R3R1 w - - 5 20",
+   "said": "wins it wins okay so he resigns see now it makes sense because we also win the exchange all right"
+  },
+  {
+   "ply": 3,
+   "t": 477.5,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 0 2",
+   "said": "okay so this is the list it's in gambit so georgia listetson was an international master from the soviet union and he was more known as a chess coach uh he also authored a very famous book that's very this is like a classic soviet chess book from 1952 and it gets the title gets straight to the point strategy and tactics of chess mastery gee listen and it was basically i loved this book so much that like i basically bounded in this like binding so it doesn't like because this is the original edition from 1952 and i basically read this whole thing so let me look at the date markers let me tell you guys when i read this 2004 yeah starter does before so when i was eight this is one of my first books actually and it's like a couple it's like 500 pages it's like it's amazing i still use it in my lessons and he covers everything but listens and also"
+  },
+  {
+   "ply": 4,
+   "t": 556.5,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/4p3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "developed this this gambit which is which is interesting but of course very dubious"
+  },
+  {
+   "ply": 5,
+   "t": 557.5,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/6N1/4p3/8/PPPP1PPP/RNBQKB1R b KQkq - 1 3",
+   "said": ""
+  },
+  {
+   "ply": 7,
+   "t": 559.5,
+   "line": [
+    "Nf6",
+    "d3"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "which is of course very dubious um but in this position after he takes d3"
+  },
+  {
+   "ply": 8,
+   "t": 561.5,
+   "line": [
+    "exd3"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/8/3p4/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "bishop takes d3"
+  },
+  {
+   "ply": 9,
+   "t": 563,
+   "line": [
+    "Bxd3"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/8/3B4/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "said": "what white is often going for is a very famous trap"
+  },
+  {
+   "ply": 10,
+   "t": 568.5,
+   "line": [
+    "h6"
+   ],
+   "fen": "rnbqkb1r/ppp1ppp1/5n1p/6N1/8/3B4/PPP2PPP/RNBQK2R w KQkq - 0 6",
+   "said": "this trap manifests itself after h6 white it's russian of course white to play in when i i translated the name white to play and win"
+  },
+  {
+   "ply": 12,
+   "t": 582.5,
+   "line": [
+    "Nxf7",
+    "Kxf7"
+   ],
+   "fen": "rnbq1b1r/ppp1pkp1/5n1p/8/8/3B4/PPP2PPP/RNBQK2R w KQ - 0 7",
+   "said": "and a lot of you guys know this knight takes f7 king takes f7 we've talked about this this is a standoff the queen is undefended the"
+  },
+  {
+   "ply": 13,
+   "t": 587,
+   "line": [
+    "Bg6+"
+   ],
+   "fen": "rnbq1b1r/ppp1pkp1/5nBp/8/8/8/PPP2PPP/RNBQK2R b KQ - 1 7",
+   "said": "king is weak bishop g6 wins the bit when's the queen but not bishop c4 c and you got to be careful actually no bishop c4"
+  },
+  {
+   "ply": 12,
+   "t": 599.5,
+   "line": [],
+   "fen": "rnbq1b1r/ppp1pkp1/5n1p/8/8/3B4/PPP2PPP/RNBQK2R w KQ - 0 7",
+   "said": "king yeah you can do it like this but here maybe black and worm worm his way out with like knight t5 but bishop g6 is"
+  },
+  {
+   "ply": 13,
+   "t": 601,
+   "line": [
+    "Bg6+"
+   ],
+   "fen": "rnbq1b1r/ppp1pkp1/5nBp/8/8/8/PPP2PPP/RNBQK2R b KQ - 1 7",
+   "said": "far more accurate okay but the thing is like black can just go knight c6 here"
+  },
+  {
+   "ply": 7,
+   "t": 609,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "and black is better but what i'm trying to do is to give you guys a road map here for dealing with these scenarios so"
+  },
+  {
+   "ply": 8,
+   "t": 615,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "said": "knight c6 is a very powerful move because our opponent is almost certainly"
+  },
+  {
+   "ply": 9,
+   "t": 620.5,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/6N1/4P3/8/PPP2PPP/RNBQKB1R b KQkq - 0 5",
+   "said": "rolling his eyes because objectively speaking he should probably do something like this"
+  },
+  {
+   "ply": 13,
+   "t": 626,
+   "line": [
+    "Qxd1+",
+    "Kxd1",
+    "Nxe4",
+    "Nxe4"
+   ],
+   "fen": "r1b1kb1r/ppp1pppp/2n5/8/4N3/8/PPP2PPP/RNBK1B1R b kq - 0 7",
+   "said": "yeah tennyson is another name for it but does a gambit player want to play this position whereas king has lost his castling right so we can go like here and then castle and then fiance we've got a great position this is equal from an objective"
+  },
+  {
+   "ply": 8,
+   "t": 649,
+   "line": [],
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "said": "standpoint but nobody wants to play this um if he's playing a list that's in gambit so that would be a good example of harnessing the psychology smartly we're not doing anything extreme we're just offering back the pawn all right um i don't know if that makes"
+  },
+  {
+   "ply": 7,
+   "t": 654.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "sense so again you don't want to take this too"
+  },
+  {
+   "ply": 8,
+   "t": 657,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "said": "far"
+  },
+  {
+   "ply": 7,
+   "t": 659.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "if they're playing some crap and they're giving up their pieces you don't want to say well daniel said i don't want to take the pieces that are offered to me because gambo players like that well no you want to exit you want to exercise your judgment but if you're if you have a sense that your opponent is some trickster and he's playing some gamut and you've never seen it before always consider giving up whatever has been sacrificed in order to get a simplified position of some sense all right let me give you guys one more example of this in the traditional black mart dmr gamut that's d45 e4 d takes e4 now the the sort of quote-unquote revised move is knight c3 but the old move is to play f3 and when this was first shown to me by i am john donaldson thank you edward osborne wilson uh well that's the whole point ggc yes yes captain obvious black can play the move e5 which is a great example of this you're actually like offering back the pawn but you're getting the same type of"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 7,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "Nf3",
+    "d5",
+    "e4",
+    "dxe4",
+    "Ng5",
+    "Nf6",
+    "d3"
+   ],
+   "options": [
+    {
+     "san": "Nc6",
+     "t": 159,
+     "continuation": "Nc6",
+     "said": "so e5 is a good move to develop the bishop but even simpler just make a developing move but don't don't touch him let him let him do his thing yeah knight c6 knight c6 okay that's a very uh powerful move psychologically too because when your opponent plays a gambit not to overanalyze this but put yourself in his shoes does your opponent want a slightly worse endgame that is like the last thing your opponent is going to want so you're you're using the psychology of gambit players against them um and okay so he goes knight c3 so he doesn't want to take it but now that we've developed the knight on c6 we could simply continue developing and to continue developing what move seems very effective yeah bishop g4 but the thing is that if he plays f3 then we take on f3 and then the whole point of the move d3 was that we would take the pawn and we'd open up his bishop and if f3e takes f3 then his bishop and that's that's what happens look at his bishop his bishop is undeveloped look at his king now his entire structure is ruined and we got to keep our extra pawn so using this threat of and we step back no problem using the threat of a annoying position"
+    },
+    {
+     "san": "exd3",
+     "t": 561.5,
+     "continuation": "exd3",
+     "said": "which is interesting but of course very dubious which is of course very dubious um but in this position after he takes d3 bishop takes d3 what white is often going for is a very famous trap this trap manifests itself after h6 white it's russian of course white to play in when i i translated the name white to play and win and a lot of you guys know this knight takes f7 king takes f7 we've talked about this this is a standoff the queen is undefended the king is weak bishop g6 wins the bit when's the queen but not bishop c4 c and you got to be careful actually no bishop c4 king yeah you can do it like this but here maybe black and worm worm his way out with like knight t5 but bishop g6 is far more accurate okay but the thing is like black can just go knight c6 here and black is better but what i'm trying to do is to give you guys a road map here for dealing with these scenarios so knight c6 is a very powerful move because our opponent is almost certainly rolling his eyes because objectively speaking he should"
+    }
+   ]
+  },
+  {
+   "ply": 8,
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/6N1/4p3/3P4/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "Nf3",
+    "d5",
+    "e4",
+    "dxe4",
+    "Ng5",
+    "Nf6",
+    "d3",
+    "Nc6"
+   ],
+   "options": [
+    {
+     "san": "Nc3",
+     "t": 182,
+     "continuation": "Nc3",
+     "said": "endgame that is like the last thing your opponent is going to want so you're you're using the psychology of gambit players against them um and okay so he goes knight c3 so he doesn't want to take it but now that we've developed the knight on c6 we could simply continue developing and to continue developing what move seems very effective yeah bishop g4 but the thing is that if he plays f3 then we take on f3 and then the whole point of the move d3 was that we would take the pawn and we'd open up his bishop and if f3e takes f3 then his bishop and that's that's what happens look at his bishop his bishop is undeveloped look at his king now his entire structure is ruined and we got to keep our extra pawn so using this threat of and we step back no problem using the threat of a annoying position we totally set him off kilter okay so let's take and in this position it makes sense to play more conservatively i think a lot of you want to go like here here but let's let's build up a solid structure there's no need to claim more space we've already done a lot of good work here let's go e6 and develop even bishop e7"
+    },
+    {
+     "san": "dxe4",
+     "t": 620.5,
+     "continuation": "dxe4",
+     "said": "guys a road map here for dealing with these scenarios so knight c6 is a very powerful move because our opponent is almost certainly rolling his eyes because objectively speaking he should probably do something like this yeah tennyson is another name for it but does a gambit player want to play this position whereas king has lost his castling right so we can go like here and then castle and then fiance we've got a great position this is equal from an objective standpoint but nobody wants to play this um if he's playing a list that's in gambit so that would be a good example of harnessing the psychology smartly we're not doing anything extreme we're just offering back the pawn all right um i don't know if that makes sense so again you don't want to take this too far if they're playing some crap and they're giving up their pieces you don't want to say well daniel said i don't want to take the pieces that are offered to me because gambo players like that well no you want to exit you want to exercise your judgment but if you're if you have a sense that your opponent is some trickster and he's playing some gamut and you've never seen it before always consider giving up whatever has been sacrificed"
+    }
+   ]
+  }
+ ]
+}

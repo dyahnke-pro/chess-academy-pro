@@ -1,0 +1,218 @@
+{
+ "videoId": "25w0mYsx_Lk",
+ "title": "Beginner To Master | Chess Speedrun | C3 Vs Modern (Saragossa) | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 16,
+   "line": [
+    "e4",
+    "g6"
+   ],
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "game let's go e4 g6"
+  },
+  {
+   "ply": 3,
+   "t": 19,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "okay so i'm modern now in the modern i'm going to show you guys a good positional"
+  },
+  {
+   "ply": 4,
+   "t": 22.5,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "said": "line in the modern one one good positional line in the modern"
+  },
+  {
+   "ply": 5,
+   "t": 26,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "is to go c3 and uh what this move does to borrow my"
+  },
+  {
+   "ply": 6,
+   "t": 33.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "favorite and highly overused expression is um is to create a situation where the bishop bite on granite"
+  },
+  {
+   "ply": 8,
+   "t": 45.5,
+   "line": [
+    "Bd3",
+    "Nf6"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2PB4/PP3PPP/RNBQK1NR w KQkq - 2 5",
+   "said": "by sun granite then we can develop the bishop into this little crevice in order to defend the other pawn so the pawn chain protects the d-pawn the"
+  },
+  {
+   "ply": 9,
+   "t": 53,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2PB1N2/PP3PPP/RNBQK2R b KQkq - 3 5",
+   "said": "bishop protects the e-pawn now just complete our development"
+  },
+  {
+   "ply": 12,
+   "t": 55,
+   "line": [
+    "Nc6",
+    "O-O",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/3PP3/2PB1N2/PP3PPP/RNBQ1RK1 w - - 6 7",
+   "said": "nothing nothing exciting about this now"
+  },
+  {
+   "ply": 13,
+   "t": 60,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/6B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 b - - 7 7",
+   "said": "we can play h3 to stop bishop g4 but bishop g5 is sort of the more aggressive continuation"
+  },
+  {
+   "ply": 14,
+   "t": 68.5,
+   "line": [
+    "h6"
+   ],
+   "fen": "r1bq1rk1/ppp1ppb1/2np1npp/6B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 w - - 0 8",
+   "said": "i'm going to play a little bit faster here because shark is super strong um h6 now we drop the bishop back"
+  },
+  {
+   "ply": 15,
+   "t": 70,
+   "line": [
+    "Bh4"
+   ],
+   "fen": "r1bq1rk1/ppp1ppb1/2np1npp/8/3PP2B/2PB1N2/PP3PPP/RN1Q1RK1 b - - 1 8",
+   "said": ""
+  },
+  {
+   "ply": 16,
+   "t": 74,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bq1rk1/ppp2pb1/2np1npp/4p3/3PP2B/2PB1N2/PP3PPP/RN1Q1RK1 w - - 0 9",
+   "said": "e5 and now um this is where things kind of get interesting so essentially he's threatening he takes d4"
+  },
+  {
+   "ply": 18,
+   "t": 91,
+   "line": [
+    "dxe5",
+    "Nxe5"
+   ],
+   "fen": "r1bq1rk1/ppp2pb1/3p1npp/4n3/4P2B/2PB1N2/PP3PPP/RN1Q1RK1 w - - 0 10",
+   "said": "and then g5 g4 which will dislodge the knight from its protection of the d-pawn i hope that makes sense so in this position we actually want to take on e5 and then we want to take in order for"
+  },
+  {
+   "ply": 20,
+   "t": 93.5,
+   "line": [
+    "Nxe5",
+    "dxe5"
+   ],
+   "fen": "r1bq1rk1/ppp2pb1/5npp/4p3/4P2B/2PB4/PP3PPP/RN1Q1RK1 w - - 0 11",
+   "said": "this bishop to remain passive now we need to do something with this knight what can we do with the a39 uh b1 knight where can we can we go to d2 is that possible and and if not where should we go yeah we"
+  },
+  {
+   "ply": 21,
+   "t": 119,
+   "line": [
+    "Na3"
+   ],
+   "fen": "r1bq1rk1/ppp2pb1/5npp/4p3/4P2B/N1PB4/PP3PPP/R2Q1RK1 b - - 1 11",
+   "said": "should go knight a3 frankfurt airport right knight d2 uh loses the bishop queen takes d3 um and so what we do is we go knight a3 and the knight is coming out to c4 which is the ideal square because we are attacking"
+  },
+  {
+   "ply": 22,
+   "t": 131.5,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r1b2rk1/ppp1qpb1/5npp/4p3/4P2B/N1PB4/PP3PPP/R2Q1RK1 w - - 2 12",
+   "said": "we are attacking the frankfurt airport analogy is what i always compare this to the knight is bad on a3 but it's a transit point to c4"
+  },
+  {
+   "ply": 23,
+   "t": 134.5,
+   "line": [
+    "Nc4"
+   ],
+   "fen": "r1b2rk1/ppp1qpb1/5npp/4p3/2N1P2B/2PB4/PP3PPP/R2Q1RK1 b - - 3 12",
+   "said": "okay so we're gonna go to c4 and we're not you might look at this and say why are we going to c4 we're not attacking the spawn the queen is protecting it well we're putting pressure on it it's not only about attacking something you"
+  },
+  {
+   "ply": 24,
+   "t": 150,
+   "line": [
+    "b6"
+   ],
+   "fen": "r1b2rk1/p1p1qpb1/1p3npp/4p3/2N1P2B/2PB4/PP3PPP/R2Q1RK1 w - - 0 13",
+   "said": "also want to put pressure on stuff that ties your opponent's pieces down white is very slightly better here i mean black and equalized with good play now how should we go about increasing the pressure on black's position well we got a very aggressive idea here um does anybody see this aggressive idea i mean i'm not being very"
+  },
+  {
+   "ply": 25,
+   "t": 178.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1b2rk1/p1p1qpb1/1p3npp/4p3/2N1PP1B/2PB4/PP4PP/R2Q1RK1 b - - 0 13",
+   "said": "specific in describing it but what i'm noticing here is this pin and what i'm also noticing is that we're putting a lot of pressure on e5 if we dislodge or displace that pawn we're going to have e5 so let's just try f4 it's a risky move we're weakening our king side that is true but everybody should be able to see the logic behind this movie if he takes the pawn we we push to e5 and uh we win the knight because the knight can't move it's pinned and if he goes g5 then we take the knight attacking the queen um those of you with the keem tactical i may notice queen c5 check but i have a very nice response to that check what is white's response to that check and this is actually why i played f4 this is if this didn't if this wasn't a possibility queen c5 would be the reputation yeah bishop f2 so remember always that uh the three ways to defend against the check take the piece that's giving the check not possible here move your king and also to intercept the check which is the move that people forget about bishop f2 attacks the queen and then we're gonna win e5 this might actually be black's"
+  },
+  {
+   "ply": 26,
+   "t": 240.5,
+   "line": [
+    "Qe8"
+   ],
+   "fen": "r1b1qrk1/p1p2pb1/1p3npp/4p3/2N1PP1B/2PB4/PP4PP/R2Q1RK1 w - - 1 14",
+   "said": "lesser evil but it's still not plus and he loses his central pawn so very methodical play so far i mean nothing crazy okay so queenie eight is the right move um obviously he gives up the pawn now which way should we take the pawn a lot of you guys might um might be attracted to taking with the pawn because it attacks the knight and i get that but remember what i said yesterday which is that um a move is not good because it creates a threat um and the problem with pawn takes e5 is that he simply slides the knight back to d7"
+  },
+  {
+   "ply": 27,
+   "t": 283,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1b1qrk1/p1p2pb1/1p3npp/4N3/4PP1B/2PB4/PP4PP/R2Q1RK1 b - - 0 14",
+   "said": "and it opens the rook too but that pawn on e5 is going to be very weak and it's going to be attacked by three different pieces simultaneously so we're actually going to lose that pawn right back and so knight takes e5 is not as"
+  },
+  {
+   "ply": 28,
+   "t": 284,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "r3qrk1/pbp2pb1/1p3npp/4N3/4PP1B/2PB4/PP4PP/R2Q1RK1 w - - 1 15",
+   "said": "satisfying it doesn't create a threat but it's a lot more uh it's it's easier for us to keep our extra fundamentals if it should be seven attacks if one we should defend it he also wants to play rook d8 which would pin the queen so i'm going to violate a rule here which is i always say uh fulfill a task with the least valuable piece so rookie one would be the way to follow that rule but i don't want him to pin my queen so we're gonna go queen e2 here so that rook d doesn't come with a pin if that makes sense um well he was attacking this pawn he's got two attackers on the pawn and i've got only one defender so we need to protect the pawn and i'm doing it with the queen to preemptively avoid the pin okay so this is a really nice position we're up upon we've got a nicely centralized pieces a g5 so this requires some calculation now the purpose of this move is that if we take the pawn on g5 the knight loses its protection of course things aren't that simple because taking also attacks the knight in after takes he's probably going to take back on g5 so let's understand what happens there now we open up the f file which is super good uh but if we visualize the position after fgh3 he's got two pieces we've got two pieces under fire the bishop as well as the knight do we have a way in that position to defend both at the same time because that would essentially justify taking on g5 yes bishop g3 nothing particularly extraordinary about this move we're just protecting the knight and we have opened up the f-file we have forced him into a big weakening of his king side and we are still up upon so these kinds of moves um are stabilizing moves and they you know they really you know sort of protect everything nicely yeah rook f5 well rook five is a great follow-up move but the rook f5 here wouldn't protect the bishop right we have two pieces hanging we have to protect both of them at the same time all right so here for example okay he's not really attacking the bishop we just got to keep an eye on it um yeah just a box i'll do that after the game so rook f5 here is a phenomenal move well bishop takes g5 he takes the the knight and he protects his own knight while he does that yeah there's a there's a lot of good moves here so let me make a very russian school of chess move rook five is good well let's bring all uh all the ponies to the you know let's bring all of the all of the toys to the nursery party let's go rook 81 and this is a good stabilizing move you might look at this and say what is the purpose like this pawn wasn't being attacked but it's more about overprotection it's more about making sure that our our foundation is solid before we launch an attack against this king prepare slowly attack fast um well rook d1 we're trying to defend the pawn more than i think the bishop isn't really a problem here it's defended by two pieces um and yeah the queen can stop babysitting the pawn later so it's a move that is oriented toward the future i don't know if this will come in handy but i think it won't hurt um it's just i mean you guys should just visually be able to see that this move just very harmoniously positions the rook in relation to the other pieces um knight to d7 okay so should we take the knight we could i mean i don't think that would be a bad idea but i also think the night is a pretty significant attacking asset and as i look at this one second guys i'm calculating yes we have a tactic here we have a tactic and i think we have a very very pretty tactic actually um we have we have a very pretty sequence here so what i notice here i mean his king is very weak right so we should already be primed to look for tactics and when i say that you should immediately immediately be thinking about captures and the only capture near the king side is knight takes f7 you calculate this okay rook f7 that positions the rook and the king on the same diagonal do we have a light squared bishop we do we can simply position that bishop on c4 and uh massacre him down that diagonal it's not that simple um and which is why you can also take the rook first because he can't take with the queen he's got to take with the king which you can then check on h5 but that leads to unnecessary well maybe they're necessary that does lead to some complications um now there is more to calculate because what he can do here right the attack on his rook is coming from two different places he can't cover the diagonal that the bishop controls he can play bishop d5 will capture between e6 will capture the queen what he can do is cover the diagonal that the rook controls which he does but what happens here we take on f7 and how do we follow this up this was an important move for me to see when i was playing knight takes f otherwise he's got two pieces for a rook and this wouldn't have been worth it and you've got to be very careful about these how should i put it these combinations which try to win material because if they backfire you lose all of your attack bingo now the queen walks into another pin this i saw rookie eight how do we how do we do this what do we do now is this a problem that he that he's pinned our queen well it's obviously it's not a problem if it was a problem we wouldn't have played this yeah so let me think about this for a second queen f2 is good because the knight can't move we will capture his queen otherwise we'll capture tonight now he does have a i think he has a move but it doesn't really help him i know that this move looks weird because we are it looks like we're unpinning is that we're actually not we're just adding an attacker um we're just adding an attacker so the knight still yeah bishop a6 is the correct move i saw that he wins back the exchange but he remains down upon and his king side is completely shattered let me just write down the notes here knight take knight g6 and we just need to evaluate which bishop to take if we take this bishop we allow the queen trade we don't want to allow a queen trade now we can take this bishop how should we capture this bishop and taking the rook here also leads to simplification which i don't want because i want to attack him why am i writing it down so i can answer it after the game rook in order to protect the spawn okay bishop f8 never never forget to check for threats bishop c5 is a threat which means we can cover that square let's find an active defensive move by by that i mean let's move the queen away and attack something at the same time the g5 is the obvious target um and so this is another thing where people think of defending against threats as a passive thing right you need to move your king or protect the square but you can defend an attack at the same time um i will explain that technical stuff afterwards like why didn't we make the other move kartik so please don't worry about it yeah this bishop aid yeah this is an ugly move and there's many ways to go about winning such a position i think uh but we can go full sort of crazy we can take on c7 that's a cool that's a sexy move because he can't take with the rook what he can do there is he can infiltrate to the second rank but on the other hand i think it is a sexy move so let's do it bishop takes c7 using the okay so he goes rook uh e2 but we have another really cool move let me play this move because we're short of time h4 why why are we playing h4 the reason should be obvious we're trying to get rid of the spawn now if he takes on h4 what i've noticed here is that he's got a weak king and he's got a type one undefended piece that should always set the alarm bells ringing in your head okay um because a weak king is not only susceptible to checkmate it is also susceptible to double attacks that should make intuitive sense queen g4 check picks off the rook okay so now we play queen takes g5 check winning another pawn and now let's come back maybe to f5 let me think about this for a second now he wants to give us a check on c5 that is not a dangerous check at all but just to be very russian about it let's go bishop e5 why because i want to cover this check with my bishop and at this point we're three pawns up so at this point i don't mind simplification um you know i've i sort of draw the line at being up a piece when you're up three puns an end game is going to be completely winning you don't really need to bog yourself down with all the checkmating ideas so he goes rook takes b2 um let's let's push our pawn up for now let's go h5 just to create the conditions for okay so he's taking all of our pawns now we're going to reorient for checkmate in terms of reorienting yourself for checkmate here we need more fuel to the fire here so we need the rook let's get this rook up into the attack let's lift it up to g3 then we're going to try to go queen to g6 jack and just crush him there thank you attractive b i'm not playing you know the most accurate moves for sure but i i you know i think we're maintaining a large margin here and uh sometimes playing it a little bit safer there's nothing wrong with that let's move away with check now let's complete our rook lift rook to g3 and i don't really see where the mate is going to come from just yet but i'm bringing all of the rest of the pieces in and that's going to be just crushing so we have i think a really cool move to finish the game off now what i'm noticing here yeah and this is where like puzzle puzzle rush comes in right this move is a pattern recognition kind of move queen ca check doesn't do as much as you guys might think it does now what the move that i think wins the game if i've calculated it correctly is rook to g7 bingo after bishop takes g7 f takes g7 check that exposes the attack on the queen"
+  },
+  {
+   "ply": 3,
+   "t": 902,
+   "line": [],
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "okay why to move here rookie 5 is a nice defensive move but i saw that but now we need to look at the whole board and queen h7 is just checking me yeah that was a good game so now the opening i think i explained pretty pretty well i i don't think i need to re-explain our development moves knight a3 frankfurt airport going to c4 pressuring the central pawn and shark i think here you should probably go g5 to break the pin even though that is a weakening move but at least you don't you're not susceptible to f4 um now what would be a good move in this position for white what would be a good move in this position for white and i always say that you know when a when a committal pawn move is made you need to readjust you need to understand what the drawbacks are what squares have been weakened and clearly the move g5 weakens the f5 square knights are the default piece to occupy an outpost so you should only look for other pieces if knight can talk you by the outpost and but here the knight can you can go to e3 and black can move the knight aside and the bishop protects f5 but this is what"
+  }
+ ],
+ "forks": []
+}

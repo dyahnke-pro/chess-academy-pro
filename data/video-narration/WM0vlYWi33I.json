@@ -1,0 +1,298 @@
+{
+ "videoId": "WM0vlYWi33I",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1280",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 649,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "keep things rolling pretty smoothly let's go on with the next one and you know 1400s i mean our opponents are already pretty good all right this girl let's play another sicilian"
+  },
+  {
+   "ply": 4,
+   "t": 651.5,
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "and uh the situation that we have been playing is the"
+  },
+  {
+   "ply": 6,
+   "t": 654.5,
+   "line": [
+    "d4",
+    "cxd4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "accelerated all right accelerated dragon"
+  },
+  {
+   "ply": 8,
+   "t": 657,
+   "line": [
+    "Nxd4",
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "said": "and the idea is we fianchetto the bishop now he takes on c6 don't first of all i can read lowercase"
+  },
+  {
+   "ply": 10,
+   "t": 672.5,
+   "line": [
+    "Nxc6",
+    "bxc6"
+   ],
+   "fen": "r1bqkbnr/p2ppp1p/2p3p1/8/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 0 6",
+   "said": "second of all um as i said i play three games at a time and then i go through each game in detail and answer all questions okay okay so actually taking on c6 is already"
+  },
+  {
+   "ply": 11,
+   "t": 674,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "r1bqkbnr/p2ppp1p/2p3p1/8/4P3/8/PPPB1PPP/RN1QKB1R b KQkq - 1 6",
+   "said": "kind of a mistake because"
+  },
+  {
+   "ply": 12,
+   "t": 682.5,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/8/PPPB1PPP/RN1QKB1R w KQkq - 2 7",
+   "said": "what it does is that it opens the b file for us and it also helps us prepare uh the move"
+  },
+  {
+   "ply": 13,
+   "t": 684,
+   "line": [
+    "Bc3"
+   ],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/2B5/PPP2PPP/RN1QKB1R b KQkq - 3 7",
+   "said": "d5 so nick dim thank you for the the prime could somebody tell me do we want to trade bishops and if not"
+  },
+  {
+   "ply": 14,
+   "t": 699.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/p2pppbp/2p2np1/8/4P3/2B5/PPP2PPP/RN1QKB1R w KQkq - 4 8",
+   "said": "how do we resist the bishop trade here what what do we do yeah clearly we don't want to do that and we do that by developing knight fc very good the movie 5 would be very very bad"
+  },
+  {
+   "ply": 15,
+   "t": 705.5,
+   "line": [
+    "f3"
+   ],
+   "fen": "r1bqk2r/p2pppbp/2p2np1/8/4P3/2B2P2/PPP3PP/RN1QKB1R b KQkq - 0 8",
+   "said": "because it would weaken the d6 square okay here we go again with f3 f3 is the kind of move people just kind"
+  },
+  {
+   "ply": 16,
+   "t": 714.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/p2pppbp/2p2np1/8/4P3/2B2P2/PPP3PP/RN1QKB1R w KQ - 1 9",
+   "said": "of make but it's incredibly weakening all right let's castle let's"
+  },
+  {
+   "ply": 17,
+   "t": 716,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bq1rk1/p2pppbp/2p2np1/8/2B1P3/2B2P2/PPP3PP/RN1QK2R b KQ - 2 9",
+   "said": "develop okay bishop c4 walks right into what move this walks right into a move that"
+  },
+  {
+   "ply": 18,
+   "t": 726,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bq1rk1/p3ppbp/2p2np1/3p4/2B1P3/2B2P2/PPP3PP/RN1QK2R w KQ - 0 10",
+   "said": "you guys should be making automatically which is d5 right occupying the center cd edcd"
+  },
+  {
+   "ply": 20,
+   "t": 728.5,
+   "line": [
+    "exd5",
+    "cxd5"
+   ],
+   "fen": "r1bq1rk1/p3ppbp/5np1/3p4/2B5/2B2P2/PPP3PP/RN1QK2R w KQ - 0 11",
+   "said": "and um i assume he's going to drop his bishop back i assume he's going to drop his bishop back and that will lead us to a very instructive moment now by the way"
+  },
+  {
+   "ply": 21,
+   "t": 752,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "r1bq1rk1/p3ppbp/5np1/3p4/8/2BB1P2/PPP3PP/RN1QK2R b KQ - 1 11",
+   "said": "if he tries to take our knight and then take our pawn we don't even have to worry about that right we'll we can move our rook then and he won't be able to defend b2 i'll explain that after the game um okay bishop d3 that's actually a better that's actually a good move um one sec i'm writing some stuff down okay what do we want to do in this position how do we play well our first order of business right is to prevent him from"
+  },
+  {
+   "ply": 22,
+   "t": 777.5,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "r1b2rk1/p3ppbp/1q3np1/3p4/8/2BB1P2/PPP3PP/RN1QK2R w KQ - 2 12",
+   "said": "castling if we can prevent him from castling and keep his king in the center uh we're going to increase our chances of a quick attack i'm not sure why people want queen d6 yeah the move is queen b6 stopping him from castling now i might not permanently prevent him from castling but in the time that he takes trying to get my queen away from b6 if that makes sense to everybody i am going to spend that time expanding in the center so that even if he manages to castle which the more i look at this position is relatively unlikely um even if he manages to castle he's going to be dealing with a hot mess in the center of the board so that's why ben feingold says never play f3 there's a reason behind that f3 is"
+  },
+  {
+   "ply": 23,
+   "t": 823,
+   "line": [
+    "Qc1"
+   ],
+   "fen": "r1b2rk1/p3ppbp/1q3np1/3p4/8/2BB1P2/PPP3PP/RNQ1K2R b KQ - 3 12",
+   "said": "one of the most weakening moves on the chessboard now one thing that you want to do when you look at a position like this is you want to be very flexible right even though the queen is preventing him from cast well never mind queen c1 i'll talk about that afterwards thread and doof okay so i mentioned that we want to spend the time that he takes trying to pass all expanding in the center so expanding in the center what does that mean"
+  },
+  {
+   "ply": 24,
+   "t": 853,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/2BB1P2/PPP3PP/RNQ1K2R w KQ - 0 13",
+   "said": "what does it mean to expand in the center the move d4 comes to mind but take a careful look at this move the move d4 closes off the queen's diagonal which helps him castle the move is e5 now e5"
+  },
+  {
+   "ply": 25,
+   "t": 855,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/3B1P2/PPPB2PP/RNQ1K2R b KQ - 1 13",
+   "said": ""
+  },
+  {
+   "ply": 24,
+   "t": 856.5,
+   "line": [],
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/2BB1P2/PPP3PP/RNQ1K2R w KQ - 0 13",
+   "said": "if he would have taken on e5 we would have pinned his bishop with devastating"
+  },
+  {
+   "ply": 25,
+   "t": 860.5,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/3B1P2/PPPB2PP/RNQ1K2R b KQ - 1 13",
+   "said": "effect all right it's very clear to me what he wants to do he wants to go bishop e3 but he's not in time because we are now"
+  },
+  {
+   "ply": 26,
+   "t": 871,
+   "line": [
+    "e4"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q3np1/3p4/4p3/3B1P2/PPPB2PP/RNQ1K2R w KQ - 0 14",
+   "said": "ready to just rampage him in the center let's go e4 all right this is the beauty also of"
+  },
+  {
+   "ply": 27,
+   "t": 874.5,
+   "line": [
+    "fxe4"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q3np1/3p4/4P3/3B4/PPPB2PP/RNQ1K2R b KQ - 0 14",
+   "said": "this bishop right now we can actually take with either the knight or the pawn uh let's"
+  },
+  {
+   "ply": 28,
+   "t": 879,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q3np1/8/4p3/3B4/PPPB2PP/RNQ1K2R w KQ - 0 15",
+   "said": "take with the pawn just to preserve simplicity"
+  },
+  {
+   "ply": 29,
+   "t": 882.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q3np1/8/2B1p3/8/PPPB2PP/RNQ1K2R b KQ - 1 15",
+   "said": "uh but we could have actually taken with the knight that would have been a very strong move and um now we have a crushing move can somebody find for me this question move yeah malcolm f tucker is on a roll the move is knight g4 now how do i see this move well i see this move because i see what his threat is what is white's intention his intention is clearly to play bishop e3 that's why"
+  },
+  {
+   "ply": 30,
+   "t": 917,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q4p1/8/2B1p1n1/8/PPPB2PP/RNQ1K2R w KQ - 2 16",
+   "said": "he put his queen on c1 so that he can castle so how can we stop bishop e3 in a way that's conducive to our attacking aims particularly noticing that our bishop if opened uh operates with devastating effect attacking that b2 pawn and so we come to the move knight g4 which fulfills all of these goals at once this is going to be just absolutely crushing if h3 then not only can we take on b2 creating an equal or stronger threat against the queen we can also play queen f2 check with mate to follow uh if h3 i would give the check on f2 and then play e3 this is where intuition comes into play right you have to be okay with not knowing exactly how you're going to check mate white here i don't even see the exact checkmate but i know it's there because look at the position i mean look at white's pieces there's just no way that this is not going to result either"
+  },
+  {
+   "ply": 31,
+   "t": 973,
+   "line": [
+    "Rf1"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q4p1/8/2B1p1n1/8/PPPB2PP/RNQ1KR2 b Q - 3 16",
+   "said": "in checkmate or in grievous loss of material and an intuition is the ability to make that judgment call and not spend you know two of your three minutes trying to work out exactly how the checkmate is going to happen what do we do here he's gone rocco funnies prevented queen f2 but let's not"
+  },
+  {
+   "ply": 32,
+   "t": 986,
+   "line": [
+    "Bxb2"
+   ],
+   "fen": "r1b2rk1/p4p1p/1q4p1/8/2B1p1n1/8/PbPB2PP/RNQ1KR2 w Q - 0 17",
+   "said": "forget about our other set of ideas let's not forget that sometimes the simplest way of converting a position is just to win a bunch of material that's like life insurance something goes wrong in the attack you're still up a rook all right there's no shame in taking the time to you know help yourself to and all you can eat buffet consisting of white species all right so let's see what he does but i'm anticipating queen d1 bishop a1 and then he might resign yeah this is a nice attack i mean there's nothing we didn't do anything special we just prevented him from castling and the rest sort of followed very naturally um no this was not pepega at all"
+  },
+  {
+   "ply": 28,
+   "t": 1031.5,
+   "line": [],
+   "fen": "r1b2rk1/p4pbp/1q3np1/8/4p3/3B4/PPPB2PP/RNQ1K2R w KQ - 0 15",
+   "said": "actually this was a very sensible idea that our opponent came up with in a difficult spot uh so let's give credit where credit is due uh but but it's just that he didn't have enough time to to do it because"
+  },
+  {
+   "ply": 32,
+   "t": 1033.5,
+   "line": [
+    "Bc4",
+    "Ng4",
+    "Rf1",
+    "Bxb2"
+   ],
+   "fen": "r1b2rk1/p4p1p/1q4p1/8/2B1p1n1/8/PbPB2PP/RNQ1KR2 w Q - 0 17",
+   "said": "the attack was just way too fast uh"
+  },
+  {
+   "ply": 31,
+   "t": 1037,
+   "line": [],
+   "fen": "r1b2rk1/p4pbp/1q4p1/8/2B1p1n1/8/PPPB2PP/RNQ1KR2 b Q - 3 16",
+   "said": "e3 here chewie you mean e3 in this position e3 maybe he goes bishop c3 i'm actually not i'm not sure if that's uh convincing because e3 blunts the queen we want the queen to sort of have access to these squares"
+  },
+  {
+   "ply": 32,
+   "t": 1066.5,
+   "line": [
+    "Bxb2"
+   ],
+   "fen": "r1b2rk1/p4p1p/1q4p1/8/2B1p1n1/8/PbPB2PP/RNQ1KR2 w Q - 0 17",
+   "said": "right and and the movie three while it looks very impressive it's actually uh i guess now it's obviously still completely winning let's be clear uh but i don't know i think it's a little less convincing and when you see the chance to win like a full rook full rook you want to go for it right even if you think you might see checkmate this is the safe option and there's nothing wrong with that i mean this guy too is letting his clock run out is there some sort of conspiracy eah apples 95 says e3 after queen d1 yeah apples 95 says e3 after queen d1 again possible as is knight e3 but why why bother calculating these variations when i can just take a full rook and then worry about e3 or whatnot yeah these guys are molding pretty hard indeed but we're having a good discussion about the position so there we go resigned and we are 1300. okay so one more game and then i will go through and explain all three of these games in detail and 1368 so we are facing pretty decent opposition"
+  }
+ ],
+ "forks": []
+}

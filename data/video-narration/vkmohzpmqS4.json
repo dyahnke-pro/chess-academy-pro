@@ -1,0 +1,234 @@
+{
+ "videoId": "vkmohzpmqS4",
+ "title": "PogChamps 3 In Depth Training | MoistCr1TiKaL | Pt. 1",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 108,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] there will be no suffering here i'm gonna go nuts"
+  },
+  {
+   "ply": 4,
+   "t": 110,
+   "line": [
+    "Nf3",
+    "g6"
+   ],
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 5,
+   "t": 111,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pp1ppp1p/6p1/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3",
+   "said": "all right this oh he's playing the exotic dragon"
+  },
+  {
+   "ply": 6,
+   "t": 112.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp1p1p1p/4p1p1/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "said": ""
+  },
+  {
+   "ply": 7,
+   "t": 113.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/pp1p1p1p/4p1p1/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 1 4",
+   "said": "all right it's good e5 is a good move"
+  },
+  {
+   "ply": 8,
+   "t": 114.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1p1p1p/2n1p1p1/2p5/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 2 5",
+   "said": ""
+  },
+  {
+   "ply": 9,
+   "t": 115.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkbnr/pp1p1p1p/2n1p1p1/2p1P3/2B5/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 0 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 118,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r1bqkbnr/pp1p1p1p/4p1p1/2p1P3/2Bn4/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 1 6",
+   "said": "covering okay 94. good"
+  },
+  {
+   "ply": 11,
+   "t": 120,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bqkbnr/pp1p1p1p/4p1p1/2p1P3/2Bn4/2NP1N2/PPP2PPP/R1BQK2R b KQkq - 0 6",
+   "said": "man you're like blasting out of the case like formula one i know this is faster"
+  },
+  {
+   "ply": 12,
+   "t": 131.5,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/pp1p1pbp/4p1p1/2p1P3/2Bn4/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 1 7",
+   "said": "than i play you're playing well actually thank you i've played this so many times now most players play like the exact"
+  },
+  {
+   "ply": 13,
+   "t": 134,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk1nr/pp1p1pbp/4p1p1/2p1P3/2Bn4/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 2 7",
+   "said": "same set of [&nbsp;__&nbsp;] right well a lot of people they who play"
+  },
+  {
+   "ply": 14,
+   "t": 137,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "r1bqk2r/pp1pnpbp/4p1p1/2p1P3/2Bn4/2NP1N2/PPP2PPP/R1BQ1RK1 w kq - 3 8",
+   "said": "the sicilian they play it because they heard it somewhere and they don't really study it which is"
+  },
+  {
+   "ply": 15,
+   "t": 141.5,
+   "line": [
+    "Na4"
+   ],
+   "fen": "r1bqk2r/pp1pnpbp/4p1p1/2p1P3/N1Bn4/3P1N2/PPP2PPP/R1BQ1RK1 b kq - 4 8",
+   "said": "good knight a4 interesting so you're attacking that"
+  },
+  {
+   "ply": 16,
+   "t": 145,
+   "line": [
+    "b6"
+   ],
+   "fen": "r1bqk2r/p2pnpbp/1p2p1p1/2p1P3/N1Bn4/3P1N2/PPP2PPP/R1BQ1RK1 w kq - 0 9",
+   "said": "pawn on c5 yeah that was the plan now we're just"
+  },
+  {
+   "ply": 17,
+   "t": 148.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "r1bqk2r/p2pnpbp/1p2p1p1/2p1P3/N1Bn4/2PP1N2/PP3PPP/R1BQ1RK1 b kq - 0 9",
+   "said": "gonna chase the knight away or he's probably gonna take the knight here"
+  },
+  {
+   "ply": 18,
+   "t": 152,
+   "line": [
+    "Ndc6"
+   ],
+   "fen": "r1bqk2r/p2pnpbp/1pn1p1p1/2p1P3/N1B5/2PP1N2/PP3PPP/R1BQ1RK1 w kq - 1 10",
+   "said": "all right now he's attacking your e5 bond so think about how you can defend"
+  },
+  {
+   "ply": 19,
+   "t": 163.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqk2r/p2pnpbp/1pn1p1p1/2p1P3/N1BP4/2P2N2/PP3PPP/R1BQ1RK1 b kq - 0 10",
+   "said": "that uh i'm i think just pushing the pawn very good the best way to defend a pawn is with"
+  },
+  {
+   "ply": 20,
+   "t": 165.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bqk2r/3pnpbp/ppn1p1p1/2p1P3/N1BP4/2P2N2/PP3PPP/R1BQ1RK1 w kq - 0 11",
+   "said": "another pawn now is he threatening anything um [Music] with his last name basis right so you really only have one choice you got there's a piece that you have to"
+  },
+  {
+   "ply": 21,
+   "t": 188.5,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r1bqk2r/3pnpbp/ppn1p1p1/2p1P3/N2P4/2P2N2/PP2BPPP/R1BQ1RK1 b kq - 1 11",
+   "said": "move away so that b5 is no longer a fork yeah i think the only piece i can move away right now is the bishop bingo you can move it anywhere"
+  },
+  {
+   "ply": 22,
+   "t": 193.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1bqk2r/3pnpbp/p1n1p1p1/1pp1P3/N2P4/2P2N2/PP2BPPP/R1BQ1RK1 w kq - 0 12",
+   "said": ""
+  },
+  {
+   "ply": 23,
+   "t": 197,
+   "line": [
+    "Nxc5"
+   ],
+   "fen": "r1bqk2r/3pnpbp/p1n1p1p1/1pN1P3/3P4/2P2N2/PP2BPPP/R1BQ1RK1 b kq - 0 12",
+   "said": "okay thank you very much chris"
+  },
+  {
+   "ply": 24,
+   "t": 200.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/3pnpbp/p1n1p1p1/1pN1P3/3P4/2P2N2/PP2BPPP/R1BQ1RK1 w - - 1 13",
+   "said": ""
+  },
+  {
+   "ply": 25,
+   "t": 206,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1bq1rk1/3pnpbp/p1n1p1p1/1pN1P1B1/3P4/2P2N2/PP2BPPP/R2Q1RK1 b - - 2 13",
+   "said": "[Music] very good man i didn't know you were"
+  },
+  {
+   "ply": 26,
+   "t": 210.5,
+   "line": [
+    "Nf5"
+   ],
+   "fen": "r1bq1rk1/3p1pbp/p1n1p1p1/1pN1PnB1/3P4/2P2N2/PP2BPPP/R2Q1RK1 w - - 3 14",
+   "said": "this good in the morning oh my god"
+  },
+  {
+   "ply": 27,
+   "t": 213.5,
+   "line": [
+    "Bxd8"
+   ],
+   "fen": "r1bB1rk1/3p1pbp/p1n1p1p1/1pN1Pn2/3P4/2P2N2/PP2BPPP/R2Q1RK1 b - - 0 14",
+   "said": "who was the one who who just woke up yeah clearly it was chris chris hvsc man these names really roll up the tongue is that a bernie sanders meme photo i think that's just bernie with the mittens right there i actually think he plays she actually plays chess which is funny um okay uh that was pretty smooth let's just i have two quick notes on that game if you don't mind all right didn't you miss the analysis board i know you've been dreaming about it all these days all these sleepless nights so very well played in the opening um couple of nitpicky notes first of all technically the move castles uh should have lost upon how can black win a pawn"
+  }
+ ],
+ "forks": []
+}

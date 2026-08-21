@@ -1000,3 +1000,40 @@ describe('narrationTailCovered (truncated branch tail triggers the wider retry)'
     expect(narrationTailCovered({ branchIdeas: ['a', 'b'], branchExtensionIdeas: [[], []] }, 2)).toBe(true);
   });
 });
+
+// ── THE TEMPTING MOVE IS ASKED AT THE STUDENT'S DECISIONS ──────────────────
+// David 2026-08-21: "the common/easy move needs to be computed. make sure it's
+// wired as it is now."
+//
+// The but-turn warns the student off a move THEY would reach for. Ask at the
+// wrong parity and the engine still runs, labels still appear, and every one of
+// them warns about a move it is not the student's turn to play — a silent
+// failure that looks exactly like success. This is the parity, pinned.
+import { temptingCandidatePlies } from './openingGenerator';
+
+describe('temptingCandidatePlies', () => {
+  // A spine alternates: white moves, black moves, white moves…
+  const spine = (n: number): Array<{ movedBy: 'white' | 'black' }> =>
+    Array.from({ length: n }, (_, i) => ({ movedBy: i % 2 === 0 ? 'white' : 'black' }));
+
+  it('asks after the OPPONENT moved, because that is when the student decides', () => {
+    // Student is White. White moves at even indices; after a WHITE move it is
+    // Black's turn, so those are not the student's decisions. The student
+    // decides after each BLACK move — the odd indices.
+    expect(temptingCandidatePlies(spine(8), 'white', 99)).toEqual([1, 3, 5, 7]);
+  });
+
+  it('flips with the student side', () => {
+    expect(temptingCandidatePlies(spine(8), 'black', 99)).toEqual([0, 2, 4, 6]);
+  });
+
+  it('respects the cost cap', () => {
+    // Each position costs one engine call per eye-catching legal move, so the
+    // cap is a real budget, not tidiness.
+    expect(temptingCandidatePlies(spine(40), 'white', 6)).toHaveLength(6);
+  });
+
+  it('returns nothing for an empty spine rather than throwing', () => {
+    expect(temptingCandidatePlies([], 'white', 6)).toEqual([]);
+  });
+});

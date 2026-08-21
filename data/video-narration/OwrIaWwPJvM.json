@@ -1,0 +1,179 @@
+{
+ "videoId": "OwrIaWwPJvM",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1470",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 698.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "and then i'm gonna go to sleep because i'm quite exhausted but let's play one last game and i will stream again tomorrow fifth sixteen hundred let's go let's play a silicon again that"
+  },
+  {
+   "ply": 4,
+   "t": 700.5,
+   "line": [
+    "Bc4",
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+   "said": "bishop c4 is"
+  },
+  {
+   "ply": 5,
+   "t": 702,
+   "line": [
+    "b3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/1P6/P1PP1PPP/RNBQK1NR b KQkq - 0 3",
+   "said": "all right so this guy is playing very weird chess b3 he's wasting time trying to"
+  },
+  {
+   "ply": 6,
+   "t": 712,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/1P6/P1PP1PPP/RNBQK1NR w KQkq - 1 4",
+   "said": "fianchetto his bishop which doesn't make too much sense let's just develop our knights and then you guys"
+  },
+  {
+   "ply": 7,
+   "t": 716,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/1P1P4/P1P2PPP/RNBQK1NR b KQkq - 0 4",
+   "said": "know the drill in such positions the"
+  },
+  {
+   "ply": 8,
+   "t": 717,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/1P1P4/P1P2PPP/RNBQK1NR w KQkq - 0 5",
+   "said": "best thing to do is to play e6 and prepare the move d5"
+  },
+  {
+   "ply": 10,
+   "t": 723,
+   "line": [
+    "Bb2",
+    "d5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2B1P3/1P1P4/PBP2PPP/RN1QK1NR w KQkq - 0 6",
+   "said": "and uh he's already lost a bishop because his bishop will his bishop is only one square but that"
+  },
+  {
+   "ply": 12,
+   "t": 727,
+   "line": [
+    "exd5",
+    "exd5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/2B5/1P1P4/PBP2PPP/RN1QK1NR w KQkq - 0 7",
+   "said": "square is going to it results in the"
+  },
+  {
+   "ply": 13,
+   "t": 728.5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/1Bpp4/8/1P1P4/PBP2PPP/RN1QK1NR b KQkq - 1 7",
+   "said": "loss of a bishop and the loss of the game this is a tactical pattern that i think most of you probably are aware of"
+  },
+  {
+   "ply": 14,
+   "t": 743,
+   "line": [
+    "Qa5+"
+   ],
+   "fen": "r1b1kb1r/pp3ppp/2n2n2/qBpp4/8/1P1P4/PBP2PPP/RN1QK1NR w KQkq - 2 8",
+   "said": "uh well the fiance doesn't make sense because it's just weird to develop bishops in this way also there is the chess principle nights before bishops"
+  },
+  {
+   "ply": 15,
+   "t": 748,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1b1kb1r/pp3ppp/2n2n2/qBpp4/8/1PNP4/PBP2PPP/R2QK1NR b KQkq - 3 8",
+   "said": "and uh he's kind of violating that now we're going to force him to develop his knight and what do we do with this night"
+  },
+  {
+   "ply": 16,
+   "t": 755,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1b1kb1r/pp3ppp/2n2n2/qBp5/3p4/1PNP4/PBP2PPP/R2QK1NR w KQkq - 0 9",
+   "said": "what do we do with this the id4 yeah exactly winning the night"
+  },
+  {
+   "ply": 18,
+   "t": 757.5,
+   "line": [
+    "Bxc6+",
+    "bxc6"
+   ],
+   "fen": "r1b1kb1r/p4ppp/2p2n2/q1p5/3p4/1PNP4/PBP2PPP/R2QK1NR w KQkq - 0 10",
+   "said": "yeah we don't care about that he's got to give up a pawn for the night uh and we're just going to be up a full piece for no compensation okay and this stuff people will try to do to you we can play bishop e7 we can play bishop b6 it doesn't matter as long as we can cover the check and we he doesn't even give get a pawn for the uh for the night now i'm gonna ask people a trick question can we castle is it possible to castle here don't get caught it is actually possible to castle because after queen takes c7 we play rook to e8 and we pin the king right so i've told people this before like sometimes our brain tells us something is impossible but before concluding that by the way defending the bishop before concluding that it's impossible we have to ask ourselves what happens if we do it anyway and that awakens in you the possibility of finding something like this okay so we are up a full piece there's nothing else to really talk about now we can just go about trading as many pieces as possible queen on e3 is very clearly vulnerable we can attack this queen by shifting the knight over to d5 opening up a channel between the bishops we can also take the knight so we can start trading pieces here and ruining his pawn structure the game is essentially over and um yeah we're going to take all of the pieces we're going to be up at night and his king's side is going to be completely ruined and we are going to approach 1500 so i'm anticipating either resignation or he's gonna play a couple more moves these triple pawns remind me of the magnus versus tara yeah some people might be disappointed by the fact that we have triple pawn okay now we win another piece we take the knight removing the defender from the bishop and then we're going to be up two pieces the rest you guys basically know the drill we're going to put a rook on the 8 we don't forget to deploy the remainder of our pieces in"
+  },
+  {
+   "ply": 7,
+   "t": 893.5,
+   "line": [],
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/1P1P4/P1P2PPP/RNBQK1NR b KQkq - 0 4",
+   "said": "a situation when we have a lot of extra material he simply resigns in a perfect game to end today's speed run yeah so just up two pieces now why is it a bad idea to film kettle the bishop here first of all the move d3 people should rule out uh because because the bishop has no way back uh"
+  },
+  {
+   "ply": 6,
+   "t": 909.5,
+   "line": [],
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/1P6/P1PP1PPP/RNBQK1NR w KQkq - 1 4",
+   "said": "and and and to do such a thing particularly when your bishop has come outside the pawn chain is just very dangerous uh so he should have at least probably defended this pawn or maybe even not"
+  },
+  {
+   "ply": 7,
+   "t": 912.5,
+   "line": [
+    "Bb2"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/1P6/PBPP1PPP/RN1QK1NR b KQkq - 2 4",
+   "said": "defended it just got bishop b2 uh but but after d3 e6 it's already very difficult to save the bishop he has to do something like d4 or b4 that's obviously very undesirable so this would have been yeah this move is is almost a killer almost immediately"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 6,
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/2B1P3/1P6/P1PP1PPP/RNBQK1NR w KQkq - 1 4",
+   "line": [
+    "e4",
+    "c5",
+    "Bc4",
+    "Nc6",
+    "b3",
+    "Nf6"
+   ],
+   "options": [
+    {
+     "san": "d3",
+     "t": 716,
+     "continuation": "d3",
+     "said": "weird chess b3 he's wasting time trying to fianchetto his bishop which doesn't make too much sense let's just develop our knights and then you guys know the drill in such positions the best thing to do is to play e6 and prepare the move d5 and uh he's already lost a bishop because his bishop will his bishop is only one square but that square is going to it results in the loss of a bishop and the loss of the game this is a tactical pattern that i think most of you probably are aware of uh well the fiance doesn't make sense because it's just weird to develop bishops in this way also there is the chess principle nights before bishops and uh he's kind of violating that now we're going to force him to develop his knight and what do we do with this night what do we do with this the id4 yeah exactly winning the night yeah we don't care about that he's got to give up a pawn for the night uh and we're just going to be up a full piece for no compensation okay and this stuff people will try to do to you we can play bishop e7 we can play bishop b6 it doesn't matter as long as we can cover the check and we he doesn't even give get a pawn for the uh for the night"
+    },
+    {
+     "san": "Bb2",
+     "t": 912.5,
+     "continuation": "Bb2",
+     "said": "and and and to do such a thing particularly when your bishop has come outside the pawn chain is just very dangerous uh so he should have at least probably defended this pawn or maybe even not defended it just got bishop b2 uh but but after d3 e6 it's already very difficult to save the bishop he has to do something like d4 or b4 that's obviously very undesirable so this would have been yeah this move is is almost a killer almost immediately"
+    }
+   ]
+  }
+ ]
+}

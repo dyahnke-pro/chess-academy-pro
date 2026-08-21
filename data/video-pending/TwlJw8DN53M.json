@@ -1,0 +1,156 @@
+{
+ "videoId": "TwlJw8DN53M",
+ "title": "Daniel VS Vladimir Kramnik",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 2.9977,
+  "y0": 2.9977,
+  "square": 43.9906,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 3685,
+  "settledPositions": null
+ },
+ "plies": 10,
+ "rewinds": 1,
+ "moves": [
+  {
+   "t": 110.5,
+   "ply": 3,
+   "line": [
+    "g3",
+    "d5",
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/5NP1/PPPPPP1P/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 113.5,
+   "ply": 4,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkbnr/ppp1pp1p/6p1/3p4/8/5NP1/PPPPPP1P/RNBQKB1R w KQkq - 0 3"
+  },
+  {
+   "t": 118,
+   "ply": 5,
+   "line": [
+    "Bg2"
+   ],
+   "fen": "rnbqkbnr/ppp1pp1p/6p1/3p4/8/5NP1/PPPPPPBP/RNBQK2R b KQkq - 1 3"
+  },
+  {
+   "t": 119,
+   "ply": 6,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk1nr/ppp1ppbp/6p1/3p4/8/5NP1/PPPPPPBP/RNBQK2R w KQkq - 2 4"
+  },
+  {
+   "t": 121.5,
+   "ply": 7,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqk1nr/ppp1ppbp/6p1/3p4/3P4/5NP1/PPP1PPBP/RNBQK2R b KQkq - 0 4"
+  },
+  {
+   "t": 122.5,
+   "ply": 6,
+   "line": [],
+   "fen": "rnbqk1nr/ppp1ppbp/6p1/3p4/8/5NP1/PPPPPPBP/RNBQK2R w KQkq - 2 4"
+  },
+  {
+   "t": 124,
+   "ply": 7,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbqk1nr/ppp1ppbp/6p1/3p4/8/5NP1/PPPPPPBP/RNBQ1RK1 b kq - 3 4"
+  },
+  {
+   "t": 125,
+   "ply": 8,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqk1nr/ppp2pbp/6p1/3pp3/8/5NP1/PPPPPPBP/RNBQ1RK1 w kq - 0 5"
+  },
+  {
+   "t": 129,
+   "ply": 9,
+   "line": [
+    "d3"
+   ],
+   "fen": "rnbqk1nr/ppp2pbp/6p1/3pp3/8/3P1NP1/PPP1PPBP/RNBQ1RK1 b kq - 0 5"
+  },
+  {
+   "t": 131.5,
+   "ply": 10,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqk1nr/ppp2pbp/2n3p1/3pp3/8/3P1NP1/PPP1PPBP/RNBQ1RK1 w kq - 1 6"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rnbqk1nr/ppp1ppbp/6p1/3p4/8/5NP1/PPPPPPBP/RNBQK2R w KQkq - 2 4",
+   "line": [
+    "g3",
+    "d5",
+    "Nf3",
+    "g6",
+    "Bg2",
+    "Bg7"
+   ],
+   "ply": 6,
+   "options": [
+    {
+     "san": "d4",
+     "t": 121.5,
+     "continuation": "d4"
+    },
+    {
+     "san": "O-O",
+     "t": 124,
+     "continuation": "O-O"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "King's Indian Attack: Double Fianchetto",
+   "eco": "A07",
+   "plies": 4,
+   "line": "g3 d5 Nf3 g6",
+   "coverage": 0.889
+  },
+  {
+   "name": "King's Indian Attack",
+   "eco": "A07",
+   "plies": 3,
+   "line": "g3 d5 Nf3",
+   "coverage": 1
+  },
+  {
+   "name": "Hungarian Opening",
+   "eco": "A00",
+   "plies": 1,
+   "line": "g3",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}

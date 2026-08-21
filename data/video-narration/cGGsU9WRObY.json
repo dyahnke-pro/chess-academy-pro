@@ -1,0 +1,384 @@
+{
+ "videoId": "cGGsU9WRObY",
+ "title": "Daniel Vs GM Sam Shankland | Blitz Battle | Pt. 2",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 676.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "oh crap is that a mouse flip yeah yeah i'll resign that's that's all right i can is there a way to take back no no no no i won't allow it that's part of the game that's gonna be the game that turns it around so you're gonna regret that later on we'll see we'll see all right let's try"
+  },
+  {
+   "ply": 6,
+   "t": 680,
+   "line": [
+    "Nf3",
+    "d6",
+    "Bb5+",
+    "Bd7"
+   ],
+   "fen": "rn1qkbnr/pp1bpppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 4",
+   "said": "something else to check yeah yeah this is dangerous it's gonna"
+  },
+  {
+   "ply": 7,
+   "t": 682,
+   "line": [
+    "c4"
+   ],
+   "fen": "rn1qkbnr/pp1bpppp/3p4/1Bp5/2P1P3/5N2/PP1P1PPP/RNBQK2R b KQkq - 0 4",
+   "said": "be dangerous okay"
+  },
+  {
+   "ply": 8,
+   "t": 683,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2qkbnr/pp1bpppp/2np4/1Bp5/2P1P3/5N2/PP1P1PPP/RNBQK2R w KQkq - 1 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 685.5,
+   "line": [
+    "d4",
+    "g6"
+   ],
+   "fen": "r2qkbnr/pp1bpp1p/2np2p1/1Bp5/2PPP3/5N2/PP3PPP/RNBQK2R w KQkq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 14,
+   "t": 690,
+   "line": [
+    "Nc3",
+    "cxd4",
+    "Nxd4",
+    "Nf6"
+   ],
+   "fen": "r2qkb1r/pp1bpp1p/2np1np1/1B6/2PNP3/2N5/PP3PPP/R1BQK2R w KQkq - 1 8",
+   "said": "i don't know if i'm supposed to do this so soon but yeah i don't know this at all i mean i know somebody i play this with"
+  },
+  {
+   "ply": 15,
+   "t": 691,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2qkb1r/pp1bpp1p/2np1np1/1B6/2PNP3/2N5/PP3PPP/R1BQ1RK1 b kq - 2 8",
+   "said": "white"
+  },
+  {
+   "ply": 16,
+   "t": 692,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r2qk2r/pp1bppbp/2np1np1/1B6/2PNP3/2N5/PP3PPP/R1BQ1RK1 w kq - 3 9",
+   "said": "yeah but sorry here i'm saying so bishop e3 knight g4 is probably okay for you right yeah i think so but if i play f3 do you"
+  },
+  {
+   "ply": 17,
+   "t": 710.5,
+   "line": [
+    "Bxc6"
+   ],
+   "fen": "r2qk2r/pp1bppbp/2Bp1np1/8/2PNP3/2N5/PP3PPP/R1BQ1RK1 b kq - 0 9",
+   "said": "have any tricks queen b6 or something it's close f3 um it looks very i think i remember this actually you're supposed to take and then after bc i have c5 yeah but i'm"
+  },
+  {
+   "ply": 18,
+   "t": 713.5,
+   "line": [
+    "Bxc6"
+   ],
+   "fen": "r2qk2r/pp2ppbp/2bp1np1/8/2PNP3/2N5/PP3PPP/R1BQ1RK1 w kq - 0 10",
+   "said": "gonna play with the bishop"
+  },
+  {
+   "ply": 19,
+   "t": 715.5,
+   "line": [
+    "f3"
+   ],
+   "fen": "r2qk2r/pp2ppbp/2bp1np1/8/2PNP3/2N2P2/PP4PP/R1BQ1RK1 b kq - 0 10",
+   "said": "okay sure but now i get them roxy you do"
+  },
+  {
+   "ply": 20,
+   "t": 717,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/pp2ppbp/2bp1np1/8/2PNP3/2N2P2/PP4PP/R1BQ1RK1 w - - 1 11",
+   "said": "but okay i have two bishops how bad is"
+  },
+  {
+   "ply": 22,
+   "t": 718,
+   "line": [
+    "Be3",
+    "Rc8"
+   ],
+   "fen": "2rq1rk1/pp2ppbp/2bp1np1/8/2PNP3/2N1BP2/PP4PP/R2Q1RK1 w - - 3 12",
+   "said": "this for black i never really"
+  },
+  {
+   "ply": 23,
+   "t": 719.5,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "2rq1rk1/pp2ppbp/2bp1np1/8/2PNP3/2N1BP2/PP1Q2PP/R4RK1 b - - 4 12",
+   "said": "was afraid of this slightly worse it's"
+  },
+  {
+   "ply": 24,
+   "t": 721,
+   "line": [
+    "a6"
+   ],
+   "fen": "2rq1rk1/1p2ppbp/p1bp1np1/8/2PNP3/2N1BP2/PP1Q2PP/R4RK1 w - - 0 13",
+   "said": ""
+  },
+  {
+   "ply": 25,
+   "t": 722,
+   "line": [
+    "b3"
+   ],
+   "fen": "2rq1rk1/1p2ppbp/p1bp1np1/8/2PNP3/1PN1BP2/P2Q2PP/R4RK1 b - - 0 13",
+   "said": "not that bad my track record of beating you in slightly worse"
+  },
+  {
+   "ply": 26,
+   "t": 728,
+   "line": [
+    "Qa5"
+   ],
+   "fen": "2r2rk1/1p2ppbp/p1bp1np1/q7/2PNP3/1PN1BP2/P2Q2PP/R4RK1 w - - 1 14",
+   "said": "it's not particularly good okay let's go here okay"
+  },
+  {
+   "ply": 27,
+   "t": 731.5,
+   "line": [
+    "Rfd1"
+   ],
+   "fen": "2r2rk1/1p2ppbp/p1bp1np1/q7/2PNP3/1PN1BP2/P2Q2PP/R2R2K1 b - - 2 14",
+   "said": ""
+  },
+  {
+   "ply": 28,
+   "t": 733,
+   "line": [
+    "Rfe8"
+   ],
+   "fen": "2r1r1k1/1p2ppbp/p1bp1np1/q7/2PNP3/1PN1BP2/P2Q2PP/R2R2K1 w - - 3 15",
+   "said": ""
+  },
+  {
+   "ply": 29,
+   "t": 736,
+   "line": [
+    "Rac1"
+   ],
+   "fen": "2r1r1k1/1p2ppbp/p1bp1np1/q7/2PNP3/1PN1BP2/P2Q2PP/2RR2K1 b - - 4 15",
+   "said": "who saw my trick what a shocker stop being 95."
+  },
+  {
+   "ply": 30,
+   "t": 738.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "2r1r1k1/1p2ppb1/p1bp1np1/q6p/2PNP3/1PN1BP2/P2Q2PP/2RR2K1 w - - 0 16",
+   "said": "all right so let's start by attacking"
+  },
+  {
+   "ply": 31,
+   "t": 744,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "2r1r1k1/1p2ppb1/p1bp1npB/q6p/2PNP3/1PN2P2/P2Q2PP/2RR2K1 b - - 1 16",
+   "said": "this fellow"
+  },
+  {
+   "ply": 32,
+   "t": 746,
+   "line": [
+    "Bh8"
+   ],
+   "fen": "2r1r1kb/1p2pp2/p1bp1npB/q6p/2PNP3/1PN2P2/P2Q2PP/2RR2K1 w - - 2 17",
+   "said": "okay"
+  },
+  {
+   "ply": 33,
+   "t": 747.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "2r1r1kb/1p2pp2/p1bp1np1/q5Bp/2PNP3/1PN2P2/P2Q2PP/2RR2K1 b - - 3 17",
+   "said": ""
+  },
+  {
+   "ply": 34,
+   "t": 760.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "2r1r1kb/4pp2/p1bp1np1/qp4Bp/2PNP3/1PN2P2/P2Q2PP/2RR2K1 w - - 0 18",
+   "said": "interesting i don't know what i'm doing let's have some fun okay shall we all right so cb and then knight cb5 you have some queen b6 is your plan i thought just green did i mean there's a couple things i thought queen d2 bishop d2 i don't believe let's see queen b6 what do you have there nb6 probably a4 e5 and that's bad news right yeah but a4 even bishop b5 let's see okay hang on i gotta find some way to cause trouble but i don't uh what a troll um you're not supposed to be able to get this move so easily but i don't see how to punish you for it"
+  },
+  {
+   "ply": 36,
+   "t": 818.5,
+   "line": [
+    "cxb5",
+    "axb5"
+   ],
+   "fen": "2r1r1kb/4pp2/2bp1np1/qp4Bp/3NP3/1PN2P2/P2Q2PP/2RR2K1 w - - 0 19",
+   "said": "all right i see an idea that looks at least interesting"
+  },
+  {
+   "ply": 38,
+   "t": 823,
+   "line": [
+    "Ncxb5",
+    "Qb6"
+   ],
+   "fen": "2r1r1kb/4pp2/1qbp1np1/1N4Bp/3NP3/1P3P2/P2Q2PP/2RR2K1 w - - 1 20",
+   "said": ""
+  },
+  {
+   "ply": 41,
+   "t": 826,
+   "line": [
+    "Rxc6",
+    "Rxc6",
+    "Be3"
+   ],
+   "fen": "4r1kb/4pp2/1qrp1np1/1N5p/3NP3/1P2BP2/P2Q2PP/3R2K1 b - - 1 21",
+   "said": "i have uh-huh idea what's going on this probably just doesn't work but at least"
+  },
+  {
+   "ply": 42,
+   "t": 833,
+   "line": [
+    "Rcc8"
+   ],
+   "fen": "2r1r1kb/4pp2/1q1p1np1/1N5p/3NP3/1P2BP2/P2Q2PP/3R2K1 w - - 2 22",
+   "said": "it looks interesting all right well it does i'll move my rook away okay"
+  },
+  {
+   "ply": 43,
+   "t": 835.5,
+   "line": [
+    "a4"
+   ],
+   "fen": "2r1r1kb/4pp2/1q1p1np1/1N5p/P2NP3/1P2BP2/3Q2PP/3R2K1 b - - 0 22",
+   "said": ""
+  },
+  {
+   "ply": 44,
+   "t": 849,
+   "line": [
+    "Qb7"
+   ],
+   "fen": "2r1r1kb/1q2pp2/3p1np1/1N5p/P2NP3/1P2BP2/3Q2PP/3R2K1 w - - 1 23",
+   "said": "seems pretty unclear to me yeah definitely messy and then i might just be lost but it's"
+  },
+  {
+   "ply": 45,
+   "t": 851.5,
+   "line": [
+    "h3"
+   ],
+   "fen": "2r1r1kb/1q2pp2/3p1np1/1N5p/P2NP3/1P2BP1P/3Q2P1/3R2K1 b - - 0 23",
+   "said": "not going to be easy no no no i think it's not so clear"
+  },
+  {
+   "ply": 46,
+   "t": 852.5,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "2r1r1kb/1q1npp2/3p2p1/1N5p/P2NP3/1P2BP1P/3Q2P1/3R2K1 w - - 1 24",
+   "said": ""
+  },
+  {
+   "ply": 47,
+   "t": 857,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "2r1r1kb/1q1npp2/3p2p1/7p/P2NP3/1PN1BP1P/3Q2P1/3R2K1 b - - 2 24",
+   "said": "it's not easy for you to play this that i have all these ideas i need to record next sir"
+  },
+  {
+   "ply": 48,
+   "t": 869,
+   "line": [
+    "Bxd4"
+   ],
+   "fen": "2r1r1k1/1q1npp2/3p2p1/7p/P2bP3/1PN1BP1P/3Q2P1/3R2K1 w - - 0 25",
+   "said": "i feel like that's topical all right to be honest i just completely missed that"
+  },
+  {
+   "ply": 50,
+   "t": 874,
+   "line": [
+    "Bxd4",
+    "Qxb3"
+   ],
+   "fen": "2r1r1k1/3npp2/3p2p1/7p/P2BP3/1qN2P1P/3Q2P1/3R2K1 w - - 0 26",
+   "said": "that's okay"
+  },
+  {
+   "ply": 51,
+   "t": 875,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "2r1r1k1/3npp2/3p2p1/3N3p/P2BP3/1q3P1P/3Q2P1/3R2K1 b - - 1 26",
+   "said": ""
+  },
+  {
+   "ply": 52,
+   "t": 879,
+   "line": [
+    "Rc2"
+   ],
+   "fen": "4r1k1/3npp2/3p2p1/3N3p/P2BP3/1q3P1P/2rQ2P1/3R2K1 w - - 2 27",
+   "said": "this is not going to work is it i don't believe"
+  },
+  {
+   "ply": 56,
+   "t": 882.5,
+   "line": [
+    "Be5",
+    "e6",
+    "Bd4",
+    "e5"
+   ],
+   "fen": "4r1k1/3n1p2/3p2p1/3Np2p/P2BP3/1q3P1P/2rQ2P1/3R2K1 w - - 0 29",
+   "said": ""
+  },
+  {
+   "ply": 57,
+   "t": 888,
+   "line": [
+    "Qh6"
+   ],
+   "fen": "4r1k1/3n1p2/3p2pQ/3Np2p/P2BP3/1q3P1P/2r3P1/3R2K1 b - - 1 29",
+   "said": "and uh yeah that knight under seven is the hero all right let's touch stuff okay let's go with another default okay shall we repeat that i'm happy to i'm gonna get to see with a hell of a lot more time this time that's right all right so here here here 94. okay f4 is not supposed to be a great move i'm pretty sure i'll all right repeat it here i think i took here all right so [Music] this feels like yourself try to improve let's see but i'm not gonna spend way too much time looking for the miracle"
+  }
+ ],
+ "forks": []
+}

@@ -1,0 +1,401 @@
+{
+ "videoId": "LXSvLzf8mQo",
+ "title": "PogChamps 3 | MoistCr1TiKaL Training | The Prophet Returns",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 965.5,
+   "line": [
+    "e4",
+    "e5",
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "this is your lucky day all right oh yeah okay they want to see that okay i'll show the cool move later"
+  },
+  {
+   "ply": 4,
+   "t": 970,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "um the cool moves knight takes c7 it was not like nothing to write home about"
+  },
+  {
+   "ply": 7,
+   "t": 973,
+   "line": [
+    "Nc3",
+    "Nf6",
+    "Bc4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
+   "said": "okay so here um h3 h6 a6 and you open up the"
+  },
+  {
+   "ply": 10,
+   "t": 974.5,
+   "line": [
+    "a6",
+    "O-O",
+    "h6"
+   ],
+   "fen": "r1bqkb1r/1ppp1pp1/p1n2n1p/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQ1RK1 w kq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 11,
+   "t": 977,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/1ppp1pp1/p1n2n1p/4p3/2BPP3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 6",
+   "said": "center right your opponent is screwing around you open up the"
+  },
+  {
+   "ply": 12,
+   "t": 980,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1bqkb1r/2pp1pp1/p1n2n1p/1p2p3/2BPP3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 7",
+   "said": "center uh and now d takes e5 so you want"
+  },
+  {
+   "ply": 13,
+   "t": 983,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/2pp1pp1/p1n2n1p/1p1Pp3/2B1P3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 7",
+   "said": "it initially to play d5 the problem with this move is that it closes up the center and"
+  },
+  {
+   "ply": 14,
+   "t": 990,
+   "line": [
+    "Nb8"
+   ],
+   "fen": "rnbqkb1r/2pp1pp1/p4n1p/1p1Pp3/2B1P3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 1 8",
+   "said": "black does not have to take your bishop let's say black just drops the knight back to b8 okay you have to move the bishop right"
+  },
+  {
+   "ply": 16,
+   "t": 996,
+   "line": [
+    "Bb3",
+    "d6"
+   ],
+   "fen": "rnbqkb1r/2p2pp1/p2p1n1p/1p1Pp3/4P3/1BN2N2/PPP2PPP/R1BQ1RK1 w kq - 0 9",
+   "said": "and black ghost d6 when you have a lead in development as you already know you want to open up the center and when you've got this structure the center is very closed which means that"
+  },
+  {
+   "ply": 12,
+   "t": 1012.5,
+   "line": [],
+   "fen": "r1bqkb1r/2pp1pp1/p1n2n1p/1p2p3/2BPP3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 7",
+   "said": "even though you have more pieces developed that loses its effectiveness if that makes sense okay so that's why the move d5 it also closes down your bishop so d takes e5 does the"
+  },
+  {
+   "ply": 13,
+   "t": 1014.5,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bqkb1r/2pp1pp1/p1n2n1p/1p2P3/2B1P3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 7",
+   "said": "same thing"
+  },
+  {
+   "ply": 14,
+   "t": 1016,
+   "line": [
+    "bxc4"
+   ],
+   "fen": "r1bqkb1r/2pp1pp1/p1n2n1p/4P3/2p1P3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 8",
+   "said": "but had he taken your bishop the center"
+  },
+  {
+   "ply": 15,
+   "t": 1018,
+   "line": [
+    "exf6"
+   ],
+   "fen": "r1bqkb1r/2pp1pp1/p1n2P1p/8/2p1P3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 8",
+   "said": "is a lot more open and you have a very"
+  },
+  {
+   "ply": 16,
+   "t": 1019.5,
+   "line": [
+    "Qxf6"
+   ],
+   "fen": "r1b1kb1r/2pp1pp1/p1n2q1p/8/2p1P3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 9",
+   "said": "very nice move here very natural move accumulating the pressure in the center yeah he's pushing the pawn upright you can do that that's one one way can"
+  },
+  {
+   "ply": 17,
+   "t": 1035,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1b1kb1r/2pp1pp1/p1n2q1p/3N4/2p1P3/5N2/PPP2PPP/R1BQ1RK1 b kq - 1 9",
+   "said": "you play a piece move attacking the queen oh yeah just developing to the d5 exactly he's got to go back now where do"
+  },
+  {
+   "ply": 18,
+   "t": 1036,
+   "line": [
+    "Qd8"
+   ],
+   "fen": "r1bqkb1r/2pp1pp1/p1n4p/3N4/2p1P3/5N2/PPP2PPP/R1BQ1RK1 w kq - 2 10",
+   "said": "you put the bishop now the bishop just goes through a"
+  },
+  {
+   "ply": 19,
+   "t": 1041,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r1bqkb1r/2pp1pp1/p1n4p/3N4/2p1PB2/5N2/PPP2PPP/R2Q1RK1 b kq - 3 10",
+   "said": "foreign bingo he's got to go you're attacking the spawn now tear this [&nbsp;__&nbsp;]"
+  },
+  {
+   "ply": 20,
+   "t": 1043,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkb1r/2p2pp1/p1np3p/3N4/2p1PB2/5N2/PPP2PPP/R2Q1RK1 w kq - 0 11",
+   "said": "apart the move you wanted to play earlier who wanted to play earlier yeah oh that's pretty big what move did i want to play earlier yeah there were several"
+  },
+  {
+   "ply": 21,
+   "t": 1065.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkb1r/2p2pp1/p1np3p/3NP3/2p2B2/5N2/PPP2PPP/R2Q1RK1 b kq - 0 11",
+   "said": "that's an extremely helpful him what are you talking about earlier in this game oh i'm just pushing the pawn absolutely e5 and you open up the file and he's absolutely busted here so very simple following the principles and black's just going to get demolished"
+  },
+  {
+   "ply": 12,
+   "t": 1077.5,
+   "line": [],
+   "fen": "r1bqkb1r/2pp1pp1/p1n2n1p/1p2p3/2BPP3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 7",
+   "said": "here so that was um a possible continuation sorry he went um d5 he went knight g4 bishop d5 bishop b7 h3"
+  },
+  {
+   "ply": 15,
+   "t": 1079.5,
+   "line": [
+    "Bd5",
+    "Ng4",
+    "dxe5"
+   ],
+   "fen": "r1bqkb1r/2pp1pp1/p1n4p/1p1BP3/4P1n1/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 8",
+   "said": ""
+  },
+  {
+   "ply": 16,
+   "t": 1081,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "r2qkb1r/1bpp1pp1/p1n4p/1p1BP3/4P1n1/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 1 9",
+   "said": ""
+  },
+  {
+   "ply": 17,
+   "t": 1082,
+   "line": [
+    "h3"
+   ],
+   "fen": "r2qkb1r/1bpp1pp1/p1n4p/1p1BP3/4P1n1/2N2N1P/PPP2PP1/R1BQ1RK1 b kq - 0 9",
+   "said": "and there's only one other thing that i wanted to"
+  },
+  {
+   "ply": 18,
+   "t": 1085.5,
+   "line": [
+    "Ngxe5"
+   ],
+   "fen": "r2qkb1r/1bpp1pp1/p1n4p/1p1Bn3/4P3/2N2N1P/PPP2PP1/R1BQ1RK1 w kq - 0 10",
+   "said": "show you after he took then everything was very simple"
+  },
+  {
+   "ply": 17,
+   "t": 1087.5,
+   "line": [],
+   "fen": "r2qkb1r/1bpp1pp1/p1n4p/1p1BP3/4P1n1/2N2N1P/PPP2PP1/R1BQ1RK1 b kq - 0 9",
+   "said": "he has a interesting move h5"
+  },
+  {
+   "ply": 18,
+   "t": 1089.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "r2qkb1r/1bpp1pp1/p1n5/1p1BP2p/4P1n1/2N2N1P/PPP2PP1/R1BQ1RK1 w kq - 0 10",
+   "said": "this is called a i think a fishing pole trap this isn't actually a trap in this"
+  },
+  {
+   "ply": 19,
+   "t": 1102,
+   "line": [
+    "hxg4"
+   ],
+   "fen": "r2qkb1r/1bpp1pp1/p1n5/1p1BP2p/4P1P1/2N2N2/PPP2PP1/R1BQ1RK1 b kq - 0 10",
+   "said": "position but that's the basic idea so what what is the meaning of the move h5 well basically the idea is if you take do you see what kind of"
+  },
+  {
+   "ply": 20,
+   "t": 1103,
+   "line": [
+    "hxg4"
+   ],
+   "fen": "r2qkb1r/1bpp1pp1/p1n5/1p1BP3/4P1p1/2N2N2/PPP2PP1/R1BQ1RK1 w kq - 0 11",
+   "said": "could happen here"
+  },
+  {
+   "ply": 21,
+   "t": 1107,
+   "line": [
+    "Nh2"
+   ],
+   "fen": "r2qkb1r/1bpp1pp1/p1n5/1p1BP3/4P1p1/2N5/PPP2PPN/R1BQ1RK1 b kq - 1 11",
+   "said": "let's say you you dropped your knight to h2 nonchalantly black is already not winning but it's unpleasant yeah so"
+  },
+  {
+   "ply": 22,
+   "t": 1117,
+   "line": [
+    "Qh4"
+   ],
+   "fen": "r3kb1r/1bpp1pp1/p1n5/1p1BP3/4P1pq/2N5/PPP2PPN/R1BQ1RK1 w kq - 2 12",
+   "said": "he's just gonna bring his queen over to the h file right exactly now it's very hard to defend against checkmate white has only one defense here luckily can you find it it's trading queens right no no that wouldn't do it yeah"
+  },
+  {
+   "ply": 23,
+   "t": 1136.5,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r3kb1r/1bpp1pp1/p1n5/1p1BP3/4PBpq/2N5/PPP2PPN/R2Q1RK1 b kq - 3 12",
+   "said": "because queen takes h2 isn't going to be made yeah um is it just bringing the bishop up to f4 bingo only move without this move it would have been checkmate but the way to"
+  },
+  {
+   "ply": 27,
+   "t": 1139,
+   "line": [
+    "Qg5",
+    "Bc1",
+    "Qd8",
+    "Nf3"
+   ],
+   "fen": "r2qkb1r/1bpp1pp1/p1n5/1p1BP3/4P1p1/2N2N2/PPP2PP1/R1BQ1RK1 b kq - 7 14",
+   "said": "just avoid all of this is to play knight g5 stopping the queen from coming to h4"
+  },
+  {
+   "ply": 18,
+   "t": 1146,
+   "line": [],
+   "fen": "r2qkb1r/1bpp1pp1/p1n5/1p1BP2p/4P1n1/2N2N1P/PPP2PP1/R1BQ1RK1 w kq - 0 10",
+   "said": "so just wanted to raise your awareness that when there is a piece on g4"
+  },
+  {
+   "ply": 16,
+   "t": 1147,
+   "line": [],
+   "fen": "r2qkb1r/1bpp1pp1/p1n4p/1p1BP3/4P1n1/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 1 9",
+   "said": "and you are attacking it with h3 uh your"
+  },
+  {
+   "ply": 18,
+   "t": 1150.5,
+   "line": [
+    "h3",
+    "h5"
+   ],
+   "fen": "r2qkb1r/1bpp1pp1/p1n5/1p1BP2p/4P1n1/2N2N1P/PPP2PP1/R1BQ1RK1 w kq - 0 10",
+   "said": "opponent may play this move and there you have to evaluate whether or not you can take the knight or the bishop whatever is on g4 and make sure that the pathway to h4 is covered up okay makes sense so that's basically it everything else was extremely smooth okay perfect so um i think we can divide this next segment into two sections we can talk a little bit about openings and i want to sort of start talking about building up positional understanding and do a little bit of a drill uh that involves that involves that looking at the position perhaps in ways that you're not quite used to does that sound good and then after that we can jump back in for a couple games good to me man perfect let me just pull up my notes and just got a couple couple of positions that i have here one moment"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 12,
+   "fen": "r1bqkb1r/2pp1pp1/p1n2n1p/1p2p3/2BPP3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 7",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "Bc4",
+    "a6",
+    "O-O",
+    "h6",
+    "d4",
+    "b5"
+   ],
+   "options": [
+    {
+     "san": "d5",
+     "t": 983,
+     "continuation": "d5",
+     "said": "okay so here um h3 h6 a6 and you open up the center right your opponent is screwing around you open up the center uh and now d takes e5 so you want it initially to play d5 the problem with this move is that it closes up the center and black does not have to take your bishop let's say black just drops the knight back to b8 okay you have to move the bishop right and black ghost d6 when you have a lead in development as you already know you want to open up the center and when you've got this structure the center is very closed which means that even though you have more pieces developed that loses its effectiveness if that makes sense okay so that's why the move d5 it also closes down your bishop so d takes e5 does the same thing but had he taken your bishop the center is a lot more open and you have a very very nice move here very natural move accumulating the pressure in the center yeah he's pushing the pawn upright you can do that that's one one way can you play a piece move attacking the queen oh yeah just developing to the d5 exactly he's got to go back now where do you put the bishop now the bishop just goes through a foreign bingo he's got to go you're attacking the spawn now tear this [&nbsp;__&nbsp;]"
+    },
+    {
+     "san": "dxe5",
+     "t": 1014.5,
+     "continuation": "dxe5",
+     "said": "even though you have more pieces developed that loses its effectiveness if that makes sense okay so that's why the move d5 it also closes down your bishop so d takes e5 does the same thing but had he taken your bishop the center is a lot more open and you have a very very nice move here very natural move accumulating the pressure in the center yeah he's pushing the pawn upright you can do that that's one one way can you play a piece move attacking the queen oh yeah just developing to the d5 exactly he's got to go back now where do you put the bishop now the bishop just goes through a foreign bingo he's got to go you're attacking the spawn now tear this [&nbsp;__&nbsp;] apart the move you wanted to play earlier who wanted to play earlier yeah oh that's pretty big what move did i want to play earlier yeah there were several that's an extremely helpful him what are you talking about earlier in this game oh i'm just pushing the pawn absolutely e5 and you open up the file and he's absolutely busted here so very simple following the principles and black's just going to get demolished here so that was um"
+    },
+    {
+     "san": "Bd5",
+     "t": 1079.5,
+     "continuation": "Bd5 Ng4 dxe5",
+     "said": "following the principles and black's just going to get demolished here so that was um a possible continuation sorry he went um d5 he went knight g4 bishop d5 bishop b7 h3 and there's only one other thing that i wanted to show you after he took then everything was very simple he has a interesting move h5 this is called a i think a fishing pole trap this isn't actually a trap in this position but that's the basic idea so what what is the meaning of the move h5 well basically the idea is if you take do you see what kind of could happen here let's say you you dropped your knight to h2 nonchalantly black is already not winning but it's unpleasant yeah so he's just gonna bring his queen over to the h file right exactly now it's very hard to defend against checkmate white has only one defense here luckily can you find it it's trading queens right no no that wouldn't do it yeah because queen takes h2 isn't going to be made yeah um is it just bringing the bishop up to f4 bingo only move without this move it would have been checkmate but the way to just avoid all of this is to play knight"
+    }
+   ]
+  },
+  {
+   "ply": 17,
+   "fen": "r2qkb1r/1bpp1pp1/p1n4p/1p1BP3/4P1n1/2N2N1P/PPP2PP1/R1BQ1RK1 b kq - 0 9",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "Bc4",
+    "a6",
+    "O-O",
+    "h6",
+    "d4",
+    "b5",
+    "Bd5",
+    "Ng4",
+    "dxe5",
+    "Bb7",
+    "h3"
+   ],
+   "options": [
+    {
+     "san": "Ngxe5",
+     "t": 1085.5,
+     "continuation": "Ngxe5",
+     "said": "a possible continuation sorry he went um d5 he went knight g4 bishop d5 bishop b7 h3 and there's only one other thing that i wanted to show you after he took then everything was very simple he has a interesting move h5 this is called a i think a fishing pole trap this isn't actually a trap in this position but that's the basic idea so what what is the meaning of the move h5 well basically the idea is if you take do you see what kind of could happen here let's say you you dropped your knight to h2 nonchalantly black is already not winning but it's unpleasant yeah so he's just gonna bring his queen over to the h file right exactly now it's very hard to defend against checkmate white has only one defense here luckily can you find it it's trading queens right no no that wouldn't do it yeah because queen takes h2 isn't going to be made yeah um is it just bringing the bishop up to f4 bingo only move without this move it would have been checkmate but the way to just avoid all of this is to play knight g5 stopping the queen from coming to h4 so just wanted to raise your awareness"
+    },
+    {
+     "san": "h5",
+     "t": 1089.5,
+     "continuation": "h5",
+     "said": "d5 he went knight g4 bishop d5 bishop b7 h3 and there's only one other thing that i wanted to show you after he took then everything was very simple he has a interesting move h5 this is called a i think a fishing pole trap this isn't actually a trap in this position but that's the basic idea so what what is the meaning of the move h5 well basically the idea is if you take do you see what kind of could happen here let's say you you dropped your knight to h2 nonchalantly black is already not winning but it's unpleasant yeah so he's just gonna bring his queen over to the h file right exactly now it's very hard to defend against checkmate white has only one defense here luckily can you find it it's trading queens right no no that wouldn't do it yeah because queen takes h2 isn't going to be made yeah um is it just bringing the bishop up to f4 bingo only move without this move it would have been checkmate but the way to just avoid all of this is to play knight g5 stopping the queen from coming to h4 so just wanted to raise your awareness that when there is a piece on g4 and you are attacking it with h3 uh your"
+    }
+   ]
+  }
+ ]
+}

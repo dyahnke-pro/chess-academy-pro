@@ -1,0 +1,803 @@
+{
+ "videoId": "p5WLA70fXMM",
+ "title": "Live Chess + Analysis | Moistcr1tikal / Penguinz0",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 716,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "say like you're sponsored by spectrum or something i was gonna feel bad no not at all no i i mean i would never i would never sacrifice myself like so let me yeah okay i'm am i following you yes okay so"
+  },
+  {
+   "ply": 3,
+   "t": 717.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "you're playing a new game against"
+  },
+  {
+   "ply": 4,
+   "t": 719,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "ah yes of course tim oh [&nbsp;__&nbsp;] i think you should resign already you're [&nbsp;__&nbsp;] okay tim seems pretty impressive man he's got a [&nbsp;__&nbsp;] pool noodle in there he does i noticed that too okay so he's playing the sicilian defense"
+  },
+  {
+   "ply": 5,
+   "t": 739.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "and again you can develop normally but you can also play what's called the open situation you can push your d-pawn out to two to uh d4 and i think you've seen this before right and the point of that is that it opens up the development for your bishop and you're exploiting the fact that he's remember he's not developing his pieces he's pushing his pawns out"
+  },
+  {
+   "ply": 6,
+   "t": 761.5,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "so therefore you're opening up the center right right no well he takes i take with knight right i don't think with queen yeah taking the queen would be the check"
+  },
+  {
+   "ply": 7,
+   "t": 763.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "over variation um check over was not a bad player but it is a pretty adventurous line"
+  },
+  {
+   "ply": 8,
+   "t": 770.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "said": ""
+  },
+  {
+   "ply": 9,
+   "t": 773,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "verything has a name in chess even the verything has a name in chess even the shittiest lines have a name"
+  },
+  {
+   "ply": 10,
+   "t": 775,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "okay he's played the night or this is the most popular sicilian now take a look at both of your bishops okay do you see good development squares for both of them and you can start with either"
+  },
+  {
+   "ply": 11,
+   "t": 801,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 6",
+   "said": "um well he takes off the the free little cheeky check which doesn't really do much anyway so what i was looking at is just the standard v4 for my f bishop yep perfect that is the bobby fischer variation now i'll show you after this game i'll blow your mind a little bit i'll show you the amount of moves that white has"
+  },
+  {
+   "ply": 12,
+   "t": 814.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/2BNP3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 7",
+   "said": "tried in that position it's actually pretty friggin interesting from right here the bobby fischer before bishop c4 so he's played e5 which is a really bad positional move because there is a certain square that he's really weakened now first you got to move your knight and as you're moving it maybe you can tell me what square that is wow thanks gm bobby fischer for the bits man i didn't even know his ghost is in the chat"
+  },
+  {
+   "ply": 13,
+   "t": 844.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/2B1P3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 7",
+   "said": "okay so where which square does the knight want to go to and don't overthink this i mean really any square is fine i mean i could just drop it back to its normal hold at f3 absolutely as you should now which square has he weakened by playing e5"
+  },
+  {
+   "ply": 14,
+   "t": 851,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rnbqk2r/1p2bppp/p2p1n2/4p3/2B1P3/2N2N2/PPP2PPP/R1BQK2R w KQkq - 2 8",
+   "said": "oh he can no longer put a pawn there on the say the outpost at d5 right so immediately a plan has crystallized now you don't want to put the knight on d5 immediately because he's got a knight on f6 guarding that square but we actually did a training problem like this"
+  },
+  {
+   "ply": 15,
+   "t": 874,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbqk2r/1p2bppp/p2p1n2/4p1B1/2B1P3/2N2N2/PPP2PPP/R2QK2R b KQkq - 3 8",
+   "said": "what's your plan to get a knight to d5 how would you eliminate its defender i just immediately go for an attack at g5 with my baby nice nice and this is a very typical plan actually in the sicilian defense i could"
+  },
+  {
+   "ply": 16,
+   "t": 881,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/1p2bppp/p2p1n2/4p1B1/2B1P3/2N2N2/PPP2PPP/R2QK2R w KQ - 4 9",
+   "said": "show you like 30 sicilian games i can show you some of my games where this happened okay continue i just take the knight which frees up"
+  },
+  {
+   "ply": 17,
+   "t": 888,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "rnbq1rk1/1p2bppp/p2p1B2/4p3/2B1P3/2N2N2/PPP2PPP/R2QK2R b KQ - 0 9",
+   "said": "the outpost bingo now there's a phrase in chess the threat"
+  },
+  {
+   "ply": 18,
+   "t": 890,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "rnbq1rk1/1p3ppp/p2p1b2/4p3/2B1P3/2N2N2/PPP2PPP/R2QK2R w KQ - 0 10",
+   "said": "is stronger than the execution"
+  },
+  {
+   "ply": 19,
+   "t": 891,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "rnbq1rk1/1p3ppp/p2p1b2/3Np3/2B1P3/5N2/PPP2PPP/R2QK2R b KQ - 1 10",
+   "said": "so you didn't have to put your knight on d5 but here specifically there's no reason not to but sometimes there would be situations where you'd want to hold out but we'll talk about talk about that afterwards so the opening has been a success you're better um over in far away australia tim is yeah i don't know how that green noodle is treating him right about now"
+  },
+  {
+   "ply": 20,
+   "t": 922.5,
+   "line": [
+    "Re8"
+   ],
+   "fen": "rnbqr1k1/1p3ppp/p2p1b2/3Np3/2B1P3/5N2/PPP2PPP/R2QK2R w KQ - 2 11",
+   "said": "i wonder how long people take to like load up photos on their chest.com accounts like i still want to know i have a photo from 2007 that is my profile but it's not very intimidating but i am holding a trophy up oh yeah no i think it's intimidating i"
+  },
+  {
+   "ply": 21,
+   "t": 938.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbqr1k1/1p3ppp/p2p1b2/3Np3/2B1P3/5N2/PPP2PPP/R2Q1RK1 b - - 3 11",
+   "said": "mean i'm always intimidating okay so it just could keep developing yeah just a normal castle here yep just a normal castle and this is going to be a very instructive position because it's"
+  },
+  {
+   "ply": 22,
+   "t": 944,
+   "line": [
+    "Be6"
+   ],
+   "fen": "rn1qr1k1/1p3ppp/p2pbb2/3Np3/2B1P3/5N2/PPP2PPP/R2Q1RK1 w - - 4 12",
+   "said": "going to allow you to find a plan okay so he some he wants to take your night but that night will then be replaced by a bishop which will be just as good on that outpost so that's it i don't need to worry about that you don't need to worry about that you what you want to do is create a plan and does anything come to mind in terms of what you want to start working on in this position hmm well the the first thing that i wanted to do was if i get my bishop there on d5 i wanted to have my knight there on g5 as well so i could come in with bishop take on f7 and win a rook but i think that's a little too deep and really reliant on things going like the way i have it in my head precisely yeah so it's probably not a good plan um other than that i was just going to get this night off so i could look to maybe do a rook lift yeah i like that and you could open up that f file potentially so where would you put that knight on f3 where it's at least doing something"
+  },
+  {
+   "ply": 23,
+   "t": 1015,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "rn1qr1k1/1p3ppp/p2pbb2/3Np3/2B1P3/8/PPPN1PPP/R2Q1RK1 b - - 5 12",
+   "said": "um i can't put it anywhere on the g or h because bishop's guarding both those and i can't take back so i just have to bring it over here to d2 okay perfect yeah that's totally fine and uh you want to open up that f5 with f4 now there's one thing you want to do before you play f4 notice that after f4 e takes f4 his bishop on f6 is going to be attacking your b2 pawn"
+  },
+  {
+   "ply": 24,
+   "t": 1039,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2qr1k1/1p3ppp/p1npbb2/3Np3/2B1P3/8/PPPN1PPP/R2Q1RK1 w - - 6 13",
+   "said": "so before you play f4 what you want to do is blunt his bishop like you want to reduce its influence and then you'll be ready to play up four without sacrificing anything yeah so i just want to push up the c pawn exactly and notice that you're also covering in doing so the d4 square so he can't put his knife his"
+  },
+  {
+   "ply": 25,
+   "t": 1047.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "r2qr1k1/1p3ppp/p1npbb2/3Np3/2B1P3/2P5/PP1N1PPP/R2Q1RK1 b - - 0 13",
+   "said": "own knight on an outpost okay that makes sense then you're ready to play for now after the game i'll show you a couple of alternative plans in that position which"
+  },
+  {
+   "ply": 26,
+   "t": 1061,
+   "line": [
+    "b5"
+   ],
+   "fen": "r2qr1k1/5ppp/p1npbb2/1p1Np3/2B1P3/2P5/PP1N1PPP/R2Q1RK1 w - - 0 14",
+   "said": "you haven't yet really learned so for all intents and purposes pushing the f1 is a good plan um okay plays b5 he chases your bishop away no problem yeah so i just bring it back it doesn't"
+  },
+  {
+   "ply": 27,
+   "t": 1068.5,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "r2qr1k1/5ppp/p1npbb2/1p1Np3/4P3/1BP5/PP1N1PPP/R2Q1RK1 b - - 1 14",
+   "said": "change the plan mm-hmm exactly now if he was really professional he'd play knight a5 here and try to take your bishop but i don't know if that's within tim 341's capabilities yeah so you want to play for you want to open up that file not only do you want to lift your rook up but eventually you can foresee a future right where you're attacking that pawn on f7 yeah oh for sure so"
+  },
+  {
+   "ply": 28,
+   "t": 1113,
+   "line": [
+    "Na5"
+   ],
+   "fen": "r2qr1k1/5ppp/p2pbb2/np1Np3/4P3/1BP5/PP1N1PPP/R2Q1RK1 w - - 2 15",
+   "said": "what he's doing here okay knight a5 he did play it let me look at my stream viewers okay so that doesn't technically stop you from doing what you want to do"
+  },
+  {
+   "ply": 29,
+   "t": 1137.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "r2qr1k1/5ppp/p2pbb2/np1Np3/4PP2/1BP5/PP1N2PP/R2Q1RK1 b - - 0 15",
+   "said": "yeah it just comes at a higher cost now because i'll lose bishop with the play which is okay you know you can't always have your cake and eat it too well i think so i'm just going to push up the f1 exactly eah in the style of bobby fischer he yeah in the style of bobby fischer he would definitely approve"
+  },
+  {
+   "ply": 30,
+   "t": 1154,
+   "line": [
+    "Nxb3"
+   ],
+   "fen": "r2qr1k1/5ppp/p2pbb2/1p1Np3/4PP2/1nP5/PP1N2PP/R2Q1RK1 w - - 0 16",
+   "said": "oh let's see if he takes your bishop i mean what he's doing are very typical moves that you play in the situation but i'm impressed that he knows them okay so what do you want to take with to keep that outpost alive on d5 do uh i have to take with well taking with the queen is the way that i keep that alive isn't it but then you pin yourself if you take"
+  },
+  {
+   "ply": 31,
+   "t": 1184.5,
+   "line": [
+    "Nxb3"
+   ],
+   "fen": "r2qr1k1/5ppp/p2pbb2/1p1Np3/4PP2/1NP5/PP4PP/R2Q1RK1 b - - 0 16",
+   "said": "with a knight notice that your queen then defends the knight on d5 you open up the defense of the queen oh i see okay sorry do you want to take with the knight yeah that's actually part of the reason why it's good to put the knight on t2 is now it's on b3 it's guarding some of the queen side squares um and it is well it's just doing a good"
+  },
+  {
+   "ply": 32,
+   "t": 1199.5,
+   "line": [
+    "Bxd5"
+   ],
+   "fen": "r2qr1k1/5ppp/p2p1b2/1p1bp3/4PP2/1NP5/PP4PP/R2Q1RK1 w - - 0 17",
+   "said": "job overall he's got two bishops for two nights but that's not always a good thing i actually like having two knights for the two bishops okay good yeah uh i take with the pawn hold that right but don't you want to outpost for your piece if you take with the pawn it's like you fill up the cavity you want you want to keep keep the cavity open do i take with the queen here you want to talk about me sorry for the dental reference but yeah"
+  },
+  {
+   "ply": 36,
+   "t": 1231.5,
+   "line": [
+    "Qd4",
+    "Qc7",
+    "Qb6",
+    "Qxb6+"
+   ],
+   "fen": "r3r1k1/5ppp/pq1p1b2/1p1bp3/4PP2/1NP5/PP4PP/R4RK1 w - - 0 19",
+   "said": "you want to take it it's fine that it's out in the open because he's traded most of his pieces okay your queen has plenty of retreat squares in case it'll be attacked and so i want to just okay giving you a check you know you shouldn't be afraid of checks and threats just because they kind of exist you can always defend"
+  },
+  {
+   "ply": 37,
+   "t": 1244.5,
+   "line": [
+    "Kh1"
+   ],
+   "fen": "r3r1k1/5ppp/pq1p1b2/1p1bp3/4PP2/1NP5/PP4PP/R4R1K b - - 1 19",
+   "said": "against the threat yeah okay the only difference here is just moving the king back right exactly and your queen's actually very strong on d5 the queen's actually very strong here my guess is he's gonna probably take your pawn on f4 but maybe he'll want to keep the f-file close i don't know yeah he's definitely playing well but but you're still better let's see what he does yeah it's rare in"
+  },
+  {
+   "ply": 38,
+   "t": 1290,
+   "line": [
+    "Rad8"
+   ],
+   "fen": "3rr1k1/5ppp/pq1p1b2/1p1bp3/4PP2/1NP5/PP4PP/R4R1K w - - 2 20",
+   "said": "general that somebody at his level plays the night of sicilian it's the kind of opening you normally learn when you cross like 16 1700. that's at least what was the case with me okay now he's given you the chance to do something really cool um you see that if he takes on f4 he opens up a file for his rook on e8 right yeah can you prevent all of that from happening could you"
+  },
+  {
+   "ply": 39,
+   "t": 1316,
+   "line": [
+    "f5"
+   ],
+   "fen": "3rr1k1/5ppp/pq1p1b2/1p1bpP2/4P3/1NP5/PP4PP/R4R1K b - - 0 20",
+   "said": "could you just freeze the king side i just push up my pawn yeah and you still have the capacity for a rook lift so you've gained that ability but you also freeze his rook and his bishop look at how they're just staring at that e5 pawn now doing absolutely nothing yeah so now it's actually a very challenging position to play but your long-term plan can actually be a pawn storm on the king side in addition to a rook lift"
+  },
+  {
+   "ply": 40,
+   "t": 1343.5,
+   "line": [
+    "a5"
+   ],
+   "fen": "3rr1k1/5ppp/1q1p1b2/pp1bpP2/4P3/1NP5/PP4PP/R4R1K w - - 0 21",
+   "said": "so when i say pawn strum what do i mean is that a question that is our question okay so i thought you're going to go into like an explanation so i'm assuming the next move in the pawn storm would be pushing up to the g4 yeah okay it is and eventually you want to prepare the move g5 which will chase this bishop away and then perhaps g6 that'll be like a checkmating move now right you're ready to play g4 you're not ready to play g5 yet but that's okay because you're going to prepare that move that's where planning comes in do i need to worry about this pawn push on a4 is that something i just wait on do i want to preemptively get the knight out or do i want to just wait well i i would just wait i wouldn't"
+  },
+  {
+   "ply": 41,
+   "t": 1385,
+   "line": [
+    "g4"
+   ],
+   "fen": "3rr1k1/5ppp/1q1p1b2/pp1bpP2/4P1P1/1NP5/PP5P/R4R1K b - - 0 21",
+   "said": "worry about it too much um because your plan is stronger than his and even if he plays a4 then you get your night out to d2 okay so then just playing g4 now is the right order indeed so what you're learning right now is not being afraid of like threats and i totally understand the instinct to prevent a threat is a good"
+  },
+  {
+   "ply": 42,
+   "t": 1395.5,
+   "line": [
+    "a4"
+   ],
+   "fen": "3rr1k1/5ppp/1q1p1b2/1p1bpP2/p3P1P1/1NP5/PP5P/R4R1K w - - 0 22",
+   "said": "one but you want to evaluate whether something is actually dangerous now here's the mind-blowing thing you wanted to put your knight on d2 anyway"
+  },
+  {
+   "ply": 43,
+   "t": 1402,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "3rr1k1/5ppp/1q1p1b2/1p1bpP2/p3P1P1/2P5/PP1N3P/R4R1K b - - 1 22",
+   "said": "because where is the knight going ultimately and what is it going to do on that final square"
+  },
+  {
+   "ply": 44,
+   "t": 1405.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "3rr1k1/5ppp/1q1p4/1p1bpPb1/p3P1P1/2P5/PP1N3P/R4R1K w - - 2 23",
+   "said": "we're looking at f we're looking at f3 right he's helping you get where you"
+  },
+  {
+   "ply": 45,
+   "t": 1412.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "3rr1k1/5ppp/1q1p4/1p1bpPb1/p3P1P1/2P2N2/PP5P/R4R1K b - - 3 23",
+   "said": "want he's making it even easier exactly because then you're going to be ready to play g5 so this maneuver was something you were going to embark on anyway"
+  },
+  {
+   "ply": 46,
+   "t": 1432,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "3rr1k1/5ppp/1q1p4/1p1bpP2/p3PbP1/2P2N2/PP5P/R4R1K w - - 4 24",
+   "said": "he's got only one actionable uh one spot for that bishop right now right bringing it to like e7 yeah well he could put it on otherwise f4 would be a pretty good square wow he he knows what he's doing but now he's allowed you to accomplish your plan"
+  },
+  {
+   "ply": 47,
+   "t": 1443.5,
+   "line": [
+    "g5"
+   ],
+   "fen": "3rr1k1/5ppp/1q1p4/1p1bpPP1/p3Pb2/2P2N2/PP5P/R4R1K b - - 0 24",
+   "said": "yeah i just play g5 anyway and you're ready for for real action now yeah the bishop on f4 is actually on an outpost because it's protected by the pawn and it's hard to dislodge it's like a splinter and you're behind but it's okay you know we can level the splinter so is the queen on d5 now do you see why you're threatening g6 here"
+  },
+  {
+   "ply": 48,
+   "t": 1476.5,
+   "line": [
+    "g6"
+   ],
+   "fen": "3rr1k1/5p1p/1q1p2p1/1p1bpPP1/p3Pb2/2P2N2/PP5P/R4R1K w - - 0 25",
+   "said": "well i think yeah because you can only take with one pawn which is this h pawn which is going to open up that for a rook lift right and then i can look for like a mating maneuver perhaps because he's well he's trying to stop you from doing that and which is a good move but what i would do here is just generally improve your position you don't always have to like do something specific you have one piece that's sleeping right now can you bring it into the game you're talking about my a rook here a1 yes where would you put it means just any good square there's a couple of good squares there's one open file you can put the rook on"
+  },
+  {
+   "ply": 49,
+   "t": 1521,
+   "line": [
+    "Rad1"
+   ],
+   "fen": "3rr1k1/5p1p/1q1p2p1/1p1bpPP1/p3Pb2/2P2N2/PP5P/3R1R1K b - - 1 25",
+   "said": "yeah so d1 is doesn't seem terrible is that really the best spot for it though it is now your pieces aren't always going to be conquering rome and joining alexander the great on campaign sometimes they're just occupying an open file and supporting the queen that's [&nbsp;__&nbsp;] acceptable too um now the queen on d5 is sort of the conqueror here but the rook is just sitting on a file where it's controlling squares so does that sort of make sense yeah that makes sense"
+  },
+  {
+   "ply": 50,
+   "t": 1551,
+   "line": [
+    "Qe3"
+   ],
+   "fen": "3rr1k1/5p1p/3p2p1/1p1bpPP1/p3Pb2/2P1qN2/PP5P/3R1R1K w - - 2 26",
+   "said": "now you're basically tossing the ball back into his court people don't like deciding what to do they want to be told what to do so he's going to have a hard time here making a decision about how to continue because he's okay he's gone queen e3 now you see that rook on d1 you can employ it to chase that queen away"
+  },
+  {
+   "ply": 51,
+   "t": 1564.5,
+   "line": [
+    "Rde1"
+   ],
+   "fen": "3rr1k1/5p1p/3p2p1/1p1bpPP1/p3Pb2/2P1qN2/PP5P/4RR1K b - - 3 26",
+   "said": "yeah am i just bringing the rook to e1 now get the queen out exactly you get the queen out and you've done a little bit of misdirection insofar as you put it on d1 he's brought his queen to an annoying square you're like get the hell out of there"
+  },
+  {
+   "ply": 52,
+   "t": 1582,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "3rr1k1/5p1p/1q1p2p1/1p1bpPP1/p3Pb2/2P2N2/PP5P/4RR1K w - - 4 27",
+   "said": "now you once he drops his queen back assuming it's not on c5 which would be the best move i'm not anticipating he will play that move though now you can continue the pawn storm you have one pawn that you haven't mobilized yet"
+  },
+  {
+   "ply": 53,
+   "t": 1591.5,
+   "line": [
+    "h4"
+   ],
+   "fen": "3rr1k1/5p1p/1q1p2p1/1p1bpPP1/p3Pb1P/2P2N2/PP6/4RR1K b - - 0 27",
+   "said": "yes i want to push up to h4 yep get it going and then you actually are preparing a sacrifice a breakthrough sacrifice you see that pawn on g6 you want to get it out of there so that you can play g6 right and you see how you can employ that newly mobilized pawn to do that"
+  },
+  {
+   "ply": 54,
+   "t": 1614,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "3rr1k1/5p1p/1q1p2p1/1p1bpPP1/p3P2P/2P2N2/PP1b4/4RR1K w - - 1 28",
+   "said": "yeah i'm just gonna throw it up at h5 yeah and that's a pretty minor sacrifice because he's gonna end up with bad pawns anyway and um oh wow that is a weird move yeah so that's just a free bishop yes"
+  },
+  {
+   "ply": 55,
+   "t": 1620.5,
+   "line": [
+    "Nxd2"
+   ],
+   "fen": "3rr1k1/5p1p/1q1p2p1/1p1bpPP1/p3P2P/2P5/PP1N4/4RR1K b - - 0 28",
+   "said": "what do you want to take yep the knight nice because you keep the queen in outpost notice that you've opened up the f file as a consequence so what are you actually threatening here now i can just go right up there to f7 i"
+  },
+  {
+   "ply": 56,
+   "t": 1637.5,
+   "line": [
+    "gxf5"
+   ],
+   "fen": "3rr1k1/5p1p/1q1p4/1p1bppP1/p3P2P/2P5/PP1N4/4RR1K w - - 0 29",
+   "said": "can just take pawn open that up and go up to f7 immediately right yes precisely you're threatening to take the pawn wow okay so by that token what do you want to take here did you keep the fight i want to take"
+  },
+  {
+   "ply": 57,
+   "t": 1646.5,
+   "line": [
+    "Rxf5"
+   ],
+   "fen": "3rr1k1/5p1p/1q1p4/1p1bpRP1/p3P2P/2P5/PP1N4/4R2K b - - 0 29",
+   "said": "take with the rook yeah and then you have a typical idea once he defends the pawn to reinforce your attack on it so he'll probably play rookie seven or cafe"
+  },
+  {
+   "ply": 58,
+   "t": 1663,
+   "line": [
+    "Rf8"
+   ],
+   "fen": "3r1rk1/5p1p/1q1p4/1p1bpRP1/p3P2P/2P5/PP1N4/4R2K w - - 1 30",
+   "said": "and then actually notice your prawns on g5 and h5 well okay what comes to mind"
+  },
+  {
+   "ply": 59,
+   "t": 1673,
+   "line": [
+    "Ref1"
+   ],
+   "fen": "3r1rk1/5p1p/1q1p4/1p1bpRP1/p3P2P/2P5/PP1N4/5R1K b - - 2 30",
+   "said": "i was just looking at stacking the rocks do it okay absolutely he's probably going to play"
+  },
+  {
+   "ply": 60,
+   "t": 1675,
+   "line": [
+    "Rd7"
+   ],
+   "fen": "5rk1/3r1p1p/1q1p4/1p1bpRP1/p3P2P/2P5/PP1N4/5R1K w - - 3 31",
+   "said": "rook d7 here and now you need a new way to attack that pawn you can use your pawns to prepare an idea you're familiar with"
+  },
+  {
+   "ply": 61,
+   "t": 1686,
+   "line": [
+    "h5"
+   ],
+   "fen": "5rk1/3r1p1p/1q1p4/1p1bpRPP/p3P3/2P5/PP1N4/5R1K b - - 0 31",
+   "said": "yeah was it is it pushing h5 and g6 okay precisely precisely you're ready to play g6 and tear them apart completely tear them apart watch your"
+  },
+  {
+   "ply": 62,
+   "t": 1696.5,
+   "line": [
+    "Kg7"
+   ],
+   "fen": "5r2/3r1pkp/1q1p4/1p1bpRPP/p3P3/2P5/PP1N4/5R1K w - - 1 32",
+   "said": "clock a little bit once you get below a minute you'll have to speed up but what we're doing here okay now here's the thing he thinks he's defended against the threat but he hasn't you just want to tear the position open"
+  },
+  {
+   "ply": 63,
+   "t": 1708,
+   "line": [
+    "g6"
+   ],
+   "fen": "5r2/3r1pkp/1q1p2P1/1p1bpR1P/p3P3/2P5/PP1N4/5R1K b - - 0 32",
+   "said": "which means g6 is still perfectly fine you see what i'm saying you're just opening up files for your rooks"
+  },
+  {
+   "ply": 64,
+   "t": 1712.5,
+   "line": [
+    "hxg6"
+   ],
+   "fen": "5r2/3r1pk1/1q1p2p1/1p1bpR1P/p3P3/2P5/PP1N4/5R1K w - - 0 33",
+   "said": "i would pre-move hg okay okay uh so now i just take with the pawn"
+  },
+  {
+   "ply": 65,
+   "t": 1718.5,
+   "line": [
+    "hxg6"
+   ],
+   "fen": "5r2/3r1pk1/1q1p2P1/1p1bpR2/p3P3/2P5/PP1N4/5R1K b - - 0 33",
+   "said": "here and he can't take with a pawn if he takes with a king well then he opens up that g-file for your rook um what he should do is play f6 or he can give you a check on h8 which is not scary at all that's what i think he's going to do he's probably going to give you a check"
+  },
+  {
+   "ply": 66,
+   "t": 1746,
+   "line": [
+    "Rh8+"
+   ],
+   "fen": "7r/3r1pk1/1q1p2P1/1p1bpR2/p3P3/2P5/PP1N4/5R1K w - - 1 34",
+   "said": "and in that case do i just want to pre-move going to g2 because i'm pretty sure that's how i'm stopping that right well you don't want to pre-move it because i'm not i'm not positive that he's going to do that well no i just met like if he does that i just want to immediately go yeah right"
+  },
+  {
+   "ply": 67,
+   "t": 1749,
+   "line": [
+    "Kg2"
+   ],
+   "fen": "7r/3r1pk1/1q1p2P1/1p1bpR2/p3P3/2P5/PP1N2K1/5R2 b - - 2 34",
+   "said": "yeah and he did so so now in playing his rook to h8 he has weakened his control he's probably going to take the pawn on g6 with his pawn it would be my guess he's weakened his control over a square into which you can then infiltrate do you see that square is it f7 it is because it's defended three times and sorry it's attacked three times and defended only twice"
+  },
+  {
+   "ply": 68,
+   "t": 1784,
+   "line": [
+    "fxg6"
+   ],
+   "fen": "7r/3r2k1/1q1p2p1/1p1bpR2/p3P3/2P5/PP1N2K1/5R2 w - - 0 35",
+   "said": "so that will signal the beginning of the end that will signal the beginning of the end yeah i mean there's really nothing else you can do because okay yeah i come in here with i come in here with the rook he has to take with the rook i take it back with the rook right"
+  },
+  {
+   "ply": 70,
+   "t": 1794,
+   "line": [
+    "Rf7+",
+    "Rxf7"
+   ],
+   "fen": "7r/5rk1/1q1p2p1/1p1bp3/p3P3/2P5/PP1N2K1/5R2 w - - 0 36",
+   "said": "well you take back actually not with a rook but there's a much better piece to take back with oh with the queen yeah with the queen here now he's gonna go king h6 and here's the thing if he what is the king's only retreat square that's not along the hp why is rook h1 not made um i actually don't oh because you can just go to g5 can you employ one of our other pieces to cover it up how yeah so knight f3 bingo and essentially checkmate is inevitable um he can try to slither out of it but if you play accurately it'll be made okay well he didn't try to slither out yeah so now just it's just checkmate now at h1 yeah yep perfect fantastic okay so let me invite you to an analysis board there's a lot to unpack there from this game um there were a couple of really interesting moments he played very well too so good job okay let me hope that this works"
+  },
+  {
+   "ply": 7,
+   "t": 1865,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "all right just invited you nice that worked immediately wow i'm in society is improving what can i say so"
+  },
+  {
+   "ply": 9,
+   "t": 1866,
+   "line": [
+    "Nf6",
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "in this position this is the"
+  },
+  {
+   "ply": 10,
+   "t": 1867,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "start of the night or sicilian um i can give you a sense here of how many moves have actually been tried in this position so give me a second i'm actually loading this on my other program where it tells me how many recorded games there were in a particular position okay it's searching right now there we go so there were a total of wow there's so many games that doesn't even display it over 200 000 in this from this position so bishop bishop g5 is the most popular move with 74 000 games then let me just list the amount of moves that have more than 100 games played with them here we go bishop g5 bishop b3 bishop e2 bishop c4 f3 f4 h3 g3 a4 bishop d3 rook g1 queen f3 knight b3 a3 h4 queen e2 knight f3 queen d3 so i followed a couple of those yep and the funny thing is uh a couple of years ago i was playing a tournament pretty big tournament the us championship and i wanted to find something new in this position so just from the amount of moves that i"
+  },
+  {
+   "ply": 11,
+   "t": 1949,
+   "line": [
+    "h4"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP2P/2N5/PPP2PP1/R1BQKB1R b KQkq - 0 6",
+   "said": "read out you can probably guess how hard that is right but i did manage to find a move that by that time in that time like this was like two years ago was extremely rare and it's become a lot more popular since since then which is the move h4 and basically the idea is to preemptively start off a pawn storm on the king side because i'm so sure that he's gonna castle short at some point"
+  },
+  {
+   "ply": 10,
+   "t": 1965.5,
+   "line": [],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "i'm already kind of beginning that pawn storm if that makes sense okay yeah i get you but mostly i was doing that for the"
+  },
+  {
+   "ply": 11,
+   "t": 1967,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 6",
+   "said": "creativity points that's just to give you a flavor of how crazy i am oh yeah real wacko that's nice though h4 i know immediately send me off to the mental institution when they found out i played that move yeah going right to oracle with that kind of [&nbsp;__&nbsp;] the psychiatrists were lined up at the door on the yeah so anyways bishop c4 is one of the classical moves uh bobby fischer basically pioneered it"
+  },
+  {
+   "ply": 12,
+   "t": 2001,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2ppn2/8/2BNP3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 7",
+   "said": "now what would be black's best move here you know that this bishop is controlling this diagonal can black basically blunt the bishop's control over that diagonal yeah just going e6 just going e6 would be absolutely correct um so he's played e5 you dropped your"
+  },
+  {
+   "ply": 14,
+   "t": 2004.5,
+   "line": [
+    "Nf3",
+    "e5"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/2B1P3/2N2N2/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "said": "knight back bishop g5 bishop takes f6"
+  },
+  {
+   "ply": 18,
+   "t": 2007,
+   "line": [
+    "Bg5",
+    "Be7",
+    "Bxf6",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/1p2bppp/p2p1B2/4p3/2B1P3/2N2N2/PPP2PPP/R2QK2R w KQ - 1 10",
+   "said": ""
+  },
+  {
+   "ply": 20,
+   "t": 2008,
+   "line": [
+    "Nd5",
+    "Bxf6"
+   ],
+   "fen": "rnbq1rk1/1p3ppp/p2p1b2/3Np3/2B1P3/5N2/PPP2PPP/R2QK2R w KQ - 0 11",
+   "said": "and knight t5 now this plan should make perfect sense you we've seen it several"
+  },
+  {
+   "ply": 24,
+   "t": 2015.5,
+   "line": [
+    "Kf1",
+    "Be6",
+    "Rg1",
+    "Re8"
+   ],
+   "fen": "rn1qr1k1/1p3ppp/p2pbb2/3Np3/2B1P3/5N2/PPP2PPP/R2Q1KR1 w - - 4 13",
+   "said": "times before and rookie 8 castles bishop e6 is great now you came up with the idea of opening up that f-file potentially lifting a"
+  },
+  {
+   "ply": 9,
+   "t": 2022,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "rook up um i actually while i was in the bathroom i remembered a story i wanted to share with you um and i forgot to share it and it"
+  },
+  {
+   "ply": 10,
+   "t": 2034,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "relates to the night or so do you still see the analysis board this is now when i say night or that's not some mythical you know like sumerian word it's it's actually after all most openings are named after someone naidorf was a grandmaster miguel nadorf uh from poland he was a strong player in his own right and he just developed this line in fact the first person to ever play the night arth and usually it's not the person it's named after it was a guy named pierce halawa in 1899 wow was only like the 30th to play the night or it's just that he put the most effort into it and then the second person believe it or not somebody played this in 1899 and then the next time somebody played it was 1926 it took 27 years before somebody actually played this line again um anyways so a couple of years ago i taught a camp to some very high rated kids i don't remember if i shared this before so they were you know two thousand twenty one hundred really good players right and i was talking about the night off and i was explaining some of its intricacies and i managed to convince a"
+  },
+  {
+   "ply": 11,
+   "t": 2107,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NPB2/2N5/PPP2PPP/R2QKB1R b KQkq - 1 6",
+   "said": "room full of 2100 rated kids because i'm really good at pranking them and because i usually have a serious face even though i'm just [&nbsp;__&nbsp;] trolling all the time uh i convinced him that the move bishop f4 had been a recent theoretical novelty oh yeah you told me this i told you that i"
+  },
+  {
+   "ply": 12,
+   "t": 2117,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkb1r/1p3ppp/p2p1n2/4p3/3NPB2/2N5/PPP2PPP/R2QKB1R w KQkq - 0 7",
+   "said": "did totally eah so those of you who are new yep i yeah so those of you who are new yep i basically managed to do that despite the fact that black can win a piece and believe it or not bishop f4 has been actually played 34 times out of 200 000 that's not super super yeah but amazingly like a 2000 played it i seen 1800 played it so i don't know what went through these people's minds um when they probably took your class yeah they probably those are all of the kids in my class i can see the names yes people like alvarez moreno and gelbanegger and um to feng gian man i'm telling you like the names of chess players you cannot make that [&nbsp;__&nbsp;] up it's like only chess players have those names okay um anyways back to business so all right so bishop e6 um and this was the position where you prepared the movement of your half point"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 10,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "a6"
+   ],
+   "options": [
+    {
+     "san": "Bc4",
+     "t": 801,
+     "continuation": "Bc4",
+     "said": "um well he takes off the the free little cheeky check which doesn't really do much anyway so what i was looking at is just the standard v4 for my f bishop yep perfect that is the bobby fischer variation now i'll show you after this game i'll blow your mind a little bit i'll show you the amount of moves that white has tried in that position it's actually pretty friggin interesting from right here the bobby fischer before bishop c4 so he's played e5 which is a really bad positional move because there is a certain square that he's really weakened now first you got to move your knight and as you're moving it maybe you can tell me what square that is wow thanks gm bobby fischer for the bits man i didn't even know his ghost is in the chat okay so where which square does the knight want to go to and don't overthink this i mean really any square is fine i mean i could just drop it back to its normal hold at f3 absolutely as you should now which square has he weakened by playing e5 oh he can no longer put a pawn there on the say the outpost at d5 right so immediately a plan has crystallized now you don't want to put the knight on d5 immediately because he's got a knight on f6 guarding that square but we actually did"
+    },
+    {
+     "san": "h4",
+     "t": 1949,
+     "continuation": "h4",
+     "said": "read out you can probably guess how hard that is right but i did manage to find a move that by that time in that time like this was like two years ago was extremely rare and it's become a lot more popular since since then which is the move h4 and basically the idea is to preemptively start off a pawn storm on the king side because i'm so sure that he's gonna castle short at some point i'm already kind of beginning that pawn storm if that makes sense okay yeah i get you but mostly i was doing that for the creativity points that's just to give you a flavor of how crazy i am oh yeah real wacko that's nice though h4 i know immediately send me off to the mental institution when they found out i played that move yeah going right to oracle with that kind of [&nbsp;__&nbsp;] the psychiatrists were lined up at the door on the yeah so anyways bishop c4 is one of the classical moves uh bobby fischer basically pioneered it now what would be black's best move here you know that this bishop is controlling this diagonal can black basically blunt the bishop's control over that diagonal yeah just going e6 just going e6 would be absolutely correct um so he's played e5 you dropped your knight back bishop g5 bishop takes f6 and knight t5 now this plan should make"
+    },
+    {
+     "san": "Bf4",
+     "t": 2107,
+     "continuation": "Bf4",
+     "said": "room full of 2100 rated kids because i'm really good at pranking them and because i usually have a serious face even though i'm just [&nbsp;__&nbsp;] trolling all the time uh i convinced him that the move bishop f4 had been a recent theoretical novelty oh yeah you told me this i told you that i did totally eah so those of you who are new yep i yeah so those of you who are new yep i basically managed to do that despite the fact that black can win a piece and believe it or not bishop f4 has been actually played 34 times out of 200 000 that's not super super yeah but amazingly like a 2000 played it i seen 1800 played it so i don't know what went through these people's minds um when they probably took your class yeah they probably those are all of the kids in my class i can see the names yes people like alvarez moreno and gelbanegger and um to feng gian man i'm telling you like the names of chess players you cannot make that [&nbsp;__&nbsp;] up it's like only chess players have those names okay um anyways back to business so all right"
+    }
+   ]
+  },
+  {
+   "ply": 11,
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "d4",
+    "cxd4",
+    "Nxd4",
+    "Nf6",
+    "Nc3",
+    "a6",
+    "Bc4"
+   ],
+   "options": [
+    {
+     "san": "e5",
+     "t": 814.5,
+     "continuation": "e5",
+     "said": "now i'll show you after this game i'll blow your mind a little bit i'll show you the amount of moves that white has tried in that position it's actually pretty friggin interesting from right here the bobby fischer before bishop c4 so he's played e5 which is a really bad positional move because there is a certain square that he's really weakened now first you got to move your knight and as you're moving it maybe you can tell me what square that is wow thanks gm bobby fischer for the bits man i didn't even know his ghost is in the chat okay so where which square does the knight want to go to and don't overthink this i mean really any square is fine i mean i could just drop it back to its normal hold at f3 absolutely as you should now which square has he weakened by playing e5 oh he can no longer put a pawn there on the say the outpost at d5 right so immediately a plan has crystallized now you don't want to put the knight on d5 immediately because he's got a knight on f6 guarding that square but we actually did a training problem like this what's your plan to get a knight to d5 how would you eliminate its defender i just immediately go for an attack at g5 with my baby nice nice and this is a very typical"
+    },
+    {
+     "san": "e6",
+     "t": 2001,
+     "continuation": "e6",
+     "said": "now what would be black's best move here you know that this bishop is controlling this diagonal can black basically blunt the bishop's control over that diagonal yeah just going e6 just going e6 would be absolutely correct um so he's played e5 you dropped your knight back bishop g5 bishop takes f6 and knight t5 now this plan should make perfect sense you we've seen it several times before and rookie 8 castles bishop e6 is great now you came up with the idea of opening up that f-file potentially lifting a rook up um i actually while i was in the bathroom i remembered a story i wanted to share with you um and i forgot to share it and it relates to the night or so do you still see the analysis board this is now when i say night or that's not some mythical you know like sumerian word it's it's actually after all most openings are named after someone naidorf was a grandmaster miguel nadorf uh from poland he was a strong player in his own right and he just developed this line in fact the first person to ever play the night arth and usually it's not the person it's named after it was a guy named pierce halawa in 1899 wow was only like the 30th to play the night"
+    }
+   ]
+  }
+ ]
+}

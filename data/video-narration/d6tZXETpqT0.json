@@ -1,0 +1,151 @@
+{
+ "videoId": "d6tZXETpqT0",
+ "title": "What Is The Carlsbad?? | Queens Gambit Declined | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 22,
+   "line": [
+    "c4",
+    "d5",
+    "d4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "all right 2250 in your Pampers great I feel very I'm in a positional mood I feel like playing positionally let's go D4 okay not sure whether no move sounds uh"
+  },
+  {
+   "ply": 4,
+   "t": 25.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "okay I just enabled them there we go Queens gamma declined okay Queen's gamma"
+  },
+  {
+   "ply": 5,
+   "t": 32,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "said": "decline that's more more than fine with us let's play Knight C3"
+  },
+  {
+   "ply": 6,
+   "t": 34.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": "and we have previously in in the speedrun almost exclusively stuck to the Carlsbad variation which is also what I play in my regular Blitz Games um now Carlsbad is a it's the name of the variation but it's also the name of the pawn structure that arises out of this variation it can also arise in certain other you know variations on a"
+  },
+  {
+   "ply": 7,
+   "t": 67,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 0 4",
+   "said": "theme and it is sort of dictated by the trade on D5 that's the Carlsbad variation you can also leave the pawn on C4 in the main line is Bishop G5 that's the traditional main line and the Carlsbad you take on D5 very early"
+  },
+  {
+   "ply": 8,
+   "t": 71,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+   "said": "and you release the tension in the center and you get this structural imbalance where white has an E Pawn and black has a seat pawn and everything else is symmetrical but this ostensibly small imbalance creates a very"
+  },
+  {
+   "ply": 9,
+   "t": 91.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR b KQkq - 1 5",
+   "said": "intriguing positional and oftentimes tactical play in the middle game so now we play this like a regular Queen's gamma decline we bring our Bishop to G5 we play E3 we play on the normal Queen's"
+  },
+  {
+   "ply": 10,
+   "t": 97,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
+   "said": "Gambit moves but a little bit later when we finish our development you will see how the Carlsbad structure defines the course of the game so okay so here there's a small subtlety I like to start with Queen C2 in order to prevent the Bishop from coming out to F5 you can also play E3 but after E3 Bishop F5 is a very annoying solid line that I'll talk a little bit about after the game so starting with Queen C2 doesn't really have a downside and it prevents Bishop F Bishop D6 okay so in the Carlsbad the bishop usually comes out to E7 but this is also a viable uh developing Square although it does doesn't really address the pin which is why more people like to put their Bishop on E7 so here after Bishop D3 we were already threatening the pawn on H7 because the Knight is pinned to the queen so black has to play H6 of course we don't give our Bishop away for no reason we keep it on H4 and the main choice that white has in the Carlsbad is uh concerns where to develop this Knight you can develop it to E2 or to F3 and both moves have clearly defined pluses and minuses and you can't say that one of these is better than the other they're both totally viable Knight F3 is the more traditional developing Square for the night but when I played the Carlsbad I have mostly positioned my knight on E2 but in this particular version of the Carol's bed with the bishop on D6 I actually like to play Knight F3 and there's a super specific tactical reason for that that I'll expand on after the game this is not essential to your understanding so for now I'm just gonna play Knight F3 and I'll spell it out later but we are going to play this very traditionally Knight F3 okay black plays Bishop B6 and okay Bishop E6 what what can What observations can we make about this move well the first thing that that occurs to me when I when I see it is that it relinquishes Black's control over the E5 Square and I had an entire speedrun game dedicated to the Pillsbury Knight which you might remember is a knight that sits on E5 in Queen's gamma decline positions and is supported by two pawns the pawn on D4 and upon that uh arrives at F4 and the Pillsbury Knight is a very nasty construction that a lot of players don't really know how to face and oftentimes there is no obvious solution so you might say well let's Castle first and then let's decide but if we Castle first then black will already bring the Knight out to D7 and we might lose our opportunity uh to entrench that Knight on E5 so I think we should play this in a principled way and we should stick the Knight on E5 while we still have a chance even before we Castle and if Knight bd7 then we shove our Pawn to F4 and the Pillsbury Knight has been has been born notice that another drawback of you know the black dark skirt Bishop not being on E7 and Bishop takes E5 D5 is not totally out of the question maybe black and play G5 there so black will save the piece but he will create just like you know gaping weaknesses on the king side and because we haven't castled yet we actually might castle queenside if the circumstances are right if black you know black hurts himself on the king side we very well might still Castle queenside I'm not ruling that out in ibd7 and F4 and I think the result of the opening has been pretty successful so we've gotten the Pillsbury Knight and now we need to decide which way we're going to Castle in these positions you do sometimes Castle Queen side it's very risky approach because we don't have a seat Bond but uh we definitely shouldn't rule it out Queen C7 okay I mean C7 so F5 by the way it does technically win the piece but actually wait let's calculate F5 what happens after F5 if Bishop takes E5 then we can play F takes E6 black has to recapture on E6 we take on E5 black takes with the queen then we can Castle Queen side so F5 actually I think does win the piece and it wins the piece for insufficient compensation but the funny thing is I'm also very enticed by the prospect of just castleing our position is so good and the Knight is so stable that we can sort of procrastinate on playing F5 I don't think there's all that much that black can do about it um but okay in the name of objectivity I think we should probably consider trapping the bishop with F5 immediately yeah it's actually really hard to decide castles it leads to a really good position for white where black has no easy way to get rid of the Knight but F5 goes after the bishop and it probably results in us getting a full minor piece for two for for only two Pawns well let's let's see what our opponent has in mind let's go F5 yeah unfortunately we're losing the Pillsbury night but we're exchanging it for a full minor piece so I think that's a worthy price to pay yeah Bishop takes C5 and actually here I think it's very important to start with f takes E6 if we play D takes E5 then after Queen takes E5 the pawn on E3 is also hanging with check so if you play de5 and fe6 then black is going to collect three pawns for the piece and I mean queen takes E3 is going to come with check so we should first I think play F takes E6 Rook takes E6 now we play D5 and after Queen takes E5 we have earned an additional Tempo over uh over overtaking on E5 immediately so it's a small little Nuance but it's quite significant and here I think our best approach is just to say okay we're gonna give up this Pawn on E3 and at first sight well then why did we go after the piece because Black's gonna get three pawns for the piece it's true but notice that we have two Bishops we have not just the bishop air black simply does not have any Bishops and our Bishops are sort of crisscrossing the board I just feel like once the Center opens up the fact that we have three minor pieces and the fact that this is a middle game is going to really really hurt black the big decision we have to make is which way are we going to Castle and because black lacks a minor piece and black lacks attacking Firepower I think we'd be fully Justified here just to cast the Queen's side because this deploys our Rook a little bit faster castling kingside I don't know maybe allows some Knight G4 related ideas the King on B1 is actually going to be totally and completely safe so Castle's Queen side hopefully this makes sense from an intuitive perspective and I assume our opponent is going to take on E3 this is the first time that they're thinking there's also a tricky move d4 I'm just noticing that the bishop on H4 is undefended um but I'll have to talk about that afterwards Queen takes a three King B1 so now we get to sort of the second stage of the game we've won a piece technically we're not really ahead in material because black has three pawns but in the middle game a minor piece is often worth a lot more than a couple of Pawns that can change in the end game that can change if the position is like locked up but if the position is wide open like this it should be obvious to you that the Bishops are superior to blacks Knights and three Pawns um notice that I didn't really care that oh black took with check that did not even enter into my considerations it doesn't matter right our King is now safe on B1 okay so there is a move here that is literally just begging to be played um there's actually a couple of moves like that there's rokechi one there's rokechi one which maybe a lot of you are thinking about but the drawback of Rook H E1 is that um well rakeshi one is a good move but the queen will move back let's say to B6 and then I wouldn't want to trade on E6 and build black up with a better Superior Pawn Center trading on E6 here actually helps black and gets black a pretty impressive Pawn Center the other move that really comes to mind is Bishop D3 to F5 which attacks the rook and it puts pressure on the Knight on t7 the bishop other Bishop puts pressure on the other night so Bishop F5 puts black under a lot of strain the way we can combine these ideas we can start with Rook H E1 get the Queen off of our back and then instead of taking on E6 we can play Bishop F5 and trade on our terms with the aim of collecting the e-file grabbing control of the only open file which is a very important thing to do I've shared that piece of advice many times let's start with the Rook HD1 send the queen away I'm anticipating Queen B6 maybe Queen C5 uh either one of these not gonna matter and Queen B6 and let's stick the bishop on F5 why does the pawn Center matter well again I'll illustrate some variations after the game but giving black that E6 pun would have been a terrible idea but Rook D6 is just self-destruction our opponent is trying to keep as many pieces on the board as possible but he's just blind to the dangers I mean the first thing I see when I look at this move the Rook is trap I mean The Rook is trapped can we attack it well it's in our dark Square do we have a dark squared Bishop we do we can play Bishop G3 in the rookus tracks that's it the game is over of course nothing wrong with the move rookie seven that's probably the move I would play if we didn't have Bishop G3 but we do and we win the rook and we win the game yeah and our opponents just played way too quickly in the middle game yeah this is okay Queen C5 but this is a good opportunity to practice being precise which a lot of people really need a lot of work on so a lot of people just oh yeah let's say gun D6 of course nothing wrong with taking the Rook will be up a rook the game will not be over black will still have three pawns we will still have to demonstrate some technique but let's try to be clinical because that's what somebody at a you know at this level would do and we have a better move than Bishop takes D6 when I see Queen C5 I'm noticing that the Queens are now aligned with each other and that creates the possibility for tactics but not just that it also creates the possibility for a queen trade The Rook isn't going anywhere right The Rook is already trapped we don't need to take it immediately as long as we keep our two Bishops in place The Rook on D6 ain't going anywhere so the move I'm thinking about is actually Knight C3 to E2 dropping the Knight back offering a queen trade but if the Queens are traded then black is even gonna have a hard time getting anything for that Rook the other really good move here is somebody's proposed Knight C3 takes B5 same exact idea if like the trade on C2 occurs then we not only trade Queens which is good because we'll be upper Rook but we also win the pawn on B5 so I think Knight takes B5 is maybe even the best move and we are going to go for it I takes B5 great move yeah even Knight E4 probably was decent but this is this is super clinical and I think our opponent is going to resign shortly eah now he's now he's thinking but it's yeah now he's now he's thinking but it's it's a little too late yeah hopefully everybody sees the point of this move if Queen takes B5 then we dis attach the queen from the rook and we play Bishop takes D6 we're up a full Rook and then you might be like well what but then we didn't get a chance to trade Queens but it doesn't matter I mean look at Black's knights in that resulting position I actually would want to keep the Queens on the board here"
+  },
+  {
+   "ply": 3,
+   "t": 822.5,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "I think it's faster for us to win by keeping the Queens on the board and resigns yeah bit of a lackluster game but nonetheless couple of remarks so yeah this is the Carlsbad C takes D5"
+  },
+  {
+   "ply": 7,
+   "t": 824.5,
+   "line": [
+    "Nf6",
+    "cxd5",
+    "e6",
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3P4/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 4",
+   "said": ""
+  },
+  {
+   "ply": 8,
+   "t": 826,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+   "said": "I definitely have"
+  },
+  {
+   "ply": 9,
+   "t": 827,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR b KQkq - 1 5",
+   "said": "I think more than one Speed Run game"
+  },
+  {
+   "ply": 10,
+   "t": 834.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3p2B1/3P4/2N5/PP2PPPP/R2QKBNR w KQkq - 0 6",
+   "said": "in the Carlsbad yeah and and already after like C6 Queen C2 Bishop D6 I was getting hopeful because Bishop D6 is has long been considered an inaccurate developing Square for for the bishop um it's long been considered an inaccurate developing score for the bishop usually in the Carlsbad you see blackplay Bishop E7 this is the main line and then white plays E3 castles Bishop D3 and ibd7 and here once again as as we did in the game we have a choice between developing to F3 and developing to E2 and I could not possibly explain all the complexities of the Carlsbad and like one analysis session so I'll restrict myself with just a couple of General points most of the time that I've played this with white I've gone Knight G2 and the main idea of developing the Knight to E2 over F3 is that you leave the F Pawn free now why is that important because there is a traditional plan in the Knight G2"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 3,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4",
+    "d5",
+    "d4"
+   ],
+   "options": [
+    {
+     "san": "e6",
+     "t": 25.5,
+     "continuation": "e6",
+     "said": "all right 2250 in your Pampers great I feel very I'm in a positional mood I feel like playing positionally let's go D4 okay not sure whether no move sounds uh okay I just enabled them there we go Queens gamma declined okay Queen's gamma decline that's more more than fine with us let's play Knight C3 and we have previously in in the speedrun almost exclusively stuck to the Carlsbad variation which is also what I play in my regular Blitz Games um now Carlsbad is a it's the name of the variation but it's also the name of the pawn structure that arises out of this variation it can also arise in certain other you know variations on a theme and it is sort of dictated by the trade on D5 that's the Carlsbad variation you can also leave the pawn on C4 in the main line is Bishop G5 that's the traditional main line and the Carlsbad you take on D5 very early and you release the tension in the center and you get this structural imbalance where white has an E Pawn and black has a seat pawn and everything else is symmetrical but this ostensibly small imbalance creates a very intriguing positional and oftentimes"
+    },
+    {
+     "san": "Nf6",
+     "t": 824.5,
+     "continuation": "Nf6 cxd5 e6 Nc3",
+     "said": "keeping the Queens on the board and resigns yeah bit of a lackluster game but nonetheless couple of remarks so yeah this is the Carlsbad C takes D5 I definitely have I think more than one Speed Run game in the Carlsbad yeah and and already after like C6 Queen C2 Bishop D6 I was getting hopeful because Bishop D6 is has long been considered an inaccurate developing Square for for the bishop um it's long been considered an inaccurate developing score for the bishop usually in the Carlsbad you see blackplay Bishop E7 this is the main line and then white plays E3 castles Bishop D3 and ibd7 and here once again as as we did in the game we have a choice between developing to F3 and developing to E2 and I could not possibly explain all the complexities of the Carlsbad and like one analysis session so I'll restrict myself with just a couple of General points most of the time that I've played this with white I've gone Knight G2 and the"
+    }
+   ]
+  }
+ ]
+}

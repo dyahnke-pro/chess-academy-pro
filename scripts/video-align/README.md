@@ -281,3 +281,82 @@ making the search smarter.
 - **Orientation.** A board shown from Black's side is not yet handled. Read it
   off the frame when calibrating that section; it is one more thing you can
   simply see.
+
+## The note count in the repo will not match the note count in the app
+
+Measured 2026-08-21: 481 notes across 182 track files, 470 in
+`src/data/video-teachings.json`. The eleven-note gap is `emit-notes` doing its
+job, not losing work — each one is anchored at a position hundreds of openings
+pass through (`679 openings pass through this position` for one of them, at
+move one), and a note spoken wherever 679 openings meet is not teaching about
+the line the student asked for. `emit-notes` prints every skip with its reason,
+so run it and read the `SKIP` lines before assuming anything is broken.
+
+Two counts that ARE worth acting on when they diverge:
+
+- notes on disk vs notes listed by `emit-notes` — a track file it never lists is
+  one it could not read;
+- `noteCount` in `video-teachings.json` vs the last emit — if the file is older
+  than the notes, the notes are not in the app. `emit-notes --write` is the step
+  that ships them, and it must be paired with a `WALKTHROUGH_GEN_REV` bump in
+  the same commit or cached trees serve the old prose for ever.
+
+## Which tracks are ready to write against
+
+`narration-queue.mjs` answers that: a track needs a subject opening (so a note
+has somewhere to belong), banked captions (the gate refuses a note without
+them), and no notes yet. Ordered deepest line first, since a deeper line settles
+on more positions and yields more anchorable moments per hour.
+
+    node scripts/video-align/narration-queue.mjs 20     # top 20, readable
+    node scripts/video-align/narration-queue.mjs --ids  # ids, for a loop
+
+## Captions, positions and timestamps, in one listing
+
+`note-anchors.mjs <videoId>` is the writing surface. It reads the track (staged
+or shipped) and the pairing, and prints, per settled position: the ply, the
+timestamp, the SAN string to put in a note's `line`, which taught line it lands
+on, whether a note already anchors there — and **the words spoken while that
+board was up**.
+
+    ply   5  t=  828s  Ruy Lopez [HAS NOTE]
+       e4 e5 Nf3 Nc6 Bb5
+       said: …
+
+The words are in the listing rather than behind a second command on purpose. A
+note is written FROM the captions — the board says what is TRUE at a position,
+the captions say which of those true things the lesson is TEACHING — and the
+old two-step (timestamp here, `at.mjs` there) is how four notes came to be
+written off the board alone when `at.mjs` failed silently on a missing
+transcript. Reference only, never quoted; the shipped prose is original.
+
+**A LONG WINDOW IS A WARNING, NOT A WINDFALL.** A window runs from this
+position settling to the next one settling, so when the tracker loses the board
+the speech of many positions piles into one entry. Measured across the bank:
+
+| words in the window | share of positions |
+|---|---|
+| 0 | 7.0% |
+| 1-60 | 75.9% |
+| 61-150 | 10.9% |
+| 151-300 | 4.6% |
+| 301-600 | 0.9% |
+| **600+** | **0.7%, holding 23% of every paired word** |
+
+Those 163 fat windows are not a rich seam, they are the places the board was
+lost. Writing a note from one risks attaching teaching that belongs to a board
+the reader never saw, which is the disease this pipeline exists to cure — so
+the listing flags anything over 300 words and says to check it against the
+video first.
+
+## Staged and shipped, and who moves a track between them
+
+`data/video-pending` is captured work; `data/video-tracks` is work whose notes
+are written. `attach-notes --write` reads BOTH and promotes a track the moment
+notes anchor to it, so the two directories keep meaning what they say. Before
+2026-08-21 it read the shipped directory alone — which made 260 staged tracks
+unreachable by the note pipeline, since there was no way to attach the notes
+that would have earned the move.
+
+`emit-notes` still reads the shipped directory only. That is the ship gate, and
+it stays where it is.

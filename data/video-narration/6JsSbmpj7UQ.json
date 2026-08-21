@@ -1,0 +1,1192 @@
+{
+ "videoId": "6JsSbmpj7UQ",
+ "title": "Amazing Game!! 95% Accuracy! | Grunfeld Defense | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 53,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "thing as too much of it. All right, let's get the show on the road. 15 plus 10. 2240 Flagger Chess, okay. All right, Flagger Chess. Well, we're going to play D4 again. I want to get a a more solid D4 game than we did last time. Maybe we'll get another Carlsbad."
+  },
+  {
+   "ply": 3,
+   "t": 59.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "Okay, knight F6 we'll play main line C4."
+  },
+  {
+   "ply": 4,
+   "t": 62,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "And G6, King's Indian or Grunfeld. We had a King's Indian game couple of weeks ago. Um I want to say when I was about 2150."
+  },
+  {
+   "ply": 5,
+   "t": 79,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "said": "And in in that game I played the Carlsbad uh not the Carlsbad, the Averbakh variation. So perhaps we'll get a chance to repeat it if our opponent plays King's Indian. Nope, but our"
+  },
+  {
+   "ply": 6,
+   "t": 81,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+   "said": "opponent plays the Grunfeld. Now it's interesting because the Grunfeld is not all that popular. I would say really under, you know, maybe master level uh USCF and FIDE. Uh and you know, 2240 standard rating on chess.com corresponds usually to about a 2000. So you just don't see the Grunfeld every day at this level and there isn't one reason for that. I would say one of the main reasons is that it requires tremendous levels of memorization and understanding. It's one of the hardest openings to learn. It's like the Chinese of of openings, you know, it's like a completely different system uh of ideas and concepts that you have to fully"
+  },
+  {
+   "ply": 8,
+   "t": 132.5,
+   "line": [
+    "cxd5",
+    "Nxd5"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+   "said": "master plus an insane amount of theory. So, the line that I with white have played against the Grünfeld for most of my life is the one that I'm about to show you. C takes D5. Now, as those of you who play the Grünfeld know, and even those who don't play the Grünfeld know, white's main"
+  },
+  {
+   "ply": 9,
+   "t": 141.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/3n4/3PP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 5",
+   "said": "move in this position is the very natural E4. And the Grünfeld, I know"
+  },
+  {
+   "ply": 10,
+   "t": 143.5,
+   "line": [
+    "Nxc3"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/6p1/8/3PP3/2n5/PP3PPP/R1BQKBNR w KQkq - 0 6",
+   "said": "this is kind of a meme at this point, is the ultimate hypermodern opening. If you"
+  },
+  {
+   "ply": 12,
+   "t": 145.5,
+   "line": [
+    "bxc3",
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/6p1/8/3PP3/2P5/P4PPP/R1BQKBNR w KQkq - 1 7",
+   "said": "were to define hypermodern opening with a single example, it would be the Grünfeld because black literally says, \"I do not care about the center.\" Or so it seems. Allows white to occupy the center with pawns, allows a pawn on C3 that supports the pawn on D4, and still it's considered one of the best objective openings. But, the idea is so clear. Black wants to push this C-pawn up to C5, and then get the knight out to C6, and get the bishop out to G4 in the event that white plays knight F3. So, in the Grünfeld, black gives up the center and then applies as much pressure on it as possible as quickly as possible. So, if you're not well versed in theory with either side, actually, you can get in huge trouble with white as well. So, there is a gazillion lines against the Grünfeld that are all viable. It It's like any such opening, the Najdorf, you know, King's Indian, white has a choice of maybe 10, 12 viable"
+  },
+  {
+   "ply": 13,
+   "t": 211.5,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/6p1/1B6/3PP3/2P5/P4PPP/R1BQK1NR b KQkq - 2 7",
+   "said": "continuations. I like a sideline here that gets most Grünfeld players out of theory, and uh from a practical standpoint, it is quite hard for black to equalize. And the move is bishop to B5 check. Um at this point, this move has become a little bit more popular. I I played it back in 2016 uh when it was"
+  },
+  {
+   "ply": 14,
+   "t": 222.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/1B6/3PP3/2P5/P4PPP/R1BQK1NR w KQkq - 0 8",
+   "said": "relatively unknown. Uh now, of course, everything under the sun is known. The point of bishop B5 check is actually"
+  },
+  {
+   "ply": 15,
+   "t": 229.5,
+   "line": [
+    "Ba4"
+   ],
+   "fen": "rnbqk2r/pp2ppbp/2p3p1/8/B2PP3/2P5/P4PPP/R1BQK1NR b KQkq - 1 8",
+   "said": "simpler than it appears. You induce C6, and then you tuck the bishop away on A4, and you make it difficult for black to play C5. You actually just delay uh the move C5. Of course, if black castles, then now black is ready to play C5. But the bishop on A4 is, believe it or not, quite well placed here because it's sort of slicing through black's position. In the future, if"
+  },
+  {
+   "ply": 16,
+   "t": 260.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/2p3p1/8/B2PP3/2P5/P4PPP/R1BQK1NR w KQ - 2 9",
+   "said": "black gets the knight out to C6, you could take it. And this bishop could also drop down at B3 and harass the F7 pawn in certain other situations. So here, the main move uh if I remember correctly, it's been a while since I've reviewed my own"
+  },
+  {
+   "ply": 17,
+   "t": 265,
+   "line": [
+    "Ne2"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/2p3p1/8/B2PP3/2P5/P3NPPP/R1BQK2R b KQ - 3 9",
+   "said": "analysis here, is knight out to E2. And the reason that you don't go knight F3 is because of the potential for bishop G4. Here, if black plays bishop G4, then you can meet that with F3 chasing the bishop away and keeping the knight intact. Of course, knight from E2, what is it doing? Uh well, primarily, it's lending further support to white's center because we are preparing for the uh very likely scenario in which black starts to pressure our center with C5, knight C6, et cetera. So we have to lay on the beef on this D4 pawn so that we avoid losing it or so that we avoid having to push the pawn to D5 and reopen this Grunfeld bishop on G7. Hopefully, I'm explaining things relatively clearly so far. I'm not giving you any variations. We'll save that for after the game, uh but I'm trying to sort of explain the conceptual underpinnings of most of these Grunfeld positions. And every line is different. White has a million ways to position their pieces, so uh take this with a grain of salt. So I'm expecting C5. As the theory of this line has developed, black uh Grunfeld players have come up with somewhat more creative treatments in this position. Earlier, C5 was considered de rigueur. It was like everybody was playing it. Now, uh Peter Svidler came along. He is perhaps the foremost Grunfeld expert alongside Maxim Matlakov. He has a great Chessable course on the Grunfeld. Uh Svidler I knew I know started playing e5 in this position, which is not as common in the Grunfeld, but in this particular variation, it's a really good move. And uh there's another line where black actually just pushes these queen side pawns b5 and a5 and tries to develop"
+  },
+  {
+   "ply": 16,
+   "t": 375.5,
+   "line": [],
+   "fen": "rnbq1rk1/pp2ppbp/2p3p1/8/B2PP3/2P5/P4PPP/R1BQK1NR w KQ - 2 9",
+   "said": "some queen side pressure as well. So, lots of good moves here for black. Let's see what our opponent chooses. Rishidan asks, \"Why does knight f3 bishop g4 h3 not solve the bishop g4 issue?\" Well, remember that the function of the knight is to protect the center. So, if the knight is eliminated, the move c5 comes with far greater effect. If you had played knight f3 bishop g4 h3, trade on f3, then that's a perfect example. Black plays c5 and you literally cannot defend the pawn on d4. You're going to have to push that pawn up to d5, and as I'll explain after the game, that frequently uh comes with a pretty hefty price tag. Yeah, e5 is a move here. b5 is a move here. c5 is a move. You could also develop the knight to d7. So, it and all of them are Oh, sorry. This is after 92. And I will confess that I don't remember too much theory here from the white side. So, we're largely on our own. But I think we've succeeded in getting our opponent out of theory. Now, believe it or not, I've seen some games in this variation where white delays short castle and actually just goes for checkmate with h4 and h5 because that attack comes really really really quickly. Um so, if black starts pushing queen side pawns, I think after b5 bishop b3 a5, there's a line where white plays h4 and things get incredibly"
+  },
+  {
+   "ply": 18,
+   "t": 463.5,
+   "line": [
+    "Ne2",
+    "c5"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/6p1/2p5/B2PP3/2P5/P3NPPP/R1BQK2R w KQ - 0 10",
+   "said": "tactical. And of course, the engine always evaluates it as 000. Um so, if you want to know what the like best objective opening is against D4. There's no question that Grunfeld is better objectively than King's Indian C5. Okay, so our opponent ends up playing the traditional way. And we don't know action is required as of yet. The pawn on D4 is protected 1 2"
+  },
+  {
+   "ply": 19,
+   "t": 486,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/6p1/2p5/B2PP3/2P5/P3NPPP/R1BQ1RK1 b - - 1 10",
+   "said": "3 times and it's attacked three times, so we don't need a fourth defender. Should we need a fourth defender, this bishop is going to come out to E3. But the top priority for now is of course for us to get our king out of the center. Let's castle."
+  },
+  {
+   "ply": 18,
+   "t": 489,
+   "line": [],
+   "fen": "rnbq1rk1/pp2ppbp/6p1/2p5/B2PP3/2P5/P3NPPP/R1BQK2R w KQ - 0 10",
+   "said": "Here, playing H4 is far less feasible because our center is already under fire. Playing H4 would be way too brazen"
+  },
+  {
+   "ply": 19,
+   "t": 501,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/6p1/2p5/B2PP3/2P5/P3NPPP/R1BQ1RK1 b - - 1 10",
+   "said": "with the king in the center and the attack on D4 comes really quickly. So here we want to play more positionally with short castle. And if black plays knight C6, then we're going to get our dark squared bishop out to E3 to support the D4 pawn. Which is generally better than getting the bishop to B2 because B2 is a really lame square. I mean, here it's literally doing nothing except supporting the center. At least on E3, it's at least controlling some other squares. We can play the move E5. Somebody in chat is asking, \"Can white play E5 in such positions?\" Yeah, you can play E5, but remember when you push any pawn in the center, it creates weak squares that can be occupied by your opponent's pieces. So, think about which weak square E5 creates. Well, it weakens the D5 square and black can navigate the bishop over to that square and that square could function as a pretty serious outpost. So, this position isn't just all about playing against the dark squared bishop. We also have to maintain the structural integrity of our center and that often means keeping the pawns on D4 and E4 as long as we can because they're controlling all of these potential developing squares uh in in the center. It's keeping black's pieces at bay. Um Now, of course, if if black plays E5 in a position like this, then we are very likely to push D5 creating a protected passed pawn in the center. So, rarely in the Grunfeld is black combine E5 and C5. Although it happens, it does happen. Now, an interesting observation, I might have misled you earlier. If black plays knight C6 here, you know, my my fancy isn't tickled at all by bishop takes C6 and knight C6 is played. Bishop takes C6, on the surface looks completely reasonable, like you're getting rid of a piece that's putting pressure on your center. The problem is that the light squares become incredibly weak as a"
+  },
+  {
+   "ply": 20,
+   "t": 623.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2n3p1/2p5/B2PP3/2P5/P3NPPP/R1BQ1RK1 w - - 2 11",
+   "said": "result. So, if you imagine the position after bishop takes C6 BC, first of all, you're opening up a pathway for the black bishop to get to A6, harassing the knight on E2. Second of all, these doubled C pawns are actually a great asset for black because black can use one of them to trade on D4 and then simply bring the second pawn up to C5. And we don't have another C pawn to"
+  },
+  {
+   "ply": 21,
+   "t": 644,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2n3p1/2p5/B2PP3/2P1B3/P3NPPP/R2Q1RK1 b - - 3 11",
+   "said": "bring up to C3. So, we certainly don't want to take that knight on C6. Instead, we want to uh bring out the reinforcements and the move is bishop E3. And I think it's fair to say that white is a little bit better here. I think we're still following the main line. And if I remember correctly,"
+  },
+  {
+   "ply": 22,
+   "t": 664.5,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2n3p1/8/B2pP3/2P1B3/P3NPPP/R2Q1RK1 w - - 0 12",
+   "said": "this is the sort of old main line. This is what's been played really for the past, you know, 10, 20 years. Um this knight from C6 in the Grunfeld also often goes to A5 and then to C4. That's"
+  },
+  {
+   "ply": 23,
+   "t": 667,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2n3p1/8/B2PP3/4B3/P3NPPP/R2Q1RK1 b - - 0 12",
+   "said": "a super typical maneuver. Instead, our opponent takes on D4, okay. Okay."
+  },
+  {
+   "ply": 24,
+   "t": 675,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2q1rk1/pp1bppbp/2n3p1/8/B2PP3/4B3/P3NPPP/R2Q1RK1 w - - 1 13",
+   "said": "And I think we have managed to successfully defend our center. Bishop D7, a little bit passive. Here I think already it's pretty safe to say that white has an edge out of the opening. So, how should we go about improving our position? Well, what what observations can we make? What what needs to be done? Well, one thing that I would like to get done is get rid of this pin against the rook on A1. So that should the necessity arise, we can push the pawn up to D5 without having to worry about losing our rook. Especially because the rook on A1 is not doing anything, and there's plenty of things that it could be doing. The move that I like is rook B1. I like rook B1. I like to induce the move B6 because that softens up the knight on C6. But, a case could also be made for rook C1. Perfectly reasonable move as well. I think both rook B1 and rook C1 to me look uh entirely feasible. But, what else what else is on the menu here? You could argue that rook B1 B6 actually helps black in a way because it creates an anchor point on A5 for the knight. Uh so, I think it's hard it's hard to say whether rook B1 or rook C1 is better. If we play rook C1, black will very likely play rook C8. But then already I think we can go after black's A7 pawn with the move D5. Hm. Let me think about this for a second. It's a difficult conceptual moment. Difficult conceptual moment here."
+  },
+  {
+   "ply": 25,
+   "t": 777.5,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "r2q1rk1/pp1bppbp/2n3p1/8/B2PP3/4B3/P3NPPP/2RQ1RK1 b - - 2 13",
+   "said": "Yeah, actually B6 is a move that black often plays on their own volition in the Grünfeld. So rook B1 might be inaccurate. Rook B1 might be inaccurate. Let's go rook C1. I like rook C1 a little bit more. And the rook is just a little bit more active on the C file than it is on the B file. Um but I was talking Svarog about rook B1 B6 and then D5 or rook C1 and then D5. That's precisely why we're moving the rook away from A1. There is a tactical detail that you should be aware of in such positions. Anytime you see the bishops staring at each other like this, you have to be considering tactics connected with knight takes D4. So, these tactics do not work as long as the queen keeps in contact with the bishop, but if after rook C8, for example, you would you would play the natural move queen D2, just let's bring the queen up, I already think knight takes D4 works. So, rook C8, queen D2, knight takes D4, bishop takes D7, and then unfortunately black can take the knight on E2 with check, drawing our queen away, and then queen takes D7 keeps the extra pawn. Okay, I can show that after the game, so you don't have to worry about visualizing it. Yeah, and in the meantime,"
+  },
+  {
+   "ply": 26,
+   "t": 859,
+   "line": [
+    "e6"
+   ],
+   "fen": "r2q1rk1/pp1b1pbp/2n1p1p1/8/B2PP3/4B3/P3NPPP/2RQ1RK1 w - - 0 14",
+   "said": "let's try to understand how we can go about improving our position. We can play the move F3 uh to create a little pawn chain here and and reinforce the pawn on E4. F3, of course, comes with some drawbacks as well. E6, okay, never mind. E6 is a big move. That's a big move that closes the bishop. Yeah, E6 looks positionally dubious to me. So, it's a it's a pretty good sign that our opponent has played it. But, you have to understand that nothing in such positions really happens fast. It's a quiet position. We're not ready to make a move like D5, which probably is tempting to some of you because D5 doesn't yield anything. D5 E takes D5, and then the knight can jump out to E5, and trades generally favor the side, you know, playing against the big center, so we shouldn't really seek them out. Some of you are proposing E5, but like I explained earlier, E5 creates a gaping hole on D5, and one of the benefits of black's last move is that the knight from C6 can now easily swing back to E7 and then toward D5, or it can do it through B4. So, it's too early to play E5. Yeah, I don't want us to to immobilize our center just yet. Queen D2, again there's knight takes D4, which is quite annoying because I really do want to connect the rooks. Um one of the possibilities is to play F3 just to reinforce our center kind of a neutral move. Um let's see what else we can do. I don't really want to move the knight away from me, too. Okay, one move that we could consider is actually rook up to C5. Rook C5 is just one of those moves that just kind of improves the position. That rook is hard to get rid of."
+  },
+  {
+   "ply": 27,
+   "t": 965.5,
+   "line": [
+    "Rc5"
+   ],
+   "fen": "r2q1rk1/pp1b1pbp/2n1p1p1/2R5/B2PP3/4B3/P3NPPP/3Q1RK1 b - - 1 14",
+   "said": "Um so rook C5 kind of attracts is is is vaguely attractive to me. But then he goes rook C8. Uh maybe then we can already go D5. Let's do it. Let's play rook C5. Let's play rook C5. And it's it's it's a move that isn't all as committal as it may appear because oh, but but what if black plays B6? First of all, B6 here fails to the obvious rook takes C6. But even in a scenario where black moves the knight away from C6, let's say, and plays B6, big FD. Like we can just move the rook back. A lot of people don't conceptualize this properly. Like moving a a piece up isn't inherently committal because you can always just move it back down again. And this is not the kind of position where every tempo is going to be all that important. Like oh, you know, we can't make a move and then bring the piece back. So rook C5 is one of those general improving moves that accumulates the pressure. And it also prepares D5 because after D5 E takes D5, we can now recapture with"
+  },
+  {
+   "ply": 28,
+   "t": 1025,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "r2q1rk1/pp1bnpbp/4p1p1/2R5/B2PP3/4B3/P3NPPP/3Q1RK1 w - - 2 15",
+   "said": "the rook and all of a sudden the queen and the rook combine to put massive pressure on this vulnerable bishop on D7. So in a way E6, this move has created a hook that we can use to push our pawn to D5 knight E7. So the ball is back in our court. We have to decide whether to trade light-squared bishops. If we compare the health of our bishop versus our opponent's Bishop. The answer probably would be no because the Bishop on D7 is a pretty lame piece. On the other hand, trading gives us another tempo which we can use to bring our queen out, let's say to B3. So, that is a sensible option as well. Bishop B3, black will go rook C8"
+  },
+  {
+   "ply": 29,
+   "t": 1063.5,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "r2q1rk1/pp1bnpbp/4p1p1/2R5/3PP3/1B2B3/P3NPPP/3Q1RK1 b - - 3 15",
+   "said": "probably. But, the positive there is that we can already go queen D2. I want to keep the Bishops. I don't want to trade too many pieces here. Hard to decide, but let's go Bishop B3. So, B6 is what I'm expecting. And then we'll move the rook back to C1. Great"
+  },
+  {
+   "ply": 30,
+   "t": 1074.5,
+   "line": [
+    "Rc8"
+   ],
+   "fen": "2rq1rk1/pp1bnpbp/4p1p1/2R5/3PP3/1B2B3/P3NPPP/3Q1RK1 w - - 4 16",
+   "said": "example of not being afraid to do that. Okay, rook C8. We certainly don't want to allow rook takes C5 because that would"
+  },
+  {
+   "ply": 31,
+   "t": 1082.5,
+   "line": [
+    "Rxc8"
+   ],
+   "fen": "2Rq1rk1/pp1bnpbp/4p1p1/8/3PP3/1B2B3/P3NPPP/3Q1RK1 b - - 0 16",
+   "said": "ruin our entire pawn center. So, let's trade a pair. And finally, we'll be able to bring our queen up to D2 without having to worry about any knight takes D4 shenanigans. So, my assessment of this position is probably a very small edge for white. We are not playing for anything big here. The Grünfeld is a ridiculously solid opening."
+  },
+  {
+   "ply": 32,
+   "t": 1110.5,
+   "line": [
+    "Bxc8"
+   ],
+   "fen": "2bq1rk1/pp2npbp/4p1p1/8/3PP3/1B2B3/P3NPPP/3Q1RK1 w - - 0 17",
+   "said": "So, get ready for a long and drawn-out positional battle here. Doesn't our Bishop stare at a wall of pawns? Yeah, you know, exactly. D5 is now a serious idea in the future. Not immediately, but in the future, absolutely the Bishop on B3"
+  },
+  {
+   "ply": 33,
+   "t": 1118,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "2bq1rk1/pp2npbp/4p1p1/8/3PP3/1B2B3/P2QNPPP/5RK1 b - - 1 17",
+   "said": "is supporting the pawn break D5. But, the other thing of course is that not every piece has to be distributing the COVID vaccine. Bishop on B3 isn't the greatest piece of all time, but it is It's controlling some squares in the center. There There's no great place for a light-squared Bishop here. Um so, it might as well chill on on B3 for now. So, I think our our subsequent plan of action here is pretty straightforward. We're going to bring a rook into the game. I don't know if we're going to play rook C1 or rook D1 just yet. Depends on how black continues. I definitely like the look of F3"
+  },
+  {
+   "ply": 34,
+   "t": 1162,
+   "line": [
+    "b6"
+   ],
+   "fen": "2bq1rk1/p3npbp/1p2p1p1/8/3PP3/1B2B3/P2QNPPP/5RK1 w - - 0 18",
+   "said": "to support the E4 pawn, a move that we were considering earlier. And you know, eventually we're probably preparing the move D5. Like eventually we will push D5, especially if we can get that pawn all the way to D6. In fact, D5 is already a semi-legit candidate move, but it is still premature. So, here an instructive moment. I think most people when comparing between rook D1 and rook C1 would say, \"Well, well, you know, I've mentioned many times that if there is only one open file, you want to be the one occupying it.\" But, rook C1 I think fails to account for the fact that black after getting the bishop out is going to play queen D7 and then rook C8. So, rook C1 is kind of a veiled rook trade because we will not be able to cement our control of the C file before"
+  },
+  {
+   "ply": 35,
+   "t": 1214,
+   "line": [
+    "Rd1"
+   ],
+   "fen": "2bq1rk1/p3npbp/1p2p1p1/8/3PP3/1B2B3/P2QNPPP/3R2K1 b - - 1 18",
+   "said": "black brings his own rook over to C8. And I actually think we should keep a pair of rooks on the board. The side of the space advantage should try to keep more pieces on the board. And for that reason, I think more to the point is actually bringing the rook to D1. The C"
+  },
+  {
+   "ply": 36,
+   "t": 1217,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "3q1rk1/pb2npbp/1p2p1p1/8/3PP3/1B2B3/P2QNPPP/3R2K1 w - - 2 19",
+   "said": "file is And let of course let's play F3"
+  },
+  {
+   "ply": 37,
+   "t": 1218,
+   "line": [
+    "f3"
+   ],
+   "fen": "3q1rk1/pb2npbp/1p2p1p1/8/3PP3/1B2BP2/P2QN1PP/3R2K1 b - - 0 19",
+   "said": "uh to support the pawn. The C file is not where the party is at. Nothing is happening on the C file. It would be nice if we could infiltrate to C7, but we cannot do that. Defending the C7 square a second time is going to be very hard. So, I think our pieces are very compactly placed. Our center is super well protected and it's kind of hard for black to make improving"
+  },
+  {
+   "ply": 38,
+   "t": 1254.5,
+   "line": [
+    "Qd7"
+   ],
+   "fen": "5rk1/pb1qnpbp/1p2p1p1/8/3PP3/1B2BP2/P2QN1PP/3R2K1 w - - 1 20",
+   "said": "moves here. Yeah, we can we can consider this classic idea of H4, which sounds drastic. Like, \"Whoa, you're pushing a pawn on the same side of your castle.\" But, our king is ridiculously safe. Black has zero attacking prospects and H4 is very typical in positions where black has this hook on G6."
+  },
+  {
+   "ply": 39,
+   "t": 1273,
+   "line": [
+    "h4"
+   ],
+   "fen": "5rk1/pb1qnpbp/1p2p1p1/8/3PP2P/1B2BP2/P2QN1P1/3R2K1 b - - 0 20",
+   "said": "We want to push the pawn to H5. And are we trying to checkmate black in three moves? No, we just want to make an annoying move and we want to pose black with a decision. So H4 to me is kind of a no-brainer in such positions. Notice that we're still maintaining the general integrity of our pawn structure. It's not like we're pushing the G pawn or something. All right, we're making a small investment. Of course, we're weakening our king a little bit. But we want to bring this pawn to H5 potentially all the way to H6 in order to create the precedent for mating ideas on the back rank. Um and if black plays H5, then that creates for us a relatively juicy outpost on G5, which we can park the bishop on, of course trying to induce the incredibly weakening move F6. So your mentality in these positions should not be I want to come up with a plan that's going to result in victory in four moves. There is no such plan. We're making small gradual improving moves. We're trying to be annoying, get black in time pressure. Uh and the move H4 fits the bill in that regard. If Hopefully that makes It's hard to understand these moves without first understanding that we are adopting the sort of okay gradual Soviet grandmaster and all very small improving moves. Okay, so let's see whether black plays H5 or not. That will dictate our subsequent course of action. Bhuvanesh suggests knight C3 and D5. Yeah, reasonable, but I think that will just lead to a ton of trades. Right, D5 is of course as I mentioned one of our main ideas, but if you play it too quickly or if you play it under the wrong circumstances, it's going to have the opposite effect. It's just going to result in a bunch of piece trades and potentially an equal end game. So to me D5 is is something that we are keeping an eye on, but it isn't really like something I envision us playing in the next, you know, five seven moves. I think we should exhaust our improving moves first on the sides of the board. Keep it in our back pocket, yeah. Ship King asks, \"Would you go Bishop H6?\" And I'm sure people watching this"
+  },
+  {
+   "ply": 40,
+   "t": 1407,
+   "line": [
+    "h5"
+   ],
+   "fen": "5rk1/pb1qnpb1/1p2p1p1/7p/3PP2P/1B2BP2/P2QN1P1/3R2K1 w - - 0 21",
+   "said": "on YouTube are wondering the same thing. Bishop H6 is so typical when you hear when you have this battery. So, from a purely like positional standpoint, obviously Bishop H6 is good for white because we trade off the Grunfeld Bishop on G7 and we create more weaknesses on the kingside. And I think now that black has played the move H5 and further softened up these dark squares on the kingside, you know, this square and this square and that square and what are all these squares defended by? Well, it's that Grunfeld Bishop. So, I like the move Bishop H6. We might play it. The drawback is that we do, you know, the Bishop on E3 was a very nice solidifying piece, you know, it was really sort of helping us make sure that our center is compact and well protected, but you"
+  },
+  {
+   "ply": 41,
+   "t": 1450.5,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "5rk1/pb1qnpb1/1p2p1pB/7p/3PP2P/1B3P2/P2QN1P1/3R2K1 b - - 1 21",
+   "said": "could also argue that that is the same role fulfilled by the knight on E2. The knight is doing a perfectly good job of reinforcing the pawn on D4. And I agree with that and I think black is sufficiently passive to where we can get away with this move. Yeah, but"
+  },
+  {
+   "ply": 40,
+   "t": 1458,
+   "line": [],
+   "fen": "5rk1/pb1qnpb1/1p2p1p1/7p/3PP2P/1B2BP2/P2QN1P1/3R2K1 w - - 0 21",
+   "said": "some of you are saying, \"Why don't we induce F6 first?\" But nobody's going to play F6 if we play Bishop G5. That was our other our other candidate move."
+  },
+  {
+   "ply": 41,
+   "t": 1464,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "5rk1/pb1qnpb1/1p2p1pB/7p/3PP2P/1B3P2/P2QN1P1/3R2K1 b - - 1 21",
+   "said": "But I think Bishop H6 is a little bit more decisive. And you know, maybe against a slightly lower rated player, I would recommend this technique of like Bishop G5 because a lot of people would play F6 and that would be a horrible, horrible, suicidal"
+  },
+  {
+   "ply": 40,
+   "t": 1488,
+   "line": [],
+   "fen": "5rk1/pb1qnpb1/1p2p1p1/7p/3PP2P/1B2BP2/P2QN1P1/3R2K1 w - - 0 21",
+   "said": "move. So, the other thing you should understand is that Bishop H6 is a limited time offer because if black would have moved his rook from F8, then already Bishop H6 could be met with the typical Bishop H8, a technique that you"
+  },
+  {
+   "ply": 41,
+   "t": 1499,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "5rk1/pb1qnpb1/1p2p1pB/7p/3PP2P/1B3P2/P2QN1P1/3R2K1 b - - 1 21",
+   "said": "should be intimately familiar with to save your fianchetto bishop. So, this is perhaps our last opportunity to trade that bishop since the rook is still on a fade and black can't move the bishop away. What is our subsequent idea? We're going to get the bishops off the board. Well,"
+  },
+  {
+   "ply": 42,
+   "t": 1518.5,
+   "line": [
+    "Ba6"
+   ],
+   "fen": "5rk1/p2qnpb1/bp2p1pB/7p/3PP2P/1B3P2/P2QN1P1/3R2K1 w - - 2 22",
+   "said": "if black takes on H6, then we might very well just play for checkmate. We could take and we can get our knight to F4 and maybe sack it on H5. That comes really, really quickly. In fact, bishop A6 is our opponent's move. First of all, well, actually let's think for a second. There is technically no hurry to take on G7. The bishop's not going anywhere for the time being. But, we should ask you like is there a point to not take on G7 because if there isn't, then we should just get it over with. And the benefit of bishop takes G7 is that after king takes G7, we can drop our knight into F4. We can't play that move here because it severs the connection between the queen and the bishop, blunders the bishop on H6. So, whether or not we take on G7 depends on where we want to put our knight afterward. I see two appealing options for the knight. The first is F4, which is what I just pointed out. The second is to move the knight over to G3 and maybe actually go for a direct king side attack. So, let's say knight G3, then we want to take the bishop and park the queen on G5 creating the threat of knight takes H5 check. So, and of course the drawback of knight G3 is that the knight is not participating directly in preparing the move D5. So, it's a hard decision to make. We can take on G7 and go knight F4 or we can play knight to G3 in this position if we"
+  },
+  {
+   "ply": 43,
+   "t": 1606.5,
+   "line": [
+    "Ng3"
+   ],
+   "fen": "5rk1/p2qnpb1/bp2p1pB/7p/3PP2P/1B3PN1/P2Q2P1/3R2K1 b - - 3 22",
+   "said": "want to basically play for checkmate. So, let me let me think about this for a moment. Okay. I think we should go knight G3. We're going to play for mate. Risky, could backfire, but I think knight F4 is just a little bit toothless. Because if we had put our knight on f4, the key difference is that we are closing the path for for the queen to g5. That is what Because the knight on f4 does the same thing that the knight on g3 does, but from g3 we are not closing the pathway for the queen to get to g5. If that makes sense. So, of course again, we're not afraid of black taking on h6. By all means, get our own queen to h6. Thank you very much. On the next move, we're going to trade on g7. I assume black is going to play rook d8. That that to me seems like kind of a no-brainer type of move. Then we're going to trade bishops, and we're going to park the queen on g5, and we're going to have a significant amount of threats on the king side. Hopefully our play is making sense to you."
+  },
+  {
+   "ply": 44,
+   "t": 1671,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "3r2k1/p2qnpb1/bp2p1pB/7p/3PP2P/1B3PN1/P2Q2P1/3R2K1 w - - 4 23",
+   "said": "Everything is pretty much straightforward and logical. Okay, our opponent is really down on the clock also. We should keep that in mind. What are the threats after king h8? Well, that's something I'll explain after king h8 is played. That's what I was dedicating my like 30-second thing"
+  },
+  {
+   "ply": 45,
+   "t": 1679,
+   "line": [
+    "Bxg7"
+   ],
+   "fen": "3r2k1/p2qnpB1/bp2p1p1/7p/3PP2P/1B3PN1/P2Q2P1/3R2K1 b - - 0 23",
+   "said": "to. Okay, rook d8 is played. Let's do this. Now,"
+  },
+  {
+   "ply": 46,
+   "t": 1680,
+   "line": [
+    "Kxg7"
+   ],
+   "fen": "3r4/p2qnpk1/bp2p1p1/7p/3PP2P/1B3PN1/P2Q2P1/3R2K1 w - - 0 24",
+   "said": "something to notice, like the sac on h5 is way premature cuz there's just no pieces, right? Sac on h5 queen g5 check"
+  },
+  {
+   "ply": 47,
+   "t": 1694,
+   "line": [
+    "Qg5"
+   ],
+   "fen": "3r4/p2qnpk1/bp2p1p1/6Qp/3PP2P/1B3PN1/P5P1/3R2K1 b - - 1 24",
+   "said": "is just two empty checks. Black will cover with the knight, and we're at a dead end. So, that's out of the question. Let's dive in with queen g5 as we had planned. Now, a lot of you are looking at this and saying, \"Well, I don't get what our follow-up is after black moves the king away from the g file.\" Cuz this the threat is obviously knight takes h5. What is it that we're going to do after black parries the threat by moving the quick king away? Uh well, depends on where black puts the king. If king h8, then we can give a check on f6 or on h6, and that looks very sexy. King h7, I think is the best move. And then I had two separate ideas that we are going to weigh and decide. Of course, nobody has canceled that our old idea of pushing the d-pawn up to d5 and with the additional king side pressure opening up another front, so to speak, in the center could really overwhelm black's defenses. Another subtle maneuver that I'm noticing is after we play d5, if the pawns are traded, that knight from g3 has now opened up a new pathway from e4 to f6. And the second pathway that's been"
+  },
+  {
+   "ply": 48,
+   "t": 1767.5,
+   "line": [
+    "Kh7"
+   ],
+   "fen": "3r4/p2qnp1k/bp2p1p1/6Qp/3PP2P/1B3PN1/P5P1/3R2K1 w - - 2 25",
+   "said": "opened in the event of d5 e d5 e d5, the bishop on b3 can suddenly drop back to c2. And if you imagine the black king on h7, the bishop will be pinning the g6 pawn and the threat of knight takes h5 is going to be reinforced. So, that's idea number one. Idea number two is very similar. We can carve that pathway out ourselves. We can push the e-pawn up to e5. Now, you might well didn't I say that this move is bad? Well, it was bad earlier and its drawback is still very much the same, right? It weakens the d5 square. Gives black a big outpost. But, if we're playing for checkmate, as you know, you have to make some positional concessions and e5 creates the maneuver knight e4 knight f6 and can allows the bishop to drop back to c2 much like in the event that we play d5. So, I like d5 because I think it contains the same strong points of e5 but none of the drawbacks."
+  },
+  {
+   "ply": 49,
+   "t": 1824,
+   "line": [
+    "d5"
+   ],
+   "fen": "3r4/p2qnp1k/bp2p1p1/3P2Qp/4P2P/1B3PN1/P5P1/3R2K1 b - - 0 25",
+   "said": "Um and opening the center is is in our favor. So, I really really like the look of d5 here. And I don't see a single compelling reason for us not to play it. Let's go. Let's go d5. Because if black ignores, well, I mean, we're threatening d takes e6. Notice"
+  },
+  {
+   "ply": 50,
+   "t": 1835,
+   "line": [
+    "exd5"
+   ],
+   "fen": "3r4/p2qnp1k/bp4p1/3p2Qp/4P2P/1B3PN1/P5P1/3R2K1 w - - 0 26",
+   "said": "that the bishop protects the rook on d1. Everything's protected. There's e takes d5. Okay. Briefly, let's consider bishop takes d5 because that is a viable move. The reason I don't like it as much is"
+  },
+  {
+   "ply": 51,
+   "t": 1849,
+   "line": [
+    "exd5"
+   ],
+   "fen": "3r4/p2qnp1k/bp4p1/3P2Qp/7P/1B3PN1/P5P1/3R2K1 b - - 0 26",
+   "said": "that leaves the rook on D1 undefended. And so we don't threaten any discovered checks or discovered attacks after Bishop takes D5. Let's stick to our plan, E takes D5. But it's good practice in general when you have multiple ways to recapture even if you had a move in mind to just give it a couple of seconds of thought because sometimes you'll realize that there is a recapture that you didn't put it sufficient thought into that just ends the game. What do you get out of E takes D5? Well, I just explained the two main things. Pathway for the knight, pathway for the bishop. But the third thing is that hey, this is a passed pawn and it's threatening to move up to D6 and that additional strain on black's position is going to be too much to handle. I think black is essentially losing here. Black's pieces are not just not active enough to to defend against all of the different sources of danger that we are imposing on him. And something's going to give, whether it's going to be a sacrifice on H5, whether it's going to be pushing the pawn up to D6, maybe black's clock will run out. One thing one way or another"
+  },
+  {
+   "ply": 52,
+   "t": 1915.5,
+   "line": [
+    "f5"
+   ],
+   "fen": "3r4/p2qn2k/bp4p1/3P1pQp/7P/1B3PN1/P5P1/3R2K1 w - - 0 27",
+   "said": "we're going to get our way get our way here. We're going to impose our will. Well, it was equal for a while, but now it's no longer equal. Okay, F5. And of course this is the kind of move that reeks of desperation, but it's not a bad move. It's an understandable move. Black is trying to prevent knight E4 and black is trying to restrict our light squared bishop. So this is where I think"
+  },
+  {
+   "ply": 53,
+   "t": 1940.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "3r4/p2qn2k/bp1P2p1/5pQp/7P/1B3PN1/P5P1/3R2K1 b - - 0 27",
+   "said": "we should revert back to our initial trump card, which is of course the D5 pawn. And all of you should be itching to play the move D6, which is a move we can largely play without calculating because it certainly is not going to hurt. It certainly is not going to hurt cuz now we're reopening the bishop, we're reopening the line of fire on black's rook on D8 and I'm already seeing a tactic that stems directly from"
+  },
+  {
+   "ply": 54,
+   "t": 1966,
+   "line": [
+    "Ng8"
+   ],
+   "fen": "3r2n1/p2q3k/bp1P2p1/5pQp/7P/1B3PN1/P5P1/3R2K1 w - - 1 28",
+   "said": "that. It's a sexy tactic and it only works if black plays knight g8. If black plays knight c6, I think we're going to win in a more mundane way, but let's hope for knight g8. Okay, knight g8 is on the board. So, what do I notice? Well, what I notice is that the queen on d7 is the only defender of the rook on d8. I also notice that the pawn on g6 is a massive weakness. How do I know that? Well, the moment black played f5, I reassessed the situation and I asked myself what new weaknesses have been created. And if you ask yourself that"
+  },
+  {
+   "ply": 55,
+   "t": 1998,
+   "line": [
+    "Bf7"
+   ],
+   "fen": "3r2n1/p2q1B1k/bp1P2p1/5pQp/7P/5PN1/P5P1/3R2K1 b - - 2 28",
+   "said": "question, then obviously g6 is the main one. And here, simple deflection tactic. Yeah, bishop e6 is winning, but even more to the point is bishop f7. Yeah, bishop f7 attacking g6. Queen takes f7 is absolutely forced, otherwise this is checkmate, and then we take the rook and promote our pawn and we win the game."
+  },
+  {
+   "ply": 56,
+   "t": 2017,
+   "line": [
+    "Qxf7"
+   ],
+   "fen": "3r2n1/p4q1k/bp1P2p1/5pQp/7P/5PN1/P5P1/3R2K1 w - - 0 29",
+   "said": "Yeah, that's all. This is over. Yeah, this is a nice move. It's pretty simple, but it's a good way to cap off the attack."
+  },
+  {
+   "ply": 57,
+   "t": 2018.5,
+   "line": [
+    "Qxd8"
+   ],
+   "fen": "3Q2n1/p4q1k/bp1P2p1/5p1p/7P/5PN1/P5P1/3R2K1 b - - 0 29",
+   "said": ""
+  },
+  {
+   "ply": 58,
+   "t": 2019.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "3Q4/p4q1k/bp1P1np1/5p1p/7P/5PN1/P5P1/3R2K1 w - - 1 30",
+   "said": "Yeah, queen f7, queen d8. Knight f6. Okay, so now a lot of people you know, you shouldn't get over excited. You shouldn't play queen takes f6. That's a horrible blunder. You should win this as simply as possible, which is something I've been imploring people to do from the very beginning. Your your technique your default technique should be just to play straightforward chess. The tactics should only come in in the case of"
+  },
+  {
+   "ply": 59,
+   "t": 2052,
+   "line": [
+    "d7"
+   ],
+   "fen": "3Q4/p2P1q1k/bp3np1/5p1p/7P/5PN1/P5P1/3R2K1 b - - 0 30",
+   "said": "necessity. Well, what's the simplest move? Not even queen e7. Your your impulse here should not be your impulse number one should not be to trade. It should just be to push your d-pawn. Just d7. Just go d7. All right, you don't need to trade queens here. You're threatening now to play queen takes f6 and d8 equals queen. Yeah, d7 is much simpler than queen e7."
+  },
+  {
+   "ply": 60,
+   "t": 2067.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "3Q4/p2P1q1k/bp3np1/7p/5p1P/5PN1/P5P1/3R2K1 w - - 0 31",
+   "said": "Although queen e7, of course, is is totally winning as well. Yeah, and I wouldn't even want to trade rooks here because rook e1 rook e7 is an idea that yields, you know, an even faster victory. We have four we can do whatever the heck we want. We can play queen takes F6. But if we want to play clinically I think the simplest approach is to play Let me think for a second. There is still one trick that we want to avoid."
+  },
+  {
+   "ply": 61,
+   "t": 2103,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "8/p1QP1q1k/bp3np1/7p/5p1P/5PN1/P5P1/3R2K1 b - - 1 31",
+   "said": "I don't think we need seven was better, Andrew. I think D7 is the best move. You know what the absolute simplest is? Just move the queen away from D8. Just move the queen. Queen C7. Just go Queen C7. That's really the simplest move cuz D8 queen is unstoppable. And if black gives the knight away, then we take back with a rook and we win the queen anyway."
+  },
+  {
+   "ply": 62,
+   "t": 2119,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "8/p1QP1q1k/bp4p1/3n3p/5p1P/5PN1/P5P1/3R2K1 w - - 2 32",
+   "said": "So, we're not even going to move the knight on G3. We don't need it. It's done its job. Okay, knight D5. And now D8 queen would be a very bad move because black would be able to take the other queen with a knight."
+  },
+  {
+   "ply": 63,
+   "t": 2130,
+   "line": [
+    "Rxd5"
+   ],
+   "fen": "8/p1QP1q1k/bp4p1/3R3p/5p1P/5PN1/P5P1/6K1 b - - 0 32",
+   "said": "But you should be your hand should already be reaching for this move. This is rook takes D5. Queen takes D5. It is important that promoting results in an discover check against the king."
+  },
+  {
+   "ply": 65,
+   "t": 2140.5,
+   "line": [
+    "Qxd5",
+    "d8=N+"
+   ],
+   "fen": "3N4/p1Q4k/bp4p1/3q3p/5p1P/5PN1/P5P1/6K1 b - - 0 33",
+   "said": "Otherwise, black would have like check on D1 and we would still have to calculate. Check. And mate on the next move because or we win the queen."
+  },
+  {
+   "ply": 66,
+   "t": 2148.5,
+   "line": [
+    "Qd7"
+   ],
+   "fen": "3N4/p1Qq3k/bp4p1/7p/5p1P/5PN1/P5P1/6K1 w - - 1 34",
+   "said": "It's all over. Daniel lost. Okay, Queen D7 takes. And Queen H8 mate. GG. GG."
+  },
+  {
+   "ply": 2,
+   "t": 2162.5,
+   "line": [],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "That was actually a really nice game. That one was was more satisfying than the last couple we've had. So, there's a lot to unpack. So, settle"
+  },
+  {
+   "ply": 5,
+   "t": 2167,
+   "line": [
+    "c4",
+    "g6",
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "said": "down because we I have a lot to explain. We we've only faced the We've never faced the Grunfeld, I want to say. Um in the speed run, so I always like facing new openings."
+  },
+  {
+   "ply": 6,
+   "t": 2186,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": "All right. So, remember that the difference between the King's Indian and the Grunfeld. In the King's Indian, black plays the immediate Bishop g7"
+  },
+  {
+   "ply": 7,
+   "t": 2189,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "and allows white to occupy the center with three or"
+  },
+  {
+   "ply": 8,
+   "t": 2194.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "said": "potentially four pawns. I play the King's Indian with black and from the white side, I recommended"
+  },
+  {
+   "ply": 9,
+   "t": 2199,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP2BPPP/R1BQK1NR b KQkq - 1 5",
+   "said": "the Averbakh variation Bishop e2 castles"
+  },
+  {
+   "ply": 10,
+   "t": 2201,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP2BPPP/R1BQK1NR w KQ - 2 6",
+   "said": "and Bishop g5."
+  },
+  {
+   "ply": 11,
+   "t": 2204,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2PPP3/2N5/PP2BPPP/R2QK1NR b KQ - 3 6",
+   "said": "Um you can refer back to the uh recent Averbakh speedrun game if you want to"
+  },
+  {
+   "ply": 6,
+   "t": 2210.5,
+   "line": [],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": "know more about this, but the Grunfeld is a completely different opening. Is it related to the King's Indian? Absolutely. Both are hypermodern openings. In both cases, black gives away the center and then tries to attack it with his pieces. But the Grunfeld is a is a opening where"
+  },
+  {
+   "ply": 8,
+   "t": 2233,
+   "line": [
+    "e4",
+    "d6"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "said": "the center is a lot more open as a rule, as a matter of fact, as a rule, than in the King's Indian. Like if you know the first thing about the King's Indian, you know that the most typical structure, if we go"
+  },
+  {
+   "ply": 9,
+   "t": 2234.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 5",
+   "said": "down the main line,"
+  },
+  {
+   "ply": 11,
+   "t": 2237,
+   "line": [
+    "O-O",
+    "Be2"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQK2R b KQ - 3 6",
+   "said": "this is the classical main line, the most popular variation, e5 castles"
+  },
+  {
+   "ply": 12,
+   "t": 2239,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "said": "knight c6,"
+  },
+  {
+   "ply": 15,
+   "t": 2241.5,
+   "line": [
+    "d5",
+    "Nc6",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/ppp2pbp/2np1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 2 8",
+   "said": "in almost all lines, white plays d5 and you get a closed center position where you have opposite sides attack, right? White attacks on the queenside, black attacks on the kingside, and that"
+  },
+  {
+   "ply": 6,
+   "t": 2262,
+   "line": [],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": "gives the King's Indian a sort of distinct flavor. In the Grunfeld, it's a totally different kettle of fish because black not only gives away the center, but black also tries to open it up. And the position is a lot more open and so you get a lot more tactics, a lot more quickly than in the King's Indian. In the King's Indian, the tactics are backloaded to the middle game. In the Grunfeld, the tactics are often frontloaded to the opening because black very quickly starts to assault white's opening with white's center with c5 and Bishop g7 and all that stuff. And that's also why you have to know what you're doing with white uh because you can easily just get destroyed um if you play obvious moves."
+  },
+  {
+   "ply": 8,
+   "t": 2300,
+   "line": [
+    "Nf3",
+    "d5"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+   "said": "So, as in these types of openings, white has a gazillion different setups. c takes d5 is not forced. So, knight f3 is a very popular move and one of the most popular modern setups is"
+  },
+  {
+   "ply": 9,
+   "t": 2303,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP1B2/2N2N2/PP2PPPP/R2QKB1R b KQkq - 1 5",
+   "said": "just to basically play this like a London knight f3 and bishop f4, castles"
+  },
+  {
+   "ply": 11,
+   "t": 2307,
+   "line": [
+    "O-O",
+    "e3"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/3p4/2PP1B2/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 6",
+   "said": "e3. And what you'll notice if you look at Grunfeld theories that black often plays"
+  },
+  {
+   "ply": 12,
+   "t": 2311,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2pp4/2PP1B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 7",
+   "said": "c5 getting this pawn square. Super super typical situation in the Grunfeld. This is a theoretical line. Uh another way that white can play without taking on d5"
+  },
+  {
+   "ply": 8,
+   "t": 2332.5,
+   "line": [],
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+   "said": "is the Russian variation queen b3. You're trying to get black to be the one to take on c4 which creates some interesting subtleties. Another very topical line. And uh you also have bishop g5"
+  },
+  {
+   "ply": 9,
+   "t": 2336,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p2B1/2PP4/2N2N2/PP2PPPP/R2QKB1R b KQkq - 1 5",
+   "said": "variations. Bishop g5 can be played in a"
+  },
+  {
+   "ply": 8,
+   "t": 2339.5,
+   "line": [],
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+   "said": "bunch of different positions. It can be played here. It can be played uh"
+  },
+  {
+   "ply": 10,
+   "t": 2340.5,
+   "line": [
+    "Ng1",
+    "Bf8"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 6",
+   "said": ""
+  },
+  {
+   "ply": 11,
+   "t": 2342,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR b KQkq - 3 6",
+   "said": "immediately in this position."
+  },
+  {
+   "ply": 10,
+   "t": 2344,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 6",
+   "said": "And if you want to play more"
+  },
+  {
+   "ply": 11,
+   "t": 2346.5,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N1P3/PP3PPP/R1BQKBNR b KQkq - 0 6",
+   "said": "conservatively, you can play the move e3. Nothing wrong with this. I mean this"
+  },
+  {
+   "ply": 12,
+   "t": 2349,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N1P3/PP3PPP/R1BQKBNR w KQkq - 1 7",
+   "said": "gives black pretty easy equality, but uh"
+  },
+  {
+   "ply": 13,
+   "t": 2351,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N1PN2/PP3PPP/R1BQKB1R b KQkq - 2 7",
+   "said": "this is a a totally viable system as well."
+  },
+  {
+   "ply": 12,
+   "t": 2356,
+   "line": [],
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N1P3/PP3PPP/R1BQKBNR w KQkq - 1 7",
+   "said": "Uh so what do you do when you have all four of those pawns creating tension? Well,"
+  },
+  {
+   "ply": 10,
+   "t": 2360,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 6",
+   "said": "uh you can you can dig around on your own, but I I can tell you that the main"
+  },
+  {
+   "ply": 12,
+   "t": 2361.5,
+   "line": [
+    "Nf3",
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 4 7",
+   "said": "line after bishop f4 castles e3 c5"
+  },
+  {
+   "ply": 16,
+   "t": 2364.5,
+   "line": [
+    "Bf4",
+    "c5",
+    "e3",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2pp4/2PP1B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 1 9",
+   "said": "um it it's less complicated than it"
+  },
+  {
+   "ply": 17,
+   "t": 2368.5,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2Pp4/2P2B2/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 9",
+   "said": "looks. Uh normally white plays d takes c5 and black gets his queen out to a5."
+  },
+  {
+   "ply": 18,
+   "t": 2370.5,
+   "line": [
+    "Qa5"
+   ],
+   "fen": "rnb2rk1/pp2ppbp/5np1/q1Pp4/2P2B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 1 10",
+   "said": "An idea that you should be familiar"
+  },
+  {
+   "ply": 19,
+   "t": 2374,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "rnb2rk1/pp2ppbp/5np1/q1PP4/5B2/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 10",
+   "said": "with. And if you just start gobbling, then there are some straightforward tactics here. Uh here black is already better. c takes d5 is a serious mistake. Who can tell me why? Who can spot Preferably somebody who doesn't play the Grunfeld black. Can"
+  },
+  {
+   "ply": 20,
+   "t": 2394.5,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "rnb2rk1/pp2ppbp/6p1/q1Pn4/5B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 11",
+   "said": "you figure out what black's little mini tactical idea here is? Okay, well queen takes c5 is not a tactic. Knight takes d5 is correct. So you got the queen a5 to pin the knight on c3. And if queen takes d5, then bishop takes c3 check."
+  },
+  {
+   "ply": 24,
+   "t": 2406,
+   "line": [
+    "Qc2",
+    "Bxc3+",
+    "Qxc3",
+    "Qxc3+"
+   ],
+   "fen": "rnb2rk1/pp2pp1p/6p1/2Pn4/5B2/2q1PN2/PP3PPP/R3KB1R w KQ - 0 13",
+   "said": "And you cannot take. Here white is already losing because here you drop the rook on a1 with for no comp. And if you don't take, well, what do you do? Everything is collapsing. Rook is"
+  },
+  {
+   "ply": 18,
+   "t": 2417,
+   "line": [],
+   "fen": "rnb2rk1/pp2ppbp/5np1/q1Pp4/2P2B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 1 10",
+   "said": "coming to d8, etc. So for this reason, the main line I think is queen to A4. And here black recaptures on C5, and"
+  },
+  {
+   "ply": 22,
+   "t": 2429,
+   "line": [
+    "Qb3",
+    "Qxc5",
+    "Qb5",
+    "Qxb5"
+   ],
+   "fen": "rnb2rk1/pp2ppbp/5np1/1q1p4/2P2B2/2N1PN2/PP3PPP/R3KB1R w KQ - 0 12",
+   "said": "white can pursue the queen with queen B5. This is a well-known line. And to my knowledge, the end game is"
+  },
+  {
+   "ply": 23,
+   "t": 2431,
+   "line": [
+    "Nxb5"
+   ],
+   "fen": "rnb2rk1/pp2ppbp/5np1/1N1p4/2P2B2/4PN2/PP3PPP/R3KB1R b KQ - 0 12",
+   "said": "equal. Knight takes B5, knight A6 covering C7, and black is"
+  },
+  {
+   "ply": 24,
+   "t": 2435.5,
+   "line": [
+    "Na6"
+   ],
+   "fen": "r1b2rk1/pp2ppbp/n4np1/1N1p4/2P2B2/4PN2/PP3PPP/R3KB1R w KQ - 1 13",
+   "said": "doing completely fine. Uh so, this is one of many, many theoretical lines in the Grunfeld."
+  },
+  {
+   "ply": 9,
+   "t": 2445.5,
+   "line": [],
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 5",
+   "said": "Um but we decided to go for the main line, C takes D5, knight takes D5, and of course E4. Now black trades on C3 and plays bishop G7. This is yet another tabiya. And a tabiya is a position from which uh branch out a bunch of different lines. Uh and this is There can be multiple tabiyas in an opening, multiple positions in which one side has a vast choice of different lines. And essentially, white has a a gazillion different ways here to uh to develop his minor pieces, his or her minor pieces. The most popular line, the line that's in terms of raw popularity and in terms of longevity, this used to be what almost all of the top players played. And for a while, it was super fashionable. It's still played at the top level. It hasn't been refuted, but black has found multiple setups that yield good play. It's bishop C4, castles, or black can start with C5. It doesn't matter. It's a transposition. And now the knight once again comes out to E2. So, just to illustrate how quickly things can the wheels can come off,"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "d5",
+     "t": 81,
+     "continuation": "d5",
+     "said": "about 2150. And in in that game I played the Carlsbad uh not the Carlsbad, the Averbakh variation. So perhaps we'll get a chance to repeat it if our opponent plays King's Indian. Nope, but our opponent plays the Grunfeld. Now it's interesting because the Grunfeld is not all that popular. I would say really under, you know, maybe master level uh USCF and FIDE. Uh and you know, 2240 standard rating on chess.com corresponds usually to about a 2000. So you just don't see the Grunfeld every day at this level and there isn't one reason for that. I would say one of the main reasons is that it requires tremendous levels of memorization and understanding. It's one of the hardest openings to learn. It's like the Chinese of of openings, you know, it's like a completely different system uh of ideas and concepts that you have to fully master plus an insane amount of theory. So, the line that I with white have played against the Grünfeld for most of my life is the one that I'm about to show you. C takes D5. Now, as those of you who play the Grünfeld know, and even those who don't play the Grünfeld know, white's main move in this position is the very natural E4. And the Grünfeld, I know"
+    },
+    {
+     "san": "Bg7",
+     "t": 2186,
+     "continuation": "Bg7",
+     "said": "I always like facing new openings. All right. So, remember that the difference between the King's Indian and the Grunfeld. In the King's Indian, black plays the immediate Bishop g7 and allows white to occupy the center with three or potentially four pawns. I play the King's Indian with black and from the white side, I recommended the Averbakh variation Bishop e2 castles and Bishop g5. Um you can refer back to the uh recent Averbakh speedrun game if you want to know more about this, but the Grunfeld is a completely different opening. Is it related to the King's Indian? Absolutely. Both are hypermodern openings. In both cases, black gives away the center and then tries to attack it with his pieces. But the Grunfeld is a is a opening where the center is a lot more open as a rule, as a matter of fact, as a rule, than in the King's Indian. Like if you know the first thing about the King's Indian, you know that the most typical structure, if we go down the main line, this is the classical main line, the most popular variation, e5 castles knight c6, in almost all lines, white plays d5 and you get a closed center position"
+    }
+   ]
+  },
+  {
+   "ply": 6,
+   "fen": "rnbqkb1r/ppp1pp1p/5np1/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "d5"
+   ],
+   "options": [
+    {
+     "san": "cxd5",
+     "t": 132.5,
+     "continuation": "cxd5 Nxd5",
+     "said": "master plus an insane amount of theory. So, the line that I with white have played against the Grünfeld for most of my life is the one that I'm about to show you. C takes D5. Now, as those of you who play the Grünfeld know, and even those who don't play the Grünfeld know, white's main move in this position is the very natural E4. And the Grünfeld, I know this is kind of a meme at this point, is the ultimate hypermodern opening. If you were to define hypermodern opening with a single example, it would be the Grünfeld because black literally says, \"I do not care about the center.\" Or so it seems. Allows white to occupy the center with pawns, allows a pawn on C3 that supports the pawn on D4, and still it's considered one of the best objective openings. But, the idea is so clear. Black wants to push this C-pawn up to C5, and then get the knight out to C6, and get the bishop out to G4 in the event that white plays knight F3. So, in the Grünfeld, black gives up the center and then applies as much pressure on it as possible as quickly as possible. So, if you're not well versed in theory with either side, actually, you can get in huge trouble with white as well. So, there is a gazillion lines against the Grünfeld that are all viable. It"
+    },
+    {
+     "san": "Bg5",
+     "t": 2342,
+     "continuation": "Bg5",
+     "said": "Another very topical line. And uh you also have bishop g5 variations. Bishop g5 can be played in a bunch of different positions. It can be played here. It can be played uh immediately in this position. And if you want to play more conservatively, you can play the move e3. Nothing wrong with this. I mean this gives black pretty easy equality, but uh this is a a totally viable system as well. Uh so what do you do when you have all four of those pawns creating tension? Well, uh you can you can dig around on your own, but I I can tell you that the main line after bishop f4 castles e3 c5 um it it's less complicated than it looks. Uh normally white plays d takes c5 and black gets his queen out to a5. An idea that you should be familiar with. And if you just start gobbling, then there are some straightforward tactics here. Uh here black is already better. c takes d5 is a serious mistake. Who can tell me why? Who can spot Preferably somebody who doesn't play the Grunfeld black. Can you figure out what black's little mini tactical idea here is? Okay, well queen takes c5 is not a tactic. Knight takes d5 is correct. So you got the queen a5 to pin the knight on c3. And if queen takes d5, then bishop takes c3 check."
+    },
+    {
+     "san": "e3",
+     "t": 2346.5,
+     "continuation": "e3",
+     "said": "variations. Bishop g5 can be played in a bunch of different positions. It can be played here. It can be played uh immediately in this position. And if you want to play more conservatively, you can play the move e3. Nothing wrong with this. I mean this gives black pretty easy equality, but uh this is a a totally viable system as well. Uh so what do you do when you have all four of those pawns creating tension? Well, uh you can you can dig around on your own, but I I can tell you that the main line after bishop f4 castles e3 c5 um it it's less complicated than it looks. Uh normally white plays d takes c5 and black gets his queen out to a5. An idea that you should be familiar with. And if you just start gobbling, then there are some straightforward tactics here. Uh here black is already better. c takes d5 is a serious mistake. Who can tell me why? Who can spot Preferably somebody who doesn't play the Grunfeld black. Can you figure out what black's little mini tactical idea here is? Okay, well queen takes c5 is not a tactic. Knight takes d5 is correct. So you got the queen a5 to pin the knight on c3. And if queen takes d5, then bishop takes c3 check. And you cannot take. Here white is already losing because here you drop the rook on a1 with for no comp."
+    },
+    {
+     "san": "Nf3",
+     "t": 2361.5,
+     "continuation": "Nf3 Bg7",
+     "said": "this is a a totally viable system as well. Uh so what do you do when you have all four of those pawns creating tension? Well, uh you can you can dig around on your own, but I I can tell you that the main line after bishop f4 castles e3 c5 um it it's less complicated than it looks. Uh normally white plays d takes c5 and black gets his queen out to a5. An idea that you should be familiar with. And if you just start gobbling, then there are some straightforward tactics here. Uh here black is already better. c takes d5 is a serious mistake. Who can tell me why? Who can spot Preferably somebody who doesn't play the Grunfeld black. Can you figure out what black's little mini tactical idea here is? Okay, well queen takes c5 is not a tactic. Knight takes d5 is correct. So you got the queen a5 to pin the knight on c3. And if queen takes d5, then bishop takes c3 check. And you cannot take. Here white is already losing because here you drop the rook on a1 with for no comp. And if you don't take, well, what do you do? Everything is collapsing. Rook is coming to d8, etc. So for this reason, the main line I think is queen to A4."
+    }
+   ]
+  },
+  {
+   "ply": 6,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7"
+   ],
+   "options": [
+    {
+     "san": "e4",
+     "t": 2189,
+     "continuation": "e4",
+     "said": "All right. So, remember that the difference between the King's Indian and the Grunfeld. In the King's Indian, black plays the immediate Bishop g7 and allows white to occupy the center with three or potentially four pawns. I play the King's Indian with black and from the white side, I recommended the Averbakh variation Bishop e2 castles and Bishop g5. Um you can refer back to the uh recent Averbakh speedrun game if you want to know more about this, but the Grunfeld is a completely different opening. Is it related to the King's Indian? Absolutely. Both are hypermodern openings. In both cases, black gives away the center and then tries to attack it with his pieces. But the Grunfeld is a is a opening where the center is a lot more open as a rule, as a matter of fact, as a rule, than in the King's Indian. Like if you know the first thing about the King's Indian, you know that the most typical structure, if we go down the main line, this is the classical main line, the most popular variation, e5 castles knight c6, in almost all lines, white plays d5 and you get a closed center position where you have opposite sides attack,"
+    },
+    {
+     "san": "Nf3",
+     "t": 2300,
+     "continuation": "Nf3 d5",
+     "said": "So, as in these types of openings, white has a gazillion different setups. c takes d5 is not forced. So, knight f3 is a very popular move and one of the most popular modern setups is just to basically play this like a London knight f3 and bishop f4, castles e3. And what you'll notice if you look at Grunfeld theories that black often plays c5 getting this pawn square. Super super typical situation in the Grunfeld. This is a theoretical line. Uh another way that white can play without taking on d5 is the Russian variation queen b3. You're trying to get black to be the one to take on c4 which creates some interesting subtleties. Another very topical line. And uh you also have bishop g5 variations. Bishop g5 can be played in a bunch of different positions. It can be played here. It can be played uh immediately in this position. And if you want to play more conservatively, you can play the move e3. Nothing wrong with this. I mean this gives black pretty easy equality, but uh this is a a totally viable system as well. Uh so what do you do when you have all four of those pawns creating tension? Well, uh you can you can dig around on your"
+    }
+   ]
+  },
+  {
+   "ply": 8,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6"
+   ],
+   "options": [
+    {
+     "san": "Be2",
+     "t": 2199,
+     "continuation": "Be2",
+     "said": "and allows white to occupy the center with three or potentially four pawns. I play the King's Indian with black and from the white side, I recommended the Averbakh variation Bishop e2 castles and Bishop g5. Um you can refer back to the uh recent Averbakh speedrun game if you want to know more about this, but the Grunfeld is a completely different opening. Is it related to the King's Indian? Absolutely. Both are hypermodern openings. In both cases, black gives away the center and then tries to attack it with his pieces. But the Grunfeld is a is a opening where the center is a lot more open as a rule, as a matter of fact, as a rule, than in the King's Indian. Like if you know the first thing about the King's Indian, you know that the most typical structure, if we go down the main line, this is the classical main line, the most popular variation, e5 castles knight c6, in almost all lines, white plays d5 and you get a closed center position where you have opposite sides attack, right? White attacks on the queenside, black attacks on the kingside, and that gives the King's Indian a sort of distinct flavor. In the Grunfeld, it's a totally different kettle of fish because black"
+    },
+    {
+     "san": "Nf3",
+     "t": 2234.5,
+     "continuation": "Nf3",
+     "said": "the center is a lot more open as a rule, as a matter of fact, as a rule, than in the King's Indian. Like if you know the first thing about the King's Indian, you know that the most typical structure, if we go down the main line, this is the classical main line, the most popular variation, e5 castles knight c6, in almost all lines, white plays d5 and you get a closed center position where you have opposite sides attack, right? White attacks on the queenside, black attacks on the kingside, and that gives the King's Indian a sort of distinct flavor. In the Grunfeld, it's a totally different kettle of fish because black not only gives away the center, but black also tries to open it up. And the position is a lot more open and so you get a lot more tactics, a lot more quickly than in the King's Indian. In the King's Indian, the tactics are backloaded to the middle game. In the Grunfeld, the tactics are often frontloaded to the opening because black very quickly starts to assault white's opening with white's center with c5 and Bishop g7 and all that stuff. And that's also why you have to know what you're doing with white uh because you can easily just get destroyed um if you play obvious moves. So, as in these types of openings, white has a gazillion different setups. c takes d5"
+    }
+   ]
+  },
+  {
+   "ply": 8,
+   "fen": "rnbqk2r/ppp1ppbp/5np1/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "Nf3",
+    "d5"
+   ],
+   "options": [
+    {
+     "san": "Bf4",
+     "t": 2303,
+     "continuation": "Bf4",
+     "said": "as in these types of openings, white has a gazillion different setups. c takes d5 is not forced. So, knight f3 is a very popular move and one of the most popular modern setups is just to basically play this like a London knight f3 and bishop f4, castles e3. And what you'll notice if you look at Grunfeld theories that black often plays c5 getting this pawn square. Super super typical situation in the Grunfeld. This is a theoretical line. Uh another way that white can play without taking on d5 is the Russian variation queen b3. You're trying to get black to be the one to take on c4 which creates some interesting subtleties. Another very topical line. And uh you also have bishop g5 variations. Bishop g5 can be played in a bunch of different positions. It can be played here. It can be played uh immediately in this position. And if you want to play more conservatively, you can play the move e3. Nothing wrong with this. I mean this gives black pretty easy equality, but uh this is a a totally viable system as well. Uh so what do you do when you have all four of those pawns creating tension? Well, uh you can you can dig around on your own, but I I can tell you that the main line after bishop f4 castles e3 c5"
+    },
+    {
+     "san": "Bg5",
+     "t": 2336,
+     "continuation": "Bg5",
+     "said": "You're trying to get black to be the one to take on c4 which creates some interesting subtleties. Another very topical line. And uh you also have bishop g5 variations. Bishop g5 can be played in a bunch of different positions. It can be played here. It can be played uh immediately in this position. And if you want to play more conservatively, you can play the move e3. Nothing wrong with this. I mean this gives black pretty easy equality, but uh this is a a totally viable system as well. Uh so what do you do when you have all four of those pawns creating tension? Well, uh you can you can dig around on your own, but I I can tell you that the main line after bishop f4 castles e3 c5 um it it's less complicated than it looks. Uh normally white plays d takes c5 and black gets his queen out to a5. An idea that you should be familiar with. And if you just start gobbling, then there are some straightforward tactics here. Uh here black is already better. c takes d5 is a serious mistake. Who can tell me why? Who can spot Preferably somebody who doesn't play the Grunfeld black. Can you figure out what black's little mini tactical idea here is? Okay, well queen takes c5 is not a tactic. Knight takes d5 is correct."
+    },
+    {
+     "san": "Ng1",
+     "t": 2340.5,
+     "continuation": "Ng1 Bf8",
+     "said": "interesting subtleties. Another very topical line. And uh you also have bishop g5 variations. Bishop g5 can be played in a bunch of different positions. It can be played here. It can be played uh immediately in this position. And if you want to play more conservatively, you can play the move e3. Nothing wrong with this. I mean this gives black pretty easy equality, but uh this is a a totally viable system as well. Uh so what do you do when you have all four of those pawns creating tension? Well, uh you can you can dig around on your own, but I I can tell you that the main line after bishop f4 castles e3 c5 um it it's less complicated than it looks. Uh normally white plays d takes c5 and black gets his queen out to a5. An idea that you should be familiar with. And if you just start gobbling, then there are some straightforward tactics here. Uh here black is already better. c takes d5 is a serious mistake. Who can tell me why? Who can spot Preferably somebody who doesn't play the Grunfeld black. Can you figure out what black's little mini tactical idea here is? Okay, well queen takes c5 is not a tactic. Knight takes d5 is correct. So you got the queen a5 to pin the knight on c3. And if queen takes d5, then bishop takes c3 check."
+    }
+   ]
+  },
+  {
+   "ply": 18,
+   "fen": "rnb2rk1/pp2ppbp/5np1/q1Pp4/2P2B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 1 10",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "Nf3",
+    "d5",
+    "Ng1",
+    "Bf8",
+    "Nf3",
+    "Bg7",
+    "Bf4",
+    "c5",
+    "e3",
+    "O-O",
+    "dxc5",
+    "Qa5"
+   ],
+   "options": [
+    {
+     "san": "cxd5",
+     "t": 2374,
+     "continuation": "cxd5",
+     "said": "um it it's less complicated than it looks. Uh normally white plays d takes c5 and black gets his queen out to a5. An idea that you should be familiar with. And if you just start gobbling, then there are some straightforward tactics here. Uh here black is already better. c takes d5 is a serious mistake. Who can tell me why? Who can spot Preferably somebody who doesn't play the Grunfeld black. Can you figure out what black's little mini tactical idea here is? Okay, well queen takes c5 is not a tactic. Knight takes d5 is correct. So you got the queen a5 to pin the knight on c3. And if queen takes d5, then bishop takes c3 check. And you cannot take. Here white is already losing because here you drop the rook on a1 with for no comp. And if you don't take, well, what do you do? Everything is collapsing. Rook is coming to d8, etc. So for this reason, the main line I think is queen to A4. And here black recaptures on C5, and white can pursue the queen with queen B5. This is a well-known line. And to my knowledge, the end game is equal. Knight takes B5, knight A6 covering C7, and black is doing completely fine."
+    },
+    {
+     "san": "Qb3",
+     "t": 2429,
+     "continuation": "Qb3 Qxc5 Qb5 Qxb5",
+     "said": "think is queen to A4. And here black recaptures on C5, and white can pursue the queen with queen B5. This is a well-known line. And to my knowledge, the end game is equal. Knight takes B5, knight A6 covering C7, and black is doing completely fine. Uh so, this is one of many, many theoretical lines in the Grunfeld. Um but we decided to go for the main line, C takes D5, knight takes D5, and of course E4. Now black trades on C3 and plays bishop G7. This is yet another tabiya. And a tabiya is a position from which uh branch out a bunch of different lines. Uh and this is There can be multiple tabiyas in an opening, multiple positions in which one side has a vast choice of different lines. And essentially, white has a a gazillion different ways here to uh to develop his minor pieces, his or her minor pieces. The most popular line, the line that's in terms of raw popularity and in terms of longevity, this used to be what almost all of the top players played. And for a while, it was super fashionable. It's still played at the top level. It hasn't been refuted, but"
+    }
+   ]
+  }
+ ]
+}

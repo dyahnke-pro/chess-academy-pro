@@ -1892,6 +1892,93 @@
      "shortText": "g6 weakens the king side, giving us a target."
     }
    ]
+  },
+  "vienna game copycat variation": {
+   "openingName": "Vienna Game: Copycat Variation",
+   "spine": [
+    "e4",
+    "e5",
+    "Nc3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "Qg4",
+    "Qf6",
+    "Nd5",
+    "Qxf2+",
+    "Kd1",
+    "Kf8",
+    "Nh3",
+    "Qd4",
+    "d3"
+   ],
+   "sourceVideos": [],
+   "studentSide": "white",
+   "intro": "Black is going to copy us move for move, and the question this whole line answers is: when does copying stop working? The answer is the first move that only works for one of us — and we are going to find it, on g7.",
+   "shortIntro": "When does copying stop working? On g7.",
+   "outro": "Play it again and watch g7 from move one.",
+   "ideas": [
+    {
+     "text": "e4. The centre, and the diagonal the queen and the bishop both want. Nothing controversial yet — but everything in this line comes from one square, f7, and the pieces that will end up pointing at it.",
+     "shortText": "e4 — the centre, and the road to f7."
+    },
+    {
+     "text": "Black mirrors. That is the whole idea we are about to test: copying is comfortable, it never loses a tempo, and it works right up until the position stops being symmetrical.",
+     "shortText": "e5 — the mirror begins."
+    },
+    {
+     "text": "The knight comes to c3, holding e4 and keeping the king's knight at home so we still get to choose where it goes. Quiet, and deliberately non-committal.",
+     "shortText": "Nc3 holds e4 and keeps our options."
+    },
+    {
+     "text": "Black copies again, and here the mirror starts costing something. The knight on c6 is a perfectly good square — but it is not f6, and f6 is the square that guards g7. Nobody notices that for another three moves.",
+     "shortText": "Nc6 mirrors, but leaves f6 empty."
+    },
+    {
+     "text": "The bishop takes the long diagonal and points at f7 — the one square the king alone defends. Still nothing forced. We are just arranging the pieces that will ask the question.",
+     "shortText": "Bc4 aims at f7."
+    },
+    {
+     "text": "And the mirror is complete. Black has copied every move and the position is dead level — which is exactly why this is worth learning, because from here the copying has to stop and Black usually does not know when. Two queen moves are close to equal here; the one we want is the one that asks about g7.",
+     "shortText": "Bc5 — the copycat, and level."
+    },
+    {
+     "text": "Out comes the queen, straight at g7. Count the defenders of that pawn: there are none. The knight that would normally cover it went to c6 instead, and that is the bill for four moves of copying. Black cannot copy this one — the same move for him hangs everything.",
+     "shortText": "Qg4 — g7 has no defender."
+    },
+    {
+     "text": "Black defends g7 with the queen, which looks like the natural answer and is the moment the game turns. Before this the position was level; now it is clearly better for us. Defending with the queen puts it on a square the whole board can shout at.",
+     "shortText": "Qf6 defends g7 — and walks into it."
+    },
+    {
+     "text": "The knight jumps to d5 and hits the queen — and behind that, if the queen simply steps away, comes the fork on c7, check on the king and the rook in the corner. I love a move that asks two questions at once; Black can answer either, not both.",
+     "shortText": "Nd5 hits the queen and eyes c7."
+    },
+    {
+     "text": "Black takes on f2 with check and grabs the pawn. Here is where a lot of players reach for the bishop instead — same square, same check, and it feels like the piece you would rather use. But the king steps to f1 and the bishop is simply sitting there attacked, with nothing to show for it. The queen is the one move that works.",
+     "shortText": "Qxf2+ takes with check — not the bishop."
+    },
+    {
+     "text": "The king steps aside to d1. We have given up castling and we are not pretending otherwise — but the king is safe behind its own pawns, and Black's problem is about to be bigger than ours.",
+     "shortText": "Kd1 — castling gone, king fine."
+    },
+    {
+     "text": "Black has to do the same, and that is the trade this whole line is built on: we both lose the right to castle, but our king walked to safety while theirs is stuck on f8 with the rook boxed in behind it. Offering the queen trade on e2 here would be the wrong instinct — Black takes it with check and the pressure evaporates.",
+     "shortText": "Kf8 — both kings stuck, ours better."
+    },
+    {
+     "text": "The knight develops to h3 and, from that unlikely square, attacks the queen on f2. This is the move Black most often meets by developing the other knight to f6 — and that just loses the queen to the knight on h3. The queen has to move, and the clock has been running on it since it took the pawn.",
+     "shortText": "Nh3 attacks the queen on f2."
+    },
+    {
+     "text": "The queen drops back to d4, and it is not running — from there it hits the bishop on c4, which nothing is defending, and the pawn on e4 as well. Two targets. This is Black's best try and it still does not solve the real problem.",
+     "shortText": "Qd4 hits the bishop and e4."
+    },
+    {
+     "text": "d3, and both threats are answered at once — the pawn shields e4 and gives the bishop on c4 the defender it was missing. Now take stock: we are clearly better, close to two pawns' worth. Black has no castling, a king stuck on f8, a rook that cannot move, and a queen that has spent the whole game touring. That is the lesson of the copycat — mirroring is free until the first move that only works for one side, and then the bill arrives all at once.",
+     "shortText": "d3 covers both — and we are much better."
+    }
+   ]
   }
  }
 }

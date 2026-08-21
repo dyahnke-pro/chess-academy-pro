@@ -1,0 +1,530 @@
+{
+ "videoId": "iQQDU3H7vaU",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1670",
+ "moves": [
+  {
+   "ply": 4,
+   "t": 537.5,
+   "line": [
+    "d4",
+    "c6",
+    "e4",
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/2p1p3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "yeah i won the bullet match ralph saad let's go e4 again and he plays a okay e6 c6 now we already know this is weird uh we're not going to change our"
+  },
+  {
+   "ply": 6,
+   "t": 546.5,
+   "line": [
+    "Nc3",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": "strategy based on weird moves that try to intimidate us okay so he plays kind of a cross between a french and a chiropractor not a great idea because it's just very passive uh now should we play e5 here what do you guys think should we play e5 some people say yes we can but it's actually not a good idea it's actually not a great move and after the game i will explain in detail the two reasons and i'm just writing all"
+  },
+  {
+   "ply": 8,
+   "t": 588.5,
+   "line": [
+    "Nf3",
+    "dxe4"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/8/3Pp3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "said": "this down sorry why it's not a great move should we take on d5 definitely not because that allows him to recapture and vacates the natural development square for the knights we're going to do nothing and he"
+  },
+  {
+   "ply": 9,
+   "t": 589.5,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/8/3PN3/5N2/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "said": "takes great look at how nice our knights are"
+  },
+  {
+   "ply": 10,
+   "t": 592,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rnbqk1nr/pp2bppp/2p1p3/8/3PN3/5N2/PPP2PPP/R1BQKB1R w KQkq - 1 6",
+   "said": "where should we put this bishop should we put it on c4 what do you guys"
+  },
+  {
+   "ply": 11,
+   "t": 601,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqk1nr/pp2bppp/2p1p3/8/3PN3/3B1N2/PPP2PPP/R1BQK2R b KQkq - 2 6",
+   "said": "think d3 absolutely we shouldn't put it on c4 then it would be biting at granite"
+  },
+  {
+   "ply": 12,
+   "t": 604,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqk2r/pp2bppp/2p1pn2/8/3PN3/3B1N2/PPP2PPP/R1BQK2R w KQkq - 3 7",
+   "said": "knight f6 now we can take the knight we can also not take the knight it doesn't really matter we can drop the knight to g3 or we could"
+  },
+  {
+   "ply": 13,
+   "t": 615,
+   "line": [
+    "Nxf6+"
+   ],
+   "fen": "rnbqk2r/pp2bppp/2p1pN2/8/3P4/3B1N2/PPP2PPP/R1BQK2R b KQkq - 0 7",
+   "said": "support it with queen e2 there's a lot of ways to do this let's play it very simple just take it"
+  },
+  {
+   "ply": 14,
+   "t": 618,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "rnbqk2r/pp3ppp/2p1pb2/8/3P4/3B1N2/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "said": "and um how should we solidify this pawn what would be the best way of solidifying this part i remember the key principle which i always share which is that uh you want the piece of least"
+  },
+  {
+   "ply": 15,
+   "t": 634.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqk2r/pp3ppp/2p1pb2/8/3P4/2PB1N2/PP3PPP/R1BQK2R b KQkq - 0 8",
+   "said": "value to do a particular task so you have a choice between bishop e3 and c3 which be should you delegate the task of defending upon it certainly we should be the pawn building up a nice pawn chain now black's bishop is very weak now i"
+  },
+  {
+   "ply": 16,
+   "t": 644,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P4/2PB1N2/PP3PPP/R1BQK2R w KQ - 1 9",
+   "said": "want to introduce you guys to a version of the greek gift sacrifice which a lot of people are not aware of now the greek gift sacrifice i won't talk about at length in the interest of time but you guys can see the elements of the greek gift in action what is the problem here why can't we take on h7 and go knight g5 obviously black has a bishop that controls the"
+  },
+  {
+   "ply": 17,
+   "t": 673.5,
+   "line": [
+    "h4"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R b KQ - 0 9",
+   "said": "square so what can we do to take the g5 square under control first in preparation for the great gift sacrifice and this is a attacking technique that everybody should be familiar with h4 let's see if he can let's see if he"
+  },
+  {
+   "ply": 18,
+   "t": 678,
+   "line": [
+    "b6"
+   ],
+   "fen": "rnbq1rk1/p4ppp/1pp1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 0 10",
+   "said": "actually spots nope beautiful guys this is our first"
+  },
+  {
+   "ply": 19,
+   "t": 682,
+   "line": [
+    "Bxh7+"
+   ],
+   "fen": "rnbq1rk1/p4ppB/1pp1pb2/8/3P3P/2P2N2/PP3PP1/R1BQK2R b KQ - 0 10",
+   "said": "greek gift sacrifice bishop takes h7"
+  },
+  {
+   "ply": 20,
+   "t": 685.5,
+   "line": [
+    "Kxh7"
+   ],
+   "fen": "rnbq1r2/p4ppk/1pp1pb2/8/3P3P/2P2N2/PP3PP1/R1BQK2R w KQ - 0 11",
+   "said": "and i'm going to do some interesting research after the game knight g5 now"
+  },
+  {
+   "ply": 21,
+   "t": 687,
+   "line": [
+    "Ng5+"
+   ],
+   "fen": "rnbq1r2/p4ppk/1pp1pb2/6N1/3P3P/2P5/PP3PP1/R1BQK2R b KQ - 1 11",
+   "said": "what was the purpose of h4 if he takes on g5 what are we going to take with"
+  },
+  {
+   "ply": 22,
+   "t": 704.5,
+   "line": [
+    "Kg6"
+   ],
+   "fen": "rnbq1r2/p4pp1/1pp1pbk1/6N1/3P3P/2P5/PP3PP1/R1BQK2R w KQ - 2 12",
+   "said": "of course we're going to take with a pawn now you guys might be like whoa whoa but but he's taking our knight what are we gonna attack with well if you look if he would have taken we would have"
+  },
+  {
+   "ply": 21,
+   "t": 706,
+   "line": [],
+   "fen": "rnbq1r2/p4ppk/1pp1pb2/6N1/3P3P/2P5/PP3PP1/R1BQK2R b KQ - 1 11",
+   "said": "taken with a pawn and then the queen would have combined with a rook"
+  },
+  {
+   "ply": 22,
+   "t": 711,
+   "line": [
+    "Kg6"
+   ],
+   "fen": "rnbq1r2/p4pp1/1pp1pbk1/6N1/3P3P/2P5/PP3PP1/R1BQK2R w KQ - 2 12",
+   "said": "to deliver decisive threats down the h file we have checkmate in three moves here or like four moves something like that three moves we have we have two choices we can go h5 and we can send the king onto a square where it can be discovered by the knight but even better is to go queen to d3 uh because if he goes king h6 we don't even need to deliver a discovered check we can simply checkmate him on h7 now he goes king h5 we need to reason logically if we can find a way to send his king back to h6 then we will have queen h7 checkmate but if we can find a way to send his king forward let's say to g4 then we're gonna have queen f3 checkmate of course the move is g4"
+  },
+  {
+   "ply": 17,
+   "t": 763,
+   "line": [],
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R b KQ - 0 9",
+   "said": "and he's damned if he does and damned if he doesn't and it's checkmate this is a very classic greek gift attack okay so h4 was the key move right it sets up the g5 square now i actually was going to research who"
+  },
+  {
+   "ply": 19,
+   "t": 772,
+   "line": [
+    "b6",
+    "Bxh7+"
+   ],
+   "fen": "rnbq1rk1/p4ppB/1pp1pb2/8/3P3P/2P2N2/PP3PP1/R1BQK2R b KQ - 0 10",
+   "said": "was the first ever person to actually come up with a great gift sacrifice so according to my research the first person and let me let me do a little search on megabase the first person to have actually played a greek of sacrifice in an actual game let me see graco g aquino graco 1620 i think graco invented the greek gift sacrifice now where can we check this information classical era modern chess let's see if he talks about it who invented the gree gift sacrifice yeah it's not um but it looks like gioquino graco who is a 17th century"
+  },
+  {
+   "ply": 18,
+   "t": 854.5,
+   "line": [],
+   "fen": "rnbq1rk1/p4ppp/1pp1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 0 10",
+   "said": "italian chess player who wrote several manuscripts where he analyzed a bunch of openings and among them he came up with agree gift sacrifice um now a couple of you might ask a couple of you might ask yeah let's change the title"
+  },
+  {
+   "ply": 17,
+   "t": 878.5,
+   "line": [],
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R b KQ - 0 9",
+   "said": "yes now um a couple of you might ask after h4 now let's say that black sniffs this out and"
+  },
+  {
+   "ply": 18,
+   "t": 880,
+   "line": [
+    "h6"
+   ],
+   "fen": "rnbq1rk1/pp3pp1/2p1pb1p/8/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 0 10",
+   "said": "goes h6 can anybody propose now a um a way that we can start to develop the attack on the king side there's actually"
+  },
+  {
+   "ply": 19,
+   "t": 897.5,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "rnbq1rk1/pp3pp1/2p1pb1p/6N1/3P3P/2PB4/PP3PP1/R1BQK2R b KQ - 1 10",
+   "said": "two possible moves and then we'll dial it back and i'll explain why not e5 in the opening so knight g5 is possible but he can actually not take the knight"
+  },
+  {
+   "ply": 18,
+   "t": 902.5,
+   "line": [],
+   "fen": "rnbq1rk1/pp3pp1/2p1pb1p/8/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 0 10",
+   "said": "he'll just ignore the knight so the first is to attack with a pawn"
+  },
+  {
+   "ply": 19,
+   "t": 904,
+   "line": [
+    "g4"
+   ],
+   "fen": "rnbq1rk1/pp3pp1/2p1pb1p/8/3P2PP/2PB1N2/PP3P2/R1BQK2R b KQ - 0 10",
+   "said": "now the pawn on h6 is what's called a"
+  },
+  {
+   "ply": 17,
+   "t": 906,
+   "line": [],
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R b KQ - 0 9",
+   "said": "hook a hoke is a pawn"
+  },
+  {
+   "ply": 18,
+   "t": 907,
+   "line": [
+    "b6"
+   ],
+   "fen": "rnbq1rk1/p4ppp/1pp1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 0 10",
+   "said": "that has moved from its original spot and is located near the king a hook can be used by your pawns or by your pieces to open up the king side easy in an easier way and you can do that by simply advancing to g5 okay uh so that's number one number two is called building a battery and you can do that by playing bishop c2 followed by queen to d3 now why is the inclusion of h4h6 in white's favor watch let's say that black develops his knight and you go queen d3 you're threatening checkmate on h7 black is only one plausible way to defend against this which is what well black technically has two ways but really only one way to stop the queen from coming to h7 that is the move g6 but here's the thing look at this pawn very carefully guys we"
+  },
+  {
+   "ply": 16,
+   "t": 970.5,
+   "line": [],
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P4/2PB1N2/PP3PPP/R1BQK2R w KQ - 1 9",
+   "said": "can capture it not only can we capture that pawn we can use the h-bond as a battering ram and shatter the other palm black loses and if you compare that to the immediate bishop c2 then after g6 it is true that you can play h4 now and you can try to use the same pawn as the same battering ram"
+  },
+  {
+   "ply": 17,
+   "t": 984.5,
+   "line": [
+    "h4"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R b KQ - 0 9",
+   "said": "the pawn on g6 is a lot better protected so h4 is good not only because it sets up the greek gift sacrifice but even if it is stopped black must make concessions on his king side which you can then use by building a battery and if i were actually playing black here how would what would i do"
+  },
+  {
+   "ply": 18,
+   "t": 1009,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbq1rk1/pp3p1p/2p1pbp1/8/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 0 10",
+   "said": "um black's position is already very bad but i would probably let me think hmm yeah no this position is uh very very bad for like maybe g6 i don't know"
+  },
+  {
+   "ply": 17,
+   "t": 1010,
+   "line": [],
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R b KQ - 0 9",
+   "said": "no black's position is extremely difficult folks there is one thing you"
+  },
+  {
+   "ply": 18,
+   "t": 1017,
+   "line": [
+    "Qd5"
+   ],
+   "fen": "rnb2rk1/pp3ppp/2p1pb2/3q4/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 1 10",
+   "said": "can try there's a trap you can set you can try to go queen to d5 and what"
+  },
+  {
+   "ply": 19,
+   "t": 1022.5,
+   "line": [
+    "Bxh7+"
+   ],
+   "fen": "rnb2rk1/pp3ppB/2p1pb2/3q4/3P3P/2P2N2/PP3PP1/R1BQK2R b KQ - 0 10",
+   "said": "is the purpose of this move let's imagine the y now takes on h7"
+  },
+  {
+   "ply": 21,
+   "t": 1024.5,
+   "line": [
+    "Kxh7",
+    "Ng5+"
+   ],
+   "fen": "rnb2r2/pp3ppk/2p1pb2/3q2N1/3P3P/2P5/PP3PP1/R1BQK2R b KQ - 1 11",
+   "said": "plays knight g5"
+  },
+  {
+   "ply": 22,
+   "t": 1025.5,
+   "line": [
+    "Kg8"
+   ],
+   "fen": "rnb2rk1/pp3pp1/2p1pb2/3q2N1/3P3P/2P5/PP3PP1/R1BQK2R w KQ - 2 12",
+   "said": "king g8 and how is the uh the greek gift usually followed up in this position obviously green h5 and why did i put a queen on d5 can anybody tell me what is the purpose of queen d5 what move does black now have this is often missed in greek gift sacrifices the fact that you can actually defend the square on h7 you can play queen to f5 and then black screen comes around to g6 and the attack evaporates so that's actually a way that you can defend against the great gift you can allow the knight to get to g5"
+  },
+  {
+   "ply": 6,
+   "t": 1073.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": "and the queen to h5 and then you can either place a bishop on this diagonal or a queen and defend the h7 pawn okay hopefully that makes sense now the only thing i wanted to point out here is why the movie five is bad"
+  },
+  {
+   "ply": 7,
+   "t": 1074.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3pP3/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "it's not that it's bad it's just that"
+  },
+  {
+   "ply": 6,
+   "t": 1079.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": "black has already spent three moves moving his pawns so from a purely logical perspective we"
+  },
+  {
+   "ply": 7,
+   "t": 1086.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3pP3/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "want to keep the center as open as possible and e5 closes it up which lessens the impact of black making crappy moves in the opening the second thing that um that i want you guys to notice is this this is a pawn chain do does black usually well not just black but uh when when your opponent is a pawn chain do you want to attack the tip of the pawn chain or the base of the pawn chain usually by nimzovich's principle now not always but generally the base now what can you tell"
+  },
+  {
+   "ply": 8,
+   "t": 1128,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 5",
+   "said": "me about the can black attack the base of the pawn chain can black attack the base of the pawn chain and if so how yes with c5 and here is the problem in such positions white wants to be able to play c3 in order to defend the base of the pawn chain here believe it or not the knight on c3 as natural as it looks"
+  },
+  {
+   "ply": 9,
+   "t": 1147.5,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2PpP3/8/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 5",
+   "said": "actually obstructs the pawn from coming to c3 which means that white's pawn chain collapses not a disaster right you can take big deal but"
+  },
+  {
+   "ply": 10,
+   "t": 1149,
+   "line": [
+    "Bxc5"
+   ],
+   "fen": "rnbqk1nr/pp3ppp/4p3/2bpP3/8/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 6",
+   "said": "you know now the pawn on e5 is weak and now black has good development for his"
+  },
+  {
+   "ply": 4,
+   "t": 1156,
+   "line": [],
+   "fen": "rnbqkbnr/pp1p1ppp/2p1p3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "pieces so in positions where you have this kind of pawn chain with a pawn on e5 and upon d4 you usually want to make sure that you can play c3 in the event that black plays c5 okay"
+  },
+  {
+   "ply": 6,
+   "t": 1169,
+   "line": [
+    "Nc3",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": "but that's not that's a secondary thing the primary thing is that i want to keep the center as open as possible uh so remember"
+  },
+  {
+   "ply": 7,
+   "t": 1177.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 4",
+   "said": "you don't always have to react to some sort of move by your opponent you can just continue developing you can do nothing okay uh and hopefully that makes sense guys we took c3 to defend the pawn and h4 to set up the greek gift sacrifice okay ready for the next game guys let's go m d bar mbdar let's go with a sitilian let's go with an accelerated dragon okay so he goes c4 which is a move it's a rare move what is the prop what is the uh drawback of this move what is the drawback of this move it's 2 am d4 is weak let's go knight c6 how should we develop our pieces to maximally emphasize our control and cement rather our control over the d4 score where should this bishop go should it go on um on e7 or should it go somewhere else so d6 e5 ladies and gentlemen would be counterproductive because it would"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 6,
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "d4",
+    "c6",
+    "e4",
+    "e6",
+    "Nc3",
+    "d5"
+   ],
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 588.5,
+     "continuation": "Nf3 dxe4",
+     "said": "this down sorry why it's not a great move should we take on d5 definitely not because that allows him to recapture and vacates the natural development square for the knights we're going to do nothing and he takes great look at how nice our knights are where should we put this bishop should we put it on c4 what do you guys think d3 absolutely we shouldn't put it on c4 then it would be biting at granite knight f6 now we can take the knight we can also not take the knight it doesn't really matter we can drop the knight to g3 or we could support it with queen e2 there's a lot of ways to do this let's play it very simple just take it and um how should we solidify this pawn what would be the best way of solidifying this part i remember the key principle which i always share which is that uh you want the piece of least value to do a particular task so you have a choice between bishop e3 and c3 which be should you delegate the task of defending upon it certainly we should be the pawn building up a nice pawn chain now black's bishop is very weak now i want to introduce you guys to a version of the greek gift sacrifice which a lot of people are not aware of now the greek gift sacrifice i won't talk about"
+    },
+    {
+     "san": "e5",
+     "t": 1074.5,
+     "continuation": "e5",
+     "said": "and then you can either place a bishop on this diagonal or a queen and defend the h7 pawn okay hopefully that makes sense now the only thing i wanted to point out here is why the movie five is bad it's not that it's bad it's just that black has already spent three moves moving his pawns so from a purely logical perspective we want to keep the center as open as possible and e5 closes it up which lessens the impact of black making crappy moves in the opening the second thing that um that i want you guys to notice is this this is a pawn chain do does black usually well not just black but uh when when your opponent is a pawn chain do you want to attack the tip of the pawn chain or the base of the pawn chain usually by nimzovich's principle now not always but generally the base now what can you tell me about the can black attack the base of the pawn chain can black attack the base of the pawn chain and if so how yes with c5 and here is the problem in such positions white wants to be able to play c3 in order to defend the base of the pawn chain here believe it or not"
+    }
+   ]
+  },
+  {
+   "ply": 17,
+   "fen": "rnbq1rk1/pp3ppp/2p1pb2/8/3P3P/2PB1N2/PP3PP1/R1BQK2R b KQ - 0 9",
+   "line": [
+    "d4",
+    "c6",
+    "e4",
+    "e6",
+    "Nc3",
+    "d5",
+    "Nf3",
+    "dxe4",
+    "Nxe4",
+    "Be7",
+    "Bd3",
+    "Nf6",
+    "Nxf6+",
+    "Bxf6",
+    "c3",
+    "O-O",
+    "h4"
+   ],
+   "options": [
+    {
+     "san": "b6",
+     "t": 678,
+     "continuation": "b6",
+     "said": "in preparation for the great gift sacrifice and this is a attacking technique that everybody should be familiar with h4 let's see if he can let's see if he actually spots nope beautiful guys this is our first greek gift sacrifice bishop takes h7 and i'm going to do some interesting research after the game knight g5 now what was the purpose of h4 if he takes on g5 what are we going to take with of course we're going to take with a pawn now you guys might be like whoa whoa but but he's taking our knight what are we gonna attack with well if you look if he would have taken we would have taken with a pawn and then the queen would have combined with a rook to deliver decisive threats down the h file we have checkmate in three moves here or like four moves something like that three moves we have we have two choices we can go h5 and we can send the king onto a square where it can be discovered by the knight but even better is to go queen to d3 uh because if he goes king h6 we don't even need to deliver a discovered check we can simply checkmate him on h7 now he goes king h5 we need to reason logically if we can find a way to send his king"
+    },
+    {
+     "san": "h6",
+     "t": 880,
+     "continuation": "h6",
+     "said": "yes now um a couple of you might ask after h4 now let's say that black sniffs this out and goes h6 can anybody propose now a um a way that we can start to develop the attack on the king side there's actually two possible moves and then we'll dial it back and i'll explain why not e5 in the opening so knight g5 is possible but he can actually not take the knight he'll just ignore the knight so the first is to attack with a pawn now the pawn on h6 is what's called a hook a hoke is a pawn that has moved from its original spot and is located near the king a hook can be used by your pawns or by your pieces to open up the king side easy in an easier way and you can do that by simply advancing to g5 okay uh so that's number one number two is called building a battery and you can do that by playing bishop c2 followed by queen to d3 now why is the inclusion of h4h6 in white's favor watch let's say that black develops his knight and you go queen d3"
+    },
+    {
+     "san": "g6",
+     "t": 1009,
+     "continuation": "g6",
+     "said": "um black's position is already very bad but i would probably let me think hmm yeah no this position is uh very very bad for like maybe g6 i don't know no black's position is extremely difficult folks there is one thing you can try there's a trap you can set you can try to go queen to d5 and what is the purpose of this move let's imagine the y now takes on h7 plays knight g5 king g8 and how is the uh the greek gift usually followed up in this position obviously green h5 and why did i put a queen on d5 can anybody tell me what is the purpose of queen d5 what move does black now have this is often missed in greek gift sacrifices the fact that you can actually defend the square on h7 you can play queen to f5 and then black screen comes around to g6 and the attack evaporates so that's actually a way that you can defend against the great gift you can allow the knight to get to g5 and the queen to h5 and then you can either place a bishop on this diagonal or a queen and defend the h7 pawn okay hopefully"
+    },
+    {
+     "san": "Qd5",
+     "t": 1017,
+     "continuation": "Qd5",
+     "said": "very bad for like maybe g6 i don't know no black's position is extremely difficult folks there is one thing you can try there's a trap you can set you can try to go queen to d5 and what is the purpose of this move let's imagine the y now takes on h7 plays knight g5 king g8 and how is the uh the greek gift usually followed up in this position obviously green h5 and why did i put a queen on d5 can anybody tell me what is the purpose of queen d5 what move does black now have this is often missed in greek gift sacrifices the fact that you can actually defend the square on h7 you can play queen to f5 and then black screen comes around to g6 and the attack evaporates so that's actually a way that you can defend against the great gift you can allow the knight to get to g5 and the queen to h5 and then you can either place a bishop on this diagonal or a queen and defend the h7 pawn okay hopefully that makes sense now the only thing i wanted to point out here is why the movie five is bad it's not that it's bad it's just that"
+    }
+   ]
+  },
+  {
+   "ply": 18,
+   "fen": "rnbq1rk1/pp3pp1/2p1pb1p/8/3P3P/2PB1N2/PP3PP1/R1BQK2R w KQ - 0 10",
+   "line": [
+    "d4",
+    "c6",
+    "e4",
+    "e6",
+    "Nc3",
+    "d5",
+    "Nf3",
+    "dxe4",
+    "Nxe4",
+    "Be7",
+    "Bd3",
+    "Nf6",
+    "Nxf6+",
+    "Bxf6",
+    "c3",
+    "O-O",
+    "h4",
+    "h6"
+   ],
+   "options": [
+    {
+     "san": "Ng5",
+     "t": 897.5,
+     "continuation": "Ng5",
+     "said": "a way that we can start to develop the attack on the king side there's actually two possible moves and then we'll dial it back and i'll explain why not e5 in the opening so knight g5 is possible but he can actually not take the knight he'll just ignore the knight so the first is to attack with a pawn now the pawn on h6 is what's called a hook a hoke is a pawn that has moved from its original spot and is located near the king a hook can be used by your pawns or by your pieces to open up the king side easy in an easier way and you can do that by simply advancing to g5 okay uh so that's number one number two is called building a battery and you can do that by playing bishop c2 followed by queen to d3 now why is the inclusion of h4h6 in white's favor watch let's say that black develops his knight and you go queen d3 you're threatening checkmate on h7 black is only one plausible way to defend against this which is what well black technically has two ways but really only one way to stop the queen from coming to h7 that is the move g6 but here's the thing look at this pawn very carefully guys we"
+    },
+    {
+     "san": "g4",
+     "t": 904,
+     "continuation": "g4",
+     "said": "explain why not e5 in the opening so knight g5 is possible but he can actually not take the knight he'll just ignore the knight so the first is to attack with a pawn now the pawn on h6 is what's called a hook a hoke is a pawn that has moved from its original spot and is located near the king a hook can be used by your pawns or by your pieces to open up the king side easy in an easier way and you can do that by simply advancing to g5 okay uh so that's number one number two is called building a battery and you can do that by playing bishop c2 followed by queen to d3 now why is the inclusion of h4h6 in white's favor watch let's say that black develops his knight and you go queen d3 you're threatening checkmate on h7 black is only one plausible way to defend against this which is what well black technically has two ways but really only one way to stop the queen from coming to h7 that is the move g6 but here's the thing look at this pawn very carefully guys we can capture it not only can we capture that pawn we can use the h-bond as a battering ram"
+    }
+   ]
+  }
+ ]
+}

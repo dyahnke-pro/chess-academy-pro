@@ -1,0 +1,300 @@
+{
+ "videoId": "e4sg69QooO0",
+ "title": "Master Class | Central Control | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 794.5,
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "it's less about knowing when he's created a weakness and more about how to attack that weakness or whether it's significant let's play the next game the world and the wife 880 so we've been playing the karo khan as a solid"
+  },
+  {
+   "ply": 3,
+   "t": 798,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "opening choice for a couple of games now that's not the only opening that we're"
+  },
+  {
+   "ply": 4,
+   "t": 799.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "going to play let's see how this guy handles it a lot of people take here"
+  },
+  {
+   "ply": 5,
+   "t": 807,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "beginners like to discharge the tension in the center but he's like c3 okay so he's playing playing the main line"
+  },
+  {
+   "ply": 6,
+   "t": 812.5,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": "all right so let's take this is theory"
+  },
+  {
+   "ply": 7,
+   "t": 816.5,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3PN3/8/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "and now there are three main moves right there's bishop f5 there's knight d7 and there's knight to f6 knight to f6"
+  },
+  {
+   "ply": 8,
+   "t": 833.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "is a very solid move and it's one that highlights how to play with a slightly deficient pawn structure so and it's also very popular nowadays knight f6 used to be the least popular of the three"
+  },
+  {
+   "ply": 9,
+   "t": 841.5,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/5P2/PPP3PP/R1BQKBNR b KQkq - 0 5",
+   "said": "now it's arguably the most popular or maybe equally as popular as bishop f5 so f3 by my opponent he's trying to hold the knight in the center but that's not a good move and uh that's not a good move because it's too early to weaken the king all right now we can take the knight and play e5 i'll show that after the game"
+  },
+  {
+   "ply": 10,
+   "t": 867,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "rn1qkb1r/pp2pppp/2p2n2/5b2/3PN3/5P2/PPP3PP/R1BQKBNR w KQkq - 1 6",
+   "said": "but because we're playing very solid chess let's instead focus on development now what developing move seems natural here yeah bishop f5 is very good because we're we're putting pressure on the knight and developing our bishop and one might argue that well why am i not exploiting the weakness of created"
+  },
+  {
+   "ply": 11,
+   "t": 883.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rn1qkb1r/pp2pppp/2p2n2/5b2/2BPN3/5P2/PPP3PP/R1BQK1NR b KQkq - 2 6",
+   "said": "by three it's not about exploiting any immediate it's not a race he's going to pay the price for f3 later all right now we're going to focus on development bishop c4 okay so that's actually an interesting move because he's allowing us to take the pawn but taking the pawn is a little bit risky from a development standpoint it opens up the f file so believe it or not i'm actually not a huge fan of up taking on e4 and that's a pretty high level concept um and let me write this down i will expand on this after the game but the bottom line is i'm a little bit worried that he's going to get compensation down the f-file i would do it in a real game of mine but we're focusing on development so instead we're going to continue developing now this bishop we're going to blunt by playing e6 but not immediately first let's deal with this knight because if we play e6 and he takes on f6 he might force our queen to come out early and i don't really like like that"
+  },
+  {
+   "ply": 12,
+   "t": 942,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r2qkb1r/pp1npppp/2p2n2/5b2/2BPN3/5P2/PPP3PP/R1BQK1NR w KQkq - 3 7",
+   "said": "so instead um where should this knight go and i'm not giving you guys a big big choice now bd7 i know some players who are sort of allergic to putting their knights here but in the karo khan"
+  },
+  {
+   "ply": 13,
+   "t": 952.5,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "r2qkb1r/pp1npppp/2p2n2/5bN1/2BP4/5P2/PPP3PP/R1BQK1NR b KQkq - 4 7",
+   "said": "it's one of the drawbacks right of playing c6 is you take the square from them but this arrangement of knights is really good knight g5 is is a fine move he's threatening checkmate"
+  },
+  {
+   "ply": 14,
+   "t": 961,
+   "line": [
+    "e6"
+   ],
+   "fen": "r2qkb1r/pp1n1ppp/2p1pn2/5bN1/2BP4/5P2/PPP3PP/R1BQK1NR w KQkq - 0 8",
+   "said": "let's not mouselift but now we of course play e6 to blunt the bishop with the perfect chance to play e6"
+  },
+  {
+   "ply": 15,
+   "t": 967,
+   "line": [
+    "d5"
+   ],
+   "fen": "r2qkb1r/pp1n1ppp/2p1pn2/3P1bN1/2B5/5P2/PPP3PP/R1BQK1NR b KQkq - 0 8",
+   "said": "my opponent's intentions are are good he's trying to open up the position and attack but he"
+  },
+  {
+   "ply": 16,
+   "t": 984,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r2qkb1r/pp1n1ppp/4pn2/3p1bN1/2B5/5P2/PPP3PP/R1BQK1NR w KQkq - 0 9",
+   "said": "doesn't have enough pieces in in the action to do it so he's just wandering the pawn i mean d5 is our best defended square yeah we take toward the center there's no reason to take with the e pawn or with the knight we take toward the center and we also open up the c file maybe"
+  },
+  {
+   "ply": 17,
+   "t": 993,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r2qkb1r/pp1n1ppp/4pn2/1B1p1bN1/8/5P2/PPP3PP/R1BQK1NR b KQkq - 1 9",
+   "said": "later we'll want to put a rook on c if he plays bishop b5 given the type of player he is yeah i was gonna say this is likely and we've had this concept in many games now if you've done the puzzle battle"
+  },
+  {
+   "ply": 18,
+   "t": 1008.5,
+   "line": [
+    "Qa5+"
+   ],
+   "fen": "r3kb1r/pp1n1ppp/4pn2/qB1p1bN1/8/5P2/PPP3PP/R1BQK1NR w KQkq - 2 10",
+   "said": "and you've done the puzzle rush bishop is undefended king is uncastled boom winning the bishop winning the game so you'll see people miss this tactic all the time keep your eyes peeled specifically for this tactic specifically for this tactic because it's missed so often at all level even at my level it's missed"
+  },
+  {
+   "ply": 7,
+   "t": 1035.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3PN3/8/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "because it's just not you know it's not instinctive to look for this kind of stuff you don't assume that you can have uh a game-winning tactic shortly so anyways um let's quickly go over that yeah so knight f6 is called the"
+  },
+  {
+   "ply": 8,
+   "t": 1039,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "tartakower variation after french russian master seville targauer was a grand master i lived a long and sort of adventurous life uh and he he's known for a lot of his like witty sayings you know like the the person who wins is the one who makes the second to last mistake and all that kind of stuff so in this position a little bit of chess history especially all right so this position first arose in 1888 in a game of kurd bombard 11 who lost a"
+  },
+  {
+   "ply": 7,
+   "t": 1092.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3PN3/8/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "famous game to steinis and the first people to play this play bishop f5 the first person to play knight f6 was caro horatio caro i assume after from the karaoke on his name but there's actually confusingly there's more than one caro"
+  },
+  {
+   "ply": 8,
+   "t": 1097.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "who played the karo khan but horatio cairo played knight f6 i think that's whom the karo khan is named after and yeah so karo played knight f6 and he was one of the earl one of the earliest people to do that so here's something interesting guys horatio caro played knight f6 in 1898 then he played it again in 1905 and the only other person to play it around that time frame was aaron"
+  },
+  {
+   "ply": 10,
+   "t": 1137,
+   "line": [
+    "Nxf6+",
+    "exf6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2p2p2/8/3P4/8/PPP2PPP/R1BQKBNR w KQkq - 0 6",
+   "said": "nimsevich and the reason that is the case in my estimation yeah i think he was british is because people didn't want to double their pawns in the late 1800s right positional chess wasn't that advanced thank you and it was only a couple of people ahead of their time who understood that there was more to"
+  },
+  {
+   "ply": 8,
+   "t": 1158,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "the picture than just the pawn structure but if you were joe you know joe schmoe chess player in the late 1800s you were taught that you know the positional chess wasn't non-existent but why would you double pawns without any provocation so nimzovich who wrote my system"
+  },
+  {
+   "ply": 10,
+   "t": 1176.5,
+   "line": [
+    "Nxf6+",
+    "exf6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2p2p2/8/3P4/8/PPP2PPP/R1BQKBNR w KQkq - 0 6",
+   "said": "was far more advanced positionally than his peers so he played that f6 anyways um i don't want to talk too much about this we're going to have this many many times throughout the speed run but let me explain and you guys already know that i've claimed again and again that pawn structure is not the most important factor in most positions for beginners and intermediate players and particularly one set of double pawns in the middle game is rarely going to be the reason that you lose the game or the reason that the evaluation is what it is but in addition this particular pair of double pawns is actually very healthy because this pawn on f6 consider the pawn highlighted in in blue and then the pawn highlighted in in red well i'm not highlighting a pun in red or in green it says to use green this pawn on f6 is controlling these two squares and then this pawn controls this square and that's a lot of central squares to control and this pawn on f6 is super annoying in addition there's the concept of shedding the skin i call this shedding the skin um this pawn on f5 let's assume that you use it as a battering ram right and you push it all the way to f3 when my coach first told me this i was kind of mind blown even after you do that and even if you castle short you're going to be left with a fully intact kingside pawn structure so you can often attack in this line after having castled on the same side that you're attacking and not suffer any consequences in terms of your pawn"
+  },
+  {
+   "ply": 11,
+   "t": 1272,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2p2p2/8/3P4/2P5/PP3PPP/R1BQKBNR b KQkq - 0 6",
+   "said": "structure so that's another team we haven't looked at a single line yet but i hope i'm explaining some of the motivation behind it the theory here is very complex this line is super popular now white has even developed some lines where he castles queenside which uh wasn't a thing for a long time"
+  },
+  {
+   "ply": 12,
+   "t": 1279,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "rnbqk2r/pp3ppp/2pb1p2/8/3P4/2P5/PP3PPP/R1BQKBNR w KQkq - 1 7",
+   "said": "so c3 bishop d6 if you watch magnus carlsen games you'll"
+  },
+  {
+   "ply": 13,
+   "t": 1280,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqk2r/pp3ppp/2pb1p2/8/3P4/2PB4/PP3PPP/R1BQK1NR b KQkq - 2 7",
+   "said": "see this line happen all the time white quickly piles up on the h-bun black gives a check white covers it and this move h5 has seen a resurgence recently it looks pretty wild but that's kind of what i mean these pawns offer pretty good protection for the king"
+  },
+  {
+   "ply": 8,
+   "t": 1308,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "so in term in the event of a castle you can actually push the spawn at h4 and use this pawn in order to weaken white's king's side galway man thank you for the tier one so i'm not going to delve any deeper into this i don't want to bore people to death gtx f6 is also a move"
+  },
+  {
+   "ply": 10,
+   "t": 1310.5,
+   "line": [
+    "Nxf6+",
+    "gxf6"
+   ],
+   "fen": "rnbqkb1r/pp2pp1p/2p2p2/8/3P4/8/PPP2PPP/R1BQKBNR w KQkq - 0 6",
+   "said": "but this is considered significantly"
+  },
+  {
+   "ply": 9,
+   "t": 1315.5,
+   "line": [],
+   "fen": "rnbqkb1r/pp2pppp/2p2N2/8/3P4/8/PPP2PPP/R1BQKBNR b KQkq - 0 5",
+   "said": "more dubious anyways he plays f3 and uh bishop f5 is our move we also could have taken and gone e5 the idea is to open up the pathway for the queen to h4 so in the event of d take c5 queen h4 white is in big trouble um and like i said the reason we won't delve as deeply is because a little bit later when we get to maybe 13 1400 people will go into the main lines so we'll talk about the theory then remember that the motivation here is to talk about stuff that's valuable mostly to the rating of which i'm currently at so this is also good for black but we decided to play it solid and there's a very famous trap where white plays queen e2 and he threatens checkmate on d6 i'm sure you guys have seen this before so here for example we should still play e6 in order to cover that square um yeah can you explain the knight d2 versus e6 mover i'm not sure what you mean can you can you spell that out yeah so"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 8,
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Nf6"
+   ],
+   "options": [
+    {
+     "san": "f3",
+     "t": 841.5,
+     "continuation": "f3",
+     "said": "deficient pawn structure so and it's also very popular nowadays knight f6 used to be the least popular of the three now it's arguably the most popular or maybe equally as popular as bishop f5 so f3 by my opponent he's trying to hold the knight in the center but that's not a good move and uh that's not a good move because it's too early to weaken the king all right now we can take the knight and play e5 i'll show that after the game but because we're playing very solid chess let's instead focus on development now what developing move seems natural here yeah bishop f5 is very good because we're we're putting pressure on the knight and developing our bishop and one might argue that well why am i not exploiting the weakness of created by three it's not about exploiting any immediate it's not a race he's going to pay the price for f3 later all right now we're going to focus on development bishop c4 okay so that's actually an interesting move because he's allowing us to take the pawn but taking the pawn is a little bit risky from a development standpoint it opens up the f file so believe it or not i'm actually not a huge fan of up taking on e4"
+    },
+    {
+     "san": "Nxf6+",
+     "t": 1137,
+     "continuation": "Nxf6+ exf6",
+     "said": "nimsevich and the reason that is the case in my estimation yeah i think he was british is because people didn't want to double their pawns in the late 1800s right positional chess wasn't that advanced thank you and it was only a couple of people ahead of their time who understood that there was more to the picture than just the pawn structure but if you were joe you know joe schmoe chess player in the late 1800s you were taught that you know the positional chess wasn't non-existent but why would you double pawns without any provocation so nimzovich who wrote my system was far more advanced positionally than his peers so he played that f6 anyways um i don't want to talk too much about this we're going to have this many many times throughout the speed run but let me explain and you guys already know that i've claimed again and again that pawn structure is not the most important factor in most positions for beginners and intermediate players and particularly one set of double pawns"
+    }
+   ]
+  }
+ ]
+}

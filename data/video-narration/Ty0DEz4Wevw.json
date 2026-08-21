@@ -1,0 +1,444 @@
+{
+ "videoId": "Ty0DEz4Wevw",
+ "title": "Double Dose of Speedrun! | Queens Gambit Accepted | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 621.5,
+   "line": [
+    "c4",
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "nice trap in the Vienna that you should be aware of. Okay, we have another black game. So maybe Arty will get his wish. No. Okay. So, so we'll play the Queen's Gamma Decline structure, which I promised to do. We'll play Queen's Gamma Declines, which is E6, of course. And one of the good things about being a Queen's Gamma Decline player is that you don't really need to study the English. That's a huge"
+  },
+  {
+   "ply": 3,
+   "t": 638.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/2P5/5N2/PP1PPPPP/RNBQKB1R b KQkq - 1 2",
+   "said": "huge benefit, right? It's it just cuts the amount of work you have to do because you can play E6. And white has ways of avoiding the Queen's Gamma"
+  },
+  {
+   "ply": 4,
+   "t": 639.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2P5/5N2/PP1PPPPP/RNBQKB1R w KQkq - 0 3",
+   "said": "decline, but not many of them. Most of the time, you find English players end"
+  },
+  {
+   "ply": 5,
+   "t": 646,
+   "line": [
+    "g3"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2P5/5NP1/PP1PPP1P/RNBQKB1R b KQkq - 0 3",
+   "said": "up going D4. White can the only Yeah. So, white plays this uh in the sort of traditional English manner. This is really the only way of doing that."
+  },
+  {
+   "ply": 6,
+   "t": 659.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2P5/5NP1/PP1PPP1P/RNBQKB1R w KQkq - 1 4",
+   "said": "There's a high probability of transposition to the Catalan. So, if white plays d4 at any moment now, we get a Catalan. If white plays this with B3,"
+  },
+  {
+   "ply": 7,
+   "t": 664,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3P4/8/5NP1/PP1PPP1P/RNBQKB1R b KQkq - 0 4",
+   "said": "then we get a more traditional English reverse Benoni structure. But again,"
+  },
+  {
+   "ply": 8,
+   "t": 668,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/8/5NP1/PP1PPP1P/RNBQKB1R w KQkq - 0 5",
+   "said": "white takes on D5 prematurely. This is a bad move. This releases the central tension. It gives us a better control of the center and it's completely and"
+  },
+  {
+   "ply": 9,
+   "t": 678.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3p4/3P4/5NP1/PP2PP1P/RNBQKB1R b KQkq - 0 5",
+   "said": "totally toothless. So I feel like people at this level who play this stuff still aren't fully, you know, still don't fully comprehend the reason behind this opening D4. Okay, so we need to figure out how to position our minor pieces. And there is not one correct answer here. There is multiple ways of"
+  },
+  {
+   "ply": 11,
+   "t": 703.5,
+   "line": [
+    "Bd6",
+    "Bg2"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/3b1n2/3p4/3P4/5NP1/PP2PPBP/RNBQK2R b KQkq - 2 6",
+   "said": "developing, but I am very partial I'm very partial to putting this bishop on D6. I like putting it on D6 and then following up sort of London system style with the move C6 just like we did in the previous game. Now, we don't need to play C6 immediately. We can castle"
+  },
+  {
+   "ply": 12,
+   "t": 708.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp2ppp/3b1n2/3p4/3P4/5NP1/PP2PPBP/RNBQK2R w KQ - 3 7",
+   "said": "first. Let's castle first. It doesn't really matter what order you do things in here. This isn't a Najdorf. This"
+  },
+  {
+   "ply": 13,
+   "t": 717,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp2ppp/3b1n2/3p4/3P4/5NP1/PP2PPBP/RNBQ1RK1 b - - 4 7",
+   "said": "isn't a sharp opening. You can do stuff in many, many different move orders. And now I like the move C6. Just look at how"
+  },
+  {
+   "ply": 14,
+   "t": 719,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/2pb1n2/3p4/3P4/5NP1/PP2PPBP/RNBQ1RK1 w - - 0 8",
+   "said": "nice this looks. C6 D5. We've got a bishop in the middle there. Now, where should the light squareed bishop go? Start thinking about that. And should it stay on C8? Maybe we should go knight BD7. And if it should develop, where should it go? F5, G4, E6. Which square are you partial to? Well, if you're a London system player, then you should already be biased toward F5. Yeah, bishop F5 is where we want to put it. White prevents it with queen C2. Okay, that's not a problem. Now, we have a certain we have a pretty radical move. We can play G6 and prepare bishop F5. But obviously obviously G6 is very weakening, especially because we're not fenettoed on G6. So bishop G6 is interesting. I don't think it's a terrible move, but here's my proposal. Let's start by playing a very flexible move. Let's see how white positions his pieces and then we will decide how we, you know, what we do. So what's an example of a flexible move? A move that we know for a fact is going to be helpful is rook E8. We know that this move is not going to hurt us. How do we know that? Well, the rook is just good on E8. We're also preventing knight to E5, which in some situations followed by"
+  },
+  {
+   "ply": 17,
+   "t": 803.5,
+   "line": [
+    "Nc3",
+    "Re8",
+    "Qc2"
+   ],
+   "fen": "rnbqr1k1/pp3ppp/2pb1n2/3p4/3P4/2N2NP1/PPQ1PPBP/R1B2RK1 b - - 3 9",
+   "said": "F4 is quite annoying. Now, I want to show you guys a very typical maneuver that uh allows us to get this bishop onto this diagonal without playing G6, which I really don't want to play. So, we first play bishop G4 and then we swing the bishop around from H5. And we don't need to do this immediately. The bishop is quite happy on G4. But white has played H3. We drop the bishop back and then we're really happy if we can get it to G6. Does that make sense? That is an idea I'm sure that some of you have seen before. I will show you an example of something very, very similar in a classical Alakine game afterwards. But also remember that we can stay on H5 for a while. We don't need to automatically go bishop G6 immediately. In fact, we're not going to. We're going to stay flexible here. What should we do? Now, I'm sure that some of you are tempted to play H6 here, which is a completely fine move, but I would not like to uh take on F6 with the queen. I would like the queen to be able to access the other side of the board if necessary. So, let's go knight BD7 as we have planned. And on the next move, we uh might very seriously consider the move H6. So, white plays A3. Now, it is quite clear that white is preparing to expand on the queen side with B4. That is not a particularly scary idea given how white has positioned his pieces. So, I'm going to make an interesting point to you guys. I 99% of people here would play A5 automatically. But what I want to show you is that you can allow B4 in these types of positions and then play the move A6 and freeze that pawn in place. And it's actually not not that great for white. So, we're going to ignore that idea entirely and we're going to play the move H6, forcing this bishop to decide. I I'm anticipating bishop takes F6. Okay, bishop E3 is a blunder. Why is it a blunder? This is a common idea. I can't tell you how much this is missed. So the bishop on E3, what what can you tell me about it? Well, any contact between two pieces is something I've told you to notice. If you notice this contact, you say, well, what is defending the bishop? Oh, it's the pawn on F2. What else is the pawn on F2 defending? Ah, it's defending the G3 pawn. It is overloaded. It's overloaded. Now, white has a counter desperado with bishop takes H6. I am hoping that our opponent plays it because we have a very instructive response to that move. Hopefully the logic makes sense. Okay, he takes. Unfortunately, I'll show this after the game. We take on E3. We are in fantastic shape here. Our next move is very likely to be queen D8 to E7 in order to increase our control of the D5. But oh, actually we have a better move I think. So rather than going to E7, right? Rather than going to E7, where else can we go with the queen? What else exists? What are the other options? Yeah, I think queen C7. I think queen C7 is a nice looking move because we're hitting white where it hurts on G3. And we are preparing to double rooks with rook A to E8. Oh, well, now we're definitely going to double rooks. Actually, wait a second. If we want to end the game, we would play bishop G6 here. if we want to try to end the game quickly. But we're gonna play rook A8 instead. We're gonna we're gonna take this slow because the reason I was saying bishop G6 is a tricky move is because queen D2 would have blundered. Okay. Whoa. Oh my lands. There's some cool stuff going on here. Wait a second. Oh, I think it's time for tactics, ladies and gentlemen. I think the time has come. Actually, maybe maybe we can just drop the rook back to E7. There are interesting tactics here, but I'm not totally convinced that it's worth going for them. And I'm going to be super annoying because yeah, I'm Look, I'm thinking about knight E4 check. The problem with knight E4 check is not that white takes the rook on E3. That's winning. I I admit that that's winning. Thank you. I need a drink. The problem with knight E4 check is that white goes king G1. And then somehow the rook on E3 is actually trapped. So it's not so easy there to to prove full compensation for the exchange. And it's not necessary. But but what is the point of this speed? The point of this speed is to show you how I would play in these situations. And I've said this before, I will say it again. If you want to be a sacrificial attacking player, I think the biggest hallmark of people like Tall, you know, and Morphe, those players, is that they know when to play it simple, right? They know in which situations just to play a simple move and win the game without adventures and wrap it up. Because if you're always going for the brilliancancy prize and you're always going for the cool moves, then you're going to leave a lot of points on the table through unnecessary sacrifices and moves that you know you shouldn't be playing. Look at this. This is so much easier. Just queen takes G3 and uh this is game over. I mean that's a second pawn. We have a rook lift to G6 coming up. Okay, now we have a winning sequence. We have a two move sequence that wins the game immediately. Who can find it? Who can find it? It's very simple. I mean, it's just boom boom. Just boom, boom. Very good. Shrew master astronaut. So, it's all about order of operations here. Yeah, we can do it in either order, but the best order is to play knight takes F2 first and then after rook takes F3 to play bishop takes F3. Um, it's actually quite a bit more accurate than bishop takes F3, which a lot of you guys were suggesting. Uh, because I'll show this after the game. This is less accurate. This is more accurate. The game is over because white cannot capture the bishop in any of the three ways. This is illegal. This blunders the rook and this blunders the rook. Okay, now let's finish white off. Let's not give white any breathing room at all. And if you want to do that, then what is the most decisive move here? What is the most decisive move? Let's go. Rook takes C2. Rook takes E2 is crushing because if white plays rook takes F3, you say, well, white's counterattacking the queen. Don't forget that the bishop on G2 is going to be hanging with checkmate. We take on E2"
+  },
+  {
+   "ply": 3,
+   "t": 1197.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/2P5/5N2/PP1PPPPP/RNBQKB1R b KQkq - 1 2",
+   "said": "and we win the game. Easy, easy, easy, easy. And very passive play by white. Very, very, very passive. I don't know who recommended this repertoire to white, but it's not a good one. So C4"
+  },
+  {
+   "ply": 2,
+   "t": 1200.5,
+   "line": [],
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "E6. So white decided to start by playing"
+  },
+  {
+   "ply": 5,
+   "t": 1203,
+   "line": [
+    "g3",
+    "d5",
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2P5/5NP1/PP1PPP1P/RNBQKB1R b KQkq - 1 3",
+   "said": "this like an English. Now once again D4"
+  },
+  {
+   "ply": 7,
+   "t": 1207,
+   "line": [
+    "Nf6",
+    "d4"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2PP4/5NP1/PP2PP1P/RNBQKB1R b KQkq - 0 4",
+   "said": "in this position would lead us into a Catalan. And I would say the Catalan is like super unpopular below 22 2300. It's not that you can't study it if you're like 16,700, but I wouldn't recommend it to anybody under 2200 really because of how complex it is, because of how much theory there is. You have to be okay playing down a pawn for long periods of"
+  },
+  {
+   "ply": 6,
+   "t": 1241.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2P5/5NP1/PP1PPP1P/RNBQKB1R w KQkq - 2 4",
+   "said": "time, which is not an easy skill. So, I wouldn't really recommend the Catalin to anybody. Um, okay. C takes D5 is just really bad. If white wants to play this like an English, the way to do that is"
+  },
+  {
+   "ply": 7,
+   "t": 1245.5,
+   "line": [
+    "Bg2"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQK2R b KQkq - 3 4",
+   "said": "to play bishop G2. Now, black can take on C4 in any of these positions. And"
+  },
+  {
+   "ply": 8,
+   "t": 1252.5,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQK2R w KQkq - 4 5",
+   "said": "that's a legitimate sideline. The most popular move is to play this like a queen's gamma declined. Bishop E7"
+  },
+  {
+   "ply": 10,
+   "t": 1257.5,
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQ1RK1 w - - 6 6",
+   "said": "castles. castle. Now again, D4 is a"
+  },
+  {
+   "ply": 11,
+   "t": 1260,
+   "line": [
+    "b3"
+   ],
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2P5/1P3NP1/P2PPPBP/RNBQ1RK1 b - - 0 6",
+   "said": "Catalan, but B3 is like the traditional English way of playing it. And in this"
+  },
+  {
+   "ply": 12,
+   "t": 1266.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/8/2Pp4/1P3NP1/P2PPPBP/RNBQ1RK1 w - - 0 7",
+   "said": "position, black has a gazillion moves. You can play this like a Benoni with D4,"
+  },
+  {
+   "ply": 13,
+   "t": 1270,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/8/2Pp4/1P2PNP1/P2P1PBP/RNBQ1RK1 b - - 0 7",
+   "said": "and then you get a Benoni structure, E3,"
+  },
+  {
+   "ply": 14,
+   "t": 1271,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbq1rk1/pp2bppp/4pn2/2p5/2Pp4/1P2PNP1/P2P1PBP/RNBQ1RK1 w - - 0 8",
+   "said": "C5. I played this with white. You can"
+  },
+  {
+   "ply": 11,
+   "t": 1273.5,
+   "line": [],
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2P5/1P3NP1/P2PPPBP/RNBQ1RK1 b - - 0 6",
+   "said": "play this more sort of queen's gambity"
+  },
+  {
+   "ply": 12,
+   "t": 1277,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbq1rk1/pp2bppp/4pn2/2pp4/2P5/1P3NP1/P2PPPBP/RNBQ1RK1 w - - 0 7",
+   "said": "with C5. You can play the move A5, which"
+  },
+  {
+   "ply": 11,
+   "t": 1283,
+   "line": [],
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2P5/1P3NP1/P2PPPBP/RNBQ1RK1 b - - 0 6",
+   "said": "was pretty popular until recently. I mean, there's a ton of moves here. Even"
+  },
+  {
+   "ply": 12,
+   "t": 1284,
+   "line": [
+    "b6"
+   ],
+   "fen": "rnbq1rk1/p1p1bppp/1p2pn2/3p4/2P5/1P3NP1/P2PPPBP/RNBQ1RK1 w - - 0 7",
+   "said": "B6 is very solid, like a Queen's Indian."
+  },
+  {
+   "ply": 11,
+   "t": 1287,
+   "line": [],
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2P5/1P3NP1/P2PPPBP/RNBQ1RK1 b - - 0 6",
+   "said": "This is about equal, but it's a very"
+  },
+  {
+   "ply": 10,
+   "t": 1288,
+   "line": [],
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQ1RK1 w - - 6 6",
+   "said": "interesting. You can play this line."
+  },
+  {
+   "ply": 14,
+   "t": 1289.5,
+   "line": [
+    "Re1",
+    "Re8",
+    "Kh1",
+    "Kh8"
+   ],
+   "fen": "rnbqr2k/ppp1bppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQR2K w - - 10 8",
+   "said": "This line is this line is cool. Uh but but CD5 is is totally toothless. It's"
+  },
+  {
+   "ply": 18,
+   "t": 1296,
+   "line": [
+    "cxd5",
+    "Bf8",
+    "Bf1",
+    "exd5"
+   ],
+   "fen": "rnbqrb1k/ppp2ppp/5n2/3p4/8/5NP1/PP1PPP1P/RNBQRB1K w - - 0 10",
+   "said": "it's it yields the center. It gives our bishop the chance to develop and white"
+  },
+  {
+   "ply": 20,
+   "t": 1301.5,
+   "line": [
+    "d4",
+    "Bd6"
+   ],
+   "fen": "rnbqr2k/ppp2ppp/3b1n2/3p4/3P4/5NP1/PP2PP1P/RNBQRB1K w - - 1 11",
+   "said": "is just slightly worse here probably if anything."
+  },
+  {
+   "ply": 14,
+   "t": 1306.5,
+   "line": [],
+   "fen": "rnbqr2k/ppp1bppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQR2K w - - 10 8",
+   "said": "So bishop G2 castles castles. We play C6. I hope that this setup makes sense."
+  },
+  {
+   "ply": 13,
+   "t": 1311,
+   "line": [],
+   "fen": "rnbqr1k1/ppp1bppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQR2K b - - 9 7",
+   "said": "Um, a lot of beginners tend to play knight c6 in these positions. And this stems from a lack of understanding of the sort of positional properties of of this line or of d4 openings in general because you have to keep the d5 pawn under lock and key. If you play knight c6 in these types of positions, what tends to happen is that white plays knight c3 and then white plays bishop g5 and you're already experiencing problems with the d5 pawn. By the way, the same exact thing goes for the Kokan. When when you're a beginner, a lot of beginners, what they do against the Karakan is they play knight C3. Super super common. I've even had some students who play this who are not who are not beginners. And this is bad for exactly the same reason. The pawn on D4 becomes a serious weakness because you can't defend it because you've blocked the C pawn. And black has the ways and means to attack that pawn. Queen B6, bishop G4 in response to Knight F3. That knight on C3 is neither here nor there."
+  }
+ ],
+ "forks": [
+  {
+   "ply": 2,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "c4",
+    "e6"
+   ],
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 638.5,
+     "continuation": "Nf3",
+     "said": "Decline player is that you don't really need to study the English. That's a huge huge benefit, right? It's it just cuts the amount of work you have to do because you can play E6. And white has ways of avoiding the Queen's Gamma decline, but not many of them. Most of the time, you find English players end up going D4. White can the only Yeah. So, white plays this uh in the sort of traditional English manner. This is really the only way of doing that. There's a high probability of transposition to the Catalan. So, if white plays d4 at any moment now, we get a Catalan. If white plays this with B3, then we get a more traditional English reverse Benoni structure. But again, white takes on D5 prematurely. This is a bad move. This releases the central tension. It gives us a better control of the center and it's completely and totally toothless. So I feel like people at this level who play this stuff still aren't fully, you know, still don't fully comprehend the reason behind this opening D4. Okay, so we need to figure out how to position our minor pieces. And there is not one correct answer here. There is multiple ways of developing, but I am very partial I'm very partial to putting this bishop on D6. I like putting it on D6 and then"
+    },
+    {
+     "san": "g3",
+     "t": 1203,
+     "continuation": "g3 d5 Nf3",
+     "said": "easy. And very passive play by white. Very, very, very passive. I don't know who recommended this repertoire to white, but it's not a good one. So C4 E6. So white decided to start by playing this like an English. Now once again D4 in this position would lead us into a Catalan. And I would say the Catalan is like super unpopular below 22 2300. It's not that you can't study it if you're like 16,700, but I wouldn't recommend it to anybody under 2200 really because of how complex it is, because of how much theory there is. You have to be okay playing down a pawn for long periods of time, which is not an easy skill. So, I wouldn't really recommend the Catalin to anybody. Um, okay. C takes D5 is just really bad. If white wants to play this like an English, the way to do that is to play bishop G2. Now, black can take on C4 in any of these positions. And that's a legitimate sideline. The most popular move is to play this like a queen's gamma declined. Bishop E7 castles. castle. Now again, D4 is a Catalan, but B3 is like the traditional English way of playing it. And in this"
+    }
+   ]
+  },
+  {
+   "ply": 6,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/2P5/5NP1/PP1PPP1P/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "c4",
+    "e6",
+    "Nf3",
+    "d5",
+    "g3",
+    "Nf6"
+   ],
+   "options": [
+    {
+     "san": "cxd5",
+     "t": 664,
+     "continuation": "cxd5",
+     "said": "There's a high probability of transposition to the Catalan. So, if white plays d4 at any moment now, we get a Catalan. If white plays this with B3, then we get a more traditional English reverse Benoni structure. But again, white takes on D5 prematurely. This is a bad move. This releases the central tension. It gives us a better control of the center and it's completely and totally toothless. So I feel like people at this level who play this stuff still aren't fully, you know, still don't fully comprehend the reason behind this opening D4. Okay, so we need to figure out how to position our minor pieces. And there is not one correct answer here. There is multiple ways of developing, but I am very partial I'm very partial to putting this bishop on D6. I like putting it on D6 and then following up sort of London system style with the move C6 just like we did in the previous game. Now, we don't need to play C6 immediately. We can castle first. Let's castle first. It doesn't really matter what order you do things in here. This isn't a Najdorf. This isn't a sharp opening. You can do stuff in many, many different move orders. And now I like the move C6. Just look at how nice this looks. C6 D5. We've got a bishop in the middle there. Now, where"
+    },
+    {
+     "san": "Bg2",
+     "t": 1245.5,
+     "continuation": "Bg2",
+     "said": "wouldn't really recommend the Catalin to anybody. Um, okay. C takes D5 is just really bad. If white wants to play this like an English, the way to do that is to play bishop G2. Now, black can take on C4 in any of these positions. And that's a legitimate sideline. The most popular move is to play this like a queen's gamma declined. Bishop E7 castles. castle. Now again, D4 is a Catalan, but B3 is like the traditional English way of playing it. And in this position, black has a gazillion moves. You can play this like a Benoni with D4, and then you get a Benoni structure, E3, C5. I played this with white. You can play this more sort of queen's gambity with C5. You can play the move A5, which was pretty popular until recently. I mean, there's a ton of moves here. Even B6 is very solid, like a Queen's Indian. This is about equal, but it's a very interesting. You can play this line. This line is this line is cool. Uh but but CD5 is is totally toothless. It's it's it yields the center. It gives our bishop the chance to develop and white is just slightly worse here probably if anything. So bishop G2 castles castles. We play"
+    }
+   ]
+  },
+  {
+   "ply": 10,
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2P5/5NP1/PP1PPPBP/RNBQ1RK1 w - - 6 6",
+   "line": [
+    "c4",
+    "e6",
+    "g3",
+    "d5",
+    "Nf3",
+    "Nf6",
+    "Bg2",
+    "Be7",
+    "O-O",
+    "O-O"
+   ],
+   "options": [
+    {
+     "san": "b3",
+     "t": 1260,
+     "continuation": "b3",
+     "said": "that's a legitimate sideline. The most popular move is to play this like a queen's gamma declined. Bishop E7 castles. castle. Now again, D4 is a Catalan, but B3 is like the traditional English way of playing it. And in this position, black has a gazillion moves. You can play this like a Benoni with D4, and then you get a Benoni structure, E3, C5. I played this with white. You can play this more sort of queen's gambity with C5. You can play the move A5, which was pretty popular until recently. I mean, there's a ton of moves here. Even B6 is very solid, like a Queen's Indian. This is about equal, but it's a very interesting. You can play this line. This line is this line is cool. Uh but but CD5 is is totally toothless. It's it's it yields the center. It gives our bishop the chance to develop and white is just slightly worse here probably if anything. So bishop G2 castles castles. We play C6. I hope that this setup makes sense. Um, a lot of beginners tend to play knight c6 in these positions. And this stems from a lack of understanding of the sort of positional properties of of"
+    },
+    {
+     "san": "Re1",
+     "t": 1289.5,
+     "continuation": "Re1 Re8 Kh1 Kh8",
+     "said": "was pretty popular until recently. I mean, there's a ton of moves here. Even B6 is very solid, like a Queen's Indian. This is about equal, but it's a very interesting. You can play this line. This line is this line is cool. Uh but but CD5 is is totally toothless. It's it's it yields the center. It gives our bishop the chance to develop and white is just slightly worse here probably if anything. So bishop G2 castles castles. We play C6. I hope that this setup makes sense. Um, a lot of beginners tend to play knight c6 in these positions. And this stems from a lack of understanding of the sort of positional properties of of this line or of d4 openings in general because you have to keep the d5 pawn under lock and key. If you play knight c6 in these types of positions, what tends to happen is that white plays knight c3 and then white plays bishop g5 and you're already experiencing problems with the d5 pawn. By the way, the same exact thing goes for the Kokan. When when you're a beginner, a lot of beginners, what they do against the Karakan is they play knight C3. Super super common. I've even had some"
+    }
+   ]
+  },
+  {
+   "ply": 11,
+   "fen": "rnbq1rk1/ppp1bppp/4pn2/3p4/2P5/1P3NP1/P2PPPBP/RNBQ1RK1 b - - 0 6",
+   "line": [
+    "c4",
+    "e6",
+    "g3",
+    "d5",
+    "Nf3",
+    "Nf6",
+    "Bg2",
+    "Be7",
+    "O-O",
+    "O-O",
+    "b3"
+   ],
+   "options": [
+    {
+     "san": "d4",
+     "t": 1266.5,
+     "continuation": "d4",
+     "said": "queen's gamma declined. Bishop E7 castles. castle. Now again, D4 is a Catalan, but B3 is like the traditional English way of playing it. And in this position, black has a gazillion moves. You can play this like a Benoni with D4, and then you get a Benoni structure, E3, C5. I played this with white. You can play this more sort of queen's gambity with C5. You can play the move A5, which was pretty popular until recently. I mean, there's a ton of moves here. Even B6 is very solid, like a Queen's Indian. This is about equal, but it's a very interesting. You can play this line. This line is this line is cool. Uh but but CD5 is is totally toothless. It's it's it yields the center. It gives our bishop the chance to develop and white is just slightly worse here probably if anything. So bishop G2 castles castles. We play C6. I hope that this setup makes sense. Um, a lot of beginners tend to play knight c6 in these positions. And this stems from a lack of understanding of the sort of positional properties of of this line or of d4 openings in general because you have to keep the d5 pawn under lock and key. If you play knight"
+    },
+    {
+     "san": "c5",
+     "t": 1277,
+     "continuation": "c5",
+     "said": "You can play this like a Benoni with D4, and then you get a Benoni structure, E3, C5. I played this with white. You can play this more sort of queen's gambity with C5. You can play the move A5, which was pretty popular until recently. I mean, there's a ton of moves here. Even B6 is very solid, like a Queen's Indian. This is about equal, but it's a very interesting. You can play this line. This line is this line is cool. Uh but but CD5 is is totally toothless. It's it's it yields the center. It gives our bishop the chance to develop and white is just slightly worse here probably if anything. So bishop G2 castles castles. We play C6. I hope that this setup makes sense. Um, a lot of beginners tend to play knight c6 in these positions. And this stems from a lack of understanding of the sort of positional properties of of this line or of d4 openings in general because you have to keep the d5 pawn under lock and key. If you play knight c6 in these types of positions, what tends to happen is that white plays knight c3 and then white plays bishop g5 and you're already experiencing problems"
+    },
+    {
+     "san": "b6",
+     "t": 1284,
+     "continuation": "b6",
+     "said": "play this more sort of queen's gambity with C5. You can play the move A5, which was pretty popular until recently. I mean, there's a ton of moves here. Even B6 is very solid, like a Queen's Indian. This is about equal, but it's a very interesting. You can play this line. This line is this line is cool. Uh but but CD5 is is totally toothless. It's it's it yields the center. It gives our bishop the chance to develop and white is just slightly worse here probably if anything. So bishop G2 castles castles. We play C6. I hope that this setup makes sense. Um, a lot of beginners tend to play knight c6 in these positions. And this stems from a lack of understanding of the sort of positional properties of of this line or of d4 openings in general because you have to keep the d5 pawn under lock and key. If you play knight c6 in these types of positions, what tends to happen is that white plays knight c3 and then white plays bishop g5 and you're already experiencing problems with the d5 pawn. By the way, the same exact thing goes for the Kokan. When when you're a beginner, a lot of"
+    }
+   ]
+  }
+ ]
+}

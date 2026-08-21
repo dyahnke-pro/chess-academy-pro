@@ -1,0 +1,1185 @@
+{
+ "videoId": "pXBR9CxK3lQ",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2340",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 733.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "yeah i'm just gonna check this game and okay he's back he's back kudos to credit to him no no he's he's legit he's just he's just severely underrated"
+  },
+  {
+   "ply": 3,
+   "t": 735.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "so let's go knight f3 and then we'll"
+  },
+  {
+   "ply": 4,
+   "t": 739,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "analyze both okay let's play the another alpha"
+  },
+  {
+   "ply": 5,
+   "t": 740,
+   "line": [
+    "c3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 6,
+   "t": 744,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n5/2p1p3/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "okay so e5 is bad uh and e5 is bad for a simple for for a similar reason well it's five am i i guess i should"
+  },
+  {
+   "ply": 7,
+   "t": 761,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n5/2p1p3/3PP3/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "said": "also not underestimate my own poor quality of play this weakens the d5 fun it also weakens this diagonal so d4 just gives white an advantage"
+  },
+  {
+   "ply": 9,
+   "t": 766.5,
+   "line": [
+    "cxd4",
+    "cxd4"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n5/4p3/3PP3/5N2/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "said": "as we already know so cdcd"
+  },
+  {
+   "ply": 10,
+   "t": 770,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2n5/3pp3/3PP3/5N2/PP3PPP/RNBQKB1R w KQkq - 0 6",
+   "said": "and um okay so he goes d5 himself"
+  },
+  {
+   "ply": 12,
+   "t": 780.5,
+   "line": [
+    "exd5",
+    "Qxd5"
+   ],
+   "fen": "r1b1kbnr/pp3ppp/2n5/3qp3/3P4/5N2/PP3PPP/RNBQKB1R w KQkq - 0 7",
+   "said": "okay that's clearly some sort of preparation so we're going to take on d5 how do we usually follow follow up here"
+  },
+  {
+   "ply": 13,
+   "t": 791,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1b1kbnr/pp3ppp/2n5/3qp3/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 7",
+   "said": "how do we usually follow up here yeah knight c3 i guess he's got bishop before but we can unpin ourselves with"
+  },
+  {
+   "ply": 14,
+   "t": 796,
+   "line": [
+    "Bb4"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/2n5/3qp3/1b1P4/2N2N2/PP3PPP/R1BQKB1R w KQkq - 2 8",
+   "said": "bishop d2 we can unpin ourselves with bishop d2"
+  },
+  {
+   "ply": 15,
+   "t": 797,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/2n5/3qp3/1b1P4/2N2N2/PP1B1PPP/R2QKB1R b KQkq - 3 8",
+   "said": "the point is we're attacking his queen"
+  },
+  {
+   "ply": 17,
+   "t": 801.5,
+   "line": [
+    "Bxc3",
+    "Bxc3"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/2n5/3qp3/3P4/2B2N2/PP3PPP/R2QKB1R b KQkq - 0 9",
+   "said": "we got the two bishops now"
+  },
+  {
+   "ply": 18,
+   "t": 803,
+   "line": [
+    "Nge7"
+   ],
+   "fen": "r1b1k2r/pp2nppp/2n5/3qp3/3P4/2B2N2/PP3PPP/R2QKB1R w KQkq - 1 10",
+   "said": ""
+  },
+  {
+   "ply": 19,
+   "t": 805,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1b1k2r/pp2nppp/2n5/3qP3/8/2B2N2/PP3PPP/R2QKB1R b KQkq - 0 10",
+   "said": ""
+  },
+  {
+   "ply": 20,
+   "t": 809.5,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "r3k2r/pp2nppp/2n5/3qP3/6b1/2B2N2/PP3PPP/R2QKB1R w KQkq - 1 11",
+   "said": "okay that's a free pawn i don't know what he's doing"
+  },
+  {
+   "ply": 21,
+   "t": 811,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r3k2r/pp2nppp/2n5/3qP3/6b1/2B2N2/PP2BPPP/R2QK2R b KQkq - 2 11",
+   "said": "okay let's just develop with bishop b2 we're just up a pawn now i mean white is"
+  },
+  {
+   "ply": 22,
+   "t": 818.5,
+   "line": [
+    "Qe4"
+   ],
+   "fen": "r3k2r/pp2nppp/2n5/4P3/4q1b1/2B2N2/PP2BPPP/R2QK2R w KQkq - 3 12",
+   "said": "much better"
+  },
+  {
+   "ply": 23,
+   "t": 824,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r3k2r/pp2nppp/2n5/4P3/4q1b1/2B2N2/PP2BPPP/R2Q1RK1 b kq - 4 12",
+   "said": "queen to e4 hmm okay let's just keep developing with castles i guess rook d8 but then queenie won we have to maintain contact with the bishop"
+  },
+  {
+   "ply": 25,
+   "t": 835,
+   "line": [
+    "Rd8",
+    "Qe1"
+   ],
+   "fen": "3rk2r/pp2nppp/2n5/4P3/4q1b1/2B2N2/PP2BPPP/R3QRK1 b k - 6 13",
+   "said": ""
+  },
+  {
+   "ply": 26,
+   "t": 840,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "3rk2r/pp3ppp/2n5/3nP3/4q1b1/2B2N2/PP2BPPP/R3QRK1 w k - 7 14",
+   "said": "okay queenie one we're up upon we just need to untangle ourselves he's super active yeah he is very active here hmm so how should we untangle ourselves what do you guys think so 92 blunders moving the night blunders the bishop yeah it's not easy i think we'll start with"
+  },
+  {
+   "ply": 27,
+   "t": 874,
+   "line": [
+    "Bd1"
+   ],
+   "fen": "3rk2r/pp3ppp/2n5/3nP3/4q1b1/2B2N2/PP3PPP/R2BQRK1 b k - 8 14",
+   "said": "yeah he's a very tough opponent i should probably focus bishop d1 let's play bishop d1 let's get the bishop out because that bishop was the source of my problems the bishop was very poorly"
+  },
+  {
+   "ply": 28,
+   "t": 881,
+   "line": [
+    "Qxe1"
+   ],
+   "fen": "3rk2r/pp3ppp/2n5/3nP3/6b1/2B2N2/PP3PPP/R2BqRK1 w k - 0 15",
+   "said": "protected by the queen"
+  },
+  {
+   "ply": 29,
+   "t": 882.5,
+   "line": [
+    "Rxe1"
+   ],
+   "fen": "3rk2r/pp3ppp/2n5/3nP3/6b1/2B2N2/PP3PPP/R2BR1K1 b k - 0 15",
+   "said": "okay so he takes the queen that lightens"
+  },
+  {
+   "ply": 31,
+   "t": 884.5,
+   "line": [
+    "Nxc3",
+    "bxc3"
+   ],
+   "fen": "3rk2r/pp3ppp/2n5/4P3/6b1/2P2N2/P4PPP/R2BR1K1 b k - 0 16",
+   "said": "the load a little bit and now we get an end game where i have very weak pawns"
+  },
+  {
+   "ply": 32,
+   "t": 888,
+   "line": [
+    "O-O"
+   ],
+   "fen": "3r1rk1/pp3ppp/2n5/4P3/6b1/2P2N2/P4PPP/R2BR1K1 w - - 1 17",
+   "said": "all over the place but i am up a pawn so this should be should be winnable"
+  },
+  {
+   "ply": 33,
+   "t": 893.5,
+   "line": [
+    "h3"
+   ],
+   "fen": "3r1rk1/pp3ppp/2n5/4P3/6b1/2P2N1P/P4PP1/R2BR1K1 b - - 0 17",
+   "said": "let's go h3"
+  },
+  {
+   "ply": 34,
+   "t": 898,
+   "line": [
+    "Be6"
+   ],
+   "fen": "3r1rk1/pp3ppp/2n1b3/4P3/8/2P2N1P/P4PP1/R2BR1K1 w - - 1 18",
+   "said": "and now um let's go bishop"
+  },
+  {
+   "ply": 35,
+   "t": 901.5,
+   "line": [
+    "Bc2"
+   ],
+   "fen": "3r1rk1/pp3ppp/2n1b3/4P3/8/2P2N1P/P1B2PP1/R3R1K1 b - - 2 18",
+   "said": "c2 or maybe bishop b3 is a better idea"
+  },
+  {
+   "ply": 39,
+   "t": 904,
+   "line": [
+    "Rd1",
+    "Bb3",
+    "Rdd8",
+    "Bd1"
+   ],
+   "fen": "3r1rk1/pp3ppp/2n1b3/4P3/8/2P2N1P/P4PP1/R2BR1K1 b - - 6 20",
+   "said": ""
+  },
+  {
+   "ply": 43,
+   "t": 905.5,
+   "line": [
+    "Bb3",
+    "Bc2",
+    "Be6",
+    "Bb3"
+   ],
+   "fen": "3r1rk1/pp3ppp/2n1b3/4P3/8/1BP2N1P/P4PP1/R3R1K1 b - - 10 22",
+   "said": "uh contesting this bishop"
+  },
+  {
+   "ply": 44,
+   "t": 910,
+   "line": [
+    "Rd3"
+   ],
+   "fen": "5rk1/pp3ppp/2n1b3/4P3/8/1BPr1N1P/P4PP1/R3R1K1 w - - 11 23",
+   "said": ""
+  },
+  {
+   "ply": 45,
+   "t": 913,
+   "line": [
+    "Rac1"
+   ],
+   "fen": "5rk1/pp3ppp/2n1b3/4P3/8/1BPr1N1P/P4PP1/2R1R1K1 b - - 12 23",
+   "said": "okay rook d3 we need to defend the spawn rook ac1 okay bishop h3 of bishop c4"
+  },
+  {
+   "ply": 46,
+   "t": 927,
+   "line": [
+    "a6"
+   ],
+   "fen": "5rk1/1p3ppp/p1n1b3/4P3/8/1BPr1N1P/P4PP1/2R1R1K1 w - - 0 24",
+   "said": "no well black is much worse no he is legit i mean completely legit just very good h a6 okay so now we need to improve our position um and we can improve our position"
+  },
+  {
+   "ply": 47,
+   "t": 952,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "5rk1/1p3ppp/p1n1b3/4P1N1/8/1BPr3P/P4PP1/2R1R1K1 b - - 1 24",
+   "said": "in in a variety of ways it would be nice to get rid of this rook now bishop c2 is possible because rook takes c3 we have a check the problem with bishop c2 is i like this bishop where it is so what we're going to do is we're going to go nitrify we're going to try to force him to correct our pawn structure our pawns are going to get braces for free if he takes on b3"
+  },
+  {
+   "ply": 49,
+   "t": 964,
+   "line": [
+    "Bxb3",
+    "axb3"
+   ],
+   "fen": "5rk1/1p3ppp/p1n5/4P1N1/8/1PPr3P/5PP1/2R1R1K1 b - - 0 25",
+   "said": "we're going to visit the orthodontist and uh we we like visiting the earth i"
+  },
+  {
+   "ply": 50,
+   "t": 965,
+   "line": [
+    "h6"
+   ],
+   "fen": "5rk1/1p3pp1/p1n4p/4P1N1/8/1PPr3P/5PP1/2R1R1K1 w - - 0 26",
+   "said": "mean i don't like visiting the orthodontist"
+  },
+  {
+   "ply": 51,
+   "t": 969.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "5rk1/1p3pp1/p1n4p/4P3/8/1PPr1N1P/5PP1/2R1R1K1 b - - 1 26",
+   "said": "but pawns do i don't miss the orthodontist but the"
+  },
+  {
+   "ply": 52,
+   "t": 974.5,
+   "line": [
+    "Rfd8"
+   ],
+   "fen": "3r2k1/1p3pp1/p1n4p/4P3/8/1PPr1N1P/5PP1/2R1R1K1 w - - 2 27",
+   "said": "pawns do so knight f3 um now uh no no no no now let's move the"
+  },
+  {
+   "ply": 53,
+   "t": 979.5,
+   "line": [
+    "Kh2"
+   ],
+   "fen": "3r2k1/1p3pp1/p1n4p/4P3/8/1PPr1N1P/5PPK/2R1R3 b - - 3 27",
+   "said": "king out of the well yeah let's move the king out of the"
+  },
+  {
+   "ply": 52,
+   "t": 980.5,
+   "line": [],
+   "fen": "3r2k1/1p3pp1/p1n4p/4P3/8/1PPr1N1P/5PP1/2R1R1K1 w - - 2 27",
+   "said": ""
+  },
+  {
+   "ply": 53,
+   "t": 982,
+   "line": [
+    "Kh2"
+   ],
+   "fen": "3r2k1/1p3pp1/p1n4p/4P3/8/1PPr1N1P/5PPK/2R1R3 b - - 3 27",
+   "said": "way"
+  },
+  {
+   "ply": 54,
+   "t": 988.5,
+   "line": [
+    "a5"
+   ],
+   "fen": "3r2k1/1p3pp1/2n4p/p3P3/8/1PPr1N1P/5PPK/2R1R3 w - - 0 28",
+   "said": "eah well i have nothing to smile about yeah well i have nothing to smile about i lost that game"
+  },
+  {
+   "ply": 56,
+   "t": 1013,
+   "line": [
+    "e6",
+    "Re8"
+   ],
+   "fen": "4r1k1/1p3pp1/2n1P2p/p7/8/1PPr1N1P/5PPK/2R1R3 w - - 1 29",
+   "said": ""
+  },
+  {
+   "ply": 58,
+   "t": 1016.5,
+   "line": [
+    "exf7+",
+    "Kxf7"
+   ],
+   "fen": "4r3/1p3kp1/2n4p/p7/8/1PPr1N1P/5PPK/2R1R3 w - - 0 30",
+   "said": "this guy is good the reason this move is good is now okay now we must"
+  },
+  {
+   "ply": 59,
+   "t": 1032.5,
+   "line": [
+    "Red1"
+   ],
+   "fen": "4r3/1p3kp1/2n4p/p7/8/1PPr1N1P/5PPK/2RR4 b - - 1 30",
+   "said": "let me think guys this guy is like seriously good craig tucker i know that but the point of this is to be educational and i know"
+  },
+  {
+   "ply": 60,
+   "t": 1039,
+   "line": [
+    "Red8"
+   ],
+   "fen": "3r4/1p3kp1/2n4p/p7/8/1PPr1N1P/5PPK/2RR4 w - - 2 31",
+   "said": "i know it's annoying to people but normally i can trust me normally i can i can explain my"
+  },
+  {
+   "ply": 63,
+   "t": 1047,
+   "line": [
+    "Rxd3",
+    "Rxd3",
+    "Kg1"
+   ],
+   "fen": "8/1p3kp1/2n4p/p7/8/1PPr1N1P/5PP1/2R3K1 b - - 1 32",
+   "said": "moves against the 2400 and not get outplayed so now what we're going to do is we're going to bring the king over to e2 and and try to try to kick the rook away from d3"
+  },
+  {
+   "ply": 65,
+   "t": 1062.5,
+   "line": [
+    "Ke8",
+    "Kf1"
+   ],
+   "fen": "4k3/1p4p1/2n4p/p7/8/1PPr1N1P/5PP1/2R2K2 b - - 3 33",
+   "said": ""
+  },
+  {
+   "ply": 66,
+   "t": 1067,
+   "line": [
+    "Rd5"
+   ],
+   "fen": "4k3/1p4p1/2n4p/p2r4/8/1PP2N1P/5PP1/2R2K2 w - - 4 34",
+   "said": ""
+  },
+  {
+   "ply": 67,
+   "t": 1070,
+   "line": [
+    "Ke2"
+   ],
+   "fen": "4k3/1p4p1/2n4p/p2r4/8/1PP2N1P/4KPP1/2R5 b - - 5 34",
+   "said": "king e8 isn't is an odd move i don't really understand it now he gives us a"
+  },
+  {
+   "ply": 68,
+   "t": 1074,
+   "line": [
+    "Kf7"
+   ],
+   "fen": "8/1p3kp1/2n4p/p2r4/8/1PP2N1P/4KPP1/2R5 w - - 6 35",
+   "said": "chance to bring our king in"
+  },
+  {
+   "ply": 69,
+   "t": 1078.5,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "8/1p3kp1/2n4p/p2r4/8/1PP4P/3NKPP1/2R5 b - - 7 35",
+   "said": ""
+  },
+  {
+   "ply": 70,
+   "t": 1083,
+   "line": [
+    "Kf6"
+   ],
+   "fen": "8/1p4p1/2n2k1p/p2r4/8/1PP4P/3NKPP1/2R5 w - - 8 36",
+   "said": ""
+  },
+  {
+   "ply": 71,
+   "t": 1085.5,
+   "line": [
+    "Ne4+"
+   ],
+   "fen": "8/1p4p1/2n2k1p/p2r4/4N3/1PP4P/4KPP1/2R5 b - - 9 36",
+   "said": ""
+  },
+  {
+   "ply": 70,
+   "t": 1087,
+   "line": [],
+   "fen": "8/1p4p1/2n2k1p/p2r4/8/1PP4P/3NKPP1/2R5 w - - 8 36",
+   "said": ""
+  },
+  {
+   "ply": 71,
+   "t": 1089,
+   "line": [
+    "Ra1"
+   ],
+   "fen": "8/1p4p1/2n2k1p/p2r4/8/1PP4P/3NKPP1/R7 b - - 9 36",
+   "said": "okay rook a one okay four i'll analyze both the last games i don't know"
+  },
+  {
+   "ply": 73,
+   "t": 1104.5,
+   "line": [
+    "b5",
+    "f4"
+   ],
+   "fen": "8/6p1/2n2k1p/pp1r4/5P2/1PP4P/3NK1P1/R7 b - - 0 37",
+   "said": "thank you gigahertz for the sorry i missed that five gifted appreciate it my man okay now we're going to expand on the queen on the king side with f4 and we're going to try to"
+  },
+  {
+   "ply": 74,
+   "t": 1110.5,
+   "line": [
+    "b4"
+   ],
+   "fen": "8/6p1/2n2k1p/p2r4/1p3P2/1PP4P/3NK1P1/R7 w - - 0 38",
+   "said": "exploit our upon majority here"
+  },
+  {
+   "ply": 75,
+   "t": 1112.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "8/6p1/2n2k1p/p2r4/1pP2P2/1P5P/3NK1P1/R7 b - - 0 38",
+   "said": ""
+  },
+  {
+   "ply": 76,
+   "t": 1118.5,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "3r4/6p1/2n2k1p/p7/1pP2P2/1P5P/3NK1P1/R7 w - - 1 39",
+   "said": ""
+  },
+  {
+   "ply": 77,
+   "t": 1123,
+   "line": [
+    "g4"
+   ],
+   "fen": "3r4/6p1/2n2k1p/p7/1pP2PP1/1P5P/3NK3/R7 b - - 0 39",
+   "said": ""
+  },
+  {
+   "ply": 76,
+   "t": 1127.5,
+   "line": [],
+   "fen": "3r4/6p1/2n2k1p/p7/1pP2P2/1P5P/3NK1P1/R7 w - - 1 39",
+   "said": ""
+  },
+  {
+   "ply": 77,
+   "t": 1129,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "3r4/6p1/2n2k1p/p7/1pP2P2/1P3N1P/4K1P1/R7 b - - 2 39",
+   "said": "i mean it's very strange i mean it's just i'm having a very hard time like making progress against this guy"
+  },
+  {
+   "ply": 78,
+   "t": 1141,
+   "line": [
+    "Kf5"
+   ],
+   "fen": "3r4/6p1/2n4p/p4k2/1pP2P2/1P3N1P/4K1P1/R7 w - - 3 40",
+   "said": ""
+  },
+  {
+   "ply": 79,
+   "t": 1143,
+   "line": [
+    "g3"
+   ],
+   "fen": "3r4/6p1/2n4p/p4k2/1pP2P2/1P3NPP/4K3/R7 b - - 0 40",
+   "said": ""
+  },
+  {
+   "ply": 80,
+   "t": 1147.5,
+   "line": [
+    "Kf6"
+   ],
+   "fen": "3r4/6p1/2n2k1p/p7/1pP2P2/1P3NPP/4K3/R7 w - - 1 41",
+   "said": ""
+  },
+  {
+   "ply": 81,
+   "t": 1148.5,
+   "line": [
+    "g4"
+   ],
+   "fen": "3r4/6p1/2n2k1p/p7/1pP2PP1/1P3N1P/4K3/R7 b - - 0 41",
+   "said": "no i mean i'm allowed to compliment him he is playing really well"
+  },
+  {
+   "ply": 83,
+   "t": 1181.5,
+   "line": [
+    "Re8+",
+    "Kf2"
+   ],
+   "fen": "4r3/6p1/2n2k1p/p7/1pP2PP1/1P3N1P/5K2/R7 b - - 2 42",
+   "said": "i haven't gotten a plaque from youtube i mean it's not that important to me"
+  },
+  {
+   "ply": 84,
+   "t": 1186.5,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "3r4/6p1/2n2k1p/p7/1pP2PP1/1P3N1P/5K2/R7 w - - 3 43",
+   "said": ""
+  },
+  {
+   "ply": 85,
+   "t": 1190.5,
+   "line": [
+    "Ke3"
+   ],
+   "fen": "3r4/6p1/2n2k1p/p7/1pP2PP1/1P2KN1P/8/R7 b - - 4 43",
+   "said": ""
+  },
+  {
+   "ply": 87,
+   "t": 1197.5,
+   "line": [
+    "g6",
+    "h4"
+   ],
+   "fen": "3r4/8/2n2kpp/p7/1pP2PPP/1P2KN2/8/R7 b - - 0 44",
+   "said": "we're going to tr okay g6 h4 we're going to keep pushing the puns"
+  },
+  {
+   "ply": 88,
+   "t": 1201.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "3r4/8/2n2kp1/p6p/1pP2PPP/1P2KN2/8/R7 w - - 0 45",
+   "said": ""
+  },
+  {
+   "ply": 91,
+   "t": 1205.5,
+   "line": [
+    "gxh5",
+    "gxh5",
+    "Rg1"
+   ],
+   "fen": "3r4/8/2n2k2/p6p/1pP2P1P/1P2KN2/8/6R1 b - - 1 46",
+   "said": "he's not lucky he's honey h5 he finds a way to inflect my pawns positively however he opens the g"
+  },
+  {
+   "ply": 92,
+   "t": 1212,
+   "line": [
+    "Re8+"
+   ],
+   "fen": "4r3/8/2n2k2/p6p/1pP2P1P/1P2KN2/8/6R1 w - - 2 47",
+   "said": "file"
+  },
+  {
+   "ply": 93,
+   "t": 1214,
+   "line": [
+    "Kd3"
+   ],
+   "fen": "4r3/8/2n2k2/p6p/1pP2P1P/1P1K1N2/8/6R1 b - - 3 47",
+   "said": "okay now we're going to tuck our king over to c2"
+  },
+  {
+   "ply": 94,
+   "t": 1218.5,
+   "line": [
+    "Kf5"
+   ],
+   "fen": "4r3/8/2n5/p4k1p/1pP2P1P/1P1K1N2/8/6R1 w - - 4 48",
+   "said": "in order to buttress okay this one here"
+  },
+  {
+   "ply": 95,
+   "t": 1227.5,
+   "line": [
+    "Nd4+"
+   ],
+   "fen": "4r3/8/2n5/p4k1p/1pPN1P1P/1P1K4/8/6R1 b - - 5 48",
+   "said": "i think we can go here and the bottom line is that"
+  },
+  {
+   "ply": 97,
+   "t": 1232.5,
+   "line": [
+    "Nxd4",
+    "Kxd4"
+   ],
+   "fen": "4r3/8/8/p4k1p/1pPK1P1P/1P6/8/6R1 b - - 0 49",
+   "said": "we have a protected passer on c4 that is going to be very very strong"
+  },
+  {
+   "ply": 99,
+   "t": 1235.5,
+   "line": [
+    "Kxf4",
+    "Rg5"
+   ],
+   "fen": "4r3/8/8/p5Rp/1pPK1k1P/1P6/8/8 b - - 1 50",
+   "said": "here"
+  },
+  {
+   "ply": 101,
+   "t": 1244,
+   "line": [
+    "Re4+",
+    "Kc5"
+   ],
+   "fen": "8/8/8/p1K3Rp/1pP1rk1P/1P6/8/8 b - - 3 51",
+   "said": "check oh sorry here he's going to check me go rookie 3 probably"
+  },
+  {
+   "ply": 102,
+   "t": 1247,
+   "line": [
+    "Re3"
+   ],
+   "fen": "8/8/8/p1K3Rp/1pP2k1P/1P2r3/8/8 w - - 4 52",
+   "said": ""
+  },
+  {
+   "ply": 103,
+   "t": 1248,
+   "line": [
+    "Kb5"
+   ],
+   "fen": "8/8/8/pK4Rp/1pP2k1P/1P2r3/8/8 b - - 5 52",
+   "said": "okay we need to win this fun otherwise he gets connected passers"
+  },
+  {
+   "ply": 105,
+   "t": 1252,
+   "line": [
+    "Rxb3",
+    "Kxa5"
+   ],
+   "fen": "8/8/8/K5Rp/1pP2k1P/1r6/8/8 b - - 0 53",
+   "said": ""
+  },
+  {
+   "ply": 106,
+   "t": 1256.5,
+   "line": [
+    "Rb1"
+   ],
+   "fen": "8/8/8/K5Rp/1pP2k1P/8/8/1r6 w - - 1 54",
+   "said": ""
+  },
+  {
+   "ply": 107,
+   "t": 1269.5,
+   "line": [
+    "Kb6"
+   ],
+   "fen": "8/8/1K6/6Rp/1pP2k1P/8/8/1r6 b - - 2 54",
+   "said": ""
+  },
+  {
+   "ply": 108,
+   "t": 1274,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "8/8/1K6/6Rp/1pP2k1P/8/8/2r5 w - - 3 55",
+   "said": ""
+  },
+  {
+   "ply": 109,
+   "t": 1279.5,
+   "line": [
+    "c5"
+   ],
+   "fen": "8/8/1K6/2P3Rp/1p3k1P/8/8/2r5 b - - 0 55",
+   "said": "oh this oh my god now i'm probably like worse"
+  },
+  {
+   "ply": 111,
+   "t": 1282.5,
+   "line": [
+    "b3",
+    "Rg2"
+   ],
+   "fen": "8/8/1K6/2P4p/5k1P/1p6/6R1/2r5 b - - 1 56",
+   "said": ""
+  },
+  {
+   "ply": 115,
+   "t": 1284.5,
+   "line": [
+    "Rg1",
+    "Rg3",
+    "Rc1",
+    "Rg1"
+   ],
+   "fen": "8/8/1K6/2P4p/5k1P/1p6/8/2r3R1 b - - 5 58",
+   "said": ""
+  },
+  {
+   "ply": 116,
+   "t": 1286.5,
+   "line": [
+    "Rc2"
+   ],
+   "fen": "8/8/1K6/2P4p/5k1P/1p6/2r5/6R1 w - - 6 59",
+   "said": ""
+  },
+  {
+   "ply": 118,
+   "t": 1292,
+   "line": [
+    "Rb1",
+    "b2"
+   ],
+   "fen": "8/8/1K6/2P4p/5k1P/8/1pr5/1R6 w - - 0 60",
+   "said": ""
+  },
+  {
+   "ply": 119,
+   "t": 1295.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "8/8/1KP5/7p/5k1P/8/1pr5/1R6 b - - 0 60",
+   "said": ""
+  },
+  {
+   "ply": 120,
+   "t": 1297,
+   "line": [
+    "Ke4"
+   ],
+   "fen": "8/8/1KP5/7p/4k2P/8/1pr5/1R6 w - - 1 61",
+   "said": ""
+  },
+  {
+   "ply": 122,
+   "t": 1303.5,
+   "line": [
+    "c7",
+    "Kf5"
+   ],
+   "fen": "8/2P5/1K6/5k1p/7P/8/1pr5/1R6 w - - 1 62",
+   "said": ""
+  },
+  {
+   "ply": 124,
+   "t": 1308,
+   "line": [
+    "Kb7",
+    "Ke5"
+   ],
+   "fen": "8/1KP5/8/4k2p/7P/8/1pr5/1R6 w - - 3 63",
+   "said": "what is king e5 you can now promote takes takes nc3d7 c2 takes takes c63 f5 d4 takes it's winning okay i'm not implying anything but this guy is very odd i mean it intersperses yeah that's a very strange move at the end to not approach the punt so let's let's look at the games guys i won't stand for any accusations um i'm uh you know the thing is it's a very tricky situation because again i i always like to say this ex nido imagine that you were him and okay perhaps you're you're good your rating doesn't reflect your strength and then you watch the stream and you have like 50 people cheating and you didn't cheat you just have this style and you just played well that kind of ruins your day so i don't want to ruin this guy's day now i'll be transparent in saying that what is odd to me is the fact that there is a huge delta between some some of the moves he makes are terrible absolutely terrible like not characteristic of a 2400 at all and then there are other stretches where he plays extremely well but that doesn't mean anything and that's certainly not grounds to conclude that he is cheating and that's just what i want to make clear so um i i i get that people are not trying to be disrespectful but uh this is not called evidence that's just something that's odd okay so in this first game right for example the smooth bishop e3 is um is just bad i mean d4 is the whole idea of taking on c6 that's the whole idea of taking on c6 so by playing bishop a3 he allows us to establish vampire teeth and stop d4 i guess vampire teeth can be good to be fair guys uh let me make a couple of things here since we're on the subject i don't mind sharing some thoughts on it here's the thing um people cheat for a variety of reasons and you cannot accuracy is a very bad indicator of whether someone is cheating there are cheaters who plug every move into the engine those are the most obvious ones there are also cheaters who who will play you know a stretch of the game with an engine then they'll turn the engine off and they'll turn it back on again or they will turn it on when they get frustrated at having a bad position um there are also people who try to disperse suspicion by playing the occasional blunder or they will deliberately make a horrible move here and there precisely to disperse suspicion that is what makes some cheaters so hard to catch because it's a very fine line you also don't want to falsely accuse people um i think that some people imply this guy fell into that category but uh there are very advanced methods and i do not have them so in the absence of those methods it's innocent until proven guilty there is this and i i would call this soft cheating where people cheat and they still maintain about the same rating uh and i don't know really what is in the minds of those people but you know sometimes it's out of frustration or it's the occasional crutch it becomes an addiction i think oh let me just check the computer here let me just check the computer there so this this categorical statement no way a human plays that way i mean do you know every human do you know what goes on inside of his mind you can't really say that there are moves which you can say no women will play that but you've got to be very careful before you say that i but i know that jimmy fallon and you know the picture of jimmy fallon and yeah it's a little bit odd but at the same time it's just it is what it is so in this game i think everything was clear right and let's try to understand when you lose a game you want to get to the bottom of what it is that went wrong exactly uh and i did everything perfectly up until this point so i think that the the um root of my mistake and this is a lesson that i will actually think about tonight uh as i lay in bed is the fact that when you see a tactical property i just got too cocky i did not stop to consider the drawbacks of the move bishop h4 so yeah we are applying for a new mod so the main mistake is that i basically i didn't stop to consider the drawbacks of the move and had i noticed that d6 would have been hanging i would have played d5 that solves the problem of the d-pawn so after bishop h4 things just get very very messy here okay and then i made a series of small mistakes to follow that up and and lost the game in the end right no i know you guys said d5 but it's not that i'm not listening it's just i i am making my own decisions at the end of the day some of you did call this move again i thought after d5 knight g3 i wouldn't get a chance to play bishop h4 now don't ask grandmother's rating is that is a dirty secret um so queen four queen g6 i guess the point is now bishop h4 is"
+  },
+  {
+   "ply": 19,
+   "t": 1647,
+   "line": [],
+   "fen": "r1b1k2r/pp2nppp/2n5/3qP3/8/2B2N2/PP3PPP/R2QKB1R b KQkq - 0 10",
+   "said": "super strong yeah so okay and uh after that things got very very messy and in the game that i won uh the opening was very i mean it was odd"
+  },
+  {
+   "ply": 17,
+   "t": 1649.5,
+   "line": [],
+   "fen": "r1b1k1nr/pp3ppp/2n5/3qp3/3P4/2B2N2/PP3PPP/R2QKB1R b KQkq - 0 9",
+   "said": "this move97 just gives the pawn up"
+  },
+  {
+   "ply": 18,
+   "t": 1650.5,
+   "line": [
+    "Nge7"
+   ],
+   "fen": "r1b1k2r/pp2nppp/2n5/3qp3/3P4/2B2N2/PP3PPP/R2QKB1R w KQkq - 1 10",
+   "said": "that's another thing like"
+  },
+  {
+   "ply": 17,
+   "t": 1653.5,
+   "line": [],
+   "fen": "r1b1k1nr/pp3ppp/2n5/3qp3/3P4/2B2N2/PP3PPP/R2QKB1R b KQkq - 0 9",
+   "said": "i don't know i mean at least play e"
+  },
+  {
+   "ply": 18,
+   "t": 1655,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/2n5/3q4/3p4/2B2N2/PP3PPP/R2QKB1R w KQkq - 0 10",
+   "said": "takes d4 or e4"
+  },
+  {
+   "ply": 17,
+   "t": 1656,
+   "line": [],
+   "fen": "r1b1k1nr/pp3ppp/2n5/3qp3/3P4/2B2N2/PP3PPP/R2QKB1R b KQkq - 0 9",
+   "said": "and white is better in this position"
+  },
+  {
+   "ply": 19,
+   "t": 1657.5,
+   "line": [
+    "e4",
+    "Ne5"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/2n5/3qN3/3Pp3/2B5/PP3PPP/R2QKB1R b KQkq - 1 10",
+   "said": "because i've got the two bishops but um this just gives the pawn up the key move really here was to play bishop d1 to identify what's wrong with the position the bishop on e2 is super weak and it's subject to attacks like knight f4 so bishop d1 takes the bishop on a defended square and this is to the point that not every one of your moves has to be super glamorous right your moves have to be functional they don't always have to be glamorous um so you know in this end game i kind of ground him down but he played very very well honestly guys i'm really tired i maybe i'll i'll talk about this end game tomorrow but i'll i will take specific questions about this game um yeah bishop d1 is hard to find because it's a retreating move retreating moves can be invisible moves here i wanted to open up the file basically and here i did something very similar to what i did in my first game against him right remember this position where i brought my king over to do something the king can be the king is like a mercenary it can be employed for these small tasks"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 17,
+   "fen": "r1b1k1nr/pp3ppp/2n5/3qp3/3P4/2B2N2/PP3PPP/R2QKB1R b KQkq - 0 9",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "e5",
+    "d4",
+    "cxd4",
+    "cxd4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Bb4",
+    "Bd2",
+    "Bxc3",
+    "Bxc3"
+   ],
+   "options": [
+    {
+     "san": "Nge7",
+     "t": 803,
+     "continuation": "Nge7",
+     "said": "yeah knight c3 i guess he's got bishop before but we can unpin ourselves with bishop d2 we can unpin ourselves with bishop d2 the point is we're attacking his queen we got the two bishops now okay that's a free pawn i don't know what he's doing okay let's just develop with bishop b2 we're just up a pawn now i mean white is much better queen to e4 hmm okay let's just keep developing with castles i guess rook d8 but then queenie won we have to maintain contact with the bishop okay queenie one we're up upon we just need to untangle ourselves he's super active yeah he is very active here hmm so how should we untangle ourselves what do you guys think so 92 blunders moving the night blunders the bishop yeah it's not easy i think we'll start with"
+    },
+    {
+     "san": "exd4",
+     "t": 1655,
+     "continuation": "exd4",
+     "said": "messy and in the game that i won uh the opening was very i mean it was odd this move97 just gives the pawn up that's another thing like i don't know i mean at least play e takes d4 or e4 and white is better in this position because i've got the two bishops but um this just gives the pawn up the key move really here was to play bishop d1 to identify what's wrong with the position the bishop on e2 is super weak and it's subject to attacks like knight f4 so bishop d1 takes the bishop on a defended square and this is to the point that not every one of your moves has to be super glamorous right your moves have to be functional they don't always have to be glamorous um so you know in this end game i kind of ground him down but he played very very well honestly guys i'm really tired i maybe i'll i'll talk about this end game tomorrow but i'll i will take specific questions about this game um yeah bishop d1 is hard to find because it's a retreating move retreating moves can be invisible moves here i wanted to open up the file basically and here i did something very similar to what i did in my first game against him right remember this position where i brought my king over to do something the king can be the king is like a mercenary"
+    },
+    {
+     "san": "e4",
+     "t": 1657.5,
+     "continuation": "e4 Ne5",
+     "said": "opening was very i mean it was odd this move97 just gives the pawn up that's another thing like i don't know i mean at least play e takes d4 or e4 and white is better in this position because i've got the two bishops but um this just gives the pawn up the key move really here was to play bishop d1 to identify what's wrong with the position the bishop on e2 is super weak and it's subject to attacks like knight f4 so bishop d1 takes the bishop on a defended square and this is to the point that not every one of your moves has to be super glamorous right your moves have to be functional they don't always have to be glamorous um so you know in this end game i kind of ground him down but he played very very well honestly guys i'm really tired i maybe i'll i'll talk about this end game tomorrow but i'll i will take specific questions about this game um yeah bishop d1 is hard to find because it's a retreating move retreating moves can be invisible moves here i wanted to open up the file basically and here i did something very similar to what i did in my first game against him right remember this position where i brought my king over to do something the king can be the king is like a mercenary it can be employed for these small tasks"
+    }
+   ]
+  },
+  {
+   "ply": 70,
+   "fen": "8/1p4p1/2n2k1p/p2r4/8/1PP4P/3NKPP1/2R5 w - - 8 36",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "e5",
+    "d4",
+    "cxd4",
+    "cxd4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Bb4",
+    "Bd2",
+    "Bxc3",
+    "Bxc3",
+    "Nge7",
+    "dxe5",
+    "Bg4",
+    "Be2",
+    "Qe4",
+    "O-O",
+    "Rd8",
+    "Qe1",
+    "Nd5",
+    "Bd1",
+    "Qxe1",
+    "Rxe1",
+    "Nxc3",
+    "bxc3",
+    "O-O",
+    "h3",
+    "Be6",
+    "Bc2",
+    "Rd1",
+    "Bb3",
+    "Rdd8",
+    "Bd1",
+    "Bb3",
+    "Bc2",
+    "Be6",
+    "Bb3",
+    "Rd3",
+    "Rac1",
+    "a6",
+    "Ng5",
+    "Bxb3",
+    "axb3",
+    "h6",
+    "Nf3",
+    "Rfd8",
+    "Kh2",
+    "a5",
+    "e6",
+    "Re8",
+    "exf7+",
+    "Kxf7",
+    "Red1",
+    "Red8",
+    "Rxd3",
+    "Rxd3",
+    "Kg1",
+    "Ke8",
+    "Kf1",
+    "Rd5",
+    "Ke2",
+    "Kf7",
+    "Nd2",
+    "Kf6"
+   ],
+   "options": [
+    {
+     "san": "Ne4+",
+     "t": 1085.5,
+     "continuation": "Ne4+",
+     "said": "okay rook a one okay four i'll analyze both the last games i don't know thank you gigahertz for the sorry i missed that five gifted appreciate it my man okay now we're going to expand on the queen on the king side with f4 and we're going to try to exploit our upon majority here i mean it's very strange i mean it's just i'm having a very hard time like making progress against this guy"
+    },
+    {
+     "san": "Ra1",
+     "t": 1089,
+     "continuation": "Ra1",
+     "said": "okay rook a one okay four i'll analyze both the last games i don't know thank you gigahertz for the sorry i missed that five gifted appreciate it my man okay now we're going to expand on the queen on the king side with f4 and we're going to try to exploit our upon majority here i mean it's very strange i mean it's just i'm having a very hard time like making progress against this guy"
+    }
+   ]
+  },
+  {
+   "ply": 76,
+   "fen": "3r4/6p1/2n2k1p/p7/1pP2P2/1P5P/3NK1P1/R7 w - - 1 39",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "e5",
+    "d4",
+    "cxd4",
+    "cxd4",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "Nc3",
+    "Bb4",
+    "Bd2",
+    "Bxc3",
+    "Bxc3",
+    "Nge7",
+    "dxe5",
+    "Bg4",
+    "Be2",
+    "Qe4",
+    "O-O",
+    "Rd8",
+    "Qe1",
+    "Nd5",
+    "Bd1",
+    "Qxe1",
+    "Rxe1",
+    "Nxc3",
+    "bxc3",
+    "O-O",
+    "h3",
+    "Be6",
+    "Bc2",
+    "Rd1",
+    "Bb3",
+    "Rdd8",
+    "Bd1",
+    "Bb3",
+    "Bc2",
+    "Be6",
+    "Bb3",
+    "Rd3",
+    "Rac1",
+    "a6",
+    "Ng5",
+    "Bxb3",
+    "axb3",
+    "h6",
+    "Nf3",
+    "Rfd8",
+    "Kh2",
+    "a5",
+    "e6",
+    "Re8",
+    "exf7+",
+    "Kxf7",
+    "Red1",
+    "Red8",
+    "Rxd3",
+    "Rxd3",
+    "Kg1",
+    "Ke8",
+    "Kf1",
+    "Rd5",
+    "Ke2",
+    "Kf7",
+    "Nd2",
+    "Kf6",
+    "Ra1",
+    "b5",
+    "f4",
+    "b4",
+    "c4",
+    "Rd8"
+   ],
+   "options": [
+    {
+     "san": "g4",
+     "t": 1123,
+     "continuation": "g4",
+     "said": "i mean it's very strange i mean it's just i'm having a very hard time like making progress against this guy no i mean i'm allowed to compliment him he is playing really well i haven't gotten a plaque from youtube i mean it's not that important to me"
+    },
+    {
+     "san": "Nf3",
+     "t": 1129,
+     "continuation": "Nf3",
+     "said": "i mean it's very strange i mean it's just i'm having a very hard time like making progress against this guy no i mean i'm allowed to compliment him he is playing really well i haven't gotten a plaque from youtube i mean it's not that important to me"
+    }
+   ]
+  }
+ ]
+}

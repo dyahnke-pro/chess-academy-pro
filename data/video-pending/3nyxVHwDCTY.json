@@ -597,5 +597,46 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "King's Indian Defense: Fianchetto Variation, Immediate Fianchetto",
+   "eco": "E60",
+   "plies": 5,
+   "line": "d4 Nf6 c4 g6 g3",
+   "coverage": 0.968
+  },
+  {
+   "name": "Indian Defense: West Indian Defense",
+   "eco": "E60",
+   "plies": 4,
+   "line": "d4 Nf6 c4 g6",
+   "coverage": 0.984
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.984
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "King's Indian Defense: Fianchetto Variation, Immediate Fianchetto",
+  "confirmed": true
+ }
 }

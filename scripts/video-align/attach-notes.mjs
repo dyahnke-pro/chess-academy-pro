@@ -23,18 +23,33 @@
  *
  * Usage: node scripts/video-align/attach-notes.mjs [--write]
  */
-import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync, renameSync } from 'node:fs';
 import { join } from 'node:path';
 
-const TRACK_DIR = 'data/video-tracks';
+// BOTH DIRECTORIES, BECAUSE A NOTE IS WRITTEN AGAINST A STAGED TRACK. A build
+// lands in `video-pending` and only moves to `video-tracks` once its notes are
+// written — but this script used to read `video-tracks` alone, so there was no
+// way to attach the notes that would earn the move. 260 staged tracks were
+// unreachable by the note pipeline for exactly that reason.
+const SHIPPED_DIR = 'data/video-tracks';
+const STAGED_DIR = 'data/video-pending';
 const NOTE_DIR = 'data/video-notes';
 
 const write = process.argv.includes('--write');
 let totalAttached = 0;
 let totalRefused = 0;
 
-for (const file of readdirSync(TRACK_DIR).filter((f) => f.endsWith('.json') && f !== 'by-opening.json')) {
-  const path = join(TRACK_DIR, file);
+const tracks = [];
+for (const dir of [SHIPPED_DIR, STAGED_DIR]) {
+  if (!existsSync(dir)) continue;
+  for (const f of readdirSync(dir)) {
+    if (f.endsWith('.json') && f !== 'by-opening.json') tracks.push({ dir, file: f });
+  }
+}
+
+let promoted = 0;
+for (const { dir, file } of tracks) {
+  const path = join(dir, file);
   const track = JSON.parse(readFileSync(path, 'utf8'));
   const notePath = join(NOTE_DIR, `${track.videoId}.json`);
   if (!existsSync(notePath)) continue;
@@ -69,9 +84,21 @@ for (const file of readdirSync(TRACK_DIR).filter((f) => f.endsWith('.json') && f
   console.log(`${track.videoId}: ${attached.length}/${notes.length} anchored`);
   if (write) {
     track.notes = attached;
+    // A NOTED TRACK IS A SHIPPED TRACK, so the move happens here rather than by
+    // hand. That is what keeps the two directories meaning something: staged =
+    // captured but not yet written up, shipped = its notes exist. Leaving the
+    // promotion to a person meant the line blurred the first time one was
+    // forgotten, and `emit-notes` reads the shipped directory, so a note left
+    // behind in staging is a note the app never speaks.
+    const dest = attached.length ? join(SHIPPED_DIR, file) : path;
     writeFileSync(path, JSON.stringify(track, null, 1));
+    if (dest !== path) {
+      renameSync(path, dest);
+      promoted += 1;
+      console.log(`  promoted ${track.videoId} -> ${SHIPPED_DIR}`);
+    }
   }
 }
 
-console.log(`\n${totalAttached} note(s) anchored, ${totalRefused} refused`);
+console.log(`\n${totalAttached} note(s) anchored, ${totalRefused} refused${promoted ? `, ${promoted} track(s) promoted` : ''}`);
 if (totalRefused) process.exit(1);

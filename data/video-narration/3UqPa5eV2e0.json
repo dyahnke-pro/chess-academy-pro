@@ -1,0 +1,448 @@
+{
+ "videoId": "3UqPa5eV2e0",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1870",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 990.5,
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "only is he going to lose his rope but if he moves it he loses more stuff than that so this is just uh i'm just going for more here than just the exchange but here we go no time wasted another game let's hope thank you jay grindel for the five gifted okay so he plays the karo khan defense which is we've"
+  },
+  {
+   "ply": 3,
+   "t": 999.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "encountered it a couple of times black prepares to go d5 now we know that we want to control the center here"
+  },
+  {
+   "ply": 4,
+   "t": 1001,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "and he goes d6 he doesn't go d5 okay so basically uh what am i going to do"
+  },
+  {
+   "ply": 5,
+   "t": 1010.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "now i'm simply going to develop my pieces which is um which is what you basically do in the"
+  },
+  {
+   "ply": 6,
+   "t": 1012,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2ppp3/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": "opening my opponent is just pushing his pawns out which is weird uh it's weird but i don't have to change my strategy because my opponent's doing something weird what should i do in this position how should we continue developing and what's sort of the best the simplest"
+  },
+  {
+   "ply": 7,
+   "t": 1041,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2ppp3/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 4",
+   "said": "way of developing our pieces we're going to keep it simple here keep it old school who can tell me the simplest possible move we could play sorry we could play off four to control the center but what i'm going to do is simply go knight f3 no knights before"
+  },
+  {
+   "ply": 8,
+   "t": 1043.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqkbnr/1p3ppp/p1ppp3/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "said": "bishops is the key role now i'm going to"
+  },
+  {
+   "ply": 9,
+   "t": 1045,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqkbnr/1p3ppp/p1ppp3/8/3PP3/2NB1N2/PPP2PPP/R1BQK2R b KQkq - 1 5",
+   "said": "develop my bishop"
+  },
+  {
+   "ply": 10,
+   "t": 1046.5,
+   "line": [
+    "h6"
+   ],
+   "fen": "rnbqkbnr/1p3pp1/p1ppp2p/8/3PP3/2NB1N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
+   "said": "now i'm going to castle in the meantime"
+  },
+  {
+   "ply": 11,
+   "t": 1048,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbqkbnr/1p3pp1/p1ppp2p/8/3PP3/2NB1N2/PPP2PPP/R1BQ1RK1 b kq - 1 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 1049,
+   "line": [
+    "b6"
+   ],
+   "fen": "rnbqkbnr/5pp1/ppppp2p/8/3PP3/2NB1N2/PPP2PPP/R1BQ1RK1 w kq - 0 7",
+   "said": "he's just trolling me he's pushing all his pawns out"
+  },
+  {
+   "ply": 13,
+   "t": 1052,
+   "line": [
+    "Be3"
+   ],
+   "fen": "rnbqkbnr/5pp1/ppppp2p/8/3PP3/2NBBN2/PPP2PPP/R2Q1RK1 b kq - 1 7",
+   "said": "he thinks he's being intimidating or funny"
+  },
+  {
+   "ply": 14,
+   "t": 1054.5,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "rn1qkbnr/1b3pp1/ppppp2p/8/3PP3/2NBBN2/PPP2PPP/R2Q1RK1 w kq - 2 8",
+   "said": "neither of which are true okay maybe he's being funny now here's the thing he finally developed a piece thank you mr x when your opponent plays this passively you guys already know kind of the general thing that we have to do which is to open up the center because by opening up the center we're going to allow my pieces uh to just to actually infiltrate otherwise he's going to get away with this so we need a plan now the obvious way of opening the center is to go e5 but then he's gonna go d5 and keep things shut so what"
+  },
+  {
+   "ply": 15,
+   "t": 1097,
+   "line": [
+    "d5"
+   ],
+   "fen": "rn1qkbnr/1b3pp1/ppppp2p/3P4/4P3/2NBBN2/PPP2PPP/R2Q1RK1 b kq - 0 8",
+   "said": "should i do how should i smash the center open and keep it open should i go e5 no i shouldn't what should i do let's get that hammer in and let's go d5 and i'm going to play a little bit"
+  },
+  {
+   "ply": 16,
+   "t": 1099.5,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "rn1qkbnr/1b3pp1/pp1pp2p/3p4/4P3/2NBBN2/PPP2PPP/R2Q1RK1 w kq - 0 9",
+   "said": "faster we had another plan"
+  },
+  {
+   "ply": 17,
+   "t": 1100.5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rn1qkbnr/1b3pp1/pp1pp2p/3P4/8/2NBBN2/PPP2PPP/R2Q1RK1 b kq - 0 9",
+   "said": ""
+  },
+  {
+   "ply": 18,
+   "t": 1102,
+   "line": [
+    "e5"
+   ],
+   "fen": "rn1qkbnr/1b3pp1/pp1p3p/3Pp3/8/2NBBN2/PPP2PPP/R2Q1RK1 w kq - 0 10",
+   "said": "that would have been even better and i'll explain it after the game but here this is simple now he's trying to close the center look at this pawn on e5 very carefully what i want to do here is i want to push my pawn out to f4"
+  },
+  {
+   "ply": 19,
+   "t": 1123.5,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "rn1qkbnr/1b3pp1/pp1p3p/3Pp3/8/2NBB3/PPPN1PPP/R2Q1RK1 b kq - 1 10",
+   "said": "in order to contest that pawn in order to open up that e file which is the main artery to his king but i can't do that right because there's a knight in the way where should we put the knight let's go knight d2 i didn't choose this square at random"
+  },
+  {
+   "ply": 20,
+   "t": 1128.5,
+   "line": [
+    "g5"
+   ],
+   "fen": "rn1qkbnr/1b3p2/pp1p3p/3Pp1p1/8/2NBB3/PPPN1PPP/R2Q1RK1 w kq - 0 11",
+   "said": "this knight could then travel to c4 and attack the b6 pawn okay he stops me from going f4 now knight c4 immediately would be fine but then he would push his pawn out to b5 and attack my knight"
+  },
+  {
+   "ply": 21,
+   "t": 1151,
+   "line": [
+    "a4"
+   ],
+   "fen": "rn1qkbnr/1b3p2/pp1p3p/3Pp1p1/P7/2NBB3/1PPN1PPP/R2Q1RK1 b kq - 0 11",
+   "said": "um what should i do to preemptively stop him from pushing this pawn kind of like a surgeon you know you're you're handcuffing that pawn we should go a4 we use our pawn to prevent hispan from"
+  },
+  {
+   "ply": 23,
+   "t": 1154.5,
+   "line": [
+    "Nd7",
+    "Nc4"
+   ],
+   "fen": "r2qkbnr/1b1n1p2/pp1p3p/3Pp1p1/P1N5/2NBB3/1PP2PPP/R2Q1RK1 b kq - 2 12",
+   "said": "moving on the next move we're going to sandwich this knight on c4 and we've got a very nice position here"
+  },
+  {
+   "ply": 24,
+   "t": 1161.5,
+   "line": [
+    "Ngf6"
+   ],
+   "fen": "r2qkb1r/1b1n1p2/pp1p1n1p/3Pp1p1/P1N5/2NBB3/1PP2PPP/R2Q1RK1 w kq - 3 13",
+   "said": "we haven't really fully opened up the center but his position is really full of holes one of those holes is f5 we're"
+  },
+  {
+   "ply": 25,
+   "t": 1165.5,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "r2qkb1r/1b1n1p2/pp1p1n1p/3PpBp1/P1N5/2N1B3/1PP2PPP/R2Q1RK1 b kq - 4 13",
+   "said": "going to stick a bishop there"
+  },
+  {
+   "ply": 26,
+   "t": 1168,
+   "line": [
+    "Rg8"
+   ],
+   "fen": "r2qkbr1/1b1n1p2/pp1p1n1p/3PpBp1/P1N5/2N1B3/1PP2PPP/R2Q1RK1 w q - 5 14",
+   "said": "just keep on increasing the pressure and guess what well we've got this e-file right we want"
+  },
+  {
+   "ply": 27,
+   "t": 1177.5,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r2qkbr1/1b1n1p2/pp1p1n1p/3PpBp1/P1N5/2N1B3/1PP2PPP/R2QR1K1 b q - 6 14",
+   "said": "to open up the file but we can't do that yet we got to prepare it let's prepare it by going rookie one and we're actually kind of"
+  },
+  {
+   "ply": 28,
+   "t": 1180.5,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r2qk1r1/1b1nbp2/pp1p1n1p/3PpBp1/P1N5/2N1B3/1PP2PPP/R2QR1K1 w q - 7 15",
+   "said": "ready to play f4 but okay so he shuts down that e file um let's continue sort of chiseling our"
+  },
+  {
+   "ply": 29,
+   "t": 1192.5,
+   "line": [
+    "a5"
+   ],
+   "fen": "r2qk1r1/1b1nbp2/pp1p1n1p/P2PpBp1/2N5/2N1B3/1PP2PPP/R2QR1K1 b q - 0 15",
+   "said": "way uh into his position how do we do that we can deploy our queen but i want to go a5 to create this little outpost for my"
+  },
+  {
+   "ply": 30,
+   "t": 1195.5,
+   "line": [
+    "bxa5"
+   ],
+   "fen": "r2qk1r1/1b1nbp2/p2p1n1p/p2PpBp1/2N5/2N1B3/1PP2PPP/R2QR1K1 w q - 0 16",
+   "said": "knight on b6 oh that's not a good move by him what should we take with the knight or the rook what do you guys think"
+  },
+  {
+   "ply": 31,
+   "t": 1207.5,
+   "line": [
+    "Nxa5"
+   ],
+   "fen": "r2qk1r1/1b1nbp2/p2p1n1p/N2PpBp1/8/2N1B3/1PP2PPP/R2QR1K1 b q - 0 16",
+   "said": "and again those of you who are sort of like not fully falling i will explain everything after the game in far more depth you can see this is a five minute game so i have to play fast some things i cannot explain at one of the time too we take with the knight why because we"
+  },
+  {
+   "ply": 32,
+   "t": 1221,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "r3k1r1/1bqnbp2/p2p1n1p/N2PpBp1/8/2N1B3/1PP2PPP/R2QR1K1 w q - 1 17",
+   "said": "attack the bishop we want to play actively we want to recapture in a way that creates a threat also this knight has access to an outpost"
+  },
+  {
+   "ply": 33,
+   "t": 1224.5,
+   "line": [
+    "Ra4"
+   ],
+   "fen": "r3k1r1/1bqnbp2/p2p1n1p/N2PpBp1/R7/2N1B3/1PP2PPP/3QR1K1 b q - 2 17",
+   "said": "now we're going to lift our rook up potentially aiming for c4 where it's"
+  },
+  {
+   "ply": 34,
+   "t": 1229,
+   "line": [
+    "h5"
+   ],
+   "fen": "r3k1r1/1bqnbp2/p2p1n2/N2PpBpp/R7/2N1B3/1PP2PPP/3QR1K1 w q - 0 18",
+   "said": "going to chase the queen away remember rooks can be activated too but we can't go rook c4 immediately right why not because we dropped the knight so can one of you brave souls tell me"
+  },
+  {
+   "ply": 35,
+   "t": 1245.5,
+   "line": [
+    "Qa1"
+   ],
+   "fen": "r3k1r1/1bqnbp2/p2p1n2/N2PpBpp/R7/2N1B3/1PP2PPP/Q3R1K1 b q - 1 18",
+   "said": "how can we first defend the knight so that we can then deploy our rook to c4 yes sir nose knows all does know the move it's queen a1"
+  },
+  {
+   "ply": 36,
+   "t": 1251.5,
+   "line": [
+    "Bxd5"
+   ],
+   "fen": "r3k1r1/2qnbp2/p2p1n2/N2bpBpp/R7/2N1B3/1PP2PPP/Q3R1K1 w q - 0 19",
+   "said": "what am i doing well that queen's going to guard the knight oh and he's going to regret this he is going to regret this"
+  },
+  {
+   "ply": 37,
+   "t": 1255,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r3k1r1/2qnbp2/p2p1n2/N2NpBpp/R7/4B3/1PP2PPP/Q3R1K1 b q - 0 19",
+   "said": "because we're going to take it"
+  },
+  {
+   "ply": 39,
+   "t": 1257.5,
+   "line": [
+    "Nxd5",
+    "Rc4"
+   ],
+   "fen": "r3k1r1/2qnbp2/p2p4/N2npBpp/2R5/4B3/1PP2PPP/Q3R1K1 b q - 1 20",
+   "said": "now we're going to complete our plan now we've given up a pawn but i've sacrificed it i haven't blundered it and the reason i sacrificed it is to open up"
+  },
+  {
+   "ply": 40,
+   "t": 1270,
+   "line": [
+    "Qb8"
+   ],
+   "fen": "rq2k1r1/3nbp2/p2p4/N2npBpp/2R5/4B3/1PP2PPP/Q3R1K1 w q - 2 21",
+   "said": "that center remember that that was our initial plan and our opponent has basically done that for us that's what a sacrifice is in chess it's when you give something up for some reason right you give up upon in order to do something that's good for you okay"
+  },
+  {
+   "ply": 41,
+   "t": 1285.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "rq2k1r1/3nbp2/p1Np4/3npBpp/2R5/4B3/1PP2PPP/Q3R1K1 b q - 3 21",
+   "said": "now we're going to well what should we do we've got a million moves here let me think for a second i also have to i think let's go knight c6 let's stick our knight on this outpost"
+  },
+  {
+   "ply": 42,
+   "t": 1290.5,
+   "line": [
+    "Qb7"
+   ],
+   "fen": "r3k1r1/1q1nbp2/p1Np4/3npBpp/2R5/4B3/1PP2PPP/Q3R1K1 w q - 4 22",
+   "said": "queen to b7 now let's just keep increasing the pressure how should we do that can somebody propose a move how should we keep increasing the pressure let's go queen to a4 absolutely creating a pin now we can take with the rook very good guys all of you are sharp i appreciate it the engagement okay so now let's lift the other rook up to b3 let's go and where is mr queen going here now the thing is if the queen moves out to c7 ladies and gentlemen thank you 107 bits it it walks right into the x-ray of the other rook this is what happens when you have well-placed pieces um mrs queen i just sorry that was bad mrs queen of course um but basically yeah he's on the ropes now if if knight b6 follows here um then well then we have several things that we can do now notice that the queen is undefended here so if i move the queen let's say to here then he will not be able to take the rook uh because uh because the queen will be undefended but actually this is not so simple he does have a move uh d5 which i didn't fully anticipate uh but okay so he's this guy is playing very well so let me take let me think for a second here we're still in good shape don't worry okay so he does this wow that is a very strong move yeah this is actually kind of sticky i have to say okay we can take the rook though and now we can slide this rook over to g3 now i've got a focus i've got 20 seconds this might be the strongest opponent we face today so i couldn't have taken the knight and i'll explain why after the game it was an insane tactical idea that he came up with okay now we're going to undermine this pawn and create some create some look for our king again i'll explain everything after the game but you guys can see i have 23 seconds so i gotta play fast the suspense is on the charlie fans came at a great time okay we're gonna take the pun he gives us a check we're gonna move the king now i do happen to like bullet chests so this is you know i'm experienced in these types of situations and i gotta make a move my man my goodness okay eah this guy is yeah this guy is vastly underrated vastly underrated but i think we'll be fine all right drum roll please ladies and gentlemen drum roll please nobody go anywhere i'm actually nervous i'm winning but i've got 13 seconds will i make it will i make it 11 seconds to win the end game will i do it all right where you got an endgame i'm up a piece but i gotta win this in nine seconds we're gonna make it happen ladies and gentlemen we're gonna make it happen i'm gonna win this that was close that was the closest i've come to losing a speedrun game this guy was incredible but wait i still gotta win and i got seven seconds to checkmate him but the thing is at some point the center is your muscle memory what i'm doing here is i'm doing something called a pre-move a pre-move is a move that you execute regardless of what your opponent does it only takes 1.1 seconds to make a pre-move so i'm able to to make a lot more moves now here i have a queen against the king this is one of the easiest checkmates in chess i'll be able to basically check my name while pre-moving all of my moves and what you can see that i'm doing here is i'm cutting off his king boom boom and ladies and gentlemen we have ourselves a checkmate what a game what a game and the perfect yeah there's so much to talk about here now the one thing i want to emphasize is"
+  },
+  {
+   "ply": 5,
+   "t": 1615.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "that it's not about playing games fast i want to make sure i explain everything so that people actually learn you guys shouldn't be that impressed i shouldn't have let this get down this close um and you know i i definitely let this slip a little bit in some moment but he played very well so i i did my best okay so"
+  },
+  {
+   "ply": 4,
+   "t": 1624.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "let's go through this game let me unpack everything for you guys so basically"
+  },
+  {
+   "ply": 2,
+   "t": 1628,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "in the opening okay when you start a"
+  },
+  {
+   "ply": 4,
+   "t": 1629.5,
+   "line": [
+    "d4",
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "chess game basically you want to control the center the center broadly speaking is these four squares that i just highlighted in red when you control the center your pieces get more space and you're able to put your pieces on better squares where they can be better positioned to start an attack against your opponent's king"
+  },
+  {
+   "ply": 5,
+   "t": 1658,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2pp4/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "as you guys know the ultimate objective of the game of chess is to checkmate your opponent's king to put him in a situation where the king is in check and has no squares so our opponent"
+  },
+  {
+   "ply": 6,
+   "t": 1659,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/2ppp3/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": "was just was just pushing out his pawns without controlling the center which is why i got a very nice position at the start i'm just developing and here the move d5 was played now instead of this what should i have done what i should have done is try to open up this file for my rook sticky bro thank you for the prime how should i have gone about doing that can somebody tell me a plan that i can execute to open up that f file and don't worry i'll be i'll be pretty quick here we'll get started on the next game soon but you know if you guys are in in here to improve you want to get better you know try to engage pay attention ask any questions you want um no such thing as a bad question it's okay to make mistakes i'm we're here to learn so i say that every time and i mean it uh d the sony thing with the prime so knight d2 would have been correct i did this in the game then we pushed the f pawn to f5 and we take on e6 now why would we want to open up the f file let's say that he makes a bunch of random moves the reason we open up the f-file is because it's a direct artery to his king in fact white has checkmate in two moves well technically in three moves here check on h5 and then checkmate on f7 you see how quickly checkmate follows after the king is opened up like this um so that's that's a very very typical situation okay so instead i played d5 and now i went knight d2 so i did the same thing in this position to try to open up that f i appreciate it brett stick and and loving the fact that so many people have stuck around we've got seven almost 8 000 viewers so uh thank you guys so much i really really appreciate it um okay so i got my knight to a good square the move a4 why did i play it i played it to stop b5 if i'd gone knight c4 immediately he could have kicked my knight away with the move b5 okay a4 knight c4 now let me fast forward to the moment where i basically almost ran out of time so takes rook a4 here i'm just activating all of my pieces sacrificing a pawn in order to open up the center and to get rid of his bishop and essentially now i thought i was completely winning but he managed to survive so boom boom we got our rook to a great square and now the fun starts okay so let's do this blow by blow this is called a fork okay not a literal fork a fork is when a piece attacks two other pieces you guys see that the knight the black knight attacks the queen and the rook but this is called a pin it's like a flush and a straight and poke or a pin is when there is one piece in another piece and they're in the same line or diagonal now one of the pieces that's the piece that's behind the pinned piece the pinned piece is the knight has to be of greater value so a pin is good because the knight can't really move if the knight moves he loses his queen right that's why this pin is so strong so it's a fork versus a pin i moved my queen which means that if he takes on c4 he drops his queen and a queen is more valuable than a rook and i moved my queen to b4 to attack his knight but now he pushed his pawn out to d5 all of a sudden this bishop opens up attacking my queen and he's attacking my rook so things get super messy here this is a discover check a lot of terminology here but i'll introduce it bit by bit the op shot is that this position occurred on the board this is an amazing position because here's the thing i could have taken his knight on b6 okay that's a free knight or so it seems now first of all if he takes my rook what does white do i just take his queen right if he takes the queen then my rook which was being attacked takes his queen and i'm up a piece but what did my devilish opponent cook up here what does black actually have and i saw this at the last second i could have lost this game this was an amazing idea who can spot it so rook to you you guys are is in the right direction that's exactly the right idea there's a problem though that is defended you guys have a good eye for tactics you're seeing the back rank mate but here's the thing queen to d5 does exactly the same thing now the queen threatens to checkmate the king no problem right it's okay but wait a second the rook is also hanging so in effect this is a fork your forking checkmate threat and the rook white cannot defend both at the same time it would be nice if the rook could travel to e1 but it can't no matter where you move the rook you can only block the check but you can't stave off the mate there's nothing i can do if i go rook d3 trying to intercept the queen then c takes d3 and black will be up a rook for a bishop which is a pretty disastrous situation that's called being up in exchange and so that is why i played rook to g3 and didn't take his knight that's hard to see and kudos to my opponent for finding this now i play h3 this is the pin pawn cannot move because he loses his king that's illegal and so i won a pawn and i got a winning position but at this point i had almost no time and my opponent continued to defend very well now there is one very cool idea i wanted to show you guys this is a fork i attack his rook and i attack his knight what if he had gone rook to b5 defending his knight with his rope white actually has a beautiful checkmating idea there are several ways to deliver checkmate but there is one move that's just very pretty who can spot it queen to d8 is the fastest mate but who sees the pretty mate knows nozzle is on a roll this man and yep rook hey sacrificing the rook dropping the king to h8 and queen fate is checkmate this is a typical pattern queen delivers the check bishop holds the king back right no squares queen d8 also was checkmate this is like the business approach queen to h8 is made is also possible or you could go rook h7 so lots of mates here he correctly gave up a piece i traded queens which is normally what you do when you're up material you want to trade pieces simplify the game and of course here i had like six seconds so i had to try my best but what i did was that i managed to trade rooks which made the win a lot simpler for me now i tossed his king out of the way and won the pawn and won the game that's basically what happened any questions and that was a complicated"
+  },
+  {
+   "ply": 9,
+   "t": 2058,
+   "line": [
+    "Bd3",
+    "a6",
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/1p3ppp/p1ppp3/8/3PP3/2NB1N2/PPP2PPP/R1BQK2R b KQkq - 1 5",
+   "said": "game there were some details that i didn't that i kind of left out uh but but i try to sort of give you the thrust of the game and extract the crucial lessons great opponent my opponent played very well and honestly if he didn't play such a bad opening uh who knows what would have happened he gave me a pretty big head start by pushing his pawns out like this um i think he played like a 23 2400 or so uh so big big kudos to my opponent let's go"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 6,
+   "fen": "rnbqkbnr/pp3ppp/2ppp3/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "e4",
+    "c6",
+    "d4",
+    "d6",
+    "Nc3",
+    "e6"
+   ],
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 1041,
+     "continuation": "Nf3",
+     "said": "way of developing our pieces we're going to keep it simple here keep it old school who can tell me the simplest possible move we could play sorry we could play off four to control the center but what i'm going to do is simply go knight f3 no knights before bishops is the key role now i'm going to develop my bishop now i'm going to castle in the meantime he's just trolling me he's pushing all his pawns out he thinks he's being intimidating or funny neither of which are true okay maybe he's being funny now here's the thing he finally developed a piece thank you mr x when your opponent plays this passively you guys already know kind of the general thing that we have to do which is to open up the center because by opening up the center we're going to allow my pieces uh to just to actually infiltrate otherwise he's going to get away with this so we need a plan now the obvious way of opening the center is to go e5 but then he's gonna go d5 and keep things shut so what should i do how should i smash the center open and keep it open should i go e5 no i shouldn't what should i do let's get that hammer in and let's go d5 and i'm going to play a little bit faster we had another plan"
+    },
+    {
+     "san": "Bd3",
+     "t": 2058,
+     "continuation": "Bd3 a6 Nf3",
+     "said": "game there were some details that i didn't that i kind of left out uh but but i try to sort of give you the thrust of the game and extract the crucial lessons great opponent my opponent played very well and honestly if he didn't play such a bad opening uh who knows what would have happened he gave me a pretty big head start by pushing his pawns out like this um i think he played like a 23 2400 or so uh so big big kudos to my opponent let's go"
+    }
+   ]
+  }
+ ]
+}

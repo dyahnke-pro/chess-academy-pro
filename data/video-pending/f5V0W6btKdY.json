@@ -1,0 +1,189 @@
+{
+ "videoId": "f5V0W6btKdY",
+ "title": "Master Class | Passive Vs Quiet | Chess Speedrun | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 3315,
+  "settledPositions": null
+ },
+ "plies": 15,
+ "rewinds": 3,
+ "moves": [
+  {
+   "t": 593,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 594.5,
+   "ply": 3,
+   "line": [
+    "d3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/3P4/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 597,
+   "ply": 4,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/3P4/PPP2PPP/RNBQKBNR w KQkq - 1 3"
+  },
+  {
+   "t": 600,
+   "ply": 5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2NP4/PPP2PPP/R1BQKBNR b KQkq - 2 3"
+  },
+  {
+   "t": 601,
+   "ply": 6,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/4P3/2NP4/PPP2PPP/R1BQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 607.5,
+   "ply": 7,
+   "line": [
+    "g3"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/4P3/2NP2P1/PPP2P1P/R1BQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 628.5,
+   "ply": 6,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/4P3/2NP4/PPP2PPP/R1BQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 630.5,
+   "ply": 8,
+   "line": [
+    "Nf3",
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/4P3/2NP1N2/PPP2PPP/R1BQKB1R w KQkq - 2 5"
+  },
+  {
+   "t": 632.5,
+   "ply": 9,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/4P3/2NP1N2/PPPB1PPP/R2QKB1R b KQkq - 3 5"
+  },
+  {
+   "t": 637,
+   "ply": 8,
+   "line": [],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/4P3/2NP1N2/PPP2PPP/R1BQKB1R w KQkq - 2 5"
+  },
+  {
+   "t": 642.5,
+   "ply": 10,
+   "line": [
+    "Bd2",
+    "d6"
+   ],
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/4P3/2NP1N2/PPPB1PPP/R2QKB1R w KQkq - 0 6"
+  },
+  {
+   "t": 644.5,
+   "ply": 11,
+   "line": [
+    "h3"
+   ],
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/4P3/2NP1N1P/PPPB1PP1/R2QKB1R b KQkq - 0 6"
+  },
+  {
+   "t": 666,
+   "ply": 12,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pp2ppbp/2np1np1/2p5/4P3/2NP1N1P/PPPB1PP1/R2QKB1R w KQkq - 1 7"
+  },
+  {
+   "t": 937.5,
+   "ply": 3,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/3P4/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 938.5,
+   "ply": 7,
+   "line": [
+    "Nc6",
+    "Nc3",
+    "g6",
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/4P3/2NP1N2/PPP2PPP/R1BQKB1R b KQkq - 1 4"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/4P3/2NP4/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "e4",
+    "c5",
+    "d3",
+    "Nc6",
+    "Nc3",
+    "g6"
+   ],
+   "ply": 6,
+   "options": [
+    {
+     "san": "g3",
+     "t": 607.5,
+     "continuation": "g3"
+    },
+    {
+     "san": "Nf3",
+     "t": 630.5,
+     "continuation": "Nf3 Bg7"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}

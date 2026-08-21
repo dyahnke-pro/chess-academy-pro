@@ -1,0 +1,621 @@
+{
+ "videoId": "7uxRcomJo7I",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1920",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 4,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "we are playing menger mania 1962. now i'm going to play the opening that i"
+  },
+  {
+   "ply": 3,
+   "t": 5,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "have been playing against 1d4 which is the king's indian"
+  },
+  {
+   "ply": 4,
+   "t": 11,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "defense those of you just joining describe i"
+  },
+  {
+   "ply": 6,
+   "t": 13.5,
+   "line": [
+    "Nc3",
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "said": "will explain once again the main sort of ideas of"
+  },
+  {
+   "ply": 7,
+   "t": 15,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "this opening if you've never played the king's indian it can look terrible what am i doing i'm giving him full control of the center and that's"
+  },
+  {
+   "ply": 8,
+   "t": 26,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "said": "the point of the king's indian what you do is you give your opponent control of the center with the ultimate aim of attacking that"
+  },
+  {
+   "ply": 9,
+   "t": 27.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 5",
+   "said": "center with your pieces from a distance"
+  },
+  {
+   "ply": 10,
+   "t": 39,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R w KQ - 2 6",
+   "said": "[Music] it's called a hyper modern opening so"
+  },
+  {
+   "ply": 11,
+   "t": 40.5,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP2BPPP/R1BQK2R b KQ - 3 6",
+   "said": "here's the thing"
+  },
+  {
+   "ply": 12,
+   "t": 42,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "said": "i'm going to go e5 and here we have it right attacking his center with my pawns this is the main move it"
+  },
+  {
+   "ply": 13,
+   "t": 52.5,
+   "line": [
+    "Be3"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N1BN2/PP2BPPP/R2QK2R b KQ - 1 7",
+   "said": "does not blunder upon uh and i'll explain everything after the game it's up string good to see you and we're gonna open up"
+  },
+  {
+   "ply": 14,
+   "t": 55,
+   "line": [
+    "exd4"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/8/2PpP3/2N1BN2/PP2BPPP/R2QK2R w KQ - 0 8",
+   "said": "the center so that we can more easily attack the e4 pawn with our pieces"
+  },
+  {
+   "ply": 15,
+   "t": 59.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/8/2PNP3/2N1B3/PP2BPPP/R2QK2R b KQ - 0 8",
+   "said": "how should i attack the e4 pawn"
+  },
+  {
+   "ply": 16,
+   "t": 72.5,
+   "line": [
+    "Re8"
+   ],
+   "fen": "rnbqr1k1/ppp2pbp/3p1np1/8/2PNP3/2N1B3/PP2BPPP/R2QK2R w KQ - 1 9",
+   "said": "did somebody tell me the simple way bingo rookie 8"
+  },
+  {
+   "ply": 17,
+   "t": 75,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqr1k1/ppp2pbp/3p1np1/8/2PNP3/2N1BP2/PP2B1PP/R2QK2R b KQ - 0 9",
+   "said": "he's got f3 what is this move done immediately remember what i told you last game whenever the f pawn is pushed you need to understand the drawbacks of every move that your opponent plays now this is just a general weakening move but look at this bishop on e3 this bishop is undefended what does that mean that means that if we can get this pawn out of e4 that's going to be something a sticky situation now we can't go d5"
+  },
+  {
+   "ply": 18,
+   "t": 109.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqr1k1/pp3pbp/2pp1np1/8/2PNP3/2N1BP2/PP2B1PP/R2QK2R w KQ - 0 10",
+   "said": "immediately right because he takes with this one but can we prepare the move d5 can we prepare the pawn break d5 hoping to exploit his this is theory by the way he's he hasn't done anything wrong this is the main line but if white doesn't know exactly how to"
+  },
+  {
+   "ply": 20,
+   "t": 113,
+   "line": [
+    "Qd2",
+    "d5"
+   ],
+   "fen": "rnbqr1k1/pp3pbp/2p2np1/3p4/2PNP3/2N1BP2/PP1QB1PP/R3K2R w KQ - 0 11",
+   "said": "play here he can get in very big trouble he plays it correctly with queen d2"
+  },
+  {
+   "ply": 21,
+   "t": 115.5,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "rnbqr1k1/pp3pbp/2p2np1/3P4/3NP3/2N1BP2/PP1QB1PP/R3K2R b KQ - 0 11",
+   "said": ""
+  },
+  {
+   "ply": 22,
+   "t": 116.5,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "rnbqr1k1/pp3pbp/5np1/3p4/3NP3/2N1BP2/PP1QB1PP/R3K2R w KQ - 0 12",
+   "said": "we've got d5 anyway because even though the bishop is defended"
+  },
+  {
+   "ply": 23,
+   "t": 123.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqr1k1/pp3pbp/5np1/3pP3/3N4/2N1BP2/PP1QB1PP/R3K2R b KQ - 0 12",
+   "said": "it's still very flimsy all right this goes back to the concept of okay so e5 just gives up a pawn that's"
+  },
+  {
+   "ply": 24,
+   "t": 126,
+   "line": [
+    "Rxe5"
+   ],
+   "fen": "rnbq2k1/pp3pbp/5np1/3pr3/3N4/2N1BP2/PP1QB1PP/R3K2R w KQ - 0 13",
+   "said": "definitely not the best way to play it and uh we've gotten everything we've opened"
+  },
+  {
+   "ply": 25,
+   "t": 132,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq2k1/pp3pbp/5np1/3pr3/3N4/2N1BP2/PP1QB1PP/R4RK1 b - - 1 13",
+   "said": "up the e file which we wanted and we've won a pawn"
+  },
+  {
+   "ply": 26,
+   "t": 135.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bq2k1/pp3pbp/2n2np1/3pr3/3N4/2N1BP2/PP1QB1PP/R4RK1 w - - 2 14",
+   "said": "okay so now let's continue our development by playing knight to c6 if he takes my knight we take with the pawn and then we are able to support"
+  },
+  {
+   "ply": 27,
+   "t": 148,
+   "line": [
+    "Rad1"
+   ],
+   "fen": "r1bq2k1/pp3pbp/2n2np1/3pr3/3N4/2N1BP2/PP1QB1PP/3R1RK1 b - - 3 14",
+   "said": "the pawn on d5 queen e8 was possible but then he could have just dropped his bishop back right we don't want to like put all of our aces on the table at once so okay what should we do who can this is an interesting situation there's many ways to play it but um i want you guys to sort of be be engaged here in the in the development now rook takes e3 is interesting but it doesn't work and i will i will show this after the game so in if we were to follow the rules by the"
+  },
+  {
+   "ply": 28,
+   "t": 184,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2q2k1/pp1b1pbp/2n2np1/3pr3/3N4/2N1BP2/PP1QB1PP/3R1RK1 w - - 4 15",
+   "said": "book we would say okay the bishop is not developed we need to develop the bishop where should we develop it i don't like bishop f5 because it allows knight takes f5 so we're just going to go bishop d7 remember what i always say not every one of your pieces needs to be"
+  },
+  {
+   "ply": 29,
+   "t": 191,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r2q2k1/pp1b1pbp/2n2np1/3pr3/3N1B2/2N2P2/PP1QB1PP/3R1RK1 b - - 5 15",
+   "said": "working on you know the coveted vaccine distribution you could have a piece that's just sort of"
+  },
+  {
+   "ply": 30,
+   "t": 195,
+   "line": [
+    "Re8"
+   ],
+   "fen": "r2qr1k1/pp1b1pbp/2n2np1/3p4/3N1B2/2N2P2/PP1QB1PP/3R1RK1 w - - 6 16",
+   "said": "chilling you know on a beach somewhere and that's the bishop okay the point of playing bishop d7 is to"
+  },
+  {
+   "ply": 31,
+   "t": 201,
+   "line": [
+    "Kh1"
+   ],
+   "fen": "r2qr1k1/pp1b1pbp/2n2np1/3p4/3N1B2/2N2P2/PP1QB1PP/3R1R1K b - - 7 16",
+   "said": "just develop it connect the rooks uh and and and you're fine okay so what should we do now well i'm looking at the knight and that's setting the metal detector"
+  },
+  {
+   "ply": 32,
+   "t": 214.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r2qr1k1/pp1b1pbp/5np1/3p4/3n1B2/2N2P2/PP1QB1PP/3R1R1K w - - 0 17",
+   "said": "off of my head whoa wait a second knight's defended by the queen but there's a bishop here i can take on d4 i can get his queen onto a very vulnerable square why is it vulnerable because it's"
+  },
+  {
+   "ply": 33,
+   "t": 220,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r2qr1k1/pp1b1pbp/5np1/3p4/3Q1B2/2N2P2/PP2B1PP/3R1R1K b - - 0 17",
+   "said": "x-rayed by the bishop this is called an x-ray and the x-ray is a precursor to a discovered attack or a discovered check where you move you basically you tear"
+  },
+  {
+   "ply": 34,
+   "t": 233.5,
+   "line": [
+    "Nh5"
+   ],
+   "fen": "r2qr1k1/pp1b1pbp/6p1/3p3n/3Q1B2/2N2P2/PP2B1PP/3R1R1K w - - 1 18",
+   "said": "the cover off and then that bishop is going to attack the queen but we want to get the most bang for our buck and as you guys are indicating knight h5 is the way to do it making"
+  },
+  {
+   "ply": 35,
+   "t": 236.5,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r2qr1k1/pp1b1pbp/6p1/3p3n/5B2/2N2P2/PP1QB1PP/3R1R1K b - - 2 18",
+   "said": "contact with the bishop"
+  },
+  {
+   "ply": 36,
+   "t": 237.5,
+   "line": [
+    "Nxf4"
+   ],
+   "fen": "r2qr1k1/pp1b1pbp/6p1/3p4/5n2/2N2P2/PP1QB1PP/3R1R1K w - - 0 19",
+   "said": "and now comes the winning idea"
+  },
+  {
+   "ply": 37,
+   "t": 242.5,
+   "line": [
+    "Qxf4"
+   ],
+   "fen": "r2qr1k1/pp1b1pbp/6p1/3p4/5Q2/2N2P2/PP2B1PP/3R1R1K b - - 0 19",
+   "said": "once he takes what should black now do look at the position carefully how has it transformed what can we do to win the game that's"
+  },
+  {
+   "ply": 38,
+   "t": 254.5,
+   "line": [
+    "Bxc3"
+   ],
+   "fen": "r2qr1k1/pp1b1p1p/6p1/3p4/5Q2/2b2P2/PP2B1PP/3R1R1K w - - 0 20",
+   "said": "why i love the king's indian you know white white makes one move incorrectly and he loses the game we chop off the defender of the bishop on e2 type one and type two undefended pieces come into play i will recap that concept for you after the game and we are gonna be up a full"
+  },
+  {
+   "ply": 39,
+   "t": 275,
+   "line": [
+    "bxc3"
+   ],
+   "fen": "r2qr1k1/pp1b1p1p/6p1/3p4/5Q2/2P2P2/P3B1PP/3R1R1K b - - 0 20",
+   "said": "piece okay so i'm just making some notes about what i want to talk about it's very hard for me to sort of set in an adequate manner introduce the king's"
+  },
+  {
+   "ply": 42,
+   "t": 278.5,
+   "line": [
+    "Rxe2",
+    "Rxd5",
+    "Qe7"
+   ],
+   "fen": "r5k1/pp1bqp1p/6p1/3R4/5Q2/2P2P2/P3r1PP/5R1K w - - 1 22",
+   "said": "indian because it's such a complex opening let's unpin ourselves but i'll do my best and i've already"
+  },
+  {
+   "ply": 43,
+   "t": 283,
+   "line": [
+    "h4"
+   ],
+   "fen": "r5k1/pp1bqp1p/6p1/3R4/5Q1P/2P2P2/P3r1P1/5R1K b - - 0 22",
+   "said": "talked about it on some occasions okay so uh he wants to go h5 some"
+  },
+  {
+   "ply": 44,
+   "t": 289.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "r5k1/pp1bqp2/6p1/3R3p/5Q1P/2P2P2/P3r1P1/5R1K w - - 0 23",
+   "said": "shenanigans let's let's cut that let's snip that in the butt uh not necessary but still now"
+  },
+  {
+   "ply": 45,
+   "t": 297.5,
+   "line": [
+    "Rfd1"
+   ],
+   "fen": "r5k1/pp1bqp2/6p1/3R3p/5Q1P/2P2P2/P3r1P1/3R3K b - - 1 23",
+   "said": "he's created a weakness on h4 queen is tied down to the pawn okay let's not forget that he threatens uh rook takes d7 where should our bishop go what would be a nice active"
+  },
+  {
+   "ply": 46,
+   "t": 310.5,
+   "line": [
+    "Bc6"
+   ],
+   "fen": "r5k1/pp2qp2/2b3p1/3R3p/5Q1P/2P2P2/P3r1P1/3R3K w - - 2 24",
+   "said": "solid square for the bishop not bishop b5 because that would blunder it but bishop to c6 right why is this a good square because it's defended by a pawn that's the only way to make sure your piece is really safe is when it's defended by fun i will delve into that after the game"
+  },
+  {
+   "ply": 47,
+   "t": 331.5,
+   "line": [
+    "Rd6"
+   ],
+   "fen": "r5k1/pp2qp2/2bR2p1/7p/5Q1P/2P2P2/P3r1P1/3R3K b - - 3 24",
+   "said": "and once again a huge shout out still we have six thousand viewers amazing stuff thank you guys so very much for all the support all the hype and and the engagement everybody's engaged and i love to see that so now we have this rook on a it feels sad"
+  },
+  {
+   "ply": 48,
+   "t": 339.5,
+   "line": [
+    "Re8"
+   ],
+   "fen": "4r1k1/pp2qp2/2bR2p1/7p/5Q1P/2P2P2/P3r1P1/3R3K w - - 4 25",
+   "said": "sad it's left out um let's make sure it's not left out by by creating the alakine gun alakine's gun is essentially when you triple your pieces i think technically it means like queen behind the rooks but informally it refers to any kind of"
+  },
+  {
+   "ply": 49,
+   "t": 361,
+   "line": [
+    "Qh6"
+   ],
+   "fen": "4r1k1/pp2qp2/2bR2pQ/7p/7P/2P2P2/P3r1P1/3R3K b - - 5 25",
+   "said": "tripling along a file named after alexander alekhine early world champion um fourth fourth world champion from russia and now if we remember something about his move h4 right it created a weakness we always"
+  },
+  {
+   "ply": 50,
+   "t": 377,
+   "line": [
+    "Qxh4+"
+   ],
+   "fen": "4r1k1/pp3p2/2bR2pQ/7p/7q/2P2P2/P3r1P1/3R3K w - - 0 26",
+   "said": "need to sort of like a librarian we need to catalog all of our opponent's weaknesses what should we do check now let me all right guys i'm gonna rub it in a little bit"
+  },
+  {
+   "ply": 52,
+   "t": 386,
+   "line": [
+    "Kg1",
+    "Re1+"
+   ],
+   "fen": "4r1k1/pp3p2/2bR2pQ/7p/7q/2P2P2/P5P1/3Rr1K1 w - - 2 27",
+   "said": "we can okay he resigned i was gonna rub it in we could have gone rookie one with the checkmate or queen f2 but we had a pretty checkmate by sacrificing the rook we could have stacked the rook to open his king up further and guess what rookie 2 is a simple mate but if we wanted to rub it in even further who can tell me a very pretty follow-up that we could uh put on the board here further ripping open his king position queen g4 is possible yeah but also bishop f3 sacrificing the bishop check"
+  },
+  {
+   "ply": 50,
+   "t": 425,
+   "line": [],
+   "fen": "4r1k1/pp3p2/2bR2pQ/7p/7q/2P2P2/P3r1P1/3R3K w - - 0 26",
+   "said": "rook cuts off the king has to go back and now the ladder mate rookie two queen g2 okay so there was an abundance of mates here and he graciously resigned all right so king's indian"
+  },
+  {
+   "ply": 12,
+   "t": 428.5,
+   "line": [],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "said": "first played in the in the year 1850 did not become popular until the 1920s 1930s"
+  },
+  {
+   "ply": 4,
+   "t": 439.5,
+   "line": [],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "and still rarely played until the 60s and 70s why because if you think about chess history i've explained this before when chess was first starting to be a thing uh people followed the rules right"
+  },
+  {
+   "ply": 7,
+   "t": 456.5,
+   "line": [
+    "e4",
+    "Bg7",
+    "Nc3"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 2 4",
+   "said": "people follow the rules and the rules said that you had to control the center and in the king's indian black most certainly does not control the center with his pawns he controls it with his pieces that's why the king's indian is called a hyper modern opening because in the 1920s there was a group of uh pretty interesting people they were from all parts of europe and they were called the hyper modernists hyper modernist says guys let's let's all chill out let's uh you know sip on some wine and the people from california said let's you know let's uh you know do something other than sipping on wine uh let's all chill out for a second let's understand something you don't always have to control the center with pawns in order for your development to be effective what they"
+  },
+  {
+   "ply": 8,
+   "t": 505,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "said": "said is that let's let our opponents control the center with his pawns and then let's shoot these pawns down from a distance that's why they deploy the bishop here and and that's why black sort of holds back white center without actually immediately contesting it and only black puts pressure on that"
+  },
+  {
+   "ply": 10,
+   "t": 516.5,
+   "line": [
+    "Nf3",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2N2/PP3PPP/R1BQKB1R w KQ - 2 6",
+   "said": "center when he is ready to do so that's sort of the philosophy of the king's indian"
+  },
+  {
+   "ply": 12,
+   "t": 518,
+   "line": [
+    "Be2",
+    "e5"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "said": "and the movie five comes right immediately striking the pawn on d4 i've played the kings in my whole life"
+  },
+  {
+   "ply": 14,
+   "t": 526,
+   "line": [
+    "dxe5",
+    "dxe5"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/5np1/4p3/2P1P3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 8",
+   "said": "um now why doesn't this blunder upon"
+  },
+  {
+   "ply": 15,
+   "t": 527,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/5np1/4N3/2P1P3/2N5/PP2BPPP/R1BQK2R b KQ - 0 8",
+   "said": "why can't white just take the pawn there's a small tactic here uh and without this tactic the king's"
+  },
+  {
+   "ply": 16,
+   "t": 535.5,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/6p1/4N3/2P1n3/2N5/PP2BPPP/R1BQK2R w KQ - 0 9",
+   "said": "indian would simply fail yeah and i take c4 exposing the attack on the knight equalizing the material and white's gonna have black's gonna have a massive bishop here"
+  },
+  {
+   "ply": 12,
+   "t": 544.5,
+   "line": [],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "said": "on e5 all right now commonly in the king's indian white pushes d5 this creates a locked center and then white castle's"
+  },
+  {
+   "ply": 15,
+   "t": 550.5,
+   "line": [
+    "d5",
+    "Nbd7",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pppn1pbp/3p1np1/3Pp3/2P1P3/2N2N2/PP2BPPP/R1BQ1RK1 b - - 2 8",
+   "said": "king's side this is what makes the king's indian fascinating it's an attack on either side of the white attacks on the queen side black"
+  },
+  {
+   "ply": 12,
+   "t": 562,
+   "line": [],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "said": "attacks on the king side black goes for checkmate so it's a very ambitious opening it's an opening for aggressive players it's a very hard opening to learn"
+  },
+  {
+   "ply": 14,
+   "t": 563.5,
+   "line": [
+    "Be3",
+    "exd4"
+   ],
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/8/2PpP3/2N1BN2/PP2BPPP/R2QK2R w KQ - 0 8",
+   "said": "instead he decided to keep the center open i opened it up and uh queen d2 was played now using chess base which i've as i told you guys i have used it to show you these these these games i am going to check for a second to see whether this has ever actually happened in tournament play and one thing that you can check using chess space which has the largest uh database of official tournament games ever assembled millions and millions of them i can check this position to see who's played like this before so queen to d2 100 okay over over 500 games uh and gary kasparov had a game here with the black pieces d5 is the main move and c takes d5 is rare only 22 games and then the move e5 was only played once in 2004 rook takes e5 so this position only occurred once in recorded tournament play in 2004 uh and of course i'm just much better because i'm up i'm up a pawn and i develop my knight in that game black played rook takes c3 which i completely don't get i think it's premature to do this even though black actually won the game icelandic player bjornsson uh i think he went like this maybe trying to pin anyways development bishop to d7 um now type one and type two undefended pieces very quickly um there's three types pieces can be categorized broadly speaking into three departments number one undefended type one i i formulated this myself it's a little clunky but mark my words i think it's helpful type one undefended piece is a piece that is literally unprotected by any other pieces or pawns does either side have any type 1 undefended pieces and the king we exclude from this category and the queen is in a special category i'll explain that um in a moment no he does not right then type 2 undefended piece and a type 2 undefended piece is a piece that is only defended by one other piece not a pawn not a game not a game practice one other piece which type 2 undefended piece jumps to mind using that definition who can tell me the key of course the bishop now the third category is a defended piece and in my definition black technically has a type 2 on on g7 right i sound like a dentist now is the g7 bishop vulnerable no because white has no pieces there okay so this is all only important if it's relevant now a defended piece is a piece that is protected by a pawn or by more than one piece okay this knight is defended this bishop is defended okay now again this is just something i created to facilitate making the right observations now here's the thing when this position is reached how does my how does my brain process the position that's on the board well there's a couple of things i notice the first is you guys all see this right the x-ray but then and this is the key bishop on e2 what kind of a bishop is it using our categorization is it defended it's a type addicting heir thank you for the prime it's a type 2. how about the bishop on a4 what can you tell me about this bishop it's a type 2 now the queen i told you i'd talk about that later the queen is always undefended no matter how many pawns or pieces are in contact with it the reason the queen is always undefended is because when the queen is attacked by any piece other than another queen it must move does that make sense so you can have 50 pieces quote-unquote defending it but it's still going to have to move because it's the most valuable piece so there's three undefended pieces in sort of the same zip code that's why i see knight h5 and this bishop type 2 undefended only the knight is defending it we chop the legs off and we win the bishop that's sort of the logic hopefully that makes sense and the rest is very straightforward okay um that's i don't know about that luke but you can go pretty far i think uh does queen before for him there defend i don't think it does i think he's pretty much busted uh queen before is the same exact thing we take the knight sorry we take the bishop or we could have also taken the knight first and then take the knight um so honestly i think this is an underestimated way of thinking about certain positions you can do a lot by simply constantly harping on the type one and type two undefended pieces in a position and if you guys just give me one moment please let me see if i can find a very quick illustrative game from my own chess career like can you actually you know prac do you actually practice what you preach daniel you might be asking and i try to when possible let me see if i can oh let me see if i can find a game from early in my chess career where i did something like that ah yes i can actually i remember a nice little combination i had which sort of exploits this concept 2005 november 5th four days before my 10th birthday this position appears on the board i'm playing a 1400 yes i was 1800 once bishop takes f3 so it looks like everything is fine for white right i mean material is equal we can trade bishops but what does that really do right but here's the thing what can you guys tell me about this bishop what kind of a piece is it 's a type 2 undefended piece only the it's a type 2 undefended piece only the rook is defending which means it's incredibly vulnerable to tactics and the move is rook to d1 distracting the rook from f1 it's got to take my opponent resigned because now i pick up the bishop and simultaneously fork the rook so there's another tactical idea that's involved here but you spot this by initially understanding that the bishop on f3 is incredibly vulnerable as is the rook on f1 this is the type 1 undefended piece so both are exploited here if only"
+  },
+  {
+   "ply": 3,
+   "t": 956,
+   "line": [],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "white's king was let's say on g2 none of this would have worked that's how important this difference is to make why does bishop d3 not work for white in a situation oh so any questions by the way about this game so type 1 is a piece that's not defended by any pieces type 2 is a piece that is defended by only one other piece and not a pawn uh mycon asks when you move bishop c6 why couldn't you activate the rook by going rook to t8 a fantastic question so and i'm actually sorry i'm not sure where oh because the reason is because this would have self-pinned me right and now i can't move the bishop away because the rook on date is going to be hanging you got to be careful about that he could even put pressure on the bishop and i might even lose this bishop black has ways to get out of this but that's basically the reason right why did 94 not work in that position another great question thank you for uh being brave 94 did work kind of but he could have dropped his queen back to d3 and the problem is even though the bishop 2 is a type 2 undefended piece there's no other undefended piece to exploit the two bishops are not forkable what's wrong with e5 instead of knight f6 well the movie e5 here is the england"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 4,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6"
+   ],
+   "options": [
+    {
+     "san": "Nc3",
+     "t": 13.5,
+     "continuation": "Nc3 Bg7",
+     "said": "we are playing menger mania 1962. now i'm going to play the opening that i have been playing against 1d4 which is the king's indian defense those of you just joining describe i will explain once again the main sort of ideas of this opening if you've never played the king's indian it can look terrible what am i doing i'm giving him full control of the center and that's the point of the king's indian what you do is you give your opponent control of the center with the ultimate aim of attacking that center with your pieces from a distance [Music] it's called a hyper modern opening so here's the thing i'm going to go e5 and here we have it right attacking his center with my pawns this is the main move it does not blunder upon uh and i'll explain everything after the game it's up string good to see you and we're gonna open up the center so that we can more easily attack the e4 pawn with our pieces how should i attack the e4 pawn did somebody tell me the simple way bingo rookie 8"
+    },
+    {
+     "san": "e4",
+     "t": 456.5,
+     "continuation": "e4 Bg7 Nc3",
+     "said": "uh people followed the rules right people follow the rules and the rules said that you had to control the center and in the king's indian black most certainly does not control the center with his pawns he controls it with his pieces that's why the king's indian is called a hyper modern opening because in the 1920s there was a group of uh pretty interesting people they were from all parts of europe and they were called the hyper modernists hyper modernist says guys let's let's all chill out let's uh you know sip on some wine and the people from california said let's you know let's uh you know do something other than sipping on wine uh let's all chill out for a second let's understand something you don't always have to control the center with pawns in order for your development to be effective what they said is that let's let our opponents control the center with his pawns and then let's shoot these pawns down from a distance that's why they deploy the bishop here and and that's why black sort of holds back white center without actually immediately contesting it and only black puts pressure on that center when he is ready to do so that's sort of the philosophy of the king's indian"
+    }
+   ]
+  },
+  {
+   "ply": 12,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N2N2/PP2BPPP/R1BQK2R w KQ - 0 7",
+   "line": [
+    "d4",
+    "Nf6",
+    "c4",
+    "g6",
+    "Nc3",
+    "Bg7",
+    "e4",
+    "d6",
+    "Nf3",
+    "O-O",
+    "Be2",
+    "e5"
+   ],
+   "options": [
+    {
+     "san": "Be3",
+     "t": 52.5,
+     "continuation": "Be3",
+     "said": "i'm going to go e5 and here we have it right attacking his center with my pawns this is the main move it does not blunder upon uh and i'll explain everything after the game it's up string good to see you and we're gonna open up the center so that we can more easily attack the e4 pawn with our pieces how should i attack the e4 pawn did somebody tell me the simple way bingo rookie 8 he's got f3 what is this move done immediately remember what i told you last game whenever the f pawn is pushed you need to understand the drawbacks of every move that your opponent plays now this is just a general weakening move but look at this bishop on e3 this bishop is undefended what does that mean that means that if we can get this pawn out of e4 that's going to be something a sticky situation now we can't go d5 immediately right because he takes with this one but can we prepare the move d5 can we prepare the pawn break d5 hoping to exploit his this is theory by the way he's he hasn't done anything wrong this is the main line but if white doesn't know exactly how to play here he can get in very big trouble"
+    },
+    {
+     "san": "dxe5",
+     "t": 526,
+     "continuation": "dxe5 dxe5",
+     "said": "king's indian and the movie five comes right immediately striking the pawn on d4 i've played the kings in my whole life um now why doesn't this blunder upon why can't white just take the pawn there's a small tactic here uh and without this tactic the king's indian would simply fail yeah and i take c4 exposing the attack on the knight equalizing the material and white's gonna have black's gonna have a massive bishop here on e5 all right now commonly in the king's indian white pushes d5 this creates a locked center and then white castle's king's side this is what makes the king's indian fascinating it's an attack on either side of the white attacks on the queen side black attacks on the king side black goes for checkmate so it's a very ambitious opening it's an opening for aggressive players it's a very hard opening to learn instead he decided to keep the center open i opened it up and uh queen d2 was played now using chess base which i've as i told you guys i have used it to show you these these these games i am going to check for a second to see whether this has ever actually happened in tournament play and one thing that you can check using"
+    },
+    {
+     "san": "d5",
+     "t": 550.5,
+     "continuation": "d5 Nbd7 O-O",
+     "said": "black's gonna have a massive bishop here on e5 all right now commonly in the king's indian white pushes d5 this creates a locked center and then white castle's king's side this is what makes the king's indian fascinating it's an attack on either side of the white attacks on the queen side black attacks on the king side black goes for checkmate so it's a very ambitious opening it's an opening for aggressive players it's a very hard opening to learn instead he decided to keep the center open i opened it up and uh queen d2 was played now using chess base which i've as i told you guys i have used it to show you these these these games i am going to check for a second to see whether this has ever actually happened in tournament play and one thing that you can check using chess space which has the largest uh database of official tournament games ever assembled millions and millions of them i can check this position to see who's played like this before so queen to d2 100 okay over over 500 games uh and gary kasparov had a game here with the black pieces d5 is the main move"
+    }
+   ]
+  }
+ ]
+}

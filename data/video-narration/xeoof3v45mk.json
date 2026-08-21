@@ -1,0 +1,328 @@
+{
+ "videoId": "xeoof3v45mk",
+ "title": "Master Class | Center Game | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 11,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "yeah speed run ha ha okay 13 37 and we're gonna continue if it ain't broke don't fix it so we're gonna play"
+  },
+  {
+   "ply": 3,
+   "t": 12.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "the danish gamut again"
+  },
+  {
+   "ply": 4,
+   "t": 22,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "said": "for the time okay knight f6 so we face this once we face this move well that is not a common move and it's not a great move it's not a terrible move either but it it i mean basically it well my first arrow"
+  },
+  {
+   "ply": 5,
+   "t": 44,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "is wrong it counter attacks the e4 pawn um which is reasonable but that knight is going to start dangling around in my position and i've explained this at a couple of points where the thing with pieces are you can look at this knight on e4 and you can"
+  },
+  {
+   "ply": 6,
+   "t": 46.5,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/4n3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "say well that's a centralized knight that's a great night that's not quite the full truth a piece can be centralized and still be really vulnerable if it's not well supported by other pieces and pawns and that's clearly the case here so a lot of you guys might be looking at queen e2 or bishop d3 but that's a little bit reactive queen e2 the knight's gonna drop to c5 and you're gonna regret putting your queen there because then you're not gonna be able to get your bishop out f3 is also tempting but remember what the problem usually is with playing f3 when they've got a knight on e4 and that's the check on h4 and i'll talk about this after the game as well thank you dubrevich because then after g3 there's knight takes two three that's a common pattern i'm sure most of you guys have seen so what's the best approach here the best approach is to basically ignore the knight for the time being and instead to understand what are the other weaknesses in black position now this pawn in f7 is actually very weak it's always weak in the opening but"
+  },
+  {
+   "ply": 7,
+   "t": 113,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2B1n3/8/PPP2PPP/RNBQK1NR b KQkq - 1 4",
+   "said": "particularly here we know that the knight is undefended so we can combine pressure on this pawn with attacking the knight and that can lead to a bunch of forks how do we actually set that up well a good way to do that is to play bishop c4 developing the bishop good pressuring f7 good and we're preparing moves like these which"
+  },
+  {
+   "ply": 8,
+   "t": 125.5,
+   "line": [
+    "Qh4"
+   ],
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B1n2q/8/PPP2PPP/RNBQK1NR w KQkq - 2 5",
+   "said": "fork the knight and attack the punt so it's like a delayed response to the night i've misled you a little bit i agree by pretending that you should do something immediately with the knight but you shouldn't do something immediately okay queen h4 is is not bad so there's some tactics here as i said there's gonna be more tactics involved in these things he's threatening checkmate and the move g3 is very tempting here why don't we just defend the maid and attack the queen what's wrong with g3 who can tell me as a challenging question what's the problem with just playing g3 and saying get out of there you have to look at the whole board here you have to see what's going on well the bishop is hanging right the queen is x-raying the bishop he can actually take on g3 with a knight and this queen it it doesn't lose the rook it doesn't lose the rook because as for g3 knight takes we can take with the f pawn our f pawn is still on f2 but this queen can slide over and pick up this bishop on c4 which is undefended that's the key problem black is actually threatening a discovered attack on the bishop so what we need to do is we need to defend this pawn and preferably defend this bishop and after that maybe we can attack the queen and we can start getting the good stuff done so if we play queen f3 that's a good move um but he can still move the knight and perhaps open fire on this bishop so well let me think about this first actually no i actually like queen f3 i'm going to change my mind here i i hallucinated for saying yeah let's play queen f3 i forgot that we're attacking f7 actually myself yeah yeah queen f3 is good because we're attacking f7 and i i was thinking for some reason that he could like take on f2 maybe he will um that would be funny but we're also attacking f7 that's a big threat that's not a mate threat but it's almost a may threat that's good enough to deter him from any kind of discoveries i think yeah nice george thanks for that queenie two was the move i intended which was also pretty good maybe even the best move from a purely scientific perspective but i like queen f3 it's going to put him in a very difficult spot he's got to be very creative to get out of this now um it's not a me threat oh de bruy but you tried to give subs oh did i miss that i'm really sorry um if i did capricorn thank you for the prime well queen f7 he can move his king to d this square that i'm that is blinking is un is accessible to the king so that's why it's not me yeah well queen e2 knight f2 i thought there was g3 that was the line i calculated like queen e4 there it's complicated or or joe there's maybe knight f3 after knight takes after attacking the queen i think that might be good for white it's actually there he goes dubrovich with a five thank you so much man i really appreciate it you're the man i've seen you in the bras appreciate the subs that's awesome five gifts you know d5 is weird he's he seems to be defending against stuff but he's just giving the pawn i mean just thank you right she go another five subs oh my land's damn girl look at this go another five for me chico tons of support today i really appreciate that and sweet messages to boot and and 500 bits from m4 thank you so much man i appreciate oh my lens another five from rpm here we go the 12 am hype has begun five more from rpm and five more from ann hoags oh my god and this is crazy now it's crazy well thank you guys this is amazing oh my god curious chimpanzee jumping in another five this is insane bishop e6 all right what else is insane is we're taking all of his pieces bishop e6 is um he's defending against the the threat of f7 but he's forgetting"
+  },
+  {
+   "ply": 12,
+   "t": 367,
+   "line": [
+    "Qf3",
+    "d5",
+    "Bxd5",
+    "Be6"
+   ],
+   "fen": "rn2kb1r/ppp2ppp/4b3/3BP3/4n2q/5Q2/PPP2PPP/RNB1K1NR w KQkq - 1 7",
+   "said": "that he's not seeing the bigger picture here now we can take on vsan but i mean let's play rashford russian school maybe the best move is to take on b-side i don't want to deal with this knight anymore i'm tired of this night being here and causing troubles let's just take the free night instead maybe we'll only win a night but at least we won't have to worry about various threats right that's always a judgment call you have to make is you have to be able to say i think maybe this is going to be the best move but let me do something that's also good and it's going to be more practical if that makes sense okay so bishop g4 indeed did mutual now where should we put our queen there's many good squares we can put it on g3 and basically force the queen train fair but the best square is to understand that we're also attacking b7 with the bishop so if we where would we want to reposition our queen so that this queen participates in the pressure on b7 you should go with a 10 with a thousander thank you yeah let's slide it over here and now our pressure on this pawn has become unbearable yeah just like the opera game exactly what i was thinking about now he should probably go here and counter-attack this yeah he does but now it is finally time for a move that we wanted to play for a while now that his knight is gone and now that the pressure is not as spicy some of you i think are maybe seeing this that is not a fork i mean it is a fork it's not a particularly good one because he can bring his knight out and defend the bishop at the same time but instead we can just go g3 get out of here finally it's our time to play this move then we can start gorging on black's queen side and when is this jiggle finger the tier one all right we've got some funny names today yes um so yeah let's let's see where he goes with this queen but there's nothing that he can do because f6 and tipsy tipsy flipper thank you for the tier one yeah well queen we need seven okay so now we need to be a little bit careful here we need to be a little bit careful here what should we take this with it doesn't actually matter what we take it with we can take it with either piece i like taking this pawn of the bishop because as i've said before there's this rule that you generally when you have two pieces that you can do something with you usually want to assign it to the piece of smaller value which is a little bit paradoxical you might think well i want to do with a queen it's going to be more reliable um you know it's going to be more reliable it's like when i was little and i would i would hear the adults ordering a steak like i'd always want it well done because or my brother was like because like why would you not have it well done it's like the best thing i want the best steak i don't want a medium or like my my dad would be like medium well why are you ordering media well like i wanted to be to be good um but the thing is when you take with a piece of smaller value you leave the piece of bigger value to do other important stuff so here the bishop is perfectly capable of dealing with this rook the rook's not going here the queen is going to be on b3 for the time being and we don't know how it is going to be used and already we have a very good use for this queen and that's not to put it on e3 and blunder it but what should we put on e3 and how does the queen figure in this uh mosaic of rolls that we've assigned to our pieces thank you for the tier one yeah i know you played like a beast no we don't have to play king f1 on that although that's fine but just bishop e3 blocks the check and encourages trades and that's for perfectly good um [Applause] oh my god oh crap i got it oh my god no i only now just got it i i was thinking the other day about like will there ever be someone who buries some sort of vile name so d so deep that like i won't be able to spot it at all like it'll just catch me by surprise and i guess the answer to it is yes um so oh my god um because the sack sack mic you know and you know what the last thing is that's pretty obvious for me one shame on you but um [Laughter] these things are easy to miss okay so what should we do here uh he's i mean people just dedicate their time to this stuff like i'm gonna make a twitch name like this and i'm so happy with myself yeah queen c3 of course it encourages the queen trade and it also and it also attacks the bishop it also it also attacks the bishop with two pieces so um sorry uh yeah bishop d4 we just take that we can't take it with the bishop because we're pinned but we can take it with the queen thank you very much um and yeah and now the game is over because now he's down two pieces already and he's losing a rook and he's losing another knight and his queen yeah he's starting to drop a lot of pieces here yes i think this one's over yeah we're taking his queen next and we're gonna have enough material here to feed a village for eight years yeah that's true no losing your queen is one of the most crushing feelings it's there's a there's a sense of of turman uh just the game is okay he we need to watch the square and this is one great example of just like not not um being too mirthful about being up interiors like he can go bishop g4 and you can pre-move whatever like some random move and you get checkmated it takes so little pieces to actually deliver checkmate we don't stop to think about that we actually as i say as i just talk up a storm and i'm not barely paying attention to what he's doing or this was even much this was much stronger it would have won both of his both of his remaining works but um yeah this is just i'm not really commenting on this because we're taking all of his pieces just sequentially um which is something that we all are kind of good at yeah sacking the queen is an unparalleled feeling in chess no matter how beautiful other combinations are there's a there's a soft spot that is reserved in every player's heart i think for the queen sacrifice okay so i'm gonna make a i'm gonna make a move that looks bad but i want you guys to tell me why it's good have i just blundered my knight have i i mean not that i couldn't not i could afford that and i could afford even blundering my rook and then my queen and even my other rook but no i can actually skewer him and win the bishop back i'm not gonna or queen f6 nicely nice catch i i miss that move we haven't even moved our oaks we probably will we're gonna let's see if i can castle with me i'm gonna see if i can actually set this up so i cancel with mate let me see if i can set this up so i can cast let me think about how to get this done first of all where do i need my pieces well i need i need this i i need this rook in and then i'm gonna castle long i i don't want to rub it in and we're gonna cut him off now so the king has to eventually go back yes now we're going to use this rook to cordon him off the other way no no please don't go here just move your pawns so i can no get back okay this is this is unnecessary i'm just going to mate him i don't know why i'm fixated on on castling with i'm just going to castle and then checkmate whoa jmj with 25 damn oh my lens that's crazy 25 and dunlop's on top of it yeah okay fine i'm just gonna castle i i mean i i i don't think it's worth the effort it's epic but it's not it's not that epic i think it's way overrated um we're going to castle thank you so much jim jim this is crazy explosion of subs today as always and then we're going to slide the rook in and that's going to be"
+  },
+  {
+   "ply": 7,
+   "t": 888,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2B1n3/8/PPP2PPP/RNBQK1NR b KQkq - 1 4",
+   "said": "checkmate all right this is the moment which is most"
+  },
+  {
+   "ply": 6,
+   "t": 890,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/4n3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "uh hardest to understand i think because you you want to attack the knight and that's that's it's attacking the night itself is not the mistake the mistake there's no good way to attack it because right now the knight doesn't escape to c5 so you're not trying to trap the knight"
+  },
+  {
+   "ply": 7,
+   "t": 915,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/4n3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 4",
+   "said": "you're not going to trap the knight that's something you should dispense with immediately you should dispense with that fiction that that we don't know what we're doing he knows exactly what he's doing and um that's why moves like f3 while good in principle are misplaced because there's a sense in which you're trying"
+  },
+  {
+   "ply": 8,
+   "t": 921.5,
+   "line": [
+    "Qh4+"
+   ],
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/4n2q/5P2/PPP3PP/RNBQKBNR w KQkq - 1 5",
+   "said": "to trap the knight but here i go queen h4 check g3 knight g3 hg3 and i'm sure"
+  },
+  {
+   "ply": 10,
+   "t": 924,
+   "line": [
+    "g3",
+    "Nxg3"
+   ],
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/7q/5Pn1/PPP4P/RNBQKBNR w KQkq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 926,
+   "line": [
+    "hxg3",
+    "Qxh1"
+   ],
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/8/5PP1/PPP5/RNBQKBNq w Qkq - 0 7",
+   "said": "everybody's seen this pattern before yeah so this is this is this is very bad"
+  },
+  {
+   "ply": 7,
+   "t": 931.5,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/4n3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 4",
+   "said": "um and if you play bishop well if you"
+  },
+  {
+   "ply": 6,
+   "t": 932.5,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/4n3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "play queen e2 then i'm going to drop the knight back and you're going to have a hard time defending developing this bishop this"
+  },
+  {
+   "ply": 7,
+   "t": 942,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2B1n3/8/PPP2PPP/RNBQK1NR b KQkq - 1 4",
+   "said": "isn't this isn't terrible but it's not great but bishop c4 is great because it sets up better moves it sets up queen d5 it sets up queen f3 so you have to exercise restraint when it comes to pieces if you have a good card um you know there's card games we have"
+  },
+  {
+   "ply": 8,
+   "t": 962.5,
+   "line": [
+    "Qh4"
+   ],
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B1n2q/8/PPP2PPP/RNBQK1NR w KQkq - 2 5",
+   "said": "to play your cards you have to hold your cards close to your chest sometimes and when you play them they're going to be a lot stronger than if you rush them okay we can we can turn off subs only for the next five the last five minutes of the stream"
+  },
+  {
+   "ply": 9,
+   "t": 973,
+   "line": [
+    "g3"
+   ],
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B1n2q/6P1/PPP2P1P/RNBQK1NR b KQkq - 0 5",
+   "said": "quinn h4 and now queen f3 so again if we go g3 here and we say well great we're attacking the queen get out of"
+  },
+  {
+   "ply": 10,
+   "t": 977,
+   "line": [
+    "Nxg3"
+   ],
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B4q/6n1/PPP2P1P/RNBQK1NR w KQkq - 0 6",
+   "said": "here black goes knight takes g3"
+  },
+  {
+   "ply": 11,
+   "t": 979.5,
+   "line": [
+    "hxg3"
+   ],
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B4q/6P1/PPP2P2/RNBQK1NR b KQkq - 0 6",
+   "said": "and actually if we think hard about it there's something even better than taking the bishop which is amazing welcome guys and sorry we had to go subs only but that discussion that we had it was it was getting a little bit i wouldn't say out of control but i mean i needed a little bit of a of a peaceful moment i know everybody understands um and it's remember that when we go sub only it's like it's never personal and i know that it can be it's very easy to perceive it that way like oh he's like angry at me it's not anger at anybody in particular it's just it's the only tool i understand it's a rough tool but it's the only tool i have at my disposal to make things go a little bit more calmly um and so thanks yeah i appreciate it thanks for the understanding okay what is white's what is black's better move here what what else can black do other than queen take c4"
+  },
+  {
+   "ply": 10,
+   "t": 1043.5,
+   "line": [],
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B4q/6n1/PPP2P1P/RNBQK1NR w KQkq - 0 6",
+   "said": "thank you m4 i appreciate it why um what what what does black have other than queen take c4 oh wait wait no what am i what am i saying sorry i meant to say"
+  },
+  {
+   "ply": 11,
+   "t": 1045.5,
+   "line": [
+    "fxg3"
+   ],
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B4q/6P1/PPP4P/RNBQK1NR b KQkq - 0 6",
+   "said": "f takes g3 after f takes g3 i meant"
+  },
+  {
+   "ply": 12,
+   "t": 1048,
+   "line": [
+    "Qe4+"
+   ],
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B1q3/6P1/PPP4P/RNBQK1NR w KQkq - 1 7",
+   "said": "yeah queen e4 check yeah queen e4 check is what i meant and actually black can pick off the exchange it's not that simple but that's basically the bottom line uh so for that reason we go queen f3 we create a bigger thread equal or stronger threat and after d5 bishop i mean d5 is where he collapses black i think has only one defense here no he's got to play knight g5 that's his only move because he defends the pawnee attack and if we take the knight and say ah well now i'm going to take on f7 no but now he swings over and takes the other bishop um yeah oh absolutely i'll be happy to do it next time and michiko gifting to tom flynn thank you again so the queen is in a bad spot that's that's actually the point that's why i said it's not that simple but it's not in bad enough of a spot where he can't get out so after knight g5 here i would have just dropped the queen to e2 and defended the bishop and aharian"
+  },
+  {
+   "ply": 8,
+   "t": 1117.5,
+   "line": [],
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B1n2q/8/PPP2PPP/RNBQK1NR w KQkq - 2 5",
+   "said": "gifting us up to grog and then white can develop the pieces this knight is very awkward black's made a lot of moves with the same b so white's better but it's not winning um well the thing is demon it's a double edged sword because this knight is both bad and good at the same time it's good because it's attacking the pawn so queen e2 is a bit risky that's what i wanted to play but it's a bit risky because of"
+  },
+  {
+   "ply": 11,
+   "t": 1136.5,
+   "line": [
+    "Qd2",
+    "Nxf2",
+    "Qxf2"
+   ],
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B4q/8/PPP2QPP/RNB1K1NR b KQkq - 0 6",
+   "said": "this move and i was discussing this with joe joe bruin and uh this is actually very unclear because if you take the knight and the queen slides over from the bishop and if um if you try to chase the queen away then it's got all these squares where it can attack other pieces so it's very unclear so queen f3 circumvents this because this is a devastating move and black's position collapses here okay um so d5 is played and after bishop d5 everything goes downhill for him i think at this point black has only one way to avoid further material losses and that's probably to play f5 which kills two birds with one stone defends the knight and it defends the pawn and at this point i can take another pawn and we trade and it looks like black uh rook is getting trapped but if you've seen morphe against duke of brunswick what's up logic very good to see you and we've got absolute um we've got absolute royalty in in in the house um so black actually has two alternatives here there's queen"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 6,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/4n3/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "e4",
+    "e5",
+    "d4",
+    "Nf6",
+    "dxe5",
+    "Nxe4"
+   ],
+   "options": [
+    {
+     "san": "Bc4",
+     "t": 113,
+     "continuation": "Bc4",
+     "said": "particularly here we know that the knight is undefended so we can combine pressure on this pawn with attacking the knight and that can lead to a bunch of forks how do we actually set that up well a good way to do that is to play bishop c4 developing the bishop good pressuring f7 good and we're preparing moves like these which fork the knight and attack the punt so it's like a delayed response to the night i've misled you a little bit i agree by pretending that you should do something immediately with the knight but you shouldn't do something immediately okay queen h4 is is not bad so there's some tactics here as i said there's gonna be more tactics involved in these things he's threatening checkmate and the move g3 is very tempting here why don't we just defend the maid and attack the queen what's wrong with g3 who can tell me as a challenging question what's the problem with just playing g3 and saying get out of there you have to look at the whole board here you have to see what's going on well the bishop is hanging right the queen is x-raying the bishop he can actually take on g3 with a knight and this queen it it doesn't lose the rook it doesn't lose the rook because as for g3 knight takes we can take with the f pawn our f pawn is still on f2 but this queen can slide over and pick"
+    },
+    {
+     "san": "f3",
+     "t": 915,
+     "continuation": "f3",
+     "said": "you're not going to trap the knight that's something you should dispense with immediately you should dispense with that fiction that that we don't know what we're doing he knows exactly what he's doing and um that's why moves like f3 while good in principle are misplaced because there's a sense in which you're trying to trap the knight but here i go queen h4 check g3 knight g3 hg3 and i'm sure everybody's seen this pattern before yeah so this is this is this is very bad um and if you play bishop well if you play queen e2 then i'm going to drop the knight back and you're going to have a hard time defending developing this bishop this isn't this isn't terrible but it's not great but bishop c4 is great because it sets up better moves it sets up queen d5 it sets up queen f3 so you have to exercise restraint when it comes to pieces if you have a good card um you know there's card games we have to play your cards you have to hold your cards close to your chest sometimes and when you play them they're going to be a lot stronger than if you rush them okay we can we can turn off subs only for the next five the last five minutes of the stream quinn h4 and now queen f3 so again if we go g3 here and we say well great we're attacking the queen get out of"
+    }
+   ]
+  },
+  {
+   "ply": 8,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B1n2q/8/PPP2PPP/RNBQK1NR w KQkq - 2 5",
+   "line": [
+    "e4",
+    "e5",
+    "d4",
+    "Nf6",
+    "dxe5",
+    "Nxe4",
+    "Bc4",
+    "Qh4"
+   ],
+   "options": [
+    {
+     "san": "Qf3",
+     "t": 367,
+     "continuation": "Qf3 d5 Bxd5 Be6",
+     "said": "that he's not seeing the bigger picture here now we can take on vsan but i mean let's play rashford russian school maybe the best move is to take on b-side i don't want to deal with this knight anymore i'm tired of this night being here and causing troubles let's just take the free night instead maybe we'll only win a night but at least we won't have to worry about various threats right that's always a judgment call you have to make is you have to be able to say i think maybe this is going to be the best move but let me do something that's also good and it's going to be more practical if that makes sense okay so bishop g4 indeed did mutual now where should we put our queen there's many good squares we can put it on g3 and basically force the queen train fair but the best square is to understand that we're also attacking b7 with the bishop so if we where would we want to reposition our queen so that this queen participates in the pressure on b7 you should go with a 10 with a thousander thank you yeah let's slide it over here and now our pressure on this pawn has become unbearable yeah just like the opera game exactly what i was thinking about now he should probably go here and counter-attack this yeah he does but now it is finally time for a move that we wanted to play for a while"
+    },
+    {
+     "san": "g3",
+     "t": 973,
+     "continuation": "g3",
+     "said": "okay we can we can turn off subs only for the next five the last five minutes of the stream quinn h4 and now queen f3 so again if we go g3 here and we say well great we're attacking the queen get out of here black goes knight takes g3 and actually if we think hard about it there's something even better than taking the bishop which is amazing welcome guys and sorry we had to go subs only but that discussion that we had it was it was getting a little bit i wouldn't say out of control but i mean i needed a little bit of a of a peaceful moment i know everybody understands um and it's remember that when we go sub only it's like it's never personal and i know that it can be it's very easy to perceive it that way like oh he's like angry at me it's not anger at anybody in particular it's just it's the only tool i understand it's a rough tool but it's the only tool i have at my disposal to make things go a little bit more calmly um and so thanks yeah i appreciate it thanks for the understanding okay what is white's what is black's better move here what what else can black do other than queen take c4 thank you m4 i appreciate it why um"
+    },
+    {
+     "san": "Qd2",
+     "t": 1136.5,
+     "continuation": "Qd2 Nxf2 Qxf2",
+     "said": "is a bit risky that's what i wanted to play but it's a bit risky because of this move and i was discussing this with joe joe bruin and uh this is actually very unclear because if you take the knight and the queen slides over from the bishop and if um if you try to chase the queen away then it's got all these squares where it can attack other pieces so it's very unclear so queen f3 circumvents this because this is a devastating move and black's position collapses here okay um so d5 is played and after bishop d5 everything goes downhill for him i think at this point black has only one way to avoid further material losses and that's probably to play f5 which kills two birds with one stone defends the knight and it defends the pawn and at this point i can take another pawn and we trade and it looks like black uh rook is getting trapped but if you've seen morphe against duke of brunswick what's up logic very good to see you and we've got absolute um we've got absolute royalty in in in the house um so black actually has two alternatives here there's queen"
+    }
+   ]
+  },
+  {
+   "ply": 10,
+   "fen": "rnb1kb1r/pppp1ppp/8/4P3/2B4q/6n1/PPP2P1P/RNBQK1NR w KQkq - 0 6",
+   "line": [
+    "e4",
+    "e5",
+    "d4",
+    "Nf6",
+    "dxe5",
+    "Nxe4",
+    "Bc4",
+    "Qh4",
+    "g3",
+    "Nxg3"
+   ],
+   "options": [
+    {
+     "san": "hxg3",
+     "t": 979.5,
+     "continuation": "hxg3",
+     "said": "quinn h4 and now queen f3 so again if we go g3 here and we say well great we're attacking the queen get out of here black goes knight takes g3 and actually if we think hard about it there's something even better than taking the bishop which is amazing welcome guys and sorry we had to go subs only but that discussion that we had it was it was getting a little bit i wouldn't say out of control but i mean i needed a little bit of a of a peaceful moment i know everybody understands um and it's remember that when we go sub only it's like it's never personal and i know that it can be it's very easy to perceive it that way like oh he's like angry at me it's not anger at anybody in particular it's just it's the only tool i understand it's a rough tool but it's the only tool i have at my disposal to make things go a little bit more calmly um and so thanks yeah i appreciate it thanks for the understanding okay what is white's what is black's better move here what what else can black do other than queen take c4 thank you m4 i appreciate it why um what what what does black have other than queen take c4"
+    },
+    {
+     "san": "fxg3",
+     "t": 1045.5,
+     "continuation": "fxg3",
+     "said": "what what what does black have other than queen take c4 oh wait wait no what am i what am i saying sorry i meant to say f takes g3 after f takes g3 i meant yeah queen e4 check yeah queen e4 check is what i meant and actually black can pick off the exchange it's not that simple but that's basically the bottom line uh so for that reason we go queen f3 we create a bigger thread equal or stronger threat and after d5 bishop i mean d5 is where he collapses black i think has only one defense here no he's got to play knight g5 that's his only move because he defends the pawnee attack and if we take the knight and say ah well now i'm going to take on f7 no but now he swings over and takes the other bishop um yeah oh absolutely i'll be happy to do it next time and michiko gifting to tom flynn thank you again so the queen is in a bad spot that's that's actually the point that's why i said it's not that simple but it's not in bad enough of a spot where he can't get out so after knight g5 here i would have just dropped the queen to e2 and defended the bishop and aharian"
+    }
+   ]
+  }
+ ]
+}

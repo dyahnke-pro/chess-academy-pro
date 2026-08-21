@@ -1,0 +1,201 @@
+{
+ "videoId": "rg4NhBBW2pc",
+ "title": "Master Level Analysis of My Games at US Chess Open!!! | GM Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 8235,
+  "settledPositions": null
+ },
+ "plies": 11,
+ "rewinds": 2,
+ "moves": [
+  {
+   "t": 52.5,
+   "ply": 3,
+   "line": [
+    "e4",
+    "c5",
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 54.5,
+   "ply": 4,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3"
+  },
+  {
+   "t": 57.5,
+   "ply": 5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3"
+  },
+  {
+   "t": 61.5,
+   "ply": 4,
+   "line": [],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3"
+  },
+  {
+   "t": 65,
+   "ply": 5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3"
+  },
+  {
+   "t": 68,
+   "ply": 8,
+   "line": [
+    "cxd4",
+    "Nxd4",
+    "a6"
+   ],
+   "fen": "rnbqkbnr/1p1p1ppp/p3p3/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5"
+  },
+  {
+   "t": 70.5,
+   "ply": 9,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqkbnr/1p1p1ppp/p3p3/8/3NP3/3B4/PPP2PPP/RNBQK2R b KQkq - 1 5"
+  },
+  {
+   "t": 73,
+   "ply": 10,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "rnbqk1nr/1p1p1ppp/p3p3/2b5/3NP3/3B4/PPP2PPP/RNBQK2R w KQkq - 2 6"
+  },
+  {
+   "t": 74.5,
+   "ply": 12,
+   "line": [
+    "Nb3",
+    "Ba7"
+   ],
+   "fen": "rnbqk1nr/bp1p1ppp/p3p3/8/4P3/1N1B4/PPP2PPP/RNBQK2R w KQkq - 4 7"
+  },
+  {
+   "t": 76,
+   "ply": 16,
+   "line": [
+    "Nc5",
+    "Bb6",
+    "Nb3",
+    "Bc5"
+   ],
+   "fen": "rnbqk1nr/1p1p1ppp/p3p3/2b5/4P3/1N1B4/PPP2PPP/RNBQK2R w KQkq - 8 9"
+  },
+  {
+   "t": 92.5,
+   "ply": 12,
+   "line": [],
+   "fen": "rnbqk1nr/bp1p1ppp/p3p3/8/4P3/1N1B4/PPP2PPP/RNBQK2R w KQkq - 4 7"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "e6"
+   ],
+   "ply": 4,
+   "options": [
+    {
+     "san": "c3",
+     "t": 57.5,
+     "continuation": "c3"
+    },
+    {
+     "san": "d4",
+     "t": 65,
+     "continuation": "d4"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Kan Variation, Polugaevsky Variation",
+   "eco": "B42",
+   "plies": 10,
+   "line": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Bd3 Bc5",
+   "coverage": 0.333
+  },
+  {
+   "name": "Sicilian Defense: Kan Variation, Modern Variation",
+   "eco": "B42",
+   "plies": 9,
+   "line": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Bd3",
+   "coverage": 0.444
+  },
+  {
+   "name": "Sicilian Defense: Kan Variation",
+   "eco": "B41",
+   "plies": 8,
+   "line": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6",
+   "coverage": 0.556
+  },
+  {
+   "name": "Sicilian Defense: French Variation, Open",
+   "eco": "B40",
+   "plies": 6,
+   "line": "e4 c5 Nf3 e6 d4 cxd4",
+   "coverage": 0.556
+  },
+  {
+   "name": "Sicilian Defense: Delayed Alapin Variation, with e6",
+   "eco": "B40",
+   "plies": 5,
+   "line": "e4 c5 Nf3 e6 c3",
+   "coverage": 0.111
+  },
+  {
+   "name": "Sicilian Defense: French Variation",
+   "eco": "B40",
+   "plies": 4,
+   "line": "e4 c5 Nf3 e6",
+   "coverage": 0.889
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}

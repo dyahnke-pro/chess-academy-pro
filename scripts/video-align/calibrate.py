@@ -42,7 +42,7 @@ import numpy as np
 from PIL import Image
 
 from detect_board import Cells
-from read_board import calibrate_from_start, read_board_calibrated, looks_like_start
+from read_board import try_calibrate
 
 # Square sizes worth considering. Below ~20px the centre sample is too small to
 # judge occupancy; above ~100px the board would exceed a 480p frame.
@@ -82,6 +82,13 @@ def start_score(cells, x0, y0, sq):
 # A start position must be almost perfectly separable. Below this, the frame is
 # something else and calibration refuses rather than fitting noise.
 MIN_START_ACCURACY = 0.95
+
+# How far past the start we will still calibrate from, in squares of occupancy.
+# Each ply moves one piece, so this reaches roughly the first two moves — and a
+# middlegame differs by dozens of squares, so nothing but the opening can pass.
+# It exists because a lesson that joins its game already in progress otherwise
+# refuses outright, with a message blaming geometry that is in fact correct.
+NEAR_START_TOLERANCE = 4
 
 
 def fit_geometry_to_start(path, sq_lo=SQ_LO, sq_hi=SQ_HI):
@@ -160,17 +167,31 @@ def calibrate_section(frame_paths, x0, y0, sq):
     genuinely has no start position and you calibrate it from a position you
     read by eye instead.
     """
+    # An exact start position is the best anchor, so take one if the video shows
+    # one. Only if the whole pass finds none do we fall back to the closest
+    # near-start frame — see NEAR_START_TOLERANCE.
+    fallback = None
     for path in frame_paths:
         try:
-            cal = calibrate_from_start(path, x0, y0, sq)
-            grid = read_board_calibrated(path, x0, y0, sq, cal)
+            g = np.asarray(Image.open(path).convert('L'), dtype=np.float64)
         except Exception:
             continue
-        if not looks_like_start(grid):
+        got = try_calibrate(g, x0, y0, sq)
+        if got is None:
+            continue
+        cal, orient, diff = got
+        if diff:
+            if diff <= NEAR_START_TOLERANCE and (fallback is None or diff < fallback[0]):
+                fallback = (diff, path, cal, orient)
             continue
         return {
-            'x0': x0, 'y0': y0, 'square': sq,
-            'orientation': orientation_of(grid),
+            'x0': x0, 'y0': y0, 'square': sq, 'orientation': orient,
+            'anchor': path, 'cal': {f'{k[0]}{k[1]}': v for k, v in cal.items()},
+        }
+    if fallback is not None:
+        _d, path, cal, orient = fallback
+        return {
+            'x0': x0, 'y0': y0, 'square': sq, 'orientation': orient,
             'anchor': path, 'cal': {f'{k[0]}{k[1]}': v for k, v in cal.items()},
         }
     return None

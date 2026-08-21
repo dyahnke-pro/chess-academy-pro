@@ -1,0 +1,456 @@
+{
+ "videoId": "LvWVEAyZzxc",
+ "title": "Smith-Morra Gambit | The Sensei Speedrun | GM Naro",
+ "moves": [
+  {
+   "ply": 4,
+   "t": 503.5,
+   "line": [
+    "d4",
+    "c5",
+    "e4",
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "bad don't go d3 this this this line is bad because white goes c4 and creates the bind benoni's also not refuted no"
+  },
+  {
+   "ply": 7,
+   "t": 505,
+   "line": [
+    "c3",
+    "dxc3",
+    "Nxc3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "kay so knight takes e3 if you really okay so knight takes e3 if you really want to know ask mark tune into his stream he streams like these hours the d-gen hours and uh you could ask him what he what he"
+  },
+  {
+   "ply": 8,
+   "t": 520,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "recommends you can say i sent i sent you uh it's why so serious with seven wise knight f6 is a mistake very common one"
+  },
+  {
+   "ply": 9,
+   "t": 521.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/4P3/8/2N5/PP3PPP/R1BQKBNR b KQkq - 0 5",
+   "said": "forgetting about e5"
+  },
+  {
+   "ply": 10,
+   "t": 524,
+   "line": [
+    "Ng8"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/4P3/8/2N5/PP3PPP/R1BQKBNR w KQkq - 1 6",
+   "said": "back to g8"
+  },
+  {
+   "ply": 11,
+   "t": 526,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/4P3/2B5/2N5/PP3PPP/R1BQK1NR b KQkq - 2 6",
+   "said": "to tempe this is already essentially losing for black for all intents and"
+  },
+  {
+   "ply": 7,
+   "t": 532,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "purposes we're all intentional e5 is bad"
+  },
+  {
+   "ply": 8,
+   "t": 533,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/8/4p3/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "said": "e5 is a common move among club players but it's really really bad who can explain to me why i assume you mean"
+  },
+  {
+   "ply": 9,
+   "t": 544.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/8/4p3/2B1P3/2N5/PP3PPP/R1BQK1NR b KQkq - 1 5",
+   "said": "black playing e5 f7 weakness yeah but it's already weak bishop c4 look how much you're weakening the d5 square don't weaken don't weaken central squares like that so casually"
+  },
+  {
+   "ply": 7,
+   "t": 554.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "white has permanent outpost on d5 so the two setups that are generally recommended here for black are well you"
+  },
+  {
+   "ply": 8,
+   "t": 558.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "start with knight c6 either way"
+  },
+  {
+   "ply": 9,
+   "t": 561,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "and now either e6 and then a6 or d6 and"
+  },
+  {
+   "ply": 10,
+   "t": 562.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/4P3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 9,
+   "t": 566,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "e6 and then later you play e5 much much"
+  },
+  {
+   "ply": 8,
+   "t": 571.5,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "later i'll let you guys investigate this on your own"
+  },
+  {
+   "ply": 11,
+   "t": 574,
+   "line": [
+    "e5",
+    "Nb8",
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/4P3/2B5/2N5/PP3PPP/R1BQK1NR b KQkq - 2 6",
+   "said": "so one important point is that if black had"
+  },
+  {
+   "ply": 13,
+   "t": 575.5,
+   "line": [
+    "Nc6",
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/4P3/2B5/2N2N2/PP3PPP/R1BQK2R b KQkq - 4 7",
+   "said": ""
+  },
+  {
+   "ply": 14,
+   "t": 576.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkbnr/pp2pppp/2np4/4P3/2B5/2N2N2/PP3PPP/R1BQK2R w KQkq - 0 8",
+   "said": "gone d6 who can tell me what white should do this is a very important point his is a very very important point i'm this is a very very important point i'm about to make what should white do 96 some of you are are are jumping the gun here bishop f7"
+  },
+  {
+   "ply": 15,
+   "t": 606,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkbnr/pp2pppp/2np4/4P3/2B5/2N2N2/PP3PPP/R1BQ1RK1 b kq - 1 8",
+   "said": "that doesn't really work taking on d6 is bad you're helping black untangle bishop f4 is on the right track but it's unnecessary the move is castles you do nothing that's the answer"
+  },
+  {
+   "ply": 16,
+   "t": 611.5,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bqkbnr/pp2pppp/3p4/4n3/2B5/2N2N2/PP3PPP/R1BQ1RK1 w kq - 0 9",
+   "said": "you're like what what about knight takes e5 well this loses the queen"
+  },
+  {
+   "ply": 19,
+   "t": 615.5,
+   "line": [
+    "Nxe5",
+    "dxe5",
+    "Bxf7+"
+   ],
+   "fen": "r1bqkbnr/pp2pBpp/8/4p3/8/2N5/PP3PPP/R1BQ1RK1 b kq - 0 10",
+   "said": "you know the drill bishop takes f7 and king queen takes d8 okay but black"
+  },
+  {
+   "ply": 21,
+   "t": 617.5,
+   "line": [
+    "Kxf7",
+    "Qxd8"
+   ],
+   "fen": "r1bQ1bnr/pp2pkpp/8/4p3/8/2N5/PP3PPP/R1B2RK1 b - - 0 11",
+   "said": "doesn't have to take any five of the"
+  },
+  {
+   "ply": 15,
+   "t": 621.5,
+   "line": [],
+   "fen": "r1bqkbnr/pp2pppp/2np4/4P3/2B5/2N2N2/PP3PPP/R1BQ1RK1 b kq - 1 8",
+   "said": "knight he can take with the pawn the important thing to understand about"
+  },
+  {
+   "ply": 16,
+   "t": 623,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bqkbnr/pp2pppp/2n5/4p3/2B5/2N2N2/PP3PPP/R1BQ1RK1 w kq - 0 9",
+   "said": "the smith mora is that even end games"
+  },
+  {
+   "ply": 17,
+   "t": 624.5,
+   "line": [
+    "Qxd8+"
+   ],
+   "fen": "r1bQkbnr/pp2pppp/2n5/4p3/2B5/2N2N2/PP3PPP/R1B2RK1 b kq - 0 9",
+   "said": "are often terrible for black"
+  },
+  {
+   "ply": 18,
+   "t": 630,
+   "line": [
+    "Kxd8"
+   ],
+   "fen": "r1bk1bnr/pp2pppp/2n5/4p3/2B5/2N2N2/PP3PPP/R1B2RK1 w - - 0 10",
+   "said": "look at this end game if king takes d8 then bishop takes f7 as possible or we"
+  },
+  {
+   "ply": 19,
+   "t": 633.5,
+   "line": [
+    "Rd1+"
+   ],
+   "fen": "r1bk1bnr/pp2pppp/2n5/4p3/2B5/2N2N2/PP3PPP/R1BR2K1 b - - 1 10",
+   "said": "can give a check this is just like devastating whoops and what about knight takes d8"
+  },
+  {
+   "ply": 22,
+   "t": 640.5,
+   "line": [
+    "Ke8",
+    "Rf1",
+    "Nd8"
+   ],
+   "fen": "r1bnkbnr/pp2pppp/8/4p3/2B5/2N2N2/PP3PPP/R1B2RK1 w - - 4 12",
+   "said": "who can tell me what the devastating move is here this is winning on the spot for white look around the board what squares can you access"
+  },
+  {
+   "ply": 23,
+   "t": 658,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1bnkbnr/pp2pppp/8/3Np3/2B5/5N2/PP3PPP/R1B2RK1 b - - 5 12",
+   "said": "it's all about squares here it's all about reaching reaching squares no not yeah knight b5 not knight d5 because of 96 not knight d5 because of"
+  },
+  {
+   "ply": 24,
+   "t": 659.5,
+   "line": [
+    "Ne6"
+   ],
+   "fen": "r1b1kbnr/pp2pppp/4n3/3Np3/2B5/5N2/PP3PPP/R1B2RK1 w - - 6 13",
+   "said": "knight e6"
+  },
+  {
+   "ply": 26,
+   "t": 664,
+   "line": [
+    "Nc3",
+    "Nd8"
+   ],
+   "fen": "r1bnkbnr/pp2pppp/8/4p3/2B5/2N2N2/PP3PPP/R1B2RK1 w - - 8 14",
+   "said": "but knight b5 because 96 you can take it now"
+  },
+  {
+   "ply": 29,
+   "t": 666.5,
+   "line": [
+    "Nb5",
+    "Ne6",
+    "Bxe6"
+   ],
+   "fen": "r1b1kbnr/pp2pppp/4B3/1N2p3/8/5N2/PP3PPP/R1B2RK1 b - - 0 15",
+   "said": "knight heads for seaside is there really no way to stop it yeah there's really no way to stop it there's a hilarious line if k27 get back get mated"
+  },
+  {
+   "ply": 26,
+   "t": 682,
+   "line": [],
+   "fen": "r1bnkbnr/pp2pppp/8/4p3/2B5/2N2N2/PP3PPP/R1B2RK1 w - - 8 14",
+   "said": "boom i'm sure some games have ended this way online black has no other defense"
+  },
+  {
+   "ply": 27,
+   "t": 683.5,
+   "line": [
+    "Nb5"
+   ],
+   "fen": "r1bnkbnr/pp2pppp/8/1N2p3/2B5/5N2/PP3PPP/R1B2RK1 b - - 9 14",
+   "said": "okay so don't rule out lines just because they get into an end game so g6 we castle we go bishop f4 okay knight h6 exacerbates it but as i was indicating many times e6 we immediately pay attention to the d6 square we had a game like this yesterday we get one knight to d6 we get the other knight to g5 we bust everything open and we win the game easily knight h6 queen d2 yeah knight f5 and just remember this idea of going g4 just winning the night like that this can come out of nowhere sometimes this idea of like trapping the knight on the side of the board can come out of nowhere another idea that's similar sometimes you have this situation and you can play queen d2 and trap the knight sorry sometimes you have this situation you can play queen d2 and trap the knight like this understood that's it i mean here black should have played knight takes e5 and this actually is not so bad for black black has two pieces two pawns for the piece we have a lot of work to do this this loses immediately one last"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 7,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "d4",
+    "c5",
+    "e4",
+    "cxd4",
+    "c3",
+    "dxc3",
+    "Nxc3"
+   ],
+   "options": [
+    {
+     "san": "Nf6",
+     "t": 520,
+     "continuation": "Nf6",
+     "said": "stream he streams like these hours the d-gen hours and uh you could ask him what he what he recommends you can say i sent i sent you uh it's why so serious with seven wise knight f6 is a mistake very common one forgetting about e5 back to g8 to tempe this is already essentially losing for black for all intents and purposes we're all intentional e5 is bad e5 is a common move among club players but it's really really bad who can explain to me why i assume you mean black playing e5 f7 weakness yeah but it's already weak bishop c4 look how much you're weakening the d5 square don't weaken don't weaken central squares like that so casually white has permanent outpost on d5 so the two setups that are generally recommended here for black are well you start with knight c6 either way and now either e6 and then a6 or d6 and e6 and then later you play e5 much much later i'll let you guys investigate this on your own so one important point is that if black had gone d6 who can tell me what white should do this is a very"
+    },
+    {
+     "san": "e5",
+     "t": 533,
+     "continuation": "e5",
+     "said": "forgetting about e5 back to g8 to tempe this is already essentially losing for black for all intents and purposes we're all intentional e5 is bad e5 is a common move among club players but it's really really bad who can explain to me why i assume you mean black playing e5 f7 weakness yeah but it's already weak bishop c4 look how much you're weakening the d5 square don't weaken don't weaken central squares like that so casually white has permanent outpost on d5 so the two setups that are generally recommended here for black are well you start with knight c6 either way and now either e6 and then a6 or d6 and e6 and then later you play e5 much much later i'll let you guys investigate this on your own so one important point is that if black had gone d6 who can tell me what white should do this is a very important point his is a very very important point i'm this is a very very important point i'm about to make what should white do 96 some of you are"
+    },
+    {
+     "san": "Nc6",
+     "t": 558.5,
+     "continuation": "Nc6",
+     "said": "central squares like that so casually white has permanent outpost on d5 so the two setups that are generally recommended here for black are well you start with knight c6 either way and now either e6 and then a6 or d6 and e6 and then later you play e5 much much later i'll let you guys investigate this on your own so one important point is that if black had gone d6 who can tell me what white should do this is a very important point his is a very very important point i'm this is a very very important point i'm about to make what should white do 96 some of you are are are jumping the gun here bishop f7 that doesn't really work taking on d6 is bad you're helping black untangle bishop f4 is on the right track but it's unnecessary the move is castles you do nothing that's the answer you're like what what about knight takes e5 well this loses the queen you know the drill bishop takes f7 and king queen takes d8 okay but black"
+    }
+   ]
+  },
+  {
+   "ply": 8,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "d4",
+    "c5",
+    "e4",
+    "cxd4",
+    "c3",
+    "dxc3",
+    "Nxc3",
+    "Nc6"
+   ],
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 561,
+     "continuation": "Nf3",
+     "said": "white has permanent outpost on d5 so the two setups that are generally recommended here for black are well you start with knight c6 either way and now either e6 and then a6 or d6 and e6 and then later you play e5 much much later i'll let you guys investigate this on your own so one important point is that if black had gone d6 who can tell me what white should do this is a very important point his is a very very important point i'm this is a very very important point i'm about to make what should white do 96 some of you are are are jumping the gun here bishop f7 that doesn't really work taking on d6 is bad you're helping black untangle bishop f4 is on the right track but it's unnecessary the move is castles you do nothing that's the answer you're like what what about knight takes e5 well this loses the queen you know the drill bishop takes f7 and king queen takes d8 okay but black doesn't have to take any five of the knight he can take with the pawn"
+    },
+    {
+     "san": "e5",
+     "t": 574,
+     "continuation": "e5 Nb8 Bc4",
+     "said": "e6 and then later you play e5 much much later i'll let you guys investigate this on your own so one important point is that if black had gone d6 who can tell me what white should do this is a very important point his is a very very important point i'm this is a very very important point i'm about to make what should white do 96 some of you are are are jumping the gun here bishop f7 that doesn't really work taking on d6 is bad you're helping black untangle bishop f4 is on the right track but it's unnecessary the move is castles you do nothing that's the answer you're like what what about knight takes e5 well this loses the queen you know the drill bishop takes f7 and king queen takes d8 okay but black doesn't have to take any five of the knight he can take with the pawn the important thing to understand about the smith mora is that even end games are often terrible for black look at this end game if king takes d8 then bishop takes f7 as possible or we can give a check this is just like"
+    }
+   ]
+  },
+  {
+   "ply": 15,
+   "fen": "r1bqkbnr/pp2pppp/2np4/4P3/2B5/2N2N2/PP3PPP/R1BQ1RK1 b kq - 1 8",
+   "line": [
+    "d4",
+    "c5",
+    "e4",
+    "cxd4",
+    "c3",
+    "dxc3",
+    "Nxc3",
+    "Nc6",
+    "e5",
+    "Nb8",
+    "Bc4",
+    "Nc6",
+    "Nf3",
+    "d6",
+    "O-O"
+   ],
+   "options": [
+    {
+     "san": "Nxe5",
+     "t": 611.5,
+     "continuation": "Nxe5",
+     "said": "untangle bishop f4 is on the right track but it's unnecessary the move is castles you do nothing that's the answer you're like what what about knight takes e5 well this loses the queen you know the drill bishop takes f7 and king queen takes d8 okay but black doesn't have to take any five of the knight he can take with the pawn the important thing to understand about the smith mora is that even end games are often terrible for black look at this end game if king takes d8 then bishop takes f7 as possible or we can give a check this is just like devastating whoops and what about knight takes d8 who can tell me what the devastating move is here this is winning on the spot for white look around the board what squares can you access it's all about squares here it's all about reaching reaching squares no not yeah knight b5 not knight d5 because of 96 not knight d5 because of knight e6 but knight b5 because 96 you can take it now knight heads for seaside is there really no way to stop it yeah there's really no way to stop it there's a hilarious line"
+    },
+    {
+     "san": "dxe5",
+     "t": 623,
+     "continuation": "dxe5",
+     "said": "e5 well this loses the queen you know the drill bishop takes f7 and king queen takes d8 okay but black doesn't have to take any five of the knight he can take with the pawn the important thing to understand about the smith mora is that even end games are often terrible for black look at this end game if king takes d8 then bishop takes f7 as possible or we can give a check this is just like devastating whoops and what about knight takes d8 who can tell me what the devastating move is here this is winning on the spot for white look around the board what squares can you access it's all about squares here it's all about reaching reaching squares no not yeah knight b5 not knight d5 because of 96 not knight d5 because of knight e6 but knight b5 because 96 you can take it now knight heads for seaside is there really no way to stop it yeah there's really no way to stop it there's a hilarious line if k27 get back get mated boom i'm sure some games have ended this way online black has no other defense"
+    }
+   ]
+  },
+  {
+   "ply": 22,
+   "fen": "r1bnkbnr/pp2pppp/8/4p3/2B5/2N2N2/PP3PPP/R1B2RK1 w - - 4 12",
+   "line": [
+    "d4",
+    "c5",
+    "e4",
+    "cxd4",
+    "c3",
+    "dxc3",
+    "Nxc3",
+    "Nc6",
+    "e5",
+    "Nb8",
+    "Bc4",
+    "Nc6",
+    "Nf3",
+    "d6",
+    "O-O",
+    "dxe5",
+    "Qxd8+",
+    "Kxd8",
+    "Rd1+",
+    "Ke8",
+    "Rf1",
+    "Nd8"
+   ],
+   "options": [
+    {
+     "san": "Nd5",
+     "t": 658,
+     "continuation": "Nd5",
+     "said": "look around the board what squares can you access it's all about squares here it's all about reaching reaching squares no not yeah knight b5 not knight d5 because of 96 not knight d5 because of knight e6 but knight b5 because 96 you can take it now knight heads for seaside is there really no way to stop it yeah there's really no way to stop it there's a hilarious line if k27 get back get mated boom i'm sure some games have ended this way online black has no other defense okay so don't rule out lines just because they get into an end game so g6 we castle we go bishop f4 okay knight h6 exacerbates it but as i was indicating many times e6 we immediately pay attention to the d6 square we had a game like this yesterday we get one knight to d6 we get the other knight to g5 we bust everything open and we win the game easily knight h6 queen d2 yeah knight f5 and just remember this idea of going g4 just winning the night like that this can come out of nowhere sometimes this idea of like trapping the knight on the side of the board can come out of"
+    },
+    {
+     "san": "Nb5",
+     "t": 666.5,
+     "continuation": "Nb5 Ne6 Bxe6",
+     "said": "no not yeah knight b5 not knight d5 because of 96 not knight d5 because of knight e6 but knight b5 because 96 you can take it now knight heads for seaside is there really no way to stop it yeah there's really no way to stop it there's a hilarious line if k27 get back get mated boom i'm sure some games have ended this way online black has no other defense okay so don't rule out lines just because they get into an end game so g6 we castle we go bishop f4 okay knight h6 exacerbates it but as i was indicating many times e6 we immediately pay attention to the d6 square we had a game like this yesterday we get one knight to d6 we get the other knight to g5 we bust everything open and we win the game easily knight h6 queen d2 yeah knight f5 and just remember this idea of going g4 just winning the night like that this can come out of nowhere sometimes this idea of like trapping the knight on the side of the board can come out of nowhere another idea that's similar sometimes you have this situation and you can play queen d2 and trap the knight sorry"
+    }
+   ]
+  }
+ ]
+}

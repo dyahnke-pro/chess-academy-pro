@@ -1,0 +1,75 @@
+[
+  {
+    "id": "vn-qgd-the-gateway-defence-and-its-one-cost",
+    "line": "d4 d5 c4 e6",
+    "teaches": "A defence worth learning first is one whose ideas transfer everywhere else. Accept its single structural cost knowingly — here, the bishop shut behind the pawn chain — because solving that problem IS the opening.",
+    "explains": "The pawn to e6 declines the offer and props up the centre with a pawn rather than a piece. It is the soundest way to meet the gambit and the one to learn first, because the structures it produces turn up across half the queen's-pawn openings. The price is immediate and permanent: the bishop on c8, which a moment ago had five squares, now has none. Every plan from here is partly about getting it out.",
+    "reasons": [
+      {
+        "kind": "blocks",
+        "from": "c8",
+        "to": "h3"
+      }
+    ]
+  },
+  {
+    "id": "vn-qgd-develop-at-the-point-of-contact",
+    "line": "d4 d5 c4 e6 Nc3",
+    "teaches": "Develop toward the square the pawns are arguing over. A knight that adds an attacker to the contested centre square makes every later trade there happen on your terms.",
+    "explains": "The knight comes to c3 and joins the c-pawn in pressing on d5. Nothing is threatened yet — d5 is defended — but the count on that square is what the next several moves are about, and White is building it first.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "d5"
+      }
+    ]
+  },
+  {
+    "id": "vn-qgd-the-pin-that-changes-the-count",
+    "line": "d4 d5 c4 e6 Nc3 Nf6 Bg5",
+    "teaches": "A pin on a defender is worth more than an attack on the thing defended. Pin first, then increase the pressure on what the pinned piece was holding.",
+    "explains": "The bishop comes to g5 and pins the knight on f6 against the queen. That knight is one of the defenders of d5, so the pin is really another attacker on the centre — the count has shifted without a single capture. Black has to answer this before getting on with development.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "f6"
+      }
+    ]
+  },
+  {
+    "id": "vn-qgd-the-move-that-looks-like-it-drops-a-pawn",
+    "line": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7",
+    "teaches": "Before grabbing what looks like a free pawn, ask why it was offered. A capture that opens a line toward YOUR uncastled king is the shape of a trap, not a windfall.",
+    "explains": "The knight to d7 adds a defender to f6 and appears to leave the centre pawn hanging. It is one of the oldest traps in the game and people still walk into it: take twice in the middle and the knight on f6 falls with the pin — except it does not, because taking the knight lets Black take back and, when the queen is snapped off, a bishop check on b4 forces the only legal reply and wins the piece straight back. Black ends a knight for a pawn ahead. The sound move is the modest pawn to e3, which unpins nothing and threatens nothing and is simply correct.",
+    "reasons": [
+      {
+        "kind": "defends",
+        "square": "f6"
+      }
+    ]
+  },
+  {
+    "id": "vn-qgd-unpin-then-castle-then-decide",
+    "line": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 e3 Be7 Nf3 O-O",
+    "teaches": "Order the opening moves by which ones you would play in every plan. Break the pin and get the king safe first; the piece you genuinely have to think about can wait.",
+    "explains": "The bishop stepped in to break the pin and the king is now tucked away — both moves Black wants in every version of this position, so neither needed a decision. What does need one is the light-squared bishop still sitting behind the pawn on e6. There are several respectable ways to solve it, including simply making a home for it on the long diagonal, and that choice is what separates the systems here.",
+    "reasons": [
+      {
+        "kind": "defends",
+        "square": "f8"
+      }
+    ]
+  },
+  {
+    "id": "vn-qgd-the-rook-behind-the-pawn-that-will-move",
+    "line": "d4 d5 c4 e6 Nc3 Nf6 Bg5 Nbd7 e3 Be7 Nf3 O-O Rc1",
+    "teaches": "Put a rook on the file you expect to open, even when your own pieces still block it. The move is not measured by what it attacks today but by what it will see when the file clears.",
+    "explains": "The rook slides to c1 on a file that is still closed — and closed by its own knight on c3, so nothing is attacked and nothing is defended yet. That is the point. The c-pawn will eventually be captured or pushed and the knight will eventually move, and when they do the rook is already sitting on the file looking at whatever Black has left there. A standard preparatory move that costs nothing and asks nothing.",
+    "reasons": [
+      {
+        "kind": "controls",
+        "square": "c2"
+      }
+    ]
+  }
+]

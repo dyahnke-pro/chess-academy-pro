@@ -1,0 +1,391 @@
+{
+ "videoId": "24yObE8SLzY",
+ "title": "Drowning The Hippo Attack | The Sensei Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 18,
+   "line": [
+    "e3",
+    "d5",
+    "g3"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/8/4P1P1/PPPP1P1P/RNBQKBNR b KQkq - 0 2",
+   "said": "okay e3 yeah we've already faced this move and uh you guys should remember that our response to this is d5 okay so we're very likely facing a hippo which is g3 e3 and then b3 d3"
+  },
+  {
+   "ply": 4,
+   "t": 30.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/4P1P1/PPPP1P1P/RNBQKBNR w KQkq - 0 3",
+   "said": "and the best thing to do against all of these defenses is to start by occupying the center"
+  },
+  {
+   "ply": 5,
+   "t": 31.5,
+   "line": [
+    "Bg2"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/3pp3/8/4P1P1/PPPP1PBP/RNBQK1NR b KQkq - 1 3",
+   "said": "and if if you'll remember i introduced a really effective"
+  },
+  {
+   "ply": 6,
+   "t": 44.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/4P1P1/PPPP1PBP/RNBQK1NR w KQkq - 2 4",
+   "said": "setup against the hippo a couple of games back i think it was in the speed run basically what you do is you play knight f6"
+  },
+  {
+   "ply": 7,
+   "t": 45.5,
+   "line": [
+    "Ne2"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pp3/8/4P1P1/PPPPNPBP/RNBQK2R b KQkq - 3 4",
+   "said": "and then you play the move pawn c6 i"
+  },
+  {
+   "ply": 8,
+   "t": 48.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3pp3/8/4P1P1/PPPPNPBP/RNBQK2R w KQkq - 0 5",
+   "said": "really really like playing c6 in these"
+  },
+  {
+   "ply": 9,
+   "t": 49.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/3pp3/8/4P1P1/PPPPNPBP/RNBQ1RK1 b kq - 1 5",
+   "said": "positions essentially creating a pawn chain so that the bishop well to use my favorite expression bites on granite"
+  },
+  {
+   "ply": 10,
+   "t": 63,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/4P1P1/PPPPNPBP/RNBQ1RK1 w kq - 2 6",
+   "said": "and then this pawn triangle like in the london many openings it creates a square on d6 on which you can put your bishop"
+  },
+  {
+   "ply": 11,
+   "t": 64,
+   "line": [
+    "b3"
+   ],
+   "fen": "rnbqk2r/pp3ppp/2pb1n2/3pp3/8/1P2P1P1/P1PPNPBP/RNBQ1RK1 b kq - 0 6",
+   "said": "now you might ask well what about this knight this knight can't go on can't go to c6 anymore well where does the knight on b8 go ultimately obviously you should understand that it goes to d7 but where"
+  },
+  {
+   "ply": 13,
+   "t": 83.5,
+   "line": [
+    "Nbd7",
+    "Bb2"
+   ],
+   "fen": "r1bqk2r/pp1n1ppp/2pb1n2/3pp3/8/1P2P1P1/PBPPNPBP/RN1Q1RK1 b kq - 2 7",
+   "said": "is it heading as a final destination in order to facilitate a kingside attack so we'll start with knight bd7 it's not going to c5 if you go to c5 you kind of walk into d4 that knight on c5 doesn't do anything yeah so"
+  },
+  {
+   "ply": 16,
+   "t": 97.5,
+   "line": [
+    "Nf8",
+    "c3",
+    "Ng6"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2pb1nn1/3pp3/8/1PP1P1P1/PB1PNPBP/RN1Q1RK1 w kq - 1 9",
+   "said": "human ftw spells it out correctly we go knight f8 knight g6 kind of right lopez style"
+  },
+  {
+   "ply": 17,
+   "t": 99,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2pb1nn1/3pp3/3P4/1PP1P1P1/PB2NPBP/RN1Q1RK1 b kq - 0 9",
+   "said": "and our opponent is yeah it's playing instantly c3d4 now what is this knight doing exactly well it is located on the king side so there's all sorts of sacrifices in the future and also as we're going to see it makes the pawn storm h5h4 a lot more effective so what should we do now how should we"
+  },
+  {
+   "ply": 18,
+   "t": 129.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2pb1nn1/3p4/3Pp3/1PP1P1P1/PB2NPBP/RN1Q1RK1 w kq - 0 10",
+   "said": "how should we answer the move d4 given that we are going to attack on the king's side so given that we're going to attack on the king's side the best thing to do is to close the center of course to play e4 and probably he's gonna go c4 but the move c4 doesn't"
+  },
+  {
+   "ply": 19,
+   "t": 134,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "r1bqk2r/pp3ppp/2pb1nn1/3p4/3Pp3/1PP1P1P1/PB1NNPBP/R2Q1RK1 b kq - 1 10",
+   "said": "really do anything the pawn on d5 is where very well protected okay now what should we do now we need to go right our opponent has barely completed his development essentially everything is in place now one very common misconception in such"
+  },
+  {
+   "ply": 20,
+   "t": 157.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "r1bqk2r/pp3pp1/2pb1nn1/3p3p/3Pp3/1PP1P1P1/PB1NNPBP/R2Q1RK1 w kq - 0 11",
+   "said": "positions is that we have to develop our bishop we don't our bishop is perfectly satisfied being on c8 if we need it later we'll develop it we just we don't need to bring our bishop out just to say that we developed our pieces let's go let's go h5 we want to checkmate him"
+  },
+  {
+   "ply": 21,
+   "t": 161.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "r1bqk2r/pp3pp1/2pb1nn1/3p3p/2PPp3/1P2P1P1/PB1NNPBP/R2Q1RK1 b kq - 0 11",
+   "said": "c4 this move doesn't accomplish anything"
+  },
+  {
+   "ply": 22,
+   "t": 167,
+   "line": [
+    "h4"
+   ],
+   "fen": "r1bqk2r/pp3pp1/2pb1nn1/3p4/2PPp2p/1P2P1P1/PB1NNPBP/R2Q1RK1 w kq - 0 12",
+   "said": "pawn on d5 is perfectly well protected let's go h4 we're already on the verge of delivering"
+  },
+  {
+   "ply": 23,
+   "t": 172,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r1bqk2r/pp3pp1/2pb1nn1/3P4/3Pp2p/1P2P1P1/PB1NNPBP/R2Q1RK1 b kq - 0 12",
+   "said": "checkmate that's how quick that's how quick this is okay so cd we obviously"
+  },
+  {
+   "ply": 24,
+   "t": 173.5,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r1bqk2r/pp3pp1/3b1nn1/3p4/3Pp2p/1P2P1P1/PB1NNPBP/R2Q1RK1 w kq - 0 13",
+   "said": ""
+  },
+  {
+   "ply": 25,
+   "t": 175.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqk2r/pp3pp1/3b1nn1/3p4/3Pp2p/1PN1P1P1/PB1N1PBP/R2Q1RK1 b kq - 1 13",
+   "said": "want to recapture knight c3 again does this move accomplish anything specific the answer to that is no it doesn't it doesn't we want to be careful in terms of how we approach uh the opening of the king side so automatically playing the move h takes g3 that's a double-sided sword because hg3 white might play f takes g3 and then white opens up the f file for his rook so we have to have a follow up in mind if we're playing h63 and very often it's actually a good idea not to hurry so let's think about this for a second hg3 fg3 in that position we really want to play them of knight shoot for right well that's a very tempting move it attacks h2 to taxi t3 what's wrong with knight chief iv in that position what's wrong with knight iv in that resulting position there is something that move and it's the same thing that's wrong with knight four here yeah it gives up the pawn on d5 now you might say well why is that pawn important well it's a center pawn and if the d5 pawn falls then the e4 pawn is also likely to fall and that messes"
+  },
+  {
+   "ply": 26,
+   "t": 252,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2qk2r/pp3pp1/3bbnn1/3p4/3Pp2p/1PN1P1P1/PB1N1PBP/R2Q1RK1 w kq - 2 14",
+   "said": "things up it complicates things so let's make one prophylactic move just one and uh with this move we we make it so much easier for ourselves to attack on the king's side just go bishop b6 this also happens to complete the development but that's not the important part important thing about this move is that it defends the d5 pawn"
+  },
+  {
+   "ply": 27,
+   "t": 264,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "r2qk2r/pp3pp1/3bbnn1/3p4/3Pp2p/1PN1P1P1/PB1N1PBP/2RQ1RK1 b kq - 3 14",
+   "said": "and it makes it possible to go knight g4 in the future and these are the moves people don't like playing when they're attacking okay so what is the idea of this move well maybe he wants knight b5 but knight"
+  },
+  {
+   "ply": 28,
+   "t": 278,
+   "line": [
+    "hxg3"
+   ],
+   "fen": "r2qk2r/pp3pp1/3bbnn1/3p4/3Pp3/1PN1P1p1/PB1N1PBP/2RQ1RK1 w kq - 0 15",
+   "said": "p5 we can always drop our bishop back to b8 so now i think the time has come for us to to start operating on the king side"
+  },
+  {
+   "ply": 30,
+   "t": 282,
+   "line": [
+    "fxg3",
+    "Ng4"
+   ],
+   "fen": "r2qk2r/pp3pp1/3bb1n1/3p4/3Pp1n1/1PN1P1P1/PB1N2BP/2RQ1RK1 w kq - 1 16",
+   "said": "h takes g3 and knight g4 now the interesting thing that you might notice"
+  },
+  {
+   "ply": 31,
+   "t": 290.5,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "r2qk2r/pp3pp1/3bb1n1/3N4/3Pp1n1/1P2P1P1/PB1N2BP/2RQ1RK1 b kq - 0 16",
+   "said": "is that the bishop is overloaded here it is defending d5 it is defending the knight and i'm very impressed that he found knight 65 quickly but i saw this i saw this and i had planned what did i plan what did i plan on this position what can we do because the knight is hanging if we can move this knight away with"
+  },
+  {
+   "ply": 32,
+   "t": 315.5,
+   "line": [
+    "Nxh2"
+   ],
+   "fen": "r2qk2r/pp3pp1/3bb1n1/3N4/3Pp3/1P2P1P1/PB1N2Bn/2RQ1RK1 w kq - 0 17",
+   "said": "tempo then well white's going to have two hanging pieces at the same time no no no knight takes you through blunders the knight what are you guys saying knight takes you three blunders the knight knight takes h2 however is a better move because it attacks the rook and if the rook moves we take the knight"
+  },
+  {
+   "ply": 33,
+   "t": 324,
+   "line": [
+    "Nf4"
+   ],
+   "fen": "r2qk2r/pp3pp1/3bb1n1/8/3PpN2/1P2P1P1/PB1N2Bn/2RQ1RK1 b kq - 1 17",
+   "said": "this is not entirely clear cut because the knight can return to c3 he goes knight f4 which is also a good move by the way um"
+  },
+  {
+   "ply": 34,
+   "t": 334,
+   "line": [
+    "Nxf1"
+   ],
+   "fen": "r2qk2r/pp3pp1/3bb1n1/8/3PpN2/1P2P1P1/PB1N2B1/2RQ1nK1 w kq - 0 18",
+   "said": "okay well what should we do now well let's take the rook"
+  },
+  {
+   "ply": 35,
+   "t": 337.5,
+   "line": [
+    "Nxf1"
+   ],
+   "fen": "r2qk2r/pp3pp1/3bb1n1/8/3PpN2/1P2P1P1/PB4B1/2RQ1NK1 b kq - 0 18",
+   "said": "night takes f1 knight takes f1 and now we're just up in exchange and"
+  },
+  {
+   "ply": 36,
+   "t": 341,
+   "line": [
+    "Nxf4"
+   ],
+   "fen": "r2qk2r/pp3pp1/3bb3/8/3Ppn2/1P2P1P1/PB4B1/2RQ1NK1 w kq - 0 19",
+   "said": "we're conti we're still attacking let's trade on f4"
+  },
+  {
+   "ply": 37,
+   "t": 343.5,
+   "line": [
+    "exf4"
+   ],
+   "fen": "r2qk2r/pp3pp1/3bb3/8/3PpP2/1P4P1/PB4B1/2RQ1NK1 b kq - 0 19",
+   "said": "let's get rid of that knight he takes f4 and now our advantage has been converted we've converted our um our tactical advantage our attack into a material advantage an extra exchange and now we have to demonstrate proper uh conversion technique yeah so f5 f5 is one way to do it but it does allow the move d5 which opens up the bishop's diagonal so we have to handle this very very carefully we have to handle this very very carefully this is not so easy actually this is"
+  },
+  {
+   "ply": 38,
+   "t": 387,
+   "line": [
+    "f5"
+   ],
+   "fen": "r2qk2r/pp4p1/3bb3/5p2/3PpP2/1P4P1/PB4B1/2RQ1NK1 w kq - 0 20",
+   "said": "this is not easy at all in fact let me think about this for a second i i need to think what do we want to do here yeah let's go five let's go f5 let's defend the e4 i feel like this is the most important pawn to defend"
+  },
+  {
+   "ply": 39,
+   "t": 394.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "r2qk2r/pp4p1/3bb3/3P1p2/4pP2/1P4P1/PB4B1/2RQ1NK1 b kq - 0 20",
+   "said": "i i feel like this is the pawn we want to defend because it also puts the bishop out of commission d5 this guy's good"
+  },
+  {
+   "ply": 40,
+   "t": 399.5,
+   "line": [
+    "Bf7"
+   ],
+   "fen": "r2qk2r/pp3bp1/3b4/3P1p2/4pP2/1P4P1/PB4B1/2RQ1NK1 w kq - 1 21",
+   "said": "okay well we have to move our bishop back so let's move it back to f7"
+  },
+  {
+   "ply": 41,
+   "t": 403.5,
+   "line": [
+    "Bxg7"
+   ],
+   "fen": "r2qk2r/pp3bB1/3b4/3P1p2/4pP2/1P4P1/P5B1/2RQ1NK1 b kq - 0 21",
+   "said": "he's going to take this pawn and that's what i was contemplating is it worth"
+  },
+  {
+   "ply": 42,
+   "t": 404.5,
+   "line": [
+    "Rg8"
+   ],
+   "fen": "r2qk1r1/pp3bB1/3b4/3P1p2/4pP2/1P4P1/P5B1/2RQ1NK1 w q - 1 22",
+   "said": "giving that pawn away and i concluded that yes it is it is worth giving that pawn away it is worth giving that pawn away"
+  },
+  {
+   "ply": 43,
+   "t": 421,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "r2qk1r1/pp3b2/3b3B/3P1p2/4pP2/1P4P1/P5B1/2RQ1NK1 b q - 2 22",
+   "said": "because at least we have the e4 pawn which is a big big pawn i'm hoping he goes okay goes bishop h6 that's a mistake that's a losing move that is a losing move now anytime you have a king on g1 that is this week you need to be hyper aware of every possibility every opportunity uh to get to that king on both sides of the board not just on the king side but also on the queen side any time the pawn moves away from f2 it opens up this diagonal"
+  },
+  {
+   "ply": 44,
+   "t": 455,
+   "line": [
+    "Qb6+"
+   ],
+   "fen": "r3k1r1/pp3b2/1q1b3B/3P1p2/4pP2/1P4P1/P5B1/2RQ1NK1 w q - 3 23",
+   "said": "if you're aware of that then it's a lot easier to find the mobile is the move bishop c5 check no well it's not because there's a rook on c1 that's guarding that's where but can we do anything else on that diagonal yes we can we can play queen b6 check forcing the king onto the h file but what sits on the h file whether it's bishop on h6 it's undefended we can drop the rook back to h8 and pick up the bishop yeah simple uh simple sequence we got lucky there bishop d4 was not actually that clear"
+  },
+  {
+   "ply": 45,
+   "t": 485,
+   "line": [
+    "Kh1"
+   ],
+   "fen": "r3k1r1/pp3b2/1q1b3B/3P1p2/4pP2/1P4P1/P5B1/2RQ1N1K b q - 4 23",
+   "said": "so my my technique there was a little bit sloppy but it does the job and i'll talk about it more after the game why exactly it was sloppy what should we have done instead no rook g6 doesn't trap the bishop because of bishop g5 it's better to go"
+  },
+  {
+   "ply": 46,
+   "t": 487.5,
+   "line": [
+    "Rh8"
+   ],
+   "fen": "r3k2r/pp3b2/1q1b3B/3P1p2/4pP2/1P4P1/P5B1/2RQ1N1K w q - 5 24",
+   "said": "rook h8 that's a pin"
+  },
+  {
+   "ply": 47,
+   "t": 490.5,
+   "line": [
+    "Nh2"
+   ],
+   "fen": "r3k2r/pp3b2/1q1b3B/3P1p2/4pP2/1P4P1/P5BN/2RQ3K b q - 6 24",
+   "said": ""
+  },
+  {
+   "ply": 48,
+   "t": 492,
+   "line": [
+    "Rxh6"
+   ],
+   "fen": "r3k3/pp3b2/1q1b3r/3P1p2/4pP2/1P4P1/P5BN/2RQ3K w q - 0 25",
+   "said": "oh thank you for the thank you for the 10 dono appreciate it the question is how do we convert this advantage as quickly as possible and so well the answer to that is we have a knight on h2 our opponent has a knight on h2 that knight is very vulnerable we want to double on the h file well what's stopping us it's the king we can just move the king up to e7 and then slide the rook on over to h8 rook a to h8 we're not afraid of bishop take c4 here white is running out of pieces our king is perfectly safe in the center okay and if we want to win the game with the flourish there is actually forced mate here if we want to win the game with a flourish we can change up the move order just a little bit as soon as the queen leaves e2 for some reason my eyes are drawn to the f2 square and if the bishop is gone from g2 right the pattern recognition starts circulating and if you've solved enough tactics this is something you should see quickly you take on h2 then you bring the other rook to a chain and then after the bishop blocks you you swoop into f2 with"
+  }
+ ],
+ "forks": []
+}

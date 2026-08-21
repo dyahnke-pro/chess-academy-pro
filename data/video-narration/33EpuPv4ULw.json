@@ -1,0 +1,262 @@
+{
+ "videoId": "33EpuPv4ULw",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1000",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 454,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "Very nice game. And we're playing Ali Resa Fua. Okay, that's a pretty scary name. I'm not going to lie. If it was if there was an ali in front of his name, I would have gotten a little bit more scared."
+  },
+  {
+   "ply": 3,
+   "t": 457.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "Okay, so let us diversify a little bit and let's play some other openings. We"
+  },
+  {
+   "ply": 4,
+   "t": 464.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "have been playing the Italian. All right. Well, never mind because he's not letting us do anything. So, what do we do in this position? The king is the piney. Exactly. We have to publish a"
+  },
+  {
+   "ply": 5,
+   "t": 476.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "said": "book of the terminology. Can somebody remind me what move have what move do we play against the filidor we play d4 why do we play d4 because by playing d6 he a"
+  },
+  {
+   "ply": 6,
+   "t": 482.5,
+   "line": [
+    "exd4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": "has not developed a piece b he's obstructed his bishop both of these"
+  },
+  {
+   "ply": 7,
+   "t": 483.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/3p4/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "said": ""
+  },
+  {
+   "ply": 8,
+   "t": 485,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/2np4/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "said": "things are serious concessions which means to exploit them we open up the center another typical situation do not"
+  },
+  {
+   "ply": 9,
+   "t": 493.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/2np4/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "rush to move this knight we can just develop because once he takes this knight this queen is perfectly safe"
+  },
+  {
+   "ply": 11,
+   "t": 497.5,
+   "line": [
+    "Nxd4",
+    "Qxd4"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/3p4/8/3QP3/2N5/PPP2PPP/R1B1KB1R b KQkq - 0 6",
+   "said": "because he no longer has a knight on b8 to attack our queen with c5 is a very typical move for a lot of players in"
+  },
+  {
+   "ply": 12,
+   "t": 507,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2qkbnr/pppb1ppp/3p4/8/3QP3/2N5/PPP2PPP/R1B1KB1R w KQkq - 1 7",
+   "said": "this position. But do not assume that attacking the queen is just going to be a naturally good thing. We'll talk about that after the game. But the move C5 is a very classic mistake in these types of positions. How do we continue our development?"
+  },
+  {
+   "ply": 13,
+   "t": 528,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r2qkbnr/pppb1ppp/3p4/8/2BQP3/2N5/PPP2PPP/R1B1K2R b KQkq - 2 7",
+   "said": "What would be the most active way of now proceeding and just, you know, very natural move, but I just want to kind of help everybody practice your your sort of sense for where the pieces belong, so to speak. Exactly. Bishop C4, pressuring the F7 pawn. He's probably going to bring his knight out and we're just going to continue our development. We don't need to move our queen anywhere. Our queen is perfectly safe. In fact, we are trying to provoke the move C5. And"
+  },
+  {
+   "ply": 15,
+   "t": 555,
+   "line": [
+    "Ne7",
+    "O-O"
+   ],
+   "fen": "r2qkb1r/pppbnppp/3p4/8/2BQP3/2N5/PPP2PPP/R1B2RK1 b kq - 4 8",
+   "said": "the main issue with that move, since he's thinking, I can talk about this is going to be that he weakens the D5 square. And that is a central square that you certainly do not want to weaken permanently. Okay, let's castle. He's probably going to go knight C6. Big"
+  },
+  {
+   "ply": 16,
+   "t": 559.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/2np4/8/2BQP3/2N5/PPP2PPP/R1B2RK1 w kq - 5 9",
+   "said": "deal. He's attacking our queen. Well, we move the queen. Where should we move the queen? And here we've got to be very careful. I know that a lot of people I know it. We're going to see somebody say queen D5. And that's tempting, but be very careful about moving your queen"
+  },
+  {
+   "ply": 17,
+   "t": 581,
+   "line": [
+    "Qd1"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/2np4/8/2B1P3/2N5/PPP2PPP/R1BQ1RK1 b kq - 6 9",
+   "said": "into too much traffic. Queen D5 might allow bishop E6. Queen D3 might allow knight E5. And I don't want to part ways with this bishop. So I'm going to do something here that some Really? You're so lame. Queen D1. Come on, man. Queen D1. And"
+  },
+  {
+   "ply": 18,
+   "t": 585.5,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r2qk2r/pppbbppp/2np4/8/2B1P3/2N5/PPP2PPP/R1BQ1RK1 w kq - 7 10",
+   "said": "sometimes you have to retreat. That doesn't mean we've done anything wrong. In fact, our position is so incredibly active and uh we can continue to activate our pieces, but it's okay to make the occasional retreating move. That doesn't mean anything. So, how do"
+  },
+  {
+   "ply": 19,
+   "t": 611.5,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r2qk2r/pppbbppp/2np4/3N4/2B1P3/8/PPP2PPP/R1BQ1RK1 b kq - 8 10",
+   "said": "we continue activating our pieces? We have a beautiful outpost for one of our pieces. What piece am I talking about? We can develop this bishop. That's fine. But I'm thinking about a particular outpost. Let's get this knight over to the center. Let's get this knight over to the center. Look at this beautiful square. We can take the bishop at our"
+  },
+  {
+   "ply": 20,
+   "t": 623.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/pppbbppp/2np4/3N4/2B1P3/8/PPP2PPP/R1BQ1RK1 w - - 9 11",
+   "said": "leisure, but we're not going to because this knight is very strong. We're going to try to make him be the one to take this knight. And I really like the proposal of hidden king. Let's increase"
+  },
+  {
+   "ply": 21,
+   "t": 629.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "r2q1rk1/pppbbppp/2np4/3N4/2B1PP2/8/PPP3PP/R1BQ1RK1 b - - 0 11",
+   "said": "our central control by playing f4. That's not necessarily the move that I"
+  },
+  {
+   "ply": 22,
+   "t": 633.5,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2q1rk1/ppp1bppp/2npb3/3N4/2B1PP2/8/PPP3PP/R1BQ1RK1 w - - 1 12",
+   "said": "would make uh in a game that I would play, but I want to show people how to attack like this. Okay, so we haven't completed our development, which is not a situation that I like particularly. And here is a good example of when to maneuver. Now we we look at this bishop for a second. Okay, we can put it on E3. Is it really doing anything on E3? We could be getting more bang for our buck."
+  },
+  {
+   "ply": 23,
+   "t": 664.5,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "r2q1rk1/ppp1bppp/2npb3/3N4/2B1PP2/8/PPPB2PP/R2Q1RK1 b - - 2 12",
+   "said": "Where should the bishop go? And this will look like a very awkward move initially, but it's it's a maneuver, right? We make an awkward move, but then the bishop maneuvers to a good square. Boom. Zaraf, that's the right idea. I don't want to play B3 because that"
+  },
+  {
+   "ply": 24,
+   "t": 672,
+   "line": [
+    "Na5"
+   ],
+   "fen": "r2q1rk1/ppp1bppp/3pb3/n2N4/2B1PP2/8/PPPB2PP/R2Q1RK1 w - - 3 13",
+   "said": "weakens the long diagonal. But the idea is the same. We're getting our bishop."
+  },
+  {
+   "ply": 25,
+   "t": 673,
+   "line": [
+    "Bxa5"
+   ],
+   "fen": "r2q1rk1/ppp1bppp/3pb3/B2N4/2B1PP2/8/PPP3PP/R2Q1RK1 b - - 0 13",
+   "said": "Look at this. We're we're reading his"
+  },
+  {
+   "ply": 26,
+   "t": 676.5,
+   "line": [
+    "b6"
+   ],
+   "fen": "r2q1rk1/p1p1bppp/1p1pb3/B2N4/2B1PP2/8/PPP3PP/R2Q1RK1 w - - 0 14",
+   "said": "mind because we're not thinking about"
+  },
+  {
+   "ply": 27,
+   "t": 678.5,
+   "line": [
+    "Bc3"
+   ],
+   "fen": "r2q1rk1/p1p1bppp/1p1pb3/3N4/2B1PP2/2B5/PPP3PP/R2Q1RK1 b - - 1 14",
+   "said": "the immediate square. We're thinking about the long-term square. Now, we get the bishop to the long diagonal and we"
+  },
+  {
+   "ply": 28,
+   "t": 685.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "r2q1rk1/p3bppp/1pppb3/3N4/2B1PP2/2B5/PPP3PP/R2Q1RK1 w - - 0 15",
+   "said": "have an extra knight. And this is not a coincidence. I've told I've said this before. When we play like this, we piss our opponent off. I mean, we annoy him. Okay, what should we do? He's attacking our our knight. We already know that there are two main methods of trying to convert extra material. Believe it or"
+  },
+  {
+   "ply": 29,
+   "t": 712,
+   "line": [
+    "Qd4"
+   ],
+   "fen": "r2q1rk1/p3bppp/1pppb3/3N4/2BQPP2/2B5/PPP3PP/R4RK1 b - - 1 15",
+   "said": "not, we can actually make a move that doesn't involve moving the knight. This is one of those things that you just got to kind of think about because we have so many active pieces. Got to start thinking about how to how to set threats. Bingo. Zarafh is on fire. Queen D4 attacking the pawn. If he plays"
+  },
+  {
+   "ply": 30,
+   "t": 718,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r2q1rk1/p3bppp/1p1pb3/3p4/2BQPP2/2B5/PPP3PP/R4RK1 w - - 0 16",
+   "said": "bishop F6, then we get a chance to trade everything in one fell swoop. Okay."
+  },
+  {
+   "ply": 31,
+   "t": 719,
+   "line": [
+    "Qxg7#"
+   ],
+   "fen": "r2q1rk1/p3bpQp/1p1pb3/3p4/2B1PP2/2B5/PPP3PP/R4RK1 b - - 0 16",
+   "said": "Allows us to deliver checkmate. Um, how do I find a move like 15, queen D4? How do you know to look for it? I'll talk about that after the game. Let me just open up the window. And we see different openings. We see the French. Now, the opening that I really like to play against the French to illustrate conceptual I wanted to say conceptual concepts. That's how I know it's 10 p.m. is the advanced French. And the advanced French causes trouble to a lot of French players because it leads to a close position. Now, this is a conceptual mistake. We talked about this. He is attacking the tip of the pawn chain rather than the base of the pawn chain. That is wrong in this case and in most cases because what happens when you attack the tip of the pawn chain very often is that look at this square on E5. Now it is a square that we can occupy with a knight. Now it is an outpost that he has granted us and in addition we still have nice central control. Now one very important thing we don't need to"
+  }
+ ],
+ "forks": []
+}

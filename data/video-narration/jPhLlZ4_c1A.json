@@ -1,0 +1,190 @@
+{
+ "videoId": "jPhLlZ4_c1A",
+ "title": "Master Class | Oh My Cheaters!! | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 457,
+   "line": [
+    "b3",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/P1PPPPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "seams we're gonna play b3 we're gonna play one b3 which you guys have seen me play a million times it's actually one of my main moves actually proffer and it's the"
+  },
+  {
+   "ply": 3,
+   "t": 458,
+   "line": [
+    "Bb2"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/8/1P6/PBPPPPPP/RN1QKBNR b KQkq - 1 2",
+   "said": "queen side bishop skincare also known as"
+  },
+  {
+   "ply": 4,
+   "t": 461.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P6/PBPPPPPP/RN1QKBNR w KQkq - 2 3",
+   "said": "the nimzo larsen opening now there is very little that needs to be said about this move because its idea is obvious you're fianchettoing the bishop those of you who are saying lame trust me we're going to have some fun this game um and it is a hyper modern opening we're not controlling any part of the center we're doing it with our pieces instead and the way that this is traditionally played the way that this is traditionally played uh is in the most direct spirit of hyper modern openings where all of your pressure occurs not"
+  },
+  {
+   "ply": 5,
+   "t": 505.5,
+   "line": [
+    "e3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/8/1P2P3/PBPP1PPP/RN1QKBNR b KQkq - 0 3",
+   "said": "uh you're not building up your own center you are purely attacking your opponent's center so what we do here and this is the old main line recently people have started going knight f3 the old main main line display e3"
+  },
+  {
+   "ply": 6,
+   "t": 511.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/8/1P2P3/PBPP1PPP/RN1QKBNR w KQkq - 1 4",
+   "said": "all right we're controlling a little bit of the center but the the basic idea of this is to open up this bishop now where should this bishop go based on what i just told you about the"
+  },
+  {
+   "ply": 7,
+   "t": 529.5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/8/1P2P3/PBPP1PPP/RN1QK1NR b KQkq - 2 4",
+   "said": "idea behind this opening bishop b5 of course in order to attack tonight we're already threatening to win a pawn we're threatening to capture the knight and capture the pawn and it may not seem problematic for"
+  },
+  {
+   "ply": 8,
+   "t": 545,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r1b1kb1r/ppppqppp/2n2n2/1B2p3/8/1P2P3/PBPP1PPP/RN1QK1NR w KQkq - 3 5",
+   "said": "black to defend it it's not black can go d6 black can even go bishop d6 that's one of the main moves and black can go queen e7 but all of those moves have pretty big drawbacks queen e7 has the serious drawback that is much harder now to develop this bishop okay the obvious continuation is knight f3 and there's nothing wrong with that move uh it puts more pressure on the pawn but what is the drawback of playing knight f3 what can black do in response that you know may seem that actually is a little bit annoying they will push the pawn to e4 and attack"
+  },
+  {
+   "ply": 9,
+   "t": 588,
+   "line": [
+    "Ne2"
+   ],
+   "fen": "r1b1kb1r/ppppqppp/2n2n2/1B2p3/8/1P2P3/PBPPNPPP/RN1QK2R b KQkq - 4 5",
+   "said": "our knight again and isn't the whole point to leave this pawn on the operating table here on e5 so what do we do about this well we don't want to develop the knights f3 instead we want to develop it to e2 but the point of this move isn't"
+  },
+  {
+   "ply": 10,
+   "t": 594,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1b1kb1r/1pppqppp/p1n2n2/1B2p3/8/1P2P3/PBPPNPPP/RN1QK2R w KQkq - 0 6",
+   "said": "only to make sure that e4 doesn't come with tempo there's a secondary plan that we are preparing"
+  },
+  {
+   "ply": 12,
+   "t": 598,
+   "line": [
+    "Bxc6",
+    "dxc6"
+   ],
+   "fen": "r1b1kb1r/1pp1qppp/p1p2n2/4p3/8/1P2P3/PBPPNPPP/RN1QK2R w KQkq - 0 7",
+   "said": "now we have to take the knight and you might look at this and say wait a second wasn't the whole point of this move to increase our pressure of this pawn and now well this pawn isn't being attacked so aren't we you know doesn't our play kind of not make logical sense that's not entirely true we actually still can attack this pawn on e5 and put very significant pressure on it um in fact i will tell you that black is already in trouble i know it seems weird six moves in but black is already in trouble how should we how should we do that well we can tack a pawn with our pieces or we can attack it with our pawns in the way to attack it with our pawns we have two ways of doing we can play d4 but d4 blocks in our own bishop and allows him to play e4 so now we should prepare the move f4"
+  },
+  {
+   "ply": 13,
+   "t": 656.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1b1kb1r/1pp1qppp/p1p2n2/4p3/8/1P2P3/PBPPNPPP/RN1Q1RK1 b kq - 1 7",
+   "said": "which will open our bishop up and basically tara open up tear open the position which is good for us because this queen on e7 is king is going to be stuck in the center and the position is generally wide open so first let's castle so that our rook is going to be positioned in a way"
+  },
+  {
+   "ply": 14,
+   "t": 666.5,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r3kb1r/1ppbqppp/p1p2n2/4p3/8/1P2P3/PBPPNPPP/RN1Q1RK1 w kq - 2 8",
+   "said": "that will benefit from the file getting opened and now let's play"
+  },
+  {
+   "ply": 15,
+   "t": 671.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "r3kb1r/1ppbqppp/p1p2n2/4p3/5P2/1P2P3/PBPPN1PP/RN1Q1RK1 b kq - 0 8",
+   "said": ""
+  },
+  {
+   "ply": 16,
+   "t": 675,
+   "line": [
+    "e4"
+   ],
+   "fen": "r3kb1r/1ppbqppp/p1p2n2/8/4pP2/1P2P3/PBPPN1PP/RN1Q1RK1 w kq - 0 9",
+   "said": "f4 okay now it doesn't weaken the king um it does i've talked about this previously uh the thing to understand is that not all king side pawn moves are the same g4 and h4 are far more weakening generally speaking than pushing up the f pawn because we still have this this cover he doesn't have any pieces on the king side we don't need to worry about this too much now now we have a great diagonal but we've got a lot we've got a couple of things to do here he's probably going to castle long and we need to think about how that impacts our continued strategy all right before we think about our strategy though we need to finish our development we have a knight on b1 that night is not developed we need to figure out where we want to put it this is where these openings are very hard to play for you know for beginners and and for people who are not too experienced with chess and you know not because you're dumb or not capable of understanding something because they require in many cases unconventional developing moves because of the demands of the situation so in this case if we look at this item where it might belong e5 seems like a great square to reach e5 we have to go this way so"
+  },
+  {
+   "ply": 18,
+   "t": 755.5,
+   "line": [
+    "Na3",
+    "h5"
+   ],
+   "fen": "r3kb1r/1ppbqpp1/p1p2n2/7p/4pP2/NP2P3/PBPPN1PP/R2Q1RK1 w kq - 0 10",
+   "said": "the knight has to go to frankfurt airport then it has to go toward the center knight c3 is very awkward it blocks in the bishop that knight on c3 doesn't really have a good roll okay h5"
+  },
+  {
+   "ply": 19,
+   "t": 759,
+   "line": [
+    "Nc4"
+   ],
+   "fen": "r3kb1r/1ppbqpp1/p1p2n2/7p/2N1pP2/1P2P3/PBPPN1PP/R2Q1RK1 b kq - 1 10",
+   "said": "let's get our knight to c4 it looks ugly"
+  },
+  {
+   "ply": 20,
+   "t": 762,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "2kr1b1r/1ppbqpp1/p1p2n2/7p/2N1pP2/1P2P3/PBPPN1PP/R2Q1RK1 w - - 2 11",
+   "said": "but guess how nice the knight might look once it reaches e5 we don't have to rush with knight e5 though another thing that people can struggle with if we're going knight a39 c4 why are we hesitating about going 95 that's because the threat is stronger than the execution right now he can't cover that square so perhaps we have more pressing matters that we want to attend to right now and then go 95 at some later point so what should we do well we have a situation of opposite side castling and generally speaking in upset side castling he's already started his attack we need to start our attack and that's a"
+  },
+  {
+   "ply": 21,
+   "t": 811.5,
+   "line": [
+    "a4"
+   ],
+   "fen": "2kr1b1r/1ppbqpp1/p1p2n2/7p/P1N1pP2/1P2P3/1BPPN1PP/R2Q1RK1 b - - 0 11",
+   "said": "pretty tall order because he's got a very um very secure pawn bumper on the queen side but that's not to say we can't break it down but we need to start we need to freaking get on with it so let's let's go our plan is to go a4 b4 b5"
+  },
+  {
+   "ply": 22,
+   "t": 819,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "2kr1b1r/1ppbqpp1/p1p5/3n3p/P1N1pP2/1P2P3/1BPPN1PP/R2Q1RK1 w - - 1 12",
+   "said": "i'll show you guys a classic game uh where a pretty weak player makes this happen and once we do that we want to make this pawn cover explode he's playing extremely well by the way folks knight d5 is really really nice"
+  },
+  {
+   "ply": 23,
+   "t": 837,
+   "line": [
+    "Qe1"
+   ],
+   "fen": "2kr1b1r/1ppbqpp1/p1p5/3n3p/P1N1pP2/1P2P3/1BPPN1PP/R3QRK1 b - - 2 12",
+   "said": "um so this is this is double-edged um so let me think for a second let's move our queen out of the way of the rook just for the future i don't want the queen to be x-rayed let's make sure our queen can come to f2 in case we need to provide more protection for our own king now the goal here ultimately is potentially to prepare before maybe do some related things the move c3 would be way too awkward though it would block in the bishop etc etc so is there anything that can be done well d3 opens up the center i'll talk about it later think about what's preventing us from playing b4 these black pieces here let's go bishop a3 now yes that involves bringing the bishop away from this diagonal but we have more important things to do chess is a game where you have to constantly be shifting your strategies based on the demands of the position now we're going to go rook b1 we're going to continue preparing before it's not going to be easy to play this but we're going to make an attempt h4 now h3 is not dangerous because we could"
+  }
+ ],
+ "forks": []
+}

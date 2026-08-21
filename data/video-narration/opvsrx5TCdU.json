@@ -1,0 +1,373 @@
+{
+ "videoId": "opvsrx5TCdU",
+ "title": "Hunting for a Queenside Attack | Owen's Defence | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 4,
+   "t": 426,
+   "line": [
+    "d4",
+    "b6",
+    "e4",
+    "e6"
+   ],
+   "fen": "rnbqkbnr/p1pp1ppp/1p2p3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "uh kind of second rate opening that that gives you a combative game and if you want to play something super offbeat there's plenty of stuff that's like just a lot more interesting than just giving up the center like this because no matter how white sets up their pieces black is going to be worse"
+  },
+  {
+   "ply": 5,
+   "t": 436.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/p1pp1ppp/1p2p3/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "which is why i don't really see the appeal of this opening okay so we played knight c3 and"
+  },
+  {
+   "ply": 7,
+   "t": 438.5,
+   "line": [
+    "Bb7",
+    "Bd3"
+   ],
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR b KQkq - 3 4",
+   "said": "bishop d3 which is i think one of the main lines so here"
+  },
+  {
+   "ply": 8,
+   "t": 444.5,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rn1qk1nr/pbppbppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "said": "the main move is knight f6 bishop e7 is very passive"
+  },
+  {
+   "ply": 7,
+   "t": 446.5,
+   "line": [],
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR b KQkq - 3 4",
+   "said": "in this opening the bishop usually goes to b4"
+  },
+  {
+   "ply": 8,
+   "t": 451,
+   "line": [
+    "Bb4"
+   ],
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "said": "but the move bishop before here let's see who paid especially careful attention to the earlier games in the speed run i have"
+  },
+  {
+   "ply": 9,
+   "t": 466,
+   "line": [
+    "Ne2"
+   ],
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 5 5",
+   "said": "recommended a move here that we have played several times in the speed run and that's knight e2 92 by the way common mistake in notation is"
+  },
+  {
+   "ply": 8,
+   "t": 473,
+   "line": [],
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "said": "to say knight g to you don't have to say knight g2 because there's only one knight that can go to e2 the other one"
+  },
+  {
+   "ply": 9,
+   "t": 475.5,
+   "line": [
+    "Ne2"
+   ],
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 5 5",
+   "said": "is pinned and the purpose of knighted to it knight g2 is to connect the"
+  },
+  {
+   "ply": 10,
+   "t": 485.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R w KQkq - 6 6",
+   "said": "i just made that mistake knight e2 is to connect the knights and if black plays for instance knight f6"
+  },
+  {
+   "ply": 11,
+   "t": 489,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/2NB4/PPP1NPPP/R1BQ1RK1 b kq - 7 6",
+   "said": "then we can just castle and if you compare this position and this position well compare the placement of the knight"
+  },
+  {
+   "ply": 12,
+   "t": 503,
+   "line": [
+    "Bxc3"
+   ],
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/3PP3/2bB4/PPP1NPPP/R1BQ1RK1 w kq - 0 7",
+   "said": "on e2 versus f3 what move does black have here it is totally harmless here well it's obviously bishop take c3 that's the"
+  },
+  {
+   "ply": 13,
+   "t": 504,
+   "line": [
+    "Nxc3"
+   ],
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/3PP3/2NB4/PPP2PPP/R1BQ1RK1 b kq - 0 7",
+   "said": "whole point of connecting your knights like this you take the sting out of the potential for a trade whereas with the knight on f3 black actually just wins upon this is a common blunder very common blunder by the way another very common mistake listen carefully because this is a mistake tons of people make is you get a position like this and then you say hmm well i see that my opponent is threatening to win the pawn so let me pin the knight in order to defend the pawn indirectly while also developing a piece on the face of it this logic sounds good but there's a a concrete flaw with this move in particular and with the concept of using a pin to defend upon what is what is the flaw what is black's best move here i see this all the time no not castles oh if black castles then white already has like e5 and stuff then it's justified yeah so black plays h6 you might say well no big deal i just play bishop h4 but here black plays g5 and we've lost a pawn because now you're black has gotten rid of the pin and black can take on e4 immediately even because because you can't take with a knight so you're forced to take the knight but now you have given up the bishop aaron you have made two moves with the bishop only to trade it for a knight that has moved once and black is doing great here so just an important note if i were to get myself into this position who can propose a way of defending the e4 pawn who can propose the best way of defending e4 pawn also one of the only ways sunny diet deity if you play h6a3 black will take the knight with check and you lose a piece on g5 yeah queen e2 but the whole reason that we put a"
+  },
+  {
+   "ply": 8,
+   "t": 628.5,
+   "line": [],
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "said": "knight on e2 rather than an f3 here block plays d5 and here you get into this very annoying situation where black starts putting pressure on your knight etc etc so for that reason i proposed the setup"
+  },
+  {
+   "ply": 9,
+   "t": 630.5,
+   "line": [
+    "Ne2"
+   ],
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 5 5",
+   "said": "with knight e2 so that after knight f6 you can simply"
+  },
+  {
+   "ply": 11,
+   "t": 635,
+   "line": [
+    "Nf6",
+    "O-O"
+   ],
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/2NB4/PPP1NPPP/R1BQ1RK1 b kq - 7 6",
+   "said": "castle you can also play a3 and kick the"
+  },
+  {
+   "ply": 10,
+   "t": 636,
+   "line": [],
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R w KQkq - 6 6",
+   "said": ""
+  },
+  {
+   "ply": 11,
+   "t": 637,
+   "line": [
+    "a3"
+   ],
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/P1NB4/1PP1NPPP/R1BQK2R b KQkq - 0 6",
+   "said": "bishop away and bishop takes c3 is"
+  },
+  {
+   "ply": 13,
+   "t": 639.5,
+   "line": [
+    "Bxc3+",
+    "Nxc3"
+   ],
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/3PP3/P1NB4/1PP2PPP/R1BQK2R b KQkq - 0 7",
+   "said": "totally harmless due to knight takes c3"
+  },
+  {
+   "ply": 9,
+   "t": 644.5,
+   "line": [],
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R b KQkq - 5 5",
+   "said": "why not f3 to prevent the shenanigans asks nikhil"
+  },
+  {
+   "ply": 8,
+   "t": 648,
+   "line": [],
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "said": "97 when when are you proposing that we play f3 here"
+  },
+  {
+   "ply": 9,
+   "t": 651.5,
+   "line": [
+    "f3"
+   ],
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB1P2/PPP3PP/R1BQK1NR b KQkq - 0 5",
+   "said": "well as you know f3 is a very weakening move you can play f3 there's nothing terribly wrong with this move but i don't like the weaknesses that you're creating on the queen on the king side and these are permanent"
+  },
+  {
+   "ply": 10,
+   "t": 670,
+   "line": [
+    "d5"
+   ],
+   "fen": "rn1qk1nr/pbp2ppp/1p2p3/3p4/1b1PP3/2NB1P2/PPP3PP/R1BQK1NR w KQkq - 0 6",
+   "said": "so f3 f3 is very weakening very weakening um also black can try to run you off the board with his pawns d5 e5 c5 and as you"
+  },
+  {
+   "ply": 12,
+   "t": 673,
+   "line": [
+    "e5",
+    "c5"
+   ],
+   "fen": "rn1qk1nr/pb3ppp/1p2p3/2ppP3/1b1P4/2NB1P2/PPP3PP/R1BQK1NR w KQkq - 0 7",
+   "said": "can tell you're you're starting to oh and i think when h4 queen takes d4 is a"
+  },
+  {
+   "ply": 8,
+   "t": 681.5,
+   "line": [],
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "said": "problem in certain positions so f3 in french structures is not usually a good move"
+  },
+  {
+   "ply": 7,
+   "t": 683,
+   "line": [],
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR b KQkq - 3 4",
+   "said": ""
+  },
+  {
+   "ply": 9,
+   "t": 685,
+   "line": [
+    "Be7",
+    "Nf3"
+   ],
+   "fen": "rn1qk1nr/pbppbppp/1p2p3/8/3PP3/2NB1N2/PPP2PPP/R1BQK2R b KQkq - 5 5",
+   "said": "okay bishop b7 so notice how we're"
+  },
+  {
+   "ply": 8,
+   "t": 686,
+   "line": [],
+   "fen": "rn1qk1nr/pbppbppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "said": "flexible right"
+  },
+  {
+   "ply": 9,
+   "t": 689.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rn1qk1nr/pbppbppp/1p2p3/8/3PP3/2NB1N2/PPP2PPP/R1BQK2R b KQkq - 5 5",
+   "said": "you might look at the say well didn't you just say that you're proposing that you developed the knight t2 yeah but the situation has changed black's bishop is now not on b4 it's on e7 and that changes our method of development a very important skill in the opening is to like not get that's why system"
+  },
+  {
+   "ply": 10,
+   "t": 719,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rn1qk2r/pbppbppp/1p2pn2/8/3PP3/2NB1N2/PPP2PPP/R1BQK2R w KQkq - 6 6",
+   "said": "players struggle by the way another reason why i don't recommend starting with the london because you don't learn how to adapt in the opening you play the same moves over and over again okay knight f3 knight f6 now we play queen e2"
+  },
+  {
+   "ply": 12,
+   "t": 725.5,
+   "line": [
+    "O-O",
+    "d5"
+   ],
+   "fen": "rn1qk2r/pbp1bppp/1p2pn2/3p4/3PP3/2NB1N2/PPP2PPP/R1BQ1RK1 w kq - 0 7",
+   "said": "once again the purpose of queen e2 is that if we castle instead black has d5"
+  },
+  {
+   "ply": 14,
+   "t": 727,
+   "line": [
+    "e5",
+    "Ne4"
+   ],
+   "fen": "rn1qk2r/pbp1bppp/1p2p3/3pP3/3Pn3/2NB1N2/PPP2PPP/R1BQ1RK1 w kq - 1 8",
+   "said": "and black can put the knight on e4 not a big deal but something that we can easily prevent with queen e2 okay d6 is passive but okay black setup is fine this is i would say probably 0.5 or 0.6 according to the engine okay so bishop a6 super common idea in a million different openings if you are a london player then get out of the stream if you are a london player or a tory player you should recognize that concept so if you play a london against the king's indian the london in the london against the king's indian this idea exists so something like this yeah oh actually man no so the the line that min likes to play he puts the bishop on c4 in the london and a lot of our games go like this like bishop b7 queen e2 and in bullet i'll often forget to go a6"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 7,
+   "fen": "rn1qkbnr/pbpp1ppp/1p2p3/8/3PP3/2NB4/PPP2PPP/R1BQK1NR b KQkq - 3 4",
+   "line": [
+    "d4",
+    "b6",
+    "e4",
+    "e6",
+    "Nc3",
+    "Bb7",
+    "Bd3"
+   ],
+   "options": [
+    {
+     "san": "Be7",
+     "t": 444.5,
+     "continuation": "Be7",
+     "said": "appeal of this opening okay so we played knight c3 and bishop d3 which is i think one of the main lines so here the main move is knight f6 bishop e7 is very passive in this opening the bishop usually goes to b4 but the move bishop before here let's see who paid especially careful attention to the earlier games in the speed run i have recommended a move here that we have played several times in the speed run and that's knight e2 92 by the way common mistake in notation is to say knight g to you don't have to say knight g2 because there's only one knight that can go to e2 the other one is pinned and the purpose of knighted to it knight g2 is to connect the i just made that mistake knight e2 is to connect the knights and if black plays for instance knight f6 then we can just castle and if you compare this position and this position well compare the placement of the knight on e2 versus f3 what move does black have here it is totally harmless here well it's obviously bishop take c3 that's the whole point of connecting your knights"
+    },
+    {
+     "san": "Bb4",
+     "t": 451,
+     "continuation": "Bb4",
+     "said": "i think one of the main lines so here the main move is knight f6 bishop e7 is very passive in this opening the bishop usually goes to b4 but the move bishop before here let's see who paid especially careful attention to the earlier games in the speed run i have recommended a move here that we have played several times in the speed run and that's knight e2 92 by the way common mistake in notation is to say knight g to you don't have to say knight g2 because there's only one knight that can go to e2 the other one is pinned and the purpose of knighted to it knight g2 is to connect the i just made that mistake knight e2 is to connect the knights and if black plays for instance knight f6 then we can just castle and if you compare this position and this position well compare the placement of the knight on e2 versus f3 what move does black have here it is totally harmless here well it's obviously bishop take c3 that's the whole point of connecting your knights like this you take the sting out of the potential for a trade whereas with the knight on f3 black"
+    }
+   ]
+  },
+  {
+   "ply": 8,
+   "fen": "rn1qk1nr/pbpp1ppp/1p2p3/8/1b1PP3/2NB4/PPP2PPP/R1BQK1NR w KQkq - 4 5",
+   "line": [
+    "d4",
+    "b6",
+    "e4",
+    "e6",
+    "Nc3",
+    "Bb7",
+    "Bd3",
+    "Bb4"
+   ],
+   "options": [
+    {
+     "san": "Ne2",
+     "t": 466,
+     "continuation": "Ne2",
+     "said": "especially careful attention to the earlier games in the speed run i have recommended a move here that we have played several times in the speed run and that's knight e2 92 by the way common mistake in notation is to say knight g to you don't have to say knight g2 because there's only one knight that can go to e2 the other one is pinned and the purpose of knighted to it knight g2 is to connect the i just made that mistake knight e2 is to connect the knights and if black plays for instance knight f6 then we can just castle and if you compare this position and this position well compare the placement of the knight on e2 versus f3 what move does black have here it is totally harmless here well it's obviously bishop take c3 that's the whole point of connecting your knights like this you take the sting out of the potential for a trade whereas with the knight on f3 black actually just wins upon this is a common blunder very common blunder by the way another very common mistake listen carefully because this is a mistake tons of people make is you get a position like this"
+    },
+    {
+     "san": "f3",
+     "t": 651.5,
+     "continuation": "f3",
+     "said": "totally harmless due to knight takes c3 why not f3 to prevent the shenanigans asks nikhil 97 when when are you proposing that we play f3 here well as you know f3 is a very weakening move you can play f3 there's nothing terribly wrong with this move but i don't like the weaknesses that you're creating on the queen on the king side and these are permanent so f3 f3 is very weakening very weakening um also black can try to run you off the board with his pawns d5 e5 c5 and as you can tell you're you're starting to oh and i think when h4 queen takes d4 is a problem in certain positions so f3 in french structures is not usually a good move okay bishop b7 so notice how we're flexible right you might look at the say well didn't you just say that you're proposing that you developed the knight t2 yeah but the situation has changed black's bishop is now not on b4 it's on e7 and that changes our method of development a very important skill in the opening is to like not get that's why system players struggle by the way another reason why i don't recommend starting"
+    }
+   ]
+  },
+  {
+   "ply": 10,
+   "fen": "rn1qk2r/pbpp1ppp/1p2pn2/8/1b1PP3/2NB4/PPP1NPPP/R1BQK2R w KQkq - 6 6",
+   "line": [
+    "d4",
+    "b6",
+    "e4",
+    "e6",
+    "Nc3",
+    "Bb7",
+    "Bd3",
+    "Bb4",
+    "Ne2",
+    "Nf6"
+   ],
+   "options": [
+    {
+     "san": "O-O",
+     "t": 489,
+     "continuation": "O-O",
+     "said": "and the purpose of knighted to it knight g2 is to connect the i just made that mistake knight e2 is to connect the knights and if black plays for instance knight f6 then we can just castle and if you compare this position and this position well compare the placement of the knight on e2 versus f3 what move does black have here it is totally harmless here well it's obviously bishop take c3 that's the whole point of connecting your knights like this you take the sting out of the potential for a trade whereas with the knight on f3 black actually just wins upon this is a common blunder very common blunder by the way another very common mistake listen carefully because this is a mistake tons of people make is you get a position like this and then you say hmm well i see that my opponent is threatening to win the pawn so let me pin the knight in order to defend the pawn indirectly while also developing a piece on the face of it this logic sounds good but there's a a concrete flaw with this move in particular and with the concept of using a pin to defend upon what is"
+    },
+    {
+     "san": "a3",
+     "t": 637,
+     "continuation": "a3",
+     "said": "for that reason i proposed the setup with knight e2 so that after knight f6 you can simply castle you can also play a3 and kick the bishop away and bishop takes c3 is totally harmless due to knight takes c3 why not f3 to prevent the shenanigans asks nikhil 97 when when are you proposing that we play f3 here well as you know f3 is a very weakening move you can play f3 there's nothing terribly wrong with this move but i don't like the weaknesses that you're creating on the queen on the king side and these are permanent so f3 f3 is very weakening very weakening um also black can try to run you off the board with his pawns d5 e5 c5 and as you can tell you're you're starting to oh and i think when h4 queen takes d4 is a problem in certain positions so f3 in french structures is not usually a good move okay bishop b7 so notice how we're flexible right you might look at the say well didn't you just say that you're proposing that you developed the knight t2 yeah but the situation has changed black's bishop is now not on b4"
+    }
+   ]
+  }
+ ]
+}

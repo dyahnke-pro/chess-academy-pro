@@ -1,0 +1,421 @@
+{
+ "videoId": "MvaAX4pTvYU",
+ "title": "Bishop's Opening | The Sensei Speedrun | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 1984,
+  "settledPositions": null
+ },
+ "plies": 46,
+ "rewinds": 4,
+ "moves": [
+  {
+   "t": 41.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 44.5,
+   "ply": 3,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2"
+  },
+  {
+   "t": 65,
+   "ply": 4,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3"
+  },
+  {
+   "t": 70,
+   "ply": 5,
+   "line": [
+    "d3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2B1P3/3P4/PPP2PPP/RNBQK1NR b KQkq - 0 3"
+  },
+  {
+   "t": 85,
+   "ply": 6,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/3P4/PPP2PPP/RNBQK1NR w KQkq - 1 4"
+  },
+  {
+   "t": 88.5,
+   "ply": 7,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R b KQkq - 2 4"
+  },
+  {
+   "t": 106.5,
+   "ply": 8,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk2r/ppppbppp/2n2n2/4p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 3 5"
+  },
+  {
+   "t": 113,
+   "ply": 9,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqk2r/ppppbppp/2n2n2/4p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R b KQkq - 4 5"
+  },
+  {
+   "t": 118.5,
+   "ply": 10,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqk2r/ppp1bppp/2np1n2/4p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6"
+  },
+  {
+   "t": 124,
+   "ply": 12,
+   "line": [
+    "h3",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/ppp1bppp/2np1n2/4p3/2B1P3/2NP1N1P/PPP2PP1/R1BQK2R w KQ - 1 7"
+  },
+  {
+   "t": 145,
+   "ply": 13,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r1bq1rk1/ppp1bppp/2np1n2/4p3/2B1P3/2NPBN1P/PPP2PP1/R2QK2R b KQ - 2 7"
+  },
+  {
+   "t": 169,
+   "ply": 14,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2q1rk1/ppp1bppp/2npbn2/4p3/2B1P3/2NPBN1P/PPP2PP1/R2QK2R w KQ - 3 8"
+  },
+  {
+   "t": 208,
+   "ply": 15,
+   "line": [
+    "Bxe6"
+   ],
+   "fen": "r2q1rk1/ppp1bppp/2npBn2/4p3/4P3/2NPBN1P/PPP2PP1/R2QK2R b KQ - 0 8"
+  },
+  {
+   "t": 209,
+   "ply": 16,
+   "line": [
+    "fxe6"
+   ],
+   "fen": "r2q1rk1/ppp1b1pp/2nppn2/4p3/4P3/2NPBN1P/PPP2PP1/R2QK2R w KQ - 0 9"
+  },
+  {
+   "t": 222.5,
+   "ply": 17,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r2q1rk1/ppp1b1pp/2nppn2/4p3/4P3/2NPBN1P/PPPQ1PP1/R3K2R b KQ - 1 9"
+  },
+  {
+   "t": 270,
+   "ply": 18,
+   "line": [
+    "a6"
+   ],
+   "fen": "r2q1rk1/1pp1b1pp/p1nppn2/4p3/4P3/2NPBN1P/PPPQ1PP1/R3K2R w KQ - 0 10"
+  },
+  {
+   "t": 306.5,
+   "ply": 19,
+   "line": [
+    "g4"
+   ],
+   "fen": "r2q1rk1/1pp1b1pp/p1nppn2/4p3/4P1P1/2NPBN1P/PPPQ1P2/R3K2R b KQ - 0 10"
+  },
+  {
+   "t": 337.5,
+   "ply": 20,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "r2q1rk1/1pp1b1pp/p1npp3/4p3/4n1P1/2NPBN1P/PPPQ1P2/R3K2R w KQ - 0 11"
+  },
+  {
+   "t": 361.5,
+   "ply": 22,
+   "line": [
+    "Nxe4",
+    "Rxf3"
+   ],
+   "fen": "r2q2k1/1pp1b1pp/p1npp3/4p3/4N1P1/3PBr1P/PPPQ1P2/R3K2R w KQ - 0 12"
+  },
+  {
+   "t": 399.5,
+   "ply": 23,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r2q2k1/1pp1b1pp/p1npp3/4p1B1/4N1P1/3P1r1P/PPPQ1P2/R3K2R b KQ - 1 12"
+  },
+  {
+   "t": 410.5,
+   "ply": 24,
+   "line": [
+    "d5"
+   ],
+   "fen": "r2q2k1/1pp1b1pp/p1n1p3/3pp1B1/4N1P1/3P1r1P/PPPQ1P2/R3K2R w KQ - 0 13"
+  },
+  {
+   "t": 424,
+   "ply": 25,
+   "line": [
+    "Bxe7"
+   ],
+   "fen": "r2q2k1/1pp1B1pp/p1n1p3/3pp3/4N1P1/3P1r1P/PPPQ1P2/R3K2R b KQ - 0 13"
+  },
+  {
+   "t": 426.5,
+   "ply": 26,
+   "line": [
+    "Qxe7"
+   ],
+   "fen": "r5k1/1pp1q1pp/p1n1p3/3pp3/4N1P1/3P1r1P/PPPQ1P2/R3K2R w KQ - 0 14"
+  },
+  {
+   "t": 451.5,
+   "ply": 27,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "r5k1/1pp1q1pp/p1n1p3/3pp1N1/6P1/3P1r1P/PPPQ1P2/R3K2R b KQ - 1 14"
+  },
+  {
+   "t": 469.5,
+   "ply": 28,
+   "line": [
+    "Rf4"
+   ],
+   "fen": "r5k1/1pp1q1pp/p1n1p3/3pp1N1/5rP1/3P3P/PPPQ1P2/R3K2R w KQ - 2 15"
+  },
+  {
+   "t": 491,
+   "ply": 29,
+   "line": [
+    "h4"
+   ],
+   "fen": "r5k1/1pp1q1pp/p1n1p3/3pp1N1/5rPP/3P4/PPPQ1P2/R3K2R b KQ - 0 15"
+  },
+  {
+   "t": 536.5,
+   "ply": 30,
+   "line": [
+    "Raf8"
+   ],
+   "fen": "5rk1/1pp1q1pp/p1n1p3/3pp1N1/5rPP/3P4/PPPQ1P2/R3K2R w KQ - 1 16"
+  },
+  {
+   "t": 542,
+   "ply": 29,
+   "line": [],
+   "fen": "r5k1/1pp1q1pp/p1n1p3/3pp1N1/5rPP/3P4/PPPQ1P2/R3K2R b KQ - 0 15"
+  },
+  {
+   "t": 551,
+   "ply": 30,
+   "line": [
+    "Raf8"
+   ],
+   "fen": "5rk1/1pp1q1pp/p1n1p3/3pp1N1/5rPP/3P4/PPPQ1P2/R3K2R w KQ - 1 16"
+  },
+  {
+   "t": 568.5,
+   "ply": 29,
+   "line": [],
+   "fen": "r5k1/1pp1q1pp/p1n1p3/3pp1N1/5rPP/3P4/PPPQ1P2/R3K2R b KQ - 0 15"
+  },
+  {
+   "t": 579.5,
+   "ply": 30,
+   "line": [
+    "Raf8"
+   ],
+   "fen": "5rk1/1pp1q1pp/p1n1p3/3pp1N1/5rPP/3P4/PPPQ1P2/R3K2R w KQ - 1 16"
+  },
+  {
+   "t": 622.5,
+   "ply": 31,
+   "line": [
+    "c4"
+   ],
+   "fen": "5rk1/1pp1q1pp/p1n1p3/3pp1N1/2P2rPP/3P4/PP1Q1P2/R3K2R b KQ - 0 16"
+  },
+  {
+   "t": 639.5,
+   "ply": 32,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "5rk1/1pp1q1pp/p3p3/3pp1N1/2Pn1rPP/3P4/PP1Q1P2/R3K2R w KQ - 1 17"
+  },
+  {
+   "t": 699.5,
+   "ply": 33,
+   "line": [
+    "Rh3"
+   ],
+   "fen": "5rk1/1pp1q1pp/p3p3/3pp1N1/2Pn1rPP/3P3R/PP1Q1P2/R3K3 b Q - 2 17"
+  },
+  {
+   "t": 704.5,
+   "ply": 34,
+   "line": [
+    "h6"
+   ],
+   "fen": "5rk1/1pp1q1p1/p3p2p/3pp1N1/2Pn1rPP/3P3R/PP1Q1P2/R3K3 w Q - 0 18"
+  },
+  {
+   "t": 716.5,
+   "ply": 35,
+   "line": [
+    "Nxe6"
+   ],
+   "fen": "5rk1/1pp1q1p1/p3N2p/3pp3/2Pn1rPP/3P3R/PP1Q1P2/R3K3 b Q - 0 18"
+  },
+  {
+   "t": 721.5,
+   "ply": 36,
+   "line": [
+    "Qxe6"
+   ],
+   "fen": "5rk1/1pp3p1/p3q2p/3pp3/2Pn1rPP/3P3R/PP1Q1P2/R3K3 w Q - 0 19"
+  },
+  {
+   "t": 751.5,
+   "ply": 37,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "5rk1/1pp3p1/p3q2p/3Pp3/3n1rPP/3P3R/PP1Q1P2/R3K3 b Q - 0 19"
+  },
+  {
+   "t": 758.5,
+   "ply": 38,
+   "line": [
+    "Qxg4"
+   ],
+   "fen": "5rk1/1pp3p1/p6p/3Pp3/3n1rqP/3P3R/PP1Q1P2/R3K3 w Q - 0 20"
+  },
+  {
+   "t": 767.5,
+   "ply": 39,
+   "line": [
+    "Rg3"
+   ],
+   "fen": "5rk1/1pp3p1/p6p/3Pp3/3n1rqP/3P2R1/PP1Q1P2/R3K3 b Q - 1 20"
+  },
+  {
+   "t": 775.5,
+   "ply": 40,
+   "line": [
+    "Qxg3"
+   ],
+   "fen": "5rk1/1pp3p1/p6p/3Pp3/3n1r1P/3P2q1/PP1Q1P2/R3K3 w Q - 0 21"
+  },
+  {
+   "t": 785.5,
+   "ply": 41,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "5rk1/1pp3p1/p6p/3Pp3/3n1r1P/3P2q1/PP1Q1P2/2KR4 b - - 1 21"
+  },
+  {
+   "t": 788,
+   "ply": 42,
+   "line": [
+    "Qxf2"
+   ],
+   "fen": "5rk1/1pp3p1/p6p/3Pp3/3n1r1P/3P4/PP1Q1q2/2KR4 w - - 0 22"
+  },
+  {
+   "t": 793,
+   "ply": 44,
+   "line": [
+    "Qxf2",
+    "Rxf2"
+   ],
+   "fen": "5rk1/1pp3p1/p6p/3Pp3/3n3P/3P4/PP3r2/2KR4 w - - 0 23"
+  },
+  {
+   "t": 797.5,
+   "ply": 33,
+   "line": [],
+   "fen": "5rk1/1pp1q1pp/p3p3/3pp1N1/2Pn1rPP/3P3R/PP1Q1P2/R3K3 b Q - 2 17"
+  },
+  {
+   "t": 824,
+   "ply": 8,
+   "line": [],
+   "fen": "r1bqk2r/ppppbppp/2n2n2/4p3/2B1P3/3P1N2/PPP2PPP/RNBQK2R w KQkq - 3 5"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Italian Game: Two Knights Defense, Modern Bishop's Opening",
+   "eco": "C55",
+   "plies": 7,
+   "line": "e4 e5 Bc4 Nf6 d3 Nc6 Nf3",
+   "coverage": 0.875
+  },
+  {
+   "name": "Bishop's Opening: Berlin Defense",
+   "eco": "C24",
+   "plies": 4,
+   "line": "e4 e5 Bc4 Nf6",
+   "coverage": 0.95
+  },
+  {
+   "name": "Bishop's Opening",
+   "eco": "C23",
+   "plies": 3,
+   "line": "e4 e5 Bc4",
+   "coverage": 0.975
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Bishop's Opening",
+  "confirmed": true
+ }
+}

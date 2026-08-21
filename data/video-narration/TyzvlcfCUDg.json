@@ -1,0 +1,822 @@
+{
+ "videoId": "TyzvlcfCUDg",
+ "title": "Master Class | QGD Chigorin & Baltic Defense  | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 14.5,
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] and um"
+  },
+  {
+   "ply": 3,
+   "t": 16,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "let's play let's play d5 let's play d5 let's play a queen's game should we play queen's game with accepted um but this time i'm black"
+  },
+  {
+   "ply": 4,
+   "t": 30.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/ppp1pppp/2n5/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+   "said": "or shall we play something cooler actually what i'm gonna do i'm gonna introduce you guys to a cool line knight c6 i'm gonna play the chigorin um i'm gonna play the chigorin which is one of my favorite sidelines uh against one d4 no trust me give give the chagoran a chance it's it's actually really cool give it a chance um i have two favorite sub you know sidelines within one d45 one is the trigor and the other is the baltic which which i taught hafu"
+  },
+  {
+   "ply": 5,
+   "t": 68,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r1bqkbnr/ppp1pppp/2n5/3P4/3P4/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "said": "now if white knows what to do then the chigorin loses its luster but at the level of a 1700 i think it's a very good weapon"
+  },
+  {
+   "ply": 6,
+   "t": 71,
+   "line": [
+    "Qxd5"
+   ],
+   "fen": "r1b1kbnr/ppp1pppp/2n5/3q4/3P4/8/PP2PPPP/RNBQKBNR w KQkq - 0 4",
+   "said": "okay cd is one of the main moves a trigon is like the equivalent of the"
+  },
+  {
+   "ply": 7,
+   "t": 72,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1b1kbnr/ppp1pppp/2n5/3q4/3P4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 4",
+   "said": "scandi except within 1d4 the idea of this opening is to very quickly pile up the pressure on the d4 pawn if you do not do that you are going to lose in five moves so for example here if you play bishop g4 that's too slow black white plays knight c3 chases the queen away then pushes the d-pawn this is crap you have to operate"
+  },
+  {
+   "ply": 8,
+   "t": 103,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1b1kbnr/ppp2ppp/2n5/3qp3/3P4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 5",
+   "said": "far more decisively here who knows the move no g6 is way too slow g6 knight c3 and your initiative evaporates you have to go e5 this is the only move the only way to make it work um dr geek tardis thank you yeah so if knight c3 you have bishop"
+  },
+  {
+   "ply": 9,
+   "t": 124.5,
+   "line": [
+    "e3"
+   ],
+   "fen": "r1b1kbnr/ppp2ppp/2n5/3qp3/3P4/4PN2/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "said": "before this is a very important detail without this detail the opening wouldn't work um what's the idea after dxe5 that'll talk about after the game e3 that's a pretty passive move and i think that essentially gives us a nice position um"
+  },
+  {
+   "ply": 10,
+   "t": 145.5,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "r3kbnr/ppp2ppp/2n5/3qp3/3P2b1/4PN2/PP3PPP/RNBQKB1R w KQkq - 1 6",
+   "said": "we can take on d4 but we don't really have to rush with this move i think we can also go bishop g4 get the bishop out to an active square um in fact that's what i'm going to do there's no rush playing he takes d4 thank you beyond repute for the five gifted subs much appreciated"
+  },
+  {
+   "ply": 11,
+   "t": 155,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r3kbnr/ppp2ppp/2n5/3qp3/3P2b1/4PN2/PP2BPPP/RNBQK2R b KQkq - 2 6",
+   "said": "god damn so many so many subs today it should be two okay now i think it's a good good time to take because already i'm starting to worry slightly about d takes e5 on the other hand"
+  },
+  {
+   "ply": 12,
+   "t": 183,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r3kbnr/ppp2ppp/2n5/3q4/3p2b1/4PN2/PP2BPPP/RNBQK2R w KQkq - 0 7",
+   "said": "yeah without this knight c3 is still not a not an idea because of bishop b4 that neutralizes it without this idea black's position would be as shaky as fiddler on the roof okay let's play takes d4 first and then we'll castle continuing to pressure the d4 pawn"
+  },
+  {
+   "ply": 13,
+   "t": 195,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r3kbnr/ppp2ppp/2n5/3q4/3P2b1/5N2/PP2BPPP/RNBQK2R b KQkq - 0 7",
+   "said": ""
+  },
+  {
+   "ply": 14,
+   "t": 197.5,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "2kr1bnr/ppp2ppp/2n5/3q4/3P2b1/5N2/PP2BPPP/RNBQK2R w KQ - 1 8",
+   "said": "ow we castle automatic move now we castle automatic move and look at the pressure we have on this d4 pawn this really reminds me of a scandi except a really good scandi because now the queen doesn't have to go to a5 it can go to h5 when the time is right if white castles"
+  },
+  {
+   "ply": 15,
+   "t": 223.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "2kr1bnr/ppp2ppp/2n5/3q4/3P2b1/2N2N2/PP2BPPP/R1BQK2R b KQ - 2 8",
+   "said": "all right oh we got a dono h you mean the five steps yeah oh you mean the five steps yeah all right knight c3 now this is very interesting now we got a donor three bucks from huge ass crack thank you now this is interesting because bishop b4 already has overstayed its welcome we don't need to play bishop before anymore why not because d5 is no longer a threat we already have castled we have an x-ray going on the queen oh that's funny i got it that's hilarious so where should we go with our queen hello that was that was not that bad though it's like the berry one where should we go"
+  },
+  {
+   "ply": 16,
+   "t": 276,
+   "line": [
+    "Qh5"
+   ],
+   "fen": "2kr1bnr/ppp2ppp/2n5/7q/3P2b1/2N2N2/PP2BPPP/R1BQK2R w KQ - 3 9",
+   "said": "queen a5 queen e6 queen f5 so i just explained the logic here we should go to h5 queen h5 is very typical in such positions why because after white castles we can play bishop d6 and start piling onto this h pawn and go for a quick checkmating attack if possible"
+  },
+  {
+   "ply": 17,
+   "t": 296.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "2kr1bnr/ppp2ppp/2n5/3P3q/6b1/2N2N2/PP2BPPP/R1BQK2R b KQ - 0 9",
+   "said": "clear we also enforce more pressure on this diagonal that's why we put the bishop on g4 d5 wow very bold but not good he's not developing enough"
+  },
+  {
+   "ply": 18,
+   "t": 303.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "2kr1b1r/ppp2ppp/2n2n2/3P3q/6b1/2N2N2/PP2BPPP/R1BQK2R w KQ - 1 10",
+   "said": "pieces this pawn is going to be lost so we're just going to go knight f6 um there's no threat of d-take c6 because of the pin so we can just attack this fun and essentially win it and we're going to end up a pawn up it's not going to be crushing or anything it's just we'll be upon up and if he castles ultimately we'll put a bishop on d6 and create big time pressure on the h2 pawn this does resemble a scandal you know i'm telling you i mean jaguar is like"
+  },
+  {
+   "ply": 19,
+   "t": 341,
+   "line": [
+    "h3"
+   ],
+   "fen": "2kr1b1r/ppp2ppp/2n2n2/3P3q/6b1/2N2N1P/PP2BPP1/R1BQK2R b KQ - 0 10",
+   "said": "cool scandi in many lines yeah white is not developed enough to sustain this pawn h3 hilarious it doesn't create any threats either again we have a pin on the rook but we need to be very careful because if white castles then there will be a threat of taking the bishop so we"
+  },
+  {
+   "ply": 20,
+   "t": 363.5,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "2kr1b1r/ppp2ppp/2n5/3n3q/6b1/2N2N1P/PP2BPP1/R1BQK2R w KQ - 0 11",
+   "said": "shouldn't be too nonchalant about this right now though we don't have to respond we can simply do what what should black do here since there is no threat of hg we can proceed with our main plan we can take the pawn on d5 very logical simple doesn't require any calculation all you have to see is that there is a pin here the rook is undefended now we have a pin of our own this one's far scarier knight takes d5 rook takes d5 and then we put our bishop on before with check white's position is falling apart queen a4 good move very good move it does threaten the bishop uh watch out for these kinds of lateral moves i see a lot of blunders uh again there's a big distance between two pieces literally so you just got to be very attentive to that kind of stuff how should we how should we manage this well there's a lot of ways we can play here i think um i see something i think is kind of cool et me try to walk you through the let me try to walk you through the logical steps here observation one is that white is not castled so ideally if possible we would like to exploit the fact that white is not castled and do something can we do something well how do you usually attack a king that's not castle usually you attack a king that's not castle through the e-file right now there is a bishop that's on e2 which is blocking the e file so from that perspective taking the knight would be very sensible in order to essentially get the bishop off of the e file bishop takes f3 bishop takes f3 and in that next position how should we continue not rookie 8 because then our queen is going to be hanging our knight is going to be hanging how should we proceed after bishop takes bishop takes bishop b4 is a great move here by the way as well i think that's an alternate approach queen swings over to e5 checks the king and hits the knight on c3 if white takes with the pawn then the entire king side is ruined that's also very beneficial so in either case i think we're going to win more material hopefully that makes sense i'm trying to be very methodical in the explanation this is a great example of a move which strategically doesn't make much sense because our light squared bishop is very good but tactically makes is justified because we are exploiting a temporary feature of the position which would evaporate on the next move okay so that's at this level chess is like constantly an interplay between between those two things okay now we obviously take on c3 twice and white is in huge trouble because he's down two pawns and there's forks galore lots of stuff going on boom boom this rook is hanging if he goes rook b1 there's a fork on d3 on deck white is losing he can give us a check on g4 doesn't do anything we just tuck our king on b8 don't be afraid of these individual checks thank you spot over the raid 115 damn girl [Music] we got we're getting tons of raids tons of subs lots of hype love to see it thank you guys thank you badour you had a good tournament [Music] we are doing some speed running with subs rook b1 goodbye queen d3 wins the rook yeah chagoran is a dubious opening if white plays correctly but it hasn't been refuted it's not like it good game it's not like it's it's it's trash all right yes okay great great game all right all right all right all right that's right okay let's have a look"
+  },
+  {
+   "ply": 4,
+   "t": 617.5,
+   "line": [],
+   "fen": "r1bqkbnr/ppp1pppp/2n5/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+   "said": "so the chigorin was not first played by trigoran it was first played by a guy named van der lassa who was an early opening specialist back at home in san francisco i have one of his manuscripts from the early 19th century he was a german player he played this in 1837. in fact the trigorian was played twice three times in 1837 trigoran only played it in 1894 but it's very important to understand i i've said this many times and an opening is named after someone it doesn't necessarily mean they played it first very often they were only like the fifteenth or twentieth person to play but jagoran played this opening over 15 times and if you guys want i could probably find what chagoran had to say about it it's a pretty hard move to play if you don't know if you don't know it exists because it's extremely committal you're blocking the c pawn you're going directly for white's center the chagoran is good chagoran yeah"
+  },
+  {
+   "ply": 5,
+   "t": 685.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/ppp1pppp/2n5/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 2 3",
+   "said": "i'm not going to talk too much opening theory you guys can do your own research i think in modern times the best move is considered to be knight c3 the best move is considered to be knight c3 this takes the sting out of the"
+  },
+  {
+   "ply": 6,
+   "t": 688.5,
+   "line": [
+    "dxc4"
+   ],
+   "fen": "r1bqkbnr/ppp1pppp/2n5/8/2pP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+   "said": "chagoran and if d takes c4 then you go"
+  },
+  {
+   "ply": 7,
+   "t": 691,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/ppp1pppp/2n5/8/2pP4/2N2N2/PP2PPPP/R1BQKB1R b KQkq - 1 4",
+   "said": "either d5 or just knight f3 followed by d5 and here black is in quite a bit of"
+  },
+  {
+   "ply": 5,
+   "t": 697,
+   "line": [],
+   "fen": "r1bqkbnr/ppp1pppp/2n5/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 2 3",
+   "said": "trouble so i think this is the reason it's lost some of its luster but i can try some moves like e5 still"
+  },
+  {
+   "ply": 6,
+   "t": 699,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/2n5/3pp3/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+   "said": "very interesting"
+  },
+  {
+   "ply": 4,
+   "t": 705.5,
+   "line": [],
+   "fen": "r1bqkbnr/ppp1pppp/2n5/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+   "said": "um you can google it so let's say you wanted to do some research on an opening the best thing to do is just to google it or to search it on youtube and you're probably going to find some tutorial on it but you should use the internet and you can also use this on chess.com there is a opening explorer feature which is really good so you can use that as well uh but don't just sit there sort of twiddling your thumbs and"
+  },
+  {
+   "ply": 5,
+   "t": 741,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r1bqkbnr/ppp1pppp/2n5/3P4/3P4/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "said": "you know the internet is very very very very um how should i put it underrated resource for learning openings all right so knight f c takes d5 is is"
+  },
+  {
+   "ply": 6,
+   "t": 742,
+   "line": [
+    "Qxd5"
+   ],
+   "fen": "r1b1kbnr/ppp1pppp/2n5/3q4/3P4/8/PP2PPPP/RNBQKBNR w KQkq - 0 4",
+   "said": "the traditional main move and knight f3"
+  },
+  {
+   "ply": 7,
+   "t": 744.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1b1kbnr/ppp1pppp/2n5/3q4/3P4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 4",
+   "said": "is already not that good uh the move"
+  },
+  {
+   "ply": 6,
+   "t": 746.5,
+   "line": [],
+   "fen": "r1b1kbnr/ppp1pppp/2n5/3q4/3P4/8/PP2PPPP/RNBQKBNR w KQkq - 0 4",
+   "said": "here is e3"
+  },
+  {
+   "ply": 7,
+   "t": 747.5,
+   "line": [
+    "e3"
+   ],
+   "fen": "r1b1kbnr/ppp1pppp/2n5/3q4/3P4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "e3 e5"
+  },
+  {
+   "ply": 8,
+   "t": 750,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1b1kbnr/ppp2ppp/2n5/3qp3/3P4/4P3/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "said": "knight c3 bishop b4 this is the"
+  },
+  {
+   "ply": 9,
+   "t": 751,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1b1kbnr/ppp2ppp/2n5/3qp3/3P4/2N1P3/PP3PPP/R1BQKBNR b KQkq - 1 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 752.5,
+   "line": [
+    "Bb4"
+   ],
+   "fen": "r1b1k1nr/ppp2ppp/2n5/3qp3/1b1P4/2N1P3/PP3PPP/R1BQKBNR w KQkq - 2 6",
+   "said": "traditional main line bishop d2"
+  },
+  {
+   "ply": 11,
+   "t": 754.5,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "r1b1k1nr/ppp2ppp/2n5/3qp3/1b1P4/2N1P3/PP1B1PPP/R2QKBNR b KQkq - 3 6",
+   "said": "bishop takes c3 b takes e3 this is one"
+  },
+  {
+   "ply": 12,
+   "t": 756.5,
+   "line": [
+    "Bxc3"
+   ],
+   "fen": "r1b1k1nr/ppp2ppp/2n5/3qp3/3P4/2b1P3/PP1B1PPP/R2QKBNR w KQkq - 0 7",
+   "said": ""
+  },
+  {
+   "ply": 13,
+   "t": 757.5,
+   "line": [
+    "bxc3"
+   ],
+   "fen": "r1b1k1nr/ppp2ppp/2n5/3qp3/3P4/2P1P3/P2B1PPP/R2QKBNR b KQkq - 0 7",
+   "said": "of the key positions of the chagoran very interesting pawn structure white"
+  },
+  {
+   "ply": 14,
+   "t": 765.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1b1k2r/ppp2ppp/2n2n2/3qp3/3P4/2P1P3/P2B1PPP/R2QKBNR w KQkq - 1 8",
+   "said": "gets this triangle white gets the two bishops but black gets very quick development and white's king is often in trouble in these lines"
+  },
+  {
+   "ply": 7,
+   "t": 780.5,
+   "line": [],
+   "fen": "r1b1kbnr/ppp1pppp/2n5/3q4/3P4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "i think according to theory white is better here but you got to know your stuff um that's the path that white should go on if you take on d5 but knight f3 e5 is already good for black i think or already not bad if d takes e5 should black take the queen let's see spam whether you think black should take the plane okay most of you think yes which is pretty impressive uh i like it black should take the queen of course black should take the queen what would be the argument against taking the queen the argument against it would be isn't black down a pawn when you're down upon you don't want to trade pieces i'm sure some of you are thinking that it's not an embarrassing thing to think but first of all all of the other pieces are still on the board which essentially makes this a queenless middle game the other thing to realize is that this pawn on e5 while it's an extra pawn is not going to be sustained forever you're going to go bishop g4 already black threatens to win the pawn back and if bishop f4 there is a typical maneuver knight g to e7 swings over to g6 white cannot hold the spawn and even if black white could hold the spawn black has massive compensation white's"
+  },
+  {
+   "ply": 9,
+   "t": 862.5,
+   "line": [
+    "e5",
+    "Nf3"
+   ],
+   "fen": "r1b1kbnr/ppp2ppp/2n5/3qp3/3P4/4PN2/PP3PPP/RNBQKB1R b KQkq - 1 5",
+   "said": "king is very weak it's right in the path of a long castle with check black gets very quick development so you have to think more concretely than that so that's why taking it on e5 is not good i think white could still maintain a"
+  },
+  {
+   "ply": 8,
+   "t": 863.5,
+   "line": [],
+   "fen": "r1b1kbnr/ppp2ppp/2n5/3qp3/3P4/4P3/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "said": "decent position"
+  },
+  {
+   "ply": 10,
+   "t": 866,
+   "line": [
+    "Nf3",
+    "Bg4"
+   ],
+   "fen": "r3kbnr/ppp2ppp/2n5/3qp3/3P2b1/4PN2/PP3PPP/RNBQKB1R w KQkq - 2 6",
+   "said": "by playing um so bishop e2 is fine"
+  },
+  {
+   "ply": 12,
+   "t": 870.5,
+   "line": [
+    "Be2",
+    "exd4"
+   ],
+   "fen": "r3kbnr/ppp2ppp/2n5/3q4/3p2b1/4PN2/PP2BPPP/RNBQK2R w KQkq - 0 7",
+   "said": "here i think there is a final opportunity to get an"
+  },
+  {
+   "ply": 13,
+   "t": 882.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r3kbnr/ppp2ppp/2n5/3q4/3p2b1/2N1PN2/PP2BPPP/R1BQK2R b KQkq - 1 7",
+   "said": "interesting position but you have to know this move this is not an easy move to just come up with and that move is knight c3 it's actually not an not an atypical idea when you have a queen on d5 i can show you many lines that have a move like this"
+  },
+  {
+   "ply": 15,
+   "t": 894,
+   "line": [
+    "Bb4",
+    "O-O"
+   ],
+   "fen": "r3k1nr/ppp2ppp/2n5/3q4/1b1p2b1/2N1PN2/PP2BPPP/R1BQ1RK1 b kq - 3 8",
+   "said": "uh and if bishop b4 white can simply castle the ship bishop takes e3 bc and white's"
+  },
+  {
+   "ply": 17,
+   "t": 896.5,
+   "line": [
+    "Bxc3",
+    "bxc3"
+   ],
+   "fen": "r3k1nr/ppp2ppp/2n5/3q4/3p2b1/2P1PN2/P3BPPP/R1BQ1RK1 b kq - 0 9",
+   "said": "trying to take the spawn on his own terms what should black do here instructive question for you guys what should black do in this position in fact it's an only move otherwise why does black is much worse oh my god we got 100 bucks we actually got 100 bucks shalish money your lessons are very helpful thank you oh my god"
+  },
+  {
+   "ply": 18,
+   "t": 929.5,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "2kr2nr/ppp2ppp/2n5/3q4/3p2b1/2P1PN2/P3BPPP/R1BQ1RK1 w - - 1 10",
+   "said": "ridiculous we've got a hundred from shailesh mani thank you so much resign yeah that is correct okay this is not correct what would happen if we castle let's"
+  },
+  {
+   "ply": 19,
+   "t": 935,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "2kr2nr/ppp2ppp/2n5/3q4/3P2b1/4PN2/P3BPPP/R1BQ1RK1 b - - 0 10",
+   "said": "figure it out white would play c takes d4 look very carefully at whites a black's king and look at white's king white's king is perfectly safe black's king is devastated because you have two semi-open files"
+  },
+  {
+   "ply": 21,
+   "t": 954.5,
+   "line": [
+    "Nf6",
+    "Ba3"
+   ],
+   "fen": "2kr3r/ppp2ppp/2n2n2/3q4/3P2b1/B3PN2/P3BPPP/R2Q1RK1 b - - 2 11",
+   "said": "white's going to occupy one of them with his rook this is going to be very bad for black and it's going to decline very quickly bishop is going to come to a3 rook is going to come to c1 queen to a4 black is black's kang is going to be devastated here"
+  },
+  {
+   "ply": 17,
+   "t": 963.5,
+   "line": [],
+   "fen": "r3k1nr/ppp2ppp/2n5/3q4/3p2b1/2P1PN2/P3BPPP/R1BQ1RK1 b kq - 0 9",
+   "said": "all right so what you want to do is give away the pawn on your own terms you want"
+  },
+  {
+   "ply": 18,
+   "t": 965,
+   "line": [
+    "d3"
+   ],
+   "fen": "r3k1nr/ppp2ppp/2n5/3q4/6b1/2PpPN2/P3BPPP/R1BQ1RK1 w kq - 0 10",
+   "said": "to go pawn to d3 a lot of you got this you're essentially keeping a bad pawn"
+  },
+  {
+   "ply": 19,
+   "t": 970.5,
+   "line": [
+    "Bxd3"
+   ],
+   "fen": "r3k1nr/ppp2ppp/2n5/3q4/6b1/2PBPN2/P4PPP/R1BQ1RK1 b kq - 0 10",
+   "said": "structure and if white takes to the bishop"
+  },
+  {
+   "ply": 20,
+   "t": 972.5,
+   "line": [
+    "Bxf3"
+   ],
+   "fen": "r3k1nr/ppp2ppp/2n5/3q4/8/2PBPb2/P4PPP/R1BQ1RK1 w kq - 0 11",
+   "said": "and you can play bishop takes f3 to start with"
+  },
+  {
+   "ply": 21,
+   "t": 976,
+   "line": [
+    "gxf3"
+   ],
+   "fen": "r3k1nr/ppp2ppp/2n5/3q4/8/2PBPP2/P4P1P/R1BQ1RK1 b kq - 0 11",
+   "said": "forcing more ruining of the pawn"
+  },
+  {
+   "ply": 22,
+   "t": 978,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "2kr2nr/ppp2ppp/2n5/3q4/8/2PBPP2/P4P1P/R1BQ1RK1 w - - 1 12",
+   "said": "structure and this is already lost for white why is it lost because the bishop is"
+  },
+  {
+   "ply": 24,
+   "t": 983,
+   "line": [
+    "Be2",
+    "Qg5+"
+   ],
+   "fen": "2kr2nr/ppp2ppp/2n5/6q1/8/2P1PP2/P3BP1P/R1BQ1RK1 w - - 3 13",
+   "said": "hanging and if it moves you swing over to g5 with the queen"
+  },
+  {
+   "ply": 18,
+   "t": 987,
+   "line": [],
+   "fen": "r3k1nr/ppp2ppp/2n5/3q4/6b1/2PpPN2/P3BPPP/R1BQ1RK1 w kq - 0 10",
+   "said": "so white probably has to take on d3 with a queen and the end game an end game like this is probably fine for black white as the two bishops but look at white's pawn structure it's absolutely horrible i think black is in"
+  },
+  {
+   "ply": 17,
+   "t": 1005,
+   "line": [],
+   "fen": "r3k1nr/ppp2ppp/2n5/3q4/3p2b1/2P1PN2/P3BPPP/R1BQ1RK1 b kq - 0 9",
+   "said": "fine shape here probably not better but fine so one shortcut toward evaluating king safety when you have opposite side castling is to see who's got the open files which side has an easier time getting"
+  },
+  {
+   "ply": 19,
+   "t": 1016.5,
+   "line": [
+    "O-O-O",
+    "cxd4"
+   ],
+   "fen": "2kr2nr/ppp2ppp/2n5/3q4/3P2b1/4PN2/P3BPPP/R1BQ1RK1 b - - 0 10",
+   "said": "rooks to open files and getting the queen to a good attacking spot here it's clearly white white's got two of these semi-open files and white's got this a4 square for the queen so you can remember that as a easy way to"
+  },
+  {
+   "ply": 18,
+   "t": 1030,
+   "line": [],
+   "fen": "2kr2nr/ppp2ppp/2n5/3q4/3p2b1/2P1PN2/P3BPPP/R1BQ1RK1 w - - 1 10",
+   "said": "kind of estimate who's got an easier job of attacking okay whoa jim james here and he's here with 25 subs what a stream thank you gem jam for the 25 let's get this hype rolling great stuff [Music] oh my lance"
+  },
+  {
+   "ply": 14,
+   "t": 1059.5,
+   "line": [],
+   "fen": "r3k1nr/ppp2ppp/2n5/3q4/1b1p2b1/2N1PN2/PP2BPPP/R1BQK2R w KQkq - 2 8",
+   "said": "all right all right so before i get rudely interrupted he takes the 4864 castle here already i think there's a high probability that white is white is in a little bit of trouble the computer actually shows still an advantage for white after castles which is very surprising to me but it turns out that after bishop d6h3 white holds on and everything hinges on one detail if bishop takes h3 what should white do here thank you fizz girl for the prime white should certainly not take the bishop because then queen h3 was a huge attack but there's a very typical idea in such positions exploiting the x-ray to go knight g5 and you're attacking the queen bishop g4 you guys might be tempted by this but bishop takes you for is to check and if the queen moves then knight takes h3 white preserves the kingside pawn structure and is up a piece so in this position black should actually go knight f6 and sacrifice the bishop this way but after knight g4 g3 queen h3 yeah it's anybody's game this is very unclear and now the computer starts saying that black is better so i think that practically speaking the position's very difficult here d5 though is a mistake after d5 white is losing knight f6 and now this pawn falls now knight d5 takes yeah bishop f3 bishop f3 queen e5 is the winning idea here how do you donate um i think exclam donate we'll give you the link thank you bass bishop if 92 then we give sorry we give a check on b4 with a crushing attack king f1 knight d4 is a great move"
+  },
+  {
+   "ply": 12,
+   "t": 1166,
+   "line": [],
+   "fen": "r3kbnr/ppp2ppp/2n5/3q4/3p2b1/4PN2/PP2BPPP/RNBQK2R w KQkq - 0 7",
+   "said": "indicated by the engine if knight d4 queen e1 is made crushing any questions so to summarize the key mistake here for white"
+  },
+  {
+   "ply": 7,
+   "t": 1168.5,
+   "line": [],
+   "fen": "r1b1kbnr/ppp1pppp/2n5/3q4/3P4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "said": "i think going into this line is already not not great knight c3 here is the way"
+  },
+  {
+   "ply": 5,
+   "t": 1173.5,
+   "line": [],
+   "fen": "r1bqkbnr/ppp1pppp/2n5/3P4/3P4/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "said": "to go if you want to take the sting out"
+  },
+  {
+   "ply": 8,
+   "t": 1177,
+   "line": [
+    "Qxd5",
+    "Nf3",
+    "e5"
+   ],
+   "fen": "r1b1kbnr/ppp2ppp/2n5/3qp3/3P4/5N2/PP2PPPP/RNBQKB1R w KQkq - 0 5",
+   "said": "um here this is fine"
+  },
+  {
+   "ply": 10,
+   "t": 1178.5,
+   "line": [
+    "e3",
+    "Bg4"
+   ],
+   "fen": "r3kbnr/ppp2ppp/2n5/3qp3/3P2b1/4PN2/PP3PPP/RNBQKB1R w KQkq - 1 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 1180,
+   "line": [
+    "Be2",
+    "exd4"
+   ],
+   "fen": "r3kbnr/ppp2ppp/2n5/3q4/3p2b1/4PN2/PP2BPPP/RNBQK2R w KQkq - 0 7",
+   "said": "knight c3 is actually a very important"
+  },
+  {
+   "ply": 13,
+   "t": 1181.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r3kbnr/ppp2ppp/2n5/3q4/3p2b1/2N1PN2/PP2BPPP/R1BQK2R b KQkq - 1 7",
+   "said": "way move to castle as quickly as"
+  },
+  {
+   "ply": 17,
+   "t": 1186,
+   "line": [
+    "Rc8",
+    "Nb1",
+    "Kd8",
+    "exd4"
+   ],
+   "fen": "2rk1bnr/ppp2ppp/2n5/3q4/3P2b1/5N2/PP2BPPP/RNBQK2R b KQ - 0 9",
+   "said": "possible after edie castles you get a pretty bad scandy type position maybe bishop e3 here preserves a reasonable position but this is what we want on the trigger and black gets a desirable position all right um any questions that are not as general as how to find the best plan all right i'm down for one more game um maybe we're the radcliff all right let's play the second interesting sideline that i advocate we're not going to play the chagoran again we are going to play the baltic bishop f5 and those of you have been on my stream for a long time i have played this with other gm's i i this is a reputable move and it contains a ton of traps it's very interesting and it's it's similar in a way to the trigorin where if c takes d5 the idea is to quickly"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 4,
+   "fen": "r1bqkbnr/ppp1pppp/2n5/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "d4",
+    "d5",
+    "c4",
+    "Nc6"
+   ],
+   "options": [
+    {
+     "san": "cxd5",
+     "t": 68,
+     "continuation": "cxd5",
+     "said": "now if white knows what to do then the chigorin loses its luster but at the level of a 1700 i think it's a very good weapon okay cd is one of the main moves a trigon is like the equivalent of the scandi except within 1d4 the idea of this opening is to very quickly pile up the pressure on the d4 pawn if you do not do that you are going to lose in five moves so for example here if you play bishop g4 that's too slow black white plays knight c3 chases the queen away then pushes the d-pawn this is crap you have to operate far more decisively here who knows the move no g6 is way too slow g6 knight c3 and your initiative evaporates you have to go e5 this is the only move the only way to make it work um dr geek tardis thank you yeah so if knight c3 you have bishop before this is a very important detail without this detail the opening wouldn't work um what's the idea after dxe5 that'll talk about after the game e3"
+    },
+    {
+     "san": "Nc3",
+     "t": 685.5,
+     "continuation": "Nc3",
+     "said": "i'm not going to talk too much opening theory you guys can do your own research i think in modern times the best move is considered to be knight c3 the best move is considered to be knight c3 this takes the sting out of the chagoran and if d takes c4 then you go either d5 or just knight f3 followed by d5 and here black is in quite a bit of trouble so i think this is the reason it's lost some of its luster but i can try some moves like e5 still very interesting um you can google it so let's say you wanted to do some research on an opening the best thing to do is just to google it or to search it on youtube and you're probably going to find some tutorial on it but you should use the internet and you can also use this on chess.com there is a opening explorer feature which is really good so you can use that as well uh but don't just sit there sort of twiddling your thumbs and you know the internet is very very very very um how should i put it underrated resource for learning openings all right so knight f c takes d5 is is the traditional main move and knight f3 is already not that good uh the move"
+    }
+   ]
+  },
+  {
+   "ply": 5,
+   "fen": "r1bqkbnr/ppp1pppp/2n5/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 2 3",
+   "line": [
+    "d4",
+    "d5",
+    "c4",
+    "Nc6",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "dxc4",
+     "t": 688.5,
+     "continuation": "dxc4",
+     "said": "i think in modern times the best move is considered to be knight c3 the best move is considered to be knight c3 this takes the sting out of the chagoran and if d takes c4 then you go either d5 or just knight f3 followed by d5 and here black is in quite a bit of trouble so i think this is the reason it's lost some of its luster but i can try some moves like e5 still very interesting um you can google it so let's say you wanted to do some research on an opening the best thing to do is just to google it or to search it on youtube and you're probably going to find some tutorial on it but you should use the internet and you can also use this on chess.com there is a opening explorer feature which is really good so you can use that as well uh but don't just sit there sort of twiddling your thumbs and you know the internet is very very very very um how should i put it underrated resource for learning openings all right so knight f c takes d5 is is the traditional main move and knight f3 is already not that good uh the move here is e3 e3 e5"
+    },
+    {
+     "san": "e5",
+     "t": 699,
+     "continuation": "e5",
+     "said": "chagoran and if d takes c4 then you go either d5 or just knight f3 followed by d5 and here black is in quite a bit of trouble so i think this is the reason it's lost some of its luster but i can try some moves like e5 still very interesting um you can google it so let's say you wanted to do some research on an opening the best thing to do is just to google it or to search it on youtube and you're probably going to find some tutorial on it but you should use the internet and you can also use this on chess.com there is a opening explorer feature which is really good so you can use that as well uh but don't just sit there sort of twiddling your thumbs and you know the internet is very very very very um how should i put it underrated resource for learning openings all right so knight f c takes d5 is is the traditional main move and knight f3 is already not that good uh the move here is e3 e3 e5 knight c3 bishop b4 this is the traditional main line bishop d2 bishop takes c3 b takes e3 this is one of the key positions of the chagoran"
+    }
+   ]
+  },
+  {
+   "ply": 6,
+   "fen": "r1b1kbnr/ppp1pppp/2n5/3q4/3P4/8/PP2PPPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "d4",
+    "d5",
+    "c4",
+    "Nc6",
+    "cxd5",
+    "Qxd5"
+   ],
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 72,
+     "continuation": "Nf3",
+     "said": "then the chigorin loses its luster but at the level of a 1700 i think it's a very good weapon okay cd is one of the main moves a trigon is like the equivalent of the scandi except within 1d4 the idea of this opening is to very quickly pile up the pressure on the d4 pawn if you do not do that you are going to lose in five moves so for example here if you play bishop g4 that's too slow black white plays knight c3 chases the queen away then pushes the d-pawn this is crap you have to operate far more decisively here who knows the move no g6 is way too slow g6 knight c3 and your initiative evaporates you have to go e5 this is the only move the only way to make it work um dr geek tardis thank you yeah so if knight c3 you have bishop before this is a very important detail without this detail the opening wouldn't work um what's the idea after dxe5 that'll talk about after the game e3 that's a pretty passive move and i think that essentially gives us a nice"
+    },
+    {
+     "san": "e3",
+     "t": 747.5,
+     "continuation": "e3",
+     "said": "for learning openings all right so knight f c takes d5 is is the traditional main move and knight f3 is already not that good uh the move here is e3 e3 e5 knight c3 bishop b4 this is the traditional main line bishop d2 bishop takes c3 b takes e3 this is one of the key positions of the chagoran very interesting pawn structure white gets this triangle white gets the two bishops but black gets very quick development and white's king is often in trouble in these lines i think according to theory white is better here but you got to know your stuff um that's the path that white should go on if you take on d5 but knight f3 e5 is already good for black i think or already not bad if d takes e5 should black take the queen let's see spam whether you think black should take the plane okay most of you think yes which is pretty impressive uh i like it"
+    }
+   ]
+  },
+  {
+   "ply": 8,
+   "fen": "r1b1kbnr/ppp2ppp/2n5/3qp3/3P4/4P3/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "d4",
+    "d5",
+    "c4",
+    "Nc6",
+    "cxd5",
+    "Qxd5",
+    "e3",
+    "e5"
+   ],
+   "options": [
+    {
+     "san": "Nc3",
+     "t": 751,
+     "continuation": "Nc3",
+     "said": "all right so knight f c takes d5 is is the traditional main move and knight f3 is already not that good uh the move here is e3 e3 e5 knight c3 bishop b4 this is the traditional main line bishop d2 bishop takes c3 b takes e3 this is one of the key positions of the chagoran very interesting pawn structure white gets this triangle white gets the two bishops but black gets very quick development and white's king is often in trouble in these lines i think according to theory white is better here but you got to know your stuff um that's the path that white should go on if you take on d5 but knight f3 e5 is already good for black i think or already not bad if d takes e5 should black take the queen let's see spam whether you think black should take the plane okay most of you think yes which is pretty impressive uh i like it black should take the queen of course black should take the queen"
+    },
+    {
+     "san": "Nf3",
+     "t": 866,
+     "continuation": "Nf3 Bg4",
+     "said": "very quick development so you have to think more concretely than that so that's why taking it on e5 is not good i think white could still maintain a decent position by playing um so bishop e2 is fine here i think there is a final opportunity to get an interesting position but you have to know this move this is not an easy move to just come up with and that move is knight c3 it's actually not an not an atypical idea when you have a queen on d5 i can show you many lines that have a move like this uh and if bishop b4 white can simply castle the ship bishop takes e3 bc and white's trying to take the spawn on his own terms what should black do here instructive question for you guys what should black do in this position in fact it's an only move otherwise why does black is much worse oh my god we got 100 bucks we actually got 100 bucks shalish money your lessons are very helpful thank you oh my god ridiculous we've got a hundred from shailesh mani thank you so much resign yeah that is correct"
+    }
+   ]
+  },
+  {
+   "ply": 12,
+   "fen": "r3kbnr/ppp2ppp/2n5/3q4/3p2b1/4PN2/PP2BPPP/RNBQK2R w KQkq - 0 7",
+   "line": [
+    "d4",
+    "d5",
+    "c4",
+    "Nc6",
+    "cxd5",
+    "Qxd5",
+    "Nf3",
+    "e5",
+    "e3",
+    "Bg4",
+    "Be2",
+    "exd4"
+   ],
+   "options": [
+    {
+     "san": "exd4",
+     "t": 195,
+     "continuation": "exd4",
+     "said": "and then we'll castle continuing to pressure the d4 pawn ow we castle automatic move now we castle automatic move and look at the pressure we have on this d4 pawn this really reminds me of a scandi except a really good scandi because now the queen doesn't have to go to a5 it can go to h5 when the time is right if white castles all right oh we got a dono h you mean the five steps yeah oh you mean the five steps yeah all right knight c3 now this is very interesting now we got a donor three bucks from huge ass crack thank you now this is interesting because bishop b4 already has overstayed its welcome we don't need to play bishop before anymore why not because d5 is no longer a threat we already have castled we have an x-ray going on the queen oh that's funny i got it that's hilarious so where should we go with our queen hello that was that was not that bad though"
+    },
+    {
+     "san": "Nc3",
+     "t": 882.5,
+     "continuation": "Nc3",
+     "said": "here i think there is a final opportunity to get an interesting position but you have to know this move this is not an easy move to just come up with and that move is knight c3 it's actually not an not an atypical idea when you have a queen on d5 i can show you many lines that have a move like this uh and if bishop b4 white can simply castle the ship bishop takes e3 bc and white's trying to take the spawn on his own terms what should black do here instructive question for you guys what should black do in this position in fact it's an only move otherwise why does black is much worse oh my god we got 100 bucks we actually got 100 bucks shalish money your lessons are very helpful thank you oh my god ridiculous we've got a hundred from shailesh mani thank you so much resign yeah that is correct okay this is not correct what would happen if we castle let's figure it out white would play c takes d4 look very carefully at whites a black's king and look at white's king white's king is perfectly safe black's king is"
+    }
+   ]
+  },
+  {
+   "ply": 13,
+   "fen": "r3kbnr/ppp2ppp/2n5/3q4/3p2b1/2N1PN2/PP2BPPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "d4",
+    "d5",
+    "c4",
+    "Nc6",
+    "cxd5",
+    "Qxd5",
+    "e3",
+    "e5",
+    "Nf3",
+    "Bg4",
+    "Be2",
+    "exd4",
+    "Nc3"
+   ],
+   "options": [
+    {
+     "san": "Bb4",
+     "t": 894,
+     "continuation": "Bb4 O-O",
+     "said": "not an not an atypical idea when you have a queen on d5 i can show you many lines that have a move like this uh and if bishop b4 white can simply castle the ship bishop takes e3 bc and white's trying to take the spawn on his own terms what should black do here instructive question for you guys what should black do in this position in fact it's an only move otherwise why does black is much worse oh my god we got 100 bucks we actually got 100 bucks shalish money your lessons are very helpful thank you oh my god ridiculous we've got a hundred from shailesh mani thank you so much resign yeah that is correct okay this is not correct what would happen if we castle let's figure it out white would play c takes d4 look very carefully at whites a black's king and look at white's king white's king is perfectly safe black's king is devastated because you have two semi-open files white's going to occupy one of them with his rook this is going to be very bad for black and it's going to decline very quickly bishop is going to come to a3"
+    },
+    {
+     "san": "Rc8",
+     "t": 1186,
+     "continuation": "Rc8 Nb1 Kd8 exd4",
+     "said": "um here this is fine knight c3 is actually a very important way move to castle as quickly as possible after edie castles you get a pretty bad scandy type position maybe bishop e3 here preserves a reasonable position but this is what we want on the trigger and black gets a desirable position all right um any questions that are not as general as how to find the best plan all right i'm down for one more game um maybe we're the radcliff all right let's play the second interesting sideline that i advocate we're not going to play the chagoran again we are going to play the baltic bishop f5 and those of you have been on my stream for a long time i have played this with other gm's i i this is a reputable move and it contains a ton of traps it's very interesting and it's it's similar in a way to the trigorin where if c takes d5 the idea is to quickly"
+    }
+   ]
+  },
+  {
+   "ply": 17,
+   "fen": "r3k1nr/ppp2ppp/2n5/3q4/3p2b1/2P1PN2/P3BPPP/R1BQ1RK1 b kq - 0 9",
+   "line": [
+    "d4",
+    "d5",
+    "c4",
+    "Nc6",
+    "cxd5",
+    "Qxd5",
+    "e3",
+    "e5",
+    "Nf3",
+    "Bg4",
+    "Be2",
+    "exd4",
+    "Nc3",
+    "Bb4",
+    "O-O",
+    "Bxc3",
+    "bxc3"
+   ],
+   "options": [
+    {
+     "san": "O-O-O",
+     "t": 929.5,
+     "continuation": "O-O-O",
+     "said": "ridiculous we've got a hundred from shailesh mani thank you so much resign yeah that is correct okay this is not correct what would happen if we castle let's figure it out white would play c takes d4 look very carefully at whites a black's king and look at white's king white's king is perfectly safe black's king is devastated because you have two semi-open files white's going to occupy one of them with his rook this is going to be very bad for black and it's going to decline very quickly bishop is going to come to a3 rook is going to come to c1 queen to a4 black is black's kang is going to be devastated here all right so what you want to do is give away the pawn on your own terms you want to go pawn to d3 a lot of you got this you're essentially keeping a bad pawn structure and if white takes to the bishop and you can play bishop takes f3 to start with forcing more ruining of the pawn structure and this is already lost for white why is it lost because the bishop is hanging and if it moves you swing over to g5 with the queen so white probably has to take on d3 with a queen and the end game"
+    },
+    {
+     "san": "d3",
+     "t": 965,
+     "continuation": "d3",
+     "said": "rook is going to come to c1 queen to a4 black is black's kang is going to be devastated here all right so what you want to do is give away the pawn on your own terms you want to go pawn to d3 a lot of you got this you're essentially keeping a bad pawn structure and if white takes to the bishop and you can play bishop takes f3 to start with forcing more ruining of the pawn structure and this is already lost for white why is it lost because the bishop is hanging and if it moves you swing over to g5 with the queen so white probably has to take on d3 with a queen and the end game an end game like this is probably fine for black white as the two bishops but look at white's pawn structure it's absolutely horrible i think black is in fine shape here probably not better but fine so one shortcut toward evaluating king safety when you have opposite side castling is to see who's got the open files which side has an easier time getting rooks to open files and getting the queen to a good attacking spot here it's clearly white white's got two of these semi-open files and white's got this a4 square for the queen so you can remember that as a easy way to kind of estimate who's got an easier job"
+    }
+   ]
+  }
+ ]
+}

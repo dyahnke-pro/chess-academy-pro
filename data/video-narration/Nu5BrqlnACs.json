@@ -1,0 +1,235 @@
+{
+ "videoId": "Nu5BrqlnACs",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2140",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1352.5,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "you guys are ready for the next one and oh damos 1289 gifting five thank you my friend damos 1289 raising that hype with the subs and let's play king's indian let's go back to uh"
+  },
+  {
+   "ply": 4,
+   "t": 1354.5,
+   "line": [
+    "Nf3",
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 3",
+   "said": "my home base let's play king's indian"
+  },
+  {
+   "ply": 5,
+   "t": 1356.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/6B1/3P4/5N2/PPP1PPPP/RN1QKB1R b KQkq - 1 3",
+   "said": "and he plays what's called the tory attack the tory attack is a similar opening to the london"
+  },
+  {
+   "ply": 6,
+   "t": 1367,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/6B1/3P4/5N2/PPP1PPPP/RN1QKB1R w KQkq - 2 4",
+   "said": "system where black white develops to f4 and in the tory white simply develops the g5 it's similar in spirit to the london"
+  },
+  {
+   "ply": 7,
+   "t": 1369.5,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/6B1/3P4/4PN2/PPP2PPP/RN1QKB1R b KQkq - 0 4",
+   "said": "white does many of the same things and logically black also does many of"
+  },
+  {
+   "ply": 8,
+   "t": 1376,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/3P4/4PN2/PPP2PPP/RN1QKB1R w KQ - 1 5",
+   "said": "the same things so the great thing about the king's indian"
+  },
+  {
+   "ply": 9,
+   "t": 1377.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/2BP4/4PN2/PPP2PPP/RN1QK2R b KQ - 2 5",
+   "said": "the reason i recommend it to a lot of players is that you don't really have to modify your set of moves depending on what your opponent does uh which is not to say it's not theoretical but if you understand the ideas you can react reasonably to most things your opponent can throw at you theo 25k"
+  },
+  {
+   "ply": 10,
+   "t": 1407,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2BP4/4PN2/PPP2PPP/RN1QK2R w KQ - 0 6",
+   "said": "so what do the king's indian moves basically look like here what should we do now should we go d5 that would be more grunfeld style not really if we want to preserve the king's india any ness of it we should go d6 and as i've explained previously in the"
+  },
+  {
+   "ply": 11,
+   "t": 1409,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/6B1/2BP4/2P1PN2/PP3PPP/RN1QK2R b KQ - 0 6",
+   "said": "king's indian black has two main pawn breaks c5 and e5 in the toure one of the ideas is that white discourages e5 because he puts the bishop on g5 preemptively does it make sense guys that white's going to have this nasty pin if we go e5 so let's not fall into his plan let's actually punt on this let's table that conversation by finishing our development first let's look at this bishop for a second where can it go thank you archdruid and tenacious where"
+  },
+  {
+   "ply": 12,
+   "t": 1449,
+   "line": [
+    "b6"
+   ],
+   "fen": "rnbq1rk1/p1p1ppbp/1p1p1np1/6B1/2BP4/2P1PN2/PP3PPP/RN1QK2R w KQ - 0 7",
+   "said": "can this bishop go what would be a nice juicy weighty square for that bishop not g4 if it goes to g4 guys he's just going to take it away with h3 we're actually going to fiance in the interest of time i'm going to make the move we're going to fee and get of the"
+  },
+  {
+   "ply": 14,
+   "t": 1454.5,
+   "line": [
+    "Nbd2",
+    "Bb7"
+   ],
+   "fen": "rn1q1rk1/pbp1ppbp/1p1p1np1/6B1/2BP4/2P1PN2/PP1N1PPP/R2QK2R w KQ - 2 8",
+   "said": "bishop and we're going to talk about this moment after i don't expect people to"
+  },
+  {
+   "ply": 15,
+   "t": 1457,
+   "line": [
+    "a4"
+   ],
+   "fen": "rn1q1rk1/pbp1ppbp/1p1p1np1/6B1/P1BP4/2P1PN2/1P1N1PPP/R2QK2R b KQ - 0 8",
+   "said": "just like know this stuff uh now he wants to go a5 so we're going"
+  },
+  {
+   "ply": 16,
+   "t": 1462.5,
+   "line": [
+    "a5"
+   ],
+   "fen": "rn1q1rk1/1bp1ppbp/1p1p1np1/p5B1/P1BP4/2P1PN2/1P1N1PPP/R2QK2R w KQ - 0 9",
+   "said": "to go a5 ourselves to prevent him from doing that"
+  },
+  {
+   "ply": 17,
+   "t": 1465.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/1bp1ppbp/1p1p1np1/p5B1/P1BP4/2P1PN2/1P1N1PPP/R2Q1RK1 b - - 1 9",
+   "said": "and now we're going to develop the"
+  },
+  {
+   "ply": 18,
+   "t": 1466.5,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r2q1rk1/1bpnppbp/1p1p1np1/p5B1/P1BP4/2P1PN2/1P1N1PPP/R2Q1RK1 w - - 2 10",
+   "said": "knight d7 we don't want to develop it to c6 to obstruct the bishop now he builds up a little battery here can we blunt that battery for now yeah he's six now wait a second i hear you guys saying but doesn't that open up the pin well it does but guess what that's not such a dangerous spin we can get rid of it by playing g5 if we need to i'm not saying we'll do that immediately we can also get rid of the pin by moving the queen and here i'm going to show you guys a really really cool idea really whoa big for raid 127 we were doing holy smokes we had a dono chest jacob 100 bucks wow are you kidding me and we are going to go g5 let's get rid of the pen thinking bigfoot for the raid i can't even keep up with this this is unbelievable levels of support guys what a raid what a dono welcome guys we're doing the speedrun thank you so much jess jacob how do we follow this move up how do we get rid of this bishop yeah that h5 is the typical follow-up i'll show you guys the cool idea afterwards it didn't quite work here but i'll show you guys afterwards this is amazing guys i i not the way i played today i didn't earn it but i really appreciate it nonetheless now what is going to be our strategy our strategy here broadly speaking is going to be to accumulate pieces on the king's side that's all we're going to do let's get our queen to f6 slowly but surely we're going to accumulate pieces on the queen side and eventually you know at some point in the very distant future we're going to try to play 5. now the situation has changed he goes e5 he doesn't actually win upon why doesn't he win upon what can we do here what very important intermediate move does black have to play because if we take on d6 we actually drop the pawn but we take the bishop that's partially why we played knight h5 we take the bishop and now we take the pawn we're in pretty decent shape here he's actually playing super super well this guy um our position is a little bit precarious black has some weaknesses but we also have the two bishops let's get the knight over to f6 again our plan is to accumulate pieces on the king's side and eventually we're going to launch into an attack now one thing i'm noticing here is that when he took on g3 with the pawn he weakened that h file so a potential idea is to go queen h5 knight g4 we don't have to do that immediately but in fact we actually can let's get the knight to g4 i don't see a downside to this move uh notice that when i play queen h5 i'm not going to be threatening queen h2 but his knight on f3 is going to be charged with a very heavy load and we're going to start looking for some overloading tactics to try to get that knight out of f3 also don't forget about the bishop that's why we fianchetto did it's occupying a really big diagonal literally holy smokes 30 on top of the 100 by chess jacob we got 30 subs ladies and gentlemen that propels us over 5500 subs my land girl this is crazy let's trade the knights absolutely unbelievable thank you so much chess jacob this is incredible now we're gonna start pushing the puns we're gonna try to tear apart the defenses around his king amazing thank you so much 50 over 5500 now we're gonna go rook ba why did we play this move why did we play rook b8 and in the interest of time i'm accelerating my pace a little bit here but i want somebody on top of that flowner with a sub we're going to shut him down with d5 somebody needs to give that man a sub thank you chess jake i really appreciate it man we needed to protect v6 and we did that indirectly he's not a sub unacceptable okay now what happens if he takes the pawn on v6 this is where things get a little bit gnarly and complicated but i'll walk you guys through this properly after the game the bottom line is we're still trying to attack on the king side and we're going to do that by pushing the pawns and trying to open up trying to deal with tommy gifting to chess jacob trying to deal with his own pawns on the king's side that's going to let us pave the way for our pieces to come in and start attacking so how specifically should we go about ripping this apart this is an idea that i mentioned previously let's not forget about it what was our initial idea i said that we'd do this eventually yeah f5 f4 let's go now this is not that simple right because we're weakening the e6 square and that's a pretty serious weakness that we've created it's right in the crosshairs of his rook so a good move for him would be bishop d3 but i've judged that i'm going to you know kind of like an nfl blitz i'm going to blitz this pawn up the board and i've made the judgment call that he's not going to have the time to exploit the newly created weakness of e6 i don't know if that makes sense that's basically my logic because i'm right on the doorstep of playing f4 and when i do i just feel like his king is not going to survive very much longer and i can always defend e6 worst comes to wars by dipping my bishop to c8 bat you know bad bishops defend good pawns he plays that for himself now how should we should we take on passant i'll give you guys a hint we actually don't have to he closed one freeway he closed one freeway but let's open the other freeway we can take the other freeway we can take the h file here's the thing in a certain sense follow my logic here it's actually a good thing it's actually a good thing that he locked up the entire center because this lets us fully focus on the other side of the board now we can divert all of our resources to the h-file including the bishop to h6 the queen to h4 and we don't have to worry about anything happening in the center at least for the time being and i've actually just missed this move um i actually completely forgot i could do that that's okay you've got to be able to recover in these situations what do we do you know what we do nothing we just let's first go queen h6 and here's what i've come up with here's what i've come up with what we're okay well i've come up with winning his knight he should have defended that pun this is the point i always make though when you put your opponent under pressure throughout the game he gets tired and it that increases the probability of a blunder i'll explain what i would have done if he had defended the plan i actually did miss king f2 to be completely fair we have won a knight let's not relax too soon because he can finally take his six it's kind of funny it's fitting that he has finally taken the pun but he's done it at the cost of a night and his entire king side has collapsed okay um thank you again chess jacob for the 30 gifted we've had so many bombs today so much support so many donors and i really really appreciate it guys we are on the path to 6 000 subs i cannot freaking believe it now i'm looking at this bishop and i'm saying man i really want this bishop on e3 that square would be really sexy can we get that bishop to e3 we can't play bishop h6 right wait a minute can we get the bishop to h6 we can you ask the sam shanklin question what happens if i do it anyway okay we're definitely gonna trade queens to simplify right what happens if i do it anyway if he had taken that rook we would have had a fork with queen e3 i'll show this after the game um and and and that really is something i advocate for players of all levels uh gm's and you know all of my students receive a healthy dose of this suggestion basically at all times now again we've got some time pressure so we just need to move the bishop away dip the kink to h8 so that we can if necessary block it with rook h7 let's bring our bishop back he's probably going to give us a check we're gonna go here i actually believe it or not i did blunder that's the funny thing i blundered because uh i have to go rook g7 i forgot this bishop was hanging"
+  },
+  {
+   "ply": 5,
+   "t": 1952.5,
+   "line": [],
+   "fen": "rnbqkb1r/pppppp1p/5np1/6B1/3P4/5N2/PPP1PPPP/RN1QKB1R b KQkq - 1 3",
+   "said": "okay and so did he but uh he's gonna lose on time sorry about that in the end nobody's perfect however so another very rich game these people are playing very very well so he played the tory attack the tory attack was named after carlos torre mexican one of the strongest players to come out of mexico uh i think he basically flourished in the first half of the 20th century and the first guy to play this was a guy"
+  },
+  {
+   "ply": 6,
+   "t": 1982,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/6B1/3P4/5N2/PPP1PPPP/RN1QKB1R w KQkq - 2 4",
+   "said": "named coleman in 1923. eugene coleman who lost against richard retti and remember i mentioned retsy retsy was one of the hyper modernists he was one of those guys in the 1920s who basically said um you don't have to play uh he was a check check player he said you don't have to control the center of your puns it ain't a surprise to anybody that um that it shouldn't be a surprise to me that that reti was playing the king's indian in the 1920s when it was still unpopular but then um tori himself did he actually ever play the tory in this move order let me see um it's one of those things you know yeah tori did play it oh but i think it's named after yokanyotory okay this is really really interesting guys so tori refers to two players carlos torre from mexico and much more recently eugenio torre eugenio cherry from the philippines one of the strongest grandmasters in the philippines he's still alive he's in his 60s i never knew this but i think the tory attack is named after eugeniotori from the philippines not carlos torre um it was around before eugenio but i think he's i see he's played it like over 20 times"
+  },
+  {
+   "ply": 8,
+   "t": 2066.5,
+   "line": [
+    "e3",
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/3P4/4PN2/PPP2PPP/RN1QKB1R w KQ - 1 5",
+   "said": "so i actually think it's named after him and not carla story pretty interesting that's a pretty recent thing but anyway nice little piece of trivia bishop g5 similar to the london castles bishop c4 so normally in the"
+  },
+  {
+   "ply": 9,
+   "t": 2067.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/2BP4/4PN2/PPP2PPP/RN1QK2R b KQ - 2 5",
+   "said": ""
+  },
+  {
+   "ply": 8,
+   "t": 2069,
+   "line": [],
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/3P4/4PN2/PPP2PPP/RN1QKB1R w KQ - 1 5",
+   "said": "tory white develops the bishop i think to d3 or e2 bishop c4 is a slightly"
+  },
+  {
+   "ply": 9,
+   "t": 2073.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/2BP4/4PN2/PPP2PPP/RN1QK2R b KQ - 2 5",
+   "said": "unusual way of developing"
+  },
+  {
+   "ply": 10,
+   "t": 2075.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/5np1/3p2B1/2BP4/4PN2/PPP2PPP/RN1QK2R w KQ - 0 6",
+   "said": "and d5 would be possible here with tempo but we wanted to keep the king's indian-ness of the line so b6 to deploy the bishop now why is bishop g4 not effective who can explain this to me succinctly why is bishop g4 why i mean usually we develop our bishop that why all of a sudden did i reject this natural developing square exactly he goes h3 and the problem guys when we fianchetto our bishop this bishop that we put on this diagonal doesn't have a retreat square so we allow him to trap the bishop and we would either have to take on f3 doesn't make sense or bring the bishop back thank you super scrub so for that reason we fianchetto division a45 and e6 to blunt the battery now h6 and now i decided to just get rid of the pin g5 not h1 now a little bit of decision logic how did i decide that it was worth weakening the king side in this way like isn't this very weakening to go g5"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 9,
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/2BP4/4PN2/PPP2PPP/RN1QK2R b KQ - 2 5",
+   "line": [
+    "d4",
+    "Nf6",
+    "Nf3",
+    "g6",
+    "Bg5",
+    "Bg7",
+    "e3",
+    "O-O",
+    "Bc4"
+   ],
+   "options": [
+    {
+     "san": "d6",
+     "t": 1407,
+     "continuation": "d6",
+     "said": "so what do the king's indian moves basically look like here what should we do now should we go d5 that would be more grunfeld style not really if we want to preserve the king's india any ness of it we should go d6 and as i've explained previously in the king's indian black has two main pawn breaks c5 and e5 in the toure one of the ideas is that white discourages e5 because he puts the bishop on g5 preemptively does it make sense guys that white's going to have this nasty pin if we go e5 so let's not fall into his plan let's actually punt on this let's table that conversation by finishing our development first let's look at this bishop for a second where can it go thank you archdruid and tenacious where can this bishop go what would be a nice juicy weighty square for that bishop not g4 if it goes to g4 guys he's just going to take it away with h3 we're actually going to fiance in the interest of time i'm going to make the move we're going to fee and get of the bishop and we're going to talk about this moment after i don't expect people to just like know this stuff uh now he wants to go a5 so we're going to go a5 ourselves to prevent him from doing that and now we're going to develop the"
+    },
+    {
+     "san": "d5",
+     "t": 2075.5,
+     "continuation": "d5",
+     "said": "similar to the london castles bishop c4 so normally in the tory white develops the bishop i think to d3 or e2 bishop c4 is a slightly unusual way of developing and d5 would be possible here with tempo but we wanted to keep the king's indian-ness of the line so b6 to deploy the bishop now why is bishop g4 not effective who can explain this to me succinctly why is bishop g4 why i mean usually we develop our bishop that why all of a sudden did i reject this natural developing square exactly he goes h3 and the problem guys when we fianchetto our bishop this bishop that we put on this diagonal doesn't have a retreat square so we allow him to trap the bishop and we would either have to take on f3 doesn't make sense or bring the bishop back thank you super scrub so for that reason we fianchetto division a45 and e6 to blunt the battery now h6 and now i decided to just get rid of the pin g5 not h1 now a little bit of decision logic how did i decide that it was worth weakening the king side in this way like isn't this very weakening to go g5"
+    }
+   ]
+  }
+ ]
+}

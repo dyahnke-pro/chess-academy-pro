@@ -31,6 +31,9 @@ if (!trackPath) { console.error(`no track for ${videoId} in video-tracks or vide
 
 const posKey = (fen) => fen.split(' ').slice(0, 2).join(' ');
 
+/** Above this, the speech in a window almost certainly spans several boards. */
+const LONG_WINDOW = 300;
+
 /** Every position the repertoire walks, labelled by the line that walks it. */
 const taught = new Map();
 {
@@ -62,7 +65,29 @@ const noted = new Set();
 }
 
 const track = JSON.parse(readFileSync(trackPath, 'utf8'));
-console.log(`${track.title}\n${trackPath}${track.titleCheck ? `  titleCheck=${JSON.stringify(track.titleCheck)}` : ''}\n`);
+
+/**
+ * What was being SAID over each position, from the pairing.
+ *
+ * A note is written from the captions — the board says what is TRUE here, the
+ * captions say which of those true things the lesson is TEACHING — so the words
+ * belong in this listing rather than behind a second command. Printing a
+ * timestamp and leaving the reader to go fetch it is how four notes came to be
+ * written off the board alone: `at.mjs` failed silently on a missing transcript
+ * and the gap was not obvious mid-batch.
+ */
+const said = new Map();
+{
+  const pairPath = `data/video-narration/${videoId}.json`;
+  if (existsSync(pairPath)) {
+    for (const m of JSON.parse(readFileSync(pairPath, 'utf8')).moves ?? []) {
+      if (m.said?.trim()) said.set(m.fen ? posKey(m.fen) : `ply:${m.ply}`, m.said.trim());
+    }
+  }
+}
+
+console.log(`${track.title}\n${trackPath}${track.titleCheck ? `  titleCheck=${JSON.stringify(track.titleCheck)}` : ''}`);
+console.log(said.size ? `captions paired at ${said.size} position(s)\n` : 'NO PAIRED CAPTIONS — run pair-narration.mjs before writing\n');
 
 let line = [];
 const seen = new Set();
@@ -80,5 +105,28 @@ for (const m of track.moves ?? []) {
   const already = m.fen && noted.has(posKey(m.fen)) ? ' [HAS NOTE]' : '';
   console.log(`ply ${String(m.ply).padStart(3)}  t=${String(Math.round(m.t)).padStart(5)}s  ${label ?? '(off line)'}${already}`);
   console.log(`   ${key}`);
+  const words = m.fen ? said.get(posKey(m.fen)) : undefined;
+  if (words) {
+    // A LONG WINDOW IS A WARNING, NOT A WINDFALL. The window runs from this
+    // position settling to the next one settling, so when the tracker loses the
+    // board the words of many positions pile into one entry. Measured across the
+    // bank: 76% of windows are under 60 words, but 163 windows (0.7%) hold 23%
+    // of every paired word. Writing a note from one of those risks attaching
+    // teaching that belongs to a board the reader never saw — which is the exact
+    // disease this whole pipeline exists to cure.
+    const n = words.split(/\s+/).filter(Boolean).length;
+    if (n > LONG_WINDOW) {
+      console.log(`   ⚠ ${n} words over one position — the tracker lost the board here, so this`);
+      console.log('     speech covers several boards. Check it against the video before writing.');
+    }
+    // Reference only, never quoted — it tells you WHICH established idea the
+    // lesson is on here, out of the several it could be making. The shipped
+    // prose is original.
+    const text = words.length > 1200 && !all ? `${words.slice(0, 1200)} …` : words;
+    console.log(`   said: ${text.replace(/\s+/g, ' ')}`);
+  } else {
+    console.log('   said: (nothing spoken over this position)');
+  }
+  console.log('');
 }
 console.log(`\n${onLine} anchor(s) on a taught line, ${seen.size} settled position(s) in the lesson`);

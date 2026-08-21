@@ -1,0 +1,390 @@
+{
+ "videoId": "d-CFu7RMVoY",
+ "title": "Breaking Down F4 Weaknesses | Sicilian Defence | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 26,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "and then maybe we'll have a political discussion so i can properly end my career all right maximilian 0104 okay i'm going to play something very tactical yeah we're going to play a sicilian"
+  },
+  {
+   "ply": 3,
+   "t": 27.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
+   "said": "okay f4 so we face this move probably oh three or four times in the speed run and"
+  },
+  {
+   "ply": 4,
+   "t": 38.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4PP2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3",
+   "said": "those of you who've been you know long time clients should know that the move here is the immediate d75 and that is the that is why people don't recommend f4 that's why if you if you're a grand"
+  },
+  {
+   "ply": 5,
+   "t": 47.5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pP4/5P2/8/PPPP2PP/RNBQKBNR b KQkq - 0 3",
+   "said": "prix attack player you want to start with knight c3 now after e takes d5 you don't take with the queen and again if you've watched the previous speedrun"
+  },
+  {
+   "ply": 6,
+   "t": 56.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/5P2/8/PPPP2PP/RNBQKBNR w KQkq - 1 4",
+   "said": "games you will know that the proper continuation here is knight g8 to f6 you're trying to take the pawn"
+  },
+  {
+   "ply": 7,
+   "t": 59.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/2P2P2/8/PP1P2PP/RNBQKBNR b KQkq - 0 4",
+   "said": "essentially on your own terms now you might say like well wait a minute white has just defended the pawn did we make a mistake no we didn't"
+  },
+  {
+   "ply": 8,
+   "t": 74.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/4pn2/2pP4/2P2P2/8/PP1P2PP/RNBQKBNR w KQkq - 0 5",
+   "said": "and it helps to know the theory here essentially the point is that the d4 square is now significantly weakened so what we do is we adopt the gambit mode we basically play a gamut we play e6 we force the trade and then we have massive compensation for the pawn and this is a very"
+  },
+  {
+   "ply": 10,
+   "t": 93.5,
+   "line": [
+    "dxe6",
+    "Bxe6"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/4bn2/2p5/2P2P2/8/PP1P2PP/RNBQKBNR w KQkq - 0 6",
+   "said": "well-known line this is a line that if you're a sicilian player you should absolutely know this line and i think i had a speedrun game many many months ago even over a year ago where i explained"
+  },
+  {
+   "ply": 11,
+   "t": 95.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/4bn2/2p5/2P2P2/5N2/PP1P2PP/RNBQKB1R b KQkq - 1 6",
+   "said": "why black has such serious compensation"
+  },
+  {
+   "ply": 12,
+   "t": 98,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2qkb1r/pp3ppp/2n1bn2/2p5/2P2P2/5N2/PP1P2PP/RNBQKB1R w KQkq - 2 7",
+   "said": "but the the elevator pitch is that we"
+  },
+  {
+   "ply": 13,
+   "t": 103,
+   "line": [
+    "a3"
+   ],
+   "fen": "r2qkb1r/pp3ppp/2n1bn2/2p5/2P2P2/P4N2/1P1P2PP/RNBQKB1R b KQkq - 0 7",
+   "said": "have massive control over the center we have control over the d4 square white has a very weak pawn on f4 that's sticking out like a sore thumb white's got a very bad bishop on f1 which is just biting on granite and white's king doesn't have any clear safe haven because this f4 pawn is out in the open and castling kingside doesn't solve all of black's problems so what should we do how should we develop in this position well a3 is really playing with fire white is not developing his pieces so"
+  },
+  {
+   "ply": 14,
+   "t": 141.5,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "r2qk2r/pp3ppp/2nbbn2/2p5/2P2P2/P4N2/1P1P2PP/RNBQKB1R w KQkq - 1 8",
+   "said": "i would kind of try to go for the kill and try to develop as actively as possible what does that mean what move signifies that we want to develop a tempo bishop d6 yeah let's get this bishop out attack that pawn and i have"
+  },
+  {
+   "ply": 15,
+   "t": 144.5,
+   "line": [
+    "d3"
+   ],
+   "fen": "r2qk2r/pp3ppp/2nbbn2/2p5/2P2P2/P2P1N2/1P4PP/RNBQKB1R b KQkq - 0 8",
+   "said": "this idea of piling up on the pawn why don't we just attack that pawn and try to force"
+  },
+  {
+   "ply": 16,
+   "t": 158,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "r3k2r/ppq2ppp/2nbbn2/2p5/2P2P2/P2P1N2/1P4PP/RNBQKB1R w KQkq - 1 9",
+   "said": "more weaknesses in white's position because white's position is already so flimsy that if we force more weaknesses in white's position he might simply not"
+  },
+  {
+   "ply": 17,
+   "t": 160.5,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r3k2r/ppq2ppp/2nbbn2/2p5/2P2P2/P2P1N2/1P2B1PP/RNBQK2R b KQkq - 2 9",
+   "said": "survive so let's play queen c7 okay bishop b2 our opponent is totally"
+  },
+  {
+   "ply": 18,
+   "t": 165,
+   "line": [
+    "Bxf4"
+   ],
+   "fen": "r3k2r/ppq2ppp/2n1bn2/2p5/2P2b2/P2P1N2/1P2B1PP/RNBQK2R w KQkq - 0 10",
+   "said": "ignoring the threats in this case i'm gonna grab that pawn absolutely let's take it"
+  },
+  {
+   "ply": 19,
+   "t": 170,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r3k2r/ppq2ppp/2n1bn2/2p5/2P2b2/P2P1N2/1P2B1PP/RNBQ1RK1 b kq - 1 10",
+   "said": "and you might say well wouldn't it have been a better idea to develop our pieces instead well yes but i also like taking free pawns so we also open up this diagonal which could create big problems for white along that diagonal so what should we do now well we should definitely castle we should definitely"
+  },
+  {
+   "ply": 20,
+   "t": 197,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "2kr3r/ppq2ppp/2n1bn2/2p5/2P2b2/P2P1N2/1P2B1PP/RNBQ1RK1 w - - 2 11",
+   "said": "castle which way should we castle you could make a case for either way if you want to play a little bit safer you could castle kingside but if you want to play more adventurously and that's the mood that i'm in right now you definitely want to castle king said this is where the party is at why am i inclined to castle king's side well first of all we're x-raying the queen which is a good thing we're the rook on d8 is already in the game right that creates potentially the threat of bishop takes c4 which i know a lot of you see but mainly it's the fact that we're also reinforcing our control over the d4 square which is you know as long as we have control over that square we're good we're chilling and now i think we can move in for the kill now i think we can move in for the kill now a lot of you are probably thinking let's go knight d4 but it's not we don't need to rush with that move we only want to play knight d4 if white's knight is gone from f3 with a move that i really like is not knight d4 but knight g4 creating threats against white's king bishop takes h2 is now a big threat and the knight is potentially heading for e3 this i mean storm clouds are starting to gather around white's king and there's a very very cool line that i'm hoping he goes for the line starts with bishop takes f4 so i'm hoping that he takes the bishop and then goes queen d2 now white is in big trouble here white is in huge trouble it's not totally winning yet but i mean if white doesn't respond properly to this then the game will be over very quickly and all of these problems stem from the fact that this d4 square is a huge hole there's a huge huge hole on that square which means that the bishop is terrible which means that white's pieces are very cramped and our play here is very straightforward and easy no white is in trouble here for sure how should white respond well i don't really know i think white is in serious role i think white should take the"
+  },
+  {
+   "ply": 23,
+   "t": 303,
+   "line": [
+    "Qc2",
+    "Ng4",
+    "Qc3"
+   ],
+   "fen": "2kr3r/ppq2ppp/2n1b3/2p5/2P2bn1/P1QP1N2/1P2B1PP/RNB2RK1 b - - 5 12",
+   "said": "bishop here because that to me seems like the only only move otherwise we well we'll at least will take on h2 with check right so white should at least take the bishop and then maybe play some sort of other move queen c3 is not the way now we can pile up with decisive threats we can take on h2 right we can take on h2 and we'll be up upon but i think we have a much better move here's how i would think about it what you should notice is that if the knight on f3 were to be gone then we would have the possibility of checkmating him on h2 well the queen can't jump over the bishop but what we can do is move the bishop off of this diagonal with check and then slide the queen into h2 so there's a couple of moving parts here the first puzzle piece is that we need to get rid of the knight once we get rid of the knight we'll be able to play the move bishop f4 to e3 check forcing him to either take or go king h1 or whatever it doesn't matter because queen takes h2 is going to be checkmate so in what"
+  },
+  {
+   "ply": 24,
+   "t": 361.5,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "2kr3r/ppq2ppp/4b3/2p5/2Pn1bn1/P1QP1N2/1P2B1PP/RNB2RK1 w - - 6 13",
+   "said": "order do we want to do things well step one is to distract the knight and we have just the way to do that literally all i've been talking about is how great the d4 square is well we finally have a good use for it we can put the knight on d4 but the use for it is tactical not positional we're not trying to use the"
+  },
+  {
+   "ply": 26,
+   "t": 371.5,
+   "line": [
+    "Nxd4",
+    "Be3+"
+   ],
+   "fen": "2kr3r/ppq2ppp/4b3/2p5/2PN2n1/P1QPb3/1P2B1PP/RNB2RK1 w - - 1 14",
+   "said": "square and establish an outpost there we're literally just trying to distract the knight bishop e3 check and it's checkmate in two moves if rook f2 then we still take on h2 and"
+  },
+  {
+   "ply": 28,
+   "t": 382,
+   "line": [
+    "Bxe3",
+    "Qxh2#"
+   ],
+   "fen": "2kr3r/pp3ppp/4b3/2p5/2PN2n1/P1QPB3/1P2B1Pq/RN3RK1 w - - 0 15",
+   "said": "the go queen h1 checkmate and that's how you dismantle this line that's how you dismantle this line and we're 1900. 14 moves well i mean"
+  },
+  {
+   "ply": 2,
+   "t": 390.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "black white played terribly to be fair white played very very poorly"
+  },
+  {
+   "ply": 6,
+   "t": 393.5,
+   "line": [
+    "f4",
+    "d5",
+    "exd5",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/5P2/8/PPPP2PP/RNBQKBNR w KQkq - 1 4",
+   "said": "so that's our second game i think in this line where people play c4 and just"
+  },
+  {
+   "ply": 7,
+   "t": 394.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/2P2P2/8/PP1P2PP/RNBQKBNR b KQkq - 0 4",
+   "said": "get destroyed"
+  },
+  {
+   "ply": 10,
+   "t": 398,
+   "line": [
+    "e6",
+    "dxe6",
+    "Bxe6"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/4bn2/2p5/2P2P2/8/PP1P2PP/RNBQKBNR w KQkq - 0 6",
+   "said": "in the first game i think something pretty similar happened so knight f3 was"
+  },
+  {
+   "ply": 11,
+   "t": 400.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/4bn2/2p5/2P2P2/5N2/PP1P2PP/RNBQKB1R b KQkq - 1 6",
+   "said": "fine a3 was a very strange move i i"
+  },
+  {
+   "ply": 13,
+   "t": 402.5,
+   "line": [
+    "Nc6",
+    "a3"
+   ],
+   "fen": "r2qkb1r/pp3ppp/2n1bn2/2p5/2P2P2/P4N2/1P1P2PP/RNBQKB1R b KQkq - 0 7",
+   "said": "don't know why people play like this white's just not developing pieces and"
+  },
+  {
+   "ply": 14,
+   "t": 411,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "r2qk2r/pp3ppp/2nbbn2/2p5/2P2P2/P4N2/1P1P2PP/RNBQKB1R w KQkq - 1 8",
+   "said": "neglecting the problems in this position so we decided to go bishop d6 and attack the pawn on f4"
+  },
+  {
+   "ply": 16,
+   "t": 413.5,
+   "line": [
+    "d3",
+    "Qc7"
+   ],
+   "fen": "r3k2r/ppq2ppp/2nbbn2/2p5/2P2P2/P2P1N2/1P4PP/RNBQKB1R w KQkq - 1 9",
+   "said": "then we decided to pile up on f4 and"
+  },
+  {
+   "ply": 17,
+   "t": 416,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r3k2r/ppq2ppp/2nbbn2/2p5/2P2P2/P2P1N2/1P2B1PP/RNBQK2R b KQkq - 2 9",
+   "said": "queen c2 or bishop b2 was a huge mistake"
+  },
+  {
+   "ply": 18,
+   "t": 418,
+   "line": [
+    "Bxf4"
+   ],
+   "fen": "r3k2r/ppq2ppp/2n1bn2/2p5/2P2b2/P2P1N2/1P2B1PP/RNBQK2R w KQkq - 0 10",
+   "said": "i mean giving up this pawn after white"
+  },
+  {
+   "ply": 17,
+   "t": 419.5,
+   "line": [],
+   "fen": "r3k2r/ppq2ppp/2nbbn2/2p5/2P2P2/P2P1N2/1P2B1PP/RNBQK2R b KQkq - 2 9",
+   "said": "gives up this pawn all hell breaks loose a better idea probably would have been to go g3 the the problem with the move g3 is that creates even more weaknesses"
+  },
+  {
+   "ply": 21,
+   "t": 434,
+   "line": [
+    "h6",
+    "Bf1",
+    "h5",
+    "g3"
+   ],
+   "fen": "r3k2r/ppq2pp1/2nbbn2/2p4p/2P2P2/P2P1NP1/1P5P/RNBQKB1R b KQkq - 0 11",
+   "said": "on the king side one way that we could try to exploit that is to play like h5 very quickly just go h5 and h4 and open up the king side completely and just try to go for the kill so i i think this would have still"
+  },
+  {
+   "ply": 23,
+   "t": 448.5,
+   "line": [
+    "O-O-O",
+    "Bg2"
+   ],
+   "fen": "2kr3r/ppq2pp1/2nbbn2/2p4p/2P2P2/P2P1NP1/1P4BP/RNBQK2R b KQ - 2 12",
+   "said": "been quite bad for white but at least it's a little bit more double-edged why can play bishop g2 i was honestly planning to do something like long castle and if white short"
+  },
+  {
+   "ply": 25,
+   "t": 452,
+   "line": [
+    "h4",
+    "O-O"
+   ],
+   "fen": "2kr3r/ppq2pp1/2nbbn2/2p5/2P2P1p/P2P1NP1/1P4BP/RNBQ1RK1 b - - 1 13",
+   "said": "castles i would even consider h4 here probably not totally sound you can understand how good this can be when played properly black's just got"
+  },
+  {
+   "ply": 18,
+   "t": 465.5,
+   "line": [],
+   "fen": "r3k2r/ppq2pp1/2nbbn1p/2p5/2P2P2/P2P1N2/1P2B1PP/RNBQK2R w KQkq - 0 10",
+   "said": "total domination over the center in any case bishop e2 gives up the pawn then we castle then we go knight g4 and already it's very very bad the one line that i wanted to show in the event of bishop takes f4 queen takes f4 white can try the move queen d2 white can try to force the queen trade and black has a very very pretty move here that i think essentially just wins the game who can spot this move yeah so you asked the sam shanklin question what happens if i do it anyway and that yields the move knight d4 because if queen takes queen then we take on e2 classic idea for king the queen and the king and then we win the queen with an extra piece and i think white has no moves here because you're threatening knight takes f3 and queen takes h2 nice little move for sure so anyways in the game of course everything was very straightforward and i can show you a gazillion examples of this idea being applied in over-the-board play another example of where pattern recognition pays off a hundred folds because i saw this idea really without even thinking about it what was my major"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 17,
+   "fen": "r3k2r/ppq2ppp/2nbbn2/2p5/2P2P2/P2P1N2/1P2B1PP/RNBQK2R b KQkq - 2 9",
+   "line": [
+    "e4",
+    "c5",
+    "f4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "c4",
+    "e6",
+    "dxe6",
+    "Bxe6",
+    "Nf3",
+    "Nc6",
+    "a3",
+    "Bd6",
+    "d3",
+    "Qc7",
+    "Be2"
+   ],
+   "options": [
+    {
+     "san": "Bxf4",
+     "t": 165,
+     "continuation": "Bxf4",
+     "said": "because white's position is already so flimsy that if we force more weaknesses in white's position he might simply not survive so let's play queen c7 okay bishop b2 our opponent is totally ignoring the threats in this case i'm gonna grab that pawn absolutely let's take it and you might say well wouldn't it have been a better idea to develop our pieces instead well yes but i also like taking free pawns so we also open up this diagonal which could create big problems for white along that diagonal so what should we do now well we should definitely castle we should definitely castle which way should we castle you could make a case for either way if you want to play a little bit safer you could castle kingside but if you want to play more adventurously and that's the mood that i'm in right now you definitely want to castle king said this is where the party is at why am i inclined to castle king's side well first of all we're x-raying the queen which is a good thing we're the rook on d8 is already in the game right that creates potentially the threat of bishop takes c4 which i know a lot of you see but mainly it's the fact that we're also reinforcing our control over the d4 square which is you know as long as we have control over that square we're good we're chilling and now i think we can move in for the kill now i think we can move in for the kill"
+    },
+    {
+     "san": "h6",
+     "t": 434,
+     "continuation": "h6 Bf1 h5 g3",
+     "said": "a better idea probably would have been to go g3 the the problem with the move g3 is that creates even more weaknesses on the king side one way that we could try to exploit that is to play like h5 very quickly just go h5 and h4 and open up the king side completely and just try to go for the kill so i i think this would have still been quite bad for white but at least it's a little bit more double-edged why can play bishop g2 i was honestly planning to do something like long castle and if white short castles i would even consider h4 here probably not totally sound you can understand how good this can be when played properly black's just got total domination over the center in any case bishop e2 gives up the pawn then we castle then we go knight g4 and already it's very very bad the one line that i wanted to show in the event of bishop takes f4 queen takes f4 white can try the move queen d2 white can try to force the queen trade and black has a very very pretty move here that i think essentially just wins the game who can spot this move yeah so you asked the sam shanklin question what happens if i do it anyway and that yields the move knight d4 because if queen takes queen then we"
+    }
+   ]
+  }
+ ]
+}

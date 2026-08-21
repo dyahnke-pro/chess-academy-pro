@@ -1,0 +1,1387 @@
+{
+ "videoId": "EfHnGTCO1s4",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2050",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 648,
+   "line": [
+    "c4",
+    "d5",
+    "d4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "for a game but if you think about the king's gambit which is the same thing on the other side of the board basically you do the same thing you give up a pawn to control the center controlling the center one of the most basic things that you want to do in chess is it a bad thing to"
+  },
+  {
+   "ply": 4,
+   "t": 649.5,
+   "line": [
+    "dxc4"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "capture this pawn no this is called the queen's gambit accepted that's a legitimate variation"
+  },
+  {
+   "ply": 3,
+   "t": 655,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "but my opponent declined the gambit and"
+  },
+  {
+   "ply": 4,
+   "t": 656,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "played c6 this is called the sloth this is called the slot we are almost at 100k subs i cannot believe all the support that's been coming my way"
+  },
+  {
+   "ply": 3,
+   "t": 669.5,
+   "line": [],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "recently it's been absolutely incredible black has several ways of whoa sorry black has several ways of declining the gambit you can play e6"
+  },
+  {
+   "ply": 4,
+   "t": 671,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "that's called the queen's gamut decline and c6 is called the sloth okay i also do coaching but not taking students right now i'm got a very very full schedule but yeah"
+  },
+  {
+   "ply": 8,
+   "t": 686.5,
+   "line": [
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "c6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2p1pn2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+   "said": "that's sort of the main thing i do now basically we're both developing our pieces right now black plays the move e6 reinforcing his control over the pawn on d5 and and opening up the bishop on f8 now that bishop can get developed those of you you know who are not too experienced uh you you've probably heard this but when you first start a chess game what both sides want to try to do is develop their pieces right you need to develop your pieces and put them on good squares because the ultimate objective of a chess game is to deliver checkmate to the king to put your opponent's king in a position where it is in check it is attacked and it has no escape squares but in order to do that if you compare chess to a war you need to deploy your army you're not going to win a war if your soldiers sit around starbucks drinking pumpkin spice lattes and you know and shooting the breeze you need to deploy them to good squares and that's basically what you do in the first i love pumpkin spice lattes uh that's my favorite drink in starbucks"
+  },
+  {
+   "ply": 9,
+   "t": 751,
+   "line": [
+    "g3"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PP1P/R1BQKB1R b KQkq - 0 5",
+   "said": "but hey you know can't always do that there's a time and a place for that and during a chess game is not the place for that but basically we're both trying to get our pieces to active squares g3 is called fianchettoing the bishop we"
+  },
+  {
+   "ply": 11,
+   "t": 755,
+   "line": [
+    "Nbd7",
+    "Bg2"
+   ],
+   "fen": "r1bqkb1r/pp1n1ppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PPBP/R1BQK2R b KQkq - 2 6",
+   "said": "bring it to the big diagonal so we're both"
+  },
+  {
+   "ply": 13,
+   "t": 757,
+   "line": [
+    "Be7",
+    "O-O"
+   ],
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 b kq - 4 7",
+   "said": "developing castle castle"
+  },
+  {
+   "ply": 14,
+   "t": 758,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 5 8",
+   "said": "and now we have to decide where to put this bishop on c1 it's still on its"
+  },
+  {
+   "ply": 15,
+   "t": 768,
+   "line": [
+    "b3"
+   ],
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/1PN2NP1/P3PPBP/R1BQ1RK1 b - - 0 8",
+   "said": "initial square we need to develop this bishop and as i talked about before after b3 which defends the pawn we have two main"
+  },
+  {
+   "ply": 16,
+   "t": 771,
+   "line": [
+    "Re8"
+   ],
+   "fen": "r1bqr1k1/pp1nbppp/2p1pn2/3p4/2PP4/1PN2NP1/P3PPBP/R1BQ1RK1 w - - 1 9",
+   "said": "choices about where to put the bishop we"
+  },
+  {
+   "ply": 17,
+   "t": 773.5,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r1bqr1k1/pp1nbppp/2p1pn2/3p4/2PP1B2/1PN2NP1/P3PPBP/R2Q1RK1 b - - 2 9",
+   "said": "can put it on f4 which is a nice nice square for the bishop but we put it on b2 remember potential in kinetic energy questions now we're going over the game so questions now but wait until i reach the point at which you want to ask the question so um you know try to ask questions on the current moment that we're at"
+  },
+  {
+   "ply": 13,
+   "t": 803,
+   "line": [],
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 b kq - 4 7",
+   "said": "why'd you defend c4 so late that's a great question uh let me mute the sub sound for now um as the alerts catch up to us now basically black could take the pawn at any moment"
+  },
+  {
+   "ply": 14,
+   "t": 804.5,
+   "line": [
+    "dxc4"
+   ],
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/8/2pP4/2N2NP1/PP2PPBP/R1BQ1RK1 w kq - 0 8",
+   "said": "okay black can capture the pawn am i blundering this pawn no"
+  },
+  {
+   "ply": 15,
+   "t": 815.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/8/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 b kq - 0 8",
+   "said": "this is basically an extension of the queen's gambit and what white usually does here is either e4 to control the center that's actually the main move here e4"
+  },
+  {
+   "ply": 16,
+   "t": 820.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/8/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 w - - 1 9",
+   "said": "controls the center and in terms of trying to win the pawn back what black can do in such a position is go b5 the idea being to support the pawn with its neighbor how can white go about stopping b5 from happening yeah i'll talk about that in a moment why can't play the move a4 that's a very typical move i've had this position"
+  },
+  {
+   "ply": 15,
+   "t": 852.5,
+   "line": [],
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/8/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 b kq - 0 8",
+   "said": "before in my tournament games then you can go after the c4 pawn with something like queen e2 capture c4 or even knight d2 takes c4 so either of those moves is fine this is the theoretical continuation if black plays b5 here i want to"
+  },
+  {
+   "ply": 16,
+   "t": 853.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1bqk2r/p2nbppp/2p1pn2/1p6/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 w kq - 0 9",
+   "said": "introduce to you guys a very important principle and the principle is that when your opponent spends a long time playing on the flank playing on the side of the board you often want to strike in the"
+  },
+  {
+   "ply": 17,
+   "t": 879.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqk2r/p2nbppp/2p1pn2/1p2P3/2pP4/2N2NP1/PP3PBP/R1BQ1RK1 b kq - 0 9",
+   "said": "center because when he's expending his attention doing random stuff on the side of the board usually he weakens his center and that's exactly where you want to strike so e5 would not be the best move here because it would it would help him"
+  },
+  {
+   "ply": 18,
+   "t": 882,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1bqk2r/p2nbppp/2p1p3/1p1nP3/2pP4/2N2NP1/PP3PBP/R1BQ1RK1 w kq - 1 10",
+   "said": "get this nice little outpost for his knight but the move would be d5"
+  },
+  {
+   "ply": 16,
+   "t": 885,
+   "line": [],
+   "fen": "r1bqk2r/p2nbppp/2p1pn2/1p6/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 w kq - 0 9",
+   "said": ""
+  },
+  {
+   "ply": 17,
+   "t": 886,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqk2r/p2nbppp/2p1pn2/1p1P4/2p1P3/2N2NP1/PP3PBP/R1BQ1RK1 b kq - 0 9",
+   "said": "and now he cannot avoid the center getting open look at how we're striking"
+  },
+  {
+   "ply": 19,
+   "t": 892.5,
+   "line": [
+    "cxd5",
+    "exd5"
+   ],
+   "fen": "r1bqk2r/p2nbppp/4pn2/1p1P4/2p5/2N2NP1/PP3PBP/R1BQ1RK1 b kq - 0 10",
+   "said": "through everything he has to open up the center this bishop gets super strong black's position kind of starts collapsing here and uh this"
+  },
+  {
+   "ply": 16,
+   "t": 903,
+   "line": [],
+   "fen": "r1bqk2r/p2nbppp/2p1pn2/1p6/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 w kq - 0 9",
+   "said": "is just not good for black also this pawn hangs so that's a principle to be aware of uh it's not a law but it's a good guideline for when your opponent is playing on the side of the board um well moving the bishop to g2 brings it"
+  },
+  {
+   "ply": 15,
+   "t": 920.5,
+   "line": [],
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/8/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 b kq - 0 8",
+   "said": "on to the biggest on to the longest diagonal in the chessboard that's kind of completing the fianchetto there's more to get into here but um since the game was long i want to keep things keep things moving thank you fenbine gold for the 200 bits"
+  },
+  {
+   "ply": 16,
+   "t": 931.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/8/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 w - - 1 9",
+   "said": "now what if b4 after d5 great question well before after d5 let's see so here uh it's important to avoid that knee-jerk reaction right he's attacking our knight but rather than moving it we can capture on e6 and counter attack his knight and then if he takes back what we can do here is we can even consider sacrificing the knight we can simply leave that knight on c3 and make a move such as knight d4 now what the hell am i doing have you gone crazy daniel are you just giving up your night no where is this night heading where is this night heading what am i doing here well i have gone crazy that happened when i was born but yeah we want knight take c6 here and uh we attack the queen we attacked the pawn and we get a massive attack in response to s compensation for the piece right that's what compensation is when you sacrifice a piece and you have some sort of advantage in return for the piece such as an attack and i have a very aggressive style so i"
+  },
+  {
+   "ply": 14,
+   "t": 996.5,
+   "line": [],
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/8/2pP4/2N2NP1/PP2PPBP/R1BQ1RK1 w kq - 0 8",
+   "said": "like doing that i think that's a very good idea in blitz right so knight takes e6 would be um very very strong there's a lot more to get into here sorry i keep doing that i pressed the wrong button there's a lot more to get into that um but uh"
+  },
+  {
+   "ply": 13,
+   "t": 999.5,
+   "line": [],
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 b kq - 4 7",
+   "said": "that basically is the lay of the land if"
+  },
+  {
+   "ply": 14,
+   "t": 1001.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 5 8",
+   "said": "black takes on c4 so let's proceed"
+  },
+  {
+   "ply": 15,
+   "t": 1003,
+   "line": [
+    "b3"
+   ],
+   "fen": "r1bq1rk1/pp1nbppp/2p1pn2/3p4/2PP4/1PN2NP1/P3PPBP/R1BQ1RK1 b - - 0 8",
+   "said": "with the actual game bishop b2 fiancato"
+  },
+  {
+   "ply": 17,
+   "t": 1005.5,
+   "line": [
+    "Re8",
+    "Bb2"
+   ],
+   "fen": "r1bqr1k1/pp1nbppp/2p1pn2/3p4/2PP4/1PN2NP1/PB2PPBP/R2Q1RK1 b - - 2 9",
+   "said": "and the other bishop and just to reiterate why am i putting the bishop on a square where it literally just stares at the pawn because wow 5480 i can't believe that self-calibers in general because the point is what we're gonna do in the future is we're gonna prepare the move e4 and the idea of preparing e4 is to remove his pawn from d5 and in turn"
+  },
+  {
+   "ply": 18,
+   "t": 1039.5,
+   "line": [
+    "b6"
+   ],
+   "fen": "r1bqr1k1/p2nbppp/1pp1pn2/3p4/2PP4/1PN2NP1/PB2PPBP/R2Q1RK1 w - - 0 10",
+   "said": "eventually we're going to push our own pawn to d5 and open up this bishop where it's going to be incredibly strong that's actually exactly what happened that's literally exactly what happened so watch knight d2 in order to prepare"
+  },
+  {
+   "ply": 19,
+   "t": 1040.5,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "r1bqr1k1/p2nbppp/1pp1pn2/3p4/2PP4/1PN3P1/PB1NPPBP/R2Q1RK1 b - - 1 10",
+   "said": "e4"
+  },
+  {
+   "ply": 22,
+   "t": 1044.5,
+   "line": [
+    "Bb7",
+    "e4",
+    "dxe4"
+   ],
+   "fen": "r2qr1k1/pb1nbppp/1pp1pn2/8/2PPp3/1PN3P1/PB1N1PBP/R2Q1RK1 w - - 0 12",
+   "said": "now we go e4 we force this pawn out of d5"
+  },
+  {
+   "ply": 25,
+   "t": 1047,
+   "line": [
+    "Ndxe4",
+    "g6",
+    "Qd2"
+   ],
+   "fen": "r2qr1k1/pb1nbp1p/1pp1pnp1/8/2PPN3/1PN3P1/PB1Q1PBP/R4RK1 b - - 1 13",
+   "said": "and now we prepare the breakthrough d5 and we do that by improving all of our"
+  },
+  {
+   "ply": 27,
+   "t": 1056,
+   "line": [
+    "Rc8",
+    "Rad1"
+   ],
+   "fen": "2rqr1k1/pb1nbp1p/1pp1pnp1/8/2PPN3/1PN3P1/PB1Q1PBP/3R1RK1 b - - 3 14",
+   "said": "pieces we patiently do that we don't just go d5 immediately we prepare slowly and attack fast"
+  },
+  {
+   "ply": 29,
+   "t": 1057,
+   "line": [
+    "Qc7",
+    "Rfe1"
+   ],
+   "fen": "2r1r1k1/pbqnbp1p/1pp1pnp1/8/2PPN3/1PN3P1/PB1Q1PBP/3RR1K1 b - - 5 15",
+   "said": "our rooks go to the best squares and"
+  },
+  {
+   "ply": 30,
+   "t": 1059,
+   "line": [
+    "Red8"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1pp1pnp1/8/2PPN3/1PN3P1/PB1Q1PBP/3RR1K1 w - - 6 16",
+   "said": ""
+  },
+  {
+   "ply": 31,
+   "t": 1060,
+   "line": [
+    "d5"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1pp1pnp1/3P4/2P1N3/1PN3P1/PB1Q1PBP/3RR1K1 b - - 0 16",
+   "said": "here comes the boom goes the dynamite d5 right we're ready to play d5 because all of my pieces have occupied ideal squares and i have to give tremendous credit to my opponent throughout the speedrun my"
+  },
+  {
+   "ply": 32,
+   "t": 1081,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1p2pnp1/3p4/2P1N3/1PN3P1/PB1Q1PBP/3RR1K1 w - - 0 17",
+   "said": "opponents have been playing very well which is awesome and in this position my opponent started to defend very very well i was quite impressed so what happens this is upon sacrifice this is upon"
+  },
+  {
+   "ply": 34,
+   "t": 1083.5,
+   "line": [
+    "cxd5",
+    "exd5"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1p3np1/3p4/4N3/1PN3P1/PB1Q1PBP/3RR1K1 w - - 0 18",
+   "said": "sacrifice because i can't take the pawn with my"
+  },
+  {
+   "ply": 35,
+   "t": 1085.5,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1p3np1/3N4/4N3/1P4P1/PB1Q1PBP/3RR1K1 b - - 0 18",
+   "said": "knight he'll just take it with his"
+  },
+  {
+   "ply": 36,
+   "t": 1086.5,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/3n4/4N3/1P4P1/PB1Q1PBP/3RR1K1 w - - 0 19",
+   "said": "knight thank you fenbine go for 300 bits yeah rook ac one might have been more accurate i kind of played rookie d1 on autopilot but i"
+  },
+  {
+   "ply": 38,
+   "t": 1101,
+   "line": [
+    "Qxd5",
+    "Bxd5"
+   ],
+   "fen": "2rr2k1/p1qnbp1p/1p4p1/3b4/4N3/1P4P1/PB3PBP/3RR1K1 w - - 0 20",
+   "said": "didn't know that he would play queen c7 i think he played it because he saw that i played rook a d1 and we can't take on d5 because a bishop takes e5 small piece of advice"
+  },
+  {
+   "ply": 32,
+   "t": 1104.5,
+   "line": [],
+   "fen": "2rr2k1/pbqnbp1p/1p2pnp1/3p4/2P1N3/1PN3P1/PB1Q1PBP/3RR1K1 w - - 0 17",
+   "said": "when you're trying to figure out whether you can play a move"
+  },
+  {
+   "ply": 33,
+   "t": 1107.5,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1p2pnp1/3P4/4N3/1PN3P1/PB1Q1PBP/3RR1K1 b - - 0 17",
+   "said": "don't only count the defenders and"
+  },
+  {
+   "ply": 34,
+   "t": 1109,
+   "line": [
+    "exd5"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1p3np1/3p4/4N3/1PN3P1/PB1Q1PBP/3RR1K1 w - - 0 18",
+   "said": "attackers it also depends on what"
+  },
+  {
+   "ply": 35,
+   "t": 1114.5,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1p3np1/3N4/4N3/1P4P1/PB1Q1PBP/3RR1K1 b - - 0 18",
+   "said": "specifically is attacking a pawn here there are actually more attackers"
+  },
+  {
+   "ply": 36,
+   "t": 1118,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/3n4/4N3/1P4P1/PB1Q1PBP/3RR1K1 w - - 0 19",
+   "said": "on the pawn than there are defenders but we can't capture with the queen because we give up the queen"
+  },
+  {
+   "ply": 38,
+   "t": 1125,
+   "line": [
+    "Qxd5",
+    "Bxd5"
+   ],
+   "fen": "2rr2k1/p1qnbp1p/1p4p1/3b4/4N3/1P4P1/PB3PBP/3RR1K1 w - - 0 20",
+   "said": "right so you can take one d5 and say oh great well"
+  },
+  {
+   "ply": 39,
+   "t": 1126,
+   "line": [
+    "Rxd5"
+   ],
+   "fen": "2rr2k1/p1qnbp1p/1p4p1/3R4/4N3/1P4P1/PB3PBP/4R1K1 b - - 0 20",
+   "said": "i accomplished d5 well congratulations and give you a medal for that but"
+  },
+  {
+   "ply": 33,
+   "t": 1133.5,
+   "line": [],
+   "fen": "2rr2k1/pbqnbp1p/1p2pnp1/3P4/4N3/1PN3P1/PB1Q1PBP/3RR1K1 b - - 0 17",
+   "said": "hey you gave up a queen so be careful about that okay but that's okay"
+  },
+  {
+   "ply": 35,
+   "t": 1135,
+   "line": [
+    "exd5",
+    "Nb5"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1p3np1/1N1p4/4N3/1P4P1/PB1Q1PBP/3RR1K1 b - - 1 18",
+   "said": "now we play knight b5 what is the idea of this move the idea is to attack his queen and open up the diagonal for our bishop now our mission has been accomplished"
+  },
+  {
+   "ply": 36,
+   "t": 1149,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/1N1p4/4n3/1P4P1/PB1Q1PBP/3RR1K1 w - - 0 19",
+   "said": "and our bishop on b2 is an absolute monster so could somebody help me understand what would happen if he took on e4 with his knight counter-attacking our queen as you guys think about that i am going to run and pour t i will be back in 10 seconds my voice is starting to go i"
+  },
+  {
+   "ply": 37,
+   "t": 1167.5,
+   "line": [
+    "Rxe4"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/1N1p4/4R3/1P4P1/PB1Q1PBP/3R2K1 b - - 0 19",
+   "said": "need that i need that t russian style give me two seconds now the move here the simplest move is rook takes c4 thank you for waiting i can't believe charlie rated me that man is an absolute legend i'm super pumped right now the rook takes c4 is the move what are we doing well remember we're still attacking his queen and now we're attacking his bishop queen h6 looks very good because we're threatening checkmate what's the problem with this move the"
+  },
+  {
+   "ply": 36,
+   "t": 1200,
+   "line": [],
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/1N1p4/4n3/1P4P1/PB1Q1PBP/3RR1K1 w - - 0 19",
+   "said": "problem is that he plays bishop f8 and he counter-attacks our queen and and defends against the checkmate this is complicated but i hope that everybody can understand what's happening here basically both queens are hanging we have both queens you know i got got gun point here knight"
+  },
+  {
+   "ply": 38,
+   "t": 1208,
+   "line": [
+    "Qd4",
+    "Bf6"
+   ],
+   "fen": "2rr2k1/pbqn1p1p/1p3bp1/1N1p4/3Qn3/1P4P1/PB3PBP/3RR1K1 w - - 2 20",
+   "said": "takes c7 and knight takes d2 queen d4 bishop f6 is the same problem he again attacks our queen in defense checkmate thank you alan miller"
+  },
+  {
+   "ply": 40,
+   "t": 1216.5,
+   "line": [
+    "Qd2",
+    "Be7"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/1N1p4/4n3/1P4P1/PB1Q1PBP/3RR1K1 w - - 4 21",
+   "said": "for the gift to mark roar and uh the idea of rook takes c4 is that we eliminate his knight and we attack his"
+  },
+  {
+   "ply": 42,
+   "t": 1220.5,
+   "line": [
+    "Rxe4",
+    "Qc5"
+   ],
+   "fen": "2rr2k1/pb1nbp1p/1p4p1/1Nqp4/4R3/1P4P1/PB1Q1PBP/3R2K1 w - - 1 22",
+   "said": "bishop he has to move his queen while defending"
+  },
+  {
+   "ply": 46,
+   "t": 1222,
+   "line": [
+    "Nc7",
+    "Qc6",
+    "Nb5",
+    "Qc7"
+   ],
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/1N1p4/4R3/1P4P1/PB1Q1PBP/3R2K1 w - - 5 24",
+   "said": "his bishop"
+  },
+  {
+   "ply": 42,
+   "t": 1225,
+   "line": [],
+   "fen": "2rr2k1/pb1nbp1p/1p4p1/1Nqp4/4R3/1P4P1/PB1Q1PBP/3R2K1 w - - 1 22",
+   "said": "and he can do that by playing queen c5 and the position remains very complicated"
+  },
+  {
+   "ply": 43,
+   "t": 1232,
+   "line": [
+    "b4"
+   ],
+   "fen": "2rr2k1/pb1nbp1p/1p4p1/1Nqp4/1P2R3/6P1/PB1Q1PBP/3R2K1 b - - 0 22",
+   "said": "but what we can actually do here is go b4 we're attacking his queen and trying to"
+  },
+  {
+   "ply": 44,
+   "t": 1239,
+   "line": [
+    "Qxb5"
+   ],
+   "fen": "2rr2k1/pb1nbp1p/1p4p1/1q1p4/1P2R3/6P1/PB1Q1PBP/3R2K1 w - - 0 23",
+   "said": "disattach his queen from the bishop and once he takes my knight and i take"
+  },
+  {
+   "ply": 45,
+   "t": 1241,
+   "line": [
+    "Rxe7"
+   ],
+   "fen": "2rr2k1/pb1nRp1p/1p4p1/1q1p4/1P6/6P1/PB1Q1PBP/3R2K1 b - - 0 23",
+   "said": "his bishop this is a very very good position for white because we are now finally ready to put our queen on d4 and threaten"
+  },
+  {
+   "ply": 42,
+   "t": 1252,
+   "line": [],
+   "fen": "2rr2k1/pb1nbp1p/1p4p1/1Nqp4/4R3/1P4P1/PB1Q1PBP/3R2K1 w - - 1 22",
+   "said": "checkmate wolf razors thank you for the prime so this is super complicated but basically white is in charge here uh"
+  },
+  {
+   "ply": 34,
+   "t": 1254.5,
+   "line": [],
+   "fen": "2rr2k1/pbqnbp1p/1p3np1/3p4/4N3/1PN3P1/PB1Q1PBP/3RR1K1 w - - 0 18",
+   "said": "i don't want to"
+  },
+  {
+   "ply": 36,
+   "t": 1256,
+   "line": [
+    "Nb5",
+    "Qc2"
+   ],
+   "fen": "2rr2k1/pb1nbp1p/1p3np1/1N1p4/4N3/1P4P1/PBqQ1PBP/3RR1K1 w - - 2 19",
+   "said": "bug ourselves down on the default with the with the details but uh clearly black is on on his last"
+  },
+  {
+   "ply": 37,
+   "t": 1264.5,
+   "line": [
+    "Ned6"
+   ],
+   "fen": "2rr2k1/pb1nbp1p/1p1N1np1/1N1p4/8/1P4P1/PBqQ1PBP/3RR1K1 b - - 3 19",
+   "said": "legs so he goes queen c2 we go 90 to d6 forking his rook and his bishop"
+  },
+  {
+   "ply": 39,
+   "t": 1268.5,
+   "line": [
+    "Qxd2",
+    "Rxd2"
+   ],
+   "fen": "2rr2k1/pb1nbp1p/1p1N1np1/1N1p4/8/1P4P1/PB1R1PBP/4R1K1 b - - 0 20",
+   "said": "he trades queens which is good for him"
+  },
+  {
+   "ply": 41,
+   "t": 1270,
+   "line": [
+    "Bxd6",
+    "Nxd6"
+   ],
+   "fen": "2rr2k1/pb1n1p1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/4R1K1 b - - 0 21",
+   "said": "but our position remains dominant"
+  },
+  {
+   "ply": 42,
+   "t": 1272.5,
+   "line": [
+    "Rc7"
+   ],
+   "fen": "3r2k1/pbrn1p1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/4R1K1 w - - 1 22",
+   "said": "and after rook c7 we go rook to e7"
+  },
+  {
+   "ply": 43,
+   "t": 1275.5,
+   "line": [
+    "Re7"
+   ],
+   "fen": "3r2k1/pbrnRp1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/6K1 b - - 2 22",
+   "said": "uh involving our rook putting it on the seventh ring thank you melon miller attacking the pawn and potentially threatening to capture his knight okay and again because we're at a relatively high rating i know that a lot of people have questions about specific moves and i know that i'm not answering all of them guys but please do understand that since i'm trying to keep this uh instructive as much as possible i have to find a compromise between talking about the details but not boring people to death and discussing them for an hour because i could talk about this game for an hour but i want to keep things going smoothly"
+  },
+  {
+   "ply": 44,
+   "t": 1319,
+   "line": [
+    "Ba8"
+   ],
+   "fen": "b2r2k1/p1rnRp1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/6K1 w - - 3 23",
+   "said": "so i'll try to give the gist of the complications without talking about it too much hopefully i'm finding the balance reasonably well and after he moves his bishop away i actually committed a mistake um"
+  },
+  {
+   "ply": 45,
+   "t": 1326,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "b2r2k1/p1rnRp1p/1p1N1Bp1/3p4/8/1P4P1/P2R1PBP/6K1 b - - 0 23",
+   "said": "i thought from a distance that i would be able to play bishop takes f6 i thought that this would be winning"
+  },
+  {
+   "ply": 46,
+   "t": 1333,
+   "line": [
+    "Nxf6"
+   ],
+   "fen": "b2r2k1/p1r1Rp1p/1p1N1np1/3p4/8/1P4P1/P2R1PBP/6K1 w - - 0 24",
+   "said": "why notice that this is a pin if he takes our bishop he loses his rook"
+  },
+  {
+   "ply": 47,
+   "t": 1334.5,
+   "line": [
+    "Rxc7"
+   ],
+   "fen": "b2r2k1/p1R2p1p/1p1N1np1/3p4/8/1P4P1/P2R1PBP/6K1 b - - 0 24",
+   "said": ""
+  },
+  {
+   "ply": 45,
+   "t": 1337,
+   "line": [],
+   "fen": "b2r2k1/p1rnRp1p/1p1N1Bp1/3p4/8/1P4P1/P2R1PBP/6K1 b - - 0 23",
+   "said": "but what did i miss here and i didn't play this move i simply thought that i would play it but what does black have"
+  },
+  {
+   "ply": 46,
+   "t": 1346.5,
+   "line": [
+    "Rc1+"
+   ],
+   "fen": "b2r2k1/p2nRp1p/1p1N1Bp1/3p4/8/1P4P1/P2R1PBP/2r3K1 w - - 1 24",
+   "said": "i appreciate it guys thank you rook c1 check so he gives us the check we have to deal with the"
+  },
+  {
+   "ply": 47,
+   "t": 1350,
+   "line": [
+    "Bf1"
+   ],
+   "fen": "b2r2k1/p2nRp1p/1p1N1Bp1/3p4/8/1P4P1/P2R1P1P/2r2BK1 b - - 2 24",
+   "said": "check thank you rando ben dodendo and now he's able to take"
+  },
+  {
+   "ply": 48,
+   "t": 1353,
+   "line": [
+    "Nxf6"
+   ],
+   "fen": "b2r2k1/p3Rp1p/1p1N1np1/3p4/8/1P4P1/P2R1P1P/2r2BK1 w - - 0 25",
+   "said": "our bishop because uh our rook is his rook is no longer hanging"
+  },
+  {
+   "ply": 44,
+   "t": 1365,
+   "line": [],
+   "fen": "b2r2k1/p1rnRp1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/6K1 w - - 3 23",
+   "said": "moreover he's attacking our knight this is not impressive for white at all so instead of this i doubled back and i said okay instead i'm just going to take"
+  },
+  {
+   "ply": 45,
+   "t": 1367,
+   "line": [
+    "Rxf7"
+   ],
+   "fen": "b2r2k1/p1rn1R1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/6K1 b - - 0 23",
+   "said": "his pawn on f7 but now he found a super good move i thought that his position collapses"
+  },
+  {
+   "ply": 46,
+   "t": 1379,
+   "line": [
+    "Rc6"
+   ],
+   "fen": "b2r2k1/p2n1R1p/1prN1np1/3p4/8/1P4P1/PB1R1PBP/6K1 w - - 1 24",
+   "said": "we're attacking his knight legitimately now because we're now attacking him with two pieces but he plays this incredibly annoying move rook c6 and here's why i defined type one and"
+  },
+  {
+   "ply": 45,
+   "t": 1384,
+   "line": [],
+   "fen": "b2r2k1/p1rn1R1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/6K1 b - - 0 23",
+   "said": "type two undefended pieces just as a reminder one very important thing to notice in any chess position type one and type two undefended pieces a type one undefended piece is a piece that is literally not defended by any other pieces so in black's position there is only one type one undefeated piece which piece is that which piece is the type one undefended piece the only one it's the rook on c7 why is that important well because it's pinned that tells us a lot about the position but something that a lot of i think chess authors don't do is define type 2 undefended pieces which are a piece which is a piece that is defended by only one other piece a piece that is defended by only one other piece and pawns don't count if a pawn defends a piece it is defendant so the knight on d6 right is type 1"
+  },
+  {
+   "ply": 46,
+   "t": 1442.5,
+   "line": [
+    "Rc6"
+   ],
+   "fen": "b2r2k1/p2n1R1p/1prN1np1/3p4/8/1P4P1/PB1R1PBP/6K1 w - - 1 24",
+   "said": "undefended and the rook is type 2 undefended so this mechanism right here is incredibly flimsy that's like you know jimmy garoppolo throwing a path like this is not going to end well and what he does here is he attacks the knight the knight is undefended and the knight itself defends the rook you guys can see how flimsy that is right"
+  },
+  {
+   "ply": 48,
+   "t": 1453.5,
+   "line": [
+    "Nb5",
+    "Kxf7"
+   ],
+   "fen": "b2r4/p2n1k1p/1pr2np1/1N1p4/8/1P4P1/PB1R1PBP/6K1 w - - 0 25",
+   "said": "that's not going to end well so if i move the knight i lose the rook if i move the rook i lose the night and"
+  },
+  {
+   "ply": 46,
+   "t": 1454.5,
+   "line": [],
+   "fen": "b2r2k1/p2n1R1p/1prN1np1/3p4/8/1P4P1/PB1R1PBP/6K1 w - - 1 24",
+   "said": "so what i basically have to do is bail"
+  },
+  {
+   "ply": 47,
+   "t": 1459.5,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "b2r2k1/p2n1R1p/1prN1Bp1/3p4/8/1P4P1/P2R1PBP/6K1 b - - 0 24",
+   "said": "out i have to take his knight with my bishop he takes back"
+  },
+  {
+   "ply": 48,
+   "t": 1460.5,
+   "line": [
+    "Nxf6"
+   ],
+   "fen": "b2r2k1/p4R1p/1prN1np1/3p4/8/1P4P1/P2R1PBP/6K1 w - - 0 25",
+   "said": "well i'm a big 49ers fan big 49ers fan"
+  },
+  {
+   "ply": 50,
+   "t": 1462,
+   "line": [
+    "Rxf6",
+    "Rcxd6"
+   ],
+   "fen": "b2r2k1/p6p/1p1r1Rp1/3p4/8/1P4P1/P2R1PBP/6K1 w - - 0 26",
+   "said": "and i'm still upset that they lost the super bowl last year so please forgive me uh he is injured but i still have to give him crap every time i uh i have a chance to so i'm from the bay"
+  },
+  {
+   "ply": 51,
+   "t": 1483.5,
+   "line": [
+    "Rf4"
+   ],
+   "fen": "b2r2k1/p6p/1p1r2p1/3p4/5R2/1P4P1/P2R1PBP/6K1 b - - 1 26",
+   "said": "area originally uh and uh you know i'm a pretty demanding fan now what's going on in this position and big warriors fan as well no i love jimmy g of course of course no no no i think he's great i think he's a super good guy i believe in him he's gonna come back but i'm still sour please understand that you know now white is still better here who can explain to me who can explain to me back to the game guys who can explain to me why white is still better in this position even though it seems like the worst is behind black definitely solving melanoma but i'll get into that after the game thank you ben mind b for the sub number one they have a weakness on d5 what's number two the number two thing is that he has an isolated pawn on d5 and what is the thing i always tell you guys to look for when your opponent has an isolated pawn what is the key question that you have to ask to determine who's in charge when you have an"
+  },
+  {
+   "ply": 52,
+   "t": 1545,
+   "line": [
+    "d4"
+   ],
+   "fen": "b2r2k1/p6p/1p1r2p1/8/3p1R2/1P4P1/P2R1PBP/6K1 w - - 0 27",
+   "said": "isolated pawn that is upon which there's no neighbors do we control the square in front of the pawn who controls the square in front of the pawn the answer here is white why does white control the square why can't black push respond to d4 well the"
+  },
+  {
+   "ply": 53,
+   "t": 1547.5,
+   "line": [
+    "Bxa8"
+   ],
+   "fen": "B2r2k1/p6p/1p1r2p1/8/3p1R2/1P4P1/P2R1P1P/6K1 b - - 0 27",
+   "said": "reason why is that white takes the bishop he has to"
+  },
+  {
+   "ply": 54,
+   "t": 1550,
+   "line": [
+    "Rxa8"
+   ],
+   "fen": "r5k1/p6p/1p1r2p1/8/3p1R2/1P4P1/P2R1P1P/6K1 w - - 0 28",
+   "said": "take that and he loses the pawn"
+  },
+  {
+   "ply": 55,
+   "t": 1551,
+   "line": [
+    "Rfxd4"
+   ],
+   "fen": "r5k1/p6p/1p1r2p1/8/3R4/1P4P1/P2R1P1P/6K1 b - - 0 28",
+   "said": "he can't push it okay so we simply blockade the pawn with a rook and he's basically got he basically has to occupy all of his pieces with the task of defending this pawn which then gives me the opportunity to play on the other side of the board and he doesn't have the resources necessary to uh you know to adequately prevent me from expanding on the king's side because all of his pieces have to supervise this really really weak pawn he can't afford to lose it and in the end game the value of one pawn increases tremendously so this would be a disastrous response so what do i do here we were playing really fast at this point but what i'm trying to do is simply expand on the king's side i've got upon majority on the king's side and what do you use upon majority to do in the end game what is the ultimate goal of upon majority how do you convert what do you convert it to eventually you convert it to a past pawn right you make a passport which is a pawn that can basically go all the way to promotion without pawn obstruction pass bonds will not necessarily promote you can stop them with pieces but you can't stop them with pawns that's the definition king f2 to stop his rook from getting anywhere by the way if he'd gone king f5 that's checkmate ladies and gentlemen so you can still get checkmated in the end game eventually i trade pawns i bring my king up that's important notice what i'm doing here every time he's trying to get active with his pieces i'm getting my bishop back to f3 and attacking his pawn so i'm forcing his pieces back to where they were keep pushing and now we get that past spawn and that pass pawn is protected okay that's the best kind of pass pawn which because it can never be attacked he's got no pawns that can undermine that pawn this is called a protected pass pawn that is the ideal situation and then again now he's in trouble now he got his rook to a vulnerable spot so i get my rooks as active as possible and now i go for checkmate check and checkmate okay guess what is responsible for this checkmate that's the protected passer because he cannot take on g6 it's protected so that is basically what won me the game now there's a lot more to talk about here but this game was long and it was detailed so i don't want to bog ourselves down too much i'll take a couple of questions and then we'll move on end game does not just mean no queens uh there is something called a queenless middle game so if you think about it uh this for example is not an end game because all of the other pieces are on the board there's no formal definition of an end game other than the last stage of the game um but you use your common sense it's like if you trade queens and you trade i would say two pairs of rooks that's already an end game that's"
+  },
+  {
+   "ply": 22,
+   "t": 1720,
+   "line": [],
+   "fen": "r2qr1k1/pb1nbppp/1pp1pn2/8/2PPp3/1PN3P1/PB1N1PBP/R2Q1RK1 w - - 0 12",
+   "said": "somewhere in that general area uh he probably could have drawn the game if he defended better um but it was very difficult to do that in time pressure if he goes rook takes g4 in the end of the game was that a draw so that's what he should have done he should have taken with a rook and we cannot give a check because we are in check ourselves i think that white is probably better here because if you compare the past pawns i've got the protected pastor and he's got the unprotected passer i can get my rook behind to d2 and then get my king over and try to win his pawn but black has an idea here that can probably draw him the game which is to tie his rook to the h5 pawn probably he could have made a draw but you know with in time pressure it's a very difficult thing to think of uh he shouldn't have taken with the knight right if he ignores that and takes the knight isn't it better yeah probably um i'm just looking for questions yeah so white is better but with accurate defense he could have made a draw um thank you phineas i appreciate it how could you have exploited his position if he didn't move his pieces back to protect the bomb well then i would have taken that pun right um i have a general positional question"
+  },
+  {
+   "ply": 4,
+   "t": 1790.5,
+   "line": [],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": "asks ryan ellis boyd when you move out of the night would you move the pawn out to stop the bishop pinning it i'm not exactly sure what you're asking around do you mean a situation like this where uh if you have this kind of situation would you go e3 and allow the pin so would you go h3 in this position to prevent the pin is that sort of the question um just to clarify is that the kind of question you're asking yes so you need to use your judgment now i've given you guys a couple of tips for evaluating whether a pin is dangerous one of the top pieces of advice for evaluating whether a pen is dangerous is is there a pawn that protects the pinned piece so let's compare two situations let's compare this pin to to this pin right if you compare these two positions here there is a pawn defending the knight here there is no pawn defending the knight it's a lot more dangerous when there is no pawn defending the pin piece because now your queen is stuck to the knight now the moment black applies pressure on the knight it's going to be a lot harder to defend it so that's going to be one shortcut that you can use and so when there is upon protecting the pin piece you shouldn't be too scared of"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 3,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4",
+    "d5",
+    "d4"
+   ],
+   "options": [
+    {
+     "san": "dxc4",
+     "t": 649.5,
+     "continuation": "dxc4",
+     "said": "king's gambit which is the same thing on the other side of the board basically you do the same thing you give up a pawn to control the center controlling the center one of the most basic things that you want to do in chess is it a bad thing to capture this pawn no this is called the queen's gambit accepted that's a legitimate variation but my opponent declined the gambit and played c6 this is called the sloth this is called the slot we are almost at 100k subs i cannot believe all the support that's been coming my way recently it's been absolutely incredible black has several ways of whoa sorry black has several ways of declining the gambit you can play e6 that's called the queen's gamut decline and c6 is called the sloth okay i also do coaching but not taking students right now i'm got a very very full schedule but yeah that's sort of the main thing i do now basically we're both developing our pieces right now black plays the move e6 reinforcing his control over the pawn on d5 and and opening up the bishop on f8 now that bishop can get developed those of you you know who are not too experienced uh you you've probably heard this but when you first start a chess game what both sides want to try to do is develop their pieces right you need to develop your pieces and put them on good squares because the ultimate objective of a chess game is to"
+    },
+    {
+     "san": "c6",
+     "t": 656,
+     "continuation": "c6",
+     "said": "controlling the center one of the most basic things that you want to do in chess is it a bad thing to capture this pawn no this is called the queen's gambit accepted that's a legitimate variation but my opponent declined the gambit and played c6 this is called the sloth this is called the slot we are almost at 100k subs i cannot believe all the support that's been coming my way recently it's been absolutely incredible black has several ways of whoa sorry black has several ways of declining the gambit you can play e6 that's called the queen's gamut decline and c6 is called the sloth okay i also do coaching but not taking students right now i'm got a very very full schedule but yeah that's sort of the main thing i do now basically we're both developing our pieces right now black plays the move e6 reinforcing his control over the pawn on d5 and and opening up the bishop on f8 now that bishop can get developed those of you you know who are not too experienced uh you you've probably heard this but when you first start a chess game what both sides want to try to do is develop their pieces right you need to develop your pieces and put them on good squares because the ultimate objective of a chess game is to deliver checkmate to the king to put your opponent's king in a position where it is in check it is"
+    },
+    {
+     "san": "e6",
+     "t": 671,
+     "continuation": "e6",
+     "said": "100k subs i cannot believe all the support that's been coming my way recently it's been absolutely incredible black has several ways of whoa sorry black has several ways of declining the gambit you can play e6 that's called the queen's gamut decline and c6 is called the sloth okay i also do coaching but not taking students right now i'm got a very very full schedule but yeah that's sort of the main thing i do now basically we're both developing our pieces right now black plays the move e6 reinforcing his control over the pawn on d5 and and opening up the bishop on f8 now that bishop can get developed those of you you know who are not too experienced uh you you've probably heard this but when you first start a chess game what both sides want to try to do is develop their pieces right you need to develop your pieces and put them on good squares because the ultimate objective of a chess game is to deliver checkmate to the king to put your opponent's king in a position where it is in check it is attacked and it has no escape squares but in order to do that if you compare chess to a war you need to deploy your army you're not going to win a war if your soldiers sit around starbucks drinking pumpkin spice lattes and you know and shooting the breeze you"
+    }
+   ]
+  },
+  {
+   "ply": 13,
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/3p4/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 b kq - 4 7",
+   "line": [
+    "c4",
+    "d5",
+    "d4",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "c6",
+    "g3",
+    "Nbd7",
+    "Bg2",
+    "Be7",
+    "O-O"
+   ],
+   "options": [
+    {
+     "san": "O-O",
+     "t": 758,
+     "continuation": "O-O",
+     "said": "for that but basically we're both trying to get our pieces to active squares g3 is called fianchettoing the bishop we bring it to the big diagonal so we're both developing castle castle and now we have to decide where to put this bishop on c1 it's still on its initial square we need to develop this bishop and as i talked about before after b3 which defends the pawn we have two main choices about where to put the bishop we can put it on f4 which is a nice nice square for the bishop but we put it on b2 remember potential in kinetic energy questions now we're going over the game so questions now but wait until i reach the point at which you want to ask the question so um you know try to ask questions on the current moment that we're at why'd you defend c4 so late that's a great question uh let me mute the sub sound for now um as the alerts catch up to us now basically black could take the pawn at any moment okay black can capture the pawn am i blundering this pawn no this is basically an extension of the queen's gambit and what white usually does here is either e4 to control the center that's actually the main move here e4"
+    },
+    {
+     "san": "dxc4",
+     "t": 804.5,
+     "continuation": "dxc4",
+     "said": "great question uh let me mute the sub sound for now um as the alerts catch up to us now basically black could take the pawn at any moment okay black can capture the pawn am i blundering this pawn no this is basically an extension of the queen's gambit and what white usually does here is either e4 to control the center that's actually the main move here e4 controls the center and in terms of trying to win the pawn back what black can do in such a position is go b5 the idea being to support the pawn with its neighbor how can white go about stopping b5 from happening yeah i'll talk about that in a moment why can't play the move a4 that's a very typical move i've had this position before in my tournament games then you can go after the c4 pawn with something like queen e2 capture c4 or even knight d2 takes c4 so either of those moves is fine this is the theoretical continuation if black plays b5 here i want to introduce to you guys a very important principle and the principle is that when your opponent spends a long time playing on the flank playing on the side of the"
+    }
+   ]
+  },
+  {
+   "ply": 15,
+   "fen": "r1bqk2r/pp1nbppp/2p1pn2/8/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "c4",
+    "d5",
+    "d4",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "c6",
+    "g3",
+    "Nbd7",
+    "Bg2",
+    "Be7",
+    "O-O",
+    "dxc4",
+    "e4"
+   ],
+   "options": [
+    {
+     "san": "O-O",
+     "t": 820.5,
+     "continuation": "O-O",
+     "said": "this is basically an extension of the queen's gambit and what white usually does here is either e4 to control the center that's actually the main move here e4 controls the center and in terms of trying to win the pawn back what black can do in such a position is go b5 the idea being to support the pawn with its neighbor how can white go about stopping b5 from happening yeah i'll talk about that in a moment why can't play the move a4 that's a very typical move i've had this position before in my tournament games then you can go after the c4 pawn with something like queen e2 capture c4 or even knight d2 takes c4 so either of those moves is fine this is the theoretical continuation if black plays b5 here i want to introduce to you guys a very important principle and the principle is that when your opponent spends a long time playing on the flank playing on the side of the board you often want to strike in the center because when he's expending his attention doing random stuff on the side of the board usually he weakens his center and that's exactly where you want to strike so e5 would not be the best move here because it would it would help him"
+    },
+    {
+     "san": "b5",
+     "t": 853.5,
+     "continuation": "b5",
+     "said": "then you can go after the c4 pawn with something like queen e2 capture c4 or even knight d2 takes c4 so either of those moves is fine this is the theoretical continuation if black plays b5 here i want to introduce to you guys a very important principle and the principle is that when your opponent spends a long time playing on the flank playing on the side of the board you often want to strike in the center because when he's expending his attention doing random stuff on the side of the board usually he weakens his center and that's exactly where you want to strike so e5 would not be the best move here because it would it would help him get this nice little outpost for his knight but the move would be d5 and now he cannot avoid the center getting open look at how we're striking through everything he has to open up the center this bishop gets super strong black's position kind of starts collapsing here and uh this is just not good for black also this pawn hangs so that's a principle to be aware of uh it's not a law but it's a good guideline for when your opponent is playing on the side of the board um well moving the bishop to g2 brings it"
+    }
+   ]
+  },
+  {
+   "ply": 16,
+   "fen": "r1bqk2r/p2nbppp/2p1pn2/1p6/2pPP3/2N2NP1/PP3PBP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "c4",
+    "d5",
+    "d4",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "c6",
+    "g3",
+    "Nbd7",
+    "Bg2",
+    "Be7",
+    "O-O",
+    "dxc4",
+    "e4",
+    "b5"
+   ],
+   "options": [
+    {
+     "san": "e5",
+     "t": 879.5,
+     "continuation": "e5",
+     "said": "center because when he's expending his attention doing random stuff on the side of the board usually he weakens his center and that's exactly where you want to strike so e5 would not be the best move here because it would it would help him get this nice little outpost for his knight but the move would be d5 and now he cannot avoid the center getting open look at how we're striking through everything he has to open up the center this bishop gets super strong black's position kind of starts collapsing here and uh this is just not good for black also this pawn hangs so that's a principle to be aware of uh it's not a law but it's a good guideline for when your opponent is playing on the side of the board um well moving the bishop to g2 brings it on to the biggest on to the longest diagonal in the chessboard that's kind of completing the fianchetto there's more to get into here but um since the game was long i want to keep things keep things moving thank you fenbine gold for the 200 bits now what if b4 after d5 great question well before after d5 let's see so here uh it's important to avoid that knee-jerk reaction right he's attacking our knight but rather than moving it we can capture on e6"
+    },
+    {
+     "san": "d5",
+     "t": 886,
+     "continuation": "d5",
+     "said": "that's exactly where you want to strike so e5 would not be the best move here because it would it would help him get this nice little outpost for his knight but the move would be d5 and now he cannot avoid the center getting open look at how we're striking through everything he has to open up the center this bishop gets super strong black's position kind of starts collapsing here and uh this is just not good for black also this pawn hangs so that's a principle to be aware of uh it's not a law but it's a good guideline for when your opponent is playing on the side of the board um well moving the bishop to g2 brings it on to the biggest on to the longest diagonal in the chessboard that's kind of completing the fianchetto there's more to get into here but um since the game was long i want to keep things keep things moving thank you fenbine gold for the 200 bits now what if b4 after d5 great question well before after d5 let's see so here uh it's important to avoid that knee-jerk reaction right he's attacking our knight but rather than moving it we can capture on e6 and counter attack his knight and then if he takes back"
+    }
+   ]
+  },
+  {
+   "ply": 34,
+   "fen": "2rr2k1/pbqnbp1p/1p3np1/3p4/4N3/1PN3P1/PB1Q1PBP/3RR1K1 w - - 0 18",
+   "line": [
+    "c4",
+    "d5",
+    "d4",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "c6",
+    "g3",
+    "Nbd7",
+    "Bg2",
+    "Be7",
+    "O-O",
+    "O-O",
+    "b3",
+    "Re8",
+    "Bb2",
+    "b6",
+    "Nd2",
+    "Bb7",
+    "e4",
+    "dxe4",
+    "Ndxe4",
+    "g6",
+    "Qd2",
+    "Rc8",
+    "Rad1",
+    "Qc7",
+    "Rfe1",
+    "Red8",
+    "d5",
+    "cxd5",
+    "cxd5",
+    "exd5"
+   ],
+   "options": [
+    {
+     "san": "Nxd5",
+     "t": 1085.5,
+     "continuation": "Nxd5",
+     "said": "in this position my opponent started to defend very very well i was quite impressed so what happens this is upon sacrifice this is upon sacrifice because i can't take the pawn with my knight he'll just take it with his knight thank you fenbine go for 300 bits yeah rook ac one might have been more accurate i kind of played rookie d1 on autopilot but i didn't know that he would play queen c7 i think he played it because he saw that i played rook a d1 and we can't take on d5 because a bishop takes e5 small piece of advice when you're trying to figure out whether you can play a move don't only count the defenders and attackers it also depends on what specifically is attacking a pawn here there are actually more attackers on the pawn than there are defenders but we can't capture with the queen because we give up the queen right so you can take one d5 and say oh great well i accomplished d5 well congratulations and give you a medal for that but hey you gave up a queen so be careful about that okay but that's okay now we play knight b5 what is the idea of this move the idea is to attack his queen and open up the diagonal for our bishop now our mission has been accomplished and our bishop on b2 is an absolute monster"
+    },
+    {
+     "san": "Nb5",
+     "t": 1256,
+     "continuation": "Nb5 Qc2",
+     "said": "to put our queen on d4 and threaten checkmate wolf razors thank you for the prime so this is super complicated but basically white is in charge here uh i don't want to bug ourselves down on the default with the with the details but uh clearly black is on on his last legs so he goes queen c2 we go 90 to d6 forking his rook and his bishop he trades queens which is good for him but our position remains dominant and after rook c7 we go rook to e7 uh involving our rook putting it on the seventh ring thank you melon miller attacking the pawn and potentially threatening to capture his knight okay and again because we're at a relatively high rating i know that a lot of people have questions about specific moves and i know that i'm not answering all of them guys but please do understand that since i'm trying to keep this uh instructive as much as possible i have to find a compromise between talking about the details but not boring people to death and discussing them for an hour because i could talk about this game for an hour but i want to keep things going smoothly so i'll try to give the gist of the complications without talking about it too much hopefully i'm finding the balance"
+    }
+   ]
+  },
+  {
+   "ply": 36,
+   "fen": "2rr2k1/pbqnbp1p/1p4p1/1N1p4/4n3/1P4P1/PB1Q1PBP/3RR1K1 w - - 0 19",
+   "line": [
+    "c4",
+    "d5",
+    "d4",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "c6",
+    "g3",
+    "Nbd7",
+    "Bg2",
+    "Be7",
+    "O-O",
+    "O-O",
+    "b3",
+    "Re8",
+    "Bb2",
+    "b6",
+    "Nd2",
+    "Bb7",
+    "e4",
+    "dxe4",
+    "Ndxe4",
+    "g6",
+    "Qd2",
+    "Rc8",
+    "Rad1",
+    "Qc7",
+    "Rfe1",
+    "Red8",
+    "d5",
+    "cxd5",
+    "cxd5",
+    "exd5",
+    "Nb5",
+    "Nxe4"
+   ],
+   "options": [
+    {
+     "san": "Rxe4",
+     "t": 1167.5,
+     "continuation": "Rxe4",
+     "said": "run and pour t i will be back in 10 seconds my voice is starting to go i need that i need that t russian style give me two seconds now the move here the simplest move is rook takes c4 thank you for waiting i can't believe charlie rated me that man is an absolute legend i'm super pumped right now the rook takes c4 is the move what are we doing well remember we're still attacking his queen and now we're attacking his bishop queen h6 looks very good because we're threatening checkmate what's the problem with this move the problem is that he plays bishop f8 and he counter-attacks our queen and and defends against the checkmate this is complicated but i hope that everybody can understand what's happening here basically both queens are hanging we have both queens you know i got got gun point here knight takes c7 and knight takes d2 queen d4 bishop f6 is the same problem he again attacks our queen in defense checkmate thank you alan miller for the gift to mark roar and uh the idea of rook takes c4 is that we eliminate his knight and we attack his bishop he has to move his queen while defending his bishop and he can do that by playing queen c5"
+    },
+    {
+     "san": "Qd4",
+     "t": 1208,
+     "continuation": "Qd4 Bf6",
+     "said": "can understand what's happening here basically both queens are hanging we have both queens you know i got got gun point here knight takes c7 and knight takes d2 queen d4 bishop f6 is the same problem he again attacks our queen in defense checkmate thank you alan miller for the gift to mark roar and uh the idea of rook takes c4 is that we eliminate his knight and we attack his bishop he has to move his queen while defending his bishop and he can do that by playing queen c5 and the position remains very complicated but what we can actually do here is go b4 we're attacking his queen and trying to disattach his queen from the bishop and once he takes my knight and i take his bishop this is a very very good position for white because we are now finally ready to put our queen on d4 and threaten checkmate wolf razors thank you for the prime so this is super complicated but basically white is in charge here uh i don't want to bug ourselves down on the default with the with the details but uh clearly black is on on his last legs so he goes queen c2 we go 90 to d6 forking his rook and his bishop he trades queens which is good for him"
+    }
+   ]
+  },
+  {
+   "ply": 42,
+   "fen": "2rr2k1/pb1nbp1p/1p4p1/1Nqp4/4R3/1P4P1/PB1Q1PBP/3R2K1 w - - 1 22",
+   "line": [
+    "c4",
+    "d5",
+    "d4",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "c6",
+    "g3",
+    "Nbd7",
+    "Bg2",
+    "Be7",
+    "O-O",
+    "O-O",
+    "b3",
+    "Re8",
+    "Bb2",
+    "b6",
+    "Nd2",
+    "Bb7",
+    "e4",
+    "dxe4",
+    "Ndxe4",
+    "g6",
+    "Qd2",
+    "Rc8",
+    "Rad1",
+    "Qc7",
+    "Rfe1",
+    "Red8",
+    "d5",
+    "cxd5",
+    "cxd5",
+    "exd5",
+    "Nb5",
+    "Nxe4",
+    "Qd4",
+    "Bf6",
+    "Qd2",
+    "Be7",
+    "Rxe4",
+    "Qc5"
+   ],
+   "options": [
+    {
+     "san": "Nc7",
+     "t": 1222,
+     "continuation": "Nc7 Qc6 Nb5 Qc7",
+     "said": "checkmate thank you alan miller for the gift to mark roar and uh the idea of rook takes c4 is that we eliminate his knight and we attack his bishop he has to move his queen while defending his bishop and he can do that by playing queen c5 and the position remains very complicated but what we can actually do here is go b4 we're attacking his queen and trying to disattach his queen from the bishop and once he takes my knight and i take his bishop this is a very very good position for white because we are now finally ready to put our queen on d4 and threaten checkmate wolf razors thank you for the prime so this is super complicated but basically white is in charge here uh i don't want to bug ourselves down on the default with the with the details but uh clearly black is on on his last legs so he goes queen c2 we go 90 to d6 forking his rook and his bishop he trades queens which is good for him but our position remains dominant and after rook c7 we go rook to e7 uh involving our rook putting it on the seventh ring thank you melon miller attacking the pawn and potentially"
+    },
+    {
+     "san": "b4",
+     "t": 1232,
+     "continuation": "b4",
+     "said": "he has to move his queen while defending his bishop and he can do that by playing queen c5 and the position remains very complicated but what we can actually do here is go b4 we're attacking his queen and trying to disattach his queen from the bishop and once he takes my knight and i take his bishop this is a very very good position for white because we are now finally ready to put our queen on d4 and threaten checkmate wolf razors thank you for the prime so this is super complicated but basically white is in charge here uh i don't want to bug ourselves down on the default with the with the details but uh clearly black is on on his last legs so he goes queen c2 we go 90 to d6 forking his rook and his bishop he trades queens which is good for him but our position remains dominant and after rook c7 we go rook to e7 uh involving our rook putting it on the seventh ring thank you melon miller attacking the pawn and potentially threatening to capture his knight okay and again because we're at a relatively high rating i know that a lot of people have questions about specific moves and i know that i'm not answering all of them"
+    }
+   ]
+  },
+  {
+   "ply": 44,
+   "fen": "b2r2k1/p1rnRp1p/1p1N1np1/3p4/8/1P4P1/PB1R1PBP/6K1 w - - 3 23",
+   "line": [
+    "c4",
+    "d5",
+    "d4",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "c6",
+    "g3",
+    "Nbd7",
+    "Bg2",
+    "Be7",
+    "O-O",
+    "O-O",
+    "b3",
+    "Re8",
+    "Bb2",
+    "b6",
+    "Nd2",
+    "Bb7",
+    "e4",
+    "dxe4",
+    "Ndxe4",
+    "g6",
+    "Qd2",
+    "Rc8",
+    "Rad1",
+    "Qc7",
+    "Rfe1",
+    "Red8",
+    "d5",
+    "cxd5",
+    "cxd5",
+    "exd5",
+    "Nb5",
+    "Qc2",
+    "Ned6",
+    "Qxd2",
+    "Rxd2",
+    "Bxd6",
+    "Nxd6",
+    "Rc7",
+    "Re7",
+    "Ba8"
+   ],
+   "options": [
+    {
+     "san": "Bxf6",
+     "t": 1326,
+     "continuation": "Bxf6",
+     "said": "finding the balance reasonably well and after he moves his bishop away i actually committed a mistake um i thought from a distance that i would be able to play bishop takes f6 i thought that this would be winning why notice that this is a pin if he takes our bishop he loses his rook but what did i miss here and i didn't play this move i simply thought that i would play it but what does black have i appreciate it guys thank you rook c1 check so he gives us the check we have to deal with the check thank you rando ben dodendo and now he's able to take our bishop because uh our rook is his rook is no longer hanging moreover he's attacking our knight this is not impressive for white at all so instead of this i doubled back and i said okay instead i'm just going to take his pawn on f7 but now he found a super good move i thought that his position collapses we're attacking his knight legitimately now because we're now attacking him with two pieces but he plays this incredibly annoying move rook c6 and here's why i defined type one and type two undefended pieces just as a reminder one"
+    },
+    {
+     "san": "Rxf7",
+     "t": 1367,
+     "continuation": "Rxf7",
+     "said": "because uh our rook is his rook is no longer hanging moreover he's attacking our knight this is not impressive for white at all so instead of this i doubled back and i said okay instead i'm just going to take his pawn on f7 but now he found a super good move i thought that his position collapses we're attacking his knight legitimately now because we're now attacking him with two pieces but he plays this incredibly annoying move rook c6 and here's why i defined type one and type two undefended pieces just as a reminder one very important thing to notice in any chess position type one and type two undefended pieces a type one undefended piece is a piece that is literally not defended by any other pieces so in black's position there is only one type one undefeated piece which piece is that which piece is the type one undefended piece the only one it's the rook on c7 why is that important well because it's pinned that tells us a lot about the position but something that a lot of i think chess authors don't do is define type 2 undefended pieces which are a piece which is a piece that is defended by only one other piece a piece that is defended by only one other piece and pawns don't count if a pawn defends a"
+    }
+   ]
+  },
+  {
+   "ply": 45,
+   "fen": "b2r2k1/p1rnRp1p/1p1N1Bp1/3p4/8/1P4P1/P2R1PBP/6K1 b - - 0 23",
+   "line": [
+    "c4",
+    "d5",
+    "d4",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "c6",
+    "g3",
+    "Nbd7",
+    "Bg2",
+    "Be7",
+    "O-O",
+    "O-O",
+    "b3",
+    "Re8",
+    "Bb2",
+    "b6",
+    "Nd2",
+    "Bb7",
+    "e4",
+    "dxe4",
+    "Ndxe4",
+    "g6",
+    "Qd2",
+    "Rc8",
+    "Rad1",
+    "Qc7",
+    "Rfe1",
+    "Red8",
+    "d5",
+    "cxd5",
+    "cxd5",
+    "exd5",
+    "Nb5",
+    "Qc2",
+    "Ned6",
+    "Qxd2",
+    "Rxd2",
+    "Bxd6",
+    "Nxd6",
+    "Rc7",
+    "Re7",
+    "Ba8",
+    "Bxf6"
+   ],
+   "options": [
+    {
+     "san": "Nxf6",
+     "t": 1333,
+     "continuation": "Nxf6",
+     "said": "i thought from a distance that i would be able to play bishop takes f6 i thought that this would be winning why notice that this is a pin if he takes our bishop he loses his rook but what did i miss here and i didn't play this move i simply thought that i would play it but what does black have i appreciate it guys thank you rook c1 check so he gives us the check we have to deal with the check thank you rando ben dodendo and now he's able to take our bishop because uh our rook is his rook is no longer hanging moreover he's attacking our knight this is not impressive for white at all so instead of this i doubled back and i said okay instead i'm just going to take his pawn on f7 but now he found a super good move i thought that his position collapses we're attacking his knight legitimately now because we're now attacking him with two pieces but he plays this incredibly annoying move rook c6 and here's why i defined type one and type two undefended pieces just as a reminder one very important thing to notice in any chess position type one and type two undefended pieces a type one undefended piece is a piece"
+    },
+    {
+     "san": "Rc1+",
+     "t": 1346.5,
+     "continuation": "Rc1+",
+     "said": "but what did i miss here and i didn't play this move i simply thought that i would play it but what does black have i appreciate it guys thank you rook c1 check so he gives us the check we have to deal with the check thank you rando ben dodendo and now he's able to take our bishop because uh our rook is his rook is no longer hanging moreover he's attacking our knight this is not impressive for white at all so instead of this i doubled back and i said okay instead i'm just going to take his pawn on f7 but now he found a super good move i thought that his position collapses we're attacking his knight legitimately now because we're now attacking him with two pieces but he plays this incredibly annoying move rook c6 and here's why i defined type one and type two undefended pieces just as a reminder one very important thing to notice in any chess position type one and type two undefended pieces a type one undefended piece is a piece that is literally not defended by any other pieces so in black's position there is only one type one undefeated piece which piece is that which piece is the type one undefended piece the only one"
+    }
+   ]
+  },
+  {
+   "ply": 46,
+   "fen": "b2r2k1/p2n1R1p/1prN1np1/3p4/8/1P4P1/PB1R1PBP/6K1 w - - 1 24",
+   "line": [
+    "c4",
+    "d5",
+    "d4",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "c6",
+    "g3",
+    "Nbd7",
+    "Bg2",
+    "Be7",
+    "O-O",
+    "O-O",
+    "b3",
+    "Re8",
+    "Bb2",
+    "b6",
+    "Nd2",
+    "Bb7",
+    "e4",
+    "dxe4",
+    "Ndxe4",
+    "g6",
+    "Qd2",
+    "Rc8",
+    "Rad1",
+    "Qc7",
+    "Rfe1",
+    "Red8",
+    "d5",
+    "cxd5",
+    "cxd5",
+    "exd5",
+    "Nb5",
+    "Qc2",
+    "Ned6",
+    "Qxd2",
+    "Rxd2",
+    "Bxd6",
+    "Nxd6",
+    "Rc7",
+    "Re7",
+    "Ba8",
+    "Rxf7",
+    "Rc6"
+   ],
+   "options": [
+    {
+     "san": "Nb5",
+     "t": 1453.5,
+     "continuation": "Nb5 Kxf7",
+     "said": "and what he does here is he attacks the knight the knight is undefended and the knight itself defends the rook you guys can see how flimsy that is right that's not going to end well so if i move the knight i lose the rook if i move the rook i lose the night and so what i basically have to do is bail out i have to take his knight with my bishop he takes back well i'm a big 49ers fan big 49ers fan and i'm still upset that they lost the super bowl last year so please forgive me uh he is injured but i still have to give him crap every time i uh i have a chance to so i'm from the bay area originally uh and uh you know i'm a pretty demanding fan now what's going on in this position and big warriors fan as well no i love jimmy g of course of course no no no i think he's great i think he's a super good guy i believe in him he's gonna come back but i'm still sour please understand that you know now white is still better here who can explain to me who can explain to me back to the game guys who can explain to me why white is still better in this position even though it seems like the worst is behind black definitely solving melanoma but i'll get into that after the game thank you ben mind b for the sub"
+    },
+    {
+     "san": "Bxf6",
+     "t": 1459.5,
+     "continuation": "Bxf6",
+     "said": "that's not going to end well so if i move the knight i lose the rook if i move the rook i lose the night and so what i basically have to do is bail out i have to take his knight with my bishop he takes back well i'm a big 49ers fan big 49ers fan and i'm still upset that they lost the super bowl last year so please forgive me uh he is injured but i still have to give him crap every time i uh i have a chance to so i'm from the bay area originally uh and uh you know i'm a pretty demanding fan now what's going on in this position and big warriors fan as well no i love jimmy g of course of course no no no i think he's great i think he's a super good guy i believe in him he's gonna come back but i'm still sour please understand that you know now white is still better here who can explain to me who can explain to me back to the game guys who can explain to me why white is still better in this position even though it seems like the worst is behind black definitely solving melanoma but i'll get into that after the game thank you ben mind b for the sub number one they have a weakness on d5 what's number two the number two thing is that he has an"
+    }
+   ]
+  }
+ ]
+}

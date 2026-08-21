@@ -1,0 +1,727 @@
+{
+ "videoId": "yAF1Bpa4m5Q",
+ "title": "What’s The Difference Between a Top Class IM and a GM?? | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 4,
+   "t": 4294,
+   "line": [
+    "d4",
+    "g6",
+    "e4",
+    "Bg7"
+   ],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "said": ""
+  },
+  {
+   "ply": 5,
+   "t": 4295.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 2 3",
+   "said": ""
+  },
+  {
+   "ply": 6,
+   "t": 4298,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": ""
+  },
+  {
+   "ply": 5,
+   "t": 4299.5,
+   "line": [],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 2 3",
+   "said": ""
+  },
+  {
+   "ply": 6,
+   "t": 4301.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "said": ""
+  },
+  {
+   "ply": 7,
+   "t": 4302.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 4",
+   "said": "act acting career I mean I mean acting Deanna is just"
+  },
+  {
+   "ply": 8,
+   "t": 4303.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqk1nr/1pp1ppbp/p2p2p1/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "said": ""
+  },
+  {
+   "ply": 9,
+   "t": 4305.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbqk1nr/1pp1ppbp/p2p2p1/6B1/3PP3/2N2N2/PPP2PPP/R2QKB1R b KQkq - 1 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 4307,
+   "line": [
+    "b5"
+   ],
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/1p4B1/3PP3/2N2N2/PPP2PPP/R2QKB1R w KQkq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 11,
+   "t": 4310,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqk1nr/2p1ppbp/p2p2p1/1p4B1/3PP3/2NB1N2/PPP2PPP/R2QK2R b KQkq - 1 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 4311,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "rn1qk1nr/1bp1ppbp/p2p2p1/1p4B1/3PP3/2NB1N2/PPP2PPP/R2QK2R w KQkq - 2 7",
+   "said": "um okay um let's go okay let's keep going I mean you could play could play board then completely"
+  },
+  {
+   "ply": 14,
+   "t": 4341,
+   "line": [
+    "Qe2",
+    "Nf6"
+   ],
+   "fen": "rn1qk2r/1bp1ppbp/p2p1np1/1p4B1/3PP3/2NB1N2/PPP1QPPP/R3K2R w KQkq - 4 8",
+   "said": "improp problem let me call board [&nbsp;__&nbsp;] just that um all right this is a disaster this is a complete catastrophe this is catastroph"
+  },
+  {
+   "ply": 17,
+   "t": 4363,
+   "line": [
+    "e5",
+    "Nd5",
+    "exd6"
+   ],
+   "fen": "rn1qk2r/1bp1ppbp/p2P2p1/1p1n2B1/3P4/2NB1N2/PPP1QPPP/R3K2R b KQkq - 0 9",
+   "said": ""
+  },
+  {
+   "ply": 18,
+   "t": 4382,
+   "line": [
+    "Qxd6"
+   ],
+   "fen": "rn2k2r/1bp1ppbp/p2q2p1/1p1n2B1/3P4/2NB1N2/PPP1QPPP/R3K2R w KQkq - 0 10",
+   "said": "nice I have to take like this through clenched teeth"
+  },
+  {
+   "ply": 19,
+   "t": 4386.5,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "rn2k2r/1bp1ppbp/p2q2p1/1p1n2B1/3PN3/3B1N2/PPP1QPPP/R3K2R b KQkq - 1 10",
+   "said": ""
+  },
+  {
+   "ply": 20,
+   "t": 4387.5,
+   "line": [
+    "Qe6"
+   ],
+   "fen": "rn2k2r/1bp1ppbp/p3q1p1/1p1n2B1/3PN3/3B1N2/PPP1QPPP/R3K2R w KQkq - 2 11",
+   "said": "okay we need a freaking Swindle of the century here I'm very impressed with his ability to"
+  },
+  {
+   "ply": 21,
+   "t": 4400.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn2k2r/1bp1ppbp/p3q1p1/1p1n2B1/3PN3/3B1N2/PPP1QPPP/R4RK1 b kq - 3 11",
+   "said": "not tell actually he's tilted surprisingly little given the score of the match"
+  },
+  {
+   "ply": 22,
+   "t": 4402.5,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r3k2r/1bpnppbp/p3q1p1/1p1n2B1/3PN3/3B1N2/PPP1QPPP/R4RK1 w kq - 4 12",
+   "said": ""
+  },
+  {
+   "ply": 23,
+   "t": 4407,
+   "line": [
+    "Rfe1"
+   ],
+   "fen": "r3k2r/1bpnppbp/p3q1p1/1p1n2B1/3PN3/3B1N2/PPP1QPPP/R3R1K1 b kq - 5 12",
+   "said": ""
+  },
+  {
+   "ply": 24,
+   "t": 4409,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r4rk1/1bpnppbp/p3q1p1/1p1n2B1/3PN3/3B1N2/PPP1QPPP/R3R1K1 w - - 6 13",
+   "said": ""
+  },
+  {
+   "ply": 25,
+   "t": 4411.5,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "r4rk1/1bpnppbp/p3q1p1/1p1n2B1/3PN3/3B1N2/PPPQ1PPP/R3R1K1 b - - 7 13",
+   "said": ""
+  },
+  {
+   "ply": 26,
+   "t": 4412.5,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "r4rk1/1bpnppbp/pq4p1/1p1n2B1/3PN3/3B1N2/PPPQ1PPP/R3R1K1 w - - 8 14",
+   "said": ""
+  },
+  {
+   "ply": 27,
+   "t": 4420.5,
+   "line": [
+    "b3"
+   ],
+   "fen": "r4rk1/1bpnppbp/pq4p1/1p1n2B1/3PN3/1P1B1N2/P1PQ1PPP/R3R1K1 b - - 0 14",
+   "said": "yeah the last two games have gone very very difficult"
+  },
+  {
+   "ply": 28,
+   "t": 4426,
+   "line": [
+    "b4"
+   ],
+   "fen": "r4rk1/1bpnppbp/pq4p1/3n2B1/1p1PN3/1P1B1N2/P1PQ1PPP/R3R1K1 w - - 0 15",
+   "said": ""
+  },
+  {
+   "ply": 29,
+   "t": 4432,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "r4rk1/1bpnppbp/pq4pB/3n4/1p1PN3/1P1B1N2/P1PQ1PPP/R3R1K1 b - - 1 15",
+   "said": ""
+  },
+  {
+   "ply": 30,
+   "t": 4438.5,
+   "line": [
+    "Rfe8"
+   ],
+   "fen": "r3r1k1/1bpnppbp/pq4pB/3n4/1p1PN3/1P1B1N2/P1PQ1PPP/R3R1K1 w - - 2 16",
+   "said": ""
+  },
+  {
+   "ply": 32,
+   "t": 4443.5,
+   "line": [
+    "Bxg7",
+    "Kxg7"
+   ],
+   "fen": "r3r3/1bpnppkp/pq4p1/3n4/1p1PN3/1P1B1N2/P1PQ1PPP/R3R1K1 w - - 0 17",
+   "said": "his is like the kind of position that his is like the kind of position that he's it really excels at it's like open but it's also very flimsy for me"
+  },
+  {
+   "ply": 33,
+   "t": 4449.5,
+   "line": [
+    "h4"
+   ],
+   "fen": "r3r3/1bpnppkp/pq4p1/3n4/1p1PN2P/1P1B1N2/P1PQ1PP1/R3R1K1 b - - 0 17",
+   "said": ""
+  },
+  {
+   "ply": 34,
+   "t": 4454.5,
+   "line": [
+    "N5f6"
+   ],
+   "fen": "r3r3/1bpnppkp/pq3np1/8/1p1PN2P/1P1B1N2/P1PQ1PP1/R3R1K1 w - - 1 18",
+   "said": "this is [&nbsp;__&nbsp;] we don't take Conley to that in the"
+  },
+  {
+   "ply": 35,
+   "t": 4460.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "r3r3/1bpnppkp/pq3np1/8/1pPPN2P/1P1B1N2/P2Q1PP1/R3R1K1 b - c3 0 18",
+   "said": "south we don't take kind later these kinds of moves"
+  },
+  {
+   "ply": 37,
+   "t": 4466.5,
+   "line": [
+    "bxc3",
+    "Qxc3"
+   ],
+   "fen": "r3r3/1bpnppkp/pq3np1/8/3PN2P/1PQB1N2/P4PP1/R3R1K1 b - - 0 19",
+   "said": "all right now we're gonna take Hayer energy protein shake we're gonna"
+  },
+  {
+   "ply": 38,
+   "t": 4469.5,
+   "line": [
+    "Bxe4"
+   ],
+   "fen": "r3r3/2pnppkp/pq3np1/8/3Pb2P/1PQB1N2/P4PP1/R3R1K1 w - - 0 20",
+   "said": "simplify [Music]"
+  },
+  {
+   "ply": 42,
+   "t": 4471.5,
+   "line": [
+    "Bc4",
+    "Nb8",
+    "Bxa6",
+    "Nxa6"
+   ],
+   "fen": "r3r3/2p1ppkp/nq3np1/8/3Pb2P/1PQ2N2/P4PP1/R3R1K1 w - - 0 22",
+   "said": ""
+  },
+  {
+   "ply": 43,
+   "t": 4472.5,
+   "line": [
+    "Rxe4"
+   ],
+   "fen": "r3r3/2p1ppkp/nq3np1/8/3PR2P/1PQ2N2/P4PP1/R5K1 b - - 0 22",
+   "said": "okay I have no time also"
+  },
+  {
+   "ply": 44,
+   "t": 4475.5,
+   "line": [
+    "Rad8"
+   ],
+   "fen": "3rr3/2p1ppkp/nq3np1/8/3PR2P/1PQ2N2/P4PP1/R5K1 w - - 1 23",
+   "said": ""
+  },
+  {
+   "ply": 45,
+   "t": 4477.5,
+   "line": [
+    "Re5"
+   ],
+   "fen": "3rr3/2p1ppkp/nq3np1/4R3/3P3P/1PQ2N2/P4PP1/R5K1 b - - 2 23",
+   "said": ""
+  },
+  {
+   "ply": 46,
+   "t": 4482,
+   "line": [
+    "Rd7"
+   ],
+   "fen": "4r3/2prppkp/nq3np1/4R3/3P3P/1PQ2N2/P4PP1/R5K1 w - - 3 24",
+   "said": ""
+  },
+  {
+   "ply": 47,
+   "t": 4483.5,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "4r3/2prppkp/nq3np1/4R3/3P3P/1PQ2N2/P4PP1/2R3K1 b - - 4 24",
+   "said": ""
+  },
+  {
+   "ply": 51,
+   "t": 4487,
+   "line": [
+    "Nc5",
+    "Qb4",
+    "Na6",
+    "Qc5"
+   ],
+   "fen": "4r3/2prppkp/nq3np1/2Q1R3/3P3P/1P3N2/P4PP1/2R3K1 b - - 8 26",
+   "said": "and we're just gonna go like D5 or something Queen C5 while very like what's kind of what what's gotten into"
+  },
+  {
+   "ply": 53,
+   "t": 4491.5,
+   "line": [
+    "Qxc5",
+    "Rexc5"
+   ],
+   "fen": "4r3/2prppkp/n4np1/2R5/3P3P/1P3N2/P4PP1/2R3K1 b - - 0 27",
+   "said": "him"
+  },
+  {
+   "ply": 54,
+   "t": 4493,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "4r3/2prppkp/n5p1/2Rn4/3P3P/1P3N2/P4PP1/2R3K1 w - - 1 28",
+   "said": "what's gotten into him what are all these frequency magnets now"
+  },
+  {
+   "ply": 56,
+   "t": 4499,
+   "line": [
+    "Ne5",
+    "Rd6"
+   ],
+   "fen": "4r3/2p1ppkp/n2r2p1/2RnN3/3P3P/1P6/P4PP1/2R3K1 w - - 3 29",
+   "said": "you see my man Matt Magnus"
+  },
+  {
+   "ply": 58,
+   "t": 4503.5,
+   "line": [
+    "Nc4",
+    "Rd7"
+   ],
+   "fen": "4r3/2prppkp/n5p1/2Rn4/2NP3P/1P6/P4PP1/2R3K1 w - - 5 30",
+   "said": "Frontier Magnus all right let's go if he goes Knight E3"
+  },
+  {
+   "ply": 59,
+   "t": 4509.5,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "4r3/2prppkp/n5p1/2RnN3/3P3P/1P6/P4PP1/2R3K1 b - - 6 30",
+   "said": "I'll go Knight F4"
+  },
+  {
+   "ply": 60,
+   "t": 4510.5,
+   "line": [
+    "Rd6"
+   ],
+   "fen": "4r3/2p1ppkp/n2r2p1/2RnN3/3P3P/1P6/P4PP1/2R3K1 w - - 7 31",
+   "said": "I'm more than happy with the draw"
+  },
+  {
+   "ply": 61,
+   "t": 4514.5,
+   "line": [
+    "g3"
+   ],
+   "fen": "4r3/2p1ppkp/n2r2p1/2RnN3/3P3P/1P4P1/P4P2/2R3K1 b - - 0 31",
+   "said": ""
+  },
+  {
+   "ply": 62,
+   "t": 4518.5,
+   "line": [
+    "Ndb4"
+   ],
+   "fen": "4r3/2p1ppkp/n2r2p1/2R1N3/1n1P3P/1P4P1/P4P2/2R3K1 w - - 1 32",
+   "said": "okay let's go night before I mean if I don't"
+  },
+  {
+   "ply": 63,
+   "t": 4523,
+   "line": [
+    "R1c4"
+   ],
+   "fen": "4r3/2p1ppkp/n2r2p1/2R1N3/1nRP3P/1P4P1/P4P2/6K1 b - - 2 32",
+   "said": "get active I'm gonna lose without a fight oh shoot wait but now I can go back"
+  },
+  {
+   "ply": 64,
+   "t": 4526,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "4r3/2p1ppkp/n2r2p1/2RnN3/2RP3P/1P4P1/P4P2/6K1 w - - 3 33",
+   "said": "maybe"
+  },
+  {
+   "ply": 65,
+   "t": 4530.5,
+   "line": [
+    "Ra4"
+   ],
+   "fen": "4r3/2p1ppkp/n2r2p1/2RnN3/R2P3P/1P4P1/P4P2/6K1 b - - 4 33",
+   "said": "this is"
+  },
+  {
+   "ply": 66,
+   "t": 4531.5,
+   "line": [
+    "Ra8"
+   ],
+   "fen": "r7/2p1ppkp/n2r2p1/2RnN3/R2P3P/1P4P1/P4P2/6K1 w - - 5 34",
+   "said": "[Music]"
+  },
+  {
+   "ply": 67,
+   "t": 4534.5,
+   "line": [
+    "Rc6"
+   ],
+   "fen": "r7/2p1ppkp/n1Rr2p1/3nN3/R2P3P/1P4P1/P4P2/6K1 b - - 6 34",
+   "said": ""
+  },
+  {
+   "ply": 68,
+   "t": 4536,
+   "line": [
+    "e6"
+   ],
+   "fen": "r7/2p2pkp/n1Rrp1p1/3nN3/R2P3P/1P4P1/P4P2/6K1 w - - 0 35",
+   "said": ""
+  },
+  {
+   "ply": 72,
+   "t": 4540.5,
+   "line": [
+    "Rxd6",
+    "cxd6",
+    "Nc4",
+    "Nc3"
+   ],
+   "fen": "r7/5pkp/n2pp1p1/8/R1NP3P/1Pn3P1/P4P2/6K1 w - - 2 37",
+   "said": ""
+  },
+  {
+   "ply": 73,
+   "t": 4541.5,
+   "line": [
+    "Ra5"
+   ],
+   "fen": "r7/5pkp/n2pp1p1/R7/2NP3P/1Pn3P1/P4P2/6K1 b - - 3 37",
+   "said": ""
+  },
+  {
+   "ply": 74,
+   "t": 4544,
+   "line": [
+    "d5"
+   ],
+   "fen": "r7/5pkp/n3p1p1/R2p4/2NP3P/1Pn3P1/P4P2/6K1 w - - 0 38",
+   "said": ""
+  },
+  {
+   "ply": 76,
+   "t": 4547.5,
+   "line": [
+    "Nb6",
+    "Rb8"
+   ],
+   "fen": "1r6/5pkp/nN2p1p1/R2p4/3P3P/1Pn3P1/P4P2/6K1 w - - 2 39",
+   "said": ""
+  },
+  {
+   "ply": 78,
+   "t": 4549.5,
+   "line": [
+    "Rxa6",
+    "Nxa2"
+   ],
+   "fen": "1r6/5pkp/RN2p1p1/3p4/3P3P/1P4P1/n4P2/6K1 w - - 0 40",
+   "said": ""
+  },
+  {
+   "ply": 80,
+   "t": 4555,
+   "line": [
+    "Nxd5",
+    "exd5"
+   ],
+   "fen": "1r6/5pkp/R5p1/3p4/3P3P/1P4P1/n4P2/6K1 w - - 0 41",
+   "said": ""
+  },
+  {
+   "ply": 82,
+   "t": 4557.5,
+   "line": [
+    "Rxa2",
+    "Rb4"
+   ],
+   "fen": "8/5pkp/6p1/3p4/1r1P3P/1P4P1/R4P2/6K1 w - - 1 42",
+   "said": ""
+  },
+  {
+   "ply": 86,
+   "t": 4561.5,
+   "line": [
+    "Ra3",
+    "Rxb3",
+    "Ra5",
+    "Rd3"
+   ],
+   "fen": "8/5pkp/6p1/R2p4/3P3P/3r2P1/5P2/6K1 w - - 2 44",
+   "said": ""
+  },
+  {
+   "ply": 88,
+   "t": 4563,
+   "line": [
+    "Rxd5",
+    "Kf6"
+   ],
+   "fen": "8/5p1p/5kp1/3R4/3P3P/3r2P1/5P2/6K1 w - - 1 45",
+   "said": ""
+  },
+  {
+   "ply": 90,
+   "t": 4565.5,
+   "line": [
+    "Kf1",
+    "Ke6"
+   ],
+   "fen": "8/5p1p/4k1p1/3R4/3P3P/3r2P1/5P2/5K2 w - - 3 46",
+   "said": ""
+  },
+  {
+   "ply": 91,
+   "t": 4567,
+   "line": [
+    "Ke2"
+   ],
+   "fen": "8/5p1p/4k1p1/3R4/3P3P/3r2P1/4KP2/8 b - - 4 46",
+   "said": ""
+  },
+  {
+   "ply": 92,
+   "t": 4569,
+   "line": [
+    "Ra3"
+   ],
+   "fen": "8/5p1p/4k1p1/3R4/3P3P/r5P1/4KP2/8 w - - 5 47",
+   "said": ""
+  },
+  {
+   "ply": 96,
+   "t": 4571,
+   "line": [
+    "Rf5",
+    "h5",
+    "Re5+",
+    "Kd6"
+   ],
+   "fen": "8/5p2/3k2p1/4R2p/3P3P/r5P1/4KP2/8 w - - 2 49",
+   "said": ""
+  },
+  {
+   "ply": 97,
+   "t": 4576,
+   "line": [
+    "Rb5"
+   ],
+   "fen": "8/5p2/3k2p1/1R5p/3P3P/r5P1/4KP2/8 b - - 3 49",
+   "said": ""
+  },
+  {
+   "ply": 99,
+   "t": 4579.5,
+   "line": [
+    "Ke6",
+    "Rb7"
+   ],
+   "fen": "8/1R3p2/4k1p1/7p/3P3P/r5P1/4KP2/8 b - - 5 50",
+   "said": ""
+  }
+ ],
+ "forks": [
+  {
+   "ply": 56,
+   "fen": "4r3/2p1ppkp/n2r2p1/2RnN3/3P3P/1P6/P4PP1/2R3K1 w - - 3 29",
+   "line": [
+    "d4",
+    "g6",
+    "e4",
+    "Bg7",
+    "Nf3",
+    "d6",
+    "Nc3",
+    "a6",
+    "Bg5",
+    "b5",
+    "Bd3",
+    "Bb7",
+    "Qe2",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "exd6",
+    "Qxd6",
+    "Ne4",
+    "Qe6",
+    "O-O",
+    "Nd7",
+    "Rfe1",
+    "O-O",
+    "Qd2",
+    "Qb6",
+    "b3",
+    "b4",
+    "Bh6",
+    "Rfe8",
+    "Bxg7",
+    "Kxg7",
+    "h4",
+    "N5f6",
+    "c4",
+    "bxc3",
+    "Qxc3",
+    "Bxe4",
+    "Bc4",
+    "Nb8",
+    "Bxa6",
+    "Nxa6",
+    "Rxe4",
+    "Rad8",
+    "Re5",
+    "Rd7",
+    "Rc1",
+    "Nc5",
+    "Qb4",
+    "Na6",
+    "Qc5",
+    "Qxc5",
+    "Rexc5",
+    "Nd5",
+    "Ne5",
+    "Rd6"
+   ],
+   "options": [
+    {
+     "san": "Nc4",
+     "t": 4503.5,
+     "continuation": "Nc4 Rd7",
+     "said": "what's gotten into him what are all these frequency magnets now you see my man Matt Magnus Frontier Magnus all right let's go if he goes Knight E3 I'll go Knight F4 I'm more than happy with the draw okay let's go night before I mean if I don't get active I'm gonna lose without a fight oh shoot wait but now I can go back maybe this is [Music]"
+    },
+    {
+     "san": "g3",
+     "t": 4514.5,
+     "continuation": "g3",
+     "said": "Frontier Magnus all right let's go if he goes Knight E3 I'll go Knight F4 I'm more than happy with the draw okay let's go night before I mean if I don't get active I'm gonna lose without a fight oh shoot wait but now I can go back maybe this is [Music]"
+    }
+   ]
+  }
+ ]
+}

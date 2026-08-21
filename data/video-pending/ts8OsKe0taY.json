@@ -1,0 +1,358 @@
+{
+ "videoId": "ts8OsKe0taY",
+ "title": "Daniel Reunited With MoistCr1tikal | Streamer Lesson",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 2728,
+  "settledPositions": null
+ },
+ "plies": 25,
+ "rewinds": 4,
+ "moves": [
+  {
+   "t": 903,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 905,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 906,
+   "ply": 4,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 907,
+   "ply": 5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3"
+  },
+  {
+   "t": 909.5,
+   "ply": 6,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+  },
+  {
+   "t": 912.5,
+   "ply": 7,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p1N1/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 5 4"
+  },
+  {
+   "t": 927.5,
+   "ply": 8,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2n2n2/3pp1N1/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 0 5"
+  },
+  {
+   "t": 936,
+   "ply": 9,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2n2n2/3Pp1N1/2B5/8/PPPP1PPP/RNBQK2R b KQkq - 0 5"
+  },
+  {
+   "t": 948.5,
+   "ply": 10,
+   "line": [
+    "Na5"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/5n2/n2Pp1N1/2B5/8/PPPP1PPP/RNBQK2R w KQkq - 1 6"
+  },
+  {
+   "t": 1513,
+   "ply": 5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3"
+  },
+  {
+   "t": 1519,
+   "ply": 6,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+  },
+  {
+   "t": 1542.5,
+   "ply": 8,
+   "line": [
+    "Ng5",
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p1N1/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 6 5"
+  },
+  {
+   "t": 1550.5,
+   "ply": 9,
+   "line": [
+    "Nxf7"
+   ],
+   "fen": "r1bqk2r/pppp1Npp/2n2n2/2b1p3/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 5"
+  },
+  {
+   "t": 1565.5,
+   "ply": 10,
+   "line": [
+    "Bxf2+"
+   ],
+   "fen": "r1bqk2r/pppp1Npp/2n2n2/4p3/2B1P3/8/PPPP1bPP/RNBQK2R w KQkq - 0 6"
+  },
+  {
+   "t": 1576.5,
+   "ply": 11,
+   "line": [
+    "Kxf2"
+   ],
+   "fen": "r1bqk2r/pppp1Npp/2n2n2/4p3/2B1P3/8/PPPP1KPP/RNBQ3R b kq - 0 6"
+  },
+  {
+   "t": 1581,
+   "ply": 12,
+   "line": [
+    "Nxe4+"
+   ],
+   "fen": "r1bqk2r/pppp1Npp/2n5/4p3/2B1n3/8/PPPP1KPP/RNBQ3R w kq - 0 7"
+  },
+  {
+   "t": 1583,
+   "ply": 13,
+   "line": [
+    "Kg1"
+   ],
+   "fen": "r1bqk2r/pppp1Npp/2n5/4p3/2B1n3/8/PPPP2PP/RNBQ2KR b kq - 1 7"
+  },
+  {
+   "t": 1614,
+   "ply": 14,
+   "line": [
+    "Qh4"
+   ],
+   "fen": "r1b1k2r/pppp1Npp/2n5/4p3/2B1n2q/8/PPPP2PP/RNBQ2KR w kq - 2 8"
+  },
+  {
+   "t": 1629.5,
+   "ply": 8,
+   "line": [],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p1N1/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 6 5"
+  },
+  {
+   "t": 1634.5,
+   "ply": 9,
+   "line": [
+    "Bxf7+"
+   ],
+   "fen": "r1bqk2r/pppp1Bpp/2n2n2/2b1p1N1/4P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 5"
+  },
+  {
+   "t": 1639,
+   "ply": 10,
+   "line": [
+    "Kf8"
+   ],
+   "fen": "r1bq1k1r/pppp1Bpp/2n2n2/2b1p1N1/4P3/8/PPPP1PPP/RNBQK2R w KQ - 1 6"
+  },
+  {
+   "t": 1640,
+   "ply": 11,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "r1bq1k1r/pppp2pp/2n2n2/2b1p1N1/4P3/1B6/PPPP1PPP/RNBQK2R b KQ - 2 6"
+  },
+  {
+   "t": 1647.5,
+   "ply": 12,
+   "line": [
+    "Bxf2+"
+   ],
+   "fen": "r1bq1k1r/pppp2pp/2n2n2/4p1N1/4P3/1B6/PPPP1bPP/RNBQK2R w KQ - 0 7"
+  },
+  {
+   "t": 1674.5,
+   "ply": 8,
+   "line": [],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p1N1/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 6 5"
+  },
+  {
+   "t": 1675.5,
+   "ply": 7,
+   "line": [],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p1N1/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 5 4"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "Nf6",
+     "t": 909.5,
+     "continuation": "Nf6"
+    },
+    {
+     "san": "Bc5",
+     "t": 1519,
+     "continuation": "Bc5"
+    }
+   ]
+  },
+  {
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p1N1/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 6 5",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "Ng5",
+    "Nf6"
+   ],
+   "ply": 8,
+   "options": [
+    {
+     "san": "Nxf7",
+     "t": 1550.5,
+     "continuation": "Nxf7"
+    },
+    {
+     "san": "Bxf7+",
+     "t": 1634.5,
+     "continuation": "Bxf7+"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Italian Game: Two Knights Defense, Polerio Defense",
+   "eco": "C58",
+   "plies": 10,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5",
+   "coverage": 0.048
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Traxler Counterattack, Knight Sacrifice Line",
+   "eco": "C57",
+   "plies": 9,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Bc5 Ng5 Nf6 Nxf7",
+   "coverage": 0.286
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Traxler Counterattack, Bishop Sacrifice Line",
+   "eco": "C57",
+   "plies": 9,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Bc5 Ng5 Nf6 Bxf7+",
+   "coverage": 0.19
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Knight Attack, Normal Variation",
+   "eco": "C57",
+   "plies": 8,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5",
+   "coverage": 0.143
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Traxler Counterattack",
+   "eco": "C57",
+   "plies": 8,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Bc5 Ng5 Nf6",
+   "coverage": 0.524
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Knight Attack",
+   "eco": "C57",
+   "plies": 7,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5",
+   "coverage": 0.19
+  },
+  {
+   "name": "Italian Game: Two Knights Defense",
+   "eco": "C55",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6",
+   "coverage": 0.238
+  },
+  {
+   "name": "Italian Game: Giuoco Piano",
+   "eco": "C50",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Bc5",
+   "coverage": 0.571
+  },
+  {
+   "name": "Italian Game",
+   "eco": "C50",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Bc4",
+   "coverage": 0.857
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.905
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.952
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}

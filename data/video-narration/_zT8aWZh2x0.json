@@ -1,0 +1,524 @@
+{
+ "videoId": "_zT8aWZh2x0",
+ "title": "Facing Off Against Kramnik and WINNING!! | Titled Tuesday | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 38,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "okay here's round one okay guys here we go sorry I started a little bit late I'm in stress City right now let me know how you can how whether you can hear me"
+  },
+  {
+   "ply": 3,
+   "t": 39,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+   "said": "well"
+  },
+  {
+   "ply": 4,
+   "t": 42,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3",
+   "said": "not too many expectations for today I'm"
+  },
+  {
+   "ply": 5,
+   "t": 43.5,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/3p1n2/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 3",
+   "said": "just gonna try to play decently"
+  },
+  {
+   "ply": 6,
+   "t": 45.5,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": ""
+  },
+  {
+   "ply": 7,
+   "t": 46.5,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rnbqkb1r/ppp1pp1p/3p1np1/8/3PP3/2N5/PPP1BPPP/R1BQK1NR b KQkq - 1 4",
+   "said": ""
+  },
+  {
+   "ply": 9,
+   "t": 49.5,
+   "line": [
+    "Bg7",
+    "Nf3"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP1BPPP/R1BQK2R b KQkq - 3 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 50.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP1BPPP/R1BQK2R w KQ - 4 6",
+   "said": "eah I've got a major headache so yeah I've got a major headache so hopefully I don't I get over 50 percent"
+  },
+  {
+   "ply": 11,
+   "t": 54,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/3PP3/2N2N2/PPP1BPPP/R1BQ1RK1 b - - 5 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 58.5,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "rn1q1rk1/ppp1ppbp/3p1np1/8/3PP1b1/2N2N2/PPP1BPPP/R1BQ1RK1 w - - 6 7",
+   "said": ""
+  },
+  {
+   "ply": 13,
+   "t": 60,
+   "line": [
+    "Be3"
+   ],
+   "fen": "rn1q1rk1/ppp1ppbp/3p1np1/8/3PP1b1/2N1BN2/PPP1BPPP/R2Q1RK1 b - - 7 7",
+   "said": ""
+  },
+  {
+   "ply": 14,
+   "t": 66,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/2np1np1/8/3PP1b1/2N1BN2/PPP1BPPP/R2Q1RK1 w - - 8 8",
+   "said": ""
+  },
+  {
+   "ply": 15,
+   "t": 68,
+   "line": [
+    "d5"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/2np1np1/3P4/4P1b1/2N1BN2/PPP1BPPP/R2Q1RK1 b - - 0 8",
+   "said": ""
+  },
+  {
+   "ply": 17,
+   "t": 70,
+   "line": [
+    "Bxf3",
+    "Bxf3"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/2np1np1/3P4/4P3/2N1BB2/PPP2PPP/R2Q1RK1 b - - 0 9",
+   "said": ""
+  },
+  {
+   "ply": 19,
+   "t": 72.5,
+   "line": [
+    "Ne5",
+    "Be2"
+   ],
+   "fen": "r2q1rk1/ppp1ppbp/3p1np1/3Pn3/4P3/2N1B3/PPP1BPPP/R2Q1RK1 b - - 2 10",
+   "said": ""
+  },
+  {
+   "ply": 20,
+   "t": 75,
+   "line": [
+    "c6"
+   ],
+   "fen": "r2q1rk1/pp2ppbp/2pp1np1/3Pn3/4P3/2N1B3/PPP1BPPP/R2Q1RK1 w - - 0 11",
+   "said": ""
+  },
+  {
+   "ply": 21,
+   "t": 76,
+   "line": [
+    "a4"
+   ],
+   "fen": "r2q1rk1/pp2ppbp/2pp1np1/3Pn3/P3P3/2N1B3/1PP1BPPP/R2Q1RK1 b - - 0 11",
+   "said": ""
+  },
+  {
+   "ply": 23,
+   "t": 83.5,
+   "line": [
+    "cxd5",
+    "exd5"
+   ],
+   "fen": "r2q1rk1/pp2ppbp/3p1np1/3Pn3/P7/2N1B3/1PP1BPPP/R2Q1RK1 b - - 0 12",
+   "said": "I think Bishop D4 and then that's all I know and queen A5 is a move here this is still Theory"
+  },
+  {
+   "ply": 24,
+   "t": 95.5,
+   "line": [
+    "Ned7"
+   ],
+   "fen": "r2q1rk1/pp1nppbp/3p1np1/3P4/P7/2N1B3/1PP1BPPP/R2Q1RK1 w - - 1 13",
+   "said": "um don't remember what Black's main move is here I think yeah 90s probably not a move"
+  },
+  {
+   "ply": 25,
+   "t": 101.5,
+   "line": [
+    "a5"
+   ],
+   "fen": "r2q1rk1/pp1nppbp/3p1np1/P2P4/8/2N1B3/1PP1BPPP/R2Q1RK1 b - - 0 13",
+   "said": ""
+  },
+  {
+   "ply": 26,
+   "t": 107,
+   "line": [
+    "a6"
+   ],
+   "fen": "r2q1rk1/1p1nppbp/p2p1np1/P2P4/8/2N1B3/1PP1BPPP/R2Q1RK1 w - - 0 14",
+   "said": ""
+  },
+  {
+   "ply": 27,
+   "t": 110,
+   "line": [
+    "Bd4"
+   ],
+   "fen": "r2q1rk1/1p1nppbp/p2p1np1/P2P4/3B4/2N5/1PP1BPPP/R2Q1RK1 b - - 1 14",
+   "said": "[Music] okay"
+  },
+  {
+   "ply": 28,
+   "t": 117,
+   "line": [
+    "Rc8"
+   ],
+   "fen": "2rq1rk1/1p1nppbp/p2p1np1/P2P4/3B4/2N5/1PP1BPPP/R2Q1RK1 w - - 2 15",
+   "said": "maybe Queen D2 I should have played"
+  },
+  {
+   "ply": 29,
+   "t": 119,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "2rq1rk1/1p1nppbp/p2p1np1/P2P4/3B4/2N5/1PPQBPPP/R4RK1 b - - 3 15",
+   "said": ""
+  },
+  {
+   "ply": 30,
+   "t": 123.5,
+   "line": [
+    "Nc5"
+   ],
+   "fen": "2rq1rk1/1p2ppbp/p2p1np1/P1nP4/3B4/2N5/1PPQBPPP/R4RK1 w - - 4 16",
+   "said": ""
+  },
+  {
+   "ply": 31,
+   "t": 125,
+   "line": [
+    "Bf3"
+   ],
+   "fen": "2rq1rk1/1p2ppbp/p2p1np1/P1nP4/3B4/2N2B2/1PPQ1PPP/R4RK1 b - - 5 16",
+   "said": "in 95 you can't play Knights C5 I'll go Bishop F3 and the only issue is he might be able to trade the darksword Bishops"
+  },
+  {
+   "ply": 32,
+   "t": 131.5,
+   "line": [
+    "Nfd7"
+   ],
+   "fen": "2rq1rk1/1p1nppbp/p2p2p1/P1nP4/3B4/2N2B2/1PPQ1PPP/R4RK1 w - - 6 17",
+   "said": "which is typically not in Wade's favor"
+  },
+  {
+   "ply": 33,
+   "t": 133,
+   "line": [
+    "Bxg7"
+   ],
+   "fen": "2rq1rk1/1p1nppBp/p2p2p1/P1nP4/8/2N2B2/1PPQ1PPP/R4RK1 b - - 0 17",
+   "said": ""
+  },
+  {
+   "ply": 34,
+   "t": 134.5,
+   "line": [
+    "Kxg7"
+   ],
+   "fen": "2rq1r2/1p1nppkp/p2p2p1/P1nP4/8/2N2B2/1PPQ1PPP/R4RK1 w - - 0 18",
+   "said": "yeah the course is up for sale as you guys already know Bortnick and I will be holding a Arena"
+  },
+  {
+   "ply": 35,
+   "t": 146.5,
+   "line": [
+    "Rfe1"
+   ],
+   "fen": "2rq1r2/1p1nppkp/p2p2p1/P1nP4/8/2N2B2/1PPQ1PPP/R3R1K1 b - - 1 18",
+   "said": "themed tournament after at 7 30 PM 30 minutes after title Tuesday ends um to sign up you need to join bortnick's club and then the join the sign ups will open at 6 33 an hour before the tournament starts the top finishers receive a course it'll be"
+  },
+  {
+   "ply": 36,
+   "t": 170,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "2rq1r2/1p2ppkp/p2p1np1/P1nP4/8/2N2B2/1PPQ1PPP/R3R1K1 w - - 2 19",
+   "said": "really fun boarding and I will both be playing in it that'll be a nice little way to reinvigorate some hype around the course I know that some people have asked for refunds or some for completely legitimate reasons in the last couple of weeks I've been slow to give out refund I will be doing that later today as well so if you're you know"
+  },
+  {
+   "ply": 37,
+   "t": 192.5,
+   "line": [
+    "Qd4"
+   ],
+   "fen": "2rq1r2/1p2ppkp/p2p1np1/P1nP4/3Q4/2N2B2/1PP2PPP/R3R1K1 b - - 3 19",
+   "said": "I'm you know if you're listening and you requested a refund for no reason then I will still be giving you that refund but just please be patient"
+  },
+  {
+   "ply": 38,
+   "t": 200.5,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "2rq1r2/1p1nppkp/p2p1np1/P2P4/3Q4/2N2B2/1PP2PPP/R3R1K1 w - - 4 20",
+   "said": "I mean we've gotten a couple we expected that but I'm again I'm not trying to scam anybody I just have been ridiculously busy so the horse will be on sale for 24 hours"
+  },
+  {
+   "ply": 39,
+   "t": 210,
+   "line": [
+    "Be2"
+   ],
+   "fen": "2rq1r2/1p1nppkp/p2p1np1/P2P4/3Q4/2N5/1PP1BPPP/R3R1K1 b - - 5 20",
+   "said": "link the the club sign up is in the link such as ex-clamp course tournament and"
+  },
+  {
+   "ply": 40,
+   "t": 219.5,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "2r2r2/1pqnppkp/p2p1np1/P2P4/3Q4/2N5/1PP1BPPP/R3R1K1 w - - 6 21",
+   "said": "then follow the link to the club sign up and then the tournament sign up link will open an hour before the tournament starts"
+  },
+  {
+   "ply": 41,
+   "t": 224,
+   "line": [
+    "Bf1"
+   ],
+   "fen": "2r2r2/1pqnppkp/p2p1np1/P2P4/3Q4/2N5/1PP2PPP/R3RBK1 b - - 7 21",
+   "said": ""
+  },
+  {
+   "ply": 42,
+   "t": 226.5,
+   "line": [
+    "Rfe8"
+   ],
+   "fen": "2r1r3/1pqnppkp/p2p1np1/P2P4/3Q4/2N5/1PP2PPP/R3RBK1 w - - 8 22",
+   "said": ""
+  },
+  {
+   "ply": 43,
+   "t": 232.5,
+   "line": [
+    "h3"
+   ],
+   "fen": "2r1r3/1pqnppkp/p2p1np1/P2P4/3Q4/2N4P/1PP2PP1/R3RBK1 b - - 0 22",
+   "said": ""
+  },
+  {
+   "ply": 44,
+   "t": 234.5,
+   "line": [
+    "Qc5"
+   ],
+   "fen": "2r1r3/1p1nppkp/p2p1np1/P1qP4/3Q4/2N4P/1PP2PP1/R3RBK1 w - - 1 23",
+   "said": ""
+  },
+  {
+   "ply": 45,
+   "t": 237,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "2r1r3/1p1nppkp/p2p1np1/P1qP4/8/2N4P/1PPQ1PP1/R3RBK1 b - - 2 23",
+   "said": ""
+  },
+  {
+   "ply": 46,
+   "t": 242,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "2r1r3/1p2ppkp/p2p1np1/P1qPn3/8/2N4P/1PPQ1PP1/R3RBK1 w - - 3 24",
+   "said": ""
+  },
+  {
+   "ply": 47,
+   "t": 248.5,
+   "line": [
+    "Ra4"
+   ],
+   "fen": "2r1r3/1p2ppkp/p2p1np1/P1qPn3/R7/2N4P/1PPQ1PP1/4RBK1 b - - 4 24",
+   "said": ""
+  },
+  {
+   "ply": 48,
+   "t": 258.5,
+   "line": [
+    "h5"
+   ],
+   "fen": "2r1r3/1p2ppk1/p2p1np1/P1qPn2p/R7/2N4P/1PPQ1PP1/4RBK1 w - - 0 25",
+   "said": "this blank is wrong I'm updated after this game"
+  },
+  {
+   "ply": 49,
+   "t": 266.5,
+   "line": [
+    "Kh1"
+   ],
+   "fen": "2r1r3/1p2ppk1/p2p1np1/P1qPn2p/R7/2N4P/1PPQ1PP1/4RB1K b - - 1 25",
+   "said": "yes sir I have a raging headache today I'm like trying to do 400 things before I leave for Oslo tomorrow I'm very stressful so we're just gonna chill"
+  },
+  {
+   "ply": 50,
+   "t": 286,
+   "line": [
+    "e6"
+   ],
+   "fen": "2r1r3/1p3pk1/p2ppnp1/P1qPn2p/R7/2N4P/1PPQ1PP1/4RB1K w - - 0 26",
+   "said": "um chest kid cup is happening in Oslo so you guys you know the CCC tournaments have you ever seen the commentary with Tanya and it has from that studio you know what I'm talking about there have been like two of them so far so this next one the finals I'll be commentating"
+  },
+  {
+   "ply": 51,
+   "t": 295,
+   "line": [
+    "dxe6"
+   ],
+   "fen": "2r1r3/1p3pk1/p2pPnp1/P1q1n2p/R7/2N4P/1PPQ1PP1/4RB1K b - - 0 26",
+   "said": "with Canty owl and Tanya foreign day but I'm flying in on the morning of"
+  },
+  {
+   "ply": 52,
+   "t": 300,
+   "line": [
+    "Rxe6"
+   ],
+   "fen": "2r5/1p3pk1/p2prnp1/P1q1n2p/R7/2N4P/1PPQ1PP1/4RB1K w - - 0 27",
+   "said": "the 18th I'm leaving New Jersey tomorrow at 6 pm"
+  },
+  {
+   "ply": 53,
+   "t": 302.5,
+   "line": [
+    "Rd1"
+   ],
+   "fen": "2r5/1p3pk1/p2prnp1/P1q1n2p/R7/2N4P/1PPQ1PP1/3R1B1K b - - 1 27",
+   "said": "but by the time my flight gets in it'll"
+  },
+  {
+   "ply": 52,
+   "t": 303.5,
+   "line": [],
+   "fen": "2r5/1p3pk1/p2prnp1/P1q1n2p/R7/2N4P/1PPQ1PP1/4RB1K w - - 0 27",
+   "said": "be this it'll be the 18th"
+  },
+  {
+   "ply": 53,
+   "t": 305,
+   "line": [
+    "Rd1"
+   ],
+   "fen": "2r5/1p3pk1/p2prnp1/P1q1n2p/R7/2N4P/1PPQ1PP1/3R1B1K b - - 1 27",
+   "said": ""
+  },
+  {
+   "ply": 54,
+   "t": 312.5,
+   "line": [
+    "Rce8"
+   ],
+   "fen": "4r3/1p3pk1/p2prnp1/P1q1n2p/R7/2N4P/1PPQ1PP1/3R1B1K w - - 2 28",
+   "said": "[Music] don't like my position here what else is now right"
+  },
+  {
+   "ply": 55,
+   "t": 321.5,
+   "line": [
+    "Qd4"
+   ],
+   "fen": "4r3/1p3pk1/p2prnp1/P1q1n2p/R2Q4/2N4P/1PP2PP1/3R1B1K b - - 3 28",
+   "said": "[Music]"
+  },
+  {
+   "ply": 56,
+   "t": 327.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "4r3/1p3pk1/p1nprnp1/P1q4p/R2Q4/2N4P/1PP2PP1/3R1B1K w - - 4 29",
+   "said": ""
+  },
+  {
+   "ply": 57,
+   "t": 331.5,
+   "line": [
+    "Qd2"
+   ],
+   "fen": "4r3/1p3pk1/p1nprnp1/P1q4p/R7/2N4P/1PPQ1PP1/3R1B1K b - - 5 29",
+   "said": ""
+  },
+  {
+   "ply": 58,
+   "t": 338,
+   "line": [
+    "d5"
+   ],
+   "fen": "4r3/1p3pk1/p1n1rnp1/P1qp3p/R7/2N4P/1PPQ1PP1/3R1B1K w - - 0 30",
+   "said": "but if he brings himself down to two seconds he'll lose on time"
+  },
+  {
+   "ply": 59,
+   "t": 344.5,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "4r3/1p3pk1/p1n1rnp1/P1qp3p/R7/2NB3P/1PPQ1PP1/3R3K b - - 1 30",
+   "said": ""
+  },
+  {
+   "ply": 61,
+   "t": 348,
+   "line": [
+    "d4",
+    "Ne2"
+   ],
+   "fen": "4r3/1p3pk1/p1n1rnp1/P1q4p/R2p4/3B3P/1PPQNPP1/3R3K b - - 1 31",
+   "said": "[Music] I mean I don't know what he's doing you can't just get you can't get yourself to one second in five moves [Music] means coal means everything I think"
+  }
+ ],
+ "forks": []
+}

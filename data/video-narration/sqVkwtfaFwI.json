@@ -1,0 +1,222 @@
+{
+ "videoId": "sqVkwtfaFwI",
+ "title": "Smith-Morra Gambit Accepted | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 62,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "a couple of books on chess instruction and that's that 1921 okay a serious opponent mexum poland"
+  },
+  {
+   "ply": 3,
+   "t": 66.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "all right well let's see how the smith mora holds up at this level"
+  },
+  {
+   "ply": 5,
+   "t": 70.5,
+   "line": [
+    "cxd4",
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "thank you gleason for the five subs appreciate it"
+  },
+  {
+   "ply": 7,
+   "t": 75,
+   "line": [
+    "dxc3",
+    "Nxc3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "all right so so far we've yeah everybody seems to be accepting the smith mora"
+  },
+  {
+   "ply": 8,
+   "t": 76.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 1 5",
+   "said": ""
+  },
+  {
+   "ply": 9,
+   "t": 77.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "so far everybody's accepted it including"
+  },
+  {
+   "ply": 10,
+   "t": 80.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/4P3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "this guy e6 yeah and this has been the most popular setup it's also kind of the most annoying setup and the one that i"
+  },
+  {
+   "ply": 9,
+   "t": 88.5,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "know least about um in my day d6 was considered"
+  },
+  {
+   "ply": 10,
+   "t": 94.5,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/4P3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "sort of deregur but now everybody's going d6 so does anybody remember how we should position our pieces here what should be the next move and this move again i repeat can be counter intuitive if you"
+  },
+  {
+   "ply": 11,
+   "t": 111,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R b KQkq - 1 6",
+   "said": "don't know and play the more it can seem like it just violates the rules of development bishop c4 but as i've explained"
+  },
+  {
+   "ply": 12,
+   "t": 115,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bqkbnr/1p1p1ppp/p1n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 0 7",
+   "said": "on several occasions this bishop is not as bad as it looks it can support a potential knight sacrifice on d5 and in general if the e6 pawn collapses this bishop is going to be very nicely poised"
+  },
+  {
+   "ply": 13,
+   "t": 132,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkbnr/1p1p1ppp/p1n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 b kq - 1 7",
+   "said": "to wreak havoc in black's king potential energy is a great way to understand it a6 so now if i remember correctly the move is castles now we continue our development by"
+  },
+  {
+   "ply": 14,
+   "t": 133.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1bqkbnr/3p1ppp/p1n1p3/1p6/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 0 8",
+   "said": "castling and b5 this is one of many many viable systems for black clearly he knows"
+  },
+  {
+   "ply": 15,
+   "t": 144,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "r1bqkbnr/3p1ppp/p1n1p3/1p6/4P3/1BN2N2/PP3PPP/R1BQ1RK1 b kq - 1 8",
+   "said": "um what he's doing okay so bishop e3 it's too early to sacrifice i think this is still theory this is about where my knowledge ends so we're going to be on our own from here on out and hopefully our opponent is as well how to conceptualize this position well knight d5 is honestly one of white's"
+  },
+  {
+   "ply": 16,
+   "t": 170,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "r2qkbnr/1b1p1ppp/p1n1p3/1p6/4P3/1BN2N2/PP3PPP/R1BQ1RK1 w kq - 2 9",
+   "said": "main ideas just shoving this knight onto the center and sacrificing it in order to get rid of the sixth one and of course open the e file bishop b7 we could develop the dark square bishop to f4 and and try to clamp down on the d on the d6 square okay that's one option but knight t5 appeals to me because black's entire kingside is undeveloped and it seems to me that we have this"
+  },
+  {
+   "ply": 17,
+   "t": 201,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r2qkbnr/1b1p1ppp/p1n1p3/1p1N4/4P3/1B3N2/PP3PPP/R1BQ1RK1 b kq - 3 9",
+   "said": "opportunity to create you know to create an initiative in the center and so now seems to be the best time at least intuitively for knight d5 and we can play this move largely without calculation because we know that in the event that the sacrifice is captured we're going to have tremendous play down the e-file so i'm very confident that taking the knight is not a good idea here and this uh kind of shows you that you don't always have to calculate every sacrifice you know for 20 minutes some sacrifices are so typical and so powerful that you you can kind of intuitively judge that that they'll work out if they're accepted well if it backfires it backfires but there's no guarantee but i don't think black should capture it i think black's best move is probably just to play d6 and to continue developing but that's not an easy move to play even for you know someone at our opponent's level what what's the point of the night being there well the knights in this first of all the knights in the center which means it's bothering it it's disrupting black's development making it a little bit hard for black to coordinate the other there are a couple of ideas that stem from the knight's placement on d5 and you know the more familiar you are with the position the more of these ideas you know for example bishop e3 bishop b6 is one concept and that sets up a fork on c7 another idea is to play bishop g5 and then you can kind of see how the knight and the bishop combine to control a lot of these squares and you know we're just putting a lot of pressure on black's position yeah and finally our opponent is settled into a think it's important to understand that in these kinds of positions very often it's not like there's anything super immediate i mean there are immediate ideas like bishop e3 which should be six as i just illustrated but a lot of the uh you know to play these positions well you often have to play for the long term pressure right it's not all about what happens in the next two moves you know you have to be more patient than that if our opponent plays well black's lack of development is making it difficult for black to sort of coordinate and obviously it's reducing the likelihood that accepting the sacrifice leads anywhere good it's just a hard position to play right it's just a difficult position for black to play and that is reflected in his thinking time"
+  },
+  {
+   "ply": 18,
+   "t": 340,
+   "line": [
+    "Nge7"
+   ],
+   "fen": "r2qkb1r/1b1pnppp/p1n1p3/1p1N4/4P3/1B3N2/PP3PPP/R1BQ1RK1 w kq - 4 10",
+   "said": "how good was bishop d5 i don't like bishop d5 as much i don't feel like the bishop is exerting the same kind of pressure that the knight is so that bishop could have just been ignored knight ge7 okay that's interesting and kind of encouraging for us so first of all the king is boxed in there's no no squares for the king so that's something to just note down we don't have to act on it necessarily that's just something to note to note in our mind so let's go through the ideas and and weigh the pros and cons of them my instinct here is to develop the dark squared bishop because it's our only minor piece that's not developed now where can we develop it too well we can develop it to g5 that's one option just pinning the knight and creating even more pressure on black's position that looks pretty good bishop g5 looks great actually another option is to play bishop f4 and to threaten the fork on c7 and that would essentially force black to play rook c8 but i'm not sure that the bishop on f4 is that well placed i don't really see what it's doing other than threatening knight c7 check and yet another idea is to play bishop e3 and revert to our old idea bishop b3 bishop b6 so bishop e3 has one drawback which is that it closes the e file and it increases the likelihood that e takes d5 is now going to work out for black i still think after e takes d5 we have a huge initiative and massive compensation but we would ideally want to be able to put a rook on you one without having to move our bishop again i'm kind of leaning toward either bishop g5 or bishop e3 i hope i've made my considerations clear i hope i've made my considerations clear so bishop g5 is the more long-term move whereas bishop e3 is the move that you play you know if you want to challenge him in the short term hmm bishop g5 though my one concern with bishop g5 is that it doesn't create a threat i know that sounds i know i just said that it's not all about creating threats here but bishop g5 let's say black plays d6 or rook c8 i feel like black can start consolidating a little bit and we're going to have a hard time in some of these positions creating threats on the other hand if bishop g5 f6 happens then we have a potential bishop sacrifice on f6 which could be really"
+  },
+  {
+   "ply": 19,
+   "t": 484.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r2qkb1r/1b1pnppp/p1n1p3/1p1N2B1/4P3/1B3N2/PP3PPP/R2Q1RK1 b kq - 5 10",
+   "said": "really interesting so honestly i think both moves are fine it's just a matter of taste and we'll check with the computer afterward let's go for the long term let's go bishop g5 i think most of you are more excited about this move than about bishop e3 and okay we'll go bishop"
+  },
+  {
+   "ply": 18,
+   "t": 494.5,
+   "line": [],
+   "fen": "r2qkb1r/1b1pnppp/p1n1p3/1p1N4/4P3/1B3N2/PP3PPP/R1BQ1RK1 w kq - 4 10",
+   "said": "g5 probably in a game i would go bishop b3 for the record i i pro i kind of prefer"
+  },
+  {
+   "ply": 19,
+   "t": 499.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r2qkb1r/1b1pnppp/p1n1p3/1p1N2B1/4P3/1B3N2/PP3PPP/R2Q1RK1 b kq - 5 10",
+   "said": "bishop b3 but this uh is more principled i think in a certain way thank you this below i'm very curious how our opponent is going to defend here yeah obviously h6 bishop h4 g5 blunders made on f6 so we should be aware of that even bishop f6 is an option in some of these positions no queen b8 doesn't solve all of black's problems queen va we can drop the bishop back to f4 for example"
+  },
+  {
+   "ply": 20,
+   "t": 529.5,
+   "line": [
+    "h6"
+   ],
+   "fen": "r2qkb1r/1b1pnpp1/p1n1p2p/1p1N2B1/4P3/1B3N2/PP3PPP/R2Q1RK1 w kq - 0 11",
+   "said": "and that's a lot more problematic than bishop f4 on the previous move it's really not that simple for black to make to play here black has to be very skilled in order to not lose this quickly h6"
+  },
+  {
+   "ply": 21,
+   "t": 532.5,
+   "line": [
+    "Bh4"
+   ],
+   "fen": "r2qkb1r/1b1pnpp1/p1n1p2p/1p1N4/4P2B/1B3N2/PP3PPP/R2Q1RK1 b kq - 1 11",
+   "said": "well um okay bishop h4 let's hope for g5 why is g5 back because knight f6 is checkmate look at how the king is boxed in that would be a smothered mate you might say well why is knight f6 not checkmate right now the g7 pawn because it captures diagonally is protecting that square currently so in the meantime as our opponent is thinking let's come up with a couple of potential ways that we can improve our position right and it almost seems weird to talk"
+  },
+  {
+   "ply": 22,
+   "t": 571,
+   "line": [
+    "g5"
+   ],
+   "fen": "r2qkb1r/1b1pnp2/p1n1p2p/1p1N2p1/4P2B/1B3N2/PP3PPP/R2Q1RK1 w kq - 0 12",
+   "said": "about that since our knight is just sitting there on d5 but it's just chilling right we don't need to move that knight black is nowhere near completing his development so i can see a couple of possibilities we can definitely oh my god"
+  },
+  {
+   "ply": 23,
+   "t": 575.5,
+   "line": [
+    "Nf6#"
+   ],
+   "fen": "r2qkb1r/1b1pnp2/p1n1pN1p/1p4p1/4P2B/1B3N2/PP3PPP/R2Q1RK1 b kq - 1 12",
+   "said": "no way i i honestly that is unbelievable oh man that's really anticlimactic too that's crazy but that's just what happens when you put a lot of pressure on your opponent oh my god you guys called it i i was not expecting this this is an anti-profit move jesus collapsed under pressure well we can still analyze this game so let's see so this is i mean this is all theory e6 a6 b5 bishop b3 yeah tons of games in opening explore bishop b7 now apparently the move is queen e2 95 might have been premature here and the one game which reached this position in the database continued knight a5 and i actually see two games in the database one of them on bishop g5 bishop b7"
+  }
+ ],
+ "forks": []
+}

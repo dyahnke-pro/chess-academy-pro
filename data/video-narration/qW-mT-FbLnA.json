@@ -1,0 +1,494 @@
+{
+ "videoId": "qW-mT-FbLnA",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1590",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 16.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "okay let's go let's get back in the ring charlie huertas from the philippines 1580. let's play the sicilian defense"
+  },
+  {
+   "ply": 3,
+   "t": 18.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "and he plays the aleppin citilion named after simone alepan i'll talk about him later what is the purpose of the alpine city and the purpose is to control the center with d4 we need to preempt white from going before we don't want to let him control the entire center how can we do that how can we preempt white from controlling the set how can we do it first"
+  },
+  {
+   "ply": 4,
+   "t": 53.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "what can we do yeah we can go e5 that's fine but e5 if you guys may notice weakens the d5 square and that kind of i don't want to create a big weakness on a central square like that let's go d5"
+  },
+  {
+   "ply": 5,
+   "t": 58.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2ppP3/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "and it is true okay he goes e5 again he wants to play d4"
+  },
+  {
+   "ply": 6,
+   "t": 62.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2p1P3/3p4/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "so we're gonna play d4 ourselves to stop"
+  },
+  {
+   "ply": 8,
+   "t": 67,
+   "line": [
+    "cxd4",
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/4P3/3p4/8/PP1P1PPP/RNBQKBNR w KQkq - 0 5",
+   "said": "him from doing that our pawn is sort of wedged here it's"
+  },
+  {
+   "ply": 9,
+   "t": 68,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/4P3/3p4/5N2/PP1P1PPP/RNBQKB1R b KQkq - 1 5",
+   "said": "stopping him from naturally controlling"
+  },
+  {
+   "ply": 10,
+   "t": 72.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp2pppp/2n5/4P3/3p4/5N2/PP1P1PPP/RNBQKB1R w KQkq - 2 6",
+   "said": "the center we've got a nice position i'll talk about this opening a little bit later"
+  },
+  {
+   "ply": 11,
+   "t": 75.5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/pp2pppp/2n5/1B2P3/3p4/5N2/PP1P1PPP/RNBQK2R b KQkq - 3 6",
+   "said": "bishop b5 we already kind of know how to respond to this type of move what should we do how should we deal with the fact of this"
+  },
+  {
+   "ply": 12,
+   "t": 92,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2qkbnr/pp1bpppp/2n5/1B2P3/3p4/5N2/PP1P1PPP/RNBQK2R w KQkq - 4 7",
+   "said": "pin being kind of annoying again not all of our pieces always need to be conquering you know the greek or the"
+  },
+  {
+   "ply": 13,
+   "t": 93.5,
+   "line": [
+    "d3"
+   ],
+   "fen": "r2qkbnr/pp1bpppp/2n5/1B2P3/3p4/3P1N2/PP3PPP/RNBQK2R b KQkq - 0 7",
+   "said": "okay d3 is a very typical mistake i need somebody i'm not going to give you any hints black to play and win how do i see this two things number one undefended pieces loose"
+  },
+  {
+   "ply": 14,
+   "t": 124,
+   "line": [
+    "Qa5+"
+   ],
+   "fen": "r3kbnr/pp1bpppp/2n5/qB2P3/3p4/3P1N2/PP3PPP/RNBQK2R w KQkq - 1 8",
+   "said": "pieces drop off number two as soon as a move is made in front of the king even tangentially you must look at the diagonals that have been opened and consider whether you cannot put a piece on those diagonals when a a5 wins a piece and this basically wins the game because knight c3 we take remember we have a pawn on d4 that's why we put it there"
+  },
+  {
+   "ply": 15,
+   "t": 143.5,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "r3kbnr/pp1bpppp/2n5/qB2P3/3p4/3P1N2/PP1B1PPP/RN1QK2R b KQkq - 2 8",
+   "said": "right it's all good no but normally you'd be right zaizi and he's fuming right now i'm telling you"
+  },
+  {
+   "ply": 16,
+   "t": 144.5,
+   "line": [
+    "Qxb5"
+   ],
+   "fen": "r3kbnr/pp1bpppp/2n5/1q2P3/3p4/3P1N2/PP1B1PPP/RN1QK2R w KQkq - 0 9",
+   "said": ""
+  },
+  {
+   "ply": 18,
+   "t": 147.5,
+   "line": [
+    "O-O",
+    "Qxd3"
+   ],
+   "fen": "r3kbnr/pp1bpppp/2n5/4P3/3p4/3q1N2/PP1B1PPP/RN1Q1RK1 w kq - 0 10",
+   "said": "boom we're also attacking three different pawns let's take one of them let's take oh we should have taken b2 because we would have probably also won the rook"
+  },
+  {
+   "ply": 19,
+   "t": 158.5,
+   "line": [
+    "Na3"
+   ],
+   "fen": "r3kbnr/pp1bpppp/2n5/4P3/3p4/N2q1N2/PP1B1PPP/R2Q1RK1 b kq - 1 10",
+   "said": "uh but i i was just too attracted by the juicy central pawn on d3 okay now what do i always tell you guys when we win a lot of material when we win a lot of material what do you not want to forget to do what do you not want to forget to do"
+  },
+  {
+   "ply": 20,
+   "t": 179,
+   "line": [
+    "e6"
+   ],
+   "fen": "r3kbnr/pp1b1ppp/2n1p3/4P3/3p4/N2q1N2/PP1B1PPP/R2Q1RK1 w kq - 0 11",
+   "said": ""
+  },
+  {
+   "ply": 21,
+   "t": 183,
+   "line": [
+    "Qe1"
+   ],
+   "fen": "r3kbnr/pp1b1ppp/2n1p3/4P3/3p4/N2q1N2/PP1B1PPP/R3QRK1 b kq - 1 11",
+   "said": "develop your pieces when you want material do not forget about that trading and i talked about this at the"
+  },
+  {
+   "ply": 22,
+   "t": 189,
+   "line": [
+    "Bxa3"
+   ],
+   "fen": "r3k1nr/pp1b1ppp/2n1p3/4P3/3p4/b2q1N2/PP1B1PPP/R3QRK1 w kq - 0 12",
+   "said": "very beginning of the speed run it's good in general trading is good when you're up material but"
+  },
+  {
+   "ply": 23,
+   "t": 194.5,
+   "line": [
+    "bxa3"
+   ],
+   "fen": "r3k1nr/pp1b1ppp/2n1p3/4P3/3p4/P2q1N2/P2B1PPP/R3QRK1 b kq - 0 12",
+   "said": "two things to point out it's not the"
+  },
+  {
+   "ply": 24,
+   "t": 195.5,
+   "line": [
+    "Nge7"
+   ],
+   "fen": "r3k2r/pp1bnppp/2n1p3/4P3/3p4/P2q1N2/P2B1PPP/R3QRK1 w kq - 1 13",
+   "said": "only way to convert a material advantage you can also use your material to attack i call this sort"
+  },
+  {
+   "ply": 25,
+   "t": 203,
+   "line": [
+    "Rb1"
+   ],
+   "fen": "r3k2r/pp1bnppp/2n1p3/4P3/3p4/P2q1N2/P2B1PPP/1R2QRK1 b kq - 2 13",
+   "said": "of method one and the other thing is that people get"
+  },
+  {
+   "ply": 26,
+   "t": 204.5,
+   "line": [
+    "b6"
+   ],
+   "fen": "r3k2r/p2bnppp/1pn1p3/4P3/3p4/P2q1N2/P2B1PPP/1R2QRK1 w kq - 0 14",
+   "said": "in a lot of trouble by the way just defending the pawn people get in a lot of trouble when you"
+  },
+  {
+   "ply": 27,
+   "t": 212.5,
+   "line": [
+    "Bb4"
+   ],
+   "fen": "r3k2r/p2bnppp/1pn1p3/4P3/1B1p4/P2q1N2/P4PPP/1R2QRK1 b kq - 1 14",
+   "said": "go out of your way to trade pieces you don't want to your entire position solely for the purpose of"
+  },
+  {
+   "ply": 28,
+   "t": 213.5,
+   "line": [
+    "Nxb4"
+   ],
+   "fen": "r3k2r/p2bnppp/1p2p3/4P3/1n1p4/P2q1N2/P4PPP/1R2QRK1 w kq - 0 15",
+   "said": "trading one pair of pieces if a trade"
+  },
+  {
+   "ply": 29,
+   "t": 218,
+   "line": [
+    "Qxb4"
+   ],
+   "fen": "r3k2r/p2bnppp/1p2p3/4P3/1Q1p4/P2q1N2/P4PPP/1R3RK1 b kq - 0 15",
+   "said": "falls in your lap as as these trades are here sure go ahead and trade a bunch of pieces fine"
+  },
+  {
+   "ply": 30,
+   "t": 230,
+   "line": [
+    "Qc3"
+   ],
+   "fen": "r3k2r/p2bnppp/1p2p3/4P3/1Q1p4/P1q2N2/P4PPP/1R3RK1 w kq - 1 16",
+   "said": "but but not if you have to your position somehow just for the sake of one trade so here for example the trades are literally falling in our lap he's offering us to take the bishop"
+  },
+  {
+   "ply": 31,
+   "t": 239.5,
+   "line": [
+    "Qd6"
+   ],
+   "fen": "r3k2r/p2bnppp/1p1Qp3/4P3/3p4/P1q2N2/P4PPP/1R3RK1 b kq - 2 16",
+   "said": "queen to c3 basically forces the queen trade in fact ladies and gentlemen we have kind of a nice move here how do we get this queen out of d6 we can basically trap it we can go queen c5"
+  },
+  {
+   "ply": 32,
+   "t": 252,
+   "line": [
+    "Nf5"
+   ],
+   "fen": "r3k2r/p2b1ppp/1p1Qp3/4Pn2/3p4/P1q2N2/P4PPP/1R3RK1 w kq - 3 17",
+   "said": "but let's look for something even better boom knight f5 get back to b4 forcing the trade we win the game okay"
+  },
+  {
+   "ply": 34,
+   "t": 271,
+   "line": [
+    "Qb4",
+    "Qxb4"
+   ],
+   "fen": "r3k2r/p2b1ppp/1p2p3/4Pn2/1q1p4/P4N2/P4PPP/1R3RK1 w kq - 0 18",
+   "said": "all right queen before we take it and now the same rules remain in the end"
+  },
+  {
+   "ply": 35,
+   "t": 274,
+   "line": [
+    "Rxb4"
+   ],
+   "fen": "r3k2r/p2b1ppp/1p2p3/4Pn2/1R1p4/P4N2/P4PPP/5RK1 b kq - 0 18",
+   "said": "game we don't want to forget to consolidate do we need this one we don't need the spot"
+  },
+  {
+   "ply": 36,
+   "t": 280,
+   "line": [
+    "Bc6"
+   ],
+   "fen": "r3k2r/p4ppp/1pb1p3/4Pn2/1R1p4/P4N2/P4PPP/5RK1 w kq - 1 19",
+   "said": "we don't need the spawn let's deploy our bishop to the most"
+  },
+  {
+   "ply": 38,
+   "t": 283,
+   "line": [
+    "Nxd4",
+    "Nxd4"
+   ],
+   "fen": "r3k2r/p4ppp/1pb1p3/4P3/1R1n4/P7/P4PPP/5RK1 w kq - 0 20",
+   "said": "active square and what should we do now"
+  },
+  {
+   "ply": 39,
+   "t": 285.5,
+   "line": [
+    "Rxd4"
+   ],
+   "fen": "r3k2r/p4ppp/1pb1p3/4P3/3R4/P7/P4PPP/5RK1 b kq - 0 20",
+   "said": "in the interest of things that i explained can somebody tell me a good move in this position we can again if a trade falls in your"
+  },
+  {
+   "ply": 40,
+   "t": 301.5,
+   "line": [
+    "Ke7"
+   ],
+   "fen": "r6r/p3kppp/1pb1p3/4P3/3R4/P7/P4PPP/5RK1 w - - 1 21",
+   "said": "lap yeah and everybody's suggesting good moves king e7 is great increasing the coordination between the pieces castling is not as good in the end game because there's no need to castle we can"
+  },
+  {
+   "ply": 41,
+   "t": 304.5,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "r6r/p3kppp/1pb1p3/4P3/3R4/P7/P4PPP/2R3K1 b - - 2 21",
+   "said": "do the same thing"
+  },
+  {
+   "ply": 42,
+   "t": 306,
+   "line": [
+    "Rac8"
+   ],
+   "fen": "2r4r/p3kppp/1pb1p3/4P3/3R4/P7/P4PPP/2R3K1 w - - 3 22",
+   "said": "as we would when we castle by putting"
+  },
+  {
+   "ply": 43,
+   "t": 311,
+   "line": [
+    "Rdc4"
+   ],
+   "fen": "2r4r/p3kppp/1pb1p3/4P3/2R5/P7/P4PPP/2R3K1 b - - 4 22",
+   "said": "our king on e7 which is closer to the center now we got to be very careful bishop b7 would run into a nasty little"
+  },
+  {
+   "ply": 44,
+   "t": 319,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "2r4r/p2bkppp/1p2p3/4P3/2R5/P7/P4PPP/2R3K1 w - - 5 23",
+   "said": "check on c7 how do we circumvent that we can just drop it to d7 right we force the rook trade"
+  },
+  {
+   "ply": 45,
+   "t": 325,
+   "line": [
+    "Rxc8"
+   ],
+   "fen": "2R4r/p2bkppp/1p2p3/4P3/8/P7/P4PPP/2R3K1 b - - 0 23",
+   "said": "the game is over okay"
+  },
+  {
+   "ply": 49,
+   "t": 329.5,
+   "line": [
+    "Bc6",
+    "R1xc6",
+    "Rxc8",
+    "Rc1"
+   ],
+   "fen": "2r5/p3kppp/1p2p3/4P3/8/P7/P4PPP/2R3K1 b - - 1 25",
+   "said": "infiltrating we're going to just start picking off his pawns how do we convert this position we identify the area where we can create a pass pawn and then we create one either by taking a bunch of our opponent's pawns or by pushing our pawns and just creating a password i this there's no rocket science here right i'm literally doing as i say i'm going to create a pass pawn and i'm going to use my extra material the extra bishop to force white's rook away he's probably gonna go rook b3 yep so no problem let's defend the pawn of the rock now where should we put our bishop to dislodge the rook from b3 yeah just let's go here bishop c6 bishop d5 b3 the fact of the matter is we have so much extra material that we can use it to continually get this rook out of its blockading post that's just how you usually win these types of positions not the only way boom b2 is very formulaic then bishop b4 it's the same thing repeated again and again until his rook has to permanently move away or give itself up for the plot and then we're going to have a rook extra okay identify a passport yeah well sometimes you sometimes you see a specific pass pawn that you can create sometimes you see the general area of the board where a passpond can be created but you don't know exactly which pass pawn it's going to be okay goodbye that's over yeah this is not the only way to convert this again i want to make it very clear that when i'm winning like this there's a million possible moves on every move uh there isn't just one way of doing this i'm just trying to show the most sort of play it by the rules by the book way of converting same thing by the way we're just going to create a pass pawn we're going to push it even though i'm up a million pieces we could literally we don't have to push any of our pawns i can move my king up and checkmate him but the easiest is just going to be to push the pawn forget don't forget about not stalemating that's why and there we go"
+  },
+  {
+   "ply": 3,
+   "t": 476,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "1600 ladies and gentlemen and uh this is a great place to stop but let's take a quick look at the game first okay so the elephant sicilian is named after jimon alopin who was a lithuanian chess master from i believe the early 20th century uh and who was the first to play the elephant thank you trash pandaman for the sub let's take some bets who thinks that that aleppin shimon alepan was the first person to play the alpine let's get a yay who thinks that alpine was the first person to play an alpine no he was not the first person to play an elephant he was the fourth person sorry the fifth person to play the elephant but he was one of the earliest proponents of it the first person to play the alpine was a in in recorded modern recorded history was a guy named william popert in london in 1841 he played it against howard staunton one of the strongest players of the 19th century and beat him with the alpine then it was played in 19 in 1842 by john william shulton another very strong english player but got crushed and only in 1898 was it played by alepan himself so as i've made clear before some of these openings are named after people but that doesn't mean those people were the first people to play them sometimes they never even played the opening named after them as in the case of the philidor the philidor is named after philidor but he never actually played it i think he just talked about it in his book but it's kind of interesting how this kind of chess naming stuff works the damiano is often named after damiano this is a horrible move and i've shared this story many times damiano a 17th century chess master wrote one of the first books ever on chess and he refuted the damiana but we don't call it damiano's reputation like who is this dummy damiano"
+  },
+  {
+   "ply": 4,
+   "t": 605.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "he was the one who actually said it was bad uh and and yet we think it was the city of damiano who wanted to play f6 so it's just interesting how this kind of stuff works but we played d5 and he played a weird move e5"
+  },
+  {
+   "ply": 5,
+   "t": 607.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2ppP3/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 4,
+   "t": 610,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "um e takes d5 is the main move"
+  },
+  {
+   "ply": 6,
+   "t": 612,
+   "line": [
+    "exd5",
+    "Qxd5"
+   ],
+   "fen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "now what is the what is the reason why uh this is better than a scandi well if you look very carefully at this position you compare it to a scandi who can tell me what the main difference is uh with the insertion of these moves like wha what move does yeah knight c3 is not"
+  },
+  {
+   "ply": 5,
+   "t": 640,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/8/2pP4/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "possible and as you guys know that's often one of the key indicators for whether a queen is safe in the center can he develop the knight and attack the queen simultaneously and here the answer is no i played the alpine myself as my main opening for"
+  },
+  {
+   "ply": 6,
+   "t": 643,
+   "line": [
+    "Qxd5"
+   ],
+   "fen": "rnb1kbnr/pp2pppp/8/2pq4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "many years"
+  },
+  {
+   "ply": 8,
+   "t": 645.5,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnb1kb1r/pp2pppp/5n2/2pq4/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "said": "there is a theoretical line that goes like this and this is a very interesting"
+  },
+  {
+   "ply": 10,
+   "t": 647,
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "fen": "r1b1kb1r/pp2pppp/2n2n2/2pq4/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
+   "said": "opening i mean it's it's not clear who's better uh it's a very rich rich position which"
+  },
+  {
+   "ply": 5,
+   "t": 659.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp2pppp/8/2pP4/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "i will not go into right now but um this is you know the movie five he wants to transpose into some sort of a french but we stopped him from doing that right we went we wedged the pawn through to d4 and then his key mistake was d3 uh which which allows of course this fork against his bishop what should he have done if he castled we actually have another nice tactic in this position oh but there's some beautiful counter tactics the bishop on b5 what can you tell me about it i'm defended remember what i said about pins they go both ways either side can exploit a pin it's like a two-sided coin how can we exploit the bishop on b5 we can do knight takes e5 this is a very typical idea it's a bit you're like did you just say it's a very typical idea have you personally daniel of you personally applied this idea in one of your games if you personally applied what do you guys think yes i have in fact i can show you the very game in which uh this position this type of"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 4,
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "e4",
+    "c5",
+    "c3",
+    "d5"
+   ],
+   "options": [
+    {
+     "san": "e5",
+     "t": 58.5,
+     "continuation": "e5",
+     "said": "the d5 square and that kind of i don't want to create a big weakness on a central square like that let's go d5 and it is true okay he goes e5 again he wants to play d4 so we're gonna play d4 ourselves to stop him from doing that our pawn is sort of wedged here it's stopping him from naturally controlling the center we've got a nice position i'll talk about this opening a little bit later bishop b5 we already kind of know how to respond to this type of move what should we do how should we deal with the fact of this pin being kind of annoying again not all of our pieces always need to be conquering you know the greek or the okay d3 is a very typical mistake i need somebody i'm not going to give you any hints black to play and win how do i see this two things number one undefended pieces loose pieces drop off number two as soon as a move is made in front of the king even tangentially"
+    },
+    {
+     "san": "exd5",
+     "t": 612,
+     "continuation": "exd5 Qxd5",
+     "said": "damiano who wanted to play f6 so it's just interesting how this kind of stuff works but we played d5 and he played a weird move e5 um e takes d5 is the main move now what is the what is the reason why uh this is better than a scandi well if you look very carefully at this position you compare it to a scandi who can tell me what the main difference is uh with the insertion of these moves like wha what move does yeah knight c3 is not possible and as you guys know that's often one of the key indicators for whether a queen is safe in the center can he develop the knight and attack the queen simultaneously and here the answer is no i played the alpine myself as my main opening for many years there is a theoretical line that goes like this and this is a very interesting opening i mean it's it's not clear who's better uh it's a very rich rich position which i will not go into right now but um this is you know the movie five he wants to transpose into some sort of a french but we stopped him from doing that right we went we wedged the pawn through to d4 and then his key mistake was d3 uh which which allows of course this"
+    }
+   ]
+  }
+ ]
+}

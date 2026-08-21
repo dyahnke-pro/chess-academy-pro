@@ -1,0 +1,394 @@
+{
+ "videoId": "OMpuTbOzyoc",
+ "title": "Master Class | Smith–Morra Gambit Declined | Chess Speedrun | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 4222,
+  "settledPositions": null
+ },
+ "plies": 31,
+ "rewinds": 7,
+ "moves": [
+  {
+   "t": 985.5,
+   "ply": 3,
+   "line": [
+    "d4",
+    "c5",
+    "e4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 986.5,
+   "ply": 4,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 987.5,
+   "ply": 5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 993.5,
+   "ply": 7,
+   "line": [
+    "dxc3",
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4"
+  },
+  {
+   "t": 1004,
+   "ply": 5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 1041.5,
+   "ply": 6,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 1044,
+   "ply": 7,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/3PP3/8/PP3PPP/RNBQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 1045,
+   "ply": 8,
+   "line": [
+    "a6"
+   ],
+   "fen": "rnbqkbnr/1p2pppp/p2p4/8/3PP3/8/PP3PPP/RNBQKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 1066.5,
+   "ply": 9,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/1p2pppp/p2p4/8/3PP3/2N5/PP3PPP/R1BQKBNR b KQkq - 1 5"
+  },
+  {
+   "t": 1067.5,
+   "ply": 10,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 2 6"
+  },
+  {
+   "t": 1069,
+   "ply": 11,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3PP3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 3 6"
+  },
+  {
+   "t": 1070.5,
+   "ply": 12,
+   "line": [
+    "b5"
+   ],
+   "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 7"
+  },
+  {
+   "t": 1076.5,
+   "ply": 10,
+   "line": [],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 2 6"
+  },
+  {
+   "t": 1078,
+   "ply": 11,
+   "line": [
+    "a4"
+   ],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/P2PP3/2N5/1P3PPP/R1BQKBNR b KQkq - 0 6"
+  },
+  {
+   "t": 1087,
+   "ply": 10,
+   "line": [],
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 2 6"
+  },
+  {
+   "t": 1089.5,
+   "ply": 13,
+   "line": [
+    "Bd3",
+    "b5",
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 1 7"
+  },
+  {
+   "t": 1095,
+   "ply": 14,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "rn1qkb1r/1b2pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R w KQkq - 2 8"
+  },
+  {
+   "t": 1103.5,
+   "ply": 15,
+   "line": [
+    "e5"
+   ],
+   "fen": "rn1qkb1r/1b2pppp/p2p1n2/1p2P3/3P4/2NB1N2/PP3PPP/R1BQK2R b KQkq - 0 8"
+  },
+  {
+   "t": 1112,
+   "ply": 17,
+   "line": [
+    "dxe5",
+    "dxe5"
+   ],
+   "fen": "rn1qkb1r/1b2pppp/p4n2/1p2P3/8/2NB1N2/PP3PPP/R1BQK2R b KQkq - 0 9"
+  },
+  {
+   "t": 1115.5,
+   "ply": 18,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "rn1qkb1r/1b2pppp/p7/1p1nP3/8/2NB1N2/PP3PPP/R1BQK2R w KQkq - 1 10"
+  },
+  {
+   "t": 1124.5,
+   "ply": 19,
+   "line": [
+    "e6"
+   ],
+   "fen": "rn1qkb1r/1b2pppp/p3P3/1p1n4/8/2NB1N2/PP3PPP/R1BQK2R b KQkq - 0 10"
+  },
+  {
+   "t": 1134.5,
+   "ply": 14,
+   "line": [],
+   "fen": "rn1qkb1r/1b2pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R w KQkq - 2 8"
+  },
+  {
+   "t": 1143.5,
+   "ply": 13,
+   "line": [],
+   "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 1 7"
+  },
+  {
+   "t": 1144.5,
+   "ply": 14,
+   "line": [
+    "b4"
+   ],
+   "fen": "rnbqkb1r/4pppp/p2p1n2/8/1p1PP3/2NB1N2/PP3PPP/R1BQK2R w KQkq - 0 8"
+  },
+  {
+   "t": 1188,
+   "ply": 13,
+   "line": [],
+   "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 1 7"
+  },
+  {
+   "t": 1194.5,
+   "ply": 16,
+   "line": [
+    "Nbd7",
+    "Rg1",
+    "Bb7"
+   ],
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK1R1 w Qkq - 4 9"
+  },
+  {
+   "t": 1216.5,
+   "ply": 18,
+   "line": [
+    "Nb1",
+    "b4"
+   ],
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/8/1p1PP3/3B1N2/PP3PPP/RNBQK1R1 w Qkq - 0 10"
+  },
+  {
+   "t": 1245,
+   "ply": 19,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/8/1p1PP3/2NB1N2/PP3PPP/R1BQK1R1 b Qkq - 1 10"
+  },
+  {
+   "t": 1256.5,
+   "ply": 18,
+   "line": [],
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/8/1p1PP3/3B1N2/PP3PPP/RNBQK1R1 w Qkq - 0 10"
+  },
+  {
+   "t": 1287.5,
+   "ply": 19,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r2qkb1r/1b1npppp/p2p1n2/8/1p1PP3/2NB1N2/PP3PPP/R1BQK1R1 b Qkq - 1 10"
+  },
+  {
+   "t": 1343,
+   "ply": 21,
+   "line": [
+    "e6",
+    "Nd5"
+   ],
+   "fen": "r2qkb1r/1b1n1ppp/p2ppn2/3N4/1p1PP3/3B1N2/PP3PPP/R1BQK1R1 b Qkq - 1 11"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d4",
+    "c5",
+    "e4",
+    "cxd4",
+    "c3"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "dxc3",
+     "t": 993.5,
+     "continuation": "dxc3 Bc4"
+    },
+    {
+     "san": "d6",
+     "t": 1041.5,
+     "continuation": "d6"
+    }
+   ]
+  },
+  {
+   "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3PP3/2N5/PP3PPP/R1BQKBNR w KQkq - 2 6",
+   "line": [
+    "d4",
+    "c5",
+    "e4",
+    "cxd4",
+    "c3",
+    "d6",
+    "cxd4",
+    "a6",
+    "Nc3",
+    "Nf6"
+   ],
+   "ply": 10,
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 1069,
+     "continuation": "Nf3"
+    },
+    {
+     "san": "a4",
+     "t": 1078,
+     "continuation": "a4"
+    },
+    {
+     "san": "Bd3",
+     "t": 1089.5,
+     "continuation": "Bd3 b5 Nf3"
+    }
+   ]
+  },
+  {
+   "fen": "rnbqkb1r/4pppp/p2p1n2/1p6/3PP3/2NB1N2/PP3PPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "d4",
+    "c5",
+    "e4",
+    "cxd4",
+    "c3",
+    "d6",
+    "cxd4",
+    "a6",
+    "Nc3",
+    "Nf6",
+    "Bd3",
+    "b5",
+    "Nf3"
+   ],
+   "ply": 13,
+   "options": [
+    {
+     "san": "Bb7",
+     "t": 1095,
+     "continuation": "Bb7"
+    },
+    {
+     "san": "b4",
+     "t": 1144.5,
+     "continuation": "b4"
+    },
+    {
+     "san": "Nbd7",
+     "t": 1194.5,
+     "continuation": "Nbd7 Rg1 Bb7"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit Accepted",
+   "eco": "B21",
+   "plies": 6,
+   "line": "d4 c5 e4 cxd4 c3 dxc3",
+   "coverage": 0.043
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit",
+   "eco": "B21",
+   "plies": 3,
+   "line": "d4 c5 e4",
+   "coverage": 1
+  },
+  {
+   "name": "Benoni Defense: Old Benoni",
+   "eco": "A43",
+   "plies": 2,
+   "line": "d4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Smith-Morra Gambit",
+  "confirmed": true
+ }
+}

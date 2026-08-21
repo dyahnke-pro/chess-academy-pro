@@ -1,0 +1,459 @@
+{
+ "videoId": "m6_i2xT7mgM",
+ "title": "Chess Analysis With Moistcr1tikal / Penguinz0 | Streamer Lesson",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 7657,
+  "settledPositions": null
+ },
+ "plies": 49,
+ "rewinds": 3,
+ "moves": [
+  {
+   "t": 376.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 381.5,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 382.5,
+   "ply": 4,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 387.5,
+   "ply": 5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3"
+  },
+  {
+   "t": 391,
+   "ply": 6,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+  },
+  {
+   "t": 405,
+   "ply": 7,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4"
+  },
+  {
+   "t": 435,
+   "ply": 8,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/1B2p3/3nP3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5"
+  },
+  {
+   "t": 449.5,
+   "ply": 9,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/1B2p3/3nP3/2N2N2/PPPP1PPP/R1BQ1RK1 b kq - 7 5"
+  },
+  {
+   "t": 460.5,
+   "ply": 10,
+   "line": [
+    "Nxb5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/1n2p3/4P3/2N2N2/PPPP1PPP/R1BQ1RK1 w kq - 0 6"
+  },
+  {
+   "t": 468,
+   "ply": 11,
+   "line": [
+    "Nxb5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/1N2p3/4P3/5N2/PPPP1PPP/R1BQ1RK1 b kq - 0 6"
+  },
+  {
+   "t": 482.5,
+   "ply": 12,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/3p1n2/1N2p3/4P3/5N2/PPPP1PPP/R1BQ1RK1 w kq - 0 7"
+  },
+  {
+   "t": 491,
+   "ply": 13,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/3p1n2/1N2p3/3PP3/5N2/PPP2PPP/R1BQ1RK1 b kq - 0 7"
+  },
+  {
+   "t": 501.5,
+   "ply": 14,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/3p1n2/1N2p3/3PP3/5N2/PPP2PPP/R1BQ1RK1 w kq - 1 8"
+  },
+  {
+   "t": 509,
+   "ply": 15,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/3p1n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 2 8"
+  },
+  {
+   "t": 541.5,
+   "ply": 16,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/3p1n2/8/3pP3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 9"
+  },
+  {
+   "t": 550,
+   "ply": 17,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r2qkb1r/pppb1ppp/3p1n2/8/3QP3/2N2N2/PPP2PPP/R1B2RK1 b kq - 0 9"
+  },
+  {
+   "t": 599.5,
+   "ply": 18,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r2qk2r/pppbbppp/3p1n2/8/3QP3/2N2N2/PPP2PPP/R1B2RK1 w kq - 1 10"
+  },
+  {
+   "t": 620,
+   "ply": 19,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r2qk2r/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/R4RK1 b kq - 2 10"
+  },
+  {
+   "t": 633,
+   "ply": 20,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/R4RK1 w - - 3 11"
+  },
+  {
+   "t": 646,
+   "ply": 21,
+   "line": [
+    "Rad1"
+   ],
+   "fen": "r2q1rk1/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/3R1RK1 b - - 4 11"
+  },
+  {
+   "t": 674,
+   "ply": 22,
+   "line": [
+    "Re8"
+   ],
+   "fen": "r2qr1k1/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/3R1RK1 w - - 5 12"
+  },
+  {
+   "t": 693,
+   "ply": 23,
+   "line": [
+    "Rfe1"
+   ],
+   "fen": "r2qr1k1/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/3RR1K1 b - - 6 12"
+  },
+  {
+   "t": 724.5,
+   "ply": 24,
+   "line": [
+    "Bc6"
+   ],
+   "fen": "r2qr1k1/ppp1bppp/2bp1n2/6B1/3QP3/2N2N2/PPP2PPP/3RR1K1 w - - 7 13"
+  },
+  {
+   "t": 732.5,
+   "ply": 25,
+   "line": [
+    "e5"
+   ],
+   "fen": "r2qr1k1/ppp1bppp/2bp1n2/4P1B1/3Q4/2N2N2/PPP2PPP/3RR1K1 b - - 0 13"
+  },
+  {
+   "t": 735.5,
+   "ply": 24,
+   "line": [],
+   "fen": "r2qr1k1/ppp1bppp/2bp1n2/6B1/3QP3/2N2N2/PPP2PPP/3RR1K1 w - - 7 13"
+  },
+  {
+   "t": 736.5,
+   "ply": 25,
+   "line": [
+    "e5"
+   ],
+   "fen": "r2qr1k1/ppp1bppp/2bp1n2/4P1B1/3Q4/2N2N2/PPP2PPP/3RR1K1 b - - 0 13"
+  },
+  {
+   "t": 777,
+   "ply": 26,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r2qr1k1/ppp1bppp/2b2n2/4p1B1/3Q4/2N2N2/PPP2PPP/3RR1K1 w - - 0 14"
+  },
+  {
+   "t": 782.5,
+   "ply": 27,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r2qr1k1/ppp1bppp/2b2n2/4N1B1/3Q4/2N5/PPP2PPP/3RR1K1 b - - 0 14"
+  },
+  {
+   "t": 815.5,
+   "ply": 28,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r3r1k1/ppp1bppp/2b2n2/4N1B1/3q4/2N5/PPP2PPP/3RR1K1 w - - 0 15"
+  },
+  {
+   "t": 821.5,
+   "ply": 29,
+   "line": [
+    "Rxd4"
+   ],
+   "fen": "r3r1k1/ppp1bppp/2b2n2/4N1B1/3R4/2N5/PPP2PPP/4R1K1 b - - 0 15"
+  },
+  {
+   "t": 852,
+   "ply": 30,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "r3r1k1/ppp2ppp/2bb1n2/4N1B1/3R4/2N5/PPP2PPP/4R1K1 w - - 1 16"
+  },
+  {
+   "t": 883,
+   "ply": 31,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r3r1k1/ppp2ppp/2bb1n2/4N3/3R1B2/2N5/PPP2PPP/4R1K1 b - - 2 16"
+  },
+  {
+   "t": 903.5,
+   "ply": 32,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "r3r1k1/ppp2ppp/2bb4/4N3/3R1Bn1/2N5/PPP2PPP/4R1K1 w - - 3 17"
+  },
+  {
+   "t": 971.5,
+   "ply": 33,
+   "line": [
+    "Nd3"
+   ],
+   "fen": "r3r1k1/ppp2ppp/2bb4/8/3R1Bn1/2NN4/PPP2PPP/4R1K1 b - - 4 17"
+  },
+  {
+   "t": 1022,
+   "ply": 34,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r3r1k1/ppp2ppp/2b5/2b5/3R1Bn1/2NN4/PPP2PPP/4R1K1 w - - 5 18"
+  },
+  {
+   "t": 1028.5,
+   "ply": 35,
+   "line": [
+    "Rxe8+"
+   ],
+   "fen": "r3R1k1/ppp2ppp/2b5/2b5/3R1Bn1/2NN4/PPP2PPP/6K1 b - - 0 18"
+  },
+  {
+   "t": 1032.5,
+   "ply": 36,
+   "line": [
+    "Rxe8"
+   ],
+   "fen": "4r1k1/ppp2ppp/2b5/2b5/3R1Bn1/2NN4/PPP2PPP/6K1 w - - 0 19"
+  },
+  {
+   "t": 1042.5,
+   "ply": 37,
+   "line": [
+    "Rc4"
+   ],
+   "fen": "4r1k1/ppp2ppp/2b5/2b5/2R2Bn1/2NN4/PPP2PPP/6K1 b - - 1 19"
+  },
+  {
+   "t": 1085,
+   "ply": 38,
+   "line": [
+    "Bxf2+"
+   ],
+   "fen": "4r1k1/ppp2ppp/2b5/8/2R2Bn1/2NN4/PPP2bPP/6K1 w - - 0 20"
+  },
+  {
+   "t": 1110,
+   "ply": 39,
+   "line": [
+    "Kf1"
+   ],
+   "fen": "4r1k1/ppp2ppp/2b5/8/2R2Bn1/2NN4/PPP2bPP/5K2 b - - 1 20"
+  },
+  {
+   "t": 1117,
+   "ply": 40,
+   "line": [
+    "Bb6"
+   ],
+   "fen": "4r1k1/ppp2ppp/1bb5/8/2R2Bn1/2NN4/PPP3PP/5K2 w - - 2 21"
+  },
+  {
+   "t": 1132.5,
+   "ply": 41,
+   "line": [
+    "Bg3"
+   ],
+   "fen": "4r1k1/ppp2ppp/1bb5/8/2R3n1/2NN2B1/PPP3PP/5K2 b - - 3 21"
+  },
+  {
+   "t": 1167.5,
+   "ply": 42,
+   "line": [
+    "Ne3+"
+   ],
+   "fen": "4r1k1/ppp2ppp/1bb5/8/2R5/2NNn1B1/PPP3PP/5K2 w - - 4 22"
+  },
+  {
+   "t": 1180,
+   "ply": 43,
+   "line": [
+    "Kg1"
+   ],
+   "fen": "4r1k1/ppp2ppp/1bb5/8/2R5/2NNn1B1/PPP3PP/6K1 b - - 5 22"
+  },
+  {
+   "t": 1182,
+   "ply": 44,
+   "line": [
+    "Nxc4+"
+   ],
+   "fen": "4r1k1/ppp2ppp/1bb5/8/2n5/2NN2B1/PPP3PP/6K1 w - - 0 23"
+  },
+  {
+   "t": 1188,
+   "ply": 45,
+   "line": [
+    "Nf2"
+   ],
+   "fen": "4r1k1/ppp2ppp/1bb5/8/2n5/2N3B1/PPP2NPP/6K1 b - - 1 23"
+  },
+  {
+   "t": 1194.5,
+   "ply": 46,
+   "line": [
+    "Re1#"
+   ],
+   "fen": "6k1/ppp2ppp/1bb5/8/2n5/2N3B1/PPP2NPP/4r1K1 w - - 2 24"
+  },
+  {
+   "t": 1199.5,
+   "ply": 32,
+   "line": [],
+   "fen": "r3r1k1/ppp2ppp/2bb4/4N3/3R1Bn1/2N5/PPP2PPP/4R1K1 w - - 3 17"
+  },
+  {
+   "t": 1209.5,
+   "ply": 22,
+   "line": [],
+   "fen": "r2qr1k1/pppbbppp/3p1n2/6B1/3QP3/2N2N2/PPP2PPP/3R1RK1 w - - 5 12"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Four Knights Game: Spanish Variation, Rubinstein Variation, Henneberger Variation",
+   "eco": "C48",
+   "plies": 9,
+   "line": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O Nd4 Nc3",
+   "coverage": 0.844
+  },
+  {
+   "name": "Ruy Lopez: Berlin Defense",
+   "eco": "C65",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bb5 Nf6",
+   "coverage": 0.911
+  },
+  {
+   "name": "Ruy Lopez",
+   "eco": "C60",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Bb5",
+   "coverage": 0.933
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.956
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.978
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}
