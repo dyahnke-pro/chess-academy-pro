@@ -304,3 +304,63 @@ export function narrateTacticalRead(read: TacticalRead, opts: { spoken?: boolean
 
   return parts.join(' ');
 }
+
+// ── LATENCY-SAFE TEMPTING (no extra engine read) ─────────────────────────────
+
+/** The seductive-but-wrong move derived from an ALREADY-COMPUTED MultiPV
+ *  analysis — for latency-sensitive surfaces (tap-time "Read this position")
+ *  that must not spend a fresh engine sweep. Weaker than `computeTacticalRead`'s
+ *  probe: it can only see moves the engine already ranked in its top lines, so a
+ *  blunder outside the MultiPV is invisible here. Returns null when no top line
+ *  below best is both eye-catching and clearly worse. `replySan` is the engine's
+ *  own refutation reply from that same PV line. */
+export function temptingFromAnalysis(
+  fen: string,
+  topLines: ReadonlyArray<{ moves: string[]; evaluation: number }>,
+  studentColor: 'white' | 'black',
+  dropThresholdCp = 120,
+): { san: string; uci: string; appeal: string; evalDropCp: number; replySan: string | null } | null {
+  if (topLines.length < 2) return null;
+  const best = topLines.length > 0 ? topLines[0] : undefined;
+  if (!best || best.moves.length === 0) return null;
+  const bestUci = best.moves.at(0);
+  const bestStudentCp = toStudentCp(best.evaluation, studentColor);
+  const scored: Array<{ san: string; uci: string; appeal: string; appealScore: number; studentCp: number; replySan: string | null }> = [];
+  for (let i = 1; i < topLines.length; i += 1) {
+    const line = topLines.at(i);
+    if (!line) continue;
+    const uci = line.moves.at(0);
+    if (!uci || uci.length < 4 || uci === bestUci) continue;
+    const probe = new Chess(fen);
+    let mv: ReturnType<Chess['move']> | undefined;
+    try {
+      mv = probe.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci.slice(4) : undefined });
+    } catch { continue; }
+    const { score, appeal } = appealScore({ isCapture: mv.captured != null, isPromotion: mv.promotion != null, san: mv.san, piece: mv.piece, to: mv.to });
+    if (score <= 0) continue;
+    let replySan: string | null = null;
+    const replyUci = line.moves.at(1);
+    if (replyUci && replyUci.length >= 4) {
+      try {
+        const r = probe.move({ from: replyUci.slice(0, 2), to: replyUci.slice(2, 4), promotion: replyUci.length > 4 ? replyUci.slice(4) : undefined });
+        replySan = r.san;
+      } catch { replySan = null; }
+    }
+    scored.push({ san: mv.san, uci, appeal, appealScore: score, studentCp: toStudentCp(line.evaluation, studentColor), replySan });
+  }
+  const pick = pickTempting(scored, bestStudentCp, dropThresholdCp);
+  if (!pick) return null;
+  const chosen = scored.find((c) => c.uci === pick.uci);
+  return { san: pick.san, uci: pick.uci, appeal: pick.appeal, evalDropCp: pick.evalDropCp, replySan: chosen?.replySan ?? null };
+}
+
+/** The affirm→but→refute sentence for a tempting move, in the Danya register. */
+export function speakTemptingTurn(
+  t: { san: string; appeal: string; replySan: string | null },
+  opts: { spoken?: boolean } = {},
+): string {
+  const say = (san: string): string => (opts.spoken ? sayMove(san) : san);
+  const affirm = APPEAL_AFFIRM[t.appeal] ?? 'play it';
+  const refutation = t.replySan ? ` — but ${say(t.replySan)} and it falls apart` : ' — but it doesn’t hold';
+  return `You’d love to ${affirm} with ${say(t.san)}${refutation}.`;
+}

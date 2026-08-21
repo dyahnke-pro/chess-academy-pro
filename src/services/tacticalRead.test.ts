@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, namedTacticClause,
+  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, speakTemptingTurn, namedTacticClause,
   type TacticalRead,
 } from './tacticalRead';
 import type { PvEngine, PvPly } from './pvPlayback';
@@ -171,5 +171,32 @@ describe('narrateTacticalRead (the computed voice)', () => {
     const out = narrateTacticalRead({ ...base, tempting: null }, { spoken: true });
     expect(out).toContain('the knight');       // "Ng4+" → "the knight to g4"
     expect(out).not.toContain('Ng4');
+  });
+});
+
+describe('temptingFromAnalysis (latency-safe, cached MultiPV)', () => {
+  // Black to move; e5-knight. best = Ng4+ (e5g4). A cheaper top line grabs on
+  // f3 (e5f3) — eye-catching capture-with-check but clearly worse.
+  const fen = '1r2qb1k/3b2pn/3p1r2/ppp1nP1p/4P2P/P1P1BNQ1/1PBN3K/3R2R1 b - - 2 27';
+  it('surfaces the eye-catching top line that is clearly worse than best', () => {
+    const t = temptingFromAnalysis(fen, [
+      { moves: ['e5g4', 'g1h1', 'g4e3'], evaluation: -445 }, // best: black +4.45
+      { moves: ['e5f3', 'd2f3'], evaluation: 180 },          // tempting: black now worse (white +1.8)
+    ], 'black');
+    expect(t?.san).toBe('Nxf3+');
+    expect(t?.appeal).toBe('capture');
+    expect(t?.replySan).toBe('Nxf3');
+    expect(t?.evalDropCp).toBeGreaterThan(300);
+  });
+  it('returns null when the second line is nearly as good (nothing to warn against)', () => {
+    expect(temptingFromAnalysis(fen, [
+      { moves: ['e5g4'], evaluation: -445 },
+      { moves: ['d7c6'], evaluation: -430 },
+    ], 'black')).toBeNull();
+  });
+  it('speakTemptingTurn phrases the affirm→but→refute turn', () => {
+    const line = speakTemptingTurn({ san: 'Nxf3+', appeal: 'capture', replySan: 'Nxf3' });
+    expect(line.toLowerCase()).toContain('but');
+    expect(line).toContain('Nxf3');
   });
 });
