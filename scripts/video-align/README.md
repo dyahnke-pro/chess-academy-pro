@@ -281,3 +281,32 @@ making the search smarter.
 - **Orientation.** A board shown from Black's side is not yet handled. Read it
   off the frame when calibrating that section; it is one more thing you can
   simply see.
+
+## The note count in the repo will not match the note count in the app
+
+Measured 2026-08-21: 481 notes across 182 track files, 470 in
+`src/data/video-teachings.json`. The eleven-note gap is `emit-notes` doing its
+job, not losing work — each one is anchored at a position hundreds of openings
+pass through (`679 openings pass through this position` for one of them, at
+move one), and a note spoken wherever 679 openings meet is not teaching about
+the line the student asked for. `emit-notes` prints every skip with its reason,
+so run it and read the `SKIP` lines before assuming anything is broken.
+
+Two counts that ARE worth acting on when they diverge:
+
+- notes on disk vs notes listed by `emit-notes` — a track file it never lists is
+  one it could not read;
+- `noteCount` in `video-teachings.json` vs the last emit — if the file is older
+  than the notes, the notes are not in the app. `emit-notes --write` is the step
+  that ships them, and it must be paired with a `WALKTHROUGH_GEN_REV` bump in
+  the same commit or cached trees serve the old prose for ever.
+
+## Which tracks are ready to write against
+
+`narration-queue.mjs` answers that: a track needs a subject opening (so a note
+has somewhere to belong), banked captions (the gate refuses a note without
+them), and no notes yet. Ordered deepest line first, since a deeper line settles
+on more positions and yields more anchorable moments per hour.
+
+    node scripts/video-align/narration-queue.mjs 20     # top 20, readable
+    node scripts/video-align/narration-queue.mjs --ids  # ids, for a loop
