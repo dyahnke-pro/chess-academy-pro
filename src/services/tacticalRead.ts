@@ -453,3 +453,43 @@ export function lineOutcomeClause(rootEvalCpWhite: number, studentColor: 'white'
   const with_ = v.text.startsWith('a ') ? `with ${v.text}` : v.text;
   return `And that leaves you ${with_}.`;
 }
+
+/** The squares a read's moves actually visit — "piece:dest" keys for the line,
+ *  the tempting move, and its refutation. The allowed vocabulary of MOVES a
+ *  voiced read may name. */
+export function groundedMoveKeys(read: TacticalRead): Set<string> {
+  const keys = new Set<string>();
+  const PW: Record<string, string> = { n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king', p: 'pawn' };
+  const add = (uci: string, san: string): void => {
+    if (!uci || uci.length < 4) return;
+    const dest = uci.slice(2, 4);
+    // piece letter from SAN (uppercase) or 'pawn'
+    const pl = /^[NBRQK]/.test(san) ? san[0].toLowerCase() : 'p';
+    keys.add(`${PW[pl]}:${dest}`);
+    keys.add(`castle:${dest}`); // O-O/O-O-O tolerance
+  };
+  for (const p of read.line) add(p.uci, p.san);
+  if (read.tempting) {
+    add(read.tempting.uci, read.tempting.san);
+    for (const p of read.tempting.refutation) add(p.uci, p.san);
+  }
+  return keys;
+}
+
+const MOVE_VERB = '(?:takes on|captures on|recaptures on|takes|captures|recaptures|goes to|lands on|jumps to|swings to|drops to|retreats to|lifts to|slides to|delivers|to)';
+const PIECE_WORD = '(knight|bishop|rook|queen|king|pawn)';
+
+/** True when the voiced text NAMES A MOVE the computed read does not contain —
+ *  a fabricated continuation or a mis-transcribed move. The board grader checks
+ *  piece-on-SQUARE claims; this checks the MOVES narrated. Callers fall back to
+ *  the deterministic template (built only from the real line) when it trips. */
+export function voiceNamesUngroundedMove(text: string, read: TacticalRead): boolean {
+  const allowed = groundedMoveKeys(read);
+  const re = new RegExp(`${PIECE_WORD}\\s+${MOVE_VERB}\\s+([a-h][1-8])`, 'gi');
+  let m: RegExpExecArray | null;
+  while ((m = re.exec(text.toLowerCase())) !== null) {
+    const key = `${m[1]}:${m[2]}`;
+    if (!allowed.has(key)) return true; // a move the real line never makes
+  }
+  return false;
+}

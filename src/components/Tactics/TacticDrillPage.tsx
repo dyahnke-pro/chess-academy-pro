@@ -19,7 +19,7 @@ import { logAppAudit } from '../../services/appAuditor';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText, tacticNoteForPuzzleThemes } from '../../services/danyaTeachingService';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { computeTacticalRead, tacticalReadFacts, narrateTacticalRead, voiceRejectsBestMove, TACTICAL_READ_DIRECTIVES } from '../../services/tacticalRead';
+import { computeTacticalRead, tacticalReadFacts, narrateTacticalRead, voiceRejectsBestMove, voiceNamesUngroundedMove, TACTICAL_READ_DIRECTIVES } from '../../services/tacticalRead';
 import { voiceFacts } from '../../services/coachApi';
 import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 
@@ -308,7 +308,14 @@ export function TacticDrillPage(): JSX.Element {
             // not argue against the engine's best move). Either failure → the
             // deterministic template, board-true by construction.
             const graded = voiced ? stripDisprovenSentences(voiced, readFen).clean.trim() : '';
-            const finalNote = (graded.length >= 24 && !voiceRejectsBestMove(graded, read.bestMoveSan)) ? graded : narrateTacticalRead(read);
+            // Three nets before we trust the model's prose: enough survived the
+            // board-grader, it does not argue against the best move, and it names
+            // no move the computed line never makes (fabricated/mis-transcribed).
+            // Any failure → the deterministic template, built only from the line.
+            const trustworthy = graded.length >= 24
+              && !voiceRejectsBestMove(graded, read.bestMoveSan)
+              && !voiceNamesUngroundedMove(graded, read);
+            const finalNote = trustworthy ? graded : narrateTacticalRead(read);
             setPostSolveNotes((prev) => ({ ...prev, [readIndex]: finalNote }));
           }
         } catch { /* the read is a bonus, never a blocker */ }

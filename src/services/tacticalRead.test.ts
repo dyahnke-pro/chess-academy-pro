@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, speakTemptingTurn, tacticalReadFacts, voiceRejectsBestMove, lineOutcomeClause, namedTacticClause,
+  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, speakTemptingTurn, tacticalReadFacts, voiceRejectsBestMove, lineOutcomeClause, voiceNamesUngroundedMove, groundedMoveKeys, namedTacticClause,
   type TacticalRead,
 } from './tacticalRead';
 import type { PvEngine, PvPly } from './pvPlayback';
@@ -257,5 +257,34 @@ describe('lineOutcomeClause (review outcome)', () => {
   it('stays silent on a level or unclear terminus (no false claim)', () => {
     expect(lineOutcomeClause(30, 'white')).toBeNull();
     expect(lineOutcomeClause(-600, 'white')).toBeNull();
+  });
+});
+
+describe('voiceNamesUngroundedMove (move-hallucination guard)', () => {
+  const read = {
+    fen: 'x', studentColor: 'black' as const, bestMoveSan: 'Ng4+', bestMoveUci: 'e5g4',
+    line: [
+      { san: 'Ng4+', uci: 'e5g4', moverColor: 'black' as const, fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
+      { san: 'Nxe3', uci: 'g4e3', moverColor: 'black' as const, fenBefore: '', fenAfter: '', facts: { captured: 'b', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
+    ],
+    verdict: summarizeVerdict(439, null), keyTactic: null, checkPlies: [0], tempting: null, closeAlternative: null,
+  };
+  it('flags a fabricated move the line never makes', () => {
+    expect(voiceNamesUngroundedMove('Instead, knight to g4, then the queen swings to a5.', read as never)).toBe(true);
+  });
+  it('flags a piece-mismatch on a real destination', () => {
+    expect(voiceNamesUngroundedMove('The bishop takes e3, forking.', read as never)).toBe(true); // line is a KNIGHT to e3
+  });
+  it('passes a faithful transcription of the line', () => {
+    expect(voiceNamesUngroundedMove('Knight to g4 with check, then knight takes e3.', read as never)).toBe(false);
+  });
+  it('does not false-positive on a spatial description (no move verb)', () => {
+    expect(voiceNamesUngroundedMove('The bishop eyes f7 and the king sits on g8.', read as never)).toBe(false);
+  });
+  it('groundedMoveKeys lists the line destinations by piece', () => {
+    const keys = groundedMoveKeys(read as never);
+    expect(keys.has('knight:g4')).toBe(true);
+    expect(keys.has('knight:e3')).toBe(true);
+    expect(keys.has('bishop:e3')).toBe(false);
   });
 });
