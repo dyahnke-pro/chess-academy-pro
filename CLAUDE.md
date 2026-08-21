@@ -2671,6 +2671,15 @@ model-free. The calls come from the `else` at `openingGenerator.ts:2066`, which
 writes the lesson's FRAMING (intro, outro, `ideas[]`, branch teasers) whenever
 the opening is not fully baked with its fork branches.
 
+**KEEP IT ON COMPUTED FOR NOW (David 2026-08-21: *"i have an idea to generate
+better hand written narrations. we will address that later. keep it computed
+narrations for now"*).** So do NOT open bake work to move a line up the tiers,
+and do not treat a line sitting on tier 3 as something to fix. A better
+hand-written pipeline is coming and baking against the current one would be work
+thrown away. What tier 3 still owes is unchanged and is not excused by being the
+floor: the lesson must NARRATE EVERY PLY AND REACH ITS LEAF so the middlegame
+picker appears.
+
 ⚠️ **`audit-teach-walkthrough-completes-prod.mjs` ASSERTS THE STRICTER CONTRACT
 and therefore fails every unbaked opening by construction.** Its 🚨 line ("the
 walkthrough called an LLM at runtime") predates this clarification. Treat its
