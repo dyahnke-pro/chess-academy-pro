@@ -5566,6 +5566,12 @@ export function CoachTeachPage(): JSX.Element {
         const arrowSourceText = displayText.trim() || finalText;
         const arrowed = await applyCandidateArrows(arrowSourceText, fen, 'CoachTeachPage', {
           excludeSan: replyPlayed,
+          // The tactical-read but-turn names the student's SEDUCTIVE move as a
+          // trap ("tempted by Nxe4, but…"). It sits at MultiPV #2/#3, so without
+          // this it would draw a yellow "play this" arrow on the losing move.
+          // Suppress it — a student's own bad move gets no arrow (David
+          // 2026-07-06); the sound continuation still keeps its green arrow.
+          suppressSans: temptingRead ? [temptingRead.san] : undefined,
           spokenText: spokenForArrows || undefined,
         });
         const highlightMarkers = candidateHighlightMarkers(arrowSourceText, 'CoachTeachPage');

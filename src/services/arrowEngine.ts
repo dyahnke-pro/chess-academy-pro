@@ -213,7 +213,23 @@ export interface RankedCandidate {
   from: string;
   to: string;
   rank: number; // 1-based multipv rank
+  /** This line's evaluation, same POV/units as every other line at the fen
+   *  (they come from one MultiPV analysis). Optional so older analyzers that
+   *  only report geometry+rank keep working. When present it lets the arrow
+   *  pass DROP a #2/#3 that is far worse than #1 — a mistake, not a real
+   *  alternative — instead of arming it yellow. */
+  evalCp?: number;
+  /** Mate distance for this line, if the engine reported one (else null). */
+  mate?: number | null;
 }
+
+/** A rank-2/#3 candidate this many centipawns (or more) below the engine's #1
+ *  is a MISTAKE, not a "decent alternative" — it gets NO arrow, not a yellow
+ *  one. Aligned with the tactical-read tempting threshold so a move flagged
+ *  "you'd be tempted by X, but…" is never armed as a suggestion (David
+ *  2026-08-21: "arrows need to match"). Only applied when the analyzer reports
+ *  per-line evals; rank-only analyzers keep the pure colorForRank behavior. */
+export const YELLOW_ARROW_MAX_DROP_CP = 120;
 
 /** Engine analyzer injected by the caller (adapts the stockfish
  *  singleton). Returns the top moves at `fen`, ranked. */
@@ -244,7 +260,7 @@ export async function injectCandidateArrows(
   text: string,
   fen: string,
   analyze: MultipvAnalyzer,
-  opts?: { excludeSan?: string; spokenText?: string },
+  opts?: { excludeSan?: string; suppressSans?: string[]; spokenText?: string },
 ): Promise<{ text: string; injected: { san: string; color: ArrowColor }[] }> {
   // Strip any pre-existing markers (we re-derive every arrow) but
   // preserve newlines — only collapse the double-spaces a stripped
@@ -260,6 +276,20 @@ export async function injectCandidateArrows(
   const excludeArrow = opts?.excludeSan ? resolveSanToArrow(opts.excludeSan, [fen]) : null;
   const excludeKey = excludeArrow ? `${excludeArrow.from}-${excludeArrow.to}` : null;
 
+  // SUPPRESSED moves are the student's OWN mistake-moves the prose names as a
+  // trap ("you'd be tempted by Nxe4, but…") — the tactical-read but-turn. By
+  // MultiPV rank they may sit at #2/#3 and would otherwise draw a YELLOW
+  // "decent alternative" arrow, telling the student to play the losing move
+  // (David 2026-08-01: "the arrows are hallucinating! BAD MOVES!!"). Doctrine
+  // (David 2026-07-06): a student's own bad move gets NO arrow — we never point
+  // at it. Suppress by resolved geometry, like the exclude set. This is NOT the
+  // red-threat exception, which is only the OPPONENT's forcing danger.
+  const suppressKeys = new Set<string>();
+  for (const s of opts?.suppressSans ?? []) {
+    const a = resolveSanToArrow(s, [fen]);
+    if (a) suppressKeys.add(`${a.from}-${a.to}`);
+  }
+
   let ranked: RankedCandidate[] = [];
   try {
     ranked = await analyze(fen);
@@ -270,6 +300,22 @@ export async function injectCandidateArrows(
     const hit = ranked.find((r) => r.from === a.from && r.to === a.to);
     return hit ? hit.rank : null;
   };
+  // Best line's eval/mate, for the "far worse than #1 → no arrow" guard below.
+  const best = ranked.find((r) => r.rank === 1);
+  const bestEval = best?.evalCp;
+  const bestMate = best?.mate ?? null;
+  // A #2/#3 move far below #1 is a MISTAKE, not a decent alternative — it must
+  // not draw a yellow "play this" arrow (David 2026-08-21: "arrows need to
+  // match"; David 2026-07-06: "we never point at a bad move"). #1 forcing a
+  // mate that this move doesn't is the same story. Only fires when the analyzer
+  // reports per-line evals; otherwise colorForRank's rank-only behavior stands.
+  const farWorseThanBest = (a: FromTo): boolean => {
+    const hit = ranked.find((r) => r.from === a.from && r.to === a.to);
+    if (!hit || hit.rank === 1) return false;
+    if (bestMate != null && bestMate > 0 && (hit.mate == null || hit.mate <= 0)) return true;
+    if (bestEval == null || hit.evalCp == null) return false;
+    return Math.abs(bestEval - hit.evalCp) >= YELLOW_ARROW_MAX_DROP_CP;
+  };
 
   const resolved: { san: string; from: string; to: string; rank: number | null }[] = [];
   const seen = new Set<string>();
@@ -278,6 +324,7 @@ export async function injectCandidateArrows(
     if (!arrow) continue;
     const key = `${arrow.from}-${arrow.to}`;
     if (key === excludeKey) continue; // the move already on the board — skip
+    if (suppressKeys.has(key)) continue; // a named trap/mistake move — never arrow it
     if (seen.has(key)) continue;
     seen.add(key);
     resolved.push({ san, from: arrow.from, to: arrow.to, rank: rankOf(arrow) });
@@ -293,7 +340,11 @@ export async function injectCandidateArrows(
   // (David 2026-07-06). Filter BEFORE the cap so the drawable candidates
   // aren't crowded out by dropped ones.
   const drawable = resolved
-    .map((r) => ({ ...r, color: colorForRank(r.rank) }))
+    .map((r) => {
+      let color = colorForRank(r.rank);
+      if (color === 'yellow' && farWorseThanBest(r)) color = null;
+      return { ...r, color };
+    })
     .filter((r): r is typeof r & { color: ArrowColor } => r.color !== null);
   const capped = drawable.slice(0, MAX_CANDIDATE_ARROWS);
 
@@ -317,7 +368,7 @@ export async function injectCandidateArrows(
       const forcing = resolveForcingMove(san, fen);
       if (!forcing) continue;
       const key = `${forcing.from}-${forcing.to}`;
-      if (key === excludeKey || drawnKeys.has(key)) continue; // played move / already drawn
+      if (key === excludeKey || suppressKeys.has(key) || drawnKeys.has(key)) continue; // played move / suppressed trap / already drawn
       const rank = rankOf(forcing);
       if (rank === 1 || rank === 2 || rank === 3) continue; // a suggestion, not a threat
       drawnKeys.add(key);

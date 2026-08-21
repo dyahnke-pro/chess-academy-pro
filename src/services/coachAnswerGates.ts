@@ -401,7 +401,9 @@ async function rankCandidatesAtFen(fen: string): Promise<RankedCandidate[]> {
   return analysis.topLines
     .map((line) => {
       const uci = line.moves[0] ?? '';
-      return { from: uci.slice(0, 2), to: uci.slice(2, 4), rank: line.rank };
+      // evalCp/mate let the arrow pass drop a #2/#3 that is far worse than #1
+      // instead of arming it yellow (David 2026-08-21: "arrows need to match").
+      return { from: uci.slice(0, 2), to: uci.slice(2, 4), rank: line.rank, evalCp: line.evaluation, mate: line.mate };
     })
     .filter((r) => r.from.length === 2 && r.to.length === 2);
 }
@@ -416,7 +418,7 @@ export async function applyCandidateArrows(
   text: string,
   fen: string | null | undefined,
   source: string,
-  opts?: { excludeSan?: string; spokenText?: string },
+  opts?: { excludeSan?: string; suppressSans?: string[]; spokenText?: string },
 ): Promise<string> {
   if (!text.trim() || !fen) return text;
   try {
