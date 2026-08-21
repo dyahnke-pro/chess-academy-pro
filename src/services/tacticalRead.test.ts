@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, speakTemptingTurn, namedTacticClause,
+  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, speakTemptingTurn, tacticalReadFacts, namedTacticClause,
   type TacticalRead,
 } from './tacticalRead';
 import type { PvEngine, PvPly } from './pvPlayback';
@@ -198,5 +198,38 @@ describe('temptingFromAnalysis (latency-safe, cached MultiPV)', () => {
     const line = speakTemptingTurn({ san: 'Nxf3+', appeal: 'capture', replySan: 'Nxf3' });
     expect(line.toLowerCase()).toContain('but');
     expect(line).toContain('Nxf3');
+  });
+});
+
+describe('tacticalReadFacts (facts for the voice model, not prose)', () => {
+  const forkPly: PvPly = {
+    san: 'Nxe3', uci: 'g4e3', moverColor: 'black', fenBefore: '',
+    fenAfter: '1r2qb1k/3b2p1/3p1r2/ppp1nP1p/4P2P/P1P1nNQ1/1PBN3K/3R2R1 w - - 0 29',
+    facts: { captured: 'bishop', isCheck: false, isMate: false, promotion: null, tacticLanded: 'fork', materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 },
+  };
+  it('states the tempting move, the line, the named tactic and the verdict as facts', () => {
+    const line: PvPly[] = [
+      { san: 'Ng4+', uci: 'e5g4', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: 'g4', shieldLost: 0 } },
+      { san: 'Kh1', uci: 'g1h1', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
+      forkPly,
+    ];
+    const facts = tacticalReadFacts({
+      fen: 'x', studentColor: 'black', bestMoveSan: 'Ng4+', bestMoveUci: 'e5g4',
+      line,
+      verdict: summarizeVerdict(439, null),
+      keyTactic: pickKeyTactic(line),
+      checkPlies: [0], closeAlternative: null,
+      tempting: { san: 'Nxf3+', uci: 'e5f3', appeal: 'capture', evalDropCp: 616, refutation: [
+        { san: 'Nxf3+', uci: 'e5f3', moverColor: 'black', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: true, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
+        { san: 'Nxf3', uci: 'd2f3', moverColor: 'white', fenBefore: '', fenAfter: '', facts: { captured: 'knight', isCheck: false, isMate: false, promotion: null, tacticLanded: null, materialGained: 3, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 } },
+      ] },
+    });
+    expect(facts).toContain('Nxf3+');            // tempting move stated
+    expect(facts).toContain('fails to Nxf3');    // refutation stated
+    expect(facts).toContain('Ng4+ Kh1 Nxe3');    // the line stated
+    expect(facts.toLowerCase()).toContain('fork'); // named tactic
+    expect(facts).toContain('up a piece');       // verdict
+    // it is FACTS, not the frozen template prose
+    expect(facts).not.toContain('You’d love to');
   });
 });

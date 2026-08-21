@@ -8,7 +8,7 @@ import { buildVoicePackage } from '../services/voicePackage';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
 import { formatReadingFacts } from '../services/positionReadingService';
-import { temptingFromAnalysis, speakTemptingTurn } from '../services/tacticalRead';
+import { temptingFromAnalysis } from '../services/tacticalRead';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from '../services/danyaTeachingService';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
@@ -243,8 +243,10 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
       const tempting = stockfishAnalysis?.topLines
         ? temptingFromAnalysis(args.fen, stockfishAnalysis.topLines, posStudentCC === 'w' ? 'white' : 'black')
         : null;
+      // The tempting move is a FACT, not a finished sentence — the model phrases
+      // the but-turn in its own words (varied), never a frozen template.
       const requiredTempting = tempting
-        ? ` REQUIRED: include this exact sentence about the move the student is tempted to play, verbatim, before you reveal the best move: "${speakTemptingTurn(tempting, { spoken: true })}"`
+        ? ` COMPUTED FACT: the student is likely tempted to play ${tempting.san} (${tempting.appeal})${tempting.replySan ? `, but it fails to ${tempting.replySan}` : ', but it does not hold'}. Before you reveal the best move, work this in as the "you'd want to, but…" turn — in your own words, do not quote this verbatim.`
         : '';
 
       // THE CORPUS LEADS (David 2026-08-13: "narrations follow the corpus,

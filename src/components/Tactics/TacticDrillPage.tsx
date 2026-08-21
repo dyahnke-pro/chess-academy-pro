@@ -19,7 +19,9 @@ import { logAppAudit } from '../../services/appAuditor';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText, tacticNoteForPuzzleThemes } from '../../services/danyaTeachingService';
 import { Chess } from 'chess.js';
 import { stockfishEngine } from '../../services/stockfishEngine';
-import { computeTacticalRead, narrateTacticalRead } from '../../services/tacticalRead';
+import { computeTacticalRead, tacticalReadFacts, narrateTacticalRead, TACTICAL_READ_DIRECTIVES } from '../../services/tacticalRead';
+import { voiceFacts } from '../../services/coachApi';
+import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 
 type Phase = 'loading' | 'solving' | 'summary';
 
@@ -291,8 +293,21 @@ export function TacticDrillPage(): JSX.Element {
           if (firstUci && firstUci.length >= 4) {
             g.move({ from: firstUci.slice(0, 2), to: firstUci.slice(2, 4), promotion: firstUci.slice(4) || undefined });
           }
-          const read = await computeTacticalRead(g.fen(), { engine: stockfishEngine, depth: 14 });
-          if (read) setPostSolveNotes((prev) => ({ ...prev, [readIndex]: narrateTacticalRead(read) }));
+          const readFen = g.fen();
+          const read = await computeTacticalRead(readFen, { engine: stockfishEngine, depth: 14 });
+          if (read) {
+            // The FACTS go to the phrasing model (voiceFacts) so each read comes
+            // out in his voice, VARIED — not the frozen template. Then BOARD-GRADE
+            // the output (G0): the model can invent piece squares to justify a
+            // read, so every claim is checked against the FEN and any provably-
+            // false sentence is dropped. If grading leaves too little, fall back
+            // to narrateTacticalRead — the deterministic template, board-true by
+            // construction. So: varied when the model is honest, safe always.
+            const voiced = await voiceFacts(tacticalReadFacts(read), { intent: 'tactics-read', directives: TACTICAL_READ_DIRECTIVES });
+            const graded = voiced ? stripDisprovenSentences(voiced, readFen).clean.trim() : '';
+            const finalNote = graded.length >= 24 ? graded : narrateTacticalRead(read);
+            setPostSolveNotes((prev) => ({ ...prev, [readIndex]: finalNote }));
+          }
         } catch { /* the read is a bonus, never a blocker */ }
       })();
     }

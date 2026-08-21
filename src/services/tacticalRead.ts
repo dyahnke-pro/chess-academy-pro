@@ -364,3 +364,46 @@ export function speakTemptingTurn(
   const refutation = t.replySan ? ` — but ${say(t.replySan)} and it falls apart` : ' — but it doesn’t hold';
   return `You’d love to ${affirm} with ${say(t.san)}${refutation}.`;
 }
+
+// ── THE FACT PACKAGE FOR THE VOICE MODEL ─────────────────────────────────────
+
+/**
+ * The tactical read as a labeled FACTS string for `voiceFacts` to phrase in the
+ * Danya register — NOT finished prose. This is the correct G0 seam: code states
+ * the board-true facts, the phrasing model gives them his voice (varied every
+ * time). `narrateTacticalRead` above is the deterministic FALLBACK floor only,
+ * for when no phrasing model is available; it is never the final voice on a
+ * surface that has the model.
+ */
+export function tacticalReadFacts(read: TacticalRead): string {
+  const parts: string[] = [];
+  if (read.tempting) {
+    const reply = read.tempting.refutation.length > 1
+      ? read.tempting.refutation[1]
+      : (read.tempting.refutation.length > 0 ? read.tempting.refutation[0] : undefined);
+    parts.push(reply
+      ? `The move the student is tempted to play is ${read.tempting.san} (${read.tempting.appeal}), but it fails to ${reply.san}.`
+      : `The move the student is tempted to play is ${read.tempting.san} (${read.tempting.appeal}), but it does not hold.`);
+  }
+  const toTactic = read.keyTactic ? read.keyTactic.atPly : Math.min(read.line.length - 1, 2);
+  const lineSans = read.line.slice(0, toTactic + 1).map((p) => p.san);
+  if (lineSans.length > 0) parts.push(`The correct line is ${lineSans.join(' ')}.`);
+  const kt = read.keyTactic;
+  if (kt && kt.squares.length > 0) {
+    parts.push(kt.description.endsWith('.') ? kt.description : `${kt.description}.`);
+  }
+  parts.push(read.verdict.kind === 'mate'
+    ? `The result is ${read.verdict.text}.`
+    : `The student ends up with ${read.verdict.text}.`);
+  return parts.join(' ');
+}
+
+/** Model-only directives for voicing a tactical read — shape, not script. Never
+ *  spoken; passed to voiceFacts.directives so the phrasing stays varied. */
+export const TACTICAL_READ_DIRECTIVES =
+  'Read this like a coach talking a student through the position out loud. If a '
+  + 'tempting move is given, affirm the pull of it first, then turn against it with '
+  + 'the refutation ("you’d love to … but …"). Then give the real move and '
+  + 'why, name the pattern, and land the verdict last. Vary your phrasing move to '
+  + 'move — never a fixed template. Spell moves as words, no notation. Warm but '
+  + 'rigorous; no praise words, no filler.';
