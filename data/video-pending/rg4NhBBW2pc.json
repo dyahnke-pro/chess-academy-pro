@@ -134,5 +134,68 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Kan Variation, Polugaevsky Variation",
+   "eco": "B42",
+   "plies": 10,
+   "line": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Bd3 Bc5",
+   "coverage": 0.333
+  },
+  {
+   "name": "Sicilian Defense: Kan Variation, Modern Variation",
+   "eco": "B42",
+   "plies": 9,
+   "line": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6 Bd3",
+   "coverage": 0.444
+  },
+  {
+   "name": "Sicilian Defense: Kan Variation",
+   "eco": "B41",
+   "plies": 8,
+   "line": "e4 c5 Nf3 e6 d4 cxd4 Nxd4 a6",
+   "coverage": 0.556
+  },
+  {
+   "name": "Sicilian Defense: French Variation, Open",
+   "eco": "B40",
+   "plies": 6,
+   "line": "e4 c5 Nf3 e6 d4 cxd4",
+   "coverage": 0.556
+  },
+  {
+   "name": "Sicilian Defense: Delayed Alapin Variation, with e6",
+   "eco": "B40",
+   "plies": 5,
+   "line": "e4 c5 Nf3 e6 c3",
+   "coverage": 0.111
+  },
+  {
+   "name": "Sicilian Defense: French Variation",
+   "eco": "B40",
+   "plies": 4,
+   "line": "e4 c5 Nf3 e6",
+   "coverage": 0.889
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

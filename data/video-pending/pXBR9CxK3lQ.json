@@ -1087,5 +1087,33 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Old Sicilian",
+   "eco": "B30",
+   "plies": 4,
+   "line": "e4 c5 Nf3 Nc6",
+   "coverage": 0.979
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

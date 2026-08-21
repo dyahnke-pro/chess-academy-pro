@@ -1264,5 +1264,32 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Scandinavian Defense: Modern Variation",
+   "eco": "B01",
+   "plies": 4,
+   "line": "e4 d5 exd5 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Scandinavian Defense",
+   "eco": "B01",
+   "plies": 2,
+   "line": "e4 d5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Ruy Lopez: Berlin Defense, Fishing Pole Variation",
+  "confirmed": false
+ }
 }

@@ -362,5 +362,33 @@
    "fen": "r7/2pR1pk1/1p2NNpn/4P2p/1p5P/8/PPP2PP1/2K5 b - - 0 25"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Modern Defense: Standard Line",
+   "eco": "B06",
+   "plies": 5,
+   "line": "e4 g6 d4 Bg7 Nc3",
+   "coverage": 0.929
+  },
+  {
+   "name": "Modern Defense",
+   "eco": "B06",
+   "plies": 2,
+   "line": "e4 g6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

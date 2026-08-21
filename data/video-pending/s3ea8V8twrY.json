@@ -232,5 +232,47 @@
    "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Scandinavian Defense: Valencian Variation, Ilundain Variation",
+   "eco": "B01",
+   "plies": 10,
+   "line": "e4 d5 exd5 Qxd5 Nc3 Qd8 d4 Nf6 Nf3 c6",
+   "coverage": 0.76
+  },
+  {
+   "name": "Scandinavian Defense: Valencian Variation",
+   "eco": "B01",
+   "plies": 6,
+   "line": "e4 d5 exd5 Qxd5 Nc3 Qd8",
+   "coverage": 0.88
+  },
+  {
+   "name": "Scandinavian Defense: Mieses-Kotroc Variation",
+   "eco": "B01",
+   "plies": 4,
+   "line": "e4 d5 exd5 Qxd5",
+   "coverage": 0.92
+  },
+  {
+   "name": "Scandinavian Defense",
+   "eco": "B01",
+   "plies": 2,
+   "line": "e4 d5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

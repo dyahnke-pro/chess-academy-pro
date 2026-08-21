@@ -498,5 +498,40 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Three Knights Opening",
+   "eco": "C46",
+   "plies": 9,
+   "line": "e4 e5 Nf3 Qf6 Nc3 Nc6 Nd5 Qd8 Nc3",
+   "coverage": 0.119
+  },
+  {
+   "name": "King's Pawn Game: McConnell Defense",
+   "eco": "C40",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Qf6",
+   "coverage": 0.952
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.976
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

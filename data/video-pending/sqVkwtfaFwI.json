@@ -210,5 +210,46 @@
    "fen": "r2qkb1r/1b1pnp2/p1n1pN1p/1p4p1/4P2B/1B3N2/PP3PPP/R2Q1RK1 b kq - 1 12"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit Accepted, Paulsen Formation",
+   "eco": "B21",
+   "plies": 12,
+   "line": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 Nc6 Nf3 e6 Bc4 a6",
+   "coverage": 0.6
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit Accepted",
+   "eco": "B21",
+   "plies": 6,
+   "line": "e4 c5 d4 cxd4 c3 dxc3",
+   "coverage": 0.85
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit",
+   "eco": "B21",
+   "plies": 3,
+   "line": "e4 c5 d4",
+   "coverage": 0.95
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Smith-Morra Gambit",
+  "confirmed": true
+ }
 }
