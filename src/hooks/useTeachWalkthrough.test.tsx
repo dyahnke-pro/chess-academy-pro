@@ -542,6 +542,46 @@ describe('gem-crush aside (Watch plays like his videos)', () => {
       { timeout: 8000 },
     );
   });
+
+  it('reaches the leaf THROUGH the aside even when the voice never resolves', async () => {
+    // THE STALL THIS EXISTS TO STOP. On prod the last narration event of a
+    // 600-second Vienna Copycat run was a gem aside eleven plies into a
+    // fifteen-ply line, and nothing followed it — no error, no advance, no
+    // leaf, so the middlegame picker never appeared. Both of the aside's exits
+    // used to gate on the IDENTITY of a shared timer ref rather than on their
+    // own settled flag, so each could decide it had been superseded by the
+    // other and the phase stayed `narrating` for ever.
+    //
+    // A never-resolving voice is the sharp version of that: it kills one exit
+    // outright, so the walk arrives at its leaf ONLY if the surviving exit is
+    // guaranteed to fire. Three earlier sessions blamed slowness, the TTS mock
+    // and missing narration; the contract that actually matters is this one —
+    // whatever happens to the voice, the walk still ends.
+    vi.mocked(voiceService.speakForced).mockReturnValue(new Promise<void>(() => {}));
+
+    const leaf = { san: 'dxe4', movedBy: 'black' as const, idea: 'black recaptures', children: [] };
+    const chain = ['Nc3', 'd5', 'd4', 'c6', 'e4'].reduce(
+      (child, san) => ({
+        san,
+        movedBy: san === 'e4' || san === 'd4' || san === 'Nc3' ? 'white' : 'black',
+        idea: san,
+        children: [{ node: child }],
+      }),
+      leaf as unknown as { san: string; movedBy: 'white' | 'black'; idea: string; children: { node: unknown }[] },
+    );
+    const tree: WalkthroughTree = {
+      openingName: 'Caro-Kann',
+      eco: 'B10',
+      intro: '',
+      outro: '',
+      root: { san: null, movedBy: null, idea: '', children: [{ node: chain as never }] },
+    } as WalkthroughTree;
+
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(tree));
+
+    await waitFor(() => expect(result.current.phase).toBe('leaf'), { timeout: 60_000 });
+  }, 70_000);
 });
 
 // ─── Drill line selection (hand-driven prod audit 2026-07-28) ─────────────

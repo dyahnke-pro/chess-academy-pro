@@ -1196,30 +1196,60 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
               source: 'useTeachWalkthrough.deltaAside',
               summary: `delta aside @[${sansSoFar.join(' ')}]: ${aside.say.slice(0, 120)}`,
             });
-            const backup = setTimeout(() => {
-              if (!isCurrent() || advanceTimerRef.current !== backup) return;
-              advanceTimerRef.current = null;
+            // THE ASIDE MUST NOT BE ABLE TO STRAND THE WALK (fixed 2026-08-21).
+            //
+            // Both continuations below used to gate on the IDENTITY of the
+            // timer — `advanceTimerRef.current !== backup` — which is the only
+            // place in this file that decides whether to transition by looking
+            // at a ref instead of its own settled flag. That made the aside the
+            // one step in the chain where BOTH exits could bail: the ref is
+            // shared, `transitionAfter` can be re-entered (the node-level backup
+            // from the segment loop is still armed and un-cleared when the aside
+            // arms its own), and the moment anything reassigns or nulls that ref
+            // in the window between arming and firing, the voice-resolve path
+            // and the timer path each decide they were superseded — by each
+            // other — and the phase stays `narrating` for ever with no error,
+            // no advance, and no leaf.
+            //
+            // That is exactly what prod showed: the LAST narration event of a
+            // 600s run was this aside at [e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5
+            // Qxf2+ Kd1] — eleven plies into a fifteen-ply line — and nothing
+            // followed it. Three earlier sessions blamed slowness, the TTS mock
+            // and missing narration; each was measured and killed. Silence with
+            // no error is the signature of a guard that both exits fail.
+            //
+            // So the aside now settles like every other narration path in this
+            // file: ONE boolean, checked and set by whichever exit arrives
+            // first. Exactly one of {voice resolved, backup fired, cancelled}
+            // wins, and — the part that matters — one of them ALWAYS does.
+            // Cancellation still goes through the run token, which orphans the
+            // whole chain the way it does everywhere else.
+            let asideSettled = false;
+            const finishAside = (): void => {
+              if (asideSettled || !isCurrent()) return;
+              asideSettled = true;
+              if (advanceTimerRef.current === backup) advanceTimerRef.current = null;
+              clearTimeout(backup);
               setNarrationArrows([]);
-              transitionAfter();
-            }, clampBackupMs(aside.say));
+              transitionAfter(); // gemAsideDone=true → falls through below
+            };
+            // Clear the node-level backup BEFORE arming the aside's, so only one
+            // timer is ever live on this ref. Leaving the segment-path timer
+            // armed is what let a second `transitionAfter` land mid-aside.
+            if (advanceTimerRef.current) clearTimeout(advanceTimerRef.current);
+            const backup = setTimeout(finishAside, clampBackupMs(aside.say));
             advanceTimerRef.current = backup;
             cancelNarrationRef.current = (): void => {
-              if (advanceTimerRef.current === backup) {
-                clearTimeout(backup);
-                advanceTimerRef.current = null;
-              }
+              // Cancel means the caller drives from here — settle without
+              // transitioning, so a later voice resolve cannot revive the chain.
+              asideSettled = true;
+              clearTimeout(backup);
+              if (advanceTimerRef.current === backup) advanceTimerRef.current = null;
               setNarrationArrows([]);
             };
             void speakWalkthroughText(aside.say, aside.short, isCurrent)
               .catch(() => undefined)
-              .then(() => {
-                // Superseded (cancelled / backup already fired) → do nothing.
-                if (!isCurrent() || advanceTimerRef.current !== backup) return;
-                clearTimeout(backup);
-                advanceTimerRef.current = null;
-                setNarrationArrows([]);
-                transitionAfter(); // gemAsideDone=true → falls through below
-              });
+              .then(finishAside);
             return;
           }
         }

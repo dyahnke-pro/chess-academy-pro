@@ -2605,11 +2605,43 @@ prod 2026-08-20, the Vienna Copycat narrates 11 nodes and then sits in the
 budget, with ZERO console errors and zero page errors, under both
 `blockTtsNetwork` and `muteTtsForAudit` (the mute resolves the speak promise on
 a text-proportional delay, so the hang is not the voice gate). Silence with no
-error is the signature: the runner's callbacks bail on `if (ctrl.cancelled ||
-!isCurrent()) return;` without scheduling anything, so a stale token strands the
-phase forever. Tier 3 is what should have caught it. When a lesson stops, ask
-which tier was supposed to speak at that ply before assuming the content is
-missing.
+error is the signature.
+
+**NARROWED 2026-08-21, and the instrument that did it was the AUDIT-STREAM, not
+the DOM.** Four sessions had now guessed at this from Playwright alone (slow /
+TTS mock / missing narration / a stale run token) and every guess was wrong.
+Pulling `/api/audit-stream` after the run answered it in one read: the LAST
+narration event of a 600s Vienna Copycat walk is
+`useTeachWalkthrough.deltaAside` at `[e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+
+Kd1]` — **exactly eleven plies, and it is the GEM ASIDE, not the segment loop.**
+Nothing follows it. That is why G1 says three instruments: Playwright can only
+report that nothing happened; the stream reports WHERE.
+
+The aside was also the one place in `useTeachWalkthrough` that gated a
+transition on the IDENTITY of the shared `advanceTimerRef` rather than on its
+own settled flag, so both of its exits could each conclude the other had
+superseded it. That has been rewritten to settle like every other narration path
+(one boolean, exactly one winner, and one of them always fires).
+
+🚨 **BUT THAT FIX IS UNPROVEN, AND THE WAY IT WAS FOUND WANTING IS THE LESSON.**
+The regression test written for it — never-resolving voice, assert the walk still
+reaches its leaf — **passes on the OLD code too.** So it does not reproduce the
+prod stall and it is not a regression test; the change is a hardening that
+removes one way to strand, not a demonstrated cure. **Always run a new test
+against the UNFIXED code before believing it.** `git stash push -- <file>`, run
+the test, `git stash pop`: thirty seconds, and it is the difference between a
+regression test and decoration that will report green for ever while the bug
+lives. The stall is still OPEN until a prod run reaches the leaf.
+
+Tier 3 is what should have caught it. When a lesson stops, ask which tier was
+supposed to speak at that ply before assuming the content is missing.
+
+**PULLING THE PROD AUDIT-STREAM NEEDS SEVERAL PULLS, NOT ONE.** The endpoint is
+served by whichever serverless instance answers, and they do not share state:
+consecutive identical requests came back `storage: "memory"` with 62 entries and
+`storage: "redis"` with 0, in the same minute. A single empty pull therefore
+proves NOTHING — it is one instance's view, not the absence of events. Pull six
+to ten times, merge on `(timestamp, summary)`, and read the union.
 
 **HOW TO MEASURE A LINE'S TIER-2 COVERAGE** (do this before concluding anything
 about a lesson): replay the line and call `lessonBeatAt(fen, seen)` per ply. Do
