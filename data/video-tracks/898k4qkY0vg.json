@@ -598,5 +598,87 @@
  "titleCheck": {
   "claims": "Caro-Kann Defense: Exchange Variation",
   "confirmed": true
- }
+ },
+ "notes": [
+  {
+   "id": "vn-carokann-support-the-break-and-inherit-the-question",
+   "line": "e4 c6",
+   "teaches": "Preparing a central break with a pawn rather than a piece keeps the structure sound and creates one long-term problem. Know which problem you are buying before you play the move.",
+   "explains": "The little pawn move readies the strike in the centre next move, backed by a pawn rather than a piece. That is the whole appeal of this defence — the structure stays healthy. It also sets the question the rest of the game will keep asking: with pawns on c6 and shortly d5, the light-squared bishop on c8 has to find somewhere to live, and in this family of openings, as in the one with the pawn on e6, it often does not have a good home.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "d5"
+    }
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "t": 18,
+   "ply": 2,
+   "source": "yt:898k4qkY0vg"
+  },
+  {
+   "id": "vn-carokann-the-break-that-is-already-defended",
+   "line": "e4 c6 d4 d5",
+   "teaches": "A central pawn that arrives already defended asks a question the opponent must answer. Compare it to the same pawn arriving loose — the difference is who gets to choose what happens next.",
+   "explains": "The pawn hits e4, and unlike a bare central strike this one comes with support behind it. White has to make a decision: push past it, hold the tension, or trade. Each leads to a different opening, and Black is comfortable in all three, which is why this defence has a reputation for soundness rather than sharpness.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e4"
+    }
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "t": 26,
+   "ply": 4,
+   "source": "yt:898k4qkY0vg"
+  },
+  {
+   "id": "vn-carokann-the-simplest-of-the-three-answers",
+   "line": "e4 c6 d4 d5 exd5",
+   "teaches": "Resolving the tension immediately is a choice for a clear structure over a complicated one. It is not passive if the structure it produces has plans in it.",
+   "explains": "White takes, which is the most straightforward of the replies and the one that settles the pawn structure at once. The pawn on d5 is attacked and will be recaptured; what matters is that the centre is now symmetrical and the game will be decided by piece placement rather than by a pawn break neither side has made yet.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c6"
+    }
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "t": 27.5,
+   "ply": 5,
+   "source": "yt:898k4qkY0vg"
+  },
+  {
+   "id": "vn-carokann-recapture-and-look-at-the-bishop",
+   "line": "e4 c6 d4 d5 exd5 cxd5",
+   "teaches": "After a symmetrical trade, the position is decided by which pieces have good squares. Find the piece with the fewest and build the setup around it.",
+   "explains": "Black takes back with the c-pawn and the structure is settled: mirrored pawns, an open c-file, and no immediate targets. Every viable black setup from here is organised around one piece — the light-squared bishop, which is now hemmed in behind its own pawn on d5 and needs a route out before it is shut in for good.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e4"
+    }
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "t": 28.5,
+   "ply": 6,
+   "source": "yt:898k4qkY0vg"
+  },
+  {
+   "id": "vn-carokann-develop-the-knights-in-the-order-the-bishop-needs",
+   "line": "e4 c6 d4 d5 exd5 cxd5 Bd3",
+   "teaches": "Develop in the order that keeps your worst piece's route open. The natural knight move is not automatically the right one when it costs your problem piece its only good square.",
+   "explains": "The bishop takes the diagonal toward the black king and the setup that follows is a familiar one — the c-pawn one square, then the other bishop out to f4, a solid formation reminiscent of an entirely different opening. The point for Black is the move ORDER. Bringing the queen's knight out first is what most players do on sight, but the sounder route is the other knight, keeping the option of getting the light-squared bishop out before it is locked in. White's small pawn move to h3 is exactly the move that shuts that route down, and once it is played Black has to switch to a different plan altogether.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e4"
+    }
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/3B4/PPP2PPP/RNBQK1NR b KQkq - 1 4",
+   "t": 31,
+   "ply": 7,
+   "source": "yt:898k4qkY0vg"
+  }
+ ]
 }
