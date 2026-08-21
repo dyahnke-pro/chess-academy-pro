@@ -1,8 +1,8 @@
 {
  "generatedAt": "2026-08-21",
- "videosDistilled": 191,
- "noteCount": 498,
- "forkCount": 499,
+ "videosDistilled": 192,
+ "noteCount": 511,
+ "forkCount": 506,
  "notes": [
   {
    "id": "vn-advance-e6-cover-the-check-square-before-the-trade",
@@ -13939,6 +13939,592 @@
     {
      "kind": "defends",
      "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-qgd-recapture-toward-the-queen",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "c6",
+    "Bf4",
+    "Bd6",
+    "Bxd6",
+    "Qxd6"
+   ],
+   "opening": "Queen's Gambit Declined: Charousek Variation",
+   "phase": "opening",
+   "explains": "Taking on d6 with the queen centralises it on an open diagonal rather than leaving it passive, and the exchange of dark-squared bishops has eased any cramp. Black is already fully equal out of the opening.",
+   "teaches": "When the opponent offers to trade your good bishop, recapturing toward the centre with the queen keeps it active and eyeing both wings. Take back with the piece that lands on the best square, not just the nearest one.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lLkqjBOGgek"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-qgd-bishop-out-before-it-is-shut-in",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "c6",
+    "Bf4",
+    "Bd6",
+    "Bxd6",
+    "Qxd6",
+    "e3",
+    "Bf5"
+   ],
+   "opening": "Queen's Gambit Declined: Charousek Variation",
+   "phase": "opening",
+   "explains": "The bishop comes to f5, active on the b1-h7 diagonal and eyeing e4, developed before White can play the bishop to d3 to challenge it. Getting it out first is what keeps it from becoming the bad bishop stuck behind the pawns.",
+   "teaches": "In closed queen's-pawn structures, get the light-squared bishop OUTSIDE the pawn chain before your own moves lock it in — and before the opponent can contest its best diagonal. The bishop that would otherwise be your worst piece becomes a good one simply by leaving early.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lLkqjBOGgek"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e4"
+    }
+   ]
+  },
+  {
+   "id": "vn-qgd-knight-to-d7-first-to-deny-e5",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "c6",
+    "Bf4",
+    "Bd6",
+    "Bxd6",
+    "Qxd6",
+    "e3",
+    "Bf5",
+    "Be2",
+    "Nd7"
+   ],
+   "opening": "Queen's Gambit Declined: Charousek Variation",
+   "phase": "opening",
+   "explains": "The knight develops to d7 and guards the e5 square, so the opponent can never establish a piece on that central outpost. Covering that square comes first, and the rest of the development follows once it is safely denied.",
+   "teaches": "Order your developing moves by what they prevent. Bring the knight that guards a key central square out first, and develop the rest only afterward; the same pieces, played in the right order, deny the opponent their best outpost for nothing.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lLkqjBOGgek"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ]
+  },
+  {
+   "id": "vn-qgd-opening-solved-complete-development",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "c6",
+    "Bf4",
+    "Bd6",
+    "Bxd6",
+    "Qxd6",
+    "e3",
+    "Bf5",
+    "Be2",
+    "Nd7",
+    "O-O",
+    "Ngf6"
+   ],
+   "opening": "Queen's Gambit Declined: Charousek Variation",
+   "phase": "opening",
+   "explains": "The kingside knight completes development to f6 and every Black piece stands on a sensible square. The opening problems are solved; there is nothing for White to bite on.",
+   "teaches": "A solid structure is not won by a clever stroke but by getting every piece to its natural square and leaving the opponent no target. When development is complete and nothing is loose, the burden shifts to the other side to find a plan.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lLkqjBOGgek"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-qgd-castle-and-let-white-search-for-a-plan",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "c6",
+    "Bf4",
+    "Bd6",
+    "Bxd6",
+    "Qxd6",
+    "e3",
+    "Bf5",
+    "Be2",
+    "Nd7",
+    "O-O",
+    "Ngf6",
+    "h3",
+    "O-O"
+   ],
+   "opening": "Queen's Gambit Declined: Charousek Variation",
+   "phase": "opening",
+   "explains": "Black castles into a comfortable, weakness-free position. White's most natural try is the minority attack with a3, b4 and b5, but nothing is forced and the burden of finding a plan is White's.",
+   "teaches": "In a symmetrical, solid position, having no weaknesses is itself an achievement — it means the opponent must take the first committal step and hand you something to work against. Finish your king safety and make them come to you.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lLkqjBOGgek"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-qgd-trade-to-open-the-d5-outpost",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "c6",
+    "Bf4",
+    "Bd6",
+    "Bxd6",
+    "Qxd6",
+    "e3",
+    "Bf5",
+    "Be2",
+    "Nd7",
+    "O-O",
+    "Ngf6",
+    "h3",
+    "O-O",
+    "Qd2",
+    "Rfe8",
+    "Rfe1",
+    "Ne4"
+   ],
+   "opening": "Queen's Gambit Declined: Charousek Variation",
+   "phase": "middlegame",
+   "explains": "The knight leaps to e4 offering the trade; when it is taken and the d-pawn recaptures, the d5 square opens for Black's other knight and White's knight loses its e-file squares. The exchange hands Black a lasting positional gain.",
+   "teaches": "Time a central knight jump for the moment the recapture improves your structure. Trading a pair of knights here forces a pawn recapture that opens a permanent square for your remaining knight and shoves the opponent's knight to the edge.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lLkqjBOGgek"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c3"
+    }
+   ]
+  },
+  {
+   "id": "vn-qgd-recapture-cramps-the-enemy-knight",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "c6",
+    "Bf4",
+    "Bd6",
+    "Bxd6",
+    "Qxd6",
+    "e3",
+    "Bf5",
+    "Be2",
+    "Nd7",
+    "O-O",
+    "Ngf6",
+    "h3",
+    "O-O",
+    "Qd2",
+    "Rfe8",
+    "Rfe1",
+    "Ne4",
+    "Nxe4",
+    "dxe4"
+   ],
+   "opening": "Queen's Gambit Declined: Charousek Variation",
+   "phase": "middlegame",
+   "explains": "Taking back with the d-pawn puts a pawn on e4 that attacks the f3-knight and drives it to the passive h2 square. The d5 square is now a clean outpost, and White is left shuffling.",
+   "teaches": "Recapturing toward the centre can plant a thorn as much as rebuild a chain. A pawn that lands attacking an enemy knight forces it to a passive square, and the space it seizes cramps the whole enemy camp.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lLkqjBOGgek"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f3"
+    }
+   ]
+  },
+  {
+   "id": "vn-qgd-reroute-toward-the-outpost",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "c6",
+    "Bf4",
+    "Bd6",
+    "Bxd6",
+    "Qxd6",
+    "e3",
+    "Bf5",
+    "Be2",
+    "Nd7",
+    "O-O",
+    "Ngf6",
+    "h3",
+    "O-O",
+    "Qd2",
+    "Rfe8",
+    "Rfe1",
+    "Ne4",
+    "Nxe4",
+    "dxe4",
+    "Nh2",
+    "Nf6"
+   ],
+   "opening": "Queen's Gambit Declined: Charousek Variation",
+   "phase": "middlegame",
+   "explains": "The knight comes back to f6 with the d5 square in mind, rerouting toward the hole in White's camp. There is no rush; the outpost is permanent and White has no way to cover it.",
+   "teaches": "Once you have an outpost, route a knight toward it patiently, even if the path looks roundabout. A knight heading for a square no pawn can ever challenge is worth two moves spent getting it there.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lLkqjBOGgek"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-qgd-the-knight-lands-on-d5",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "c6",
+    "Bf4",
+    "Bd6",
+    "Bxd6",
+    "Qxd6",
+    "e3",
+    "Bf5",
+    "Be2",
+    "Nd7",
+    "O-O",
+    "Ngf6",
+    "h3",
+    "O-O",
+    "Qd2",
+    "Rfe8",
+    "Rfe1",
+    "Ne4",
+    "Nxe4",
+    "dxe4",
+    "Nh2",
+    "Nf6",
+    "Rec1",
+    "Nd5"
+   ],
+   "opening": "Queen's Gambit Declined: Charousek Variation",
+   "phase": "middlegame",
+   "explains": "The knight settles on d5, an unassailable outpost that also covers the c-file so the enemy rooks find no entry. Black's pieces dominate while White's shuffle with no plan.",
+   "teaches": "A knight on a square no enemy pawn can attack is worth far more than its material value — it blockades, it dominates, and it cannot be evicted. Plant it and the position plays itself.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lLkqjBOGgek"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-qgd-a5-stops-the-minority-attack",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "c6",
+    "Bf4",
+    "Bd6",
+    "Bxd6",
+    "Qxd6",
+    "e3",
+    "Bf5",
+    "Be2",
+    "Nd7",
+    "O-O",
+    "Ngf6",
+    "h3",
+    "O-O",
+    "Qd2",
+    "Rfe8",
+    "Rfe1",
+    "Ne4",
+    "Nxe4",
+    "dxe4",
+    "Nh2",
+    "Nf6",
+    "Rec1",
+    "Nd5",
+    "a3",
+    "a5"
+   ],
+   "opening": "Queen's Gambit Declined: Charousek Variation",
+   "phase": "middlegame",
+   "explains": "White's a3 prepares b4 and a minority attack; the reply a5 clamps down on b4 and stops the advance before it starts. The queenside is shut and White is left without a constructive plan.",
+   "teaches": "Meet a wing pawn advance before it rolls. When the opponent prepares to gain queenside space with a pawn push, answering with your own rook-pawn one square up freezes the break and denies them the outpost the push was meant to create.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lLkqjBOGgek"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "b4"
+    }
+   ]
+  },
+  {
+   "id": "vn-qgd-lift-the-rook-toward-the-king",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "c6",
+    "Bf4",
+    "Bd6",
+    "Bxd6",
+    "Qxd6",
+    "e3",
+    "Bf5",
+    "Be2",
+    "Nd7",
+    "O-O",
+    "Ngf6",
+    "h3",
+    "O-O",
+    "Qd2",
+    "Rfe8",
+    "Rfe1",
+    "Ne4",
+    "Nxe4",
+    "dxe4",
+    "Nh2",
+    "Nf6",
+    "Rec1",
+    "Nd5",
+    "a3",
+    "a5",
+    "Rc2",
+    "Re6"
+   ],
+   "opening": "Queen's Gambit Declined: Charousek Variation",
+   "phase": "middlegame",
+   "explains": "With the queenside frozen, the rook lifts to e6 planning to swing across to g6 and join an attack on the king. All of Black's play is now aimed at the one part of the board where White cannot defend easily.",
+   "teaches": "When one wing is shut, shift your force to the other. A rook lifted along the third or sixth rank can swing toward the enemy king, turning a quiet positional edge into a genuine attack where the defender has no counterplay.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lLkqjBOGgek"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-qgd-the-good-knight-survives-the-trade",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "c6",
+    "Bf4",
+    "Bd6",
+    "Bxd6",
+    "Qxd6",
+    "e3",
+    "Bf5",
+    "Be2",
+    "Nd7",
+    "O-O",
+    "Ngf6",
+    "h3",
+    "O-O",
+    "Qd2",
+    "Rfe8",
+    "Rfe1",
+    "Ne4",
+    "Nxe4",
+    "dxe4",
+    "Nh2",
+    "Nf6",
+    "Rec1",
+    "Nd5",
+    "a3",
+    "a5",
+    "Rc2",
+    "Re6",
+    "Bg4",
+    "Bxg4",
+    "Nxg4"
+   ],
+   "opening": "Queen's Gambit Declined: Charousek Variation",
+   "phase": "middlegame",
+   "explains": "The bishops come off and the knight recaptures on g4, heading back into the game. What is left is a knight-versus-knight position where Black's knight, bound for its outpost, clearly outclasses White's.",
+   "teaches": "Not every trade is equal — swapping off pieces is good when what remains favours you. Trading light-squared bishops here leaves a knight-versus-knight middlegame where your knight is the far better piece, which is a small victory in itself.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lLkqjBOGgek"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-qgd-f6-prepares-the-kingside-break",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "c6",
+    "Bf4",
+    "Bd6",
+    "Bxd6",
+    "Qxd6",
+    "e3",
+    "Bf5",
+    "Be2",
+    "Nd7",
+    "O-O",
+    "Ngf6",
+    "h3",
+    "O-O",
+    "Qd2",
+    "Rfe8",
+    "Rfe1",
+    "Ne4",
+    "Nxe4",
+    "dxe4",
+    "Nh2",
+    "Nf6",
+    "Rec1",
+    "Nd5",
+    "a3",
+    "a5",
+    "Rc2",
+    "Re6",
+    "Bg4",
+    "Bxg4",
+    "Nxg4",
+    "f6"
+   ],
+   "opening": "Queen's Gambit Declined: Charousek Variation",
+   "phase": "middlegame",
+   "explains": "The move f6 takes the e5 square away from White's knight and prepares the plan of h5 and f5, rolling the kingside pawns to open the floodgates toward the king. It is patient preparation, not an immediate threat.",
+   "teaches": "Prepare a pawn storm with a quiet restraining move first. Playing the f-pawn one square denies the enemy knight its central square and lays the groundwork for pushing the pawns forward to open lines at the king — slow, but unstoppable when the other wing is dead.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:lLkqjBOGgek"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e5"
     }
    ]
   },
@@ -31908,6 +32494,235 @@
     }
    ],
    "source": "yt:l65FZlRkWcM"
+  },
+  {
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "Be7",
+     "t": 34,
+     "continuation": "Be7"
+    },
+    {
+     "san": "Nf6",
+     "t": 1429.5,
+     "continuation": "Nf6 Bg5"
+    }
+   ],
+   "source": "yt:lLkqjBOGgek"
+  },
+  {
+   "fen": "rnbqk1nr/ppp1bppp/4p3/3p4/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7"
+   ],
+   "ply": 6,
+   "options": [
+    {
+     "san": "cxd5",
+     "t": 45.5,
+     "continuation": "cxd5"
+    },
+    {
+     "san": "Nf3",
+     "t": 1434.5,
+     "continuation": "Nf3"
+    }
+   ],
+   "source": "yt:lLkqjBOGgek"
+  },
+  {
+   "fen": "rnbqk1nr/ppp1bppp/8/3p4/3P4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 5",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5"
+   ],
+   "ply": 8,
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 53,
+     "continuation": "Nf3"
+    },
+    {
+     "san": "Bf4",
+     "t": 1457.5,
+     "continuation": "Bf4"
+    }
+   ],
+   "source": "yt:lLkqjBOGgek"
+  },
+  {
+   "fen": "rnbqk1nr/pp3ppp/2pb4/3p4/3P1B2/2N2N2/PP2PPPP/R2QKB1R w KQkq - 2 7",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Be7",
+    "cxd5",
+    "exd5",
+    "Nf3",
+    "c6",
+    "Bf4",
+    "Bd6"
+   ],
+   "ply": 12,
+   "options": [
+    {
+     "san": "Bxd6",
+     "t": 152.5,
+     "continuation": "Bxd6 Qxd6"
+    },
+    {
+     "san": "Bg5",
+     "t": 1515,
+     "continuation": "Bg5"
+    }
+   ],
+   "source": "yt:lLkqjBOGgek"
+  },
+  {
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 8 7",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Bg5",
+    "Be7",
+    "Bc1",
+    "Ng8",
+    "Nf3",
+    "Nf6"
+   ],
+   "ply": 12,
+   "options": [
+    {
+     "san": "Bg5",
+     "t": 1442.5,
+     "continuation": "Bg5"
+    },
+    {
+     "san": "cxd5",
+     "t": 1452.5,
+     "continuation": "cxd5 Ng8 Ng1"
+    }
+   ],
+   "source": "yt:lLkqjBOGgek"
+  },
+  {
+   "fen": "rnbqk1nr/pp2bppp/2p5/3p4/3P1B2/2N1P3/PP3PPP/R2QKBNR b KQkq - 0 10",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Bg5",
+    "Be7",
+    "Bc1",
+    "Ng8",
+    "Nf3",
+    "Nf6",
+    "cxd5",
+    "Ng8",
+    "Ng1",
+    "exd5",
+    "Bf4",
+    "c6",
+    "e3"
+   ],
+   "ply": 19,
+   "options": [
+    {
+     "san": "Bf5",
+     "t": 1465.5,
+     "continuation": "Bf5"
+    },
+    {
+     "san": "Bd6",
+     "t": 1469,
+     "continuation": "Bd6"
+    }
+   ],
+   "source": "yt:lLkqjBOGgek"
+  },
+  {
+   "fen": "r3r1k1/pp1n1ppp/2pb4/3p1b2/3Pn3/2N1PN1P/PP1QBPP1/R3K1R1 w - - 5 18",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "e6",
+    "Nc3",
+    "Nf6",
+    "Bg5",
+    "Be7",
+    "Bc1",
+    "Ng8",
+    "Nf3",
+    "Nf6",
+    "cxd5",
+    "Ng8",
+    "Bd2",
+    "c6",
+    "Bf4",
+    "exd5",
+    "e3",
+    "Qd6",
+    "Bxd6",
+    "Bxd6",
+    "Be2",
+    "Bf5",
+    "Kf1",
+    "Nd7",
+    "Rg1",
+    "Ngf6",
+    "h3",
+    "O-O",
+    "Qd2",
+    "Rfe8",
+    "Ke1",
+    "Ne4"
+   ],
+   "ply": 34,
+   "options": [
+    {
+     "san": "Qd1",
+     "t": 1706.5,
+     "continuation": "Qd1 Rf8 Kf1 Nef6"
+    },
+    {
+     "san": "Nxe4",
+     "t": 1759.5,
+     "continuation": "Nxe4 dxe4"
+    }
+   ],
+   "source": "yt:lLkqjBOGgek"
   },
   {
    "fen": "r1bqkb1r/pp1ppp1p/2n2np1/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 1 6",
