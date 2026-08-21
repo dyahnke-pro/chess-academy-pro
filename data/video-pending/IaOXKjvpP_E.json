@@ -1,0 +1,429 @@
+{
+ "videoId": "IaOXKjvpP_E",
+ "title": "Titled Tuesday!! Brutal Battle for the Top Spot! | GM Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 8625,
+  "settledPositions": null
+ },
+ "plies": 49,
+ "rewinds": 0,
+ "moves": [
+  {
+   "t": 58,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 60,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 61.5,
+   "ply": 5,
+   "line": [
+    "d6",
+    "Bb5+"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 3"
+  },
+  {
+   "t": 64,
+   "ply": 7,
+   "line": [
+    "Nd7",
+    "O-O"
+   ],
+   "fen": "r1bqkbnr/pp1npppp/3p4/1Bp5/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 3 4"
+  },
+  {
+   "t": 65.5,
+   "ply": 9,
+   "line": [
+    "a6",
+    "Bd3"
+   ],
+   "fen": "r1bqkbnr/1p1npppp/p2p4/2p5/4P3/3B1N2/PPPP1PPP/RNBQ1RK1 b kq - 1 5"
+  },
+  {
+   "t": 66.5,
+   "ply": 10,
+   "line": [
+    "Ngf6"
+   ],
+   "fen": "r1bqkb1r/1p1npppp/p2p1n2/2p5/4P3/3B1N2/PPPP1PPP/RNBQ1RK1 w kq - 2 6"
+  },
+  {
+   "t": 67.5,
+   "ply": 11,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1bqkb1r/1p1npppp/p2p1n2/2p5/4P3/3B1N2/PPPP1PPP/RNBQR1K1 b kq - 3 6"
+  },
+  {
+   "t": 72,
+   "ply": 12,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkb1r/1p1npp1p/p2p1np1/2p5/4P3/3B1N2/PPPP1PPP/RNBQR1K1 w kq - 0 7"
+  },
+  {
+   "t": 73,
+   "ply": 13,
+   "line": [
+    "c3"
+   ],
+   "fen": "r1bqkb1r/1p1npp1p/p2p1np1/2p5/4P3/2PB1N2/PP1P1PPP/RNBQR1K1 b kq - 0 7"
+  },
+  {
+   "t": 74.5,
+   "ply": 15,
+   "line": [
+    "Bg7",
+    "Bc2"
+   ],
+   "fen": "r1bqk2r/1p1nppbp/p2p1np1/2p5/4P3/2P2N2/PPBP1PPP/RNBQR1K1 b kq - 2 8"
+  },
+  {
+   "t": 76,
+   "ply": 18,
+   "line": [
+    "e5",
+    "d4",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/1p1n1pbp/p2p1np1/2p1p3/3PP3/2P2N2/PPB2PPP/RNBQR1K1 w - - 1 10"
+  },
+  {
+   "t": 79.5,
+   "ply": 19,
+   "line": [
+    "a4"
+   ],
+   "fen": "r1bq1rk1/1p1n1pbp/p2p1np1/2p1p3/P2PP3/2P2N2/1PB2PPP/RNBQR1K1 b - - 0 10"
+  },
+  {
+   "t": 88,
+   "ply": 20,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "r1b2rk1/1pqn1pbp/p2p1np1/2p1p3/P2PP3/2P2N2/1PB2PPP/RNBQR1K1 w - - 1 11"
+  },
+  {
+   "t": 101.5,
+   "ply": 21,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1b2rk1/1pqn1pbp/p2p1np1/2pPp3/P3P3/2P2N2/1PB2PPP/RNBQR1K1 b - - 0 11"
+  },
+  {
+   "t": 104,
+   "ply": 22,
+   "line": [
+    "h6"
+   ],
+   "fen": "r1b2rk1/1pqn1pb1/p2p1npp/2pPp3/P3P3/2P2N2/1PB2PPP/RNBQR1K1 w - - 0 12"
+  },
+  {
+   "t": 105,
+   "ply": 23,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "r1b2rk1/1pqn1pb1/p2p1npp/2pPp3/P3P3/2P2N2/1PBN1PPP/R1BQR1K1 b - - 1 12"
+  },
+  {
+   "t": 109,
+   "ply": 25,
+   "line": [
+    "b6",
+    "Nf1"
+   ],
+   "fen": "r1b2rk1/2qn1pb1/pp1p1npp/2pPp3/P3P3/2P2N2/1PB2PPP/R1BQRNK1 b - - 1 13"
+  },
+  {
+   "t": 112.5,
+   "ply": 26,
+   "line": [
+    "Nh5"
+   ],
+   "fen": "r1b2rk1/2qn1pb1/pp1p2pp/2pPp2n/P3P3/2P2N2/1PB2PPP/R1BQRNK1 w - - 2 14"
+  },
+  {
+   "t": 114.5,
+   "ply": 27,
+   "line": [
+    "Ne3"
+   ],
+   "fen": "r1b2rk1/2qn1pb1/pp1p2pp/2pPp2n/P3P3/2P1NN2/1PB2PPP/R1BQR1K1 b - - 3 14"
+  },
+  {
+   "t": 122.5,
+   "ply": 28,
+   "line": [
+    "Ndf6"
+   ],
+   "fen": "r1b2rk1/2q2pb1/pp1p1npp/2pPp2n/P3P3/2P1NN2/1PB2PPP/R1BQR1K1 w - - 4 15"
+  },
+  {
+   "t": 128,
+   "ply": 29,
+   "line": [
+    "g3"
+   ],
+   "fen": "r1b2rk1/2q2pb1/pp1p1npp/2pPp2n/P3P3/2P1NNP1/1PB2P1P/R1BQR1K1 b - - 0 15"
+  },
+  {
+   "t": 136.5,
+   "ply": 30,
+   "line": [
+    "Rb8"
+   ],
+   "fen": "1rb2rk1/2q2pb1/pp1p1npp/2pPp2n/P3P3/2P1NNP1/1PB2P1P/R1BQR1K1 w - - 1 16"
+  },
+  {
+   "t": 138.5,
+   "ply": 31,
+   "line": [
+    "Nh4"
+   ],
+   "fen": "1rb2rk1/2q2pb1/pp1p1npp/2pPp2n/P3P2N/2P1N1P1/1PB2P1P/R1BQR1K1 b - - 2 16"
+  },
+  {
+   "t": 144.5,
+   "ply": 32,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "1r3rk1/2qb1pb1/pp1p1npp/2pPp2n/P3P2N/2P1N1P1/1PB2P1P/R1BQR1K1 w - - 3 17"
+  },
+  {
+   "t": 154,
+   "ply": 33,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "1r3rk1/2qb1pb1/pp1p1npp/2pPp2n/P3P2N/2P1N1P1/1PBB1P1P/R2QR1K1 b - - 4 17"
+  },
+  {
+   "t": 157.5,
+   "ply": 34,
+   "line": [
+    "Rfc8"
+   ],
+   "fen": "1rr3k1/2qb1pb1/pp1p1npp/2pPp2n/P3P2N/2P1N1P1/1PBB1P1P/R2QR1K1 w - - 5 18"
+  },
+  {
+   "t": 160.5,
+   "ply": 35,
+   "line": [
+    "Ra3"
+   ],
+   "fen": "1rr3k1/2qb1pb1/pp1p1npp/2pPp2n/P3P2N/R1P1N1P1/1PBB1P1P/3QR1K1 b - - 6 18"
+  },
+  {
+   "t": 164,
+   "ply": 36,
+   "line": [
+    "Ra8"
+   ],
+   "fen": "r1r3k1/2qb1pb1/pp1p1npp/2pPp2n/P3P2N/R1P1N1P1/1PBB1P1P/3QR1K1 w - - 7 19"
+  },
+  {
+   "t": 165.5,
+   "ply": 37,
+   "line": [
+    "Qa1"
+   ],
+   "fen": "r1r3k1/2qb1pb1/pp1p1npp/2pPp2n/P3P2N/R1P1N1P1/1PBB1P1P/Q3R1K1 b - - 8 19"
+  },
+  {
+   "t": 170.5,
+   "ply": 38,
+   "line": [
+    "Qd8"
+   ],
+   "fen": "r1rq2k1/3b1pb1/pp1p1npp/2pPp2n/P3P2N/R1P1N1P1/1PBB1P1P/Q3R1K1 w - - 9 20"
+  },
+  {
+   "t": 172.5,
+   "ply": 39,
+   "line": [
+    "c4"
+   ],
+   "fen": "r1rq2k1/3b1pb1/pp1p1npp/2pPp2n/P1P1P2N/R3N1P1/1PBB1P1P/Q3R1K1 b - - 0 20"
+  },
+  {
+   "t": 179.5,
+   "ply": 40,
+   "line": [
+    "Nh7"
+   ],
+   "fen": "r1rq2k1/3b1pbn/pp1p2pp/2pPp2n/P1P1P2N/R3N1P1/1PBB1P1P/Q3R1K1 w - - 1 21"
+  },
+  {
+   "t": 182,
+   "ply": 41,
+   "line": [
+    "Bd1"
+   ],
+   "fen": "r1rq2k1/3b1pbn/pp1p2pp/2pPp2n/P1P1P2N/R3N1P1/1P1B1P1P/Q2BR1K1 b - - 2 21"
+  },
+  {
+   "t": 184.5,
+   "ply": 42,
+   "line": [
+    "Nf4"
+   ],
+   "fen": "r1rq2k1/3b1pbn/pp1p2pp/2pPp3/P1P1Pn1N/R3N1P1/1P1B1P1P/Q2BR1K1 w - - 3 22"
+  },
+  {
+   "t": 203,
+   "ply": 45,
+   "line": [
+    "Neg2",
+    "Qxh4",
+    "gxf4"
+   ],
+   "fen": "r1r3k1/3b1pbn/pp1p2pp/2pPp3/P1P1PP1q/R7/1P1B1PNP/Q2BR1K1 b - - 0 23"
+  },
+  {
+   "t": 207,
+   "ply": 46,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r1r3k1/3bqpbn/pp1p2pp/2pPp3/P1P1PP2/R7/1P1B1PNP/Q2BR1K1 w - - 1 24"
+  },
+  {
+   "t": 208,
+   "ply": 47,
+   "line": [
+    "fxe5"
+   ],
+   "fen": "r1r3k1/3bqpbn/pp1p2pp/2pPP3/P1P1P3/R7/1P1B1PNP/Q2BR1K1 b - - 0 24"
+  },
+  {
+   "t": 217.5,
+   "ply": 50,
+   "line": [
+    "Qxe5",
+    "Bc3",
+    "Qe7"
+   ],
+   "fen": "r1r3k1/3bqpbn/pp1p2pp/2pP4/P1P1P3/R1B5/1P3PNP/Q2BR1K1 w - - 2 26"
+  },
+  {
+   "t": 219.5,
+   "ply": 52,
+   "line": [
+    "Bxg7",
+    "Kxg7"
+   ],
+   "fen": "r1r5/3bqpkn/pp1p2pp/2pP4/P1P1P3/R7/1P3PNP/Q2BR1K1 w - - 0 27"
+  },
+  {
+   "t": 222.5,
+   "ply": 53,
+   "line": [
+    "Rae3"
+   ],
+   "fen": "r1r5/3bqpkn/pp1p2pp/2pP4/P1P1P3/4R3/1P3PNP/Q2BR1K1 b - - 1 27"
+  },
+  {
+   "t": 235,
+   "ply": 55,
+   "line": [
+    "f6",
+    "f4"
+   ],
+   "fen": "r1r5/3bq1kn/pp1p1ppp/2pP4/P1P1PP2/4R3/1P4NP/Q2BR1K1 b - - 0 28"
+  },
+  {
+   "t": 236.5,
+   "ply": 56,
+   "line": [
+    "Re8"
+   ],
+   "fen": "r3r3/3bq1kn/pp1p1ppp/2pP4/P1P1PP2/4R3/1P4NP/Q2BR1K1 w - - 1 29"
+  },
+  {
+   "t": 239,
+   "ply": 57,
+   "line": [
+    "b3"
+   ],
+   "fen": "r3r3/3bq1kn/pp1p1ppp/2pP4/P1P1PP2/1P2R3/6NP/Q2BR1K1 b - - 0 29"
+  },
+  {
+   "t": 244.5,
+   "ply": 58,
+   "line": [
+    "Qf7"
+   ],
+   "fen": "r3r3/3b1qkn/pp1p1ppp/2pP4/P1P1PP2/1P2R3/6NP/Q2BR1K1 w - - 1 30"
+  },
+  {
+   "t": 249.5,
+   "ply": 59,
+   "line": [
+    "Bc2"
+   ],
+   "fen": "r3r3/3b1qkn/pp1p1ppp/2pP4/P1P1PP2/1P2R3/2B3NP/Q3R1K1 b - - 2 30"
+  },
+  {
+   "t": 252.5,
+   "ply": 60,
+   "line": [
+    "Kg8"
+   ],
+   "fen": "r3r1k1/3b1q1n/pp1p1ppp/2pP4/P1P1PP2/1P2R3/2B3NP/Q3R1K1 w - - 3 31"
+  },
+  {
+   "t": 260.5,
+   "ply": 61,
+   "line": [
+    "h4"
+   ],
+   "fen": "r3r1k1/3b1q1n/pp1p1ppp/2pP4/P1P1PP1P/1P2R3/2B3N1/Q3R1K1 b - - 0 31"
+  },
+  {
+   "t": 266,
+   "ply": 62,
+   "line": [
+    "Kh8"
+   ],
+   "fen": "r3r2k/3b1q1n/pp1p1ppp/2pP4/P1P1PP1P/1P2R3/2B3N1/Q3R1K1 w - - 1 32"
+  },
+  {
+   "t": 267,
+   "ply": 63,
+   "line": [
+    "e5"
+   ],
+   "fen": "r3r2k/3b1q1n/pp1p1ppp/2pPP3/P1P2P1P/1P2R3/2B3N1/Q3R1K1 b - - 0 32"
+  }
+ ],
+ "forks": []
+}

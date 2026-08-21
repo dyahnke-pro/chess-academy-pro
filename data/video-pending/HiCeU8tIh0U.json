@@ -1,0 +1,145 @@
+{
+ "videoId": "HiCeU8tIh0U",
+ "title": "Grandmaster Naroditsky Chess Speedrun Pt. 2",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 2429,
+  "settledPositions": null
+ },
+ "plies": 12,
+ "rewinds": 3,
+ "moves": [
+  {
+   "t": 10.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 24,
+   "ply": 4,
+   "line": [
+    "Qh5",
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/4P3/8/PPPP1PPP/RNB1KBNR w KQkq - 2 3"
+  },
+  {
+   "t": 27,
+   "ply": 5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3"
+  },
+  {
+   "t": 41,
+   "ply": 6,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pppp1p1p/2n3p1/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 4"
+  },
+  {
+   "t": 388.5,
+   "ply": 5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3"
+  },
+  {
+   "t": 408.5,
+   "ply": 6,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r1b1kbnr/ppppqppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 4 4"
+  },
+  {
+   "t": 457,
+   "ply": 7,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1b1kbnr/ppppqppp/2n5/4p2Q/2B1P3/2N5/PPPP1PPP/R1B1K1NR b KQkq - 5 4"
+  },
+  {
+   "t": 467.5,
+   "ply": 9,
+   "line": [
+    "Qd8",
+    "Nb1"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 7 5"
+  },
+  {
+   "t": 482,
+   "ply": 10,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pppp1p1p/2n3p1/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 6"
+  },
+  {
+   "t": 483,
+   "ply": 9,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 7 5"
+  },
+  {
+   "t": 485,
+   "ply": 10,
+   "line": [
+    "Qf6"
+   ],
+   "fen": "r1b1kbnr/pppp1ppp/2n2q2/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 8 6"
+  },
+  {
+   "t": 494,
+   "ply": 9,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 7 5"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p2Q/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 3 3",
+   "line": [
+    "e4",
+    "e5",
+    "Qh5",
+    "Nc6",
+    "Bc4"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "g6",
+     "t": 41,
+     "continuation": "g6"
+    },
+    {
+     "san": "Qe7",
+     "t": 408.5,
+     "continuation": "Qe7"
+    },
+    {
+     "san": "Qf6",
+     "t": 485,
+     "continuation": "Qf6"
+    }
+   ]
+  }
+ ]
+}
