@@ -324,11 +324,6 @@
           "Race the kingside pawns f3 and g4-g5 at Black's king.",
           "Use the half-open d-file to pressure the d6-pawn."
         ]
-      },
-      {
-        "name": "Scotch Gambit: 4...Bc5 and the Modest ...Be7",
-        "pgn": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 c3 Be7 Qc2 Na5 Qb3 d3",
-        "explanation": "The c-pawn asks the bishop a question and the polite answer is a retreat to e7, which costs Black a tempo and shuts in nothing that matters yet. White lines the queen up behind the bishop on the a2-g8 diagonal, so f7 is under fire from two pieces at once. The pawn Black shoves to d3 looks like it is doing something and mostly just runs out of support; White develops around it and keeps the pressure aimed at the square that decides these positions."
       }
     ],
     "trapLines": [],
@@ -589,11 +584,6 @@
         "pgn": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nxd4 Bb4 Nxc6 bxc6 Bd3 O-O O-O d6 Bg5 h6 Bh4 Re8 f4 a5 Kh1",
         "explanation": "White trades on c6 to relieve the pin before it wins the centre pawn, then develops the bishop to d3 where it is blocked and is holding the e4 pawn that gives White space \u2014 a bad bishop doing a good pawn's work. Once both sides are castled, Bg5 pins the knight that guards e4 a second time, and f4 claims more space. Kh1 is the quiet preparation: it steps off the diagonal the fianchettoed bishop and the queenside pawns are aiming down before the pawns advance.",
         "shortExplanation": "White trades on c6, holds e4 with a blocked bishop, pins with Bg5 and expands with f4."
-      },
-      {
-        "name": "Three Knights: 3...d6 and the Central Trade",
-        "pgn": "e4 e5 Nf3 Nc6 Nc3 d6 d4 exd4 Nxd4 Nxd4 Qxd4 Qf6 Qe3",
-        "explanation": "When Black keeps the king's knight at home and props the centre with the d-pawn instead, open it immediately. The pawn break trades in the middle, the knights come off, and the queen recaptures on d4 with no knight anywhere near to chase her. Black offers the queen trade from f6 and there is no reason to take it: stepping to e3 keeps the queens on, keeps the space the e-pawn holds, and leaves Black's dark-squared bishop sitting behind its own pawn on d6 with nothing to do."
       }
     ],
     "trapLines": [],
@@ -708,11 +698,6 @@
         "name": "Najdorf: Anti-Najdorf (6.a4)",
         "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 a4 Nc6 Be2 e5 Nb3 Be7 O-O O-O Be3 Be6 Nd5",
         "explanation": "The Anti-Najdorf 6.a4 directly prevents Black's queenside expansion with ...b5, which is the soul of many Najdorf lines. Without the ...b5 lever, Black must find alternative plans, typically opting for ...Nc6 and ...e5 with a more restrained positional approach. White gains lasting queenside space and the d5 outpost becomes easier to maintain since Black's usual ...b5 challenge is off the table. Black compensates by building a solid central structure, but the resulting positions tend to favor White's strategic plans with Be3, Nd5, and slow maneuvering."
-      },
-      {
-        "name": "Najdorf: Scheveningen Small Centre (6.Be2 e6)",
-        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e6 O-O Be7 f4 O-O Kh1 Qc7 a4 Nc6 Be3 Re8 Bf3 Rb8",
-        "explanation": "Holding the pawn on e6 instead of pushing it two squares keeps the centre small and keeps the important squares covered \u2014 d5 and f5 are both guarded, so the knight on d4 has no outpost to jump into and nowhere better to stand. Black finishes developing before picking a side of the board: the king goes into the corner, the queen steps to c7 to look down the half-open c-file, and the rooks take b8 and e8. White claims the kingside space with the f-pawn and tucks the king away on h1. Black's play comes against the centre and down the queenside once every piece has a job."
       }
     ],
     "trapLines": [],
@@ -808,26 +793,6 @@
         "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Be2 O-O O-O d5 exd5 Nxd5 Nxc6 bxc6 Bd4 Nxc3 Bxc3 Bxc3 Qxd8 Rxd8 bxc3 Bf5 Bf3 e6 Bxc6 Bxc2 Rfe1 Rac8",
         "explanation": "White's bishop belongs on c4 in this structure for one reason: it argues against ...d5, the break that solves Black's whole opening. The quiet Be2 declines that argument, so the break comes at once and everything frees. The trades that follow are chosen rather than forced \u2014 ...Nxc3 hits queen and bishop together, so White's recapture damages the queenside, and Black's remaining pieces arrive on targets: the bishop to f5 with tempo on c2, then the rooks lining up on the c-file where the damaged pawn stands behind the bishop.",
         "shortExplanation": "Be2 does not stop ...d5, so Black breaks at once and plays for the damaged queenside."
-      },
-      {
-        "name": "Yugoslav Attack: the ...d5 Break",
-        "pgn": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O O-O-O d5 exd5 Nxd5 Nxc6 bxc6 Bd4 e5 Bc5 Be6 Ne4 Re8",
-        "explanation": "The queen's knight comes out before the rook does, and that changes what Black is racing for. The moment White commits the king to the queenside, the central break arrives: the knights come off on c6, the b-pawn recaptures, and the half-open b-file is left pointing straight at the king on c1. White plants the bishop on d4 to challenge the dragon bishop down the long diagonal, and pushing the e-pawn answers both problems at once \u2014 the bishop is attacked and the diagonal is shut. What remains is the Dragon's honest bargain: White storms with the h- and g-pawns, while Black already has the open file and a knight parked on d5."
-      },
-      {
-        "name": "Accelerated Dragon: Mar\u00f3czy with the early ...Nxd4",
-        "pgn": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 c4 Nf6 Nc3 Nxd4 Qxd4 d6 Be2 Bg7 Be3 O-O Qd2 Be6 Rc1 Qa5 f3 Rfc8 b3 a6 Na4 Qxd2+ Kxd2 Nd7",
-        "explanation": "Trading the knights at once invites the queen to d4, and Black is happy to let her come: the knight on f6 blocks the long diagonal, so there is nothing to hit her with yet, and Black simply builds \u2014 the pawn to d6, the bishop to g7 \u2014 while White has to prop the queen up with the bishop on e3 before doing anything else. The bind is the real subject here. Pawns on c4 and e4 take d5 away, so Black plays on the squares the bind cannot cover: a rook swings to the c-file, the queen steps out to a5 and offers the trade, and once the queens come off the knight reroutes through d7 toward c5 \u2014 which is exactly why White's knight goes out to a4 to guard that square."
-      },
-      {
-        "name": "Anti-Sicilian: the early Bc4 met by ...e6 and ...d5",
-        "pgn": "e4 c5 Nf3 Nc6 Bc4 e6 c3 d5 exd5 exd5 Bb3 Nf6 c4 dxc4 Bxc4",
-        "explanation": "That bishop came out early for one reason \u2014 f7 \u2014 so the first job is to shut the door: the pawn to e6 blocks the diagonal, and only then does the centre push arrive. Everything comes off in the middle, and look at what is left. Black has both knights developed, no weak pawn anywhere, and a queen's bishop about to find a good diagonal; White's bishop has been chased from c4 to b3 and back to c4 with nothing to show for the journey. Material is level and the developing race is not."
-      },
-      {
-        "name": "Anti-Sicilian: Rossolimo (3.Bb5)",
-        "pgn": "e4 c5 Nf3 Nc6 Bb5 g6 Bxc6 dxc6 d3 Bg7 Nc3 Nf6 O-O Bg4 h3 Bxf3 Qxf3 Nd7 Be3 e5 a4 a5 Ne2",
-        "explanation": "The bishop takes on c6 straight away, and recapturing toward the centre is the move: the doubled pawn is the price, and a pawn covering d5 is what it buys. Two bishops are the other half of the compensation, and Black spends one of them on f3 to take off the knight heading for the centre. Then the pawn to e5 builds a wall, the a-pawn holds the queenside, and Black has four pawns there against three \u2014 doubled, so not a clean majority, but it is where the play is while White works on the other wing."
       }
     ],
     "trapLines": [],
@@ -1087,11 +1052,6 @@
         "pgn": "e4 e6 d4 d5 e5 c5 Nf3 cxd4 Bd3 Nc6 O-O Nge7 Bf4 Ng6 Bg3 Be7 Nbd2 O-O Nb3 Qb6 h4 f6",
         "explanation": "White develops the king's knight instead of propping the centre with c3, so Black can take on d4 and keep the pawn for a long time \u2014 at the end of this line it is still there. What White gets for it is the clamp: the pawn on e5 covers d6 and f6, so Black's king's knight has to travel the long way by e7 and g6, and the dark-squared bishop has no natural square. White's queen's knight reroutes through d2 to b3 to lean on d4, and h4 gains space against the knight before Black's ...f6 break arrives.",
         "shortExplanation": "5.Nf3 lets Black keep d4; White plays for the e5 clamp, Nd2-b3 on d4 and h4 against the g6 knight."
-      },
-      {
-        "name": "Advance: 5.Nf3 with ...Nc6 and the ...f6 Break",
-        "pgn": "e4 e6 d4 d5 e5 c5 Nf3 Nc6 Bd3 cxd4 O-O f6 Re1 fxe5 Nxe5 Nf6 Bf4 Bd6 Nd2",
-        "explanation": "Bringing the knight out before taking on d4 keeps the real break in reserve, and the break is what the whole system is about: the pawn on e5 is the head of White's chain, and the f-pawn is what removes it. Once the f-file opens, the bishop steps to d6 to face the knight that landed on e5, and the pawn Black won on d4 is still sitting there. Black comes out a pawn to the good with White holding activity for it \u2014 which is the bargain this line offers every time."
       }
     ],
     "trapLines": [],
@@ -1380,11 +1340,6 @@
         "pgn": "e4 d5 exd5 Nf6 Bb5+ Bd7 Be2 Nxd5 d4 Bf5 Nf3 e6 O-O Be7 a3 O-O c4 Nb6 Nc3 Nc6 Be3 Bf6 h3 Qd7 Qd2 Rad8 Rfd1 Na5",
         "explanation": "The check on b5 is played precisely so that Black has to block it, and the block on d7 costs something concrete: the bishop stands between the queen and the pawn on d5, so the queen can no longer take it back and only the knight can. White then retreats the bishop, having spent two moves with one piece to force a piece onto a square it did not choose. Black recaptures with the knight and develops normally, and the game becomes a standard isolated-centre struggle.",
         "shortExplanation": "3.Bb5+ forces ...Bd7, which blocks the queen off d5 so only the knight can recapture."
-      },
-      {
-        "name": "Qa5 vs the g3 Fianchetto",
-        "pgn": "e4 d5 exd5 Qxd5 Nc3 Qa5 g3 c6 Bg2 Nf6 Nge2 e5 O-O Bb4 a3 Bxc3 Nxc3",
-        "explanation": "White fianchettos, so the bishop on g2 is going to stare down the long diagonal all game \u2014 and the answer is the modest pawn to c6, which blunts it and gives the queen a bolt-hole in the same move. Then the centre: the pawn to e5 claims real estate the fianchetto has no easy way to challenge. When the pin comes and the a-pawn chases it, taking on c3 is right here \u2014 White recaptures with the knight, and Black has traded a bishop with no future for the piece that was covering the centre."
       }
     ],
     "trapLines": [],
@@ -1768,16 +1723,6 @@
         "pgn": "d4 d5 Nc3 Nf6 Bf4 c5 e3 cxd4 exd4 a6 Nf3 Nc6 Ne5 Bd7 g4 e6 g5 Ng8 h4 Nge7",
         "explanation": "Instead of developing a piece Black hits the centre at once. The exchange on d4 leaves White with an isolated-looking d-pawn that is in fact well supported, and ...a6 is the accurate follow-up \u2014 it takes b5 away from the knight before it can jump there. White builds the same way as in the main line: the knight to e5, then g4 and g5 to drive the king's knight backwards, and h4 behind it.",
         "shortExplanation": "3...c5 hits the centre; ...a6 stops Nb5, and White answers with Ne5 and the g4-g5-h4 storm."
-      },
-      {
-        "name": "Barry Attack (Nc3 and Bf4 vs the Fianchetto)",
-        "pgn": "d4 Nf6 Nf3 g6 Nc3 d5 Bf4 Bg7 e3 O-O Be2 c6 h4 h5 Ne5 Nbd7 f3 Nxe5 Bxe5",
-        "explanation": "Against the fianchetto the queen's knight comes out first, and the bishop that follows to f4 has a sharper plan than the quiet London: the h-pawn runs at the king while White's own king stays in the middle, where it is safe enough with the centre closed. The knight jumps to e5, and when it is traded the bishop takes over the square \u2014 now White owns the long diagonal Black's fianchettoed bishop was supposed to rule, and it is the black bishop looking at a wall."
-      },
-      {
-        "name": "London vs Early c5: the Bb5 Pin",
-        "pgn": "d4 Nf6 Bf4 c5 e3 d5 Nf3 Nc6 Bb5 Qa5+ Nc3 Bg4",
-        "explanation": "Propping the centre with the small pawn move keeps the bishop outside the pawn chain and lets everything come out in order. Black's check from a5 looks annoying and is answered by simply developing into it \u2014 the knight goes to c3 and the bishop drops to b5, where it leans on the knight that is attacking d4. Black pins back with the bishop on g4, and the position is the one White wants from this move order: both bishops active, the centre intact, and every black piece committed to a square White already knew about."
       }
     ],
     "trapLines": [],
@@ -2886,11 +2831,6 @@
         "name": "Ultra-Symmetrical Variation",
         "pgn": "c4 c5 Nc3 Nc6 g3 g6 Bg2 Bg7 Nf3 Nf6 O-O O-O d3 d6 a3 a6 Rb1 Rb8 b4 cxb4",
         "explanation": "The Ultra-Symmetrical Variation features both sides mirroring each other's fianchetto development, creating a tense positional battle where the first player to break the symmetry gains the advantage. White's extra tempo means the Rb1 and b4 expansion comes first, forcing Black to react. After the queenside pawn exchanges, White gets active rook play on the a and b files while the Nd5 jump disrupts Black's coordination. The key concept is that symmetry favors the player with the extra move, and White should aggressively seek to break the mirror image before Black can equalize."
-      },
-      {
-        "name": "English: 3.g3 Move Order with the d4 Break",
-        "pgn": "c4 e5 Nc3 Nf6 g3 d5 cxd5 Nxd5 Bg2 Nb6 Nf3 Nc6 O-O Be7 e3 O-O d4 exd4 exd4 Be6 Re1",
-        "explanation": "Playing the fianchetto before the king's knight keeps the move order flexible and invites Black to hit the centre at once, which is exactly what White is set up for. After the trades in the middle the pawn goes to d4 and the position explains itself: the bishop rakes the long diagonal, the e-file is open with the rook stepping onto it and two black pieces standing in its way, and White's knights have the squares around that centre pawn to work with."
       }
     ],
     "trapLines": [],

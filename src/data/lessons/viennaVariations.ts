@@ -358,30 +358,16 @@ const VGA: LessonScript = {
 const COPYCAT: LessonScript = {
   openingId: 'vienna-game',
   sources: ['concept:pos-development', 'concept:att-greek-gift', 'https://en.wikipedia.org/wiki/Vienna_Game'],
-  title: 'Vienna \u2014 Punishing the Copycat',
-  minutes: 9,
+  title: 'Vienna — Punishing the Copycat',
+  minutes: 7,
   orientation: 'white',
   kind: 'roadmap',
-  // PER-PLY BEATS, NOT ONE BLOB (2026-08-20). This lesson had exactly two
-  // beats: `Qg4` at ply 7 and a single beat whose `moves` jumped to ply 15,
-  // narrating the whole eight-ply sequence in one paragraph. The opening tab
-  // could live with that; the coach walkthrough cannot, because `lessonBeatAt`
-  // offers a beat only at the position its own moves make \u2014 so plies 8-14 had
-  // NO hand-written narration and the walkthrough fell to the computed floor
-  // across the entire tactical point of the line. Every claim below is
-  // chess.js-verified at its own position.
   beats: [
-    b({ id: 'cp1', moves: 'e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4', say: "The Copycat trap \u2014 when Black mindlessly mirrors White move for move, White shatters the symmetry with Qg4!, swinging out to hit g7 and daring Black to keep copying. This is the one move Black cannot safely mirror, and the punishment for trying is severe.", sayShort: 'Qg4! \u2014 break the mirror, hit g7.', arrows: [A('g4', 'g7', ATK)], highlights: [H('g7', KEY)] }),
-    b({ id: 'cp2', moves: 'e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6', say: "\u2026Qf6 keeps the mirror going, and it is not yet a mistake \u2014 the queen guards g7 and eyes f2 in return, so the copy still answers the threat. But symmetry stopped being safe the moment White moved first. Black is defending with the same piece White is attacking with, and one of them is a tempo behind.", sayShort: '\u2026Qf6 guards g7, eyes f2.', arrows: [A('f6', 'g7', ATK)], highlights: [H('g7', KEY), H('f2', SOFT)] }),
-    b({ id: 'cp3', moves: 'e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5', say: "Nd5 is the move that ends the copying. The knight lands on d5 attacking the queen on f6, and behind that it eyes c7, a square a knight reaches with check and where the rook on a8 is the next thing it sees. Black must deal with the threat to the queen first, so from here White chooses and Black answers.", sayShort: 'Nd5 hits the queen, eyes c7.', arrows: [A('d5', 'f6', ATK), A('d5', 'c7', ATK)], highlights: [H('c7', KEY)] }),
-    b({ id: 'cp4', moves: 'e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+', say: "The greedy grab. Taking on f2 comes with check and looks like a free pawn \u2014 so count White's legal replies before believing it. There is exactly one. A check that leaves the opponent a single move has not won material; it has walked the queen somewhere White wants her.", sayShort: '\u2026Qxf2+ takes with check.', highlights: [H('f2', KEY)] }),
-    b({ id: 'cp5', moves: 'e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1', say: "Kd1, the only legal move on the board, and White is glad to play it. The king simply steps aside, nothing is lost, and the pawn Black collected has bought a queen stranded in White's half with no piece near enough to help her.", sayShort: 'Kd1 \u2014 the only move.', highlights: [H('d1', KEY)] }),
-    b({ id: 'cp6', moves: 'e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1 Kf8', say: "Now Black must spend a move on \u2026Kf8, because g7 was only ever defended by the queen and she has left. The king becomes its own bodyguard. Two of Black's last three moves have been forced, and the one that was not is the pawn grab that forced them.", sayShort: '\u2026Kf8 \u2014 the king guards g7.', arrows: [A('f8', 'g7', ATK)], highlights: [H('g7', KEY)] }),
-    b({ id: 'cp7', moves: 'e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1 Kf8 Nh3', say: "Nh3 brings the last minor piece out and attacks the queen on f2 doing it. That is a developing move the opponent has to answer \u2014 White gains a piece on the board while Black spends the move running. This is what a lead in development is actually made of: not moves played, but moves the other side never gets to choose.", sayShort: 'Nh3 develops and hits the queen.', arrows: [A('h3', 'f2', ATK)], highlights: [H('f2', KEY)] }),
-    b({ id: 'cp8', moves: 'e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1 Kf8 Nh3 Qd4', say: "\u2026Qd4 is the best square she has and it is still a retreat. From there the queen reaches at the bishop on c4, the knight on d5, and the pawns on b2 and e4 all at once, which looks ferocious. Every one of them can be answered by a single quiet move, and a queen attacking four things she cannot take is a queen standing in traffic.", sayShort: '\u2026Qd4 grabs at everything at once.', arrows: [A('d4', 'c4', ATK), A('d4', 'd5', ATK)], highlights: [H('b2', SOFT), H('e4', SOFT)] }),
-    b({ id: 'cp9', moves: 'e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1 Kf8 Nh3 Qd4 d3', say: "d3 settles it with one modest push: the bishop on c4 is defended, the pawn on e4 is defended, and the entire queen raid has been answered by a pawn. Look at what each side spent. Black won a pawn on move five and has been answering threats ever since; White has every piece out, a knight nobody can touch on d5, and a winning position. Never copy into an attack.", sayShort: 'd3 \u2014 one pawn answers everything.', highlights: [H('d5', KEY), H('c4', SOFT), H('e4', SOFT)] }),
+    b({ id: 'cp1', moves: 'e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4', say: "The Copycat trap — when Black mindlessly mirrors White move for move, White shatters the symmetry with Qg4!, swinging out to hit g7 and daring Black to keep copying. This is the one move Black cannot safely mirror, and the punishment for trying is severe.", sayShort: 'Qg4! — break the mirror, hit g7.', arrows: [A('g4', 'g7', ATK)], highlights: [H('g7', KEY)] }),
+    b({ id: 'cp2', moves: 'e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5 Qxf2+ Kd1 Kf8 Nh3 Qd4 d3', say: "Black copies with …Qf6, but Nd5 sets the trap: the greedy …Qxf2+ runs into Kd1 and Nh3, and the queen is chased to d4 while White develops with tempo. There is the verdict — Black's queen raid is repelled, White is winning with a commanding lead in development and the knight dominating d5. The lesson: never copy into an attack.", sayShort: 'Nd5 — trap the copying queen.', highlights: [H('d5', KEY), H('d4', SOFT)] }),
   ],
 };
+
 export const VIENNA_VARIATION_LESSONS: Record<string, LessonScript> = {
   'vienna-game::Stanley Variation': STANLEY,
   'vienna-game::Vienna Gambit Accepted': VGA,

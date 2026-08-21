@@ -123,7 +123,7 @@ const PRO_DATA_REVISION = '2026-07-30-drop-empty-pro-players';
 const PRO_REVISION_KEY = 'pro_data_revision';
 // Bump when repertoire.json CONTENT changes need to reach already-seeded
 // devices (the base repertoire is otherwise only loaded on first install).
-const BASE_DATA_REVISION = '2026-08-20-drop-onenote-fork';
+const BASE_DATA_REVISION = '2026-08-21-revert-opening-tab';
 const BASE_REVISION_KEY = 'base_repertoire_revision';
 
 export async function isDatabaseSeeded(): Promise<boolean> {
