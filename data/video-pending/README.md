@@ -19,3 +19,27 @@ durable without weakening that rule or letting un-noted builds look shipped.
 **The flow:** scan -> track lands here -> notes are hand-written -> the track
 moves to `data/video-tracks/` with its notes attached. A track that has sat here
 a long time is a debt, not an archive.
+
+---
+
+## STATUS 2026-08-21 — the 19 left here are FINISHED, not backlogged
+
+The distil pass moved 13 tracks out with 74 new hand-written notes. What remains
+falls into two classes, and neither should be written over:
+
+**2 hand-verdicted MISTRACKED** — `CXvo1dMF1Qs` (titled a Benko, tracked a
+different game entirely) and `nkDlJMpLezk` (titled an Alapin, tracked Slav
+lines). Their `titleCheck.verdict` records the hand judgement. Writing prose
+over a bad track satisfies the letter of "every pulled line gets notes" while
+destroying exactly what that rule protects. `map-openings --write` preserves a
+standing verdict rather than overwriting it; do not clear these by re-running it.
+
+**17 whose remaining on-line anchors carry no teaching.** Every position they
+settle on that sits on a taught line either already has a note from another
+lesson, or is a generic opener (`e4 c5`, `e4 e5 Nf3`) with banter or chess
+history spoken over it rather than teaching. Empty > generic > invented.
+
+**Before concluding a track is spent, run `node scripts/video-align/note-anchors.mjs
+<videoId>`** — it prints every anchor, whether one already has a note, and the
+timestamp to read the captions at. The repertoire changes; a track with nothing
+to say today can have anchors tomorrow if a taught line is extended into it.

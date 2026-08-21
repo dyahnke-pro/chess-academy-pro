@@ -687,18 +687,29 @@ and strands the phase. That is the thing to fix: a lesson must always land in le
       (order-indexed prose ⇒ one changed move misaligns every later idea). Prefix-only tolerance
       is safe; anything past divergence is not.
 
-### P3 — distil the dump (35 tracks)
-- [ ] Write notes from the captions at each anchor's timestamp (`at.mjs <vtt> <seconds>`).
-      Verify EVERY board claim with chess.js first. Captions gate every note.
-- [ ] Start with the 336 positions already on a taught line — **160 of them are the Alapin**,
-      then Scotch 49, Najdorf 30, Italian 23.
-- IN PROGRESS `r7W4yl6y29c` (Alapin Stoltz): **7 notes written of ~26 anchorable positions.**
-  Every one read from the captions at its own timestamp FIRST, then board-verified. The
-  checker rejected two of my claims before they shipped — a `deprives` on a pawn that was
-  already blocked, and (earlier) three notes written from the board that taught generic tempo
-  principles instead of the lesson's actual idea. Both classes are the reason the rule is
-  "rewrite the captions", not "write something true about the position".
-- [ ] Move a track `video-pending/` → `video-tracks/` only once its notes are written.
+### P3 — distil the dump — **DONE for everything with teachable captions (2026-08-21)**
+- [x] 13 tracks distilled and banked to `data/video-tracks/`: Alapin Stoltz, Alapin IQP-accepted,
+      Alapin 2...d5 (both recaptures), Alapin 2...e6, Smith-Morra declined, Scotch Classical,
+      Scotch Four Knights, Scotch Gambit, Scotch Gambit Haxo, Caro-Kann Exchange, KID Sämisch,
+      Belgrade Gambit, Jobava transposition, plus two entry-point notes.
+- [x] **74 new hand-written notes.** Every one read from the captions at its own timestamp
+      first, then every board claim verified with chess.js. `check-notes` clean, 0 refused,
+      1 deliberately off-line. Taught-line coverage went from 109 to **183 of 376 lines**.
+- [x] Built `scripts/video-align/note-anchors.mjs` — prints the SAN string to put in `line`,
+      the caption timestamp, the taught line it lands on, and `[HAS NOTE]` where one exists.
+      It exists because `attach-notes` matches by SAN STRING while `check-notes` matches by
+      FEN, so a transposition is on the taught line and still refused (9 of 12 notes on one
+      lesson, all correct, all rejected). Rule locked in CLAUDE.md.
+- **19 tracks stay in `video-pending/` and that is a finish, not a debt:**
+  - 2 hand-verdicted MISTRACKED (`CXvo1dMF1Qs` Benko, `nkDlJMpLezk` Alapin-titled/Slav-tracked)
+    — a bad track never gets prose written over it.
+  - 17 whose only remaining on-line anchors are generic openers with banter or chess history
+    over them rather than teaching. Filler there would satisfy the letter of "every pulled line
+    gets notes" while destroying what it protects. Empty > generic > invented.
+- Errors the checker caught before they shipped, worth keeping in mind: a `deprives` on a pawn
+  that was already blocked; a bishop "hitting" a square its own knight stood in front of; two
+  notes naming another opening in prose (a note is selected by POSITION and may be spoken in a
+  different opening's lesson, so naming one is a false claim — describe the structure instead).
 
 ### P4 — the 1,408 off-line positions + 217 stranded notes
 - [ ] Re-anchor onto a taught line where the idea survives the move (cheapest, highest yield).
@@ -708,9 +719,14 @@ and strands the phase. That is the thing to fix: a lesson must always land in le
 ### P5 — prune + the old-narration download list
 - [ ] **130 of the 150 drop videos are safe to delete** (track + paired narration exist).
       KEEP: 9 `needs-hand-geometry`, 1 mistracked (`CXvo1dMF1Qs`), 11 no-game.
-- [ ] When all work is done: give David the download list to attach the OLD narrations,
-      **ordered most-effect → least**. Raw data: `data/video-queues/priority-downloads.txt`
-      (44 videos; 20 in taught openings; 24 already have captions).
+- [x] **The download list is written**: `data/video-queues/priority-downloads.txt`, three
+      sections, most-effect first — (1) the five Smartypants trap videos (become gems),
+      (2) the 44 videos behind the gen-1 bakes, (3) NEW: the coverage gap, measured 2026-08-21.
+      The gap is the finding: the banked corpus is almost entirely 1.e4 because the speedruns
+      are, so the whole d4 half of the repertoire has ZERO hand-written coverage — QGD 236
+      plies, Semi-Slav 231, Pirc 215, Nimzo-Indian 215, Benoni 203, Réti 187. A video on any
+      of those lands on a taught line immediately; a fourth Alapin video mostly lands on
+      positions that already carry notes.
 
 ## SEQUENCING LOGIC
 P0 unblocks everything and needs nothing from David. P1 before P2 because determinism does not
