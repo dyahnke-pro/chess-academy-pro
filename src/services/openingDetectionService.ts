@@ -1074,8 +1074,31 @@ export function resolveTeachSpine(
   fallbackMoves: string[],
   opts?: { extendToMiddlegame?: boolean },
 ): { spineMoves: string[]; branches: ForkBranch[]; extendedToMiddlegame: boolean } {
+  // 🔒 THE OPENING TAB IS THE BASELINE — WHERE THE TAB STOPS IS WHERE THE
+  // WALKTHROUGH STOPS (David 2026-08-21: "12 ply is too short. That's only 6
+  // moves each. Take it to the true middle game before dropping the picker.
+  // Use the opening tab as the baseline").
+  //
+  // `fallbackMoves` is ALREADY the tab's curated line whenever the caller
+  // resolved through `resolveCuratedVariation` — whose own docstring has said
+  // since 2026-05-22 that it is "preferred over the ECO DB in the lesson
+  // generator so coach lessons match the opening tab". It was then discarded
+  // one line later, because the DB's shortest canonical PGN won whenever the DB
+  // had ANY row for the name. That is why the coach stopped short of the tab:
+  // measured across all 388 taught lines, 376 run DEEPER than the DB entry that
+  // prefixes them, by a median of 12 plies. The Vienna Copycat is the worked
+  // example — the tab teaches 15 plies, the DB names 9, and the walkthrough
+  // died at 11 having never reached its leaf, so the middlegame picker never
+  // appeared at all.
+  //
+  // The old reasoning (a short spine "leaves the most room for fork branches")
+  // is what this overturns: a fork picker the student never reaches because the
+  // lesson ends in book theory is worth less than a lesson that arrives at a
+  // real middlegame and offers the continuation there.
   const shortPgn = findShortestCanonicalPgn(canonicalName);
-  let spineMoves = shortPgn ? shortPgn.split(/\s+/).filter(Boolean) : fallbackMoves;
+  const dbMoves = shortPgn ? shortPgn.split(/\s+/).filter(Boolean) : [];
+  const taughtIsDeeper = fallbackMoves.length > dbMoves.length;
+  let spineMoves = taughtIsDeeper ? fallbackMoves : (dbMoves.length > 0 ? dbMoves : fallbackMoves);
   let branches = findSiblingExtensionBranches(canonicalName, spineMoves.join(' '));
   let extendedToMiddlegame = false;
 
