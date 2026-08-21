@@ -392,9 +392,16 @@ export function tacticalReadFacts(read: TacticalRead): string {
   if (kt && kt.squares.length > 0) {
     parts.push(kt.description.endsWith('.') ? kt.description : `${kt.description}.`);
   }
-  parts.push(read.verdict.kind === 'mate'
-    ? `The result is ${read.verdict.text}.`
-    : `The student ends up with ${read.verdict.text}.`);
+  if (read.verdict.kind === 'mate') {
+    // Name the mating MOVE (the fact), so the model never guesses a mate PATTERN
+    // ("back-rank mate", "smothered mate") the board does not support.
+    const mateMove = read.line.find((p) => p.facts.isMate);
+    parts.push(mateMove
+      ? `The line ends in ${read.verdict.text}, delivered by ${mateMove.san}.`
+      : `The result is ${read.verdict.text}.`);
+  } else {
+    parts.push(`The student ends up with ${read.verdict.text}.`);
+  }
   return parts.join(' ');
 }
 
@@ -404,6 +411,10 @@ export const TACTICAL_READ_DIRECTIVES =
   'Read this like a coach talking a student through the position out loud. If a '
   + 'tempting move is given, affirm the pull of it first, then turn against it with '
   + 'the refutation ("you’d love to … but …"). Then give the real move and '
-  + 'why, name the pattern, and land the verdict last. Vary your phrasing move to '
-  + 'move — never a fixed template. Spell moves as words, no notation. Warm but '
-  + 'rigorous; no praise words, no filler.';
+  + 'why, and land the verdict last. Vary your phrasing move to move — never a '
+  + 'fixed template. Spell moves as words, no notation. Warm but rigorous; no '
+  + 'praise words, no filler. STRICT GROUNDING: state ONLY facts given above — '
+  + 'do NOT name a tactic or mate pattern (e.g. "back-rank mate", "smothered '
+  + 'mate", "fork") unless it appears in the facts, and do NOT assert where any '
+  + 'piece sits unless its square is given. When unsure, describe the move’s '
+  + 'effect, not a named pattern.';
