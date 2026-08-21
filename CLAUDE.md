@@ -2643,6 +2643,23 @@ consecutive identical requests came back `storage: "memory"` with 62 entries and
 proves NOTHING — it is one instance's view, not the absence of events. Pull six
 to ten times, merge on `(timestamp, summary)`, and read the union.
 
+**WHY A WALKTHROUGH STILL CALLS THE LLM, precisely — mapped 2026-08-21.** The
+prod audit records ~5 calls to `/api/llm/deepseek/chat/completions` per walk,
+which reads like the tier chain is not wired. It IS wired: PASS 1 in
+`openingGenerator` fills `plyNoteText` from baked → hand-written note →
+`lessonBeatAt` → farmed note, and a ply that gets one is `locked` so nothing
+overwrites it. The calls come from somewhere else — the `else` at
+`openingGenerator.ts:2066`, which generates the `NarrationOutput` (intro, outro,
+`ideas[]`, branch teasers) whenever the opening is not fully baked WITH its fork
+branches. So the per-ply teaching is already tier-sourced while the lesson's
+FRAMING is still model-written, and the round-trip fires either way.
+
+That is the tier-1 wiring job, and it is a real change, not a flag: make that
+`else` synthesise intro/outro/ideas from the tiers that already cover the line
+and fall to computed prose for the rest, so `bakedBranchesCoverAll` stops being
+the only path with zero runtime LLM. Do NOT confuse it with the stall above —
+they present together on the same audit and are two different bugs.
+
 **HOW TO MEASURE A LINE'S TIER-2 COVERAGE** (do this before concluding anything
 about a lesson): replay the line and call `lessonBeatAt(fen, seen)` per ply. Do
 NOT measure against `data/video-notes` — that is the hand-written VIDEO corpus,
