@@ -330,5 +330,23 @@
   "claims": "French Defense",
   "confirmed": true,
   "viaParent": "French Defense: Rubinstein Variation"
- }
+ },
+ "notes": [
+  {
+   "id": "vn-jobava-the-push-that-hands-over-the-opening",
+   "line": "d4 d5 Nc3 e6 e4",
+   "teaches": "When one push transposes into a different opening entirely, treat it as a choice about which theory you want to be in, not as a developing move. Play it because you want the resulting structure, not because it looks active.",
+   "explains": "The e-pawn goes forward and hits d5, and with it the game changes families. Holding the pawn back would have kept the system with the knight already on c3 and the dark-squared bishop coming out early — a scheme that works against almost anything Black tries. Pushing abandons that for a far more theoretical opening built on locked pawn chains and play on opposite wings. Both are perfectly good; what is not good is making this push without knowing which of the two you have just entered.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d5"
+    }
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 3",
+   "t": 24,
+   "ply": 5,
+   "source": "yt:8O4UG9NtUoM"
+  }
+ ]
 }
