@@ -1,0 +1,110 @@
+[
+  {
+    "id": "vn-scotch-open-the-position-give-back-the-centre",
+    "line": "e4 e5 Nf3 Nc6 d4",
+    "teaches": "Trading a centre pawn is not losing the centre if it opens lines for the pieces that are already out. Count what gets FREED, not what gets given.",
+    "explains": "White hits e5 immediately rather than building up behind it. The pawn will come off and with it the closed character of the position — the point is not to win a pawn but to open the middle while the knight already stands on f3 and Black's pieces do not. There are quieter versions of the same idea, holding back the recapture with a bishop or a pawn on c3, but the straight recapture is the main road.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "e5"
+      }
+    ]
+  },
+  {
+    "id": "vn-scotch-the-knight-that-cannot-stay",
+    "line": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4",
+    "teaches": "A centralised knight is only strong while it cannot be chased. Recapturing into the middle is a gain of space and an invitation at the same time.",
+    "explains": "The knight recaptures in the centre and immediately touches the knight on c6. This is the pure version of the opening — no gambit, no quiet pawn recapture — and everything from here is about that knight on d4. It sits on the best square on the board and it is also the piece every black developing move will point at.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "c6"
+      }
+    ]
+  },
+  {
+    "id": "vn-scotch-the-practical-of-the-two-main-moves",
+    "line": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5",
+    "teaches": "Between two sound replies, the one that needs less memorised theory is the better practical choice. Sharpness you cannot recall at the board is not sharpness, it is risk.",
+    "explains": "Two moves share the main line here, and both aim at the knight on d4: the bishop to c5 and the knight to f6. The knight leads to the chaotic positions, the ones both sides genuinely have to study move for move. The bishop is the more manageable road — still theoretical, but it asks the same question of d4 without demanding a memorised maze in return.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "d4"
+      }
+    ]
+  },
+  {
+    "id": "vn-scotch-prop-the-knight-and-set-the-trade",
+    "line": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3",
+    "teaches": "When a piece is attacked, look first for the defence that also creates a threat. Adding a defender that lines up a favourable trade wins the argument twice.",
+    "explains": "The bishop comes to e3 to hold the knight on d4, and it does more than that: it lines up opposite the bishop on c5. That sets a real threat — taking on c6 first, because the knight lands there hitting the queen on d8, and after the recapture the bishops come off on c5 for free. Black has to answer that before doing anything else.",
+    "reasons": [
+      {
+        "kind": "defends",
+        "square": "d4"
+      }
+    ]
+  },
+  {
+    "id": "vn-scotch-the-queen-move-that-answers-two-things",
+    "line": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6",
+    "teaches": "Step out of a fork before it happens rather than after. The best square is the one that dodges the threat and joins the attack on the piece that made it.",
+    "explains": "The queen steps to f6 and the threat on c6 evaporates: the knight can still go there, but it no longer arrives hitting a queen on d8. At the same time the queen joins the pressure on d4 along the diagonal, and it is quietly eyeing f2 — a detail that will matter in two moves' time. One move, three jobs.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "d4"
+      }
+    ]
+  },
+  {
+    "id": "vn-scotch-the-modest-pawn-that-holds-everything",
+    "line": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3",
+    "teaches": "A pawn that adds a defender to a contested piece is worth more than a developing move that ignores it. Solve the pressure, then develop.",
+    "explains": "The little pawn move puts a third guard on d4 and takes b4 away from black pieces at the same time. It is the main continuation because the knight on d4 is the piece the whole position is arguing about — hold it and White's structure keeps its shape; lose it and the game becomes about nothing else.",
+    "reasons": [
+      {
+        "kind": "defends",
+        "square": "d4"
+      }
+    ]
+  },
+  {
+    "id": "vn-scotch-why-the-queen-went-to-f6",
+    "line": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3 Nge7",
+    "teaches": "An in-between capture beats a recapture when it comes with a bigger threat. Before taking back, look for the move that must be answered first.",
+    "explains": "The knight develops to e7 rather than f6, keeping the f-file clear for the queen. Taking on c6 now is simply bad for White: Black does not recapture, Black takes the bishop on e3 first, and that threatens mate on f2 — which is exactly why the queen went to f6. White has to take back on e3 with the f-pawn, and only then does Black recapture on c6, with White's structure in ruins.",
+    "reasons": [
+      {
+        "kind": "defends",
+        "square": "c6"
+      }
+    ]
+  },
+  {
+    "id": "vn-scotch-the-most-popular-square-and-its-cost",
+    "line": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3 Nge7 Bc4",
+    "teaches": "The most popular developing square is not automatically the safest. A bishop aimed at f7 is also a bishop with no retreat when a knight arrives in the centre.",
+    "explains": "The bishop goes to c4, the most popular choice, pointing at f7. It changes nothing about Black's plan — the pieces keep coming out. The cost is that the bishop is now a target: a black knight stepping into the middle of the board hits it, and that centralising jump is the move reckoned to give Black the simplest equal game.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "f7"
+      }
+    ]
+  },
+  {
+    "id": "vn-scotch-the-same-trick-stops-working-after-castling",
+    "line": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6 c3 Nge7 Bc4 O-O",
+    "teaches": "A tactic that depends on an in-between move dies the moment the opponent's reply comes with check. Re-check your resources after every king move — including your own.",
+    "explains": "Black castles, and one thing quietly changes: taking on c6 is no longer bad for White. The in-between capture on e3 stops working, because the knight on c6 can take on e7 WITH CHECK, and a check has to be answered before anything else. So Black would simply recapture with the queen instead — still a perfectly good position, just not the free structural damage that was on offer one move ago.",
+    "reasons": [
+      {
+        "kind": "defends",
+        "square": "f8"
+      }
+    ]
+  }
+]

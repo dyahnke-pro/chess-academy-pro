@@ -1,0 +1,146 @@
+[
+  {
+    "id": "vn-alapin-iqp-strike-first-or-develop-first",
+    "line": "e4 c5 c3 Nf6 e5 Nd5 d4",
+    "teaches": "Two move orders that reach the same structures are still two different move orders. Compare them by what the opponent gets to do in between, not by where the pieces end up.",
+    "explains": "This is the traditional way: hit c5 straight away rather than developing first. The two orders usually reach the same middlegames, and the difference is what Black is allowed in the meantime — which is the whole reason a modern repertoire prefers bringing the knight out before committing the d-pawn. At club level the old order is a serious practical weapon, because the theory that neutralises it is theory most opponents have never seen.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "c5"
+      }
+    ]
+  },
+  {
+    "id": "vn-alapin-iqp-the-recapture-that-removes-an-option",
+    "line": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4",
+    "teaches": "When two recaptures look the same, count the options each one leaves the opponent. Taking with the pawn here removes a whole line from their side of the board.",
+    "explains": "Black takes, and the pawn on d4 is now looking at c3. Recapturing with the c-pawn is the point of this move order: it answers the threat and, in doing so, takes the pawn off c3 entirely, so the grab on that square stops existing. Develop the knight first instead and Black keeps the option of taking on c3, which is a different game with a pawn in the balance.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "c3"
+      }
+    ]
+  },
+  {
+    "id": "vn-alapin-iqp-develop-toward-the-pawn-you-took",
+    "line": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6",
+    "teaches": "Develop toward the material you are holding. A gambit pawn you cannot defend is a tempo already spent; one your developing move happens to guard is a real question for the other side.",
+    "explains": "The knight comes out to c6 and on the way props up the pawn Black won on d4. White will take it back with the c-pawn anyway, but the order matters: Black gets a piece out for free while the recapture is being arranged. Notice what the delayed recapture allowed — with a pawn still on c3, taking there was on the table, and that option is the whole difference between the two move orders.",
+    "reasons": [
+      {
+        "kind": "defends",
+        "square": "d4"
+      }
+    ]
+  },
+  {
+    "id": "vn-alapin-iqp-give-the-pawn-back-and-take-the-squares",
+    "line": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6",
+    "teaches": "Handing a gambit pawn back at the right moment is not a concession. Give it back to hit the pawn that is cramping you and you have bought the time to finish developing.",
+    "explains": "White has taken back on d4 and Black answers by hitting the advanced pawn on e5. This is the shape the whole line has been heading for: an isolated pawn on d4 that hands White squares and initiative, against a solid black position that will trade pieces and lean on it. Neither side is worse — the argument is over whether that pawn is a spearhead or a target.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "e5"
+      }
+    ]
+  },
+  {
+    "id": "vn-alapin-iqp-the-bishop-questions-the-knight",
+    "line": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4",
+    "teaches": "Aim a developing move at the piece that is doing the most work. Development that also asks a question is worth two moves.",
+    "explains": "The bishop comes to c4 and asks the knight on d5 to make up its mind. The knight has been sitting in the middle since move three and this is the first move that actually challenges it. Dropping back to b6 is the popular reply; taking on e5 is the other one, and it is the move that steers towards an equal game.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "d5"
+      }
+    ]
+  },
+  {
+    "id": "vn-alapin-iqp-the-sacrifice-that-fails-because-nothing-moved",
+    "line": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6",
+    "teaches": "Before sacrificing on f7, ask what happens after the king walks back. A sacrifice that needs a follow-up piece is refuted by the opponent having one more defender than you have attackers — even a defender that has never moved.",
+    "explains": "The knight steps back to b6 and hits the bishop. It is worth knowing why the usual sacrifice does not work in this exact position: take on f7, the king takes back, push the pawn to e6 with check — and the king simply returns to g8. White has nothing left that can touch that pawn on e6, and Black can even remove it with the bishop that has not moved all game. The sacrifice fails precisely BECAUSE Black is undeveloped, which is not how these things usually go.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "c4"
+      }
+    ]
+  },
+  {
+    "id": "vn-alapin-iqp-retreat-sideways-not-backwards",
+    "line": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6 Bb5",
+    "teaches": "When a bishop is kicked, look for the retreat that attacks something. Stepping sideways with a threat costs the opponent the tempo they thought they had won.",
+    "explains": "Instead of dropping the bishop back where it came from, it steps across to b5 and pins the knight on c6 against the king. The move that chased it has been answered with a move that asks its own question, so the tempo Black spent kicking the bishop has come straight back. This is the position where the very old theory begins, and it runs a long way.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "c6"
+      }
+    ]
+  },
+  {
+    "id": "vn-alapin-iqp-trade-the-cramping-pawn",
+    "line": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6 Bb5 dxe5",
+    "teaches": "Trade off the pawn that is taking your squares, even when it opens lines for the opponent. Space you cannot use is worth less than squares you can.",
+    "explains": "Black takes on e5, getting rid of the advanced pawn that has been holding d6 and f6 since move three. The pawn that lands on e5 now leans on d4 in turn. White will recapture with the knight and the position opens up: fewer pawns, more piece play, and an isolated pawn on d4 that is both a weakness and a source of squares.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "d4"
+      }
+    ]
+  },
+  {
+    "id": "vn-alapin-iqp-develop-to-the-pin-not-away-from-it",
+    "line": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7",
+    "teaches": "A pinned piece needs a second defender before it needs sympathy. Develop toward the pin — the move that unpins and develops in one is usually the only move worth playing.",
+    "explains": "The bishop comes out to d7 and props up the pinned knight on c6. That is the whole job: the knight is what attacks the piece sitting on e5, and it can only do that work while something is holding it. Note the bishop does not hit the piece on b5 — its own knight stands in the way — so this is support, not counter-attack. Everything from here has been played thousands of times; it is the backbone of the old main line.",
+    "reasons": [
+      {
+        "kind": "defends",
+        "square": "c6"
+      }
+    ]
+  },
+  {
+    "id": "vn-alapin-iqp-recapture-toward-the-centre",
+    "line": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7 Nxd7 Qxd7",
+    "teaches": "Recapture with the piece that ends up doing something. A queen that lands defending a loose piece is not a queen that came out too early.",
+    "explains": "The queen takes back on d7 rather than the king or a knight, and from there it holds the knight on c6 — which matters, because that knight is about to become the single most important piece in the position. Two pairs of minor pieces have come off, the position is simplifying, and Black is close to being fully out.",
+    "reasons": [
+      {
+        "kind": "defends",
+        "square": "c6"
+      }
+    ]
+  },
+  {
+    "id": "vn-alapin-iqp-the-modest-pawn-that-takes-a-square",
+    "line": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7 Nxd7 Qxd7 Nc3 e6",
+    "teaches": "A small pawn move that takes a central square away is worth more than it looks. Deny the outpost before the piece arrives, not after.",
+    "explains": "The pawn steps to e6, taking d5 away from White's pieces for good and opening the way for the dark-squared bishop. It looks passive and it is not: the knight that just came to c3 would love to sit on d5, and this quietly says no. Black is one move from being completely developed.",
+    "reasons": [
+      {
+        "kind": "controls",
+        "square": "d5"
+      }
+    ]
+  },
+  {
+    "id": "vn-alapin-iqp-take-the-defender-before-the-attacker-arrives",
+    "line": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7 Nxd7 Qxd7 Nc3 e6 O-O Be7",
+    "teaches": "Check the order before the idea. If the move you want to play hangs something, look for the capture that removes the defender first — the attacking move is still there next turn.",
+    "explains": "The bishop comes to e7 and Black is about to be finished developing, so this is the moment. The queen belongs on g4, hitting g7 through the bishop and e6 in front of it. But the order matters more than the idea: swinging the other bishop to h6 straight away is a blunder, because Black takes the isolated pawn on d4 with the queen, where the knight on c6 defends it, the queen covers g7 from there, and White's own queen on g4 is hanging. Take the knight on c6 first. Then the same queen grab simply loses the queen, the bishop arrives on h6 with real force, and the black bishop is forced to f6 where the knight comes to e4 and hits it again.",
+    "reasons": [
+      {
+        "kind": "controls",
+        "square": "f6"
+      }
+    ]
+  }
+]
