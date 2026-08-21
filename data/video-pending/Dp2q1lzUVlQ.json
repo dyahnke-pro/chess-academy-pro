@@ -742,5 +742,60 @@
    "fen": "8/7R/6k1/8/P7/6P1/rr5P/6K1 w - - 6 44"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Ruy Lopez: Closed, Anti-Marshall",
+   "eco": "C88",
+   "plies": 15,
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4",
+   "coverage": 0.841
+  },
+  {
+   "name": "Ruy Lopez: Closed",
+   "eco": "C84",
+   "plies": 10,
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7",
+   "coverage": 0.902
+  },
+  {
+   "name": "Ruy Lopez: Morphy Defense",
+   "eco": "C70",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6",
+   "coverage": 0.951
+  },
+  {
+   "name": "Ruy Lopez",
+   "eco": "C60",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Bb5",
+   "coverage": 0.963
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.976
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.988
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Ruy Lopez: Closed, Anti-Marshall",
+  "confirmed": true
+ }
 }

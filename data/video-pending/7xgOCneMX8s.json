@@ -214,5 +214,60 @@
    "fen": "r1bR1k1r/p4ppp/1p2p3/4P1B1/6nQ/8/PPP2bPP/2K2B1R b - - 1 14"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Four Knights Game: Scotch Variation Accepted",
+   "eco": "C47",
+   "plies": 8,
+   "line": "e4 e5 Nf3 Nf6 Nc3 Nc6 d4 exd4",
+   "coverage": 0.792
+  },
+  {
+   "name": "Four Knights Game: Scotch Variation",
+   "eco": "C47",
+   "plies": 7,
+   "line": "e4 e5 Nf3 Nf6 Nc3 Nc6 d4",
+   "coverage": 0.833
+  },
+  {
+   "name": "Four Knights Game",
+   "eco": "C47",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nf6 Nc3 Nc6",
+   "coverage": 0.833
+  },
+  {
+   "name": "Petrov's Defense: Three Knights Game",
+   "eco": "C42",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nf6 Nc3",
+   "coverage": 0.875
+  },
+  {
+   "name": "Petrov's Defense",
+   "eco": "C42",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nf6",
+   "coverage": 0.917
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.958
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Four Knights Game: Scotch Variation",
+  "confirmed": true
+ }
 }
