@@ -28,7 +28,10 @@ const HINT_LANES: Array<{ name: string; near: string; proof: RegExp }> = [
   {
     name: 'rejected-tempting',
     near: 'rejected_tempting_offered',
-    proof: /packageForRegister\(rt\.hint, discussion\.hintDial\.register\)/,
+    // The but-turn now runs on the unified tacticalRead engine (migration
+    // 2026-08-21) — its HintPackage is a local `hint`, still routed through the
+    // register exactly as before.
+    proof: /packageForRegister\(hint, discussion\.hintDial\.register\)/,
   },
   {
     name: 'think-aloud',

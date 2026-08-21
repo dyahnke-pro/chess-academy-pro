@@ -7461,15 +7461,17 @@ export function CoachTeachPage(): JSX.Element {
                             const calcRead = studentBest?.topLines
                               ? tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor, { maxPlies: 6 })
                               : null;
-                            const kt = calcRead?.keyTactic ?? null;
-                            const ktPly = kt ? calcRead?.line[kt.atPly] : null;
-                            if (kt && ktPly && ktPly.moverColor === playerColor) {
-                              const point = namedTacticClause(calcRead!.line);
-                              const seq = calcRead!.line.slice(1, kt.atPly + 1).map((p) => p.san);
-                              if (point) {
-                                recLine = seq.length
-                                  ? `${recLineBase} Play it out: ${seq.join(', ')} — ${point.replace(/^The point — /, '')}`
-                                  : `${recLineBase} ${point}`;
+                            if (calcRead?.keyTactic) {
+                              const kt = calcRead.keyTactic;
+                              const ktPly = calcRead.line[kt.atPly];
+                              if (ktPly && ktPly.moverColor === playerColor) {
+                                const point = namedTacticClause(calcRead.line);
+                                const seq = calcRead.line.slice(1, kt.atPly + 1).map((p) => p.san);
+                                if (point) {
+                                  recLine = seq.length
+                                    ? `${recLineBase} Play it out: ${seq.join(', ')} — ${point.replace(/^The point — /, '')}`
+                                    : `${recLineBase} ${point}`;
+                                }
                               }
                             }
                             facts.push(recLine);
