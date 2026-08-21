@@ -28,7 +28,11 @@ import sys
 import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from calibrate import calibrate_section  # noqa: E402
+import numpy as np  # noqa: E402
+from PIL import Image  # noqa: E402
+
+from calibrate import NEAR_START_TOLERANCE  # noqa: E402
+from read_board import try_calibrate  # noqa: E402
 
 # The hand-read layouts, at 854 wide. Scaled by the frame's own width.
 LAYOUTS = [
@@ -38,9 +42,12 @@ LAYOUTS = [
 ]
 # Per-encode drift around a layout. Small on purpose: this corrects a couple of
 # pixels, it does not go looking for a board somewhere else in the frame.
-DX = (0.0, 2.0, -2.0, 4.0, -4.0)
-DY = (0.0, 2.0, -2.0, 4.0, -4.0)
-DS = (0.0, 0.25, -0.25, 0.5, -0.5)
+DRIFT = [(0.0, 0.0, 0.0)]
+for _dx in (0.0, 2.0, -2.0):
+    for _dy in (0.0, 2.0, -2.0):
+        for _ds in (0.0, 0.25, -0.25):
+            if (_dx, _dy, _ds) != (0.0, 0.0, 0.0):
+                DRIFT.append((_dx, _dy, _ds))
 
 
 def duration(path):
@@ -66,23 +73,31 @@ def width(path):
         return 854
 
 
-def sample(path, out_dir, dur):
-    """Frames where a start position is likely, cheaply.
+def sample_times(dur, dense_n, spread_n):
+    """When a start position is likely to be on screen.
 
-    Dense over the first two minutes because most lessons open on one, then
-    spread across the rest because plenty do not — a speedrun's next game starts
-    whenever the last one ended, and a lesson may open on an old game. A start
-    position lasts only a few seconds, so a coarse grid alone walks past them:
-    75 frames spanning fifty minutes missed every one on a two-hour match.
+    Dense over the opening because most lessons begin on one, then spread over
+    the rest because plenty do not — a speedrun's next game starts whenever the
+    last ended, and a lesson may open on an old game. A start position lasts only
+    a few seconds, so a coarse grid alone walks past them: 75 frames spanning
+    fifty minutes missed every one on a two-hour match.
     """
-    times = [t / 2 for t in range(0, 240)]                      # 0-120s at 0.5s
-    if dur > 120:
-        step = max(5.0, (dur - 120) / 260)
-        t = 120.0
-        while t < dur - 2:
-            times.append(t)
-            t += step
-    paths = []
+    times = [i * 0.5 for i in range(dense_n)]
+    if dur > times[-1] + 4 and spread_n:
+        step = (dur - times[-1] - 2) / spread_n
+        times += [times[-1] + 2 + i * step for i in range(spread_n)]
+    return [t for t in times if t < dur - 0.5]
+
+
+def frames_at(path, times, out_dir):
+    """Seeked frames, loaded once as arrays.
+
+    Loaded ONCE is the point. The first cut re-opened every PNG for every
+    candidate geometry — 375 candidates over 500 frames is 187,000 image decodes,
+    and it was still grinding on its first video after ten minutes. The pixels do
+    not change between candidates; only the grid laid over them does.
+    """
+    out = []
     for i, t in enumerate(times):
         p = os.path.join(out_dir, f'{i:05d}.png')
         r = subprocess.run(
@@ -90,30 +105,56 @@ def sample(path, out_dir, dur):
              '-frames:v', '1', p, '-y'], capture_output=True,
         )
         if r.returncode == 0 and os.path.exists(p):
-            paths.append(p)
-    return paths
+            try:
+                out.append(np.asarray(Image.open(p).convert('L'), dtype=np.float64))
+            except Exception:
+                pass
+            os.unlink(p)
+    return out
+
+
+def search(frames, r, drift, quiet):
+    """First geometry that reproduces a start position, exact preferred."""
+    near = None
+    for lx, ly, ls in LAYOUTS:
+        for dx, dy, ds in drift:
+            x0, y0, sq = (lx + dx) * r, (ly + dy) * r, (ls + ds) * r
+            for g in frames:
+                got = try_calibrate(g, x0, y0, sq)
+                if got is None:
+                    continue
+                _cal, orient, diff = got
+                if diff == 0:
+                    if not quiet:
+                        print(f'confirmed {x0:.2f},{y0:.2f},{sq:.2f} ({orient})', file=sys.stderr)
+                    return x0, y0, sq
+                if diff <= NEAR_START_TOLERANCE and (near is None or diff < near[0]):
+                    near = (diff, x0, y0, sq, orient)
+    if near is not None:
+        d, x0, y0, sq, orient = near
+        if not quiet:
+            print(f'confirmed {x0:.2f},{y0:.2f},{sq:.2f} ({orient}), {d} square(s) '
+                  f'past the start', file=sys.stderr)
+        return x0, y0, sq
+    return None
 
 
 def confirm(video, quiet=False):
-    w = width(video)
-    r = w / 854.0
+    """Base layouts over a wide sample first; drift over a narrow one only if
+    that fails. Almost every video is answered by the first phase, so the
+    expensive combination — many candidates times many frames — is paid only
+    where the alternative is losing the lesson."""
+    r = width(video) / 854.0
+    dur = duration(video)
     with tempfile.TemporaryDirectory() as tmp:
-        frames = sample(video, tmp, duration(video))
-        if not frames:
+        wide = frames_at(video, sample_times(dur, 160, 120), tmp)
+        if not wide:
             return None
-        for lx, ly, ls in LAYOUTS:
-            for ds in DS:
-                for dx in DX:
-                    for dy in DY:
-                        x0, y0, sq = (lx + dx) * r, (ly + dy) * r, (ls + ds) * r
-                        got = calibrate_section(frames, x0, y0, sq)
-                        if got:
-                            if not quiet:
-                                print(f'confirmed {x0:.2f},{y0:.2f},{sq:.2f} '
-                                      f'({got["orientation"]}) on {len(frames)} sampled frames',
-                                      file=sys.stderr)
-                            return x0, y0, sq
-    return None
+        got = search(wide, r, DRIFT[:1], quiet)
+        if got:
+            return got
+        narrow = wide[::4]
+        return search(narrow, r, DRIFT[1:], quiet)
 
 
 if __name__ == '__main__':
