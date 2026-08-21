@@ -586,5 +586,47 @@
    "fen": "6k1/8/p3q1p1/P1B1p1np/2p1Pb2/1p1p1P1P/1P1N2P1/R3Q2K b - - 1 46"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation",
+   "eco": "B31",
+   "plies": 6,
+   "line": "e4 c5 Nf3 Nc6 Bb5 g6",
+   "coverage": 0.941
+  },
+  {
+   "name": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack",
+   "eco": "B30",
+   "plies": 5,
+   "line": "e4 c5 Nf3 Nc6 Bb5",
+   "coverage": 0.956
+  },
+  {
+   "name": "Sicilian Defense: Old Sicilian",
+   "eco": "B30",
+   "plies": 4,
+   "line": "e4 c5 Nf3 Nc6",
+   "coverage": 0.971
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

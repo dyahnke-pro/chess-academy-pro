@@ -361,5 +361,19 @@
    "fen": "r3k3/pp3b2/1q1b3r/3P1p2/4pP2/1P4P1/P5BN/2RQ3K w q - 0 25"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Van't Kruijs Opening",
+   "eco": "A00",
+   "plies": 1,
+   "line": "e3",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

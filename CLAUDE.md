@@ -2621,6 +2621,22 @@ was waiting.** The fix was three selectors in the audit's poll loop (skip the
 trap — accepting forks into a punish lesson, a different surface than this audit
 measures), and it now reports which prompts it answered and when.
 
+**VERIFIED PASS ON PROD 2026-08-21:** `prompts answered: trap-prompt@305s,
+trap-prompt@345s` → `reached the leaf: true`. The Copycat walks its full 15-ply
+line and drops the middlegame picker.
+
+**AND A SECOND, SEPARATE AUDIT DEFECT WAS STACKED UNDERNEATH IT: THE BUDGET WAS
+SIZED FOR THE OLD, SHORTER SPINE.** Even after the trap was answered, a 420s run
+still reported failure — the walk reaches ply 11 at ~305s because **each ply
+takes roughly 31 seconds**, which is real pacing, not a hang: auto-advance is
+voice-promise gated and `muteTtsForAudit` resolves on a text-proportional delay,
+so a full beat costs what the beat would cost spoken. A 15-ply line therefore
+needs ~8 minutes of budget MINIMUM and ~18 to be safe. **When a spine is
+deepened, every audit budget measured against the old depth silently becomes a
+false failure.** Size the budget from the ply count (`plies × ~35s`, plus slack
+for prompts), and treat "ran out of budget" as a distinct verdict from "stalled"
+— they are the same red line today and they mean opposite things.
+
 **THE LESSON, WHICH THIS FILE ALREADY CONTAINED:** *"a fire-and-forget scripted
 bot that assumes a fixed happy-path flow is NOT an audit — it stalls the moment a
 prompt it didn't anticipate appears."* That rule was written after the 2026-07-24

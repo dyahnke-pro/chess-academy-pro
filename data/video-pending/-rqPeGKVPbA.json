@@ -431,5 +431,26 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "English Opening: Anglo-Indian Defense",
+   "eco": "A15",
+   "plies": 2,
+   "line": "c4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "English Opening",
+   "eco": "A10",
+   "plies": 1,
+   "line": "c4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

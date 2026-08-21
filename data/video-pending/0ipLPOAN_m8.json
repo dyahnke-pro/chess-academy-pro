@@ -657,5 +657,60 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "King's Indian Defense: Fianchetto Variation",
+   "eco": "E60",
+   "plies": 7,
+   "line": "c4 Nf6 d4 g6 Nf3 Bg7 g3",
+   "coverage": 0.014
+  },
+  {
+   "name": "King's Indian Defense: Normal Variation, King's Knight Variation",
+   "eco": "E60",
+   "plies": 5,
+   "line": "c4 Nf6 d4 g6 Nf3",
+   "coverage": 0.029
+  },
+  {
+   "name": "King's Indian Defense: Fianchetto Variation, Immediate Fianchetto",
+   "eco": "E60",
+   "plies": 5,
+   "line": "c4 Nf6 d4 g6 g3",
+   "coverage": 0.957
+  },
+  {
+   "name": "Indian Defense: West Indian Defense",
+   "eco": "E60",
+   "plies": 4,
+   "line": "c4 Nf6 d4 g6",
+   "coverage": 0.986
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "c4 Nf6 d4",
+   "coverage": 1
+  },
+  {
+   "name": "English Opening: Anglo-Indian Defense",
+   "eco": "A15",
+   "plies": 2,
+   "line": "c4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "English Opening",
+   "eco": "A10",
+   "plies": 1,
+   "line": "c4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "English Opening: Anglo-Indian Defense",
+  "confirmed": true
+ }
 }
