@@ -621,5 +621,32 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Elephant Gambit",
+   "eco": "C40",
+   "plies": 4,
+   "line": "e4 e5 Nf3 d5",
+   "coverage": 0.956
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.978
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Elephant Gambit",
+  "confirmed": true
+ }
 }

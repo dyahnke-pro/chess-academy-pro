@@ -142,5 +142,32 @@
    "fen": "rnbqkbnr/ppp2p1p/3p4/6N1/3PPppP/8/PPP3P1/RNBQKB1R b KQkq - 1 6"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "King's Gambit Accepted: Fischer Defense",
+   "eco": "C34",
+   "plies": 6,
+   "line": "e4 e5 f4 d6 Nf3 exf4",
+   "coverage": 0.333
+  },
+  {
+   "name": "King's Gambit",
+   "eco": "C30",
+   "plies": 3,
+   "line": "e4 e5 f4",
+   "coverage": 0.917
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "King's Gambit",
+  "confirmed": true
+ }
 }

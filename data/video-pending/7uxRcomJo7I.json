@@ -567,5 +567,103 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "King's Indian Defense: Orthodox Variation, Positional Defense, Closed Line",
+   "eco": "E94",
+   "plies": 15,
+   "line": "d4 Nf6 c4 g6 e4 Bg7 Nc3 d6 Nf3 O-O Be2 e5 d5 Nbd7 O-O",
+   "coverage": 0.018
+  },
+  {
+   "name": "King's Indian Defense: Petrosian Variation, Normal Defense",
+   "eco": "E93",
+   "plies": 14,
+   "line": "d4 Nf6 c4 g6 e4 Bg7 Nc3 d6 Nf3 O-O Be2 e5 d5 Nbd7",
+   "coverage": 0.018
+  },
+  {
+   "name": "King's Indian Defense: Orthodox Variation, Gligoric-Taimanov System",
+   "eco": "E92",
+   "plies": 13,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2 e5 Be3",
+   "coverage": 0.655
+  },
+  {
+   "name": "King's Indian Defense: Exchange Variation",
+   "eco": "E92",
+   "plies": 13,
+   "line": "d4 Nf6 c4 g6 e4 Bg7 Nc3 d6 Nf3 O-O Be2 e5 dxe5",
+   "coverage": 0.055
+  },
+  {
+   "name": "King's Indian Defense: Petrosian Variation",
+   "eco": "E92",
+   "plies": 13,
+   "line": "d4 Nf6 c4 g6 e4 Bg7 Nc3 d6 Nf3 O-O Be2 e5 d5",
+   "coverage": 0.018
+  },
+  {
+   "name": "King's Indian Defense: Orthodox Variation",
+   "eco": "E91",
+   "plies": 11,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3 O-O Be2",
+   "coverage": 0.691
+  },
+  {
+   "name": "King's Indian Defense: Normal Variation, Rare Defenses",
+   "eco": "E90",
+   "plies": 9,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 Nf3",
+   "coverage": 0.727
+  },
+  {
+   "name": "King's Indian Defense: Normal Variation",
+   "eco": "E70",
+   "plies": 7,
+   "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4",
+   "coverage": 0.764
+  },
+  {
+   "name": "King's Indian Defense",
+   "eco": "E61",
+   "plies": 5,
+   "line": "d4 Nf6 c4 g6 Nc3",
+   "coverage": 0.782
+  },
+  {
+   "name": "Indian Defense: West Indian Defense",
+   "eco": "E60",
+   "plies": 4,
+   "line": "d4 Nf6 c4 g6",
+   "coverage": 0.964
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.982
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

@@ -138,5 +138,26 @@
    "fen": "rn1qkb1r/ppp2ppp/5n2/3p1p2/3P4/2P1P3/PP3PPP/RNBQK1NR w KQkq - 0 6"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

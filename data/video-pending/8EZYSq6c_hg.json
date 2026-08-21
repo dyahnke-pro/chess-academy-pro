@@ -251,5 +251,33 @@
    "fen": "2k1r3/pp3p1p/2b2p2/8/2P5/2b1qP1N/P1P3PP/3R1K1R w - - 1 19"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Bowdler Attack",
+   "eco": "B20",
+   "plies": 3,
+   "line": "e4 c5 Bc4",
+   "coverage": 0.964
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

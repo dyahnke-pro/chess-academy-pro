@@ -250,5 +250,33 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Queen's Gambit Declined: Baltic Defense",
+   "eco": "D06",
+   "plies": 4,
+   "line": "d4 d5 c4 Bf5",
+   "coverage": 0.846
+  },
+  {
+   "name": "Queen's Gambit",
+   "eco": "D06",
+   "plies": 3,
+   "line": "d4 d5 c4",
+   "coverage": 0.923
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

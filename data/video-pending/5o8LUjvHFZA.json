@@ -220,5 +220,26 @@
    "fen": "rnbqkbnr/ppp2ppp/3pp3/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Horwitz Defense",
+   "eco": "A40",
+   "plies": 2,
+   "line": "d4 e6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

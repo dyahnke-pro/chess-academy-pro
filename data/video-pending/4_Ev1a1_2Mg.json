@@ -529,5 +529,46 @@
    "fen": "r1bqkbnr/pppp2pp/2n5/4pp2/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Three Knights Opening: Winawer Defense",
+   "eco": "C46",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Nc3 f5",
+   "coverage": 0.947
+  },
+  {
+   "name": "Three Knights Opening",
+   "eco": "C46",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Nc3",
+   "coverage": 0.965
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.965
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.982
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Latvian Gambit",
+  "confirmed": false
+ }
 }

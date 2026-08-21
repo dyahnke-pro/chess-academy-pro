@@ -586,5 +586,54 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Slav Defense: Two Knights Attack",
+   "eco": "D15",
+   "plies": 8,
+   "line": "d4 d5 c4 c6 Nf3 Nf6 Nc3 dxc4",
+   "coverage": 0.911
+  },
+  {
+   "name": "Slav Defense: Three Knights Variation",
+   "eco": "D15",
+   "plies": 7,
+   "line": "d4 d5 c4 c6 Nf3 Nf6 Nc3",
+   "coverage": 0.929
+  },
+  {
+   "name": "Slav Defense: Modern Line",
+   "eco": "D11",
+   "plies": 5,
+   "line": "d4 d5 c4 c6 Nf3",
+   "coverage": 0.946
+  },
+  {
+   "name": "Slav Defense",
+   "eco": "D10",
+   "plies": 4,
+   "line": "d4 d5 c4 c6",
+   "coverage": 0.964
+  },
+  {
+   "name": "Queen's Gambit",
+   "eco": "D06",
+   "plies": 3,
+   "line": "d4 d5 c4",
+   "coverage": 0.982
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }
