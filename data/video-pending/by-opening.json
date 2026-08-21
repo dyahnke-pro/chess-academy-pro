@@ -157,6 +157,14 @@
    "forks": 0
   },
   {
+   "videoId": "9hotlaRRkD0",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
    "videoId": "DCBwXvH3kH4",
    "eco": "A40",
    "plies": 1,
@@ -573,635 +581,611 @@
    "forks": 2
   }
  ],
- "Trompowsky Attack": [
+ "Sicilian Defense: Old Sicilian": [
   {
-   "videoId": "-MtlVsMGiCo",
-   "eco": "A45",
-   "plies": 3,
-   "coverage": 0.988,
+   "videoId": "-B2wrOqn5sQ",
+   "eco": "B30",
+   "plies": 4,
+   "coverage": 0.875,
    "subject": true,
    "forks": 2
-  }
- ],
- "Indian Defense": [
-  {
-   "videoId": "-MtlVsMGiCo",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 2
   },
   {
-   "videoId": "3nyxVHwDCTY",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "4T9-0D4SnMk",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "4Vbr9EQoGd4",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 6
-  },
-  {
-   "videoId": "7f2sPY2U204",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "7uxRcomJo7I",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 2
-  },
-  {
-   "videoId": "91lZ8sfu-XU",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": true,
-   "forks": 0
-  },
-  {
-   "videoId": "E0cMsom-N7E",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "FtTdaYxkDeY",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "J6MDnL_B83w",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 4
-  },
-  {
-   "videoId": "JEMVGw2WdCE",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 9
-  },
-  {
-   "videoId": "JzGMXud3GWE",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "NQQnQ9X9dL8",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "Nu5BrqlnACs",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "QVw89_6fh2Y",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "VeHyQWutHPQ",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "Vy6j7N_Wh0o",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 3
-  },
-  {
-   "videoId": "XvyJvuj8NdM",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": true,
-   "forks": 6
-  },
-  {
-   "videoId": "_zT8aWZh2x0",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "cdEASsRLWcg",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "n64LCdoBzaU",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "oH407-a1v-4",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": true,
-   "forks": 4
-  },
-  {
-   "videoId": "wR42fihChx4",
-   "eco": "A45",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  }
- ],
- "Italian Game: Classical Variation, Greco Gambit, Modern Line": [
-  {
-   "videoId": "-PSQS88VdZU",
-   "eco": "C54",
-   "plies": 11,
-   "coverage": 0.047,
-   "subject": false,
-   "forks": 4
-  }
- ],
- "Scotch Game: Scotch Gambit, Advance Variation": [
-  {
-   "videoId": "-PSQS88VdZU",
-   "eco": "C44",
-   "plies": 9,
-   "coverage": 0.07,
-   "subject": false,
-   "forks": 4
-  }
- ],
- "Scotch Game: Haxo Gambit": [
-  {
-   "videoId": "-PSQS88VdZU",
-   "eco": "C44",
-   "plies": 8,
-   "coverage": 0.023,
-   "subject": false,
-   "forks": 4
-  }
- ],
- "Scotch Game: Scotch Gambit, Dubois Réti Defense": [
-  {
-   "videoId": "-PSQS88VdZU",
-   "eco": "C44",
-   "plies": 8,
-   "coverage": 0.163,
-   "subject": false,
-   "forks": 4
-  }
- ],
- "Scotch Game: Scotch Gambit": [
-  {
-   "videoId": "-PSQS88VdZU",
-   "eco": "C44",
-   "plies": 7,
-   "coverage": 0.233,
-   "subject": false,
-   "forks": 4
-  }
- ],
- "Scotch Game": [
-  {
-   "videoId": "-PSQS88VdZU",
-   "eco": "C44",
-   "plies": 5,
-   "coverage": 0.93,
-   "subject": true,
-   "forks": 4
-  },
-  {
-   "videoId": "H0Fln-ujA3w",
-   "eco": "C44",
-   "plies": 5,
-   "coverage": 0.926,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "Ytkf3qZTj74",
-   "eco": "C44",
-   "plies": 5,
-   "coverage": 0.88,
-   "subject": false,
-   "forks": 1
-  }
- ],
- "King's Knight Opening: Normal Variation": [
-  {
-   "videoId": "-PSQS88VdZU",
-   "eco": "C44",
-   "plies": 4,
-   "coverage": 0.953,
-   "subject": false,
-   "forks": 4
-  },
-  {
-   "videoId": "4_Ev1a1_2Mg",
-   "eco": "C44",
-   "plies": 4,
-   "coverage": 0.965,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "7Tueff34xjA",
-   "eco": "C44",
-   "plies": 4,
-   "coverage": 0.929,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "A-HTpnOfVcE",
-   "eco": "C44",
-   "plies": 4,
-   "coverage": 0.962,
-   "subject": false,
-   "forks": 3
-  },
-  {
-   "videoId": "AeDEjalJkq0",
-   "eco": "C44",
-   "plies": 4,
-   "coverage": 0.95,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "FqVMAv3wKes",
-   "eco": "C44",
+   "videoId": "1AMYr01rkHE",
+   "eco": "B30",
    "plies": 4,
    "coverage": 0.971,
    "subject": false,
    "forks": 0
   },
   {
-   "videoId": "H0Fln-ujA3w",
-   "eco": "C44",
+   "videoId": "3dnTa3IoD9g",
+   "eco": "B30",
    "plies": 4,
-   "coverage": 0.963,
+   "coverage": 1,
    "subject": false,
-   "forks": 1
+   "forks": 4
   },
   {
-   "videoId": "MMELgpZ4CeQ",
-   "eco": "C44",
+   "videoId": "Dj_hLEdDpAg",
+   "eco": "B30",
    "plies": 4,
-   "coverage": 0.953,
-   "subject": false,
-   "forks": 5
-  },
-  {
-   "videoId": "Nl9vUi1_ha0",
-   "eco": "C44",
-   "plies": 4,
-   "coverage": 0.983,
-   "subject": false,
+   "coverage": 0.966,
+   "subject": true,
    "forks": 3
   },
   {
-   "videoId": "QJ3YfBMrVls",
-   "eco": "C44",
+   "videoId": "JXqgHjE14K4",
+   "eco": "B30",
    "plies": 4,
-   "coverage": 0.947,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "RUYbO35XVCE",
-   "eco": "C44",
-   "plies": 4,
-   "coverage": 0.969,
-   "subject": false,
-   "forks": 9
-  },
-  {
-   "videoId": "T6IeD5ldw3s",
-   "eco": "C44",
-   "plies": 4,
-   "coverage": 0.981,
+   "coverage": 0.2,
    "subject": false,
    "forks": 1
   },
   {
-   "videoId": "TYKVZpAy5Ow",
-   "eco": "C44",
+   "videoId": "O0JmBfMtiWs",
+   "eco": "B30",
    "plies": 4,
-   "coverage": 0.981,
-   "subject": false,
-   "forks": 2
-  },
-  {
-   "videoId": "Ytkf3qZTj74",
-   "eco": "C44",
-   "plies": 4,
-   "coverage": 0.92,
+   "coverage": 0.182,
    "subject": false,
    "forks": 1
   },
   {
-   "videoId": "fGBhk9oqdbg",
-   "eco": "C44",
+   "videoId": "R2skmBe07aQ",
+   "eco": "B30",
    "plies": 4,
-   "coverage": 0.977,
+   "coverage": 0.964,
    "subject": true,
-   "forks": 6
+   "forks": 1
   },
   {
-   "videoId": "i9lgxqlkUgQ",
-   "eco": "C44",
-   "plies": 4,
-   "coverage": 0.97,
-   "subject": false,
-   "forks": 6
-  },
-  {
-   "videoId": "ndNfx0HHcLk",
-   "eco": "C44",
-   "plies": 4,
-   "coverage": 0.846,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "uVQKL83tZb0",
-   "eco": "C44",
+   "videoId": "S-PGKHRQM5o",
+   "eco": "B30",
    "plies": 4,
    "coverage": 0.952,
    "subject": false,
-   "forks": 3
+   "forks": 0
   },
   {
-   "videoId": "wdHXvOBC8bw",
-   "eco": "C44",
+   "videoId": "U8zArIhxato",
+   "eco": "B30",
    "plies": 4,
-   "coverage": 0.977,
-   "subject": false,
-   "forks": 6
-  }
- ],
- "King's Knight Opening": [
-  {
-   "videoId": "-PSQS88VdZU",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.977,
-   "subject": false,
-   "forks": 4
-  },
-  {
-   "videoId": "-Y5bZoD6TM0",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 1,
+   "coverage": 0.955,
    "subject": false,
    "forks": 0
   },
   {
-   "videoId": "4_Ev1a1_2Mg",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.982,
+   "videoId": "WM0vlYWi33I",
+   "eco": "B30",
+   "plies": 4,
+   "coverage": 0.962,
    "subject": false,
    "forks": 0
   },
   {
-   "videoId": "4ajr7LFi170",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.978,
-   "subject": false,
-   "forks": 4
-  },
-  {
-   "videoId": "7Tueff34xjA",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "A-HTpnOfVcE",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.981,
-   "subject": false,
-   "forks": 3
-  },
-  {
-   "videoId": "AeDEjalJkq0",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "FqVMAv3wKes",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.971,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "H0Fln-ujA3w",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.963,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "MMELgpZ4CeQ",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.977,
-   "subject": false,
-   "forks": 5
-  },
-  {
-   "videoId": "Nl9vUi1_ha0",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 1,
-   "subject": false,
-   "forks": 3
-  },
-  {
-   "videoId": "QJ3YfBMrVls",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.974,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "RUYbO35XVCE",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.984,
-   "subject": false,
-   "forks": 9
-  },
-  {
-   "videoId": "T6IeD5ldw3s",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.981,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "TYKVZpAy5Ow",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.99,
-   "subject": false,
-   "forks": 2
-  },
-  {
-   "videoId": "UXKY-hKJs6Q",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.968,
-   "subject": false,
-   "forks": 2
-  },
-  {
-   "videoId": "Ytkf3qZTj74",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.96,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "fGBhk9oqdbg",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.989,
-   "subject": false,
-   "forks": 6
-  },
-  {
-   "videoId": "i9lgxqlkUgQ",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.985,
-   "subject": false,
-   "forks": 6
-  },
-  {
-   "videoId": "iFdoGDFnT3c",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.95,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "iwCO5bNiuNw",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.9,
+   "videoId": "bIxvPbhuTpo",
+   "eco": "B30",
+   "plies": 4,
+   "coverage": 0.944,
    "subject": true,
    "forks": 0
   },
   {
-   "videoId": "ndNfx0HHcLk",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.923,
+   "videoId": "dJYcXok1_wQ",
+   "eco": "B30",
+   "plies": 4,
+   "coverage": 0.973,
    "subject": false,
    "forks": 0
   },
   {
-   "videoId": "sfjI4jEY58s",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.976,
-   "subject": false,
-   "forks": 3
-  },
-  {
-   "videoId": "uVQKL83tZb0",
-   "eco": "C40",
-   "plies": 3,
-   "coverage": 0.964,
-   "subject": false,
-   "forks": 3
-  },
-  {
-   "videoId": "wdHXvOBC8bw",
-   "eco": "C40",
-   "plies": 3,
+   "videoId": "gOKiOKPv-X0",
+   "eco": "B30",
+   "plies": 4,
    "coverage": 0.977,
    "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "lWVZLZdQHcY",
+   "eco": "B30",
+   "plies": 4,
+   "coverage": 0.917,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "nsG9XSdGkj8",
+   "eco": "B30",
+   "plies": 4,
+   "coverage": 0.958,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "pXBR9CxK3lQ",
+   "eco": "B30",
+   "plies": 4,
+   "coverage": 0.979,
+   "subject": true,
+   "forks": 3
+  }
+ ],
+ "Sicilian Defense": [
+  {
+   "videoId": "-B2wrOqn5sQ",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "0RpvhiIZQkk",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "1AMYr01rkHE",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "1tbpB-Qrqds",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "3dnTa3IoD9g",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "5M0c_EwRQiI",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "8EZYSq6c_hg",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "9Iu56-1zzfI",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "CQFSXmfxMV8",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "CfCoA7jQu84",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "Dj_hLEdDpAg",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "GbY7R4GYN_M",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "IEnsliJAt3U",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 9
+  },
+  {
+   "videoId": "IaOXKjvpP_E",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "JXqgHjE14K4",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "KwU9YZOZkQU",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
    "forks": 6
+  },
+  {
+   "videoId": "O0JmBfMtiWs",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "OwrIaWwPJvM",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "Q0CTfDwnd3A",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "R2skmBe07aQ",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "S-PGKHRQM5o",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "SV-y9Ai7QkA",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 13
+  },
+  {
+   "videoId": "U8zArIhxato",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "U9ZVpNscIGg",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "UVJ75kdDdt8",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "WM0vlYWi33I",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "WSEAjQgHpYs",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "WwRujiYpgq0",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "_Y-iXy9b4Ew",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "ac2evoOBWko",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "aoWDLhcoQtE",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "bIxvPbhuTpo",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "cKeN_oR3VEA",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "d-CFu7RMVoY",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "d-MNpi_zPr0",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "dJYcXok1_wQ",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "f5V0W6btKdY",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": true,
+   "forks": 1
+  },
+  {
+   "videoId": "f8alAsVJRc8",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "fc8rxAMb7xI",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "gOKiOKPv-X0",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "h0hCWHzzgoE",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "kVIQEb0fOPg",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "kbQl_tsSo8w",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "ktoa6lk6qNk",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "lWVZLZdQHcY",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "n5BL4u1QpfY",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "nSASokndzVQ",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "nsG9XSdGkj8",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "o29kg7LLAVg",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "oUhyUlyh1Fs",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "pXBR9CxK3lQ",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "qW-mT-FbLnA",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "rg4NhBBW2pc",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "sqVkwtfaFwI",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "uJro3yCDEgk",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "vH3fLZ7Y4YM",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "vtY88mBc088",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 9
+  },
+  {
+   "videoId": "wrk4e6bGi1Y",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
   }
  ],
  "King's Pawn Game": [
+  {
+   "videoId": "-B2wrOqn5sQ",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
   {
    "videoId": "-PSQS88VdZU",
    "eco": "B00",
@@ -1212,6 +1196,14 @@
   },
   {
    "videoId": "-Y5bZoD6TM0",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "0RpvhiIZQkk",
    "eco": "B00",
    "plies": 1,
    "coverage": 1,
@@ -1236,6 +1228,14 @@
   },
   {
    "videoId": "25w0mYsx_Lk",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "2DST_c9uP4Q",
    "eco": "B00",
    "plies": 1,
    "coverage": 1,
@@ -2187,6 +2187,634 @@
    "forks": 2
   }
  ],
+ "Trompowsky Attack": [
+  {
+   "videoId": "-MtlVsMGiCo",
+   "eco": "A45",
+   "plies": 3,
+   "coverage": 0.988,
+   "subject": true,
+   "forks": 2
+  }
+ ],
+ "Indian Defense": [
+  {
+   "videoId": "-MtlVsMGiCo",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "3nyxVHwDCTY",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "4T9-0D4SnMk",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "4Vbr9EQoGd4",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 6
+  },
+  {
+   "videoId": "7f2sPY2U204",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "7uxRcomJo7I",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "91lZ8sfu-XU",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": true,
+   "forks": 0
+  },
+  {
+   "videoId": "E0cMsom-N7E",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "FtTdaYxkDeY",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "J6MDnL_B83w",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "JEMVGw2WdCE",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 9
+  },
+  {
+   "videoId": "JzGMXud3GWE",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "NQQnQ9X9dL8",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "Nu5BrqlnACs",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "QVw89_6fh2Y",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "VeHyQWutHPQ",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "Vy6j7N_Wh0o",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "XvyJvuj8NdM",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": true,
+   "forks": 6
+  },
+  {
+   "videoId": "_zT8aWZh2x0",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "cdEASsRLWcg",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "n64LCdoBzaU",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "oH407-a1v-4",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": true,
+   "forks": 4
+  },
+  {
+   "videoId": "wR42fihChx4",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "Italian Game: Classical Variation, Greco Gambit, Modern Line": [
+  {
+   "videoId": "-PSQS88VdZU",
+   "eco": "C54",
+   "plies": 11,
+   "coverage": 0.047,
+   "subject": false,
+   "forks": 4
+  }
+ ],
+ "Scotch Game: Scotch Gambit, Advance Variation": [
+  {
+   "videoId": "-PSQS88VdZU",
+   "eco": "C44",
+   "plies": 9,
+   "coverage": 0.07,
+   "subject": false,
+   "forks": 4
+  }
+ ],
+ "Scotch Game: Haxo Gambit": [
+  {
+   "videoId": "-PSQS88VdZU",
+   "eco": "C44",
+   "plies": 8,
+   "coverage": 0.023,
+   "subject": false,
+   "forks": 4
+  }
+ ],
+ "Scotch Game: Scotch Gambit, Dubois Réti Defense": [
+  {
+   "videoId": "-PSQS88VdZU",
+   "eco": "C44",
+   "plies": 8,
+   "coverage": 0.163,
+   "subject": false,
+   "forks": 4
+  }
+ ],
+ "Scotch Game: Scotch Gambit": [
+  {
+   "videoId": "-PSQS88VdZU",
+   "eco": "C44",
+   "plies": 7,
+   "coverage": 0.233,
+   "subject": false,
+   "forks": 4
+  }
+ ],
+ "Scotch Game": [
+  {
+   "videoId": "-PSQS88VdZU",
+   "eco": "C44",
+   "plies": 5,
+   "coverage": 0.93,
+   "subject": true,
+   "forks": 4
+  },
+  {
+   "videoId": "H0Fln-ujA3w",
+   "eco": "C44",
+   "plies": 5,
+   "coverage": 0.926,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "Ytkf3qZTj74",
+   "eco": "C44",
+   "plies": 5,
+   "coverage": 0.88,
+   "subject": false,
+   "forks": 1
+  }
+ ],
+ "King's Knight Opening: Normal Variation": [
+  {
+   "videoId": "-PSQS88VdZU",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.953,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "4_Ev1a1_2Mg",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.965,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "7Tueff34xjA",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.929,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "A-HTpnOfVcE",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.962,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "AeDEjalJkq0",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.95,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "FqVMAv3wKes",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.971,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "H0Fln-ujA3w",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.963,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "MMELgpZ4CeQ",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.953,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "Nl9vUi1_ha0",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.983,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "QJ3YfBMrVls",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.947,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "RUYbO35XVCE",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.969,
+   "subject": false,
+   "forks": 9
+  },
+  {
+   "videoId": "T6IeD5ldw3s",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.981,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "TYKVZpAy5Ow",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.981,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "Ytkf3qZTj74",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.92,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "fGBhk9oqdbg",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.977,
+   "subject": true,
+   "forks": 6
+  },
+  {
+   "videoId": "i9lgxqlkUgQ",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.97,
+   "subject": false,
+   "forks": 6
+  },
+  {
+   "videoId": "ndNfx0HHcLk",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.846,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "uVQKL83tZb0",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.952,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "wdHXvOBC8bw",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.977,
+   "subject": false,
+   "forks": 6
+  }
+ ],
+ "King's Knight Opening": [
+  {
+   "videoId": "-PSQS88VdZU",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.977,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "-Y5bZoD6TM0",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "4_Ev1a1_2Mg",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.982,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "4ajr7LFi170",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.978,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "7Tueff34xjA",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "A-HTpnOfVcE",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.981,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "AeDEjalJkq0",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "FqVMAv3wKes",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.971,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "H0Fln-ujA3w",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.963,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "MMELgpZ4CeQ",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.977,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "Nl9vUi1_ha0",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "QJ3YfBMrVls",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.974,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "RUYbO35XVCE",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.984,
+   "subject": false,
+   "forks": 9
+  },
+  {
+   "videoId": "T6IeD5ldw3s",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.981,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "TYKVZpAy5Ow",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.99,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "UXKY-hKJs6Q",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.968,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "Ytkf3qZTj74",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.96,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "fGBhk9oqdbg",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.989,
+   "subject": false,
+   "forks": 6
+  },
+  {
+   "videoId": "i9lgxqlkUgQ",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.985,
+   "subject": false,
+   "forks": 6
+  },
+  {
+   "videoId": "iFdoGDFnT3c",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.95,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "iwCO5bNiuNw",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.9,
+   "subject": true,
+   "forks": 0
+  },
+  {
+   "videoId": "ndNfx0HHcLk",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.923,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "sfjI4jEY58s",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.976,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "uVQKL83tZb0",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.964,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "wdHXvOBC8bw",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.977,
+   "subject": false,
+   "forks": 6
+  }
+ ],
  "Four Knights Game: Glek System": [
   {
    "videoId": "-Y5bZoD6TM0",
@@ -2407,6 +3035,74 @@
    "forks": 2
   }
  ],
+ "Sicilian Defense: Moscow Variation": [
+  {
+   "videoId": "0RpvhiIZQkk",
+   "eco": "B51",
+   "plies": 5,
+   "coverage": 0.982,
+   "subject": true,
+   "forks": 0
+  },
+  {
+   "videoId": "IaOXKjvpP_E",
+   "eco": "B51",
+   "plies": 5,
+   "coverage": 0.959,
+   "subject": true,
+   "forks": 0
+  }
+ ],
+ "Sicilian Defense: Modern Variations": [
+  {
+   "videoId": "0RpvhiIZQkk",
+   "eco": "B50",
+   "plies": 4,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "IaOXKjvpP_E",
+   "eco": "B50",
+   "plies": 4,
+   "coverage": 0.959,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "SV-y9Ai7QkA",
+   "eco": "B50",
+   "plies": 4,
+   "coverage": 0.106,
+   "subject": false,
+   "forks": 13
+  },
+  {
+   "videoId": "UVJ75kdDdt8",
+   "eco": "B50",
+   "plies": 4,
+   "coverage": 0.974,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "ktoa6lk6qNk",
+   "eco": "B50",
+   "plies": 4,
+   "coverage": 0.988,
+   "subject": false,
+   "forks": 4
+  },
+  {
+   "videoId": "oUhyUlyh1Fs",
+   "eco": "B50",
+   "plies": 4,
+   "coverage": 0.929,
+   "subject": true,
+   "forks": 1
+  }
+ ],
  "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation": [
   {
    "videoId": "1AMYr01rkHE",
@@ -2465,578 +3161,6 @@
    "coverage": 0.944,
    "subject": true,
    "forks": 0
-  }
- ],
- "Sicilian Defense: Old Sicilian": [
-  {
-   "videoId": "1AMYr01rkHE",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.971,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "3dnTa3IoD9g",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 1,
-   "subject": false,
-   "forks": 4
-  },
-  {
-   "videoId": "Dj_hLEdDpAg",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.966,
-   "subject": true,
-   "forks": 3
-  },
-  {
-   "videoId": "JXqgHjE14K4",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.2,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "O0JmBfMtiWs",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.182,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "R2skmBe07aQ",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.964,
-   "subject": true,
-   "forks": 1
-  },
-  {
-   "videoId": "S-PGKHRQM5o",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.952,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "U8zArIhxato",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.955,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "WM0vlYWi33I",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.962,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "bIxvPbhuTpo",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.944,
-   "subject": true,
-   "forks": 0
-  },
-  {
-   "videoId": "dJYcXok1_wQ",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.973,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "gOKiOKPv-X0",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.977,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "lWVZLZdQHcY",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.917,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "nsG9XSdGkj8",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.958,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "pXBR9CxK3lQ",
-   "eco": "B30",
-   "plies": 4,
-   "coverage": 0.979,
-   "subject": true,
-   "forks": 3
-  }
- ],
- "Sicilian Defense": [
-  {
-   "videoId": "1AMYr01rkHE",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "1tbpB-Qrqds",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "3dnTa3IoD9g",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 4
-  },
-  {
-   "videoId": "5M0c_EwRQiI",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "8EZYSq6c_hg",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "9Iu56-1zzfI",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "CQFSXmfxMV8",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "CfCoA7jQu84",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 2
-  },
-  {
-   "videoId": "Dj_hLEdDpAg",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 3
-  },
-  {
-   "videoId": "GbY7R4GYN_M",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "IEnsliJAt3U",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 9
-  },
-  {
-   "videoId": "IaOXKjvpP_E",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "JXqgHjE14K4",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "KwU9YZOZkQU",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 6
-  },
-  {
-   "videoId": "O0JmBfMtiWs",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "OwrIaWwPJvM",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "Q0CTfDwnd3A",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "R2skmBe07aQ",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "S-PGKHRQM5o",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "SV-y9Ai7QkA",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 13
-  },
-  {
-   "videoId": "U8zArIhxato",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "U9ZVpNscIGg",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 3
-  },
-  {
-   "videoId": "UVJ75kdDdt8",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 4
-  },
-  {
-   "videoId": "WM0vlYWi33I",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "WSEAjQgHpYs",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 5
-  },
-  {
-   "videoId": "WwRujiYpgq0",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "_Y-iXy9b4Ew",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "ac2evoOBWko",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "aoWDLhcoQtE",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 2
-  },
-  {
-   "videoId": "bIxvPbhuTpo",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "cKeN_oR3VEA",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "d-CFu7RMVoY",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "d-MNpi_zPr0",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 3
-  },
-  {
-   "videoId": "dJYcXok1_wQ",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "f5V0W6btKdY",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": true,
-   "forks": 1
-  },
-  {
-   "videoId": "f8alAsVJRc8",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "fc8rxAMb7xI",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 2
-  },
-  {
-   "videoId": "gOKiOKPv-X0",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "h0hCWHzzgoE",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "kVIQEb0fOPg",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 4
-  },
-  {
-   "videoId": "kbQl_tsSo8w",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "ktoa6lk6qNk",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 4
-  },
-  {
-   "videoId": "lWVZLZdQHcY",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "n5BL4u1QpfY",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 2
-  },
-  {
-   "videoId": "nSASokndzVQ",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 5
-  },
-  {
-   "videoId": "nsG9XSdGkj8",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "o29kg7LLAVg",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "oUhyUlyh1Fs",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "pXBR9CxK3lQ",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 3
-  },
-  {
-   "videoId": "qW-mT-FbLnA",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "rg4NhBBW2pc",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 1
-  },
-  {
-   "videoId": "sqVkwtfaFwI",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "uJro3yCDEgk",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 2
-  },
-  {
-   "videoId": "vH3fLZ7Y4YM",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "vtY88mBc088",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 9
-  },
-  {
-   "videoId": "wrk4e6bGi1Y",
-   "eco": "B20",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 2
   }
  ],
  "Sicilian Defense: Alapin Variation": [
@@ -3281,6 +3405,32 @@
    "eco": "B06",
    "plies": 4,
    "coverage": 0.985,
+   "subject": false,
+   "forks": 2
+  }
+ ],
+ "Alekhine Defense": [
+  {
+   "videoId": "2DST_c9uP4Q",
+   "eco": "B02",
+   "plies": 2,
+   "coverage": 1,
+   "subject": true,
+   "forks": 0
+  },
+  {
+   "videoId": "CZC9BI_joNU",
+   "eco": "B02",
+   "plies": 6,
+   "coverage": 0.12,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "j4-gTbXfwXg",
+   "eco": "B02",
+   "plies": 2,
+   "coverage": 1,
    "subject": false,
    "forks": 2
   }
@@ -4391,6 +4541,74 @@
    "forks": 0
   }
  ],
+ "Rapport-Jobava System": [
+  {
+   "videoId": "9hotlaRRkD0",
+   "eco": "D01",
+   "plies": 5,
+   "coverage": 0.952,
+   "subject": true,
+   "forks": 0
+  },
+  {
+   "videoId": "JzGMXud3GWE",
+   "eco": "D01",
+   "plies": 5,
+   "coverage": 0.938,
+   "subject": true,
+   "forks": 0
+  },
+  {
+   "videoId": "NQQnQ9X9dL8",
+   "eco": "D01",
+   "plies": 5,
+   "coverage": 0.818,
+   "subject": true,
+   "forks": 0
+  },
+  {
+   "videoId": "n64LCdoBzaU",
+   "eco": "D01",
+   "plies": 5,
+   "coverage": 0.956,
+   "subject": true,
+   "forks": 1
+  }
+ ],
+ "Queen's Pawn Game: Chigorin Variation": [
+  {
+   "videoId": "9hotlaRRkD0",
+   "eco": "D00",
+   "plies": 3,
+   "coverage": 0.952,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "JzGMXud3GWE",
+   "eco": "A45",
+   "plies": 4,
+   "coverage": 0.938,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "NQQnQ9X9dL8",
+   "eco": "A45",
+   "plies": 4,
+   "coverage": 0.909,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "n64LCdoBzaU",
+   "eco": "A45",
+   "plies": 4,
+   "coverage": 0.956,
+   "subject": false,
+   "forks": 1
+  }
+ ],
  "Ruy Lopez: Berlin Defense, Anti-Berlin Variation": [
   {
    "videoId": "AeDEjalJkq0",
@@ -4463,24 +4681,6 @@
    "coverage": 0.08,
    "subject": false,
    "forks": 3
-  }
- ],
- "Alekhine Defense": [
-  {
-   "videoId": "CZC9BI_joNU",
-   "eco": "B02",
-   "plies": 6,
-   "coverage": 0.12,
-   "subject": false,
-   "forks": 3
-  },
-  {
-   "videoId": "j4-gTbXfwXg",
-   "eco": "B02",
-   "plies": 2,
-   "coverage": 1,
-   "subject": false,
-   "forks": 2
   }
  ],
  "Nimzowitsch Defense: Declined Variation": [
@@ -5335,58 +5535,6 @@
    "forks": 9
   }
  ],
- "Sicilian Defense: Moscow Variation": [
-  {
-   "videoId": "IaOXKjvpP_E",
-   "eco": "B51",
-   "plies": 5,
-   "coverage": 0.959,
-   "subject": true,
-   "forks": 0
-  }
- ],
- "Sicilian Defense: Modern Variations": [
-  {
-   "videoId": "IaOXKjvpP_E",
-   "eco": "B50",
-   "plies": 4,
-   "coverage": 0.959,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "SV-y9Ai7QkA",
-   "eco": "B50",
-   "plies": 4,
-   "coverage": 0.106,
-   "subject": false,
-   "forks": 13
-  },
-  {
-   "videoId": "UVJ75kdDdt8",
-   "eco": "B50",
-   "plies": 4,
-   "coverage": 0.974,
-   "subject": false,
-   "forks": 4
-  },
-  {
-   "videoId": "ktoa6lk6qNk",
-   "eco": "B50",
-   "plies": 4,
-   "coverage": 0.988,
-   "subject": false,
-   "forks": 4
-  },
-  {
-   "videoId": "oUhyUlyh1Fs",
-   "eco": "B50",
-   "plies": 4,
-   "coverage": 0.929,
-   "subject": true,
-   "forks": 1
-  }
- ],
  "King's Indian Defense: Zinnowitz Variation": [
   {
    "videoId": "J6MDnL_B83w",
@@ -5509,58 +5657,6 @@
    "coverage": 0.209,
    "subject": false,
    "forks": 6
-  }
- ],
- "Rapport-Jobava System": [
-  {
-   "videoId": "JzGMXud3GWE",
-   "eco": "D01",
-   "plies": 5,
-   "coverage": 0.938,
-   "subject": true,
-   "forks": 0
-  },
-  {
-   "videoId": "NQQnQ9X9dL8",
-   "eco": "D01",
-   "plies": 5,
-   "coverage": 0.818,
-   "subject": true,
-   "forks": 0
-  },
-  {
-   "videoId": "n64LCdoBzaU",
-   "eco": "D01",
-   "plies": 5,
-   "coverage": 0.956,
-   "subject": true,
-   "forks": 1
-  }
- ],
- "Queen's Pawn Game: Chigorin Variation": [
-  {
-   "videoId": "JzGMXud3GWE",
-   "eco": "A45",
-   "plies": 4,
-   "coverage": 0.938,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "NQQnQ9X9dL8",
-   "eco": "A45",
-   "plies": 4,
-   "coverage": 0.909,
-   "subject": false,
-   "forks": 0
-  },
-  {
-   "videoId": "n64LCdoBzaU",
-   "eco": "A45",
-   "plies": 4,
-   "coverage": 0.956,
-   "subject": false,
-   "forks": 1
   }
  ],
  "Blackmar-Diemer Gambit Declined: Lamb Defense": [

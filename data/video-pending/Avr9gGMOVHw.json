@@ -1,0 +1,189 @@
+{
+ "videoId": "Avr9gGMOVHw",
+ "title": "Lesson with MoistCr1tikal - Predicting The Future",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 5277,
+  "settledPositions": null
+ },
+ "plies": 15,
+ "rewinds": 3,
+ "moves": [
+  {
+   "t": 391.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 400.5,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 405,
+   "ply": 4,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 417,
+   "ply": 5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3"
+  },
+  {
+   "t": 423,
+   "ply": 4,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 438,
+   "ply": 5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3"
+  },
+  {
+   "t": 458.5,
+   "ply": 6,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4"
+  },
+  {
+   "t": 472,
+   "ply": 7,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4"
+  },
+  {
+   "t": 474,
+   "ply": 8,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 6 5"
+  },
+  {
+   "t": 491,
+   "ply": 9,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5"
+  },
+  {
+   "t": 500.5,
+   "ply": 10,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BpP3/5N2/PPP2PPP/RNBQ1RK1 w kq - 0 6"
+  },
+  {
+   "t": 502,
+   "ply": 11,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1P3/2Bp4/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 6"
+  },
+  {
+   "t": 506.5,
+   "ply": 9,
+   "line": [],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5"
+  },
+  {
+   "t": 508.5,
+   "ply": 11,
+   "line": [
+    "Nxd4",
+    "Nxe5"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/5n2/2b1N3/2BnP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 6"
+  },
+  {
+   "t": 510,
+   "ply": 9,
+   "line": [],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6"
+   ],
+   "ply": 4,
+   "options": [
+    {
+     "san": "d4",
+     "t": 417,
+     "continuation": "d4"
+    },
+    {
+     "san": "Bc4",
+     "t": 438,
+     "continuation": "Bc4"
+    }
+   ]
+  },
+  {
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bc4",
+    "Bc5",
+    "O-O",
+    "Nf6",
+    "d4"
+   ],
+   "ply": 9,
+   "options": [
+    {
+     "san": "exd4",
+     "t": 500.5,
+     "continuation": "exd4"
+    },
+    {
+     "san": "Nxd4",
+     "t": 508.5,
+     "continuation": "Nxd4 Nxe5"
+    }
+   ]
+  }
+ ]
+}
