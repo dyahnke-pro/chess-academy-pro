@@ -5214,6 +5214,16 @@ the same commit.
   Roll back the alias by re-aliasing the prior Production deploy
   (`npx vercel ls` → find the most recent `Environment` =
   Production row, alias that one).
+- 🚨 **THE BUNDLE-HASH CHECK IN THIS FILE HAS A FALSE-NEGATIVE BUG. Vite hashes
+  contain UNDERSCORES and hyphens**, so the `grep -oE '/assets/index-[A-Za-z0-9]+\.js'`
+  written everywhere above silently matches NOTHING on a build like
+  `index-CwYt_afn.js` — and an empty result reads exactly like "the deploy has
+  not landed", which is the excuse this file already spends paragraphs warning
+  against ("prod IS reachable — verify the bundle hash before claiming
+  cap-blocked"). Use a character class that includes them:
+  `grep -oE '/assets/index-[A-Za-z0-9_-]+\.js'`, and treat an EMPTY match as a
+  broken check, never as a stale deploy — an empty answer and an old hash are
+  different findings.
 - **Vercel CDN caches the index.html briefly.** If
   `curl -I .../` returns `x-vercel-cache: HIT` and the
   `last-modified` is older than your push, give it 30-60s and
