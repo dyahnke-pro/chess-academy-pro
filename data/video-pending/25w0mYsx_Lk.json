@@ -1,0 +1,211 @@
+{
+ "videoId": "25w0mYsx_Lk",
+ "title": "Beginner To Master | Chess Speedrun | C3 Vs Modern (Saragossa) | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 2698,
+  "settledPositions": null
+ },
+ "plies": 23,
+ "rewinds": 1,
+ "moves": [
+  {
+   "t": 16,
+   "ply": 2,
+   "line": [
+    "e4",
+    "g6"
+   ],
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 19,
+   "ply": 3,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 22.5,
+   "ply": 4,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3"
+  },
+  {
+   "t": 26,
+   "ply": 5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 33.5,
+   "ply": 6,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 45.5,
+   "ply": 8,
+   "line": [
+    "Bd3",
+    "Nf6"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2PB4/PP3PPP/RNBQK1NR w KQkq - 2 5"
+  },
+  {
+   "t": 53,
+   "ply": 9,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/3PP3/2PB1N2/PP3PPP/RNBQK2R b KQkq - 3 5"
+  },
+  {
+   "t": 55,
+   "ply": 12,
+   "line": [
+    "Nc6",
+    "O-O",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/8/3PP3/2PB1N2/PP3PPP/RNBQ1RK1 w - - 6 7"
+  },
+  {
+   "t": 60,
+   "ply": 13,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1bq1rk1/ppp1ppbp/2np1np1/6B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 b - - 7 7"
+  },
+  {
+   "t": 68.5,
+   "ply": 14,
+   "line": [
+    "h6"
+   ],
+   "fen": "r1bq1rk1/ppp1ppb1/2np1npp/6B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 w - - 0 8"
+  },
+  {
+   "t": 70,
+   "ply": 15,
+   "line": [
+    "Bh4"
+   ],
+   "fen": "r1bq1rk1/ppp1ppb1/2np1npp/8/3PP2B/2PB1N2/PP3PPP/RN1Q1RK1 b - - 1 8"
+  },
+  {
+   "t": 74,
+   "ply": 16,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bq1rk1/ppp2pb1/2np1npp/4p3/3PP2B/2PB1N2/PP3PPP/RN1Q1RK1 w - - 0 9"
+  },
+  {
+   "t": 91,
+   "ply": 18,
+   "line": [
+    "dxe5",
+    "Nxe5"
+   ],
+   "fen": "r1bq1rk1/ppp2pb1/3p1npp/4n3/4P2B/2PB1N2/PP3PPP/RN1Q1RK1 w - - 0 10"
+  },
+  {
+   "t": 93.5,
+   "ply": 20,
+   "line": [
+    "Nxe5",
+    "dxe5"
+   ],
+   "fen": "r1bq1rk1/ppp2pb1/5npp/4p3/4P2B/2PB4/PP3PPP/RN1Q1RK1 w - - 0 11"
+  },
+  {
+   "t": 119,
+   "ply": 21,
+   "line": [
+    "Na3"
+   ],
+   "fen": "r1bq1rk1/ppp2pb1/5npp/4p3/4P2B/N1PB4/PP3PPP/R2Q1RK1 b - - 1 11"
+  },
+  {
+   "t": 131.5,
+   "ply": 22,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r1b2rk1/ppp1qpb1/5npp/4p3/4P2B/N1PB4/PP3PPP/R2Q1RK1 w - - 2 12"
+  },
+  {
+   "t": 134.5,
+   "ply": 23,
+   "line": [
+    "Nc4"
+   ],
+   "fen": "r1b2rk1/ppp1qpb1/5npp/4p3/2N1P2B/2PB4/PP3PPP/R2Q1RK1 b - - 3 12"
+  },
+  {
+   "t": 150,
+   "ply": 24,
+   "line": [
+    "b6"
+   ],
+   "fen": "r1b2rk1/p1p1qpb1/1p3npp/4p3/2N1P2B/2PB4/PP3PPP/R2Q1RK1 w - - 0 13"
+  },
+  {
+   "t": 178.5,
+   "ply": 25,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1b2rk1/p1p1qpb1/1p3npp/4p3/2N1PP1B/2PB4/PP4PP/R2Q1RK1 b - - 0 13"
+  },
+  {
+   "t": 240.5,
+   "ply": 26,
+   "line": [
+    "Qe8"
+   ],
+   "fen": "r1b1qrk1/p1p2pb1/1p3npp/4p3/2N1PP1B/2PB4/PP4PP/R2Q1RK1 w - - 1 14"
+  },
+  {
+   "t": 283,
+   "ply": 27,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1b1qrk1/p1p2pb1/1p3npp/4N3/4PP1B/2PB4/PP4PP/R2Q1RK1 b - - 0 14"
+  },
+  {
+   "t": 284,
+   "ply": 28,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "r3qrk1/pbp2pb1/1p3npp/4N3/4PP1B/2PB4/PP4PP/R2Q1RK1 w - - 1 15"
+  },
+  {
+   "t": 902,
+   "ply": 3,
+   "line": [],
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  }
+ ],
+ "forks": []
+}
