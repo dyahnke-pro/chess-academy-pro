@@ -3377,6 +3377,16 @@ usually just as true one ply over, on the line students really see.
 not a failure, because off-line notes are real teaching; what changed is that
 leaving one there is now a deliberate choice rather than an accident.
 
+🚨 **DO NOT RE-ANCHOR WHILE MORE CORPUS IS STILL LANDING (David 2026-08-21:
+*"hold on 3 because i just finished downloading the rest of naroditski's videos.
+we will have a home for them soon"*).** An off-line note is off-line relative to
+the tracks banked TODAY. Every new lesson adds settled positions, so a note that
+has no home now may have one the moment the next batch is scanned — and a note
+re-anchored onto a different position to rescue it has been moved for nothing,
+away from the board it was actually written about. Re-anchoring is a pass to run
+against a FINISHED corpus, not a rolling one. Check whether a harvest is in
+flight before starting it.
+
 **RE-ANCHORING BEATS HARVESTING.** With a corpus already banked, moving existing
 notes onto taught lines multiplies the reach of work already paid for — from
 10/64 toward most of them — while a new video adds notes that may land off-line
