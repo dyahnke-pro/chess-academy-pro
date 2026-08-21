@@ -1,8 +1,8 @@
 {
  "generatedAt": "2026-08-21",
- "videosDistilled": 182,
- "noteCount": 470,
- "forkCount": 483,
+ "videosDistilled": 186,
+ "noteCount": 477,
+ "forkCount": 487,
  "notes": [
   {
    "id": "vn-advance-e6-cover-the-check-square-before-the-trade",
@@ -7360,6 +7360,38 @@
    }
   },
   {
+   "id": "vn-bishops-move-orders-that-converge-are-one-position",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Bc4",
+    "Nf6",
+    "d3",
+    "Nc6",
+    "Nf3"
+   ],
+   "opening": "Italian Game: Two Knights Defense, Modern Bishop's Opening",
+   "phase": "opening",
+   "explains": "With the bishop already posted on c4 and the modest d3 supporting the centre, the knight steps to f3 and reaches exactly the quiet, familiar centre that a more common move order arrives at from the other side. The knight eyes the e5-pawn and the position settles into well-known paths.",
+   "teaches": "Two different opening sequences that arrive at the same position are the same game, and an unfamiliar first move is nothing to fear once you see it landing in a structure you already understand. Learn positions and plans, not move-order trivia: the board in front of you is what matters, never the path that reached it. Recognising the transposition turns a strange start into familiar ground.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:MvaAX4pTvYU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    },
+    {
+     "kind": "controls",
+     "square": "d4"
+    }
+   ]
+  },
+  {
    "id": "vn-fourpawns-recapture-that-keeps-the-file-shut",
    "lineSan": [
     "e4",
@@ -8856,6 +8888,113 @@
    ]
   },
   {
+   "id": "vn-qga-regain-the-pawn-by-developing-not-chasing",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "dxc4",
+    "Nf3"
+   ],
+   "opening": "Queen's Gambit Accepted",
+   "phase": "opening",
+   "explains": "The knight develops toward the centre, eyeing e5 and guarding the d4-pawn, while White simply prepares to clear the light bishop's road to c4. The extra pawn on c4 cannot be propped up for long, so it is regained a move later with every piece already in play.",
+   "teaches": "When an opponent gives a pawn back rather than trying to hold it, resist grabbing it at once. The value of the sequence is the lead in development you earn while collecting it, not the pawn itself; recapturing straight away with the queen wins the pawn and throws that lead away. Bring a piece out first, and the pawn still comes back.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:U7pqt57VwuU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    },
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ]
+  },
+  {
+   "id": "vn-qga-clear-the-bishop-road-before-the-sortie",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "dxc4",
+    "Nf3",
+    "Nf6",
+    "e3"
+   ],
+   "opening": "Queen's Gambit Accepted",
+   "phase": "opening",
+   "explains": "The pawn steps to e3 and unblocks the f1-bishop, whose diagonal now runs all the way to c4 to collect the pawn sitting there. It lends the d4-pawn extra support at the same time, and it does all of this without leaving a single weakness behind.",
+   "teaches": "A quiet pawn move that clears a path can be worth more than a natural developing move that commits you. Opening the bishop's diagonal to reclaim the pawn keeps the position sound and the plans flexible; a knight sortie into the centre first looks active but forces matters before you know which setup you need. Prefer the order that keeps your options open.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:U7pqt57VwuU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "opens",
+     "from": "f1",
+     "to": "c4"
+    },
+    {
+     "kind": "defends",
+     "square": "d4"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "d4",
+     "d5",
+     "c4",
+     "dxc4",
+     "Nf3",
+     "Nf6"
+    ],
+    "taughtMove": "Nc3",
+    "alternative": "e3",
+    "lineName": "Queen's Gambit Accepted / Alekhine Variation 4.Nc3"
+   }
+  },
+  {
+   "id": "vn-qga-the-c5-break-steers-into-the-isolani",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "dxc4",
+    "Nf3",
+    "Nf6",
+    "e3",
+    "e6",
+    "Bxc4",
+    "c5"
+   ],
+   "opening": "Queen's Gambit Accepted",
+   "phase": "opening",
+   "explains": "The pawn advances to c5 and strikes at White's d4-pawn. Once the central pawns come off, White's d-pawn will stand alone, with no pawn on the c-file or the e-file to shield it, and the isolated-pawn middlegame this line is known for is reached by a single freeing thrust.",
+   "teaches": "Learn the freeing break that defines a middlegame by its structure, not by memorizing the moves. Striking at the centre with the c-pawn steers the game toward an isolated-pawn position, and that structure carries its plans with it: the side with the lone central pawn plays for piece activity and outpost squares, the other blockades the pawn and trades pieces down toward an endgame where it is weak. Know which side of that bargain you are on before the middlegame begins.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:U7pqt57VwuU"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d4"
+    }
+   ]
+  },
+  {
    "id": "vn-closedtrad-queen-that-hits-two-pawns-across-the-board",
    "lineSan": [
     "e4",
@@ -10156,6 +10295,82 @@
    ]
   },
   {
+   "id": "vn-alapin-develop-first-when-the-pawn-cannot-run",
+   "lineSan": [
+    "e4",
+    "c5",
+    "d4",
+    "cxd4",
+    "c3",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "Nf3"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation, Smith-Morra Declined",
+   "phase": "opening",
+   "explains": "The knight develops and keeps an eye on the extra pawn on d4 while the big pawn on e5 stays defended. Black cannot prop the d4-pawn up, so White regains it at the moment that suits, having already brought a piece into play instead of spending the move on a recapture.",
+   "teaches": "When a pawn you could win back has nowhere to run, develop first and collect it later on your own terms. Recapturing on the spot is the reflex; the stronger move is often to bring a piece out and keep the tension, because the pawn is not going anywhere and every move you spend developing instead of grabbing is a move ahead. Flexibility beats haste when nothing is being lost by waiting.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ac2evoOBWko"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e5"
+    },
+    {
+     "kind": "attacks",
+     "square": "d4"
+    }
+   ]
+  },
+  {
+   "id": "vn-alapin-the-isolani-lives-to-push-d5",
+   "lineSan": [
+    "e4",
+    "c5",
+    "d4",
+    "cxd4",
+    "c3",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "Nf3",
+    "d6",
+    "cxd4",
+    "Nc6",
+    "Bc4",
+    "Nb6",
+    "Bb5",
+    "dxe5",
+    "Nxe5",
+    "Bd7",
+    "Nxd7",
+    "Qxd7",
+    "Nc3"
+   ],
+   "opening": "Sicilian Defense: Alapin Variation, Smith-Morra Declined",
+   "phase": "opening",
+   "explains": "The knight comes to c3 and eyes d5, the square just in front of the isolated d-pawn. Pieces gather behind d4 so that the pawn can advance when the moment is right, opening lines for the bishops and rooks standing ready behind it.",
+   "teaches": "A lone central pawn is not just a weakness to be defended; its whole purpose is to advance. Cluster your pieces behind it so the break can be made at the right moment, and the pawn that looked like a liability becomes the lever that rips the position open. The side playing against it wants to blockade and trade; the side that owns it wants activity and the push.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:ac2evoOBWko"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "d5"
+    }
+   ]
+  },
+  {
    "id": "vn-morra-declined-the-gambit-that-turned-into-a-different-opening",
    "lineSan": [
     "e4",
@@ -10895,6 +11110,46 @@
     {
      "kind": "controls",
      "square": "d6"
+    }
+   ]
+  },
+  {
+   "id": "vn-caro-recapture-toward-the-centre-doubled-is-fine",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Nf6",
+    "Nxf6+",
+    "exf6"
+   ],
+   "opening": "Caro-Kann Defense: Main Line",
+   "phase": "opening",
+   "explains": "Capturing toward the centre doubles the f-pawns but opens the e-file that the rook will use once the king castles, and it leaves a solid block on f6, f7, g7 and h7 to shield the king. The structure looks damaged and is genuinely comfortable to play.",
+   "teaches": "When you recapture, taking toward the centre usually beats taking toward the edge, even at the cost of doubled pawns. Doubled pawns that open a file for your pieces and build a wall in front of your king are a feature, not a flaw, and the file and the shelter are worth more than the tidy structure you gave up. Judge a pawn weakness by what it actually does, not by the name it carries.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:e4sg69QooO0"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "opens",
+     "from": "e8",
+     "to": "e5"
+    },
+    {
+     "kind": "controls",
+     "square": "e5"
+    },
+    {
+     "kind": "controls",
+     "square": "g5"
     }
    ]
   },
@@ -25233,6 +25488,53 @@
    "source": "yt:Twv9FExvwSw"
   },
   {
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "dxc4"
+   ],
+   "ply": 4,
+   "options": [
+    {
+     "san": "Nf3",
+     "t": 789,
+     "continuation": "Nf3"
+    },
+    {
+     "san": "Nc3",
+     "t": 844,
+     "continuation": "Nc3"
+    }
+   ],
+   "source": "yt:U7pqt57VwuU"
+  },
+  {
+   "fen": "rnbqkbnr/ppp1pppp/8/8/2pP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "lineSan": [
+    "d4",
+    "d5",
+    "c4",
+    "dxc4",
+    "Nc3"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "Nf6",
+     "t": 856.5,
+     "continuation": "Nf6"
+    },
+    {
+     "san": "e5",
+     "t": 866,
+     "continuation": "e5"
+    }
+   ],
+   "source": "yt:U7pqt57VwuU"
+  },
+  {
    "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/2N5/PPPP1PPP/R1BQK1NR b KQkq - 3 3",
    "lineSan": [
     "e4",
@@ -27764,6 +28066,51 @@
    "source": "yt:_j8aiuqS4_0"
   },
   {
+   "fen": "3rk2r/pp1qbppp/1nn1p3/1B6/3P4/2N1B3/PP3PPP/R2Q1RK1 w k - 4 14",
+   "lineSan": [
+    "e4",
+    "c5",
+    "d4",
+    "cxd4",
+    "c3",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "Nf3",
+    "d6",
+    "cxd4",
+    "Nc6",
+    "Bc4",
+    "Nb6",
+    "Bb5",
+    "dxe5",
+    "Nxe5",
+    "Bd7",
+    "Nxd7",
+    "Qxd7",
+    "Nc3",
+    "e6",
+    "O-O",
+    "Rd8",
+    "Be3",
+    "Be7"
+   ],
+   "ply": 26,
+   "options": [
+    {
+     "san": "Bf4",
+     "t": 313.5,
+     "continuation": "Bf4 Ra8 Bc1 Bf8"
+    },
+    {
+     "san": "Rc1",
+     "t": 363.5,
+     "continuation": "Rc1"
+    }
+   ],
+   "source": "yt:ac2evoOBWko"
+  },
+  {
    "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
    "lineSan": [
     "e4",
@@ -29142,6 +29489,33 @@
     }
    ],
    "source": "yt:dqYU2XP72pM"
+  },
+  {
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "lineSan": [
+    "e4",
+    "c6",
+    "d4",
+    "d5",
+    "Nc3",
+    "dxe4",
+    "Nxe4",
+    "Nf6"
+   ],
+   "ply": 8,
+   "options": [
+    {
+     "san": "f3",
+     "t": 841.5,
+     "continuation": "f3"
+    },
+    {
+     "san": "Nxf6+",
+     "t": 1137,
+     "continuation": "Nxf6+ exf6"
+    }
+   ],
+   "source": "yt:e4sg69QooO0"
   },
   {
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
