@@ -39,11 +39,27 @@ while [ $i -lt $total ]; do
     if [ -f "data/video-tracks/$id.json" ] || [ -f "data/video-pending/$id.json" ]; then
       echo "SKIP-BANKED $id"; continue
     fi
-    if ! git cat-file -e "$REF:$DIR/$id.mp4" 2>/dev/null; then
-      echo "NO-BLOB  $id"; continue
+    # A LESSON OVER 100MB ARRIVES SPLIT, AND MUST NOT GO MISSING.
+    # GitHub refuses a blob that big, so those are pushed as `.mp4.part-aa`,
+    # `.part-ab`, … Checking only for `<id>.mp4` reported NO-BLOB and moved on —
+    # 19 of the 586 on the branch, silently dropped, which is the exact shape of
+    # failure this pipeline keeps re-learning: the loop says success and the
+    # lesson is on the floor. `cat` in order is byte-exact, so the rejoined file
+    # is the one yt-dlp wrote and ffmpeg reads it unchanged.
+    if git cat-file -e "$REF:$DIR/$id.mp4" 2>/dev/null; then
+      git cat-file blob "$REF:$DIR/$id.mp4" > "$DIR/$id.mp4" 2>/dev/null \
+        || { echo "FETCH-FAIL $id"; rm -f "$DIR/$id.mp4"; continue; }
+    else
+      parts=$(git ls-tree -r --name-only "$REF" 2>/dev/null | grep -E "^$DIR/$(printf '%s' "$id" | sed 's/[][\.*^$/]/\\&/g')\.mp4\.part-" | sort)
+      if [ -z "$parts" ]; then echo "NO-BLOB  $id"; continue; fi
+      : > "$DIR/$id.mp4"
+      ok=1
+      for part in $parts; do
+        git cat-file blob "$REF:$part" >> "$DIR/$id.mp4" 2>/dev/null || { ok=0; break; }
+      done
+      if [ "$ok" -ne 1 ]; then echo "FETCH-FAIL $id (split)"; rm -f "$DIR/$id.mp4"; continue; fi
+      echo "JOINED   $id ($(printf '%s\n' $parts | wc -l) parts)"
     fi
-    git cat-file blob "$REF:$DIR/$id.mp4" > "$DIR/$id.mp4" 2>/dev/null \
-      || { echo "FETCH-FAIL $id"; rm -f "$DIR/$id.mp4"; continue; }
   done
   bash scripts/video-align/harvest-local.sh "$DIR" || echo "harvest-local returned non-zero — continuing"
   # harvest-local deletes what it banks; clear anything it kept (a crash) so the
