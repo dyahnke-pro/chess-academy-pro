@@ -242,7 +242,7 @@ import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from 
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
-import { tacticalReadFromLines } from '../../services/tacticalRead';
+import { tacticalReadFromLines, namedTacticClause } from '../../services/tacticalRead';
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText, gradeBorrowedTeaching, takeBorrowedProbeStats } from '../../services/coachAnswerGates';
@@ -7444,9 +7444,34 @@ export function CoachTeachPage(): JSX.Element {
                             // `bestReplyRanking` — a null ranking (single-PV
                             // engine, cache miss) keeps the old sentence.
                             const ranked = rankReplies(probe.fen(), studentBest);
-                            const recLine = ranked
+                            const recLineBase = ranked
                               ? bestReplyLine(ranked, recWhy)
                               : `Your strongest reply here is ${recMove.san}${recWhy}.`;
+                            // CALCULATION (DNA 2026-08-21: the measured pattern is
+                            // concrete lines over abstract principle ~5:1, and free-
+                            // play was the inverse). When the recommended move opens a
+                            // FORCING line to a named tactic the STUDENT lands, give
+                            // the concrete continuation + the point — recommend AND
+                            // calculate, the way he does. Gated to the recommendation
+                            // slot (honesty holds — the best move is already named
+                            // here) and to a real student-side tactic (else it is a
+                            // quiet move with no line to read). All board-computed via
+                            // tacticalReadFromLines (no new engine search).
+                            let recLine = recLineBase;
+                            const calcRead = studentBest?.topLines
+                              ? tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor, { maxPlies: 6 })
+                              : null;
+                            const kt = calcRead?.keyTactic ?? null;
+                            const ktPly = kt ? calcRead?.line[kt.atPly] : null;
+                            if (kt && ktPly && ktPly.moverColor === playerColor) {
+                              const point = namedTacticClause(calcRead!.line);
+                              const seq = calcRead!.line.slice(1, kt.atPly + 1).map((p) => p.san);
+                              if (point) {
+                                recLine = seq.length
+                                  ? `${recLineBase} Play it out: ${seq.join(', ')} — ${point.replace(/^The point — /, '')}`
+                                  : `${recLineBase} ${point}`;
+                              }
+                            }
                             facts.push(recLine);
                             // Track A candidate — ONLY set here, where no
                             // fork / think-aloud / priority beat withheld the

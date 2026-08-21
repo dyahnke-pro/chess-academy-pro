@@ -286,7 +286,12 @@ function findMateThreats(chess: Chess): TacticPattern[] {
         type: 'mate_threat',
         beneficiary: color,
         involvedSquares: [mate.from, mate.to],
-        description: `${color === 'w' ? 'White' : 'Black'} has a checkmate available from ${mate.from}`,
+        // "THREATENS mate", never "has a checkmate available": this probe FLIPS
+        // the side to move (withTurn), so it measures a threat if given the move,
+        // not a forced mate on the live board. "available" overstated it and read
+        // as a claim the opponent cannot parry (David 2026-08-21 false-claim
+        // audit). Only an engine-confirmed forced mate may upgrade the wording.
+        description: `${color === 'w' ? 'White' : 'Black'} threatens mate from ${mate.from}`,
       });
     }
   }
