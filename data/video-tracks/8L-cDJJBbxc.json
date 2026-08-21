@@ -548,7 +548,7 @@
    "id": "vn-tromp-the-sideline-that-skips-the-c-pawn",
    "line": "d4 Nf6 Bg5",
    "teaches": "An early bishop sortie that skips the usual second pawn move is a system, not an oversight. Meet it on its own terms rather than reaching for the move that answers the main line.",
-   "explains": "The bishop comes straight out to g5 and pins nothing — it simply attacks the knight on f6 before White has committed the c-pawn. This is one of a family of sidelines that avoid the main theoretical roads entirely. It has been overtaken in popularity by the quieter setup with the bishop on f4, and the reason is on the next move.",
+   "explains": "The bishop comes straight out to g5 and pins nothing — it simply attacks the knight on f6 before White has committed the c-pawn. This is one of a family of sidelines that avoid the main theoretical roads entirely, and it has been overtaken in popularity by its quieter cousin, where the bishop takes a safer diagonal and never invites what happens next. The reason is on Black's reply.",
    "reasons": [
     {
      "kind": "attacks",
