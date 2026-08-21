@@ -838,5 +838,155 @@
  "titleCheck": {
   "claims": "Sicilian Defense: Alapin Variation",
   "confirmed": true
- }
+ },
+ "notes": [
+  {
+   "id": "vn-alapin-d5-hit-the-centre-before-it-is-built",
+   "line": "e4 c5 c3 d5",
+   "teaches": "When the opponent spends a move preparing a big centre, strike at it before the preparation finishes. The pawn that was going to be supported is worth attacking while it still stands alone.",
+   "explains": "The pawn on c3 says the plan is to build a broad centre next move. So Black hits e4 now, while it has only one defender's worth of help, rather than waiting for the pawn to arrive on d4 with everything behind it. This is the principled answer, and it is the one that avoids the cramped positions the other replies invite.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e4"
+    }
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pp4/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "t": 28.5,
+   "ply": 4,
+   "source": "yt:kWk-UW7GdnY"
+  },
+  {
+   "id": "vn-alapin-d5-the-pawn-that-has-to-be-taken",
+   "line": "e4 c5 c3 d5 exd5",
+   "teaches": "A capture that is forced is still a choice about what comes next. Take when declining would hand the opponent the centre for free, then think about who recaptures.",
+   "explains": "White takes, and now the question is which black piece takes back. The pawn on d5 is temporary either way: it holds c6 and e6 for a moment, and Black will remove it. What matters is which recapture leaves Black better placed for what comes after, and that is where the two roads split.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e6"
+    },
+    {
+     "kind": "controls",
+     "square": "c6"
+    }
+   ],
+   "fen": "rnbqkbnr/pp2pppp/8/2pP4/8/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+   "t": 34.5,
+   "ply": 5,
+   "source": "yt:kWk-UW7GdnY"
+  },
+  {
+   "id": "vn-alapin-d5-develop-and-recapture-in-one",
+   "line": "e4 c5 c3 d5 exd5 Nf6",
+   "teaches": "When a recapture is available to two pieces, prefer the one that develops. Bringing the queen out to grab a pawn invites the tempo moves that undo the grab.",
+   "explains": "Rather than snatching the pawn immediately with the queen, the knight comes out and attacks it. The pawn is not running anywhere, so Black gets a developing move for free and avoids the queen being chased around the board with tempo. It is a small ordering decision that is worth a move.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d5"
+    }
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 1 4",
+   "t": 1183.5,
+   "ply": 6,
+   "source": "yt:kWk-UW7GdnY"
+  },
+  {
+   "id": "vn-alapin-d5-the-structure-white-is-steering-for",
+   "line": "e4 c5 c3 d5 exd5 Nf6 d4",
+   "teaches": "Recognise the structure a move is aiming for, not just the move. An isolated queen's pawn is a plan — squares and initiative in exchange for a permanent weakness — and knowing which side of it you are on decides everything after.",
+   "explains": "The pawn goes to d4 and hits c5, and the shape of the whole game is now settled: the pawns will come off and White will be left with a lone pawn on d4. That structure is a real weapon — it hands White the e5 and c5 squares and open files for the pieces — but only when the defender has no piece sitting in front of the pawn.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c5"
+    }
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "t": 35.5,
+   "ply": 7,
+   "source": "yt:kWk-UW7GdnY"
+  },
+  {
+   "id": "vn-alapin-d5-take-and-let-the-file-open",
+   "line": "e4 c5 c3 d5 exd5 Nf6 d4 cxd4",
+   "teaches": "Trade into the structure you are happy to defend. Opening a file for the opponent is fine when the pawn you leave behind is the one that can never be defended by another pawn.",
+   "explains": "Black takes, and the pawn on d4 now touches c3. White will take back and the c-file opens for both sides. That is the deal being struck here: White accepts a pawn that no other pawn can ever protect, in return for space and open lines, and Black accepts the open lines in return for a permanent target.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c3"
+    }
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/3P4/3p4/2P5/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "t": 1200,
+   "ply": 8,
+   "source": "yt:kWk-UW7GdnY"
+  },
+  {
+   "id": "vn-alapin-d5-the-isolated-pawn-is-now-on-the-board",
+   "line": "e4 c5 c3 d5 exd5 Nf6 d4 cxd4 cxd4",
+   "teaches": "An isolated pawn is strong exactly as long as it can advance. Judge the position by whether the square in front of it is available, not by the pawn count.",
+   "explains": "White recaptures and there it is: a pawn on d4 with no neighbour on the c- or e-file, holding the squares in front of it and pointing at the black position. Whether it is an asset or a liability comes down to one square — the one directly ahead of it. If a black piece settles there for good, the pawn stops being a spearhead and becomes something to defend.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ],
+   "fen": "rnbqkb1r/pp2pppp/5n2/3P4/3P4/8/PP3PPP/RNBQKBNR b KQkq - 0 5",
+   "t": 42,
+   "ply": 9,
+   "source": "yt:kWk-UW7GdnY"
+  },
+  {
+   "id": "vn-alapin-d5-the-blockader-arrives-early",
+   "line": "e4 c5 c3 d5 exd5 Nf6 d4 cxd4 cxd4 Nxd5",
+   "teaches": "Against an isolated pawn, the blockading square is the prize. Reaching it with a knight, and reaching it before the opponent is developed, is the version every defender is hoping for.",
+   "explains": "The knight recaptures on d5 and, without spending a single extra move, it is standing exactly where a defender wants to be — directly in front of the isolated pawn, where no pawn can ever chase it away. From there it also contests c3, the square White's own knight wants. The structure still favours nobody outright: White develops the knight and the position steers into well-charted territory. But this is the comfortable side of it.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "c3"
+    }
+   ],
+   "fen": "rnbqkb1r/pp2pppp/8/3n4/3P4/8/PP3PPP/RNBQKBNR w KQkq - 0 6",
+   "t": 51,
+   "ply": 10,
+   "source": "yt:kWk-UW7GdnY"
+  },
+  {
+   "id": "vn-alapin-d5-develop-behind-the-pawn-you-must-hold",
+   "line": "e4 c5 c3 d5 exd5 Nf6 d4 cxd4 cxd4 Nxd5 Nf3",
+   "teaches": "Develop the pieces that defend the weakness first. With an isolated pawn, every move that both develops and guards it is a move you did not have to spend later.",
+   "explains": "The knight comes to f3, where it adds a defender to d4 while getting out. That is the pattern for the side with the isolated pawn: pieces first, and preferably pieces that touch the pawn on the way past, because the defender will be aiming everything at it. Trading pieces helps Black; keeping them on helps White.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    }
+   ],
+   "fen": "rnbqkb1r/pp2pppp/8/3n4/3P4/5N2/PP3PPP/RNBQKB1R b KQkq - 1 6",
+   "t": 67.5,
+   "ply": 11,
+   "source": "yt:kWk-UW7GdnY"
+  },
+  {
+   "id": "vn-alapin-d5-every-developing-move-points-at-the-pawn",
+   "line": "e4 c5 c3 d5 exd5 Nf6 d4 cxd4 cxd4 Nxd5 Nf3 Nc6",
+   "teaches": "Against an isolated pawn, develop toward it. Attackers cost the opponent defenders, and a piece pinned to defensive duty has stopped playing.",
+   "explains": "The knight comes out and leans on d4 as it does so. That is the whole defensive method in one move: put the blockader in front of the pawn, then bring every other piece to bear on it, so each new attacker forces a new defender. Nobody has an advantage yet — but every piece Black develops has a job, and White's have to be arranged around one square.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d4"
+    }
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2n5/3n4/3P4/5N2/PP3PPP/RNBQKB1R w KQkq - 2 7",
+   "t": 69.5,
+   "ply": 12,
+   "source": "yt:kWk-UW7GdnY"
+  }
+ ]
 }
