@@ -1,8 +1,8 @@
 {
  "generatedAt": "2026-08-21",
- "videosDistilled": 196,
- "noteCount": 534,
- "forkCount": 516,
+ "videosDistilled": 197,
+ "noteCount": 538,
+ "forkCount": 517,
  "notes": [
   {
    "id": "vn-advance-e6-cover-the-check-square-before-the-trade",
@@ -11936,6 +11936,135 @@
      "san": "e5"
     }
    ]
+  },
+  {
+   "id": "vn-danish-develop-before-you-strike",
+   "lineSan": [
+    "d4",
+    "e5",
+    "e4",
+    "exd4",
+    "c3",
+    "dxc3",
+    "Bc4",
+    "cxb2",
+    "Bxb2",
+    "c6",
+    "Nf3"
+   ],
+   "opening": "Danish Gambit Accepted",
+   "phase": "opening",
+   "explains": "The knight develops to f3, completing White's mobilisation rather than lunging. Having given up two pawns for the lead in development, White converts it patiently — there is no rush while the extra pieces are still coming out.",
+   "teaches": "In a gambit you have paid material for time, so spend that time on development, not on premature threats. With only a couple of pieces out there is nothing real to attack yet; finish mobilising first and the initiative you bought will still be there.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:dowe5Oy7u_Y"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ]
+  },
+  {
+   "id": "vn-danish-block-the-check-with-development",
+   "lineSan": [
+    "d4",
+    "e5",
+    "e4",
+    "exd4",
+    "c3",
+    "dxc3",
+    "Bc4",
+    "cxb2",
+    "Bxb2",
+    "c6",
+    "Nf3",
+    "Bb4+",
+    "Nbd2"
+   ],
+   "opening": "Danish Gambit Accepted",
+   "phase": "opening",
+   "explains": "The knight blocks the check on d2 while developing, keeping White's right to castle intact. Shuffling the king in the centre would have solved the check too, but at the cost of king safety later.",
+   "teaches": "Meet a check by blocking with a developing move wherever you can, rather than by moving the king out of its castling rights. The interposition that also brings a piece into play answers the check and improves your position at the same time.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:dowe5Oy7u_Y"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "blocks",
+     "from": "b4",
+     "to": "e1"
+    }
+   ]
+  },
+  {
+   "id": "vn-danish-battery-punishes-the-f6-weakening",
+   "lineSan": [
+    "d4",
+    "e5",
+    "e4",
+    "exd4",
+    "c3",
+    "dxc3",
+    "Bc4",
+    "cxb2",
+    "Bxb2",
+    "c6",
+    "Nf3",
+    "Bb4+",
+    "Nbd2",
+    "f6",
+    "Qb3"
+   ],
+   "opening": "Danish Gambit Accepted",
+   "phase": "opening",
+   "explains": "The queen comes to b3, forming a battery behind the c4-bishop that bears down toward f7, while the whole position leans on the exposed light squares that the f6 push created. Black's undeveloped kingside knight has no easy way out.",
+   "teaches": "When the opponent weakens the shield in front of their king with a pawn move, aim pieces at the squares it exposed. A queen lined up behind a bishop on the same diagonal creates pressure toward the king that a single piece never could.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:dowe5Oy7u_Y"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-danish-recapture-that-keeps-the-bind",
+   "lineSan": [
+    "d4",
+    "e5",
+    "e4",
+    "exd4",
+    "c3",
+    "dxc3",
+    "Bc4",
+    "cxb2",
+    "Bxb2",
+    "c6",
+    "Nf3",
+    "Bb4+",
+    "Nbd2",
+    "f6",
+    "Qb3",
+    "Bxd2+",
+    "Nxd2"
+   ],
+   "opening": "Danish Gambit Accepted",
+   "phase": "opening",
+   "explains": "Recapturing with the knight keeps White's pieces coordinated toward the king, which still cannot castle with the bishops raking the long diagonals. It is the recapture that maintains the bind rather than easing it.",
+   "teaches": "When two pieces can recapture, take with the one that keeps your force aimed at the target. Preserving the pieces that restrict the enemy king matters more than a tidy-looking recapture with the other man.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:dowe5Oy7u_Y"
+   ],
+   "positionSource": "high"
   },
   {
    "id": "vn-jobavatake-take-the-pawn-and-keep-the-squares",
@@ -32245,6 +32374,65 @@
     }
    ],
    "source": "yt:dEjoCta8oOQ"
+  },
+  {
+   "fen": "rk5r/pb1p2pp/2n4n/1NRBqp2/8/1Q6/P4PPP/3R2K1 w - - 1 21",
+   "lineSan": [
+    "d4",
+    "e5",
+    "e4",
+    "exd4",
+    "c3",
+    "dxc3",
+    "Bc4",
+    "cxb2",
+    "Bxb2",
+    "c6",
+    "Nf3",
+    "Bb4+",
+    "Nbd2",
+    "f6",
+    "Qb3",
+    "Bxd2+",
+    "Nxd2",
+    "Nh6",
+    "O-O",
+    "Qe7",
+    "e5",
+    "f5",
+    "Ba3",
+    "c5",
+    "Bd5",
+    "Nc6",
+    "Nc4",
+    "Kd8",
+    "Nd6",
+    "b6",
+    "Rfd1",
+    "Kc7",
+    "Rac1",
+    "Qxe5",
+    "Nb5+",
+    "Kb8",
+    "Bxc5",
+    "bxc5",
+    "Rxc5",
+    "Bb7"
+   ],
+   "ply": 40,
+   "options": [
+    {
+     "san": "Nd6",
+     "t": 884.5,
+     "continuation": "Nd6"
+    },
+    {
+     "san": "Nd4",
+     "t": 897,
+     "continuation": "Nd4"
+    }
+   ],
+   "source": "yt:dowe5Oy7u_Y"
   },
   {
    "fen": "r3qrk1/1p2bppp/p1n1b3/2Ppp1B1/1P2n3/P1N1PN2/2P1BPPP/R2Q1RK1 w - - 7 12",

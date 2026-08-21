@@ -632,5 +632,62 @@
   "claims": null,
   "confirmed": null,
   "unverifiable": "title names no opening"
- }
+ },
+ "notes": [
+  {
+   "id": "vn-danish-develop-before-you-strike",
+   "line": "d4 e5 e4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 c6 Nf3",
+   "teaches": "In a gambit you have paid material for time, so spend that time on development, not on premature threats. With only a couple of pieces out there is nothing real to attack yet; finish mobilising first and the initiative you bought will still be there.",
+   "explains": "The knight develops to f3, completing White's mobilisation rather than lunging. Having given up two pawns for the lead in development, White converts it patiently — there is no rush while the extra pieces are still coming out.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/2p5/8/2B1P3/5N2/PB3PPP/RN1QK2R b KQkq - 1 6",
+   "t": 78.5,
+   "ply": 11,
+   "source": "yt:dowe5Oy7u_Y"
+  },
+  {
+   "id": "vn-danish-block-the-check-with-development",
+   "line": "d4 e5 e4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 c6 Nf3 Bb4+ Nbd2",
+   "teaches": "Meet a check by blocking with a developing move wherever you can, rather than by moving the king out of its castling rights. The interposition that also brings a piece into play answers the check and improves your position at the same time.",
+   "explains": "The knight blocks the check on d2 while developing, keeping White's right to castle intact. Shuffling the king in the centre would have solved the check too, but at the cost of king safety later.",
+   "reasons": [
+    {
+     "kind": "blocks",
+     "from": "b4",
+     "to": "e1"
+    }
+   ],
+   "fen": "rnbqk1nr/pp1p1ppp/2p5/8/1bB1P3/5N2/PB1N1PPP/R2QK2R b KQkq - 3 7",
+   "t": 139,
+   "ply": 13,
+   "source": "yt:dowe5Oy7u_Y"
+  },
+  {
+   "id": "vn-danish-battery-punishes-the-f6-weakening",
+   "line": "d4 e5 e4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 c6 Nf3 Bb4+ Nbd2 f6 Qb3",
+   "teaches": "When the opponent weakens the shield in front of their king with a pawn move, aim pieces at the squares it exposed. A queen lined up behind a bishop on the same diagonal creates pressure toward the king that a single piece never could.",
+   "explains": "The queen comes to b3, forming a battery behind the c4-bishop that bears down toward f7, while the whole position leans on the exposed light squares that the f6 push created. Black's undeveloped kingside knight has no easy way out.",
+   "reasons": [],
+   "fen": "rnbqk1nr/pp1p2pp/2p2p2/8/1bB1P3/1Q3N2/PB1N1PPP/R3K2R b KQkq - 1 8",
+   "t": 216,
+   "ply": 15,
+   "source": "yt:dowe5Oy7u_Y"
+  },
+  {
+   "id": "vn-danish-recapture-that-keeps-the-bind",
+   "line": "d4 e5 e4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 c6 Nf3 Bb4+ Nbd2 f6 Qb3 Bxd2+ Nxd2",
+   "teaches": "When two pieces can recapture, take with the one that keeps your force aimed at the target. Preserving the pieces that restrict the enemy king matters more than a tidy-looking recapture with the other man.",
+   "explains": "Recapturing with the knight keeps White's pieces coordinated toward the king, which still cannot castle with the bishops raking the long diagonals. It is the recapture that maintains the bind rather than easing it.",
+   "reasons": [],
+   "fen": "rnbqk1nr/pp1p2pp/2p2p2/8/2B1P3/1Q6/PB1N1PPP/R3K2R b KQkq - 0 9",
+   "t": 267.5,
+   "ply": 17,
+   "source": "yt:dowe5Oy7u_Y"
+  }
+ ]
 }
