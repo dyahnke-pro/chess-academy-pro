@@ -1,0 +1,405 @@
+{
+ "videoId": "emogd1h6o9A",
+ "title": "Grandmaster Naroditsky US Chess Championship | Vs Timur Gareyev",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 10.5,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "you know i didn't feel amazing at the start of the game it was a little sluggish but uh i got warmed up pretty quickly so let's jump in i played e4 teamwork played e5 and timor had uh beaten me in a pro chesley game a couple of years back in the in the rye lopez and"
+  },
+  {
+   "ply": 3,
+   "t": 28,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "said": "i i didn't want to repeat that i thought he might have prepared against that rye lopez given that that's my main line um so i decided on on a whim to play the bishops opening bishop c4 hikaru plays this against me all the time it's very very fashionable and i would say it's it's it's not the same as the italian uh and the difference between this and the italian is that white doesn't develop the knights f3 and the reason that that can be important is that uh white is four ideas at various points in this line there are there are drawbacks and one of those drawbacks is is uh evidenced by timur in this game you'll see almost straight away why"
+  },
+  {
+   "ply": 5,
+   "t": 68,
+   "line": [
+    "Nf6",
+    "d3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2B1P3/3P4/PPP2PPP/RNBQK1NR b KQkq - 0 3",
+   "said": "you play knight f3 in the first place thank you hojo jordan [Music] knight f6 by timor d3 and one of the upsides of of d3 over knight c3 is that black has this"
+  },
+  {
+   "ply": 9,
+   "t": 77,
+   "line": [
+    "d5",
+    "Nd2",
+    "Nxe4",
+    "dxe4"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/8/3pp3/2B1P3/8/PPPN1PPP/R1BQK1NR b KQkq - 0 5",
+   "said": "truck that i've shown many times in the speed run knight take c4 and d5 uh of course here what white is great h5"
+  },
+  {
+   "ply": 5,
+   "t": 82,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2B1P3/3P4/PPP2PPP/RNBQK1NR b KQkq - 0 3",
+   "said": "and that's a different theoretical line but d3 skirts that entirely i play just one"
+  },
+  {
+   "ply": 6,
+   "t": 84,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/3P4/PPP2PPP/RNBQK1NR w KQkq - 1 4",
+   "said": "game result knight c6 knight c3"
+  },
+  {
+   "ply": 7,
+   "t": 87,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/2NP4/PPP2PPP/R1BQK1NR b KQkq - 2 4",
+   "said": "that's completely right as there's monkey so this is still very much theory i'm gonna be checking a reference to show you guys whether this was theory at which point the theory um the theory sort of you know ended uh let me just do one more thing i'm going to add the reference the reference tab so you guys can basically see what i'm seeing in regards to uh chessbase's reference feature which allows us to look up all the games played through that 10 gifted subs holy spokes this is unbelievable ah this might be this is just insane ladies and gentlemen absolutely insane man the amount gifted just one bomb after another after another thank you guys huh amazing stuff all right well what i'm going to do here is i'm going to all right we're good so basically you guys can see i've activated the"
+  },
+  {
+   "ply": 8,
+   "t": 159,
+   "line": [
+    "Na5"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/n3p3/2B1P3/2NP4/PPP2PPP/R1BQK1NR w KQkq - 3 5",
+   "said": "reference feature thank you so much mustachiola you won all right guys so you can see that this is a very topical line thousands of games and timor played knight a5 which is the main move uh which is a very simple move you're trying to eliminate the bishop"
+  },
+  {
+   "ply": 9,
+   "t": 169,
+   "line": [
+    "Nge2"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/n3p3/2B1P3/2NP4/PPP1NPPP/R1BQK2R b KQkq - 4 5",
+   "said": "white can't prevent that from happening but that's part of the plan and here i want i go knight g2 which is the main move now a lot of people looking at this who have not played this line uh would i imagine be a little bit"
+  },
+  {
+   "ply": 10,
+   "t": 181,
+   "line": [
+    "Nxc4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/4p3/2n1P3/2NP4/PPP1NPPP/R1BQK2R w KQkq - 0 6",
+   "said": "surprised 500 bits from dw0124 at the fact that i'm allowing black to"
+  },
+  {
+   "ply": 11,
+   "t": 182,
+   "line": [
+    "dxc4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/4p3/2P1P3/2N5/PPP1NPPP/R1BQK2R b KQkq - 0 6",
+   "said": "my pawns on the on the queen side why don't i like i i love it ladder and never never said that um of course i did yokta the prime and 100 bits from the backup and essentially i i've talked about this several times in in the speed run among other things um the fact that the pawns are double does not tell the whole story and what you should be paying attention to here thank you mean sweet bean for the prime is the fact that white has this clamp going on the d5 square and that is a very important clamp because white essentially has superior"
+  },
+  {
+   "ply": 12,
+   "t": 227.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2p2n2/4p3/2P1P3/2N5/PPP1NPPP/R1BQK2R w KQkq - 0 7",
+   "said": "central control here this structure to me uh is actually quite unpleasant for black the computer often thinks this is equal sorry computer often thinks this is equal i feel like white has the more pleasant play here because it's very very hard for black to ever institute uh orchestrate the d5"
+  },
+  {
+   "ply": 9,
+   "t": 234,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/n3p3/2B1P3/2NP4/PPP1NPPP/R1BQK2R b KQkq - 4 5",
+   "said": "pawn break right so teamwork holds off on that he goes c6"
+  },
+  {
+   "ply": 10,
+   "t": 235,
+   "line": [
+    "c6"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2p2n2/n3p3/2B1P3/2NP4/PPP1NPPP/R1BQK2R w KQkq - 0 6",
+   "said": "let's check whether this is the main"
+  },
+  {
+   "ply": 9,
+   "t": 237.5,
+   "line": [],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/n3p3/2B1P3/2NP4/PPP1NPPP/R1BQK2R b KQkq - 4 5",
+   "said": "line uh this is not the main line i take c4 you can see is more popular but look at the white score is 52 by the way the chess"
+  },
+  {
+   "ply": 10,
+   "t": 250.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2p2n2/n3p3/2B1P3/2NP4/PPP1NPPP/R1BQK2R w KQkq - 0 6",
+   "said": "base when it gives you the score it's always from white's perspective uh 52 and c6 scores very very well uh it scores over 50 for black now i decided to go bishop b3 which is"
+  },
+  {
+   "ply": 11,
+   "t": 263.5,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2p2n2/n3p3/4P3/1BNP4/PPP1NPPP/R1BQK2R b KQkq - 1 6",
+   "said": "very rare and this shows you that i don't really know the theory of this line very well so i played a move that's only been played five times i was played by some decent players why"
+  },
+  {
+   "ply": 10,
+   "t": 269.5,
+   "line": [],
+   "fen": "r1bqkb1r/pp1p1ppp/2p2n2/n3p3/2B1P3/2NP4/PPP1NPPP/R1BQK2R w KQkq - 0 6",
+   "said": "did i go bishop e3 well my rationale was that if i were to castle"
+  },
+  {
+   "ply": 11,
+   "t": 273.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2p2n2/n3p3/2B1P3/2NP4/PPP1NPPP/R1BQ1RK1 b kq - 1 6",
+   "said": "immediately i was a little bit concerned that d5"
+  },
+  {
+   "ply": 12,
+   "t": 276,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2p2n2/n2pp3/2B1P3/2NP4/PPP1NPPP/R1BQ1RK1 w kq - 0 7",
+   "said": "would come with tempo it would come by attacking the bishop although clearly as the theory evidence is"
+  },
+  {
+   "ply": 13,
+   "t": 285,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2p2n2/n2Pp3/2B5/2NP4/PPP1NPPP/R1BQ1RK1 b kq - 0 7",
+   "said": "this is not an issue uh and the reason this is not an issue"
+  },
+  {
+   "ply": 14,
+   "t": 286,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/5n2/n2pp3/2B5/2NP4/PPP1NPPP/R1BQ1RK1 w kq - 0 8",
+   "said": "is probably because black is unable to"
+  },
+  {
+   "ply": 15,
+   "t": 287,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/5n2/nB1pp3/8/2NP4/PPP1NPPP/R1BQ1RK1 b kq - 1 8",
+   "said": "hold together"
+  },
+  {
+   "ply": 16,
+   "t": 289,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/1B1pp3/8/2NP4/PPP1NPPP/R1BQ1RK1 w kq - 2 9",
+   "said": "his cent his center white immediately"
+  },
+  {
+   "ply": 17,
+   "t": 290,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/1B1pp3/3P4/2N5/PPP1NPPP/R1BQ1RK1 b kq - 0 9",
+   "said": "starts attacking the center"
+  },
+  {
+   "ply": 19,
+   "t": 292.5,
+   "line": [
+    "e4",
+    "Bg5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2n2n2/1B1p2B1/3Pp3/2N5/PPP1NPPP/R2Q1RK1 b kq - 1 10",
+   "said": "and white's pieces just come out really quickly and and i guess black is not holding stuff holding stuff together uh so this just shows you why it pays to like actually know an opening"
+  },
+  {
+   "ply": 10,
+   "t": 310.5,
+   "line": [],
+   "fen": "r1bqkb1r/pp1p1ppp/2p2n2/n3p3/2B1P3/2NP4/PPP1NPPP/R1BQK2R w KQkq - 0 6",
+   "said": "uh let me remove this yeah so this is where we basically exited out of the theory so i go bishop b3 i"
+  },
+  {
+   "ply": 11,
+   "t": 311.5,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2p2n2/n3p3/4P3/1BNP4/PPP1NPPP/R1BQK2R b KQkq - 1 6",
+   "said": "don't think this is a big mistake i think that maybe it's just a little bit inaccurate"
+  },
+  {
+   "ply": 12,
+   "t": 316.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1bqk2r/pp1p1ppp/2p2n2/n1b1p3/4P3/1BNP4/PPP1NPPP/R1BQK2R w KQkq - 2 7",
+   "said": "and timor goes bishop to c5 now"
+  },
+  {
+   "ply": 11,
+   "t": 321,
+   "line": [],
+   "fen": "r1bqkb1r/pp1p1ppp/2p2n2/n3p3/4P3/1BNP4/PPP1NPPP/R1BQK2R b KQkq - 1 6",
+   "said": "obviously he can now take on b3 and"
+  },
+  {
+   "ply": 12,
+   "t": 323,
+   "line": [
+    "Nxb3"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2p2n2/4p3/4P3/1nNP4/PPP1NPPP/R1BQK2R w KQkq - 0 7",
+   "said": "i can no longer get that structure i was"
+  },
+  {
+   "ply": 13,
+   "t": 328,
+   "line": [
+    "axb3"
+   ],
+   "fen": "r1bqkb1r/pp1p1ppp/2p2n2/4p3/4P3/1PNP4/1PP1NPPP/R1BQK2R b KQkq - 0 7",
+   "said": "talking about thank you rob bell hingham for the prime but i play a takes b3 i still have double pawns now i have nice control over the a file i have pressure on the a file and i thought that this structure i've analyzed it before a little bit was also quite interesting and and very much combative it's 90 plus 30 gaming 90 plus 30 second increment per move so classical time control teamwork develops this bishop castle castle castles castles captures captures and now pause the video and try to find the move a bishop a bush hg5 here and uh he simply resigned the game uh and each gary over the draw okay and i will take a sip of my water okay so so far we've just been basically developing our pieces nothing to write home about h6 bishop h4 is frequently thrown in in these positions and teamwork took a long time here i i would say almost 15 minutes uh because this pin is super annoying and white has two main plans in this position and he can combine them he can orchest he can orchestrate only one of them"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2B1P3/3P4/PPP2PPP/RNBQK1NR b KQkq - 0 3",
+   "line": [
+    "e4",
+    "e5",
+    "Bc4",
+    "Nf6",
+    "d3"
+   ],
+   "options": [
+    {
+     "san": "d5",
+     "t": 77,
+     "continuation": "d5 Nd2 Nxe4 dxe4",
+     "said": "[Music] knight f6 by timor d3 and one of the upsides of of d3 over knight c3 is that black has this truck that i've shown many times in the speed run knight take c4 and d5 uh of course here what white is great h5 and that's a different theoretical line but d3 skirts that entirely i play just one game result knight c6 knight c3 that's completely right as there's monkey so this is still very much theory i'm gonna be checking a reference to show you guys whether this was theory at which point the theory um the theory sort of you know ended uh let me just do one more thing i'm going to add the reference the reference tab so you guys can basically see what i'm seeing in regards to uh chessbase's reference feature which allows us to look up all the games played through that 10 gifted subs holy spokes this is unbelievable ah this might be this is just insane ladies and gentlemen absolutely insane man the amount gifted just one bomb after another after another thank you guys"
+    },
+    {
+     "san": "Nc6",
+     "t": 84,
+     "continuation": "Nc6",
+     "said": "over knight c3 is that black has this truck that i've shown many times in the speed run knight take c4 and d5 uh of course here what white is great h5 and that's a different theoretical line but d3 skirts that entirely i play just one game result knight c6 knight c3 that's completely right as there's monkey so this is still very much theory i'm gonna be checking a reference to show you guys whether this was theory at which point the theory um the theory sort of you know ended uh let me just do one more thing i'm going to add the reference the reference tab so you guys can basically see what i'm seeing in regards to uh chessbase's reference feature which allows us to look up all the games played through that 10 gifted subs holy spokes this is unbelievable ah this might be this is just insane ladies and gentlemen absolutely insane man the amount gifted just one bomb after another after another thank you guys huh amazing stuff all right well what i'm going to do here is i'm going to all right we're good so basically you"
+    }
+   ]
+  },
+  {
+   "ply": 9,
+   "fen": "r1bqkb1r/pppp1ppp/5n2/n3p3/2B1P3/2NP4/PPP1NPPP/R1BQK2R b KQkq - 4 5",
+   "line": [
+    "e4",
+    "e5",
+    "Bc4",
+    "Nf6",
+    "d3",
+    "Nc6",
+    "Nc3",
+    "Na5",
+    "Nge2"
+   ],
+   "options": [
+    {
+     "san": "Nxc4",
+     "t": 181,
+     "continuation": "Nxc4",
+     "said": "move now a lot of people looking at this who have not played this line uh would i imagine be a little bit surprised 500 bits from dw0124 at the fact that i'm allowing black to my pawns on the on the queen side why don't i like i i love it ladder and never never said that um of course i did yokta the prime and 100 bits from the backup and essentially i i've talked about this several times in in the speed run among other things um the fact that the pawns are double does not tell the whole story and what you should be paying attention to here thank you mean sweet bean for the prime is the fact that white has this clamp going on the d5 square and that is a very important clamp because white essentially has superior central control here this structure to me uh is actually quite unpleasant for black the computer often thinks this is equal sorry computer often thinks this is equal i feel like white has the more pleasant play here because it's very very hard for black to ever institute uh orchestrate the d5 pawn break right so teamwork holds off on that he goes c6 let's check whether this is the main line uh this is not the main line i take c4"
+    },
+    {
+     "san": "c6",
+     "t": 235,
+     "continuation": "c6",
+     "said": "feel like white has the more pleasant play here because it's very very hard for black to ever institute uh orchestrate the d5 pawn break right so teamwork holds off on that he goes c6 let's check whether this is the main line uh this is not the main line i take c4 you can see is more popular but look at the white score is 52 by the way the chess base when it gives you the score it's always from white's perspective uh 52 and c6 scores very very well uh it scores over 50 for black now i decided to go bishop b3 which is very rare and this shows you that i don't really know the theory of this line very well so i played a move that's only been played five times i was played by some decent players why did i go bishop e3 well my rationale was that if i were to castle immediately i was a little bit concerned that d5 would come with tempo it would come by attacking the bishop although clearly as the theory evidence is this is not an issue uh and the reason this is not an issue is probably because black is unable to hold together his cent his center white immediately starts attacking the center and white's pieces just come out really quickly and and i guess black is not"
+    }
+   ]
+  },
+  {
+   "ply": 10,
+   "fen": "r1bqkb1r/pp1p1ppp/2p2n2/n3p3/2B1P3/2NP4/PPP1NPPP/R1BQK2R w KQkq - 0 6",
+   "line": [
+    "e4",
+    "e5",
+    "Bc4",
+    "Nf6",
+    "d3",
+    "Nc6",
+    "Nc3",
+    "Na5",
+    "Nge2",
+    "c6"
+   ],
+   "options": [
+    {
+     "san": "Bb3",
+     "t": 263.5,
+     "continuation": "Bb3",
+     "said": "uh it scores over 50 for black now i decided to go bishop b3 which is very rare and this shows you that i don't really know the theory of this line very well so i played a move that's only been played five times i was played by some decent players why did i go bishop e3 well my rationale was that if i were to castle immediately i was a little bit concerned that d5 would come with tempo it would come by attacking the bishop although clearly as the theory evidence is this is not an issue uh and the reason this is not an issue is probably because black is unable to hold together his cent his center white immediately starts attacking the center and white's pieces just come out really quickly and and i guess black is not holding stuff holding stuff together uh so this just shows you why it pays to like actually know an opening uh let me remove this yeah so this is where we basically exited out of the theory so i go bishop b3 i don't think this is a big mistake i think that maybe it's just a little bit inaccurate and timor goes bishop to c5 now obviously he can now take on b3 and"
+    },
+    {
+     "san": "O-O",
+     "t": 273.5,
+     "continuation": "O-O",
+     "said": "the theory of this line very well so i played a move that's only been played five times i was played by some decent players why did i go bishop e3 well my rationale was that if i were to castle immediately i was a little bit concerned that d5 would come with tempo it would come by attacking the bishop although clearly as the theory evidence is this is not an issue uh and the reason this is not an issue is probably because black is unable to hold together his cent his center white immediately starts attacking the center and white's pieces just come out really quickly and and i guess black is not holding stuff holding stuff together uh so this just shows you why it pays to like actually know an opening uh let me remove this yeah so this is where we basically exited out of the theory so i go bishop b3 i don't think this is a big mistake i think that maybe it's just a little bit inaccurate and timor goes bishop to c5 now obviously he can now take on b3 and i can no longer get that structure i was talking about thank you rob bell hingham for the prime but i play a takes b3 i still have double pawns now i have nice control over the a file i have pressure on the a file"
+    }
+   ]
+  },
+  {
+   "ply": 11,
+   "fen": "r1bqkb1r/pp1p1ppp/2p2n2/n3p3/4P3/1BNP4/PPP1NPPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "e4",
+    "e5",
+    "Bc4",
+    "Nf6",
+    "d3",
+    "Nc6",
+    "Nc3",
+    "Na5",
+    "Nge2",
+    "c6",
+    "Bb3"
+   ],
+   "options": [
+    {
+     "san": "Bc5",
+     "t": 316.5,
+     "continuation": "Bc5",
+     "said": "where we basically exited out of the theory so i go bishop b3 i don't think this is a big mistake i think that maybe it's just a little bit inaccurate and timor goes bishop to c5 now obviously he can now take on b3 and i can no longer get that structure i was talking about thank you rob bell hingham for the prime but i play a takes b3 i still have double pawns now i have nice control over the a file i have pressure on the a file and i thought that this structure i've analyzed it before a little bit was also quite interesting and and very much combative it's 90 plus 30 gaming 90 plus 30 second increment per move so classical time control teamwork develops this bishop castle castle castles castles captures captures and now pause the video and try to find the move a bishop a bush hg5 here and uh he simply resigned the game uh and each gary over the draw okay and i will take a sip of my water okay so so far we've just been basically developing our pieces nothing to write home about h6 bishop h4 is frequently thrown in in these positions and teamwork took a long time here i i"
+    },
+    {
+     "san": "Nxb3",
+     "t": 323,
+     "continuation": "Nxb3",
+     "said": "don't think this is a big mistake i think that maybe it's just a little bit inaccurate and timor goes bishop to c5 now obviously he can now take on b3 and i can no longer get that structure i was talking about thank you rob bell hingham for the prime but i play a takes b3 i still have double pawns now i have nice control over the a file i have pressure on the a file and i thought that this structure i've analyzed it before a little bit was also quite interesting and and very much combative it's 90 plus 30 gaming 90 plus 30 second increment per move so classical time control teamwork develops this bishop castle castle castles castles captures captures and now pause the video and try to find the move a bishop a bush hg5 here and uh he simply resigned the game uh and each gary over the draw okay and i will take a sip of my water okay so so far we've just been basically developing our pieces nothing to write home about h6 bishop h4 is frequently thrown in in these positions and teamwork took a long time here i i would say almost 15 minutes uh because this pin is super annoying and white has two main plans in this"
+    }
+   ]
+  }
+ ]
+}

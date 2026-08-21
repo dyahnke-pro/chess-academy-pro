@@ -1,0 +1,634 @@
+{
+ "videoId": "8Q_A2tEn2ko",
+ "title": "Chess Lessons with GM Daniel Naroditsky and GoldDustTori | Part I",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 326,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "and Tori has started her game she's playing white against mr. al-sheikh for hoping that you guys can see everything fine Andy forty-five has been played curtis"
+  },
+  {
+   "ply": 3,
+   "t": 337,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "mistake night of three okay so this is"
+  },
+  {
+   "ply": 4,
+   "t": 339,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "of course standard night seasick let's see what Tori what opening Tori chooses I mean I think most people who are starting to play usually play the Italian which is kind of the rite of passage opening but um you know right"
+  },
+  {
+   "ply": 5,
+   "t": 361.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "Lopez scotch there's a lot of good opening sartorius Tori's probably thinking about which line to choose she's playing perfectly so far basic Knight c3 the four Knights also a perfectly viable opening choice so this is completely lost Oh Bishop c5 so Tori can resigned here she is she has already made three mistakes out of three moves I have no more interest in comment the rest is easy just kidding so Bishop c5 is an interesting I mean of course as you guys"
+  },
+  {
+   "ply": 7,
+   "t": 394,
+   "line": [
+    "Bc5",
+    "Bc4"
+   ],
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R b KQkq - 5 4",
+   "said": "probably know Knight f6 here is um is the main move leading into the four Knights what is the drawback of Bishop c5 the drawback is that white now has the move Knight takes e5 the point being after Knight takes e5 there's d4 Tory decides to play Bishop c4 which is also of course completely fine now Knight f6 transposes back to the four Knights and we'll see what-what el-sheikh plays I mean I have six yeah that's kind of an old line"
+  },
+  {
+   "ply": 8,
+   "t": 419.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2N2N2/PPPP1PPP/R1BQK2R w KQkq - 6 5",
+   "said": "where both both sides develop symmetrically and you know I can also play some music by the way what's up supper I don't know if people but this is a more instructive stream so hopefully you know you won't get bored so in that Essex indeed has been played what is the idea here for white now white needs to complete is her development as fast as possible and there are two ways to the to do this she can Castle or she can play d3 opening up the bishop and develop the Bishop to g5 965 now does not work because after Knight takes d5 the bishop on c4 will be hanging does the four Knights usually"
+  },
+  {
+   "ply": 9,
+   "t": 454,
+   "line": [
+    "d3"
+   ],
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R b KQkq - 0 5",
+   "said": "lead to a draw no I wouldn't say that it's a Drudge opening necessarily there are a couple of draw is in the four Knights that I might show afterwards but I wouldn't say that it is they did by nature leads to draw position so Tori in"
+  },
+  {
+   "ply": 10,
+   "t": 462,
+   "line": [
+    "h6"
+   ],
+   "fen": "r1bqk2r/pppp1pp1/2n2n1p/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQK2R w KQkq - 0 6",
+   "said": "fact plays d3 she's playing perfectly so far the opening stage she's got down h6 what is the idea to stop the Bishop whoa that's not the idea to stop the bishop from developing to g5 very sensible move so where does this"
+  },
+  {
+   "ply": 11,
+   "t": 478,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqk2r/pppp1pp1/2n2n1p/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 b kq - 1 6",
+   "said": "Bishop go the bishop goes usually to square III here now you might be saying well what does that do because blacks gonna double"
+  },
+  {
+   "ply": 12,
+   "t": 480,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pppp1pp1/2n2n1p/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQ1RK1 w - - 2 7",
+   "said": "the pawns by taking the bishop on the other hand castle castle logical by white gets the F file yeah file is very important here what is White's plan here normally it's to operate on the Kings side and that's the point of Bishop III there is an alternative plan which is to play Bishop d2 queen c1 and try to sacrifice on h6 but that is that is a"
+  },
+  {
+   "ply": 13,
+   "t": 507,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1bq1rk1/pppp1pp1/2n2n1p/2b1p3/2B1P3/2NP1N2/PPP2PPP/R1BQR1K1 b - - 3 7",
+   "said": "little bit artificial and black has a lot of ways to stop that what else is there I mean why can't play moves like h3 but rook e1 Tory is played which I'm not a big it's not a mistake but I'm not a big fan of this move why because the rook belongs on the F file as I mentioned now the move this should be three is not going to be as effective"
+  },
+  {
+   "ply": 14,
+   "t": 528.5,
+   "line": [
+    "Nd4"
+   ],
+   "fen": "r1bq1rk1/pppp1pp1/5n1p/2b1p3/2BnP3/2NP1N2/PPP2PPP/R1BQR1K1 w - - 4 8",
+   "said": "now the problem is the rook looks good here but in fact it kind of stares at this pawn so if the e-file were open I look at this move differently but as it stands probably a little bit of an inaccuracy ninety-four interesting so what the idea the e5 pawn is left hanging but if Knight takes e5 what I think I'll shake is preparing is d6 leading to a very quick development of his pieces after Knight back to f3 in Bishop g4 painting that night so Tori"
+  },
+  {
+   "ply": 15,
+   "t": 558,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r1bq1rk1/pppp1pp1/5n1p/2b1p3/2BnP3/2NPBN2/PPP2PPP/R2QR1K1 b - - 5 8",
+   "said": "has to be very careful here she has a decision on our hands and pink spoofer of course if I can remove the Bishop to b6 e does not as a very good point it is not have to take tortillas play-doh should be through which I like a little bit more it's a little safer than taking the pawn so I like that decision what is black want to do now probably d6 now Knight takes e5 is a threat so you know"
+  },
+  {
+   "ply": 16,
+   "t": 582.5,
+   "line": [
+    "Nxf3+"
+   ],
+   "fen": "r1bq1rk1/pppp1pp1/5n1p/2b1p3/2B1P3/2NPBn2/PPP2PPP/R2QR1K1 w - - 0 9",
+   "said": "so I'm expecting d6 from black now black isn't a bit of a pickle already because if black plays d6 what can what can Tory then do Tori can capture the night with with her Bishop ruining the pawn structure which is why our shaykh takes the knight now the drawback of what he just did is that is that he's moved his"
+  },
+  {
+   "ply": 17,
+   "t": 592.5,
+   "line": [
+    "Qxf3"
+   ],
+   "fen": "r1bq1rk1/pppp1pp1/5n1p/2b1p3/2B1P3/2NPBQ2/PPP2PPP/R3R1K1 b - - 0 9",
+   "said": "knight one two three times in exchange for a night that's only developed once now Tory puts her queen on a very nice square of three we're in fact guards word in fact controls the FL now let's see which what Tory recaptures with the correct way would be to capture the pawn as I previously mentioned that leaves the f5 open and then she can relocate her ripped out one and start pressuring the F pile but one of the things that's important to understand is Tory might be paying attention to the fact that if she takes on e3 with a pawn that doubles her pawns but it's important to make the judgement that that's less important now"
+  },
+  {
+   "ply": 19,
+   "t": 633,
+   "line": [
+    "Bxe3",
+    "Qxe3"
+   ],
+   "fen": "r1bq1rk1/pppp1pp1/5n1p/4p3/2B1P3/2NPQ3/PPP2PPP/R3R1K1 b - - 0 10",
+   "said": "than opening the F file so it would be much less accurate to take on e3 with another piece if she takes with the rook that kind of lets block off the hook like and then just complete heard about his development with d6 the reason i'm"
+  },
+  {
+   "ply": 20,
+   "t": 635.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bq1rk1/ppp2pp1/3p1n1p/4p3/2B1P3/2NPQ3/PPP2PPP/R3R1K1 w - - 0 11",
+   "said": "yuda tory is because she's commentating on her end on her stream i'm commentating on her game here i want to let her concentrate and and find her own moves after the game finishes we will convene again and discuss the game she decided to take with her queen so that's"
+  },
+  {
+   "ply": 21,
+   "t": 658,
+   "line": [
+    "a3"
+   ],
+   "fen": "r1bq1rk1/ppp2pp1/3p1n1p/4p3/2B1P3/P1NPQ3/1PP2PPP/R3R1K1 b - - 0 11",
+   "said": "one thing that we might discuss afterward is it's very important to understand that sometimes you do need to violate positional principles that's the sacrifice you need to make for tactical reasons oftentimes so ru responds with a three which again not a mistake but what exactly is the point of this move she"
+  },
+  {
+   "ply": 22,
+   "t": 673.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/p2p1n1p/4p3/2B1P3/P1NPQ3/1PP2PPP/R3R1K1 w - - 0 12",
+   "said": "potentially a square for her bishop on 82 but it's a little bit too slow I would have considered playing f4 instead again trying to open the F file black responds with a6 potentially preparing a queen side expansion of b5 so it's a pretty quiet position there's not much going on white really has two ideas here one is to create play f4 as I like the other is to prepare a central striker d4 so we'll see which of these which of these Tory ends up choosing white can also play a neutral move like h3 now Tory's probably deciding on what plan now this is a position where you need to decide what plan to to choose because"
+  },
+  {
+   "ply": 23,
+   "t": 723,
+   "line": [
+    "a4"
+   ],
+   "fen": "r1bq1rk1/1pp2pp1/p2p1n1p/4p3/P1B1P3/2NPQ3/1PP2PPP/R3R1K1 b - - 0 12",
+   "said": "there isn't enough naturally going on in the position to dictate you know have sequence of moves and oftentimes when you're stuck and you don't know what plans to choose and a story plays a four which is interesting she stops b5 but I'm not sure b5 was something that necessarily needed stopping at the same time I like this move but she has spent a tempo playing a three and then eight for maybe a four immediately would have"
+  },
+  {
+   "ply": 24,
+   "t": 747.5,
+   "line": [
+    "c6"
+   ],
+   "fen": "r1bq1rk1/1p3pp1/p1pp1n1p/4p3/P1B1P3/2NPQ3/1PP2PPP/R3R1K1 w - - 0 13",
+   "said": "been a little bit more it would have carried a little more pizzazz so to speak but again you might be like well she's made two moves at the same point at the same time the position is closed so you know it doesn't exactly moves on exactly I don't know this is a very dangerous moment what does anybody see what black is threatening here does anybody see what black is threatening and I want to include you guys because that's the point of what we're doing here everybody is hopefully benefitting what is black threatening d5 followed by d4 d5 the bishop has to move in d4 Forks the Queen and the knight what this story have to do she has to move one of the pieces that are gonna be in the way either the bishop has to move to a2 or b3 or the Queen has to move from e3 a good move here would be Queen g3 or Queen f3 especially stopping d5 entirely she could also move the knight but it would be a little bit passive I like the way the knight is placed on c3 she could also consider playing d4 blocking the passage to deed for any one of these"
+  },
+  {
+   "ply": 25,
+   "t": 803,
+   "line": [
+    "Rad1"
+   ],
+   "fen": "r1bq1rk1/1p3pp1/p1pp1n1p/4p3/P1B1P3/2NPQ3/1PP2PPP/3RR1K1 b - - 1 13",
+   "said": "things prevents d5 but especially when you're only learning chess it's very important to always start by asking yourself what is my opponents threaten to consider not only one move threats but two and three move threats she misses it which is which is a mistake so route d1 is a clear mistake I think what"
+  },
+  {
+   "ply": 26,
+   "t": 812,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bq1rk1/1p3pp1/p1p2n1p/3pp3/P1B1P3/2NPQ3/1PP2PPP/3RR1K1 w - - 0 14",
+   "said": "Torre noticed was that none of her pieces are being attacked so she proceeded with her idea and black in fact plays d5 attacking the bishop now it's a bit major danger zone the game is"
+  },
+  {
+   "ply": 27,
+   "t": 823,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r1bq1rk1/1p3pp1/p1p2n1p/3Pp3/P1B5/2NPQ3/1PP2PPP/3RR1K1 b - - 0 14",
+   "said": "not over why is the game not over because a little Torre will lose a piece here she can get a couple of pawns for the piece she takes correctly now she has to take on e5 she has to come to terms with the fact that she's losing a piece she can also play d4 here that might actually allow her to save the piece but that's a little bit complicated t4 if he takes d4 then Queen"
+  },
+  {
+   "ply": 28,
+   "t": 845,
+   "line": [
+    "cxd5"
+   ],
+   "fen": "r1bq1rk1/1p3pp1/p4n1p/3pp3/P1B5/2NPQ3/1PP2PPP/3RR1K1 w - - 0 15",
+   "said": "takes d4 pinning the Queen and if pawn takes c4 than pawn takes a 5 opening up the attack on the de Pombal Queen and opening up the attack in the night so that might be a very strong move she could also simply take on e5 getting coupons for the piece and getting an initiative because the D file was open so the game is far from over this is uh it is only the beginning as Count Dooku would say in Star Wars and that is a very nerdy reference yes I'm owning it yeah I admit and now we all saw that says Aquila of course of course so Tori I'm by the / thinking pattern in the fact that her hands has reached her her face area is signaling to me that she's realized that u4 is coming now it's very very important early chest psychology when you blunder it's out it's very easy to say it's hard to do you have to recuperate immediately assume that it's the start of a new game and you have to find the lesser evil and I think that's the key to to making a lot of comebacks which I obviously do because I'm usually in a loss position most of the time it's very important to come to terms of the fact that you made a mistake you blundered now what can I do given the situation that I have and so let's see if Tory finds one of these options either Queen takes e5 or Bishop takes d5 followed by Queen 65 that would be worse can somebody explain to me conceptually why would Bishop takes d5 what's up Michael Scott saw the news we'll get to that later why would it be worse to capture on g5 with the bishop then of the Queen on e5 could somebody explain to me conceptually Judy will play one game and you'll get to 2,200 you need a you need"
+  },
+  {
+   "ply": 29,
+   "t": 961.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bq1rk1/1p3pp1/p4n1p/3pp3/P1BP4/2N1Q3/1PP2PPP/3RR1K1 b - - 0 15",
+   "said": "to make peace with it but we'll talk about it because then you take with Queen well kind of but oh man and Tory has found Z for it that is that is amazing that is a serious serious move I'm impressed I am legitimately impressed because let us again reiterate the idea if it takes d4 then Y can actually take with either piece either Queen takes d4 or rook takes d4 creating a pin against blacks Queen which means that the bishop on c4 is untouchable now black is another move which is of course"
+  },
+  {
+   "ply": 30,
+   "t": 1000.5,
+   "line": [
+    "dxc4"
+   ],
+   "fen": "r1bq1rk1/1p3pp1/p4n1p/4p3/P1pP4/2N1Q3/1PP2PPP/3RR1K1 w - - 0 16",
+   "said": "to take the bishop immediately what is white to them white captures on e5 of the pawn noticed that opens up an attack on the Queen and against tonight you can follow along in your own board if you want now that is not the end of the line because after D takes e4 let me make"
+  },
+  {
+   "ply": 29,
+   "t": 1003,
+   "line": [],
+   "fen": "r1bq1rk1/1p3pp1/p4n1p/3pp3/P1BP4/2N1Q3/1PP2PPP/3RR1K1 b - - 0 15",
+   "said": "that move on the board D takes e4 D takes e5 black can save the knight by playing 97 defending the Queen and removing the knight from attack but then Y can advance the pawn to e6 she's got a huge initiative because blacks pieces are very passive that's what's important to understand about sacrificing sacrificing is very relative if you have a huge initiative it shouldn't be afraid of sacrifice pieces so this is a fantastic move that and notice the Tory did exactly what what she should have done I just noticed that black does have the move Knight g4 here which could be quite nasty that could be a problem"
+  },
+  {
+   "ply": 30,
+   "t": 1047,
+   "line": [
+    "dxc4"
+   ],
+   "fen": "r1bq1rk1/1p3pp1/p4n1p/4p3/P1pP4/2N1Q3/1PP2PPP/3RR1K1 w - - 0 16",
+   "said": "because that removes the knight preemptively from attack from an attack square and it attacks the Queen forcing Tori to move for Queen and then black takes the bishop but that's not the end because there that night on g4 could later get into some trouble black ends up taking on c4 immediately now Tori's gonna take on e5 of the pawn"
+  },
+  {
+   "ply": 31,
+   "t": 1060,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bq1rk1/1p3pp1/p4n1p/4P3/P1p5/2N1Q3/1PP2PPP/3RR1K1 b - - 0 16",
+   "said": "Tory's gonna take on e5 of the pawn opening up the attack of the Queen and the knight let's see if black finds 97 if he doesn't that white is clearly better because notice that all of whites pieces are positioned on open files on very nice squares if white ends up taking the night with a"
+  },
+  {
+   "ply": 32,
+   "t": 1074.5,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r1bq1rk1/1p1n1pp1/p6p/4P3/P1p5/2N1Q3/1PP2PPP/3RR1K1 w - - 1 17",
+   "said": "pawn then Tory can then maneuver her night around to d5 in to e7 or even to b6 black is very underdeveloped like those fine 97 which is not a tragedy now after east 6 I like White's position because all of her pieces are very harmoniously placed but it's very important to I've decisively here if Tori kind of dilly-dally with a move like Queens e4 then that could allow black to consolidate that could allow black to consolidate and as soon as black consolidates that extra piece will make its presence felt there are other moves here like Queens e4 which would also be fine even 95 so there's a lot of most here that white can do to build up her initiative but what would be an example of a bad moves something like I don't know Queen g3 or h3 the move that white makes now has to be very targeted toward developing the initiative if she makes a move that you know that is a little bit too slow then this is a matter of one or two tempi I wouldn't say that white is better objectively speaking I would say that white is worse if two computers were to play I would bet that the evaluation is probably 0.7 maybe minus one in blacks favor but known as minus one when you're down at peaced is not a lot and that is the mistake that a lot of beginners make I think is that and not because they're they're dumb or something I don't say this because you know somebody is obtuse you know it reminds me of Andy Dufresne and Norton in the Shawshank Redemption but you know people look at the computers evaluation and they conclude the objective the practical value of a move based on the computers evaluation but the computers evaluation tells very small part of the story there are plenty of positions which the computer or even what even evaluate is winning which I would still go for in a practical game especially a blitz game where thinking time is confined and a human is sitting before you not a computer so you need to"
+  },
+  {
+   "ply": 33,
+   "t": 1184,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bq1rk1/1p1n1pp1/p3P2p/8/P1p5/2N1Q3/1PP2PPP/3RR1K1 b - - 0 17",
+   "said": "judge a position based on the difficulty of moves that one has to find we do go over the game after Shawshank reduction my favorite movie one of my 3 or 4 favorite movies I know that one by heart Tory plays d6 beautiful she's playing very well but she's spent half of her time it's only holding in 17 Mushu she'll have to be a little bit careful black is forced to take on e6 the moves rook e8 here would would also be possible but that's just very scary after he takes up 7 forcing the King out so Tori is playing extremely well extremely well right now and let's see if she is rewarded now what is the psychological effect of the way that she's playing when one side has the initiative the"
+  },
+  {
+   "ply": 34,
+   "t": 1225.5,
+   "line": [
+    "fxe6"
+   ],
+   "fen": "r1bq1rk1/1p1n2p1/p3p2p/8/P1p5/2N1Q3/1PP2PPP/3RR1K1 w - - 0 18",
+   "said": "other side has to constantly be calculating constantly be thinking they burn a lot of time they get fatigued and that increases the chances of a blunder even if they successfully deal with the initiative at the start now I'll shake is playing very fast so props to him he's finding finding a sequence of good moves opinions on No Country for Old Men a movie that I also greatly like if the"
+  },
+  {
+   "ply": 35,
+   "t": 1243.5,
+   "line": [
+    "Qxe6+"
+   ],
+   "fen": "r1bq1rk1/1p1n2p1/p3Q2p/8/P1p5/2N5/1PP2PPP/3RR1K1 b - - 0 18",
+   "said": "rule that led you here if the rule you followed led you here why follow the rule that's I think the famous line I don't know it exactly but I love No Country for Old Men I've seen it a"
+  },
+  {
+   "ply": 36,
+   "t": 1248.5,
+   "line": [
+    "Kh7"
+   ],
+   "fen": "r1bq1r2/1p1n2pk/p3Q2p/8/P1p5/2N5/1PP2PPP/3RR1K1 w - - 1 19",
+   "said": "couple of times I can make a logical reference to Khan's hit the game like I'm talking or its ads or tails heads or tails just to save your life decide now tell no one my name is Anton Chigurh I would like peanuts and fill up my gas I'm invincible Oh what's up face just"
+  },
+  {
+   "ply": 37,
+   "t": 1290,
+   "line": [
+    "Qe4+"
+   ],
+   "fen": "r1bq1r2/1p1n2pk/p6p/8/P1p1Q3/2N5/1PP2PPP/3RR1K1 b - - 2 19",
+   "said": "this is untoned Shakur commentating on Goldust tourist game heads or tails face just know my place is waiting for check checking the king and attack in the Seaport pawn if the rule that brought that you followed brought you to this of what use of what use was the rule so she checks on e4 perfectly sensible move I would probably take on c4 immediately leaving the King on h7 why because the King on h7 can later be subject to the fact there's a very famous nimzowitsch quote could somebody tell me what it is that applies perfectly to the situation"
+  },
+  {
+   "ply": 39,
+   "t": 1325.5,
+   "line": [
+    "Kh8",
+    "Qxc4"
+   ],
+   "fen": "r1bq1r1k/1p1n2p1/p6p/8/P1Q5/2N5/1PP2PPP/3RR1K1 b - - 0 20",
+   "said": "where you hold off on a particular move what is the the cliche here that applies nobody anybody anybody Bueller the alert the threat is stronger than the execution perfect espera wanna be so sorry has taken on c4 white is doing perfectly fine here now you might be"
+  },
+  {
+   "ply": 40,
+   "t": 1355,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "r1b2r1k/1p1n2p1/pq5p/8/P1Q5/2N5/1PP2PPP/3RR1K1 w - - 1 21",
+   "said": "saying again she's down at PS what am I even talking about am I like on the drugs or something no because first of all white is two pawns she has six pawns white black has four hands all of whites pieces are very nicely placed rooks on an open fall Queen b6 very well played black is playing well above his rating as well this is a very nice move because black is bringing the Queen out of the pin and attacking the pawn enough to now Tory has a difficult situation to resolve I would play call an hits b2 actually didn't notice that thank you for pointing that out extreme dota what would I do I would play the move maybe 94 here the idea being we are defending f2 and positioning preparing to position the knight on g6 we have to play very fast here these positions when you're down a lot of material you cannot care about pawns you have to care about them you have to have your eyes on the prize so 94 would be my one candidate move another candidate move that I would consider is something along the lines of King h1 which could be calm which looks slow but in reality you stop Queen takes up to check on the other hand what is black star black wants to move his knight to f6 controlling the d5 score it's very important to act fast that is why it suggested 94 in the first place now"
+  },
+  {
+   "ply": 41,
+   "t": 1424,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1b2r1k/1p1n2p1/pq5p/3N4/P1Q5/8/1PP2PPP/3RR1K1 b - - 2 21",
+   "said": "another idea which which looks very brazen is to play 95 giving up the f2 pawn again I'm sure the computer will refute this so don't check the computer on this this is a purely practical move the ITF 95 Queen takes f2 King h1 you might be like well it's terrible to give up the f2 pawn with check but if you"
+  },
+  {
+   "ply": 40,
+   "t": 1432,
+   "line": [],
+   "fen": "r1b2r1k/1p1n2p1/pq5p/8/P1Q5/2N5/1PP2PPP/3RR1K1 w - - 1 21",
+   "said": "think a little bit further you might notice that after that white threatens rook F 1 so the the opening of the f1 might actually be in White's favor and of course you get the Knight to d5 from where it can later travel to e7 perhaps even to g6 so you know you have to in"
+  },
+  {
+   "ply": 41,
+   "t": 1454,
+   "line": [
+    "b3"
+   ],
+   "fen": "r1b2r1k/1p1n2p1/pq5p/8/P1Q5/1PN5/2P2PPP/3RR1K1 b - - 0 21",
+   "said": "your mind be very disciplined about understanding what type of positioning do we have here is it a position where you can afford to play slowly or is in position where how to play fast would be 3 which Tory played it's a very instructive mistake what was her idea she was at the b2 pond and and saying well let me defend it first of all I can't take on f2 but I wouldn't be worried about that because again that opens the F file and whites favor I would be a lot more worried about a move like Knight f6 the knight on f6 is going to fully restrict white tonight and whites Knight is going to be the sort of the screwdriver with which you're going to open up all the locks all the weaknesses and whites in blacks position they can only be accessed by whites Knight which is why this temple is very important so after Knight f6 I think white isn't a lot of trouble while she still has two pawns for the piece she no longer has that"
+  },
+  {
+   "ply": 42,
+   "t": 1506,
+   "line": [
+    "Qxf2+"
+   ],
+   "fen": "r1b2r1k/1p1n2p1/p6p/8/P1Q5/1PN5/2P2qPP/3RR1K1 w - - 0 22",
+   "said": "initiative that we were speaking about let's see what black can come up with here by the way guys those of you just joining us thank you so much for taking time out of your day this is a collaborative training session with gold dust story the one and only right now I'm commentating on her game after she finishes we will reconvene and"
+  },
+  {
+   "ply": 43,
+   "t": 1517.5,
+   "line": [
+    "Kh1"
+   ],
+   "fen": "r1b2r1k/1p1n2p1/p6p/8/P1Q5/1PN5/2P2qPP/3RR2K b - - 1 22",
+   "said": "discuss it together and then she will play another one after that we will transition to some opening studies so black has taken on f2 which is a double-edged sword as I mentioned the F file opens in white in whites favour on the other hand white only has one point for the piece and we are squad streaming as well I hope you're enjoying your meal vlogs sorry I don't think it matters I think this affords white torii a little bit more time to think which is what we want now black has to be careful because rook f1 is the right black has to play Knight f6 here I think closing off the F file so in reality I think Queen takes up two is fully justified here and only if black finds the movement of six so the game is far from over black does find the move Knight f6 I think black is playing nearly perfectly in this game so you know Tori has played has played very admirably but a credit to a Shakey's found all the good defensive moves so far now the game is never over and that's my mentality is white is down a piece she maybe no longer has the initiative that she once did but how do you make a comeback in chess how do you come back from a completely lost position which is a critical skill well first of all you have to borrow Magnus is quote one move at a time you cannot think well I'm gonna win this game one day because you can't imagine such a scenario you're down a piece that just depressed further and makes you what you know not more hopeful but less hopeful so you have to pose problems to your opponent one problem after another problem after another problem no matter how small these problems might seem if you pose enough of them your opponent gets tired he might lose his guard now Tory plays 94 which is a very interesting move that I paid attention to earlier what is the idea let's see if she can follow up"
+  },
+  {
+   "ply": 45,
+   "t": 1626,
+   "line": [
+    "Nf6",
+    "Ne4"
+   ],
+   "fen": "r1b2r1k/1p4p1/p4n1p/8/P1Q1N3/1P6/2P2qPP/3RR2K b - - 3 23",
+   "said": "correctly after Knight takes e4 she might be intending to move rook out one painting the Queen on the rook and the Queen has no retreat in order to keep the rope guarded there is a flaw with this and we'll discuss the flaw if black does take on e4 but let's see what black does here Alex files thank you so much for subscribing with twitch Prime I really appreciate it hope you're enjoying the content thus far thank you now let me ask a calculation question to you guys after and I would encourage you"
+  },
+  {
+   "ply": 46,
+   "t": 1661.5,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "r1b2r1k/1p4p1/p6p/8/P1Q1n3/1P6/2P2qPP/3RR2K w - - 0 24",
+   "said": "if you have a board next to you follow this on a real nice wooden board this is I think the best way to learn after Knight takes e4 rook up one where should the Queen go black is a very strong tactical response in that position black does take on e4 with his knights after rook f1 what is the correct move using the fact that the King is located on h1 could somebody beautiful GM am sad after rook f1 black chasm between c5 now you might think well wait wait a minute wait a minute Queen takes e5 Knight takes e5 and again"
+  },
+  {
+   "ply": 47,
+   "t": 1692,
+   "line": [
+    "Qxe4"
+   ],
+   "fen": "r1b2r1k/1p4p1/p6p/8/P3Q3/1P6/2P2qPP/3RR2K b - - 0 24",
+   "said": "the rook is hanging but this is where the Italians have a word for this and the Germans have a word for this what are both of these words what is it that black does after white captures on c5 and Tory takes on e4 correctly because Queen rook F 1 Queen c5 would have been losing either it is is not correct extreme dota Intermezzo is absolutely right that's the Italian word for it and mission look very nice as the German word for it it's an in-between move in"
+  },
+  {
+   "ply": 48,
+   "t": 1720,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "r4r1k/1p4p1/p6p/5b2/P3Q3/1P6/2P2qPP/3RR2K w - - 1 25",
+   "said": "between moves in my experience are very hard tactics to see a lot of people in the club player rage especially in the beginner range struggle with intermediate moves because at that point your brain you know it works more automatically so it's very hard to alert yourself to the presence of an intermediate move Bishop f5 another very good move like brings to this Knight is Bishop out now leaving the b7 pawn hanging and by in return the c2 pond it's gonna be hanging these pawns are all on light squares and anonymous gift sir is gifting us up to neighbor boy thank you so much miss your anonymous gift her appreciate it black is playing beautifully and using his time exactly correctly so you know you know we need to be clear about about"
+  },
+  {
+   "ply": 49,
+   "t": 1763.5,
+   "line": [
+    "Qxb7"
+   ],
+   "fen": "r4r1k/1Q4p1/p6p/5b2/P7/1P6/2P2qPP/3RR2K b - - 0 25",
+   "said": "the fact that aureus is giving this game her heart but the the initiative just didn't quite work out now let's see if she can put up a good resistance how would I do that here you have to take on b7 otherwise blacks gonna take on c2 for free and she does now black has to take on c2 with his bishop now after rooks t1 the problem is black has the move rocky and black just has too much horse power you know it's like white is driving see blacks driving like a like I'm not good with cars but some sort of like a Corvette and and that's the problem with extra material now a piece of advice for you guys is basically when I was in my mother's womb if the classic advice you would get is when you're up material you do what what"
+  },
+  {
+   "ply": 50,
+   "t": 1807.5,
+   "line": [
+    "Bxc2"
+   ],
+   "fen": "r4r1k/1Q4p1/p6p/8/P7/1P6/2b2qPP/3RR2K w - - 0 26",
+   "said": "do you do when you're up material the most cliched sentence of all time and I for some reason I said that in a New York accent or notor line just great faces and you get some coffee so you drink pieces when your material but what is that a movie right for the Godfather I guess but I think that's pardon my french that's a load of malarkey in my experience you sometimes you want to trade your pieces but very often it is precisely because you are off material that an attack will work out better and so you should attack when you're up material and you shouldn't trade pieces"
+  },
+  {
+   "ply": 51,
+   "t": 1841,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "r4r1k/1Q4p1/p6p/8/P7/1P6/2b2qPP/2R1R2K b - - 1 26",
+   "said": "that's a very limiting mentality a lot of people get in a lot of trouble because when they're as soon as they're up a knight or a bishop they set it to be their life's goal to trade off all all the rest of the pieces and and that way they they they allow blunders into their life and very often if you just set your mind on attacking as black can do with a mover of BA the point of that move is not to trade off the rooks it's to prepare the move Bishop e4 which will forth the Queen and the G to square so my advice to you would be and I'm a very concrete player I like to think on Crete Lee in on a case by case basis rather than in principles sometimes there is room for trades very often you want to be able to attack you have an acting career waiting for you Suzy Fox who knows it's entirely possible I would I accept all invitations if Woody Allen is in the chat or even Woody Harrelson or you know I'll even settle for for Steven"
+  },
+  {
+   "ply": 52,
+   "t": 1893,
+   "line": [
+    "Rae8"
+   ],
+   "fen": "4rr1k/1Q4p1/p6p/8/P7/1P6/2b2qPP/2R1R2K w - - 2 27",
+   "said": "Spielberg even though you know or god forbid Martin Scorsese thank you Chris I appreciate it I'm on the I'm on the Leo DiCaprio you know just a bunch of you know just amateur hour I could do much better job but more about that later rook AEA played I think black is flying on the level of a grandmaster I'm gonna be honest with you guys black is playing off grandmaster and Tory what to do now Ettore has to resist with with her final ounces of energy how could she do that definitely taking mini 8 is not the way because after rook takes the it rook takes here black has two threats rookie 1 threatening made on the back rank in Bishop before forking the Queen on the pond on g2 black the White has to play the move rook g1 what is the purpose the purpose is to guard the g2 pawn again when you're completely lost you don't resign you don't give up hope you've got to create as many problems for your opponent as possible so you know so you've got to be you got to be you know you got to cling to the last the last ounces of hope and there's just no other"
+  },
+  {
+   "ply": 53,
+   "t": 1963.5,
+   "line": [
+    "Rg1"
+   ],
+   "fen": "4rr1k/1Q4p1/p6p/8/P7/1P6/2b2qPP/2R3RK b - - 3 27",
+   "said": "way psychologically to come back from completely lost situations I agree statute unfortunately blacks position basically plays itself it's hard to make a mistake here it's not the sort of situation where you can truly create problems and rooked you one very nice Tories showing signs of a fighter fighting with your last balances of strength and that's very important it doesn't matter what your rating is you've got to put yourself in a psychological position where you can improve and to do that you got to be used to being in loss positions and fighting I think black is playing absolutely on the level of a grandmaster so far what would I do here I'd probably play rookie to piling up on the G to pawn and this is what I mean when you're up material this fish of white doesn't have a counterpart so this bishop belongs on e4 but playing Bishop b4 immediately allows Queen takes a6 and the pressure on g2 is not quite enough to force Chapman however if black positions a monster on e2 and then plays Bishop before this pawn is going to be indefensible so let's see if black is able to find the move rookie to here boom pow pow boom pop hawk subscribing with twitch Brian thank you so much for"
+  },
+  {
+   "ply": 54,
+   "t": 2028.5,
+   "line": [
+    "Be4"
+   ],
+   "fen": "4rr1k/1Q4p1/p6p/8/P3b3/1P6/5qPP/2R3RK w - - 4 28",
+   "said": "the sub my man it means a lot to me love the support early on guys and yeah maybe this guys listening to me maybe he's on my stream so Oh see this sleeper should be four maybe I should suggest a queen blunder like Queen f3 which might actually be a good move unfortunately that's the problem with this position but maybe I should deliberately suggest a blunder of some sort now he does play Bishop before I'm not sure what he is intending after Queen takes a six so Tory just has to grab grab grab the only way she can come back from this issue she gains material oh but unfortunately black-ass okay this is very interesting after Queen takes a six it's very close to checkmate after"
+  },
+  {
+   "ply": 55,
+   "t": 2066.5,
+   "line": [
+    "Qxa6"
+   ],
+   "fen": "4rr1k/6p1/Q6p/8/P3b3/1P6/5qPP/2R3RK b - - 0 28",
+   "said": "the sacrifice on g2 but I'm not calculating right now I'm not seeing exactly the checkmate yet that King Aegeus I'm calculating a long line but Centauri absolutely snaps on a6 quickly very nicely done okay now obviously black is completely winning still and and he can play a lot of moves you can"
+  },
+  {
+   "ply": 56,
+   "t": 2088,
+   "line": [
+    "Bxg2+"
+   ],
+   "fen": "4rr1k/6p1/Q6p/8/P7/1P6/5qbP/2R3RK w - - 0 29",
+   "said": "play rook up six intending to carry the rook over to g6 and pile up on G on g2 what else can he do he can probably take on g2 I would bet you he does take on g2 now I don't see it yet because rook takes three to rook e1 check rook takes d1 Queen takes two and follow along guys rook g1 we need four check rook g2 now why is Rho Chi Chuan not checkmate in that position can somebody tell me could somebody tell me why the end of that line work f1 is not checkmate because and you got a look at the whole board and he goes for this let's see if he sees it because the queen is on h6 guardian upon another corner guarding the square enough one a huge source of blunders and I'm not saying this to dumb it down i blundered for this reason is precisely because you don't look at the entire board your brain kind of sections things off flanked by its length but I do see a win here I can't believe Black has found this so fast he's found it faster than I have after rook takes c1 Queen takes you when rook g1 Queenie for up G to black does have a win I believe and what is that win it he does he has not blundered this is actually correct what is the win"
+  },
+  {
+   "ply": 59,
+   "t": 2159.5,
+   "line": [
+    "Rxg2",
+    "Re1+",
+    "Rxe1"
+   ],
+   "fen": "5r1k/6p1/Q6p/8/P7/1P6/5qRP/4R2K b - - 0 30",
+   "said": "mr. Davis good to see you now Queenie one I'll guard I'll guard with rook g1 so that doesn't quite do the trick but rook f2 says the Duke of France and slowly down that's very nice rack up to attacking g2 there's no way to defend you - now I thought originally the widest perpetual but after Queen taking h7 white runs out of checks if white guards the rook then with Queen h3 this is a long line guys practice your visualization what does black then do"
+  },
+  {
+   "ply": 60,
+   "t": 2180.5,
+   "line": [
+    "Qxe1+"
+   ],
+   "fen": "5r1k/6p1/Q6p/8/P7/1P6/6RP/4q2K w - - 0 31",
+   "said": "what is black do after that no I don't"
+  },
+  {
+   "ply": 61,
+   "t": 2185,
+   "line": [
+    "Rg1"
+   ],
+   "fen": "5r1k/6p1/Q6p/8/P7/1P6/7P/4q1RK b - - 1 31",
+   "said": "think he's watching the stream because no this guy i I hate to sour the"
+  },
+  {
+   "ply": 62,
+   "t": 2187,
+   "line": [
+    "Qe4+"
+   ],
+   "fen": "5r1k/6p1/Q6p/8/P3q3/1P6/7P/6RK w - - 2 32",
+   "said": "atmosphere guys but this guy's played an absolutely flawless game of chess this guy's played a flawless game of chess then woke up one checkmate because now it's very important to realize this"
+  },
+  {
+   "ply": 63,
+   "t": 2206,
+   "line": [
+    "Rg2"
+   ],
+   "fen": "5r1k/6p1/Q6p/8/P3q3/1P6/6RP/7K b - - 3 32",
+   "said": "small differences in the position when you're calculating a long line one of the biggest sources of mistakes is when you assume that certain properties of the position are the same as they always were but that is not off now rook upon us checkmate let's test if this guy is actually watching the stream rock off one mate and the game is over rook f1 is checkmate and I have a story about my friend was telling me about this how she many years ago she had a game where her opponent actually delivered not Tory but somebody I know our opponent delivered made and said Chuck made it was actually a blunder of this exact Sorocaba played very nice Queen see a track now White has to stay in the game with Queen see it in Queens g4 but unfortunately there's just no way to stay about checkmate and yeah it takes forever to see him and one rook after two I don't know what to tell you guys but mister al-sheikh has played on the level of a super GM in this game so you know but um"
+  },
+  {
+   "ply": 66,
+   "t": 2279.5,
+   "line": [
+    "Rf2",
+    "Qc8+",
+    "Kh7"
+   ],
+   "fen": "2Q5/6pk/7p/8/P3q3/1P6/5rRP/7K w - - 6 34",
+   "said": "Queen ch-check Torrey hats off to her she's not losing hope fighting into the last drop of blood unfortunately if there was a bishop say on a6 and why would be winning so she's really suffered because there's nothing to guard the light squares other than the Queen yeah other than the Queen there's nothing to guard the light square this guy is one every game he's played I'd say basically and you know that's interesting enough interesting enough I'm gonna I'm going to he might be underrated I hate to not someone to throw it accusations and it might very well be that this guy simply underrated but I'm gonna ask the right thority to to conduct a small investigation I'm gonna ask the right authority to task to to conduct an investigation hello and let's see Tory will unmute herself moments all right that would well I I will tell you this my estimation of your opponent's strength is probably GM level yeah that's one thing they're playing"
+  },
+  {
+   "ply": 70,
+   "t": 2371.5,
+   "line": [
+    "Qe6",
+    "Kh8",
+    "Qa6",
+    "Rf8"
+   ],
+   "fen": "5r1k/6p1/Q6p/8/P3q3/1P6/6RP/7K w - - 10 36",
+   "said": "you know what what that implies I will not say and I'm not implying anything myself but you know well you know so yeah the level of his play yeah he was listening to me now it's funny because at the very end I'll move 32 and shall we make an analysis board to to look over this game or we can both look at our own boards and and follow along or so what do you think I don't know it's best my China's reporting 99.5% accuracy and naturally I do that every time actually that's that's pretty low what do you say so that's I could do that in my sleep casually ninety nine forty five percent yeah I remember at oculus as I remember being 99.5% of 1300 so Tori you'll become a serious just where when you do ninety nine point six percent accuracy this is not serious I'm kidding of course so let's do um let me think if I click on your game will you be able to actually let's just let me open an analysis board no no oh and I'll invite you and then we can reconstruct the game maybe okay so we do that through life chest and then you click let me see"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 40,
+   "fen": "r1b2r1k/1p1n2p1/pq5p/8/P1Q5/2N5/1PP2PPP/3RR1K1 w - - 1 21",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Bc5",
+    "Bc4",
+    "Nf6",
+    "d3",
+    "h6",
+    "O-O",
+    "O-O",
+    "Re1",
+    "Nd4",
+    "Be3",
+    "Nxf3+",
+    "Qxf3",
+    "Bxe3",
+    "Qxe3",
+    "d6",
+    "a3",
+    "a6",
+    "a4",
+    "c6",
+    "Rad1",
+    "d5",
+    "exd5",
+    "cxd5",
+    "d4",
+    "dxc4",
+    "dxe5",
+    "Nd7",
+    "e6",
+    "fxe6",
+    "Qxe6+",
+    "Kh7",
+    "Qe4+",
+    "Kh8",
+    "Qxc4",
+    "Qb6"
+   ],
+   "options": [
+    {
+     "san": "Nd5",
+     "t": 1424,
+     "continuation": "Nd5",
+     "said": "another idea which which looks very brazen is to play 95 giving up the f2 pawn again I'm sure the computer will refute this so don't check the computer on this this is a purely practical move the ITF 95 Queen takes f2 King h1 you might be like well it's terrible to give up the f2 pawn with check but if you think a little bit further you might notice that after that white threatens rook F 1 so the the opening of the f1 might actually be in White's favor and of course you get the Knight to d5 from where it can later travel to e7 perhaps even to g6 so you know you have to in your mind be very disciplined about understanding what type of positioning do we have here is it a position where you can afford to play slowly or is in position where how to play fast would be 3 which Tory played it's a very instructive mistake what was her idea she was at the b2 pond and and saying well let me defend it first of all I can't take on f2 but I wouldn't be worried about that because again that opens the F file and whites favor I would be a lot more worried about a move like Knight f6 the knight on f6 is going to fully restrict white tonight and whites Knight is going to be the sort of the screwdriver with which you're going to open up all the locks all the weaknesses and whites in blacks position they can only be"
+    },
+    {
+     "san": "b3",
+     "t": 1454,
+     "continuation": "b3",
+     "said": "your mind be very disciplined about understanding what type of positioning do we have here is it a position where you can afford to play slowly or is in position where how to play fast would be 3 which Tory played it's a very instructive mistake what was her idea she was at the b2 pond and and saying well let me defend it first of all I can't take on f2 but I wouldn't be worried about that because again that opens the F file and whites favor I would be a lot more worried about a move like Knight f6 the knight on f6 is going to fully restrict white tonight and whites Knight is going to be the sort of the screwdriver with which you're going to open up all the locks all the weaknesses and whites in blacks position they can only be accessed by whites Knight which is why this temple is very important so after Knight f6 I think white isn't a lot of trouble while she still has two pawns for the piece she no longer has that initiative that we were speaking about let's see what black can come up with here by the way guys those of you just joining us thank you so much for taking time out of your day this is a collaborative training session with gold dust story the one and only right now I'm commentating on her game after she finishes we will reconvene and discuss it together and then she will"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,379 @@
+{
+ "videoId": "7ntWn4K1_E4",
+ "title": "Smith-Morra Gambit ACCEPTED | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 11.5,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "foreign [Music]"
+  },
+  {
+   "ply": 3,
+   "t": 16.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "okay and we know what we're doing in response to C5 we play A Smith Mora"
+  },
+  {
+   "ply": 4,
+   "t": 19,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 5,
+   "t": 20.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 6,
+   "t": 24,
+   "line": [
+    "dxc3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "C takes D4 and C3 hopefully the smithmore Gambit is accepted and it is"
+  },
+  {
+   "ply": 7,
+   "t": 25,
+   "line": [
+    "Nxc3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "very good"
+  },
+  {
+   "ply": 8,
+   "t": 28,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "we continue our journey in the Smith"
+  },
+  {
+   "ply": 9,
+   "t": 31,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+   "said": "Mora Knight C6 Knight F3"
+  },
+  {
+   "ply": 10,
+   "t": 36.5,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/4P3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "all right C6 Knight F3 and G6 okay so G6 is one of several possible moves here I don't think it's supposed to be the"
+  },
+  {
+   "ply": 11,
+   "t": 49.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2B1P3/2N2N2/PP3PPP/R1BQK2R b KQkq - 1 6",
+   "said": "best move I actually don't even think it's supposed to be all that good if I remember correctly we are going to play Bishop C4 as is the custom in these positions but light"
+  },
+  {
+   "ply": 12,
+   "t": 55,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 2 7",
+   "said": "squared Bishop always goes to C4 and Bishop G7 to buy black so from a conceptual perspective fianchettoing the bishop is completely understandable like that is the gold standard for black setup but in the Smith Mora developing quickly is more important than developing in a high quality fashion yeah here are the move of Z5 you guys are demonstrating excellent knowledge of the opening we had a game like this so I remember checking Mark's book I remember that the move here is actually E4 E5 if you don't know this and this is why an opening like the smithmore has to be studied carefully before you play it if you don't know what to do here you would probably end up castling you would probably end up castling or you would play a move like Queen to D5 which I know some of you are probably tempted by Queen to D5 doesn't do anything on account of E6 if you Castle then you're giving black"
+  },
+  {
+   "ply": 13,
+   "t": 120,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/4P3/2B5/2N2N2/PP3PPP/R1BQK2R b KQkq - 0 7",
+   "said": "an opportunity to push the d-pawn up to D6 now is that the end of the world absolutely not but it immobilizes the E4 Pawn so Mark's move is the immediate E5 Pawn push which already causes significant problems to Black why is"
+  },
+  {
+   "ply": 14,
+   "t": 131,
+   "line": [
+    "Nh6"
+   ],
+   "fen": "r1bqk2r/pp1pppbp/2n3pn/4P3/2B5/2N2N2/PP3PPP/R1BQK2R w KQkq - 1 8",
+   "said": "this such a good move well the idea of this move should be pretty obvious you're preventing black from developing their"
+  },
+  {
+   "ply": 13,
+   "t": 135.5,
+   "line": [],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/4P3/2B5/2N2N2/PP3PPP/R1BQK2R b KQkq - 0 7",
+   "said": "Knight to F6 and if Knight takes C5 then we play Knight takes C5 Bishop takes E5 and there's a sack on F7 that a"
+  },
+  {
+   "ply": 14,
+   "t": 145.5,
+   "line": [
+    "Nh6"
+   ],
+   "fen": "r1bqk2r/pp1pppbp/2n3pn/4P3/2B5/2N2N2/PP3PPP/R1BQK2R w KQkq - 1 8",
+   "said": "lot of you are familiar with Knight H6 I don't know Knight H6 I do not know so I am on my own here um well I'm on my own here and there's sort of two candidate moves that come to mind here we can castle and we can absolutely Castle here there's nothing wrong with that but I'm a little bit concerned about the welfare of this E5 Pawn and ideally I would like to arrange my pieces in such a way that I'm not at risk of losing the E5 Pawn so what bothers me about castling here is the move Knight G4 we definitely don't want to take the Knight on H6 right because our dark squared Bishop is a valuable asset we don't want to exchange it for a you know for a crappy night on the side of the"
+  },
+  {
+   "ply": 15,
+   "t": 204,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r1bqk2r/pp1pppbp/2n3pn/4P3/2B2B2/2N2N2/PP3PPP/R2QK2R b KQkq - 2 8",
+   "said": "board so the move that really catches my eye here is actually Bishop to F4 and you might look at this and say well you know it doesn't look like such a sexy developing you know development square but I think it's important to"
+  },
+  {
+   "ply": 16,
+   "t": 208,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp1pppbp/2n3pn/4P3/2B2B2/2N2N2/PP3PPP/R2QK2R w KQ - 3 9",
+   "said": "over protect the E5 Pawn so that black doesn't play Knight G4 and and win the pawn if black can win the pawn will end up in trouble now I think we can very safely castle and our opponent is still"
+  },
+  {
+   "ply": 17,
+   "t": 228,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp1pppbp/2n3pn/4P3/2B2B2/2N2N2/PP3PPP/R2Q1RK1 b - - 4 9",
+   "said": "playing instantly so I'm a little bit on high alert but I don't see a problem with just castling"
+  },
+  {
+   "ply": 18,
+   "t": 230.5,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2np2pn/4P3/2B2B2/2N2N2/PP3PPP/R2Q1RK1 w - - 0 10",
+   "said": "okay D6 yeah so our opponent gives away gives the pawn back in order to accelerate the development of his or her light squared Bishop maybe we've already misplated I don't know but White's move here seems to be basically forced I mean we have to take the Bonnet I don't see anything else perhaps some of you would be attracted by them of Queen D2 but I don't think Queen E2 gives that much and queen D2 Knight F5 or queen D2"
+  },
+  {
+   "ply": 19,
+   "t": 271.5,
+   "line": [
+    "exd6"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2nP2pn/8/2B2B2/2N2N2/PP3PPP/R2Q1RK1 b - - 0 10",
+   "said": "Knight G4 you're actually sending the Knight to a square that wants to go anyway which is something that you want to avoid"
+  },
+  {
+   "ply": 20,
+   "t": 273.5,
+   "line": [
+    "Nf5"
+   ],
+   "fen": "r1bq1rk1/pp2ppbp/2nP2p1/5n2/2B2B2/2N2N2/PP3PPP/R2Q1RK1 w - - 1 11",
+   "said": "okay e takes D6 Knight F5 wow I mean fairly this is still Theory I I don't know this at all but this looks quite reasonable for"
+  },
+  {
+   "ply": 21,
+   "t": 286.5,
+   "line": [
+    "dxe7"
+   ],
+   "fen": "r1bq1rk1/pp2Ppbp/2n3p1/5n2/2B2B2/2N2N2/PP3PPP/R2Q1RK1 b - - 0 11",
+   "said": "black okay so now the pawn on D6 is attacked we have to do something with it I I don't see an alternative to D takes E7"
+  },
+  {
+   "ply": 22,
+   "t": 290,
+   "line": [
+    "Qxe7"
+   ],
+   "fen": "r1b2rk1/pp2qpbp/2n3p1/5n2/2B2B2/2N2N2/PP3PPP/R2Q1RK1 w - - 0 12",
+   "said": "let's do it and we get a kind of interesting position with an open Center I'm known in you know my career as a chess player as somebody who it tends to be pretty good at open Center positions these are my favorite types of positions where there are no Pawns in the center and what does it mean what implications does an open Center position have well it basically means there's a ton of tactics because the board is wide open the Central files are open you know you can put your pieces anywhere you want in the center um and these positions are very hard to handle because what always happens is that there's a ton of candidate moves there's some attempting moves and you don't know which one to play so let's try to sort through the complications here okay well to me the most obvious move is rookie one attacking the queen where is the queen going to go if we play rookie one well it's probably going to go to C5 in order to attack this bishop and so we could definitely play rookie one Queen C5 and then drop the bishop back to B3 that looks absolutely normal what other moves do we have in mind well the move Knight D5 comes to mind centralizing the Knight D5 probably black will still play the move Queen C5 um perhaps even black will play the move Queen to E4 sticking the queen in the center and attacking this bishop but there's an interesting line that I'm already seeing there no Knight D5 Queen E4 does seem fine for black so I I agree that this move kind of"
+  },
+  {
+   "ply": 23,
+   "t": 391.5,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1b2rk1/pp2qpbp/2n3p1/5n2/2B2B2/2N2N2/PP3PPP/R2QR1K1 b - - 1 12",
+   "said": "overextends White's pieces a little bit I don't I don't particularly love Knight D5 I'm not married to that concept"
+  },
+  {
+   "ply": 22,
+   "t": 396,
+   "line": [],
+   "fen": "r1b2rk1/pp2qpbp/2n3p1/5n2/2B2B2/2N2N2/PP3PPP/R2Q1RK1 w - - 0 12",
+   "said": "I actually like rookie1 I think it's I think it's simple rookie one there is Queen before though that's a weird little move oh and then we can play rookie four no but then Queen takes B2 man"
+  },
+  {
+   "ply": 23,
+   "t": 413.5,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1b2rk1/pp2qpbp/2n3p1/5n2/2B2B2/2N2N2/PP3PPP/R2QR1K1 b - - 1 12",
+   "said": "apparently this line is fine for black okay rookie one Queen before we'll play Queen B3 we'll go into an end game let's go Ricky one"
+  },
+  {
+   "ply": 24,
+   "t": 416,
+   "line": [
+    "Qb4"
+   ],
+   "fen": "r1b2rk1/pp3pbp/2n3p1/5n2/1qB2B2/2N2N2/PP3PPP/R2QR1K1 w - - 2 13",
+   "said": "let's go rookie one wow okay I I would be suspicious if this wasn't still Theory so this attacks the bishop if the bishop moves then we lose the other Bishop I think our move is absolutely forced we need to play Queen B3 because we we should avoid losing the B2 Pawn we'll check the database um we'll check the database after the game but finally we got him to think we got our opponent to think why am I going to this end game why do I think that white has chances for an advantage in the end game well the main reason that I think white is probably slightly to be preferred has to do with the placement of the pieces which of White's pieces is more actively placed than its black counterpart who can tell me what"
+  },
+  {
+   "ply": 26,
+   "t": 473,
+   "line": [
+    "Qb3",
+    "Qxb3"
+   ],
+   "fen": "r1b2rk1/pp3pbp/2n3p1/5n2/2B2B2/1qN2N2/PP3PPP/R3R1K1 w - - 0 14",
+   "said": "is like the nature of our peace placement superiority it's the light squared Bishop right if we were to isolate the reason that I like White's position it's because this bishop is controlling an important diagonal and this bishop still has yet to be developed which way should we take the queen an instructive moment you should you're watching on YouTube you should pause the video and think about this which way to take the queen to me the answer is kind of a no-brainer to me the answer is kind of although I think both recaptures are okay but my intuition is screaming actually to take with the pawn Maybe I'm Wrong let's investigate the why is my intuition screaming that because largely taking with the pawn does two things it opens up the a file which is always good"
+  },
+  {
+   "ply": 27,
+   "t": 516,
+   "line": [
+    "axb3"
+   ],
+   "fen": "r1b2rk1/pp3pbp/2n3p1/5n2/2B2B2/1PN2N2/1P3PPP/R3R1K1 b - - 0 14",
+   "said": "and it secures the bishop on C4 taking back with the bishop I feel like potentially allows black to stick a knight on D4 with tempo and I want to create a bit of an imbalance on the board I wanna I wanna add some Tabasco sauce to the position so let's take back with the pun I'm a"
+  },
+  {
+   "ply": 28,
+   "t": 527,
+   "line": [
+    "Nfd4"
+   ],
+   "fen": "r1b2rk1/pp3pbp/2n3p1/8/2Bn1B2/1PN2N2/1P3PPP/R3R1K1 w - - 1 15",
+   "said": "lot less worried about the pawns being doubled if you've watched my speeder on consistently you know that there are certain things that I prioritize over other things and one of the things that I almost always de-prioritize uh are our past pawns they're usually not that"
+  },
+  {
+   "ply": 29,
+   "t": 544.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1b2rk1/pp3pbp/2n3p1/8/2BN1B2/1PN5/1P3PPP/R3R1K1 b - - 0 15",
+   "said": "important Knight fd4 okay so I think that here we should probably take the Knight we should probably take once"
+  },
+  {
+   "ply": 30,
+   "t": 546,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1b2rk1/pp3pbp/6p1/8/2Bn1B2/1PN5/1P3PPP/R3R1K1 w - - 0 16",
+   "said": "okay so so the threat is to play Knight C2 I'm positive that many of you are attempted by the move Bishop to D6 here but if we calculate this out Bishop D6 Rook d8 um Bishop D6 Rook d8 sorry doubled pawns I meant I I might have said past spawns Bishop D6 Rook d8 Bishop B7 Rook E8 and 95 Knight C2 Knight F6 Bishop takes F6 now it doesn't work I'll show you after the game the line I just calculated what else can we do"
+  },
+  {
+   "ply": 31,
+   "t": 591,
+   "line": [
+    "Re7"
+   ],
+   "fen": "r1b2rk1/pp2Rpbp/6p1/8/2Bn1B2/1PN5/1P3PPP/R5K1 b - - 1 16",
+   "said": "yeah rookie seven I think rookie seven is natural and pretty strong because we are um while we're sticking a rook on the seventh rank now when you do such a thing you have to make sure that your opponent cannot Chase The Rook away from the seventh rank and in this case black can but it's not that simple well if Knight C6 I wanted to play Rook C7 and is the rook in a bit of danger there yeah but you know what is fun about life if we're not Living Dangerously we're obviously trying to get the other Rook into the game and you know"
+  },
+  {
+   "ply": 32,
+   "t": 636,
+   "line": [
+    "Bf6"
+   ],
+   "fen": "r1b2rk1/pp2Rp1p/5bp1/8/2Bn1B2/1PN5/1P3PPP/R5K1 w - - 2 17",
+   "said": "sit on black before he can complete his development but I there is something I missed here I miss the detail let's see if our opponent finds it Bishop pep six found wow okay very strong so what did I miss I'm losing the touch and the speedrun I missed that after Rook C7 there's this retreating with Bishop d8 yeah I missed I missed Bishop F6 Rook C7 Bishop d8 okay well we need to improvise but I just found a beautiful idea I just found a super sexy idea"
+  },
+  {
+   "ply": 33,
+   "t": 669.5,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1b2rk1/pp2Rp1p/5bp1/3N4/2Bn1B2/1P6/1P3PPP/R5K1 b - - 3 17",
+   "said": "I just found a super sexy idea let's see who can find it ah this is a good this is a this is a nice move Knight D5 very good yeah 1995 95 because if Bishop E7 the Knight takes C7 check King moves Bishop E5 check picks off the Knight on D4 so how do I find this move right you might be looking at the signal I get the reason you know I can understand this move after it's played but how would I found this move during the game well it all has to do with not making assumptions right the reason that a move like this is hard to find is because you're automatically assuming that you have to move the Rook once you free yourself from that assumption it becomes possible to find these types of moves what else did I consider I"
+  },
+  {
+   "ply": 32,
+   "t": 717,
+   "line": [],
+   "fen": "r1b2rk1/pp2Rp1p/5bp1/8/2Bn1B2/1PN5/1P3PPP/R5K1 w - - 2 17",
+   "said": "thought about maybe bishop D6 here well that doesn't work because black takes it and goes rookie eight thought about maybe just sacking it positionally going to Rook 81 but once you start thinking in that direction ultimately you spot the move Knight D5 because you recapture with a check"
+  },
+  {
+   "ply": 33,
+   "t": 724,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1b2rk1/pp2Rp1p/5bp1/3N4/2Bn1B2/1P6/1P3PPP/R5K1 b - - 3 17",
+   "said": "does that make sense so you know you have to avoid making these immediate blanket assumptions that oh I have to move the Rook I have to do this keep an open mind to tactics even in the end game and you will find yourself spotting more of these types of unexpected tactical moves but you have to be patient with yourself and it's also the product of just solving a ton of puzzles I think black is in a serious amount of trouble here because the bishop is hanging and it's not easy to defend it I think like does have a defensive move here but I don't see anything truly satisfactory I think black is worse everywhere yeah free yourself from these assumptions and then hang pieces and"
+  },
+  {
+   "ply": 34,
+   "t": 778.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1b2rk1/pp2Rp1p/2n2bp1/3N4/2B2B2/1P6/1P3PPP/R5K1 w - - 4 18",
+   "said": "said Daniel said to not make assumptions in you know when their pieces are hanging I I really think that black has only one move let's see if black finds it okay Knight C6 well that's not it that's obviously not it that's just loses on the spot yeah and you can still see that that"
+  },
+  {
+   "ply": 35,
+   "t": 791,
+   "line": [
+    "Nxf6+"
+   ],
+   "fen": "r1b2rk1/pp2Rp1p/2n2Np1/8/2B2B2/1P6/1P3PPP/R5K1 b - - 0 18",
+   "said": "people when they're faced with these types of challenges they'd end up panic immediately like this just gives up the bishop with a check yeah this of course"
+  },
+  {
+   "ply": 36,
+   "t": 792.5,
+   "line": [
+    "Kg7"
+   ],
+   "fen": "r1b2r2/pp2Rpkp/2n2Np1/8/2B2B2/1P6/1P3PPP/R5K1 w - - 1 19",
+   "said": "is Black's idea but it has not a single chance of working in fact I think there is more than one refutation so the simplest the absolute simplest move here is to drop the Knight back to D5"
+  },
+  {
+   "ply": 37,
+   "t": 815,
+   "line": [
+    "Ne8+"
+   ],
+   "fen": "r1b1Nr2/pp2Rpkp/2n3p1/8/2B2B2/1P6/1P3PPP/R5K1 b - - 2 19",
+   "said": "and then after Knight takes C7 Knight takes C7 we have two pieces for our rook and we should be winning but there is a much better and much simpler move which is of course Knight E8 check and this ends the game because either black has to move the king or take the Knight and lose a rook yeah Marca Mark's opening prevails again but although this was a short game"
+  },
+  {
+   "ply": 3,
+   "t": 843,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "we have a lot to discuss in the opening and there's a lot of meat on the bone in the middle game last couple of games have been pretty short I guess so yeah so the G6 variation I think we faced it once before Bishop C4 Bishop G7 and E5 okay so Knight H6 is the move that I didn't know it is the main move um Bishop F4 is indeed the the database move Bishop F4 castles castles D6 there is one game in the database here still so we're just gonna have to check with the engine we're just gonna have to check the opening with the engine and notice that you might say well isn't that doesn't that violate the spirit of the speedrun well I always tell this to students the best like use case for the engine is in the opening right if you want to determine whether you played correctly in the opening you have two options you can use a book if you have a book on the opening but if you want to check efficiently and quickly you can pull up the engine and check it'll give you a good sense of like whether you played uh you found moves in the right ballpark right so hopefully you can forgive me for pulling up the engine this early in the game or early in the analysis rather but the"
+  }
+ ],
+ "forks": []
+}

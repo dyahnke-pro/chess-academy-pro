@@ -377,5 +377,40 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Bishop's Opening: Vienna Hybrid",
+   "eco": "C24",
+   "plies": 7,
+   "line": "e4 e5 Bc4 Nf6 d3 Nc6 Nc3",
+   "coverage": 0.792
+  },
+  {
+   "name": "Bishop's Opening: Berlin Defense",
+   "eco": "C24",
+   "plies": 4,
+   "line": "e4 e5 Bc4 Nf6",
+   "coverage": 0.917
+  },
+  {
+   "name": "Bishop's Opening",
+   "eco": "C23",
+   "plies": 3,
+   "line": "e4 e5 Bc4",
+   "coverage": 0.958
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

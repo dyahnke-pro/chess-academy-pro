@@ -1,0 +1,226 @@
+{
+ "videoId": "7xgOCneMX8s",
+ "title": "Four Knights Scotch | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 10,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] let's go e4"
+  },
+  {
+   "ply": 3,
+   "t": 11,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": ""
+  },
+  {
+   "ply": 4,
+   "t": 13,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "okay so we're sticking to our guns we're sticking to our gun and and the great thing about the four night scotch is that you do not need a separate"
+  },
+  {
+   "ply": 5,
+   "t": 23,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "said": "system against the petrog you can just go knight c3 and black is of course very likely to go"
+  },
+  {
+   "ply": 7,
+   "t": 26.5,
+   "line": [
+    "Nc6",
+    "d4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "said": "knight c6 and now we go into the four night scotch"
+  },
+  {
+   "ply": 8,
+   "t": 30.5,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "said": "against which so far nobody has really"
+  },
+  {
+   "ply": 9,
+   "t": 31.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "said": "even played the main line which was"
+  },
+  {
+   "ply": 10,
+   "t": 34.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/8/3nP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "said": "bishop before and still still we see"
+  },
+  {
+   "ply": 11,
+   "t": 36,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/8/3QP3/2N5/PPP2PPP/R1B1KB1R b KQkq - 0 6",
+   "said": "knight takes before which is a mistake and a lot of people still attracted to this idea of chasing white's queen which we've discussed several times and already black has to be very careful"
+  },
+  {
+   "ply": 13,
+   "t": 56.5,
+   "line": [
+    "b6",
+    "e5"
+   ],
+   "fen": "r1bqkb1r/p1pp1ppp/1p3n2/4P3/3Q4/2N5/PPP2PPP/R1B1KB1R b KQkq - 0 7",
+   "said": "d6 is almost the only move here otherwise we shove her upon down black's throat no this is already almost losing so as i as i've indicated now we go e5 i won't re-explain this we've had probably already three or four games that go just"
+  },
+  {
+   "ply": 14,
+   "t": 62.5,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r1b1kb1r/p1ppqppp/1p3n2/4P3/3Q4/2N5/PPP2PPP/R1B1KB1R w KQkq - 1 8",
+   "said": "like this queen e7 okay this is getting worse and worse for black couldn't get the staff or yeah and it's an ansi stafford idea okay so what to do here now i'm quite confident that some of you guys are probably yeah bishop g5 is a great move so how do i explain this bishop g5 doesn't actually threaten to take the knight immediately but bishop g5 is a second order threat if we play bishop g5 what we're actually threatening is to castle queenside and then we'll be winning the night so bishop g5 is a great move um but we can also play this very simple we can play bishop out to e2 and cancel this pin and then force the knight back to g8 which looks absolutely atrocious for black and we can play bishop e3 with the same exact idea i also like bishop e3 from the perspective of preparing queen side"
+  },
+  {
+   "ply": 15,
+   "t": 135,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1b1kb1r/p1ppqppp/1p3n2/4P1B1/3Q4/2N5/PPP2PPP/R3KB1R b KQkq - 2 8",
+   "said": "castles so both bishop g5 and bishop e2 are phenomenal moves i feel like a quicker win could be yielded by bishop g5 i i want to go bishop g5 i feel like we're gonna we're gonna go straight for black's throat here i like bishop g5 too because this creates a a monumental challenge for black in the sense that we're threatening to castle and then the knight is going to be lost and the thing to understand is that if black plays well if black plays h6 here"
+  },
+  {
+   "ply": 16,
+   "t": 168,
+   "line": [
+    "Qe6"
+   ],
+   "fen": "r1b1kb1r/p1pp1ppp/1p2qn2/4P1B1/3Q4/2N5/PPP2PPP/R3KB1R w KQkq - 3 9",
+   "said": "and we'll cross that bridge if we get there black plays h6 we have a move that essentially wins on the spot we've got maybe even several moves that went on the spot queen e6 our opponent is totally off off off their rocker what to do now ell we already know what to do now ell we already know what to do now so bishop c4 there's a funny move queen g4 and even then we could trade queens and go like knight d5 and then black ant defense so it's a disaster but we don't even need to play okay so bishop c4 queen g4 let me think for a second that position i'm going to try to find a knockout"
+  },
+  {
+   "ply": 17,
+   "t": 213.5,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "r1b1kb1r/p1pp1ppp/1p2qn2/4P1B1/3Q4/2N5/PPP2PPP/2KR1B1R b kq - 4 9",
+   "said": "there there there it it's not quite as convincing as i'd like it to be yeah i think the simplest the simplest thing we can do here is just to castle just to complete our development and and to reinforce the threat of he takes f6"
+  },
+  {
+   "ply": 18,
+   "t": 222.5,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1b1k2r/p1pp1ppp/1p2qn2/2b1P1B1/3Q4/2N5/PPP2PPP/2KR1B1R w kq - 5 10",
+   "said": "easy does it in such positions you really don't need any kind of extravagant idea you don't need any extravagant ideas now here we have a very high level move i'm going to warn everybody this is not a move that i would expect necessarily a you know it and this i don't mean this kind of setting you know like this is a pretty master level idea so in probably most of you are thinking about queen f4 the way that most people would approach this position is to say okay queen is hanging we need to move the queen to a square such that it protects the e5 pawn okay queen e4 blunders the queen so the only square available is queen f4 now does queen of four have any issues the only issue with queen f4 actually there"
+  },
+  {
+   "ply": 19,
+   "t": 274.5,
+   "line": [
+    "Qh4"
+   ],
+   "fen": "r1b1k2r/p1pp1ppp/1p2qn2/2b1P1B1/7Q/2N5/PPP2PPP/2KR1B1R b kq - 6 10",
+   "said": "are no issues with queen f4 and queen of four is completely winning but i want to show you guys a an idea that i think is cooler and more instructive and that is queen h4 which deliberately gives up the e5 pawn and it looks like black takes on e5 and then black is ready to castle kingside and unfortunately after queen takes e5 we are unable to play rookie one because"
+  },
+  {
+   "ply": 20,
+   "t": 301,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "r1b1k2r/p1pp1ppp/1p2q3/2b1P1B1/6nQ/2N5/PPP2PPP/2KR1B1R w kq - 7 11",
+   "said": "our bishop isn't developed yet so the e1 square isn't protected but after queen takes e5 we have a very very nice follow-up that if i've calculated it correctly wins the game on the spot knight okay unfortunately our opponent doesn't even let us demonstrate it that's sad but it is what it is knight g4 okay now we um"
+  },
+  {
+   "ply": 21,
+   "t": 317.5,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1b1k2r/p1pp1ppp/1p2q3/2bNP1B1/6nQ/8/PPP2PPP/2KR1B1R b kq - 8 11",
+   "said": "we collect now we collect and we need to target the c7 pawn how do we do that we go knight d5 and if black castles king side and this is i will admit probably not ideal on mice on my end the way i play this is maybe not perfect but it's for those people on youtube it's it's three in the morning so i'll give myself a pass and then of course we can play and i take c7 if we want yeah our opponent is playing if i may be honest our opponent is playing so badly that like we have so many options on every move and even i'm getting overwhelmed by the amount sheer amount of different winning possibilities we have it's just yeah i mean i mean this is"
+  },
+  {
+   "ply": 22,
+   "t": 368.5,
+   "line": [
+    "Bxf2"
+   ],
+   "fen": "r1b1k2r/p1pp1ppp/1p2q3/3NP1B1/6nQ/8/PPP2bPP/2KR1B1R w kq - 0 12",
+   "said": "i guess an effective way of playing for black well i'm saying i'm telling you like it is our phone is just not playing very well i'm sure they're trying"
+  },
+  {
+   "ply": 23,
+   "t": 372,
+   "line": [
+    "Nxc7+"
+   ],
+   "fen": "r1b1k2r/p1Np1ppp/1p2q3/4P1B1/6nQ/8/PPP2bPP/2KR1B1R b kq - 0 12",
+   "said": "bishop f2 i didn't say that he's not trying but"
+  },
+  {
+   "ply": 24,
+   "t": 375,
+   "line": [
+    "Kf8"
+   ],
+   "fen": "r1b2k1r/p1Np1ppp/1p2q3/4P1B1/6nQ/8/PPP2bPP/2KR1B1R w - - 1 13",
+   "said": ""
+  },
+  {
+   "ply": 25,
+   "t": 377.5,
+   "line": [
+    "Nxe6+"
+   ],
+   "fen": "r1b2k1r/p2p1ppp/1p2N3/4P1B1/6nQ/8/PPP2bPP/2KR1B1R b - - 0 13",
+   "said": "okay this no comments"
+  },
+  {
+   "ply": 26,
+   "t": 379.5,
+   "line": [
+    "dxe6"
+   ],
+   "fen": "r1b2k1r/p4ppp/1p2p3/4P1B1/6nQ/8/PPP2bPP/2KR1B1R w - - 0 14",
+   "said": ""
+  },
+  {
+   "ply": 27,
+   "t": 383,
+   "line": [
+    "Rd8#"
+   ],
+   "fen": "r1bR1k1r/p4ppp/1p2p3/4P1B1/6nQ/8/PPP2bPP/2K2B1R b - - 1 14",
+   "said": "yeah i mean i don't know not not his or her best day so [Music] again you can see that even at this level almost everybody goes for this position knight takes d4 which is a mistake and then follows up with another mistake allowing e5 i went through this many times you guys can consult previous speedrun games for an explanation of why this is already bad for black but the bottom line here is that um yeah i think maybe bishop b2 would be a more prudent option forcing the knight back to g8 and then we can go knight t5 etc this is just horrible but we decided on bishop g5 and then castles bishop c5 queen h4 now the only idea and maybe i overplayed this a little bit after queen takes c5 we have a pretty subtle move that i believe wins the game immediately so obviously we want to put a rook on e1"
+  }
+ ],
+ "forks": []
+}
