@@ -278,5 +278,43 @@
   "claims": null,
   "confirmed": null,
   "unverifiable": "title names no opening"
- }
+ },
+ "notes": [
+  {
+   "id": "vn-qg-the-symmetrical-reply-that-claims-a-square",
+   "line": "d4 d5",
+   "teaches": "Meeting a central pawn with the mirror move is not passivity — it is a claim on the square in front of it. Everything that follows is an argument about who gets to advance first.",
+   "explains": "The pawn to d5 stops the centre from being taken outright and holds e4 and c4 in its sights. From here White's main try is to offer the c-pawn to deflect it, and Black's whole choice of defence comes down to how that offer is answered: hold the centre, take and give it back later, or ignore it and develop.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e4"
+    },
+    {
+     "kind": "controls",
+     "square": "c4"
+    }
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "t": 13,
+   "ply": 2,
+   "source": "yt:4EXCxC9UxI0"
+  },
+  {
+   "id": "vn-qg-the-offer-that-is-not-a-gambit",
+   "line": "d4 d5 c4",
+   "teaches": "A pawn offered to deflect a defender is not a gambit if it can be regained. Judge the offer by whether taking it can be HELD, not by whether taking it is legal.",
+   "explains": "The c-pawn hits d5 and asks the question the whole opening is built on. Black is not really being offered a pawn — grabbing and clinging to it does not work — so the reply is a choice of structure instead: decline and hold the centre, take and concede it for activity, or step outside the pawn chain first. That last road includes a genuine sideline where the light-squared bishop comes out to f5 immediately, before the pawn on e7 shuts it in, which is exactly the problem the main lines spend several moves solving.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d5"
+    }
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "t": 21,
+   "ply": 3,
+   "source": "yt:4EXCxC9UxI0"
+  }
+ ]
 }
