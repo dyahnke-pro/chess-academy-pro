@@ -3164,6 +3164,48 @@ endpoint — measured 2026-08-17, a subtitle fetch returned 515KB on the same
 cookies that had just been refused three video downloads with HTTP 429. So a
 missing transcript is cheap to fix and there is no reason to write around it.
 
+### 🔒🔒 A NOTE'S `line` IS THE VIDEO'S MOVE ORDER, NEVER THE REPERTOIRE'S — and `note-anchors.mjs` is how you find it (locked 2026-08-21)
+
+Two tools match a note two different ways, and the mismatch between them is a
+trap that silently refuses good work:
+
+- **`attach-notes` matches by the exact SAN STRING the lesson walked.**
+- **`check-notes` matches the taught line by FEN.**
+
+So a lesson that reaches a taught position through a different move order —
+`4.d4 cxd4 5.Nf3 Nc6 6.cxd4 d6` against the repertoire's `5.cxd4 d6 6.Nf3 Nc6` —
+is genuinely ON the taught line, passes `check-notes` clean, and is still
+REFUSED by `attach-notes`, because the strings differ. Measured the day this was
+written: 9 of 12 notes on one lesson, all correct, all rejected. **Write the
+video's order into `line`; the FEN check will still place it on the taught line.**
+
+**`scripts/video-align/note-anchors.mjs <videoId>` prints exactly what a note
+needs** and exists so this is never re-derived by hand: every position the lesson
+settled on, the SAN string to put in `line`, the timestamp to read the captions
+at, which taught line it lands on, and `[HAS NOTE]` where a note already anchors
+there. Run it before writing anything. Two things it will save you from:
+
+- **A position the video PASSED THROUGH is not a position it SETTLED on.** Only
+  settled positions can be anchored; a note on a move the teacher played straight
+  through is refused. If it is not in the listing, it cannot carry a note.
+- **`[HAS NOTE]` is by POSITION, not by string.** Two videos reaching the same
+  board by different orders would otherwise get two notes on one position — the
+  flag is what stops the second one being written.
+
+**`check-notes` also fails a note whose prose NAMES another opening** ("this
+transposes into the French"). That is deliberate: a note is selected by position
+and may be spoken in a lesson about a different opening entirely, where naming
+the wrong one is a false claim. Describe the STRUCTURE instead — "a locked pawn
+chain where White's e-pawn has advanced past" — which is true wherever it is
+spoken.
+
+**A track with no teachable captions gets NO notes, and that is a finish, not a
+debt.** Some lessons' only on-line anchors are the generic openers, with banter
+or chess history over them rather than teaching. Writing filler there to clear
+the "every pulled line gets notes" rule is the one way to satisfy its letter
+while destroying what it protects. Leave the track in `data/video-pending/` and
+say why. Empty > generic > invented, as always.
+
 ### 🔒🔒 THE FORK PIPELINE IS HOW A STRANDED NOTE IS RESCUED — RUN IT, DON'T IMPROVISE (locked 2026-08-19 after a session hand-rolled a lesser version of work that already existed)
 
 An off-line note is SILENT in Watch and Learn. The fix is to add the video's

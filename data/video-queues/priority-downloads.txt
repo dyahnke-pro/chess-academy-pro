@@ -113,3 +113,45 @@ DYjp2MrfxkA
 #     -f "134/396/135/bestvideo[height<=480]/bestvideo" -o "drop/$id.mp4" -- "$id" || echo SKIP $id
 #   sleep 5
 # done
+
+
+# ============================================================================
+# THE COVERAGE GAP — where the NEXT downloads should go (measured 2026-08-21)
+#
+# 183 of the repertoire's 376 taught lines now carry at least one hand-written
+# note; 193 carry none. The banked corpus is overwhelmingly e4: Naroditsky's
+# speedruns open 1.e4 almost every game, so the Sicilian, Scotch, Italian and
+# Caro families are well served and the entire d4 half of the repertoire has
+# NOTHING.
+#
+# Ordered by total taught plies with zero coverage — the honest most-effect-to-
+# least list. A video on any of these lands on a taught line immediately; a
+# fourth Alapin video mostly lands on positions that already have notes.
+#
+# Re-measure rather than trusting these numbers as the corpus grows:
+#   node scripts/video-align/note-anchors.mjs <videoId>   (per video)
+# ============================================================================
+
+# 236 plies   9 lines  Queen's Gambit Declined
+# 231 plies   8 lines  Semi-Slav Defence
+# 215 plies   9 lines  Pirc Defence
+# 215 plies   9 lines  Nimzo-Indian Defence
+# 209 plies   9 lines  Queen's Gambit
+# 203 plies   8 lines  Benoni Defence
+# 187 plies   9 lines  Reti Opening
+# 182 plies   8 lines  Benko Gambit
+# 178 plies   8 lines  Old Indian Defence
+# 170 plies   9 lines  Slav Defence
+# 164 plies   7 lines  Queen's Gambit Accepted
+# 163 plies   8 lines  Dutch Defence
+# 158 plies   8 lines  Catalan Opening
+# 136 plies   8 lines  Bird's Opening
+# 75 plies   4 lines  Albin Countergambit
+
+# Search terms that would fill these fastest, most-effect first:
+#   "Queen's Gambit Declined theory speedrun"      (236 plies, 9 lines)
+#   "Semi-Slav Meran / Botvinnik explained"        (231 plies, 8 lines)
+#   "Pirc Defence Austrian Attack lesson"          (215 plies, 9 lines)
+#   "Nimzo-Indian Rubinstein / Classical lesson"   (215 plies, 9 lines)
+#   "Benoni Modern / Four Pawns Attack lesson"     (203 plies, 8 lines)
+#   "Reti / King's Indian Attack system video"     (187 plies, 9 lines)
