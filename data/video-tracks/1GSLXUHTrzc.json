@@ -254,7 +254,7 @@
    "id": "vn-scotch-open-the-position-give-back-the-centre",
    "line": "e4 e5 Nf3 Nc6 d4",
    "teaches": "Trading a centre pawn is not losing the centre if it opens lines for the pieces that are already out. Count what gets FREED, not what gets given.",
-   "explains": "White hits e5 immediately rather than building up behind it. The pawn will come off and with it the closed character of the position — the point is not to win a pawn but to open the middle while the knight already stands on f3 and Black's pieces do not. There are quieter versions of the same idea, holding back the recapture with a bishop or a pawn on c3, but the straight recapture is the main road.",
+   "explains": "White hits e5 immediately rather than building up behind it. The pawn will come off and with it the closed character of the position — the point is not to win a pawn but to open the middle while the knight already stands on f3 and Black's pieces do not. There are quieter ways to reach the same structure, delaying the recapture or preparing it with the c-pawn, but taking straight back is the main road.",
    "reasons": [
     {
      "kind": "attacks",
@@ -318,7 +318,7 @@
    "id": "vn-scotch-the-queen-move-that-answers-two-things",
    "line": "e4 e5 Nf3 Nc6 d4 exd4 Nxd4 Bc5 Be3 Qf6",
    "teaches": "Step out of a fork before it happens rather than after. The best square is the one that dodges the threat and joins the attack on the piece that made it.",
-   "explains": "The queen steps to f6 and the threat on c6 evaporates: the knight can still go there, but it no longer arrives hitting a queen on d8. At the same time the queen joins the pressure on d4 along the diagonal, and it is quietly eyeing f2 — a detail that will matter in two moves' time. One move, three jobs.",
+   "explains": "The queen steps to f6 and the threat evaporates: the knight can still take on c6, but it no longer arrives hitting a queen. At the same time the queen joins the pressure on d4 along the diagonal, and it is quietly eyeing f2 — a detail that will matter in two moves' time. One move, three jobs.",
    "reasons": [
     {
      "kind": "attacks",

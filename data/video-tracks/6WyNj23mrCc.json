@@ -1871,7 +1871,7 @@
    "id": "vn-alapin-iqp-the-sacrifice-that-fails-because-nothing-moved",
    "line": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6",
    "teaches": "Before sacrificing on f7, ask what happens after the king walks back. A sacrifice that needs a follow-up piece is refuted by the opponent having one more defender than you have attackers — even a defender that has never moved.",
-   "explains": "The knight steps back to b6 and hits the bishop. It is worth knowing why the usual sacrifice does not work in this exact position: take on f7, the king takes back, push the pawn to e6 with check — and the king simply returns to g8. White has nothing left that can touch that pawn on e6, and Black can even remove it with the bishop that has not moved all game. The sacrifice fails precisely BECAUSE Black is undeveloped, which is not how these things usually go.",
+   "explains": "The knight steps back to b6 and hits the bishop. It is worth knowing why the usual sacrifice does not work in this exact position: take on f7, the king takes back, push the pawn to e6 with check — and the king simply returns to g8. White has nothing left that can touch the pawn there, and the bishop that has not moved all game can even remove it. The sacrifice fails precisely BECAUSE Black is undeveloped, which is not how these things usually go.",
    "reasons": [
     {
      "kind": "attacks",
@@ -1967,7 +1967,7 @@
    "id": "vn-alapin-iqp-take-the-defender-before-the-attacker-arrives",
    "line": "e4 c5 c3 Nf6 e5 Nd5 d4 cxd4 Nf3 Nc6 cxd4 d6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7 Nxd7 Qxd7 Nc3 e6 O-O Be7",
    "teaches": "Check the order before the idea. If the move you want to play hangs something, look for the capture that removes the defender first — the attacking move is still there next turn.",
-   "explains": "The bishop comes to e7 and Black is about to be finished developing, so this is the moment. The queen belongs on g4, hitting g7 through the bishop and e6 in front of it. But the order matters more than the idea: swinging the other bishop to h6 straight away is a blunder, because Black takes the isolated pawn on d4 with the queen, where the knight on c6 defends it, the queen covers g7 from there, and White's own queen on g4 is hanging. Take the knight on c6 first. Then the same queen grab simply loses the queen, the bishop arrives on h6 with real force, and the black bishop is forced to f6 where the knight comes to e4 and hits it again.",
+   "explains": "The bishop comes to e7 and Black is about to be finished developing, so this is the moment. The queen belongs on g4, hitting g7 through the bishop and e6 in front of it. But the order matters more than the idea. Swinging the other bishop out to h6 straight away is a blunder: Black replies by taking the isolated pawn with the queen, where the knight on c6 defends it, the queen covers g7 from there, and White's own queen is left hanging. Take the knight on c6 first. Then the same queen grab simply loses the queen, the bishop arrives on h6 with real force, and the black bishop is forced to f6 where the knight comes to e4 and hits it again.",
    "reasons": [
     {
      "kind": "controls",

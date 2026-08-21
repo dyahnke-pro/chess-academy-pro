@@ -87,7 +87,7 @@
     "id": "vn-fourknights-which-bishop-square-decided-which-pawn-break",
     "line": "e4 e5 Nc3 Nf6 Nf3 Nc6 d4 exd4 Nxd4 Bb4 Nxc6 bxc6 Bd3 d5",
     "teaches": "An early bishop move is really a choice of pawn break three moves later. Ask which pawn advance the bishop's square makes natural before you play it.",
-    "explains": "The pawn goes to d5 and hits e4. This is the point of the bishop having gone to b4 rather than c5: with the pin, almost everyone strikes with the d-pawn two squares, opening the position immediately and using the doubled pawns as central mass. Put the bishop on c5 instead and the plan quietly changes to the modest one-square advance and a slower game. Same opening, two different structures, decided four moves earlier.",
+    "explains": "The pawn goes to d5 and hits e4. This is the point of the bishop having gone to b4 rather than c5: with the pin, almost everyone strikes with the d-pawn two squares, opening the position immediately and using the doubled pawns as central mass. The other bishop square quietly changes the plan to the modest one-square advance and a slower game. Same opening, two different structures, decided four moves earlier.",
     "reasons": [
       {
         "kind": "attacks",

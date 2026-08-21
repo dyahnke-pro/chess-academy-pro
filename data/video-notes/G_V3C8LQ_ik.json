@@ -39,7 +39,7 @@
     "id": "vn-alapin-qd5-the-modest-move-that-frees-the-bishop",
     "line": "e4 c5 c3 d5 exd5 Qxd5 d4 Nf6 Nf3 e6",
     "teaches": "Between two developing moves, prefer the one that unlocks a piece with no other route. The natural knight move is worse than it looks when it leaves a bishop behind its own pawn.",
-    "explains": "The pawn steps to e6, which looks like the least ambitious move on the board and is not. The intuitive alternative, bringing the queen's knight out, leaves the dark-squared bishop shut in behind the pawn on e7 with nothing to do — this move clears its diagonal instead. Developing the light-squared bishop outside the chain is the other serious try. White's answer to the pawn move is the knight round to a3, heading for b5 where it hits c7 and forks the king and rook if allowed, so Black spends a move guarding that square — the queen stepping home or the other knight coming to a6.",
+    "explains": "The pawn steps to e6, which looks like the least ambitious move on the board and is not. The intuitive alternative, bringing the queen's knight out, leaves the dark-squared bishop shut in with nothing to do; this clears its diagonal instead. Developing the light-squared bishop outside the chain is the other serious try. White's answer is the knight round to a3, heading for b5 where it hits c7 and forks the king and rook if allowed, so Black spends a move guarding that square — the queen stepping home or the other knight coming to a6.",
     "reasons": [
       {
         "kind": "opens",
