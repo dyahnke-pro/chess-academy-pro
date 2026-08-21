@@ -1,0 +1,232 @@
+{
+ "videoId": "Wgl8OsI1dB4",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1200",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 3128,
+  "settledPositions": null
+ },
+ "plies": 20,
+ "rewinds": 1,
+ "moves": [
+  {
+   "t": 17.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 20,
+   "ply": 3,
+   "line": [
+    "f4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 45,
+   "ply": 4,
+   "line": [
+    "exf4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/8/PPPP2PP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 47.5,
+   "ply": 5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4Pp2/5N2/PPPP2PP/RNBQKB1R b KQkq - 1 3"
+  },
+  {
+   "t": 54,
+   "ply": 6,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/3p4/4Pp2/5N2/PPPP2PP/RNBQKB1R w KQkq - 0 4"
+  },
+  {
+   "t": 65,
+   "ply": 7,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/8/3P4/5p2/5N2/PPPP2PP/RNBQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 85.5,
+   "ply": 8,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3P4/5p2/5N2/PPPP2PP/RNBQKB1R w KQkq - 1 5"
+  },
+  {
+   "t": 94,
+   "ply": 9,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3P4/3P1p2/5N2/PPP3PP/RNBQKB1R b KQkq - 0 5"
+  },
+  {
+   "t": 96,
+   "ply": 10,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/8/3n4/3P1p2/5N2/PPP3PP/RNBQKB1R w KQkq - 0 6"
+  },
+  {
+   "t": 99.5,
+   "ply": 11,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/8/3n4/2BP1p2/5N2/PPP3PP/RNBQK2R b KQkq - 1 6"
+  },
+  {
+   "t": 107,
+   "ply": 12,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/8/3n4/2BP1p2/5N2/PPP3PP/RNBQK2R w KQkq - 2 7"
+  },
+  {
+   "t": 114,
+   "ply": 13,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/8/3n4/2BP1p2/5N2/PPP3PP/RNBQ1RK1 b kq - 3 7"
+  },
+  {
+   "t": 116,
+   "ply": 14,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppp1bppp/8/3n4/2BP1p2/5N2/PPP3PP/RNBQ1RK1 w - - 4 8"
+  },
+  {
+   "t": 120,
+   "ply": 15,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "rnbq1rk1/ppp1bppp/8/3nN3/2BP1p2/8/PPP3PP/RNBQ1RK1 b - - 5 8"
+  },
+  {
+   "t": 123,
+   "ply": 14,
+   "line": [],
+   "fen": "rnbq1rk1/ppp1bppp/8/3n4/2BP1p2/5N2/PPP3PP/RNBQ1RK1 w - - 4 8"
+  },
+  {
+   "t": 131,
+   "ply": 15,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "rnbq1rk1/ppp1bppp/8/3nN3/2BP1p2/8/PPP3PP/RNBQ1RK1 b - - 5 8"
+  },
+  {
+   "t": 169,
+   "ply": 16,
+   "line": [
+    "Be6"
+   ],
+   "fen": "rn1q1rk1/ppp1bppp/4b3/3nN3/2BP1p2/8/PPP3PP/RNBQ1RK1 w - - 6 9"
+  },
+  {
+   "t": 187.5,
+   "ply": 17,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rn1q1rk1/ppp1bppp/4b3/3nN3/3P1p2/3B4/PPP3PP/RNBQ1RK1 b - - 7 9"
+  },
+  {
+   "t": 220,
+   "ply": 18,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2q1rk1/ppp1bppp/2n1b3/3nN3/3P1p2/3B4/PPP3PP/RNBQ1RK1 w - - 8 10"
+  },
+  {
+   "t": 228.5,
+   "ply": 20,
+   "line": [
+    "Nxc6",
+    "bxc6"
+   ],
+   "fen": "r2q1rk1/p1p1bppp/2p1b3/3n4/3P1p2/3B4/PPP3PP/RNBQ1RK1 w - - 0 11"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "King's Gambit Accepted: Abbazia Defense",
+   "eco": "C36",
+   "plies": 8,
+   "line": "e4 e5 f4 exf4 Nf3 d5 exd5 Nf6",
+   "coverage": 0.667
+  },
+  {
+   "name": "King's Gambit Accepted: Modern Defense",
+   "eco": "C36",
+   "plies": 6,
+   "line": "e4 e5 f4 exf4 Nf3 d5",
+   "coverage": 0.778
+  },
+  {
+   "name": "King's Gambit Accepted: King's Knight's Gambit",
+   "eco": "C34",
+   "plies": 5,
+   "line": "e4 e5 f4 exf4 Nf3",
+   "coverage": 0.833
+  },
+  {
+   "name": "King's Gambit Accepted",
+   "eco": "C33",
+   "plies": 4,
+   "line": "e4 e5 f4 exf4",
+   "coverage": 0.889
+  },
+  {
+   "name": "King's Gambit",
+   "eco": "C30",
+   "plies": 3,
+   "line": "e4 e5 f4",
+   "coverage": 0.944
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}

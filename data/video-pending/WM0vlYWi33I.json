@@ -1,0 +1,331 @@
+{
+ "videoId": "WM0vlYWi33I",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1280",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 4585,
+  "settledPositions": null
+ },
+ "plies": 32,
+ "rewinds": 3,
+ "moves": [
+  {
+   "t": 649,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 651.5,
+   "ply": 4,
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 654.5,
+   "ply": 6,
+   "line": [
+    "d4",
+    "cxd4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4"
+  },
+  {
+   "t": 657,
+   "ply": 8,
+   "line": [
+    "Nxd4",
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5"
+  },
+  {
+   "t": 672.5,
+   "ply": 10,
+   "line": [
+    "Nxc6",
+    "bxc6"
+   ],
+   "fen": "r1bqkbnr/p2ppp1p/2p3p1/8/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 0 6"
+  },
+  {
+   "t": 674,
+   "ply": 11,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "r1bqkbnr/p2ppp1p/2p3p1/8/4P3/8/PPPB1PPP/RN1QKB1R b KQkq - 1 6"
+  },
+  {
+   "t": 682.5,
+   "ply": 12,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/8/PPPB1PPP/RN1QKB1R w KQkq - 2 7"
+  },
+  {
+   "t": 684,
+   "ply": 13,
+   "line": [
+    "Bc3"
+   ],
+   "fen": "r1bqk1nr/p2pppbp/2p3p1/8/4P3/2B5/PPP2PPP/RN1QKB1R b KQkq - 3 7"
+  },
+  {
+   "t": 699.5,
+   "ply": 14,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/p2pppbp/2p2np1/8/4P3/2B5/PPP2PPP/RN1QKB1R w KQkq - 4 8"
+  },
+  {
+   "t": 705.5,
+   "ply": 15,
+   "line": [
+    "f3"
+   ],
+   "fen": "r1bqk2r/p2pppbp/2p2np1/8/4P3/2B2P2/PPP3PP/RN1QKB1R b KQkq - 0 8"
+  },
+  {
+   "t": 714.5,
+   "ply": 16,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/p2pppbp/2p2np1/8/4P3/2B2P2/PPP3PP/RN1QKB1R w KQ - 1 9"
+  },
+  {
+   "t": 716,
+   "ply": 17,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bq1rk1/p2pppbp/2p2np1/8/2B1P3/2B2P2/PPP3PP/RN1QK2R b KQ - 2 9"
+  },
+  {
+   "t": 726,
+   "ply": 18,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bq1rk1/p3ppbp/2p2np1/3p4/2B1P3/2B2P2/PPP3PP/RN1QK2R w KQ - 0 10"
+  },
+  {
+   "t": 728.5,
+   "ply": 20,
+   "line": [
+    "exd5",
+    "cxd5"
+   ],
+   "fen": "r1bq1rk1/p3ppbp/5np1/3p4/2B5/2B2P2/PPP3PP/RN1QK2R w KQ - 0 11"
+  },
+  {
+   "t": 752,
+   "ply": 21,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "r1bq1rk1/p3ppbp/5np1/3p4/8/2BB1P2/PPP3PP/RN1QK2R b KQ - 1 11"
+  },
+  {
+   "t": 777.5,
+   "ply": 22,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "r1b2rk1/p3ppbp/1q3np1/3p4/8/2BB1P2/PPP3PP/RN1QK2R w KQ - 2 12"
+  },
+  {
+   "t": 823,
+   "ply": 23,
+   "line": [
+    "Qc1"
+   ],
+   "fen": "r1b2rk1/p3ppbp/1q3np1/3p4/8/2BB1P2/PPP3PP/RNQ1K2R b KQ - 3 12"
+  },
+  {
+   "t": 853,
+   "ply": 24,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/2BB1P2/PPP3PP/RNQ1K2R w KQ - 0 13"
+  },
+  {
+   "t": 855,
+   "ply": 25,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/3B1P2/PPPB2PP/RNQ1K2R b KQ - 1 13"
+  },
+  {
+   "t": 856.5,
+   "ply": 24,
+   "line": [],
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/2BB1P2/PPP3PP/RNQ1K2R w KQ - 0 13"
+  },
+  {
+   "t": 860.5,
+   "ply": 25,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/3B1P2/PPPB2PP/RNQ1K2R b KQ - 1 13"
+  },
+  {
+   "t": 871,
+   "ply": 26,
+   "line": [
+    "e4"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q3np1/3p4/4p3/3B1P2/PPPB2PP/RNQ1K2R w KQ - 0 14"
+  },
+  {
+   "t": 874.5,
+   "ply": 27,
+   "line": [
+    "fxe4"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q3np1/3p4/4P3/3B4/PPPB2PP/RNQ1K2R b KQ - 0 14"
+  },
+  {
+   "t": 879,
+   "ply": 28,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q3np1/8/4p3/3B4/PPPB2PP/RNQ1K2R w KQ - 0 15"
+  },
+  {
+   "t": 882.5,
+   "ply": 29,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q3np1/8/2B1p3/8/PPPB2PP/RNQ1K2R b KQ - 1 15"
+  },
+  {
+   "t": 917,
+   "ply": 30,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q4p1/8/2B1p1n1/8/PPPB2PP/RNQ1K2R w KQ - 2 16"
+  },
+  {
+   "t": 973,
+   "ply": 31,
+   "line": [
+    "Rf1"
+   ],
+   "fen": "r1b2rk1/p4pbp/1q4p1/8/2B1p1n1/8/PPPB2PP/RNQ1KR2 b Q - 3 16"
+  },
+  {
+   "t": 986,
+   "ply": 32,
+   "line": [
+    "Bxb2"
+   ],
+   "fen": "r1b2rk1/p4p1p/1q4p1/8/2B1p1n1/8/PbPB2PP/RNQ1KR2 w Q - 0 17"
+  },
+  {
+   "t": 1031.5,
+   "ply": 28,
+   "line": [],
+   "fen": "r1b2rk1/p4pbp/1q3np1/8/4p3/3B4/PPPB2PP/RNQ1K2R w KQ - 0 15"
+  },
+  {
+   "t": 1033.5,
+   "ply": 32,
+   "line": [
+    "Bc4",
+    "Ng4",
+    "Rf1",
+    "Bxb2"
+   ],
+   "fen": "r1b2rk1/p4p1p/1q4p1/8/2B1p1n1/8/PbPB2PP/RNQ1KR2 w Q - 0 17"
+  },
+  {
+   "t": 1037,
+   "ply": 31,
+   "line": [],
+   "fen": "r1b2rk1/p4pbp/1q4p1/8/2B1p1n1/8/PPPB2PP/RNQ1KR2 b Q - 3 16"
+  },
+  {
+   "t": 1066.5,
+   "ply": 32,
+   "line": [
+    "Bxb2"
+   ],
+   "fen": "r1b2rk1/p4p1p/1q4p1/8/2B1p1n1/8/PbPB2PP/RNQ1KR2 w Q - 0 17"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Accelerated Dragon, Exchange Variation",
+   "eco": "B34",
+   "plies": 9,
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nxc6",
+   "coverage": 0.846
+  },
+  {
+   "name": "Sicilian Defense: Accelerated Dragon",
+   "eco": "B32",
+   "plies": 8,
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6",
+   "coverage": 0.885
+  },
+  {
+   "name": "Sicilian Defense: Open",
+   "eco": "B32",
+   "plies": 5,
+   "line": "e4 c5 Nf3 Nc6 d4",
+   "coverage": 0.923
+  },
+  {
+   "name": "Sicilian Defense: Old Sicilian",
+   "eco": "B30",
+   "plies": 4,
+   "line": "e4 c5 Nf3 Nc6",
+   "coverage": 0.962
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}

@@ -810,5 +810,39 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Delayed Alapin Variation, with d6",
+   "eco": "B50",
+   "plies": 5,
+   "line": "e4 c5 Nf3 d6 c3",
+   "coverage": 0.962
+  },
+  {
+   "name": "Sicilian Defense: Modern Variations",
+   "eco": "B50",
+   "plies": 4,
+   "line": "e4 c5 Nf3 d6",
+   "coverage": 0.974
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Delayed Alapin Variation, with d6",
+  "confirmed": true
+ }
 }

@@ -106,5 +106,33 @@
    "fen": "rnbqkbnr/pp3ppp/4p3/2pP4/4P3/8/PPP3PP/RNBQKBNR w KQkq - 0 6"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Caro-Kann Defense: Maróczy Variation",
+   "eco": "B12",
+   "plies": 5,
+   "line": "e4 c6 d4 d5 f3",
+   "coverage": 0.667
+  },
+  {
+   "name": "Caro-Kann Defense",
+   "eco": "B10",
+   "plies": 2,
+   "line": "e4 c6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

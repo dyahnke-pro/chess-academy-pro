@@ -473,5 +473,46 @@
    "fen": "2r3k1/4bp2/6p1/3p3p/p2P4/2P3PP/5P1K/8 w - - 0 32"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "King's Indian Defense",
+   "eco": "E61",
+   "plies": 5,
+   "line": "d4 Nf6 c4 g6 Nc3",
+   "coverage": 0.962
+  },
+  {
+   "name": "Indian Defense: West Indian Defense",
+   "eco": "E60",
+   "plies": 4,
+   "line": "d4 Nf6 c4 g6",
+   "coverage": 0.962
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.981
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "King's Indian Defense",
+  "confirmed": true
+ }
 }
