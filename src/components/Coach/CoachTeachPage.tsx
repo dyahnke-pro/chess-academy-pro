@@ -23,7 +23,7 @@ import { trapPlayPosition } from '../../services/trapPlayPosition';
 import { buildVoicePackage, describeVoicePackage, markableSquares, type VoicePackage, type VoiceFactKind } from '../../services/voicePackage';
 import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
-import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
+import { buildPlayCommentary, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
 import type { CommentaryKind } from '../../services/playCommentary';
 import { reasonLineFor, forkLineFor } from '../../services/reasonVoice';
 import { buildNarrationSegments } from '../../services/narrationSegments';
@@ -242,6 +242,7 @@ import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from 
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
+import { tacticalReadFromLines } from '../../services/tacticalRead';
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText, gradeBorrowedTeaching, takeBorrowedProbeStats } from '../../services/coachAnswerGates';
@@ -7457,28 +7458,37 @@ export function CoachTeachPage(): JSX.Element {
                         }
                       }
                     }
-                    // THE REJECTED TEMPTING MOVE (the speedrun's warning
-                    // beat): a capture/check the multipv scored ≥1.5 pawns
-                    // worse than best, refuted by its own line's reply. Rides
-                    // alongside whichever beat fired above — it warns about a
-                    // DIFFERENT move, so nothing leaks.
-                    if (rejectedTemptingCountRef.current < REJECTED_TEMPTING_MAX_PER_GAME) {
-                      const rtLines = (studentBest?.topLines ?? [])
-                        .slice(0, 4)
-                        .filter((l) => typeof l.moves?.[0] === 'string' && typeof l.evaluation === 'number')
-                        .map((l) => ({
-                          uci: l.moves[0],
-                          replyUci: typeof l.moves[1] === 'string' ? l.moves[1] : null,
-                          evalCp: playerColor === 'white' ? l.evaluation : -l.evaluation,
-                        }));
-                      const rt = rtLines.length >= 2
-                        ? buildRejectedTempting({ fen: probe.fen(), studentColor: playerColor, lines: rtLines })
-                        : null;
-                      if (rt) {
+                    // THE REJECTED TEMPTING MOVE (Danya's #1 device, the but-turn) —
+                    // now off the UNIFIED tacticalRead engine (migration 2026-08-21):
+                    // the SAME but-turn computer the tactics / read-position surfaces
+                    // use, fed the studentBest MultiPV lines already in hand (no new
+                    // search). `requireForcing` + 150cp preserves the old conservative
+                    // feel (a capture/check ≥1.5 pawns worse than best, refuted by its
+                    // own line). It warns about a DIFFERENT move than any beat above,
+                    // so nothing leaks. topLines evals are WHITE-POV; the assembler
+                    // flips to the student internally, so pass them raw.
+                    const rtTopLines = studentBest?.topLines;
+                    if (rejectedTemptingCountRef.current < REJECTED_TEMPTING_MAX_PER_GAME
+                        && rtTopLines && rtTopLines.length >= 2) {
+                      const read = tacticalReadFromLines(probe.fen(), rtTopLines, playerColor,
+                        { requireForcing: true, dropThresholdCp: 150 });
+                      const t = read?.tempting ?? null;
+                      const refSan = t?.refutation[1]?.san ?? t?.refutation[0]?.san ?? null;
+                      if (t && refSan) {
                         rejectedTemptingCountRef.current += 1;
-                        captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: rt.temptingSan, refutation: rt.refutationSan });
-                        facts.push(packageForRegister(rt.hint, discussion.hintDial.register));
-                        queueSpokenHint(probe.fen(), packageForRegister(rt.hint, discussion.hintDial.register));
+                        captureEvent('rejected_tempting_offered', { surface: 'coach-teach', tempting: t.san, refutation: refSan });
+                        const why = t.appeal === 'capture' ? 'it snatches material'
+                          : t.appeal === 'check' ? 'it comes with check'
+                          : t.appeal === 'promotion' ? 'it promises a new queen' : 'it looks natural';
+                        const dropPawns = (t.evalDropCp / 100).toFixed(1);
+                        const hint = {
+                          anchor: `TEMPTING BUT REFUTED: ${t.san} looks natural — ${why} — but the reply ${refSan} refutes it.`,
+                          detail: `That line leaves the student about ${dropPawns} pawns worse than the best plan.`,
+                          stakes: 'Teach the habit from this: calculate the opponent\'s most forcing reply BEFORE trusting a tempting move.',
+                          withhold: `Name ${t.san} and ${refSan} exactly as given. Do NOT name or hint at the best move.`,
+                        };
+                        facts.push(packageForRegister(hint, discussion.hintDial.register));
+                        queueSpokenHint(probe.fen(), packageForRegister(hint, discussion.hintDial.register));
                       }
                     }
 
