@@ -288,3 +288,18 @@ describe('voiceNamesUngroundedMove (move-hallucination guard)', () => {
     expect(keys.has('bishop:e3')).toBe(false);
   });
 });
+
+describe('pickKeyTactic mate_threat downgrade (false-claim audit)', () => {
+  it('rewords "has a checkmate available" to "threatens mate" (a threat is not a forced mate)', () => {
+    // Real position where detectTactics reports a mate_threat (deterministic — no engine).
+    const fenAfter = '4rr1k/pQp3pp/7q/6b1/6n1/2N3P1/PPP2P1P/3R1RK1 w - - 3 18';
+    const ply: PvPly = {
+      san: 'Qh6', uci: 'd6h6', moverColor: 'black', fenBefore: '', fenAfter,
+      facts: { captured: null, isCheck: false, isMate: false, promotion: null, tacticLanded: 'mate_threat', materialGained: 0, newOpenFiles: [], newPassedPawns: [], outpostGained: null, shieldLost: 0 },
+    };
+    const key = pickKeyTactic([ply]);
+    expect(key?.type).toBe('mate_threat');
+    expect(key?.description.toLowerCase()).not.toContain('has a checkmate available');
+    expect(key?.description.toLowerCase()).toContain('threatens mate');
+  });
+});

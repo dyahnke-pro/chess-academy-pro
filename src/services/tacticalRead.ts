@@ -108,10 +108,19 @@ export function pickKeyTactic(line: PvPly[]): KeyTactic | null {
     // Prefer the scanner pattern of the same type that names the pieces.
     const named: TacticPattern | undefined =
       scan.tactics.find((p) => p.type === t) ?? (scan.tactics.length > 0 ? scan.tactics[0] : undefined);
+    // A mate_threat is a THREAT, not a forced mate — the engine's verdict, not
+    // the static scanner, decides whether mate is actually available. "has a
+    // checkmate available" overstates a threat the opponent can parry (giving
+    // up material). Downgrade the wording so the read never claims a mate it
+    // cannot force. (David 2026-08-21 false-claim audit.)
+    const rawDesc = named ? named.description : `${t} on ${line[i].san}`;
+    const description = t === 'mate_threat'
+      ? rawDesc.replace(/\bhas a checkmate available from\b/i, 'threatens mate from')
+      : rawDesc;
     return {
       type: t,
       squares: named ? named.involvedSquares : [],
-      description: named ? named.description : `${t} on ${line[i].san}`,
+      description,
       atPly: i,
     };
   }
