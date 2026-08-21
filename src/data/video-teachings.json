@@ -1,7 +1,7 @@
 {
  "generatedAt": "2026-08-21",
- "videosDistilled": 192,
- "noteCount": 511,
+ "videosDistilled": 193,
+ "noteCount": 516,
  "forkCount": 506,
  "notes": [
   {
@@ -5296,6 +5296,243 @@
     {
      "kind": "attacks",
      "square": "g5"
+    }
+   ]
+  },
+  {
+   "id": "vn-antimarshall-castle-and-keep-the-gambit-in-reserve",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "a6",
+    "Ba4",
+    "Nf6",
+    "O-O",
+    "Be7",
+    "Re1",
+    "b5",
+    "Bb3",
+    "O-O"
+   ],
+   "opening": "Ruy Lopez: Closed, Anti-Marshall",
+   "phase": "opening",
+   "explains": "Black castles instead of pushing the d-pawn, keeping the gambit in hand: the moment White plays c3, the immediate break in the centre sacrifices a pawn for a fierce attack. King safety comes first, the sacrifice second.",
+   "teaches": "The point of a system can be a pawn sacrifice you have not made yet. Rather than grab space early, get castled and ready and hold the freeing break in reserve until the opponent commits to the setup that invites it.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Dp2q1lzUVlQ"
+   ],
+   "positionSource": "high",
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "e5",
+     "Nf3",
+     "Nc6",
+     "Bb5",
+     "a6",
+     "Ba4",
+     "Nf6",
+     "O-O",
+     "Be7",
+     "Re1",
+     "b5",
+     "Bb3"
+    ],
+    "taughtMove": "d6",
+    "alternative": "O-O",
+    "lineName": "Ruy Lopez"
+   }
+  },
+  {
+   "id": "vn-antimarshall-a4-sidesteps-the-gambit",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "a6",
+    "Ba4",
+    "Nf6",
+    "O-O",
+    "Be7",
+    "Re1",
+    "b5",
+    "Bb3",
+    "O-O",
+    "a4"
+   ],
+   "opening": "Ruy Lopez: Closed, Anti-Marshall",
+   "phase": "opening",
+   "explains": "Instead of the move that invites the gambit, White plays a4, pressing the b5-pawn and steering clear of Black's preparation. It is the most testing modern way to duck the whole system.",
+   "teaches": "When you fear an opponent's deep preparation, sidestep it rather than walk in. A quiet flank thrust that leans on the queenside pawn chain avoids the memorised attack entirely and asks the opponent a fresh question.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Dp2q1lzUVlQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "b5"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "e5",
+     "Nf3",
+     "Nc6",
+     "Bb5",
+     "a6",
+     "Ba4",
+     "Nf6",
+     "O-O",
+     "Be7",
+     "Re1",
+     "b5",
+     "Bb3",
+     "O-O"
+    ],
+    "taughtMove": "c3",
+    "alternative": "a4",
+    "lineName": "Ruy Lopez / Marshall Attack"
+   }
+  },
+  {
+   "id": "vn-antimarshall-push-past-and-develop-behind",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "a6",
+    "Ba4",
+    "Nf6",
+    "O-O",
+    "Be7",
+    "Re1",
+    "b5",
+    "Bb3",
+    "O-O",
+    "a4",
+    "b4"
+   ],
+   "opening": "Ruy Lopez: Closed, Anti-Marshall",
+   "phase": "opening",
+   "explains": "The b-pawn advances to b4, declining to defend and instead clearing the way to swing the rook to b8 off the a-file and fianchetto the bishop to b7. The pawn chain stays whole and the pieces get active.",
+   "teaches": "When a flank pawn pokes your chain, advancing past it is often cleaner than defending it. Pushing keeps the tension off and frees your pieces to develop behind the pawn, rather than tying a piece to its defence.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Dp2q1lzUVlQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "c3"
+    }
+   ]
+  },
+  {
+   "id": "vn-antimarshall-a-central-break-over-the-quiet-move",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "a6",
+    "Ba4",
+    "Nf6",
+    "O-O",
+    "Be7",
+    "Re1",
+    "b5",
+    "Bb3",
+    "O-O",
+    "a4",
+    "b4",
+    "d4"
+   ],
+   "opening": "Ruy Lopez: Closed, Anti-Marshall",
+   "phase": "opening",
+   "explains": "White strikes with d4 rather than the usual quiet c3. Taking on d4 would be a mistake because it lets White advance the e-pawn with tempo, so Black should hold the centre instead of grabbing.",
+   "teaches": "A central pawn break can test the opponent more sharply than the routine supporting move. When it comes, do not capture on reflex — check what the recapture would allow, because opening the centre for the opponent can cost you more than the pawn is worth.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Dp2q1lzUVlQ"
+   ],
+   "positionSource": "high",
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "e5",
+     "Nf3",
+     "Nc6",
+     "Bb5",
+     "a6",
+     "Ba4",
+     "Nf6",
+     "O-O",
+     "Be7",
+     "Re1",
+     "b5",
+     "Bb3",
+     "O-O",
+     "a4",
+     "b4"
+    ],
+    "taughtMove": "d3",
+    "alternative": "d4",
+    "lineName": "Ruy Lopez / Anti-Marshall (8.a4)"
+   }
+  },
+  {
+   "id": "vn-antimarshall-support-the-centre-with-d6",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "a6",
+    "Ba4",
+    "Nf6",
+    "O-O",
+    "Be7",
+    "Re1",
+    "b5",
+    "Bb3",
+    "O-O",
+    "a4",
+    "b4",
+    "d4",
+    "d6"
+   ],
+   "opening": "Ruy Lopez: Closed, Anti-Marshall",
+   "phase": "opening",
+   "explains": "Pawn to d6 defends the e5-pawn, holding the centre together rather than releasing the tension. It is the accurate reply to the central break.",
+   "teaches": "When your centre pawn is attacked and capturing is unsafe, support it. The modest defensive pawn move keeps the structure intact and refuses the opponent the space grab a careless capture would have handed them.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:Dp2q1lzUVlQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e5"
     }
    ]
   },

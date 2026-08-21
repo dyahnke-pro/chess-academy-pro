@@ -797,5 +797,104 @@
  "titleCheck": {
   "claims": "Ruy Lopez: Closed, Anti-Marshall",
   "confirmed": true
- }
+ },
+ "notes": [
+  {
+   "id": "vn-antimarshall-ba4-keeps-the-diagonal",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4",
+   "teaches": "When a pawn pokes your bishop, retreating along the same diagonal keeps the pressure alive instead of surrendering it. The bishop stays trained on the defender of the centre, so the tempo the opponent spent nudging it bought them nothing lasting.",
+   "explains": "The bishop drops back to a4 rather than off the board, still eyeing the c6-knight down the diagonal. The pin-pressure on the knight that guards e5 is maintained, and White keeps all the tension of the opening.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c6"
+    }
+   ],
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "t": 70.5,
+   "ply": 7,
+   "source": "yt:Dp2q1lzUVlQ"
+  },
+  {
+   "id": "vn-antimarshall-the-pawn-is-not-poison",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O",
+   "teaches": "A pawn everyone 'knows' not to take is often perfectly edible — received wisdom about a poisoned pawn is worth checking for yourself. What folklore calls a blunder can be a respected, fully sound line.",
+   "explains": "After White castles, capturing the e4-pawn is not the mistake it is reputed to be; it is the Open Variation, sound and popular at the very top. Declining it to develop is a matter of taste, not necessity.",
+   "reasons": [],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 3 5",
+   "t": 79.5,
+   "ply": 9,
+   "source": "yt:Dp2q1lzUVlQ"
+  },
+  {
+   "id": "vn-antimarshall-castle-and-keep-the-gambit-in-reserve",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O",
+   "teaches": "The point of a system can be a pawn sacrifice you have not made yet. Rather than grab space early, get castled and ready and hold the freeing break in reserve until the opponent commits to the setup that invites it.",
+   "explains": "Black castles instead of pushing the d-pawn, keeping the gambit in hand: the moment White plays c3, the immediate break in the centre sacrifices a pawn for a fierce attack. King safety comes first, the sacrifice second.",
+   "reasons": [],
+   "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 w - - 2 8",
+   "t": 120,
+   "ply": 14,
+   "source": "yt:Dp2q1lzUVlQ"
+  },
+  {
+   "id": "vn-antimarshall-a4-sidesteps-the-gambit",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4",
+   "teaches": "When you fear an opponent's deep preparation, sidestep it rather than walk in. A quiet flank thrust that leans on the queenside pawn chain avoids the memorised attack entirely and asks the opponent a fresh question.",
+   "explains": "Instead of the move that invites the gambit, White plays a4, pressing the b5-pawn and steering clear of Black's preparation. It is the most testing modern way to duck the whole system.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "b5"
+    }
+   ],
+   "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/P3P3/1B3N2/1PPP1PPP/RNBQR1K1 b - - 0 8",
+   "t": 134,
+   "ply": 15,
+   "source": "yt:Dp2q1lzUVlQ"
+  },
+  {
+   "id": "vn-antimarshall-push-past-and-develop-behind",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4",
+   "teaches": "When a flank pawn pokes your chain, advancing past it is often cleaner than defending it. Pushing keeps the tension off and frees your pieces to develop behind the pawn, rather than tying a piece to its defence.",
+   "explains": "The b-pawn advances to b4, declining to defend and instead clearing the way to swing the rook to b8 off the a-file and fianchetto the bishop to b7. The pawn chain stays whole and the pieces get active.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "c3"
+    }
+   ],
+   "fen": "r1bq1rk1/2ppbppp/p1n2n2/4p3/Pp2P3/1B3N2/1PPP1PPP/RNBQR1K1 w - - 0 9",
+   "t": 168.5,
+   "ply": 16,
+   "source": "yt:Dp2q1lzUVlQ"
+  },
+  {
+   "id": "vn-antimarshall-a-central-break-over-the-quiet-move",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4 d4",
+   "teaches": "A central pawn break can test the opponent more sharply than the routine supporting move. When it comes, do not capture on reflex — check what the recapture would allow, because opening the centre for the opponent can cost you more than the pawn is worth.",
+   "explains": "White strikes with d4 rather than the usual quiet c3. Taking on d4 would be a mistake because it lets White advance the e-pawn with tempo, so Black should hold the centre instead of grabbing.",
+   "reasons": [],
+   "fen": "r1bq1rk1/2ppbppp/p1n2n2/4p3/Pp1PP3/1B3N2/1PP2PPP/RNBQR1K1 b - - 0 9",
+   "t": 183,
+   "ply": 17,
+   "source": "yt:Dp2q1lzUVlQ"
+  },
+  {
+   "id": "vn-antimarshall-support-the-centre-with-d6",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4 d4 d6",
+   "teaches": "When your centre pawn is attacked and capturing is unsafe, support it. The modest defensive pawn move keeps the structure intact and refuses the opponent the space grab a careless capture would have handed them.",
+   "explains": "Pawn to d6 defends the e5-pawn, holding the centre together rather than releasing the tension. It is the accurate reply to the central break.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e5"
+    }
+   ],
+   "fen": "r1bq1rk1/2p1bppp/p1np1n2/4p3/Pp1PP3/1B3N2/1PP2PPP/RNBQR1K1 w - - 0 10",
+   "t": 194.5,
+   "ply": 18,
+   "source": "yt:Dp2q1lzUVlQ"
+  }
+ ]
 }
