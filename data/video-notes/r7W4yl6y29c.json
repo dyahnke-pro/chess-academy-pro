@@ -2,7 +2,7 @@
  {
   "id": "vn-alapin-stoltz-the-bishop-move-that-looks-like-a-mistake",
   "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4",
-  "teaches": "Judge a developing move by what it invites, not by the tempo count. This one looks careless: the bishop attacks a knight that is happy to step aside, and White will end up moving the same bishop twice. Play it anyway when the retreat it provokes is a move you want played \u2014 a 'lost' tempo that buys the position you are aiming for is not lost at all.",
+  "teaches": "Judge a developing move by what it invites, not by the tempo count. This one looks careless: the bishop attacks a knight that is happy to step aside, and White will end up moving the same bishop twice. Play it anyway when the retreat it provokes is a move you want played — a 'lost' tempo that buys the position you are aiming for is not lost at all.",
   "explains": "The bishop comes to c4 and hits the knight on d5. Black's knight will drop back and the bishop will be nudged again, so on a tempo count White appears to be losing the argument. That is the appearance the line trades on: what White is really doing is inviting Black to grab the centre with a pawn, which is exactly the position White wants to meet.",
   "reasons": [
    {
@@ -15,7 +15,7 @@
   "id": "vn-alapin-stoltz-the-pawn-on-e5-is-what-makes-the-push-answerable",
   "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5",
   "teaches": "Before you fear a pawn arriving beside yours, check whether your own advanced pawn can take it in passing. A two-square push that sails past a pawn on the fifth rank is answerable for exactly one move, and that single-move window is the whole reason the advanced pawn was worth keeping there.",
-  "explains": "Black pushes the d-pawn two squares and it looks frightening \u2014 the centre is suddenly Black's and the pawn arrives untouched. But White's pawn already stands on e5, so the push can be met in passing this move and only this move. The scary-looking advance is the move White was fishing for.",
+  "explains": "Black pushes the d-pawn two squares and it looks frightening — the centre is suddenly Black's and the pawn arrives untouched. But White's pawn already stands on e5, so the push can be met in passing this move and only this move. The scary-looking advance is the move White was fishing for.",
   "reasons": [
    {
     "kind": "controls",
@@ -30,12 +30,64 @@
  {
   "id": "vn-alapin-stoltz-take-in-passing-or-the-bishop-comes-out-free",
   "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6",
-  "teaches": "When a capture in passing is available and the alternative hands the opponent an easy developing move, take. The cost of declining is rarely the pawn \u2014 it is that the opponent's last problem piece walks out to a good square with a threat attached, and the position you were provoking never appears.",
-  "explains": "White takes in passing. Declining would leave the centre closed in Black's favour and let the light-squared bishop come to g4, where it lands on the knight guarding f3 with the queen sitting behind it \u2014 Black's most awkward piece solved with tempo. Taking keeps the tension on White's terms.",
+  "teaches": "When a capture in passing is available and the alternative hands the opponent an easy developing move, take. The cost of declining is rarely the pawn — it is that the opponent's last problem piece walks out to a good square with a threat attached, and the position you were provoking never appears.",
+  "explains": "White takes in passing. Declining would leave the centre closed in Black's favour and let the light-squared bishop come to g4, where it lands on the knight guarding f3 with the queen sitting behind it — Black's most awkward piece solved with tempo. Taking keeps the tension on White's terms.",
   "reasons": [
    {
     "kind": "attacks",
     "square": "e7"
+   }
+  ]
+ },
+ {
+  "id": "vn-alapin-stoltz-develop-first-the-centre-push-is-not-the-plan",
+  "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6",
+  "teaches": "A pawn break being available does not make it the plan. In this system the centre push is the move you keep in reserve while the pieces come out, because the target is not the centre at all — it is the knight sitting on the rim, and pieces get at it faster than pawns do.",
+  "explains": "Black recaptures on d6 and White's natural instinct is to hit the centre at once. That is not what this line is for. The bishop's diagonal is open, the pieces come out first, and the play is aimed at the queenside knight rather than at a pawn break that would only release the tension early.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "d2"
+   },
+   {
+    "kind": "attacks",
+    "square": "h2"
+   }
+  ]
+ },
+ {
+  "id": "vn-alapin-stoltz-king-off-the-centre-before-the-fireworks",
+  "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O",
+  "teaches": "Castle before you start something. A plan that needs several moves on one wing is only safe once the king is off the file it started on — the tempo spent tucking it away is what lets every later move be about the attack instead of about defence.",
+  "explains": "White castles rather than beginning the queenside plan immediately. The king leaves the centre, the rook joins, and only then does the work start; the alternative is beginning an operation on one wing with the king still sitting where a file could open.",
+  "reasons": [
+   {
+    "kind": "defends",
+    "square": "f1"
+   }
+  ]
+ },
+ {
+  "id": "vn-alapin-stoltz-trade-on-e6-to-buy-the-tempi",
+  "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6",
+  "teaches": "Trade into the square your opponent's own development needs. A capture that forces a recapture onto a square their pawn was going to use is worth more than the bishop pair — you are not winning material, you are taking away the move order that would have solved their position.",
+  "explains": "White takes on e6 rather than avoiding the trade. The recapture is forced, and the square it fills is precisely the one Black's game depends on.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "f7"
+   }
+  ]
+ },
+ {
+  "id": "vn-alapin-stoltz-the-square-the-kingside-needed-is-never-free",
+  "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6",
+  "teaches": "Count development by what the opponent CAN do next, not by pieces out. If the square their kingside needs is occupied first by your piece and then by theirs, the bishop behind it never comes out and the king never castles — and every move they spend untangling is a move you spend attacking.",
+  "explains": "The queen must retake on e6, and the square stays shut either way: White's bishop stood there, and now Black's own queen does. The pawn on e7 still has nowhere to go, so the dark-squared bishop is stuck at home and the king stays in the centre. Black has to move the queen again before anything opens, and that is the time White uses to go after the knight on b6.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "a2"
    }
   ]
  }

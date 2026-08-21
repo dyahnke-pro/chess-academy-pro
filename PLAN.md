@@ -692,6 +692,12 @@ and strands the phase. That is the thing to fix: a lesson must always land in le
       Verify EVERY board claim with chess.js first. Captions gate every note.
 - [ ] Start with the 336 positions already on a taught line — **160 of them are the Alapin**,
       then Scotch 49, Najdorf 30, Italian 23.
+- IN PROGRESS `r7W4yl6y29c` (Alapin Stoltz): **7 notes written of ~26 anchorable positions.**
+  Every one read from the captions at its own timestamp FIRST, then board-verified. The
+  checker rejected two of my claims before they shipped — a `deprives` on a pawn that was
+  already blocked, and (earlier) three notes written from the board that taught generic tempo
+  principles instead of the lesson's actual idea. Both classes are the reason the rule is
+  "rewrite the captions", not "write something true about the position".
 - [ ] Move a track `video-pending/` → `video-tracks/` only once its notes are written.
 
 ### P4 — the 1,408 off-line positions + 217 stranded notes
