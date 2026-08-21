@@ -17,7 +17,7 @@
  * unit-tested with hand-fed data — the engine wiring is a thin shell over them.
  */
 import { Chess } from 'chess.js';
-import { computePvLine, type PvEngine, type PvLine, type PvPly } from './pvPlayback';
+import { computePvLine, computePlyFacts, type PvEngine, type PvLine, type PvPly } from './pvPlayback';
 import { detectTactics } from './tacticsDetector';
 import type { TacticPattern } from '../types/tacticTypes';
 
@@ -244,6 +244,102 @@ export async function computeTacticalRead(
   };
 }
 
+/** Piece values for the recapture carry — mirrors pvPlayback's PIECE_POINTS. */
+const READ_PT: Record<string, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 0 };
+
+/** Replay a known UCI move list from `fen` into PvPly[] with the SAME per-ply
+ *  facts the engine path computes — no engine needed, because the moves are
+ *  already in hand. The pure twin of computePvLine's ply loop. */
+function replayUci(fen: string, uciMoves: readonly string[]): PvPly[] {
+  const chess = new Chess(fen);
+  const plies: PvPly[] = [];
+  let prevCap: { square: string | null; capturedValue: number } = { square: null, capturedValue: 0 };
+  for (const uci of uciMoves) {
+    if (!uci || uci.length < 4) break;
+    const fenBefore = chess.fen();
+    let mv: ReturnType<Chess['move']> | undefined;
+    try {
+      mv = chess.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci.slice(4) : undefined });
+    } catch { break; }
+    if (!mv) break;
+    const fenAfter = chess.fen();
+    plies.push({
+      san: mv.san,
+      uci,
+      moverColor: mv.color === 'w' ? 'white' : 'black',
+      fenBefore,
+      fenAfter,
+      facts: computePlyFacts(fenBefore, fenAfter, mv, prevCap),
+    });
+    prevCap = { square: mv.to, capturedValue: mv.captured ? (READ_PT[mv.captured] ?? 0) : 0 };
+  }
+  return plies;
+}
+
+/**
+ * THE LATENCY-SAFE TACTICAL READ — the full read (forcing line, named tactic,
+ * verdict, but-turn, uncertainty) assembled from MultiPV lines the caller ALREADY
+ * has, with NO engine search. This is the seam that lets any surface holding a
+ * cached analysis (free-play, read-position, the best-move answer) speak the SAME
+ * read as the tactics post-solve path — one position-read engine, surface-tuned
+ * by `opts`. Mirrors `computeTacticalRead`'s assembly exactly; only the source of
+ * the lines differs. Returns null when there is nothing to read.
+ */
+export function tacticalReadFromLines(
+  fen: string,
+  topLines: ReadonlyArray<{ moves: string[]; evaluation: number }>,
+  studentColor: 'white' | 'black',
+  opts: { dropThresholdCp?: number; requireForcing?: boolean; maxPlies?: number } = {},
+): TacticalRead | null {
+  const best = topLines.length > 0 ? topLines[0] : undefined;
+  if (!best || !best.moves || best.moves.length === 0) return null;
+  const plies = replayUci(fen, best.moves.slice(0, opts.maxPlies ?? 8));
+  if (plies.length === 0) return null;
+  const first = plies[0];
+  const rootEvalCp = best.evaluation; // WHITE POV, like computePvLine.rootEvalCp
+  const bestStudentCp = toStudentCp(rootEvalCp, studentColor);
+  const mateIn = studentMateIn(plies, studentColor);
+  const verdict = summarizeVerdict(bestStudentCp, mateIn);
+  const keyTactic = pickKeyTactic(plies);
+  const checkPlies = plies.map((p, i) => (p.facts.isCheck ? i : -1)).filter((i) => i >= 0);
+
+  // Uncertainty: runner-up within 40cp, its SAN resolved on THIS board.
+  let closeAlternative: { san: string; gapCp: number } | null = null;
+  if (topLines.length > 1) {
+    const runner = topLines[1];
+    const gap = bestStudentCp - toStudentCp(runner.evaluation, studentColor);
+    const rUci = runner?.moves?.[0];
+    if (rUci && rUci.length >= 4 && rUci !== first.uci && gap >= 0 && gap <= 40) {
+      const rp = replayUci(fen, [rUci]);
+      if (rp.length) closeAlternative = { san: rp[0].san, gapCp: gap };
+    }
+  }
+
+  let tempting: TemptingMove | null = null;
+  const t = temptingFromAnalysis(fen, topLines, studentColor, {
+    dropThresholdCp: opts.dropThresholdCp,
+    requireForcing: opts.requireForcing,
+  });
+  if (t) {
+    const refLine = topLines.find((l) => l.moves?.[0] === t.uci);
+    const refutation = refLine ? replayUci(fen, refLine.moves.slice(0, 4)) : [];
+    tempting = { san: t.san, uci: t.uci, appeal: t.appeal, evalDropCp: t.evalDropCp, refutation };
+  }
+
+  return {
+    fen,
+    studentColor,
+    bestMoveSan: first.san,
+    bestMoveUci: first.uci,
+    line: plies,
+    verdict,
+    keyTactic,
+    checkPlies,
+    tempting,
+    closeAlternative,
+  };
+}
+
 // ── THE COMPUTED VOICE ───────────────────────────────────────────────────────
 
 const APPEAL_AFFIRM: Record<string, string> = {
@@ -327,9 +423,10 @@ export function temptingFromAnalysis(
   fen: string,
   topLines: ReadonlyArray<{ moves: string[]; evaluation: number }>,
   studentColor: 'white' | 'black',
-  dropThresholdCp = 120,
+  opts: { dropThresholdCp?: number; requireForcing?: boolean } = {},
 ): { san: string; uci: string; appeal: string; evalDropCp: number; replySan: string | null } | null {
   if (topLines.length < 2) return null;
+  const dropThresholdCp = opts.dropThresholdCp ?? 120;
   const best = topLines.length > 0 ? topLines[0] : undefined;
   if (!best || best.moves.length === 0) return null;
   const bestUci = best.moves.at(0);
@@ -345,6 +442,9 @@ export function temptingFromAnalysis(
     try {
       mv = probe.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci.slice(4) : undefined });
     } catch { continue; }
+    // requireForcing: only a capture or a check may be flagged tempting — the
+    // conservative free-play contract (matches the retired buildRejectedTempting).
+    if (opts.requireForcing && !(mv.captured != null || probe.inCheck())) continue;
     const { score, appeal } = appealScore({ isCapture: mv.captured != null, isPromotion: mv.promotion != null, san: mv.san, piece: mv.piece, to: mv.to });
     if (score <= 0) continue;
     let replySan: string | null = null;

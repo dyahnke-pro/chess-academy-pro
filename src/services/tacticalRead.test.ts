@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, speakTemptingTurn, tacticalReadFacts, voiceRejectsBestMove, lineOutcomeClause, voiceNamesUngroundedMove, groundedMoveKeys, namedTacticClause,
+  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, tacticalReadFromLines, speakTemptingTurn, tacticalReadFacts, voiceRejectsBestMove, lineOutcomeClause, voiceNamesUngroundedMove, groundedMoveKeys, namedTacticClause,
   type TacticalRead,
 } from './tacticalRead';
 import type { PvEngine, PvPly } from './pvPlayback';
@@ -301,5 +301,69 @@ describe('pickKeyTactic mate_threat downgrade (false-claim audit)', () => {
     expect(key?.type).toBe('mate_threat');
     expect(key?.description.toLowerCase()).not.toContain('has a checkmate available');
     expect(key?.description.toLowerCase()).toContain('threatens mate');
+  });
+});
+
+// ── tacticalReadFromLines (latency-safe assembler, NO engine) ────────────────
+describe('tacticalReadFromLines', () => {
+  const START = new Chess().fen();
+
+  it('replays the PV into the read: best move, line, verdict — no engine', () => {
+    const read = tacticalReadFromLines(
+      START,
+      [{ moves: ['e2e4', 'e7e5', 'g1f3'], evaluation: 30 }],
+      'white',
+    );
+    expect(read).not.toBeNull();
+    expect(read?.bestMoveSan).toBe('e4');
+    expect(read?.line.map((p) => p.san)).toEqual(['e4', 'e5', 'Nf3']);
+    expect(read?.verdict.kind).toBe('equal');
+    expect(read?.tempting).toBeNull();          // one line only — nothing to warn against
+    expect(read?.closeAlternative).toBeNull();  // no runner-up given
+  });
+
+  it('flags a near-equal runner-up as the uncertainty signal', () => {
+    const read = tacticalReadFromLines(
+      START,
+      [
+        { moves: ['e2e4', 'e7e5'], evaluation: 40 },
+        { moves: ['d2d4', 'd7d5'], evaluation: 20 },  // 20cp behind — within 40
+      ],
+      'white',
+    );
+    expect(read?.closeAlternative).toEqual({ san: 'd4', gapCp: 20 });
+  });
+
+  it('finds the tempting capture + its refutation (requireForcing keeps it)', () => {
+    // White queen can grab the d5 pawn but it hangs to Nf6xd5.
+    const fen = 'rnbqkb1r/ppp1pppp/5n2/3p4/8/8/PPP1PPPP/RNBQKBNR w KQkq - 0 1';
+    const read = tacticalReadFromLines(
+      fen,
+      [
+        { moves: ['g1f3', 'b8c6'], evaluation: 20 },       // best — quiet
+        { moves: ['d1d5', 'f6d5'], evaluation: -600 },     // Qxd5?? Nxd5
+      ],
+      'white',
+      { requireForcing: true, dropThresholdCp: 150 },
+    );
+    expect(read?.bestMoveSan).toBe('Nf3');
+    expect(read?.tempting?.san).toBe('Qxd5');
+    expect(read?.tempting?.refutation[1]?.san).toBe('Nxd5');
+  });
+
+  it('requireForcing DROPS a non-forcing (central-develop) tempting move', () => {
+    const lines = [
+      { moves: ['e2e4', 'e7e5'], evaluation: 30 },
+      { moves: ['b1c3', 'e7e5'], evaluation: -200 },  // Nc3 — central, worse, but quiet
+    ];
+    const forced = tacticalReadFromLines(START, lines, 'white', { requireForcing: true });
+    expect(forced?.tempting).toBeNull();            // quiet move filtered out
+    const open = tacticalReadFromLines(START, lines, 'white', { requireForcing: false });
+    expect(open?.tempting?.san).toBe('Nc3');        // flagged when forcing not required
+  });
+
+  it('returns null when there is nothing to read', () => {
+    expect(tacticalReadFromLines(START, [], 'white')).toBeNull();
+    expect(tacticalReadFromLines(START, [{ moves: [], evaluation: 0 }], 'white')).toBeNull();
   });
 });
