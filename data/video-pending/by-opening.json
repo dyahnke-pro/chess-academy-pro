@@ -881,6 +881,14 @@
    "forks": 0
   },
   {
+   "videoId": "CVnUl74fHsM",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 6
+  },
+  {
    "videoId": "CfCoA7jQu84",
    "eco": "B20",
    "plies": 2,
@@ -1577,6 +1585,14 @@
    "coverage": 1,
    "subject": false,
    "forks": 0
+  },
+  {
+   "videoId": "CVnUl74fHsM",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 6
   },
   {
    "videoId": "CZC9BI_joNU",
@@ -3863,6 +3879,14 @@
    "forks": 0
   },
   {
+   "videoId": "CVnUl74fHsM",
+   "eco": "B50",
+   "plies": 4,
+   "coverage": 1,
+   "subject": false,
+   "forks": 6
+  },
+  {
    "videoId": "IaOXKjvpP_E",
    "eco": "B50",
    "plies": 4,
@@ -5967,6 +5991,80 @@
    "coverage": 0.96,
    "subject": false,
    "forks": 1
+  }
+ ],
+ "Sicilian Defense: Richter-Rauzer Variation, Neo-Modern Variation": [
+  {
+   "videoId": "CVnUl74fHsM",
+   "eco": "B67",
+   "plies": 16,
+   "coverage": 0.909,
+   "subject": true,
+   "forks": 6
+  }
+ ],
+ "Sicilian Defense: Richter-Rauzer Variation, Neo-Modern Variation, Early Deviations": [
+  {
+   "videoId": "CVnUl74fHsM",
+   "eco": "B66",
+   "plies": 14,
+   "coverage": 0.924,
+   "subject": false,
+   "forks": 6
+  }
+ ],
+ "Sicilian Defense: Richter-Rauzer Variation, Traditional Variation": [
+  {
+   "videoId": "CVnUl74fHsM",
+   "eco": "B63",
+   "plies": 13,
+   "coverage": 0.939,
+   "subject": false,
+   "forks": 6
+  }
+ ],
+ "Sicilian Defense: Richter-Rauzer Variation": [
+  {
+   "videoId": "CVnUl74fHsM",
+   "eco": "B60",
+   "plies": 11,
+   "coverage": 0.955,
+   "subject": false,
+   "forks": 6
+  },
+  {
+   "videoId": "d9qnuDDwiHQ",
+   "eco": "B60",
+   "plies": 11,
+   "coverage": 0.724,
+   "subject": false,
+   "forks": 0
+  }
+ ],
+ "Sicilian Defense: Classical Variation": [
+  {
+   "videoId": "CVnUl74fHsM",
+   "eco": "B56",
+   "plies": 10,
+   "coverage": 0.97,
+   "subject": false,
+   "forks": 6
+  },
+  {
+   "videoId": "SV-y9Ai7QkA",
+   "eco": "B56",
+   "plies": 10,
+   "coverage": 0.009,
+   "subject": false,
+   "forks": 13
+  },
+  {
+   "videoId": "d9qnuDDwiHQ",
+   "eco": "B56",
+   "plies": 10,
+   "coverage": 0.759,
+   "subject": false,
+   "forks": 0
   }
  ],
  "Alekhine Defense: Maróczy Variation": [
@@ -8305,24 +8403,6 @@
    "forks": 0
   }
  ],
- "Sicilian Defense: Classical Variation": [
-  {
-   "videoId": "SV-y9Ai7QkA",
-   "eco": "B56",
-   "plies": 10,
-   "coverage": 0.009,
-   "subject": false,
-   "forks": 13
-  },
-  {
-   "videoId": "d9qnuDDwiHQ",
-   "eco": "B56",
-   "plies": 10,
-   "coverage": 0.759,
-   "subject": false,
-   "forks": 0
-  }
- ],
  "Sicilian Defense: Dragon Variation": [
   {
    "videoId": "SV-y9Ai7QkA",
@@ -9302,16 +9382,6 @@
    "plies": 12,
    "coverage": 0.69,
    "subject": true,
-   "forks": 0
-  }
- ],
- "Sicilian Defense: Richter-Rauzer Variation": [
-  {
-   "videoId": "d9qnuDDwiHQ",
-   "eco": "B60",
-   "plies": 11,
-   "coverage": 0.724,
-   "subject": false,
    "forks": 0
   }
  ],

@@ -266,3 +266,58 @@ def looks_like_start(grid):
     occ = [''.join('x' if c in 'wb' else '.' for c in row) for row in grid]
     return (occ[0] == occ[1] == 'xxxxxxxx' and occ[6] == occ[7] == 'xxxxxxxx'
             and all(r == '........' for r in occ[2:6]))
+
+
+def try_calibrate(g, x0, y0, sq):
+    """THE one test for "is this frame a start position at this geometry".
+
+    Returns (cal, orientation, squares_off_the_start) or None. Three steps, in
+    this order, and the order is the whole point:
+
+      1. ORIENTATION FROM RAW LUMINANCE. It cannot come from the classified grid,
+         because the classifier is calibrated by an assumption about which end
+         holds White — so a wrong assumption inverts every label and then reads
+         back as self-consistent. `orientation_of` agrees with the mistake that
+         produced it; luminance does not share the premise.
+      2. Calibrate from this frame under that orientation.
+      3. Read it BACK. It reproduces the start position only if it really was one.
+
+    It exists because two callers had drifted into two different tests.
+    `calibrate_section` skipped step 1 and used `orientation_of`, so on
+    `K8QMjqu0_MY` it blessed geometry that `scan_stream` then rejected — and
+    worse, accepted a frame a move past the start AS the start, which is the
+    false anchor the strictness is there to prevent. A confirmation that does not
+    match what the scanner will do is not a confirmation.
+    """
+    orient = orientation_from_luminance(g, x0, y0, sq)
+    if orient is None:
+        return None
+    try:
+        cal = calibrate_from_start_arr(g, x0, y0, sq, orient)
+        grid = read_board_calibrated_arr(g, x0, y0, sq, cal)
+    except Exception:
+        return None
+    return cal, orient, start_diff(grid)
+
+
+def start_diff(grid):
+    """How many squares this grid's OCCUPANCY differs from the start position.
+
+    Calibration needs a frame whose piece/empty split it already knows, and the
+    start position is the one frame that states it outright. But a lesson does
+    not always show it: measured on `K8QMjqu0_MY`, the board is already one move
+    in by the first frame that is not an intro animation, so an exact-match
+    anchor search runs the whole video and refuses — reporting "geometry never
+    reproduced the start position" for geometry that is provably correct.
+
+    A frame ONE OR TWO MOVES IN carries the same information. The six colour
+    centroids are MEDIANS over ~16 cells per class, so a couple of squares
+    assigned to the wrong class cannot move them; the read that comes out is the
+    same. What must not be relaxed is how far from the start we will go — a
+    middlegame differs by dozens of squares, so a small tolerance still refuses
+    everything except the opening moves.
+    """
+    occ = [''.join('x' if c in 'wb' else '.' for c in row) for row in grid]
+    want = ['xxxxxxxx', 'xxxxxxxx', '........', '........',
+            '........', '........', 'xxxxxxxx', 'xxxxxxxx']
+    return sum(a != b for row, w in zip(occ, want) for a, b in zip(row, w))

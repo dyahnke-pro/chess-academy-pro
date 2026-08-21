@@ -52,6 +52,7 @@ from read_board import (  # noqa: E402
     looks_like_start,
     read_board_arr,
     read_board_calibrated_arr,
+    try_calibrate,
 )
 from read_board import orientation_from_luminance  # noqa: E402
 
@@ -132,9 +133,22 @@ def load_anchor(path, x0, y0, sq):
     return cal, orient
 
 
+# How far past the start we will still calibrate from, in squares of occupancy.
+# Each ply moves one piece, so this reaches roughly the first two moves, and a
+# middlegame differs by dozens of squares — nothing but the opening can pass.
+NEAR_START_TOLERANCE = 4
+
+# Frames dropped before calibration that are worth a second decode to recover.
+# 60 frames is 30s at the standard 2fps — below that there is nothing in the
+# head worth a pass; above it, a lesson is losing real teaching.
+LATE_CALIBRATION = 60
+
+
 def scan(video, x0, y0, sq, fps, calibrated=False, anchor=None):
     w, h = dimensions(video)
     rows = []
+    near = None
+    cal_frame = None
     cal, orient = (anchor if anchor else (None, None))
     for i, g in stream(video, fps, w, h):
         if not calibrated:
@@ -153,17 +167,24 @@ def scan(video, x0, y0, sq, fps, calibrated=False, anchor=None):
             # why it tracked 0 games), so a start-frame search resting on that
             # reader finds nothing and the video is refused for the wrong reason.
             if cal is None:
-                # ORIENTATION FIRST, FROM RAW LUMINANCE — the calibration needs
-                # it, because labelling the two full ranks the wrong way round
-                # inverts every colour and then reads back as self-consistent.
-                trial_orient = orientation_from_luminance(g, x0, y0, sq)
-                if trial_orient is None:
+                got = try_calibrate(g, x0, y0, sq)
+                if got is None:
                     continue
-                trial = calibrate_from_start_arr(g, x0, y0, sq, trial_orient)
-                start = read_board_calibrated_arr(g, x0, y0, sq, trial)
-                if not looks_like_start(start):
+                trial, trial_orient, d = got
+                if d:
+                    # REMEMBER THE CLOSEST NEAR-START, in case this lesson never
+                    # shows an untouched one. Some join their game already in
+                    # progress — measured on K8QMjqu0_MY, the board is a move in
+                    # by the first frame that is not an intro animation — and an
+                    # exact-only search then runs the whole video and refuses,
+                    # blaming geometry that is correct. The colour centroids are
+                    # medians over ~16 cells per class, so one or two squares in
+                    # the wrong class cannot move them. See NEAR_START_TOLERANCE.
+                    if d <= NEAR_START_TOLERANCE and (near is None or d < near[0]):
+                        near = (d, i, trial, trial_orient)
                     continue
                 cal, orient = trial, trial_orient
+                cal_frame = i
                 print(f'calibrated at frame {i} (t={i / fps:.1f}s), orientation={orient}', flush=True)
             grid = read_board_calibrated_arr(g, x0, y0, sq, cal)
             # ORIENTATION IS RE-READ AT EVERY START POSITION, never fixed once
@@ -185,6 +206,38 @@ def scan(video, x0, y0, sq, fps, calibrated=False, anchor=None):
             if orient == 'black':
                 grid = flip(grid)
         rows.append({'t': round(i / fps, 1), 'grid': grid})
+
+    # FRAMES BEFORE CALIBRATION ARE DROPPED, so a lesson that reaches its first
+    # start position late loses everything up to it. Measured on K8QMjqu0_MY:
+    # the exact start arrives at t=2206 of a 2486s upload, and the first pass
+    # kept 560 grids out of ~4,900 — 37 minutes of teaching discarded, silently,
+    # by a scan that reported success. Once the colour classes are known they are
+    # known for the whole file, so a second decode recovers all of it.
+    #
+    # It runs in two cases: nothing calibrated at all but a near-start was seen
+    # (otherwise the video is refused outright), or calibration landed late
+    # enough that the dropped head is worth a pass. Not for a video that
+    # calibrates in its first seconds, where there is nothing to recover.
+    recover = calibrated and cal is None and near is not None
+    if recover:
+        d, i0, cal, orient = near
+        print(f'no exact start position; calibrated {d} square(s) past the start '
+              f'at frame {i0}, orientation={orient}', flush=True)
+    elif calibrated and cal is not None and cal_frame is not None and cal_frame > LATE_CALIBRATION:
+        recover = True
+        print(f'calibrated late (frame {cal_frame}); re-reading from the top', flush=True)
+    if recover:
+        rows = []
+        for i, g in stream(video, fps, w, h):
+            grid = read_board_calibrated_arr(g, x0, y0, sq, cal)
+            if looks_like_start(grid):
+                fresh = orientation_from_luminance(g, x0, y0, sq)
+                if fresh is not None and fresh != orient:
+                    print(f'  orientation -> {fresh} at t={i / fps:.1f}s', flush=True)
+                    orient = fresh
+            if orient == 'black':
+                grid = flip(grid)
+            rows.append({'t': round(i / fps, 1), 'grid': grid})
     return rows
 
 
