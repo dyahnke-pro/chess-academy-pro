@@ -1,17 +1,10 @@
-#!/bin/bash
-# 106 lessons — the 16 remaining gap-picks on TAUGHT openings first, then the 90
-# left in the channel queue. 10s between each, roughly 1 hour.
-#
-# 360p (`-f 134`), and anything still over 95MB is SPLIT rather than skipped:
-# GitHub refuses a blob over 100MB and the drop branch is how these travel.
-# harvest-local.sh cats the parts back before scanning — the join is byte-exact.
-#
-# `stat -f%z` is the macOS spelling; the Linux `-c%s` fallback keeps the same
-# script working either place. Getting this wrong disables the split SILENTLY,
-# which is how a whole round was lost once already.
-set -u
-mkdir -p drop
-n=0
+cd ~/video-drop && mkdir -p drop && n=0
+for f in $(ls drop/*.mp4 too-big/*.mp4 2>/dev/null); do
+  b=$(basename "$f")
+  if [ "$(stat -f%z "$f" 2>/dev/null || stat -c%s "$f")" -gt 99000000 ]; then
+    echo "split $b"; split -b 95M "$f" "drop/$b.part-" && rm -f "$f"
+  elif [ "${f%%/*}" = "too-big" ]; then mv "$f" drop/; fi
+done
 for id in 7xgOCneMX8s Z5QLUtjiGFg 9JUlD51s6zE 8O4UG9NtUoM zmdiLoeqFyU 898k4qkY0vg \
           ciTwGjksQWs -t1i9fKUUiI VOQ7DlsATuc 3XUh57mV8a8 NqtT3roFaBs H0Fln-ujA3w \
           ofUcXj4ArHA NQQnQ9X9dL8 1GSLXUHTrzc OE2pJpVVzYw opvsrx5TCdU SV-y9Ai7QkA \
@@ -38,7 +31,6 @@ for id in 7xgOCneMX8s Z5QLUtjiGFg 9JUlD51s6zE 8O4UG9NtUoM zmdiLoeqFyU 898k4qkY0v
   if [ -f "drop/$id.mp4" ] && [ "$(stat -f%z "drop/$id.mp4" 2>/dev/null || stat -c%s "drop/$id.mp4")" -gt 99000000 ]; then
     echo "    splitting (over 95MB)"; split -b 95M "drop/$id.mp4" "drop/$id.mp4.part-" && rm -f "drop/$id.mp4"
   fi
-  # Push every 10 so an interrupted run keeps everything it already fetched.
   n=$((n+1)); [ $((n % 10)) -eq 0 ] && { git add drop && git commit -q -m "videos: +$n" && git push -q origin video-drop || echo "    push deferred"; }
   sleep 10
 done
