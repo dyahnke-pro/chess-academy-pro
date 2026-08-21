@@ -1,9 +1,9 @@
 [
  {
-  "id": "vn-alapin-stoltz-develop-at-the-knight-that-already-moved-twice",
+  "id": "vn-alapin-stoltz-the-bishop-move-that-looks-like-a-mistake",
   "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4",
-  "teaches": "A piece that has already moved twice is the piece to aim at, because every time you attack it the opponent spends a third move on it and you spend your first. The bishop's most natural developing square happens to be the one that asks the question, so the tempo costs nothing \u2014 this is development and an attack in the same move, which is the cheapest kind of initiative there is.",
-  "explains": "The bishop steps out to c4 and immediately attacks the knight on d5. Black's knight has already been to f6 and d5; now it has to move a third time or be propped up with a pawn, and either way White has gained the sort of head start that decides quiet positions.",
+  "teaches": "Judge a developing move by what it invites, not by the tempo count. This one looks careless: the bishop attacks a knight that is happy to step aside, and White will end up moving the same bishop twice. Play it anyway when the retreat it provokes is a move you want played \u2014 a 'lost' tempo that buys the position you are aiming for is not lost at all.",
+  "explains": "The bishop comes to c4 and hits the knight on d5. Black's knight will drop back and the bishop will be nudged again, so on a tempo count White appears to be losing the argument. That is the appearance the line trades on: what White is really doing is inviting Black to grab the centre with a pawn, which is exactly the position White wants to meet.",
   "reasons": [
    {
     "kind": "attacks",
@@ -12,26 +12,30 @@
   ]
  },
  {
-  "id": "vn-alapin-stoltz-the-retreat-that-asks-its-own-question",
-  "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6",
-  "teaches": "A retreat is not automatically a concession. Look for the square that steps back and attacks something on the way, because then the tempo you appeared to lose comes straight back and the opponent is the one who has to react. Judge a retreat by what it does, not by the direction it travels.",
-  "explains": "The knight drops back to b6, and from there it hits the bishop on c4. White has to decide where that bishop lives before doing anything else, so the move that looked like a step backwards has handed the question back across the board.",
+  "id": "vn-alapin-stoltz-the-pawn-on-e5-is-what-makes-the-push-answerable",
+  "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5",
+  "teaches": "Before you fear a pawn arriving beside yours, check whether your own advanced pawn can take it in passing. A two-square push that sails past a pawn on the fifth rank is answerable for exactly one move, and that single-move window is the whole reason the advanced pawn was worth keeping there.",
+  "explains": "Black pushes the d-pawn two squares and it looks frightening \u2014 the centre is suddenly Black's and the pawn arrives untouched. But White's pawn already stands on e5, so the push can be met in passing this move and only this move. The scary-looking advance is the move White was fishing for.",
   "reasons": [
    {
-    "kind": "attacks",
+    "kind": "controls",
+    "square": "e4"
+   },
+   {
+    "kind": "controls",
     "square": "c4"
    }
   ]
  },
  {
-  "id": "vn-alapin-stoltz-develop-toward-the-pawn-that-cramps-you",
-  "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6",
-  "teaches": "When a pawn has been pushed into your half and is taking your squares away, develop the pieces that lean on it rather than the ones that ignore it. A cramping pawn is only strong while it is defended cheaply; every piece you point at it raises the price of keeping it there.",
-  "explains": "The knight comes to c6, where it leans on the pawn on e5. It is not going to fall this move, but the advanced pawn is now something White has to keep answering for, and that is how the space it claimed gets paid back.",
+  "id": "vn-alapin-stoltz-take-in-passing-or-the-bishop-comes-out-free",
+  "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6",
+  "teaches": "When a capture in passing is available and the alternative hands the opponent an easy developing move, take. The cost of declining is rarely the pawn \u2014 it is that the opponent's last problem piece walks out to a good square with a threat attached, and the position you were provoking never appears.",
+  "explains": "White takes in passing. Declining would leave the centre closed in Black's favour and let the light-squared bishop come to g4, where it lands on the knight guarding f3 with the queen sitting behind it \u2014 Black's most awkward piece solved with tempo. Taking keeps the tension on White's terms.",
   "reasons": [
    {
     "kind": "attacks",
-    "square": "e5"
+    "square": "e7"
    }
   ]
  }
