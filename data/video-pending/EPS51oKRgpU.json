@@ -614,5 +614,26 @@
    "fen": "rnbqkbnr/1p2pppp/p1pp4/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 4"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Caro-Kann Defense",
+   "eco": "B10",
+   "plies": 2,
+   "line": "e4 c6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

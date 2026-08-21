@@ -331,5 +331,19 @@
    "fen": "r1bqkb1r/pppnp1pp/3p1n2/5p2/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 3 5"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

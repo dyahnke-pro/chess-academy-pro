@@ -1279,5 +1279,82 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Semi-Slav Defense",
+   "eco": "D43",
+   "plies": 8,
+   "line": "c4 d5 d4 e6 Nc3 Nf6 Nf3 c6",
+   "coverage": 0.943
+  },
+  {
+   "name": "Queen's Gambit Declined: Three Knights Variation",
+   "eco": "D37",
+   "plies": 7,
+   "line": "c4 d5 d4 e6 Nc3 Nf6 Nf3",
+   "coverage": 0.943
+  },
+  {
+   "name": "Queen's Gambit Declined: Normal Defense",
+   "eco": "D35",
+   "plies": 6,
+   "line": "c4 d5 d4 e6 Nc3 Nf6",
+   "coverage": 0.943
+  },
+  {
+   "name": "Queen's Gambit Declined: Queen's Knight Variation",
+   "eco": "D31",
+   "plies": 5,
+   "line": "c4 d5 d4 e6 Nc3",
+   "coverage": 0.943
+  },
+  {
+   "name": "Queen's Gambit Accepted",
+   "eco": "D20",
+   "plies": 4,
+   "line": "c4 d5 d4 dxc4",
+   "coverage": 0.014
+  },
+  {
+   "name": "Slav Defense",
+   "eco": "D10",
+   "plies": 4,
+   "line": "c4 d5 d4 c6",
+   "coverage": 0.014
+  },
+  {
+   "name": "Queen's Gambit Declined",
+   "eco": "D30",
+   "plies": 4,
+   "line": "c4 d5 d4 e6",
+   "coverage": 0.957
+  },
+  {
+   "name": "Queen's Gambit",
+   "eco": "D06",
+   "plies": 3,
+   "line": "c4 d5 d4",
+   "coverage": 1
+  },
+  {
+   "name": "English Opening: Anglo-Scandinavian Defense",
+   "eco": "A10",
+   "plies": 2,
+   "line": "c4 d5",
+   "coverage": 1
+  },
+  {
+   "name": "English Opening",
+   "eco": "A10",
+   "plies": 1,
+   "line": "c4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

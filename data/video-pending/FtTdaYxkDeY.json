@@ -155,5 +155,32 @@
    "fen": "rnbqkb1r/pppppppp/5n2/8/3P1P2/8/PPP1P1PP/RNBQKBNR b KQkq - 0 2"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Canard Opening",
+   "eco": "A45",
+   "plies": 3,
+   "line": "d4 Nf6 f4",
+   "coverage": 0.938
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Queen's Pawn Game: Stonewall Attack",
+  "confirmed": false
+ }
 }

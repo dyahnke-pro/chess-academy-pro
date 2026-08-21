@@ -552,5 +552,32 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Queen's Gambit Declined: Marshall Defense",
+   "eco": "D06",
+   "plies": 4,
+   "line": "d4 d5 c4 Nf6",
+   "coverage": 0.962
+  },
+  {
+   "name": "Queen's Gambit",
+   "eco": "D06",
+   "plies": 3,
+   "line": "d4 d5 c4",
+   "coverage": 0.981
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Queen's Gambit",
+  "confirmed": true
+ }
 }

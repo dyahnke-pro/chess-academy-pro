@@ -186,5 +186,75 @@
    "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQK2R b KQ - 1 6"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "King's Indian Defense: Fianchetto Variation, Classical Main Line",
+   "eco": "E69",
+   "plies": 17,
+   "line": "d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5 e4 c6 h3",
+   "coverage": 0.526
+  },
+  {
+   "name": "King's Indian Defense: Fianchetto Variation, Classical Variation",
+   "eco": "E68",
+   "plies": 15,
+   "line": "d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5 e4",
+   "coverage": 0.632
+  },
+  {
+   "name": "King's Indian Defense: Fianchetto Variation, Classical Fianchetto",
+   "eco": "E67",
+   "plies": 14,
+   "line": "d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7 O-O e5",
+   "coverage": 0.684
+  },
+  {
+   "name": "King's Indian Defense: Fianchetto Variation, Debrecen Defense",
+   "eco": "E67",
+   "plies": 12,
+   "line": "d4 Nf6 c4 g6 g3 Bg7 Bg2 O-O Nc3 d6 Nf3 Nbd7",
+   "coverage": 0.737
+  },
+  {
+   "name": "King's Indian Defense: Fianchetto Variation, Immediate Fianchetto",
+   "eco": "E60",
+   "plies": 5,
+   "line": "d4 Nf6 c4 g6 g3",
+   "coverage": 0.895
+  },
+  {
+   "name": "Indian Defense: West Indian Defense",
+   "eco": "E60",
+   "plies": 4,
+   "line": "d4 Nf6 c4 g6",
+   "coverage": 0.947
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "d4 Nf6 c4",
+   "coverage": 0.947
+  },
+  {
+   "name": "Indian Defense",
+   "eco": "A45",
+   "plies": 2,
+   "line": "d4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

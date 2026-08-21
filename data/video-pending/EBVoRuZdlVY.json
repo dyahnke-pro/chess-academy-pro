@@ -220,5 +220,33 @@
    "fen": "2bqr1k1/1pp3bp/3pn1p1/4np2/1PPNP3/2N1BPP1/3R2BP/Q5K1 w - - 1 21"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "King's Indian Defense: Fianchetto Variation, Classical Variation",
+   "eco": "E68",
+   "plies": 19,
+   "line": "Nf3 Nf6 g3 g6 Bg2 Bg7 O-O O-O c3 d6 c4 e5 d4 Nbd7 Nc3 Ne4 e3 Nef6 e4",
+   "coverage": 0.739
+  },
+  {
+   "name": "King's Indian Attack: Symmetrical Defense",
+   "eco": "A05",
+   "plies": 4,
+   "line": "Nf3 Nf6 g3 g6",
+   "coverage": 0.913
+  },
+  {
+   "name": "Zukertort Opening",
+   "eco": "A04",
+   "plies": 1,
+   "line": "Nf3",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

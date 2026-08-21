@@ -502,5 +502,40 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Nimzowitsch Defense: Kennedy Variation, Keres Attack",
+   "eco": "B00",
+   "plies": 7,
+   "line": "e4 e5 d4 Nc6 dxe5 Nxe5 Nc3",
+   "coverage": 0.868
+  },
+  {
+   "name": "Nimzowitsch Defense: Kennedy Variation",
+   "eco": "B00",
+   "plies": 4,
+   "line": "e4 e5 d4 Nc6",
+   "coverage": 0.947
+  },
+  {
+   "name": "Center Game",
+   "eco": "C20",
+   "plies": 3,
+   "line": "e4 e5 d4",
+   "coverage": 0.974
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }
