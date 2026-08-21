@@ -542,5 +542,59 @@
  "titleCheck": {
   "claims": "Trompowsky Attack",
   "confirmed": true
- }
+ },
+ "notes": [
+  {
+   "id": "vn-tromp-the-sideline-that-skips-the-c-pawn",
+   "line": "d4 Nf6 Bg5",
+   "teaches": "An early bishop sortie that skips the usual second pawn move is a system, not an oversight. Meet it on its own terms rather than reaching for the move that answers the main line.",
+   "explains": "The bishop comes straight out to g5 and pins nothing — it simply attacks the knight on f6 before White has committed the c-pawn. This is one of a family of sidelines that avoid the main theoretical roads entirely. It has been overtaken in popularity by the quieter setup with the bishop on f4, and the reason is on the next move.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f6"
+    }
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/6B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+   "t": 32.5,
+   "ply": 3,
+   "source": "yt:8L-cDJJBbxc"
+  },
+  {
+   "id": "vn-tromp-move-the-attacked-piece-forward",
+   "line": "d4 Nf6 Bg5 Ne4",
+   "teaches": "When a piece is attacked, look at the squares in FRONT of it before the squares behind. A knight that jumps forward and attacks the attacker turns a threat into a question.",
+   "explains": "Rather than defending the knight or moving it back, it jumps to e4 and hits the bishop that just came out. This is the standard answer and the one worth learning, though it is not the only good one — players comfortable with the structures after a modest pawn to e6 do well with that instead. White now has to decide where the bishop lives, and the choice is real: there are three defensible squares and they lead to different games.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "g5"
+    }
+   ],
+   "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn3/8/PPP1PPPP/RN1QKBNR w KQkq - 3 3",
+   "t": 56,
+   "ply": 4,
+   "source": "yt:8L-cDJJBbxc"
+  },
+  {
+   "id": "vn-tromp-the-retreat-that-keeps-the-diagonal",
+   "line": "d4 Nf6 Bg5 Ne4 Bf4",
+   "teaches": "Between retreats, prefer the one that keeps the piece doing something. A bishop that steps back onto a working diagonal has lost a tempo; one that steps back to safety has lost the piece's purpose too.",
+   "explains": "The bishop drops to f4, where it still eyes c7 and holds e5, and this is the main line. The alternatives are worth knowing: stepping back along the same diagonal to h4 keeps the bishop on the board but achieves little, and there is a sharper flank push popularised by English players that is a genuine sideline rather than a mistake. Of the three, this is the one that keeps the bishop useful.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c7"
+    },
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ],
+   "fen": "rnbqkb1r/pppppppp/8/8/3PnB2/8/PPP1PPPP/RN1QKBNR b KQkq - 4 3",
+   "t": 62.5,
+   "ply": 5,
+   "source": "yt:8L-cDJJBbxc"
+  }
+ ]
 }
