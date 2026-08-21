@@ -1,3 +1,21 @@
+# ============================================================================
+# TOP PRIORITY — the Smartypants Chess "Opening Traps For The Improving Player"
+# series. These become GEMS (David 2026-08-21). #1 is the Vienna Copycat trap,
+# the line the app teaches but no good video covered until now.
+#
+# GothamChess does NOT teach the Copycat — checked his four Vienna videos by
+# caption: he names it and dismisses it as losing for Black, never walks it.
+#
+# Five found; a #6 is not indexed under this title phrasing.
+# ============================================================================
+
+Z5z5NzU6igs   Opening Traps #1 | The Vienna Copycat Trap
+ZCekijO6Bn8   Opening Traps #2 | Sly Line To Humiliate The Caro Kann
+eQwgN51_OXE   Opening Traps #3 | Blackburne Shilling Gambit
+QKjo3REAuHQ   Opening Traps #4 | The Englund Gambit Trap
+QywJlggqTO4   Opening Traps #5 | The Lasker Trap
+
+
 # PRIORITY DOWNLOADS — the videos behind the 23 gen-1 baked narrations
 #
 # The 2026-08-01 bakes were written from transcripts BEFORE the board-reading
