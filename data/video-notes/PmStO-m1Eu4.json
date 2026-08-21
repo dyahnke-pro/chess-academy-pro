@@ -1,0 +1,14 @@
+[
+  {
+    "id": "vn-sicilian-which-sicilian-to-learn-first",
+    "line": "e4 c5 Nf3 d6",
+    "teaches": "Pick your defence by how much theory you can carry, not by how strong it is at the top. A system whose plans repeat is a better first choice than one whose value lives in exact move orders.",
+    "explains": "The pawn to d6 covers e5 and heads for the sharpest, most theory-heavy systems in this whole family — the ones where knowing the twelfth move matters. The gentler entry point is the knight to c6 instead, which leads to setups with repeating plans and far less to remember, and that is the one worth learning first. Note that the choice may not survive: after the knight move White very often avoids the open lines altogether with an early bishop check, which is a different game again.",
+    "reasons": [
+      {
+        "kind": "controls",
+        "square": "e5"
+      }
+    ]
+  }
+]

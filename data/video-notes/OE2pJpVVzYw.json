@@ -1,0 +1,14 @@
+[
+  {
+    "id": "vn-openinggame-the-strike-recommended-to-beginners",
+    "line": "e4 e5 Nf3",
+    "teaches": "When you are choosing a system to learn first, pick the one whose ideas are visible on the board rather than stored in your memory. An opening that teaches you to open lines and develop is worth more early than one that wins a theoretical argument.",
+    "explains": "The knight comes out to hit e5, and White's real decision is one move away: which system to build. The direct central strike with the d-pawn is the one worth knowing first — it opens the position immediately, trades a pair of pawns, and leaves both sides playing with pieces on an open board. That makes it the rare opening that teaches good habits while you play it rather than after you have memorised it.",
+    "reasons": [
+      {
+        "kind": "attacks",
+        "square": "e5"
+      }
+    ]
+  }
+]
