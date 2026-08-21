@@ -406,5 +406,26 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Owen Defense",
+   "eco": "B00",
+   "plies": 2,
+   "line": "e4 b6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

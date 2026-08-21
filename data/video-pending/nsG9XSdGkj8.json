@@ -412,5 +412,40 @@
    "fen": "5rk1/p5p1/1p1b2q1/2pPprN1/1PP4Q/P6R/3B1PB1/4R1K1 b - - 2 29"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Open",
+   "eco": "B32",
+   "plies": 5,
+   "line": "e4 c5 Nf3 Nc6 d4",
+   "coverage": 0.938
+  },
+  {
+   "name": "Sicilian Defense: Old Sicilian",
+   "eco": "B30",
+   "plies": 4,
+   "line": "e4 c5 Nf3 Nc6",
+   "coverage": 0.958
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

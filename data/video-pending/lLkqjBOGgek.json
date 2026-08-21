@@ -1457,5 +1457,81 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Queen's Gambit Declined: Exchange Variation, Positional Variation",
+   "eco": "D35",
+   "plies": 9,
+   "line": "d4 d5 c4 Nf6 cxd5 e6 Nc3 exd5 Bg5",
+   "coverage": 0.024
+  },
+  {
+   "name": "Queen's Gambit Declined: Modern Variation",
+   "eco": "D50",
+   "plies": 7,
+   "line": "d4 d5 c4 e6 Nc3 Nf6 Bg5",
+   "coverage": 0.276
+  },
+  {
+   "name": "Queen's Gambit Declined: Exchange Variation",
+   "eco": "D35",
+   "plies": 7,
+   "line": "d4 d5 c4 Nf6 cxd5 e6 Nc3",
+   "coverage": 0.039
+  },
+  {
+   "name": "Queen's Gambit Declined: Charousek Variation",
+   "eco": "D31",
+   "plies": 6,
+   "line": "d4 d5 c4 e6 Nc3 Be7",
+   "coverage": 0.654
+  },
+  {
+   "name": "Queen's Gambit Declined: Normal Defense",
+   "eco": "D35",
+   "plies": 6,
+   "line": "d4 d5 c4 e6 Nc3 Nf6",
+   "coverage": 0.276
+  },
+  {
+   "name": "Queen's Gambit Declined: Queen's Knight Variation",
+   "eco": "D31",
+   "plies": 5,
+   "line": "d4 d5 c4 e6 Nc3",
+   "coverage": 0.937
+  },
+  {
+   "name": "Queen's Gambit Declined",
+   "eco": "D30",
+   "plies": 4,
+   "line": "d4 d5 c4 e6",
+   "coverage": 0.945
+  },
+  {
+   "name": "Queen's Gambit Declined: Marshall Defense",
+   "eco": "D06",
+   "plies": 4,
+   "line": "d4 d5 c4 Nf6",
+   "coverage": 0.039
+  },
+  {
+   "name": "Queen's Gambit",
+   "eco": "D06",
+   "plies": 3,
+   "line": "d4 d5 c4",
+   "coverage": 0.992
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Queen's Gambit",
+  "confirmed": true
+ }
 }

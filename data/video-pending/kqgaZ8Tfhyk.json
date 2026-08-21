@@ -358,5 +358,26 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Nimzo-Larsen Attack: English Variation",
+   "eco": "A01",
+   "plies": 2,
+   "line": "b3 c5",
+   "coverage": 1
+  },
+  {
+   "name": "Nimzo-Larsen Attack",
+   "eco": "A01",
+   "plies": 1,
+   "line": "b3",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

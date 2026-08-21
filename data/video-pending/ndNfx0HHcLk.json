@@ -132,5 +132,54 @@
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Ruy Lopez: Berlin Defense, Improved Steinitz Defense",
+   "eco": "C66",
+   "plies": 8,
+   "line": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O d6",
+   "coverage": 0.615
+  },
+  {
+   "name": "Ruy Lopez: Berlin Defense",
+   "eco": "C65",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bb5 Nf6",
+   "coverage": 0.769
+  },
+  {
+   "name": "Ruy Lopez",
+   "eco": "C60",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Bb5",
+   "coverage": 0.846
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.846
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.923
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

@@ -838,5 +838,54 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Nimzowitsch Variation, Main Line",
+   "eco": "B29",
+   "plies": 12,
+   "line": "e4 c5 Nf3 Nf6 e5 Nd5 Nc3 e6 Nxd5 exd5 d4 Nc6",
+   "coverage": 0.014
+  },
+  {
+   "name": "Sicilian Defense: Nimzowitsch Variation, Advance Variation",
+   "eco": "B29",
+   "plies": 5,
+   "line": "e4 c5 Nf3 Nf6 e5",
+   "coverage": 0.914
+  },
+  {
+   "name": "Sicilian Defense: Nimzowitsch Variation, Closed Variation",
+   "eco": "B29",
+   "plies": 5,
+   "line": "e4 c5 Nf3 Nf6 Nc3",
+   "coverage": 0.043
+  },
+  {
+   "name": "Sicilian Defense: Nimzowitsch Variation",
+   "eco": "B29",
+   "plies": 4,
+   "line": "e4 c5 Nf3 Nf6",
+   "coverage": 0.971
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

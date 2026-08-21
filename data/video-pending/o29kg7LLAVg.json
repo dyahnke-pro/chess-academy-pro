@@ -222,5 +222,39 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Alapin Variation, Barmen Defense",
+   "eco": "B22",
+   "plies": 6,
+   "line": "e4 c5 c3 d5 exd5 Qxd5",
+   "coverage": 0.765
+  },
+  {
+   "name": "Sicilian Defense: Alapin Variation",
+   "eco": "B22",
+   "plies": 3,
+   "line": "e4 c5 c3",
+   "coverage": 0.941
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Alapin Variation",
+  "confirmed": true
+ }
 }
