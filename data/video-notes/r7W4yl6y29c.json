@@ -1,0 +1,38 @@
+[
+ {
+  "id": "vn-alapin-stoltz-develop-at-the-knight-that-already-moved-twice",
+  "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4",
+  "teaches": "A piece that has already moved twice is the piece to aim at, because every time you attack it the opponent spends a third move on it and you spend your first. The bishop's most natural developing square happens to be the one that asks the question, so the tempo costs nothing \u2014 this is development and an attack in the same move, which is the cheapest kind of initiative there is.",
+  "explains": "The bishop steps out to c4 and immediately attacks the knight on d5. Black's knight has already been to f6 and d5; now it has to move a third time or be propped up with a pawn, and either way White has gained the sort of head start that decides quiet positions.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "d5"
+   }
+  ]
+ },
+ {
+  "id": "vn-alapin-stoltz-the-retreat-that-asks-its-own-question",
+  "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6",
+  "teaches": "A retreat is not automatically a concession. Look for the square that steps back and attacks something on the way, because then the tempo you appeared to lose comes straight back and the opponent is the one who has to react. Judge a retreat by what it does, not by the direction it travels.",
+  "explains": "The knight drops back to b6, and from there it hits the bishop on c4. White has to decide where that bishop lives before doing anything else, so the move that looked like a step backwards has handed the question back across the board.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "c4"
+   }
+  ]
+ },
+ {
+  "id": "vn-alapin-stoltz-develop-toward-the-pawn-that-cramps-you",
+  "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6",
+  "teaches": "When a pawn has been pushed into your half and is taking your squares away, develop the pieces that lean on it rather than the ones that ignore it. A cramping pawn is only strong while it is defended cheaply; every piece you point at it raises the price of keeping it there.",
+  "explains": "The knight comes to c6, where it leans on the pawn on e5. It is not going to fall this move, but the advanced pawn is now something White has to keep answering for, and that is how the space it claimed gets paid back.",
+  "reasons": [
+   {
+    "kind": "attacks",
+    "square": "e5"
+   }
+  ]
+ }
+]
