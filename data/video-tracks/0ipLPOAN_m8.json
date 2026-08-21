@@ -712,5 +712,55 @@
  "titleCheck": {
   "claims": "English Opening: Anglo-Indian Defense",
   "confirmed": true
- }
+ },
+ "notes": [
+  {
+   "id": "vn-kid-fianchetto-the-setup-with-the-longest-pedigree",
+   "line": "c4 Nf6 d4 g6 g3 Bg7 Nf3 d6 Bg2 O-O O-O",
+   "teaches": "A setup that has stayed popular for decades usually earned it structurally, not fashionably. When one scheme answers several defences at once, that consistency IS the argument for it.",
+   "explains": "Both kings are tucked away and the flank bishop is home on the long diagonal. This whole scheme comes from a repertoire built on putting that bishop there against everything, and it has stayed one of White's best tries for an advantage ever since. Black has a genuine menu of replies from here — enough that strong players cycle through several over a career — and none of them is refuted; they are simply different games.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "f1"
+    }
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 3 6",
+   "t": 118.5,
+   "ply": 11,
+   "source": "yt:0ipLPOAN_m8"
+  },
+  {
+   "id": "vn-kid-fianchetto-the-knight-square-that-denies-a-tempo",
+   "line": "c4 Nf6 d4 g6 g3 Bg7 Nf3 d6 Bg2 O-O O-O Nbd7",
+   "teaches": "Between two developing squares for the same knight, prefer the one the opponent's pawn break cannot hit. Denying a tempo is worth more than the extra square the other move covers.",
+   "explains": "The knight goes to d7 rather than c6, and the difference is a whole tempo. From c6 it stands directly in front of White's d-pawn, so the advance to d5 arrives attacking it and White gains time. From d7 that same advance hits nothing. The knight still does its main job from here — it guards e5 and prepares the central pawn strike that the whole setup is aiming for. This is the oldest and easiest of the systems to learn, and while it is not the objectively strongest, it is a thoroughly practical way to play it.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ],
+   "fen": "r1bq1rk1/pppnppbp/3p1np1/8/2PP4/5NP1/PP2PPBP/RNBQ1RK1 w - - 4 7",
+   "t": 165,
+   "ply": 12,
+   "source": "yt:0ipLPOAN_m8"
+  },
+  {
+   "id": "vn-kid-fianchetto-a-pin-that-threatens-nothing",
+   "line": "c4 Nf6 d4 g6 g3 Bg7 Nf3 d6 Bg2 O-O O-O Nbd7 Bg5 Nb8 Bc1",
+   "teaches": "Before pinning, check whether the capture would actually win something. A pin against a defended piece threatens nothing, so the opponent can simply ask the bishop where it intends to live.",
+   "explains": "The bishop has been to g5 and come straight back to c1. It is a common move at club level and it is not a good one: the knight it pins is defended, so taking on f6 wins nothing, which means the bishop is committed to a square where it can be questioned by a pawn at no cost. Two moves spent, nothing gained, and the same position with Black to move.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "g5"
+    }
+   ],
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/5NP1/PP2PPBP/RNBQ1RK1 b - - 7 8",
+   "t": 171.5,
+   "ply": 15,
+   "source": "yt:0ipLPOAN_m8"
+  }
+ ]
 }

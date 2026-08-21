@@ -1,0 +1,86 @@
+[
+  {
+    "id": "vn-kid-many-systems-one-study-load",
+    "line": "c4 Nf6 d4 g6 Nc3",
+    "teaches": "When one defence faces many setups of roughly equal strength, do not study only the line called 'main'. The name tells you what is popular, not what you will actually be shown across a hundred games.",
+    "explains": "The knight to c3 takes d5 and e4 and is the busiest route, but it is only one of several White systems here, and they are close enough in objective value that none of them can be skipped. That is what makes this defence theoretically demanding: the pawn advance one square, the same pawn two squares, the quiet knight development and the flank bishop are separate games, each needing its own attention.",
+    "reasons": [
+      {
+        "kind": "controls",
+        "square": "d5"
+      },
+      {
+        "kind": "controls",
+        "square": "e4"
+      }
+    ]
+  },
+  {
+    "id": "vn-kid-the-big-centre-invites-the-counter",
+    "line": "c4 Nf6 d4 g6 Nc3 Bg7 e4",
+    "teaches": "Building the widest possible centre is a commitment, not a free gain. It takes squares now and hands the opponent a fixed target to strike at later.",
+    "explains": "The pawn to e4 completes the broad centre, holding d5 and f5 and shutting the long diagonal the bishop on g7 was just aimed down. Black is not trying to stop this — the whole design is to let the centre be built and then hit it, either in the middle with a pawn to e5 or on the wing with a pawn to c5. What White has taken in space, White now has to hold.",
+    "reasons": [
+      {
+        "kind": "controls",
+        "square": "d5"
+      },
+      {
+        "kind": "controls",
+        "square": "f5"
+      }
+    ]
+  },
+  {
+    "id": "vn-kid-the-modest-pawn-that-prepares-the-strike",
+    "line": "c4 Nf6 d4 g6 Nc3 Bg7 e4 d6",
+    "teaches": "A one-square pawn move that looks passive is often the one that makes the break possible. Ask what it prepares, not what it occupies.",
+    "explains": "The pawn steps to d6 rather than two squares, contesting e5 and holding the point the whole plan turns on. It looks modest and it is the move that makes the position work: the centre stays flexible, the bishop keeps its diagonal, and the pawn strike in the middle is now available whenever Black wants it. Committing further this early would tell White which plan is coming.",
+    "reasons": [
+      {
+        "kind": "controls",
+        "square": "e5"
+      }
+    ]
+  },
+  {
+    "id": "vn-kid-develop-and-hold-the-point-you-took",
+    "line": "c4 Nf6 d4 g6 Nc3 Bg7 e4 d6 Be2 O-O Nf3",
+    "teaches": "With a big centre, develop the pieces that hold it. Every developing move that also guards the centre is a move you will not have to spend defending later.",
+    "explains": "The knight arrives on f3, adding a guard to d4 and contesting e5 — the exact square Black wants to strike at. This is the most-played arrangement, and White's problem from here is a pleasant one: the space is real, but so is the fact that a broad centre needs defending, and Black's pieces are all pointed at it.",
+    "reasons": [
+      {
+        "kind": "controls",
+        "square": "e5"
+      },
+      {
+        "kind": "defends",
+        "square": "d4"
+      }
+    ]
+  },
+  {
+    "id": "vn-kid-copy-the-setup-instead-of-fighting-it",
+    "line": "c4 Nf6 d4 g6 Nf3",
+    "teaches": "Against a setup built to counter-attack a big centre, consider not building one. Mirroring the opponent's structure removes the target their whole plan needs.",
+    "explains": "The knight comes out to f3 and contests e5 without committing the e-pawn. This is the quiet road, and it is the one engines tend to like best at high depth: rather than build the broad centre Black is preparing to hit, White copies Black's own approach — flank bishop, modest centre — and leaves the counter-attack nothing to bite on.",
+    "reasons": [
+      {
+        "kind": "controls",
+        "square": "e5"
+      }
+    ]
+  },
+  {
+    "id": "vn-kid-the-mirror-completed",
+    "line": "c4 Nf6 d4 g6 Nf3 Bg7 g3",
+    "teaches": "Two bishops on the same long diagonal is not a stalemate of ideas — it is a fight for who gets to open it. The side with the extra tempo usually decides.",
+    "explains": "The pawn to g3 prepares the bishop's home on the long diagonal, directly opposite the one Black has already fianchettoed. This is the version reckoned objectively strongest and the one the engine reaches for at depth. There is no big centre to attack, so both sides play for the light squares and for the moment the diagonal opens — a slower game, and a harder one to prepare against precisely because it refuses the argument the defence was built to have.",
+    "reasons": [
+      {
+        "kind": "controls",
+        "square": "f4"
+      }
+    ]
+  }
+]
