@@ -3095,6 +3095,44 @@ per game and a 40-second sampling grid walks straight past it. `scan_stream`
 samples at 2fps and found it immediately. When a hand read looks right and
 calibrate says no, tighten the sample before touching the numbers.
 
+🚨 **THE PARKED BUCKET IS MOSTLY A THEME PROBLEM, NOT A GEOMETRY PROBLEM
+(measured 2026-08-21).** `needs-hand-geometry.txt` is named for the diagnosis
+that put videos there, and for most of them that diagnosis is WRONG. Of 93
+parked, **49 are lessons or speedruns** — the entire 16-video "Principles of
+Chess Endgames" series, several Master Classes, the Sensei speedruns — so this
+is not a bucket of stream VODs that can be written off.
+
+The evidence, on `K8QMjqu0_MY` (Master Class | Caro-Kann, 854x480, board plainly
+at `372,0,60.25` by eye): calibrate refuses it across 40 frames spanning forty
+minutes, and `scan_stream` at 2fps refuses it too. The geometry is right. What
+is wrong is the BOARD THEME. Sampling the 64 squares of one frame:
+
+| | luminance |
+|---|---|
+| empty light square | 206-209 |
+| **white piece on a dark square** | **142-194** |
+| empty dark square | 119-127 |
+| black piece | 54-86 |
+
+A white piece on a LIGHT square is therefore indistinguishable from an empty
+light square, which is the inversion this file already warns `read_board`'s
+fixed ±25 margin causes. And it is fatal EARLIER than expected, because of an
+ordering problem: `calibrate_section` measures the colour classes FROM a start
+position, but it has to find that start position using the plain uncalibrated
+read — so on a wooden board the plain read cannot recognise the start position,
+calibration never happens, and the video is refused and filed as bad geometry.
+Chicken and egg.
+
+That also explains the near-misses: `D0AlZuN14Fw` calibrated and then tracked
+4 moves out of 2,812 grids, and `2pOxIYxPr3M` / `D8yxw4t4F3A` refused outright —
+all wooden, two of them at geometry that is provably correct.
+
+**The fix is to make start-position detection theme-robust** — occupancy from a
+threshold measured off the frame's own distribution rather than a fixed margin,
+which is MEASUREMENT of the kind this file already sanctions, not a fit that
+guesses. It is a change to a load-bearing reader whose two previous
+"improvements" died, so it wants a deliberate pass rather than a patch mid-sweep.
+
 **BUT GEOMETRY IS ONLY THE FIRST GATE, AND A REFUSAL AFTER IT MEANS SOMETHING
 ELSE.** Two of the recovered left-board videos still came up empty for different
 reasons, and both are worth recognising before re-reading pixels again:
