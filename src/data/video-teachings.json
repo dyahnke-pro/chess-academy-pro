@@ -1,8 +1,8 @@
 {
  "generatedAt": "2026-08-21",
- "videosDistilled": 186,
- "noteCount": 477,
- "forkCount": 487,
+ "videosDistilled": 188,
+ "noteCount": 480,
+ "forkCount": 494,
  "notes": [
   {
    "id": "vn-advance-e6-cover-the-check-square-before-the-trade",
@@ -7239,6 +7239,42 @@
     {
      "kind": "defends",
      "square": "f4"
+    }
+   ]
+  },
+  {
+   "id": "vn-glek-fianchetto-order-is-flexible-learn-the-picture",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "Bc5",
+    "Bg2",
+    "d6",
+    "d3"
+   ],
+   "opening": "Four Knights Game: Glek System",
+   "phase": "opening",
+   "explains": "The pawn to d3 supports the e4-pawn and completes the modest central footing this system is built on, and it can come before or after castling with no real difference. The pieces arrive at the same harmonious picture whichever route you take.",
+   "teaches": "In a quiet fianchetto setup the exact move order rarely matters, and that is a freedom worth using. When the same handful of moves can be played in almost any sequence, choose the order that keeps the most options open and commits to nothing the opponent can pounce on. Learn the setup as a picture to reach, not a march to memorize.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:MMELgpZ4CeQ"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    },
+    {
+     "kind": "controls",
+     "square": "c4"
     }
    ]
   },
@@ -17497,6 +17533,100 @@
    ]
   },
   {
+   "id": "vn-french-advance-reinforce-the-base-of-the-chain",
+   "lineSan": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "c3"
+   ],
+   "opening": "French Defense: Advance Variation, Main Line",
+   "phase": "opening",
+   "explains": "The pawn steps to c3 and props up d4, the joint the opponent is attacking with the c-pawn and the pieces massing behind it. With the base secured by a pawn, the pieces are free to develop toward the real plan instead of babysitting the centre.",
+   "teaches": "A pawn chain has a base, and the base is where the whole structure is held or lost. When the opponent piles pressure onto the point at the head of your chain, the calm reply is to reinforce it from behind with a pawn rather than tie pieces to its defence. One quiet supporting move frees your pieces for the plan the position actually calls for.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:wn7jKtpg2dg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "e6",
+     "d4",
+     "d5",
+     "e5",
+     "c5"
+    ],
+    "taughtMove": "Nf3",
+    "alternative": "c3",
+    "lineName": "French Defence / Advance: 5.Nf3 Move Order"
+   }
+  },
+  {
+   "id": "vn-french-advance-answer-pressure-with-b4-expansion",
+   "lineSan": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "c3",
+    "Nc6",
+    "Nf3",
+    "Qb6",
+    "a3"
+   ],
+   "opening": "French Defense: Advance Variation, Main Line",
+   "phase": "opening",
+   "explains": "The a-pawn steps to a3 to prepare pushing the b-pawn to b4, claiming room on the queenside and shoring up the very tension the opponent leans on. It also denies b4 to the enemy pieces, so nothing lands there with tempo.",
+   "teaches": "When the opponent throws their weight against one wing, answering the pressure with expansion of your own often beats passive defence. A modest rook-pawn move that prepares to gain space changes the question: instead of holding a point under fire, you claim room and put the opponent on the back foot where they meant to press. Meet an attack by seizing space, not by hunkering down.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:wn7jKtpg2dg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "b4"
+    },
+    {
+     "kind": "meets",
+     "san": "Nb4"
+    }
+   ],
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "e6",
+     "d4",
+     "d5",
+     "e5",
+     "c5",
+     "c3",
+     "Nc6",
+     "Nf3",
+     "Qb6"
+    ],
+    "taughtMove": "Bd3",
+    "alternative": "a3",
+    "lineName": "French Defence / Advance: Milner-Barry Gambit"
+   }
+  },
+  {
    "id": "vn-move-order-the-developing-move-that-is-also-a-refutation",
    "lineSan": [
     "e4",
@@ -24238,6 +24368,176 @@
     }
    ],
    "source": "yt:LLidbvIUZ5I"
+  },
+  {
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 2 5",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "Bc5",
+    "Bg2"
+   ],
+   "ply": 9,
+   "options": [
+    {
+     "san": "d6",
+     "t": 133.5,
+     "continuation": "d6"
+    },
+    {
+     "san": "O-O",
+     "t": 460.5,
+     "continuation": "O-O"
+    }
+   ],
+   "source": "yt:MMELgpZ4CeQ"
+  },
+  {
+   "fen": "r3k2r/pppq1ppp/2npbn2/2b1p3/4P3/2NP1NP1/PPP2PBP/R1BQ1RK1 w kq - 3 8",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "Bc5",
+    "Bg2",
+    "d6",
+    "d3",
+    "Be6",
+    "O-O",
+    "Qd7"
+   ],
+   "ply": 14,
+   "options": [
+    {
+     "san": "Re1",
+     "t": 170,
+     "continuation": "Re1 Qd8 Kh1"
+    },
+    {
+     "san": "Bg5",
+     "t": 265.5,
+     "continuation": "Bg5"
+    }
+   ],
+   "source": "yt:MMELgpZ4CeQ"
+  },
+  {
+   "fen": "r1bq1rk1/pppp1ppp/5n2/4b3/4P3/2N3P1/PPP2PBP/R1BQK2R w KQ - 0 9",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "Bc5",
+    "Bg2",
+    "O-O",
+    "Nxe5",
+    "Nxe5",
+    "d4",
+    "Bd6",
+    "dxe5",
+    "Bxe5"
+   ],
+   "ply": 16,
+   "options": [
+    {
+     "san": "O-O",
+     "t": 499.5,
+     "continuation": "O-O"
+    },
+    {
+     "san": "f4",
+     "t": 514,
+     "continuation": "f4"
+    }
+   ],
+   "source": "yt:MMELgpZ4CeQ"
+  },
+  {
+   "fen": "r1bq1rk1/pppp1ppp/5n2/4b3/4P3/2N3P1/PPP2PBP/R1BQ1RK1 b - - 1 9",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "Bc5",
+    "Bg2",
+    "O-O",
+    "Nxe5",
+    "Nxe5",
+    "d4",
+    "Bd6",
+    "dxe5",
+    "Bxe5",
+    "O-O"
+   ],
+   "ply": 17,
+   "options": [
+    {
+     "san": "d6",
+     "t": 502.5,
+     "continuation": "d6"
+    },
+    {
+     "san": "Bxc3",
+     "t": 535,
+     "continuation": "Bxc3"
+    }
+   ],
+   "source": "yt:MMELgpZ4CeQ"
+  },
+  {
+   "fen": "r1bq1rk1/pppp1ppp/5n2/8/4PP2/2P3P1/P1P3BP/R1BQK2R b KQ - 0 10",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "Bc5",
+    "Bg2",
+    "O-O",
+    "Nxe5",
+    "Nxe5",
+    "d4",
+    "Bd6",
+    "dxe5",
+    "Bxe5",
+    "f4",
+    "Bxc3+",
+    "bxc3"
+   ],
+   "ply": 19,
+   "options": [
+    {
+     "san": "Re8",
+     "t": 525.5,
+     "continuation": "Re8"
+    },
+    {
+     "san": "Nxe4",
+     "t": 528,
+     "continuation": "Nxe4"
+    }
+   ],
+   "source": "yt:MMELgpZ4CeQ"
   },
   {
    "fen": "r3k1nr/ppp1qppp/2nb4/1B1pp3/5Pb1/1P2PNP1/PBPP3P/RN1QK2R w KQkq - 3 8",
@@ -34663,6 +34963,93 @@
     }
    ],
    "source": "yt:vzR7wHdNuOU"
+  },
+  {
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 3 6",
+   "lineSan": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "c3",
+    "Nc6",
+    "Nf3",
+    "Qb6"
+   ],
+   "ply": 10,
+   "options": [
+    {
+     "san": "a3",
+     "t": 1662.5,
+     "continuation": "a3"
+    },
+    {
+     "san": "Bd3",
+     "t": 2950.5,
+     "continuation": "Bd3"
+    }
+   ],
+   "source": "yt:wn7jKtpg2dg"
+  },
+  {
+   "fen": "2r1r3/1p2bkpp/pqn1Rpn1/3p4/1P1P4/PB3N2/1B1Q1PPP/4R1K1 b - - 4 20",
+   "lineSan": [
+    "e4",
+    "e6",
+    "d4",
+    "d5",
+    "e5",
+    "c5",
+    "c3",
+    "Nc6",
+    "Nf3",
+    "Qb6",
+    "a3",
+    "f6",
+    "b4",
+    "cxd4",
+    "cxd4",
+    "a6",
+    "Bd3",
+    "Bd7",
+    "O-O",
+    "Nge7",
+    "Nc3",
+    "Ng6",
+    "Re1",
+    "Be7",
+    "Bb2",
+    "Nf4",
+    "Bc2",
+    "Rc8",
+    "Qd2",
+    "Ng6",
+    "Nxd5",
+    "exd5",
+    "e6",
+    "Bxe6",
+    "Rxe6",
+    "Kf7",
+    "Rae1",
+    "Rhe8",
+    "Bb3"
+   ],
+   "ply": 39,
+   "options": [
+    {
+     "san": "Nd8",
+     "t": 2351.5,
+     "continuation": "Nd8"
+    },
+    {
+     "san": "Rcd8",
+     "t": 2855.5,
+     "continuation": "Rcd8"
+    }
+   ],
+   "source": "yt:wn7jKtpg2dg"
   },
   {
    "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",

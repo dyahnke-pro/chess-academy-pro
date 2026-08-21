@@ -590,5 +590,63 @@
   "claims": null,
   "confirmed": null,
   "unverifiable": "title names no opening"
- }
+ },
+ "notes": [
+  {
+   "id": "vn-french-advance-take-the-centre-you-are-offered",
+   "line": "e4 e6 d4",
+   "teaches": "The most solid, restrained defences invite you to build a broad pawn centre, and the right response to that invitation is to accept it. Occupy the middle with both pawns and make the opponent prove they can break it; a big centre is only a liability if it can be undermined, and meeting a slow setup with the same caution hands back the one edge the opening handed you. Take the space you are given.",
+   "explains": "Advancing the d-pawn plants a second pawn in the centre beside the one on e4, staking out c5 and e5 and daring the cramped defence to challenge it. The whole middlegame will turn on whether that centre can be broken or held.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "c5"
+    },
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "t": 1585.5,
+   "ply": 3,
+   "source": "yt:wn7jKtpg2dg"
+  },
+  {
+   "id": "vn-french-advance-reinforce-the-base-of-the-chain",
+   "line": "e4 e6 d4 d5 e5 c5 c3",
+   "teaches": "A pawn chain has a base, and the base is where the whole structure is held or lost. When the opponent piles pressure onto the point at the head of your chain, the calm reply is to reinforce it from behind with a pawn rather than tie pieces to its defence. One quiet supporting move frees your pieces for the plan the position actually calls for.",
+   "explains": "The pawn steps to c3 and props up d4, the joint the opponent is attacking with the c-pawn and the pieces massing behind it. With the base secured by a pawn, the pieces are free to develop toward the real plan instead of babysitting the centre.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    }
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "t": 1618,
+   "ply": 7,
+   "source": "yt:wn7jKtpg2dg"
+  },
+  {
+   "id": "vn-french-advance-answer-pressure-with-b4-expansion",
+   "line": "e4 e6 d4 d5 e5 c5 c3 Nc6 Nf3 Qb6 a3",
+   "teaches": "When the opponent throws their weight against one wing, answering the pressure with expansion of your own often beats passive defence. A modest rook-pawn move that prepares to gain space changes the question: instead of holding a point under fire, you claim room and put the opponent on the back foot where they meant to press. Meet an attack by seizing space, not by hunkering down.",
+   "explains": "The a-pawn steps to a3 to prepare pushing the b-pawn to b4, claiming room on the queenside and shoring up the very tension the opponent leans on. It also denies b4 to the enemy pieces, so nothing lands there with tempo.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "b4"
+    },
+    {
+     "kind": "meets",
+     "san": "Nb4"
+    }
+   ],
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/P1P2N2/1P3PPP/RNBQKB1R b KQkq - 0 6",
+   "t": 1662.5,
+   "ply": 11,
+   "source": "yt:wn7jKtpg2dg"
+  }
+ ]
 }

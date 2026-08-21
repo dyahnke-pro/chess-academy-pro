@@ -677,5 +677,27 @@
  "titleCheck": {
   "claims": "Caro-Kann Defense",
   "confirmed": false
- }
+ },
+ "notes": [
+  {
+   "id": "vn-glek-fianchetto-order-is-flexible-learn-the-picture",
+   "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 g3 Bc5 Bg2 d6 d3",
+   "teaches": "In a quiet fianchetto setup the exact move order rarely matters, and that is a freedom worth using. When the same handful of moves can be played in almost any sequence, choose the order that keeps the most options open and commits to nothing the opponent can pounce on. Learn the setup as a picture to reach, not a march to memorize.",
+   "explains": "The pawn to d3 supports the e4-pawn and completes the modest central footing this system is built on, and it can come before or after castling with no real difference. The pieces arrive at the same harmonious picture whichever route you take.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e4"
+    },
+    {
+     "kind": "controls",
+     "square": "c4"
+    }
+   ],
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/4P3/2NP1NP1/PPP2PBP/R1BQK2R b KQkq - 0 6",
+   "t": 153.5,
+   "ply": 11,
+   "source": "yt:MMELgpZ4CeQ"
+  }
+ ]
 }
