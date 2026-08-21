@@ -176,7 +176,7 @@ function studentMateIn(line: PvPly[], studentColor: 'white' | 'black'): number |
 
 export async function computeTacticalRead(
   fen: string,
-  opts: { engine?: PvEngine; depth?: number; findTempting?: boolean } = {},
+  opts: { engine?: PvEngine; depth?: number; findTempting?: boolean; maxTemptingProbe?: number } = {},
 ): Promise<TacticalRead | null> {
   const depth = opts.depth ?? 16;
   const pv: PvLine | null = await computePvLine(fen, { engine: opts.engine, maxPlies: 8, depth });
@@ -193,19 +193,26 @@ export async function computeTacticalRead(
 
   let tempting: TemptingMove | null = null;
   if (opts.findTempting !== false && opts.engine) {
-    const legal = board.moves({ verbose: true });
+    // Rank eye-catching legal moves by appeal FIRST, then engine-eval only the
+    // top few — the tempting move is always a high-appeal one, so evaluating
+    // every capture on the board is wasted engine time on a runtime surface.
+    const maxProbe = opts.maxTemptingProbe ?? 6;
+    const candidates = board.moves({ verbose: true })
+      .map((mv) => {
+        const { score, appeal } = appealScore({ isCapture: mv.captured != null, isPromotion: mv.promotion != null, san: mv.san, piece: mv.piece, to: mv.to });
+        return { mv, score, appeal, uci: mv.from + mv.to + (mv.promotion ?? '') };
+      })
+      .filter((c) => c.score > 0 && c.uci !== first.uci)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, maxProbe);
     const scored: Array<{ san: string; uci: string; appeal: string; appealScore: number; studentCp: number }> = [];
-    for (const mv of legal) {
-      const { score, appeal } = appealScore({ isCapture: mv.captured != null, isPromotion: mv.promotion != null, san: mv.san, piece: mv.piece, to: mv.to });
-      if (score <= 0) continue; // only genuinely eye-catching moves are "tempting"
-      const uci = mv.from + mv.to + (mv.promotion ?? '');
-      if (uci === first.uci) continue; // the best move is never the tempting-wrong one
+    for (const c of candidates) {
       const child = new Chess(fen);
-      child.move({ from: mv.from, to: mv.to, promotion: mv.promotion });
+      child.move({ from: c.mv.from, to: c.mv.to, promotion: c.mv.promotion });
       const a = await opts.engine.analyzePosition(child.fen(), Math.max(10, depth - 4));
       // eval is now from the OPPONENT's POV (they're to move) → student POV = -that
       const studentCp = -toStudentCp(a.evaluation, studentColor === 'white' ? 'black' : 'white');
-      scored.push({ san: mv.san, uci, appeal, appealScore: score, studentCp });
+      scored.push({ san: c.mv.san, uci: c.uci, appeal: c.appeal, appealScore: c.score, studentCp });
     }
     const pick = pickTempting(scored, bestStudentCp);
     if (pick) {
@@ -226,4 +233,74 @@ export async function computeTacticalRead(
     tempting,
     closeAlternative: pv.closeAlternative,
   };
+}
+
+// ── THE COMPUTED VOICE ───────────────────────────────────────────────────────
+
+const APPEAL_AFFIRM: Record<string, string> = {
+  capture: 'grab it',
+  check: 'give the check',
+  promotion: 'push it and queen',
+  'central-develop': 'develop right into the middle',
+  recapture: 'take it back',
+  natural: 'play the natural move',
+};
+
+/** SAN spelled for the voice: "Nd5" → "knight to d5", "Nxe3" → "knight takes e3",
+ *  "O-O" → "castle". Deterministic; the read's moves are the engine's. */
+function sayMove(san: string): string {
+  const clean = san.replace(/[+#]/g, '');
+  if (clean === 'O-O') return 'castle short';
+  if (clean === 'O-O-O') return 'castle long';
+  const P: Record<string, string> = { N: 'the knight', B: 'the bishop', R: 'the rook', Q: 'the queen', K: 'the king' };
+  const m = clean.match(/^([NBRQK])?([a-h]?[1-8]?)?(x)?([a-h][1-8])(=([NBRQ]))?$/);
+  if (!m) return clean;
+  const piece = m[1] ? P[m[1]] : 'the pawn';
+  const takes = m[3] ? ' takes ' : ' to ';
+  const dest = m[4];
+  const promo = m[6] ? `, promoting to ${({ N: 'a knight', B: 'a bishop', R: 'a rook', Q: 'a queen' } as Record<string, string>)[m[6]]}` : '';
+  return `${piece}${takes}${dest}${promo}`;
+}
+
+/**
+ * THE COMPUTED VOICE — turn a TacticalRead fact package into a coach line in the
+ * Danya register, composed ENTIRELY from the computed facts (G0: nothing here
+ * decides chess, it only phrases what the engine + chess.js already found).
+ *
+ * Shape mirrors his measured rhythm: the affirm→BUT→refute turn on the tempting
+ * move (his #1 device), then the real move and the line to the tactic, the named
+ * point, and the verdict last. `spoken` spells moves for TTS; the caller picks.
+ */
+export function narrateTacticalRead(read: TacticalRead, opts: { spoken?: boolean } = {}): string {
+  const say = (san: string): string => (opts.spoken ? sayMove(san) : san);
+  const parts: string[] = [];
+
+  // BUT-TURN — affirm the seductive move, then refute it with the computed line.
+  if (read.tempting) {
+    const affirm = APPEAL_AFFIRM[read.tempting.appeal] ?? 'play it';
+    const ref = read.tempting.refutation;
+    const reply = ref.length > 1 ? ref[1] : (ref.length > 0 ? ref[0] : undefined);
+    const refutation = reply ? ` — but ${say(reply.san)} and it falls apart` : ' — but it doesn’t hold';
+    parts.push(`You’d love to ${affirm} with ${say(read.tempting.san)}${refutation}.`);
+  }
+
+  // THE MOVE + the forcing line to the tactic.
+  const toTactic = read.keyTactic ? read.keyTactic.atPly : Math.min(read.line.length - 1, 2);
+  const lineSans = read.line.slice(0, toTactic + 1).map((p) => say(p.san));
+  if (lineSans.length > 0) {
+    parts.push(read.tempting
+      ? `Instead, ${lineSans.join(', ')}.`
+      : `The move is ${lineSans.join(', ')}.`);
+  }
+
+  // NAME the point (from the static scanner, pieces and all).
+  const clause = namedTacticClause(read.line);
+  if (clause) parts.push(clause);
+
+  // VERDICT last — the payoff.
+  parts.push(read.verdict.kind === 'mate'
+    ? `And that’s ${read.verdict.text}.`
+    : `You come out with ${read.verdict.text}.`);
+
+  return parts.join(' ');
 }

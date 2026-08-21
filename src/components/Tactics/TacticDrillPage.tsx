@@ -17,6 +17,9 @@ import type { PuzzleRecord } from '../../types';
 import { db } from '../../db/schema';
 import { logAppAudit } from '../../services/appAuditor';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText, tacticNoteForPuzzleThemes } from '../../services/danyaTeachingService';
+import { Chess } from 'chess.js';
+import { stockfishEngine } from '../../services/stockfishEngine';
+import { computeTacticalRead, narrateTacticalRead } from '../../services/tacticalRead';
 
 type Phase = 'loading' | 'solving' | 'summary';
 
@@ -270,6 +273,29 @@ export function TacticDrillPage(): JSX.Element {
       }
       if (note) setPostSolveNotes((prev) => ({ ...prev, [currentIndex]: note }));
     } catch { /* the note is a bonus, never a blocker */ }
+
+    // COMPUTED-VOICE READ — the Danya-register tactical read for THIS exact
+    // board (best line + named tactic + verdict + the tempting-but-wrong move),
+    // composed from computed facts (G0). Written only — rule #8 keeps the drill
+    // SILENT during solving; text under the board is allowed, and it lands only
+    // AFTER grading. Prefers this over the pattern-family note (it is about this
+    // position, not the family). Fire-and-forget; keyed by index so a later
+    // resolve never blocks auto-advance.
+    if (outcome.correct) {
+      const readIndex = currentIndex;
+      const readPuzzle = puzzle;
+      void (async (): Promise<void> => {
+        try {
+          const g = new Chess(readPuzzle.fen);
+          const firstUci = readPuzzle.moves.split(' ').filter(Boolean)[0];
+          if (firstUci && firstUci.length >= 4) {
+            g.move({ from: firstUci.slice(0, 2), to: firstUci.slice(2, 4), promotion: firstUci.slice(4) || undefined });
+          }
+          const read = await computeTacticalRead(g.fen(), { engine: stockfishEngine, depth: 14 });
+          if (read) setPostSolveNotes((prev) => ({ ...prev, [readIndex]: narrateTacticalRead(read) }));
+        } catch { /* the read is a bonus, never a blocker */ }
+      })();
+    }
 
     // Auto-advance on a SOLVE. 3s is enough to see the final position and the
     // rating tick; a fail never auto-advances. `goNextRef` — goNext is
