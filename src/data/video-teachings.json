@@ -1,8 +1,8 @@
 {
  "generatedAt": "2026-08-21",
- "videosDistilled": 195,
- "noteCount": 529,
- "forkCount": 514,
+ "videosDistilled": 196,
+ "noteCount": 534,
+ "forkCount": 516,
  "notes": [
   {
    "id": "vn-advance-e6-cover-the-check-square-before-the-trade",
@@ -12052,6 +12052,149 @@
      "square": "f1"
     }
    ]
+  },
+  {
+   "id": "vn-sic-c4-surprise-is-not-a-mistake",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c4"
+   ],
+   "opening": "Sicilian Defense: Staunton-Cochrane Variation",
+   "phase": "opening",
+   "explains": "The pawn to c4 grabs space but permanently concedes the d4 square, since White no longer has a c-pawn to support that break. It is a sideline to be met with simple positional chess, not a move to fear.",
+   "teaches": "A surprising off-beat move is not the same as a mistake, but it rarely reflects deep preparation — so meet it with calm, textbook play rather than trying to punish it at once. The refutation of a sideline is usually just sound development, not fireworks.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fc8rxAMb7xI"
+   ],
+   "positionSource": "high",
+   "forkOf": {
+    "atLine": [
+     "e4",
+     "c5"
+    ],
+    "taughtMove": "Nf3",
+    "alternative": "c4",
+    "lineName": "Sicilian: Najdorf"
+   }
+  },
+  {
+   "id": "vn-sic-c4-fianchetto-eyes-the-weak-square",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c4",
+    "Nc6",
+    "Nc3",
+    "g6",
+    "d3",
+    "Bg7"
+   ],
+   "opening": "Sicilian Defense: Staunton-Cochrane Variation",
+   "phase": "opening",
+   "explains": "The bishop develops to g7, bearing down the long diagonal toward the d4 square that White's early c-pawn advance left permanently soft. It is a natural, universal setup here.",
+   "teaches": "A fianchetto that rakes the long diagonal is a logical developing move whatever the specific opening, especially when it aims straight at a square the opponent has weakened. Point your best piece at the hole.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fc8rxAMb7xI"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "d4"
+    }
+   ]
+  },
+  {
+   "id": "vn-sic-c4-keep-the-diagonal-open",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c4",
+    "Nc6",
+    "Nc3",
+    "g6",
+    "d3",
+    "Bg7",
+    "Nf3",
+    "d6"
+   ],
+   "opening": "Sicilian Defense: Staunton-Cochrane Variation",
+   "phase": "opening",
+   "explains": "Pawn to d6 comes first; sending the knight to f6 would block the g7-bishop's view down the long diagonal and loosen the grip on d4, so the knight will instead head for e7. The move also prepares a later central break.",
+   "teaches": "Order your developing moves to keep your best piece's diagonal open. Delay the natural knight development that would block your own fianchettoed bishop, and play the useful pawn move first while keeping the knight's route flexible.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fc8rxAMb7xI"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-sic-c4-trade-the-defender-with-bg4",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c4",
+    "Nc6",
+    "Nc3",
+    "g6",
+    "d3",
+    "Bg7",
+    "Nf3",
+    "d6",
+    "Be2",
+    "Bg4"
+   ],
+   "opening": "Sicilian Defense: Staunton-Cochrane Variation",
+   "phase": "opening",
+   "explains": "The bishop comes to g4, pinning the f3-knight and preparing to trade it. Removing that knight loosens White's control of the central d4 and e5 squares, which is the whole fight in this structure.",
+   "teaches": "There is more than one way to remove a key enemy defender. Besides the usual pawn levers, simply pinning and trading it off with a bishop is an option players often overlook — and it is exactly the piece guarding the squares you want.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fc8rxAMb7xI"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f3"
+    }
+   ]
+  },
+  {
+   "id": "vn-sic-c4-concrete-priority-over-the-rule",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c4",
+    "Nc6",
+    "Nc3",
+    "g6",
+    "d3",
+    "Bg7",
+    "Nf3",
+    "d6",
+    "Be2",
+    "Bg4",
+    "O-O",
+    "Bxf3"
+   ],
+   "opening": "Sicilian Defense: Staunton-Cochrane Variation",
+   "phase": "opening",
+   "explains": "Taking the knight surrenders the bishop pair, but with the centre closed that matters little; the trade removes a defender of the central squares Black is fighting for, and development is not harmed.",
+   "teaches": "General rules bow to a concrete priority. In a closed centre, giving up the bishop pair to remove a defender of the key squares is worth more than the abstract advantage of the two bishops — the position, not the maxim, decides.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fc8rxAMb7xI"
+   ],
+   "positionSource": "high"
   },
   {
    "id": "vn-chain-play-the-free-bishop-glares-down-the-board",
@@ -32170,6 +32313,55 @@
     }
    ],
    "source": "yt:e4sg69QooO0"
+  },
+  {
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/2N5/PP1P1PPP/R1BQKBNR b KQkq - 2 3",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c4",
+    "Nc6",
+    "Nc3"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "g6",
+     "t": 123,
+     "continuation": "g6"
+    },
+    {
+     "san": "Nb8",
+     "t": 810,
+     "continuation": "Nb8 Nb1"
+    }
+   ],
+   "source": "yt:fc8rxAMb7xI"
+  },
+  {
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/2P1P3/2N5/PP1P1PPP/R1BQKBNR w KQkq - 0 4",
+   "lineSan": [
+    "e4",
+    "c5",
+    "c4",
+    "Nc6",
+    "Nc3",
+    "g6"
+   ],
+   "ply": 6,
+   "options": [
+    {
+     "san": "d3",
+     "t": 126.5,
+     "continuation": "d3"
+    },
+    {
+     "san": "g3",
+     "t": 874.5,
+     "continuation": "g3"
+    }
+   ],
+   "source": "yt:fc8rxAMb7xI"
   },
   {
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
