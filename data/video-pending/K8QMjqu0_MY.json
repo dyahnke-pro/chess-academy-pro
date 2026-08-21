@@ -283,5 +283,39 @@
    "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3"
   }
  ],
- "forks": []
+ "forks": [],
+ "openings": [
+  {
+   "name": "Caro-Kann Defense: Tartakower Variation",
+   "eco": "B15",
+   "plies": 10,
+   "line": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6",
+   "coverage": 0.759
+  },
+  {
+   "name": "Caro-Kann Defense: Main Line",
+   "eco": "B15",
+   "plies": 7,
+   "line": "e4 c6 d4 d5 Nc3 dxe4 Nxe4",
+   "coverage": 0.828
+  },
+  {
+   "name": "Caro-Kann Defense",
+   "eco": "B10",
+   "plies": 2,
+   "line": "e4 c6",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Caro-Kann Defense",
+  "confirmed": true
+ }
 }

@@ -1,0 +1,218 @@
+{
+ "videoId": "7xgOCneMX8s",
+ "title": "Four Knights Scotch | The Sensei Speedrun | GM Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 1524,
+  "settledPositions": null
+ },
+ "plies": 24,
+ "rewinds": 0,
+ "moves": [
+  {
+   "t": 10,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 11,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 13,
+   "ply": 4,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 23,
+   "ply": 5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3"
+  },
+  {
+   "t": 26.5,
+   "ply": 7,
+   "line": [
+    "Nc6",
+    "d4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 30.5,
+   "ply": 8,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5"
+  },
+  {
+   "t": 31.5,
+   "ply": 9,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5"
+  },
+  {
+   "t": 34.5,
+   "ply": 10,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/8/3nP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6"
+  },
+  {
+   "t": 36,
+   "ply": 11,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r1bqkb1r/pppp1ppp/5n2/8/3QP3/2N5/PPP2PPP/R1B1KB1R b KQkq - 0 6"
+  },
+  {
+   "t": 56.5,
+   "ply": 13,
+   "line": [
+    "b6",
+    "e5"
+   ],
+   "fen": "r1bqkb1r/p1pp1ppp/1p3n2/4P3/3Q4/2N5/PPP2PPP/R1B1KB1R b KQkq - 0 7"
+  },
+  {
+   "t": 62.5,
+   "ply": 14,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r1b1kb1r/p1ppqppp/1p3n2/4P3/3Q4/2N5/PPP2PPP/R1B1KB1R w KQkq - 1 8"
+  },
+  {
+   "t": 135,
+   "ply": 15,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r1b1kb1r/p1ppqppp/1p3n2/4P1B1/3Q4/2N5/PPP2PPP/R3KB1R b KQkq - 2 8"
+  },
+  {
+   "t": 168,
+   "ply": 16,
+   "line": [
+    "Qe6"
+   ],
+   "fen": "r1b1kb1r/p1pp1ppp/1p2qn2/4P1B1/3Q4/2N5/PPP2PPP/R3KB1R w KQkq - 3 9"
+  },
+  {
+   "t": 213.5,
+   "ply": 17,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "r1b1kb1r/p1pp1ppp/1p2qn2/4P1B1/3Q4/2N5/PPP2PPP/2KR1B1R b kq - 4 9"
+  },
+  {
+   "t": 222.5,
+   "ply": 18,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1b1k2r/p1pp1ppp/1p2qn2/2b1P1B1/3Q4/2N5/PPP2PPP/2KR1B1R w kq - 5 10"
+  },
+  {
+   "t": 274.5,
+   "ply": 19,
+   "line": [
+    "Qh4"
+   ],
+   "fen": "r1b1k2r/p1pp1ppp/1p2qn2/2b1P1B1/7Q/2N5/PPP2PPP/2KR1B1R b kq - 6 10"
+  },
+  {
+   "t": 301,
+   "ply": 20,
+   "line": [
+    "Ng4"
+   ],
+   "fen": "r1b1k2r/p1pp1ppp/1p2q3/2b1P1B1/6nQ/2N5/PPP2PPP/2KR1B1R w kq - 7 11"
+  },
+  {
+   "t": 317.5,
+   "ply": 21,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r1b1k2r/p1pp1ppp/1p2q3/2bNP1B1/6nQ/8/PPP2PPP/2KR1B1R b kq - 8 11"
+  },
+  {
+   "t": 368.5,
+   "ply": 22,
+   "line": [
+    "Bxf2"
+   ],
+   "fen": "r1b1k2r/p1pp1ppp/1p2q3/3NP1B1/6nQ/8/PPP2bPP/2KR1B1R w kq - 0 12"
+  },
+  {
+   "t": 372,
+   "ply": 23,
+   "line": [
+    "Nxc7+"
+   ],
+   "fen": "r1b1k2r/p1Np1ppp/1p2q3/4P1B1/6nQ/8/PPP2bPP/2KR1B1R b kq - 0 12"
+  },
+  {
+   "t": 375,
+   "ply": 24,
+   "line": [
+    "Kf8"
+   ],
+   "fen": "r1b2k1r/p1Np1ppp/1p2q3/4P1B1/6nQ/8/PPP2bPP/2KR1B1R w - - 1 13"
+  },
+  {
+   "t": 377.5,
+   "ply": 25,
+   "line": [
+    "Nxe6+"
+   ],
+   "fen": "r1b2k1r/p2p1ppp/1p2N3/4P1B1/6nQ/8/PPP2bPP/2KR1B1R b - - 0 13"
+  },
+  {
+   "t": 379.5,
+   "ply": 26,
+   "line": [
+    "dxe6"
+   ],
+   "fen": "r1b2k1r/p4ppp/1p2p3/4P1B1/6nQ/8/PPP2bPP/2KR1B1R w - - 0 14"
+  },
+  {
+   "t": 383,
+   "ply": 27,
+   "line": [
+    "Rd8#"
+   ],
+   "fen": "r1bR1k1r/p4ppp/1p2p3/4P1B1/6nQ/8/PPP2bPP/2K2B1R b - - 1 14"
+  }
+ ],
+ "forks": []
+}
