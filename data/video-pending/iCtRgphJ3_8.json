@@ -1,0 +1,148 @@
+{
+ "videoId": "iCtRgphJ3_8",
+ "title": "Master Class | Crushing The Modern Defense | Chess Speedrun | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 2847,
+  "settledPositions": null
+ },
+ "plies": 10,
+ "rewinds": 3,
+ "moves": [
+  {
+   "t": 583,
+   "ply": 4,
+   "line": [
+    "d4",
+    "g6",
+    "e4",
+    "Bg7"
+   ],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3"
+  },
+  {
+   "t": 584.5,
+   "ply": 5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 3"
+  },
+  {
+   "t": 585.5,
+   "ply": 4,
+   "line": [],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3"
+  },
+  {
+   "t": 586.5,
+   "ply": 5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 606.5,
+   "ply": 6,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqk1nr/ppp1ppbp/3p2p1/8/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 633.5,
+   "ply": 5,
+   "line": [],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 634.5,
+   "ply": 6,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqk1nr/pp1pppbp/6p1/2p5/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 637.5,
+   "ply": 4,
+   "line": [],
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3"
+  },
+  {
+   "t": 639.5,
+   "ply": 6,
+   "line": [
+    "Nc3",
+    "c5"
+   ],
+   "fen": "rnbqk1nr/pp1pppbp/6p1/2p5/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 642.5,
+   "ply": 8,
+   "line": [
+    "dxc5",
+    "Qa5"
+   ],
+   "fen": "rnb1k1nr/pp1pppbp/6p1/q1P5/4P3/2N5/PPP2PPP/R1BQKBNR w KQkq - 1 5"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "d4",
+    "g6",
+    "e4",
+    "Bg7"
+   ],
+   "ply": 4,
+   "options": [
+    {
+     "san": "Nc3",
+     "t": 584.5,
+     "continuation": "Nc3"
+    },
+    {
+     "san": "c3",
+     "t": 586.5,
+     "continuation": "c3"
+    }
+   ]
+  },
+  {
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d4",
+    "g6",
+    "e4",
+    "Bg7",
+    "c3"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "d6",
+     "t": 606.5,
+     "continuation": "d6"
+    },
+    {
+     "san": "c5",
+     "t": 634.5,
+     "continuation": "c5"
+    }
+   ]
+  }
+ ]
+}
