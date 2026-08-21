@@ -263,5 +263,96 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Italian Game: Two Knights Defense, Polerio Defense",
+   "eco": "C58",
+   "plies": 10,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5 Na5",
+   "coverage": 0.048
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Traxler Counterattack, Knight Sacrifice Line",
+   "eco": "C57",
+   "plies": 9,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Bc5 Ng5 Nf6 Nxf7",
+   "coverage": 0.286
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Traxler Counterattack, Bishop Sacrifice Line",
+   "eco": "C57",
+   "plies": 9,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Bc5 Ng5 Nf6 Bxf7+",
+   "coverage": 0.19
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Knight Attack, Normal Variation",
+   "eco": "C57",
+   "plies": 8,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5",
+   "coverage": 0.143
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Traxler Counterattack",
+   "eco": "C57",
+   "plies": 8,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Bc5 Ng5 Nf6",
+   "coverage": 0.524
+  },
+  {
+   "name": "Italian Game: Two Knights Defense, Knight Attack",
+   "eco": "C57",
+   "plies": 7,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5",
+   "coverage": 0.19
+  },
+  {
+   "name": "Italian Game: Two Knights Defense",
+   "eco": "C55",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Nf6",
+   "coverage": 0.238
+  },
+  {
+   "name": "Italian Game: Giuoco Piano",
+   "eco": "C50",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bc4 Bc5",
+   "coverage": 0.571
+  },
+  {
+   "name": "Italian Game",
+   "eco": "C50",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Bc4",
+   "coverage": 0.857
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.905
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.952
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

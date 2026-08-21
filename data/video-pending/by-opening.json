@@ -627,6 +627,30 @@
    "coverage": 1,
    "subject": false,
    "forks": 2
+  },
+  {
+   "videoId": "yAF1Bpa4m5Q",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "yXliDC1I0U0",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "zEkwjGCA2M4",
+   "eco": "A40",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
   }
  ],
  "Sicilian Defense: Old Sicilian": [
@@ -1297,6 +1321,22 @@
    "forks": 0
   },
   {
+   "videoId": "vdWQcl1cNlI",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "vkmohzpmqS4",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
    "videoId": "vtY88mBc088",
    "eco": "B20",
    "plies": 2,
@@ -1311,6 +1351,22 @@
    "coverage": 1,
    "subject": false,
    "forks": 2
+  },
+  {
+   "videoId": "xYJRC7aOrJ0",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "zhfOsKtD2vk",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
   }
  ],
  "King's Pawn Game": [
@@ -2467,6 +2523,14 @@
    "forks": 0
   },
   {
+   "videoId": "ts8OsKe0taY",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
    "videoId": "u6uLgifbn5I",
    "eco": "B00",
    "plies": 1,
@@ -2492,6 +2556,22 @@
   },
   {
    "videoId": "vH3fLZ7Y4YM",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "vdWQcl1cNlI",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "vkmohzpmqS4",
    "eco": "B00",
    "plies": 1,
    "coverage": 1,
@@ -2529,6 +2609,46 @@
    "coverage": 1,
    "subject": false,
    "forks": 2
+  },
+  {
+   "videoId": "xYJRC7aOrJ0",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
+   "videoId": "xeoof3v45mk",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
+  },
+  {
+   "videoId": "xoS71OW-Re0",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "y5eb3xaRRPA",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
+  },
+  {
+   "videoId": "zhfOsKtD2vk",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 3
   }
  ],
  "Trompowsky Attack": [
@@ -2728,6 +2848,14 @@
   },
   {
    "videoId": "wR42fihChx4",
+   "eco": "A45",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "zEkwjGCA2M4",
    "eco": "A45",
    "plies": 2,
    "coverage": 1,
@@ -3037,6 +3165,14 @@
    "forks": 0
   },
   {
+   "videoId": "ts8OsKe0taY",
+   "eco": "C44",
+   "plies": 4,
+   "coverage": 0.905,
+   "subject": false,
+   "forks": 2
+  },
+  {
    "videoId": "uVQKL83tZb0",
    "eco": "C44",
    "plies": 4,
@@ -3327,6 +3463,14 @@
    "forks": 3
   },
   {
+   "videoId": "ts8OsKe0taY",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 0.952,
+   "subject": false,
+   "forks": 2
+  },
+  {
    "videoId": "uVQKL83tZb0",
    "eco": "C40",
    "plies": 3,
@@ -3341,6 +3485,14 @@
    "coverage": 0.977,
    "subject": false,
    "forks": 6
+  },
+  {
+   "videoId": "xoS71OW-Re0",
+   "eco": "C40",
+   "plies": 3,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
   }
  ],
  "Four Knights Game: Glek System": [
@@ -3757,6 +3909,22 @@
    "coverage": 0.973,
    "subject": false,
    "forks": 2
+  },
+  {
+   "videoId": "vdWQcl1cNlI",
+   "eco": "B50",
+   "plies": 4,
+   "coverage": 0.846,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "zhfOsKtD2vk",
+   "eco": "B50",
+   "plies": 4,
+   "coverage": 0.971,
+   "subject": false,
+   "forks": 3
   }
  ],
  "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation": [
@@ -3955,6 +4123,14 @@
    "coverage": 0.974,
    "subject": true,
    "forks": 2
+  },
+  {
+   "videoId": "xYJRC7aOrJ0",
+   "eco": "B22",
+   "plies": 3,
+   "coverage": 0.992,
+   "subject": true,
+   "forks": 2
   }
  ],
  "Van't Kruijs Opening": [
@@ -4079,6 +4255,14 @@
    "coverage": 0.985,
    "subject": false,
    "forks": 2
+  },
+  {
+   "videoId": "yAF1Bpa4m5Q",
+   "eco": "B06",
+   "plies": 4,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
   }
  ],
  "Alekhine Defense": [
@@ -4287,6 +4471,14 @@
    "coverage": 0.939,
    "subject": false,
    "forks": 0
+  },
+  {
+   "videoId": "zEkwjGCA2M4",
+   "eco": "E60",
+   "plies": 4,
+   "coverage": 0.981,
+   "subject": false,
+   "forks": 0
   }
  ],
  "Indian Defense: Normal Variation": [
@@ -4399,6 +4591,14 @@
    "eco": "A50",
    "plies": 3,
    "coverage": 0.97,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "zEkwjGCA2M4",
+   "eco": "A50",
+   "plies": 3,
+   "coverage": 0.981,
    "subject": false,
    "forks": 0
   }
@@ -5215,6 +5415,14 @@
    "coverage": 0.929,
    "subject": true,
    "forks": 0
+  },
+  {
+   "videoId": "zEkwjGCA2M4",
+   "eco": "E61",
+   "plies": 5,
+   "coverage": 0.962,
+   "subject": false,
+   "forks": 0
   }
  ],
  "King's Indian Defense: Orthodox Variation, Positional Defense, Closed Line": [
@@ -5529,6 +5737,14 @@
    "coverage": 0.016,
    "subject": false,
    "forks": 9
+  },
+  {
+   "videoId": "ts8OsKe0taY",
+   "eco": "C50",
+   "plies": 6,
+   "coverage": 0.571,
+   "subject": false,
+   "forks": 2
   }
  ],
  "Italian Game": [
@@ -5571,6 +5787,14 @@
    "coverage": 0.957,
    "subject": false,
    "forks": 6
+  },
+  {
+   "videoId": "ts8OsKe0taY",
+   "eco": "C50",
+   "plies": 5,
+   "coverage": 0.857,
+   "subject": true,
+   "forks": 2
   }
  ],
  "Sicilian Defense: French Variation, Westerinen Attack": [
@@ -6001,6 +6225,14 @@
    "coverage": 1,
    "subject": false,
    "forks": 0
+  },
+  {
+   "videoId": "xeoof3v45mk",
+   "eco": "C20",
+   "plies": 3,
+   "coverage": 0.944,
+   "subject": true,
+   "forks": 3
   }
  ],
  "Italian Game: Giuoco Pianissimo, Italian Four Knights Variation": [
@@ -6851,6 +7083,14 @@
    "coverage": 1,
    "subject": true,
    "forks": 0
+  },
+  {
+   "videoId": "y5eb3xaRRPA",
+   "eco": "B00",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 5
   }
  ],
  "King's Pawn Game: Wayward Queen Attack": [
@@ -7277,6 +7517,22 @@
    "coverage": 1,
    "subject": false,
    "forks": 2
+  },
+  {
+   "videoId": "yAF1Bpa4m5Q",
+   "eco": "A40",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "yXliDC1I0U0",
+   "eco": "A40",
+   "plies": 2,
+   "coverage": 1,
+   "subject": true,
+   "forks": 5
   }
  ],
  "King's Knight Opening: Konstantinopolsky": [
@@ -7615,6 +7871,14 @@
    "coverage": 0.943,
    "subject": false,
    "forks": 6
+  },
+  {
+   "videoId": "ts8OsKe0taY",
+   "eco": "C55",
+   "plies": 6,
+   "coverage": 0.238,
+   "subject": false,
+   "forks": 2
   }
  ],
  "Danish Gambit Accepted": [
@@ -7827,6 +8091,14 @@
    "coverage": 0.886,
    "subject": false,
    "forks": 6
+  },
+  {
+   "videoId": "ts8OsKe0taY",
+   "eco": "C58",
+   "plies": 10,
+   "coverage": 0.048,
+   "subject": false,
+   "forks": 2
   }
  ],
  "Ruy Lopez: Morphy Defense, Caro Variation": [
@@ -7855,6 +8127,14 @@
    "coverage": 0.914,
    "subject": false,
    "forks": 6
+  },
+  {
+   "videoId": "ts8OsKe0taY",
+   "eco": "C57",
+   "plies": 8,
+   "coverage": 0.143,
+   "subject": false,
+   "forks": 2
   }
  ],
  "Italian Game: Two Knights Defense, Traxler Counterattack": [
@@ -7865,6 +8145,14 @@
    "coverage": 0.016,
    "subject": false,
    "forks": 9
+  },
+  {
+   "videoId": "ts8OsKe0taY",
+   "eco": "C57",
+   "plies": 8,
+   "coverage": 0.524,
+   "subject": false,
+   "forks": 2
   }
  ],
  "Italian Game: Two Knights Defense, Knight Attack": [
@@ -7883,6 +8171,14 @@
    "coverage": 0.929,
    "subject": false,
    "forks": 6
+  },
+  {
+   "videoId": "ts8OsKe0taY",
+   "eco": "C57",
+   "plies": 7,
+   "coverage": 0.19,
+   "subject": false,
+   "forks": 2
   }
  ],
  "English Opening: King's English Variation, Kramnik-Shirov Counterattack": [
@@ -7951,6 +8247,14 @@
    "coverage": 0.89,
    "subject": false,
    "forks": 2
+  },
+  {
+   "videoId": "vdWQcl1cNlI",
+   "eco": "B90",
+   "plies": 10,
+   "coverage": 0.538,
+   "subject": false,
+   "forks": 0
   }
  ],
  "Sicilian Defense: Classical Variation": [
@@ -8017,6 +8321,22 @@
    "coverage": 0.918,
    "subject": false,
    "forks": 2
+  },
+  {
+   "videoId": "vdWQcl1cNlI",
+   "eco": "B54",
+   "plies": 8,
+   "coverage": 0.692,
+   "subject": true,
+   "forks": 0
+  },
+  {
+   "videoId": "zhfOsKtD2vk",
+   "eco": "B54",
+   "plies": 8,
+   "coverage": 0.941,
+   "subject": true,
+   "forks": 3
   }
  ],
  "Sicilian Defense: O'Kelly Variation, Yerevan System": [
@@ -8497,6 +8817,22 @@
    "coverage": 0.025,
    "subject": false,
    "forks": 3
+  },
+  {
+   "videoId": "xoS71OW-Re0",
+   "eco": "C41",
+   "plies": 4,
+   "coverage": 0.978,
+   "subject": false,
+   "forks": 1
+  },
+  {
+   "videoId": "y5eb3xaRRPA",
+   "eco": "C41",
+   "plies": 4,
+   "coverage": 1,
+   "subject": true,
+   "forks": 5
   }
  ],
  "King's Pawn Game: Maróczy Defense": [
@@ -8683,6 +9019,14 @@
    "eco": "B27",
    "plies": 4,
    "coverage": 0.9,
+   "subject": true,
+   "forks": 0
+  },
+  {
+   "videoId": "vkmohzpmqS4",
+   "eco": "B27",
+   "plies": 4,
+   "coverage": 0.96,
    "subject": true,
    "forks": 0
   }
@@ -9581,6 +9925,26 @@
    "forks": 0
   }
  ],
+ "Italian Game: Two Knights Defense, Traxler Counterattack, Knight Sacrifice Line": [
+  {
+   "videoId": "ts8OsKe0taY",
+   "eco": "C57",
+   "plies": 9,
+   "coverage": 0.286,
+   "subject": false,
+   "forks": 2
+  }
+ ],
+ "Italian Game: Two Knights Defense, Traxler Counterattack, Bishop Sacrifice Line": [
+  {
+   "videoId": "ts8OsKe0taY",
+   "eco": "C57",
+   "plies": 9,
+   "coverage": 0.19,
+   "subject": false,
+   "forks": 2
+  }
+ ],
  "Ponziani Opening: Jaenisch Counterattack": [
   {
    "videoId": "u6uLgifbn5I",
@@ -9777,6 +10141,36 @@
    "coverage": 0.818,
    "subject": false,
    "forks": 2
+  }
+ ],
+ "Philidor Defense: Exchange Variation": [
+  {
+   "videoId": "xoS71OW-Re0",
+   "eco": "C41",
+   "plies": 6,
+   "coverage": 0.933,
+   "subject": true,
+   "forks": 1
+  }
+ ],
+ "Modern Defense: Two Knights Variation": [
+  {
+   "videoId": "yAF1Bpa4m5Q",
+   "eco": "B06",
+   "plies": 7,
+   "coverage": 0.955,
+   "subject": true,
+   "forks": 1
+  }
+ ],
+ "King's Indian Defense: Smyslov Variation": [
+  {
+   "videoId": "zEkwjGCA2M4",
+   "eco": "E61",
+   "plies": 9,
+   "coverage": 0.885,
+   "subject": true,
+   "forks": 0
   }
  ]
 }
