@@ -345,5 +345,39 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Queen's Pawn Game: Symmetrical Variation, Pseudo-Catalan",
+   "eco": "D02",
+   "plies": 5,
+   "line": "d4 d5 Nf3 Nf6 g3",
+   "coverage": 0.914
+  },
+  {
+   "name": "Queen's Pawn Game: Symmetrical Variation",
+   "eco": "D02",
+   "plies": 4,
+   "line": "d4 d5 Nf3 Nf6",
+   "coverage": 0.943
+  },
+  {
+   "name": "Queen's Pawn Game: Zukertort Variation",
+   "eco": "D02",
+   "plies": 3,
+   "line": "d4 d5 Nf3",
+   "coverage": 0.971
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Smith-Morra Gambit",
+  "confirmed": false
+ }
 }

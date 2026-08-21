@@ -1,0 +1,247 @@
+{
+ "videoId": "S-PGKHRQM5o",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | OK. Another Cheater!???",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 3189,
+  "settledPositions": null
+ },
+ "plies": 21,
+ "rewinds": 0,
+ "moves": [
+  {
+   "t": 12.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 19,
+   "ply": 4,
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 24,
+   "ply": 6,
+   "line": [
+    "d4",
+    "cxd4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4"
+  },
+  {
+   "t": 35.5,
+   "ply": 7,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 37,
+   "ply": 8,
+   "line": [
+    "g6"
+   ],
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5"
+  },
+  {
+   "t": 43.5,
+   "ply": 10,
+   "line": [
+    "Be3",
+    "Bg7"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/4B3/PPP2PPP/RN1QKB1R w KQkq - 2 6"
+  },
+  {
+   "t": 49,
+   "ply": 11,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 3 6"
+  },
+  {
+   "t": 50,
+   "ply": 12,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 4 7"
+  },
+  {
+   "t": 58,
+   "ply": 14,
+   "line": [
+    "Bc4",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/2BNP3/2N1B3/PPP2PPP/R2QK2R w KQ - 6 8"
+  },
+  {
+   "t": 63,
+   "ply": 15,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/3NP3/1BN1B3/PPP2PPP/R2QK2R b KQ - 7 8"
+  },
+  {
+   "t": 73.5,
+   "ply": 16,
+   "line": [
+    "a5"
+   ],
+   "fen": "r1bq1rk1/1p1pppbp/2n2np1/p7/3NP3/1BN1B3/PPP2PPP/R2QK2R w KQ - 0 9"
+  },
+  {
+   "t": 79,
+   "ply": 17,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/1p1pppbp/2n2np1/p7/3NP3/1BN1B3/PPP2PPP/R2Q1RK1 b - - 1 9"
+  },
+  {
+   "t": 102,
+   "ply": 18,
+   "line": [
+    "a4"
+   ],
+   "fen": "r1bq1rk1/1p1pppbp/2n2np1/8/p2NP3/1BN1B3/PPP2PPP/R2Q1RK1 w - - 0 10"
+  },
+  {
+   "t": 108,
+   "ply": 19,
+   "line": [
+    "Nxa4"
+   ],
+   "fen": "r1bq1rk1/1p1pppbp/2n2np1/8/N2NP3/1B2B3/PPP2PPP/R2Q1RK1 b - - 0 10"
+  },
+  {
+   "t": 109,
+   "ply": 20,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "r1bq1rk1/1p1pppbp/2n3p1/8/N2Nn3/1B2B3/PPP2PPP/R2Q1RK1 w - - 0 11"
+  },
+  {
+   "t": 114.5,
+   "ply": 21,
+   "line": [
+    "Nb5"
+   ],
+   "fen": "r1bq1rk1/1p1pppbp/2n3p1/1N6/N3n3/1B2B3/PPP2PPP/R2Q1RK1 b - - 1 11"
+  },
+  {
+   "t": 138,
+   "ply": 22,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bq1rk1/1p2ppbp/2np2p1/1N6/N3n3/1B2B3/PPP2PPP/R2Q1RK1 w - - 0 12"
+  },
+  {
+   "t": 145.5,
+   "ply": 23,
+   "line": [
+    "f3"
+   ],
+   "fen": "r1bq1rk1/1p2ppbp/2np2p1/1N6/N3n3/1B2BP2/PPP3PP/R2Q1RK1 b - - 0 12"
+  },
+  {
+   "t": 152.5,
+   "ply": 24,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bq1rk1/1p2ppbp/2np1np1/1N6/N7/1B2BP2/PPP3PP/R2Q1RK1 w - - 1 13"
+  },
+  {
+   "t": 160.5,
+   "ply": 26,
+   "line": [
+    "Nb6",
+    "Ra6"
+   ],
+   "fen": "2bq1rk1/1p2ppbp/rNnp1np1/1N6/8/1B2BP2/PPP3PP/R2Q1RK1 w - - 3 14"
+  },
+  {
+   "t": 167,
+   "ply": 28,
+   "line": [
+    "Nxc8",
+    "Qxc8"
+   ],
+   "fen": "2q2rk1/1p2ppbp/r1np1np1/1N6/8/1B2BP2/PPP3PP/R2Q1RK1 w - - 0 15"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Accelerated Dragon, Modern Bc4 Variation",
+   "eco": "B35",
+   "plies": 13,
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Be3 Bg7 Nc3 Nf6 Bc4",
+   "coverage": 0.619
+  },
+  {
+   "name": "Sicilian Defense: Accelerated Dragon",
+   "eco": "B32",
+   "plies": 8,
+   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6",
+   "coverage": 0.81
+  },
+  {
+   "name": "Sicilian Defense: Open",
+   "eco": "B32",
+   "plies": 5,
+   "line": "e4 c5 Nf3 Nc6 d4",
+   "coverage": 0.905
+  },
+  {
+   "name": "Sicilian Defense: Old Sicilian",
+   "eco": "B30",
+   "plies": 4,
+   "line": "e4 c5 Nf3 Nc6",
+   "coverage": 0.952
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}

@@ -227,5 +227,19 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Van't Kruijs Opening",
+   "eco": "A00",
+   "plies": 1,
+   "line": "e3",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }

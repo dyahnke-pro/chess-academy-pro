@@ -425,5 +425,39 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit Accepted",
+   "eco": "B21",
+   "plies": 6,
+   "line": "d4 c5 e4 cxd4 c3 dxc3",
+   "coverage": 0.964
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit",
+   "eco": "B21",
+   "plies": 3,
+   "line": "d4 c5 e4",
+   "coverage": 1
+  },
+  {
+   "name": "Benoni Defense: Old Benoni",
+   "eco": "A43",
+   "plies": 2,
+   "line": "d4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "Queen's Pawn Game",
+   "eco": "A40",
+   "plies": 1,
+   "line": "d4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Smith-Morra Gambit",
+  "confirmed": true
+ }
 }
