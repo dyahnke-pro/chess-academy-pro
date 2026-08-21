@@ -439,5 +439,47 @@
     }
    ]
   }
- ]
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: McDonnell Attack, Tal Gambit",
+   "eco": "B21",
+   "plies": 6,
+   "line": "e4 c5 f4 d5 exd5 Nf6",
+   "coverage": 0.756
+  },
+  {
+   "name": "Sicilian Defense: McDonnell Attack",
+   "eco": "B21",
+   "plies": 3,
+   "line": "e4 c5 f4",
+   "coverage": 0.805
+  },
+  {
+   "name": "Sicilian Defense: Closed",
+   "eco": "B23",
+   "plies": 3,
+   "line": "e4 c5 Nc3",
+   "coverage": 0.171
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
 }
