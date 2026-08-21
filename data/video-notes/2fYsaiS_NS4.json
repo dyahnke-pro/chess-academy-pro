@@ -1,0 +1,44 @@
+[
+ {
+  "id": "vn-owen-welcome-the-trade-keep-the-good-bishop",
+  "line": "e4 b6 d4 Bb7 Nc3 e6 Bd3 Bb4 Nf3",
+  "teaches": "Do not reflexively avoid a doubled pawn. When the trade that doubles you also hands you the bishop pair and a pawn duo that supports your centre, welcome it — and keep the piece that matters. Judge the exchange by what you end up with, not by the tidy pawns you give up.",
+  "explains": "The knight simply develops to f3; if the bishop captures it, the c3 and d4 pawns support the centre and White keeps the strong light-squared bishop. Putting the bishop on d3 first is exactly what makes this calm reply possible.",
+  "reasons": [ { "kind": "defends", "square": "d4" } ]
+ },
+ {
+  "id": "vn-owen-gain-space-with-tempo",
+  "line": "e4 b6 d4 Bb7 Nc3 e6 Bd3 Bb4 Nf3 Nf6 Qe2 d5 e5",
+  "teaches": "Advance a central pawn when the push also gains time by hitting a piece. Space seized with tempo, rather than as a slow lunge, gives you a free move to get on with your plan while the opponent scrambles the attacked piece to safety.",
+  "explains": "The pawn to e5 grabs central space and attacks the knight on f6, forcing it to retreat. White gains room for a kingside build-up while the opponent spends a move tucking the knight away.",
+  "reasons": [ { "kind": "attacks", "square": "f6" } ]
+ },
+ {
+  "id": "vn-owen-tickle-the-bishop-put-the-question",
+  "line": "e4 b6 d4 Bb7 Nc3 e6 Bd3 Bb4 Nf3 Nf6 Qe2 d5 e5 Nfd7 O-O h6 a3",
+  "teaches": "When an enemy bishop pins your knight and nothing forces your hand, a rook-pawn poke makes it commit. Either it captures — handing you the bishop pair — or it retreats with a lasting awkwardness. Ask the question and let the opponent shoulder the answer.",
+  "explains": "The pawn to a3 attacks the bishop on b4, forcing it to choose: take on c3, giving White the bishop pair and a supported centre, or drop back with a headache. Both outcomes favour White.",
+  "reasons": [ { "kind": "attacks", "square": "b4" } ]
+ },
+ {
+  "id": "vn-owen-beware-the-c4-bishop-trap",
+  "line": "e4 b6 d4 Bb7 Nc3 e6 Bd3 Bb4 Nf3 Nf6 Qe2 d5 e5 Nfd7 O-O h6 a3 Bxc3 bxc3 c5",
+  "teaches": "In a cramped, closed structure watch for a pawn thrust that cages your own developed bishop. The space you gained can become a trap for your pieces, so spot the coming pawn advance that attacks a bishop with no retreat before it lands.",
+  "explains": "With c5 the opponent threatens to push to c4, hitting the bishop on d3 which would have no safe square. It is the standard trap in this structure, and White must deal with the idea before completing the attack.",
+  "reasons": [ { "kind": "attacks", "square": "d4" } ]
+ },
+ {
+  "id": "vn-owen-qe3-defends-and-keeps-the-attacker",
+  "line": "e4 b6 d4 Bb7 Nc3 e6 Bd3 Bb4 Nf3 Nf6 Qe2 d5 e5 Nfd7 O-O h6 a3 Bxc3 bxc3 c5 Qe3",
+  "teaches": "Answer a threat with the move that does two jobs at once — and never trade the piece your attack depends on. A quiet queen move that both guards the attacked point and preserves your key attacker beats a developing move that invites its exchange.",
+  "explains": "The queen goes to e3, defending the d4-pawn while sidestepping the bishop-to-b5 try that would be met by a6 and force the trade of White's prized light-squared bishop. The attacker stays on the board.",
+  "reasons": [ { "kind": "defends", "square": "d4" } ]
+ },
+ {
+  "id": "vn-owen-reroute-the-queen-toward-g7",
+  "line": "e4 b6 d4 Bb7 Nc3 e6 Bd3 Bb4 Nf3 Nf6 Qe2 d5 e5 Nfd7 O-O h6 a3 Bxc3 bxc3 c5 Qe3 Ba6 Qf4",
+  "teaches": "Reroute your queen toward the enemy king by way of a stepping-stone square. When your plan is a kingside attack, the queen's journey to its attacking post is worth the tempo, and choosing a route that keeps defending the centre costs you nothing.",
+  "explains": "The queen swings to f4, on its way to g4 or g3 to bear down on the g7-pawn and the kingside. From those squares it keeps an eye on the centre too, so the attacking plan loses no time.",
+  "reasons": []
+ }
+]
