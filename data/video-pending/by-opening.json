@@ -921,6 +921,14 @@
    "forks": 0
   },
   {
+   "videoId": "HywK8lbZ2wQ",
+   "eco": "B20",
+   "plies": 2,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
    "videoId": "IEnsliJAt3U",
    "eco": "B20",
    "plies": 2,
@@ -1761,6 +1769,14 @@
    "coverage": 1,
    "subject": false,
    "forks": 1
+  },
+  {
+   "videoId": "HywK8lbZ2wQ",
+   "eco": "B00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
   },
   {
    "videoId": "IEnsliJAt3U",
@@ -4163,6 +4179,14 @@
    "forks": 6
   },
   {
+   "videoId": "HywK8lbZ2wQ",
+   "eco": "B50",
+   "plies": 4,
+   "coverage": 1,
+   "subject": false,
+   "forks": 2
+  },
+  {
    "videoId": "IaOXKjvpP_E",
    "eco": "B50",
    "plies": 4,
@@ -4367,6 +4391,14 @@
    "coverage": 0.972,
    "subject": true,
    "forks": 1
+  },
+  {
+   "videoId": "URql999FcT8",
+   "eco": "B22",
+   "plies": 3,
+   "coverage": 1,
+   "subject": true,
+   "forks": 0
   },
   {
    "videoId": "cKeN_oR3VEA",
@@ -7509,6 +7541,32 @@
    "forks": 1
   }
  ],
+ "Sicilian Defense: Delayed Alapin Variation, with d6": [
+  {
+   "videoId": "HywK8lbZ2wQ",
+   "eco": "B50",
+   "plies": 5,
+   "coverage": 0.933,
+   "subject": true,
+   "forks": 2
+  },
+  {
+   "videoId": "UVJ75kdDdt8",
+   "eco": "B50",
+   "plies": 5,
+   "coverage": 0.962,
+   "subject": true,
+   "forks": 4
+  },
+  {
+   "videoId": "ktoa6lk6qNk",
+   "eco": "B50",
+   "plies": 5,
+   "coverage": 0.976,
+   "subject": true,
+   "forks": 4
+  }
+ ],
  "Sicilian Defense: Alapin Variation, Barmen Defense, Endgame Variation": [
   {
    "videoId": "IEnsliJAt3U",
@@ -9015,6 +9073,24 @@
    "forks": 0
   }
  ],
+ "Saragossa Opening": [
+  {
+   "videoId": "URql999FcT8",
+   "eco": "A00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  },
+  {
+   "videoId": "g36Y1YDdqoQ",
+   "eco": "A00",
+   "plies": 1,
+   "coverage": 1,
+   "subject": false,
+   "forks": 0
+  }
+ ],
  "Caro-Kann Defense: Maróczy Variation": [
   {
    "videoId": "USDQ8LIjaCo",
@@ -9023,24 +9099,6 @@
    "coverage": 0.667,
    "subject": true,
    "forks": 0
-  }
- ],
- "Sicilian Defense: Delayed Alapin Variation, with d6": [
-  {
-   "videoId": "UVJ75kdDdt8",
-   "eco": "B50",
-   "plies": 5,
-   "coverage": 0.962,
-   "subject": true,
-   "forks": 4
-  },
-  {
-   "videoId": "ktoa6lk6qNk",
-   "eco": "B50",
-   "plies": 5,
-   "coverage": 0.976,
-   "subject": true,
-   "forks": 4
   }
  ],
  "Philidor Defense": [
@@ -9509,16 +9567,6 @@
    "coverage": 0.109,
    "subject": false,
    "forks": 2
-  }
- ],
- "Saragossa Opening": [
-  {
-   "videoId": "g36Y1YDdqoQ",
-   "eco": "A00",
-   "plies": 1,
-   "coverage": 1,
-   "subject": false,
-   "forks": 0
   }
  ],
  "Sicilian Defense: Accelerated Dragon, Maróczy Bind": [

@@ -1,0 +1,324 @@
+{
+ "videoId": "URql999FcT8",
+ "title": "Daniel Vs GM Sam Shankland | Blitz Battle | Pt. 1",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 320,
+  "y0": 20.0094,
+  "square": 40.0187,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 8311,
+  "settledPositions": null
+ },
+ "plies": 33,
+ "rewinds": 0,
+ "moves": [
+  {
+   "t": 2274.5,
+   "ply": 3,
+   "line": [
+    "c3",
+    "c5",
+    "e4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 2276.5,
+   "ply": 4,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 1 3"
+  },
+  {
+   "t": 2278.5,
+   "ply": 5,
+   "line": [
+    "d3"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/4P3/2PP4/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 2281,
+   "ply": 6,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/4P3/2PP4/PP3PPP/RNBQKBNR w KQkq - 1 4"
+  },
+  {
+   "t": 2282,
+   "ply": 7,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/4PP2/2PP4/PP4PP/RNBQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 2286.5,
+   "ply": 9,
+   "line": [
+    "d6",
+    "Nf3"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/4PP2/2PP1N2/PP4PP/RNBQKB1R b KQkq - 1 5"
+  },
+  {
+   "t": 2288.5,
+   "ply": 10,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2np1n2/2p1p3/4PP2/2PP1N2/PP4PP/RNBQKB1R w KQkq - 0 6"
+  },
+  {
+   "t": 2291.5,
+   "ply": 11,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2np1n2/2p1p3/4PP2/2PP1N2/PP2B1PP/RNBQK2R b KQkq - 1 6"
+  },
+  {
+   "t": 2294,
+   "ply": 12,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk2r/pp2bppp/2np1n2/2p1p3/4PP2/2PP1N2/PP2B1PP/RNBQK2R w KQkq - 2 7"
+  },
+  {
+   "t": 2296,
+   "ply": 15,
+   "line": [
+    "fxe5",
+    "O-O",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp2bppp/2np1n2/2p1P3/4P3/2PP1N2/PP2B1PP/RNBQ1RK1 b - - 2 8"
+  },
+  {
+   "t": 2299.5,
+   "ply": 17,
+   "line": [
+    "dxe5",
+    "Bg5"
+   ],
+   "fen": "r1bq1rk1/pp2bppp/2n2n2/2p1p1B1/4P3/2PP1N2/PP2B1PP/RN1Q1RK1 b - - 1 9"
+  },
+  {
+   "t": 2302.5,
+   "ply": 18,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2q1rk1/pp2bppp/2n1bn2/2p1p1B1/4P3/2PP1N2/PP2B1PP/RN1Q1RK1 w - - 2 10"
+  },
+  {
+   "t": 2303.5,
+   "ply": 19,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "r2q1rk1/pp2bppp/2n1bn2/2p1p1B1/4P3/2PP1N2/PP1NB1PP/R2Q1RK1 b - - 3 10"
+  },
+  {
+   "t": 2310,
+   "ply": 21,
+   "line": [
+    "Nd7",
+    "Be3"
+   ],
+   "fen": "r2q1rk1/pp1nbppp/2n1b3/2p1p3/4P3/2PPBN2/PP1NB1PP/R2Q1RK1 b - - 5 11"
+  },
+  {
+   "t": 2312,
+   "ply": 23,
+   "line": [
+    "b6",
+    "Qe1"
+   ],
+   "fen": "r2q1rk1/p2nbppp/1pn1b3/2p1p3/4P3/2PPBN2/PP1NB1PP/R3QRK1 b - - 1 12"
+  },
+  {
+   "t": 2315,
+   "ply": 25,
+   "line": [
+    "Re8",
+    "Qg3"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1pn1b3/2p1p3/4P3/2PPBNQ1/PP1NB1PP/R4RK1 b - - 3 13"
+  },
+  {
+   "t": 2330.5,
+   "ply": 26,
+   "line": [
+    "c4"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1pn1b3/4p3/2p1P3/2PPBNQ1/PP1NB1PP/R4RK1 w - - 0 14"
+  },
+  {
+   "t": 2333,
+   "ply": 27,
+   "line": [
+    "d4"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1pn1b3/4p3/2pPP3/2P1BNQ1/PP1NB1PP/R4RK1 b - - 0 14"
+  },
+  {
+   "t": 2336.5,
+   "ply": 29,
+   "line": [
+    "exd4",
+    "cxd4"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1pn1b3/8/2pPP3/4BNQ1/PP1NB1PP/R4RK1 b - - 0 15"
+  },
+  {
+   "t": 2352,
+   "ply": 30,
+   "line": [
+    "Nb4"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1p2b3/8/1npPP3/4BNQ1/PP1NB1PP/R4RK1 w - - 1 16"
+  },
+  {
+   "t": 2357.5,
+   "ply": 31,
+   "line": [
+    "d5"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1p2b3/3P4/1np1P3/4BNQ1/PP1NB1PP/R4RK1 b - - 0 16"
+  },
+  {
+   "t": 2364,
+   "ply": 32,
+   "line": [
+    "Bxd5"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1p6/3b4/1np1P3/4BNQ1/PP1NB1PP/R4RK1 w - - 0 17"
+  },
+  {
+   "t": 2367,
+   "ply": 33,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1p6/3P4/1np5/4BNQ1/PP1NB1PP/R4RK1 b - - 0 17"
+  },
+  {
+   "t": 2368,
+   "ply": 34,
+   "line": [
+    "Nc2"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1p6/3P4/2p5/4BNQ1/PPnNB1PP/R4RK1 w - - 1 18"
+  },
+  {
+   "t": 2403.5,
+   "ply": 35,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1p5B/3P4/2p5/5NQ1/PPnNB1PP/R4RK1 b - - 2 18"
+  },
+  {
+   "t": 2414,
+   "ply": 36,
+   "line": [
+    "Bf6"
+   ],
+   "fen": "r2qr1k1/p2n1ppp/1p3b1B/3P4/2p5/5NQ1/PPnNB1PP/R4RK1 w - - 3 19"
+  },
+  {
+   "t": 2417.5,
+   "ply": 37,
+   "line": [
+    "Rac1"
+   ],
+   "fen": "r2qr1k1/p2n1ppp/1p3b1B/3P4/2p5/5NQ1/PPnNB1PP/2R2RK1 b - - 4 19"
+  },
+  {
+   "t": 2436.5,
+   "ply": 38,
+   "line": [
+    "Rxe2"
+   ],
+   "fen": "r2q2k1/p2n1ppp/1p3b1B/3P4/2p5/5NQ1/PPnNr1PP/2R2RK1 w - - 0 20"
+  },
+  {
+   "t": 2438.5,
+   "ply": 40,
+   "line": [
+    "Rxc2",
+    "b5"
+   ],
+   "fen": "r2q2k1/p2n1ppp/5b1B/1p1P4/2p5/5NQ1/PPRNr1PP/5RK1 w - - 0 21"
+  },
+  {
+   "t": 2453.5,
+   "ply": 41,
+   "line": [
+    "Rcc1"
+   ],
+   "fen": "r2q2k1/p2n1ppp/5b1B/1p1P4/2p5/5NQ1/PP1Nr1PP/2R2RK1 b - - 1 21"
+  },
+  {
+   "t": 2458.5,
+   "ply": 43,
+   "line": [
+    "Bxb2",
+    "Rce1"
+   ],
+   "fen": "r2q2k1/p2n1ppp/7B/1p1P4/2p5/5NQ1/Pb1Nr1PP/4RRK1 b - - 1 22"
+  },
+  {
+   "t": 2459.5,
+   "ply": 47,
+   "line": [
+    "Bc1",
+    "Rd1",
+    "Bb2",
+    "Rc1"
+   ],
+   "fen": "r2q2k1/p2n1ppp/7B/1p1P4/2p5/5NQ1/Pb1Nr1PP/2R2RK1 b - - 5 24"
+  },
+  {
+   "t": 2509.5,
+   "ply": 49,
+   "line": [
+    "c3",
+    "Kh1"
+   ],
+   "fen": "r2q2k1/p2n1ppp/7B/1p1P4/8/2p2NQ1/Pb1Nr1PP/2R2R1K b - - 1 25"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Alapin Variation",
+   "eco": "B22",
+   "plies": 3,
+   "line": "c3 c5 e4",
+   "coverage": 1
+  },
+  {
+   "name": "Saragossa Opening",
+   "eco": "A00",
+   "plies": 1,
+   "line": "c3",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ }
+}
