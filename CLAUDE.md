@@ -2643,22 +2643,40 @@ consecutive identical requests came back `storage: "memory"` with 62 entries and
 proves NOTHING — it is one instance's view, not the absence of events. Pull six
 to ten times, merge on `(timestamp, summary)`, and read the union.
 
-**WHY A WALKTHROUGH STILL CALLS THE LLM, precisely — mapped 2026-08-21.** The
-prod audit records ~5 calls to `/api/llm/deepseek/chat/completions` per walk,
-which reads like the tier chain is not wired. It IS wired: PASS 1 in
-`openingGenerator` fills `plyNoteText` from baked → hand-written note →
-`lessonBeatAt` → farmed note, and a ply that gets one is `locked` so nothing
-overwrites it. The calls come from somewhere else — the `else` at
-`openingGenerator.ts:2066`, which generates the `NarrationOutput` (intro, outro,
-`ideas[]`, branch teasers) whenever the opening is not fully baked WITH its fork
-branches. So the per-ply teaching is already tier-sourced while the lesson's
-FRAMING is still model-written, and the round-trip fires either way.
+🚨 **BAKED AND FARMED ARE THE SAME TIER, AND TIER 3 USES THE LLM (David
+2026-08-21, correcting a session that had just written the opposite):** *"baked
+and farmed are the same thing. we farmed the opening narrations and baked them in
+after hand writing them. thats tier 1. tier 2 are the opening tab's narrations.
+tier 3 are the computed narrations that use the llm."*
 
-That is the tier-1 wiring job, and it is a real change, not a flag: make that
-`else` synthesise intro/outro/ideas from the tiers that already cover the line
-and fall to computed prose for the rest, so `bakedBranchesCoverAll` stops being
-the only path with zero runtime LLM. Do NOT confuse it with the stall above —
-they present together on the same audit and are two different bugs.
+Farming, hand-rewriting and baking are ONE pipeline producing ONE tier, not
+separate tiers to be ranked against each other. And the floor is not LLM-free:
+computed narration means **code decides the facts and the model phrases them**,
+which is G0 exactly — the LLM never chooses a move, an eval or a reason, it
+voices what was computed. "No LLM DECIDES a walkthrough teaching" and "tier 3
+uses the LLM" are the same statement read from two ends.
+
+**SO RUNTIME LLM CALLS ON AN UNBAKED OPENING ARE TIER 3 WORKING, NOT A DEFECT.**
+The prod audit records ~5 calls to `/api/llm/deepseek/chat/completions` per walk
+of the Vienna Copycat, and a session read that as the tier chain being unwired
+and proposed rebuilding `openingGenerator`'s narration path to remove it. That
+was the wrong work. Vienna is not one of the 23 baked openings and the Copycat
+has 5 of 15 plies covered by opening-tab beats, so the line correctly falls to
+the floor. **The fix for a line that reaches tier 3 is to BAKE it** — move it up
+the tiers — never to re-plumb the generator so the floor stops working.
+
+The mechanics, for whoever does need them: PASS 1 fills `plyNoteText` from the
+tiers and LOCKS any ply it covers, so tier-covered plies are already
+model-free. The calls come from the `else` at `openingGenerator.ts:2066`, which
+writes the lesson's FRAMING (intro, outro, `ideas[]`, branch teasers) whenever
+the opening is not fully baked with its fork branches.
+
+⚠️ **`audit-teach-walkthrough-completes-prod.mjs` ASSERTS THE STRICTER CONTRACT
+and therefore fails every unbaked opening by construction.** Its 🚨 line ("the
+walkthrough called an LLM at runtime") predates this clarification. Treat its
+LLM-call output as a DIAGNOSTIC — "this line is on tier 3, bake it" — not as a
+failure, and read its real verdict off `reachedLeaf`. Whoever next touches that
+script should split the two so a tier-3 line is not reported as broken.
 
 **HOW TO MEASURE A LINE'S TIER-2 COVERAGE** (do this before concluding anything
 about a lesson): replay the line and call `lessonBeatAt(fen, seen)` per ply. Do
