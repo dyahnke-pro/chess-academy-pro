@@ -1,0 +1,214 @@
+{
+ "videoId": "sqVkwtfaFwI",
+ "title": "Smith-Morra Gambit Accepted | The Sensei Speedrun | GM Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 2586,
+  "settledPositions": null
+ },
+ "plies": 24,
+ "rewinds": 2,
+ "moves": [
+  {
+   "t": 62,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 66.5,
+   "ply": 3,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 70.5,
+   "ply": 5,
+   "line": [
+    "cxd4",
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 75,
+   "ply": 7,
+   "line": [
+    "dxc3",
+    "Nxc3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 76.5,
+   "ply": 8,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 1 5"
+  },
+  {
+   "t": 77.5,
+   "ply": 9,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 2 5"
+  },
+  {
+   "t": 80.5,
+   "ply": 10,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/4P3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 6"
+  },
+  {
+   "t": 88.5,
+   "ply": 9,
+   "line": [],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/4P3/2N2N2/PP3PPP/R1BQKB1R b KQkq - 2 5"
+  },
+  {
+   "t": 94.5,
+   "ply": 10,
+   "line": [
+    "e6"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/4P3/2N2N2/PP3PPP/R1BQKB1R w KQkq - 0 6"
+  },
+  {
+   "t": 111,
+   "ply": 11,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R b KQkq - 1 6"
+  },
+  {
+   "t": 115,
+   "ply": 12,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bqkbnr/1p1p1ppp/p1n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 0 7"
+  },
+  {
+   "t": 132,
+   "ply": 13,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkbnr/1p1p1ppp/p1n1p3/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 b kq - 1 7"
+  },
+  {
+   "t": 133.5,
+   "ply": 14,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1bqkbnr/3p1ppp/p1n1p3/1p6/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 0 8"
+  },
+  {
+   "t": 144,
+   "ply": 15,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "r1bqkbnr/3p1ppp/p1n1p3/1p6/4P3/1BN2N2/PP3PPP/R1BQ1RK1 b kq - 1 8"
+  },
+  {
+   "t": 170,
+   "ply": 16,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "r2qkbnr/1b1p1ppp/p1n1p3/1p6/4P3/1BN2N2/PP3PPP/R1BQ1RK1 w kq - 2 9"
+  },
+  {
+   "t": 201,
+   "ply": 17,
+   "line": [
+    "Nd5"
+   ],
+   "fen": "r2qkbnr/1b1p1ppp/p1n1p3/1p1N4/4P3/1B3N2/PP3PPP/R1BQ1RK1 b kq - 3 9"
+  },
+  {
+   "t": 340,
+   "ply": 18,
+   "line": [
+    "Nge7"
+   ],
+   "fen": "r2qkb1r/1b1pnppp/p1n1p3/1p1N4/4P3/1B3N2/PP3PPP/R1BQ1RK1 w kq - 4 10"
+  },
+  {
+   "t": 484.5,
+   "ply": 19,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r2qkb1r/1b1pnppp/p1n1p3/1p1N2B1/4P3/1B3N2/PP3PPP/R2Q1RK1 b kq - 5 10"
+  },
+  {
+   "t": 494.5,
+   "ply": 18,
+   "line": [],
+   "fen": "r2qkb1r/1b1pnppp/p1n1p3/1p1N4/4P3/1B3N2/PP3PPP/R1BQ1RK1 w kq - 4 10"
+  },
+  {
+   "t": 499.5,
+   "ply": 19,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "r2qkb1r/1b1pnppp/p1n1p3/1p1N2B1/4P3/1B3N2/PP3PPP/R2Q1RK1 b kq - 5 10"
+  },
+  {
+   "t": 529.5,
+   "ply": 20,
+   "line": [
+    "h6"
+   ],
+   "fen": "r2qkb1r/1b1pnpp1/p1n1p2p/1p1N2B1/4P3/1B3N2/PP3PPP/R2Q1RK1 w kq - 0 11"
+  },
+  {
+   "t": 532.5,
+   "ply": 21,
+   "line": [
+    "Bh4"
+   ],
+   "fen": "r2qkb1r/1b1pnpp1/p1n1p2p/1p1N4/4P2B/1B3N2/PP3PPP/R2Q1RK1 b kq - 1 11"
+  },
+  {
+   "t": 571,
+   "ply": 22,
+   "line": [
+    "g5"
+   ],
+   "fen": "r2qkb1r/1b1pnp2/p1n1p2p/1p1N2p1/4P2B/1B3N2/PP3PPP/R2Q1RK1 w kq - 0 12"
+  },
+  {
+   "t": 575.5,
+   "ply": 23,
+   "line": [
+    "Nf6#"
+   ],
+   "fen": "r2qkb1r/1b1pnp2/p1n1pN1p/1p4p1/4P2B/1B3N2/PP3PPP/R2Q1RK1 b kq - 1 12"
+  }
+ ],
+ "forks": []
+}
