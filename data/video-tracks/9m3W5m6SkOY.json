@@ -218,8 +218,8 @@
   {
    "id": "vn-unsoundsac-develop-instead-of-chasing-the-attack",
    "line": "e4 c5 f4 d5 exd5 Nf6 Nc3 Nxd5 Bc4 Nb6 Bxf7+ Kxf7 Nf3",
-   "teaches": "When a sacrifice on f7 has dragged your king out and there is no follow-up check, the refutation is development, not evasion. Count the attacker's pieces: if only one of them is out, every move you spend bringing a piece toward the king is worth more than the pawn you are up, and the attack runs out before it starts.",
-   "explains": "The bishop has been given up for the pawn on f7 and the king has taken. White now brings the knight out to f3, which is the only developing move with tempo available, covering e5 and g5 and holding the back rank. From here the attack has one piece out and a bishop invested — the material is not coming back unless the defender helps.",
+   "teaches": "When a sacrifice on f7 has dragged your king out and there is no follow-up check, the refutation is development, not evasion — count the attacker's pieces, and if only one is out, every move you spend bringing a piece toward the king is worth more than the pawn you are up.",
+   "explains": "The bishop has been given up for the pawn on f7 and the king has taken. White now brings the knight out to f3, the only developing move with tempo available, covering e5 and g5 and holding the back rank. From here the attack has one piece out and a bishop invested — the material is not coming back unless the defender helps.",
    "reasons": [
     {
      "kind": "controls",

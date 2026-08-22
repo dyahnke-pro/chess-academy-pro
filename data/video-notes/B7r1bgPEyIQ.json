@@ -2,31 +2,22 @@
  {
   "id": "vn-modern-poisoned-b2",
   "line": "d4 g6 e4 Bg7 Nc3 c6 Be3 Qb6 Qd2",
-  "teaches": "Taking the pawn on b2 with the queen is a decision about time, not about material. The rook that swings to b1 arrives with a threat and gains the move it would otherwise have spent developing, so the side that grabbed the pawn ends up defending in a position where nothing else is out.",
+  "teaches": "Taking the pawn on b2 with the queen is a decision about time, not about material — the rook that swings to b1 arrives with a threat and gains the move it would otherwise have spent developing, so the side that grabbed the pawn ends up defending in a position where nothing else is out.",
   "explains": "Two paths diverge here. Capturing on b2 wins a pawn, but the rook then comes to b1 attacking the queen, and at that moment the only black piece off the back rank besides the queen is the fianchettoed bishop. Advancing in the centre with the d-pawn instead keeps the pieces at home for now but leaves nothing loose.",
   "options": [
    {
     "san": "Qxb2",
     "continuation": "Qxb2 Rb1 Qa3",
     "reasons": [
-     {
-      "kind": "attacks",
-      "square": "a1"
-     },
-     {
-      "kind": "attacks",
-      "square": "c3"
-     }
+     { "kind": "attacks", "square": "a1" },
+     { "kind": "attacks", "square": "c3" }
     ]
    },
    {
     "san": "d5",
     "continuation": "d5 f3",
     "reasons": [
-     {
-      "kind": "attacks",
-      "square": "e4"
-     }
+     { "kind": "attacks", "square": "e4" }
     ]
    }
   ]
@@ -34,45 +25,30 @@
  {
   "id": "vn-modern-take-the-exit-square",
   "line": "d4 g6 e4 Bg7 Nc3 c6 Be3 Qb6 Qd2 Qxb2 Rb1 Qa3 Nf3 b5 Bxb5 cxb5 Nxb5 Qxa2",
-  "teaches": "When an enemy queen has raided deep into your position, the move that wins is rarely the check that chases her. Look instead for the quiet move that removes her last route home — a queen with plenty of squares and no way back is a piece you can hunt at leisure.",
+  "teaches": "When an enemy queen has raided deep into your position, the move that wins is rarely the check that chases her — look instead for the quiet move that removes her last route home. A queen with plenty of squares and no way back is a piece you can hunt at leisure.",
   "explains": "White has given up a bishop to open lines against the uncastled king, and the black queen sits on a2 with almost nothing else developed. Three tries come into consideration: the knight check, castling, and a quiet queen move — the difference between them is whether they hurry the queen along or shut her escape route first.",
   "options": [
    {
     "san": "Nc7+",
     "continuation": "Nc7+ Kd8",
     "reasons": [
-     {
-      "kind": "attacks",
-      "square": "e8"
-     },
-     {
-      "kind": "attacks",
-      "square": "a8"
-     }
+     { "kind": "attacks", "square": "e8" },
+     { "kind": "attacks", "square": "a8" }
     ]
    },
    {
     "san": "O-O",
     "continuation": "O-O",
     "reasons": [
-     {
-      "kind": "defends",
-      "square": "f1"
-     }
+     { "kind": "defends", "square": "f1" }
     ]
    },
    {
     "san": "Qc3",
     "continuation": "Qc3",
     "reasons": [
-     {
-      "kind": "attacks",
-      "square": "c8"
-     },
-     {
-      "kind": "defends",
-      "square": "d4"
-     }
+     { "kind": "attacks", "square": "c8" },
+     { "kind": "defends", "square": "d4" }
     ]
    }
   ]
@@ -80,13 +56,10 @@
  {
   "id": "vn-modern-central-break-timing",
   "line": "d4 g6 e4 Bg7 Nc3 c6 Be3 d5 f3",
-  "teaches": "Against a big pawn centre propped up by f3, the choice is between resolving the tension at once and keeping it. Releasing it hands the opponent a clear structure to play against; keeping it means accepting a cramped position for a while in exchange for keeping options.",
+  "teaches": "Against a big pawn centre propped up by f3, the choice is between resolving the tension at once and keeping it — releasing it hands the opponent a clear structure to play against; keeping it means accepting a cramped position for a while in exchange for keeping options.",
   "explains": "White has supported the e4 pawn with the f-pawn rather than a piece, so the centre will not disappear on its own. Four continuations branch from here — capturing on e4, developing the queen to b6, bringing the knight round via h6, and striking with the e-pawn — and they lead to genuinely different games rather than transposing.",
   "reasons": [
-   {
-    "kind": "defends",
-    "square": "e4"
-   }
+   { "kind": "defends", "square": "e4" }
   ]
  }
 ]

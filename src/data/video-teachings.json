@@ -3962,7 +3962,7 @@
    "opening": "French Defense: Advance Variation, Nimzowitsch System",
    "phase": "opening",
    "explains": "The bishop steps to d7 in anticipation of a pawn move that has not been played, and it takes d7 away from the knight on b8 at the same time. Nothing has been gained yet and one option has been spent.",
-   "teaches": "Playing a move because you assume what the opponent will do next is how a piece ends up on a square chosen by a plan that never happens. Wait one move: the same bishop has several futures depending on which setup appears, and committing early throws all but one of them away — and this square blocks the knight that wanted it.",
+   "teaches": "Playing a move because you assume what the opponent will do next is how a piece ends up on a square chosen by a plan that never happens — wait one move, because the same bishop has several futures depending on which setup appears, and this square also blocks the knight that wanted it.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3996,8 +3996,8 @@
    ],
    "opening": "Sicilian Defense: McDonnell Attack, Tal Gambit",
    "phase": "opening",
-   "explains": "The bishop has been given up for the pawn on f7 and the king has taken. White now brings the knight out to f3, which is the only developing move with tempo available, covering e5 and g5 and holding the back rank. From here the attack has one piece out and a bishop invested — the material is not coming back unless the defender helps.",
-   "teaches": "When a sacrifice on f7 has dragged your king out and there is no follow-up check, the refutation is development, not evasion. Count the attacker's pieces: if only one of them is out, every move you spend bringing a piece toward the king is worth more than the pawn you are up, and the attack runs out before it starts.",
+   "explains": "The bishop has been given up for the pawn on f7 and the king has taken. White now brings the knight out to f3, the only developing move with tempo available, covering e5 and g5 and holding the back rank. From here the attack has one piece out and a bishop invested — the material is not coming back unless the defender helps.",
+   "teaches": "When a sacrifice on f7 has dragged your king out and there is no follow-up check, the refutation is development, not evasion — count the attacker's pieces, and if only one is out, every move you spend bringing a piece toward the king is worth more than the pawn you are up.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4031,8 +4031,8 @@
    ],
    "opening": "Alekhine Defense: Scandinavian Variation",
    "phase": "opening",
-   "explains": "The bishop comes to g4 onto the knight on f3, which both develops toward the queenside plan and provokes a reply. The other queenside piece follows next move, and the king goes long behind them.",
-   "teaches": "Decide which way the king is going BEFORE choosing developing squares, then bring out the pieces on that wing first. Castling long is only fast if the queenside is already clear, and each of those developing moves should also ask a question — a bishop that pins on its way out buys the tempo that makes the plan work.",
+   "explains": "The bishop comes to g4 onto the knight on f3, which both develops toward the queenside plan and provokes a reply. The other queenside piece follows next move, and the king goes long behind them. A bishop that pins on its way out buys the tempo that makes the plan work.",
+   "teaches": "Decide which way the king is going BEFORE choosing developing squares, then bring out the pieces on that wing first — castling long is only fast if the queenside is already clear, and each developing move should also ask a question.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4080,7 +4080,7 @@
    "opening": "King's Indian Defense: Averbakh Variation, Geller Defense",
    "phase": "middlegame",
    "explains": "The pawn steps to g5 and attacks the knight on f6 and the pawn on h6 in the same move. One of them must give: the knight retreats or the pawns trade, and either answer opens lines on the side of the board where all the storming pawns already point.",
-   "teaches": "In a locked centre the pawn storm is the argument, and its best moves hit two things at once. A pawn advance that attacks a piece and a pawn together forces a concession whichever way it is answered — and every trade it causes opens another line toward the king.",
+   "teaches": "In a locked centre the pawn storm is the argument, and its best moves hit two things at once — a pawn advance that attacks a piece and a pawn together forces a concession whichever way it is answered, and every trade it causes opens another line toward the king.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4163,7 +4163,7 @@
    "opening": "Modern Defense: Standard Line",
    "phase": "opening",
    "explains": "Two paths diverge here. Capturing on b2 wins a pawn, but the rook then comes to b1 attacking the queen, and at that moment the only black piece off the back rank besides the queen is the fianchettoed bishop. Advancing in the centre with the d-pawn instead keeps the pieces at home for now but leaves nothing loose.",
-   "teaches": "Taking the pawn on b2 with the queen is a decision about time, not about material. The rook that swings to b1 arrives with a threat and gains the move it would otherwise have spent developing, so the side that grabbed the pawn ends up defending in a position where nothing else is out.",
+   "teaches": "Taking the pawn on b2 with the queen is a decision about time, not about material — the rook that swings to b1 arrives with a threat and gains the move it would otherwise have spent developing, so the side that grabbed the pawn ends up defending in a position where nothing else is out.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4222,7 +4222,7 @@
    "opening": "Modern Defense: Standard Line",
    "phase": "opening",
    "explains": "White has given up a bishop to open lines against the uncastled king, and the black queen sits on a2 with almost nothing else developed. Three tries come into consideration: the knight check, castling, and a quiet queen move — the difference between them is whether they hurry the queen along or shut her escape route first.",
-   "teaches": "When an enemy queen has raided deep into your position, the move that wins is rarely the check that chases her. Look instead for the quiet move that removes her last route home — a queen with plenty of squares and no way back is a piece you can hunt at leisure.",
+   "teaches": "When an enemy queen has raided deep into your position, the move that wins is rarely the check that chases her — look instead for the quiet move that removes her last route home. A queen with plenty of squares and no way back is a piece you can hunt at leisure.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4286,7 +4286,7 @@
    "opening": "Modern Defense: Standard Line",
    "phase": "opening",
    "explains": "White has supported the e4 pawn with the f-pawn rather than a piece, so the centre will not disappear on its own. Four continuations branch from here — capturing on e4, developing the queen to b6, bringing the knight round via h6, and striking with the e-pawn — and they lead to genuinely different games rather than transposing.",
-   "teaches": "Against a big pawn centre propped up by f3, the choice is between resolving the tension at once and keeping it. Releasing it hands the opponent a clear structure to play against; keeping it means accepting a cramped position for a while in exchange for keeping options.",
+   "teaches": "Against a big pawn centre propped up by f3, the choice is between resolving the tension at once and keeping it — releasing it hands the opponent a clear structure to play against; keeping it means accepting a cramped position for a while in exchange for keeping options.",
    "plans": "",
    "concepts": [],
    "sources": [
