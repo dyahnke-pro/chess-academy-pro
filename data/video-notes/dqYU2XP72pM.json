@@ -2,7 +2,7 @@
  {
   "id": "vn-jobavatake-take-the-pawn-and-keep-the-squares",
   "line": "d4 Nf6 Nc3 d5 Bf4 a6 e3 c5 dxc5",
-  "teaches": "Capturing toward the wing looks like it concedes the centre, and the question is what the pawn does from its new square. A pawn on the sixth file that covers both squares the opponent needs to recapture from is not a loose pawn — it is a wedge that has to be dealt with before anything else happens.",
+  "teaches": "Capturing toward the wing looks like it concedes the centre, and the question is what the pawn does from its new square — a pawn on the sixth file that covers both squares the opponent needs to recapture from is not a loose pawn, it is a wedge that has to be dealt with before anything else happens.",
   "explains": "The pawn has been offered on c5 and is taken. From there it covers b6 and d6, which are the two squares a knight or a bishop would use to win it back. Nothing recaptures immediately, so the extra pawn either survives or costs the defender a move to collect while the pieces opposite are still at home.",
   "reasons": [
    { "kind": "controls", "square": "b6" },
