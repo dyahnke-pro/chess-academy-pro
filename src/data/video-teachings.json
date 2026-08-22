@@ -13095,7 +13095,7 @@
    "opening": "French Defense: Advance Variation, Nimzowitsch System",
    "phase": "opening",
    "explains": "Taking on c5 reaches the structure the position was heading for, and the pawn now attacks the queen on b6, so the tempo comes back immediately. The gambit that this line usually concedes has simply not been paid.",
-   "teaches": "When the opponent is about to capture in the centre anyway, consider capturing FIRST. The structure that results is the same one they were aiming for — except you reach it without conceding the pawn, and the capture lands with tempo if their queen is standing where the pawn arrives.",
+   "teaches": "When the opponent is about to capture in the centre anyway, consider capturing FIRST — the structure that results is the same one they were aiming for, except you reach it without conceding the pawn, and the capture lands with tempo if their queen is standing where the pawn arrives.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13129,7 +13129,7 @@
    "opening": "Caro-Kann Defense: Maróczy Variation",
    "phase": "opening",
    "explains": "The bishop takes on f7 with check, and the king has to recapture. The knight that follows arrives with check too, so there is never a move spare to save the bishop that is left hanging on the other side of the board.",
-   "teaches": "Before developing a piece to a natural square, count what is holding the square in front of your king. A bishop taken on f7 is only a sacrifice if the follow-up does not come back — when the king is dragged out with check and a knight fork or a loose piece waits behind it, the material returns and the king does not go home.",
+   "teaches": "Before developing a piece to a natural square, count what is holding the square in front of your king — a bishop taken on f7 is only a sacrifice if the follow-up does not come back, and when the king is dragged out with check and a loose piece waits behind it, the material returns and the king does not go home.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13167,7 +13167,7 @@
    "opening": "Caro-Kann Defense: Maróczy Variation",
    "phase": "opening",
    "explains": "The knight now stands on g4, holding the piece the two checks made unsavable, and it bears down on the knight on f6 from there. The enemy king sits on g8 having lost the right to castle.",
-   "teaches": "A short forcing sequence is worth calculating to the END, not to the exciting move. The point of a check is rarely the check — it is that the opponent has no time to attend to the piece you are really going for. Count the material at the last quiet position, and if it comes out level with their king displaced, the sequence was sound.",
+   "teaches": "A short forcing sequence is worth calculating to the END, not to the exciting move — the point of a check is rarely the check, it is that the opponent has no time to attend to the piece you are really going for. Count the material at the last quiet position, and if it comes out level with their king displaced, the sequence was sound.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13198,7 +13198,7 @@
    "opening": "Indian Defense: Budapest Defense",
    "phase": "opening",
    "explains": "The bishop steps to b4 giving check, so the next move is not a free choice — it has to answer the king. The natural-looking square on the other diagonal invites a quiet pawn move instead, and quiet is exactly what a gambit cannot afford.",
-   "teaches": "Two developing squares can look equally natural and be worth completely different amounts. The one that comes with check forces the reply, and if the forced reply is the one you were hoping for, you have chosen your opponent's move for them. Prefer the developing move that asks a question over the one that merely occupies a good square.",
+   "teaches": "Two developing squares can look equally natural and be worth completely different amounts — the one that comes with check forces the reply, and if the forced reply is the one you were hoping for, you have chosen your opponent's move for them. Prefer the developing move that asks a question over the one that merely occupies a good square.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13231,7 +13231,7 @@
    "opening": "Indian Defense: Budapest Defense",
    "phase": "opening",
    "explains": "The queen comes to e7 pointing straight down the file at the king, with a single pawn on e5 standing in between, and it defends the bishop out on b4 at the same time. Nothing is threatened yet, which is why it reads as a normal move.",
-   "teaches": "A piece aimed through a pawn at the enemy king is not doing nothing — it is a threat waiting for one square to empty. Set the alignment up FIRST, while it looks like ordinary development, and the tactic arrives later as a simple capture rather than as something that has to be found. The same move should also hold your loose pieces together.",
+   "teaches": "A piece aimed through a pawn at the enemy king is not doing nothing — it is a threat waiting for one square to empty, so set the alignment up FIRST, while it looks like ordinary development, and the tactic arrives later as a simple capture rather than something that has to be found.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13270,7 +13270,7 @@
    "opening": "Indian Defense: Budapest Defense",
    "phase": "opening",
    "explains": "The knight from g4 takes on e5, hitting the knight on f3 and the pawn on c4 and covering d3. The file behind it is now clear apart from one pawn, and the bishop on b4 is deliberately left to be taken.",
-   "teaches": "When two pieces can take the same pawn, the tie-break is what the square BEHIND the capture becomes. Recapture with the piece whose departure opens your own line, and the move does two jobs: it restores the material and it arms the alignment you built earlier. If the opponent now grabs the piece you left hanging, they are stepping into the idea.",
+   "teaches": "When two pieces can take the same pawn, the tie-break is what the square BEHIND the capture becomes — recapture with the piece whose departure opens your own line, and the move restores the material and arms the alignment you built earlier at once. If the opponent now grabs the piece you left hanging, they are stepping into the idea.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13346,7 +13346,7 @@
    "opening": "Ponziani Opening",
    "phase": "opening",
    "explains": "The knight comes out hitting the pawn on e4 and covering d5, the square the intended advance wants to control. Nothing has been committed and the slow plan already has a problem.",
-   "teaches": "A quiet pawn move that prepares a big centre is an announcement, and announcements should be answered before they are carried out. Develop the piece that attacks the pawn already standing in the middle: the opponent must now spend the move they wanted for the build-up on defending instead, and a plan interrupted one move early is usually a plan abandoned.",
+   "teaches": "A quiet pawn move that prepares a big centre is an announcement, and announcements should be answered before they are carried out — develop the piece that attacks the pawn already standing in the middle, so the opponent must spend the move they wanted for the build-up on defending instead.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13381,7 +13381,7 @@
    "opening": "Ponziani Opening",
    "phase": "opening",
    "explains": "The knight goes to d5 rather than back, where it attacks the pawn on c3 and covers b4, e3 and f4. The pawn that would normally chase it from c4 is standing on c3 and cannot get there in one move.",
-   "teaches": "When a pawn advances to kick a knight, count which pawn would do the kicking NEXT before deciding where the knight goes. A knight that steps forward into the middle is only loose if a pawn can come and ask it to move — and if that pawn has already been spent on something else, the outpost is permanent. The move that prepared the centre is the move that gave the square away.",
+   "teaches": "When a pawn advances to kick a knight, count which pawn would do the kicking NEXT before deciding where the knight goes — a knight that steps forward into the middle is only loose if a pawn can come and ask it to move, and if that pawn has already been spent on something else, the outpost is permanent.",
    "plans": "",
    "concepts": [],
    "sources": [

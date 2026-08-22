@@ -2,7 +2,7 @@
  {
   "id": "vn-budapest-check-that-carries-a-trap",
   "line": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Nc6 Bf4 Bb4+",
-  "teaches": "Two developing squares can look equally natural and be worth completely different amounts. The one that comes with check forces the reply, and if the forced reply is the one you were hoping for, you have chosen your opponent's move for them. Prefer the developing move that asks a question over the one that merely occupies a good square.",
+  "teaches": "Two developing squares can look equally natural and be worth completely different amounts — the one that comes with check forces the reply, and if the forced reply is the one you were hoping for, you have chosen your opponent's move for them. Prefer the developing move that asks a question over the one that merely occupies a good square.",
   "explains": "The bishop steps to b4 giving check, so the next move is not a free choice — it has to answer the king. The natural-looking square on the other diagonal invites a quiet pawn move instead, and quiet is exactly what a gambit cannot afford.",
   "reasons": [
    { "kind": "attacks", "square": "e1" }
@@ -11,7 +11,7 @@
  {
   "id": "vn-budapest-line-up-behind-the-pawn-you-mean-to-remove",
   "line": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Nc6 Bf4 Bb4+ Nbd2 Qe7",
-  "teaches": "A piece aimed through a pawn at the enemy king is not doing nothing — it is a threat waiting for one square to empty. Set the alignment up FIRST, while it looks like ordinary development, and the tactic arrives later as a simple capture rather than as something that has to be found. The same move should also hold your loose pieces together.",
+  "teaches": "A piece aimed through a pawn at the enemy king is not doing nothing — it is a threat waiting for one square to empty, so set the alignment up FIRST, while it looks like ordinary development, and the tactic arrives later as a simple capture rather than something that has to be found.",
   "explains": "The queen comes to e7 pointing straight down the file at the king, with a single pawn on e5 standing in between, and it defends the bishop out on b4 at the same time. Nothing is threatened yet, which is why it reads as a normal move.",
   "reasons": [
    { "kind": "attacks", "square": "e5" },
@@ -21,7 +21,7 @@
  {
   "id": "vn-budapest-regain-the-pawn-with-the-knight-that-clears-the-file",
   "line": "d4 Nf6 c4 e5 dxe5 Ng4 Nf3 Nc6 Bf4 Bb4+ Nbd2 Qe7 a3 Ngxe5",
-  "teaches": "When two pieces can take the same pawn, the tie-break is what the square BEHIND the capture becomes. Recapture with the piece whose departure opens your own line, and the move does two jobs: it restores the material and it arms the alignment you built earlier. If the opponent now grabs the piece you left hanging, they are stepping into the idea.",
+  "teaches": "When two pieces can take the same pawn, the tie-break is what the square BEHIND the capture becomes — recapture with the piece whose departure opens your own line, and the move restores the material and arms the alignment you built earlier at once. If the opponent now grabs the piece you left hanging, they are stepping into the idea.",
   "explains": "The knight from g4 takes on e5, hitting the knight on f3 and the pawn on c4 and covering d3. The file behind it is now clear apart from one pawn, and the bishop on b4 is deliberately left to be taken.",
   "reasons": [
    { "kind": "attacks", "square": "f3" },
