@@ -2,25 +2,19 @@
  {
   "id": "vn-staunton-the-gambit-pawn-comes-straight-back",
   "line": "d4 f5 e4 fxe4 Nc3",
-  "teaches": "A gambit is only a real sacrifice if the pawn cannot be recovered. Check whether the captured pawn has a defender before treating the material as won — a pawn sitting undefended on an open file is a loan, not a gift.",
+  "teaches": "A gambit is only a real sacrifice if the pawn cannot be recovered — check whether the captured pawn has a defender before treating the material as won. A pawn sitting undefended on an open file is a loan, not a gift.",
   "explains": "The knight comes to c3 and attacks the pawn on e4, which nothing guards. So the pawn returns and the position that remains is the point of the whole idea: lines are open, development is ahead, and the side that grabbed the pawn has spent two moves on it. Declining to hurry the recapture is also possible, because the pawn is not going anywhere.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "e4"
-   }
+   { "kind": "attacks", "square": "e4" }
   ]
  },
  {
   "id": "vn-staunton-two-attackers-on-the-square-the-king-guards",
   "line": "d4 f5 e4 fxe4 Nc3 Nc6 Nf3 e5 Nxe5 Nf6 Bc4",
-  "teaches": "Count attackers and defenders on the weak square before calculating anything concrete. When a square next to the king is hit twice and guarded only by the king itself, the tactics are usually already there — the calculation confirms the count rather than discovering it.",
+  "teaches": "Count attackers and defenders on the weak square before calculating anything concrete — when a square next to the king is hit twice and guarded only by the king itself, the tactics are usually already there.",
   "explains": "The bishop arriving on c4 joins the knight in hitting f7, and the only piece covering that square is the king. That is the arithmetic the opening has been working towards since the f-pawn left, and it arrives while the defending side still has pieces on their starting squares.",
   "reasons": [
-   {
-    "kind": "controls",
-    "square": "f7"
-   }
+   { "kind": "controls", "square": "f7" }
   ]
  }
 ]
