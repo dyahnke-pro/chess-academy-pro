@@ -13489,7 +13489,7 @@
    "opening": "Sicilian Defense: Venice Attack",
    "phase": "opening",
    "explains": "The knight has landed on f5, the square the pawn push to e5 gave away forever, and it attacks the pawn on d6 and the pawn on g7 at the same time. No pawn can ever ask it to leave — the hole has a tenant, and the rent is paid in defensive moves.",
-   "teaches": "A hole is only a weakness once a piece lives in it. The knight's jump to the square the pawn advance can never attack again is the follow-through — from there it hits in two directions at once, and evicting it costs a concession every time.",
+   "teaches": "A hole is only a weakness once a piece lives in it — the knight's jump to the square the pawn advance can never attack again is the follow-through, and from there it hits in two directions at once, so evicting it costs a concession every time.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13535,7 +13535,7 @@
    "opening": "Sicilian Defense: Venice Attack",
    "phase": "opening",
    "explains": "The knight has centralised on d5, attacking the pinned knight on f6 — pinned by the bishop against the rook behind it. Taking the intruder walks into the pin's point, and declining leaves a monster in the middle while the queen is away on b2 counting pawns.",
-   "teaches": "When your opponent goes pawn-grabbing with the queen while behind in development, answer in the centre, not on the wing she left. The knight's leap to the central square works because the pin behind it makes the capture unpalatable — and keep your eyes on the greater prize rather than the first material the tactic offers.",
+   "teaches": "When your opponent goes pawn-grabbing with the queen while behind in development, answer in the centre, not on the wing she left — the knight's leap to the central square works because the pin behind it makes the capture unpalatable, so keep your eyes on the greater prize rather than the first material the tactic offers.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13560,7 +13560,7 @@
    "opening": "Caro-Kann Defense",
    "phase": "opening",
    "explains": "The pawn on d6 attacks the pawn on e5 directly. There is no way to keep the advanced pawn without committing more forces to it, so the opponent's second move is already a question they have to answer on their third.",
-   "teaches": "A pawn pushed forward this early has outrun its support, and the right response is to challenge it immediately rather than play around it. The pawn either trades itself off — giving back the space it grabbed — or its owner spends more moves propping it up while you simply develop.",
+   "teaches": "A pawn pushed forward this early has outrun its support, and the right response is to challenge it immediately rather than play around it — the pawn either trades itself off, giving back the space it grabbed, or its owner spends more moves propping it up while you simply develop.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13599,7 +13599,7 @@
    "opening": "Caro-Kann Defense",
    "phase": "opening",
    "explains": "The knight on e4 is supported by the pawn on d5, so the bishop is free to skip the defensive posting and come to g4, attacking the knight on f3 and pinning it against the queen behind it. One move, and it is the opponent who has to spend the next one.",
-   "teaches": "Before spending a move defending a piece, check whether it is already defended — a centralised knight held by a pawn needs nothing from you. Spend the move on a new problem for your opponent instead: the pin that ties their knight to the queen costs them a tempo however they resolve it.",
+   "teaches": "Before spending a move defending a piece, check whether it is already defended — a centralised knight held by a pawn needs nothing from you, so spend the move on a new problem for your opponent instead.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13671,7 +13671,7 @@
    "opening": "Indian Defense: Accelerated London System",
    "phase": "opening",
    "explains": "The modest pawn to d6 covers c5 and e5 and gets on with the position while the queen keeps eyeing the loose pawn. Nothing has been cashed in and the threat has not gone away.",
-   "teaches": "A queen sortie that eyes a loose pawn is strongest as a THREAT, not as a capture. Taking usually enters the one line the opponent has actually studied, where their development is the compensation. Leave the pawn hanging, make a useful move, and keep them solving the problem instead of following their preparation.",
+   "teaches": "A queen sortie that eyes a loose pawn is strongest as a THREAT, not as a capture — taking usually enters the one line the opponent has actually studied, where their development is the compensation. Leave the pawn hanging, make a useful move, and keep them solving the problem instead of following their preparation.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13720,7 +13720,7 @@
    "opening": "Alekhine Defense: Four Pawns Attack, Main Line",
    "phase": "opening",
    "explains": "The bishop takes on f6, where it bears down the diagonal on the pawn on d4 and connects with the queen behind it. The chain that was cramping the position is gone and its remaining pawn is now the target.",
-   "teaches": "After a central break is resolved, recapture with the piece that ends up doing the most, not the one nearest to hand. A bishop that lands on the long diagonal turns the opened centre into pressure on the pawn that is left — the break was never about the pawn count.",
+   "teaches": "After a central break is resolved, recapture with the piece that ends up doing the most, not the one nearest to hand — a bishop that lands on the long diagonal turns the opened centre into pressure on the pawn that is left, because the break was never about the pawn count.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13756,7 +13756,7 @@
    "opening": "Caro-Kann Defense: Maróczy Variation",
    "phase": "opening",
    "explains": "Every white move so far has been a pawn, and the c-pawn takes still more ground while the knight on d5 is asked to move again. It is a real gain and a real risk at once: the knight drops back to b6 or c7 and White has to bring pieces out quickly, because a centre this wide with nothing developed behind it invites a counterstrike.",
-   "teaches": "Taking a large share of the centre with pawns is not the same as being ahead, and the danger grows with every further pawn move. Grabbing more space while none of your pieces are out is playable only if you can follow it immediately with accurate development — the space has to be defended by something.",
+   "teaches": "Taking a large share of the centre with pawns is not the same as being ahead, and the danger grows with every further pawn move — grabbing more space while none of your pieces are out is playable only if you can follow it immediately with accurate development, because the space has to be defended by something.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13789,7 +13789,7 @@
    "opening": "Caro-Kann Defense: Maróczy Variation",
    "phase": "opening",
    "explains": "Bringing the king's knight to f3 hands the light-squared bishop a job: it comes to g4 and pins the knight against the queen on d1, since e2 is empty. Developing the queen's knight to c3 first leaves f3 vacant, so that bishop has nothing to attack and has to choose a square on its own terms.",
-   "teaches": "When two knights both want to come out, the order is decided by which one can be given a target. Develop the piece that cannot be harassed first and leave the other at home a moment longer — the opponent then has to commit a piece without knowing what it will be aiming at.",
+   "teaches": "When two knights both want to come out, the order is decided by which one can be given a target — develop the piece that cannot be harassed first and leave the other at home a moment longer, so the opponent has to commit a piece without knowing what it will be aiming at.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13817,7 +13817,7 @@
    "opening": "Caro-Kann Defense: Maróczy Variation",
    "phase": "opening",
    "explains": "The pawn on f3 supports the centre and blocks the king's knight from its natural square. Three replies come into consideration: capturing in the centre straight away, the modest pawn move that keeps the position closed, or bringing a knight out and leaving the tension for another move.",
-   "teaches": "When the centre is propped up by a pawn rather than a piece, you can take it, sidestep it, or develop and leave the tension. Taking resolves the position at once and hands over the centre. Sidestepping keeps everything closed and asks whether the prop was worth the move. Developing declines the argument entirely. All three are played here.",
+   "teaches": "When the centre is propped up by a pawn rather than a piece, you can take it, sidestep it, or develop and leave the tension — taking resolves the position at once and hands over the centre, sidestepping keeps everything closed and asks whether the prop was worth the move, developing declines the argument entirely. All three are played here.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13883,7 +13883,7 @@
    "opening": "Caro-Kann Defense: Maróczy Variation",
    "phase": "opening",
    "explains": "White has rebuilt the centre with the pawn on e4 and the f-file is open. Two tries come into consideration: the central pawn push that challenges the pawn head-on, or the king's knight developing onto it, which asks the same question without committing a pawn.",
-   "teaches": "Against a big centre held by pawns you can strike it or develop at it. The pawn break challenges immediately and accepts an open game; the knight comes out hitting the same pawn and keeps the tension for another move. Which you want depends on whether you are happy to open the position while your king is still at home.",
+   "teaches": "Against a big centre held by pawns you can strike it or develop at it — the pawn break challenges immediately and accepts an open game, the knight comes out hitting the same pawn and keeps the tension for another move. Which you want depends on whether you are happy to open the position while your king is still at home.",
    "plans": "",
    "concepts": [],
    "sources": [

@@ -2,25 +2,19 @@
  {
   "id": "vn-early-push-challenge-the-overextended-pawn-at-once",
   "line": "e4 c6 e5 d6",
-  "teaches": "A pawn pushed forward this early has outrun its support, and the right response is to challenge it immediately rather than play around it. The pawn either trades itself off — giving back the space it grabbed — or its owner spends more moves propping it up while you simply develop.",
+  "teaches": "A pawn pushed forward this early has outrun its support, and the right response is to challenge it immediately rather than play around it — the pawn either trades itself off, giving back the space it grabbed, or its owner spends more moves propping it up while you simply develop.",
   "explains": "The pawn on d6 attacks the pawn on e5 directly. There is no way to keep the advanced pawn without committing more forces to it, so the opponent's second move is already a question they have to answer on their third.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "e5"
-   }
+   { "kind": "attacks", "square": "e5" }
   ]
  },
  {
   "id": "vn-early-push-pin-instead-of-defending-what-needs-no-defence",
   "line": "e4 c6 e5 d6 exd6 exd6 d4 Nf6 c3 d5 Bg5 Be7 Nf3 Ne4 Bf4 O-O Bd3 Bg4",
-  "teaches": "Before spending a move defending a piece, check whether it is already defended — a centralised knight held by a pawn needs nothing from you. Spend the move on a new problem for your opponent instead: the pin that ties their knight to the queen costs them a tempo however they resolve it.",
+  "teaches": "Before spending a move defending a piece, check whether it is already defended — a centralised knight held by a pawn needs nothing from you, so spend the move on a new problem for your opponent instead.",
   "explains": "The knight on e4 is supported by the pawn on d5, so the bishop is free to skip the defensive posting and come to g4, attacking the knight on f3 and pinning it against the queen behind it. One move, and it is the opponent who has to spend the next one.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "f3"
-   }
+   { "kind": "attacks", "square": "f3" }
   ]
  },
  {
@@ -29,10 +23,7 @@
   "teaches": "Positions are rarely won by one blow — they are won inch by inch, by creating enough small problems that they coalesce into a big one. Each developing move should carry a little annoyance: a square eyed, a pawn break held in reserve, a piece the opponent has to keep watching.",
   "explains": "The knight develops to d7 and takes the e5 square in hand, and behind it the pawn break with the f-pawn stays in reserve. Nothing here forces anything yet — but every piece now carries a small threat, and the opponent has to answer all of them at once.",
   "reasons": [
-   {
-    "kind": "controls",
-    "square": "e5"
-   }
+   { "kind": "controls", "square": "e5" }
   ]
  }
 ]

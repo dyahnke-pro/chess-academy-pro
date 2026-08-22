@@ -2,17 +2,11 @@
  {
   "id": "vn-london-decline-the-pawn-the-theory-wants-you-to-take",
   "line": "d4 Nf6 Bf4 c5 e3 cxd4 exd4 Qb6 Nc3 d6",
-  "teaches": "A queen sortie that eyes a loose pawn is strongest as a THREAT, not as a capture. Taking usually enters the one line the opponent has actually studied, where their development is the compensation. Leave the pawn hanging, make a useful move, and keep them solving the problem instead of following their preparation.",
+  "teaches": "A queen sortie that eyes a loose pawn is strongest as a THREAT, not as a capture — taking usually enters the one line the opponent has actually studied, where their development is the compensation. Leave the pawn hanging, make a useful move, and keep them solving the problem instead of following their preparation.",
   "explains": "The modest pawn to d6 covers c5 and e5 and gets on with the position while the queen keeps eyeing the loose pawn. Nothing has been cashed in and the threat has not gone away.",
   "reasons": [
-   {
-    "kind": "controls",
-    "square": "c5"
-   },
-   {
-    "kind": "controls",
-    "square": "e5"
-   }
+   { "kind": "controls", "square": "c5" },
+   { "kind": "controls", "square": "e5" }
   ]
  }
 ]

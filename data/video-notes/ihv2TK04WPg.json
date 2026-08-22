@@ -5,38 +5,26 @@
   "teaches": "When the opponent's pawn advance leaves permanent holes, the bishop check that forces a trade is not a drawish gesture — it removes the one piece that could have covered those holes. Trade toward the weak squares: every exchange makes the holes harder to patch.",
   "explains": "The bishop checks on b5, and however the check is met, the light-squared defenders start coming off the board — the pieces that would have guarded the squares the pawn advance abandoned in the centre. The holes are permanent; the defenders are not.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "e8"
-   }
+   { "kind": "attacks", "square": "e8" }
   ]
  },
  {
   "id": "vn-open-sicilian-the-knight-moves-into-the-hole",
   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Bb5+ Bd7 Bxd7+ Nbxd7 Nf5",
-  "teaches": "A hole is only a weakness once a piece lives in it. The knight's jump to the square the pawn advance can never attack again is the follow-through — from there it hits in two directions at once, and evicting it costs a concession every time.",
+  "teaches": "A hole is only a weakness once a piece lives in it — the knight's jump to the square the pawn advance can never attack again is the follow-through, and from there it hits in two directions at once, so evicting it costs a concession every time.",
   "explains": "The knight has landed on f5, the square the pawn push to e5 gave away forever, and it attacks the pawn on d6 and the pawn on g7 at the same time. No pawn can ever ask it to leave — the hole has a tenant, and the rent is paid in defensive moves.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "d6"
-   },
-   {
-    "kind": "attacks",
-    "square": "g7"
-   }
+   { "kind": "attacks", "square": "d6" },
+   { "kind": "attacks", "square": "g7" }
   ]
  },
  {
   "id": "vn-open-sicilian-centralize-on-the-pin",
   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 e5 Bb5+ Bd7 Bxd7+ Nbxd7 Nf5 Qb6 O-O Rd8 Bg5 Qxb2 Nd5",
-  "teaches": "When your opponent goes pawn-grabbing with the queen while behind in development, answer in the centre, not on the wing she left. The knight's leap to the central square works because the pin behind it makes the capture unpalatable — and keep your eyes on the greater prize rather than the first material the tactic offers.",
+  "teaches": "When your opponent goes pawn-grabbing with the queen while behind in development, answer in the centre, not on the wing she left — the knight's leap to the central square works because the pin behind it makes the capture unpalatable, so keep your eyes on the greater prize rather than the first material the tactic offers.",
   "explains": "The knight has centralised on d5, attacking the pinned knight on f6 — pinned by the bishop against the rook behind it. Taking the intruder walks into the pin's point, and declining leaves a monster in the middle while the queen is away on b2 counting pawns.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "f6"
-   }
+   { "kind": "attacks", "square": "f6" }
   ]
  }
 ]
