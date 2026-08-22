@@ -3018,8 +3018,8 @@
    ],
    "opening": "Philidor Defense",
    "phase": "opening",
-   "explains": "Black has shut the king's bishop in with the d-pawn, and White has developed the light-squared bishop and the queen's knight before touching the centre. The central push is still coming and the game usually transposes to the same structures; the value of holding it back is that it arrives when the pieces are already placed to meet the reply.",
-   "teaches": "A move order can be worth more than the move it delays. Playing the natural central break a little later, after the pieces are out, keeps the same position available while denying the opponent the setup they have prepared against — and a defender who is not on familiar ground is worth a tempo on its own.",
+   "explains": "A move order can be worth more than the move it delays. Black has shut the king's bishop in with the d-pawn, and White has developed the light-squared bishop and the queen's knight before touching the centre. The central push is still coming and usually transposes to the same structures — but held back, it arrives when the pieces are already placed to meet the reply, and a defender off familiar ground is worth a tempo by itself.",
+   "teaches": "A move order can be worth more than the move it delays — playing the natural central break a little later, after the pieces are out, keeps the same position available while denying the opponent the setup they have prepared against.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3046,8 +3046,8 @@
    ],
    "opening": "Philidor Defense",
    "phase": "opening",
-   "explains": "Black has castled and everything looks routine, but taking on e4 here works: after the recapture the d-pawn comes forward and attacks the knight on e4 and the bishop on c4 together. Dropping the bishop to d3 keeps the bishop pair and the material is level — what is gone is the centre, and trading the e4 pawn for the pawn on d6 is a poor bargain, because it frees the very bishop Black's opening had shut in.",
-   "teaches": "Whenever a bishop sits on c4 and a pawn on e4 with a knight able to reach it, check for the centre fork trick before you castle: the knight takes the pawn, and after the recapture a pawn advance hits knight and bishop at once. It is not usually winning, but it solves the defender's problems, and that is the point — the cost is paid in structure, not material.",
+   "explains": "Black has castled and it all looks routine, but taking on e4 here works: after the recapture the d-pawn comes forward and attacks the knight on e4 and the bishop on c4 together. Dropping the bishop to d3 keeps the bishop pair and the material is level — what is gone is the centre. Trading the e4 pawn for the pawn on d6 is a poor bargain, because it frees the very bishop Black's opening had shut in.",
+   "teaches": "Whenever a bishop sits on c4 and a pawn on e4 with a knight able to reach it, check for the centre fork trick before you castle — it is not usually winning, but it solves the defender's problems, and the cost is paid in structure, not material.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3070,8 +3070,8 @@
    ],
    "opening": "French Defense: Advance Variation, Nimzowitsch System",
    "phase": "opening",
-   "explains": "Both obvious recaptures on d4 invite the queen's knight to c6, attacking the piece that just landed there and developing at the same time. Placing the bishop on d3 instead ignores the pawn for now and gets on with the kingside, trusting that d4 is weak enough to collect in due course.",
-   "teaches": "A pawn taken from you is not a pawn you must take back immediately. When every natural recapture can be hit with tempo, the move that wins the pawn is the one you play later, after the pieces are out — recovering material on the opponent's schedule is how a lead in development gets spent for nothing.",
+   "explains": "A pawn taken from you is not a pawn you must take back at once. Both obvious recaptures on d4 invite the queen's knight to c6, hitting the piece that just landed there and developing at the same time — so placing the bishop on d3 instead ignores the pawn for now, gets on with the kingside, and trusts that d4 is weak enough to collect in due course. Recovering material on the opponent's schedule is how a lead in development gets spent for nothing.",
+   "teaches": "A pawn taken from you is not a pawn you must take back immediately — when every natural recapture can be hit with tempo, the move that wins the pawn is the one you play later, after the pieces are out.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3121,7 +3121,7 @@
    "opening": "French Defense: Advance Variation, Nimzowitsch System",
    "phase": "opening",
    "explains": "The pawn on e5 covers both f6 and d6, so the king's knight and the dark-squared bishop lose their natural developing squares, and Black's position is cut in two with the queenside pieces struggling to join the kingside. That is why White is content to leave d4 alone for the moment: the clamp is worth more than the pawn.",
-   "teaches": "One advanced pawn can do the work of a piece when it takes away the squares the opponent's pieces most want. Judge such a pawn by what it denies rather than by whether it is defended — and be correspondingly unwilling to part with it.",
+   "teaches": "One advanced pawn can do the work of a piece when it takes away the squares the opponent's pieces most want — judge such a pawn by what it denies rather than by whether it is defended, and be correspondingly unwilling to part with it.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3148,7 +3148,7 @@
    "opening": "French Defense: Advance Variation, Nimzowitsch System",
    "phase": "opening",
    "explains": "The pawn chain is fixed and White has castled. Three tries come into consideration: the knight to e7, heading for f5 or g6 behind the chain; the bishop out to c5 where it eyes the centre immediately; or the pawn to f6, striking at the head of the chain before the pieces are settled.",
-   "teaches": "With the centre locked and the king still to be tucked away, the choice is which piece the position needs first. A knight developed behind its own pawns keeps every option; a bishop posted actively commits it; a pawn break at the head of the chain changes the structure at once. All three are played here, and they are not the same game.",
+   "teaches": "With the centre locked and the king still to be tucked away, the choice is which piece the position needs first — a knight behind its pawns keeps every option, an active bishop commits it, a break at the head of the chain changes the structure at once. They are not the same game.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3208,7 +3208,7 @@
    "opening": "French Defense: Advance Variation, Nimzowitsch System",
    "phase": "opening",
    "explains": "Black challenges the e5 pawn directly, and the reply is the bishop to b5 — pinning the knight on c6 against the king, since d7 is empty. That takes the sting out of capturing on e5, because recapturing with the knight then hits c6 a second time, from the other side of the board.",
-   "teaches": "A move that is wrong early can be exactly right once the position has changed. Striking at a cramping pawn with the f-pawn loosens the squares around your own king, so before you play it, ask which enemy piece is waiting to use them.",
+   "teaches": "A move that is wrong early can be exactly right once the position has changed — striking at a cramping pawn with the f-pawn loosens the squares around your own king, so before you play it, ask which enemy piece is waiting to use them.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3256,8 +3256,8 @@
    ],
    "opening": "Rapport-Jobava System",
    "phase": "opening",
-   "explains": "The bishop has stepped to b4 to swap itself for the knight on c3. The reply is to develop the other bishop to d3, and if the exchange comes, recapturing with the c-pawn is the point — it takes the central squares and opens a path for the queen along the c-file, leaving White the bishop pair.",
-   "teaches": "Being pinned against nothing is not a threat. When a bishop comes out to trade itself for a knight, ask what it actually costs you: doubled pawns are only a weakness if they cannot be used, and a pair of bishops plus open lines is usually the better half of that bargain.",
+   "explains": "The bishop steps to b4 to swap itself for the knight on c3 — but ask what it actually costs. Develop the other bishop to d3, and if the exchange comes, recapture with the c-pawn: that is the point — it takes the central squares, opens a path for the queen along the c-file, and leaves White the bishop pair.",
+   "teaches": "Being pinned against nothing is not a threat — when a bishop comes out to trade itself for a knight, ask what it actually costs you. Doubled pawns are only a weakness if they cannot be used, and a pair of bishops plus open lines is usually the better half of that bargain.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3292,8 +3292,8 @@
    ],
    "opening": "Rapport-Jobava System",
    "phase": "opening",
-   "explains": "The knight has landed on e5, and from here the choice is between castling and bringing the queen’s knight to d7. The difference matters: the knight on d7 can offer a trade on e5 and change the structure before White's kingside pawns get going, while castling leaves the centre alone and lets the storm start at once.",
-   "teaches": "A knight planted in the centre is often preparation for a pawn advance elsewhere, not an end in itself. Whether that advance works usually turns on move order — if the opponent can challenge the knight first, the whole plan arrives a move too late.",
+   "explains": "The knight has landed on e5, and from here the choice is between castling and bringing the queen's knight to d7. The difference matters: the knight on d7 can offer a trade on e5 and change the structure before White's kingside pawns get going, while castling leaves the centre alone and lets the storm start at once.",
+   "teaches": "A knight planted in the centre is often preparation for a pawn advance elsewhere, not an end in itself — whether that advance works usually turns on move order, because if the opponent can challenge the knight first, the whole plan arrives a move too late.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3350,7 +3350,7 @@
    "opening": "Rapport-Jobava System",
    "phase": "opening",
    "explains": "The advance of the g-pawn drives the bishop, and after it steps to g6 the h-pawn comes too, threatening to push again. Every square the bishop can then reach is covered by a white pawn, so it can only come off for a pawn — which is why the alternative here was the quieter bishop to d3, inviting the trade on White's terms instead.",
-   "teaches": "Pawns hunt bishops. When your king is castled on the side an enemy pawn storm is coming, count the squares your loose bishop can retreat to and check whether pawns cover them — a bishop with only defended squares to run to is still lost if every one of them can be taken by a pawn.",
+   "teaches": "Pawns hunt bishops — when your king is castled on the side an enemy pawn storm is coming, count the squares your loose bishop can retreat to and check whether pawns cover them. A bishop with only defended squares to run to is still lost if every one of them can be taken by a pawn.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3396,7 +3396,7 @@
    "opening": "Rapport-Jobava System",
    "phase": "opening",
    "explains": "The centre has just been clarified and both sides look alike. Developing the queen's knight to c6 is the natural move and is the inaccuracy here, because the knight can be harried from b5; the small pawn move to a6 takes the square away first, and it is that line that holds the balance.",
-   "teaches": "In a symmetrical-looking position the most natural developing move and the move that actually equalises are frequently not the same. Where a knight would be hit by a knight jumping to b5, a quiet pawn move that takes that square away can be worth more than a tempo of development.",
+   "teaches": "In a symmetrical-looking position the most natural developing move and the move that actually equalises are frequently not the same — where a knight would be hit by a knight jumping to b5, a quiet pawn move that takes that square away can be worth more than a tempo of development.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3437,7 +3437,7 @@
    "opening": "Caro-Kann Defense: Exchange Variation",
    "phase": "opening",
    "explains": "The pawn hits e4, and unlike a bare central strike this one comes with support behind it. White has to make a decision: push past it, hold the tension, or trade. Each leads to a different opening, and Black is comfortable in all three, which is why this defence has a reputation for soundness rather than sharpness.",
-   "teaches": "A central pawn that arrives already defended asks a question the opponent must answer. Compare it to the same pawn arriving loose — the difference is who gets to choose what happens next.",
+   "teaches": "A central pawn that arrives already defended asks a question the opponent must answer — compare it to the same pawn arriving loose, and the difference is who gets to choose what happens next.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3463,7 +3463,7 @@
    "opening": "Caro-Kann Defense: Exchange Variation",
    "phase": "opening",
    "explains": "White takes, which is the most straightforward of the replies and the one that settles the pawn structure at once. The pawn on d5 is attacked and will be recaptured; what matters is that the centre is now symmetrical and the game will be decided by piece placement rather than by a pawn break neither side has made yet.",
-   "teaches": "Resolving the tension immediately is a choice for a clear structure over a complicated one. It is not passive if the structure it produces has plans in it.",
+   "teaches": "Resolving the tension immediately is a choice for a clear structure over a complicated one — it is not passive if the structure it produces has plans in it.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3501,7 +3501,7 @@
    "opening": "Caro-Kann Defense: Exchange Variation",
    "phase": "opening",
    "explains": "Black takes back with the c-pawn and the structure is settled: mirrored pawns, an open c-file, and no immediate targets. Every viable black setup from here is organised around one piece — the light-squared bishop, which is now hemmed in behind its own pawn on d5 and needs a route out before it is shut in for good.",
-   "teaches": "After a symmetrical trade, the position is decided by which pieces have good squares. Find the piece with the fewest and build the setup around it.",
+   "teaches": "After a symmetrical trade, the position is decided by which pieces have good squares — find the piece with the fewest and build the setup around it.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3528,8 +3528,8 @@
    ],
    "opening": "Caro-Kann Defense: Exchange Variation",
    "phase": "opening",
-   "explains": "The bishop takes the diagonal toward the black king and the setup that follows is a familiar one — the c-pawn one square, then the other bishop out to f4, a solid formation reminiscent of an entirely different opening. The point for Black is the move ORDER. Bringing the queen's knight out first is what most players do on sight, but the sounder route is the other knight, keeping the option of getting the light-squared bishop out before it is locked in. White's small pawn move to h3 is exactly the move that shuts that route down, and once it is played Black has to switch to a different plan altogether.",
-   "teaches": "Develop in the order that keeps your worst piece's route open. The natural knight move is not automatically the right one when it costs your problem piece its only good square.",
+   "explains": "The bishop takes the diagonal toward the black king and the setup that follows is a familiar one — the c-pawn one square, then the other bishop out to f4, a solid formation reminiscent of an entirely different opening. The point for Black is the move order. Bringing the queen's knight out first is what most players do on sight, but the sounder route is the other knight, keeping the option of getting the light-squared bishop out before it is locked in. White's small pawn move to h3 is exactly the move that shuts that route down, and once it is played Black has to switch to a different plan altogether.",
+   "teaches": "Develop in the order that keeps your worst piece's route open — the natural knight move is not automatically the right one when it costs your problem piece its only good square.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3566,7 +3566,7 @@
    "opening": "Trompowsky Attack",
    "phase": "opening",
    "explains": "The bishop comes straight out to g5 and pins nothing — it simply attacks the knight on f6 before White has committed the c-pawn. This is one of a family of sidelines that avoid the main theoretical roads entirely, and it has been overtaken in popularity by its quieter cousin, where the bishop takes a safer diagonal and never invites what happens next. The reason is on Black's reply.",
-   "teaches": "An early bishop sortie that skips the usual second pawn move is a system, not an oversight. Meet it on its own terms rather than reaching for the move that answers the main line.",
+   "teaches": "An early bishop sortie that skips the usual second pawn move is a system, not an oversight — meet it on its own terms rather than reaching for the move that answers the main line.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3600,7 +3600,7 @@
    "opening": "Trompowsky Attack",
    "phase": "opening",
    "explains": "Rather than defending the knight or moving it back, it jumps to e4 and hits the bishop that just came out. This is the standard answer and the one worth learning, though it is not the only good one — players comfortable with the structures after a modest pawn to e6 do well with that instead. White now has to decide where the bishop lives, and the choice is real: there are three defensible squares and they lead to different games.",
-   "teaches": "When a piece is attacked, look at the squares in FRONT of it before the squares behind. A knight that jumps forward and attacks the attacker turns a threat into a question.",
+   "teaches": "When a piece is attacked, look at the squares in FRONT of it before the squares behind — a knight that jumps forward and attacks the attacker turns a threat into a question.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3636,7 +3636,7 @@
    "opening": "Trompowsky Attack",
    "phase": "opening",
    "explains": "The bishop drops to f4, where it still eyes c7 and holds e5, and this is the main line. The alternatives are worth knowing: stepping back along the same diagonal to h4 keeps the bishop on the board but achieves little, and there is a sharper flank push popularised by English players that is a genuine sideline rather than a mistake. Of the three, this is the one that keeps the bishop useful.",
-   "teaches": "Between retreats, prefer the one that keeps the piece doing something. A bishop that steps back onto a working diagonal has lost a tempo; one that steps back to safety has lost the piece's purpose too.",
+   "teaches": "Between retreats, prefer the one that keeps the piece doing something — a bishop that steps back onto a working diagonal has lost a tempo; one that steps back to safety has lost the piece's purpose too.",
    "plans": "",
    "concepts": [],
    "sources": [
