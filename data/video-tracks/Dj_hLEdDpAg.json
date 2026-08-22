@@ -685,8 +685,8 @@
   {
    "id": "vn-sicilian-dont-be-move-ordered",
    "line": "e4 c5 Nf3 Nc6 c3 d5 e5",
-   "teaches": "Recognise when a move is trying to 'move-order' you — to steer the game into a line you don't play by transposition. The counter is not to panic into the opponent's preferred structure but to reach a version of it on your own favourable terms.",
-   "explains": "Pushing to e5 is a trick to drag Black into an advance structure — a locked chain with the e-pawn pushed past — by transposition. Rather than be sucked into a line on the opponent's terms, Black will aim for a superior version of that structure, with the light-squared bishop developed first.",
+   "teaches": "Recognise when a move is trying to move-order you — to steer the game into a structure you don't play by transposition. The counter is not to panic into their version but to reach a better version of it on your own terms.",
+   "explains": "Pushing to e5 is a little trick: White wants to drag you into a locked chain with the e-pawn shoved past, on their terms. Don't be sucked in — we will happily play that structure, but a better version of it, with the light-squared bishop developed outside the chain first.",
    "reasons": [],
    "fen": "r1bqkbnr/pp2pppp/2n5/2ppP3/8/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 4",
    "t": 61.5,
@@ -696,8 +696,8 @@
   {
    "id": "vn-sicilian-pin-the-defender-of-e5",
    "line": "e4 c5 Nf3 Nc6 c3 d5 e5 Bg4",
-   "teaches": "If you are handed a structure you would normally avoid, take its most active version. Pinning the piece that defends the opponent's advanced pawn puts that pawn under immediate pressure and poses the sharpest question.",
-   "explains": "The bishop comes to g4, pinning the f3-knight to the queen and leaning on the e5-pawn the knight defends. It is the most testing setup — a favourable version of that advance structure, with the light-squared bishop already outside the pawn chain.",
+   "teaches": "If you are handed a structure you would normally avoid, take its most active version — pinning the piece that defends the opponent's advanced pawn puts that pawn under immediate pressure and poses the sharpest question.",
+   "explains": "The bishop comes to g4, pinning the knight on f3 to the queen and leaning on the e5-pawn that knight is defending. This is the whole point: the bishop is already outside the chain, and it is the most testing version of the structure — a favourable one, not the cramped one White wanted.",
    "reasons": [
     {
      "kind": "attacks",
@@ -712,8 +712,8 @@
   {
    "id": "vn-sicilian-queen-c7-does-more-jobs",
    "line": "e4 c5 Nf3 Nc6 c3 d5 e5 Bg4 Bb5 Qc7",
-   "teaches": "When placing your queen, choose the square that does the most jobs at the least risk. A post that eyes the key pawn, stays clear of tempo-gaining attacks, and prepares your next move beats a more forward but exposed square.",
-   "explains": "The queen goes to c7, adding pressure to the e5-pawn along the diagonal while sitting less exposed than further forward, and preparing e6. It also readies a clean recapture on c6 should the bishop trade itself off.",
+   "teaches": "When placing your queen, choose the square that does the most jobs at the least risk — one that eyes the key pawn, stays clear of tempo-gaining attacks, and prepares your next move beats a more forward but exposed post.",
+   "explains": "The queen goes to c7, and it is quietly doing three jobs: it leans on the e5-pawn down the diagonal, it sits far enough back to dodge any tempo-hit, and it prepares e6. It also lines up a clean recapture on c6 if the bishop trades itself off — one square, plenty of work.",
    "reasons": [
     {
      "kind": "attacks",
@@ -728,8 +728,8 @@
   {
    "id": "vn-sicilian-recapture-keeps-the-structure",
    "line": "e4 c5 Nf3 Nc6 c3 d5 e5 Bg4 Bb5 Qc7 Bxc6+ Qxc6",
-   "teaches": "A queen move can be quiet preparation for a trade you already see coming. Positioning the queen so it, not a pawn, recaptures keeps your structure intact when the opponent swaps on your knight.",
-   "explains": "Because the queen sat on c7, it takes back on c6 instead of a pawn, so the structure stays clean and healthy. Black emerges with a comfortable, solid position and no damage to show for the trade.",
+   "teaches": "A queen move can be quiet preparation for a trade you already see coming — positioning it so the queen, not a pawn, recaptures keeps your structure intact when the opponent swaps on your knight.",
+   "explains": "And here is why the queen went to c7: when White trades on c6, the queen takes back, not a pawn. The structure stays clean and healthy, and Black comes out of the swap solid and comfortable with nothing to fix.",
    "reasons": [],
    "fen": "r3kbnr/pp2pppp/2q5/2ppP3/6b1/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 0 7",
    "t": 185,
@@ -739,8 +739,8 @@
   {
    "id": "vn-sicilian-play-the-simple-move-on-judgment",
    "line": "e4 c5 Nf3 Nc6 c3 d5 e5 Bg4 Bb5 Qc7 Bxc6+ Qxc6 d4 e6",
-   "teaches": "Not every position demands deep calculation. Sound structural understanding lets you play the simple, solid move on judgment and save your clock; when a tactical try and a calm move both work, the calm one that needs no calculation is usually the practical choice.",
-   "explains": "Rather than enter tactics, Black plays the simple e6, reaching a comfortable, solid structure with the bishop already developed outside the pawn chain. It is an intuitive judgment call made without long calculation.",
+   "teaches": "Not every position demands deep calculation — when a tactical try and a calm move both work, sound structural understanding lets you play the calm one on judgment and save your clock.",
+   "explains": "There are tactics to dig into here — but you don't have to. Black plays the simple e6, reaching a comfortable, solid structure with the bishop already outside the chain. It is a judgment call made on understanding, not on a long calculation, and it is plenty good.",
    "reasons": [],
    "fen": "r3kbnr/pp3ppp/2q1p3/2ppP3/3P2b1/2P2N2/PP3PPP/RNBQK2R w KQkq - 0 8",
    "t": 264.5,
@@ -750,8 +750,8 @@
   {
    "id": "vn-sicilian-route-the-knight-toward-f5",
    "line": "e4 c5 Nf3 Nc6 c3 d5 e5 Bg4 Bb5 Qc7 Bxc6+ Qxc6 d4 e6 Be3 Ne7",
-   "teaches": "Develop a knight toward its best future square, even when the first hop looks modest. In these locked advance structures the knight's journey to the strong central-edge post is standard, and the destination justifies the detour.",
-   "explains": "The knight develops to e7, on its way to f5 where it will press the centre, and it clears the way for the dark-squared bishop as well. The plan is the reroute, not the square it starts on.",
+   "teaches": "Develop a knight toward its best future square even when the first hop looks modest — in these locked structures the knight's journey to the strong central-edge post is standard, and the destination justifies the detour.",
+   "explains": "The knight develops to e7 — a modest-looking hop, but it is on its way to f5 where it will press the centre, and it clears the path for the dark-squared bishop too. The plan is the journey, not the square it starts on.",
    "reasons": [],
    "fen": "r3kb1r/pp2nppp/2q1p3/2ppP3/3P2b1/2P1BN2/PP3PPP/RN1QK2R w KQkq - 2 9",
    "t": 299.5,
@@ -761,8 +761,8 @@
   {
    "id": "vn-sicilian-the-knight-lands-on-f5",
    "line": "e4 c5 Nf3 Nc6 c3 d5 e5 Bg4 Bb5 Qc7 Bxc6+ Qxc6 d4 e6 Be3 Ne7 O-O Nf5",
-   "teaches": "The thematic knight jump to the fifth rank turns a solid, cramped structure into an edge. Landing on the square that hits the base of the enemy centre is how the defender becomes the side doing the pressing.",
-   "explains": "The knight lands on f5, pressuring the d4-pawn and eyeing the dark squares. With the bishop outside the chain and the knight active, it is Black who is now slightly better and setting the agenda.",
+   "teaches": "The thematic knight jump to the fifth rank turns a solid, cramped structure into an edge — landing on the square that hits the base of the enemy centre is how the defender becomes the side doing the pressing.",
+   "explains": "And there it lands — the knight to f5, pressing the pawn on d4 and gripping the dark squares. With the bishop outside the chain and the knight on its dream square, it is Black who is a shade better now and setting the agenda. The one White tried to cramp is doing the pressing.",
    "reasons": [
     {
      "kind": "attacks",

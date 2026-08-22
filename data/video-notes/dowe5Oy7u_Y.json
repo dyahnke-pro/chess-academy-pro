@@ -2,29 +2,29 @@
  {
   "id": "vn-danish-develop-before-you-strike",
   "line": "d4 e5 e4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 c6 Nf3",
-  "teaches": "In a gambit you have paid material for time, so spend that time on development, not on premature threats. With only a couple of pieces out there is nothing real to attack yet; finish mobilising first and the initiative you bought will still be there.",
-  "explains": "The knight develops to f3, completing White's mobilisation rather than lunging. Having given up two pawns for the lead in development, White converts it patiently — there is no rush while the extra pieces are still coming out.",
+  "teaches": "In a gambit you have paid material for time, so spend that time on development, not premature threats — with only a couple of pieces out there is nothing real to attack yet.",
+  "explains": "You are down two pawns and the hand itches to lunge at something — but there is nothing there yet. The knight to f3 finishes bringing the pieces out. You paid two pawns for the lead in development, so cash it in patiently; the initiative you bought is not going anywhere.",
   "reasons": [ { "kind": "controls", "square": "e5" } ]
  },
  {
   "id": "vn-danish-block-the-check-with-development",
   "line": "d4 e5 e4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 c6 Nf3 Bb4+ Nbd2",
-  "teaches": "Meet a check by blocking with a developing move wherever you can, rather than by moving the king out of its castling rights. The interposition that also brings a piece into play answers the check and improves your position at the same time.",
-  "explains": "The knight blocks the check on d2 while developing, keeping White's right to castle intact. Shuffling the king in the centre would have solved the check too, but at the cost of king safety later.",
+  "teaches": "Meet a check by blocking with a developing move wherever you can, rather than by moving the king out of its castling rights — the interposition that also brings a piece into play answers the check and improves your position at once.",
+  "explains": "The check comes, and you could just shuffle the king a square — but that throws away castling. Instead the knight blocks on d2 and develops in the same move. The check is answered and a piece comes into play, with king safety kept for later.",
   "reasons": [ { "kind": "blocks", "from": "b4", "to": "e1" } ]
  },
  {
   "id": "vn-danish-battery-punishes-the-f6-weakening",
   "line": "d4 e5 e4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 c6 Nf3 Bb4+ Nbd2 f6 Qb3",
-  "teaches": "When the opponent weakens the shield in front of their king with a pawn move, aim pieces at the squares it exposed. A queen lined up behind a bishop on the same diagonal creates pressure toward the king that a single piece never could.",
-  "explains": "The queen comes to b3, forming a battery behind the c4-bishop that bears down toward f7, while the whole position leans on the exposed light squares that the f6 push created. Black's undeveloped kingside knight has no easy way out.",
+  "teaches": "When the opponent weakens the shield in front of their king with a pawn move, aim pieces at the squares it exposed — a queen lined up behind a bishop on the same diagonal creates pressure toward the king a single piece never could.",
+  "explains": "Black's f6 loosens the light squares around the king — so we aim at them. The queen comes to b3, lining up behind the bishop on c4 and bearing down toward f7. Black's kingside knight has no easy way out, and the whole position leans on the squares that pawn move gave up.",
   "reasons": []
  },
  {
   "id": "vn-danish-recapture-that-keeps-the-bind",
   "line": "d4 e5 e4 exd4 c3 dxc3 Bc4 cxb2 Bxb2 c6 Nf3 Bb4+ Nbd2 f6 Qb3 Bxd2+ Nxd2",
-  "teaches": "When two pieces can recapture, take with the one that keeps your force aimed at the target. Preserving the pieces that restrict the enemy king matters more than a tidy-looking recapture with the other man.",
-  "explains": "Recapturing with the knight keeps White's pieces coordinated toward the king, which still cannot castle with the bishops raking the long diagonals. It is the recapture that maintains the bind rather than easing it.",
+  "teaches": "When two pieces can recapture, take with the one that keeps your force aimed at the target — preserving the pieces that restrict the enemy king matters more than a tidy-looking recapture with the other man.",
+  "explains": "Two pieces can take back here, and the choice matters. Recapturing with the knight keeps White's men coordinated toward the king — which still cannot castle with the bishops raking the long diagonals. It is the recapture that holds the bind, not the one that eases it.",
   "reasons": []
  }
 ]

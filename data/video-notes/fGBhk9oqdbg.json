@@ -2,29 +2,29 @@
  {
   "id": "vn-glek-develop-dont-weaken",
   "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 g3 a6 Bg2",
-  "teaches": "In a fianchetto system, answer a harmless flank pawn poke by simply continuing your development, not by reacting to it. Spending a move to prevent a pin would weaken a key square for no real gain — let the opponent's little pawn move be the wasted one.",
-  "explains": "The bishop completes its fianchetto on g2, taking aim down the long diagonal. Meeting the rook-pawn nudge with a pawn move of your own would only soften the b4 square, so White just develops and waits for Black to commit.",
+  "teaches": "In a fianchetto system, answer a harmless flank pawn poke by simply continuing your development, not by reacting to it — spending a move to prevent a pin would weaken a key square for no real gain.",
+  "explains": "The bishop completes its fianchetto on g2, aimed down the long diagonal. You could burn a move to stop the coming pin — but that would only soften the b4 square for nothing. Just develop, and let the opponent's little rook-pawn nudge be the wasted move.",
   "reasons": []
  },
  {
   "id": "vn-glek-castle-not-d3",
   "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 g3 a6 Bg2 Bb4 O-O",
-  "teaches": "The instinctive supporting pawn move is not always best. In this fianchetto setup, castling first is stronger than propping the centre with a modest pawn, because it keeps a tempo in hand for when the pin is traded off — and it leaves a tactical resource if the opponent gets greedy.",
-  "explains": "Castling is the key move here, better than the natural d3. Once Black trades the bishop on c3, White recaptures toward the centre with a tempo and an open position, and there is even a tactic waiting if Black snatches the e4-pawn.",
+  "teaches": "The instinctive supporting pawn move is not always best — castling first keeps a tempo in hand for when the pin is traded off, and leaves a tactical resource if the opponent gets greedy.",
+  "explains": "The natural move is d3 to prop the centre — but castling is stronger here. Once Black trades the bishop on c3, White recaptures toward the middle with a tempo and an open game, and there is even a tactic waiting if Black snatches the e4-pawn. Keep the pawn move in reserve.",
   "reasons": []
  },
  {
   "id": "vn-glek-recapture-toward-the-centre",
   "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 g3 a6 Bg2 Bb4 O-O Bxc3 dxc3",
-  "teaches": "When you recapture, prefer the direction that opens a piece and grips the centre over the one that merely keeps the pawns tidy. A recapture toward the middle frees a bishop and stakes a bigger central claim.",
-  "explains": "Taking back with the d-pawn opens the dark-squared bishop's diagonal and increases White's grip on the central squares, better than recapturing away from the centre. The doubled pawns are a small price for the activity.",
+  "teaches": "When you recapture, prefer the direction that opens a piece and grips the centre over the one that merely keeps the pawns tidy — a recapture toward the middle frees a bishop and stakes a bigger central claim.",
+  "explains": "You could take back the tidy way and keep the pawns clean — but take with the d-pawn instead. It opens the dark-squared bishop's diagonal and tightens White's grip on the central squares. The doubled pawns are a small price for that activity.",
   "reasons": [ { "kind": "controls", "square": "d4" } ]
  },
  {
   "id": "vn-glek-the-in-between-recapture",
   "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 g3 a6 Bg2 Bb4 O-O Bxc3 dxc3 Nxe4 Nxe5",
   "teaches": "When the opponent grabs a pawn with a piece, look for the in-between capture that wins it straight back — and do not fear a desperado counter-grab. Counting the sequence out beats reflexively defending.",
-  "explains": "If Black snatches the pawn on e4, the knight takes on e5 attacking the knight on c6, and White regains the material once the dust settles. A desperado counter-grab is nothing to be afraid of when you count the sequence out.",
+  "explains": "If Black snatches the pawn on e4, don't scramble to defend — count it. The knight takes on e5, hitting the knight on c6, and White regains the material once the dust settles. A desperado counter-grab is nothing to fear when you have counted the line to the end.",
   "reasons": [ { "kind": "attacks", "square": "c6" } ]
  }
 ]

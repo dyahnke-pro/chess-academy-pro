@@ -1538,8 +1538,8 @@
   {
    "id": "vn-qgd-recapture-toward-the-queen",
    "line": "d4 d5 c4 e6 Nc3 Be7 cxd5 exd5 Nf3 c6 Bf4 Bd6 Bxd6 Qxd6",
-   "teaches": "When the opponent offers to trade your good bishop, recapturing toward the centre with the queen keeps it active and eyeing both wings. Take back with the piece that lands on the best square, not just the nearest one.",
-   "explains": "Taking on d6 with the queen centralises it on an open diagonal rather than leaving it passive, and the exchange of dark-squared bishops has eased any cramp. Black is already fully equal out of the opening.",
+   "teaches": "When the opponent offers to trade your good bishop, recapture with the piece that lands on the best square, not just the nearest one — toward the centre, where the queen stays active and eyes both wings.",
+   "explains": "White offers to swap the dark-squared bishops, and the reflex is to take back with a pawn and keep things tidy — but the queen does the job better. On d6 it sits on an open diagonal, active and looking both ways, and with the dark-squared bishops gone any cramp is gone with them. Black is already fully equal out of the opening.",
    "reasons": [],
    "fen": "rnb1k1nr/pp3ppp/2pq4/3p4/3P4/2N2N2/PP2PPPP/R2QKB1R w KQkq - 0 8",
    "t": 152.5,
@@ -1549,8 +1549,8 @@
   {
    "id": "vn-qgd-bishop-out-before-it-is-shut-in",
    "line": "d4 d5 c4 e6 Nc3 Be7 cxd5 exd5 Nf3 c6 Bf4 Bd6 Bxd6 Qxd6 e3 Bf5",
-   "teaches": "In closed queen's-pawn structures, get the light-squared bishop OUTSIDE the pawn chain before your own moves lock it in — and before the opponent can contest its best diagonal. The bishop that would otherwise be your worst piece becomes a good one simply by leaving early.",
-   "explains": "The bishop comes to f5, active on the b1-h7 diagonal and eyeing e4, developed before White can play the bishop to d3 to challenge it. Getting it out first is what keeps it from becoming the bad bishop stuck behind the pawns.",
+   "teaches": "In closed queen's-pawn structures, get the light-squared bishop OUTSIDE the pawn chain before your own moves lock it in — the piece that would be your worst becomes a good one simply by leaving early.",
+   "explains": "Here is the move you must not delay: the bishop to f5. Leave it home one move too long and your own pawns wall it in — but out here it grips the e4 square and stares down the whole diagonal, in play before White can challenge it with the bishop to d3. Out first, and your worst piece is suddenly a good one.",
    "reasons": [
     {
      "kind": "controls",
@@ -1565,8 +1565,8 @@
   {
    "id": "vn-qgd-knight-to-d7-first-to-deny-e5",
    "line": "d4 d5 c4 e6 Nc3 Be7 cxd5 exd5 Nf3 c6 Bf4 Bd6 Bxd6 Qxd6 e3 Bf5 Be2 Nd7",
-   "teaches": "Order your developing moves by what they prevent. Bring the knight that guards a key central square out first, and develop the rest only afterward; the same pieces, played in the right order, deny the opponent their best outpost for nothing.",
-   "explains": "The knight develops to d7 and guards the e5 square, so the opponent can never establish a piece on that central outpost. Covering that square comes first, and the rest of the development follows once it is safely denied.",
+   "teaches": "Order your developing moves by what they prevent — bring the knight that guards the key central square out first, and the same pieces played in the right order deny the opponent their best outpost for nothing.",
+   "explains": "Which knight first? The one that takes something away. The knight to d7 clamps the e5 square, so White can never plant a piece on that central outpost — and only once e5 is denied do we bring the rest of the army out. Same pieces, right order, and the opponent's best square is gone for free.",
    "reasons": [
     {
      "kind": "controls",
@@ -1581,8 +1581,8 @@
   {
    "id": "vn-qgd-opening-solved-complete-development",
    "line": "d4 d5 c4 e6 Nc3 Be7 cxd5 exd5 Nf3 c6 Bf4 Bd6 Bxd6 Qxd6 e3 Bf5 Be2 Nd7 O-O Ngf6",
-   "teaches": "A solid structure is not won by a clever stroke but by getting every piece to its natural square and leaving the opponent no target. When development is complete and nothing is loose, the burden shifts to the other side to find a plan.",
-   "explains": "The kingside knight completes development to f6 and every Black piece stands on a sensible square. The opening problems are solved; there is nothing for White to bite on.",
+   "teaches": "A solid structure is not won by a clever stroke but by getting every piece to its natural square and leaving nothing loose — then the burden shifts to the other side to find a plan.",
+   "explains": "The last knight comes to f6, and every black piece stands on a sensible square. There is no fancy stroke here to hunt for — the opening is simply solved, nothing hangs, and now it is White who has to find something to do. That burden is the whole point.",
    "reasons": [],
    "fen": "r3k2r/pp1n1ppp/2pq1n2/3p1b2/3P4/2N1PN2/PP2BPPP/R2Q1RK1 w kq - 5 11",
    "t": 292,
@@ -1592,8 +1592,8 @@
   {
    "id": "vn-qgd-castle-and-let-white-search-for-a-plan",
    "line": "d4 d5 c4 e6 Nc3 Be7 cxd5 exd5 Nf3 c6 Bf4 Bd6 Bxd6 Qxd6 e3 Bf5 Be2 Nd7 O-O Ngf6 h3 O-O",
-   "teaches": "In a symmetrical, solid position, having no weaknesses is itself an achievement — it means the opponent must take the first committal step and hand you something to work against. Finish your king safety and make them come to you.",
-   "explains": "Black castles into a comfortable, weakness-free position. White's most natural try is the minority attack with a3, b4 and b5, but nothing is forced and the burden of finding a plan is White's.",
+   "teaches": "In a symmetrical, solid position, having no weaknesses is itself the achievement — it means the opponent must take the first committal step and hand you something to work against.",
+   "explains": "Black castles into a position with no weaknesses at all, and in a near-mirror structure that is exactly the achievement. White's only real try is the slow queenside roll with a3, b4 and b5 — but nothing is forced, and the burden of finding a plan is entirely White's. We finish the king and make them come to us.",
    "reasons": [],
    "fen": "r4rk1/pp1n1ppp/2pq1n2/3p1b2/3P4/2N1PN1P/PP2BPP1/R2Q1RK1 w - - 1 12",
    "t": 363.5,
@@ -1603,8 +1603,8 @@
   {
    "id": "vn-qgd-trade-to-open-the-d5-outpost",
    "line": "d4 d5 c4 e6 Nc3 Be7 cxd5 exd5 Nf3 c6 Bf4 Bd6 Bxd6 Qxd6 e3 Bf5 Be2 Nd7 O-O Ngf6 h3 O-O Qd2 Rfe8 Rfe1 Ne4",
-   "teaches": "Time a central knight jump for the moment the recapture improves your structure. Trading a pair of knights here forces a pawn recapture that opens a permanent square for your remaining knight and shoves the opponent's knight to the edge.",
-   "explains": "The knight leaps to e4 offering the trade; when it is taken and the d-pawn recaptures, the d5 square opens for Black's other knight and White's knight loses its e-file squares. The exchange hands Black a lasting positional gain.",
+   "teaches": "Time a central knight jump for the moment the recapture improves your structure — trading a pair of knights can force a pawn recapture that opens a permanent square for your remaining knight.",
+   "explains": "The knight jumps to e4, hitting the knight on c3 and offering the swap. It looks like a plain trade — but timed here the recapture works for you: when White takes and the d-pawn comes back, the d5 square opens for Black's other knight while White's knight loses its squares. This exchange is a lasting gain, not an even swap.",
    "reasons": [
     {
      "kind": "attacks",
@@ -1619,8 +1619,8 @@
   {
    "id": "vn-qgd-recapture-cramps-the-enemy-knight",
    "line": "d4 d5 c4 e6 Nc3 Be7 cxd5 exd5 Nf3 c6 Bf4 Bd6 Bxd6 Qxd6 e3 Bf5 Be2 Nd7 O-O Ngf6 h3 O-O Qd2 Rfe8 Rfe1 Ne4 Nxe4 dxe4",
-   "teaches": "Recapturing toward the centre can plant a thorn as much as rebuild a chain. A pawn that lands attacking an enemy knight forces it to a passive square, and the space it seizes cramps the whole enemy camp.",
-   "explains": "Taking back with the d-pawn puts a pawn on e4 that attacks the f3-knight and drives it to the passive h2 square. The d5 square is now a clean outpost, and White is left shuffling.",
+   "teaches": "Recapturing toward the centre can plant a thorn as much as rebuild a chain — a pawn that lands attacking an enemy knight drives it to a passive square and cramps the whole enemy camp.",
+   "explains": "Take back toward the centre, and this is not just rebuilding a chain — it is planting a thorn. The pawn lands on e4 attacking the knight on f3, shoving it to the passive h2 square, and the d5 hole is now permanent. White is left shuffling with nothing to do.",
    "reasons": [
     {
      "kind": "attacks",
@@ -1635,8 +1635,8 @@
   {
    "id": "vn-qgd-reroute-toward-the-outpost",
    "line": "d4 d5 c4 e6 Nc3 Be7 cxd5 exd5 Nf3 c6 Bf4 Bd6 Bxd6 Qxd6 e3 Bf5 Be2 Nd7 O-O Ngf6 h3 O-O Qd2 Rfe8 Rfe1 Ne4 Nxe4 dxe4 Nh2 Nf6",
-   "teaches": "Once you have an outpost, route a knight toward it patiently, even if the path looks roundabout. A knight heading for a square no pawn can ever challenge is worth two moves spent getting it there.",
-   "explains": "The knight comes back to f6 with the d5 square in mind, rerouting toward the hole in White's camp. There is no rush; the outpost is permanent and White has no way to cover it.",
+   "teaches": "Once you have an outpost, route a knight toward it patiently even if the path looks roundabout — a knight heading for a square no pawn can ever challenge is worth the two moves spent getting it there.",
+   "explains": "No rush. The knight comes back to f6 with one square in mind — the d5 hole — and takes the roundabout route to reach it. There is no hurry at all, because the outpost is permanent and White has no way to cover it.",
    "reasons": [],
    "fen": "r3r1k1/pp3ppp/2pq1n2/5b2/3Pp3/4P2P/PP1QBPPN/R3R1K1 w - - 2 16",
    "t": 616,
@@ -1647,7 +1647,7 @@
    "id": "vn-qgd-the-knight-lands-on-d5",
    "line": "d4 d5 c4 e6 Nc3 Be7 cxd5 exd5 Nf3 c6 Bf4 Bd6 Bxd6 Qxd6 e3 Bf5 Be2 Nd7 O-O Ngf6 h3 O-O Qd2 Rfe8 Rfe1 Ne4 Nxe4 dxe4 Nh2 Nf6 Rec1 Nd5",
    "teaches": "A knight on a square no enemy pawn can attack is worth far more than its material value — it blockades, it dominates, and it cannot be evicted. Plant it and the position plays itself.",
-   "explains": "The knight settles on d5, an unassailable outpost that also covers the c-file so the enemy rooks find no entry. Black's pieces dominate while White's shuffle with no plan.",
+   "explains": "And there it is — the knight settles on d5, a square no enemy pawn can ever challenge. Planted in the heart of the board it blockades and dominates, and nothing can chase it off. Black's pieces are simply the better ones now, while White's shuffle with no plan.",
    "reasons": [],
    "fen": "r3r1k1/pp3ppp/2pq4/3n1b2/3Pp3/4P2P/PP1QBPPN/R1R3K1 w - - 4 17",
    "t": 691,
@@ -1657,8 +1657,8 @@
   {
    "id": "vn-qgd-a5-stops-the-minority-attack",
    "line": "d4 d5 c4 e6 Nc3 Be7 cxd5 exd5 Nf3 c6 Bf4 Bd6 Bxd6 Qxd6 e3 Bf5 Be2 Nd7 O-O Ngf6 h3 O-O Qd2 Rfe8 Rfe1 Ne4 Nxe4 dxe4 Nh2 Nf6 Rec1 Nd5 a3 a5",
-   "teaches": "Meet a wing pawn advance before it rolls. When the opponent prepares to gain queenside space with a pawn push, answering with your own rook-pawn one square up freezes the break and denies them the outpost the push was meant to create.",
-   "explains": "White's a3 prepares b4 and a minority attack; the reply a5 clamps down on b4 and stops the advance before it starts. The queenside is shut and White is left without a constructive plan.",
+   "teaches": "Meet a wing pawn advance before it rolls — when the opponent prepares to gain queenside space, answering with your own rook-pawn one square up freezes the break and denies them the outpost the push was meant to create.",
+   "explains": "White plays a3 to prepare b4 and roll the queenside — but meet it before it moves. The pawn to a5 clamps the b4 square and the whole advance is frozen dead. The queenside is shut, and White is left without a single constructive idea.",
    "reasons": [
     {
      "kind": "controls",
@@ -1673,8 +1673,8 @@
   {
    "id": "vn-qgd-lift-the-rook-toward-the-king",
    "line": "d4 d5 c4 e6 Nc3 Be7 cxd5 exd5 Nf3 c6 Bf4 Bd6 Bxd6 Qxd6 e3 Bf5 Be2 Nd7 O-O Ngf6 h3 O-O Qd2 Rfe8 Rfe1 Ne4 Nxe4 dxe4 Nh2 Nf6 Rec1 Nd5 a3 a5 Rc2 Re6",
-   "teaches": "When one wing is shut, shift your force to the other. A rook lifted along the third or sixth rank can swing toward the enemy king, turning a quiet positional edge into a genuine attack where the defender has no counterplay.",
-   "explains": "With the queenside frozen, the rook lifts to e6 planning to swing across to g6 and join an attack on the king. All of Black's play is now aimed at the one part of the board where White cannot defend easily.",
+   "teaches": "When one wing is shut, shift your force to the other — a rook lifted along the rank can swing toward the enemy king, turning a quiet positional edge into a real attack the defender cannot answer.",
+   "explains": "One wing is dead, so we shift the whole army to the other. The rook lifts to e6, planning to swing across to g6 and pile onto the king. A quiet edge is turning into a genuine attack — and White has no defenders coming the other way to meet it.",
    "reasons": [],
    "fen": "r5k1/1p3ppp/2pqr3/p2n1b2/3Pp3/P3P2P/1PRQBPPN/R5K1 w - - 2 19",
    "t": 819,
@@ -1684,8 +1684,8 @@
   {
    "id": "vn-qgd-the-good-knight-survives-the-trade",
    "line": "d4 d5 c4 e6 Nc3 Be7 cxd5 exd5 Nf3 c6 Bf4 Bd6 Bxd6 Qxd6 e3 Bf5 Be2 Nd7 O-O Ngf6 h3 O-O Qd2 Rfe8 Rfe1 Ne4 Nxe4 dxe4 Nh2 Nf6 Rec1 Nd5 a3 a5 Rc2 Re6 Bg4 Bxg4 Nxg4",
-   "teaches": "Not every trade is equal — swapping off pieces is good when what remains favours you. Trading light-squared bishops here leaves a knight-versus-knight middlegame where your knight is the far better piece, which is a small victory in itself.",
-   "explains": "The bishops come off and the knight recaptures on g4, heading back into the game. What is left is a knight-versus-knight position where Black's knight, bound for its outpost, clearly outclasses White's.",
+   "teaches": "Not every trade is equal — swapping pieces is good when what remains favours you. Trading light-squared bishops here leaves a knight-versus-knight middlegame where your knight is the far better piece.",
+   "explains": "Trades do not help both sides the same. The bishops come off and the knight recaptures on g4, back into the game — and what is left is knight against knight, where Black's, bound for its outpost, is plainly the better piece. Swapping is a win when what stays on the board is yours.",
    "reasons": [],
    "fen": "r5k1/1p3ppp/2pqr3/p2n4/3Pp1N1/P3P2P/1PRQ1PP1/R5K1 b - - 0 20",
    "t": 853,
@@ -1695,8 +1695,8 @@
   {
    "id": "vn-qgd-f6-prepares-the-kingside-break",
    "line": "d4 d5 c4 e6 Nc3 Be7 cxd5 exd5 Nf3 c6 Bf4 Bd6 Bxd6 Qxd6 e3 Bf5 Be2 Nd7 O-O Ngf6 h3 O-O Qd2 Rfe8 Rfe1 Ne4 Nxe4 dxe4 Nh2 Nf6 Rec1 Nd5 a3 a5 Rc2 Re6 Bg4 Bxg4 Nxg4 f6",
-   "teaches": "Prepare a pawn storm with a quiet restraining move first. Playing the f-pawn one square denies the enemy knight its central square and lays the groundwork for pushing the pawns forward to open lines at the king — slow, but unstoppable when the other wing is dead.",
-   "explains": "The move f6 takes the e5 square away from White's knight and prepares the plan of h5 and f5, rolling the kingside pawns to open the floodgates toward the king. It is patient preparation, not an immediate threat.",
+   "teaches": "Prepare a pawn storm with a quiet restraining move first — a modest pawn advance can deny the enemy knight its central square and lay the groundwork for rolling the pawns forward to open lines at the king.",
+   "explains": "One quiet restraining move before the storm: the pawn to f6 takes the e5 square away from White's knight and readies the plan of h5 and f5, rolling the kingside forward to tear open lines at the king. It is patient, not an immediate threat — but with the other wing dead, it is unstoppable.",
    "reasons": [
     {
      "kind": "controls",
