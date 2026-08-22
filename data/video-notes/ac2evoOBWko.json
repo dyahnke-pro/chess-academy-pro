@@ -2,7 +2,7 @@
  {
   "id": "vn-alapin-develop-first-when-the-pawn-cannot-run",
   "line": "e4 c5 d4 cxd4 c3 Nf6 e5 Nd5 Nf3",
-  "teaches": "When a pawn you could win back has nowhere to run, develop first and collect it later on your own terms. Recapturing on the spot is the reflex; the stronger move is often to bring a piece out and keep the tension, because the pawn is not going anywhere and every move you spend developing instead of grabbing is a move ahead. Flexibility beats haste when nothing is being lost by waiting.",
+  "teaches": "When a pawn you could win back has nowhere to run, develop first and collect it later on your own terms — recapturing on the spot is the reflex, but the stronger move is often to bring a piece out and keep the tension, because every move you spend developing instead of grabbing is a move ahead.",
   "explains": "The knight develops and keeps an eye on the extra pawn on d4 while the big pawn on e5 stays defended. Black cannot prop the d4-pawn up, so White regains it at the moment that suits, having already brought a piece into play instead of spending the move on a recapture.",
   "reasons": [
    { "kind": "defends", "square": "e5" },
@@ -12,7 +12,7 @@
  {
   "id": "vn-alapin-the-isolani-lives-to-push-d5",
   "line": "e4 c5 d4 cxd4 c3 Nf6 e5 Nd5 Nf3 d6 cxd4 Nc6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7 Nxd7 Qxd7 Nc3",
-  "teaches": "A lone central pawn is not just a weakness to be defended; its whole purpose is to advance. Cluster your pieces behind it so the break can be made at the right moment, and the pawn that looked like a liability becomes the lever that rips the position open. The side playing against it wants to blockade and trade; the side that owns it wants activity and the push.",
+  "teaches": "A lone central pawn is not just a weakness to be defended; its whole purpose is to advance — cluster your pieces behind it so the break can be made at the right moment, and the pawn that looked like a liability becomes the lever that rips the position open.",
   "explains": "The knight comes to c3 and eyes d5, the square just in front of the isolated d-pawn. Pieces gather behind d4 so that the pawn can advance when the moment is right, opening lines for the bishops and rooks standing ready behind it.",
   "reasons": [
    { "kind": "controls", "square": "d5" }

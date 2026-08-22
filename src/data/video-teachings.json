@@ -11363,7 +11363,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Smith-Morra Declined",
    "phase": "opening",
    "explains": "The knight develops and keeps an eye on the extra pawn on d4 while the big pawn on e5 stays defended. Black cannot prop the d4-pawn up, so White regains it at the moment that suits, having already brought a piece into play instead of spending the move on a recapture.",
-   "teaches": "When a pawn you could win back has nowhere to run, develop first and collect it later on your own terms. Recapturing on the spot is the reflex; the stronger move is often to bring a piece out and keep the tension, because the pawn is not going anywhere and every move you spend developing instead of grabbing is a move ahead. Flexibility beats haste when nothing is being lost by waiting.",
+   "teaches": "When a pawn you could win back has nowhere to run, develop first and collect it later on your own terms — recapturing on the spot is the reflex, but the stronger move is often to bring a piece out and keep the tension, because every move you spend developing instead of grabbing is a move ahead.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11409,7 +11409,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Smith-Morra Declined",
    "phase": "opening",
    "explains": "The knight comes to c3 and eyes d5, the square just in front of the isolated d-pawn. Pieces gather behind d4 so that the pawn can advance when the moment is right, opening lines for the bishops and rooks standing ready behind it.",
-   "teaches": "A lone central pawn is not just a weakness to be defended; its whole purpose is to advance. Cluster your pieces behind it so the break can be made at the right moment, and the pawn that looked like a liability becomes the lever that rips the position open. The side playing against it wants to blockade and trade; the side that owns it wants activity and the push.",
+   "teaches": "A lone central pawn is not just a weakness to be defended; its whole purpose is to advance — cluster your pieces behind it so the break can be made at the right moment, and the pawn that looked like a liability becomes the lever that rips the position open.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11439,7 +11439,7 @@
    "opening": "Sicilian Defense: Smith-Morra Gambit",
    "phase": "opening",
    "explains": "White has taken the pawn back and the gambit is over before it began — this is now a completely different opening, one where White has a broad centre and no attack. Grabbing the pawn instead is the principled test and it plays straight into the hands of someone who has studied the gambit for years. This road is far safer: less to memorise, and no way to lose in five moves to a line the opponent knows by heart.",
-   "teaches": "The best answer to a gambit is often not to take it or to refuse it, but to transpose it into an opening the gambiteer did not want to play. Take the fun out of the setup rather than testing it head on.",
+   "teaches": "The best answer to a gambit is often not to take it or to refuse it, but to transpose it into an opening the gambiteer did not want to play — take the fun out of the setup rather than testing it head on.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11470,7 +11470,7 @@
    "opening": "Sicilian Defense: Smith-Morra Gambit",
    "phase": "opening",
    "explains": "Black hits the pawn on e5 at once rather than developing around it. That pawn is the one taking away squares — it denies f6 and d6 to the black pieces — and every move it survives is a move Black spends squeezed. White will have to spend time propping it up, and that is time not spent attacking.",
-   "teaches": "Against a broad pawn centre, attack the advanced pawn straight away. A centre only cramps you while it is intact, and the pawn furthest forward is always the one with the fewest defenders.",
+   "teaches": "Against a broad pawn centre, attack the advanced pawn straight away — a centre only cramps you while it is intact, and the pawn furthest forward is always the one with the fewest defenders.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11502,7 +11502,7 @@
    "opening": "Sicilian Defense: Smith-Morra Gambit",
    "phase": "opening",
    "explains": "The knight comes out and props up the advanced pawn. Black now has a real choice: take on e5, which resolves the centre immediately, or bring the queen's knight out and add a second attacker instead. The knight move is the main and principled continuation, and it invites the bishop out to c4 — the position where the interesting theory really begins.",
-   "teaches": "When the opponent defends a pawn you attacked, you get to choose between trading it off and adding a second attacker. Trading clarifies; attacking again keeps the tension and the options.",
+   "teaches": "When the opponent defends a pawn you attacked, you get to choose between trading it off and adding a second attacker — trading clarifies; attacking again keeps the tension and the options.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11532,7 +11532,7 @@
    "opening": "French Defense: Advance Variation",
    "phase": "opening",
    "explains": "The bishop takes the strongest diagonal it has, pointing at h7 and covering the light squares in front of the centre. The pawn in the middle can be taken; the position it is being traded for is a full move ahead in development.",
-   "teaches": "When your centre is attacked, defending it with a pawn is not the only answer — and it is often the worst one, because the propping move develops nothing and commits a square your pieces wanted. Give the pawn up and DEVELOP instead: a lead in development buys back more than one pawn is worth, provided every move you spend is a piece coming out with a purpose.",
+   "teaches": "When your centre is attacked, defending it with a pawn is not the only answer — and it is often the worst one, because the propping move develops nothing and commits a square your pieces wanted. Give the pawn up and DEVELOP instead: a lead in development buys back more than one pawn is worth.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11574,7 +11574,7 @@
    "opening": "French Defense: Advance Variation",
    "phase": "opening",
    "explains": "The rook comes to e1 straight behind the advanced pawn, holding it and holding the file behind it. If the pawn is captured now, a piece of ours arrives on that square rather than the position simply opening.",
-   "teaches": "When the opponent strikes at the pawn that anchors your whole position, capturing back is the move that throws the position away. The pawn is not the point — the square it sits on is, and taking removes your own occupant of it. Add a defender instead and make them do the trading, so whatever lands on that square is yours.",
+   "teaches": "When the opponent strikes at the pawn that anchors your whole position, capturing back is the move that throws the position away — the pawn is not the point, the square it sits on is, and taking removes your own occupant of it. Add a defender instead and make them do the trading.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11612,7 +11612,7 @@
    "opening": "French Defense: Advance Variation",
    "phase": "opening",
    "explains": "The bishop settles on f4, defending the knight that occupies the key square. The pin one square further along looks more active and touches nothing that matters here; this is the square that keeps the knight where it is.",
-   "teaches": "A pin is attractive because it is concrete, and that is exactly why it distracts. If your position is built around holding one square, judge every developing move by whether it adds a guard to that square — the flashier square that pins a knight but abandons the outpost is a worse move even though it looks like it does more.",
+   "teaches": "A pin is attractive because it is concrete, and that is exactly why it distracts — if your position is built around holding one square, judge every developing move by whether it adds a guard to that square, because the flashier square that pins a knight but abandons the outpost is a worse move even though it looks like it does more.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11652,7 +11652,7 @@
    "opening": "French Defense: Advance Variation",
    "phase": "opening",
    "explains": "The knight comes to d2, covering f3 — the square from which it will add another defender to the outpost — and holding e4 on the way. Nothing has been developed for its own sake.",
-   "teaches": "When a piece must be developed and a square must be reinforced, look for the move that does both. A knight has more than one route out, and the route that passes through a square from which it will defend your outpost is worth more than the one that merely looks central. Development and the plan should be the same move whenever they can be.",
+   "teaches": "When a piece must be developed and a square must be reinforced, look for the move that does both — a knight has more than one route out, and the route that passes through a square from which it will defend your outpost is worth more than the one that merely looks central.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11681,7 +11681,7 @@
    "opening": "Sicilian Defense: Alapin Variation",
    "phase": "opening",
    "explains": "The modest pawn to e6 is the third option here, behind the two main central replies. Its interesting property is what it offers next move: once White builds the centre, Black can push the d-pawn and turn the game into a locked pawn chain where White's e-pawn has advanced past and both sides play on the wings. Some White players are delighted by that structure; others never play it at all, and this move makes them say which.",
-   "teaches": "A third-choice move can still be a good practical one when its point is to offer the opponent a transposition they may not want. Choose by what it makes THEM decide, not by its ranking.",
+   "teaches": "A third-choice move can still be a good practical one when its point is to offer the opponent a transposition they may not want — choose by what it makes THEM decide, not by its ranking.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11717,7 +11717,7 @@
    "opening": "Sicilian Defense: Alapin Variation",
    "phase": "opening",
    "explains": "The pawn takes the centre alongside its neighbour, hitting c5. This is the obvious continuation and it hands the choice straight back: Black can push the d-pawn and steer toward the locked chain, or leave it and keep the open game. Either way White wants to know which reply is coming before playing this, because the answer to the d-pawn push is where the two roads separate.",
-   "teaches": "Occupy the centre when your opponent's last move invited it. A big centre is only a commitment if you have already decided how to answer the strike against it.",
+   "teaches": "Occupy the centre when your opponent's last move invited it — a big centre is only a commitment if you have already decided how to answer the strike against it.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11744,7 +11744,7 @@
    "opening": "Sicilian Defense: Alapin Variation",
    "phase": "opening",
    "explains": "The pawn arrives on d5 and White faces the fork in the road. Pushing past locks the chain and gives the game a completely different character. The alternative is simply to take, which is the recommended route for anyone who does not want that structure: White is reckoned slightly better in the position that follows, and after Black recaptures with the queen the game transposes into the well-worn lines where the queen comes out early and gets chased.",
-   "teaches": "When an advance would transpose into an opening you do not play, look for the capture that keeps the game in your own territory. Trading is not passive when it steers the position toward theory you actually know.",
+   "teaches": "When an advance would transpose into an opening you do not play, look for the capture that keeps the game in your own territory — trading is not passive when it steers the position toward theory you actually know.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11775,7 +11775,7 @@
    "opening": "Alekhine Defense: Normal Variation",
    "phase": "opening",
    "explains": "The pawn on d6 attacks the pawn on e5, the one the opening's early moves lured forward. However the tension resolves, the bishop behind the pawn gets its diagonal and the centre stops belonging to one side.",
-   "teaches": "This whole defence provokes the centre forward in order to hit it, and the strike itself is not a subtle move — do not overthink it. The pawn challenges the advanced pawn, claims a share of the centre, and opens the bishop's diagonal, all in one routine gesture. Some moves are just correct.",
+   "teaches": "This whole defence provokes the centre forward in order to hit it, and the strike itself is not a subtle move — do not overthink it: the pawn challenges the advanced pawn, claims a share of the centre, and opens the bishop's diagonal in one routine gesture.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11812,7 +11812,7 @@
    "opening": "Alekhine Defense: Normal Variation",
    "phase": "opening",
    "explains": "The bishop develops to g4 and attacks the knight on f3, which is all that stands between it and the bishop that recaptured on d1. One developing move, one threat, and the opponent's pieces — king in the centre, bishop home on d1 — must untangle under pressure.",
-   "teaches": "After a queen trade that denies castling, keep developing with hits — every piece that comes out attacking something extends the lead the trade created. The piece that recaptured is usually the most tangled one; aim at it and its defenders and the endgame plays like an attack.",
+   "teaches": "After a queen trade that denies castling, keep developing with hits — every piece that comes out attacking something extends the lead the trade created, and the piece that recaptured is usually the most tangled one.",
    "plans": "",
    "concepts": [],
    "sources": [
