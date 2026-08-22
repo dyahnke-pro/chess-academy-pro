@@ -1098,8 +1098,8 @@
   {
    "id": "vn-belgrade-the-reply-that-tells-you-they-have-studied",
    "line": "e4 Nc6 Nf3 e5 Nc3 Nf6 d4 exd4 Nd5",
-   "teaches": "Read the opponent's preparation from which reply they choose. A move that only appears in books tells you the next ten moves will be theory, so switch from testing them to testing the position.",
-   "explains": "The knight jumps into d5 and offers the pawn — the gambit proper. Black's best reply is the knight to b4, which the engines like and the books recommend, and a player who finds it is telling you they know this line. The answer that keeps it interesting is to take the knight on f6 straight away. And there is one thing to get right after that: if Black recaptures with the queen, do not grab the pawn on d4, because the queens come off with a check to follow — the knight drops in on c2 forking the king and rook, and the whole gambit turns into a lost ending.",
+   "teaches": "Read the opponent's preparation from which reply they choose — a move that only appears in books tells you the next ten moves will be theory, so switch from testing them to testing the position.",
+   "explains": "Read the opponent's prep from which reply they pick. The knight jumps into d5 and offers the pawn — the gambit proper. Black's best is the knight to b4, which the engines like and the books recommend, so a player who finds it is telling you they know this line. The answer that keeps it interesting is to take on f6 straight away. And one thing to get right after: if Black recaptures with the queen, do not grab the pawn on d4 — the queens come off with a check to follow, the knight drops in on c2 forking king and rook, and the whole gambit turns into a lost ending.",
    "reasons": [
     {
      "kind": "attacks",
