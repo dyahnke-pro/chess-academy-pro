@@ -1105,5 +1105,49 @@
  "titleCheck": {
   "claims": "Sicilian Defense: Bowdler Attack",
   "confirmed": true
- }
+ },
+ "notes": [
+  {
+   "id": "vn-bowdler-jump-in-to-win-the-bishop-pair",
+   "line": "e4 c5 Bc4 Nc6 Qf3 Ne5",
+   "teaches": "When an enemy bishop is planted on a square your knight can hit, jumping in to attack it can win the bishop pair even without a fork. Forcing the trade of that bishop, and driving the piece behind it to an awkward square, is a real gain in the opening.",
+   "explains": "The knight leaps to e5, attacking both the bishop on c4 and the queen on f3. White cannot keep the bishop, so Black wins the pair of bishops and shoves the queen onto a more exposed square.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c4"
+    },
+    {
+     "kind": "attacks",
+     "square": "f3"
+    }
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/8/2p1n3/2B1P3/5Q2/PPPP1PPP/RNB1K1NR w KQkq - 4 4",
+   "t": 1521.5,
+   "ply": 6,
+   "source": "yt:U9ZVpNscIGg"
+  },
+  {
+   "id": "vn-bowdler-trade-for-the-pair-and-a-target",
+   "line": "e4 c5 Bc4 Nc6 Qf3 Ne5 Qb3 Nxc4 Qxc4",
+   "teaches": "Trading a knight for a bishop is a clear gain when you come out with the two bishops and provoke the enemy queen onto an exposed square. A queen stuck in the open becomes a target your development can hit with tempo.",
+   "explains": "After the trade Black holds the bishop pair and the white queen sits out in the open on c4, where Black's coming central expansion will gain time by attacking it.",
+   "reasons": [],
+   "fen": "r1bqkbnr/pp1ppppp/8/2p5/2Q1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 5",
+   "t": 1530.5,
+   "ply": 9,
+   "source": "yt:U9ZVpNscIGg"
+  },
+  {
+   "id": "vn-bowdler-expand-with-the-flexible-pawn",
+   "line": "e4 c5 Bc4 Nc6 Qf3 Ne5 Qb3 Nxc4 Qxc4 e6",
+   "teaches": "When you expand in the centre, choose the pawn move that prepares a break and keeps your pieces free, over the passive one that blocks them in. Flexibility — a break in reserve and a bishop still able to choose its diagonal — is worth more than a solid but stodgy structure.",
+   "explains": "The pawn to e6 prepares the d5 break and leaves the light-squared bishop free to fianchetto, more flexible than shutting it in behind d6. Black expands while keeping every option open.",
+   "reasons": [],
+   "fen": "r1bqkbnr/pp1p1ppp/4p3/2p5/2Q1P3/8/PPPP1PPP/RNB1K1NR w KQkq - 0 6",
+   "t": 1546,
+   "ply": 10,
+   "source": "yt:U9ZVpNscIGg"
+  }
+ ]
 }

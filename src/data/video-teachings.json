@@ -1,8 +1,8 @@
 {
  "generatedAt": "2026-08-22",
- "videosDistilled": 198,
- "noteCount": 542,
- "forkCount": 521,
+ "videosDistilled": 199,
+ "noteCount": 545,
+ "forkCount": 524,
  "notes": [
   {
    "id": "vn-advance-e6-cover-the-check-square-before-the-trade",
@@ -9851,6 +9851,86 @@
      "square": "d4"
     }
    ]
+  },
+  {
+   "id": "vn-bowdler-jump-in-to-win-the-bishop-pair",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Bc4",
+    "Nc6",
+    "Qf3",
+    "Ne5"
+   ],
+   "opening": "Sicilian Defense: Bowdler Attack",
+   "phase": "opening",
+   "explains": "The knight leaps to e5, attacking both the bishop on c4 and the queen on f3. White cannot keep the bishop, so Black wins the pair of bishops and shoves the queen onto a more exposed square.",
+   "teaches": "When an enemy bishop is planted on a square your knight can hit, jumping in to attack it can win the bishop pair even without a fork. Forcing the trade of that bishop, and driving the piece behind it to an awkward square, is a real gain in the opening.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:U9ZVpNscIGg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c4"
+    },
+    {
+     "kind": "attacks",
+     "square": "f3"
+    }
+   ]
+  },
+  {
+   "id": "vn-bowdler-trade-for-the-pair-and-a-target",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Bc4",
+    "Nc6",
+    "Qf3",
+    "Ne5",
+    "Qb3",
+    "Nxc4",
+    "Qxc4"
+   ],
+   "opening": "Sicilian Defense: Bowdler Attack",
+   "phase": "opening",
+   "explains": "After the trade Black holds the bishop pair and the white queen sits out in the open on c4, where Black's coming central expansion will gain time by attacking it.",
+   "teaches": "Trading a knight for a bishop is a clear gain when you come out with the two bishops and provoke the enemy queen onto an exposed square. A queen stuck in the open becomes a target your development can hit with tempo.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:U9ZVpNscIGg"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-bowdler-expand-with-the-flexible-pawn",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Bc4",
+    "Nc6",
+    "Qf3",
+    "Ne5",
+    "Qb3",
+    "Nxc4",
+    "Qxc4",
+    "e6"
+   ],
+   "opening": "Sicilian Defense: Bowdler Attack",
+   "phase": "opening",
+   "explains": "The pawn to e6 prepares the d5 break and leaves the light-squared bishop free to fianchetto, more flexible than shutting it in behind d6. Black expands while keeping every option open.",
+   "teaches": "When you expand in the centre, choose the pawn move that prepares a break and keeps your pieces free, over the passive one that blocks them in. Flexibility — a break in reserve and a bishop still able to choose its diagonal — is worth more than a solid but stodgy structure.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:U9ZVpNscIGg"
+   ],
+   "positionSource": "high"
   },
   {
    "id": "vn-closedtrad-queen-that-hits-two-pawns-across-the-board",
@@ -28574,6 +28654,139 @@
     }
    ],
    "source": "yt:U7pqt57VwuU"
+  },
+  {
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Bc4",
+    "Nc6"
+   ],
+   "ply": 4,
+   "options": [
+    {
+     "san": "Qf3",
+     "t": 1506,
+     "continuation": "Qf3"
+    },
+    {
+     "san": "Bf1",
+     "t": 2533.5,
+     "continuation": "Bf1 Nb8"
+    }
+   ],
+   "source": "yt:U9ZVpNscIGg"
+  },
+  {
+   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 2 7",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Bc4",
+    "Nc6",
+    "Bf1",
+    "Nb8",
+    "Bc4",
+    "Nc6",
+    "Nf3",
+    "e6",
+    "O-O",
+    "Nf6"
+   ],
+   "ply": 12,
+   "options": [
+    {
+     "san": "e5",
+     "t": 2545.5,
+     "continuation": "e5"
+    },
+    {
+     "san": "Re1",
+     "t": 2579.5,
+     "continuation": "Re1"
+    }
+   ],
+   "source": "yt:U9ZVpNscIGg"
+  },
+  {
+   "fen": "r4b2/5p2/4p1k1/1pprP3/n2p1PpB/PN1P4/1PR2PK1/7R w - - 6 31",
+   "lineSan": [
+    "e4",
+    "c5",
+    "Bc4",
+    "Nc6",
+    "Qf3",
+    "Ne5",
+    "Qb3",
+    "Nxc4",
+    "Qxc4",
+    "e6",
+    "Nf3",
+    "Nf6",
+    "e5",
+    "d5",
+    "Qb5+",
+    "Nd7",
+    "d3",
+    "a6",
+    "Qb3",
+    "b5",
+    "c4",
+    "Bb7",
+    "cxb5",
+    "Qa5+",
+    "Bd2",
+    "Qxb5",
+    "Qxb5",
+    "axb5",
+    "O-O",
+    "d4",
+    "Bf4",
+    "Bxf3",
+    "gxf3",
+    "g5",
+    "Bg3",
+    "Bg7",
+    "Re1",
+    "h5",
+    "h3",
+    "O-O",
+    "Nd2",
+    "Kh7",
+    "Nb3",
+    "Rfc8",
+    "a3",
+    "Nb6",
+    "Rac1",
+    "Na4",
+    "Rc2",
+    "Bf8",
+    "f4",
+    "g4",
+    "hxg4",
+    "hxg4",
+    "Kg2",
+    "Rd8",
+    "Rh1+",
+    "Kg6",
+    "Bh4",
+    "Rd5"
+   ],
+   "ply": 60,
+   "options": [
+    {
+     "san": "Bd8",
+     "t": 2065,
+     "continuation": "Bd8 Rd6 Bh4 Rdd8"
+    },
+    {
+     "san": "Kg3",
+     "t": 2072.5,
+     "continuation": "Kg3"
+    }
+   ],
+   "source": "yt:U9ZVpNscIGg"
   },
   {
    "fen": "r1bqkbnr/pp1ppppp/2n5/1Bp5/4P3/2N5/PPPP1PPP/R1BQK1NR b KQkq - 3 3",
