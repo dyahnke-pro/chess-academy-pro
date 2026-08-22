@@ -2,49 +2,37 @@
   {
     "id": "vn-kingsgambit-the-oldest-argument-in-chess",
     "line": "e4 e5 f4",
-    "teaches": "An opening that fell out of favour usually did so for a concrete reason, not a change of taste. Find the specific line the defenders found, because that is the one you will meet.",
+    "teaches": "An opening that fell out of favour usually did so for a concrete reason, not a change of taste — find the specific line the defenders found, because that is the one you will meet.",
     "explains": "The f-pawn offers itself to drag the black centre pawn away, and this is about as old as the European game — the first recorded game with it dates to 1560. It stopped being a top-level weapon not because the attacking positions dried up but because Black found ways to defuse them: if White still got the attack, players would happily keep paying a pawn for it. Knowing which defences do that is the whole preparation.",
     "reasons": [
-      {
-        "kind": "attacks",
-        "square": "e5"
-      }
+      { "kind": "attacks", "square": "e5" }
     ]
   },
   {
     "id": "vn-kingsgambit-accept-after-shoring-up-the-centre",
     "line": "e4 e5 f4 d6 Nf3 exf4",
-    "teaches": "You can accept a gambit a move late. Slipping in a solid pawn move first costs nothing if the offer will still be there, and it means taking on your terms rather than theirs.",
+    "teaches": "You can accept a gambit a move late — slipping in a solid pawn move first costs nothing if the offer will still be there, and it means taking on your terms rather than theirs.",
     "explains": "Black has propped the centre with the d-pawn before taking, and only now grabs on f4 — the second most popular way to handle the offer. The pawn on f4 is the whole point of the argument from here: Black is a pawn up and White has an open file and a lead in development to show for it.",
     "reasons": [
-      {
-        "kind": "controls",
-        "square": "e3"
-      }
+      { "kind": "controls", "square": "e3" }
     ]
   },
   {
     "id": "vn-kingsgambit-hold-the-pawn-or-do-not-take-it",
     "line": "e4 e5 f4 d6 Nf3 exf4 d4 g5",
-    "teaches": "If you accept a gambit, commit to holding the material. Taking a pawn and then handing it straight back leaves you with the worse position and nothing to show for the moves.",
+    "teaches": "If you accept a gambit, commit to holding the material — taking a pawn and then handing it straight back leaves you with the worse position and nothing to show for the moves.",
     "explains": "The pawn to g5 props up the one on f4, and it has to: giving the pawn back makes the whole line pointless, because everything Black conceded — the open file, the loosened kingside — was the price of keeping it. It looks careless to push pawns in front of the king like this, and it is the move.",
     "reasons": [
-      {
-        "kind": "defends",
-        "square": "f4"
-      }
+      { "kind": "defends", "square": "f4" }
     ]
   },
   {
     "id": "vn-kingsgambit-soften-the-chain-then-undevelop",
     "line": "e4 e5 f4 d6 Nf3 exf4 d4 g5 h4",
-    "teaches": "A retreat to the back rank is not always a lost tempo. When the retreat is what lets you attack the pawn you have been undermining, going backwards is the move that goes forwards.",
+    "teaches": "A retreat to the back rank is not always a lost tempo — when the retreat is what lets you attack the pawn you have been undermining, going backwards is the move that goes forwards.",
     "explains": "The pawn hits g5 and this is the main line and a sacrifice line at once — the knight is being offered. After Black pushes past with the g-pawn there is a jump into g5 that a strong grandmaster has played and that is probably unsound; the real move is to put the knight all the way back to g1. It looks absurd and it is precise: the pawn chain around f4 has been loosened enough that White can afford a move going backwards, because the knight is coming out again at that pawn and Black cannot hold it.",
     "reasons": [
-      {
-        "kind": "attacks",
-        "square": "g5"
-      }
+      { "kind": "attacks", "square": "g5" }
     ]
   }
 ]

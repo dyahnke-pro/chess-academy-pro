@@ -2,25 +2,19 @@
   {
     "id": "vn-kid-saemisch-the-pawn-that-buys-two-things-and-costs-one",
     "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3",
-    "teaches": "A modest pawn move that props up the centre is often also the first move of a pawn storm. Ask what it enables as well as what it defends — and what square it takes away from your own pieces.",
+    "teaches": "A modest pawn move that props up the centre is often also the first move of a pawn storm — ask what it enables as well as what it defends, and what square it takes away from your own pieces.",
     "explains": "The pawn to f3 does two jobs. It puts a second guard on e4, which the bishop on g7 has been staring at down the long diagonal since it came out, and it prepares to push the g-pawn and roll the kingside pawns at the castled king. The cost is real and permanent: the knight on g1 can no longer come to f3, so it has to take the slower route through e2.",
     "reasons": [
-      {
-        "kind": "defends",
-        "square": "e4"
-      }
+      { "kind": "defends", "square": "e4" }
     ]
   },
   {
     "id": "vn-kid-saemisch-castle-first-then-pick-the-system",
     "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 d6 f3 O-O",
-    "teaches": "Castle before choosing a plan when several plans are all playable. The king move is common to all of them, so it costs nothing and buys a move of information about what the opponent commits to.",
+    "teaches": "Castle before choosing a plan when several plans are all playable — the king move is common to all of them, so it costs nothing and buys a move of information about what the opponent commits to.",
     "explains": "Black castles, which is automatic here — every reasonable system against this setup starts the same way. The choice comes next, and there are three: the flank break with the c-pawn two squares, which is the line reckoned objectively best; the queenside expansion with the knight to c6, then the a-pawn, the rook, and the b-pawn; and the old central strike with the e-pawn, which is the traditional way to play this defence and is perfectly viable despite its reputation. White, meanwhile, will develop the dark-squared bishop or bring the knight round to e2, and those two often transpose into one another.",
     "reasons": [
-      {
-        "kind": "defends",
-        "square": "f8"
-      }
+      { "kind": "defends", "square": "f8" }
     ]
   }
 ]

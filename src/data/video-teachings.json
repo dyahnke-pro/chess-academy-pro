@@ -3678,7 +3678,7 @@
    "opening": "King's Gambit",
    "phase": "opening",
    "explains": "Black has propped the centre with the d-pawn before taking, and only now grabs on f4 — the second most popular way to handle the offer. The pawn on f4 is the whole point of the argument from here: Black is a pawn up and White has an open file and a lead in development to show for it.",
-   "teaches": "You can accept a gambit a move late. Slipping in a solid pawn move first costs nothing if the offer will still be there, and it means taking on your terms rather than theirs.",
+   "teaches": "You can accept a gambit a move late — slipping in a solid pawn move first costs nothing if the offer will still be there, and it means taking on your terms rather than theirs.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3707,7 +3707,7 @@
    "opening": "King's Gambit",
    "phase": "opening",
    "explains": "The pawn to g5 props up the one on f4, and it has to: giving the pawn back makes the whole line pointless, because everything Black conceded — the open file, the loosened kingside — was the price of keeping it. It looks careless to push pawns in front of the king like this, and it is the move.",
-   "teaches": "If you accept a gambit, commit to holding the material. Taking a pawn and then handing it straight back leaves you with the worse position and nothing to show for the moves.",
+   "teaches": "If you accept a gambit, commit to holding the material — taking a pawn and then handing it straight back leaves you with the worse position and nothing to show for the moves.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3737,7 +3737,7 @@
    "opening": "King's Gambit",
    "phase": "opening",
    "explains": "The pawn hits g5 and this is the main line and a sacrifice line at once — the knight is being offered. After Black pushes past with the g-pawn there is a jump into g5 that a strong grandmaster has played and that is probably unsound; the real move is to put the knight all the way back to g1. It looks absurd and it is precise: the pawn chain around f4 has been loosened enough that White can afford a move going backwards, because the knight is coming out again at that pawn and Black cannot hold it.",
-   "teaches": "A retreat to the back rank is not always a lost tempo. When the retreat is what lets you attack the pawn you have been undermining, going backwards is the move that goes forwards.",
+   "teaches": "A retreat to the back rank is not always a lost tempo — when the retreat is what lets you attack the pawn you have been undermining, going backwards is the move that goes forwards.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3771,7 +3771,7 @@
    "opening": "Petrov's Defense: Stafford Gambit",
    "phase": "opening",
    "explains": "The pawn on c3 takes d4 in hand, ready to hit the bishop on c5 and shut its diagonal for good, while the quiet bishop development already stands guard in front of the king. The attacking setup across the board has no target left — the counterplay ended before it began.",
-   "teaches": "The antidote to a piece-activity gambit is not to refute it move by move but to switch off its one dangerous piece. The modest pawn-and-bishop setup blunts the diagonal into your king's position, and with that bishop talking to nobody, the gambiteer is simply a pawn down with pretty pieces.",
+   "teaches": "The antidote to a piece-activity gambit is not to refute it move by move but to switch off its one dangerous piece — blunt the diagonal into your king's position, and with that bishop talking to nobody the gambiteer is simply a pawn down with pretty pieces.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3857,7 +3857,7 @@
    "opening": "King's Indian Defense: Averbakh Variation, Flexible Defense",
    "phase": "opening",
    "explains": "The bishop lands on g5 pinning the knight on f6 against the queen behind it. The central pawn push this setup exists to play is still legal, and it now runs into the pin rather than into a defence.",
-   "teaches": "The best developing moves do a second job the opponent notices only when they try their plan. Pinning the knight that would support the central break does not forbid the break — it makes it cost a pawn and an ending. Ask of every developing square: which of their ideas does this quietly discourage?",
+   "teaches": "The best developing moves do a second job the opponent notices only when they try their plan — pinning the knight that would support the central break does not forbid the break, it makes it cost a pawn and an ending. Ask of every developing square: which of their ideas does this quietly discourage?",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3887,7 +3887,7 @@
    "opening": "King's Indian Defense: Sämisch Variation, Bobotsov-Korchnoi-Petrosian Variation",
    "phase": "opening",
    "explains": "The pawn to f3 does two jobs. It puts a second guard on e4, which the bishop on g7 has been staring at down the long diagonal since it came out, and it prepares to push the g-pawn and roll the kingside pawns at the castled king. The cost is real and permanent: the knight on g1 can no longer come to f3, so it has to take the slower route through e2.",
-   "teaches": "A modest pawn move that props up the centre is often also the first move of a pawn storm. Ask what it enables as well as what it defends — and what square it takes away from your own pieces.",
+   "teaches": "A modest pawn move that props up the centre is often also the first move of a pawn storm — ask what it enables as well as what it defends, and what square it takes away from your own pieces.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -3933,7 +3933,7 @@
    "opening": "King's Indian Defense: Sämisch Variation, Bobotsov-Korchnoi-Petrosian Variation",
    "phase": "opening",
    "explains": "Black castles, which is automatic here — every reasonable system against this setup starts the same way. The choice comes next, and there are three: the flank break with the c-pawn two squares, which is the line reckoned objectively best; the queenside expansion with the knight to c6, then the a-pawn, the rook, and the b-pawn; and the old central strike with the e-pawn, which is the traditional way to play this defence and is perfectly viable despite its reputation. White, meanwhile, will develop the dark-squared bishop or bring the knight round to e2, and those two often transpose into one another.",
-   "teaches": "Castle before choosing a plan when several plans are all playable. The king move is common to all of them, so it costs nothing and buys a move of information about what the opponent commits to.",
+   "teaches": "Castle before choosing a plan when several plans are all playable — the king move is common to all of them, so it costs nothing and buys a move of information about what the opponent commits to.",
    "plans": "",
    "concepts": [],
    "sources": [
