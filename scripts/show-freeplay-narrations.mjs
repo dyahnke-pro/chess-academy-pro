@@ -49,9 +49,12 @@ function bestMoveUci(fen) {
 }
 const OUT = join('audit-reports', `freeplay-narrations-${new Date().toISOString().replace(/[:.]/g, '-')}`);
 
-/** Pull the spoken text out of an audit entry's summary (`… "the text"`) or,
- *  failing a quoted form, the whole summary. */
+/** The FULL spoken text. `narrationText` carries the whole line; `summary` is
+ *  length-capped by the audit logger and MUST NOT be used for display — reading
+ *  it truncated every sample (David 2026-08-22: "STILL FUCKING CUT SHORT"). Fall
+ *  back to the quoted tail of summary only when narrationText is absent. */
 function saidText(e) {
+  if (typeof e.narrationText === 'string' && e.narrationText.trim()) return e.narrationText.trim();
   const s = e.summary ?? '';
   const m = /"([\s\S]*)"\s*$/.exec(s);
   return (m ? m[1] : s).trim();
