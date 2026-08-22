@@ -2,39 +2,24 @@
  {
   "id": "vn-earlylondon-close-the-centre-before-it-is-challenged",
   "line": "d4 Nf6 Bf4 c5 d5",
-  "teaches": "When the bishop comes out before the pawns are settled, a pawn push in the centre answers the challenge by closing it. Judge the push by the two squares it covers rather than by the space it takes: with both entry squares held by a pawn, the pieces opposite have nowhere to develop toward and the bishop outside the chain is safe.",
+  "teaches": "When the bishop comes out before the pawns are settled, a pawn push in the centre answers the challenge by closing it — judge the push by the two squares it covers rather than by the space it takes, because with both entry squares held the pieces opposite have nowhere to develop toward.",
   "explains": "The pawn has been offered on c5 and the centre pawn advances past it to d5, covering c6 and e6. Those are the squares the knight and the light-squared bishop want. The position locks, which suits the side whose bishop is already outside the pawn chain — the piece that could have been trapped is the one with the open diagonal.",
   "reasons": [
-   {
-    "kind": "controls",
-    "square": "c6"
-   },
-   {
-    "kind": "controls",
-    "square": "e6"
-   }
+   { "kind": "controls", "square": "c6" },
+   { "kind": "controls", "square": "e6" }
   ],
   "options": [
    {
     "san": "b5",
     "reasons": [
-     {
-      "kind": "controls",
-      "square": "c4"
-     }
+     { "kind": "controls", "square": "c4" }
     ]
    },
    {
     "san": "d6",
     "reasons": [
-     {
-      "kind": "defends",
-      "square": "c5"
-     },
-     {
-      "kind": "controls",
-      "square": "e5"
-     }
+     { "kind": "defends", "square": "c5" },
+     { "kind": "controls", "square": "e5" }
     ]
    }
   ]
@@ -42,17 +27,11 @@
  {
   "id": "vn-earlylondon-step-back-onto-the-pawn",
   "line": "d4 Nf6 Bf4 c5 d5 d6 Nc3 e5 Bg3",
-  "teaches": "A bishop attacked by a pawn advance should retreat along the diagonal rather than off it, if the square behind still bears on the pawn that just moved. The pawn cannot come back, so the retreat keeps the target and the tempo the opponent spent is gone.",
+  "teaches": "A bishop attacked by a pawn advance should retreat along the diagonal rather than off it, if the square behind still bears on the pawn that just moved — the pawn cannot come back, so the retreat keeps the target and the tempo the opponent spent is gone.",
   "explains": "The pawn has come to e5 to hit the bishop, and the bishop drops back to g3 still looking at that same pawn. It also holds the pawns on f2 and h2 behind it. The advance gained space and created a target in the same move, and the bishop is now the piece asking the questions.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "e5"
-   },
-   {
-    "kind": "defends",
-    "square": "h2"
-   }
+   { "kind": "attacks", "square": "e5" },
+   { "kind": "defends", "square": "h2" }
   ]
  }
 ]
