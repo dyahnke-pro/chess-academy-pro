@@ -450,7 +450,7 @@
   {
    "id": "vn-opposite-castles-the-storm-hunts-the-gatekeeper",
    "line": "e4 e5 Ba6 Nxa6 Nf3 d6 d4 Bg4 c3 Be7 Be3 Nf6 Nbd2 O-O h3 Bxf3 Qxf3 c5 dxe5 dxe5 O-O-O Qa5 Kb1 Rad8 g4",
-   "teaches": "With the kings on opposite wings, the pawn storm is not a mood — it has two precise jobs. It pries open files for the rooks, and before that it evicts the knight in front of the castled king, the gatekeeper whose departure makes every later sacrifice work. Aim the pawns at that knight first.",
+   "teaches": "With the kings on opposite wings, the pawn storm is not a mood — it has two precise jobs: it pries open files for the rooks, and before that it evicts the knight in front of the castled king, the gatekeeper whose departure makes every later sacrifice work. Aim the pawns at that knight first.",
    "explains": "The pawn steps to g4 with the kings castled on opposite sides, taking f5 and h5 in hand, and the next step of the same pawn asks the knight on f6 to leave. That knight is the kingside's gatekeeper — everything the storm wants to do afterwards begins with making it move.",
    "reasons": [
     {
@@ -470,7 +470,7 @@
   {
    "id": "vn-opposite-castles-unbalance-by-castling-the-other-way",
    "line": "e4 e5 Ba6 Nxa6 Nf3 d6 d4 Bg4 c3 Be7 Be3 Nf6 Nbd2 O-O h3 Bxf3 Qxf3 c5 dxe5 dxe5 O-O-O",
-   "teaches": "When you need to unbalance a position — because the material or the position says a draw is a loss — the simplest formula is to castle the opposite side from your opponent. Both sides get pawn storms that do not weaken their own king, the race begins, and the better attacker wins rather than the better memoriser.",
+   "teaches": "When you need to unbalance a position — because the material or the position says a draw is a loss — the simplest formula is to castle the opposite side from your opponent: both sides get pawn storms that do not weaken their own king, and the better attacker wins rather than the better memoriser.",
    "explains": "Castling long against a short-castled king splits the board into two attacking zones: the pawns in front of each king are free to charge, because they shelter nobody on their own side. The position stops being about equality and starts being about speed.",
    "structural": "opposite-side castling chosen deliberately to turn the game into a race both sides must run",
    "fen": "r2q1rk1/pp2bppp/n4n2/2p1p3/4P3/2P1BQ1P/PP1N1PP1/2KR3R b - - 1 11",

@@ -6173,7 +6173,7 @@
    "opening": "French Defense",
    "phase": "opening",
    "explains": "The bishop returns to its original square after the trade it came out for was declined, guarding the base pawn on e6 exactly as it did before it left. Two moves have gone into a piece that is now where it began, while the other side developed both times.",
-   "teaches": "A piece that goes out, is asked a question, and comes home has spent two moves to arrive where it started. That is the real cost of an early sortie, and it is paid in a currency that cannot be earned back — count the moves, not the squares, when deciding whether a plan is worth starting.",
+   "teaches": "A piece that goes out, is asked a question, and comes home has spent two moves to arrive where it started — that is the real cost of an early sortie, paid in a currency that cannot be earned back. Count the moves, not the squares, when deciding whether a plan is worth starting.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -6201,7 +6201,7 @@
    "opening": "Sicilian Defense: Smith-Morra Gambit",
    "phase": "opening",
    "explains": "The knight has come to c6 hitting the queen, and instead of retreating she steps sideways to a4, where she hits that same knight back and eyes the pawn on a7. She also holds the pawns on c2 and e4 from there. The move that was supposed to gain time has instead put the knight on a square where it is the piece being asked questions.",
-   "teaches": "Bringing the queen out early is only bad when she has to move again. Look for the square where the move that chases her has already been made — from there she is out, doing something, and the tempo the opponent expected to win is not available.",
+   "teaches": "Bringing the queen out early is only bad when she has to move again — look for the square where the move that chases her has already been made, and from there she is out, doing something, with no tempo left for the opponent to win.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -6237,7 +6237,7 @@
    "opening": "Sicilian Defense: Smith-Morra Gambit",
    "phase": "opening",
    "explains": "The pawn goes to c3 covering b4 and d4, which are the two squares a bishop or knight would use to come at the queen with tempo. It also blunts the fianchettoed bishop's diagonal. Nothing is developed by the move and the position becomes much harder to play against, because the loose piece stops being loose.",
-   "teaches": "When your queen is out and slightly exposed, the pawn move that covers the squares an enemy piece would use to attack her is worth more than another developing move. Count where the attack could come from, then take those squares away — a queen nobody can hit is simply a developed piece.",
+   "teaches": "When your queen is out and slightly exposed, the pawn move that covers the squares an enemy piece would use to attack her is worth more than another developing move — count where the attack could come from, then take those squares away. A queen nobody can hit is simply a developed piece.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -6275,7 +6275,7 @@
    "opening": "Sicilian Defense: Smith-Morra Gambit",
    "phase": "opening",
    "explains": "The bishop has come to f4 covering the dark squares in the middle. Black can step the knight back and invite the bishop to return, or castle and get on with the game. Both are playable and they lead to completely different results, so this is the moment to know which one you want.",
-   "teaches": "When a bishop lands on a square the opponent can challenge by shuffling a knight, the position is offering a repetition. Taking it is a legitimate result and refusing it is a decision — but decide, rather than drifting into the same squares three times without noticing what you agreed to.",
+   "teaches": "When a bishop lands on a square the opponent can challenge by shuffling a knight, the position is offering a repetition — taking it is a legitimate result and refusing it is a decision, but decide, rather than drifting into the same squares three times without noticing what you agreed to.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -6321,7 +6321,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Barmen Defense",
    "phase": "opening",
    "explains": "The queen took back in the centre and now the pawn takes the square it was standing over, hitting c5 on the way. White has the ideal setup — a broad centre backed by the pawn on c3 — and has not spent a move that was not also useful. Recapturing with the queen is not careless: the chase is short and Black develops during it. This exact position has been reached thousands of times and is deep theory on both sides.",
-   "teaches": "When the enemy queen sits on a square your pawn wants, take the square. A developing move that also gains time on the queen is the cheapest tempo in the opening.",
+   "teaches": "When the enemy queen sits on a square your pawn wants, take the square — a developing move that also gains time on the queen is the cheapest tempo in the opening.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -6350,7 +6350,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Barmen Defense",
    "phase": "opening",
    "explains": "The knight comes out to f6, the main move by a distance. It contests e4, it takes part in the fight for the centre, and it prepares to castle so the queen is not the only thing keeping the position together. Everything up to here is theory; the branching starts one move from now.",
-   "teaches": "When the queen is exposed, develop a piece that shares its duties. The knight that covers the squares the queen is standing on is worth more than the knight that only looks active.",
+   "teaches": "When the queen is exposed, develop a piece that shares its duties — the knight that covers the squares the queen is standing on is worth more than the knight that only looks active.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -6394,7 +6394,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Barmen Defense",
    "phase": "opening",
    "explains": "The knight comes to f3, adding a guard to d4 as it develops. This is where Black stands at a real crossroads — four different moves here are all worth serious attention, and they lead to genuinely different games rather than transpositions of one another.",
-   "teaches": "With a broad centre, develop the pieces that hold it. A knight that both comes out and defends the pawn it stands behind never has to be recalled.",
+   "teaches": "With a broad centre, develop the pieces that hold it — a knight that both comes out and defends the pawn it stands behind never has to be recalled.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -6425,7 +6425,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Barmen Defense",
    "phase": "opening",
    "explains": "The pawn steps to e6, which looks like the least ambitious move on the board and is not. The intuitive alternative, bringing the queen's knight out, leaves the dark-squared bishop shut in with nothing to do; this clears its diagonal instead. Developing the light-squared bishop outside the chain is the other serious try. White's answer is the knight round to a3, heading for b5 where it hits c7 and forks the king and rook if allowed, so Black spends a move guarding that square — the queen stepping home or the other knight coming to a6.",
-   "teaches": "Between two developing moves, prefer the one that unlocks a piece with no other route. The natural knight move is worse than it looks when it leaves a bishop behind its own pawn.",
+   "teaches": "Between two developing moves, prefer the one that unlocks a piece with no other route — the natural knight move is worse than it looks when it leaves a bishop behind its own pawn.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -6456,8 +6456,8 @@
    ],
    "opening": "Indian Defense: Normal Variation",
    "phase": "opening",
-   "explains": "The bishop takes on c3, removing the knight that was contesting the centre and leaving the recapture to damage the queenside pawns. The advance that would claim the middle now has one fewer supporter.",
-   "teaches": "Giving up the bishop pair is a price, not a mistake, when what you buy is a permanent say over one central square. The knight being traded is a defender of that square; once it is gone, the pawn advance the whole opening is built on becomes hard to arrange, and the doubled pawns left behind cannot help with it either.",
+   "explains": "The bishop takes on c3, removing the knight that was contesting the centre and leaving the recapture to damage the queenside pawns. The advance that would claim the middle now has one fewer supporter, and the doubled pawns left behind cannot help with it either.",
+   "teaches": "Giving up the bishop pair is a price, not a mistake, when what you buy is a permanent say over one central square — the knight being traded is a defender of that square, and once it is gone the pawn advance the whole opening is built on becomes hard to arrange.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -6507,7 +6507,7 @@
    "opening": "King's Pawn Game",
    "phase": "middlegame",
    "explains": "The pawn steps to g4 with the kings castled on opposite sides, taking f5 and h5 in hand, and the next step of the same pawn asks the knight on f6 to leave. That knight is the kingside's gatekeeper — everything the storm wants to do afterwards begins with making it move.",
-   "teaches": "With the kings on opposite wings, the pawn storm is not a mood — it has two precise jobs. It pries open files for the rooks, and before that it evicts the knight in front of the castled king, the gatekeeper whose departure makes every later sacrifice work. Aim the pawns at that knight first.",
+   "teaches": "With the kings on opposite wings, the pawn storm is not a mood — it has two precise jobs: it pries open files for the rooks, and before that it evicts the knight in front of the castled king, the gatekeeper whose departure makes every later sacrifice work. Aim the pawns at that knight first.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -6553,7 +6553,7 @@
    "opening": "King's Pawn Game",
    "phase": "opening",
    "explains": "Castling long against a short-castled king splits the board into two attacking zones: the pawns in front of each king are free to charge, because they shelter nobody on their own side. The position stops being about equality and starts being about speed.",
-   "teaches": "When you need to unbalance a position — because the material or the position says a draw is a loss — the simplest formula is to castle the opposite side from your opponent. Both sides get pawn storms that do not weaken their own king, the race begins, and the better attacker wins rather than the better memoriser.",
+   "teaches": "When you need to unbalance a position — because the material or the position says a draw is a loss — the simplest formula is to castle the opposite side from your opponent: both sides get pawn storms that do not weaken their own king, and the better attacker wins rather than the better memoriser.",
    "plans": "",
    "concepts": [],
    "sources": [
