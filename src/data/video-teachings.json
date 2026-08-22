@@ -13941,7 +13941,7 @@
    "opening": "Sicilian Defense: Old Sicilian",
    "phase": "opening",
    "explains": "The pawn has captured on c5 and from there attacks the pawn on d6 — a pawn won and a second one asked about, in one move. The tempting piece moves are still on the board and lose nothing by waiting; the pawn does not wait.",
-   "teaches": "When a clean capture wins a pawn and the tempting alternative merely looks clever, take the pawn. Material is the one advantage that does not evaporate while you work out the rest — the flashy move can be checked afterwards, from a position where you are already a pawn up.",
+   "teaches": "When a clean capture wins a pawn and the tempting alternative merely looks clever, take the pawn — material is the one advantage that does not evaporate while you work out the rest, and the flashy move can be checked afterwards from a position where you are already a pawn up.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -13990,7 +13990,7 @@
    "opening": "Sicilian Defense: Old Sicilian",
    "phase": "middlegame",
    "explains": "The recapture has left doubled pawns on e6 and e7, the rook-pawn on a6 stands isolated with its b-file neighbour long gone, and the pawn cover in front of the castled king is torn where the f-pawn used to be. Three permanent debts on one ledger — the plan is to collect them.",
-   "teaches": "Pawn structure is a ledger, and sometimes the right plan is simply to read it. Doubled pawns, an isolated rook-pawn and a torn king's cover are not abstractions — each one is a target or an open line, and a position with several of them loses itself once you aim at them patiently.",
+   "teaches": "Pawn structure is a ledger, and sometimes the right plan is simply to read it — doubled pawns, an isolated rook-pawn and a torn king's cover are not abstractions; each one is a target or an open line, and a position with several of them loses itself once you aim at them patiently.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14010,7 +14010,7 @@
    "opening": "Sicilian Defense: Closed, Traditional",
    "phase": "opening",
    "explains": "The queen's knight is out and Black has answered symmetrically. Several continuations come into consideration and they lead to genuinely different games: an immediate trade on the queenside, quiet development, a kingside fianchetto, or the pawn storm. There is nothing to refute here.",
-   "teaches": "Some positions have no best move, only a choice of what kind of game you want. A bishop out to the edge, a knight to its natural square, a fianchetto, a big pawn move on the f-file — each is sound, and each commits you to a different plan. Pick the one you understand rather than the one you half-remember.",
+   "teaches": "Some positions have no best move, only a choice of what kind of game you want — a bishop out to the edge, a knight to its natural square, a fianchetto, a big pawn move on the f-file; each is sound and each commits you to a different plan. Pick the one you understand rather than the one you half-remember.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14044,7 +14044,7 @@
    "opening": "Sicilian Defense: Closed, Traditional",
    "phase": "opening",
    "explains": "The bishop steps to b5 and hits the knight on c6. Black can defend it, block, move it, or ignore the offer and let the trade happen, and each choice fixes something about the pawn structure for the rest of the game. From b5 the bishop also covers c4 and d3, so the light squares in the centre stay contested whatever happens.",
-   "teaches": "Offering to trade a bishop for a knight early is a structural decision made with a developing move. The knight is the piece holding the defender's centre together, so the offer must be answered — and however it is answered, something has been committed that was not committed a move ago.",
+   "teaches": "Offering to trade a bishop for a knight early is a structural decision made with a developing move — the knight is the piece holding the defender's centre together, so the offer must be answered, and however it is answered, something has been committed that was not committed a move ago.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14082,7 +14082,7 @@
    "opening": "Sicilian Defense: Closed, Traditional",
    "phase": "opening",
    "explains": "The pawns have been traded and the knight takes back in the middle of the board. From there it covers b5, c6, e6 and f5 — the squares a bishop or knight would use to come forward — and holds the pawn on c2 behind it. Nothing is attacked; what has changed is that there is no comfortable square left for the pieces that have not developed yet.",
-   "teaches": "When you recapture in the centre with a knight, look at the squares it now covers rather than at the ground it occupies. A knight in the middle that holds b5, c6, e6 and f5 has taken over four entry points at once — the defender's pieces have nowhere to land, and that is what a central knight is really for.",
+   "teaches": "When you recapture in the centre with a knight, look at the squares it now covers rather than at the ground it occupies — a knight in the middle that holds b5, c6, e6 and f5 has taken over four entry points at once, and that is what a central knight is really for.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14151,7 +14151,7 @@
    "opening": "King's Indian Defense: Normal Variation, King's Knight Variation",
    "phase": "opening",
    "explains": "The expansion with b5 is what this whole set-up is for, but played right now it simply drops a pawn: the c-pawn and the queen's knight both cover b5, and only the pawn on c6 guards it. The rook's pawn to a6 makes it two against two, and from here the break goes in whenever the moment is right rather than never.",
-   "teaches": "Before pushing a pawn into the opponent's half, count the pieces covering the square it lands on. A break that is one defender short is not a break, it is a donation — and the cheapest repair is almost always a quiet pawn move on the neighbouring file, which costs a tempo and buys the whole plan.",
+   "teaches": "Before pushing a pawn into the opponent's half, count the pieces covering the square it lands on — a break that is one defender short is not a break, it is a donation, and the cheapest repair is almost always a quiet pawn move on the neighbouring file.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14198,7 +14198,7 @@
    "opening": "King's Indian Defense: Normal Variation, King's Knight Variation",
    "phase": "middlegame",
    "explains": "The knight arrives on b6 hitting the bishop and joining the pieces already trained on d5. Count where that bishop can go and the position speaks for itself — of its six squares, exactly two keep it guarding the pawn, and both of them are behind it on the same diagonal, further from the game rather than nearer to it.",
-   "teaches": "When a piece has been reduced to guarding a single pawn, push it further back before it can be re-routed. Time spent harassing a defender is not time lost: every square you take away from it is a square it can never help from again.",
+   "teaches": "When a piece has been reduced to guarding a single pawn, push it further back before it can be re-routed — time spent harassing a defender is not time lost: every square you take away from it is a square it can never help from again.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14251,7 +14251,7 @@
    "opening": "King's Indian Defense: Normal Variation, King's Knight Variation",
    "phase": "middlegame",
    "explains": "The pawn steps to c4 and shuts the bishop off the long diagonal it was defending along. Three defenders become two, against three attackers, and the pawn on d5 cannot simply be guarded again: the one move that adds a defender without losing material is the central push, which is exactly the concession being played for.",
-   "teaches": "A pawn does not have to attack a square to win it. Pushing past a defender cuts the line that defender was working along, and a point held three times by pieces that can no longer see it is a point held twice. Removing a guard and adding an attacker are the same arithmetic from opposite ends.",
+   "teaches": "A pawn does not have to attack a square to win it — pushing past a defender cuts the line that defender was working along, and a point held three times by pieces that can no longer see it is a point held twice. Removing a guard and adding an attacker are the same arithmetic from opposite ends.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14303,7 +14303,7 @@
    "opening": "King's Indian Defense: Normal Variation, King's Knight Variation",
    "phase": "middlegame",
    "explains": "The offer to trade on h6 is coming, and with the rook where it stands the retreat along the diagonal walks into a capture on the square the rook has just left, which means the trade cannot be declined. Stepping the rook to e8 empties that square and the retreat becomes free. It is a piece of technique worth keeping: the rook move looks like ordinary development and is really the answer to a threat one move ahead.",
-   "teaches": "When the whole character of your position rests on one bishop, look for the move that gives it a safe retreat before it is ever challenged. A fianchettoed bishop offered a trade has only one square to duck to, and whether ducking is possible depends on a rook standing a file away — so move the rook first, while it is still free.",
+   "teaches": "When the whole character of your position rests on one bishop, look for the move that gives it a safe retreat before it is ever challenged — a fianchettoed bishop offered a trade has only one square to duck to, and whether ducking is possible depends on a rook standing a file away, so move the rook first while it is still free.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14325,7 +14325,7 @@
    "opening": "King's Indian Defense: Normal Variation, King's Knight Variation",
    "phase": "opening",
    "explains": "The bishop stands on g7 aiming through the centre. One try puts a bishop opposite it on the same diagonal, so the piece the opponent built around has something to look at. The other develops the dark-squared bishop outside the pawn chain, where it contests the squares in front of the fianchetto rather than facing it down.",
-   "teaches": "With both centre pawns out and the opponent fianchettoed, the choice is whether to answer on the long diagonal or on the dark squares. A fianchetto of your own blunts their best piece by facing it; the bishop developed outside the chain contests the squares that bishop wants to use instead. Both are mainstream and they ask different questions.",
+   "teaches": "With both centre pawns out and the opponent fianchettoed, the choice is whether to answer on the long diagonal or on the dark squares — a fianchetto of your own blunts their best piece by facing it; the bishop developed outside the chain contests the squares that bishop wants to use instead. Both are mainstream and they ask different questions.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14372,7 +14372,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Anti-Alapin Gambit",
    "phase": "opening",
    "explains": "The pawn on c3 says the plan is to build a broad centre next move. So Black hits e4 now, while it has only one defender's worth of help, rather than waiting for the pawn to arrive on d4 with everything behind it. This is the principled answer, and it is the one that avoids the cramped positions the other replies invite.",
-   "teaches": "When the opponent spends a move preparing a big centre, strike at it before the preparation finishes. The pawn that was going to be supported is worth attacking while it still stands alone.",
+   "teaches": "When the opponent spends a move preparing a big centre, strike at it before the preparation finishes — the pawn that was going to be supported is worth attacking while it still stands alone.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14408,7 +14408,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Anti-Alapin Gambit",
    "phase": "opening",
    "explains": "White takes, and now the question is which black piece takes back. The pawn on d5 is temporary either way: it holds c6 and e6 for a moment, and Black will remove it. What matters is which recapture leaves Black better placed for what comes after, and that is where the two roads split.",
-   "teaches": "A capture that is forced is still a choice about what comes next. Take when declining would hand the opponent the centre for free, then think about who recaptures.",
+   "teaches": "A capture that is forced is still a choice about what comes next — take when declining would hand the opponent the centre for free, then think about who recaptures.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14439,7 +14439,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Anti-Alapin Gambit",
    "phase": "opening",
    "explains": "Rather than snatching the pawn immediately with the queen, the knight comes out and attacks it. The pawn is not running anywhere, so Black gets a developing move for free and avoids the queen being chased around the board with tempo. It is a small ordering decision that is worth a move.",
-   "teaches": "When a recapture is available to two pieces, prefer the one that develops. Bringing the queen out to grab a pawn invites the tempo moves that undo the grab.",
+   "teaches": "When a recapture is available to two pieces, prefer the one that develops — bringing the queen out to grab a pawn invites the tempo moves that undo the grab.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14479,7 +14479,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Anti-Alapin Gambit",
    "phase": "opening",
    "explains": "The pawn goes to d4 and hits c5, and the shape of the whole game is now settled: the pawns will come off and White will be left with a lone pawn on d4. That structure is a real weapon — it hands White the e5 and c5 squares and open files for the pieces — but only when the defender has no piece sitting in front of the pawn.",
-   "teaches": "Recognise the structure a move is aiming for, not just the move. An isolated queen's pawn is a plan — squares and initiative in exchange for a permanent weakness — and knowing which side of it you are on decides everything after.",
+   "teaches": "Recognise the structure a move is aiming for, not just the move — an isolated queen's pawn is a plan, squares and initiative in exchange for a permanent weakness, and knowing which side of it you are on decides everything after.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14508,7 +14508,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Anti-Alapin Gambit",
    "phase": "opening",
    "explains": "Black takes, and the pawn on d4 now touches c3. White will take back and the c-file opens for both sides. That is the deal being struck here: White accepts a pawn that no other pawn can ever protect, in return for space and open lines, and Black accepts the open lines in return for a permanent target.",
-   "teaches": "Trade into the structure you are happy to defend. Opening a file for the opponent is fine when the pawn you leave behind is the one that can never be defended by another pawn.",
+   "teaches": "Trade into the structure you are happy to defend — opening a file for the opponent is fine when the pawn you leave behind is the one that can never be defended by another pawn.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14538,7 +14538,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Anti-Alapin Gambit",
    "phase": "opening",
    "explains": "White recaptures and there it is: a pawn on d4 with no neighbour on the c- or e-file, holding the squares in front of it and pointing at the black position. Whether it is an asset or a liability comes down to one square — the one directly ahead of it. If a black piece settles there for good, the pawn stops being a spearhead and becomes something to defend.",
-   "teaches": "An isolated pawn is strong exactly as long as it can advance. Judge the position by whether the square in front of it is available, not by the pawn count.",
+   "teaches": "An isolated pawn is strong exactly as long as it can advance — judge the position by whether the square in front of it is available, not by the pawn count.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14569,7 +14569,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Anti-Alapin Gambit",
    "phase": "opening",
    "explains": "The knight recaptures on d5 and, without spending a single extra move, it is standing exactly where a defender wants to be — directly in front of the isolated pawn, where no pawn can ever chase it away. From there it also contests c3, the square White's own knight wants. The structure still favours nobody outright: White develops the knight and the position steers into well-charted territory. But this is the comfortable side of it.",
-   "teaches": "Against an isolated pawn, the blockading square is the prize. Reaching it with a knight, and reaching it before the opponent is developed, is the version every defender is hoping for.",
+   "teaches": "Against an isolated pawn, the blockading square is the prize — reaching it with a knight, and reaching it before the opponent is developed, is the version every defender is hoping for.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14601,7 +14601,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Anti-Alapin Gambit",
    "phase": "opening",
    "explains": "The knight comes to f3, where it adds a defender to d4 while getting out. That is the pattern for the side with the isolated pawn: pieces first, and preferably pieces that touch the pawn on the way past, because the defender will be aiming everything at it. Trading pieces helps Black; keeping them on helps White.",
-   "teaches": "Develop the pieces that defend the weakness first. With an isolated pawn, every move that both develops and guards it is a move you did not have to spend later.",
+   "teaches": "Develop the pieces that defend the weakness first — with an isolated pawn, every move that both develops and guards it is a move you did not have to spend later.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14634,7 +14634,7 @@
    "opening": "Sicilian Defense: Alapin Variation, Anti-Alapin Gambit",
    "phase": "opening",
    "explains": "The knight comes out and leans on d4 as it does so. That is the whole defensive method in one move: put the blockader in front of the pawn, then bring every other piece to bear on it, so each new attacker forces a new defender. Nobody has an advantage yet — but every piece Black develops has a job, and White's have to be arranged around one square.",
-   "teaches": "Against an isolated pawn, develop toward it. Attackers cost the opponent defenders, and a piece pinned to defensive duty has stopped playing.",
+   "teaches": "Against an isolated pawn, develop toward it — attackers cost the opponent defenders, and a piece pinned to defensive duty has stopped playing.",
    "plans": "",
    "concepts": [],
    "sources": [

@@ -2,7 +2,7 @@
  {
   "id": "vn-closed-five-honest-second-moves",
   "line": "e4 c5 Nc3 Nc6",
-  "teaches": "Some positions have no best move, only a choice of what kind of game you want. A bishop out to the edge, a knight to its natural square, a fianchetto, a big pawn move on the f-file — each is sound, and each commits you to a different plan. Pick the one you understand rather than the one you half-remember.",
+  "teaches": "Some positions have no best move, only a choice of what kind of game you want — a bishop out to the edge, a knight to its natural square, a fianchetto, a big pawn move on the f-file; each is sound and each commits you to a different plan. Pick the one you understand rather than the one you half-remember.",
   "explains": "The queen's knight is out and Black has answered symmetrically. Several continuations come into consideration and they lead to genuinely different games: an immediate trade on the queenside, quiet development, a kingside fianchetto, or the pawn storm. There is nothing to refute here.",
   "options": [
    { "san": "Bb5" },
@@ -14,7 +14,7 @@
  {
   "id": "vn-closed-bishop-that-asks-about-the-knight",
   "line": "e4 c5 Nc3 Nc6 Bb5",
-  "teaches": "Offering to trade a bishop for a knight early is a structural decision made with a developing move. The knight is the piece holding the defender's centre together, so the offer must be answered — and however it is answered, something has been committed that was not committed a move ago.",
+  "teaches": "Offering to trade a bishop for a knight early is a structural decision made with a developing move — the knight is the piece holding the defender's centre together, so the offer must be answered, and however it is answered, something has been committed that was not committed a move ago.",
   "explains": "The bishop steps to b5 and hits the knight on c6. Black can defend it, block, move it, or ignore the offer and let the trade happen, and each choice fixes something about the pawn structure for the rest of the game. From b5 the bishop also covers c4 and d3, so the light squares in the centre stay contested whatever happens.",
   "reasons": [
    { "kind": "attacks", "square": "c6" },
@@ -24,7 +24,7 @@
  {
   "id": "vn-closed-recapture-that-covers-the-outposts",
   "line": "e4 c5 Nc3 Nc6 Nb1 Nb8 Nc3 d6 Nf3 Nf6 d4 cxd4 Nxd4",
-  "teaches": "When you recapture in the centre with a knight, look at the squares it now covers rather than at the ground it occupies. A knight in the middle that holds b5, c6, e6 and f5 has taken over four entry points at once — the defender's pieces have nowhere to land, and that is what a central knight is really for.",
+  "teaches": "When you recapture in the centre with a knight, look at the squares it now covers rather than at the ground it occupies — a knight in the middle that holds b5, c6, e6 and f5 has taken over four entry points at once, and that is what a central knight is really for.",
   "explains": "The pawns have been traded and the knight takes back in the middle of the board. From there it covers b5, c6, e6 and f5 — the squares a bishop or knight would use to come forward — and holds the pawn on c2 behind it. Nothing is attacked; what has changed is that there is no comfortable square left for the pieces that have not developed yet.",
   "reasons": [
    { "kind": "controls", "square": "c6" },
