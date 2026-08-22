@@ -9727,7 +9727,7 @@
    "opening": "English Opening: King's English Variation",
    "phase": "opening",
    "explains": "The pawn steps to d5 hitting the pawn on c4 and taking e4 in hand, backed by the pawn that prepared it. The fianchettoed bishop is left looking at a wall it helped build.",
-   "teaches": "A flank opening only works while it argues about the centre. When the reply is a quiet fianchetto instead of a strike or a knight, the answer is the full central advance — and the side that was 'a tempo up' now finds itself playing the black side of its own system, a move behind.",
+   "teaches": "A flank opening only works while it argues about the centre — when the reply is a quiet fianchetto instead of a strike or a knight, the answer is the full central advance, and the side that was 'a tempo up' now finds itself playing the black side of its own system, a move behind.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -9757,7 +9757,7 @@
    "opening": "Queen's Gambit Accepted",
    "phase": "opening",
    "explains": "The knight develops toward the centre, eyeing e5 and guarding the d4-pawn, while White simply prepares to clear the light bishop's road to c4. The extra pawn on c4 cannot be propped up for long, so it is regained a move later with every piece already in play.",
-   "teaches": "When an opponent gives a pawn back rather than trying to hold it, resist grabbing it at once. The value of the sequence is the lead in development you earn while collecting it, not the pawn itself; recapturing straight away with the queen wins the pawn and throws that lead away. Bring a piece out first, and the pawn still comes back.",
+   "teaches": "When an opponent gives a pawn back rather than trying to hold it, resist grabbing it at once — the value of the sequence is the lead in development you earn while collecting it, not the pawn itself, and recapturing straight away with the queen throws that lead away.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -9789,7 +9789,7 @@
    "opening": "Queen's Gambit Accepted",
    "phase": "opening",
    "explains": "The pawn steps to e3 and unblocks the f1-bishop, whose diagonal now runs all the way to c4 to collect the pawn sitting there. It lends the d4-pawn extra support at the same time, and it does all of this without leaving a single weakness behind.",
-   "teaches": "A quiet pawn move that clears a path can be worth more than a natural developing move that commits you. Opening the bishop's diagonal to reclaim the pawn keeps the position sound and the plans flexible; a knight sortie into the centre first looks active but forces matters before you know which setup you need. Prefer the order that keeps your options open.",
+   "teaches": "A quiet pawn move that clears a path can be worth more than a natural developing move that commits you — opening the bishop's diagonal to reclaim the pawn keeps the position sound and the plans flexible, while a knight sortie into the centre first forces matters before you know which setup you need.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -9838,7 +9838,7 @@
    "opening": "Queen's Gambit Accepted",
    "phase": "opening",
    "explains": "The pawn advances to c5 and strikes at White's d4-pawn. Once the central pawns come off, White's d-pawn will stand alone, with no pawn on the c-file or the e-file to shield it, and the isolated-pawn middlegame this line is known for is reached by a single freeing thrust.",
-   "teaches": "Learn the freeing break that defines a middlegame by its structure, not by memorizing the moves. Striking at the centre with the c-pawn steers the game toward an isolated-pawn position, and that structure carries its plans with it: the side with the lone central pawn plays for piece activity and outpost squares, the other blockades the pawn and trades pieces down toward an endgame where it is weak. Know which side of that bargain you are on before the middlegame begins.",
+   "teaches": "Learn the freeing break that defines a middlegame by its structure, not by memorizing the moves — the side with the lone central pawn plays for piece activity and outpost squares, the other blockades the pawn and trades down toward an endgame where it is weak, so know which side of that bargain you are on before the middlegame begins.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -9960,7 +9960,7 @@
    "opening": "Sicilian Defense: Closed, Traditional",
    "phase": "opening",
    "explains": "The pawn has advanced to e5 to chase the queen out of the centre. She steps to b4, where she hits the pawns on b7 and d6 and still holds the centre pawn and the knight behind her. The move that was meant to gain time has instead pointed her at the two pawns the pawn advance left behind.",
-   "teaches": "A queen driven off a central square should look for the diagonal that hits two pawns at once rather than the nearest safe square. When both targets are on squares a pawn can never defend, the defender has to answer with a piece, and the queen has kept the initiative she was supposed to lose.",
+   "teaches": "A queen driven off a central square should look for the diagonal that hits two pawns at once rather than the nearest safe square — when both targets are on squares a pawn can never defend, the defender has to answer with a piece, and the queen has kept the initiative she was supposed to lose.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -10108,7 +10108,7 @@
    "opening": "Caro-Kann Defense: Maróczy Variation",
    "phase": "opening",
    "explains": "The pawn steps to e5 and asks the question directly, attacking d4 while nothing yet defends the position properly. Waiting one move to develop first would let that centre be reinforced, and then the same break arrives against a set-up that is ready for it.",
-   "teaches": "When the opponent has spent moves building a broad centre with pawns, hit it before the pieces arrive to support it. A centre that has to be defended by pieces is a liability; the same centre given a free move to consolidate becomes a space advantage.",
+   "teaches": "When the opponent has spent moves building a broad centre with pawns, hit it before the pieces arrive to support it — a centre that has to be defended by pieces is a liability; the same centre given a free move to consolidate becomes a space advantage.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -10138,7 +10138,7 @@
    "opening": "Caro-Kann Defense: Maróczy Variation",
    "phase": "opening",
    "explains": "Taking on e5 here loses the pawn straight back: the queen checks from h4 and the pawn on e4 has no defender at all, so it drops with tempo. Developing the knight to f3 covers h4 instead, which does not make the queen sortie illegal but does make it cost a queen for a knight. Material can wait; the check square cannot.",
-   "teaches": "Before taking a pawn in the centre, look for the check that comes with it. A queen check on the edge of the board is easy to dismiss as a lunge, but if it arrives with tempo and collects a loose pawn on the way back, the capture was never free.",
+   "teaches": "Before taking a pawn in the centre, look for the check that comes with it — a queen check on the edge of the board is easy to dismiss as a lunge, but if it arrives with tempo and collects a loose pawn on the way back, the capture was never free.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -10169,7 +10169,7 @@
    "opening": "Ruy Lopez: Bird Variation",
    "phase": "opening",
    "explains": "Black jumps the knight to d4 instead of defending, offering the trade in the centre and inviting the bishop to declare itself. Three replies branch here: taking on d4, retreating the bishop along the diagonal, and dropping it all the way home. The resulting pawn structures do not arise from any other line in this opening.",
-   "teaches": "Some sidelines are not shortcuts into the main lines — they build a structure that appears nowhere else in the opening. When a line does that, general familiarity with the parent opening will not carry you, and the only preparation that helps is knowing this position specifically.",
+   "teaches": "Some sidelines are not shortcuts into the main lines — they build a structure that appears nowhere else in the opening, so general familiarity with the parent opening will not carry you, and the only preparation that helps is knowing this position specifically.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -10203,7 +10203,7 @@
    "opening": "Ruy Lopez: Bird Variation",
    "phase": "opening",
    "explains": "White has taken on d4 and castled, leaving Black a pawn on d4 and a choice. Two moves are genuinely playable: the bishop to c5, which is the most common, and the modest c6, taking the b5 square away. Anything else concedes more than the line can afford.",
-   "teaches": "An opening the books call dubious is only dubious against an accurate reply. That is exactly why strong players still pick one — the objective verdict matters less than whether the person opposite has looked at it recently.",
+   "teaches": "An opening the books call dubious is only dubious against an accurate reply — that is exactly why strong players still pick one: the objective verdict matters less than whether the person opposite has looked at it recently.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -10249,7 +10249,7 @@
    "opening": "Ruy Lopez: Bird Variation",
    "phase": "opening",
    "explains": "The bishop has come to c4 and now eyes f7. Taking there with check drags the king out, and the queen arriving on h5 forces a pawn move — after which the undefended bishop on c5 falls. That is the tactical point behind the natural-looking bishop move, and it is why Black's replies here all have to reckon with it.",
-   "teaches": "A bishop aimed at f7 combines with a queen that can reach h5, and the two together are worth more than either alone. Before developing a bishop where it can be hit by that pair, check whether it is defended — the check on f7 is only the setup, and the piece it wins is somewhere else entirely.",
+   "teaches": "A bishop aimed at f7 combines with a queen that can reach h5, and the two together are worth more than either alone — before developing a bishop where it can be hit by that pair, check whether it is defended, because the check on f7 is only the setup and the piece it wins is somewhere else entirely.",
    "plans": "",
    "concepts": [],
    "sources": [

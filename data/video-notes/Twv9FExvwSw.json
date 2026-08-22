@@ -2,17 +2,11 @@
  {
   "id": "vn-english-e5-punish-the-slow-flank-move-with-the-centre",
   "line": "c4 e5 g3 c6 Bg2 d5",
-  "teaches": "A flank opening only works while it argues about the centre. When the reply is a quiet fianchetto instead of a strike or a knight, the answer is the full central advance \u2014 and the side that was 'a tempo up' now finds itself playing the black side of its own system, a move behind.",
+  "teaches": "A flank opening only works while it argues about the centre — when the reply is a quiet fianchetto instead of a strike or a knight, the answer is the full central advance, and the side that was 'a tempo up' now finds itself playing the black side of its own system, a move behind.",
   "explains": "The pawn steps to d5 hitting the pawn on c4 and taking e4 in hand, backed by the pawn that prepared it. The fianchettoed bishop is left looking at a wall it helped build.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "c4"
-   },
-   {
-    "kind": "controls",
-    "square": "e4"
-   }
+   { "kind": "attacks", "square": "c4" },
+   { "kind": "controls", "square": "e4" }
   ]
  }
 ]
