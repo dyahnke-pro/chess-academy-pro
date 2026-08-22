@@ -8,23 +8,14 @@
    {
     "san": "Nxd4",
     "reasons": [
-     {
-      "kind": "attacks",
-      "square": "c6"
-     }
+     { "kind": "attacks", "square": "c6" }
     ]
    },
    {
     "san": "Nb5",
     "reasons": [
-     {
-      "kind": "attacks",
-      "square": "d6"
-     },
-     {
-      "kind": "attacks",
-      "square": "d4"
-     }
+     { "kind": "attacks", "square": "d6" },
+     { "kind": "attacks", "square": "d4" }
     ]
    }
   ]

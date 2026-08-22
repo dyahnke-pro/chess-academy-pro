@@ -10639,7 +10639,7 @@
    "opening": "Indian Defense",
    "phase": "opening",
    "explains": "The bishop steps to b4 pinning the knight on c3 against the king behind it. The pawn move that would normally chase this bishop away is unavailable, because the knight is standing on the square it needs.",
-   "teaches": "A system that develops the queen's knight before the c-pawn buys speed and pays for it with a pin. Against any such setup, the bishop that comes out to pin that knight is the most annoying move available — it ties the piece the whole scheme rests on, and it cannot be answered by the pawn move the system has already given up.",
+   "teaches": "A system that develops the queen's knight before the c-pawn buys speed and pays for it with a pin — against any such setup, the bishop that comes out to pin that knight is the most annoying move available: it ties the piece the whole scheme rests on, and it cannot be answered by the pawn move the system has already given up.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -10667,7 +10667,7 @@
    "opening": "Vienna Game",
    "phase": "opening",
    "explains": "The knight has come to f3 and the queen's landing on h4 is covered — the check that was the position's one forcing counter now walks into a defended square. One developing move turned the sting into a blunder, and everything the pawn sacrifice promised can be collected in peace.",
-   "teaches": "After giving up the f-pawn, the queen check on the h-file is the counter-blow every gambit player must respect — it is the difference between an attack and an accident. The knight's developing move that covers the checking square is therefore not optional or slow: it is the move that makes the whole gambit playable.",
+   "teaches": "After giving up the f-pawn, the queen check on the h-file is the counter-blow every gambit player must respect — it is the difference between an attack and an accident, so the knight's developing move that covers the checking square is not optional or slow: it is the move that makes the whole gambit playable.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -10737,7 +10737,7 @@
    "opening": "Vienna Game",
    "phase": "opening",
    "explains": "The pawn has eaten its way to g7 and now attacks the rook on f8, standing one square from the king with the shelter gone. Whatever happens to the pawn itself, the pawns that used to cover the king went with it, and the open lines remain.",
-   "teaches": "A pawn that reaches the sixth and seventh rank inside the king's shelter is worth more than the piece it may have cost along the way. Each capture it makes strips another pawn off the king's cover, and by the time it stands next to the king, every heavy piece you own has a target to aim at.",
+   "teaches": "A pawn that reaches the sixth and seventh rank inside the king's shelter is worth more than the piece it may have cost along the way — each capture it makes strips another pawn off the king's cover, and by the time it stands next to the king, every heavy piece you own has a target to aim at.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -10769,7 +10769,7 @@
    "opening": "Sicilian Defense",
    "phase": "opening",
    "explains": "The bishop comes to e3, where it holds the knight in the centre and covers the squares in front of it. The fianchettoed bishop on g7 is aimed down the long diagonal at that knight, and this quietly answers it — the knight is no longer loose, so the pawn breaks that would have won it are simply moves.",
-   "teaches": "Against a fianchetto the dark-squared bishop belongs where it both supports your own centre and contests the diagonal the enemy bishop was put on. A developing move that defends the piece already in the middle costs nothing and removes every tactic built on hitting it.",
+   "teaches": "Against a fianchetto the dark-squared bishop belongs where it both supports your own centre and contests the diagonal the enemy bishop was put on — a developing move that defends the piece already in the middle costs nothing and removes every tactic built on hitting it.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -10807,7 +10807,7 @@
    "opening": "Sicilian Defense",
    "phase": "opening",
    "explains": "The pawn steps to f3, defending the pawn on e4 and covering g4 so no bishop or knight can land there. That single move is what makes the whole setup work: the centre cannot be undermined, the kingside pawns are free to advance, and the king has somewhere to go on the other wing.",
-   "teaches": "Before castling on the side you intend to attack, spend the pawn move that makes the attack legal. Holding the centre pawn and covering the square an enemy piece would use to come forward is what lets the king go the other way and the pawns march — without it, the attack is a plan the position cannot support.",
+   "teaches": "Before castling on the side you intend to attack, spend the pawn move that makes the attack legal — holding the centre pawn and covering the square an enemy piece would use to come forward is what lets the king go the other way and the pawns march.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -10875,7 +10875,7 @@
    "opening": "Sicilian Defense",
    "phase": "opening",
    "explains": "The knights have come off in the centre and the bishop steps to d4, straight down the long diagonal at the bishop on g7. It hits the pawn on a7 on the way and holds the knight on c3 behind it. The defender must either accept the exchange of the king's best guard or spend moves avoiding it while the pawns are already coming.",
-   "teaches": "When attacking a fianchettoed king, the piece to remove is the bishop on the long diagonal — it is the only defender that covers the dark squares around the king. Getting your own bishop onto the same diagonal facing it forces the trade or forces the king's guard to stay home, and either answer helps the attack.",
+   "teaches": "When attacking a fianchettoed king, the piece to remove is the bishop on the long diagonal — it is the only defender that covers the dark squares around the king, and getting your own bishop onto the same diagonal facing it forces the trade or forces the king's guard to stay home.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -10915,7 +10915,7 @@
    "opening": "Three Knights Opening",
    "phase": "opening",
    "explains": "The bishop comes to e3 holding the pawn on d4 and covering the king's corner behind it. The king has stepped off the open file, the checks are finished, and the extra piece is still on the board.",
-   "teaches": "A king dragged out by a sacrifice is not in danger once it has a square to tuck into and the checks run out. Walk it to safety by hand, then develop the piece that props up the centre — the attacker who spent material on the exposure has to show a threat before you have finished, and here there is none.",
+   "teaches": "A king dragged out by a sacrifice is not in danger once it has a square to tuck into and the checks run out — walk it to safety by hand, then develop the piece that props up the centre, because the attacker who spent material on the exposure has to show a threat before you have finished.",
    "plans": "",
    "concepts": [],
    "sources": [
