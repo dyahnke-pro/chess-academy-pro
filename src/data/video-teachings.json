@@ -8559,7 +8559,7 @@
    "opening": "Pirc Defense: Austrian Attack, Weiss Variation",
    "phase": "opening",
    "explains": "The knight develops to f3, guarding the d4-pawn and covering e5 so the wide row of central pawns stays firmly in hand. The defence has conceded the middle deliberately, and every piece brought up to hold it makes that concession harder to justify.",
-   "teaches": "A broad pawn centre is a genuine asset, not an overextension, so long as you can hold it, and against a defence that hands you the middle on purpose the way to punish that choice is to take the space and keep it defended. The opponent means to let you build big and then chip away at it, so make every central pawn count and support it before it is challenged.",
+   "teaches": "A broad pawn centre is a genuine asset, not an overextension, so long as you can hold it — and against a defence that hands you the middle on purpose, the way to punish that choice is to take the space and keep it defended.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8595,7 +8595,7 @@
    "opening": "Pirc Defense: Austrian Attack, Weiss Variation",
    "phase": "opening",
    "explains": "The bishop goes to d3 rather than the more natural-looking square a file over, and from d3 it defends the e4-pawn so the knight cannot simply be taken. The active square would have invited a central pawn break that strikes two pieces at once; the modest square sidesteps it and keeps the centre solid.",
-   "teaches": "The most natural developing square is not always the safe one. When an active post walks the piece into a central break that hits two of your men at once, the quieter square that defends your centre is worth more than the extra aggression. Check what your opponent's freeing pawn push would hit before you commit the piece.",
+   "teaches": "The most natural developing square is not always the safe one — when an active post walks the piece into a central break that hits two of your men at once, the quieter square that defends your centre is worth more than the extra aggression.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8643,7 +8643,7 @@
    "opening": "Four Knights Game: Scotch Variation, Belgrade Gambit",
    "phase": "opening",
    "explains": "Black is a pawn up on d4 and the knight on c6 is what holds it. Two bishop developments come into consideration: one to d3, intending to swing round afterwards, and one straight to b5, which attacks the guard at once — once that knight is dealt with, both the knight and the queen are ready to collect on d4.",
-   "teaches": "To win back a gambit pawn, attack the piece defending it rather than the pawn itself. Counting defenders first tells you which piece to harass, and a bishop that pins or hits the guard does more than a piece aimed at the pawn ever will.",
+   "teaches": "To win back a gambit pawn, attack the piece defending it rather than the pawn itself — counting defenders first tells you which piece to harass, and a bishop that pins or hits the guard does more than a piece aimed at the pawn ever will.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8704,7 +8704,7 @@
    "opening": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation",
    "phase": "opening",
    "explains": "The bishop has been traded for the knight and the pawn recaptures toward the centre. From c6 that pawn covers b5 and d5 — the outpost square in the middle and the square on the wing where a bishop or knight would otherwise sit and annoy. The pawns look untidy on the c-file and the position is perfectly sound, because the squares that matter are held.",
-   "teaches": "Doubled pawns are only weak when they cover nothing. Before recapturing, look at which squares each pawn would hold from its new file: a doubled pawn that takes away the two squares the opponent's pieces most want to use has already paid for the cosmetic damage to the structure.",
+   "teaches": "Doubled pawns are only weak when they cover nothing — before recapturing, look at which squares each pawn would hold from its new file, because a doubled pawn that takes away the two squares the opponent's pieces most want has already paid for the cosmetic damage.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8738,7 +8738,7 @@
    "opening": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation",
    "phase": "opening",
    "explains": "The pawn steps only to d3 rather than to d4. It props up the pawn on e4 so the centre cannot be undermined, and covers c4 so no piece drops in there. The position stays closed while the pieces come out — which is exactly what the side without the bishop pair wants.",
-   "teaches": "When you have given up the bishop pair, do not rush to open the position. The modest one-square pawn move keeps the centre closed enough that the two bishops have nothing to aim at, and time spent making the position solid is time the opponent cannot spend making it sharp.",
+   "teaches": "When you have given up the bishop pair, do not rush to open the position — the modest one-square pawn move keeps the centre closed enough that the two bishops have nothing to aim at, and time spent making the position solid is time the opponent cannot spend making it sharp.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8780,7 +8780,7 @@
    "opening": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation",
    "phase": "opening",
    "explains": "The bishop has been traded on f3 and the queen takes back. From f3 she hits the knight on f6 immediately, so the recapture comes with a question attached rather than as a pause. She also stands behind the pawns on d3, e4, g2 and h3, which means there is no square from which she can be harassed.",
-   "teaches": "When two pieces can recapture, take with the one that lands doing something. A queen that arrives hitting a piece has gained the move the recapture would normally cost, and if she also sits behind her own pawns she is safe from being chased off again.",
+   "teaches": "When two pieces can recapture, take with the one that lands doing something — a queen that arrives hitting a piece has gained the move the recapture would normally cost, and if she also sits behind her own pawns she is safe from being chased off again.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8826,7 +8826,7 @@
    "opening": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation",
    "phase": "opening",
    "explains": "The centre is locked with pawns on e4 and e5 and neither side can force it open there. The pawn goes to a4 and covers b5, which is the square the queenside pawn break needs. With that square held, the position has no natural way to be opened, and the game becomes about who can improve their worst piece.",
-   "teaches": "In a closed position the pawn breaks are the only way in, so the strongest prophylactic move is often the one that takes a break square away before the break is prepared. A pawn spent on the wing costs nothing here — nothing is happening quickly, and the plan it stops was the opponent's only one.",
+   "teaches": "In a closed position the pawn breaks are the only way in, so the strongest prophylactic move is often the one that takes a break square away before the break is prepared — a pawn spent on the wing costs nothing here, and the plan it stops was the opponent's only one.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8870,7 +8870,7 @@
    "opening": "Sicilian Defense: Nyezhmetdinov-Rossolimo Attack, Fianchetto Variation",
    "phase": "opening",
    "explains": "With the pawns fixed, the knight on c3 has nothing left to do there. Dropping back to e2 keeps it covering d4, the one central square either side could use as an outpost, and opens the route toward the kingside where the position is not yet decided. Retreating is not passive when the square behind is a crossroads.",
-   "teaches": "In a locked position a knight that has run out of squares should retreat toward a route rather than stand still. Judge the retreat by where it can go next and by what it holds on the way — a knight stepping back while still covering the key central square has lost nothing at all.",
+   "teaches": "In a locked position a knight that has run out of squares should retreat toward a route rather than stand still — judge the retreat by where it can go next and by what it holds on the way, because a knight stepping back while still covering the key central square has lost nothing at all.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8903,8 +8903,8 @@
    ],
    "opening": "Philidor Defense: Exchange Variation",
    "phase": "opening",
-   "explains": "The knight comes to c3 holding the pawn on e4 and covering d5 and b5. Both centre files are settled, the knight in the middle is supported, and Black's position is sound and short of space.",
-   "teaches": "A defence that props the centre pawn with the d-pawn instead of a piece concedes space without losing anything — so there is nothing to refute, only something to collect. Strike in the middle, recapture with a piece, and finish developing: the advantage is that every one of your pieces has a square and one of theirs does not.",
+   "explains": "The knight comes to c3 holding the pawn on e4 and covering d5 and b5. Both centre files are settled, the knight in the middle is supported, and Black's position is sound and short of space. The advantage is that every one of your pieces has a square and one of theirs does not.",
+   "teaches": "A defence that props the centre pawn with the d-pawn instead of a piece concedes space without losing anything — so there is nothing to refute, only something to collect. Strike in the middle, recapture with a piece, and finish developing.",
    "plans": "",
    "concepts": [],
    "sources": [
