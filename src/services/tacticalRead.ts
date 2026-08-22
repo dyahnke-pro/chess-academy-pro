@@ -484,19 +484,31 @@ export function speakTemptingTurn(
  * for when no phrasing model is available; it is never the final voice on a
  * surface that has the model.
  */
-export function tacticalReadFacts(read: TacticalRead): string {
+export function tacticalReadFacts(read: TacticalRead, opts: { inGame?: boolean } = {}): string {
+  // `inGame` phrases the facts in the LIVE, second-person, present-tense register
+  // (the two-registers rule): "you'd love to play X, but…" / "you end up with…".
+  // Third person ("the student…") is the post-solve/review register and must
+  // never reach a live free-play surface — on a voiceFacts fallback the facts are
+  // spoken verbatim, and David has heard "the student played f4" read at him.
+  const ig = opts.inGame === true;
   const parts: string[] = [];
   if (read.tempting) {
     const reply = read.tempting.refutation.length > 1
       ? read.tempting.refutation[1]
       : (read.tempting.refutation.length > 0 ? read.tempting.refutation[0] : undefined);
-    parts.push(reply
-      ? `The move the student is tempted to play is ${read.tempting.san} (${read.tempting.appeal}), but it fails to ${reply.san}.`
-      : `The move the student is tempted to play is ${read.tempting.san} (${read.tempting.appeal}), but it does not hold.`);
+    if (ig) {
+      parts.push(reply
+        ? `You'd love to play ${read.tempting.san} here (${read.tempting.appeal}), but it runs into ${reply.san}.`
+        : `You'd love to play ${read.tempting.san} here (${read.tempting.appeal}), but it doesn't hold.`);
+    } else {
+      parts.push(reply
+        ? `The move the student is tempted to play is ${read.tempting.san} (${read.tempting.appeal}), but it fails to ${reply.san}.`
+        : `The move the student is tempted to play is ${read.tempting.san} (${read.tempting.appeal}), but it does not hold.`);
+    }
   }
   const toTactic = read.keyTactic ? read.keyTactic.atPly : Math.min(read.line.length - 1, 2);
   const lineSans = read.line.slice(0, toTactic + 1).map((p) => p.san);
-  if (lineSans.length > 0) parts.push(`The correct line is ${lineSans.join(' ')}.`);
+  if (lineSans.length > 0) parts.push(`${ig ? 'The line goes' : 'The correct line is'} ${lineSans.join(' ')}.`);
   const kt = read.keyTactic;
   if (kt && kt.squares.length > 0) {
     parts.push(kt.description.endsWith('.') ? kt.description : `${kt.description}.`);
@@ -509,7 +521,7 @@ export function tacticalReadFacts(read: TacticalRead): string {
       ? `The line ends in ${read.verdict.text}, delivered by ${mateMove.san}.`
       : `The result is ${read.verdict.text}.`);
   } else {
-    parts.push(`The student ends up with ${read.verdict.text}.`);
+    parts.push(`${ig ? 'You end up with' : 'The student ends up with'} ${read.verdict.text}.`);
   }
   return parts.join(' ');
 }

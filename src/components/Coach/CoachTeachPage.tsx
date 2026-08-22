@@ -242,7 +242,7 @@ import type { ChatMessage as ChatMessageType, BoardArrow, BoardHighlight } from 
 import { stockfishEngine } from '../../services/stockfishEngine';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { explainBestMoveGrounded } from '../../services/groundedAnswer';
-import { tacticalReadFromLines, namedTacticClause } from '../../services/tacticalRead';
+import { tacticalReadFromLines, namedTacticClause, computeTacticalRead } from '../../services/tacticalRead';
 import { rankByPopularity, popularityLabel, type RankedLineOption } from '../../services/linePickerPopularity';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { applyCandidateArrows, candidateHighlightMarkers, gradeNarrationText, gradeBorrowedTeaching, takeBorrowedProbeStats } from '../../services/coachAnswerGates';
@@ -7494,11 +7494,24 @@ export function CoachTeachPage(): JSX.Element {
                     // own line). It warns about a DIFFERENT move than any beat above,
                     // so nothing leaks. topLines evals are WHITE-POV; the assembler
                     // flips to the student internally, so pass them raw.
-                    const rtTopLines = studentBest?.topLines;
+                    // A tempting move can only exist if the board offers an eye-
+                    // catcher (a capture or a check) that is not simply the best
+                    // move. This cheap chess.js pre-check skips the probe entirely in
+                    // quiet positions, so the extra search only runs where a but-turn
+                    // is even possible.
+                    const hasEyeCatcher = probe.moves({ verbose: true })
+                      .some((m) => m.captured != null || m.san.includes('+'));
                     if (rejectedTemptingCountRef.current < REJECTED_TEMPTING_MAX_PER_GAME
-                        && rtTopLines && rtTopLines.length >= 2) {
-                      const read = tacticalReadFromLines(probe.fen(), rtTopLines, playerColor,
-                        { requireForcing: true, dropThresholdCp: 150 });
+                        && hasEyeCatcher
+                        && (studentBest?.topLines?.length ?? 0) >= 2) {
+                      // PROBE for the tempting move (David 2026-08-22: "I need the
+                      // but-turn"). The MultiPV-only read misses the seductive-but-
+                      // losing move whenever it sits OUTSIDE the engine's top lines —
+                      // which is most of the time — so the but-turn almost never fired
+                      // (measured ~0% on prod). computeTacticalRead EVALUATES the
+                      // eye-catching candidates directly, so it actually finds them.
+                      const read = await computeTacticalRead(probe.fen(),
+                        { engine: stockfishEngine, depth: COACH_TURN_DEPTH, findTempting: true }).catch(() => null);
                       const t = read?.tempting ?? null;
                       const refSan = t?.refutation[1]?.san ?? t?.refutation[0]?.san ?? null;
                       if (t && refSan) {
