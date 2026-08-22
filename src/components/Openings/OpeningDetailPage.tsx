@@ -2004,75 +2004,6 @@ export function OpeningDetailPage(): JSX.Element {
         </p>
       )}
 
-      {/* ═══ ZONE 2 — UNDERSTAND ═══════════════════════════════════════
-          "Here's what this opening IS and what masters have said
-          about it." Contains: Overview + Key Ideas + Classic Wisdom.
-          See docs/plans/2026-05-19-narration-tone-rewrite.md for the
-          full teaching arc design. */}
-      <OpeningZoneHeader
-        color="cyan"
-        icon={BookOpen}
-        title="Understand"
-        tagline="What this opening is and what masters have said about it."
-        isActive={narratingSection === 'understand-zone'}
-        onActivate={() => {
-          const parts = [
-            opening.overview,
-            opening.keyIdeas && opening.keyIdeas.length > 0
-              ? `Key ideas. ${opening.keyIdeas.join('. ')}`
-              : '',
-          ].filter(Boolean);
-          if (parts.length > 0) toggleNarration('understand-zone', parts.join('. '));
-        }}
-      />
-
-      {/* Overview — listenable prose (tap-to-read, per-paragraph relisten).
-          Rescopes to the selected variation's text. */}
-      {subjectOverview && (
-        <ListenableProse
-          key={`overview-${selectedTabIndex}`}
-          title="Overview"
-          icon={BookOpen}
-          iconColor="text-theme-accent"
-          idPrefix="overview"
-          items={subjectOverview.split('\n\n').filter(Boolean)}
-        />
-      )}
-
-      {/* Key Ideas — listenable bullets. */}
-      {subjectKeyIdeas && subjectKeyIdeas.length > 0 && (
-        <ListenableProse
-          key={`keyIdeas-${selectedTabIndex}`}
-          title="Key Ideas"
-          icon={Lightbulb}
-          iconColor="text-yellow-500"
-          idPrefix="keyIdeas"
-          items={subjectKeyIdeas}
-          variant="bullets"
-        />
-      )}
-
-      {/* Classic Wisdom — passages from Capablanca / Lasker / Staunton /
-          Young / Edge / Bird (Project Gutenberg, public domain) that
-          mention this opening. Renders nothing if no passages matched. */}
-      <ClassicWisdomSection
-        openingName={opening.name}
-        renderNarrationButton={(text) => (
-          <NarrationButton sectionId="classic-wisdom" text={text} />
-        )}
-        onActivate={(text) => toggleNarration('classic-wisdom', text)}
-      />
-
-      {/* From the Books — one audiobook-style tabbed reader (Opening /
-          Middlegame / Endgame chapters) read aloud passage-by-passage.
-          Replaces the prior split BookPagesSection + ConceptBookSection. */}
-      <BookReader
-        key={`book-${selectedTabIndex}`}
-        openingName={subjectName}
-        overview={subjectOverview}
-        keyIdeas={subjectKeyIdeas}
-      />
-
       {/* ═══ ZONE 3 — MASTER ═══════════════════════════════════════════
           "Test what you grasped. See the plans. Study one complete
           game." Contains: Quiz + Middlegame Plans + Model Games. */}
@@ -2456,6 +2387,78 @@ export function OpeningDetailPage(): JSX.Element {
           </div>
         </div>
       )}
+
+      {/* ═══ ZONE 2 — UNDERSTAND (moved to the BOTTOM, David 2026-08-22:
+          "all of the words 'from the book' / 'wisdom' at the bottom, all
+          play surfaces front and center") ══════════════════════════════
+          "Here's what this opening IS and what masters have said about
+          it." Contains: Overview + Key Ideas + Classic Wisdom + From the
+          Books. The interactive play surfaces (WLPP ladder, Master plans,
+          model games, gems, pitfalls) now lead; the reading content reads
+          last. See docs/plans/2026-05-19-narration-tone-rewrite.md. */}
+      <OpeningZoneHeader
+        color="cyan"
+        icon={BookOpen}
+        title="Understand"
+        tagline="What this opening is and what masters have said about it."
+        isActive={narratingSection === 'understand-zone'}
+        onActivate={() => {
+          const parts = [
+            opening.overview,
+            opening.keyIdeas && opening.keyIdeas.length > 0
+              ? `Key ideas. ${opening.keyIdeas.join('. ')}`
+              : '',
+          ].filter(Boolean);
+          if (parts.length > 0) toggleNarration('understand-zone', parts.join('. '));
+        }}
+      />
+
+      {/* Overview — listenable prose (tap-to-read, per-paragraph relisten).
+          Rescopes to the selected variation's text. */}
+      {subjectOverview && (
+        <ListenableProse
+          key={`overview-${selectedTabIndex}`}
+          title="Overview"
+          icon={BookOpen}
+          iconColor="text-theme-accent"
+          idPrefix="overview"
+          items={subjectOverview.split('\n\n').filter(Boolean)}
+        />
+      )}
+
+      {/* Key Ideas — listenable bullets. */}
+      {subjectKeyIdeas && subjectKeyIdeas.length > 0 && (
+        <ListenableProse
+          key={`keyIdeas-${selectedTabIndex}`}
+          title="Key Ideas"
+          icon={Lightbulb}
+          iconColor="text-yellow-500"
+          idPrefix="keyIdeas"
+          items={subjectKeyIdeas}
+          variant="bullets"
+        />
+      )}
+
+      {/* Classic Wisdom — passages from Capablanca / Lasker / Staunton /
+          Young / Edge / Bird (Project Gutenberg, public domain) that
+          mention this opening. Renders nothing if no passages matched. */}
+      <ClassicWisdomSection
+        openingName={opening.name}
+        renderNarrationButton={(text) => (
+          <NarrationButton sectionId="classic-wisdom" text={text} />
+        )}
+        onActivate={(text) => toggleNarration('classic-wisdom', text)}
+      />
+
+      {/* From the Books — one audiobook-style tabbed reader (Opening /
+          Middlegame / Endgame chapters) read aloud passage-by-passage.
+          Replaces the prior split BookPagesSection + ConceptBookSection. */}
+      <BookReader
+        key={`book-${selectedTabIndex}`}
+        openingName={subjectName}
+        overview={subjectOverview}
+        keyIdeas={subjectKeyIdeas}
+      />
     </div>
   );
 }
