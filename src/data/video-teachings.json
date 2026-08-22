@@ -4317,8 +4317,8 @@
    ],
    "opening": "Scandinavian Defense: Main Line",
    "phase": "opening",
-   "explains": "The knight goes to e2 rather than the natural square, covering d4 and f4 and supporting its partner on c3, with the long diagonal untouched behind it.",
-   "teaches": "Once a bishop has been placed on a long diagonal, every later developing move is judged by whether it stands in the bishop's way. The natural square for the king's knight blocks that diagonal for the rest of the game; the square beside it does the same central work and leaves the line open. Develop AROUND the piece whose whole value is a line.",
+   "explains": "Once a bishop sits on a long diagonal, develop around it. The natural square for the king's knight would block that diagonal for the whole game — so the knight goes to e2 instead, covering d4 and f4 and supporting its partner on c3, with the long diagonal untouched behind it.",
+   "teaches": "Once a bishop has been placed on a long diagonal, every later developing move is judged by whether it stands in the bishop's way — the natural square for the king's knight blocks that diagonal for the rest of the game; the square beside it does the same central work and leaves the line open.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4364,7 +4364,7 @@
    "opening": "Scandinavian Defense: Main Line",
    "phase": "opening",
    "explains": "The other knight takes back on c3, holding the queen behind it and covering d5, b5 and e4, and the queenside pawns stay whole. Either pawn recapture would have doubled them for no return.",
-   "teaches": "When a bishop takes a knight and two pawns plus a piece can all recapture, the pawn recaptures are usually the ones that feel forced and the piece recapture is the one that keeps everything. Ruining your own structure to open a file is a trade — make it deliberately, and when the structure is the thing your plan needs, take with the piece.",
+   "teaches": "When a bishop takes a knight and two pawns plus a piece can all recapture, the pawn recaptures usually feel forced and the piece recapture is the one that keeps everything — ruin your own structure to open a file deliberately, not by reflex, and when the structure is what your plan needs, take with the piece.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4400,7 +4400,7 @@
    "opening": "Queen's Pawn Game: Barry Attack, Grünfeld Variation",
    "phase": "opening",
    "explains": "The bishop steps to f4 and looks straight down at the pawn on c7 while covering e5, the square in the middle that both sides want for a knight. It also holds h2, which matters later once the pawns start moving on that wing. Nothing is committed in the centre yet, and the piece that would have been trapped is already out.",
-   "teaches": "Against a fianchetto, get the dark-squared bishop outside the pawn chain before you build it. Once the modest e-pawn move goes in, that bishop has no way out — so develop it first, on the diagonal where it already has a target, and let the pawns follow.",
+   "teaches": "Against a fianchetto, get the dark-squared bishop outside the pawn chain before you build it — once the modest e-pawn move goes in, that bishop has no way out, so develop it first on the diagonal where it already has a target.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4438,7 +4438,7 @@
    "opening": "Queen's Pawn Game: Barry Attack, Grünfeld Variation",
    "phase": "opening",
    "explains": "The centre is closed enough that the game will be decided on a wing, and the pawn goes to h4 covering g5. Black must either let it come to h5 or stop it with the h-pawn, and both replies loosen something around the king. Nothing is threatened for several moves; the point is that the shelter is now a little worse whatever happens.",
-   "teaches": "A rook's pawn pushed at a fianchettoed king is not an attack yet — it is a question the defender has to answer with a pawn move of their own. Whichever answer comes, a pawn in front of the castled king will have moved, and that is what you were buying.",
+   "teaches": "A rook's pawn pushed at a fianchettoed king is not an attack yet — it is a question the defender has to answer with a pawn move of their own, and whichever answer comes, a pawn in front of the castled king will have moved.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4474,7 +4474,7 @@
    "opening": "Queen's Pawn Game: Barry Attack, Grünfeld Variation",
    "phase": "opening",
    "explains": "The knight comes to e5 in the centre, where it hits the pawns on c6, f7 and g6 at the same time. It cannot be taken by a pawn and it cannot be chased by one either, so the only way to remove it is a trade — and every trade there opens a line toward the king the pawns have already been loosened around.",
-   "teaches": "An outpost is worth more the more it touches. Before planting a knight in the middle, count the pawns it will hit from there — a knight attacking three of them at once cannot simply be ignored, and driving it away usually costs the defender a concession somewhere else.",
+   "teaches": "An outpost is worth more the more it touches — before planting a knight in the middle, count the pawns it will hit. A knight attacking three at once cannot simply be ignored, and driving it away usually costs the defender a concession somewhere else.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4516,7 +4516,7 @@
    "opening": "Queen's Pawn Game: Barry Attack, Grünfeld Variation",
    "phase": "opening",
    "explains": "The pawn goes to f3 and covers e4 and g4, the two squares from which a black knight could come and challenge the outpost. Nothing is attacked and nothing is developed. What has changed is that the knight on e5 now has no way of being asked to leave, so every plan built around it stays available.",
-   "teaches": "When a knight is doing all the work in the centre, spend a move making sure it cannot be dislodged. A modest pawn move that covers the two squares an enemy knight would jump to is not slow — it is what turns a good square into a permanent one.",
+   "teaches": "When a knight is doing all the work in the centre, spend a move making sure it cannot be dislodged — a modest pawn move that covers the two squares an enemy knight would jump to is what turns a good square into a permanent one.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4560,7 +4560,7 @@
    "opening": "Queen's Pawn Game: Barry Attack, Grünfeld Variation",
    "phase": "opening",
    "explains": "The knight has been exchanged and the bishop takes back on e5. From there it hits the knight on f6, which is the piece defending the fianchetto, and it holds the pawn on d4 behind it. The square that was strong for the knight is strong for the bishop as well — and the bishop stares straight at the king.",
-   "teaches": "When your outpost knight gets traded, recapture with the piece that inherits the square. A bishop that lands on the long diagonal facing a fianchettoed king has taken over the job, and it arrives hitting a piece, so the defender does not get the quiet move the exchange was supposed to win.",
+   "teaches": "When your outpost knight gets traded, recapture with the piece that inherits the square — a bishop that lands on the long diagonal facing a fianchettoed king has taken over the job, and it arrives hitting a piece, so the defender does not get the quiet move the exchange was supposed to win.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4589,7 +4589,7 @@
    "opening": "Queen's Pawn Game: Barry Attack, Grünfeld Variation",
    "phase": "opening",
    "explains": "The bishop is heading for g7 and the long diagonal. Three continuations come into consideration: developing the dark-squared bishop outside the pawn chain while it still can get out, mirroring with a fianchetto of your own, or bringing the queen's knight out and leaving the pawns uncommitted for one more move.",
-   "teaches": "Against a kingside fianchetto the third move decides which structure you are playing for, and all three tries here are sound. The bishop out early claims the dark squares before the pawns commit. The fianchetto answers the opponent on their own terms. The knight out keeps the centre pawns free to advance later. Pick the structure you know.",
+   "teaches": "Against a kingside fianchetto the third move decides which structure you are playing for, and all three tries here are sound — the bishop out early claims the dark squares, the fianchetto answers the opponent on their own terms, the knight out keeps the centre pawns free. Pick the structure you know.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4651,8 +4651,8 @@
    ],
    "opening": "Owen Defense",
    "phase": "opening",
-   "explains": "The bishop has been placed on b7 aiming down the long diagonal at the pawn on e4. Putting the bishop on d3 defends that pawn and the one on c2 behind it, so the whole idea of the setup opposite has nothing to work on. The bishop is modestly placed and it is the move that makes the big centre permanent.",
-   "teaches": "When the opponent fianchettoes on the queenside, their bishop's only target is your centre pawn. Develop the bishop that defends it rather than the one that looks more active — a centre that cannot be undermined leaves the fianchettoed bishop staring at a wall for the rest of the game.",
+   "explains": "The bishop on b7 aims down the long diagonal at the pawn on e4. Putting the bishop on d3 defends that pawn and the one on c2 behind it, so the whole idea of the setup opposite has nothing to work on. The bishop is modestly placed and it is the move that makes the big centre permanent.",
+   "teaches": "When the opponent fianchettoes on the queenside, their bishop's only target is your centre pawn — develop the bishop that defends it rather than the one that looks more active. A centre that cannot be undermined leaves the fianchettoed bishop staring at a wall for the rest of the game.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4692,7 +4692,7 @@
    "opening": "Owen Defense",
    "phase": "opening",
    "explains": "The pawn advances to e5, hitting the knight on f6 and covering d6. The knight has no comfortable square and the pawn now blocks the long diagonal the bishop on b7 was placed for. One move gains space, gains a tempo, and shuts the opponent's best piece out of the game.",
-   "teaches": "Space gained with tempo is the cheapest kind. When the centre pawn can advance hitting a knight, look at what the pawn covers once it has moved — if it also takes the square that knight would retreat to, the defender has to find somewhere awkward and the diagonal you were worried about closes at the same time.",
+   "teaches": "Space gained with tempo is the cheapest kind — when the centre pawn can advance hitting a knight, look at what the pawn covers once it has moved; if it also takes the square that knight would retreat to, the diagonal you were worried about closes at the same time.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4724,7 +4724,7 @@
    "opening": "Three Knights Opening",
    "phase": "opening",
    "explains": "Both knights are developed and the g-pawn steps forward to put the bishop on the long diagonal rather than on the usual c4 or b5 square. Nothing is committed yet in the centre: the plan waits to see which setup Black chooses, because the pawn structure Black picks decides where White's pieces belong.",
-   "teaches": "A fianchetto is unusual in the open game, and that is most of its value at club level: the resulting positions are sound but unfamiliar, so the opponent is out of book while nothing has been risked. It is reachable through more than one move order, which makes it hard to sidestep — the knights can come out in either order before the g-pawn moves.",
+   "teaches": "A fianchetto is unusual in the open game, and that is most of its value at club level: the positions are sound but unfamiliar, so the opponent is out of book while nothing has been risked. It is reachable through more than one move order, which makes it hard to sidestep.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4759,7 +4759,7 @@
    "opening": "Three Knights Opening",
    "phase": "opening",
    "explains": "Both sides have developed symmetrically and nothing is resolved. One try takes on the centre at once. The other steps the g-pawn forward so the bishop can take the long diagonal, keeping the centre closed and asking the opponent to think rather than recite.",
-   "teaches": "With four knights out and the centre untouched, the fourth move picks the whole character of the game. The central push opens lines immediately and heads for the positions both sides have studied. The fianchetto is unusual in an open game and that is most of its value at club level — sound, and unfamiliar to the person opposite.",
+   "teaches": "With four knights out and the centre untouched, the fourth move picks the whole character of the game — the central push opens lines and heads for the studied positions; the fianchetto is unusual in an open game, and that is most of its value at club level: sound, and unfamiliar to the person opposite.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4802,7 +4802,7 @@
    "opening": "Benoni Defense",
    "phase": "opening",
    "explains": "The pawn to c5 hits d4 and asks it to make up its mind. Trading gives Black comfortable play, holding the tension is playable, and pushing past is the critical answer — and each of the three is a different opening. Black is choosing a fight over the centre rather than an occupation of it.",
-   "teaches": "Hitting a central pawn with a wing pawn invites it to advance past you. That is the trade: you concede space in return for a target you can chew on for the rest of the game.",
+   "teaches": "Hitting a central pawn with a wing pawn invites it to advance past you — that is the trade: you concede space in return for a target you can chew on for the rest of the game.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4838,7 +4838,7 @@
    "opening": "Benoni Defense",
    "phase": "opening",
    "explains": "The pawn goes past to d5, taking c6 and e6 — the two squares Black's knight and light-squared bishop would most like. This is the critical continuation. Black now has a real choice about how to undermine that pawn, and one of those choices is to offer a pawn on the queenside to open lines against it.",
-   "teaches": "Advancing a central pawn past its neighbour buys squares and costs flexibility. It is right when the squares it takes are the ones the opponent's pieces need.",
+   "teaches": "Advancing a central pawn past its neighbour buys squares and costs flexibility — it is right when the squares it takes are the ones the opponent's pieces need.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4869,7 +4869,7 @@
    "opening": "Benoni Defense",
    "phase": "opening",
    "explains": "The pawn to b5 hits c4 and offers itself. The point is not the pawn: taking it opens the a- and b-files, and Black's rooks and the bishop on the long diagonal will press down them for the rest of the game — often long into an endgame, and often a pawn down without minding. Taking is what the books recommend and is entirely topical. There is also an old and little-known knight retreat to d2, which meets the capture on c4 by striking in the centre instead — almost reversing the gambit, offering a pawn back, and regaining it. It has teeth precisely because nobody has seen it.",
-   "teaches": "When a gambit offers a pawn to open two files, taking it is not automatically the test. A rare declining move that hands the pawn straight back on your own terms can leave the gambiteer with nothing to show for the structure.",
+   "teaches": "When a gambit offers a pawn to open two files, taking it is not automatically the test — a rare declining move that hands the pawn straight back on your own terms can leave the gambiteer with nothing to show for the structure.",
    "plans": "",
    "concepts": [],
    "sources": [
