@@ -352,8 +352,8 @@
   {
    "id": "vn-saemisch-wall-the-pawn-that-holds-the-whole-plan",
    "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 O-O f3",
-   "teaches": "The modest f-pawn move is the spine of this whole setup: it bolts the centre shut so that everything that follows — the bishop's development, the queen behind it, castling long, the pawn storm — happens behind a wall. Judge it by what it enables, not by what it looks like.",
-   "explains": "The pawn on f3 defends the pawn on e4, and with the centre held by pawns alone the pieces are free to take up attacking posts instead of guard duty. The fianchettoed bishop across the board now stares into a wall that never needs a defender.",
+   "teaches": "The modest f-pawn move is the spine of this whole setup — it bolts the centre shut so that everything that follows happens behind a wall. Judge it by what it enables, not by what it looks like.",
+   "explains": "The modest f-pawn is the spine of the whole setup: it bolts the centre shut so everything that follows — the bishop out, the queen behind it, castling long, the pawn storm — happens behind a wall. The pawn on f3 defends the pawn on e4, and with pawns alone holding the centre the pieces are freed from guard duty for attacking posts. The fianchettoed bishop across the board now stares into a wall that never needs a defender.",
    "reasons": [
     {
      "kind": "defends",
@@ -368,8 +368,8 @@
   {
    "id": "vn-saemisch-wall-a-healthy-structure-can-afford-to-take",
    "line": "d4 Nf6 c4 g6 Nc3 Bg7 e4 O-O f3 d6 Be3 e5 d5 c6 Qd2 Bd7 O-O-O b5 dxc6 Nxc6 Nxb5",
-   "teaches": "Whether you can accept a pawn offer depends on your structure, not your nerve. A setup with no weaknesses behind it can open the centre and grab material without exposing anything — count your loose pieces and pawn holes first, and when the count says none, take.",
-   "explains": "The knight on b5 attacks the pawn on d6. It also attacks the pawn on a7. Nothing at home hangs: the centre is bolted and development is finished, so the pawn grab is just good bookkeeping.",
+   "teaches": "Whether you can accept a pawn offer depends on your structure, not your nerve — a setup with no weaknesses behind it can open the centre and grab material without exposing anything. Count your loose pieces and pawn holes first; when the count says none, take.",
+   "explains": "Whether you can accept a pawn offer depends on your structure, not your nerve. A setup with nothing loose behind it can open the centre and grab material safely — count your weak pieces and pawn holes first, and when the count is zero, take. The knight on b5 attacks the pawn on d6 and the pawn on a7; nothing at home hangs, the centre is bolted and development is finished, so the grab is just good bookkeeping.",
    "reasons": [
     {
      "kind": "attacks",

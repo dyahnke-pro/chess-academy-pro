@@ -760,8 +760,8 @@
   {
    "id": "vn-fourpawns-develop-so-the-knight-jump-has-an-answer",
    "line": "e4 Nf6 e5 Nd5 d4 d6 c4 Nb6 f4 dxe5 fxe5 Nc6 Be3 Bf5 Nc3",
-   "teaches": "Develop in the order that keeps an answer ready for the opponent's most annoying jump. A knight coming to the square beside your queenside pawns is only a problem while the rook behind them is still at home — bring the other pieces out in the sequence that leaves that rook one move from covering it, and the jump stops being a threat before it is played.",
-   "explains": "The knight comes to c3, holding d5 and b5 and clearing the way for the rook to swing to the c-file if the enemy knight hops in. It is the developing move that answers a move that has not happened.",
+   "teaches": "Develop in the order that keeps an answer ready for the opponent's most annoying jump — a knight coming beside your queenside pawns is only a problem while the rook behind them is still at home.",
+   "explains": "Develop in the order that keeps an answer ready for the opponent's most annoying jump. A knight landing beside your queenside pawns is only a problem while the rook behind them sits at home — so the knight comes to c3, holding d5 and b5 and clearing the rook's path to the c-file if that knight ever hops in. It answers a move that hasn't been played yet.",
    "reasons": [
     {
      "kind": "controls",
