@@ -5,26 +5,17 @@
   "teaches": "A check that also attacks a piece narrows your opponent's world to a handful of replies — and when the most natural of those replies walks into the next blow, the check is really a two-move combination wearing a modest face. Look one move past the block before deciding a check achieves nothing.",
   "explains": "The queen checks from a5 and attacks the bishop on b5 in the same breath. The reply that covers the check and defends the bishop at once looks perfect — and it steps directly into the pawn advance that wins the blocking piece. The check chose the opponent's move for them.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "e1"
-   },
-   {
-    "kind": "attacks",
-    "square": "b5"
-   }
+   { "kind": "attacks", "square": "e1" },
+   { "kind": "attacks", "square": "b5" }
   ]
  },
  {
   "id": "vn-forcing-play-the-pawn-collects-the-blocker",
   "line": "e4 c5 Bc4 Nc6 Nf3 e6 a3 Nf6 d3 d5 exd5 exd5 Bb5 Qa5+ Nc3 d4",
-  "teaches": "A piece forced to a square by a check is a piece whose next address you already know. The quiet pawn advance that attacks the compelled blocker is the harvest: it cannot step away without abandoning the job the check gave it, and the pin against the queen behind it seals the trap.",
+  "teaches": "A piece forced to a square by a check is a piece whose next address you already know — the quiet pawn advance that attacks the compelled blocker is the harvest: it cannot step away without abandoning the job the check gave it, and the pin against the queen behind it seals the trap.",
   "explains": "The pawn advances to d4 and attacks the knight on c3 — the piece the check just compelled to that square, now pinned against its own queen's defence of the bishop. The knight was placed by force and is collected by a pawn.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "c3"
-   }
+   { "kind": "attacks", "square": "c3" }
   ]
  },
  {
@@ -33,10 +24,7 @@
   "teaches": "In a sequence of mutual captures, take with check whenever you can — the check fixes the move order, because your opponent must answer it before collecting anything of yours. Getting waylaid by the biggest piece on offer instead of the forcing capture is how won sequences come apart.",
   "explains": "The bishop captures on d2 with check, so the recapture is forced before the opponent can take anything back elsewhere. The rook on offer was louder; the capture with check was correct, and the whole exchange resolves a piece ahead with no counting required.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "e1"
-   }
+   { "kind": "attacks", "square": "e1" }
   ]
  }
 ]

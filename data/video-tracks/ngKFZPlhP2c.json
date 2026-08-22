@@ -361,7 +361,7 @@
   {
    "id": "vn-tarrasch-block-your-own-bishop-to-keep-the-centre",
    "line": "e4 e6 d4 d5 Nd2 Nf6 e5 Nfd7 Bd3 c5 c3",
-   "teaches": "Developing a knight to the square that blocks your own bishop looks like a beginner's error and is a deliberate trade: it keeps the c-pawn free, so when the centre is challenged you can prop it with a pawn instead of dissolving it. You give up a diagonal for a move or two and keep the whole centre — decide which of the two the position is about.",
+   "teaches": "Developing a knight to the square that blocks your own bishop looks like a beginner's error and is a deliberate trade: it keeps the c-pawn free, so when the centre is challenged you can prop it with a pawn instead of dissolving it. You give up a diagonal for a move or two and keep the whole centre.",
    "explains": "The pawn to c3 holds d4 against the challenge, which is only possible because the knight went to the other square and left the c-pawn its move. The centre stays intact and the second knight will take over the defence.",
    "reasons": [
     {
