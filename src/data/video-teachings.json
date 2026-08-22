@@ -4917,7 +4917,7 @@
    "opening": "Grünfeld Defense",
    "phase": "opening",
    "explains": "The pawn's capture on c5 has cleared the d-file from top to bottom: the queen on d5 now looks straight down at the queen on d1 with nothing between them. The pawn can be regained at leisure — the open file and the exposed first rank are the real change on the board.",
-   "teaches": "When the centre pawn finally captures, look down the file it just left. The capture that wins a pawn can open the line your queen was already standing on — and a file opened onto their back rank matters more than the pawn that opened it.",
+   "teaches": "When the centre pawn finally captures, look down the file it just left — the capture that wins a pawn can open the line your queen was already standing on, and a file opened onto their back rank matters more than the pawn that opened it.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -4957,7 +4957,7 @@
    "opening": "Grünfeld Defense",
    "phase": "opening",
    "explains": "The queen checks from a5 down the open diagonal to the king on e1. There is no comfortable answer: blocking invites the queen trade, and the recapture pulls the king into the middle of the board with pieces still on. Every later idea gains a move against a king that has to watch its step.",
-   "teaches": "When the enemy king is still in the centre, a queen check that can only be answered by a block is a lever: the block invites the trade, and the recapture drags the king to a working square of your choosing. The endgame that follows starts with their king misplaced — a permanent, free concession.",
+   "teaches": "When the enemy king is still in the centre, a queen check that can only be answered by a block is a lever — the block invites the trade, and the recapture drags the king to a working square of your choosing, so the endgame starts with their king already misplaced.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -5008,7 +5008,7 @@
    "opening": null,
    "phase": "opening",
    "explains": "The knight came out first and only now does the pawn step to g6, taking f5 and preparing the bishop's home on the long diagonal. That order is what makes this the defence it is. Its close cousin plays the flank pawn on move one instead and often puts off the knight entirely, going for a queenside pawn advance first — the two transpose constantly, and the move the opponent is withholding tells you which one you are really in.",
-   "teaches": "Two defences can reach the same position and still be different openings, because the difference is which moves they DELAY. Watch what the opponent has not played yet.",
+   "teaches": "Two defences can reach the same position and still be different openings, because the difference is which moves they DELAY — watch what the opponent has not played yet.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -5048,7 +5048,7 @@
    "opening": null,
    "phase": "opening",
    "explains": "The f-pawn joins the centre and White now has three abreast, holding e5 twice over. For several decades this has been regarded as the most principled way to fight for an advantage here — not necessarily the strongest move, but the most aggressive one, and it carries an enormous amount of theory behind it. The pawns look overwhelming and that is exactly what Black is playing against.",
-   "teaches": "The most principled try and the objectively best move are not always the same move. Choose the aggressive one for what it demands of the opponent, and know you are choosing a theory load.",
+   "teaches": "The most principled try and the objectively best move are not always the same move — choose the aggressive one for what it demands of the opponent, and know you are choosing a theory load.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -5090,7 +5090,7 @@
    "opening": null,
    "phase": "opening",
    "explains": "The bishop takes the long diagonal and, for the moment, holds its own knight on f6 rather than hitting anything. That is the point: the pressure down the diagonal only becomes real once the knight steps aside, and Black will look to arrange that at a moment when it costs White something. Everything in this structure runs on that delayed threat.",
-   "teaches": "A fianchettoed bishop aimed at the centre is not yet attacking it if a piece of your own stands in the way. The plan is to move the blocker with tempo — until then the pressure is potential, not real.",
+   "teaches": "A fianchettoed bishop aimed at the centre is not yet attacking it if a piece of your own stands in the way — the plan is to move the blocker with tempo, and until then the pressure is potential, not real.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -5117,7 +5117,7 @@
    "opening": null,
    "phase": "opening",
    "explains": "Instead of shoring up the queenside knight, the other knight comes out and hits e4. This is the high-level answer to the bishop, and it has a reputation for steering toward simplified positions early. That reputation is only half deserved — the endgames it produces are far from lifeless, and White has several genuinely different ways to meet it rather than heading for them.",
-   "teaches": "When the opponent puts pressure on your position, look for a developing move that ignores it and creates pressure of its own. Counter-attack in the centre usually beats a defensive shuffle.",
+   "teaches": "When the opponent puts pressure on your position, look for a developing move that ignores it and creates pressure of its own — counter-attack in the centre usually beats a defensive shuffle.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -5157,7 +5157,7 @@
    "opening": null,
    "phase": "opening",
    "explains": "White tucks the king away rather than propping up the attacked pawn. Taking it is entirely playable for Black — this is the main road — but it hands White the initiative and a series of tempo moves against the knight that grabs it. The alternative is a quieter one-square pawn move by Black, which is passive but a perfectly legitimate old defence rather than a mistake.",
-   "teaches": "Offering a pawn you can regain is a way of asking the opponent to commit. Castling instead of defending is the move when the capture costs them time and leaves you a lead in development.",
+   "teaches": "Offering a pawn you can regain is a way of asking the opponent to commit — castling instead of defending is the move when the capture costs them time and leaves you a lead in development.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -5189,7 +5189,7 @@
    "opening": "Four Knights Game: Scotch Variation Accepted",
    "phase": "opening",
    "explains": "The bishop steps to e3 backing up the knight on d4, so the pressure down the diagonal has nothing to win. Both sides now have a bishop staring at a defended piece, which is a standoff the better-developed side is happy with.",
-   "teaches": "When a bishop comes out to stare at the knight sitting in the middle, the answer is to reinforce that knight rather than to move it. A defended centre piece cannot be traded profitably, and the defending bishop lands on a square where it will be useful for the rest of the game anyway.",
+   "teaches": "When a bishop comes out to stare at the knight sitting in the middle, the answer is to reinforce that knight rather than to move it — a defended centre piece cannot be traded profitably, and the defending bishop lands on a square where it will be useful for the rest of the game anyway.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -5222,7 +5222,7 @@
    "opening": "Petrov's Defense: Three Knights Game",
    "phase": "opening",
    "explains": "The knight develops to c6 and takes the d4 square in hand, and with the bishop already pinning the defender on f3, the jump into d4 is a real threat the opponent has to answer at once. The developing move set the agenda.",
-   "teaches": "The best developing move is the one that arrives carrying a threat. A knight that comes out eyeing the central jump forces your opponent to spend their next move on your plans instead of their own — development and initiative in the same motion.",
+   "teaches": "The best developing move is the one that arrives carrying a threat — a knight that comes out eyeing the central jump forces your opponent to spend their next move on your plans instead of their own.",
    "plans": "",
    "concepts": [],
    "sources": [

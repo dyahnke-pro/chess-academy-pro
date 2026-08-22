@@ -138,7 +138,7 @@
   {
    "id": "vn-ruy-the-bishop-that-asks-about-the-defender",
    "line": "e4 e5 Nf3 Nc6 Bb5",
-   "teaches": "Attack the piece that DEFENDS, not the pawn it defends. Pressure on a defender is a question the opponent has to keep answering for the rest of the opening.",
+   "teaches": "Attack the piece that DEFENDS, not the pawn it defends — pressure on a defender is a question the opponent has to keep answering for the rest of the opening.",
    "explains": "The bishop pins its attention on the knight at c6 — the piece holding e5 together. It is not winning anything: the pawn is defended and taking the knight only helps Black's structure in some lines. What it does is put a standing question to the defender, and that question is what this whole opening is built on.",
    "reasons": [
     {
@@ -154,7 +154,7 @@
   {
    "id": "vn-ruy-berlin-answer-a-question-with-a-question",
    "line": "e4 e5 Nf3 Nc6 Bb5 Nf6",
-   "teaches": "When the opponent puts pressure on your position, look for a developing move that ignores it and creates pressure of its own. Counter-attack in the centre usually beats a defensive shuffle.",
+   "teaches": "When the opponent puts pressure on your position, look for a developing move that ignores it and creates pressure of its own — counter-attack in the centre usually beats a defensive shuffle.",
    "explains": "Instead of shoring up the queenside knight, the other knight comes out and hits e4. This is the high-level answer to the bishop, and it has a reputation for steering toward simplified positions early. That reputation is only half deserved — the endgames it produces are far from lifeless, and White has several genuinely different ways to meet it rather than heading for them.",
    "reasons": [
     {
@@ -170,7 +170,7 @@
   {
    "id": "vn-ruy-castle-and-offer-the-pawn",
    "line": "e4 e5 Nf3 Nc6 Bb5 Nf6 O-O",
-   "teaches": "Offering a pawn you can regain is a way of asking the opponent to commit. Castling instead of defending is the move when the capture costs them time and leaves you a lead in development.",
+   "teaches": "Offering a pawn you can regain is a way of asking the opponent to commit — castling instead of defending is the move when the capture costs them time and leaves you a lead in development.",
    "explains": "White tucks the king away rather than propping up the attacked pawn. Taking it is entirely playable for Black — this is the main road — but it hands White the initiative and a series of tempo moves against the knight that grabs it. The alternative is a quieter one-square pawn move by Black, which is passive but a perfectly legitimate old defence rather than a mistake.",
    "reasons": [
     {

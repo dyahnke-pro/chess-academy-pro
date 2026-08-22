@@ -2,36 +2,27 @@
  {
   "id": "vn-open-game-develop-with-a-threat-behind-it",
   "line": "e4 e5 Nf3 Nf6 Nc3 Bc5 Bc4 d6 O-O Bg4 d3 Nc6",
-  "teaches": "The best developing move is the one that arrives carrying a threat. A knight that comes out eyeing the central jump forces your opponent to spend their next move on your plans instead of their own \u2014 development and initiative in the same motion.",
+  "teaches": "The best developing move is the one that arrives carrying a threat — a knight that comes out eyeing the central jump forces your opponent to spend their next move on your plans instead of their own.",
   "explains": "The knight develops to c6 and takes the d4 square in hand, and with the bishop already pinning the defender on f3, the jump into d4 is a real threat the opponent has to answer at once. The developing move set the agenda.",
   "reasons": [
-   {
-    "kind": "controls",
-    "square": "d4"
-   }
+   { "kind": "controls", "square": "d4" }
   ]
  },
  {
   "id": "vn-open-game-stake-a-claim-on-the-wing-they-own",
   "line": "e4 e5 Nf3 Nf6 Nc3 Bc5 Bc4 d6 O-O Bg4 d3 Nc6 Be3 Bb6 h3 Bh5 Kh2 O-O Qd2 Bxf3 gxf3 Nh5",
-  "teaches": "When the pawn cover in front of their king has been damaged, do not wait \u2014 get the wheels turning on that wing before they reorganise. A knight hopping toward the weakened squares stakes the claim, and every piece that follows finds the squares already prepared.",
-  "explains": "The knight swings to h5 and takes both f4 and g3 in hand \u2014 the two dark squares the doubled pawns no longer guard. The factory starts running on the side of the board where the opponent's king lives, one hop ahead of their regrouping.",
+  "teaches": "When the pawn cover in front of their king has been damaged, do not wait — get the wheels turning on that wing before they reorganise. A knight hopping toward the weakened squares stakes the claim, and every piece that follows finds the squares already prepared.",
+  "explains": "The knight swings to h5 and takes both f4 and g3 in hand — the two dark squares the doubled pawns no longer guard. The factory starts running on the side of the board where the opponent's king lives, one hop ahead of their regrouping.",
   "reasons": [
-   {
-    "kind": "controls",
-    "square": "f4"
-   },
-   {
-    "kind": "controls",
-    "square": "g3"
-   }
+   { "kind": "controls", "square": "f4" },
+   { "kind": "controls", "square": "g3" }
   ]
  },
  {
   "id": "vn-open-game-two-passers-the-king-cannot-catch",
   "line": "e4 e5 Nf3 Nf6 Nc3 Bc5 Bc4 d6 O-O Bg4 d3 Nc6 Be3 Bb6 h3 Bh5 Kh2 O-O Qd2 Bxf3 gxf3 Nh5 Rg1 Qf6 Rg4 Qxf3 Rag1 Kh8 Nd5 f5 exf5 Rxf5 R4g2 Raf8 Nxb6 axb6 Be6 Ne7 Bxf5 Nxf5 Rg5 Nh4 R5g4 Qxg4 hxg4 Nf3+ Kg2 Nxd2 Bxd2 Nf4+ Bxf4 Rxf4 f3 Kg8 a3 b5 Kg3 Kf7 Rh1 h6 Rh5 Kg6 c3 c5 Rh1 Ra4 Re1 Kf6 Re4 Rxe4 dxe4 Ke6 Kh4 g6 g5 h5 Kg3 d5 Kf2 d4 Ke2 h4 cxd4 cxd4 Kf2 h3 Kg3 d3",
-  "teaches": "Two passed pawns on opposite sides of the board beat a lone king even when neither pawn has support \u2014 the king cannot stand in two doorways at once. Count the squares before agreeing to any trade that leaves this race: if the pawns are far enough apart, the position that looks thin is simply winning.",
-  "explains": "One passed pawn stands on d3 and another on h3, a whole board apart, and the enemy king on one side cannot reach the other in time. The plan is the pawns' own legs \u2014 each step by one forces the king to abandon the other.",
-  "structural": "two distant passers against a king judged by counting, not hope \u2014 the king cannot hold both doorways"
+  "teaches": "Two passed pawns on opposite sides of the board beat a lone king even when neither pawn has support — the king cannot stand in two doorways at once. Count the squares before agreeing to any trade that leaves this race: if the pawns are far enough apart, the position that looks thin is simply winning.",
+  "explains": "One passed pawn stands on d3 and another on h3, a whole board apart, and the enemy king on one side cannot reach the other in time. The plan is the pawns' own legs — each step by one forces the king to abandon the other.",
+  "structural": "two distant passers against a king judged by counting, not hope — the king cannot hold both doorways"
  }
 ]
