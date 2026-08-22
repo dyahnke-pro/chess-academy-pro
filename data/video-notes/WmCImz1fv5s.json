@@ -2,21 +2,12 @@
  {
   "id": "vn-slav-a6-centralize-instead-of-answering-the-pin",
   "line": "d4 c6 c4 d5 Nf3 Nf6 Nc3 a6 g3 Bg4 Ne5",
-  "teaches": "A bishop that comes out to pin a knight has committed itself to one diagonal \u2014 and if the knight can step FORWARD instead of being defended, the pin is answered by the piece it was aiming at. Before treating a pin as something to solve, check whether the pinned piece has a square in the middle where it hits more than it is worth.",
+  "teaches": "A bishop that comes out to pin a knight has committed itself to one diagonal — and if the knight can step FORWARD instead of being defended, the pin is answered by the piece it was aiming at. Before treating a pin as something to solve, check whether the pinned piece has a square in the middle where it hits more than it is worth.",
   "explains": "The knight jumps to e5 instead of being propped up, attacking the bishop that came to pin it along with the pawns on c6 and f7. The bishop has to move again, and the knight is now the best-placed piece on the board.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "g4"
-   },
-   {
-    "kind": "attacks",
-    "square": "c6"
-   },
-   {
-    "kind": "attacks",
-    "square": "f7"
-   }
+   { "kind": "attacks", "square": "g4" },
+   { "kind": "attacks", "square": "c6" },
+   { "kind": "attacks", "square": "f7" }
   ]
  }
 ]
