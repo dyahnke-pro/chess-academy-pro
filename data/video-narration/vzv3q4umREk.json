@@ -1,0 +1,132 @@
+{
+ "videoId": "vzv3q4umREk",
+ "title": "\"Oh I Get It, HE'S CHEATING!!!\" | Smith Morra Gambit | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "22 1928 e4 c5 and let's see how the smith mora"
+  },
+  {
+   "ply": 3,
+   "t": 14.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "holds up at this level now again those people watching on youtube i've been playing the smith mora in the speed run i don't really"
+  },
+  {
+   "ply": 4,
+   "t": 26,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "i don't really know the smith more all that well myself so i've been winging it which has been a lot of fun what i do have as of a couple of weeks ago i ordered this book i'm not going to look at it now obviously that would be cheating"
+  },
+  {
+   "ply": 5,
+   "t": 41,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "uh that would be cheating but i do now have mayhem and the mora so we can consult the book after the game assuming that black takes on c3 which is the accepted smith mora"
+  },
+  {
+   "ply": 6,
+   "t": 52.5,
+   "line": [
+    "dxc3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "okay just a second okay i hear the right sound because i'm turning the ac on i hear the perfect"
+  },
+  {
+   "ply": 7,
+   "t": 59.5,
+   "line": [
+    "Nxc3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "said": "sound d takes e3 and we will indeed get a chance"
+  },
+  {
+   "ply": 8,
+   "t": 64,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "said": "to play the accepted smith mora d6 okay so d6 is just one of like many many possible moves it doesn't really contain a lot of independent value because normally black follows up by playing knight c6 or knight f6 and if you paid attention to the previous myth warrior games in the speed run you know that the light squad bishop belongs in such positions on the c4 square you basically want to"
+  },
+  {
+   "ply": 9,
+   "t": 98,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/2B1P3/2N5/PP3PPP/R1BQK1NR b KQkq - 1 5",
+   "said": "provoke black into playing e6 which would create the sort of savannah chevan and pawn structure and lead to some of the main lines of the smith mora so as far as i remember the move here is bishop c4 yeah i've heard amazing things about mayhem and the moral it's it's just"
+  },
+  {
+   "ply": 10,
+   "t": 106,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/3pp3/8/2B1P3/2N5/PP3PPP/R1BQK1NR w KQkq - 0 6",
+   "said": "terrific analysis all around and i think it it's just good as a as an instructional book because it's so full of ideas e6 oh and look who's in the chat look who's in the chat um mark himself the author himself is in the chat gifting a sub and now i'm gonna make a fool of myself in front of you know the leading expert so mark says knight f3 first almost always except maybe if early a6"
+  },
+  {
+   "ply": 11,
+   "t": 145.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/3pp3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R b KQkq - 1 6",
+   "said": "threatening or eb5 so i stand corrected according to mark you actually want to start with knight f3 and maybe we can delve into the reasons why after the game but after e6 we essentially transpose to the main line by playing knight f3"
+  },
+  {
+   "ply": 12,
+   "t": 151,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2npp3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 2 7",
+   "said": "okay so now we got the man himself we got to bring our a game ah yeah that idea i'm familiar with with bishop c4 queen b3 so knight c6 okay so now i suppose that we castle"
+  },
+  {
+   "ply": 13,
+   "t": 168.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2npp3/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 b kq - 3 7",
+   "said": "and then of course we have the typical smithmore idea of queen e2 rook d1 so let's castle let's continue our development kavita with the five subs"
+  },
+  {
+   "ply": 14,
+   "t": 176,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk1nr/pp2bppp/2npp3/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 4 8",
+   "said": "we got a lot of action here in the chat bishop e7 okay so the order in which our opponent is developing is a little bit odd i don't think it's really impacting the uh the position itself and here i think is a good moment to implement the very typical idea by which we start applying pressure on black's center the queen is not the most effective piece to attack d6 what we want is to have not a queen on d1 but a rook on d1 because that would x-ray black's queen and that would create all sorts of threats like e5 and bishop f4 bishop t bishop takes d6 and so that's where the typical regrouping comes from we play queen e2 and then we play rook d1 okay queen e2 knight f6 rook d1 and we are already threatening the move e4 e5 um and a lot of people as far as i know miss this okay so here black plays e5 himself i think this is actually the correct move and embarrassingly enough i don't totally remember what white's response is i think it might be bishop e3 i think it might be bishop e3 so we just want to continue our development casually let's get our bishop out yep and mark confirms that the move is bishop e3 and i do remember that there's this idea of going before in these positions to distract the knight from before and then take on e5 but i don't think it's the move here i think the move is just rook ac1 and if black plays bishop e6 then we take on e6 and go b4 and mark says that h3 is not necessary in this position in these positions um because bishop g4 isn't really that inherently dangerous there is no real easy way to put more pressure on the knight okay so let's get this rook into the game with rook ac1 we have now completed our development all of our pieces are in the game and this is really the heart of the smith moore or this position so bishop b6 and mark shared the interesting principle that you don't really take on e6 unless it wins material unless you have something concrete as a follow-up and here i think is a great idea is a great moment to apply this idea of going b4 so we go b4 and the point is that if knight takes b4 then we take on e6 and we have i think either knight takes e5 or queen c4 we'll have to cross that bridge when we get there black plays knight g4 thank you dan kama for the five subs okay so this move i already don't know so so now we're basically on our own which is sort of exciting my understanding of this position will be tested now knight g4 hits the bishop and at least intuitively at least intuitively i would want to keep this bishop so what comes to my mind as kind of unsexy as this move looks is just bishop e3 to d2 because later on we could chase the knight away with h3 so i feel like bishop d2 makes the most sense to me let's drop our bishop back and i'm not too worried about like knight d4 in this position thank you anonymous for the thousand bits we got tons of support here all right knight back to f6 so our opponent is not against the draw very high level play by black here very very high level play and okay probably the engine will recommend that white repeats moves here but of course we want to play for a win so maybe we can find something other than bishop e3 i do have one idea which is to play and mark also played bishop d2 which is to play bishop d2 to g5 right e3 is not the only square for the bishop i don't love g5 as a development square because we're not really intending to take on f6 but it's the only other square other than e3 so i feel like this is better than nothing so let's try bishop g5 and see how black responds to this okay bishop g4 ah very impressive bishop g4 threatens knight d4 bishop g4 threatens knight d4 which is now a very serious threat because it would essentially ruin our king's side ah the game was bishop d2 knight takes before wow yeah we'll look at that after the game we'll look at that line i think in this position we actually have to go back to e3 at this point i think at this point we have to go back to e3 at this point or we have to play h3 but h3 there is still 94. so let's go back to e3 the plus side of this is that black no longer has the move knight before because now he's got a bishop there um now he's got a bishop there okay knight takes b4 so that's the second pawn that's the second pawn but the good news is that we can win that pawn back either by playing rook b1 which i don't like as much or and we have to speed up a little bit let's play the move h3 and pose a little dilemma to this bishop if bishop takes f3 then we're playing two pawns down but we have the light squared bishop if the bishop moves i was going to say that we have knight takes c5 but i completely miss bishop d7 so our opponent is currently outplaying us and uh we're gonna have to play two pawns down but i still think i've got a lot of compensation here let's play a3 to chase the knight away let's play a3 to chase the knight away okay and now let me think for a second i know that queen a2 is a pretty typical idea in such positions but black has this move knight a5 yeah no i'm uh not too impressed with the the path that this game has followed um let me think for a second but knight b5 gives up e4 so somehow whichever move we make whichever move we make uh there's some sort of a downside to it let's play bishop g5 let's play bishop g5 let's again get our bishop to g5 and maybe this time i do want to take his knight this time i kind of do want to take his knight okay bishop e6 okay now takes and queen a2 is very interesting but then black has queen d7 and according to mark you don't really want to do this unless you can guarantee that you win material thank you willy tasks for cash but nonetheless i kind of want to change the structure a little bit okay our opponent taking his time on f takes c6 good stuff um and now let's play queen and swing it over to a2 and attack e6 hmm the problem is after queen d7 i don't really see a follow-up yeah we're i have a very very strong feeling that we're going to lose this game let's try to double rooks on the d-file let's try to double rooks on the d-file t's double well rook cd1 he's got let's double well rook cd1 he's got knight d4 um this is starting to look like one of those games uh but okay we gotta handle it in in style okay let's go rook cd1 yeah and unfortunately black has this move knight d4 now otherwise we'd develop some sort of pressure against the d6 pawn h6 yeah i had to take the draw that's the thing i i had to take the draw there but i didn't think that i thought i'd be able to get away with it little did i know who i was facing b6 wow okay let's play queen b1 and then maybe an ip5 no but now i have 95. now oh but he's called queen eight of course yeah so we have to go knight p5 and get it away from the attack yeah yeah this is yeah we know we know what's happening this is uh i'm about 90 to 95 percent sure but of course we will look after the game it's just one of those games but you can see by the time consumption you can see by the way that he's out playing me and i honestly had a feeling after knight g4 already the course of the game has only kind of served to confirm my suspicions yeah the book is banned it's all because the smithmore is a terrible opening that's the reason we're losing this game right okay let's play 92 knight before i'm still trying the game is not over the game is not over i'm still trying we want to go knight before we want to create counter play against the queen side okay let's go knight b4 and then maybe knight d3 and knight takes e5 if he goes a5 no i think well not taking the bishop makes sense to me but you know a 1900 would probably have made a couple of mistakes at this point okay but now we have knight takes e5 so wait a second maybe this is not so clear after all maybe this is not so clear after all knight c3 oh my god okay all right you win my friend and he thinks on knight takes a2 which was of course pretty damning but then knight takes b6 knight takes b6 knight c3 knight takes ca i don't know i'm just going to go for it we got to try to win as many pawns as possible yeah this is very unfortunate it ruins the mood but you can't do anything about it he's got rook takes c8 and at the end of the line he takes on a3 no he takes on e2 interesting oh my god knight g3 [Laughter] knight g3 check i see how could i have missed that elementary tactic i mean he's not even trying to hide it though that's the problem these people always puzzle me because they make it so incredibly obvious and they expect to last on the site it's it's pretty crazy to me yeah mark says he's faced knight g4 only once and the fact that you know a random dude does it on chess.com and plays the super theoretically topical line that was already that already threw me off the thing is i'm going to try to flag him he's got a little bit too much time if he had a minute at this point i'd have a chance but unfortunately he's playing too accurately and he's basically gonna checkmate me within a couple of moves rook takes f2 is coming what's up yeah no no of course i mean he's thinking on rook takes h2 yeah yeah he won't last another day played the wrong guy oh knight c3 i mean he's clearly not a player at all because he's not even playing on his own in this position yeah we have zero chemistry i mean the one the author of the book comes in to help me and i still lose to a 1900. i still lose to a 1900. you know how you know it's an engine it's when like the middle game there's this sense in which you make one little inaccuracy and then you just get blown off the board like it's not even close not a single one of your ideas even comes close to working so you could kind of see that there once i declined the repetition the game was over it was like not a single idea worked and i'll be completely honest with people and say that i already knew what the truth was i i already had a sense when he played knight g4 like that was the moment when i could sense that something was a little bit off oh my god d4 and then wherever i go he checkmates me no oh knight f6 m8 beautiful that's a beautiful mate congratulations very nice all right so first first order of business i'm gonna report him all right"
+  },
+  {
+   "ply": 6,
+   "t": 886.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "said": "yeah okay i'll uh this this this this guy will not last very long but it's interesting um yeah cheaters suck i mean it just it just sucks how many of these people there are yeah i'll analyze anyway we'll look with an engine um just obviously we will confirm i violated my golden rule and i reported to him without actually checking the game explicitly but i think everybody can forgive me for that so first a quick run through an accuracy check yeah 95 it seems like is the accuracy he aims for he aims for in all of his games so yeah knight g4 knight back to f6 bishop g4 is best knight takes before yeah this knight takes before bishop d7 routine was already highly highly suspicious rook rook 6 c7 look at this move rook 67 prophylaxis against knight before"
+  }
+ ],
+ "forks": []
+}

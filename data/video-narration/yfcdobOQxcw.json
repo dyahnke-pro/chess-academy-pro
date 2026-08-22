@@ -1,0 +1,278 @@
+{
+ "videoId": "yfcdobOQxcw",
+ "title": "Ruy Lopez | The Sensei Speedrun | GM Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 9.5,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "Okay, let's go conventional. Let's go E5."
+  },
+  {
+   "ply": 3,
+   "t": 17.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "said": "Let's go traditional style."
+  },
+  {
+   "ply": 4,
+   "t": 18.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "Let's see what we face this level. Italian probably still the most common."
+  },
+  {
+   "ply": 5,
+   "t": 27.5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "said": "Five 11 months. Thank you. This should be five. Ru Lopez. Now, I think we faced this once or twice in the speedrun, and I've been advocating for the main"
+  },
+  {
+   "ply": 6,
+   "t": 47.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "said": "line. Um, I've been advocating for the main line. I don't really think that, you know, if you're an E5 player that you should be experimenting too much against the real Lopez. So, A6 is"
+  },
+  {
+   "ply": 7,
+   "t": 54,
+   "line": [
+    "Ba4"
+   ],
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "said": "the first move. And now we go knight f6"
+  },
+  {
+   "ply": 8,
+   "t": 56,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 5",
+   "said": "main line. And here white generally"
+  },
+  {
+   "ply": 9,
+   "t": 64,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B2PP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "said": "castles. But note that yeah, I was opening I was opening my mouth to say that in the real Lopez there is literally a gazillion sidelines that white can play and they're all sort of in the same"
+  },
+  {
+   "ply": 5,
+   "t": 86.5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "said": "category. Like not bad. They can be dangerous if you don't know how to face them. So if you're an E5 player who wants to go mainline R Lopez, you've got to know them. That raises the appeal of playing certain sidelines like the Schllean, which avoid all of white's"
+  },
+  {
+   "ply": 9,
+   "t": 93.5,
+   "line": [
+    "Nf6",
+    "Ba4",
+    "a6",
+    "d4"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B2PP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "said": "annoying sidelines in the main line, but there's nothing wrong with learning a little bit more. D4 is one of those sidelines. And the way we we're supposed to respond here, you know, is not to reinvent the wheel. You don't want to"
+  },
+  {
+   "ply": 10,
+   "t": 110,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/8/B2pP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 6",
+   "said": "take E4 because that keeps the D4 pawn alive. It allows like D5 that it's bad. The move is simply E takes D4 as far as I remember. And then well, as you can probably imagine, white has a couple of moves. There's E4 E5. Uh, white can also just"
+  },
+  {
+   "ply": 11,
+   "t": 130,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/8/B2pP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 1 6",
+   "said": "castle here. So, it depends on what he chooses. Well, the Hornets I might go to play in game. Castles. Yeah, that's a move. Now, we want to refrain from taking on E4. And I don't think I even need to really explain to you guys why. I mean, we haven't we have nothing developed. Rook E1 there. Even though we can defend the knight with D5, that opens up the uh A4 E8 diagonal. And then after knight takes"
+  },
+  {
+   "ply": 12,
+   "t": 162,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk2r/1pppbppp/p1n2n2/8/B2pP3/5N2/PPP2PPP/RNBQ1RK1 w kq - 2 7",
+   "said": "D4, white is threatening knight takes C6 and F3 becomes a threat. So we I think black has several possible moves here, but the move that I was always taught is just to develop modestly with bishop E7. And that's where the bishop belongs in the main line of the Ru Lopez as well."
+  },
+  {
+   "ply": 11,
+   "t": 172.5,
+   "line": [],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/8/B2pP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 1 6",
+   "said": "closes the E file and it prepares to castle. You might wonder why bishop C5 is not a"
+  },
+  {
+   "ply": 13,
+   "t": 174,
+   "line": [
+    "Be7",
+    "e5"
+   ],
+   "fen": "r1bqk2r/1pppbppp/p1n2n2/4P3/B2p4/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 7",
+   "said": "move, but that's something I'll talk about after the game. Now, does anybody know where the knight should go in this line? This might not be quite as intuitive as you may think. There's two viable squares, E D5 and E4. Definitely don't want to go back to G8 and undevelop. So, the move is knight up"
+  },
+  {
+   "ply": 14,
+   "t": 205,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r1bqk2r/1pppbppp/p1n5/4P3/B2pn3/5N2/PPP2PPP/RNBQ1RK1 w kq - 1 8",
+   "said": "to E4. And you might say, \"Well, but didn't you just say we don't want our knight there?\" But the circumstances have changed. Um, the E file is now closed. So, rook E1 is no longer dangerous. And the knight has this retreating square on C5 where it also tickles the bishop and virtually forces a desirable trade. Bishop takes C6 D,"
+  },
+  {
+   "ply": 15,
+   "t": 223.5,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqk2r/1pppbppp/p1n5/4P3/B2Nn3/8/PPP2PPP/RNBQ1RK1 b kq - 0 8",
+   "said": "which in turn opens up the other bishop and causes white to give up the Ru Lopez bishop. Now, white has Yeah. Knight takes D4 is the move. And now we've got several possibilities."
+  },
+  {
+   "ply": 16,
+   "t": 234.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/1pppbppp/p1n5/4P3/B2Nn3/8/PPP2PPP/RNBQ1RK1 w - - 1 9",
+   "said": "We can go knight C5 immediately, but the the safe move is just to castle first. Just to castle immediately. And then the theory goes knight F5. Let's see if if he plays that. Knight F5 is the the only move that I'm aware of for white. And again, you might say, well, what about knight takes C6?"
+  },
+  {
+   "ply": 17,
+   "t": 260,
+   "line": [
+    "Nf5"
+   ],
+   "fen": "r1bq1rk1/1pppbppp/p1n5/4PN2/B3n3/8/PPP2PPP/RNBQ1RK1 b - - 2 9",
+   "said": "Well, like I mentioned, we want to play D takes C6. Why not taking toward the center? Well, in the Ray Lopez, you often play D takes C6 because BC creates two pawn islands and it also um keeps the bishop hemmed in on C8. Now, we want to respond accurately. It's actually very important to respond accurately here because well, white is threatening queen G4. That's a very nasty threat. So, we need to get rid of the knight. So, you might say, well, is the move then G6?"
+  },
+  {
+   "ply": 18,
+   "t": 291.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bq1rk1/1pp1bppp/p1n5/3pPN2/B3n3/8/PPP2PPP/RNBQ1RK1 w - d6 0 10",
+   "said": "But G6 weakens your king side tremendously and it also doesn't really stop queen G4. The move that we want to play is D7 D5 which opens up the light script bishop attacks the knight and forces white to make a decision in regards to that knight. Yeah, our opponent is is knowledgeable following the main line. And here white's got several moves. White can take the bishop. The move that I'm most familiar with is on pant. I had a game like this a couple of years ago over the board. And that leads to an equal position as far as I know. Pretty dry equal position. If white follows the main line with on passant, it's going to lead to a"
+  },
+  {
+   "ply": 19,
+   "t": 330,
+   "line": [
+    "exd6"
+   ],
+   "fen": "r1bq1rk1/1pp1bppp/p1nP4/5N2/B3n3/8/PPP2PPP/RNBQ1RK1 b - - 0 10",
+   "said": "bunch of trades. On pass, we take the knight on F5. White takes the bishop on E7. We play queen takes C7. White can also make a trade on C6, which will then lead to an opposite colored bishop position where our ruined pawn structure"
+  },
+  {
+   "ply": 20,
+   "t": 332,
+   "line": [
+    "Bxf5"
+   ],
+   "fen": "r2q1rk1/1pp1bppp/p1nP4/5b2/B3n3/8/PPP2PPP/RNBQ1RK1 w - - 0 11",
+   "said": "will be counterbalanced by our slightly more active pieces."
+  },
+  {
+   "ply": 21,
+   "t": 339,
+   "line": [
+    "dxe7"
+   ],
+   "fen": "r2q1rk1/1pp1Pppp/p1n5/5b2/B3n3/8/PPP2PPP/RNBQ1RK1 b - - 0 11",
+   "said": "Yeah, our opponent is following the main line. We could take with a knight, but taking"
+  },
+  {
+   "ply": 22,
+   "t": 342,
+   "line": [
+    "Qxe7"
+   ],
+   "fen": "r4rk1/1pp1qppp/p1n5/5b2/B3n3/8/PPP2PPP/RNBQ1RK1 w - - 0 12",
+   "said": "with the queen is more natural. Bishop takes C6 is not a big worry, especially with opposite colored bishops. The role of a bad pawn structure is quite devalued because let's upgrade because white"
+  },
+  {
+   "ply": 24,
+   "t": 362.5,
+   "line": [
+    "Bxc6",
+    "bxc6"
+   ],
+   "fen": "r4rk1/2p1qppp/p1p5/5b2/4n3/8/PPP2PPP/RNBQ1RK1 w - - 0 13",
+   "said": "doesn't have the machinery available to attack our pawns easily. Okay, this is all that I know by the way. I don't know any more theory. This is this is all that I know. So, from here on out, I'm sort of on my"
+  },
+  {
+   "ply": 25,
+   "t": 379,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r4rk1/2p1qppp/p1p5/5b2/4n3/4B3/PPP2PPP/RN1Q1RK1 b - - 1 13",
+   "said": "own. We're on our own. Yeah. Rook E1. I'm expecting rook E1. That's a natural move. Bishop E3. Okay. Well, I think we should continue playing naturally here. Um, again, I I don't think it's worthwhile to reinvent the wheel. So, what seems natural in this position to you? Sort of ask yourself that question. See what you come up with. Yeah. me. I mean, rook A D8 seems like the move, but we should spend a couple of moments figuring out which rook to put on D8, right? We should never automatically put one of the rooks on D8. The the worry that I have, slight worry that I have with rook A8 is that white might play queen D1 to E2. And that hits the A6 pawn. And we don't just want to give away pawns in this position for free. The benefit of rook FD8, as unnatural as that move looks, is that the A rook does defend A6. On the other hand, after rook a D8, queen E2, we can make the move A6 A5. And if we can defend that pawn, our other rook is going to come to E8. And I"
+  },
+  {
+   "ply": 26,
+   "t": 447,
+   "line": [
+    "Rad8"
+   ],
+   "fen": "3r1rk1/2p1qppp/p1p5/5b2/4n3/4B3/PPP2PPP/RN1Q1RK1 w - - 2 14",
+   "said": "feel like going rook FD8, you know, is something you'd only do for one reason. And the A8 rook is just kind of going to remain passive for a while. I I'm not too worried about the issue with the A pawn. I think we'll be able to resolve that. I would much rather keep my rooks harmonious, if that makes sense. What about putting something on the B file? Well, we can put something on the B file. Um, yeah, or we could sack the pawn and lift the rooks. That's the the tall-like approach. Rook D6, rook G6. Just go for checkmate. We'll think about it if he plays queen E2, but um, rook B8 I wasn't too impressed with because of the possibility of B3. And then the rook is kind of biting on Granite. You could argue that B3 weakens the long diagonal and then there's queen F6. Um, oh my goodness. There is an amazing trick for white after rook D6. Rook D6 doesn't work because of a ridiculous tactic which our opponent probably will find. So, we can play this in a modified move order. Bishop C5. Yeah, bishop C5 because of the standoff between the queens. That's why you always have to notice uh what I call standoffs any situation like this because it it opens"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5"
+   ],
+   "options": [
+    {
+     "san": "a6",
+     "t": 47.5,
+     "continuation": "a6",
+     "said": "line. Um, I've been advocating for the main line. I don't really think that, you know, if you're an E5 player that you should be experimenting too much against the real Lopez. So, A6 is the first move. And now we go knight f6 main line. And here white generally castles. But note that yeah, I was opening I was opening my mouth to say that in the real Lopez there is literally a gazillion sidelines that white can play and they're all sort of in the same category. Like not bad. They can be dangerous if you don't know how to face them. So if you're an E5 player who wants to go mainline R Lopez, you've got to know them. That raises the appeal of playing certain sidelines like the Schllean, which avoid all of white's annoying sidelines in the main line, but there's nothing wrong with learning a little bit more. D4 is one of those sidelines. And the way we we're supposed to respond here, you know, is not to reinvent the wheel. You don't want to take E4 because that keeps the D4 pawn alive. It allows like D5 that it's bad."
+    },
+    {
+     "san": "Nf6",
+     "t": 93.5,
+     "continuation": "Nf6 Ba4 a6 d4",
+     "said": "wants to go mainline R Lopez, you've got to know them. That raises the appeal of playing certain sidelines like the Schllean, which avoid all of white's annoying sidelines in the main line, but there's nothing wrong with learning a little bit more. D4 is one of those sidelines. And the way we we're supposed to respond here, you know, is not to reinvent the wheel. You don't want to take E4 because that keeps the D4 pawn alive. It allows like D5 that it's bad. The move is simply E takes D4 as far as I remember. And then well, as you can probably imagine, white has a couple of moves. There's E4 E5. Uh, white can also just castle here. So, it depends on what he chooses. Well, the Hornets I might go to play in game. Castles. Yeah, that's a move. Now, we want to refrain from taking on E4. And I don't think I even need to really explain to you guys why. I mean, we haven't we have nothing developed. Rook E1 there. Even though we can defend the knight with D5, that opens up the uh A4 E8 diagonal. And then after knight takes D4, white is threatening knight takes C6 and F3 becomes a threat. So we I think"
+    }
+   ]
+  }
+ ]
+}

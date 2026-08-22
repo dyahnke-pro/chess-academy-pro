@@ -1,0 +1,759 @@
+{
+ "videoId": "lRgIkvwIh4g",
+ "title": "How Naroditsky Defeated Caruana At The US Championship!!!",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 67.5,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "essentially out of the opening so i decided to pause all of the sicilian and alaka and shenanigans and go with what i know best which is e45 and fabio has been playing the rye lopez almost um"
+  },
+  {
+   "ply": 4,
+   "t": 77.5,
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "said": "almost exclusively uh in in the last couple of months so i didn't really prepare for much else to be honest i"
+  },
+  {
+   "ply": 5,
+   "t": 81.5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "said": "briefly looked at the italian but i was fully expecting that rylo because he plays it i i fluctuated here"
+  },
+  {
+   "ply": 6,
+   "t": 91.5,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "said": "between several different possible variations in the past i mostly played the main line a6 bishop a4 knight"
+  },
+  {
+   "ply": 7,
+   "t": 93.5,
+   "line": [
+    "Ba4"
+   ],
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "said": "f6"
+  },
+  {
+   "ply": 5,
+   "t": 97,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "said": "later against dominguez i played the schliemann which i also contemplated but fabi seemed to know it down pat and then my eyes kind of settled on a line that i faced with the white pieces against our tamiya of a name chess thank you my baby"
+  },
+  {
+   "ply": 6,
+   "t": 121,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkbnr/ppp2ppp/2np4/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "said": "and and that is called the deferred or the delayed steinitz variation not the delayed shaleem and the delayed steinens the traditional steinitz is to go d6 in this position which is still considered a very solid move but but it's also very passive it blocks the bishop and black"
+  },
+  {
+   "ply": 5,
+   "t": 127,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "said": "is worse here the inclusion of a6 bishop a4"
+  },
+  {
+   "ply": 7,
+   "t": 128,
+   "line": [
+    "a6",
+    "Ba4"
+   ],
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "said": ""
+  },
+  {
+   "ply": 8,
+   "t": 129,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bqkbnr/1pp2ppp/p1np4/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+   "said": "allows the extra option of b5 and that has many concrete benefits for black"
+  },
+  {
+   "ply": 9,
+   "t": 140.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkbnr/1pp2ppp/p1np4/4p3/B2PP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 5",
+   "said": "one of which is that uh you know you get the famous noah's ark trap if white plays d4 here uh traditionally black has responded with"
+  },
+  {
+   "ply": 10,
+   "t": 144.5,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1bqkbnr/2p2ppp/p1np4/1p2p3/B2PP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 6",
+   "said": "v5 bishop b3 and now knight takes d4 and"
+  },
+  {
+   "ply": 12,
+   "t": 146.5,
+   "line": [
+    "Bb3",
+    "Nxd4"
+   ],
+   "fen": "r1bqkbnr/2p2ppp/p2p4/1p2p3/3nP3/1B3N2/PPP2PPP/RNBQK2R w KQkq - 0 7",
+   "said": "this is a trap that i'm sure almost"
+  },
+  {
+   "ply": 14,
+   "t": 148.5,
+   "line": [
+    "Nxd4",
+    "exd4"
+   ],
+   "fen": "r1bqkbnr/2p2ppp/p2p4/1p6/3pP3/1B6/PPP2PPP/RNBQK2R w KQkq - 0 8",
+   "said": "everybody or a lot of people in in the audience"
+  },
+  {
+   "ply": 15,
+   "t": 153.5,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "r1bqkbnr/2p2ppp/p2p4/1p6/3QP3/1B6/PPP2PPP/RNB1K2R b KQkq - 0 8",
+   "said": "probably know queen d4 and already black is winning with c5 and"
+  },
+  {
+   "ply": 16,
+   "t": 155,
+   "line": [
+    "c5"
+   ],
+   "fen": "r1bqkbnr/5ppp/p2p4/1pp5/3QP3/1B6/PPP2PPP/RNB1K2R w KQkq - 0 9",
+   "said": "the bishop is going to be trapped"
+  },
+  {
+   "ply": 17,
+   "t": 159,
+   "line": [
+    "Qd5"
+   ],
+   "fen": "r1bqkbnr/5ppp/p2p4/1ppQ4/4P3/1B6/PPP2PPP/RNB1K2R b KQkq - 1 9",
+   "said": "between d5 first you have to"
+  },
+  {
+   "ply": 18,
+   "t": 163,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2qkbnr/5ppp/p2pb3/1ppQ4/4P3/1B6/PPP2PPP/RNB1K2R w KQkq - 2 10",
+   "said": "protect both the rook and the maid threats of bishop b6 check bishop d7"
+  },
+  {
+   "ply": 22,
+   "t": 167,
+   "line": [
+    "Qc4",
+    "Bd7",
+    "Qd5",
+    "c4"
+   ],
+   "fen": "r2qkbnr/3b1ppp/p2p4/1p1Q4/2p1P3/1B6/PPP2PPP/RNB1K2R w KQkq - 0 12",
+   "said": "queen d5 now the queen defends the rook and you can go c4 okay so this is nothing to write home"
+  },
+  {
+   "ply": 8,
+   "t": 173,
+   "line": [],
+   "fen": "r1bqkbnr/1pp2ppp/p1np4/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+   "said": "about uh obviously fabi knows not to play d4"
+  },
+  {
+   "ply": 9,
+   "t": 175.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkbnr/1pp2ppp/p1np4/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 5",
+   "said": "and he decides to castle which is one of"
+  },
+  {
+   "ply": 8,
+   "t": 178.5,
+   "line": [],
+   "fen": "r1bqkbnr/1pp2ppp/p1np4/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+   "said": "the main lines together with c3"
+  },
+  {
+   "ply": 9,
+   "t": 181.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkbnr/1pp2ppp/p1np4/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 5",
+   "said": "and um"
+  },
+  {
+   "ply": 10,
+   "t": 183,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "r2qkbnr/1ppb1ppp/p1np4/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 2 6",
+   "said": "okay so bishop d7 following the sort of modern line that our tamiya has been playing and a lot of people have been resorting to this line of the black the funny thing is if you turn on stockfish here at first it gives like 0.7 for white which is a lot even for the ray lopez but if you let it sit and if you delve really deeply into these positions you often find that uh that that stockfish kind of flounders"
+  },
+  {
+   "ply": 11,
+   "t": 216.5,
+   "line": [
+    "c3"
+   ],
+   "fen": "r2qkbnr/1ppb1ppp/p1np4/4p3/B3P3/2P2N2/PP1P1PPP/RNBQ1RK1 b kq - 0 6",
+   "said": "here and doesn't propose particularly appealing ideas for white so for example one very common thing that you will see and even modern computers do this i'm going to rewind in just a second so"
+  },
+  {
+   "ply": 14,
+   "t": 219,
+   "line": [
+    "Nf6",
+    "Re1",
+    "g6"
+   ],
+   "fen": "r2qkb1r/1ppb1p1p/p1np1np1/4p3/B3P3/2P2N2/PP1P1PPP/RNBQR1K1 w kq - 0 8",
+   "said": ""
+  },
+  {
+   "ply": 15,
+   "t": 220.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r2qkb1r/1ppb1p1p/p1np1np1/4p3/B2PP3/2P2N2/PP3PPP/RNBQR1K1 b kq - 0 8",
+   "said": "you know don't i'm just trying to get to"
+  },
+  {
+   "ply": 16,
+   "t": 223,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "r2qk2r/1ppb1pbp/p1np1np1/4p3/B2PP3/2P2N2/PP3PPP/RNBQR1K1 w kq - 1 9",
+   "said": "the appropriate position here for example the chess.com engine is recommending is"
+  },
+  {
+   "ply": 17,
+   "t": 228.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "r2qk2r/1ppb1pbp/p1np1np1/3Pp3/B3P3/2P2N2/PP3PPP/RNBQR1K1 b kq - 0 9",
+   "said": "the top move d5"
+  },
+  {
+   "ply": 18,
+   "t": 231,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "r2qk2r/1ppbnpbp/p2p1np1/3Pp3/B3P3/2P2N2/PP3PPP/RNBQR1K1 w kq - 1 10",
+   "said": "but as you guys can probably understand this"
+  },
+  {
+   "ply": 19,
+   "t": 232,
+   "line": [
+    "Bxd7+"
+   ],
+   "fen": "r2qk2r/1ppBnpbp/p2p1np1/3Pp3/4P3/2P2N2/PP3PPP/RNBQR1K1 b kq - 0 10",
+   "said": "is"
+  },
+  {
+   "ply": 20,
+   "t": 236,
+   "line": [
+    "Nxd7"
+   ],
+   "fen": "r2qk2r/1ppnnpbp/p2p2p1/3Pp3/4P3/2P2N2/PP3PPP/RNBQR1K1 w kq - 0 11",
+   "said": "maybe objectively better for white but from a king's indian perspective it's kind of like a dream position i'm already kind of poised to play f5 and um i had no problem with with this"
+  },
+  {
+   "ply": 16,
+   "t": 249.5,
+   "line": [],
+   "fen": "r2qk2r/1ppb1pbp/p1np1np1/4p3/B2PP3/2P2N2/PP3PPP/RNBQR1K1 w kq - 1 9",
+   "said": "type of situation um so in these closed center type positions the computer can still uh sometimes falter"
+  },
+  {
+   "ply": 10,
+   "t": 258.5,
+   "line": [],
+   "fen": "r2qkbnr/1ppb1ppp/p1np4/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 2 6",
+   "said": "okay so now let's go back to bishop d7 um against our tamiya i think i played c4 here kind of trying to get a marutzi"
+  },
+  {
+   "ply": 11,
+   "t": 272,
+   "line": [
+    "c3"
+   ],
+   "fen": "r2qkbnr/1ppb1ppp/p1np4/4p3/B3P3/2P2N2/PP1P1PPP/RNBQ1RK1 b kq - 0 6",
+   "said": "type position it didn't go particularly well and i think fabi plays you know objectively best line which is"
+  },
+  {
+   "ply": 12,
+   "t": 274.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r2qkb1r/1ppb1ppp/p1np1n2/4p3/B3P3/2P2N2/PP1P1PPP/RNBQ1RK1 w kq - 1 7",
+   "said": "c3 knight f6 and now"
+  },
+  {
+   "ply": 13,
+   "t": 277.5,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r2qkb1r/1ppb1ppp/p1np1n2/4p3/B3P3/2P2N2/PP1P1PPP/RNBQR1K1 b kq - 2 7",
+   "said": "very important move rookie one because"
+  },
+  {
+   "ply": 12,
+   "t": 279,
+   "line": [],
+   "fen": "r2qkb1r/1ppb1ppp/p1np1n2/4p3/B3P3/2P2N2/PP1P1PPP/RNBQ1RK1 w kq - 1 7",
+   "said": "if white plays d4"
+  },
+  {
+   "ply": 13,
+   "t": 280,
+   "line": [
+    "d4"
+   ],
+   "fen": "r2qkb1r/1ppb1ppp/p1np1n2/4p3/B2PP3/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 7",
+   "said": "then it turns out the black actually can"
+  },
+  {
+   "ply": 14,
+   "t": 282,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "r2qkb1r/1ppb1ppp/p1np4/4p3/B2Pn3/2P2N2/PP3PPP/RNBQ1RK1 w kq - 0 8",
+   "said": "take this pawn and you get a forced line that results in a slightly better end game for white but i had analyzed that end game very"
+  },
+  {
+   "ply": 15,
+   "t": 295,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r2qkb1r/1ppb1ppp/p1np4/4p3/B2Pn3/2P2N2/PP3PPP/RNBQR1K1 b kq - 1 8",
+   "said": "very deeply and i i was confident that i would be able to hold a draw so the line here goes rookie one you"
+  },
+  {
+   "ply": 16,
+   "t": 297,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r2qkb1r/1ppb1ppp/p1np1n2/4p3/B2P4/2P2N2/PP3PPP/RNBQR1K1 w kq - 2 9",
+   "said": "drop the knight back and basically you get liquidation so d5 d5 bishop c6 bishop c6 queen d8 now rook d8 walks into kind of a potential x-ray so you play king d8 knight e5 bishop d5 um at this point there are let me see yeah at this point there are in the database about ten games seven games including nepo against artemyev and by the way both bishop b and bishop d5 here i think are good moves"
+  },
+  {
+   "ply": 17,
+   "t": 337.5,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r2qkb1r/1ppb1ppp/p1np1n2/4P3/B7/2P2N2/PP3PPP/RNBQR1K1 b kq - 0 9",
+   "said": "and it's like a 0.3 type advantage because white's got a bit of a clamp here and the king is weak but ultimately black consolidates due to the two bishops i was not worried about this i didn't think fabio would burn his bridges like this right and risk drawing the game"
+  },
+  {
+   "ply": 16,
+   "t": 340.5,
+   "line": [],
+   "fen": "r2qkb1r/1ppb1ppp/p1np1n2/4p3/B2P4/2P2N2/PP3PPP/RNBQR1K1 w kq - 2 9",
+   "said": "because he'd been struggling this"
+  },
+  {
+   "ply": 13,
+   "t": 342.5,
+   "line": [],
+   "fen": "r2qkb1r/1ppb1ppp/p1np1n2/4p3/B2PP3/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 7",
+   "said": "tournament so far and indeed to my you know non-surprise he goes rookie one and now g6 so this is the whole idea behind black setup you stein it's often played bishop e7 in these positions but this is tremendously passive i mean you can just see bishops on e7 and d7 like this is not the way modern players tend to play and there's nothing super wrong with this it's just"
+  },
+  {
+   "ply": 16,
+   "t": 376,
+   "line": [
+    "g6",
+    "Re1",
+    "Bg7"
+   ],
+   "fen": "r2qk2r/1ppb1pbp/p1np1np1/4p3/B2PP3/2P2N2/PP3PPP/RNBQR1K1 w kq - 2 9",
+   "said": "too passive the modern treatment is to play g6 and kind of played king's indian style fiance of the bishop and black is a little bit behind on development on the king's side but it turns out after d4 bishop g7 that tactically everything is justified here"
+  },
+  {
+   "ply": 17,
+   "t": 380,
+   "line": [
+    "Bxc6"
+   ],
+   "fen": "r2qk2r/1ppb1pbp/p1Bp1np1/4p3/3PP3/2P2N2/PP3PPP/RNBQR1K1 b kq - 0 9",
+   "said": "once again bishop c6"
+  },
+  {
+   "ply": 18,
+   "t": 381,
+   "line": [
+    "Bxc6"
+   ],
+   "fen": "r2qk2r/1pp2pbp/p1bp1np1/4p3/3PP3/2P2N2/PP3PPP/RNBQR1K1 w kq - 0 10",
+   "said": "and de might look very appetizing"
+  },
+  {
+   "ply": 19,
+   "t": 382,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r2qk2r/1pp2pbp/p1bp1np1/4P3/4P3/2P2N2/PP3PPP/RNBQR1K1 b kq - 0 10",
+   "said": ""
+  },
+  {
+   "ply": 20,
+   "t": 385,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "r2qk2r/1pp2pbp/p1bp2p1/4P3/4n3/2P2N2/PP3PPP/RNBQR1K1 w kq - 0 11",
+   "said": "but black simply takes the pawn on e4 and on the next move black is going to"
+  },
+  {
+   "ply": 21,
+   "t": 390.5,
+   "line": [
+    "exd6"
+   ],
+   "fen": "r2qk2r/1pp2pbp/p1bP2p1/8/4n3/2P2N2/PP3PPP/RNBQR1K1 b kq - 0 11",
+   "said": "castle and even if white takes on d6 you still"
+  },
+  {
+   "ply": 22,
+   "t": 392,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/1pp2pbp/p1bP2p1/8/4n3/2P2N2/PP3PPP/RNBQR1K1 w - - 1 12",
+   "said": "castle"
+  },
+  {
+   "ply": 24,
+   "t": 394,
+   "line": [
+    "dxc7",
+    "Qxc7"
+   ],
+   "fen": "r4rk1/1pq2pbp/p1b3p1/8/4n3/2P2N2/PP3PPP/RNBQR1K1 w - - 0 13",
+   "said": "this occurred in carjacking against artemyev and black has excellent compensation for the pawn or sorry uh so again sir tammy we're telling you we won that game it's equal but"
+  },
+  {
+   "ply": 21,
+   "t": 412,
+   "line": [],
+   "fen": "r2qk2r/1pp2pbp/p1bP2p1/8/4n3/2P2N2/PP3PPP/RNBQR1K1 b kq - 0 11",
+   "said": "rooks are coming to d8 i mean you can see you know you don't even need to calculate it to understand the black as full compensation here for the pawn and there's nothing else that y can do"
+  },
+  {
+   "ply": 20,
+   "t": 413,
+   "line": [],
+   "fen": "r2qk2r/1pp2pbp/p1bp2p1/4P3/4n3/2P2N2/PP3PPP/RNBQR1K1 w kq - 0 11",
+   "said": "here um some of you tactically minded people"
+  },
+  {
+   "ply": 23,
+   "t": 419,
+   "line": [
+    "Rxe4",
+    "Bxe4",
+    "Qa4+"
+   ],
+   "fen": "r2qk2r/1pp2pbp/p2p2p1/4P3/Q3b3/2P2N2/PP3PPP/RNB3K1 b kq - 1 12",
+   "said": "might notice this idea but the problem when you fork a bishop is that the bishop is capable of saving"
+  },
+  {
+   "ply": 24,
+   "t": 426.5,
+   "line": [
+    "Bc6"
+   ],
+   "fen": "r2qk2r/1pp2pbp/p1bp2p1/4P3/Q7/2P2N2/PP3PPP/RNB3K1 w kq - 2 13",
+   "said": "both itself and the other forked piece you bring it back to c6 and this was all"
+  },
+  {
+   "ply": 16,
+   "t": 431.5,
+   "line": [],
+   "fen": "r2qk2r/1ppb1pbp/p1np1np1/4p3/B2PP3/2P2N2/PP3PPP/RNBQR1K1 w kq - 2 9",
+   "said": "part of my prep um fabi you know also knew this he was still in"
+  },
+  {
+   "ply": 17,
+   "t": 436,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "r2qk2r/1ppb1pbp/p1np1np1/4p3/B2PP3/2P2N2/PP1N1PPP/R1BQR1K1 b kq - 3 9",
+   "said": "his theory and so he plays knight b to d2 developing and please feel free to ask questions thank you pat you've been and clarify stuff i'm going too fast i'm happy to repeat whatever needs repeating i'm not going to do this twice so please please feel free um so knight bd2 and here comes uh a moment that i was really proud of iii this is not a novelty by any means but uh well it almost is a novelty actually there are only three games in the database uh with the move that i played here and by transposition after my next move there's only four games in the database and i'm the only sort of gm game um we end up transposing on the 11th move to"
+  },
+  {
+   "ply": 18,
+   "t": 495,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r2q1rk1/1ppb1pbp/p1np1np1/4p3/B2PP3/2P2N2/PP1N1PPP/R1BQR1K1 w - - 4 10",
+   "said": "a more popular line which has about 30 games but still very uncommon most common movers you guys might probably unders probably guess is just a castle it's just a castle uh and we get you know this kind of"
+  },
+  {
+   "ply": 19,
+   "t": 501,
+   "line": [
+    "Bc2"
+   ],
+   "fen": "r2q1rk1/1ppb1pbp/p1np1np1/4p3/3PP3/2P2N2/PPBN1PPP/R1BQR1K1 b - - 5 10",
+   "said": "structure generally the bishop drops back to c2 to solidify the center and i think white is slightly better here but having left sorry having left the"
+  },
+  {
+   "ply": 22,
+   "t": 509.5,
+   "line": [
+    "Re8",
+    "Ba4",
+    "Kh8"
+   ],
+   "fen": "r2qr2k/1ppb1pbp/p1np1np1/4p3/B2PP3/2P2N2/PP1N1PPP/R1BQR1K1 w - - 8 12",
+   "said": "computer on for a long time i discovered that there's a very interesting and seemingly anti-positional idea you take on d4 now what are we doing aren't we just yielding the center isn't this the whole point not to do this right well you know that's what it may seem like visually but it turns out that because of the slight awkwardness i think of white's coordination black has all these sudden tactical ideas that allow me to put super significant pressure on white's center thank you only correct what ideas are those well first of all it's not so easy for white to make a move because the bishop on c1 is hemmed in by the knight and i had a game like this earlier today i think the typical rai lopez move is knight f1 but does anybody remember how black can pounce in this position and if you are a experienced try lopez player you will notice that what's very alarming about white's position is that"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5"
+   ],
+   "options": [
+    {
+     "san": "a6",
+     "t": 91.5,
+     "continuation": "a6",
+     "said": "briefly looked at the italian but i was fully expecting that rylo because he plays it i i fluctuated here between several different possible variations in the past i mostly played the main line a6 bishop a4 knight f6 later against dominguez i played the schliemann which i also contemplated but fabi seemed to know it down pat and then my eyes kind of settled on a line that i faced with the white pieces against our tamiya of a name chess thank you my baby and and that is called the deferred or the delayed steinitz variation not the delayed shaleem and the delayed steinens the traditional steinitz is to go d6 in this position which is still considered a very solid move but but it's also very passive it blocks the bishop and black is worse here the inclusion of a6 bishop a4 allows the extra option of b5 and that has many concrete benefits for black one of which is that uh you know you get the famous noah's ark trap if white plays d4 here uh traditionally black has responded with v5 bishop b3 and now knight takes d4 and this is a trap that i'm sure almost everybody or a lot of people in in the audience"
+    },
+    {
+     "san": "d6",
+     "t": 121,
+     "continuation": "d6",
+     "said": "and and that is called the deferred or the delayed steinitz variation not the delayed shaleem and the delayed steinens the traditional steinitz is to go d6 in this position which is still considered a very solid move but but it's also very passive it blocks the bishop and black is worse here the inclusion of a6 bishop a4 allows the extra option of b5 and that has many concrete benefits for black one of which is that uh you know you get the famous noah's ark trap if white plays d4 here uh traditionally black has responded with v5 bishop b3 and now knight takes d4 and this is a trap that i'm sure almost everybody or a lot of people in in the audience probably know queen d4 and already black is winning with c5 and the bishop is going to be trapped between d5 first you have to protect both the rook and the maid threats of bishop b6 check bishop d7 queen d5 now the queen defends the rook and you can go c4 okay so this is nothing to write home about uh obviously fabi knows not to play d4 and he decides to castle which is one of the main lines together with c3"
+    }
+   ]
+  },
+  {
+   "ply": 8,
+   "fen": "r1bqkbnr/1pp2ppp/p1np4/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "a6",
+    "Ba4",
+    "d6"
+   ],
+   "options": [
+    {
+     "san": "d4",
+     "t": 140.5,
+     "continuation": "d4",
+     "said": "allows the extra option of b5 and that has many concrete benefits for black one of which is that uh you know you get the famous noah's ark trap if white plays d4 here uh traditionally black has responded with v5 bishop b3 and now knight takes d4 and this is a trap that i'm sure almost everybody or a lot of people in in the audience probably know queen d4 and already black is winning with c5 and the bishop is going to be trapped between d5 first you have to protect both the rook and the maid threats of bishop b6 check bishop d7 queen d5 now the queen defends the rook and you can go c4 okay so this is nothing to write home about uh obviously fabi knows not to play d4 and he decides to castle which is one of the main lines together with c3 and um okay so bishop d7 following the sort of modern line that our tamiya has been playing and a lot of people have been resorting to this line of the black the funny thing is if you turn on stockfish here at first it gives like 0.7 for white which is a lot even for the ray lopez but if you let it sit and if you delve really deeply into"
+    },
+    {
+     "san": "O-O",
+     "t": 175.5,
+     "continuation": "O-O",
+     "said": "queen d5 now the queen defends the rook and you can go c4 okay so this is nothing to write home about uh obviously fabi knows not to play d4 and he decides to castle which is one of the main lines together with c3 and um okay so bishop d7 following the sort of modern line that our tamiya has been playing and a lot of people have been resorting to this line of the black the funny thing is if you turn on stockfish here at first it gives like 0.7 for white which is a lot even for the ray lopez but if you let it sit and if you delve really deeply into these positions you often find that uh that that stockfish kind of flounders here and doesn't propose particularly appealing ideas for white so for example one very common thing that you will see and even modern computers do this i'm going to rewind in just a second so you know don't i'm just trying to get to the appropriate position here for example the chess.com engine is recommending is the top move d5 but as you guys can probably understand this is maybe objectively better for white but"
+    }
+   ]
+  },
+  {
+   "ply": 12,
+   "fen": "r2qkb1r/1ppb1ppp/p1np1n2/4p3/B3P3/2P2N2/PP1P1PPP/RNBQ1RK1 w kq - 1 7",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "a6",
+    "Ba4",
+    "d6",
+    "O-O",
+    "Bd7",
+    "c3",
+    "Nf6"
+   ],
+   "options": [
+    {
+     "san": "Re1",
+     "t": 277.5,
+     "continuation": "Re1",
+     "said": "type position it didn't go particularly well and i think fabi plays you know objectively best line which is c3 knight f6 and now very important move rookie one because if white plays d4 then it turns out the black actually can take this pawn and you get a forced line that results in a slightly better end game for white but i had analyzed that end game very very deeply and i i was confident that i would be able to hold a draw so the line here goes rookie one you drop the knight back and basically you get liquidation so d5 d5 bishop c6 bishop c6 queen d8 now rook d8 walks into kind of a potential x-ray so you play king d8 knight e5 bishop d5 um at this point there are let me see yeah at this point there are in the database about ten games seven games including nepo against artemyev and by the way both bishop b and bishop d5 here i think are good moves and it's like a 0.3 type advantage because white's got a bit of a clamp here and the king is weak but ultimately black consolidates due to the two bishops i was not worried about this i didn't think fabio would burn his bridges like this right"
+    },
+    {
+     "san": "d4",
+     "t": 280,
+     "continuation": "d4",
+     "said": "and i think fabi plays you know objectively best line which is c3 knight f6 and now very important move rookie one because if white plays d4 then it turns out the black actually can take this pawn and you get a forced line that results in a slightly better end game for white but i had analyzed that end game very very deeply and i i was confident that i would be able to hold a draw so the line here goes rookie one you drop the knight back and basically you get liquidation so d5 d5 bishop c6 bishop c6 queen d8 now rook d8 walks into kind of a potential x-ray so you play king d8 knight e5 bishop d5 um at this point there are let me see yeah at this point there are in the database about ten games seven games including nepo against artemyev and by the way both bishop b and bishop d5 here i think are good moves and it's like a 0.3 type advantage because white's got a bit of a clamp here and the king is weak but ultimately black consolidates due to the two bishops i was not worried about this i didn't think fabio would burn his bridges like this right and risk drawing the game"
+    }
+   ]
+  },
+  {
+   "ply": 13,
+   "fen": "r2qkb1r/1ppb1ppp/p1np1n2/4p3/B2PP3/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 7",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "a6",
+    "Ba4",
+    "d6",
+    "O-O",
+    "Bd7",
+    "c3",
+    "Nf6",
+    "d4"
+   ],
+   "options": [
+    {
+     "san": "Nxe4",
+     "t": 282,
+     "continuation": "Nxe4",
+     "said": "you know objectively best line which is c3 knight f6 and now very important move rookie one because if white plays d4 then it turns out the black actually can take this pawn and you get a forced line that results in a slightly better end game for white but i had analyzed that end game very very deeply and i i was confident that i would be able to hold a draw so the line here goes rookie one you drop the knight back and basically you get liquidation so d5 d5 bishop c6 bishop c6 queen d8 now rook d8 walks into kind of a potential x-ray so you play king d8 knight e5 bishop d5 um at this point there are let me see yeah at this point there are in the database about ten games seven games including nepo against artemyev and by the way both bishop b and bishop d5 here i think are good moves and it's like a 0.3 type advantage because white's got a bit of a clamp here and the king is weak but ultimately black consolidates due to the two bishops i was not worried about this i didn't think fabio would burn his bridges like this right and risk drawing the game because he'd been struggling this"
+    },
+    {
+     "san": "g6",
+     "t": 376,
+     "continuation": "g6 Re1 Bg7",
+     "said": "too passive the modern treatment is to play g6 and kind of played king's indian style fiance of the bishop and black is a little bit behind on development on the king's side but it turns out after d4 bishop g7 that tactically everything is justified here once again bishop c6 and de might look very appetizing but black simply takes the pawn on e4 and on the next move black is going to castle and even if white takes on d6 you still castle this occurred in carjacking against artemyev and black has excellent compensation for the pawn or sorry uh so again sir tammy we're telling you we won that game it's equal but rooks are coming to d8 i mean you can see you know you don't even need to calculate it to understand the black as full compensation here for the pawn and there's nothing else that y can do here um some of you tactically minded people might notice this idea but the problem when you fork a bishop is that the bishop is capable of saving both itself and the other forked piece you bring it back to c6 and this was all part of my prep um fabi you know also knew this he was still in his theory and so he plays knight b to"
+    }
+   ]
+  },
+  {
+   "ply": 16,
+   "fen": "r2qk2r/1ppb1pbp/p1np1np1/4p3/B2PP3/2P2N2/PP3PPP/RNBQR1K1 w kq - 1 9",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "a6",
+    "Ba4",
+    "d6",
+    "O-O",
+    "Bd7",
+    "c3",
+    "Nf6",
+    "Re1",
+    "g6",
+    "d4",
+    "Bg7"
+   ],
+   "options": [
+    {
+     "san": "d5",
+     "t": 228.5,
+     "continuation": "d5",
+     "said": "going to rewind in just a second so you know don't i'm just trying to get to the appropriate position here for example the chess.com engine is recommending is the top move d5 but as you guys can probably understand this is maybe objectively better for white but from a king's indian perspective it's kind of like a dream position i'm already kind of poised to play f5 and um i had no problem with with this type of situation um so in these closed center type positions the computer can still uh sometimes falter okay so now let's go back to bishop d7 um against our tamiya i think i played c4 here kind of trying to get a marutzi type position it didn't go particularly well and i think fabi plays you know objectively best line which is c3 knight f6 and now very important move rookie one because if white plays d4 then it turns out the black actually can take this pawn and you get a forced line that results in a slightly better end game for white but i had analyzed that end game very"
+    },
+    {
+     "san": "Bxc6",
+     "t": 380,
+     "continuation": "Bxc6",
+     "said": "kind of played king's indian style fiance of the bishop and black is a little bit behind on development on the king's side but it turns out after d4 bishop g7 that tactically everything is justified here once again bishop c6 and de might look very appetizing but black simply takes the pawn on e4 and on the next move black is going to castle and even if white takes on d6 you still castle this occurred in carjacking against artemyev and black has excellent compensation for the pawn or sorry uh so again sir tammy we're telling you we won that game it's equal but rooks are coming to d8 i mean you can see you know you don't even need to calculate it to understand the black as full compensation here for the pawn and there's nothing else that y can do here um some of you tactically minded people might notice this idea but the problem when you fork a bishop is that the bishop is capable of saving both itself and the other forked piece you bring it back to c6 and this was all part of my prep um fabi you know also knew this he was still in his theory and so he plays knight b to d2 developing and please feel free to ask questions thank you pat you've been"
+    },
+    {
+     "san": "Nbd2",
+     "t": 436,
+     "continuation": "Nbd2",
+     "said": "both itself and the other forked piece you bring it back to c6 and this was all part of my prep um fabi you know also knew this he was still in his theory and so he plays knight b to d2 developing and please feel free to ask questions thank you pat you've been and clarify stuff i'm going too fast i'm happy to repeat whatever needs repeating i'm not going to do this twice so please please feel free um so knight bd2 and here comes uh a moment that i was really proud of iii this is not a novelty by any means but uh well it almost is a novelty actually there are only three games in the database uh with the move that i played here and by transposition after my next move there's only four games in the database and i'm the only sort of gm game um we end up transposing on the 11th move to a more popular line which has about 30 games but still very uncommon most common movers you guys might probably unders probably guess is just a castle it's just a castle"
+    }
+   ]
+  },
+  {
+   "ply": 20,
+   "fen": "r2qk2r/1pp2pbp/p1bp2p1/4P3/4n3/2P2N2/PP3PPP/RNBQR1K1 w kq - 0 11",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5",
+    "a6",
+    "Ba4",
+    "d6",
+    "O-O",
+    "Bd7",
+    "c3",
+    "Nf6",
+    "d4",
+    "g6",
+    "Re1",
+    "Bg7",
+    "Bxc6",
+    "Bxc6",
+    "dxe5",
+    "Nxe4"
+   ],
+   "options": [
+    {
+     "san": "exd6",
+     "t": 390.5,
+     "continuation": "exd6",
+     "said": "once again bishop c6 and de might look very appetizing but black simply takes the pawn on e4 and on the next move black is going to castle and even if white takes on d6 you still castle this occurred in carjacking against artemyev and black has excellent compensation for the pawn or sorry uh so again sir tammy we're telling you we won that game it's equal but rooks are coming to d8 i mean you can see you know you don't even need to calculate it to understand the black as full compensation here for the pawn and there's nothing else that y can do here um some of you tactically minded people might notice this idea but the problem when you fork a bishop is that the bishop is capable of saving both itself and the other forked piece you bring it back to c6 and this was all part of my prep um fabi you know also knew this he was still in his theory and so he plays knight b to d2 developing and please feel free to ask questions thank you pat you've been and clarify stuff i'm going too fast i'm happy to repeat whatever needs repeating i'm not going to do this twice so please please feel free um so knight bd2"
+    },
+    {
+     "san": "Rxe4",
+     "t": 419,
+     "continuation": "Rxe4 Bxe4 Qa4+",
+     "said": "calculate it to understand the black as full compensation here for the pawn and there's nothing else that y can do here um some of you tactically minded people might notice this idea but the problem when you fork a bishop is that the bishop is capable of saving both itself and the other forked piece you bring it back to c6 and this was all part of my prep um fabi you know also knew this he was still in his theory and so he plays knight b to d2 developing and please feel free to ask questions thank you pat you've been and clarify stuff i'm going too fast i'm happy to repeat whatever needs repeating i'm not going to do this twice so please please feel free um so knight bd2 and here comes uh a moment that i was really proud of iii this is not a novelty by any means but uh well it almost is a novelty actually there are only three games in the database uh with the move that i played here and by transposition after my next move there's only four games in the database and i'm the only sort of gm game"
+    }
+   ]
+  }
+ ]
+}
