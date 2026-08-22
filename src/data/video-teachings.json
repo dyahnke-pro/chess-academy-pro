@@ -7057,8 +7057,8 @@
    ],
    "opening": "Sicilian Defense: Staunton-Cochrane Variation",
    "phase": "opening",
-   "explains": "The bishop is heading for g7 and wants the long diagonal opened. Two tries come into consideration: resolve the centre now, or hold the clamp with the modest pawn move and make the opponent find a way in. Neither is a mistake; they are different bargains.",
-   "teaches": "With pawns already on c4 and e4 there are two honest plans, and they lead to different games. Pushing the d-pawn two squares opens the centre and hands the fianchettoed bishop the long diagonal it was put there for. Playing it one square keeps everything closed and leaves that bishop biting on granite — quieter, and much harder to play against.",
+   "explains": "The bishop is heading for g7 and wants the long diagonal opened. Two tries come into consideration: resolve the centre now, or hold the clamp with the modest pawn move and make the opponent find a way in. Neither is a mistake; they are different bargains, and the closed version is quieter and much harder to play against.",
+   "teaches": "With pawns already on c4 and e4 there are two honest plans, and they lead to different games — pushing the d-pawn two squares opens the centre and hands the fianchettoed bishop its long diagonal; playing it one square keeps everything closed and leaves that bishop biting on granite.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -7108,7 +7108,7 @@
    "opening": "Sicilian Defense: Staunton-Cochrane Variation",
    "phase": "opening",
    "explains": "The pawn goes only to d3, where it defends the pawns on c4 and e4 at the same time. Both of those are the clamp — between them they cover the squares in the middle that the opponent's pieces want. Nothing has been grabbed and nothing can be attacked, which is exactly the point.",
-   "teaches": "A pawn advanced one square instead of two can be the move that makes a whole structure work. Judge it by what it holds rather than by the ground it takes: a single pawn propping up both wings of your centre means neither can be undermined, and a clamp that cannot be broken is worth more than space you have to defend.",
+   "teaches": "A pawn advanced one square instead of two can be the move that makes a whole structure work — judge it by what it holds rather than by the ground it takes, because a single pawn propping up both wings of your centre means neither can be undermined, and a clamp that cannot be broken is worth more than space you have to defend.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -7144,7 +7144,7 @@
    "opening": "Sicilian Defense: Staunton-Cochrane Variation",
    "phase": "opening",
    "explains": "The bishop comes to e3, hitting the pawn on c5 and covering d4. That square in the middle is the one the fianchettoed bishop is aimed at through the whole game, and it is now held by a piece that cannot easily be driven away. The centre stays closed and the dark squares stop being available.",
-   "teaches": "When the opponent has fianchettoed, the fight is for the dark squares that bishop wants to use. Develop the bishop that contests them, and prefer the square where it both holds the central outpost and asks a question of a pawn — a developing move that also denies a square is doing two jobs.",
+   "teaches": "When the opponent has fianchettoed, the fight is for the dark squares that bishop wants to use — develop the bishop that contests them, and prefer the square where it both holds the central outpost and asks a question of a pawn.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -7184,7 +7184,7 @@
    "opening": "Sicilian Defense: Staunton-Cochrane Variation",
    "phase": "opening",
    "explains": "The bishop has been exchanged on f3 and the other bishop takes back. From f3 it holds the pawn on e4, which is half the clamp, and covers g2 and the queen behind it. The knight that guarded those squares is gone and nothing has been loosened, so the trade costs nothing in a position that will not open.",
-   "teaches": "Giving up a knight for a bishop is not automatically a concession when the position is closed. What matters is whether the recapturing piece takes over the jobs the knight was doing — a bishop that lands defending the centre pawn and the squares around its own king has replaced the knight, not merely traded with it.",
+   "teaches": "Giving up a knight for a bishop is not automatically a concession when the position is closed — what matters is whether the recapturing piece takes over the jobs the knight was doing.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -7228,7 +7228,7 @@
    "opening": "Sicilian Defense: Staunton-Cochrane Variation",
    "phase": "opening",
    "explains": "The knight has come to e7 and the bishop steps to g5, looking at it with the queen standing behind on d8. The knight still has four legal squares and every one of them loses the queen, so in practice it cannot move at all. The bishop covers f6 and h6 from the same square, which are the squares in front of the fianchetto — so the piece is doing the pinning and the restraining together.",
-   "teaches": "A piece is pinned in the way that matters whenever every square it can legally reach costs you something behind it. Do not look only for pins against the king: a bishop dropped on the diagonal in front of the queen fixes the piece in between just as firmly, and the defender usually has to spend a pawn move to break it.",
+   "teaches": "A piece is pinned in the way that matters whenever every square it can legally reach costs you something behind it — do not look only for pins against the king; a bishop dropped on the diagonal in front of the queen fixes the piece in between just as firmly.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -7267,7 +7267,7 @@
    "opening": "Caro-Kann Defense: Hillbilly Attack",
    "phase": "opening",
    "explains": "The pawn on a6 attacks the knight on b5, and the pawn move a moment ago took c3 away as its retreat — the knight's comfortable road home is gone, and its remaining choices either misplace it or wreck the pawns around it. One little pawn move, played at exactly the right time.",
-   "teaches": "Timing in the opening is often about a square that just disappeared. The moment a pawn move takes away a piece's retreat square, the move that attacks that piece is promoted from routine to urgent — the same attack a move earlier or later achieves nothing.",
+   "teaches": "Timing in the opening is often about a square that just disappeared — the moment a pawn move takes away a piece's retreat square, the move that attacks that piece is promoted from routine to urgent.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -7326,7 +7326,7 @@
    "opening": "Caro-Kann Defense: Hillbilly Attack",
    "phase": "middlegame",
    "explains": "The queen has recaptured on d4 and stands in the middle of the board, centralised by the trade her opponent initiated. The sequence was invited, not avoided: each capture pulled a defender away and the recapture was the developing move.",
-   "teaches": "Trading on your own terms means arranging that your opponent is the one who captures first, so every recapture improves your pieces instead of theirs. The material stays level; the activity does not — count who ends up better placed after the dust settles, not who took what.",
+   "teaches": "Trading on your own terms means arranging that your opponent is the one who captures first, so every recapture improves your pieces instead of theirs — the material stays level; the activity does not.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -7355,7 +7355,7 @@
    "opening": "French Defense: Normal Variation",
    "phase": "opening",
    "explains": "The knight has been placed on c6 rather than behind the c-pawn, and the pawn advances to d5 hitting it and the pawn on e6 at the same time. The knight has to jump somewhere awkward or the centre gets opened on terms the developed side chooses. This is the cost of that knight placement, and it arrives the moment the centre is ready.",
-   "teaches": "When a knight is developed in front of its own c-pawn, the centre push arrives hitting the knight and a pawn together. Before advancing, check whether the defender can answer both — if one reply saves the knight and a different one saves the pawn, the push wins something whatever they choose.",
+   "teaches": "When a knight is developed in front of its own c-pawn, the centre push arrives hitting the knight and a pawn together — before advancing, check whether the defender can answer both, because if one reply saves the knight and a different one saves the pawn, the push wins something whatever they choose.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -7391,7 +7391,7 @@
    "opening": "French Defense: Tarrasch Variation, Closed Variation",
    "phase": "opening",
    "explains": "The bishop develops to d3 and attacks the pawn on h7 down a completely open diagonal — the advanced e-pawn stands out of its way on e5, not in it. The chain is propped by the c-pawn behind it, and every piece is on the square the setup always gives it.",
-   "teaches": "This setup's pieces have standard posts, and the light-squared bishop's is the diagonal aimed at the enemy king's home — take it before the king castles into it. The modest knight development earlier is what makes the whole scheme work: the c-pawn kept its job propping the chain, and the bishop keeps this diagonal.",
+   "teaches": "This setup's pieces have standard posts, and the light-squared bishop's is the diagonal aimed at the enemy king's home — take it before the king castles into it. The modest knight development earlier is what makes the whole scheme work.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -7439,7 +7439,7 @@
    "opening": "French Defense: Tarrasch Variation, Closed Variation",
    "phase": "middlegame",
    "explains": "The pawn goes to a4 and takes b5 away, so the queenside pawns opposite have no lever to advance with — their storm needs that square and it is gone. The kingside plans can now be prepared without a clock ticking on the other side of the board.",
-   "teaches": "When your play is on one wing, spend a single pawn move to freeze the other. The rook-pawn's advance takes away the square the enemy pawns need to start rolling, and the counterplay that would have arrived in five moves never arrives at all.",
+   "teaches": "When your play is on one wing, spend a single pawn move to freeze the other — the rook-pawn's advance takes away the square the enemy pawns need to start rolling, and the counterplay that would have arrived in five moves never arrives at all.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -7468,7 +7468,7 @@
    "opening": "Caro-Kann Defense: Maróczy Variation",
    "phase": "opening",
    "explains": "With the pawns locked on d5 and e5, the white centre rests on d4, and the pawn arriving on c5 hits exactly that square. The head of the chain on e5 cannot be attacked profitably while it is defended from behind, so play goes after the pawn holding it up instead.",
-   "teaches": "A pawn chain is attacked at its base, not at its head. The front pawn is defended by the one behind it, so hitting the rear pawn is the move that asks a real question — take the base away and everything in front of it is loose.",
+   "teaches": "A pawn chain is attacked at its base, not at its head — the front pawn is defended by the one behind it, so hitting the rear pawn is the move that asks a real question. Take the base away and everything in front of it is loose.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -7498,7 +7498,7 @@
    "opening": "Caro-Kann Defense: Maróczy Variation",
    "phase": "opening",
    "explains": "Before this the base on d4 was held only by the queen, which is a defender you would rather not commit so early. The modest pawn move gives d4 a second guard that nothing can harass, so the centre holds and the pieces stay free to develop where they want to go.",
-   "teaches": "When the base of your chain is attacked, add a pawn defender before you add a piece one. A pawn holds the square without being driven off, while a piece tied to defence has to keep standing there and can be chased.",
+   "teaches": "When the base of your chain is attacked, add a pawn defender before you add a piece one — a pawn holds the square without being driven off, while a piece tied to defence has to keep standing there and can be chased.",
    "plans": "",
    "concepts": [],
    "sources": [
