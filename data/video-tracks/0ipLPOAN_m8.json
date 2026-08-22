@@ -717,8 +717,8 @@
   {
    "id": "vn-kid-fianchetto-the-setup-with-the-longest-pedigree",
    "line": "c4 Nf6 d4 g6 g3 Bg7 Nf3 d6 Bg2 O-O O-O",
-   "teaches": "A setup that has stayed popular for decades usually earned it structurally, not fashionably. When one scheme answers several defences at once, that consistency IS the argument for it.",
-   "explains": "Both kings are tucked away and the flank bishop is home on the long diagonal. This whole scheme comes from a repertoire built on putting that bishop there against everything, and it has stayed one of White's best tries for an advantage ever since. Black has a genuine menu of replies from here — enough that strong players cycle through several over a career — and none of them is refuted; they are simply different games.",
+   "teaches": "A setup that stays popular for decades usually earned it structurally, not fashionably — when one scheme answers several defences at once, that consistency IS the argument for it.",
+   "explains": "Both kings are tucked away and the bishop sits home on g2 on the long diagonal. This whole scheme is built around that bishop — one setup that answers a dozen defences — and that consistency is exactly why it has been among White's best tries for decades. Black has a real menu of replies from here, and none of them is refuted; they are simply different games.",
    "reasons": [
     {
      "kind": "defends",
@@ -733,8 +733,8 @@
   {
    "id": "vn-kid-fianchetto-the-knight-square-that-denies-a-tempo",
    "line": "c4 Nf6 d4 g6 g3 Bg7 Nf3 d6 Bg2 O-O O-O Nbd7",
-   "teaches": "Between two developing squares for the same knight, prefer the one the opponent's pawn break cannot hit. Denying a tempo is worth more than the extra square the other move covers.",
-   "explains": "The knight goes to d7 rather than c6, and the difference is a whole tempo. From c6 it stands directly in front of White's d-pawn, so the advance to d5 arrives attacking it and White gains time. From d7 that same advance hits nothing. The knight still does its main job from here — it guards e5 and prepares the central pawn strike that the whole setup is aiming for. This is the oldest and easiest of the systems to learn, and while it is not the objectively strongest, it is a thoroughly practical way to play it.",
+   "teaches": "Between two developing squares for the same knight, prefer the one the opponent's pawn break cannot hit — denying a tempo is worth more than the extra square the other move covers.",
+   "explains": "Two squares for this knight, and the difference is a whole tempo. On c6 it would stand right in front of White's d-pawn, so the push to d5 arrives hitting it and White gains time — so we choose d7 instead, where that same advance hits nothing. The knight still does its real job from here: it guards e5 and readies the central pawn strike the whole setup is built around. The oldest and easiest of these systems to learn, and a thoroughly practical way to play it.",
    "reasons": [
     {
      "kind": "controls",
@@ -749,8 +749,8 @@
   {
    "id": "vn-kid-fianchetto-a-pin-that-threatens-nothing",
    "line": "c4 Nf6 d4 g6 g3 Bg7 Nf3 d6 Bg2 O-O O-O Nbd7 Bg5 Nb8 Bc1",
-   "teaches": "Before pinning, check whether the capture would actually win something. A pin against a defended piece threatens nothing, so the opponent can simply ask the bishop where it intends to live.",
-   "explains": "The bishop has been to g5 and come straight back to c1. It is a common move at club level and it is not a good one: the knight it pins is defended, so taking on f6 wins nothing, which means the bishop is committed to a square where it can be questioned by a pawn at no cost. Two moves spent, nothing gained, and the same position with Black to move.",
+   "teaches": "Before pinning, check whether the capture would actually win something — a pin against a defended piece threatens nothing, so the opponent can simply ask the bishop where it means to live.",
+   "explains": "The bishop went out to g5 to pin, and has come straight back to c1. It is a club favourite and it is a mistake: the knight it pinned was defended, so taking on f6 won nothing — which means the bishop only committed itself to a square a pawn can kick for free. Two moves spent, nothing gained, and it is the same position with Black to move.",
    "reasons": [
     {
      "kind": "controls",
