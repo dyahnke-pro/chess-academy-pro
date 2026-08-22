@@ -14716,7 +14716,7 @@
    "opening": "Sicilian Defense: Accelerated Dragon, Modern Variation",
    "phase": "opening",
    "explains": "Taking with the b-pawn doubles on the c-file, but that pawn defends the knight sitting in the middle on d5 and covers b5, so neither enemy minor piece has a square in front of it.",
-   "teaches": "Recapture toward the centre when the doubled pawn you accept has work to do. A pawn structure is not graded on its shape but on what it holds: a doubled pawn that defends a strong central piece and takes an outpost away from the opponent has already paid for itself, whatever it looks like.",
+   "teaches": "Recapture toward the centre when the doubled pawn you accept has work to do — a pawn structure is not graded on its shape but on what it holds: a doubled pawn that defends a strong central piece and takes an outpost away from the opponent has already paid for itself.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14763,7 +14763,7 @@
    "opening": "Sicilian Defense: Accelerated Dragon, Modern Variation",
    "phase": "opening",
    "explains": "The knight lands on c3 attacking the queen on d1 and the bishop on e2 at the same time, so it cannot be ignored for a move. Answering with the pawn is what damages the queenside, and that damage is chosen here, not stumbled into.",
-   "teaches": "Between two sound continuations, prefer the one that leaves your opponent no choice. A trade offered with a threat behind it is not really an offer — the recapture is forced, so you decide the structure that results rather than negotiating it.",
+   "teaches": "Between two sound continuations, prefer the one that leaves your opponent no choice — a trade offered with a threat behind it is not really an offer: the recapture is forced, so you decide the structure that results rather than negotiating it.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14816,7 +14816,7 @@
    "opening": "Sicilian Defense: Accelerated Dragon, Modern Variation",
    "phase": "middlegame",
    "explains": "The bishop steps out to f5 and immediately hits the pawn on c2, so the next move is spent answering it rather than improving. It is developed and it is asking a question in the same breath.",
-   "teaches": "In a simplified position the last piece to come out should arrive on a target, not merely on a good square. Development that carries a threat buys the tempo you need to start a plan before the opponent starts theirs — the difference between an equal ending and a pressing one is usually one move of initiative.",
+   "teaches": "In a simplified position the last piece to come out should arrive on a target, not merely on a good square — development that carries a threat buys the tempo you need to start a plan before the opponent starts theirs, and the difference between an equal ending and a pressing one is usually one move of initiative.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14871,7 +14871,7 @@
    "opening": "Sicilian Defense: Accelerated Dragon, Modern Variation",
    "phase": "middlegame",
    "explains": "The rook comes to c8 attacking the bishop on c6, and the damaged pawn on c3 stands behind it on the same file. The bishop must move, and the pawn it was shielding falls.",
-   "teaches": "When two enemy men stand on the same line, the piece you point down it wins one of them regardless of which moves. Look for the second target BEHIND the first before deciding a capture is only a capture — that is what turns an even trade into a won pawn.",
+   "teaches": "When two enemy men stand on the same line, the piece you point down it wins one of them regardless of which moves — look for the second target BEHIND the first before deciding a capture is only a capture, because that is what turns an even trade into a won pawn.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -14960,7 +14960,7 @@
    "opening": "French Defense: King's Indian Attack",
    "phase": "middlegame",
    "explains": "The pawn on h4 covers g5, so the defence's freeing break there runs into a capture, and the same square is reserved for your own pieces to come through. Across the board the enemy pawn has reached b4 — both storms are declared, and the kingside one is the better prepared.",
-   "teaches": "In the standard attack a quiet rook-pawn move serves two purposes at once: it stops the freeing pawn break in front of the wedge, and it reserves the squares the pieces will use to lift toward the king. Their wing pawns will race meanwhile — that is the bargain of the position, and the side whose preparation is further along wins it.",
+   "teaches": "In the standard attack a quiet rook-pawn move serves two purposes at once: it stops the freeing pawn break in front of the wedge, and it reserves the squares the pieces will use to lift toward the king — their wing pawns race meanwhile, and the side whose preparation is further along wins the bargain.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -15032,7 +15032,7 @@
    "opening": "Queen's Indian Defense: Spassky System",
    "phase": "opening",
    "explains": "The bishop settles on b7 with the long diagonal open through the centre, taking e4 in hand from a distance. The opponent's modest setup has no piece that argues for that square, so the central advance their position wants is already spoken against.",
-   "teaches": "Openings are conversations about specific squares, and when your opponent's quiet setup declines the sharp argument, pick the square their setup cannot fight for and own it. The fianchettoed bishop trained on the central light square decides what their pawns may ever do in the middle — a whole plan built from one diagonal.",
+   "teaches": "Openings are conversations about specific squares, and when your opponent's quiet setup declines the sharp argument, pick the square their setup cannot fight for and own it — the fianchettoed bishop trained on the central light square decides what their pawns may ever do in the middle.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -15069,7 +15069,7 @@
    "opening": "Queen's Indian Defense: Spassky System",
    "phase": "opening",
    "explains": "The advanced pawn has been captured twice over, and the bishop finishes the sequence by retaking on c5, where it now attacks the pawn on e3 down the cleared diagonal. The count was knowable before the push: two captures against, one recapture for, and a bishop improved for free at the end of it.",
-   "teaches": "A pawn advance that looks like it gains space is a purchase, and the price is counted in captures: every pawn that can take it, and every recapture that follows. When the count comes out against the pusher, the space never existed — the pawn simply left. The modest pawn on b6 was insurance bought moves earlier for exactly this.",
+   "teaches": "A pawn advance that looks like it gains space is a purchase, and the price is counted in captures: every pawn that can take it, and every recapture that follows — when the count comes out against the pusher, the space never existed, the pawn simply left.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -15101,7 +15101,7 @@
    "opening": "Rat Defense: Accelerated Gurgenidze",
    "phase": "opening",
    "explains": "The bishop comes to e3 holding the pawn on d4 and the pawn on f4 at the same time. The trade on f3 is still available to them, and after it the centre is still propped up.",
-   "teaches": "When a bishop pins your knight, ask what the pin is FOR before you spend a move on it. If the plan behind it is to trade off the knight and leave a central pawn short of defenders, the answer is to add a defender to that pawn now — then the trade they were preparing simply happens and costs you nothing.",
+   "teaches": "When a bishop pins your knight, ask what the pin is FOR before you spend a move on it — if the plan behind it is to trade off the knight and leave a central pawn short of defenders, add a defender to that pawn now, and the trade they were preparing simply happens and costs you nothing.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -15139,7 +15139,7 @@
    "opening": "Rat Defense: Accelerated Gurgenidze",
    "phase": "opening",
    "explains": "The queen settles on d2 holding the knight on c3, the pawn on d4 and the bishop on e3 all at once. Everything in the middle is now defended twice, and the king is ready to go long.",
-   "teaches": "A queen sortie against your queenside is answered by finishing your own development, not by defending the pawn it is eyeing. Bring the queen to the square that links your centre and your minor pieces together, and the pawn-grab becomes a line you WANT them to enter — they spend two moves on a pawn while your rook arrives with tempo.",
+   "teaches": "A queen sortie against your queenside is answered by finishing your own development, not by defending the pawn it is eyeing — bring the queen to the square that links your centre and your minor pieces together, and the pawn-grab becomes a line you WANT them to enter.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -15183,7 +15183,7 @@
    "opening": "Rat Defense: Accelerated Gurgenidze",
    "phase": "opening",
    "explains": "Taking with the g-pawn doubles on the f-file, and the new pawn on f3 defends the pawn on e4 — so the big centre survives the trade intact. The file the pawn left is now open toward their kingside.",
-   "teaches": "Recapture toward the centre even when it doubles your pawns, if the doubled pawn is what holds your space. The structure looks damaged and the position is not: the pawn does a job, and the half-open file it leaves behind points at the wing the opponent is about to castle into.",
+   "teaches": "Recapture toward the centre even when it doubles your pawns, if the doubled pawn is what holds your space — the structure looks damaged and the position is not: the pawn does a job, and the half-open file it leaves behind points at the wing the opponent is about to castle into.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -15806,7 +15806,7 @@
    "opening": "Sicilian Defense: Accelerated Dragon, Maróczy Bind, Gurgenidze Variation",
    "phase": "opening",
    "explains": "The queen steps out to b6 and takes aim at the pawn on b2, which is the obvious half of the move. The half that makes it work is that the bishop on e3 has no defender, and it is one of the two pieces holding the knight on d4 together. Grabbing material immediately would let the position be defended; asking a second question first is what makes the loose bishop start to matter.",
-   "teaches": "Before playing the capture you can see, look for the piece that is not defended. A tactic usually fails or succeeds on one loose piece somewhere else on the board, and the strongest move is often the quiet one that adds a second problem while that piece stays loose.",
+   "teaches": "Before playing the capture you can see, look for the piece that is not defended — a tactic usually fails or succeeds on one loose piece somewhere else on the board, and the strongest move is often the quiet one that adds a second problem while that piece stays loose.",
    "plans": "",
    "concepts": [],
    "sources": [

@@ -616,7 +616,7 @@
   {
    "id": "vn-kia-clockwork-the-rook-pawn-with-two-jobs",
    "line": "d3 e6 e4 d5 Nc3 Nf6 Nb1 Ng8 Nd2 Nf6 g3 c5 Bg2 Nc6 Ngf3 Be7 O-O O-O e5 Nd7 Re1 b5 Nf1 a6 h3 a5 h4 b4",
-   "teaches": "In the standard attack a quiet rook-pawn move serves two purposes at once: it stops the freeing pawn break in front of the wedge, and it reserves the squares the pieces will use to lift toward the king. Their wing pawns will race meanwhile — that is the bargain of the position, and the side whose preparation is further along wins it.",
+   "teaches": "In the standard attack a quiet rook-pawn move serves two purposes at once: it stops the freeing pawn break in front of the wedge, and it reserves the squares the pieces will use to lift toward the king — their wing pawns race meanwhile, and the side whose preparation is further along wins the bargain.",
    "explains": "The pawn on h4 covers g5, so the defence's freeing break there runs into a capture, and the same square is reserved for your own pieces to come through. Across the board the enemy pawn has reached b4 — both storms are declared, and the kingside one is the better prepared.",
    "structural": "the rook-pawn's two jobs — the g5 break covered and the lift squares reserved — while the wing race runs",
    "fen": "r1bq1rk1/3nbppp/2n1p3/p1ppP3/1p5P/3P1NP1/PPP2PB1/R1BQRNK1 w - - 0 15",

@@ -558,7 +558,7 @@
   {
    "id": "vn-accel-fianchetto-a-doubled-pawn-that-does-a-job",
    "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Be2 O-O O-O d5 exd5 Nxd5 Nxc6 bxc6",
-   "teaches": "Recapture toward the centre when the doubled pawn you accept has work to do. A pawn structure is not graded on its shape but on what it holds: a doubled pawn that defends a strong central piece and takes an outpost away from the opponent has already paid for itself, whatever it looks like.",
+   "teaches": "Recapture toward the centre when the doubled pawn you accept has work to do — a pawn structure is not graded on its shape but on what it holds: a doubled pawn that defends a strong central piece and takes an outpost away from the opponent has already paid for itself.",
    "explains": "Taking with the b-pawn doubles on the c-file, but that pawn defends the knight sitting in the middle on d5 and covers b5, so neither enemy minor piece has a square in front of it.",
    "reasons": [
     {
@@ -578,7 +578,7 @@
   {
    "id": "vn-accel-fianchetto-pick-the-trade-that-forces-the-answer",
    "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Be2 O-O O-O d5 exd5 Nxd5 Nxc6 bxc6 Bd4 Nxc3",
-   "teaches": "Between two sound continuations, prefer the one that leaves your opponent no choice. A trade offered with a threat behind it is not really an offer — the recapture is forced, so you decide the structure that results rather than negotiating it.",
+   "teaches": "Between two sound continuations, prefer the one that leaves your opponent no choice — a trade offered with a threat behind it is not really an offer: the recapture is forced, so you decide the structure that results rather than negotiating it.",
    "explains": "The knight lands on c3 attacking the queen on d1 and the bishop on e2 at the same time, so it cannot be ignored for a move. Answering with the pawn is what damages the queenside, and that damage is chosen here, not stumbled into.",
    "reasons": [
     {
@@ -598,7 +598,7 @@
   {
    "id": "vn-accel-fianchetto-develop-onto-a-target",
    "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Be2 O-O O-O d5 exd5 Nxd5 Nxc6 bxc6 Bd4 Nxc3 Bxc3 Bxc3 Qxd8 Rxd8 bxc3 Bf5",
-   "teaches": "In a simplified position the last piece to come out should arrive on a target, not merely on a good square. Development that carries a threat buys the tempo you need to start a plan before the opponent starts theirs — the difference between an equal ending and a pressing one is usually one move of initiative.",
+   "teaches": "In a simplified position the last piece to come out should arrive on a target, not merely on a good square — development that carries a threat buys the tempo you need to start a plan before the opponent starts theirs, and the difference between an equal ending and a pressing one is usually one move of initiative.",
    "explains": "The bishop steps out to f5 and immediately hits the pawn on c2, so the next move is spent answering it rather than improving. It is developed and it is asking a question in the same breath.",
    "reasons": [
     {
@@ -614,7 +614,7 @@
   {
    "id": "vn-accel-fianchetto-line-up-where-two-targets-share-a-file",
    "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Be2 O-O O-O d5 exd5 Nxd5 Nxc6 bxc6 Bd4 Nxc3 Bxc3 Bxc3 Qxd8 Rxd8 bxc3 Bf5 Bf3 e6 Bxc6 Bxc2 Rfe1 Rac8",
-   "teaches": "When two enemy men stand on the same line, the piece you point down it wins one of them regardless of which moves. Look for the second target BEHIND the first before deciding a capture is only a capture — that is what turns an even trade into a won pawn.",
+   "teaches": "When two enemy men stand on the same line, the piece you point down it wins one of them regardless of which moves — look for the second target BEHIND the first before deciding a capture is only a capture, because that is what turns an even trade into a won pawn.",
    "explains": "The rook comes to c8 attacking the bishop on c6, and the damaged pawn on c3 stands behind it on the same file. The bishop must move, and the pawn it was shielding falls.",
    "reasons": [
     {
