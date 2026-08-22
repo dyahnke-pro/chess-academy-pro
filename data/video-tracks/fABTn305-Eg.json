@@ -252,7 +252,7 @@
   {
    "id": "vn-grandprix-queen-behind-the-attack",
    "line": "e4 c5 Nc3 g6 f4 Bg7 Nf3 Nc6 Bb5 Nd4 O-O Nxb5 Nxb5 d6 d3 Nf6 Qe1",
-   "teaches": "In a kingside attack the queen usually belongs behind the pawns rather than in front of them. A move to the back rank that clears her original square, holds the centre pawn and opens the route toward the king does three jobs and threatens nothing — which is exactly why it is hard to meet.",
+   "teaches": "In a kingside attack the queen usually belongs behind the pawns rather than in front of them — a move to the back rank that clears her original square, holds the centre pawn and opens the route toward the king does three jobs and threatens nothing, which is exactly why it is hard to meet.",
    "explains": "The bishops have been traded and the pawn on f4 has committed the attack. The queen steps to e1, where she holds the pawn on e4, connects the pieces on the back rank, and can travel to the kingside along the third rank once the pawns advance. Nothing is attacked yet; the piece that will lead the attack has simply been put where it can join it.",
    "reasons": [
     {

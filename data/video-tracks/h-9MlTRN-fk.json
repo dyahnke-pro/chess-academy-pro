@@ -1228,7 +1228,7 @@
   {
    "id": "vn-3knights-sideline-exists-isnt-good",
    "line": "e4 e5 Nf3 Nc6 Nc3",
-   "teaches": "A move can be playable, well known and still not good. Openings collect lines that survive because they set traps rather than because they equalise, and the way to meet one is to know the refutation rather than to avoid the whole position.",
+   "teaches": "A move can be playable, well known and still not good — openings collect lines that survive because they set traps rather than because they equalise, and the way to meet one is to know the refutation rather than to avoid the whole position.",
    "explains": "Two replies divide here. Developing the king's knight is the sound, mainstream choice. Jumping the queen's knight to d4 instead is the tricky one — it exists and is played, but it invites White to take on e5, and from there Black is relying on the opponent going wrong.",
    "options": [
     {
@@ -1248,7 +1248,7 @@
   {
    "id": "vn-3knights-queen-king-same-file",
    "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bc4 Nd4 Nxe5 Qe7 Nxf7",
-   "teaches": "A queen standing on the same file as her own king is a standing invitation, and it is worth noticing before you go pawn-grabbing rather than after. When the file between them can be opened, the tactics tend to appear on their own.",
+   "teaches": "A queen standing on the same file as her own king is a standing invitation, and it is worth noticing before you go pawn-grabbing rather than after — when the file between them can be opened, the tactics tend to appear on their own.",
    "explains": "Grabbing the pawn on e4 with the knight loses a piece outright — White castles and the knight cannot be held, with the black queen and king sitting on the e-file behind it. The move that works instead is pushing the d-pawn, which cuts across the bishop's diagonal and the knight's path at the same time.",
    "options": [
     {
@@ -1268,7 +1268,7 @@
   {
    "id": "vn-3knights-dont-grab-the-rook",
    "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bc4 Nd4 Nxe5 Qe7 Nxf7 d5",
-   "teaches": "A rook in the corner is worth more than a knight only if the knight comes home. Before taking material with a piece that has to travel back through enemy territory, count its exit squares — a won exchange that costs the piece which won it is not won at all.",
+   "teaches": "A rook in the corner is worth more than a knight only if the knight comes home — before taking material with a piece that has to travel back through enemy territory, count its exit squares, because a won exchange that costs the piece which won it is not won at all.",
    "explains": "Taking the rook on h8 is the greedy try, and after Black recaptures the bishop on c4 the knight has just two squares to leave by, g6 and f7, and Black covers them both. The alternative is to take on d5 and keep the pieces in play; the position stays messy, but nothing is stranded.",
    "reasons": [
     {
@@ -1284,7 +1284,7 @@
   {
    "id": "vn-3knights-discovery-recapture",
    "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 Bc4 Nd4 Nxe5 Qe7 Nxf7 d5 Nxd5 Qxf7",
-   "teaches": "When you calculate a discovered attack, check that the piece you intend to win cannot simply capture the piece doing the discovering. That single question is what separates a real double attack from one that evaporates, and it is the most common way these tricks are miscounted.",
+   "teaches": "When you calculate a discovered attack, check that the piece you intend to win cannot simply capture the piece doing the discovering — that single question is what separates a real double attack from one that evaporates, and it is the most common way these tricks are miscounted.",
    "explains": "The knight can leap to c7 with check, hitting the king and the rook in the corner at once — but the queen on f7 travels along the seventh rank and takes it, and the whole idea comes to nothing. Retreating the knight to b6 keeps material, though it leaves the king alone in the centre, where the queen swings to g6 and hunts it down the light squares.",
    "reasons": [
     {
