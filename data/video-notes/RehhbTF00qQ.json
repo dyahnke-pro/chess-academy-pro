@@ -2,29 +2,20 @@
  {
   "id": "vn-vienna-gambit-develop-onto-the-square-you-must-hold",
   "line": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Bc5",
-  "teaches": "A pawn move in front of the king takes a square away from its own side. Develop the bishop onto the diagonal that runs at that square: it defends the square your own knight wants to land on and threatens to use it at the same time, so one developing move is both the threat and the insurance.",
+  "teaches": "A pawn move in front of the king takes a square away from its own side — develop the bishop onto the diagonal that runs at that square, so it defends the square your own knight wants to land on and threatens to use it at the same time.",
   "explains": "The bishop settles on c5 looking down the diagonal at f2 and at g1 behind it. The knight already sitting in the centre now has a fork square that is covered, and the pawn move that opened the diagonal cannot be taken back.",
   "reasons": [
-   {
-    "kind": "controls",
-    "square": "f2"
-   },
-   {
-    "kind": "controls",
-    "square": "g1"
-   }
+   { "kind": "controls", "square": "f2" },
+   { "kind": "controls", "square": "g1" }
   ]
  },
  {
   "id": "vn-vienna-gambit-break-the-rule-the-advance-invited",
   "line": "e4 e5 Nc3 Nf6 f4 d5 fxe5 Nxe4 Nf3 Bc5 d4 Bb4",
-  "teaches": "A central advance that gains space with tempo also opens a diagonal behind it, and the piece it just chased is often the one that should use it. Moving the same bishop twice breaks the rule about developing everything once \u2014 the rule assumes the second square is no better than the first, and here it pins the knight holding the centre.",
+  "teaches": "A central advance that gains space with tempo also opens a diagonal behind it, and the piece it just chased is often the one that should use it — moving the same bishop twice breaks the rule about developing everything once, because here the rule is wrong: the second square pins the knight holding the centre.",
   "explains": "The bishop steps to b4 pinning the knight on c3 against the king behind it. The pawn move that chased it off the other diagonal is exactly what opened this one.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "c3"
-   }
+   { "kind": "attacks", "square": "c3" }
   ]
  }
 ]

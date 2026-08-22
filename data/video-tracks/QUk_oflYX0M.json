@@ -281,7 +281,7 @@
   {
    "id": "vn-advance-e6-break-the-rule-when-you-can-name-the-route",
    "line": "e4 e6 d4 d5 e5 c5 Nf3 Nc6 Bd3 Qb6 O-O Bd7 Re1 Nh6 Nc3",
-   "teaches": "General rules about where a knight belongs are worth following until you can name a concrete route that beats them. A knight developed to the square the rule forbids is justified the moment you can say which two squares it is travelling to and what it does when it arrives — 'it looks awkward' is not an argument once the itinerary is specific.",
+   "teaches": "General rules about where a knight belongs are worth following until you can name a concrete route that beats them — a knight developed to the square the rule forbids is justified the moment you can say which two squares it is travelling to and what it does when it arrives.",
    "explains": "The knight comes to c3 attacking the pawn on d5 and taking b5 in hand, and b5 is the first step of the route toward the outpost it is really heading for. The block it causes on the c-file is real, and it is being paid for with a plan rather than ignored.",
    "reasons": [
     {
