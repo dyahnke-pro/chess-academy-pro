@@ -7892,7 +7892,7 @@
    "opening": "Rapport-Jobava System",
    "phase": "opening",
    "explains": "The pawn to e3 props up the pawn on d4 and covers the square behind the bishop on f4. Nothing is committed, and the setup is now the same against every reply the position allows.",
-   "teaches": "A system opening earns its keep by having one setup that answers several replies. Get the bishop outside the pawn chain FIRST, then close the box behind it: the modest pawn move holds the centre pawn and gives the bishop a retreat, so whichever of the three or four standard replies appears, the same structure meets it.",
+   "teaches": "A system opening earns its keep by having one setup that answers several replies — get the bishop outside the pawn chain FIRST, then close the box behind it, so whichever of the three or four standard replies appears, the same structure meets it.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -7928,7 +7928,7 @@
    "opening": "Four Knights Game: Glek System",
    "phase": "opening",
    "explains": "The pawn to d3 supports the e4-pawn and completes the modest central footing this system is built on, and it can come before or after castling with no real difference. The pieces arrive at the same harmonious picture whichever route you take.",
-   "teaches": "In a quiet fianchetto setup the exact move order rarely matters, and that is a freedom worth using. When the same handful of moves can be played in almost any sequence, choose the order that keeps the most options open and commits to nothing the opponent can pounce on. Learn the setup as a picture to reach, not a march to memorize.",
+   "teaches": "In a quiet fianchetto setup the exact move order rarely matters, and that is a freedom worth using — when the same handful of moves can be played in almost any sequence, choose the order that keeps the most options open and commits to nothing the opponent can pounce on. Learn the setup as a picture to reach, not a march to memorize.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -7960,7 +7960,7 @@
    "opening": "Nimzo-Larsen Attack: Modern Variation",
    "phase": "opening",
    "explains": "The bishop steps to b5 and attacks the knight on c6, and that knight is the piece holding the pawn in the middle. The long diagonal from the other bishop is already trained on the same pawn from behind.",
-   "teaches": "An opening that concedes the centre wins it back by PRESSURE, and pressure is applied to the defenders, not to the pawn itself. Find the piece holding the enemy centre together and put a question to that piece — the pawn you are really after has never been touched, and it starts falling the moment its guard has to move.",
+   "teaches": "An opening that concedes the centre wins it back by PRESSURE, and pressure is applied to the defenders, not to the pawn itself — find the piece holding the enemy centre together and put a question to that piece, and the pawn you are really after starts falling the moment its guard has to move.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -7990,7 +7990,7 @@
    "opening": "Nimzo-Larsen Attack: Modern Variation",
    "phase": "opening",
    "explains": "The pawn to f4 hits the pawn on e5 head-on and covers g5. The knight move that looks equally natural allows a pawn chain in front of it, after which the centre can no longer be pressured at all.",
-   "teaches": "A piece attacking a pawn can be answered by defending it; a PAWN attacking a pawn cannot, because nothing wants to trade down into it. When the natural knight move would let the opponent build a chain and settle the centre for good, use the pawn instead — it asks a question the defender has to answer immediately.",
+   "teaches": "A piece attacking a pawn can be answered by defending it; a PAWN attacking a pawn cannot, because nothing wants to trade down into it — when the natural knight move would let the opponent build a chain and settle the centre for good, use the pawn instead.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8026,8 +8026,8 @@
    ],
    "opening": "King's Indian Defense: Four Pawns Attack",
    "phase": "opening",
-   "explains": "The pawn steps to e5 attacking the pawns on d4 and f4 at once, with the fianchettoed bishop already looking down the long diagonal at the same square. Whatever the centre does about it, it stops being a wall.",
-   "teaches": "The bigger the pawn centre, the more of it is loose. A wall of pawns supports itself only where the pawns are, and striking at the point where two of them touch forces a resolution while your pieces are already aimed at it. Castle first, then hit — a centre that has to make a decision is not a centre that is squeezing you.",
+   "explains": "The pawn steps to e5 attacking the pawns on d4 and f4 at once, with the fianchettoed bishop already looking down the long diagonal at the same square. Whatever the centre does about it, it stops being a wall — and a centre that has to make a decision is not a centre that is squeezing you.",
+   "teaches": "The bigger the pawn centre, the more of it is loose — a wall of pawns supports itself only where the pawns are, and striking at the point where two of them touch forces a resolution while your pieces are already aimed at it. Castle first, then hit.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8077,7 +8077,7 @@
    "opening": "Italian Game: Two Knights Defense, Modern Bishop's Opening",
    "phase": "opening",
    "explains": "With the bishop already posted on c4 and the modest d3 supporting the centre, the knight steps to f3 and reaches exactly the quiet, familiar centre that a more common move order arrives at from the other side. The knight eyes the e5-pawn and the position settles into well-known paths.",
-   "teaches": "Two different opening sequences that arrive at the same position are the same game, and an unfamiliar first move is nothing to fear once you see it landing in a structure you already understand. Learn positions and plans, not move-order trivia: the board in front of you is what matters, never the path that reached it. Recognising the transposition turns a strange start into familiar ground.",
+   "teaches": "Two different opening sequences that arrive at the same position are the same game, and an unfamiliar first move is nothing to fear once you see it landing in a structure you already understand — learn positions and plans, not move-order trivia. Recognising the transposition turns a strange start into familiar ground.",
    "plans": "",
    "concepts": [],
    "sources": [

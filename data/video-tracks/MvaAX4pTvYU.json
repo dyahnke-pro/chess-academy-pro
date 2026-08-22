@@ -422,7 +422,7 @@
   {
    "id": "vn-bishops-move-orders-that-converge-are-one-position",
    "line": "e4 e5 Bc4 Nf6 d3 Nc6 Nf3",
-   "teaches": "Two different opening sequences that arrive at the same position are the same game, and an unfamiliar first move is nothing to fear once you see it landing in a structure you already understand. Learn positions and plans, not move-order trivia: the board in front of you is what matters, never the path that reached it. Recognising the transposition turns a strange start into familiar ground.",
+   "teaches": "Two different opening sequences that arrive at the same position are the same game, and an unfamiliar first move is nothing to fear once you see it landing in a structure you already understand — learn positions and plans, not move-order trivia. Recognising the transposition turns a strange start into familiar ground.",
    "explains": "With the bishop already posted on c4 and the modest d3 supporting the centre, the knight steps to f3 and reaches exactly the quiet, familiar centre that a more common move order arrives at from the other side. The knight eyes the e5-pawn and the position settles into well-known paths.",
    "reasons": [
     {

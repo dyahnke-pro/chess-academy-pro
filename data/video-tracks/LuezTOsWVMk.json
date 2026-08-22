@@ -159,7 +159,7 @@
   {
    "id": "vn-jobava-build-the-little-box-behind-the-bishop",
    "line": "d4 Nf6 Nc3 d5 Bf4 a6 e3",
-   "teaches": "A system opening earns its keep by having one setup that answers several replies. Get the bishop outside the pawn chain FIRST, then close the box behind it: the modest pawn move holds the centre pawn and gives the bishop a retreat, so whichever of the three or four standard replies appears, the same structure meets it.",
+   "teaches": "A system opening earns its keep by having one setup that answers several replies — get the bishop outside the pawn chain FIRST, then close the box behind it, so whichever of the three or four standard replies appears, the same structure meets it.",
    "explains": "The pawn to e3 props up the pawn on d4 and covers the square behind the bishop on f4. Nothing is committed, and the setup is now the same against every reply the position allows.",
    "reasons": [
     {
