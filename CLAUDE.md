@@ -88,35 +88,21 @@ in prose. Close the gap in code; then phrase from it.
 `computePvLine` / `PlyFacts` (`coachFeatureService.ts` — the engine line + per-ply
 facts), `boardConcepts` (`boardConcepts.ts` — structural tags), the opening-ideas
 narrator (`coachFeatureService.ts`), `noteAtPosition` / `lessonBeatAt` (existing
-teaching at a position), and `computeTacticalRead` / `namedTacticClause`
-(`tacticalRead.ts` — the tactical-READ assembler: engine forcing line + named
-tactic + spoken verdict + check plies + the tempting-but-wrong move & its
-refutation). chess.js is the board-truth check on every claim.
+teaching at a position). chess.js is the board-truth check on every claim.
 
 **IDENTIFIED GAPS (David 2026-08-21 — to be closed and folded into the computed
 inputs; ranked by how much of the Danya toolkit they unblock):**
 
-- **GAP 1 — THE TEMPTING-BUT-WRONG MOVE ("the seductive move"). ✅ CLOSED
-  2026-08-21 (`8076fd4`).** His #1 device is the BUT-TURN (~33% of positions,
-  ALL 147 videos) and its cousin SELF-CORRECTION (~14%). Both require knowing
-  the move the STUDENT would *want* to play AND its concrete refutation.
-  `computeTacticalRead(fen, {engine})` in **`src/services/tacticalRead.ts`** now
-  computes it: it enumerates the eye-catching legal moves (captures / checks /
-  promotions / central-develop, via `appealScore`), engine-evals each, and
-  `pickTempting` returns the highest-appeal move that is ≥120cp worse than best,
-  with its engine refutation line — so the affirm→but→refute rhythm is generated
-  from computed facts, never invented (G0). Same call assembles the whole
-  tactical READ (best line + `namedTacticClause` naming the forked pieces +
-  spoken `verdict` + check plies + `closeAlternative` uncertainty signal),
-  fixing the "calculator can name a static pattern but can't READ a tactic /
-  a mate-in-3 read as nothing" gap. Proven end-to-end on a real fork puzzle
-  (tempting `Nxf3+`, −616cp, refuted by `Nxf3`) and a mate-in-3 (tempting
-  `Qxe6+` throws the mate). Pure assemblers unit-tested in `tacticalRead.test.ts`;
-  first consumer wired into review lines (`b3aaf80`). **Still open follow-ons:**
-  the tempting-move heuristic is engine-only (no amateur-explorer "what players
-  at rating R actually play" yet — a future upgrade), and the tactics DRILL
-  surface still shows only "Find the fork" + silence (rule #8) — the read exists,
-  it is just not pointed at that surface yet.
+- **GAP 1 — THE TEMPTING-BUT-WRONG MOVE ("the seductive move"). Biggest gap.**
+  His #1 device is the BUT-TURN (~33% of positions, ALL 147 videos) and its
+  cousin SELF-CORRECTION (~14%). Both require knowing the move the STUDENT would
+  *want* to play here AND its concrete refutation line. We compute the BEST move
+  and detected tactics — but nothing computes "the natural-looking move a player
+  at rating R reaches for, plus the line that refutes it." Without it the
+  affirm→but→refute rhythm cannot be generated without the model inventing the
+  tempting move (a G0 violation). The parts exist (slipDetector, the amateur
+  explorer's common human move, engine refutation) but are not assembled into a
+  fact the narrator receives.
 - **GAP 2 — MULTI-REASON DECOMPOSITION.** `explainBestMoveGrounded` returns a
   single prose string (bestClause + costClause), not a LIST of atomic reasons
   each naming its own squares and each independently board-checkable. The locked

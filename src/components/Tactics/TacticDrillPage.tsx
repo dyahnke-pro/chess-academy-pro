@@ -17,11 +17,6 @@ import type { PuzzleRecord } from '../../types';
 import { db } from '../../db/schema';
 import { logAppAudit } from '../../services/appAuditor';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText, tacticNoteForPuzzleThemes } from '../../services/danyaTeachingService';
-import { Chess } from 'chess.js';
-import { stockfishEngine } from '../../services/stockfishEngine';
-import { computeTacticalRead, tacticalReadFacts, narrateTacticalRead, voiceRejectsBestMove, voiceNamesUngroundedMove, TACTICAL_READ_DIRECTIVES } from '../../services/tacticalRead';
-import { voiceFacts } from '../../services/coachApi';
-import { stripDisprovenSentences } from '../../services/boardClaimValidator';
 
 type Phase = 'loading' | 'solving' | 'summary';
 
@@ -275,52 +270,6 @@ export function TacticDrillPage(): JSX.Element {
       }
       if (note) setPostSolveNotes((prev) => ({ ...prev, [currentIndex]: note }));
     } catch { /* the note is a bonus, never a blocker */ }
-
-    // COMPUTED-VOICE READ — the Danya-register tactical read for THIS exact
-    // board (best line + named tactic + verdict + the tempting-but-wrong move),
-    // composed from computed facts (G0). Written only — rule #8 keeps the drill
-    // SILENT during solving; text under the board is allowed, and it lands only
-    // AFTER grading. Prefers this over the pattern-family note (it is about this
-    // position, not the family). Fire-and-forget; keyed by index so a later
-    // resolve never blocks auto-advance.
-    if (outcome.correct) {
-      const readIndex = currentIndex;
-      const readPuzzle = puzzle;
-      void (async (): Promise<void> => {
-        try {
-          const g = new Chess(readPuzzle.fen);
-          const firstUci = readPuzzle.moves.split(' ').filter(Boolean)[0];
-          if (firstUci && firstUci.length >= 4) {
-            g.move({ from: firstUci.slice(0, 2), to: firstUci.slice(2, 4), promotion: firstUci.slice(4) || undefined });
-          }
-          const readFen = g.fen();
-          const read = await computeTacticalRead(readFen, { engine: stockfishEngine, depth: 14 });
-          if (read) {
-            // The FACTS go to the phrasing model (voiceFacts) so each read comes
-            // out in his voice, VARIED — not the frozen template. Then BOARD-GRADE
-            // the output (G0): the model can invent piece squares to justify a
-            // read, so every claim is checked against the FEN and any provably-
-            // false sentence is dropped. If grading leaves too little, fall back
-            // to narrateTacticalRead — the deterministic template, board-true by
-            // construction. So: varied when the model is honest, safe always.
-            const voiced = await voiceFacts(tacticalReadFacts(read), { intent: 'tactics-read', directives: TACTICAL_READ_DIRECTIVES });
-            // board-grade (false squares) AND recommendation-guard (the model must
-            // not argue against the engine's best move). Either failure → the
-            // deterministic template, board-true by construction.
-            const graded = voiced ? stripDisprovenSentences(voiced, readFen).clean.trim() : '';
-            // Three nets before we trust the model's prose: enough survived the
-            // board-grader, it does not argue against the best move, and it names
-            // no move the computed line never makes (fabricated/mis-transcribed).
-            // Any failure → the deterministic template, built only from the line.
-            const trustworthy = graded.length >= 24
-              && !voiceRejectsBestMove(graded, read.bestMoveSan)
-              && !voiceNamesUngroundedMove(graded, read);
-            const finalNote = trustworthy ? graded : narrateTacticalRead(read);
-            setPostSolveNotes((prev) => ({ ...prev, [readIndex]: finalNote }));
-          }
-        } catch { /* the read is a bonus, never a blocker */ }
-      })();
-    }
 
     // Auto-advance on a SOLVE. 3s is enough to see the final position and the
     // rating tick; a fail never auto-advances. `goNextRef` — goNext is

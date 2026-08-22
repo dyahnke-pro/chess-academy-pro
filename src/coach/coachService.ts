@@ -1405,9 +1405,6 @@ async function askImpl(input: CoachAskInput, options: CoachServiceOptions = {}):
             // `resolvedEnginePlan` IS `input.liveState.enginePlan` whenever the
             // surface threaded one, so this only ever adds the on-demand case.
             engineBestMoveUci: input.liveState.engineBestMoveUci ?? resolvedEnginePlan?.bestMoveUci,
-            // MultiPV lines → the tempting-but-wrong "but-turn" in the grounded
-            // best-move answer (assembleMoveEvalAnswer). Absent = no but-turn.
-            engineTopLines: input.liveState.engineTopLines,
             // enginePlan carries a white-perspective eval for plan turns; the
             // eval-bar snapshot carries one for every turn. Either is fine — both
             // are white-perspective (the interception converts to side-to-move).

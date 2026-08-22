@@ -1097,10 +1097,6 @@ export interface MasterGroundingOptions {
   engineEvalCp?: number;
   /** Mate distance in plies (signed, white-positive) for `currentFen`. */
   engineMateIn?: number;
-  /** Engine MultiPV top lines (white-POV evals) for `currentFen`. When present,
-   *  the best-move answer opens with the tempting-but-wrong move (his but-turn),
-   *  derived latency-safe from these lines. Additive: absent = no but-turn. */
-  engineTopLines?: ReadonlyArray<{ moves: string[]; evaluation: number }>;
   /** STEP D Phase 3 — the engine's principal variation for a PLAN question.
    *  The plan's MOVE backbone is Stockfish's best line (real, legal, verified),
    *  voiced by assemblePlanAnswer instead of the LLM free-synthesizing a plan.
@@ -1770,8 +1766,6 @@ function describeMoveMoment(m: MoveMoment | undefined): string {
 }
 
 export async function groundedMoveFeedback(opts: {
-  /** Engine MultiPV top lines (white-POV) — enables the tempting but-turn. */
-  topLines?: ReadonlyArray<{ moves: string[]; evaluation: number }>;
   fen: string;
   /** Engine best move in UCI (e.g. `g1f3`) — Stockfish PV[0]. */
   bestMoveUci?: string | null;
@@ -1818,7 +1812,6 @@ export async function groundedMoveFeedback(opts: {
       engineBestMoveUci: opts.bestMoveUci ?? undefined,
       engineEvalCp: opts.evalCp ?? undefined,
       engineMateIn: opts.mateIn ?? undefined,
-      engineTopLines: opts.topLines ?? undefined,
       tactics: opts.tactics,
       studentColor: opts.studentColor,
     },
@@ -1859,10 +1852,10 @@ async function serveGroundedPositionDefault(
       typeof grounding.engineMateIn === 'number'
         ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
         : null;
-    const answer = assembleMoveEvalAnswer({ fen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null, topLines: grounding.engineTopLines });
+    const answer = assembleMoveEvalAnswer({ fen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, studentColor: grounding.studentColor ?? null });
     if (computedOnly && answer?.facts?.trim()) return `${prefix}${answer.facts}`.trim();
     if (answer) {
-      const voiced = await voiceFacts(`${prefix}${answer.facts}`, { studentMessage, providerConfig: config, intent: 'safe-default-bestmove', preferRaw: !warm, warm, mustPreserve: answer.temptingSans });
+      const voiced = await voiceFacts(`${prefix}${answer.facts}`, { studentMessage, providerConfig: config, intent: 'safe-default-bestmove', preferRaw: !warm, warm });
       if (voiced) {
         return answer.bestMoveFromTo
           ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`
@@ -4123,9 +4116,9 @@ export async function getCoachChatResponse(
               typeof grounding.engineMateIn === 'number'
                 ? (blackToMove ? -grounding.engineMateIn : grounding.engineMateIn)
                 : null;
-            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, askedPiece: grounding.askedPiece ?? null, studentColor: grounding.studentColor ?? null, topLines: grounding.engineTopLines });
+            const answer = assembleMoveEvalAnswer({ fen: bestFen, bestMoveUci: bestUci, evalCp: stmEvalCp, mateIn: stmMateIn, askedPiece: grounding.askedPiece ?? null });
             if (answer) {
-              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true, mustPreserve: answer.temptingSans });
+              const voiced = await voiceFacts(answer.facts, { studentMessage: lastUserMessage(), providerConfig: config, intent: 'best-move', preferRaw: true });
               if (voiced) {
                 return answer.bestMoveFromTo
                   ? `${voiced} [BOARD: arrow:${answer.bestMoveFromTo.from}-${answer.bestMoveFromTo.to}:green]`

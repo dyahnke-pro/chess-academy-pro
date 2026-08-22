@@ -15,7 +15,6 @@
 import { Chess } from 'chess.js';
 import type { Square, PieceSymbol } from 'chess.js';
 import { seeGain } from './positionReadingService';
-import { temptingFromAnalysis } from './tacticalRead';
 import type { TacticsLiveContext, LivePlayerGamesContext } from '../coach/types';
 import type { BadHabit, LessonScript, MoveAnnotation } from '../types';
 import type { MasterPlayResult } from './masterPlayTypes';
@@ -38,9 +37,6 @@ export interface GroundedAnswer {
   bestMoveFromTo: { from: string; to: string } | null;
   /** Where every fact came from (engine / chess.js) — recorded, never the LLM. */
   sources: string[];
-  /** Critical SANs the phrasing model MUST keep verbatim (the tempting move +
-   *  its refutation), for voiceFacts.mustPreserve. Absent when no but-turn. */
-  temptingSans?: string[];
 }
 
 /** Convert a centipawn eval (side-to-move POV) into a grounded phrase. Never
@@ -351,10 +347,6 @@ export function assembleMoveEvalAnswer(opts: {
    *  answer to "what should I play". It is to SAY that it isn't the thing they
    *  asked about, so the student can tell an answer from a non-answer. */
   askedPiece?: 'pawn' | 'knight' | 'bishop' | 'rook' | 'queen' | 'king' | null;
-  /** Engine MultiPV top lines for `fen` (white-POV evals). When present, the
-   *  answer opens with the tempting-but-wrong move — his but-turn — derived
-   *  latency-safe from the lines already computed. */
-  topLines?: ReadonlyArray<{ moves: string[]; evaluation: number }>;
 }): GroundedAnswer | null {
   const { fen, bestMoveUci } = opts;
   if (!bestMoveUci || bestMoveUci.length < 4) return null;
@@ -408,21 +400,6 @@ export function assembleMoveEvalAnswer(opts: {
   if (why) parts.push(why);
   if (evalText) parts.push(`${evalText.charAt(0).toUpperCase()}${evalText.slice(1)}.`);
 
-  // THE BUT-TURN — the move the student is tempted by, derived from the MultiPV
-  // already in hand (no extra engine read). Opens the answer so the coach
-  // affirms the pull, then turns against it — his #1 device. Computed (G0).
-  let temptingSans: string[] | undefined;
-  if (opts.topLines && opts.topLines.length >= 2 && !theirMove) {
-    const t = temptingFromAnalysis(fen, opts.topLines, mover);
-    if (t) {
-      const butTurn = t.replySan
-        ? `The move you’ll be tempted by is ${t.san}, but it fails to ${t.replySan}.`
-        : `The move you’ll be tempted by is ${t.san}, but it doesn’t hold.`;
-      parts.unshift(butTurn);
-      temptingSans = t.replySan ? [t.san, t.replySan] : [t.san];
-    }
-  }
-
   const sources = ['engine:stockfish', 'board:chess.js'];
 
   return {
@@ -430,7 +407,6 @@ export function assembleMoveEvalAnswer(opts: {
     bestMoveSan,
     bestMoveFromTo: fromTo,
     sources,
-    temptingSans,
   };
 }
 

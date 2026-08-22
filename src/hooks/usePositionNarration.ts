@@ -8,7 +8,6 @@ import { buildVoicePackage } from '../services/voicePackage';
 import { stockfishEngine, resolveWorkerUrl } from '../services/stockfishEngine';
 import { buildChessContextMessage, POSITION_NARRATION_ADDITION } from '../services/coachPrompts';
 import { formatReadingFacts } from '../services/positionReadingService';
-import { temptingFromAnalysis } from '../services/tacticalRead';
 import { teachingSourceForBoard, generalizedTeaching, spokenBeatText } from '../services/danyaTeachingService';
 import { logAppAudit } from '../services/appAuditor';
 import { db } from '../db/schema';
@@ -236,19 +235,6 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         ? ` REQUIRED: the engine has computed the deepest look-ahead for this position. You MUST include this exact sentence, verbatim, as part of your narration (do not paraphrase, do not omit it): "${lookaheadLine}"`
         : '';
 
-      // THE TEMPTING-BUT-WRONG MOVE — the but-turn, his #1 device. Derived from
-      // the ALREADY-COMPUTED MultiPV (no extra engine read, so the tap stays
-      // latency-safe), phrased in code (G0). Null when no top line below best is
-      // both eye-catching and clearly worse — nothing to warn against.
-      const tempting = stockfishAnalysis?.topLines
-        ? temptingFromAnalysis(args.fen, stockfishAnalysis.topLines, posStudentCC === 'w' ? 'white' : 'black')
-        : null;
-      // The tempting move is a FACT, not a finished sentence — the model phrases
-      // the but-turn in its own words (varied), never a frozen template.
-      const requiredTempting = tempting
-        ? ` COMPUTED FACT: the student is likely tempted to play ${tempting.san} (${tempting.appeal})${tempting.replySan ? `, but it fails to ${tempting.replySan}` : ', but it does not hold'}. Before you reveal the best move, work this in as the "you'd want to, but…" turn — in your own words, do not quote this verbatim. Name ONLY moves that appear in the computed facts above; never introduce a move of your own.`
-        : '';
-
       // THE CORPUS LEADS (David 2026-08-13: "narrations follow the corpus,
       // hand written, computed note format"). A read of the board starts from
       // a farmed teaching note about THIS position or structure when one
@@ -279,7 +265,7 @@ export function usePositionNarration(args: UsePositionNarrationArgs): UsePositio
         playerMove: null,
         moveClassification: null,
         playerProfile: { rating, weaknesses: [] },
-        additionalContext: `${readingFacts ? `${readingFacts}\n\n` : ''}The student is playing as ${args.playerColor}. They just tapped "Read this position" — give them a live, spoken narration of what you see.${requiredNote}${requiredTempting}${requiredLookahead}`,
+        additionalContext: `${readingFacts ? `${readingFacts}\n\n` : ''}The student is playing as ${args.playerColor}. They just tapped "Read this position" — give them a live, spoken narration of what you see.${requiredNote}${requiredLookahead}`,
       };
 
       const userMessage = buildChessContextMessage(context);

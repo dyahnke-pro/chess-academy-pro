@@ -213,23 +213,7 @@ export interface RankedCandidate {
   from: string;
   to: string;
   rank: number; // 1-based multipv rank
-  /** This line's evaluation, same POV/units as every other line at the fen
-   *  (they come from one MultiPV analysis). Optional so older analyzers that
-   *  only report geometry+rank keep working. When present it lets the arrow
-   *  pass DROP a #2/#3 that is far worse than #1 — a mistake, not a real
-   *  alternative — instead of arming it yellow. */
-  evalCp?: number;
-  /** Mate distance for this line, if the engine reported one (else null). */
-  mate?: number | null;
 }
-
-/** A rank-2/#3 candidate this many centipawns (or more) below the engine's #1
- *  is a MISTAKE, not a "decent alternative" — it gets NO arrow, not a yellow
- *  one. Aligned with the tactical-read tempting threshold so a move flagged
- *  "you'd be tempted by X, but…" is never armed as a suggestion (David
- *  2026-08-21: "arrows need to match"). Only applied when the analyzer reports
- *  per-line evals; rank-only analyzers keep the pure colorForRank behavior. */
-export const YELLOW_ARROW_MAX_DROP_CP = 120;
 
 /** Engine analyzer injected by the caller (adapts the stockfish
  *  singleton). Returns the top moves at `fen`, ranked. */
@@ -286,22 +270,6 @@ export async function injectCandidateArrows(
     const hit = ranked.find((r) => r.from === a.from && r.to === a.to);
     return hit ? hit.rank : null;
   };
-  // Best line's eval/mate, for the "far worse than #1 → no arrow" guard below.
-  const best = ranked.find((r) => r.rank === 1);
-  const bestEval = best?.evalCp;
-  const bestMate = best?.mate ?? null;
-  // A #2/#3 move far below #1 is a MISTAKE, not a decent alternative — it must
-  // not draw a yellow "play this" arrow (David 2026-08-21: "arrows need to
-  // match"; David 2026-07-06: "we never point at a bad move"). #1 forcing a
-  // mate that this move doesn't is the same story. Only fires when the analyzer
-  // reports per-line evals; otherwise colorForRank's rank-only behavior stands.
-  const farWorseThanBest = (a: FromTo): boolean => {
-    const hit = ranked.find((r) => r.from === a.from && r.to === a.to);
-    if (!hit || hit.rank === 1) return false;
-    if (bestMate != null && bestMate > 0 && (hit.mate == null || hit.mate <= 0)) return true;
-    if (bestEval == null || hit.evalCp == null) return false;
-    return Math.abs(bestEval - hit.evalCp) >= YELLOW_ARROW_MAX_DROP_CP;
-  };
 
   const resolved: { san: string; from: string; to: string; rank: number | null }[] = [];
   const seen = new Set<string>();
@@ -325,11 +293,7 @@ export async function injectCandidateArrows(
   // (David 2026-07-06). Filter BEFORE the cap so the drawable candidates
   // aren't crowded out by dropped ones.
   const drawable = resolved
-    .map((r) => {
-      let color = colorForRank(r.rank);
-      if (color === 'yellow' && farWorseThanBest(r)) color = null;
-      return { ...r, color };
-    })
+    .map((r) => ({ ...r, color: colorForRank(r.rank) }))
     .filter((r): r is typeof r & { color: ArrowColor } => r.color !== null);
   const capped = drawable.slice(0, MAX_CANDIDATE_ARROWS);
 

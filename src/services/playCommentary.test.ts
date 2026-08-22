@@ -3,7 +3,7 @@
 // nothing (the locked voice law: speak when it instructs).
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
-import { buildPlayCommentary, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from './playCommentary';
+import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from './playCommentary';
 
 describe('buildPlayCommentary', () => {
   it('names the opponent knight on an unchallengeable outpost when the trade is available', () => {
@@ -78,6 +78,53 @@ describe('buildPlayCommentary', () => {
     // Same alignment, but White\'s only piece is a bishop — wrong geometry.
     const beat = buildPlayCommentary({ fen: '3r2k1/5pp1/3q3p/8/8/8/6PP/B5K1 w - - 0 20', studentColor: 'white' });
     expect(beat?.kind).not.toBe('seeding-observation');
+  });
+});
+
+describe('buildRejectedTempting', () => {
+  // Scandinavian shape: after e4 d5, exd5 (a capture) is playable but the
+  // fixture scores it 180cp below the best line with ...Qxd5 as the reply.
+  const fen = 'rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2';
+
+  it('names the tempting capture AND its refutation, never the best move', () => {
+    const rt = buildRejectedTempting({
+      fen,
+      studentColor: 'white',
+      lines: [
+        { uci: 'e4e5', replyUci: 'c7c5', evalCp: 40 },
+        { uci: 'e4d5', replyUci: 'd8d5', evalCp: -140 },
+      ],
+    });
+    expect(rt?.temptingSan).toBe('exd5');
+    expect(rt?.refutationSan).toBe('Qxd5');
+    expect(rt?.facts).toContain('exd5');
+    expect(rt?.facts).toContain('Qxd5');
+    expect(rt?.facts).not.toContain('e5 '); // the best move stays unnamed
+  });
+
+  it('a quiet alternative is not "tempting" — silence', () => {
+    // Second line is a quiet knight move, not a capture or check.
+    const rt = buildRejectedTempting({
+      fen,
+      studentColor: 'white',
+      lines: [
+        { uci: 'e4e5', replyUci: 'c7c5', evalCp: 40 },
+        { uci: 'g1f3', replyUci: 'd5e4', evalCp: -140 },
+      ],
+    });
+    expect(rt).toBeNull();
+  });
+
+  it('an eval gap under 1.5 pawns is a preference, not a refutation — silence', () => {
+    const rt = buildRejectedTempting({
+      fen,
+      studentColor: 'white',
+      lines: [
+        { uci: 'e4e5', replyUci: 'c7c5', evalCp: 40 },
+        { uci: 'e4d5', replyUci: 'd8d5', evalCp: -60 },
+      ],
+    });
+    expect(rt).toBeNull();
   });
 });
 

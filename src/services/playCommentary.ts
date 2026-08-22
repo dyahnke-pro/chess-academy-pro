@@ -481,9 +481,67 @@ export function describeMoveConsequence(fenBefore: string, san: string): string 
   }
 }
 
-// buildRejectedTempting was RETIRED 2026-08-21: the but-turn is now computed
-// by the unified tacticalRead engine (tacticalReadFromLines), the same one
-// the tactics / read-position surfaces use. Free-play was its only caller.
+/**
+ * THE REJECTED TEMPTING MOVE — the speedrun beat "if you play the tempting
+ * Knight to c5, Black can push e5". Deterministic: the tempting candidate is
+ * a CAPTURE or CHECK the engine's multipv scored ≥1.5 pawns worse than the
+ * best line, and the refutation is that line's own reply. Unlike the other
+ * beats this one NAMES both moves — it is a warning the video delivers
+ * openly, not a quiz — but it never names the BEST move (the honesty
+ * contract holds).
+ */
+export function buildRejectedTempting(args: {
+  fen: string;
+  studentColor: 'white' | 'black';
+  /** Engine multipv lines, best first: first move + its reply (UCI), eval
+   *  from the STUDENT's perspective in centipawns. */
+  lines: Array<{ uci: string; replyUci?: string | null; evalCp: number }>;
+}): { facts: string; hint: HintPackage; temptingSan: string; refutationSan: string } | null {
+  if (args.lines.length < 2) return null;
+  const me: 'w' | 'b' = args.studentColor === 'white' ? 'w' : 'b';
+  let base: Chess;
+  try {
+    base = new Chess(args.fen);
+  } catch {
+    return null;
+  }
+  if (base.turn() !== me) return null;
+  const bestEval = args.lines[0].evalCp;
+  for (const line of args.lines.slice(1)) {
+    if (!line.replyUci || bestEval - line.evalCp < 150) continue;
+    try {
+      const probe = new Chess(args.fen);
+      const tempting = probe.move({ from: line.uci.slice(0, 2) as Square, to: line.uci.slice(2, 4) as Square, promotion: (line.uci[4] as 'q' | undefined) ?? undefined });
+      if (!tempting) continue;
+      // Tempting = it LOOKS like it wins something or forces something.
+      const looksGood = tempting.captured !== undefined || probe.isCheck();
+      if (!looksGood) continue;
+      const refutation = probe.move({ from: line.replyUci.slice(0, 2) as Square, to: line.replyUci.slice(2, 4) as Square, promotion: (line.replyUci[4] as 'q' | undefined) ?? undefined });
+      if (!refutation) continue;
+      const dropPawns = ((bestEval - line.evalCp) / 100).toFixed(1);
+      const why = tempting.captured !== undefined
+        ? `it grabs the ${NAME[tempting.captured] ?? 'piece'} on ${tempting.to}`
+        : 'it comes with check';
+      // Tiered so the REGISTER decides how much of this is handed over
+      // (hintRegister.packageForRegister). The anchor carries both moves
+      // because the tempting move alone, without its refutation, would read as
+      // a recommendation — every tier has to stand on its own.
+      const hint: HintPackage = {
+        anchor: `TEMPTING BUT REFUTED: ${tempting.san} looks natural — ${why} — but the reply ${refutation.san} refutes it.`,
+        detail: `That line leaves the student about ${dropPawns} pawns worse than the best plan.`,
+        stakes: 'Teach the habit from this: calculate the opponent\'s most forcing reply BEFORE trusting a tempting move.',
+        withhold: `Name ${tempting.san} and ${refutation.san} exactly as given. Do NOT name or hint at the best move.`,
+      };
+      return {
+        temptingSan: tempting.san,
+        refutationSan: refutation.san,
+        hint,
+        facts: packageForRegister(hint, 'moderate'),
+      };
+    } catch { /* malformed line — try the next */ }
+  }
+  return null;
+}
 
 /**
  * PRIORITY-FIRST FRAMING — the speedrun beat "our main priority is to attack
