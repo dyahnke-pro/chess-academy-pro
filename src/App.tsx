@@ -3,8 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import './services/bucketAuditBridge'; // installs window.__bucketAudit for the bucket-delivery audit (no-op for real users)
 import { useAppStore } from './stores/appStore';
 import { getOrCreateMainProfile } from './services/dbService';
-import { calibrateStrength } from './services/strengthCalibrationService';
-import { StrengthCalibrationBubble } from './components/Settings/StrengthCalibrationBubble';
+import { calibrateStrength, applyStrength, SKILL_BANDS } from './services/strengthCalibrationService';
 import { AiConsentModal } from './components/Legal/AiConsentModal';
 import { useAiConsentStore } from './stores/aiConsentStore';
 import { getThemeById, applyTheme } from './services/themeService';
@@ -112,7 +111,6 @@ import { AccessGate } from './components/Paywall/AccessGate';
 import { initBilling, getStableAnalyticsId } from './services/billingService';
 import { useFreeTierStore } from './stores/freeTierStore';
 import { ReviewPrompt } from './components/Feedback/ReviewPrompt';
-import { CoachUnlockAnnouncement } from './components/Paywall/CoachUnlockAnnouncement';
 
 /**
  * Mounted inside BrowserRouter so it can use router hooks. Wires the
@@ -128,19 +126,19 @@ export function App(): JSX.Element {
   const { isLoading, setLoading, setActiveProfile, setActiveTheme, activeProfile } =
     useAppStore();
   const [onboardingSkipped, setOnboardingSkipped] = useState(true);
-  const [needsCalibration, setNeedsCalibration] = useState(false);
 
-  // First-run AI data-sharing consent (Apple 5.1.1). Once strength
-  // calibration is out of the way, if this profile has never answered the
-  // consent prompt (undefined ⇒ new install OR an existing profile that
-  // predates the field), surface the blocking AiConsentModal before any
-  // coach call can share gameplay data with the third-party AI providers.
+  // First-run AI data-sharing consent (Apple 5.1.1). If this profile has never
+  // answered the consent prompt (undefined ⇒ new install OR an existing profile
+  // that predates the field), surface the blocking AiConsentModal before any
+  // coach call can share gameplay data with the third-party AI providers. (The
+  // strength-picker bubble that used to gate this was removed 2026-08-22 — see
+  // the calibration block below — so consent is now the ONLY first-run prompt.)
   useEffect(() => {
-    if (needsCalibration || !activeProfile) return;
+    if (!activeProfile) return;
     if (activeProfile.aiDataConsent !== undefined) return;
     if (useAiConsentStore.getState().promptOpen) return;
     void useAiConsentStore.getState().requestConsent();
-  }, [needsCalibration, activeProfile]);
+  }, [activeProfile]);
 
   // Unlock Web Speech API on first user gesture (required on iOS/WKWebView)
   useEffect(() => {
@@ -329,7 +327,13 @@ export function App(): JSX.Element {
         try {
           const { result, profile: calibrated } = await calibrateStrength(profile);
           if (result.needsPicker) {
-            setNeedsCalibration(true);
+            // First-run skill-picker bubble REMOVED (David 2026-08-22: kill the
+            // pop-ups that greet a fresh download — "make it free and open").
+            // Seed a sensible default (Intermediate) so difficulty stays
+            // adaptive from move one; the user retunes it any time in Settings.
+            // No blocking bubble.
+            const seeded = await applyStrength(profile, SKILL_BANDS[2].rating);
+            setActiveProfile(seeded);
           } else if (calibrated !== profile) {
             setActiveProfile(calibrated);
           }
@@ -611,35 +615,19 @@ export function App(): JSX.Element {
       </Routes>
       <BuildVersionWidget />
       <StarAnimationLayer />
-      {/* First-run strength bubble — the first coach-mark to pop, blocking
-          until answered, so a beginner's difficulty is set before anything
-          else. Imports bypass it (calibrated silently at boot). */}
-      {needsCalibration && activeProfile && (
-        <StrengthCalibrationBubble onDone={() => setNeedsCalibration(false)} />
-      )}
-      {/* AI data-sharing consent — blocking, shown once after calibration and
-          re-shown just-in-time if a user who declined later tries the coach.
+      {/* AI data-sharing consent — the ONLY first-run prompt now (the strength
+          picker was removed 2026-08-22). Blocking, shown once; re-shown
+          just-in-time if a user who declined later tries the coach.
           Guideline 5.1.1(i): permission before any gameplay data is shared with
           the third-party AI + voice providers. Must live INSIDE BrowserRouter —
           it renders a <Link to="/privacy">, and a router consumer outside the
           Router throws "Cannot destructure property 'basename' from null" and
-          white-screens the whole app (P0, David 2026-07-02).
-          SEQUENCED after the strength bubble (David-approved fix 2026-07-28):
-          both used to mount at once and the consent modal (z-[120]) sat ON TOP
-          of the calibration bubble, intercepting its taps — two stacked
-          blocking prompts, answered in the opposite order to the comment
-          above. Gating on !needsCalibration makes the code match the stated
-          order: calibrate first, then consent. */}
-      {!needsCalibration && <AiConsentModal />}
+          white-screens the whole app (P0, David 2026-07-02). */}
+      <AiConsentModal />
       {/* Two-step review prompt — armed by reviewPromptService after enough
           positive moments; renders only when open. Global so it can surface
           from any surface that recorded the win. */}
       <ReviewPrompt />
-      {/* One-time "the coach is free to try" toast (David 2026-08-06) — fires
-          for every non-Pro user, including existing users whose freeTier row
-          predates the coach fields (see CoachUnlockAnnouncement doc comment).
-          Non-blocking bottom sheet, safe to mount unconditionally. */}
-      <CoachUnlockAnnouncement />
     </BrowserRouter>
     </>
   );

@@ -1,12 +1,11 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { Info, X } from 'lucide-react';
-import { db } from '../../db/schema';
 
 // "How to use this app" help bubble (playbook §8). A top-right "i" button that
-// opens a coach-mark explainer for the surface. Auto-opens on FIRST visit
-// (tracked per-surface in Dexie meta), then lives behind the "i" — replayable
-// any time. Additive, no app state. Teach the LOOP (Watch → Learn → Practice → Play).
+// opens a coach-mark explainer for the surface. First-visit auto-open was
+// removed 2026-08-22 (no pop-ups on a fresh download); the help now lives
+// behind the "i" only — replayable any time. Additive, no app state.
 
 export interface HelpStep {
   /** Short label, e.g. "Watch" or "The climb". */
@@ -37,26 +36,15 @@ interface PageHelpProps {
   footer?: ReactNode;
 }
 
-function metaKey(helpId: string): string {
-  return `pagehelp-seen-${helpId}`;
-}
-
 export function PageHelp({ title, steps, className = '', helpId, suppressAutoOpen = false, footer }: PageHelpProps): JSX.Element {
   const [open, setOpen] = useState(false);
 
-  // First-visit auto-open: check Dexie once on mount; if unseen, open + mark
-  // seen. Held while suppressAutoOpen is true (re-runs when it flips false),
-  // so the strength bubble can claim the first slot.
-  useEffect(() => {
-    if (!helpId || suppressAutoOpen) return;
-    let cancelled = false;
-    void db.meta.get(metaKey(helpId)).then((rec) => {
-      if (cancelled || rec) return;
-      setOpen(true);
-      void db.meta.put({ key: metaKey(helpId), value: '1' });
-    });
-    return () => { cancelled = true; };
-  }, [helpId, suppressAutoOpen]);
+  // First-visit auto-open DISABLED (David 2026-08-22: "remove all of the stupid
+  // screens that pop up when you dl my app"). The help stays one tap away behind
+  // the "i" button below — it just never opens itself. helpId / suppressAutoOpen
+  // are kept in the props so no call site has to change.
+  void helpId;
+  void suppressAutoOpen;
 
   useEffect(() => {
     if (!open) return;
