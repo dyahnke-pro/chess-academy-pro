@@ -16269,7 +16269,7 @@
    "opening": "Sicilian Defense",
    "phase": "opening",
    "explains": "The bishop comes out to c4 aiming at the pawn on f7, the only pawn near the king with no pawn defending it. From the same square it covers d5, which is where the defender's freeing pawn break wants to land, and b5. Nothing is threatened yet; what has happened is that the natural ways to free the position are all a little harder.",
-   "teaches": "A bishop on c4 is doing more than staring at f7. From that square it also covers d5 and b5 — the two squares the defender needs for a knight or a freeing pawn — so it restrains as much as it attacks. Judge the piece by the whole diagonal, not by the one square at the end of it.",
+   "teaches": "A bishop on c4 is doing more than staring at f7 — from that square it also covers d5 and b5, the two squares the defender needs for a knight or a freeing pawn, so it restrains as much as it attacks. Judge the piece by the whole diagonal, not by the one square at the end of it.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -16314,7 +16314,7 @@
    "opening": "Sicilian Defense",
    "phase": "opening",
    "explains": "The pawn steps to d3 and defends the bishop on c4 and the pawn on e4 at the same time. Both were the loose points in the position: the bishop could be hit by a pawn coming to d5, and the centre pawn had nothing behind it. One quiet move removes both problems and the position becomes simply solid.",
-   "teaches": "When a bishop is committed early, spend the modest pawn move that supports it. A single pawn holding both the bishop and the centre pawn means neither can be won by a pawn advance, and the position stops having a tactical answer — which is exactly what an early bishop needs.",
+   "teaches": "When a bishop is committed early, spend the modest pawn move that supports it — a single pawn holding both the bishop and the centre pawn means neither can be won by a pawn advance, and the position stops having a tactical answer, which is exactly what an early bishop needs.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -16350,7 +16350,7 @@
    "opening": "Sicilian Defense",
    "phase": "opening",
    "explains": "The pawn has come to d5 and the bishop must move. Going to b5 hits the knight on c6, which is the piece supporting the centre, so the move that looked forced arrives with a threat. The bishop also holds the pawn on d3 from there, so nothing is left loose behind it.",
-   "teaches": "When a pawn advance chases your bishop, look for the retreat square that attacks something rather than the one that keeps the old diagonal. A bishop driven backwards has lost time; a bishop driven sideways onto the piece holding the centre has gained it back.",
+   "teaches": "When a pawn advance chases your bishop, look for the retreat square that attacks something rather than the one that keeps the old diagonal — a bishop driven backwards has lost time; a bishop driven sideways onto the piece holding the centre has gained it back.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -16417,7 +16417,7 @@
    "opening": "Sicilian Defense",
    "phase": "opening",
    "explains": "Both knights are out and the centre is still unresolved. Three continuations come into consideration here: taking on the centre at once, the bishop to b5 hitting the knight that holds it, or the bishop to c4 aiming at the weakest square near the enemy king. They lead to genuinely different games rather than to a single best line.",
-   "teaches": "Three sound third moves with little between them objectively, and a real difference in what you are signing up for. Opening the centre leads to the positions both sides have studied hardest. Offering the bishop for the knight trades a piece for a permanent change in the pawn structure. Putting the bishop out toward f7 keeps everything flexible and takes the game somewhere far less familiar — which at club level is most of its value.",
+   "teaches": "Three sound third moves with little between them objectively, and a real difference in what you are signing up for — opening the centre leads to the positions both sides have studied hardest, offering the bishop for the knight trades a piece for a permanent change in the pawn structure, putting the bishop toward f7 keeps everything flexible and takes the game somewhere far less familiar, which at club level is most of its value.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -16498,7 +16498,7 @@
    "opening": "Benoni Defense",
    "phase": "opening",
    "explains": "The bishop develops to e3 and attacks the pawn on c5. The quiet move is not passive — it completes development, connects the heavy pieces, and puts a question to the queenside pawn in the same motion. The sharper pawn sacrifice was available; simplicity outranked it.",
-   "teaches": "Part of having a positional style is knowing when simplicity is required. When the position is rich with sharp tries, the developing move that completes your setup is often stronger than any of them — a trade that ruins your pawns a little while opening a file for your rook is a price worth agreeing to in advance.",
+   "teaches": "Part of having a positional style is knowing when simplicity is required — when the position is rich with sharp tries, the developing move that completes your setup is often stronger than any of them, and a trade that ruins your pawns a little while opening a file for your rook is a price worth agreeing to in advance.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -16546,7 +16546,7 @@
    "opening": "Benoni Defense",
    "phase": "middlegame",
    "explains": "The pawn arrives on f5 attacking the bishop on e6 and the knight on g6 at the same time — two pieces, one pawn, and only one of them can step away. The capture on e6 a move earlier is what put the bishop there, so the whole sequence was one idea: pull the piece in, then hit it and its neighbour together.",
-   "teaches": "A pawn storm earns its keep when each step lands with tempo. Trade in the centre to pull a piece onto the square your pawn wants to hit, and the advance stops being a loosening gesture and becomes a forcing sequence — every move of it answered on your opponent's clock.",
+   "teaches": "A pawn storm earns its keep when each step lands with tempo — trade in the centre to pull a piece onto the square your pawn wants to hit, and the advance stops being a loosening gesture and becomes a forcing sequence, every move of it answered on your opponent's clock.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -16604,7 +16604,7 @@
    "opening": "Benoni Defense",
    "phase": "middlegame",
    "explains": "The queen on d6 has taken the backward pawn. The rook on d1 defends the queen along a completely open file. The whole line aimed at this pawn, and the rook move converts the raid into control of the only open file on the board.",
-   "teaches": "When a backward pawn falls, the file it lived on is the real prize. Bring the rook to that file at once — the piece that captured is strong there but exposed, and the rook behind it turns a one-move raid into permanent occupation.",
+   "teaches": "When a backward pawn falls, the file it lived on is the real prize — bring the rook to that file at once, because the piece that captured is strong there but exposed, and the rook behind it turns a one-move raid into permanent occupation.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -16671,7 +16671,7 @@
    "opening": "Scotch Game: Scotch Gambit, Advance Variation",
    "phase": "opening",
    "explains": "White strikes at e5 instead of going for the sacrifice. The pieces have not moved anywhere unusual, but the game has left the bishop-on-c4 lines and is heading somewhere with a different name and different theory. This is the sideline that a player who only prepared the sacrifice will be improvising against.",
-   "teaches": "A pawn break can change which opening you are in without changing a single piece placement. Recognise the transposition and you are already in known territory rather than thinking from scratch.",
+   "teaches": "A pawn break can change which opening you are in without changing a single piece placement — recognise the transposition and you are already in known territory rather than thinking from scratch.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -16713,7 +16713,7 @@
    "opening": "Scotch Game: Scotch Gambit, Advance Variation",
    "phase": "opening",
    "explains": "Black takes in the centre. The pawn on d4 is not going to be held for the rest of the game and it does not need to be — it costs White a move to regain, and that is a move Black spends developing. What matters is which structure appears when White finally takes it back.",
-   "teaches": "Accept the pawn when declining costs you the centre anyway. A gambit pawn you can give back on your own terms is a bargaining chip, not a debt.",
+   "teaches": "Accept the pawn when declining costs you the centre anyway — a gambit pawn you can give back on your own terms is a bargaining chip, not a debt.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -16743,7 +16743,7 @@
    "opening": "Scotch Game: Scotch Gambit, Advance Variation",
    "phase": "opening",
    "explains": "The pawn drives at the knight on f6 and this is the gambit proper — White has given a pawn and is now using the tempo. Moving the knight is legal and playable, but there is one move here that is considered far more reputable than any of them: hitting back in the centre and letting the knight look after itself.",
-   "teaches": "When a pawn advance both gains space and attacks a piece, expect the reply to be a counter-strike rather than a retreat. Look for the move that hits back before you look for a square to run to.",
+   "teaches": "When a pawn advance both gains space and attacks a piece, expect the reply to be a counter-strike rather than a retreat — look for the move that hits back before you look for a square to run to.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -16789,7 +16789,7 @@
    "opening": "Scotch Game: Scotch Gambit, Advance Variation",
    "phase": "opening",
    "explains": "Instead of moving the attacked knight, the pawn goes to d5 and hits the bishop on c4. Both pieces are now under fire and it is White to choose, which is a far better version of the position for Black than any retreat. The idea is worth remembering beyond this exact opening — the central counter-push is the standard answer whenever a wing attack asks a question in the middle.",
-   "teaches": "Counter-attack beats retreat when the counter-attack hits something of equal value. Ignoring a threat is sound whenever your own threat is at least as fast.",
+   "teaches": "Counter-attack beats retreat when the counter-attack hits something of equal value — ignoring a threat is sound whenever your own threat is at least as fast.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -16821,7 +16821,7 @@
    "opening": "Scotch Game: Scotch Gambit, Advance Variation",
    "phase": "opening",
    "explains": "The bishop steps aside to b5, pinning the knight on c6 against the king — that knight cannot legally move at all right now. Two roads out. The traditional one, considered for a long time to be essentially forced, jumps the other knight forward. The newer one retreats it to d7 instead, which looks like it does nothing and in fact blocks the pinning line, so the knight on c6 is free again and the capture on d4 no longer wins anything.",
-   "teaches": "When a piece is pinned, count how many ways there are to break the pin before assuming the traditional one is best. Blocking the line is a move that also develops.",
+   "teaches": "When a piece is pinned, count how many ways there are to break the pin before assuming the traditional one is best — blocking the line is a move that also develops.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -16897,7 +16897,7 @@
    "opening": "Rapport-Jobava System",
    "phase": "opening",
    "explains": "Black has just recaptured on d6 with the c-pawn, accepting doubled pawns on the d-file in exchange for the half-open c-file. From here the queen sortie to b6 is the critical try, while castling is the move most players reach for.",
-   "teaches": "The reply you will actually meet is not always the sharpest one. Preparing only for the critical try leaves you improvising in the position that turns up most often, so it is worth knowing the ordinary continuation at least as well as the forcing one.",
+   "teaches": "The reply you will actually meet is not always the sharpest one — preparing only for the critical try leaves you improvising in the position that turns up most often, so it is worth knowing the ordinary continuation at least as well as the forcing one.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -16957,7 +16957,7 @@
    "opening": "Rapport-Jobava System",
    "phase": "opening",
    "explains": "The g- and h-pawns are marching at the bishop on g6, and the threat of pushing the h-pawn again is the reason Black is uncomfortable. Stopping it with the h-pawn does not solve the problem either: the knight on e5 simply takes the bishop, and recapturing with the f-pawn wrecks the pawns in front of the king, leaving the pawn on g6 as the next target.",
-   "teaches": "A bishop developed outside its own pawn chain can be chased by pawns, and the chase costs nothing when your king has not committed to that side. Before placing a bishop where pawns can reach it, look at whether the opponent's kingside pawns are still free to advance.",
+   "teaches": "A bishop developed outside its own pawn chain can be chased by pawns, and the chase costs nothing when your king has not committed to that side — before placing a bishop where pawns can reach it, look at whether the opponent's kingside pawns are still free to advance.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -17005,7 +17005,7 @@
    "opening": "Four Knights Game: Scotch Variation",
    "phase": "opening",
    "explains": "The queen recaptures on d4 in the centre, holding the pawn on e4 and the knight on c3 while eyeing the knight on f6 and the pawn on a7. The trade removed a defender and gave the queen the best square on the board.",
-   "teaches": "Trading a knight in the centre because it is 'just a trade' is how a position quietly goes wrong. Count what stands there afterwards: if the recapture puts their queen in the middle where nothing can chase her, you have spent a developed piece to improve the strongest piece they own. A trade is only equal when the square it leaves behind is.",
+   "teaches": "Trading a knight in the centre because it is 'just a trade' is how a position quietly goes wrong — count what stands there afterwards: if the recapture puts their queen in the middle where nothing can chase her, you have spent a developed piece to improve the strongest piece they own. A trade is only equal when the square it leaves behind is.",
    "plans": "",
    "concepts": [],
    "sources": [
