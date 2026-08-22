@@ -1,8 +1,8 @@
 {
  "generatedAt": "2026-08-22",
- "videosDistilled": 199,
- "noteCount": 545,
- "forkCount": 524,
+ "videosDistilled": 200,
+ "noteCount": 549,
+ "forkCount": 530,
  "notes": [
   {
    "id": "vn-advance-e6-cover-the-check-square-before-the-trade",
@@ -12374,6 +12374,126 @@
     {
      "kind": "defends",
      "square": "f1"
+    }
+   ]
+  },
+  {
+   "id": "vn-glek-develop-dont-weaken",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "a6",
+    "Bg2"
+   ],
+   "opening": "King's Knight Opening: Normal Variation",
+   "phase": "opening",
+   "explains": "The bishop completes its fianchetto on g2, taking aim down the long diagonal. Meeting the rook-pawn nudge with a pawn move of your own would only soften the b4 square, so White just develops and waits for Black to commit.",
+   "teaches": "In a fianchetto system, answer a harmless flank pawn poke by simply continuing your development, not by reacting to it. Spending a move to prevent a pin would weaken a key square for no real gain — let the opponent's little pawn move be the wasted one.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fGBhk9oqdbg"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-glek-castle-not-d3",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "a6",
+    "Bg2",
+    "Bb4",
+    "O-O"
+   ],
+   "opening": "King's Knight Opening: Normal Variation",
+   "phase": "opening",
+   "explains": "Castling is the key move here, better than the natural d3. Once Black trades the bishop on c3, White recaptures toward the centre with a tempo and an open position, and there is even a tactic waiting if Black snatches the e4-pawn.",
+   "teaches": "The instinctive supporting pawn move is not always best. In this fianchetto setup, castling first is stronger than propping the centre with a modest pawn, because it keeps a tempo in hand for when the pin is traded off — and it leaves a tactical resource if the opponent gets greedy.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fGBhk9oqdbg"
+   ],
+   "positionSource": "high"
+  },
+  {
+   "id": "vn-glek-recapture-toward-the-centre",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "a6",
+    "Bg2",
+    "Bb4",
+    "O-O",
+    "Bxc3",
+    "dxc3"
+   ],
+   "opening": "King's Knight Opening: Normal Variation",
+   "phase": "opening",
+   "explains": "Taking back with the d-pawn opens the dark-squared bishop's diagonal and increases White's grip on the central squares, better than recapturing away from the centre. The doubled pawns are a small price for the activity.",
+   "teaches": "When you recapture, prefer the direction that opens a piece and grips the centre over the one that merely keeps the pawns tidy. A recapture toward the middle frees a bishop and stakes a bigger central claim.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fGBhk9oqdbg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "d4"
+    }
+   ]
+  },
+  {
+   "id": "vn-glek-the-in-between-recapture",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "a6",
+    "Bg2",
+    "Bb4",
+    "O-O",
+    "Bxc3",
+    "dxc3",
+    "Nxe4",
+    "Nxe5"
+   ],
+   "opening": "King's Knight Opening: Normal Variation",
+   "phase": "opening",
+   "explains": "If Black snatches the pawn on e4, the knight takes on e5 attacking the knight on c6, and White regains the material once the dust settles. A desperado counter-grab is nothing to be afraid of when you count the sequence out.",
+   "teaches": "When the opponent grabs a pawn with a piece, look for the in-between capture that wins it straight back — and do not fear a desperado counter-grab. Counting the sequence out beats reflexively defending.",
+   "plans": "",
+   "concepts": [],
+   "sources": [
+    "yt:fGBhk9oqdbg"
+   ],
+   "positionSource": "high",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c6"
     }
    ]
   },
@@ -32941,6 +33061,214 @@
     }
    ],
    "source": "yt:e4sg69QooO0"
+  },
+  {
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 0 4",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3"
+   ],
+   "ply": 7,
+   "options": [
+    {
+     "san": "a6",
+     "t": 1280,
+     "continuation": "a6"
+    },
+    {
+     "san": "Bc5",
+     "t": 1800.5,
+     "continuation": "Bc5"
+    },
+    {
+     "san": "d5",
+     "t": 1808.5,
+     "continuation": "d5"
+    },
+    {
+     "san": "Bb4",
+     "t": 1957,
+     "continuation": "Bb4"
+    }
+   ],
+   "source": "yt:fGBhk9oqdbg"
+  },
+  {
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4p3/1b2P3/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 4 5",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "g3",
+    "Nf6",
+    "Nc3",
+    "Bb4",
+    "Bg2"
+   ],
+   "ply": 9,
+   "options": [
+    {
+     "san": "Bxc3",
+     "t": 1968.5,
+     "continuation": "Bxc3 dxc3 Nxe4"
+    },
+    {
+     "san": "a6",
+     "t": 1974.5,
+     "continuation": "a6 O-O"
+    }
+   ],
+   "source": "yt:fGBhk9oqdbg"
+  },
+  {
+   "fen": "r1bqk2r/1ppp1ppp/p1n2n2/4p3/4P3/2P2NP1/PPP2PBP/R1BQ1RK1 b kq - 0 7",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "a6",
+    "Bg2",
+    "Bb4",
+    "O-O",
+    "Bxc3",
+    "dxc3"
+   ],
+   "ply": 13,
+   "options": [
+    {
+     "san": "Nxe4",
+     "t": 1332,
+     "continuation": "Nxe4"
+    },
+    {
+     "san": "d6",
+     "t": 1986,
+     "continuation": "d6"
+    }
+   ],
+   "source": "yt:fGBhk9oqdbg"
+  },
+  {
+   "fen": "r1bqk2r/1ppp1ppp/p1n5/4N3/4n3/2P3P1/PPP2PBP/R1BQ1RK1 b kq - 0 8",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "a6",
+    "Bg2",
+    "Bb4",
+    "O-O",
+    "Bxc3",
+    "dxc3",
+    "Nxe4",
+    "Nxe5"
+   ],
+   "ply": 15,
+   "options": [
+    {
+     "san": "Nxe5",
+     "t": 1381.5,
+     "continuation": "Nxe5"
+    },
+    {
+     "san": "Nxf2",
+     "t": 2155.5,
+     "continuation": "Nxf2"
+    }
+   ],
+   "source": "yt:fGBhk9oqdbg"
+  },
+  {
+   "fen": "r1bqk2r/1ppp1ppp/p1n5/4N3/8/2P3P1/PPP2nBP/R1BQ1RK1 w kq - 0 9",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "g3",
+    "Nf6",
+    "Nc3",
+    "Bb4",
+    "Bg2",
+    "a6",
+    "O-O",
+    "Bxc3",
+    "dxc3",
+    "Nxe4",
+    "Nxe5",
+    "Nxf2"
+   ],
+   "ply": 16,
+   "options": [
+    {
+     "san": "Nxc6",
+     "t": 2176,
+     "continuation": "Nxc6"
+    },
+    {
+     "san": "Nxf7",
+     "t": 2203,
+     "continuation": "Nxf7"
+    }
+   ],
+   "source": "yt:fGBhk9oqdbg"
+  },
+  {
+   "fen": "r1b1k2r/1Bp1qppp/pn1p4/8/5P2/2P3P1/PPP1Q2P/R1B2RK1 w kq - 1 13",
+   "lineSan": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Nc3",
+    "Nf6",
+    "g3",
+    "a6",
+    "Bg2",
+    "Bb4",
+    "O-O",
+    "Bxc3",
+    "dxc3",
+    "Nxe4",
+    "Nxe5",
+    "Nxe5",
+    "Bxe4",
+    "d6",
+    "f4",
+    "Nc4",
+    "Qe2",
+    "Nb6",
+    "Bxb7+",
+    "Qe7"
+   ],
+   "ply": 24,
+   "options": [
+    {
+     "san": "Re1",
+     "t": 1581,
+     "continuation": "Re1"
+    },
+    {
+     "san": "Rf2",
+     "t": 1607,
+     "continuation": "Rf2 Qxe2 Rxe2+ Be6"
+    }
+   ],
+   "source": "yt:fGBhk9oqdbg"
   },
   {
    "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/2N5/PP1P1PPP/R1BQKBNR b KQkq - 2 3",
