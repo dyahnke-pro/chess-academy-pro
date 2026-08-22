@@ -1,0 +1,480 @@
+{
+ "videoId": "BmFrJuPdwxE",
+ "title": "How to CRUSH the London System!! | Indian, Scandinavian | GM Naroditsky's DYI Speedrun",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1697.5,
+   "line": [
+    "e4",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "if there are any lines that I didn't go over uh you can definitely pull this game up and uh dig around on your own let's play one more we have the white pieces this time and we're facing a scandy let's see"
+  },
+  {
+   "ply": 3,
+   "t": 1700.5,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "which line uh we end up facing Knight F6 okay so this is I think"
+  },
+  {
+   "ply": 4,
+   "t": 1704,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+   "said": "the Portuguese variation we have faced it before in previous speedruns and as"
+  },
+  {
+   "ply": 5,
+   "t": 1712,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR b KQkq - 2 3",
+   "said": "ome of you might remember I recommend the move Bishop B5 check and here I recommend like an old Russian line which is certainly not the best line if you"
+  },
+  {
+   "ply": 7,
+   "t": 1727,
+   "line": [
+    "Bd7",
+    "Be2"
+   ],
+   "fen": "rn1qkb1r/pppbpppp/5n2/3P4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 4 4",
+   "said": "check the the recent chessable courses I'm pretty sure Bishop C4 is often recommended but my coach taught me to move Bishop E2 which avoids Theory it"
+  },
+  {
+   "ply": 8,
+   "t": 1730,
+   "line": [
+    "c6"
+   ],
+   "fen": "rn1qkb1r/pp1bpppp/2p2n2/3P4/8/8/PPPPBPPP/RNBQK1NR w KQkq - 0 5",
+   "said": "gives a nice stable advantage and it's not the move that people who play this"
+  },
+  {
+   "ply": 10,
+   "t": 1740.5,
+   "line": [
+    "dxc6",
+    "Bxc6"
+   ],
+   "fen": "rn1qkb1r/pp2pppp/2b2n2/8/8/8/PPPPBPPP/RNBQK1NR w KQkq - 0 6",
+   "said": "line with black like to face Okay C C6 is a ridiculous move this just gives away a pawn for no reason black is trying to go for some semblance of compensation but provided that we protect the G2 Pawn our position is"
+  },
+  {
+   "ply": 11,
+   "t": 1753,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rn1qkb1r/pp2pppp/2b2n2/8/8/5N2/PPPPBPPP/RNBQK2R b KQkq - 1 6",
+   "said": "excellent so now we just go Knight F3 developing and"
+  },
+  {
+   "ply": 12,
+   "t": 1754.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/2b2n2/4p3/8/5N2/PPPPBPPP/RNBQK2R w KQkq - 0 7",
+   "said": "efending and I think some people would get a little bit scared uh especially black is playing very quickly but there is no magic in chess right development is equal both of us have developed two pieces black has given up a center Pawn there's absolutely no reason that this should be dangerous now I think a lot of you who are looking at this position your instinct might be to go D3 but I think D3 is not the way to maximize our advantage the question you should ask yourself is first of all should we take on E5 and I think Knight E5 is fine but Bishop takes G2 looks a little bit messy we'd have to move the Rook then we wouldn't be able to castle that's that to me seems unnecessarily messy but E4 is actually not a threat like let's imagine the black plays E4 in this"
+  },
+  {
+   "ply": 13,
+   "t": 1810.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/2b2n2/4p3/8/5N2/PPPPBPPP/RNBQ1RK1 b kq - 1 7",
+   "said": "position we can just jump our Knight into E5 and the Knight on E5 is under zero danger because it can always be supported with a move d4 so I actually think we need to Simply keep developing and invite the move"
+  },
+  {
+   "ply": 14,
+   "t": 1812,
+   "line": [
+    "e4"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/2b2n2/8/4p3/5N2/PPPPBPPP/RNBQ1RK1 w kq - 0 8",
+   "said": ""
+  },
+  {
+   "ply": 15,
+   "t": 1813,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/2b2n2/4N3/4p3/8/PPPPBPPP/RNBQ1RK1 b kq - 1 8",
+   "said": "E4 now we're threatening to grab the bishop"
+  },
+  {
+   "ply": 16,
+   "t": 1817.5,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "rn1qk2r/pp3ppp/2bb1n2/4N3/4p3/8/PPPPBPPP/RNBQ1RK1 w kq - 2 9",
+   "said": "air black continues to play instantly and actually here if we want to be super"
+  },
+  {
+   "ply": 17,
+   "t": 1826,
+   "line": [
+    "d4"
+   ],
+   "fen": "rn1qk2r/pp3ppp/2bb1n2/4N3/3Pp3/8/PPP1BPPP/RNBQ1RK1 b kq d3 0 9",
+   "said": "accurate we don't even need to rush the move Knight takes C6 we can start by playing D4 solidifying theight KN and if black takes on pant which of course is"
+  },
+  {
+   "ply": 18,
+   "t": 1833,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/pp3ppp/2bb1n2/4N3/3Pp3/8/PPP1BPPP/RNBQ1RK1 w - - 1 10",
+   "said": "forced well I guess it's not if black would have taken on pant we actually can"
+  },
+  {
+   "ply": 17,
+   "t": 1834.5,
+   "line": [],
+   "fen": "rn1qk2r/pp3ppp/2bb1n2/4N3/3Pp3/8/PPP1BPPP/RNBQ1RK1 b kq d3 0 9",
+   "said": "still take the bishop first and then recapture on D3 using some nice"
+  },
+  {
+   "ply": 18,
+   "t": 1841.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/pp3ppp/2bb1n2/4N3/3Pp3/8/PPP1BPPP/RNBQ1RK1 w - - 1 10",
+   "said": "tactics all right so black castles which means our Knight can remain safely entrenched on E5 we can also take on C6 largely a matter of taste but I think"
+  },
+  {
+   "ply": 19,
+   "t": 1857,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rn1q1rk1/pp3ppp/2bb1n2/4N1B1/3Pp3/8/PPP1BPPP/RN1Q1RK1 b - - 2 10",
+   "said": "the best way to punish black for his uh for his Shenanigans is to develop the bishop to G5"
+  },
+  {
+   "ply": 20,
+   "t": 1859,
+   "line": [
+    "h6"
+   ],
+   "fen": "rn1q1rk1/pp3pp1/2bb1n1p/4N1B1/3Pp3/8/PPP1BPPP/RN1Q1RK1 w - - 0 11",
+   "said": "creating this really really nasty pin okay H6 Bishop H4 no problem obviously"
+  },
+  {
+   "ply": 21,
+   "t": 1860,
+   "line": [
+    "Bh4"
+   ],
+   "fen": "rn1q1rk1/pp3pp1/2bb1n1p/4N3/3Pp2B/8/PPP1BPPP/RN1Q1RK1 b - - 1 11",
+   "said": ""
+  },
+  {
+   "ply": 22,
+   "t": 1865,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rn1q1rk1/pp2bpp1/2b2n1p/4N3/3Pp2B/8/PPP1BPPP/RN1Q1RK1 w - - 2 12",
+   "said": "we're not worried about Bishop takes C5 okay so what should we do now well we have an extra Pawn so we have essentially the four on two on the queen"
+  },
+  {
+   "ply": 23,
+   "t": 1876,
+   "line": [
+    "c4"
+   ],
+   "fen": "rn1q1rk1/pp2bpp1/2b2n1p/4N3/2PPp2B/8/PP2BPPP/RN1Q1RK1 b - - 0 12",
+   "said": "side how do we exploit it I think the most straightforward way is to play C4 and then to develop the Knight to C3 and eventually to prepare the move D5"
+  },
+  {
+   "ply": 24,
+   "t": 1887,
+   "line": [
+    "b6"
+   ],
+   "fen": "rn1q1rk1/p3bpp1/1pb2n1p/4N3/2PPp2B/8/PP2BPPP/RN1Q1RK1 w - - 0 13",
+   "said": "notice that this Knight on E5 is actually it's it's a great asset rather than a weakness we don't need to exchange this Knight at the first available opportunity in fact I would much rather keep this Knight because the"
+  },
+  {
+   "ply": 25,
+   "t": 1897.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rn1q1rk1/p3bpp1/1pb2n1p/4N3/2PPp2B/2N5/PP2BPPP/R2Q1RK1 b - - 1 13",
+   "said": "bishop on C6 is a totally useless piece let's keep developing let's keep"
+  },
+  {
+   "ply": 26,
+   "t": 1902,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r2q1rk1/p2nbpp1/1pb2n1p/4N3/2PPp2B/2N5/PP2BPPP/R2Q1RK1 w - - 2 14",
+   "said": "developing thank you very much and the game is over Whoopsie Daisy I think"
+  },
+  {
+   "ply": 27,
+   "t": 1903,
+   "line": [
+    "Nxc6"
+   ],
+   "fen": "r2q1rk1/p2nbpp1/1pN2n1p/8/2PPp2B/2N5/PP2BPPP/R2Q1RK1 b - - 0 14",
+   "said": ""
+  },
+  {
+   "ply": 24,
+   "t": 1908.5,
+   "line": [],
+   "fen": "rn1q1rk1/p3bpp1/1pb2n1p/4N3/2PPp2B/8/PP2BPPP/RN1Q1RK1 w - - 0 13",
+   "said": "black forgot to play Bishop B7 he did all of that to Heen ked the bishop and then ended up blundering it yeah not Black's fine as day in the"
+  },
+  {
+   "ply": 27,
+   "t": 1917.5,
+   "line": [
+    "Nxc6",
+    "Nbd7",
+    "Nc3"
+   ],
+   "fen": "r2q1rk1/p2nbpp1/1pN2n1p/8/2PPp2B/2N5/PP2BPPP/R2Q1RK1 b - - 2 14",
+   "said": "office yeah move order is important folks always get the move order right"
+  },
+  {
+   "ply": 12,
+   "t": 1930,
+   "line": [],
+   "fen": "rn1qkb1r/pp3ppp/2b2n2/4p3/8/5N2/PPPPBPPP/RNBQK2R w KQkq - 0 7",
+   "said": "okay to be fair the position was already a disaster but I think the instructive moment well there's two instructive"
+  },
+  {
+   "ply": 11,
+   "t": 1932,
+   "line": [],
+   "fen": "rn1qkb1r/pp2pppp/2b2n2/8/8/5N2/PPPPBPPP/RNBQK2R b KQkq - 1 6",
+   "said": "moments when it comes to the opening play the first"
+  },
+  {
+   "ply": 12,
+   "t": 1935.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/2b2n2/4p3/8/5N2/PPPPBPPP/RNBQK2R w KQkq - 0 7",
+   "said": "was not to rush with a move like D3 which was a lot more passive so we"
+  },
+  {
+   "ply": 16,
+   "t": 1942.5,
+   "line": [
+    "O-O",
+    "e4",
+    "Ne5",
+    "Bd6"
+   ],
+   "fen": "rn1qk2r/pp3ppp/2bb1n2/4N3/4p3/8/PPPPBPPP/RNBQ1RK1 w kq - 2 9",
+   "said": "invited the move E4 and then the second was not just to exchange on C6 at the first available opportunity to realize that when the Knight on E5 is protected"
+  },
+  {
+   "ply": 17,
+   "t": 1949.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rn1qk2r/pp3ppp/2bb1n2/4N3/3Pp3/8/PPP1BPPP/RNBQ1RK1 b kq d3 0 9",
+   "said": "like this it's actually a very very safe piece the worst absolute worst that can happen is black piles up on the Knight and wins a pawn back but that's the absolute worst that can happen because the D4 Pawn is such a well protected Pawn Yeah okay is our opponent just going to stall out the clock here that would not be good and I think we're about 1600 we're entering a level where these relatively small technical things start becoming really important like I wasn't drawing as much emphasis on this when we were 1300 at that point we're just focused on the big things when you enter intermediate level of course a lot of games are still going to be decided by one move blunders as as it was here a lot of games were going to be decided by superior opening knowledge like the previous game but these positional subtleties um when you stack them"
+  },
+  {
+   "ply": 13,
+   "t": 2015.5,
+   "line": [],
+   "fen": "rn1qkb1r/pp3ppp/2b2n2/4p3/8/5N2/PPPPBPPP/RNBQ1RK1 b kq - 1 7",
+   "said": "together that's what creates a lot of the power in your play um the things that are really easy to skip over if you're just looking at a game superficially and short castles is exactly that kind of move that you really want to understand why did I play"
+  },
+  {
+   "ply": 5,
+   "t": 2024,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR b KQkq - 2 3",
+   "said": "that thank you for resigning so just really quickly obviously black should"
+  },
+  {
+   "ply": 7,
+   "t": 2025.5,
+   "line": [
+    "Bd7",
+    "Be2"
+   ],
+   "fen": "rn1qkb1r/pppbpppp/5n2/3P4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 4 4",
+   "said": ""
+  },
+  {
+   "ply": 8,
+   "t": 2026.5,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/8/8/PPPPBPPP/RNBQK1NR w KQkq - 0 5",
+   "said": "play Knight takes D5 and here the point is simply to go D4 and quickly to push"
+  },
+  {
+   "ply": 9,
+   "t": 2028,
+   "line": [
+    "d4"
+   ],
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/3P4/8/PPP1BPPP/RNBQK1NR b KQkq - 0 5",
+   "said": "C4 um in fact Black's only move here to avoid being much worse is Bishop F5"
+  },
+  {
+   "ply": 10,
+   "t": 2037.5,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "rn1qkb1r/ppp1pppp/8/3n1b2/3P4/8/PPP1BPPP/RNBQK1NR w KQkq - 1 6",
+   "said": ""
+  },
+  {
+   "ply": 9,
+   "t": 2039,
+   "line": [],
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/3P4/8/PPP1BPPP/RNBQK1NR b KQkq - 0 5",
+   "said": "if black plays a move like E6 and after C4 white is a clear Advantage Bishop F5"
+  },
+  {
+   "ply": 11,
+   "t": 2040.5,
+   "line": [
+    "e6",
+    "c4"
+   ],
+   "fen": "rn1qkb1r/pppb1ppp/4p3/3n4/2PP4/8/PP2BPPP/RNBQK1NR b KQkq - 0 6",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 2044.5,
+   "line": [],
+   "fen": "rn1qkb1r/pppb1ppp/4p3/3n4/3P4/8/PPP1BPPP/RNBQK1NR w KQkq - 0 6",
+   "said": "is a really nice move because It prepares to meet C4 with Knight B4 which is why we should delay the move C4 and which is why we should start by playing A3 and only then play C4 so for instance if Bishop B7 we can start by playing A3 and after C4 white has a very pleasant position um one thing to remember is that Knight to B4 is not dangerous provided that our Pawn is on C2 because after Knight A3 we can just chase the Knight away with C3 but a serious positional error would be to play C4 because now if we play Knight A3 much like in the previous game this Knight is a very very nasty piece we had exactly the same idea in the previous game so just a good rule of thumb in the jababa London this is a very very common theme as well where a lot of players who are less experienced to the black pieces they will play a move like C5 allowing us to entrench a knight on B5 and it's exactly the same concept black is"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 7,
+   "fen": "rn1qkb1r/pppbpppp/5n2/3P4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 4 4",
+   "line": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Be2"
+   ],
+   "options": [
+    {
+     "san": "c6",
+     "t": 1730,
+     "continuation": "c6",
+     "said": "check the the recent chessable courses I'm pretty sure Bishop C4 is often recommended but my coach taught me to move Bishop E2 which avoids Theory it gives a nice stable advantage and it's not the move that people who play this line with black like to face Okay C C6 is a ridiculous move this just gives away a pawn for no reason black is trying to go for some semblance of compensation but provided that we protect the G2 Pawn our position is excellent so now we just go Knight F3 developing and efending and I think some people would get a little bit scared uh especially black is playing very quickly but there is no magic in chess right development is equal both of us have developed two pieces black has given up a center Pawn there's absolutely no reason that this should be dangerous now I think a lot of you who are looking at this position your instinct might be to go D3 but I think D3 is not the way to maximize our advantage the question you should ask yourself is first of all should we take on E5 and I think Knight E5 is fine but Bishop takes G2 looks a little bit messy we'd have to move the Rook then we"
+    },
+    {
+     "san": "Nxd5",
+     "t": 2026.5,
+     "continuation": "Nxd5",
+     "said": "exactly that kind of move that you really want to understand why did I play that thank you for resigning so just really quickly obviously black should play Knight takes D5 and here the point is simply to go D4 and quickly to push C4 um in fact Black's only move here to avoid being much worse is Bishop F5 if black plays a move like E6 and after C4 white is a clear Advantage Bishop F5 is a really nice move because It prepares to meet C4 with Knight B4 which is why we should delay the move C4 and which is why we should start by playing A3 and only then play C4 so for instance if Bishop B7 we can start by playing A3 and after C4 white has a very pleasant position um one thing to remember is that Knight to B4 is not dangerous provided that our Pawn is on C2 because after Knight A3 we can just chase the Knight away with C3 but a serious positional error would be to play C4 because now if we play Knight A3 much like in the previous game this Knight is a very very nasty piece we had exactly the same idea in the previous game so just a good rule of thumb in the"
+    }
+   ]
+  },
+  {
+   "ply": 9,
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/3P4/8/PPP1BPPP/RNBQK1NR b KQkq - 0 5",
+   "line": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Be2",
+    "Nxd5",
+    "d4"
+   ],
+   "options": [
+    {
+     "san": "Bf5",
+     "t": 2037.5,
+     "continuation": "Bf5",
+     "said": "play Knight takes D5 and here the point is simply to go D4 and quickly to push C4 um in fact Black's only move here to avoid being much worse is Bishop F5 if black plays a move like E6 and after C4 white is a clear Advantage Bishop F5 is a really nice move because It prepares to meet C4 with Knight B4 which is why we should delay the move C4 and which is why we should start by playing A3 and only then play C4 so for instance if Bishop B7 we can start by playing A3 and after C4 white has a very pleasant position um one thing to remember is that Knight to B4 is not dangerous provided that our Pawn is on C2 because after Knight A3 we can just chase the Knight away with C3 but a serious positional error would be to play C4 because now if we play Knight A3 much like in the previous game this Knight is a very very nasty piece we had exactly the same idea in the previous game so just a good rule of thumb in the jababa London this is a very very common theme as well where a lot of players who are less experienced to the black pieces they will play a move like C5 allowing"
+    },
+    {
+     "san": "e6",
+     "t": 2040.5,
+     "continuation": "e6 c4",
+     "said": "C4 um in fact Black's only move here to avoid being much worse is Bishop F5 if black plays a move like E6 and after C4 white is a clear Advantage Bishop F5 is a really nice move because It prepares to meet C4 with Knight B4 which is why we should delay the move C4 and which is why we should start by playing A3 and only then play C4 so for instance if Bishop B7 we can start by playing A3 and after C4 white has a very pleasant position um one thing to remember is that Knight to B4 is not dangerous provided that our Pawn is on C2 because after Knight A3 we can just chase the Knight away with C3 but a serious positional error would be to play C4 because now if we play Knight A3 much like in the previous game this Knight is a very very nasty piece we had exactly the same idea in the previous game so just a good rule of thumb in the jababa London this is a very very common theme as well where a lot of players who are less experienced to the black pieces they will play a move like C5 allowing"
+    }
+   ]
+  },
+  {
+   "ply": 24,
+   "fen": "rn1q1rk1/p3bpp1/1pb2n1p/4N3/2PPp2B/8/PP2BPPP/RN1Q1RK1 w - - 0 13",
+   "line": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Be2",
+    "c6",
+    "dxc6",
+    "Bxc6",
+    "Nf3",
+    "e5",
+    "O-O",
+    "e4",
+    "Ne5",
+    "Bd6",
+    "d4",
+    "O-O",
+    "Bg5",
+    "h6",
+    "Bh4",
+    "Be7",
+    "c4",
+    "b6"
+   ],
+   "options": [
+    {
+     "san": "Nc3",
+     "t": 1897.5,
+     "continuation": "Nc3",
+     "said": "than a weakness we don't need to exchange this Knight at the first available opportunity in fact I would much rather keep this Knight because the bishop on C6 is a totally useless piece let's keep developing let's keep developing thank you very much and the game is over Whoopsie Daisy I think black forgot to play Bishop B7 he did all of that to Heen ked the bishop and then ended up blundering it yeah not Black's fine as day in the office yeah move order is important folks always get the move order right okay to be fair the position was already a disaster but I think the instructive moment well there's two instructive moments when it comes to the opening play the first was not to rush with a move like D3 which was a lot more passive so we invited the move E4 and then the second was not just to exchange on C6 at the first available opportunity to realize that when the Knight on E5 is protected like this it's actually a very very safe piece the worst absolute worst that can happen is black piles up on the Knight and wins a pawn back but that's the"
+    },
+    {
+     "san": "Nxc6",
+     "t": 1917.5,
+     "continuation": "Nxc6 Nbd7 Nc3",
+     "said": "black forgot to play Bishop B7 he did all of that to Heen ked the bishop and then ended up blundering it yeah not Black's fine as day in the office yeah move order is important folks always get the move order right okay to be fair the position was already a disaster but I think the instructive moment well there's two instructive moments when it comes to the opening play the first was not to rush with a move like D3 which was a lot more passive so we invited the move E4 and then the second was not just to exchange on C6 at the first available opportunity to realize that when the Knight on E5 is protected like this it's actually a very very safe piece the worst absolute worst that can happen is black piles up on the Knight and wins a pawn back but that's the absolute worst that can happen because the D4 Pawn is such a well protected Pawn Yeah okay is our opponent just going to stall out the clock here that would not be good and I think we're about 1600 we're entering a level where these relatively small technical things start becoming really important like I"
+    }
+   ]
+  }
+ ]
+}

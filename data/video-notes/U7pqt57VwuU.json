@@ -1,0 +1,31 @@
+[
+ {
+  "id": "vn-qga-regain-the-pawn-by-developing-not-chasing",
+  "line": "d4 d5 c4 dxc4 Nf3",
+  "teaches": "When an opponent gives a pawn back rather than trying to hold it, resist grabbing it at once — the value of the sequence is the lead in development you earn while collecting it, not the pawn itself, and recapturing straight away with the queen throws that lead away.",
+  "explains": "The knight develops toward the centre, eyeing e5 and guarding the d4-pawn, while White simply prepares to clear the light bishop's road to c4. The extra pawn on c4 cannot be propped up for long, so it is regained a move later with every piece already in play.",
+  "reasons": [
+   { "kind": "defends", "square": "d4" },
+   { "kind": "controls", "square": "e5" }
+  ]
+ },
+ {
+  "id": "vn-qga-clear-the-bishop-road-before-the-sortie",
+  "line": "d4 d5 c4 dxc4 Nf3 Nf6 e3",
+  "teaches": "A quiet pawn move that clears a path can be worth more than a natural developing move that commits you — opening the bishop's diagonal to reclaim the pawn keeps the position sound and the plans flexible, while a knight sortie into the centre first forces matters before you know which setup you need.",
+  "explains": "The pawn steps to e3 and unblocks the f1-bishop, whose diagonal now runs all the way to c4 to collect the pawn sitting there. It lends the d4-pawn extra support at the same time, and it does all of this without leaving a single weakness behind.",
+  "reasons": [
+   { "kind": "opens", "from": "f1", "to": "c4" },
+   { "kind": "defends", "square": "d4" }
+  ]
+ },
+ {
+  "id": "vn-qga-the-c5-break-steers-into-the-isolani",
+  "line": "d4 d5 c4 dxc4 Nf3 Nf6 e3 e6 Bxc4 c5",
+  "teaches": "Learn the freeing break that defines a middlegame by its structure, not by memorizing the moves — the side with the lone central pawn plays for piece activity and outpost squares, the other blockades the pawn and trades down toward an endgame where it is weak, so know which side of that bargain you are on before the middlegame begins.",
+  "explains": "The pawn advances to c5 and strikes at White's d4-pawn. Once the central pawns come off, White's d-pawn will stand alone, with no pawn on the c-file or the e-file to shield it, and the isolated-pawn middlegame this line is known for is reached by a single freeing thrust.",
+  "reasons": [
+   { "kind": "attacks", "square": "d4" }
+  ]
+ }
+]

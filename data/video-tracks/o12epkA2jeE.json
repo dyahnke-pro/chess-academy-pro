@@ -380,7 +380,7 @@
   {
    "id": "vn-bowdler-bishop-that-holds-the-light-squares",
    "line": "e4 c5 Nf3 Nc6 Bc4",
-   "teaches": "A bishop on c4 is doing more than staring at f7. From that square it also covers d5 and b5 — the two squares the defender needs for a knight or a freeing pawn — so it restrains as much as it attacks. Judge the piece by the whole diagonal, not by the one square at the end of it.",
+   "teaches": "A bishop on c4 is doing more than staring at f7 — from that square it also covers d5 and b5, the two squares the defender needs for a knight or a freeing pawn, so it restrains as much as it attacks. Judge the piece by the whole diagonal, not by the one square at the end of it.",
    "explains": "The bishop comes out to c4 aiming at the pawn on f7, the only pawn near the king with no pawn defending it. From the same square it covers d5, which is where the defender's freeing pawn break wants to land, and b5. Nothing is threatened yet; what has happened is that the natural ways to free the position are all a little harder.",
    "reasons": [
     {
@@ -400,7 +400,7 @@
   {
    "id": "vn-bowdler-one-square-that-holds-two-pieces",
    "line": "e4 c5 Nf3 Nc6 Bc4 e6 Nc3 Nf6 d3",
-   "teaches": "When a bishop is committed early, spend the modest pawn move that supports it. A single pawn holding both the bishop and the centre pawn means neither can be won by a pawn advance, and the position stops having a tactical answer — which is exactly what an early bishop needs.",
+   "teaches": "When a bishop is committed early, spend the modest pawn move that supports it — a single pawn holding both the bishop and the centre pawn means neither can be won by a pawn advance, and the position stops having a tactical answer, which is exactly what an early bishop needs.",
    "explains": "The pawn steps to d3 and defends the bishop on c4 and the pawn on e4 at the same time. Both were the loose points in the position: the bishop could be hit by a pawn coming to d5, and the centre pawn had nothing behind it. One quiet move removes both problems and the position becomes simply solid.",
    "reasons": [
     {
@@ -420,7 +420,7 @@
   {
    "id": "vn-bowdler-step-aside-and-hit-the-defender",
    "line": "e4 c5 Nf3 Nc6 Bc4 e6 Nc3 Nf6 d3 d5 Bb5",
-   "teaches": "When a pawn advance chases your bishop, look for the retreat square that attacks something rather than the one that keeps the old diagonal. A bishop driven backwards has lost time; a bishop driven sideways onto the piece holding the centre has gained it back.",
+   "teaches": "When a pawn advance chases your bishop, look for the retreat square that attacks something rather than the one that keeps the old diagonal — a bishop driven backwards has lost time; a bishop driven sideways onto the piece holding the centre has gained it back.",
    "explains": "The pawn has come to d5 and the bishop must move. Going to b5 hits the knight on c6, which is the piece supporting the centre, so the move that looked forced arrives with a threat. The bishop also holds the pawn on d3 from there, so nothing is left loose behind it.",
    "reasons": [
     {
@@ -460,7 +460,7 @@
   {
    "id": "vn-bowdler-open-it-or-aim-at-it",
    "line": "e4 c5 Nf3 Nc6",
-   "teaches": "Three sound third moves with little between them objectively, and a real difference in what you are signing up for. Opening the centre leads to the positions both sides have studied hardest. Offering the bishop for the knight trades a piece for a permanent change in the pawn structure. Putting the bishop out toward f7 keeps everything flexible and takes the game somewhere far less familiar — which at club level is most of its value.",
+   "teaches": "Three sound third moves with little between them objectively, and a real difference in what you are signing up for — opening the centre leads to the positions both sides have studied hardest, offering the bishop for the knight trades a piece for a permanent change in the pawn structure, putting the bishop toward f7 keeps everything flexible and takes the game somewhere far less familiar, which at club level is most of its value.",
    "explains": "Both knights are out and the centre is still unresolved. Three continuations come into consideration here: taking on the centre at once, the bishop to b5 hitting the knight that holds it, or the bishop to c4 aiming at the weakest square near the enemy king. They lead to genuinely different games rather than to a single best line.",
    "options": [
     {

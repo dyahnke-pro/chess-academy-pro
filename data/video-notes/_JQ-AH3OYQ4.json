@@ -2,17 +2,11 @@
  {
   "id": "vn-owens-answer-the-pin-with-a-square-not-a-pawn",
   "line": "e4 b6 d4 Bb7 Nc3 e6 Bd3 Bb4 Ne2",
-  "teaches": "Facing a pin on the queen's knight, spending a pawn move to prevent it weakens the squares the pin was aiming at anyway. Develop instead, and keep the modest square beside the king in reserve for the OTHER knight: when the pin arrives, that knight takes it, the pinned one is free, and no pawn has been touched. Answer a pin with a square, not with a pawn.",
+  "teaches": "Facing a pin on the queen's knight, spending a pawn move to prevent it weakens the squares the pin was aiming at anyway — develop instead, and keep the modest square beside the king in reserve for the OTHER knight, so when the pin arrives that knight takes it, the pinned one is free, and no pawn has been touched.",
   "explains": "The king's knight goes to e2 rather than its natural square, so the knight on c3 is no longer the only thing holding the centre and the pin has nothing to win. The pawn move that would have chased the bishop was never needed.",
   "reasons": [
-   {
-    "kind": "defends",
-    "square": "c3"
-   },
-   {
-    "kind": "defends",
-    "square": "d4"
-   }
+   { "kind": "defends", "square": "c3" },
+   { "kind": "defends", "square": "d4" }
   ]
  }
 ]

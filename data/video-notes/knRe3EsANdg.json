@@ -2,27 +2,24 @@
  {
   "id": "vn-kia-clockwork-the-space-wedge-starts-the-attack",
   "line": "d3 e6 e4 d5 Nc3 Nf6 Nb1 Ng8 Nd2 Nf6 g3 c5 Bg2 Nc6 Ngf3 Be7 O-O O-O e5",
-  "teaches": "This whole setup plays the same middlegame every time, and it begins with the pawn wedge: the e-pawn advances, evicts the defender knight, and divides the board \u2014 your attack lives on the king's wing behind that pawn, their counterplay on the other. Learn the clockwork once and it plays itself for a lifetime.",
+  "teaches": "This whole setup plays the same middlegame every time, and it begins with the pawn wedge: the e-pawn advances, evicts the defender knight, and divides the board — your attack lives on the king's wing behind that pawn, their counterplay on the other. Learn the clockwork once and it plays itself for a lifetime.",
   "explains": "The pawn advances to e5 and attacks the knight on f6, the defender in front of the castled king. Once it moves, the wedge stands permanently between the wings, and the standard kingside build-up unrolls behind it move by move.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "f6"
-   }
+   { "kind": "attacks", "square": "f6" }
   ]
  },
  {
   "id": "vn-kia-clockwork-the-rook-pawn-with-two-jobs",
   "line": "d3 e6 e4 d5 Nc3 Nf6 Nb1 Ng8 Nd2 Nf6 g3 c5 Bg2 Nc6 Ngf3 Be7 O-O O-O e5 Nd7 Re1 b5 Nf1 a6 h3 a5 h4 b4",
-  "teaches": "In the standard attack a quiet rook-pawn move serves two purposes at once: it stops the freeing pawn break in front of the wedge, and it reserves the squares the pieces will use to lift toward the king. Their wing pawns will race meanwhile \u2014 that is the bargain of the position, and the side whose preparation is further along wins it.",
-  "explains": "The pawn on h4 covers g5, so the defence's freeing break there runs into a capture, and the same square is reserved for your own pieces to come through. Across the board the enemy pawn has reached b4 \u2014 both storms are declared, and the kingside one is the better prepared.",
-  "structural": "the rook-pawn's two jobs \u2014 the g5 break covered and the lift squares reserved \u2014 while the wing race runs"
+  "teaches": "In the standard attack a quiet rook-pawn move serves two purposes at once: it stops the freeing pawn break in front of the wedge, and it reserves the squares the pieces will use to lift toward the king — their wing pawns race meanwhile, and the side whose preparation is further along wins the bargain.",
+  "explains": "The pawn on h4 covers g5, so the defence's freeing break there runs into a capture, and the same square is reserved for your own pieces to come through. Across the board the enemy pawn has reached b4 — both storms are declared, and the kingside one is the better prepared.",
+  "structural": "the rook-pawn's two jobs — the g5 break covered and the lift squares reserved — while the wing race runs"
  },
  {
   "id": "vn-kia-clockwork-let-their-pawns-run-past",
   "line": "d3 e6 e4 d5 Nc3 Nf6 Nb1 Ng8 Nd2 Nf6 g3 c5 Bg2 Nc6 Ngf3 Be7 O-O O-O e5 Nd7 Re1 b5 Nf1 a6 h3 a5 h4 b4 Bf4 a4 N1h2 a3",
-  "teaches": "When the opponent's counterplay is a pawn storm on the wing you have abandoned, the master's answer is to ignore it correctly: do not touch your pawns to meet theirs, because every pawn move on that wing creates the holes their pieces need. Pawns arriving alone win nothing \u2014 keep your own structure smooth and your pieces on the attacking wing.",
-  "explains": "The enemy pawns have marched all the way down the board while every one of your pawns on that wing still stands on its original square \u2014 no hooks, no holes, nothing for their pieces to use when they arrive. Meanwhile the pieces continue their regrouping toward the other king, where the game is actually being decided.",
-  "structural": "the queenside storm met by not moving a single pawn \u2014 no hooks conceded, the race run only on one wing"
+  "teaches": "When the opponent's counterplay is a pawn storm on the wing you have abandoned, the master's answer is to ignore it correctly: do not touch your pawns to meet theirs, because every pawn move on that wing creates the holes their pieces need. Pawns arriving alone win nothing — keep your own structure smooth and your pieces on the attacking wing.",
+  "explains": "The enemy pawns have marched all the way down the board while every one of your pawns on that wing still stands on its original square — no hooks, no holes, nothing for their pieces to use when they arrive. Meanwhile the pieces continue their regrouping toward the other king, where the game is actually being decided.",
+  "structural": "the queenside storm met by not moving a single pawn — no hooks conceded, the race run only on one wing"
  }
 ]

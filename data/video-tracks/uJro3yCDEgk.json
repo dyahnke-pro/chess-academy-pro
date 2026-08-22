@@ -1,0 +1,907 @@
+{
+ "videoId": "uJro3yCDEgk",
+ "title": "Alapin Sicilian | The Sensei Speedrun | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 2708,
+  "settledPositions": null
+ },
+ "plies": 71,
+ "rewinds": 7,
+ "moves": [
+  {
+   "t": 27.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 44,
+   "ply": 3,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 68.5,
+   "ply": 4,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 70.5,
+   "ply": 5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 74,
+   "ply": 6,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 96.5,
+   "ply": 7,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pP4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 103.5,
+   "ply": 8,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/8/2pp4/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 143.5,
+   "ply": 9,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/8/2pp4/3P4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 1 5"
+  },
+  {
+   "t": 148,
+   "ply": 10,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 2 6"
+  },
+  {
+   "t": 155.5,
+   "ply": 11,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/5n2/1Bpp4/3P4/2P2N2/PP3PPP/RNBQK2R b KQkq - 3 6"
+  },
+  {
+   "t": 163.5,
+   "ply": 12,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "rn1qkb1r/pp1b1ppp/5n2/1Bpp4/3P4/2P2N2/PP3PPP/RNBQK2R w KQkq - 4 7"
+  },
+  {
+   "t": 177.5,
+   "ply": 14,
+   "line": [
+    "Bf1",
+    "Bc8"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 6 8"
+  },
+  {
+   "t": 185.5,
+   "ply": 16,
+   "line": [
+    "Bb5+",
+    "Bd7"
+   ],
+   "fen": "rn1qkb1r/pp1b1ppp/5n2/1Bpp4/3P4/2P2N2/PP3PPP/RNBQK2R w KQkq - 8 9"
+  },
+  {
+   "t": 187,
+   "ply": 17,
+   "line": [
+    "Bxd7+"
+   ],
+   "fen": "rn1qkb1r/pp1B1ppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQK2R b KQkq - 0 9"
+  },
+  {
+   "t": 194.5,
+   "ply": 19,
+   "line": [
+    "Nbxd7",
+    "O-O"
+   ],
+   "fen": "r2qkb1r/pp1n1ppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQ1RK1 b kq - 1 10"
+  },
+  {
+   "t": 200,
+   "ply": 20,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r2qk2r/pp1nbppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQ1RK1 w kq - 2 11"
+  },
+  {
+   "t": 213.5,
+   "ply": 21,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "r2qk2r/pp1nbppp/5n2/2Pp4/8/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 11"
+  },
+  {
+   "t": 222.5,
+   "ply": 20,
+   "line": [],
+   "fen": "r2qk2r/pp1nbppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQ1RK1 w kq - 2 11"
+  },
+  {
+   "t": 228.5,
+   "ply": 21,
+   "line": [
+    "dxc5"
+   ],
+   "fen": "r2qk2r/pp1nbppp/5n2/2Pp4/8/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 11"
+  },
+  {
+   "t": 264,
+   "ply": 22,
+   "line": [
+    "Bxc5"
+   ],
+   "fen": "r2qk2r/pp1n1ppp/5n2/2bp4/8/2P2N2/PP3PPP/RNBQ1RK1 w kq - 0 12"
+  },
+  {
+   "t": 301.5,
+   "ply": 23,
+   "line": [
+    "Re1+"
+   ],
+   "fen": "r2qk2r/pp1n1ppp/5n2/2bp4/8/2P2N2/PP3PPP/RNBQR1K1 b kq - 1 12"
+  },
+  {
+   "t": 332,
+   "ply": 24,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r2qk2r/pp1n1ppp/8/2bp4/4n3/2P2N2/PP3PPP/RNBQR1K1 w kq - 2 13"
+  },
+  {
+   "t": 339,
+   "ply": 26,
+   "line": [
+    "Qxd5",
+    "Bxf2+"
+   ],
+   "fen": "r2qk2r/pp1n1ppp/8/3Q4/4n3/2P2N2/PP3bPP/RNB1R1K1 w kq - 0 14"
+  },
+  {
+   "t": 340,
+   "ply": 27,
+   "line": [
+    "Kf1"
+   ],
+   "fen": "r2qk2r/pp1n1ppp/8/3Q4/4n3/2P2N2/PP3bPP/RNB1RK2 b kq - 1 14"
+  },
+  {
+   "t": 348.5,
+   "ply": 29,
+   "line": [
+    "Bxe1",
+    "Qxe4+"
+   ],
+   "fen": "r2qk2r/pp1n1ppp/8/8/4Q3/2P2N2/PP4PP/RNB1bK2 b kq - 0 15"
+  },
+  {
+   "t": 360.5,
+   "ply": 30,
+   "line": [
+    "Qe7"
+   ],
+   "fen": "r3k2r/pp1nqppp/8/8/4Q3/2P2N2/PP4PP/RNB1bK2 w kq - 1 16"
+  },
+  {
+   "t": 361.5,
+   "ply": 31,
+   "line": [
+    "Qxe7+"
+   ],
+   "fen": "r3k2r/pp1nQppp/8/8/8/2P2N2/PP4PP/RNB1bK2 b kq - 0 16"
+  },
+  {
+   "t": 364.5,
+   "ply": 33,
+   "line": [
+    "Kxe7",
+    "Kxe1"
+   ],
+   "fen": "r6r/pp1nkppp/8/8/8/2P2N2/PP4PP/RNB1K3 b - - 0 17"
+  },
+  {
+   "t": 379.5,
+   "ply": 34,
+   "line": [
+    "Rhe8"
+   ],
+   "fen": "r3r3/pp1nkppp/8/8/8/2P2N2/PP4PP/RNB1K3 w - - 1 18"
+  },
+  {
+   "t": 409.5,
+   "ply": 35,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r3r3/pp1nkppp/8/8/8/2P1BN2/PP4PP/RN2K3 b - - 2 18"
+  },
+  {
+   "t": 449.5,
+   "ply": 37,
+   "line": [
+    "Kf8",
+    "Kf2"
+   ],
+   "fen": "r3rk2/pp1n1ppp/8/8/8/2P1BN2/PP3KPP/RN6 b - - 4 19"
+  },
+  {
+   "t": 463,
+   "ply": 38,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "r3rk2/pp3ppp/8/4n3/8/2P1BN2/PP3KPP/RN6 w - - 5 20"
+  },
+  {
+   "t": 475,
+   "ply": 39,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r3rk2/pp3ppp/8/4N3/8/2P1B3/PP3KPP/RN6 b - - 0 20"
+  },
+  {
+   "t": 479.5,
+   "ply": 40,
+   "line": [
+    "Rxe5"
+   ],
+   "fen": "r4k2/pp3ppp/8/4r3/8/2P1B3/PP3KPP/RN6 w - - 0 21"
+  },
+  {
+   "t": 510.5,
+   "ply": 41,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "r4k2/pp3ppp/8/4r3/8/2P1B3/PP1N1KPP/R7 b - - 1 21"
+  },
+  {
+   "t": 513.5,
+   "ply": 42,
+   "line": [
+    "Rae8"
+   ],
+   "fen": "4rk2/pp3ppp/8/4r3/8/2P1B3/PP1N1KPP/R7 w - - 2 22"
+  },
+  {
+   "t": 524,
+   "ply": 43,
+   "line": [
+    "Re1"
+   ],
+   "fen": "4rk2/pp3ppp/8/4r3/8/2P1B3/PP1N1KPP/4R3 b - - 3 22"
+  },
+  {
+   "t": 544.5,
+   "ply": 44,
+   "line": [
+    "f5"
+   ],
+   "fen": "4rk2/pp4pp/8/4rp2/8/2P1B3/PP1N1KPP/4R3 w - - 0 23"
+  },
+  {
+   "t": 553,
+   "ply": 45,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "4rk2/pp4pp/8/4rp2/8/2P1BN2/PP3KPP/4R3 b - - 1 23"
+  },
+  {
+   "t": 562.5,
+   "ply": 46,
+   "line": [
+    "Rb5"
+   ],
+   "fen": "4rk2/pp4pp/8/1r3p2/8/2P1BN2/PP3KPP/4R3 w - - 2 24"
+  },
+  {
+   "t": 583,
+   "ply": 47,
+   "line": [
+    "b4"
+   ],
+   "fen": "4rk2/pp4pp/8/1r3p2/1P6/2P1BN2/P4KPP/4R3 b - - 0 24"
+  },
+  {
+   "t": 600,
+   "ply": 48,
+   "line": [
+    "b6"
+   ],
+   "fen": "4rk2/p5pp/1p6/1r3p2/1P6/2P1BN2/P4KPP/4R3 w - - 0 25"
+  },
+  {
+   "t": 637.5,
+   "ply": 49,
+   "line": [
+    "Rd1"
+   ],
+   "fen": "4rk2/p5pp/1p6/1r3p2/1P6/2P1BN2/P4KPP/3R4 b - - 1 25"
+  },
+  {
+   "t": 665,
+   "ply": 50,
+   "line": [
+    "f4"
+   ],
+   "fen": "4rk2/p5pp/1p6/1r6/1P3p2/2P1BN2/P4KPP/3R4 w - - 0 26"
+  },
+  {
+   "t": 667,
+   "ply": 51,
+   "line": [
+    "Bxf4"
+   ],
+   "fen": "4rk2/p5pp/1p6/1r6/1P3B2/2P2N2/P4KPP/3R4 b - - 0 26"
+  },
+  {
+   "t": 678,
+   "ply": 52,
+   "line": [
+    "Rf5"
+   ],
+   "fen": "4rk2/p5pp/1p6/5r2/1P3B2/2P2N2/P4KPP/3R4 w - - 1 27"
+  },
+  {
+   "t": 686.5,
+   "ply": 53,
+   "line": [
+    "Bg3"
+   ],
+   "fen": "4rk2/p5pp/1p6/5r2/1P6/2P2NB1/P4KPP/3R4 b - - 2 27"
+  },
+  {
+   "t": 687.5,
+   "ply": 52,
+   "line": [],
+   "fen": "4rk2/p5pp/1p6/5r2/1P3B2/2P2N2/P4KPP/3R4 w - - 1 27"
+  },
+  {
+   "t": 706,
+   "ply": 53,
+   "line": [
+    "g3"
+   ],
+   "fen": "4rk2/p5pp/1p6/5r2/1P3B2/2P2NP1/P4K1P/3R4 b - - 0 27"
+  },
+  {
+   "t": 725.5,
+   "ply": 54,
+   "line": [
+    "Rf7"
+   ],
+   "fen": "4rk2/p4rpp/1p6/8/1P3B2/2P2NP1/P4K1P/3R4 w - - 1 28"
+  },
+  {
+   "t": 754.5,
+   "ply": 55,
+   "line": [
+    "c4"
+   ],
+   "fen": "4rk2/p4rpp/1p6/8/1PP2B2/5NP1/P4K1P/3R4 b - - 0 28"
+  },
+  {
+   "t": 763,
+   "ply": 54,
+   "line": [],
+   "fen": "4rk2/p4rpp/1p6/8/1P3B2/2P2NP1/P4K1P/3R4 w - - 1 28"
+  },
+  {
+   "t": 765.5,
+   "ply": 56,
+   "line": [
+    "c4",
+    "Rc8"
+   ],
+   "fen": "2r2k2/p4rpp/1p6/8/1PP2B2/5NP1/P4K1P/3R4 w - - 1 29"
+  },
+  {
+   "t": 767.5,
+   "ply": 54,
+   "line": [],
+   "fen": "4rk2/p4rpp/1p6/8/1P3B2/2P2NP1/P4K1P/3R4 w - - 1 28"
+  },
+  {
+   "t": 772,
+   "ply": 56,
+   "line": [
+    "c4",
+    "Rc8"
+   ],
+   "fen": "2r2k2/p4rpp/1p6/8/1PP2B2/5NP1/P4K1P/3R4 w - - 1 29"
+  },
+  {
+   "t": 782,
+   "ply": 57,
+   "line": [
+    "c5"
+   ],
+   "fen": "2r2k2/p4rpp/1p6/2P5/1P3B2/5NP1/P4K1P/3R4 b - - 0 29"
+  },
+  {
+   "t": 809,
+   "ply": 58,
+   "line": [
+    "Kg8"
+   ],
+   "fen": "2r3k1/p4rpp/1p6/2P5/1P3B2/5NP1/P4K1P/3R4 w - - 1 30"
+  },
+  {
+   "t": 853,
+   "ply": 59,
+   "line": [
+    "Rd5"
+   ],
+   "fen": "2r3k1/p4rpp/1p6/2PR4/1P3B2/5NP1/P4K1P/8 b - - 2 30"
+  },
+  {
+   "t": 895.5,
+   "ply": 61,
+   "line": [
+    "bxc5",
+    "bxc5"
+   ],
+   "fen": "2r3k1/p4rpp/8/2PR4/5B2/5NP1/P4K1P/8 b - - 0 31"
+  },
+  {
+   "t": 924.5,
+   "ply": 62,
+   "line": [
+    "Rb7"
+   ],
+   "fen": "2r3k1/pr4pp/8/2PR4/5B2/5NP1/P4K1P/8 w - - 1 32"
+  },
+  {
+   "t": 959,
+   "ply": 63,
+   "line": [
+    "c6"
+   ],
+   "fen": "2r3k1/pr4pp/2P5/3R4/5B2/5NP1/P4K1P/8 b - - 0 32"
+  },
+  {
+   "t": 993,
+   "ply": 64,
+   "line": [
+    "Rb2+"
+   ],
+   "fen": "2r3k1/p5pp/2P5/3R4/5B2/5NP1/Pr3K1P/8 w - - 1 33"
+  },
+  {
+   "t": 994,
+   "ply": 65,
+   "line": [
+    "Ke3"
+   ],
+   "fen": "2r3k1/p5pp/2P5/3R4/5B2/4KNP1/Pr5P/8 b - - 2 33"
+  },
+  {
+   "t": 1027,
+   "ply": 64,
+   "line": [],
+   "fen": "2r3k1/p5pp/2P5/3R4/5B2/5NP1/Pr3K1P/8 w - - 1 33"
+  },
+  {
+   "t": 1037,
+   "ply": 66,
+   "line": [
+    "Ke3",
+    "Rc2"
+   ],
+   "fen": "2r3k1/p5pp/2P5/3R4/5B2/4KNP1/P1r4P/8 w - - 3 34"
+  },
+  {
+   "t": 1038.5,
+   "ply": 67,
+   "line": [
+    "c7"
+   ],
+   "fen": "2r3k1/p1P3pp/8/3R4/5B2/4KNP1/P1r4P/8 b - - 0 34"
+  },
+  {
+   "t": 1048.5,
+   "ply": 68,
+   "line": [
+    "Kf7"
+   ],
+   "fen": "2r5/p1P2kpp/8/3R4/5B2/4KNP1/P1r4P/8 w - - 1 35"
+  },
+  {
+   "t": 1051,
+   "ply": 69,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "2rR4/p1P2kpp/8/8/5B2/4KNP1/P1r4P/8 b - - 2 35"
+  },
+  {
+   "t": 1056,
+   "ply": 68,
+   "line": [],
+   "fen": "2r5/p1P2kpp/8/3R4/5B2/4KNP1/P1r4P/8 w - - 1 35"
+  },
+  {
+   "t": 1062.5,
+   "ply": 69,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "2rR4/p1P2kpp/8/8/5B2/4KNP1/P1r4P/8 b - - 2 35"
+  },
+  {
+   "t": 1093.5,
+   "ply": 5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1p1ppp/4p3/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rn1qkb1r/pp1b1ppp/5n2/1Bpp4/3P4/2P2N2/PP3PPP/RNBQK2R w KQkq - 4 7",
+   "line": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7"
+   ],
+   "ply": 12,
+   "options": [
+    {
+     "san": "Bf1",
+     "t": 177.5,
+     "continuation": "Bf1 Bc8"
+    },
+    {
+     "san": "Bxd7+",
+     "t": 187,
+     "continuation": "Bxd7+"
+    }
+   ]
+  },
+  {
+   "fen": "4rk2/p5pp/1p6/5r2/1P3B2/2P2N2/P4KPP/3R4 w - - 1 27",
+   "line": [
+    "e4",
+    "c5",
+    "c3",
+    "e6",
+    "d4",
+    "d5",
+    "exd5",
+    "exd5",
+    "Nf3",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Bf1",
+    "Bc8",
+    "Bb5+",
+    "Bd7",
+    "Bxd7+",
+    "Nbxd7",
+    "O-O",
+    "Be7",
+    "dxc5",
+    "Bxc5",
+    "Re1+",
+    "Ne4",
+    "Qxd5",
+    "Bxf2+",
+    "Kf1",
+    "Bxe1",
+    "Qxe4+",
+    "Qe7",
+    "Qxe7+",
+    "Kxe7",
+    "Kxe1",
+    "Rhe8",
+    "Be3",
+    "Kf8",
+    "Kf2",
+    "Ne5",
+    "Nxe5",
+    "Rxe5",
+    "Nd2",
+    "Rae8",
+    "Re1",
+    "f5",
+    "Nf3",
+    "Rb5",
+    "b4",
+    "b6",
+    "Rd1",
+    "f4",
+    "Bxf4",
+    "Rf5"
+   ],
+   "ply": 52,
+   "options": [
+    {
+     "san": "Bg3",
+     "t": 686.5,
+     "continuation": "Bg3"
+    },
+    {
+     "san": "g3",
+     "t": 706,
+     "continuation": "g3"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Alapin Variation",
+   "eco": "B22",
+   "plies": 3,
+   "line": "e4 c5 c3",
+   "coverage": 0.984
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Alapin Variation",
+  "confirmed": true
+ },
+ "notes": [
+  {
+   "id": "vn-alapin-c3-the-healthy-anti-sicilian",
+   "line": "e4 c5 c3",
+   "teaches": "Against a sharp defence, the setup you know cold usually beats the one that is objectively critical but unfamiliar — especially while you are still learning.",
+   "explains": "Black has answered in the sharpest way, and you might be bracing for a big theoretical brawl — but I would rather sidestep all of that. The little pawn to c3 simply prepares to build the centre with d4, and it steers us into a calm, sound structure we actually understand instead of a memory contest.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "d4"
+    }
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "t": 44,
+   "ply": 3,
+   "source": "yt:uJro3yCDEgk"
+  },
+  {
+   "id": "vn-alapin-take-on-d5-head-for-the-isolani",
+   "line": "e4 c5 c3 e6 d4 d5 exd5",
+   "teaches": "When a position offers you a choice of structures, pick the one whose plans you know cold.",
+   "explains": "Black strikes at the centre with d5, and here you could shove past with e5 and lock things up — but I will take instead. Capturing on d5 steers us into the isolated-pawn structure, and that is a game where both sides' plans are laid out from the very first move.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e6"
+    }
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pP4/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "t": 96.5,
+   "ply": 7,
+   "source": "yt:uJro3yCDEgk"
+  },
+  {
+   "id": "vn-alapin-blockade-the-square-in-front",
+   "line": "e4 c5 c3 e6 d4 d5 exd5 exd5",
+   "teaches": "The way to fight an isolated pawn is to own the square in front of it: blockade it, pile up on it, and trade down until it is simply weak.",
+   "explains": "So we are steering toward an isolated pawn, and the whole fight will be about the square directly in front of it. Our job is to clamp down on that square, blockade the pawn, and trade pieces until it is nothing but a weakness — and that plan is set before the pawn is even isolated.",
+   "reasons": [],
+   "fen": "rnbqkbnr/pp3ppp/8/2pp4/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "t": 103.5,
+   "ply": 8,
+   "source": "yt:uJro3yCDEgk"
+  },
+  {
+   "id": "vn-alapin-develop-first-dont-rush-the-trade",
+   "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3",
+   "teaches": "When the plan is to win a slow structural battle, develop first — the timing of the key trade matters more than making it now.",
+   "explains": "There is no rush to grab anything back; the pawn is not going anywhere. So we develop — the knight comes out eyeing e5 and guarding d4 — and we keep the trade on c5 in reserve for the moment it also costs Black a tempo.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "d4"
+    },
+    {
+     "kind": "controls",
+     "square": "e5"
+    }
+   ],
+   "fen": "rnbqkbnr/pp3ppp/8/2pp4/3P4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 1 5",
+   "t": 143.5,
+   "ply": 9,
+   "source": "yt:uJro3yCDEgk"
+  },
+  {
+   "id": "vn-alapin-check-develops-with-tempo",
+   "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+",
+   "teaches": "Prefer the developing move that also asks a question; a check that develops is a move for nothing.",
+   "explains": "The bishop comes out with check — a free tempo. We develop a piece while Black has to stop and deal with it, and any trade that follows costs him time, not us.",
+   "reasons": [],
+   "fen": "rnbqkb1r/pp3ppp/5n2/1Bpp4/3P4/2P2N2/PP3PPP/RNBQK2R b KQkq - 3 6",
+   "t": 155.5,
+   "ply": 11,
+   "source": "yt:uJro3yCDEgk"
+  },
+  {
+   "id": "vn-alapin-trade-and-castle-when-slightly-better",
+   "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+",
+   "teaches": "With a small, safe edge, simplicity is a weapon — fewer pieces mean fewer ways to go wrong.",
+   "explains": "We are a shade better, so let us keep it simple and trade the bishop off rather than shuffle it back. We swap a pair of minor pieces, keep a clean structure, and get on with castling — no heroics needed when you already hold the pull.",
+   "reasons": [],
+   "fen": "rn1qkb1r/pp1B1ppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQK2R b KQkq - 0 9",
+   "t": 187,
+   "ply": 17,
+   "source": "yt:uJro3yCDEgk"
+  },
+  {
+   "id": "vn-alapin-safety-before-action",
+   "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O",
+   "teaches": "In a quiet structural edge, castle and finish development before you act — a small advantage is converted slowly.",
+   "explains": "King to safety first. We castle, everything is developed, and only now do we turn to the pawn tension. The whole edge is the pressure coming against that isolated pawn, and that pressure is cashed in by patience, not by rushing.",
+   "reasons": [],
+   "fen": "r2qkb1r/pp1n1ppp/5n2/2pp4/3P4/2P2N2/PP3PPP/RNBQ1RK1 b kq - 1 10",
+   "t": 194.5,
+   "ply": 19,
+   "source": "yt:uJro3yCDEgk"
+  },
+  {
+   "id": "vn-alapin-time-the-trade-to-gain-a-tempo",
+   "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5",
+   "teaches": "Time your trades for when they also gain something — the same capture, made a move later, can cost the opponent a tempo.",
+   "explains": "Now the trade. Black has just committed the bishop to e7, so taking on c5 forces him to recapture and lose a move — the very same swap, timed to cost him a tempo. And he is left holding the isolated d-pawn we have been eyeing all along.",
+   "reasons": [],
+   "fen": "r2qk2r/pp1nbppp/5n2/2Pp4/8/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 11",
+   "t": 213.5,
+   "ply": 21,
+   "source": "yt:uJro3yCDEgk"
+  },
+  {
+   "id": "vn-alapin-a-natural-recapture-walks-into-a-check",
+   "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+",
+   "teaches": "Before a natural recapture, check what it opens — an open file at your own king can turn a routine move into a losing one.",
+   "explains": "Here is the moment. Black took back with the bishop, the natural move — but it left his king sitting on the open e-file, and we pounce with the rook check. That innocent-looking recapture is the real mistake: the check is the first move of a forcing line that wins material.",
+   "reasons": [],
+   "fen": "r2qk2r/pp1n1ppp/5n2/2bp4/8/2P2N2/PP3PPP/RNBQR1K1 b kq - 1 12",
+   "t": 301.5,
+   "ply": 23,
+   "source": "yt:uJro3yCDEgk"
+  },
+  {
+   "id": "vn-alapin-count-the-loose-pieces-before-grabbing",
+   "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4",
+   "teaches": "When the opponent blocks a check by pulling a piece off a defence, look for the in-between capture — count what is suddenly loose.",
+   "explains": "Black blocks with the knight — but look: it has stopped guarding d5. So we do not take the knight, we snap the pawn with the queen first. Count the loose pieces before grabbing, and the whole sequence nets two pieces for a rook.",
+   "reasons": [],
+   "fen": "r2qk2r/pp1n1ppp/8/2bp4/4n3/2P2N2/PP3PPP/RNBQR1K1 w kq - 2 13",
+   "t": 332,
+   "ply": 24,
+   "source": "yt:uJro3yCDEgk"
+  },
+  {
+   "id": "vn-alapin-two-pieces-beat-a-rook-with-coordination",
+   "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4 Qxd5 Bxf2+ Kf1 Bxe1 Qxe4+ Qe7 Qxe7+ Kxe7 Kxe1",
+   "teaches": "Two minor pieces usually beat a rook — keep the pieces on, coordinate them, and do not hurry the conversion.",
+   "explains": "The dust settles: two minor pieces against a rook, and in material value we are a clear piece up. Now do not rush — bring the king out, finish developing, and let the two pieces work together. Coordinated, they simply outgun the rook.",
+   "reasons": [],
+   "fen": "r6r/pp1nkppp/8/8/8/2P2N2/PP4PP/RNB1K3 b - - 0 17",
+   "t": 364.5,
+   "ply": 33,
+   "source": "yt:uJro3yCDEgk"
+  },
+  {
+   "id": "vn-alapin-a-temporary-pin-is-no-pin",
+   "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4 Qxd5 Bxf2+ Kf1 Bxe1 Qxe4+ Qe7 Qxe7+ Kxe7 Kxe1 Rhe8 Be3",
+   "teaches": "Calculate a pin before you fear it; if a simple move next turn breaks it, the pin is an illusion.",
+   "explains": "The bishop steps to e3 to take the c5 square away from his knight. Walking into the pin against our king looks risky — but it is not: if the king moves off, we just answer with King-to-f2, unpinning and defending the bishop in one stroke. A pin you can break by force was never really a pin.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "c5"
+    }
+   ],
+   "fen": "r3r3/pp1nkppp/8/8/8/2P1BN2/PP4PP/RN2K3 b - - 2 18",
+   "t": 409.5,
+   "ply": 35,
+   "source": "yt:uJro3yCDEgk"
+  },
+  {
+   "id": "vn-alapin-the-king-is-a-piece-in-the-endgame",
+   "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4 Qxd5 Bxf2+ Kf1 Bxe1 Qxe4+ Qe7 Qxe7+ Kxe7 Kxe1 Rhe8 Be3 Kf8 Kf2",
+   "teaches": "In the endgame the king is a fighting piece — centralising it is half of converting an advantage.",
+   "explains": "King to f2 — it breaks the pin and defends the bishop at the same time, and now the knight is free to reroute toward the centre. In an endgame the king marches up and joins the fight, and with an extra piece that walk is half the technique.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e3"
+    }
+   ],
+   "fen": "r3rk2/pp1n1ppp/8/8/8/2P1BN2/PP3KPP/RN6 b - - 4 19",
+   "t": 449.5,
+   "ply": 37,
+   "source": "yt:uJro3yCDEgk"
+  },
+  {
+   "id": "vn-alapin-push-a-pawn-with-a-plan",
+   "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4 Qxd5 Bxf2+ Kf1 Bxe1 Qxe4+ Qe7 Qxe7+ Kxe7 Kxe1 Rhe8 Be3 Kf8 Kf2 Ne5 Nxe5 Rxe5 Nd2 Rae8 Re1 f5 Nf3 Rb5 b4",
+   "teaches": "A pawn push should serve a plan — take space and a key square, rather than sit back and defend.",
+   "explains": "One more improving move: the pawn to b4 takes queenside space and, backed by the pawn on c3, takes the c5 square away from Black's rook. The bishop on e3, the knight on f3 and the rook on e1 all coordinate, and against two rooks that extra minor piece decides it — from here it is just a matter of technique.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "c5"
+    }
+   ],
+   "fen": "4rk2/pp4pp/8/1r3p2/1P6/2P1BN2/P4KPP/4R3 b - - 0 24",
+   "t": 583,
+   "ply": 47,
+   "source": "yt:uJro3yCDEgk"
+  }
+ ]
+}

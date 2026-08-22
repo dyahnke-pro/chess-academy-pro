@@ -541,7 +541,7 @@
   {
    "id": "vn-counter-fianchetto-step-the-knight-off-the-trade-square",
    "line": "c4 Nf6 d4 g6 Nc3 d5 cxd5 Nxd5 Na4",
-   "teaches": "This defence's whole machine runs on one trade: the knight takes on c3, the pawn chain forms, and the c-pawn's strike attacks it. Deny the trade and the machine has no fuel — a knight move to the rim that disallows the capture forces the defence to find a different game entirely.",
+   "teaches": "This defence's whole machine runs on one trade: the knight takes on c3, the pawn chain forms, and the c-pawn's strike attacks it — deny the trade and the machine has no fuel, so a knight move to the rim that disallows the capture forces a different game entirely.",
    "explains": "The knight has stepped to a4 and the capture on c3 is off the table — the centralised knight has nothing to take and no favourable trade to anchor its plans on. The pawn can come to e4 next with the centre intact, which is exactly the picture this defence exists to prevent.",
    "reasons": [
     {
@@ -557,7 +557,7 @@
   {
    "id": "vn-counter-fianchetto-step-dont-block-when-the-block-hangs-something",
    "line": "c4 Nf6 d4 g6 Nc3 d5 cxd5 Nxd5 Na4 e5 dxe5 Bb4+ Bd2 Ne3 fxe3 Qh4+ g3 Bxd2+ Kxd2 Qb4+ Kc1",
-   "teaches": "When a check can be met by blocking or by a king step, count what each answer leaves loose before choosing. A block that abandons a pawn with check is not a developing move, it is a blunder in stages — and the quiet king step that keeps everything defended is precise, not passive.",
+   "teaches": "When a check can be met by blocking or by a king step, count what each answer leaves loose before choosing — a block that abandons a pawn with check is not a developing move, it is a blunder in stages, and the quiet king step that keeps everything defended is precise, not passive.",
    "explains": "The king steps to c1 out of the check, and in doing so it defends the pawn on b2 — the pawn a blocking piece would have abandoned to a capture with check. Nothing hangs, the extra material stays, and the attack has run out of forcing moves.",
    "reasons": [
     {

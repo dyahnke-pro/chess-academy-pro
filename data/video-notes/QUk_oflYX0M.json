@@ -2,33 +2,21 @@
  {
   "id": "vn-advance-e6-break-the-rule-when-you-can-name-the-route",
   "line": "e4 e6 d4 d5 e5 c5 Nf3 Nc6 Bd3 Qb6 O-O Bd7 Re1 Nh6 Nc3",
-  "teaches": "General rules about where a knight belongs are worth following until you can name a concrete route that beats them. A knight developed to the square the rule forbids is justified the moment you can say which two squares it is travelling to and what it does when it arrives \u2014 'it looks awkward' is not an argument once the itinerary is specific.",
+  "teaches": "General rules about where a knight belongs are worth following until you can name a concrete route that beats them — a knight developed to the square the rule forbids is justified the moment you can say which two squares it is travelling to and what it does when it arrives.",
   "explains": "The knight comes to c3 attacking the pawn on d5 and taking b5 in hand, and b5 is the first step of the route toward the outpost it is really heading for. The block it causes on the c-file is real, and it is being paid for with a plan rather than ignored.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "d5"
-   },
-   {
-    "kind": "controls",
-    "square": "b5"
-   }
+   { "kind": "attacks", "square": "d5" },
+   { "kind": "controls", "square": "b5" }
   ]
  },
  {
   "id": "vn-advance-e6-knight-to-the-rim-when-the-queen-is-on-b6",
   "line": "e4 e6 d4 d5 e5 c5 Nf3 Nc6 Bd3 Qb6 O-O Bd7 Re1 Nh6 Nc3 a6 Na4",
-  "teaches": "A queen posted on b6 and a knight on c3 make a standing pattern worth memorising: the knight steps to a4 with tempo, and the square it is really going to is c5. Learn the pairing rather than recalculating it \u2014 the knight looks misplaced on the edge for exactly one move, which is the move the queen spends moving.",
+  "teaches": "A queen posted on b6 and a knight on c3 make a standing pattern worth memorising: the knight steps to a4 with tempo, and the square it is really going to is c5. Learn the pairing rather than recalculating it — the knight looks misplaced on the edge for exactly one move, which is the move the queen spends moving.",
   "explains": "The knight hits the queen on b6 and touches the pawn on c5 at the same time. The queen has to move, and whatever it does, the knight's next step lands on the square in front of it.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "b6"
-   },
-   {
-    "kind": "attacks",
-    "square": "c5"
-   }
+   { "kind": "attacks", "square": "b6" },
+   { "kind": "attacks", "square": "c5" }
   ]
  }
 ]

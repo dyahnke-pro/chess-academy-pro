@@ -2,33 +2,21 @@
  {
   "id": "vn-bind-hold-the-clamp-or-open-the-centre",
   "line": "c4 c5 e4 Nc6 Nf3 g6",
-  "teaches": "With pawns already on c4 and e4 there are two honest plans, and they lead to different games. Pushing the d-pawn two squares opens the centre and hands the fianchettoed bishop the long diagonal it was put there for. Playing it one square keeps everything closed and leaves that bishop biting on granite — quieter, and much harder to play against.",
-  "explains": "The bishop is heading for g7 and wants the long diagonal opened. Two tries come into consideration: resolve the centre now, or hold the clamp with the modest pawn move and make the opponent find a way in. Neither is a mistake; they are different bargains.",
+  "teaches": "With pawns already on c4 and e4 there are two honest plans, and they lead to different games — pushing the d-pawn two squares opens the centre and hands the fianchettoed bishop its long diagonal; playing it one square keeps everything closed and leaves that bishop biting on granite.",
+  "explains": "The bishop is heading for g7 and wants the long diagonal opened. Two tries come into consideration: resolve the centre now, or hold the clamp with the modest pawn move and make the opponent find a way in. Neither is a mistake; they are different bargains, and the closed version is quieter and much harder to play against.",
   "options": [
    {
     "san": "d3",
     "reasons": [
-     {
-      "kind": "defends",
-      "square": "c4"
-     },
-     {
-      "kind": "defends",
-      "square": "e4"
-     }
+     { "kind": "defends", "square": "c4" },
+     { "kind": "defends", "square": "e4" }
     ]
    },
    {
     "san": "d4",
     "reasons": [
-     {
-      "kind": "attacks",
-      "square": "c5"
-     },
-     {
-      "kind": "controls",
-      "square": "e5"
-     }
+     { "kind": "attacks", "square": "c5" },
+     { "kind": "controls", "square": "e5" }
     ]
    }
   ]
@@ -36,65 +24,41 @@
  {
   "id": "vn-bind-one-square-holds-both-pawns",
   "line": "c4 c5 e4 Nc6 Nf3 g6 d3",
-  "teaches": "A pawn advanced one square instead of two can be the move that makes a whole structure work. Judge it by what it holds rather than by the ground it takes: a single pawn propping up both wings of your centre means neither can be undermined, and a clamp that cannot be broken is worth more than space you have to defend.",
+  "teaches": "A pawn advanced one square instead of two can be the move that makes a whole structure work — judge it by what it holds rather than by the ground it takes, because a single pawn propping up both wings of your centre means neither can be undermined, and a clamp that cannot be broken is worth more than space you have to defend.",
   "explains": "The pawn goes only to d3, where it defends the pawns on c4 and e4 at the same time. Both of those are the clamp — between them they cover the squares in the middle that the opponent's pieces want. Nothing has been grabbed and nothing can be attacked, which is exactly the point.",
   "reasons": [
-   {
-    "kind": "defends",
-    "square": "c4"
-   },
-   {
-    "kind": "defends",
-    "square": "e4"
-   }
+   { "kind": "defends", "square": "c4" },
+   { "kind": "defends", "square": "e4" }
   ]
  },
  {
   "id": "vn-bind-bishop-that-takes-the-dark-square",
   "line": "c4 c5 e4 Nc6 Nf3 g6 d3 Bg7 Nc3 d6 Be3",
-  "teaches": "When the opponent has fianchettoed, the fight is for the dark squares that bishop wants to use. Develop the bishop that contests them, and prefer the square where it both holds the central outpost and asks a question of a pawn — a developing move that also denies a square is doing two jobs.",
+  "teaches": "When the opponent has fianchettoed, the fight is for the dark squares that bishop wants to use — develop the bishop that contests them, and prefer the square where it both holds the central outpost and asks a question of a pawn.",
   "explains": "The bishop comes to e3, hitting the pawn on c5 and covering d4. That square in the middle is the one the fianchettoed bishop is aimed at through the whole game, and it is now held by a piece that cannot easily be driven away. The centre stays closed and the dark squares stop being available.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "c5"
-   },
-   {
-    "kind": "controls",
-    "square": "d4"
-   }
+   { "kind": "attacks", "square": "c5" },
+   { "kind": "controls", "square": "d4" }
   ]
  },
  {
   "id": "vn-bind-recapture-that-keeps-everything-covered",
   "line": "c4 c5 e4 Nc6 Nf3 g6 d3 Bg7 Nc3 d6 Be3 Bg4 Be2 Bxf3 Bxf3",
-  "teaches": "Giving up a knight for a bishop is not automatically a concession when the position is closed. What matters is whether the recapturing piece takes over the jobs the knight was doing — a bishop that lands defending the centre pawn and the squares around its own king has replaced the knight, not merely traded with it.",
+  "teaches": "Giving up a knight for a bishop is not automatically a concession when the position is closed — what matters is whether the recapturing piece takes over the jobs the knight was doing.",
   "explains": "The bishop has been exchanged on f3 and the other bishop takes back. From f3 it holds the pawn on e4, which is half the clamp, and covers g2 and the queen behind it. The knight that guarded those squares is gone and nothing has been loosened, so the trade costs nothing in a position that will not open.",
   "reasons": [
-   {
-    "kind": "defends",
-    "square": "e4"
-   },
-   {
-    "kind": "defends",
-    "square": "g2"
-   }
+   { "kind": "defends", "square": "e4" },
+   { "kind": "defends", "square": "g2" }
   ]
  },
  {
   "id": "vn-bind-bishop-fixes-the-knight-against-the-queen",
   "line": "c4 c5 e4 Nc6 Nf3 g6 d3 Bg7 Nc3 d6 Be3 Bg4 Be2 Bxf3 Bxf3 e6 O-O Nge7 Bg5",
-  "teaches": "A piece is pinned in the way that matters whenever every square it can legally reach costs you something behind it. Do not look only for pins against the king: a bishop dropped on the diagonal in front of the queen fixes the piece in between just as firmly, and the defender usually has to spend a pawn move to break it.",
+  "teaches": "A piece is pinned in the way that matters whenever every square it can legally reach costs you something behind it — do not look only for pins against the king; a bishop dropped on the diagonal in front of the queen fixes the piece in between just as firmly.",
   "explains": "The knight has come to e7 and the bishop steps to g5, looking at it with the queen standing behind on d8. The knight still has four legal squares and every one of them loses the queen, so in practice it cannot move at all. The bishop covers f6 and h6 from the same square, which are the squares in front of the fianchetto — so the piece is doing the pinning and the restraining together.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "e7"
-   },
-   {
-    "kind": "controls",
-    "square": "f6"
-   }
+   { "kind": "attacks", "square": "e7" },
+   { "kind": "controls", "square": "f6" }
   ]
  }
 ]

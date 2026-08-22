@@ -1,0 +1,460 @@
+{
+ "videoId": "SXsVWpN8e1A",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2170",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 5547,
+  "settledPositions": null
+ },
+ "plies": 39,
+ "rewinds": 3,
+ "moves": [
+  {
+   "t": 20,
+   "ply": 3,
+   "line": [
+    "c4",
+    "Nf6",
+    "d4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 23,
+   "ply": 6,
+   "line": [
+    "e6",
+    "Nc3",
+    "Bb4"
+   ],
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"
+  },
+  {
+   "t": 31.5,
+   "ply": 7,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N2P2/PP2P1PP/R1BQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 35,
+   "ply": 8,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/4pn2/3p4/1bPP4/2N2P2/PP2P1PP/R1BQKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 38.5,
+   "ply": 9,
+   "line": [
+    "a3"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/4pn2/3p4/1bPP4/P1N2P2/1P2P1PP/R1BQKBNR b KQkq - 0 5"
+  },
+  {
+   "t": 43,
+   "ply": 11,
+   "line": [
+    "Bxc3+",
+    "bxc3"
+   ],
+   "fen": "rnbqk2r/ppp2ppp/4pn2/3p4/2PP4/P1P2P2/4P1PP/R1BQKBNR b KQkq - 0 6"
+  },
+  {
+   "t": 52.5,
+   "ply": 13,
+   "line": [
+    "c5",
+    "cxd5"
+   ],
+   "fen": "rnbqk2r/pp3ppp/4pn2/2pP4/3P4/P1P2P2/4P1PP/R1BQKBNR b KQkq - 0 7"
+  },
+  {
+   "t": 56,
+   "ply": 14,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqk2r/pp3ppp/5n2/2pp4/3P4/P1P2P2/4P1PP/R1BQKBNR w KQkq - 0 8"
+  },
+  {
+   "t": 86,
+   "ply": 15,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbqk2r/pp3ppp/5n2/2pp4/3P4/P1P1PP2/6PP/R1BQKBNR b KQkq - 0 8"
+  },
+  {
+   "t": 106.5,
+   "ply": 17,
+   "line": [
+    "O-O",
+    "Bd3"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/5n2/2pp4/3P4/P1PBPP2/6PP/R1BQK1NR b KQ - 2 9"
+  },
+  {
+   "t": 125,
+   "ply": 19,
+   "line": [
+    "Re8",
+    "Ne2"
+   ],
+   "fen": "rnbqr1k1/pp3ppp/5n2/2pp4/3P4/P1PBPP2/4N1PP/R1BQK2R b KQ - 4 10"
+  },
+  {
+   "t": 138.5,
+   "ply": 21,
+   "line": [
+    "c4",
+    "Bc2"
+   ],
+   "fen": "rnbqr1k1/pp3ppp/5n2/3p4/2pP4/P1P1PP2/2B1N1PP/R1BQK2R b KQ - 1 11"
+  },
+  {
+   "t": 154.5,
+   "ply": 22,
+   "line": [
+    "Be6"
+   ],
+   "fen": "rn1qr1k1/pp3ppp/4bn2/3p4/2pP4/P1P1PP2/2B1N1PP/R1BQK2R w KQ - 2 12"
+  },
+  {
+   "t": 166.5,
+   "ply": 23,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1qr1k1/pp3ppp/4bn2/3p4/2pP4/P1P1PP2/2B1N1PP/R1BQ1RK1 b - - 3 12"
+  },
+  {
+   "t": 180.5,
+   "ply": 24,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2qr1k1/pp3ppp/2n1bn2/3p4/2pP4/P1P1PP2/2B1N1PP/R1BQ1RK1 w - - 4 13"
+  },
+  {
+   "t": 196,
+   "ply": 25,
+   "line": [
+    "Ng3"
+   ],
+   "fen": "r2qr1k1/pp3ppp/2n1bn2/3p4/2pP4/P1P1PPN1/2B3PP/R1BQ1RK1 b - - 5 13"
+  },
+  {
+   "t": 207.5,
+   "ply": 26,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "r2qr1k1/pp2nppp/4bn2/3p4/2pP4/P1P1PPN1/2B3PP/R1BQ1RK1 w - - 6 14"
+  },
+  {
+   "t": 208.5,
+   "ply": 27,
+   "line": [
+    "e4"
+   ],
+   "fen": "r2qr1k1/pp2nppp/4bn2/3p4/2pPP3/P1P2PN1/2B3PP/R1BQ1RK1 b - - 0 14"
+  },
+  {
+   "t": 213.5,
+   "ply": 28,
+   "line": [
+    "Ng6"
+   ],
+   "fen": "r2qr1k1/pp3ppp/4bnn1/3p4/2pPP3/P1P2PN1/2B3PP/R1BQ1RK1 w - - 1 15"
+  },
+  {
+   "t": 231,
+   "ply": 29,
+   "line": [
+    "e5"
+   ],
+   "fen": "r2qr1k1/pp3ppp/4bnn1/3pP3/2pP4/P1P2PN1/2B3PP/R1BQ1RK1 b - - 0 15"
+  },
+  {
+   "t": 235,
+   "ply": 31,
+   "line": [
+    "Nd7",
+    "f4"
+   ],
+   "fen": "r2qr1k1/pp1n1ppp/4b1n1/3pP3/2pP1P2/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 16"
+  },
+  {
+   "t": 257.5,
+   "ply": 32,
+   "line": [
+    "f5"
+   ],
+   "fen": "r2qr1k1/pp1n2pp/4b1n1/3pPp2/2pP1P2/P1P3N1/2B3PP/R1BQ1RK1 w - f6 0 17"
+  },
+  {
+   "t": 280,
+   "ply": 33,
+   "line": [
+    "exf6"
+   ],
+   "fen": "r2qr1k1/pp1n2pp/4bPn1/3p4/2pP1P2/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 17"
+  },
+  {
+   "t": 306.5,
+   "ply": 34,
+   "line": [
+    "Bf7"
+   ],
+   "fen": "r2qr1k1/pp1n1bpp/5Pn1/3p4/2pP1P2/P1P3N1/2B3PP/R1BQ1RK1 w - - 1 18"
+  },
+  {
+   "t": 313,
+   "ply": 35,
+   "line": [
+    "f5"
+   ],
+   "fen": "r2qr1k1/pp1n1bpp/5Pn1/3p1P2/2pP4/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 18"
+  },
+  {
+   "t": 317,
+   "ply": 37,
+   "line": [
+    "Ngf8",
+    "fxg7"
+   ],
+   "fen": "r2qrnk1/pp1n1bPp/8/3p1P2/2pP4/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 19"
+  },
+  {
+   "t": 318.5,
+   "ply": 38,
+   "line": [
+    "Kxg7"
+   ],
+   "fen": "r2qrn2/pp1n1bkp/8/3p1P2/2pP4/P1P3N1/2B3PP/R1BQ1RK1 w - - 0 20"
+  },
+  {
+   "t": 333.5,
+   "ply": 39,
+   "line": [
+    "f6+"
+   ],
+   "fen": "r2qrn2/pp1n1bkp/5P2/3p4/2pP4/P1P3N1/2B3PP/R1BQ1RK1 b - - 0 20"
+  },
+  {
+   "t": 347,
+   "ply": 40,
+   "line": [
+    "Kh8"
+   ],
+   "fen": "r2qrn1k/pp1n1b1p/5P2/3p4/2pP4/P1P3N1/2B3PP/R1BQ1RK1 w - - 1 21"
+  },
+  {
+   "t": 383,
+   "ply": 41,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "r2qrn1k/pp1n1b1p/5P1B/3p4/2pP4/P1P3N1/2B3PP/R2Q1RK1 b - - 2 21"
+  },
+  {
+   "t": 402,
+   "ply": 44,
+   "line": [
+    "Nxf6",
+    "Bg5",
+    "N8d7"
+   ],
+   "fen": "r2qr2k/pp1n1b1p/5n2/3p2B1/2pP4/P1P3N1/2B3PP/R2Q1RK1 w - - 2 23"
+  },
+  {
+   "t": 472,
+   "ply": 6,
+   "line": [],
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"
+  },
+  {
+   "t": 473,
+   "ply": 7,
+   "line": [
+    "f3"
+   ],
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N2P2/PP2P1PP/R1BQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 909.5,
+   "ply": 8,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbqk2r/pp1p1ppp/4pn2/2p5/1bPP4/2N2P2/PP2P1PP/R1BQKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 912.5,
+   "ply": 7,
+   "line": [],
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N2P2/PP2P1PP/R1BQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 915,
+   "ply": 10,
+   "line": [
+    "d5",
+    "a3",
+    "Be7"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PP4/P1N2P2/1P2P1PP/R1BQKBNR w KQkq - 1 6"
+  },
+  {
+   "t": 916,
+   "ply": 11,
+   "line": [
+    "e4"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/4pn2/3p4/2PPP3/P1N2P2/1P4PP/R1BQKBNR b KQkq - 0 6"
+  },
+  {
+   "t": 919.5,
+   "ply": 14,
+   "line": [
+    "dxe4",
+    "fxe4",
+    "e5"
+   ],
+   "fen": "rnbqk2r/ppp1bppp/5n2/4p3/2PPP3/P1N5/1P4PP/R1BQKBNR w KQkq - 0 8"
+  },
+  {
+   "t": 926.5,
+   "ply": 6,
+   "line": [],
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rnbqk2r/pppp1ppp/4pn2/8/1bPP4/2N2P2/PP2P1PP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "c4",
+    "Nf6",
+    "d4",
+    "e6",
+    "Nc3",
+    "Bb4",
+    "f3"
+   ],
+   "ply": 7,
+   "options": [
+    {
+     "san": "d5",
+     "t": 35,
+     "continuation": "d5"
+    },
+    {
+     "san": "c5",
+     "t": 909.5,
+     "continuation": "c5"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Nimzo-Indian Defense: Sämisch Variation",
+   "eco": "E25",
+   "plies": 13,
+   "line": "c4 Nf6 d4 e6 Nc3 Bb4 f3 d5 a3 Bxc3+ bxc3 c5 cxd5",
+   "coverage": 0.714
+  },
+  {
+   "name": "Nimzo-Indian Defense: Kmoch Variation",
+   "eco": "E20",
+   "plies": 7,
+   "line": "c4 Nf6 d4 e6 Nc3 Bb4 f3",
+   "coverage": 0.943
+  },
+  {
+   "name": "Nimzo-Indian Defense",
+   "eco": "E20",
+   "plies": 6,
+   "line": "c4 Nf6 d4 e6 Nc3 Bb4",
+   "coverage": 0.971
+  },
+  {
+   "name": "Indian Defense: Normal Variation",
+   "eco": "A50",
+   "plies": 3,
+   "line": "c4 Nf6 d4",
+   "coverage": 1
+  },
+  {
+   "name": "English Opening: Anglo-Indian Defense",
+   "eco": "A15",
+   "plies": 2,
+   "line": "c4 Nf6",
+   "coverage": 1
+  },
+  {
+   "name": "English Opening",
+   "eco": "A10",
+   "plies": 1,
+   "line": "c4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ },
+ "notes": [
+  {
+   "id": "vn-nimzo-f3-a3-forces-the-bishop-to-commit",
+   "line": "c4 Nf6 d4 e6 Nc3 Bb4 f3 d5 a3",
+   "teaches": "When an enemy bishop pins your knight, a rook-pawn poke asks it a hard question: retreat and lose time, or capture and hand you the bishop pair — against a defence built on that pin, forcing the trade early and taking the two bishops plus a broad centre is usually a fine bargain, even at the cost of a doubled pawn.",
+   "explains": "The a-pawn steps to a3 and attacks the bishop on b4. It must either drop back, having achieved nothing, or take the knight, and after the recapture White owns the pair of bishops and a wide pawn centre, with only doubled c-pawns to show against it on the other side of the ledger.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "b4"
+    }
+   ],
+   "fen": "rnbqk2r/ppp2ppp/4pn2/3p4/1bPP4/P1N2P2/1P2P1PP/R1BQKBNR b KQkq - 0 5",
+   "t": 38.5,
+   "ply": 9,
+   "source": "yt:SXsVWpN8e1A"
+  },
+  {
+   "id": "vn-nimzo-f3-bend-every-move-toward-the-e4-break",
+   "line": "c4 Nf6 d4 e6 Nc3 Bb4 f3 d5 a3 Bxc3+ bxc3 c5 cxd5 exd5 e3",
+   "teaches": "Once a structure hands you the two bishops and a pawn centre, the whole game can narrow to a single break, and the discipline is to bend every move toward it — develop the pieces that clear the way and castle, so the central push comes under the best conditions instead of in a scramble.",
+   "explains": "The pawn to e3 opens the light bishop's diagonal and supports the d4-pawn, and it is a step toward the one break this position is about: advancing the e-pawn to open lines for the two bishops. Kingside development and castling come first so that break can be prepared at full strength.",
+   "reasons": [
+    {
+     "kind": "opens",
+     "from": "f1",
+     "to": "c4"
+    },
+    {
+     "kind": "defends",
+     "square": "d4"
+    }
+   ],
+   "fen": "rnbqk2r/pp3ppp/5n2/2pp4/3P4/P1P1PP2/6PP/R1BQKBNR b KQkq - 0 8",
+   "t": 86,
+   "ply": 15,
+   "source": "yt:SXsVWpN8e1A"
+  }
+ ]
+}

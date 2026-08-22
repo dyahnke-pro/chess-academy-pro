@@ -412,8 +412,8 @@
   {
    "id": "vn-giuoco-check-before-you-retreat",
    "line": "e4 e5 Nf3 Nc6 Bc4 Bc5 c3 Nf6 d4 exd4 cxd4 Bb4+",
-   "teaches": "When a pawn advance attacks your bishop, the instinct is to move it back — and retreating hands the centre over for nothing. Look for a check first: the same bishop steps sideways with tempo instead of backwards without one, and the move you buy is the one that either takes the pawn or strikes back in the middle. A retreat is a move spent; a check is a move earned.",
-   "explains": "The bishop goes to b4 with check rather than back down the diagonal. The reply is forced, and the tempo that buys is what makes the counter-strike in the centre possible next move.",
+   "teaches": "When a pawn advance attacks your bishop, the instinct is to slink back — and a retreat hands the centre over for nothing. Look for a check first: the same bishop steps sideways with tempo instead of backwards without one.",
+   "explains": "The pawn hits the bishop and the reflex is to drop it back down the diagonal — but a retreat is a move spent for nothing, and it hands White the centre. Look for a check first. The bishop steps sideways to b4 with check, so the reply is forced, and that free tempo is exactly what makes the counter-strike in the centre possible next move. A retreat costs a move; a check earns one.",
    "reasons": [
     {
      "kind": "attacks",

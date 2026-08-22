@@ -2,13 +2,10 @@
  {
   "id": "vn-gambit-antidote-cut-the-bishop-off-before-it-bites",
   "line": "e4 e5 Nf3 Nc6 Nxe5 Nf6 Nxc6 dxc6 d3 Bc5 Be2 h5 c3",
-  "teaches": "The antidote to a piece-activity gambit is not to refute it move by move but to switch off its one dangerous piece. The modest pawn-and-bishop setup blunts the diagonal into your king's position, and with that bishop talking to nobody, the gambiteer is simply a pawn down with pretty pieces.",
+  "teaches": "The antidote to a piece-activity gambit is not to refute it move by move but to switch off its one dangerous piece — blunt the diagonal into your king's position, and with that bishop talking to nobody the gambiteer is simply a pawn down with pretty pieces.",
   "explains": "The pawn on c3 takes d4 in hand, ready to hit the bishop on c5 and shut its diagonal for good, while the quiet bishop development already stands guard in front of the king. The attacking setup across the board has no target left — the counterplay ended before it began.",
   "reasons": [
-   {
-    "kind": "controls",
-    "square": "d4"
-   }
+   { "kind": "controls", "square": "d4" }
   ]
  },
  {

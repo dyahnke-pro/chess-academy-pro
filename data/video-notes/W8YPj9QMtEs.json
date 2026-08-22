@@ -2,7 +2,7 @@
  {
   "id": "vn-jobavapush-strike-the-centre-while-the-bishop-is-out",
   "line": "d4 Nf6 Nc3 d5 Bf4 c5 e4",
-  "teaches": "A gambit is worth playing when the pawn buys development you were going to need anyway. Pushing the second centre pawn while both minor pieces are already out hits the pawn holding the centre and opens the line for the pieces behind it — the material comes back or it does not, but the position opens for the side that is ready.",
+  "teaches": "A gambit is worth playing when the pawn buys development you were going to need anyway — pushing the second centre pawn while both minor pieces are already out hits the pawn holding the centre and opens the line for the pieces behind it, so the material comes back or it does not, but the position opens for the side that is ready.",
   "explains": "Both knights and the dark-squared bishop are developed and Black has struck at the centre from the side. The pawn advances to e4 hitting the pawn on d5 and covering f5. Taking it leads to a position where every white piece has a line and the extra pawn is on a square that cannot be held.",
   "reasons": [
    { "kind": "attacks", "square": "d5" },

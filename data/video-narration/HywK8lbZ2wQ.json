@@ -1,0 +1,225 @@
+{
+ "videoId": "HywK8lbZ2wQ",
+ "title": "5 Killer Strategies Against Smith-Morra Gambit & Delayed Alapin | GM Naroditsky's DYI Chess Speedrun",
+ "moves": [
+  {
+   "ply": 4,
+   "t": 2136.5,
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 3",
+   "said": "there we go and so this one definitely a simpler game than the one we played previously our opponent I think kind of lost their composure pretty"
+  },
+  {
+   "ply": 7,
+   "t": 2139,
+   "line": [
+    "c3",
+    "Nf6",
+    "Be2"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2p5/4P3/2P2N2/PP1PBPPP/RNBQK2R b KQkq - 2 4",
+   "said": "quickly okay so the delayed alipin is this Knight F3 followed by C3 setup it's"
+  },
+  {
+   "ply": 9,
+   "t": 2144.5,
+   "line": [
+    "Ng8",
+    "Bf1"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 4 5",
+   "said": "very very popular as an anti- Sicilian but it has never been considered"
+  },
+  {
+   "ply": 10,
+   "t": 2154.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 5 6",
+   "said": "particularly dangerous for black so Bishop E2 is the main continuation it is not the only move in this position but"
+  },
+  {
+   "ply": 11,
+   "t": 2156,
+   "line": [
+    "Be2"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2p5/4P3/2P2N2/PP1PBPPP/RNBQK2R b KQkq - 6 6",
+   "said": "it's the one that we're going to focus on"
+  },
+  {
+   "ply": 12,
+   "t": 2161.5,
+   "line": [
+    "Bd7"
+   ],
+   "fen": "rn1qkb1r/pp1bpppp/3p1n2/2p5/4P3/2P2N2/PP1PBPPP/RNBQK2R w KQkq - 7 7",
+   "said": "and I played Bishop to D7 which is the recommendation in a lot of old books also possible is to play G6 you can investigate this on your own I think this is Anish gir's recommendation in"
+  },
+  {
+   "ply": 13,
+   "t": 2177.5,
+   "line": [
+    "d3"
+   ],
+   "fen": "rn1qkb1r/pp1bpppp/3p1n2/2p5/4P3/2PP1N2/PP2BPPP/RNBQK2R b KQkq - 0 7",
+   "said": "his course but we played Bishop to D7 uh White responds with uh D3 the most popular move by the way if white plays Queen to C2 uh preparing D4 a good idea is for us"
+  },
+  {
+   "ply": 17,
+   "t": 2189.5,
+   "line": [
+    "Qc7",
+    "d4",
+    "cxd4",
+    "Qc2"
+   ],
+   "fen": "rn2kb1r/ppqbpppp/3p1n2/8/3pP3/2P2N2/PPQ1BPPP/RNB1K2R b KQkq - 1 9",
+   "said": "to follow kind in kind with Queen C7 of course the point is to take the sting out of D4 because white cannot take with a pawn unless your name is Alexander"
+  },
+  {
+   "ply": 20,
+   "t": 2193,
+   "line": [
+    "Qc8",
+    "cxd4",
+    "Qxc2"
+   ],
+   "fen": "rn2kb1r/pp1bpppp/3p1n2/8/3PP3/5N2/PPq1BPPP/RNB1K2R w KQkq - 0 11",
+   "said": "botes so white will have to take with a knight leading to like a very bad open"
+  },
+  {
+   "ply": 13,
+   "t": 2205,
+   "line": [],
+   "fen": "rn1qkb1r/pp1bpppp/3p1n2/2p5/4P3/2PP1N2/PP2BPPP/RNBQK2R b KQkq - 0 7",
+   "said": "Sicilian structure where black has a good development Advantage so Queen C2 is nothing special D3 we decided to take the opportunity"
+  },
+  {
+   "ply": 14,
+   "t": 2208.5,
+   "line": [
+    "g6"
+   ],
+   "fen": "rn1qkb1r/pp1bpp1p/3p1np1/2p5/4P3/2PP1N2/PP2BPPP/RNBQK2R w KQkq - 0 8",
+   "said": "and fanet to the bishop and so we get"
+  },
+  {
+   "ply": 17,
+   "t": 2210.5,
+   "line": [
+    "Bg5",
+    "Bg7",
+    "O-O"
+   ],
+   "fen": "rn1qk2r/pp1bppbp/3p1np1/2p3B1/4P3/2PP1N2/PP2BPPP/RN1Q1RK1 b kq - 3 9",
+   "said": "this sort of standard delayed alipin position I'm still seeing some games in"
+  },
+  {
+   "ply": 19,
+   "t": 2220.5,
+   "line": [
+    "O-O",
+    "Nbd2"
+   ],
+   "fen": "rn1q1rk1/pp1bppbp/3p1np1/2p3B1/4P3/2PP1N2/PP1NBPPP/R2Q1RK1 b - - 5 10",
+   "said": "the database by the way after even after Knight B to D2 this position has occurred before acopian versus sakay 2018 two GMS um I'm seeing five games in the"
+  },
+  {
+   "ply": 20,
+   "t": 2231.5,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r2q1rk1/pp1bppbp/2np1np1/2p3B1/4P3/2PP1N2/PP1NBPPP/R2Q1RK1 w - - 6 11",
+   "said": "database um Knight to C6 and believe it or not after D4 white"
+  },
+  {
+   "ply": 21,
+   "t": 2233.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "r2q1rk1/pp1bppbp/2np1np1/2p3B1/3PP3/2P2N2/PP1NBPPP/R2Q1RK1 b - - 0 11",
+   "said": "is worse after D4 white is simply"
+  },
+  {
+   "ply": 23,
+   "t": 2235.5,
+   "line": [
+    "cxd4",
+    "cxd4"
+   ],
+   "fen": "r2q1rk1/pp1bppbp/2np1np1/6B1/3PP3/5N2/PP1NBPPP/R2Q1RK1 b - - 0 12",
+   "said": "worse um H6 but what would have been our response to Bishop to H4 and this is I think the most instructive situation in the entire game how would we have proceeded after Bishop to H4 black to play see if I can find some sample games on this concept so G5 okay then white plays Bishop G3 you should have a followup in mind what's the followup so give me the entire sequence yeah G5 is correct what what what after that so just a moment I'm just looking for some other games on this topic yeah so here we go for example yeah the point is you play G5 you force Bishop to G3 and in this position there's usually two ways to continue the standard move is Knight to H5 the standard move this opens up an attack on D4 and It prepares to pick up the bishop pair this is one very typical idea um"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 7,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2p5/4P3/2P2N2/PP1PBPPP/RNBQK2R b KQkq - 2 4",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "c3",
+    "Nf6",
+    "Be2"
+   ],
+   "options": [
+    {
+     "san": "Ng8",
+     "t": 2144.5,
+     "continuation": "Ng8 Bf1",
+     "said": "there we go and so this one definitely a simpler game than the one we played previously our opponent I think kind of lost their composure pretty quickly okay so the delayed alipin is this Knight F3 followed by C3 setup it's very very popular as an anti- Sicilian but it has never been considered particularly dangerous for black so Bishop E2 is the main continuation it is not the only move in this position but it's the one that we're going to focus on and I played Bishop to D7 which is the recommendation in a lot of old books also possible is to play G6 you can investigate this on your own I think this is Anish gir's recommendation in his course but we played Bishop to D7 uh White responds with uh D3 the most popular move by the way if white plays Queen to C2 uh preparing D4 a good idea is for us to follow kind in kind with Queen C7 of course the point is to take the sting out of D4 because white cannot take with a pawn unless your name is Alexander botes so white will have to take with a knight leading to like a very bad open Sicilian structure where black has a good development Advantage so Queen C2 is nothing special"
+    },
+    {
+     "san": "Bd7",
+     "t": 2161.5,
+     "continuation": "Bd7",
+     "said": "particularly dangerous for black so Bishop E2 is the main continuation it is not the only move in this position but it's the one that we're going to focus on and I played Bishop to D7 which is the recommendation in a lot of old books also possible is to play G6 you can investigate this on your own I think this is Anish gir's recommendation in his course but we played Bishop to D7 uh White responds with uh D3 the most popular move by the way if white plays Queen to C2 uh preparing D4 a good idea is for us to follow kind in kind with Queen C7 of course the point is to take the sting out of D4 because white cannot take with a pawn unless your name is Alexander botes so white will have to take with a knight leading to like a very bad open Sicilian structure where black has a good development Advantage so Queen C2 is nothing special D3 we decided to take the opportunity and fanet to the bishop and so we get this sort of standard delayed alipin position I'm still seeing some games in the database by the way after even after Knight B to D2 this position has occurred before acopian versus sakay"
+    }
+   ]
+  },
+  {
+   "ply": 13,
+   "fen": "rn1qkb1r/pp1bpppp/3p1n2/2p5/4P3/2PP1N2/PP2BPPP/RNBQK2R b KQkq - 0 7",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "d6",
+    "c3",
+    "Nf6",
+    "Be2",
+    "Ng8",
+    "Bf1",
+    "Nf6",
+    "Be2",
+    "Bd7",
+    "d3"
+   ],
+   "options": [
+    {
+     "san": "Qc7",
+     "t": 2189.5,
+     "continuation": "Qc7 d4 cxd4 Qc2",
+     "said": "Queen to C2 uh preparing D4 a good idea is for us to follow kind in kind with Queen C7 of course the point is to take the sting out of D4 because white cannot take with a pawn unless your name is Alexander botes so white will have to take with a knight leading to like a very bad open Sicilian structure where black has a good development Advantage so Queen C2 is nothing special D3 we decided to take the opportunity and fanet to the bishop and so we get this sort of standard delayed alipin position I'm still seeing some games in the database by the way after even after Knight B to D2 this position has occurred before acopian versus sakay 2018 two GMS um I'm seeing five games in the database um Knight to C6 and believe it or not after D4 white is worse after D4 white is simply worse um H6 but what would have been our response to Bishop to H4 and this is I think the most instructive situation in the entire game how would we have proceeded after Bishop"
+    },
+    {
+     "san": "g6",
+     "t": 2208.5,
+     "continuation": "g6",
+     "said": "Sicilian structure where black has a good development Advantage so Queen C2 is nothing special D3 we decided to take the opportunity and fanet to the bishop and so we get this sort of standard delayed alipin position I'm still seeing some games in the database by the way after even after Knight B to D2 this position has occurred before acopian versus sakay 2018 two GMS um I'm seeing five games in the database um Knight to C6 and believe it or not after D4 white is worse after D4 white is simply worse um H6 but what would have been our response to Bishop to H4 and this is I think the most instructive situation in the entire game how would we have proceeded after Bishop to H4 black to play see if I can find some sample games on this concept so G5 okay then white plays Bishop G3 you should have a followup in mind what's the followup so give me the entire sequence yeah G5 is correct what what what after that so just a moment I'm"
+    }
+   ]
+  }
+ ]
+}

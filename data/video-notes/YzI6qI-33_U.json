@@ -2,51 +2,33 @@
  {
   "id": "vn-yugoslav-bishop-that-guards-its-own-knight",
   "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3",
-  "teaches": "Against a fianchetto the dark-squared bishop belongs where it both supports your own centre and contests the diagonal the enemy bishop was put on. A developing move that defends the piece already in the middle costs nothing and removes every tactic built on hitting it.",
+  "teaches": "Against a fianchetto the dark-squared bishop belongs where it both supports your own centre and contests the diagonal the enemy bishop was put on — a developing move that defends the piece already in the middle costs nothing and removes every tactic built on hitting it.",
   "explains": "The bishop comes to e3, where it holds the knight in the centre and covers the squares in front of it. The fianchettoed bishop on g7 is aimed down the long diagonal at that knight, and this quietly answers it — the knight is no longer loose, so the pawn breaks that would have won it are simply moves.",
   "reasons": [
-   {
-    "kind": "defends",
-    "square": "d4"
-   },
-   {
-    "kind": "defends",
-    "square": "f2"
-   }
+   { "kind": "defends", "square": "d4" },
+   { "kind": "defends", "square": "f2" }
   ]
  },
  {
   "id": "vn-yugoslav-pawn-that-buys-the-whole-plan",
   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3",
-  "teaches": "Before castling on the side you intend to attack, spend the pawn move that makes the attack legal. Holding the centre pawn and covering the square an enemy piece would use to come forward is what lets the king go the other way and the pawns march — without it, the attack is a plan the position cannot support.",
+  "teaches": "Before castling on the side you intend to attack, spend the pawn move that makes the attack legal — holding the centre pawn and covering the square an enemy piece would use to come forward is what lets the king go the other way and the pawns march.",
   "explains": "The pawn steps to f3, defending the pawn on e4 and covering g4 so no bishop or knight can land there. That single move is what makes the whole setup work: the centre cannot be undermined, the kingside pawns are free to advance, and the king has somewhere to go on the other wing.",
   "reasons": [
-   {
-    "kind": "defends",
-    "square": "e4"
-   },
-   {
-    "kind": "controls",
-    "square": "g4"
-   }
+   { "kind": "defends", "square": "e4" },
+   { "kind": "controls", "square": "g4" }
   ],
   "options": [
    {
     "san": "O-O",
     "reasons": [
-     {
-      "kind": "defends",
-      "square": "g7"
-     }
+     { "kind": "defends", "square": "g7" }
     ]
    },
    {
     "san": "Nc6",
     "reasons": [
-     {
-      "kind": "attacks",
-      "square": "d4"
-     }
+     { "kind": "attacks", "square": "d4" }
     ]
    }
   ]
@@ -54,17 +36,11 @@
  {
   "id": "vn-yugoslav-trade-the-bishop-that-guards-the-king",
   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 g6 Be3 Bg7 f3 Nc6 Qd2 O-O O-O-O d5 exd5 Nxd5 Nxc6 bxc6 Bd4",
-  "teaches": "When attacking a fianchettoed king, the piece to remove is the bishop on the long diagonal — it is the only defender that covers the dark squares around the king. Getting your own bishop onto the same diagonal facing it forces the trade or forces the king's guard to stay home, and either answer helps the attack.",
+  "teaches": "When attacking a fianchettoed king, the piece to remove is the bishop on the long diagonal — it is the only defender that covers the dark squares around the king, and getting your own bishop onto the same diagonal facing it forces the trade or forces the king's guard to stay home.",
   "explains": "The knights have come off in the centre and the bishop steps to d4, straight down the long diagonal at the bishop on g7. It hits the pawn on a7 on the way and holds the knight on c3 behind it. The defender must either accept the exchange of the king's best guard or spend moves avoiding it while the pawns are already coming.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "g7"
-   },
-   {
-    "kind": "attacks",
-    "square": "a7"
-   }
+   { "kind": "attacks", "square": "g7" },
+   { "kind": "attacks", "square": "a7" }
   ]
  }
 ]

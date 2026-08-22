@@ -1,0 +1,304 @@
+{
+ "videoId": "K8QMjqu0_MY",
+ "title": "Master Class | Caro-Kann | Chess Speedrun | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12.5,
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] black against ooh 2400 okay this one might might be very competitive so let's go to the caro con"
+  },
+  {
+   "ply": 3,
+   "t": 14,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": ""
+  },
+  {
+   "ply": 4,
+   "t": 16,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "this guy's 27 52"
+  },
+  {
+   "ply": 5,
+   "t": 18,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "um blitz so he's good"
+  },
+  {
+   "ply": 6,
+   "t": 21,
+   "line": [
+    "dxe4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "said": "all right"
+  },
+  {
+   "ply": 7,
+   "t": 23,
+   "line": [
+    "Nxe4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3PN3/8/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "said": ""
+  },
+  {
+   "ply": 8,
+   "t": 24.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/2p2n2/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "said": "let's go with a tardical recaro"
+  },
+  {
+   "ply": 10,
+   "t": 31,
+   "line": [
+    "Nxf6+",
+    "exf6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2p2p2/8/3P4/8/PPP2PPP/R1BQKBNR w KQkq - 0 6",
+   "said": "and i'm gonna go for my main line he takes f6 this is what i play in blitz often and this is a very fashionable system"
+  },
+  {
+   "ply": 11,
+   "t": 37.5,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2p2p2/8/3P4/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 6",
+   "said": "where we eventually we develop the"
+  },
+  {
+   "ply": 12,
+   "t": 38.5,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "rnbqk2r/pp3ppp/2pb1p2/8/3P4/5N2/PPP2PPP/R1BQKB1R w KQkq - 2 7",
+   "said": "bishop to d6 then we castle"
+  },
+  {
+   "ply": 13,
+   "t": 40.5,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnbqk2r/pp3ppp/2pb1p2/8/3P4/3B1N2/PPP2PPP/R1BQK2R b KQkq - 3 7",
+   "said": ""
+  },
+  {
+   "ply": 14,
+   "t": 42,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/2pb1p2/8/3P4/3B1N2/PPP2PPP/R1BQK2R w KQ - 4 8",
+   "said": "this is all theory and this bishop comes"
+  },
+  {
+   "ply": 15,
+   "t": 43,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/2pb1p2/8/3P4/3B1N2/PPP2PPP/R1BQ1RK1 b - - 5 8",
+   "said": ""
+  },
+  {
+   "ply": 16,
+   "t": 45.5,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "rn1q1rk1/pp3ppp/2pb1p2/8/3P2b1/3B1N2/PPP2PPP/R1BQ1RK1 w - - 6 9",
+   "said": "out to g4 so this is all normal and now the knight comes out to d7 i'm i've talked about this setup before i don't want to take too much time in the"
+  },
+  {
+   "ply": 17,
+   "t": 57.5,
+   "line": [
+    "h3"
+   ],
+   "fen": "rn1q1rk1/pp3ppp/2pb1p2/8/3P2b1/3B1N1P/PPP2PP1/R1BQ1RK1 b - - 0 9",
+   "said": "opening because clearly we have a very very strong opponent okay h3"
+  },
+  {
+   "ply": 18,
+   "t": 59.5,
+   "line": [
+    "Bh5"
+   ],
+   "fen": "rn1q1rk1/pp3ppp/2pb1p2/7b/3P4/3B1N1P/PPP2PP1/R1BQ1RK1 w - - 1 10",
+   "said": "so we go bishop h5 and generally white i mean if white allows the bishop to"
+  },
+  {
+   "ply": 19,
+   "t": 70,
+   "line": [
+    "Re1"
+   ],
+   "fen": "rn1q1rk1/pp3ppp/2pb1p2/7b/3P4/3B1N1P/PPP2PP1/R1BQR1K1 b - - 2 10",
+   "said": "come to g4 as he did we've essentially solved all our opening problems"
+  },
+  {
+   "ply": 20,
+   "t": 71,
+   "line": [
+    "Nd7"
+   ],
+   "fen": "r2q1rk1/pp1n1ppp/2pb1p2/7b/3P4/3B1N1P/PPP2PP1/R1BQR1K1 w - - 3 11",
+   "said": "so now we go knight d7 and then queen c7 rook e8 i mean it's a very easy system to play the pieces don't even have that many squares to go"
+  },
+  {
+   "ply": 21,
+   "t": 94,
+   "line": [
+    "c4"
+   ],
+   "fen": "r2q1rk1/pp1n1ppp/2pb1p2/7b/2PP4/3B1N1P/PP3PP1/R1BQR1K1 b - - 0 11",
+   "said": "to yeah 2300s are good i mean this guy is clearly clearly clearly a strong player okay he goes c4 all right so there's a couple of ways that we can go about playing this line in general i like the idea of connecting the rooks and also creating a little battery here we can also go c5 but that allows them to create a protective passer with d5 although in that position we could go knight e5 so i like to move c5 as well but in such positions i don't like to play"
+  },
+  {
+   "ply": 22,
+   "t": 132,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "r4rk1/ppqn1ppp/2pb1p2/7b/2PP4/3B1N1P/PP3PP1/R1BQR1K1 w - - 1 12",
+   "said": "very committally and i think we should reserve the move c5 for later we're not afraid of him going c5 because after queen c7 c5 will have bishop f4 let's start by playing queen c7 and then"
+  },
+  {
+   "ply": 23,
+   "t": 134,
+   "line": [
+    "g4"
+   ],
+   "fen": "r4rk1/ppqn1ppp/2pb1p2/7b/2PP2P1/3B1N1P/PP3P2/R1BQR1K1 b - - 0 12",
+   "said": "c okay g4 instantly"
+  },
+  {
+   "ply": 24,
+   "t": 137,
+   "line": [
+    "Bg6"
+   ],
+   "fen": "r4rk1/ppqn1ppp/2pb1pb1/8/2PP2P1/3B1N1P/PP3P2/R1BQR1K1 w - - 1 13",
+   "said": "well that doesn't leave us much of a choice bishop g6 c5"
+  },
+  {
+   "ply": 25,
+   "t": 139,
+   "line": [
+    "c5"
+   ],
+   "fen": "r4rk1/ppqn1ppp/2pb1pb1/2P5/3P2P1/3B1N1P/PP3P2/R1BQR1K1 b - - 0 13",
+   "said": ""
+  },
+  {
+   "ply": 26,
+   "t": 142,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r4rk1/ppqn1ppp/2p2pb1/2P5/3P1bP1/3B1N1P/PP3P2/R1BQR1K1 w - - 1 14",
+   "said": "okay bishop f4 is forced i mean there's clearly something i'm missing here because um this guy is playing very quickly here"
+  },
+  {
+   "ply": 28,
+   "t": 151.5,
+   "line": [
+    "Bxf4",
+    "Qxf4"
+   ],
+   "fen": "r4rk1/pp1n1ppp/2p2pb1/2P5/3P1qP1/3B1N1P/PP3P2/R2QR1K1 w - - 0 15",
+   "said": "i mean obviously he's weakened the king's side tremendously so i don't really believe in this for white but there might be something concrete that i am missing yeah rookie 7 of course is"
+  },
+  {
+   "ply": 29,
+   "t": 168,
+   "line": [
+    "Bxg6"
+   ],
+   "fen": "r4rk1/pp1n1ppp/2p2pB1/2P5/3P1qP1/5N1P/PP3P2/R2QR1K1 b - - 0 15",
+   "said": "a possibility but i can even play rook ada and i'm not too afraid of just a single rook landing on e7 he's gonna need more than that to"
+  },
+  {
+   "ply": 30,
+   "t": 170.5,
+   "line": [
+    "hxg6"
+   ],
+   "fen": "r4rk1/pp1n1pp1/2p2pp1/2P5/3P1qP1/5N1P/PP3P2/R2QR1K1 w - - 0 16",
+   "said": "to scare me all right h takes g6 creating the pawn cube obviously not f takes g6 which would be"
+  },
+  {
+   "ply": 31,
+   "t": 178.5,
+   "line": [
+    "Re7"
+   ],
+   "fen": "r4rk1/pp1nRpp1/2p2pp1/2P5/3P1qP1/5N1P/PP3P2/R2Q2K1 b - - 1 16",
+   "said": "tremendously weakening rook e7 all right so this is what he was aiming for i'm not too scared of this the knight"
+  },
+  {
+   "ply": 32,
+   "t": 190,
+   "line": [
+    "Rad8"
+   ],
+   "fen": "3r1rk1/pp1nRpp1/2p2pp1/2P5/3P1qP1/5N1P/PP3P2/R2Q2K1 w - - 2 17",
+   "said": "has no squares which is a little bit concerning but fortunately we can defend the knight with a rook why do we go with this rook because we want the other rook to defend f7 if he goes queen b3 right now"
+  },
+  {
+   "ply": 31,
+   "t": 198,
+   "line": [],
+   "fen": "r4rk1/pp1nRpp1/2p2pp1/2P5/3P1qP1/5N1P/PP3P2/R2Q2K1 b - - 1 16",
+   "said": "if we had gone rook fd8 then queen b3 would have followed and we would have been in massive trouble because to defend that f-fun we would have had to"
+  },
+  {
+   "ply": 32,
+   "t": 208.5,
+   "line": [
+    "Rad8"
+   ],
+   "fen": "3r1rk1/pp1nRpp1/2p2pp1/2P5/3P1qP1/5N1P/PP3P2/R2Q2K1 w - - 2 17",
+   "said": "return with the rook to f8 and then the knight would have been left unprotected all right you know what i mean lawful waffle okay queen e2 all right so if we can solve the problem of the rook i think black will be better due to our um superior structure and whites weak squares so the plan here is to try to break free of the chains o how do we so how do we how do we do that um it's not so simple it's not so simple i think for a second yeah we can go g5 we can go f5 the problem with f5 is he goes g5 five doesn't quite cut it five doesn't quite cut it um i have an idea it's not the greatest idea in the world but it's an idea the idea is to go a5"
+  },
+  {
+   "ply": 3,
+   "t": 285.5,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "and then to go b6 after that and the reason that i don't want to go b6 immediately is because of b4 white would preserve the bind on our position so first i want to go a5 to stop b4 and then on the next move i want to go b6 i don't love my position to be completely honest but i think if we can get b6 and we'll be fine all right so here even taking the queen should be considered because if we take the queen and he takes to the pawn then we go rook fe-8 probably the end game is slightly worse for us but closer to equality than to anything um we can also drop the queen back to ba but then he goes rook a e1 and if we go b6 white can go b3 takes takes very concerning position there so probably we should take the queen probably we should take the queen yeah we're getting slightly outplayed here queen back to b8 yeah this guy this guy played hikaru and stuff so he's clearly very very strong no i want to go queen b i don't want to take me i'll explain why after the game but i think this is a better chance thank you cronies for the for the five gifted i appreciate it so if only we could go get rook feed and we would be totally fine because the knight would be able to park on f8 man very strong b6 okay let's try to break free no i have not lost on the speed run um this is potentially my first loss if he continues to play as powerful as he has okay we'll see the position remains quite solid i think i don't see a way for him to break through the move i'm worried about is b3 because we are threatening to take on c5 and then to take the pawn on b2 okay let me think no he he's obviously not sniping he's just found the move okay probably we should take and go queen before so you can go queen before to attack the pawn so maybe it's not so bad actually see one no it actually is bad okay maybe f5 takes takes knight t4 uh maybe knight b8 is interesting to open the d open the d file but then he goes rook c4 queen a3 no that's all very bad geez okay worse comes to worse we can go knight e5 here i really don't like that i can try the move queen a3 okay let's try queen a3 rook c2 okay maybe now knight b8 then he goes 94. okay or does he want to trap my queen of the rookie 4 with a4 wow that is insane gosh i feel like an idiot let's go a4 maybe let's try a4 yeah we have to try for open up some territory on the queen side obviously this is bad but do what i can here yeah i mean i it's hard to estimate his level so far but obviously so far he's playing at a gm level or i'm just playing below my level but i don't even really know what i did wrong to be completely honest takes takes rook d2 yeah here i was thinking knight e5 here i was thinking 95 and maybe i can squeeze out a draw though it's doubtful because if knight b8 amazingly he's got take stakes rookie winning my knight well not random stuff i mean sack upon and try to actually pull out a draw here is what we're gonna do no it's not hope dress i mean we have to we have to trade as many pieces as possible here and then my king the only thing that's working in my favor is that the king is kind of safe okay we take yeah 2400 in rapid is really high but it's i mean it should not be a gm level i think so let's see rick takes e5 all right so here's the situation if we play queen takes a2 then he goes rook e8 check and then we trade on e8 and the queen comes back and takes on c6 so i thought rookie five was a mistake because i can actually give this check first i think i can give this check first and then take on a2 on the next move and i actually didn't see how he can make progress in in with respect to my king because if he gives me a check on e8 i just go king h7 and i mean if his queen had a way to get onto the eighth rank in one move i think he would make me but i don't see how he gets that done so maybe we're holding on here i don't know i'm optimistic though now he absolutely does not give uh does not give off the impression of a cheetah he's definitely legit i mean i'm 99 sure he's not i'm not i don't get that sense from him he's just clearly extremely strong that's all there is to it okay so queen we got to calculate queen a1 queen a1 there there wait let me calculate q1 no that's got to be good right queen f3 you want king of four 22. i think i have at least a draw there so queen a1 is what i'm currently currently rolling over but it probably also doesn't work he's got there there [Music] yeah maybe i shouldn't do that how else can i defend i can go rook d5 then he takes it i can go rig d2 maybe but i don't really like that either yeah maybe your d2 is forced okay we can also risk it with kuni one yeah let's risk it let's risk it for the biscuit with queen a one i'll explain at everything after the game but i gotta move let's go queen a1 if rookie ate king h7 and if queen takes f7 there i start tracking him rook g1 etc this is obviously a highly concerning position but also at the same time uh his king is also very weak here so i'm picking h7 queen f7 okay so we go for that line rook g1 check is forced king f3 queen d1 check and maybe i have a perpetual there i'm not entirely positive king h2 rook h1 okay king g3 oh my god does he want to go he wants to go to h4 doesn't he which i of course i didn't see at all my gosh what a what a defensive idea queen c3 is possible no but the ah but yeah maybe it is possible rookie three but then he doesn't have that check anymore yeah ricky three but then i can take on c5 maybe and i should be okay i don't know ait does he have f3 oh my gosh wait does he have f3 oh my gosh he might have f3 though unreal and i have no check so king queen is dominated [Music] okay what is he threatening queen g8 h4 yeah well done i don't think i have a defense i mean maybe there's something but i don't see it yeah rook g1 he goes king up i missed this move f3 completely okay i have to do this king h4 well wait but this allows f6 now i'm still more or less in the game if he's not careful he can get checkmated here i guess ricky six wins damn still probably winning for him jesus okay that's a very strange king h4 move because he was just winning on the spot there king h2 damn it yeah i was hoping he would uh get himself mated but he didn't why did i do that i i should have probably i don't know what i should have done h5 and there's no stalemate unfortunately incredible i mean unless uh so i can get a five in but okay let's see how look at five wins i mean you just played incredibly well i don't know what to say i guess the speedrun lasts a little bit longer wait wait wait i'm still lost i'm still lost that's the that's the amazing thing i'm still probably lost i like how he just like didn't even flinch this is still probably at least a drop probably a loss wow i like how he gained rating from this game yeah it's it's it's that's a position it's a draw that was very dirty but you got to try everything it's online chess of course in my eyes i lost that game okay let's analyze um i mean of course the accuracy is good oh my god 99.3 to 98.2 oh my god that's pretty crazy"
+  },
+  {
+   "ply": 5,
+   "t": 1214,
+   "line": [
+    "d5",
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "said": "no no no i this guy was legit i mean i i didn't i completely did not get the sense that i'm playing a machine i just got the sense that i'm playing a very strong human uh we'll analyze with an engine obviously but um i'm also human like i i make mistakes the point of the speedrun is not to convince anybody that i am to convince anybody that i am some sort of superhuman okay do skeleco thank you for the prime no there's no chance there's another speed running yet so by the way i didn't want to misrepresent the tardigrade um i didn't want to misrepresent i have played him before i didn't know that um i made a very crucial mistake here um and the mistake was what i would call chess related procrastination so do you guys remember what move i refrained from playing in this position do you remember what move i refrained from playing in this position yeah so c5 please and i'm not going to keep repeating this but it goes without saying that um baseless accusations are disgusting and shame on you if you go around saying"
+  }
+ ],
+ "forks": []
+}

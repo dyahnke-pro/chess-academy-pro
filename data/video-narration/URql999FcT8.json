@@ -1,0 +1,320 @@
+{
+ "videoId": "URql999FcT8",
+ "title": "Daniel Vs GM Sam Shankland | Blitz Battle | Pt. 1",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 2274.5,
+   "line": [
+    "c3",
+    "c5",
+    "e4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "said": "I'm kidding. Yeah. All right. Again. That was painful. Place some more. There's the elephant."
+  },
+  {
+   "ply": 4,
+   "t": 2276.5,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 1 3",
+   "said": ""
+  },
+  {
+   "ply": 5,
+   "t": 2278.5,
+   "line": [
+    "d3"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/2p5/4P3/2PP4/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "said": "Okay, let's go here. Okay,"
+  },
+  {
+   "ply": 6,
+   "t": 2281,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/4P3/2PP4/PP3PPP/RNBQKBNR w KQkq - 1 4",
+   "said": "that's a tricky move, actually. Doesn't look totally stupid. All right,"
+  },
+  {
+   "ply": 7,
+   "t": 2282,
+   "line": [
+    "f4"
+   ],
+   "fen": "r1bqkb1r/pp1ppppp/2n2n2/2p5/4PP2/2PP4/PP4PP/RNBQKBNR b KQkq - 0 4",
+   "said": ""
+  },
+  {
+   "ply": 9,
+   "t": 2286.5,
+   "line": [
+    "d6",
+    "Nf3"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/4PP2/2PP1N2/PP4PP/RNBQKB1R b KQkq - 1 5",
+   "said": ""
+  },
+  {
+   "ply": 10,
+   "t": 2288.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2np1n2/2p1p3/4PP2/2PP1N2/PP4PP/RNBQKB1R w KQkq - 0 6",
+   "said": "so if I play E5, do you have a big idea? No, just develop."
+  },
+  {
+   "ply": 11,
+   "t": 2291.5,
+   "line": [
+    "Be2"
+   ],
+   "fen": "r1bqkb1r/pp3ppp/2np1n2/2p1p3/4PP2/2PP1N2/PP2B1PP/RNBQK2R b KQkq - 1 6",
+   "said": ""
+  },
+  {
+   "ply": 12,
+   "t": 2294,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk2r/pp2bppp/2np1n2/2p1p3/4PP2/2PP1N2/PP2B1PP/RNBQK2R w KQkq - 2 7",
+   "said": "If you cannot bring a bishop to C4, I don't think you're going to mate me."
+  },
+  {
+   "ply": 15,
+   "t": 2296,
+   "line": [
+    "fxe5",
+    "O-O",
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/pp2bppp/2np1n2/2p1P3/4P3/2PP1N2/PP2B1PP/RNBQ1RK1 b - - 2 8",
+   "said": ""
+  },
+  {
+   "ply": 17,
+   "t": 2299.5,
+   "line": [
+    "dxe5",
+    "Bg5"
+   ],
+   "fen": "r1bq1rk1/pp2bppp/2n2n2/2p1p1B1/4P3/2PP1N2/PP2B1PP/RN1Q1RK1 b - - 1 9",
+   "said": "All right."
+  },
+  {
+   "ply": 18,
+   "t": 2302.5,
+   "line": [
+    "Be6"
+   ],
+   "fen": "r2q1rk1/pp2bppp/2n1bn2/2p1p1B1/4P3/2PP1N2/PP2B1PP/RN1Q1RK1 w - - 2 10",
+   "said": ""
+  },
+  {
+   "ply": 19,
+   "t": 2303.5,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "r2q1rk1/pp2bppp/2n1bn2/2p1p1B1/4P3/2PP1N2/PP1NB1PP/R2Q1RK1 b - - 3 10",
+   "said": "Telling me black's worse here. No, white's probably fighting for"
+  },
+  {
+   "ply": 21,
+   "t": 2310,
+   "line": [
+    "Nd7",
+    "Be3"
+   ],
+   "fen": "r2q1rk1/pp1nbppp/2n1b3/2p1p3/4P3/2PPBN2/PP1NB1PP/R2Q1RK1 b - - 5 11",
+   "said": "equality, which is what I normally do with white."
+  },
+  {
+   "ply": 23,
+   "t": 2312,
+   "line": [
+    "b6",
+    "Qe1"
+   ],
+   "fen": "r2q1rk1/p2nbppp/1pn1b3/2p1p3/4P3/2PPBN2/PP1NB1PP/R3QRK1 b - - 1 12",
+   "said": "Okay, sure."
+  },
+  {
+   "ply": 25,
+   "t": 2315,
+   "line": [
+    "Re8",
+    "Qg3"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1pn1b3/2p1p3/4P3/2PPBNQ1/PP1NB1PP/R4RK1 b - - 3 13",
+   "said": "But I'm not so sure a king is as safe as you think it is. Mine I might be right. Um"
+  },
+  {
+   "ply": 26,
+   "t": 2330.5,
+   "line": [
+    "c4"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1pn1b3/4p3/2p1P3/2PPBNQ1/PP1NB1PP/R4RK1 w - - 0 14",
+   "said": "All right, we're playing BS. Let's have fun."
+  },
+  {
+   "ply": 27,
+   "t": 2333,
+   "line": [
+    "d4"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1pn1b3/4p3/2pPP3/2P1BNQ1/PP1NB1PP/R4RK1 b - - 0 14",
+   "said": "Sure. What's your big idea? As you say,"
+  },
+  {
+   "ply": 29,
+   "t": 2336.5,
+   "line": [
+    "exd4",
+    "cxd4"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1pn1b3/8/2pPP3/4BNQ1/PP1NB1PP/R4RK1 b - - 0 15",
+   "said": "that's simple. I don't know. I just sort of hope that his worked, but I don't think it does. Wow. Right when I was equalizing the"
+  },
+  {
+   "ply": 30,
+   "t": 2352,
+   "line": [
+    "Nb4"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1p2b3/8/1npPP3/4BNQ1/PP1NB1PP/R4RK1 w - - 1 16",
+   "said": "match, too, I just wondered D4 and now I can resign in one move. That's pretty bad. Ah, all right. I'm still sour over the last game, though. Hopefully. Yeah, you got to try to try"
+  },
+  {
+   "ply": 31,
+   "t": 2357.5,
+   "line": [
+    "d5"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1p2b3/3P4/1np1P3/4BNQ1/PP1NB1PP/R4RK1 b - - 0 16",
+   "said": "some tricks. Yeah. Okay, let's fine. Fine. I'll let you experiment. So,"
+  },
+  {
+   "ply": 32,
+   "t": 2364,
+   "line": [
+    "Bxd5"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1p6/3b4/1np1P3/4BNQ1/PP1NB1PP/R4RK1 w - - 0 17",
+   "said": "take this and then"
+  },
+  {
+   "ply": 33,
+   "t": 2367,
+   "line": [
+    "exd5"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1p6/3P4/1np5/4BNQ1/PP1NB1PP/R4RK1 b - - 0 17",
+   "said": ""
+  },
+  {
+   "ply": 34,
+   "t": 2368,
+   "line": [
+    "Nc2"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1p6/3P4/2p5/4BNQ1/PPnNB1PP/R4RK1 w - - 1 18",
+   "said": "Yeah. Yeah. Yeah. Now, we got to find something here. Put his It shouldn't be too hard. Shanky Panky away. Actually, is it that easy here? I don't like the way you said that. Okay. I have an idea. I probably just busted. But like I think I know what I'm doing though. So, let me"
+  },
+  {
+   "ply": 35,
+   "t": 2403.5,
+   "line": [
+    "Bh6"
+   ],
+   "fen": "r2qr1k1/p2nbppp/1p5B/3P4/2p5/5NQ1/PPnNB1PP/R4RK1 b - - 2 18",
+   "said": "do I Okay, I can actually just play calmly or no. Okay, let's go here. I was hoping you wouldn't find that. All right. Um, it's probably the end."
+  },
+  {
+   "ply": 36,
+   "t": 2414,
+   "line": [
+    "Bf6"
+   ],
+   "fen": "r2qr1k1/p2n1ppp/1p3b1B/3P4/2p5/5NQ1/PPnNB1PP/R4RK1 w - - 3 19",
+   "said": "So, I guess I have to play bishop F6, but this is not going to be good."
+  },
+  {
+   "ply": 37,
+   "t": 2417.5,
+   "line": [
+    "Rac1"
+   ],
+   "fen": "r2qr1k1/p2n1ppp/1p3b1B/3P4/2p5/5NQ1/PPnNB1PP/2R2RK1 b - - 4 19",
+   "said": "Yeah, I mean, knight bishop C4 was probably also winning, but I feel like this just keeps the piece. What if knight takes C3, though? I'm not"
+  },
+  {
+   "ply": 38,
+   "t": 2436.5,
+   "line": [
+    "Rxe2"
+   ],
+   "fen": "r2q2k1/p2n1ppp/1p3b1B/3P4/2p5/5NQ1/PPnNr1PP/2R2RK1 w - - 0 20",
+   "said": "sure. Oh, yeah. So, this seems very bad. All right. Take and B5 and hope for the"
+  },
+  {
+   "ply": 40,
+   "t": 2438.5,
+   "line": [
+    "Rxc2",
+    "b5"
+   ],
+   "fen": "r2q2k1/p2n1ppp/5b1B/1p1P4/2p5/5NQ1/PPRNr1PP/5RK1 w - - 0 21",
+   "said": "best. Mhm. But no question, I'm very much lost here."
+  },
+  {
+   "ply": 41,
+   "t": 2453.5,
+   "line": [
+    "Rcc1"
+   ],
+   "fen": "r2q2k1/p2n1ppp/5b1B/1p1P4/2p5/5NQ1/PP1Nr1PP/2R2RK1 b - - 1 21",
+   "said": "I need to somehow I need to drive that rook out. I'm going to do it at the cost of the pawn."
+  },
+  {
+   "ply": 43,
+   "t": 2458.5,
+   "line": [
+    "Bxb2",
+    "Rce1"
+   ],
+   "fen": "r2q2k1/p2n1ppp/7B/1p1P4/2p5/5NQ1/Pb1Nr1PP/4RRK1 b - - 1 22",
+   "said": "Drive it out. Sure."
+  },
+  {
+   "ply": 47,
+   "t": 2459.5,
+   "line": [
+    "Bc1",
+    "Rd1",
+    "Bb2",
+    "Rc1"
+   ],
+   "fen": "r2q2k1/p2n1ppp/7B/1p1P4/2p5/5NQ1/Pb1Nr1PP/2R2RK1 b - - 5 24",
+   "said": "Oh crap. Damn it. You saw my trick. I did. Queen B6. Rascal. Okay. I don't even know if I'm worse anymore. Too many blunders in these technical positions. Are you good at talking and playing at the same time? I really suck. I'm not great, but um I've adapted sort of. All right. Gh. If you lose this game just to clean piece up, I'm going to laugh at you. Well, I better not lose it then. I'll laugh at myself. I almost just took that rook. Oh my god. Why don't you take it? It's a"
+  },
+  {
+   "ply": 49,
+   "t": 2509.5,
+   "line": [
+    "c3",
+    "Kh1"
+   ],
+   "fen": "r2q2k1/p2n1ppp/7B/1p1P4/8/2p2NQ1/Pb1Nr1PP/2R2R1K b - - 1 25",
+   "said": "free rock. Yeah. Okay. So, let's see. What do I start with? I think you're going to regret what you just said. Thank you, Alexander, for the sub. Okay. C3 pawn. Jesus Christ. That's pretty, Sam. Oh, man. Oh, you're right. I am going to regret what I just said. Oh my gosh. Back to the chor. Okay. I didn't prepare this specially for the match or anything. I I've been dabbling in the chor. So, let's go to D2 this time. I wasn't totally thrilled with how the last one check out. I think against Venuel like this. So, I think I have to not take that right away. You're out playing me all the time, man. All right. Take about played every game. Let's challenge this bishop. Let it find a square. Okay. You know what? I'm gonna play it like this. Really? Yeah. Okay. I thought the knight on D4 is is really"
+  }
+ ],
+ "forks": []
+}

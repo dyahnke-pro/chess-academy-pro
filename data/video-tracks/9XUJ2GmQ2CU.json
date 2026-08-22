@@ -352,7 +352,7 @@
   {
    "id": "vn-advance-e6-do-not-commit-a-piece-to-an-assumed-plan",
    "line": "e4 e6 e5 c5 d4 d5 Nf3 Bd7",
-   "teaches": "Playing a move because you assume what the opponent will do next is how a piece ends up on a square chosen by a plan that never happens. Wait one move: the same bishop has several futures depending on which setup appears, and committing early throws all but one of them away — and this square blocks the knight that wanted it.",
+   "teaches": "Playing a move because you assume what the opponent will do next is how a piece ends up on a square chosen by a plan that never happens — wait one move, because the same bishop has several futures depending on which setup appears, and this square also blocks the knight that wanted it.",
    "explains": "The bishop steps to d7 in anticipation of a pawn move that has not been played, and it takes d7 away from the knight on b8 at the same time. Nothing has been gained yet and one option has been spent.",
    "reasons": [
     {

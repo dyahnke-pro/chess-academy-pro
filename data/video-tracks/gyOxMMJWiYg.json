@@ -647,7 +647,7 @@
   {
    "id": "vn-centre-push-punish-the-same-piece-moved-again",
    "line": "e4 c6 d4 d5 f3 h5 Nc3 Nf6 e5",
-   "teaches": "When your opponent spends their opening moves on flank gestures and repeat moves with the same piece, the centre push is the punishment. Every tempo they wasted is a tempo your pawns use to start asking questions their undeveloped pieces cannot answer.",
+   "teaches": "When your opponent spends their opening moves on flank gestures and repeat moves with the same piece, the centre push is the punishment — every tempo they wasted is a tempo your pawns use to start asking questions their undeveloped pieces cannot answer.",
    "explains": "The pawn advances to e5 and attacks the knight on f6 — the one piece the opponent has developed — while their flank pawn move sits on the edge doing nothing for the fight. The knight must move again, and the pawn that chased it stands in the centre it was given for free.",
    "reasons": [
     {
@@ -663,7 +663,7 @@
   {
    "id": "vn-centre-push-the-wedge-that-buries-a-position",
    "line": "e4 c6 d4 d5 f3 h5 Nc3 Nf6 e5 Nfd7 e6",
-   "teaches": "A pawn given away on the right square can be worth more than a pawn kept. The wedge thrown into the heart of an undeveloped position forks defenders, wrecks the pawn shelter whichever way it is taken, and leaves every enemy piece tripping over the wreckage for the rest of the game.",
+   "teaches": "A pawn given away on the right square can be worth more than a pawn kept — the wedge thrown into the heart of an undeveloped position forks defenders, wrecks the pawn shelter whichever way it is taken, and leaves every enemy piece tripping over the wreckage for the rest of the game.",
    "explains": "The pawn steps into e6 attacking the knight on d7 and the pawn on f7 at once. There is no way to ignore it and no good way to take it — the capture opens the king's cover, and afterwards the pieces behind the broken pawns have nowhere sensible to stand.",
    "reasons": [
     {

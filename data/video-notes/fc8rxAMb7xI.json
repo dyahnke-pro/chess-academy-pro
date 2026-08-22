@@ -1,0 +1,37 @@
+[
+ {
+  "id": "vn-sic-c4-surprise-is-not-a-mistake",
+  "line": "e4 c5 c4",
+  "teaches": "A surprising off-beat move is not the same as a mistake, but it rarely reflects deep preparation — meet it with calm, textbook play rather than trying to punish it at once. The refutation of a sideline is usually just sound development.",
+  "explains": "The pawn to c4 grabs a bit of space — but it hands over the d4 square for good, because White no longer has a c-pawn to ever support that break. Don't reach for fireworks to punish it; this is a sideline you answer with simple, sound positional chess.",
+  "reasons": []
+ },
+ {
+  "id": "vn-sic-c4-fianchetto-eyes-the-weak-square",
+  "line": "e4 c5 c4 Nc6 Nc3 g6 d3 Bg7",
+  "teaches": "A fianchetto that rakes the long diagonal is a logical developing move whatever the specific opening — especially when it aims straight at a square the opponent has weakened. Point your best piece at the hole.",
+  "explains": "The bishop develops to g7 and rakes down the long diagonal, aimed right at the d4 square that White's early c-pawn push left soft for good. Nothing clever, just the natural move — the best piece pointed at the weakness.",
+  "reasons": [ { "kind": "controls", "square": "d4" } ]
+ },
+ {
+  "id": "vn-sic-c4-keep-the-diagonal-open",
+  "line": "e4 c5 c4 Nc6 Nc3 g6 d3 Bg7 Nf3 d6",
+  "teaches": "Order your developing moves to keep your best piece's diagonal open — delay the natural knight development that would block your own fianchettoed bishop, and play the useful pawn move first.",
+  "explains": "Pawn to d6 comes first. The natural knight to f6 would wall in the g7-bishop and loosen the grip on d4 — so we hold it back and route that knight to e7 instead. The pawn move is useful anyway and prepares a later central break.",
+  "reasons": []
+ },
+ {
+  "id": "vn-sic-c4-trade-the-defender-with-bg4",
+  "line": "e4 c5 c4 Nc6 Nc3 g6 d3 Bg7 Nf3 d6 Be2 Bg4",
+  "teaches": "There is more than one way to remove a key enemy defender — besides the usual pawn levers, simply pinning and trading it off with a bishop is an option players often overlook, and it is exactly the piece guarding the squares you want.",
+  "explains": "The bishop comes to g4, pinning the knight on f3 and preparing to trade it off. That knight guards the central d4 and e5 squares — the whole fight in this structure — so removing it is worth the bishop.",
+  "reasons": [ { "kind": "attacks", "square": "f3" } ]
+ },
+ {
+  "id": "vn-sic-c4-concrete-priority-over-the-rule",
+  "line": "e4 c5 c4 Nc6 Nc3 g6 d3 Bg7 Nf3 d6 Be2 Bg4 O-O Bxf3",
+  "teaches": "General rules bow to a concrete priority — in a closed centre, giving up the bishop pair to remove a defender of the key squares is worth more than the abstract advantage of the two bishops. The position, not the maxim, decides.",
+  "explains": "Yes, taking the knight hands over the bishop pair — the rule says keep it. But the rule bows to the position here: the centre is closed, so the two bishops matter little, and this trade removes a defender of the squares Black is fighting for. Development is untouched.",
+  "reasons": []
+ }
+]

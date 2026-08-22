@@ -1,0 +1,810 @@
+{
+ "videoId": "0LxFKZyaD-I",
+ "title": "Exploiting Common Mistakes | Alapin Sicilian, Advance French | GM Naroditsky's DYI Chess Speedrun",
+ "moves": [
+  {
+   "ply": 4,
+   "t": 2350.5,
+   "line": [
+    "d4",
+    "d5",
+    "e4",
+    "e6"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "1939. Okay, so let's read Alakine's original commentary. Alak Nimzich E4 E6 D4 D5. Um, Alakine played knight C3."
+  },
+  {
+   "ply": 5,
+   "t": 2353,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 3",
+   "said": ""
+  },
+  {
+   "ply": 6,
+   "t": 2354.5,
+   "line": [
+    "Bb4"
+   ],
+   "fen": "rnbqk1nr/ppp2ppp/4p3/3p4/1b1PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 2 4",
+   "said": "Nimzovich played bishop B4. This is the win hour. E5. C5. Bishop to D2. This"
+  },
+  {
+   "ply": 7,
+   "t": 2357,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqk1nr/ppp2ppp/4p3/3pP3/1b1P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "said": ""
+  },
+  {
+   "ply": 9,
+   "t": 2358.5,
+   "line": [
+    "c5",
+    "Bd2"
+   ],
+   "fen": "rnbqk1nr/pp3ppp/4p3/2ppP3/1b1P4/2N5/PPPB1PPP/R2QKBNR b KQkq - 1 5",
+   "said": "rather tame move in connection with the following knight maneuver should not cause black much trouble. More promising perhaps only because less explored is"
+  },
+  {
+   "ply": 10,
+   "t": 2379,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "rnbqk2r/pp2nppp/4p3/2ppP3/1b1P4/2N5/PPPB1PPP/R2QKBNR w KQkq - 2 6",
+   "said": "queen to G4 or even pawn takes pawn. That didn't age very well. The main move now is A3 of course. So, let me skip through the opening because that's not the interesting phase. Knight to E7."
+  },
+  {
+   "ply": 11,
+   "t": 2381,
+   "line": [
+    "Nb5"
+   ],
+   "fen": "rnbqk2r/pp2nppp/4p3/1NppP3/1b1P4/8/PPPB1PPP/R2QKBNR b KQkq - 3 6",
+   "said": "Knight to B5. Bishop takes bishop. Queen"
+  },
+  {
+   "ply": 13,
+   "t": 2383,
+   "line": [
+    "Bxd2+",
+    "Qxd2"
+   ],
+   "fen": "rnbqk2r/pp2nppp/4p3/1NppP3/3P4/8/PPPQ1PPP/R3KBNR b KQkq - 0 7",
+   "said": "takes bishop. Short castle. And after"
+  },
+  {
+   "ply": 15,
+   "t": 2386,
+   "line": [
+    "O-O",
+    "c3"
+   ],
+   "fen": "rnbq1rk1/pp2nppp/4p3/1NppP3/3P4/2P5/PP1Q1PPP/R3KBNR b KQ - 0 8",
+   "said": "Alakine plays C3, you get sort of the advance the advanced pawn formation. Right. It's in Italy. I apologize. Pawn"
+  },
+  {
+   "ply": 16,
+   "t": 2395,
+   "line": [
+    "b6"
+   ],
+   "fen": "rnbq1rk1/p3nppp/1p2p3/1NppP3/3P4/2P5/PP1Q1PPP/R3KBNR w KQ - 0 9",
+   "said": "to queen knight three. Alakine writes, \"The wish to solve the queen bishop problem as rapidly as possible is by black and the French quite legitimate. But in this particular position, the attempt will"
+  },
+  {
+   "ply": 15,
+   "t": 2417,
+   "line": [],
+   "fen": "rnbq1rk1/pp2nppp/4p3/1NppP3/3P4/2P5/PP1Q1PPP/R3KBNR b KQ - 0 8",
+   "said": "prove a failure as black cannot succeed in exchanging that bishop against white's against white's bishop. Good instead was the move knight to f5 exclam"
+  },
+  {
+   "ply": 16,
+   "t": 2419.5,
+   "line": [
+    "Nf5"
+   ],
+   "fen": "rnbq1rk1/pp3ppp/4p3/1NppPn2/3P4/2P5/PP1Q1PPP/R3KBNR w KQ - 1 9",
+   "said": "preventing knight to d6 as played with success by Nimzich against Dr. Lasker."
+  },
+  {
+   "ply": 15,
+   "t": 2426,
+   "line": [],
+   "fen": "rnbq1rk1/pp2nppp/4p3/1NppP3/3P4/2P5/PP1Q1PPP/R3KBNR b KQ - 0 8",
+   "said": "uh four years later in Zurich. Sure. Nim"
+  },
+  {
+   "ply": 16,
+   "t": 2427,
+   "line": [
+    "b6"
+   ],
+   "fen": "rnbq1rk1/p3nppp/1p2p3/1NppP3/3P4/2P5/PP1Q1PPP/R3KBNR w KQ - 0 9",
+   "said": "Alakine plays F4 and Nimzovich played"
+  },
+  {
+   "ply": 17,
+   "t": 2429.5,
+   "line": [
+    "f4"
+   ],
+   "fen": "rnbq1rk1/p3nppp/1p2p3/1NppP3/3P1P2/2P5/PP1Q2PP/R3KBNR b KQ - 0 9",
+   "said": ""
+  },
+  {
+   "ply": 18,
+   "t": 2432,
+   "line": [
+    "Ba6"
+   ],
+   "fen": "rn1q1rk1/p3nppp/bp2p3/1NppP3/3P1P2/2P5/PP1Q2PP/R3KBNR w KQ - 1 10",
+   "said": "bishop to A6 trying to force white's a pawn up in order to play afterwards in order to play afterwards"
+  },
+  {
+   "ply": 19,
+   "t": 2445,
+   "line": [
+    "a4"
+   ],
+   "fen": "rn1q1rk1/p3nppp/bp2p3/1NppP3/P2P1P2/2P5/1P1Q2PP/R3KBNR b KQ - 0 10",
+   "said": "um knight to queen bishop three. Oh, he's trying to force A4 to play knight C6, knight A5. But as we will see, the"
+  },
+  {
+   "ply": 18,
+   "t": 2449.5,
+   "line": [],
+   "fen": "rn1q1rk1/p3nppp/bp2p3/1NppP3/3P1P2/2P5/PP1Q2PP/R3KBNR w KQ - 1 10",
+   "said": "second part of this plan cannot be"
+  },
+  {
+   "ply": 19,
+   "t": 2451,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rn1q1rk1/p3nppp/bp2p3/1NppP3/3P1P2/2P2N2/PP1Q2PP/R3KB1R b KQ - 2 10",
+   "said": "executed. Alakine plays here. Nimzovich"
+  },
+  {
+   "ply": 20,
+   "t": 2453,
+   "line": [
+    "Qd7"
+   ],
+   "fen": "rn3rk1/p2qnppp/bp2p3/1NppP3/3P1P2/2P2N2/PP1Q2PP/R3KB1R w KQ - 3 11",
+   "said": "plays queen D7"
+  },
+  {
+   "ply": 21,
+   "t": 2455,
+   "line": [
+    "a4"
+   ],
+   "fen": "rn3rk1/p2qnppp/bp2p3/1NppP3/P2P1P2/2P2N2/1P1Q2PP/R3KB1R b KQ - 0 11",
+   "said": "A4. Knight to C6 B4 exclam. Strangely"
+  },
+  {
+   "ply": 22,
+   "t": 2457,
+   "line": [
+    "Nbc6"
+   ],
+   "fen": "r4rk1/p2qnppp/bpn1p3/1NppP3/P2P1P2/2P2N2/1P1Q2PP/R3KB1R w KQ - 1 12",
+   "said": ""
+  },
+  {
+   "ply": 23,
+   "t": 2458.5,
+   "line": [
+    "b4"
+   ],
+   "fen": "r4rk1/p2qnppp/bpn1p3/1NppP3/PP1P1P2/2P2N2/3Q2PP/R3KB1R b KQ - 0 12",
+   "said": "enough, this move, this more or less conventional move, created at the time of the game a kind of small sensation. The late Dr. Tar, for instance, called it in his comments highly original. To my mind, more surprising than the move is the fact that a player of Numvich's level when adopting the plan starting uh"
+  },
+  {
+   "ply": 25,
+   "t": 2489.5,
+   "line": [
+    "cxd4",
+    "cxd4"
+   ],
+   "fen": "r4rk1/p2qnppp/bpn1p3/1N1pP3/PP1P1P2/5N2/3Q2PP/R3KB1R b KQ - 0 13",
+   "said": "by B6 did not take this possibility into serious consideration. DM so flaming Nimzovich. Great. Pawn takes B4. Pawn takes B4. Bishop to B7. Knight to D6."
+  },
+  {
+   "ply": 26,
+   "t": 2491,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "r4rk1/pb1qnppp/1pn1p3/1N1pP3/PP1P1P2/5N2/3Q2PP/R3KB1R w KQ - 1 14",
+   "said": ""
+  },
+  {
+   "ply": 27,
+   "t": 2493,
+   "line": [
+    "Nd6"
+   ],
+   "fen": "r4rk1/pb1qnppp/1pnNp3/3pP3/PP1P1P2/5N2/3Q2PP/R3KB1R b KQ - 2 14",
+   "said": "You can see that Nim Alakine is winding his tentacles around black's position."
+  },
+  {
+   "ply": 28,
+   "t": 2498.5,
+   "line": [
+    "f5"
+   ],
+   "fen": "r4rk1/pb1qn1pp/1pnNp3/3pPp2/PP1P1P2/5N2/3Q2PP/R3KB1R w KQ f6 0 15",
+   "said": "Pawn to F5. the decisive error in an already bad position in view of the threatening"
+  },
+  {
+   "ply": 27,
+   "t": 2509.5,
+   "line": [],
+   "fen": "r4rk1/pb1qnppp/1pnNp3/3pP3/PP1P1P2/5N2/3Q2PP/R3KB1R b KQ - 2 14",
+   "said": "advance of white's a pawn the only chance of obtaining more counterplay lay in A5. Um the point being if B5 the knight"
+  },
+  {
+   "ply": 30,
+   "t": 2518,
+   "line": [
+    "a5",
+    "Bb5",
+    "axb4"
+   ],
+   "fen": "r4rk1/1b1qnppp/1pnNp3/1B1pP3/Pp1P1P2/5N2/3Q2PP/R3K2R w KQ - 0 16",
+   "said": "before so Alakine was intending bishop to B5 short castles after which white's"
+  },
+  {
+   "ply": 31,
+   "t": 2519.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r4rk1/1b1qnppp/1pnNp3/1B1pP3/Pp1P1P2/5N2/3Q2PP/R4RK1 b - - 1 16",
+   "said": "initiative um would not develop so rapidly."
+  },
+  {
+   "ply": 27,
+   "t": 2524,
+   "line": [],
+   "fen": "r4rk1/pb1qnppp/1pnNp3/3pP3/PP1P1P2/5N2/3Q2PP/R3KB1R b KQ - 2 14",
+   "said": "Instead, Nimzovich plays this terrible"
+  },
+  {
+   "ply": 28,
+   "t": 2525,
+   "line": [
+    "f5"
+   ],
+   "fen": "r4rk1/pb1qn1pp/1pnNp3/3pPp2/PP1P1P2/5N2/3Q2PP/R3KB1R w KQ f6 0 15",
+   "said": "move F5, allowing Alakine to advance the"
+  },
+  {
+   "ply": 29,
+   "t": 2528,
+   "line": [
+    "a5"
+   ],
+   "fen": "r4rk1/pb1qn1pp/1pnNp3/P2pPp2/1P1P1P2/5N2/3Q2PP/R3KB1R b KQ - 0 15",
+   "said": "pawn further, cramping black's position. And just watch how the game ends. Knight"
+  },
+  {
+   "ply": 30,
+   "t": 2533,
+   "line": [
+    "Nc8"
+   ],
+   "fen": "r1n2rk1/pb1q2pp/1pnNp3/P2pPp2/1P1P1P2/5N2/3Q2PP/R3KB1R w KQ - 1 16",
+   "said": "to C8. Knight takes B7. Queen takes B7."
+  },
+  {
+   "ply": 31,
+   "t": 2535.5,
+   "line": [
+    "Nxb7"
+   ],
+   "fen": "r1n2rk1/pN1q2pp/1pn1p3/P2pPp2/1P1P1P2/5N2/3Q2PP/R3KB1R b KQ - 0 16",
+   "said": ""
+  },
+  {
+   "ply": 33,
+   "t": 2537.5,
+   "line": [
+    "Qxb7",
+    "a6"
+   ],
+   "fen": "r1n2rk1/pq4pp/Ppn1p3/3pPp2/1P1P1P2/5N2/3Q2PP/R3KB1R b KQ - 0 17",
+   "said": "A6. Queen to F7. Bishop to B5. Every"
+  },
+  {
+   "ply": 34,
+   "t": 2539.5,
+   "line": [
+    "Qf7"
+   ],
+   "fen": "r1n2rk1/p4qpp/Ppn1p3/3pPp2/1P1P1P2/5N2/3Q2PP/R3KB1R w KQ - 1 18",
+   "said": ""
+  },
+  {
+   "ply": 35,
+   "t": 2541.5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1n2rk1/p4qpp/Ppn1p3/1B1pPp2/1P1P1P2/5N2/3Q2PP/R3K2R b KQ - 2 18",
+   "said": "move with tempo. Knight to E7. Short"
+  },
+  {
+   "ply": 36,
+   "t": 2544.5,
+   "line": [
+    "N8e7"
+   ],
+   "fen": "r4rk1/p3nqpp/Ppn1p3/1B1pPp2/1P1P1P2/5N2/3Q2PP/R3K2R w KQ - 3 19",
+   "said": "castles pawn to"
+  },
+  {
+   "ply": 38,
+   "t": 2546.5,
+   "line": [
+    "O-O",
+    "h6"
+   ],
+   "fen": "r4rk1/p3nqp1/Ppn1p2p/1B1pPp2/1P1P1P2/5N2/3Q2PP/R4RK1 w - - 0 20",
+   "said": "H6. Uh although knight G5 was not yet a threat, it could become one in the near"
+  },
+  {
+   "ply": 39,
+   "t": 2556,
+   "line": [
+    "Rfc1"
+   ],
+   "fen": "r4rk1/p3nqp1/Ppn1p2p/1B1pPp2/1P1P1P2/5N2/3Q2PP/R1R3K1 b - - 1 20",
+   "said": "future. Um, black has nothing better to do. King is rook to C1. Rook FC8. Rook"
+  },
+  {
+   "ply": 40,
+   "t": 2558,
+   "line": [
+    "Rfc8"
+   ],
+   "fen": "r1r3k1/p3nqp1/Ppn1p2p/1B1pPp2/1P1P1P2/5N2/3Q2PP/R1R3K1 w - - 2 21",
+   "said": "to C2. Alakine doubles on the Cfile. And"
+  },
+  {
+   "ply": 41,
+   "t": 2560,
+   "line": [
+    "Rc2"
+   ],
+   "fen": "r1r3k1/p3nqp1/Ppn1p2p/1B1pPp2/1P1P1P2/5N2/2RQ2PP/R5K1 b - - 3 21",
+   "said": ""
+  },
+  {
+   "ply": 42,
+   "t": 2563,
+   "line": [
+    "Qe8"
+   ],
+   "fen": "r1r1q1k1/p3n1p1/Ppn1p2p/1B1pPp2/1P1P1P2/5N2/2RQ2PP/R5K1 w - - 4 22",
+   "said": "the game is over. Queen to E8. Rook A."
+  },
+  {
+   "ply": 43,
+   "t": 2565,
+   "line": [
+    "Rac1"
+   ],
+   "fen": "r1r1q1k1/p3n1p1/Ppn1p2p/1B1pPp2/1P1P1P2/5N2/2RQ2PP/2R3K1 b - - 5 22",
+   "said": "H, sorry, queen's rook to bishop one. Th this and the next move are not the most exact ones, but it doesn't matter."
+  },
+  {
+   "ply": 44,
+   "t": 2575.5,
+   "line": [
+    "Rab8"
+   ],
+   "fen": "1rr1q1k1/p3n1p1/Ppn1p2p/1B1pPp2/1P1P1P2/5N2/2RQ2PP/2R3K1 w - - 6 23",
+   "said": "Queen's rook to knight one. Queen to E3. Rook to C7. Rook to"
+  },
+  {
+   "ply": 45,
+   "t": 2577,
+   "line": [
+    "Qe3"
+   ],
+   "fen": "1rr1q1k1/p3n1p1/Ppn1p2p/1B1pPp2/1P1P1P2/4QN2/2R3PP/2R3K1 b - - 7 23",
+   "said": ""
+  },
+  {
+   "ply": 46,
+   "t": 2578.5,
+   "line": [
+    "Rc7"
+   ],
+   "fen": "1r2q1k1/p1r1n1p1/Ppn1p2p/1B1pPp2/1P1P1P2/4QN2/2R3PP/2R3K1 w - - 8 24",
+   "said": ""
+  },
+  {
+   "ply": 47,
+   "t": 2579.5,
+   "line": [
+    "Rc3"
+   ],
+   "fen": "1r2q1k1/p1r1n1p1/Ppn1p2p/1B1pPp2/1P1P1P2/2R1QN2/6PP/2R3K1 b - - 9 24",
+   "said": "C3. Alakine builds the Alakine gun."
+  },
+  {
+   "ply": 48,
+   "t": 2582,
+   "line": [
+    "Qd7"
+   ],
+   "fen": "1r4k1/p1rqn1p1/Ppn1p2p/1B1pPp2/1P1P1P2/2R1QN2/6PP/2R3K1 w - - 10 25",
+   "said": "Queen to D7. Rook to C2. Just look at"
+  },
+  {
+   "ply": 49,
+   "t": 2584,
+   "line": [
+    "R1c2"
+   ],
+   "fen": "1r4k1/p1rqn1p1/Ppn1p2p/1B1pPp2/1P1P1P2/2R1QN2/2R3PP/6K1 b - - 11 25",
+   "said": "this. King to F8. Queen to"
+  },
+  {
+   "ply": 50,
+   "t": 2586,
+   "line": [
+    "Kf8"
+   ],
+   "fen": "1r3k2/p1rqn1p1/Ppn1p2p/1B1pPp2/1P1P1P2/2R1QN2/2R3PP/6K1 w - - 12 26",
+   "said": ""
+  },
+  {
+   "ply": 51,
+   "t": 2587.5,
+   "line": [
+    "Qc1"
+   ],
+   "fen": "1r3k2/p1rqn1p1/Ppn1p2p/1B1pPp2/1P1P1P2/2R2N2/2R3PP/2Q3K1 b - - 13 26",
+   "said": ""
+  },
+  {
+   "ply": 52,
+   "t": 2590,
+   "line": [
+    "Rbc8"
+   ],
+   "fen": "2r2k2/p1rqn1p1/Ppn1p2p/1B1pPp2/1P1P1P2/2R2N2/2R3PP/2Q3K1 w - - 14 27",
+   "said": "C1. Rook to C8. And we get the position that I thought about during our game."
+  },
+  {
+   "ply": 53,
+   "t": 2599,
+   "line": [
+    "Ba4"
+   ],
+   "fen": "2r2k2/p1rqn1p1/Ppn1p2p/3pPp2/BP1P1P2/2R2N2/2R3PP/2Q3K1 b - - 15 27",
+   "said": "Just look at the pressure on the knight on C6. And Alakine's next move is super sexy. Bang. Bishop A4. Preparing the move B5. The last link of the positional"
+  },
+  {
+   "ply": 29,
+   "t": 2611,
+   "line": [],
+   "fen": "r4rk1/pb1qn1pp/1pnNp3/P2pPp2/1P1P1P2/5N2/3Q2PP/R3KB1R b KQ - 0 15",
+   "said": "attack started uh by my 15th move, which was A5. Incredible. In order to save the piece threatened by B5, black must sacrifice the B pawn. After this, he succeeds in protecting the important squares with the king, but must still resign as a consequence of a complete zukvang. An instructive finish, says Alakine. B5. Bishop takes B5. King to E8. Bishop simply moves back. King D8. H4. After a couple of irrelevant pawn moves, black will be obliged to play queen to E8 after which B5 wins immediately because the rook on C7 has lost a defender and"
+  },
+  {
+   "ply": 4,
+   "t": 2657.5,
+   "line": [],
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "said": "Nimzovich resigned in this position. Okay, so this is a classic game that's often shown to like, you know, it was shown in the old days by like the Soviet-minded coaches and our game"
+  },
+  {
+   "ply": 7,
+   "t": 2659.5,
+   "line": [
+    "e5",
+    "c5",
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
+   "said": "reminded me of it for some reason. I hope you enjoyed it. Um, funnily enough, we play the This is called the Nimzovich"
+  },
+  {
+   "ply": 8,
+   "t": 2671,
+   "line": [
+    "Qb6"
+   ],
+   "fen": "rnb1kbnr/pp3ppp/1q2p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
+   "said": "system. So, Nimzovich played this with white as well, queen to B6, bishop to"
+  },
+  {
+   "ply": 9,
+   "t": 2673.5,
+   "line": [
+    "Bd3"
+   ],
+   "fen": "rnb1kbnr/pp3ppp/1q2p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R b KQkq - 3 5",
+   "said": "D3. And we don't have the time to delve into like a a deep exposition of the"
+  },
+  {
+   "ply": 10,
+   "t": 2681,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnb1kbnr/pp3ppp/1q2p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQK2R w KQkq - 0 6",
+   "said": "theory, but who can tell me like after C takes D4, what is the point of white's setup? There's other speedrun games where we face C takes D4, but what is it that white is aiming for here um in in this line? So, the wrong answer the wrong answer is knight takes D4. You're not trying to win the pawn back. This is"
+  },
+  {
+   "ply": 11,
+   "t": 2710,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnb1kbnr/pp3ppp/1q2p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 1 6",
+   "said": "formally a gambit line. And that's important to understand. Um you're not playing knight takes D4. You are actually castling king side. You're castling king side. What you are aiming for is essentially to overprotect the e5 pawn which has the influence of cramping black's development to such an extent that it's"
+  },
+  {
+   "ply": 12,
+   "t": 2734,
+   "line": [
+    "f6"
+   ],
+   "fen": "rnb1kbnr/pp4pp/1q2pp2/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+   "said": "very difficult for black to like properly get their pieces out. Okay, so this is like the positional the positional underpinning of of this line. Of course, like if you're a French player, you know that black often can get away with the move f6, but here f6 is very dangerous because black is quite"
+  },
+  {
+   "ply": 11,
+   "t": 2741.5,
+   "line": [],
+   "fen": "rnb1kbnr/pp3ppp/1q2p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 1 6",
+   "said": "underdeveloped. So like usually what happens is black will play knight c6. We"
+  },
+  {
+   "ply": 12,
+   "t": 2743,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 2 7",
+   "said": ""
+  },
+  {
+   "ply": 13,
+   "t": 2745,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQR1K1 b kq - 3 7",
+   "said": "will play the rook to e1 to make sure this pawn is super well protected and black will start running into troubles getting the rest of their minor pieces"
+  },
+  {
+   "ply": 14,
+   "t": 2762,
+   "line": [
+    "Bc5"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/1qn1p3/2bpP3/3p4/3B1N2/PPP2PPP/RNBQR1K1 w kq - 4 8",
+   "said": "out. And I'm sure we'll have more of a chance to uh to play this line in the future. Uh, of course, like if black plays bishop to C5 here, then the knight"
+  },
+  {
+   "ply": 15,
+   "t": 2764,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/1qn1p3/2bpP3/3p4/3B1N2/PPPN1PPP/R1BQR1K1 b kq - 5 8",
+   "said": "comes out to D2 and much like in the"
+  },
+  {
+   "ply": 16,
+   "t": 2766,
+   "line": [
+    "Nge7"
+   ],
+   "fen": "r1b1k2r/pp2nppp/1qn1p3/2bpP3/3p4/3B1N2/PPPN1PPP/R1BQR1K1 w kq - 6 9",
+   "said": "game, if black plays knight G to E7, the"
+  },
+  {
+   "ply": 17,
+   "t": 2771,
+   "line": [
+    "a3"
+   ],
+   "fen": "r1b1k2r/pp2nppp/1qn1p3/2bpP3/3p4/P2B1N2/1PPN1PPP/R1BQR1K1 b kq - 0 9",
+   "said": "bishop on C5 runs into a lot of trouble after the move A3, threatening B4 and threatening knight to B3. So, in fact, black is already like borderline lost. Black can play A5, but then we play knight to B3. This bishop is going to be traded and black also cannot castle king side to make matters worse because obviously there is a classic Greek gift sacrifice. So really exciting line. I like it a lot in the game. Black plays short castles and knight bishop to d7 knight to c3. And I would argue that knight g e7 is already a decisive mistake. Already a decisive mistake. Uh allowing knight e4 is unthinkable. What should black have done instead? Probably something like knight to d4 or even moving the queen back. So, queen a5 c3. And the one thing I wanted to focus on is showing you what I intended after knight takes e5. So, here my intended move was knight takes e5. And the first thing to"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 4,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d4",
+    "d5",
+    "e4",
+    "e6"
+   ],
+   "options": [
+    {
+     "san": "Nc3",
+     "t": 2353,
+     "continuation": "Nc3",
+     "said": "original commentary. Alak Nimzich E4 E6 D4 D5. Um, Alakine played knight C3. Nimzovich played bishop B4. This is the win hour. E5. C5. Bishop to D2. This rather tame move in connection with the following knight maneuver should not cause black much trouble. More promising perhaps only because less explored is queen to G4 or even pawn takes pawn. That didn't age very well. The main move now is A3 of course. So, let me skip through the opening because that's not the interesting phase. Knight to E7. Knight to B5. Bishop takes bishop. Queen takes bishop. Short castle. And after Alakine plays C3, you get sort of the advance the advanced pawn formation. Right. It's in Italy. I apologize. Pawn to queen knight three. Alakine writes, \"The wish to solve the queen bishop problem as rapidly as possible is by black and the French quite legitimate. But in this particular position, the attempt will prove a failure as black cannot succeed in exchanging that bishop against white's against white's bishop. Good"
+    },
+    {
+     "san": "e5",
+     "t": 2659.5,
+     "continuation": "e5 c5 Nf3",
+     "said": "Nimzovich resigned in this position. Okay, so this is a classic game that's often shown to like, you know, it was shown in the old days by like the Soviet-minded coaches and our game reminded me of it for some reason. I hope you enjoyed it. Um, funnily enough, we play the This is called the Nimzovich system. So, Nimzovich played this with white as well, queen to B6, bishop to D3. And we don't have the time to delve into like a a deep exposition of the theory, but who can tell me like after C takes D4, what is the point of white's setup? There's other speedrun games where we face C takes D4, but what is it that white is aiming for here um in in this line? So, the wrong answer the wrong answer is knight takes D4. You're not trying to win the pawn back. This is formally a gambit line. And that's important to understand. Um you're not playing knight takes D4. You are actually castling king side. You're castling king side. What you are aiming for is essentially to overprotect the e5 pawn which has the influence of cramping black's"
+    }
+   ]
+  },
+  {
+   "ply": 11,
+   "fen": "rnb1kbnr/pp3ppp/1q2p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 1 6",
+   "line": [
+    "d4",
+    "d5",
+    "e4",
+    "e6",
+    "e5",
+    "c5",
+    "Nf3",
+    "Qb6",
+    "Bd3",
+    "cxd4",
+    "O-O"
+   ],
+   "options": [
+    {
+     "san": "f6",
+     "t": 2734,
+     "continuation": "f6",
+     "said": "very difficult for black to like properly get their pieces out. Okay, so this is like the positional the positional underpinning of of this line. Of course, like if you're a French player, you know that black often can get away with the move f6, but here f6 is very dangerous because black is quite underdeveloped. So like usually what happens is black will play knight c6. We will play the rook to e1 to make sure this pawn is super well protected and black will start running into troubles getting the rest of their minor pieces out. And I'm sure we'll have more of a chance to uh to play this line in the future. Uh, of course, like if black plays bishop to C5 here, then the knight comes out to D2 and much like in the game, if black plays knight G to E7, the bishop on C5 runs into a lot of trouble after the move A3, threatening B4 and threatening knight to B3. So, in fact, black is already like borderline lost. Black can play A5, but then we play knight to B3. This bishop is going to be traded and black also cannot castle king side to make matters worse because obviously there is a classic Greek gift sacrifice. So really exciting"
+    },
+    {
+     "san": "Nc6",
+     "t": 2743,
+     "continuation": "Nc6",
+     "said": "Of course, like if you're a French player, you know that black often can get away with the move f6, but here f6 is very dangerous because black is quite underdeveloped. So like usually what happens is black will play knight c6. We will play the rook to e1 to make sure this pawn is super well protected and black will start running into troubles getting the rest of their minor pieces out. And I'm sure we'll have more of a chance to uh to play this line in the future. Uh, of course, like if black plays bishop to C5 here, then the knight comes out to D2 and much like in the game, if black plays knight G to E7, the bishop on C5 runs into a lot of trouble after the move A3, threatening B4 and threatening knight to B3. So, in fact, black is already like borderline lost. Black can play A5, but then we play knight to B3. This bishop is going to be traded and black also cannot castle king side to make matters worse because obviously there is a classic Greek gift sacrifice. So really exciting line. I like it a lot in the game. Black plays short castles and knight bishop to d7 knight to"
+    }
+   ]
+  },
+  {
+   "ply": 15,
+   "fen": "rnbq1rk1/pp2nppp/4p3/1NppP3/3P4/2P5/PP1Q1PPP/R3KBNR b KQ - 0 8",
+   "line": [
+    "d4",
+    "d5",
+    "e4",
+    "e6",
+    "Nc3",
+    "Bb4",
+    "e5",
+    "c5",
+    "Bd2",
+    "Ne7",
+    "Nb5",
+    "Bxd2+",
+    "Qxd2",
+    "O-O",
+    "c3"
+   ],
+   "options": [
+    {
+     "san": "b6",
+     "t": 2395,
+     "continuation": "b6",
+     "said": "takes bishop. Short castle. And after Alakine plays C3, you get sort of the advance the advanced pawn formation. Right. It's in Italy. I apologize. Pawn to queen knight three. Alakine writes, \"The wish to solve the queen bishop problem as rapidly as possible is by black and the French quite legitimate. But in this particular position, the attempt will prove a failure as black cannot succeed in exchanging that bishop against white's against white's bishop. Good instead was the move knight to f5 exclam preventing knight to d6 as played with success by Nimzich against Dr. Lasker. uh four years later in Zurich. Sure. Nim Alakine plays F4 and Nimzovich played bishop to A6 trying to force white's a pawn up in order to play afterwards in order to play afterwards um knight to queen bishop three. Oh, he's trying to force A4 to play knight C6, knight A5. But as we will see, the second part of this plan cannot be executed. Alakine plays here. Nimzovich plays queen D7 A4. Knight to C6 B4 exclam. Strangely"
+    },
+    {
+     "san": "Nf5",
+     "t": 2419.5,
+     "continuation": "Nf5",
+     "said": "in exchanging that bishop against white's against white's bishop. Good instead was the move knight to f5 exclam preventing knight to d6 as played with success by Nimzich against Dr. Lasker. uh four years later in Zurich. Sure. Nim Alakine plays F4 and Nimzovich played bishop to A6 trying to force white's a pawn up in order to play afterwards in order to play afterwards um knight to queen bishop three. Oh, he's trying to force A4 to play knight C6, knight A5. But as we will see, the second part of this plan cannot be executed. Alakine plays here. Nimzovich plays queen D7 A4. Knight to C6 B4 exclam. Strangely enough, this move, this more or less conventional move, created at the time of the game a kind of small sensation. The late Dr. Tar, for instance, called it in his comments highly original. To my mind, more surprising than the move is the fact that a player of Numvich's level when adopting the plan starting uh by B6 did not take this possibility into"
+    }
+   ]
+  },
+  {
+   "ply": 18,
+   "fen": "rn1q1rk1/p3nppp/bp2p3/1NppP3/3P1P2/2P5/PP1Q2PP/R3KBNR w KQ - 1 10",
+   "line": [
+    "d4",
+    "d5",
+    "e4",
+    "e6",
+    "Nc3",
+    "Bb4",
+    "e5",
+    "c5",
+    "Bd2",
+    "Ne7",
+    "Nb5",
+    "Bxd2+",
+    "Qxd2",
+    "O-O",
+    "c3",
+    "b6",
+    "f4",
+    "Ba6"
+   ],
+   "options": [
+    {
+     "san": "a4",
+     "t": 2445,
+     "continuation": "a4",
+     "said": "pawn up in order to play afterwards in order to play afterwards um knight to queen bishop three. Oh, he's trying to force A4 to play knight C6, knight A5. But as we will see, the second part of this plan cannot be executed. Alakine plays here. Nimzovich plays queen D7 A4. Knight to C6 B4 exclam. Strangely enough, this move, this more or less conventional move, created at the time of the game a kind of small sensation. The late Dr. Tar, for instance, called it in his comments highly original. To my mind, more surprising than the move is the fact that a player of Numvich's level when adopting the plan starting uh by B6 did not take this possibility into serious consideration. DM so flaming Nimzovich. Great. Pawn takes B4. Pawn takes B4. Bishop to B7. Knight to D6. You can see that Nim Alakine is winding his tentacles around black's position. Pawn to F5. the decisive error in an already bad position in view of the threatening advance of white's a pawn the only"
+    },
+    {
+     "san": "Nf3",
+     "t": 2451,
+     "continuation": "Nf3",
+     "said": "um knight to queen bishop three. Oh, he's trying to force A4 to play knight C6, knight A5. But as we will see, the second part of this plan cannot be executed. Alakine plays here. Nimzovich plays queen D7 A4. Knight to C6 B4 exclam. Strangely enough, this move, this more or less conventional move, created at the time of the game a kind of small sensation. The late Dr. Tar, for instance, called it in his comments highly original. To my mind, more surprising than the move is the fact that a player of Numvich's level when adopting the plan starting uh by B6 did not take this possibility into serious consideration. DM so flaming Nimzovich. Great. Pawn takes B4. Pawn takes B4. Bishop to B7. Knight to D6. You can see that Nim Alakine is winding his tentacles around black's position. Pawn to F5. the decisive error in an already bad position in view of the threatening advance of white's a pawn the only chance of obtaining more counterplay lay in"
+    }
+   ]
+  },
+  {
+   "ply": 27,
+   "fen": "r4rk1/pb1qnppp/1pnNp3/3pP3/PP1P1P2/5N2/3Q2PP/R3KB1R b KQ - 2 14",
+   "line": [
+    "d4",
+    "d5",
+    "e4",
+    "e6",
+    "Nc3",
+    "Bb4",
+    "e5",
+    "c5",
+    "Bd2",
+    "Ne7",
+    "Nb5",
+    "Bxd2+",
+    "Qxd2",
+    "O-O",
+    "c3",
+    "b6",
+    "f4",
+    "Ba6",
+    "Nf3",
+    "Qd7",
+    "a4",
+    "Nbc6",
+    "b4",
+    "cxd4",
+    "cxd4",
+    "Bb7",
+    "Nd6"
+   ],
+   "options": [
+    {
+     "san": "f5",
+     "t": 2498.5,
+     "continuation": "f5",
+     "said": "takes B4. Bishop to B7. Knight to D6. You can see that Nim Alakine is winding his tentacles around black's position. Pawn to F5. the decisive error in an already bad position in view of the threatening advance of white's a pawn the only chance of obtaining more counterplay lay in A5. Um the point being if B5 the knight before so Alakine was intending bishop to B5 short castles after which white's initiative um would not develop so rapidly. Instead, Nimzovich plays this terrible move F5, allowing Alakine to advance the pawn further, cramping black's position. And just watch how the game ends. Knight to C8. Knight takes B7. Queen takes B7. A6. Queen to F7. Bishop to B5. Every move with tempo. Knight to E7. Short castles pawn to H6. Uh although knight G5 was not yet a threat, it could become one in the near future. Um, black has nothing better to do. King is rook to C1. Rook FC8. Rook"
+    },
+    {
+     "san": "a5",
+     "t": 2518,
+     "continuation": "a5 Bb5 axb4",
+     "said": "chance of obtaining more counterplay lay in A5. Um the point being if B5 the knight before so Alakine was intending bishop to B5 short castles after which white's initiative um would not develop so rapidly. Instead, Nimzovich plays this terrible move F5, allowing Alakine to advance the pawn further, cramping black's position. And just watch how the game ends. Knight to C8. Knight takes B7. Queen takes B7. A6. Queen to F7. Bishop to B5. Every move with tempo. Knight to E7. Short castles pawn to H6. Uh although knight G5 was not yet a threat, it could become one in the near future. Um, black has nothing better to do. King is rook to C1. Rook FC8. Rook to C2. Alakine doubles on the Cfile. And the game is over. Queen to E8. Rook A. H, sorry, queen's rook to bishop one. Th this and the next move are not the most exact ones, but it doesn't matter. Queen's rook to knight one. Queen to E3. Rook to C7. Rook to"
+    }
+   ]
+  }
+ ]
+}

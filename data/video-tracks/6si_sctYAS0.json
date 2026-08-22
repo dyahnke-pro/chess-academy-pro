@@ -856,8 +856,8 @@
   {
    "id": "vn-french-adv-dont-rush-the-recapture",
    "line": "e4 e6 d4 d5 e5 c5 Nf3 cxd4",
-   "teaches": "A pawn taken from you is not a pawn you must take back immediately. When every natural recapture can be hit with tempo, the move that wins the pawn is the one you play later, after the pieces are out — recovering material on the opponent's schedule is how a lead in development gets spent for nothing.",
-   "explains": "Both obvious recaptures on d4 invite the queen's knight to c6, attacking the piece that just landed there and developing at the same time. Placing the bishop on d3 instead ignores the pawn for now and gets on with the kingside, trusting that d4 is weak enough to collect in due course.",
+   "teaches": "A pawn taken from you is not a pawn you must take back immediately — when every natural recapture can be hit with tempo, the move that wins the pawn is the one you play later, after the pieces are out.",
+   "explains": "A pawn taken from you is not a pawn you must take back at once. Both obvious recaptures on d4 invite the queen's knight to c6, hitting the piece that just landed there and developing at the same time — so placing the bishop on d3 instead ignores the pawn for now, gets on with the kingside, and trusts that d4 is weak enough to collect in due course. Recovering material on the opponent's schedule is how a lead in development gets spent for nothing.",
    "options": [
     {
      "san": "Nxd4",
@@ -892,7 +892,7 @@
   {
    "id": "vn-french-adv-clamp-pawn",
    "line": "e4 e6 d4 d5 e5 c5 Nf3 cxd4 Bd3",
-   "teaches": "One advanced pawn can do the work of a piece when it takes away the squares the opponent's pieces most want. Judge such a pawn by what it denies rather than by whether it is defended — and be correspondingly unwilling to part with it.",
+   "teaches": "One advanced pawn can do the work of a piece when it takes away the squares the opponent's pieces most want — judge such a pawn by what it denies rather than by whether it is defended, and be correspondingly unwilling to part with it.",
    "explains": "The pawn on e5 covers both f6 and d6, so the king's knight and the dark-squared bishop lose their natural developing squares, and Black's position is cut in two with the queenside pieces struggling to join the kingside. That is why White is content to leave d4 alone for the moment: the clamp is worth more than the pawn.",
    "structural": "what the e5 pawn denies — a property of the structure, not of the move played",
    "fen": "rnbqkbnr/pp3ppp/4p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQK2R b KQkq - 1 5",
@@ -903,7 +903,7 @@
   {
    "id": "vn-french-adv-knight-route-b3",
    "line": "e4 e6 d4 d5 e5 c5 Nf3 cxd4 Bd3 Nc6 O-O",
-   "teaches": "With the centre locked and the king still to be tucked away, the choice is which piece the position needs first. A knight developed behind its own pawns keeps every option; a bishop posted actively commits it; a pawn break at the head of the chain changes the structure at once. All three are played here, and they are not the same game.",
+   "teaches": "With the centre locked and the king still to be tucked away, the choice is which piece the position needs first — a knight behind its pawns keeps every option, an active bishop commits it, a break at the head of the chain changes the structure at once. They are not the same game.",
    "explains": "The pawn chain is fixed and White has castled. Three tries come into consideration: the knight to e7, heading for f5 or g6 behind the chain; the bishop out to c5 where it eyes the centre immediately; or the pawn to f6, striking at the head of the chain before the pieces are settled.",
    "options": [
     {
@@ -946,7 +946,7 @@
   {
    "id": "vn-french-adv-f6-invites-b5",
    "line": "e4 e6 d4 d5 e5 c5 Nf3 cxd4 Bd3 Nc6 O-O f6",
-   "teaches": "A move that is wrong early can be exactly right once the position has changed. Striking at a cramping pawn with the f-pawn loosens the squares around your own king, so before you play it, ask which enemy piece is waiting to use them.",
+   "teaches": "A move that is wrong early can be exactly right once the position has changed — striking at a cramping pawn with the f-pawn loosens the squares around your own king, so before you play it, ask which enemy piece is waiting to use them.",
    "explains": "Black challenges the e5 pawn directly, and the reply is the bishop to b5 — pinning the knight on c6 against the king, since d7 is empty. That takes the sting out of capturing on e5, because recapturing with the knight then hits c6 a second time, from the other side of the board.",
    "reasons": [
     {

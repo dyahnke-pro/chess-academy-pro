@@ -1,0 +1,21 @@
+[
+ {
+  "id": "vn-pirc-austrian-take-the-broad-centre-and-hold-it",
+  "line": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3",
+  "teaches": "A broad pawn centre is a genuine asset, not an overextension, so long as you can hold it — and against a defence that hands you the middle on purpose, the way to punish that choice is to take the space and keep it defended.",
+  "explains": "The knight develops to f3, guarding the d4-pawn and covering e5 so the wide row of central pawns stays firmly in hand. The defence has conceded the middle deliberately, and every piece brought up to hold it makes that concession harder to justify.",
+  "reasons": [
+   { "kind": "defends", "square": "d4" },
+   { "kind": "controls", "square": "e5" }
+  ]
+ },
+ {
+  "id": "vn-pirc-austrian-bishop-to-d3-not-into-the-fork",
+  "line": "e4 d6 d4 Nf6 Nc3 g6 f4 Bg7 Nf3 O-O Bd3",
+  "teaches": "The most natural developing square is not always the safe one — when an active post walks the piece into a central break that hits two of your men at once, the quieter square that defends your centre is worth more than the extra aggression.",
+  "explains": "The bishop goes to d3 rather than the more natural-looking square a file over, and from d3 it defends the e4-pawn so the knight cannot simply be taken. The active square would have invited a central pawn break that strikes two pieces at once; the modest square sidesteps it and keeps the centre solid.",
+  "reasons": [
+   { "kind": "defends", "square": "e4" }
+  ]
+ }
+]

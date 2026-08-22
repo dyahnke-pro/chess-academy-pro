@@ -2,49 +2,37 @@
   {
     "id": "vn-scandi-develop-with-a-hit-on-the-queen",
     "line": "e4 d5 exd5 Qxd5 Nc3",
-    "teaches": "When the enemy queen comes out early, develop at it. A knight that gains time on the queen has paid for its own move.",
-    "explains": "The knight comes to c3 and hits the queen sitting in the middle of the board. Black knew this was coming — recapturing with the queen always concedes it — so the question is not whether the queen gets chased but where it goes, because that choice decides which of several quite different games follows.",
+    "teaches": "When the enemy queen comes out early, develop AT it — a knight that gains time on the queen has paid for its own move.",
+    "explains": "When the enemy queen comes out early, develop at it. The knight to c3 hits the queen sitting in the middle of the board — Black knew this was coming, since recapturing with the queen always concedes it — so the question is not whether the queen gets chased but where it goes, because that choice decides which of several quite different games follows.",
     "reasons": [
-      {
-        "kind": "attacks",
-        "square": "d5"
-      }
+      { "kind": "attacks", "square": "d5" }
     ]
   },
   {
     "id": "vn-scandi-the-square-that-earned-a-book",
     "line": "e4 d5 exd5 Qxd5 Nc3 Qd6",
-    "teaches": "A queen retreat is a plan, not an admission. Judge the square by what it eyes and what it stays out of the way of, not by the fact that the piece moved twice.",
-    "explains": "The queen steps to d6 rather than the older squares, keeping an eye on d4 while staying off the file White's rook will eventually own. This treatment rose to prominence recently and now has a book of its own — it is entirely legitimate. What it does not do is change White's job: develop the pieces, take the centre, and play a normal game.",
+    "teaches": "A queen retreat is a plan, not an admission — judge the square by what it eyes and what it stays out of the way of, not by the fact that the piece moved twice.",
+    "explains": "A queen retreat is a plan, not an apology. The queen steps to d6 rather than the older squares, keeping an eye on d4 while staying off the file White's rook will eventually own. This treatment rose to prominence recently and now has a book of its own — entirely legitimate. What it does not do is change White's job: develop the pieces, take the centre, play a normal game.",
     "reasons": [
-      {
-        "kind": "controls",
-        "square": "d4"
-      }
+      { "kind": "controls", "square": "d4" }
     ]
   },
   {
     "id": "vn-scandi-take-the-centre-and-expect-the-pressure",
     "line": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4",
-    "teaches": "Occupy the centre even when the square is already under fire. A pawn that will need defending is still worth more than the space you never took.",
-    "explains": "The pawn takes the centre and holds e5. Note that it arrives already attacked — the queen on d6 is looking straight down at it — so White is not building at leisure and every developing move from here has to keep that pawn in mind. That is the whole shape of this line: nothing forcing, nothing clever, just a race between White's space and the pressure Black is putting on the point that space rests on.",
+    "teaches": "Occupy the centre even when the square is already under fire — a pawn that will need defending is still worth more than the space you never took.",
+    "explains": "Take the centre even though the square is already under fire. The pawn to d4 holds e5, and note it arrives already attacked — the queen on d6 looks straight down at it — so White is not building at leisure, and every developing move from here has to keep that pawn in mind. That is the whole shape of the line: nothing forcing, nothing clever, just a race between White's space and Black's pressure on the point that space rests on.",
     "reasons": [
-      {
-        "kind": "controls",
-        "square": "e5"
-      }
+      { "kind": "controls", "square": "e5" }
     ]
   },
   {
     "id": "vn-scandi-develop-toward-the-pawn-they-are-hitting",
     "line": "e4 d5 exd5 Qxd5 Nc3 Qd6 d4 Nf6 Nf3",
-    "teaches": "When one pawn is the target of everything, prefer the developing square that also guards it. Solving the pressure while developing is the cheapest defence there is.",
-    "explains": "The knight comes to f3 and adds a defender to the pawn the queen has been eyeing since it retreated. Nothing here is exotic — the plan from this point is exactly what it looks like: finish developing, keep the centre held, and take the small edge that space and the extra tempo have already bought.",
+    "teaches": "When one pawn is the target of everything, prefer the developing square that also guards it — solving the pressure while developing is the cheapest defence there is.",
+    "explains": "When one pawn is the target of everything, pick the developing square that also guards it. The knight to f3 adds a defender to the pawn the queen has eyed since it retreated. Nothing exotic from here — the plan is exactly what it looks like: finish developing, keep the centre held, and take the small edge that space and the extra tempo have already bought.",
     "reasons": [
-      {
-        "kind": "defends",
-        "square": "d4"
-      }
+      { "kind": "defends", "square": "d4" }
     ]
   }
 ]

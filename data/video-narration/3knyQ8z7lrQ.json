@@ -1,0 +1,634 @@
+{
+ "videoId": "3knyQ8z7lrQ",
+ "title": "Grandmaster Naroditsky Chess Speedrun Pt. 3",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 8.5,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "said": "[Music] so we're going to go e5 and we will play other openings here as"
+  },
+  {
+   "ply": 3,
+   "t": 10.5,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+   "said": "well um bishop c4 this is called the bishop's"
+  },
+  {
+   "ply": 4,
+   "t": 16,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+   "said": "opening we're going to develop our knight"
+  },
+  {
+   "ply": 5,
+   "t": 18.5,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2BPP3/8/PPP2PPP/RNBQK1NR b KQkq - 0 3",
+   "said": "and simultaneously attacked when he goes d4 okay so this is an interesting move uh this essentially opens up the center immediately"
+  },
+  {
+   "ply": 6,
+   "t": 34,
+   "line": [
+    "exd4"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/8/2BpP3/8/PPP2PPP/RNBQK1NR w KQkq - 0 4",
+   "said": "and it does it does attack it does attack the pawn so we're going to just take pawn and we're going to try to get him to develop"
+  },
+  {
+   "ply": 7,
+   "t": 35.5,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/2Bp4/8/PPP2PPP/RNBQK1NR b KQkq - 0 4",
+   "said": "his queen early go z5 that's that's the theoretical move now this is actually a line and i actually don't want to move my knight what you want to look for in such"
+  },
+  {
+   "ply": 8,
+   "t": 55,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pP3/2Bp4/8/PPP2PPP/RNBQK1NR w KQkq d6 0 5",
+   "said": "situations when there's a bishop on c4 in these particular openings are ways to develop your pieces and counter-attack your opponent's pieces so the move here is actually d5 i'll talk about this"
+  },
+  {
+   "ply": 9,
+   "t": 59,
+   "line": [
+    "exf6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5P2/3p4/2Bp4/8/PPP2PPP/RNBQK1NR b KQkq - 0 5",
+   "said": "later the move here is actually d5 he's taken"
+  },
+  {
+   "ply": 10,
+   "t": 62.5,
+   "line": [
+    "dxc4"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5P2/8/2pp4/8/PPP2PPP/RNBQK1NR w KQkq - 0 6",
+   "said": "my knight and i've taken his bishop now look what happens as a consequence guys don't worry i will explain this more slowly later he gives us a check"
+  },
+  {
+   "ply": 12,
+   "t": 79,
+   "line": [
+    "Qe2+",
+    "Be6"
+   ],
+   "fen": "rn1qkb1r/ppp2ppp/4bP2/8/2pp4/8/PPP1QPPP/RNB1K1NR w KQkq - 2 7",
+   "said": "do we have to move our king do we have to move our king or can we block the check we can't block it with bishop e7 but we can block it with bishop e6 don't worry black is much much better here because this might look intimidating guys"
+  },
+  {
+   "ply": 13,
+   "t": 92,
+   "line": [
+    "fxg7"
+   ],
+   "fen": "rn1qkb1r/ppp2pPp/4b3/8/2pp4/8/PPP1QPPP/RNB1K1NR b KQkq - 0 7",
+   "said": "because of the pawn he can take but remember principles don't lie if you abide by"
+  },
+  {
+   "ply": 14,
+   "t": 93,
+   "line": [
+    "Bxg7"
+   ],
+   "fen": "rn1qk2r/ppp2pbp/4b3/8/2pp4/8/PPP1QPPP/RNB1K1NR w KQkq - 0 8",
+   "said": "opening principles for the most part and"
+  },
+  {
+   "ply": 15,
+   "t": 98.5,
+   "line": [
+    "Qh5"
+   ],
+   "fen": "rn1qk2r/ppp2pbp/4b3/7Q/2pp4/8/PPP2PPP/RNB1K1NR b KQkq - 1 8",
+   "said": "you develop your pieces and your opponent gives you a bunch of intimidating looking checks he ain't gonna go far again he's trying to intimidate me and this is part of the reason that a"
+  },
+  {
+   "ply": 17,
+   "t": 109.5,
+   "line": [
+    "Nc6",
+    "Nf3"
+   ],
+   "fen": "r2qk2r/ppp2pbp/2n1b3/7Q/2pp4/5N2/PPP2PPP/RNB1K2R b KQkq - 3 9",
+   "said": "lot of beginners slip up they get intimidated by this stuff rather than just continuing to develop okay he finally develops now here's the thing would you guys castle short or would you"
+  },
+  {
+   "ply": 18,
+   "t": 123.5,
+   "line": [
+    "Qd7"
+   ],
+   "fen": "r3k2r/pppq1pbp/2n1b3/7Q/2pp4/5N2/PPP2PPP/RNB1K2R w KQkq - 4 10",
+   "said": "prepare to castle long and why so actually you castle long because if your castle short it's very dangerous because he's removed the g7 pawn which is a vital part of the pawn cover"
+  },
+  {
+   "ply": 19,
+   "t": 139,
+   "line": [
+    "Ng5"
+   ],
+   "fen": "r3k2r/pppq1pbp/2n1b3/6NQ/2pp4/8/PPP2PPP/RNB1K2R b KQkq - 5 10",
+   "said": "and he could start threatening checkmate with moves such as knight g5 so we're actually going to castle long so people get confused okay knight g5 no"
+  },
+  {
+   "ply": 20,
+   "t": 141,
+   "line": [
+    "O-O-O"
+   ],
+   "fen": "2kr3r/pppq1pbp/2n1b3/6NQ/2pp4/8/PPP2PPP/RNB1K2R w KQ - 6 11",
+   "said": "threats we're just gonna castle knock yourself out take my bishop so he's moving the same two pieces a million times and he's going to pay a very very steep price for this if he doesn't castle"
+  },
+  {
+   "ply": 21,
+   "t": 159,
+   "line": [
+    "O-O"
+   ],
+   "fen": "2kr3r/pppq1pbp/2n1b3/6NQ/2pp4/8/PPP2PPP/RNB2RK1 b - - 7 11",
+   "said": "he has to castle otherwise i'm going to kill him down the c file okay he's playing well i mean he's playing i would say like a 7 800 now we're actually going to move this"
+  },
+  {
+   "ply": 22,
+   "t": 161.5,
+   "line": [
+    "Bd5"
+   ],
+   "fen": "2kr3r/pppq1pbp/2n5/3b2NQ/2pp4/8/PPP2PPP/RNB2RK1 w - - 8 12",
+   "said": "bishop away and centralize it and just put it on a better square and depending on what he does we're going to develop a plan now in"
+  },
+  {
+   "ply": 23,
+   "t": 177,
+   "line": [
+    "a4"
+   ],
+   "fen": "2kr3r/pppq1pbp/2n5/3b2NQ/P1pp4/8/1PP2PPP/RNB2RK1 b - - 0 12",
+   "said": "terms of attacking his king can anybody propose a plan how are we going to actually attack the king what are we going to do and on what file what can you notice yes very good guys man you're good so because he's removed our pawn from g7"
+  },
+  {
+   "ply": 25,
+   "t": 194.5,
+   "line": [
+    "Rdg8",
+    "Nxf7"
+   ],
+   "fen": "2k3rr/pppq1Nbp/2n5/3b3Q/P1pp4/8/1PP2PPP/RNB2RK1 b - - 0 13",
+   "said": "that's not only a bad thing that's also a good thing we have what's called a semi-open file which means that only his pawns are on whoa oh relax"
+  },
+  {
+   "ply": 26,
+   "t": 202.5,
+   "line": [
+    "Bxf7"
+   ],
+   "fen": "2k3rr/pppq1bbp/2n5/7Q/P1pp4/8/1PP2PPP/RNB2RK1 w - - 0 14",
+   "said": "two defenders one attacker this is a great example of when i would"
+  },
+  {
+   "ply": 25,
+   "t": 204.5,
+   "line": [],
+   "fen": "2k3rr/pppq1Nbp/2n5/3b3Q/P1pp4/8/1PP2PPP/RNB2RK1 b - - 0 13",
+   "said": "not trade because we are so close to essentially starting an attack against this pawn"
+  },
+  {
+   "ply": 27,
+   "t": 213.5,
+   "line": [
+    "Bxf7",
+    "Qb5"
+   ],
+   "fen": "2k3rr/pppq1bbp/2n5/1Q6/P1pp4/8/1PP2PPP/RNB2RK1 b - - 1 14",
+   "said": "and is king and that's going to be a devastating attack but there is no point in letting him trade now what do you guys think we do here what do you guys think we do here"
+  },
+  {
+   "ply": 28,
+   "t": 228.5,
+   "line": [
+    "Bd5"
+   ],
+   "fen": "2k3rr/pppq2bp/2n5/1Q1b4/P1pp4/8/1PP2PPP/RNB2RK1 w - - 2 15",
+   "said": "we need to do something and we need to move a piece back to its original square let's keep attacking the spawn yeah let's move the bishop back to d5 let's start pressuring the spot now we are ready now to move this bishop away and then we are going to have a devastating attack on the pawn"
+  },
+  {
+   "ply": 29,
+   "t": 240,
+   "line": [
+    "a5"
+   ],
+   "fen": "2k3rr/pppq2bp/2n5/PQ1b4/2pp4/8/1PP2PPP/RNB2RK1 b - - 0 15",
+   "said": "we're also threatening something super cool oh okay but he played a5 now here's the thing guys he wants to play this annoying move a6 so can we stop that can we stop that can"
+  },
+  {
+   "ply": 30,
+   "t": 258,
+   "line": [
+    "a6"
+   ],
+   "fen": "2k3rr/1ppq2bp/p1n5/PQ1b4/2pp4/8/1PP2PPP/RNB2RK1 w - - 0 16",
+   "said": "we just deal with this right now and then we're gonna do something beautiful can we deal with yeah let's play six and this is called prophylaxis we don't need to play this move but it's a good idea"
+  },
+  {
+   "ply": 31,
+   "t": 266,
+   "line": [
+    "Qc5"
+   ],
+   "fen": "2k3rr/1ppq2bp/p1n5/P1Qb4/2pp4/8/1PP2PPP/RNB2RK1 b - - 1 16",
+   "said": "to take care of any annoying threats and we're actually gonna do something really beautiful here ah danny stop this we can actually trap this queen this is so cool we can trap this queen"
+  },
+  {
+   "ply": 32,
+   "t": 284.5,
+   "line": [
+    "Bf8"
+   ],
+   "fen": "2k2brr/1ppq3p/p1n5/P1Qb4/2pp4/8/1PP2PPP/RNB2RK1 w - - 2 17",
+   "said": "queen h3 almost worked but this is also really cool how can we trap the screen yep look at this"
+  },
+  {
+   "ply": 33,
+   "t": 285.5,
+   "line": [
+    "Na3"
+   ],
+   "fen": "2k2brr/1ppq3p/p1n5/P1Qb4/2pp4/N7/1PP2PPP/R1B2RK1 b - - 3 17",
+   "said": "bishop f8 trapping the queen now when you see a good move look for a better one is there something even better than taking the queen"
+  },
+  {
+   "ply": 34,
+   "t": 300,
+   "line": [
+    "Rxg2+"
+   ],
+   "fen": "2k2b1r/1ppq3p/p1n5/P1Qb4/2pp4/N7/1PP2PrP/R1B2RK1 w - - 0 18",
+   "said": "because by playing bishop f8 we've killed two birds with one stone we have not only attacked the queen but we have opened up an attack on the pawn and here"
+  },
+  {
+   "ply": 35,
+   "t": 304.5,
+   "line": [
+    "Kh1"
+   ],
+   "fen": "2k2b1r/1ppq3p/p1n5/P1Qb4/2pp4/N7/1PP2PrP/R1B2R1K b - - 1 18",
+   "said": "this is really advanced but we have checkmate in two moves who can find me the in two it's better than a windmill there is actually an immediate check made in two moves this is a very advanced concept but it's"
+  },
+  {
+   "ply": 36,
+   "t": 328,
+   "line": [
+    "Rg1+"
+   ],
+   "fen": "2k2b1r/1ppq3p/p1n5/P1Qb4/2pp4/N7/1PP2P1P/R1B2RrK w - - 2 19",
+   "said": "an important one nobody's seen it yet it's all checks both moves are checks both moves are checks queen h3 he can stave off the maid rook g1 this is a double check don't worry i will explain everything i am checking him from two different sources when you have a double check"
+  },
+  {
+   "ply": 37,
+   "t": 341.5,
+   "line": [
+    "Kxg1"
+   ],
+   "fen": "2k2b1r/1ppq3p/p1n5/P1Qb4/2pp4/N7/1PP2P1P/R1B2RK1 b - - 0 19",
+   "said": "only the only way to defend against the double check is to move the king there's no other way to defend against the double check"
+  },
+  {
+   "ply": 38,
+   "t": 344,
+   "line": [
+    "Qg4#"
+   ],
+   "fen": "2k2b1r/1pp4p/p1n5/P1Qb4/2pp2q1/N7/1PP2P1P/R1B2RK1 w - - 1 20",
+   "said": "and queen g4 is checkmate because the queen is delivering the checkmate and the bishop is basically preventing the king from moving back to h1 the rook"
+  },
+  {
+   "ply": 7,
+   "t": 360.5,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/2Bp4/8/PPP2PPP/RNBQK1NR b KQkq - 0 4",
+   "said": "is preventing him from moving to either of these two squares okay that was an instructive game let's talk about it so basically in the opening he played this movie five okay now what would be wrong with moving the"
+  },
+  {
+   "ply": 8,
+   "t": 373.5,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2Bpn3/8/PPP2PPP/RNBQK1NR w KQkq - 1 5",
+   "said": "knight away well not only would that violate an opening principle of not moving the same piece more than once but he could actually pick up the pawn"
+  },
+  {
+   "ply": 9,
+   "t": 376.5,
+   "line": [
+    "Qxd4"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2BQn3/8/PPP2PPP/RNB1K1NR b KQkq - 0 5",
+   "said": "on d4 and simultaneously he attacks the knight"
+  },
+  {
+   "ply": 10,
+   "t": 381.5,
+   "line": [
+    "Nc5"
+   ],
+   "fen": "rnbqkb1r/pppp1ppp/8/2n1P3/2BQ4/8/PPP2PPP/RNB1K1NR w KQkq - 1 6",
+   "said": "we have to move the knight again donya i think many people can't keep up with your commentary um well i'm sorry to hear that rasheed i'm really trying my best to explain everything as fully as possible and also that's why i'm going over the game afterward this is a five minute game so i also have to play quickly and i go over the moments very slowly"
+  },
+  {
+   "ply": 8,
+   "t": 412,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2Bpn3/8/PPP2PPP/RNBQK1NR w KQkq - 1 5",
+   "said": "after the game i'm trying my absolute best here to essentially make it interesting for for everybody um so this would not be good now the move d5 is very specifically it's fine i i appreciate your guys's support and i always accept constructive criticism i appreciate it and it's totally fine with me now do you guys see that i am also attacking the bishop thank you spectrum for the sub"
+  },
+  {
+   "ply": 12,
+   "t": 440.5,
+   "line": [
+    "Bd5",
+    "Nf6",
+    "Bc4",
+    "d5"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pP3/2Bp4/8/PPP2PPP/RNBQK1NR w KQkq d6 0 7",
+   "said": "so he can take my knight and i can take his special what do i accomplish by playing d5 well what i accomplish is that i open up my bishop and i occupy the center now earlier i talked about a situation where you have two pieces hanging when you have two pieces hanging you want to think about moving one of the pieces with check and"
+  },
+  {
+   "ply": 13,
+   "t": 455,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/1B1pP3/3p4/8/PPP2PPP/RNBQK1NR b KQkq - 1 7",
+   "said": "then because your opponent has to deal with the check you can take the other piece so the move bishop b5 chair comes with does this win a piece does does this win a piece who can who"
+  },
+  {
+   "ply": 14,
+   "t": 469,
+   "line": [
+    "c6"
+   ],
+   "fen": "rnbqkb1r/pp3ppp/2p2n2/1B1pP3/3p4/8/PPP2PPP/RNBQK1NR w KQkq - 0 8",
+   "said": "can answer that question for me no why not because you can either play c6 or you can actually play the advanced"
+  },
+  {
+   "ply": 13,
+   "t": 470.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/1B1pP3/3p4/8/PPP2PPP/RNBQK1NR b KQkq - 1 7",
+   "said": "move knight after d7"
+  },
+  {
+   "ply": 14,
+   "t": 472,
+   "line": [
+    "Nfd7"
+   ],
+   "fen": "rnbqkb1r/pppn1ppp/8/1B1pP3/3p4/8/PPP2PPP/RNBQK1NR w KQkq - 2 8",
+   "said": "dropping the knight back and simultaneously defending it"
+  },
+  {
+   "ply": 13,
+   "t": 477.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/1B1pP3/3p4/8/PPP2PPP/RNBQK1NR b KQkq - 1 7",
+   "said": "but don't play knight c6 because then he"
+  },
+  {
+   "ply": 15,
+   "t": 479.5,
+   "line": [
+    "Nc6",
+    "exf6"
+   ],
+   "fen": "r1bqkb1r/ppp2ppp/2n2P2/1B1p4/3p4/8/PPP2PPP/RNBQK1NR b KQkq - 0 8",
+   "said": "can already take your knight okay so he what he should have done is"
+  },
+  {
+   "ply": 12,
+   "t": 482.5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pP3/2Bp4/8/PPP2PPP/RNBQK1NR w KQkq d6 0 7",
+   "said": ""
+  },
+  {
+   "ply": 13,
+   "t": 484,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pP3/3p4/1B6/PPP2PPP/RNBQK1NR b KQkq - 1 7",
+   "said": "probably just dropped his bishop back but then i can already play knight e4"
+  },
+  {
+   "ply": 14,
+   "t": 487.5,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP3/3pn3/1B6/PPP2PPP/RNBQK1NR w KQkq - 2 8",
+   "said": "and if you compare this position with"
+  },
+  {
+   "ply": 8,
+   "t": 491.5,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2Bpn3/8/PPP2PPP/RNBQK1NR w KQkq - 1 5",
+   "said": "this position you see that there is one fundamental"
+  },
+  {
+   "ply": 11,
+   "t": 496,
+   "line": [
+    "Bb3",
+    "d5",
+    "Qxd4"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/8/3pP3/3Qn3/1B6/PPP2PPP/RNB1K1NR b KQkq - 0 6",
+   "said": "difference which is that after queen takes d4 the knight is no longer under attack and"
+  },
+  {
+   "ply": 12,
+   "t": 501,
+   "line": [
+    "Be6"
+   ],
+   "fen": "rn1qkb1r/ppp2ppp/4b3/3pP3/3Qn3/1B6/PPP2PPP/RNB1K1NR w KQkq - 1 7",
+   "said": "you can just essentially develop you can play bishop e6 defending the pawn and then you can play knight c6 with tempo that's why it's a bad idea to develop the queen so early because you can develop pieces by it and simultaneously attack the queen okay so he can also play on passat and i think most of you guys are familiar with on passant and i'm going to use this to discuss the concept of the discovered check after bishop takes d6 it seems like he can take the pawn on d4 can he take the pawn on d4 yes or no and why not if no because the bishop before check this is called a discovered check you expose the attack on the queen what if you go c3 what if you go c3 bowler i'll get to your question in a moment because if queen takes queen and you cannot take back because of the pin okay that is also why undefended pieces are so important undefended pieces actually might be the most important tactical concept to get your head around as you begin playing chess and as you progress through the first stages especially an undefended queen especially an undefended queen that is x-rayed by the opponent's queen that is the situation in which you have to be incredibly cautious another time that that manifests itself is in this kind of situation when you're castled the king is on a dark square there's always the possibility of delivering a check to h2 i've won a lot of games precisely in this way i've won a lot of games precisely in this way okay so boulder asked the question about this position what happens if f3 do you remember guys when i told you that when you move pawns in front of your king it's almost always very dangerous because it opens up diagonals that the queen could occupy and essentially create big threats against the king this is exactly such an example queen h4 check in fg3 there is a very typical very typical tactical idea most of you have seen this in puzzle rush plenty of times which is where you take on g3 now guess what is the oil that makes this machine"
+  },
+  {
+   "ply": 9,
+   "t": 633,
+   "line": [],
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/3pn3/1B6/PPP2PPP/RNBQK1NR b KQkq - 2 5",
+   "said": "run undefended pieces again because the rook is undefended you can get away with this and just take the rook and you're up a million things and your opponent's position is devastated i hope that answers your question bowler so he took i took the queenie two trick looks looks scary but it's nothing f takes g7 bishop takes g7 i already have two pieces developed and i have an extra pawn and i have a beautiful pawn chain he has nothing and he continues to dig himself further into the hole by moving his queen again uh i prepare long castle so just to recap short castle would have been fine but i didn't want to allow him to create made threats i mean why allow this when i have a perfect home for the king on the queen side castle's long and i played bishop d5 so already at this point i started developing a plan whereby i will essentially put a rook on g8 i'm going to move this bishop away and i'm going to try to chase this knight away from g5 and once i crash through on g2 the game is going to basically be over um just out of curiosity any reason you chose queen d7 or queen n great great yes there is there's two reasons the first is i do not want to allow this kind of move which pins the queen to the rook now yes you can play f6 but um this blunts the bishop i want the bishop to be open and i just don't want to allow the possibility of this and the second reason is that let's say he does what he did in the game i i don't want to allow potentially the rookie one with tempo neither of these things are in any way dangerous but it's all about taking care of your future self it's all about playing so that you minimize the risk of disaster okay now you might ask well wait a second doesn't he have the possibility of that well no he doesn't because two pieces are defending the squares 95 is not possible so watch out for temple plays that's a great way of encapsulating that the true ching watch out for temple play so when you develop a piece watch out for ways that your opponent can develop and simultaneously attack your piece that's called developing with tempo again that doesn't mean you never try to allow that sometimes it's not scary at all sometimes you have to allow development tempo but when you have a choice watch out for that okay so he plays a4 making a motion to attack us on the queen side but he doesn't have any pieces there so it's not scary rook dg8 knight takes f7 was just terrible i mean he does our bidding for us and he blunders the knight we just come back to d5 to keep pressuring the pun now had he played queen a4 i would have had a beautiful move in this position and in order to find this move in order to find this move how do i think about this the first question i ask myself what would have happened let's say this pod were gone if this one were gone the king would be trapped which means any check with them with my dark squared bishop would be made next question can we get rid of this pawn first move that comes to mind is bishop takes you two this is a very typical mistake people follow the logic so far then they say bishop takes you two but remember by sacrificing the bishop and of course black is still winning you have relinquished your control over the h1 square so remember that when you're trying to remove a piece or a pawn make sure that you're not sacrificing the piece that is responsible for the mating mechanism the correct move here is queen h3 sacrificing the queen nothing extraordinary but very nice g takes h3 is essentially forced now we just move the bishop away white does have bishop g5 but rook takes g5 is checkmate okay so this is not a mythical move hopefully i've shown you the kind of logic that can be used to unearth a move like this there's far more advanced advanced instances of this type of tactic this is essentially removing the defender or decoy there's a lot of names for this that's the idea now by playing queen c5 why has he prevented queen h3 why has he prevented this move or has he prevented it i know that we trapped his queen but could we have also done this this leads me to something that i call the queen syndrome yes nanuka very good nanuka says queen takes d5 and we don't take the queen we take the bishop instead the queen syndrome is refers to two things and one of them is when people see a queen hanging they assume that the queen must be captured a boat says gambit can be declined guys remember that you don't have to take anything and so people forget that you can take something other than the queen or you can just ignore a queen sacrifice that's a very powerful device that we will flesh out a lot more when we talk about defending i'm going to write this down because i want to keep track of what i've talked about okay so we played bishop f8 rook takes you too now how do you find rook she won check again the rook is actually an obstruction okay i realized that remember guys when we asked ourselves the question what happens if the g2 pawn were gone it's basically the same thing the jeep coupon is now done the jupiter 21 is now gone so all we need to do is simply get the king back to the g file and then we can check him down the g file and it's going to be checkmate the trueching asks can you not just back up the rook to g4 well not quite because i can play f3 and this comes back to something i said earlier which is that you can block a check remember that when you're considering a check you look not only for king retreats there's no king retreat to hide checkmate but you can also block a check with pieces and you need to check for that get it when you are considering moves now last thing would this also result in checkmate well not really because now the f2 pawn was an integral part of the king being locked in so if we do the same thing he can now take the rule now what could we do here we could go back to g2 and then we could go back to g3 and because there is no longer a pawn on f2 he has to block with a rook and this is just checkmate so we could do that this is called a windmill this particular device we can also take all of his pieces where you essentially check him then move away with a discover check then move back with a check is called a windmill there are many famous examples of a windmill it's one of my favorite tactical devices and we will talk a lot more about that later but cash flow reel with 10 bucks any thoughts on king safety versus keeping up quick beast development in the attack i find i miss prioritize this sometime very good question so cash flow reel is asking um how do we know whether to develop a piece or to castle um i don't have and thank you so much for the 10 bucks i don't have a shorthand answer for you i would say that usually castling here's the thing castling is a lot more committal than development because in virtually any position you know that development is a good idea but castling could be very dangerous if it later turns out that the side on which you castle gets opened up or gets gets um exposed in some way so here's what i'll say as a beginner if your rating is let's say below 700 your priority should be to castle as early as possible because it's a lot more important to build good habits than to find exceptions to the rule you need to learn how to treat your king"
+  },
+  {
+   "ply": 12,
+   "t": 1070.5,
+   "line": [
+    "d5",
+    "Bc4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pP3/2Bp4/8/PPP2PPP/RNBQK1NR w KQkq - 2 7",
+   "said": "well and most of the time nothing bad is going to happen if you castle a little bit too early as a relatively advanced player what you need to start practicing is the concept of flexibility there are some positions where you want to leave your king in the center for two reasons sometimes the king is safer in the center than it is on one side of the board that happens and another reason is sometimes you don't know whether you want to cancel long or short and so you delay that decision but you don't procrastinate too long but you delay it until things have clarified until your opponent has indicated on which side of the board he would rather attack and then you can make an informed decision about where you want to castle let's see if i can apply that here so here would be a great example of that right i don't want a castle yet because i know that this side of the board is kind of weak now you might be like so you wouldn't castle short but that doesn't answer my question well maybe i would have if he would have swung his queen to the other side of the board i might very well have said okay now he he's not going to attack on the king's side now i might castle um yeah sometimes the king is safer in the middle uh if you're an advanced player and you want more information about this i highly recommend the book the art of attack in chess"
+  }
+ ],
+ "forks": [
+  {
+   "ply": 7,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4P3/2Bp4/8/PPP2PPP/RNBQK1NR b KQkq - 0 4",
+   "line": [
+    "e4",
+    "e5",
+    "Bc4",
+    "Nf6",
+    "d4",
+    "exd4",
+    "e5"
+   ],
+   "options": [
+    {
+     "san": "d5",
+     "t": 55,
+     "continuation": "d5",
+     "said": "what you want to look for in such situations when there's a bishop on c4 in these particular openings are ways to develop your pieces and counter-attack your opponent's pieces so the move here is actually d5 i'll talk about this later the move here is actually d5 he's taken my knight and i've taken his bishop now look what happens as a consequence guys don't worry i will explain this more slowly later he gives us a check do we have to move our king do we have to move our king or can we block the check we can't block it with bishop e7 but we can block it with bishop e6 don't worry black is much much better here because this might look intimidating guys because of the pawn he can take but remember principles don't lie if you abide by opening principles for the most part and you develop your pieces and your opponent gives you a bunch of intimidating looking checks he ain't gonna go far again he's trying to intimidate me and this is part of the reason that a lot of beginners slip up they get intimidated by this stuff rather than just continuing to develop okay he finally develops now here's the thing would you guys castle short or would you"
+    },
+    {
+     "san": "Ne4",
+     "t": 373.5,
+     "continuation": "Ne4",
+     "said": "in the opening he played this movie five okay now what would be wrong with moving the knight away well not only would that violate an opening principle of not moving the same piece more than once but he could actually pick up the pawn on d4 and simultaneously he attacks the knight we have to move the knight again donya i think many people can't keep up with your commentary um well i'm sorry to hear that rasheed i'm really trying my best to explain everything as fully as possible and also that's why i'm going over the game afterward this is a five minute game so i also have to play quickly and i go over the moments very slowly after the game i'm trying my absolute best here to essentially make it interesting for for everybody um so this would not be good now the move d5 is very specifically it's fine i i appreciate your guys's support and i always accept constructive criticism i appreciate it and it's totally fine with me now do you guys see that i am also attacking the bishop thank you spectrum for the sub so he can take my knight and i can take his special what do i accomplish by playing d5"
+    }
+   ]
+  },
+  {
+   "ply": 8,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/3pP3/2Bp4/8/PPP2PPP/RNBQK1NR w KQkq d6 0 5",
+   "line": [
+    "e4",
+    "e5",
+    "Bc4",
+    "Nf6",
+    "d4",
+    "exd4",
+    "e5",
+    "d5"
+   ],
+   "options": [
+    {
+     "san": "exf6",
+     "t": 59,
+     "continuation": "exf6",
+     "said": "in these particular openings are ways to develop your pieces and counter-attack your opponent's pieces so the move here is actually d5 i'll talk about this later the move here is actually d5 he's taken my knight and i've taken his bishop now look what happens as a consequence guys don't worry i will explain this more slowly later he gives us a check do we have to move our king do we have to move our king or can we block the check we can't block it with bishop e7 but we can block it with bishop e6 don't worry black is much much better here because this might look intimidating guys because of the pawn he can take but remember principles don't lie if you abide by opening principles for the most part and you develop your pieces and your opponent gives you a bunch of intimidating looking checks he ain't gonna go far again he's trying to intimidate me and this is part of the reason that a lot of beginners slip up they get intimidated by this stuff rather than just continuing to develop okay he finally develops now here's the thing would you guys castle short or would you prepare to castle long and why"
+    },
+    {
+     "san": "Bb5+",
+     "t": 455,
+     "continuation": "Bb5+",
+     "said": "when you have two pieces hanging you want to think about moving one of the pieces with check and then because your opponent has to deal with the check you can take the other piece so the move bishop b5 chair comes with does this win a piece does does this win a piece who can who can answer that question for me no why not because you can either play c6 or you can actually play the advanced move knight after d7 dropping the knight back and simultaneously defending it but don't play knight c6 because then he can already take your knight okay so he what he should have done is probably just dropped his bishop back but then i can already play knight e4 and if you compare this position with this position you see that there is one fundamental difference which is that after queen takes d4 the knight is no longer under attack and you can just essentially develop you can play bishop e6 defending the pawn and then you can play knight c6 with tempo that's why it's a bad idea to develop the queen so early because you can develop pieces by it and simultaneously attack the queen okay so he can also play on passat"
+    },
+    {
+     "san": "Bb3",
+     "t": 484,
+     "continuation": "Bb3",
+     "said": "dropping the knight back and simultaneously defending it but don't play knight c6 because then he can already take your knight okay so he what he should have done is probably just dropped his bishop back but then i can already play knight e4 and if you compare this position with this position you see that there is one fundamental difference which is that after queen takes d4 the knight is no longer under attack and you can just essentially develop you can play bishop e6 defending the pawn and then you can play knight c6 with tempo that's why it's a bad idea to develop the queen so early because you can develop pieces by it and simultaneously attack the queen okay so he can also play on passat and i think most of you guys are familiar with on passant and i'm going to use this to discuss the concept of the discovered check after bishop takes d6 it seems like he can take the pawn on d4 can he take the pawn on d4 yes or no and why not if no because the bishop before check this is called a discovered check you expose the attack on the queen what if you go c3 what if you go c3 bowler i'll get to your question in a moment because if queen takes queen and you"
+    }
+   ]
+  },
+  {
+   "ply": 8,
+   "fen": "rnbqkb1r/pppp1ppp/8/4P3/2Bpn3/8/PPP2PPP/RNBQK1NR w KQkq - 1 5",
+   "line": [
+    "e4",
+    "e5",
+    "Bc4",
+    "Nf6",
+    "d4",
+    "exd4",
+    "e5",
+    "Ne4"
+   ],
+   "options": [
+    {
+     "san": "Qxd4",
+     "t": 376.5,
+     "continuation": "Qxd4",
+     "said": "okay now what would be wrong with moving the knight away well not only would that violate an opening principle of not moving the same piece more than once but he could actually pick up the pawn on d4 and simultaneously he attacks the knight we have to move the knight again donya i think many people can't keep up with your commentary um well i'm sorry to hear that rasheed i'm really trying my best to explain everything as fully as possible and also that's why i'm going over the game afterward this is a five minute game so i also have to play quickly and i go over the moments very slowly after the game i'm trying my absolute best here to essentially make it interesting for for everybody um so this would not be good now the move d5 is very specifically it's fine i i appreciate your guys's support and i always accept constructive criticism i appreciate it and it's totally fine with me now do you guys see that i am also attacking the bishop thank you spectrum for the sub so he can take my knight and i can take his special what do i accomplish by playing d5 well what i accomplish is that i open up my bishop"
+    },
+    {
+     "san": "Bd5",
+     "t": 440.5,
+     "continuation": "Bd5 Nf6 Bc4 d5",
+     "said": "so he can take my knight and i can take his special what do i accomplish by playing d5 well what i accomplish is that i open up my bishop and i occupy the center now earlier i talked about a situation where you have two pieces hanging when you have two pieces hanging you want to think about moving one of the pieces with check and then because your opponent has to deal with the check you can take the other piece so the move bishop b5 chair comes with does this win a piece does does this win a piece who can who can answer that question for me no why not because you can either play c6 or you can actually play the advanced move knight after d7 dropping the knight back and simultaneously defending it but don't play knight c6 because then he can already take your knight okay so he what he should have done is probably just dropped his bishop back but then i can already play knight e4 and if you compare this position with this position you see that there is one fundamental difference which is that after queen takes d4 the knight is no longer under attack and you can just essentially develop you can"
+    },
+    {
+     "san": "Bb3",
+     "t": 496,
+     "continuation": "Bb3 d5 Qxd4",
+     "said": "but then i can already play knight e4 and if you compare this position with this position you see that there is one fundamental difference which is that after queen takes d4 the knight is no longer under attack and you can just essentially develop you can play bishop e6 defending the pawn and then you can play knight c6 with tempo that's why it's a bad idea to develop the queen so early because you can develop pieces by it and simultaneously attack the queen okay so he can also play on passat and i think most of you guys are familiar with on passant and i'm going to use this to discuss the concept of the discovered check after bishop takes d6 it seems like he can take the pawn on d4 can he take the pawn on d4 yes or no and why not if no because the bishop before check this is called a discovered check you expose the attack on the queen what if you go c3 what if you go c3 bowler i'll get to your question in a moment because if queen takes queen and you cannot take back because of the pin okay that is also why undefended pieces are so important undefended pieces actually might be the most important tactical concept to get your head around as you begin"
+    }
+   ]
+  },
+  {
+   "ply": 13,
+   "fen": "rnbqkb1r/ppp2ppp/5n2/1B1pP3/3p4/8/PPP2PPP/RNBQK1NR b KQkq - 1 7",
+   "line": [
+    "e4",
+    "e5",
+    "Bc4",
+    "Nf6",
+    "d4",
+    "exd4",
+    "e5",
+    "Ne4",
+    "Bd5",
+    "Nf6",
+    "Bc4",
+    "d5",
+    "Bb5+"
+   ],
+   "options": [
+    {
+     "san": "c6",
+     "t": 469,
+     "continuation": "c6",
+     "said": "a piece does does this win a piece who can who can answer that question for me no why not because you can either play c6 or you can actually play the advanced move knight after d7 dropping the knight back and simultaneously defending it but don't play knight c6 because then he can already take your knight okay so he what he should have done is probably just dropped his bishop back but then i can already play knight e4 and if you compare this position with this position you see that there is one fundamental difference which is that after queen takes d4 the knight is no longer under attack and you can just essentially develop you can play bishop e6 defending the pawn and then you can play knight c6 with tempo that's why it's a bad idea to develop the queen so early because you can develop pieces by it and simultaneously attack the queen okay so he can also play on passat and i think most of you guys are familiar with on passant and i'm going to use this to discuss the concept of the discovered check after bishop takes d6 it seems like he can take the pawn on d4 can he take the pawn on d4 yes or no and"
+    },
+    {
+     "san": "Nfd7",
+     "t": 472,
+     "continuation": "Nfd7",
+     "said": "can answer that question for me no why not because you can either play c6 or you can actually play the advanced move knight after d7 dropping the knight back and simultaneously defending it but don't play knight c6 because then he can already take your knight okay so he what he should have done is probably just dropped his bishop back but then i can already play knight e4 and if you compare this position with this position you see that there is one fundamental difference which is that after queen takes d4 the knight is no longer under attack and you can just essentially develop you can play bishop e6 defending the pawn and then you can play knight c6 with tempo that's why it's a bad idea to develop the queen so early because you can develop pieces by it and simultaneously attack the queen okay so he can also play on passat and i think most of you guys are familiar with on passant and i'm going to use this to discuss the concept of the discovered check after bishop takes d6 it seems like he can take the pawn on d4 can he take the pawn on d4 yes or no and why not if no because the bishop before check this is"
+    },
+    {
+     "san": "Nc6",
+     "t": 479.5,
+     "continuation": "Nc6 exf6",
+     "said": "c6 or you can actually play the advanced move knight after d7 dropping the knight back and simultaneously defending it but don't play knight c6 because then he can already take your knight okay so he what he should have done is probably just dropped his bishop back but then i can already play knight e4 and if you compare this position with this position you see that there is one fundamental difference which is that after queen takes d4 the knight is no longer under attack and you can just essentially develop you can play bishop e6 defending the pawn and then you can play knight c6 with tempo that's why it's a bad idea to develop the queen so early because you can develop pieces by it and simultaneously attack the queen okay so he can also play on passat and i think most of you guys are familiar with on passant and i'm going to use this to discuss the concept of the discovered check after bishop takes d6 it seems like he can take the pawn on d4 can he take the pawn on d4 yes or no and why not if no because the bishop before check this is called a discovered check you expose the attack on the queen what if you go c3 what if you go c3 bowler i'll get to"
+    }
+   ]
+  }
+ ]
+}

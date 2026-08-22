@@ -2,19 +2,16 @@
  {
   "id": "vn-clean-position-just-take-the-pawn",
   "line": "e4 c5 Nf3 Nc6 Be2 a6 Bxa6 bxa6 O-O d6 h3 Nf6 Re1 g6 c3 Bg7 d4 O-O dxc5",
-  "teaches": "When a clean capture wins a pawn and the tempting alternative merely looks clever, take the pawn. Material is the one advantage that does not evaporate while you work out the rest — the flashy move can be checked afterwards, from a position where you are already a pawn up.",
+  "teaches": "When a clean capture wins a pawn and the tempting alternative merely looks clever, take the pawn — material is the one advantage that does not evaporate while you work out the rest, and the flashy move can be checked afterwards from a position where you are already a pawn up.",
   "explains": "The pawn has captured on c5 and from there attacks the pawn on d6 — a pawn won and a second one asked about, in one move. The tempting piece moves are still on the board and lose nothing by waiting; the pawn does not wait.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "d6"
-   }
+   { "kind": "attacks", "square": "d6" }
   ]
  },
  {
   "id": "vn-clean-position-read-the-wreckage",
   "line": "e4 c5 Nf3 Nc6 Be2 a6 Bxa6 bxa6 O-O d6 h3 Nf6 Re1 g6 c3 Bg7 d4 O-O dxc5 dxc5 Qa4 Qb6 Na3 Be6 Ng5 Nd7 Nxe6 fxe6",
-  "teaches": "Pawn structure is a ledger, and sometimes the right plan is simply to read it. Doubled pawns, an isolated rook-pawn and a torn king's cover are not abstractions — each one is a target or an open line, and a position with several of them loses itself once you aim at them patiently.",
+  "teaches": "Pawn structure is a ledger, and sometimes the right plan is simply to read it — doubled pawns, an isolated rook-pawn and a torn king's cover are not abstractions; each one is a target or an open line, and a position with several of them loses itself once you aim at them patiently.",
   "explains": "The recapture has left doubled pawns on e6 and e7, the rook-pawn on a6 stands isolated with its b-file neighbour long gone, and the pawn cover in front of the castled king is torn where the f-pawn used to be. Three permanent debts on one ledger — the plan is to collect them.",
   "structural": "the position judged by its pawn ledger — doubled e-pawns, isolated rook-pawn, torn king cover, all permanent"
  }

@@ -264,7 +264,7 @@
   {
    "id": "vn-flank-opening-the-diagonal-is-the-opening",
    "line": "b3 d6 Bb2",
-   "teaches": "This opening is one idea wearing a move order: the bishop on the long diagonal, fighting for the central dark squares with pieces instead of pawns. Every reply that concedes that diagonal — a modest pawn move without its counterpart claim in the centre — hands the bishop exactly the board it wanted.",
+   "teaches": "This opening is one idea wearing a move order: the bishop on the long diagonal, fighting for the central dark squares with pieces instead of pawns — every reply that concedes that diagonal hands the bishop exactly the board it wanted.",
    "explains": "The bishop on b2 takes the e5 square in hand down a completely open diagonal. The opponent's modest pawn move promised a central stake it has not yet made — until the pawn arrives on e5, the bishop owns the centre from the wing.",
    "reasons": [
     {

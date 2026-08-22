@@ -2,37 +2,22 @@
  {
   "id": "vn-slow-c3-answer-a-slow-build-up-by-hitting-the-centre-now",
   "line": "e4 e5 Nf3 Nc6 c3 Nf6",
-  "teaches": "A quiet pawn move that prepares a big centre is an announcement, and announcements should be answered before they are carried out. Develop the piece that attacks the pawn already standing in the middle: the opponent must now spend the move they wanted for the build-up on defending instead, and a plan interrupted one move early is usually a plan abandoned.",
+  "teaches": "A quiet pawn move that prepares a big centre is an announcement, and announcements should be answered before they are carried out — develop the piece that attacks the pawn already standing in the middle, so the opponent must spend the move they wanted for the build-up on defending instead.",
   "explains": "The knight comes out hitting the pawn on e4 and covering d5, the square the intended advance wants to control. Nothing has been committed and the slow plan already has a problem.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "e4"
-   },
-   {
-    "kind": "controls",
-    "square": "d5"
-   }
+   { "kind": "attacks", "square": "e4" },
+   { "kind": "controls", "square": "d5" }
   ]
  },
  {
   "id": "vn-slow-c3-step-forward-when-the-chasing-pawn-is-already-committed",
   "line": "e4 e5 Nf3 Nc6 c3 Nf6 d4 exd4 e5 Nd5",
-  "teaches": "When a pawn advances to kick a knight, count which pawn would do the kicking NEXT before deciding where the knight goes. A knight that steps forward into the middle is only loose if a pawn can come and ask it to move \u2014 and if that pawn has already been spent on something else, the outpost is permanent. The move that prepared the centre is the move that gave the square away.",
+  "teaches": "When a pawn advances to kick a knight, count which pawn would do the kicking NEXT before deciding where the knight goes — a knight that steps forward into the middle is only loose if a pawn can come and ask it to move, and if that pawn has already been spent on something else, the outpost is permanent.",
   "explains": "The knight goes to d5 rather than back, where it attacks the pawn on c3 and covers b4, e3 and f4. The pawn that would normally chase it from c4 is standing on c3 and cannot get there in one move.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "c3"
-   },
-   {
-    "kind": "controls",
-    "square": "e3"
-   },
-   {
-    "kind": "controls",
-    "square": "f4"
-   }
+   { "kind": "attacks", "square": "c3" },
+   { "kind": "controls", "square": "e3" },
+   { "kind": "controls", "square": "f4" }
   ]
  }
 ]

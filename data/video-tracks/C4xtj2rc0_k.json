@@ -555,8 +555,8 @@
   {
    "id": "vn-owen-bishop-that-answers-the-long-diagonal",
    "line": "e4 b6 d4 Bb7 Nc3 e6 Bd3",
-   "teaches": "When the opponent fianchettoes on the queenside, their bishop's only target is your centre pawn. Develop the bishop that defends it rather than the one that looks more active — a centre that cannot be undermined leaves the fianchettoed bishop staring at a wall for the rest of the game.",
-   "explains": "The bishop has been placed on b7 aiming down the long diagonal at the pawn on e4. Putting the bishop on d3 defends that pawn and the one on c2 behind it, so the whole idea of the setup opposite has nothing to work on. The bishop is modestly placed and it is the move that makes the big centre permanent.",
+   "teaches": "When the opponent fianchettoes on the queenside, their bishop's only target is your centre pawn — develop the bishop that defends it rather than the one that looks more active. A centre that cannot be undermined leaves the fianchettoed bishop staring at a wall for the rest of the game.",
+   "explains": "The bishop on b7 aims down the long diagonal at the pawn on e4. Putting the bishop on d3 defends that pawn and the one on c2 behind it, so the whole idea of the setup opposite has nothing to work on. The bishop is modestly placed and it is the move that makes the big centre permanent.",
    "reasons": [
     {
      "kind": "defends",
@@ -575,7 +575,7 @@
   {
    "id": "vn-owen-push-that-shuts-the-diagonal",
    "line": "e4 b6 d4 Bb7 Nc3 e6 Bd3 Bb4 Ne2 Nf6 O-O Bxc3 Nxc3 h6 e5",
-   "teaches": "Space gained with tempo is the cheapest kind. When the centre pawn can advance hitting a knight, look at what the pawn covers once it has moved — if it also takes the square that knight would retreat to, the defender has to find somewhere awkward and the diagonal you were worried about closes at the same time.",
+   "teaches": "Space gained with tempo is the cheapest kind — when the centre pawn can advance hitting a knight, look at what the pawn covers once it has moved; if it also takes the square that knight would retreat to, the diagonal you were worried about closes at the same time.",
    "explains": "The pawn advances to e5, hitting the knight on f6 and covering d6. The knight has no comfortable square and the pawn now blocks the long diagonal the bishop on b7 was placed for. One move gains space, gains a tempo, and shuts the opponent's best piece out of the game.",
    "reasons": [
     {

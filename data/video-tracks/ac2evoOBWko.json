@@ -1,0 +1,391 @@
+{
+ "videoId": "ac2evoOBWko",
+ "title": "Squeezing The Sicilian, Sacking A Rook to Win!!! | The Sensei Speedrun | GM Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 7543,
+  "settledPositions": null
+ },
+ "plies": 29,
+ "rewinds": 1,
+ "moves": [
+  {
+   "t": 24,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 28,
+   "ply": 3,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 34.5,
+   "ply": 5,
+   "line": [
+    "cxd4",
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 41,
+   "ply": 6,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/8/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 1 4"
+  },
+  {
+   "t": 55,
+   "ply": 7,
+   "line": [
+    "e5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/4P3/3p4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 59.5,
+   "ply": 6,
+   "line": [],
+   "fen": "rnbqkb1r/pp1ppppp/5n2/8/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 1 4"
+  },
+  {
+   "t": 62,
+   "ply": 8,
+   "line": [
+    "e5",
+    "Nd5"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/8/3nP3/3p4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5"
+  },
+  {
+   "t": 96.5,
+   "ply": 9,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/8/3nP3/3p4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 2 5"
+  },
+  {
+   "t": 107,
+   "ply": 10,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p4/3nP3/3p4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 6"
+  },
+  {
+   "t": 115.5,
+   "ply": 11,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkb1r/pp2pppp/3p4/3nP3/3P4/5N2/PP3PPP/RNBQKB1R b KQkq - 0 6"
+  },
+  {
+   "t": 120,
+   "ply": 12,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2np4/3nP3/3P4/5N2/PP3PPP/RNBQKB1R w KQkq - 1 7"
+  },
+  {
+   "t": 160.5,
+   "ply": 13,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/2np4/3nP3/2BP4/5N2/PP3PPP/RNBQK2R b KQkq - 2 7"
+  },
+  {
+   "t": 164,
+   "ply": 14,
+   "line": [
+    "Nb6"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/1nnp4/4P3/2BP4/5N2/PP3PPP/RNBQK2R w KQkq - 3 8"
+  },
+  {
+   "t": 167,
+   "ply": 15,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/1nnp4/1B2P3/3P4/5N2/PP3PPP/RNBQK2R b KQkq - 4 8"
+  },
+  {
+   "t": 172.5,
+   "ply": 16,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/1nn5/1B2p3/3P4/5N2/PP3PPP/RNBQK2R w KQkq - 0 9"
+  },
+  {
+   "t": 173.5,
+   "ply": 17,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bqkb1r/pp2pppp/1nn5/1B2N3/3P4/8/PP3PPP/RNBQK2R b KQkq - 0 9"
+  },
+  {
+   "t": 176,
+   "ply": 19,
+   "line": [
+    "Bd7",
+    "Nxd7"
+   ],
+   "fen": "r2qkb1r/pp1Npppp/1nn5/1B6/3P4/8/PP3PPP/RNBQK2R b KQkq - 0 10"
+  },
+  {
+   "t": 177,
+   "ply": 20,
+   "line": [
+    "Qxd7"
+   ],
+   "fen": "r3kb1r/pp1qpppp/1nn5/1B6/3P4/8/PP3PPP/RNBQK2R w KQkq - 0 11"
+  },
+  {
+   "t": 193,
+   "ply": 21,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r3kb1r/pp1qpppp/1nn5/1B6/3P4/2N5/PP3PPP/R1BQK2R b KQkq - 1 11"
+  },
+  {
+   "t": 197,
+   "ply": 22,
+   "line": [
+    "e6"
+   ],
+   "fen": "r3kb1r/pp1q1ppp/1nn1p3/1B6/3P4/2N5/PP3PPP/R1BQK2R w KQkq - 0 12"
+  },
+  {
+   "t": 199.5,
+   "ply": 23,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r3kb1r/pp1q1ppp/1nn1p3/1B6/3P4/2N5/PP3PPP/R1BQ1RK1 b kq - 1 12"
+  },
+  {
+   "t": 226,
+   "ply": 24,
+   "line": [
+    "Rd8"
+   ],
+   "fen": "3rkb1r/pp1q1ppp/1nn1p3/1B6/3P4/2N5/PP3PPP/R1BQ1RK1 w k - 2 13"
+  },
+  {
+   "t": 296,
+   "ply": 25,
+   "line": [
+    "Be3"
+   ],
+   "fen": "3rkb1r/pp1q1ppp/1nn1p3/1B6/3P4/2N1B3/PP3PPP/R2Q1RK1 b k - 3 13"
+  },
+  {
+   "t": 305,
+   "ply": 26,
+   "line": [
+    "Be7"
+   ],
+   "fen": "3rk2r/pp1qbppp/1nn1p3/1B6/3P4/2N1B3/PP3PPP/R2Q1RK1 w k - 4 14"
+  },
+  {
+   "t": 313.5,
+   "ply": 30,
+   "line": [
+    "Bf4",
+    "Ra8",
+    "Bc1",
+    "Bf8"
+   ],
+   "fen": "r3kb1r/pp1q1ppp/1nn1p3/1B6/3P4/2N5/PP3PPP/R1BQ1RK1 w k - 8 16"
+  },
+  {
+   "t": 322,
+   "ply": 34,
+   "line": [
+    "Bd2",
+    "Rd8",
+    "Be3",
+    "Be7"
+   ],
+   "fen": "3rk2r/pp1qbppp/1nn1p3/1B6/3P4/2N1B3/PP3PPP/R2Q1RK1 w k - 12 18"
+  },
+  {
+   "t": 363.5,
+   "ply": 35,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "3rk2r/pp1qbppp/1nn1p3/1B6/3P4/2N1B3/PP3PPP/2RQ1RK1 b k - 13 18"
+  },
+  {
+   "t": 399,
+   "ply": 36,
+   "line": [
+    "O-O"
+   ],
+   "fen": "3r1rk1/pp1qbppp/1nn1p3/1B6/3P4/2N1B3/PP3PPP/2RQ1RK1 w - - 14 19"
+  },
+  {
+   "t": 537,
+   "ply": 40,
+   "line": [
+    "Rb1",
+    "Rfe8",
+    "Ra1",
+    "Kh8"
+   ],
+   "fen": "3rr2k/pp1qbppp/1nn1p3/1B6/3P4/2N1B3/PP3PPP/R2Q1RK1 w - - 18 21"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "3rk2r/pp1qbppp/1nn1p3/1B6/3P4/2N1B3/PP3PPP/R2Q1RK1 w k - 4 14",
+   "line": [
+    "e4",
+    "c5",
+    "d4",
+    "cxd4",
+    "c3",
+    "Nf6",
+    "e5",
+    "Nd5",
+    "Nf3",
+    "d6",
+    "cxd4",
+    "Nc6",
+    "Bc4",
+    "Nb6",
+    "Bb5",
+    "dxe5",
+    "Nxe5",
+    "Bd7",
+    "Nxd7",
+    "Qxd7",
+    "Nc3",
+    "e6",
+    "O-O",
+    "Rd8",
+    "Be3",
+    "Be7"
+   ],
+   "ply": 26,
+   "options": [
+    {
+     "san": "Bf4",
+     "t": 313.5,
+     "continuation": "Bf4 Ra8 Bc1 Bf8"
+    },
+    {
+     "san": "Rc1",
+     "t": 363.5,
+     "continuation": "Rc1"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Alapin Variation, Smith-Morra Declined",
+   "eco": "B22",
+   "plies": 8,
+   "line": "e4 c5 d4 cxd4 c3 Nf6 e5 Nd5",
+   "coverage": 0.821
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit Declined, Alapin Formation",
+   "eco": "B21",
+   "plies": 6,
+   "line": "e4 c5 d4 cxd4 c3 Nf6",
+   "coverage": 0.893
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit",
+   "eco": "B21",
+   "plies": 3,
+   "line": "e4 c5 d4",
+   "coverage": 0.964
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": null,
+  "confirmed": null,
+  "unverifiable": "title names no opening"
+ },
+ "notes": [
+  {
+   "id": "vn-alapin-develop-first-when-the-pawn-cannot-run",
+   "line": "e4 c5 d4 cxd4 c3 Nf6 e5 Nd5 Nf3",
+   "teaches": "When a pawn you could win back has nowhere to run, develop first and collect it later on your own terms — recapturing on the spot is the reflex, but the stronger move is often to bring a piece out and keep the tension, because every move you spend developing instead of grabbing is a move ahead.",
+   "explains": "The knight develops and keeps an eye on the extra pawn on d4 while the big pawn on e5 stays defended. Black cannot prop the d4-pawn up, so White regains it at the moment that suits, having already brought a piece into play instead of spending the move on a recapture.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e5"
+    },
+    {
+     "kind": "attacks",
+     "square": "d4"
+    }
+   ],
+   "fen": "rnbqkb1r/pp1ppppp/8/3nP3/3p4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 2 5",
+   "t": 96.5,
+   "ply": 9,
+   "source": "yt:ac2evoOBWko"
+  },
+  {
+   "id": "vn-alapin-the-isolani-lives-to-push-d5",
+   "line": "e4 c5 d4 cxd4 c3 Nf6 e5 Nd5 Nf3 d6 cxd4 Nc6 Bc4 Nb6 Bb5 dxe5 Nxe5 Bd7 Nxd7 Qxd7 Nc3",
+   "teaches": "A lone central pawn is not just a weakness to be defended; its whole purpose is to advance — cluster your pieces behind it so the break can be made at the right moment, and the pawn that looked like a liability becomes the lever that rips the position open.",
+   "explains": "The knight comes to c3 and eyes d5, the square just in front of the isolated d-pawn. Pieces gather behind d4 so that the pawn can advance when the moment is right, opening lines for the bishops and rooks standing ready behind it.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "d5"
+    }
+   ],
+   "fen": "r3kb1r/pp1qpppp/1nn5/1B6/3P4/2N5/PP3PPP/R1BQK2R b KQkq - 1 11",
+   "t": 193,
+   "ply": 21,
+   "source": "yt:ac2evoOBWko"
+  }
+ ]
+}

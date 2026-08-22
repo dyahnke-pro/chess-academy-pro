@@ -1,0 +1,475 @@
+{
+ "videoId": "BmFrJuPdwxE",
+ "title": "How to CRUSH the London System!! | Indian, Scandinavian | GM Naroditsky's DYI Speedrun",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 4372,
+  "settledPositions": null
+ },
+ "plies": 42,
+ "rewinds": 8,
+ "moves": [
+  {
+   "t": 1697.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "d5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 1700.5,
+   "ply": 3,
+   "line": [
+    "exd5"
+   ],
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 1704,
+   "ply": 4,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3"
+  },
+  {
+   "t": 1712,
+   "ply": 5,
+   "line": [
+    "Bb5+"
+   ],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR b KQkq - 2 3"
+  },
+  {
+   "t": 1727,
+   "ply": 7,
+   "line": [
+    "Bd7",
+    "Be2"
+   ],
+   "fen": "rn1qkb1r/pppbpppp/5n2/3P4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 4 4"
+  },
+  {
+   "t": 1730,
+   "ply": 8,
+   "line": [
+    "c6"
+   ],
+   "fen": "rn1qkb1r/pp1bpppp/2p2n2/3P4/8/8/PPPPBPPP/RNBQK1NR w KQkq - 0 5"
+  },
+  {
+   "t": 1740.5,
+   "ply": 10,
+   "line": [
+    "dxc6",
+    "Bxc6"
+   ],
+   "fen": "rn1qkb1r/pp2pppp/2b2n2/8/8/8/PPPPBPPP/RNBQK1NR w KQkq - 0 6"
+  },
+  {
+   "t": 1753,
+   "ply": 11,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rn1qkb1r/pp2pppp/2b2n2/8/8/5N2/PPPPBPPP/RNBQK2R b KQkq - 1 6"
+  },
+  {
+   "t": 1754.5,
+   "ply": 12,
+   "line": [
+    "e5"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/2b2n2/4p3/8/5N2/PPPPBPPP/RNBQK2R w KQkq - 0 7"
+  },
+  {
+   "t": 1810.5,
+   "ply": 13,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/2b2n2/4p3/8/5N2/PPPPBPPP/RNBQ1RK1 b kq - 1 7"
+  },
+  {
+   "t": 1812,
+   "ply": 14,
+   "line": [
+    "e4"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/2b2n2/8/4p3/5N2/PPPPBPPP/RNBQ1RK1 w kq - 0 8"
+  },
+  {
+   "t": 1813,
+   "ply": 15,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/2b2n2/4N3/4p3/8/PPPPBPPP/RNBQ1RK1 b kq - 1 8"
+  },
+  {
+   "t": 1817.5,
+   "ply": 16,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "rn1qk2r/pp3ppp/2bb1n2/4N3/4p3/8/PPPPBPPP/RNBQ1RK1 w kq - 2 9"
+  },
+  {
+   "t": 1826,
+   "ply": 17,
+   "line": [
+    "d4"
+   ],
+   "fen": "rn1qk2r/pp3ppp/2bb1n2/4N3/3Pp3/8/PPP1BPPP/RNBQ1RK1 b kq d3 0 9"
+  },
+  {
+   "t": 1833,
+   "ply": 18,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/pp3ppp/2bb1n2/4N3/3Pp3/8/PPP1BPPP/RNBQ1RK1 w - - 1 10"
+  },
+  {
+   "t": 1834.5,
+   "ply": 17,
+   "line": [],
+   "fen": "rn1qk2r/pp3ppp/2bb1n2/4N3/3Pp3/8/PPP1BPPP/RNBQ1RK1 b kq d3 0 9"
+  },
+  {
+   "t": 1841.5,
+   "ply": 18,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rn1q1rk1/pp3ppp/2bb1n2/4N3/3Pp3/8/PPP1BPPP/RNBQ1RK1 w - - 1 10"
+  },
+  {
+   "t": 1857,
+   "ply": 19,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rn1q1rk1/pp3ppp/2bb1n2/4N1B1/3Pp3/8/PPP1BPPP/RN1Q1RK1 b - - 2 10"
+  },
+  {
+   "t": 1859,
+   "ply": 20,
+   "line": [
+    "h6"
+   ],
+   "fen": "rn1q1rk1/pp3pp1/2bb1n1p/4N1B1/3Pp3/8/PPP1BPPP/RN1Q1RK1 w - - 0 11"
+  },
+  {
+   "t": 1860,
+   "ply": 21,
+   "line": [
+    "Bh4"
+   ],
+   "fen": "rn1q1rk1/pp3pp1/2bb1n1p/4N3/3Pp2B/8/PPP1BPPP/RN1Q1RK1 b - - 1 11"
+  },
+  {
+   "t": 1865,
+   "ply": 22,
+   "line": [
+    "Be7"
+   ],
+   "fen": "rn1q1rk1/pp2bpp1/2b2n1p/4N3/3Pp2B/8/PPP1BPPP/RN1Q1RK1 w - - 2 12"
+  },
+  {
+   "t": 1876,
+   "ply": 23,
+   "line": [
+    "c4"
+   ],
+   "fen": "rn1q1rk1/pp2bpp1/2b2n1p/4N3/2PPp2B/8/PP2BPPP/RN1Q1RK1 b - - 0 12"
+  },
+  {
+   "t": 1887,
+   "ply": 24,
+   "line": [
+    "b6"
+   ],
+   "fen": "rn1q1rk1/p3bpp1/1pb2n1p/4N3/2PPp2B/8/PP2BPPP/RN1Q1RK1 w - - 0 13"
+  },
+  {
+   "t": 1897.5,
+   "ply": 25,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rn1q1rk1/p3bpp1/1pb2n1p/4N3/2PPp2B/2N5/PP2BPPP/R2Q1RK1 b - - 1 13"
+  },
+  {
+   "t": 1902,
+   "ply": 26,
+   "line": [
+    "Nbd7"
+   ],
+   "fen": "r2q1rk1/p2nbpp1/1pb2n1p/4N3/2PPp2B/2N5/PP2BPPP/R2Q1RK1 w - - 2 14"
+  },
+  {
+   "t": 1903,
+   "ply": 27,
+   "line": [
+    "Nxc6"
+   ],
+   "fen": "r2q1rk1/p2nbpp1/1pN2n1p/8/2PPp2B/2N5/PP2BPPP/R2Q1RK1 b - - 0 14"
+  },
+  {
+   "t": 1908.5,
+   "ply": 24,
+   "line": [],
+   "fen": "rn1q1rk1/p3bpp1/1pb2n1p/4N3/2PPp2B/8/PP2BPPP/RN1Q1RK1 w - - 0 13"
+  },
+  {
+   "t": 1917.5,
+   "ply": 27,
+   "line": [
+    "Nxc6",
+    "Nbd7",
+    "Nc3"
+   ],
+   "fen": "r2q1rk1/p2nbpp1/1pN2n1p/8/2PPp2B/2N5/PP2BPPP/R2Q1RK1 b - - 2 14"
+  },
+  {
+   "t": 1930,
+   "ply": 12,
+   "line": [],
+   "fen": "rn1qkb1r/pp3ppp/2b2n2/4p3/8/5N2/PPPPBPPP/RNBQK2R w KQkq - 0 7"
+  },
+  {
+   "t": 1932,
+   "ply": 11,
+   "line": [],
+   "fen": "rn1qkb1r/pp2pppp/2b2n2/8/8/5N2/PPPPBPPP/RNBQK2R b KQkq - 1 6"
+  },
+  {
+   "t": 1935.5,
+   "ply": 12,
+   "line": [
+    "e5"
+   ],
+   "fen": "rn1qkb1r/pp3ppp/2b2n2/4p3/8/5N2/PPPPBPPP/RNBQK2R w KQkq - 0 7"
+  },
+  {
+   "t": 1942.5,
+   "ply": 16,
+   "line": [
+    "O-O",
+    "e4",
+    "Ne5",
+    "Bd6"
+   ],
+   "fen": "rn1qk2r/pp3ppp/2bb1n2/4N3/4p3/8/PPPPBPPP/RNBQ1RK1 w kq - 2 9"
+  },
+  {
+   "t": 1949.5,
+   "ply": 17,
+   "line": [
+    "d4"
+   ],
+   "fen": "rn1qk2r/pp3ppp/2bb1n2/4N3/3Pp3/8/PPP1BPPP/RNBQ1RK1 b kq d3 0 9"
+  },
+  {
+   "t": 2015.5,
+   "ply": 13,
+   "line": [],
+   "fen": "rn1qkb1r/pp3ppp/2b2n2/4p3/8/5N2/PPPPBPPP/RNBQ1RK1 b kq - 1 7"
+  },
+  {
+   "t": 2024,
+   "ply": 5,
+   "line": [],
+   "fen": "rnbqkb1r/ppp1pppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR b KQkq - 2 3"
+  },
+  {
+   "t": 2025.5,
+   "ply": 7,
+   "line": [
+    "Bd7",
+    "Be2"
+   ],
+   "fen": "rn1qkb1r/pppbpppp/5n2/3P4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 4 4"
+  },
+  {
+   "t": 2026.5,
+   "ply": 8,
+   "line": [
+    "Nxd5"
+   ],
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/8/8/PPPPBPPP/RNBQK1NR w KQkq - 0 5"
+  },
+  {
+   "t": 2028,
+   "ply": 9,
+   "line": [
+    "d4"
+   ],
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/3P4/8/PPP1BPPP/RNBQK1NR b KQkq - 0 5"
+  },
+  {
+   "t": 2037.5,
+   "ply": 10,
+   "line": [
+    "Bf5"
+   ],
+   "fen": "rn1qkb1r/ppp1pppp/8/3n1b2/3P4/8/PPP1BPPP/RNBQK1NR w KQkq - 1 6"
+  },
+  {
+   "t": 2039,
+   "ply": 9,
+   "line": [],
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/3P4/8/PPP1BPPP/RNBQK1NR b KQkq - 0 5"
+  },
+  {
+   "t": 2040.5,
+   "ply": 11,
+   "line": [
+    "e6",
+    "c4"
+   ],
+   "fen": "rn1qkb1r/pppb1ppp/4p3/3n4/2PP4/8/PP2BPPP/RNBQK1NR b KQkq - 0 6"
+  },
+  {
+   "t": 2044.5,
+   "ply": 10,
+   "line": [],
+   "fen": "rn1qkb1r/pppb1ppp/4p3/3n4/3P4/8/PPP1BPPP/RNBQK1NR w KQkq - 0 6"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "rn1qkb1r/pppbpppp/5n2/3P4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 4 4",
+   "line": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Be2"
+   ],
+   "ply": 7,
+   "options": [
+    {
+     "san": "c6",
+     "t": 1730,
+     "continuation": "c6"
+    },
+    {
+     "san": "Nxd5",
+     "t": 2026.5,
+     "continuation": "Nxd5"
+    }
+   ]
+  },
+  {
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/3P4/8/PPP1BPPP/RNBQK1NR b KQkq - 0 5",
+   "line": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Be2",
+    "Nxd5",
+    "d4"
+   ],
+   "ply": 9,
+   "options": [
+    {
+     "san": "Bf5",
+     "t": 2037.5,
+     "continuation": "Bf5"
+    },
+    {
+     "san": "e6",
+     "t": 2040.5,
+     "continuation": "e6 c4"
+    }
+   ]
+  },
+  {
+   "fen": "rn1q1rk1/p3bpp1/1pb2n1p/4N3/2PPp2B/8/PP2BPPP/RN1Q1RK1 w - - 0 13",
+   "line": [
+    "e4",
+    "d5",
+    "exd5",
+    "Nf6",
+    "Bb5+",
+    "Bd7",
+    "Be2",
+    "c6",
+    "dxc6",
+    "Bxc6",
+    "Nf3",
+    "e5",
+    "O-O",
+    "e4",
+    "Ne5",
+    "Bd6",
+    "d4",
+    "O-O",
+    "Bg5",
+    "h6",
+    "Bh4",
+    "Be7",
+    "c4",
+    "b6"
+   ],
+   "ply": 24,
+   "options": [
+    {
+     "san": "Nc3",
+     "t": 1897.5,
+     "continuation": "Nc3"
+    },
+    {
+     "san": "Nxc6",
+     "t": 1917.5,
+     "continuation": "Nxc6 Nbd7 Nc3"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Scandinavian Defense: Modern Variation",
+   "eco": "B01",
+   "plies": 4,
+   "line": "e4 d5 exd5 Nf6",
+   "coverage": 0.931
+  },
+  {
+   "name": "Scandinavian Defense",
+   "eco": "B01",
+   "plies": 2,
+   "line": "e4 d5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Indian Defense: London System",
+  "confirmed": false
+ }
+}

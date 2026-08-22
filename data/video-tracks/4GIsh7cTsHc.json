@@ -756,8 +756,8 @@
   {
    "id": "vn-advance-caro-the-bishop-beats-the-bars",
    "line": "e4 c6 d4 d5 e5 Bf5",
-   "teaches": "The whole point of this defence's first moves is one comparison: the same locked centre with the light-squared bishop outside the chain instead of behind it. Bring the bishop out first, every time, and only then close the chain — the difference between the two pictures is the difference between a comfortable game and a lifelong apology.",
-   "explains": "The bishop has come out to f5 before the e-pawn moves, and it is already working: it holds e4, the square in front of the chain where the opponent would love to post a piece, and the pawn can go to e6 behind it next. The structure that follows is the good version of the closed centre — same pawns, bishop on the right side of them.",
+   "teaches": "The whole point of this defence's first moves is one comparison: the same locked centre with the light-squared bishop outside the chain instead of behind it. Bring the bishop out first, every time, and only then close the chain.",
+   "explains": "The whole point of these first moves is one comparison: the same locked centre, but with the light-squared bishop outside the chain instead of buried behind it. So bring it out first, every time, and only then close the chain. The bishop to f5 is already working — it holds e4, the square in front of the chain where the opponent would love to post a piece, and the pawn can go to e6 behind it next. Same pawns, bishop on the right side of them: the good version.",
    "reasons": [
     {
      "kind": "controls",
@@ -772,8 +772,8 @@
   {
    "id": "vn-advance-caro-strike-the-base-on-schedule",
    "line": "e4 c6 d4 d5 e5 Bf5 f4 Nh6 Bd3 e6 Nf3 c5",
-   "teaches": "Against a pawn chain, the plan is not a secret: attack the base. The c-pawn's strike at the centre is the main idea of the whole structure, and it lands best once your minor pieces have settled — the pawn asks the question and the pieces are already in place to profit from any answer.",
-   "explains": "The pawn strikes at c5, attacking the pawn on d4 — the base of the chain that starts there and runs to e5. Whatever happens next, the chain's foundation is under pressure, and the pieces developed on the previous moves are aimed at exactly this fight.",
+   "teaches": "Against a pawn chain, the plan is not a secret: attack the base. The c-pawn's strike at the centre is the main idea of the whole structure, and it lands best once your minor pieces have settled.",
+   "explains": "Against a pawn chain the plan is no secret: attack the base. The pawn strikes at c5, hitting the pawn on d4 — the base of the chain that runs up to e5 — and it lands best now that the minor pieces have settled. The pawn asks the question, and the pieces developed on the previous moves are aimed at exactly this fight.",
    "reasons": [
     {
      "kind": "attacks",
@@ -788,7 +788,7 @@
   {
    "id": "vn-advance-caro-keep-the-tension-never-lock-it-yourself",
    "line": "e4 c6 d4 d5 e5 Bf5 f4 Nh6 Bd3 e6 Nf3 c5 Bxf5 Nc6 Kf1 Nb8 dxc5 Nc6 c3 Qb6 Rg1 Nxf5",
-   "teaches": "When a trade is offered on a square your knight can reach, prefer the recapture that improves a piece over the one that moves a pawn. The knight that retakes arrives on an active square with the pawn shield untouched — the same trade, and one version of it develops you.",
+   "teaches": "When a trade is offered on a square your knight can reach, prefer the recapture that improves a piece over the one that moves a pawn. The knight that retakes arrives on an active square with the pawn shield untouched — same trade, and one version develops you.",
    "explains": "The knight has recaptured on f5, stepping from the rim into the fight, and every pawn in front of the king still stands where it started. The queen on b6 keeps leaning on the pawns on b2 and c5 meanwhile — pressure held, structure intact, one piece better than before the trade.",
    "structural": "the recapture chosen to activate a piece and keep the pawn shield — same trade, better version",
    "fen": "r3kb1r/pp3ppp/1qn1p3/2PpPn2/5P2/2P2N2/PP4PP/RNBQ1KR1 w kq - 0 12",

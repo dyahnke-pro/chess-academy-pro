@@ -468,7 +468,7 @@
   {
    "id": "vn-scotchgambit-the-bishop-that-picks-the-argument",
    "line": "e4 e5 Nf3 Nc6 Bc4",
-   "teaches": "Aim the bishop at f7 early and the opponent has to choose a defence, not a plan. Two replies are sound here and they lead to completely different games.",
+   "teaches": "Aim the bishop at f7 early and the opponent has to choose a defence, not a plan — two replies are sound here and they lead to completely different games.",
    "explains": "The bishop takes the diagonal pointing at f7, the square only the king defends. Black has two main answers and they are genuinely different openings: block the diagonal with the bishop, or develop the knight and accept that the sharpest sacrifice on f7 is now on the table. Choosing the knight means committing to know that sacrifice cold.",
    "reasons": [
     {
@@ -500,7 +500,7 @@
   {
    "id": "vn-scotchgambit-the-sideline-that-changes-the-opening-name",
    "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4",
-   "teaches": "A pawn break can change which opening you are in without changing a single piece placement. Recognise the transposition and you are already in known territory rather than thinking from scratch.",
+   "teaches": "A pawn break can change which opening you are in without changing a single piece placement — recognise the transposition and you are already in known territory rather than thinking from scratch.",
    "explains": "White strikes at e5 instead of going for the sacrifice. The pieces have not moved anywhere unusual, but the game has left the bishop-on-c4 lines and is heading somewhere with a different name and different theory. This is the sideline that a player who only prepared the sacrifice will be improvising against.",
    "reasons": [
     {
@@ -516,7 +516,7 @@
   {
    "id": "vn-scotchgambit-take-and-hold-it-for-a-while",
    "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4",
-   "teaches": "Accept the pawn when declining costs you the centre anyway. A gambit pawn you can give back on your own terms is a bargaining chip, not a debt.",
+   "teaches": "Accept the pawn when declining costs you the centre anyway — a gambit pawn you can give back on your own terms is a bargaining chip, not a debt.",
    "explains": "Black takes in the centre. The pawn on d4 is not going to be held for the rest of the game and it does not need to be — it costs White a move to regain, and that is a move Black spends developing. What matters is which structure appears when White finally takes it back.",
    "reasons": [
     {
@@ -532,7 +532,7 @@
   {
    "id": "vn-scotchgambit-the-push-that-names-the-gambit",
    "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 e5",
-   "teaches": "When a pawn advance both gains space and attacks a piece, expect the reply to be a counter-strike rather than a retreat. Look for the move that hits back before you look for a square to run to.",
+   "teaches": "When a pawn advance both gains space and attacks a piece, expect the reply to be a counter-strike rather than a retreat — look for the move that hits back before you look for a square to run to.",
    "explains": "The pawn drives at the knight on f6 and this is the gambit proper — White has given a pawn and is now using the tempo. Moving the knight is legal and playable, but there is one move here that is considered far more reputable than any of them: hitting back in the centre and letting the knight look after itself.",
    "reasons": [
     {
@@ -548,7 +548,7 @@
   {
    "id": "vn-scotchgambit-answer-a-push-with-a-push",
    "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 e5 d5",
-   "teaches": "Counter-attack beats retreat when the counter-attack hits something of equal value. Ignoring a threat is sound whenever your own threat is at least as fast.",
+   "teaches": "Counter-attack beats retreat when the counter-attack hits something of equal value — ignoring a threat is sound whenever your own threat is at least as fast.",
    "explains": "Instead of moving the attacked knight, the pawn goes to d5 and hits the bishop on c4. Both pieces are now under fire and it is White to choose, which is a far better version of the position for Black than any retreat. The idea is worth remembering beyond this exact opening — the central counter-push is the standard answer whenever a wing attack asks a question in the middle.",
    "reasons": [
     {
@@ -564,7 +564,7 @@
   {
    "id": "vn-scotchgambit-the-crossroads-after-the-pin",
    "line": "e4 e5 Nf3 Nc6 Bc4 Nf6 d4 exd4 e5 d5 Bb5",
-   "teaches": "When a piece is pinned, count how many ways there are to break the pin before assuming the traditional one is best. Blocking the line is a move that also develops.",
+   "teaches": "When a piece is pinned, count how many ways there are to break the pin before assuming the traditional one is best — blocking the line is a move that also develops.",
    "explains": "The bishop steps aside to b5, pinning the knight on c6 against the king — that knight cannot legally move at all right now. Two roads out. The traditional one, considered for a long time to be essentially forced, jumps the other knight forward. The newer one retreats it to d7 instead, which looks like it does nothing and in fact blocks the pinning line, so the knight on c6 is free again and the capture on d4 no longer wins anything.",
    "reasons": [
     {

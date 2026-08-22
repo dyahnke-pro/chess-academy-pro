@@ -1,0 +1,51 @@
+[
+ {
+  "id": "vn-antimarshall-ba4-keeps-the-diagonal",
+  "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4",
+  "teaches": "When a pawn pokes your bishop, retreating along the same diagonal keeps the pressure alive instead of surrendering it — the tempo the opponent spent nudging it bought them nothing lasting.",
+  "explains": "The pawn asks the bishop a question, and you could just trade it off on c6 — but drop it back to a4 instead. It stays trained down the diagonal on the knight that guards e5, so all the tension of the opening is still there and the little pawn poke changed nothing.",
+  "reasons": [ { "kind": "attacks", "square": "c6" } ]
+ },
+ {
+  "id": "vn-antimarshall-the-pawn-is-not-poison",
+  "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O",
+  "teaches": "A pawn everyone 'knows' not to take is often perfectly edible — what folklore calls a blunder can be a respected, fully sound line, so check the received wisdom for yourself.",
+  "explains": "White castles, and here is the pawn on e4 sitting there. You might have been told grabbing it is a beginner's blunder — but it is not: this is the Open Variation, sound and played at the very top. Declining it to develop is a matter of taste, not a rule.",
+  "reasons": []
+ },
+ {
+  "id": "vn-antimarshall-castle-and-keep-the-gambit-in-reserve",
+  "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O",
+  "teaches": "The point of a system can be a pawn sacrifice you have not made yet — get castled and ready, and hold the freeing break in reserve until the opponent commits to the setup that invites it.",
+  "explains": "You could grab space in the centre now — but Black castles instead and keeps the real weapon in hand. The moment White plays c3, the central break comes as a pawn sacrifice for a fierce attack. King safety first, the sacrifice second, and only when White has walked into it.",
+  "reasons": []
+ },
+ {
+  "id": "vn-antimarshall-a4-sidesteps-the-gambit",
+  "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4",
+  "teaches": "When you fear an opponent's deep preparation, sidestep it rather than walk in — a quiet flank thrust that leans on their pawn chain avoids the memorised attack and asks a fresh question.",
+  "explains": "Rather than play the move that invites the whole prepared attack, White plays a4, leaning on the b5-pawn and steering clear of the memorised lines. It refuses the theory fight and hands the question back to Black — the most testing modern way to duck the system.",
+  "reasons": [ { "kind": "attacks", "square": "b5" } ]
+ },
+ {
+  "id": "vn-antimarshall-push-past-and-develop-behind",
+  "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4",
+  "teaches": "When a flank pawn pokes your chain, advancing past it is often cleaner than defending it — pushing keeps the tension off and frees your pieces to develop behind the pawn.",
+  "explains": "You could sit and defend the b-pawn — but pushing it to b4 is cleaner. It takes the tension away and clears the path to swing the rook off the a-file to b8 and fianchetto the bishop to b7. The chain stays whole and every piece gets active.",
+  "reasons": [ { "kind": "controls", "square": "c3" } ]
+ },
+ {
+  "id": "vn-antimarshall-a-central-break-over-the-quiet-move",
+  "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4 d4",
+  "teaches": "A central pawn break can test the opponent more sharply than the routine supporting move — but do not capture on reflex; opening the centre for the opponent can cost more than the pawn is worth.",
+  "explains": "White strikes with d4 instead of the usual quiet c3. The reflex is to snap it off — but that would be the mistake: taking on d4 lets White shove the e-pawn forward with tempo. Black should hold the centre together rather than grab.",
+  "reasons": []
+ },
+ {
+  "id": "vn-antimarshall-support-the-centre-with-d6",
+  "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4 d4 d6",
+  "teaches": "When your centre pawn is attacked and capturing is unsafe, support it — the modest defensive pawn move keeps the structure intact and refuses the opponent the space grab a careless capture would hand them.",
+  "explains": "So instead of grabbing, the pawn to d6 defends the e5-pawn and holds the centre together. It is the quiet, accurate reply — no tension released, no space handed over, and Black stands perfectly fine.",
+  "reasons": [ { "kind": "defends", "square": "e5" } ]
+ }
+]

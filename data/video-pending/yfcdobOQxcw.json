@@ -1,0 +1,320 @@
+{
+ "videoId": "yfcdobOQxcw",
+ "title": "Ruy Lopez | The Sensei Speedrun | GM Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-22",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 6010,
+  "settledPositions": null
+ },
+ "plies": 27,
+ "rewinds": 2,
+ "moves": [
+  {
+   "t": 9.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 17.5,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 18.5,
+   "ply": 4,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 27.5,
+   "ply": 5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3"
+  },
+  {
+   "t": 47.5,
+   "ply": 6,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4"
+  },
+  {
+   "t": 54,
+   "ply": 7,
+   "line": [
+    "Ba4"
+   ],
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4"
+  },
+  {
+   "t": 56,
+   "ply": 8,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 5"
+  },
+  {
+   "t": 64,
+   "ply": 9,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B2PP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 5"
+  },
+  {
+   "t": 86.5,
+   "ply": 5,
+   "line": [],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3"
+  },
+  {
+   "t": 93.5,
+   "ply": 9,
+   "line": [
+    "Nf6",
+    "Ba4",
+    "a6",
+    "d4"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B2PP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 5"
+  },
+  {
+   "t": 110,
+   "ply": 10,
+   "line": [
+    "exd4"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/8/B2pP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 6"
+  },
+  {
+   "t": 130,
+   "ply": 11,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/8/B2pP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 1 6"
+  },
+  {
+   "t": 162,
+   "ply": 12,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk2r/1pppbppp/p1n2n2/8/B2pP3/5N2/PPP2PPP/RNBQ1RK1 w kq - 2 7"
+  },
+  {
+   "t": 172.5,
+   "ply": 11,
+   "line": [],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/8/B2pP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 1 6"
+  },
+  {
+   "t": 174,
+   "ply": 13,
+   "line": [
+    "Be7",
+    "e5"
+   ],
+   "fen": "r1bqk2r/1pppbppp/p1n2n2/4P3/B2p4/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 7"
+  },
+  {
+   "t": 205,
+   "ply": 14,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "r1bqk2r/1pppbppp/p1n5/4P3/B2pn3/5N2/PPP2PPP/RNBQ1RK1 w kq - 1 8"
+  },
+  {
+   "t": 223.5,
+   "ply": 15,
+   "line": [
+    "Nxd4"
+   ],
+   "fen": "r1bqk2r/1pppbppp/p1n5/4P3/B2Nn3/8/PPP2PPP/RNBQ1RK1 b kq - 0 8"
+  },
+  {
+   "t": 234.5,
+   "ply": 16,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/1pppbppp/p1n5/4P3/B2Nn3/8/PPP2PPP/RNBQ1RK1 w - - 1 9"
+  },
+  {
+   "t": 260,
+   "ply": 17,
+   "line": [
+    "Nf5"
+   ],
+   "fen": "r1bq1rk1/1pppbppp/p1n5/4PN2/B3n3/8/PPP2PPP/RNBQ1RK1 b - - 2 9"
+  },
+  {
+   "t": 291.5,
+   "ply": 18,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bq1rk1/1pp1bppp/p1n5/3pPN2/B3n3/8/PPP2PPP/RNBQ1RK1 w - d6 0 10"
+  },
+  {
+   "t": 330,
+   "ply": 19,
+   "line": [
+    "exd6"
+   ],
+   "fen": "r1bq1rk1/1pp1bppp/p1nP4/5N2/B3n3/8/PPP2PPP/RNBQ1RK1 b - - 0 10"
+  },
+  {
+   "t": 332,
+   "ply": 20,
+   "line": [
+    "Bxf5"
+   ],
+   "fen": "r2q1rk1/1pp1bppp/p1nP4/5b2/B3n3/8/PPP2PPP/RNBQ1RK1 w - - 0 11"
+  },
+  {
+   "t": 339,
+   "ply": 21,
+   "line": [
+    "dxe7"
+   ],
+   "fen": "r2q1rk1/1pp1Pppp/p1n5/5b2/B3n3/8/PPP2PPP/RNBQ1RK1 b - - 0 11"
+  },
+  {
+   "t": 342,
+   "ply": 22,
+   "line": [
+    "Qxe7"
+   ],
+   "fen": "r4rk1/1pp1qppp/p1n5/5b2/B3n3/8/PPP2PPP/RNBQ1RK1 w - - 0 12"
+  },
+  {
+   "t": 362.5,
+   "ply": 24,
+   "line": [
+    "Bxc6",
+    "bxc6"
+   ],
+   "fen": "r4rk1/2p1qppp/p1p5/5b2/4n3/8/PPP2PPP/RNBQ1RK1 w - - 0 13"
+  },
+  {
+   "t": 379,
+   "ply": 25,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r4rk1/2p1qppp/p1p5/5b2/4n3/4B3/PPP2PPP/RN1Q1RK1 b - - 1 13"
+  },
+  {
+   "t": 447,
+   "ply": 26,
+   "line": [
+    "Rad8"
+   ],
+   "fen": "3r1rk1/2p1qppp/p1p5/5b2/4n3/4B3/PPP2PPP/RN1Q1RK1 w - - 2 14"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3",
+    "Nc6",
+    "Bb5"
+   ],
+   "ply": 5,
+   "options": [
+    {
+     "san": "a6",
+     "t": 47.5,
+     "continuation": "a6"
+    },
+    {
+     "san": "Nf6",
+     "t": 93.5,
+     "continuation": "Nf6 Ba4 a6 d4"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Ruy Lopez: Morphy Defense, Mackenzie Variation",
+   "eco": "C77",
+   "plies": 9,
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 d4",
+   "coverage": 0.04
+  },
+  {
+   "name": "Ruy Lopez: Morphy Defense",
+   "eco": "C70",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6",
+   "coverage": 0.16
+  },
+  {
+   "name": "Ruy Lopez: Berlin Defense",
+   "eco": "C65",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bb5 Nf6",
+   "coverage": 0.68
+  },
+  {
+   "name": "Ruy Lopez",
+   "eco": "C60",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Bb5",
+   "coverage": 0.88
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.92
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.96
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Ruy Lopez",
+  "confirmed": true
+ }
+}

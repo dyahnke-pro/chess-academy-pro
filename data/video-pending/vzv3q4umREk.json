@@ -1,0 +1,175 @@
+{
+ "videoId": "vzv3q4umREk",
+ "title": "\"Oh I Get It, HE'S CHEATING!!!\" | Smith Morra Gambit | The Sensei Speedrun | GM Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-22",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 2915,
+  "settledPositions": null
+ },
+ "plies": 14,
+ "rewinds": 1,
+ "moves": [
+  {
+   "t": 12,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 14.5,
+   "ply": 3,
+   "line": [
+    "d4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2"
+  },
+  {
+   "t": 26,
+   "ply": 4,
+   "line": [
+    "cxd4"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3"
+  },
+  {
+   "t": 41,
+   "ply": 5,
+   "line": [
+    "c3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3"
+  },
+  {
+   "t": 52.5,
+   "ply": 6,
+   "line": [
+    "dxc3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4"
+  },
+  {
+   "t": 59.5,
+   "ply": 7,
+   "line": [
+    "Nxc3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4"
+  },
+  {
+   "t": 64,
+   "ply": 8,
+   "line": [
+    "d6"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/4P3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5"
+  },
+  {
+   "t": 98,
+   "ply": 9,
+   "line": [
+    "Bc4"
+   ],
+   "fen": "rnbqkbnr/pp2pppp/3p4/8/2B1P3/2N5/PP3PPP/R1BQK1NR b KQkq - 1 5"
+  },
+  {
+   "t": 106,
+   "ply": 10,
+   "line": [
+    "e6"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/3pp3/8/2B1P3/2N5/PP3PPP/R1BQK1NR w KQkq - 0 6"
+  },
+  {
+   "t": 145.5,
+   "ply": 11,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp3ppp/3pp3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R b KQkq - 1 6"
+  },
+  {
+   "t": 151,
+   "ply": 12,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2npp3/8/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 2 7"
+  },
+  {
+   "t": 168.5,
+   "ply": 13,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkbnr/pp3ppp/2npp3/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 b kq - 3 7"
+  },
+  {
+   "t": 176,
+   "ply": 14,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk1nr/pp2bppp/2npp3/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 4 8"
+  },
+  {
+   "t": 886.5,
+   "ply": 6,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit Accepted, Scheveningen Formation",
+   "eco": "B21",
+   "plies": 12,
+   "line": "e4 c5 d4 cxd4 c3 dxc3 Nxc3 d6 Bc4 e6 Nf3 Nc6",
+   "coverage": 0.231
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit Accepted",
+   "eco": "B21",
+   "plies": 6,
+   "line": "e4 c5 d4 cxd4 c3 dxc3",
+   "coverage": 0.692
+  },
+  {
+   "name": "Sicilian Defense: Smith-Morra Gambit",
+   "eco": "B21",
+   "plies": 3,
+   "line": "e4 c5 d4",
+   "coverage": 0.923
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense: Smith-Morra Gambit",
+  "confirmed": true
+ }
+}

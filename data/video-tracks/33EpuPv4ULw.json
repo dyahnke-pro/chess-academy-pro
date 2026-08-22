@@ -286,8 +286,8 @@
   {
    "id": "vn-philidor-the-move-that-concedes-twice",
    "line": "e4 e5 Nf3 d6",
-   "teaches": "Judge a defensive pawn move by what it costs, not by whether it is safe. A move that neither develops a piece nor frees one has conceded two things at once, and both are exploitable.",
-   "explains": "The pawn to d6 holds e5 and that is all it does. It brings no piece out, and it shuts in the bishop on f8, which a moment ago had the whole diagonal to choose from. Solid is not the same as good: two concessions in one move is exactly the sort of thing an opponent is entitled to punish, and there is a standard way to do it.",
+   "teaches": "Judge a defensive pawn move by what it costs, not by whether it is safe — a move that neither develops a piece nor frees one has conceded two things at once, and both are exploitable.",
+   "explains": "Judge a defensive pawn move by what it costs, not whether it's safe. The pawn to d6 holds e5 and that is all it does: it brings no piece out, and it shuts in the bishop on f8 that a moment ago had the whole diagonal to choose from. Solid is not the same as good — two concessions in one move is exactly the sort of thing an opponent is entitled to punish, and there is a standard way to do it.",
    "reasons": [
     {
      "kind": "blocks",
@@ -303,8 +303,8 @@
   {
    "id": "vn-philidor-open-the-position-against-the-undeveloped",
    "line": "e4 e5 Nf3 d6 d4",
-   "teaches": "Against an opponent who is behind in development, open the position. Every line you open is worth more to the side with more pieces looking down it — that is the whole reason to trade in the centre here.",
-   "explains": "The pawn strikes at e5 immediately. This is the standard answer and the logic is mechanical rather than clever: the opponent has spent a move without developing and has blocked a bishop, so the way to make those facts matter is to open lines while they are still true. Waiting lets them untangle for free.",
+   "teaches": "Against an opponent who is behind in development, open the position — every line you open is worth more to the side with more pieces looking down it.",
+   "explains": "Against an opponent behind in development, open the position. The pawn strikes at e5 at once, and the logic is mechanical rather than clever: they have spent a move without developing and blocked a bishop, so you make those facts matter by opening lines while they are still true. Wait, and they untangle for free.",
    "reasons": [
     {
      "kind": "attacks",
@@ -319,7 +319,7 @@
   {
    "id": "vn-philidor-recapture-and-do-not-rush-the-knight",
    "line": "e4 e5 Nf3 d6 d4 exd4 Nxd4",
-   "teaches": "A centralised knight that cannot be chased does not need to move again. Develop the rest of the army and let the opponent decide whether trading it off helps them.",
+   "teaches": "A centralised knight that cannot be chased does not need to move again — develop the rest of the army and let the opponent decide whether trading it off helps them.",
    "explains": "The knight takes back in the middle, covering f5 and b5, and there is no hurry to move it anywhere. If it gets traded, taking back with the queen is perfectly comfortable here — the piece that would normally chase a queen off that square has to come out first, and it has not. So White simply keeps developing and lets the position stay open.",
    "reasons": [
     {

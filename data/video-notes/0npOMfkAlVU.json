@@ -2,17 +2,11 @@
  {
   "id": "vn-najdorf-choose-the-structure-not-just-the-move",
   "line": "e4 c5 Nf3 d6 d4 cxd4 Nxd4 Nf6 Nc3 a6 Be2 e6",
-  "teaches": "Some moves are a choice of MOVE and some are a choice of STRUCTURE, and this pawn is the second kind. Playing it to the sixth rank keeps the centre flexible and the light squares guarded; pushing it a square further seizes space and concedes one square permanently. Neither is better \u2014 but pick knowingly, because everything you do for the next twenty moves follows from it.",
-  "explains": "The pawn steps to e6, covering d5 and f5 \u2014 the two squares a knight would love in front of this structure. The centre stays fluid and nothing has been conceded.",
+  "teaches": "Some moves are a choice of MOVE and some are a choice of STRUCTURE — pick knowingly, because everything you do for the next twenty moves follows from it. To the sixth rank keeps the centre flexible and the light squares guarded; a square further seizes space and concedes one square for good.",
+  "explains": "Some moves choose a move; this one chooses a structure. Push the pawn two squares and you grab space but hand over a square for good — play it to e6 instead and the centre stays fluid, nothing conceded. On e6 it covers d5 and f5, the two squares a knight would kill to reach in front of this structure. Pick it knowingly: everything for the next twenty moves flows from here.",
   "reasons": [
-   {
-    "kind": "controls",
-    "square": "d5"
-   },
-   {
-    "kind": "controls",
-    "square": "f5"
-   }
+   { "kind": "controls", "square": "d5" },
+   { "kind": "controls", "square": "f5" }
   ]
  }
 ]

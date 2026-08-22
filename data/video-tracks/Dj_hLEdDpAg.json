@@ -1,0 +1,778 @@
+{
+ "videoId": "Dj_hLEdDpAg",
+ "title": "Sicilian Defense | The Sensei Speedrun | GM Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 4862,
+  "settledPositions": null
+ },
+ "plies": 65,
+ "rewinds": 5,
+ "moves": [
+  {
+   "t": 16.5,
+   "ply": 2,
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 18.5,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 22.5,
+   "ply": 4,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 24,
+   "ply": 5,
+   "line": [
+    "c3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3"
+  },
+  {
+   "t": 53.5,
+   "ply": 6,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkbnr/pp2pppp/2n5/2pp4/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4"
+  },
+  {
+   "t": 61.5,
+   "ply": 7,
+   "line": [
+    "e5"
+   ],
+   "fen": "r1bqkbnr/pp2pppp/2n5/2ppP3/8/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 4"
+  },
+  {
+   "t": 118.5,
+   "ply": 8,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "r2qkbnr/pp2pppp/2n5/2ppP3/6b1/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 1 5"
+  },
+  {
+   "t": 132.5,
+   "ply": 9,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r2qkbnr/pp2pppp/2n5/1BppP3/6b1/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 2 5"
+  },
+  {
+   "t": 170.5,
+   "ply": 10,
+   "line": [
+    "Qc7"
+   ],
+   "fen": "r3kbnr/ppq1pppp/2n5/1BppP3/6b1/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 3 6"
+  },
+  {
+   "t": 181.5,
+   "ply": 11,
+   "line": [
+    "Bxc6+"
+   ],
+   "fen": "r3kbnr/ppq1pppp/2B5/2ppP3/6b1/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 0 6"
+  },
+  {
+   "t": 185,
+   "ply": 12,
+   "line": [
+    "Qxc6"
+   ],
+   "fen": "r3kbnr/pp2pppp/2q5/2ppP3/6b1/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 0 7"
+  },
+  {
+   "t": 190.5,
+   "ply": 13,
+   "line": [
+    "d4"
+   ],
+   "fen": "r3kbnr/pp2pppp/2q5/2ppP3/3P2b1/2P2N2/PP3PPP/RNBQK2R b KQkq - 0 7"
+  },
+  {
+   "t": 264.5,
+   "ply": 14,
+   "line": [
+    "e6"
+   ],
+   "fen": "r3kbnr/pp3ppp/2q1p3/2ppP3/3P2b1/2P2N2/PP3PPP/RNBQK2R w KQkq - 0 8"
+  },
+  {
+   "t": 274.5,
+   "ply": 15,
+   "line": [
+    "Be3"
+   ],
+   "fen": "r3kbnr/pp3ppp/2q1p3/2ppP3/3P2b1/2P1BN2/PP3PPP/RN1QK2R b KQkq - 1 8"
+  },
+  {
+   "t": 299.5,
+   "ply": 16,
+   "line": [
+    "Ne7"
+   ],
+   "fen": "r3kb1r/pp2nppp/2q1p3/2ppP3/3P2b1/2P1BN2/PP3PPP/RN1QK2R w KQkq - 2 9"
+  },
+  {
+   "t": 306.5,
+   "ply": 17,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r3kb1r/pp2nppp/2q1p3/2ppP3/3P2b1/2P1BN2/PP3PPP/RN1Q1RK1 b kq - 3 9"
+  },
+  {
+   "t": 308.5,
+   "ply": 18,
+   "line": [
+    "Nf5"
+   ],
+   "fen": "r3kb1r/pp3ppp/2q1p3/2ppPn2/3P2b1/2P1BN2/PP3PPP/RN1Q1RK1 w kq - 4 10"
+  },
+  {
+   "t": 318.5,
+   "ply": 19,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "r3kb1r/pp3ppp/2q1p3/2ppPn2/3P2b1/2P1BN2/PP1N1PPP/R2Q1RK1 b kq - 5 10"
+  },
+  {
+   "t": 360,
+   "ply": 20,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r3k2r/pp2bppp/2q1p3/2ppPn2/3P2b1/2P1BN2/PP1N1PPP/R2Q1RK1 w kq - 6 11"
+  },
+  {
+   "t": 366.5,
+   "ply": 22,
+   "line": [
+    "h3",
+    "Bh5"
+   ],
+   "fen": "r3k2r/pp2bppp/2q1p3/2ppPn1b/3P4/2P1BN1P/PP1N1PP1/R2Q1RK1 w kq - 1 12"
+  },
+  {
+   "t": 380,
+   "ply": 23,
+   "line": [
+    "Rc1"
+   ],
+   "fen": "r3k2r/pp2bppp/2q1p3/2ppPn1b/3P4/2P1BN1P/PP1N1PP1/2RQ1RK1 b kq - 2 12"
+  },
+  {
+   "t": 420.5,
+   "ply": 24,
+   "line": [
+    "c4"
+   ],
+   "fen": "r3k2r/pp2bppp/2q1p3/3pPn1b/2pP4/2P1BN1P/PP1N1PP1/2RQ1RK1 w kq - 0 13"
+  },
+  {
+   "t": 440.5,
+   "ply": 25,
+   "line": [
+    "b3"
+   ],
+   "fen": "r3k2r/pp2bppp/2q1p3/3pPn1b/2pP4/1PP1BN1P/P2N1PP1/2RQ1RK1 b kq - 0 13"
+  },
+  {
+   "t": 498,
+   "ply": 26,
+   "line": [
+    "b5"
+   ],
+   "fen": "r3k2r/p3bppp/2q1p3/1p1pPn1b/2pP4/1PP1BN1P/P2N1PP1/2RQ1RK1 w kq - 0 14"
+  },
+  {
+   "t": 512,
+   "ply": 27,
+   "line": [
+    "a4"
+   ],
+   "fen": "r3k2r/p3bppp/2q1p3/1p1pPn1b/P1pP4/1PP1BN1P/3N1PP1/2RQ1RK1 b kq - 0 14"
+  },
+  {
+   "t": 547,
+   "ply": 28,
+   "line": [
+    "bxa4"
+   ],
+   "fen": "r3k2r/p3bppp/2q1p3/3pPn1b/p1pP4/1PP1BN1P/3N1PP1/2RQ1RK1 w kq - 0 15"
+  },
+  {
+   "t": 553,
+   "ply": 29,
+   "line": [
+    "bxa4"
+   ],
+   "fen": "r3k2r/p3bppp/2q1p3/3pPn1b/P1pP4/2P1BN1P/3N1PP1/2RQ1RK1 b kq - 0 15"
+  },
+  {
+   "t": 563,
+   "ply": 30,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r4rk1/p3bppp/2q1p3/3pPn1b/P1pP4/2P1BN1P/3N1PP1/2RQ1RK1 w - - 1 16"
+  },
+  {
+   "t": 572,
+   "ply": 31,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r4rk1/p3bppp/2q1p3/3pPn1b/P1pP4/2P1BN1P/3N1PP1/2RQR1K1 b - - 2 16"
+  },
+  {
+   "t": 592.5,
+   "ply": 32,
+   "line": [
+    "Rab8"
+   ],
+   "fen": "1r3rk1/p3bppp/2q1p3/3pPn1b/P1pP4/2P1BN1P/3N1PP1/2RQR1K1 w - - 3 17"
+  },
+  {
+   "t": 602,
+   "ply": 33,
+   "line": [
+    "Nf1"
+   ],
+   "fen": "1r3rk1/p3bppp/2q1p3/3pPn1b/P1pP4/2P1BN1P/5PP1/2RQRNK1 b - - 4 17"
+  },
+  {
+   "t": 625,
+   "ply": 34,
+   "line": [
+    "Ba3"
+   ],
+   "fen": "1r3rk1/p4ppp/2q1p3/3pPn1b/P1pP4/b1P1BN1P/5PP1/2RQRNK1 w - - 5 18"
+  },
+  {
+   "t": 631,
+   "ply": 36,
+   "line": [
+    "Ra1",
+    "Bb2"
+   ],
+   "fen": "1r3rk1/p4ppp/2q1p3/3pPn1b/P1pP4/2P1BN1P/1b3PP1/R2QRNK1 w - - 7 19"
+  },
+  {
+   "t": 632,
+   "ply": 40,
+   "line": [
+    "Ra3",
+    "Bc1",
+    "Ra1",
+    "Ba3"
+   ],
+   "fen": "1r3rk1/p4ppp/2q1p3/3pPn1b/P1pP4/b1P1BN1P/5PP1/R2QRNK1 w - - 11 21"
+  },
+  {
+   "t": 633.5,
+   "ply": 36,
+   "line": [],
+   "fen": "1r3rk1/p4ppp/2q1p3/3pPn1b/P1pP4/2P1BN1P/1b3PP1/R2QRNK1 w - - 7 19"
+  },
+  {
+   "t": 688.5,
+   "ply": 37,
+   "line": [
+    "Ra2"
+   ],
+   "fen": "1r3rk1/p4ppp/2q1p3/3pPn1b/P1pP4/2P1BN1P/Rb3PP1/3QRNK1 b - - 8 19"
+  },
+  {
+   "t": 690.5,
+   "ply": 38,
+   "line": [
+    "Bxc3"
+   ],
+   "fen": "1r3rk1/p4ppp/2q1p3/3pPn1b/P1pP4/2b1BN1P/R4PP1/3QRNK1 w - - 0 20"
+  },
+  {
+   "t": 695,
+   "ply": 39,
+   "line": [
+    "Ree2"
+   ],
+   "fen": "1r3rk1/p4ppp/2q1p3/3pPn1b/P1pP4/2b1BN1P/R3RPP1/3Q1NK1 b - - 1 20"
+  },
+  {
+   "t": 718,
+   "ply": 40,
+   "line": [
+    "Bxf3"
+   ],
+   "fen": "1r3rk1/p4ppp/2q1p3/3pPn2/P1pP4/2b1Bb1P/R3RPP1/3Q1NK1 w - - 0 21"
+  },
+  {
+   "t": 722.5,
+   "ply": 41,
+   "line": [
+    "gxf3"
+   ],
+   "fen": "1r3rk1/p4ppp/2q1p3/3pPn2/P1pP4/2b1BP1P/R3RP2/3Q1NK1 b - - 0 21"
+  },
+  {
+   "t": 773.5,
+   "ply": 42,
+   "line": [
+    "Rb3"
+   ],
+   "fen": "5rk1/p4ppp/2q1p3/3pPn2/P1pP4/1rb1BP1P/R3RP2/3Q1NK1 w - - 1 22"
+  },
+  {
+   "t": 802.5,
+   "ply": 43,
+   "line": [
+    "Ng3"
+   ],
+   "fen": "5rk1/p4ppp/2q1p3/3pPn2/P1pP4/1rb1BPNP/R3RP2/3Q2K1 b - - 2 22"
+  },
+  {
+   "t": 842.5,
+   "ply": 44,
+   "line": [
+    "Rfb8"
+   ],
+   "fen": "1r4k1/p4ppp/2q1p3/3pPn2/P1pP4/1rb1BPNP/R3RP2/3Q2K1 w - - 3 23"
+  },
+  {
+   "t": 861.5,
+   "ply": 45,
+   "line": [
+    "Kg2"
+   ],
+   "fen": "1r4k1/p4ppp/2q1p3/3pPn2/P1pP4/1rb1BPNP/R3RPK1/3Q4 b - - 4 23"
+  },
+  {
+   "t": 875.5,
+   "ply": 46,
+   "line": [
+    "Nh4+"
+   ],
+   "fen": "1r4k1/p4ppp/2q1p3/3pP3/P1pP3n/1rb1BPNP/R3RPK1/3Q4 w - - 5 24"
+  },
+  {
+   "t": 887,
+   "ply": 47,
+   "line": [
+    "Kh2"
+   ],
+   "fen": "1r4k1/p4ppp/2q1p3/3pP3/P1pP3n/1rb1BPNP/R3RP1K/3Q4 b - - 6 24"
+  },
+  {
+   "t": 888,
+   "ply": 48,
+   "line": [
+    "Rb1"
+   ],
+   "fen": "1r4k1/p4ppp/2q1p3/3pP3/P1pP3n/2b1BPNP/R3RP1K/1r1Q4 w - - 7 25"
+  },
+  {
+   "t": 1208,
+   "ply": 3,
+   "line": [],
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 1210,
+   "ply": 5,
+   "line": [
+    "Nc6",
+    "c3"
+   ],
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 3"
+  },
+  {
+   "t": 1211.5,
+   "ply": 6,
+   "line": [
+    "d5"
+   ],
+   "fen": "r1bqkbnr/pp2pppp/2n5/2pp4/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4"
+  },
+  {
+   "t": 1219,
+   "ply": 9,
+   "line": [
+    "exd5",
+    "Qxd5",
+    "d4"
+   ],
+   "fen": "r1b1kbnr/pp2pppp/2n5/2pq4/3P4/2P2N2/PP3PPP/RNBQKB1R b KQkq - 0 5"
+  },
+  {
+   "t": 1227,
+   "ply": 12,
+   "line": [
+    "cxd4",
+    "cxd4",
+    "e5"
+   ],
+   "fen": "r1b1kbnr/pp3ppp/2n5/3qp3/3P4/5N2/PP3PPP/RNBQKB1R w KQkq - 0 7"
+  },
+  {
+   "t": 1239,
+   "ply": 13,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1b1kbnr/pp3ppp/2n5/3qP3/8/5N2/PP3PPP/RNBQKB1R b KQkq - 0 7"
+  },
+  {
+   "t": 1240.5,
+   "ply": 15,
+   "line": [
+    "Qxd1+",
+    "Kxd1"
+   ],
+   "fen": "r1b1kbnr/pp3ppp/2n5/4P3/8/5N2/PP3PPP/RNBK1B1R b kq - 0 8"
+  },
+  {
+   "t": 1244,
+   "ply": 16,
+   "line": [
+    "Bg4"
+   ],
+   "fen": "r3kbnr/pp3ppp/2n5/4P3/6b1/5N2/PP3PPP/RNBK1B1R w kq - 1 9"
+  },
+  {
+   "t": 1257.5,
+   "ply": 12,
+   "line": [],
+   "fen": "r1b1kbnr/pp3ppp/2n5/3qp3/3P4/5N2/PP3PPP/RNBQKB1R w KQkq - 0 7"
+  },
+  {
+   "t": 1259,
+   "ply": 13,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "r1b1kbnr/pp3ppp/2n5/3qp3/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 7"
+  },
+  {
+   "t": 1260.5,
+   "ply": 14,
+   "line": [
+    "Bb4"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/2n5/3qp3/1b1P4/2N2N2/PP3PPP/R1BQKB1R w KQkq - 2 8"
+  },
+  {
+   "t": 1262.5,
+   "ply": 15,
+   "line": [
+    "Bd2"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/2n5/3qp3/1b1P4/2N2N2/PP1B1PPP/R2QKB1R b KQkq - 3 8"
+  },
+  {
+   "t": 1265,
+   "ply": 17,
+   "line": [
+    "Bxc3",
+    "Bxc3"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/2n5/3qp3/3P4/2B2N2/PP3PPP/R2QKB1R b KQkq - 0 9"
+  },
+  {
+   "t": 1266.5,
+   "ply": 18,
+   "line": [
+    "e4"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/2n5/3q4/3Pp3/2B2N2/PP3PPP/R2QKB1R w KQkq - 0 10"
+  },
+  {
+   "t": 1268.5,
+   "ply": 19,
+   "line": [
+    "Ne5"
+   ],
+   "fen": "r1b1k1nr/pp3ppp/2n5/3qN3/3Pp3/2B5/PP3PPP/R2QKB1R b KQkq - 1 10"
+  },
+  {
+   "t": 1273,
+   "ply": 22,
+   "line": [
+    "Nxe5",
+    "dxe5",
+    "Ne7"
+   ],
+   "fen": "r1b1k2r/pp2nppp/8/3qP3/4p3/2B5/PP3PPP/R2QKB1R w KQkq - 1 12"
+  },
+  {
+   "t": 1293.5,
+   "ply": 13,
+   "line": [],
+   "fen": "r1b1kbnr/pp3ppp/2n5/3qp3/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 7"
+  },
+  {
+   "t": 1298,
+   "ply": 7,
+   "line": [],
+   "fen": "r1bqkbnr/pp2pppp/2n5/2pP4/8/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 4"
+  }
+ ],
+ "forks": [
+  {
+   "fen": "r1bqkbnr/pp2pppp/2n5/2pp4/4P3/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "d5"
+   ],
+   "ply": 6,
+   "options": [
+    {
+     "san": "e5",
+     "t": 61.5,
+     "continuation": "e5"
+    },
+    {
+     "san": "exd5",
+     "t": 1219,
+     "continuation": "exd5 Qxd5 d4"
+    }
+   ]
+  },
+  {
+   "fen": "r1b1kbnr/pp3ppp/2n5/3qp3/3P4/5N2/PP3PPP/RNBQKB1R w KQkq - 0 7",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "d5",
+    "exd5",
+    "Qxd5",
+    "d4",
+    "cxd4",
+    "cxd4",
+    "e5"
+   ],
+   "ply": 12,
+   "options": [
+    {
+     "san": "dxe5",
+     "t": 1239,
+     "continuation": "dxe5"
+    },
+    {
+     "san": "Nc3",
+     "t": 1259,
+     "continuation": "Nc3"
+    }
+   ]
+  },
+  {
+   "fen": "1r3rk1/p4ppp/2q1p3/3pPn1b/P1pP4/2P1BN1P/1b3PP1/R2QRNK1 w - - 7 19",
+   "line": [
+    "e4",
+    "c5",
+    "Nf3",
+    "Nc6",
+    "c3",
+    "d5",
+    "e5",
+    "Bg4",
+    "Bb5",
+    "Qc7",
+    "Bxc6+",
+    "Qxc6",
+    "d4",
+    "e6",
+    "Be3",
+    "Ne7",
+    "O-O",
+    "Nf5",
+    "Nbd2",
+    "Be7",
+    "h3",
+    "Bh5",
+    "Rc1",
+    "c4",
+    "b3",
+    "b5",
+    "a4",
+    "bxa4",
+    "bxa4",
+    "O-O",
+    "Re1",
+    "Rab8",
+    "Nf1",
+    "Ba3",
+    "Ra1",
+    "Bb2"
+   ],
+   "ply": 36,
+   "options": [
+    {
+     "san": "Ra3",
+     "t": 632,
+     "continuation": "Ra3 Bc1 Ra1 Ba3"
+    },
+    {
+     "san": "Ra2",
+     "t": 688.5,
+     "continuation": "Ra2"
+    }
+   ]
+  }
+ ],
+ "openings": [
+  {
+   "name": "Sicilian Defense: Old Sicilian",
+   "eco": "B30",
+   "plies": 4,
+   "line": "e4 c5 Nf3 Nc6",
+   "coverage": 0.966
+  },
+  {
+   "name": "Sicilian Defense",
+   "eco": "B20",
+   "plies": 2,
+   "line": "e4 c5",
+   "coverage": 1
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Sicilian Defense",
+  "confirmed": true
+ },
+ "notes": [
+  {
+   "id": "vn-sicilian-dont-be-move-ordered",
+   "line": "e4 c5 Nf3 Nc6 c3 d5 e5",
+   "teaches": "Recognise when a move is trying to move-order you — to steer the game into a structure you don't play by transposition. The counter is not to panic into their version but to reach a better version of it on your own terms.",
+   "explains": "Pushing to e5 is a little trick: White wants to drag you into a locked chain with the e-pawn shoved past, on their terms. Don't be sucked in — we will happily play that structure, but a better version of it, with the light-squared bishop developed outside the chain first.",
+   "reasons": [],
+   "fen": "r1bqkbnr/pp2pppp/2n5/2ppP3/8/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 4",
+   "t": 61.5,
+   "ply": 7,
+   "source": "yt:Dj_hLEdDpAg"
+  },
+  {
+   "id": "vn-sicilian-pin-the-defender-of-e5",
+   "line": "e4 c5 Nf3 Nc6 c3 d5 e5 Bg4",
+   "teaches": "If you are handed a structure you would normally avoid, take its most active version — pinning the piece that defends the opponent's advanced pawn puts that pawn under immediate pressure and poses the sharpest question.",
+   "explains": "The bishop comes to g4, pinning the knight on f3 to the queen and leaning on the e5-pawn that knight is defending. This is the whole point: the bishop is already outside the chain, and it is the most testing version of the structure — a favourable one, not the cramped one White wanted.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "f3"
+    }
+   ],
+   "fen": "r2qkbnr/pp2pppp/2n5/2ppP3/6b1/2P2N2/PP1P1PPP/RNBQKB1R w KQkq - 1 5",
+   "t": 118.5,
+   "ply": 8,
+   "source": "yt:Dj_hLEdDpAg"
+  },
+  {
+   "id": "vn-sicilian-queen-c7-does-more-jobs",
+   "line": "e4 c5 Nf3 Nc6 c3 d5 e5 Bg4 Bb5 Qc7",
+   "teaches": "When placing your queen, choose the square that does the most jobs at the least risk — one that eyes the key pawn, stays clear of tempo-gaining attacks, and prepares your next move beats a more forward but exposed post.",
+   "explains": "The queen goes to c7, and it is quietly doing three jobs: it leans on the e5-pawn down the diagonal, it sits far enough back to dodge any tempo-hit, and it prepares e6. It also lines up a clean recapture on c6 if the bishop trades itself off — one square, plenty of work.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    }
+   ],
+   "fen": "r3kbnr/ppq1pppp/2n5/1BppP3/6b1/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 3 6",
+   "t": 170.5,
+   "ply": 10,
+   "source": "yt:Dj_hLEdDpAg"
+  },
+  {
+   "id": "vn-sicilian-recapture-keeps-the-structure",
+   "line": "e4 c5 Nf3 Nc6 c3 d5 e5 Bg4 Bb5 Qc7 Bxc6+ Qxc6",
+   "teaches": "A queen move can be quiet preparation for a trade you already see coming — positioning it so the queen, not a pawn, recaptures keeps your structure intact when the opponent swaps on your knight.",
+   "explains": "And here is why the queen went to c7: when White trades on c6, the queen takes back, not a pawn. The structure stays clean and healthy, and Black comes out of the swap solid and comfortable with nothing to fix.",
+   "reasons": [],
+   "fen": "r3kbnr/pp2pppp/2q5/2ppP3/6b1/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 0 7",
+   "t": 185,
+   "ply": 12,
+   "source": "yt:Dj_hLEdDpAg"
+  },
+  {
+   "id": "vn-sicilian-play-the-simple-move-on-judgment",
+   "line": "e4 c5 Nf3 Nc6 c3 d5 e5 Bg4 Bb5 Qc7 Bxc6+ Qxc6 d4 e6",
+   "teaches": "Not every position demands deep calculation — when a tactical try and a calm move both work, sound structural understanding lets you play the calm one on judgment and save your clock.",
+   "explains": "There are tactics to dig into here — but you don't have to. Black plays the simple e6, reaching a comfortable, solid structure with the bishop already outside the chain. It is a judgment call made on understanding, not on a long calculation, and it is plenty good.",
+   "reasons": [],
+   "fen": "r3kbnr/pp3ppp/2q1p3/2ppP3/3P2b1/2P2N2/PP3PPP/RNBQK2R w KQkq - 0 8",
+   "t": 264.5,
+   "ply": 14,
+   "source": "yt:Dj_hLEdDpAg"
+  },
+  {
+   "id": "vn-sicilian-route-the-knight-toward-f5",
+   "line": "e4 c5 Nf3 Nc6 c3 d5 e5 Bg4 Bb5 Qc7 Bxc6+ Qxc6 d4 e6 Be3 Ne7",
+   "teaches": "Develop a knight toward its best future square even when the first hop looks modest — in these locked structures the knight's journey to the strong central-edge post is standard, and the destination justifies the detour.",
+   "explains": "The knight develops to e7 — a modest-looking hop, but it is on its way to f5 where it will press the centre, and it clears the path for the dark-squared bishop too. The plan is the journey, not the square it starts on.",
+   "reasons": [],
+   "fen": "r3kb1r/pp2nppp/2q1p3/2ppP3/3P2b1/2P1BN2/PP3PPP/RN1QK2R w KQkq - 2 9",
+   "t": 299.5,
+   "ply": 16,
+   "source": "yt:Dj_hLEdDpAg"
+  },
+  {
+   "id": "vn-sicilian-the-knight-lands-on-f5",
+   "line": "e4 c5 Nf3 Nc6 c3 d5 e5 Bg4 Bb5 Qc7 Bxc6+ Qxc6 d4 e6 Be3 Ne7 O-O Nf5",
+   "teaches": "The thematic knight jump to the fifth rank turns a solid, cramped structure into an edge — landing on the square that hits the base of the enemy centre is how the defender becomes the side doing the pressing.",
+   "explains": "And there it lands — the knight to f5, pressing the pawn on d4 and gripping the dark squares. With the bishop outside the chain and the knight on its dream square, it is Black who is a shade better now and setting the agenda. The one White tried to cramp is doing the pressing.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "d4"
+    }
+   ],
+   "fen": "r3kb1r/pp3ppp/2q1p3/2ppPn2/3P2b1/2P1BN2/PP3PPP/RN1Q1RK1 w kq - 4 10",
+   "t": 308.5,
+   "ply": 18,
+   "source": "yt:Dj_hLEdDpAg"
+  }
+ ]
+}

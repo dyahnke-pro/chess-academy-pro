@@ -315,7 +315,7 @@
   {
    "id": "vn-closedtrad-queen-that-hits-two-pawns-across-the-board",
    "line": "e4 c5 Nc3 Nc6 Bb5 Nb8 Bf1 Nc6 Bb5 Nd4 Nf3 Nxb5 Nxb5 a6 Nc3 d6 d4 cxd4 Qxd4 e5 Qb4",
-   "teaches": "A queen driven off a central square should look for the diagonal that hits two pawns at once rather than the nearest safe square. When both targets are on squares a pawn can never defend, the defender has to answer with a piece, and the queen has kept the initiative she was supposed to lose.",
+   "teaches": "A queen driven off a central square should look for the diagonal that hits two pawns at once rather than the nearest safe square — when both targets are on squares a pawn can never defend, the defender has to answer with a piece, and the queen has kept the initiative she was supposed to lose.",
    "explains": "The pawn has advanced to e5 to chase the queen out of the centre. She steps to b4, where she hits the pawns on b7 and d6 and still holds the centre pawn and the knight behind her. The move that was meant to gain time has instead pointed her at the two pawns the pawn advance left behind.",
    "reasons": [
     {

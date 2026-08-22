@@ -2,36 +2,27 @@
  {
   "id": "vn-glek-fianchetto-in-the-open-game",
   "line": "e4 e5 Nf3 Nf6 Nc3 Nc6 g3",
-  "teaches": "A fianchetto is unusual in the open game, and that is most of its value at club level: the resulting positions are sound but unfamiliar, so the opponent is out of book while nothing has been risked. It is reachable through more than one move order, which makes it hard to sidestep — the knights can come out in either order before the g-pawn moves.",
+  "teaches": "A fianchetto is unusual in the open game, and that is most of its value at club level: the positions are sound but unfamiliar, so the opponent is out of book while nothing has been risked. It is reachable through more than one move order, which makes it hard to sidestep.",
   "explains": "Both knights are developed and the g-pawn steps forward to put the bishop on the long diagonal rather than on the usual c4 or b5 square. Nothing is committed yet in the centre: the plan waits to see which setup Black chooses, because the pawn structure Black picks decides where White's pieces belong.",
   "structural": "why an unusual-but-sound setup is worth playing at club level"
  },
  {
   "id": "vn-fork-push-the-centre-or-fianchetto",
   "line": "e4 e5 Nf3 Nf6 Nc3 Nc6",
-  "teaches": "With four knights out and the centre untouched, the fourth move picks the whole character of the game. The central push opens lines immediately and heads for the positions both sides have studied. The fianchetto is unusual in an open game and that is most of its value at club level — sound, and unfamiliar to the person opposite.",
+  "teaches": "With four knights out and the centre untouched, the fourth move picks the whole character of the game — the central push opens lines and heads for the studied positions; the fianchetto is unusual in an open game, and that is most of its value at club level: sound, and unfamiliar to the person opposite.",
   "explains": "Both sides have developed symmetrically and nothing is resolved. One try takes on the centre at once. The other steps the g-pawn forward so the bishop can take the long diagonal, keeping the centre closed and asking the opponent to think rather than recite.",
   "options": [
    {
     "san": "d4",
     "reasons": [
-     {
-      "kind": "attacks",
-      "square": "e5"
-     }
+     { "kind": "attacks", "square": "e5" }
     ]
    },
    {
     "san": "g3",
     "reasons": [
-     {
-      "kind": "controls",
-      "square": "f4"
-     },
-     {
-      "kind": "controls",
-      "square": "h4"
-     }
+     { "kind": "controls", "square": "f4" },
+     { "kind": "controls", "square": "h4" }
     ]
    }
   ]

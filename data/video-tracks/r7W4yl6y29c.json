@@ -372,8 +372,8 @@
   {
    "id": "vn-alapin-stoltz-the-bishop-move-that-looks-like-a-mistake",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4",
-   "teaches": "Judge a developing move by what it invites, not by the tempo count. This one looks careless: the bishop attacks a knight that is happy to step aside, and White will end up moving the same bishop twice. Play it anyway when the retreat it provokes is a move you want played — a 'lost' tempo that buys the position you are aiming for is not lost at all.",
-   "explains": "The bishop comes to c4 and hits the knight on d5. Black's knight will drop back and the bishop will be nudged again, so on a tempo count White appears to be losing the argument. That is the appearance the line trades on: what White is really doing is inviting Black to grab the centre with a pawn, which is exactly the position White wants to meet.",
+   "teaches": "Judge a developing move by what it invites, not by the tempo count — a 'lost' tempo that buys the position you are aiming for is not lost at all.",
+   "explains": "The bishop comes to c4 and hits the knight on d5, and on a tempo count it looks careless: the knight is happy to step aside and White will move the same bishop twice. But that is the appearance the line trades on — what White is really doing is inviting Black to grab the centre with a pawn, which is exactly the position White wants to meet.",
    "reasons": [
     {
      "kind": "attacks",
@@ -388,7 +388,7 @@
   {
    "id": "vn-alapin-stoltz-the-pawn-on-e5-is-what-makes-the-push-answerable",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5",
-   "teaches": "Before you fear a pawn arriving beside yours, check whether your own advanced pawn can take it in passing. A two-square push that sails past a pawn on the fifth rank is answerable for exactly one move, and that single-move window is the whole reason the advanced pawn was worth keeping there.",
+   "teaches": "Before you fear a pawn arriving beside yours, check whether your own advanced pawn can take it in passing — a two-square push that sails past a pawn on the fifth rank is answerable for exactly one move, and that single-move window is the whole reason the advanced pawn was worth keeping there.",
    "explains": "Black pushes the d-pawn two squares and it looks frightening — the centre is suddenly Black's and the pawn arrives untouched. But White's pawn already stands on e5, so the push can be met in passing this move and only this move. The scary-looking advance is the move White was fishing for.",
    "reasons": [
     {
@@ -408,7 +408,7 @@
   {
    "id": "vn-alapin-stoltz-take-in-passing-or-the-bishop-comes-out-free",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6",
-   "teaches": "When a capture in passing is available and the alternative hands the opponent an easy developing move, take. The cost of declining is rarely the pawn — it is that the opponent's last problem piece walks out to a good square with a threat attached, and the position you were provoking never appears.",
+   "teaches": "When a capture in passing is available and the alternative hands the opponent an easy developing move, take — the cost of declining is rarely the pawn; it is that the opponent's last problem piece walks out to a good square with a threat attached.",
    "explains": "White takes in passing. Declining would leave the centre closed in Black's favour and let the light-squared bishop come to g4, where it lands on the knight guarding f3 with the queen sitting behind it — Black's most awkward piece solved with tempo. Taking keeps the tension on White's terms.",
    "reasons": [
     {
@@ -424,7 +424,7 @@
   {
    "id": "vn-alapin-stoltz-develop-first-the-centre-push-is-not-the-plan",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6",
-   "teaches": "A pawn break being available does not make it the plan. In this system the centre push is the move you keep in reserve while the pieces come out, because the target is not the centre at all — it is the knight sitting on the rim, and pieces get at it faster than pawns do.",
+   "teaches": "A pawn break being available does not make it the plan — in this system the centre push is the move you keep in reserve while the pieces come out, because the target is not the centre at all: it is the knight sitting on the rim, and pieces get at it faster than pawns do.",
    "explains": "Black recaptures on d6 and White's natural instinct is to hit the centre at once. That is not what this line is for. The bishop's diagonal is open, the pieces come out first, and the play is aimed at the queenside knight rather than at a pawn break that would only release the tension early.",
    "reasons": [
     {
@@ -444,7 +444,7 @@
   {
    "id": "vn-alapin-stoltz-king-off-the-centre-before-the-fireworks",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O",
-   "teaches": "Castle before you start something. A plan that needs several moves on one wing is only safe once the king is off the file it started on — the tempo spent tucking it away is what lets every later move be about the attack instead of about defence.",
+   "teaches": "Castle before you start something — a plan that needs several moves on one wing is only safe once the king is off the file it started on, and the tempo spent tucking it away is what lets every later move be about the attack instead of about defence.",
    "explains": "White castles rather than beginning the queenside plan immediately. The king leaves the centre, the rook joins, and only then does the work start; the alternative is beginning an operation on one wing with the king still sitting where a file could open.",
    "reasons": [
     {
@@ -460,7 +460,7 @@
   {
    "id": "vn-alapin-stoltz-trade-on-e6-to-buy-the-tempi",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6",
-   "teaches": "Trade into the square your opponent's own development needs. A capture that forces a recapture onto a square their pawn was going to use is worth more than the bishop pair — you are not winning material, you are taking away the move order that would have solved their position.",
+   "teaches": "Trade into the square your opponent's own development needs — a capture that forces a recapture onto a square their pawn was going to use is worth more than the bishop pair, because you are not winning material, you are taking away the move order that would have solved their position.",
    "explains": "White takes on e6 rather than avoiding the trade. The recapture is forced, and the square it fills is precisely the one Black's game depends on.",
    "reasons": [
     {
@@ -476,7 +476,7 @@
   {
    "id": "vn-alapin-stoltz-the-square-the-kingside-needed-is-never-free",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6",
-   "teaches": "Count development by what the opponent CAN do next, not by pieces out. If the square their kingside needs is occupied first by your piece and then by theirs, the bishop behind it never comes out and the king never castles — and every move they spend untangling is a move you spend attacking.",
+   "teaches": "Count development by what the opponent CAN do next, not by pieces out — if the square their kingside needs is occupied first by your piece and then by theirs, the bishop behind it never comes out and the king never castles, and every move they spend untangling is a move you spend attacking.",
    "explains": "The queen must retake on e6, and the square stays shut either way: White's bishop stood there, and now Black's own queen does. The pawn on e7 still has nowhere to go, so the dark-squared bishop is stuck at home and the king stays in the centre. Black has to move the queen again before anything opens, and that is the time White uses to go after the knight on b6.",
    "reasons": [
     {
@@ -492,8 +492,8 @@
   {
    "id": "vn-alapin-stoltz-the-wing-pawn-is-going-somewhere",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4",
-   "teaches": "A wing push is worth playing even when its immediate threat is easy to answer, provided the pawn is going somewhere. And never chase an enemy piece that is standing in its own army's way — the tempo you win is a tempo you hand straight back.",
-   "explains": "The traditional move here is d4, breaking in the centre at once. Instead the pawn steps to a4, heading for a5 and the knight on b6. Taken on its own that threat is nothing — the knight will have c8, d5 and c4 to run to — and that is exactly the point: a5 is not about the knight, it is the first step of a march to a6. Worth naming what not to play too. A rook to e1 is the move most players reach for, and it helps Black: the queen on e6 is the thing keeping his kingside shut in, so driving it away does his work for him.",
+   "teaches": "A wing push is worth playing even when its immediate threat is easy to answer, provided the pawn is going somewhere — and never chase an enemy piece that is standing in its own army's way, because the tempo you win is a tempo you hand straight back.",
+   "explains": "The traditional move here is d4, breaking in the centre at once. Instead the pawn steps to a4, heading for a5 and the knight on b6. Taken on its own that threat is nothing — the knight will have c8, d5 and c4 to run to — and that is exactly the point: a5 is not about the knight, it is the first step of a march to a6. Worth naming what not to play too: a rook to e1 is the move most players reach for, and it helps Black, because the queen on e6 is the thing keeping his kingside shut in, so driving it away does his work for him.",
    "reasons": [
     {
      "kind": "controls",
@@ -508,7 +508,7 @@
   {
    "id": "vn-alapin-stoltz-when-they-untangle-you-commit",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7",
-   "teaches": "When the opponent solves the problem you were profiting from, that is the moment to commit. A plan that was optional one move ago is urgent now.",
+   "teaches": "When the opponent solves the problem you were profiting from, that is the moment to commit — a plan that was optional one move ago is urgent now.",
    "explains": "The queen leaves e6 of its own accord, and Black is right to move it: while it stood there the e-pawn could not go anywhere and the dark-squared bishop was stuck at home. From d7 it holds the knight on c6 and the kingside is finally free to come out. So the free time is over — whatever White is doing on the queenside has to happen now, not later.",
    "reasons": [
     {
@@ -524,7 +524,7 @@
   {
    "id": "vn-alapin-stoltz-push-the-wing-hold-the-break",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7 a5",
-   "teaches": "Two plans at once is not indecision. Push on the wing while their pieces are looking the other way, and keep the central break in reserve until the position is already stretched.",
+   "teaches": "Two plans at once is not indecision — push on the wing while their pieces are looking the other way, and keep the central break in reserve until the position is already stretched.",
    "explains": "The pawn arrives on a5 and asks the knight on b6 where it would like to go. Every retreat is still there, so nothing has been won — the move is played because the queenside has to keep moving while Black is busy untangling on the other side of the board. The break with d4 has not been abandoned; it is being held back for the moment it costs Black the most.",
    "reasons": [
     {
@@ -540,8 +540,8 @@
   {
    "id": "vn-alapin-stoltz-a-pawn-that-cannot-advance-is-a-target",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7 a5 Nd5",
-   "teaches": "A wing pawn is a weapon while it can still advance and a liability the moment it cannot. Whoever fixes the structure decides which of the two it turns into.",
-   "explains": "The knight steps into the middle instead of shuffling back to c8, and from d5 it leans on the pawn on c3. The urgent point, though, is what Black has not played. If his own a-pawn reaches a6 first, White's pawn on a5 stops dead — it can never advance again, the knight on c6 leans on it, and a spearhead turns into something that needs guarding.",
+   "teaches": "A wing pawn is a weapon while it can still advance and a liability the moment it cannot — whoever fixes the structure decides which of the two it turns into.",
+   "explains": "The knight steps into the middle instead of shuffling back to c8, and from d5 it leans on the pawn on c3. The urgent point, though, is what Black has not played: if his own a-pawn reaches a6 first, White's pawn on a5 stops dead — it can never advance again, the knight on c6 leans on it, and a spearhead turns into something that needs guarding.",
    "reasons": [
     {
      "kind": "attacks",
@@ -556,7 +556,7 @@
   {
    "id": "vn-alapin-stoltz-freeze-it-on-your-terms",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7 a5 Nd5 a6",
-   "teaches": "Freeze the structure on your terms. A pawn planted deep in their camp costs them a defender for the rest of the game, while the same pawn one square further back costs them a single tempo.",
+   "teaches": "Freeze the structure on your terms — a pawn planted deep in their camp costs them a defender for the rest of the game, while the same pawn one square further back costs them a single tempo.",
    "explains": "The pawn goes to a6 first, before Black's can. It hits b7, and it nails the pawn on a7 down for good — that pawn now has no move at all, and whatever ends up guarding it is a piece that is not guarding the king. It also settles b5 permanently: the only black pawns that could ever have covered that square are the c-pawn, long past it, and the a-pawn, which is now frozen.",
    "reasons": [
     {
@@ -577,7 +577,7 @@
   {
    "id": "vn-alapin-stoltz-every-answer-is-a-concession",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7 a5 Nd5 a6 b6",
-   "teaches": "A pawn thrust has done its job when every reply is a permanent concession. And when the piece that naturally works a colour of squares has been traded off, ask which OTHER piece moves the same way — a queen covers a bishop's diagonals.",
+   "teaches": "A pawn thrust has done its job when every reply is a permanent concession — and when the piece that naturally works a colour of squares has been traded off, ask which OTHER piece moves the same way, because a queen covers a bishop's diagonals.",
    "explains": "Black shuts the door rather than let the pawn crash into b7. Leaving it one move longer loses the queenside outright, and taking the other way, with the b-pawn, only invites a rook to a6 with a permanent look at the pawn on a7. So this is the least bad reply, and it still costs: the light squares behind the pawn chain now have nothing that can ever cover them. White has no light-squared bishop — that one was traded on e6 — but a queen travels the same diagonals, and that is the piece those squares are being saved for.",
    "reasons": [
     {
@@ -597,7 +597,7 @@
   {
    "id": "vn-alapin-stoltz-strike-the-centre-while-they-are-still-tangled",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7 a5 Nd5 a6 b6 d4",
-   "teaches": "A central break is only strong while the opponent is still tangled. Once their pieces come out it stops being a break and starts being a trade, so take the moment when it exists rather than the moment that feels tidy.",
+   "teaches": "A central break is only strong while the opponent is still tangled — once their pieces come out it stops being a break and starts being a trade, so take the moment when it exists rather than the moment that feels tidy.",
    "explains": "Now the centre, because a move from now it will be too late — Black is one move from freeing the bishop, and the moment the kingside is out the queenside squares stop mattering. The pawn hits c5 and opens the middle without forcing anything. If Black takes, the knight recaptures; if Black takes again, the queen lands on d4 propped up by the pawn on c3 and looking straight down the long diagonal at g7, which is exactly the square the bishop on f8 needs freed.",
    "reasons": [
     {
@@ -613,7 +613,7 @@
   {
    "id": "vn-alapin-stoltz-the-tempting-kick-that-loses-the-chain",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7 a5 Nd5 a6 b6 d4 e6",
-   "teaches": "Before kicking a piece, check where it lands. A square your pawns can never attack is not a retreat, it is a new home — and the pawn you moved to do the kicking is usually the one that ends up loose.",
+   "teaches": "Before kicking a piece, check where it lands — a square your pawns can never attack is not a retreat, it is a new home, and the pawn you moved to do the kicking is usually the one that ends up loose.",
    "explains": "The pawn steps to e6, propping up the knight on d5 and clearing the way for the bishop. The obvious reply is to shove the c-pawn and kick that knight, and it is the wrong move: the knight simply goes to b4, a square no white pawn covers, and from there it hits the pawn on a6 the whole queenside plan is built around while the chain that was holding the centre together comes apart behind it.",
    "reasons": [
     {
@@ -629,7 +629,7 @@
   {
    "id": "vn-alapin-stoltz-trade-the-knight-to-plant-the-pawn",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7 a5 Nd5 a6 b6 d4 e6 Ne5",
-   "teaches": "Offer a trade when the recapture improves your pawns. The piece that comes off is worth less than the structure the exchange leaves behind.",
+   "teaches": "Offer a trade when the recapture improves your pawns — the piece that comes off is worth less than the structure the exchange leaves behind.",
    "explains": "The knight jumps to e5, touching the queen on d7, the knight on c6 and the pawn on f7 all at once — which is really an invitation. The point is not the knight, it is what replaces it: once the pieces come off, a pawn stands on e5 instead, and the position stops being a possible isolated-pawn middlegame and becomes the structure this whole line is aiming for.",
    "reasons": [
     {
@@ -653,7 +653,7 @@
   {
    "id": "vn-alapin-stoltz-the-pawn-that-takes-two-squares-away",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7 a5 Nd5 a6 b6 d4 e6 Ne5 Nxe5 dxe5",
-   "teaches": "Recapture with the pawn when the pawn does more standing there than the piece would. A pawn that holds two squares the opponent needs is worth more than the file it gives up.",
+   "teaches": "Recapture with the pawn when the pawn does more standing there than the piece would — a pawn that holds two squares the opponent needs is worth more than the file it gives up.",
    "explains": "Taking with the pawn rather than a piece is the whole idea. The pawn on e5 now sits on top of the position and holds f6 and d6 for the rest of the game — and those are precisely the two squares Black wants: f6 for the dark-squared bishop, and f6 again for a knight if the c-pawn ever comes forward. The d-file opens at the same time, and it opens pointing at the knight on d5, for the side with the extra space.",
    "reasons": [
     {
@@ -678,7 +678,7 @@
   {
    "id": "vn-alapin-stoltz-the-queen-was-waiting-for-this",
    "line": "e4 c5 c3 Nf6 e5 Nd5 Nf3 Nc6 Bc4 Nb6 Bb3 d5 exd6 Qxd6 O-O Be6 Bxe6 Qxe6 a4 Qd7 a5 Nd5 a6 b6 d4 e6 Ne5 Nxe5 dxe5 Rd8 Na3 Be7",
-   "teaches": "A piece parked on an odd square is developed if it is waiting for one specific entry point. Put it where it can arrive the instant the single defender leaves, then make the defender want to leave.",
+   "teaches": "A piece parked on an odd square is developed if it is waiting for one specific entry point — put it where it can arrive the instant the single defender leaves, then make the defender want to leave.",
    "explains": "The bishop comes out to e7 and the king is one move from safety, which makes the queen move the obvious one: from g4 it hits the pawn on g7 behind the bishop and the pawn on e6 in front of it, and the bishop on c1 can follow it to h6. The pawn on e5 is what makes that plan work — the natural defence of putting the bishop on f6 simply gets taken. Meanwhile the knight has come round to a3 for one reason: b5 is a square no black pawn can ever cover, and the only thing guarding it is the queen on the seventh rank. The moment that queen steps away, the knight drops in.",
    "reasons": [
     {

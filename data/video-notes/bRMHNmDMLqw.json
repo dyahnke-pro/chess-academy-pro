@@ -2,61 +2,40 @@
  {
   "id": "vn-advance-e6-develop-instead-of-propping-the-pawn",
   "line": "e4 e6 d4 d5 e5 c5 Nf3 Nc6 Bd3",
-  "teaches": "When your centre is attacked, defending it with a pawn is not the only answer \u2014 and it is often the worst one, because the propping move develops nothing and commits a square your pieces wanted. Give the pawn up and DEVELOP instead: a lead in development buys back more than one pawn is worth, provided every move you spend is a piece coming out with a purpose.",
+  "teaches": "When your centre is attacked, defending it with a pawn is not the only answer — and it is often the worst one, because the propping move develops nothing and commits a square your pieces wanted. Give the pawn up and DEVELOP instead: a lead in development buys back more than one pawn is worth.",
   "explains": "The bishop takes the strongest diagonal it has, pointing at h7 and covering the light squares in front of the centre. The pawn in the middle can be taken; the position it is being traded for is a full move ahead in development.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "h7"
-   },
-   {
-    "kind": "controls",
-    "square": "e4"
-   },
-   {
-    "kind": "controls",
-    "square": "f5"
-   }
+   { "kind": "attacks", "square": "h7" },
+   { "kind": "controls", "square": "e4" },
+   { "kind": "controls", "square": "f5" }
   ]
  },
  {
   "id": "vn-advance-e6-hold-the-square-instead-of-taking-the-pawn",
   "line": "e4 e6 d4 d5 e5 c5 Nf3 Nc6 Bd3 cxd4 O-O f6 Re1",
-  "teaches": "When the opponent strikes at the pawn that anchors your whole position, capturing back is the move that throws the position away. The pawn is not the point \u2014 the square it sits on is, and taking removes your own occupant of it. Add a defender instead and make them do the trading, so whatever lands on that square is yours.",
+  "teaches": "When the opponent strikes at the pawn that anchors your whole position, capturing back is the move that throws the position away — the pawn is not the point, the square it sits on is, and taking removes your own occupant of it. Add a defender instead and make them do the trading.",
   "explains": "The rook comes to e1 straight behind the advanced pawn, holding it and holding the file behind it. If the pawn is captured now, a piece of ours arrives on that square rather than the position simply opening.",
   "reasons": [
-   {
-    "kind": "defends",
-    "square": "e5"
-   }
+   { "kind": "defends", "square": "e5" }
   ]
  },
  {
   "id": "vn-advance-e6-the-pin-is-not-the-plan",
   "line": "e4 e6 d4 d5 e5 c5 Nf3 Nc6 Bd3 cxd4 O-O f6 Re1 fxe5 Nxe5 Nf6 Bf4",
-  "teaches": "A pin is attractive because it is concrete, and that is exactly why it distracts. If your position is built around holding one square, judge every developing move by whether it adds a guard to that square \u2014 the flashier square that pins a knight but abandons the outpost is a worse move even though it looks like it does more.",
+  "teaches": "A pin is attractive because it is concrete, and that is exactly why it distracts — if your position is built around holding one square, judge every developing move by whether it adds a guard to that square, because the flashier square that pins a knight but abandons the outpost is a worse move even though it looks like it does more.",
   "explains": "The bishop settles on f4, defending the knight that occupies the key square. The pin one square further along looks more active and touches nothing that matters here; this is the square that keeps the knight where it is.",
   "reasons": [
-   {
-    "kind": "defends",
-    "square": "e5"
-   }
+   { "kind": "defends", "square": "e5" }
   ]
  },
  {
   "id": "vn-advance-e6-develop-along-the-route-to-the-square-you-are-holding",
   "line": "e4 e6 d4 d5 e5 c5 Nf3 Nc6 Bd3 cxd4 O-O f6 Re1 fxe5 Nxe5 Nf6 Bf4 Bd6 Nd2",
-  "teaches": "When a piece must be developed and a square must be reinforced, look for the move that does both. A knight has more than one route out, and the route that passes through a square from which it will defend your outpost is worth more than the one that merely looks central. Development and the plan should be the same move whenever they can be.",
-  "explains": "The knight comes to d2, covering f3 \u2014 the square from which it will add another defender to the outpost \u2014 and holding e4 on the way. Nothing has been developed for its own sake.",
+  "teaches": "When a piece must be developed and a square must be reinforced, look for the move that does both — a knight has more than one route out, and the route that passes through a square from which it will defend your outpost is worth more than the one that merely looks central.",
+  "explains": "The knight comes to d2, covering f3 — the square from which it will add another defender to the outpost — and holding e4 on the way. Nothing has been developed for its own sake.",
   "reasons": [
-   {
-    "kind": "controls",
-    "square": "f3"
-   },
-   {
-    "kind": "controls",
-    "square": "e4"
-   }
+   { "kind": "controls", "square": "f3" },
+   { "kind": "controls", "square": "e4" }
   ]
  }
 ]

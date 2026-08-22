@@ -2,13 +2,10 @@
  {
   "id": "vn-fourknights-scotch-meet-the-central-trade-by-holding-d4",
   "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nxd4 Bc5 Be3",
-  "teaches": "When a bishop comes out to stare at the knight sitting in the middle, the answer is to reinforce that knight rather than to move it. A defended centre piece cannot be traded profitably, and the defending bishop lands on a square where it will be useful for the rest of the game anyway.",
+  "teaches": "When a bishop comes out to stare at the knight sitting in the middle, the answer is to reinforce that knight rather than to move it — a defended centre piece cannot be traded profitably, and the defending bishop lands on a square where it will be useful for the rest of the game anyway.",
   "explains": "The bishop steps to e3 backing up the knight on d4, so the pressure down the diagonal has nothing to win. Both sides now have a bishop staring at a defended piece, which is a standoff the better-developed side is happy with.",
   "reasons": [
-   {
-    "kind": "defends",
-    "square": "d4"
-   }
+   { "kind": "defends", "square": "d4" }
   ]
  }
 ]

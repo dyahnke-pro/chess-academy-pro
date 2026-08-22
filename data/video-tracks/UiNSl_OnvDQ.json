@@ -257,7 +257,7 @@
   {
    "id": "vn-fantasy-caro-strike-back-at-the-centre-immediately",
    "line": "e4 c6 d4 d5 f3 dxe4 fxe4 e5",
-   "teaches": "When the opponent has spent moves building a broad centre with pawns, hit it before the pieces arrive to support it. A centre that has to be defended by pieces is a liability; the same centre given a free move to consolidate becomes a space advantage.",
+   "teaches": "When the opponent has spent moves building a broad centre with pawns, hit it before the pieces arrive to support it — a centre that has to be defended by pieces is a liability; the same centre given a free move to consolidate becomes a space advantage.",
    "explains": "The pawn steps to e5 and asks the question directly, attacking d4 while nothing yet defends the position properly. Waiting one move to develop first would let that centre be reinforced, and then the same break arrives against a set-up that is ready for it.",
    "reasons": [
     {
@@ -273,7 +273,7 @@
   {
    "id": "vn-fantasy-caro-cover-the-check-square-before-grabbing",
    "line": "e4 c6 d4 d5 f3 dxe4 fxe4 e5 Nf3",
-   "teaches": "Before taking a pawn in the centre, look for the check that comes with it. A queen check on the edge of the board is easy to dismiss as a lunge, but if it arrives with tempo and collects a loose pawn on the way back, the capture was never free.",
+   "teaches": "Before taking a pawn in the centre, look for the check that comes with it — a queen check on the edge of the board is easy to dismiss as a lunge, but if it arrives with tempo and collects a loose pawn on the way back, the capture was never free.",
    "explains": "Taking on e5 here loses the pawn straight back: the queen checks from h4 and the pawn on e4 has no defender at all, so it drops with tempo. Developing the knight to f3 covers h4 instead, which does not make the queen sortie illegal but does make it cost a queen for a knight. Material can wait; the check square cannot.",
    "reasons": [
     {

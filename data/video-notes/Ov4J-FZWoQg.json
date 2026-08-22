@@ -2,27 +2,21 @@
  {
   "id": "vn-belgrade-remove-the-guard",
   "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nd5 h6",
-  "teaches": "To win back a gambit pawn, attack the piece defending it rather than the pawn itself. Counting defenders first tells you which piece to harass, and a bishop that pins or hits the guard does more than a piece aimed at the pawn ever will.",
+  "teaches": "To win back a gambit pawn, attack the piece defending it rather than the pawn itself — counting defenders first tells you which piece to harass, and a bishop that pins or hits the guard does more than a piece aimed at the pawn ever will.",
   "explains": "Black is a pawn up on d4 and the knight on c6 is what holds it. Two bishop developments come into consideration: one to d3, intending to swing round afterwards, and one straight to b5, which attacks the guard at once — once that knight is dealt with, both the knight and the queen are ready to collect on d4.",
   "options": [
    {
     "san": "Bd3",
     "continuation": "Bd3",
     "reasons": [
-     {
-      "kind": "defends",
-      "square": "e4"
-     }
+     { "kind": "defends", "square": "e4" }
     ]
    },
    {
     "san": "Bb5",
     "continuation": "Bb5 d6",
     "reasons": [
-     {
-      "kind": "attacks",
-      "square": "c6"
-     }
+     { "kind": "attacks", "square": "c6" }
     ]
    }
   ]

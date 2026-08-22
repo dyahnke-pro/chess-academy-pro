@@ -201,8 +201,8 @@
   {
    "id": "vn-advance-e6-cover-the-check-square-before-the-trade",
    "line": "e4 e6 d4 d5 e5 b6 c3 Qd7",
-   "teaches": "A plan to trade off your worst piece can fail on a single check. Before playing the trade, look at the square the enemy queen would check from once the recapture lands — if a knight or rook would hang to it, spend one move covering that square first. The preparation move looks slow and is the difference between a good plan and a lost piece.",
-   "explains": "The queen steps to d7 taking a4 in hand and holding the bishop on c8 that is about to travel. Trading immediately would have invited a check on that very square, forking king and the piece that recaptured.",
+   "teaches": "A plan to trade off your worst piece can fail on a single check — before playing the trade, look at the square the enemy queen would check from once the recapture lands. One quiet preparing move is the difference between a good plan and a lost piece.",
+   "explains": "The plan is to trade off the bad light-squared bishop, and the reflex is just to do it now — but look one move further first. Trade immediately and it opens a check, with the queen landing to fork your king and the piece that recaptured. So the queen steps to d7 first: it covers the a4 check-square and keeps the bishop on c8 defended for its coming trip. One quiet move, and the fork never exists.",
    "reasons": [
     {
      "kind": "controls",
@@ -221,8 +221,8 @@
   {
    "id": "vn-advance-e6-develop-the-knight-so-the-f-pawn-can-run",
    "line": "e4 e6 d4 d5 e5 b6 c3 Qd7 Bd3 Ba6 Ne2",
-   "teaches": "Where a knight goes should be decided by which PAWN you intend to advance later. The natural central square sits in front of the f-pawn and quietly cancels the plan of pushing it; the square beside it does the same defensive work and leaves the pawn free to charge. Decide the plan first, then pick the developing square that serves it.",
-   "explains": "The knight comes to e2 holding d4 and c3 and covering f4, with the f-pawn unobstructed behind it. Once the king is castled, that pawn can run at the base of the enemy chain.",
+   "teaches": "Where a knight goes should be decided by which PAWN you mean to advance later — the natural central square sits in front of the f-pawn and quietly cancels its charge, while the square beside it does the same defensive work and leaves the pawn free.",
+   "explains": "Where should the knight go? Let the pawn you want to push decide. The natural square in front of the f-pawn would quietly kill the plan of ever running it — so the knight comes to e2 instead. It still holds d4 and c3 and covers f4, but now the f-pawn is unobstructed behind it. Castle, then let that pawn charge at the base of the enemy chain.",
    "reasons": [
     {
      "kind": "controls",

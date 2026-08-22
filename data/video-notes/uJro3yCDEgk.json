@@ -1,0 +1,100 @@
+[
+ {
+  "id": "vn-alapin-c3-the-healthy-anti-sicilian",
+  "line": "e4 c5 c3",
+  "teaches": "Against a sharp defence, the setup you know cold usually beats the one that is objectively critical but unfamiliar — especially while you are still learning.",
+  "explains": "Black has answered in the sharpest way, and you might be bracing for a big theoretical brawl — but I would rather sidestep all of that. The little pawn to c3 simply prepares to build the centre with d4, and it steers us into a calm, sound structure we actually understand instead of a memory contest.",
+  "reasons": [ { "kind": "controls", "square": "d4" } ]
+ },
+ {
+  "id": "vn-alapin-take-on-d5-head-for-the-isolani",
+  "line": "e4 c5 c3 e6 d4 d5 exd5",
+  "teaches": "When a position offers you a choice of structures, pick the one whose plans you know cold.",
+  "explains": "Black strikes at the centre with d5, and here you could shove past with e5 and lock things up — but I will take instead. Capturing on d5 steers us into the isolated-pawn structure, and that is a game where both sides' plans are laid out from the very first move.",
+  "reasons": [ { "kind": "attacks", "square": "e6" } ]
+ },
+ {
+  "id": "vn-alapin-blockade-the-square-in-front",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5",
+  "teaches": "The way to fight an isolated pawn is to own the square in front of it: blockade it, pile up on it, and trade down until it is simply weak.",
+  "explains": "So we are steering toward an isolated pawn, and the whole fight will be about the square directly in front of it. Our job is to clamp down on that square, blockade the pawn, and trade pieces until it is nothing but a weakness — and that plan is set before the pawn is even isolated.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-develop-first-dont-rush-the-trade",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3",
+  "teaches": "When the plan is to win a slow structural battle, develop first — the timing of the key trade matters more than making it now.",
+  "explains": "There is no rush to grab anything back; the pawn is not going anywhere. So we develop — the knight comes out eyeing e5 and guarding d4 — and we keep the trade on c5 in reserve for the moment it also costs Black a tempo.",
+  "reasons": [ { "kind": "defends", "square": "d4" }, { "kind": "controls", "square": "e5" } ]
+ },
+ {
+  "id": "vn-alapin-check-develops-with-tempo",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+",
+  "teaches": "Prefer the developing move that also asks a question; a check that develops is a move for nothing.",
+  "explains": "The bishop comes out with check — a free tempo. We develop a piece while Black has to stop and deal with it, and any trade that follows costs him time, not us.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-trade-and-castle-when-slightly-better",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+",
+  "teaches": "With a small, safe edge, simplicity is a weapon — fewer pieces mean fewer ways to go wrong.",
+  "explains": "We are a shade better, so let us keep it simple and trade the bishop off rather than shuffle it back. We swap a pair of minor pieces, keep a clean structure, and get on with castling — no heroics needed when you already hold the pull.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-safety-before-action",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O",
+  "teaches": "In a quiet structural edge, castle and finish development before you act — a small advantage is converted slowly.",
+  "explains": "King to safety first. We castle, everything is developed, and only now do we turn to the pawn tension. The whole edge is the pressure coming against that isolated pawn, and that pressure is cashed in by patience, not by rushing.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-time-the-trade-to-gain-a-tempo",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5",
+  "teaches": "Time your trades for when they also gain something — the same capture, made a move later, can cost the opponent a tempo.",
+  "explains": "Now the trade. Black has just committed the bishop to e7, so taking on c5 forces him to recapture and lose a move — the very same swap, timed to cost him a tempo. And he is left holding the isolated d-pawn we have been eyeing all along.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-a-natural-recapture-walks-into-a-check",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+",
+  "teaches": "Before a natural recapture, check what it opens — an open file at your own king can turn a routine move into a losing one.",
+  "explains": "Here is the moment. Black took back with the bishop, the natural move — but it left his king sitting on the open e-file, and we pounce with the rook check. That innocent-looking recapture is the real mistake: the check is the first move of a forcing line that wins material.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-count-the-loose-pieces-before-grabbing",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4",
+  "teaches": "When the opponent blocks a check by pulling a piece off a defence, look for the in-between capture — count what is suddenly loose.",
+  "explains": "Black blocks with the knight — but look: it has stopped guarding d5. So we do not take the knight, we snap the pawn with the queen first. Count the loose pieces before grabbing, and the whole sequence nets two pieces for a rook.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-two-pieces-beat-a-rook-with-coordination",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4 Qxd5 Bxf2+ Kf1 Bxe1 Qxe4+ Qe7 Qxe7+ Kxe7 Kxe1",
+  "teaches": "Two minor pieces usually beat a rook — keep the pieces on, coordinate them, and do not hurry the conversion.",
+  "explains": "The dust settles: two minor pieces against a rook, and in material value we are a clear piece up. Now do not rush — bring the king out, finish developing, and let the two pieces work together. Coordinated, they simply outgun the rook.",
+  "reasons": []
+ },
+ {
+  "id": "vn-alapin-a-temporary-pin-is-no-pin",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4 Qxd5 Bxf2+ Kf1 Bxe1 Qxe4+ Qe7 Qxe7+ Kxe7 Kxe1 Rhe8 Be3",
+  "teaches": "Calculate a pin before you fear it; if a simple move next turn breaks it, the pin is an illusion.",
+  "explains": "The bishop steps to e3 to take the c5 square away from his knight. Walking into the pin against our king looks risky — but it is not: if the king moves off, we just answer with King-to-f2, unpinning and defending the bishop in one stroke. A pin you can break by force was never really a pin.",
+  "reasons": [ { "kind": "controls", "square": "c5" } ]
+ },
+ {
+  "id": "vn-alapin-the-king-is-a-piece-in-the-endgame",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4 Qxd5 Bxf2+ Kf1 Bxe1 Qxe4+ Qe7 Qxe7+ Kxe7 Kxe1 Rhe8 Be3 Kf8 Kf2",
+  "teaches": "In the endgame the king is a fighting piece — centralising it is half of converting an advantage.",
+  "explains": "King to f2 — it breaks the pin and defends the bishop at the same time, and now the knight is free to reroute toward the centre. In an endgame the king marches up and joins the fight, and with an extra piece that walk is half the technique.",
+  "reasons": [ { "kind": "defends", "square": "e3" } ]
+ },
+ {
+  "id": "vn-alapin-push-a-pawn-with-a-plan",
+  "line": "e4 c5 c3 e6 d4 d5 exd5 exd5 Nf3 Nf6 Bb5+ Bd7 Bf1 Bc8 Bb5+ Bd7 Bxd7+ Nbxd7 O-O Be7 dxc5 Bxc5 Re1+ Ne4 Qxd5 Bxf2+ Kf1 Bxe1 Qxe4+ Qe7 Qxe7+ Kxe7 Kxe1 Rhe8 Be3 Kf8 Kf2 Ne5 Nxe5 Rxe5 Nd2 Rae8 Re1 f5 Nf3 Rb5 b4",
+  "teaches": "A pawn push should serve a plan — take space and a key square, rather than sit back and defend.",
+  "explains": "One more improving move: the pawn to b4 takes queenside space and, backed by the pawn on c3, takes the c5 square away from Black's rook. The bishop on e3, the knight on f3 and the rook on e1 all coordinate, and against two rooks that extra minor piece decides it — from here it is just a matter of technique.",
+  "reasons": [ { "kind": "controls", "square": "c5" } ]
+ }
+]

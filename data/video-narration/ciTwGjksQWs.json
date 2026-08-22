@@ -1,0 +1,143 @@
+{
+ "videoId": "ciTwGjksQWs",
+ "title": "Beginner To Master | Chess Speedrun | King's Indian Defense | Grandmaster Naroditsky",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 0.5,
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "said": "and as always we're gonna play the king's indian which is which is my main opening and you guys know the"
+  },
+  {
+   "ply": 3,
+   "t": 8,
+   "line": [
+    "c4"
+   ],
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "said": "drill by now this is my main opening and uh i i like to propagate this"
+  },
+  {
+   "ply": 4,
+   "t": 11,
+   "line": [
+    "g6"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "said": ""
+  },
+  {
+   "ply": 5,
+   "t": 13.5,
+   "line": [
+    "Bg5"
+   ],
+   "fen": "rnbqkb1r/pppppp1p/5np1/6B1/2PP4/8/PP2PPPP/RN1QKBNR b KQkq - 1 3",
+   "said": "to people i'm a big big advocate of the"
+  },
+  {
+   "ply": 6,
+   "t": 15,
+   "line": [
+    "Bg7"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/6B1/2PP4/8/PP2PPPP/RN1QKBNR w KQkq - 2 4",
+   "said": "king's indian"
+  },
+  {
+   "ply": 7,
+   "t": 26,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqk2r/ppppppbp/5np1/6B1/2PP4/5N2/PP2PPPP/RN1QKB1R b KQkq - 3 4",
+   "said": "[Music] now he plays bishop g5 which is a bit of an odd developing move although it does make some sense"
+  },
+  {
+   "ply": 8,
+   "t": 28.5,
+   "line": [
+    "O-O"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/2PP4/5N2/PP2PPPP/RN1QKB1R w KQ - 4 5",
+   "said": "as we're going to castle and"
+  },
+  {
+   "ply": 9,
+   "t": 33,
+   "line": [
+    "e3"
+   ],
+   "fen": "rnbq1rk1/ppppppbp/5np1/6B1/2PP4/4PN2/PP3PPP/RN1QKB1R b KQ - 0 5",
+   "said": "now okay so he plays something called the smithslav system named after former world champion vasily smith's law but he plays it in a bit of a weird way usually in this mislove system the knight gets out to c3 first so if you guys will remember in the king's indian black has two main central pawn breaks does anybody know what they are how do you ultimately get control of the center with your puns there's two ways of doing it one is more king zindini and the other is a little bit less kings indian there's z5 and c5 i got a lot of questions as to like when you play c5 because usually i give priority to e5 and this is a great example of when c5 is a better pawn break because if you guys notice by developing his bishop he's weakened the b2 pawn which is now undefended and how does the move c5 contribute or how"
+  },
+  {
+   "ply": 10,
+   "t": 88.5,
+   "line": [
+    "c5"
+   ],
+   "fen": "rnbq1rk1/pp1pppbp/5np1/2p3B1/2PP4/4PN2/PP3PPP/RN1QKB1R w KQ - 0 6",
+   "said": "does the move c5 prepare a move that would ultimately attack that b2 pawn what am i what am i implying here yeah so the move queen b6 is going to be very nasty actually thank you cat rock and mo and that doesn't mean i'm going to play queen b6 immediately but just the possibility of this move uh is is quite unpleasant for him because the bishop has gone outside of the pawn"
+  },
+  {
+   "ply": 11,
+   "t": 109,
+   "line": [
+    "d5"
+   ],
+   "fen": "rnbq1rk1/pp1pppbp/5np1/2pP2B1/2P5/4PN2/PP3PPP/RN1QKB1R b KQ - 0 6",
+   "said": "chain so also um i quite like the idea of going c5 because it keeps the diagonal open for the bishop so c5 is definitely a very legitimate idea whoa alexandra thank you so much a big honor to be raided by alexander castiniuk um welcome everybody we're doing a little bit of a of an educational stream right now a bit of a speed run um i'm not sure if it was a russian stream or an or an english stream was it was it a russian stream or was it an english stream english nice all right very cool um so he's gone d5 let's continue the game now we have to understand as i always say when a move like this is played what are the effects what what effects does this create what i notice here is that this opens the this opens the long diagonal for the bishop"
+  },
+  {
+   "ply": 12,
+   "t": 167,
+   "line": [
+    "Ne4"
+   ],
+   "fen": "rnbq1rk1/pp1pppbp/6p1/2pP2B1/2P1n3/4PN2/PP3PPP/RN1QKB1R w KQ - 1 7",
+   "said": "uh okay so what does that mean how do we exploit the fact this long diagonal has been opened you know is there anything we can do to to take advantage of the fact that this diagonal has now been opened and of course we can we can go 94. and by the way you guys remember that i said it's weird that he hasn't developed his knight that's one of the the drawbacks of not developing your knight is that the e4 square has been made available to our knights uh to our knight and now we're threatening to take on v2 we're not exactly threatening to win the bishop"
+  },
+  {
+   "ply": 13,
+   "t": 194,
+   "line": [
+    "Bh4"
+   ],
+   "fen": "rnbq1rk1/pp1pppbp/6p1/2pP4/2P1n2B/4PN2/PP3PPP/RN1QKB1R b KQ - 2 7",
+   "said": "because the knight defends the bishop but that's a pretty valuable bishop to take i mean you don't just want to go around giving away your bishops like that um and so i would definitely take on g5 given the opportunity so let's see what he does okay bishop h4 what do we do now and that is a kind of an admission of defeat"
+  },
+  {
+   "ply": 14,
+   "t": 204,
+   "line": [
+    "Bxb2"
+   ],
+   "fen": "rnbq1rk1/pp1ppp1p/6p1/2pP4/2P1n2B/4PN2/Pb3PPP/RN1QKB1R w KQ - 0 8",
+   "said": "and now our strategy has ultimately worked yeah we take on b2 and he's actually kind of busted here because as you guys will notice the amazing thing is he can't even get really a piece for the rook and and the most obvious move here is knight b to d2 which would attempt"
+  },
+  {
+   "ply": 15,
+   "t": 228.5,
+   "line": [
+    "Nbd2"
+   ],
+   "fen": "rnbq1rk1/pp1ppp1p/6p1/2pP4/2P1n2B/4PN2/Pb1N1PPP/R2QKB1R b KQ - 1 8",
+   "said": "at least to link the queen with the rook but after knight bd2 we wouldn't take the rook immediately i'll talk about that if he plays it so that's why c5 in that position is okay so one of the mistakes i often have talked about on on the stream is when it's on the concept of automatic moves we're playing on autopilot and a lot of people here would immediately take the walk because you would celebrate you know i won the rook but it's very important in these positions to take a little bit of time because it may very well be the case that if you if you spend a couple of seconds you'll be able to find a big improvement over the obvious move and if you notice what do i always say about the queen the queen is the worst defender on the board because the queen is very easy to dislodge that is exactly what we can do here we can knock the queen away from its protection of the rook with a very cool move knight c3 and if you notice the queen has no square is along the first drink it has"
+  },
+  {
+   "ply": 16,
+   "t": 280.5,
+   "line": [
+    "Nc3"
+   ],
+   "fen": "rnbq1rk1/pp1ppp1p/6p1/2pP4/2P4B/2n1PN2/Pb1N1PPP/R2QKB1R w KQ - 2 9",
+   "said": "to move away but then we take the rook our pieces will get a little tangled up there um but at the very least will cause him some more trouble so he does have a way i believe of winning that bishop back but we'll see if he does that alex you know as you'll see this is still a better version for black then than immediately taking the rook all right so we take on a1 and maybe any some of you guys can spot how this bishop can be trapped now the knight is sort of blocking okay so he didn't quite see it which gives us a bit of a respite now this is still not easy though on my end because he wants to castle and once he castles uh that bishop on a1 is going to be under fire so it's actually very hard uh to to get both pieces out and you have to come to terms with that we are going to lose one of our minor pieces and this correct strategy here is to come to terms with that and if we do we want to give away uh first we have to decide do we want to give away the knight or do we want to give away the bishop um and let's make that decision do you guys think that we should give away the definitely the knight we want to keep the king's indian bishop if we"
+  }
+ ],
+ "forks": []
+}

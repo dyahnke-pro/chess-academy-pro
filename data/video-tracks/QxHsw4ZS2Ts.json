@@ -378,7 +378,7 @@
   {
    "id": "vn-slav-exchange-the-ugly-pawn-move-that-buys-the-centre",
    "line": "d4 d5 c4 c6 cxd5 cxd5 Nc3 Nf6 f3",
-   "teaches": "A pawn move that develops nothing and blocks your own knight's best square is worth playing when it buys the one square the position turns on. In a symmetrical structure whoever gets the big central advance in first is better, and preparing it with a pawn is slow, ugly, and the only way to get there.",
+   "teaches": "A pawn move that develops nothing and blocks your own knight's best square is worth playing when it buys the one square the position turns on — in a symmetrical structure whoever gets the big central advance in first is better, and preparing it with a pawn is slow, ugly, and the only way to get there.",
    "explains": "The pawn to f3 takes e4 in hand, which is the square the central advance needs. It breaks every rule about early development and it is the move that makes the advance possible at all.",
    "reasons": [
     {

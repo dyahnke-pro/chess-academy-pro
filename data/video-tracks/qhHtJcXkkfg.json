@@ -707,8 +707,8 @@
   {
    "id": "vn-accel-fianchetto-the-bishop-is-aimed-at-a-square",
    "line": "e4 c5 Nf3 Nc6 d4 cxd4 Nxd4 g6 Nc3 Bg7 Be3 Nf6 Bc4",
-   "teaches": "A developing move can be aimed at a SQUARE rather than at a piece, and when it is, the square is the reason — not the diagonal it happens to open. Black's whole opening rests on one freeing break; the bishop is placed where it argues against that break before it is ever played. Ask what a developing move is DENYING, not only what it is doing.",
-   "explains": "From c4 the bishop looks down at d5, the square the central break needs, and the same diagonal reaches the pawn on f7. Both jobs come from one move, but only the first explains why this square is chosen over the quieter one behind it.",
+   "teaches": "A developing move can be aimed at a SQUARE rather than at a piece, and when it is, the square is the reason — not the diagonal it happens to open. Ask what a developing move is DENYING, not only what it is doing.",
+   "explains": "From c4 the bishop looks down at d5, the square the central break needs, and the same diagonal reaches the pawn on f7. Both jobs come from one move, but only the first explains why this square is chosen over the quieter one behind it — Black's whole opening rests on that one freeing break, and the bishop is placed where it argues against it before it is ever played.",
    "reasons": [
     {
      "kind": "controls",

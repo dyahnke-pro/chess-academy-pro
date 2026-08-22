@@ -2,41 +2,23 @@
  {
   "id": "vn-scandi-qxd5-develop-so-the-fianchetto-keeps-its-diagonal",
   "line": "e4 d5 exd5 Qxd5 Nc3 Qa5 g3 c6 Bg2 Nf6 Nge2",
-  "teaches": "Once a bishop has been placed on a long diagonal, every later developing move is judged by whether it stands in the bishop's way. The natural square for the king's knight blocks that diagonal for the rest of the game; the square beside it does the same central work and leaves the line open. Develop AROUND the piece whose whole value is a line.",
-  "explains": "The knight goes to e2 rather than the natural square, covering d4 and f4 and supporting its partner on c3, with the long diagonal untouched behind it.",
+  "teaches": "Once a bishop has been placed on a long diagonal, every later developing move is judged by whether it stands in the bishop's way — the natural square for the king's knight blocks that diagonal for the rest of the game; the square beside it does the same central work and leaves the line open.",
+  "explains": "Once a bishop sits on a long diagonal, develop around it. The natural square for the king's knight would block that diagonal for the whole game — so the knight goes to e2 instead, covering d4 and f4 and supporting its partner on c3, with the long diagonal untouched behind it.",
   "reasons": [
-   {
-    "kind": "controls",
-    "square": "d4"
-   },
-   {
-    "kind": "controls",
-    "square": "f4"
-   },
-   {
-    "kind": "defends",
-    "square": "c3"
-   }
+   { "kind": "controls", "square": "d4" },
+   { "kind": "controls", "square": "f4" },
+   { "kind": "defends", "square": "c3" }
   ]
  },
  {
   "id": "vn-scandi-qxd5-recapture-with-the-piece-that-keeps-the-structure",
   "line": "e4 d5 exd5 Qxd5 Nc3 Qa5 g3 c6 Bg2 Nf6 Nge2 e5 O-O Bb4 a3 Bxc3 Nxc3",
-  "teaches": "When a bishop takes a knight and two pawns plus a piece can all recapture, the pawn recaptures are usually the ones that feel forced and the piece recapture is the one that keeps everything. Ruining your own structure to open a file is a trade \u2014 make it deliberately, and when the structure is the thing your plan needs, take with the piece.",
+  "teaches": "When a bishop takes a knight and two pawns plus a piece can all recapture, the pawn recaptures usually feel forced and the piece recapture is the one that keeps everything — ruin your own structure to open a file deliberately, not by reflex, and when the structure is what your plan needs, take with the piece.",
   "explains": "The other knight takes back on c3, holding the queen behind it and covering d5, b5 and e4, and the queenside pawns stay whole. Either pawn recapture would have doubled them for no return.",
   "reasons": [
-   {
-    "kind": "controls",
-    "square": "d5"
-   },
-   {
-    "kind": "controls",
-    "square": "b5"
-   },
-   {
-    "kind": "defends",
-    "square": "d1"
-   }
+   { "kind": "controls", "square": "d5" },
+   { "kind": "controls", "square": "b5" },
+   { "kind": "defends", "square": "d1" }
   ]
  }
 ]

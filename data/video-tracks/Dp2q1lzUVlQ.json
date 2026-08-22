@@ -1,0 +1,900 @@
+{
+ "videoId": "Dp2q1lzUVlQ",
+ "title": "Anti-Marshall | The Sensei Speedrun | Grandmaster Naroditsky",
+ "creator": "naroditsky",
+ "trackedAt": "2026-08-21",
+ "geometry": {
+  "x0": 277.2834,
+  "y0": -1.4988,
+  "square": 44.9649,
+  "orientation": "white",
+  "source": "confirmed against the start position by calibrate_section"
+ },
+ "sampling": {
+  "fps": 2,
+  "frames": 4354,
+  "settledPositions": null
+ },
+ "plies": 91,
+ "rewinds": 5,
+ "moves": [
+  {
+   "t": 38,
+   "ply": 2,
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2"
+  },
+  {
+   "t": 43,
+   "ply": 3,
+   "line": [
+    "Nf3"
+   ],
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2"
+  },
+  {
+   "t": 45,
+   "ply": 4,
+   "line": [
+    "Nc6"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3"
+  },
+  {
+   "t": 50.5,
+   "ply": 5,
+   "line": [
+    "Bb5"
+   ],
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3"
+  },
+  {
+   "t": 61.5,
+   "ply": 6,
+   "line": [
+    "a6"
+   ],
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4"
+  },
+  {
+   "t": 70.5,
+   "ply": 7,
+   "line": [
+    "Ba4"
+   ],
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4"
+  },
+  {
+   "t": 77,
+   "ply": 8,
+   "line": [
+    "Nf6"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 5"
+  },
+  {
+   "t": 79.5,
+   "ply": 9,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 3 5"
+  },
+  {
+   "t": 96.5,
+   "ply": 10,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r1bqk2r/1pppbppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 4 6"
+  },
+  {
+   "t": 101,
+   "ply": 11,
+   "line": [
+    "Re1"
+   ],
+   "fen": "r1bqk2r/1pppbppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQR1K1 b kq - 5 6"
+  },
+  {
+   "t": 104,
+   "ply": 12,
+   "line": [
+    "b5"
+   ],
+   "fen": "r1bqk2r/2ppbppp/p1n2n2/1p2p3/B3P3/5N2/PPPP1PPP/RNBQR1K1 w kq - 0 7"
+  },
+  {
+   "t": 110,
+   "ply": 13,
+   "line": [
+    "Bb3"
+   ],
+   "fen": "r1bqk2r/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 b kq - 1 7"
+  },
+  {
+   "t": 120,
+   "ply": 14,
+   "line": [
+    "O-O"
+   ],
+   "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 w - - 2 8"
+  },
+  {
+   "t": 134,
+   "ply": 15,
+   "line": [
+    "a4"
+   ],
+   "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/P3P3/1B3N2/1PPP1PPP/RNBQR1K1 b - - 0 8"
+  },
+  {
+   "t": 168.5,
+   "ply": 16,
+   "line": [
+    "b4"
+   ],
+   "fen": "r1bq1rk1/2ppbppp/p1n2n2/4p3/Pp2P3/1B3N2/1PPP1PPP/RNBQR1K1 w - - 0 9"
+  },
+  {
+   "t": 183,
+   "ply": 17,
+   "line": [
+    "d4"
+   ],
+   "fen": "r1bq1rk1/2ppbppp/p1n2n2/4p3/Pp1PP3/1B3N2/1PP2PPP/RNBQR1K1 b - - 0 9"
+  },
+  {
+   "t": 194.5,
+   "ply": 18,
+   "line": [
+    "d6"
+   ],
+   "fen": "r1bq1rk1/2p1bppp/p1np1n2/4p3/Pp1PP3/1B3N2/1PP2PPP/RNBQR1K1 w - - 0 10"
+  },
+  {
+   "t": 203.5,
+   "ply": 19,
+   "line": [
+    "dxe5"
+   ],
+   "fen": "r1bq1rk1/2p1bppp/p1np1n2/4P3/Pp2P3/1B3N2/1PP2PPP/RNBQR1K1 b - - 0 10"
+  },
+  {
+   "t": 216.5,
+   "ply": 20,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r1bq1rk1/2p1bppp/p2p1n2/4n3/Pp2P3/1B3N2/1PP2PPP/RNBQR1K1 w - - 0 11"
+  },
+  {
+   "t": 220,
+   "ply": 19,
+   "line": [],
+   "fen": "r1bq1rk1/2p1bppp/p1np1n2/4P3/Pp2P3/1B3N2/1PP2PPP/RNBQR1K1 b - - 0 10"
+  },
+  {
+   "t": 227.5,
+   "ply": 22,
+   "line": [
+    "Nxe5",
+    "Nxe5",
+    "dxe5"
+   ],
+   "fen": "r1bq1rk1/2p1bppp/p4n2/4p3/Pp2P3/1B6/1PP2PPP/RNBQR1K1 w - - 0 12"
+  },
+  {
+   "t": 230.5,
+   "ply": 23,
+   "line": [
+    "Qxd8"
+   ],
+   "fen": "r1bQ1rk1/2p1bppp/p4n2/4p3/Pp2P3/1B6/1PP2PPP/RNB1R1K1 b - - 0 12"
+  },
+  {
+   "t": 236.5,
+   "ply": 24,
+   "line": [
+    "Rxd8"
+   ],
+   "fen": "r1br2k1/2p1bppp/p4n2/4p3/Pp2P3/1B6/1PP2PPP/RNB1R1K1 w - - 0 13"
+  },
+  {
+   "t": 240.5,
+   "ply": 25,
+   "line": [
+    "Nd2"
+   ],
+   "fen": "r1br2k1/2p1bppp/p4n2/4p3/Pp2P3/1B6/1PPN1PPP/R1B1R1K1 b - - 1 13"
+  },
+  {
+   "t": 284.5,
+   "ply": 26,
+   "line": [
+    "Bb7"
+   ],
+   "fen": "r2r2k1/1bp1bppp/p4n2/4p3/Pp2P3/1B6/1PPN1PPP/R1B1R1K1 w - - 2 14"
+  },
+  {
+   "t": 286,
+   "ply": 27,
+   "line": [
+    "Nc4"
+   ],
+   "fen": "r2r2k1/1bp1bppp/p4n2/4p3/PpN1P3/1B6/1PP2PPP/R1B1R1K1 b - - 3 14"
+  },
+  {
+   "t": 298.5,
+   "ply": 28,
+   "line": [
+    "Bxe4"
+   ],
+   "fen": "r2r2k1/2p1bppp/p4n2/4p3/PpN1b3/1B6/1PP2PPP/R1B1R1K1 w - - 0 15"
+  },
+  {
+   "t": 300,
+   "ply": 29,
+   "line": [
+    "Nxe5"
+   ],
+   "fen": "r2r2k1/2p1bppp/p4n2/4N3/Pp2b3/1B6/1PP2PPP/R1B1R1K1 b - - 0 15"
+  },
+  {
+   "t": 316,
+   "ply": 30,
+   "line": [
+    "Bd5"
+   ],
+   "fen": "r2r2k1/2p1bppp/p4n2/3bN3/Pp6/1B6/1PP2PPP/R1B1R1K1 w - - 1 16"
+  },
+  {
+   "t": 345.5,
+   "ply": 31,
+   "line": [
+    "Bxd5"
+   ],
+   "fen": "r2r2k1/2p1bppp/p4n2/3BN3/Pp6/8/1PP2PPP/R1B1R1K1 b - - 0 16"
+  },
+  {
+   "t": 365,
+   "ply": 32,
+   "line": [
+    "Rxd5"
+   ],
+   "fen": "r5k1/2p1bppp/p4n2/3rN3/Pp6/8/1PP2PPP/R1B1R1K1 w - - 0 17"
+  },
+  {
+   "t": 384,
+   "ply": 33,
+   "line": [
+    "Bf4"
+   ],
+   "fen": "r5k1/2p1bppp/p4n2/3rN3/Pp3B2/8/1PP2PPP/R3R1K1 b - - 1 17"
+  },
+  {
+   "t": 408,
+   "ply": 34,
+   "line": [
+    "Bd6"
+   ],
+   "fen": "r5k1/2p2ppp/p2b1n2/3rN3/Pp3B2/8/1PP2PPP/R3R1K1 w - - 2 18"
+  },
+  {
+   "t": 418,
+   "ply": 35,
+   "line": [
+    "g3"
+   ],
+   "fen": "r5k1/2p2ppp/p2b1n2/3rN3/Pp3B2/6P1/1PP2P1P/R3R1K1 b - - 0 18"
+  },
+  {
+   "t": 453.5,
+   "ply": 36,
+   "line": [
+    "g5"
+   ],
+   "fen": "r5k1/2p2p1p/p2b1n2/3rN1p1/Pp3B2/6P1/1PP2P1P/R3R1K1 w - - 0 19"
+  },
+  {
+   "t": 467,
+   "ply": 38,
+   "line": [
+    "Bxg5",
+    "Bxe5"
+   ],
+   "fen": "r5k1/2p2p1p/p4n2/3rb1B1/Pp6/6P1/1PP2P1P/R3R1K1 w - - 0 20"
+  },
+  {
+   "t": 499.5,
+   "ply": 39,
+   "line": [
+    "Rxe5"
+   ],
+   "fen": "r5k1/2p2p1p/p4n2/3rR1B1/Pp6/6P1/1PP2P1P/R5K1 b - - 0 20"
+  },
+  {
+   "t": 500.5,
+   "ply": 40,
+   "line": [
+    "Rxe5"
+   ],
+   "fen": "r5k1/2p2p1p/p4n2/4r1B1/Pp6/6P1/1PP2P1P/R5K1 w - - 0 21"
+  },
+  {
+   "t": 501.5,
+   "ply": 41,
+   "line": [
+    "Bxf6"
+   ],
+   "fen": "r5k1/2p2p1p/p4B2/4r3/Pp6/6P1/1PP2P1P/R5K1 b - - 0 21"
+  },
+  {
+   "t": 530.5,
+   "ply": 42,
+   "line": [
+    "Re2"
+   ],
+   "fen": "r5k1/2p2p1p/p4B2/8/Pp6/6P1/1PP1rP1P/R5K1 w - - 1 22"
+  },
+  {
+   "t": 547,
+   "ply": 43,
+   "line": [
+    "c3"
+   ],
+   "fen": "r5k1/2p2p1p/p4B2/8/Pp6/2P3P1/1P2rP1P/R5K1 b - - 0 22"
+  },
+  {
+   "t": 560.5,
+   "ply": 44,
+   "line": [
+    "Rxb2"
+   ],
+   "fen": "r5k1/2p2p1p/p4B2/8/Pp6/2P3P1/1r3P1P/R5K1 w - - 0 23"
+  },
+  {
+   "t": 565,
+   "ply": 45,
+   "line": [
+    "cxb4"
+   ],
+   "fen": "r5k1/2p2p1p/p4B2/8/PP6/6P1/1r3P1P/R5K1 b - - 0 23"
+  },
+  {
+   "t": 566,
+   "ply": 46,
+   "line": [
+    "Rxb4"
+   ],
+   "fen": "r5k1/2p2p1p/p4B2/8/Pr6/6P1/5P1P/R5K1 w - - 0 24"
+  },
+  {
+   "t": 577.5,
+   "ply": 47,
+   "line": [
+    "Be7"
+   ],
+   "fen": "r5k1/2p1Bp1p/p7/8/Pr6/6P1/5P1P/R5K1 b - - 1 24"
+  },
+  {
+   "t": 609.5,
+   "ply": 48,
+   "line": [
+    "Rc4"
+   ],
+   "fen": "r5k1/2p1Bp1p/p7/8/P1r5/6P1/5P1P/R5K1 w - - 2 25"
+  },
+  {
+   "t": 673.5,
+   "ply": 49,
+   "line": [
+    "Kf1"
+   ],
+   "fen": "r5k1/2p1Bp1p/p7/8/P1r5/6P1/5P1P/R4K2 b - - 3 25"
+  },
+  {
+   "t": 681,
+   "ply": 50,
+   "line": [
+    "c5"
+   ],
+   "fen": "r5k1/4Bp1p/p7/2p5/P1r5/6P1/5P1P/R4K2 w - - 0 26"
+  },
+  {
+   "t": 707,
+   "ply": 51,
+   "line": [
+    "Bf6"
+   ],
+   "fen": "r5k1/5p1p/p4B2/2p5/P1r5/6P1/5P1P/R4K2 b - - 1 26"
+  },
+  {
+   "t": 719,
+   "ply": 52,
+   "line": [
+    "Rc2"
+   ],
+   "fen": "r5k1/5p1p/p4B2/2p5/P7/6P1/2r2P1P/R4K2 w - - 2 27"
+  },
+  {
+   "t": 744,
+   "ply": 53,
+   "line": [
+    "Rd1"
+   ],
+   "fen": "r5k1/5p1p/p4B2/2p5/P7/6P1/2r2P1P/3R1K2 b - - 3 27"
+  },
+  {
+   "t": 760,
+   "ply": 54,
+   "line": [
+    "c4"
+   ],
+   "fen": "r5k1/5p1p/p4B2/8/P1p5/6P1/2r2P1P/3R1K2 w - - 0 28"
+  },
+  {
+   "t": 766,
+   "ply": 55,
+   "line": [
+    "Rd4"
+   ],
+   "fen": "r5k1/5p1p/p4B2/8/P1pR4/6P1/2r2P1P/5K2 b - - 1 28"
+  },
+  {
+   "t": 778,
+   "ply": 56,
+   "line": [
+    "Rc8"
+   ],
+   "fen": "2r3k1/5p1p/p4B2/8/P1pR4/6P1/2r2P1P/5K2 w - - 2 29"
+  },
+  {
+   "t": 782.5,
+   "ply": 57,
+   "line": [
+    "Rg4+"
+   ],
+   "fen": "2r3k1/5p1p/p4B2/8/P1p3R1/6P1/2r2P1P/5K2 b - - 3 29"
+  },
+  {
+   "t": 783.5,
+   "ply": 58,
+   "line": [
+    "Kf8"
+   ],
+   "fen": "2r2k2/5p1p/p4B2/8/P1p3R1/6P1/2r2P1P/5K2 w - - 4 30"
+  },
+  {
+   "t": 821,
+   "ply": 59,
+   "line": [
+    "Bg7+"
+   ],
+   "fen": "2r2k2/5pBp/p7/8/P1p3R1/6P1/2r2P1P/5K2 b - - 5 30"
+  },
+  {
+   "t": 823,
+   "ply": 58,
+   "line": [],
+   "fen": "2r2k2/5p1p/p4B2/8/P1p3R1/6P1/2r2P1P/5K2 w - - 4 30"
+  },
+  {
+   "t": 837.5,
+   "ply": 59,
+   "line": [
+    "Bg7+"
+   ],
+   "fen": "2r2k2/5pBp/p7/8/P1p3R1/6P1/2r2P1P/5K2 b - - 5 30"
+  },
+  {
+   "t": 839,
+   "ply": 60,
+   "line": [
+    "Ke7"
+   ],
+   "fen": "2r5/4kpBp/p7/8/P1p3R1/6P1/2r2P1P/5K2 w - - 6 31"
+  },
+  {
+   "t": 843.5,
+   "ply": 61,
+   "line": [
+    "Re4+"
+   ],
+   "fen": "2r5/4kpBp/p7/8/P1p1R3/6P1/2r2P1P/5K2 b - - 7 31"
+  },
+  {
+   "t": 863,
+   "ply": 62,
+   "line": [
+    "Kd7"
+   ],
+   "fen": "2r5/3k1pBp/p7/8/P1p1R3/6P1/2r2P1P/5K2 w - - 8 32"
+  },
+  {
+   "t": 891.5,
+   "ply": 63,
+   "line": [
+    "Rf4"
+   ],
+   "fen": "2r5/3k1pBp/p7/8/P1p2R2/6P1/2r2P1P/5K2 b - - 9 32"
+  },
+  {
+   "t": 945.5,
+   "ply": 64,
+   "line": [
+    "c3"
+   ],
+   "fen": "2r5/3k1pBp/p7/8/P4R2/2p3P1/2r2P1P/5K2 w - - 0 33"
+  },
+  {
+   "t": 948.5,
+   "ply": 65,
+   "line": [
+    "Rxf7+"
+   ],
+   "fen": "2r5/3k1RBp/p7/8/P7/2p3P1/2r2P1P/5K2 b - - 0 33"
+  },
+  {
+   "t": 983,
+   "ply": 66,
+   "line": [
+    "Ke6"
+   ],
+   "fen": "2r5/5RBp/p3k3/8/P7/2p3P1/2r2P1P/5K2 w - - 1 34"
+  },
+  {
+   "t": 985,
+   "ply": 67,
+   "line": [
+    "Rf6+"
+   ],
+   "fen": "2r5/6Bp/p3kR2/8/P7/2p3P1/2r2P1P/5K2 b - - 2 34"
+  },
+  {
+   "t": 986,
+   "ply": 68,
+   "line": [
+    "Ke7"
+   ],
+   "fen": "2r5/4k1Bp/p4R2/8/P7/2p3P1/2r2P1P/5K2 w - - 3 35"
+  },
+  {
+   "t": 988,
+   "ply": 69,
+   "line": [
+    "Rxa6"
+   ],
+   "fen": "2r5/4k1Bp/R7/8/P7/2p3P1/2r2P1P/5K2 b - - 0 35"
+  },
+  {
+   "t": 1019,
+   "ply": 70,
+   "line": [
+    "Ra2"
+   ],
+   "fen": "2r5/4k1Bp/R7/8/P7/2p3P1/r4P1P/5K2 w - - 1 36"
+  },
+  {
+   "t": 1021,
+   "ply": 71,
+   "line": [
+    "Bf6+"
+   ],
+   "fen": "2r5/4k2p/R4B2/8/P7/2p3P1/r4P1P/5K2 b - - 2 36"
+  },
+  {
+   "t": 1022.5,
+   "ply": 72,
+   "line": [
+    "Kf7"
+   ],
+   "fen": "2r5/5k1p/R4B2/8/P7/2p3P1/r4P1P/5K2 w - - 3 37"
+  },
+  {
+   "t": 1023.5,
+   "ply": 71,
+   "line": [],
+   "fen": "2r5/4k2p/R4B2/8/P7/2p3P1/r4P1P/5K2 b - - 2 36"
+  },
+  {
+   "t": 1025,
+   "ply": 72,
+   "line": [
+    "Kf7"
+   ],
+   "fen": "2r5/5k1p/R4B2/8/P7/2p3P1/r4P1P/5K2 w - - 3 37"
+  },
+  {
+   "t": 1043.5,
+   "ply": 74,
+   "line": [
+    "Bxc3",
+    "Rxc3"
+   ],
+   "fen": "8/5k1p/R7/8/P7/2r3P1/r4P1P/5K2 w - - 0 38"
+  },
+  {
+   "t": 1045,
+   "ply": 75,
+   "line": [
+    "Ra7+"
+   ],
+   "fen": "8/R4k1p/8/8/P7/2r3P1/r4P1P/5K2 b - - 1 38"
+  },
+  {
+   "t": 1059,
+   "ply": 76,
+   "line": [
+    "Ke6"
+   ],
+   "fen": "8/R6p/4k3/8/P7/2r3P1/r4P1P/5K2 w - - 2 39"
+  },
+  {
+   "t": 1063.5,
+   "ply": 77,
+   "line": [
+    "Rxh7"
+   ],
+   "fen": "8/7R/4k3/8/P7/2r3P1/r4P1P/5K2 b - - 0 39"
+  },
+  {
+   "t": 1065,
+   "ply": 78,
+   "line": [
+    "Rf3"
+   ],
+   "fen": "8/7R/4k3/8/P7/5rP1/r4P1P/5K2 w - - 1 40"
+  },
+  {
+   "t": 1067,
+   "ply": 77,
+   "line": [],
+   "fen": "8/7R/4k3/8/P7/2r3P1/r4P1P/5K2 b - - 0 39"
+  },
+  {
+   "t": 1070,
+   "ply": 78,
+   "line": [
+    "Rf3"
+   ],
+   "fen": "8/7R/4k3/8/P7/5rP1/r4P1P/5K2 w - - 1 40"
+  },
+  {
+   "t": 1090,
+   "ply": 79,
+   "line": [
+    "Kg2"
+   ],
+   "fen": "8/7R/4k3/8/P7/5rP1/r4PKP/8 b - - 2 40"
+  },
+  {
+   "t": 1091,
+   "ply": 78,
+   "line": [],
+   "fen": "8/7R/4k3/8/P7/5rP1/r4P1P/5K2 w - - 1 40"
+  },
+  {
+   "t": 1093,
+   "ply": 79,
+   "line": [
+    "Kg2"
+   ],
+   "fen": "8/7R/4k3/8/P7/5rP1/r4PKP/8 b - - 2 40"
+  },
+  {
+   "t": 1094.5,
+   "ply": 80,
+   "line": [
+    "Rfxf2+"
+   ],
+   "fen": "8/7R/4k3/8/P7/6P1/r4rKP/8 w - - 0 41"
+  },
+  {
+   "t": 1102.5,
+   "ply": 81,
+   "line": [
+    "Kg1"
+   ],
+   "fen": "8/7R/4k3/8/P7/6P1/r4r1P/6K1 b - - 1 41"
+  },
+  {
+   "t": 1110.5,
+   "ply": 82,
+   "line": [
+    "Rfb2"
+   ],
+   "fen": "8/7R/4k3/8/P7/6P1/rr5P/6K1 w - - 2 42"
+  },
+  {
+   "t": 1116,
+   "ply": 83,
+   "line": [
+    "Rh6+"
+   ],
+   "fen": "8/8/4k2R/8/P7/6P1/rr5P/6K1 b - - 3 42"
+  },
+  {
+   "t": 1117,
+   "ply": 84,
+   "line": [
+    "Kf7"
+   ],
+   "fen": "8/5k2/7R/8/P7/6P1/rr5P/6K1 w - - 4 43"
+  },
+  {
+   "t": 1132.5,
+   "ply": 85,
+   "line": [
+    "Rh7+"
+   ],
+   "fen": "8/5k1R/8/8/P7/6P1/rr5P/6K1 b - - 5 43"
+  },
+  {
+   "t": 1134.5,
+   "ply": 86,
+   "line": [
+    "Kg6"
+   ],
+   "fen": "8/7R/6k1/8/P7/6P1/rr5P/6K1 w - - 6 44"
+  }
+ ],
+ "forks": [],
+ "openings": [
+  {
+   "name": "Ruy Lopez: Closed, Anti-Marshall",
+   "eco": "C88",
+   "plies": 15,
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4",
+   "coverage": 0.841
+  },
+  {
+   "name": "Ruy Lopez: Closed",
+   "eco": "C84",
+   "plies": 10,
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7",
+   "coverage": 0.902
+  },
+  {
+   "name": "Ruy Lopez: Morphy Defense",
+   "eco": "C70",
+   "plies": 6,
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6",
+   "coverage": 0.951
+  },
+  {
+   "name": "Ruy Lopez",
+   "eco": "C60",
+   "plies": 5,
+   "line": "e4 e5 Nf3 Nc6 Bb5",
+   "coverage": 0.963
+  },
+  {
+   "name": "King's Knight Opening: Normal Variation",
+   "eco": "C44",
+   "plies": 4,
+   "line": "e4 e5 Nf3 Nc6",
+   "coverage": 0.976
+  },
+  {
+   "name": "King's Knight Opening",
+   "eco": "C40",
+   "plies": 3,
+   "line": "e4 e5 Nf3",
+   "coverage": 0.988
+  },
+  {
+   "name": "King's Pawn Game",
+   "eco": "B00",
+   "plies": 1,
+   "line": "e4",
+   "coverage": 1
+  }
+ ],
+ "titleCheck": {
+  "claims": "Ruy Lopez: Closed, Anti-Marshall",
+  "confirmed": true
+ },
+ "notes": [
+  {
+   "id": "vn-antimarshall-ba4-keeps-the-diagonal",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4",
+   "teaches": "When a pawn pokes your bishop, retreating along the same diagonal keeps the pressure alive instead of surrendering it — the tempo the opponent spent nudging it bought them nothing lasting.",
+   "explains": "The pawn asks the bishop a question, and you could just trade it off on c6 — but drop it back to a4 instead. It stays trained down the diagonal on the knight that guards e5, so all the tension of the opening is still there and the little pawn poke changed nothing.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "c6"
+    }
+   ],
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/4p3/B3P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "t": 70.5,
+   "ply": 7,
+   "source": "yt:Dp2q1lzUVlQ"
+  },
+  {
+   "id": "vn-antimarshall-the-pawn-is-not-poison",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O",
+   "teaches": "A pawn everyone 'knows' not to take is often perfectly edible — what folklore calls a blunder can be a respected, fully sound line, so check the received wisdom for yourself.",
+   "explains": "White castles, and here is the pawn on e4 sitting there. You might have been told grabbing it is a beginner's blunder — but it is not: this is the Open Variation, sound and played at the very top. Declining it to develop is a matter of taste, not a rule.",
+   "reasons": [],
+   "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 3 5",
+   "t": 79.5,
+   "ply": 9,
+   "source": "yt:Dp2q1lzUVlQ"
+  },
+  {
+   "id": "vn-antimarshall-castle-and-keep-the-gambit-in-reserve",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O",
+   "teaches": "The point of a system can be a pawn sacrifice you have not made yet — get castled and ready, and hold the freeing break in reserve until the opponent commits to the setup that invites it.",
+   "explains": "You could grab space in the centre now — but Black castles instead and keeps the real weapon in hand. The moment White plays c3, the central break comes as a pawn sacrifice for a fierce attack. King safety first, the sacrifice second, and only when White has walked into it.",
+   "reasons": [],
+   "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 w - - 2 8",
+   "t": 120,
+   "ply": 14,
+   "source": "yt:Dp2q1lzUVlQ"
+  },
+  {
+   "id": "vn-antimarshall-a4-sidesteps-the-gambit",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4",
+   "teaches": "When you fear an opponent's deep preparation, sidestep it rather than walk in — a quiet flank thrust that leans on their pawn chain avoids the memorised attack and asks a fresh question.",
+   "explains": "Rather than play the move that invites the whole prepared attack, White plays a4, leaning on the b5-pawn and steering clear of the memorised lines. It refuses the theory fight and hands the question back to Black — the most testing modern way to duck the system.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "b5"
+    }
+   ],
+   "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/P3P3/1B3N2/1PPP1PPP/RNBQR1K1 b - - 0 8",
+   "t": 134,
+   "ply": 15,
+   "source": "yt:Dp2q1lzUVlQ"
+  },
+  {
+   "id": "vn-antimarshall-push-past-and-develop-behind",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4",
+   "teaches": "When a flank pawn pokes your chain, advancing past it is often cleaner than defending it — pushing keeps the tension off and frees your pieces to develop behind the pawn.",
+   "explains": "You could sit and defend the b-pawn — but pushing it to b4 is cleaner. It takes the tension away and clears the path to swing the rook off the a-file to b8 and fianchetto the bishop to b7. The chain stays whole and every piece gets active.",
+   "reasons": [
+    {
+     "kind": "controls",
+     "square": "c3"
+    }
+   ],
+   "fen": "r1bq1rk1/2ppbppp/p1n2n2/4p3/Pp2P3/1B3N2/1PPP1PPP/RNBQR1K1 w - - 0 9",
+   "t": 168.5,
+   "ply": 16,
+   "source": "yt:Dp2q1lzUVlQ"
+  },
+  {
+   "id": "vn-antimarshall-a-central-break-over-the-quiet-move",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4 d4",
+   "teaches": "A central pawn break can test the opponent more sharply than the routine supporting move — but do not capture on reflex; opening the centre for the opponent can cost more than the pawn is worth.",
+   "explains": "White strikes with d4 instead of the usual quiet c3. The reflex is to snap it off — but that would be the mistake: taking on d4 lets White shove the e-pawn forward with tempo. Black should hold the centre together rather than grab.",
+   "reasons": [],
+   "fen": "r1bq1rk1/2ppbppp/p1n2n2/4p3/Pp1PP3/1B3N2/1PP2PPP/RNBQR1K1 b - - 0 9",
+   "t": 183,
+   "ply": 17,
+   "source": "yt:Dp2q1lzUVlQ"
+  },
+  {
+   "id": "vn-antimarshall-support-the-centre-with-d6",
+   "line": "e4 e5 Nf3 Nc6 Bb5 a6 Ba4 Nf6 O-O Be7 Re1 b5 Bb3 O-O a4 b4 d4 d6",
+   "teaches": "When your centre pawn is attacked and capturing is unsafe, support it — the modest defensive pawn move keeps the structure intact and refuses the opponent the space grab a careless capture would hand them.",
+   "explains": "So instead of grabbing, the pawn to d6 defends the e5-pawn and holds the centre together. It is the quiet, accurate reply — no tension released, no space handed over, and Black stands perfectly fine.",
+   "reasons": [
+    {
+     "kind": "defends",
+     "square": "e5"
+    }
+   ],
+   "fen": "r1bq1rk1/2p1bppp/p1np1n2/4p3/Pp1PP3/1B3N2/1PP2PPP/RNBQR1K1 w - - 0 10",
+   "t": 194.5,
+   "ply": 18,
+   "source": "yt:Dp2q1lzUVlQ"
+  }
+ ]
+}

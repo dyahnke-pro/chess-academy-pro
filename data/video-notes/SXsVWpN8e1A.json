@@ -1,0 +1,21 @@
+[
+ {
+  "id": "vn-nimzo-f3-a3-forces-the-bishop-to-commit",
+  "line": "c4 Nf6 d4 e6 Nc3 Bb4 f3 d5 a3",
+  "teaches": "When an enemy bishop pins your knight, a rook-pawn poke asks it a hard question: retreat and lose time, or capture and hand you the bishop pair — against a defence built on that pin, forcing the trade early and taking the two bishops plus a broad centre is usually a fine bargain, even at the cost of a doubled pawn.",
+  "explains": "The a-pawn steps to a3 and attacks the bishop on b4. It must either drop back, having achieved nothing, or take the knight, and after the recapture White owns the pair of bishops and a wide pawn centre, with only doubled c-pawns to show against it on the other side of the ledger.",
+  "reasons": [
+   { "kind": "attacks", "square": "b4" }
+  ]
+ },
+ {
+  "id": "vn-nimzo-f3-bend-every-move-toward-the-e4-break",
+  "line": "c4 Nf6 d4 e6 Nc3 Bb4 f3 d5 a3 Bxc3+ bxc3 c5 cxd5 exd5 e3",
+  "teaches": "Once a structure hands you the two bishops and a pawn centre, the whole game can narrow to a single break, and the discipline is to bend every move toward it — develop the pieces that clear the way and castle, so the central push comes under the best conditions instead of in a scramble.",
+  "explains": "The pawn to e3 opens the light bishop's diagonal and supports the d4-pawn, and it is a step toward the one break this position is about: advancing the e-pawn to open lines for the two bishops. Kingside development and castling come first so that break can be prepared at full strength.",
+  "reasons": [
+   { "kind": "opens", "from": "f1", "to": "c4" },
+   { "kind": "defends", "square": "d4" }
+  ]
+ }
+]

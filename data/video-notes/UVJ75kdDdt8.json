@@ -1,0 +1,30 @@
+[
+ {
+  "id": "vn-delayed-alapin-premature-push-loses-time",
+  "line": "e4 c5 Nf3 d6 c3 Nf6 e5",
+  "teaches": "A central pawn push made before you can support it just loses time — when the advance can be met by a clean capture that leaves you ahead in development, welcome it. The space it grabbed evaporates and you are simply better for having let it come.",
+  "explains": "The pawn to e5 attacks the knight on f6 and looks aggressive — but it is premature. The pawn on c3 is sitting idle, the e5-pawn itself has no proper support, so we just take it. Grab it and Black comes out a full tempo ahead in development.",
+  "reasons": []
+ },
+ {
+  "id": "vn-delayed-alapin-challenge-the-centralised-knight",
+  "line": "e4 c5 Nf3 d6 c3 Nf6 e5 dxe5 Nxe5 Nbd7",
+  "teaches": "Meet a centralised enemy knight by challenging it with a developing move that offers a trade on your terms — bringing a piece out while forcing the exchange beats tolerating the knight in your camp.",
+  "explains": "Rather than let the knight sit proudly on e5, the knight to d7 develops and attacks it, offering the swap. Whatever White chooses, Black comes out comfortably developed and a shade better — the intruder is challenged the moment it lands.",
+  "reasons": [ { "kind": "attacks", "square": "e5" } ]
+ },
+ {
+  "id": "vn-delayed-alapin-recapture-that-develops",
+  "line": "e4 c5 Nf3 d6 c3 Nf6 e5 dxe5 Nxe5 Nbd7 Nxd7 Bxd7",
+  "teaches": "When you recapture, do it with the piece that also develops — a recapture that brings a man toward activity is two moves in one. Prefer the take that improves your position over the passive one.",
+  "explains": "You could take back with the queen — but the bishop is better. Recapturing with it develops the piece and sets up a reroute to c6 on the long diagonal. The same capture, but it brings a man into the game instead of just restoring the count.",
+  "reasons": []
+ },
+ {
+  "id": "vn-delayed-alapin-reroute-the-bishop-with-tempo",
+  "line": "e4 c5 Nf3 d6 c3 Nf6 e5 dxe5 Nxe5 Nbd7 Nxd7 Bxd7 Bc4 Bc6",
+  "teaches": "An awkwardly placed bishop should be rerouted to its best diagonal, and doing it with a gain of tempo forces the opponent to react before you finish your own plan — move the bad piece to a good square while attacking something.",
+  "explains": "The bishop swings to c6, seizing the long diagonal and hitting the g2-pawn, so White has to stop and deal with it. That bought tempo lets Black calmly finish with e6, the dark-squared bishop and castling — the bad piece is now the good one, and for free.",
+  "reasons": [ { "kind": "attacks", "square": "g2" } ]
+ }
+]

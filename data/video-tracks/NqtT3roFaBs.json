@@ -395,7 +395,7 @@
   {
    "id": "vn-haxo-take-and-wait-to-see-which-gambit",
    "line": "e4 e5 Nf3 Nc6 d4 exd4",
-   "teaches": "Take a central pawn when the recapture is not automatic. The opponent's choice of HOW to regain it is the real fork in the road, so let them commit first.",
+   "teaches": "Take a central pawn when the recapture is not automatic — the opponent's choice of HOW to regain it is the real fork in the road, so let them commit first.",
    "explains": "Black takes in the centre, which is simply what is played here. White now decides how to get the pawn back, and the choice names the opening: recapture with the knight for the straightforward version, or leave the pawn alone and develop toward f7 for the gambit. Nothing has been risked yet.",
    "reasons": [
     {
@@ -411,7 +411,7 @@
   {
    "id": "vn-haxo-two-approaches-against-the-gambit",
    "line": "e4 e5 Nf3 Nc6 d4 exd4 Bc4",
-   "teaches": "Against a gambit that ignores the pawn, pick a defence by which structure you want, not by which move looks bravest. Both replies here are sound and they lead to different games.",
+   "teaches": "Against a gambit that ignores the pawn, pick a defence by which structure you want, not by which move looks bravest — both replies here are sound and they lead to different games.",
    "explains": "White leaves the pawn on d4 alone and develops at the f7 diagonal instead — the gambit. Black has two main approaches from here. One brings the knight out to f6, which invites the pawn advance and the central counter-push that follows it. The other blocks the diagonal with the bishop and keeps the extra pawn for now. Both are respectable; they are simply different games.",
    "reasons": [
     {
@@ -427,7 +427,7 @@
   {
    "id": "vn-haxo-the-extra-pawn-that-is-not-worth-taking",
    "line": "e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 c3 Nf6",
-   "teaches": "A second pawn offered in a gambit is usually a trap for the greedy. When the capture opens lines toward your uncastled king, count the development, not the material.",
+   "teaches": "A second pawn offered in a gambit is usually a trap for the greedy — when the capture opens lines toward your uncastled king, count the development, not the material.",
    "explains": "White has offered the c-pawn as well and Black declines by developing. Taking it is the mistake: whatever modern analysis says about the resulting position, in practice it hands White a huge lead in development with lines opening straight at the black king, and the extra pawn never gets to matter. Bringing the knight out and hitting e4 keeps the position sound and leaves White to prove the gambit.",
    "reasons": [
     {

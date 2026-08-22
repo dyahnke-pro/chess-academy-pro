@@ -1,0 +1,13 @@
+[
+ {
+  "id": "vn-caro-recapture-toward-the-centre-doubled-is-fine",
+  "line": "e4 c6 d4 d5 Nc3 dxe4 Nxe4 Nf6 Nxf6+ exf6",
+  "teaches": "When you recapture, taking toward the centre usually beats taking toward the edge, even at the cost of doubled pawns — doubled pawns that open a file for your pieces and build a wall in front of your king are a feature, not a flaw. Judge a pawn weakness by what it actually does, not by the name it carries.",
+  "explains": "Capturing toward the centre doubles the f-pawns but opens the e-file that the rook will use once the king castles, and it leaves a solid block on f6, f7, g7 and h7 to shield the king. The structure looks damaged and is genuinely comfortable to play.",
+  "reasons": [
+   { "kind": "opens", "from": "e8", "to": "e5" },
+   { "kind": "controls", "square": "e5" },
+   { "kind": "controls", "square": "g5" }
+  ]
+ }
+]

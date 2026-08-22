@@ -346,7 +346,7 @@
   {
    "id": "vn-minor-piece-play-hit-the-knight-whose-retreat-just-vanished",
    "line": "e4 c6 Bc4 d5 exd5 cxd5 Bb5+ Bd7 Nc3 Bxb5 Nxb5 Nc6 c3 a6",
-   "teaches": "Timing in the opening is often about a square that just disappeared. The moment a pawn move takes away a piece's retreat square, the move that attacks that piece is promoted from routine to urgent — the same attack a move earlier or later achieves nothing.",
+   "teaches": "Timing in the opening is often about a square that just disappeared — the moment a pawn move takes away a piece's retreat square, the move that attacks that piece is promoted from routine to urgent.",
    "explains": "The pawn on a6 attacks the knight on b5, and the pawn move a moment ago took c3 away as its retreat — the knight's comfortable road home is gone, and its remaining choices either misplace it or wreck the pawns around it. One little pawn move, played at exactly the right time.",
    "reasons": [
     {
@@ -362,7 +362,7 @@
   {
    "id": "vn-minor-piece-play-trade-on-your-own-terms",
    "line": "e4 c6 Bc4 d5 exd5 cxd5 Bb5+ Bd7 Nc3 Bxb5 Nxb5 Nc6 c3 a6 Nd4 Nxd4 cxd4 e6 Nf3 Bd6 d3 Ne7 O-O O-O Re1 Qb6 a3 Nf5 b4 a5 Bd2 axb4 axb4 Nxd4 Rxa8 Rxa8 Nxd4 Qxd4",
-   "teaches": "Trading on your own terms means arranging that your opponent is the one who captures first, so every recapture improves your pieces instead of theirs. The material stays level; the activity does not — count who ends up better placed after the dust settles, not who took what.",
+   "teaches": "Trading on your own terms means arranging that your opponent is the one who captures first, so every recapture improves your pieces instead of theirs — the material stays level; the activity does not.",
    "explains": "The queen has recaptured on d4 and stands in the middle of the board, centralised by the trade her opponent initiated. The sequence was invited, not avoided: each capture pulled a defender away and the recapture was the developing move.",
    "structural": "a level trade sequence steered so every recapture activates the recapturing side",
    "fen": "r5k1/1p3ppp/3bp3/3p4/1P1q4/3P4/3B1PPP/3QR1K1 w - - 0 20",

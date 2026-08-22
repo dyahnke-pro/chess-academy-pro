@@ -1088,8 +1088,8 @@
   {
    "id": "vn-fourknights-the-move-that-could-be-three-openings",
    "line": "e4 e5 Nc3",
-   "teaches": "Develop with a move that keeps several openings available. The less your third move commits to, the more of the opponent's preparation is wasted.",
-   "explains": "The knight comes to c3, guarding e4, and at this moment the game could still become several different openings — a quiet knight game, a sharp f-pawn advance, or a transposition into the lines with both knights out. Nothing is settled yet, which is the point: whatever Black has prepared, it is not yet clear it applies.",
+   "teaches": "Develop with a move that keeps several openings available — the less your third move commits to, the more of the opponent's preparation is wasted.",
+   "explains": "The knight comes to c3, guarding e4, and right now the game could still become several different openings — a quiet knight game, a sharp f-pawn advance, or the lines with both knights out. Nothing is settled yet, which is the point: whatever Black has prepared, it is not yet clear it even applies.",
    "reasons": [
     {
      "kind": "defends",
@@ -1104,7 +1104,7 @@
   {
    "id": "vn-fourknights-answer-the-knight-by-hitting-the-pawn",
    "line": "e4 e5 Nc3 Nf6",
-   "teaches": "Meet a developing move with a developing move that carries a threat. Attacking the pawn the opponent just defended forces them to keep defending it.",
+   "teaches": "Meet a developing move with a developing move that carries a threat — attacking the pawn the opponent just defended forces them to keep defending it.",
    "explains": "Black brings the knight out and immediately leans on e4. It is defended, so nothing is won — but from here on every White move has to keep that pawn covered, and that is a constraint White will feel for the next several moves.",
    "reasons": [
     {
@@ -1120,7 +1120,7 @@
   {
    "id": "vn-fourknights-the-symmetrical-shape",
    "line": "e4 e5 Nc3 Nf6 Nf3",
-   "teaches": "In a symmetrical position, the extra move is only an advantage if it can be turned into a threat. Mirror until the opponent commits, then look for the break.",
+   "teaches": "In a symmetrical position, the extra move is only an advantage if it can be turned into a threat — mirror until the opponent commits, then look for the break.",
    "explains": "The second knight comes out to hit e5, and the position is a mirror image of itself. Neither side has done anything special; both have simply put the knights where knights go. The real game starts with the first pawn break, and it is White's turn to choose one.",
    "reasons": [
     {
@@ -1136,8 +1136,8 @@
   {
    "id": "vn-fourknights-the-break-that-changes-the-opening",
    "line": "e4 e5 Nc3 Nf6 Nf3 Nc6 d4",
-   "teaches": "A pawn break in a symmetrical position is a decision to change the pawn structure while you still have the move. Break when the resulting position suits your pieces, not because you are tired of mirroring.",
-   "explains": "White cracks the symmetry with the pawn to d4, hitting e5. This turns the knight game into an open one — the pawns will come off in the centre, the position will open, and both sides will play with pieces rather than pawn chains. From this side of the board it is a comparatively rare choice, which is itself worth something.",
+   "teaches": "A pawn break in a symmetrical position is a decision to change the pawn structure while you still have the move — break when the resulting position suits your pieces, not because you are tired of mirroring.",
+   "explains": "White cracks the symmetry with the pawn to d4, hitting e5. This turns the knight game into an open one — the pawns come off in the centre, the position opens, and both sides play with pieces rather than pawn chains. From this side of the board it is a comparatively rare choice, which is itself worth something.",
    "reasons": [
     {
      "kind": "attacks",
@@ -1152,7 +1152,7 @@
   {
    "id": "vn-fourknights-take-and-the-pawn-hits-the-knight",
    "line": "e4 e5 Nc3 Nf6 Nf3 Nc6 d4 exd4",
-   "teaches": "When you capture toward the centre, look at what the pawn attacks on arrival. A recapture that is forced by your pawn's new target is a tempo you did not have to ask for.",
+   "teaches": "When you capture toward the centre, look at what the pawn attacks on arrival — a recapture forced by your pawn's new target is a tempo you did not have to ask for.",
    "explains": "Black takes, and the pawn that lands on d4 is looking straight at the knight on c3. White has to deal with that, which means recapturing right away rather than slipping in a useful move first. Small thing, but it is why this structure resolves so quickly.",
    "reasons": [
     {
@@ -1168,7 +1168,7 @@
   {
    "id": "vn-fourknights-two-reputable-bishop-squares",
    "line": "e4 e5 Nc3 Nf6 Nf3 Nc6 d4 exd4 Nxd4",
-   "teaches": "The most-recommended move is not the only good one. A second-most-popular move that steers into structures you understand better is worth more than a main line you half remember.",
+   "teaches": "The most-recommended move is not the only good one — a second-most-popular move that steers into structures you understand better is worth more than a main line you half remember.",
    "explains": "The knight recaptures in the centre, touching the knight on c6, and Black chooses where the dark-squared bishop goes. The move in most books is the pin on b4, leading to the well-charted lines where White trades on c6 and develops the bishop to d3. The bishop to c5 is the other road — second most popular, entirely reputable, and steering into a different pawn structure altogether.",
    "reasons": [
     {
@@ -1184,7 +1184,7 @@
   {
    "id": "vn-fourknights-develop-toward-the-pawn-under-pressure",
    "line": "e4 e5 Nc3 Nf6 Nf3 Nc6 d4 exd4 Nxd4 Bb4 Nxc6 bxc6 Bd3",
-   "teaches": "When one pawn is the target of everything, develop the piece that covers it. Choosing a developing square that also defends beats choosing the square that only looks active.",
+   "teaches": "When one pawn is the target of everything, develop the piece that covers it — choosing a developing square that also defends beats choosing the square that only looks active.",
    "explains": "White has traded on c6 and now develops the bishop to d3, where it supports the pawn on e4. That pawn is the pressure point of the whole structure: Black's doubled c-pawns are the price paid for a pair of long-range pieces and a target to aim at. A different bishop square looks more aggressive and leaves e4 short of help — which is exactly the kind of thing that decides these positions.",
    "reasons": [
     {
@@ -1200,7 +1200,7 @@
   {
    "id": "vn-fourknights-which-bishop-square-decided-which-pawn-break",
    "line": "e4 e5 Nc3 Nf6 Nf3 Nc6 d4 exd4 Nxd4 Bb4 Nxc6 bxc6 Bd3 d5",
-   "teaches": "An early bishop move is really a choice of pawn break three moves later. Ask which pawn advance the bishop's square makes natural before you play it.",
+   "teaches": "An early bishop move is really a choice of pawn break three moves later — ask which pawn advance the bishop's square makes natural before you play it.",
    "explains": "The pawn goes to d5 and hits e4. This is the point of the bishop having gone to b4 rather than c5: with the pin, almost everyone strikes with the d-pawn two squares, opening the position immediately and using the doubled pawns as central mass. The other bishop square quietly changes the plan to the modest one-square advance and a slower game. Same opening, two different structures, decided four moves earlier.",
    "reasons": [
     {
