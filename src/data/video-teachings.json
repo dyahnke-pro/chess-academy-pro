@@ -8113,7 +8113,7 @@
    "opening": "Alekhine Defense: Four Pawns Attack",
    "phase": "opening",
    "explains": "The pawn arrives on e5 covering d6 and f6, so the knight has no way back to the natural square in front of its king and the dark squares in front of Black stay sealed. The centre pawns are still standing side by side, which is the entire point of the system.",
-   "teaches": "With two ways to recapture, the choice is a choice of position, not of bookkeeping. Take with the wing pawn and the big centre survives intact and the file behind it opens for the rook; take with the centre pawn and the middle thins out exactly where the whole plan lives. Recapture toward the strength you are trying to keep.",
+   "teaches": "With two ways to recapture, the choice is a choice of position, not of bookkeeping — take with the wing pawn and the big centre survives intact and the file behind it opens for the rook; take with the centre pawn and the middle thins out exactly where the whole plan lives.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8151,7 +8151,7 @@
    "opening": "Alekhine Defense: Four Pawns Attack",
    "phase": "opening",
    "explains": "The knight that just came out attacks d4, and d4 is the pawn holding e5 in place. The bishop to e3 adds a second defender to d4, so the front of the centre stays supported without putting a pinnable piece in front of it.",
-   "teaches": "When a pawn comes under fire, look at what is HOLDING it before you look at the pawn. A big centre is a chain, and pressure on the front pawn is answered by reinforcing the one underneath — the natural knight move looks like it does the same job, but it steps onto a square where it can be pinned to the very pawn it is meant to hold.",
+   "teaches": "When a pawn comes under fire, look at what is HOLDING it before you look at the pawn — a big centre is a chain, and pressure on the front pawn is answered by reinforcing the one underneath, while the natural knight move steps onto a square where it can be pinned to the very pawn it is meant to hold.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8191,7 +8191,7 @@
    "opening": "Alekhine Defense: Four Pawns Attack",
    "phase": "opening",
    "explains": "From e2 the bishop covers the knight on f3, so the pin against it no longer threatens to win anything, and the same bishop is holding the pawn on c4 that the forward square would have left loose.",
-   "teaches": "The active-looking square for a bishop is often the one that invites the pin; the modest square behind it is the one that answers it. A pin only bites when the pinned piece is undefended — put a defender on it in advance and the pin becomes a question with an easy answer, which is worth more than a diagonal you were never going to use.",
+   "teaches": "The active-looking square for a bishop is often the one that invites the pin; the modest square behind it is the one that answers it — a pin only bites when the pinned piece is undefended, so put a defender on it in advance and the pin becomes a question with an easy answer.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8239,7 +8239,7 @@
    "opening": "Alekhine Defense: Four Pawns Attack",
    "phase": "opening",
    "explains": "The pawn steps to d5 hitting the knight on c6 and the pawn on e6 together. The knight has to move and the pawn has to be dealt with, and only one of those can be attended to first.",
-   "teaches": "A space-gaining push is worth playing the moment it comes with a question attached. One pawn move that attacks a developed piece and strikes a defended pawn at the same time forces the answer to be found immediately, and answers found under pressure are the ones that go wrong.",
+   "teaches": "A space-gaining push is worth playing the moment it comes with a question attached — one pawn move that attacks a developed piece and strikes a defended pawn at the same time forces the answer to be found immediately, and answers found under pressure are the ones that go wrong.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8289,7 +8289,7 @@
    "opening": "Alekhine Defense: Four Pawns Attack",
    "phase": "middlegame",
    "explains": "The bishop now stands on b6, bearing down on the pawn on c7 behind it and on the pawn out on a5. The knight that hopped to the rim has won nothing yet, and it is now a piece behind.",
-   "teaches": "When a piece jumps to an aggressive square, check what it LEFT before you answer where it went. A knight arriving with threats is only frightening if the piece it abandoned is still safe — and once the abandoned one is taken, the aggressive one has to justify itself alone.",
+   "teaches": "When a piece jumps to an aggressive square, check what it LEFT before you answer where it went — a knight arriving with threats is only frightening if the piece it abandoned is still safe, and once the abandoned one is taken, the aggressive one has to justify itself alone.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8320,7 +8320,7 @@
    "opening": "Scotch Game: Haxo Gambit",
    "phase": "opening",
    "explains": "Black takes in the centre, which is simply what is played here. White now decides how to get the pawn back, and the choice names the opening: recapture with the knight for the straightforward version, or leave the pawn alone and develop toward f7 for the gambit. Nothing has been risked yet.",
-   "teaches": "Take a central pawn when the recapture is not automatic. The opponent's choice of HOW to regain it is the real fork in the road, so let them commit first.",
+   "teaches": "Take a central pawn when the recapture is not automatic — the opponent's choice of HOW to regain it is the real fork in the road, so let them commit first.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8348,7 +8348,7 @@
    "opening": "Scotch Game: Haxo Gambit",
    "phase": "opening",
    "explains": "White leaves the pawn on d4 alone and develops at the f7 diagonal instead — the gambit. Black has two main approaches from here. One brings the knight out to f6, which invites the pawn advance and the central counter-push that follows it. The other blocks the diagonal with the bishop and keeps the extra pawn for now. Both are respectable; they are simply different games.",
-   "teaches": "Against a gambit that ignores the pawn, pick a defence by which structure you want, not by which move looks bravest. Both replies here are sound and they lead to different games.",
+   "teaches": "Against a gambit that ignores the pawn, pick a defence by which structure you want, not by which move looks bravest — both replies here are sound and they lead to different games.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8392,7 +8392,7 @@
    "opening": "Scotch Game: Haxo Gambit",
    "phase": "opening",
    "explains": "White has offered the c-pawn as well and Black declines by developing. Taking it is the mistake: whatever modern analysis says about the resulting position, in practice it hands White a huge lead in development with lines opening straight at the black king, and the extra pawn never gets to matter. Bringing the knight out and hitting e4 keeps the position sound and leaves White to prove the gambit.",
-   "teaches": "A second pawn offered in a gambit is usually a trap for the greedy. When the capture opens lines toward your uncastled king, count the development, not the material.",
+   "teaches": "A second pawn offered in a gambit is usually a trap for the greedy — when the capture opens lines toward your uncastled king, count the development, not the material.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8423,7 +8423,7 @@
    "opening": "Alekhine Defense: Two Pawns Attack",
    "phase": "opening",
    "explains": "The pawns have traded so that the wing majorities point in opposite directions — the queenside pawns outnumber their counterparts and will advance there, while the opponent's extra kingside pawn does the same on the other wing. The imbalance is the plan: push where you are the majority.",
-   "teaches": "When two recaptures are both sound, prefer the one that creates a structure with a plan built in. Recapturing to leave majorities on opposite wings gives each side a clear job — your extra pawns advance on their wing, and the whole middlegame plays itself by plan rather than by move-to-move invention. It is also the recapture that teaches you the most.",
+   "teaches": "When two recaptures are both sound, prefer the one that creates a structure with a plan built in — recapturing to leave majorities on opposite wings gives each side a clear job, and the whole middlegame plays itself by plan rather than by move-to-move invention.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8448,7 +8448,7 @@
    "opening": "Sicilian Defense: Open",
    "phase": "opening",
    "explains": "The pawn comes to c4 and covers b5 and d5. The central break to d5 is the move this defence uses to free itself, and it is now met by a pawn rather than a piece. Nothing is attacked; the position becomes one where the defender has space to hold and no lever to open it with.",
-   "teaches": "The way to take a freeing pawn break off the board is to cover its landing square with a pawn of your own. A second pawn on the fourth rank looks like a slow space-grab and is really prophylaxis: the break the defender's whole setup is built around simply stops existing.",
+   "teaches": "The way to take a freeing pawn break off the board is to cover its landing square with a pawn of your own — a second pawn on the fourth rank looks like a slow space-grab and is really prophylaxis: the break the defender's whole setup is built around simply stops existing.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -8525,7 +8525,7 @@
    "opening": "Sicilian Defense: Open",
    "phase": "opening",
    "explains": "The knights have come off in the centre and the queen takes back. From d4 she hits the knight on f6 and the pawns on a7 and d7, while holding the pawns of the clamp behind her. The exchange that was supposed to relieve the cramped side has instead put the queen on the strongest square on the board.",
-   "teaches": "Trading knights in a clamped position helps the side with less space, so recapture with the piece that makes the trade cost something. A queen that lands hitting a knight and two pawns at once means the simplification the defender wanted has handed over three tempi instead.",
+   "teaches": "Trading knights in a clamped position helps the side with less space, so recapture with the piece that makes the trade cost something — a queen that lands hitting a knight and two pawns at once means the simplification the defender wanted has handed over three tempi instead.",
    "plans": "",
    "concepts": [],
    "sources": [
