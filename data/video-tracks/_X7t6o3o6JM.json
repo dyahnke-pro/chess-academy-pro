@@ -587,7 +587,7 @@
   {
    "id": "vn-jobava-london-knight-first-eyes-the-centre",
    "line": "d4 Nf6 Nc3",
-   "teaches": "When a knight develops before the centre pawns, look at which pawn break it has just made possible. A quiet-looking developing move can be the one that decides whether your opponent gets to choose their own opening or gets steered into yours.",
+   "teaches": "When a knight develops before the centre pawns, look at which pawn break it has just made possible — a quiet-looking developing move can be the one that decides whether your opponent gets to choose their own opening or gets steered into yours.",
    "explains": "The knight covers e4, so the pawn is ready to come there next and take the whole centre. That is the threat this move order lives on: an answer that ignores it lets the big centre appear and hands the opponent a game they chose rather than one you did. Meeting it in the centre keeps that push honest, because the pawn arriving on e4 can then simply be taken.",
    "reasons": [
     {
@@ -603,7 +603,7 @@
   {
    "id": "vn-jobava-london-h5-stops-the-rook-pawn-dead",
    "line": "d4 Nf6 Nc3 d5 Bf4 g6 e3 Bg7 h4 h5",
-   "teaches": "Against a rook pawn running at a fianchetto, meeting it head on is the move that ends the discussion. A pawn that has been blocked on an open file is not slow — it has no squares at all, and the attacker has to find a different plan or spend pieces.",
+   "teaches": "Against a rook pawn running at a fianchetto, meeting it head on is the move that ends the discussion — a pawn that has been blocked on an open file is not slow, it has no squares at all, and the attacker has to find a different plan or spend pieces.",
    "explains": "Once the pawn arrives on h5 the white h-pawn has nowhere to go: its one square is occupied and it cannot capture, so the pawn storm stops without a piece being touched. That is why the attacking side treats this as the main line and starts looking at sacrificing on h5 instead — the pawn alone can no longer make progress.",
    "reasons": [
     {
@@ -620,7 +620,7 @@
   {
    "id": "vn-jobava-london-queen-step-clears-the-castling-path",
    "line": "d4 Nf6 Nc3 d5 Bf4 g6 e3 Bg7 h4 h5 Nf3 O-O Qd2",
-   "teaches": "A quiet queen move is often a castling move. Before reading a developing move as slow, check which squares it empties — the last piece to leave the back rank is what makes the king's journey to the other wing possible.",
+   "teaches": "A quiet queen move is often a castling move — before reading a developing move as slow, check which squares it empties, because the last piece to leave the back rank is what makes the king's journey to the other wing possible.",
    "explains": "Stepping the queen to d2 empties the last square between king and queen's rook, so castling long becomes available. That is the side the king belongs on here, because the h-pawn has already committed to the attack and going short would put the king behind it. The queen also connects to the bishop on f4, so the move does two jobs.",
    "reasons": [
     {

@@ -10952,7 +10952,7 @@
    "opening": "Caro-Kann Defense: Panov Attack, Modern Defense",
    "phase": "opening",
    "explains": "The bishop steps to e6 holding the pawn on d5 and the pawn on f7 behind it. It does stand in front of the other bishop, which will come out the long way instead — a route that costs a move and gains a diagonal.",
-   "teaches": "A bishop that blocks its own colleague looks like a mistake and is not, provided the colleague has another route out. Judge a developing move by what it HOLDS: the pawn in the middle is the one both sides are about to fight over, and a piece defending it from the side is worth more than a tidy-looking diagonal.",
+   "teaches": "A bishop that blocks its own colleague looks like a mistake and is not, provided the colleague has another route out — judge a developing move by what it HOLDS, because the pawn in the middle is the one both sides are about to fight over, and a piece defending it from the side is worth more than a tidy-looking diagonal.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -10991,7 +10991,7 @@
    "opening": "Caro-Kann Defense: Panov Attack, Modern Defense",
    "phase": "opening",
    "explains": "The queen comes to a5 hitting the knight on c3 and adding a second defender to the pawn on d5, with the pawn on a2 in the same line. Nothing in the position can drive the queen off that square.",
-   "teaches": "When a piece is pinned to the defence of a central pawn, bringing the queen out on the same diagonal does two jobs in one move: it develops, and it adds pressure to the piece that is already busy. An early queen is only bad when it can be chased — here nothing attacks the square, so the tempo is real.",
+   "teaches": "When a piece is pinned to the defence of a central pawn, bringing the queen out on the same diagonal does two jobs in one move: it develops, and it adds pressure to the piece that is already busy — an early queen is only bad when it can be chased, and here nothing attacks the square.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11032,7 +11032,7 @@
    "opening": "Caro-Kann Defense: Panov Attack, Modern Defense",
    "phase": "opening",
    "explains": "Taking with the e-pawn doubles the f-pawns and clears e7, so the bishop still sitting at home now has the long dark diagonal to come out on. The alternative recapture keeps the pawns tidy and leaves that bishop with nowhere to go.",
-   "teaches": "When a capture can be answered two ways, pick the one that unlocks the piece you have not developed yet. Doubling a pawn is a real cost, and it is the right price when the recapture opens the only diagonal your last minor piece has — the structure looks worse and the position is easier to play.",
+   "teaches": "When a capture can be answered two ways, pick the one that unlocks the piece you have not developed yet — doubling a pawn is a real cost, and it is the right price when the recapture opens the only diagonal your last minor piece has.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11078,7 +11078,7 @@
    "opening": "Caro-Kann Defense: Panov Attack, Modern Defense",
    "phase": "opening",
    "explains": "The bishop comes to g4 pinning down the knight on f3, which is the main piece holding the pawn in the middle. Trade it off and the target has one fewer guard, with the rest of the black army already aimed that way.",
-   "teaches": "Against an isolated central pawn the plan is not to attack the pawn — it is to remove its DEFENDERS one by one and then attack it. The knight in front of the king is usually the busiest of them, so the bishop that can trade itself for that knight is worth more than the bishop pair. Name the target, then take out what holds it.",
+   "teaches": "Against an isolated central pawn the plan is not to attack the pawn — it is to remove its DEFENDERS one by one and then attack it. The knight in front of the king is usually the busiest of them, so the bishop that can trade itself for that knight is worth more than the bishop pair.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11117,7 +11117,7 @@
    "opening": "Petrov's Defense: Three Knights Game",
    "phase": "opening",
    "explains": "The knight has taken on e4 and attacks two pieces from there: the bishop on g3 that was doing the pinning, and the knight on c3. The move looked forbidden while the pin stood; the pawn advances changed the geometry, and now it wins material or the initiative whichever way the opponent answers.",
-   "teaches": "A pin on your king's knight is only as strong as the tactics keeping it there. When the pawns have pushed the pinning bishop to a square where the knight's capture in the centre attacks it, the pin is over — count everything the capture hits before dismissing it as impossible.",
+   "teaches": "A pin on your king's knight is only as strong as the tactics keeping it there — when the pawns have pushed the pinning bishop to a square where the knight's capture in the centre attacks it, the pin is over, so count everything the capture hits before dismissing it as impossible.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11151,7 +11151,7 @@
    "opening": "Owen Defense",
    "phase": "opening",
    "explains": "The king's knight goes to e2 rather than its natural square, so the knight on c3 is no longer the only thing holding the centre and the pin has nothing to win. The pawn move that would have chased the bishop was never needed.",
-   "teaches": "Facing a pin on the queen's knight, spending a pawn move to prevent it weakens the squares the pin was aiming at anyway. Develop instead, and keep the modest square beside the king in reserve for the OTHER knight: when the pin arrives, that knight takes it, the pinned one is free, and no pawn has been touched. Answer a pin with a square, not with a pawn.",
+   "teaches": "Facing a pin on the queen's knight, spending a pawn move to prevent it weakens the squares the pin was aiming at anyway — develop instead, and keep the modest square beside the king in reserve for the OTHER knight, so when the pin arrives that knight takes it, the pinned one is free, and no pawn has been touched.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11179,7 +11179,7 @@
    "opening": "Rapport-Jobava System",
    "phase": "opening",
    "explains": "The knight covers e4, so the pawn is ready to come there next and take the whole centre. That is the threat this move order lives on: an answer that ignores it lets the big centre appear and hands the opponent a game they chose rather than one you did. Meeting it in the centre keeps that push honest, because the pawn arriving on e4 can then simply be taken.",
-   "teaches": "When a knight develops before the centre pawns, look at which pawn break it has just made possible. A quiet-looking developing move can be the one that decides whether your opponent gets to choose their own opening or gets steered into yours.",
+   "teaches": "When a knight develops before the centre pawns, look at which pawn break it has just made possible — a quiet-looking developing move can be the one that decides whether your opponent gets to choose their own opening or gets steered into yours.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11219,7 +11219,7 @@
    "opening": "Rapport-Jobava System",
    "phase": "opening",
    "explains": "Once the pawn arrives on h5 the white h-pawn has nowhere to go: its one square is occupied and it cannot capture, so the pawn storm stops without a piece being touched. That is why the attacking side treats this as the main line and starts looking at sacrificing on h5 instead — the pawn alone can no longer make progress.",
-   "teaches": "Against a rook pawn running at a fianchetto, meeting it head on is the move that ends the discussion. A pawn that has been blocked on an open file is not slow — it has no squares at all, and the attacker has to find a different plan or spend pieces.",
+   "teaches": "Against a rook pawn running at a fianchetto, meeting it head on is the move that ends the discussion — a pawn that has been blocked on an open file is not slow, it has no squares at all, and the attacker has to find a different plan or spend pieces.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11254,7 +11254,7 @@
    "opening": "Rapport-Jobava System",
    "phase": "opening",
    "explains": "Stepping the queen to d2 empties the last square between king and queen's rook, so castling long becomes available. That is the side the king belongs on here, because the h-pawn has already committed to the attack and going short would put the king behind it. The queen also connects to the bishop on f4, so the move does two jobs.",
-   "teaches": "A quiet queen move is often a castling move. Before reading a developing move as slow, check which squares it empties — the last piece to leave the back rank is what makes the king's journey to the other wing possible.",
+   "teaches": "A quiet queen move is often a castling move — before reading a developing move as slow, check which squares it empties, because the last piece to leave the back rank is what makes the king's journey to the other wing possible.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11286,7 +11286,7 @@
    "opening": "Scandinavian Defense: Modern Variation",
    "phase": "opening",
    "explains": "The bishop leaves the square the check pushed it to and comes to f5, where it does hit the pawn on c2 and cover the central light squares. It is a good square — reached one move late.",
-   "teaches": "Counting development means counting MOVES, not pieces. A piece that reaches its good square on the second try has cost two moves and delivered one developed piece, and that arithmetic is the whole reason a side stands slightly better out of a quiet opening. When you must move a piece twice, make the second square earn it.",
+   "teaches": "Counting development means counting MOVES, not pieces — a piece that reaches its good square on the second try has cost two moves and delivered one developed piece, and that arithmetic is the whole reason a side stands slightly better out of a quiet opening. When you must move a piece twice, make the second square earn it.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -11325,7 +11325,7 @@
    "opening": "Scandinavian Defense: Modern Variation",
    "phase": "opening",
    "explains": "The advance takes the centre but abandons d3, and the knight drops in on b4 eyeing that square and c2 while hitting the pawn on a2. There is no pawn left that can ever ask it to move.",
-   "teaches": "A pawn move that gains space also stops guarding the squares it has left behind. Before playing the natural expanding move, look at which square in your own camp becomes permanently unavailable to your pawns — a knight that lands there cannot be chased, and cannot be ignored either.",
+   "teaches": "A pawn move that gains space also stops guarding the squares it has left behind — before playing the natural expanding move, look at which square in your own camp becomes permanently unavailable to your pawns, because a knight that lands there cannot be chased and cannot be ignored either.",
    "plans": "",
    "concepts": [],
    "sources": [
