@@ -105,7 +105,7 @@
   {
    "id": "vn-catalan-the-quiet-pawn-move-that-announces-a-plan",
    "line": "d4 d5 c4 e6 Nf3 Nf6 g3 Be7 Bg2 O-O O-O a6",
-   "teaches": "A rook's-pawn move in a quiet opening is rarely aimless — read it as the announcement of a two-move plan. It usually prepares to take a pawn and HOLD it with the advance behind it, and knowing that one move early is what lets you defend the pawn before it is grabbed rather than chasing it afterwards.",
+   "teaches": "A rook's-pawn move in a quiet opening is rarely aimless — read it as the announcement of a two-move plan. It usually prepares to take a pawn and HOLD it with the advance behind it, and knowing that one move early lets you defend the pawn before it is grabbed rather than chase it afterwards.",
    "explains": "The pawn to a6 takes b5 in hand, which is the square the queenside advance needs after a capture in the centre. Nothing is threatened yet, and the capture is now supported before it happens.",
    "reasons": [
     {

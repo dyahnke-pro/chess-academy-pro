@@ -2,19 +2,16 @@
  {
   "id": "vn-open-centre-pin-the-recapturing-knight",
   "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nxd4 Bb4 Nxc6 bxc6 Bd3 O-O O-O d6 Bg5",
-  "teaches": "After the centre opens, the enemy king's knight is the piece holding the position together, and the bishop's pin against the queen freezes it. Every attacking idea that follows — the pawn advances, the piece lifts — gains a move because the defender's best piece is spoken for.",
+  "teaches": "After the centre opens, the enemy king's knight is the piece holding the position together, and the bishop's pin against the queen freezes it — every attacking idea that follows gains a move because the defender's best piece is spoken for.",
   "explains": "The bishop on g5 attacks the knight on f6 and pins it against the queen behind it. The knight can neither move nor be comfortably unpinned, so the kingside squares it was guarding are already half-abandoned while the attack is still choosing its plan.",
   "reasons": [
-   {
-    "kind": "attacks",
-    "square": "f6"
-   }
+   { "kind": "attacks", "square": "f6" }
   ]
  },
  {
   "id": "vn-open-centre-the-prophylactic-king-step",
   "line": "e4 e5 Nf3 Nc6 Nc3 Nf6 d4 exd4 Nxd4 Bb4 Nxc6 bxc6 Bd3 O-O O-O d6 Bg5 h6 Bh4 Re8 f4 a5 Kh1",
-  "teaches": "Before committing to the pawn storm, spend one move stepping the king off the diagonal your opponent's pieces want. Prophylaxis is cheapest when nothing is happening yet: the check or the hit that would have interrupted your attack at its critical moment simply never exists.",
+  "teaches": "Before committing to the pawn storm, spend one move stepping the king off the diagonal your opponent's pieces want — prophylaxis is cheapest when nothing is happening yet, because the check or the hit that would have interrupted your attack at its critical moment simply never exists.",
   "explains": "The king tucks into the corner, off the diagonal that runs through the centre toward g1 — the line the enemy bishop would love once the pawns advance and the position opens. The attacking setup continues next move, now without a single tactical string attached to it.",
   "structural": "the king stepped off the working diagonal before the storm — prophylaxis paid while it costs nothing"
  }

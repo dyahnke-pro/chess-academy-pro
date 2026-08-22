@@ -5403,7 +5403,7 @@
    "opening": "Grünfeld Defense: Exchange Variation, Nadanian Attack",
    "phase": "opening",
    "explains": "The knight has stepped to a4 and the capture on c3 is off the table — the centralised knight has nothing to take and no favourable trade to anchor its plans on. The pawn can come to e4 next with the centre intact, which is exactly the picture this defence exists to prevent.",
-   "teaches": "This defence's whole machine runs on one trade: the knight takes on c3, the pawn chain forms, and the c-pawn's strike attacks it. Deny the trade and the machine has no fuel — a knight move to the rim that disallows the capture forces the defence to find a different game entirely.",
+   "teaches": "This defence's whole machine runs on one trade: the knight takes on c3, the pawn chain forms, and the c-pawn's strike attacks it — deny the trade and the machine has no fuel, so a knight move to the rim that disallows the capture forces a different game entirely.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -5445,7 +5445,7 @@
    "opening": "Grünfeld Defense: Exchange Variation, Nadanian Attack",
    "phase": "opening",
    "explains": "The king steps to c1 out of the check, and in doing so it defends the pawn on b2 — the pawn a blocking piece would have abandoned to a capture with check. Nothing hangs, the extra material stays, and the attack has run out of forcing moves.",
-   "teaches": "When a check can be met by blocking or by a king step, count what each answer leaves loose before choosing. A block that abandons a pawn with check is not a developing move, it is a blunder in stages — and the quiet king step that keeps everything defended is precise, not passive.",
+   "teaches": "When a check can be met by blocking or by a king step, count what each answer leaves loose before choosing — a block that abandons a pawn with check is not a developing move, it is a blunder in stages, and the quiet king step that keeps everything defended is precise, not passive.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -5685,7 +5685,7 @@
    "opening": "Petrov's Defense: Italian Variation",
    "phase": "opening",
    "explains": "The pawn on h3 covers g4, so the bishop's arrival there now runs into a defended square — it can still come, but it gets asked the question immediately and on your terms. With that settled, castling short is safe and the plans with the pawns can begin.",
-   "teaches": "In quiet openings the annoying pin against your king's knight is half your opponent's plan, and the rook-pawn's one-square step is the standing answer. Play it before castling short: the pin square is covered, so the bishop's visit costs a tempo instead of creating a nagging problem.",
+   "teaches": "In quiet openings the annoying pin against your king's knight is half your opponent's plan, and the rook-pawn's one-square step is the standing answer — play it before castling short, so the bishop's visit costs a tempo instead of creating a nagging problem.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -5716,7 +5716,7 @@
    "opening": "Petrov's Defense: Italian Variation",
    "phase": "opening",
    "explains": "The pawn on h6 attacks the knight on g5. The square c6 is empty, so the capture on d5 hit nothing and gained no time. The knight on g5 must retreat, and a full move is gone from the raid.",
-   "teaches": "A famous attacking pattern is a set of conditions, not a move to copy. The knight's raid works in its home position because a specific piece stands on a specific square — remove that piece and the same raid loses a tempo at every step. Compare the board in front of you to the pattern's conditions before borrowing its moves.",
+   "teaches": "A famous attacking pattern is a set of conditions, not a move to copy — the knight's raid works in its home position because a specific piece stands on a specific square, and removing that piece makes the same raid lose a tempo at every step.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -5986,7 +5986,7 @@
    "opening": "Queen's Gambit Declined",
    "phase": "opening",
    "explains": "The pawn to a6 takes b5 in hand, which is the square the queenside advance needs after a capture in the centre. Nothing is threatened yet, and the capture is now supported before it happens.",
-   "teaches": "A rook's-pawn move in a quiet opening is rarely aimless — read it as the announcement of a two-move plan. It usually prepares to take a pawn and HOLD it with the advance behind it, and knowing that one move early is what lets you defend the pawn before it is grabbed rather than chasing it afterwards.",
+   "teaches": "A rook's-pawn move in a quiet opening is rarely aimless — read it as the announcement of a two-move plan. It usually prepares to take a pawn and HOLD it with the advance behind it, and knowing that one move early lets you defend the pawn before it is grabbed rather than chase it afterwards.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -6033,7 +6033,7 @@
    "opening": "Sicilian Defense: Morphy Gambit",
    "phase": "opening",
    "explains": "The knight arriving on f6 hits the pawn on e4, so the choice is not between developing and attacking — the move does both. That matters most against a set-up that has not committed its centre yet, because the question has to be answered before anything else gets built.",
-   "teaches": "Given two developing moves, prefer the one that asks a question. A piece that comes out attacking something forces a reply, so you get the tempo to finish developing instead of spending it answering.",
+   "teaches": "Given two developing moves, prefer the one that asks a question — a piece that comes out attacking something forces a reply, so you get the tempo to finish developing instead of spending it answering.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -6063,7 +6063,7 @@
    "opening": "Sicilian Defense: Morphy Gambit",
    "phase": "opening",
    "explains": "Pushing the pawn to e5 hits the knight, and the two pawns covering f6 do not rescue it: taking on f6 would win a piece for a pawn and the recapture only gets the pawn back. So the knight cannot simply sit there, which is exactly what the push is asking. The answer has to be a move that creates a threat of its own rather than a quiet retreat.",
-   "teaches": "When a pawn attacks a piece, counting defenders is the wrong calculation. The pawn is worth less than anything it hits, so the trade is good for the attacker no matter how many times the square is guarded — the piece has to move, or find a bigger answer elsewhere.",
+   "teaches": "When a pawn attacks a piece, counting defenders is the wrong calculation — the pawn is worth less than anything it hits, so the trade is good for the attacker no matter how many times the square is guarded. The piece has to move, or find a bigger answer elsewhere.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -6101,7 +6101,7 @@
    "opening": "Four Knights Game: Scotch Variation Accepted",
    "phase": "opening",
    "explains": "The bishop on g5 attacks the knight on f6 and pins it against the queen behind it. The knight can neither move nor be comfortably unpinned, so the kingside squares it was guarding are already half-abandoned while the attack is still choosing its plan.",
-   "teaches": "After the centre opens, the enemy king's knight is the piece holding the position together, and the bishop's pin against the queen freezes it. Every attacking idea that follows — the pawn advances, the piece lifts — gains a move because the defender's best piece is spoken for.",
+   "teaches": "After the centre opens, the enemy king's knight is the piece holding the position together, and the bishop's pin against the queen freezes it — every attacking idea that follows gains a move because the defender's best piece is spoken for.",
    "plans": "",
    "concepts": [],
    "sources": [
@@ -6145,7 +6145,7 @@
    "opening": "Four Knights Game: Scotch Variation Accepted",
    "phase": "opening",
    "explains": "The king tucks into the corner, off the diagonal that runs through the centre toward g1 — the line the enemy bishop would love once the pawns advance and the position opens. The attacking setup continues next move, now without a single tactical string attached to it.",
-   "teaches": "Before committing to the pawn storm, spend one move stepping the king off the diagonal your opponent's pieces want. Prophylaxis is cheapest when nothing is happening yet: the check or the hit that would have interrupted your attack at its critical moment simply never exists.",
+   "teaches": "Before committing to the pawn storm, spend one move stepping the king off the diagonal your opponent's pieces want — prophylaxis is cheapest when nothing is happening yet, because the check or the hit that would have interrupted your attack at its critical moment simply never exists.",
    "plans": "",
    "concepts": [],
    "sources": [
