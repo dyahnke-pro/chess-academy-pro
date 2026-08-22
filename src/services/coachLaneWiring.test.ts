@@ -21,7 +21,6 @@ const HOOK = read('src/hooks/useDiscussionPractice.ts');
 const BACKWARD = read('src/services/backwardLook.ts');
 const FORK = read('src/services/forkNarration.ts');
 const PHASE = read('src/hooks/usePhaseNarration.ts');
-const PLAY = read('src/components/Coach/CoachGamePage.tsx');
 /** Comments stripped. A rule about what the code must NOT DO has to read the
  *  code — the note explaining WHY a call was removed contains the very string
  *  the rule forbids, and a gate that trips on its own documentation teaches the
@@ -157,13 +156,12 @@ describe('the lanes reach the VOICE, not just the prompt', () => {
     // transcript by hand. That blind spot is exactly what let
     // `gem_alert_spoken` sit at zero for its entire life.
     expect(TEACH).toMatch(/captureEvent\('coach_beat_offered'/);
-    // BOTH outcomes, which is what makes the lane measurable now that it is
-    // allowed to say nothing. Since the generic fallback was removed the
-    // interesting question changed from "which of nine kinds fired" to "how
-    // often does this lane stay silent" — and a lane that only emits when it
-    // speaks cannot answer that. Silence is a measurement, not an absence.
-    expect(TEACH, 'the lane does not report a reason firing').toMatch(/kind: 'reasons', spoke: true/);
-    expect(TEACH, 'the lane does not report its silence').toMatch(/kind: 'reasons', spoke: false/);
+    // The KIND, or the event cannot tell nine lanes apart.
+    expect(TEACH).toMatch(/kind: beat\.kind/);
+    // And computed-vs-spoken, which is the distinction every dead lane this
+    // week turned on: each computed correctly and reached nobody, so counting
+    // computations would have reported all of them healthy.
+    expect(TEACH).toMatch(/spoke: computedLine !== null/);
   });
 
   it('the queued package is actually spoken', () => {
@@ -240,92 +238,6 @@ describe('phase narration is judged against the board it was computed from', () 
   // against `getLiveFen()`, the board right now. Both are real boards, just
   // different ones, so a sentence true when detected became "board-false"
   // because the student moved while it was being phrased and streamed.
-  // ── THE REASON LANE MUST ACTUALLY BE REACHED ─────────────────────────────
-  //
-  // `reasonCheck` shipped with ZERO runtime importers and `emit-notes.mjs`
-  // dropped the `reasons` field on the way into the corpus, so the whole
-  // multi-reason rule verified prose at authoring time and reached no student.
-  // A wire that does not fire is not a wire (David 2026-08-07), and the way
-  // this one dies is silently — every other lane keeps working.
-  // ── PLAY GETS THE REASONS, AND STAYS SILENT ──────────────────────────────
-  //
-  // David 2026-08-18: *"Play stays silent. I just want coach to have access to
-  // the info."* A first pass spoke the reason on quiet moves and was wrong —
-  // the locked rule already said access is not permission to speak.
-  //
-  // Both halves are gated, because each fails independently and each failure is
-  // invisible: the reasons can stop being computed (the coach then answers from
-  // nothing) or they can start being spoken (Play stops being a playing
-  // surface, which nobody would see in a test that only checked the data).
-  it('computes checked reasons in Play from the pre-move board', () => {
-    expect(PLAY, 'the reason lane is not wired into coach-play at all')
-      .toMatch(/reasonLineFor\(/);
-    // From the PRE-move board. Handing it the post-move fen would check every
-    // claim against the wrong position and silently drop the true ones — and
-    // preFen is gone by the time a question arrives, which is why this is
-    // computed per move rather than lazily at ask time.
-    expect(PLAY, 'the reason lane is reading the wrong board')
-      .toMatch(/reasonLineFor\(preFen, moveResult\.san\)/);
-    expect(PLAY, 'the computed reasons are not stored for the coach to answer with')
-      .toMatch(/lastMoveReasonsRef\.current = rl/);
-    expect(PLAY, 'the reasons never reach the chat panel')
-      .toMatch(/lastMoveReasons=\{lastMoveReasonsRef\.current\}/);
-  });
-
-  it('never speaks the reasons on Play', () => {
-    // The exact shape of the reverted mistake: assigning a reason line to the
-    // spoken commentary. Play may compute them and hand them to the coach; it
-    // may not put them in the voice.
-    expect(PLAY, 'Play is speaking the reasons again — it must stay silent')
-      .not.toMatch(/commentary = reasonLine\.spoken/);
-    expect(PLAY, 'Play is injecting the reasons into the transcript unprompted')
-      .not.toMatch(/injectAssistantMessage\(reasonLine/);
-  });
-
-  it('hands the reasons to the brain as answer-only material', () => {
-    const ENVELOPE = read('src/coach/envelope.ts');
-    expect(ENVELOPE, 'lastMoveReasons never reaches the prompt — a field on a type is not a wire')
-      .toMatch(/state\.lastMoveReasons/);
-    // Without this the model will volunteer it, which is the silence rule
-    // broken by a longer route.
-    expect(ENVELOPE, 'the brain is not told to keep it until asked')
-      .toMatch(/never raise it unprompted/);
-  });
-
-  // ── THE FORK SIGNPOST ────────────────────────────────────────────────────
-  //
-  // David 2026-08-17: *"i want Learn with coach to touch on them as well so the
-  // user knows there are other options at certain forks/positions."*
-  //
-  // The `options` field was DATA-ONLY until this landed — 37 fork notes, 90
-  // candidate moves and 105 verified claims that no runtime code read. Exactly
-  // the defect the reasons themselves had: computed, checked, reaching nobody.
-  it('names the fork in Learn, once per fork', () => {
-    expect(TEACH, 'the fork signpost is not wired into coach-teach')
-      .toMatch(/forkLineFor\(/);
-    // On the STUDENT's move. Naming alternatives to the coach's reply is a
-    // different and much less useful sentence.
-    expect(TEACH, 'the fork is reading the wrong ply')
-      .toMatch(/forkLineFor\(fenBefore, history\[history\.length - 2\]\)/);
-    // A signpost repeated is noise — a student replaying a line passes the same
-    // fork every time.
-    expect(TEACH, 'the fork has no once-per-session guard')
-      .toMatch(/forkSaidRef\.current\.has\(line\.key\)/);
-    expect(TEACH, 'the fork never reaches the voice package')
-      .toMatch(/kind: 'fork' as const, text: forkLine/);
-  });
-
-  it('speaks the move\'s checked reasons, and nothing when there are none', () => {
-    expect(TEACH, 'the reason lane is not wired into coach-teach at all')
-      .toMatch(/reasonLineFor\(/);
-    // NO REASON, NO SENTENCE (David 2026-08-18). The lane used to fall back to
-    // `buildPlayCommentary` on every uncovered ply, which is where the filler
-    // came from. The fallback must not come back into THIS lane — the other
-    // call sites are engine-driven recommendation beats and are fine.
-    expect(TEACH, 'the generic beat is back in the ambient computed lane')
-      .not.toMatch(/computedLine \? null : buildPlayCommentary\(/);
-  });
-
   it('grades against event.fen, not against whatever is on screen', () => {
     expect(PHASE).toMatch(/isSpokenSentenceGrounded\(trimmed, event\.fen/);
     expect(PHASE, 'the sentence is graded against a board it was not computed from')

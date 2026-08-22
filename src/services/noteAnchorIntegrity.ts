@@ -264,13 +264,6 @@ export function noteStaysInScope(
     for (const m of prose.matchAll(NAMED_VARIATION)) {
       const name = (m[1] ?? m[2] ?? m[3] ?? '').trim();
       if (!name) continue;
-      // AN ALL-CAPS WORD IS EMPHASIS, NOT A PROPER NOUN. Opening names are
-      // Title Case; "the FILE is what matters" is a note author leaning on a
-      // word. Read as a name it made the note name a foreign opening, so the
-      // note was dropped from every position it was written for — silently,
-      // because a rejected note looks exactly like no coverage. Two of these
-      // notes were lost that way before the gate caught it.
-      if (/^[A-Z][A-Z'-]+$/.test(name)) continue;
       const tokens = name
         .toLowerCase()
         .replace(/defence/g, 'defense')

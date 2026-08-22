@@ -26,29 +26,7 @@ const BRANCH_PCT = 0.60, VAR_MIN = 150;                // a real variation tab
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const uci = (ms) => { const c = new Chess(); return ms.map((m) => { const x = c.move(m); return x.from + x.to + (x.promotion ?? ''); }); };
 const g = (m) => (m.white || 0) + (m.draws || 0) + (m.black || 0);
-// A DROPPED REQUEST LOOKS EXACTLY LIKE THE END OF THEORY. Without a retry the
-// walk breaks on the first hiccup and writes a spine that stops mid-opening
-// with thousands of games still on the board — measured 2026-08-18, where 10 of
-// 15 builds halted one step in with 3k-288k games at the terminus. Whether a
-// line ran out or the proxy did is not visible in the output, so the retry is
-// what makes `reachedMiddlegame=false` mean something.
-async function exp(ms, src) {
-  const e = src === 'lichess' ? '&ratings=2000,2200,2500&speeds=blitz,rapid,classical' : '';
-  const url = `${PROXY}?source=${src}&play=${uci(ms).join(',')}${e}`;
-  for (let attempt = 0; attempt < 6; attempt++) {
-    try {
-      const r = await fetch(url);
-      if (r.ok) return await r.json();
-      // A 429 is the amateur explorer asking for a MINUTE, not a moment. Backing
-      // off in hundreds of milliseconds just spends the retries without waiting,
-      // and the walk then stops on a line that has tens of thousands of games.
-      if (r.status === 429) { await sleep(15_000); continue; }
-    } catch { /* transport failure retries the same as a bad status */ }
-    await sleep(400 * 2 ** attempt);
-  }
-  console.error(`[spine] explorer unreachable after 6 tries: ${src} @ ply ${ms.length}`);
-  return null;
-}
+async function exp(ms, src) { const e = src === 'lichess' ? '&ratings=2000,2200,2500&speeds=blitz,rapid,classical' : ''; const r = await fetch(`${PROXY}?source=${src}&play=${uci(ms).join(',')}${e}`); return r.ok ? r.json() : null; }
 async function node(ms) { let j = await exp(ms, 'masters'); await sleep(100); let src = 'masters', tot = j ? g(j) : 0; if (tot < COMMON) { const k = await exp(ms, 'lichess'); await sleep(100); if (k) { j = k; src = 'lichess'; tot = g(k); } } return { j, src, tot }; }
 
 const [openingId, seedStr] = process.argv.slice(2);

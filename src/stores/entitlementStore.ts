@@ -95,7 +95,16 @@ export const selectIsPro = (s: EntitlementState): boolean => s.isPro;
  * cutover. Controlled by the build flag `VITE_PAYWALL_ENABLED=true`.
  */
 export function isPaywallGateEnabled(): boolean {
-  return import.meta.env.VITE_PAYWALL_ENABLED === 'true';
+  // 🔓 PAYWALL DISABLED — THE ENTIRE APP IS FREE (David 2026-08-22: "make it
+  // free and see if it's even usable"). The shipped 3.6 App Store binary was
+  // built with VITE_PAYWALL_ENABLED baked TRUE and walled users on launch, so
+  // nobody could get into the app. Forcing the gate dormant in CODE guarantees
+  // the whole app is open on every surface regardless of what the build env
+  // sets — an instant, build-safe unblock (resolveAccess / AccessGate / the
+  // free-tier meters all key off this one function). To re-enable the metered
+  // gate later, restore the env check below.
+  // return import.meta.env.VITE_PAYWALL_ENABLED === 'true';
+  return false;
 }
 
 /** Whole days remaining until `expiresAt` (trial countdown copy). Returns

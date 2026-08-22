@@ -17,7 +17,6 @@
 
 import { Chess } from 'chess.js';
 import teachingsData from '../data/danya-teachings.json';
-import videoTeachings from '../data/video-teachings.json';
 import { computeStructureSignature, signatureMatchScore, type StructureSignature } from './structureSignature';
 import { validateBoardClaims } from './boardClaimValidator';
 import { secondarySupportNotes, secondaryNotesForPosition, secondaryNotesForFen } from './secondaryCorpora';
@@ -62,36 +61,6 @@ export interface DanyaNote {
    * never inherit verified authority through an omission.
    */
   positionSource?: 'high' | 'medium' | 'inferred';
-  /**
-   * WHICH CORPUS this note came from — stamped at load, never authored.
-   *
-   *   handwritten  read off the video frame by frame, chess.js-validated, and
-   *                the prose written by hand against that board.
-   *   farmed       distilled from a transcript by an earlier automated pass.
-   *
-   * These two are being kept apart on purpose, because the hand-written set is
-   * REPLACING the farmed one opening by opening (David 2026-08-17). Until this
-   * existed the only thing separating them was which came first in an array,
-   * so nothing downstream could report which kind a student had actually heard
-   * — and a replacement that cannot be observed is just a merge.
-   */
-  origin?: 'handwritten' | 'farmed';
-  /**
-   * This note explains an ALTERNATIVE at a position the lesson reaches but a
-   * move it does not play — computed at emit time, never hand-written.
-   *
-   * David 2026-08-17, choosing this over re-anchoring: *"fork alternative"*.
-   * Five notes sat exactly one move off a taught line. Re-anchoring them onto
-   * the taught move would have thrown away what they actually teach; keeping
-   * them as forks preserves it AND is the "other lines" content the video forks
-   * exist for. Learn NAMES that a fork exists ("this is one of three tries
-   * here"); Review WALKS it. Same data, two depths.
-   *
-   * `atLine` is the shared prefix — the position the student really reaches.
-   * `taughtMove` is what the lesson plays there; `alternative` is what this
-   * note is about. A surface can say both without inventing either.
-   */
-  forkOf?: { atLine: string[]; taughtMove: string; alternative: string; lineName: string };
 }
 
 interface TeachingsBundle {
@@ -102,77 +71,13 @@ interface TeachingsBundle {
 }
 
 const RAW_DATA = teachingsData as unknown as TeachingsBundle;
-const VIDEO_DATA = videoTeachings as unknown as TeachingsBundle;
 
-// VIDEO NOTES JOIN THE PRIMARY POOL, not the gap tier.
-//
-// The gap tier exists for farmed corpora, which are consulted only where the
-// primary corpus is silent — right for notes distilled from audio, wrong for
-// these. A video note's position was READ OFF THE SCREEN frame by frame and
-// every move chess.js-validated before the tracker accepted it, and its prose
-// was written by hand against that board. There is no inference in the chain,
-// which makes these the best-evidenced notes in the corpus; filing them behind
-// the farmed ones would rank them below the material they were built to fix.
-//
-// They are a small static import ON PURPOSE, unlike the farmed corpora that had
-// to leave the bundle at ~9MB each: this file is hand-written and grows a
-// paragraph at a time, so it will not approach the precache cap.
-//
-// VIDEO NOTES GO FIRST so they win a tie. Where two notes sit at one board the
-// selector takes the first that passes its filters, and at the Englund position
-// after 1.d4 e5 2.dxe5 Nc6 3.Nf3 Qe7 a distilled note was chosen over the
-// hand-written one. Order is the whole mechanism, and the better-evidenced note
-// should be the one the student hears.
 // Derived anchors are applied ONCE, here, before any index below is built —
 // every lookup map (prefix, opening, concept, fen) must be keyed on the
 // corrected line or the correction is invisible to selection. See
 // `noteAnchorOverrides`, and read `scripts/derive-note-anchors.mjs` before
 // touching the derivation itself.
-//
-// VIDEO NOTES ARE NOT PUT THROUGH THE DERIVATION. It exists to repair anchors
-// that a transcript distillation guessed at, and these were not guessed — the
-// position came off the screen and the prose was written against that board.
-// Running them through it would let a repair pass RELOCATE a note that is
-// already correct, and it silently changed the derived sidecar (1201 anchors ->
-// 1226) the moment they were included, which is the gate that caught it.
-// THE TWO CORPORA STAY TELLABLE APART, AND THE NEW ONE REPLACES THE OLD PER
-// OPENING WHEN IT IS FINISHED (David 2026-08-17: *"dont get these new
-// narrations mixed up with the old, we will replace the old when the new are
-// done."*).
-//
-// Ordering alone was NOT that separation. Both sets landed in one undated pool
-// where the only difference was which came first, so nothing downstream — no
-// audit, no gate, no log line — could say whether a student heard a
-// hand-written note or a distilled one. That is precisely the state in which a
-// replacement quietly becomes a merge.
-//
-// So origin is stamped on every note, and `REPLACED_BY_HANDWRITTEN` names the
-// openings whose hand-written coverage is complete. For those, the farmed notes
-// are DROPPED rather than out-ranked: leaving them underneath means a position
-// the hand-written set does not happen to cover falls back to the material this
-// work exists to replace, which is the mixing by another route.
-//
-// The set is empty today because no opening is finished yet. Add an opening the
-// day its notes are written — never before, since dropping the old notes early
-// leaves the surface with nothing to say.
-const REPLACED_BY_HANDWRITTEN: ReadonlySet<string> = new Set<string>([]);
-
-const openingOf = (note: DanyaNote): string => (note.opening ?? '').toLowerCase().trim();
-
-const handwritten = (VIDEO_DATA.notes ?? []).map((n) => ({ ...n, origin: 'handwritten' as const }));
-const farmed = applyDerivedAnchors(RAW_DATA.notes ?? [])
-  .filter((n) => !REPLACED_BY_HANDWRITTEN.has(openingOf(n)))
-  .map((n) => ({ ...n, origin: 'farmed' as const }));
-
-const DATA: TeachingsBundle = {
-  ...RAW_DATA,
-  notes: [...handwritten, ...farmed],
-};
-
-/** Every note in the pool, origin-stamped. Exported so the separation between
- *  the hand-written and farmed corpora is inspectable — a distinction nothing
- *  can observe is one that quietly stops being true. */
-export const ALL_NOTES: readonly DanyaNote[] = DATA.notes;
+const DATA: TeachingsBundle = { ...RAW_DATA, notes: applyDerivedAnchors(RAW_DATA.notes ?? []) };
 
 /** Position-keyed notes indexed by their SAN-prefix key ("e4 c6 d4"). */
 const byPrefix = new Map<string, DanyaNote[]>();
@@ -565,16 +470,6 @@ export function noteAtPosition(
   const preferReachable = (notes: DanyaNote[]): DanyaNote[] => {
     if (notes.length < 2) return notes;
     return [...notes].sort((a, b) => {
-      // HAND-WRITTEN BEATS FARMED AT THE SAME BOARD. The replacement doctrine
-      // says the new narrations replace the old, and a hand-written note losing
-      // a tie to a distilled one is that replacement failing silently — the note
-      // is in the corpus, indexed, board-true, and never spoken. Caught by
-      // `videoNotesSpeak` when a Slav note lost its own position to `dt-2n6`.
-      //
-      // It is a TIE-BREAK, not a filter: a farmed note still wins wherever no
-      // hand-written note is anchored, which is most of the board.
-      const written = (n: DanyaNote): number => (n.origin === 'handwritten' ? 1 : 0);
-      if (written(b) !== written(a)) return written(b) - written(a);
       const ok = (n: DanyaNote): number =>
         (!n.opening || openingReachesPosition(n.opening, historySans) ? 1 : 0);
       return ok(b) - ok(a);
@@ -1799,35 +1694,6 @@ export function spokenBeatText(note: DanyaNote): string {
 
   const explains = (note.explains ?? '').trim();
   if (!explains) return '';
-
-  // A HAND-WRITTEN NOTE SPEAKS BOTH HALVES, AND SKIPS THE PRUNING (David
-  // 2026-08-20: "both, but the narrations should be enough. again i do not want
-  // the computed voice with the hand written narrations").
-  //
-  // This is the other half of suppressing the computed sentence on these plies.
-  // Once nothing follows the note, the note has to carry the beat alone — and
-  // `explains` alone is the board fact with the POINT of it left in a field
-  // nobody speaks. Facts first, then the point, which is the house voice.
-  //
-  // The pruning below exists for the FARMED corpus: mid-clause openers,
-  // unbalanced parentheses, stranded back-references — the wreckage of cutting
-  // speech into sentences. Hand-written prose is written whole and every board
-  // claim in it is chess.js-checked, so running that repair over it can only
-  // damage it.
-  if (note.origin === 'handwritten') {
-    // BOTH HALVES, WHOLE (David 2026-08-20, shown the longest beat: "i dont
-    // care about long statements"). An earlier trim spoke only the first
-    // sentence of `teaches` to hold the beat near its old length; he read the
-    // note it was written for and kept the full version.
-    //
-    // The cost is real and is time, not tokens: the median hand-written beat is
-    // 104 spoken words, roughly forty seconds of voice for one move, against 72
-    // words trimmed. Auto-advance is voice-promise gated, so a lesson moves at
-    // that pace by design.
-    const idea = (note.teaches ?? '').trim();
-    return idea ? `${explains} ${idea}` : explains;
-  }
-
   const sentences = explains.match(/[^.!?]+[.!?]+(?:\s|$)|[^.!?]+$/g) ?? [explains];
   // A truncated distillation artifact, not a sentence: begins mid-clause
   // (", Bd2, Be2) lead to…") or closes a parenthesis it never opened. David

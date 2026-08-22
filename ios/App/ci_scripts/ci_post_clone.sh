@@ -129,7 +129,13 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # narration, the endgame surface wired into the farmed corpus, the coach Q&A
 # lane fixes (opening-existence lookup, named-opening traps offer, five
 # unreachable lanes threaded), and the tactics drill framing beats.
-IOS_MARKETING_VERSION="3.6"
+# BUMP 3.6 → 3.7 (David 2026-08-22): 3.6 is RELEASED on the App Store and shipped
+# with VITE_PAYWALL_ENABLED baked TRUE, so it walled every user on launch — "no
+# one is using the app." 3.7 branches from the exact 3.6 App Store source line
+# and forces the paywall gate dormant in CODE (isPaywallGateEnabled → false), so
+# the entire app is free regardless of the build env flag. Minimal-diff hotfix:
+# ONLY the paywall change vs 3.6 — deliberately NOT current main.
+IOS_MARKETING_VERSION="3.7"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
 echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"

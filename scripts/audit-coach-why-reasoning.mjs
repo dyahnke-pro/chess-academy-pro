@@ -12,7 +12,6 @@
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
-import { autoDismissCalibration } from './audit-lib/auto-dismiss.mjs';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'https://chess-academy-pro.vercel.app';
 const BOOT = 30_000;
@@ -25,7 +24,6 @@ async function main() {
   const browser = await chromium.launch({ headless: true, executablePath, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext({ ...sandboxContextOptions(), viewport: { width: 1280, height: 900 }, userAgent: 'AuditCoachPlayBot/1.0 (why-reasoning)' });
   await ctx.addInitScript(muteTtsForAudit);   // audits never spend TTS money (G1)
-  await ctx.addInitScript(autoDismissCalibration); // CSS-based — a hand-rolled click races the bubble
   const page = await ctx.newPage();
   const results = [];
   const ok = (n, p, d) => { results.push({ n, p }); console.log(`${p ? '✓' : '✗'} ${n}${d ? ` — ${d}` : ''}`); };
@@ -69,11 +67,7 @@ async function main() {
       await page.waitForTimeout(3500);
     }
 
-    // Desktop layout renders the chat panel inline — the button toggles the
-    // mobile drawer. Click it only if the panel is not already mounted.
-    if (!(await page.locator('[data-testid="game-chat-panel"]').count())) {
-      await page.locator('[data-testid="play-chat-button"]').click({ timeout: 8000 }).catch(() => {});
-    }
+    await page.locator('[data-testid="play-chat-button"]').click({ timeout: 8000 });
     await page.locator('[data-testid="game-chat-panel"]').first().waitFor({ timeout: 6000 });
     await page.waitForTimeout(500);
 

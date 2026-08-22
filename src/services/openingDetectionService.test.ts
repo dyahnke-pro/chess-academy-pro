@@ -708,12 +708,7 @@ describe('findLinePickerOptions — every tile names its move', () => {
     const caro = findLinePickerOptions('Caro-Kann Defense');
     const caroByLabel = new Map((caro?.options ?? []).map((o) => [o.label, o.keyMove]));
     expect(caroByLabel.get('Advance')).toBe('3.e5');
-    // 3.f3 stopped identifying the Fantasy the day a SECOND f3 line was added
-    // ("Fantasy: 3...e6 Main Line"). Two tiles sharing a label is the thing
-    // `uniqueAt` exists to prevent, so it correctly walks on to the first ply
-    // where this line stands alone among its siblings — the recapture.
-    // The expectation was stale, not the labeller.
-    expect(caroByLabel.get('Fantasy')).toBe('3...dxe4');
+    expect(caroByLabel.get('Fantasy')).toBe('3.f3');
   });
 
   it('numbers the move from the side that plays it', () => {

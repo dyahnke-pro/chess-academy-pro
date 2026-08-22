@@ -95,26 +95,8 @@ export function bestReplyLine(ranked: RankedReply, why: string): string {
   if (ranked.clear || !ranked.alsoSan) {
     return `Your strongest reply here is ${ranked.bestSan}${why}.`;
   }
-  // TWO GOOD MOVES IS THE LESSON — but only while there is a lesson in it. Not
-  // a hedge: a position with two answers teaches something a position with one
-  // does not, and the student can see both on the board.
-  //
-  // WITH NO `why`, THOUGH, IT IS TWO PIECES OF NOTATION AND NOTHING ELSE.
-  // "Two good moves here — e4, or d4." says neither what either does nor how
-  // they differ, and it fired that bare on a driven game (David 2026-08-18).
-  // Rule 1: every spoken sentence names a square, a piece or an idea the
-  // student can look at — a SAN pair names two squares and explains neither,
-  // and the pairing is the entire content of the sentence.
-  //
-  // AND THE ANSWER IS SILENCE, NOT A DEMOTION TO THE SINGLE MOVE. Naming just
-  // the top one would say "your strongest reply here is Bd2" about a position
-  // where Bd2 and Bh4 are six centipawns apart and swap places at depth 20 —
-  // trading a vacuous sentence for a false one. This branch is reached only
-  // when the moves are genuinely close, so there is no strongest to name, and
-  // a turn with nothing to say about either move is a turn to stay quiet on
-  // (Rule 4: silence is acceptable). The empty string is dropped by the voice
-  // package as an empty fact, and whatever else the turn computed is heard
-  // instead.
-  if (!why.trim()) return '';
+  // TWO GOOD MOVES IS THE LESSON. Not a hedge — a position with two answers
+  // teaches something a position with one does not, and the student can see
+  // both on the board.
   return `Two good moves here — ${ranked.bestSan}${why}, or ${ranked.alsoSan}.`;
 }

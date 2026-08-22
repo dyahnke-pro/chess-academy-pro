@@ -52,155 +52,19 @@ and validate a candidate on empty-square flatness rather than checker contrast.
 ## Pipeline
 
 ```bash
-# 1. cookies from a signed-in YouTube account, Netscape format. Export from a
-#    window you do NOT then sign out of — signing out rotates the session and
-#    the file dies with "cookies are no longer valid". Never commit it.
-# 2. a JS runtime for the n-challenge:  npm i -g deno
-# 3. VIDEO-ONLY DASH (-f 135 / 396). The progressive formats are behind
-#    YouTube's SABR rollout and 403 even with valid cookies; video-only DASH
-#    is served normally, and we only ever want pixels.
-yt-dlp --cookies /tmp/yt.txt --remote-components ejs:npm -f 135 -o v.mp4 "<url>"
+# 1. cookies from a signed-in (throwaway) YouTube account, Netscape format
+#    — YouTube blocks datacenter IPs without them. Never commit this file.
+# 2. a PO-token provider must be running (bgutil-ytdlp-pot-provider).
+yt-dlp --cookies /tmp/yt.txt --remote-components ejs:github -f 396 -o v.mp4 "<url>"
 
-# 4. CALIBRATE BY HAND — see below. Three numbers per board layout.
-# 5. frames -> occupancy grids  (x0 y0 square fps)
-#    2fps, not 0.5 — see "Sampling rate" below
-python3 scripts/video-align/scan_video.py v.mp4 /tmp/frames 370 -2 60 2
+# 3. frames -> occupancy grids  (x0 y0 square fps)
+# geometry comes from the detector; 2fps, not 0.5 — see "Sampling rate" below
+python3 scripts/video-align/detect_board.py /tmp/frames/f_00001.png
+python3 scripts/video-align/scan_video.py v.mp4 /tmp/frames 284 -2.4 44.4 2
 
-# 6. grids -> timestamped moves, constrained by the rules
+# 4. grids -> timestamped moves, constrained by the rules
 node scripts/video-align/track.mjs /tmp/frames/grids.json
 ```
-
-## You read the geometry. Code confirms it and measures the colours.
-
-```bash
-# the three numbers are YOURS, read off a frame (see below)
-python3 scripts/video-align/calibrate.py 370 -2 60 /tmp/frames/f_*.png
-# -> {"x0": 370, "y0": -2, "square": 60.0, "orientation": "white",
-#     "anchor": "/tmp/frames/f_00015.png"}
-```
-
-It scans for the first frame where YOUR numbers actually reproduce the start
-position, then measures the six colour classes from that frame. Three
-behaviours, all verified:
-
-| input | result |
-|---|---|
-| correct hand geometry | confirmed, anchor found, orientation `white` |
-| geometry one square off | **refused** |
-| no start-position frame in range | **refused** |
-
-That middle row is the whole point. A geometry one square out — or carried
-across a section boundary onto a resized board — is the exact failure that
-killed both automated detectors, and it now cannot pass silently.
-
-**TWO GEOMETRY GUESSERS HAVE DIED HERE. Do not write a third.**
-`detect_board.py` failed four ways on appearance. Then fitting to the start
-position looked principled and returned a plausible `x=376.6 y=-6.6 sq=60.75`
-on the pilot — and produced NO FIT at all on that same frame rescaled to
-640x360 and 1024x576. Videos arrive at whatever resolution YouTube serves, so
-that would silently skip most of a corpus. David, having watched it:
-*"keep doing it yourself, no bots. it seems to work better that way."*
-
-## Reading the geometry by eye — the standard procedure
-
-David 2026-08-17: *"maybe aligning by hand yourself is the way to go. do not
-rely on bots?"* — and he was right, after a detector had already burned a
-session failing.
-
-The geometry is THREE NUMBERS per board layout, and reading them off a frame
-takes seconds, because you can see the board. Automating that is replacing the
-one part of this job that is genuinely easy. `detect_board.py` is kept for
-reference and is NOT trustworthy (see its docstring for the four scoring
-functions that each looked right and measured wrong).
-
-The reliable procedure, which is how the numbers below were found:
-
-1. Extract one frame from the section and LOOK at it.
-2. Read the position off it by eye.
-3. Let code find the geometry that reproduces that position — search a small
-   grid of `(x0, y0, sq)` around your estimate and keep the one with fewest
-   mismatches against the position you read. This is hand alignment with a
-   machine check, not a guess: you supply the truth, code confirms the numbers.
-
-On the pilot that lands in one pass: `x=370 y=-2 sq=60.0`, **63 of 64 squares
-correct**. The single miss was d1 reading black — the exact fixed bias
-described above, which `track.mjs`'s `calibrate()` then found and subtracted on
-its own (`c1(b->w) d1(b->w)`). Do not chase that last square by hand.
-
-**Every video needs this more than once.** David 2026-08-17: *"he does also
-change board size when switching from play to the review section, and the board
-also changes a third time when he shows example games."* So geometry is
-per-SECTION, not per-video — calibrate each layout separately and scan its
-range. A geometry carried across a section boundary reads a board that is no
-longer there.
-
-## ONE MISREAD SQUARE CAN COST A WHOLE VIDEO — and it will look like a format problem
-
-Three uploads tracked 0-4 plies and every plausible story for it was wrong:
-blitz outrunning the sampler (no — 140 of 196 gaps between settled positions
-were a single ply), search depth (no — MAX_PLY 6 changed nothing), boards too
-annotated to settle (no — 197 settled positions is not "never settles").
-
-The cause was **d1 reading black with a white queen on it**, in every frame from
-t=112 on. One phantom piece means no target grid can match a legal position, so
-the tracker stalls immediately and permanently. It presents exactly like "this
-kind of video does not work".
-
-`calibrate` in `track.mjs` should have caught it and could not, because it
-inspected only the EIGHT most common grids. On a video where the teacher lingers
-on positions those are all deep middlegame boards (128-248 occurrences each),
-while start-position frames are spread thin across many near-identical grids.
-Searching ALL grids, most-common first, finds the biased start immediately:
-
-    French       4 -> 82 plies      Sicilian Alapin   0 -> 62
-    Scandinavian 0 -> 16            pilot unchanged at 153
-
-**And a common early position is not a biased start position.** No distance
-threshold separates them — a London video calibrated against the board after
-1.d4 d5 and "corrected" d2/d4/d5/d7, erasing real pawns; tightening the
-threshold just moved it to 1.d4. The RULES separate them: a real position is
-reachable from the start by legal moves, a read bias is not. A candidate
-chess.js can explain as a played line is skipped.
-
-So when a video refuses: diff a settled grid against the position the tracker
-believes it is at, and look for a square that is wrong in EVERY frame. Do that
-before concluding anything about the source material.
-
-## Verified end-to-end — FULL VIDEO (2026-08-17, hand-calibrated)
-
-All 27 minutes of *Trashing the Traxler* at 2fps:
-
-    3,245 frames -> 325 settled positions -> 153 plies, 31 rewinds
-
-against the original pilot's 49 plies and 15 rewinds. Geometry `x=370 y=-2
-sq=60` held for the entire video — no blank chunk anywhere — so this one does
-NOT resize its board, though others do and each section must still be checked.
-
-Read in 3-minute chunks, deleting frames as it goes: 3,245 PNGs is ~1GB, and
-there is no reason to hold them.
-
-The strongest evidence the reads are right is that the moves are known theory.
-The tracker recovers the Traxler mate exactly:
-
-    Nxf7 Bxf2+ Kxf2 Nxe4+ Ke3 Qh4 Nxh8 Qf4+ Ke2 Qf2+ Kd3 Nc5+ Kc3 Qd4#
-
-Before the colour calibration that stretch came out as a garbled three-ply
-jump. Every move is chess.js-legal from its predecessor, and no grid that fails
-to match a legal move is ever believed.
-
-The earlier 7-minute run, for reference — 840 frames -> 71 settled positions:
-
-    t=81    ply 1-9   e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5   the Fried Liver
-    t=134.5 << rewind to ply 7
-    t=136.5 ply 8     Bc5                                  the Traxler
-    t=158   ply 9-15  Nxf7 Bxf2+ Kxf2 Nxe4+ Ke3 Qh4 Nxh8   the counterattack
-    t=219.5 << rewind to ply 8
-    t=224.5 ply 9     Bxf7+                                White's refutation
-
-Cost, measured on the full 27-minute video at 480p: download ~40s, frame
-extraction ~96s, board reads 7.1ms/frame (~23s), tracking seconds. Roughly
-**3 minutes per video**, which parallelises. Frame extraction should stream
-rather than write PNGs — 3,244 frames is ~1GB per video on disk.
 
 Pilot result on *"Trashing the Traxler"* — `e4 e5 Nf3 Nc6 Bc4 Nf6 Ng5 d5 exd5`,
 the Two Knights into the Fried Liver, with a timestamp on every ply. Since every
@@ -251,112 +115,11 @@ making the search smarter.
 
 ## Not done yet
 
-- **Joining to the notes — and it is blocked on the CORPUS, not on video.**
-  Timestamp -> FEN works. The notes have no timestamp to join it to: **0 of
-  11,426** carry `t`. The field was only added to `distill-v2` on 2026-08-16,
-  after all 421 videos had been distilled.
-
-  It cannot be recovered from the shipped corpus. Measured: 10,144 notes have
-  no position and an empty `lineSan`, so their chunk is unidentifiable; the
-  1,152 positioned ones had `lineSan` REWRITTEN by the anchor pass, so it no
-  longer names the chunk; the remaining 130 are `inferred`, which
-  `isVerifiedPosition` rejects anyway. So the join needs an **additive**
-  re-distill — additive because note ids are content digests, and regenerating
-  prose would orphan the 268 hand-written spoken forms.
-
-- **Why the video is needed at all**, since the transcript already has the
-  words: the transcript aligner positions nothing. Measured across 6 videos,
-  **0 of 52 chunks** got a DB alignment, consistent with the shipped corpus's
-  130 `inferred` notes from 421 videos. That is why ~89% of the corpus cannot
-  fire at a specific move.
-
-- **What the board adds over just reading the transcript** (David asked, and it
-  is a fair question — the move ORDER is largely readable): per-ply
-  TIMESTAMPS, which are the join key; the REWINDS, 15 in the pilot, which are
-  the branch points where the teaching actually happens; and PROOF, since a
-  position read from pixels is a measurement rather than an assertion. The
-  board is not doing the thinking here, it is doing the verifying — the same
-  role Stockfish plays for gems.
-
-- **Orientation.** A board shown from Black's side is not yet handled. Read it
-  off the frame when calibrating that section; it is one more thing you can
-  simply see.
-
-## The note count in the repo will not match the note count in the app
-
-Measured 2026-08-21: 481 notes across 182 track files, 470 in
-`src/data/video-teachings.json`. The eleven-note gap is `emit-notes` doing its
-job, not losing work — each one is anchored at a position hundreds of openings
-pass through (`679 openings pass through this position` for one of them, at
-move one), and a note spoken wherever 679 openings meet is not teaching about
-the line the student asked for. `emit-notes` prints every skip with its reason,
-so run it and read the `SKIP` lines before assuming anything is broken.
-
-Two counts that ARE worth acting on when they diverge:
-
-- notes on disk vs notes listed by `emit-notes` — a track file it never lists is
-  one it could not read;
-- `noteCount` in `video-teachings.json` vs the last emit — if the file is older
-  than the notes, the notes are not in the app. `emit-notes --write` is the step
-  that ships them, and it must be paired with a `WALKTHROUGH_GEN_REV` bump in
-  the same commit or cached trees serve the old prose for ever.
-
-## Which tracks are ready to write against
-
-`narration-queue.mjs` answers that: a track needs a subject opening (so a note
-has somewhere to belong), banked captions (the gate refuses a note without
-them), and no notes yet. Ordered deepest line first, since a deeper line settles
-on more positions and yields more anchorable moments per hour.
-
-    node scripts/video-align/narration-queue.mjs 20     # top 20, readable
-    node scripts/video-align/narration-queue.mjs --ids  # ids, for a loop
-
-## Captions, positions and timestamps, in one listing
-
-`note-anchors.mjs <videoId>` is the writing surface. It reads the track (staged
-or shipped) and the pairing, and prints, per settled position: the ply, the
-timestamp, the SAN string to put in a note's `line`, which taught line it lands
-on, whether a note already anchors there — and **the words spoken while that
-board was up**.
-
-    ply   5  t=  828s  Ruy Lopez [HAS NOTE]
-       e4 e5 Nf3 Nc6 Bb5
-       said: …
-
-The words are in the listing rather than behind a second command on purpose. A
-note is written FROM the captions — the board says what is TRUE at a position,
-the captions say which of those true things the lesson is TEACHING — and the
-old two-step (timestamp here, `at.mjs` there) is how four notes came to be
-written off the board alone when `at.mjs` failed silently on a missing
-transcript. Reference only, never quoted; the shipped prose is original.
-
-**A LONG WINDOW IS A WARNING, NOT A WINDFALL.** A window runs from this
-position settling to the next one settling, so when the tracker loses the board
-the speech of many positions piles into one entry. Measured across the bank:
-
-| words in the window | share of positions |
-|---|---|
-| 0 | 7.0% |
-| 1-60 | 75.9% |
-| 61-150 | 10.9% |
-| 151-300 | 4.6% |
-| 301-600 | 0.9% |
-| **600+** | **0.7%, holding 23% of every paired word** |
-
-Those 163 fat windows are not a rich seam, they are the places the board was
-lost. Writing a note from one risks attaching teaching that belongs to a board
-the reader never saw, which is the disease this pipeline exists to cure — so
-the listing flags anything over 300 words and says to check it against the
-video first.
-
-## Staged and shipped, and who moves a track between them
-
-`data/video-pending` is captured work; `data/video-tracks` is work whose notes
-are written. `attach-notes --write` reads BOTH and promotes a track the moment
-notes anchor to it, so the two directories keep meaning what they say. Before
-2026-08-21 it read the shipped directory alone — which made 260 staged tracks
-unreachable by the note pipeline, since there was no way to attach the notes
-that would have earned the move.
-
-`emit-notes` still reads the shipped directory only. That is the ship gate, and
-it stays where it is.
+- **Orientation.** A board shown from Black's side is not yet detected.
+- **Validation across themes.** The detector is proven on one chess.com layout.
+  Before running at scale it needs to earn its keep on several videos with
+  different boards — a confidently wrong geometry produces confidently wrong
+  positions. The tracker's exact-match rule is the backstop (a bad grid matches
+  no legal move and is dropped), but that is the last line, not a substitute.
+- **Joining to the notes.** Timestamp -> FEN exists now; mapping distilled
+  notes onto it is the remaining step.

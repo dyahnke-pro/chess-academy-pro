@@ -107,43 +107,6 @@ const hasBishopPair = (b: Board): boolean =>
 
 const hasQueensOff = (b: Board): boolean => !b.pieces.some((p) => p.type === 'q');
 
-
-/** The piece types left on the board besides kings and pawns. */
-const majorMinorTypes = (b: Board): Set<string> =>
-  new Set(b.pieces.filter((p) => p.type !== 'k' && p.type !== 'p').map((p) => p.type));
-
-/** "This is a rook endgame" and friends. A note that names the ENDGAME TYPE is
- *  making the largest structural claim there is — everything it then advises
- *  follows from that type — and it is the cheapest of all to settle: look at
- *  what is still on the board.
- *
- *  Heard on prod (David 2026-08-18): *"The rook endgame turns on removing both
- *  white pawns while keeping at least one black pawn"*, spoken over a position
- *  with two knights and a bishop still on and FIVE white pawns. Every earlier
- *  guard passed it — it names no square for the grader, and no structure the
- *  list below knew about. Two separate checks now catch that one line. */
-const isEndgameOf = (types: readonly string[]) => (b: Board): boolean => {
-  const left = majorMinorTypes(b);
-  if (left.size === 0) return types.length === 0;
-  return [...left].every((t) => types.includes(t));
-};
-
-/** Exactly N pawns of that colour — the claim hidden inside "both white pawns",
- *  which presupposes a two-pawn ending and reads as ordinary prose. */
-const pawnCountIs = (color: Color, n: number) => (b: Board): boolean =>
-  b.pieces.filter((p) => p.type === 'p' && p.color === color).length === n;
-
-/** One bishop each, on squares of different colours — the ending whose whole
- *  character is that neither bishop can ever challenge the other. */
-const hasOppositeColouredBishops = (b: Board): boolean => {
-  const light = (sq: string): boolean =>
-    (FILES.indexOf(sq[0]) + Number(sq[1])) % 2 === 1;
-  const of = (c: Color) => b.pieces.filter((p) => p.type === 'b' && p.color === c);
-  const [w, bl] = [of('w'), of('b')];
-  if (w.length !== 1 || bl.length !== 1) return false;
-  return light(w[0].square) !== light(bl[0].square);
-};
-
 /** Phrase → the check that settles it. Order matters only for readability. */
 const CLAIMS: Array<{ re: RegExp; holds: (b: Board) => boolean; label: string }> = [
   { re: /\bdoubled rooks?\b|\brooks? (?:are )?doubled\b/i, holds: hasDoubledRooks, label: 'doubled rooks' },
@@ -154,19 +117,6 @@ const CLAIMS: Array<{ re: RegExp; holds: (b: Board) => boolean; label: string }>
   { re: /\bisolated pawn\b|\bisolani\b/i, holds: hasIsolatedPawn, label: 'isolated pawn' },
   { re: /\bbishop pair\b|\btwo bishops\b/i, holds: hasBishopPair, label: 'bishop pair' },
   { re: /\bqueens? (?:are )?(?:off|traded|exchanged)\b/i, holds: hasQueensOff, label: 'queens off' },
-  // ENDGAME TYPE. The biggest structural claim a note can make, and the one
-  // every piece of advice after it rests on.
-  { re: /\brook (?:and pawn )?end(?:game|ing)\b/i, holds: isEndgameOf(['r']), label: 'a rook endgame' },
-  { re: /\bqueen (?:and pawn )?end(?:game|ing)\b/i, holds: isEndgameOf(['q']), label: 'a queen endgame' },
-  { re: /\bknight (?:and pawn )?end(?:game|ing)\b/i, holds: isEndgameOf(['n']), label: 'a knight endgame' },
-  { re: /\bbishop (?:and pawn )?end(?:game|ing)\b/i, holds: isEndgameOf(['b']), label: 'a bishop endgame' },
-  { re: /\bminor[- ]piece end(?:game|ing)\b/i, holds: isEndgameOf(['n', 'b']), label: 'a minor-piece endgame' },
-  { re: /\b(?:king and pawn|pure pawn) end(?:game|ing)\b/i, holds: isEndgameOf([]), label: 'a pawn endgame' },
-  { re: /\bopposite[- ]colou?red bishops\b/i, holds: hasOppositeColouredBishops, label: 'opposite-coloured bishops' },
-  // PAWN COUNT. "Both white pawns" reads as prose and is a claim that the side
-  // has exactly two of them.
-  { re: /\bboth (?:of )?(?:the )?white pawns\b/i, holds: pawnCountIs('w', 2), label: 'exactly two white pawns' },
-  { re: /\bboth (?:of )?(?:the )?black pawns\b/i, holds: pawnCountIs('b', 2), label: 'exactly two black pawns' },
 ];
 
 /** The first structural claim the text makes that is FALSE here, or null when

@@ -39,7 +39,6 @@
 //      log at all.
 import { gradeNarrationText } from './coachAnswerGates';
 import { falseConfigurationClaim } from './configurationClaims';
-import { borrowedNoteIsOutOfScope } from './borrowedScope';
 
 /** What produced this line. Also its priority — see `RANK`. */
 export type VoiceFactKind =
@@ -263,18 +262,6 @@ function verify(fact: VoiceFact): { text: string } | { reason: string } {
   if (!raw) return { reason: 'empty' };
 
   for (const s of NOT_SPEAKABLE) if (s.re.test(raw)) return { reason: s.why };
-
-  // A BORROWED NOTE MAY CARRY AN IDEA, NEVER A CONTINUATION. It is by
-  // construction about another board, so "if the queen recaptures, the rook
-  // pins her" cannot be true here however it is framed — and framing is exactly
-  // what hid it: every one arrived under "As a rule in these positions:", which
-  // reads as a generalisation and names no square, so neither the board grader
-  // nor `configurationClaims` had anything to check. A full game driven on prod
-  // spoke eleven of these, ten of them another game's move sequence.
-  if (fact.kind === 'borrowed') {
-    const why = borrowedNoteIsOutOfScope(raw);
-    if (why) return { reason: `borrowed note ${why}` };
-  }
 
   // Square-anchored claims: "the knight on f6" when f6 is empty.
   const graded = gradeNarrationText(raw, fact.fen, `voicePackage.${fact.kind}`)?.trim();

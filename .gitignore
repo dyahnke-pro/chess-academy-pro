@@ -65,18 +65,8 @@ data/sources/*-otb/
 # family rollup + per-opening trees + voice notes (all <600KB each).
 data/sources/*-stats.json
 data/sources/*-families.json
-# Voice research: the auto-mined digests are ignored; the hand-curated *.md
-# notes are committed.
-#
-# TRANSCRIPTS ARE NOW COMMITTED, gzipped, under data/video-transcripts/ (David
-# 2026-08-17: *"everything that we get access to gets saved ... there are often
-# more than one idea stated after each move, or if something else goes wrong.
-# save it all!"*). A note is written from ONE idea at a move, and the transcript
-# is where the others still live — so re-visiting a narration needs the source
-# that produced it, and this container is ephemeral. The plagiarism guard is
-# unchanged and is about SHIPPING, not storing: transcripts are reference only,
-# never quoted, never shipped as narration. Storing them is what makes the
-# reference checkable; it is the raw *.vtt working copies that stay out.
+# Voice research: only the raw transcript pulls and the auto-mined digests
+# derived from them are ignored; the hand-curated *.md notes are committed.
 data/sources/*-voice/transcripts/
 data/sources/*-voice/digests/
 data/sources/carlsen-alts/
@@ -126,7 +116,3 @@ scripts/_*.mjs
 *.mp4
 *.webm
 scripts/video-align/frames/
-
-# Python bytecode — regenerated on import, and version-specific
-__pycache__/
-*.pyc

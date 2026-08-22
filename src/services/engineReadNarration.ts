@@ -97,25 +97,16 @@ export function engineReadLines(
       } else {
         const winFrac = asFraction(w.win);
         const lossFrac = asFraction(w.loss);
-        // KEY ON THE PHRASE, NOT ON THE NUMBER BEHIND IT. Keying the raw
-        // permille was already known to be wrong — it drifts every ply on a
-        // stable position — and the hundreds bucket that replaced it is still
-        // FINER THAN THE SENTENCE it guards: `asFraction` collapses everything
-        // from 900 to 1000 into "almost always", while the bucket splits that
-        // range into 9 and 10. A driven game duly said "you come out on top
-        // almost always" twice (David 2026-08-18).
-        //
-        // The words are what the student hears, so the words are the key. This
-        // also cannot drift again if `asFraction` is ever re-bucketed — the
-        // same disease was fixed in `positionalRead` the same day, where the
-        // derivation key likewise outlived its own sentence.
+        // Bucketed key, not the raw number: the permille drifts every ply on a
+        // stable position, so keying on it would let the same reading back in
+        // under a new name — the idle-pieces mistake in another lane.
         if (winFrac && w.win >= 600) {
-          once(`wdl-win-${winFrac}`, {
+          once(`wdl-win-${Math.floor(w.win / 100)}`, {
             kind: 'wdl',
             text: `From here you come out on top ${winFrac} — the position is doing the work, so keep it simple.`,
           });
         } else if (lossFrac && w.loss >= 600) {
-          once(`wdl-loss-${lossFrac}`, {
+          once(`wdl-loss-${Math.floor(w.loss / 100)}`, {
             kind: 'wdl',
             text: `This one goes against you ${lossFrac} — you want complications, not a clean simplification.`,
           });

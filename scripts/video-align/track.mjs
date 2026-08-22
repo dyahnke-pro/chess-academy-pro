@@ -65,17 +65,6 @@ function diff(a, b) {
  * untouched start position. That is an offset, not noise, so it is subtracted
  * rather than absorbed by loosening the match threshold, which would admit real
  * misreads everywhere else.
- *
- * A COMMON EARLY POSITION IS NOT A BIASED START POSITION, and no distance
- * threshold separates them: a London video calibrated against the board after
- * 1.d4 d5 (which appears far more often than the untouched one) and "corrected"
- * d2/d4/d5/d7, erasing real pawns from every frame. Tightening to two squares
- * only moved the problem to 1.d4, which is a two-square difference.
- *
- * The RULES separate them. A real position is reachable from the start by legal
- * moves; a read bias is not — no move turns c1 and d1 black while leaving
- * everything else. So a candidate that chess.js can explain as a played line is
- * a position and must not be subtracted from every frame.
  */
 function calibrate(grids) {
   const counts = new Map();
@@ -83,18 +72,9 @@ function calibrate(grids) {
     const k = grid.join('/');
     counts.set(k, (counts.get(k) ?? 0) + 1);
   }
-  // ALL grids, most common first — NOT the top few. Limiting to the eight
-  // commonest missed the start position entirely on a video where the teacher
-  // lingers: its top grids were deep middlegame boards seen 128-248 times each,
-  // while the start frames were spread thin. The result was no calibration at
-  // all, so a persistent d1 misread (the white queen reading black) rode along
-  // in every frame and no target could ever match a legal position — the video
-  // tracked 4 plies out of 197 settled positions.
-  for (const [k] of [...counts.entries()].sort((a, b) => b[1] - a[1])) {
+  for (const [k] of [...counts.entries()].sort((a, b) => b[1] - a[1]).slice(0, 8)) {
     const g = k.split('/');
-    // Explainable as a played line => a real position, not a bias. Skip it.
-    if (explain(new Chess(), g)) continue;
-    if (diff(g, START) <= 2) {
+    if (diff(g, START) <= 6) {
       const fix = [];
       for (let r = 0; r < 8; r++) for (let c = 0; c < 8; c++) {
         if (g[r][c] !== START[r][c]) fix.push([r, c, g[r][c], START[r][c]]);
@@ -216,18 +196,7 @@ for (const { t, grid } of settled) {
   if (diff(grid, gridOf(chess)) === 0) continue;
 
   // A settled board back at the starting layout is the NEXT GAME, not a move.
-  //
-  // TOLERANT, because an exact match never happens on some videos. Measured on
-  // a speedrun upload: ZERO of 3,881 frames matched START exactly, while 76 sat
-  // one square away — the board returns to the start between games, with a
-  // single square consistently misread that `calibrate` did not catch. With an
-  // exact test the tracker never re-synced after losing the first game and
-  // produced 4 plies from 197 settled positions.
-  //
-  // Two squares is safe rather than loose: a genuine mid-game position differs
-  // from the start by many squares (every developed piece and every pawn push),
-  // so nothing but a real start position lands this close.
-  if (diff(grid, START) <= 2) {
+  if (diff(grid, START) === 0) {
     if (game.moves.length) games.push(game);
     chess = new Chess();
     game = { start: t, moves: [] };
@@ -260,13 +229,7 @@ for (const { t, grid } of settled) {
 if (game.moves.length) games.push(game);
 
 const total = games.reduce((n, g) => n + g.moves.reduce((m, x) => m + x.line.length, 0), 0);
-// Default beside the grids it came from. The previous default was a scratch
-// path from the original pilot's container, so a run that had already done all
-// the work — 840 frames, 71 settled positions, the full move list printed —
-// still died with ENOENT at the last line.
-const outPath = process.argv[3]
-  ?? process.argv[2].replace(/grids\.json$/, 'track.json');
-writeFileSync(outPath, JSON.stringify(games, null, 1));
+writeFileSync(process.argv[3] ?? '/tmp/vidtest/track.json', JSON.stringify(games, null, 1));
 console.log(`\n${games.length} game(s), ${total} plies tracked`);
 // Print the STEPS, never a flattened move list. After a rewind the following
 // moves continue from the earlier position, so concatenating everything into

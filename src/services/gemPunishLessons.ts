@@ -29,8 +29,6 @@ import {
   type PunishGem,
 } from '../data/lessons/punishGems';
 import { narrateContinuationMove } from './continuationMoveNarration';
-import { noteAtPosition, spokenBeatText } from './danyaTeachingService';
-import { gradeNarrationText } from './coachAnswerGates';
 import repertoireData from '../data/repertoire.json';
 import type { PunishLesson } from '../types/walkthroughTree';
 
@@ -64,25 +62,6 @@ function tidy(text: string): string {
  * Convert one curated gem into the coach's `PunishLesson` shape.
  * Returns null when the gem cannot be replayed exactly as recorded.
  */
-/** A corpus note for the board a gem line has just reached, or ''.
- *
- *  Position-keyed and board-graded, exactly as in the walkthrough: the note has
- *  to be anchored at THIS position and every claim in it has to survive the
- *  grader against THIS board, or it does not speak. */
-function gemNoteAt(board: Chess, seen: Set<string>): string {
-  try {
-    const history = board.history();
-    const note = noteAtPosition(history, board.fen(), null, seen);
-    if (!note) return '';
-    const graded = gradeNarrationText(spokenBeatText(note), board.fen(), 'gemPunishLessons.note');
-    if (!graded?.trim()) return '';
-    seen.add(note.id);
-    return graded.trim();
-  } catch {
-    return '';
-  }
-}
-
 export function gemToPunishLesson(gem: PunishGem): PunishLesson | null {
   const setupMoves = gem.lineMoves.split(/\s+/).filter(Boolean);
   const narration = gemNarrationFor(gemId(gem));
@@ -121,8 +100,6 @@ export function gemToPunishLesson(gem: PunishGem): PunishLesson | null {
   const inaccuracyPly = setupMoves.length;
   const punishPly = inaccuracyPly + 1;
   const followup: PunishLesson['followup'] = [];
-  // One note teaches once per gem line, the same dedupe the walkthrough keeps.
-  const seenNoteIds = new Set<string>();
   const tail = (gem.punishSeq ?? []).slice(1);
   for (let i = 0; i < tail.length; i += 1) {
     const fenBefore = chess.fen();
@@ -141,23 +118,12 @@ export function gemToPunishLesson(gem: PunishGem): PunishLesson | null {
     const ply = punishPly + 1 + i;
     const authored = tidy(narration?.watch[ply] ?? '');
     const authoredShort = tidy(narration?.learn[ply] ?? '');
-    // THE CORPUS SPEAKS ON A GEM LINE TOO, between the authored prose and the
-    // computed fallback (David 2026-08-20: "I would also want hand written
-    // narrations. Or corpus notes. Possible??").
-    //
-    // A gem line is made of real positions, so the same position-keyed lookup
-    // the walkthrough uses works here unchanged — no new retrieval, which is
-    // the rule: reinventing retrieval is how a surface ends up selecting by
-    // name. Order is the locked one: hand-authored gem prose outranks a note,
-    // a note outranks anything computed, and the note is board-graded at the
-    // ply it speaks on so it can only describe the board it is standing on.
-    const fromCorpus = authored ? '' : gemNoteAt(chess, seenNoteIds);
-    const computed = (authored || fromCorpus) && authoredShort
+    const computed = authored && authoredShort
       ? null
       : narrateContinuationMove(fenBefore, chess.fen(), san, from, to);
     followup.push({
       san,
-      idea: authored || fromCorpus || computed?.say || '',
+      idea: authored || computed?.say || '',
       shortIdea: authoredShort || computed?.short || '',
     });
   }

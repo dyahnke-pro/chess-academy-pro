@@ -4,7 +4,6 @@ import { seeGain } from './positionReadingService';
 import { explainBestMoveGrounded, explainMoveOrder, describeMoveMerit, describeSacrifice, seatPieceReferences, describeStudentThreat, detectNewThreat, describeThreatRecognition, describeThreatPrevention } from './groundedAnswer';
 import { buildReviewMoveTeaching, buildReviewConversionTeaching, nameEndgamePhase } from './reviewMoveTeaching';
 import { plyFactsForMove, plyFactsClause, computePvLine, type PvLine, type PrevCaptureContext } from './pvPlayback';
-import { namedTacticClause } from './tacticalRead';
 import { explainEvalByPieceQuality, lowestMinorMobility } from './pieceQuality';
 import { compareTwoMoves, type Evaluate } from './moveComparison';
 import { detectConcept } from './reviewConcepts';
@@ -2291,10 +2290,7 @@ async function augmentWithProjections(
       const frame = isStudentSlip
         ? `Here's how it gets punished from here: ${render(line, true)}.`
         : `Here's how you take advantage: ${render(line, true)}.`;
-      // Name the decisive tactic down to its pieces — render() only said
-      // "lands a fork"; this says WHAT it forks (G0.1 tactical-read wire).
-      const tclause3 = namedTacticClause(line.plies);
-      s.narration = `${s.narration ?? ''} ${frame}${tclause3 ? ` ${tclause3}` : ''}`.trim();
+      s.narration = `${s.narration ?? ''} ${frame}`.trim();
       attachLineArrows(s, line, 4); // punishment/advantage line
       budget -= 1;
     }
@@ -2347,11 +2343,9 @@ async function augmentWithProjections(
       // line (compareTwoMoves returns delta=null and we just play it out).
       const cmp = await raceTimeout(compareTwoMoves(s.fenBefore, s.san, bestName, deltaEvaluate), PROJ_TIMEOUT_MS, null);
       const why = cmp?.delta?.text ?? null;
-      const tclause4 = namedTacticClause(line.plies);
-      const tSuffix4 = tclause4 ? ` ${tclause4}` : '';
       s.narration = why
-        ? `${s.narration ?? ''} Why ${bestName} was better — ${why}. The line runs ${render(line, true)}.${tSuffix4}`.trim()
-        : `${s.narration ?? ''} Why ${bestName} was better — the line runs ${render(line, true)}.${tSuffix4}`.trim();
+        ? `${s.narration ?? ''} Why ${bestName} was better — ${why}. The line runs ${render(line, true)}.`.trim()
+        : `${s.narration ?? ''} Why ${bestName} was better — the line runs ${render(line, true)}.`.trim();
       attachLineArrows(s, line, 5); // the delta / better-line — David's named priority
       whyBudget -= 1;
     }

@@ -1,9 +1,0 @@
-[
- {
-  "id": "vn-symmetry-take-the-knight-before-the-bishop-gets-caught",
-  "line": "d4 c6 e4 d5 exd5 cxd5 Nc3 Nc6 Nf3 Nf6 Bb5 Bg4 h3 Bxf3",
-  "teaches": "When the rook's pawn puts the question to your bishop, the retreat is not automatically the safe answer \u2014 count the pawn advances that follow before choosing it. Players are conditioned never to give a bishop for a knight, and that conditioning is exactly what walks the bishop into a cage two moves later. This bishop came out to take that knight; let it do its job.",
-  "explains": "The bishop takes the knight on f3. The pawn on h3 asked the question, and the pawn on g2 stands ready behind it. The bishop came out to make this trade \u2014 taking now does it on your terms.",
-  "structural": "the take-or-retreat decision answered by counting the pawn advances behind the retreat, not by habit"
- }
-]

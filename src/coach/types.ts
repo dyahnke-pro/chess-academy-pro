@@ -123,18 +123,6 @@ export interface LiveState {
    *  the grounding pipeline falls back to the master-play top move when
    *  absent. See docs/plans/2026-06-10-coach-chat-grounding-inversion.md. */
   engineBestMoveUci?: string;
-  /** The move the student just played, with the reasons for it that CODE
-   *  verified on the board it was played from (`reasonVoice.reasonLineFor`).
-   *
-   *  This is the G0 shape applied to a question: the fact is computed and
-   *  checked before the brain sees it, so answering "why was that good?" is
-   *  phrasing rather than reasoning, and the coach cannot invent a reason the
-   *  board does not support.
-   *
-   *  On Play it is the ONLY route these reasons take — that surface never
-   *  volunteers them (David 2026-08-18: *"Play stays silent. I just want coach
-   *  to have access to the info."*). Access is not permission to speak. */
-  lastMoveReasons?: { san: string; line: string };
   /** Pre-fetched Lichess explorer snapshot for the current FEN. The
    *  surface (CoachTeachPage) fires `fetchLichessExplorer` on every
    *  FEN change and threads the compact result here so the brain can

@@ -1,4 +1,4 @@
-import { describe, it, expect, vi, beforeAll, beforeEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { render, screen, waitFor, fireEvent, act } from '../../test/utils';
 import type { CoachGameMove, KeyMoment } from '../../types';
 
@@ -358,26 +358,10 @@ let CoachGameReviewComponent: typeof import('./CoachGameReview').CoachGameReview
 // ─── Tests ──────────────────────────────────────────────────────────────────
 
 describe('CoachGameReview', () => {
-  // THE IMPORT IS ONCE, NOT PER TEST — and it needs room.
-  //
-  // This was a `beforeEach`, so the first test paid the whole module-graph
-  // transform (~8s, measured) inside a hook whose budget is 10s. Under parallel
-  // load it crossed, and the run failed with "Hook timed out in 10000ms" on
-  // "renders empty state when no moves" — a test whose body is 50ms (render
-  // 41ms, query 7ms). That mismatch is why the obvious fixes were all wrong:
-  // raising a TEST timeout does nothing to a HOOK, and the 9.3MB corpus import
-  // it was blamed on accounts for only 1.5s of it.
-  //
-  // Per-test re-importing bought nothing anyway: with no `vi.resetModules()`
-  // the ESM cache returns the same module object every time, so every call
-  // after the first was already a no-op.
-  beforeAll(async () => {
+  beforeEach(async () => {
+    vi.clearAllMocks();
     const mod = await import('./CoachGameReview');
     CoachGameReviewComponent = mod.CoachGameReview;
-  }, 60_000);
-
-  beforeEach(() => {
-    vi.clearAllMocks();
   });
 
   it('renders empty state when no moves', () => {

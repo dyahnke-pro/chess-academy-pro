@@ -57,7 +57,6 @@ import { withTimeout } from '../../coach/withTimeout';
 import { classifyPosition, scanUpcomingTactics } from '../../services/tacticClassifier';
 import { buildTacticVisuals } from '../../services/tacticVisuals';
 import { isCriticalThreat } from '../../services/tacticAlertService';
-import { reasonLineFor } from '../../services/reasonVoice';
 import { buildTacticsLiveContext, buildFedTacticsContext } from '../../services/liveTacticsContext';
 import { stripUngroundedTacticSentences } from '../../services/tacticClaimValidator';
 import { getScenarioTemplate } from '../../services/coachTemplates';
@@ -463,11 +462,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
 
   const [coachLastMove, setCoachLastMove] = useState<{ from: string; to: string } | null>(null);
   const previousFenRef = useRef<string | null>(null);
-  /** The checked reasons for the move just played, for the coach to ANSWER
-   *  with — never to volunteer. David 2026-08-18: *"Play stays silent. I just
-   *  want coach to have access to the info."* Access is not permission to
-   *  speak, so this is read only when the student asks a question. */
-  const lastMoveReasonsRef = useRef<{ san: string; line: string } | null>(null);
   const [isCoachThinking, setIsCoachThinking] = useState(false);
   // Foreground re-kick (David 2026-06-19: "Play with coach is frozen").
   // iOS suspends the engine Web Worker AND `setTimeout` while the PWA is
@@ -3631,14 +3625,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
     // makes the coach reply immediately (no 4–15s LLM gate) and keeps
     // Polly fed a single short utterance per move instead of a flood of
     // streamed sentences (which is what was dropping it to Web Speech).
-    // Computed on every move regardless of which commentary path runs, because
-    // the student can ask on any move — and computed here rather than at ask
-    // time because `preFen` is the pre-move board, which is gone by then.
-    try {
-      const rl = reasonLineFor(preFen, moveResult.san);
-      lastMoveReasonsRef.current = rl ? { san: moveResult.san, line: rl.spoken } : null;
-    } catch { lastMoveReasonsRef.current = null; }
-
     if (!USE_LLM_MOVE_COMMENTARY) {
       const narrationTactics = (tacticResult?.tactics ?? []).filter((t) => t.type !== 'none');
       // Reset the once-per-game hanging ledger when the game changes.
@@ -3679,23 +3665,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
         // feeds the chat the student reads).
         gameChatRef.current?.injectAssistantMessage(fastLine);
       } else {
-        // ── PLAY STAYS SILENT ────────────────────────────────────────────
-        //
-        // David 2026-08-18: *"Play stays silent. I just want coach to have
-        // access to the info."*
-        //
-        // A first pass spoke the checked reason here, on the quiet moves where
-        // `buildFastMoveLine` returns null and Play had nothing to say. That
-        // was wrong, and the locked rule already said so: Play is a pure
-        // playing surface, the coach NEVER volunteers mid-game, and *access is
-        // not permission to speak* (2026-08-07). The reasons being verified
-        // does not change what surface this is — a student playing a game did
-        // not ask to be taught mid-move.
-        //
-        // The reasons ARE computed for this move and handed to the coach's
-        // context (see `lastMoveReasonsRef` below), so the moment the student
-        // asks "why was that good?" the answer is already grounded. Nothing
-        // reaches the voice unless they ask.
         commentary = tacticSuffix.trim();
         llmProducedSpeech = false;
       }
@@ -5255,7 +5224,6 @@ export function CoachGamePage(_props: CoachGamePageProps = {}): JSX.Element {
               lastMoveBy={lastMoveBy}
               history={game.history}
               previousFen={previousFenRef.current}
-              lastMoveReasons={lastMoveReasonsRef.current}
               onBoardAnnotation={handleBoardAnnotation}
               onRestartGame={handleRestart}
               onPlayOpening={handleOpeningRequest}

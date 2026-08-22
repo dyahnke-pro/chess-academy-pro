@@ -25,7 +25,6 @@ import { buildPositionalRead } from '../../services/positionalRead';
 import { curatedBeatAt } from '../../services/curatedBeatSource';
 import { buildPlayCommentary, buildRejectedTempting, buildPriorityFirst, buildInstantReplyLine, describeMoveConsequence } from '../../services/playCommentary';
 import type { CommentaryKind } from '../../services/playCommentary';
-import { reasonLineFor, forkLineFor } from '../../services/reasonVoice';
 import { buildNarrationSegments } from '../../services/narrationSegments';
 
 // Walkthrough arrows/highlights render through the SAME react-chessboard
@@ -85,7 +84,7 @@ import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../service
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
 import { gemId } from '../../data/lessons/punishGems';
-import { pickGreeting, pickSuggestedQuestions, pickTeachingOffers, weaknessNudgeFromItem } from '../../data/coachGreetings';
+import { pickGreeting, pickSuggestedQuestions, weaknessNudgeFromItem } from '../../data/coachGreetings';
 import { getStoredWeaknessProfile } from '../../services/weaknessAnalyzer';
 import type {
   WalkthroughTree,
@@ -258,7 +257,6 @@ import { samePosition } from '../../utils/samePosition';
 import { withTimeout } from '../../coach/withTimeout';
 import { tryRouteIntent } from '../../services/coachSessionRouter';
 import { isCounterRepertoireQuestion } from '../../coach/questionIntents';
-import { routeStage, type TeachStage } from './teachStageRouting';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -326,30 +324,12 @@ function freshTurnId(topic?: string): string {
 // square-pair and flooded "Encountered two children with the same key".
 const uniqueArrows = dedupeArrowsBySquarePair;
 
-/** Free-form starters, chosen to DEMONSTRATE what this surface can actually do
- *  rather than to look like a search box (David 2026-08-17: *"something that
- *  more accurately demonstrates the better capabilities of learn with coach"*).
- *
- *  The old five were generic — pins and skewers, "what is the Sicilian" — and
- *  showed none of the routes that make this surface different from a chat box:
- *  a narrated walkthrough off hand-written teaching, a live game in a chosen
- *  opening, engine-verified traps, and a pro's REAL moves pulled from their
- *  games. Each line below exercises a different one, and each names an opening
- *  where the hand-written corpus actually has coverage, so the first thing a
- *  student taps is the surface at its best rather than at its most generic.
- *
- *  PHRASINGS ARE LOAD-BEARING, not stylistic. "Play X against me" is the wired
- *  game route (a walkthrough starts instead if the verb is wrong), and the pro
- *  query must read "How does <player> play the <opening>?" — the leading "How
- *  does" dodges TEACH_PATTERN and the trailing "?" trips the bare-name router,
- *  so it reaches the grounded player tools instead of being fuzzy-matched as an
- *  opening name. Do not tidy either one. */
 const SUGGESTIONS = [
-  'Teach me the Four Knights Game',
-  'Play the Caro-Kann Defence against me',
-  'Traps in the Two Knights Defence',
-  'How does Magnus Carlsen play the London System?',
-  'Quiz me on the French Defence',
+  'Walk me through the Vienna opening',
+  'Teach me about pins and skewers',
+  'Show me the Italian Game main line',
+  'How do I attack a castled king?',
+  'What is the Sicilian Defense and why play it?',
 ];
 
 /** Action modes the picker offers above the chat input. Each maps to
@@ -440,34 +420,13 @@ export function buildPlayerStyleQuery(player: string, opening: string): string {
 
 /** Fallback openings shown when the student has no favorites yet —
  *  a curated mix of the most-asked-about ones across both colors. */
-/** Openings offered when the student has favourited none yet.
- *
- *  ORDERED BY WHERE THE TEACHING ACTUALLY IS, not by how famous the opening is.
- *  These are the openings whose lines carry hand-written, board-verified notes
- *  that survive the splice — measured, not chosen by taste:
- *
- *    Four Knights Game    2 on-line notes + 2 forks
- *    Two Knights Defence  2 + 1
- *    Trompowsky Attack    2 + 1
- *    Caro-Kann Defence    2
- *    London System        1 + 1
- *    French Defence       1
- *
- *  The previous list was the six most famous openings, which is a reasonable
- *  default for a surface with nothing behind it and the wrong one for this
- *  surface: tapping "Sicilian Defense" opened a variation picker and then a
- *  lesson with no hand-written teaching on it, while the openings that DO have
- *  it were not offered at all. Re-derive this list from `reanchor-report.mjs`
- *  whenever the corpus grows — the names must match `repertoire.json` exactly
- *  (note the British spellings) so they resolve without going through the
- *  fuzzy matcher. */
 const FALLBACK_OPENING_NAMES: string[] = [
-  'Four Knights Game',
-  'Two Knights Defence',
-  'Trompowsky Attack',
-  'Caro-Kann Defence',
-  'London System',
-  'French Defence',
+  'Sicilian Defense',
+  'Italian Game',
+  'Caro-Kann Defense',
+  'French Defense',
+  "Queen's Gambit",
+  'Vienna Game',
 ];
 
 /** A deep-dive entry point pulled from the walkthrough tree. Every
@@ -1541,14 +1500,14 @@ export function CoachTeachPage(): JSX.Element {
   const gemFenRef = useRef<string | null>(null);
   /** Last spoken tactics-alert key (David 2026-08-07: "I saw no tactics
    *  alerts") — a persisting danger alerts once, not every turn. */
+  /** Generic teaching clauses `buildPlayCommentary` has already used this game.
+   *  The principle is worth saying once; the fact speaks every time. */
+  const saidExplainersRef = useRef(new Set<string>());
   /** The last computed read spoken. A standing board feature (an outpost, an
    *  open file) survives many plies, and the lane had NO repeat guard at all —
    *  the tactic and threat lanes each had one — so it re-narrated the identical
    *  sentence turn after turn. Measured on a Vienna walk: the e4-outpost line
    *  spoke on two consecutive moves, verbatim. */
-  /** Forks already named this session. A signpost repeated is noise, and a
-   *  student replaying a line passes the same fork every time. */
-  const forkSaidRef = useRef(new Set<string>());
   const lastComputedRef = useRef('');
 
   /** Last spoken TACTIC key, so a standing opportunity does not nag every ply. */
@@ -3351,6 +3310,58 @@ export function CoachTeachPage(): JSX.Element {
       // walkthrough and go straight to punish lines after their
       // first session?" Each pattern strips the keyword from the
       // input; the cleaned text is then resolved as the opening name.
+      const STAGE_PATTERNS: Array<{
+        regex: RegExp;
+        stage: 'concepts' | 'findMove' | 'drill' | 'punish' | 'play-real';
+      }> = [
+        { regex: /\b(?:drill|practice)\s+(?:the\s+)?/i, stage: 'drill' },
+        { regex: /\b(?:the\s+)?(?:.+?)\s+drill(?:s)?\b/i, stage: 'drill' },
+        { regex: /\bpunish(?:ment)?(?:\s+lines?)?\s+(?:in\s+|for\s+|from\s+)?(?:the\s+)?/i, stage: 'punish' },
+        { regex: /\b(?:the\s+)?(?:.+?)\s+punish(?:ment)?(?:\s+lines?)?\b/i, stage: 'punish' },
+        // TRAPS ARE THE PUNISH STAGE (David 2026-08-02: "Learn with coach
+        // cannot teach traps in x openings. Wire that in. Should be gem
+        // lines."). Nobody asks for "punish lines" — they ask for traps. The
+        // stage they mean already exists and already prefers the curated,
+        // engine-verified gems over the puzzle path (openingGenerator's punish
+        // branch), so this is purely the missing word: with no pattern for it,
+        // "teach me the traps in the Vienna" fell through to the brain, which
+        // is forbidden from inventing chess content and correctly refused.
+        //
+        // Two patterns, mirroring the punish pair, but each matching ONLY the
+        // keyword and its connective — the opening name must survive the strip
+        // to be resolved afterwards.
+        { regex: /\btraps?(?:\s+lines?)?\s+(?:in|for|from|of|against|with)\s+(?:the\s+)?/i, stage: 'punish' },
+        { regex: /\btraps?(?:\s+lines?)?\b/i, stage: 'punish' },
+        { regex: /\b(?:quiz\s+me\s+on|quiz)\s+(?:the\s+)?/i, stage: 'concepts' },
+        { regex: /\b(?:concept(?:\s+check)?|concepts)\s+(?:for\s+|of\s+)?(?:the\s+)?/i, stage: 'concepts' },
+        { regex: /\b(?:find(?:\s+the)?\s+moves?|recognition)\s+(?:in\s+|for\s+)?(?:the\s+)?/i, stage: 'findMove' },
+        // 🔒 "PLAY X AGAINST ME" IS A REQUEST FOR A GAME, NOT A LECTURE
+        // (David 2026-08-09: "Ask it to play a certain opening against you").
+        //
+        // Until now the ONLY route to a game required the literal word
+        // "real" — "play it for real the Vienna". Nobody says that. Driving a
+        // live game on prod, "play the Vienna Gambit against me" resolved the
+        // opening perfectly (score=1.00) and then started a WALKTHROUGH:
+        // "Ready — let's walk through the Vienna Game: Vienna Gambit." The
+        // board never moved because it was waiting to be watched.
+        //
+        // Exactly the same bug as the traps patterns above — "nobody asks for
+        // 'punish lines', they ask for traps… this is purely the missing
+        // word" — one verb further along.
+        //
+        // Each pattern strips only its connective so the opening NAME survives
+        // for resolution: "play the Vienna Gambit against me" → "Vienna
+        // Gambit". Order matters — the against/with-me arm runs first because
+        // it is the most specific.
+        { regex: /\bplay\s+(?:it\s+)?(?:for\s+)?real\s+(?:the\s+)?/i, stage: 'play-real' },
+        // "play the Vienna against me" / "…with me" / "…versus me"
+        { regex: /\b(?:let'?s\s+|can\s+we\s+|could\s+we\s+|i\s+want\s+to\s+|wanna\s+)?play\s+(?:the\s+)?(?=.*\b(?:against|versus|vs\.?|with)\s+(?:me|you)\b)|\s*\b(?:against|versus|vs\.?|with)\s+(?:me|you)\b/gi, stage: 'play-real' },
+        // "play me the Italian" — the coach is the opponent, not the lecturer.
+        { regex: /\bplay\s+me\s+(?:the\s+)?/i, stage: 'play-real' },
+        // "let's play the Caro" / "can we play the London". NOT "play through
+        // the Vienna" — that is a watch ask and keeps its walkthrough.
+        { regex: /\b(?:let'?s|can\s+we|could\s+we|wanna|i\s+want\s+to)\s+play\s+(?!through\b)(?:the\s+)?/i, stage: 'play-real' },
+      ];
       const trimmed = text.trim();
       // MULTI-INTENT FIRST-VERB ROUTING (2026-08-13 audit): "teach me the
       // najdorf and quiz me and show me a trap" must honor the FIRST verb —
@@ -3379,16 +3390,27 @@ export function CoachTeachPage(): JSX.Element {
       // long comment block above `if (!opts?.kickoff)`. Don't
       // re-declare it here; doing so would shadow the outer let and
       // re-introduce the "not defined" pageerror on the brain path.
-      // Routing lives in `teachStageRouting` so the PICKER'S CONTRACT can be
-      // tested: every picker builds a phrase and submits it as if typed, so a
-      // picker is only as good as the regex its phrasing hits, and nothing was
-      // checking that pairing. Both known failures ("play X against me" started
-      // a walkthrough; "traps in X" fell through to the brain) were one missing
-      // word, invisible until someone drove prod. See teachPickerRouting.test.
-      const routed = routeStage(effectiveInput);
-      let stageHint: TeachStage | null = routed.stage;
-      const stageStrippedInput = routed.remainder;
-
+      let stageHint:
+        | 'concepts'
+        | 'findMove'
+        | 'drill'
+        | 'punish'
+        | 'play-real'
+        | null = null;
+      let stageStrippedInput = effectiveInput;
+      for (const sp of STAGE_PATTERNS) {
+        const sm = stageStrippedInput.match(sp.regex);
+        if (sm) {
+          stageHint = sp.stage;
+          stageStrippedInput = stageStrippedInput.replace(sp.regex, ' ').replace(/\s+/g, ' ').trim();
+          // "play against me IN the Vienna" leaves "in the Vienna" after the
+          // strip, and the resolver has no opening called "in the" (varied
+          // sweep, run allq-mss6tkuy). A dangling leading preposition is
+          // never part of the name.
+          stageStrippedInput = stageStrippedInput.replace(/^(?:in|with|on|at|using)\s+(?:the\s+)?/i, '').trim();
+          break;
+        }
+      }
       // THE PICKER'S OFFER IS HONOURED BOTH WAYS. Its acknowledgement says
       // "pick the one you want to play, or just type its name" — and a typed
       // name carries no stage word, so it would have been read as a request to
@@ -3490,16 +3512,8 @@ export function CoachTeachPage(): JSX.Element {
         // Same shape as the deictic case beside it: a remainder that names no
         // opening must resolve to the lesson in front of the student, not to
         // whatever the DB thinks "more" sounds like.
-        // PLURALS AND "LINES" COUNT TOO (David 2026-08-17, from real use:
-        // *"during the quiz questions when i then ask coach to 'quiz me on
-        // lines' it doesnt know which opening im talking about"*). The noun
-        // list ended at a singular `line`, so "lines" missed the anchor and
-        // fell through to be fuzzy-matched as an OPENING NAME — mid-quiz, with
-        // the Vienna on the board and the student plainly asking for more of
-        // it. The memory was never the problem; the word was one letter out of
-        // the list. Determiners gain these/those for the same reason.
-        const namesNoOpening = /^(?:(?:this|that|the|current|my|these|those)\s+)?(?:positions?|boards?|games?|lines?|variations?|moves?|ideas?|here|it|them)$/i.test(stageStrippedInput)
-          || /^(?:some\s+|any\s+|a\s+few\s+)?(?:more|another|other|others|again|next|else|extra)(?:\s+(?:one|ones|lines?))?$/i.test(stageStrippedInput);
+        const namesNoOpening = /^(?:(?:this|that|the|current|my)\s+)?(?:position|board|game|line|here|it)$/i.test(stageStrippedInput)
+          || /^(?:some\s+|any\s+|a\s+few\s+)?(?:more|another|other|others|again|next|else|extra)(?:\s+(?:one|ones))?$/i.test(stageStrippedInput);
         if (namesNoOpening) {
           const activeName = walkthrough.tree?.openingName ?? null;
           if (activeName) {
@@ -6326,10 +6340,9 @@ export function CoachTeachPage(): JSX.Element {
 
     // ── THE TAUGHT NOTE + its lead-the-eye arrows ──────────────────────────
     try {
-      const spliced = bakedLine
+      const noteText = bakedLine
         ? null
         : noteArrowSourceAt(history, args.fenAfterReply, teachNoteSeenIdsRef.current);
-      const noteText = spliced?.text ?? null;
       if (noteText) {
         factLines.push(`Coaching note taught at THIS position: ${noteText}`);
         noteLine = noteText;
@@ -6368,109 +6381,66 @@ export function CoachTeachPage(): JSX.Element {
     // fact verified against the FEN it was handed, and null on a quiet
     // position, which is the correct answer most of the time.
     let computedLine: string | null = null;
-
-    // ── THE MOVE'S OWN REASONS, CHECKED ON THIS BOARD ──────────────────────
-    //
-    // David 2026-08-18, on the computed voice: *"can we attach them to the
-    // computer?"* — the corpus's structured reasons, spoken by the computed
-    // lane. They are the sharpest thing this lane can say, so they run FIRST
-    // and `buildPlayCommentary` becomes the fallback for plies they don't
-    // cover.
-    //
-    // WHY THIS IS NOT A LOOSENING OF NOTE SELECTION. A note may only SPEAK at a
-    // position its own line produces — unchanged. What travels here is not the
-    // note's prose but its atomic claims, each re-checked against THIS board by
-    // `survivingReasons` before a word is phrased. A reason that fails is not
-    // hedged, it is dropped; a move with no surviving reason says nothing. So
-    // the coach can teach at a position the corpus never anchored to without
-    // ever asserting something it has not verified here — which is the whole
-    // point of storing reasons atomically rather than as prose (G0).
-    //
-    // The STUDENT's move first, then the coach's reply. Both just landed, but
-    // "why what you played works" is the teaching; what the opponent's move
-    // does is the fallback.
-    // Shared by the reason lane and the fork signpost below — both need the
-    // board a move was played FROM, and that board is gone from `args`.
-    const replayTo = (n: number): string | null => {
-      const c = new Chess();
-      try { for (const san of history.slice(0, n)) c.move(san); } catch { return null; }
-      return c.fen();
-    };
     try {
-      for (const back of [2, 1]) {
-        if (history.length < back) continue;
-        const fenBefore = replayTo(history.length - back);
-        if (!fenBefore) continue;
-        const line = reasonLineFor(fenBefore, history[history.length - back]);
-        // Same immediate-repeat guard the other lanes use, keyed on the reason
-        // set rather than the text — the same claims phrased two ways is still
-        // the same observation.
-        if (!line || line.key === lastComputedRef.current) continue;
-        computedLine = line.spoken;
-        lastComputedRef.current = line.key;
-        for (const sq of line.squares) spokenSquaresThisTurn.add(sq);
-        factLines.push(`Computed from the board (reasons): ${line.spoken}`);
-        captureEvent('coach_beat_offered', { surface: 'coach-teach', kind: 'reasons', spoke: true });
-        break;
-      }
-    } catch { /* the reason lane is a bonus, never a blocker */ }
-
-    // ── THE FORK: NAMING THAT A CHOICE WAS MADE ──────────────────────────
-    //
-    // David 2026-08-17: *"i want Learn with coach to touch on them as well so
-    // the user knows there are other options at certain forks/positions."*
-    // Learn NAMES the fork; Review is where the lines get walked.
-    //
-    // The options are the moves that APPEARED ON SCREEN in the lesson, so
-    // "here are the other tries" is a claim about the video with the video as
-    // its evidence. That is what makes it safe to put in front of a student
-    // when a model-generated list of alternatives would not be.
-    //
-    // Fires on the STUDENT's move only. The fork is about the choice they just
-    // made, and naming alternatives to the coach's reply is a different (and
-    // much less useful) sentence.
-    let forkLine: string | null = null;
-    try {
-      if (history.length >= 2) {
-        const fenBefore = replayTo(history.length - 2);
-        const line = fenBefore ? forkLineFor(fenBefore, history[history.length - 2]) : null;
-        // Once per fork per session. A signpost repeated is noise, and the
-        // student passes the same position every time they replay the line.
-        if (line && !forkSaidRef.current.has(line.key)) {
-          forkSaidRef.current.add(line.key);
-          forkLine = line.spoken;
-          for (const sq of line.squares) spokenSquaresThisTurn.add(sq);
-          factLines.push(`Fork recorded in the lesson: ${line.spoken}`);
-          captureEvent('coach_beat_offered', { surface: 'coach-teach', kind: 'fork', spoke: true });
+      const beat = buildPlayCommentary({
+        fen: args.fenAfterReply,
+        studentColor: playerColor,
+        saidExplainers: saidExplainersRef.current,
+        // ROOT CAUSE, not the gate. Both this composer and the tactics alert
+        // above read `detectTactics` off THIS board, and neither knew the
+        // other had spoken — so both announced the same loose piece and the
+        // student heard the observation twice with a different moral bolted on
+        // each time. Handing over the squares already spoken means the
+        // duplicate is never composed: the ladder descends to the next real
+        // thing, so the turn GAINS a beat rather than losing one to a filter.
+        skipSquares: spokenSquaresThisTurn,
+      });
+      if (beat) {
+        // `spoken`, NOT `facts`. The facts are written at a phrasing model —
+        // shouted header, then an instruction ("Do NOT name the winning move")
+        // — so once the package started refusing scaffolding this lane was
+        // being dropped on every single ply, silently. It is the lane meant to
+        // FILL the silence: the corpus can only reach ~14% of the plies we
+        // teach, and the computed read is what the other 86% was always
+        // supposed to hear. Feeding it directives made it contribute nothing.
+        // Immediate repeat only — the same guard shape the tactic and threat
+        // lanes use. A feature that comes BACK after other content is fair to
+        // mention again; the same observation twice running is not.
+        //
+        // Keyed on `beat.key`, NOT on the text: the say-the-principle-once rule
+        // strips a trailing clause the second time a pattern appears, so the
+        // same observation yields two different strings on consecutive plies
+        // and a text guard sails straight past it. Measured on a Vienna walk —
+        // the e4-outpost beat spoke on moves 4 and 5, the second time minus
+        // its moral.
+        if (beat.key && beat.key === lastComputedRef.current) {
+          computedLine = null;
+        } else {
+          computedLine = beat.spoken;
+          lastComputedRef.current = beat.key;
         }
+        // ── WHICH BEATS ACTUALLY REACH ANYONE ──────────────────────────────
+        //
+        // 🔒 A LANE NOBODY CAN MEASURE IS A LANE NOBODY CAN FIX. `playCommentary`
+        // knows nine kinds and NOT ONE of them emitted an event, so "does the
+        // seeding observation ever fire?" had no answer short of reading a
+        // transcript by hand. That is the same blind spot that let
+        // `gem_alert_spoken` sit at zero events for its entire life, and the
+        // same one that hid four dead lanes this week.
+        //
+        // Emitted HERE, where the beat became `computedLine` and is on its way
+        // to the voice — not where it was computed. The distinction is the
+        // whole point: every lane that failed this week computed correctly and
+        // reached nobody, so counting computations would have reported all of
+        // them healthy. `spoke` separates the two in one field.
+        captureEvent('coach_beat_offered', {
+          surface: 'coach-teach',
+          kind: beat.kind,
+          spoke: computedLine !== null,
+        });
+        factLines.push(`Computed from the board (${beat.kind}): ${beat.facts.join(' ')}`);
       }
-    } catch { /* the fork signpost is a bonus, never a blocker */ }
-
-    // ── NO REASON, NO SENTENCE ───────────────────────────────────────────
-    //
-    // David 2026-08-18: *"We can also gate the computer to narrate only when
-    // there is a reason to go with it."*
-    //
-    // This lane used to fall back to `buildPlayCommentary`, a generic beat
-    // composer, on every ply the reasons did not cover. The argument for it was
-    // coverage — the corpus reaches ~14% of taught plies, so something had to
-    // fill the other 86%. What actually filled them was true-but-unremarkable
-    // observation, which is the filler a driven game kept surfacing.
-    //
-    // The checked reasons reach 25% of the taught repertoire's plies, and each
-    // one is a fact about THIS board rather than a general remark about the
-    // position. So the trade is a lane that speaks less often and says
-    // something every time, which the narration rules ask for outright:
-    // silence is acceptable, there is no length floor, and when in doubt
-    // prefer silence. The other `buildPlayCommentary` call sites are untouched
-    // — they are engine-driven recommendation beats, not this ambient lane.
-    //
-    // The silence is MEASURED, not assumed: the event fires either way, so
-    // "how often does the computed lane say nothing now" has an answer.
-    if (!computedLine) {
-      captureEvent('coach_beat_offered', { surface: 'coach-teach', kind: 'reasons', spoke: false });
-    }
-
+    } catch { /* commentary is a bonus, never a blocker */ }
 
     // ── THE SILENT PLIES. David 2026-08-08, after reading a ply-by-ply
     // transcript: "There needs to be positional notes then or something at the
@@ -6747,7 +6717,6 @@ export function CoachTeachPage(): JSX.Element {
       ...(threatLine ? [{ kind: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares }] : []),
       ...(announceLine ? [{ kind: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
       ...(computedLine ? [{ kind: 'computed' as const, text: computedLine, fen: args.fenAfterReply }] : []),
-      ...(forkLine ? [{ kind: 'fork' as const, text: forkLine, fen: args.fenAfterReply }] : []),
       // The masterclass beat first among the teaching lanes — it is the only
       // one verified before it shipped.
       ...(curatedLine ? [{ kind: 'note' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
@@ -7920,7 +7889,7 @@ export function CoachTeachPage(): JSX.Element {
                     // origins (opening-family / structure / concept) keep the
                     // provenance-labeled fact line, no arrows — they are not
                     // about this board.
-                    const noteText = noteArrowSourceAt(historyAfterReply, probe.fen(), teachNoteSeenIdsRef.current)?.text ?? null;
+                    const noteText = noteArrowSourceAt(historyAfterReply, probe.fen(), teachNoteSeenIdsRef.current);
                     if (noteText) {
                       facts.push(`Coaching note taught at THIS position: ${noteText}`);
                       // Voiced by the instant pass instead (which also
@@ -8753,19 +8722,7 @@ export function CoachTeachPage(): JSX.Element {
       // chip they tap), still grounded (routes to a computed vertical). Cheap
       // stored read; null-guarded so a fresh profile just shows the generic set.
       if (!rolodexOpening) {
-        // TEACHING LEADS, STATS FOLLOW (David 2026-08-18: *"These pickers I
-        // wanted to be more relevant"*). The pool used to be four questions
-        // about the student — rating, blunder rate, weaknesses — so the first
-        // thing a student saw was the scoreboard, and nothing on screen said
-        // the coach could teach them an opening, play one against them or drill
-        // its traps. Three offers built from openings they have favourited (or
-        // the ones taught deepest), then ONE stats question so that vertical is
-        // still discoverable.
-        const chipOpenings = favoriteOpenings.length > 0
-          ? favoriteOpenings.slice(0, 6).map((o) => o.name)
-          : FALLBACK_OPENING_NAMES;
-        const teaching = pickTeachingOffers(chipOpenings, greetingRotation, 3);
-        const generic = [...teaching, ...pickSuggestedQuestions(greetingRotation, 4 - teaching.length)];
+        const generic = pickSuggestedQuestions(greetingRotation, 4);
         // Show the generic set immediately, then asynchronously upgrade to a
         // nudge-led set if a stored weakness profile is available (non-blocking
         // — the kickoff IIFE is synchronous). Null-guarded end to end.
@@ -8789,12 +8746,7 @@ export function CoachTeachPage(): JSX.Element {
             const top = (profile?.items ?? []).slice().sort((a, b) => b.severity - a.severity)[0];
             const nudge = top ? weaknessNudgeFromItem(top.category, top.label) : null;
             if (nudge) {
-              // Drop the STATS tail for the nudge, never a teaching offer: the
-              // nudge is itself a question about the student, and prepending it
-              // to a slice(0, 4) would otherwise push the teaching off screen
-              // one chip at a time — the same way the set David saw ended up
-              // with nothing but questions about himself on it.
-              setCoachChoices([nudge, ...teaching, ...generic.filter((q) => q !== nudge && !teaching.includes(q))].slice(0, 4));
+              setCoachChoices([nudge, ...generic.filter((q) => q !== nudge)].slice(0, 4));
             }
             let spokeCall = false;
             try {
@@ -8806,10 +8758,7 @@ export function CoachTeachPage(): JSX.Element {
                 spokeCall = true;
                 const chip = call.prescription === 'weakness' && nudge ? nudge : call.chip;
                 setMessages((prev) => [...prev, { id: uid('coachs-call'), role: 'assistant', content: call.line, timestamp: Date.now() }]);
-                setCoachChoices((prev) => {
-                  const rest = (prev ?? generic).filter((q) => q !== chip && !teaching.includes(q));
-                  return [chip, ...teaching, ...rest].slice(0, 4);
-                });
+                setCoachChoices((prev) => [chip, ...(prev ?? generic).filter((q) => q !== chip)].slice(0, 4));
                 speechChainRef.current = speechChainRef.current
                   .then(() => voiceService.speakForced(call.line))
                   .catch(() => undefined);
@@ -10427,57 +10376,6 @@ export function CoachTeachPage(): JSX.Element {
                     ))}
                   </div>
                 </details>
-              </div>
-            );
-          })()}
-
-          {/* IN-LESSON PICKER — the same actions, still scoped to the opening
-              you are already in (David 2026-08-17: *"if i chose quiz lines, but
-              get tired of that, i want to see different quiz options about the
-              same opening"*).
-
-              The start picker hides the moment a lesson begins, so switching
-              from one activity to another mid-opening meant typing the opening
-              name again — and typing a deictic instead ("quiz me on lines") is
-              exactly what sent the router hunting for an opening called
-              "lines". This removes the need to say it at all: every chip
-              carries the ACTIVE opening name, so the request is never
-              ambiguous no matter how many subjects the student moves through.
-
-              Deliberately excludes the action already running — offering
-              "Quiz me on the Vienna" during a Vienna quiz is noise, and the
-              point of the row is somewhere ELSE to go. */}
-          {walkthrough.tree?.openingName && !streaming && !kickoffStatus && !linePicker && (() => {
-            const active = walkthrough.tree?.openingName;
-            if (!active) return null;
-            const others = PICKER_ACTIONS.filter((a) => a.id !== 'player' && a.id !== pickerAction);
-            if (!others.length) return null;
-            return (
-              <div className="mt-3 space-y-1.5" data-testid="teach-inlesson-picker">
-                <div
-                  className="text-[11px] font-medium uppercase tracking-wide px-1"
-                  style={{ color: 'var(--color-text-muted)' }}
-                >
-                  More on the {active}
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {others.map((a) => (
-                    <button
-                      key={a.id}
-                      type="button"
-                      onClick={() => {
-                        setPickerAction(a.id);
-                        void handleSubmit(a.buildInput(active));
-                      }}
-                      className="px-2.5 py-1.5 rounded-md border text-xs hover:opacity-80 transition-opacity"
-                      style={{ borderColor: 'var(--color-border)', color: 'var(--color-text)' }}
-                      data-testid={`teach-inlesson-${a.id}`}
-                      title={a.description}
-                    >
-                      {a.label}
-                    </button>
-                  ))}
-                </div>
               </div>
             );
           })()}

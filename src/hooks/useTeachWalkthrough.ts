@@ -720,27 +720,6 @@ export function _findMatchingTraps(
 ): PunishLesson[] {
   return findMatchingTraps(pathSans, punishLessons);
 }
-/** True when a lesson's `setupFen` is exactly the position its own `setupMoves`
- *  produce from the start — the mark of a gem, whose line IS an opening line.
- *  A puzzle-derived punish stores an unrelated mid-game FEN here, and its
- *  inaccuracy is not legal at the walkthrough's board.
- *
- *  Compared on placement + side to move only: move counters differ between a
- *  fresh replay and however the record was produced, and the board is what
- *  decides whether the move can be played. */
-function fenMatchesSetupMoves(lesson: PunishLesson): boolean {
-  try {
-    const board = new Chess();
-    for (const san of lesson.setupMoves) {
-      if (!board.move(san)) return false;
-    }
-    const key = (f: string): string => f.split(' ').slice(0, 2).join(' ');
-    return key(board.fen()) === key(lesson.setupFen ?? '');
-  } catch {
-    return false;
-  }
-}
-
 function findMatchingTraps(
   pathSans: string[],
   punishLessons: PunishLesson[] | undefined,
@@ -760,19 +739,7 @@ function findMatchingTraps(
     // walkthrough fired 5 trap-prompts at the spine's leaf with
     // illegal-from-this-position SANs; user couldn't make sense of
     // it. Filter them out here.
-    //
-    // A GEM IS NOT A PUZZLE, AND THE DIFFERENCE IS COMPUTABLE (David 2026-08-20:
-    // "I want the gem lines to be included in the teach me x opening. I haven't
-    // seen that yet"). A curated gem also carries `setupFen` — but it is DERIVED
-    // by playing its own `setupMoves` from the start, so it IS the position the
-    // walkthrough is standing on and its inaccuracy is legal there. Rejecting
-    // every lesson with a `setupFen` therefore threw out the one class of punish
-    // that belongs inline, which is why no gem has ever forked out of a lesson.
-    //
-    // So the test is not "does it have a FEN" but "is that FEN the one its own
-    // moves reach". Play them and compare — the fact is computed, not guessed
-    // from the shape of the record (G0).
-    if (lesson.setupFen && !fenMatchesSetupMoves(lesson)) return false;
+    if (lesson.setupFen) return false;
     return (
       lesson.setupMoves.length === pathSans.length &&
       lesson.setupMoves.every((m, i) => m === pathSans[i])
@@ -1196,60 +1163,30 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
               source: 'useTeachWalkthrough.deltaAside',
               summary: `delta aside @[${sansSoFar.join(' ')}]: ${aside.say.slice(0, 120)}`,
             });
-            // THE ASIDE MUST NOT BE ABLE TO STRAND THE WALK (fixed 2026-08-21).
-            //
-            // Both continuations below used to gate on the IDENTITY of the
-            // timer — `advanceTimerRef.current !== backup` — which is the only
-            // place in this file that decides whether to transition by looking
-            // at a ref instead of its own settled flag. That made the aside the
-            // one step in the chain where BOTH exits could bail: the ref is
-            // shared, `transitionAfter` can be re-entered (the node-level backup
-            // from the segment loop is still armed and un-cleared when the aside
-            // arms its own), and the moment anything reassigns or nulls that ref
-            // in the window between arming and firing, the voice-resolve path
-            // and the timer path each decide they were superseded — by each
-            // other — and the phase stays `narrating` for ever with no error,
-            // no advance, and no leaf.
-            //
-            // That is exactly what prod showed: the LAST narration event of a
-            // 600s run was this aside at [e4 e5 Nc3 Nc6 Bc4 Bc5 Qg4 Qf6 Nd5
-            // Qxf2+ Kd1] — eleven plies into a fifteen-ply line — and nothing
-            // followed it. Three earlier sessions blamed slowness, the TTS mock
-            // and missing narration; each was measured and killed. Silence with
-            // no error is the signature of a guard that both exits fail.
-            //
-            // So the aside now settles like every other narration path in this
-            // file: ONE boolean, checked and set by whichever exit arrives
-            // first. Exactly one of {voice resolved, backup fired, cancelled}
-            // wins, and — the part that matters — one of them ALWAYS does.
-            // Cancellation still goes through the run token, which orphans the
-            // whole chain the way it does everywhere else.
-            let asideSettled = false;
-            const finishAside = (): void => {
-              if (asideSettled || !isCurrent()) return;
-              asideSettled = true;
-              if (advanceTimerRef.current === backup) advanceTimerRef.current = null;
-              clearTimeout(backup);
+            const backup = setTimeout(() => {
+              if (!isCurrent() || advanceTimerRef.current !== backup) return;
+              advanceTimerRef.current = null;
               setNarrationArrows([]);
-              transitionAfter(); // gemAsideDone=true → falls through below
-            };
-            // Clear the node-level backup BEFORE arming the aside's, so only one
-            // timer is ever live on this ref. Leaving the segment-path timer
-            // armed is what let a second `transitionAfter` land mid-aside.
-            if (advanceTimerRef.current) clearTimeout(advanceTimerRef.current);
-            const backup = setTimeout(finishAside, clampBackupMs(aside.say));
+              transitionAfter();
+            }, clampBackupMs(aside.say));
             advanceTimerRef.current = backup;
             cancelNarrationRef.current = (): void => {
-              // Cancel means the caller drives from here — settle without
-              // transitioning, so a later voice resolve cannot revive the chain.
-              asideSettled = true;
-              clearTimeout(backup);
-              if (advanceTimerRef.current === backup) advanceTimerRef.current = null;
+              if (advanceTimerRef.current === backup) {
+                clearTimeout(backup);
+                advanceTimerRef.current = null;
+              }
               setNarrationArrows([]);
             };
             void speakWalkthroughText(aside.say, aside.short, isCurrent)
               .catch(() => undefined)
-              .then(finishAside);
+              .then(() => {
+                // Superseded (cancelled / backup already fired) → do nothing.
+                if (!isCurrent() || advanceTimerRef.current !== backup) return;
+                clearTimeout(backup);
+                advanceTimerRef.current = null;
+                setNarrationArrows([]);
+                transitionAfter(); // gemAsideDone=true → falls through below
+              });
             return;
           }
         }

@@ -42,56 +42,6 @@ export const SUGGESTED_QUESTIONS: readonly string[] = [
   'How do I do against the Sicilian?',
 ];
 
-/** What the coach can TEACH, phrased the way a student would ask for it.
- *
- *  🔒 THESE LEAD THE PICKER, AND THE STATS QUESTIONS DO NOT (David 2026-08-18:
- *  *"These pickers I wanted to be more relevant"*, shown against a set reading
- *  "How often do I blunder? / What's my rating?"). Every chip above was a
- *  question about the STUDENT. Not one of them showed what the app had been
- *  built to do, so the surface advertised its scoreboard and hid its teaching.
- *
- *  Each template is a phrasing `teachStageRouting` actually routes — that
- *  pairing is asserted in `teachPickerRouting.test.ts`, because a picker is only
- *  as good as the regex its wording happens to hit and two of these have already
- *  been one missing word away from landing the student in the wrong surface.
- *
- *  The `{}` is filled with an opening the caller supplies. The caller passes the
- *  openings the student has favourited, or the ones the app teaches most deeply
- *  — so the chips track what has actually been built rather than a list written
- *  once and left to rot. */
-export const TEACHING_OFFERS: readonly string[] = [
-  'Teach me the {}',
-  'Play the {} against me',
-  'Traps in the {}',
-  'Quiz me on the {}',
-  'Drill the {}',
-];
-
-/** Build teaching chips by rotating openings against offers.
- *
- *  Rotating BOTH means a student who opens the app twice does not see the same
- *  four chips, and pairing offer `k` with opening `k` (rather than nesting the
- *  loops) means the visible set spreads across several openings instead of
- *  showing five ways to study one of them. */
-export function pickTeachingOffers(
-  openings: readonly string[],
-  index: number,
-  count = 3,
-): string[] {
-  const pool = openings.filter((o) => o.trim().length > 1);
-  if (pool.length === 0) return [];
-  const n = Math.max(0, Math.trunc(count));
-  const start = Math.trunc(index);
-  const out: string[] = [];
-  for (let k = 0; k < n; k++) {
-    const offer = TEACHING_OFFERS[(((start + k) % TEACHING_OFFERS.length) + TEACHING_OFFERS.length) % TEACHING_OFFERS.length];
-    const opening = pool[(((start + k) % pool.length) + pool.length) % pool.length];
-    const chip = offer.replace('{}', opening);
-    if (!out.includes(chip)) out.push(chip);
-  }
-  return out;
-}
-
 /** Pick a greeting by rotation index. */
 export function pickGreeting(index: number): string {
   const i = ((Math.trunc(index) % COACH_GREETINGS.length) + COACH_GREETINGS.length) % COACH_GREETINGS.length;

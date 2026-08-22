@@ -25,7 +25,6 @@
 import { Chess, type Move } from 'chess.js';
 import puzzleData from '../data/puzzles.json';
 import { extractMentionedSquares, MAX_CANDIDATE_HIGHLIGHTS, type LineMove } from './arrowEngine';
-import { computeTacticalRead } from './tacticalRead';
 import { getCoachChatResponse, getCoachStructuredResponse } from './coachApi';
 import {
   validateMoveLegality,
@@ -50,13 +49,11 @@ import { materialBalance } from './materialClaimValidator';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { logAppAudit } from './appAuditor';
 import { buildDanyaTeachingBlock, noteAtPosition, spokenBeatText } from './danyaTeachingService';
-import { lessonBeatAt } from './lessonBeatNarration';
 import { authoredNoteAt, authoredEntryFor } from './authoredOpeningNotes';
 import authoredRepertoire from '../data/repertoire.json';
 import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
-import { forkSentence } from './videoForks';
 import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
 import { detectTactics } from './tacticsDetector';
 import { stageArrayHasUsableEntry } from './stageEntryValidity';
@@ -329,35 +326,6 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
     if (Array.isArray(tree.punish) && tree.punish.length > 0) {
       tree.punish = repairPunishStage(tree.punish).kept;
     }
-    // ── GEMS ARE ATTACHED HERE, NOT GENERATED ──────────────────────────────
-    //
-    // David 2026-08-20: "The walkthrough prebuilds the lesson so they need to
-    // be built in at run time."
-    //
-    // `tree.punish` was filled only by BACKGROUND stage generation, so gems
-    // arrived after the lesson had already walked past the positions they fire
-    // at — which is the other half of why a gem fork has never been seen. That
-    // wait buys nothing: a gem needs no LLM and no network. It is curated,
-    // engine-verified at mining time, and chess.js-validated on conversion, so
-    // it is a synchronous local lookup.
-    //
-    // This boundary is the right home because EVERY tree passes through it —
-    // fresh generation and cache reads alike — so a tree cached before this
-    // shipped picks the gems up on its next read instead of needing a bump.
-    //
-    // Seeded AFTER the repair pass deliberately: the repairs exist to police
-    // model-generated stage entries, and a gem is neither generated nor
-    // shaped like one.
-    if (tree.openingName) {
-      const gems = gemPunishLessonsForOpeningName(tree.openingName);
-      if (gems.length > 0) {
-        const existing = new Set((tree.punish ?? []).map((l) => `${l.setupMoves.join(' ')}|${l.inaccuracy}`));
-        const fresh = gems.filter((g) => !existing.has(`${g.setupMoves.join(' ')}|${g.inaccuracy}`));
-        // Gems lead: they are the hand-narrated, engine-tiered weapons, and the
-        // trap queue speaks in order.
-        if (fresh.length > 0) tree.punish = [...fresh, ...(tree.punish ?? [])];
-      }
-    }
   } catch {
     // A repair throwing on wildly-malformed data must not break the read
     // — the per-consumer validity guards still protect the UI.
@@ -410,79 +378,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // lesson cached at the '-spelling' rev keeps its dead-tier prose forever while
 // the audits (fresh browser, cold cache, always regenerating) show green.
 // One bump batching both fixes, per the locked cost rule.
-// 2026-08-17: sixteen hand-written video notes landed, and PASS 1 splices a note
-// at the ply it is anchored to. Beats bake at generation time, so without this
-// bump every lesson already cached — including the trees seeded onto a fresh
-// device — keeps prose written before the notes existed, and the new teaching
-// reaches nobody. A prod audit chased that for an hour: the note was verifiably
-// in the shipped bundle, verifiably on the taught line, and verifiably selected
-// by the real selector in unit tests, while the lesson on prod served a cached
-// tree that predated it. The comment directly above describes the same failure
-// from August, which is the argument for bumping WITH the change rather than
-// after noticing.
-//
-// 2026-08-20: bumped for the hand-written opening-tab beats (`lessonBeatAt`,
-// commit 939c45a). That change altered what a walkthrough SPEAKS but shipped
-// without a bump, so every device holding a tree stamped `2026-08-18-note-forks`
-// would have served the old prose forever — the feature invisible in production
-// while its unit tests passed, because those call the function directly and
-// never go through the cache. That is the failure the paragraph above describes
-// happening for the third time; the bump belongs in the SAME commit as any
-// change to what a beat says.
-//
-// One bump for the whole batch, per the locked cost rule: a bump regenerates
-// prose into new strings that miss the TTS clip cache, so batching keeps that to
-// a single synthesis bill instead of one per lesson written.
-//
-// 2026-08-21 (second bump, same day, deliberately batched into one deploy): 74
-// hand-written notes across 13 lessons were emitted into the shipped corpus
-// (340 -> 423). Those notes SPLICE INTO BEATS at generation time, so a device
-// holding a tree stamped with the previous rev would serve the old prose for
-// ever and the whole distil pass would be invisible in production while every
-// unit test passed — the tests call the splice directly and never touch the
-// cache. That failure is recorded three times in CLAUDE.md; this is the bump
-// that keeps it from being a fourth.
-/** How many student-to-move positions get a computed tempting move per lesson.
- *  Each costs one engine call per eye-catching legal move, so this is the cost
- *  dial: six covers the opening decisions where a but-turn actually teaches
- *  without turning generation into an engine session. */
-const TEMPTING_MAX_POSITIONS = 6;
-/** Reduced depth for the tempting scan. The question is "is this move clearly
- *  worse", not "what is the exact eval" — a 120cp gap is visible early, and the
- *  refutation line is played out at this depth too. */
-const TEMPTING_DEPTH = 12;
-
-/** Which spine plies get asked for a tempting move.
- *
- *  PARITY IS THE WHOLE RISK HERE, which is why it is a pure function with its
- *  own test rather than a filter buried in the generator. The but-turn teaches
- *  the STUDENT off a move THEY would reach for; computing it at the opponent's
- *  decisions produces facts nobody can act on, and the failure is silent — the
- *  engine runs, labels appear, and every one of them warns the student about a
- *  move it is not their turn to play.
- *
- *  A position's `movedBy` is the side that JUST moved, so the side to move next
- *  is the other one. The student faces the decision exactly when the opponent
- *  just moved. */
-export function temptingCandidatePlies(
-  positions: Array<{ movedBy: 'white' | 'black' }>,
-  studentSide: 'white' | 'black',
-  max: number,
-): number[] {
-  const out: number[] = [];
-  for (const [idx, p] of positions.entries()) {
-    if (p.movedBy === studentSide) continue; // student just moved → opponent decides next
-    out.push(idx);
-    if (out.length >= max) break;
-  }
-  return out;
-}
-
-// 2026-08-21 (third bump this day — the batching rule says one per DEPLOY, and
-// these three ship together): the tier-3 system prompt now carries the measured
-// Danya arc, so every generated beat's prose changes. A cached tree stamped with
-// the previous rev would serve the old register for ever.
-const WALKTHROUGH_GEN_REV = '2026-08-21-danya-arc-copycat-bake';
+const WALKTHROUGH_GEN_REV = '2026-08-13-material-ledger';
 
 export async function getCachedOpening(
   name: string,
@@ -1256,60 +1152,12 @@ export function repairNarrationArrows(tree: WalkthroughTree): number {
  *  those say what the corpus COULD offer, while this says what a lesson actually
  *  splices — the dedupe and the board-truth grade both drop plies, and a report
  *  that skips them overstates by a factor of three. */
-export interface SplicedNote {
-  text: string;
-  /** Hand-written notes SUPPRESS the generated prose on their ply; farmed ones
-   *  still lead it. See the splice site for why the two are treated apart. */
-  handwritten: boolean;
-  /** The corpus note's id. Returned so a caller that ends up NOT speaking this
-   *  note can put it back — retrieval marks a note seen on the way out, and a
-   *  note consumed but never spoken is the silent-starvation failure this file
-   *  has already hit once from the other direction. */
-  id: string;
-}
-
-/** How a spliced note and the model's generated sentence combine on one ply.
- *
- *  HAND-WRITTEN REPLACES; FARMED LEADS (David 2026-08-19: "the narrations are
- *  also good enough to turn off the computed narrations. so any lines that has
- *  had written teachings should not play the computed narrations").
- *
- *  A hand-written note is written against the board with every claim checked by
- *  chess.js, so a generated sentence after it is a second, weaker account of the
- *  same move — and it is the half that reaches for the opening's NAME when it
- *  has nothing computed to say, which is how a Caro-Kann lesson came to narrate
- *  Queen's-Gambit ideas. A farmed note is a distillation of speech: thinner, and
- *  not written to carry a ply on its own, so it still leads the generated prose
- *  rather than replacing it.
- *
- *  Pulled out of the splice so the rule is one testable expression rather than a
- *  branch inside a two-hundred-line assembly. */
-export function spliceNarration(teaching: SplicedNote, generated: string): string {
-  if (teaching.handwritten) return teaching.text;
-  return generated.trim() ? `${teaching.text} ${generated}` : teaching.text;
-}
-
-/** Append the lesson's own "other tries here" sentence, when it showed one.
- *
- *  LEARN NAMES THE FORK; REVIEW WALKS IT (David 2026-08-17: "i want Learn with
- *  coach to touch on them as well so the user knows there are other options at
- *  certain forks/positions"). One sentence, no continuations — a lesson that
- *  recites every branch is the wordiness already objected to once.
- *
- *  The move the lesson goes on to play is excluded: the student is about to see
- *  it, so calling it an alternative confuses rather than informs. */
-function withFork(text: string, fen: string, playedNext?: string): string {
-  const sentence = forkSentence(fen, playedNext);
-  if (!sentence) return text;
-  return text.trim() ? `${text} ${sentence}` : sentence;
-}
-
 export function noteArrowSourceAt(
   historySans: string[],
   fen: string,
   seenIds: Set<string>,
   openingName?: string | null,
-): SplicedNote | null {
+): string | null {
   try {
     // POSITION ONLY — move-prefix or transposition into this very FEN. This is
     // the contract documented at the splice site below, and for three days the
@@ -1335,7 +1183,7 @@ export function noteArrowSourceAt(
     const graded = gradeNarrationText(spokenBeatText(note), fen, 'openingGenerator.noteArrows');
     if (!graded?.trim()) return null;
     seenIds.add(note.id);
-    return { text: graded, handwritten: note.origin === 'handwritten', id: note.id };
+    return graded;
   } catch {
     return null; // the corpus is a bonus, never a blocker
   }
@@ -1923,56 +1771,6 @@ async function generateOpeningFromDbNarration(
   const studentSide = faceContext
     ? (baseStudentSide === 'white' ? 'black' : 'white')
     : baseStudentSide;
-  // ── THE TEMPTING MOVE, COMPUTED (David 2026-08-21: "the common/easy move
-  // needs to be computed. make sure it's wired as it is now") ────────────────
-  //
-  // The but-turn is the house voice's signature beat and it needs one fact:
-  // the move a student would WANT to play here, and the line that refutes it.
-  // Nothing else in this generator produces it, so before this the model either
-  // skipped the beat or invented the move — and inventing it means inventing a
-  // line and an evaluation, which is the G0.1 violation the rule names first.
-  //
-  // `computeTacticalRead` computes it honestly: it scores every legal move for
-  // EYE-APPEAL (captures, checks, promotions, central knight/bishop moves — what
-  // actually draws a human), evaluates each, and keeps the most appealing one
-  // that is clearly worse than best. Then it plays out the refutation.
-  //
-  // BOUNDED ON PURPOSE. That is one engine call per candidate move per position,
-  // so running it on a whole spine would cost hundreds. The but-turn only teaches
-  // on the STUDENT'S OWN decisions — warning them off a move the opponent might
-  // play teaches nothing — so this asks only at student-to-move plies, caps the
-  // count, and runs at reduced depth. Everything is best-effort: no engine (SSR,
-  // tests, a dead worker) means no tempting facts, which means the prompt's gate
-  // keeps the model off the beat rather than letting it improvise.
-  const temptingByPly = new Map<number, string>();
-  if (!faceContext) {
-    try {
-      const { stockfishEngine } = await import('./stockfishEngine');
-      const candidateIdx = temptingCandidatePlies(
-        positions.map((p) => ({ movedBy: p.movedBy })),
-        studentSide === 'white' ? 'white' : 'black',
-        TEMPTING_MAX_POSITIONS,
-      );
-      for (const idx of candidateIdx) {
-        const p = positions[idx];
-        const read = await computeTacticalRead(p.fen, {
-          engine: stockfishEngine,
-          depth: TEMPTING_DEPTH,
-          findTempting: true,
-        });
-        if (!read?.tempting) continue;
-        const ref = read.tempting.refutation.slice(0, 3).map((r) => r.san).join(' ');
-        temptingByPly.set(
-          idx,
-          `TEMPTING here: ${read.tempting.san} (the ${read.tempting.appeal} — but ${(read.tempting.evalDropCp / 100).toFixed(1)} worse)${ref ? `, refuted by ${ref}` : ''}`,
-        );
-      }
-    } catch {
-      // No engine in this environment. The beat is simply unavailable — never
-      // approximated. See the gate in the system prompt.
-    }
-  }
-
   const moveLabels = positions
     .map((p, idx) => {
       const moveNum = Math.floor(p.ply / 2) + 1;
@@ -1986,8 +1784,7 @@ async function generateOpeningFromDbNarration(
         ? 'material even'
         : bal > 0 ? `WHITE is up ${bal} point${bal === 1 ? '' : 's'} of material`
           : `BLACK is up ${-bal} point${bal === -1 ? '' : 's'} of material`;
-      const tempting = temptingByPly.get(idx);
-      return `${idx + 1}. ${dotted}${p.san}  (after this move FEN: ${p.fen}; ${matNote})${tempting ? `\n     ${tempting}` : ''}`;
+      return `${idx + 1}. ${dotted}${p.san}  (after this move FEN: ${p.fen}; ${matNote})`;
     })
     .join('\n');
   // Branches sit at the position AFTER the canonical's last move.
@@ -2005,26 +1802,6 @@ async function generateOpeningFromDbNarration(
   const lessonFraming = faceContext
     ? `a walkthrough of "${entry.canonicalName}" — the canonical White (or attacking side) counter to "${faceContext.originalDisplayName}". The student is the side PLAYING this counter (learning to face the named opening from the opposite perspective), not the side being countered.`
     : `a walkthrough of "${entry.canonicalName}".`;
-  // THE DANYA ARC (David 2026-08-21: "when the computer narrates it gets used").
-  //
-  // The style rules below are the measured teaching spec
-  // (docs/plans/2026-08-21-danya-teaching-dna.md) applied to the tier-3 computed
-  // path. What is deliberately GATED here is the BUT-TURN: it is his signature
-  // beat and it needs a fact this generator does not yet compute — the move a
-  // student would want to play, plus its refutation.
-  //
-  // `tacticalRead.ts` computes exactly that (GAP 1, closed there), but it needs
-  // an engine and this generator has none: a position label carries SAN, FEN and
-  // the material ledger, nothing more. So rather than tell the model to use the
-  // but-turn a third of the time and let it pick the tempting move itself — which
-  // is inventing a line and an eval, the precise G0 violation G0.1 exists to kill
-  // — the prompt teaches the shape and forbids using it unsupplied.
-  //
-  // REMAINING WORK, stated so it is not mistaken for done: feed a `tacticalRead`
-  // per KEYSTONE position into `moveLabels` (not every ply — the engine cost is
-  // real and the keystones are where the turn belongs), then relax the gate to
-  // "use it wherever a tempting move is supplied". Until then the computed path
-  // gets the arc, the register and the discipline, but not the signature beat.
   const systemPrompt = `You are a warm, world-class chess coach — think Daniel Naroditsky sitting right next to the student, teaching this opening. Narrate ${lessonFraming} Output ONLY a JSON object matching the schema. The move sequence and positions are PROVIDED — do NOT invent or alter them. Your only job is to write the coach commentary plus optional visualization arrows.
 
 HOUSE VOICE (David 2026-07-05 — the ENTIRE repertoire should feel like Naroditsky is teaching it, not a database dumping annotations):
@@ -2038,20 +1815,6 @@ WHY DISCIPLINE (David 2026-07-19 — "be careful not to overstate the why, I don
 - A normal developing move is allowed to be just that. If a move is routine, say so plainly ("Castles kingside — all very natural") rather than inventing a deep hidden purpose. A tag that says "this needs no theory" is itself useful information; a fabricated deep reason is not.
 - Anchor the reason to something on the board: a specific square, pawn, piece, or line. If you can't name what the reason points AT, don't state it.
 - MATERIAL ACCOUNTING IS COMPUTED, NOT YOURS TO JUDGE: every move below carries a computed material note ("material even" / "BLACK is up 1 point"). Any statement about who is up or down material, an extra pawn, or material being level MUST match that note for the move being narrated — including hypotheticals ("once White takes X" must describe the accounting that capture actually produces). Never claim a piece "stays home" or "is kept back" on the very move where that piece develops.
-
-THE ARC — a lesson is not flat (measured over 147 lessons / 7,360 narrated positions; spec: docs/plans/2026-08-21-danya-teaching-dna.md):
-- OPEN on the tension, CALCULATE through the middle, LAND A VERDICT at the end. Concrete calculation stays hot throughout; the evaluation verdict nearly doubles in the final tenth of the lesson. Student-level meta ("a lot of people play X here") bookends — intro and wrap, rarely in between.
-- The principle is the PAYOFF, never the premise. Reach for a general rule only AFTER a concrete line has earned it. Concrete beats abstract about five to one.
-- DELIGHT IS A SPIKE, NOT A DRIP. "Beautiful", "lovely", "I love this move" — at most ONCE in a whole lesson, on a genuinely special moment. A drip of it reads as fake within three beats.
-- ASK BEFORE YOU REVEAL. If you pose a question ("what should we do here?"), you answer it in the same breath. Never a quiz with no key.
-- MODEL THINKING, NOT OMNISCIENCE — BUT NEVER FAKE IT. You may weigh or hesitate ONLY where the position is genuinely double-edged. You may NEVER hedge over something stated as fact below. If the material ledger says a side is up a piece, say so plainly; do not say "this looks winning".
-
-THE BUT-TURN — his signature device, and the ONE thing you may not manufacture:
-- The shape is: voice the move the student would WANT to play, then turn on it with the concrete refutation. It is his most frequent move (about one position in three, present in all 147 lessons) and it is why the lesson teaches instead of lectures.
-- A move line below may carry a computed "TEMPTING here: <move> … refuted by <line>". That move was chosen by the engine — scored for what draws a human eye (a capture, a check, a promotion, a natural central developing move), confirmed to be clearly worse than best, and refuted with a real line. WHERE ONE IS GIVEN, USE IT: that beat is exactly where the but-turn belongs, and it is the most valuable sentence in the lesson.
-- WHERE NONE IS GIVEN, DO NOT MANUFACTURE ONE. Picking a "natural-looking move" yourself and asserting why it fails means inventing a line and an evaluation — the exact failure this prompt exists to prevent. No tempting move supplied means no but-turn on that beat. Silence is a legal move.
-- Voice it as a turn, not a warning label: name the move the way a student would think of it, then turn. "You'd love to just take on e5 here — but then the knight comes to d5 and the pawn is falling anyway." Never "the tempting move is X, which loses to Y".
-- The same limit governs the CONTRAST frame generally: contrast one supplied fact against another supplied fact, never against a line you thought of.
 
 STRUCTURAL BEATS (the tape's keystone shape — use on the defining/keystone moves, not routine ones):
 - Shape a keystone's WHY as: the TRIGGER that makes the plan apply (a structure, a pawn event like "once the center locks", or a piece placement) → the concrete PLAN as a square-by-square route ("the knight travels f3→d2→c4", not "the knight improves") → the ONE weakness it TARGETS, stated with "because" ("a monster on c4 because d6 can never challenge it"). Optionally add the rule then its exception ("you almost always meet …c6 with a4 — but here b4 is fine because…").
@@ -2350,20 +2113,6 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     // hand a note to the deepest ply it touches instead of the first.
     // [0] = the branch move itself, [1 + j] = extension move j.
     const branchNoteSources: Array<string | null> = [];
-    /** Whether each branch ply's source is HAND-WRITTEN — a corpus note written
-     *  by hand, or an opening tab's own beat. Those replace the generated line
-     *  instead of leading it, exactly as on the spine. */
-    const branchNoteWritten: boolean[] = [];
-    // Per-branch, because branches are alternatives to each other — one beat may
-    // legitimately teach on two of them, the same rule `branchNoteIds` follows.
-    //
-    // The seed from the spine's set is defensive, not load-bearing: branches are
-    // assembled BEFORE the spine's PASS 1, so it is empty here. It costs nothing
-    // and stops a spine paragraph repeating on a branch if that order ever
-    // changes. Overlap is near-impossible anyway — a branch position is the
-    // terminus plus more moves, so it can only collide with a spine board
-    // through a transposition.
-    const branchBeatIds = new Set<string>(lessonBeatIds);
     // CODE-COMPUTED arrows for [b.san, ...extensionMoves], replayed
     // from the spine terminus. branchSeq[0] = b.san's replayed move;
     // branchSeq[1 + j] = extensionMoves[j]'s.
@@ -2379,37 +2128,14 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     }
     const branchSans = [b.san, ...b.extensionMoves];
     for (let k = 0; k < branchSeq.length; k += 1) {
-      const fen = branchSeq[k].fen;
-      const teaching = noteArrowSourceAt(
-        [...spineSans, ...branchSans.slice(0, k + 1)],
-        fen,
-        branchNoteIds,
-        entry.canonicalName,
+      branchNoteSources.push(
+        noteArrowSourceAt(
+          [...spineSans, ...branchSans.slice(0, k + 1)],
+          branchSeq[k].fen,
+          branchNoteIds,
+          entry.canonicalName,
+        ),
       );
-      // Same tier order as the spine: hand-written corpus note, then the
-      // opening tab's beat, then the farmed note. The tabs' VARIATION lessons
-      // are keyed to exactly these branches, so this is where their coverage
-      // is densest — a branch used to get one thin farmed sentence where a
-      // whole authored beat was sitting unreachable.
-      if (teaching?.handwritten) {
-        branchNoteSources.push(teaching.text);
-        branchNoteWritten.push(true);
-        continue;
-      }
-      const beat = lessonBeatAt(fen, branchBeatIds);
-      if (beat) {
-        const graded = gradeNarrationText(beat.text, fen, 'openingGenerator.lessonBeat.branch');
-        if (graded?.trim()) {
-          if (teaching) branchNoteIds.delete(teaching.id);
-          branchBeatIds.add(beat.id);
-          branchBeatLessons.push(beat.lessonKey);
-          branchNoteSources.push(graded);
-          branchNoteWritten.push(true);
-          continue;
-        }
-      }
-      branchNoteSources.push(teaching?.text ?? null);
-      branchNoteWritten.push(false);
     }
     // The branch's first move belongs to the side whose turn it is
     // after the canonical's last ply. Position[i].ply = i, so after
@@ -2449,10 +2175,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       // square the narration never named — the lead-the-eye defect.
       const extNote = baked ? null : branchNoteSources[j + 1] ?? null;
       const text = extNote
-        ? spliceNarration(
-            { text: extNote, handwritten: branchNoteWritten[j + 1] ?? false, id: '' },
-            extGenerated,
-          )
+        ? (extGenerated ? `${extNote} ${extGenerated}` : extNote)
         : extGenerated;
       const shortText =
         typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
@@ -2547,19 +2270,6 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // captured BEFORE the house-voice reword so the arrows can never drift with
   // the model's phrasing (G0, see `noteArrowSourceAt`). null = ungrounded ply.
   const plyNoteText: Array<string | null> = positions.map(() => null);
-  // The opening tabs' hand-written beats: which ply each spoke on, its short
-  // cue, and the plies whose text must survive PASS 2 untouched (see the lock
-  // at the reword call). `lessonBeatIds` is run-level dedupe — a walkthrough
-  // that rewinds or transposes back to a board must not re-read the paragraph.
-  const lessonBeatIds = new Set<string>();
-  const lockedPlies = new Set<number>();
-  const plyShortText: Array<string | undefined> = positions.map(() => undefined);
-  const beatsSpoke: Array<{ ply: number; lessonKey: string }> = [];
-  /** Beats that spoke on a BRANCH or one of its extension plies, rather than on
-   *  the spine — reported separately because the two answer different questions:
-   *  the spine number says whether the main line is taught, the branch number
-   *  says whether the "other tries" are. */
-  const branchBeatLessons: string[] = [];
   // PASS 1 — assemble each ply's raw material.
   //
   // THE NOTE LEADS (David 2026-08-04: "corpus notes are primary for teach me x
@@ -2599,60 +2309,9 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       if (baked) return fallback;
       const prefix = positions.slice(0, i + 1).map((q) => q.san);
       const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName);
-      // TIER 2 — THE OPENING TAB'S OWN HAND-WRITTEN BEAT (David 2026-08-20:
-      // "Use the hand written narrations from opening tabs").
-      //
-      // 821 registered LessonScripts carry 3,780 two-register beats, every one
-      // hand-authored against the board and held to `narrationAccuracy` at
-      // build time — and the coach could not reach a word of it, because the
-      // tab loads its lesson by OPENING ID and a walkthrough has only a board.
-      // `lessonBeatAt` closes that by replaying each beat's own moves into a
-      // FEN, so the beat is offered at the position it was written for and
-      // nowhere else. It lands on 38.7% of taught plies.
-      //
-      // It outranks a FARMED note (a distillation of speech, thinner, not
-      // written to carry a ply alone) and yields to a HAND-WRITTEN corpus note,
-      // which is per-move and newer. When it displaces a farmed note that note
-      // is put BACK — retrieval consumed it on the way out, and a note marked
-      // spoken but never spoken is silently lost for the rest of the lesson.
-      if (!teaching?.handwritten) {
-        const beat = lessonBeatAt(p.fen, lessonBeatIds);
-        if (beat) {
-          if (teaching) splicedNoteIds.delete(teaching.id);
-          lessonBeatIds.add(beat.id);
-          const gradedBeat = gradeNarrationText(beat.text, p.fen, 'openingGenerator.lessonBeat');
-          if (gradedBeat?.trim()) {
-            plyNoteText[i] = gradedBeat;
-            lockedPlies.add(i);
-            beatsSpoke.push({ ply: i, lessonKey: beat.lessonKey });
-            if (beat.short) plyShortText[i] = beat.short;
-            return withFork(gradedBeat, p.fen, positions[i + 1]?.san);
-          }
-          // Refused by the board-truth gate. Un-mark it so the next pass over
-          // this position may try again, and fall through to the tiers below
-          // rather than going silent on a ply that has other material.
-          lessonBeatIds.delete(beat.id);
-        }
-      }
       if (teaching) {
-        plyNoteText[i] = teaching.text;
-        // A HAND-WRITTEN NOTE IS THE WHOLE NARRATION FOR ITS PLY (David
-        // 2026-08-19: "the narrations are also good enough to turn off the
-        // computed narrations. so any lines that has had written teachings
-        // should not play the computed narrations").
-        //
-        // These notes are written against the board with every claim checked by
-        // chess.js, so the generated sentence after them adds a second, weaker
-        // account of the same move — and it is the half that reaches for the
-        // opening's NAME when it has nothing computed to say, which is how a
-        // Caro-Kann lesson ended up narrating Queen's-Gambit ideas. Dropping it
-        // where a hand-written note already speaks removes that failure from
-        // every ply the hand-written corpus covers.
-        //
-        // A FARMED note still LEADS the generated prose rather than replacing
-        // it: those are distillations of speech, thinner and not written to
-        // carry a ply alone. Same treatment for the baked tier above.
-        return withFork(spliceNarration(teaching, generated), p.fen, positions[i + 1]?.san);
+        plyNoteText[i] = teaching;
+        return generated ? `${teaching} ${generated}` : teaching;
       }
       // TIER 3 — THE HAND-WRITTEN PROSE, BEFORE ANYTHING COMPUTED.
       //
@@ -2694,26 +2353,6 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // the difference either, because PASS 2 rewords the authored sentence into
   // the house voice and no literal phrase survives to match on. So say it out
   // loud: which variation spoke, at which ply, in its pre-reword words.
-  // SAY WHETHER THE TABS' NARRATION REACHED THE COACH. This tier is invisible
-  // from the outside once PASS 2 runs — except that it does not run on these
-  // plies, which is itself the thing worth being able to confirm from a prod
-  // audit rather than inferring from phrasing.
-  void logAppAudit({
-    kind: 'coach-surface-migrated',
-    category: 'subsystem',
-    source: 'openingGenerator.lessonBeatTier',
-    summary:
-      beatsSpoke.length > 0
-        ? `opening-tab beats spoke on ${beatsSpoke.length}/${positions.length} spine ply(s) + ${branchBeatLessons.length} branch ply(s) of "${entry.canonicalName}"`
-        : `opening-tab beats silent on "${entry.canonicalName}" — no lesson teaches any position on this spine`,
-    details: JSON.stringify({
-      plies: beatsSpoke.map((b) => b.ply),
-      lessons: Array.from(new Set(beatsSpoke.map((b) => b.lessonKey))),
-      branchPlies: branchBeatLessons.length,
-      branchLessons: Array.from(new Set(branchBeatLessons)),
-    }),
-  });
-
   if (authoredSpoke.length > 0) {
     void logAppAudit({
       kind: 'coach-surface-migrated',
@@ -2772,7 +2411,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       const arrowSans = positions.map((p, i) =>
         groundedSegmentArrows(plyNoteText[i], rawPlyTexts[i], p).spans.map((sp) => sp.san),
       );
-      finalPlyTexts = await rewordNarrationInHouseVoice(positions, rawPlyTexts, arrowSans, lockedPlies);
+      finalPlyTexts = await rewordNarrationInHouseVoice(positions, rawPlyTexts, arrowSans);
     }
   } catch (err) {
     void logAppAudit({
@@ -2790,11 +2429,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     const shortText =
       typeof ideaEntry === 'object' && ideaEntry?.shortText?.trim()
         ? ideaEntry.shortText.trim()
-        // A beat that spoke brings its own authored Learn cue with it. Both
-        // registers were written together against the same board, so taking the
-        // prose without the cue would leave Learn narrating a generated line
-        // over hand-written Watch prose.
-        : plyShortText[i];
+        : undefined;
     const node: WalkthroughTreeNode = {
       san: p.san,
       movedBy: p.movedBy,
@@ -2990,12 +2625,6 @@ async function rewordNarrationInHouseVoice(
    *  SAN. Handed to the model as a requirement, never as a suggestion — see
    *  the arrow contract below. */
   arrowSans: string[][] = [],
-  /** Plies whose text is already hand-written, verified, and in the house voice
-   *  — the opening tabs' own masterclass beats. They are still SHOWN to the
-   *  model so the lines around them stay coherent, but the model's version of
-   *  them is discarded. Same reasoning the baked tier is exempted for: text that
-   *  has already passed the accuracy gate in its final form can only drift. */
-  lockedPlies: Set<number> = new Set(),
 ): Promise<string[]> {
   if (rawTexts.length === 0) return rawTexts;
   const script = rawTexts
@@ -3026,7 +2655,6 @@ Return STRICT JSON: {"lines": [string, ...]} with EXACTLY ${rawTexts.length} ent
   let kept = 0;
   let dropped = 0;
   const out = rawTexts.map((raw, i) => {
-    if (lockedPlies.has(i)) return raw;
     const candidate = typeof lines[i] === 'string' ? lines[i].trim() : '';
     if (!candidate) return raw;
     const graded = gradeNarrationText(candidate, positions[i].fen, 'openingGenerator.houseVoiceReword');
