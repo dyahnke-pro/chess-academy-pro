@@ -844,5 +844,61 @@
  "titleCheck": {
   "claims": "Sicilian Defense: Delayed Alapin Variation, with d6",
   "confirmed": true
- }
+ },
+ "notes": [
+  {
+   "id": "vn-delayed-alapin-premature-push-loses-time",
+   "line": "e4 c5 Nf3 d6 c3 Nf6 e5",
+   "teaches": "A central pawn push made before you can support it just loses time. When the advance can be met by a clean capture that leaves you ahead in development, welcome it — the space it grabbed evaporates and you are simply better for having let it come.",
+   "explains": "The pawn on e5 attacks the knight on f6, but the advance is premature: the pawn on c3 sits idle and the e5-pawn itself is loose, so capturing it leaves Black a tempo ahead in development.",
+   "reasons": [],
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2p1P3/8/2P2N2/PP1P1PPP/RNBQKB1R b KQkq - 0 4",
+   "t": 58,
+   "ply": 7,
+   "source": "yt:UVJ75kdDdt8"
+  },
+  {
+   "id": "vn-delayed-alapin-challenge-the-centralised-knight",
+   "line": "e4 c5 Nf3 d6 c3 Nf6 e5 dxe5 Nxe5 Nbd7",
+   "teaches": "Meet a centralised enemy knight by challenging it with a developing move that offers a trade on your terms. Bringing a piece out while forcing the exchange is far better than tolerating the knight in your camp.",
+   "explains": "The knight comes to d7, developing and attacking the knight on e5 to offer a trade. Whatever White does, Black emerges comfortably developed and a shade better.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "e5"
+    }
+   ],
+   "fen": "r1bqkb1r/pp1npppp/5n2/2p1N3/8/2P5/PP1P1PPP/RNBQKB1R w KQkq - 1 6",
+   "t": 106,
+   "ply": 10,
+   "source": "yt:UVJ75kdDdt8"
+  },
+  {
+   "id": "vn-delayed-alapin-recapture-that-develops",
+   "line": "e4 c5 Nf3 d6 c3 Nf6 e5 dxe5 Nxe5 Nbd7 Nxd7 Bxd7",
+   "teaches": "When you recapture, do it with the piece that also develops — a recapture that brings a man toward activity is two moves in one. Prefer the take that improves your position over the passive one.",
+   "explains": "Taking back with the bishop develops it and sets up a reroute to c6 on the long diagonal, rather than recapturing passively with the queen. The recapture is also a developing move.",
+   "reasons": [],
+   "fen": "r2qkb1r/pp1bpppp/5n2/2p5/8/2P5/PP1P1PPP/RNBQKB1R w KQkq - 0 7",
+   "t": 124,
+   "ply": 12,
+   "source": "yt:UVJ75kdDdt8"
+  },
+  {
+   "id": "vn-delayed-alapin-reroute-the-bishop-with-tempo",
+   "line": "e4 c5 Nf3 d6 c3 Nf6 e5 dxe5 Nxe5 Nbd7 Nxd7 Bxd7 Bc4 Bc6",
+   "teaches": "An awkwardly placed bishop should be rerouted to its best diagonal, and doing it with a gain of tempo forces the opponent to react before you finish your own plan. Move the bad piece to a good square while attacking something.",
+   "explains": "The bishop swings to c6, seizing the long diagonal and attacking the g2-pawn, which forces White to respond before Black calmly completes with e6, the dark-squared bishop and castling.",
+   "reasons": [
+    {
+     "kind": "attacks",
+     "square": "g2"
+    }
+   ],
+   "fen": "r2qkb1r/pp2pppp/2b2n2/2p5/2B5/2P5/PP1P1PPP/RNBQK2R w KQkq - 2 8",
+   "t": 199,
+   "ply": 14,
+   "source": "yt:UVJ75kdDdt8"
+  }
+ ]
 }
