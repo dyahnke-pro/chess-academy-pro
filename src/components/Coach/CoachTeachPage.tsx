@@ -11250,6 +11250,65 @@ function WalkthroughControls({
     );
   }
 
+  // A baked gem is animating on the board (via trapFen). No controls — just a
+  // status line while the crush plays out.
+  if (phase === 'gem-playing') {
+    return (
+      <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-gem-playing">
+        <div className="text-xs font-medium text-theme-text-muted px-1">
+          💎 Playing the trap out…
+        </div>
+      </div>
+    );
+  }
+
+  // A punish-gem is available at THIS position — pause and offer it (David
+  // 2026-08-23). Tapping "See it" plays every trap out; "Keep going" skips.
+  if (phase === 'gem-picker') {
+    const gems = walkthrough.gemPickerLines;
+    const many = gems.length > 1;
+    return (
+      <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-gem-picker">
+        <div className="text-xs font-medium text-theme-text-muted px-1">
+          💎 {many ? `${gems.length} traps are` : 'A trap is'} lurking here — your
+          opponent could slip. Want to see the punish?
+        </div>
+        <div className="flex flex-col gap-1.5">
+          {gems.map((g, idx) => (
+            <div
+              key={`${g.gemId}-${idx}`}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-theme-surface text-left"
+              data-testid={`walkthrough-gem-entry-${idx}`}
+            >
+              <span className="text-xs font-semibold text-theme-text">{g.title}</span>
+            </div>
+          ))}
+        </div>
+        <div className="flex flex-col gap-2 pt-1">
+          <button
+            onClick={() => walkthrough.playGems()}
+            className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[48px] transition-colors"
+            style={redGlowStyle}
+            data-testid="walkthrough-gem-see"
+          >
+            <span className="text-sm font-semibold text-theme-text">
+              {many ? 'See the traps' : 'See the trap'}
+            </span>
+            <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+          </button>
+          <button
+            onClick={() => walkthrough.dismissGemPicker()}
+            className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-theme-surface hover:bg-theme-bg text-left"
+            data-testid="walkthrough-gem-skip"
+          >
+            <span className="text-sm text-theme-text">Keep going with the walkthrough</span>
+            <ChevronRight size={14} className="text-theme-text-muted flex-shrink-0" />
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   if (phase === 'fork') {
     return (
       <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-fork-panel">

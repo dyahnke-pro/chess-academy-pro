@@ -62,6 +62,45 @@ export interface WalkthroughTreeNode {
    *  after `idea` is narrated). `length > 1` means BRANCH — pause,
    *  show tap targets, wait for student to pick. */
   children: WalkthroughTreeChild[];
+  /** BAKED punish-gem detours available at THIS position (David 2026-08-23:
+   *  "bake gem teaching into the teach me x opening"). When present, the
+   *  walkthrough PAUSES here and offers a picker: the opponent could slip, and
+   *  each entry is a trap the student can watch played out. Tapping "see it"
+   *  plays every entry out on the board (inaccuracy + punish), then snaps back.
+   *  Computed at generation time from the premade, engine-verified gems — the
+   *  narration + arrows are the SAME the opening tab uses (`gemToPlayableLine`).
+   *  G0/G3: the moves + prose are code-computed; the model decides nothing. */
+  gems?: BakedGemLine[];
+}
+
+/** One played-out ply of a baked gem detour. `fen` is the position AFTER this
+ *  move, driven onto the board via the `trapFen` override; `arrows`/`highlights`
+ *  lead the eye exactly as the opening tab does. */
+export interface BakedGemStep {
+  san: string;
+  fen: string;
+  /** Full-register narration for this ply (opening-tab Watch prose). */
+  idea: string;
+  /** Learn-register cue (opening-tab learnCue). May be empty. */
+  shortIdea: string;
+  arrows: NarrationArrow[];
+  highlights?: NarrationHighlight[];
+}
+
+/** A single punish-gem detour, baked onto the node whose position it fires from.
+ *  `baseFen` is that position (opponent to move) — the board snaps back to it
+ *  after the detour plays. `steps` is [inaccuracy, ...punish...] played out to
+ *  where the advantage is on the board. */
+export interface BakedGemLine {
+  /** Stable id of the source gem — used to dedupe a gem taught on two lines. */
+  gemId: string;
+  /** Picker tap-target label, e.g. "Punish f3 with exf3". */
+  title: string;
+  /** The opponent's tempting-but-losing move (SAN), for the picker sub-text. */
+  inaccuracy: string;
+  /** The position the detour plays from and snaps back to. */
+  baseFen: string;
+  steps: BakedGemStep[];
 }
 
 /** A single narration segment — one beat of speech with its own
