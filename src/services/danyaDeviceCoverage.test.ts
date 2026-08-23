@@ -17,7 +17,10 @@ import { namedPawnStructure } from './positionReadingService';
 
 // Each entry: a FEN whose student-to-move position fires the named behavior.
 const BEHAVIOR_CASES: Array<{ id: string; fen: string; student: 'white' | 'black' }> = [
-  { id: 'king-safety', fen: '6k1/ppp5/8/8/8/8/PPP5/6RK w - - 0 12', student: 'white' },
+  // Dense MIDDLEGAME (queens, rooks, minors) with the black king exposed —
+  // only h7 shields it, the f/g files are open. king SAFETY is a middlegame
+  // idea and now stands down in the endgame (David 2026-08-23).
+  { id: 'king-safety', fen: 'r2q1rk1/ppp4p/2n1pn2/3p4/3P4/2N1PN2/PPP1QPPP/R3K2R w KQ - 0 14', student: 'white' },
   { id: 'prophylaxis', fen: 'r3k3/8/8/8/6b1/5N2/8/4K3 w - - 0 1', student: 'white' },
   { id: 'tactics', fen: '8/2r1k3/8/3N4/8/8/8/4K3 w - - 0 1', student: 'white' },
   { id: 'outpost', fen: '4k3/8/8/3N4/4P3/8/8/4K3 w - - 0 1', student: 'white' },
@@ -41,10 +44,18 @@ const BEHAVIOR_CASES: Array<{ id: string; fen: string; student: 'white' | 'black
   // Rook on a1 to lift + the enemy king on g8 EXPOSED (g-file open, only f7/h7
   // shielding) — a real attack to swing into, so it fires. (David 2026-08-23: a
   // lift into empty space with a snug enemy king is geometry, silent.)
-  { id: 'rook-lift', fen: '5rk1/ppp2p1p/8/8/8/8/1PP2PPP/R3K3 w Q - 0 12', student: 'white' },
+  { id: 'rook-lift', fen: '3q1rk1/ppp2p1p/8/8/8/8/1PPQ1PPP/R3K3 w Q - 0 12', student: 'white' },
   { id: 'open-file', fen: '3rk3/8/8/8/8/8/8/3RK3 w - - 0 1', student: 'white' },
   { id: 'development', fen: 'rnbqkb1r/pppp1ppp/5n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQ1RK1 b kq - 0 6', student: 'black' },
   { id: 'piece-activity', fen: '4k3/8/8/3N4/4P3/8/8/4K3 w - - 0 12', student: 'white' },
+  // ── endgame reads (David 2026-08-23) — each on a real endgame trigger ──
+  // Passive white king on e1 that can walk to d2 toward the centre, safely.
+  { id: 'king-activity', fen: '8/8/8/4k3/4p3/8/4P3/4K3 w - - 0 40', student: 'white' },
+  // White passed e5-pawn + a rook on a1 that can swing to e1, BEHIND it.
+  { id: 'rook-behind-passer', fen: '6k1/8/8/4P3/8/8/8/R5K1 w - - 0 40', student: 'white' },
+  // Pure K+P ending, kings in direct opposition (e5 vs e7), Black to move — so
+  // White (the student) holds the opposition.
+  { id: 'opposition', fen: '8/4k3/8/4K3/4P3/8/8/8 b - - 0 40', student: 'white' },
 ];
 
 describe('Danya device coverage — every device fires on its trigger position (100% gate)', () => {

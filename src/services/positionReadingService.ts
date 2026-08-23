@@ -755,6 +755,106 @@ export function findPassedPawns(fen: string, color: Color): Square[] {
   return passed;
 }
 
+/** KING ACTIVATION — the endgame's first idea (David 2026-08-23). Fires only
+ *  when the student's king is still PASSIVE (on its back two ranks) AND has a
+ *  legal step toward the centre that is SAFE (the destination isn't attacked).
+ *  A king that is already active, or that can only advance into danger, gets no
+ *  "march it up" — that would be the platitude the endgame version of geometry.
+ *  Returns the best central step. */
+export function kingActivation(fen: string, color: Color): { to: Square } | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  let king: Square | null = null;
+  for (const row of chess.board()) for (const cell of row) {
+    if (cell && cell.type === 'k' && cell.color === color) king = cell.square;
+  }
+  if (!king) return null;
+  const kr = Number(king[1]);
+  const passive = color === 'w' ? kr <= 2 : kr >= 7;
+  if (!passive) return null;
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  const centreDist = (s: Square): number => Math.abs((s.charCodeAt(0) - 97) - 3.5) + Math.abs(Number(s[1]) - 4.5);
+  let best: Square | null = null;
+  let bestDist = centreDist(king);
+  try {
+    const c = new Chess(forceTurn(fen, color));
+    for (const m of c.moves({ verbose: true })) {
+      if (m.piece !== 'k') continue;
+      const d = centreDist(m.to);
+      if (d >= bestDist) continue;
+      const probe = new Chess(forceTurn(fen, color));
+      probe.move({ from: m.from, to: m.to });
+      if (probe.attackers(m.to, enemy).length === 0) { best = m.to; bestDist = d; }
+    }
+  } catch { return null; }
+  return best ? { to: best } : null;
+}
+
+/** ROOK BEHIND THE PASSED PAWN — the Tarrasch rule (David 2026-08-23). Fires
+ *  when there is a passed pawn (yours or theirs) and the student has a rook that
+ *  can get onto its file BEHIND it (the rear = lower ranks for a white pawn,
+ *  higher for a black one) and is not already there. No passer, or no rook that
+ *  can reach the rear file, → silent. */
+export function rookBehindPasser(fen: string, color: Color): { rook: Square; pawn: Square; own: boolean } | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  const rooks: Square[] = [];
+  for (const row of chess.board()) for (const cell of row) {
+    if (cell && cell.type === 'r' && cell.color === color) rooks.push(cell.square);
+  }
+  if (rooks.length === 0) return null;
+  const reach = (pawn: Square, pawnIsWhite: boolean): Square | null => {
+    const file = pawn[0];
+    const pr = Number(pawn[1]);
+    const behindRank = (r: number): boolean => (pawnIsWhite ? r < pr : r > pr);
+    // already correctly placed → nothing to say.
+    for (const r of rooks) if (r[0] === file && behindRank(Number(r[1]))) return null;
+    try {
+      const c = new Chess(forceTurn(fen, color));
+      for (const m of c.moves({ verbose: true })) {
+        if (m.piece !== 'r' || m.to[0] !== file) continue;
+        if (behindRank(Number(m.to[1]))) return m.from;
+      }
+    } catch { return null; }
+    return null;
+  };
+  for (const p of findPassedPawns(fen, color)) {
+    const rk = reach(p, color === 'w');
+    if (rk) return { rook: rk, pawn: p, own: true };
+  }
+  for (const p of findPassedPawns(fen, enemy)) {
+    const rk = reach(p, enemy === 'w');
+    if (rk) return { rook: rk, pawn: p, own: false };
+  }
+  return null;
+}
+
+/** THE OPPOSITION — a king-and-pawn ending read (David 2026-08-23). Fires only
+ *  in a pure pawn ending (kings + pawns) when the kings stand in DIRECT
+ *  opposition (same file or rank, one empty square between). The side NOT to
+ *  move HOLDS the opposition — that is the whole point, so `holds` is true when
+ *  it is the opponent's move. Distant opposition is left out on purpose (it
+ *  needs deeper reckoning than a one-line read should claim). */
+export function oppositionRead(fen: string, color: Color): { holds: boolean } | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  let wk: Square | null = null;
+  let bk: Square | null = null;
+  for (const row of chess.board()) for (const cell of row) {
+    if (!cell) continue;
+    if (cell.type !== 'k' && cell.type !== 'p') return null; // not a pure pawn ending
+    if (cell.type === 'k') { if (cell.color === 'w') wk = cell.square; else bk = cell.square; }
+  }
+  if (!wk || !bk) return null;
+  const wf = wk.charCodeAt(0) - 97; const wr = Number(wk[1]);
+  const bf = bk.charCodeAt(0) - 97; const br = Number(bk[1]);
+  const directFile = wf === bf && Math.abs(wr - br) === 2;
+  const directRank = wr === br && Math.abs(wf - bf) === 2;
+  if (!directFile && !directRank) return null;
+  return { holds: chess.turn() !== color };
+}
+
 /** The friendly MINOR piece (bishop/knight) a teacher would tell you to KEEP —
  *  the most active one by board scope, plus whether it markedly out-scopes the
  *  enemy's best minor (Naroditsky's "preserve all light-square bishops → don't
