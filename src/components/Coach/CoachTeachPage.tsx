@@ -7162,7 +7162,11 @@ export function CoachTeachPage(): JSX.Element {
                 try {
                   const raw = await stockfishEngine.evalBoard(probe.fen());
                   if (raw) {
-                    for (const q of pieceQualityLines(parseEvalTable(raw), playerColor, pieceQualitySaidRef.current)) {
+                    // "Improve your worst piece" is a middlegame idea — gate it
+                    // on the phase so it never fires on an undeveloped opening
+                    // piece (David 2026-08-23).
+                    const isMiddlegame = Number(probe.fen().split(' ')[5] ?? '0') >= 10;
+                    for (const q of pieceQualityLines(parseEvalTable(raw), playerColor, pieceQualitySaidRef.current, { isMiddlegame })) {
                       queueSpokenHint(probe.fen(), q.text, 'computed', q.squares);
                       captureEvent('piece_quality_spoken', { surface: 'coach-teach', kind: q.kind });
                     }

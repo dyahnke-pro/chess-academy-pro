@@ -179,3 +179,20 @@ describe('pieceQualityLines — never reroute the queen (David 2026-08-23, DNA r
     if (worst) expect(worst.text).toContain('rook on a1');
   });
 });
+
+describe('pieceQualityLines — worst piece only in the middlegame (David 2026-08-23)', () => {
+  const REAL_TABLE = [
+    { square: 'd1', piece: 'Q', color: 'w' as const, value: 5 },
+    { square: 'd8', piece: 'q', color: 'b' as const, value: 5 },
+    { square: 'a1', piece: 'R', color: 'w' as const, value: 3.4 },
+    { square: 'a8', piece: 'r', color: 'b' as const, value: 4.6 },
+  ];
+  it('suppresses the your-worst-piece line when NOT in the middlegame', () => {
+    const lines = pieceQualityLines(REAL_TABLE, 'white', undefined, { isMiddlegame: false });
+    expect(lines.find((l) => l.kind === 'your-worst-piece')).toBeUndefined();
+  });
+  it('fires it once the middlegame is reached', () => {
+    const lines = pieceQualityLines(REAL_TABLE, 'white', undefined, { isMiddlegame: true });
+    expect(lines.find((l) => l.kind === 'your-worst-piece')?.text).toContain('rook on a1');
+  });
+});

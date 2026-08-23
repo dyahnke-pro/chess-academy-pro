@@ -120,8 +120,13 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const notes = findPieceQuality(fen).filter((n) => n.color === student);
       const good = notes.find((n) => n.quality === 'good' && (n.piece === 'n' || n.piece === 'b' || n.piece === 'r'));
       if (good) {
+        // A good outpost / rook on the open file is worth praising any time.
         return { fact: `Your ${PIECE_NAME[good.piece]} on ${good.square} — ${good.reason}. Build around it.`, squares: [good.square] };
       }
+      // "Reroute your worst piece" is a MIDDLEGAME idea — in the opening a piece
+      // is passive because it isn't developed yet (David 2026-08-23).
+      const isMiddlegame = Number(fen.split(' ')[5] ?? '0') >= 10;
+      if (!isMiddlegame) return null;
       const bad = notes.find((n) => n.quality === 'bad');
       if (bad) {
         return { fact: `Your ${PIECE_NAME[bad.piece]} on ${bad.square} is a ${bad.reason} — reroute it to a better square.`, squares: [bad.square] };

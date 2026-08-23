@@ -154,6 +154,7 @@ export function pieceQualityLines(
   values: readonly PieceValue[],
   studentColor: 'white' | 'black',
   said?: Set<string>,
+  opts?: { isMiddlegame?: boolean },
 ): PieceQualityLine[] {
   const out: PieceQualityLine[] = [];
   if (values.length === 0) return out;
@@ -195,10 +196,14 @@ export function pieceQualityLines(
   // piece" when the enemy queen was more active; the delta metric alone only
   // masks it on some boards). You improve a passive minor or rook, never make
   // rerouting the queen the whole idea.
+  // "Improve your worst piece" is a MIDDLEGAME idea (David 2026-08-23) — in the
+  // opening a piece is idle because it hasn't been developed YET, not because it
+  // is misplaced, so naming it there is wrong advice. Suppressed until the
+  // middlegame (the caller passes the phase).
   const worst = mine.filter((v) => v.piece.toLowerCase() !== 'p' && v.piece.toLowerCase() !== 'q')
     .map((v) => ({ v, d: delta(v) }))
     .sort((a, b) => a.d - b.d)[0];
-  if (worst && worst.d <= -0.3) {
+  if (opts?.isMiddlegame !== false && worst && worst.d <= -0.3) {
     const key = `worst-${worst.v.square}`;
     if (!said?.has(key)) {
       said?.add(key);
