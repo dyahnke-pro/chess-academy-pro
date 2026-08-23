@@ -68,10 +68,12 @@ async function readGemNodes(page) {
       };
     });
     const report = [];
+    const seen = [];
     for (const row of all) {
       const tree = row?.tree; if (!tree?.root) continue;
-      let gemNodes = 0; let firstPath = null; const titles = [];
+      let gemNodes = 0; let firstPath = null; let totalNodes = 0; const titles = [];
       const walk = (node, path) => {
+        totalNodes += 1;
         const here = node.san ? [...path, node.san] : path;
         if (Array.isArray(node.gems) && node.gems.length) {
           gemNodes += node.gems.length;
@@ -81,9 +83,10 @@ async function readGemNodes(page) {
         for (const ch of node.children ?? []) walk(ch.node, here);
       };
       walk(tree.root, []);
+      seen.push({ opening: tree.openingName, totalNodes, gemNodes, genRev: row.genRev });
       if (gemNodes) report.push({ opening: tree.openingName, gemNodes, firstPath, titles: titles.slice(0, 6) });
     }
-    return { report };
+    return { report, seen, rows: all.length };
   });
 }
 
@@ -142,6 +145,7 @@ async function main() {
     await sleep(1500);
     const gems = await readGemNodes(page).catch((e) => ({ error: String(e) }));
     gemReport = gems.report ?? [];
+    console.log(`[gem-picker] "${ask}": Dexie rows=${gems.rows ?? '?'} seen=${JSON.stringify(gems.seen ?? gems.error ?? [])}`);
     if (gemReport.reduce((a, r) => a + r.gemNodes, 0) > 0) { usedAsk = ask; break; }
     console.log(`[gem-picker] "${ask}": no gem node in the tree yet — trying next`);
   }
