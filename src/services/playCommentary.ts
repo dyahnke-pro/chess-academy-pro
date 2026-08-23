@@ -14,7 +14,7 @@
 // narration rules' "silence is acceptable" — a coach who comments on every
 // recapture teaches nothing and gets tuned out.
 import { Chess } from 'chess.js';
-import type { Square } from 'chess.js';
+import type { Square, PieceSymbol } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { phaseOfFen } from './boardConcepts';
 import { packageForRegister, type HintPackage } from './hintRegister';
@@ -164,10 +164,47 @@ function opponentsBestPiece(
  * lesson), the two pieces must have at most one piece between them, and the
  * student must own a slider that moves along that geometry.
  */
+/** Rewrite side-to-move (and clear en-passant) so we can ask "what could `color`
+ *  do here?" for a short plan, independent of whose turn it is. */
+function withTurn(fen: string, color: 'w' | 'b'): string {
+  const p = fen.split(' ');
+  p[1] = color; p[3] = '-';
+  return p.join(' ');
+}
+
+/** EXPLOITABILITY for an alignment (David 2026-08-23: "only call it out if it can
+ *  actually be exploited"). Can a student slider of `types` reach a square from
+ *  which it ATTACKS one of the aligned pieces — already, or within ~2 moves? An
+ *  alignment no slider can contest is tidy geometry, not a threat. */
+function toolCanContest(fen: string, aSq: Square, bSq: Square, me: 'w' | 'b', types: PieceSymbol[]): boolean {
+  const gen = (f: string): { from: Square; to: Square }[] => {
+    try { return new Chess(f).moves({ verbose: true }).filter((m) => types.includes(m.piece)); } catch { return []; }
+  };
+  const contests = (c: Chess): boolean => c.attackers(aSq, me).length > 0 || c.attackers(bSq, me).length > 0;
+  const start = withTurn(fen, me);
+  let c0: Chess;
+  try { c0 = new Chess(start); } catch { return false; }
+  if (contests(c0)) return true;
+  const m1 = gen(start);
+  for (const m of m1) {
+    try { const mid = new Chess(start); mid.move({ from: m.from, to: m.to }); if (contests(mid)) return true; } catch { /* skip */ }
+  }
+  for (const m of m1.slice(0, 18)) {
+    let mid: Chess;
+    try { mid = new Chess(start); mid.move({ from: m.from, to: m.to }); } catch { continue; }
+    const nf = withTurn(mid.fen(), me);
+    for (const mm of gen(nf)) {
+      try { const c2 = new Chess(nf); c2.move({ from: mm.from, to: mm.to }); if (contests(c2)) return true; } catch { /* skip */ }
+    }
+  }
+  return false;
+}
+
 function findAlignmentSeed(
   all: Piece[],
   me: 'w' | 'b',
   them: 'w' | 'b',
+  fen: string,
 ): { what: string; line: string; tool: string } | null {
   const bigs = all.filter(
     (p) => p.color === them && (p.type === 'k' || p.type === 'q' || p.type === 'r'),
@@ -222,9 +259,9 @@ function findAlignmentSeed(
     );
   };
 
-  const myTool = (kinds: string[]): string | null => {
+  const myTool = (kinds: PieceSymbol[]): string | null => {
     for (const k of kinds) {
-      if (all.some((p) => p.color === me && p.type === k)) return NAME[k];
+      if (all.some((p) => p.color === me && p.type === k)) return NAME[k as string];
     }
     return null;
   };
@@ -240,18 +277,23 @@ function findAlignmentSeed(
 
       let line: string | null = null;
       let tool: string | null = null;
+      let toolKinds: PieceSymbol[] = [];
       if (df === 0) {
         line = `${a.square[0]}-file`;
-        tool = myTool(['r', 'q']);
+        toolKinds = ['r', 'q']; tool = myTool(toolKinds);
       } else if (dr === 0 && !bothUnmoved(a, b)) {
         line = `${rankOf(a.square)}th rank`.replace(/^1th/, '1st').replace(/^2th/, '2nd').replace(/^3th/, '3rd');
-        tool = myTool(['r', 'q']);
+        toolKinds = ['r', 'q']; tool = myTool(toolKinds);
       } else if (Math.abs(df) === Math.abs(dr)) {
         line = 'diagonal';
-        tool = myTool(['b', 'q']);
+        toolKinds = ['b', 'q']; tool = myTool(toolKinds);
       }
       if (!line || !tool) continue;
       if (betweenCount(a, b) > 1) continue;
+      // EXPLOITABILITY (David 2026-08-23): the tool must be able to CONTEST the
+      // line — attack an aligned piece now or within ~2 moves. "You have a rook
+      // that moves along it" is a lie if no rook can ever get onto that line.
+      if (!toolCanContest(fen, a.square as Square, b.square as Square, me, toolKinds)) continue;
       // An alignment is only worth a word if a slider can actually GET on the
       // line. This replaced a flat "adjacent pieces are a huddle" skip, which
       // threw away the sharpest version of the pattern: David 2026-08-07 —
@@ -773,7 +815,7 @@ export function buildPlayCommentary(args: {
   // tuned-out failure the narration rules name outright. `once` here is keyed
   // on the LINE alone, so a genuinely new geometry — a different file, a
   // diagonal — still speaks.
-  const seed = findAlignmentSeed(all, me, them);
+  const seed = findAlignmentSeed(all, me, them, args.fen);
   if (seed && once(`alignment-${seed.line}`, 'x') === '') {
     // Already taught this line's alignment — fall through to a quieter beat.
   } else if (seed) {

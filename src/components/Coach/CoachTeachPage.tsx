@@ -1554,6 +1554,11 @@ export function CoachTeachPage(): JSX.Element {
   /** Pieces already called out this game, so "improve your worst piece" names
    *  a given square once rather than every ply it stays idle. */
   const pieceQualitySaidRef = useRef<Set<string>>(new Set());
+  /** The moment Stockfish reports a forced mate FOR the student, the async engine
+   *  pass flags it here (keyed by the FEN it read) so the instant package can call
+   *  the mating NET at mate-in-N — not wait for the board to reach mate-in-1
+   *  (David 2026-08-23). Cleared when there is no student mate. */
+  const pendingEngineMateRef = useRef<{ fen: string; movesToMate: number } | null>(null);
   /** Positional observations already spoken this game — see `buildPositionalRead`.
    *  Without it an uncastled king repeats the same sentence every ply until it
    *  castles, and the boundary repeat-guard turns each of those back into the
@@ -6192,9 +6197,20 @@ export function CoachTeachPage(): JSX.Element {
       // with the budget gone there is no reason to choose. David's order
       // (2026-08-09) also ranks them differently: corpus, then tactics, then
       // gems, then threats.
-      if (tctx.boardFacts?.mateInOne) {
-        tacticKey = `mate1:${tctx.boardFacts.mateInOne}`;
-        tacticLine = "There's a mate in one here — see if you can find it.";
+      // ENGINE MATE FIRST — the moment Stockfish reports a forced mate for the
+      // student, call the net at mate-in-N (David 2026-08-23), falling back to
+      // the board-pattern mate-in-1 when no engine read is in hand. The move is
+      // WITHHELD (honesty contract) — name the mate, let them find the start.
+      const engineMateN = pendingEngineMateRef.current
+        && samePosition(pendingEngineMateRef.current.fen, args.fenAfterReply)
+        ? pendingEngineMateRef.current.movesToMate
+        : null;
+      const forcedMateN = engineMateN ?? (tctx.boardFacts?.mateInOne ? 1 : null);
+      if (forcedMateN) {
+        tacticKey = `mate:${forcedMateN}`;
+        tacticLine = forcedMateN === 1
+          ? "There's a mate in one here — see if you can find it."
+          : `There's a forced mate here — mate in ${forcedMateN}. See if you can find the start.`;
       } else if (theirHanging.length > 0) {
         const prize = theirHanging[0];
         tacticKey = `win:${prize.piece}${prize.square}`;
@@ -7306,6 +7322,21 @@ export function CoachTeachPage(): JSX.Element {
                     fenAfter: probe.fen(),
                   }
                   : null;
+
+                // ENGINE MATE — call the net the instant Stockfish sees it
+                // (David 2026-08-23: "mate should be called out as soon as the
+                // mating sequence is identified by Stockfish", not at mate-in-1).
+                // `mateIn` is white-POV, so the STUDENT mates when the sign
+                // matches their colour; N = |mateIn|. The instant package reads
+                // this ref and speaks the mate-in-N net (move withheld).
+                if (studentBest?.isMate && typeof studentBest.mateIn === 'number' && studentBest.mateIn !== 0) {
+                  const studentMates = playerColor === 'white' ? studentBest.mateIn > 0 : studentBest.mateIn < 0;
+                  pendingEngineMateRef.current = studentMates
+                    ? { fen: probe.fen(), movesToMate: Math.abs(studentBest.mateIn) }
+                    : null;
+                } else {
+                  pendingEngineMateRef.current = null;
+                }
 
                 // ── WHAT THE ENGINE ITSELF REPORTS, SPOKEN ────────────────
                 //
