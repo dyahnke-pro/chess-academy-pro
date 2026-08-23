@@ -47,7 +47,6 @@ import {
   findFianchetto,
   findRookLift,
   findBlockade,
-  namedPawnStructure,
 } from './positionReadingService';
 
 const PIECE_NAME: Record<PieceSymbol, string> = {
@@ -423,15 +422,6 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       if (xr) {
         return { fact: `Your ${PIECE_NAME[xr.sliderPiece]} on ${xr.slider} x-rays their ${PIECE_NAME[xr.targetPiece]} on ${xr.target} through ${xr.blocker} — if that blocker shifts, you win it.`, squares: [xr.slider, xr.blocker, xr.target] };
       }
-      return null;
-    },
-  },
-  {
-    id: 'pawn-structure-family',
-    weight: 119,
-    detect: ({ fen }) => {
-      const s = namedPawnStructure(fen);
-      if (s) return { fact: `${s.name} — ${s.plan}.`, squares: [] };
       return null;
     },
   },

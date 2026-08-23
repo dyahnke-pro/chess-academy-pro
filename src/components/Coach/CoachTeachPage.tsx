@@ -249,6 +249,7 @@ import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGroundi
 // student must not read the same board at different depths. See the constant.
 import { rankReplies, bestReplyLine } from '../../services/bestReplyRanking';
 import { tacticalReadFromLines, namedTacticClause, temptingTurnClause, uncertaintyClause, candidateCompareClause } from '../../services/tacticalRead';
+import { namedPawnStructure } from '../../services/positionReadingService';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
@@ -1484,6 +1485,10 @@ export function CoachTeachPage(): JSX.Element {
    *  same pin is still coming three moves later — so without this the coach
    *  chants. A five-ply sample from a real game repeated one line four times. */
   const planSaidRef = useRef<Set<string>>(new Set());
+  /** Pawn-structure families already NAMED this game — the structure is stable
+   *  across many plies, so like the plan and the engine reads it is said once as
+   *  it crystallises, then referred back to, never re-announced every ply. */
+  const structureSaidRef = useRef<Set<string>>(new Set());
   /** Engine readings already spoken this game — WDL and sharpness are stable
    *  across many plies by nature, so without this the coach repeats "you come
    *  out on top three times in four" every move it holds. Same contract as
@@ -7157,6 +7162,19 @@ export function CoachTeachPage(): JSX.Element {
                       const gradedReg = reg ? gradeNarrationText(reg, probe.fen(), 'CoachTeachPage.register')?.trim() : '';
                       if (gradedReg) queueSpokenHint(probe.fen(), gradedReg);
                     }
+                    // NAME THE STRUCTURE the moment it crystallises — his closing
+                    // lesson ("catalogue the typical structures and their plans").
+                    // Reliable say-once (structureSaidRef), NOT the rate-fair
+                    // behaviour scheduler that shadowed it: the family is stable, so
+                    // it is announced once as it appears and then referred back to.
+                    try {
+                      const struct = namedPawnStructure(probe.fen());
+                      if (struct && !structureSaidRef.current.has(struct.name)) {
+                        structureSaidRef.current.add(struct.name);
+                        const line = gradeNarrationText(`${struct.name} — ${struct.plan}.`, probe.fen(), 'CoachTeachPage.structure')?.trim();
+                        if (line) queueSpokenHint(probe.fen(), line);
+                      }
+                    } catch { /* the structure note is a bonus, never a blocker */ }
                   }
                 } catch { /* the read is a bonus, never a blocker */ }
                 // ── THE COACH JUDGES ITS OWN MOVE ──────────────────────────
