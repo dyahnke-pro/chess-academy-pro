@@ -44,6 +44,9 @@ import {
   opponentIntentRead,
   findXrays,
   findKnightReroute,
+  findFianchetto,
+  findRookLift,
+  findBlockade,
 } from './positionReadingService';
 
 const PIECE_NAME: Record<PieceSymbol, string> = {
@@ -418,6 +421,40 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const xr = findXrays(fen, student)[0];
       if (xr) {
         return { fact: `Your ${PIECE_NAME[xr.sliderPiece]} on ${xr.slider} x-rays their ${PIECE_NAME[xr.targetPiece]} on ${xr.target} through ${xr.blocker} — if that blocker shifts, you win it.`, squares: [xr.slider, xr.blocker, xr.target] };
+      }
+      return null;
+    },
+  },
+  {
+    id: 'rook-lift',
+    weight: 128,
+    detect: ({ fen, student }) => {
+      if (Number(fen.split(' ')[5] ?? '0') < 10) return null; // an attacking-phase idea
+      const rl = findRookLift(fen, student);
+      if (rl) {
+        return { fact: `Lift the rook to ${rl.to} and swing it along the third rank into the attack.`, squares: [rl.rook, rl.to] };
+      }
+      return null;
+    },
+  },
+  {
+    id: 'fianchetto',
+    weight: 93,
+    detect: ({ fen, student }) => {
+      const b = findFianchetto(fen, student);
+      if (b) {
+        return { fact: `Your bishop on ${b} rakes the long diagonal — keep that diagonal open and it dominates.`, squares: [b] };
+      }
+      return null;
+    },
+  },
+  {
+    id: 'blockade',
+    weight: 86,
+    detect: ({ fen, student }) => {
+      const bl = findBlockade(fen, student);
+      if (bl) {
+        return { fact: `Your ${bl.blocker} piece is the perfect blockader — it sits in front of the passed pawn on ${bl.pawn} and that pawn goes nowhere.`, squares: [bl.blocker, bl.pawn] };
       }
       return null;
     },

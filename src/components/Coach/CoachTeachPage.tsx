@@ -7108,6 +7108,24 @@ export function CoachTeachPage(): JSX.Element {
                 try {
                   studentBest = await stockfishEngine.analyzeWithBudget(probe.fen(), COACH_TURN_DEPTH, 1200);
                 } catch { /* engine down → thin (chess.js-only) context below */ }
+                // ONE probed tactical read per turn — the engine-verified
+                // seductive-but-wrong move (the BUT-TURN, Naroditsky's #1 device)
+                // and the honest hedge (a close second-best). Computed once here
+                // and shared by the recommendation beat AND the plan lane, so his
+                // register rides the narration that fires almost every ply, not
+                // just the rare recommendation. Board-true, never invented (G0);
+                // quality over the extra reads (David 2026-07-06). Guarded to the
+                // student being to move so the probe reads for the right side.
+                let turnRead: Awaited<ReturnType<typeof computeTacticalRead>> = null;
+                try {
+                  if (studentBest?.topLines && probe.turn() === (playerColor === 'white' ? 'w' : 'b')) {
+                    turnRead = tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor, { maxPlies: 6 });
+                    if (turnRead && !turnRead.tempting) {
+                      const probed = await computeTacticalRead(probe.fen(), { engine: stockfishEngine, maxTemptingProbe: 4, depth: COACH_TURN_DEPTH });
+                      if (probed?.tempting) turnRead = { ...turnRead, tempting: probed.tempting };
+                    }
+                  }
+                } catch { /* the read is a bonus, never a blocker */ }
                 // ── THE COACH JUDGES ITS OWN MOVE ──────────────────────────
                 // David 2026-08-10: "the coach side needs wiring." Until now
                 // Learn could only call out the coach when the position was in
@@ -7476,25 +7494,7 @@ export function CoachTeachPage(): JSX.Element {
                             // no line to read).
                             let recLine = recLineBase;
                             try {
-                              let calcRead = studentBest?.topLines
-                                ? tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor, { maxPlies: 6 })
-                                : null;
-                              // BUT-TURN via a real PROBE — his #1 device. The
-                              // top-3 MultiPV rarely contains the seductive-but-
-                              // wrong move (the engine ranks the sound moves), so
-                              // when the cheap read found no tempting, probe the
-                              // eye-catching captures/checks directly and engine-
-                              // verify them inferior. Board-true, never invented
-                              // (G0); quality over the extra reads (David's rule).
-                              // Guarded to the student being to move so the probe
-                              // reads for the right side.
-                              const studentToMove = probe.turn() === (playerColor === 'white' ? 'w' : 'b');
-                              if (calcRead && !calcRead.tempting && studentToMove) {
-                                try {
-                                  const probed = await computeTacticalRead(probe.fen(), { engine: stockfishEngine, maxTemptingProbe: 4, depth: COACH_TURN_DEPTH });
-                                  if (probed?.tempting) calcRead = { ...calcRead, tempting: probed.tempting };
-                                } catch { /* the probe is a bonus, never a blocker */ }
-                              }
+                              const calcRead = turnRead; // shared probed read (but-turn + hedge)
                               if (calcRead?.keyTactic) {
                                 const kt = calcRead.keyTactic;
                                 const ktPly = calcRead.line[kt.atPly];
@@ -7642,6 +7642,23 @@ export function CoachTeachPage(): JSX.Element {
                             register: discussion.hintDial.register,
                           });
                           facts.push(`LOOK-AHEAD PLAN (computed from the engine's own line — state it, do NOT name a move): ${said}`);
+                          // THE NARODITSKY REGISTER — the but-turn ("you'd love X,
+                          // but…") and the honest hedge ("roughly equal"), his top
+                          // devices. Ride the plan lane because it speaks nearly
+                          // every ply, which is what makes the narration sound like
+                          // the videos. Its OWN fact so the plan's "do NOT name a
+                          // move" contract is untouched: this names the TEMPTING
+                          // move to AVOID (never the student's best), so nothing
+                          // leaks. Board-true from the one probed read — fires only
+                          // on a genuine seductive-inferior move / a real close
+                          // call, never manufactured (G0).
+                          if (turnRead) {
+                            const butTurn = temptingTurnClause(turnRead);
+                            const hedge = uncertaintyClause(turnRead);
+                            const reg = [butTurn, hedge].filter(Boolean).join(' ');
+                            const gradedReg = reg ? gradeNarrationText(reg, planFen, 'CoachTeachPage.register')?.trim() : '';
+                            if (gradedReg) facts.push(`COACH ASIDE (say close to verbatim — the TEMPTING move to AVOID + the honest read, never the best move): ${gradedReg}`);
+                          }
                           // ── LEAD THE EYE, HERE, WHERE THE PLAN LIVES ──────
                           // The instant package is assembled SYNCHRONOUSLY, in
                           // the same tick this engine read was started — so by

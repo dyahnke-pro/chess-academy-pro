@@ -30,6 +30,9 @@ import {
   opponentIntentRead,
   findXrays,
   findKnightReroute,
+  findFianchetto,
+  findRookLift,
+  findBlockade,
 } from './positionReadingService';
 import type { WeaknessCategory } from '../types';
 import type { TacticsLiveContext } from '../coach/types';
@@ -810,5 +813,23 @@ describe('findXrays + findKnightReroute (Danya signatures, 2026-08-23)', () => {
   it('findKnightReroute does NOT reroute a developed central knight (no noise)', () => {
     // A knight on f3/e3 is fine where it is — only rim knights are candidates.
     expect(findKnightReroute('4k3/8/8/8/2P5/4N3/8/4K3 w - - 0 1', 'w')).toBeNull();
+  });
+})
+
+describe('findFianchetto + findRookLift + findBlockade (2026-08-23, the rest of the tools)', () => {
+  it('findFianchetto names a bishop raking an open long diagonal', () => {
+    expect(findFianchetto('r5k1/8/8/8/8/6P1/6BP/6K1 w - - 0 1', 'w')).toBe('g2');
+  });
+  it('findFianchetto is null for a bishop whose diagonal is blocked by its own knight', () => {
+    expect(findFianchetto('r2qk2r/ppp2ppp/2np1n2/4p3/4P3/3P1NP1/PPP2PB1/RN1QK2R w KQkq - 0 1', 'w')).toBeNull();
+  });
+  it('findRookLift lifts a back-rank rook toward a flanked enemy king', () => {
+    expect(findRookLift('5rk1/ppp2ppp/8/8/8/8/1PP2PPP/R3K3 w Q - 0 1', 'w')).toMatchObject({ rook: 'a1', to: 'a3' });
+  });
+  it('findRookLift does NOT fire when the enemy king is still central', () => {
+    expect(findRookLift('4k3/8/8/8/8/8/1PP2PPP/R3K3 w Q - 0 1', 'w')).toBeNull();
+  });
+  it('findBlockade names a minor sitting in front of an enemy passed pawn', () => {
+    expect(findBlockade('4k3/3p4/3N4/8/8/8/8/4K3 w - - 0 1', 'w')).toMatchObject({ blocker: 'd6', pawn: 'd7' });
   });
 })

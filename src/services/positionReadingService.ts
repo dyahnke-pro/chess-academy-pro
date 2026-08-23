@@ -429,6 +429,73 @@ export function findKnightReroute(fen: string, color: Color): { from: Square; to
   return null;
 }
 
+/** FIANCHETTO — a bishop on its long-diagonal home (b2/g2 for White, b7/g7 for
+ *  Black) with the diagonal genuinely open (rakes ≥3 squares). Naroditsky names
+ *  the fianchettoed bishop constantly ("the bishop on the long diagonal"). Pure
+ *  geometry (G3). Returns the bishop's square. */
+export function findFianchetto(fen: string, color: Color): Square | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const homes: Square[] = color === 'w' ? ['b2', 'g2'] : ['b7', 'g7'];
+  for (const sq of homes) {
+    const p = chess.get(sq);
+    if (p && p.type === 'b' && p.color === color && pieceScope(chess, sq) >= 5) return sq;
+  }
+  return null;
+}
+
+/** ROOK LIFT — a rook on its back rank that can step up to its OWN third rank
+ *  (White's rank 3, Black's rank 6) on an OPEN file-square and from there swing
+ *  laterally toward the enemy king's side. Naroditsky's "lift the rook and swing
+ *  it over" attacking idea. Intent-gated: only when the lift square is empty and
+ *  the enemy king is castled to a flank the lifted rook can reach. Returns the
+ *  rook square + the lift square. Pure geometry (G3). */
+export function findRookLift(fen: string, color: Color): { rook: Square; to: Square } | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  const backRank = color === 'w' ? 1 : 8;
+  const liftRank = color === 'w' ? 3 : 6;
+  // Where is the enemy king? Only worth lifting toward a flanked king.
+  let kingFile = -1;
+  for (const row of chess.board()) for (const cell of row) {
+    if (cell && cell.type === 'k' && cell.color === enemy) kingFile = cell.square.charCodeAt(0) - 97;
+  }
+  if (kingFile < 0 || (kingFile >= 3 && kingFile <= 4)) return null; // central king — a lift is not the plan
+  for (const row of chess.board()) for (const cell of row) {
+    if (!cell || cell.color !== color || cell.type !== 'r' || Number(cell.square[1]) !== backRank) continue;
+    const f = cell.square[0];
+    const liftSq = `${f}${liftRank}` as Square;
+    if (chess.get(liftSq)) continue; // path blocked
+    // The rank-2 square between must be empty too (rook needs to pass).
+    const midSq = `${f}${color === 'w' ? 2 : 7}` as Square;
+    if (chess.get(midSq)) continue;
+    return { rook: cell.square, to: liftSq };
+  }
+  return null;
+}
+
+/** BLOCKADE — a friendly knight or bishop sitting DIRECTLY in front of an enemy
+ *  passed pawn, the square from which it can neither be pushed past nor easily
+ *  evicted. Naroditsky's "the knight is a perfect blockader". Returns the
+ *  blockading piece's square + the pawn it holds. Pure geometry (G3). */
+export function findBlockade(fen: string, color: Color): { blocker: Square; pawn: Square } | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  const enemyPassers = findPassedPawns(fen, enemy);
+  const enemyForward = enemy === 'w' ? 1 : -1;
+  for (const pawn of enemyPassers) {
+    const f = pawn.charCodeAt(0) - 97;
+    const r = Number(pawn[1]) + enemyForward;
+    if (r < 1 || r > 8) continue;
+    const front = `${String.fromCharCode(97 + f)}${r}` as Square;
+    const p = chess.get(front);
+    if (p && p.color === color && (p.type === 'n' || p.type === 'b')) return { blocker: front, pawn };
+  }
+  return null;
+}
+
 export interface ActivePieceNote { square: Square; piece: PieceSymbol; scope: number }
 
 /** The most- and least-active non-pawn, non-king piece of `color` by board scope.
