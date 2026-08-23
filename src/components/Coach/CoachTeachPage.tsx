@@ -248,6 +248,7 @@ import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGroundi
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { rankReplies, bestReplyLine } from '../../services/bestReplyRanking';
+import { tacticalReadFromLines, namedTacticClause } from '../../services/tacticalRead';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
 import type { StockfishAnalysis } from '../../types';
@@ -7409,9 +7410,42 @@ export function CoachTeachPage(): JSX.Element {
                             // `bestReplyRanking` — a null ranking (single-PV
                             // engine, cache miss) keeps the old sentence.
                             const ranked = rankReplies(probe.fen(), studentBest);
-                            const recLine = ranked
+                            const recLineBase = ranked
                               ? bestReplyLine(ranked, recWhy)
                               : `Your strongest reply here is ${recMove.san}${recWhy}.`;
+                            // CALCULATION — the Danya DNA on the computed line
+                            // (David 2026-08-23: "get the Danya dna working for
+                            // computed lines"). When the best move opens a
+                            // FORCING line to a named tactic the STUDENT lands,
+                            // recommend AND play it out: the concrete
+                            // continuation + the point, the way he does. All
+                            // board-computed via tacticalReadFromLines — no new
+                            // engine search (reuses studentBest.topLines), no
+                            // model on the hot path (this surface is
+                            // deterministic by design). Gated to the
+                            // recommendation slot (the best move is already
+                            // named, so honesty holds) and to a real
+                            // student-side tactic (else it is a quiet move with
+                            // no line to read).
+                            let recLine = recLineBase;
+                            try {
+                              const calcRead = studentBest?.topLines
+                                ? tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor, { maxPlies: 6 })
+                                : null;
+                              if (calcRead?.keyTactic) {
+                                const kt = calcRead.keyTactic;
+                                const ktPly = calcRead.line[kt.atPly];
+                                if (ktPly && ktPly.moverColor === playerColor) {
+                                  const point = namedTacticClause(calcRead.line);
+                                  const seq = calcRead.line.slice(1, kt.atPly + 1).map((p) => p.san);
+                                  if (point) {
+                                    recLine = seq.length
+                                      ? `${recLineBase} Play it out: ${seq.join(', ')} — ${point.replace(/^The point — /, '')}`
+                                      : `${recLineBase} ${point}`;
+                                  }
+                                }
+                              }
+                            } catch { /* the calc is a bonus, never a blocker */ }
                             facts.push(recLine);
                             // Track A candidate — ONLY set here, where no
                             // fork / think-aloud / priority beat withheld the
