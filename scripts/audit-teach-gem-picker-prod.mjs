@@ -114,15 +114,25 @@ async function main() {
     '[data-testid="walkthrough-narrating-panel"], [data-testid="walkthrough-choose-mode"], [data-testid="walkthrough-fork-panel"], [data-testid="walkthrough-leaf-panel"], [data-testid="walkthrough-gem-picker"]',
   ).first();
 
+  const sendBtn = page.locator('[data-testid="chat-send-btn"]').first();
   // Ask for ONE opening (bare name) and wait for its walkthrough to start.
+  // Submit via the SEND BUTTON, not Enter — the React textarea treats Enter as
+  // a newline, so an Enter "submit" never generates (the rows=0 bug).
   async function askOpening(text) {
     for (let i = 0; i < 60 && (await box.isDisabled().catch(() => false)); i++) await sleep(1000);
     await box.click({ force: true }).catch(() => {});
     await box.fill('').catch(() => {});
-    await box.pressSequentially(text, { delay: 12 });
-    await page.keyboard.press('Enter');
+    await box.pressSequentially(text, { delay: 15 });
+    await sleep(300);
+    await sendBtn.click({ force: true }).catch(() => {});
+    // First message shows the AI-consent gate; allow, then send again.
     const consent = page.locator('[data-testid="ai-consent-allow"]').first();
-    if (await consent.isVisible().catch(() => false)) { await consent.click({ force: true }).catch(() => {}); await sleep(500); await page.locator('[data-testid="chat-send-btn"]').first().click({ force: true }).catch(() => {}); }
+    if (await consent.isVisible().catch(() => false)) {
+      await consent.click({ force: true }).catch(() => {});
+      await sleep(600);
+      if (!(await box.inputValue().catch(() => '')).trim()) { await box.click({ force: true }).catch(() => {}); await box.pressSequentially(text, { delay: 15 }); await sleep(300); }
+      await sendBtn.click({ force: true }).catch(() => {});
+    }
     console.log(`[gem-picker] asked "${text}" — waiting for generation…`);
     const deadline = Date.now() + 180_000;
     while (Date.now() < deadline) {
@@ -229,7 +239,7 @@ async function main() {
   const real = pageErrors.filter((e) => !NOISE.test(e));
   if (real.length) fail('no page errors', real.slice(0, 2).join(' | ')); else pass('no page errors');
 
-  await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({ ask: ASK, gemReport, pickerFired, played, gemPickerEvents: gemPickerEvents.length, results }, null, 2));
+  await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({ asks: ASKS, usedAsk, gemReport, pickerFired, played, gemPickerEvents: gemPickerEvents.length, results }, null, 2));
   const ok = results.filter((r) => r.ok === true).length;
   const bad = results.filter((r) => r.ok === false).length;
   const un = results.filter((r) => r.ok === null).length;
