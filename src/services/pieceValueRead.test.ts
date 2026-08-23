@@ -163,3 +163,19 @@ describe('where the edge comes from', () => {
     expect(parseEvalSplit('no bucket table here')).toBeNull();
   });
 });
+
+describe('pieceQualityLines — never reroute the queen (David 2026-08-23, DNA run)', () => {
+  it('does NOT name the queen "your worst piece" even when its value is the most below its kind', () => {
+    const values = [
+      { square: 'd1', piece: 'Q', color: 'w' as const, value: 2 },   // student queen, low
+      { square: 'd8', piece: 'q', color: 'b' as const, value: 6 },   // enemy queen, high → white Q delta ≈ -2
+      { square: 'a1', piece: 'R', color: 'w' as const, value: 3.4 }, // student rook, mildly idle
+      { square: 'a8', piece: 'r', color: 'b' as const, value: 4.6 }, // enemy rook → white R delta ≈ -0.6
+    ];
+    const lines = pieceQualityLines(values, 'white');
+    const worst = lines.find((l) => l.kind === 'your-worst-piece');
+    expect(worst?.text ?? '').not.toMatch(/queen on d1/);
+    // it should reach for the idle rook instead
+    if (worst) expect(worst.text).toContain('rook on a1');
+  });
+});

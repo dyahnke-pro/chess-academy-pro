@@ -189,9 +189,13 @@ export function pieceQualityLines(
     }
   }
 
-  // YOUR WORST — the piece underperforming its own kind by the most. Same pawn
-  // exclusion, same reason.
-  const worst = mine.filter((v) => v.piece.toLowerCase() !== 'p')
+  // YOUR WORST — the piece underperforming its own kind by the most. Pawns
+  // AND the QUEEN are excluded: "reroute your queen" is not a plan a coach
+  // gives (David 2026-08-23 — a live run still named the d1 queen "your worst
+  // piece" when the enemy queen was more active; the delta metric alone only
+  // masks it on some boards). You improve a passive minor or rook, never make
+  // rerouting the queen the whole idea.
+  const worst = mine.filter((v) => v.piece.toLowerCase() !== 'p' && v.piece.toLowerCase() !== 'q')
     .map((v) => ({ v, d: delta(v) }))
     .sort((a, b) => a.d - b.d)[0];
   if (worst && worst.d <= -0.3) {
