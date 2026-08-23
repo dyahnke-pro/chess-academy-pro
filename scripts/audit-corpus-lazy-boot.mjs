@@ -13,20 +13,23 @@ import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
 
 const PORT = 4319;
-const BASE = `http://localhost:${PORT}`;
+// Point at a live URL (prod) with AUDIT_SMOKE_URL; otherwise serve the shipped
+// dist bundle locally via vite preview.
+const EXTERNAL = process.env.AUDIT_SMOKE_URL || '';
+const BASE = EXTERNAL || `http://localhost:${PORT}`;
 const HEAVY = ['saintlouis-teachings', 'hangingpawns-teachings', 'corpus-spoken'];
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function main() {
-  const server = spawn('npx', ['vite', 'preview', '--port', String(PORT), '--strictPort'], {
+  const server = EXTERNAL ? null : spawn('npx', ['vite', 'preview', '--port', String(PORT), '--strictPort'], {
     stdio: 'ignore', env: process.env,
   });
-  const cleanup = () => { try { server.kill('SIGKILL'); } catch { /* noop */ } };
+  const cleanup = () => { try { server?.kill('SIGKILL'); } catch { /* noop */ } };
   process.on('exit', cleanup);
 
-  // Wait for preview to answer.
-  for (let i = 0; i < 60; i += 1) {
+  // Wait for the server to answer.
+  if (!EXTERNAL) for (let i = 0; i < 60; i += 1) {
     try { const r = await fetch(BASE); if (r.ok) break; } catch { /* not up yet */ }
     await sleep(500);
   }
