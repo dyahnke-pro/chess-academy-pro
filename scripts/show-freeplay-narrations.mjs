@@ -266,7 +266,7 @@ const main = async () => {
     'but-turn':        /\b(but|however)\b.*\b(fails|runs into|refut|drops|loses|doesn.?t|falls apart)\b|tempt|you.?d (love|want) to|looks (natural|tempting|good)|seductive/i,
     'calculation':     /\bif\b[^.]*\bthen\b|\band if\b|→|\bfollowed by\b|[NBRQK]?[a-h]?x?[a-h][1-8][+#]?\b.*\b(and|then)\b.*[NBRQK]?[a-h]?x?[a-h][1-8]/,
     'multi-reason':    /,\s.*\band\b.*,|;.*\band\b/,
-    'uncertainty':     /\b(unclear|murky|roughly|about equal|hard to say|double-edged|may|might|probably|likely|it.?s not obvious)\b/i,
+    'uncertainty':     /\b(unclear|murky|roughly|about equal|hard to say|double-edged|may|might|probably|likely|it.?s not obvious|genuinely close|about as good|don.?t agonise|too close to call)\b/i,
     'opponent-intent': /\b(they want|he wants|she wants|watch out|threat|is coming)\b/i,
     'naming/pattern':  /\b(the same idea|pattern|fork|pin|skewer|outpost|battery|passed pawn|the .* mate)\b/i,
   };

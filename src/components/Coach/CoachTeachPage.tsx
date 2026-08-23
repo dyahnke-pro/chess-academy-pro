@@ -7106,8 +7106,17 @@ export function CoachTeachPage(): JSX.Element {
                 // opps=0" to the model while he hung a knight for 530cp.
                 let studentBest: StockfishAnalysis | null = null;
                 try {
+                  // Widen the fan to 6 lines for THIS ONE search so the but-turn
+                  // can see a seductive-but-wrong move ranked below the top 3 (a
+                  // move ≥120cp worse is, by definition, not in the top 3). This
+                  // is ONE search with more PVs tracked — cheap, unlike a
+                  // per-candidate probe (5 separate searches) which starved the
+                  // single worker into "engine read failed". Narrow back after so
+                  // the rest of the live path stays at 3 (the leak rule).
+                  try { stockfishEngine.setMultiPv(6); } catch { /* not ready → stays at default */ }
                   studentBest = await stockfishEngine.analyzeWithBudget(probe.fen(), COACH_TURN_DEPTH, 1200);
                 } catch { /* engine down → thin (chess.js-only) context below */ }
+                finally { try { stockfishEngine.setMultiPv(3); } catch { /* ignore */ } }
                 // ONE tactical read per turn — the seductive-but-wrong move (the
                 // BUT-TURN, Naroditsky's #1 device) and the honest hedge (a close
                 // second-best), read straight off the MultiPV the turn ALREADY
