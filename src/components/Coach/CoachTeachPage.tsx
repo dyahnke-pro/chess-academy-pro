@@ -8673,15 +8673,17 @@ export function CoachTeachPage(): JSX.Element {
                     pending.lines.map(({ kind, text, squares }) => ({ kind, text, squares, fen: pending.fen })),
                     instantSpokenText,
                   );
-                  // ONE IDEA PER BREATH (David 2026-08-23: "match his style").
-                  // The kept lanes are rank-sorted, so on a no-note turn where the
-                  // register, a structure note and a piece-quality read all survive,
-                  // speak only the TOP one — his clipped cadence, never four reads
-                  // stacked into a paragraph. The rest stood down for this ply; a
-                  // stable read (structure) will still be there next turn to lead.
-                  const hintPkg = (NARRATE_DNA_ONLY && fullPkg.kept.length > 1)
+                  // ~3 REASONS, HIS CADENCE (David 2026-08-23: "doesn't he give 3
+                  // ideas?" — the DNA tally is 3.4 reasons/move). The kept lanes are
+                  // rank-sorted, so keep the TOP THREE — the register, a structure
+                  // note and a piece-quality read read as his three-reason breath,
+                  // never the 6-8-lane grab-bag that made the wall. Any beyond three
+                  // stand down for this ply; a stable read (structure) is still there
+                  // next turn to lead.
+                  const DNA_MAX_REASONS = 3;
+                  const hintPkg = (NARRATE_DNA_ONLY && fullPkg.kept.length > DNA_MAX_REASONS)
                     ? buildVoicePackage(
-                      [{ kind: fullPkg.kept[0].kind, text: fullPkg.kept[0].text, squares: fullPkg.kept[0].squares, fen: pending.fen }],
+                      fullPkg.kept.slice(0, DNA_MAX_REASONS).map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: pending.fen })),
                       instantSpokenText,
                     )
                     : fullPkg;

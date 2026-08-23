@@ -561,12 +561,11 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
       void transitionLabel;
       // GROUNDED framing (David 2026-07-09 + the 2026-07-06 voice law):
       // in-game narration VOICES facts computed in code and DECIDES nothing.
-      // The transition label is the ONLY authored framing; the eval + tactics
-      // that follow are all code-computed. `bestUci` is the engine PV[0] at
-      // `event.fen` (the FEN's side-to-move is the OPPONENT — the transition
-      // fires right after the student's move — and serveGroundedPositionDefault
-      // handles the perspective flip + the student-relative assessment).
-      const bestUci = stockfishAnalysis?.bestMove || stockfishAnalysis?.topLines?.[0]?.moves?.[0];
+      // The transition label is the ONLY authored framing; the tactics that
+      // follow are code-computed. The engine best move + eval are no longer
+      // read out here (David 2026-08-23: "strip that") — a phase transition is
+      // a beat, not a decision point, so it never hands over "the best move is
+      // O-O" or "winning ~3 points".
 
 
       // P5 — GUARANTEED deep look-ahead (David 2026-07-26: "add it to the package
@@ -631,8 +630,14 @@ export function usePhaseNarration(args: UsePhaseNarrationArgs): UsePhaseNarratio
         const grounded = await withTimeout(
           groundedMoveFeedback({
             fen: event.fen,
-            bestMoveUci: bestUci,
-            evalCp: stockfishAnalysis?.evaluation,
+            // BEST-MOVE + EVAL READOUT STRIPPED (David 2026-08-23: "strip that").
+            // A phase transition is a "here's where we are" beat, not a decision
+            // point — "the best move is O-O" hands over the move unprompted
+            // (honesty contract) and "Black is winning ~3 points" is the numeric
+            // readout he flagged as noise. Passing neither drops both lines; the
+            // transition beat ("we're into the middlegame"), the board-verified
+            // tactics and the corpus note still speak. Applies to Play too — the
+            // one narration Play allows stays a phase beat, never an eval dump.
             mateIn: stockfishAnalysis?.mateIn,
             tactics: phaseTactics,
             studentColor: event.playerColor,
