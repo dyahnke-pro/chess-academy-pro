@@ -190,17 +190,16 @@ export function pieceQualityLines(
     }
   }
 
-  // YOUR WORST — the piece underperforming its own kind by the most. Pawns
-  // AND the QUEEN are excluded: "reroute your queen" is not a plan a coach
-  // gives (David 2026-08-23 — a live run still named the d1 queen "your worst
-  // piece" when the enemy queen was more active; the delta metric alone only
-  // masks it on some boards). You improve a passive minor or rook, never make
-  // rerouting the queen the whole idea.
-  // "Improve your worst piece" is a MIDDLEGAME idea (David 2026-08-23) — in the
-  // opening a piece is idle because it hasn't been developed YET, not because it
-  // is misplaced, so naming it there is wrong advice. Suppressed until the
-  // middlegame (the caller passes the phase).
-  const worst = mine.filter((v) => v.piece.toLowerCase() !== 'p' && v.piece.toLowerCase() !== 'q')
+  // YOUR WORST — the piece underperforming its own kind by the most. ONLY a
+  // MINOR (knight/bishop) qualifies: "reroute your bad knight" is the real
+  // improve-your-worst-piece lesson. Pawns, the queen AND ROOKS are excluded —
+  // a rook is activated by putting it on a file/rank, never "rerouted to a
+  // better square", and the value-delta metric flagged an ACTIVE rook on d5 as
+  // "your worst piece, find it a better square" in a live run (David 2026-08-23,
+  // the same wrong-intent as the queen case). Danya reroutes minors, not rooks.
+  // Also a MIDDLEGAME idea only — in the opening a minor is idle because it
+  // isn't developed YET, not because it is misplaced (the caller passes phase).
+  const worst = mine.filter((v) => v.piece.toLowerCase() === 'n' || v.piece.toLowerCase() === 'b')
     .map((v) => ({ v, d: delta(v) }))
     .sort((a, b) => a.d - b.d)[0];
   if (opts?.isMiddlegame !== false && worst && worst.d <= -0.3) {

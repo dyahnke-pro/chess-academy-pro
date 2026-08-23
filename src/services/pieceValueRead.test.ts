@@ -82,11 +82,16 @@ describe('the engine\'s per-piece table', () => {
     expect(lines.some((l) => /bishop on c8/.test(l.text))).toBe(false);
   });
 
-  it('names the genuinely idle piece', () => {
-    // a1 at 3.88 against a board rook mean of ~4.2 — the least active rook on
-    // the board, which on move 4 of an Italian is exactly right.
-    const lines = pieceQualityLines(parseEvalTable(REAL), 'white');
-    expect(lines.find((l) => l.kind === 'your-worst-piece')?.text).toContain('rook on a1');
+  it('names only a passive MINOR as the worst piece — never a rook or queen', () => {
+    const values = [
+      { square: 'c1', piece: 'B', color: 'w' as const, value: 2 },   // idle bishop
+      { square: 'c8', piece: 'b', color: 'b' as const, value: 4 },   // enemy bishop → white B delta ≈ -1
+      { square: 'a1', piece: 'R', color: 'w' as const, value: 3.4 }, // idle rook — must NOT be chosen
+      { square: 'a8', piece: 'r', color: 'b' as const, value: 4.6 },
+    ];
+    const worst = pieceQualityLines(values, 'white').find((l) => l.kind === 'your-worst-piece');
+    expect(worst?.text ?? '').toContain('bishop on c1');
+    expect(worst?.text ?? '').not.toMatch(/rook|queen/);
   });
 
   it('stays silent rather than inventing a standout in a balanced position', () => {
@@ -95,16 +100,19 @@ describe('the engine\'s per-piece table', () => {
     expect(pieceQualityLines(parseEvalTable(REAL), 'black')).toHaveLength(0);
   });
 
+  const BAD_MINOR = [
+    { square: 'c1', piece: 'B', color: 'w' as const, value: 2 },   // idle bishop → worst
+    { square: 'c8', piece: 'b', color: 'b' as const, value: 4 },
+  ];
   it('says each piece once per game', () => {
     const said = new Set<string>();
-    const v = parseEvalTable(REAL);
-    expect(pieceQualityLines(v, 'white', said).length).toBeGreaterThan(0);
-    expect(pieceQualityLines(v, 'white', said)).toHaveLength(0);
+    expect(pieceQualityLines(BAD_MINOR, 'white', said).length).toBeGreaterThan(0);
+    expect(pieceQualityLines(BAD_MINOR, 'white', said)).toHaveLength(0);
   });
 
   it('carries the square it is about, for the board to mark', () => {
-    const l = pieceQualityLines(parseEvalTable(REAL), 'white')[0];
-    expect(l.squares).toEqual(['a1']);
+    const l = pieceQualityLines(BAD_MINOR, 'white').find((x) => x.kind === 'your-worst-piece')!;
+    expect(l.squares).toEqual(['c1']);
   });
 });
 
@@ -169,21 +177,21 @@ describe('pieceQualityLines — never reroute the queen (David 2026-08-23, DNA r
     const values = [
       { square: 'd1', piece: 'Q', color: 'w' as const, value: 2 },   // student queen, low
       { square: 'd8', piece: 'q', color: 'b' as const, value: 6 },   // enemy queen, high → white Q delta ≈ -2
-      { square: 'a1', piece: 'R', color: 'w' as const, value: 3.4 }, // student rook, mildly idle
-      { square: 'a8', piece: 'r', color: 'b' as const, value: 4.6 }, // enemy rook → white R delta ≈ -0.6
+      { square: 'c1', piece: 'B', color: 'w' as const, value: 2 },   // idle bishop
+      { square: 'c8', piece: 'b', color: 'b' as const, value: 4 },   // enemy bishop → white B delta ≈ -1
     ];
     const lines = pieceQualityLines(values, 'white');
     const worst = lines.find((l) => l.kind === 'your-worst-piece');
     expect(worst?.text ?? '').not.toMatch(/queen on d1/);
-    // it should reach for the idle rook instead
-    if (worst) expect(worst.text).toContain('rook on a1');
+    // it should reach for the idle MINOR instead, never the queen or a rook
+    if (worst) expect(worst.text).toContain('bishop on c1');
   });
 });
 
 describe('pieceQualityLines — worst piece only in the middlegame (David 2026-08-23)', () => {
   const REAL_TABLE = [
-    { square: 'd1', piece: 'Q', color: 'w' as const, value: 5 },
-    { square: 'd8', piece: 'q', color: 'b' as const, value: 5 },
+    { square: 'c1', piece: 'B', color: 'w' as const, value: 2 },
+    { square: 'c8', piece: 'b', color: 'b' as const, value: 4 },
     { square: 'a1', piece: 'R', color: 'w' as const, value: 3.4 },
     { square: 'a8', piece: 'r', color: 'b' as const, value: 4.6 },
   ];
@@ -193,6 +201,6 @@ describe('pieceQualityLines — worst piece only in the middlegame (David 2026-0
   });
   it('fires it once the middlegame is reached', () => {
     const lines = pieceQualityLines(REAL_TABLE, 'white', undefined, { isMiddlegame: true });
-    expect(lines.find((l) => l.kind === 'your-worst-piece')?.text).toContain('rook on a1');
+    expect(lines.find((l) => l.kind === 'your-worst-piece')?.text).toContain('bishop on c1');
   });
 });
