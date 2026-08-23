@@ -69,6 +69,29 @@ into `src/services/tacticalRead.ts`):
 - [ ] **P4 — real-game narration audit** (the locked standard,
   `audit-review-real-game.mjs` shape): seed a real game, walk every ply, assert
   the spoken line is board-true AND in-voice; 3 instruments. On the branch.
+
+- [ ] **P4b — TEACHING-POINT COVERAGE AUDIT vs a real Naroditsky video
+  (David 2026-08-23: "break down every deterministic teaching point he makes
+  and make sure our app can identify the same ones").** His teaching is
+  DETERMINISTIC board facts, not vibes — so the compare is a coverage audit,
+  not a style match:
+  1. yt-dlp the transcript of ONE speedrun game (yt-dlp now installed, works
+     here); reconstruct the exact moves → FENs via chess.js.
+  2. Segment his commentary per position; DECOMPOSE each into discrete
+     deterministic teaching points — one board-grounded claim each: tactic
+     (fork/pin/skewer/discovery/battery), weak/strong square, outpost,
+     good/bad piece, pawn break/lever, open file/diagonal, tempo, king safety,
+     space, pawn structure, initiative, prophylaxis, a trade's merit, endgame
+     transition, etc.
+  3. For EACH point, map to whether our app has a deterministic computer that
+     identifies it at that FEN — detectTactics, buildPositionalRead,
+     lookaheadPlan/planFromUci, keySquareLine, threat/gem detectors,
+     backwardLook, tacticalRead. Mark DETECTED / PARTIAL / MISSING; for every
+     MISSING, name the detector to build.
+  4. Output: side-by-side (his point ↔ our line at that FEN) + a coverage
+     matrix (teaching-point type → detector → covered?) + the ranked list of
+     detectors to build. NEVER fabricate his words — reference-only, from the
+     real transcript (plagiarism guard).
 - [ ] **P5 — David approves → reconcile branch onto current main → ship → prod
   audit.**
 
