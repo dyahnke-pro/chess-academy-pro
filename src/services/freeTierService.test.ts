@@ -24,6 +24,9 @@ import {
   coachChatTurnsRemaining,
   hasCoachChatTurnsLeft,
   hasCoachAccessLeft,
+  recordCoachSpend,
+  coachSpendRemaining,
+  FREE_COACH_SPEND_LIMIT_USD,
   needsCoachUnlockAnnouncement,
   markCoachUnlockAnnouncementSeen,
 } from './freeTierService';
@@ -146,18 +149,36 @@ describe('coach chat-turn bucket', () => {
   });
 });
 
-describe('coach access — either bucket keeps the surface open', () => {
+describe('coach spend budget — the $1 lifetime gate', () => {
+  it('starts at zero and accrues cost', async () => {
+    expect((await loadFreeTier()).coachSpendUsd).toBe(0);
+    await recordCoachSpend(0.2);
+    await recordCoachSpend(0.05);
+    const row = await loadFreeTier();
+    expect(row.coachSpendUsd).toBeCloseTo(0.25, 6);
+    expect(coachSpendRemaining(row)).toBeCloseTo(FREE_COACH_SPEND_LIMIT_USD - 0.25, 6);
+  });
+  it('ignores non-positive / NaN costs so an unpriced model never advances the gate', async () => {
+    await recordCoachSpend(0.1);
+    await recordCoachSpend(0);
+    await recordCoachSpend(-5);
+    await recordCoachSpend(Number.NaN);
+    expect((await loadFreeTier()).coachSpendUsd).toBeCloseTo(0.1, 6);
+  });
+});
+
+describe('coach access — gated on cumulative DeepSeek token cost ($1 lifetime)', () => {
   it('has access with a fresh ledger', () => {
-    expect(hasCoachAccessLeft({ coachLessonsUsed: 0, coachChatTurnsUsed: 0 })).toBe(true);
+    expect(hasCoachAccessLeft({ coachSpendUsd: 0 })).toBe(true);
   });
-  it('has access when only one bucket has room', () => {
-    expect(hasCoachAccessLeft({ coachLessonsUsed: FREE_COACH_LESSON_LIMIT, coachChatTurnsUsed: 10 })).toBe(true);
-    expect(hasCoachAccessLeft({ coachLessonsUsed: 2, coachChatTurnsUsed: FREE_COACH_CHAT_LIMIT })).toBe(true);
+  it('keeps access below the $1 limit', () => {
+    expect(hasCoachAccessLeft({ coachSpendUsd: 0.5 })).toBe(true);
+    expect(hasCoachAccessLeft({ coachSpendUsd: FREE_COACH_SPEND_LIMIT_USD - 0.0001 })).toBe(true);
   });
-  it('loses access only once BOTH buckets are spent', () => {
-    expect(
-      hasCoachAccessLeft({ coachLessonsUsed: FREE_COACH_LESSON_LIMIT, coachChatTurnsUsed: FREE_COACH_CHAT_LIMIT }),
-    ).toBe(false);
+  it('loses access once spend reaches the $1 limit', () => {
+    expect(hasCoachAccessLeft({ coachSpendUsd: FREE_COACH_SPEND_LIMIT_USD })).toBe(false);
+    expect(hasCoachAccessLeft({ coachSpendUsd: 2 })).toBe(false);
+    expect(coachSpendRemaining({ coachSpendUsd: 2 })).toBe(0);
   });
 });
 

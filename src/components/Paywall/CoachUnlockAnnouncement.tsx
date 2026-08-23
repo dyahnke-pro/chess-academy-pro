@@ -60,7 +60,7 @@ export function CoachUnlockAnnouncement(): JSX.Element | null {
           <div className="flex-1">
             <h2 className="text-sm font-bold text-zinc-100">The AI coach is free to try</h2>
             <p className="mt-1 text-xs leading-relaxed text-zinc-400">
-              7 free lessons and 50 free chat turns — no card, no trial to start. Ask it anything.
+              Hundreds of free lessons and chat turns to try — no card, no trial to start. Ask it anything.
             </p>
           </div>
           <button

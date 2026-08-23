@@ -23,6 +23,7 @@ function setRow(
     kidFirstAccessAt: number | null;
     coachLessonsUsed: number;
     coachChatTurnsUsed: number;
+    coachSpendUsd: number;
   }>,
 ): void {
   useFreeTierStore.setState({
@@ -33,6 +34,7 @@ function setRow(
       kidFirstAccessAt: null,
       coachLessonsUsed: 0,
       coachChatTurnsUsed: 0,
+      coachSpendUsd: 0,
       coachUnlockSeenAt: null,
       updatedAt: 0,
       ...over,
@@ -86,15 +88,17 @@ describe('AccessGate — free surfaces', () => {
 });
 
 describe('AccessGate — walled', () => {
-  it('walls the coach once both free-tier buckets are spent', () => {
-    setRow({ coachLessonsUsed: 7, coachChatTurnsUsed: 50 });
+  it('walls the coach once $1 of token cost is spent', () => {
+    setRow({ coachSpendUsd: 1 });
     renderAt('/coach/teach');
     expect(wallShown()).toBe(true);
     expect(appShown()).toBe(false);
   });
-  it('walls a Gambits-tab course (not in the main tab)', () => {
+  it('BROWSES a Gambits-tab course page (route open; one-pick wall moved in-page)', () => {
+    // David 2026-08-09: every /openings page is browsable free; the one-free-
+    // opening pick is enforced on the WLPP deep-dive tap, not at the route.
     renderAt('/openings/smith-morra-gambit');
-    expect(wallShown()).toBe(true);
+    expect(appShown()).toBe(true);
   });
   it('walls tactics once the bucket is spent', () => {
     setRow({ puzzlesSolved: 20 });
@@ -129,8 +133,8 @@ describe('AccessGate — allowed free tier', () => {
     renderAt('/coach/teach');
     expect(appShown()).toBe(true);
   });
-  it('meters the coach while only one bucket is spent', () => {
-    setRow({ coachLessonsUsed: 7, coachChatTurnsUsed: 12 });
+  it('meters the coach while spend is still under $1', () => {
+    setRow({ coachSpendUsd: 0.6 });
     renderAt('/coach/play');
     expect(appShown()).toBe(true);
   });

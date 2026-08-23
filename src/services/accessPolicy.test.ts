@@ -6,8 +6,7 @@ const FRESH: AccessInput['freeTier'] = {
   puzzlesSolved: 0,
   freeOpeningId: null,
   kidFirstAccessAt: null,
-  coachLessonsUsed: 0,
-  coachChatTurnsUsed: 0,
+  coachSpendUsd: 0,
 };
 
 function decide(pathname: string, over: Partial<AccessInput> = {}) {
@@ -91,26 +90,26 @@ describe('accessPolicy — kid window', () => {
   });
 });
 
-describe('accessPolicy — coach free tier (7 lessons + 50 chat turns)', () => {
+describe('accessPolicy — coach free tier ($1 DeepSeek token-cost, lifetime)', () => {
   it.each(['/coach/play', '/coach/teach', '/coach/home'])('meters %s with a fresh budget', (p) => {
     expect(decide(p)).toEqual({ decision: 'meter', feature: 'coach' });
   });
-  it('meters coach while EITHER bucket still has room', () => {
-    expect(decide('/coach/teach', { freeTier: { ...FRESH, coachLessonsUsed: 7, coachChatTurnsUsed: 10 } })).toEqual({
+  it('meters coach while spend is below $1', () => {
+    expect(decide('/coach/teach', { freeTier: { ...FRESH, coachSpendUsd: 0.5 } })).toEqual({
       decision: 'meter',
       feature: 'coach',
     });
-    expect(decide('/coach/teach', { freeTier: { ...FRESH, coachLessonsUsed: 2, coachChatTurnsUsed: 50 } })).toEqual({
+    expect(decide('/coach/teach', { freeTier: { ...FRESH, coachSpendUsd: 0.99 } })).toEqual({
       decision: 'meter',
       feature: 'coach',
     });
   });
-  it('walls coach once BOTH buckets are spent', () => {
-    expect(decide('/coach/teach', { freeTier: { ...FRESH, coachLessonsUsed: 7, coachChatTurnsUsed: 50 } })).toEqual({
+  it('walls coach once spend reaches $1', () => {
+    expect(decide('/coach/teach', { freeTier: { ...FRESH, coachSpendUsd: 1 } })).toEqual({
       decision: 'wall',
       feature: 'coach',
     });
-    expect(decide('/coach/play', { freeTier: { ...FRESH, coachLessonsUsed: 9, coachChatTurnsUsed: 60 } })).toEqual({
+    expect(decide('/coach/play', { freeTier: { ...FRESH, coachSpendUsd: 2.5 } })).toEqual({
       decision: 'wall',
       feature: 'coach',
     });
