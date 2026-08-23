@@ -6278,6 +6278,15 @@ export function CoachTeachPage(): JSX.Element {
           ? `This game is now the ${det.name}.`
           : `The line has sharpened into the ${det.name}.`) + (idea ? ` Key idea: ${idea}` : '');
         factLines.push(announceLine);
+        // GUARANTEE it is HEARD — naming the opening is R1 of the teaching arc,
+        // his first move every game. The say-once ref is spent on THIS turn
+        // (above), so if the instant package drops the announce because a tactic
+        // outranked it that turn, the name is marked announced and never retries
+        // — the opening goes unnamed for the whole game (the arc audit caught a
+        // Scandinavian that was never named). Queue it through the same reliable
+        // late-package path as the plan/structure/register so a busy turn can't
+        // swallow it.
+        queueSpokenHint(args.fenAfterReply, announceLine, 'opening');
         captureEvent('opening_announced', {
           surface: 'coach-teach', name: det.name, first: firstResolve, has_idea: idea.length > 0,
         });
