@@ -248,8 +248,8 @@ import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGroundi
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { rankReplies, bestReplyLine } from '../../services/bestReplyRanking';
-import { tacticalReadFromLines, namedTacticClause, temptingTurnClause, uncertaintyClause } from '../../services/tacticalRead';
-import { BehaviorScheduler } from '../../services/danyaBehaviors';
+import { tacticalReadFromLines, namedTacticClause, temptingTurnClause, uncertaintyClause, computeTacticalRead } from '../../services/tacticalRead';
+import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
 import type { StockfishAnalysis } from '../../types';
@@ -6694,12 +6694,26 @@ export function CoachTeachPage(): JSX.Element {
     let behaviorLine: string | null = null;
     let behaviorSquares: string[] = [];
     let positionalLine: string | null = null;
-    if (!gemLine && !tacticLine && !threatLine && !announceLine && !computedLine && !noteLine && !curatedLine && !teachingLine && !planLine) {
+    // The URGENT board reads — the ~10% the corpus doctrine says are computed
+    // interrupts (a threat the opponent just set up, a latent x-ray, a piece
+    // you now win, a passer, a knight that belongs on an outpost). These RIDE
+    // ALONGSIDE the plan, so his signature behaviors actually reach the spoken
+    // stream at his rate instead of being shadowed whenever the look-ahead plan
+    // fired (which is most plies). The SOFT positional reads still only fill a
+    // genuinely quiet turn, so a plan + a soft observation never double up.
+    const BEHAVIOR_ALWAYS_RIDE = new Set(['prophylaxis', 'pressure', 'x-ray', 'passed-pawn', 'knight-maneuver', 'weak-square', 'outpost']);
+    const quietTurn = !computedLine && !noteLine && !curatedLine && !teachingLine && !planLine;
+    if (!gemLine && !tacticLine && !threatLine && !announceLine) {
       try {
-        const hit = behaviorSchedulerRef.current.next({ fen: args.fenAfterReply, studentColor: args.studentColor });
+        const allHits = detectBehaviors({ fen: args.fenAfterReply, studentColor: args.studentColor });
+        const eligible = quietTurn ? allHits : allHits.filter((h) => BEHAVIOR_ALWAYS_RIDE.has(h.id));
+        const hit = behaviorSchedulerRef.current.pick(eligible);
         if (hit) { behaviorLine = hit.fact; behaviorSquares = hit.squares; factLines.push(`Behavior (${hit.id}): ${hit.fact}`); }
       } catch { /* never a blocker */ }
-      if (!behaviorLine) {
+      // The generic positional filler is a LAST resort — only on a genuinely
+      // quiet turn where no behavior fired either. It must never ride alongside
+      // the plan (that was the "irrelevant observation" David flagged).
+      if (quietTurn && !behaviorLine) {
         try {
           const pr = buildPositionalRead(args.fenAfterReply, playerColor, positionalSaidRef.current);
           if (pr) { positionalLine = pr; factLines.push(`Positional read: ${pr}`); }
@@ -7462,9 +7476,25 @@ export function CoachTeachPage(): JSX.Element {
                             // no line to read).
                             let recLine = recLineBase;
                             try {
-                              const calcRead = studentBest?.topLines
+                              let calcRead = studentBest?.topLines
                                 ? tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor, { maxPlies: 6 })
                                 : null;
+                              // BUT-TURN via a real PROBE — his #1 device. The
+                              // top-3 MultiPV rarely contains the seductive-but-
+                              // wrong move (the engine ranks the sound moves), so
+                              // when the cheap read found no tempting, probe the
+                              // eye-catching captures/checks directly and engine-
+                              // verify them inferior. Board-true, never invented
+                              // (G0); quality over the extra reads (David's rule).
+                              // Guarded to the student being to move so the probe
+                              // reads for the right side.
+                              const studentToMove = probe.turn() === (playerColor === 'white' ? 'w' : 'b');
+                              if (calcRead && !calcRead.tempting && studentToMove) {
+                                try {
+                                  const probed = await computeTacticalRead(probe.fen(), { engine: stockfishEngine, maxTemptingProbe: 4, depth: COACH_TURN_DEPTH });
+                                  if (probed?.tempting) calcRead = { ...calcRead, tempting: probed.tempting };
+                                } catch { /* the probe is a bonus, never a blocker */ }
+                              }
                               if (calcRead?.keyTactic) {
                                 const kt = calcRead.keyTactic;
                                 const ktPly = calcRead.line[kt.atPly];
