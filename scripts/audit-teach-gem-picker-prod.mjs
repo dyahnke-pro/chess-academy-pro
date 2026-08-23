@@ -35,7 +35,13 @@ import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { sleep } from './audit-lib/board-drive.mjs';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
-const ASK = process.env.AUDIT_TEACH_ASK ?? 'teach me the Caro-Kann';
+// BARE opening names trigger generation of a walkthrough; "teach me the X"
+// routes to chat Q&A instead (the surface-routing rule). Try a few until one
+// whose GENERATED tree actually carries a baked gem node — that tree is the one
+// whose walk can reach the picker.
+const ASKS = (process.env.AUDIT_TEACH_ASK
+  ? [process.env.AUDIT_TEACH_ASK]
+  : ['Caro-Kann', 'Vienna', 'Scandinavian Defense', 'Italian Game']);
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/teach-gem-picker-${stamp}`;
 
@@ -100,35 +106,53 @@ async function main() {
     if (await el.isVisible().catch(() => false)) { await el.click({ force: true }).catch(() => {}); await sleep(400); }
   }
 
-  // Ask for the opening.
   const box = page.locator('[data-testid="chat-text-input"] textarea, [data-testid="chat-text-input"]').first();
-  await box.click({ force: true }).catch(() => {});
-  await box.fill('').catch(() => {});
-  await box.pressSequentially(ASK, { delay: 12 });
-  await page.keyboard.press('Enter');
-  const consent = page.locator('[data-testid="ai-consent-allow"]').first();
-  if (await consent.isVisible().catch(() => false)) { await consent.click({ force: true }).catch(() => {}); await sleep(500); await page.locator('[data-testid="chat-send-btn"]').first().click({ force: true }).catch(() => {}); }
-  console.log(`[gem-picker] asked "${ASK}" — waiting for generation…`);
+  const startedPanel = page.locator(
+    '[data-testid="walkthrough-narrating-panel"], [data-testid="walkthrough-choose-mode"], [data-testid="walkthrough-fork-panel"], [data-testid="walkthrough-leaf-panel"], [data-testid="walkthrough-gem-picker"]',
+  ).first();
 
-  // Wait for the walkthrough to mount (board + a walkthrough control appear).
-  const walkStarted = page.locator('[data-testid="walkthrough-skip"], [data-testid="walkthrough-gem-picker"], [data-testid="walkthrough-fork-panel"]').first();
-  const genDeadline = Date.now() + 150_000;
-  let started = false;
-  while (Date.now() < genDeadline) {
-    if (await walkStarted.isVisible().catch(() => false)) { started = true; break; }
-    await sleep(2000);
+  // Ask for ONE opening (bare name) and wait for its walkthrough to start.
+  async function askOpening(text) {
+    for (let i = 0; i < 60 && (await box.isDisabled().catch(() => false)); i++) await sleep(1000);
+    await box.click({ force: true }).catch(() => {});
+    await box.fill('').catch(() => {});
+    await box.pressSequentially(text, { delay: 12 });
+    await page.keyboard.press('Enter');
+    const consent = page.locator('[data-testid="ai-consent-allow"]').first();
+    if (await consent.isVisible().catch(() => false)) { await consent.click({ force: true }).catch(() => {}); await sleep(500); await page.locator('[data-testid="chat-send-btn"]').first().click({ force: true }).catch(() => {}); }
+    console.log(`[gem-picker] asked "${text}" — waiting for generation…`);
+    const deadline = Date.now() + 180_000;
+    while (Date.now() < deadline) {
+      if (await startedPanel.isVisible().catch(() => false)) break;
+      await sleep(2500);
+    }
+    // Returning-student chooser → start the walk.
+    const chooser = page.locator('[data-testid="walkthrough-choose-walkthrough"]').first();
+    if (await chooser.isVisible().catch(() => false)) { await chooser.click({ force: true }).catch(() => {}); await sleep(1500); }
+    return startedPanel.isVisible().catch(() => false);
   }
-  if (!started) { fail('the walkthrough generated and started', 'no walkthrough control appeared in 150s'); }
-  else pass('the walkthrough generated and started', ASK);
+
+  // Try asks until a GENERATED tree carries a baked gem node.
+  let gemReport = [];
+  let usedAsk = null;
+  let anyStarted = false;
+  for (const ask of ASKS) {
+    const ok = await askOpening(ask);
+    anyStarted = anyStarted || ok;
+    await sleep(1500);
+    const gems = await readGemNodes(page).catch((e) => ({ error: String(e) }));
+    gemReport = gems.report ?? [];
+    if (gemReport.reduce((a, r) => a + r.gemNodes, 0) > 0) { usedAsk = ask; break; }
+    console.log(`[gem-picker] "${ask}": no gem node in the tree yet — trying next`);
+  }
+
+  if (anyStarted) pass('the walkthrough generated and started', usedAsk ?? ASKS.join('/'));
+  else fail('the walkthrough generated and started', 'no walkthrough panel appeared for any ask');
 
   // ── A. Baking landed on prod — the tree has node.gems.
-  await sleep(1500);
-  const gems = await readGemNodes(page).catch((e) => ({ error: String(e) }));
-  const gemReport = gems.report ?? [];
   const gemTotal = gemReport.reduce((a, r) => a + r.gemNodes, 0);
-  if (gems.error) fail('the generated tree carries baked gems (node.gems)', `could not read Dexie: ${gems.error}`);
-  else if (gemTotal > 0) pass('the generated tree carries baked gems (node.gems)', `${gemTotal} gem(s) across ${gemReport.length} opening(s); first path ${JSON.stringify(gemReport[0].firstPath)}`);
-  else fail('the generated tree carries baked gems (node.gems)', 'no node.gems in any cached tree — baking did not land');
+  if (gemTotal > 0) pass('the generated tree carries baked gems (node.gems)', `${usedAsk}: ${gemTotal} gem(s); first path ${JSON.stringify(gemReport[0].firstPath)}; titles ${JSON.stringify(gemReport[0].titles)}`);
+  else fail('the generated tree carries baked gems (node.gems)', 'no node.gems in any generated tree — baking did not land');
 
   // ── B. Drive the walk until the gem picker fires (or a fork; steer toward the
   //    gem path when we have one). Cap the walk so a gem-less spine can't hang.
