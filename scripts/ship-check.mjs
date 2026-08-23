@@ -162,6 +162,12 @@ console.log('');
 // orientation). If any of these fail, the build can't ship. If a non-gate
 // test fails, that's a separate problem the gate harness shouldn't gate.
 const GATE_TESTS = [
+  // 🔒 DANYA DEVICE COVERAGE (David 2026-08-23, "100%") — every teaching device
+  // (behaviours + register clauses + structure) must fire on its crafted trigger
+  // position. Self-play can't reach every position (the coach controls its own
+  // side), so THIS is the coverage proof; a device regressing to silence on its
+  // own trigger makes ship-check RED.
+  'src/services/danyaDeviceCoverage.test.ts',
   // 🔒 G0 — the LLM decides nothing. Freezes the band-aid count in the coach
   // LLM path; adding a validator/regen/"don't hallucinate" prompt instead of
   // routing through voiceFacts makes ship-check go RED and blocks the push.
