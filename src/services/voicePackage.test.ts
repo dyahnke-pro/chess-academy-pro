@@ -316,10 +316,21 @@ describe('the general rule yields to the particular board', () => {
     expect(pkg.kept.map((f) => f.kind)).toEqual(['drawback']);
   });
 
-  it('still speaks it when the PV had nothing — most turns', () => {
+  it('a DETECTED tactic or threat stands it down (David 2026-08-23)', () => {
+    // The device log had a wrong borrowed rule firing alongside a real,
+    // board-computed threat. A general rule borrowed from another board yields
+    // to the concrete thing happening on THIS one.
+    const threatPkg = buildVoicePackage([borrowed, fact('threat', 'Careful — your knight on c6 is attacked.', FEN)]);
+    expect(threatPkg.kept.map((f) => f.kind)).not.toContain('borrowed');
+    const tacticPkg = buildVoicePackage([borrowed, fact('tactic', "There's a fork here for you — have a look.", FEN)]);
+    expect(tacticPkg.kept.map((f) => f.kind)).not.toContain('borrowed');
+  });
+
+  it('still speaks it on a quiet turn — no event, only the routine plan', () => {
     // The borrowed tier carries whole turns the look-ahead cannot reach. That
-    // is most of its value and all of its reason to exist.
-    const pkg = buildVoicePackage([borrowed, fact('threat', 'Careful — your knight on c6 is attacked.', FEN)]);
+    // is most of its value and all of its reason to exist — so a quiet position
+    // with no detected tactic/threat still hears the corpus (no 08-15 regression).
+    const pkg = buildVoicePackage([borrowed, fact('plan', 'Both sides want the d5 square.', FEN)]);
     expect(pkg.kept.map((f) => f.kind)).toContain('borrowed');
   });
 

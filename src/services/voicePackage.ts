@@ -424,8 +424,22 @@ export function buildVoicePackage(
   // corpus as well would turn one dropped sentence into a silent turn. Rank
   // makes this safe — every lane below outranks `borrowed`, so by the time a
   // borrowed fact is considered, their verdict is already in.
+  //
+  // ── A DETECTED TACTIC/THREAT ALSO OUTRANKS A BORROWED RULE (David 2026-08-23,
+  //    the device-log fix: "Most computed teaching are irrelevant or wrong to
+  //    the current position") ──────────────────────────────────────────────
+  // The borrowed tier speaks corpus notes transferred from a DIFFERENT board.
+  // When THIS board has a real board-computed tactic or threat — the concrete
+  // thing happening right now — a general rule borrowed from elsewhere is at
+  // best redundant and at worst the wrong-position teaching he heard. `tactic`
+  // and `threat` are EVENT-like (they fire only when the detector actually
+  // finds one, not on every turn the way `plan` does), so keying the stand-down
+  // to them fixes the wrong-note complaint WITHOUT re-triggering the 08-15
+  // over-silencing: a quiet position with no detected tactic still hears the
+  // corpus. `plan` stays excluded (it fires ~every turn — see the note above).
   const pvSpoke = (): boolean => kept.some(
-    (f) => f.kind === 'drawback' || f.kind === 'mistake' || f.kind === 'coachMistake',
+    (f) => f.kind === 'drawback' || f.kind === 'mistake' || f.kind === 'coachMistake'
+      || f.kind === 'tactic' || f.kind === 'threat',
   );
 
   for (const { f } of ordered) {

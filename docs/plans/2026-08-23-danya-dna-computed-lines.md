@@ -50,12 +50,12 @@ into `src/services/tacticalRead.ts`):
 
 ## Phased plan
 
-- [ ] **P1 — wire the computed read as the primary teach voice.** Per turn,
+- [x] **P1 — wire the computed read as the primary teach voice.** Per turn,
   build a `TacticalRead` from the turn's ALREADY-computed engine lines
   (`tacticalReadFromLines`, latency-safe) and phrase it via `voiceFacts` under
   `TACTICAL_READ_DIRECTIVES`, guarded by `voiceNamesUngroundedMove` /
   `voiceRejectsBestMove` (drop/regen on trip). Fallback = `narrateTacticalRead`.
-- [ ] **P2 — stand the borrowed tier down when the computed read spoke.**
+- [x] **P2 — stand the borrowed tier down when the computed read spoke.**
   In `voicePackage.ts`, extend the stand-down key so `borrowed` yields whenever
   a board-true computed read is in `kept` (restores David's 2026-08-10 "the
   general rule yields to the particular board", fixing the 08-15 over-relaxation
