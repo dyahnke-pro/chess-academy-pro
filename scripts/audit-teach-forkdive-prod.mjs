@@ -29,12 +29,18 @@ const BASE = process.env.AUDIT_SMOKE_URL || 'https://chess-academy-pro.vercel.ap
 const ASK = process.env.AUDIT_OPENING || 'alapin';
 const SECRET = process.env.AUDIT_STREAM_SECRET ?? '';
 
-// The three shapes the dead-end took. Any of them on screen after the tap is
-// a FAIL — the student asked for a lesson and got routed to chat instead.
+// The shapes the dead-end took. Any of them on screen after the tap is a FAIL —
+// the student asked for a lesson and got routed to chat / a picker instead.
 const DEAD_ENDS = [
   { id: 'brain-refusal', re: /can'?t verify that precisely|can'?t verify which moves are sound/i },
   { id: 'auto-paused', re: /walkthrough is paused\.?\s*tap resume/i },
   { id: 'didyoumean', re: /don'?t have an exact match|did you mean one of these/i },
+  // David 2026-08-23: "alapin d5 deep dive redirected me to the Sicilian
+  // pickers." A deep-dive whose canonical name resolved to a bare family hit
+  // the Tier-1.5 line picker. Its prose is DISTINCT from the fuzzy "did you
+  // mean" above, so the audit was green while this exact loop shipped.
+  { id: 'family-picker', re: /branches into many lines|pick one to dive in deep/i },
+  { id: 'play-picker', re: /splits into several different games/i },
 ];
 
 const pullStream = async () => {

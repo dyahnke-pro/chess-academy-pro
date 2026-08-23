@@ -4118,7 +4118,20 @@ export function CoachTeachPage(): JSX.Element {
         // "Najdorf Sicilian" still hits cache instantly; only a
         // user typing the broad family name "Sicilian" gets the
         // picker every time.
-        if (!stageHint && !faceMode) {
+        //
+        // A DEEP-DIVE TAP (teachIntent) IS NEVER A PICKER (David 2026-08-23:
+        // "alapin d5 deep dive redirected me to the Sicilian pickers. it did
+        // not start a deep dive"). teachIntent already bypasses the fuzzy
+        // matcher above for the same reason — a code-resolved deep-dive name is
+        // an explicit "teach THIS line now" tap, not a family to disambiguate.
+        // But this Tier-1.5 gate had NO teachIntent guard, so any deep-dive
+        // whose canonical name resolves to a BARE family (e.g. a fork whose
+        // move path lands on "Sicilian Defense" rather than a colon-named
+        // sub-variation) got hijacked straight into the family picker — the
+        // exact loop David hit. The tap must start a lesson on the resolved
+        // line; if that line is a broad family, teaching its main line is the
+        // right outcome, never a picker the student already answered by tapping.
+        if (!stageHint && !faceMode && !opts?.teachIntent) {
           const pickerData = findLinePickerOptions(requestedName);
           if (pickerData) {
             // Two messages:
