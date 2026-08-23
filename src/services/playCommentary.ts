@@ -14,7 +14,7 @@
 // narration rules' "silence is acceptable" — a coach who comments on every
 // recapture teaches nothing and gets tuned out.
 import { Chess } from 'chess.js';
-import type { Square } from 'chess.js';
+import type { Square, PieceSymbol } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { phaseOfFen } from './boardConcepts';
 import { packageForRegister, type HintPackage } from './hintRegister';
