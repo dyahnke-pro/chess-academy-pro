@@ -57,7 +57,7 @@ const EVAL_FIXTURE = `
 | +0.57 | +0.91 | +1.11 | +0.59 |       | +0.97 | +1.21 | +0.71 |
 +-------+-------+-------+-------+-------+-------+-------+-------+
 |   R   |   N   |   B   |   Q   |   K   |       |       |   R   |
-| +3.88 | +3.48 | +3.99 | +5.81 | +0.00 |       |       | +4.05 |
+| +3.88 | +2.20 | +3.99 | +5.81 | +0.00 |       |       | +4.05 |
 +-------+-------+-------+-------+-------+-------+-------+-------+
 
  NNUE network contributions (White to move)
@@ -91,6 +91,10 @@ describe('no dead lanes — every lane can fire', () => {
   });
 
   it('piece quality — their best / your worst', () => {
+    // The b1 knight in EVAL_FIXTURE reads +2.20 (well under its ~3.4 kind) so a
+    // passive MINOR carries this lane. It used to lean on an under-valued ROOK,
+    // but 'improve your worst piece' now names only minors (David 2026-08-23 —
+    // Danya reroutes minors, not rooks), so the fixture must present a minor.
     const out = pieceQualityLines(parseEvalTable(EVAL_FIXTURE), 'white');
     expect(out.length, 'piece-quality lane produced nothing on a real eval table').toBeGreaterThan(0);
   });
