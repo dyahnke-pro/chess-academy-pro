@@ -263,6 +263,34 @@ import { isCounterRepertoireQuestion } from '../../coach/questionIntents';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
+/** DNA-ONLY NARRATION (David 2026-08-23: "turn all off except for the dna …
+ *  the notes are his dna. If I'm hearing a note I shouldn't be hearing the
+ *  computed narrations").
+ *
+ *  Two rules, one flag:
+ *
+ *  1. THE NOTE IS PRIMARY. When a farmed corpus note (his DNA voice) teaches a
+ *     turn, the whole async COMPUTED late package stands down — no register,
+ *     piece-quality, structure, priority-first or callout piling on behind it.
+ *     Gated on `hasInstantTeaching`, the existing "a note/teaching spoke this
+ *     turn" signal.
+ *
+ *  2. THE PRE-EXISTING WORDY LANES ARE SILENCED outright, so even a NO-note
+ *     turn stays terse: the look-ahead plan prose ("they're bringing pieces to
+ *     d5 and e6…"), the engine reads ("heading for a draw", "three moves hold
+ *     equally"), the eval-split ("simplify vs keep pieces on"), the fork-in-the-
+ *     road prompt ("which road do you want to walk?"), the borrowed-continuation
+ *     ("following on from the line so far…") and the plain "the best move is X".
+ *
+ *  KEPT as the DNA that fills a no-note turn (each already data-gated, so it
+ *  only speaks when there is something real to say): the register (but-turn /
+ *  hedge / candidate-compare), the named structure, piece-quality (trade their
+ *  best / improve your worst), priority-first, the Danya behaviours, the named-
+ *  tactic + threat alerts, the mistake call-out and the opening naming.
+ *
+ *  One flag so any lane is a one-line flip back. */
+const NARRATE_DNA_ONLY = true;
+
 /** Cheap gate: does the request look like a "X vs Y" matchup? Only then do
  *  we run the (fuzzy-per-side) matchup resolver. */
 const MATCHUP_HINT_RE = /\b(?:vs\.?|versus|against)\b/i;
@@ -6770,15 +6798,25 @@ export function CoachTeachPage(): JSX.Element {
     // from before it may be spoken. What comes back is one object that is both
     // the utterance and the log — the divergence between those two is what let
     // three foreign notes reach David as "the pin on the board".
+    // NOTE-PRIMARY (David 2026-08-23: "if I'm hearing a note I shouldn't be
+    // hearing the computed narrations"). When a farmed corpus note teaches this
+    // ply — his DNA voice — the SOFT computed teaching stands down inside the
+    // instant package too: the generic computed observation, the rate-matched
+    // behaviour and the positional filler. The URGENT interrupts (gem / tactic /
+    // threat) and the opening naming still ride — those are the ~10% the corpus
+    // doctrine keeps alongside the note, not the wordy lanes he flagged.
+    const noteHere = !!(curatedLine || noteLine || bakedLine);
+    const softStandDown = NARRATE_DNA_ONLY && noteHere;
     const pkg = buildVoicePackage([
       ...(gemLine ? [{ kind: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
       ...(tacticLine ? [{ kind: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares }] : []),
       ...(threatLine ? [{ kind: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares }] : []),
       ...(announceLine ? [{ kind: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
-      ...(computedLine ? [{ kind: 'computed' as const, text: computedLine, fen: args.fenAfterReply }] : []),
+      ...(computedLine && !softStandDown ? [{ kind: 'computed' as const, text: computedLine, fen: args.fenAfterReply }] : []),
       // Rate-matched Danya behavior — computed board-truth, ranks with the other
-      // computed lanes and above the positional observation filler.
-      ...(behaviorLine ? [{ kind: 'computed' as const, text: behaviorLine, fen: args.fenAfterReply, squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)) }] : []),
+      // computed lanes and above the positional observation filler. Stands down
+      // behind a note (softStandDown).
+      ...(behaviorLine && !softStandDown ? [{ kind: 'computed' as const, text: behaviorLine, fen: args.fenAfterReply, squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)) }] : []),
       // The masterclass beat first among the teaching lanes — it is the only
       // one verified before it shipped.
       ...(curatedLine ? [{ kind: 'note' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
@@ -6805,7 +6843,7 @@ export function CoachTeachPage(): JSX.Element {
       // `observation`, not `note` — it is filler, and while it shared the
       // teaching rank it could displace a masterclass beat with "your pawn on
       // a2 is isolated". Lowest rank by construction.
-      ...(positionalLine ? [{ kind: 'observation' as const, text: positionalLine, fen: args.fenAfterReply }] : []),
+      ...(positionalLine && !softStandDown ? [{ kind: 'observation' as const, text: positionalLine, fen: args.fenAfterReply }] : []),
     ]);
 
     if (bakedPly !== null) {
@@ -7230,7 +7268,10 @@ export function CoachTeachPage(): JSX.Element {
                 // failure this session has been unpicking all day (the gem, the
                 // plan, the mate branch). Built and inert is not built.
                 try {
-                  if (studentBest) {
+                  // SILENCED under DNA-only (David 2026-08-23): the WDL / "heading
+                  // for a draw" / "three moves hold equally" reads are pre-existing
+                  // wordy lanes, not his DNA.
+                  if (!NARRATE_DNA_ONLY && studentBest) {
                     for (const r of engineReadLines(studentBest, playerColor, engineReadSaidRef.current)) {
                       queueSpokenHint(probe.fen(), r.text, 'computed');
                       captureEvent('engine_read_spoken', { surface: 'coach-teach', kind: r.kind });
@@ -7266,7 +7307,10 @@ export function CoachTeachPage(): JSX.Element {
                     // call for OPPOSITE plans (trade down and convert, or keep
                     // pieces on and press), which is why guessing at it by eye
                     // goes wrong and why the engine's own split is worth having.
-                    const split = parseEvalSplit(raw);
+                    // SILENCED under DNA-only (David 2026-08-23): "simplify vs keep
+                    // pieces on" is a pre-existing lane, not his DNA. Piece-quality
+                    // above STAYS (his "trade their best / improve your worst").
+                    const split = NARRATE_DNA_ONLY ? null : parseEvalSplit(raw);
                     const splitLine = split ? evalSplitLine(split, playerColor, pieceQualitySaidRef.current) : null;
                     if (splitLine) {
                       queueSpokenHint(probe.fen(), splitLine, 'computed');
@@ -7380,7 +7424,10 @@ export function CoachTeachPage(): JSX.Element {
                     // They SHARE the per-game budget: a student who has been
                     // asked to choose three times has been asked enough,
                     // whichever kind of fork did the asking.
-                    const bookFork = forkTalkCountRef.current < FORK_TALK_MAX_PER_GAME
+                    // SILENCED under DNA-only (David 2026-08-23): "the theory splits
+                    // here … which road do you want to walk?" is a pre-existing
+                    // prompt lane, not his DNA.
+                    const bookFork = !NARRATE_DNA_ONLY && forkTalkCountRef.current < FORK_TALK_MAX_PER_GAME
                       ? forkOfferAt(historyAfterReply, probe.fen(), playerColor)
                       : null;
                     if (bookFork) {
@@ -7745,7 +7792,11 @@ export function CoachTeachPage(): JSX.Element {
                             // corpus instead of above it. Every rule built on
                             // the plan rank was inert: the general-rules tier
                             // never stood down, and the plan spoke last.
-                            if (graded) queueSpokenHint(planFen, graded, 'plan');
+                            // SILENCED under DNA-only (David 2026-08-23): the look-
+                            // ahead plan prose ("they're bringing pieces to d5 and
+                            // e6 …") is the wordiest of the pre-existing lanes, not
+                            // his DNA. The plan's ARROWS still paint below.
+                            if (graded && !NARRATE_DNA_ONLY) queueSpokenHint(planFen, graded, 'plan');
                             // 🔒 THE SAME COMPARISON THE SPEECH USES. This was
                             // `liveFenRef.current === planFen` — whole-FEN
                             // equality — while the line immediately above
@@ -8339,7 +8390,12 @@ export function CoachTeachPage(): JSX.Element {
                 // The borrowed corpus rides the LATE package with the plan, so
                 // the yield rule has both in front of it — see the note at the
                 // instant assembly.
-                if (instant.borrowedLine) {
+                // SILENCED under DNA-only (David 2026-08-23): the borrowed line is
+                // corpus teaching about a DIFFERENT board reached by structure/
+                // concept transfer ("following on from the line so far…") — the
+                // fuzzy tier, not the exact-position note that is his DNA. The
+                // exact + baked notes still speak from the instant package.
+                if (instant.borrowedLine && !NARRATE_DNA_ONLY) {
                   queueSpokenHint(fenAfterReply, instant.borrowedLine, 'borrowed');
                 }
                 if (instant.planArrows.length > 0 || instant.planHighlights.length > 0) {
@@ -8599,17 +8655,36 @@ export function CoachTeachPage(): JSX.Element {
                 } catch { /* the callout is a bonus, never a blocker */ }
 
                 const pending = pendingVoiceRef.current;
-                if (pending && samePosition(pending.fen, fenAfterReply) && pending.lines.length > 0) {
+                // NOTE-PRIMARY (David 2026-08-23): if a farmed corpus note taught
+                // this turn (`hasInstantTeaching`), the whole computed late package
+                // stands down — "if I'm hearing a note I shouldn't be hearing the
+                // computed narrations". The queue is still cleared so it can't leak
+                // onto the next turn.
+                if (NARRATE_DNA_ONLY && hasInstantTeaching) pendingVoiceRef.current = null;
+                if (pending && !(NARRATE_DNA_ONLY && hasInstantTeaching)
+                    && samePosition(pending.fen, fenAfterReply) && pending.lines.length > 0) {
                   pendingVoiceRef.current = null;
                   // `instantSpokenText` is everything Track A has said on this
                   // turn — the event line and the instant package. Handing it
                   // over is what stops the late package repeating a sentence the
                   // student heard eight seconds ago; see the parameter's note in
                   // `voicePackage`.
-                  const hintPkg = buildVoicePackage(
+                  const fullPkg = buildVoicePackage(
                     pending.lines.map(({ kind, text, squares }) => ({ kind, text, squares, fen: pending.fen })),
                     instantSpokenText,
                   );
+                  // ONE IDEA PER BREATH (David 2026-08-23: "match his style").
+                  // The kept lanes are rank-sorted, so on a no-note turn where the
+                  // register, a structure note and a piece-quality read all survive,
+                  // speak only the TOP one — his clipped cadence, never four reads
+                  // stacked into a paragraph. The rest stood down for this ply; a
+                  // stable read (structure) will still be there next turn to lead.
+                  const hintPkg = (NARRATE_DNA_ONLY && fullPkg.kept.length > 1)
+                    ? buildVoicePackage(
+                      [{ kind: fullPkg.kept[0].kind, text: fullPkg.kept[0].text, squares: fullPkg.kept[0].squares, fen: pending.fen }],
+                      instantSpokenText,
+                    )
+                    : fullPkg;
                   if (hintPkg.spoken) {
                     speakTrackA(hintPkg.spoken);
                     // AND MARK WHAT SURVIVED. The squares came in on the facts,
@@ -8636,7 +8711,9 @@ export function CoachTeachPage(): JSX.Element {
                     });
                   }
                 }
-                const teachLine = hasInstantTeaching ? null : trackABestReply;
+                // SILENCED under DNA-only (David 2026-08-23): the plain "the best
+                // move is X" recommendation is a pre-existing lane, not his DNA.
+                const teachLine = (NARRATE_DNA_ONLY || hasInstantTeaching) ? null : trackABestReply;
                 if (teachLine) {
                   speakTrackA(teachLine);
                   // Lead-the-eye AT the mention: the rec move's green arrow
