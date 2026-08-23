@@ -249,6 +249,7 @@ import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGroundi
 // student must not read the same board at different depths. See the constant.
 import { rankReplies, bestReplyLine } from '../../services/bestReplyRanking';
 import { tacticalReadFromLines, namedTacticClause } from '../../services/tacticalRead';
+import { BehaviorScheduler } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
 import type { StockfishAnalysis } from '../../types';
@@ -966,6 +967,14 @@ export function CoachTeachPage(): JSX.Element {
   // of roads is recorded when it is offered and the chosen one is marked
   // walked; `nextForkToOffer` then knows what is left.
   const forkLogRef = useRef<ForkLog>([]);
+  // Rate-matched Danya behavior scheduler — one per session, so the DISTRIBUTION
+  // of what the coach teaches across a game tracks his farmed corpus (David
+  // 2026-08-23: "as many behaviors as we can duplicate deterministically, set to
+  // fire at the same rate that we see his teachings"). Stride scheduling; see
+  // danyaBehaviors.ts. It only speaks on turns where no higher board event
+  // (gem/tactic/threat/plan) already claimed the voice — replacing the generic
+  // positional filler that David flagged as "irrelevant or wrong".
+  const behaviorSchedulerRef = useRef<BehaviorScheduler>(new BehaviorScheduler());
   const [roadsBack, setRoadsBack] = useState<{ fork: Fork; walked: number; total: number } | null>(null);
   const [linePicker, setLinePicker] = useState<{
     canonicalName: string;
@@ -6673,12 +6682,29 @@ export function CoachTeachPage(): JSX.Element {
       : null;
     if (planLine) factLines.push(`Look-ahead plan: ${planLine}`);
 
+    // RATE-MATCHED DANYA BEHAVIOR — the board-true teaching that fills a quiet
+    // turn at his corpus rate (David 2026-08-23). Runs in the SAME gate as the
+    // positional filler (nothing higher fired), and takes precedence over it:
+    // a rate-fair, square-naming behavior read beats a generic observation, and
+    // it is the tier that displaces the borrowed-note filler David flagged as
+    // "irrelevant or wrong". The scheduler only advances (spends its stride)
+    // when a behavior actually fires here, so the long-run distribution tracks
+    // the corpus. No engine lines are in hand at this synchronous site, so the
+    // `calculation` behavior stands down; the other reads are engine-free.
+    let behaviorLine: string | null = null;
+    let behaviorSquares: string[] = [];
     let positionalLine: string | null = null;
     if (!gemLine && !tacticLine && !threatLine && !announceLine && !computedLine && !noteLine && !curatedLine && !teachingLine && !planLine) {
       try {
-        const pr = buildPositionalRead(args.fenAfterReply, playerColor, positionalSaidRef.current);
-        if (pr) { positionalLine = pr; factLines.push(`Positional read: ${pr}`); }
+        const hit = behaviorSchedulerRef.current.next({ fen: args.fenAfterReply, studentColor: args.studentColor });
+        if (hit) { behaviorLine = hit.fact; behaviorSquares = hit.squares; factLines.push(`Behavior (${hit.id}): ${hit.fact}`); }
       } catch { /* never a blocker */ }
+      if (!behaviorLine) {
+        try {
+          const pr = buildPositionalRead(args.fenAfterReply, playerColor, positionalSaidRef.current);
+          if (pr) { positionalLine = pr; factLines.push(`Positional read: ${pr}`); }
+        } catch { /* never a blocker */ }
+      }
     }
 
     // ── THE BOARD WALKS ANY LINE THE TEACHING RECITES ─────────────────────
@@ -6718,6 +6744,9 @@ export function CoachTeachPage(): JSX.Element {
       ...(threatLine ? [{ kind: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares }] : []),
       ...(announceLine ? [{ kind: 'opening' as const, text: announceLine, fen: args.fenAfterReply }] : []),
       ...(computedLine ? [{ kind: 'computed' as const, text: computedLine, fen: args.fenAfterReply }] : []),
+      // Rate-matched Danya behavior — computed board-truth, ranks with the other
+      // computed lanes and above the positional observation filler.
+      ...(behaviorLine ? [{ kind: 'computed' as const, text: behaviorLine, fen: args.fenAfterReply, squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)) }] : []),
       // The masterclass beat first among the teaching lanes — it is the only
       // one verified before it shipped.
       ...(curatedLine ? [{ kind: 'note' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
