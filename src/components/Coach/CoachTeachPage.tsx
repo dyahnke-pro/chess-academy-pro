@@ -7628,9 +7628,29 @@ export function CoachTeachPage(): JSX.Element {
                           .filter((p) => Boolean(p.text));
                         const said = survived.map((p) => p.text).join(' ');
                         if (said) {
+                          // THE NARODITSKY REGISTER — the but-turn ("you'd love X,
+                          // but…") and the honest hedge ("roughly equal"), his top
+                          // devices. Appended to the SPOKEN plan text (not just a
+                          // fact) because narration here is deterministic — the
+                          // package speaks `lookaheadPlanRef.text`, so the register
+                          // only reaches the student if it rides that string. It
+                          // names the TEMPTING move to AVOID (never the best), so
+                          // the plan's "don't hand over the move" honesty holds.
+                          // Board-true from the one probed read — fires only on a
+                          // real seductive-inferior move / a genuine close call,
+                          // never manufactured (G0). planSaidRef dedupes across
+                          // plies so it never repeats.
+                          let spoken = said;
+                          if (turnRead) {
+                            const butTurn = temptingTurnClause(turnRead);
+                            const hedge = uncertaintyClause(turnRead);
+                            const reg = [butTurn, hedge].filter(Boolean).join(' ');
+                            const gradedReg = reg ? gradeNarrationText(reg, planFen, 'CoachTeachPage.register')?.trim() : '';
+                            if (gradedReg) spoken = `${said} ${gradedReg}`;
+                          }
                           lookaheadPlanRef.current = {
                             fen: planFen,
-                            text: said,
+                            text: spoken,
                             plan,
                             saidParts: survived
                               .filter((p): p is typeof p & { side: 'key' | 'mine' | 'theirs' } => p.side !== null)
@@ -7642,23 +7662,6 @@ export function CoachTeachPage(): JSX.Element {
                             register: discussion.hintDial.register,
                           });
                           facts.push(`LOOK-AHEAD PLAN (computed from the engine's own line — state it, do NOT name a move): ${said}`);
-                          // THE NARODITSKY REGISTER — the but-turn ("you'd love X,
-                          // but…") and the honest hedge ("roughly equal"), his top
-                          // devices. Ride the plan lane because it speaks nearly
-                          // every ply, which is what makes the narration sound like
-                          // the videos. Its OWN fact so the plan's "do NOT name a
-                          // move" contract is untouched: this names the TEMPTING
-                          // move to AVOID (never the student's best), so nothing
-                          // leaks. Board-true from the one probed read — fires only
-                          // on a genuine seductive-inferior move / a real close
-                          // call, never manufactured (G0).
-                          if (turnRead) {
-                            const butTurn = temptingTurnClause(turnRead);
-                            const hedge = uncertaintyClause(turnRead);
-                            const reg = [butTurn, hedge].filter(Boolean).join(' ');
-                            const gradedReg = reg ? gradeNarrationText(reg, planFen, 'CoachTeachPage.register')?.trim() : '';
-                            if (gradedReg) facts.push(`COACH ASIDE (say close to verbatim — the TEMPTING move to AVOID + the honest read, never the best move): ${gradedReg}`);
-                          }
                           // ── LEAD THE EYE, HERE, WHERE THE PLAN LIVES ──────
                           // The instant package is assembled SYNCHRONOUSLY, in
                           // the same tick this engine read was started — so by
