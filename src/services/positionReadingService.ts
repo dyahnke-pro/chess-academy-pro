@@ -95,6 +95,44 @@ export function seeSequence(fen: string, square: Square): string[] {
   return seq;
 }
 
+/** Rewrite a FEN's side-to-move (and clear en-passant, which a flipped turn
+ *  would make illegal) so move generation can answer "what could THIS side do
+ *  here?" for a multi-move plan, independent of whose turn it actually is. */
+function forceTurn(fen: string, color: Color): string {
+  const parts = fen.split(' ');
+  parts[1] = color;
+  parts[3] = '-';
+  return parts.join(' ');
+}
+
+/** EXPLOITABILITY — can a knight or bishop of `color` REACH the empty square
+ *  `target` (a hole) and hold it within `maxMoves` moves? (David 2026-08-23: a
+ *  hole is only worth naming when the student actually has a minor that can get
+ *  there in a move or two — otherwise "plant a knight there" is geometry with no
+ *  knight.) Turn-independent, so it answers the PLAN, not just "this ply". */
+export function minorCanReachSquare(fen: string, target: Square, color: Color, maxMoves = 2): boolean {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return false; }
+  if (chess.get(target)) return false; // occupied — not an empty hole to plant on
+  const isMinorMove = (m: { piece: PieceSymbol }): boolean => m.piece === 'n' || m.piece === 'b';
+  // reach-1: a minor of `color` can move straight onto the hole.
+  const gen = (f: string): { from: Square; to: Square; piece: PieceSymbol }[] => {
+    try { return new Chess(f).moves({ verbose: true }).filter(isMinorMove); } catch { return []; }
+  };
+  const start = forceTurn(fen, color);
+  const moves1 = gen(start);
+  if (moves1.some((m) => m.to === target)) return true;
+  if (maxMoves < 2) return false;
+  // reach-2: a minor hops to an intermediate square, then onto the hole. Cap the
+  // fan-out so a pathological position can't run away.
+  for (const m of moves1.slice(0, 24)) {
+    let mid: Chess;
+    try { mid = new Chess(start); mid.move({ from: m.from, to: m.to }); } catch { continue; }
+    if (gen(forceTurn(mid.fen(), color)).some((m2) => m2.to === target)) return true;
+  }
+  return false;
+}
+
 export interface HangingPiece {
   square: Square;
   piece: PieceSymbol;
@@ -376,9 +414,31 @@ export function findXrays(fen: string, color: Color): XrayNote[] {
         // is a real x-ray (else a bishop pointing at f7 fires every ply).
         const winsMaterial = found[1].piece !== 'k' && PIECE_VALUE[found[1].piece] > PIECE_VALUE[cell.type];
         const majorOnKing = found[1].piece === 'k' && (cell.type === 'r' || cell.type === 'q');
-        if (winsMaterial || majorOnKing) {
-          out.push({ slider: cell.square, sliderPiece: cell.type, target: found[1].sq, targetPiece: found[1].piece, blocker: found[0].sq });
-        }
+        if (!winsMaterial && !majorOnKing) continue;
+        // DISCOVERED ATTACK / CHECK ONLY (David 2026-08-23). The line "if that
+        // blocker shifts, you win it" describes the STUDENT stepping their OWN
+        // piece aside to unveil the slider — a discovered attack. An ENEMY piece
+        // wedged in front of a bigger enemy piece is a PIN, which is the pin
+        // detector's job, not this one. So require a FRIENDLY blocker.
+        const blocker = found[0];
+        if (blocker.color !== color) continue;
+        // And prove the discovery is REAL: the blocker has a move to a square
+        // where it isn't simply lost, and unveiling the slider genuinely wins the
+        // target (or, on the king, delivers a discovered check). No safe reveal
+        // that wins → it's geometry, not a threat.
+        let exploitable = false;
+        try {
+          const start = forceTurn(fen, color);
+          const c0 = new Chess(start);
+          for (const bm of c0.moves({ verbose: true }).filter((m) => m.from === blocker.sq)) {
+            const probe = new Chess(start);
+            probe.move({ from: bm.from, to: bm.to, promotion: bm.promotion });
+            if (seeGain(probe, bm.to) > 0) continue;            // the blocker just hangs
+            if (majorOnKing ? probe.isCheck() : seeGain(probe, found[1].sq) > 0) { exploitable = true; break; }
+          }
+        } catch { exploitable = false; }
+        if (!exploitable) continue;
+        out.push({ slider: cell.square, sliderPiece: cell.type, target: found[1].sq, targetPiece: found[1].piece, blocker: found[0].sq });
       }
     }
   }

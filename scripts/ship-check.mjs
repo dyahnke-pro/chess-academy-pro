@@ -168,6 +168,7 @@ const GATE_TESTS = [
   // side), so THIS is the coverage proof; a device regressing to silence on its
   // own trigger makes ship-check RED.
   'src/services/danyaDeviceCoverage.test.ts',
+  'src/services/danyaExploitability.test.ts',
   // 🔒 G0 — the LLM decides nothing. Freezes the band-aid count in the coach
   // LLM path; adding a validator/regen/"don't hallucinate" prompt instead of
   // routing through voiceFacts makes ship-check go RED and blocks the push.

@@ -797,9 +797,13 @@ describe('Danya positional detectors (2026-08-23 — pressure / passer / preserv
 })
 
 describe('findXrays + findKnightReroute (Danya signatures, 2026-08-23)', () => {
-  it('findXrays flags your rook lined up with the enemy king through a blocker', () => {
-    const xr = findXrays('4k3/8/8/4p3/8/8/8/4R1K1 w - - 0 1', 'w');
-    expect(xr[0]).toMatchObject({ slider: 'e1', target: 'e8', blocker: 'e5' });
+  it('findXrays flags a DISCOVERED attack — your own blocker steps aside to unveil the slider', () => {
+    // Rook a1 behind its OWN knight a4; the knight vacates the file and Ra8 wins
+    // the black queen. findXrays is the discovered-attack detector now (David
+    // 2026-08-23) — a friendly blocker with a verified safe reveal — NOT an
+    // enemy-piece pin (that is the pin detector's job).
+    const xr = findXrays('q3k3/8/8/8/N7/8/8/R3K3 w - - 0 1', 'w');
+    expect(xr[0]).toMatchObject({ slider: 'a1', target: 'a8', blocker: 'a4' });
   });
   it('findXrays does NOT fire when the target is worth less than the slider', () => {
     // white queen a1, black rook h8 on the long diagonal with a blocker — rook < queen.

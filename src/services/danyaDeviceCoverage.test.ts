@@ -25,12 +25,23 @@ const BEHAVIOR_CASES: Array<{ id: string; fen: string; student: 'white' | 'black
   { id: 'passed-pawn', fen: '6k1/5ppp/8/P7/8/8/5PPP/6K1 w - - 0 1', student: 'white' },
   { id: 'bishop-pair', fen: '6k1/8/8/8/8/8/1B3B2/6K1 w - - 0 1', student: 'white' },
   { id: 'pressure', fen: '4r1k1/8/8/8/8/8/4R3/6K1 b - - 0 1', student: 'black' },
-  { id: 'weak-square', fen: '4k3/2p1p3/3P4/8/8/8/8/4K3 w - - 0 1', student: 'white' },
-  { id: 'x-ray', fen: '4k3/8/8/4p3/8/8/8/4R1K1 w - - 0 1', student: 'white' },
+  // A hole on d5 in Black's camp (no black c/e pawn can ever guard it) AND a
+  // white knight on c3 that reaches it in one hop — exploitable, so it fires.
+  // (David 2026-08-23: a hole no student minor can reach is geometry, silent.)
+  { id: 'weak-square', fen: '4k3/pp3ppp/3p4/4p3/8/2N5/PP3PPP/4K3 w - - 0 12', student: 'white' },
+  // A real DISCOVERED attack: white rook a1 behind its OWN knight on a4, black
+  // queen on a8. The knight vacates the a-file (Nc5/Nb6…) and Ra8 wins the
+  // queen. (David 2026-08-23: findXrays is the discovered-attack detector —
+  // friendly blocker that can actually leave the ray, verified safe reveal —
+  // not an enemy-piece pin, which is the pin detector's job.)
+  { id: 'x-ray', fen: 'q3k3/8/8/8/N7/8/8/R3K3 w - - 0 1', student: 'white' },
   { id: 'knight-maneuver', fen: '4k3/8/8/8/NP6/8/8/4K3 w - - 0 12', student: 'white' },
   { id: 'fianchetto', fen: 'r5k1/8/8/8/8/6P1/6BP/6K1 w - - 0 1', student: 'white' },
   { id: 'blockade', fen: '4k3/3p4/3N4/8/8/8/8/4K3 w - - 0 1', student: 'white' },
-  { id: 'rook-lift', fen: '5rk1/ppp2ppp/8/8/8/8/1PP2PPP/R3K3 w Q - 0 12', student: 'white' },
+  // Rook on a1 to lift + the enemy king on g8 EXPOSED (g-file open, only f7/h7
+  // shielding) — a real attack to swing into, so it fires. (David 2026-08-23: a
+  // lift into empty space with a snug enemy king is geometry, silent.)
+  { id: 'rook-lift', fen: '5rk1/ppp2p1p/8/8/8/8/1PP2PPP/R3K3 w Q - 0 12', student: 'white' },
   { id: 'open-file', fen: '3rk3/8/8/8/8/8/8/3RK3 w - - 0 1', student: 'white' },
   { id: 'development', fen: 'rnbqkb1r/pppp1ppp/5n2/4p3/2B1P3/2N2N2/PPPP1PPP/R1BQ1RK1 b kq - 0 6', student: 'black' },
   { id: 'piece-activity', fen: '4k3/8/8/3N4/4P3/8/8/4K3 w - - 0 12', student: 'white' },

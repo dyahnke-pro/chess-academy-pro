@@ -163,11 +163,14 @@ describe('danyaBehaviors — INTENT regressions (David 2026-08-23: "give suggest
 });
 
 describe('danyaBehaviors — knight-maneuver + x-ray fire on REAL cases, silent otherwise', () => {
-  it('x-ray fires for a rook bearing on the enemy king through one blocker', () => {
-    const hits = detectBehaviors({ fen: '4k3/8/8/4p3/8/8/8/4R1K1 w - - 0 1', studentColor: 'white' });
+  it('x-ray fires for a DISCOVERED attack — own blocker unveils the rook onto the queen', () => {
+    // Rook a1 behind its OWN knight a4; the knight vacates and Ra8 wins the
+    // black queen. findXrays is the discovered-attack detector now (David
+    // 2026-08-23), not an enemy-piece pin (the pin detector's job).
+    const hits = detectBehaviors({ fen: 'q3k3/8/8/8/N7/8/8/R3K3 w - - 0 1', studentColor: 'white' });
     const xr = hits.find((h) => h.id === 'x-ray');
     expect(xr).toBeDefined();
-    expect(xr!.fact).toContain('e8');
+    expect(xr!.fact).toContain('a8');
   });
   it('x-ray does NOT fire for a bishop merely pointing at f7/the king (the every-ply noise)', () => {
     // Italian, after castling: Bc4 "aims" at f7/g8 — not a teaching x-ray.

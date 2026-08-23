@@ -47,6 +47,8 @@ import {
   findFianchetto,
   findRookLift,
   findBlockade,
+  minorCanReachSquare,
+  seeGain,
 } from './positionReadingService';
 
 const PIECE_NAME: Record<PieceSymbol, string> = {
@@ -54,6 +56,18 @@ const PIECE_NAME: Record<PieceSymbol, string> = {
 };
 
 const PIECE_VALUE_TABLE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+
+/** Can `by` actually get at the pawn on `sq`? Either it already attacks it, or
+ *  the pawn's file is half-open for `by` (no `by` pawn on it) so a rook can pile
+ *  down the file. The exploitability test for "this weak pawn is a target". */
+function pawnIsAttackable(chess: Chess, sq: Square, by: Color): boolean {
+  if (chess.attackers(sq, by).length >= 1) return true;
+  const file = sq[0];
+  for (const row of chess.board()) for (const cell of row) {
+    if (cell && cell.type === 'p' && cell.color === by && cell.square[0] === file) return false;
+  }
+  return true;
+}
 
 /** A single engine PV line, as the coach turn already has it in hand. */
 export interface BehaviorLine { moves: string[]; evaluation: number }
@@ -183,14 +197,22 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     id: 'pawn-structure',
     weight: 818,
     detect: ({ fen, opp, student }) => {
+      let chess: Chess;
+      try { chess = new Chess(fen); } catch { return null; }
+      // EXPLOITABILITY (David 2026-08-23): a weak pawn is only a target if it can
+      // actually be attacked — the side already bears on it, OR its file is
+      // half-open for that side so a rook can pile on. A backward pawn defended
+      // three times behind a closed file is not a target.
       const theirs = findWeakPawns(fen, opp);
-      const pick = theirs.backward[0] ?? theirs.isolated[0] ?? theirs.doubled[0];
-      if (pick) {
-        const kind = theirs.backward.includes(pick) ? 'backward' : theirs.isolated.includes(pick) ? 'isolated' : 'doubled';
-        return { fact: `The ${kind} pawn on ${pick} is a lasting weakness — pile up on it.`, squares: [pick] };
+      const theirsPick = [theirs.backward[0], theirs.isolated[0], theirs.doubled[0]]
+        .find((p): p is Square => !!p && pawnIsAttackable(chess, p, student));
+      if (theirsPick) {
+        const kind = theirs.backward.includes(theirsPick) ? 'backward' : theirs.isolated.includes(theirsPick) ? 'isolated' : 'doubled';
+        return { fact: `The ${kind} pawn on ${theirsPick} is a lasting weakness — pile up on it.`, squares: [theirsPick] };
       }
       const mine = findWeakPawns(fen, student);
-      const minePick = mine.backward[0] ?? mine.isolated[0];
+      const minePick = [mine.backward[0], mine.isolated[0]]
+        .find((p): p is Square => !!p && pawnIsAttackable(chess, p, opp));
       if (minePick) {
         const kind = mine.backward.includes(minePick) ? 'backward' : 'isolated';
         return { fact: `Watch your ${kind} pawn on ${minePick} — don't let it become a target.`, squares: [minePick] };
@@ -243,6 +265,18 @@ export const DANYA_BEHAVIORS: Behavior[] = [
           // f7-PAWN (against a knight or even the king) is not a teaching tactic
           // and fired on nearly every ply.
           if (val(front) < 3) return false;
+          // EXPLOITABILITY (David 2026-08-23: "the pin call-outs need to be
+          // actual threats"). A pin is only a threat when the frozen piece can be
+          // WON — the student's attackers on it at least match its defenders (a
+          // pinned piece can't recapture, so equal attackers win it). A pin that
+          // presses nothing winnable is geometry. Skewers already hit the more
+          // valuable piece directly, so this gates pins specifically.
+          if (p.type === 'pin' && frontSq) {
+            const enemy: Color = student === 'w' ? 'b' : 'w';
+            const att = chess.attackers(frontSq as Square, student).length;
+            const def = chess.attackers(frontSq as Square, enemy).length;
+            if (att < 1 || att < def) return false;
+          }
         }
         return true;
       });
@@ -301,9 +335,23 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     id: 'passed-pawn',
     weight: 231,
     detect: ({ fen, student }) => {
+      let chess: Chess;
+      try { chess = new Chess(fen); } catch { return null; }
       const passers = findPassedPawns(fen, student);
-      if (passers.length > 0) {
-        return { fact: `The passed pawn on ${passers[0]} is a long-term trump — support it and push.`, squares: [passers[0]] };
+      // EXPLOITABILITY (David 2026-08-23): don't say "support it and push" when
+      // the passer is dead-blockaded — an enemy piece sits directly in front and
+      // it isn't going anywhere. Only a passer that can actually advance is the
+      // trump the advice describes.
+      const canAdvance = (sq: Square): boolean => {
+        const r = Number(sq[1]) + (student === 'w' ? 1 : -1);
+        if (r < 1 || r > 8) return false;
+        const ahead = `${sq[0]}${r}` as Square;
+        const occ = chess.get(ahead);
+        return !occ || occ.color === student; // empty or self — not enemy-blockaded
+      };
+      const live = passers.find(canAdvance);
+      if (live) {
+        return { fact: `The passed pawn on ${live} is a long-term trump — support it and push.`, squares: [live] };
       }
       return null;
     },
@@ -316,8 +364,22 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       // Only when it's the student to move (the break is theirs to make).
       if (chess.turn() !== student) return null;
       const breaks = findPawnBreaks(fen);
-      if (breaks.length > 0) {
-        return { fact: `${breaks[0]} is the pawn break that cracks the position open — prepare it.`, squares: [breaks[0]] };
+      // EXPLOITABILITY (David 2026-08-23): the break must be SOUND, not merely
+      // legal — after the push the pawn can't simply be won (SEE on the break
+      // square doesn't favour the opponent). A break that just drops a pawn is
+      // not "the break that cracks it open".
+      for (const dest of breaks) {
+        const mv = chess.moves({ verbose: true }).find((m) => m.piece === 'p' && m.to === dest);
+        if (!mv) continue;
+        let sound = false;
+        try {
+          const probe = new Chess(fen);
+          probe.move({ from: mv.from, to: mv.to, promotion: 'q' });
+          sound = seeGain(probe, dest) <= 0;
+        } catch { sound = false; }
+        if (sound) {
+          return { fact: `${dest} is the pawn break that cracks the position open — prepare it.`, squares: [dest] };
+        }
       }
       return null;
     },
@@ -392,11 +454,15 @@ export const DANYA_BEHAVIORS: Behavior[] = [
   {
     id: 'weak-square',
     weight: 90,
-    detect: ({ fen, opp }) => {
+    detect: ({ fen, opp, student }) => {
       const weak = findWeakSquares(fen);
       const holes = opp === 'w' ? weak.white : weak.black;
-      if (holes.length > 0) {
-        return { fact: `${holes[0]} is a hole in their camp — a piece planted there can't be kicked.`, squares: [holes[0]] };
+      // EXPLOITABILITY (David 2026-08-23): only name a hole a student MINOR can
+      // actually reach and hold in ~2 moves. "Plant a knight or bishop there"
+      // when the student has neither able to arrive is geometry — silence it.
+      const hole = holes.find((h) => minorCanReachSquare(fen, h, student));
+      if (hole) {
+        return { fact: `${hole} is a hole in their camp — a piece planted there can't be kicked.`, squares: [hole] };
       }
       return null;
     },
@@ -419,22 +485,29 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     weight: 125,
     detect: ({ fen, student }) => {
       const xr = findXrays(fen, student)[0];
-      if (xr) {
-        return { fact: `Your ${PIECE_NAME[xr.sliderPiece]} on ${xr.slider} x-rays their ${PIECE_NAME[xr.targetPiece]} on ${xr.target} through ${xr.blocker} — if that blocker shifts, you win it.`, squares: [xr.slider, xr.blocker, xr.target] };
-      }
-      return null;
+      if (!xr) return null;
+      // findXrays is now a DISCOVERED-attack/check detector (friendly blocker,
+      // verified safe reveal) — so name it truthfully: the king case unveils a
+      // CHECK, a piece case wins material (David 2026-08-23).
+      const fact = xr.targetPiece === 'k'
+        ? `Your ${PIECE_NAME[xr.sliderPiece]} on ${xr.slider} lines up on their king behind your piece on ${xr.blocker} — shift it and it's a discovered check.`
+        : `Your ${PIECE_NAME[xr.sliderPiece]} on ${xr.slider} x-rays their ${PIECE_NAME[xr.targetPiece]} on ${xr.target} behind your piece on ${xr.blocker} — shift the blocker and you win it.`;
+      return { fact, squares: [xr.slider, xr.blocker, xr.target] };
     },
   },
   {
     id: 'rook-lift',
     weight: 128,
-    detect: ({ fen, student }) => {
+    detect: ({ fen, student, opp }) => {
       if (Number(fen.split(' ')[5] ?? '0') < 10) return null; // an attacking-phase idea
       const rl = findRookLift(fen, student);
-      if (rl) {
-        return { fact: `Lift the rook to ${rl.to} and swing it along the third rank into the attack.`, squares: [rl.rook, rl.to] };
-      }
-      return null;
+      if (!rl) return null;
+      // EXPLOITABILITY (David 2026-08-23): only swing into a REAL attack — the
+      // enemy king must show exposure (an open/half-open file near it or a
+      // broken shield). A lift into empty space is geometry.
+      const k = kingSafetyRead(fen, opp);
+      if (!k || (k.openFilesNearKing.length < 1 && k.shieldPawns > 2)) return null;
+      return { fact: `Lift the rook to ${rl.to} and swing it along the third rank into the attack.`, squares: [rl.rook, rl.to] };
     },
   },
   {
