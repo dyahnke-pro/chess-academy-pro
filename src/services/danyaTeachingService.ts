@@ -24,7 +24,7 @@ import { detectOpening } from './openingDetectionService';
 import { noteContradictsLine, notePhaseMismatchesBoard } from './noteLineGuard';
 import { boardConcepts, phaseOfFen } from './boardConcepts';
 import { noteDescribesPosition, noteTeachesChessNotItsSource, noteStaysInScope, notePhaseMatchesBoardWords, noteRecommendsALegalMove, noteSuitsStudentSide } from './noteAnchorIntegrity';
-import { bakedSpoken } from './spokenNoteBake';
+import { bakedSpoken, loadSpokenBake } from './spokenNoteBake';
 import { falseConfigurationClaim } from './configurationClaims';
 import { logAppAudit } from './appAuditor';
 import { applyDerivedAnchors } from './noteAnchorOverrides';
@@ -1660,6 +1660,12 @@ function stripAnchorRecitation(sentence: string, lineSan: string[] | undefined):
 }
 
 export function spokenBeatText(note: DanyaNote): string {
+  // Lazily load the spoken bake on first coach speech (off the critical path,
+  // idempotent). It is no longer fetched on boot — see farmedCorpusData for why
+  // the eager teaching-corpus loads were OOM-crashing the app. Until it lands
+  // `bakedSpoken` returns undefined and we fall back to the original prose, the
+  // pre-bake behaviour, so this self-heals within a second of the first beat.
+  void loadSpokenBake();
   // THE BAKE WINS. When a note has a committed spoken form it is already in its
   // verified final shape — reviewed, gated, and (for a note with no position)
   // with the foreign example's geometry generalized away. Re-running the

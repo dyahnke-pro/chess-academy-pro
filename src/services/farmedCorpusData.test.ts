@@ -1,5 +1,10 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { loadFarmedCorpora, getFarmedCorporaSync, __setFarmedCorporaCache } from './farmedCorpusData';
+import {
+  loadFarmedCorpora,
+  getFarmedCorporaSync,
+  primeFarmedCorporaLazily,
+  __setFarmedCorporaCache,
+} from './farmedCorpusData';
 import { secondaryCorpora, secondaryNotesForGap } from './secondaryCorpora';
 import type { TeachingsBundle } from './secondaryCorpus';
 
@@ -11,6 +16,22 @@ import type { TeachingsBundle } from './secondaryCorpus';
 //     are sync, and rewiring them would ripple through the coach pipeline);
 //   - an unprimed cache is SAFE — the gap tier goes quiet, never wrong;
 //   - a fetch failure is non-fatal for the same reason (empty > invented).
+//
+// They are also now LAZY and per-corpus (2026-08-23): fetching all six on boot
+// (53 MB with the bake) OOM-crashed the app, so nothing loads until a teaching
+// lookup primes the tier, and `getFarmedCorporaSync` is a PURE read. What must
+// hold after THAT move:
+//   - `getFarmedCorporaSync` triggers no fetch (a stats/debug read is free);
+//   - a teaching lookup (`secondaryNotesForGap`) primes the tier;
+//   - `primeFarmedCorporaLazily` eventually loads every corpus.
+
+// Flush the sequential lazy prewarm (real promises, one setTimeout(0) yield per
+// corpus in the load loop) until all corpora have landed or we give up.
+const flushLazy = async (): Promise<void> => {
+  for (let i = 0; i < 100 && getFarmedCorporaSync().length < 6; i += 1) {
+    await new Promise((r) => setTimeout(r, 0));
+  }
+};
 
 const bundle = (key: string, opening: string): TeachingsBundle => ({
   generatedAt: '2026-08-01',
@@ -49,6 +70,55 @@ describe('farmedCorpusData', () => {
   it('contributes nothing until the prewarm resolves, so the gap tier is quiet not wrong', () => {
     expect(getFarmedCorporaSync()).toEqual([]);
     expect(farmedNotes(GAP_A)).toEqual([]);
+  });
+
+  it('getFarmedCorporaSync is a PURE read — it never triggers a fetch', () => {
+    const fetchMock = vi.fn(async () => ({ ok: true, json: async () => bundle('hp', GAP_A) }));
+    vi.stubGlobal('fetch', fetchMock);
+    expect(getFarmedCorporaSync()).toEqual([]);
+    getFarmedCorporaSync();
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it('primeFarmedCorporaLazily eventually loads every corpus, off the critical path', async () => {
+    const fetchMock = vi.fn(async (url: string) => ({
+      ok: true,
+      json: async () => bundle(url.includes('hangingpawns') ? 'hp' : 'sl', GAP_A),
+    }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    primeFarmedCorporaLazily();
+    // Nothing is loaded synchronously — the whole point is it never blocks boot.
+    expect(getFarmedCorporaSync()).toEqual([]);
+
+    await flushLazy();
+    expect(getFarmedCorporaSync()).toHaveLength(6);
+    expect(fetchMock).toHaveBeenCalledTimes(6);
+  });
+
+  it('primeFarmedCorporaLazily is idempotent — repeated calls do not refetch', async () => {
+    const fetchMock = vi.fn(async () => ({ ok: true, json: async () => bundle('hp', GAP_A) }));
+    vi.stubGlobal('fetch', fetchMock);
+    primeFarmedCorporaLazily();
+    primeFarmedCorporaLazily();
+    await flushLazy();
+    primeFarmedCorporaLazily();
+    expect(fetchMock).toHaveBeenCalledTimes(6);
+  });
+
+  it('a teaching lookup primes the tier (self-heals within a beat)', async () => {
+    const fetchMock = vi.fn(async (url: string) => ({
+      ok: true,
+      json: async () => bundle(url.includes('hangingpawns') ? 'hp' : 'sl', GAP_A),
+    }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    // First lookup: tier not yet loaded, so it is quiet — but it kicks the load.
+    expect(farmedNotes(GAP_A)).toEqual([]);
+    expect(fetchMock).toHaveBeenCalled();
+
+    await flushLazy();
+    expect(farmedNotes(GAP_A).length).toBeGreaterThan(0);
   });
 
   it('fetches every farmed corpus once and exposes them synchronously', async () => {

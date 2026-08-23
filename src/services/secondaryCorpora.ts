@@ -19,7 +19,7 @@
 // resolves, which is safe because this is the gap tier: an unprimed cache means
 // "no gap teaching yet", never wrong teaching.
 import chessbrahData from '../data/chessbrah-teachings.json';
-import { getFarmedCorporaSync } from './farmedCorpusData';
+import { getFarmedCorporaSync, onFarmedCorpusLoaded, primeFarmedCorporaLazily } from './farmedCorpusData';
 import { createSecondaryCorpus, gapNotesAcross, supportNotesAcross, type SecondaryCorpus, type TeachingsBundle } from './secondaryCorpus';
 import type { DanyaNote } from './danyaTeachingService';
 
@@ -48,10 +48,21 @@ function farmedCorpora(): SecondaryCorpus[] {
 }
 
 /** Every corpus currently available — static ones always, farmed ones once the
- *  boot prewarm (`loadFarmedCorpora`) has resolved. */
+ *  lazy prewarm (`primeFarmedCorporaLazily`) has landed them. Pure: reads
+ *  whatever is loaded, triggers no fetch (priming is done by the lookup
+ *  entry points below, so a stats/debug read never kicks a 28 MB download). */
 export function secondaryCorpora(): SecondaryCorpus[] {
   return [...STATIC_CORPORA, ...farmedCorpora()];
 }
+
+// Warm each farmed corpus's transposition index AS IT LANDS. `warmFenIndex` is
+// chunked + cursor-guarded (idempotent), so re-warming the whole set on every
+// corpus-loaded event is safe and keeps the position tier current without a
+// boot prewarm. Off the critical path — a lookup that beats it gets whatever is
+// indexed so far, which for the gap tier is honest silence, never wrong.
+onFarmedCorpusLoaded(() => {
+  void warmSecondaryPositionIndex().catch(() => { /* the corpus is a bonus, never a blocker */ });
+});
 
 /** THE gap-filling entry point: teaching for an opening the primary corpus does
  *  not cover. Callers pass how many notes the primary already supplied. */
@@ -61,6 +72,7 @@ export function secondaryNotesForGap(args: {
   primaryHits: number;
   maxNotes?: number;
 }): DanyaNote[] {
+  primeFarmedCorporaLazily();
   return gapNotesAcross(secondaryCorpora(), args);
 }
 
@@ -76,11 +88,13 @@ export function secondarySupportNotes(args: {
   exclude?: ReadonlySet<string>;
   accept?: (note: DanyaNote) => boolean;
 }): DanyaNote[] {
+  primeFarmedCorporaLazily();
   return supportNotesAcross(secondaryCorpora(), args);
 }
 
 /** Secondary notes keyed EXACTLY at this line, across every corpus. */
 export function secondaryNotesForPosition(historySans: string[]): DanyaNote[] {
+  primeFarmedCorporaLazily();
   return secondaryCorpora().flatMap((c) => c.notesForPosition(historySans));
 }
 
@@ -93,6 +107,7 @@ export function secondaryNotesForPosition(historySans: string[]): DanyaNote[] {
  *  opening-name arm that used to fill those plies with teaching authored
  *  somewhere else (2026-08-04). */
 export function secondaryNotesForFen(fen: string): DanyaNote[] {
+  primeFarmedCorporaLazily();
   return secondaryCorpora().flatMap((c) => c.notesForFen(fen));
 }
 
