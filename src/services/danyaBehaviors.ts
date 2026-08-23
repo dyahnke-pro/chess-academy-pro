@@ -235,7 +235,7 @@ export const DANYA_BEHAVIORS: Behavior[] = [
           // shielding something worth winning.
           const frontSq = p.involvedSquares[1];
           const front = frontSq ? chess.get(frontSq as Square) : null;
-          const val = (x: { type: PieceSymbol } | null): number => (x ? { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 }[x.type] : 0);
+          const val = (x: { type: PieceSymbol } | null | undefined): number => (x ? { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 }[x.type] : 0);
           // The PINNED/skewered piece itself must be a real piece — pinning the
           // f7-PAWN (against a knight or even the king) is not a teaching tactic
           // and fired on nearly every ply.
