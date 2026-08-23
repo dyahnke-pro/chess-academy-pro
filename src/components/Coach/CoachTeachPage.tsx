@@ -8390,7 +8390,15 @@ export function CoachTeachPage(): JSX.Element {
               const eventLine = im
                 ? buildInstantReplyLine({ san: im.san, captured: im.captured, isCheckmate: ip.isCheckmate(), isCheck: ip.isCheck() })
                 : null;
-              if (eventLine) lines.push(eventLine);
+              // DNA-only (David 2026-08-23: he likes the whyItFailed teaching
+              // "…the king's holding it, that trade loses material", NOT the rote
+              // "That takes your pawn"). Drop the bare capture announcement — it
+              // restates the board (Narration Voice Rule #3); the whyItFailed /
+              // threat lanes carry the real reason. Keep "Check."/"Checkmate."
+              const dnaEventLine = (NARRATE_DNA_ONLY && im?.captured && !ip.isCheckmate())
+                ? null
+                : eventLine;
+              if (dnaEventLine) lines.push(dnaEventLine);
               if (im) {
                 const instant = computeInstantTeaching({
                   fenAfterReply: ip.fen(),
