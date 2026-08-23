@@ -35,13 +35,17 @@ import { startAuditListener } from './audit-lib/audit-listener.mjs';
 import { sleep } from './audit-lib/board-drive.mjs';
 
 const BASE_URL = process.env.AUDIT_SMOKE_URL ?? 'http://localhost:5173';
-// BARE opening names trigger generation of a walkthrough; "teach me the X"
-// routes to chat Q&A instead (the surface-routing rule). Try a few until one
-// whose GENERATED tree actually carries a baked gem node — that tree is the one
-// whose walk can reach the picker.
-const ASKS = (process.env.AUDIT_TEACH_ASK
-  ? [process.env.AUDIT_TEACH_ASK]
-  : ['Caro-Kann', 'Vienna', 'Scandinavian Defense', 'Italian Game']);
+// The /coach/teach picker exposes opening TILES that deterministically start a
+// walkthrough. Drive those (teach-picker-action-teach + teach-picker-opening-<slug>)
+// rather than the chat box. Vienna + Italian carry the most gems. Try each until
+// one whose GENERATED tree actually carries a baked gem node.
+const OPENINGS = (process.env.AUDIT_TEACH_SLUG
+  ? [{ name: process.env.AUDIT_TEACH_SLUG, slug: process.env.AUDIT_TEACH_SLUG }]
+  : [
+      { name: 'Vienna Game', slug: 'vienna-game' },
+      { name: 'Italian Game', slug: 'italian-game' },
+      { name: 'Caro-Kann Defense', slug: 'caro-kann-defense' },
+    ]);
 const stamp = new Date().toISOString().replace(/[:.]/g, '-');
 const OUT_DIR = `audit-reports/teach-gem-picker-${stamp}`;
 
@@ -109,59 +113,49 @@ async function main() {
     if (await el.isVisible().catch(() => false)) { await el.click({ force: true }).catch(() => {}); await sleep(400); }
   }
 
-  const box = page.locator('[data-testid="chat-text-input"] textarea, [data-testid="chat-text-input"]').first();
   const startedPanel = page.locator(
     '[data-testid="walkthrough-narrating-panel"], [data-testid="walkthrough-choose-mode"], [data-testid="walkthrough-fork-panel"], [data-testid="walkthrough-leaf-panel"], [data-testid="walkthrough-gem-picker"]',
   ).first();
 
-  const sendBtn = page.locator('[data-testid="chat-send-btn"]').first();
-  // Ask for ONE opening (bare name) and wait for its walkthrough to start.
-  // Submit via the SEND BUTTON, not Enter — the React textarea treats Enter as
-  // a newline, so an Enter "submit" never generates (the rows=0 bug).
-  async function askOpening(text) {
-    for (let i = 0; i < 60 && (await box.isDisabled().catch(() => false)); i++) await sleep(1000);
-    await box.click({ force: true }).catch(() => {});
-    await box.fill('').catch(() => {});
-    await box.pressSequentially(text, { delay: 15 });
-    await sleep(300);
-    await sendBtn.click({ force: true }).catch(() => {});
-    // First message shows the AI-consent gate; allow, then send again.
+  // Start a walkthrough via the picker TILES (the deterministic entry): select
+  // the Teach action, then tap the opening tile. Returns whether it started.
+  async function teachOpening(slug) {
+    // Back to the picker if a prior walkthrough is up.
+    const teachAction = page.locator('[data-testid="teach-picker-action-teach"]').first();
+    for (let i = 0; i < 30 && !(await teachAction.isVisible().catch(() => false)) && !(await startedPanel.isVisible().catch(() => false)); i++) await sleep(1000);
+    if (await teachAction.isVisible().catch(() => false)) { await teachAction.click({ force: true }).catch(() => {}); await sleep(400); }
+    const tile = page.locator(`[data-testid="teach-picker-opening-${slug}"]`).first();
+    if (!(await tile.isVisible().catch(() => false))) { console.log(`[gem-picker] tile ${slug} not offered`); return false; }
+    await tile.click({ force: true }).catch(() => {});
     const consent = page.locator('[data-testid="ai-consent-allow"]').first();
-    if (await consent.isVisible().catch(() => false)) {
-      await consent.click({ force: true }).catch(() => {});
-      await sleep(600);
-      if (!(await box.inputValue().catch(() => '')).trim()) { await box.click({ force: true }).catch(() => {}); await box.pressSequentially(text, { delay: 15 }); await sleep(300); }
-      await sendBtn.click({ force: true }).catch(() => {});
-    }
-    console.log(`[gem-picker] asked "${text}" — waiting for generation…`);
+    if (await consent.isVisible().catch(() => false)) { await consent.click({ force: true }).catch(() => {}); await sleep(600); }
+    console.log(`[gem-picker] teaching "${slug}" — waiting for generation…`);
     const deadline = Date.now() + 180_000;
     while (Date.now() < deadline) {
       if (await startedPanel.isVisible().catch(() => false)) break;
       await sleep(2500);
     }
-    // Returning-student chooser → start the walk.
     const chooser = page.locator('[data-testid="walkthrough-choose-walkthrough"]').first();
     if (await chooser.isVisible().catch(() => false)) { await chooser.click({ force: true }).catch(() => {}); await sleep(1500); }
     return startedPanel.isVisible().catch(() => false);
   }
 
-  // Try asks until a GENERATED tree carries a baked gem node.
+  // Try openings until a GENERATED tree carries a baked gem node.
   let gemReport = [];
   let usedAsk = null;
   let anyStarted = false;
-  for (const ask of ASKS) {
-    const ok = await askOpening(ask);
+  for (const o of OPENINGS) {
+    const ok = await teachOpening(o.slug);
     anyStarted = anyStarted || ok;
     await sleep(1500);
     const gems = await readGemNodes(page).catch((e) => ({ error: String(e) }));
     gemReport = gems.report ?? [];
-    console.log(`[gem-picker] "${ask}": Dexie rows=${gems.rows ?? '?'} seen=${JSON.stringify(gems.seen ?? gems.error ?? [])}`);
-    if (gemReport.reduce((a, r) => a + r.gemNodes, 0) > 0) { usedAsk = ask; break; }
-    console.log(`[gem-picker] "${ask}": no gem node in the tree yet — trying next`);
+    console.log(`[gem-picker] "${o.slug}": started=${ok} Dexie rows=${gems.rows ?? '?'} seen=${JSON.stringify(gems.seen ?? gems.error ?? [])}`);
+    if (gemReport.reduce((a, r) => a + r.gemNodes, 0) > 0) { usedAsk = o.slug; break; }
   }
 
-  if (anyStarted) pass('the walkthrough generated and started', usedAsk ?? ASKS.join('/'));
-  else fail('the walkthrough generated and started', 'no walkthrough panel appeared for any ask');
+  if (anyStarted) pass('the walkthrough generated and started', usedAsk ?? OPENINGS.map((o) => o.slug).join('/'));
+  else fail('the walkthrough generated and started', 'no walkthrough panel appeared for any opening tile');
 
   // ── A. Baking landed on prod — the tree has node.gems.
   const gemTotal = gemReport.reduce((a, r) => a + r.gemNodes, 0);
@@ -239,7 +233,7 @@ async function main() {
   const real = pageErrors.filter((e) => !NOISE.test(e));
   if (real.length) fail('no page errors', real.slice(0, 2).join(' | ')); else pass('no page errors');
 
-  await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({ asks: ASKS, usedAsk, gemReport, pickerFired, played, gemPickerEvents: gemPickerEvents.length, results }, null, 2));
+  await writeFile(`${OUT_DIR}/report.json`, JSON.stringify({ openings: OPENINGS, usedAsk, gemReport, pickerFired, played, gemPickerEvents: gemPickerEvents.length, results }, null, 2));
   const ok = results.filter((r) => r.ok === true).length;
   const bad = results.filter((r) => r.ok === false).length;
   const un = results.filter((r) => r.ok === null).length;
