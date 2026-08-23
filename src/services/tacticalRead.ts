@@ -410,6 +410,34 @@ export function narrateTacticalRead(read: TacticalRead, opts: { spoken?: boolean
   return parts.join(' ');
 }
 
+/**
+ * THE BUT-TURN as a standalone clause — Naroditsky's #1 device (measured ~33%):
+ * affirm the seductive move, then refute it. Reuses the exact phrasing of
+ * `narrateTacticalRead`'s first sentence so the register is consistent wherever
+ * it is spliced. Null when there is no clearly-inferior tempting move to warn
+ * against. `spoken` spells the move for TTS.
+ */
+export function temptingTurnClause(read: TacticalRead, opts: { spoken?: boolean } = {}): string | null {
+  if (!read.tempting) return null;
+  const say = (san: string): string => (opts.spoken ? sayMove(san) : san);
+  const affirm = APPEAL_AFFIRM[read.tempting.appeal] ?? 'play it';
+  const ref = read.tempting.refutation;
+  const reply = ref.length > 1 ? ref[1] : (ref.length > 0 ? ref[0] : undefined);
+  const refutation = reply ? ` — but ${say(reply.san)} and it falls apart` : ' — but it doesn’t hold';
+  return `You’d love to ${affirm} with ${say(read.tempting.san)}${refutation}.`;
+}
+
+/**
+ * THE UNCERTAINTY clause — his honest hedge (measured ~21%): when a runner-up is
+ * within a whisker of best, say so rather than feign certainty. Null when the
+ * best move is clear. `gapCp` is the student-POV centipawn gap to the runner-up.
+ */
+export function uncertaintyClause(read: TacticalRead, opts: { spoken?: boolean } = {}): string | null {
+  if (!read.closeAlternative) return null;
+  const say = (san: string): string => (opts.spoken ? sayMove(san) : san);
+  return `It’s genuinely close — ${say(read.closeAlternative.san)} is about as good, so don’t agonise.`;
+}
+
 // ── LATENCY-SAFE TEMPTING (no extra engine read) ─────────────────────────────
 
 /** The seductive-but-wrong move derived from an ALREADY-COMPUTED MultiPV

@@ -248,7 +248,7 @@ import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGroundi
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { rankReplies, bestReplyLine } from '../../services/bestReplyRanking';
-import { tacticalReadFromLines, namedTacticClause } from '../../services/tacticalRead';
+import { tacticalReadFromLines, namedTacticClause, temptingTurnClause, uncertaintyClause } from '../../services/tacticalRead';
 import { BehaviorScheduler } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
@@ -7477,6 +7477,22 @@ export function CoachTeachPage(): JSX.Element {
                                       : `${recLineBase} ${point}`;
                                   }
                                 }
+                              }
+                              // THE REGISTER — his two signature devices, computed
+                              // from the SAME topLines (G0), spliced onto the rec
+                              // beat so the DNA filter's but-turn (~33%) and
+                              // uncertainty (~21%) stop reading 0% (David 2026-08-23:
+                              // approved routing them into the spoken line). The
+                              // but-turn only rides when it warns about a DIFFERENT
+                              // move than the one we're recommending (else it leaks
+                              // / contradicts).
+                              if (calcRead) {
+                                const butTurn = calcRead.tempting && calcRead.tempting.san !== recMove.san
+                                  ? temptingTurnClause(calcRead)
+                                  : null;
+                                if (butTurn) recLine = `${butTurn} Instead, ${recLine.charAt(0).toLowerCase()}${recLine.slice(1)}`;
+                                const hedge = uncertaintyClause(calcRead);
+                                if (hedge) recLine = `${recLine} ${hedge}`;
                               }
                             } catch { /* the calc is a bonus, never a blocker */ }
                             facts.push(recLine);

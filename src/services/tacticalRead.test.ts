@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { Chess } from 'chess.js';
 import {
-  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, tacticalReadFromLines, speakTemptingTurn, tacticalReadFacts, voiceRejectsBestMove, lineOutcomeClause, voiceNamesUngroundedMove, groundedMoveKeys, namedTacticClause,
+  computeTacticalRead, summarizeVerdict, pickKeyTactic, appealScore, pickTempting, toStudentCp, narrateTacticalRead, temptingFromAnalysis, tacticalReadFromLines, speakTemptingTurn, tacticalReadFacts, voiceRejectsBestMove, lineOutcomeClause, voiceNamesUngroundedMove, groundedMoveKeys, namedTacticClause, temptingTurnClause, uncertaintyClause,
   type TacticalRead,
 } from './tacticalRead';
 import type { PvEngine, PvPly } from './pvPlayback';
@@ -379,5 +379,38 @@ describe('tacticalReadFacts inGame register', () => {
     expect(facts).toMatch(/You'd love to play Qxd5/);
     expect(facts).toContain('Nxd5');
     expect(facts.toLowerCase()).not.toContain('the student');
+  });
+});
+
+describe('temptingTurnClause + uncertaintyClause (DNA register — David 2026-08-23)', () => {
+  const read = {
+    fen: '8/8/8/8/8/8/8/8 w - - 0 1',
+    studentColor: 'white',
+    bestMoveSan: 'Nf3', bestMoveUci: 'g1f3',
+    line: [], checkPlies: [], keyTactic: null,
+    verdict: { kind: 'edge', mateIn: null, studentCp: 60, text: 'a pleasant edge' },
+    tempting: {
+      san: 'Nxe5', uci: 'f3e5', appeal: 'capture', evalDropCp: 220,
+      refutation: [{ san: 'd6' }, { san: 'Qa4' }],
+    },
+    closeAlternative: { san: 'Bc4', gapCp: 20 },
+  } as unknown as TacticalRead;
+
+  it('builds the but-turn: affirm the tempting move, then refute it', () => {
+    const c = temptingTurnClause(read)!;
+    expect(c).toContain('Nxe5');
+    expect(c).toMatch(/but Qa4 and it falls apart/);
+  });
+
+  it('builds the honest hedge naming the close alternative', () => {
+    const c = uncertaintyClause(read)!;
+    expect(c).toContain('Bc4');
+    expect(c.toLowerCase()).toMatch(/close|about as good/);
+  });
+
+  it('returns null when there is no tempting move / no close alternative', () => {
+    const clear = { ...read, tempting: null, closeAlternative: null } as unknown as TacticalRead;
+    expect(temptingTurnClause(clear)).toBeNull();
+    expect(uncertaintyClause(clear)).toBeNull();
   });
 });
