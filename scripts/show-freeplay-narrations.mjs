@@ -146,8 +146,13 @@ async function clearFirstRunOverlays(page) {
  *  the COACH replies through the app's own rating-limited engine. */
 async function playGame(page, plies) {
   const mirror = new Chess();
-  // A sharp, natural opening for the student side so tactics arise early.
-  const OPENING = ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Bc5', 'b4', 'Bxb4', 'c3', 'Ba5', 'd4'];
+  // A sharp opening that REACHES A TACTICAL MIDDLEGAME (opposite-side pawn
+  // storms) so seductive-but-wrong captures actually arise — the positions the
+  // but-turn is FOR. Env OPENING_SANS overrides (space-separated SAN). Default:
+  // Sicilian Najdorf, English Attack.
+  const OPENING = (process.env.OPENING_SANS
+    ? process.env.OPENING_SANS.trim().split(/\s+/)
+    : ['e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Be3', 'e5', 'Nb3', 'Be6', 'f3', 'Be7', 'Qd2', 'O-O', 'O-O-O', 'Nbd7', 'g4', 'b5', 'g5', 'b4', 'Ne2', 'Ne8', 'f4', 'a5', 'f5', 'a4']);
   const moves = [];
   let lastTs = Date.now() - 1;
   for (let i = 0; i < plies && !mirror.isGameOver(); i += 1) {

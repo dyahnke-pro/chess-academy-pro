@@ -7131,6 +7131,22 @@ export function CoachTeachPage(): JSX.Element {
                 try {
                   if (studentBest?.topLines && probe.turn() === (playerColor === 'white' ? 'w' : 'b')) {
                     turnRead = tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor, { maxPlies: 6 });
+                    // QUEUE THE REGISTER so it is HEARD — the but-turn ("you'd love
+                    // X, but…") and the honest hedge ("genuinely close"), his top
+                    // devices, spoken when the board reaches this position via the
+                    // late package. Its OWN queued line (not coupled to the plan,
+                    // which does not fire every ply — that coupling was why the
+                    // register computed but never spoke). Names the TEMPTING move
+                    // to avoid, never the best, so nothing leaks. Board-true from
+                    // the MultiPV already computed; fires only on a real seductive-
+                    // inferior move / a genuine close call (G0).
+                    if (turnRead) {
+                      const butTurn = temptingTurnClause(turnRead, { spoken: true });
+                      const hedge = uncertaintyClause(turnRead, { spoken: true });
+                      const reg = [butTurn, hedge].filter(Boolean).join(' ');
+                      const gradedReg = reg ? gradeNarrationText(reg, probe.fen(), 'CoachTeachPage.register')?.trim() : '';
+                      if (gradedReg) queueSpokenHint(probe.fen(), gradedReg);
+                    }
                   }
                 } catch { /* the read is a bonus, never a blocker */ }
                 // ── THE COACH JUDGES ITS OWN MOVE ──────────────────────────
@@ -7635,29 +7651,9 @@ export function CoachTeachPage(): JSX.Element {
                           .filter((p) => Boolean(p.text));
                         const said = survived.map((p) => p.text).join(' ');
                         if (said) {
-                          // THE NARODITSKY REGISTER — the but-turn ("you'd love X,
-                          // but…") and the honest hedge ("roughly equal"), his top
-                          // devices. Appended to the SPOKEN plan text (not just a
-                          // fact) because narration here is deterministic — the
-                          // package speaks `lookaheadPlanRef.text`, so the register
-                          // only reaches the student if it rides that string. It
-                          // names the TEMPTING move to AVOID (never the best), so
-                          // the plan's "don't hand over the move" honesty holds.
-                          // Board-true from the one probed read — fires only on a
-                          // real seductive-inferior move / a genuine close call,
-                          // never manufactured (G0). planSaidRef dedupes across
-                          // plies so it never repeats.
-                          let spoken = said;
-                          if (turnRead) {
-                            const butTurn = temptingTurnClause(turnRead);
-                            const hedge = uncertaintyClause(turnRead);
-                            const reg = [butTurn, hedge].filter(Boolean).join(' ');
-                            const gradedReg = reg ? gradeNarrationText(reg, planFen, 'CoachTeachPage.register')?.trim() : '';
-                            if (gradedReg) spoken = `${said} ${gradedReg}`;
-                          }
                           lookaheadPlanRef.current = {
                             fen: planFen,
-                            text: spoken,
+                            text: said,
                             plan,
                             saidParts: survived
                               .filter((p): p is typeof p & { side: 'key' | 'mine' | 'theirs' } => p.side !== null)
