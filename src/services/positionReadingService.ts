@@ -372,6 +372,199 @@ export function findWeakPawns(fen: string, color: Color): { isolated: Square[]; 
   return { isolated, doubled, backward };
 }
 
+export type PressureVerdict = 'winnable' | 'balanced-tension' | 'solid' | 'none';
+
+export interface PressureCount {
+  square: Square;
+  piece: PieceSymbol;
+  color: Color;
+  /** How many enemy pieces attack the target. */
+  attackers: number;
+  /** How many friendly pieces defend it. */
+  defenders: number;
+  attackerSquares: Square[];
+  defenderSquares: Square[];
+  /**
+   * `winnable`  — attackers already outnumber defenders (SEE-confirmed win);
+   * `balanced-tension` — equal count, ≥1 each: "one more attacker and it falls"
+   *   (Naroditsky's classic d4-pawn read — the pressure frame, not SEE);
+   * `solid` — better defended than attacked; `none` — untouched.
+   */
+  verdict: PressureVerdict;
+}
+
+/** ATTACKER-vs-DEFENDER pressure on one square — the deterministic backing for
+ *  Naroditsky's "the d4-pawn has two attackers and two defenders; one more
+ *  attacker and it falls" teaching frame (#5 in the coverage audit). Counts are
+ *  pure chess.js geometry (G3); the `winnable` verdict is SEE-confirmed so the
+ *  count heuristic never over-claims a win the exchange doesn't actually give. */
+export function pressureCount(fen: string, square: Square): PressureCount | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const piece = chess.get(square);
+  if (!piece) return null;
+  const enemy: Color = piece.color === 'w' ? 'b' : 'w';
+  const attackerSquares = chess.attackers(square, enemy);
+  const defenderSquares = chess.attackers(square, piece.color);
+  const attackers = attackerSquares.length;
+  const defenders = defenderSquares.length;
+  let verdict: PressureVerdict = 'none';
+  if (attackers === 0) verdict = 'none';
+  else if (attackers > defenders && seeGain(chess, square) > 0) verdict = 'winnable';
+  else if (attackers >= 1 && attackers === defenders) verdict = 'balanced-tension';
+  else if (attackers > defenders) verdict = 'winnable';
+  else verdict = 'solid';
+  return { square, piece: piece.type, color: piece.color, attackers, defenders, attackerSquares, defenderSquares, verdict };
+}
+
+/** Every square carrying an enemy piece under real pressure (≥1 attacker),
+ *  sorted so the winnable/tension targets a teacher would name come first.
+ *  `attackerColor` is the side doing the pressing (the student). */
+export function pressuredTargets(fen: string, attackerColor: Color): PressureCount[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  const enemy: Color = attackerColor === 'w' ? 'b' : 'w';
+  const out: PressureCount[] = [];
+  for (const row of chess.board()) for (const cell of row) {
+    if (!cell || cell.color !== enemy) continue;
+    const pc = pressureCount(fen, cell.square);
+    if (pc && pc.attackers >= 1) out.push(pc);
+  }
+  const rank: Record<PressureVerdict, number> = { winnable: 0, 'balanced-tension': 1, solid: 2, none: 3 };
+  return out.sort((a, b) => rank[a.verdict] - rank[b.verdict] || (b.attackers - a.attackers));
+}
+
+/** PASSED PAWNS for `color` — a pawn with no enemy pawn on its own OR either
+ *  adjacent file anywhere ahead of it, so nothing can stop it queening by
+ *  pawn-capture. Pure file/rank geometry (G3). Backs Naroditsky's "that a-pawn
+ *  is a monster passer — push it" (#20/#33). Returns the pawn squares. */
+export function findPassedPawns(fen: string, color: Color): Square[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  const enemyPawns: { f: number; r: number }[] = [];
+  const ownPawns: Square[] = [];
+  for (const row of chess.board()) for (const cell of row) {
+    if (!cell || cell.type !== 'p') continue;
+    const f = cell.square.charCodeAt(0) - 97;
+    const r = Number(cell.square[1]);
+    if (cell.color === color) ownPawns.push(cell.square);
+    else enemyPawns.push({ f, r });
+  }
+  const forward = color === 'w' ? 1 : -1;
+  const passed: Square[] = [];
+  for (const sq of ownPawns) {
+    const f = sq.charCodeAt(0) - 97;
+    const r = Number(sq[1]);
+    const blocked = enemyPawns.some((ep) =>
+      Math.abs(ep.f - f) <= 1 && (color === 'w' ? ep.r > r : ep.r < r));
+    if (!blocked && r + forward >= 1 && r + forward <= 8) passed.push(sq);
+  }
+  return passed;
+}
+
+/** The friendly MINOR piece (bishop/knight) a teacher would tell you to KEEP —
+ *  the most active one by board scope, plus whether it markedly out-scopes the
+ *  enemy's best minor (Naroditsky's "preserve all light-square bishops → don't
+ *  trade your good piece", #14). Reuses `pieceScope` (G3 activity, not a vibe). */
+export function bestMinorToKeep(fen: string, color: Color): { note: ActivePieceNote; dominant: boolean } | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const minorsOf = (c: Color): ActivePieceNote[] => {
+    const notes: ActivePieceNote[] = [];
+    for (const row of chess.board()) for (const cell of row) {
+      if (!cell || cell.color !== c || (cell.type !== 'b' && cell.type !== 'n')) continue;
+      notes.push({ square: cell.square, piece: cell.type, scope: pieceScope(chess, cell.square) });
+    }
+    return notes.sort((a, b) => b.scope - a.scope);
+  };
+  const ours = minorsOf(color);
+  if (ours.length === 0) return null;
+  const theirs = minorsOf(color === 'w' ? 'b' : 'w');
+  const best = ours[0];
+  const enemyBest = theirs[0]?.scope ?? 0;
+  return { note: best, dominant: best.scope >= enemyBest + 3 };
+}
+
+/** BISHOP PAIR — does `color` hold two bishops while the opponent does not?
+ *  The classic long-term positional asset Naroditsky names constantly
+ *  (concept `bishop-pair`, 191 corpus notes). Pure piece count (G3). */
+export function bishopPair(fen: string, color: Color): boolean {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return false; }
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  let ours = 0; let theirs = 0;
+  for (const row of chess.board()) for (const cell of row) {
+    if (!cell || cell.type !== 'b') continue;
+    if (cell.color === color) ours += 1; else theirs += 1;
+  }
+  return ours >= 2 && theirs < 2;
+}
+
+export interface OpponentIntent {
+  /** The opponent's most dangerous immediate idea (their SAN). */
+  san: string;
+  /** SEE material it wins (0 for a non-material forcing threat like a fork). */
+  gain: number;
+  /** 'capture' — wins material outright; 'fork' — hits two valuable pieces. */
+  kind: 'capture' | 'fork';
+  /** The square the threatened/forking piece lands on. */
+  target: Square;
+}
+
+/** OPPONENT-INTENT read — "what does the opponent WANT to do next?" — the
+ *  deterministic backing for Naroditsky's #1 teaching behavior, PROPHYLAXIS
+ *  (927 corpus notes): name the opponent's threat so the student can pre-empt
+ *  it. Flips the side to move and finds the opponent's best immediate idea:
+ *  a material-winning capture (SEE-confirmed) or a fork that hits two valuable
+ *  pieces. Returns null on a quiet position (nothing to anticipate). Pure
+ *  chess.js (G3) — no engine, latency-safe on the move hot path. */
+export function opponentIntentRead(fen: string, studentColor: Color | 'white' | 'black'): OpponentIntent | null {
+  const student: Color = studentColor === 'w' || studentColor === 'white' ? 'w' : 'b';
+  const opp: Color = student === 'w' ? 'b' : 'w';
+  const parts = fen.split(' ');
+  if (parts.length < 6) return null;
+  parts[1] = opp;                 // make it the opponent's move
+  parts[3] = '-';                 // clear en-passant (side flip invalidates it)
+  let chess: Chess;
+  try { chess = new Chess(parts.join(' ')); } catch { return null; }
+  let best: OpponentIntent | null = null;
+  const consider = (cand: OpponentIntent): void => {
+    if (!best || cand.gain > best.gain || (cand.gain === best.gain && cand.kind === 'fork' && best.kind !== 'fork')) best = cand;
+  };
+  // Material-winning captures: SEE the target square with the opponent to move —
+  // the swap-off net FROM THE OPPONENT's side (they capture first). >0 ⇒ winnable.
+  const seen = new Set<string>();
+  for (const mv of chess.moves({ verbose: true })) {
+    if (!mv.captured || seen.has(mv.to)) continue;
+    seen.add(mv.to);
+    const gain = seeGain(chess, mv.to as Square);
+    if (gain <= 0) continue;
+    // Name it with the least-valuable attacker's capture (the move actually played).
+    const caps = chess.moves({ verbose: true }).filter((m) => m.to === mv.to && m.captured);
+    caps.sort((a, b) => (PIECE_VALUE[a.piece] ?? 0) - (PIECE_VALUE[b.piece] ?? 0));
+    consider({ san: caps[0].san, gain, kind: 'capture', target: mv.to as Square });
+  }
+  for (const mv of chess.moves({ verbose: true })) {
+    // Fork: after the move the moved piece attacks ≥2 student pieces worth ≥3.
+    if (mv.piece === 'n' || mv.piece === 'q' || mv.piece === 'b' || mv.piece === 'r' || mv.piece === 'p') {
+      let after: Chess;
+      try { after = new Chess(chess.fen()); after.move(mv); } catch { continue; }
+      const hitFen = after.fen().split(' '); hitFen[1] = opp; // keep opp as attacker to read attacks
+      let probe: Chess;
+      try { probe = new Chess(hitFen.join(' ')); } catch { continue; }
+      let valuableHits = 0;
+      for (const row of probe.board()) for (const cell of row) {
+        if (!cell || cell.color === opp) continue;
+        if (PIECE_VALUE[cell.type] < 3) continue;
+        if (probe.attackers(cell.square, opp).includes(mv.to as Square)) valuableHits += 1;
+      }
+      if (valuableHits >= 2) consider({ san: mv.san, gain: 0, kind: 'fork', target: mv.to as Square });
+    }
+  }
+  return best;
+}
+
 export interface OpenFilesInfo {
   /** Files with no pawns of EITHER color — fully open. */
   open: string[];

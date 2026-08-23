@@ -22,6 +22,12 @@ import {
   readingHint,
   findOpenFiles,
   computeSpace,
+  pressureCount,
+  pressuredTargets,
+  findPassedPawns,
+  bestMinorToKeep,
+  bishopPair,
+  opponentIntentRead,
 } from './positionReadingService';
 import type { WeaknessCategory } from '../types';
 import type { TacticsLiveContext } from '../coach/types';
@@ -701,5 +707,71 @@ describe('readingHint — progressive GROUNDED hint ladder (David 2026-06-28, ap
   it('a negative question hints toward "nothing" at tier 2 instead of a square', () => {
     const negQ = buildReadingQuestions('4k3/8/8/8/8/8/8/4K3 w - - 0 1', emptyTactics()).find((q) => q.type === 'hanging' && q.negative)!;
     expect(readingHint(negQ, 2)?.toLowerCase()).toContain('nothing');
+  });
+})
+
+describe('Danya positional detectors (2026-08-23 — pressure / passer / preservation / bishop-pair / opponent-intent)', () => {
+  it('pressureCount reports attackers vs defenders and a balanced-tension verdict', () => {
+    // White pawn d4 attacked by c5-pawn and e5-... no; craft: black c5 & e5 pawns vs white d4, defended by e3 pawn + Nf3
+    // FEN: white pawns d4,e3, Nf3; black pawns c5,e5. d4 attacked by c5(pawn) and e5(pawn)=2; defended by e3(pawn) and Nf3=2.
+    const fen = '4k3/8/8/2p1p3/3P4/4PN2/8/4K3 b - - 0 1';
+    const pc = pressureCount(fen, 'd4')!;
+    expect(pc.attackers).toBe(2);
+    expect(pc.defenders).toBe(2);
+    expect(pc.verdict).toBe('balanced-tension');
+  });
+
+  it('pressureCount flags a winnable target when attackers outweigh defenders', () => {
+    // Black rook e8 x-rays white rook e2 (undefended), black to move: e2 attacked by Re8, defended by none.
+    const fen = '4r1k1/8/8/8/8/8/4R3/6K1 b - - 0 1';
+    const pc = pressureCount(fen, 'e2')!;
+    expect(pc.attackers).toBeGreaterThan(pc.defenders);
+    expect(pc.verdict).toBe('winnable');
+  });
+
+  it('pressuredTargets ranks the winnable target first', () => {
+    const fen = '4r1k1/8/8/8/8/8/4R3/6K1 b - - 0 1';
+    const t = pressuredTargets(fen, 'black');
+    expect(t[0].square).toBe('e2');
+    expect(t[0].verdict).toBe('winnable');
+  });
+
+  it('findPassedPawns flags a pawn with no enemy pawn ahead on its file or neighbors', () => {
+    // White a-pawn on a5, black pawns only on the kingside → a5 is passed.
+    const fen = '6k1/5ppp/8/P7/8/8/5PPP/6K1 w - - 0 1';
+    expect(findPassedPawns(fen, 'w')).toContain('a5');
+  });
+
+  it('findPassedPawns does NOT flag a pawn an enemy pawn can still stop', () => {
+    // White d4 pawn with black c-pawn on c6 (adjacent file, ahead) → not passed.
+    const fen = '6k1/8/2p5/8/3P4/8/8/6K1 w - - 0 1';
+    expect(findPassedPawns(fen, 'w')).not.toContain('d4');
+  });
+
+  it('bestMinorToKeep names the side\'s most active minor', () => {
+    // White fianchetto bishop on b2 raking the long diagonal, plus a passive knight on a3.
+    const fen = '6k1/8/8/8/8/N7/1B6/6K1 w - - 0 1';
+    const keep = bestMinorToKeep(fen, 'w')!;
+    expect(keep.note.square).toBe('b2');
+    expect(keep.note.piece).toBe('b');
+  });
+
+  it('bishopPair is true with two bishops vs fewer', () => {
+    const two = '6k1/8/8/8/8/8/1B3B2/6K1 w - - 0 1';
+    expect(bishopPair(two, 'w')).toBe(true);
+    expect(bishopPair(two, 'b')).toBe(false);
+  });
+
+  it('opponentIntentRead names a material-winning capture threat (prophylaxis backing)', () => {
+    // Black to be anticipated: white knight f3 is hanging to black bishop g4? Build: student=white, black Bg4 attacks Nf3 (undefended).
+    const fen = 'r3k3/8/8/8/6b1/5N2/8/4K3 w - - 0 1';
+    const intent = opponentIntentRead(fen, 'white')!;
+    expect(intent).not.toBeNull();
+    expect(intent.kind).toBe('capture');
+    expect(intent.target).toBe('f3');
+  });
+
+  it('opponentIntentRead returns null on a quiet position', () => {
+    expect(opponentIntentRead('4k3/8/8/8/8/8/8/4K3 w - - 0 1', 'white')).toBeNull();
   });
 })
