@@ -58,7 +58,7 @@ const FEATURES: readonly string[] = [
 const FREE_TIER: readonly string[] = [
   '20 free tactics puzzles',
   'One full opening — Watch, Learn, Practice, Play',
-  '7 free AI coach lessons + 50 free chat turns',
+  'Hundreds of free AI coach turns to try',
   'Upload your games + see your weaknesses',
   'Kids mode free for a week',
 ];
@@ -71,7 +71,7 @@ export type PaywallFeature = 'opening' | 'puzzles' | 'coach' | 'academy' | 'kid'
 const FEATURE_PROMPT: Record<PaywallFeature, string | null> = {
   puzzles: 'You’ve used all 20 free puzzles. Go Pro for unlimited tactics tuned to your level.',
   opening: 'You’ve opened your one free masterclass. Go Pro to unlock all 42 openings.',
-  coach: 'You’ve used your 7 free lessons and 50 free chat turns. Go Pro for unlimited coaching.',
+  coach: 'You’ve used up your free coaching. Go Pro for unlimited lessons, chat, and analysis.',
   academy: 'The Academy is a Pro feature — go Pro for the full guided course path.',
   kid: 'Your free week of Kids mode is up. Go Pro to keep playing.',
   app: null,

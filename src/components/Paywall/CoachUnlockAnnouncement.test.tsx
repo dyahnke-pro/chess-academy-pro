@@ -24,6 +24,7 @@ function setRow(over: Partial<{ coachUnlockSeenAt: number | null }>): void {
       kidFirstAccessAt: null,
       coachLessonsUsed: 0,
       coachChatTurnsUsed: 0,
+      coachSpendUsd: 0,
       coachUnlockSeenAt: null,
       updatedAt: 0,
       ...over,

@@ -95,6 +95,15 @@ export interface FreeTierRecord {
   coachLessonsUsed: number;
   /** Count of coach chat turns sent against the free lifetime bucket (50). */
   coachChatTurnsUsed: number;
+  /** Cumulative estimated USD cost of the coach LLM (DeepSeek) tokens this
+   *  user has spent, lifetime. THE coach free-tier gate (David 2026-08-23:
+   *  "free until they have hit $1.00 worth of tokens on deepseek") — the
+   *  /coach/* route walls once this crosses FREE_COACH_SPEND_LIMIT_USD. Accrued
+   *  at the one LLM chokepoint (coachCostService.recordApiUsage). Backfills to
+   *  0 for rows that predate this field (loadFreeTier merges over DEFAULT_ROW).
+   *  The old coachLessonsUsed/coachChatTurnsUsed counters stay as analytics but
+   *  no longer gate. */
+  coachSpendUsd: number;
   /** Unix ms the "the coach is free to try" announcement was shown/dismissed,
    *  or null if never shown. Drives CoachUnlockAnnouncement — fires once for
    *  every non-Pro user, INCLUDING existing users whose row predates this

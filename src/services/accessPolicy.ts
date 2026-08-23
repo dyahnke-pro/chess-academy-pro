@@ -34,7 +34,7 @@ export interface AccessInput {
   gateEnabled: boolean;
   freeTier: Pick<
     FreeTierRecord,
-    'puzzlesSolved' | 'freeOpeningId' | 'kidFirstAccessAt' | 'coachLessonsUsed' | 'coachChatTurnsUsed'
+    'puzzlesSolved' | 'freeOpeningId' | 'kidFirstAccessAt' | 'coachSpendUsd'
   >;
   /** Injectable clock for the kid-window check (tests). */
   now?: number;
@@ -95,11 +95,11 @@ export function resolveAccess(input: AccessInput): AccessDecision {
       : { decision: 'wall', feature: 'puzzles' };
   }
 
-  // Coach — metered free tier (7 lessons + 50 chat turns, lifetime, no trial
-  // start — David 2026-08-06: "give them a little more... I'm giving value").
-  // Two independent buckets; the surface self-walls once BOTH are spent (a
-  // lesson start / chat turn consumed there flips the store, and this route
-  // re-evaluates to `wall` on the next render — see useCoachFreeMeter).
+  // Coach — metered free tier gated on cumulative DeepSeek token COST, $1.00
+  // lifetime (David 2026-08-23: "free until they have hit $1.00 worth of tokens
+  // on deepseek"). Every coach LLM call accrues its estimated cost into the
+  // store (coachCostService.recordApiUsage → recordCoachSpend); this route
+  // re-evaluates to `wall` on the next render once the budget crosses $1.
   if (startsWith(pathname, '/coach')) {
     return hasCoachAccessLeft(freeTier)
       ? { decision: 'meter', feature: 'coach' }

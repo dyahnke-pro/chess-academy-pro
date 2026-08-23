@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { db } from '../../db/schema';
 import { loadEcoData } from '../../services/dataLoader';
-import { findOpeningByPgnPrefix, getOpeningMoves } from '../../services/openingDetectionService';
+import { findOpeningByPgnPrefix, getOpeningMoves, findLinePickerOptions } from '../../services/openingDetectionService';
 import { fuzzyMatchOpening } from '../../services/openingFuzzyMatcher';
 import { searchOpenings } from '../../services/openingService';
 
@@ -74,4 +74,58 @@ describe('walkthrough Deep-dive routing (teachIntent)', () => {
     const moves = getOpeningMoves(name) ?? (await searchOpenings(name))[0]?.pgn?.trim().split(/\s+/);
     expect(moves?.length ?? 0).toBeGreaterThanOrEqual(ALAPIN_FORK.length);
   }, 60000);
+});
+
+// SECOND dead-end, found 2026-08-23 (David: "alapin d5 deep dive redirected me
+// to the Sicilian pickers. it did not start a deep dive").
+//
+// teachIntent was made to bypass the FUZZY matcher (Tier 0) so a code-resolved
+// name is never re-guessed — but the Tier-1.5 BROAD-FAMILY line picker had no
+// such guard. A deep-dive whose move path resolves to a BARE family name (a
+// fork off a broad tree lands on "Sicilian Defense" / "Caro-Kann Defense" /
+// "French Defense" rather than a colon-named sub-variation) then hit
+// findLinePickerOptions and popped the family picker — the loop David saw:
+// tapping a "dive in deep" tile bounced him to "pick a line to dive in deep".
+//
+// The fix is the teachIntent guard on the Tier-1.5 gate (CoachTeachPage
+// handleSubmit): a deep-dive TAP already IS the choice, so it must start a
+// lesson, never re-open a picker. These assertions pin the trap the guard
+// closes — the bare families a deep-dive can legitimately resolve to all
+// trigger the picker, so without the guard those taps dead-end.
+describe('walkthrough Deep-dive routing — the Tier 1.5 family-picker trap', () => {
+  beforeAll(async () => {
+    await db.delete();
+    await db.open();
+    await loadEcoData();
+  }, 60000);
+
+  it('a deep-dive off a broad tree resolves to a BARE family that triggers the picker', () => {
+    // Every one of these is a real fork a broad e4/d4 walkthrough offers, and
+    // every canonical name it resolves to WOULD pop the line picker — which is
+    // exactly why a code-resolved deep-dive must bypass that gate.
+    const forks: string[][] = [
+      ['e4', 'c5'], // Sicilian Defense
+      ['e4', 'c6'], // Caro-Kann Defense
+      ['e4', 'e6'], // French Defense
+      ['d4', 'd5'], // Queen's Pawn Game
+    ];
+    for (const path of forks) {
+      const canon = findOpeningByPgnPrefix(path);
+      expect(canon, `no canonical for ${path.join(' ')}`).toBeTruthy();
+      const picker = findLinePickerOptions(canon!.canonicalName);
+      expect(
+        picker,
+        `deep-dive to "${canon!.canonicalName}" must be recognised as a family the picker would hijack`,
+      ).not.toBeNull();
+    }
+  });
+
+  it('a colon-named sub-variation (the Alapin itself) does NOT trigger the picker', () => {
+    // The counter-case: the Alapin deep-dive resolves specifically, so it never
+    // needed the guard on a fresh tree — which is why the fresh-context audit
+    // stayed green while David hit the bare-family loop from a broad fork.
+    const canon = findOpeningByPgnPrefix(['e4', 'c5', 'c3', 'd5']);
+    expect(canon?.canonicalName).toMatch(/Alapin/i);
+    expect(findLinePickerOptions(canon!.canonicalName)).toBeNull();
+  });
 });
