@@ -127,3 +127,37 @@ describe('BehaviorScheduler — fires at the corpus RATE (stride scheduling)', (
     expect(r).toBeLessThan(1.3);
   });
 });
+
+describe('danyaBehaviors — INTENT regressions (David 2026-08-23: "give suggestions that actually match the intent")', () => {
+  it('NEVER says "your queen is your most active piece"', () => {
+    // Open position where the queen has the widest scope.
+    const hits = detectBehaviors({ fen: 'r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 1', studentColor: 'white' });
+    const pa = hits.find((h) => h.id === 'piece-activity');
+    if (pa) expect(pa.fact.toLowerCase()).not.toContain('queen');
+  });
+
+  it('does NOT cry "enemy king exposed, attack" on move 1', () => {
+    const hits = detectBehaviors({ fen: 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', studentColor: 'white' });
+    expect(hits.find((h) => h.id === 'king-safety')).toBeUndefined();
+  });
+
+  it('does NOT warn about a check that just loses the piece (phantom Bxf2+ fork)', () => {
+    // Italian: Bc5 "eyes" f2, but Bxf2+ Kxf2 just drops the bishop — not a threat.
+    const hits = detectBehaviors({ fen: 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 0 1', studentColor: 'white' });
+    const proph = hits.find((h) => h.id === 'prophylaxis');
+    if (proph) expect(proph.fact.toLowerCase()).not.toContain('f2');
+  });
+
+  it('does NOT surface a pinned PAWN as a tactic (Bc4 "pins" f7)', () => {
+    const hits = detectBehaviors({ fen: 'r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 1', studentColor: 'white' });
+    const t = hits.find((h) => h.id === 'tactics');
+    if (t) expect(t.fact.toLowerCase()).not.toMatch(/pins pawn|skewers pawn/);
+  });
+
+  it('does NOT call an active fianchetto/outside bishop "bad"', () => {
+    // Black Bf5 developed outside the chain.
+    const hits = detectBehaviors({ fen: 'rn1qkbnr/pp2pppp/2p5/3p1b2/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 1', studentColor: 'black' });
+    const pa = hits.find((h) => h.id === 'piece-activity');
+    if (pa) expect(pa.fact).not.toMatch(/f5.*bad bishop/);
+  });
+});

@@ -48,6 +48,8 @@ const PIECE_NAME: Record<PieceSymbol, string> = {
   p: 'pawn', n: 'knight', b: 'bishop', r: 'rook', q: 'queen', k: 'king',
 };
 
+const PIECE_VALUE_TABLE: Record<PieceSymbol, number> = { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 };
+
 /** A single engine PV line, as the coach turn already has it in hand. */
 export interface BehaviorLine { moves: string[]; evaluation: number }
 
@@ -110,11 +112,23 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     id: 'piece-activity',
     weight: 1039,
     detect: ({ fen, student }) => {
-      const { strongest, weakest } = strongestWeakestPiece(fen, student);
-      if (strongest && strongest.scope >= 9) {
-        return { fact: `Your ${PIECE_NAME[strongest.piece]} on ${strongest.square} is your most active piece, hitting ${strongest.scope} squares — build around it.`, squares: [strongest.square] };
+      // Danya's real "piece activity" read is a CONCRETE placement — a knight
+      // on an outpost, a rook on the open file, a bad bishop to improve — NOT
+      // "your queen is your most active piece" (the queen always has the widest
+      // scope; naming it every turn was the bug). Prefer a good minor/rook, then
+      // a bad piece to reroute. `findPieceQuality` computes exactly this.
+      const notes = findPieceQuality(fen).filter((n) => n.color === student);
+      const good = notes.find((n) => n.quality === 'good' && (n.piece === 'n' || n.piece === 'b' || n.piece === 'r'));
+      if (good) {
+        return { fact: `Your ${PIECE_NAME[good.piece]} on ${good.square} — ${good.reason}. Build around it.`, squares: [good.square] };
       }
-      if (weakest && weakest.scope <= 1) {
+      const bad = notes.find((n) => n.quality === 'bad');
+      if (bad) {
+        return { fact: `Your ${PIECE_NAME[bad.piece]} on ${bad.square} is a ${bad.reason} — reroute it to a better square.`, squares: [bad.square] };
+      }
+      // Fallback: a genuinely passive MINOR (never the queen/king/rook).
+      const { weakest } = strongestWeakestPiece(fen, student);
+      if (weakest && (weakest.piece === 'n' || weakest.piece === 'b') && weakest.scope <= 1) {
         return { fact: `Your ${PIECE_NAME[weakest.piece]} on ${weakest.square} is doing nothing — find it a better square.`, squares: [weakest.square] };
       }
       return null;
@@ -124,14 +138,21 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     id: 'king-safety',
     weight: 937,
     detect: ({ fen, student, opp }) => {
+      // A king with its pawn shield intact is NOT exposed — the raw `exposed`
+      // flag fired on move 1 (David's complaint). Require REAL exposure: an
+      // open file bearing on the king AND a broken shield (≤1 shield pawn), and
+      // only past the opening so it isn't just "the uncastled starting king".
+      const moveNo = Number(fen.split(' ')[5] ?? '0');
       const theirs = kingSafetyRead(fen, opp);
-      if (theirs?.exposed) {
+      if (theirs?.exposed && theirs.openFilesNearKing.length >= 1 && theirs.shieldPawns <= 1 && moveNo >= 8) {
         const files = theirs.openFilesNearKing.join(', ');
-        return { fact: `The enemy king on ${theirs.square} is exposed${files ? ` — the ${files}-file is open toward it` : ''}. Play for the attack.`, squares: [sq(theirs.square)] };
+        return { fact: `The enemy king on ${theirs.square} is exposed — the ${files}-file is open toward it. Play for the attack.`, squares: [sq(theirs.square)] };
       }
+      // Your own king stuck in the center is only a real problem once pieces are
+      // out and the center can open — not on move 3 with everything at home.
       const mine = kingSafetyRead(fen, student);
-      if (mine?.exposed && !mine.castled) {
-        return { fact: `Your own king on ${mine.square} is still in the center — get it safe before you push.`, squares: [sq(mine.square)] };
+      if (mine && !mine.castled && mine.inCenter && moveNo >= 8 && mine.openFilesNearKing.length >= 1) {
+        return { fact: `Your king on ${mine.square} is still in the center with lines opening — castle before anything sharp.`, squares: [sq(mine.square)] };
       }
       return null;
     },
@@ -170,14 +191,19 @@ export const DANYA_BEHAVIORS: Behavior[] = [
   {
     id: 'development',
     weight: 753,
-    detect: ({ fen, student, chess }) => {
+    detect: ({ fen, student, opp, chess }) => {
       if (!chess) return null;
-      // Only an opening-phase message — count full moves.
       const moveNo = Number(fen.split(' ')[5] ?? '99');
-      if (moveNo > 12) return null;
-      const dev = developmentRead(fen, student);
-      if (dev && !dev.castled && dev.developedMinors < dev.totalMinors - 1) {
-        return { fact: `You're behind in development — finish getting the minor pieces out and castle before anything sharp.`, squares: [] };
+      if (moveNo < 3 || moveNo > 14) return null;
+      const mine = developmentRead(fen, student);
+      const theirs = developmentRead(fen, opp);
+      if (!mine || !theirs) return null;
+      // Only fire when you are genuinely BEHIND the opponent — not just
+      // "uncastled", which was true for both sides every opening ply.
+      const iLag = mine.developedMinors + (mine.castled ? 2 : 0);
+      const theyLead = theirs.developedMinors + (theirs.castled ? 2 : 0);
+      if (theyLead - iLag >= 2 && !mine.castled) {
+        return { fact: `You're behind in development — get the minor pieces out and castle before the position sharpens.`, squares: [] };
       }
       return null;
     },
@@ -185,11 +211,34 @@ export const DANYA_BEHAVIORS: Behavior[] = [
   {
     id: 'tactics',
     weight: 647,
-    detect: ({ fen, student }) => {
+    detect: ({ fen, student, chess }) => {
+      if (!chess) return null;
       const t = detectTactics(fen);
-      const mine = t.tactics.find((p) => p.beneficiary === student && p.type !== 'none');
-      if (mine) {
-        return { fact: mine.description, squares: mine.involvedSquares.map(sq) };
+      // Only surface tactics that actually MATTER — drop the trivial geometric
+      // "bishop pins the f7-PAWN against a knight" noise that fired every ply.
+      // A pin/skewer must involve a real piece (≥ knight) behind the line, and
+      // every reported tactic must favor the student.
+      const meaningful = t.tactics.filter((p) => {
+        if (p.beneficiary !== student || p.type === 'none') return false;
+        if (p.type === 'pin' || p.type === 'skewer') {
+          // involvedSquares: [attacker, front, back]. The PINNED (front) piece
+          // must be a real piece (≥ knight) — pinning the f7-PAWN against a
+          // knight is not a teaching tactic (it fired every ply). A pin/skewer
+          // is worth naming only when the immobilized piece is worth winning or
+          // shielding something worth winning.
+          const frontSq = p.involvedSquares[1];
+          const front = frontSq ? chess.get(frontSq as Square) : null;
+          const val = (x: { type: PieceSymbol } | null): number => (x ? { p: 1, n: 3, b: 3, r: 5, q: 9, k: 100 }[x.type] : 0);
+          // The PINNED/skewered piece itself must be a real piece — pinning the
+          // f7-PAWN (against a knight or even the king) is not a teaching tactic
+          // and fired on nearly every ply.
+          if (val(front) < 3) return false;
+        }
+        return true;
+      });
+      if (meaningful.length > 0) {
+        const p = meaningful[0];
+        return { fact: p.description, squares: p.involvedSquares.map(sq) };
       }
       return null;
     },
@@ -225,12 +274,14 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     weight: 302,
     detect: ({ fen, student }) => {
       const { advantage } = countMaterial(fen);
-      // advantage is WHITE-positive; convert to the student's side.
+      // advantage is WHITE-positive; convert to the student's side. Require ≥2
+      // so a mid-exchange transient (one side has captured, recapture pending)
+      // doesn't read as a durable material edge.
       const studentAdv = student === 'w' ? advantage : -advantage;
-      if (studentAdv >= 1) {
+      if (studentAdv >= 2) {
         return { fact: `You're up material — trade pieces, keep pawns, and steer for the endgame.`, squares: [] };
       }
-      if (studentAdv <= -1) {
+      if (studentAdv <= -2) {
         return { fact: `You're down material — don't trade; look for activity and counterplay.`, squares: [] };
       }
       return null;
@@ -299,13 +350,20 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     id: 'pressure',
     weight: 135,
     detect: ({ fen, student }) => {
+      // A real, mounting threat — not "one bishop eyes f7" every ply. Either the
+      // target is genuinely winnable (SEE) OR there is real tension with ≥2
+      // attackers (the "two attackers, two defenders, one more and it falls"
+      // frame Danya actually uses on a contested pawn like d4).
       const targets = pressuredTargets(fen, student);
-      const t = targets.find((x) => x.verdict === 'winnable' || x.verdict === 'balanced-tension');
-      if (!t) return null;
-      const tail = t.verdict === 'balanced-tension'
-        ? `${t.attackers} attackers against ${t.defenders} defenders — one more and it falls`
-        : `you win the ${PIECE_NAME[t.piece]} on ${t.square}`;
-      return { fact: `Pressure on ${t.square}: ${tail}.`, squares: [t.square] };
+      const winnable = targets.find((x) => x.verdict === 'winnable' && PIECE_VALUE_TABLE[x.piece] >= 3);
+      if (winnable) {
+        return { fact: `You win the ${PIECE_NAME[winnable.piece]} on ${winnable.square} — it can't be held.`, squares: [winnable.square] };
+      }
+      const tension = targets.find((x) => x.verdict === 'balanced-tension' && x.attackers >= 2);
+      if (tension) {
+        return { fact: `${tension.attackers} attackers on ${tension.square} against ${tension.defenders} defenders — pile on one more and it falls.`, squares: [tension.square] };
+      }
+      return null;
     },
   },
   {
@@ -337,8 +395,13 @@ export const DANYA_BEHAVIORS: Behavior[] = [
     id: 'piece-preservation',
     weight: 90,
     detect: ({ fen, student }) => {
+      // Only once pieces are actually developed, and only for a genuinely ACTIVE
+      // minor — not the move-1 home bishop that happens to out-scope the enemy's
+      // still-sleeping pieces.
+      const moveNo = Number(fen.split(' ')[5] ?? '0');
+      if (moveNo < 6) return null;
       const keep = bestMinorToKeep(fen, student);
-      if (keep?.dominant) {
+      if (keep?.dominant && keep.note.scope >= 6) {
         return { fact: `Keep your ${PIECE_NAME[keep.note.piece]} on ${keep.note.square} — it outclasses their minor; don't trade it off.`, squares: [keep.note.square] };
       }
       return null;

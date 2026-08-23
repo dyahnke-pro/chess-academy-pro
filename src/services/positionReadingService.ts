@@ -221,6 +221,14 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
       }
 
       if (type === 'b') {
+        // A "bad bishop" is one BLOCKED BEHIND its own pawn chain — not merely a
+        // bishop with pawns on its colour. The count-only test branded an active
+        // bishop developed OUTSIDE the chain (the Caro's Bf5/Bg4 — the GOOD
+        // bishop Naroditsky praises) as bad, and flagged the undeveloped home
+        // bishop on move 1. Require all three: developed (off its home square),
+        // ≥4 own pawns on its colour, AND genuinely hemmed now (low mobility).
+        const home = color === 'w' ? (square === 'c1' || square === 'f1') : (square === 'c8' || square === 'f8');
+        if (home) continue;
         const bishopColor = squareColor(square);
         let ownPawnsOnColor = 0;
         for (const r2 of board) {
@@ -228,7 +236,11 @@ export function findPieceQuality(fen: string): PieceQualityNote[] {
             if (c2 && c2.type === 'p' && c2.color === color && squareColor(c2.square) === bishopColor) ownPawnsOnColor += 1;
           }
         }
-        if (ownPawnsOnColor >= 4) notes.push({ square, piece: 'b', color, quality: 'bad', reason: 'bad bishop (hemmed in by its own pawns)' });
+        if (ownPawnsOnColor < 4) continue;
+        let mobility = 0;
+        const fp = chess.fen().split(' '); fp[1] = color; fp[3] = '-';
+        try { mobility = new Chess(fp.join(' ')).moves({ square, verbose: true }).length; } catch { mobility = 99; }
+        if (mobility <= 3) notes.push({ square, piece: 'b', color, quality: 'bad', reason: 'bad bishop (hemmed in behind its own pawns)' });
       }
 
       if (type === 'r') {
@@ -441,7 +453,6 @@ export function pressuredTargets(fen: string, attackerColor: Color): PressureCou
 export function findPassedPawns(fen: string, color: Color): Square[] {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return []; }
-  const enemy: Color = color === 'w' ? 'b' : 'w';
   const enemyPawns: { f: number; r: number }[] = [];
   const ownPawns: Square[] = [];
   for (const row of chess.board()) for (const cell of row) {
@@ -492,7 +503,6 @@ export function bestMinorToKeep(fen: string, color: Color): { note: ActivePieceN
 export function bishopPair(fen: string, color: Color): boolean {
   let chess: Chess;
   try { chess = new Chess(fen); } catch { return false; }
-  const enemy: Color = color === 'w' ? 'b' : 'w';
   let ours = 0; let theirs = 0;
   for (const row of chess.board()) for (const cell of row) {
     if (!cell || cell.type !== 'b') continue;
@@ -538,18 +548,23 @@ export function opponentIntentRead(fen: string, studentColor: Color | 'white' | 
   for (const mv of chess.moves({ verbose: true })) {
     if (!mv.captured || seen.has(mv.to)) continue;
     seen.add(mv.to);
-    const gain = seeGain(chess, mv.to as Square);
+    const gain = seeGain(chess, mv.to);
     if (gain <= 0) continue;
     // Name it with the least-valuable attacker's capture (the move actually played).
     const caps = chess.moves({ verbose: true }).filter((m) => m.to === mv.to && m.captured);
     caps.sort((a, b) => (PIECE_VALUE[a.piece] ?? 0) - (PIECE_VALUE[b.piece] ?? 0));
-    consider({ san: caps[0].san, gain, kind: 'capture', target: mv.to as Square });
+    consider({ san: caps[0].san, gain, kind: 'capture', target: mv.to });
   }
   for (const mv of chess.moves({ verbose: true })) {
     // Fork: after the move the moved piece attacks ≥2 student pieces worth ≥3.
     if (mv.piece === 'n' || mv.piece === 'q' || mv.piece === 'b' || mv.piece === 'r' || mv.piece === 'p') {
       let after: Chess;
       try { after = new Chess(chess.fen()); after.move(mv); } catch { continue; }
+      // The forking piece must LAND SAFELY — if the student just wins it back
+      // (SEE > 0 for the student on the landing square), it is no fork, only a
+      // losing check/capture (this is the "Bxf2+ that just drops the bishop"
+      // false-positive). seeGain here is the student's net as the recapturer.
+      if (seeGain(after, mv.to) > 0) continue;
       const hitFen = after.fen().split(' '); hitFen[1] = opp; // keep opp as attacker to read attacks
       let probe: Chess;
       try { probe = new Chess(hitFen.join(' ')); } catch { continue; }
@@ -557,9 +572,14 @@ export function opponentIntentRead(fen: string, studentColor: Color | 'white' | 
       for (const row of probe.board()) for (const cell of row) {
         if (!cell || cell.color === opp) continue;
         if (PIECE_VALUE[cell.type] < 3) continue;
-        if (probe.attackers(cell.square, opp).includes(mv.to as Square)) valuableHits += 1;
+        // The hit piece must be UNDEFENDED or worth more than the forker —
+        // a defended equal piece is not actually won.
+        const forkerVal = PIECE_VALUE[mv.piece];
+        const defended = probe.attackers(cell.square, student).length > 0;
+        if (defended && PIECE_VALUE[cell.type] <= forkerVal) continue;
+        if (probe.attackers(cell.square, opp).includes(mv.to)) valuableHits += 1;
       }
-      if (valuableHits >= 2) consider({ san: mv.san, gain: 0, kind: 'fork', target: mv.to as Square });
+      if (valuableHits >= 2) consider({ san: mv.san, gain: 0, kind: 'fork', target: mv.to });
     }
   }
   return best;

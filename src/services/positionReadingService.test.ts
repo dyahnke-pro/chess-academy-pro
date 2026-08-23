@@ -103,11 +103,25 @@ describe('findPieceQuality', () => {
     expect(notes.find((n) => n.square === 'd5' && n.reason.includes('outpost'))).toBeUndefined();
   });
 
-  it('flags a bad bishop hemmed in by ≥4 of its own pawns on its colour', () => {
-    const notes = findPieceQuality('4k3/8/8/8/4P3/8/P1P1B1P1/4K3 w - - 0 1');
-    const bishop = notes.find((n) => n.square === 'e2');
+  it('flags a bad bishop DEVELOPED but genuinely hemmed behind its own pawns (low mobility)', () => {
+    // Bd2 is boxed in: its up-diagonals are blocked by its own pawns c3 and e3,
+    // leaving only c1/e1 (mobility 2), with 4 own pawns on its colour.
+    const notes = findPieceQuality('4k3/8/8/8/8/2P1P3/1P1B1P2/4K3 w - - 0 1');
+    const bishop = notes.find((n) => n.square === 'd2');
     expect(bishop?.quality).toBe('bad');
     expect(bishop?.reason).toContain('bishop');
+  });
+
+  it('does NOT flag an ACTIVE bishop developed outside the pawn chain as bad (the Caro Bf5)', () => {
+    // Black light-squared bishop developed to f5 outside the chain — the GOOD
+    // bishop Naroditsky praises, even with pawns on its colour. Must not be "bad".
+    const notes = findPieceQuality('rn1qkbnr/pp2pppp/2p5/3p1b2/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 1');
+    expect(notes.find((n) => n.square === 'f5' && n.quality === 'bad')).toBeUndefined();
+  });
+
+  it('does NOT flag an undeveloped home bishop as bad on move 1', () => {
+    const notes = findPieceQuality('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1');
+    expect(notes.find((n) => (n.square === 'c1' || n.square === 'f1') && n.quality === 'bad')).toBeUndefined();
   });
 
   it('flags a rook on an open file', () => {
