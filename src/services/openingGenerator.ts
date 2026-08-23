@@ -55,6 +55,7 @@ import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
 import { bakedNarrationFor } from './bakedWalkthroughNarration';
 import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
+import { gemsForPosition } from './gemCrushLines';
 import { detectTactics } from './tacticsDetector';
 import { stageArrayHasUsableEntry } from './stageEntryValidity';
 import type {
@@ -378,7 +379,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // lesson cached at the '-spelling' rev keeps its dead-tier prose forever while
 // the audits (fresh browser, cold cache, always regenerating) show green.
 // One bump batching both fixes, per the locked cost rule.
-const WALKTHROUGH_GEN_REV = '2026-08-13-material-ledger';
+const WALKTHROUGH_GEN_REV = '2026-08-23-baked-gem-beats';
 
 export async function getCachedOpening(
   name: string,
@@ -1676,6 +1677,39 @@ export function narrationTailCovered(
 // openingDetectionService — we use it here without re-importing the
 // raw openings-lichess.json data.
 
+/**
+ * BAKE PUNISH-GEM DETOURS onto a walkthrough node (David 2026-08-23: "bake gem
+ * teaching into the teach me x opening in learn with coach").
+ *
+ * If the position `pathSans` reaches sits on surfaceable gem(s) (opponent to
+ * move, the student could punish a slip), attach each as a `BakedGemLine` on
+ * `node.gems`. The runtime turns these into an interactive PICKER: it pauses,
+ * offers the trap(s), and on tap plays each one out on the board (inaccuracy +
+ * punish) and snaps back — see `useTeachWalkthrough`. The narration + arrows are
+ * the SAME the opening tab uses (`gemToPlayableLine`).
+ *
+ * G0/G3: every move is the curated, engine-verified gem's own; the model decides
+ * nothing here. Only genuine WEAPONS for the taught side are baked (a gem where
+ * the student is the one who slips is a warning, out of scope). `spliced` dedupes
+ * across the whole tree so a gem taught on two lines never doubles.
+ */
+export function attachBakedGems(
+  node: WalkthroughTreeNode,
+  pathSans: string[],
+  spliced: Set<string>,
+  studentSide?: 'white' | 'black',
+): void {
+  let detours: ReturnType<typeof gemsForPosition>;
+  try {
+    detours = gemsForPosition(pathSans, studentSide);
+  } catch {
+    return;
+  }
+  const fresh = detours.filter((d) => !spliced.has(d.gemId));
+  if (fresh.length === 0) return;
+  for (const d of fresh) spliced.add(d.gemId);
+  node.gems = [...(node.gems ?? []), ...fresh];
+}
 
 async function generateOpeningFromDbNarration(
   name: string,
@@ -2103,6 +2137,9 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // there so its lead-the-eye arrows are code-computed too.
   const terminusFen = positions[positions.length - 1].fen;
   const spineSans = positions.map((q) => q.san);
+  // Tree-wide dedupe for BAKED gem-crush beats — a gem taught on the spine
+  // terminus must not teach again on a branch that transposes to the same board.
+  const splicedGemIds = new Set<string>();
   const branchChildren: ChildWrap[] = branches.map((b, idx) => {
     // Notes ground this branch's arrows the same way they ground the spine's
     // (G0). Scoped per branch: a branch is a path the student takes INSTEAD of
@@ -2200,6 +2237,8 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         if (shortText) segment.shortText = shortText;
         node.narration = [segment];
       }
+      // Bake the gem on this variation ply too (branchSans[j+1] is extension j).
+      attachBakedGems(node, [...spineSans, ...branchSans.slice(0, j + 2)], splicedGemIds, studentSide);
       extChildren = [{ node }];
     }
     const shortTeaser = narration.shortBranchIdeas?.[idx]?.trim();
@@ -2224,6 +2263,8 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       if (shortTeaser) segment.shortText = shortTeaser;
       branchNode.narration = [segment];
     }
+    // Bake the gem on the variation's naming move too.
+    attachBakedGems(branchNode, [...spineSans, b.san], splicedGemIds, studentSide);
     return {
       label: b.label,
       forkSubtitle: teaser,
@@ -2498,6 +2539,10 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     // Any arrow whose sentence cannot be identified rides the FIRST segment, so
     // an arrow is never dropped for being hard to place.
     node.narration = splitSegmentBySentence(segment, grounded.spans);
+    // BAKE THE GEM PICKER: if this spine position sits on surfaceable gem(s),
+    // attach the played-out detour(s) so the walkthrough offers the trap picker
+    // here (David 2026-08-23). Independent of the video bake — additive there too.
+    attachBakedGems(node, spineSans.slice(0, i + 1), splicedGemIds, studentSide);
     nextChildren = [{ node }];
   }
   // In Face mode, surface the canonical counter's name with a

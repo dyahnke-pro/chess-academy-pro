@@ -24,7 +24,8 @@ import { useTeachWalkthrough, buildPunishWalkthroughTree } from './useTeachWalkt
 import { logAppAudit } from '../services/appAuditor';
 import { voiceService } from '../services/voiceService';
 import { useAppStore } from '../stores/appStore';
-import type { PunishLesson } from '../types/walkthroughTree';
+import type { PunishLesson, BakedGemLine } from '../types/walkthroughTree';
+import { Chess } from 'chess.js';
 
 // Synthetic tree:
 //   root → 1.e4 → 1...e5 → FORK { 2.Nc3 → leaf , 2.Nf3 → leaf }
@@ -541,6 +542,99 @@ describe('gem-crush aside (Watch plays like his videos)', () => {
       },
       { timeout: 8000 },
     );
+  });
+});
+
+// ─── Baked gem picker (David 2026-08-23) ──────────────────────────────────
+describe('baked gem picker', () => {
+  beforeEach(() => {
+    vi.mocked(voiceService.speakForced).mockResolvedValue(undefined);
+    vi.mocked(voiceService.stop).mockClear();
+    useAppStore.setState({ activeProfile: undefined } as never);
+  });
+
+  // A short synthetic detour — the runtime plays whatever steps a BakedGemLine
+  // carries; detour construction legality is covered by
+  // openingGenerator.gemBake.test.ts. Keeping it 2 plies keeps the state-machine
+  // test fast and deterministic.
+  function firstDetour(): BakedGemLine {
+    const c = new Chess();
+    c.move('e4');
+    const baseFen = c.fen();
+    c.move('e5');
+    const f1 = c.fen();
+    c.move('Nf3');
+    const f2 = c.fen();
+    return {
+      gemId: 'test:e4:e5',
+      title: 'Test trap',
+      inaccuracy: 'e5',
+      baseFen,
+      steps: [
+        { san: 'e5', fen: f1, idea: 'the slip', shortIdea: 'slip', arrows: [] },
+        { san: 'Nf3', fen: f2, idea: 'the punish', shortIdea: 'punish', arrows: [] },
+      ],
+    };
+  }
+
+  // A one-move tree whose only node is a leaf carrying the baked gem — the
+  // runtime reads node.gems directly, so the picker fires regardless of path.
+  function gemTree(detour: BakedGemLine): WalkthroughTree {
+    return {
+      openingName: 'Gem',
+      eco: 'B10',
+      intro: '',
+      outro: '',
+      root: {
+        san: null,
+        movedBy: null,
+        idea: '',
+        children: [
+          {
+            node: {
+              san: 'e4',
+              movedBy: 'white',
+              idea: 'reach the trap position',
+              gems: [detour],
+              children: [],
+            },
+          },
+        ],
+      },
+    } as WalkthroughTree;
+  }
+
+  it('pauses and offers the picker at a baked-gem node', async () => {
+    const detour = firstDetour();
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(gemTree(detour)));
+    await waitFor(() => expect(result.current.phase).toBe('gem-picker'), { timeout: 8000 });
+    expect(result.current.gemPickerLines).toHaveLength(1);
+    expect(result.current.gemPickerLines[0].steps.length).toBeGreaterThan(0);
+  });
+
+  it('playGems plays the detour out on the board, snaps back, and resumes', async () => {
+    const detour = firstDetour();
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(gemTree(detour)));
+    await waitFor(() => expect(result.current.phase).toBe('gem-picker'), { timeout: 8000 });
+    act(() => result.current.playGems());
+    // The detour drives the board via trapFen; at the end it snaps back
+    // (trapFen null) and resumes — the node is a leaf, so → 'leaf'.
+    await waitFor(() => expect(result.current.phase).toBe('leaf'), { timeout: 12000 });
+    expect(result.current.trapFen).toBeNull();
+    expect(result.current.gemPickerLines).toHaveLength(0);
+  }, 20000);
+
+  it('dismissGemPicker resumes without playing anything', async () => {
+    const detour = firstDetour();
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(gemTree(detour)));
+    await waitFor(() => expect(result.current.phase).toBe('gem-picker'), { timeout: 8000 });
+    act(() => result.current.dismissGemPicker());
+    await waitFor(() => expect(result.current.phase).toBe('leaf'), { timeout: 8000 });
+    expect(result.current.trapFen).toBeNull();
+    expect(result.current.gemPickerLines).toHaveLength(0);
   });
 });
 

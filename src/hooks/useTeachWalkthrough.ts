@@ -59,6 +59,7 @@ import type {
   DrillLine,
   NarrationArrow,
   NarrationHighlight,
+  BakedGemLine,
 } from '../types/walkthroughTree';
 
 const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
@@ -489,6 +490,8 @@ export type WalkthroughPhase =
   | 'fork'
   | 'trap-prompt'    // inline-trap intro narrated; user picks See/Continue
   | 'trap-playing'   // trap line animating on the board
+  | 'gem-picker'     // baked gem(s) available here; user picks See it / Keep going
+  | 'gem-playing'    // gem detour(s) animating on the board
   | 'leaf'
   | 'paused'
   | 'stage-menu'  // post-leaf hub; pick which stage to do next
@@ -704,6 +707,19 @@ export interface UseTeachWalkthroughReturn {
   /** User declined the trap intro — move to the next queued trap
    *  (if any) or transition to the fork picker. */
   skipTrap: () => void;
+
+  // ─── Baked gem picker (David 2026-08-23) ─────────────────────
+  /** Gem detours offered at the current position (phase === 'gem-picker').
+   *  Empty when no picker is showing. Each entry is a trap the opponent could
+   *  walk into here; tapping "see it" plays them all out. */
+  gemPickerLines: BakedGemLine[];
+  /** User tapped "see the trap(s)" — play EVERY offered gem out on the board
+   *  (inaccuracy + punish, snapping to the base between each), then snap back
+   *  and resume the walkthrough. */
+  playGems: () => void;
+  /** User tapped "keep going" — dismiss the picker and resume the walkthrough
+   *  without playing any gem. */
+  dismissGemPicker: () => void;
 }
 
 /** Find punish lessons whose setupMoves match the walkthrough's
@@ -927,6 +943,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   const [trapQueue, setTrapQueue] = useState<PunishLesson[]>([]);
   const [trapIndex, setTrapIndex] = useState(0);
   const [trapFen, setTrapFen] = useState<string | null>(null);
+  // Baked gem picker: the detours offered at the current position, and (in a
+  // ref, so `playGems` reads them without a stale closure) the same list.
+  const [gemPickerLines, setGemPickerLines] = useState<BakedGemLine[]>([]);
+  const gemLinesRef = useRef<BakedGemLine[]>([]);
 
   // When inside a punish-walkthrough sub-flow, this holds the
   // ORIGINAL opening tree so we can return to it when the lesson
@@ -964,6 +984,10 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
   // trap-completed node fell through to setPhase('fork') even if the
   // node was a linear advance — interrupting the walkthrough mid-line.
   const deferredTransitionRef = useRef<(() => void) | null>(null);
+  // When the gem picker pauses the walkthrough, this holds the closure that
+  // resumes the transition (re-enters `transitionAfter` past the picker). Set
+  // when the picker opens; run when the student plays the gems or keeps going.
+  const gemResumeRef = useRef<(() => void) | null>(null);
 
   const cleanupNarration = useCallback((): void => {
     // ORPHAN EVERY IN-FLIGHT CHAIN FIRST (David 2026-08-02: beats repeating,
@@ -1126,8 +1150,44 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
       // fall through to the real transition. Fires once per node; skip/pause
       // cancels it via cancelNarrationRef like any other narration.
       let gemAsideDone = false;
+      let gemPickerDone = false;
       const transitionAfter = (): void => {
         if (!isCurrent()) return;
+        // BAKED GEM PICKER (David 2026-08-23) — if gem detour(s) were baked at
+        // THIS position, pause and offer the trap picker before anything else.
+        // The student decides (pause-and-wait, no timer — the fork contract);
+        // `playGems`/`dismissGemPicker` resume by calling the parked closure,
+        // which re-enters here with the picker already consumed.
+        if (!gemPickerDone) {
+          gemPickerDone = true;
+          const gems = node.gems ?? [];
+          if (gems.length > 0) {
+            gemAsideDone = true; // the picker replaces the live gem aside here
+            setNarrationArrows([]);
+            setNarrationHighlights([]);
+            gemLinesRef.current = gems;
+            setGemPickerLines(gems);
+            gemResumeRef.current = (): void => {
+              transitionAfter();
+            };
+            cancelNarrationRef.current = (): void => {
+              setGemPickerLines([]);
+              gemLinesRef.current = [];
+              gemResumeRef.current = null;
+              setTrapFen(null);
+              setNarrationArrows([]);
+              setNarrationHighlights([]);
+            };
+            void logAppAudit({
+              kind: 'coach-narration-spoken',
+              category: 'narration',
+              source: 'useTeachWalkthrough.gemPicker',
+              summary: `gem picker @[${path.filter((n) => n.san).map((n) => n.san).join(' ')}]: ${gems.length} trap(s)`,
+            });
+            setPhase('gem-picker');
+            return;
+          }
+        }
         if (!gemAsideDone) {
           gemAsideDone = true;
           const sansSoFar = path
@@ -1136,8 +1196,13 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           // The delta at this move: a curated gem crush first (highest value),
           // else the ENGINE THREAT the move just created (David 2026-07-24 "add
           // engine delta to watch"). Both draw arrows on the STATIC board.
-          let aside: DeltaAside | null = computeWatchGemAside(null, sansSoFar);
-          if (!aside && node.san !== null && node.movedBy) {
+          // Skip the live gem aside when a gem was BAKED here — the picker above
+          // already owns that teaching (it would otherwise double-teach).
+          const hasBakedGems = (node.gems?.length ?? 0) > 0;
+          let aside: DeltaAside | null = hasBakedGems
+            ? null
+            : computeWatchGemAside(null, sansSoFar);
+          if (!aside && !hasBakedGems && node.san !== null && node.movedBy) {
             const fenAfter = fenForPath(sansSoFar, treeRef.current?.startFen);
             const fenBefore = fenForPath(sansSoFar.slice(0, -1), treeRef.current?.startFen);
             aside = computeThreatDelta(
@@ -1818,6 +1883,85 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     })();
   }, [trapQueue, trapIndex, advancePastTrap]);
 
+  // ─── Baked gem picker handlers (David 2026-08-23) ────────────────────────
+  // Snap-to-base + digest pauses for the played-out detour. Short enough not to
+  // stall the lesson; long enough for the board to read as "reset" and for the
+  // final position to sink in before we move on.
+  const GEM_RESET_PAUSE_MS = 550;
+  const GEM_DIGEST_PAUSE_MS = 1100;
+
+  /** Resume the walkthrough after the picker (play or dismiss). Clears the
+   *  detour board + arrows and runs the parked transition closure. */
+  const resumeAfterGems = useCallback((): void => {
+    setGemPickerLines([]);
+    gemLinesRef.current = [];
+    setTrapFen(null);
+    setNarrationArrows([]);
+    setNarrationHighlights([]);
+    const resume = gemResumeRef.current;
+    gemResumeRef.current = null;
+    if (resume) resume();
+  }, []);
+
+  const playGems = useCallback((): void => {
+    const gems = gemLinesRef.current;
+    if (!gems || gems.length === 0) return;
+    // Capture the live run token — a navigate/pause/stop bumps it via
+    // cleanupNarration, and every continuation below bails the moment it does.
+    const runId = runIdRef.current;
+    const stillCurrent = (): boolean => runIdRef.current === runId;
+    voiceService.stop();
+    setGemPickerLines([]); // hide the picker while the detour plays
+    setPhase('gem-playing');
+    cancelNarrationRef.current = (): void => {
+      setTrapFen(null);
+      setNarrationArrows([]);
+      setNarrationHighlights([]);
+    };
+    void (async (): Promise<void> => {
+      try {
+        for (const gem of gems) {
+          if (!stillCurrent()) return;
+          // Snap to the base position and let it read as a reset before this
+          // trap plays (each gem is a different slip FROM the same board).
+          setTrapFen(null);
+          setNarrationArrows([]);
+          setNarrationHighlights([]);
+          await waitInterruptibly(GEM_RESET_PAUSE_MS, stillCurrent);
+          for (const step of gem.steps) {
+            if (!stillCurrent()) return;
+            setTrapFen(step.fen);
+            setNarrationArrows(step.arrows);
+            setNarrationHighlights(step.highlights ?? []);
+            if (step.idea.trim()) {
+              try {
+                await speakWalkthroughText(step.idea, step.shortIdea, stillCurrent);
+              } catch {
+                // Voice errors never block the animation arc.
+              }
+            } else {
+              // Silent ply — hold briefly so the arrow reads, then move on.
+              await waitInterruptibly(700, stillCurrent);
+            }
+          }
+          if (!stillCurrent()) return;
+          // Brief pause at the end of the gem so the finish can sink in
+          // (David 2026-08-23: "a brief pause before snapping back to let the
+          // brain digest the end of the gem").
+          await waitInterruptibly(GEM_DIGEST_PAUSE_MS, stillCurrent);
+        }
+      } catch {
+        /* fall through to resume */
+      }
+      if (!stillCurrent()) return;
+      resumeAfterGems();
+    })();
+  }, [resumeAfterGems]);
+
+  const dismissGemPicker = useCallback((): void => {
+    resumeAfterGems();
+  }, [resumeAfterGems]);
+
   const stop = useCallback((): void => {
     cleanupNarration();
     setTree(null);
@@ -1830,6 +1974,9 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     setTrapFen(null);
     setPendingStageJump(null);
     deferredTransitionRef.current = null;
+    setGemPickerLines([]);
+    gemLinesRef.current = [];
+    gemResumeRef.current = null;
   }, [cleanupNarration]);
 
   const stepBack = useCallback((): void => {
@@ -2513,5 +2660,8 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
     trapsQueuedAfter: Math.max(0, trapQueue.length - trapIndex - 1),
     acceptTrap,
     skipTrap,
+    gemPickerLines,
+    playGems,
+    dismissGemPicker,
   };
 }

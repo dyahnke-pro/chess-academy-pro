@@ -32,9 +32,16 @@ import {
   isSurfaceableGem,
   gemId,
   gemNarrationFor,
+  gemToPlayableLine,
+  gemInaccuracyFen,
   type PunishGem,
 } from '../data/lessons/punishGems';
-import type { NarrationArrow } from '../types/walkthroughTree';
+import type {
+  NarrationArrow,
+  NarrationHighlight,
+  BakedGemLine,
+  BakedGemStep,
+} from '../types/walkthroughTree';
 
 /** Register-neutral crush facts + arrows. Both surfaces build their voicing from
  *  this; neither invents chess. */
@@ -386,6 +393,106 @@ export function computeWatchGemAside(
     say: buildWatchGemSay(crush),
     short: `${cleanSan(crush.inaccuracy)}? Punish ${cleanSan(crush.punish)}.`,
   };
+}
+
+// ─── Baked gem DETOUR — the picker's played-out line (David 2026-08-23) ──────
+const ARROW_COLORS = new Set(['green', 'red', 'blue', 'yellow', 'orange']);
+function toNarrationColor(c?: string): NarrationArrow['color'] {
+  return c && ARROW_COLORS.has(c) ? (c as NarrationArrow['color']) : 'green';
+}
+
+/**
+ * Build the played-out DETOUR for one gem: the [inaccuracy, ...punish...] tail,
+ * each ply carrying the SAME narration + arrows the opening tab uses
+ * (`gemToPlayableLine`, David 2026-08-23: "use the same narrations and arrows
+ * from the opening tab"). `baseFen` is the position the detour plays from and
+ * snaps back to. Returns null if the gem yields no playable line.
+ *
+ * G0/G3: every move is the curated gem's own, replayed through chess.js; the
+ * prose is the opening tab's hand-authored/board-composed narration. Nothing
+ * invented here.
+ */
+export function buildGemDetour(gem: PunishGem): BakedGemLine | null {
+  const line = gemToPlayableLine(gem);
+  if (!line) return null;
+  const setup = gem.lineMoves.split(/\s+/).filter(Boolean);
+  const inaccuracyPly = setup.length;
+  const detourSans = line.moves.slice(inaccuracyPly);
+  if (detourSans.length === 0) return null;
+
+  const baseFen = gemInaccuracyFen(gem); // position after the spine (pre-slip)
+  let board: Chess;
+  try {
+    board = new Chess(baseFen);
+  } catch {
+    return null;
+  }
+
+  const steps: BakedGemStep[] = [];
+  for (let i = 0; i < detourSans.length; i += 1) {
+    const srcIdx = inaccuracyPly + i;
+    let mv;
+    try {
+      mv = board.move(detourSans[i]);
+    } catch {
+      break; // playLine is gate-legal, but never throw mid-build
+    }
+    if (!mv) break;
+    const arrows = (line.arrows[srcIdx] ?? []).map((a) => ({
+      from: a.from,
+      to: a.to,
+      color: toNarrationColor(a.color),
+    }));
+    const highlights: NarrationHighlight[] = (line.highlights?.[srcIdx] ?? []).map((h) => ({
+      square: h.square,
+      color: toNarrationColor(h.color) as NarrationHighlight['color'],
+    }));
+    steps.push({
+      san: mv.san,
+      fen: board.fen(),
+      idea: (line.annotations[srcIdx] ?? '').trim(),
+      shortIdea: (line.learnCues?.[srcIdx] ?? '').trim(),
+      arrows,
+      ...(highlights.length > 0 ? { highlights } : {}),
+    });
+  }
+  if (steps.length === 0) return null;
+
+  return {
+    gemId: gemId(gem),
+    title: line.title,
+    inaccuracy: cleanSan(gem.inaccuracy),
+    baseFen,
+    steps,
+  };
+}
+
+/**
+ * Every surfaceable gem whose spine reaches the position `pathSans` stands in,
+ * built into baked detours. Optionally scoped to the taught student's side so
+ * only genuine WEAPONS (opponent slips, student crushes) are offered — a gem
+ * where the student is the one who slips is a warning, a different beat.
+ */
+export function gemsForPosition(
+  pathSans: string[],
+  studentSide?: 'white' | 'black',
+): BakedGemLine[] {
+  const out: BakedGemLine[] = [];
+  for (const gem of gemsAtPosition(pathSans)) {
+    const detour = buildGemDetour(gem);
+    if (!detour) continue;
+    if (studentSide) {
+      let punisher: 'white' | 'black';
+      try {
+        punisher = new Chess(detour.baseFen).turn() === 'w' ? 'black' : 'white';
+      } catch {
+        continue;
+      }
+      if (punisher !== studentSide) continue;
+    }
+    out.push(detour);
+  }
+  return out;
 }
 
 // ─── Review voicing — RETROSPECTIVE, the user's own game ───────────────────
