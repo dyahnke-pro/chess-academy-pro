@@ -17,6 +17,7 @@ import {
   stampKidAccess as svcStampKidAccess,
   recordCoachLessonUsed as svcRecordCoachLessonUsed,
   recordCoachChatTurnUsed as svcRecordCoachChatTurnUsed,
+  recordCoachSpend as svcRecordCoachSpend,
   markCoachUnlockAnnouncementSeen as svcMarkCoachUnlockAnnouncementSeen,
   type ClaimResult,
 } from '../services/freeTierService';
@@ -40,6 +41,9 @@ export interface FreeTierState {
   recordCoachLessonUsed: () => Promise<void>;
   /** Record one coach chat turn; persists + updates the mirror. */
   recordCoachChatTurnUsed: () => Promise<void>;
+  /** Accrue coach LLM token cost (USD) against the lifetime free budget;
+   *  persists + updates the mirror so the gate re-evaluates without a reload. */
+  recordCoachSpend: (costUsd: number) => Promise<void>;
   /** Mark the coach-unlock announcement seen; persists + updates the mirror. */
   markCoachUnlockSeen: () => Promise<void>;
 }
@@ -51,6 +55,7 @@ const INITIAL_ROW: FreeTierRecord = {
   kidFirstAccessAt: null,
   coachLessonsUsed: 0,
   coachChatTurnsUsed: 0,
+  coachSpendUsd: 0,
   coachUnlockSeenAt: null,
   updatedAt: 0,
 };
@@ -82,6 +87,10 @@ export const useFreeTierStore = create<FreeTierState>((set) => ({
   },
   recordCoachChatTurnUsed: async () => {
     const row = await svcRecordCoachChatTurnUsed();
+    set({ row });
+  },
+  recordCoachSpend: async (costUsd: number) => {
+    const row = await svcRecordCoachSpend(costUsd);
     set({ row });
   },
   markCoachUnlockSeen: async () => {

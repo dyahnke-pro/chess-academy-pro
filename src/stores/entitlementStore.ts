@@ -95,16 +95,17 @@ export const selectIsPro = (s: EntitlementState): boolean => s.isPro;
  * cutover. Controlled by the build flag `VITE_PAYWALL_ENABLED=true`.
  */
 export function isPaywallGateEnabled(): boolean {
-  // 🔓 PAYWALL DISABLED — THE ENTIRE APP IS FREE (David 2026-08-22: "make it
-  // free and see if it's even usable"). The shipped 3.6 App Store binary was
-  // built with VITE_PAYWALL_ENABLED baked TRUE and walled users on launch, so
-  // nobody could get into the app. Forcing the gate dormant in CODE guarantees
-  // the whole app is open on every surface regardless of what the build env
-  // sets — an instant, build-safe unblock (resolveAccess / AccessGate / the
-  // free-tier meters all key off this one function). To re-enable the metered
-  // gate later, restore the env check below.
-  // return import.meta.env.VITE_PAYWALL_ENABLED === 'true';
-  return false;
+  // Gate is env-driven again (David 2026-08-23: "free until they have hit $1.00
+  // worth of tokens on deepseek"). This is SAFE to re-arm — unlike the 3.6
+  // binary that walled users on launch, the coach free tier now gates on
+  // cumulative DeepSeek token COST ($1 lifetime, see FREE_COACH_SPEND_LIMIT_USD).
+  // A fresh / updated install has coachSpendUsd = 0, so `hasCoachAccessLeft` is
+  // true and EVERY route (home + coach included) is allowed until the user has
+  // actually spent $1 of tokens — there is no launch-wall to reintroduce. Web
+  // stays free two ways: no RevenueCat key ⇒ isPro (billingService), and
+  // VITE_PAYWALL_ENABLED is absent on Vercel ⇒ this returns false. The wall only
+  // bites on a native build that bakes the flag TRUE AND after $1 of spend.
+  return import.meta.env.VITE_PAYWALL_ENABLED === 'true';
 }
 
 /** Whole days remaining until `expiresAt` (trial countdown copy). Returns

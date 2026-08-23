@@ -1,4 +1,5 @@
 import { db } from '../db/schema';
+import { useFreeTierStore } from '../stores/freeTierStore';
 
 export interface ApiUsageEntry {
   id: string;
@@ -41,7 +42,7 @@ export async function recordApiUsage(
   model: string,
   inputTokens: number,
   outputTokens: number,
-): Promise<void> {
+): Promise<number> {
   const cost = estimateCost(model, inputTokens, outputTokens);
   const entry: ApiUsageEntry = {
     id: `usage-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
@@ -63,6 +64,16 @@ export async function recordApiUsage(
       preferences: { ...profile.preferences, estimatedSpend: newSpend },
     });
   }
+
+  // Accrue against the coach free-tier budget (David 2026-08-23: "free until
+  // they have hit $1.00 worth of tokens on deepseek"). Route through the store
+  // action so the mirror the access gate reads updates live — no reload needed.
+  // Always records (cheap, honest data); the gate only reads it when live.
+  if (cost > 0) {
+    void useFreeTierStore.getState().recordCoachSpend(cost);
+  }
+
+  return cost;
 }
 
 export async function getMonthlySpend(): Promise<number> {

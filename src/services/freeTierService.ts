@@ -31,6 +31,16 @@ export const FREE_PUZZLE_LIMIT = 20;
 export const FREE_COACH_LESSON_LIMIT = 7;
 export const FREE_COACH_CHAT_LIMIT = 50;
 
+/**
+ * THE coach free-tier gate (David 2026-08-23: "free until they have hit $1.00
+ * worth of tokens on deepseek"). A non-Pro user gets $1.00 of estimated coach
+ * LLM token-cost, LIFETIME, before /coach/* walls. This SUPERSEDES the old
+ * lesson/chat-turn count buckets as the gate — those counters stay for
+ * analytics only. $1 of DeepSeek is generous: a coach turn is a fraction of a
+ * cent, so this is hundreds of turns before anyone sees the wall.
+ */
+export const FREE_COACH_SPEND_LIMIT_USD = 1.0;
+
 /** Free kid-section window: 7 days from first kid access. */
 export const KID_FREE_MS = 7 * 24 * 60 * 60 * 1000;
 
@@ -67,6 +77,7 @@ const DEFAULT_ROW: FreeTierRecord = {
   kidFirstAccessAt: null,
   coachLessonsUsed: 0,
   coachChatTurnsUsed: 0,
+  coachSpendUsd: 0,
   coachUnlockSeenAt: null,
   updatedAt: 0,
 };
@@ -147,13 +158,25 @@ export function hasCoachChatTurnsLeft(state: Pick<FreeTierRecord, 'coachChatTurn
   return coachChatTurnsRemaining(state) > 0;
 }
 
-/** Whether ANY coach budget remains — the route-level mount decision. The two
- *  buckets are independent spends (a lesson start doesn't touch chat turns and
- *  vice versa); the coach route walls only once BOTH are exhausted. Pure. */
-export function hasCoachAccessLeft(
-  state: Pick<FreeTierRecord, 'coachLessonsUsed' | 'coachChatTurnsUsed'>,
-): boolean {
-  return hasCoachLessonsLeft(state) || hasCoachChatTurnsLeft(state);
+/** Accrue estimated coach LLM (DeepSeek) token cost against the lifetime free
+ *  budget. Called at the one LLM chokepoint (coachCostService.recordApiUsage).
+ *  Ignores non-positive/NaN costs so an unpriced model never advances the gate. */
+export async function recordCoachSpend(costUsd: number): Promise<FreeTierRecord> {
+  const cur = await loadFreeTier();
+  if (!(costUsd > 0)) return cur;
+  return patch({ coachSpendUsd: cur.coachSpendUsd + costUsd });
+}
+
+/** USD of free coach budget left (never negative). Pure. */
+export function coachSpendRemaining(state: Pick<FreeTierRecord, 'coachSpendUsd'>): number {
+  return Math.max(0, FREE_COACH_SPEND_LIMIT_USD - state.coachSpendUsd);
+}
+
+/** Whether ANY free coach budget remains — the route-level mount decision.
+ *  David 2026-08-23: gate on cumulative DeepSeek token COST ($1 lifetime), not
+ *  on lesson/chat-turn counts. Pure. */
+export function hasCoachAccessLeft(state: Pick<FreeTierRecord, 'coachSpendUsd'>): boolean {
+  return state.coachSpendUsd < FREE_COACH_SPEND_LIMIT_USD;
 }
 
 /** Whether the "the coach is free to try" announcement still needs to be
