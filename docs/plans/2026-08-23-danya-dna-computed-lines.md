@@ -79,7 +79,34 @@ into `src/services/tacticalRead.ts`):
   reorder; the old danya branch (508712a) predates the 3.6 reset and is the
   wrong base — only its `tacticalRead.ts` engine is reused.
 
-## Next-session pickup
-Start P1 in `CoachTeachPage.tsx` (the free-play turn voicing, ~L7450-7550 where
-the tacticalRead probe was wired on the old branch). Reuse the turn's cached
-engine lines; do not add an engine sweep on the hot path.
+## Key architectural finding (2026-08-23, before wiring)
+Current main's free-play move narration is **DETERMINISTIC** — the `facts`
+bundle in the trackA block is the AUDIT RECORD; the spoken line comes from
+`buildVoicePackage` (code templates), NOT a per-move model call. They removed
+model-per-move on purpose (2026-08-02 prompt-leak incidents: the student heard
+the prompt read aloud). So the fix that FITS the architecture is the
+**deterministic Danya read** (`narrateTacticalRead`: affirm→but→refute→line→
+point→verdict), NOT routing through `voiceFacts`+directives per move. That was
+my earlier assumption and it is wrong for this surface — do not add an LLM call
+on the move hot path.
+
+## Next-session pickup (concrete)
+1. **Wire site:** `CoachTeachPage.tsx` trackA block. `studentBest =
+   analyzeWithBudget(probe.fen(), COACH_TURN_DEPTH, 1200)` at ~L7065 gives
+   `studentBest.topLines` — the engine lines already in hand (no new sweep).
+2. **Enrich the RECOMMENDATION beat (~L7218+), don't add a competing beat**
+   (the file is obsessed with dedup / double-speak). Build the read via
+   `tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor,
+   {maxPlies:6})` and fold `narrateTacticalRead(read)` (or its line+point+
+   verdict clauses) into the existing rec beat — the branch's proven shape was
+   `${recLineBase} Play it out: ${seq} — ${point}` (see branch
+   508712a CoachTeachPage ~L7440-7476), plus `speakTemptingTurn` for the but-turn.
+3. **P2 stand-down:** in `voicePackage.ts` extend `pvSpoke()` so `borrowed`
+   yields when the computed read spoke (fix the 08-15 over-relaxation). Couple
+   with P1 or it recreates "I need to hear the corpus!!".
+4. **Then** capture a real line on the branch (narration listener) → tune to
+   David's ear (P3) → real-game audit (P4) → approve → reconcile onto main.
+
+NOTE: this is careful surgery on the coach's core with paying customers on the
+App Store; the real-game narration audit (LLM + browser drive) MUST run on the
+branch before it goes near prod. Do not ship on typecheck alone.
