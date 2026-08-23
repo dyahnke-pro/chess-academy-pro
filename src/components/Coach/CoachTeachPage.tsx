@@ -291,6 +291,35 @@ const STARTING_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
  *  One flag so any lane is a one-line flip back. */
 const NARRATE_DNA_ONLY = true;
 
+/** THE DNA WHITELIST (David 2026-08-23: "the only computed voice I should hear
+ *  is the DNA computations. If it doesn't fit within the DNA structure it does
+ *  not get spoken"). A WHITELIST, not a blacklist: default-silent, and only a
+ *  kind that IS part of the Danya DNA structure may be spoken. Any lane not
+ *  listed here is dropped from the spoken package no matter what produced it, so
+ *  a future non-DNA lane is silent by construction instead of leaking until
+ *  someone hand-silences it.
+ *
+ *  IN — the DNA structure:
+ *   • note        — the farmed corpus, his voice (the 90%)
+ *   • gem/threat/tactic — threat + gem + tactic detection (the 10%)
+ *   • opening     — naming the opening (R1 of the arc)
+ *   • computed    — the register (but-turn/hedge/compare), the Danya behaviours,
+ *                   the named structure, piece-quality. (The non-DNA `computed`
+ *                   lanes — engine reads, eval-split, plan prose, best-move — are
+ *                   already silenced at their source, so what reaches here as
+ *                   `computed` is DNA.)
+ *   • drawback/mistake/coachMistake — the backward look: what the last move gave
+ *                   up, the mistake call-out, the coach's own-blunder admission.
+ *                   DNA per David's 2026-08-10 ordering ("backwards first…").
+ *
+ *  OUT — silent: `observation` (the generic positional filler — "your pawn on a2
+ *  is isolated", not a specific Danya behaviour), `plan` and `borrowed` (already
+ *  silenced at source; here for defence in depth). */
+const DNA_VOICE_KINDS: ReadonlySet<VoiceFactKind> = new Set<VoiceFactKind>([
+  'note', 'gem', 'threat', 'tactic', 'opening', 'computed',
+  'drawback', 'mistake', 'coachMistake',
+]);
+
 /** Cheap gate: does the request look like a "X vs Y" matchup? Only then do
  *  we run the (fuzzy-per-side) matchup resolver. */
 const MATCHUP_HINT_RE = /\b(?:vs\.?|versus|against)\b/i;
@@ -6820,7 +6849,7 @@ export function CoachTeachPage(): JSX.Element {
     // doctrine keeps alongside the note, not the wordy lanes he flagged.
     const noteHere = !!(curatedLine || noteLine || bakedLine);
     const softStandDown = NARRATE_DNA_ONLY && noteHere;
-    const pkg = buildVoicePackage([
+    const instantFull = buildVoicePackage([
       ...(gemLine ? [{ kind: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
       ...(tacticLine ? [{ kind: 'tactic' as const, text: tacticLine, fen: args.fenAfterReply, squares: tacticSquares }] : []),
       ...(threatLine ? [{ kind: 'threat' as const, text: threatLine, fen: args.fenAfterReply, squares: threatSquares }] : []),
@@ -6858,6 +6887,18 @@ export function CoachTeachPage(): JSX.Element {
       // a2 is isolated". Lowest rank by construction.
       ...(positionalLine && !softStandDown ? [{ kind: 'observation' as const, text: positionalLine, fen: args.fenAfterReply }] : []),
     ]);
+    // DNA WHITELIST + ~3 REASONS — INSTANT package (David 2026-08-23: "only the
+    // DNA computations… if it doesn't fit the DNA structure it does not get
+    // spoken", and "doesn't he give 3 ideas?" — DNA tally 3.4/move). Drop any
+    // non-DNA kind (the generic positional filler), then keep the top three
+    // rank-sorted (gem/note/mistake lead). A busy tactical turn used to stack
+    // coach-mistake + tactic + backward-look + register into a 400-char wall
+    // (prod audit, 2026-08-23); this caps it to his three-reason breath.
+    const INSTANT_MAX_REASONS = 3;
+    const instantDna = instantFull.kept.filter((f) => DNA_VOICE_KINDS.has(f.kind)).slice(0, INSTANT_MAX_REASONS);
+    const pkg = (NARRATE_DNA_ONLY && instantDna.length < instantFull.kept.length)
+      ? buildVoicePackage(instantDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: args.fenAfterReply })))
+      : instantFull;
 
     if (bakedPly !== null) {
       void logAppAudit({
@@ -8686,17 +8727,17 @@ export function CoachTeachPage(): JSX.Element {
                     pending.lines.map(({ kind, text, squares }) => ({ kind, text, squares, fen: pending.fen })),
                     instantSpokenText,
                   );
-                  // ~3 REASONS, HIS CADENCE (David 2026-08-23: "doesn't he give 3
-                  // ideas?" — the DNA tally is 3.4 reasons/move). The kept lanes are
-                  // rank-sorted, so keep the TOP THREE — the register, a structure
-                  // note and a piece-quality read read as his three-reason breath,
-                  // never the 6-8-lane grab-bag that made the wall. Any beyond three
-                  // stand down for this ply; a stable read (structure) is still there
-                  // next turn to lead.
+                  // DNA WHITELIST + ~3 REASONS (David 2026-08-23: "only the DNA
+                  // computations… if it doesn't fit the DNA structure it does not
+                  // get spoken", and "doesn't he give 3 ideas?"). Drop any non-DNA
+                  // kind, then keep the TOP THREE rank-sorted — the register, a
+                  // structure note and a piece-quality read as his three-reason
+                  // breath, never the 6-8-lane grab-bag that made the wall.
                   const DNA_MAX_REASONS = 3;
-                  const hintPkg = (NARRATE_DNA_ONLY && fullPkg.kept.length > DNA_MAX_REASONS)
+                  const lateDna = fullPkg.kept.filter((f) => DNA_VOICE_KINDS.has(f.kind)).slice(0, DNA_MAX_REASONS);
+                  const hintPkg = (NARRATE_DNA_ONLY && lateDna.length < fullPkg.kept.length)
                     ? buildVoicePackage(
-                      fullPkg.kept.slice(0, DNA_MAX_REASONS).map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: pending.fen })),
+                      lateDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: pending.fen })),
                       instantSpokenText,
                     )
                     : fullPkg;
