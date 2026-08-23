@@ -248,7 +248,7 @@ import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGroundi
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { rankReplies, bestReplyLine } from '../../services/bestReplyRanking';
-import { tacticalReadFromLines, namedTacticClause, temptingTurnClause, uncertaintyClause, computeTacticalRead } from '../../services/tacticalRead';
+import { tacticalReadFromLines, namedTacticClause, temptingTurnClause, uncertaintyClause } from '../../services/tacticalRead';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
@@ -7108,22 +7108,20 @@ export function CoachTeachPage(): JSX.Element {
                 try {
                   studentBest = await stockfishEngine.analyzeWithBudget(probe.fen(), COACH_TURN_DEPTH, 1200);
                 } catch { /* engine down → thin (chess.js-only) context below */ }
-                // ONE probed tactical read per turn — the engine-verified
-                // seductive-but-wrong move (the BUT-TURN, Naroditsky's #1 device)
-                // and the honest hedge (a close second-best). Computed once here
-                // and shared by the recommendation beat AND the plan lane, so his
-                // register rides the narration that fires almost every ply, not
-                // just the rare recommendation. Board-true, never invented (G0);
-                // quality over the extra reads (David 2026-07-06). Guarded to the
-                // student being to move so the probe reads for the right side.
-                let turnRead: Awaited<ReturnType<typeof computeTacticalRead>> = null;
+                // ONE tactical read per turn — the seductive-but-wrong move (the
+                // BUT-TURN, Naroditsky's #1 device) and the honest hedge (a close
+                // second-best), read straight off the MultiPV the turn ALREADY
+                // computed. Shared by the recommendation beat AND the plan lane,
+                // so the register rides the narration that fires almost every ply.
+                // NO extra engine reads: the app has a single Stockfish worker and
+                // an eye-catching-move PROBE here fired 5 reads/turn, overloading
+                // it into "engine read failed" — which kills the whole turn's
+                // teaching. A modest but-turn rate on a live engine beats a high
+                // one on a dead one. Board-true (G0); guarded to student-to-move.
+                let turnRead: ReturnType<typeof tacticalReadFromLines> = null;
                 try {
                   if (studentBest?.topLines && probe.turn() === (playerColor === 'white' ? 'w' : 'b')) {
                     turnRead = tacticalReadFromLines(probe.fen(), studentBest.topLines, playerColor, { maxPlies: 6 });
-                    if (turnRead && !turnRead.tempting) {
-                      const probed = await computeTacticalRead(probe.fen(), { engine: stockfishEngine, maxTemptingProbe: 4, depth: COACH_TURN_DEPTH });
-                      if (probed?.tempting) turnRead = { ...turnRead, tempting: probed.tempting };
-                    }
                   }
                 } catch { /* the read is a bonus, never a blocker */ }
                 // ── THE COACH JUDGES ITS OWN MOVE ──────────────────────────
