@@ -116,3 +116,4 @@ scripts/_*.mjs
 *.mp4
 *.webm
 scripts/video-align/frames/
+.ship-out.log
