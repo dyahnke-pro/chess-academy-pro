@@ -9,9 +9,6 @@ import gambitData from '../data/gambits.json';
 import antiOpeningsData from '../data/anti-openings.json';
 import modelGamesData from '../data/model-games.json';
 import { loadProGameReferenceData } from './proGameReferenceData';
-import { loadFarmedCorpora } from './farmedCorpusData';
-import { loadSpokenBake } from './spokenNoteBake';
-import { warmSecondaryPositionIndex } from './secondaryCorpora';
 import { warmCuratedBeatIndex } from './curatedBeatSource';
 import middlegamePlansData from '../data/middlegame-plans.json';
 // Separate-lane gambit-tab plans (David 2026-05-27): own file so the masterclass
@@ -972,29 +969,32 @@ async function runSeedOnce(): Promise<void> {
 }
 
 export function seedDatabase(): Promise<void> {
-  // Prime the FARMED teaching corpora (public/data, not bundled) immediately
-  // and OFF the critical path. The gap tier reads them synchronously and simply
-  // contributes nothing until this resolves, so starting it here — rather than
-  // inside the ~50s deferred seed — is what keeps the coach from being silent
-  // on an uncovered opening early in a session. Never rejects.
-  // The BAKED spoken forms, alongside the corpora and for the same reason: it
-  // is what the voice actually says, so a note selected before it lands would
-  // speak its original written prose. Same-origin, never rejects, and until it
-  // resolves every caller falls back to that prose — the pre-bake behaviour.
-  void loadSpokenBake();
-  void loadFarmedCorpora().then(() => {
-    // Build the TRANSPOSITION index once the corpora are in hand. It is what
-    // lets a note authored through one move order be found by a lesson that
-    // reached the same board through another — the deterministic tier that
-    // replaced the fuzzy opening-name match (2026-08-04). Replaying ~5,400 note
-    // lines is seconds of chess.js, so it runs here — after the fetch, off the
-    // critical path, and CHUNKED with a yield between batches so it never holds
-    // the main thread. A lookup that beats it finishes the index itself.
-    void warmSecondaryPositionIndex().catch(() => { /* the corpus is a bonus, never a blocker */ });
-    // The masterclass beats, same deal: 5.0s of chess.js replay that must not
-    // land on the main thread when the student makes their first move.
-    void warmCuratedBeatIndex().catch(() => { /* curated teaching is a bonus, never a blocker */ });
-  });
+  // The FARMED teaching corpora (the video-derived "dumps") + the spoken bake
+  // are NO LONGER fetched on boot. Fetching and parsing all six farmed corpora
+  // in one shot — 53 MB with the bake, Saint Louis alone 28 MB — on the boot
+  // critical path spiked the heap with six back-to-back multi-MB JSON.parse
+  // calls and then held ~109 MB of raw corpus forever, OOM-crashing the app
+  // (desktop tabs and iOS WKWebView especially, where Jetsam kills the process)
+  // — David 2026-08-23, "video dumps pulling over too much data". They now load
+  // LAZILY and SEQUENTIALLY (smallest first, Saint Louis last) the first time a
+  // teaching surface actually consults the tier — see
+  // `primeFarmedCorporaLazily` (fired from the secondaryCorpora lookups) and
+  // `loadSpokenBake` (fired from `spokenBeatText`). A session that never opens
+  // the coach now pays nothing, and the transposition index warms per-corpus as
+  // each one lands (the `onFarmedCorpusLoaded` listener in secondaryCorpora).
+  //
+  // The curated masterclass beat index replays the PRIMARY, bundled corpus — no
+  // fetch, pure CPU — so it stays warmed, but on IDLE rather than on the boot
+  // critical path. A lesson that beats it self-heals (the index is read-only and
+  // finishes on lookup). Guarded for non-browser (test/SSR) envs.
+  {
+    const warmBeats = (): void => {
+      void warmCuratedBeatIndex().catch(() => { /* curated teaching is a bonus, never a blocker */ });
+    };
+    const ric = (globalThis as { requestIdleCallback?: (cb: () => void) => void }).requestIdleCallback;
+    if (typeof ric === 'function') ric(warmBeats);
+    else if (typeof setTimeout === 'function') setTimeout(warmBeats, 2000);
+  }
   // Reuse the in-flight promise so concurrent callers share one run.
   // Resolves after the CRITICAL seed (repertoire) — the heavy ECO/pro/
   // gambit/model-game backfill continues detached. Callers that need
