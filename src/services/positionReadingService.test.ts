@@ -28,6 +28,8 @@ import {
   bestMinorToKeep,
   bishopPair,
   opponentIntentRead,
+  findXrays,
+  findKnightReroute,
 } from './positionReadingService';
 import type { WeaknessCategory } from '../types';
 import type { TacticsLiveContext } from '../coach/types';
@@ -787,5 +789,26 @@ describe('Danya positional detectors (2026-08-23 — pressure / passer / preserv
 
   it('opponentIntentRead returns null on a quiet position', () => {
     expect(opponentIntentRead('4k3/8/8/8/8/8/8/4K3 w - - 0 1', 'white')).toBeNull();
+  });
+})
+
+describe('findXrays + findKnightReroute (Danya signatures, 2026-08-23)', () => {
+  it('findXrays flags your rook lined up with the enemy king through a blocker', () => {
+    const xr = findXrays('4k3/8/8/4p3/8/8/8/4R1K1 w - - 0 1', 'w');
+    expect(xr[0]).toMatchObject({ slider: 'e1', target: 'e8', blocker: 'e5' });
+  });
+  it('findXrays does NOT fire when the target is worth less than the slider', () => {
+    // white queen a1, black rook h8 on the long diagonal with a blocker — rook < queen.
+    expect(findXrays('7r/8/8/8/3P4/8/8/Q5K1 w - - 0 1', 'w')).toEqual([]);
+  });
+  it('findKnightReroute routes a RIM knight one hop to a real outpost', () => {
+    // White knight a4 on the rim; c5 is an outpost (b4 pawn guards it, no black
+    // pawn can hit it). a4 -> c5 in one hop.
+    const rr = findKnightReroute('4k3/8/8/8/NP6/8/8/4K3 w - - 0 1', 'w');
+    expect(rr).toMatchObject({ from: 'a4', to: 'c5', via: null });
+  });
+  it('findKnightReroute does NOT reroute a developed central knight (no noise)', () => {
+    // A knight on f3/e3 is fine where it is — only rim knights are candidates.
+    expect(findKnightReroute('4k3/8/8/8/2P5/4N3/8/4K3 w - - 0 1', 'w')).toBeNull();
   });
 })

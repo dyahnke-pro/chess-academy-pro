@@ -321,6 +321,114 @@ export function pieceScope(chess: Chess, sq: Square): number {
   return n;
 }
 
+export interface XrayNote {
+  /** Your long-range piece doing the x-raying. */
+  slider: Square;
+  sliderPiece: PieceSymbol;
+  /** The enemy piece it x-rays THROUGH the blocker. */
+  target: Square;
+  targetPiece: PieceSymbol;
+  /** The single piece sitting between them. */
+  blocker: Square;
+}
+
+const KNIGHT_STEPS: readonly [number, number][] = [[1, 2], [2, 1], [2, -1], [1, -2], [-1, -2], [-2, -1], [-2, 1], [-1, 2]];
+
+/** X-RAY / latent alignment — one of YOUR long-range pieces (R/B/Q) lined up with
+ *  an enemy piece of value ≥ its own, with exactly ONE piece between them, so the
+ *  moment the blocker shifts a real threat appears. Naroditsky names these
+ *  explicitly ("the x-ray between the queen and the bishop" — a relationship that
+ *  gets the wheels turning). Gated hard to stay intent-true: the target must be
+ *  worth winning (≥ the slider), never a bare pawn, so we don't narrate every
+ *  geometric line. Pure ray geometry (G3). */
+export function findXrays(fen: string, color: Color): XrayNote[] {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return []; }
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  const out: XrayNote[] = [];
+  const DIRS: Record<'r' | 'b', [number, number][]> = {
+    r: [[1, 0], [-1, 0], [0, 1], [0, -1]],
+    b: [[1, 1], [1, -1], [-1, 1], [-1, -1]],
+  };
+  for (const row of chess.board()) for (const cell of row) {
+    if (!cell || cell.color !== color) continue;
+    if (cell.type !== 'r' && cell.type !== 'b' && cell.type !== 'q') continue;
+    const dirsets: [number, number][] = cell.type === 'r' ? DIRS.r : cell.type === 'b' ? DIRS.b : [...DIRS.r, ...DIRS.b];
+    const f0 = cell.square.charCodeAt(0) - 97;
+    const r0 = Number(cell.square[1]);
+    for (const [df, dr] of dirsets) {
+      const found: { sq: Square; piece: PieceSymbol; color: Color }[] = [];
+      for (let step = 1; step < 8 && found.length < 2; step += 1) {
+        const f = f0 + df * step; const r = r0 + dr * step;
+        if (f < 0 || f > 7 || r < 1 || r > 8) break;
+        const s = `${String.fromCharCode(97 + f)}${r}` as Square;
+        const p = chess.get(s);
+        if (p) found.push({ sq: s, piece: p.type, color: p.color });
+      }
+      // slider → [blocker] → enemy target. Intent-gated to a REAL relationship,
+      // not "a bishop points at f7": either the target is worth STRICTLY MORE
+      // than the slider (removing the blocker wins material), OR it's the enemy
+      // KING and the slider is a major piece (a genuine pin/king-file threat).
+      // A bishop x-raying an equal-value knight, or any piece x-raying a pawn,
+      // is dropped — that was the every-ply noise.
+      if (found.length === 2 && found[1].color === enemy && found[1].piece !== 'p') {
+        // The king is not "material to win" — only a major piece bearing on it
+        // is a real x-ray (else a bishop pointing at f7 fires every ply).
+        const winsMaterial = found[1].piece !== 'k' && PIECE_VALUE[found[1].piece] > PIECE_VALUE[cell.type];
+        const majorOnKing = found[1].piece === 'k' && (cell.type === 'r' || cell.type === 'q');
+        if (winsMaterial || majorOnKing) {
+          out.push({ slider: cell.square, sliderPiece: cell.type, target: found[1].sq, targetPiece: found[1].piece, blocker: found[0].sq });
+        }
+      }
+    }
+  }
+  return out;
+}
+
+/** KNIGHT REROUTE — a friendly knight on a passive square (rim, or few squares)
+ *  that has a clean two-hop path to a genuine OUTPOST (enemy half, empty, and no
+ *  enemy pawn can ever attack it). This is Naroditsky's signature maneuver read
+ *  ("the knight goes to d7, final destination f5"). Intent-gated: only when the
+ *  destination is a real outpost AND the knight is currently passive, so it never
+ *  says "reroute" about an already-active knight. Pure geometry (G3). */
+export function findKnightReroute(fen: string, color: Color): { from: Square; to: Square; via: Square | null } | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const enemy: Color = color === 'w' ? 'b' : 'w';
+  const enemyHalf = (r: number): boolean => (color === 'w' ? r >= 4 && r <= 6 : r >= 3 && r <= 5);
+  const knightTo = (from: Square): Square[] => {
+    const f0 = from.charCodeAt(0) - 97; const r0 = Number(from[1]);
+    const outs: Square[] = [];
+    for (const [df, dr] of KNIGHT_STEPS) {
+      const f = f0 + df; const r = r0 + dr;
+      if (f < 0 || f > 7 || r < 1 || r > 8) continue;
+      outs.push(`${String.fromCharCode(97 + f)}${r}` as Square);
+    }
+    return outs;
+  };
+  const isOutpost = (s: Square): boolean => {
+    if (chess.get(s)) return false;
+    if (!enemyHalf(Number(s[1]))) return false;
+    if (chess.attackers(s, enemy).some((a) => chess.get(a)?.type === 'p')) return false;
+    return chess.attackers(s, color).some((a) => chess.get(a)?.type === 'p');
+  };
+  // STRICT to keep intent: only a knight genuinely STUCK ON THE RIM (a- or
+  // h-file) is a reroute candidate, and only a ONE-HOP jump to a real outpost is
+  // suggested. A developed central knight (f3, c3, …) is fine where it is — the
+  // earlier "route f3 to f5 by way of h4 every ply" was exactly the generic
+  // noise this avoids. Rim knight → central outpost is the honest, rare case.
+  for (const row of chess.board()) for (const cell of row) {
+    if (!cell || cell.color !== color || cell.type !== 'n') continue;
+    const file = cell.square.charCodeAt(0) - 97;
+    const onRim = file === 0 || file === 7;
+    if (!onRim) continue;
+    for (const dest of knightTo(cell.square)) {
+      if (isOutpost(dest)) return { from: cell.square, to: dest, via: null };
+    }
+  }
+  return null;
+}
+
 export interface ActivePieceNote { square: Square; piece: PieceSymbol; scope: number }
 
 /** The most- and least-active non-pawn, non-king piece of `color` by board scope.

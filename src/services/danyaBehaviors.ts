@@ -42,6 +42,8 @@ import {
   bishopPair,
   bestMinorToKeep,
   opponentIntentRead,
+  findXrays,
+  findKnightReroute,
 } from './positionReadingService';
 
 const PIECE_NAME: Record<PieceSymbol, string> = {
@@ -392,6 +394,30 @@ export const DANYA_BEHAVIORS: Behavior[] = [
       const holes = opp === 'w' ? weak.white : weak.black;
       if (holes.length > 0) {
         return { fact: `${holes[0]} is a hole in their camp — a piece planted there can't be kicked.`, squares: [holes[0]] };
+      }
+      return null;
+    },
+  },
+  {
+    id: 'knight-maneuver',
+    weight: 207,
+    detect: ({ fen, student }) => {
+      if (Number(fen.split(' ')[5] ?? '0') < 10) return null; // a middlegame idea
+      const rr = findKnightReroute(fen, student);
+      if (rr) {
+        const path = rr.via ? `, by way of ${rr.via},` : '';
+        return { fact: `Route the knight from ${rr.from} to ${rr.to}${path} — a square no pawn can ever chase it from.`, squares: [rr.from, rr.to] };
+      }
+      return null;
+    },
+  },
+  {
+    id: 'x-ray',
+    weight: 125,
+    detect: ({ fen, student }) => {
+      const xr = findXrays(fen, student)[0];
+      if (xr) {
+        return { fact: `Your ${PIECE_NAME[xr.sliderPiece]} on ${xr.slider} x-rays their ${PIECE_NAME[xr.targetPiece]} on ${xr.target} through ${xr.blocker} — if that blocker shifts, you win it.`, squares: [xr.slider, xr.blocker, xr.target] };
       }
       return null;
     },

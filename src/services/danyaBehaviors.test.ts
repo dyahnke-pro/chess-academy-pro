@@ -161,3 +161,27 @@ describe('danyaBehaviors — INTENT regressions (David 2026-08-23: "give suggest
     if (pa) expect(pa.fact).not.toMatch(/f5.*bad bishop/);
   });
 });
+
+describe('danyaBehaviors — knight-maneuver + x-ray fire on REAL cases, silent otherwise', () => {
+  it('x-ray fires for a rook bearing on the enemy king through one blocker', () => {
+    const hits = detectBehaviors({ fen: '4k3/8/8/4p3/8/8/8/4R1K1 w - - 0 1', studentColor: 'white' });
+    const xr = hits.find((h) => h.id === 'x-ray');
+    expect(xr).toBeDefined();
+    expect(xr!.fact).toContain('e8');
+  });
+  it('x-ray does NOT fire for a bishop merely pointing at f7/the king (the every-ply noise)', () => {
+    // Italian, after castling: Bc4 "aims" at f7/g8 — not a teaching x-ray.
+    const hits = detectBehaviors({ fen: 'r1bq1rk1/pppp1ppp/2n2n2/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQR1K1 w - - 0 1', studentColor: 'white' });
+    expect(hits.find((h) => h.id === 'x-ray')).toBeUndefined();
+  });
+  it('knight-maneuver fires only for a RIM knight with an outpost, in the middlegame', () => {
+    // move 12+, white Na4 with b4 pawn guarding the c5 outpost.
+    const hits = detectBehaviors({ fen: '4k3/8/8/8/NP6/8/8/4K3 w - - 0 12', studentColor: 'white' });
+    const km = hits.find((h) => h.id === 'knight-maneuver');
+    expect(km?.fact ?? '').toContain('c5');
+  });
+  it('knight-maneuver does NOT fire for a developed central knight', () => {
+    const hits = detectBehaviors({ fen: 'r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 12', studentColor: 'white' });
+    expect(hits.find((h) => h.id === 'knight-maneuver')).toBeUndefined();
+  });
+})
