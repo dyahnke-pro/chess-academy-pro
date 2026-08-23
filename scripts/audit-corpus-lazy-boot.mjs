@@ -11,6 +11,7 @@
 import { spawn } from 'node:child_process';
 import { chromium } from 'playwright';
 import { resolveChromiumExecutable, sandboxLaunchArgs, sandboxContextOptions } from './audit-lib/chromium.mjs';
+import { muteTtsForAudit } from './audit-lib/mute-tts.mjs';
 
 const PORT = 4319;
 // Point at a live URL (prod) with AUDIT_SMOKE_URL; otherwise serve the shipped
@@ -37,6 +38,10 @@ async function main() {
   const exe = await resolveChromiumExecutable();
   const browser = await chromium.launch({ executablePath: exe, args: sandboxLaunchArgs() });
   const ctx = await browser.newContext(sandboxContextOptions());
+  // This audit measures corpus /data fetches, NOT voice — it has no TTS
+  // instrument, so mute synthesis so a /coach/teach narration can't spend real
+  // TTS money on every run (auditHarnessReach gate, CLAUDE.md §G1).
+  await ctx.addInitScript(muteTtsForAudit);
   const page = await ctx.newPage();
 
   const dataReqs = new Set();
