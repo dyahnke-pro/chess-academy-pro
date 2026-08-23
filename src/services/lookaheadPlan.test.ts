@@ -82,15 +82,15 @@ describe('two plans, one line', () => {
     expect(asBlack?.theirs).toBe(asBlack?.white);
   });
 
-  it('speaks the student\'s plan as "you" and the opponent\'s as "they"', () => {
+  it('speaks the student\'s plan as "we" and the opponent\'s as "they"', () => {
     const plan = buildLookaheadPlan(line(plies(START, ['e4', 'c5', 'Nf3', 'd6'])), 'white');
     // When BOTH sides fall back to the drift clause the two are merged into one
     // sentence (see the twin-drift describe below — David heard the unmerged
     // pair as a stutter), so the contract is about the whole utterance rather
-    // than about each field: the student is "you", the opponent is "they", and
-    // neither is missing.
+    // than about each field: the student is "we" (Naroditsky's collaborative
+    // voice, 2026-08-23), the opponent is "they", and neither is missing.
     const said = [plan?.theirs.text, plan?.mine.text].filter(Boolean).join(' ');
-    expect(said).toMatch(/\byou\b/i);
+    expect(said).toMatch(/\bwe\b/i);
     expect(said).toMatch(/\bthey\b/i);
     expect(said, 'the opponent half is not first').toMatch(/^They\b/);
   });
@@ -301,18 +301,18 @@ describe('the sentence is ordered by the position, not by a fixed ladder', () =>
   const say = (over: Partial<SidePlan>): string => describePlan({ ...base, ...over }, 'mine');
 
   it('leads with a four-piece attack over winning a pawn', () => {
-    expect(say({ nearEnemyKing: 4, materialSwing: 1 })).toMatch(/^You want to swing pieces toward their king/);
+    expect(say({ nearEnemyKing: 4, materialSwing: 1 })).toMatch(/^We want to swing pieces toward their king/);
   });
 
   it('leads with a rook over a two-piece gesture at the king', () => {
-    expect(say({ nearEnemyKing: 2, materialSwing: 5 })).toMatch(/^You want to win a rook/);
+    expect(say({ nearEnemyKing: 2, materialSwing: 5 })).toMatch(/^We want to win a rook/);
   });
 
   it('weighs a passed pawn by how close it is to promoting', () => {
     const near = say({ passedPawns: ['a7'], trading: ['pawn'] });
     const far = say({ passedPawns: ['a3'], outposts: ['e5'] });
-    expect(near).toMatch(/^You want to create a passed pawn on a7/);
-    expect(far).not.toMatch(/^You want to create a passed pawn/);
+    expect(near).toMatch(/^We want to create a passed pawn on a7/);
+    expect(far).not.toMatch(/^We want to create a passed pawn/);
   });
 
   it('says a rook is a rook and a pawn is a pawn', () => {
@@ -350,7 +350,7 @@ describe('the sentence is ordered by the position, not by a fixed ladder', () =>
     // tail. Stripping three shield pawns scores 99 and a fork 90, so the
     // pawns lead here — the scorer answering to the position rather than to a
     // fixed ladder is the whole design.
-    const lead = loud.replace(/^You want to /, '');
+    const lead = loud.replace(/^We want to /, "");
     expect(lead).toMatch(/^pull the pawns away/);
     // …and the cheapest clause is last, not missing.
     expect(loud).toContain('open the c-file');

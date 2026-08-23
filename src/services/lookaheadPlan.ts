@@ -595,7 +595,12 @@ export function describePlan(
    *  and the same intention repeated three times. Caller owns the set. */
   said?: Set<string>,
 ): string {
-  const subject = voice === 'mine' ? 'You' : 'They';
+  // "We" for the student's own plan — Naroditsky's collaborative teaching voice
+  // ("we want to advance the queenside; they want to attack the king"), David
+  // 2026-08-23. The opponent stays "They". Interjections elsewhere (threat
+  // alerts, the recommendation) keep "you" — the plan is where the shared-journey
+  // register belongs.
+  const subject = voice === 'mine' ? 'We' : 'They';
   const theirKing = voice === 'mine' ? 'their king' : 'your king';
 
   // Mate ends the sentence before it starts: nothing else in the position
@@ -722,7 +727,7 @@ export function describePlan(
     const key = `drift-${voice}-${heading.join('')}`;
     if (said?.has(key)) return '';
     said?.add(key);
-    const line = `${subject === 'You' ? "You're" : "They're"} bringing pieces to ${squares} over the next few moves.`;
+    const line = `${voice === 'mine' ? "We're" : "They're"} bringing pieces to ${squares} over the next few moves.`;
     // THE CLAUSE, NOT THE SENTENCE. `spokenClauses[].text` is a bare verb
     // phrase by contract — `inaccuracyCall.whyBetter` splices the leader
     // straight after "it would ". Storing the finished SENTENCE here produced,

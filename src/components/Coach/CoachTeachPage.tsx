@@ -248,7 +248,7 @@ import { groundArrows, dedupeArrowsBySquarePair } from '../../utils/arrowGroundi
 // ONE depth for the whole turn — the hint lane and the lane that grades the
 // student must not read the same board at different depths. See the constant.
 import { rankReplies, bestReplyLine } from '../../services/bestReplyRanking';
-import { tacticalReadFromLines, namedTacticClause, temptingTurnClause, uncertaintyClause } from '../../services/tacticalRead';
+import { tacticalReadFromLines, namedTacticClause, temptingTurnClause, uncertaintyClause, candidateCompareClause } from '../../services/tacticalRead';
 import { BehaviorScheduler, detectBehaviors } from '../../services/danyaBehaviors';
 import { stockfishCache } from '../../services/stockfishCache';
 import { COACH_TURN_DEPTH } from '../../services/engineConstants';
@@ -6183,7 +6183,11 @@ export function CoachTeachPage(): JSX.Element {
         threatLine = first
           ? `Watch out — if they play ${first}, ${desc}.`
           : `Watch out — ${desc} is coming.`;
-      } else if (myHanging.length > 0) {
+      } else if (myHanging.length > 0 && (AV[myHanging[0].piece] ?? 0) >= 3) {
+        // Only a real PIECE (minor or better) earns the interrupt. A hanging pawn
+        // is the small stuff Naroditsky assumes you see — flagging every one is
+        // the over-alerting that reads as nagging (David 2026-08-23). The locked
+        // "I want tactics alerts" contract is about pieces, not pawns.
         const worst = myHanging[0];
         threatKey = `hang:${worst.piece}${worst.square}`;
         threatSquares = [worst.square];
@@ -7143,7 +7147,13 @@ export function CoachTeachPage(): JSX.Element {
                     if (turnRead) {
                       const butTurn = temptingTurnClause(turnRead, { spoken: true });
                       const hedge = uncertaintyClause(turnRead, { spoken: true });
-                      const reg = [butTurn, hedge].filter(Boolean).join(' ');
+                      // His "X, not Y, because…" — only when there is NO but-turn
+                      // (a seductive blunder outranks a fine-margin preference) and
+                      // NO hedge (a genuine coin-flip is the hedge, not a compare).
+                      const compare = (!butTurn && !hedge)
+                        ? candidateCompareClause(probe.fen(), studentBest.topLines, playerColor, { spoken: true })
+                        : null;
+                      const reg = [butTurn, hedge, compare].filter(Boolean).join(' ');
                       const gradedReg = reg ? gradeNarrationText(reg, probe.fen(), 'CoachTeachPage.register')?.trim() : '';
                       if (gradedReg) queueSpokenHint(probe.fen(), gradedReg);
                     }

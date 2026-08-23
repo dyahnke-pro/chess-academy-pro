@@ -414,3 +414,32 @@ describe('temptingTurnClause + uncertaintyClause (DNA register — David 2026-08
     expect(uncertaintyClause(clear)).toBeNull();
   });
 });
+
+describe('candidateCompareClause (his "X, not Y, because…", 2026-08-23)', () => {
+  it('prefers the safer square when the same piece can go two ways', async () => {
+    const { candidateCompareClause } = await import('./tacticalRead');
+    // Black queen d8 can go to c7 (safe) or b6 (attacked by a white piece).
+    // Craft: white bishop on a5 attacks b6; nothing attacks c7. Best=Qc7 by 60cp.
+    // Black queen d8; white knight c4 attacks b6 but NOT c7. So Qc7 is the safe
+    // square, Qb6 walks into the knight. Best=Qc7 by 60cp.
+    const fen = '3qk3/8/8/8/2N5/8/8/4K3 b - - 0 1';
+    const clause = candidateCompareClause(fen, [
+      { moves: ['d8c7'], evaluation: 20 },   // white-POV; black-POV = -20
+      { moves: ['d8b6'], evaluation: 80 },   // black-POV = -80 → 60cp worse for Black
+    ], 'black');
+    expect(clause).toMatch(/Qc7 over Qb6/);
+    expect(clause).toMatch(/safer|less exposed/);
+  });
+  it('returns null when the gap is a blunder-sized drop (that is the but-turn, not a compare)', async () => {
+    const { candidateCompareClause } = await import('./tacticalRead');
+    const fen2 = '3qk3/8/8/8/2N5/8/8/4K3 b - - 0 1';
+    expect(candidateCompareClause(fen2, [
+      { moves: ['d8c7'], evaluation: 20 },
+      { moves: ['d8b6'], evaluation: 300 },  // 280cp worse → but-turn territory
+    ], 'black')).toBeNull();
+  });
+  it('returns null with a single line', async () => {
+    const { candidateCompareClause } = await import('./tacticalRead');
+    expect(candidateCompareClause('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1', [{ moves: ['e2e4'], evaluation: 20 }], 'white')).toBeNull();
+  });
+});

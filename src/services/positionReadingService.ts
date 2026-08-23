@@ -496,6 +496,52 @@ export function findBlockade(fen: string, color: Color): { blocker: Square; pawn
   return null;
 }
 
+/** A NAMED PAWN STRUCTURE + its standing plan — Naroditsky's closing lesson
+ *  ("catalogue the typical structures from your openings and their plans"). This
+ *  is the deterministic proxy for his "we've move-ordered into a French" teaching:
+ *  the pawn SKELETON, not the move order, names the family. Recognises the few
+ *  clearest, highest-frequency skeletons; returns null otherwise (empty > vague).
+ *  Pure pawn geometry (G3). */
+export function namedPawnStructure(fen: string): { name: string; plan: string } | null {
+  let chess: Chess;
+  try { chess = new Chess(fen); } catch { return null; }
+  const wp = new Set<string>(); const bp = new Set<string>();
+  for (const row of chess.board()) for (const cell of row) {
+    if (cell && cell.type === 'p') (cell.color === 'w' ? wp : bp).add(cell.square);
+  }
+  const w = (s: string): boolean => wp.has(s);
+  const b = (s: string): boolean => bp.has(s);
+  const fileCount = (set: Set<string>, file: string): number => [...set].filter((s) => s[0] === file).length;
+  // FRENCH / ADVANCE CHAIN — White d4+e5 vs Black d5+e6, the locked chain.
+  if (w('d4') && w('e5') && b('d5') && b('e6')) {
+    return { name: 'French-type pawn chain', plan: 'the break comes at the base of the chain — Black hits d4 with …c5 and …f6, White defends the head on e5 and plays on the kingside' };
+  }
+  // KING'S-INDIAN CLOSED CENTRE — White d5+e4 vs Black d6+e5.
+  if (w('d5') && w('e4') && b('d6') && b('e5')) {
+    return { name: 'King’s-Indian closed centre', plan: 'the wings decide: Black storms the kingside with …f5-f4 and a pawn avalanche, White breaks on the queenside with c5' };
+  }
+  // ISOLATED QUEEN’S PAWN — a d-pawn with no friendly c- or e-pawns.
+  for (const [set, name] of [[wp, 'You hold the isolated queen’s pawn'], [bp, 'They hold the isolated queen’s pawn']] as const) {
+    const dRank = [...set].find((s) => s[0] === 'd');
+    if (dRank && fileCount(set, 'c') === 0 && fileCount(set, 'e') === 0
+      && (name.startsWith('You') ? (bp.has('d5') || bp.has('d4') || true) : true)) {
+      // Only call it when the opponent has NO d-pawn on the same file mass — a true isolani.
+      const enemy = set === wp ? bp : wp;
+      if (fileCount(enemy, 'd') === 0) {
+        return { name, plan: 'the isolani gives active pieces and the d5/d4 outpost now, but becomes a target in the endgame — the owner attacks, the blockader trades down' };
+      }
+    }
+  }
+  // HANGING PAWNS — c- and d-pawns abreast on the 4th/5th with no b/e neighbours.
+  if (w('c4') && w('d4') && fileCount(wp, 'b') === 0 && fileCount(wp, 'e') === 0) {
+    return { name: 'You have the hanging pawns', plan: 'they grip the centre and can lunge with d5 or c5 — but if they’re fixed and blockaded they turn into two weaknesses' };
+  }
+  if (b('c5') && b('d5') && fileCount(bp, 'b') === 0 && fileCount(bp, 'e') === 0) {
+    return { name: 'They have the hanging pawns', plan: 'they grip the centre and threaten a …d4 or …c4 lunge — provoke and blockade them to make them targets' };
+  }
+  return null;
+}
+
 export interface ActivePieceNote { square: Square; piece: PieceSymbol; scope: number }
 
 /** The most- and least-active non-pawn, non-king piece of `color` by board scope.

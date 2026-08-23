@@ -438,6 +438,67 @@ export function uncertaintyClause(read: TacticalRead, opts: { spoken?: boolean }
   return `It’s genuinely close — ${say(read.closeAlternative.san)} is about as good, so don’t agonise.`;
 }
 
+/**
+ * THE CANDIDATE-COMPARISON clause — Naroditsky's "X, not Y, because…" (his
+ * "Qc7 is less vulnerable than Qb6" reasoning). When the best move and a natural
+ * alternative are BOTH plausible but the best is clearly-if-modestly better
+ * (30-120cp — below is the honest hedge, above is the but-turn), state the
+ * preference with a GROUNDED reason read off the board, never a vibe (G0):
+ *   - same piece, two squares → whichever destination the enemy attacks LESS is
+ *     "safer" (exactly his Qc7-vs-Qb6 logic);
+ *   - best captures/checks and the alt doesn't → the best "does more";
+ *   - otherwise → the best simply "keeps more of the edge".
+ * Latency-safe: reads only the MultiPV already computed. Null when there is no
+ * such teachable two-way decision.
+ */
+export function candidateCompareClause(
+  fen: string,
+  topLines: ReadonlyArray<{ moves: string[]; evaluation: number }>,
+  studentColor: 'white' | 'black',
+  opts: { spoken?: boolean } = {},
+): string | null {
+  if (topLines.length < 2) return null;
+  const say = (san: string): string => (opts.spoken ? sayMove(san) : san);
+  const bestUci = topLines[0]?.moves?.[0];
+  if (!bestUci || bestUci.length < 4) return null;
+  const bestCp = toStudentCp(topLines[0].evaluation, studentColor);
+  let board: Chess;
+  try { board = new Chess(fen); } catch { return null; }
+  const enemy: 'w' | 'b' = studentColor === 'white' ? 'b' : 'w';
+  const parse = (uci: string): ReturnType<Chess['move']> | null => {
+    const probe = new Chess(fen);
+    try { return probe.move({ from: uci.slice(0, 2), to: uci.slice(2, 4), promotion: uci.length > 4 ? uci.slice(4) : undefined }); }
+    catch { return null; }
+  };
+  const bestMv = parse(bestUci);
+  if (!bestMv) return null;
+  for (let i = 1; i < topLines.length; i += 1) {
+    const altUci = topLines[i]?.moves?.[0];
+    if (!altUci || altUci.length < 4 || altUci === bestUci) continue;
+    const gap = bestCp - toStudentCp(topLines[i].evaluation, studentColor);
+    if (gap < 30 || gap > 120) continue; // hedge below, but-turn above
+    const altMv = parse(altUci);
+    if (!altMv) continue;
+    // Case 1 — SAME piece to two squares: the "which square" decision. Prefer
+    // the destination the enemy attacks less (safer), his Qc7-vs-Qb6 read.
+    if (altMv.piece === bestMv.piece && altMv.from === bestMv.from && altMv.to !== bestMv.to) {
+      const atkBest = board.attackers(bestMv.to, enemy).length;
+      const atkAlt = board.attackers(altMv.to, enemy).length;
+      if (atkAlt > atkBest) {
+        return `${say(bestMv.san)} over ${say(altMv.san)} — the square is safer, less exposed to attack.`;
+      }
+      return `${say(bestMv.san)} is the better square than ${say(altMv.san)}, keeping more of the edge.`;
+    }
+    // Case 2 — best is the forcing one, the alt is quiet.
+    if ((bestMv.captured || bestMv.san.includes('+')) && !altMv.captured && !altMv.san.includes('+')) {
+      return `${say(bestMv.san)} over ${say(altMv.san)} — it does more, forcing the issue while the edge is there.`;
+    }
+    // Case 3 — two different plans, best simply holds more.
+    return `${say(bestMv.san)} reads better than ${say(altMv.san)} here — it keeps more of the edge.`;
+  }
+  return null;
+}
+
 // ── LATENCY-SAFE TEMPTING (no extra engine read) ─────────────────────────────
 
 /** The seductive-but-wrong move derived from an ALREADY-COMPUTED MultiPV

@@ -33,6 +33,7 @@ import {
   findFianchetto,
   findRookLift,
   findBlockade,
+  namedPawnStructure,
 } from './positionReadingService';
 import type { WeaknessCategory } from '../types';
 import type { TacticsLiveContext } from '../coach/types';
@@ -833,3 +834,18 @@ describe('findFianchetto + findRookLift + findBlockade (2026-08-23, the rest of 
     expect(findBlockade('4k3/3p4/3N4/8/8/8/8/4K3 w - - 0 1', 'w')).toMatchObject({ blocker: 'd6', pawn: 'd7' });
   });
 })
+
+describe('namedPawnStructure (his "catalogue the structures", 2026-08-23)', () => {
+  it('names the French-type chain (d4+e5 vs d5+e6)', () => {
+    const s = namedPawnStructure('r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/2P2N2/PP3PPP/RNBQKB1R w KQkq - 0 1');
+    expect(s?.name).toMatch(/French/);
+  });
+  it('names an isolated queen pawn', () => {
+    // White d4 with no c/e pawns; Black has no d-pawn.
+    const s = namedPawnStructure('4k3/pp3ppp/8/8/3P4/8/PP3PPP/4K3 w - - 0 1');
+    expect(s?.name).toMatch(/isolated queen/i);
+  });
+  it('returns null on a normal symmetric structure', () => {
+    expect(namedPawnStructure('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1')).toBeNull();
+  });
+});
