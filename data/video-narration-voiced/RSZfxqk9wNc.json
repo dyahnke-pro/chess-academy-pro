@@ -1,0 +1,269 @@
+{
+ "videoId": "RSZfxqk9wNc",
+ "title": "Master Class | Danish ACCEPTED!! | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Danish Gambit",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:RSZfxqk9wNc",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 41,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 44,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4 opens the Danish Gambit — White offers pawns to blow the center open and generate a raging development lead.",
+   "kind": "main",
+   "teaches": "Gambit central pawns to accelerate development and open lines."
+  },
+  {
+   "ply": 4,
+   "t": 51.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 54.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 66.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "dxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 68,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Bishop to c4 completes the Danish — with two pawns sacrificed, the bishops rake toward f7 and the whole army will crash out with tempo.",
+   "kind": "main",
+   "teaches": "In the Danish, aim the bishops at f7 and prize activity over the two pawns."
+  },
+  {
+   "ply": 8,
+   "t": 82,
+   "fen": "rnb1kbnr/ppppqppp/8/8/2B1P3/2p5/PP3PPP/RNBQK1NR w KQkq - 2 5",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 109,
+   "fen": "rnb1kbnr/ppppqppp/8/8/2B1P3/2N5/PP3PPP/R1BQK1NR b KQkq - 0 5",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": "Recapturing on c3 with the knight leaves White a massive lead in development and open lines — the two pawns are gone, but Black is badly behind and cramped.",
+   "kind": "main",
+   "teaches": "Measure a gambit by development and activity, not the pawn count."
+  },
+  {
+   "ply": 10,
+   "t": 114.5,
+   "fen": "rnb1kbnr/pp1pqppp/2p5/8/2B1P3/2N5/PP3PPP/R1BQK1NR w KQkq - 0 6",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 152.5,
+   "fen": "rnb1kbnr/pp1pqppp/2p5/8/2B1P3/2N2N2/PP3PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 158.5,
+   "fen": "rnb1kbnr/pp1pqpp1/2p4p/8/2B1P3/2N2N2/PP3PPP/R1BQK2R w KQkq - 0 7",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 173,
+   "fen": "rnb1kbnr/pp1pqpp1/2p4p/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 b kq - 1 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 180.5,
+   "fen": "rnb1kbnr/pp2qpp1/2pp3p/8/2B1P3/2N2N2/PP3PPP/R1BQ1RK1 w kq - 0 8",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 230,
+   "fen": "rnb1kbnr/pp2qpp1/2pp3p/8/2B1P3/2N2N2/PP3PPP/R1BQR1K1 b kq - 1 8",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 273,
+   "fen": "rn2kbnr/pp2qpp1/2ppb2p/8/2B1P3/2N2N2/PP3PPP/R1BQR1K1 w kq - 2 9",
+   "line": [
+    "Be6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 320,
+   "fen": "rn2kbnr/pp2qpp1/2ppb2p/3N4/2B1P3/5N2/PP3PPP/R1BQR1K1 b kq - 3 9",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 327.5,
+   "fen": "rn2kbnr/pp2qpp1/3pb2p/3p4/2B1P3/5N2/PP3PPP/R1BQR1K1 w kq - 0 10",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 330,
+   "fen": "rn2kbnr/pp2qpp1/3pb2p/3P4/2B5/5N2/PP3PPP/R1BQR1K1 b kq - 0 10",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 380,
+   "fen": "rn2kb1r/pp2qpp1/3pbn1p/3P4/2B5/5N2/PP3PPP/R1BQR1K1 w kq - 1 11",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 381,
+   "fen": "rn2kb1r/pp2qpp1/3pPn1p/8/2B5/5N2/PP3PPP/R1BQR1K1 b kq - 0 11",
+   "line": [
+    "dxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 391,
+   "fen": "rn2kb1r/pp2qpp1/3pP2p/8/2B1n3/5N2/PP3PPP/R1BQR1K1 w kq - 1 12",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 394,
+   "fen": "rn2kb1r/pp2qpp1/3pP2p/8/2B1R3/5N2/PP3PPP/R1BQ2K1 b kq - 0 12",
+   "line": [
+    "Rxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 414,
+   "fen": "rn2kb1r/pp2q1p1/3pPp1p/8/2B1R3/5N2/PP3PPP/R1BQ2K1 w kq - 0 13",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 468.5,
+   "fen": "rn2kb1r/pp2q1p1/3pPp1p/8/2B1R2N/8/PP3PPP/R1BQ2K1 b kq - 1 13",
+   "line": [
+    "Nh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 470.5,
+   "fen": "r3kb1r/pp2q1p1/2npPp1p/8/2B1R2N/8/PP3PPP/R1BQ2K1 w kq - 2 14",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 486,
+   "fen": "r3kb1r/pp2q1p1/2npPpNp/8/2B1R3/8/PP3PPP/R1BQ2K1 b kq - 3 14",
+   "line": [
+    "Ng6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 494,
+   "fen": "r3kb1N/ppq3p1/2npPp1p/8/2B1R3/8/PP3PPP/R1BQ2K1 b q - 0 15",
+   "line": [
+    "Qc7",
+    "Nxh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 706.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
