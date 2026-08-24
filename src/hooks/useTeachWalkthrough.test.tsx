@@ -579,6 +579,9 @@ describe('baked gem picker', () => {
 
   // A one-move tree whose only node is a leaf carrying the baked gem — the
   // runtime reads node.gems directly, so the picker fires regardless of path.
+  // The node carries `narration` so it runs the SEGMENTED path (Path 1), which
+  // arms a whole-node backup advance timer — the path where the picker used to
+  // vanish (David 2026-08-23).
   function gemTree(detour: BakedGemLine): WalkthroughTree {
     return {
       openingName: 'Gem',
@@ -595,6 +598,7 @@ describe('baked gem picker', () => {
               san: 'e4',
               movedBy: 'white',
               idea: 'reach the trap position',
+              narration: [{ text: 'reach the trap position', arrows: [] }],
               gems: [detour],
               children: [],
             },
@@ -612,6 +616,20 @@ describe('baked gem picker', () => {
     expect(result.current.gemPickerLines).toHaveLength(1);
     expect(result.current.gemPickerLines[0].steps.length).toBeGreaterThan(0);
   });
+
+  it('does NOT auto-advance — the picker waits for a tap past its backup timer', async () => {
+    const detour = firstDetour();
+    const { result } = renderHook(() => useTeachWalkthrough());
+    act(() => result.current.start(gemTree(detour)));
+    await waitFor(() => expect(result.current.phase).toBe('gem-picker'), { timeout: 8000 });
+    // The narration's whole-node backup advance timer would fire within a few
+    // seconds. Wait well past it and confirm the picker is STILL up (never
+    // vanished into the next node). David 2026-08-23: "the pickers vanished
+    // before i could even select one and continued the lesson."
+    await new Promise((r) => setTimeout(r, 6000));
+    expect(result.current.phase).toBe('gem-picker');
+    expect(result.current.gemPickerLines).toHaveLength(1);
+  }, 15000);
 
   it('playGems plays the detour out on the board, snaps back, and resumes', async () => {
     const detour = firstDetour();

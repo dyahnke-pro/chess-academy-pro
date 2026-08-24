@@ -1163,6 +1163,17 @@ export function useTeachWalkthrough(): UseTeachWalkthroughReturn {
           const gems = node.gems ?? [];
           if (gems.length > 0) {
             gemAsideDone = true; // the picker replaces the live gem aside here
+            // KILL ANY PENDING ADVANCE TIMER (David 2026-08-23: "the pickers
+            // vanished before i could even select one and continued"). The
+            // narration path that called us armed a backup advance timer; left
+            // running it re-enters transitionAfter with gemPickerDone=true,
+            // skips the picker, and auto-advances. A decision point must never
+            // advance on a timer (the fork contract) — clear it so the picker
+            // waits for the tap.
+            if (advanceTimerRef.current) {
+              clearTimeout(advanceTimerRef.current);
+              advanceTimerRef.current = null;
+            }
             setNarrationArrows([]);
             setNarrationHighlights([]);
             gemLinesRef.current = gems;

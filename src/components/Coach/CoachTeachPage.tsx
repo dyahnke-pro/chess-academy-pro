@@ -11267,44 +11267,51 @@ function WalkthroughControls({
   if (phase === 'gem-picker') {
     const gems = walkthrough.gemPickerLines;
     const many = gems.length > 1;
+    // BUTTONS FIRST, then the (bounded, scrollable) trap list — so the actions
+    // are always reachable even in the non-scrolling board column (David
+    // 2026-08-23: "i cant scroll down to see the selections"). The whole panel
+    // also caps its height and scrolls internally as a backstop.
     return (
-      <div className="px-3 pb-3 space-y-2" data-testid="walkthrough-gem-picker">
+      <div
+        className="px-3 pb-3 space-y-2 max-h-[42vh] overflow-y-auto"
+        data-testid="walkthrough-gem-picker"
+      >
         <div className="text-xs font-medium text-theme-text-muted px-1">
-          💎 {many ? `${gems.length} traps are` : 'A trap is'} lurking here — your
-          opponent could slip. Want to see the punish?
+          💎 {many ? `${gems.length} traps here` : 'A trap here'} — your opponent could
+          slip. See the punish?
         </div>
-        <div className="flex flex-col gap-1.5">
-          {gems.map((g, idx) => (
-            <div
-              key={`${g.gemId}-${idx}`}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg bg-theme-surface text-left"
-              data-testid={`walkthrough-gem-entry-${idx}`}
-            >
-              <span className="text-xs font-semibold text-theme-text">{g.title}</span>
-            </div>
-          ))}
-        </div>
-        <div className="flex flex-col gap-2 pt-1">
-          <button
-            onClick={() => walkthrough.playGems()}
-            className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[48px] transition-colors"
-            style={redGlowStyle}
-            data-testid="walkthrough-gem-see"
-          >
-            <span className="text-sm font-semibold text-theme-text">
-              {many ? 'See the traps' : 'See the trap'}
-            </span>
-            <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
-          </button>
-          <button
-            onClick={() => walkthrough.dismissGemPicker()}
-            className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-theme-surface hover:bg-theme-bg text-left"
-            data-testid="walkthrough-gem-skip"
-          >
-            <span className="text-sm text-theme-text">Keep going with the walkthrough</span>
-            <ChevronRight size={14} className="text-theme-text-muted flex-shrink-0" />
-          </button>
-        </div>
+        <button
+          onClick={() => walkthrough.playGems()}
+          className="w-full flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg bg-theme-surface hover:bg-theme-bg text-left min-h-[48px] transition-colors"
+          style={redGlowStyle}
+          data-testid="walkthrough-gem-see"
+        >
+          <span className="text-sm font-semibold text-theme-text">
+            {many ? 'See the traps' : 'See the trap'}
+          </span>
+          <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
+        </button>
+        <button
+          onClick={() => walkthrough.dismissGemPicker()}
+          className="w-full flex items-center justify-between gap-3 px-3 py-2 rounded-lg bg-theme-surface hover:bg-theme-bg text-left"
+          data-testid="walkthrough-gem-skip"
+        >
+          <span className="text-sm text-theme-text">Keep going with the walkthrough</span>
+          <ChevronRight size={14} className="text-theme-text-muted flex-shrink-0" />
+        </button>
+        {gems.length > 0 && (
+          <div className="max-h-24 overflow-y-auto space-y-1 pt-0.5">
+            {gems.map((g, idx) => (
+              <div
+                key={`${g.gemId}-${idx}`}
+                className="px-3 py-1.5 rounded-lg bg-theme-surface/60 text-left"
+                data-testid={`walkthrough-gem-entry-${idx}`}
+              >
+                <span className="text-[11px] text-theme-text-muted">{g.title}</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     );
   }
