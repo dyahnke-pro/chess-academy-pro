@@ -41,6 +41,12 @@ const APP = '6776418777';
 const TERRITORY = process.env.TERRITORY || 'USA';
 const APPLY = process.env.APPLY === '1';
 const PRESERVE = process.env.PRESERVE === '1';
+// A price CHANGE on an already-approved subscription needs an effective date.
+// With startDate:null Apple treats the POST as setting the INITIAL price and
+// rejects it 409 "Initial price cannot be created again after subscription is
+// approved" (hit 2026-08-24 on the live monthly). Default to today (UTC); a
+// decrease takes effect from this date and existing subscribers migrate down.
+const START_DATE = process.env.START_DATE || new Date().toISOString().slice(0, 10);
 
 /** productId → target price, as a plain number of dollars. */
 const TARGETS = {
@@ -142,7 +148,7 @@ const main = async () => {
     const res = await api('POST', '/v1/subscriptionPrices', {
       data: {
         type: 'subscriptionPrices',
-        attributes: { preserveCurrentPrice: PRESERVE, startDate: null },
+        attributes: { preserveCurrentPrice: PRESERVE, startDate: START_DATE },
         relationships: {
           subscription: { data: { type: 'subscriptions', id: sub.id } },
           subscriptionPricePoint: { data: { type: 'subscriptionPricePoints', id: match.id } },
