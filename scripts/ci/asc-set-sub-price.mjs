@@ -41,12 +41,14 @@ const APP = '6776418777';
 const TERRITORY = process.env.TERRITORY || 'USA';
 const APPLY = process.env.APPLY === '1';
 const PRESERVE = process.env.PRESERVE === '1';
-// A price CHANGE on an already-approved subscription needs an effective date.
-// With startDate:null Apple treats the POST as setting the INITIAL price and
-// rejects it 409 "Initial price cannot be created again after subscription is
-// approved" (hit 2026-08-24 on the live monthly). Default to today (UTC); a
-// decrease takes effect from this date and existing subscribers migrate down.
-const START_DATE = process.env.START_DATE || new Date().toISOString().slice(0, 10);
+// A price CHANGE on an already-approved subscription needs an effective date,
+// and Apple requires it STRICTLY IN THE FUTURE — startDate=today is rejected
+// 409 "a future date is expected, and must be on or after <tomorrow>" (hit
+// 2026-08-24). With startDate:null it instead 409s "Initial price cannot be
+// created again after subscription is approved". So default to TOMORROW (UTC);
+// the decrease takes effect then and existing subscribers migrate down.
+const START_DATE = process.env.START_DATE
+  || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().slice(0, 10);
 
 /** productId → target price, as a plain number of dollars. */
 const TARGETS = {
