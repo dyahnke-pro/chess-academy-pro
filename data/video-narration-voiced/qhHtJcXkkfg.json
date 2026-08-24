@@ -1,0 +1,739 @@
+{
+ "videoId": "qhHtJcXkkfg",
+ "title": "Sicilian, Accelerated Dragon | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Sicilian Defense: Accelerated Dragon",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:qhHtJcXkkfg",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 14.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 16.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 23.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 30,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 32.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 34,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 35,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 37.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 41,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 6",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 49,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R b KQkq - 3 6",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 57.5,
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 4 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 65.5,
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/2BNP3/2N1B3/PPP2PPP/R2QK2R b KQkq - 5 7",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "White develops the bishop to c4, aiming at f7 — the sharp Sozin-style setup. Black just keeps developing; depending on White's next move it will be castling, or d6, or sometimes d5 in one go.",
+   "kind": "main",
+   "teaches": "Against the aggressive bishop on c4, complete development and keep the central break flexible.",
+   "plans": "Castle, hold the d-pawn, and choose the break later."
+  },
+  {
+   "ply": 14,
+   "t": 71,
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/2BNP3/2N1B3/PPP2PPP/R2QK2R w KQ - 6 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Castling first, and deliberately NOT the pawn to d6 yet — holding it back preserves maximum flexibility. That reserve pays off if White castles, when the one-move d5 break becomes available.",
+   "kind": "main",
+   "teaches": "Delaying a committal pawn move keeps your best break in reserve.",
+   "plans": "Keep the d-pawn home until d5 in one move is on."
+  },
+  {
+   "ply": 15,
+   "t": 83,
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/2B1P3/2N1B3/PPP1NPPP/R2QK2R b KQ - 7 8",
+   "line": [
+    "Nde2"
+   ],
+   "spoken": "The knight retreat to e2 is a poor choice — it steps off the strong d4-square passively and hands Black an immediate way to challenge in the centre.",
+   "kind": "main",
+   "teaches": "A passive retreat that abandons a strong central post invites an immediate counter.",
+   "plans": "Hit back at once while White is disorganised."
+  },
+  {
+   "ply": 16,
+   "t": 126.5,
+   "fen": "r1bq1rk1/pp1pppbp/2n3p1/8/2B1P1n1/2N1B3/PPP1NPPP/R2QK2R w KQ - 8 9",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": "The knight leaps to g4, harassing the e3-bishop — a move that can be genuinely nasty here, since the bishop has no comfortable square that keeps everything defended.",
+   "kind": "main",
+   "teaches": "With the queen still home, the g4-knight jab against the e3-bishop is a standard Dragon resource.",
+   "plans": "Follow up with the queen sortie to b6."
+  },
+  {
+   "ply": 17,
+   "t": 150,
+   "fen": "r1bq1rk1/pp1pppbp/2n3p1/6B1/2B1P1n1/2N5/PPP1NPPP/R2QK2R b KQ - 9 9",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 151.5,
+   "fen": "r1b2rk1/pp1pppbp/1qn3p1/6B1/2B1P1n1/2N5/PPP1NPPP/R2QK2R w KQ - 10 10",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": "The queen swings to b6 — a garden-variety double attack, hitting the f2- and b2-pawns at once. It comes with risk, since the light-squared bishop is still at home, but the fork is real and White can only defend one pawn.",
+   "kind": "main",
+   "teaches": "A queen on b6 forking f2 and b2 is a classic Sicilian double attack — one pawn must fall.",
+   "plans": "Take the pawn White doesn't defend."
+  },
+  {
+   "ply": 19,
+   "t": 174,
+   "fen": "r1b2rk1/pp1pppbp/1qn3p1/6B1/2B1P1n1/2N5/PPP1NPPP/R2Q1RK1 b - - 11 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 177,
+   "fen": "r1b2rk1/pp1pppbp/2n3p1/6B1/2B1P1n1/2N5/PqP1NPPP/R2Q1RK1 w - - 0 11",
+   "line": [
+    "Qxb2"
+   ],
+   "spoken": "Grab it — the pawn on b2. The queen looks adventurous but it won't be trapped: the a3-square is a ready retreat and there are escape routes to spare, so this is simply a clean extra pawn.",
+   "kind": "main",
+   "teaches": "Before a deep pawn-grab, check the queen's escapes; with a3 available on b2 there is no trap.",
+   "plans": "Retreat to a3 and consolidate the extra pawn."
+  },
+  {
+   "ply": 22,
+   "t": 189,
+   "fen": "r1b2rk1/pp1pppbp/2n3p1/6B1/2B1P1n1/q1N5/P1P1NPPP/1R1Q1RK1 w - - 2 12",
+   "line": [
+    "Rb1",
+    "Qa3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 228.5,
+   "fen": "r1b2rk1/pp1pppbp/2n3p1/3N2B1/2B1P1n1/q7/P1P1NPPP/1R1Q1RK1 b - - 3 12",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 268,
+   "fen": "r1b2rk1/pp1pppbp/2n3p1/3Nn1B1/2B1P3/q7/P1P1NPPP/1R1Q1RK1 w - - 4 13",
+   "line": [
+    "Nge5"
+   ],
+   "spoken": "The knight comes back from its loose post on g4 to the fine central square e5, hitting the c4-bishop as it arrives — its job on g4 is done, and e5 is a much sturdier home.",
+   "kind": "main",
+   "teaches": "Reroute a knight that has done its job before it becomes a target — g4 to e5 with tempo.",
+   "plans": "Consolidate the centre, then untangle the queenside."
+  },
+  {
+   "ply": 25,
+   "t": 289.5,
+   "fen": "r1b2rk1/pp1pppbp/2n3p1/3Nn1B1/4P3/qB6/P1P1NPPP/1R1Q1RK1 b - - 5 13",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 328,
+   "fen": "r1b2rk1/pp1pppb1/2n3pp/3Nn1B1/4P3/qB6/P1P1NPPP/1R1Q1RK1 w - - 0 14",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 338.5,
+   "fen": "r1b2rk1/pp1pppb1/2n3pp/3Nn3/4P2B/qB6/P1P1NPPP/1R1Q1RK1 b - - 1 14",
+   "line": [
+    "Bh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 342.5,
+   "fen": "r1b2rk1/pp1pppb1/2n4p/3Nn1p1/4P2B/qB6/P1P1NPPP/1R1Q1RK1 w - - 0 15",
+   "line": [
+    "g5"
+   ],
+   "spoken": "The pawn to g5 chases the bishop off the board's active diagonal altogether. Booting the strong piece unburdens the position and lets Black consolidate the extra material in peace.",
+   "kind": "main",
+   "teaches": "When the opponent's pieces are your only problem, push them back with pawns and consolidate.",
+   "plans": "Follow with d6 once the pressure eases."
+  },
+  {
+   "ply": 29,
+   "t": 349,
+   "fen": "r1b2rk1/pp1pppb1/2n4p/3Nn1p1/4P3/qB4B1/P1P1NPPP/1R1Q1RK1 b - - 1 15",
+   "line": [
+    "Bg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 370.5,
+   "fen": "r1b2rk1/pp2ppb1/2np3p/3Nn1p1/4P3/qB4B1/P1P1NPPP/1R1Q1RK1 w - - 0 16",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Now the pawn to d6 is safe — e7 is well covered — so Black finally locks the centre without weakening the dark squares that a combined g6-and-e6 would have left soft.",
+   "kind": "main",
+   "teaches": "Choose d6 over e6 when you've already committed g6 — it keeps the dark squares intact.",
+   "plans": "Complete development and convert the extra pawn."
+  },
+  {
+   "ply": 31,
+   "t": 383.5,
+   "fen": "r1b2rk1/pp2ppb1/2np3p/3Nn1p1/4P2P/qB4B1/P1P1NPP1/1R1Q1RK1 b - - 0 16",
+   "line": [
+    "h4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 416,
+   "fen": "r4rk1/pp2ppb1/2np3p/3Nn1p1/4P1bP/qB4B1/P1P1NPP1/1R1Q1RK1 w - - 1 17",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 424.5,
+   "fen": "r1b2rk1/pp2ppb1/2np3p/3Nn1p1/4P2P/qB4B1/P1P1NPP1/1R1Q1RK1 b - - 0 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 432,
+   "fen": "r4rk1/pp2ppb1/2np3p/3Nn1p1/4P1bP/qB4B1/P1P1NPP1/1R1Q1RK1 w - - 1 17",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 471,
+   "fen": "r4rk1/pp2ppb1/2np3p/3Nn1p1/4P1bP/qB4B1/P1PQNPP1/1R3RK1 b - - 2 17",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 501.5,
+   "fen": "r4rk1/pp2ppb1/2np3p/q2Nn1p1/4P1bP/1B4B1/P1PQNPP1/1R3RK1 w - - 3 18",
+   "line": [
+    "Qa5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 525,
+   "fen": "r4rk1/pp2ppb1/2np3p/q2Nn1p1/4P1bP/1B2Q1B1/P1P1NPP1/1R3RK1 b - - 4 18",
+   "line": [
+    "Qe3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 542,
+   "fen": "r4rk1/pp2ppb1/2np3p/2qNn1p1/4P1bP/1B2Q1B1/P1P1NPP1/1R3RK1 w - - 5 19",
+   "line": [
+    "Qc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 558,
+   "fen": "r4rk1/pp2ppb1/2np3p/2qNn1p1/4P1bP/1B4B1/P1PQNPP1/1R3RK1 b - - 6 19",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 559,
+   "fen": "r4rk1/pp3pb1/2npp2p/2qNn1p1/4P1bP/1B4B1/P1PQNPP1/1R3RK1 w - - 0 20",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 597,
+   "fen": "r4rk1/pp3pb1/2npp2p/2q1n1p1/4P1bP/1B2N1B1/P1PQNPP1/1R3RK1 b - - 1 20",
+   "line": [
+    "Ne3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 610.5,
+   "fen": "r4rk1/pp3pb1/2npp2p/2q1n1p1/4P2P/1B2NbB1/P1PQNPP1/1R3RK1 w - - 2 21",
+   "line": [
+    "Bf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 638,
+   "fen": "r4rk1/pp3pb1/2npp2p/2q1n1P1/4P3/1B2NbB1/P1PQNPP1/1R3RK1 b - - 0 21",
+   "line": [
+    "hxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 640,
+   "fen": "r4rk1/pp3pb1/2npp3/2q1n1p1/4P3/1B2NbB1/P1PQNPP1/1R3RK1 w - - 0 22",
+   "line": [
+    "hxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 650,
+   "fen": "r4rk1/pp3pb1/2npp3/2q1B1p1/4P3/1B2Nb2/P1PQNPP1/1R3RK1 b - - 0 22",
+   "line": [
+    "Bxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 651,
+   "fen": "r4rk1/pp3pb1/3pp3/2q1n1p1/4P3/1B2Nb2/P1PQNPP1/1R3RK1 w - - 0 23",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 657.5,
+   "fen": "r4rk1/pp3pb1/3pp3/2q1n1p1/4P3/1B2NbN1/P1PQ1PP1/1R3RK1 b - - 1 23",
+   "line": [
+    "Ng3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 686.5,
+   "fen": "r4rk1/pp3pb1/3pp3/2q1n3/4P1p1/1B2NbN1/P1PQ1PP1/1R3RK1 w - - 0 24",
+   "line": [
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 713,
+   "fen": "r4rk1/pp3pb1/3pp3/2q1n3/4P1p1/1B2NbN1/P1P2PP1/1RQ2RK1 b - - 1 24",
+   "line": [
+    "Qc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 729,
+   "fen": "r4rk1/pp3p2/3pp2b/2q1n3/4P1p1/1B2NbN1/P1P2PP1/1RQ2RK1 w - - 2 25",
+   "line": [
+    "Bh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 732,
+   "fen": "r4rk1/pp3p2/3pp2b/2q1n3/4P1p1/1B2NPN1/P1P2P2/1RQ2RK1 b - - 0 25",
+   "line": [
+    "gxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 743,
+   "fen": "r4rk1/pp3p2/3pp2b/2q1n3/4P3/1B2NpN1/P1P2P2/1RQ2RK1 w - - 0 26",
+   "line": [
+    "gxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 782,
+   "fen": "r4rk1/pp3p2/3pp2b/2q1n3/4P1p1/1B2NPN1/P1P2P2/1RQ2RK1 b - - 0 25",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 783,
+   "fen": "r4rk1/pp3p2/3pp2b/2q1n3/4P3/1B2NpN1/P1P2P2/1RQ2RK1 w - - 0 26",
+   "line": [
+    "gxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 804,
+   "fen": "r4rk1/pp3p2/3pp2b/2q1n3/4P3/1B2NpN1/P1P2P2/1R2QRK1 b - - 1 26",
+   "line": [
+    "Qe1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 52,
+   "t": 817.5,
+   "fen": "r4r2/pp3p1k/3pp2b/2q1n3/4P3/1B2NpN1/P1P2P2/1R2QRK1 w - - 2 27",
+   "line": [
+    "Kh7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 825,
+   "fen": "r4rk1/pp3p2/3pp2b/2q1n3/4P3/1B2NpN1/P1P2P2/1R2QRK1 b - - 1 26",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 52,
+   "t": 831,
+   "fen": "r4r2/pp3p1k/3pp2b/2q1n3/4P3/1B2NpN1/P1P2P2/1R2QRK1 w - - 2 27",
+   "line": [
+    "Kh7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 837.5,
+   "fen": "r4r2/pp3p1k/3pp2b/2q1n3/2N1P3/1B3pN1/P1P2P2/1R2QRK1 b - - 3 27",
+   "line": [
+    "Nc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 54,
+   "t": 869,
+   "fen": "r5r1/pp3p1k/3pp2b/2q1n3/2N1P3/1B3pN1/P1P2P2/1R2QRK1 w - - 4 28",
+   "line": [
+    "Rg8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 886.5,
+   "fen": "r5r1/pp3p1k/3pp2b/2q1n3/2N1P3/1B3pN1/P1P2P1K/1R2QR2 b - - 5 28",
+   "line": [
+    "Kh2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 897.5,
+   "fen": "r5r1/pp3p1k/3pp2b/2q5/2N1P1n1/1B3pN1/P1P2P1K/1R2QR2 w - - 6 29",
+   "line": [
+    "Ng4+"
+   ],
+   "spoken": "The knight to g4 with check is crushing — it drives the exposed king onto the run into a mating net, and Black's attack, a pawn up already, simply finishes the game.",
+   "kind": "main",
+   "teaches": "Once the enemy king is dragged into the open, forcing checks convert the attack.",
+   "plans": "Deliver the checks and mate."
+  },
+  {
+   "ply": 57,
+   "t": 899.5,
+   "fen": "r5r1/pp3p1k/3pp2b/2q5/2N1P1n1/1B3pNK/P1P2P2/1R2QR2 b - - 7 29",
+   "line": [
+    "Kh3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 58,
+   "t": 952,
+   "fen": "r5r1/pp3p1k/3pp3/2q5/2N1Pbn1/1B3pNK/P1P2P2/1R2QR2 w - - 8 30",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 59,
+   "t": 958.5,
+   "fen": "r5r1/pp3p1k/3pp3/2q1P3/2N2bn1/1B3pNK/P1P2P2/1R2QR2 b - - 0 30",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 60,
+   "t": 963,
+   "fen": "r5r1/pp3p1k/3pp3/2q1P3/2N2b2/1B3pNK/P1P2n2/1R2QR2 w - - 0 31",
+   "line": [
+    "Nxf2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 974,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 976.5,
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2N1B3/PPP2PPP/R2QKB1R w KQkq - 4 7",
+   "line": [
+    "Nc3",
+    "Bg7",
+    "Be3",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 978.5,
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/2BNP3/2N1B3/PPP2PPP/R2QK2R w KQ - 6 8",
+   "line": [
+    "Bc4",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 980.5,
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/2B1P3/2N1B3/PPP1NPPP/R2QK2R b KQ - 7 8",
+   "line": [
+    "Nde2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 983.5,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2B1P3/2N1B3/PPP1NPPP/R2QK2R w KQ - 0 9",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 986.5,
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/8/2B1P3/2N1B3/PPP1NPPP/R2QK2R b KQ - 7 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 989,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2B1P3/2N1B3/PPP1NPPP/R2QK2R w KQ - 0 9",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 990.5,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2B1P3/2N1B3/PPP1NPPP/R2Q1RK1 b - - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1008.5,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2B1P3/2N1B3/PPP1NPPP/R2QK2R w KQ - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1010,
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/2BNP3/2N1B3/PPP2PPP/R2QK2R b KQkq - 5 7",
+   "line": [],
+   "spoken": "The verdict on this line: the Maróczy Bind is a good try against the accelerated setup, but it does not refute it — and at club level most players don't even reach for it. The principled g4-then-Qb6 plan gave Black a fine game.",
+   "kind": "review",
+   "teaches": "A respected anti-system being 'good' is not the same as it refuting your opening — know the difference.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 1017.5,
+   "fen": "r1bq1rk1/pp1pppbp/2n3p1/8/2B1P1n1/2N1B3/PPP1NPPP/R2QK2R w KQ - 8 9",
+   "line": [
+    "Ng4",
+    "Nde2",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1019,
+   "fen": "r1bq1rk1/pp1pppbp/2n3p1/6B1/2B1P1n1/2N5/PPP1NPPP/R2QK2R b KQ - 9 9",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1022,
+   "fen": "r1b2rk1/pp1pppbp/1qn3p1/6B1/2B1P1n1/2N5/PPP1NPPP/R2QK2R w KQ - 10 10",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1023,
+   "fen": "r1b2rk1/pp1pppbp/1qn3p1/6B1/2B1P1n1/2N5/PPP1NPPP/R2Q1RK1 b - - 11 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  }
+ ]
+}
