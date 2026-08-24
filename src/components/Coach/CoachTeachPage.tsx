@@ -81,6 +81,7 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
+import { resolveVoicedWalkthrough } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
 import { gemId } from '../../data/lessons/punishGems';
@@ -4088,7 +4089,14 @@ export function CoachTeachPage(): JSX.Element {
           return;
         }
 
+        // Tier 0: a VOICED walkthrough (our-words DNA corpus, merged from real
+        // games — board-true, note-led). When we have one for the requested
+        // opening, it IS the lesson (G0/G3), so it wins over the static
+        // masterclass AND over LLM generation. It's already note-driven, so
+        // the notes-lead branch below must never null it back to generation.
+        const voicedTree = resolveVoicedWalkthrough(requestedName);
         const candidateStatic =
+          voicedTree ??
           resolveWalkthroughTree(requestedName) ??
           (!faceMode && pace !== 'tour'
             ? masterclassWalkthroughTree(
@@ -4147,7 +4155,9 @@ export function CoachTeachPage(): JSX.Element {
           }
         })();
         const notesLeadThisLesson = noteCoverage >= NOTE_PRIMARY_MIN_PLIES;
-        const staticTree = notesLeadThisLesson ? null : candidateStatic;
+        // A voiced tree is our note-driven lesson already — never discard it
+        // for generation. Otherwise honor the notes-lead decision.
+        const staticTree = notesLeadThisLesson && !voicedTree ? null : candidateStatic;
         if (notesLeadThisLesson) {
           void logAppAudit({
             kind: 'coach-surface-migrated',
@@ -5200,7 +5210,9 @@ export function CoachTeachPage(): JSX.Element {
             // fallback keeps the in-place walkthrough flow on
             // /coach/teach for everything we've ever generated.
             const tree =
-              resolveWalkthroughTree(opening) ?? (await getCachedOpening(opening));
+              resolveVoicedWalkthrough(opening) ??
+              resolveWalkthroughTree(opening) ??
+              (await getCachedOpening(opening));
             if (tree) {
               // SILENCE THE BRAIN before the walkthrough starts speaking.
               // Production audit (build 3e2263c) caught a "two voices"
