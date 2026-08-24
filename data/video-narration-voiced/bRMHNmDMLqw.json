@@ -1,0 +1,538 @@
+{
+ "videoId": "bRMHNmDMLqw",
+ "title": "Master Class | French, Advance | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "French Defense: Advance Variation, Nimzowitsch gambit (4.Nf3), e5-control battle",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:bRMHNmDMLqw",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 47,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 55,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 57,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 58.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 61.5,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 68,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "The pawn to c5 arrives and the normal move would be c3 — but not here. The knight to f3, leaving d4, is the treatment: an idea of Nimzowitsch's whose whole purpose is to accelerate White's development.",
+   "kind": "main",
+   "teaches": "Nf3 over c3: give the pawn, take the lead in development.",
+   "plans": "Develop fast, fight for e5."
+  },
+  {
+   "ply": 8,
+   "t": 69.5,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 95,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R b KQkq - 3 5",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "Develop as if nothing is happening — the bishop to d3, not b5. The bishop to b5 is a very common mistake in these positions: the queenside pin is rarely dangerous, whereas from d3 the bishop points straight at the kingside where Black will castle.",
+   "kind": "main",
+   "teaches": "Prefer Bd3 aiming at the king over the tempting but toothless ...Bb5 pin.",
+   "plans": "Bd3, castle, target the king."
+  },
+  {
+   "ply": 10,
+   "t": 105,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 111,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 1 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 112,
+   "fen": "r1bqkbnr/pp4pp/2n1pp2/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+   "line": [
+    "f6"
+   ],
+   "spoken": "Now the zen of the whole system: establish total control of the e5-square. That advanced pawn — and the piece that replaces it — is everything. Lose the grip on e5 and Black's pawns start rolling up the board; hold it and Black stays cramped.",
+   "kind": "main",
+   "teaches": "The system lives or dies on control of e5 — a pawn there can be replaced by a piece, but never relinquish the square.",
+   "plans": "Pile defenders on e5."
+  },
+  {
+   "ply": 13,
+   "t": 150.5,
+   "fen": "r1bqkbnr/pp4pp/2n1pp2/3pP3/3p4/3B1N2/PPP2PPP/RNBQR1K1 b kq - 1 7",
+   "line": [
+    "Re1"
+   ],
+   "spoken": "So the rook comes to e1, reinforcing the e5-point before Black can chip at it. Rook to e1 or bishop to f4 — either adds a guard to the square the whole game revolves around.",
+   "kind": "main",
+   "teaches": "Add defenders to your key square proactively, before it's attacked.",
+   "plans": "Re1 to back up e5."
+  },
+  {
+   "ply": 14,
+   "t": 153.5,
+   "fen": "r1bqkbnr/pp4pp/2n1p3/3pp3/3p4/3B1N2/PPP2PPP/RNBQR1K1 w kq - 0 8",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 155,
+   "fen": "r1bqkbnr/pp4pp/2n1p3/3pN3/3p4/3B4/PPP2PPP/RNBQR1K1 b kq - 0 8",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": "Recapturing with the knight on e5 keeps the grip — the pawn is gone but a piece takes its place, and control of the square is unbroken.",
+   "kind": "main",
+   "teaches": "A piece can inherit a pawn's outpost; the square matters more than which unit holds it.",
+   "plans": "Nxe5, keep the clamp."
+  },
+  {
+   "ply": 16,
+   "t": 158,
+   "fen": "r1bqkb1r/pp4pp/2n1pn2/3pN3/3p4/3B4/PPP2PPP/RNBQR1K1 w kq - 1 9",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 186.5,
+   "fen": "r1bqkb1r/pp4pp/2n1pn2/3pN3/3p1B2/3B4/PPP2PPP/RN1QR1K1 b kq - 2 9",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": "The bishop goes to f4, and don't be seduced by the one-move pin on g5. The goal isn't a cheap pin — it's more control of e5. Even if f4 looks a touch lame, positionally it's the right call because it guards the square.",
+   "kind": "main",
+   "teaches": "Choose the move that serves your strategic goal over a flashy one-move pin.",
+   "plans": "Bf4, reinforce e5."
+  },
+  {
+   "ply": 18,
+   "t": 192.5,
+   "fen": "r1bqk2r/pp4pp/2nbpn2/3pN3/3p1B2/3B4/PPP2PPP/RN1QR1K1 w kq - 3 10",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "Even more control is needed, so combine two jobs in one: develop the last knight to a square where it heads for f3 and adds yet another defender of e5. Bring the undeveloped piece out and let it reinforce the battle square at the same time.",
+   "kind": "main",
+   "teaches": "Develop a piece toward the exact square it can also defend — economy of tempo.",
+   "plans": "Nd2 then Ndf3, stacking guards on e5."
+  },
+  {
+   "ply": 19,
+   "t": 222,
+   "fen": "r1bqk2r/pp4pp/2nbpn2/3pN3/3p1B2/3B4/PPPN1PPP/R2QR1K1 b kq - 4 10",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 231.5,
+   "fen": "r1bq1rk1/pp4pp/2nbpn2/3pN3/3p1B2/3B4/PPPN1PPP/R2QR1K1 w - - 5 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 233,
+   "fen": "r1bq1rk1/pp4pp/2nbpn2/3pN3/3p1B2/3B1N2/PPP2PPP/R2QR1K1 b - - 6 11",
+   "line": [
+    "Ndf3"
+   ],
+   "spoken": "With the knight to f3 there are now so many pieces holding e5 that any single one can leave its post and the square still stands — that was the whole point. Just stay alert to the x-ray on the undefended bishop; a later drop back to g3 is the tidy prophylactic.",
+   "kind": "main",
+   "teaches": "Over-guard a square so no single trade or departure loosens it; watch for x-ray discoveries.",
+   "plans": "Ndf3; keep Bg3 in reserve."
+  },
+  {
+   "ply": 22,
+   "t": 317.5,
+   "fen": "r1bq1rk1/pp4pp/2nbp3/3pN3/3pnB2/3B1N2/PPP2PPP/R2QR1K1 w - - 7 12",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 369.5,
+   "fen": "r1bq1rk1/p5pp/2pbp3/3p4/3pnB2/3B1N2/PPP2PPP/R2QR1K1 w - - 0 13",
+   "line": [
+    "Nxc6",
+    "bxc6"
+   ],
+   "spoken": "The capture on c6 comes with force — the recapture with the b-pawn is forced, because otherwise the queen simply hangs. That opens the way to collect on d6 next.",
+   "kind": "trap",
+   "teaches": "A capture that also attacks the queen forces the recapture — read the in-between threat.",
+   "plans": "Nxc6, then win on d6."
+  },
+  {
+   "ply": 26,
+   "t": 371.5,
+   "fen": "r1b2rk1/p5pp/2pqp3/3p4/3pn3/3B1N2/PPP2PPP/R2QR1K1 w - - 0 14",
+   "line": [
+    "Bxd6",
+    "Qxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 381,
+   "fen": "r1b2rk1/p5pp/2pqp3/3p4/3pB3/5N2/PPP2PPP/R2QR1K1 b - - 0 14",
+   "line": [
+    "Bxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 385,
+   "fen": "r1b2rk1/p5pp/2pqp3/8/3pp3/5N2/PPP2PPP/R2QR1K1 w - - 0 15",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": "A textbook never-pre-move moment: the rook takes on c4 looks great, but calculate one move further — Black replies c5 and rips open a massive diagonal for the bishop, and White isn't better. Take the two seconds; the right move is the queen to d4.",
+   "kind": "main",
+   "teaches": "Never pre-move a natural recapture — check one move deeper for the opponent's resource.",
+   "plans": "Qxd4, not the hasty Rxc4."
+  },
+  {
+   "ply": 29,
+   "t": 412,
+   "fen": "r1b2rk1/p5pp/2pqp3/8/3Qp3/5N2/PPP2PPP/R3R1K1 b - - 0 15",
+   "line": [
+    "Qxd4"
+   ],
+   "spoken": "The queen to d4 hits the enemy queen, and a trade there leaves Black's pawn structure in ruins. This is the typical way to convert: force the queens off into a position where the static weaknesses decide.",
+   "kind": "main",
+   "teaches": "Offer a queen trade that leaves the opponent with a wrecked structure.",
+   "plans": "Qxd4, trade into a better ending."
+  },
+  {
+   "ply": 24,
+   "t": 432.5,
+   "fen": "r1bq1rk1/p5pp/2pbp3/3p4/3pnB2/3B1N2/PPP2PPP/R2QR1K1 w - - 0 13",
+   "line": [],
+   "spoken": "The order mattered: taking on e4 first would have let Black grab the dark-squared bishop, so White captured on d6 first and only then won the pawn. Right result, right sequence.",
+   "kind": "review",
+   "teaches": "Sequence captures so the opponent never gets an in-between recapture of a valuable piece.",
+   "plans": "Bxd6 first, then collect.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 526,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 528.5,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R b KQkq - 3 5",
+   "line": [
+    "c5",
+    "Bd3",
+    "Nc6",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 587.5,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 1 6",
+   "line": [
+    "cxd4",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 588.5,
+   "fen": "r1bqkbnr/pp4pp/2n1pp2/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 604,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/3B4/PPP2PPP/RNBQK1NR w KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 606,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R b KQkq - 3 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 607.5,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/3pP3/2pP4/3B1N2/PPP2PPP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "c4"
+   ],
+   "spoken": "And you actually want Black to push the pawn to c4 — the bishop just drops back to e2, and the central chain is no longer under any pressure at all. The advance releases the tension in White's favour.",
+   "kind": "review",
+   "teaches": "Welcome ...c4: it frees the bishop to retreat and de-stresses the centre.",
+   "plans": "Meet ...c4 with Be2.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 610.5,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/3pP3/2pP4/5N2/PPP1BPPP/RNBQK2R b KQkq - 1 6",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 619,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/3pP3/2pP4/3B1N2/PPP2PPP/RNBQK2R w KQkq - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 755.5,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/3B4/PPP2PPP/RNBQK1NR w KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 761,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R b KQkq - 3 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 767.5,
+   "fen": "r1bqkbnr/pp4pp/2n1pp2/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+   "line": [
+    "f6",
+    "O-O",
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 769,
+   "fen": "r1bqkbnr/pp4pp/2n1pp2/3pP3/3p4/3B1N2/PPP2PPP/RNBQR1K1 b kq - 1 7",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 770.5,
+   "fen": "r1bqkbnr/pp4pp/2n1p3/3pp3/3p4/3B1N2/PPP2PPP/RNBQR1K1 w kq - 0 8",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 772,
+   "fen": "r1bqkbnr/pp4pp/2n1p3/3pN3/3p4/3B4/PPP2PPP/RNBQR1K1 b kq - 0 8",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 780,
+   "fen": "r1bqkb1r/pp4pp/2n1pn2/3pN3/3p4/3B4/PPP2PPP/RNBQR1K1 w kq - 1 9",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 783,
+   "fen": "r1bqkb1r/pp4pp/2n1pn2/3pN3/3p1B2/3B4/PPP2PPP/RN1QR1K1 b kq - 2 9",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 796,
+   "fen": "r1bqk2r/pp4pp/2nbpn2/3pN3/3p1B2/3B4/PPP2PPP/RN1QR1K1 w kq - 3 10",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 797.5,
+   "fen": "r1bq1rk1/pp4pp/2nbpn2/3pN3/3p1B2/3B4/PPPN1PPP/R2QR1K1 w - - 5 11",
+   "line": [
+    "Nd2",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 798.5,
+   "fen": "r1bq1rk1/pp4pp/2nbpn2/3pN3/3p1B2/3B1N2/PPP2PPP/R2QR1K1 b - - 6 11",
+   "line": [
+    "Ndf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 805.5,
+   "fen": "r1bq1rk1/pp4pp/2nbp3/3pN3/3pnB2/3B1N2/PPP2PPP/R2QR1K1 w - - 7 12",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 812.5,
+   "fen": "r1bq1rk1/pp4pp/2nbpn2/3pN3/3p1B2/3B1N2/PPP2PPP/R2QR1K1 b - - 6 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 813.5,
+   "fen": "r1b2rk1/ppq3pp/2nbpn2/3pN3/3p1B2/3B1N2/PPP2PPP/R2QR1K1 w - - 7 12",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 817.5,
+   "fen": "r1b2rk1/ppq3pp/2nbpn2/3pN3/3p4/3B1NB1/PPP2PPP/R2QR1K1 b - - 8 12",
+   "line": [
+    "Bg3"
+   ],
+   "spoken": "Objectively the knight to e4 was the inaccuracy — the quiet queen to c7 keeps equality — but even level, White's side is easier to play: healthy improving moves like queen to e2 and rook to d1, full compensation for the pawn, and Black clamped out. The e6-pawn stays a chronic weakness.",
+   "kind": "review",
+   "teaches": "Full compensation plus easy improving moves can make an equal position much easier to play.",
+   "plans": "Improve slowly, pressure e6.",
+   "reanchor": true
+  },
+  {
+   "ply": 24,
+   "t": 850,
+   "fen": "r4rk1/ppqb2pp/2nbpn2/3pN3/3p4/3B1NB1/PPP2PPP/R2QR1K1 w - - 9 13",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 876.5,
+   "fen": "r1bqkbnr/pp4pp/2n1pp2/2ppP3/3P4/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 1 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 887.5,
+   "fen": "r1bqkbnr/pp4pp/2n1pp2/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  }
+ ]
+}
