@@ -51,17 +51,35 @@ describe('buildGemDetour', () => {
 });
 
 describe('gemsForPosition', () => {
-  it('returns weapon detours only for the punisher side', () => {
+  it('classifies a gem as a WEAPON for the punisher side, a WARNING for the other', () => {
     const gem = firstSurfaceableGem();
     const path = gem.lineMoves.split(/\s+/).filter(Boolean);
-    // Caro-Kann student punishes as Black.
-    expect(gemsForPosition(path, 'black').length).toBeGreaterThan(0);
-    // Asking as White (the slipping side here) yields nothing — that's a warning.
-    expect(gemsForPosition(path, 'white').length).toBe(0);
+    // Caro-Kann student punishes as Black → weapon; the same gem for a White
+    // student is a trap to avoid → warning (David 2026-08-24 "add warnings too").
+    const asBlack = gemsForPosition(path, 'black');
+    expect(asBlack.length).toBeGreaterThan(0);
+    expect(asBlack.every((g) => g.kind === 'weapon')).toBe(true);
+    const asWhite = gemsForPosition(path, 'white');
+    expect(asWhite.length).toBeGreaterThan(0);
+    expect(asWhite.every((g) => g.kind === 'warning')).toBe(true);
   });
 
   it('is empty on a position no gem knows', () => {
     expect(gemsForPosition(['e4'])).toHaveLength(0);
+  });
+});
+
+describe('buildGemDetour warnings', () => {
+  it('frames a warning with computed, careful narration (not the weapon prose)', () => {
+    const gem = firstSurfaceableGem();
+    const w = buildGemDetour(gem, 'warning');
+    expect(w).toBeTruthy();
+    expect(w!.kind).toBe('warning');
+    expect(w!.title.toLowerCase()).toContain('careful');
+    expect(w!.steps[0].idea.toLowerCase()).toContain('careful');
+    // Still a legal played-out line from the base.
+    const board = new Chess(w!.baseFen);
+    for (const s of w!.steps) expect(board.move(s.san)).toBeTruthy();
   });
 });
 

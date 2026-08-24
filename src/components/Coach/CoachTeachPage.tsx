@@ -11266,7 +11266,15 @@ function WalkthroughControls({
   // 2026-08-23). Tapping "See it" plays every trap out; "Keep going" skips.
   if (phase === 'gem-picker') {
     const gems = walkthrough.gemPickerLines;
-    const many = gems.length > 1;
+    const weapons = gems.filter((g) => g.kind !== 'warning');
+    const warnings = gems.filter((g) => g.kind === 'warning');
+    // Header names what's here: weapons to spring and/or warnings to avoid.
+    const headline =
+      weapons.length && warnings.length
+        ? `${weapons.length} trap${weapons.length > 1 ? 's' : ''} to spring · ${warnings.length} to avoid`
+        : weapons.length
+          ? `${weapons.length > 1 ? `${weapons.length} traps here` : 'A trap here'} — your opponent could slip`
+          : `${warnings.length > 1 ? `${warnings.length} traps to avoid` : 'A trap to avoid'} — your opponent has a trick`;
     // BUTTONS FIRST, then the (bounded, scrollable) trap list — so the actions
     // are always reachable even in the non-scrolling board column (David
     // 2026-08-23: "i cant scroll down to see the selections"). The whole panel
@@ -11277,8 +11285,7 @@ function WalkthroughControls({
         data-testid="walkthrough-gem-picker"
       >
         <div className="text-xs font-medium text-theme-text-muted px-1">
-          💎 {many ? `${gems.length} traps here` : 'A trap here'} — your opponent could
-          slip. See the punish?
+          {weapons.length ? '💎' : '⚠️'} {headline}. See how it plays out?
         </div>
         <button
           onClick={() => walkthrough.playGems()}
@@ -11287,7 +11294,7 @@ function WalkthroughControls({
           data-testid="walkthrough-gem-see"
         >
           <span className="text-sm font-semibold text-theme-text">
-            {many ? 'See the traps' : 'See the trap'}
+            {gems.length > 1 ? 'See them' : 'See it'}
           </span>
           <ChevronRight size={16} className="text-theme-text-muted flex-shrink-0" />
         </button>
@@ -11307,7 +11314,10 @@ function WalkthroughControls({
                 className="px-3 py-1.5 rounded-lg bg-theme-surface/60 text-left"
                 data-testid={`walkthrough-gem-entry-${idx}`}
               >
-                <span className="text-[11px] text-theme-text-muted">{g.title}</span>
+                <span className="text-[11px] text-theme-text-muted">
+                  {g.kind === 'warning' ? '⚠️ ' : '💎 '}
+                  {g.title}
+                </span>
               </div>
             ))}
           </div>

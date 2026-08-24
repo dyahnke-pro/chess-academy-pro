@@ -567,6 +567,7 @@ describe('baked gem picker', () => {
     const f2 = c.fen();
     return {
       gemId: 'test:e4:e5',
+      kind: 'weapon',
       title: 'Test trap',
       inaccuracy: 'e5',
       baseFen,

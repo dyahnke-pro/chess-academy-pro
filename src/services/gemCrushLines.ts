@@ -36,6 +36,7 @@ import {
   gemInaccuracyFen,
   type PunishGem,
 } from '../data/lessons/punishGems';
+import { narrateContinuationMove } from './continuationMoveNarration';
 import type {
   NarrationArrow,
   NarrationHighlight,
@@ -402,17 +403,27 @@ function toNarrationColor(c?: string): NarrationArrow['color'] {
 }
 
 /**
- * Build the played-out DETOUR for one gem: the [inaccuracy, ...punish...] tail,
- * each ply carrying the SAME narration + arrows the opening tab uses
- * (`gemToPlayableLine`, David 2026-08-23: "use the same narrations and arrows
- * from the opening tab"). `baseFen` is the position the detour plays from and
- * snaps back to. Returns null if the gem yields no playable line.
+ * Build the played-out DETOUR for one gem: the [inaccuracy, ...punish...] tail.
  *
- * G0/G3: every move is the curated gem's own, replayed through chess.js; the
- * prose is the opening tab's hand-authored/board-composed narration. Nothing
- * invented here.
+ * WEAPON (opponent slips, student punishes): each ply carries the SAME narration
+ * + arrows the opening tab uses (`gemToPlayableLine`, David 2026-08-23: "use the
+ * same narrations and arrows from the opening tab").
+ *
+ * WARNING (student's tempting move runs into the opponent's punish — David
+ * 2026-08-24: "add warnings too"): the gem's AUTHORED prose is written from the
+ * punisher's side and would misframe a warning ("you crush" when it is the
+ * student getting crushed), so warning narration is COMPUTED board-truthfully
+ * per ply via `narrateContinuationMove`, with a "careful" lead on the slip.
+ *
+ * `baseFen` is the position the detour plays from and snaps back to. Returns null
+ * if the gem yields no playable line. G0/G3: every move is the curated gem's own,
+ * replayed through chess.js; prose is authored (weapon) or board-composed
+ * (warning) — nothing invented.
  */
-export function buildGemDetour(gem: PunishGem): BakedGemLine | null {
+export function buildGemDetour(
+  gem: PunishGem,
+  kind: 'weapon' | 'warning' = 'weapon',
+): BakedGemLine | null {
   const line = gemToPlayableLine(gem);
   if (!line) return null;
   const setup = gem.lineMoves.split(/\s+/).filter(Boolean);
@@ -431,6 +442,7 @@ export function buildGemDetour(gem: PunishGem): BakedGemLine | null {
   const steps: BakedGemStep[] = [];
   for (let i = 0; i < detourSans.length; i += 1) {
     const srcIdx = inaccuracyPly + i;
+    const fenBefore = board.fen();
     let mv;
     try {
       mv = board.move(detourSans[i]);
@@ -438,29 +450,44 @@ export function buildGemDetour(gem: PunishGem): BakedGemLine | null {
       break; // playLine is gate-legal, but never throw mid-build
     }
     if (!mv) break;
-    const arrows = (line.arrows[srcIdx] ?? []).map((a) => ({
-      from: a.from,
-      to: a.to,
-      color: toNarrationColor(a.color),
-    }));
-    const highlights: NarrationHighlight[] = (line.highlights?.[srcIdx] ?? []).map((h) => ({
-      square: h.square,
-      color: toNarrationColor(h.color) as NarrationHighlight['color'],
-    }));
+    let idea: string;
+    let shortIdea: string;
+    let arrows: NarrationArrow[];
+    let highlights: NarrationHighlight[] = [];
+    if (kind === 'weapon') {
+      arrows = (line.arrows[srcIdx] ?? []).map((a) => ({ from: a.from, to: a.to, color: toNarrationColor(a.color) }));
+      highlights = (line.highlights?.[srcIdx] ?? []).map((h) => ({ square: h.square, color: toNarrationColor(h.color) as NarrationHighlight['color'] }));
+      idea = (line.annotations[srcIdx] ?? '').trim();
+      shortIdea = (line.learnCues?.[srcIdx] ?? '').trim();
+    } else {
+      // Warning — board-true, perspective-neutral prose. The FIRST ply is the
+      // student's tempting slip; lead it with the caution.
+      const c = narrateContinuationMove(fenBefore, board.fen(), mv.san, mv.from, mv.to);
+      arrows = c.arrows;
+      idea = i === 0
+        ? `Careful — ${cleanSan(mv.san)} is tempting, but your opponent hits back. ${c.say}`.trim()
+        : c.say;
+      shortIdea = i === 0 ? `Avoid ${cleanSan(mv.san)}` : c.short;
+    }
     steps.push({
       san: mv.san,
       fen: board.fen(),
-      idea: (line.annotations[srcIdx] ?? '').trim(),
-      shortIdea: (line.learnCues?.[srcIdx] ?? '').trim(),
+      idea,
+      shortIdea,
       arrows,
       ...(highlights.length > 0 ? { highlights } : {}),
     });
   }
   if (steps.length === 0) return null;
 
+  const title = kind === 'weapon'
+    ? line.title
+    : `Careful: ${cleanSan(gem.inaccuracy)} runs into ${cleanSan(gem.punish)}`;
+
   return {
     gemId: gemId(gem),
-    title: line.title,
+    kind,
+    title,
     inaccuracy: cleanSan(gem.inaccuracy),
     baseFen,
     steps,
@@ -469,9 +496,10 @@ export function buildGemDetour(gem: PunishGem): BakedGemLine | null {
 
 /**
  * Every surfaceable gem whose spine reaches the position `pathSans` stands in,
- * built into baked detours. Optionally scoped to the taught student's side so
- * only genuine WEAPONS (opponent slips, student crushes) are offered — a gem
- * where the student is the one who slips is a warning, a different beat.
+ * built into baked detours. When `studentSide` is given, each gem is classified:
+ * a gem the STUDENT punishes is a WEAPON (a trap to spring); a gem the OPPONENT
+ * punishes is a WARNING (a trap to avoid — David 2026-08-24). Without a side,
+ * everything is a weapon (back-compat).
  */
 export function gemsForPosition(
   pathSans: string[],
@@ -479,18 +507,18 @@ export function gemsForPosition(
 ): BakedGemLine[] {
   const out: BakedGemLine[] = [];
   for (const gem of gemsAtPosition(pathSans)) {
-    const detour = buildGemDetour(gem);
-    if (!detour) continue;
+    let kind: 'weapon' | 'warning' = 'weapon';
     if (studentSide) {
       let punisher: 'white' | 'black';
       try {
-        punisher = new Chess(detour.baseFen).turn() === 'w' ? 'black' : 'white';
+        punisher = new Chess(gemInaccuracyFen(gem)).turn() === 'w' ? 'black' : 'white';
       } catch {
         continue;
       }
-      if (punisher !== studentSide) continue;
+      kind = punisher === studentSide ? 'weapon' : 'warning';
     }
-    out.push(detour);
+    const detour = buildGemDetour(gem, kind);
+    if (detour) out.push(detour);
   }
   return out;
 }

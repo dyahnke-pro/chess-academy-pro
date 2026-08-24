@@ -379,7 +379,7 @@ export function sanitizeTreeStages(tree: WalkthroughTree): WalkthroughTree {
 // lesson cached at the '-spelling' rev keeps its dead-tier prose forever while
 // the audits (fresh browser, cold cache, always regenerating) show green.
 // One bump batching both fixes, per the locked cost rule.
-const WALKTHROUGH_GEN_REV = '2026-08-23-baked-gem-beats';
+const WALKTHROUGH_GEN_REV = '2026-08-24-gem-warnings';
 
 export async function getCachedOpening(
   name: string,

@@ -94,9 +94,14 @@ export interface BakedGemStep {
 export interface BakedGemLine {
   /** Stable id of the source gem — used to dedupe a gem taught on two lines. */
   gemId: string;
-  /** Picker tap-target label, e.g. "Punish f3 with exf3". */
+  /** WEAPON = the opponent slips and the STUDENT punishes (a trap to spring).
+   *  WARNING = the STUDENT's tempting move runs into the opponent's punish (a
+   *  trap to avoid — David 2026-08-24: "add warnings too", e.g. the Center Fork
+   *  Trick). Same engine-verified gem data; the perspective and framing differ. */
+  kind: 'weapon' | 'warning';
+  /** Picker tap-target label, e.g. "Punish f3 with exf3" / "Careful: Nc3 runs into Nxe4". */
   title: string;
-  /** The opponent's tempting-but-losing move (SAN), for the picker sub-text. */
+  /** The tempting move (SAN) — the opponent's on a weapon, the student's on a warning. */
   inaccuracy: string;
   /** The position the detour plays from and snaps back to. */
   baseFen: string;
