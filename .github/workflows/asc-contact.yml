@@ -17,7 +17,7 @@ jobs:
           ASC_KEY_ID: ${{ secrets.APP_STORE_CONNECT_API_KEY_ID }}
           ASC_ISSUER_ID: ${{ secrets.APP_STORE_CONNECT_API_ISSUER_ID }}
           APP_BUNDLE_ID: com.chessacademy.pro
-          APP_VERSION: '3.7'
+          APP_VERSION: '3.8'
           CONTACT_FIRST: David
           CONTACT_LAST: Yahnke
           CONTACT_PHONE: '+16305182417'
