@@ -1,0 +1,279 @@
+{
+ "videoId": "OE2pJpVVzYw",
+ "title": "Beginner To Master | Chess Speedrun | Scotch Game | Grandmaster Naroditsky",
+ "openingName": "Scotch Game",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:OE2pJpVVzYw",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 11.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 14,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 20,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 30.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4 is the Scotch — striking e5 at once to open the center and free the pieces for quick, active development.",
+   "kind": "main",
+   "teaches": "The Scotch opens the center immediately with d4."
+  },
+  {
+   "ply": 6,
+   "t": 60.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 82.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 97,
+   "fen": "r1bqkbnr/ppp2ppp/2np4/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 151.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 157,
+   "fen": "r1bqkbnr/ppp2ppp/2np4/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 158.5,
+   "fen": "r1bqkbnr/ppp2ppp/2np4/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 180,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 2 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 211.5,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQK2R b KQkq - 3 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "Bishop to c4 trains on f7 — the softest square in Black's camp — building long-term pressure and setting up sacrificial ideas against the king.",
+   "kind": "main",
+   "teaches": "Place the bishop on c4 to pressure f7 and prepare tactics."
+  },
+  {
+   "ply": 12,
+   "t": 236.5,
+   "fen": "r1bqkb1r/ppp2p1p/2np1np1/8/2BNP3/2N5/PPP2PPP/R1BQK2R w KQkq - 0 7",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 331.5,
+   "fen": "r1bqkb1r/ppp2p1p/2Np1np1/8/2B1P3/2N5/PPP2PPP/R1BQK2R b KQkq - 0 7",
+   "line": [
+    "Nxc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 343.5,
+   "fen": "r1bqkb1r/p1p2p1p/2pp1np1/4P3/2B5/2N5/PPP2PPP/R1BQK2R b KQkq - 0 8",
+   "line": [
+    "bxc6",
+    "e5"
+   ],
+   "spoken": "e5 is a decoy thrust — it attacks the knight on f6 and, if Black grabs it, opens lines to spring Bxf7-based tactics against the king.",
+   "kind": "main",
+   "teaches": "A central pawn push can act as a decoy, luring pieces away and opening attacking lines."
+  },
+  {
+   "ply": 16,
+   "t": 353.5,
+   "fen": "r1bqkb1r/p1p2p1p/2p2np1/3pP3/2B5/2N5/PPP2PPP/R1BQK2R w KQkq - 0 9",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 391,
+   "fen": "r1bqkb1r/p1p2p1p/2p2np1/3pP1B1/2B5/2N5/PPP2PPP/R2QK2R b KQkq - 1 9",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 410.5,
+   "fen": "r1bqkb1r/p1p2p1p/2p2np1/3pP3/2B5/2N5/PPP2PPP/R1BQK2R w KQkq - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 425.5,
+   "fen": "r1bqk2r/p1p1bp1p/2p2np1/3pP1B1/2B5/2N5/PPP2PPP/R2QK2R w KQkq - 2 10",
+   "line": [
+    "Bg5",
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 448.5,
+   "fen": "r1bqk2r/p1p1bp1p/2p2Pp1/3p2B1/2B5/2N5/PPP2PPP/R2QK2R b KQkq - 0 10",
+   "line": [
+    "exf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 458,
+   "fen": "r1bqk2r/p1p2p1p/2p2bp1/3p2B1/2B5/2N5/PPP2PPP/R2QK2R w KQkq - 0 11",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 460,
+   "fen": "r1bqk2r/p1p2p1p/2p2Bp1/3p4/2B5/2N5/PPP2PPP/R2QK2R b KQkq - 0 11",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 470,
+   "fen": "r1b1k2r/p1p2p1p/2p2qp1/3p4/2B5/2N5/PPP2PPP/R2QK2R w KQkq - 0 12",
+   "line": [
+    "Qxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 474,
+   "fen": "r1b1k2r/p1p2p1p/2p2qp1/3p4/8/2NB4/PPP2PPP/R2QK2R b KQkq - 1 12",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 482,
+   "fen": "r1b2rk1/p1p2p1p/2p2qp1/3p4/8/2NB4/PPP2PPP/R2Q1RK1 b - - 3 13",
+   "line": [
+    "O-O",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 491.5,
+   "fen": "r1b2rk1/p1p2p1p/2p3p1/3p2q1/8/2NB4/PPP2PPP/R2Q1RK1 w - - 4 14",
+   "line": [
+    "Qg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 570,
+   "fen": "r1b2rk1/p1p2p1p/2p3p1/3p2q1/5P2/2NB4/PPP3PP/R2Q1RK1 b - - 0 14",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 598.5,
+   "fen": "r1b2rk1/p1p2p1p/2p2qp1/3p1P2/8/2NB4/PPP3PP/R2Q1RK1 b - - 0 15",
+   "line": [
+    "Qf6",
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 615,
+   "fen": "r1b2rk1/p1p2p1p/2p2q2/3p1Pp1/8/2NB4/PPP3PP/R2Q1RK1 w - - 0 16",
+   "line": [
+    "g5"
+   ],
+   "spoken": ""
+  }
+ ]
+}

@@ -1,0 +1,200 @@
+{
+ "videoId": "2cZZQyrF_HU",
+ "title": "Deconstructing The Philidor Defence  | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Philidor Defence",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:2cZZQyrF_HU",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 17,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 18,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 25.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 28.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 33.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "Nc6",
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 36.5,
+   "fen": "r1bqkbnr/ppp2ppp/2np4/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 52.5,
+   "fen": "r1bqkbnr/ppp2ppp/2np4/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "Against the passive Philidor setup, d4 strikes at once — Black has spent a move on the modest d6 and left the center open to challenge.",
+   "kind": "main",
+   "teaches": "Meet a passive defense by opening the center to exploit its lag in development."
+  },
+  {
+   "ply": 8,
+   "t": 55,
+   "fen": "r1bqkbnr/ppp2ppp/2np4/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 56,
+   "fen": "r1bqkbnr/ppp2ppp/2np4/8/3NP3/2N5/PPP2PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 58.5,
+   "fen": "r1bqkbnr/ppp2ppp/3p4/8/3QP3/2N5/PPP2PPP/R1B1KB1R b KQkq - 0 6",
+   "line": [
+    "Nxd4",
+    "Qxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 61.5,
+   "fen": "r1bqkb1r/ppp2ppp/3p1n2/8/3QP3/2N5/PPP2PPP/R1B1KB1R w KQkq - 1 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 102.5,
+   "fen": "r1bqkb1r/ppp2ppp/3p1n2/6B1/3QP3/2N5/PPP2PPP/R3KB1R b KQkq - 2 7",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 105,
+   "fen": "r1bqk2r/ppp1bppp/3p1n2/6B1/3QP3/2N5/PPP2PPP/R3KB1R w KQkq - 3 8",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 110.5,
+   "fen": "r1bqk2r/ppp1bppp/3p1n2/6B1/3QP3/2N5/PPP2PPP/2KR1B1R b kq - 4 8",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "Castling long connects the rooks and swings the king's rook onto the d-file, setting the classic plan: pawns and pieces storming Black's king.",
+   "kind": "main",
+   "teaches": "With queens castling on opposite wings, castle into your attack and open lines toward the enemy king."
+  },
+  {
+   "ply": 16,
+   "t": 117.5,
+   "fen": "r1bqk2r/pp2bppp/3p1n2/2p3B1/3QP3/2N5/PPP2PPP/2KR1B1R w kq - 0 9",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 192,
+   "fen": "r1bqk2r/pp2bppp/3p1n2/1Bp3B1/3QP3/2N5/PPP2PPP/2KR3R b kq - 1 9",
+   "line": [
+    "Bb5+"
+   ],
+   "spoken": "Bishop to b5 checks and forces the light-squared bishops off — with Black's defender of d5 gone, the knight will crash into that outpost.",
+   "kind": "main",
+   "teaches": "Trade off the piece guarding a key outpost, then occupy it."
+  },
+  {
+   "ply": 18,
+   "t": 199,
+   "fen": "r2qk2r/pp1bbppp/3p1n2/1Bp3B1/3QP3/2N5/PPP2PPP/2KR3R w kq - 2 10",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 257.5,
+   "fen": "r2qk2r/pp1Bbppp/3p1n2/2p3B1/3QP3/2N5/PPP2PPP/2KR3R b kq - 0 10",
+   "line": [
+    "Bxd7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 262.5,
+   "fen": "r3k2r/pp1qbppp/3p1n2/2p3B1/3QP3/2N5/PPP2PPP/2KR3R w kq - 0 11",
+   "line": [
+    "Qxd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 393.5,
+   "fen": "r4rk1/pp1qbppp/3p1n2/2p1P1B1/2Q5/2N5/PPP2PPP/2KR3R b - - 0 12",
+   "line": [
+    "Qc4",
+    "O-O",
+    "e5"
+   ],
+   "spoken": ""
+  }
+ ]
+}

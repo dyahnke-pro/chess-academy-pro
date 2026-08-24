@@ -1,0 +1,150 @@
+{
+ "videoId": "7Tueff34xjA",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2330",
+ "openingName": "Ruy Lopez, Steinitz Defense",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:7Tueff34xjA",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 788.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 794,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Nc6",
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 798,
+   "fen": "r1bqkbnr/ppp2ppp/2np4/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 822,
+   "fen": "r1bqkbnr/ppp2ppp/2np4/1B2p3/3PP3/5N2/PPP2PPP/RNBQK2R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4 opens the position to exploit the pin on the c6-knight — the Ruy's point against Steinitz's ...d6, prying the center while Black's king is still in it.",
+   "kind": "main",
+   "teaches": "Open the center to cash in a pin you've already established."
+  },
+  {
+   "ply": 8,
+   "t": 827,
+   "fen": "r2qkbnr/pppb1ppp/2np4/1B2p3/3PP3/5N2/PPP2PPP/RNBQK2R w KQkq - 1 5",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 832,
+   "fen": "r2qkbnr/ppp2ppp/2bp4/4p3/3PP3/5N2/PPP2PPP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "Bxc6",
+    "Bxc6"
+   ],
+   "spoken": "White voluntarily trades on c6 — surprising, since the pin was the pride of the position — but it softens the e5-pawn and clears the way to press the center.",
+   "kind": "main",
+   "teaches": "Surrender the bishop pair when the resulting pressure on the center outweighs the pin."
+  },
+  {
+   "ply": 11,
+   "t": 839.5,
+   "fen": "r2qkbnr/ppp2ppp/2bp4/4p3/3PP3/2N2N2/PPP2PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Nc3 completes development and adds a second guard to the center, building pressure before Black can fully coordinate against the tension.",
+   "kind": "main",
+   "teaches": "Finish developing with tempo, reinforcing your central squares."
+  },
+  {
+   "ply": 12,
+   "t": 844,
+   "fen": "r2qkb1r/ppp2ppp/2bp1n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQK2R w KQkq - 2 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 852.5,
+   "fen": "r2qkb1r/ppp2ppp/2bp1n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 3 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 864,
+   "fen": "r2qkb1r/ppp2ppp/2bp4/4p3/3Pn3/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 8",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 865.5,
+   "fen": "r2qkb1r/ppp2ppp/2bp4/4p3/3PN3/5N2/PPP2PPP/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 868.5,
+   "fen": "r2qkb1r/ppp2ppp/3p4/4p3/3Pb3/5N2/PPP2PPP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "Bxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 881.5,
+   "fen": "r2qkb1r/ppp2ppp/3p4/4p3/3Pb3/5N2/PPP2PPP/R1BQR1K1 b kq - 1 9",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 887,
+   "fen": "r2qkb1r/ppp2ppp/3p4/4N3/3Q4/5b2/PPP2PPP/R1B1R1K1 b kq - 0 11",
+   "line": [
+    "exd4",
+    "Ne5",
+    "Bf3",
+    "Qxd4"
+   ],
+   "spoken": ""
+  }
+ ]
+}

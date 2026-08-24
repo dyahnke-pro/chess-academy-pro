@@ -1,0 +1,383 @@
+{
+ "videoId": "9XUJ2GmQ2CU",
+ "title": "French; Steinitz Variation | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "French Defense: Advance Variation, Steinitz (4.Nf3), demolition on g7",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:9XUJ2GmQ2CU",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 10.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 25.5,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq d6 0 4",
+   "line": [
+    "e5",
+    "c5",
+    "d4",
+    "d5"
+   ],
+   "spoken": "Against the French the choice is the pawn to e5 with the knight to f3 — the Steinitz treatment of the Advance. No c3 to prop up d4; the whole system will revolve around the e5-pawn instead.",
+   "kind": "main",
+   "teaches": "Steinitz Advance: commit to e5 and Nf3, and plan to live without c3.",
+   "plans": "e5, Nf3, build around the clamp."
+  },
+  {
+   "ply": 8,
+   "t": 37.5,
+   "fen": "rn1qkbnr/pp1b1ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
+   "line": [
+    "Nf3",
+    "Bd7"
+   ],
+   "spoken": "Black plays the bishop to d7 expecting c3 — but that move never comes. The point of the Steinitz is to leave the pawn on d4 to be taken, make every other normal French move, and simply save the tempo c3 would have cost.",
+   "kind": "main",
+   "teaches": "Conserve the c3 tempo — let d4 go and spend the time on development.",
+   "plans": "Bd3, castle, let d4 fall."
+  },
+  {
+   "ply": 10,
+   "t": 60.5,
+   "fen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R w KQkq - 4 6",
+   "line": [
+    "Bd3",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 63.5,
+   "fen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 5 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 67.5,
+   "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 92,
+   "fen": "r3kbnr/pp1b1ppp/1qn1p3/3pP3/3p1B2/3B1N2/PPP2PPP/RN1Q1RK1 w kq - 2 8",
+   "line": [
+    "Bf4",
+    "Qb6"
+   ],
+   "spoken": "Before the knight comes to d2, the bishop drops to f4 to over-protect e5 — pile defenders on the clamp so it never becomes a worry. Everything in this system is in the service of that one pawn.",
+   "kind": "main",
+   "teaches": "Over-protect the key pawn first; a heavily-guarded clamp frees your other pieces.",
+   "plans": "Bf4, then Nbd2 without fear for e5."
+  },
+  {
+   "ply": 15,
+   "t": 117.5,
+   "fen": "r3kbnr/pp1b1ppp/1qn1p3/3pP3/3p1B2/3B1N2/PPPN1PPP/R2Q1RK1 b kq - 3 8",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": "The knight to d2, and the b2-pawn is simply left hanging. If Black grabs it, the rook to b1 rips open the b-file, and against a king this underdeveloped the file alone is a disaster — no calculation required.",
+   "kind": "main",
+   "teaches": "Offer a wing pawn when the recapture opens a file straight at an undeveloped opponent.",
+   "plans": "Nbd2; welcome ...Qxb2 Rb1."
+  },
+  {
+   "ply": 16,
+   "t": 139.5,
+   "fen": "r3kbnr/pp1b1ppp/1q2p3/3pP3/1n1p1B2/3B1N2/PPPN1PPP/R2Q1RK1 w kq - 4 9",
+   "line": [
+    "Nb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 152,
+   "fen": "r3kbnr/pp1b1ppp/1q2p3/3pP3/1n1p1B2/1N1B1N2/PPP2PPP/R2Q1RK1 b kq - 5 9",
+   "line": [
+    "Nb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 190,
+   "fen": "r3kbnr/pp1b1ppp/1q2p3/3pP3/3p1B2/1N1P1N2/PP3PPP/R2Q1RK1 b kq - 0 10",
+   "line": [
+    "Nxd3",
+    "cxd3"
+   ],
+   "spoken": "Recapture on d3 with the pawn — taking with the queen would run into the bishop to b5, winning her. And the pawn recapture is what you'd want anyway: it opens the c-file for a rook.",
+   "kind": "main",
+   "teaches": "Choose the recapture that both avoids a pin and opens a file for your rooks.",
+   "plans": "cxd3, seize the c-file."
+  },
+  {
+   "ply": 20,
+   "t": 191.5,
+   "fen": "2r1kbnr/pp1b1ppp/1q2p3/3pP3/3p1B2/1N1P1N2/PP3PPP/R2Q1RK1 w k - 1 11",
+   "line": [
+    "Rc8"
+   ],
+   "spoken": "No rush to snatch d4. Contest the c-file first with the rook to c1 — the pawn isn't going anywhere, and grabbing it a move later loses nothing while the file is worth more now.",
+   "kind": "main",
+   "teaches": "Take the open file before collecting a pawn that can't run away.",
+   "plans": "Rc1, then win d4 at leisure."
+  },
+  {
+   "ply": 22,
+   "t": 228.5,
+   "fen": "2r1kb1r/pp1bnppp/1q2p3/3pP3/3p1B2/1N1P1N2/PP3PPP/2RQ1RK1 w k - 3 12",
+   "line": [
+    "Rc1",
+    "Ne7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 276.5,
+   "fen": "2r1kb1r/pp1b1ppp/1qn1p3/3pP3/3N1B2/1N1P4/PP3PPP/2RQ1RK1 w k - 1 13",
+   "line": [
+    "Nfxd4",
+    "Nc6"
+   ],
+   "spoken": "Dropping the bishop back to e3 keeps the queenside pressure and, more importantly, sets up the real plan: the f-pawn marching f4 and f5 to blast open Black's kingside while his bishop still sleeps at home.",
+   "kind": "main",
+   "teaches": "Regroup with a purpose — Be3 clears the way for the f4-f5 pawn storm.",
+   "plans": "Be3, then f4-f5."
+  },
+  {
+   "ply": 25,
+   "t": 279.5,
+   "fen": "2r1kb1r/pp1b1ppp/1qn1p3/3pP3/3N4/1N1PB3/PP3PPP/2RQ1RK1 b k - 2 13",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 336.5,
+   "fen": "2r1kb1r/pp1b1ppp/q1n1p3/3pP3/3N4/1N1PB3/PP3PPP/2RQ1RK1 w k - 3 14",
+   "line": [
+    "Qa6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 350.5,
+   "fen": "2r1kb1r/pp1b1ppp/q1N1p3/3pP3/8/1N1PB3/PP3PPP/2RQ1RK1 b k - 0 14",
+   "line": [
+    "Nxc6"
+   ],
+   "spoken": "Simplest is to take on c6 — it deals with the ...Nxe5 idea, trades into a clean structure, and gains a tempo. In a rich position with many roughly equal options, the simple move is the strong one.",
+   "kind": "main",
+   "teaches": "Amid many equal choices, pick the one that neutralises the threat and simplifies.",
+   "plans": "Trade on c6, keep it clean."
+  },
+  {
+   "ply": 26,
+   "t": 386.5,
+   "fen": "2r1kb1r/pp1b1ppp/q1n1p3/3pP3/3N4/1N1PB3/PP3PPP/2RQ1RK1 w k - 3 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 435.5,
+   "fen": "2r1kb1r/pp3ppp/q1b1p3/3pP3/8/1N1PB3/PP3PPP/2RQ1RK1 w k - 0 15",
+   "line": [
+    "Nxc6",
+    "Bxc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 471,
+   "fen": "2r1kb1r/pp3ppp/2b1p3/3pP3/3N4/3PB3/qP3PPP/2RQ1RK1 w k - 0 16",
+   "line": [
+    "Nd4",
+    "Qxa2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 548.5,
+   "fen": "2r1kb1r/pp3ppp/2b1p3/q2pP3/3N1P2/3PB3/1P2Q1PP/2R2RK1 b k - 2 17",
+   "line": [
+    "f4",
+    "Qa5",
+    "Qe2"
+   ],
+   "spoken": "Who cares about the a2-pawn — it won't matter for the next twenty moves. Instead push the f-pawn and go straight after the king, punishing Black for leaving that bishop undeveloped.",
+   "kind": "main",
+   "teaches": "Ignore an irrelevant wing pawn and invest the tempo in a kingside attack.",
+   "plans": "f4-f5, attack the king."
+  },
+  {
+   "ply": 34,
+   "t": 570,
+   "fen": "2r1k2r/pp3ppp/2b1p3/q2pP3/1b1N1P2/3PB3/1P2Q1PP/2R2RK1 w k - 3 18",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 571.5,
+   "fen": "2r1k2r/pp3ppp/2b1p3/q2pPP2/1b1N4/3PB3/1P2Q1PP/2R2RK1 b k - 0 18",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 588.5,
+   "fen": "2r2rk1/pp3ppp/2b1P3/q2pP3/1b1N4/3PB3/1P2Q1PP/2R2RK1 b - - 0 19",
+   "line": [
+    "O-O",
+    "fxe6"
+   ],
+   "spoken": "Take on e6 and open as many files and avenues on the kingside as possible — capture twice, force the rook to shift, and prise the king's cover apart.",
+   "kind": "main",
+   "teaches": "Trade in front of the enemy king to open lines for the attacking pieces.",
+   "plans": "fxe6, open the f- and e-files."
+  },
+  {
+   "ply": 38,
+   "t": 591.5,
+   "fen": "2r2rk1/pp4pp/2b1p3/q2pP3/1b1N4/3PB3/1P2Q1PP/2R2RK1 w - - 0 20",
+   "line": [
+    "fxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 593,
+   "fen": "2r2rk1/pp4pp/2b1N3/q2pP3/1b6/3PB3/1P2Q1PP/2R2RK1 b - - 0 20",
+   "line": [
+    "Nxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 612.5,
+   "fen": "2r3k1/pp4pp/2b1N3/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 b - - 0 21",
+   "line": [
+    "Rxf1+",
+    "Rxf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 624.5,
+   "fen": "2r3k1/pp1b2pp/4N3/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 w - - 1 22",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 637,
+   "fen": "2r3k1/pp1b2Np/8/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 b - - 0 22",
+   "line": [
+    "Nxg7"
+   ],
+   "spoken": "The knight smashes into g7 — a demolition sacrifice. You give the piece to tear away the pawn cover around Black's king, then use the remaining pieces to blast through the wreckage.",
+   "kind": "trap",
+   "teaches": "A demolition sacrifice trades a piece for the king's pawn shelter, opening it to the heavy pieces.",
+   "plans": "Nxg7, then crash in."
+  },
+  {
+   "ply": 44,
+   "t": 652,
+   "fen": "2r5/pp1b2kp/8/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 w - - 0 23",
+   "line": [
+    "Kxg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 702.5,
+   "fen": "2r5/pp4kp/4b3/q2p4/1b1B4/3P4/1P2Q1PP/5RK1 b - - 1 24",
+   "line": [
+    "e6",
+    "Bxe6",
+    "Bd4+"
+   ],
+   "spoken": "After the king recaptures, the bishop checks from d4 on the long diagonal — not the natural-looking queen check, which just hangs — and the queen crashes into e6 with checkmate. From the f4-break it took only about seven moves.",
+   "kind": "main",
+   "teaches": "Find the follow-up that keeps every piece attacking; the flashy check that hangs isn't the move.",
+   "plans": "Bd4+, then Qxe6 mate."
+  },
+  {
+   "ply": 48,
+   "t": 704,
+   "fen": "2r3k1/pp5p/4b3/q2p4/1b1B4/3P4/1P2Q1PP/5RK1 w - - 2 25",
+   "line": [
+    "Kg8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 803,
+   "fen": "rn1qkbnr/pp1b1ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
+   "line": [],
+   "spoken": "The conceptual underpinning: by giving up d4 you're freed from ever defending it, and the e5-clamp remains. Going forward and then dropping a piece back to regroup is a completely normal part of high-level play.",
+   "kind": "review",
+   "teaches": "Surrendering a pawn can buy freedom from defending it — regrouping backward is not a concession.",
+   "plans": "Trust the clamp, regroup as needed.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 816.5,
+   "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+   "line": [
+    "Bd3",
+    "Nc6",
+    "O-O",
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 821.5,
+   "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQR1K1 b kq - 1 7",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  }
+ ]
+}

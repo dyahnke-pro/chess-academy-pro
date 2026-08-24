@@ -1,0 +1,552 @@
+{
+ "videoId": "8L-cDJJBbxc",
+ "title": "Dominating the Center | Trompowsky Attack, Sicilian Dragon | GM Naroditsky's DYI Chess Speedrun",
+ "openingName": "Trompowsky Attack",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:8L-cDJJBbxc",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 31,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 32.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/6B1/3P4/8/PPP1PPPP/RN1QKBNR b KQkq - 2 2",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 56,
+   "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn3/8/PPP1PPPP/RN1QKBNR w KQkq - 3 3",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "The knight leaps into e4, striking the bishop on g5 and grabbing the center instead of meekly defending. This is the point against the Trompowsky — challenge the bishop at once.",
+   "kind": "main",
+   "teaches": "Meet an early bishop pin by counterattacking the pinning piece, not by passively unpinning."
+  },
+  {
+   "ply": 5,
+   "t": 62.5,
+   "fen": "rnbqkb1r/pppppppp/8/8/3PnB2/8/PPP1PPPP/RN1QKBNR b KQkq - 4 3",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 65.5,
+   "fen": "rnbqkb1r/pppppppp/8/6B1/3Pn3/8/PPP1PPPP/RN1QKBNR b KQkq - 8 5",
+   "line": [
+    "Ng5",
+    "Be3",
+    "Ne4",
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 85.5,
+   "fen": "rnbqkb1r/pppppppp/8/8/3PnB2/8/PPP1PPPP/RN1QKBNR b KQkq - 4 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 112,
+   "fen": "r1bqkb1r/pppppppp/2n5/8/3PnB2/8/PPP1PPPP/RN1QKBNR w KQkq - 5 4",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 115.5,
+   "fen": "r1bqkb1r/pppppppp/2n5/8/3PnB2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 4",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 120.5,
+   "fen": "r1bqkb1r/ppp1pppp/2n5/3p4/3PnB2/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 124,
+   "fen": "r1bqkb1r/ppp1pppp/2n5/3p4/3PnB2/3BP3/PPP2PPP/RN1QK1NR b KQkq - 1 5",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 129.5,
+   "fen": "r1bqkb1r/pppppppp/2n5/8/3PnB2/8/PPP1PPPP/RN1QKBNR w KQkq - 5 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 140,
+   "fen": "r1bqkb1r/ppp1pppp/2n5/3p4/3PnB2/3BP3/PPP2PPP/RN1QK1NR b KQkq - 1 5",
+   "line": [
+    "e3",
+    "d5",
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 154.5,
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/3p4/3P1B2/3BP3/PPP2PPP/RN1QK1NR w KQkq - 2 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 158,
+   "fen": "r1bqkb1r/ppp1pppp/2n2n2/3p4/3P1B2/3BPN2/PPP2PPP/RN1QK2R b KQkq - 3 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 171,
+   "fen": "r2qkb1r/ppp1pppp/2n2n2/3p4/3P1Bb1/3BPN2/PPP2PPP/RN1QK2R w KQkq - 4 7",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "The light bishop comes out to g4, pinning the knight on f3 to the queen before White can lock it out with h3. Get this piece active while the door is still open.",
+   "kind": "main",
+   "teaches": "Develop the light-squared bishop outside the pawn chain early, before pawns can shut it in."
+  },
+  {
+   "ply": 13,
+   "t": 175,
+   "fen": "r2qkb1r/ppp1pppp/2n2n2/3p4/3P1Bb1/3BPN1P/PPP2PP1/RN1QK2R b KQkq - 0 7",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 176,
+   "fen": "r2qkb1r/ppp1pppp/2n2n2/3p3b/3P1B2/3BPN1P/PPP2PP1/RN1QK2R w KQkq - 1 8",
+   "line": [
+    "Bh5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 178,
+   "fen": "r2qkb1r/ppp1pppp/2n2n2/3p3b/3P1BP1/3BPN1P/PPP2P2/RN1QK2R b KQkq - 0 8",
+   "line": [
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 179.5,
+   "fen": "r2qkb1r/ppp1pppp/2n2nb1/3p4/3P1BP1/3BPN1P/PPP2P2/RN1QK2R w KQkq - 1 9",
+   "line": [
+    "Bg6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 189.5,
+   "fen": "r2qkb1r/ppp1pppp/2n2nb1/3p4/3P1BP1/3BPN1P/PPPN1P2/R2QK2R b KQkq - 2 9",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 232.5,
+   "fen": "r2qkb1r/ppp2ppp/2n1pnb1/3p4/3P1BP1/3BPN1P/PPPN1P2/R2QK2R w KQkq - 0 10",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 255,
+   "fen": "r2qkb1r/ppp2ppp/2n1pnb1/3pN3/3P1BP1/3BP2P/PPPN1P2/R2QK2R b KQkq - 1 10",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 259.5,
+   "fen": "r2qkb1r/ppp2ppp/4pnb1/3pn3/3P1BP1/3BP2P/PPPN1P2/R2QK2R w KQkq - 0 11",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 263.5,
+   "fen": "r2qkb1r/ppp2ppp/4pnb1/3pB3/3P2P1/3BP2P/PPPN1P2/R2QK2R b KQkq - 0 11",
+   "line": [
+    "Bxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 267,
+   "fen": "r2qk2r/ppp2ppp/3bpnb1/3pB3/3P2P1/3BP2P/PPPN1P2/R2QK2R w KQkq - 1 12",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "Bishop to d6 challenges the bishop planted on e5, handing White the very question we were just asked. Trade off the strong piece and the tension resolves in our favor.",
+   "kind": "main",
+   "teaches": "Contest a centralized enemy piece with a trade offer rather than living around it."
+  },
+  {
+   "ply": 23,
+   "t": 275,
+   "fen": "r2qk2r/ppp2ppp/3bpnb1/3pB1P1/3P4/3BP2P/PPPN1P2/R2QK2R b KQkq - 0 12",
+   "line": [
+    "g5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 306.5,
+   "fen": "r2qk2r/ppp2ppp/4pnb1/3pb1P1/3P4/3BP2P/PPPN1P2/R2QK2R w KQkq - 0 13",
+   "line": [
+    "Bxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 310,
+   "fen": "r2qk2r/ppp2ppp/4pnb1/3pP1P1/8/3BP2P/PPPN1P2/R2QK2R b KQkq - 0 13",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 384,
+   "fen": "r2qk2r/ppp2ppp/4pn2/3pP1Pb/8/3BP2P/PPPN1P2/R2QK2R w KQkq - 1 14",
+   "line": [
+    "Bh5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 402,
+   "fen": "r2qk2r/ppp2ppp/4pn2/3pP1Pb/8/3BPP1P/PPPN4/R2QK2R b KQkq - 0 14",
+   "line": [
+    "f3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 415.5,
+   "fen": "r2qk2r/pppn1ppp/4p3/3pP1Pb/8/3BPP1P/PPPN4/R2QK2R w KQkq - 1 15",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "The knight drops back to d7 and quietly hits the e5-pawn, which has no defender. White's kingside pawns have overextended and now the weaknesses simply fall.",
+   "kind": "main",
+   "teaches": "When the opponent overextends, calm recentralizing moves collect the loose pawns."
+  },
+  {
+   "ply": 26,
+   "t": 431.5,
+   "fen": "r2qk2r/ppp2ppp/4pn2/3pP1Pb/8/3BP2P/PPPN1P2/R2QK2R w KQkq - 1 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 435,
+   "fen": "r2qk2r/pppn1ppp/4p3/3pP1Pb/8/3BPP1P/PPPNQ3/R3K2R b KQkq - 2 15",
+   "line": [
+    "f3",
+    "Nd7",
+    "Qe2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 457.5,
+   "fen": "r3k2r/pppn1ppp/4p3/3pP1qb/8/3BPP1P/PPPNQ3/R3K2R w KQkq - 0 16",
+   "line": [
+    "Qxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 467,
+   "fen": "r3k2r/pppn1ppp/4p3/3pP1qb/8/3BPP1P/PPPNQ3/2KR3R b kq - 1 16",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 471,
+   "fen": "r3k2r/pppn1ppp/4p3/3pq2b/8/3BPP1P/PPPNQ3/2KR3R w kq - 0 17",
+   "line": [
+    "Qxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 478,
+   "fen": "r3k2r/pppn1ppp/4p3/3pP1qb/8/3BPP1P/PPPNQ3/2KR3R b kq - 1 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 482.5,
+   "fen": "r3k2r/pppn1ppp/4p3/3pq2b/8/3BPP1P/PPPN1Q2/2KR3R b kq - 1 17",
+   "line": [
+    "Qxe5",
+    "Qf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 511,
+   "fen": "2kr3r/pppn1ppp/4p3/3pq2b/8/3BPP1P/PPPN1Q2/2KR3R w - - 2 18",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 525,
+   "fen": "2kr3r/pppn1ppp/4p3/3pq2b/8/3BPP1P/PPPN1Q2/2K1R2R b - - 3 18",
+   "line": [
+    "Rde1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 534,
+   "fen": "2kr3r/pppn1ppp/3qp3/3p3b/8/3BPP1P/PPPN1Q2/2K1R2R w - - 4 19",
+   "line": [
+    "Qd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 540,
+   "fen": "2kr3r/pppn1ppp/3qp3/3p3b/8/3BPP1P/PPPN1Q2/2K1R1R1 b - - 5 19",
+   "line": [
+    "Rhg1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 541,
+   "fen": "2kr3r/pppn1ppp/3qp1b1/3p4/8/3BPP1P/PPPN1Q2/2K1R1R1 w - - 6 20",
+   "line": [
+    "Bg6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 549.5,
+   "fen": "2kr3r/pppn1ppp/3qp1b1/3p4/4P3/3B1P1P/PPPN1Q2/2K1R1R1 b - - 0 20",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 551.5,
+   "fen": "1k1r3r/pppn1ppp/3qp1b1/3p4/4P3/3B1P1P/PPPN1Q2/2K1R1R1 w - - 1 21",
+   "line": [
+    "Kb8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 560.5,
+   "fen": "1k1r3r/pppn1ppp/3qp1b1/3p4/4P3/3B1P1P/PPPN1Q2/2KR2R1 b - - 2 21",
+   "line": [
+    "Rd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 587.5,
+   "fen": "1k1r3r/ppp2ppp/3qp1b1/3pn3/4P3/3B1P1P/PPPN1Q2/2KR2R1 w - - 3 22",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 601.5,
+   "fen": "1k1r3r/ppp2ppp/3qp1b1/3pn3/4P3/1N1B1P1P/PPP2Q2/2KR2R1 b - - 4 22",
+   "line": [
+    "Nb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 611,
+   "fen": "1k1r3r/ppp2ppp/3qp1b1/3p4/4P3/1N1n1P1P/PPP2Q2/2KR2R1 w - - 0 23",
+   "line": [
+    "Nxd3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 612.5,
+   "fen": "1k1r3r/ppp2ppp/3qp1b1/3p4/4P3/1N1R1P1P/PPP2Q2/2K3R1 b - - 0 23",
+   "line": [
+    "Rxd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 614,
+   "fen": "1k1r3r/ppp2ppp/4p1b1/3p4/4Pq2/1N1R1P1P/PPP2Q2/2K3R1 w - - 1 24",
+   "line": [
+    "Qf4+"
+   ],
+   "spoken": "Queen to f4 checks along the dark diagonal into c1. White must either shed the queens or watch another pawn drop — both outcomes hand us the win.",
+   "kind": "review",
+   "teaches": "With a material edge, force checks that trade queens or win more material to simplify home."
+  },
+  {
+   "ply": 48,
+   "t": 620,
+   "fen": "1k1r3r/ppp2ppp/4p1b1/8/4pq2/1N1R1P1P/PPP2Q2/1K4R1 w - - 0 25",
+   "line": [
+    "Kb1",
+    "dxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 625,
+   "fen": "1k1r3r/ppp2ppp/4p1b1/8/4pq2/1NR2P1P/PPP2Q2/1K4R1 b - - 1 25",
+   "line": [
+    "Rc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 638,
+   "fen": "1k1r3r/ppp2ppp/4p1b1/8/5q2/1NR2p1P/PPP2Q2/1K4R1 w - - 0 26",
+   "line": [
+    "exf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 664,
+   "fen": "1k1r3r/ppp2ppp/4p1b1/8/5qR1/1NR2p1P/PPP2Q2/1K6 b - - 1 26",
+   "line": [
+    "Rg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 52,
+   "t": 665,
+   "fen": "1k5r/ppp2ppp/4p1b1/8/5qR1/1NR2p1P/PPP2Q2/1K1r4 w - - 2 27",
+   "line": [
+    "Rd1+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 674,
+   "fen": "1k5r/ppp2ppp/4p1b1/8/5qR1/2R2p1P/PPP2Q2/1KNr4 b - - 3 27",
+   "line": [
+    "Nc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 54,
+   "t": 678,
+   "fen": "1k5r/ppp2ppp/4p1b1/8/5qR1/2R2p1P/PPP2Q2/1Kr5 w - - 0 28",
+   "line": [
+    "Rxc1#"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 680.5,
+   "fen": "rnbqkb1r/pppppppp/8/8/3PnB2/8/PPP1PPPP/RN1QKBNR b KQkq - 4 3",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

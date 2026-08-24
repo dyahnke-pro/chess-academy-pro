@@ -1,0 +1,212 @@
+{
+ "videoId": "kO4qTTR0B7o",
+ "title": "Master Class | Caro–Kann x2!! | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Caro-Kann Defense: Exchange Variation",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:kO4qTTR0B7o",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 1156,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4",
+    "c6",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1158.5,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/2N5/PPP2PPP/R1BQKBNR b KQkq - 1 4",
+   "line": [
+    "d5",
+    "exd5",
+    "cxd5",
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1226,
+   "fen": "r1bqkbnr/pp2pppp/2n5/3p4/3P4/2N5/PPP2PPP/R1BQKBNR w KQkq - 2 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1228,
+   "fen": "r1bqkbnr/pp2pppp/2n5/3p4/3P4/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 3 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1230,
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/3p4/3P4/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 4 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1232,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P2b1/2N2N2/PPP2PPP/R1BQK2R w KQkq - 6 7",
+   "line": [
+    "Bb5",
+    "Bg4"
+   ],
+   "spoken": "The bishop to g4 pins the knight on f3 — but the real lesson is timing: when do you cash a pin, and when do you keep the tension?",
+   "kind": "main",
+   "teaches": "A pin is a resource to be timed, not a move to resolve automatically."
+  },
+  {
+   "ply": 13,
+   "t": 1241.5,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P2b1/2N2N1P/PPP2PP1/R1BQK2R b KQkq - 0 7",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1246.5,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P4/2N2b1P/PPP2PP1/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1248,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P2b1/2N2N1P/PPP2PP1/R1BQK2R b KQkq - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1249,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p3b/3P4/2N2N1P/PPP2PP1/R1BQK2R w KQkq - 1 8",
+   "line": [
+    "Bh5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1277.5,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P2b1/2N2N1P/PPP2PP1/R1BQK2R b KQkq - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1279.5,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P4/2N2b1P/PPP2PP1/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1282.5,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P2b1/2N2N1P/PPP2PP1/R1BQK2R b KQkq - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1292.5,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p3b/3P4/2N2N1P/PPP2PP1/R1BQK2R w KQkq - 1 8",
+   "line": [
+    "Bh5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1302,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p3b/3P2P1/2N2N1P/PPP2P2/R1BQK2R b KQkq - 0 8",
+   "line": [
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1306,
+   "fen": "r2qkb1r/pp2pppp/2n2nb1/1B1p4/3P2P1/2N2N1P/PPP2P2/R1BQK2R w KQkq - 1 9",
+   "line": [
+    "Bg6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1323.5,
+   "fen": "r2qkb1r/pp2pppp/2n2nb1/1B1pN3/3P2P1/2N4P/PPP2P2/R1BQK2R b KQkq - 2 9",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "The danger of over-holding the pin: if the bishop keeps retreating, White plays g4 and then the knight to e5 — the pin is broken, the bishop is shut out on g6, and Black is simply worse. That is the point of no return.",
+   "kind": "branch",
+   "teaches": "Don't cling to a pin past the moment the opponent can break it favorably."
+  },
+  {
+   "ply": 18,
+   "t": 1332,
+   "fen": "2rqkb1r/pp2pppp/2n2nb1/1B1pN3/3P2P1/2N4P/PPP2P2/R1BQK2R w KQk - 3 10",
+   "line": [
+    "Rc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1352.5,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P2b1/2N2N1P/PPP2PP1/R1BQK2R b KQkq - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1354.5,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p3b/3P2P1/2N2N1P/PPP2P2/R1BQK2R b KQkq - 0 8",
+   "line": [
+    "Bh5",
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1393.5,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P2b1/2N2N1P/PPP2PP1/R1BQK2R b KQkq - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1394.5,
+   "fen": "r2qkb1r/pp2pppp/2n2n2/1B1p4/3P4/2N2b1P/PPP2PP1/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": "So Black takes on f3 at the right moment, trading the bishop for the knight before White can ever untangle with g4 and the knight leap. Timing the capture is the whole point.",
+   "kind": "main",
+   "teaches": "Cash a pin the instant before the opponent could free the pinned piece on good terms."
+  }
+ ]
+}

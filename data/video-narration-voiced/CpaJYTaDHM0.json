@@ -1,0 +1,145 @@
+{
+ "videoId": "CpaJYTaDHM0",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2021",
+ "openingName": "Ruy Lopez, Berlin Defense",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:CpaJYTaDHM0",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 23,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 24,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 27,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Nc6",
+    "Bb5"
+   ],
+   "spoken": "Bishop to b5 is the Ruy Lopez — pinning pressure on the c6-knight that guards e5, the most respected weapon against 1.e4 e5.",
+   "kind": "main",
+   "teaches": "The Ruy pressures the knight defending e5 to slowly undermine Black's center."
+  },
+  {
+   "ply": 6,
+   "t": 34.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 43.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 5 4",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 51.5,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B2p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 68,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B2p3/3PP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4 strikes the center at once — against Black's passive ...d6 Berlin, opening lines exploits the lag rather than allowing a slow, solid setup.",
+   "kind": "main",
+   "teaches": "Open the center against a passive defense to make your development lead count."
+  },
+  {
+   "ply": 10,
+   "t": 70,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B6/3pP3/5N2/PPP2PPP/RNBQ1RK1 w kq - 0 6",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 71.5,
+   "fen": "r1bqkb1r/ppp2ppp/2np1n2/1B6/3NP3/8/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 74,
+   "fen": "r2qkb1r/pppb1ppp/2np1n2/1B6/3NP3/8/PPP2PPP/RNBQ1RK1 w kq - 1 7",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 76.5,
+   "fen": "r2qkb1r/pppb1ppp/2np1n2/1B6/3NP3/2N5/PPP2PPP/R1BQ1RK1 b kq - 2 7",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 80.5,
+   "fen": "r2qk2r/pppbbppp/2np1n2/1B6/3NP3/2N5/PPP2PPP/R1BQ1RK1 w kq - 3 8",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 84,
+   "fen": "r2qk2r/pppbbppp/2Bp1n2/8/3NP3/2N5/PPP2PPP/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "Bxc6"
+   ],
+   "spoken": "Capturing on c6 keeps the knight proudly centralized on d4 while saddling Black with doubled, damaged queenside pawns — a lasting structural plus.",
+   "kind": "main",
+   "teaches": "Trade bishop for knight to inflict permanent pawn weaknesses while keeping your best piece."
+  },
+  {
+   "ply": 16,
+   "t": 87,
+   "fen": "r2qk2r/p1pbbppp/2pp1n2/8/3NP3/2N5/PPP2PPP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "bxc6"
+   ],
+   "spoken": ""
+  }
+ ]
+}

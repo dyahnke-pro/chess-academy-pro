@@ -1,0 +1,175 @@
+{
+ "videoId": "nkDlJMpLezk",
+ "title": "Best Game So Far!! | Mastering the Alapin Sicilian | GM Naroditsky's Theory Speed Run",
+ "openingName": "London System (Black)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:nkDlJMpLezk",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 2565,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 2566,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P1B2/8/PPP1PPPP/RN1QKBNR b KQkq - 1 2",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": "The bishop to f4 outside the pawn chain is the London System — a solid, low-theory setup White can play on autopilot. Black should meet it with a clear, active plan rather than mirroring passively.",
+   "kind": "main",
+   "teaches": "The London is easy to play but not threatening — answer it with an active, concrete plan.",
+   "plans": "Build c5/Nc6 and pressure b2 with the queen."
+  },
+  {
+   "ply": 5,
+   "t": 2568.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/4P3/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+   "line": [
+    "Nf6",
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2569.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/4P3/PPP2PPP/RN1QKBNR w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 2573,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3P1B2/4PN2/PPP2PPP/RN1QKB1R b KQkq - 1 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2574,
+   "fen": "rnbqkb1r/pp3ppp/4pn2/2pp4/3P1B2/4PN2/PPP2PPP/RN1QKB1R w KQkq - 0 5",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2576,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/3P1B2/2P1PN2/PP3PPP/RN1QKB1R w KQkq - 1 6",
+   "line": [
+    "c3",
+    "Nc6"
+   ],
+   "spoken": "Black sets up the standard counter: pawns on d5 and c5 with the knight on c6, striking at White's centre and preparing pressure on the queenside.",
+   "kind": "main",
+   "teaches": "Against the London, hit the centre with c5 and develop the knight to c6.",
+   "plans": "Prepare the queen sortie to b6."
+  },
+  {
+   "ply": 11,
+   "t": 2577,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/3P1B2/2P1PN2/PP1N1PPP/R2QKB1R b KQkq - 2 6",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2579.5,
+   "fen": "r1b1kb1r/pp3ppp/1qn1pn2/2pp4/3P1B2/2P1PN2/PP1N1PPP/R2QKB1R w KQkq - 3 7",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": "The queen to b6 is the most standard way to play — it eyes the b2-pawn and the loose queenside, forcing White to react before he can complete his comfortable setup.",
+   "kind": "main",
+   "teaches": "Queen to b6 is the thematic London antidote — it targets b2 and asks White real questions.",
+   "plans": "Pressure b2 and c4-type breaks, seizing the initiative."
+  },
+  {
+   "ply": 14,
+   "t": 2586.5,
+   "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pp4/3P1B2/1qP1PN2/PP1N1PPP/R3KB1R w KQkq - 0 8",
+   "line": [
+    "Qb3",
+    "Qxb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 2588,
+   "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pp4/3P1B2/1PP1PN2/1P1N1PPP/R3KB1R b KQkq - 0 8",
+   "line": [
+    "axb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 2590.5,
+   "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pp4/3P1B2/1qP1PN2/PP1N1PPP/R3KB1R w KQkq - 0 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 2592.5,
+   "fen": "r1b1kb1r/pp3ppp/2n1pn2/2pp4/3P1B2/1PP1PN2/1P1N1PPP/R3KB1R b KQkq - 0 8",
+   "line": [
+    "axb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 2598.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 2600.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c4",
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2614,
+   "fen": "rnbqkb1r/1p2pppp/p1p2n2/3p4/2PP4/2N2N2/PP2PPPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "Nc3",
+    "Nf6",
+    "Nf3",
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 4510,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

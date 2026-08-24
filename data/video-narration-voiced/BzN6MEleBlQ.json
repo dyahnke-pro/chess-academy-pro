@@ -1,0 +1,384 @@
+{
+ "videoId": "BzN6MEleBlQ",
+ "title": "Beating The Scandinavian Defense | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Scandinavian Defense: 3.Nc3 Qa5, g3 System (White)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:BzN6MEleBlQ",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 17,
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 18.5,
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "Qxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 29,
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 31.5,
+   "fen": "rnb1kbnr/ppp1pppp/8/q7/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Qa5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 61,
+   "fen": "rnb1kbnr/ppp1pppp/8/q7/8/2N3P1/PPPP1P1P/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "g3"
+   ],
+   "spoken": "Here is the surprise: the fianchetto with the pawn to g3. It looks modest, but it is an easy, low-theory system against the Qa5 Scandinavian that catches many players off guard.",
+   "kind": "main",
+   "teaches": "A quiet fianchetto setup can be a practical weapon precisely because opponents don't prepare for it.",
+   "plans": "Fianchetto, develop, and target the c6-pawn."
+  },
+  {
+   "ply": 9,
+   "t": 68,
+   "fen": "rnb1kbnr/pp2pppp/2p5/q7/8/2N3P1/PPPP1PBP/R1BQK1NR b KQkq - 1 5",
+   "line": [
+    "c6",
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 80,
+   "fen": "rnb1kb1r/pp2pppp/2p2n2/q7/8/2N3P1/PPPP1PBP/R1BQK1NR w KQkq - 2 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 81.5,
+   "fen": "rnb1kb1r/pp2pppp/2p2n2/q7/8/2N3P1/PPPPNPBP/R1BQK2R b KQkq - 3 6",
+   "line": [
+    "Nge2"
+   ],
+   "spoken": "The knight develops to e2, not f3 — deliberately, so it does not block the g2-bishop. White's whole plan is to break down Black's c6-pawn and open the long diagonal for that bishop.",
+   "kind": "main",
+   "teaches": "Develop the knight to e2 to keep the fianchettoed bishop's diagonal clear.",
+   "plans": "Prepare the b-pawn advance to hit c6."
+  },
+  {
+   "ply": 13,
+   "t": 99,
+   "fen": "rnb1kb1r/pp3ppp/2p2n2/q3p3/8/2N3P1/PPPPNPBP/R1BQ1RK1 b kq - 1 7",
+   "line": [
+    "e5",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 113.5,
+   "fen": "rnb1k2r/pp3ppp/2p2n2/q3p3/1b6/2N3P1/PPPPNPBP/R1BQ1RK1 w kq - 2 8",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 133.5,
+   "fen": "rnb1k2r/pp3ppp/2p2n2/q3p3/1b6/P1N3P1/1PPPNPBP/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "a3"
+   ],
+   "spoken": "Meet the bishop pin on b4 with the simple pawn to a3. It is a natural response, and it fits the plan — the b-pawn is on its way to b4 and b5, a minority attack against c6.",
+   "kind": "main",
+   "teaches": "a3 both questions the pinning bishop and clears the path for the b-pawn's advance.",
+   "plans": "Push b4-b5 to undermine c6."
+  },
+  {
+   "ply": 16,
+   "t": 135.5,
+   "fen": "rnb1k2r/pp3ppp/2p2n2/q3p3/8/P1b3P1/1PPPNPBP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "Bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 142,
+   "fen": "rnb1k2r/pp3ppp/2p2n2/q3p3/8/P1N3P1/1PPP1PBP/R1BQ1RK1 b kq - 0 9",
+   "line": [
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 162.5,
+   "fen": "rn2k2r/pp3ppp/2p2n2/q3p3/6b1/P1N3P1/1PPP1PBP/R1BQ1RK1 w kq - 1 10",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "Against the bishop coming to g4, do NOT weaken with f3 — instead the queen steps to e1, unpinning quietly and keeping the queenside plan rolling.",
+   "kind": "main",
+   "teaches": "Answer a pin with a repositioning move, not a weakening pawn push.",
+   "plans": "Continue the b-pawn minority attack."
+  },
+  {
+   "ply": 19,
+   "t": 176.5,
+   "fen": "rn2k2r/pp3ppp/2p2n2/q3p3/6b1/P1N3P1/1PPP1PBP/R1B1QRK1 b kq - 2 10",
+   "line": [
+    "Qe1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 199.5,
+   "fen": "rn3rk1/pp3ppp/2p2n2/q3p3/6b1/P1N3P1/1PPP1PBP/R1B1QRK1 w - - 3 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 210.5,
+   "fen": "rn3rk1/pp3ppp/2p2n2/q3p3/6b1/P1NP2P1/1PP2PBP/R1B1QRK1 b - - 0 11",
+   "line": [
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 245.5,
+   "fen": "rn2r1k1/pp3ppp/2p2n2/q3p3/6b1/P1NP2P1/1PP2PBP/R1B1QRK1 w - - 1 12",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 258.5,
+   "fen": "rn2r1k1/pp3ppp/2p2n2/q3p3/1P4b1/P1NP2P1/2P2PBP/R1B1QRK1 b - - 0 12",
+   "line": [
+    "b4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 299.5,
+   "fen": "rn2r1k1/pp3ppp/q1p2n2/4p3/1P4b1/P1NP2P1/2P2PBP/R1B1QRK1 w - - 1 13",
+   "line": [
+    "Qa6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 330,
+   "fen": "rn2r1k1/pp3ppp/q1p2n2/4p3/1P4b1/P1NP2PP/2P2PB1/R1B1QRK1 b - - 0 13",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 391.5,
+   "fen": "rn2r1k1/pp3ppp/q1p2n2/4p2b/1P6/P1NP2PP/2P2PB1/R1B1QRK1 w - - 1 14",
+   "line": [
+    "Bh5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 396,
+   "fen": "rn2r1k1/pp3ppp/q1p2n2/4p2b/1P6/P1NP2PP/1BP2PB1/R3QRK1 b - - 2 14",
+   "line": [
+    "Bb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 400.5,
+   "fen": "rn2r1k1/pp3ppp/q1p2n2/4p2b/1P6/P1NP2PP/2P2PB1/R1B1QRK1 w - - 1 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 404,
+   "fen": "rn2r1k1/pp3ppp/q1p2n2/7b/1P2p3/P1NP2PP/1BP2PB1/R3QRK1 w - - 0 15",
+   "line": [
+    "Bb2",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 459,
+   "fen": "rn2r1k1/pp3ppp/q1p2n2/7b/1P2N3/P2P2PP/1BP2PB1/R3QRK1 b - - 0 15",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 464.5,
+   "fen": "rn2r1k1/pp3ppp/q1p5/7b/1P2n3/P2P2PP/1BP2PB1/R3QRK1 w - - 0 16",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 490.5,
+   "fen": "rn2r1k1/pp3ppp/q1p5/7b/1P2B3/P2P2PP/1BP2P2/R3QRK1 b - - 0 16",
+   "line": [
+    "Bxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 505.5,
+   "fen": "rn4k1/pp3ppp/q1p5/7b/1P2r3/P2P2PP/1BP2P2/R3QRK1 w - - 0 17",
+   "line": [
+    "Rxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 556,
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 558.5,
+   "fen": "rnb1kbnr/ppp1pppp/8/q7/8/2N3P1/PPPP1P1P/R1BQKBNR b KQkq - 2 4",
+   "line": [
+    "g3",
+    "Qa5",
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 563.5,
+   "fen": "rnb1kbnr/pp2pppp/2p5/q7/8/2N3P1/PPPP1PBP/R1BQK1NR b KQkq - 1 5",
+   "line": [
+    "c6",
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 566,
+   "fen": "rnb1kb1r/pp2pppp/2p2n2/q7/8/2N3P1/PPPPNPBP/R1BQK2R b KQkq - 3 6",
+   "line": [
+    "Nf6",
+    "Nge2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 568.5,
+   "fen": "rnb1kb1r/pp3ppp/2p2n2/q3p3/8/2N3P1/PPPPNPBP/R1BQK2R w KQkq - 0 7",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 569.5,
+   "fen": "rnb1kb1r/pp2pppp/2p2n2/q7/8/2N3P1/PPPP1PBP/R1BQK1NR w KQkq - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 571,
+   "fen": "rnb1kb1r/pp2pppp/2p2n2/q7/8/2N3P1/PPPPNPBP/R1BQK2R b KQkq - 3 6",
+   "line": [
+    "Nge2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 573.5,
+   "fen": "rn2kb1r/pp2pppp/2p2n2/q4b2/8/2N3P1/PPPPNPBP/R1BQK2R w KQkq - 4 7",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 576,
+   "fen": "rn2kb1r/pp3ppp/2p1pn2/q4b2/8/2N3P1/PPPPNPBP/R1BQ1RK1 w kq - 0 8",
+   "line": [
+    "O-O",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 595,
+   "fen": "rn2kb1r/pp2pppp/2p2n2/q4b2/8/2N3P1/PPPPNPBP/R1BQ1RK1 b kq - 5 7",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

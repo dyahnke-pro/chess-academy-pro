@@ -1,0 +1,326 @@
+{
+ "videoId": "hw9tEjYabd8",
+ "title": "French Defense: Advance, Steinitz | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "French Defense: Advance Variation, Steinitz (4.Nf3, 6.dxc5)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:hw9tEjYabd8",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 12.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 15,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": "The French again, and against it the plan is the Steinitz: the pawn to e5 for the Advance, but instead of the usual c3 to prop up d4, a very odd-looking treatment is coming.",
+   "kind": "main",
+   "teaches": "The Steinitz Advance skips c3 — White leans on the e5-clamp rather than the d4-pawn.",
+   "plans": "Push e5, develop, ignore d4."
+  },
+  {
+   "ply": 5,
+   "t": 21.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d5",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 23.5,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "c5"
+   ],
+   "spoken": "Black hits with the pawn to c5 and now the signature move — the knight to f3, leaving d4 to its fate. It looks strange and it scores heavily: development and the e5-clamp matter more than the pawn.",
+   "kind": "main",
+   "teaches": "Nf3 over c3: trade the d4-pawn's defence for speed and the cramping e5-pawn.",
+   "plans": "Develop fast behind e5."
+  },
+  {
+   "ply": 7,
+   "t": 26,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 30,
+   "fen": "rnb1kbnr/pp3ppp/1q2p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 36,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 41,
+   "fen": "rnb1kbnr/pp3ppp/1q2p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 44,
+   "fen": "rnb1kbnr/pp3ppp/1q2p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R b KQkq - 3 5",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "Bishop to d3, and the capture on d4 simply doesn't matter. The whole idea is to keep developing and let the e5-pawn do the cramping while Black spends moves on a pawn that was never the point.",
+   "kind": "main",
+   "teaches": "Meet ...cxd4 with calm development — the initiative outweighs the pawn.",
+   "plans": "Bd3, then resolve the centre favourably."
+  },
+  {
+   "ply": 10,
+   "t": 46.5,
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R w KQkq - 4 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 60,
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/2PpP3/8/3B1N2/PPP2PPP/RNBQK2R b KQkq - 0 6",
+   "line": [
+    "dxc5"
+   ],
+   "spoken": "Rather than castle, capture on c5. This reaches exactly the pawn structure Black would have got by taking on d4 — except here White never sacrificed the pawn, and the position is already unpleasant for Black.",
+   "kind": "main",
+   "teaches": "dxc5 can reach the same structure as a pawn sac without paying the pawn — take the free version.",
+   "plans": "dxc5, recapture, keep the extra tempo."
+  },
+  {
+   "ply": 12,
+   "t": 62.5,
+   "fen": "r1b1k1nr/pp3ppp/1qn1p3/2bpP3/8/3B1N2/PPP2PPP/RNBQK2R w KQkq - 0 7",
+   "line": [
+    "Bxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 64.5,
+   "fen": "r1b1k1nr/pp3ppp/1qn1p3/2bpP3/8/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 1 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 70.5,
+   "fen": "r1b1k2r/pp2nppp/1qn1p3/2bpP3/8/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 2 8",
+   "line": [
+    "Nge7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 111.5,
+   "fen": "r1b1k2r/pp2nppp/1qn1p3/2bpP3/8/2NB1N2/PPP2PPP/R1BQ1RK1 b kq - 3 8",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The knight to c3 is the principled, most testing move. Two things frame the position: Black has no dark-squared bishop, so his remaining bishop is the bad one, and the Greek-gift sacrifice on h7 is quietly on the cards the moment Black castles kingside.",
+   "kind": "main",
+   "teaches": "Note the missing dark-squared bishop and a lurking Bxh7+ before choosing where to develop.",
+   "plans": "Nc3, eye the light squares and the h7 sac."
+  },
+  {
+   "ply": 16,
+   "t": 117,
+   "fen": "r1b1k2r/ppq1nppp/2n1p3/2bpP3/8/2NB1N2/PPP2PPP/R1BQ1RK1 w kq - 4 9",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": "With the queen on c7, look at where the knight can go. The knight to b5 is thematic — it wants to sink its teeth into d6, the hole in Black's camp.",
+   "kind": "main",
+   "teaches": "Reroute the knight toward a hole the opponent can't cover — here, d6.",
+   "plans": "Nb5, aiming at the d6 outpost."
+  },
+  {
+   "ply": 17,
+   "t": 135,
+   "fen": "r1b1k2r/ppq1nppp/2n1p3/1NbpP3/8/3B1N2/PPP2PPP/R1BQ1RK1 b kq - 5 9",
+   "line": [
+    "Nb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 142.5,
+   "fen": "r1b1k2r/pp2nppp/1qn1p3/1NbpP3/8/3B1N2/PPP2PPP/R1BQ1RK1 w kq - 6 10",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 155,
+   "fen": "r1b1k2r/pp2nppp/1qnNp3/2bpP3/8/3B1N2/PPP2PPP/R1BQ1RK1 b kq - 7 10",
+   "line": [
+    "Nd6+"
+   ],
+   "spoken": "The knight to d6 with check, and it's not too late to strike — d6 is uncovered, so the knight jumps in without preparation. After the trade, a monster pawn lands on d6 and Black's position already stinks.",
+   "kind": "trap",
+   "teaches": "When the outpost is uncovered, occupy it with tempo before the opponent can defend it.",
+   "plans": "Nd6+, then a cramping pawn on d6."
+  },
+  {
+   "ply": 21,
+   "t": 157.5,
+   "fen": "r1b1k2r/pp2nppp/1qnPp3/3p4/8/3B1N2/PPP2PPP/R1BQ1RK1 b kq - 0 11",
+   "line": [
+    "Bxd6",
+    "exd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 163,
+   "fen": "r1b1k2r/pp3ppp/1qnPp1n1/3p4/8/3B1N2/PPP2PPP/R1BQ1RK1 w kq - 1 12",
+   "line": [
+    "Ng6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 202,
+   "fen": "r1b1k2r/pp3ppp/1qnPp1n1/3p4/8/3B1N2/PPP2PPP/R1BQR1K1 b kq - 2 12",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 220,
+   "fen": "r1b1k2r/pp3ppp/1q1Pp1n1/3p4/1n6/3B1N2/PPP2PPP/R1BQR1K1 w kq - 3 13",
+   "line": [
+    "Nb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 246,
+   "fen": "r1b1k2r/pp3ppp/1q1Pp1B1/3p4/1n6/5N2/PPP2PPP/R1BQR1K1 b kq - 0 13",
+   "line": [
+    "Bxg6"
+   ],
+   "spoken": "First eliminate the knight with the capture on g6 — because bishop to f4 straight away would just hang the bishop. Take, then play bishop f4: it supports the d6-pawn, and with no dark-squared bishop, Black has nothing to challenge it with.",
+   "kind": "main",
+   "teaches": "Remove the defender/attacker first, then occupy the square the recapture no longer contests.",
+   "plans": "Bxg6, Bf4, cement d6."
+  },
+  {
+   "ply": 27,
+   "t": 260,
+   "fen": "r1b1k2r/pp3pp1/1q1Pp1p1/3p4/1n3B2/5N2/PPP2PPP/R2QR1K1 b kq - 1 14",
+   "line": [
+    "hxg6",
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 283.5,
+   "fen": "r1b2rk1/pp3pp1/1q1Pp1p1/3p4/1n3B2/5N2/PPP2PPP/R2QR1K1 w - - 2 15",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Notice the extra point: recapturing wrecks Black's kingside pawns and opens the h-file, and if Black castles short he steps into an attack down it — while, other than the rook on h8, Black has no kingside firepower to make that file cut both ways.",
+   "kind": "main",
+   "teaches": "Opening a file against a king only helps the side with pieces to pour down it.",
+   "plans": "Damage the kingside, aim rooks at the h-file."
+  },
+  {
+   "ply": 29,
+   "t": 327,
+   "fen": "r1b2rk1/pp3pp1/1q1Pp1p1/3p2N1/1n3B2/8/PPP2PPP/R2QR1K1 b - - 3 15",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "The knight to g5 is prophylaxis and attack in one. Its main job is to stop ...f6 — because then e6 would hang — and at the same time it joins the hunt on Black's king.",
+   "kind": "main",
+   "teaches": "A single knight move can both prevent the opponent's freeing break and attack the king.",
+   "plans": "Ng5, deny ...f6, build the attack."
+  },
+  {
+   "ply": 30,
+   "t": 357.5,
+   "fen": "r4rk1/pp1b1pp1/1q1Pp1p1/3p2N1/1n3B2/8/PPP2PPP/R2QR1K1 w - - 4 16",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 419.5,
+   "fen": "r4rk1/pp1b1pp1/1q1Pp1p1/3p2N1/1n3B2/4R3/PPP2PPP/R2Q2K1 b - - 5 16",
+   "line": [
+    "Re3"
+   ],
+   "spoken": "Time for the rook lift — the rook to e3, ready to swing to h3 and join the queen against the king. The pieces are all pointing the same way; now they converge.",
+   "kind": "main",
+   "teaches": "Lift a rook along the third rank to add a heavy piece to the kingside attack.",
+   "plans": "Re3-h3, then bring the queen in."
+  },
+  {
+   "ply": 32,
+   "t": 437,
+   "fen": "2r2rk1/pp1b1pp1/1q1Pp1p1/3p2N1/1n3B2/4R3/PPP2PPP/R2Q2K1 w - - 6 17",
+   "line": [
+    "Rac8"
+   ],
+   "spoken": "With the rook lifted, the queen comes to g4 and the threats mount — rook to h3 next, and the mating net tightens. Everything is in place; the attack plays itself.",
+   "kind": "main",
+   "teaches": "Once the pieces are massed, add the queen last and the mate threats appear on their own.",
+   "plans": "Qg4, Rh3, deliver mate."
+  },
+  {
+   "ply": 8,
+   "t": 553,
+   "fen": "rnb1kbnr/pp3ppp/1q2p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

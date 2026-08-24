@@ -1,0 +1,417 @@
+{
+ "videoId": "Ov4J-FZWoQg",
+ "title": "Mastering the Belgrade Gambit | Scotch Accepted | GM Naroditsky’s Theory Speed Run",
+ "openingName": "Belgrade Gambit",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:Ov4J-FZWoQg",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 13,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 15.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 18,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 50,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 52.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R w KQkq - 4 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 53.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "d4 opens the Four Knights into gambit territory — after Black captures, White has the sharp Belgrade in store rather than the quiet main line.",
+   "kind": "main",
+   "teaches": "Use the Four Knights move order to reach a surprise gambit."
+  },
+  {
+   "ply": 8,
+   "t": 55,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 91.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/3N4/3pP3/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "Nd5 is the Belgrade Gambit — instead of recapturing on d4, White centralizes the knight, throwing a rare, aggressive problem at Black that's easy to mishandle over the board.",
+   "kind": "main",
+   "teaches": "A well-timed piece leap can be worth a pawn when it creates immediate concrete problems."
+  },
+  {
+   "ply": 8,
+   "t": 109.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/8/3pP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 112.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/3N4/3pP3/5N2/PPP2PPP/R1BQKB1R b KQkq - 1 5",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 163,
+   "fen": "r1bqkb1r/pppp1pp1/2n2n1p/3N4/3pP3/5N2/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 246.5,
+   "fen": "r1bqkb1r/pppp1pp1/2n2n1p/3N4/3pP3/3B1N2/PPP2PPP/R1BQK2R b KQkq - 1 6",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 317.5,
+   "fen": "r1bqkb1r/ppp2pp1/2np1n1p/3N4/3pP3/3B1N2/PPP2PPP/R1BQK2R w KQkq - 0 7",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 356,
+   "fen": "r1bqkb1r/ppp2pp1/2np1n1p/1B1N4/3pP3/5N2/PPP2PPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 360.5,
+   "fen": "r1bqkb1r/pppp1pp1/2n2n1p/3N4/3pP3/3B1N2/PPP2PPP/R1BQK2R b KQkq - 1 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 361.5,
+   "fen": "r1bqkb1r/ppp2pp1/2np1n1p/1B1N4/3pP3/5N2/PPP2PPP/R1BQK2R b KQkq - 1 7",
+   "line": [
+    "d6",
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 367.5,
+   "fen": "r1bqkb1r/pppp1pp1/2n2n1p/3N4/3pP3/5N2/PPP2PPP/R1BQKB1R w KQkq - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 374.5,
+   "fen": "r1bqkb1r/ppp2pp1/2np1n1p/1B1N4/3pP3/5N2/PPP2PPP/R1BQK2R w KQkq - 0 7",
+   "line": [
+    "Bb5",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 474,
+   "fen": "r1bqkb1r/1pp2pp1/p1np1n1p/3N4/B2pP3/5N2/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "line": [
+    "Ba4",
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 476,
+   "fen": "r1bqkb1r/1pp2pp1/p1np1n1p/1B1N4/3pP3/5N2/PPP2PPP/R1BQK2R b KQkq - 1 8",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 477,
+   "fen": "r1bqkb1r/1pp2pp1/p1np1n1p/3N4/B2pP3/5N2/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 498.5,
+   "fen": "r1bqkb1r/1pp2pp1/p1np1n1p/1B1N4/3pP3/5N2/PPP2PPP/R1BQK2R b KQkq - 1 8",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 509.5,
+   "fen": "r1bqkb1r/1pp2pp1/p1np1n1p/3N4/B2pP3/5N2/PPP2PPP/R1BQK2R w KQkq - 0 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 516.5,
+   "fen": "r1bqkb1r/2p2pp1/p1np1n1p/1p1N4/B2pP3/5N2/PPP2PPP/R1BQK2R w KQkq - 0 10",
+   "line": [
+    "Bb5",
+    "b6",
+    "Ba4",
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 527.5,
+   "fen": "r1bqkb1r/2p2pp1/p1np1n1p/1p1N4/3pP3/1B3N2/PPP2PPP/R1BQK2R b KQkq - 1 10",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": "The bishop drops to b3, eyeing f7 through the pin — White keeps maximum tension, refusing trades and piling pressure on Black's exposed kingside.",
+   "kind": "main",
+   "teaches": "Retreat the bishop to b3 to keep it aimed at f7 while preserving the tension."
+  },
+  {
+   "ply": 20,
+   "t": 529.5,
+   "fen": "r1bqkb1r/2p2pp1/p2p1n1p/1p1Nn3/3pP3/1B3N2/PPP2PPP/R1BQK2R w KQkq - 2 11",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 607.5,
+   "fen": "r1bqkb1r/2p2pp1/p2p1n1p/1p1Nn3/3NP3/1B6/PPP2PPP/R1BQK2R b KQkq - 0 11",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 609.5,
+   "fen": "r1bqkb1r/5pp1/p2p1n1p/1ppNn3/3NP3/1B6/PPP2PPP/R1BQK2R w KQkq - 0 12",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 615.5,
+   "fen": "r1b1kb1r/5pp1/p2p1n1p/1qpNn3/3NP3/8/PPP2PPP/R1BQK2R w KQkq - 0 14",
+   "line": [
+    "Ba4",
+    "Qd7",
+    "Bxb5",
+    "Qxb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 754,
+   "fen": "r3kb1r/5pp1/p2p1n1p/1qpNn3/3NP1b1/8/PPP2PPP/R1BQK2R w KQkq - 4 16",
+   "line": [
+    "Qg4",
+    "Bd7",
+    "Qd1",
+    "Bg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 830,
+   "fen": "r3kb1r/5pp1/p2p1n1p/1qpNn3/4P1b1/8/PPP1NPPP/R1BQK2R b KQkq - 5 16",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 833,
+   "fen": "1r2kb1r/5pp1/p2p1n1p/1qpNn3/4P1b1/8/PPP1NPPP/R1BQK2R w KQk - 6 17",
+   "line": [
+    "Rb8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 891,
+   "fen": "1r2kb1r/5pp1/p2p1n1p/1qpNn3/4P1b1/8/PPP1NPPP/R1BQ1RK1 b k - 7 17",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 952.5,
+   "fen": "1r2k2r/4bpp1/p2p1n1p/1qpNn3/4P1b1/8/PPP1NPPP/R1BQ1RK1 w k - 8 18",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 957,
+   "fen": "1r2k2r/4bpp1/p2p1n1p/1qpNn3/4P1b1/5P2/PPP1N1PP/R1BQ1RK1 b k - 0 18",
+   "line": [
+    "f3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 962,
+   "fen": "1r2k2r/4bpp1/p2pbn1p/1qpNn3/4P3/5P2/PPP1N1PP/R1BQ1RK1 w k - 1 19",
+   "line": [
+    "Be6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1059,
+   "fen": "1r2k2r/4bpp1/p2pbn1p/1qpNn3/4PP2/8/PPP1N1PP/R1BQ1RK1 b k - 0 19",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 1087.5,
+   "fen": "1r2k2r/4bpp1/p2pbn1p/1qpNn3/4P3/5P2/PPP1N1PP/R1BQ1RK1 w k - 1 19",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1094.5,
+   "fen": "1r2k2r/4bpp1/p2pbn1p/1qpNn3/4PP2/8/PPP1N1PP/R1BQ1RK1 b k - 0 19",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 1117.5,
+   "fen": "1r2k2r/3nbpp1/p2pbn1p/1qpN4/4PP2/8/PPP1N1PP/R1BQ1RK1 w k - 1 20",
+   "line": [
+    "Ned7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 1199,
+   "fen": "1r2k2r/3nbpp1/p2pbn1p/1qpNP3/5P2/8/PPP1N1PP/R1BQ1RK1 b k - 0 20",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1213,
+   "fen": "r3kb1r/5pp1/p2p1n1p/1qpNn3/4P1b1/8/PPP1NPPP/R1BQK2R b KQkq - 5 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1224.5,
+   "fen": "1r2k2r/4bpp1/p2p1n1p/1qpNn3/4P1b1/8/PPP1NPPP/R1BQ1RK1 w k - 8 18",
+   "line": [
+    "Rb8",
+    "O-O",
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 1228,
+   "fen": "1r2k2r/3nbpp1/p2pbn1p/1qpNP3/5P2/8/PPP1N1PP/R1BQ1RK1 w k - 1 20",
+   "line": [
+    "f4",
+    "Ned7",
+    "e5",
+    "Be6"
+   ],
+   "spoken": ""
+  }
+ ]
+}

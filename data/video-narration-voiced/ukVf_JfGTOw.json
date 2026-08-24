@@ -1,0 +1,266 @@
+{
+ "videoId": "ukVf_JfGTOw",
+ "title": "The Power of a Knight on H7! | King’s Indian Defense | GM Naroditsky’s Theory Speed Run",
+ "openingName": "King's Indian Defense: Fianchetto Variation",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:ukVf_JfGTOw",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 34,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/8/5N2/PPPPPPPP/RNBQKB1R w KQkq - 2 2",
+   "line": [
+    "Nf3",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 39.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2P5/5N2/PP1PPPPP/RNBQKB1R b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 41,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2P5/5N2/PP1PPPPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 43,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 46.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 1 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 48.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/5NP1/PP2PP1P/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 95.5,
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PP4/5NP1/PP2PP1P/RNBQKB1R w KQ - 1 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 99,
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PP4/5NP1/PP2PPBP/RNBQK2R b KQ - 2 5",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 100,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/5NP1/PP2PPBP/RNBQK2R w KQ - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 103,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQK2R b KQ - 1 6",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 152,
+   "fen": "r1bq1rk1/pppnppbp/3p1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQK2R w KQ - 2 7",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 156.5,
+   "fen": "r1bq1rk1/pppnppbp/3p1np1/8/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 b - - 3 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 157.5,
+   "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PP4/2N2NP1/PP2PPBP/R1BQ1RK1 w - - 0 8",
+   "line": [
+    "e5"
+   ],
+   "spoken": "With the setup complete, Black strikes the centre with e5 — the whole point of the knight on d7, challenging d4 head-on and claiming central space of Black's own.",
+   "kind": "main",
+   "teaches": "The Nbd7 setup exists to prepare the central e5 break.",
+   "plans": "Press d4 and e4; keep the tension."
+  },
+  {
+   "ply": 15,
+   "t": 160.5,
+   "fen": "r1bq1rk1/pppn1pbp/3p1np1/4p3/2PPP3/2N2NP1/PP3PBP/R1BQ1RK1 b - - 0 8",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 211,
+   "fen": "r1bq1rk1/pp1n1pbp/2pp1np1/4p3/2PPP3/2N2NP1/PP3PBP/R1BQ1RK1 w - - 0 9",
+   "line": [
+    "c6"
+   ],
+   "spoken": "After White clamps with e4, Black plays c6, patiently pressing the big white centre. White holds more space, but that centre is a long-term target Black keeps needling.",
+   "kind": "main",
+   "teaches": "Against a space advantage, apply steady pressure to the centre rather than forcing matters."
+  },
+  {
+   "ply": 17,
+   "t": 231.5,
+   "fen": "r1bq1rk1/pp1n1pbp/2pp1np1/4p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 b - - 0 9",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 236,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 w - - 1 10",
+   "line": [
+    "Qa5"
+   ],
+   "spoken": "The queen to a5 is the point of this line — it leans on the knight on c3 and the whole centre, keeping pressure on while Black stays flexible.",
+   "kind": "main",
+   "teaches": "An active queen sortie to a5 pressures the c3-knight and White's centre at once."
+  },
+  {
+   "ply": 19,
+   "t": 243.5,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N1BNPP/PP3PB1/R2Q1RK1 b - - 2 10",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 263,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 w - - 1 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 275,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q7/2PpP3/2N1BNPP/PP3PB1/R2Q1RK1 w - - 0 11",
+   "line": [
+    "Be3",
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 294,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N1BNPP/PP3PB1/R2Q1RK1 b - - 2 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 300.5,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q7/2PpP3/2N1BNPP/PP3PB1/R2Q1RK1 w - - 0 11",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 369,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 w - - 1 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 376,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q7/2PBP3/2N2NPP/PP3PB1/R2Q1RK1 b - - 0 11",
+   "line": [
+    "Be3",
+    "exd4",
+    "Bxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 434.5,
+   "fen": "r1b1r1k1/pp1n1pbp/2pp1np1/q7/2PBP3/2N2NPP/PP3PB1/R2Q1RK1 w - - 1 12",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 518,
+   "fen": "r1b1r1k1/pp1n1pbp/2pp1np1/q7/2PBP3/2N2NPP/PP3PB1/R2QR1K1 b - - 2 12",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 548.5,
+   "fen": "r1b1r1k1/ppqn1pbp/2pp1np1/8/2PBP3/2N2NPP/PP3PB1/R2QR1K1 w - - 3 13",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 566,
+   "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 w - - 1 10",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

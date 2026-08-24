@@ -1,0 +1,176 @@
+{
+ "videoId": "3Qw4AL8RDOw",
+ "title": "Natural Developing Moves | Scandinavian Defense: Modern | GM Naroditsky’s Top Theory Speedrun",
+ "openingName": "Scandinavian Defense: 2.exd5 Nf6, 3.Bb5+ (White)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:3Qw4AL8RDOw",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 17,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 24,
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 26,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 97,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR b KQkq - 2 3",
+   "line": [
+    "Bb5+"
+   ],
+   "spoken": "The bishop check on b5 — an easy-to-learn, effective line against the Nf6 Scandinavian. It forces Black to block and commit awkwardly.",
+   "kind": "main",
+   "teaches": "The b5 check is a low-theory way to get a pleasant, slightly better game against the Scandinavian.",
+   "plans": "Provoke a clumsy block, then develop with a pull."
+  },
+  {
+   "ply": 6,
+   "t": 133.5,
+   "fen": "rn1qkb1r/pppbpppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR w KQkq - 3 4",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "Most players block with the bishop to d7 — but that piece is poorly placed: it deprives the queen's knight of its natural d7-square and clogs Black's development.",
+   "kind": "main",
+   "teaches": "A blocking bishop on d7 is a liability — it robs the b8-knight of its best square.",
+   "plans": "Keep that bishop stuck; don't trade it off."
+  },
+  {
+   "ply": 7,
+   "t": 205,
+   "fen": "rn1qkb1r/pppbpppp/5n2/3P4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 4 4",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "Retreat the bishop to e2 rather than allowing an exchange — the whole idea is to leave Black's awkward d7-bishop on the board, a lasting inconvenience.",
+   "kind": "main",
+   "teaches": "Preserve the opponent's bad piece by declining the trade.",
+   "plans": "Recover the d5-pawn and take the centre."
+  },
+  {
+   "ply": 11,
+   "t": 223,
+   "fen": "rn1qkb1r/pppbpppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR b KQkq - 8 6",
+   "line": [
+    "Bb5",
+    "Bd3",
+    "Bd7",
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 241,
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 1 7",
+   "line": [
+    "Nxd5",
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 243,
+   "fen": "rn1qkb1r/pppbpppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR b KQkq - 8 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 248.5,
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 1 7",
+   "line": [
+    "Nxd5",
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 274.5,
+   "fen": "rn1qkb1r/pppb1ppp/4p3/3n4/3P4/8/PPP1BPPP/RNBQK1NR b KQkq - 0 8",
+   "line": [
+    "e6",
+    "d4"
+   ],
+   "spoken": "Grab the centre with the pawn to d4 — and it is important to start with d4, not a sloppy e6-type move that would leave the bishop and the g2-square under fire.",
+   "kind": "main",
+   "teaches": "Move order matters — take the centre with d4 before the pieces can be harassed.",
+   "plans": "Complete development behind the centre."
+  },
+  {
+   "ply": 17,
+   "t": 329,
+   "fen": "rn1qkb1r/pp1b1ppp/4p3/2pn4/3P4/5N2/PPP1BPPP/RNBQK2R b KQkq - 1 9",
+   "line": [
+    "c5",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 399,
+   "fen": "rn1qkb1r/pp1b1ppp/4pn2/2p5/2PP4/5N2/PP2BPPP/RNBQK2R b KQkq - 0 10",
+   "line": [
+    "Nf6",
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 463,
+   "fen": "r2qkb1r/pp1b1ppp/2n1pn2/2p5/2PP4/2N2N2/PP2BPPP/R1BQK2R b KQkq - 2 11",
+   "line": [
+    "Nc6",
+    "Nc3"
+   ],
+   "spoken": "Develop the knight to c6 — principled, by-the-book play. With the extra space and Black's awkward bishop, White simply stands more comfortably.",
+   "kind": "main",
+   "teaches": "When you have a structural edge, keep developing soundly — the advantage compounds.",
+   "plans": "Finish development and press the space."
+  },
+  {
+   "ply": 3,
+   "t": 1162,
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1170.5,
+   "fen": "rnb1kbnr/ppp1pppp/8/3q4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "Qxd5"
+   ],
+   "spoken": ""
+  }
+ ]
+}

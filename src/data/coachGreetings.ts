@@ -15,12 +15,12 @@
 /** Rotating opening lines. Each invites a question without the stale
  *  "welcome to my classroom" every time. */
 export const COACH_GREETINGS: readonly string[] = [
-  "What are we working on today?",
-  "Good to see you. What's on your mind — an opening, your weak spots, a position?",
-  "Ready when you are. Ask me about your game, or pick a line to drill.",
-  "Back at the board. What would you like to sharpen today?",
-  "Let's get to work. Curious about your stats, your openings, or a specific move?",
-  "What can I help you with? Your weaknesses, a new opening, or a game to review?",
+  "What are we working on today? Name an opening and I'll teach it to you move by move.",
+  "Good to see you. Want me to teach you an opening, dig into your weak spots, or look at a position?",
+  "Ready when you are. Pick a line to learn — just say “teach me the Caro-Kann” — or ask about your game.",
+  "Back at the board. Name any opening and I'll walk you through it, or tell me what to sharpen.",
+  "Let's get to work. I can teach you a specific opening move by move — or talk stats, openings, and weak spots.",
+  "What can I help with? Learn a new opening, drill your weaknesses, or review a game — your call.",
 ];
 
 /** The starter questions a student can tap — each one routes to a GROUNDED
@@ -40,6 +40,8 @@ export const SUGGESTED_QUESTIONS: readonly string[] = [
   "What's due for review?",
   'Am I better as White or Black?',
   'How do I do against the Sicilian?',
+  'Teach me the Caro-Kann',
+  'Teach me the Italian Game',
 ];
 
 /** Pick a greeting by rotation index. */

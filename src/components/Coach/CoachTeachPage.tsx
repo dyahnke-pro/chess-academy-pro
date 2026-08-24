@@ -81,6 +81,7 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
+import { resolveVoicedWalkthrough } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
 import { gemId } from '../../data/lessons/punishGems';
@@ -951,6 +952,22 @@ export function CoachTeachPage(): JSX.Element {
     // pause. Cached per opening, so re-teaching is instant. Best-effort; never
     // throws. Pre-mined gems were already baked synchronously before start.
     const finderSide = tree.studentSide ?? inferStudentSideFromName(tree.openingName);
+    // PRE-MINED gems bake SYNCHRONOUSLY onto THIS tree — the one actually walked
+    // — before the finder's async pass. Doing it here (not on candidateStatic in
+    // handleSubmit) fixes the notes-lead case, where the static tree that got
+    // baked was discarded and the generated tree walked instead (David 2026-08-24
+    // "no gems at all" on the Accelerated Dragon). One chokepoint, every path.
+    try {
+      const n = bakeGemsIntoTree(tree, finderSide);
+      if (n > 0) {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachTeachPage.startWalkthrough.bakeGems',
+          summary: `baked ${n} pre-mined gem(s) into walked "${tree.openingName}"`,
+        });
+      }
+    } catch { /* gems are a bonus, never a blocker */ }
     void findAndBakeGems(tree, tree.openingName, finderSide).catch(() => undefined);
   }, [walkthrough]);
 
@@ -4072,7 +4089,14 @@ export function CoachTeachPage(): JSX.Element {
           return;
         }
 
+        // Tier 0: a VOICED walkthrough (our-words DNA corpus, merged from real
+        // games — board-true, note-led). When we have one for the requested
+        // opening, it IS the lesson (G0/G3), so it wins over the static
+        // masterclass AND over LLM generation. It's already note-driven, so
+        // the notes-lead branch below must never null it back to generation.
+        const voicedTree = resolveVoicedWalkthrough(requestedName);
         const candidateStatic =
+          voicedTree ??
           resolveWalkthroughTree(requestedName) ??
           (!faceMode && pace !== 'tour'
             ? masterclassWalkthroughTree(
@@ -4131,7 +4155,9 @@ export function CoachTeachPage(): JSX.Element {
           }
         })();
         const notesLeadThisLesson = noteCoverage >= NOTE_PRIMARY_MIN_PLIES;
-        const staticTree = notesLeadThisLesson ? null : candidateStatic;
+        // A voiced tree is our note-driven lesson already — never discard it
+        // for generation. Otherwise honor the notes-lead decision.
+        const staticTree = notesLeadThisLesson && !voicedTree ? null : candidateStatic;
         if (notesLeadThisLesson) {
           void logAppAudit({
             kind: 'coach-surface-migrated',
@@ -5184,7 +5210,9 @@ export function CoachTeachPage(): JSX.Element {
             // fallback keeps the in-place walkthrough flow on
             // /coach/teach for everything we've ever generated.
             const tree =
-              resolveWalkthroughTree(opening) ?? (await getCachedOpening(opening));
+              resolveVoicedWalkthrough(opening) ??
+              resolveWalkthroughTree(opening) ??
+              (await getCachedOpening(opening));
             if (tree) {
               // SILENCE THE BRAIN before the walkthrough starts speaking.
               // Production audit (build 3e2263c) caught a "two voices"
