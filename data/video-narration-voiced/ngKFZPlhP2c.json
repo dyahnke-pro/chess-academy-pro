@@ -1,0 +1,387 @@
+{
+ "videoId": "ngKFZPlhP2c",
+ "title": "Tempo Vs Pawns | French Defence: Tarrasch Variation | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "French Defense: Tarrasch Variation (3.Nd2), 7.Ngf3 pawn sacrifice",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:ngKFZPlhP2c",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 15.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 18,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 19.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 32,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": "This time not the Advance but the knight to d2 — the Tarrasch. It looks odd because it blocks in the c1-bishop, so the whole point had better be worth that.",
+   "kind": "main",
+   "teaches": "The Tarrasch develops the knight to d2, accepting a temporarily blocked bishop for other gains.",
+   "plans": "Nd2, then e5 and c3."
+  },
+  {
+   "ply": 6,
+   "t": 34.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 43.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/8/PPPN1PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "e5"
+   ],
+   "spoken": "The pawn to e5 gains space and kicks the knight, which tucks back to d7. Now the clamp is up and White has the familiar French space advantage.",
+   "kind": "main",
+   "teaches": "e5 clamps the centre and drives the f6-knight to a passive square.",
+   "plans": "Advance e5, keep the space."
+  },
+  {
+   "ply": 8,
+   "t": 47.5,
+   "fen": "rnbqkb1r/pppn1ppp/4p3/3pP3/3P4/8/PPPN1PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Nfd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 55.5,
+   "fen": "rnbqkb1r/pppn1ppp/4p3/3pP3/3P4/3B4/PPPN1PPP/R1BQK1NR b KQkq - 2 5",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 60,
+   "fen": "rnbqkb1r/pp1n1ppp/4p3/2ppP3/3P4/2PB4/PP1N1PPP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "c5",
+    "c3"
+   ],
+   "spoken": "Here is why d2 was worth blocking the bishop: when Black hits with c5, White answers with the pawn to c3 and keeps the centre fully intact. It's the best of both worlds — pieces develop, the d4-e5 chain holds, and the other knight will take over guarding d4.",
+   "kind": "main",
+   "teaches": "Nd2 lets White meet ...c5 with c3, holding the centre while developing — the knight's payoff.",
+   "plans": "c3 to hold d4, develop behind it."
+  },
+  {
+   "ply": 12,
+   "t": 69,
+   "fen": "r1bqkb1r/pp1n1ppp/2n1p3/2ppP3/3P4/2PB4/PP1N1PPP/R1BQK1NR w KQkq - 1 7",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 84,
+   "fen": "r1bqkb1r/pp1n1ppp/2n1p3/2ppP3/3P4/2PB1N2/PP1N1PPP/R1BQK2R b KQkq - 2 7",
+   "line": [
+    "Ngf3"
+   ],
+   "spoken": "The knight to f3 — the g-knight, not the natural-looking knight to b3. For decades this was thought inferior because d4 is hard to hold, but engines flipped the verdict: it's the more testing move.",
+   "kind": "main",
+   "teaches": "Modern theory prefers Ngf3 over Nb3 despite the harder-to-defend d4-pawn.",
+   "plans": "Ngf3, castle, don't fear for d4."
+  },
+  {
+   "ply": 14,
+   "t": 89.5,
+   "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/2ppP3/3P4/2PB1N2/PP1N1PPP/R1BQK2R w KQkq - 3 8",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 114.5,
+   "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/2ppP3/3P4/2PB1N2/PP1N1PPP/R1BQ1RK1 b kq - 4 8",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "And this is the modern question the computers asked: what if you simply don't defend d4 at all? Castle and let the pawn go — in return you get a lead in development, more space, and the e5-pawn clamping the centre.",
+   "kind": "main",
+   "teaches": "Sacrifice d4 for development, space, and the e5-clamp rather than passively defending it.",
+   "plans": "O-O; let d4 fall for the initiative."
+  },
+  {
+   "ply": 16,
+   "t": 119,
+   "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/3pP3/3p4/2PB1N2/PP1N1PPP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 120,
+   "fen": "r1b1kb1r/pp1n1ppp/1qn1p3/3pP3/3P4/3B1N2/PP1N1PPP/R1BQ1RK1 b kq - 0 9",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 122.5,
+   "fen": "r1b1kb1r/pp1n1ppp/1q2p3/3pP3/3n4/3B1N2/PP1N1PPP/R1BQ1RK1 w kq - 0 10",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 126.5,
+   "fen": "r1b1kb1r/pp1n1ppp/1q2p3/3pP3/3N4/3B4/PP1N1PPP/R1BQ1RK1 b kq - 0 10",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 128.5,
+   "fen": "r1b1kb1r/pp1n1ppp/4p3/3pP3/3q4/3B4/PP1N1PPP/R1BQ1RK1 w kq - 0 11",
+   "line": [
+    "Qxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 135,
+   "fen": "r1b1kb1r/pp1n1ppp/4p3/3pP3/3q4/3B1N2/PP3PPP/R1BQ1RK1 b kq - 1 11",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "This is the move that holds it all together — the knight to f3. After the queen grabs on d4 the bishop and pawns are hanging and the position would collapse without it, but the knight develops with tempo, driving the queen off before she can cash in. From here White must keep following up accurately, like in any d4-pawn gambit.",
+   "kind": "trap",
+   "teaches": "Recapture the initiative with a developing move that hits the greedy queen with tempo.",
+   "plans": "Nf3, chase the queen, keep the lead."
+  },
+  {
+   "ply": 22,
+   "t": 138,
+   "fen": "r1b1kb1r/pp1n1ppp/1q2p3/3pP3/8/3B1N2/PP3PPP/R1BQ1RK1 w kq - 2 12",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 688.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 689.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3pP3/3P4/8/PPPN1PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 692,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 787.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 792.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 800,
+   "fen": "rnbqk1nr/ppp2ppp/4p3/3p4/1b1PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 5 5",
+   "line": [
+    "Be7",
+    "Nb1",
+    "Bb4+",
+    "Nc3"
+   ],
+   "spoken": "Compare the alternative: the knight to c3 walks into the bishop to b4 — the Winawer pin. The knight to d2 quietly sidesteps that whole family of pinning ideas.",
+   "kind": "review",
+   "teaches": "Nd2 avoids the Winawer's ...Bb4 pin that Nc3 must allow.",
+   "plans": "Prefer Nd2 to dodge ...Bb4.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 804.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 7 6",
+   "line": [
+    "Bf8",
+    "Nb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 806.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 808,
+   "fen": "rnbqk1nr/ppp2ppp/4p3/3p4/1b1PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": "And should Black still try the bishop to b4, it's toothless — the pawn to c3 simply shoves it away. With the knight on d2 the c-pawn is free to do that job.",
+   "kind": "review",
+   "teaches": "With Nd2, ...Bb4 is met by c3; the pin has no bite.",
+   "plans": "Answer ...Bb4 with c3.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 809.5,
+   "fen": "rnbqk1nr/ppp2ppp/4p3/3p4/1b1PP3/2P5/PP1N1PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 812.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 826,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The second point of d2: it leaves the c-pawn unblocked. When Black challenges the centre, the pawn to c3 is there to support d4 — which is exactly how the game went.",
+   "kind": "review",
+   "teaches": "Nd2 keeps the c-pawn free to reinforce d4 against ...c5.",
+   "plans": "Support d4 with c3 on demand.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 827,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 830,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "c5"
+   ],
+   "spoken": "Black has two main replies to the Tarrasch — the knight to f6 played here, or the immediate pawn to c5. Against ...c5 the modern route is the knight to f3, with a great deal of theory behind it.",
+   "kind": "review",
+   "teaches": "The Tarrasch's two main tries are ...Nf6 and the immediate ...c5.",
+   "plans": "Know both main-line branches.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 833,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/5N2/PPPN1PPP/R1BQKB1R b KQkq - 1 4",
+   "line": [
+    "Ngf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 837,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1609.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1614.5,
+   "fen": "rnbqkb1r/ppp2ppp/4pn2/3p4/3PP3/8/PPPN1PPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1616,
+   "fen": "rnbqkb1r/pppn1ppp/4p3/3pP3/3P4/8/PPPN1PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "e5",
+    "Nfd7"
+   ],
+   "spoken": ""
+  }
+ ]
+}

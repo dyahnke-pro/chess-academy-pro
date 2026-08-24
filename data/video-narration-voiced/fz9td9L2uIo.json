@@ -1,0 +1,314 @@
+{
+ "videoId": "fz9td9L2uIo",
+ "title": "Master Class | Caro-Kann Defense | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Caro-Kann Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:fz9td9L2uIo",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 21.5,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/2P1P3/8/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4",
+    "c6",
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 42.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 83,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/4P3/8/PP1P1PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "cxd5",
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 86,
+   "fen": "rnbqkbnr/pp2pppp/8/3pP3/8/8/PP1P1PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "e5"
+   ],
+   "spoken": "White pushes e5, locking the centre and handing Black an ideal French-style structure — but a French where the light-squared bishop is not yet shut in. The advanced pawn can be undermined at leisure.",
+   "kind": "main",
+   "teaches": "When White locks the centre with e5, get the light bishop OUTSIDE the pawn chain before playing e6."
+  },
+  {
+   "ply": 8,
+   "t": 144.5,
+   "fen": "r1bqkbnr/pp2pppp/2n5/3pP3/8/8/PP1P1PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 159,
+   "fen": "r2qkbnr/pp2pppp/2n5/3pPb2/3P4/8/PP3PPP/RNBQKBNR w KQkq - 1 6",
+   "line": [
+    "d4",
+    "Bf5"
+   ],
+   "spoken": "The bishop comes out to f5 before e6 would ever trap it — the one problem piece of the French, solved for free. Black already has an easy, comfortable game against the e5-pawn.",
+   "kind": "main",
+   "teaches": "Developing the light-squared bishop to f5 before e6 is Black's whole edge in these Advance structures.",
+   "plans": "Play e6, finish developing, and pile onto d4 and e5."
+  },
+  {
+   "ply": 11,
+   "t": 199.5,
+   "fen": "r2qkbnr/pp2pppp/2n5/3pPb2/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 6",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 201.5,
+   "fen": "r2qkbnr/pp3ppp/2n1p3/3pPb2/3P4/2N5/PP3PPP/R1BQKBNR w KQkq - 0 7",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 273,
+   "fen": "r2qkbnr/pp3ppp/2n1p3/3pPb2/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 7",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 319,
+   "fen": "r3kbnr/pp3ppp/1qn1p3/3pPb2/3P4/2N2N2/PP3PPP/R1BQKB1R w KQkq - 2 8",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 345.5,
+   "fen": "r3kbnr/pp3ppp/1qn1p3/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R b KQkq - 3 8",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 406,
+   "fen": "r3kb1r/pp3ppp/1qn1p2n/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R w KQkq - 4 9",
+   "line": [
+    "Nh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 412,
+   "fen": "r3kb1r/pp3ppp/1qn1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQK2R b KQkq - 5 9",
+   "line": [
+    "Na4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 458,
+   "fen": "r3kb1r/ppq2ppp/2n1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQK2R w KQkq - 6 10",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 461,
+   "fen": "r3kb1r/ppq2ppp/2n1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQ1RK1 b kq - 7 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 463,
+   "fen": "r3k2r/ppq1bppp/2n1p2n/3pPb2/N2P4/5N2/PP2BPPP/R1BQ1RK1 w kq - 8 11",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 467,
+   "fen": "r3k2r/ppq1bppp/2n1p2n/3pPb2/N2P4/5N2/PP1BBPPP/R2Q1RK1 b kq - 9 11",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 471,
+   "fen": "r3k2r/ppq1bppp/2n1p1bn/3pP3/N2P4/5N2/PP1BBPPP/R2Q1RK1 w kq - 10 12",
+   "line": [
+    "Bg6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 473.5,
+   "fen": "r3k2r/ppq1bppp/2n1p1b1/3pPn2/N2P4/P4N2/1P1BBPPP/R2Q1RK1 w kq - 1 13",
+   "line": [
+    "a3",
+    "Nf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 488,
+   "fen": "r3k2r/ppq1bppp/2n1p1b1/3pPn2/N2P4/P3BN2/1P2BPPP/R2Q1RK1 b kq - 2 13",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 519.5,
+   "fen": "r4rk1/ppq1bppp/2n1p1b1/3pPn2/N2P4/P3BN2/1P2BPPP/R2Q1RK1 w - - 3 14",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 531.5,
+   "fen": "r4rk1/ppq1bppp/2n1p1b1/3pPn2/3P4/P1N1BN2/1P2BPPP/R2Q1RK1 b - - 4 14",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 551,
+   "fen": "r4rk1/ppq1b1pp/2n1ppb1/3pPn2/3P4/P1N1BN2/1P2BPPP/R2Q1RK1 w - - 0 15",
+   "line": [
+    "f6"
+   ],
+   "spoken": "The pawn to f6 strikes at the head of White's chain, prising open the centre and the f-file to get at the d4- and e5-pawns Black has been pressuring.",
+   "kind": "main",
+   "teaches": "Break a cramping pawn chain at its head with f6 to open lines onto its base."
+  },
+  {
+   "ply": 29,
+   "t": 556.5,
+   "fen": "r4rk1/ppq1b1pp/2n1ppb1/1N1pPn2/3P4/P3BN2/1P2BPPP/R2Q1RK1 b - - 1 15",
+   "line": [
+    "Nb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 572.5,
+   "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P3BN2/1P2BPPP/R2Q1RK1 w - - 2 16",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 624,
+   "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 b - - 3 16",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 647,
+   "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P3BN2/1P2BPPP/R2Q1RK1 w - - 2 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 648.5,
+   "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 b - - 3 16",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 712.5,
+   "fen": "r4rk1/pp2b1pp/1qn1p1b1/1N1ppn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 w - - 0 17",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 764,
+   "fen": "r4rk1/pp2b1pp/1qn1ppb1/1N1pPn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 b - - 3 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 779.5,
+   "fen": "r4rk1/pp2b1pp/1qn1p1b1/1N1ppn2/3P4/P2BBN2/1P3PPP/R2Q1RK1 w - - 0 17",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": "With the centre cracked open the pressure tells: White is overloaded. The knight on b5 is loose under the queen on b6, and taking on e5 also bares the bishop on e3 to the knight — two things hang at once and Black wins material.",
+   "kind": "main",
+   "teaches": "Converging pressure creates an overload — when two enemy pieces hang at the same moment, one of them falls."
+  },
+  {
+   "ply": 16,
+   "t": 1005.5,
+   "fen": "r3kb1r/pp3ppp/1qn1p2n/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R w KQkq - 4 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1013,
+   "fen": "r3kbnr/pp3ppp/1qn1p3/3pPb2/3P4/2N2N2/PP2BPPP/R1BQK2R b KQkq - 3 8",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

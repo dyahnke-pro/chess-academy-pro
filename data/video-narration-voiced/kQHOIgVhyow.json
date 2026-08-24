@@ -1,0 +1,296 @@
+{
+ "videoId": "kQHOIgVhyow",
+ "title": "Mastering Transitions in The King’s Indian Opening | A GM Naroditsky Theory Speed Run",
+ "openingName": "King's Indian Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:kQHOIgVhyow",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 27.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 37,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 54,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 60,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 64,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 76.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/5N2/PP2PPPP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 95.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/5N2/PP2PPPP/RNBQKB1R w KQkq - 2 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 111.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP1B2/5N2/PP2PPPP/RN1QKB1R b KQkq - 3 4",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 198.5,
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PP1B2/5N2/PP2PPPP/RN1QKB1R w KQ - 4 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 227,
+   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PP1B2/2N2N2/PP2PPPP/R2QKB1R b KQ - 5 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 278.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP1B2/2N2N2/PP2PPPP/R2QKB1R w KQ - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Facing White's flexible Bf4 system, Black commits to a King's Indian with d6 rather than the Grünfeld's d5. The lesson is transitions: read White's setup and choose the structure that punishes it.",
+   "kind": "main",
+   "teaches": "Stay flexible — pick your central structure, King's Indian or Grünfeld, based on how White develops.",
+   "plans": "Expand on the queenside with c6, a6 and b5."
+  },
+  {
+   "ply": 11,
+   "t": 293.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PP1B2/2N1PN2/PP3PPP/R2QKB1R b KQ - 0 6",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 325,
+   "fen": "rnbq1rk1/pp2ppbp/2pp1np1/8/2PP1B2/2N1PN2/PP3PPP/R2QKB1R w KQ - 0 7",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 395,
+   "fen": "rnbq1rk1/pp2ppbp/2pp1np1/8/2PP1B2/2N1PN2/PP2BPPP/R2QK2R b KQ - 1 7",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 416.5,
+   "fen": "rnbq1rk1/1p2ppbp/p1pp1np1/8/2PP1B2/2N1PN2/PP2BPPP/R2QK2R w KQ - 0 8",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 486,
+   "fen": "rnbq1rk1/1p2ppbp/p1pp1np1/8/2PP1B2/2N1PN2/PP1QBPPP/R3K2R b KQ - 1 8",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 503,
+   "fen": "rnbq1rk1/4ppbp/p1pp1np1/1p6/2PP1B2/2N1PN2/PP1QBPPP/R3K2R w KQ - 0 9",
+   "line": [
+    "b5"
+   ],
+   "spoken": "Black expands on the queenside with a6 and b5, grabbing space and opening the bishop's diagonal. Against White's slow centre, the play belongs on the wing where Black is quicker.",
+   "kind": "main",
+   "teaches": "When White plays a slow central system, seize space on the queenside with a6 and b5."
+  },
+  {
+   "ply": 17,
+   "t": 558.5,
+   "fen": "rnbq1rk1/4ppbp/p1pp1np1/1p6/2PP1B2/P1N1PN2/1P1QBPPP/R3K2R b KQ - 0 9",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 641,
+   "fen": "rn1q1rk1/1b2ppbp/p1pp1np1/1p6/2PP1B2/P1N1PN2/1P1QBPPP/R3K2R w KQ - 1 10",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 663,
+   "fen": "rn1q1rk1/1b2ppbp/p1pp1np1/1p6/2PP1B2/P1N1PN2/1P1QBPPP/R4RK1 b - - 2 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 692.5,
+   "fen": "r2q1rk1/1b1nppbp/p1pp1np1/1p6/2PP1B2/P1N1PN2/1P1QBPPP/R4RK1 w - - 3 11",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 818,
+   "fen": "r2q1rk1/1b1nppbp/p1pp1np1/1p6/2PP1B2/P1N1PN1P/1P1QBPP1/R4RK1 b - - 0 11",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 848,
+   "fen": "r2q1rk1/1b1nppbp/p1pp1np1/8/2pP1B2/P1N1PN1P/1P1QBPP1/R4RK1 w - - 0 12",
+   "line": [
+    "bxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 853.5,
+   "fen": "r2q1rk1/1b1nppbp/p1pp1np1/8/2BP1B2/P1N1PN1P/1P1Q1PP1/R4RK1 b - - 0 12",
+   "line": [
+    "Bxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 865,
+   "fen": "r2q1rk1/1b1nppbp/p2p1np1/2p5/2BP1B2/P1N1PN1P/1P1Q1PP1/R4RK1 w - - 0 13",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 907,
+   "fen": "r2q1rk1/1b1nppbp/p2p1np1/2pP4/2B2B2/P1N1PN1P/1P1Q1PP1/R4RK1 b - - 0 13",
+   "line": [
+    "d5"
+   ],
+   "spoken": "The game transitions into a Benoni: after Black plays c5, White pushes d5, and Black gets the classic queenside majority with the long-diagonal bishop pointing straight through the position.",
+   "kind": "main",
+   "teaches": "These King's Indian setups can transition into a Benoni where Black plays on the queenside behind the fianchetto bishop."
+  },
+  {
+   "ply": 26,
+   "t": 959,
+   "fen": "r2q1rk1/1b2ppbp/pn1p1np1/2pP4/2B2B2/P1N1PN1P/1P1Q1PP1/R4RK1 w - - 1 14",
+   "line": [
+    "Nb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 999,
+   "fen": "r2q1rk1/1b2ppbp/pn1p1np1/2pP4/5B2/P1N1PN1P/BP1Q1PP1/R4RK1 b - - 2 14",
+   "line": [
+    "Ba2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 1045.5,
+   "fen": "r2q1rk1/1b2ppbp/pn1p1np1/3P4/2p2B2/P1N1PN1P/BP1Q1PP1/R4RK1 w - - 0 15",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1073,
+   "fen": "r2q1rk1/1b2ppbp/pn1p1np1/3P4/2p1PB2/P1N2N1P/BP1Q1PP1/R4RK1 b - - 0 15",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1131,
+   "fen": "r2qr1k1/1b2ppbp/pn1p1np1/3P4/2p1PB2/P1N2N1P/BP1Q1PP1/R4RK1 w - - 1 16",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  }
+ ]
+}

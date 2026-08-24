@@ -1,0 +1,856 @@
+{
+ "videoId": "WSEAjQgHpYs",
+ "title": "Happy Holidays!!! | Smith-Morra, London, Philidor, French | GM Naroditsky's DYI Speedrun",
+ "openingName": "Sicilian Defense: Smith-Morra Gambit Declined (3...d5)",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:WSEAjQgHpYs",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 2325,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 2327,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 2328.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 2329.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": "White offers the Smith-Morra Gambit with the pawn to c3, hoping Black grabs the pawn and lets him develop with a lead. Against it there's a practical, rarely-seen answer coming — one good enough to win a strong Titled Tuesday game.",
+   "kind": "main",
+   "teaches": "The Smith-Morra trades a pawn for development; a rare declining line can sidestep all White's prep.",
+   "plans": "Decline the gambit, keep it solid."
+  },
+  {
+   "ply": 6,
+   "t": 2351,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "d5"
+   ],
+   "spoken": "The move is the pawn to d5 — declining the gambit outright. It's exceedingly rare, and precisely because of that, if White isn't accurate he can end up slightly worse. This is the whole point: a practical weapon that dodges the booked-up main lines.",
+   "kind": "trap",
+   "teaches": "3...d5 declines the Morra and returns the initiative — surprise value plus soundness.",
+   "plans": "...d5, take over if White drifts."
+  },
+  {
+   "ply": 7,
+   "t": 2353.5,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3QP3/2P5/PP3PPP/RNB1KBNR b KQkq - 0 4",
+   "line": [
+    "Qxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2355,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 2360,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3QP3/2P5/PP3PPP/RNB1KBNR b KQkq - 0 4",
+   "line": [
+    "Qxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2380,
+   "fen": "rnbqkb1r/pp2pppp/5n2/3p4/3QP3/2P5/PP3PPP/RNB1KBNR w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The natural reaction is the knight to f6, developing and steering away from a queen trade. Keeping the queens on suits the side that's better developed, and Black is happy to keep pieces on the board.",
+   "kind": "main",
+   "teaches": "Develop with ...Nf6 and avoid the queen trade when you hold the initiative.",
+   "plans": "...Nf6, then ...Nc6 with tempo."
+  },
+  {
+   "ply": 10,
+   "t": 2387,
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/3pP3/3Q4/2P5/PP3PPP/RNB1KBNR w KQkq - 1 6",
+   "line": [
+    "e5",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2390,
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/1B1pP3/3Q4/2P5/PP3PPP/RNB1K1NR b KQkq - 2 6",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "The knight to c6 hits the queen with tempo, and now precision is required. Don't leap the knight into e4 — the pawn to f3 would trap it. The clean move is the knight back to d7: it concedes the d5-pawn but keeps everything safe and coordinated.",
+   "kind": "main",
+   "teaches": "Watch for the trap: an active-looking knight to e4 gets caught by f3 — retreat to d7 instead.",
+   "plans": "...Nd7, stay solid, keep the edge."
+  },
+  {
+   "ply": 12,
+   "t": 2400.5,
+   "fen": "r1bqkb1r/pp1npppp/2n5/1B1pP3/3Q4/2P5/PP3PPP/RNB1K1NR w KQkq - 3 7",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 2407,
+   "fen": "r1bqkb1r/pp1npppp/8/1B1pP3/3n4/2P2N2/PP3PPP/RNB1K2R w KQkq - 0 8",
+   "line": [
+    "Nf3",
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 2409.5,
+   "fen": "r1bqkb1r/pp1npppp/8/1B1pP3/3N4/2P5/PP3PPP/RNB1K2R b KQkq - 0 8",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2417.5,
+   "fen": "r1bqkb1r/pp1n1ppp/4p3/1B1pP3/3N4/2P5/PP3PPP/RNB1K2R w KQkq - 0 9",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 2419.5,
+   "fen": "r1bqkb1r/pp1n1ppp/4p3/1B1pP3/3N4/2P5/PP3PPP/RNB2RK1 b kq - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 2421.5,
+   "fen": "r1bqkb1r/1p1n1ppp/p3p3/1B1pP3/3N4/2P5/PP3PPP/RNB2RK1 w kq - 0 10",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 2424,
+   "fen": "r1bqkb1r/pp1npppp/8/1B1pP3/3n4/2P2N2/PP3PPP/RNB1K2R w KQkq - 0 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 2426,
+   "fen": "r1bqkb1r/1p1n1ppp/p3p3/1B1pP3/3N4/2P5/PP3PPP/RNB2RK1 w kq - 0 10",
+   "line": [
+    "Nxd4",
+    "a6",
+    "O-O",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 2427,
+   "fen": "r1bqkb1r/1p1n1ppp/p3p3/3pP3/B2N4/2P5/PP3PPP/RNB2RK1 b kq - 1 10",
+   "line": [
+    "Ba4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 2430.5,
+   "fen": "r1bqkb1r/3n1ppp/p3p3/1p1pP3/B2N4/2P5/PP3PPP/RNB2RK1 w kq - 0 11",
+   "line": [
+    "b5"
+   ],
+   "spoken": "From here it's easy conversion. The pawn to b5 kicks the bishop and Black simply grabs the central pawn, then hurries the pieces out. When you're up material, speed of development finishes the job.",
+   "kind": "main",
+   "teaches": "Convert a material edge by grabbing loose pawns and developing quickly — no heroics needed.",
+   "plans": "...b5, win the pawn, develop."
+  },
+  {
+   "ply": 22,
+   "t": 2433,
+   "fen": "r1bqkb1r/5ppp/p3p3/1p1pn3/3N4/2P5/PPB2PPP/RNB2RK1 w kq - 0 12",
+   "line": [
+    "Bc2",
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 2437,
+   "fen": "r1bqkb1r/5ppp/p3p3/1p1pn3/3N1P2/2P5/PPB3PP/RNB2RK1 b kq - 0 12",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 2438,
+   "fen": "r1bqkb1r/5ppp/p3p3/1p1p4/2nN1P2/2P5/PPB3PP/RNB2RK1 w kq - 1 13",
+   "line": [
+    "Nc4"
+   ],
+   "spoken": "The knight to c4 centralises, heading for its best square. Improving the worst-placed piece is the quiet engine of conversion.",
+   "kind": "main",
+   "teaches": "Centralise your pieces while ahead; a knight on c4 dominates.",
+   "plans": "...Nc4, improve every piece."
+  },
+  {
+   "ply": 25,
+   "t": 2439,
+   "fen": "r1bqkb1r/5ppp/p3p3/1p1p4/2nN1P2/1PP5/P1B3PP/RNB2RK1 b kq - 0 13",
+   "line": [
+    "b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 2440.5,
+   "fen": "r1bqkb1r/5ppp/p2np3/1p1p4/3N1P2/1PP5/P1B3PP/RNB2RK1 w kq - 1 14",
+   "line": [
+    "Nd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 2442,
+   "fen": "r1bqk2r/4bppp/p2np3/1p1p4/3N1P2/1PP1B3/P1B3PP/RN3RK1 w kq - 3 15",
+   "line": [
+    "Be3",
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 2444,
+   "fen": "r1bqk2r/4bppp/p1Nnp3/1p1p4/5P2/1PP1B3/P1B3PP/RN3RK1 b kq - 4 15",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 2445,
+   "fen": "r1b1k2r/2q1bppp/p1Nnp3/1p1p4/5P2/1PP1B3/P1B3PP/RN3RK1 w kq - 5 16",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 2446,
+   "fen": "r1b1k2r/2q1Nppp/p2np3/1p1p4/5P2/1PP1B3/P1B3PP/RN3RK1 b kq - 0 16",
+   "line": [
+    "Nxe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 2448,
+   "fen": "r1b1k2r/4qppp/p2np3/1p1p4/5P2/1PP1B3/P1B3PP/RN3RK1 w kq - 0 17",
+   "line": [
+    "Qxe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 2452,
+   "fen": "r1b2rk1/4qppp/p2np3/1p1p4/3B1P2/1PP5/P1B3PP/RN3RK1 w - - 2 18",
+   "line": [
+    "Bd4",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 2453.5,
+   "fen": "r4rk1/1b2qppp/p2np3/1p1p4/3B1P2/1PP5/P1BN2PP/R4RK1 w - - 4 19",
+   "line": [
+    "Nd2",
+    "Bb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 2455,
+   "fen": "r4rk1/1b2qppp/p2np3/1p1p4/3B1P2/1PP2N2/P1B3PP/R4RK1 b - - 5 19",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 2457.5,
+   "fen": "2r2rk1/1b2qppp/p2np3/1p1p4/3B1P2/1PP2N2/P1B3PP/R4RK1 w - - 6 20",
+   "line": [
+    "Rac8"
+   ],
+   "spoken": "Here's the whole roadmap: develop your pieces to active squares — the rook to c8 — then identify the biggest target and trade pieces when it doesn't harm your position. Simple, methodical, and decisive when you're already better.",
+   "kind": "main",
+   "teaches": "Conversion roadmap: activate pieces, name the target, trade favourably.",
+   "plans": "...Rc8, target c3, simplify."
+  },
+  {
+   "ply": 39,
+   "t": 2459,
+   "fen": "2r2rk1/1b2qppp/p2np3/1p1pN3/3B1P2/1PP5/P1B3PP/R4RK1 b - - 7 20",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 2465.5,
+   "fen": "2r2rk1/1b2qppp/p3p3/1p1pN3/3BnP2/1PP5/P1B3PP/R4RK1 w - - 8 21",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "The knight to e4 hits the pawn and invites White to trade off his well-placed knight on e5. Encouraging the exchange of the opponent's best piece is exactly how you loosen a position.",
+   "kind": "main",
+   "teaches": "Provoke the trade of the opponent's most active piece to remove his last source of play.",
+   "plans": "...Ne4, trade off the e5-knight."
+  },
+  {
+   "ply": 41,
+   "t": 2470,
+   "fen": "2r2rk1/1b2qppp/p3p3/1p1pN3/3BnP2/1PP2R2/P1B3PP/R5K1 b - - 9 21",
+   "line": [
+    "Rf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 2471,
+   "fen": "2r2rk1/1b2q1pp/p3pp2/1p1pN3/3BnP2/1PP2R2/P1B3PP/R5K1 w - - 0 22",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 2476,
+   "fen": "2r2rk1/1b2q1pp/p3pp2/1p1p4/3BnPN1/1PP2R2/P1B3PP/R5K1 b - - 1 22",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": "And now the tactical eye earns its keep. The pawn on c3 is the standing target, but there's a sharper idea: whenever White has pushed the f-pawn with the king on g1, tactics along the a7-g1 diagonal are in the air. The knight to g4 is the shot that cashes in.",
+   "kind": "trap",
+   "teaches": "With White's f-pawn advanced and king on g1, hunt for tactics on the a7-g1 diagonal.",
+   "plans": "...Ng4, strike on the diagonal."
+  },
+  {
+   "ply": 23,
+   "t": 2494,
+   "fen": "r1bqkb1r/5ppp/p3p3/1p1pn3/3N1P2/2P5/PPB3PP/RNB2RK1 b kq - 0 12",
+   "line": [],
+   "spoken": "Burn in the pattern: with a white king tucked on g1 and the f-pawn advanced, the a7-g1 diagonal turns into a tactical highway. It's a recurring theme worth spotting far beyond this game.",
+   "kind": "review",
+   "teaches": "f-pawn advanced + king on g1 = recurring tactics on the a7-g1 diagonal.",
+   "plans": "Always check that diagonal.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 2553.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2554.5,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "d5"
+   ],
+   "spoken": "For the record, calling the pawn to d5 rare doesn't mean a handful of games — it's simply far behind accepting the gambit with ...Nf6 in popularity. That obscurity is exactly what makes it such a practical surprise weapon.",
+   "kind": "review",
+   "teaches": "3...d5 is a low-frequency but sound way to decline the Morra — surprise value is real.",
+   "plans": "Keep it as a practical weapon.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 2562,
+   "fen": "rnbqkbnr/pp1ppppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2572,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 2573.5,
+   "fen": "rnbqkbnr/pp2pppp/8/3P4/3p4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2576.5,
+   "fen": "rnbqkb1r/pp2pppp/5n2/3P4/3p4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2587,
+   "fen": "rnbqkb1r/pp2pppp/5n2/3P4/3P4/8/PP3PPP/RNBQKBNR b KQkq - 0 5",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2591,
+   "fen": "rnbqkb1r/pp2pppp/8/3n4/3P4/8/PP3PPP/RNBQKBNR w KQkq - 0 6",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2592.5,
+   "fen": "rnbqkb1r/pp2pppp/8/3n4/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 1 6",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 2594.5,
+   "fen": "r1bqkb1r/pp2pppp/2n5/3n4/3P4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 3 7",
+   "line": [
+    "Nc6",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 2613.5,
+   "fen": "r2qkb1r/pp2pppp/2n5/3n1b2/3P4/2N2N2/PP3PPP/R1BQKB1R w KQkq - 4 8",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 2623,
+   "fen": "r2qkb1r/pp2pppp/2n5/3n1b2/3P4/1QN2N2/PP3PPP/R1B1KB1R b KQkq - 5 8",
+   "line": [
+    "Qb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2625.5,
+   "fen": "r2qkb1r/pp2pppp/2n5/5b2/1n1P4/1QN2N2/PP3PPP/R1B1KB1R w KQkq - 6 9",
+   "line": [
+    "Ndb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 2634.5,
+   "fen": "r2qkb1r/pp2pppp/2n5/3P1b2/1n6/1QN2N2/PP3PPP/R1B1KB1R b KQkq - 0 9",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 2635.5,
+   "fen": "r2qkb1r/pp2pppp/2n5/3P1b2/8/1QN2N2/PPn2PPP/R1B1KB1R w KQkq - 1 10",
+   "line": [
+    "Nc2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 2637,
+   "fen": "r2qkb1r/pp2pppp/2n5/3P1b2/8/1QN2N2/PPn2PPP/R1BK1B1R b kq - 2 10",
+   "line": [
+    "Kd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 2647.5,
+   "fen": "r2qkb1r/pQ2pppp/2n5/3P1b2/8/2N2N2/PP3PPP/n1BK1B1R b kq - 0 11",
+   "line": [
+    "Nxa1",
+    "Qxb7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 2680,
+   "fen": "r2qkb1r/pp2pppp/2n5/3n1b2/3P4/2N2N2/PP3PPP/R1BQKB1R w KQkq - 4 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 2687,
+   "fen": "r2qkb1r/pp2pppp/2n5/3n1b2/2BP4/2N2N2/PP3PPP/R1BQK2R b KQkq - 5 8",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2688.5,
+   "fen": "r2qkb1r/pp3ppp/2n1p3/3n1b2/2BP4/2N2N2/PP3PPP/R1BQK2R w KQkq - 0 9",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2692,
+   "fen": "rnbqkb1r/pp2pppp/5n2/3P4/3p4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2693,
+   "fen": "rnbqkb1r/pp2pppp/5n2/3P4/3Q4/2P5/PP3PPP/RNB1KBNR b KQkq - 0 5",
+   "line": [
+    "Qxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2699,
+   "fen": "rnb1kb1r/pp2pppp/5n2/3q4/3Q4/2P5/PP3PPP/RNB1KBNR w KQkq - 0 6",
+   "line": [
+    "Qxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2702.5,
+   "fen": "rnb1kb1r/pp2pppp/8/3n4/8/2P5/PP3PPP/RNB1KBNR w KQkq - 0 7",
+   "line": [
+    "Qxd5",
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 2704.5,
+   "fen": "rnbqkbnr/pp2pppp/8/3P4/3p4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2705.5,
+   "fen": "rnbqkb1r/pp2pppp/5n2/3P4/3p4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2707,
+   "fen": "rnbqkb1r/pp2pppp/5n2/3P4/2Pp4/8/PP3PPP/RNBQKBNR b KQkq - 0 5",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2713.5,
+   "fen": "rnbqkb1r/pp3ppp/5n2/3Pp3/2Pp4/8/PP3PPP/RNBQKBNR w KQkq e6 0 6",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2717,
+   "fen": "rnbqkb1r/pp3ppp/4Pn2/8/2Pp4/8/PP3PPP/RNBQKBNR b KQkq - 0 6",
+   "line": [
+    "dxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2719.5,
+   "fen": "rnbqkb1r/pp4pp/4pn2/8/2Pp4/8/PP3PPP/RNBQKBNR w KQkq - 0 7",
+   "line": [
+    "fxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 2722.5,
+   "fen": "rnbqkb1r/pp4pp/4pn2/8/2Pp4/5N2/PP3PPP/RNBQKB1R b KQkq - 1 7",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 2733.5,
+   "fen": "rnbqkb1r/pp4pp/5n2/4p3/2Pp4/5N2/PP3PPP/RNBQKB1R w KQkq - 0 8",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2739,
+   "fen": "rnb1kb1r/pp4pp/5n2/q3N3/2Pp4/8/PP3PPP/RNBQKB1R w KQkq - 1 9",
+   "line": [
+    "Nxe5",
+    "Qa5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 2741.5,
+   "fen": "rnbqkbnr/pp2pppp/8/3P4/3p4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2742.5,
+   "fen": "rnbqkb1r/pp2pppp/5n2/3P4/3p4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 2744,
+   "fen": "rnbqkb1r/pp2pppp/5n2/1B1P4/3p4/2P5/PP3PPP/RNBQK1NR b KQkq - 2 5",
+   "line": [
+    "Bb5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2745.5,
+   "fen": "rn1qkb1r/pp1bpppp/5n2/1B1P4/3p4/2P5/PP3PPP/RNBQK1NR w KQkq - 3 6",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 2747,
+   "fen": "rn1qkb1r/pp1bpppp/5n2/3P4/2Bp4/2P5/PP3PPP/RNBQK1NR b KQkq - 4 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 2757.5,
+   "fen": "rn1qkb1r/p2bpppp/5n2/1p1P4/2Bp4/2P5/PP3PPP/RNBQK1NR w KQkq - 0 7",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 2758.5,
+   "fen": "rn1qkb1r/p2bpppp/5n2/1p1P4/3p4/1BP5/PP3PPP/RNBQK1NR b KQkq - 1 7",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 2763,
+   "fen": "rn1qkb1r/p2bpppp/5n2/1p1P4/8/1BN5/PP3PPP/R1BQK1NR b KQkq - 0 8",
+   "line": [
+    "dxc3",
+    "Nxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 2768.5,
+   "fen": "rn1qkb1r/3bpppp/5n2/pp1P4/8/1BN5/PP3PPP/R1BQK1NR w KQkq - 0 9",
+   "line": [
+    "a5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 2788,
+   "fen": "rnbqkbnr/pp2pppp/8/3P4/3p4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 2789.5,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 2792.5,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3QP3/2P5/PP3PPP/RNB1KBNR b KQkq - 0 4",
+   "line": [
+    "Qxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2799,
+   "fen": "rnbqkbnr/pp2pppp/8/8/3Qp3/2P5/PP3PPP/RNB1KBNR w KQkq - 0 5",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2803.5,
+   "fen": "rnbk1bnr/pp2pppp/8/8/4p3/2P5/PP3PPP/RNB1KBNR w KQ - 0 6",
+   "line": [
+    "Qxd8+",
+    "Kxd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2805.5,
+   "fen": "rnbqkbnr/pp2pppp/8/8/3Qp3/2P5/PP3PPP/RNB1KBNR w KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 2807,
+   "fen": "rnbqkb1r/pp2pppp/5n2/8/4Q3/2P5/PP3PPP/RNB1KBNR w KQkq - 1 6",
+   "line": [
+    "Qxe4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 2810,
+   "fen": "rnbqkbnr/pp2pppp/8/8/3Qp3/2P5/PP3PPP/RNB1KBNR w KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

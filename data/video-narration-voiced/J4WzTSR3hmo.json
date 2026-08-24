@@ -1,0 +1,258 @@
+{
+ "videoId": "J4WzTSR3hmo",
+ "title": "NEW SPEEDRUN!!! Fly to a Higher Elo | French, Nimzowitsch | Top Gun Speedrun | GM Naroditsky",
+ "openingName": "French Defense: 2...Nc6 (non-theoretical), central-break punished",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:J4WzTSR3hmo",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 15,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 60,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 62.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n1p3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 85,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": "The knight to c6 is already off the main road — the book move here is the pawn to d5. It's a perfectly playable developing move, but it's a warning too: don't assume an offbeat setup is losing just because it isn't theory.",
+   "kind": "review",
+   "teaches": "Against a non-theoretical move, don't relax — treat it on its merits, not as a free win.",
+   "plans": "Develop soundly and wait for a target.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 91.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n1p3/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 111,
+   "fen": "r1bqkbnr/pppp1ppp/2n1p3/8/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 2 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "No need to rush the pawn to d5 with nothing developed yet — the simplest is to get the knight to f3. Once the pieces are out, the central breaks d5 and e5 become real; premature, they're just concrete for its own sake.",
+   "kind": "main",
+   "teaches": "Finish development before committing to a concrete central break.",
+   "plans": "Develop first, break in the centre later."
+  },
+  {
+   "ply": 6,
+   "t": 129,
+   "fen": "r1bqkbnr/ppp2ppp/2npp3/8/3PP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Black's pawn to d6 is another passive, unforcing choice. Play it as primitively as possible — the knight to c3, keeping it in the spirit of e4. The pawn to c4 would be reasonable, but that's really a queen's-pawn way of playing.",
+   "kind": "main",
+   "teaches": "In an e4 opening, natural piece development beats grabbing extra space with c4.",
+   "plans": "Nc3, Bd3, castle, then strike."
+  },
+  {
+   "ply": 7,
+   "t": 166.5,
+   "fen": "r1bqkbnr/ppp2ppp/2npp3/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R b KQkq - 1 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 168,
+   "fen": "r1bqkb1r/ppp2ppp/2nppn2/8/3PP3/2N2N2/PPP2PPP/R1BQKB1R w KQkq - 2 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 177,
+   "fen": "r1bqkb1r/ppp2ppp/2nppn2/8/3PP3/2NB1N2/PPP2PPP/R1BQK2R b KQkq - 3 5",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "The bishop to d3 is the square I want: it reinforces the e4-pawn and, once Black castles, prepares the pawn to e5 with the bishop staring at h7. The queen later joins on e4 — bishop and queen aimed at h7 is a real mate threat. Note the point: even when the h-pawn moves, the square it left behind stays weak.",
+   "kind": "main",
+   "teaches": "A moved pawn can fix nothing — the square it vacated may be the lasting weakness.",
+   "plans": "Bd3 then Qe4, battery on the b1-h7 diagonal."
+  },
+  {
+   "ply": 11,
+   "t": 243,
+   "fen": "r1bqkb1r/ppp2pp1/2nppn1p/8/3PP3/2NB1N2/PPP2PPP/R1BQ1RK1 b kq - 1 6",
+   "line": [
+    "h6",
+    "O-O"
+   ],
+   "spoken": "Castle and keep making the most standard moves — the knight jump to b4 isn't even a threat, since the bishop just steps back and a3 shoos it away. Black's pawn to b6 ignores the kingside, and that's what invites punishment: to punish slow development you open the centre, because open files are direct pathways to the king and to loose pieces.",
+   "kind": "main",
+   "teaches": "Punishing slow development means opening the centre — files are highways to the king and to loose pieces.",
+   "plans": "Castle, then break to open lines."
+  },
+  {
+   "ply": 13,
+   "t": 398.5,
+   "fen": "r1bqkb1r/p1p2pp1/1pnppn1p/3P4/4P3/2NB1N2/PPP2PPP/R1BQ1RK1 b kq - 0 7",
+   "line": [
+    "b6",
+    "d5"
+   ],
+   "spoken": "This is the dynamite: the pawn to d5. The d6- and e6-pawns are hooks, and advancing onto them forces the centre open. Two moves do the job, but only this one opens the file I actually want — the e-file, the direct path to Black's king.",
+   "kind": "main",
+   "teaches": "Advance onto the opponent's pawn hooks to force the file you want open — here, the e-file.",
+   "plans": "d5 to rip open the e-file."
+  },
+  {
+   "ply": 14,
+   "t": 419,
+   "fen": "r1bqkb1r/p1p2pp1/1pnp1n1p/3p4/4P3/2NB1N2/PPP2PPP/R1BQ1RK1 w kq - 0 8",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 421,
+   "fen": "r1bqkb1r/p1p2pp1/1pnp1n1p/3P4/8/2NB1N2/PPP2PPP/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "exd5"
+   ],
+   "spoken": "Recapturing on d5 completes the operation — the e-file is open straight at Black's uncastled king, and this is exactly why castling early mattered: the rook is already home to use the file the moment it opens.",
+   "kind": "main",
+   "teaches": "Castle early so your rook is ready to seize the file the instant the centre opens.",
+   "plans": "Use the open e-file against the stuck king."
+  },
+  {
+   "ply": 16,
+   "t": 429.5,
+   "fen": "r1bqkb1r/p1p2pp1/1p1p1n1p/3P4/1n6/2NB1N2/PPP2PPP/R1BQ1RK1 w kq - 1 9",
+   "line": [
+    "Nb4"
+   ],
+   "spoken": "Now the objective crystallises: keep Black's king in the centre. It's hard to shoot a moving target — if the king reaches the kingside the attack restarts from zero. The rook to e1 pins the bishop the moment it appears, chaining the king to its defence.",
+   "kind": "main",
+   "teaches": "Against a stuck king, prevent castling and pin its would-be defenders to keep it exposed.",
+   "plans": "Re1, pile on the pin, keep the king central."
+  },
+  {
+   "ply": 17,
+   "t": 501,
+   "fen": "r1bqkb1r/p1p2pp1/1p1p1n1p/1B1P4/1n6/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 2 9",
+   "line": [
+    "Bb5+"
+   ],
+   "spoken": "First the bishop checks from b5, sidestepping a trade headache — and this light-squared bishop is worth keeping, because Black's pawn to b6 punched holes all over the light squares that only this piece can occupy.",
+   "kind": "main",
+   "teaches": "Preserve the bishop that patrols the colour complex your opponent has weakened.",
+   "plans": "Keep the light bishop, target the light-square holes."
+  },
+  {
+   "ply": 18,
+   "t": 519,
+   "fen": "r2qkb1r/p1pb1pp1/1p1p1n1p/1B1P4/1n6/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 3 10",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 545,
+   "fen": "r2qkb1r/p1pB1pp1/1p1p1n1p/3P4/1n6/2N2N2/PPP2PPP/R1BQ1RK1 b kq - 0 10",
+   "line": [
+    "Bxd7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 554.5,
+   "fen": "r3kb1r/p1pq1pp1/1p1p1n1p/3P4/1n6/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 0 11",
+   "line": [
+    "Qxd7"
+   ],
+   "spoken": "After the trade on d7 the queen recaptures, and here's the second flaw: the knight sitting on b4 is loose. The open e-file was never the whole story — a stranded minor piece plus an exposed king is the raw material for a fork.",
+   "kind": "main",
+   "teaches": "Scan for two weaknesses at once — an open line and a loose piece combine into a decisive tactic.",
+   "plans": "Kick the knight, then fork it with the king."
+  },
+  {
+   "ply": 21,
+   "t": 583,
+   "fen": "r3kb1r/p1pq1pp1/1p1p1n1p/3P4/1n6/P1N2N2/1PP2PPP/R1BQ1RK1 b kq - 0 11",
+   "line": [
+    "a3"
+   ],
+   "spoken": "The pawn to a3 shoves the knight, and you want to do this regardless of the follow-up: a minor piece parked on your side of the board is a target for pawns. It has to trudge back to a6, and now it's really out of play.",
+   "kind": "main",
+   "teaches": "Push away an intruding minor piece with a pawn — offside knights are pawn-fodder.",
+   "plans": "a3 to sideline the knight onto a6."
+  },
+  {
+   "ply": 22,
+   "t": 611.5,
+   "fen": "r3kb1r/p1pq1pp1/np1p1n1p/3P4/8/P1N2N2/1PP2PPP/R1BQ1RK1 w kq - 1 12",
+   "line": [
+    "Na6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 634,
+   "fen": "r3kb1r/p1pq1pp1/np1p1n1p/3P4/8/P1N2N2/1PP1QPPP/R1B2RK1 b kq - 2 12",
+   "line": [
+    "Qe2+"
+   ],
+   "spoken": "There it is — the queen to e2 with check. Forget the e-file for a second: this checks the king and, on the same move, rakes the a6-knight down the diagonal. Loose pieces drop off — an exposed king plus an undefended piece is a ready-made fork, and White wins the knight and the game.",
+   "kind": "trap",
+   "teaches": "Loose piece + open king = fork; one move that checks and attacks the stray piece wins it.",
+   "plans": "Qe2+, then capture the loose knight."
+  },
+  {
+   "ply": 18,
+   "t": 645,
+   "fen": "r2qkb1r/p1pb1pp1/1p1p1n1p/1B1P4/1n6/2N2N2/PPP2PPP/R1BQ1RK1 w kq - 3 10",
+   "line": [],
+   "spoken": "Watch the flexibility: the plan began as stopping Black from castling, and while working on that, two observations — the pressure down the e-file and the vulnerable knight on b4 — merged into the fork. A piece up, the cleanest conversion is to keep trading.",
+   "kind": "review",
+   "teaches": "Let separate observations combine; then, a piece up, simplify to make the advantage tell.",
+   "plans": "Trade pieces and convert the extra piece.",
+   "reanchor": true
+  }
+ ]
+}

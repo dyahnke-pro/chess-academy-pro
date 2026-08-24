@@ -1,0 +1,852 @@
+{
+ "videoId": "tWGrKGoNNEA",
+ "title": "Mastering the Rubenstein Defense | French Defense Strategic Guide | GM Naroditsky’s Theory Speed Run",
+ "openingName": "French Defense: Rubinstein Variation (3...dxe4), 7.c3 endgame grind",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:tWGrKGoNNEA",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 14,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 16.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 18.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPPN1PPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "d5",
+    "Nd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 23,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/8/3Pp3/8/PPPN1PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 27,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/8/3PN3/8/PPP2PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 28.5,
+   "fen": "r1bqkbnr/pppn1ppp/4p3/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 1 5",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": "This is the Rubinstein French — Black gives up the centre with the capture on e4 for a rock-solid, if slightly passive, structure. It can arrive through the Tarrasch or the Nc3 move order, and every e4-player has to know how to handle it.",
+   "kind": "main",
+   "teaches": "The Rubinstein trades central tension for solidity; recognise it from either move order.",
+   "plans": "Develop naturally, keep the space edge."
+  },
+  {
+   "ply": 9,
+   "t": 109,
+   "fen": "r1bqkbnr/pppn1ppp/4p3/8/3PN3/5N2/PPP2PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 111,
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/8/3PN3/5N2/PPP2PPP/R1BQKB1R w KQkq - 3 6",
+   "line": [
+    "Ngf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 115,
+   "fen": "r1bqkbnr/pppn1ppp/4p3/8/3PN3/8/PPP2PPP/R1BQKBNR w KQkq - 5 7",
+   "line": [
+    "Ng1",
+    "Ng8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 119,
+   "fen": "r1bqkb1r/pppn1ppp/4pn2/8/3PN3/5N2/PPP2PPP/R1BQKB1R w KQkq - 7 8",
+   "line": [
+    "Nf3",
+    "Ngf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 122.5,
+   "fen": "r1bqkb1r/pppn1ppp/4pN2/8/3P4/5N2/PPP2PPP/R1BQKB1R b KQkq - 0 8",
+   "line": [
+    "Nxf6+"
+   ],
+   "spoken": "Trading on f6 reaches the main tabia of the line. From here White has five or six reasonable setups — g3, the classical Bd3 — but the one with the best modern reputation is coming.",
+   "kind": "main",
+   "teaches": "After the knight trade, this is the Rubinstein tabia where White chooses a setup.",
+   "plans": "Pick a setup and develop."
+  },
+  {
+   "ply": 16,
+   "t": 125.5,
+   "fen": "r1bqkb1r/ppp2ppp/4pn2/8/3P4/5N2/PPP2PPP/R1BQKB1R w KQkq - 0 9",
+   "line": [
+    "Nxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 146.5,
+   "fen": "r1bqkb1r/ppp2ppp/4pn2/8/3P4/2P2N2/PP3PPP/R1BQKB1R b KQkq - 0 9",
+   "line": [
+    "c3"
+   ],
+   "spoken": "The move is the pawn to c3, and it's easy to misread as purely positional. Yes, it reinforces d4 — but it also opens the d1-a4 diagonal, and the check on a4 is a major resource in these positions as long as Black's king sits on e8.",
+   "kind": "main",
+   "teaches": "c3 both supports d4 and unveils Qa4+ ideas against the uncastled king.",
+   "plans": "c3, keep Qa4+ in the toolbox."
+  },
+  {
+   "ply": 18,
+   "t": 159.5,
+   "fen": "r1bqkb1r/pp3ppp/4pn2/2p5/3P4/2P2N2/PP3PPP/R1BQKB1R w KQkq - 0 10",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 212.5,
+   "fen": "r1bqkb1r/pp3ppp/4pn2/2p5/3P4/2P1BN2/PP3PPP/R2QKB1R b KQkq - 1 10",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "The bishop to e3 develops with a point — it leans on c5, and the real threat is simply to capture there. A developing move that also poses a concrete question is worth two.",
+   "kind": "main",
+   "teaches": "Develop with pressure: Be3 eyes c5 and threatens dxc5.",
+   "plans": "Be3, then dxc5."
+  },
+  {
+   "ply": 20,
+   "t": 279,
+   "fen": "r1bqkb1r/pp3ppp/4p3/2pn4/3P4/2P1BN2/PP3PPP/R2QKB1R w KQkq - 2 11",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 335.5,
+   "fen": "r1bqkb1r/pp3ppp/4p3/2pnN3/3P4/2P1B3/PP3PPP/R2QKB1R b KQkq - 3 11",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "Now the knight to e5 — the perfect moment to centralise it. The check on a4 would achieve nothing, since Black just plays the bishop to d7 and you've only helped him develop; the knight on e5 is the real prize.",
+   "kind": "main",
+   "teaches": "Don't play a check that develops the opponent; centralise where it actually improves your game.",
+   "plans": "Ne5, dominate the centre."
+  },
+  {
+   "ply": 22,
+   "t": 450,
+   "fen": "r1bqkb1r/1p3ppp/p3p3/2pnN3/3P4/2P1B3/PP3PPP/R2QKB1R w KQkq - 0 12",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 619,
+   "fen": "r1bqkb1r/1p3ppp/p3p3/2PnN3/8/2P1B3/PP3PPP/R2QKB1R b KQkq - 0 12",
+   "line": [
+    "dxc5"
+   ],
+   "spoken": "Leaning toward the capture on c5 — into an endgame rather than a middlegame. It's not clearly the best, but it poses Black an immediate dilemma: take on e3 and enter the ending, or not. Posing problems has value of its own.",
+   "kind": "main",
+   "teaches": "A slightly committal choice that forces the opponent to solve a problem can be practically strong.",
+   "plans": "dxc5, invite the ending."
+  },
+  {
+   "ply": 22,
+   "t": 629.5,
+   "fen": "r1bqkb1r/1p3ppp/p3p3/2pnN3/3P4/2P1B3/PP3PPP/R2QKB1R w KQkq - 0 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 637.5,
+   "fen": "r1bqkb1r/1p3ppp/p3p3/2PnN3/8/2P1B3/PP3PPP/R2QKB1R b KQkq - 0 12",
+   "line": [
+    "dxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 725,
+   "fen": "r1bqkb1r/1p3ppp/p3p3/2P1N3/8/2P1n3/PP3PPP/R2QKB1R w KQkq - 0 13",
+   "line": [
+    "Nxe3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 726.5,
+   "fen": "r1bQkb1r/1p3ppp/p3p3/2P1N3/8/2P1n3/PP3PPP/R3KB1R b KQkq - 0 13",
+   "line": [
+    "Qxd8+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 729.5,
+   "fen": "r1bk1b1r/1p3ppp/p3p3/2P1N3/8/2P1P3/PP4PP/R3KB1R b KQ - 0 14",
+   "line": [
+    "Kxd8",
+    "fxe3"
+   ],
+   "spoken": "Queens come off and the pawn recaptures on e3. Black has lost the right to castle, and while White's e-pawns are doubled, the c5-b4-c3 wall is about to strangle any queenside counterplay — an excellent structure to grind from.",
+   "kind": "main",
+   "teaches": "Trade into an ending where your structure denies the opponent counterplay.",
+   "plans": "Fix the queenside, improve every piece."
+  },
+  {
+   "ply": 28,
+   "t": 850,
+   "fen": "r1b1kb1r/1p3ppp/p3p3/2P1N3/8/2P1P3/PP4PP/R3KB1R w KQ - 1 15",
+   "line": [
+    "Ke8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 851,
+   "fen": "r1b1kb1r/1p3ppp/p3p3/2P1N3/1P6/2P1P3/P5PP/R3KB1R b KQ - 0 15",
+   "line": [
+    "b4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 897.5,
+   "fen": "r1b1k2r/1p2bppp/p3p3/2P1N3/1P6/2P1P3/P5PP/R3KB1R w KQ - 1 16",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 946,
+   "fen": "r1b1k2r/1p2bppp/p3p3/2P5/1PN5/2P1P3/P5PP/R3KB1R b KQ - 2 16",
+   "line": [
+    "Nc4"
+   ],
+   "spoken": "Start with the knight to c4 — the move you want anyway. It's flexible, it discourages the bishop coming to f6 because the knight to d6 arrives with tempo, and it keeps every option open.",
+   "kind": "main",
+   "teaches": "Play the move you'll want regardless first — it keeps flexibility and pre-empts the opponent's plan.",
+   "plans": "Nc4, discourage ...Bf6."
+  },
+  {
+   "ply": 30,
+   "t": 955,
+   "fen": "r1b1k2r/1p2bppp/p3p3/2P1N3/1P6/2P1P3/P5PP/R3KB1R w KQ - 1 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 960.5,
+   "fen": "r1b1k2r/1p2bppp/p3p3/2P5/1PN5/2P1P3/P5PP/R3KB1R b KQ - 2 16",
+   "line": [
+    "Nc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 997.5,
+   "fen": "r1b1k2r/1p3ppp/p3pb2/2P5/1PN5/2P1P3/P5PP/R3KB1R w KQ - 3 17",
+   "line": [
+    "Bf6"
+   ],
+   "spoken": "This c5-b4-c3 construction, which shows up from many openings, is superb at winding down all of Black's queenside counterplay. As long as that chain holds, Black simply can't get his pawns moving.",
+   "kind": "main",
+   "teaches": "A fixed c5-b4-c3 wall neutralises the opponent's pawn breaks — keep it intact.",
+   "plans": "Preserve the clamp, play on both wings."
+  },
+  {
+   "ply": 33,
+   "t": 1051,
+   "fen": "r1b1k2r/1p3ppp/p3pb2/2P5/1PN5/2P1P3/P2K2PP/R4B1R b - - 4 17",
+   "line": [
+    "Kd2"
+   ],
+   "spoken": "The king walks to d2 to shepherd the c3-pawn — because you shouldn't tie a heavy piece to a menial defensive job. The rook on d8 isn't dangerous, and the king, the piece not yet participating, is the perfect defender; its home is c2.",
+   "kind": "main",
+   "teaches": "Defend a pawn with the least valuable idle piece; don't chain a rook to a menial task.",
+   "plans": "Kd2-c2 to hold c3."
+  },
+  {
+   "ply": 32,
+   "t": 1056.5,
+   "fen": "r1b1k2r/1p3ppp/p3pb2/2P5/1PN5/2P1P3/P5PP/R3KB1R w KQ - 3 17",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1067.5,
+   "fen": "r1b1k2r/1p3ppp/p3pb2/2P5/1PN5/2P1P3/P2K2PP/R4B1R b - - 4 17",
+   "line": [
+    "Kd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1071.5,
+   "fen": "r1b4r/1p2kppp/p3pb2/2P5/1PN5/2P1P3/P2K2PP/R4B1R w - - 5 18",
+   "line": [
+    "Ke7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1127,
+   "fen": "r1b4r/1p2kppp/p3pb2/2P5/1PN5/2P1P3/P2KB1PP/R6R b - - 6 18",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "Get the bishop out first with the move to e2, heading for f3. When Black tries the bishop to d7 and c6 for the long diagonal, White meets it on f3 — a defended square from which the bishop pressures b7.",
+   "kind": "main",
+   "teaches": "Route your bishop to a defended square that contests the opponent's best diagonal.",
+   "plans": "Be2-f3, pressure b7."
+  },
+  {
+   "ply": 37,
+   "t": 1159.5,
+   "fen": "r1br4/1p2kppp/p3pb2/2P5/1PN5/2P1P3/P1K1B1PP/R6R b - - 8 19",
+   "line": [
+    "Rd8+",
+    "Kc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 1247,
+   "fen": "r2r4/1p1bkppp/p3pb2/2P5/1PN5/2P1P3/P1K1B1PP/R6R w - - 9 20",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 1266.5,
+   "fen": "r2r4/1p1bkppp/p3pb2/2P5/PPN5/2P1P3/2K1B1PP/R6R b - - 0 20",
+   "line": [
+    "a4"
+   ],
+   "spoken": "The pawn to a4, as planned — it prepares b5 and the advance of the queenside pawn majority. Meanwhile that light-squared bishop of Black's does nothing; judge a piece by what it actually achieves, not by how many squares it nominally covers.",
+   "kind": "main",
+   "teaches": "Evaluate a piece by its real function, not its square-count; advance your majority.",
+   "plans": "a4-b5, roll the majority."
+  },
+  {
+   "ply": 41,
+   "t": 1288,
+   "fen": "r2r4/1p2kppp/p1b1pb2/2P5/PPN5/2P1PB2/2K3PP/R6R b - - 2 21",
+   "line": [
+    "Bc6",
+    "Bf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 1378.5,
+   "fen": "r2r4/1p2kppp/p3pb2/2P5/PPN5/2P1Pb2/2K3PP/R6R w - - 0 22",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 1379.5,
+   "fen": "r2r4/1p2kppp/p3pb2/2P5/PPN5/2P1PP2/2K4P/R6R b - - 0 22",
+   "line": [
+    "gxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 1382.5,
+   "fen": "2rr4/1p2kppp/p3pb2/2P5/PPN5/2P1PP2/2K4P/R6R w - - 1 23",
+   "line": [
+    "Rac8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 1390.5,
+   "fen": "2rr4/1p2kppp/p3pb2/2P5/PPN5/2P1PP2/2K4P/3R3R b - - 2 23",
+   "line": [
+    "Rad1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 1397.5,
+   "fen": "2rr4/1p2kppp/p3pb2/2P5/PPN5/2P1PP2/2K4P/R6R w - - 1 23",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 1404,
+   "fen": "2rr4/1p2kppp/p3pb2/2P5/PPN5/2P1PP2/2K4P/3R3R b - - 2 23",
+   "line": [
+    "Rad1"
+   ],
+   "spoken": "The rook to d1 contests the d-file — the whole point of the approach. And note the restraint: no rushing the knight into d6 or b6. On c4 it controls everything; there's no reason to move a perfectly placed piece.",
+   "kind": "main",
+   "teaches": "Contest the open file and leave a dominant piece where it is — don't move it just because you can.",
+   "plans": "Rd1, keep the knight on c4."
+  },
+  {
+   "ply": 46,
+   "t": 1443.5,
+   "fen": "2rr4/1p2kp1p/p3pbp1/2P5/PPN5/2P1PP2/2K4P/3R3R w - - 0 24",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 1469.5,
+   "fen": "2rr4/1p2kp1p/p3pbp1/2P5/PPN5/1KP1PP2/7P/3R3R b - - 1 24",
+   "line": [
+    "Kb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 1485.5,
+   "fen": "2rr4/1p2kp2/p3pbp1/2P4p/PPN5/1KP1PP2/7P/3R3R w - - 0 25",
+   "line": [
+    "h5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 1501,
+   "fen": "2rr4/1p2kp2/p2Rpbp1/2P4p/PPN5/1KP1PP2/7P/7R b - - 1 25",
+   "line": [
+    "Rd6"
+   ],
+   "spoken": "The rook to d6 is a classic maneuver: place one heavy piece ahead on the file to clear the way for the other. And recapture on d6 with the knight, not the pawn — the pawn recapture hands Black a tempo, and keeping the current structure leaves his knight paralysed by the weak c3-pawn.",
+   "kind": "main",
+   "teaches": "Double on a file by stepping one piece ahead; recapture the way that preserves your winning structure.",
+   "plans": "Rd6, Rxd6 with the knight, then Rd1."
+  },
+  {
+   "ply": 48,
+   "t": 1518,
+   "fen": "2rr4/1p2kp2/p3pbp1/2P4p/PPN5/1KP1PP2/7P/3R3R w - - 0 25",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 1525.5,
+   "fen": "2rr4/1p2kp2/p2Rpbp1/2P4p/PPN5/1KP1PP2/7P/7R b - - 1 25",
+   "line": [
+    "Rd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 1548.5,
+   "fen": "2r5/1p2kp2/p2rpbp1/2P4p/PPN5/1KP1PP2/7P/7R w - - 0 26",
+   "line": [
+    "Rxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 1549.5,
+   "fen": "2r5/1p2kp2/p2Npbp1/2P4p/PP6/1KP1PP2/7P/7R b - - 0 26",
+   "line": [
+    "Nxd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 52,
+   "t": 1556,
+   "fen": "8/1pr1kp2/p2Npbp1/2P4p/PP6/1KP1PP2/7P/7R w - - 1 27",
+   "line": [
+    "Rc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 53,
+   "t": 1557,
+   "fen": "8/1pr1kp2/p2Npbp1/2P4p/PP6/1KP1PP2/7P/3R4 b - - 2 27",
+   "line": [
+    "Rd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 54,
+   "t": 1563,
+   "fen": "8/1pr1kp2/p2Npb2/2P3pp/PP6/1KP1PP2/7P/3R4 w - - 0 28",
+   "line": [
+    "g5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 1566.5,
+   "fen": "8/1pr1kp2/p2Npb2/2P3pp/PP6/1KP1PP1P/8/3R4 b - - 0 28",
+   "line": [
+    "h3"
+   ],
+   "spoken": "The pawn to h3 restricts Black's pawns and denies any ...g4 activity. There's no hurry — Black isn't threatening anything — so tighten the vice before converting.",
+   "kind": "main",
+   "teaches": "In a winning position, restrict the opponent's only source of activity before pushing for the win.",
+   "plans": "h3, deny counterplay."
+  },
+  {
+   "ply": 56,
+   "t": 1573,
+   "fen": "8/1pr1kp2/p2Np3/2P1b1pp/PP6/1KP1PP1P/8/3R4 w - - 1 29",
+   "line": [
+    "Be5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 1621.5,
+   "fen": "8/1pr1kp2/p3p3/2P1b1pp/PP2N3/1KP1PP1P/8/3R4 b - - 2 29",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 1623,
+   "fen": "8/1pr1kp2/p2Np3/2P1b1pp/PP6/1KP1PP1P/8/3R4 w - - 1 29",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 57,
+   "t": 1625.5,
+   "fen": "8/1pr1kp2/p3p3/2P1b1pp/PP2N3/1KP1PP1P/8/3R4 b - - 2 29",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 58,
+   "t": 1629,
+   "fen": "8/1pr1k3/p3pp2/2P1b1pp/PP2N3/1KP1PP1P/8/3R4 w - - 0 30",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 1631,
+   "fen": "8/1pr1kp2/p2Np3/2P1b1pp/PP6/1KP1PP1P/8/3R4 w - - 1 29",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 58,
+   "t": 1646.5,
+   "fen": "8/1pr1k3/p3pp2/2P1b1pp/PP2N3/1KP1PP1P/8/3R4 w - - 0 30",
+   "line": [
+    "Ne4",
+    "f6"
+   ],
+   "spoken": "The knight to e4 freezes Black's kingside pawns — and that's the key idea. Black's one real source of counterplay in the long run is manufacturing a passed pawn with ...f5 and ...g4; kill that, and White can convert without ever worrying about a runner of his own.",
+   "kind": "main",
+   "teaches": "Shut down the opponent's only passed-pawn plan before cashing your advantage.",
+   "plans": "Ne4, freeze the kingside, then convert."
+  },
+  {
+   "ply": 59,
+   "t": 1669.5,
+   "fen": "8/1pr1k3/p3pp2/2P1b1pp/PPK1N3/2P1PP1P/8/3R4 b - - 1 30",
+   "line": [
+    "Kc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 60,
+   "t": 1686.5,
+   "fen": "8/1p1rk3/p3pp2/2P1b1pp/PPK1N3/2P1PP1P/8/3R4 w - - 2 31",
+   "line": [
+    "Rd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 62,
+   "t": 1691.5,
+   "fen": "8/1p1k4/p3pp2/2P1b1pp/PPK1N3/2P1PP1P/8/8 w - - 0 32",
+   "line": [
+    "Rxd7+",
+    "Kxd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 63,
+   "t": 1703,
+   "fen": "8/1p1k4/p3pp2/2P1b1pp/PPK1NP2/2P1P2P/8/8 b - - 0 32",
+   "line": [
+    "f4"
+   ],
+   "spoken": "Here's the tactic that wins a second pawn: the pawn to f4 knocks the bishop off e5, and after the trade White captures on f6 with check and comes around to collect on h5. It doesn't end there — the bishop will fight back to e5, and the knight is freed by walking the king to e4 to dislodge it.",
+   "kind": "trap",
+   "teaches": "Break with a pawn to dislodge a blockader, then harvest weak pawns with checks and king marches.",
+   "plans": "f4, fxf6+, Nxh5, extract via Ke4."
+  },
+  {
+   "ply": 65,
+   "t": 1727.5,
+   "fen": "8/1p1k4/p3pp2/2P1b2p/PPK1NP2/2P4P/8/8 b - - 0 33",
+   "line": [
+    "gxf4",
+    "exf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 67,
+   "t": 1736,
+   "fen": "8/1p1k4/p3pN2/2P4p/PPK2b2/2P4P/8/8 b - - 0 34",
+   "line": [
+    "Bxf4",
+    "Nxf6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 68,
+   "t": 1746.5,
+   "fen": "8/1p2k3/p3pN2/2P4p/PPK2b2/2P4P/8/8 w - - 1 35",
+   "line": [
+    "Ke7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 69,
+   "t": 1748,
+   "fen": "8/1p2k3/p3p3/2P4N/PPK2b2/2P4P/8/8 b - - 0 35",
+   "line": [
+    "Nxh5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 71,
+   "t": 1750.5,
+   "fen": "8/1p2k3/p3p3/2P1b2N/PP6/2PK3P/8/8 b - - 2 36",
+   "line": [
+    "Be5",
+    "Kd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 72,
+   "t": 1756,
+   "fen": "8/1p3k2/p3p3/2P1b2N/PP6/2PK3P/8/8 w - - 3 37",
+   "line": [
+    "Kf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 73,
+   "t": 1775.5,
+   "fen": "8/1p3k2/p3p3/2P1b2N/PPP5/3K3P/8/8 b - - 0 37",
+   "line": [
+    "c4"
+   ],
+   "spoken": "Before the king commits to e4, fix the queenside with the pawn to c4. That's the magic of the line: after the king comes to e4 and Black tries the bishop to c3 to win the b4-linchpin of the majority, the knight jumps to f4 with check and escapes — c4 first is what makes it work.",
+   "kind": "main",
+   "teaches": "Fix a wing before advancing the king, so a saving in-between check extricates your piece.",
+   "plans": "c4, then Ke4 and Nf4+."
+  },
+  {
+   "ply": 74,
+   "t": 1800.5,
+   "fen": "8/1p6/p3p1k1/2P1b2N/PPP5/3K3P/8/8 w - - 1 38",
+   "line": [
+    "Kg6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 75,
+   "t": 1801.5,
+   "fen": "8/1p6/p3p1k1/2P1b2N/PPP1K3/7P/8/8 b - - 2 38",
+   "line": [
+    "Ke4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 77,
+   "t": 1808,
+   "fen": "8/1p6/p3p1k1/2P5/PPP1KN2/2b4P/8/8 b - - 4 39",
+   "line": [
+    "Bc3",
+    "Nf4+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 79,
+   "t": 1811.5,
+   "fen": "8/1p6/p3pk2/1PP5/P1P1KN2/2b4P/8/8 b - - 0 40",
+   "line": [
+    "Kf6",
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 80,
+   "t": 1827,
+   "fen": "8/1p6/p3pk2/1PP5/PbP1KN2/7P/8/8 w - - 1 41",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 81,
+   "t": 1835,
+   "fen": "8/1p6/p1P1pk2/1P6/PbP1KN2/7P/8/8 b - - 0 41",
+   "line": [
+    "c6"
+   ],
+   "spoken": "Now it's just too many passers. The pawn to c6 creates an outside passer on the a-file — the general rule is that a passed pawn wants to be as far from the enemy pieces as possible, and corner pawns are the hardest of all to stop.",
+   "kind": "main",
+   "teaches": "Make your passer as far from the enemy king as you can — outside and corner passers win.",
+   "plans": "c6, create the a-passer, promote."
+  },
+  {
+   "ply": 82,
+   "t": 1839.5,
+   "fen": "8/8/p1p1pk2/1P6/PbP1KN2/7P/8/8 w - - 0 42",
+   "line": [
+    "bxc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 83,
+   "t": 1841,
+   "fen": "8/8/P1p1pk2/8/PbP1KN2/7P/8/8 b - - 0 42",
+   "line": [
+    "bxa6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 85,
+   "t": 1845,
+   "fen": "8/8/P1p1pk2/2b5/P1P1K3/3N3P/8/8 b - - 2 43",
+   "line": [
+    "Bc5",
+    "Nd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 86,
+   "t": 1852.5,
+   "fen": "8/b7/P1p1pk2/8/P1P1K3/3N3P/8/8 w - - 3 44",
+   "line": [
+    "Ba7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 87,
+   "t": 1853.5,
+   "fen": "8/b7/P1p1pk2/4N3/P1P1K3/7P/8/8 b - - 4 44",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  }
+ ]
+}

@@ -1,0 +1,396 @@
+{
+ "videoId": "i8G7wozMNcU",
+ "title": "When to Sac for Mate | Caro; Fantasy Variation | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Caro-Kann Defense: Fantasy Variation",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:i8G7wozMNcU",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 16,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 32.5,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 35.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 40.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "f3"
+   ],
+   "spoken": "The pawn to f3 is the Fantasy Variation — an offbeat, tricky way to keep the full centre and steer for a quick attack. Its reputation is far worse than its bite.",
+   "kind": "main",
+   "teaches": "f3 holds the centre and invites sharp play many Caro players simply don't know."
+  },
+  {
+   "ply": 6,
+   "t": 43.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 54.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3PP3/8/PPP3PP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "fxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 56.5,
+   "fen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/8/PPP3PP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 70.5,
+   "fen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/5N2/PPP3PP/RNBQKB1R b KQkq - 1 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 80.5,
+   "fen": "rn1qkbnr/pp3ppp/2p5/4p3/3PP1b1/5N2/PPP3PP/RNBQKB1R w KQkq - 2 6",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 111.5,
+   "fen": "rn1qkbnr/pp3ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R b KQkq - 3 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 152,
+   "fen": "rn1qkb1r/pp3ppp/2p2n2/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R w KQkq - 4 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 179.5,
+   "fen": "rn1qkb1r/pp3Bpp/2p2n2/4p3/3PP1b1/5N2/PPP3PP/RNBQK2R b KQkq - 0 7",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": "White sacrifices the bishop on f7 with check. The point is the reply: after the king takes, the knight leaps to e5 with check and forks the king together with the loose bishop on g4 — check first, win the piece next.",
+   "kind": "trap",
+   "teaches": "A sacrifice works when the recapture runs into a knight that checks the king and hits a piece in the same move."
+  },
+  {
+   "ply": 14,
+   "t": 183.5,
+   "fen": "rn1q1b1r/pp3kpp/2p2n2/4p3/3PP1b1/5N2/PPP3PP/RNBQK2R w KQ - 0 8",
+   "line": [
+    "Kxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 185,
+   "fen": "rn1q1b1r/pp3kpp/2p2n2/4N3/3PP1b1/8/PPP3PP/RNBQK2R b KQ - 0 8",
+   "line": [
+    "Nxe5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 187.5,
+   "fen": "rn1q1bkr/pp4pp/2p2n2/4N3/3PP1b1/8/PPP3PP/RNBQK2R w KQ - 1 9",
+   "line": [
+    "Kg8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 189.5,
+   "fen": "rn1q1bkr/pp4pp/2p2n2/8/3PP1N1/8/PPP3PP/RNBQK2R b KQ - 0 9",
+   "line": [
+    "Nxg4"
+   ],
+   "spoken": "Two pawns up, the black king dragged to g8 and stripped bare, White's knight picks off the bishop that had come to g4. This is already winning, straight out of the opening.",
+   "kind": "main",
+   "teaches": "The sacrifice's dividend is material plus a permanently exposed king."
+  },
+  {
+   "ply": 18,
+   "t": 221.5,
+   "fen": "r2q1bkr/pp1n2pp/2p2n2/8/3PP1N1/8/PPP3PP/RNBQK2R w KQ - 1 10",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 281.5,
+   "fen": "r2q1bkr/pp1n2pp/2p2n2/8/3PP1N1/2N5/PPP3PP/R1BQK2R b KQ - 2 10",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 301.5,
+   "fen": "r2q2kr/pp1n2pp/2p2n2/8/1b1PP1N1/2N5/PPP3PP/R1BQK2R w KQ - 3 11",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 308.5,
+   "fen": "r2q2kr/pp1n2pp/2p2n2/8/1b1PP1N1/2N5/PPP3PP/R1BQ1RK1 b - - 4 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 325,
+   "fen": "r5kr/ppqn2pp/2p2n2/8/1b1PP1N1/2N5/PPP3PP/R1BQ1RK1 w - - 5 12",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 360,
+   "fen": "r5kr/ppqn2pp/2p2n2/4P3/1b1P2N1/2N5/PPP3PP/R1BQ1RK1 b - - 0 12",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 386,
+   "fen": "r5kr/ppqn2pp/2p2n2/8/1b1PP1N1/2N5/PPP3PP/R1BQ1RK1 w - - 5 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 389,
+   "fen": "r5kr/ppqn2pp/2p2n2/4P3/1b1P2N1/2N5/PPP3PP/R1BQ1RK1 b - - 0 12",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 397,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 404.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d5",
+    "f3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 516,
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 517,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 529,
+   "fen": "rnb1kbnr/pp2pppp/1qp5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 538,
+   "fen": "rnb1kbnr/pp2pppp/1qp5/3p4/3PP3/2N2P2/PPP3PP/R1BQKBNR b KQkq - 2 4",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 540.5,
+   "fen": "rnb1kbnr/pp3ppp/1qp5/3pp3/3PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 544,
+   "fen": "rnb1k1nr/pp3ppp/1qp5/2bpP3/4P3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 1 6",
+   "line": [
+    "dxe5",
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 549.5,
+   "fen": "rnb1k1nr/pp3ppp/1qp5/2bpP3/4P3/2N2P2/PPP1N1PP/R1BQKB1R b KQkq - 2 6",
+   "line": [
+    "Nge2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 552.5,
+   "fen": "rnb1k1nr/pp3ppp/2p5/3pP3/4P3/2N1qP2/PPPKNbPP/R1BQ1B1R w kq - 5 8",
+   "line": [
+    "Bf2+",
+    "Kd2",
+    "Qe3#"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 555,
+   "fen": "rnb1k1nr/pp3ppp/1qp5/2bpP3/4P3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 1 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 556.5,
+   "fen": "rnb1k1nr/pp3ppp/1qp5/2bpP3/N3P3/5P2/PPP3PP/R1BQKBNR b KQkq - 2 6",
+   "line": [
+    "Na4"
+   ],
+   "spoken": "In the ...Qb6 sideline lurks a trap: Black's bishop to c5 builds a dark-square battery, and a careless knight to e2 is mated — check on f2, the king dragged to d2, and the queen to e3 finishes it. The antidote is the knight to a4, which hits the c5-bishop and shores up those dark squares.",
+   "kind": "trap",
+   "teaches": "Know the one defensive move that both attacks the intruder and plugs the mating squares."
+  },
+  {
+   "ply": 14,
+   "t": 569,
+   "fen": "rnb1k1nr/pp3ppp/2p5/3pP3/N3P3/4qP2/PPP1KbPP/R1BQ1BNR w kq - 5 8",
+   "line": [
+    "Bf2+",
+    "Ke2",
+    "Qe3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 580.5,
+   "fen": "rnb1k1nr/pp3ppp/2p5/3pP3/N2bP3/5P2/PPP1K1PP/R1Q2BNR w kq - 2 10",
+   "line": [
+    "Bxe3",
+    "Bxe3",
+    "Qc1",
+    "Bd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 607,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 610,
+   "fen": "rnbqkbnr/pp3ppp/2p1p3/3p4/3PP3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 616,
+   "fen": "rnbqk1nr/pp3ppp/2p1p3/3p4/1b1PP3/2N2P2/PPP3PP/R1BQKBNR w KQkq - 2 5",
+   "line": [
+    "Nc3",
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 623.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

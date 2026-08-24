@@ -1,0 +1,346 @@
+{
+ "videoId": "QUk_oflYX0M",
+ "title": "Master Class | French Defense, Steinitz | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "French Defense: Advance Variation, Steinitz gambit line (4.Nf3)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:QUk_oflYX0M",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 20.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "spoken": "Black meets e4 with the pawn to e6 — the French. The plan today is aggressive: build toward the enemy king and see if the attack can land a checkmate.",
+   "kind": "main",
+   "teaches": "The French invites a fight where White can play for a direct kingside attack.",
+   "plans": "Clamp the centre and hunt the king."
+  },
+  {
+   "ply": 3,
+   "t": 25.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 37,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 62,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "e5"
+   ],
+   "spoken": "The pawn goes to e5 — the Advance. This is the Steinitz treatment, a line that has been around forever but flies under the radar: the e5-pawn locks Black in and the whole game will orbit around keeping it there.",
+   "kind": "main",
+   "teaches": "In the Advance French, the e5-pawn is the clamp — everything supports it.",
+   "plans": "Advance e5 and build around the clamp."
+  },
+  {
+   "ply": 6,
+   "t": 64.5,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "c5"
+   ],
+   "spoken": "Black strikes with the pawn to c5, and here everyone and their brother plays c3 to shore up d4. Not today — giving that pawn away looks unthinkable, and that's exactly the point of the line.",
+   "kind": "main",
+   "teaches": "The gambit idea: don't reflexively defend d4 — the initiative can be worth the pawn.",
+   "plans": "Ignore c5, keep developing."
+  },
+  {
+   "ply": 7,
+   "t": 74.5,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "Pretend nothing is happening and develop the knight to f3. The d4-pawn can fall; what matters is the e5-pawn and a fast, harmonious setup behind it.",
+   "kind": "main",
+   "teaches": "Prioritise the clamping pawn and development over a materially even but passive c3.",
+   "plans": "Develop; let d4 go if it must."
+  },
+  {
+   "ply": 8,
+   "t": 78.5,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 86,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R b KQkq - 3 5",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "Bishop to d3, still developing as if the centre weren't on fire — and quietly inviting Black to grab the pawn. Let him: the e5-pawn is the one really squeezing his position, so that's the pawn to nurse.",
+   "kind": "main",
+   "teaches": "Trade a defended pawn's tension for lead in development; keep the pawn that cramps the opponent.",
+   "plans": "Bd3, castle, overprotect e5."
+  },
+  {
+   "ply": 10,
+   "t": 92.5,
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R w KQkq - 4 6",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 111.5,
+   "fen": "r1b1kbnr/pp3ppp/1qn1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 5 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Castle and accelerate — the rook is coming to e1 not to attack yet but to over-protect e5. Leave d4 alone, pile support behind the clamp, and let development do the talking.",
+   "kind": "main",
+   "teaches": "Over-protection: heap defenders on your key pawn so it can never be undermined.",
+   "plans": "O-O, Re1, keep e5 bulletproof."
+  },
+  {
+   "ply": 12,
+   "t": 119.5,
+   "fen": "r3kbnr/pp1b1ppp/1qn1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 6 7",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 151,
+   "fen": "r3kbnr/pp1b1ppp/1qn1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQR1K1 b kq - 7 7",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 209.5,
+   "fen": "r3kb1r/pp1b1ppp/1qn1p2n/2ppP3/3P4/3B1N2/PPP2PPP/RNBQR1K1 w kq - 8 8",
+   "line": [
+    "Nh6"
+   ],
+   "spoken": "The knight to h6 is the standard French rerouting — it's heading for f5. Don't capture it; taking only helps Black's structure and hands him the open lines he wants.",
+   "kind": "main",
+   "teaches": "Don't grab a knight bound for a good square if the recapture repairs the opponent's position.",
+   "plans": "Leave the knight, keep developing."
+  },
+  {
+   "ply": 15,
+   "t": 292.5,
+   "fen": "r3kb1r/pp1b1ppp/1qn1p2n/2ppP3/3P4/2NB1N2/PPP2PPP/R1BQR1K1 b kq - 9 8",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The knight to c3 — looking deeper, this stops the ...Nb4-d6 idea that would dig at the light bishop, and it develops toward the centre. Sometimes the useful move is simply the one that denies the opponent his plan.",
+   "kind": "main",
+   "teaches": "A developing move that also prevents the opponent's regrouping is doubly valuable.",
+   "plans": "Nc3, deny ...Nb4-d6."
+  },
+  {
+   "ply": 16,
+   "t": 323.5,
+   "fen": "r3kb1r/1p1b1ppp/pqn1p2n/2ppP3/3P4/2NB1N2/PPP2PPP/R1BQR1K1 w kq - 0 9",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 339,
+   "fen": "r3kb1r/1p1b1ppp/pqn1p2n/2ppP3/N2P4/3B1N2/PPP2PPP/R1BQR1K1 b kq - 1 9",
+   "line": [
+    "Na4"
+   ],
+   "spoken": "Here is the move to burn into memory: with a knight on c3 and the enemy queen on b6, always look at the knight to a4. It hits the queen and the c5-pawn at once, and Black's whole queenside starts to wobble.",
+   "kind": "trap",
+   "teaches": "Nc3 + enemy queen on b6 is a standing cue: Na4 forks the queen and c5.",
+   "plans": "Na4, win the tempo and the c5 tension."
+  },
+  {
+   "ply": 18,
+   "t": 340.5,
+   "fen": "r3kb1r/qp1b1ppp/p1n1p2n/2ppP3/N2P4/3B1N2/PPP2PPP/R1BQR1K1 w kq - 2 10",
+   "line": [
+    "Qa7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 344.5,
+   "fen": "r3k2r/qp1b1ppp/p1n1p2n/2bpP3/3P4/3B1N2/PPP2PPP/R1BQR1K1 w kq - 0 11",
+   "line": [
+    "Nxc5",
+    "Bxc5"
+   ],
+   "spoken": "The knight takes on c5 and the bishop recaptures — and that's the real gain. When the dust settles Black's dark-squared bishop has been traded off, White owns the two bishops, and Black's position is positionally in shambles.",
+   "kind": "main",
+   "teaches": "Trading a knight to eliminate a key bishop can be a positional win — the bishop pair is the prize.",
+   "plans": "Win the bishop pair, then press."
+  },
+  {
+   "ply": 22,
+   "t": 346.5,
+   "fen": "r3k2r/1p1b1ppp/p1n1p2n/2qpP3/8/3B1N2/PPP2PPP/R1BQR1K1 w kq - 0 12",
+   "line": [
+    "dxc5",
+    "Qxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 385,
+   "fen": "r3k2r/1p1b1ppp/p1n1p2n/2qpP3/8/2PB1N2/PP3PPP/R1BQR1K1 b kq - 0 12",
+   "line": [
+    "c3"
+   ],
+   "spoken": "No rush to attack — the pawn to c3 guards the d4-square, a very typical, solid touch, and Black's ...Ng4 is nothing to fear because the queen to e2 and a later h3 simply shove it back. Play it positionally first.",
+   "kind": "main",
+   "teaches": "Consolidate a key square before attacking; a harmless knight sortie is met by kicking it away.",
+   "plans": "c3, Be3, complete development."
+  },
+  {
+   "ply": 24,
+   "t": 404.5,
+   "fen": "r3k1nr/1p1b1ppp/p1n1p3/2qpP3/8/2PB1N2/PP3PPP/R1BQR1K1 w kq - 1 13",
+   "line": [
+    "Ng8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 426.5,
+   "fen": "r3k1nr/1p1b1ppp/p1n1p3/2qpP3/8/2PBBN2/PP3PPP/R2QR1K1 b kq - 2 13",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 431.5,
+   "fen": "r3k1nr/1p1b1ppp/p1n1p3/q2pP3/8/2PBBN2/PP3PPP/R2QR1K1 w kq - 3 14",
+   "line": [
+    "Qa5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 441.5,
+   "fen": "r3k1nr/1p1b1ppp/p1n1p3/q2pP3/1P6/2PBBN2/P4PPP/R2QR1K1 b kq - 0 14",
+   "line": [
+    "b4"
+   ],
+   "spoken": "The pawn to b4 isn't just a hit on the queen — it stakes out c5 as an outpost. Every tempo now buys an important square for the pieces, and the bishop already has its eye on that hole.",
+   "kind": "main",
+   "teaches": "Gain a tempo AND a square in one move — attacking with purpose, not just for the check.",
+   "plans": "b4, claim the c5 outpost."
+  },
+  {
+   "ply": 28,
+   "t": 448,
+   "fen": "r3k1nr/1pqb1ppp/p1n1p3/3pP3/1P6/2PBBN2/P4PPP/R2QR1K1 w kq - 1 15",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 456.5,
+   "fen": "r3k1nr/1pqb1ppp/p1n1p3/2BpP3/1P6/2PB1N2/P4PPP/R2QR1K1 b kq - 2 15",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 460.5,
+   "fen": "r3k2r/1pqbnppp/p1n1p3/2BpP3/1P6/2PB1N2/P4PPP/R2QR1K1 w kq - 3 16",
+   "line": [
+    "Nge7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 466,
+   "fen": "r3k2r/1pqbnppp/p1nBp3/3pP3/1P6/2PB1N2/P4PPP/R2QR1K1 b kq - 4 16",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "The bishop swings to d6, parking itself right in Black's gut and slicing down the diagonal. There was no hurry — but with everything else in place, planting it here is a fine way to finish the buildup.",
+   "kind": "main",
+   "teaches": "Post a bishop on a dominant central square once the rest of the setup is complete.",
+   "plans": "Bd6, then switch to the kingside."
+  },
+  {
+   "ply": 32,
+   "t": 479,
+   "fen": "r1q1k2r/1p1bnppp/p1nBp3/3pP3/1P6/2PB1N2/P4PPP/R2QR1K1 w kq - 5 17",
+   "line": [
+    "Qc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 498.5,
+   "fen": "r1q1k2r/1p1bnppp/p1nBp3/3pP1N1/1P6/2PB4/P4PPP/R2QR1K1 b kq - 6 17",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "Now for the concrete phase. Development is done, the bishop dominates, and Black's king is stuck in the centre with no castling in sight — so the knight jumps to g5 and the queen heads for h5. This is going for the throat.",
+   "kind": "main",
+   "teaches": "Only launch the direct attack once development is complete and the enemy king is fixed.",
+   "plans": "Ng5, Qh5, mate the stranded king."
+  },
+  {
+   "ply": 34,
+   "t": 536,
+   "fen": "r1q1k2r/1p1b1ppp/p1nBp1n1/3pP1N1/1P6/2PB4/P4PPP/R2QR1K1 w kq - 7 18",
+   "line": [
+    "Ng6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 639,
+   "fen": "r3kb1r/1p1b1ppp/pqn1p2n/2ppP3/N2P4/3B1N2/PPP2PPP/R1BQR1K1 b kq - 1 9",
+   "line": [],
+   "spoken": "In hindsight, Black defended the opening well; the trouble started with the queen chased to a7 and the tilt that followed — the slow ...Ng8 and the weakening ...b6-b4 ideas. Against a fixed king, those concessions add up fast.",
+   "kind": "review",
+   "teaches": "One provoked retreat can start a slide; slow, weakening moves against an attack compound quickly.",
+   "plans": "Keep converting the attack.",
+   "reanchor": true
+  }
+ ]
+}

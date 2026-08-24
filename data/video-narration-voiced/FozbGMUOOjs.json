@@ -1,0 +1,298 @@
+{
+ "videoId": "FozbGMUOOjs",
+ "title": "Master Class | French Defense | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "French Defense: Advance Variation vs 3...b6 (...Ba6 plan)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:FozbGMUOOjs",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 100.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 105,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 108,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d5",
+    "e5"
+   ],
+   "spoken": "The French, and against it the pawn to e5 — the Advance. The clamp goes up and Black must find counterplay against it.",
+   "kind": "main",
+   "teaches": "e5 is the thematic Advance clamp against the French.",
+   "plans": "e5, then support the chain."
+  },
+  {
+   "ply": 6,
+   "t": 112,
+   "fen": "rnbqkbnr/p1p2ppp/1p2p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "b6"
+   ],
+   "spoken": "Instead of the main move c5, Black tries the pawn to b6 — an old sideline. The whole idea is the bishop to a6, to swap off the light-squared bishop that the French normally leaves boxed in behind e6.",
+   "kind": "main",
+   "teaches": "Against the Advance, ...b6 aims to trade Black's bad light-squared bishop via ...Ba6.",
+   "plans": "Prevent or punish the bishop trade."
+  },
+  {
+   "ply": 7,
+   "t": 135,
+   "fen": "rnbqkbnr/p1p2ppp/1p2p3/3pP3/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "c3"
+   ],
+   "spoken": "The pawn to c3 quietly does two jobs. It props up d4 — and it clears the d1-a4 diagonal, so that if the bishop comes to a6, White captures and then the queen to a4 checks the king while forking the knight on a6.",
+   "kind": "trap",
+   "teaches": "c3 opens the d1-a4 diagonal: ...Ba6 Bxa6 Nxa6 Qa4+ forks king and knight.",
+   "plans": "c3, then meet ...Ba6 with the Qa4+ fork."
+  },
+  {
+   "ply": 8,
+   "t": 139,
+   "fen": "rnbqkbnr/p4ppp/1pp1p3/3pP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 141,
+   "fen": "rnbqkbnr/p1p2ppp/1p2p3/3pP3/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 146,
+   "fen": "rnbqkbnr/p4ppp/1pp1p3/3pP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 155.5,
+   "fen": "rnbqkbnr/p4ppp/1pp1p3/3pP3/3P4/2PB4/PP3PPP/RNBQK1NR b KQkq - 1 5",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "With the bishop trade defused, just develop nicely — the bishop to d3, taking a good diagonal and preparing to castle.",
+   "kind": "main",
+   "teaches": "Once the opponent's key idea is stopped, develop by principle.",
+   "plans": "Bd3, castle, then attack."
+  },
+  {
+   "ply": 10,
+   "t": 158.5,
+   "fen": "rnbqkbnr/5ppp/1pp1p3/p2pP3/3P4/2PB4/PP3PPP/RNBQK1NR w KQkq - 0 6",
+   "line": [
+    "a5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 194,
+   "fen": "rnbqkbnr/5ppp/1pp1p3/p2pP3/3P4/2PB4/PP2NPPP/RNBQK2R b KQkq - 1 6",
+   "line": [
+    "Ne2"
+   ],
+   "spoken": "The knight goes to e2, not f3 — deliberately. Keeping the f-pawn free lets it charge f4 and f5 later, and that pawn on e6 is exactly the target the storm will crash into.",
+   "kind": "main",
+   "teaches": "Develop the knight to e2 to keep the f-pawn free for the f4-f5 break against e6.",
+   "plans": "Ne2, later f4-f5."
+  },
+  {
+   "ply": 12,
+   "t": 197.5,
+   "fen": "rn1qkbnr/5ppp/bpp1p3/p2pP3/3P4/2PB4/PP2NPPP/RNBQK2R w KQkq - 2 7",
+   "line": [
+    "Ba6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 202,
+   "fen": "rn1qkbnr/5ppp/bpp1p3/p2pP3/3P4/2PB4/PP2NPPP/RNBQ1RK1 b kq - 3 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Don't rush the f-pawn — castle and complete the setup first. Black is grabbing queenside space instead of developing, which is the signal to finish preparing and then hit the gas with f4.",
+   "kind": "main",
+   "teaches": "Complete development before launching the pawn storm; punish an undeveloping opponent by speeding up.",
+   "plans": "O-O, then f4 toward f5."
+  },
+  {
+   "ply": 2,
+   "t": 381,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1013.5,
+   "fen": "rnbqkbnr/p1p2ppp/1p2p3/3pP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq d6 0 4",
+   "line": [
+    "e5",
+    "b6",
+    "d4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1018.5,
+   "fen": "rnbqkbnr/p1p2ppp/1p2p3/3pP3/3P4/2P5/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1020,
+   "fen": "rn1qkbnr/p1p2ppp/bp2p3/3pP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Ba6"
+   ],
+   "spoken": "This is the recurring theme against the French: Black always wants to get rid of that light-squared bishop. The bishop to a6 is the try — and move order decides whether it's punished.",
+   "kind": "review",
+   "teaches": "Recognise Black's standing wish to trade the bad French bishop and time your response.",
+   "plans": "Trade on a6 at the right moment.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 1059,
+   "fen": "rn3bnr/p1pk1ppp/bp2p3/3pP3/3P4/2P5/PP3PPP/RNB1KBNR w KQ - 0 7",
+   "line": [
+    "Qa4+",
+    "Qd7",
+    "Qxd7+",
+    "Kxd7"
+   ],
+   "spoken": "The wrong order: the immediate queen to a4 check runs into the queen to d7, blocking and hitting back — there's no time to grab the bishop, and after the king recaptures Black is out of the woods. You must trade on a6 first, then win the knight.",
+   "kind": "review",
+   "teaches": "Move order matters: capture the bishop first, then Qa4+ wins the knight — the check first fails to ...Qd7.",
+   "plans": "Bxa6 first, then Qa4+.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1062.5,
+   "fen": "rn1qkbnr/p1p2ppp/bp2p3/3pP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1064,
+   "fen": "rn1qkbnr/p1p2ppp/Bp2p3/3pP3/3P4/2P5/PP3PPP/RNBQK1NR b KQkq - 0 5",
+   "line": [
+    "Bxa6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1070.5,
+   "fen": "rn1qkbnr/p1p2ppp/bp2p3/3pP3/3P4/2P5/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1074,
+   "fen": "rnbqkbnr/p4ppp/1pp1p3/3pP3/3P4/2PB4/PP3PPP/RNBQK1NR w KQkq - 2 7",
+   "line": [
+    "Be2",
+    "c6",
+    "Bd3",
+    "Bc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1076,
+   "fen": "rn1qkbnr/p4ppp/bpp1p3/3pP3/3P4/2P5/PP2BPPP/RNBQK1NR w KQkq - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1079,
+   "fen": "rnbqkbnr/p4ppp/1pp1p3/3pP3/3P4/2PB4/PP3PPP/RNBQK1NR w KQkq - 2 7",
+   "line": [
+    "Bd3",
+    "Bc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1082,
+   "fen": "rn1qkbnr/p4ppp/bpp1p3/3pP3/3P4/2P5/PP2BPPP/RNBQK1NR w KQkq - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1087.5,
+   "fen": "rnbqkbnr/5ppp/1pp1p3/p2pP3/3P4/2PB4/PP2NPPP/RNBQK2R w KQkq - 0 8",
+   "line": [
+    "Bd3",
+    "Bc8",
+    "Ne2",
+    "a5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1089,
+   "fen": "rn1qkbnr/5ppp/bpp1p3/p2pP3/3P4/2PB4/PP2NPPP/RNBQK2R w KQkq - 4 10",
+   "line": [
+    "Ba6",
+    "Bb7",
+    "Bd3",
+    "Ba6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1093.5,
+   "fen": "rn1qkbnr/5ppp/bpp1p3/p2pP3/3P4/2PB4/PP2NPPP/RNBQ1RK1 b kq - 5 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Black keeps neglecting development, so castle and bang on the gas — the pawn to f4. Against the knight to h6, the quiet h3 keeps things in hand before committing the storm; the natural-looking knight to g3 has a hidden drawback here.",
+   "kind": "main",
+   "teaches": "Speed up against a lagging opponent, but check for the tactical drawback before the obvious preparing move.",
+   "plans": "f4, h3, then f5."
+  }
+ ]
+}
