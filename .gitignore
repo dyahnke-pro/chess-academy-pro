@@ -118,3 +118,4 @@ scripts/_*.mjs
 scripts/video-align/frames/
 .ship-out.log
 data/video-narration/
+scratchpad/
