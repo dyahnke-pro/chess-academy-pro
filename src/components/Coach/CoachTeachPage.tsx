@@ -168,6 +168,7 @@ import { noteStaysInScope, noteSuitsStudentSide, noteAdvisesSide } from '../../s
  *  instant, verified masterclass is still the better lesson, so it keeps it. */
 const NOTE_PRIMARY_MIN_PLIES = 3;
 import { findLivePunishment, bakeGemsIntoTree } from '../../services/gemCrushLines';
+import { findAndBakeGems } from '../../services/gemFinder';
 import { engineReadLines } from '../../services/engineReadNarration';
 import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine } from '../../services/pieceValueRead';
@@ -942,6 +943,15 @@ export function CoachTeachPage(): JSX.Element {
       ...(fromDeepDive ? { showChooser: false } : {}),
       ...(resumeFromSans ? { resumeFromSans } : {}),
     });
+    // THE GEM FINDER runs in the BACKGROUND after the walk starts (David
+    // 2026-08-24: "calculate a new teaching walkthrough … the gem finder should
+    // run before the walkthrough even starts to ID what gem lines there are").
+    // The walk holds the tree by REFERENCE, so discovered gems mutate onto the
+    // nodes and the picker fires when the student reaches them — no blocking
+    // pause. Cached per opening, so re-teaching is instant. Best-effort; never
+    // throws. Pre-mined gems were already baked synchronously before start.
+    const finderSide = tree.studentSide ?? inferStudentSideFromName(tree.openingName);
+    void findAndBakeGems(tree, tree.openingName, finderSide).catch(() => undefined);
   }, [walkthrough]);
 
   // Ponder on the student's clock (David 2026-07-03) — while the free-play board
