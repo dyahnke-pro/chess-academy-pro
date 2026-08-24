@@ -1,0 +1,417 @@
+{
+ "videoId": "1671V8LrEwk",
+ "title": "The Italian Game | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Italian Game, Giuoco Piano",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:1671V8LrEwk",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 24.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 28,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nf3",
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 30,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 50,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": "Bishop to c5 chooses the Giuoco Piano — a calm, principled setup that sidesteps the sharp Two Knights lines and is far easier to steer at speed.",
+   "kind": "main",
+   "teaches": "Mirror the opponent's active bishop and develop soundly rather than inviting forcing theory."
+  },
+  {
+   "ply": 7,
+   "t": 53,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R b KQkq - 0 4",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 60,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2B1P3/2P2N2/PP1P1PPP/RNBQK2R w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 66.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2BPP3/2P2N2/PP3PPP/RNBQK2R b KQkq - 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 70,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BpP3/2P2N2/PP3PPP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 72.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b5/2BPP3/5N2/PP3PPP/RNBQK2R b KQkq - 0 6",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 81,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP3PPP/RNBQK2R w KQkq - 1 7",
+   "line": [
+    "Bb4+"
+   ],
+   "spoken": "The bishop checks from b4 before recapturing — this is the whole point. It forces White to block, and only then does Black strike back at the big center.",
+   "kind": "main",
+   "teaches": "Insert a forcing check to win a tempo before resolving the central tension."
+  },
+  {
+   "ply": 13,
+   "t": 88,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP1B1PPP/RN1QK2R b KQkq - 2 7",
+   "line": [
+    "Bd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 127,
+   "fen": "r1bqk2r/pppp1ppp/2n5/8/1bBPn3/5N2/PP1B1PPP/RN1QK2R w KQkq - 0 8",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 145,
+   "fen": "r1bqk2r/pppp1ppp/2n5/8/1bBPn3/2N2N2/PP1B1PPP/R2QK2R b KQkq - 1 8",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 164,
+   "fen": "r1bqk2r/pppp1ppp/2n5/8/1bBP4/2N5/PP1N1PPP/R2QK2R b KQkq - 0 9",
+   "line": [
+    "Nxd2",
+    "Nxd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 205,
+   "fen": "r1bq1rk1/pppp1ppp/2n5/8/1bBP4/2N5/PP1N1PPP/R2QK2R w KQ - 1 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 216,
+   "fen": "r1bq1rk1/pppp1ppp/2n5/8/1bBP4/2N5/PP1N1PPP/R2Q1RK1 b - - 2 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 219,
+   "fen": "r1bq1rk1/pppp1ppp/2n5/8/1bBP4/2N5/PP1N1PPP/R2QK2R w KQ - 1 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 222.5,
+   "fen": "r1bq1rk1/pppp1ppp/2n5/8/1bBP4/2N5/PP1N1PPP/R2Q1RK1 b - - 2 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 223.5,
+   "fen": "r1bq1rk1/pppp1ppp/8/8/1bBn4/2N5/PP1N1PPP/R2Q1RK1 w - - 0 11",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 224.5,
+   "fen": "r1bq1rk1/pppp1ppp/2n5/8/1bBP4/2N5/PP1N1PPP/R2Q1RK1 b - - 2 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 225.5,
+   "fen": "r1bq1rk1/pppp1ppp/8/8/1bBn4/2N5/PP1N1PPP/R2Q1RK1 w - - 0 11",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 244,
+   "fen": "r1bq1rk1/pppp1ppp/8/8/1bBn4/P1N5/1P1N1PPP/R2Q1RK1 b - - 0 11",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 273,
+   "fen": "r1bq1rk1/pppp1ppp/8/8/2Bn4/P1b5/1P1N1PPP/R2Q1RK1 w - - 0 12",
+   "line": [
+    "Bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 275,
+   "fen": "r1bq1rk1/pppp1ppp/8/8/2Bn4/P1P5/3N1PPP/R2Q1RK1 b - - 0 12",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 288,
+   "fen": "r1bq1rk1/pppp1ppp/2n5/8/2B5/P1P5/3N1PPP/R2Q1RK1 w - - 1 13",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 310,
+   "fen": "r1bq1rk1/pppp1ppp/2n5/8/2B5/P1P5/3N1PPP/R2QR1K1 b - - 2 13",
+   "line": [
+    "Re1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 320.5,
+   "fen": "r1bq1rk1/ppp2ppp/2n5/3p4/2B5/P1P5/3N1PPP/R2QR1K1 w - - 0 14",
+   "line": [
+    "d5"
+   ],
+   "spoken": "With an extra pawn banked, d5 hits the bishop and frees Black's game; the light bishop will settle on e6, guarding d5 and f7 at once.",
+   "kind": "main",
+   "teaches": "When ahead in material, open lines for your pieces and simplify toward the win."
+  },
+  {
+   "ply": 27,
+   "t": 343,
+   "fen": "r1bq1rk1/ppp2ppp/2n5/3p4/8/P1P5/3N1PPP/R2QRBK1 b - - 1 14",
+   "line": [
+    "Bf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 364,
+   "fen": "r2q1rk1/ppp2ppp/2n1b3/3p4/8/P1P5/3N1PPP/R2QRBK1 w - - 2 15",
+   "line": [
+    "Be6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 383.5,
+   "fen": "r1bq1rk1/ppp2ppp/2n5/3p4/8/P1P5/3N1PPP/R2QRBK1 b - - 1 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 385.5,
+   "fen": "r2q1rk1/ppp2ppp/2n1b3/3p4/8/P1P5/3N1PPP/R2QRBK1 w - - 2 15",
+   "line": [
+    "Be6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 389.5,
+   "fen": "r2q1rk1/ppp2ppp/2n1b3/3p4/8/P1P2N2/5PPP/R2QRBK1 b - - 3 15",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 397,
+   "fen": "r4rk1/ppp2ppp/2n1bq2/3p4/8/P1P2N2/5PPP/R2QRBK1 w - - 4 16",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 415.5,
+   "fen": "r4rk1/ppp2ppp/2n1bq2/3p4/8/P1P2N2/5PPP/1R1QRBK1 b - - 5 16",
+   "line": [
+    "Rb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 432.5,
+   "fen": "r4rk1/p1p2ppp/1pn1bq2/3p4/8/P1P2N2/5PPP/1R1QRBK1 w - - 0 17",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 475,
+   "fen": "r4rk1/ppp2ppp/2n1bq2/3p4/8/P1P2N2/5PPP/1R1QRBK1 b - - 5 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1101,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP1B1PPP/RN1QK2R b KQkq - 2 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1104.5,
+   "fen": "r1bqk2r/pppp1ppp/2n5/8/1bBPn3/5N2/PP1B1PPP/RN1QK2R w KQkq - 0 8",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1109.5,
+   "fen": "r1bqk2r/pppp1ppp/2n5/8/1BBPn3/5N2/PP3PPP/RN1QK2R b KQkq - 0 8",
+   "line": [
+    "Bxb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1112,
+   "fen": "r1bqk2r/pppp1ppp/8/8/1nBPn3/5N2/PP3PPP/RN1QK2R w KQkq - 0 9",
+   "line": [
+    "Nxb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1113.5,
+   "fen": "r1bqk2r/pppp1Bpp/8/8/1n1Pn3/5N2/PP3PPP/RN1QK2R b KQkq - 0 9",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1116.5,
+   "fen": "r1bq3r/pppp1kpp/8/8/1n1Pn3/5N2/PP3PPP/RN1QK2R w KQ - 0 10",
+   "line": [
+    "Kxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1121.5,
+   "fen": "r1b2k1r/ppppq1pp/8/8/1Q1Pn3/5N2/PP3PPP/RN2K2R w KQ - 1 12",
+   "line": [
+    "Qb3+",
+    "Kf8",
+    "Qxb4+",
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 1125.5,
+   "fen": "r1b4r/ppppk1pp/8/8/3Pn3/5N2/PP3PPP/RN2K2R w KQ - 0 13",
+   "line": [
+    "Qxe7+",
+    "Kxe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1133,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/8/1bBPP3/5N2/PP1B1PPP/RN1QK2R b KQkq - 2 7",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
