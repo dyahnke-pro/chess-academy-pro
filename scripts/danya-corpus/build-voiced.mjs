@@ -20,8 +20,9 @@ const bMoves = bank.moves || bank;
 const moves = bMoves.map((b, i) => {
   const out = { ply: b.ply, t: b.t, fen: b.fen, line: b.line || [] };
   const beat = beats[String(i)];
-  if (beat && (beat.spoken || '').trim()) {
-    out.spoken = beat.spoken.trim();
+  const text = beat && (beat.spoken ?? beat.explains ?? '');
+  if (beat && text.trim()) {
+    out.spoken = text.trim();
     if (beat.kind) out.kind = beat.kind;
     if (beat.teaches) out.teaches = beat.teaches;
     if (beat.plans !== undefined && beat.plans !== '') out.plans = beat.plans;

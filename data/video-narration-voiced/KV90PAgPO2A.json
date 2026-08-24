@@ -1,0 +1,280 @@
+{
+ "videoId": "KV90PAgPO2A",
+ "title": "Master Class | Panov Attack (Caro–Kann) | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Caro-Kann Defense: Panov-Botvinnik Attack",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:KV90PAgPO2A",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 11.5,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 45.5,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 49,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 63.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3P4/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 65.5,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 78.5,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/2PP4/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "c4"
+   ],
+   "spoken": "The pawn to c4 is the Panov Attack — rather than a quiet Exchange, White challenges d5 at once and steers into a sharp, tactical fight built around an isolated queen's pawn.",
+   "kind": "main",
+   "teaches": "The Panov turns the Exchange Caro into an aggressive IQP battle.",
+   "plans": "Pressure d5, accept an isolated d-pawn for space and active pieces."
+  },
+  {
+   "ply": 8,
+   "t": 83.5,
+   "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/8/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 85,
+   "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 87,
+   "fen": "rnbqkb1r/pp2pppp/5n2/8/2pP4/2N5/PP3PPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 96,
+   "fen": "rnbqkb1r/pp2pppp/5n2/8/2BP4/2N5/PP3PPP/R1BQK1NR b KQkq - 0 6",
+   "line": [
+    "Bxc4"
+   ],
+   "spoken": "Black releases the tension and White recaptures on c4, reaching the famous isolated queen's-pawn structure: the d4-pawn now stands alone, a long-term weakness but the source of open lines and piece activity.",
+   "kind": "main",
+   "teaches": "The IQP is a two-sided bargain — a weak pawn traded for space and active pieces."
+  },
+  {
+   "ply": 12,
+   "t": 99,
+   "fen": "rn1qkb1r/pp2pppp/5n2/5b2/2BP4/2N5/PP3PPP/R1BQK1NR w KQkq - 1 7",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": "Black develops the bishop to f5 before a later e6 would shut it in. The middlegame theme is set: White leans on the d4-pawn's space while both sides fight over d5, the blockade square right in front of the isolated pawn.",
+   "kind": "main",
+   "teaches": "With an isolated queen's pawn, the square in front of it decides everything — control d5 and the pawn is a spearhead; blockade it and the pawn is a target."
+  },
+  {
+   "ply": 16,
+   "t": 173.5,
+   "fen": "r2qkb1r/pp1n1ppp/4pn2/1Q3b2/2BP4/2N5/PP3PPP/R1B1K1NR w KQkq - 0 9",
+   "line": [
+    "Qb3",
+    "Nbd7",
+    "Qb5",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 213.5,
+   "fen": "r2qkb1r/pp1n1ppp/4pn2/5b2/2BP4/2N2N2/PP3PPP/R1B1K2R w KQkq - 2 11",
+   "line": [
+    "Qb6",
+    "Qxb6",
+    "Nf3",
+    "Qd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 921,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 922,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 925.5,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "d4",
+    "d5",
+    "exd5",
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 938.5,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/3B4/PPP2PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 941.5,
+   "fen": "r1bqkbnr/pp2pppp/2n5/3p4/3P4/2PB4/PP3PPP/RNBQK1NR b KQkq - 0 5",
+   "line": [
+    "Nc6",
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 954,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 955.5,
+   "fen": "rnbqkbnr/pp2pppp/8/3p4/2PP4/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1145,
+   "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/8/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1148,
+   "fen": "rnbqkb1r/pp2pppp/5n2/8/2pP4/2N5/PP3PPP/R1BQKBNR w KQkq - 0 6",
+   "line": [
+    "Nc3",
+    "dxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1149.5,
+   "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1153,
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR w KQkq - 3 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1160,
+   "fen": "rnbqkb1r/pp2pppp/5n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 2 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1162,
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/3p4/2PP4/2N5/PP3PPP/R1BQKBNR w KQkq - 3 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1163,
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/3P4/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 0 6",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1176,
+   "fen": "rnbqkb1r/pp2pppp/5n2/3P4/2BP4/2N5/PP3PPP/R1BQK1NR b KQkq - 2 7",
+   "line": [
+    "Nb8",
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1177,
+   "fen": "r1bqkb1r/pp2pppp/2n2n2/3P4/3P4/2N5/PP3PPP/R1BQKBNR b KQkq - 0 6",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
