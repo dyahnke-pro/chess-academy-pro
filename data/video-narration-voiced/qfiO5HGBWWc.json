@@ -1,0 +1,569 @@
+{
+ "videoId": "qfiO5HGBWWc",
+ "title": "Master Class | Accelerated Dragon Sicilian | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Sicilian Defense: Accelerated Dragon",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:qfiO5HGBWWc",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 18,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 26.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 32.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 35.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "d4",
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 39,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "Nxd4",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 46.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/4B3/PPP2PPP/RN1QKB1R b KQkq - 1 5",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 56.5,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/4B3/PPP2PPP/RN1QKB1R w KQkq - 2 6",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "The bishop reaches g7 and leans down the long diagonal, pressing at once on the knight that anchors White's centre.",
+   "kind": "main",
+   "teaches": "The fianchettoed bishop is the Dragon's engine — it fights for the centre from the corner.",
+   "plans": "Castle, then break the centre."
+  },
+  {
+   "ply": 11,
+   "t": 59.5,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/8/3NP3/2P1B3/PP3PPP/RN1QKB1R b KQkq - 0 6",
+   "line": [
+    "c3"
+   ],
+   "spoken": "The pawn to c3 is a mediocre choice: it props up the d4-knight and blunts the g7-bishop, but it develops nothing and, worse, robs White's own knight of its natural c3 square — so White's queenside comes out passively.",
+   "kind": "main",
+   "teaches": "A pawn move that solves one problem can create a bigger one — here c3 steals the best square from White's own knight.",
+   "plans": "Develop naturally and exploit White's slow queenside."
+  },
+  {
+   "ply": 12,
+   "t": 89.5,
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/8/3NP3/2P1B3/PP3PPP/RN1QKB1R w KQkq - 1 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "No need to reinvent anything: the knight comes to f6, then castling, then the pawn to d5 in one move. In the accelerated setup Black often never needs the small d6 step at all.",
+   "kind": "main",
+   "teaches": "The accelerated move order aims for the full central break in a single move — d5, not d6 then d5.",
+   "plans": "Knight to f6, castle, strike with d5."
+  },
+  {
+   "ply": 13,
+   "t": 97,
+   "fen": "r1bqk2r/pp1pppbp/2n2np1/1B6/3NP3/2P1B3/PP3PPP/RN1QK2R b KQkq - 2 7",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": "The bishop to b5 simply drops the e4-pawn — there is nothing defending it, and the f6-knight is ready to collect.",
+   "kind": "trap",
+   "teaches": "Before committing a piece, check what it stops defending — b5 abandons e4.",
+   "plans": "Take the free pawn."
+  },
+  {
+   "ply": 14,
+   "t": 100.5,
+   "fen": "r1bqk2r/pp1pppbp/2n3p1/1B6/3Nn3/2P1B3/PP3PPP/RN1QK2R w KQkq - 0 8",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": "The knight snaps off e4 — a clean extra pawn, and the whole setup already pays off.",
+   "kind": "main",
+   "teaches": "When a central pawn hangs for nothing, take it and ask questions later.",
+   "plans": "Consolidate the extra pawn."
+  },
+  {
+   "ply": 15,
+   "t": 104.5,
+   "fen": "r1bqk2r/pp1pppbp/2B3p1/8/3Nn3/2P1B3/PP3PPP/RN1QK2R b KQkq - 0 8",
+   "line": [
+    "Bxc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 140,
+   "fen": "r1bqk2r/pp2ppbp/2p3p1/8/3Nn3/2P1B3/PP3PPP/RN1QK2R w KQkq - 0 9",
+   "line": [
+    "dxc6"
+   ],
+   "spoken": "Recapture toward the centre with the d-pawn: it opens the queen's file, frees the light-squared bishop onto a juicier diagonal, and leaves Black with the two bishops — a pawn up.",
+   "kind": "main",
+   "teaches": "Recapturing toward the centre trades a doubled pawn for open lines and the bishop pair — usually a fine deal.",
+   "plans": "Open the position for the two bishops."
+  },
+  {
+   "ply": 17,
+   "t": 146,
+   "fen": "r1bqk2r/pp2ppbp/2p3p1/8/3Nn3/2P1B3/PP3PPP/RN1Q1RK1 b kq - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 152.5,
+   "fen": "r1bq1rk1/pp2ppbp/2p3p1/8/3Nn3/2P1B3/PP3PPP/RN1Q1RK1 w - - 2 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 163,
+   "fen": "r1bq1rk1/pp2ppbp/2p3p1/8/3Nn3/2P1B3/PP1N1PPP/R2Q1RK1 b - - 3 10",
+   "line": [
+    "Nd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 217.5,
+   "fen": "r1bq1rk1/pp2ppbp/2p2np1/8/2NN4/2P1B3/PP3PPP/R2Q1RK1 b - - 5 11",
+   "line": [
+    "Nf6",
+    "Nc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 274.5,
+   "fen": "r1b2rk1/ppq1ppbp/2p2np1/8/2NN4/2P1B3/PP3PPP/R2Q1RK1 w - - 6 12",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": "The queen tucks onto c7 — a universal, safe post. The pawn on c6 already guards the b5 and d5 outposts, so the queen sits behind it untouchable while keeping the tension.",
+   "kind": "main",
+   "teaches": "Queen to c7 behind a c6-pawn is a standard, safe home across many Sicilians.",
+   "plans": "Keep the tension and prepare the central pawns."
+  },
+  {
+   "ply": 23,
+   "t": 283,
+   "fen": "r1b2rk1/ppq1ppbp/2p2np1/8/2NN4/2P1BQ2/PP3PPP/R4RK1 b - - 7 12",
+   "line": [
+    "Qf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 313.5,
+   "fen": "r1b2rk1/ppq1ppbp/2p3p1/3n4/2NN4/2P1BQ2/PP3PPP/R4RK1 w - - 8 13",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "The knight centralises on d5 — a magnificent outpost that also stops the freeing bishop to f4. From here the central pawns are ready to roll.",
+   "kind": "main",
+   "teaches": "A knight on a protected central outpost is worth more than a pawn grab elsewhere — centralise and dominate.",
+   "plans": "Follow with the central pawn storm."
+  },
+  {
+   "ply": 25,
+   "t": 330,
+   "fen": "r1b2rk1/ppq1ppbp/2p3p1/3n4/2NN4/2P1BQ2/PP3PPP/3R1RK1 b - - 9 13",
+   "line": [
+    "Rad1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 392.5,
+   "fen": "r1b2rk1/ppq2pbp/2p3p1/3np3/2NN4/2P1BQ2/PP3PPP/3R1RK1 w - - 0 14",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Time for the main plan: the pawn to e5 kicks the knight off d4, and f5 with e4 follows, ramming the pawns down the board. White's pieces are loose and hard to coordinate; Black's are anchored.",
+   "kind": "main",
+   "teaches": "When your pieces are better anchored, open with a pawn storm — push the loose enemy pieces around.",
+   "plans": "e5, then f5 and e4 — roll the centre."
+  },
+  {
+   "ply": 28,
+   "t": 417,
+   "fen": "r1b2rk1/ppq3bp/2p3p1/3npp2/2N5/1NP1BQ2/PP3PPP/3R1RK1 w - - 0 15",
+   "line": [
+    "Nb3",
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 436.5,
+   "fen": "r1b2rk1/ppq2pbp/2p3p1/3np3/2NN4/2P1BQ2/PP3PPP/3R1RK1 w - - 0 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 441,
+   "fen": "r1b2rk1/ppq3bp/2p3p1/2Bnpp2/2N5/1NP2Q2/PP3PPP/3R1RK1 b - - 1 15",
+   "line": [
+    "Nb3",
+    "f5",
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 461,
+   "fen": "r1br2k1/ppq3bp/2p3p1/2Bnpp2/2N5/1NP2Q2/PP3PPP/3R1RK1 w - - 2 16",
+   "line": [
+    "Rd8"
+   ],
+   "spoken": "Rook to d8, not e8 — pure prophylaxis. If the bishop lands on d6, the rook simply takes it, winning two pieces for the rook. Always ask where the enemy pieces want to go, not only what they threaten now.",
+   "kind": "main",
+   "teaches": "Prophylaxis is asking where the opponent's pieces are headed and denying it in advance.",
+   "plans": "Neutralise the bishop's best square, then press."
+  },
+  {
+   "ply": 31,
+   "t": 492,
+   "fen": "r1br2k1/ppq3bp/2p3p1/2Bnpp2/2N5/1NP2Q2/PP3PPP/3RR1K1 b - - 3 16",
+   "line": [
+    "Rfe1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 493.5,
+   "fen": "r1br2k1/ppq3bp/2p3p1/2Bn1p2/2N1p3/1NP2Q2/PP3PPP/3RR1K1 w - - 0 17",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 502.5,
+   "fen": "r1br2k1/ppq3bp/2p3p1/2Bn1p2/2N1p3/1NP3Q1/PP3PPP/3RR1K1 b - - 1 17",
+   "line": [
+    "Qg3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 531.5,
+   "fen": "r1br2k1/ppq3bp/2p3p1/2Bn4/2N1pp2/1NP3Q1/PP3PPP/3RR1K1 w - - 0 18",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 556,
+   "fen": "r1br2k1/ppq3bp/2p3p1/2Bn4/2N1pp1Q/1NP5/PP3PPP/3RR1K1 b - - 1 18",
+   "line": [
+    "Qh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 574.5,
+   "fen": "r2r2k1/ppq3bp/2p3p1/2Bn1b2/2N1pp1Q/1NP5/PP3PPP/3RR1K1 w - - 2 19",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 588.5,
+   "fen": "r2r2k1/ppq3bp/2p3p1/2Bn1b2/2NNpp1Q/2P5/PP3PPP/3RR1K1 b - - 3 19",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 654,
+   "fen": "r2r2k1/p1q3bp/1pp3p1/2Bn1b2/2NNpp1Q/2P5/PP3PPP/3RR1K1 w - - 0 20",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 678.5,
+   "fen": "r2r2k1/p1q3bp/1pp3p1/2Bn1N2/2N1pp1Q/2P5/PP3PPP/3RR1K1 b - - 0 20",
+   "line": [
+    "Nxf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 684,
+   "fen": "r2r2k1/p1q3bp/1pp5/2Bn1p2/2N1pp1Q/2P5/PP3PPP/3RR1K1 w - - 0 21",
+   "line": [
+    "gxf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 703,
+   "fen": "r2r2k1/p1q3bp/1pp5/3n1p2/2NBpp1Q/2P5/PP3PPP/3RR1K1 b - - 1 21",
+   "line": [
+    "Bd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 725,
+   "fen": "r2r3k/p1q3bp/1pp5/3n1p2/2NBpp1Q/2P5/PP3PPP/3RR1K1 w - - 2 22",
+   "line": [
+    "Kh8"
+   ],
+   "spoken": "The king steps to h8. The exposed look is an illusion — Black's pawns cover the third rank, so there is no rook lift and no real attack; tucking the king away simply keeps it out of the crossfire.",
+   "kind": "main",
+   "teaches": "A king looks weak but is safe when its own pawns deny every entry square — count the attackers, don't eyeball the shell.",
+   "plans": "Complete king safety, then convert the extra material."
+  },
+  {
+   "ply": 43,
+   "t": 753.5,
+   "fen": "r2r3k/p1q3bp/1pp5/3n1pQ1/2NBpp2/2P5/PP3PPP/3RR1K1 b - - 3 22",
+   "line": [
+    "Qg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 766,
+   "fen": "r4r1k/p1q3bp/1pp5/3n1pQ1/2NBpp2/2P5/PP3PPP/3RR1K1 w - - 4 23",
+   "line": [
+    "Rf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 785,
+   "fen": "r4r1k/p1q3Bp/1pp5/3n1pQ1/2N1pp2/2P5/PP3PPP/3RR1K1 b - - 0 23",
+   "line": [
+    "Bxg7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 795.5,
+   "fen": "r4r1k/p5qp/1ppN4/3n1pQ1/4pp2/2P5/PP3PPP/3RR1K1 b - - 1 24",
+   "line": [
+    "Qxg7",
+    "Nd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 796.5,
+   "fen": "r4r1k/p6p/1ppN4/3n1pq1/4pp2/2P5/PP3PPP/3RR1K1 w - - 0 25",
+   "line": [
+    "Qxg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 814.5,
+   "fen": "r4r1k/p6p/1pp5/3n1pq1/2N1pp2/2P5/PP3PPP/3RR1K1 b - - 1 25",
+   "line": [
+    "Nc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 818.5,
+   "fen": "r4r1k/p6p/1pp5/3n1pq1/2N1p3/2P2p2/PP3PPP/3RR1K1 w - - 0 26",
+   "line": [
+    "f3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 821.5,
+   "fen": "r4r1k/p6p/1pp5/3n1pq1/2N1p3/2P2pP1/PP3P1P/3RR1K1 b - - 0 26",
+   "line": [
+    "g3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 52,
+   "t": 837,
+   "fen": "r4r1k/p6p/1pp5/3n1p2/2N1p1q1/2P2pP1/PP3P1P/3RR1K1 w - - 1 27",
+   "line": [
+    "Qg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 54,
+   "t": 851,
+   "fen": "r4r1k/p6p/1pp5/3n1p2/2N1p3/2P2pPq/PP3P1P/3RR2K w - - 3 28",
+   "line": [
+    "Kh1",
+    "Qh3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 55,
+   "t": 853.5,
+   "fen": "r4r1k/p6p/1pp5/3n1p2/2N1p3/2P2pPq/PP3P1P/3R2RK b - - 4 28",
+   "line": [
+    "Rg1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 56,
+   "t": 865,
+   "fen": "r6k/p6p/1pp2r2/3n1p2/2N1p3/2P2pPq/PP3P1P/3R2RK w - - 5 29",
+   "line": [
+    "Rf6"
+   ],
+   "spoken": "The rook lift — to f6 and up to h6 for mate. A clean, common finishing pattern once the enemy king is boxed in.",
+   "kind": "main",
+   "teaches": "With the king walled in on the h-file, lift a rook along the sixth rank to the mating square.",
+   "plans": "Deliver the rook to h6."
+  },
+  {
+   "ply": 57,
+   "t": 870.5,
+   "fen": "r6k/p6p/1pp2r2/3nNp2/4p3/2P2pPq/PP3P1P/3R2RK b - - 6 29",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 58,
+   "t": 878.5,
+   "fen": "r6k/p6p/1pp2r2/3nNp2/4p3/2P2pP1/PP3P1q/3R2RK w - - 0 30",
+   "line": [
+    "Qxh2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 59,
+   "t": 884.5,
+   "fen": "r6k/p6p/1pp2r2/3nNp2/4p3/2P2pP1/PP3P1K/3R2R1 b - - 0 30",
+   "line": [
+    "Kxh2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 60,
+   "t": 887.5,
+   "fen": "r6k/p6p/1pp4r/3nNp2/4p3/2P2pP1/PP3P1K/3R2R1 w - - 1 31",
+   "line": [
+    "Rh6#"
+   ],
+   "spoken": "Checkmate. The queen sacrifice a move earlier dragged the king to h2, and the rook to h6 seals it — the enemy rook on g1 blocks its own king's only flight. Same idea either way; the sac just came with check to save a tempo.",
+   "kind": "main",
+   "teaches": "A queen sacrifice is worth it when it forces the mating net one tempo faster."
+  },
+  {
+   "ply": 57,
+   "t": 896,
+   "fen": "r6k/p6p/1pp2r2/3nNp2/4p3/2P2pPq/PP3P1P/3R2RK b - - 6 29",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 60,
+   "t": 906.5,
+   "fen": "r6k/p6p/1pp4r/3nNp2/4p3/2P2pP1/PP3P1K/3R2R1 w - - 1 31",
+   "line": [
+    "Qxh2+",
+    "Kxh2",
+    "Rh6#"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 907.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [],
+   "spoken": "The opening verdict: c3 was subpar and the bishop to b5 was outright bad. White's correct try here is the knight to d2, at least defending the pawn — then Black castles and, as a rule, strikes with d5 in one move.",
+   "kind": "review",
+   "teaches": "Against the accelerated setup White must guard e4 first; failing that, Black gets a free pawn and the d5 break.",
+   "reanchor": true
+  }
+ ]
+}
