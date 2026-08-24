@@ -51,6 +51,7 @@ import { TrainingPlanRolodexPage } from './components/Coach/TrainingPlanRolodexP
 import { GameInsightsPage } from './components/Insights/GameInsightsPage';
 import { GamesDrilldownPage } from './components/Insights/GamesDrilldownPage';
 import { CoachTeachPage } from './components/Coach/CoachTeachPage';
+import { VoicedWalkthroughsPage } from './components/Voiced/VoicedWalkthroughsPage';
 import { ProGamesPage } from './components/Coach/ProGamesPage';
 import { CoachEndgamePage } from './components/Coach/CoachEndgamePage';
 import { CoachesLibraryPage } from './components/Coach/CoachesLibraryPage';
@@ -477,6 +478,7 @@ export function App(): JSX.Element {
               desires"). Linked from the plan, not the main nav. */}
           <Route path="/coach/train" element={<ErrorBoundary><CoachTrainPage /></ErrorBoundary>} />
           <Route path="/coach/teach" element={<ErrorBoundary><CoachTeachPage /></ErrorBoundary>} />
+          <Route path="/voiced" element={<ErrorBoundary><VoicedWalkthroughsPage /></ErrorBoundary>} />
           <Route path="/coach/endgame" element={<ErrorBoundary><CoachEndgamePage /></ErrorBoundary>} />
           <Route path="/coach/academy" element={<Navigate to="/coach/library" replace />} />
           <Route path="/coach/library" element={<ErrorBoundary><CoachesLibraryPage /></ErrorBoundary>} />
