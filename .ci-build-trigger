@@ -1,1 +1,1 @@
-build requested 2026-08-24T01:26:15Z — URGENT crash hotfix: stop eager video-dump corpus loads (boot OOM) from current main
+build requested 2026-08-24T01:35:01Z — 3.8 URGENT crash hotfix (stop video-dump boot OOM); 3.7 is READY_FOR_SALE so next version is 3.8

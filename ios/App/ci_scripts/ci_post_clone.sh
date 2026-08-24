@@ -138,7 +138,12 @@ cp ios-patches/App/AppDelegate.swift ios/App/App/AppDelegate.swift
 # page-help auto-open, "coach is free" toast) — the Apple-required AI-consent
 # modal (5.1.1) stays. Branched from the 3.6 App Store line — deliberately NOT
 # current main.
-IOS_MARKETING_VERSION="3.7"
+# BUMP 3.7 → 3.8 (David 2026-08-24): 3.7 is READY_FOR_SALE on the App Store, so
+# Apple rejects new builds under it. 3.8 is the next release train — the URGENT
+# crash hotfix that stops the eager "video-dump" teaching-corpus loads from
+# OOM-crashing the app at boot (desktop tabs + iOS WKWebView Jetsam). Built from
+# current main.
+IOS_MARKETING_VERSION="3.8"
 sed -i '' -e "s/MARKETING_VERSION = [^;]*;/MARKETING_VERSION = ${IOS_MARKETING_VERSION};/g" \
   ios/App/App.xcodeproj/project.pbxproj
 echo "ci_post_clone: MARKETING_VERSION set to ${IOS_MARKETING_VERSION} (build ${CI_BUILD_NUMBER:-?})"
