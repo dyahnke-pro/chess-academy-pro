@@ -67,6 +67,11 @@ function scoreMatch(reqTokens: string[], nameTokens: Set<string>): number {
  */
 export function resolveVoicedWalkthrough(query: string): WalkthroughTree | null {
   if (!query || !query.trim()) return null;
+  // A "X vs Y" matchup is NOT a single-opening lesson — leave it to the
+  // matchup planner (planOpeningMatchup), which constructs the two openings
+  // colliding on one board. Declining here keeps a fall-through from ever
+  // collapsing a matchup into one side's voiced walkthrough.
+  if (/\b(?:vs\.?|versus|against)\b/i.test(query)) return null;
   const reqTokens = tokens(query);
   if (reqTokens.length === 0) return null;
 
