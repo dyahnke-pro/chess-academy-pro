@@ -26,6 +26,7 @@ import { Chess } from 'chess.js';
 import type { Color, PieceSymbol, Square } from 'chess.js';
 import { detectTactics } from './tacticsDetector';
 import { tacticalReadFromLines, namedTacticClause } from './tacticalRead';
+import { phaseOfFen, type Phase } from './boardConcepts';
 import {
   strongestWeakestPiece,
   kingSafetyRead,
@@ -49,6 +50,9 @@ import {
   findBlockade,
   minorCanReachSquare,
   seeGain,
+  kingActivation,
+  rookBehindPasser,
+  oppositionRead,
 } from './positionReadingService';
 
 const PIECE_NAME: Record<PieceSymbol, string> = {
@@ -103,6 +107,12 @@ interface NormalizedCtx {
   studentWord: 'white' | 'black';
   topLines?: ReadonlyArray<BehaviorLine>;
   chess: Chess | null;
+  /** The phase, computed once — so a MIDDLEGAME behaviour (king-safety,
+   *  development, rook-lift, "steer for the endgame") can stand down once the
+   *  board has simplified, and the ENDGAME reads only fire when they belong
+   *  (David 2026-08-23: no phase-inapplicable teaching). */
+  phase: Phase | null;
+  isEndgame: boolean;
 }
 
 function normalize(ctx: BehaviorContext): NormalizedCtx | null {
@@ -110,6 +120,7 @@ function normalize(ctx: BehaviorContext): NormalizedCtx | null {
   let chess: Chess | null = null;
   try { chess = new Chess(ctx.fen); } catch { chess = null; }
   if (!chess) return null;
+  const phase = phaseOfFen(ctx.fen);
   return {
     fen: ctx.fen,
     student,
@@ -117,6 +128,8 @@ function normalize(ctx: BehaviorContext): NormalizedCtx | null {
     studentWord: student === 'w' ? 'white' : 'black',
     topLines: ctx.topLines,
     chess,
+    phase,
+    isEndgame: phase === 'endgame',
   };
 }
 
@@ -161,7 +174,11 @@ export const DANYA_BEHAVIORS: Behavior[] = [
   {
     id: 'king-safety',
     weight: 937,
-    detect: ({ fen, student, opp }) => {
+    detect: ({ fen, student, opp, isEndgame }) => {
+      // NOT IN THE ENDGAME (David 2026-08-23): "castle before anything sharp" is
+      // wrong when the king belongs in the centre and castling is off the table —
+      // king SAFETY is a middlegame idea; the endgame idea is king ACTIVITY.
+      if (isEndgame) return null;
       // A king with its pawn shield intact is NOT exposed — the raw `exposed`
       // flag fired on move 1 (David's complaint). Require REAL exposure: an
       // open file bearing on the king AND a broken shield (≤1 shield pawn), and
@@ -223,8 +240,11 @@ export const DANYA_BEHAVIORS: Behavior[] = [
   {
     id: 'development',
     weight: 753,
-    detect: ({ fen, student, opp, chess }) => {
+    detect: ({ fen, student, opp, chess, isEndgame }) => {
       if (!chess) return null;
+      // "Get your minors out and castle" is meaningless once the pieces are off
+      // and the king is a fighting unit (David 2026-08-23).
+      if (isEndgame) return null;
       const moveNo = Number(fen.split(' ')[5] ?? '99');
       if (moveNo < 3 || moveNo > 14) return null;
       const mine = developmentRead(fen, student);
@@ -316,14 +336,21 @@ export const DANYA_BEHAVIORS: Behavior[] = [
   {
     id: 'material',
     weight: 302,
-    detect: ({ fen, student }) => {
+    detect: ({ fen, student, isEndgame }) => {
       const { advantage } = countMaterial(fen);
       // advantage is WHITE-positive; convert to the student's side. Require ≥2
       // so a mid-exchange transient (one side has captured, recapture pending)
       // doesn't read as a durable material edge.
       const studentAdv = student === 'w' ? advantage : -advantage;
       if (studentAdv >= 2) {
-        return { fact: `You're up material — trade pieces, keep pawns, and steer for the endgame.`, squares: [] };
+        // Don't say "steer FOR the endgame" when you are already IN it (David
+        // 2026-08-23) — there the job is to convert the edge, not head toward it.
+        return {
+          fact: isEndgame
+            ? `You're up material — trade the last pieces down and convert; keep your pawns and push.`
+            : `You're up material — trade pieces, keep pawns, and steer for the endgame.`,
+          squares: [],
+        };
       }
       if (studentAdv <= -2) {
         return { fact: `You're down material — don't trade; look for activity and counterplay.`, squares: [] };
@@ -354,6 +381,49 @@ export const DANYA_BEHAVIORS: Behavior[] = [
         return { fact: `The passed pawn on ${live} is a long-term trump — support it and push.`, squares: [live] };
       }
       return null;
+    },
+  },
+  // ── THE ENDGAME READS (David 2026-08-23) ────────────────────────────────
+  // Each fires ONLY in the endgame and ONLY when it can be executed — the same
+  // exploitability discipline as the tactical lanes, applied to endgame ideas.
+  {
+    id: 'king-activity',
+    weight: 260,
+    detect: ({ fen, student, isEndgame }) => {
+      if (!isEndgame) return null;
+      const ka = kingActivation(fen, student);
+      if (!ka) return null;
+      return { fact: `Your king is a fighting piece now — walk it up toward the centre, starting with ${ka.to}; an active king often decides the endgame.`, squares: [ka.to] };
+    },
+  },
+  {
+    id: 'rook-behind-passer',
+    weight: 210,
+    detect: ({ fen, student, isEndgame }) => {
+      if (!isEndgame) return null;
+      const rb = rookBehindPasser(fen, student);
+      if (!rb) return null;
+      return {
+        fact: rb.own
+          ? `Put your rook behind the passed pawn on ${rb.pawn} — from the rear it shoves the pawn up and stays active.`
+          : `Get your rook behind their passed pawn on ${rb.pawn} — behind it is where a rook restrains a runner.`,
+        squares: [rb.rook, rb.pawn],
+      };
+    },
+  },
+  {
+    id: 'opposition',
+    weight: 150,
+    detect: ({ fen, student, isEndgame }) => {
+      if (!isEndgame) return null;
+      const op = oppositionRead(fen, student);
+      if (!op) return null;
+      return {
+        fact: op.holds
+          ? `You hold the opposition — they have to give ground, and that is how the king breaks through.`
+          : `They hold the opposition — you must give ground, so look for a pawn move or a flank route to hand the move back.`,
+        squares: [],
+      };
     },
   },
   {
@@ -498,8 +568,11 @@ export const DANYA_BEHAVIORS: Behavior[] = [
   {
     id: 'rook-lift',
     weight: 128,
-    detect: ({ fen, student, opp }) => {
+    detect: ({ fen, student, opp, isEndgame }) => {
       if (Number(fen.split(' ')[5] ?? '0') < 10) return null; // an attacking-phase idea
+      // No king-hunt to swing into once it's an endgame (David 2026-08-23) — the
+      // endgame rook idea is "behind the passed pawn", handled separately.
+      if (isEndgame) return null;
       const rl = findRookLift(fen, student);
       if (!rl) return null;
       // EXPLOITABILITY (David 2026-08-23): only swing into a REAL attack — the
