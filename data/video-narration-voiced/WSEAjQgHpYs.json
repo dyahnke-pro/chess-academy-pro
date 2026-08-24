@@ -405,7 +405,7 @@
    "t": 2494,
    "fen": "r1bqkb1r/5ppp/p3p3/1p1pn3/3N1P2/2P5/PPB3PP/RNB2RK1 b kq - 0 12",
    "line": [],
-   "spoken": "Burn in the pattern: any time White pushes the f-pawn and the king sits on g1, the a7-g1 diagonal becomes a source of tactics. It's a recurring theme worth remembering far beyond this game.",
+   "spoken": "Burn in the pattern: with a white king tucked on g1 and the f-pawn advanced, the a7-g1 diagonal turns into a tactical highway. It's a recurring theme worth spotting far beyond this game.",
    "kind": "review",
    "teaches": "f-pawn advanced + king on g1 = recurring tactics on the a7-g1 diagonal.",
    "plans": "Always check that diagonal.",
