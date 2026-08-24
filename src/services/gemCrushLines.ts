@@ -42,6 +42,8 @@ import type {
   NarrationHighlight,
   BakedGemLine,
   BakedGemStep,
+  WalkthroughTree,
+  WalkthroughTreeNode,
 } from '../types/walkthroughTree';
 
 /** Register-neutral crush facts + arrows. Both surfaces build their voicing from
@@ -521,6 +523,53 @@ export function gemsForPosition(
     if (detour) out.push(detour);
   }
   return out;
+}
+
+/**
+ * Bake gem detours onto EVERY node of a walkthrough tree, in place (David
+ * 2026-08-24: "the masterclass doesn't have gems baked in"). The generator does
+ * this per-node while building a DB-narration lesson; the STATIC masterclass /
+ * legacy trees are assembled elsewhere and never saw it, so their walk offered
+ * no trap picker. Walking the finished tree here gives every lesson path — static
+ * or generated — the same weapons + warnings.
+ *
+ * Dedupes across the whole tree so one gem never bakes twice, and preserves any
+ * gems already attached (the generator's). Returns the number of gems attached.
+ */
+export function bakeGemsIntoTree(
+  tree: WalkthroughTree | null | undefined,
+  studentSide?: 'white' | 'black',
+): number {
+  if (!tree?.root) return 0;
+  const spliced = new Set<string>();
+  // Seed with any gems already on the tree so we don't double-bake.
+  const seed = (node: WalkthroughTreeNode): void => {
+    for (const g of node.gems ?? []) spliced.add(g.gemId);
+    for (const ch of node.children) seed(ch.node);
+  };
+  seed(tree.root);
+
+  let attached = 0;
+  const walk = (node: WalkthroughTreeNode, pathSans: string[]): void => {
+    const here = node.san ? [...pathSans, node.san] : pathSans;
+    if (node.san) {
+      let detours: BakedGemLine[] = [];
+      try {
+        detours = gemsForPosition(here, studentSide);
+      } catch {
+        detours = [];
+      }
+      const fresh = detours.filter((d) => !spliced.has(d.gemId));
+      if (fresh.length > 0) {
+        for (const d of fresh) spliced.add(d.gemId);
+        node.gems = [...(node.gems ?? []), ...fresh];
+        attached += fresh.length;
+      }
+    }
+    for (const ch of node.children) walk(ch.node, here);
+  };
+  walk(tree.root, []);
+  return attached;
 }
 
 // ─── Review voicing — RETROSPECTIVE, the user's own game ───────────────────

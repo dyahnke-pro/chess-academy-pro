@@ -167,7 +167,7 @@ import { noteStaysInScope, noteSuitsStudentSide, noteAdvisesSide } from '../../s
  *  single opening-level note that happened to match early. Below the floor the
  *  instant, verified masterclass is still the better lesson, so it keeps it. */
 const NOTE_PRIMARY_MIN_PLIES = 3;
-import { findLivePunishment } from '../../services/gemCrushLines';
+import { findLivePunishment, bakeGemsIntoTree } from '../../services/gemCrushLines';
 import { engineReadLines } from '../../services/engineReadNarration';
 import { moveOrderArrows } from '../../services/moveOrderArrows';
 import { parseEvalTable, pieceQualityLines, parseEvalSplit, evalSplitLine } from '../../services/pieceValueRead';
@@ -4070,6 +4070,29 @@ export function CoachTeachPage(): JSX.Element {
                 sideOverride ?? inferStudentSideFromName(requestedName),
               )
             : null);
+        // BAKE THE TRAP PICKER INTO THE STATIC MASTERCLASS TOO (David 2026-08-24:
+        // "the masterclass doesn't have gems baked in"). The generated path bakes
+        // gems per-node; the static masterclass / legacy trees are built
+        // elsewhere and skipped it, so their walk offered no picker. Attach the
+        // weapons + warnings here so every lesson path teaches the traps.
+        if (candidateStatic) {
+          try {
+            const gemsBaked = bakeGemsIntoTree(
+              candidateStatic,
+              sideOverride ?? inferStudentSideFromName(requestedName),
+            );
+            if (gemsBaked > 0) {
+              void logAppAudit({
+                kind: 'coach-surface-migrated',
+                category: 'subsystem',
+                source: 'CoachTeachPage.handleSubmit.bakeGems',
+                summary: `baked ${gemsBaked} gem(s) into static "${candidateStatic.openingName}"`,
+              });
+            }
+          } catch {
+            /* gems are a bonus, never a blocker */
+          }
+        }
         // Coverage is measured over the line the LESSON actually walks, not the
         // database's canonical stub. A masterclass spine runs 24-39 plies while
         // its DB entry is 3-7, so measuring the stub asked "do the notes cover

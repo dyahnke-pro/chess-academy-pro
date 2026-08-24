@@ -9,9 +9,9 @@
  */
 import { describe, it, expect } from 'vitest';
 import { attachBakedGems } from './openingGenerator';
-import { buildGemDetour, gemsForPosition } from './gemCrushLines';
+import { buildGemDetour, gemsForPosition, bakeGemsIntoTree } from './gemCrushLines';
 import { getPunishGemsForOpening, isSurfaceableGem } from '../data/lessons/punishGems';
-import type { WalkthroughTreeNode } from '../types/walkthroughTree';
+import type { WalkthroughTree, WalkthroughTreeNode } from '../types/walkthroughTree';
 import { Chess } from 'chess.js';
 
 function bareNode(san: string): WalkthroughTreeNode {
@@ -111,5 +111,43 @@ describe('attachBakedGems', () => {
     const node = bareNode('e4');
     attachBakedGems(node, ['e4'], new Set<string>(), 'white');
     expect(node.gems).toBeUndefined();
+  });
+});
+
+describe('bakeGemsIntoTree — the static masterclass path', () => {
+  it('attaches gems onto the node whose position sits on a gem (David 2026-08-24)', () => {
+    const gem = firstSurfaceableGem();
+    const spine = gem.lineMoves.split(/\s+/).filter(Boolean);
+    // Build a linear tree along the gem's spine (as the static masterclass walk).
+    let child: WalkthroughTreeNode = { san: spine[spine.length - 1], movedBy: 'white', idea: '', children: [] };
+    for (let i = spine.length - 2; i >= 0; i -= 1) {
+      child = { san: spine[i], movedBy: i % 2 === 0 ? 'white' : 'black', idea: '', children: [{ node: child }] };
+    }
+    const tree = {
+      openingName: 'Caro-Kann Defense', eco: 'B10', intro: '', outro: '',
+      root: { san: null, movedBy: null, idea: '', children: [{ node: child }] },
+    } as WalkthroughTree;
+
+    const attached = bakeGemsIntoTree(tree, 'black');
+    expect(attached).toBeGreaterThan(0);
+    // The deepest node (the gem's terminus) carries the weapon.
+    let cur = tree.root;
+    while (cur.children.length) cur = cur.children[0].node;
+    expect(cur.gems?.some((g) => g.kind === 'weapon')).toBe(true);
+  });
+
+  it('is idempotent — a second bake adds nothing', () => {
+    const gem = firstSurfaceableGem();
+    const spine = gem.lineMoves.split(/\s+/).filter(Boolean);
+    let child: WalkthroughTreeNode = { san: spine[spine.length - 1], movedBy: 'white', idea: '', children: [] };
+    for (let i = spine.length - 2; i >= 0; i -= 1) {
+      child = { san: spine[i], movedBy: i % 2 === 0 ? 'white' : 'black', idea: '', children: [{ node: child }] };
+    }
+    const tree = {
+      openingName: 'Caro-Kann Defense', eco: 'B10', intro: '', outro: '',
+      root: { san: null, movedBy: null, idea: '', children: [{ node: child }] },
+    } as WalkthroughTree;
+    expect(bakeGemsIntoTree(tree, 'black')).toBeGreaterThan(0);
+    expect(bakeGemsIntoTree(tree, 'black')).toBe(0);
   });
 });
