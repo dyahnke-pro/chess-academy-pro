@@ -1,0 +1,528 @@
+{
+ "videoId": "jwFOi039eeg",
+ "title": "Four Pawns Attack | Alekhine's Defence | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "Alekhine's Defense: Four Pawns Attack",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:jwFOi039eeg",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 14.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "e4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 20,
+   "fen": "rnbqkb1r/pppppppp/5n2/4P3/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 22.5,
+   "fen": "rnbqkb1r/pppppppp/8/3nP3/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 24.5,
+   "fen": "rnbqkb1r/pppppppp/8/3nP3/3P4/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 27,
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": "This is the critical fork in the road. Three or four sound setups exist here; the Four Pawns Attack is the one for the player who wants to punish the Alekhine — little theory to learn, and a real chance to blow Black off the board.",
+   "kind": "main",
+   "teaches": "Pick your weapon by temperament — the Four Pawns is the aggressive, low-theory way to meet the Alekhine.",
+   "plans": "Build the four-pawn centre and attack."
+  },
+  {
+   "ply": 7,
+   "t": 57,
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/2PP4/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 60,
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/2PP4/8/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "Nb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 61,
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/2PP1P2/8/PP4PP/RNBQKBNR b KQkq - 0 5",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 63.5,
+   "fen": "rnbqkb1r/ppp1pppp/1n6/4p3/2PP1P2/8/PP4PP/RNBQKBNR w KQkq - 0 6",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 71,
+   "fen": "rnbqkb1r/ppp1pppp/1n6/4P3/2PP4/8/PP4PP/RNBQKBNR b KQkq - 0 6",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 73,
+   "fen": "r1bqkb1r/ppp1pppp/1nn5/4P3/2PP4/8/PP4PP/RNBQKBNR w KQkq - 1 7",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The knight to c6 is the main line — and here is the pitfall: the natural knight to f3 is a mistake. It walks straight into the capture on d4 followed by the bishop pin on g4, dropping the e5-pawn. Nor does the knight to e2 help — it blocks the bishop.",
+   "kind": "trap",
+   "teaches": "In the Four Pawns, Nf3 too early loses e5 to Nxd4 and Bg4 — develop the other pieces first.",
+   "plans": "Defend e5 another way before committing the king's knight."
+  },
+  {
+   "ply": 13,
+   "t": 104,
+   "fen": "r1bqkb1r/ppp1pppp/1nn5/4P3/2PP4/4B3/PP4PP/RN1QKBNR b KQkq - 2 7",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "The right way to hold e5 without allowing the pin is the bishop to e3. It defends the centre and keeps the king's knight free to come out only once it is safe.",
+   "kind": "main",
+   "teaches": "Defend with a developing move that doesn't create a pin — the bishop to e3 holds the centre.",
+   "plans": "Develop the queen's knight, then the king's knight."
+  },
+  {
+   "ply": 14,
+   "t": 109,
+   "fen": "r2qkb1r/ppp1pppp/1nn5/4Pb2/2PP4/4B3/PP4PP/RN1QKBNR w KQkq - 3 8",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 116.5,
+   "fen": "r2qkb1r/ppp1pppp/1nn5/4Pb2/2PP4/2N1B3/PP4PP/R2QKBNR b KQkq - 4 8",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 123.5,
+   "fen": "r2qkb1r/ppp2ppp/1nn1p3/4Pb2/2PP4/2N1BN2/PP4PP/R2QKB1R b KQkq - 1 9",
+   "line": [
+    "e6",
+    "Nf3"
+   ],
+   "spoken": "Only now, with Black's bishop already committed to f5 and the queen's knight developed, is the knight to f3 safe — the g4-pin has lost its bite. Order of development is everything in this line.",
+   "kind": "main",
+   "teaches": "Delay the king's knight until the enemy bishop can no longer pin it profitably.",
+   "plans": "Complete development and castle."
+  },
+  {
+   "ply": 18,
+   "t": 127,
+   "fen": "r2qk2r/ppp1bppp/1nn1p3/4Pb2/2PP4/2N1BN2/PP4PP/R2QKB1R w KQkq - 2 10",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 141.5,
+   "fen": "r2qk2r/ppp1bppp/1nn1p3/4Pb2/2PP4/2N1BN2/PP2B1PP/R2QK2R b KQkq - 3 10",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 147.5,
+   "fen": "r2q1rk1/ppp1b1pp/1nn1pp2/4Pb2/2PP4/2N1BN2/PP2B1PP/R2Q1RK1 w - - 2 12",
+   "line": [
+    "f6",
+    "O-O",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 153.5,
+   "fen": "r2q1rk1/ppp1b1pp/1nn1pP2/5b2/2PP4/2N1BN2/PP2B1PP/R2Q1RK1 b - - 0 12",
+   "line": [
+    "exf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 155.5,
+   "fen": "r2q1rk1/ppp3pp/1nn1pb2/5b2/2PP4/2N1BN2/PP2B1PP/R2Q1RK1 w - - 0 13",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": "After the pawn break f6 is met by the capture and recapture, White stands clearly better: superior central control, a backward black pawn on e6, and beautifully placed pieces.",
+   "kind": "main",
+   "teaches": "A premature pawn break against a big centre often just hands you a backward pawn to target.",
+   "plans": "Pile up on the backward e6-pawn and the centre."
+  },
+  {
+   "ply": 25,
+   "t": 185,
+   "fen": "r2q1rk1/ppp3pp/1nn1pb2/5b2/2PP4/2N1BN2/PP1QB1PP/R4RK1 b - - 1 13",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 193,
+   "fen": "r2q1rk1/ppp3pp/1nn1pb2/8/2PP2b1/2N1BN2/PP1QB1PP/R4RK1 w - - 2 14",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 213,
+   "fen": "r2q1rk1/ppp3pp/1nn1pb2/8/2PP2b1/2N1BN2/PP1QB1PP/3R1RK1 b - - 3 14",
+   "line": [
+    "Rad1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 231,
+   "fen": "r4rk1/ppp1q1pp/1nn1pb2/8/2PP2b1/2N1BN2/PP1QB1PP/3R1RK1 w - - 4 15",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 267.5,
+   "fen": "r4rk1/ppp1q1pp/1nn1pb2/8/2PPN1b1/4BN2/PP1QB1PP/3R1RK1 b - - 5 15",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "The knight to e4 aims to trade off the f6-bishop. Once that bishop is gone, the d4-pawn is no longer under pressure and White's pieces are freed from defending the centre. Note the restraint: recapturing on f3 with the bishop would hang the c4-pawn, so the rook or pawn must do it.",
+   "kind": "main",
+   "teaches": "Trade the piece pressuring your centre to free your own hands — then the initiative is yours.",
+   "plans": "Exchange on f6, then attack unhindered."
+  },
+  {
+   "ply": 30,
+   "t": 289.5,
+   "fen": "r4rk1/ppp1q1pp/1nn1pb2/8/2PPN3/4Bb2/PP1QB1PP/3R1RK1 w - - 0 16",
+   "line": [
+    "Bxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 319,
+   "fen": "r4rk1/ppp1q1pp/1nn1pb2/8/2PPN3/4BR2/PP1QB1PP/3R2K1 b - - 0 16",
+   "line": [
+    "Rxf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 335,
+   "fen": "r4rk1/ppp1q1p1/1nn1pb1p/8/2PPN3/4BR2/PP1QB1PP/3R2K1 w - - 0 17",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 367,
+   "fen": "r4rk1/ppp1q1p1/1nn1pb1p/8/2PPN3/4BR2/PP1QB1PP/5RK1 b - - 1 17",
+   "line": [
+    "Rdf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 373.5,
+   "fen": "3r1rk1/ppp1q1p1/1nn1pb1p/8/2PPN3/4BR2/PP1QB1PP/5RK1 w - - 2 18",
+   "line": [
+    "Rad8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 382.5,
+   "fen": "3r1rk1/ppp1q1p1/1nn1pN1p/8/2PP4/4BR2/PP1QB1PP/5RK1 b - - 0 18",
+   "line": [
+    "Nxf6+"
+   ],
+   "spoken": "The capture on f6 with check is the moment — it can't be delayed without losing d4, and the point of the earlier rook shift is that Black can no longer keep the kingside pawns intact. The structure shatters and the king is exposed.",
+   "kind": "main",
+   "teaches": "Time a structural-damage capture to the exact moment your centre still holds.",
+   "plans": "Break the kingside pawns, then attack the bare king."
+  },
+  {
+   "ply": 36,
+   "t": 385.5,
+   "fen": "3r2k1/ppp1q1p1/1nn1pr1p/8/2PP4/4BR2/PP1QB1PP/5RK1 w - - 0 19",
+   "line": [
+    "Rxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 388.5,
+   "fen": "3r2k1/ppp1q1p1/1nn1pR1p/8/2PP4/4B3/PP1QB1PP/5RK1 b - - 0 19",
+   "line": [
+    "Rxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 392,
+   "fen": "3r2k1/ppp1q3/1nn1pp1p/8/2PP4/4B3/PP1QB1PP/5RK1 w - - 0 20",
+   "line": [
+    "gxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 446.5,
+   "fen": "3r2k1/ppp1q3/1nn1pp1p/8/2PP4/4BR2/PP1QB1PP/6K1 b - - 1 20",
+   "line": [
+    "Rf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 456,
+   "fen": "3r2k1/ppp1q3/1n2pp1p/4n3/2PP4/4BR2/PP1QB1PP/6K1 w - - 2 21",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 479.5,
+   "fen": "3r2k1/ppp1q3/1n2pp1p/4n3/2PP4/4B1R1/PP1QB1PP/6K1 b - - 3 21",
+   "line": [
+    "Rg3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 481.5,
+   "fen": "3r3k/ppp1q3/1n2pp1p/4n3/2PP4/4B1R1/PP1QB1PP/6K1 w - - 4 22",
+   "line": [
+    "Kh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 501.5,
+   "fen": "3r3k/ppp1q3/1n2pp1B/4n3/2PP4/6R1/PP1QB1PP/6K1 b - - 0 22",
+   "line": [
+    "Bxh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 514.5,
+   "fen": "3r3k/ppp1qn2/1n2pp1B/8/2PP4/6R1/PP1QB1PP/6K1 w - - 1 23",
+   "line": [
+    "Nf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 521,
+   "fen": "3r3k/ppp1qnB1/1n2pp2/8/2PP4/6R1/PP1QB1PP/6K1 b - - 2 23",
+   "line": [
+    "Bg7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 525.5,
+   "fen": "3r4/ppp1qnBk/1n2pp2/8/2PP4/6R1/PP1QB1PP/6K1 w - - 3 24",
+   "line": [
+    "Kh7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 560,
+   "fen": "3r4/ppp1qnBk/1n2pp2/8/2PP4/3B2R1/PP1Q2PP/6K1 b - - 4 24",
+   "line": [
+    "Bd3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 48,
+   "t": 562,
+   "fen": "3r4/ppp1qnBk/1n2p3/5p2/2PP4/3B2R1/PP1Q2PP/6K1 w - - 0 25",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 49,
+   "t": 602.5,
+   "fen": "3r4/ppp1qnBk/1n2p3/5p2/2PP1Q2/3B2R1/PP4PP/6K1 b - - 1 25",
+   "line": [
+    "Qf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 50,
+   "t": 618.5,
+   "fen": "3r4/ppp1q1Bk/1n1np3/5p2/2PP1Q2/3B2R1/PP4PP/6K1 w - - 2 26",
+   "line": [
+    "Nd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 51,
+   "t": 645.5,
+   "fen": "3r4/ppp1q1Bk/1n1np2Q/5p2/2PP4/3B2R1/PP4PP/6K1 b - - 3 26",
+   "line": [
+    "Qh6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 657.5,
+   "fen": "r2qk2r/ppp1bppp/1nn1p3/4Pb2/2PP4/2N1BN2/PP2B1PP/R2QK2R b KQkq - 3 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 658.5,
+   "fen": "r2qk2r/ppp1bppp/1nn1p3/4Pb2/2PP4/2N1BN2/PP4PP/R2QKB1R w KQkq - 2 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 662.5,
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 665,
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/2PP4/8/PP3PPP/RNBQKBNR w KQkq - 1 5",
+   "line": [
+    "c4",
+    "Nb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 666,
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/2PP1P2/8/PP4PP/RNBQKBNR b KQkq - 0 5",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 667.5,
+   "fen": "rnbqkb1r/ppp1pppp/1n6/4P3/2PP4/8/PP4PP/RNBQKBNR b KQkq - 0 6",
+   "line": [
+    "dxe5",
+    "fxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 669.5,
+   "fen": "r1bqkb1r/ppp1pppp/1nn5/4P3/2PP4/4B3/PP4PP/RN1QKBNR b KQkq - 2 7",
+   "line": [
+    "Nc6",
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 671,
+   "fen": "r2qkb1r/ppp1pppp/1nn5/4Pb2/2PP4/4B3/PP4PP/RN1QKBNR w KQkq - 3 8",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": ""
+  }
+ ]
+}
