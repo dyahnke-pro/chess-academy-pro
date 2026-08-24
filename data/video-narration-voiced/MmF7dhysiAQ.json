@@ -1,0 +1,473 @@
+{
+ "videoId": "MmF7dhysiAQ",
+ "title": "Crushing The Four Pawns Attack!! | The King's Indian | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "King's Indian Defense: Four Pawns Attack",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:MmF7dhysiAQ",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 16.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 19,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "c4",
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 20.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 21.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 23.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "e4",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 25.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPPP2/2N5/PP4PP/R1BQKBNR b KQkq - 0 5",
+   "line": [
+    "f4"
+   ],
+   "spoken": "White's f4 sets up the Four Pawns Attack — the most space-grabbing anti-King's-Indian line, with pawns on c4, d4, e4 and f4. It is dangerous but overextended, and Black must strike at that wall before it rolls forward.",
+   "kind": "main",
+   "teaches": "Against the Four Pawns' huge centre, counter-strike quickly — an overextended centre is a target.",
+   "plans": "Hit the centre with e5 or c5."
+  },
+  {
+   "ply": 10,
+   "t": 45.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPPP2/2N5/PP4PP/R1BQKBNR w KQ - 1 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 47,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPPP2/2N2N2/PP4PP/R1BQKB1R b KQ - 2 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 61.5,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPPP2/2N2N2/PP4PP/R1BQKB1R w KQ - 0 7",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Black strikes at once with e5, hitting the base of the pawn wall. It looks reckless into all that space, but it forces White to resolve the tension and pries the overextension open.",
+   "kind": "main",
+   "teaches": "Undermine a broad pawn centre by challenging it immediately, before it becomes a rolling force."
+  },
+  {
+   "ply": 13,
+   "t": 68,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4P3/2PPP3/2N2N2/PP4PP/R1BQKB1R b KQ - 0 7",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 69,
+   "fen": "rnbq1rk1/ppp2pbp/5np1/4p3/2PPP3/2N2N2/PP4PP/R1BQKB1R w KQ - 0 8",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 71.5,
+   "fen": "rnbq1rk1/ppp2pbp/5np1/4N3/2PPP3/2N5/PP4PP/R1BQKB1R b KQ - 0 8",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 97,
+   "fen": "rnbq1rk1/pp3pbp/5np1/2p1N3/2PPP3/2N5/PP4PP/R1BQKB1R w KQ - 0 9",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 150,
+   "fen": "rnbq1rk1/pp3pbp/5np1/2pPN3/2P1P3/2N5/PP4PP/R1BQKB1R b KQ - 0 9",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 182,
+   "fen": "rnbqr1k1/pp3pbp/5np1/2pPN3/2P1P3/2N5/PP4PP/R1BQKB1R w KQ - 1 10",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 194.5,
+   "fen": "rnbqr1k1/pp3pbp/5np1/2pP4/2P1P3/2N2N2/PP4PP/R1BQKB1R b KQ - 2 10",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 196.5,
+   "fen": "rnbqr1k1/pp3pbp/6p1/2pP4/2P1n3/2N2N2/PP4PP/R1BQKB1R w KQ - 0 11",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 199,
+   "fen": "rnbq2k1/pp3pbp/6p1/2pP4/2P1r3/5N2/PP4PP/R1BQKB1R w KQ - 0 12",
+   "line": [
+    "Nxe4",
+    "Rxe4+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 200.5,
+   "fen": "rnbq2k1/pp3pbp/6p1/2pP4/2P1r3/5N2/PP2B1PP/R1BQK2R b KQ - 1 12",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 236.5,
+   "fen": "rnb1q1k1/pp3pbp/6p1/2pP4/2P1r3/5N2/PP2B1PP/R1BQK2R w KQ - 2 13",
+   "line": [
+    "Qe8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 285.5,
+   "fen": "rnb1q1k1/pp3pbp/6p1/2pP2N1/2P1r3/8/PP2B1PP/R1BQK2R b KQ - 3 13",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 330,
+   "fen": "rnb1q1k1/pp3pbp/6p1/2pP2N1/2Pr4/8/PP2B1PP/R1BQK2R w KQ - 4 14",
+   "line": [
+    "Rd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 602,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPPP2/2N2N2/PP4PP/R1BQKB1R b KQ - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 607,
+   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPPP2/2N2N2/PP4PP/R1BQKB1R w KQ - 0 7",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 617,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPPP2/2N2N2/PP4PP/R1BQKB1R b KQ - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 618.5,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPPP2/2N2N2/PP4PP/R1BQKB1R w KQ - 0 7",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 624,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2pP4/2P1PP2/2N2N2/PP4PP/R1BQKB1R b KQ - 0 7",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 626.5,
+   "fen": "rnbq1rk1/pp3pbp/3ppnp1/2pP4/2P1PP2/2N2N2/PP4PP/R1BQKB1R w KQ - 0 8",
+   "line": [
+    "e6"
+   ],
+   "spoken": "The main line is c5, and after White pushes d5 Black breaks with e6 — a Benoni structure where White's big centre is also a liability, giving Black clear targets to play against.",
+   "kind": "branch",
+   "teaches": "In the Four Pawns, c5 and e6 reach a Benoni where the broad centre becomes overextended."
+  },
+  {
+   "ply": 15,
+   "t": 630.5,
+   "fen": "rnbq1rk1/pp3pbp/3ppnp1/2pP4/2P1PP2/2N2N2/PP2B1PP/R1BQK2R b KQ - 1 8",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 632,
+   "fen": "rnbq1rk1/pp3pbp/3p1np1/2pp4/2P1PP2/2N2N2/PP2B1PP/R1BQK2R w KQ - 0 9",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 633,
+   "fen": "rnbq1rk1/pp3pbp/3p1np1/2pP4/4PP2/2N2N2/PP2B1PP/R1BQK2R b KQ - 0 9",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 644.5,
+   "fen": "rnbq1rk1/p4pbp/3p1np1/1ppP4/4PP2/2N2N2/PP2B1PP/R1BQK2R w KQ - 0 10",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 648,
+   "fen": "rnbq1rk1/p4pbp/3p1np1/1BpP4/4PP2/2N2N2/PP4PP/R1BQK2R b KQ - 0 10",
+   "line": [
+    "Bxb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 650,
+   "fen": "rnbq1rk1/p4pbp/3p2p1/1BpP4/4nP2/2N2N2/PP4PP/R1BQK2R w KQ - 0 11",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 653,
+   "fen": "rnb2rk1/p4pbp/3p2p1/qBpP4/4NP2/5N2/PP4PP/R1BQK2R w KQ - 1 12",
+   "line": [
+    "Nxe4",
+    "Qa5+"
+   ],
+   "spoken": "The tactical glue behind Black's play: if White snatches the b5-pawn, the knight takes on e4 and the check on a5 forks the king and the bishop on b5, so Black regains the material and stands well.",
+   "kind": "main",
+   "teaches": "A queen check that also hits a loose piece is what makes an aggressive pawn break sound."
+  },
+  {
+   "ply": 23,
+   "t": 654.5,
+   "fen": "rnb2rk1/p4pbp/3p2p1/qBpP4/5P2/2N2N2/PP4PP/R1BQK2R b KQ - 2 12",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 657.5,
+   "fen": "rnb2rk1/p4p1p/3p2p1/qBpP4/5P2/2b2N2/PP4PP/R1BQK2R w KQ - 0 13",
+   "line": [
+    "Bxc3+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 659,
+   "fen": "rnb2rk1/p4p1p/3p2p1/1qpP4/5P2/2P2N2/P5PP/R1BQK2R w KQ - 0 14",
+   "line": [
+    "bxc3",
+    "Qxb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 667,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPPP2/2N2N2/PP4PP/R1BQKB1R w KQ - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 700,
+   "fen": "rnbq1rk1/pp3pbp/5np1/2pPp3/2P1P3/2N2N2/PP4PP/R1BQKB1R w KQ - 0 9",
+   "line": [
+    "d5",
+    "e5",
+    "fxe5",
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 861,
+   "fen": "rnbq1rk1/pp3pbp/5np1/2pPp1B1/2P1P3/2N2N2/PP4PP/R2QKB1R b KQ - 1 9",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 888.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPPP2/2N2N2/PP4PP/R1BQKB1R b KQ - 2 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 891,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPPP2/2N2N2/PP4PP/R1BQKB1R w KQ - 0 7",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 893.5,
+   "fen": "rnbq1rk1/pp3pbp/3ppnp1/2pP4/2P1PP2/2N2N2/PP4PP/R1BQKB1R w KQ - 0 8",
+   "line": [
+    "d5",
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 894.5,
+   "fen": "rnbq1rk1/pp3pbp/3ppnp1/2pP4/2P1PP2/2N2N2/PP2B1PP/R1BQK2R b KQ - 1 8",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 896,
+   "fen": "rnbq1rk1/pp3pbp/3p1np1/2pP4/4PP2/2N2N2/PP2B1PP/R1BQK2R b KQ - 0 9",
+   "line": [
+    "exd5",
+    "cxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 898.5,
+   "fen": "r1bq1rk1/pp1n1pbp/3p1np1/2pP4/4PP2/2N2N2/PP2B1PP/R1BQK2R w KQ - 1 10",
+   "line": [
+    "Nbd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 907.5,
+   "fen": "r1bqr1k1/pp1n1pbp/3p1np1/2pP4/4PP2/2N5/PP1NB1PP/R1BQ1RK1 b - - 4 11",
+   "line": [
+    "Nd2",
+    "Re8",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 908.5,
+   "fen": "r1bqr1k1/pp1n1pbp/3p1np1/3P4/2p1PP2/2N5/PP1NB1PP/R1BQ1RK1 w - - 0 12",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 917,
+   "fen": "rnbq1rk1/pp3pbp/3ppnp1/2pP4/2P1PP2/2N2N2/PP4PP/R1BQKB1R w KQ - 0 8",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}

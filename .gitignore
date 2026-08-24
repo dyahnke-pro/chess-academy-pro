@@ -117,3 +117,5 @@ scripts/_*.mjs
 *.webm
 scripts/video-align/frames/
 .ship-out.log
+data/video-narration/
+scratchpad/
