@@ -1,0 +1,472 @@
+{
+ "videoId": "4T9-0D4SnMk",
+ "title": "King's Indian + Bowdler Attack | Develop Your Instincts | GM Naroditsky's DYI Speedrun",
+ "openingName": "King's Indian Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:4T9-0D4SnMk",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 53,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 55.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/3P4/8/8/PPP1PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 82,
+   "fen": "rnbqkb1r/pppppp1p/5np1/3P4/8/8/PPP1PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 87,
+   "fen": "rnbqkb1r/pppppp1p/5np1/3P4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 93,
+   "fen": "rnbqk2r/ppppppbp/5np1/3P4/2P5/8/PP2PPPP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 98,
+   "fen": "rnbqk2r/ppppppbp/5np1/3P4/2P5/5N2/PP2PPPP/RNBQKB1R b KQkq - 2 4",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 100,
+   "fen": "rnbq1rk1/ppppppbp/5np1/3P4/2P5/5N2/PP2PPPP/RNBQKB1R w KQ - 3 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 107.5,
+   "fen": "rnbq1rk1/ppppppbp/5np1/3P4/2P5/4BN2/PP2PPPP/RN1QKB1R b KQ - 4 5",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 152.5,
+   "fen": "rnbq1rk1/pp1pppbp/2p2np1/3P4/2P5/4BN2/PP2PPPP/RN1QKB1R w KQ - 0 6",
+   "line": [
+    "c6"
+   ],
+   "spoken": "Against White's early space grab with d5, Black strikes at its base with c6. The plan is simple: undermine and trade off the overextended pawn, and the extra space evaporates.",
+   "kind": "main",
+   "teaches": "Meet a premature space grab by challenging the advanced pawn at its base.",
+   "plans": "Develop smoothly and exploit White's loose, overextended setup."
+  },
+  {
+   "ply": 11,
+   "t": 153.5,
+   "fen": "rnbq1rk1/pp1pppbp/2p2np1/3P4/2P5/4BN2/PP1NPPPP/R2QKB1R b KQ - 1 6",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 156.5,
+   "fen": "rnbq1rk1/pp1pppbp/2p2np1/3P4/2P5/4BN2/PP2PPPP/RN1QKB1R w KQ - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 169,
+   "fen": "rnbq1rk1/pp1pppbp/2p2np1/3P4/2P5/4BN2/PP1NPPPP/R2QKB1R b KQ - 1 6",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 170.5,
+   "fen": "rnbq1rk1/pp1pppbp/5np1/3p4/2P5/4BN2/PPQNPPPP/R3KB1R b KQ - 1 7",
+   "line": [
+    "cxd5",
+    "Qc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 177,
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/3p4/2P5/4BN2/PPQNPPPP/R3KB1R w KQ - 2 8",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 179.5,
+   "fen": "r1bq1rk1/pp1pppbp/2n2np1/3p4/2PN4/4B3/PPQNPPPP/R3KB1R b KQ - 3 8",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 226.5,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/3p4/2PN4/1N2B3/PPQ1PPPP/R3KB1R b KQ - 1 9",
+   "line": [
+    "d6",
+    "N2b3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 255,
+   "fen": "r1bq1rk1/pp2ppbp/3p1np1/3p4/2Pn4/1N2B3/PPQ1PPPP/R3KB1R w KQ - 0 10",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 261,
+   "fen": "r1bq1rk1/pp3pbp/3p1np1/3pp3/2PB4/1N6/PPQ1PPPP/R3KB1R w KQ - 0 11",
+   "line": [
+    "Bxd4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 268,
+   "fen": "r1bq1rk1/pp3pbp/3p1np1/3pp3/2P5/1N2B3/PPQ1PPPP/R3KB1R b KQ - 1 11",
+   "line": [
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 274,
+   "fen": "r2q1rk1/pp3pbp/3p1np1/3ppb2/2P5/1N2B3/PPQ1PPPP/R3KB1R w KQ - 2 12",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": "Black develops the bishop to f5 with tempo, hitting White's queen on c2 and forcing a concession. Every move gains time because White's pieces are placed so awkwardly.",
+   "kind": "main",
+   "teaches": "Develop with a threat against a poorly-placed queen — each tempo compounds."
+  },
+  {
+   "ply": 23,
+   "t": 283.5,
+   "fen": "r2q1rk1/pp3pbp/3p1np1/3ppb2/2P5/1N2B3/PP1QPPPP/R3KB1R b KQ - 3 12",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 289.5,
+   "fen": "r2q1rk1/pp3pbp/3p1np1/4pb2/2p5/1N2B3/PP1QPPPP/R3KB1R w KQ - 0 13",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 300.5,
+   "fen": "r2q1rk1/pp3pbp/3p1np1/N3pb2/2p5/4B3/PP1QPPPP/R3KB1R b KQ - 1 13",
+   "line": [
+    "Na5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 341.5,
+   "fen": "r2q1rk1/pp3pbp/3p1np1/N3pb2/8/2p1B3/PP1QPPPP/R3KB1R w KQ - 0 14",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 348.5,
+   "fen": "r2q1rk1/pp3pbp/3p1np1/N3pb2/8/2Q1B3/PP2PPPP/R3KB1R b KQ - 0 14",
+   "line": [
+    "Qxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 368.5,
+   "fen": "r2q1rk1/pp3pbp/3p2p1/N2npb2/8/2Q1B3/PP2PPPP/R3KB1R w KQ - 1 15",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 380.5,
+   "fen": "r2q1rk1/pp3pbp/3p2p1/N2npb2/8/1Q2B3/PP2PPPP/R3KB1R b KQ - 2 15",
+   "line": [
+    "Qb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 386,
+   "fen": "r2q1rk1/pp3pbp/3p2p1/N2npb2/8/2Q1B3/PP2PPPP/R3KB1R b KQ - 6 17",
+   "line": [
+    "Nc3",
+    "Qb4",
+    "Nd5",
+    "Qc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 395,
+   "fen": "r2q1rk1/pp3pbp/3p2p1/N2npb2/8/1Q2B3/PP2PPPP/R3KB1R b KQ - 2 15",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 398,
+   "fen": "r2q1rk1/pp3pbp/3p2p1/N3pb2/8/1Q2n3/PP2PPPP/R3KB1R w KQ - 0 16",
+   "line": [
+    "Nxe3"
+   ],
+   "spoken": "The combination lands: Black removes the bishop on e3 first, then collects. With White's king still stuck in the centre and the pieces loose, the position simply falls apart and Black wins a piece.",
+   "kind": "main",
+   "teaches": "Eliminate the defender, then cash in — a king stuck in the centre invites the tactics."
+  },
+  {
+   "ply": 31,
+   "t": 405.5,
+   "fen": "r2q1rk1/pp3pbp/3p2p1/N3pb2/8/4Q3/PP2PPPP/R3KB1R b KQ - 0 16",
+   "line": [
+    "Qxe3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 407,
+   "fen": "r2q1rk1/pp3pbp/3p2p1/N3pb2/8/1Q2n3/PP2PPPP/R3KB1R w KQ - 0 16",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 411.5,
+   "fen": "r2q1rk1/pp3pbp/3p2p1/N3pb2/8/4Q3/PP2PPPP/R3KB1R b KQ - 0 16",
+   "line": [
+    "Qxe3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 413,
+   "fen": "r4rk1/pp3pbp/3p2p1/q3pb2/8/4Q3/PP2PPPP/R3KB1R w KQ - 0 17",
+   "line": [
+    "Qxa5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 420,
+   "fen": "r4rk1/pp3pbp/3p2p1/q3pb2/8/8/PP1QPPPP/R3KB1R b KQ - 1 17",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 440,
+   "fen": "r4rk1/pp3pbp/3p2p1/4pb2/8/8/PP1qPPPP/R3KB1R w KQ - 0 18",
+   "line": [
+    "Qxd2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 447.5,
+   "fen": "2r2rk1/pp3pbp/3p2p1/4pb2/8/8/PP1KPPPP/R4B1R w - - 1 19",
+   "line": [
+    "Kxd2",
+    "Rac8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 453.5,
+   "fen": "2r2rk1/pp3pbp/3p2p1/4pb2/8/8/PP1KPPPP/2R2B1R b - - 2 19",
+   "line": [
+    "Rc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 458,
+   "fen": "5rk1/pp3pbp/3p2p1/4pb2/8/8/PP1KPPPP/2r2B1R w - - 0 20",
+   "line": [
+    "Rxc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 460.5,
+   "fen": "2r3k1/pp3pbp/3p2p1/4pb2/8/8/PP2PPPP/2K2B1R w - - 1 21",
+   "line": [
+    "Kxc1",
+    "Rc8+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 478.5,
+   "fen": "2r3k1/pp3pbp/3p2p1/4pb2/8/8/PP2PPPP/3K1B1R b - - 2 21",
+   "line": [
+    "Kd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 500,
+   "fen": "6k1/pp3pbp/3p2p1/4pb2/8/8/PPr1PPPP/3K1B1R w - - 3 22",
+   "line": [
+    "Rc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 505,
+   "fen": "6k1/pp3pbp/3p2p1/4pb2/8/4P3/PPr2PPP/3K1B1R b - - 0 22",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 508,
+   "fen": "6k1/pp3pbp/3p2p1/4pb2/8/8/PPr1PPPP/3K1B1R w - - 3 22",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 510.5,
+   "fen": "6k1/pp3pbp/3p2p1/4pb2/8/4P3/PPr2PPP/3K1B1R b - - 0 22",
+   "line": [
+    "e3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 512.5,
+   "fen": "6k1/pp3pbp/3p2p1/4pb2/8/4P3/PP3rPP/3K1B1R w - - 0 23",
+   "line": [
+    "Rxf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 526.5,
+   "fen": "6k1/pp3pbp/3p2p1/4pb2/2B5/4P3/PP3rPP/3K3R b - - 1 23",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 529,
+   "fen": "6k1/pp3pbp/3p2p1/4pb2/2B5/4P3/Pr4PP/3K3R w - - 0 24",
+   "line": [
+    "Rxb2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 534,
+   "fen": "r2q1rk1/pp3pbp/3p1np1/N3pb2/8/2Q1B3/PP2PPPP/R3KB1R b KQ - 0 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 657.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/3P4/2P5/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 661.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/3P4/8/8/PPP1PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
