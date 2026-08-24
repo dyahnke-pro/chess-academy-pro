@@ -1,0 +1,252 @@
+{
+ "videoId": "358seoKegqA",
+ "title": "Settle for a Draw!?! | Scandinavian Defense | GM Naroditsky’s Theory Speed Run",
+ "openingName": "Scandinavian Defense: 2.exd5 Nf6, 3.Bb5+ (White)",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:358seoKegqA",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 30.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 38.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 39.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 43.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3P4/8/8/PPPP1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 48,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 86.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR b KQkq - 2 3",
+   "line": [
+    "Bb5+"
+   ],
+   "spoken": "The bishop check on b5 — an easy-to-play line that dodges heavy theory. It forces a piece to appear on d7, an awkward square for Black.",
+   "kind": "main",
+   "teaches": "The b5 check trades a little material tension for an easy, slightly better game.",
+   "plans": "Return the pawn later, keep the space and the better bishop."
+  },
+  {
+   "ply": 6,
+   "t": 91,
+   "fen": "rn1qkb1r/pppbpppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR w KQkq - 3 4",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 134.5,
+   "fen": "rn1qkb1r/pppbpppp/5n2/3P4/8/8/PPPPBPPP/RNBQK1NR b KQkq - 4 4",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 137,
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/8/8/PPPPBPPP/RNBQK1NR w KQkq - 0 5",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 139,
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/3P4/8/PPP1BPPP/RNBQK1NR b KQkq - 0 5",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 146.5,
+   "fen": "rn1qkb1r/pp1bpppp/8/2pn4/3P4/8/PPP1BPPP/RNBQK1NR w KQkq - 0 6",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 167.5,
+   "fen": "rn1qkb1r/pppbpppp/8/3n4/3P4/8/PPP1BPPP/RNBQK1NR b KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 173.5,
+   "fen": "rn1qkb1r/pp1bpppp/8/2pn4/3P4/8/PPP1BPPP/RNBQK1NR w KQkq - 0 6",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 210,
+   "fen": "rn1qkb1r/pp1bpppp/8/2pn4/2PP4/8/PP2BPPP/RNBQK1NR b KQkq - 0 6",
+   "line": [
+    "c4"
+   ],
+   "spoken": "When Black strikes with c5, the clamp is the pawn to c4 followed by d5 — driving a pawn deep and establishing a firm central presence Black must play around.",
+   "kind": "main",
+   "teaches": "Answer a wing break by clamping the centre with c4 and d5.",
+   "plans": "Fix the centre, then finish development."
+  },
+  {
+   "ply": 12,
+   "t": 215.5,
+   "fen": "rn1qkb1r/pp1bpppp/5n2/2p5/2PP4/8/PP2BPPP/RNBQK1NR w KQkq - 1 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 252.5,
+   "fen": "rn1qkb1r/pp1bpppp/5n2/2pP4/2P5/8/PP2BPPP/RNBQK1NR b KQkq - 0 7",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 255,
+   "fen": "rn1qkb1r/pp1b1ppp/4pn2/2pP4/2P5/8/PP2BPPP/RNBQK1NR w KQkq - 0 8",
+   "line": [
+    "e6"
+   ],
+   "spoken": "With the pawn wedged on d5 and Black committed to e6, White has a pleasant space advantage and a clear plan — a comfortable, low-risk edge out of the opening.",
+   "kind": "main",
+   "teaches": "A protected pawn on d5 cramping the opponent is a durable, easy-to-play plus.",
+   "plans": "Develop behind the clamp and press."
+  },
+  {
+   "ply": 16,
+   "t": 319.5,
+   "fen": "rn1qkb1r/pp1b2pp/4pn2/2p5/2P5/8/PP2BPPP/RNBQK1NR w KQkq - 0 9",
+   "line": [
+    "dxe6",
+    "fxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 358.5,
+   "fen": "rn1qkb1r/pp1b2pp/4pn2/2p5/2P5/2N5/PP2BPPP/R1BQK1NR b KQkq - 1 9",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 360.5,
+   "fen": "r2qkb1r/pp1b2pp/2n1pn2/2p5/2P5/2N5/PP2BPPP/R1BQK1NR w KQkq - 2 10",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 361.5,
+   "fen": "r2qkb1r/pp1b2pp/2n1pn2/2p5/2P5/2N2N2/PP2BPPP/R1BQK2R b KQkq - 3 10",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 363,
+   "fen": "r2qk2r/pp1bb1pp/2n1pn2/2p5/2P5/2N2N2/PP2BPPP/R1BQK2R w KQkq - 4 11",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 364.5,
+   "fen": "r2qk2r/pp1bb1pp/2n1pn2/2p5/2P5/2N2N2/PP2BPPP/R1BQ1RK1 b kq - 5 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 370,
+   "fen": "r2q1rk1/pp1bb1pp/2n1pn2/2p5/2P5/2N2N2/PP2BPPP/R1BQ1RK1 w - - 6 12",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 420,
+   "fen": "rn1qkb1r/pp1bpppp/5n2/2pP4/2P5/8/PP2BPPP/RNBQK1NR b KQkq - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1123,
+   "fen": "rn1qkb1r/pp1b2pp/4pn2/2p5/2P5/8/PP2BPPP/RNBQK1NR w KQkq - 0 9",
+   "line": [
+    "e6",
+    "dxe6",
+    "fxe6"
+   ],
+   "spoken": ""
+  }
+ ]
+}
