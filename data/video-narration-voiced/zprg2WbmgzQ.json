@@ -42,9 +42,9 @@
    "line": [
     "f3"
    ],
-   "spoken": "The pawn to f3 is the Fantasy Variation — a bold way to prop up e4 with a pawn and keep the whole centre, turning the Caro into a sharp, attacking fight rather than a quiet one.",
+   "spoken": "The pawn to f3 is the Fantasy Variation — a bold way to prop up e4 with a pawn, keep the whole centre, and steer the Caro into a sharp, tactical fight.",
    "kind": "main",
-   "teaches": "f3 defends the centre with a pawn so White can play for lines and an attack, not a slow game.",
+   "teaches": "f3 defends the centre with a pawn so White can play for lines and an attack.",
    "plans": "Hold the centre, develop, and open the kingside."
   },
   {
@@ -54,9 +54,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "Black answers with e6, the soundest reply, steering into a French-like structure. It keeps the freeing capture on e4 in reserve, together with the queen-check on h4 that punishes a careless recapture.",
-   "kind": "main",
-   "teaches": "...e6 treats the Fantasy like a French — solid, while keeping the ...dxe4 and h4-check resources alive."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -65,9 +63,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "The knight to c3 reinforces e4 and develops in the same move, and it draws the sting from the h4-check, which now runs into a simple g3.",
-   "kind": "main",
-   "teaches": "Defend and develop at once — the knight guards e4 and blunts the queen-check."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -76,9 +72,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": "The bishop to b4 pins the knight guarding e4 and adds a second attacker to the pawn — the same Winawer pressure Black uses in the French.",
-   "kind": "main",
-   "teaches": "Pinning the defender of e4 is Black's way to fight for the pawn."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -87,7 +81,7 @@
    "line": [
     "a3"
    ],
-   "spoken": "The pawn to a3 puts the question to the pinning bishop. On the surface it looks to just drop e4, but it is a deliberate gambit: take the knight and White collects the bishop pair and lasting dark-square targets.",
+   "spoken": "The pawn to a3 puts the question to the pinning bishop. It looks to just drop e4, but it is a deliberate gambit: take the knight and White collects the bishop pair and lasting dark-square targets.",
    "kind": "main",
    "teaches": "a3 offers e4 as a gambit for the two bishops and the holes Black's dark-squared bishop leaves behind.",
    "plans": "Invite the capture on c3, then work the dark squares."
@@ -108,9 +102,7 @@
    "line": [
     "bxc3"
    ],
-   "spoken": "Recapturing with the b-pawn builds a broad pawn mass, and the deeper point is that Black has parted with the dark-squared bishop. The holes on d6 and e7 will be felt long after the pawn count is forgotten.",
-   "kind": "main",
-   "teaches": "Trading off the dark-squared bishop leaves permanent dark-square weaknesses, even when it wins a pawn."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -128,10 +120,7 @@
    "line": [
     "Nh3"
    ],
-   "spoken": "The knight to h3 looks strange, but it develops toward castling and, above all, prepares to reroute through f2 to win the e4-pawn back. The h4-check stays harmless — g3 always answers it.",
-   "kind": "main",
-   "teaches": "An awkward-looking developing move can be the point — the knight loops through f2 to regain the pawn.",
-   "plans": "Play the knight to f2, recover e4, then castle and attack."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -149,10 +138,7 @@
    "line": [
     "Bb2"
    ],
-   "spoken": "The bishop to b2 defends the c3-pawn the queen is eyeing. Passive as it sits, it is loaded with potential: the moment c4 and d5 pry the centre open, that diagonal comes alive.",
-   "kind": "main",
-   "teaches": "A quiet fianchetto can hold a weak pawn now and turn dangerous once you open its lines.",
-   "plans": "Prepare c4 and d5 to activate the bishop."
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -170,9 +156,7 @@
    "line": [
     "fxe4"
    ],
-   "spoken": "White rounds the pawn back up on e4. The gambit has paid its bill: material is restored, and White keeps the bishop pair and the faster development.",
-   "kind": "main",
-   "teaches": "A sound gambit returns the pawn on your terms — here with the two bishops and the initiative in hand."
+   "spoken": ""
   },
   {
    "ply": 18,
@@ -183,7 +167,7 @@
    ],
    "spoken": "Black snatches on e4 again, but the raid is dubious. The knight grab on c3 is no real threat: the queen would step to d2, pinning that knight against the loose queen on a5 and simply winning it.",
    "kind": "main",
-   "teaches": "Before fearing a fork on c3, spot the pin — Qd2 skewers knight to the undefended queen on a5."
+   "teaches": "Before fearing a fork on c3, spot the pin — Qd2 skewers the knight to the undefended queen on a5."
   },
   {
    "ply": 19,
@@ -192,9 +176,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The bishop to d3 develops with tempo, hitting the knight on e4 and clearing the way to castle. White's initiative is already worth more than the pawn.",
-   "kind": "main",
-   "teaches": "Develop with a threat — the bishop kicks the knight and points at the kingside."
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -212,10 +194,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Castling tucks the king away and, just as important, drops the rook onto the half-open f-file — the attacking highway the Fantasy is built to open.",
-   "kind": "main",
-   "teaches": "In the Fantasy the f-file opens for the rook, so castling is itself an attacking move.",
-   "plans": "Open the kingside with c4 and d5, then bring the queen over."
+   "spoken": ""
   },
   {
    "ply": 22,
@@ -233,10 +212,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "The pawn to c4 prepares d5. Ripping the centre open turns every white piece toward Black's king and the f7-pawn, and it frees the bishop that has been biding its time.",
-   "kind": "main",
-   "teaches": "Advance c4 and d5 to open the centre and swing the attack toward f7.",
-   "plans": "Push d5 and pour pieces at the king."
+   "spoken": ""
   },
   {
    "ply": 24,
@@ -268,9 +244,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Black castles long, choosing to give up g7 rather than the exposed short castle. White sizes it up plainly: the g7-pawn is simply hanging, and grabbing it is worth the open file.",
-   "kind": "main",
-   "teaches": "Attacking doesn't forbid taking a free pawn — material still counts when the counterplay is unclear."
+   "spoken": ""
   },
   {
    "ply": 29,
@@ -300,9 +274,7 @@
     "Qxf7",
     "Rde8"
    ],
-   "spoken": "The queen collects f7 as well, but Black's quiet rook to e8 is the real idea. With the knight on f6 defended, White can't take it off, and Black keeps live pressure — a tense, unclear fight where precision decides everything.",
-   "kind": "main",
-   "teaches": "A silent defensive move can outweigh a check — keeping every piece defended is what sustains the counterattack."
+   "spoken": ""
   }
  ]
 }

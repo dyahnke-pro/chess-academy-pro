@@ -42,10 +42,10 @@
    "line": [
     "f3"
    ],
-   "spoken": "White meets the central strike a quiet way: the pawn to f3 simply props up the e4-pawn rather than a piece. The broad pawn duo in the centre stays intact, and Black is never handed a free pawn.",
+   "spoken": "The pawn to f3 is the Fantasy Variation — it props up e4 with a pawn instead of a piece, keeps the whole centre, and turns the Caro into a sharp, attacking fight.",
    "kind": "main",
-   "teaches": "The Fantasy Variation keeps a big pawn centre by defending e4 with a pawn, not a piece — space over speed.",
-   "plans": "Hold the centre, develop behind it, and castle."
+   "teaches": "f3 defends the centre with a pawn so White can play for space and an attack, not a quiet game.",
+   "plans": "Hold the centre, aim the pieces at f7, and castle."
   },
   {
    "ply": 6,
@@ -72,10 +72,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Black hits the d4-pawn, and the greedy reply is a trap for White: taking on e5 walks into a queen check on h4 that also rakes down the fourth rank at the e4-pawn — one move forking the king and the pawn. Development, not the pawn grab, is the answer.",
-   "kind": "main",
-   "teaches": "Before grabbing a central pawn, check the check it opens — the capture here hangs the king to a fork on h4.",
-   "plans": "Blunt the h4-check with a developing move first."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -84,9 +81,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "The knight comes to f3, developing and taking the h4-square away from the queen in a single move. Black can round up the d4-pawn, but that costs the time White wants.",
-   "kind": "main",
-   "teaches": "Answer a threat with a developing move that also solves it."
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -104,10 +99,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The bishop swings to its most active diagonal and fixes on f7. That is the soft spot in Black's camp — the one square the king alone defends — and every white piece will be steered toward it.",
-   "kind": "main",
-   "teaches": "Point the bishop at f7 early; it is the square only the enemy king guards.",
-   "plans": "Castle, then pile the rook and pieces onto f7."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -125,10 +117,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Castling is development too: the rook slides to f1 and bears down the f-file at f7, doubling the pressure the bishop already sets. Only White's own knight on f3 stands in between — and it can leap off with effect at any moment.",
-   "kind": "main",
-   "teaches": "Castling brings the rook to the file behind the pawn — here straight at f7.",
-   "plans": "Shift the f3-knight with tempo and f7 is overwhelmed."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -137,9 +126,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "This lets the storm break. The bishop develops to d6 but leaves f7 guarded by the king and nothing else, with the bishop on c4 and the rook behind the f-pawn already trained on it.",
-   "kind": "main",
-   "teaches": "When attackers pile onto a square the king alone defends, a sacrifice is usually in the air."
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -148,10 +135,9 @@
    "line": [
     "Bxf7+"
    ],
-   "spoken": "So White gives up the bishop for the pawn. The point sits behind it: once the king is dragged onto f7, the knight on f3 can jump away and unveil a check from the rook down the f-file — a discovered check that wins the material back with the king stranded.",
+   "spoken": "White gives up the bishop to crash into f7. The point sits behind it: once the king is dragged out to f7, the knight on f3 can leap away and unveil a check from the rook down the file — a discovered check that wins the material back with the king stranded.",
    "kind": "trap",
-   "teaches": "Sacrifice to strip the king when a discovered check waits behind the very piece you give up.",
-   "plans": "Provoke the king forward, then fire the discovered check."
+   "teaches": "Sacrifice to strip the king when a discovered check waits behind the very piece you give up."
   },
   {
    "ply": 16,
@@ -160,9 +146,7 @@
    "line": [
     "Kf8"
    ],
-   "spoken": "Black declines the bishop and tucks the king to f8, sheltering behind the piece on f7 so the discovered check is muted. White needs a forcing way to peel the king back off that shelter.",
-   "kind": "main",
-   "teaches": "A king hiding behind an enemy piece needs a forcing move to dislodge it, not a quiet one."
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -171,10 +155,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": "The bishop steps back to e6, and the retreat carries two threats: it attacks the loose bishop on g4 and clamps f7 so the king stays boxed on f8.",
-   "kind": "main",
-   "teaches": "A retreat that also attacks keeps the initiative — the piece moves back but the pressure does not.",
-   "plans": "Win the g4-bishop or drive the king."
+   "spoken": ""
   },
   {
    "ply": 18,
@@ -183,9 +164,7 @@
    "line": [
     "Ngf6"
    ],
-   "spoken": "The knight drops to f6 to block the file and screen the king, but it abandons the bishop on g4 — solving one threat while dropping a piece to the other.",
-   "kind": "main",
-   "teaches": "Plugging one hole can uncover another — count every threat before choosing the defence."
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -194,9 +173,7 @@
    "line": [
     "Bxg4"
    ],
-   "spoken": "White simply pockets the bishop on g4. Recapturing reopens the king to the discovered check White has been angling for all along.",
-   "kind": "main",
-   "teaches": "Collect the loose piece; the recapture only feeds the attack."
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -205,10 +182,7 @@
    "line": [
     "Nxg4"
    ],
-   "spoken": "Now the geometry: the black king on f8 and queen on d8 stand a knight's leap from one square, e6. A white knight arriving there would fork them both.",
-   "kind": "main",
-   "teaches": "When the enemy king and queen sit a knight's-move apart, hunt for the square that forks them.",
-   "plans": "Route the f3-knight toward e6."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -217,9 +191,7 @@
    "line": [
     "Ng5+"
    ],
-   "spoken": "The knight jumps to g5, and stepping off f3 uncovers the rook's check straight down the f-file. The check comes free while the knight lands one hop from the e6-fork; if the king runs, the knight and mate follow, so Black has to block.",
-   "kind": "main",
-   "teaches": "A discovered check buys a free tempo to steer the checking-and-forking knight into place."
+   "spoken": ""
   },
   {
    "ply": 22,
@@ -237,9 +209,9 @@
    "line": [
     "Ne6+"
    ],
-   "spoken": "The knight lands on e6 with check and forks the king and the queen at once. The king must move, and the queen falls.",
+   "spoken": "The knight lands on e6 with check and forks the king on f8 and the queen on d8 at once. The king must move, and the queen falls.",
    "kind": "main",
-   "teaches": "The forking square you spotted turns the tempo of a check into a won queen."
+   "teaches": "When the enemy king and queen stand a knight's-move apart, the square that forks them wins the queen."
   },
   {
    "ply": 24,
@@ -258,10 +230,7 @@
     "Nxd8",
     "Raxd8"
    ],
-   "spoken": "The knight takes the queen. White is a full queen up for a bishop, and from here the job is simply to trade the board down and convert.",
-   "kind": "main",
-   "teaches": "Once you win the queen, simplify — every trade brings the extra material closer to deciding.",
-   "plans": "Finish developing, swap pieces, and mate."
+   "spoken": ""
   },
   {
    "ply": 27,
@@ -288,9 +257,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "The bishop comes to g5 and pins the knight on f6 to the king on e7 — the knight is frozen, unable to step off the diagonal without baring its king.",
-   "kind": "main",
-   "teaches": "A pin against the king nails a piece to the spot; it cannot legally move."
+   "spoken": ""
   },
   {
    "ply": 30,
@@ -308,9 +275,7 @@
    "line": [
     "Bxf6+"
    ],
-   "spoken": "With an extra queen, trading is the plan. The bishop takes the pinned knight with check, and every pair that leaves the board makes the win simpler.",
-   "kind": "main",
-   "teaches": "When you are up material, swap pieces — fewer defenders, easier technique."
+   "spoken": ""
   },
   {
    "ply": 32,
@@ -337,10 +302,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "Black's pawn to g5 leaves a permanent hole on f5. With the pawns pushed past it, no black pawn can ever guard that square again — it is begging for a white piece.",
-   "kind": "main",
-   "teaches": "A pawn push that vacates the square in front of it leaves a hole an enemy piece can settle on for good.",
-   "plans": "Plant a piece on f5."
+   "spoken": ""
   },
   {
    "ply": 35,
@@ -349,9 +311,7 @@
    "line": [
     "Rf5"
    ],
-   "spoken": "The rook occupies f5, the untouchable hole, and immediately leans on the e5-pawn — nothing can chase it away.",
-   "kind": "main",
-   "teaches": "Occupy a hole with a piece no pawn can ever evict."
+   "spoken": ""
   },
   {
    "ply": 34,
@@ -394,9 +354,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "The pawn to e5 forks the bishop on d6 and the knight on f6, and the rook on f5 defends it — so the fork can't simply be captured off.",
-   "kind": "main",
-   "teaches": "A pawn can fork two pieces too; just be sure the forking pawn is defended."
+   "spoken": ""
   },
   {
    "ply": 38,
@@ -414,9 +372,7 @@
    "line": [
     "exd6+"
    ],
-   "spoken": "Rather than recapturing elsewhere, White takes the bishop with check. The check means the fork nets a clean piece — Black must answer before saving anything.",
-   "kind": "main",
-   "teaches": "Cash a fork with a check so the opponent has no time to wriggle free."
+   "spoken": ""
   },
   {
    "ply": 40,
@@ -425,10 +381,7 @@
    "line": [
     "Kxd6"
    ],
-   "spoken": "The king recaptures onto d6 and lines up with the white queen on d1, screened only by the knight on d2. That is a double check waiting to happen.",
-   "kind": "main",
-   "teaches": "Stack the queen behind your own knight on the enemy king's file — the knight becomes a double-check gun.",
-   "plans": "Spring the knight with a double check."
+   "spoken": ""
   },
   {
    "ply": 41,
@@ -437,7 +390,7 @@
    "line": [
     "Ne4+"
    ],
-   "spoken": "The knight springs to e4: a double check. Knight and queen strike the king together, and a double check can never be blocked or captured away — the king has to walk.",
+   "spoken": "The knight springs to e4 for a double check — knight and queen strike the king together. A double check can never be blocked or captured away, so the king has to walk into the net.",
    "kind": "main",
    "teaches": "A double check forces the king to move; nothing answers two checks at once."
   },
@@ -457,9 +410,7 @@
    "line": [
     "Qd6+"
    ],
-   "spoken": "Before snapping off the free knight, an in-between check: the queen drops to d6, shielded by the knight on e4 so it can't be taken, and drives the king further into the net.",
-   "kind": "main",
-   "teaches": "Improve the attack with a protected in-between check before you collect material."
+   "spoken": ""
   },
   {
    "ply": 44,
@@ -495,9 +446,7 @@
    "line": [
     "Nd7+"
    ],
-   "spoken": "The mating net closes. The knight checks from d7 and shoves the king to the rim, where it starts to run out of squares.",
-   "kind": "main",
-   "teaches": "Drive the king to the edge, where a queen and a minor piece can finish it."
+   "spoken": ""
   },
   {
    "ply": 48,
@@ -515,7 +464,7 @@
    "line": [
     "Qa3#"
    ],
-   "spoken": "The queen to a3 is mate. It checks up the open a-file, and every escape is sealed: the rook on f5 rakes the fifth rank to deny b5 and a5, the knight on d7 covers b6, and Black's own pawns choke a7 and b7.",
+   "spoken": "The queen to a3 is mate. It checks up the open a-file and every escape is sealed: the rook on f5 rakes the fifth rank to deny b5 and a5, the knight on d7 covers b6, and Black's own pawns choke a7 and b7.",
    "kind": "main",
    "teaches": "Mate is one piece checking while the rest quietly remove every flight square."
   },
@@ -533,9 +482,7 @@
    "line": [
     "Nd5+"
    ],
-   "spoken": "The near-miss worth seeing: the same idea with the knight to d5 is only a check, not mate. The knight steps onto its own rook's fifth rank and blocks it from covering b5 — so the king would keep that escape.",
-   "kind": "review",
-   "teaches": "Watch your own pieces blocking each other — a knight can walk right in front of the rook it needs."
+   "spoken": ""
   },
   {
    "ply": 49,
@@ -545,8 +492,7 @@
     "Ka6",
     "Qa3+"
    ],
-   "spoken": "Played out, the queen check on a3 only lets the king slip to b5, straight through the gap the knight left in the rook's line. That is why the other knight check was chosen.",
-   "kind": "review"
+   "spoken": ""
   },
   {
    "ply": 50,
