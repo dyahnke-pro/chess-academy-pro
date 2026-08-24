@@ -951,6 +951,22 @@ export function CoachTeachPage(): JSX.Element {
     // pause. Cached per opening, so re-teaching is instant. Best-effort; never
     // throws. Pre-mined gems were already baked synchronously before start.
     const finderSide = tree.studentSide ?? inferStudentSideFromName(tree.openingName);
+    // PRE-MINED gems bake SYNCHRONOUSLY onto THIS tree — the one actually walked
+    // — before the finder's async pass. Doing it here (not on candidateStatic in
+    // handleSubmit) fixes the notes-lead case, where the static tree that got
+    // baked was discarded and the generated tree walked instead (David 2026-08-24
+    // "no gems at all" on the Accelerated Dragon). One chokepoint, every path.
+    try {
+      const n = bakeGemsIntoTree(tree, finderSide);
+      if (n > 0) {
+        void logAppAudit({
+          kind: 'coach-surface-migrated',
+          category: 'subsystem',
+          source: 'CoachTeachPage.startWalkthrough.bakeGems',
+          summary: `baked ${n} pre-mined gem(s) into walked "${tree.openingName}"`,
+        });
+      }
+    } catch { /* gems are a bonus, never a blocker */ }
     void findAndBakeGems(tree, tree.openingName, finderSide).catch(() => undefined);
   }, [walkthrough]);
 
