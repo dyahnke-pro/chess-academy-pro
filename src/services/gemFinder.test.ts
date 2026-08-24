@@ -2,20 +2,18 @@ import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { Chess } from 'chess.js';
 import type { WalkthroughTree, BakedGemLine } from '../types/walkthroughTree';
 
-// Mock the engine + explorer + playout so discovery is deterministic.
+// Mock the engine + explorer so discovery is deterministic.
 vi.mock('./stockfishEngine', () => ({
-  stockfishEngine: { analyzePosition: vi.fn() },
+  stockfishEngine: { analyzeWithBudget: vi.fn() },
 }));
 vi.mock('./amateurPlayLookup', () => ({ lookupAmateurPlay: vi.fn() }));
-vi.mock('./punishPlayout', () => ({
-  playOutPunish: vi.fn(),
-  advantageAlreadyShown: vi.fn(() => true), // skip the playout in the test
-}));
 vi.mock('../db/schema', () => ({ db: { meta: { get: vi.fn(async () => undefined), put: vi.fn(async () => undefined) } } }));
 vi.mock('./appAuditor', () => ({ logAppAudit: vi.fn() }));
 
 import { stockfishEngine } from './stockfishEngine';
 import { lookupAmateurPlay } from './amateurPlayLookup';
+
+const analyzeMock = () => stockfishEngine.analyzeWithBudget as unknown as ReturnType<typeof vi.fn>;
 import {
   collectWalkPositions,
   bakeFoundGemsIntoTree,
@@ -80,11 +78,11 @@ describe('findGemsForLine (mocked engine/explorer)', () => {
       fen: baseFen, totalGames: 1000, source: 'lichess-live',
       moves: [{ san: 'f6', uci: 'f7f6', games: 120, white: 60, draws: 20, black: 40, whitePct: 60, drawPct: 20, blackPct: 40, averageRating: 1800 }],
     });
-    // base eval (student ~even) then after-slip eval (student clearly better) with a legal punish UCI.
-    const analyze = stockfishEngine.analyzePosition as unknown as ReturnType<typeof vi.fn>;
-    analyze
-      .mockResolvedValueOnce({ evaluation: 20, bestMove: 'g1f3', isMate: false, mateIn: null, depth: 16, topLines: [] })
-      .mockResolvedValueOnce({ evaluation: 260, bestMove: 'd2d4', isMate: false, mateIn: null, depth: 16, topLines: [] });
+    // base eval (student ~even) then after-slip eval (student clearly better)
+    // whose PV is the punish line (UCI), replayed legally from the after-slip FEN.
+    analyzeMock()
+      .mockResolvedValueOnce({ evaluation: 20, bestMove: 'g1f3', isMate: false, mateIn: null, depth: 12, topLines: [{ rank: 1, evaluation: 20, moves: ['g1f3'], mate: null }] })
+      .mockResolvedValueOnce({ evaluation: 260, bestMove: 'd2d4', isMate: false, mateIn: null, depth: 12, topLines: [{ rank: 1, evaluation: 260, moves: ['d2d4', 'g8f6'], mate: null }] });
 
     const found = await findGemsForLine([{ fen: baseFen, opponentToMove: true }], 'white', 5000);
     const key = baseFen.split(' ').slice(0, 4).join(' ');
@@ -103,10 +101,9 @@ describe('findGemsForLine (mocked engine/explorer)', () => {
       fen: baseFen, totalGames: 1000, source: 'lichess-live',
       moves: [{ san: 'e5', uci: 'e7e5', games: 500, white: 33, draws: 34, black: 33, whitePct: 33, drawPct: 34, blackPct: 33, averageRating: 1800 }],
     });
-    const analyze = stockfishEngine.analyzePosition as unknown as ReturnType<typeof vi.fn>;
-    analyze
-      .mockResolvedValueOnce({ evaluation: 20, bestMove: 'g1f3', isMate: false, mateIn: null, depth: 16, topLines: [] })
-      .mockResolvedValueOnce({ evaluation: 25, bestMove: 'g1f3', isMate: false, mateIn: null, depth: 16, topLines: [] }); // no jump
+    analyzeMock()
+      .mockResolvedValueOnce({ evaluation: 20, bestMove: 'g1f3', isMate: false, mateIn: null, depth: 12, topLines: [{ rank: 1, evaluation: 20, moves: ['g1f3'], mate: null }] })
+      .mockResolvedValueOnce({ evaluation: 25, bestMove: 'g1f3', isMate: false, mateIn: null, depth: 12, topLines: [{ rank: 1, evaluation: 25, moves: ['g1f3'], mate: null }] }); // no jump
     const found = await findGemsForLine([{ fen: baseFen, opponentToMove: true }], 'white', 5000);
     expect(found.size).toBe(0);
   });

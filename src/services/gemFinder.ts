@@ -21,7 +21,6 @@
 import { Chess } from 'chess.js';
 import { lookupAmateurPlay } from './amateurPlayLookup';
 import { stockfishEngine } from './stockfishEngine';
-import { playOutPunish, advantageAlreadyShown } from './punishPlayout';
 import { narrateContinuationMove } from './continuationMoveNarration';
 import { db } from '../db/schema';
 import { logAppAudit } from './appAuditor';
@@ -32,7 +31,7 @@ import type {
   WalkthroughTreeNode,
 } from '../types/walkthroughTree';
 
-const FINDER_REV = '2026-08-24-v1';
+const FINDER_REV = '2026-08-24-v2-gentle';
 // Centipawn bars — identical to the offline miner (studentEval is white-POV
 // engine cp flipped to the student's side).
 const WEAPON_CP = 100; // ≥ +1.0 = confirmed
@@ -40,10 +39,24 @@ const EDGE_CP = 50; //   +0.5..+1.0 = positional; below → dropped
 const JUMP_CP = 50; //   the slip must COST ≥ +0.5 vs not slipping
 const FREQ_FLOOR = 0.03; // a candidate slip humans play ≥ 3% of the time
 const MIN_GAMES_AT_POS = 20; // the position needs a real human sample
-const MAX_CANDIDATES = 4; // top-N human moves to test per position
-const MOVE_TIME_MS = 300; // per engine ply during the play-out
-const ANALYZE_DEPTH = 16;
-const DEFAULT_BUDGET_MS = 30_000; // overall wall-clock ceiling per opening
+// 🔒 GENTLE BY CONTRACT (David 2026-08-24: "app and computer are both super
+// slow now"). The finder shares the SINGLE multi-threaded Stockfish worker with
+// the lesson + the UI; depth-16 analysis over dozens of positions saturated
+// every core and starved the TTS (a stuttering voice sounded "accented"). So:
+// TIME-boxed shallow analysis (never depth-bounded, which can run long), the
+// engine's own PV as the punish line (no second multi-second play-out), hard
+// caps on positions + candidates, and a yield between every engine call so the
+// UI and voice always get CPU back.
+const ANALYZE_DEPTH = 12;
+const ANALYZE_BUDGET_MS = 350; // per analysis — a hard time box, not depth
+const MAX_CANDIDATES = 2; // top-N human moves to test per position
+const MAX_POSITIONS = 12; // scan the first N opponent positions (spine-first)
+const PV_PLIES = 8; // punish continuation taken from the engine PV
+const YIELD_MS = 250; // hand the CPU back between engine calls
+const DEFAULT_BUDGET_MS = 15_000; // overall wall-clock ceiling per opening
+const START_DELAY_MS = 4_000; // let the lesson settle before we touch the engine
+
+const sleep = (ms: number): Promise<void> => new Promise((r) => setTimeout(r, ms));
 
 function positionKey(fen: string): string {
   return fen.split(' ').slice(0, 4).join(' ');
@@ -107,10 +120,11 @@ async function verifySlip(
   studentIsWhite: boolean,
 ): Promise<BakedGemLine | null> {
   // Baseline: how the student stands BEFORE the slip. If they're already
-  // winning, there's no trap worth teaching here.
+  // winning, there's no trap worth teaching here. Time-boxed (never depth-
+  // bounded, which can run the worker long and starve the UI/voice).
   let base;
   try {
-    base = await stockfishEngine.analyzePosition(baseFen, ANALYZE_DEPTH);
+    base = await stockfishEngine.analyzeWithBudget(baseFen, ANALYZE_DEPTH, ANALYZE_BUDGET_MS);
   } catch {
     return null;
   }
@@ -134,7 +148,7 @@ async function verifySlip(
 
   let after;
   try {
-    after = await stockfishEngine.analyzePosition(afterSlipFen, ANALYZE_DEPTH);
+    after = await stockfishEngine.analyzeWithBudget(afterSlipFen, ANALYZE_DEPTH, ANALYZE_BUDGET_MS);
   } catch {
     return null;
   }
@@ -142,37 +156,28 @@ async function verifySlip(
   // Must reach a real edge AND the slip must have COST that edge.
   if (E1 < EDGE_CP || E1 - E0 < JUMP_CP) return null;
 
-  const punishUci = after.bestMove;
-  if (!punishUci || punishUci.length < 4) return null;
-  const punisher: 'w' | 'b' = studentIsWhite ? 'w' : 'b';
-  let b2: Chess;
-  let pm;
-  try {
-    b2 = new Chess(afterSlipFen);
-    pm = b2.move({
-      from: punishUci.slice(0, 2),
-      to: punishUci.slice(2, 4),
-      ...(punishUci.length > 4 ? { promotion: punishUci[4] } : {}),
-    });
-  } catch {
-    return null;
-  }
-  if (!pm) return null;
-
-  // Play the punish out to a quiet, material-shown terminus (or confirm it's
-  // already shown). If best play dissolves the edge, it isn't a real trap.
-  const afterPunishFen = b2.fen();
-  let punishSeq: string[] = [pm.san];
-  if (!advantageAlreadyShown(afterPunishFen, punisher)) {
-    let po;
+  // The punish line is the engine's own PV from after the slip — no second
+  // multi-second play-out. Replay it UCI→SAN and keep the first few plies.
+  const pv = after.topLines?.[0]?.moves ?? (after.bestMove ? [after.bestMove] : []);
+  if (pv.length === 0) return null;
+  const b2 = new Chess(afterSlipFen);
+  const punishSeq: string[] = [];
+  for (const uci of pv.slice(0, PV_PLIES)) {
+    if (typeof uci !== 'string' || uci.length < 4) break;
+    let mv;
     try {
-      po = await playOutPunish(afterPunishFen, punisher, MOVE_TIME_MS);
+      mv = b2.move({
+        from: uci.slice(0, 2),
+        to: uci.slice(2, 4),
+        ...(uci.length > 4 ? { promotion: uci[4] } : {}),
+      });
     } catch {
-      return null;
+      break;
     }
-    if (po.terminus === 'dissolved' || po.terminus === 'illegal') return null;
-    punishSeq = [pm.san, ...po.steps.map((s) => s.san)];
+    if (!mv) break;
+    punishSeq.push(mv.san);
   }
+  if (punishSeq.length === 0) return null;
 
   const gemId = `found:${positionKey(baseFen)}:${cleanSan(slipSan)}`;
   return buildComputedDetour(baseFen, slipSan, punishSeq, gemId);
@@ -198,8 +203,9 @@ export async function findGemsForLine(
   const out = new Map<string, BakedGemLine[]>();
   const seen = new Set<string>();
   const deadline = Date.now() + budgetMs;
+  let scanned = 0;
   for (const pos of positions) {
-    if (Date.now() > deadline) break;
+    if (Date.now() > deadline || scanned >= MAX_POSITIONS) break;
     if (!pos.opponentToMove) continue;
     const key = positionKey(pos.fen);
     if (seen.has(key)) continue;
@@ -213,12 +219,14 @@ export async function findGemsForLine(
     if (amateur.source === 'none' || amateur.moves.length === 0) continue;
     const total = amateur.totalGames || 0;
     if (total < MIN_GAMES_AT_POS) continue;
+    scanned += 1;
     const candidates = amateur.moves
       .filter((m) => m.games / Math.max(1, total) >= FREQ_FLOOR)
       .slice(0, MAX_CANDIDATES);
     const detours: BakedGemLine[] = [];
     for (const cand of candidates) {
       if (Date.now() > deadline) break;
+      await sleep(YIELD_MS); // hand the CPU back to the UI/voice before each engine burst
       const d = await verifySlip(pos.fen, cand.san, studentIsWhite);
       if (d) detours.push(d);
     }
@@ -258,6 +266,10 @@ export async function findGemsForOpening(
   } catch {
     /* cache read is a bonus */
   }
+  // Cache MISS → real engine work ahead. Let the lesson's opening moves + their
+  // own analysis settle first, so the finder never competes during the busiest
+  // few seconds (David 2026-08-24: "app and computer are both super slow now").
+  await sleep(START_DELAY_MS);
   const found = await findGemsForLine(positions, studentSide, budgetMs);
   try {
     await db.meta.put({ key: cacheKey, value: serialize(found) });
