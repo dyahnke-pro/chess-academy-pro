@@ -1,0 +1,145 @@
+{
+ "videoId": "OQsa_sdKzjY",
+ "title": "Master Class | Alekhine Defense | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Alekhine's Defense: Exchange Variation",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:OQsa_sdKzjY",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 764,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "e4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 766.5,
+   "fen": "rnbqkb1r/pppppppp/8/3nP3/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "e5",
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 773,
+   "fen": "rnbqkb1r/pppppppp/8/3nP3/2P5/8/PP1P1PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 780.5,
+   "fen": "rnbqkb1r/pppppppp/1n6/4P3/2P5/8/PP1P1PPP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "Nb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 783,
+   "fen": "rnbqkb1r/pppppppp/1n6/4P3/2PP4/8/PP3PPP/RNBQKBNR b KQkq - 0 4",
+   "line": [
+    "d4"
+   ],
+   "spoken": "White occupies the centre with the pawn to d4 — the sound, measured way to meet the Alekhine, building the big centre without overreaching.",
+   "kind": "main",
+   "teaches": "Against the Alekhine's provocation, occupy the centre soundly rather than lunging forward.",
+   "plans": "Complete the centre, then develop."
+  },
+  {
+   "ply": 8,
+   "t": 788,
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/2PP4/8/PP3PPP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 789,
+   "fen": "rnbqkb1r/ppp1pppp/1n1P4/8/2PP4/8/PP3PPP/RNBQKBNR b KQkq - 0 5",
+   "line": [
+    "exd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 796,
+   "fen": "rnbqkb1r/pp2pppp/1n1p4/8/2PP4/8/PP3PPP/RNBQKBNR w KQkq - 0 6",
+   "line": [
+    "cxd6"
+   ],
+   "spoken": "Recapture with the c-pawn — the recommended choice. It teaches you to play with an imbalanced structure: White gets a queenside pawn majority, Black a kingside majority, and each side plays where it is stronger.",
+   "kind": "main",
+   "teaches": "Recapturing toward the wing creates majorities — an imbalance you steer for your own plans.",
+   "plans": "Play on the kingside where your majority lies."
+  },
+  {
+   "ply": 11,
+   "t": 810,
+   "fen": "rnbqkb1r/pp2pppp/1n1p4/8/2PP4/2N5/PP3PPP/R1BQKBNR b KQkq - 1 6",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 814,
+   "fen": "rnbqkb1r/pp2pp1p/1n1p2p1/8/2PP4/2N5/PP3PPP/R1BQKBNR w KQkq - 0 7",
+   "line": [
+    "g6"
+   ],
+   "spoken": "The pawn to g6 prepares the fianchetto. The light-squared bishop has a hard time finding a good diagonal here, so the natural home for the dark-squared bishop is the long diagonal on g7.",
+   "kind": "main",
+   "teaches": "When a bishop's natural diagonal is blocked, fianchetto it to the long diagonal instead.",
+   "plans": "Fianchetto, castle, and target the centre."
+  },
+  {
+   "ply": 13,
+   "t": 815,
+   "fen": "rnbqkb1r/pp2pp1p/1n1p2p1/8/2PP4/2N2N2/PP3PPP/R1BQKB1R b KQkq - 1 7",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 816,
+   "fen": "rnbqk2r/pp2ppbp/1n1p2p1/8/2PP4/2N2N2/PP3PPP/R1BQKB1R w KQkq - 2 8",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 819.5,
+   "fen": "r1bq1rk1/pp2ppbp/1nnp2p1/8/2PP4/2N2N2/PP2KPPP/R1BQ1BR1 w - - 6 10",
+   "line": [
+    "Ke2",
+    "Nc6",
+    "Rg1",
+    "O-O"
+   ],
+   "spoken": "The knight to c6 completes the plan: Black's pieces bear down on White's two central pawns. That pressure is the whole point of the setup.",
+   "kind": "main",
+   "teaches": "In the Alekhine the target is the pawn centre — pile pieces against it.",
+   "plans": "Pressure c4 and d4; provoke a concession."
+  }
+ ]
+}
