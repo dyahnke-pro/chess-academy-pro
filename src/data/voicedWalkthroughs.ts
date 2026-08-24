@@ -11,6 +11,7 @@
  */
 import type { WalkthroughTree } from '../types/walkthroughTree';
 import voicedData from './voiced-walkthroughs.json';
+import voicedMatchupData from './voiced-matchups.json';
 
 interface VoicedEntry {
   id: string;
@@ -111,4 +112,89 @@ export function listVoicedWalkthroughs(): {
 export function getVoicedTreeById(id: string): (WalkthroughTree & { studentSide?: 'white' | 'black' }) | null {
   const e = ENTRIES.find((x) => x.id === id);
   return e ? { ...e.tree, studentSide: e.studentSide } : null;
+}
+
+// ─── Matchup walkthroughs (built from real videos of a pairing) ────────────
+
+interface MatchupEntry {
+  id: string;
+  matchupName: string;      // "King's Indian Attack vs French Defense"
+  whiteSystem: string;
+  blackDefense: string;
+  videoIds: string[];
+  narratedNodes: number;
+  totalNodes: number;
+  tree: WalkthroughTree;
+}
+const MATCHUPS = voicedMatchupData as unknown as MatchupEntry[];
+
+/** Short aliases → canonical family. Tokens use SINGULAR "king"/"queen" to
+ *  match the apostrophe-stripped tokenization of "King's"/"Queen's", and KEEP
+ *  "attack"/"defense" (they distinguish KIA from KID). */
+const FAMILY_ALIASES: Record<string, string> = {
+  kia: 'king indian attack',
+  kid: 'king indian defense',
+  qgd: 'queen gambit', qga: 'queen gambit', qg: 'queen gambit',
+  najdorf: 'sicilian', dragon: 'sicilian dragon', sicilian: 'sicilian',
+  caro: 'caro kann', carokann: 'caro kann', scandi: 'scandinavian',
+  spanish: 'ruy lopez', ruy: 'ruy lopez', italian: 'italian', giuoco: 'italian',
+  french: 'french', london: 'london', vienna: 'vienna', scotch: 'scotch',
+  alekhine: 'alekhine', pirc: 'pirc', modern: 'modern',
+};
+
+/** Stop-words for FAMILY matching. Unlike the single-opening tokenizer, this
+ *  KEEPS attack/defense/gambit/game — those are what tell KIA from KID and
+ *  Queen's Gambit from Queen's Pawn. Also folds possessive "king's" → "king". */
+const MATCHUP_STOP = new Set([
+  'the', 'a', 'an', 'vs', 'versus', 'against', 'opening', 'variation', 'line',
+  'play', 'teach', 'me', 'with', 'show', 'us', 'my', 'and', 'of',
+]);
+
+function famTokens(text: string): string[] {
+  const raw = (text || '').toLowerCase().replace(/[^a-z0-9\s]/g, ' ').replace(/\s+/g, ' ').trim();
+  const alias = FAMILY_ALIASES[raw.replace(/\s+/g, '')];
+  return (alias ?? raw)
+    .split(/\s+/)
+    .filter((w) => w.length > 1 && w !== 's' && !MATCHUP_STOP.has(w));
+}
+
+/** Does a requested side ("KIA", "the French") name this family? All the
+ *  side's content tokens must appear in the family's tokens. */
+function sideNamesFamily(sideText: string, family: string): boolean {
+  const s = famTokens(sideText);
+  if (s.length === 0) return false;
+  const fam = new Set(famTokens(family));
+  return s.every((t) => fam.has(t));
+}
+
+const MATCHUP_SPLIT = /\s+(?:vs\.?|versus|against)\s+/i;
+
+/**
+ * Resolve a "X vs Y" request to a VOICED matchup walkthrough built from the
+ * real videos we have of that pairing — or null when we have none (the caller
+ * then falls back to the constructed line via planOpeningMatchup).
+ *
+ * Sides match in EITHER order: "KIA vs French" and "French vs KIA" both find
+ * King's Indian Attack (White) vs French Defense (Black).
+ */
+export function resolveVoicedMatchup(query: string): (WalkthroughTree & { studentSide?: 'white' | 'black' }) | null {
+  if (!query || !MATCHUP_SPLIT.test(query)) return null;
+  const parts = query.split(MATCHUP_SPLIT).map((s) => s.trim()).filter(Boolean);
+  if (parts.length !== 2) return null;
+  const [a, b] = parts;
+  let best: MatchupEntry | null = null;
+  for (const m of MATCHUPS) {
+    const straight = sideNamesFamily(a, m.whiteSystem) && sideNamesFamily(b, m.blackDefense);
+    const swapped = sideNamesFamily(a, m.blackDefense) && sideNamesFamily(b, m.whiteSystem);
+    if (straight || swapped) {
+      if (!best || m.narratedNodes > best.narratedNodes) best = m;
+    }
+  }
+  if (!best) return null;
+  return { ...best.tree, studentSide: 'white' };
+}
+
+/** The matchup catalogue — pairings we have real video(s) for. */
+export function listVoicedMatchups(): { id: string; matchupName: string; narratedNodes: number; games: number }[] {
+  return MATCHUPS.map((m) => ({ id: m.id, matchupName: m.matchupName, narratedNodes: m.narratedNodes, games: m.videoIds.length }));
 }

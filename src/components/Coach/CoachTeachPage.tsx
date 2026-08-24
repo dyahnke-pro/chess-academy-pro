@@ -81,7 +81,7 @@ import { useEnginePonder } from '../../hooks/useEnginePonder';
 import { ProAttributionNotice } from '../Openings/ProAttributionNotice';
 import { resolveWalkthroughTree, inferStudentSide } from '../../data/openingWalkthroughs';
 import { findSiblingExtensionBranches, resolveOpeningEntry } from '../../services/openingDetectionService';
-import { resolveVoicedWalkthrough } from '../../data/voicedWalkthroughs';
+import { resolveVoicedWalkthrough, resolveVoicedMatchup } from '../../data/voicedWalkthroughs';
 import { masterclassWalkthroughTree } from '../../services/masterclassWalkthroughAdapter';
 import { gemForChipLabel, gemForChipLabelAnywhere, gemTeachingText, remainingGemChoices, parseGemChipLabel, MORE_TRAPS_CHIP } from '../../data/lessons/gemTrapMenu';
 import { gemId } from '../../data/lessons/punishGems';
@@ -3716,6 +3716,37 @@ export function CoachTeachPage(): JSX.Element {
       // vs Sicilian Dragon" shows the actual Dragon (…g6 …Bg7), not a French
       // move order. Same-colour pairs can't share a board → honest chips.
       if (requestedName && MATCHUP_HINT_RE.test(requestedName)) {
+        // Prefer a VOICED matchup built from the REAL videos we have of this
+        // pairing (David 2026-08-24: "we build a walkthrough of all videos we
+        // have of KIA vs French"). Only when we have none do we construct the
+        // line from DB setups + Stockfish (planOpeningMatchup) — "I want both".
+        const voicedMatchup = resolveVoicedMatchup(requestedName);
+        if (voicedMatchup) {
+          const vmTurnId = freshTurnId('voiced-matchup');
+          setMessages((prev) => [...prev, {
+            id: `${vmTurnId}-u`, role: 'user', content: text, timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach', role: 'user', text,
+            fen: opts?.fenOverride ?? gameRef.current.fen, trigger: null,
+          });
+          const vmAck = `Sure — here's ${voicedMatchup.openingName}, from real games we have of that matchup.`;
+          setMessages((prev) => [...prev, {
+            id: `${vmTurnId}-c`, role: 'assistant', content: vmAck, timestamp: Date.now(),
+          }]);
+          useCoachMemoryStore.getState().appendConversationMessage({
+            surface: 'chat-teach', role: 'coach', text: vmAck, fen: gameRef.current.fen, trigger: null,
+          });
+          void logAppAudit({
+            kind: 'coach-surface-migrated',
+            category: 'subsystem',
+            source: 'CoachTeachPage.handleSubmit.voicedMatchup',
+            summary: `voiced matchup "${requestedName}" → ${voicedMatchup.openingName} (real videos)`,
+          });
+          voiceService.stop();
+          startWalkthrough(voicedMatchup);
+          return;
+        }
         const plan = planOpeningMatchup(requestedName);
         if (plan) {
           const mTurnId = freshTurnId('matchup');

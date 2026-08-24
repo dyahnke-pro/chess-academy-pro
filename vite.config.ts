@@ -209,6 +209,7 @@ export default defineConfig(({ mode }) => {
             // regression class — without a chunk rule it inlined into `index`
             // and pushed it past the 8 MiB Workbox precache cap.
             if (id.includes('voiced-walkthroughs.json')) return 'appdata-voiced';
+            if (id.includes('voiced-matchups.json')) return 'appdata-voiced';
             // The secondary teaching corpus (gap-tier coverage) — same rule for
             // the same reason: statically imported, MB-scale, and it re-broke
             // the entry chunk (7.7 → 10.0 MB) the moment it was added without

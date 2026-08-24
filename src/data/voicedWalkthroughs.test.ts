@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { resolveVoicedWalkthrough, listVoicedWalkthroughs } from './voicedWalkthroughs';
+import { resolveVoicedWalkthrough, listVoicedWalkthroughs, resolveVoicedMatchup, listVoicedMatchups } from './voicedWalkthroughs';
 
 describe('resolveVoicedWalkthrough', () => {
   it('resolves a single-opening teach request to a voiced tree', () => {
@@ -27,6 +27,31 @@ describe('resolveVoicedWalkthrough', () => {
     expect(resolveVoicedWalkthrough('')).toBeNull();
     expect(resolveVoicedWalkthrough('   ')).toBeNull();
     expect(resolveVoicedWalkthrough('zzz qqq nonsense')).toBeNull();
+  });
+
+  it('resolves a "X vs Y" matchup to a voiced walkthrough built from real videos', () => {
+    // KIA vs French — we have a real video of exactly this pairing.
+    const kf = resolveVoicedMatchup('KIA vs French');
+    expect(kf).not.toBeNull();
+    expect(kf?.openingName.toLowerCase()).toContain('indian attack');
+    expect(kf?.openingName.toLowerCase()).toContain('french');
+    // sides match in either order.
+    expect(resolveVoicedMatchup('French vs KIA')?.openingName).toBe(kf?.openingName);
+    expect(resolveVoicedMatchup("King's Indian Attack against the French")?.openingName).toBe(kf?.openingName);
+  });
+
+  it('returns null for a matchup we have no video of (caller constructs it)', () => {
+    // A pairing with no real video in the corpus → null → planOpeningMatchup builds it.
+    expect(resolveVoicedMatchup('Grünfeld vs Dutch')).toBeNull();
+    // Not a matchup at all.
+    expect(resolveVoicedMatchup('teach me the caro-kann')).toBeNull();
+  });
+
+  it('every matchup tree is a legal, note-bearing walkthrough', () => {
+    for (const m of listVoicedMatchups()) {
+      expect(m.matchupName).toContain(' vs ');
+      expect(m.narratedNodes).toBeGreaterThan(0);
+    }
   });
 
   it('every voiced tree in the catalogue is a legal, non-empty walkthrough', () => {
