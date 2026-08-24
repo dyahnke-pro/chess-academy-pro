@@ -204,6 +204,11 @@ export default defineConfig(({ mode }) => {
             // rule it inlined into `index`, pushed it to 9.9 MB, and broke
             // every deploy after 2026-07-12 wave 6.
             if (id.includes('danya-teachings.json')) return 'appdata-danya';
+            // The voiced-walkthrough corpus (merged DNA beats → branching
+            // trees, one per opening). Grows as more videos are voiced; same
+            // regression class — without a chunk rule it inlined into `index`
+            // and pushed it past the 8 MiB Workbox precache cap.
+            if (id.includes('voiced-walkthroughs.json')) return 'appdata-voiced';
             // The secondary teaching corpus (gap-tier coverage) — same rule for
             // the same reason: statically imported, MB-scale, and it re-broke
             // the entry chunk (7.7 → 10.0 MB) the moment it was added without
