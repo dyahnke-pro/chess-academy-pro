@@ -1,0 +1,287 @@
+{
+ "videoId": "KwbAHRLJ1RY",
+ "title": "Why you CHEATING!? | Ruy Lopez | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Ruy Lopez, Exchange Variation",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:KwbAHRLJ1RY",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 20,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 21.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 2,
+   "t": 27.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 34.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 36,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 37,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Bb5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 110.5,
+   "fen": "r1bqkbnr/1ppp1ppp/p1n5/1B2p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+   "line": [
+    "a6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 138,
+   "fen": "r1bqkbnr/1ppp1ppp/p1B5/4p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 4",
+   "line": [
+    "Bxc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 163,
+   "fen": "r1bqkbnr/1pp2ppp/p1p5/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "dxc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 178.5,
+   "fen": "r1bqkbnr/1ppp1ppp/p1B5/4p3/4P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 185.5,
+   "fen": "r1bqkbnr/1pp2ppp/p1p5/4p3/4P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "dxc6"
+   ],
+   "spoken": "Recapturing with the d-pawn opens the diagonal for the light-squared bishop — in the Exchange Ruy, Black willingly doubles the c-pawns to speed development and use the bishop pair.",
+   "kind": "main",
+   "teaches": "Recapture to activate a piece and gain the bishop pair, accepting a structural blemish."
+  },
+  {
+   "ply": 9,
+   "t": 215.5,
+   "fen": "r1bqkbnr/1pp2ppp/p1p5/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 266,
+   "fen": "r1bqkbnr/1pp3pp/p1p2p2/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 6",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 274.5,
+   "fen": "r1bqkbnr/1pp3pp/p1p2p2/4p3/3PP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 276,
+   "fen": "r1bqkbnr/1pp3pp/p1p2p2/4p3/4P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 283,
+   "fen": "r1bqkbnr/1pp3pp/p1p2p2/4p3/3PP3/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 342.5,
+   "fen": "r2qkbnr/1pp3pp/p1p2p2/4p3/3PP1b1/5N2/PPP2PPP/RNBQ1RK1 w kq - 1 7",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "Bishop to g4 pins the knight on f3 — with the e5-pawn firmly held, Black leans on the bishop pair to create pressure and tie White's pieces down.",
+   "kind": "main",
+   "teaches": "Use a bishop pin to restrain the opponent's knight and exploit the two bishops."
+  },
+  {
+   "ply": 13,
+   "t": 355,
+   "fen": "r2qkbnr/1pp3pp/p1p2p2/4p3/3PP1b1/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 7",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 366.5,
+   "fen": "r2qkbnr/1pp3pp/p1p2p2/4p3/3PP1b1/5N2/PPP2PPP/RNBQ1RK1 w kq - 1 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 373.5,
+   "fen": "r2qkbnr/1pp3pp/p1p2p2/4p3/3PP1b1/2P2N2/PP3PPP/RNBQ1RK1 b kq - 0 7",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 401.5,
+   "fen": "r2qk1nr/1pp3pp/p1pb1p2/4p3/3PP1b1/2P2N2/PP3PPP/RNBQ1RK1 w kq - 1 8",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "Bishop to d6 is the classic Exchange setup — it guards e5 and eyes the kingside, completing a harmonious, solid deployment for Black.",
+   "kind": "main",
+   "teaches": "Place the dark-squared bishop where it both defends the center and points at the enemy king."
+  },
+  {
+   "ply": 15,
+   "t": 412,
+   "fen": "r2qk1nr/1pp3pp/p1pb1p2/4p3/3PP1b1/2P2N2/PP1N1PPP/R1BQ1RK1 b kq - 2 8",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 441,
+   "fen": "r2qk2r/1pp1n1pp/p1pb1p2/4p3/3PP1b1/2P2N2/PP1N1PPP/R1BQ1RK1 w kq - 3 9",
+   "line": [
+    "Ne7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 450,
+   "fen": "r2qk2r/1pp1n1pp/p1pb1p2/4p3/3PP1b1/2P2N1P/PP1N1PP1/R1BQ1RK1 b kq - 0 9",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 475.5,
+   "fen": "r2qk2r/1pp1n1pp/p1pb1p2/4p2b/3PP3/2P2N1P/PP1N1PP1/R1BQ1RK1 w kq - 1 10",
+   "line": [
+    "Bh5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 501,
+   "fen": "r2qk2r/1pp1n1pp/p1pb1p2/4P2b/4P3/2P2N1P/PP1N1PP1/R1BQ1RK1 b kq - 0 10",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 502.5,
+   "fen": "r2qk2r/1pp1n1pp/p1pb1p2/4p2b/3PP3/2P2N1P/PP1N1PP1/R1BQ1RK1 w kq - 1 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 516.5,
+   "fen": "r2qk2r/1pp1n1pp/p1pb1p2/4P2b/4P3/2P2N1P/PP1N1PP1/R1BQ1RK1 b kq - 0 10",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 518.5,
+   "fen": "r2qk2r/1pp1n1pp/p1pb4/4p2b/4P3/2P2N1P/PP1N1PP1/R1BQ1RK1 w kq - 0 11",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 532,
+   "fen": "r2qk2r/1pp1n1pp/p1pb4/4p2b/2N1P3/2P2N1P/PP3PP1/R1BQ1RK1 b kq - 1 11",
+   "line": [
+    "Nc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 552,
+   "fen": "r2q1rk1/1pp1n1pp/p1pb4/4p2b/2N1P3/2P2N1P/PP3PP1/R1BQ1RK1 w - - 2 12",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  }
+ ]
+}
