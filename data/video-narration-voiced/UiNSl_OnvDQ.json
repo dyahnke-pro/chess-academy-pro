@@ -1,0 +1,250 @@
+{
+ "videoId": "UiNSl_OnvDQ",
+ "title": "From Worse to Victory! Art of the Comeback!! | Caro-Kann: Fantasy | GM Naroditsky’s Theory Speed Run",
+ "openingName": "Caro-Kann Defense: Fantasy Variation",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:UiNSl_OnvDQ",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 43,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 48.5,
+   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 51,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 62.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "f3"
+   ],
+   "spoken": "The pawn to f3 is the Fantasy — the kryptonite of many Caro players: less studied, sharply tactical, and it forces Black to know real theory instead of drifting.",
+   "kind": "main",
+   "teaches": "An offbeat but sound line forces the opponent out of memorized moves."
+  },
+  {
+   "ply": 4,
+   "t": 70,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 75.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "f3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 80.5,
+   "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 84.5,
+   "fen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/8/PPP3PP/RNBQKBNR w KQkq - 0 5",
+   "line": [
+    "fxe4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 110,
+   "fen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/5N2/PPP3PP/RNBQKB1R b KQkq - 1 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 114,
+   "fen": "rn1qkbnr/pp3ppp/2p5/4p3/3PP1b1/5N2/PPP3PP/RNBQKB1R w KQkq - 2 6",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 117,
+   "fen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/5N2/PPP3PP/RNBQKB1R b KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 123,
+   "fen": "rn1qkbnr/pp3ppp/2p5/4p3/3PP1b1/5N2/PPP3PP/RNBQKB1R w KQkq - 2 6",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 166,
+   "fen": "rn1qkbnr/pp3ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R b KQkq - 3 6",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The bishop to c4 fixes on f7. The sacrifice on f7 becomes a standing threat for the whole middlegame, so Black can never fully relax there.",
+   "kind": "main",
+   "teaches": "Keep a live sacrificial threat on f7 to restrict the defender's freedom.",
+   "plans": "Castle and pile toward f7."
+  },
+  {
+   "ply": 12,
+   "t": 172.5,
+   "fen": "r2qkbnr/pp1n1ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R w KQkq - 4 7",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 201,
+   "fen": "r2qkbnr/pp1n1ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQ1RK1 b kq - 5 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 213.5,
+   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP1b1/5N2/PPP3PP/RNBQ1RK1 w kq - 6 8",
+   "line": [
+    "Ngf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 250.5,
+   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP1b1/2P2N2/PP4PP/RNBQ1RK1 b kq - 0 8",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 265,
+   "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p3/2BPP1b1/2P2N2/PP4PP/RNBQ1RK1 w kq - 1 9",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 286,
+   "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p1B1/2BPP1b1/2P2N2/PP4PP/RN1Q1RK1 b kq - 2 9",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 300.5,
+   "fen": "r2qk2r/pp1n1pp1/2pb1n1p/4p1B1/2BPP1b1/2P2N2/PP4PP/RN1Q1RK1 w kq - 0 10",
+   "line": [
+    "h6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 310.5,
+   "fen": "r2qk2r/pp1n1pp1/2pb1n1p/4p3/2BPP1bB/2P2N2/PP4PP/RN1Q1RK1 b kq - 1 10",
+   "line": [
+    "Bh4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 314.5,
+   "fen": "r2qk2r/pp1n1p2/2pb1n1p/4p1p1/2BPP1bB/2P2N2/PP4PP/RN1Q1RK1 w kq - 0 11",
+   "line": [
+    "g5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 332,
+   "fen": "r2qk2r/pp1n1p2/2pb1n1p/4p1p1/2BPP1b1/2P2NB1/PP4PP/RN1Q1RK1 b kq - 1 11",
+   "line": [
+    "Bg3"
+   ],
+   "spoken": "The bishop can't just sit, so it travels: to g5, and when kicked it retreats along h4 to g3 — each step provoking a pawn move, first h6 then g5, that permanently weakens Black's kingside.",
+   "kind": "main",
+   "teaches": "A repositioning bishop can provoke weakening pawn pushes as it travels."
+  },
+  {
+   "ply": 22,
+   "t": 334,
+   "fen": "r3k2r/pp1nqp2/2pb1n1p/4p1p1/2BPP1b1/2P2NB1/PP4PP/RN1Q1RK1 w kq - 2 12",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 404.5,
+   "fen": "r3k2r/pp1nqp2/2pb1n1p/4p1p1/2BPP1b1/2P2NB1/PP1N2PP/R2Q1RK1 b kq - 3 12",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 410,
+   "fen": "2kr3r/pp1nqp2/2pb1n1p/4p1p1/2BPP1b1/2P2NB1/PP1N2PP/R2Q1RK1 w - - 4 13",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": ""
+  }
+ ]
+}
