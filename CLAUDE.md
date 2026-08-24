@@ -2627,6 +2627,20 @@ Practical consequences:
 - **A silent surface is a retrieval failure, not a design choice** (except Play,
   which is silent by contract — see below).
 
+### 🔒🔒 THE VOICED-NARRATION PIPELINE — its own locked playbook (David 2026-08-24).
+
+Distilling videos, rewriting narrations in our own words, where the voiced files
+go, how they become teach walkthroughs + White-vs-Black matchup walkthroughs
+(KIA vs French) + position-keyed CORPUS notes, and where to save games to make
+more pairings — the ENTIRE end-to-end recipe is locked in
+**`docs/voiced-narration-pipeline.md`**. Read it before touching any voiced
+narration / walkthrough / matchup / corpus wiring. The reusable authoring tools
+live in `scripts/voiced-authoring/` (`inspect.mjs`, `verify.mjs`, `lib.mjs`);
+the derived builders are `scripts/build-voiced-{walkthroughs,matchups,teachings}.mjs`.
+The voiced notes ARE corpus notes (position-keyed, `opening:null`, exact-board
+selection) — they feed free-play/review/tactics via `teachingNoteForBoard`, same
+as every other corpus below.
+
 ### 🔒🔒 EVERY COACHING SURFACE GETS THE CORPUS — review, play, learn, tactics, all of it (David 2026-08-07, emphatic).
 
 The 58,124 farmed notes are the app's teaching. A surface that coaches without
