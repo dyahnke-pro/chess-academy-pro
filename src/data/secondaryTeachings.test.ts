@@ -82,6 +82,12 @@ const CORPORA: Array<{ key: string; idPrefix: string; notes: Note[]; banned: Reg
     notes: readCorpus('magnuscarlsen').notes,
     banned: new RegExp(`\\b(${SHARED_BAN}|magnus|carlsen|play magnus|chess24)\\b`, 'i'),
   },
+  {
+    key: 'voiced',
+    idPrefix: 'vc',
+    notes: readCorpus('voiced').notes,
+    banned: new RegExp(`\\b(${SHARED_BAN})\\b`, 'i'),
+  },
 ];
 
 const MOVE_NUMBER_PREFIX = /\d{1,2}(\.|…|\.\.\.)(?=[NBRQKO]|[a-h][1-8x])/;

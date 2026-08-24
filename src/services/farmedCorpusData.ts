@@ -51,6 +51,8 @@ const FARMED: Array<{ key: string; url: string; bytes: number }> = [
   { key: 'hikaru', url: '/data/hikaru-teachings.json', bytes: 850_000 },
   { key: 'imrosen', url: '/data/imrosen-teachings.json', bytes: 620_000 },
   { key: 'magnuscarlsen', url: '/data/magnuscarlsen-teachings.json', bytes: 60_000 },
+  // Voiced DNA corpus — position-keyed board-true notes; feeds free-play/review/tactics.
+  { key: 'voiced', url: '/data/voiced-teachings.json', bytes: 400_000 },
 ];
 
 const EMPTY: TeachingsBundle = { generatedAt: '', videosDistilled: 0, noteCount: 0, notes: [] };

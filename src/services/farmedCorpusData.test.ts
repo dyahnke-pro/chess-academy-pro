@@ -92,8 +92,8 @@ describe('farmedCorpusData', () => {
     expect(getFarmedCorporaSync()).toEqual([]);
 
     await flushLazy();
-    expect(getFarmedCorporaSync()).toHaveLength(6);
-    expect(fetchMock).toHaveBeenCalledTimes(6);
+    expect(getFarmedCorporaSync()).toHaveLength(7);
+    expect(fetchMock).toHaveBeenCalledTimes(7);
   });
 
   it('primeFarmedCorporaLazily is idempotent — repeated calls do not refetch', async () => {
@@ -103,7 +103,7 @@ describe('farmedCorpusData', () => {
     primeFarmedCorporaLazily();
     await flushLazy();
     primeFarmedCorporaLazily();
-    expect(fetchMock).toHaveBeenCalledTimes(6);
+    expect(fetchMock).toHaveBeenCalledTimes(7);
   });
 
   it('a teaching lookup primes the tier (self-heals within a beat)', async () => {
@@ -129,9 +129,9 @@ describe('farmedCorpusData', () => {
     vi.stubGlobal('fetch', fetchMock);
 
     const loaded = await loadFarmedCorpora();
-    expect(loaded.map((c) => c.key)).toEqual(['hangingpawns', 'saintlouis', 'gothamchess', 'hikaru', 'imrosen', 'magnuscarlsen']);
-    expect(fetchMock).toHaveBeenCalledTimes(6);
-    expect(getFarmedCorporaSync()).toHaveLength(6);
+    expect(loaded.map((c) => c.key)).toEqual(['hangingpawns', 'saintlouis', 'gothamchess', 'hikaru', 'imrosen', 'magnuscarlsen', 'voiced']);
+    expect(fetchMock).toHaveBeenCalledTimes(7);
+    expect(getFarmedCorporaSync()).toHaveLength(7);
   });
 
   it('is idempotent — a second call does not refetch', async () => {
@@ -139,14 +139,14 @@ describe('farmedCorpusData', () => {
     vi.stubGlobal('fetch', fetchMock);
     await loadFarmedCorpora();
     await loadFarmedCorpora();
-    expect(fetchMock).toHaveBeenCalledTimes(6); // six corpora, one round
+    expect(fetchMock).toHaveBeenCalledTimes(7); // seven corpora, one round
   });
 
   it('concurrent callers share one inflight round', async () => {
     const fetchMock = vi.fn(async () => ({ ok: true, json: async () => bundle('hp', GAP_A) }));
     vi.stubGlobal('fetch', fetchMock);
     await Promise.all([loadFarmedCorpora(), loadFarmedCorpora(), loadFarmedCorpora()]);
-    expect(fetchMock).toHaveBeenCalledTimes(6);
+    expect(fetchMock).toHaveBeenCalledTimes(7);
   });
 
   it('survives a missing file / network failure with an empty corpus', async () => {
