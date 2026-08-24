@@ -1,0 +1,454 @@
+{
+ "videoId": "Qkv7D-BGAt4",
+ "title": "French Defence | The Sensei Speedrun | Grandmaster Naroditsky",
+ "openingName": "Modern Defense (1...g6), French-Advance pawn structure",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-24",
+ "source": "yt:Qkv7D-BGAt4",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 35,
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "g6"
+   ],
+   "spoken": "Black opens with the pawn to g6 — the Modern, not a French, though it will soon take on a French-shaped centre. Against it the plan is a broad pawn chain to blunt the fianchettoed bishop.",
+   "kind": "main",
+   "teaches": "1...g6 is the Modern Defense; meet it by building a big centre.",
+   "plans": "d4 and a c3 chain."
+  },
+  {
+   "ply": 4,
+   "t": 46.5,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "d4",
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 74.5,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": "The pawn to c3 builds the chain, so the bishop on g7 is biting on granite — it stares at d4 but can't budge it. The one downside is that c3 denies the knight its natural c3-square; no problem, the knight simply develops to d2 instead.",
+   "kind": "main",
+   "teaches": "c3 blunts the fianchetto and hands the b1-knight a d2 route instead of c3.",
+   "plans": "c3, then Nbd2."
+  },
+  {
+   "ply": 6,
+   "t": 76.5,
+   "fen": "rnbqk1nr/pppp1pbp/4p1p1/8/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 95.5,
+   "fen": "rnbqk1nr/pppp1pbp/4p1p1/8/3PP3/2PB4/PP3PPP/RNBQK1NR b KQkq - 1 4",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "Just like in the London, once you've built the little pawn house you put the bishop in its hole — the bishop to d3. Try to get the dark-squared pieces sorted before that knight commits, and otherwise just develop naturally.",
+   "kind": "main",
+   "teaches": "Slot the bishop into the pawn-chain's hole and develop by principle.",
+   "plans": "Bd3, then complete development."
+  },
+  {
+   "ply": 8,
+   "t": 122.5,
+   "fen": "rnbqk1nr/ppp2pbp/4p1p1/3p4/3PP3/2PB4/PP3PPP/RNBQK1NR w KQkq - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 141,
+   "fen": "rnbqk1nr/ppp2pbp/4p1p1/3pP3/3P4/2PB4/PP3PPP/RNBQK1NR b KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Black plays the pawn to d5, and closing with e5 is a no-brainer. The move to g6 already weakened all the dark squares, and shutting the centre makes those squares far easier to target — this becomes a French-style Advance with an extra hole on f6.",
+   "kind": "main",
+   "teaches": "Close the centre to fix the opponent's dark-square weaknesses in place.",
+   "plans": "e5, then play on the dark squares."
+  },
+  {
+   "ply": 10,
+   "t": 144.5,
+   "fen": "rnbqk2r/ppp1npbp/4p1p1/3pP3/3P4/2PB4/PP3PPP/RNBQK1NR w KQkq - 1 6",
+   "line": [
+    "Ne7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 147.5,
+   "fen": "rnbqk2r/ppp1npbp/4p1p1/3pP3/3P4/2PB1N2/PP3PPP/RNBQK2R b KQkq - 2 6",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 151.5,
+   "fen": "rnbqk2r/pp2npbp/4p1p1/2ppP3/3P4/2PB1N2/PP3PPP/RNBQK2R w KQkq - 0 7",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 168.5,
+   "fen": "rnbqk2r/pp2npbp/4p1p1/2ppP3/3P4/2PB1N2/PP3PPP/RNBQ1RK1 b kq - 1 7",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 170,
+   "fen": "rnbqk2r/pp2npbp/4p1p1/3pP3/2pP4/2PB1N2/PP3PPP/RNBQ1RK1 w kq - 0 8",
+   "line": [
+    "c4"
+   ],
+   "spoken": "When Black locks it further with the pawn to c4, that suits White perfectly — the queenside is sealed, the d4-pawn is under no real pressure, and White gets what amounts to a free hand to attack on the kingside.",
+   "kind": "main",
+   "teaches": "A closed queenside frees you to throw everything at the other wing.",
+   "plans": "Ignore c4, attack the kingside."
+  },
+  {
+   "ply": 15,
+   "t": 187,
+   "fen": "rnbqk2r/pp2npbp/4p1p1/3pP3/2pP4/2P2N2/PPB2PPP/RNBQ1RK1 b kq - 1 8",
+   "line": [
+    "Bc2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 189.5,
+   "fen": "rnbq1rk1/pp2npbp/4p1p1/3pP3/2pP4/2P2N2/PPB2PPP/RNBQ1RK1 w - - 2 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "The attack will aim at the dark squares Black conceded — above all f6 and e5. The job now is to route the b1-knight toward those holes, and everything is arranged around getting it there.",
+   "kind": "main",
+   "teaches": "Plan a knight tour toward the opponent's key dark-square holes.",
+   "plans": "Maneuver the knight to f6/e5."
+  },
+  {
+   "ply": 17,
+   "t": 211,
+   "fen": "rnbq1rk1/pp2npbp/4p1p1/3pP3/2pP4/2P2N2/PPB2PPP/RNBQR1K1 b - - 3 9",
+   "line": [
+    "Re1"
+   ],
+   "spoken": "The rook to e1 looks odd, even bad — but its purpose is to vacate f1 for the knight. The route is knight to d2, to f1, then to e3 or g4, and on toward the f6-square.",
+   "kind": "main",
+   "teaches": "A quiet rook move can clear a path for a knight maneuver — look past the surface.",
+   "plans": "Re1, then Nd2-f1-e3."
+  },
+  {
+   "ply": 18,
+   "t": 235.5,
+   "fen": "r1bq1rk1/pp2npbp/2n1p1p1/3pP3/2pP4/2P2N2/PPB2PPP/RNBQR1K1 w - - 4 10",
+   "line": [
+    "Nbc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 236.5,
+   "fen": "r1bq1rk1/pp2npbp/2n1p1p1/3pP3/2pP4/2P2N2/PPBN1PPP/R1BQR1K1 b - - 5 10",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 241.5,
+   "fen": "r2q1rk1/pp1bnpbp/2n1p1p1/3pP3/2pP4/2P2N2/PPB2PPP/R1BQRNK1 b - - 7 11",
+   "line": [
+    "Bd7",
+    "Nf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 244.5,
+   "fen": "r2q1rk1/pp1b1pbp/2n1p1p1/3pPn2/2pP4/2P2N2/PPB2PPP/R1BQRNK1 w - - 8 12",
+   "line": [
+    "Nf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 275.5,
+   "fen": "r2q1rk1/pp1b1pbp/2n1p1p1/3pPnB1/2pP4/2P2N2/PPB2PPP/R2QRNK1 b - - 9 12",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "The knight came to f5, and the bishop to g5 exploits its drawback: it hits the queen with tempo along the now-open diagonal, keeps the clamp on f6, and readies the pawn to g4 to chase the knight.",
+   "kind": "main",
+   "teaches": "Punish a knight sortie by developing with tempo while maintaining your grip on the key square.",
+   "plans": "Bg5, then g4 to harass."
+  },
+  {
+   "ply": 24,
+   "t": 286.5,
+   "fen": "r2q1rk1/pp1b2bp/2n1ppp1/3pPnB1/2pP4/2P2N2/PPB2PPP/R2QRNK1 w - - 0 13",
+   "line": [
+    "f6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 293,
+   "fen": "r2q1rk1/pp1b3p/2n1pbp1/3p1nB1/2pP4/2P2N2/PPB2PPP/R2QRNK1 w - - 0 14",
+   "line": [
+    "exf6",
+    "Bxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 295,
+   "fen": "r2q1rk1/pp1b3p/2n1pBp1/3p1n2/2pP4/2P2N2/PPB2PPP/R2QRNK1 b - - 0 14",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 297,
+   "fen": "r4rk1/pp1b3p/2n1pqp1/3p1n2/2pP4/2P2N2/PPB2PPP/R2QRNK1 w - - 0 15",
+   "line": [
+    "Qxf6"
+   ],
+   "spoken": "Black's pawn to f6 does White's work: after the trades the e5-square becomes a gaping weakness. Occupy it with a knight, not a rook — a rook is a poor blockader — and there's no rush to do it.",
+   "kind": "main",
+   "teaches": "When the opponent trades off a defender, the vacated square is a permanent outpost; garrison it with a knight.",
+   "plans": "Aim a knight at e5."
+  },
+  {
+   "ply": 29,
+   "t": 334.5,
+   "fen": "r4rk1/pp1b3p/2n1pqp1/3p1n2/2pP4/2P1NN2/PPB2PPP/R2QR1K1 b - - 1 15",
+   "line": [
+    "Ne3"
+   ],
+   "spoken": "The knight to e3 keeps to the plan, eyeing g4 and then the e5-outpost. Flexible, unhurried — the square isn't going anywhere.",
+   "kind": "main",
+   "teaches": "Reroute the knight step by step toward the outpost; flexibility beats haste.",
+   "plans": "Ne3-g4, then e5."
+  },
+  {
+   "ply": 30,
+   "t": 342.5,
+   "fen": "r4rk1/p2b3p/2n1pqp1/1p1p1n2/2pP4/2P1NN2/PPB2PPP/R2QR1K1 w - - 0 16",
+   "line": [
+    "b5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 344,
+   "fen": "r4rk1/p2b3p/2n1pqp1/1p1p1n2/2pP2N1/2P2N2/PPB2PPP/R2QR1K1 b - - 1 16",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 356.5,
+   "fen": "r4rk1/p2b2qp/2n1p1p1/1p1p1n2/2pP2N1/2P2N2/PPB2PPP/R2QR1K1 w - - 2 17",
+   "line": [
+    "Qg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 363,
+   "fen": "r4rk1/p2b2qp/2n1p1p1/1p1p1n2/2pP2N1/2P2N2/PPBQ1PPP/R3R1K1 b - - 3 17",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "With total control of e5 there's no need to rush a piece onto it — nobody can contest it. Connect the rooks first, maybe double on the e-file, and stay patient; here the threat is stronger than the execution.",
+   "kind": "main",
+   "teaches": "When you own a square, improve elsewhere first — the threat to occupy it is often worth more than occupying it.",
+   "plans": "Connect rooks, keep e5 in reserve."
+  },
+  {
+   "ply": 34,
+   "t": 379,
+   "fen": "r4rk1/p2b2q1/2n1p1p1/1p1p1n1p/2pP2N1/2P2N2/PPBQ1PPP/R3R1K1 w - - 0 18",
+   "line": [
+    "h5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 381,
+   "fen": "r4rk1/p2b2q1/2n1p1p1/1p1pNn1p/2pP4/2P2N2/PPBQ1PPP/R3R1K1 b - - 1 18",
+   "line": [
+    "Nge5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 384,
+   "fen": "r4rk1/p2b2q1/4p1p1/1p1pnn1p/2pP4/2P2N2/PPBQ1PPP/R3R1K1 w - - 0 19",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 385,
+   "fen": "r4rk1/p2b2q1/4p1p1/1p1pNn1p/2pP4/2P5/PPBQ1PPP/R3R1K1 b - - 0 19",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 394,
+   "fen": "r3brk1/p5q1/4p1p1/1p1pNn1p/2pP4/2P5/PPBQ1PPP/R3R1K1 w - - 1 20",
+   "line": [
+    "Be8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 430.5,
+   "fen": "r3brk1/p5q1/4p1p1/1p1pNn1p/2pP4/2P5/PPBQRPPP/R5K1 b - - 2 20",
+   "line": [
+    "Re2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 441.5,
+   "fen": "r3brk1/p5q1/4p1pn/1p1pN2p/2pP4/2P5/PPBQRPPP/R5K1 w - - 3 21",
+   "line": [
+    "Nh6"
+   ],
+   "spoken": "Before anything else, stop Black's one idea — the pawn to g5. The move to h4 does it; f4 would only weaken things by cutting the queen's diagonal. The h4 and g3 arrangement locks the kingside down.",
+   "kind": "main",
+   "teaches": "Prevent the opponent's only break; choose the restraining pawn move that doesn't weaken your own position.",
+   "plans": "h4 (not f4), then g3."
+  },
+  {
+   "ply": 41,
+   "t": 475,
+   "fen": "r3brk1/p5q1/4p1pn/1p1pN2p/2pP3P/2P5/PPBQRPP1/R5K1 b - - 0 21",
+   "line": [
+    "h4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 479,
+   "fen": "r3brk1/p5q1/4p1p1/1p1pN2p/2pP2nP/2P5/PPBQRPP1/R5K1 w - - 1 22",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 493,
+   "fen": "r3brk1/p5q1/4p1p1/1p1p3p/2pP2NP/2P5/PPBQRPP1/R5K1 b - - 0 22",
+   "line": [
+    "Nxg4"
+   ],
+   "spoken": "Normally you'd keep the knight on e5, but concretely the capture on g4 transforms the advantage — the knight has done its job, and now the rook simply collects the pawn on e6, leaving White up material with that monster e5-square intact.",
+   "kind": "main",
+   "teaches": "Trade a dominating piece when the concrete line converts the positional edge into material.",
+   "plans": "Nxg4, then Rxe6."
+  },
+  {
+   "ply": 45,
+   "t": 495,
+   "fen": "r3brk1/p5q1/4R1p1/1p1p4/2pP2pP/2P5/PPBQ1PP1/R5K1 b - - 0 23",
+   "line": [
+    "hxg4",
+    "Rxe6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 503,
+   "fen": "r4rk1/p2b2q1/4R1p1/1p1p4/2pP2pP/2P5/PPBQ1PP1/R5K1 w - - 1 24",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "Don't reflexively retreat the rook — marinate on the position and remember the bishop kept on c2 all game. It rakes the diagonal toward h7, and that's why the rook can crash into g6 with decisive threats. Black resigns.",
+   "kind": "trap",
+   "teaches": "A quietly preserved bishop can be the piece that finishes — don't forget your long-diagonal attacker.",
+   "plans": "Rxg6 with the Bc2 battery."
+  },
+  {
+   "ply": 47,
+   "t": 521,
+   "fen": "r4rk1/p2b2q1/6R1/1p1p4/2pP2pP/2P5/PPBQ1PP1/R5K1 b - - 0 24",
+   "line": [
+    "Rxg6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 530,
+   "fen": "r4rk1/p2b2q1/4R1p1/1p1p4/2pP2pP/2P5/PPBQ1PP1/R5K1 w - - 1 24",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 535.5,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [],
+   "spoken": "For the record, this was the Modern Defense — Black delays the g8-knight and fianchettoes, a cousin of the Pirc, and the two frequently transpose. Here it simply melted into a French-shaped centre where the dark squares decided everything.",
+   "kind": "review",
+   "teaches": "The Modern and Pirc are related fianchetto systems that often transpose into structures like this.",
+   "plans": "Treat the resulting structure on its merits.",
+   "reanchor": true
+  }
+ ]
+}
