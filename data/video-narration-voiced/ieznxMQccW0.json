@@ -1,10 +1,10 @@
 {
  "videoId": "ieznxMQccW0",
  "title": "How To CRUSH The Scandinavian Defense | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Scandinavian Defense: 3.Nc3 Qd8 (White)",
+ "openingName": "Scandinavian Defense",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:ieznxMQccW0",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "d5"
    ],
-   "spoken": ""
+   "spoken": "We take White and Black answers with the Scandinavian."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "We take the pawn on d5."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Qxd5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the queen."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3, hitting the queen with tempo."
   },
   {
    "ply": 6,
@@ -51,10 +51,7 @@
    "line": [
     "Qd8"
    ],
-   "spoken": "The queen retreats all the way to d8 — the solid, recently popular system. White simply takes the centre with d4 and develops naturally and actively; there is nothing tricky to fear.",
-   "kind": "main",
-   "teaches": "Against a passive queen retreat, occupy the centre and develop with purpose.",
-   "plans": "d4, natural development, and pressure the space."
+   "spoken": "Black retreats the queen all the way to d8 — the modern, solid setup that's gained popularity. The clean way to meet it is straightforward: occupy the centre, then develop naturally and actively."
   },
   {
    "ply": 7,
@@ -63,7 +60,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We begin by seizing the centre with d4."
   },
   {
    "ply": 9,
@@ -73,7 +70,7 @@
     "c6",
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "Black plays c6; we develop the knight to f3."
   },
   {
    "ply": 10,
@@ -82,10 +79,7 @@
    "line": [
     "h6"
    ],
-   "spoken": "The little pawn to h6 is already a mistake — completely unnecessary, a wasted tempo Black cannot afford in an opening where the queen has already been chased. It can be punished by principled play.",
-   "kind": "trap",
-   "teaches": "An unforced luft like h6 in the opening is a tempo you can punish directly.",
-   "plans": "Develop with threats aimed at f7."
+   "spoken": "Black plays h6 — already a mistake, a completely unnecessary move, and we can punish it simply by playing principled chess."
   },
   {
    "ply": 11,
@@ -94,10 +88,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "Start the punishment with the bishop to c4, aiming straight at the f7-pawn — the eternal soft spot when Black has spent time on the edge instead of developing.",
-   "kind": "main",
-   "teaches": "When Black wastes time, train the pieces on f7 at once.",
-   "plans": "Add the knight to the f7 attack."
+   "spoken": "We develop the bishop to c4, aiming at f7."
   },
   {
    "ply": 12,
@@ -106,7 +97,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": ""
+   "spoken": "Black plays the bishop to f5 — flirting with disaster, because it's ...Bf5 without the supporting ...e6."
   },
   {
    "ply": 13,
@@ -115,10 +106,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "The knight to e5 piles a second attacker onto f7. With Black underdeveloped, the pressure on the weak point becomes overwhelming almost immediately.",
-   "kind": "main",
-   "teaches": "Two pieces on f7 against an undeveloped king is often already decisive.",
-   "plans": "Break through on f7."
+   "spoken": "We plant the knight on e5, aiming at f7."
   },
   {
    "ply": 14,
@@ -127,7 +115,7 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "Black defends with e6. Now the idea: the queen to f3 would add a second attacker on f7, and the tactic to watch for is knight-takes-f7 — if the king recaptures, the e6-pawn is pinned to it, so the queen would take on f5 and win a piece with Black's king in shambles. The bishop on c4 is perfectly safe and can always drop back to b3, and the queen can retreat if needed. It's a pattern worth filing away — the knight-f7 then queen-f5 motif recurs across many openings. Then the plan is to castle and pile a rook on the e-file to smash through on e6."
   },
   {
    "ply": 5,
@@ -187,7 +175,8 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Black's better path was ...Bg4, stopping the knight from reaching e5 — and as a rule ...Bc4 should be met with ...e6 to blunt the bishop.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -223,7 +212,8 @@
     "Bf1",
     "Bc8"
    ],
-   "spoken": ""
+   "spoken": "When Black is this far behind in development, a slow move like ...h6 is a waste he simply cannot afford.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -241,7 +231,8 @@
    "line": [
     "Bf5"
    ],
-   "spoken": ""
+   "spoken": "A word on why the immediate queen to f3 is dubious: Black could grab on d4, and after the queen recaptures White has two roads — the slow bishop to f4, keeping the tension, or the tactical knight-takes-f7. But the tactical line must reckon with ...Nd7, since the c4-bishop is only singly defended and White's grip can wobble.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -251,7 +242,8 @@
     "Ne5",
     "e6"
    ],
-   "spoken": ""
+   "spoken": "Even winning the exchange with knight-takes-f7, White would have to beware the knight getting trapped after ...g5 and ...Bg7 — so quietly castling is the mature approach, keeping the tactic in reserve.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -260,7 +252,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle — the disciplined choice — with the whole attacking plan still held back for the right moment."
   }
  ]
 }
