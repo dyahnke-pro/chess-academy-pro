@@ -16,7 +16,7 @@
     "e5",
     "Nf3"
    ],
-   "spoken": "Finally a Glek System — the Four Knights with g3, White's recommendation."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -28,7 +28,7 @@
     "Nf6",
     "Nc3"
    ],
-   "spoken": "White fianchettoes with g3 — this is the Glek."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -37,7 +37,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "Black develops the bishop to c5."
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -47,7 +47,7 @@
     "Bg2",
     "Ng4"
    ],
-   "spoken": "After the bishop to g2, Black plays a typical move at this level — the knight to g4. It looks intimidating..."
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -56,7 +56,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": "...but White just castles. In most of these lines the knight takes on f2 and the bishop recaptures, leaving White two pieces for a rook and a pawn — and in the middlegame the rooks are not mobilised, so the pieces dominate."
+   "spoken": "The knight lunge to g4 looks intimidating but there's nothing to fear — simply castle. If it grabs on f2 and the bishop recaptures, the trade leaves two pieces for a rook and pawn, and in the middlegame the rooks stay stuck in their corners while the two minor pieces run the board.",
+   "kind": "plan"
   },
   {
    "ply": 12,
@@ -65,7 +66,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Black plays d6. White can chase the knight with h3, or play d3 — no hurry."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -74,7 +75,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "Let's force the commitment with h3."
+   "spoken": "The h-pawn move chases the knight and forces a decision. There's no real hurry — a quiet pawn move would also do — but making the opponent commit costs nothing."
   },
   {
    "ply": 14,
@@ -83,7 +84,7 @@
    "line": [
     "Nh6"
    ],
-   "spoken": "Black drops back to h6 — an odd square. The likely idea is a quick f5, but that is near-suicidal with the king stuck in the centre."
+   "spoken": "The retreat to h6 is an awkward square, and it telegraphs the plan — a quick f5 push, which is close to suicidal with the king still stuck in the centre."
   },
   {
    "ply": 15,
@@ -92,7 +93,8 @@
    "line": [
     "d3"
    ],
-   "spoken": "So White just plays the normal Glek move, d3, completing development and setting up the positional threat of taking on h6."
+   "spoken": "So there's no need to change course — just play the standard d3, completing development while quietly setting up the positional threat of capturing on h6. Playing the system's own moves is exactly the appeal of it.",
+   "kind": "plan"
   },
   {
    "ply": 16,
@@ -110,7 +112,7 @@
    "line": [
     "Bxh6"
    ],
-   "spoken": "Black ignores it and castles — so the bishop takes on h6. Not for the pawn structure per se, but because Black has castled to that very side. Had Black tucked the bishop back to b6 instead, White would be far more hesitant to take."
+   "spoken": "A subtlety about that capture on h6: it's strong not because it doubles the pawns — pawn structure is routinely overrated — but because the king has castled onto that very wing. Had the opponent kept the king elsewhere, ruining the structure would be far less tempting."
   },
   {
    "ply": 15,
@@ -128,7 +130,7 @@
     "Bxh6",
     "gxh6"
    ],
-   "spoken": "Now White has an easily attackable target on h6."
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -137,7 +139,8 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "The low-hanging move to attack it is the queen to d2 — built on a tactical detail newer players miss."
+   "spoken": "The queen swings to d2 to lean on the h6 target — and it rests on a tactical point newer players routinely miss in this system.",
+   "kind": "plan"
   },
   {
    "ply": 20,
@@ -146,7 +149,8 @@
    "line": [
     "Qf6"
    ],
-   "spoken": "The instinct is the queen to f6, getting active — but it walks into a nasty knight jump to d5, hitting c7."
+   "spoken": "That point is this: the instinctive queen development to f6 walks straight into a knight leap to d5, forking into c7. The natural move is a blunder.",
+   "kind": "tactic"
   },
   {
    "ply": 21,
@@ -155,7 +159,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "And there it is. Notice the power of the bishop on g2 — it protects the knight, guards the pawn on h3, and keeps White's king safe."
+   "spoken": "And admire the workhorse on g2 — a single bishop is guarding the knight, defending the h3-pawn, and shielding its own king all at once. That one piece holds the whole position together."
   },
   {
    "ply": 22,
@@ -164,7 +168,8 @@
    "line": [
     "Qg6"
    ],
-   "spoken": "The knight to d5 is a menace. Black's queen to g6 threatens to take on g3 — but White has an incredible resource. Whenever the enemy king and queen sit on forkable squares and the forking square is reachable, put your tactical cap on: if we can deflect the defending knight from c6, there is a win in our pocket."
+   "spoken": "The queen shift to g6 carries a threat against g3, but there's a resource hiding in plain sight. The trigger to spot: when the enemy king and queen both sit on squares a knight could fork, and the forking square is reachable, put the tactical cap on — if the guard on that square can be deflected, the win is already in the pocket.",
+   "kind": "tactic"
   },
   {
    "ply": 23,
@@ -173,7 +178,8 @@
    "line": [
     "b4"
    ],
-   "spoken": "The knight takes c5 fails, since Black recaptures with the pawn — but b4 does the job."
+   "spoken": "The direct capture fails to a pawn recapture, but the quiet pawn thrust to b4 is the deflector — hitting the bishop that guards the knight far away on the other wing.",
+   "kind": "tactic"
   },
   {
    "ply": 24,
@@ -191,7 +197,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "Black is completely unsuspecting — b5, and he misses..."
+   "spoken": ""
   },
   {
    "ply": 26,
@@ -209,15 +215,15 @@
    "line": [
     "Ne7+"
    ],
-   "spoken": "...the fork on e7, and White wins. This is whole-board awareness — doing something on one wing that decides the game on another. b4 is hard to see precisely because it happens on the quiet queenside, but all three zones of the board are intricately connected."
+   "spoken": "And it lands — the knight check forks king and queen and wins outright. This is whole-board awareness in a nutshell: the decisive move happens on the sleepy queenside where nothing seemed to be going on, precisely why it's so hard to see. All three zones of the board are one connected battlefield.",
+   "kind": "tactic"
   },
   {
    "ply": 7,
    "t": 354,
    "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 2 4",
    "line": [],
-   "spoken": "Black resigns — a quick tour of the first Glek System, but far from the last.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -244,8 +250,7 @@
     "Nf6",
     "Nc3"
    ],
-   "spoken": "The Glek is launched with g3 — a fine opening at all levels; players rarely meet it and start floundering almost at once.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -255,8 +260,7 @@
     "Bc5",
     "Bg2"
    ],
-   "spoken": "And the knight to g4 followed by castling is already a serious inaccuracy.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -299,7 +303,9 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "A core point of the system: castling short early is a mistake even strong players make, and it's punished by the centre-fork trick — a capture on the bishop followed by taking the e-pawn. The position stays near equal, but the first player is now the one pressing for the edge.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -391,7 +397,9 @@
     "Bxe5",
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Here's a positional gem to internalise: think of the bishop and the advanced e-pawn as a single team. That bishop may look bad on its own, but together they clamp the d5 square, denying the opponent the freeing break forever. Judge pieces by what they do together, not how they look alone.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -436,7 +444,9 @@
    "line": [
     "Re8"
    ],
-   "spoken": ""
+   "spoken": "The strongest continuation is the knight to e2, threatening to advance the f-pawn and trap the bishop. The freeing break still fails to a simple capture, so the opponent is reduced to awkward shuffling while a stable, lasting advantage is built move by move.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -577,7 +587,9 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Why is this near-winning when the material is level — a rook and pawn balancing the two pieces? Because once the centre opens, it's effectively two extra minor pieces: the rooks are marooned out of the game while the knights and bishop leap into dominant central posts. Mobilised force, not the material count, is what decides it.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -680,7 +692,8 @@
    "line": [
     "Kg7"
    ],
-   "spoken": ""
+   "spoken": "The only route to survival would have been the king step to g7 — and that's a genuinely hard move to find, because newer players rarely think of using the king as a defender. Sometimes the king itself is the piece that holds the position together.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -689,7 +702,9 @@
    "line": [
     "Kh2"
    ],
-   "spoken": ""
+   "spoken": "The reply to that defence is a thematic king step of one's own to h2 — sidestepping the pin and preparing the plan of clearing the knight and driving the f-pawn forward to blow open the kingside. The opponent is essentially powerless against it; even a pre-emptive pawn break just helps the file come open.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 22,
