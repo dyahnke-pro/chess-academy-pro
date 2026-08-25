@@ -4,7 +4,7 @@
  "openingName": "Caro-Kann Defense: Fantasy Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:zprg2WbmgzQ",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Caro-Kann."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We build the centre with d4."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black challenges with d5."
   },
   {
    "ply": 5,
@@ -42,10 +42,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "The pawn to f3 is the Fantasy Variation — a bold way to prop up e4 with a pawn, keep the whole centre, and steer the Caro into a sharp, tactical fight.",
-   "kind": "main",
-   "teaches": "f3 defends the centre with a pawn so White can play for lines and an attack.",
-   "plans": "Hold the centre, develop, and open the kingside."
+   "spoken": "We play f3 — the Fantasy Variation, sharp and tactical, and far less studied than the mainlines."
   },
   {
    "ply": 6,
@@ -54,7 +51,7 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "Black plays e6 — the most reputable reply — and we treat it like a French. Note the threat: ...dxe4 and then ...Qh4 with check."
   },
   {
    "ply": 7,
@@ -63,7 +60,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We defend while developing — the knight to c3 reinforces e4 and takes the sting out of ...Qh4, which would now meet g3."
   },
   {
    "ply": 8,
@@ -72,7 +69,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": ""
+   "spoken": "Black pins with the bishop to b4 — the main move, just like the Winawer French."
   },
   {
    "ply": 9,
@@ -81,10 +78,7 @@
    "line": [
     "a3"
    ],
-   "spoken": "The pawn to a3 puts the question to the pinning bishop. It looks to just drop e4, but it is a deliberate gambit: take the knight and White collects the bishop pair and lasting dark-square targets.",
-   "kind": "main",
-   "teaches": "a3 offers e4 as a gambit for the two bishops and the holes Black's dark-squared bishop leaves behind.",
-   "plans": "Invite the capture on c3, then work the dark squares."
+   "spoken": "We try a3 — a pawn sacrifice, forcing the bishop to decide."
   },
   {
    "ply": 10,
@@ -93,7 +87,7 @@
    "line": [
     "Bxc3+"
    ],
-   "spoken": ""
+   "spoken": "Black takes on c3 with check."
   },
   {
    "ply": 11,
@@ -102,7 +96,7 @@
    "line": [
     "bxc3"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the b-pawn onto c3. Black has given up the dark-squared bishop, leaving a position riddled with dark-square weaknesses on d6 and e7."
   },
   {
    "ply": 12,
@@ -111,7 +105,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": ""
+   "spoken": "Black grabs on e4."
   },
   {
    "ply": 13,
@@ -120,7 +114,7 @@
    "line": [
     "Nh3"
    ],
-   "spoken": ""
+   "spoken": "The computer move — not a bishop but the knight to h3. It prepares fxe4 to win the pawn back, and a check on h4 is now harmless because Nf2 would cover e4."
   },
   {
    "ply": 14,
@@ -129,7 +123,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": ""
+   "spoken": "Black plays the theory move to a5, the queen eyeing the c3-pawn."
   },
   {
    "ply": 15,
@@ -138,7 +132,7 @@
    "line": [
     "Bb2"
    ],
-   "spoken": ""
+   "spoken": "We fianchetto to b2 rather than d2 — d2 would run into ...e3, deflecting the bishop and forcing our king to move. On b2 it looks bad now, but c4 and d5 later give it real potential energy."
   },
   {
    "ply": 16,
@@ -147,7 +141,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 17,
@@ -156,7 +150,7 @@
    "line": [
     "fxe4"
    ],
-   "spoken": ""
+   "spoken": "We take back on e4."
   },
   {
    "ply": 18,
@@ -165,9 +159,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "Black snatches on e4 again, but the raid is dubious. The knight grab on c3 is no real threat: the queen would step to d2, pinning that knight against the loose queen on a5 and simply winning it.",
-   "kind": "main",
-   "teaches": "Before fearing a fork on c3, spot the pin — Qd2 skewers the knight to the undefended queen on a5."
+   "spoken": "Black recaptures with the knight — dubious, I think."
   },
   {
    "ply": 19,
@@ -176,7 +168,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to d3, hitting the knight and preparing to castle. If ...Nxc3, then Qd2 would pin and win it, since the a5-queen is undefended."
   },
   {
    "ply": 20,
@@ -185,7 +177,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black drops the knight back to f6."
   },
   {
    "ply": 21,
@@ -194,7 +186,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle — king to safety, and more importantly the rook lands on the semi-open f-file, a hallmark of the Fantasy."
   },
   {
    "ply": 22,
@@ -203,7 +195,7 @@
    "line": [
     "b6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the slow b6, preparing to fianchetto — but we're a couple of moves from smashing open the kingside."
   },
   {
    "ply": 23,
@@ -212,7 +204,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "On theme, we push c4 — investing a tempo to free the b2-bishop and prepare d5."
   },
   {
    "ply": 24,
@@ -221,7 +213,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": ""
+   "spoken": "Black connects the knights with ...Nbd7, taking the sting out of d5."
   },
   {
    "ply": 27,
@@ -232,10 +224,7 @@
     "Bb7",
     "Qg3"
    ],
-   "spoken": "The queen swings via f3 to g3 — the ideal attacking post in the Fantasy. It steps out of the rook's way, trains straight down at the g7-pawn, and forces Black to weaken.",
-   "kind": "main",
-   "teaches": "g3 is the Fantasy queen's home — it clears the rook's file and bears on g7.",
-   "plans": "Threaten g7 and provoke a concession."
+   "spoken": "We bring the queen into the attack with Qf3; Black develops the bishop to b7; and the queen slides to g3 — its real destination, bearing down the g-file at g7 and clear of the rook."
   },
   {
    "ply": 28,
@@ -244,7 +233,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles queenside, conceding g7 — not an easy thing to do, but the grandmaster choice."
   },
   {
    "ply": 29,
@@ -253,9 +242,7 @@
    "line": [
     "Qxg7"
    ],
-   "spoken": "White takes on g7. It hands Black the open g-file, but it is a clean extra pawn, and White is betting the counterattack on g2 is a bluff.",
-   "kind": "main",
-   "teaches": "Grab the pawn when you can't refute your own attack — trust the material if the counter falls short."
+   "spoken": "We take the free pawn — even in attack, material matters; the queen crashes into g7."
   },
   {
    "ply": 30,
@@ -264,7 +251,7 @@
    "line": [
     "Rhg8"
    ],
-   "spoken": ""
+   "spoken": "Black swings the rook to g8, hitting the queen."
   },
   {
    "ply": 32,
@@ -274,7 +261,7 @@
     "Qxf7",
     "Rde8"
    ],
-   "spoken": ""
+   "spoken": "The queen slips out to f7, grabbing a second pawn; Black answers with the quiet rook to e8 — a high-level defensive resource."
   }
  ]
 }
