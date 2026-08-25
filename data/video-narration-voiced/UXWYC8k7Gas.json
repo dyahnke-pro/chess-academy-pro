@@ -1,7 +1,7 @@
 {
  "videoId": "UXWYC8k7Gas",
  "title": "Master Class | 900 Elo | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Danish Gambit",
+ "openingName": "Centre Game",
  "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -16,7 +16,7 @@
     "e5",
     "e4"
    ],
-   "spoken": "Hoping to finally play the Danish Gambit — d4, e5, e4."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
    "line": [
     "f6"
    ],
-   "spoken": "But f6 — a horrible move, one of the worst here, a Damiano-style weakening."
+   "spoken": "That f-pawn move is one of the very worst available here — the same Damiano-style error that's bad even after a normal knight development. It fatally weakens the king's diagonal."
   },
   {
    "ply": 5,
@@ -34,7 +34,8 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "Not the immediate check on h5 — Black answers g6. First take on e5, and if he takes back, he is basically lost."
+   "spoken": "Resist the tempting immediate check, which would just be met by a pawn move — capture on e5 first. Order of operations turns a near-loss for the opponent into a lost one.",
+   "kind": "tactic"
   },
   {
    "ply": 9,
@@ -46,7 +47,7 @@
     "fxe5",
     "Qxe5+"
    ],
-   "spoken": "It is like the Damiano, except White has not even sacrificed the knight — the queen check wins the rook. As old as the hills."
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -73,7 +74,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "f6 is a natural-looking move — beginners don't grasp how it weakens the king. But now White must be precise: don't fool around with the queen, it is trapped."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -82,7 +83,8 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "To untrap it, use the fact that the queen pins the bishop — the elementary bishop to h6, forcing a queen trade."
+   "spoken": "The queen has strayed into a trap, and the way to free it is to lean on the fact that it pins a piece — a bishop to h6 exploits the pin and essentially forces the queens off. Use the very pin that looks awkward as the lever that saves the piece.",
+   "kind": "tactic"
   },
   {
    "ply": 14,
@@ -91,7 +93,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Don't be deterred by the check on c4 — just cover it. And White needn't take on f8 immediately; develop the knight first and defend the pawn."
+   "spoken": "Don't grab the material in the corner in a hurry — it isn't going anywhere. Cover the intervening check, develop a knight, and shore up the pawn first; the loose piece can be collected at leisure.",
+   "kind": "plan"
   },
   {
    "ply": 15,
@@ -109,7 +112,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "Still no rush to take on f8 — make another developing move, castling."
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -136,7 +139,7 @@
    "line": [
     "Qxf8+"
    ],
-   "spoken": "Black finds an ingenious idea, but White takes on f8 at the last moment. As a beginner, though, I'd take at once — you are inside a professional's head here."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -164,7 +167,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "A good idea — f4, advancing another pawn into the centre."
+   "spoken": "With a winning material edge, just keep improving — advancing another pawn into the centre and letting the position play itself. No need for anything fancy when you're up a rook."
   },
   {
    "ply": 24,
@@ -182,7 +185,8 @@
    "line": [
     "Rd2"
    ],
-   "spoken": "The knight to g4 hits f2. Defend with the rook to d2 rather than the knight to h3 — no knight on the rim — and then chase Black's knight with h3."
+   "spoken": "The knight lunge eyes the f2 square, and there are two ways to defend — a rook step or a knight to the edge. Prefer the rook, because you never want a knight consigned to the rim purely to babysit a pawn; the intruder can be shooed away by a pawn later.",
+   "kind": "plan"
   },
   {
    "ply": 26,
@@ -200,7 +204,8 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Completely winning, up a full rook — just develop and use common sense. No need for h3 yet; the knight to f3, and remember, a piece on your side of the board is not scary."
+   "spoken": "A principle worth repeating: when the opponent has a piece parked in your half, you don't always need to rush to chase it — first understand what it's actually doing. It can be evicted in good time; meanwhile just keep developing.",
+   "kind": "plan"
   },
   {
    "ply": 28,
@@ -228,7 +233,8 @@
     "Nf6",
     "e5"
    ],
-   "spoken": "Now e5 forks the two knights."
+   "spoken": "Now the pawn push to e5 forks the two knights at once, cashing the accumulated advantage into more material.",
+   "kind": "tactic"
   },
   {
    "ply": 32,
@@ -246,7 +252,8 @@
    "line": [
     "exd6"
    ],
-   "spoken": "Take on d6 — two pieces for a rook, and now two full pieces up."
+   "spoken": "Capture on d6 — the point is that it nets two pieces for a rook, converting the pressure into a clean, decisive material lead.",
+   "kind": "tactic"
   },
   {
    "ply": 34,
@@ -284,7 +291,8 @@
     "Bb7",
     "Re1"
    ],
-   "spoken": "Complete development, bring the rook into the game, and win."
+   "spoken": "Notice the discipline even in the endgame — every rook and minor piece gets brought into the game. No coasting; activate the whole army and finish cleanly.",
+   "kind": "plan"
   },
   {
    "ply": 40,
@@ -302,7 +310,7 @@
    "line": [
     "Bxg6"
    ],
-   "spoken": "The bishop takes on g6, and Black resigns."
+   "spoken": ""
   },
   {
    "ply": 43,
@@ -335,7 +343,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "If Black declines the Center Game, d6 is the better way — far from ideal, but White can transpose to a Philidor, or take the queens off into an endgame that is OK for Black but not great, since Black has lost castling.",
+   "spoken": "Had the opponent declined the central fight, the better route is a modest d6 — though even that isn't ideal, since it lets the game transpose toward a Philidor, and the queen-trade endgame that can follow costs the defender their castling rights.",
    "reanchor": true
   },
   {
@@ -380,8 +388,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "Playing Black against the Danish, you simply accept the gambit — that is part of the package: after c3 you take on c3, and with some effort you get a fine game.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -415,7 +422,8 @@
    "line": [
     "dxc3"
    ],
-   "spoken": ""
+   "spoken": "And the wider takeaway: choosing sound openings — especially with the first move — practically guarantees good positions every game. That's the case against the idea that opening study should wait until you're strong: reaching good positions repeatedly exposes you to better play and simply wins more games.",
+   "reanchor": true
   }
  ]
 }
