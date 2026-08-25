@@ -1,7 +1,7 @@
 {
  "videoId": "VkAqhxUJjrw",
  "title": "Amazing Blitz Match | GM Alex Rustemov Vs GM Daniel Naroditsky",
- "openingName": "Pirc Defense",
+ "openingName": "Pirc Defence",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -24,7 +24,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "d6, and now e4 — an invitation into a Pirc."
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -99,7 +99,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "An unorthodox move order, but the plan is simply to treat it like a Pirc."
+   "spoken": "The move order has drifted into something unorthodox — but the guiding decision is simply to treat it like a Pirc, leaning on the familiar dark-squared fianchetto and flexible pawn breaks.",
+   "kind": "plan"
   },
   {
    "ply": 16,
@@ -109,7 +110,7 @@
     "Qd2",
     "O-O"
    ],
-   "spoken": "Castling short, unafraid of a kingside pawn storm — if White throws the rook-pawn up the board, meeting it with a rook-pawn of your own blunts the attack."
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -118,7 +119,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": "Just as unafraid of White castling long — then the two sides race on opposite wings."
+   "spoken": ""
   },
   {
    "ply": 18,
@@ -167,7 +168,8 @@
     "Bxc4",
     "Nxc4"
    ],
-   "spoken": "Bidding for the bishop pair, which should be good long-term compensation."
+   "spoken": "The point of the exchange sequence is to win the bishop pair — two bishops in an increasingly open position is a lasting asset well worth the small concession.",
+   "kind": "plan"
   },
   {
    "ply": 27,
@@ -243,7 +245,8 @@
     "Nd4",
     "h5"
    ],
-   "spoken": "The easy developing moves are done; now the hard part — Black is being squeezed positionally and needs a real maneuver."
+   "spoken": "An honest strategic moment — the easy, natural moves are all played, and now the position demands a real plan, a concrete maneuver. This is exactly the hard part, where drifting on autopilot starts to get squeezed positionally.",
+   "kind": "plan"
   },
   {
    "ply": 40,
@@ -253,7 +256,7 @@
     "Nce2",
     "a6"
    ],
-   "spoken": ""
+   "spoken": "A committal call: the rook-pawn move is undesirable because it leaves the queen nearly boxed in — but it goes in anyway, accepting the awkwardness as the lesser evil under pressure."
   },
   {
    "ply": 44,
@@ -303,7 +306,7 @@
     "Nxc2",
     "Bc8"
    ],
-   "spoken": "Simply worse here, in danger of being crushed on the light squares."
+   "spoken": ""
   },
   {
    "ply": 51,
@@ -321,7 +324,7 @@
    "line": [
     "Kf8"
    ],
-   "spoken": "Time to hunt for tactics — the only way out of a bind like this."
+   "spoken": ""
   },
   {
    "ply": 54,
@@ -508,7 +511,8 @@
    "line": [
     "Kc2"
    ],
-   "spoken": ""
+   "spoken": "In the ending the safe resource is a bishop trade steering into a draw — the practical honesty of recognising when a position no longer offers a winning try, even when you'd rather press.",
+   "kind": "plan"
   },
   {
    "ply": 80,
@@ -755,7 +759,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "Suddenly a chance — the position is getting unbalanced, and with it, real winning tries."
+   "spoken": ""
   },
   {
    "ply": 119,
@@ -847,7 +851,7 @@
    "line": [
     "Kxf7"
    ],
-   "spoken": "The far-advanced passed pawn and a race for the other flank decide it — a hard-earned win from a worse position."
+   "spoken": ""
   }
  ]
 }
