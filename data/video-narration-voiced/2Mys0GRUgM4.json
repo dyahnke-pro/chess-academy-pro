@@ -1,312 +1,306 @@
 {
- "videoId": "2Mys0GRUgM4",
- "title": "Master Class | King's Indian Defence, Sämisch | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "King's Indian Defense: Sämisch Variation",
- "studentSide": "white",
- "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
- "source": "yt:2Mys0GRUgM4",
- "moves": [
-  {
-   "ply": 2,
-   "t": 9.5,
-   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
-   "line": [
-    "d4",
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 31,
-   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
-   "line": [
-    "c4",
-    "g6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 36,
-   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
-   "line": [
-    "Nc3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 37,
-   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
-   "line": [
-    "Bg7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 7,
-   "t": 39,
-   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
-   "line": [
-    "e4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 40,
-   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQ - 1 5",
-   "line": [
-    "O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 7,
-   "t": 45.5,
-   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 49.5,
-   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQ - 1 5",
-   "line": [
-    "O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 90.5,
-   "fen": "rnbq1rk1/ppppppbp/5np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR b KQ - 0 5",
-   "line": [
-    "f3"
-   ],
-   "spoken": "The pawn to f3 is the Sämisch — White braces e4 and prepares to castle long and storm the kingside with g4 and the h-pawn. It also denies Black's knight the g4 square.",
-   "kind": "main",
-   "teaches": "The Sämisch pairs a big centre with a pawn-storm attack; f3 is its keystone.",
-   "plans": "Be3, Qd2, castle long, then push g4 and h4."
-  },
-  {
-   "ply": 10,
-   "t": 93.5,
-   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR w KQ - 0 6",
-   "line": [
-    "d6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 113,
-   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N1BP2/PP4PP/R2QKBNR b KQ - 1 6",
-   "line": [
-    "Be3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 115.5,
-   "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N1BP2/PP4PP/R2QKBNR w KQ - 0 7",
-   "line": [
-    "e5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 153.5,
-   "fen": "rnbq1rk1/ppp2pbp/3p1np1/3Pp3/2P1P3/2N1BP2/PP4PP/R2QKBNR b KQ - 0 7",
-   "line": [
-    "d5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 156,
-   "fen": "rnbq1rk1/pp3pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP4PP/R2QKBNR w KQ - 0 8",
-   "line": [
-    "c6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 167.5,
-   "fen": "rnbq1rk1/pp3pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP1Q2PP/R3KBNR b KQ - 1 8",
-   "line": [
-    "Qd2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 16,
-   "t": 172.5,
-   "fen": "rn1q1rk1/pp1b1pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP1Q2PP/R3KBNR w KQ - 2 9",
-   "line": [
-    "Bd7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 17,
-   "t": 185.5,
-   "fen": "rn1q1rk1/pp1b1pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR b - - 3 9",
-   "line": [
-    "O-O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 189,
-   "fen": "rn1q1rk1/p2b1pbp/2pp1np1/1p1Pp3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR w - - 0 10",
-   "line": [
-    "b5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 19,
-   "t": 221,
-   "fen": "rn1q1rk1/p2b1pbp/2Pp1np1/1p2p3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR b - - 0 10",
-   "line": [
-    "dxc6"
-   ],
-   "spoken": "Black's b5 lunges on the queenside where White's king sits, but it's premature. White cracks the position open first with the capture on c6, exposing the weak d6-pawn and clearing lines to it.",
-   "kind": "main",
-   "teaches": "Meet a flank pawn-lunge by opening the centre before it gathers momentum."
-  },
-  {
-   "ply": 20,
-   "t": 238.5,
-   "fen": "r2q1rk1/p2b1pbp/2np1np1/1p2p3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR w - - 0 11",
-   "line": [
-    "Nxc6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 21,
-   "t": 270.5,
-   "fen": "r2q1rk1/p2b1pbp/2np1np1/1N2p3/2P1P3/4BP2/PP1Q2PP/2KR1BNR b - - 0 11",
-   "line": [
-    "Nxb5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 22,
-   "t": 282,
-   "fen": "r2q1rk1/3b1pbp/2np1np1/pN2p3/2P1P3/4BP2/PP1Q2PP/2KR1BNR w - - 0 12",
-   "line": [
-    "a5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 23,
-   "t": 301,
-   "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p3/2P1P3/4BP2/PP4PP/2KR1BNR b - - 0 12",
-   "line": [
-    "Qxd6"
-   ],
-   "spoken": "The pressure converges: several pieces bear down on d6 and the queen simply collects it. Black's loose queenside play has left him a pawn down and clearly worse.",
-   "kind": "main",
-   "teaches": "When several attackers hit one weak pawn, it falls — punish over-extension concretely."
-  },
-  {
-   "ply": 24,
-   "t": 329.5,
-   "fen": "r2q1rk1/3b1pbp/3Q1np1/pN2p3/1nP1P3/4BP2/PP4PP/2KR1BNR w - - 1 13",
-   "line": [
-    "Nb4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 25,
-   "t": 344.5,
-   "fen": "r2q1rk1/3b1pbp/3Q1np1/pN2p3/1nP1P3/P3BP2/1P4PP/2KR1BNR b - - 0 13",
-   "line": [
-    "a3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 26,
-   "t": 391.5,
-   "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p3/2P1P3/P3BP2/1P4PP/2KR1BNR w - - 1 14",
-   "line": [
-    "Nc6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 27,
-   "t": 393.5,
-   "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p1B1/2P1P3/P4P2/1P4PP/2KR1BNR b - - 2 14",
-   "line": [
-    "Bg5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 26,
-   "t": 397,
-   "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p3/2P1P3/P3BP2/1P4PP/2KR1BNR w - - 1 14",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 27,
-   "t": 405,
-   "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p1B1/2P1P3/P4P2/1P4PP/2KR1BNR b - - 2 14",
-   "line": [
-    "Bg5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 28,
-   "t": 415,
-   "fen": "2rq1rk1/3b1pbp/2nQ1np1/pN2p1B1/2P1P3/P4P2/1P4PP/2KR1BNR w - - 3 15",
-   "line": [
-    "Rc8"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 29,
-   "t": 428.5,
-   "fen": "2rq1rk1/3b1pbp/2nQ1Bp1/pN2p3/2P1P3/P4P2/1P4PP/2KR1BNR b - - 0 15",
-   "line": [
-    "Bxf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 31,
-   "t": 441.5,
-   "fen": "2rq1rk1/2Qb1p1p/2n2bp1/pN2p3/2P1P3/P4P2/1P4PP/2KR1BNR b - - 1 16",
-   "line": [
-    "Bxf6",
-    "Qc7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 2,
-   "t": 1108,
-   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
-   "line": [],
-   "spoken": ""
-  }
- ]
+  "videoId": "2Mys0GRUgM4",
+  "title": "Master Class | King's Indian Defence, Sämisch | Chess Speedrun | Grandmaster Naroditsky",
+  "openingName": "King's Indian Defense: Samisch Variation",
+  "studentSide": "white",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-25",
+  "source": "yt:2Mys0GRUgM4",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 9.5,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "line": [
+        "d4",
+        "Nf6"
+      ],
+      "spoken": "We take White and open d4; Black replies with the knight to f6."
+    },
+    {
+      "ply": 4,
+      "t": 31,
+      "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "line": [
+        "c4",
+        "g6"
+      ],
+      "spoken": "We play c4, the main line; Black fianchettoes with g6."
+    },
+    {
+      "ply": 5,
+      "t": 36,
+      "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "We develop the knight to c3."
+    },
+    {
+      "ply": 6,
+      "t": 37,
+      "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+      "line": [
+        "Bg7"
+      ],
+      "spoken": "Black completes the fianchetto with the bishop to g7."
+    },
+    {
+      "ply": 7,
+      "t": 39,
+      "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+      "line": [
+        "e4"
+      ],
+      "spoken": "We build the big centre with e4."
+    },
+    {
+      "ply": 8,
+      "t": 40,
+      "fen": "rnbq1rk1/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQ - 1 5",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "Black castles."
+    },
+    {
+      "ply": 7,
+      "t": 45.5,
+      "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+      "line": [],
+      "spoken": "Castling is fine here; the e5-punish is known to be bad ever since a famous Fischer win in the sixties. We just play it as a normal King's Indian.",
+      "reanchor": true
+    },
+    {
+      "ply": 8,
+      "t": 49.5,
+      "fen": "rnbq1rk1/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQ - 1 5",
+      "line": [
+        "O-O"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 9,
+      "t": 90.5,
+      "fen": "rnbq1rk1/ppppppbp/5np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR b KQ - 0 5",
+      "line": [
+        "f3"
+      ],
+      "spoken": "We play f3 — the Sämisch: reinforcing e4, preparing a g4 pawn storm, and denying the knight g4."
+    },
+    {
+      "ply": 10,
+      "t": 93.5,
+      "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR w KQ - 0 6",
+      "line": [
+        "d6"
+      ],
+      "spoken": "Black plays d6."
+    },
+    {
+      "ply": 11,
+      "t": 113,
+      "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N1BP2/PP4PP/R2QKBNR b KQ - 1 6",
+      "line": [
+        "Be3"
+      ],
+      "spoken": "We develop the bishop to e3."
+    },
+    {
+      "ply": 12,
+      "t": 115.5,
+      "fen": "rnbq1rk1/ppp2pbp/3p1np1/4p3/2PPP3/2N1BP2/PP4PP/R2QKBNR w KQ - 0 7",
+      "line": [
+        "e5"
+      ],
+      "spoken": "Black plays the old main line ...e5."
+    },
+    {
+      "ply": 13,
+      "t": 153.5,
+      "fen": "rnbq1rk1/ppp2pbp/3p1np1/3Pp3/2P1P3/2N1BP2/PP4PP/R2QKBNR b KQ - 0 7",
+      "line": [
+        "d5"
+      ],
+      "spoken": "We close the centre with d5."
+    },
+    {
+      "ply": 14,
+      "t": 156,
+      "fen": "rnbq1rk1/pp3pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP4PP/R2QKBNR w KQ - 0 8",
+      "line": [
+        "c6"
+      ],
+      "spoken": "Black hits the wedge with c6."
+    },
+    {
+      "ply": 15,
+      "t": 167.5,
+      "fen": "rnbq1rk1/pp3pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP1Q2PP/R3KBNR b KQ - 1 8",
+      "line": [
+        "Qd2"
+      ],
+      "spoken": "The queen to d2, preparing to castle long."
+    },
+    {
+      "ply": 16,
+      "t": 172.5,
+      "fen": "rn1q1rk1/pp1b1pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP1Q2PP/R3KBNR w KQ - 2 9",
+      "line": [
+        "Bd7"
+      ],
+      "spoken": "Black plays the awkward ...Bd7, depriving his own knight of that square."
+    },
+    {
+      "ply": 17,
+      "t": 185.5,
+      "fen": "rn1q1rk1/pp1b1pbp/2pp1np1/3Pp3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR b - - 3 9",
+      "line": [
+        "O-O-O"
+      ],
+      "spoken": "We castle queenside."
+    },
+    {
+      "ply": 18,
+      "t": 189,
+      "fen": "rn1q1rk1/p2b1pbp/2pp1np1/1p1Pp3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR w - - 0 10",
+      "line": [
+        "b5"
+      ],
+      "spoken": "Black launches ...b5 on the queenside."
+    },
+    {
+      "ply": 19,
+      "t": 221,
+      "fen": "rn1q1rk1/p2b1pbp/2Pp1np1/1p2p3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR b - - 0 10",
+      "line": [
+        "dxc6"
+      ],
+      "spoken": "We take on c6, exposing the weak d6-pawn."
+    },
+    {
+      "ply": 20,
+      "t": 238.5,
+      "fen": "r2q1rk1/p2b1pbp/2np1np1/1p2p3/2P1P3/2N1BP2/PP1Q2PP/2KR1BNR w - - 0 11",
+      "line": [
+        "Nxc6"
+      ],
+      "spoken": "Black recaptures with the knight."
+    },
+    {
+      "ply": 21,
+      "t": 270.5,
+      "fen": "r2q1rk1/p2b1pbp/2np1np1/1N2p3/2P1P3/4BP2/PP1Q2PP/2KR1BNR b - - 0 11",
+      "line": [
+        "Nxb5"
+      ],
+      "spoken": "We take on b5 — with the knight, not the pawn, which would only open the c-file for Black."
+    },
+    {
+      "ply": 22,
+      "t": 282,
+      "fen": "r2q1rk1/3b1pbp/2np1np1/pN2p3/2P1P3/4BP2/PP1Q2PP/2KR1BNR w - - 0 12",
+      "line": [
+        "a5"
+      ],
+      "spoken": "Black continues with a5, grasping at straws."
+    },
+    {
+      "ply": 23,
+      "t": 301,
+      "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p3/2P1P3/4BP2/PP4PP/2KR1BNR b - - 0 12",
+      "line": [
+        "Qxd6"
+      ],
+      "spoken": "We harvest the loose pawn, the queen swooping into d6 and paralyzing Black."
+    },
+    {
+      "ply": 24,
+      "t": 329.5,
+      "fen": "r2q1rk1/3b1pbp/3Q1np1/pN2p3/1nP1P3/4BP2/PP4PP/2KR1BNR w - - 1 13",
+      "line": [
+        "Nb4"
+      ],
+      "spoken": "Black tries ...Nb4, hitting a2."
+    },
+    {
+      "ply": 25,
+      "t": 344.5,
+      "fen": "r2q1rk1/3b1pbp/3Q1np1/pN2p3/1nP1P3/P3BP2/1P4PP/2KR1BNR b - - 0 13",
+      "line": [
+        "a3"
+      ],
+      "spoken": "We chase the knight with a3 — with tempo, our king perfectly safe on c1."
+    },
+    {
+      "ply": 26,
+      "t": 391.5,
+      "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p3/2P1P3/P3BP2/1P4PP/2KR1BNR w - - 1 14",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "Black retreats the knight to c6."
+    },
+    {
+      "ply": 27,
+      "t": 393.5,
+      "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p1B1/2P1P3/P4P2/1P4PP/2KR1BNR b - - 2 14",
+      "line": [
+        "Bg5"
+      ],
+      "spoken": "We pin with the bishop to g5, threatening to win the d7-bishop."
+    },
+    {
+      "ply": 26,
+      "t": 397,
+      "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p3/2P1P3/P3BP2/1P4PP/2KR1BNR w - - 1 14",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 27,
+      "t": 405,
+      "fen": "r2q1rk1/3b1pbp/2nQ1np1/pN2p1B1/2P1P3/P4P2/1P4PP/2KR1BNR b - - 2 14",
+      "line": [
+        "Bg5"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 28,
+      "t": 415,
+      "fen": "2rq1rk1/3b1pbp/2nQ1np1/pN2p1B1/2P1P3/P4P2/1P4PP/2KR1BNR w - - 3 15",
+      "line": [
+        "Rc8"
+      ],
+      "spoken": "Black plays the rook to c8."
+    },
+    {
+      "ply": 29,
+      "t": 428.5,
+      "fen": "2rq1rk1/3b1pbp/2nQ1Bp1/pN2p3/2P1P3/P4P2/1P4PP/2KR1BNR b - - 0 15",
+      "line": [
+        "Bxf6"
+      ],
+      "spoken": "We take on f6 — the whole point of Bg5."
+    },
+    {
+      "ply": 31,
+      "t": 441.5,
+      "fen": "2rq1rk1/2Qb1p1p/2n2bp1/pN2p3/2P1P3/P4P2/1P4PP/2KR1BNR b - - 1 16",
+      "line": [
+        "Bxf6",
+        "Qc7"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 2,
+      "t": 1108,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+      "line": [],
+      "spoken": ""
+    }
+  ]
 }
