@@ -1,0 +1,351 @@
+{
+ "videoId": "9Iu56-1zzfI",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1830",
+ "openingName": "Alapin Sicilian",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:9Iu56-1zzfI",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 41,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "First 2000-rated opponent — and against the Sicilian, White reaches for the Alapin."
+  },
+  {
+   "ply": 3,
+   "t": 42,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c3"
+   ],
+   "spoken": "The quiet c3 — the Alapin — preparing to build a big centre with d4."
+  },
+  {
+   "ply": 4,
+   "t": 43.5,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Black replies d6, which is not the most testing choice: it lets White seize the centre."
+  },
+  {
+   "ply": 5,
+   "t": 48,
+   "fen": "rnbqkbnr/pp2pppp/3p4/2p5/3PP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": "So White grabs it with d4."
+  },
+  {
+   "ply": 6,
+   "t": 49.5,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2p5/3PP3/2P5/PP3PPP/RNBQKBNR w KQkq - 1 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Black develops and leans on the e4-pawn."
+  },
+  {
+   "ply": 7,
+   "t": 56,
+   "fen": "rnbqkb1r/pp2pppp/3p1n2/2p5/3PP3/2PB4/PP3PPP/RNBQK1NR b KQkq - 2 4",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "White defends by developing the bishop to d3 — with a couple of subtleties to keep in mind, especially against the knight to c6."
+  },
+  {
+   "ply": 8,
+   "t": 62.5,
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/3PP3/2PB4/PP3PPP/RNBQK1NR w KQkq - 3 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "And there it is, the knight to c6."
+  },
+  {
+   "ply": 9,
+   "t": 65.5,
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/3PP3/2PB1N2/PP3PPP/RNBQK2R b KQkq - 4 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "White develops the knight to f3, guarding d4. The bishop to g4 would look intimidating here — more on that after the game."
+  },
+  {
+   "ply": 10,
+   "t": 70,
+   "fen": "r1bqkb1r/pp3ppp/2nppn2/2p5/3PP3/2PB1N2/PP3PPP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Black chooses the very passive e6."
+  },
+  {
+   "ply": 11,
+   "t": 77,
+   "fen": "r1bqkb1r/pp3ppp/2nppn2/2p5/3PP3/2PB1N2/PP3PPP/RNBQ1RK1 b kq - 1 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "White castles — nothing special is required against such a quiet setup."
+  },
+  {
+   "ply": 12,
+   "t": 78,
+   "fen": "r1bqk2r/pp2bppp/2nppn2/2p5/3PP3/2PB1N2/PP3PPP/RNBQ1RK1 w kq - 2 7",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "Black develops the bishop to e7. White has two good roads: open the centre with the capture, or play flexibly."
+  },
+  {
+   "ply": 13,
+   "t": 92.5,
+   "fen": "r1bqk2r/pp2bppp/2nppn2/2p3B1/3PP3/2PB1N2/PP3PPP/RN1Q1RK1 b kq - 3 7",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "White chooses flexibility with the bishop to g5, developing by the book."
+  },
+  {
+   "ply": 15,
+   "t": 95,
+   "fen": "r1bq1rk1/pp2bppp/2nppn2/2p3B1/3PP3/2PB1N2/PP1N1PPP/R2Q1RK1 b - - 5 8",
+   "line": [
+    "O-O",
+    "Nbd2"
+   ],
+   "spoken": "The queen's knight goes to d2 — the one drawback of the Alapin is that it cannot reach c3 — but it is fine here, and it also props up the e4-pawn. White is comfortably better with a lovely pawn centre."
+  },
+  {
+   "ply": 18,
+   "t": 115.5,
+   "fen": "r1bq1rk1/pp2bppp/2np1n2/4p1B1/3PP3/3B1N2/PP1N1PPP/R2Q1RK1 w - - 0 10",
+   "line": [
+    "cxd4",
+    "cxd4",
+    "e5"
+   ],
+   "spoken": "Black strikes with e5. Now the decision many players find hard — capture or push? Taking would open the position in Black's favour and hit the bishop, so..."
+  },
+  {
+   "ply": 19,
+   "t": 133,
+   "fen": "r1bq1rk1/pp2bppp/2np1n2/3Pp1B1/4P3/3B1N2/PP1N1PPP/R2Q1RK1 b - - 0 10",
+   "line": [
+    "d5"
+   ],
+   "spoken": "...White keeps it closed with d5, holding the space advantage, which in theory should tell."
+  },
+  {
+   "ply": 20,
+   "t": 135,
+   "fen": "r1bq1rk1/pp2bppp/3p1n2/3Pp1B1/1n2P3/3B1N2/PP1N1PPP/R2Q1RK1 w - - 1 11",
+   "line": [
+    "Nb4"
+   ],
+   "spoken": "Black jumps the knight to b4."
+  },
+  {
+   "ply": 21,
+   "t": 148,
+   "fen": "r1bq1rk1/pp2bppp/3p1n2/3Pp1B1/1n2P3/5N2/PP1NBPPP/R2Q1RK1 b - - 2 11",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "White retreats the bishop to e2 — but there is a tactical detail here White failed to anticipate."
+  },
+  {
+   "ply": 22,
+   "t": 150.5,
+   "fen": "r1bq1rk1/pp2bppp/3p4/3np1B1/1n2P3/5N2/PP1NBPPP/R2Q1RK1 w - - 0 12",
+   "line": [
+    "Nfxd5"
+   ],
+   "spoken": "And Black finds it — the knight takes on d5. White had missed this. But this is the beauty of being positionally better: you can slip and still be fine."
+  },
+  {
+   "ply": 23,
+   "t": 155.5,
+   "fen": "r1bq1rk1/pp2Bppp/3p4/3np3/1n2P3/5N2/PP1NBPPP/R2Q1RK1 b - - 0 12",
+   "line": [
+    "Bxe7"
+   ],
+   "spoken": "White captures on e7."
+  },
+  {
+   "ply": 24,
+   "t": 158.5,
+   "fen": "r1bq1rk1/pp2nppp/3p4/4p3/1n2P3/5N2/PP1NBPPP/R2Q1RK1 w - - 0 13",
+   "line": [
+    "Nxe7"
+   ],
+   "spoken": "Black recaptures — and because the d-file is now open, the question becomes how to pressure the pawn on d6."
+  },
+  {
+   "ply": 25,
+   "t": 169.5,
+   "fen": "r1bq1rk1/pp2nppp/3p4/4p3/1nN1P3/5N2/PP2BPPP/R2Q1RK1 b - - 1 13",
+   "line": [
+    "Nc4"
+   ],
+   "spoken": "The knight to c4, leaning on d6. No disaster — White still has a good game — but this was an instructive mistake in the making."
+  },
+  {
+   "ply": 26,
+   "t": 181,
+   "fen": "r2q1rk1/pp2nppp/3pb3/4p3/1nN1P3/5N2/PP2BPPP/R2Q1RK1 w - - 2 14",
+   "line": [
+    "Be6"
+   ],
+   "spoken": "Black develops the bishop to e6 — and this lets White win the pawn straight back."
+  },
+  {
+   "ply": 27,
+   "t": 183,
+   "fen": "r2q1rk1/pp2nppp/3Nb3/4p3/1n2P3/5N2/PP2BPPP/R2Q1RK1 b - - 0 14",
+   "line": [
+    "Nxd6"
+   ],
+   "spoken": "White wins it back with the knight on d6, and the position is roughly level. Had Black tried to push, White would take and the e5-pawn would hang — and White has designs on that pawn too."
+  },
+  {
+   "ply": 28,
+   "t": 211,
+   "fen": "r4rk1/ppq1nppp/3Nb3/4p3/1n2P3/5N2/PP2BPPP/R2Q1RK1 w - - 1 15",
+   "line": [
+    "Qc7"
+   ],
+   "spoken": "Black's knight on b4 gives some counterplay. The queen to c7 is not the most accurate — the queen to b6 was better, planning to pile on that knight. Now White has ideas, starting with the knight to b5 with tempo."
+  },
+  {
+   "ply": 29,
+   "t": 240,
+   "fen": "r4rk1/ppq1nppp/4b3/1N2p3/1n2P3/5N2/PP2BPPP/R2Q1RK1 b - - 2 15",
+   "line": [
+    "Nb5"
+   ],
+   "spoken": "Most players would activate the rook to c1, but the real priority is that loose knight — chess is about priorities — so White evacuates it to b5 first."
+  },
+  {
+   "ply": 30,
+   "t": 246.5,
+   "fen": "r4rk1/pp2nppp/1q2b3/1N2p3/1n2P3/5N2/PP2BPPP/R2Q1RK1 w - - 3 16",
+   "line": [
+    "Qb6"
+   ],
+   "spoken": "And now, with the knight safely out and defended, White can do something impossible a moment ago — because Black has forgotten the e5-pawn is hanging."
+  },
+  {
+   "ply": 31,
+   "t": 258,
+   "fen": "r4rk1/pp2nppp/1q2b3/1N2N3/1n2P3/8/PP2BPPP/R2Q1RK1 b - - 0 16",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": "The knight grabs on e5, and White is up a pawn. Sometimes chess is about resisting the by-the-book move and prioritising instead."
+  },
+  {
+   "ply": 32,
+   "t": 276.5,
+   "fen": "r4rk1/1p2nppp/pq2b3/1N2N3/1n2P3/8/PP2BPPP/R2Q1RK1 w - - 0 17",
+   "line": [
+    "a6"
+   ],
+   "spoken": "Grabbing on a2 would lose material, so Black plays a6, shooing the knight."
+  },
+  {
+   "ply": 33,
+   "t": 281,
+   "fen": "r4rk1/1p2nppp/pq2b3/4N3/1n2P3/2N5/PP2BPPP/R2Q1RK1 b - - 1 17",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "No problem — the knight retreats to c3, an even safer square."
+  },
+  {
+   "ply": 34,
+   "t": 286,
+   "fen": "3r1rk1/1p2nppp/pq2b3/4N3/1n2P3/2N5/PP2BPPP/R2Q1RK1 w - - 2 18",
+   "line": [
+    "Rad8"
+   ],
+   "spoken": "Black brings a rook to d8. White must take care — the queen to e1 would walk into a fork — so the queen goes to a4 instead, staying active and pressing the knights."
+  },
+  {
+   "ply": 8,
+   "t": 494,
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/3PP3/2PB4/PP3PPP/RNBQK1NR w KQkq - 3 5",
+   "line": [],
+   "spoken": "In review: Black's d6 hands White the centre — a line worth knowing from both sides.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 495,
+   "fen": "r1bqkb1r/pp2pppp/2np1n2/2p5/3PP3/2PB1N2/PP3PPP/RNBQK2R b KQkq - 4 5",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "If Black tries the pin with the bishop to g4, White simply plays d5.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 497,
+   "fen": "r2qkb1r/pp2pppp/2np1n2/2p5/3PP1b1/2PB1N2/PP3PPP/RNBQK2R w KQkq - 5 6",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 498.5,
+   "fen": "r2qkb1r/pp2pppp/2np1n2/2pP4/4P1b1/2PB1N2/PP3PPP/RNBQK2R b KQkq - 0 6",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 499.5,
+   "fen": "r2qkb1r/pp2pppp/3p1n2/2pPn3/4P1b1/2PB1N2/PP3PPP/RNBQK2R w KQkq - 1 7",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "And here a knight to e5 might look strong, but with that diagonal open White has a lovely, typical idea.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 515,
+   "fen": "r2qkb1r/pp2pppp/3p1n2/1bpPN3/4P3/2P5/PP3PPP/RNBQK2R w KQkq - 0 9",
+   "line": [
+    "Bb5+",
+    "Bd7",
+    "Nxe5",
+    "Bxb5"
+   ],
+   "spoken": "The check on b5 is the key — after the bishop blocks, White takes on e5, and when the smoke clears White is up a piece. It is not a queen blunder, it is a setup — and this same trick turns up in countless openings, including a famous Queen's Gambit version.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 538,
+   "fen": "r2qkb1r/pp2pppp/2np1n2/2p5/3PP1b1/2PB1N2/PP3PPP/RNBQK2R w KQkq - 5 6",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
