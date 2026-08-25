@@ -1,0 +1,273 @@
+{
+ "videoId": "j4-gTbXfwXg",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2030",
+ "openingName": "Alekhine Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:j4-gTbXfwXg",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1316,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "e4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1319.5,
+   "fen": "rnbqkb1r/pppppppp/8/3nP3/8/8/PPPP1PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "e5",
+    "Nd5"
+   ],
+   "spoken": "He plays e5, and my knight jumps to d5 — a serious opening."
+  },
+  {
+   "ply": 5,
+   "t": 1320.5,
+   "fen": "rnbqkb1r/pppppppp/8/3nP3/8/5N2/PPPP1PPP/RNBQKB1R b KQkq - 2 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1321.5,
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/8/5N2/PPPP1PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1322.5,
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/2B5/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": "The bishop to c4 — a slightly different way of handling the Alekhine, developing pieces rather than grabbing the centre with pawns; there's even a Bxf7 sacrifice line to watch for."
+  },
+  {
+   "ply": 8,
+   "t": 1358.5,
+   "fen": "rnbqkb1r/ppp2ppp/3pp3/3nP3/2B5/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Worried about a trap, protect the knight with e6 — passive, but solid."
+  },
+  {
+   "ply": 9,
+   "t": 1362.5,
+   "fen": "rnbqkb1r/ppp2ppp/3pp3/3nP3/2B5/5N2/PPPP1PPP/RNBQ1RK1 b kq - 1 5",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Passive but solid — there's real value in openings that are hard to break, even if you're slightly worse."
+  },
+  {
+   "ply": 10,
+   "t": 1371.5,
+   "fen": "r1bqkb1r/ppp2ppp/2npp3/3nP3/2B5/5N2/PPPP1PPP/RNBQ1RK1 w kq - 2 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Develop the knight and attack the pawn on e5, forcing him to decide; and after exd6 we recapture with the bishop."
+  },
+  {
+   "ply": 11,
+   "t": 1383,
+   "fen": "r1bqkb1r/ppp2ppp/2npp3/3nP3/2BP4/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 6",
+   "line": [
+    "d4"
+   ],
+   "spoken": "Allow him d4 — he gets more of the centre, but our piece placement is rock-solid."
+  },
+  {
+   "ply": 12,
+   "t": 1387,
+   "fen": "r1bqkb1r/ppp2ppp/2n1p3/3np3/2BP4/5N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": "Take on e5, clearing the diagonal for our bishop."
+  },
+  {
+   "ply": 13,
+   "t": 1394,
+   "fen": "r1bqkb1r/ppp2ppp/2n1p3/3nP3/2B5/5N2/PPP2PPP/RNBQ1RK1 b kq - 0 7",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": "Look how nicely the knight on d5 sits — solid and central."
+  },
+  {
+   "ply": 14,
+   "t": 1415,
+   "fen": "r1bqk2r/ppp1bppp/2n1p3/3nP3/2B5/5N2/PPP2PPP/RNBQ1RK1 w kq - 1 8",
+   "line": [
+    "Be7"
+   ],
+   "spoken": "The bishop to e7, not c5 — a bit of a trick question: c5 would let a white piece reach the g5 square."
+  },
+  {
+   "ply": 15,
+   "t": 1421.5,
+   "fen": "r1bqk2r/ppp1bppp/2n1p3/3nP3/2B2B2/5N2/PPP2PPP/RN1Q1RK1 b kq - 2 8",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1426.5,
+   "fen": "r1bqk2r/ppp1bppp/2n1p3/4P3/2B2n2/5N2/PPP2PPP/RN1Q1RK1 w kq - 0 9",
+   "line": [
+    "Nxf4"
+   ],
+   "spoken": "And that's how you play the Alekhine — it wins by force in eight moves. You can't make this stuff up."
+  },
+  {
+   "ply": 7,
+   "t": 1457,
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/2B5/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1461,
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/2B5/5N2/PPPP1PPP/RNBQK2R w KQkq - 2 5",
+   "line": [
+    "Nb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1463,
+   "fen": "rnbqkb1r/ppp1pBpp/1n1p4/4P3/8/5N2/PPPP1PPP/RNBQK2R b KQkq - 0 5",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1465,
+   "fen": "rnbq1b1r/ppp1pkpp/1n1p4/4P3/8/5N2/PPPP1PPP/RNBQK2R w KQ - 0 6",
+   "line": [
+    "Kxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1466,
+   "fen": "rnbq1b1r/ppp1pkpp/1n1pP3/8/8/5N2/PPPP1PPP/RNBQK2R b KQ - 0 6",
+   "line": [
+    "e6+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1467.5,
+   "fen": "rnbq1bkr/ppp1p1pp/1n1pP3/8/8/5N2/PPPP1PPP/RNBQK2R w KQ - 1 7",
+   "line": [
+    "Kg8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1469.5,
+   "fen": "rnbq1bkr/ppp1p1pp/1n1pP3/6N1/8/8/PPPP1PPP/RNBQK2R b KQ - 2 7",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1470.5,
+   "fen": "rnb1qbkr/ppp1p1pp/1n1pP3/6N1/8/8/PPPP1PPP/RNBQK2R w KQ - 3 8",
+   "line": [
+    "Qe8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1476,
+   "fen": "rnbqkb1r/ppp1pppp/3p4/3nP3/2B5/5N2/PPPP1PPP/RNBQK2R b KQkq - 1 4",
+   "line": [],
+   "spoken": "e6 isn't actually best — it blocks the development of our bishop; the knight to b6 is the strongest move.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 1481,
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/8/1B3N2/PPPP1PPP/RNBQK2R b KQkq - 3 5",
+   "line": [
+    "Nb6",
+    "Bb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1484,
+   "fen": "rn1qkb1r/ppp1pppp/1n1p4/4P3/6b1/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 4 6",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "And don't play the bishop to g4 — a big mistake: Bxf7-check, king takes, then the knight to g5 opens the attack. A very typical tactic.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1501,
+   "fen": "rn1q1b1r/ppp1pkpp/1n1p4/4P1N1/6b1/8/PPPP1PPP/RNBQK2R b KQ - 1 7",
+   "line": [
+    "Bxf7+",
+    "Kxf7",
+    "Ng5+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1505,
+   "fen": "rn1qkb1r/ppp1pppp/1n1p4/4P3/6b1/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 4 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1506,
+   "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/2B5/5N2/PPPP1PPP/RNBQK2R w KQkq - 6 7",
+   "line": [
+    "Bc4",
+    "Bc8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1508,
+   "fen": "rn1qkb1r/ppp1pppp/1n1p4/4P3/6b1/1B3N2/PPPP1PPP/RNBQK2R w KQkq - 4 6",
+   "line": [],
+   "spoken": "White should have played the queen to e2 and the rook to d1, piling pressure on the knight — not taking on d5, which would just hand our bishop a fine diagonal.",
+   "reanchor": true
+  }
+ ]
+}
