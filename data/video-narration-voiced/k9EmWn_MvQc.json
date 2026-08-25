@@ -24,7 +24,8 @@
    "line": [
     "e3"
    ],
-   "spoken": "e3 — the Colle. Solid, but Black doesn't change plans: we play the Queen's Gambit Declined setup regardless of how White arranges his pieces."
+   "spoken": "The modest pawn to e3 is the Colle — a very solid opening, but the reply doesn't change one bit: just play the Queen's Gambit Declined setup no matter how the opponent arranges the pieces. Let their choice be the one that has to adapt.",
+   "kind": "plan"
   },
   {
    "ply": 4,
@@ -33,7 +34,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "The knight to f6 — the QGD setup."
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -51,7 +52,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "e6 — the Queen's Gambit Declined, even though e3 has blocked in White's own bishop."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -86,7 +87,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "The bishop to e7 — all the regular QGD moves."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -113,7 +114,8 @@
    "line": [
     "b4"
    ],
-   "spoken": "White isn't developing a single kingside piece — and the way to punish that is to open the centre. We can't play c5, it's defended, nor e5; so first undermine the b4-pawn."
+   "spoken": "Notice what jumps out — the opponent hasn't developed a single kingside piece, and the standard punishment for that is to open the centre. It isn't easy here, since the direct breaks are covered, so rather than the slow preparation there's a sharper way to make the key break possible.",
+   "kind": "plan"
   },
   {
    "ply": 12,
@@ -122,7 +124,8 @@
    "line": [
     "a5"
    ],
-   "spoken": "a5 — a typical undermining move, forcing the issue and making the c5 break possible."
+   "spoken": "That way is to undermine the pawn with a5 — a typical response in countless openings, hitting the base of the queenside advance. Even if it's captured, the freeing break becomes available anyway.",
+   "kind": "plan"
   },
   {
    "ply": 13,
@@ -140,7 +143,8 @@
    "line": [
     "axb4"
    ],
-   "spoken": "Take on b4 — but grab the hanging rook first."
+   "spoken": "The opponent's move drops the pawn — so capture, but take the hanging rook first, since it's the piece under attack. Resolve the loose material before collecting the winnings.",
+   "kind": "tactic"
   },
   {
    "ply": 16,
@@ -160,7 +164,7 @@
     "Qxa1",
     "Bxb4"
    ],
-   "spoken": "Thank you for the pawn — and we're ready for c5, with a nice pin going."
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -169,7 +173,8 @@
    "line": [
     "Ba3"
    ],
-   "spoken": "The bishop to a3 is a decent move — but rather than trade automatically, keep the tension."
+   "spoken": "Facing the bishop, most instincts say you must trade — but there are ways to swap on your own terms or even decline. Keeping the tension with the queen out, ready to trade but demanding the queen reach an active square, is one option; the knight development has the downside of blocking a pawn.",
+   "kind": "plan"
   },
   {
    "ply": 20,
@@ -178,7 +183,8 @@
    "line": [
     "c5"
    ],
-   "spoken": "The best move is c5 — it carries two ideas: a passed pawn if he takes, and it opens a pathway for another of our pieces."
+   "spoken": "The best move is the central break c5 — it carries two ideas at once. If it's captured we can't recapture immediately, since the bishop x-rays through, but the break's real gift is that it opens a path for another piece to join in.",
+   "kind": "plan"
   },
   {
    "ply": 21,
@@ -196,7 +202,8 @@
    "line": [
     "Qa5"
    ],
-   "spoken": "There it is — the queen to a5, pinning the bishop. Taking on b4 now loses the queen, so White's reply is absolutely forced."
+   "spoken": "That other piece is the queen, swinging to a5 to pin the bishop — now capturing on the queenside would lose the queen, so the opponent's retreat is absolutely forced. The break didn't win the pawn; it opened the line that wins the game.",
+   "kind": "tactic"
   },
   {
    "ply": 23,
@@ -214,7 +221,8 @@
    "line": [
     "Bxa3"
    ],
-   "spoken": "Take with the bishop — keep the queens on the board, his king stuck in the centre, and win faster."
+   "spoken": "A perfect illustration of not assuming you must trade — the bishop is simply taken, keeping the queens on the board because the enemy king is stuck in the centre and the other bishop can barely develop. Keeping the strongest pieces on multiplies the winning chances.",
+   "kind": "plan"
   },
   {
    "ply": 25,
@@ -223,7 +231,7 @@
    "line": [
     "Kd1"
    ],
-   "spoken": "King to d1 is pure desperation, unpinning the knight — now open the centre as fast as we can; that king is trapped."
+   "spoken": ""
   },
   {
    "ply": 26,
@@ -232,7 +240,8 @@
    "line": [
     "dxc4"
    ],
-   "spoken": "Open the d-file with dxc4 — that's the avenue of attack, straight to his king."
+   "spoken": "The king is stranded, so open the centre as fast as possible — the d-file is the avenue of attack, the pathway that leads straight to the king. Identify that main file or diagonal early, because you simply cannot attack without open lines.",
+   "kind": "plan"
   },
   {
    "ply": 27,
@@ -250,7 +259,8 @@
    "line": [
     "e5"
    ],
-   "spoken": "Kick the knight out of d4 with e5, and then the rook comes to d8 with check."
+   "spoken": "When a knight parks itself on a strong central square, the first instinct should be — can it be kicked? Here the pawn push to e5 does exactly that, evicting it before the rook swings in with check.",
+   "kind": "plan"
   },
   {
    "ply": 29,
@@ -268,7 +278,7 @@
    "line": [
     "Rd8+"
    ],
-   "spoken": "The rook to d8, check."
+   "spoken": ""
   },
   {
    "ply": 31,
@@ -286,7 +296,8 @@
    "line": [
     "Bf5+"
    ],
-   "spoken": "Develop with check — the king on c2 is horribly exposed, and the bishop to f5 is almost mate."
+   "spoken": "The best development comes with check — the bishop to f5, hitting the exposed king. It's almost mate, forcing the only defence, and the whole point is that the threats against the king vastly outweigh a hanging bishop of one's own.",
+   "kind": "tactic"
   },
   {
    "ply": 33,
@@ -295,7 +306,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "e4 is literally forced — and our threats against his king far outweigh the fact that our bishop on a3 is hanging."
+   "spoken": ""
   },
   {
    "ply": 34,
@@ -304,7 +315,8 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "Take on e4 with the knight, setting up a devastating discovered check."
+   "spoken": "Recapture in the centre with the knight, unmasking a devastating discovered check — and if the opponent trades, the bishop finishes it. The material left hanging elsewhere is irrelevant next to a forced mate.",
+   "kind": "tactic"
   },
   {
    "ply": 35,
@@ -313,7 +325,9 @@
    "line": [
     "Nxa3"
    ],
-   "spoken": ""
+   "spoken": "A piece of attacking wisdom — be wary of checks delivered right up against the enemy king. A rook check at close quarters lets the king sidestep and suddenly ties your own knight to the very rook you just planted. The king is a pesky defender, so attacking from a distance is often stronger than crowding your pieces next to it, where they can get loose.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 36,
@@ -322,7 +336,7 @@
    "line": [
     "Nxc3+"
    ],
-   "spoken": "The knight takes on c3 with check — attacking from a distance beats crowding the king, where your own pieces can get loose."
+   "spoken": ""
   },
   {
    "ply": 37,
@@ -340,7 +354,8 @@
    "line": [
     "Qb4+"
    ],
-   "spoken": "The cleanest is the queen to b4 with check — then king to c1, and the rook to d1 is mate."
+   "spoken": "And the clean finish is the queen check on b4, the king driven to the corner, and a rook to the back rank delivers mate — the simplest, most accurate path home.",
+   "kind": "tactic"
   }
  ]
 }
