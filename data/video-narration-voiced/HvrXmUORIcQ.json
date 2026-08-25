@@ -1,570 +1,587 @@
 {
- "videoId": "HvrXmUORIcQ",
- "title": "Danya Plays the BONGCLOUD!! | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Queen's Gambit Declined",
- "studentSide": "black",
- "voice": "danya-dna",
- "rewrittenAt": "2026-08-25",
- "source": "yt:HvrXmUORIcQ",
- "moves": [
-  {
-   "ply": 2,
-   "t": 66.5,
-   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
-   "line": [
-    "d4",
-    "d5"
-   ],
-   "spoken": "A Bongcloud speedrun, just for fun — Black answers d5, planning a self-imposed handicap."
-  },
-  {
-   "ply": 3,
-   "t": 68.5,
-   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
-   "line": [
-    "c4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 70,
-   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
-   "line": [
-    "e6"
-   ],
-   "spoken": "The Queen's Gambit Declined — and the cheeky king move is coming next."
-  },
-  {
-   "ply": 5,
-   "t": 74.5,
-   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
-   "line": [
-    "e3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 76,
-   "fen": "rnbq1bnr/ppp1kppp/4p3/3p4/2PP4/4P3/PP3PPP/RNBQKBNR w KQ - 1 4",
-   "line": [
-    "Ke7"
-   ],
-   "spoken": "And there it is — the Bongcloud, the king to e7. This version is not even that bad against a quiet Queen's Gambit, but Black has given up the right to castle."
-  },
-  {
-   "ply": 7,
-   "t": 91,
-   "fen": "rnbq1bnr/ppp1kppp/4p3/3p4/2PP4/4PN2/PP3PPP/RNBQKB1R b KQ - 2 4",
-   "line": [
-    "Nf3"
-   ],
-   "spoken": "So what is the road to recovery? Black does not need the king straight back home — the ideal is to castle by hand."
-  },
-  {
-   "ply": 8,
-   "t": 110.5,
-   "fen": "rnbq1b1r/ppp1kppp/4pn2/3p4/2PP4/4PN2/PP3PPP/RNBQKB1R w KQ - 3 5",
-   "line": [
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 113.5,
-   "fen": "rnbq1b1r/ppp1kppp/4pn2/3p4/2PP4/2N1PN2/PP3PPP/R1BQKB1R b KQ - 4 5",
-   "line": [
-    "Nc3"
-   ],
-   "spoken": "Develop the knight to f6. One plan is to drop the king back to e8; the other is to fianchetto and castle by hand — a rook to e8, the bishop to f8 — but that must reckon with b3 and the bishop to a3, cutting off the king's route to f8."
-  },
-  {
-   "ply": 10,
-   "t": 146.5,
-   "fen": "rnbq1b1r/ppp1kp1p/4pnp1/3p4/2PP4/2N1PN2/PP3PPP/R1BQKB1R w KQ - 0 6",
-   "line": [
-    "g6"
-   ],
-   "spoken": "So Black plays g6 — if White tries b3, then the bishop to g7, and against the bishop to a3, simply drop the king back to e8."
-  },
-  {
-   "ply": 11,
-   "t": 151,
-   "fen": "rnbq1b1r/ppp1kp1p/4pnp1/3pN3/2PP4/2N1P3/PP3PPP/R1BQKB1R b KQ - 1 6",
-   "line": [
-    "Ne5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 153.5,
-   "fen": "rnbq3r/ppp1kpbp/4pnp1/3pN3/2PP4/2N1P3/PP3PPP/R1BQKB1R w KQ - 2 7",
-   "line": [
-    "Bg7"
-   ],
-   "spoken": "The fianchetto completed — now only two steps from castling by hand."
-  },
-  {
-   "ply": 13,
-   "t": 158,
-   "fen": "rnbq3r/ppp1kpbp/4pnp1/3pN3/2PP1P2/2N1P3/PP4PP/R1BQKB1R b KQ - 0 7",
-   "line": [
-    "f4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 167,
-   "fen": "rnbqr3/ppp1kpbp/4pnp1/3pN3/2PP1P2/2N1P3/PP4PP/R1BQKB1R w KQ - 1 8",
-   "line": [
-    "Re8"
-   ],
-   "spoken": "Not the rook to f8, which would block the king's path — the rook to e8, and step one is done."
-  },
-  {
-   "ply": 16,
-   "t": 171.5,
-   "fen": "rnbqrk2/ppp2pbp/4pnp1/3pN3/2PP1P2/2N1P3/PP2B1PP/R1BQK2R w KQ - 3 9",
-   "line": [
-    "Be2",
-    "Kf8"
-   ],
-   "spoken": "The king walks to f8 — safety reached by hand."
-  },
-  {
-   "ply": 17,
-   "t": 173.5,
-   "fen": "rnbqrk2/ppp2pbp/4pnp1/3pN3/2PP1P2/2N1P3/PP2B1PP/R1BQ1RK1 b - - 4 9",
-   "line": [
-    "O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 175.5,
-   "fen": "rnbqr1k1/ppp2pbp/4pnp1/3pN3/2PP1P2/2N1P3/PP2B1PP/R1BQ1RK1 w - - 5 10",
-   "line": [
-    "Kg8"
-   ],
-   "spoken": "And even all the way to g8."
-  },
-  {
-   "ply": 19,
-   "t": 181,
-   "fen": "rnbqr1k1/ppp2pbp/4pnp1/3pN3/2PP1P1P/2N1P3/PP2B1P1/R1BQ1RK1 b - - 0 10",
-   "line": [
-    "h4"
-   ],
-   "spoken": "Now step two. Black has spent a lot of tempi, so it is time to strike in the centre and finish developing — leave White's construction alone and it becomes total positional domination."
-  },
-  {
-   "ply": 20,
-   "t": 214.5,
-   "fen": "rnbqr1k1/pp3pbp/4pnp1/2ppN3/2PP1P1P/2N1P3/PP2B1P1/R1BQ1RK1 w - - 0 11",
-   "line": [
-    "c5"
-   ],
-   "spoken": "So — c5, breaking down White's centre as fast as possible, before White gets rolling on the kingside."
-  },
-  {
-   "ply": 21,
-   "t": 231.5,
-   "fen": "rnbqr1k1/pp3pbp/4pnp1/2ppN2P/2PP1P2/2N1P3/PP2B1P1/R1BQ1RK1 b - - 0 11",
-   "line": [
-    "h5"
-   ],
-   "spoken": "White's h5 is not dangerous: this fianchetto wall is rock-solid, and if White takes on g6, Black just recaptures."
-  },
-  {
-   "ply": 22,
-   "t": 241,
-   "fen": "rnbqr1k1/pp3pbp/4pnp1/3pN2P/2Pp1P2/2N1P3/PP2B1P1/R1BQ1RK1 w - - 0 12",
-   "line": [
-    "cxd4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 23,
-   "t": 244,
-   "fen": "rnbqr1k1/pp3pbp/4pnp1/3pN2P/2PP1P2/2N5/PP2B1P1/R1BQ1RK1 b - - 0 12",
-   "line": [
-    "exd4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 24,
-   "t": 273,
-   "fen": "rnbqr1k1/pp3pbp/4pnp1/4N2P/2pP1P2/2N5/PP2B1P1/R1BQ1RK1 w - - 0 13",
-   "line": [
-    "dxc4"
-   ],
-   "spoken": "After the trade, should Black take again on c4? The instinct says no — but here the answer is yes. It leaves White with an isolated queen's pawn on d4, and Black's queen already presses it: the best of all worlds."
-  },
-  {
-   "ply": 25,
-   "t": 289,
-   "fen": "rnbqr1k1/pp3pbp/4pnP1/4N3/2pP1P2/2N5/PP2B1P1/R1BQ1RK1 b - - 0 13",
-   "line": [
-    "hxg6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 26,
-   "t": 290.5,
-   "fen": "rnbqr1k1/pp3pb1/4pnp1/4N3/2pP1P2/2N5/PP2B1P1/R1BQ1RK1 w - - 0 14",
-   "line": [
-    "hxg6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 27,
-   "t": 299.5,
-   "fen": "rnbqr1k1/pp3pb1/4pnp1/4N3/2BP1P2/2N5/PP4P1/R1BQ1RK1 b - - 0 14",
-   "line": [
-    "Bxc4"
-   ],
-   "spoken": "Now White's queen is tied to defending the d4-pawn. Black keeps developing — where should the queen's knight go?"
-  },
-  {
-   "ply": 28,
-   "t": 327,
-   "fen": "r1bqr1k1/pp3pb1/2n1pnp1/4N3/2BP1P2/2N5/PP4P1/R1BQ1RK1 w - - 1 15",
-   "line": [
-    "Nc6"
-   ],
-   "spoken": "One plan is the knight to d7, then b6 and d5, blockading the square in front of the isolated pawn. But Black prefers the direct route — the knight to c6, hurrying to trade that piece off."
-  },
-  {
-   "ply": 27,
-   "t": 330.5,
-   "fen": "rnbqr1k1/pp3pb1/4pnp1/4N3/2BP1P2/2N5/PP4P1/R1BQ1RK1 b - - 0 14",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 29,
-   "t": 332.5,
-   "fen": "r1bqr1k1/pp3pb1/2n1pnp1/4N3/2BP1P2/8/PP2N1P1/R1BQ1RK1 b - - 2 15",
-   "line": [
-    "Nc6",
-    "Ne2"
-   ],
-   "spoken": "Black wants to fianchetto with b6 and the bishop to b7 — but the knight would hang. To prepare b6, defend the knight — not with a bishop, which defeats the purpose, but with the queen, and from a square that keeps the pressure on d4."
-  },
-  {
-   "ply": 30,
-   "t": 382.5,
-   "fen": "r1b1r1k1/pp3pb1/2nqpnp1/4N3/2BP1P2/8/PP2N1P1/R1BQ1RK1 w - - 3 16",
-   "line": [
-    "Qd6"
-   ],
-   "spoken": "That is why not the queen to c7, and why the queen to d6 is right — it defends while still eyeing d4. And not the queen to b6, which would block the b-pawn."
-  },
-  {
-   "ply": 31,
-   "t": 388,
-   "fen": "r1b1r1k1/pp3pb1/2nqpnp1/4N3/2BP1P2/3Q4/PP2N1P1/R1B2RK1 b - - 4 16",
-   "line": [
-    "Qd3"
-   ],
-   "spoken": "Amazingly White finds the one move that stops b6 — the queen to d3, because after the knight trade the bishop to b5 would pin the queen to the rook."
-  },
-  {
-   "ply": 32,
-   "t": 403.5,
-   "fen": "r1b1r1k1/pp3pb1/3qpnp1/4N3/1nBP1P2/3Q4/PP2N1P1/R1B2RK1 w - - 5 17",
-   "line": [
-    "Nb4"
-   ],
-   "spoken": "So Black chases with the knight to b4, and now b6 becomes playable."
-  },
-  {
-   "ply": 33,
-   "t": 445,
-   "fen": "r1b1r1k1/pp3pb1/3qpnp1/4N3/1nBP1P2/5Q2/PP2N1P1/R1B2RK1 b - - 6 17",
-   "line": [
-    "Qf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 34,
-   "t": 453.5,
-   "fen": "1rb1r1k1/pp3pb1/3qpnp1/4N3/1nBP1P2/5Q2/PP2N1P1/R1B2RK1 w - - 7 18",
-   "line": [
-    "Rb8"
-   ],
-   "spoken": "b6 would still drop the rook, so first the rook to b8 — and now even b5 with tempo, hitting the bishop, beats a plain b6. And note: grabbing the pawn on d4 is dangerous. Keeping it alive keeps the d-file shut, and in a cramped position that suits Black; opening the centre would favour White."
-  },
-  {
-   "ply": 35,
-   "t": 507,
-   "fen": "1rb1r1k1/pp3pb1/3qpnp1/4N3/1nBP1P2/4BQ2/PP2N1P1/R4RK1 b - - 8 18",
-   "line": [
-    "Be3"
-   ],
-   "spoken": "It looks like a free pawn on d4, but taking it hands White a huge initiative — trust the understanding here, not the material count."
-  },
-  {
-   "ply": 36,
-   "t": 514,
-   "fen": "1rb1r1k1/p4pb1/3qpnp1/1p2N3/1nBP1P2/4BQ2/PP2N1P1/R4RK1 w - - 0 19",
-   "line": [
-    "b5"
-   ],
-   "spoken": "So, as planned — not b6 passively, but b5, with the gain of a tempo."
-  },
-  {
-   "ply": 37,
-   "t": 518.5,
-   "fen": "1rb1r1k1/p4pb1/3qpnp1/1p2N3/1n1P1P2/1B2BQ2/PP2N1P1/R4RK1 b - - 1 19",
-   "line": [
-    "Bb3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 38,
-   "t": 519.5,
-   "fen": "1r2r1k1/pb3pb1/3qpnp1/1p2N3/1n1P1P2/1B2BQ2/PP2N1P1/R4RK1 w - - 2 20",
-   "line": [
-    "Bb7"
-   ],
-   "spoken": "The bishop to b7, and every piece is out. That pesky knight on e5 remains, but it is no crisis."
-  },
-  {
-   "ply": 39,
-   "t": 543.5,
-   "fen": "1r2r1k1/pb3pb1/3qpnp1/1p2N3/1n1P1P2/1B2B2Q/PP2N1P1/R4RK1 b - - 3 20",
-   "line": [
-    "Qh3"
-   ],
-   "spoken": "If White ever plays a3, Black drops the knight back to d5 — the perfect blockading square in front of the isolated pawn."
-  },
-  {
-   "ply": 40,
-   "t": 565.5,
-   "fen": "1r2r1k1/pb3pb1/3qp1p1/1p2N3/1n1PnP2/1B2B2Q/PP2N1P1/R4RK1 w - - 4 21",
-   "line": [
-    "Ne4"
-   ],
-   "spoken": "There is no algorithm here — just look at your pieces and improve them. The knight springs from f6 to e4, a fine active post."
-  },
-  {
-   "ply": 41,
-   "t": 608,
-   "fen": "1r2r1k1/pb3pb1/3qp1p1/1p2N3/1n1PnPQ1/1B2B3/PP2N1P1/R4RK1 b - - 5 21",
-   "line": [
-    "Qg4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 42,
-   "t": 632.5,
-   "fen": "1r2r1k1/pb3pb1/3qp1p1/1p1nN3/3PnPQ1/1B2B3/PP2N1P1/R4RK1 w - - 6 22",
-   "line": [
-    "Nd5"
-   ],
-   "spoken": "The queen to g4 left the bishop undefended — so now the knight back to d5 is enticing, because it hits the bishop."
-  },
-  {
-   "ply": 43,
-   "t": 648.5,
-   "fen": "1r2r1k1/pb3pb1/3qp1p1/1p1BN3/3PnPQ1/4B3/PP2N1P1/R4RK1 b - - 0 22",
-   "line": [
-    "Bxd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 44,
-   "t": 659,
-   "fen": "1r2r1k1/pb3pb1/4p1p1/1p1qN3/3PnPQ1/4B3/PP2N1P1/R4RK1 w - - 0 23",
-   "line": [
-    "Qxd5"
-   ],
-   "spoken": "Recapture with the queen, building a battery. It looks like the queen was only guarding g2 — but play the long game too: if the queen ever leaves g4, the battery is ready."
-  },
-  {
-   "ply": 45,
-   "t": 687.5,
-   "fen": "1r2r1k1/pb3pb1/4p1p1/1p1qN3/3PnPQ1/4BR2/PP2N1P1/R5K1 b - - 1 23",
-   "line": [
-    "Rf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 46,
-   "t": 707,
-   "fen": "2r1r1k1/pb3pb1/4p1p1/1p1qN3/3PnPQ1/4BR2/PP2N1P1/R5K1 w - - 2 24",
-   "line": [
-    "Rbc8"
-   ],
-   "spoken": "Keep improving — a rook to c8, aiming to infiltrate c2. And do not fear the rook lift: even if White's queen turns up on h7 after the king steps to f8, there is no follow-up. That is the best-and-worst-case test — let your opponent fully achieve his idea, then ask how scary it really is."
-  },
-  {
-   "ply": 47,
-   "t": 738,
-   "fen": "2r1r1k1/pb3pb1/4p1p1/1p1qN3/3PnPQ1/4B2R/PP2N1P1/R5K1 b - - 3 24",
-   "line": [
-    "Rh3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 48,
-   "t": 749.5,
-   "fen": "4r1k1/pb3pb1/4p1p1/1p1qN3/3PnPQ1/4B2R/PPr1N1P1/R5K1 w - - 4 25",
-   "line": [
-    "Rc2"
-   ],
-   "spoken": "The rook to c2 — and notice the queen is overloaded, guarding both g2 and the knight. The threat is the knight to f6, which the queen cannot meet."
-  },
-  {
-   "ply": 49,
-   "t": 786.5,
-   "fen": "4r1k1/pb3pb1/4p1N1/1p1q4/3PnPQ1/4B2R/PPr1N1P1/R5K1 b - - 0 25",
-   "line": [
-    "Nxg6"
-   ],
-   "spoken": "White lashes out — but do not automatically grab the knight on g6."
-  },
-  {
-   "ply": 50,
-   "t": 813.5,
-   "fen": "4r1k1/pb3pb1/4pnN1/1p1q4/3P1PQ1/4B2R/PPr1N1P1/R5K1 w - - 1 26",
-   "line": [
-    "Nf6"
-   ],
-   "spoken": "Play the knight to f6 anyway — it is a paper tiger, making no real threat. Once Black takes on e2, taking on g2 is devastating."
-  },
-  {
-   "ply": 51,
-   "t": 916,
-   "fen": "4r1k1/pb3pb1/4pnN1/1p1q4/3P1PQ1/2N1B2R/PPr3P1/R5K1 b - - 2 26",
-   "line": [
-    "Nc3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 52,
-   "t": 935,
-   "fen": "4r1k1/pb3pb1/4pnN1/1p1q4/3P1PQ1/2N1B2R/PP4r1/R5K1 w - - 0 27",
-   "line": [
-    "Rxg2+"
-   ],
-   "spoken": "The clean win is the rook takes on g2 with check — the idea all along."
-  },
-  {
-   "ply": 54,
-   "t": 941.5,
-   "fen": "4r1k1/pb3pb1/4pnN1/1p6/3P1P2/2N1B2R/PP4q1/R5K1 w - - 0 28",
-   "line": [
-    "Qxg2",
-    "Qxg2#"
-   ],
-   "spoken": "If White takes the rook, it is mate."
-  },
-  {
-   "ply": 52,
-   "t": 944,
-   "fen": "4r1k1/pb3pb1/4pnN1/1p1q4/3P1PQ1/2N1B2R/PP4r1/R5K1 w - - 0 27",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 53,
-   "t": 945,
-   "fen": "4r1k1/pb3pb1/4pnN1/1p1q4/3P1PQ1/2N1B2R/PP4r1/R4K2 b - - 1 27",
-   "line": [
-    "Kf1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 54,
-   "t": 957,
-   "fen": "4r1k1/pb3pb1/4pnN1/1p6/2qP1PQ1/2N1B2R/PP4r1/R4K2 w - - 2 28",
-   "line": [
-    "Qc4+"
-   ],
-   "spoken": "And if the king had gone to f1 — when two queens are hanging, first look whether you can move yours away with check. The queen to c4 with check does exactly that, winning the queen.",
-   "reanchor": true
-  },
-  {
-   "ply": 56,
-   "t": 961.5,
-   "fen": "4r1k1/pb3pb1/4pnN1/1p6/2qP1P2/2N1B2R/PP2r3/R4K2 w - - 0 29",
-   "line": [
-    "Qe2",
-    "Rxe2"
-   ],
-   "spoken": "A simple recovery — castle by hand, contest the centre with c5, trade everything, and hammer with the knight to c6.",
-   "reanchor": true
-  },
-  {
-   "ply": 8,
-   "t": 1059,
-   "fen": "rnbq1b1r/ppp1kppp/4pn2/3p4/2PP4/4PN2/PP3PPP/RNBQKB1R w KQ - 3 5",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 1060.5,
-   "fen": "rnbq1b1r/ppp1kp1p/4pnp1/3p4/2PP4/2N1PN2/PP3PPP/R1BQKB1R w KQ - 0 6",
-   "line": [
-    "Nc3",
-    "g6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 1061.5,
-   "fen": "rnbq1b1r/ppp1kp1p/4pnp1/3p4/2PP4/1PN1PN2/P4PPP/R1BQKB1R b KQ - 0 6",
-   "line": [
-    "b3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 1062.5,
-   "fen": "rnbq3r/ppp1kpbp/4pnp1/3p4/2PP4/1PN1PN2/P4PPP/R1BQKB1R w KQ - 1 7",
-   "line": [
-    "Bg7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 1064,
-   "fen": "rnbq3r/ppp1kpbp/4pnp1/3p4/2PP4/BPN1PN2/P4PPP/R2QKB1R b KQ - 2 7",
-   "line": [
-    "Ba3+"
-   ],
-   "spoken": "The way to punish the Bongcloud here is b3 and the hyper-fianchetto, the bishop to a3 with check — that stops the king walking over to f8 and g8. Every Bongcloud has its own antidote; against a traditional one, rip the centre open as fast as possible, and the whole battle turns on whether the king can castle by hand.",
-   "reanchor": true
-  },
-  {
-   "ply": 11,
-   "t": 1072,
-   "fen": "rnbq1b1r/ppp1kp1p/4pnp1/3p4/2PP4/1PN1PN2/P4PPP/R1BQKB1R b KQ - 0 6",
-   "line": [],
-   "spoken": ""
-  }
- ]
+  "videoId": "HvrXmUORIcQ",
+  "title": "Danya Plays the BONGCLOUD!! | The Sensei Speedrun | Grandmaster Naroditsky",
+  "openingName": "Queen's Gambit Declined",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-25",
+  "source": "yt:HvrXmUORIcQ",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 66.5,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "d4",
+        "d5"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 3,
+      "t": 68.5,
+      "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+      "line": [
+        "c4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 4,
+      "t": 70,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+      "line": [
+        "e6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 5,
+      "t": 74.5,
+      "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
+      "line": [
+        "e3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 6,
+      "t": 76,
+      "fen": "rnbq1bnr/ppp1kppp/4p3/3p4/2PP4/4P3/PP3PPP/RNBQKBNR w KQ - 1 4",
+      "line": [
+        "Ke7"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 7,
+      "t": 91,
+      "fen": "rnbq1bnr/ppp1kppp/4p3/3p4/2PP4/4PN2/PP3PPP/RNBQKB1R b KQ - 2 4",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 8,
+      "t": 110.5,
+      "fen": "rnbq1b1r/ppp1kppp/4pn2/3p4/2PP4/4PN2/PP3PPP/RNBQKB1R w KQ - 3 5",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "With the king already flushed out, the recovery plan is to castle by hand. The king doesn't have to hurry straight back — first complete development, then walk it to safety step by step.",
+      "kind": "plan"
+    },
+    {
+      "ply": 9,
+      "t": 113.5,
+      "fen": "rnbq1b1r/ppp1kppp/4pn2/3p4/2PP4/2N1PN2/PP3PPP/R1BQKB1R b KQ - 4 5",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "Two routes present themselves: simply retreat the king toward e8, or fianchetto and shepherd the king to f8 by hand. The catch with the fianchetto is a pawn to b3 followed by the bishop swinging to a3 — that diagonal shot freezes the king in place and stops the manual castle.",
+      "kind": "plan"
+    },
+    {
+      "ply": 10,
+      "t": 146.5,
+      "fen": "rnbq1b1r/ppp1kp1p/4pnp1/3p4/2PP4/2N1PN2/PP3PPP/R1BQKB1R w KQ - 0 6",
+      "line": [
+        "g6"
+      ],
+      "spoken": "So play g6 with a contingency in mind — meet b3 with the fianchetto, and if the bishop lunges to a3, just drop the king back to e8. Every setup has its own answer."
+    },
+    {
+      "ply": 11,
+      "t": 151,
+      "fen": "rnbq1b1r/ppp1kp1p/4pnp1/3pN3/2PP4/2N1P3/PP3PPP/R1BQKB1R b KQ - 1 6",
+      "line": [
+        "Ne5"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 12,
+      "t": 153.5,
+      "fen": "rnbq3r/ppp1kpbp/4pnp1/3pN3/2PP4/2N1P3/PP3PPP/R1BQKB1R w KQ - 2 7",
+      "line": [
+        "Bg7"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 13,
+      "t": 158,
+      "fen": "rnbq3r/ppp1kpbp/4pnp1/3pN3/2PP1P2/2N1P3/PP4PP/R1BQKB1R b KQ - 0 7",
+      "line": [
+        "f4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 14,
+      "t": 167,
+      "fen": "rnbqr3/ppp1kpbp/4pnp1/3pN3/2PP1P2/2N1P3/PP4PP/R1BQKB1R w KQ - 1 8",
+      "line": [
+        "Re8"
+      ],
+      "spoken": "The rook goes to e8, not f8 — putting it on f8 would jam the king's own escape route. With the file cleared, the king can march to f8 and onward to g8, and the by-hand castle is done."
+    },
+    {
+      "ply": 16,
+      "t": 171.5,
+      "fen": "rnbqrk2/ppp2pbp/4pnp1/3pN3/2PP1P2/2N1P3/PP2B1PP/R1BQK2R w KQ - 3 9",
+      "line": [
+        "Be2",
+        "Kf8"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 17,
+      "t": 173.5,
+      "fen": "rnbqrk2/ppp2pbp/4pnp1/3pN3/2PP1P2/2N1P3/PP2B1PP/R1BQ1RK1 b - - 4 9",
+      "line": [
+        "O-O"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 18,
+      "t": 175.5,
+      "fen": "rnbqr1k1/ppp2pbp/4pnp1/3pN3/2PP1P2/2N1P3/PP2B1PP/R1BQ1RK1 w - - 5 10",
+      "line": [
+        "Kg8"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 19,
+      "t": 181,
+      "fen": "rnbqr1k1/ppp2pbp/4pnp1/3pN3/2PP1P1P/2N1P3/PP2B1P1/R1BQ1RK1 b - - 0 10",
+      "line": [
+        "h4"
+      ],
+      "spoken": "All those tempi spent, it's time to hit back in the centre. The opponent's kingside build-up looks imposing but it's flimsy — leave it untouched and it becomes total positional domination, so it has to be challenged.",
+      "kind": "plan"
+    },
+    {
+      "ply": 20,
+      "t": 214.5,
+      "fen": "rnbqr1k1/pp3pbp/4pnp1/2ppN3/2PP1P1P/2N1P3/PP2B1P1/R1BQ1RK1 w - - 0 11",
+      "line": [
+        "c5"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 21,
+      "t": 231.5,
+      "fen": "rnbqr1k1/pp3pbp/4pnp1/2ppN2P/2PP1P2/2N1P3/PP2B1P1/R1BQ1RK1 b - - 0 11",
+      "line": [
+        "h5"
+      ],
+      "spoken": "The pawn storm looks scary but isn't — the setup is rock-solid, and if the h-pawn captures on g6 it's simply recaptured with no damage. Understanding that the structure holds is what lets the counterplay proceed calmly."
+    },
+    {
+      "ply": 22,
+      "t": 241,
+      "fen": "rnbqr1k1/pp3pbp/4pnp1/3pN2P/2Pp1P2/2N1P3/PP2B1P1/R1BQ1RK1 w - - 0 12",
+      "line": [
+        "cxd4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 23,
+      "t": 244,
+      "fen": "rnbqr1k1/pp3pbp/4pnp1/3pN2P/2PP1P2/2N5/PP2B1P1/R1BQ1RK1 b - - 0 12",
+      "line": [
+        "exd4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 24,
+      "t": 273,
+      "fen": "rnbqr1k1/pp3pbp/4pnp1/4N2P/2pP1P2/2N5/PP2B1P1/R1BQ1RK1 w - - 0 13",
+      "line": [
+        "dxc4"
+      ],
+      "spoken": "Here's the counter-intuitive call: yes, capture again on c4. Most of the time the cautious answer would be to hold off, but not here — it saddles the opponent with an isolated queen's pawn on d4, and the queen immediately leans on it. Opening the centre also pulls the opponent's focus away from the kingside attack. Best of all worlds.",
+      "kind": "plan"
+    },
+    {
+      "ply": 25,
+      "t": 289,
+      "fen": "rnbqr1k1/pp3pbp/4pnP1/4N3/2pP1P2/2N5/PP2B1P1/R1BQ1RK1 b - - 0 13",
+      "line": [
+        "hxg6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 26,
+      "t": 290.5,
+      "fen": "rnbqr1k1/pp3pb1/4pnp1/4N3/2pP1P2/2N5/PP2B1P1/R1BQ1RK1 w - - 0 14",
+      "line": [
+        "hxg6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 27,
+      "t": 299.5,
+      "fen": "rnbqr1k1/pp3pb1/4pnp1/4N3/2BP1P2/2N5/PP4P1/R1BQ1RK1 b - - 0 14",
+      "line": [
+        "Bxc4"
+      ],
+      "spoken": "Now bring out the last knight. One plan is the slow route — reroute it toward the blockade square in front of the isolated pawn. The more direct plan is to send it to c6 and trade off the opponent's strong advanced knight as fast as possible.",
+      "kind": "plan"
+    },
+    {
+      "ply": 28,
+      "t": 327,
+      "fen": "r1bqr1k1/pp3pb1/2n1pnp1/4N3/2BP1P2/2N5/PP4P1/R1BQ1RK1 w - - 1 15",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 27,
+      "t": 330.5,
+      "fen": "rnbqr1k1/pp3pb1/4pnp1/4N3/2BP1P2/2N5/PP4P1/R1BQ1RK1 b - - 0 14",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 29,
+      "t": 332.5,
+      "fen": "r1bqr1k1/pp3pb1/2n1pnp1/4N3/2BP1P2/8/PP2N1P1/R1BQ1RK1 b - - 2 15",
+      "line": [
+        "Nc6",
+        "Ne2"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 30,
+      "t": 382.5,
+      "fen": "r1b1r1k1/pp3pb1/2nqpnp1/4N3/2BP1P2/8/PP2N1P1/R1BQ1RK1 w - - 3 16",
+      "line": [
+        "Qd6"
+      ],
+      "spoken": "To prepare the fianchetto with b6, the knight it leaves loose has to be defended first — and not by a bishop, which would defeat the whole point of the long diagonal. The queen is the defender, but from a square that keeps the pressure on the isolated pawn: that's why d6 is right and c7 or b6 are not.",
+      "kind": "plan"
+    },
+    {
+      "ply": 31,
+      "t": 388,
+      "fen": "r1b1r1k1/pp3pb1/2nqpnp1/4N3/2BP1P2/3Q4/PP2N1P1/R1B2RK1 b - - 4 16",
+      "line": [
+        "Qd3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 32,
+      "t": 403.5,
+      "fen": "r1b1r1k1/pp3pb1/3qpnp1/4N3/1nBP1P2/3Q4/PP2N1P1/R1B2RK1 w - - 5 17",
+      "line": [
+        "Nb4"
+      ],
+      "spoken": "The queen slides across to guard against the b6 break, since the fianchetto would run into a capture and a pin winning the exchange. The reply is to jab the queen with the knight to b4, chasing it off so that b6 becomes playable after all. Be stubborn with a sound idea — remove the obstacle rather than abandon the plan.",
+      "kind": "plan"
+    },
+    {
+      "ply": 33,
+      "t": 445,
+      "fen": "r1b1r1k1/pp3pb1/3qpnp1/4N3/1nBP1P2/5Q2/PP2N1P1/R1B2RK1 b - - 6 17",
+      "line": [
+        "Qf3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 34,
+      "t": 453.5,
+      "fen": "1rb1r1k1/pp3pb1/3qpnp1/4N3/1nBP1P2/5Q2/PP2N1P1/R1B2RK1 w - - 7 18",
+      "line": [
+        "Rb8"
+      ],
+      "spoken": "Rather than blunder the rook to the immediate break, prepare it with a rook to b8, and then the pawn can even come with tempo. And a deeper point: leave the isolated pawn alive rather than snatching it. Grabbing it flings the centre open, and in a cramped position an open centre favours the better-developed side — keeping the file closed keeps the pressure off.",
+      "kind": "plan"
+    },
+    {
+      "ply": 35,
+      "t": 507,
+      "fen": "1rb1r1k1/pp3pb1/3qpnp1/4N3/1nBP1P2/4BQ2/PP2N1P1/R4RK1 b - - 8 18",
+      "line": [
+        "Be3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 36,
+      "t": 514,
+      "fen": "1rb1r1k1/p4pb1/3qpnp1/1p2N3/1nBP1P2/4BQ2/PP2N1P1/R4RK1 w - - 0 19",
+      "line": [
+        "b5"
+      ],
+      "spoken": "So instead of the passive push, play b5 — the same fianchetto idea but with a tempo attached, hitting a piece on the way."
+    },
+    {
+      "ply": 37,
+      "t": 518.5,
+      "fen": "1rb1r1k1/p4pb1/3qpnp1/1p2N3/1n1P1P2/1B2BQ2/PP2N1P1/R4RK1 b - - 1 19",
+      "line": [
+        "Bb3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 38,
+      "t": 519.5,
+      "fen": "1r2r1k1/pb3pb1/3qpnp1/1p2N3/1n1P1P2/1B2BQ2/PP2N1P1/R4RK1 w - - 2 20",
+      "line": [
+        "Bb7"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 39,
+      "t": 543.5,
+      "fen": "1r2r1k1/pb3pb1/3qpnp1/1p2N3/1n1P1P2/1B2B2Q/PP2N1P1/R4RK1 b - - 3 20",
+      "line": [
+        "Qh3"
+      ],
+      "spoken": "That advanced enemy knight is nothing to fear — the moment it's challenged, the reply is to drop a knight back to d5, the ideal blockading square right in front of the isolated pawn. From there, just keep making active moves; positions like this have no formula, only piece improvement.",
+      "kind": "plan"
+    },
+    {
+      "ply": 40,
+      "t": 565.5,
+      "fen": "1r2r1k1/pb3pb1/3qp1p1/1p2N3/1n1PnP2/1B2B2Q/PP2N1P1/R4RK1 w - - 4 21",
+      "line": [
+        "Ne4"
+      ],
+      "spoken": "The method is exactly that — scan for the piece that can be improved. A knight can spring forward to e4; a rook belongs where it shields the vulnerable e-pawn and discourages sacrifices on f7. Don't hunt for an algorithm; look around and upgrade your worst-placed piece.",
+      "kind": "plan"
+    },
+    {
+      "ply": 41,
+      "t": 608,
+      "fen": "1r2r1k1/pb3pb1/3qp1p1/1p2N3/1n1PnPQ1/1B2B3/PP2N1P1/R4RK1 b - - 5 21",
+      "line": [
+        "Qg4"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 42,
+      "t": 632.5,
+      "fen": "1r2r1k1/pb3pb1/3qp1p1/1p1nN3/3PnPQ1/1B2B3/PP2N1P1/R4RK1 w - - 6 22",
+      "line": [
+        "Nd5"
+      ],
+      "spoken": "The queen's advance left the bishop undefended — and that changes the maths. Now a retreat to d5 is enticing precisely because it hits that loose bishop.",
+      "kind": "tactic"
+    },
+    {
+      "ply": 43,
+      "t": 648.5,
+      "fen": "1r2r1k1/pb3pb1/3qp1p1/1p1BN3/3PnPQ1/4B3/PP2N1P1/R4RK1 b - - 0 22",
+      "line": [
+        "Bxd5"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 44,
+      "t": 659,
+      "fen": "1r2r1k1/pb3pb1/4p1p1/1p1qN3/3PnPQ1/4B3/PP2N1P1/R4RK1 w - - 0 23",
+      "line": [
+        "Qxd5"
+      ],
+      "spoken": "Recapture with the queen to start building a battery. It seems to abandon the defence of a key square, but this is the long game — if the opposing queen ever shifts, the battery is already loaded. There's no downside to preparing for the future.",
+      "kind": "plan"
+    },
+    {
+      "ply": 45,
+      "t": 687.5,
+      "fen": "1r2r1k1/pb3pb1/4p1p1/1p1qN3/3PnPQ1/4BR2/PP2N1P1/R5K1 b - - 1 23",
+      "line": [
+        "Rf3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 46,
+      "t": 707,
+      "fen": "2r1r1k1/pb3pb1/4p1p1/1p1qN3/3PnPQ1/4BR2/PP2N1P1/R5K1 w - - 2 24",
+      "line": [
+        "Rbc8"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 47,
+      "t": 738,
+      "fen": "2r1r1k1/pb3pb1/4p1p1/1p1qN3/3PnPQ1/4B2R/PP2N1P1/R5K1 b - - 3 24",
+      "line": [
+        "Rh3"
+      ],
+      "spoken": "A tool for scary-looking threats — the best-and-worst-case test. If unsure whether the opponent's plan is dangerous, imagine letting them carry it out in full and ask how bad the result really is. Here even a queen landing next to the king is met with a quiet king step, and it amounts to nothing.",
+      "kind": "plan"
+    },
+    {
+      "ply": 48,
+      "t": 749.5,
+      "fen": "4r1k1/pb3pb1/4p1p1/1p1qN3/3PnPQ1/4B2R/PPr1N1P1/R5K1 w - - 4 25",
+      "line": [
+        "Rc2"
+      ],
+      "spoken": "Infiltrate with the rook to c2, and now notice the enemy queen is overloaded — it's guarding two things at once and can't hold both. The knight jump to f6 is the threat that exploits the overload.",
+      "kind": "tactic"
+    },
+    {
+      "ply": 49,
+      "t": 786.5,
+      "fen": "4r1k1/pb3pb1/4p1N1/1p1q4/3PnPQ1/4B2R/PPr1N1P1/R5K1 b - - 0 25",
+      "line": [
+        "Nxg6"
+      ],
+      "spoken": "The knight lunge that grabs a pawn is desperation — so don't reflexively recapture. The far stronger continuation keeps the overload theme alive rather than snatching the offered piece.",
+      "kind": "tactic"
+    },
+    {
+      "ply": 50,
+      "t": 813.5,
+      "fen": "4r1k1/pb3pb1/4pnN1/1p1q4/3P1PQ1/4B2R/PPr1N1P1/R5K1 w - - 1 26",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 51,
+      "t": 916,
+      "fen": "4r1k1/pb3pb1/4pnN1/1p1q4/3P1PQ1/2N1B2R/PPr3P1/R5K1 b - - 2 26",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 52,
+      "t": 935,
+      "fen": "4r1k1/pb3pb1/4pnN1/1p1q4/3P1PQ1/2N1B2R/PP4r1/R5K1 w - - 0 27",
+      "line": [
+        "Rxg2+"
+      ],
+      "spoken": "The cleanest kill is the rook crashing in with check — that was the whole idea. If the queen takes, it's mate; the material is already decisive, so there's no need to be distracted by side pawns.",
+      "kind": "tactic"
+    },
+    {
+      "ply": 54,
+      "t": 941.5,
+      "fen": "4r1k1/pb3pb1/4pnN1/1p6/3P1P2/2N1B2R/PP4q1/R5K1 w - - 0 28",
+      "line": [
+        "Qxg2",
+        "Qxg2#"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 52,
+      "t": 944,
+      "fen": "4r1k1/pb3pb1/4pnN1/1p1q4/3P1PQ1/2N1B2R/PP4r1/R5K1 w - - 0 27",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 53,
+      "t": 945,
+      "fen": "4r1k1/pb3pb1/4pnN1/1p1q4/3P1PQ1/2N1B2R/PP4r1/R4K2 b - - 1 27",
+      "line": [
+        "Kf1"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 54,
+      "t": 957,
+      "fen": "4r1k1/pb3pb1/4pnN1/1p6/2qP1PQ1/2N1B2R/PP4r1/R4K2 w - - 2 28",
+      "line": [
+        "Qc4+"
+      ],
+      "spoken": "When both queens are hanging at once, the first thing to look for is whether your own queen can escape with check — buying the tempo to survive. Here the check on c4 does exactly that and wins the queen.",
+      "kind": "tactic",
+      "reanchor": true
+    },
+    {
+      "ply": 56,
+      "t": 961.5,
+      "fen": "4r1k1/pb3pb1/4pnN1/1p6/2qP1P2/2N1B2R/PP2r3/R4K2 w - - 0 29",
+      "line": [
+        "Qe2",
+        "Rxe2"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 8,
+      "t": 1059,
+      "fen": "rnbq1b1r/ppp1kppp/4pn2/3p4/2PP4/4PN2/PP3PPP/RNBQKB1R w KQ - 3 5",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 10,
+      "t": 1060.5,
+      "fen": "rnbq1b1r/ppp1kp1p/4pnp1/3p4/2PP4/2N1PN2/PP3PPP/R1BQKB1R w KQ - 0 6",
+      "line": [
+        "Nc3",
+        "g6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 11,
+      "t": 1061.5,
+      "fen": "rnbq1b1r/ppp1kp1p/4pnp1/3p4/2PP4/1PN1PN2/P4PPP/R1BQKB1R b KQ - 0 6",
+      "line": [
+        "b3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 12,
+      "t": 1062.5,
+      "fen": "rnbq3r/ppp1kpbp/4pnp1/3p4/2PP4/1PN1PN2/P4PPP/R1BQKB1R w KQ - 1 7",
+      "line": [
+        "Bg7"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 13,
+      "t": 1064,
+      "fen": "rnbq3r/ppp1kpbp/4pnp1/3p4/2PP4/BPN1PN2/P4PPP/R2QKB1R b KQ - 2 7",
+      "line": [
+        "Ba3+"
+      ],
+      "spoken": "Every version of this exposed-king structure has its own antidote. Against the plain version the recipe is to rip the centre open as fast as possible, and the whole fight boils down to whether the by-hand castle can be completed — the pawn-to-b3-and-bishop-to-a3 idea being the way to stop it.",
+      "kind": "plan",
+      "reanchor": true
+    },
+    {
+      "ply": 11,
+      "t": 1072,
+      "fen": "rnbq1b1r/ppp1kp1p/4pnp1/3p4/2PP4/1PN1PN2/P4PPP/R1BQKB1R b KQ - 0 6",
+      "line": [],
+      "spoken": ""
+    }
+  ]
 }
