@@ -1,7 +1,7 @@
 {
  "videoId": "WM0vlYWi33I",
  "title": "Grandmaster Naroditsky | Chess Speedrun | 1280",
- "openingName": "Sicilian Defense: Accelerated Dragon",
+ "openingName": "Sicilian Defence: Accelerated Dragon",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -35,7 +35,7 @@
     "d4",
     "cxd4"
    ],
-   "spoken": "The Accelerated Dragon — Black will fianchetto and get quick, harmonious development."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -45,7 +45,7 @@
     "Nxd4",
     "g6"
    ],
-   "spoken": "The bishop heads to the long diagonal; White, meanwhile, is about to trade on c6."
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -55,7 +55,8 @@
     "Nxc6",
     "bxc6"
    ],
-   "spoken": "That trade is already a slight inaccuracy: recapturing toward the centre opens the b-file and prepares the d5 break."
+   "spoken": "Capturing on c6 is already a slight error — it opens the b-file for the second player and, just as usefully, clears the way to prepare the central break to d5. A trade that helps the defender is no trade to make.",
+   "kind": "plan"
   },
   {
    "ply": 11,
@@ -73,7 +74,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "The fianchetto completed — the open b-file and a coming d5 are the source of Black's play."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -82,7 +83,7 @@
    "line": [
     "Bc3"
    ],
-   "spoken": "White offers a trade of dark-squared bishops on the long diagonal — do we allow it?"
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -91,7 +92,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Developing the knight to f6 declines the trade cleanly; the tempting e5 would be bad, weakening the d6 square."
+   "spoken": "The fianchettoed bishop must not be traded — resist by developing the knight to f6. And note the pawn move to e5 would be poor, since it hands over the d6 square as a lasting hole.",
+   "kind": "plan"
   },
   {
    "ply": 15,
@@ -100,7 +102,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "f3 is the kind of move players make on autopilot, but it is incredibly weakening."
+   "spoken": "There it is again — that f-pawn move is one of the most weakening moves on the board, yet players toss it in reflexively. There's a good reason the old advice is simply never to play it."
   },
   {
    "ply": 16,
@@ -109,7 +111,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Castle and finish development."
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -118,7 +120,8 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The bishop to c4 walks straight into a break Black should be playing automatically."
+   "spoken": "The bishop out to c4 walks straight into the break you should be playing on autopilot — a pawn to d5, seizing the centre and opening lines while the opponent is still sorting out development.",
+   "kind": "plan"
   },
   {
    "ply": 18,
@@ -127,7 +130,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "d5 — occupying the centre and challenging at once."
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -137,7 +140,7 @@
     "exd5",
     "cxd5"
    ],
-   "spoken": "White will drop the bishop back; that leads to a very instructive moment."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -146,7 +149,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The bishop to d3 is a genuinely good move. First order of business now: prevent White from castling."
+   "spoken": ""
   },
   {
    "ply": 22,
@@ -155,7 +158,8 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "The queen to b6 stops castling. It may not prevent it forever, but every tempo White spends dislodging the queen, Black spends expanding in the centre."
+   "spoken": "The first order of business is to stop the opponent from castling and keep the king stranded in the centre — a queen to b6 does it. It may not prevent castling forever, but every tempo spent chasing the queen away is a tempo spent expanding in the centre, so even if the king eventually tucks away, it does so into a hot mess.",
+   "kind": "plan"
   },
   {
    "ply": 23,
@@ -164,7 +168,7 @@
    "line": [
     "Qc1"
    ],
-   "spoken": "Stay flexible. There is a reason strong players warn never to play f3 — it is one of the most weakening moves on the board."
+   "spoken": ""
   },
   {
    "ply": 24,
@@ -173,7 +177,8 @@
    "line": [
     "e5"
    ],
-   "spoken": "Expanding in the centre — d4 would close off the bishop's long diagonal and help him castle, so the move is e5."
+   "spoken": "Expand — but with the right pawn. The natural central push would close the queen's diagonal and actually help the opponent castle. The move is e5 instead, keeping the diagonal live and the pressure on.",
+   "kind": "plan"
   },
   {
    "ply": 25,
@@ -189,7 +194,8 @@
    "t": 856.5,
    "fen": "r1b2rk1/p4pbp/1q3np1/3pp3/8/2BB1P2/PPP3PP/RNQ1K2R w KQ - 0 13",
    "line": [],
-   "spoken": "Had White captured on e5, the bishop would have been pinned with devastating effect.",
+   "spoken": "And a trap in the offing — had the opponent captured on e5, the bishop would have been pinned with devastating effect. The break carried a hidden sting.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -199,8 +205,7 @@
    "line": [
     "Bd2"
    ],
-   "spoken": "White wants the bishop to e3, but he is not in time — Black is ready to rampage in the centre.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 26,
@@ -209,7 +214,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "e4 — and the beauty is Black can recapture with either the knight or the pawn."
+   "spoken": ""
   },
   {
    "ply": 27,
@@ -227,7 +232,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": "Recapturing with the pawn to keep things simple, though taking with the knight was also very strong."
+   "spoken": ""
   },
   {
    "ply": 29,
@@ -236,7 +241,8 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "White's whole intention is the bishop to e3 and then castling — that is why the queen went to c1."
+   "spoken": "Now a crushing quiet move — a knight to g4. It's found by reading the opponent's intention: they want a bishop to e3 so they can finally castle. The knight leap stops that while feeding the attack, and the fianchettoed bishop rakes into b2. If the knight is challenged, a queen check on f2 leads to mate.",
+   "kind": "tactic"
   },
   {
    "ply": 30,
@@ -245,7 +251,8 @@
    "line": [
     "Ng4"
    ],
-   "spoken": "The knight to g4 stops the bishop reaching e3, and with the long diagonal open the bishop eyes the pawn on b2. If h3, then not only a capture on b2 hitting the queen, but even a check on f2 with mate to follow — you don't need the exact mate, only to trust the position."
+   "spoken": "This is where intuition earns its keep. You don't need to see the exact mating sequence — one glance at the opponent's tangled pieces tells you it's there, and it's either checkmate or catastrophic material loss. Intuition is trusting that judgment instead of burning your whole clock trying to calculate it to the end.",
+   "kind": "plan"
   },
   {
    "ply": 31,
@@ -254,7 +261,7 @@
    "line": [
     "Rf1"
    ],
-   "spoken": "He defends against the check on f2 — but don't forget the other set of ideas."
+   "spoken": ""
   },
   {
    "ply": 32,
@@ -263,7 +270,8 @@
    "line": [
     "Bxb2"
    ],
-   "spoken": "Simplest of all: just take on b2 and win a load of material. Call it life insurance — if the attack ever misfires, you are still up a rook."
+   "spoken": "Don't forget the other route — sometimes the simplest conversion is just to win a heap of material, a kind of insurance. If the attack ever misfires, you're still up a rook. When a full rook is on offer, take it, even if a mate might be lurking; the safe path is nothing to be ashamed of.",
+   "kind": "plan"
   },
   {
    "ply": 28,
@@ -289,7 +297,7 @@
    "t": 1037,
    "fen": "r1b2rk1/p4pbp/1q4p1/8/2B1p1n1/8/PPPB2PP/RNQ1KR2 b Q - 3 16",
    "line": [],
-   "spoken": "The immediate e3 is tempting, but it blunts our own queen; better to keep those squares open for it.",
+   "spoken": "Note why the flashier pawn thrust is less convincing — it blunts the queen, and the queen wants access to those squares. With a whole rook there for the taking, the clean grab beats the showy try every time.",
    "reanchor": true
   },
   {
@@ -299,8 +307,7 @@
    "line": [
     "Bxb2"
    ],
-   "spoken": "When you can win a full rook, take it — the safe, clean conversion, even when a mate might be lurking.",
-   "reanchor": true
+   "spoken": ""
   }
  ]
 }
