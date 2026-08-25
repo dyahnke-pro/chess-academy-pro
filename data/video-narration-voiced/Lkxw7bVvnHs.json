@@ -1,7 +1,7 @@
 {
  "videoId": "Lkxw7bVvnHs",
  "title": "Master Class | Smith–Morra Gambit | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Queen's Gambit Declined",
+ "openingName": "Queen's Pawn Game",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -33,7 +33,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Black plays a Queen's Gambit Declined — the original solid choice."
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "White fianchettoes with g3 instead — not dangerous, but because it does not challenge the centre at once..."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -51,7 +51,8 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "...Black gets to bring the bishop out to f5 first, outside the pawn chain, Caro-Kann style — and only then play e6."
+   "spoken": "Because the fianchetto setup doesn't immediately challenge the centre, there's no need to rush e6. Instead — exactly as in the Caro-Kann — develop the bishop to f5 first, getting it outside the pawn chain before the e-pawn shuts it in.",
+   "kind": "plan"
   },
   {
    "ply": 7,
@@ -69,7 +70,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "The bishop sits outside the chain now — an ideal, London-type setup."
+   "spoken": "Only now does e6 go in, with the light-squared bishop already breathing free air outside the chain. It's an ideal, harmonious structure — everything developed to its best square."
   },
   {
    "ply": 9,
@@ -87,7 +88,8 @@
    "line": [
     "h6"
    ],
-   "spoken": "In a London setup Black often plays h6, giving the bishop luft on h7 and taking the sting out of a knight to h4."
+   "spoken": "A useful little move — h6 grants the bishop a bolt-hole on h7, so that any lunge at it with a knight to h4 is rendered completely harmless before it ever happens.",
+   "kind": "plan"
   },
   {
    "ply": 11,
@@ -96,7 +98,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "The knight to c3 is a classic inaccuracy at this level — it blocks the c-pawn from reaching c4."
+   "spoken": "The knight to c3 is a familiar inaccuracy at this level — it blocks the c-pawn's path to c4, its most natural challenge to the centre. That leaves the centre as solid as it gets, with the c5 lever held in reserve."
   },
   {
    "ply": 12,
@@ -105,7 +107,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "Black's centre is as solid as it gets, with the c5 lever even available. Just complete development."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -114,7 +116,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "Now castle — and note there's no real threat to the centre: it's defended three times while attacked only twice. Counting the guards against the attackers is what tells you a threat is empty."
   },
   {
    "ply": 14,
@@ -123,7 +125,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White is not threatening e4 — Black has defended it three times, and White attacks it only twice."
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -132,7 +134,7 @@
    "line": [
     "Nh4"
    ],
-   "spoken": "Now Black is ready for c5. And the knight to h4..."
+   "spoken": "And there's the knight lunge — which is precisely why the little luft move went in earlier. The bishop simply steps to h7, unbothered."
   },
   {
    "ply": 16,
@@ -141,7 +143,7 @@
    "line": [
     "Bh7"
    ],
-   "spoken": "...is exactly why h6 was played — the bishop simply steps to h7."
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -150,7 +152,8 @@
    "line": [
     "e4"
    ],
-   "spoken": "White strikes with e4, opening the centre — a legitimate idea, but it will not serve him well. The simplest reply is to take everything on e4; note how his king weakens without the fianchetto bishop, and the idea of taking on h4 is in the air."
+   "spoken": "The central break is a genuine idea, opening things up. The plainest reply is to swap everything off on e4, which strips away the fianchetto bishop and leaves the enemy king a touch draughty — but there's a sharper sequence worth finding.",
+   "kind": "plan"
   },
   {
    "ply": 18,
@@ -159,7 +162,8 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "Using the fact that this knight can be captured to ruin White's structure, Black takes on e4."
+   "spoken": "The cleverness rests on the fact that the recapturing knight is itself loose. Snap on e4, and after the recapture an in-between capture on h4 wrecks the opponent's pawns while staying a pawn ahead. Order the captures right and the extra material comes with a ruined enemy structure.",
+   "kind": "tactic"
   },
   {
    "ply": 20,
@@ -169,7 +173,7 @@
     "Nxe4",
     "Bxh4"
    ],
-   "spoken": "There is an intermediate move — taking on h4 first — and Black is up a pawn. White's clever try was the knight to c5, but he just takes."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -187,7 +191,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": "Black recaptures, wrecking White's pawn structure. Careful, though — Black cannot grab back here, because White takes on b7 and wins the exchange; Black plays meat-and-potatoes chess, not speculative sacs."
+   "spoken": ""
   },
   {
    "ply": 23,
@@ -196,7 +200,7 @@
    "line": [
     "Bxe4"
    ],
-   "spoken": ""
+   "spoken": "There's no obligation to capture on e4 at all — allowing a rook to sit there, ready to swing across for a kingside lift, is unpleasant. Since the bishop isn't truly threatened, a calm recapture keeps everything sound."
   },
   {
    "ply": 24,
@@ -205,7 +209,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "The zen recapture — the knight to c6, developing while doing the same job. For the small price of doubled pawns, Black gets opposite-coloured bishops, which favour the attacker in the middlegame."
+   "spoken": "The Zen move is the knight to c6 — the tempting pawn advance would just blunder the rook. Same central idea, but a developing move instead of a loosening one.",
+   "kind": "plan"
   },
   {
    "ply": 26,
@@ -215,7 +220,8 @@
     "Bxh7+",
     "Kxh7"
    ],
-   "spoken": "White takes the bishop with check — but Black is happily forking two pawns in return."
+   "spoken": "For the small price of doubled pawns comes an opposite-coloured-bishop middlegame — and those famously favour the attacker, because the defender's bishop can never guard the squares under fire. The knight recapture even forks a pair of pawns as a bonus.",
+   "kind": "plan"
   },
   {
    "ply": 27,
@@ -224,7 +230,8 @@
    "line": [
     "Re4"
    ],
-   "spoken": "The rook to e4 is strong, and now it is time to make things go boom. White's bishop is still undeveloped, so his king is under-defended — pry the centre open and White pays."
+   "spoken": "Now the window: the opponent's bishop still isn't out, so the king is under-defended. There's a small chance to strike — pry the centre open at any cost and the lagging development gets punished.",
+   "kind": "plan"
   },
   {
    "ply": 28,
@@ -233,7 +240,8 @@
    "line": [
     "f5"
    ],
-   "spoken": "e5 is possible, but f5 is more forcing — it drives the rook, and after it moves, e5 wins. If White takes on e6, the knight takes on d4 with discovered-check ideas — very nasty."
+   "spoken": "f5 is more forcing than the quieter break — it drives the rook off its square. If it retreats along the file the centre push wins; if it captures, a knight recapture hits it back with a discovered check lurking behind. Every branch keeps a threat attached.",
+   "kind": "tactic"
   },
   {
    "ply": 29,
@@ -242,7 +250,8 @@
    "line": [
     "Rxe6"
    ],
-   "spoken": ""
+   "spoken": "The point that makes it work: the enemy queen is undefended, so the pawn can't be taken. That single loose piece is what powers the whole combination.",
+   "kind": "tactic"
   },
   {
    "ply": 30,
@@ -251,7 +260,8 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "White cannot grab the pawn because his queen is undefended — which is exactly why Black must act with urgency: the moment the bishop develops, the queen is covered and the discovered-attack tactics vanish."
+   "spoken": "And this is exactly why speed matters — the moment the bishop finally develops, the queen is guarded, the discovered attack evaporates, and the tactics are gone. Urgency is the whole idea.",
+   "kind": "plan"
   },
   {
    "ply": 31,
@@ -287,7 +297,8 @@
    "line": [
     "Rad8"
    ],
-   "spoken": "Nothing fancy needed — bring the last rook into play, setting up an x-ray against the queen."
+   "spoken": "No need for anything fancy — bring the last rook into the game and set up an x-ray against the queen. Quietly improving the idle piece is what converts.",
+   "kind": "plan"
   },
   {
    "ply": 35,
@@ -305,7 +316,8 @@
    "line": [
     "Nb3"
    ],
-   "spoken": "Careful with the checks — the queen can take them. The real threat is the knight to b3, hitting the rook in the corner. And keep an eye on g7: if White's queen could ever reach a square hitting g7 it would be mate — but look carefully, it cannot."
+   "spoken": "The knight jumps to b3, hitting the rook in the corner. And a safety check first — scan whether the enemy queen can reach a square that hits g7 for a mate threat; it can't, so the plan is clean. Always confirm the opponent has no counter-mate before committing.",
+   "kind": "tactic"
   },
   {
    "ply": 38,
@@ -315,7 +327,8 @@
     "Qf3",
     "Nxa1"
    ],
-   "spoken": "Black grabs the rook and it is over — the king is a touch airy, but Black is simply winning. There is even a forced mate: a queen check, and after the rook drops back, the queen to e4 is mate — the hanging pieces do not matter."
+   "spoken": "The finish looks like a slip — a couple of pieces hang — but sharp vision reveals a forced mate. It begins with the rook, not the queen: if the knight is taken, the queen crashes into e4 for checkmate. Trust the calculation over the material count.",
+   "kind": "tactic"
   },
   {
    "ply": 15,
@@ -333,7 +346,8 @@
     "Nf3",
     "Kh8"
    ],
-   "spoken": "The one real moment was the knight takes on e4 and then the bishop takes on h4. White's correct try was the knight to c5, counter-attacking b7 — a double-edged position — but Black relied on him to miss it. This setup with the knight sitting on c3 is risky for White: without e4 he has no plan, while Black keeps the c5 lever in reserve.",
+   "spoken": "The one real moment was that knight-and-bishop combination — the correct defence would have been a knight to c5, counterattacking the queenside instead of grabbing. And a strategic note on the whole line: the c3 setup is risky, because if the central break never lands the opponent is simply left without a plan, while this side always keeps the c5 lever in hand.",
+   "kind": "plan",
    "reanchor": true
   }
  ]
