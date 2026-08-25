@@ -53,7 +53,6 @@ import { authoredNoteAt, authoredEntryFor } from './authoredOpeningNotes';
 import authoredRepertoire from '../data/repertoire.json';
 import { deriveNarrationArrows } from './narrationArrows';
 import { splitSentences, squaresInText } from './narrationSegments';
-import { bakedNarrationFor } from './bakedWalkthroughNarration';
 import { gemPunishLessonsForOpeningName } from './gemPunishLessons';
 import { gemsForPosition } from './gemCrushLines';
 import { detectTactics } from './tacticsDetector';
@@ -1919,74 +1918,15 @@ ${branches.length > 0 ? `\nBranches available at the end of the spine (the stude
 
 Emit a JSON object with intro (string), shortIntro (string), outro (string), ideas (array of ${positions.length} objects { text, shortText }, one per spine move in order)${branches.length > 0 ? `, branchIdeas (array of ${branches.length} strings), shortBranchIdeas (array of ${branches.length} strings), and branchExtensionIdeas (2D array of { text, shortText } objects)` : ''}.`;
 
-  // ── Tier 2 (David 2026-07-30, locked): a BAKED video narration for this
-  // exact line replaces the runtime LLM spine narration. The bake script
-  // already handed the teacher's transcript to the model offline, reworded
-  // it into the house voice and gated every line — so a hit is final prose:
-  // no note splice, no reword pass, deterministic every session. The LLM is
-  // still called ONLY when fork branches need their teasers narrated.
-  const bakedRaw = faceContext
-    ? null
-    : bakedNarrationFor(entry.canonicalName, positions.map((p) => p.san));
-  if (bakedRaw) {
-    void logAppAudit({
-      kind: 'book-grounding-injected',
-      category: 'subsystem',
-      source: 'openingGenerator.bakedVideoNarration',
-      summary: `baked video narration hit for "${entry.canonicalName}" (${positions.length}/${bakedRaw.spine.length} plies, sources: ${bakedRaw.sourceVideos.join(',')})`,
-    });
-  }
-  // Orient the bake to THIS tree's studentSide: when the bake's primary
-  // register addresses the other color (side inference changed, or the bake
-  // predates it) and a flipped register exists, the registers swap — the
-  // spoken "we" always matches the side the student is learning. The other
-  // register rides along for the live board-flip (David 2026-07-31).
-  const baked = (() => {
-    if (!bakedRaw) return null;
-    const mismatched =
-      bakedRaw.studentSide !== undefined && bakedRaw.studentSide !== studentSide;
-    if (!mismatched || !bakedRaw.ideasFlipped) return bakedRaw;
-    return {
-      ...bakedRaw,
-      intro: bakedRaw.introFlipped ?? bakedRaw.intro,
-      shortIntro: bakedRaw.shortIntroFlipped ?? bakedRaw.shortIntro,
-      outro: bakedRaw.outroFlipped ?? bakedRaw.outro,
-      ideas: bakedRaw.ideasFlipped,
-      introFlipped: bakedRaw.intro,
-      shortIntroFlipped: bakedRaw.shortIntro,
-      outroFlipped: bakedRaw.outro,
-      ideasFlipped: bakedRaw.ideas,
-      studentSide,
-    };
-  })();
-
+  // ── Tier 1 is THE CORPUS now (David 2026-08-24). The old generic offline
+  // bake (walkthrough-narrations.json via bakedNarrationFor) is DELETED — a
+  // generic line pinned to a position is a false claim, never a real tier. The
+  // spine narration is the LLM-generated house voice with the video-distilled
+  // corpus note SPLICED in per ply (PASS 1 below leads each beat with its
+  // graded note). No baked overlay remains.
   let narration: NarrationOutput;
   let narrationFellBack = false;
-  // Full-tree bake coverage: every fork branch has a baked narration deep
-  // enough for its extension line → zero runtime LLM even WITH branches
-  // (David 2026-07-31: "Tier 2 openings fully in effect?").
-  const bakedBranchesCoverAll =
-    baked !== null &&
-    branches.every((b) => {
-      const bn = baked.branchNarrations?.[b.san];
-      return bn !== undefined && bn.ideas.length >= b.extensionMoves.length;
-    });
-  if (baked && (branches.length === 0 || bakedBranchesCoverAll)) {
-    // Full coverage — zero runtime LLM.
-    narration = {
-      intro: baked.intro,
-      ...(baked.shortIntro ? { shortIntro: baked.shortIntro } : {}),
-      outro: baked.outro,
-      ideas: baked.ideas.slice(0, positions.length),
-      ...(bakedBranchesCoverAll && branches.length > 0
-        ? {
-            branchIdeas: branches.map((b) => baked.branchNarrations?.[b.san]?.teaser ?? ''),
-            shortBranchIdeas: branches.map((b) => baked.branchNarrations?.[b.san]?.shortTeaser ?? ''),
-            branchExtensionIdeas: branches.map((b) => baked.branchNarrations?.[b.san]?.ideas ?? []),
-          }
-        : {}),
-    };
-  } else {
+  {
   // Up to 2 attempts before the template fallback. A single transient
   // failure (truncated/malformed tool JSON — the 2026-07-31 Alapin session:
   // "JSON Parse error: Expected ']'") used to drop the WHOLE lesson to
@@ -2099,31 +2039,6 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       ideas: positions.map(() => ({ text: '' })),
     };
   }
-  if (baked) {
-    // Overlay the baked spine narration over whatever the call produced
-    // (or the fallback) — the spine speaks the baked video teaching, and
-    // any branch WITH a baked narration speaks it too (LLM prose only for
-    // uncovered branches). A baked spine also un-fails the fallback: the
-    // tree's MAIN narration is real, so it may cache.
-    const branchIdeas = branches.map(
-      (b, i) => baked.branchNarrations?.[b.san]?.teaser ?? narration.branchIdeas?.[i] ?? '',
-    );
-    const shortBranchIdeas = branches.map(
-      (b, i) => baked.branchNarrations?.[b.san]?.shortTeaser ?? narration.shortBranchIdeas?.[i] ?? '',
-    );
-    const branchExtensionIdeas = branches.map(
-      (b, i) => baked.branchNarrations?.[b.san]?.ideas ?? narration.branchExtensionIdeas?.[i] ?? [],
-    );
-    narration = {
-      ...narration,
-      intro: baked.intro,
-      ...(baked.shortIntro ? { shortIntro: baked.shortIntro } : {}),
-      outro: baked.outro,
-      ideas: baked.ideas.slice(0, positions.length),
-      ...(branches.length > 0 ? { branchIdeas, shortBranchIdeas, branchExtensionIdeas } : {}),
-    };
-    narrationFellBack = false;
-  }
   }
 
   // 3. Build the tree from the bottom up using the LLM's ideas.
@@ -2210,7 +2125,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       // grounded on this note (`branchNoteSources` below); until now the prose
       // never said what they pointed at, so a green arrow could land on a
       // square the narration never named — the lead-the-eye defect.
-      const extNote = baked ? null : branchNoteSources[j + 1] ?? null;
+      const extNote = branchNoteSources[j + 1] ?? null;
       const text = extNote
         ? (extGenerated ? `${extNote} ${extGenerated}` : extNote)
         : extGenerated;
@@ -2245,7 +2160,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     // The note leads what is SPOKEN on the branch move. `teaser` itself stays
     // untouched — it doubles as the fork tile's `forkSubtitle`, which must
     // remain a short label, not a paragraph.
-    const branchNote = baked ? null : branchNoteSources[0] ?? null;
+    const branchNote = branchNoteSources[0] ?? null;
     const branchSpoken = branchNote ? `${branchNote} ${teaser}` : teaser;
     const branchNode: WalkthroughTreeNode = {
       san: b.san,
@@ -2345,9 +2260,6 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
     // narration, and the board is the lesson on those plies.
     const fallback = generated;
     try {
-      // Baked video narration IS the teaching for this ply — splicing a
-      // corpus note on top would double-teach the same source material.
-      if (baked) return fallback;
       const prefix = positions.slice(0, i + 1).map((q) => q.san);
       const teaching = noteArrowSourceAt(prefix, p.fen, splicedNoteIds, entry.canonicalName);
       if (teaching) {
@@ -2406,7 +2318,7 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
         firstText: authoredSpoke[0].text.slice(0, 240),
       }),
     });
-  } else if (!baked) {
+  } else {
     // SAY WHY IT DIDN'T SPEAK. Three prod runs went silent on the French and
     // each time the cause had to be guessed at from the outside — a stale
     // cache, then a name that would not resolve, then a bake that turned out
@@ -2442,18 +2354,14 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
   // call failure the raw script ships as before.
   let finalPlyTexts = rawPlyTexts;
   try {
-    // A baked script is ALREADY reworded + gated offline — rewording it
-    // again could only drift it away from its verified form.
-    if (!baked) {
-      // The arrows are decided HERE, in code, from the note — then handed to
-      // the model as a requirement it must voice (David 2026-08-01: "we need to
-      // hand the arrows in the package to the llm... but we dont let the LLM
-      // decide"). Computing them before the reword is what makes that possible.
-      const arrowSans = positions.map((p, i) =>
-        groundedSegmentArrows(plyNoteText[i], rawPlyTexts[i], p).spans.map((sp) => sp.san),
-      );
-      finalPlyTexts = await rewordNarrationInHouseVoice(positions, rawPlyTexts, arrowSans);
-    }
+    // The arrows are decided HERE, in code, from the note — then handed to
+    // the model as a requirement it must voice (David 2026-08-01: "we need to
+    // hand the arrows in the package to the llm... but we dont let the LLM
+    // decide"). Computing them before the reword is what makes that possible.
+    const arrowSans = positions.map((p, i) =>
+      groundedSegmentArrows(plyNoteText[i], rawPlyTexts[i], p).spans.map((sp) => sp.san),
+    );
+    finalPlyTexts = await rewordNarrationInHouseVoice(positions, rawPlyTexts, arrowSans);
   } catch (err) {
     void logAppAudit({
       kind: 'llm-error',
@@ -2478,12 +2386,6 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       children: nextChildren,
     };
     if (shortText) node.shortIdea = shortText;
-    // Opposite-perspective register from the bake (board-flip pronouns).
-    const flippedIdea = baked?.ideasFlipped?.[i];
-    if (flippedIdea?.text?.trim()) {
-      node.ideaFlipped = flippedIdea.text.trim();
-      if (flippedIdea.shortText?.trim()) node.shortIdeaFlipped = flippedIdea.shortText.trim();
-    }
     // THE OPENING-TAB ARROW GRAMMAR (David 2026-07-31, third request —
     // "the arrows on the coach tab need to MATCH the opening tab"):
     // ORANGE trail on the played move (LessonPlayer's TRAIL), GREEN vision
@@ -2566,9 +2468,6 @@ Emit a JSON object with intro (string), shortIntro (string), outro (string), ide
       `${displayName} — let's walk through the main line.`,
     ...(shortIntro ? { shortIntro } : {}),
     outro: narration.outro?.trim() || `Drill the moves to lock them in.`,
-    ...(baked?.introFlipped ? { introFlipped: baked.introFlipped } : {}),
-    ...(baked?.shortIntroFlipped ? { shortIntroFlipped: baked.shortIntroFlipped } : {}),
-    ...(baked?.outroFlipped ? { outroFlipped: baked.outroFlipped } : {}),
     root: { san: null, movedBy: null, idea: '', children: nextChildren },
   };
   // Drop redundant arrows (no-ops + arrows pointing AT the move's
