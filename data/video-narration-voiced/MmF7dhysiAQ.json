@@ -2,9 +2,9 @@
  "videoId": "MmF7dhysiAQ",
  "title": "Crushing The Four Pawns Attack!! | The King's Indian | The Sensei Speedrun | GM Naroditsky",
  "openingName": "King's Indian Defense: Four Pawns Attack",
- "studentSide": "black",
+ "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:MmF7dhysiAQ",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "We take White and open d4; Black plays ...Nf6."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "c4",
     "g6"
    ],
-   "spoken": ""
+   "spoken": "We claim space with c4; Black fianchettoes with ...g6."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3."
   },
   {
    "ply": 6,
@@ -43,7 +43,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "Black completes the fianchetto with the bishop to g7."
   },
   {
    "ply": 8,
@@ -53,7 +53,7 @@
     "e4",
     "d6"
    ],
-   "spoken": ""
+   "spoken": "We build the big centre with e4; Black plays ...d6."
   },
   {
    "ply": 9,
@@ -62,10 +62,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "White's f4 sets up the Four Pawns Attack — the most space-grabbing anti-King's-Indian line, with pawns on c4, d4, e4 and f4. It is dangerous but overextended, and Black must strike at that wall before it rolls forward.",
-   "kind": "main",
-   "teaches": "Against the Four Pawns' huge centre, counter-strike quickly — an overextended centre is a target.",
-   "plans": "Hit the centre with e5 or c5."
+   "spoken": "We play f4 — the Four Pawns Attack."
   },
   {
    "ply": 10,
@@ -74,7 +71,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 11,
@@ -83,7 +80,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 12,
@@ -92,9 +89,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Black strikes at once with e5, hitting the base of the pawn wall. It looks reckless into all that space, but it forces White to resolve the tension and pries the overextension open.",
-   "kind": "main",
-   "teaches": "Undermine a broad pawn centre by challenging it immediately, before it becomes a rolling force."
+   "spoken": "Black strikes with ...e5."
   },
   {
    "ply": 13,
@@ -103,7 +98,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": ""
+   "spoken": "We take on e5."
   },
   {
    "ply": 14,
@@ -112,7 +107,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the d-pawn."
   },
   {
    "ply": 15,
@@ -121,7 +116,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "We grab on e5 with the knight."
   },
   {
    "ply": 16,
@@ -130,7 +125,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "Black hits back with c5."
   },
   {
    "ply": 17,
@@ -139,7 +134,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "We push d5, gaining space."
   },
   {
    "ply": 18,
@@ -148,7 +143,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": ""
+   "spoken": "Black plays the rook to e8."
   },
   {
    "ply": 19,
@@ -157,7 +152,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We retreat the knight to f3."
   },
   {
    "ply": 20,
@@ -166,7 +161,7 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": ""
+   "spoken": "Black grabs on e4 with the knight."
   },
   {
    "ply": 22,
@@ -176,7 +171,7 @@
     "Nxe4",
     "Rxe4+"
    ],
-   "spoken": ""
+   "spoken": "We recapture on e4; Black takes with the rook, check."
   },
   {
    "ply": 23,
@@ -185,7 +180,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to e2."
   },
   {
    "ply": 24,
@@ -194,7 +189,7 @@
    "line": [
     "Qe8"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to e8."
   },
   {
    "ply": 25,
@@ -203,7 +198,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": ""
+   "spoken": "We jump the knight to g5."
   },
   {
    "ply": 26,
@@ -212,7 +207,7 @@
    "line": [
     "Rd4"
    ],
-   "spoken": ""
+   "spoken": "Black lifts the rook to d4."
   },
   {
    "ply": 11,
@@ -262,9 +257,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "The main line is c5, and after White pushes d5 Black breaks with e6 — a Benoni structure where White's big centre is also a liability, giving Black clear targets to play against.",
-   "kind": "branch",
-   "teaches": "In the Four Pawns, c5 and e6 reach a Benoni where the broad centre becomes overextended."
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -328,9 +321,7 @@
     "Nxe4",
     "Qa5+"
    ],
-   "spoken": "The tactical glue behind Black's play: if White snatches the b5-pawn, the knight takes on e4 and the check on a5 forks the king and the bishop on b5, so Black regains the material and stands well.",
-   "kind": "main",
-   "teaches": "A queen check that also hits a loose piece is what makes an aggressive pawn break sound."
+   "spoken": ""
   },
   {
    "ply": 23,
