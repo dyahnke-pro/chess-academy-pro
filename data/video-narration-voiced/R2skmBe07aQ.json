@@ -1,7 +1,7 @@
 {
  "videoId": "R2skmBe07aQ",
  "title": "Beginner To Master | Chess Speedrun | 1100 | Grandmaster Naroditsky",
- "openingName": "Sicilian Defense",
+ "openingName": "Sicilian Defence: Accelerated Dragon",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "The Sicilian — Black plays the Accelerated Dragon, a fine choice at this level."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -34,7 +34,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "White plays the bishop to c4 — an Italian idea against the Sicilian, but it does not work the same way."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -43,7 +43,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "The reason: e6, blunting the bishop and preparing d5."
+   "spoken": "This bishop out to c4 is the Italian-style idea against the Sicilian — but it simply doesn't work the same way here. The clean reply is e6, blunting the bishop's diagonal and quietly readying a central break."
   },
   {
    "ply": 7,
@@ -78,7 +78,7 @@
     "Nf6",
     "e5"
    ],
-   "spoken": "White pushes e5 — and here is a mind-blower: a very cool move becomes possible precisely because of the bishop on c4."
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -87,7 +87,8 @@
    "line": [
     "d5"
    ],
-   "spoken": "The move is d5 — associate the bishop on c4 with the possibility of d5. It plants a pawn in the centre."
+   "spoken": "Here's the eye-opener: the central thrust to d5 becomes possible precisely because a bishop is sitting on c4. Train yourself to link those two — a bishop on c4 and the chance to strike with d5. It seizes the middle in one blow.",
+   "kind": "tactic"
   },
   {
    "ply": 11,
@@ -96,7 +97,7 @@
    "line": [
     "exf6"
    ],
-   "spoken": "If White takes the knight, Black takes the bishop, and a very interesting structure arises."
+   "spoken": "So plant the pawn in the centre — and if the knight gets taken, recapture on the bishop, leading to a distinctive pawn structure that looks damaged but isn't. There's plenty going on beneath the surface."
   },
   {
    "ply": 12,
@@ -115,7 +116,7 @@
     "fxg7",
     "Bxg7"
    ],
-   "spoken": "Doubled pawns, a ruined kingside — but look deeper."
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -140,8 +141,8 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "It is hard for White to develop the bishop: if d3, Black takes, White recaptures, and the pawn on d3 becomes a sitting duck. Black has the two bishops, great in an open position, one already pre-developed to a fine square. And those 'weak' pawns are actually strong — they stop White controlling any share of the centre.",
-   "reanchor": true
+   "spoken": "Why the ragged structure is actually fine: the opponent struggles to develop the light-squared bishop, since a pawn move to challenge would just be captured and leave a sitting-duck pawn behind. On top of that comes the bishop pair — golden in an open position, with one already pre-developed to a fine post — and those supposedly weak pawns are strong, choking the opponent's grip on the centre.",
+   "kind": "plan"
   },
   {
    "ply": 16,
@@ -150,7 +151,8 @@
    "line": [
     "b6"
    ],
-   "spoken": "c5 is attacked — and b6 kills two birds: it defends the pawn and prepares to fianchetto the other bishop."
+   "spoken": "The c-pawn is under fire, so defend it and prepare development in one stroke — b6 kills two birds, bracing the pawn while opening the way to fianchetto the other bishop.",
+   "kind": "plan"
   },
   {
    "ply": 17,
@@ -177,7 +179,8 @@
    "line": [
     "cxd3"
    ],
-   "spoken": "A lesson in flexibility: the natural bishop to a6, hitting the pawn, actually fails to the queen to a4, forking two undefended pieces. Be obsessed with undefended pieces — putting a piece on an undefended square should ring alarm bells."
+   "spoken": "A lesson in flexibility and vigilance: the natural intention is the bishop to a6 hitting the pawn — but that runs into a queen sortie to a4 forking two undefended pieces. Be obsessed with loose pieces; the instant you place a man on an undefended square, the alarm should ring. So the bishop goes to b7 instead.",
+   "kind": "tactic"
   },
   {
    "ply": 20,
@@ -186,7 +189,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": "So the bishop to b7 instead — then castle, and the knight to b4 can target that weak pawn."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -204,7 +207,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White threatens a knight jump to d6 — but castling takes the sting out of it: even if the knight lands there, it is no longer a fork."
+   "spoken": "Castling doesn't literally prevent the knight jump to d6 — it takes the sting out of it. The move is no longer a fork, so there's simply no need to react to the threat directly.",
+   "kind": "plan"
   },
   {
    "ply": 23,
@@ -213,7 +217,8 @@
    "line": [
     "Nfg5"
    ],
-   "spoken": "The knight to g5 looks scary, but it has no real threat. Black could play h6, but need not — go straight for the counter-attack. Taking on b2 would be bad, though — c5 and the queen to h5 — so keep the bishop for defence."
+   "spoken": "The knight leap to g5 looks menacing but has no leg to stand on. There's no need to spend a move shooing it — head straight for the counterattack. Just keep the dark-squared bishop back for defence, since surrendering it would invite a real attack; hold onto it and the intimidation amounts to nothing.",
+   "kind": "plan"
   },
   {
    "ply": 24,
@@ -222,7 +227,8 @@
    "line": [
     "Nb4"
    ],
-   "spoken": "Find what is weak: the d3-pawn is White's biggest weakness, so target it with the knight to b4. If White tries the queen to h5, his position falls apart — Black takes on d3 with check, disarms the attack, and wins a piece."
+   "spoken": "For the counterattack, ask what's weak — and the d3 pawn is the opponent's glaring weakness. So the knight swings to b4 to target it. If the queen lunges out to attack, the position collapses: a capture on d3 with check disarms the assault and wins a piece.",
+   "kind": "plan"
   },
   {
    "ply": 25,
@@ -231,7 +237,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "The knight to d4 does not accomplish much — the knight to b4 is more purposeful. White is already in trouble."
+   "spoken": ""
   },
   {
    "ply": 26,
@@ -240,7 +246,8 @@
    "line": [
     "h6"
    ],
-   "spoken": "First, annoy him — h6, get out of here — then take on d3. If the knight goes to f3, then the knight takes on d3 hits two pieces at once."
+   "spoken": "First, needle the opponent — the pawn to h6 shoves the knight away before the real recapture. And a timing point: depending on where the knight retreats, a capture on d3 may hit two pieces at once, since the knight would have lost its defender.",
+   "kind": "tactic"
   },
   {
    "ply": 27,
@@ -258,7 +265,8 @@
    "line": [
     "Nxd3"
    ],
-   "spoken": "The knight takes on d3 — attacking the bishop, and now the knight on e4 has lost its pawn defender."
+   "spoken": "The knight crashes into d3, attacking the bishop — and the central knight, until now propped by that pawn, has just lost its defender. Two threats, and no clean way to meet both.",
+   "kind": "tactic"
   },
   {
    "ply": 27,
@@ -274,7 +282,8 @@
    "line": [
     "Nxd3"
    ],
-   "spoken": "If White tries the bishop to d6 to save the piece, Black still takes the knight, ending up two pieces for a rook and a pawn — complete domination.",
+   "spoken": "If the bishop tries to wriggle out with a counterattacking retreat, it doesn't save the day — the knight is taken anyway, leaving two pieces for a rook and a pawn and total piece domination. Ahead in quality even where the count is close.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -293,7 +302,8 @@
    "line": [
     "Bxe4"
    ],
-   "spoken": "White is completely lost — the rook on b1 hangs, so Black can take either piece. Take with the bishop; but now White hits it back, so don't just defend — defend in a way that coordinates the most pieces. The queen to d5 is best, building a battery: threatening to wreck White's structure or force a queen trade, connecting the rooks. And it is not a real pin — the knight is not paralysed, so the knight takes on f4 counter-attacks the queen, and it is simply winning."
+   "spoken": "With a rook hanging, either capture wins — but the deeper habit is to defend correctly when it's your turn to be hit. Rather than any old defence of the attacked bishop, choose the one that coordinates the most force: the queen to d5 builds a battery against the knight, connects the rooks and cements the whole advantage. And the apparent pin is an illusion — it isn't against the king, so a knight capture on f4 just wins the queen.",
+   "kind": "tactic"
   },
   {
    "ply": 6,
@@ -311,7 +321,7 @@
     "Nf6",
     "Nc3"
    ],
-   "spoken": "In review, the bishop to c4 is not amazing. The d5 idea shows up most famously in the Scotch Gambit — that Scotch-and-Italian mix — where after the knight to f6 and e5, d5 is the main theoretical continuation. Same concept here.",
+   "spoken": "That d5 idea shows up most famously in the Scotch Gambit and its Italian cousin, where advancing to d5 is the main theoretical line. It's the same concept reappearing across many openings — worth recognising wherever a bishop lands on c4.",
    "reanchor": true
   },
   {
@@ -319,7 +329,8 @@
    "t": 663.5,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
    "line": [],
-   "spoken": "And those doubled pawns operate in tandem, partners in stopping White's centre — it is not easy for White to attack either. Try the queen to e2 to win one, and Black just counter-attacks and forces the queen back.",
+   "spoken": "And a closing note on the structure: doubled pawns can work in tandem, partners in denying the opponent the centre. They're not easy to attack — try to win one and it can be defended by counterattacking the other, chasing the aggressor's queen back home.",
+   "kind": "plan",
    "reanchor": true
   }
  ]
