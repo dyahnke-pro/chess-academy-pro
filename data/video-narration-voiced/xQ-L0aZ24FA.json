@@ -1,0 +1,229 @@
+{
+ "videoId": "xQ-L0aZ24FA",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2220",
+ "openingName": "English Opening",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:xQ-L0aZ24FA",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 18,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/8/PP1PPPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "c4",
+    "e5"
+   ],
+   "spoken": "The English — and we answer with e5, the reversed Sicilian."
+  },
+  {
+   "ply": 3,
+   "t": 23.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR b KQkq - 1 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 26.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2N5/PP1PPPPP/R1BQKBNR w KQkq - 2 3",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 29.5,
+   "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/2P5/2N2N2/PP1PPPPP/R1BQKB1R b KQkq - 3 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 30.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2P5/2N2N2/PP1PPPPP/R1BQKB1R w KQkq - 4 4",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 32,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2P1P3/2N2N2/PP1P1PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [
+    "e4"
+   ],
+   "spoken": "A slightly weird setup by White."
+  },
+  {
+   "ply": 8,
+   "t": 34,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4p3/1bP1P3/2N2N2/PP1P1PPP/R1BQKB1R w KQkq - 1 5",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 37.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4p3/1bP1P3/2NB1N2/PP1P1PPP/R1BQK2R b KQkq - 2 5",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 42.5,
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/4p3/1bP1P3/2NB1N2/PP1P1PPP/R1BQK2R w KQkq - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Just develop our pieces."
+  },
+  {
+   "ply": 11,
+   "t": 47.5,
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/4p3/1bP1P3/2NB1N2/PP1P1PPP/R1BQ1RK1 b kq - 1 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "The d4 square is weak — our ultimate idea is to plant the knight on d4."
+  },
+  {
+   "ply": 12,
+   "t": 63.5,
+   "fen": "r2qk2r/ppp2ppp/2np1n2/4p3/1bP1P1b1/2NB1N2/PP1P1PPP/R1BQ1RK1 w kq - 2 7",
+   "line": [
+    "Bg4"
+   ],
+   "spoken": "The bishop to g4 — but don't rush to give it up for the knight; keep the option of taking on f3 in your pocket for the right moment."
+  },
+  {
+   "ply": 13,
+   "t": 66.5,
+   "fen": "r2qk2r/ppp2ppp/2np1n2/4p3/1bP1P1b1/P1NB1N2/1P1P1PPP/R1BQ1RK1 b kq - 0 7",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 68.5,
+   "fen": "r2qk2r/ppp2ppp/2np1n2/2b1p3/2P1P1b1/P1NB1N2/1P1P1PPP/R1BQ1RK1 w kq - 1 8",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 73.5,
+   "fen": "r2qk2r/ppp2ppp/2np1n2/2bNp3/2P1P1b1/P2B1N2/1P1P1PPP/R1BQ1RK1 b kq - 2 8",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "He plays the knight to d5; and rather than rush our own knight to d4, first get rid of that annoying knight."
+  },
+  {
+   "ply": 16,
+   "t": 95,
+   "fen": "r2qk2r/ppp2ppp/2np4/2bnp3/2P1P1b1/P2B1N2/1P1P1PPP/R1BQ1RK1 w kq - 0 9",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "Take on d5 — then the knight to d4, to shatter his kingside pawn structure."
+  },
+  {
+   "ply": 18,
+   "t": 103.5,
+   "fen": "r2qk2r/ppp2ppp/3p4/2bPp3/3nP1b1/P2B1N2/1P1P1PPP/R1BQ1RK1 w kq - 1 10",
+   "line": [
+    "cxd5",
+    "Nd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 110,
+   "fen": "r2qk2r/ppp2ppp/3p4/2bPp3/3nP1b1/P4N2/1P1PBPPP/R1BQ1RK1 b kq - 2 10",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "Because the f5 idea is so strong, we do the opposite of the normal move — instead of keeping the knight on d4, we take the bishop."
+  },
+  {
+   "ply": 20,
+   "t": 128.5,
+   "fen": "r2qk2r/ppp2ppp/3p4/2bPp3/4P1b1/P4N2/1P1PnPPP/R1BQ1RK1 w kq - 0 11",
+   "line": [
+    "Nxe2+"
+   ],
+   "spoken": "Take the bishop, castle, and ram f5 through — piling as much pressure as possible on the f3 knight."
+  },
+  {
+   "ply": 7,
+   "t": 377,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2P1P3/2N2N2/PP1P1PPP/R1BQKB1R b KQkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 382.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2P1P3/2N2N2/PP1P1PPP/R1BQKB1R w KQkq - 1 5",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 397,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1N3/2P1P3/2N5/PP1P1PPP/R1BQKB1R b KQkq - 0 5",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": "The point of avoiding Bc5: with a knight on c6 and a bishop on c5, White has Nxe5 — the very same trick — which is why the bishop to b4 is considered best.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 398.5,
+   "fen": "r1bqk2r/pppp1ppp/5n2/2b1n3/2PPP3/2N5/PP3PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "Nxe5",
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 405,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/2P1P3/2N2N2/PP1P1PPP/R1BQKB1R w KQkq - 1 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 406.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/4p3/1bP1P3/2NB1N2/PP1P1PPP/R1BQK2R w KQkq - 3 6",
+   "line": [
+    "Bd3",
+    "Bb4"
+   ],
+   "spoken": "So everything follows — the knight to d4, and the judgment call to take the bishop, because f5 needs the pin on the f3 knight kept intact; then open the centre with c6, the king to h8 to unpin, the queen to e7 to connect the rooks, and b5 to stop a4.",
+   "reanchor": true
+  }
+ ]
+}
