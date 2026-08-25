@@ -1,0 +1,337 @@
+{
+ "videoId": "DG-DdQkdP94",
+ "title": "Famous Game Analysis + Live Chess | Moistcr1tikal / Penguinz0",
+ "openingName": "Tarrasch Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:DG-DdQkdP94",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 61,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "spoken": "A famous Rubinstein brilliancy, and it opens quietly — White's d4, and Rubinstein answers d5."
+  },
+  {
+   "ply": 3,
+   "t": 76,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "A queen's-pawn opening — White develops the knight to f3."
+  },
+  {
+   "ply": 4,
+   "t": 79,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3P4/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 3",
+   "line": [
+    "e6"
+   ],
+   "spoken": "Black plays e6, reinforcing the pawn on d5."
+  },
+  {
+   "ply": 5,
+   "t": 85.5,
+   "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3P4/4PN2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "e3"
+   ],
+   "spoken": "White mirrors with e3. The drawback of both e6 and e3 is the same — each shuts in a bishop; conservative, but not bad."
+  },
+  {
+   "ply": 6,
+   "t": 103,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/3P4/4PN2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "c5"
+   ],
+   "spoken": "Black contests the centre with c5."
+  },
+  {
+   "ply": 7,
+   "t": 106.5,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2pp4/2PP4/4PN2/PP3PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "c4"
+   ],
+   "spoken": "White challenges with c4."
+  },
+  {
+   "ply": 8,
+   "t": 115.5,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2pp4/2PP4/4PN2/PP3PPP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The knight to c6."
+  },
+  {
+   "ply": 9,
+   "t": 117,
+   "fen": "r1bqkbnr/pp3ppp/2n1p3/2pp4/2PP4/2N1PN2/PP3PPP/R1BQKB1R b KQkq - 2 5",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "And the knight to c3."
+  },
+  {
+   "ply": 10,
+   "t": 118,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2PP4/2N1PN2/PP3PPP/R1BQKB1R w KQkq - 3 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Now a little box of pawns forms in the centre — it looks tangled, but everything defends everything, so neither side wants to be first to flinch."
+  },
+  {
+   "ply": 11,
+   "t": 133,
+   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2Pp4/2P5/2N1PN2/PP3PPP/R1BQKB1R b KQkq - 0 6",
+   "line": [
+    "dxc5"
+   ],
+   "spoken": "But White flinches — the capture on c5, releasing the tension."
+  },
+  {
+   "ply": 12,
+   "t": 136.5,
+   "fen": "r1bqk2r/pp3ppp/2n1pn2/2bp4/2P5/2N1PN2/PP3PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "Bxc5"
+   ],
+   "spoken": "Rubinstein recaptures, the bishop to c5."
+  },
+  {
+   "ply": 13,
+   "t": 139,
+   "fen": "r1bqk2r/pp3ppp/2n1pn2/2bp4/2P5/P1N1PN2/1P3PPP/R1BQKB1R b KQkq - 0 7",
+   "line": [
+    "a3"
+   ],
+   "spoken": "White plays a3 — preparing something. What is it?"
+  },
+  {
+   "ply": 14,
+   "t": 148.5,
+   "fen": "r1bqk2r/1p3ppp/p1n1pn2/2bp4/2P5/P1N1PN2/1P3PPP/R1BQKB1R w KQkq - 0 8",
+   "line": [
+    "a6"
+   ],
+   "spoken": "The idea is b4 — so Rubinstein slips in a6 first; you will see the point in a moment."
+  },
+  {
+   "ply": 15,
+   "t": 152,
+   "fen": "r1bqk2r/1p3ppp/p1n1pn2/2bp4/1PP5/P1N1PN2/5PPP/R1BQKB1R b KQkq - 0 8",
+   "line": [
+    "b4"
+   ],
+   "spoken": "White expands with b4."
+  },
+  {
+   "ply": 16,
+   "t": 153.5,
+   "fen": "r1bqk2r/1p3ppp/p1nbpn2/3p4/1PP5/P1N1PN2/5PPP/R1BQKB1R w KQkq - 1 9",
+   "line": [
+    "Bd6"
+   ],
+   "spoken": "The bishop drops back to d6 — and here is the point of a6: it discourages White from harassing the knight with b5, because Black would take on b5 and blast open the a-file."
+  },
+  {
+   "ply": 17,
+   "t": 196,
+   "fen": "r1bqk2r/1p3ppp/p1nbpn2/3P4/1P6/P1N1PN2/5PPP/R1BQKB1R b KQkq - 0 9",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": "White takes on d5."
+  },
+  {
+   "ply": 19,
+   "t": 198,
+   "fen": "r1bqk2r/1p3ppp/p1nb1n2/3N4/1P6/P3PN2/5PPP/R1BQKB1R b KQkq - 0 10",
+   "line": [
+    "exd5",
+    "Nxd5"
+   ],
+   "spoken": "After the recapture White grabs on d5 with the knight — so why isn't this just a free pawn?"
+  },
+  {
+   "ply": 20,
+   "t": 230,
+   "fen": "r1bqk2r/1p3ppp/p1nb4/3n4/1P6/P3PN2/5PPP/R1BQKB1R w KQkq - 0 11",
+   "line": [
+    "Nxd5"
+   ],
+   "spoken": "Because the move order is everything. Black takes the knight first, and if White grabs back with the queen, that queen becomes a sitting duck — the check on b4 wins it."
+  },
+  {
+   "ply": 19,
+   "t": 241,
+   "fen": "r1bqk2r/1p3ppp/p1nb1n2/3N4/1P6/P3PN2/5PPP/R1BQKB1R b KQkq - 0 10",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 242.5,
+   "fen": "r1bqk2r/1p3ppp/p1n2n2/3N4/1b6/P3PN2/5PPP/R1BQKB1R w KQkq - 0 11",
+   "line": [
+    "Bxb4+"
+   ],
+   "spoken": "The bishop checks on b4, and next move the queen is snapped off. Take the pawn first, though, and it all falls apart.",
+   "reanchor": true
+  },
+  {
+   "ply": 21,
+   "t": 253,
+   "fen": "r1bqk2r/1p3ppp/p1n2n2/8/1N6/P3PN2/5PPP/R1BQKB1R b KQkq - 0 11",
+   "line": [
+    "Nxb4"
+   ],
+   "spoken": "Because if Black grabs the pawn first, White simply recaptures the bishop — with knight or pawn — and just wins the pawn straight back. Order matters."
+  },
+  {
+   "ply": 20,
+   "t": 255,
+   "fen": "r1bqk2r/1p3ppp/p1n2n2/3N4/1b6/P3PN2/5PPP/R1BQKB1R w KQkq - 0 11",
+   "line": [],
+   "spoken": "So instead White fianchettoes the bishop to b2, Black castles, and the queen comes to d2.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 276,
+   "fen": "r1bqk2r/1p3ppp/p1nbpn2/3p4/1PP5/P1N1PN2/5PPP/R1BQKB1R w KQkq - 1 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 284,
+   "fen": "r1bq1rk1/1p3ppp/p1nbpn2/3p4/1PP5/P1N1PN2/1B1Q1PPP/R3KB1R b KQ - 4 10",
+   "line": [
+    "Bb2",
+    "O-O",
+    "Qd2"
+   ],
+   "spoken": "In fact White never captured on d5 at all — he just left the d-pawn alone and developed: the bishop to b2, castling, the queen to d2.",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 289.5,
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/3p4/1PP5/P1N1PN2/1B1Q1PPP/R3KB1R w KQ - 5 11",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": "Rubinstein plays the queen to e7, connecting the rooks.",
+   "reanchor": true
+  },
+  {
+   "ply": 21,
+   "t": 293,
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/3p4/1PP5/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 6 11",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "White develops the bishop to d3. Now look at Black's light bishop, still back on c8 — can it be developed just as actively as White's, and all by force?",
+   "reanchor": true
+  },
+  {
+   "ply": 22,
+   "t": 319,
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1p1p4/1PP5/P1NBPN2/1B1Q1PPP/R3K2R w KQ - 0 12",
+   "line": [
+    "b5"
+   ],
+   "spoken": "The goal is to get that bishop out to b7 with tempo — but you cannot just fire out b5 first."
+  },
+  {
+   "ply": 23,
+   "t": 321,
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1P1p4/1P6/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 0 12",
+   "line": [
+    "cxb5"
+   ],
+   "spoken": "Because White would simply take the free pawn."
+  },
+  {
+   "ply": 21,
+   "t": 323.5,
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/3p4/1PP5/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 6 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 366,
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/8/1Pp5/P1NBPN2/1B1Q1PPP/R3K2R w KQ - 0 12",
+   "line": [
+    "dxc4"
+   ],
+   "spoken": "So first Black takes on c4, luring the bishop out — don't be so reluctant to trade in order to get things done.",
+   "reanchor": true
+  },
+  {
+   "ply": 23,
+   "t": 368.5,
+   "fen": "r1b2rk1/1p2qppp/p1nbpn2/8/1PB5/P1N1PN2/1B1Q1PPP/R3K2R b KQ - 0 12",
+   "line": [
+    "Bxc4"
+   ],
+   "spoken": "The bishop recaptures on c4...",
+   "reanchor": true
+  },
+  {
+   "ply": 24,
+   "t": 369.5,
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1p6/1PB5/P1N1PN2/1B1Q1PPP/R3K2R w KQ - 0 13",
+   "line": [
+    "b5"
+   ],
+   "spoken": "...and NOW b5, hitting the bishop."
+  },
+  {
+   "ply": 25,
+   "t": 374.5,
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1p6/1P6/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 1 13",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "White has to waste a move retreating the bishop to d3."
+  },
+  {
+   "ply": 26,
+   "t": 377.5,
+   "fen": "r4rk1/1b2qppp/p1nbpn2/1p6/1P6/P1NBPN2/1B1Q1PPP/R3K2R w KQ - 2 14",
+   "line": [
+    "Bb7"
+   ],
+   "spoken": "And the bishop swings out to b7 — developed actively and with tempo, reaching a near-symmetrical position but with Black a step ahead."
+  },
+  {
+   "ply": 25,
+   "t": 383,
+   "fen": "r1b2rk1/4qppp/p1nbpn2/1p6/1P6/P1NBPN2/1B1Q1PPP/R3K2R b KQ - 1 13",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 403,
+   "fen": "r1br2k1/4qppp/p1nbpn2/1p6/1P6/P1NBPN2/1B1Q1PPP/R3K2R w KQ - 2 14",
+   "line": [
+    "Rd8"
+   ],
+   "spoken": "One small drawback remains — that white queen sitting on d2. Can we make it uncomfortable? Yes: a rook to d8 pins the bishop against it down the open file, and parking the queen on d2 turns out to be a real mistake. It sets up the Greek-gift idea too — both bishops x-ray White's king — but first the knight must step out, to e5 offering a trade, to clear the way for the sacrifice.",
+   "reanchor": true
+  }
+ ]
+}
