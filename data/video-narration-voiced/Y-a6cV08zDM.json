@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "Let's play e5 — old-school, classical chess."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -42,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 — the Scotch."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": "We take the pawn, and now White has a choice; the bishop to c4 is the Scotch Gambit."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -60,7 +60,8 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The Scotch Gambit. A key practical point: when you sense your opponent is entering a line you don't know and fear getting crushed in the main theory, a quiet move that accepts a slightly worse but solid position keeps you on the board. The principled tries are the knight to f6, meeting e5 with d5, or the bishop to c5."
+   "spoken": "A practical lesson: when you sense the opponent is steering into a line they know and you don't, you can sidestep the sharpest theory with a quiet move, accepting a slightly worse position in exchange for not being blown off the board. The principled tries here are the knight to f6 or clinging to the pawn with a bishop to c5.",
+   "kind": "plan"
   },
   {
    "ply": 8,
@@ -69,7 +70,8 @@
    "line": [
     "Be7"
    ],
-   "spoken": "We'll go super solid, even if a touch passive — the bishop to e7, also stopping the knight from coming to g5."
+   "spoken": "So opt for solid, even slightly passive chess — the bishop to e7, which also rules out an annoying knight lunge and lets development finish in peace.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -78,7 +80,8 @@
    "line": [
     "c3"
    ],
-   "spoken": "The natural dxc3 is a blunder — a famous trap. Qd5 threatens mate on f7, and the only defence, the knight to h6, just drops the knight. So we can't take."
+   "spoken": "Here's a famous trap to know: grabbing the offered pawn is a blunder, because a queen leap to d5 threatens mate on f7 with no good defence — the only try drops a piece. So the pawn can't be taken, which leaves the standard menu of choices: ignore, accept, hand the pawn back on your own terms, or, failing all else, resign.",
+   "kind": "tactic"
   },
   {
    "ply": 10,
@@ -87,7 +90,8 @@
    "line": [
     "d3"
    ],
-   "spoken": "Instead, hand the pawn back on our own terms — d3, denying White a dominant centre."
+   "spoken": "The choice here is to give the pawn back on favourable terms — a modest d3, denying the opponent a dominant pawn centre by forcing the capture rather than letting them build.",
+   "kind": "plan"
   },
   {
    "ply": 11,
@@ -96,7 +100,8 @@
    "line": [
     "Qb3"
    ],
-   "spoken": "He has the strong Qb3, coming after f7 — and that pawn is impossible to defend."
+   "spoken": "The queen sortie to b3 is genuinely nasty, because the target pawn simply can't be held. The known antidote is a knight to a5, prising the queen away from the defence of the bishop and untangling by concrete means.",
+   "kind": "tactic"
   },
   {
    "ply": 12,
@@ -105,7 +110,7 @@
    "line": [
     "Na5"
    ],
-   "spoken": "The knight to a5 is the standard idea, deflecting the queen from its target."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -124,7 +129,8 @@
    "line": [
     "Qd5"
    ],
-   "spoken": "White keeps the queen on the bishop's diagonal with Qd5 — but I think it's a mistake."
+   "spoken": "The tempting queen move to d5, keeping it lined up with the bishop, is actually a mistake — a pawn to c6 both attacks the queen and defends the knight in one move, and the queen is driven off with tempo. One move answering two threats.",
+   "kind": "tactic"
   },
   {
    "ply": 16,
@@ -133,7 +139,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "c6 attacks the queen and defends the knight in one move."
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -142,7 +148,8 @@
    "line": [
     "Qf5"
    ],
-   "spoken": "He finds Qf5, threatening a discovered check — and we have two defences: the knight to f6, or the bishop."
+   "spoken": "Even after a surprise resource, don't hit the panic button — just identify the real issue. The danger is a discovered check, and a knight to f6 interposes between the queen and bishop, which is cleaner than the bishop block that would allow a capture.",
+   "kind": "tactic"
   },
   {
    "ply": 18,
@@ -151,7 +158,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "The knight to f6 intercepts between the queen and the bishop; the bishop to f6 would be worse, since the knight could be taken."
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -160,7 +167,8 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "Ng5, defending the bishop — but development is still the priority."
+   "spoken": "Development stays the priority. When the knight lunges in defending the bishop, stay logical — but before kicking it, do the discipline: look for the opponent's checks and rule out any weird mating sequence. Only once it's confirmed safe do you proceed.",
+   "kind": "plan"
   },
   {
    "ply": 20,
@@ -169,7 +177,7 @@
    "line": [
     "h6"
    ],
-   "spoken": "h6 — and first, carefully check for any mate. There is none."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -178,7 +186,8 @@
    "line": [
     "e5"
    ],
-   "spoken": "Very concrete Russian-school chess — e5, counterattacking the knight."
+   "spoken": "The concrete central push counterattacks the knight — and it simplifies the position rather than complicating it, because the reply is forced: capture the knight, then recapture, with no room to do things any other way.",
+   "kind": "tactic"
   },
   {
    "ply": 22,
@@ -187,7 +196,7 @@
    "line": [
     "hxg5"
    ],
-   "spoken": "Our hand is forced: the knight must come off."
+   "spoken": ""
   },
   {
    "ply": 23,
@@ -205,7 +214,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": "The tactical skirmish is settling, and Black should emerge on top."
+   "spoken": ""
   },
   {
    "ply": 25,
@@ -214,7 +223,8 @@
    "line": [
     "Bg6"
    ],
-   "spoken": "A little room to breathe — but we must pounce before he finishes developing."
+   "spoken": "Now spot the standing feature — the opponent still hasn't castled. A queen check on e7 probes to see the reaction, and the whole plan revolves around exploiting that stranded king before it finds shelter.",
+   "kind": "plan"
   },
   {
    "ply": 26,
@@ -223,7 +233,7 @@
    "line": [
     "Qe7+"
    ],
-   "spoken": "He hasn't castled — so the check on e7 probes his setup; if the bishop blocks, the knight jumps to c4."
+   "spoken": ""
   },
   {
    "ply": 27,
@@ -241,7 +251,8 @@
    "line": [
     "Nc4"
    ],
-   "spoken": "The knight to c4 activates — and he can't pin the queen, because that bishop is itself pinned."
+   "spoken": "A knight to c4 barges in, and the reason it can't simply be pinned against the king is that the pinning bishop is itself pinned. Slowly the initiative changes hands.",
+   "kind": "tactic"
   },
   {
    "ply": 29,
@@ -250,7 +261,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "He castles, but he is going to have to take on d3."
+   "spoken": ""
   },
   {
    "ply": 30,
@@ -259,7 +270,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "d5 activates the bishop and forces the recapture."
+   "spoken": ""
   },
   {
    "ply": 31,
@@ -268,7 +279,7 @@
    "line": [
     "Qf3"
    ],
-   "spoken": "Essentially forcing him to take the pawn — and here he blunders."
+   "spoken": ""
   },
   {
    "ply": 32,
@@ -277,7 +288,8 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "The queen and bishop stand a knight's move apart, so Ne5 forks them."
+   "spoken": "Here's the shot to see — the enemy bishop and queen sit a knight's move apart, so a knight to e5 forks the pair. Whenever two pieces stand a knight's-distance apart, the fork should light up.",
+   "kind": "tactic"
   },
   {
    "ply": 34,
@@ -287,7 +299,8 @@
     "Qd1",
     "Nxg6"
    ],
-   "spoken": ""
+   "spoken": "A recurring truth about strong lower-rated opponents: they're excellent in the opening and rattle off good tactical moves, but keep your composure and they'll lose theirs first. Sometimes winning is just outlasting them in the calculation.",
+   "kind": "plan"
   },
   {
    "ply": 35,
@@ -296,7 +309,7 @@
    "line": [
     "Qxd3"
    ],
-   "spoken": "A piece up now — time to convert cleanly."
+   "spoken": ""
   },
   {
    "ply": 36,
@@ -305,7 +318,8 @@
    "line": [
     "Qe5"
    ],
-   "spoken": "Qe5 induces a weakness, h3 or g3, and leans on the open e-file. A great example of not needing a pawn storm when the file is already handed to you."
+   "spoken": "A queen to e5 induces a weakening pawn move in front of the king — and this is a lovely example of not needing a pawn storm. The open file has already been handed over, so pushing pawns would be counterproductive; the attack flows down the file as it is.",
+   "kind": "plan"
   },
   {
    "ply": 37,
@@ -323,7 +337,7 @@
    "line": [
     "Nxf4"
    ],
-   "spoken": "Take with the knight, forcing another trade and getting rid of his bishop."
+   "spoken": ""
   },
   {
    "ply": 39,
@@ -341,7 +355,7 @@
    "line": [
     "gxf4"
    ],
-   "spoken": "A clean piece up."
+   "spoken": ""
   },
   {
    "ply": 41,
@@ -359,7 +373,8 @@
    "line": [
     "Qe3+"
    ],
-   "spoken": "It's lame, but with the clock in mind, steer into the queen trade."
+   "spoken": "Offer the queen trade — it may feel tame, but when you can play fast and accurately in the resulting endgame, simplifying into a won ending is exactly the right practical choice.",
+   "kind": "plan"
   },
   {
    "ply": 44,
@@ -378,7 +393,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Priorities now: develop, and defend that pawn."
+   "spoken": ""
   },
   {
    "ply": 46,
@@ -387,7 +402,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "The bishop to g4 has a drawback — but there's a concrete follow-up, so play it anyway."
+   "spoken": ""
   },
   {
    "ply": 47,
@@ -405,7 +420,7 @@
    "line": [
     "e2"
    ],
-   "spoken": "We strike first — the pawn to e2, attacking the rook."
+   "spoken": ""
   },
   {
    "ply": 50,
@@ -415,7 +430,7 @@
     "Nxg4",
     "exf1=N"
    ],
-   "spoken": "He takes on g4, and we're up a rook."
+   "spoken": ""
   },
   {
    "ply": 51,
@@ -433,7 +448,8 @@
    "line": [
     "Ke7"
    ],
-   "spoken": "King to e7, defending the bishop. The winning plan: create a passed pawn with c5 and d4, centralise the rooks, and stay alert for knight forks the whole way."
+   "spoken": "Converting the ending is a matter of order: centralise the king, bring the rooks to the open files, and identify the wing where a passed pawn can be made — that passer is ultimately what wins. Keep one eye always on knight forks, and the finish is a rook lift that dislodges the blockading knight so the pawn can promote.",
+   "kind": "plan"
   },
   {
    "ply": 3,
@@ -460,7 +476,8 @@
     "exd4",
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "A practical detour on suspicion of cheating: don't assume it after every clean loss — take the game to the engine. Accuracy only means much in longer games, and even a high score isn't proof, since strong cheaters often avoid the top move, picking the second or third to disguise it, and may toss in a deliberate mistake. Time spent per move and the opponent's game history tell you more; if a real case emerges, report it in good faith and let it be investigated.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -495,7 +512,7 @@
     "e5",
     "d5"
    ],
-   "spoken": "The main move is the knight to f6; after e5 and d5 you reach the main-line theory of the Scotch Gambit — a dangerous, easy-to-learn weapon for White.",
+   "spoken": "For the theory record: the knight to f6 is the main move, and after the pawn is chased and struck with d5 you reach the heart of the Scotch Gambit — a genuinely dangerous weapon that troubles players right up to master level. The bishop to c5 is the other principled path.",
    "reanchor": true
   },
   {
@@ -567,7 +584,8 @@
    "line": [
     "Qd5"
    ],
-   "spoken": "Against the bishop to c5, White plays c3, and after dxc3 there's a famous misconception that Qd5 wins a piece.",
+   "spoken": "A subtle defensive idea worth naming: there's a common misconception that the queen leap wins a piece by fork — but forks must always be checked against a move that guards both threatened pieces at once. That's a defensive fork: instead of attacking two things, you defend two things in a single move, and it neutralises the whole idea.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -577,8 +595,7 @@
    "line": [
     "Qe7"
    ],
-   "spoken": "But forks must be checked against a move that defends both targets at once — here Qe7 is a 'defensive fork', guarding both threatened pieces in a single move.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -619,8 +636,7 @@
     "d6",
     "Qxc3"
    ],
-   "spoken": "And if White switches the move order — the bishop takes on f7 first, then the check on d5 — he doesn't win a piece, but the material equalises and Black's king is left permanently exposed.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -658,8 +674,7 @@
     "Nh6",
     "Bxh6"
    ],
-   "spoken": "The point of the bishop sitting on e7 instead of c5: the queen has no escape, so the knight to h6 is met by taking on h6, and Black is simply losing.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -754,8 +769,7 @@
     "b6",
     "Qa4"
    ],
-   "spoken": "Remember, defending this way, you needn't keep the queen on the diagonal — you can shift it aside and hit an undefended piece, saving the bishop and keeping material level.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -823,8 +837,7 @@
    "line": [
     "Bxg6+"
    ],
-   "spoken": "If g6, then the bishop takes on g6 with check and Black is busted.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -849,8 +862,7 @@
    "line": [
     "Be6+"
    ],
-   "spoken": "And if d5 attacks the queen, the bishop just steps back to e6 — this queen is amazingly well protected.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -866,8 +878,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "So instead of attacking the queen, we intercept the mechanism by bringing the knight out to f6.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -1088,8 +1099,7 @@
    "line": [
     "Qe4"
    ],
-   "spoken": "Qe4 would be a brilliant move for a 1500 — it forces the queen trade, and it avoids the tempting alternative. That is part of what makes a move brilliant: you saw the tempting line and understood why the deeper move was better.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 31,
@@ -1099,8 +1109,7 @@
     "Qd6",
     "Qe8#"
    ],
-   "spoken": "Black has no choice — declining the trade walks straight into mate.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 29,
@@ -1319,8 +1328,7 @@
    "line": [
     "Qe5"
    ],
-   "spoken": "Qe5 threatens mate, and if he defends, the bishop to f5 traps the queen — the mate threat becomes the vehicle for the tactic.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 39,
@@ -1355,8 +1363,7 @@
     "g3",
     "Bf5"
    ],
-   "spoken": "That's the concept: threatening checkmate and using the threat to set up a second tactic, like a queen trap — don't fall into tunnel vision aiming at only one idea.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 37,
