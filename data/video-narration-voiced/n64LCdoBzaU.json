@@ -1,7 +1,7 @@
 {
  "videoId": "n64LCdoBzaU",
  "title": "Grandmaster Naroditsky | Chess Speedrun | 2250",
- "openingName": "London System",
+ "openingName": "Jobava London System",
  "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -34,7 +34,7 @@
     "d5",
     "Bf4"
    ],
-   "spoken": "The Jobava London — the knight to c3 and the bishop to f4; let me run you through its main ideas."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -52,7 +52,8 @@
    "line": [
     "e3"
    ],
-   "spoken": "Support the d4-pawn with e3, and don't take on c5."
+   "spoken": "The modest pawn to e3 braces the centre — and crucially, don't capture on c5. Holding the tension is part of the Jobava's venom.",
+   "kind": "plan"
   },
   {
    "ply": 8,
@@ -61,7 +62,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "The knight to c6 is already a very big mistake."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -70,7 +71,8 @@
    "line": [
     "Nb5"
    ],
-   "spoken": "The knight to b5 — one of the appeals of the Jobava: good players fall right into this. There's no good defence against the fork on c7."
+   "spoken": "And the trap springs — a knight to b5, with the threat of a fork on c7 that has no good answer short of an awkward king move. This is exactly why the Jobava is so appealing: strong players walk right into it.",
+   "kind": "tactic"
   },
   {
    "ply": 10,
@@ -97,7 +99,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "He finds the best reply, a6, counterattacking the knight — and we avoid exf6, which runs into b5 and the check on a5, winning the bishop."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -106,7 +108,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Keep it simple — the knight back to c3; the d5 pawn is weak, and now we attack his knight too."
+   "spoken": "When the opponent counterattacks the knight, don't overthink it — the simplest path is to note that the d-pawn is weak and just retreat the knight to c3, hitting the enemy knight. If it moves, the pawn falls, and the opponent is left two pawns down.",
+   "kind": "plan"
   },
   {
    "ply": 14,
@@ -150,7 +153,7 @@
     "dxc3",
     "Qxd8+"
    ],
-   "spoken": "Just take the queen."
+   "spoken": ""
   },
   {
    "ply": 18,
@@ -168,7 +171,8 @@
    "line": [
     "O-O-O+"
    ],
-   "spoken": "Develop with tempo — castle long, with check."
+   "spoken": "After the queens come off, don't rush — develop with tempo. Castling long with check is the classic device, gaining a free move while the king tucks away and leaving a full, healthy extra pawn for the endgame.",
+   "kind": "plan"
   },
   {
    "ply": 20,
@@ -186,7 +190,8 @@
    "line": [
     "bxc3"
    ],
-   "spoken": ""
+   "spoken": "Choose the recapture that doesn't help the opponent — taking toward the centre would only assist their development. Never do your opponent's work for them; keep their pieces cramped.",
+   "kind": "plan"
   },
   {
    "ply": 20,
@@ -203,7 +208,7 @@
     "bxc3",
     "gxf6"
    ],
-   "spoken": "We avoided taking toward g6, which would only help him develop — now it's a simple endgame, a clean pawn up."
+   "spoken": ""
   },
   {
    "ply": 23,
@@ -212,7 +217,8 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "His c8-bishop wants to reach e6 and target the a2-pawn — so start with the bishop to c4."
+   "spoken": "Now read the opponent's intentions — the light-squared bishop wants to reach e6 and target the sensitive a2 pawn. Pre-empt it by developing the bishop to c4, so a clever answer is ready if the bishop comes out.",
+   "kind": "plan"
   },
   {
    "ply": 24,
@@ -230,7 +236,8 @@
    "line": [
     "Bd5"
    ],
-   "spoken": "Don't take his bishop — it would fix his structure. The bishop to d5 instead, and if he attacks it, support it with a pawn."
+   "spoken": "Don't capture the bishop, which would only mend the opponent's pawn structure — the right idea is to meet it centrally on d5, supported by a pawn if it's attacked. The awkward-looking retreat would trap the bishop, so it's the right concept but the wrong execution.",
+   "kind": "plan"
   },
   {
    "ply": 26,
@@ -248,7 +255,8 @@
    "line": [
     "g3"
    ],
-   "spoken": "Defend with g3 — he can't attack this bishop, so it being boxed in is no problem at all."
+   "spoken": "Defend the deep bishop with a modest pawn move — it looks ungainly, but the point is that the bishop simply cannot be attacked, so its apparent entombment is no problem at all. A piece that can't be challenged is safe wherever it sits.",
+   "kind": "plan"
   },
   {
    "ply": 28,
@@ -266,7 +274,8 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "A candid lesson from a slip — advancing the c-pawn without understanding which squares it surrenders lets the enemy knight jump to an annoying post. Practise what you preach: weigh the holes before you push.",
+   "kind": "plan"
   },
   {
    "ply": 30,
@@ -284,7 +293,8 @@
    "line": [
     "e4"
    ],
-   "spoken": "Preserving the bishop matters more than the pawn — so e4; we give up the pawn but keep a monster bishop."
+   "spoken": "The priority when the bishop is attacked is to preserve it, not the pawn — because moving it would allow a knight check that pries the king away from the rook. So push in the centre, conceding the pawn but keeping the monster bishop, which is worth far more.",
+   "kind": "tactic"
   },
   {
    "ply": 34,
@@ -313,7 +323,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "The discipline that would have avoided the mistake: every single time you move a pawn, spend a few seconds asking which squares you've just given up and whether the opponent can occupy them. At this level that habit is what separates good moves from careless ones.",
+   "kind": "plan"
   },
   {
    "ply": 37,
@@ -322,7 +333,8 @@
    "line": [
     "Rd3"
    ],
-   "spoken": "The classic plan on an open file — double the rooks on the d-file."
+   "spoken": "Now a plan — the action is all on the d-file, so the classic way to press an open file is to double the rooks on it. Stack the heavy pieces where the play is.",
+   "kind": "plan"
   },
   {
    "ply": 38,
@@ -342,7 +354,8 @@
     "fxe5",
     "Rhd1"
    ],
-   "spoken": "Take the knight — look how lame his bishop is, just staring at its own pawns; we double up and win a tempo."
+   "spoken": "Should the knight be taken? Yes — and don't say no just because the question is posed. Look how lame the opponent's bishop becomes, staring blankly into its own pawns, while the capture wins a tempo and lets the rooks double. Sometimes the obvious trade is simply best.",
+   "kind": "plan"
   },
   {
    "ply": 42,
@@ -378,7 +391,8 @@
    "line": [
     "h4"
    ],
-   "spoken": "h4, depriving the bishop of the g5 square — and preparing to bring the king to c1."
+   "spoken": "A useful pawn move to h4, depriving the enemy bishop of a square and preparing to activate the king. In an endgame the king is a fighting piece — the plan is to bring it toward the centre, not to hide it on the edge.",
+   "kind": "plan"
   },
   {
    "ply": 44,
@@ -412,7 +426,7 @@
    "line": [
     "Kc1"
    ],
-   "spoken": "The king to c1 — keep it active; in an endgame you don't want to shove the king to the edge."
+   "spoken": ""
   },
   {
    "ply": 48,
@@ -430,7 +444,8 @@
    "line": [
     "R1d2"
    ],
-   "spoken": ""
+   "spoken": "The natural pawn move would rebound — it lets the bishop retreat and suddenly a pawn goes weak and gets won. Resist the reactionary reply and instead block calmly with the rook, gaining a tempo. Learning to make these unintuitive prophylactic moves is exactly what many players struggle with.",
+   "kind": "plan"
   },
   {
    "ply": 50,
@@ -448,7 +463,7 @@
    "line": [
     "Na4"
    ],
-   "spoken": "Attack another weakness — the knight to a4."
+   "spoken": ""
   },
   {
    "ply": 52,
@@ -466,7 +481,8 @@
    "line": [
     "Rb3"
    ],
-   "spoken": "The rooks have done their job — the rook to b3, preparing to sink the knight into b6."
+   "spoken": "The rooks have done their job on the file, so switch gears — reroute the knight, preparing to sink it into a dominating outpost on b6. When one plan has run its course, find the next piece to improve.",
+   "kind": "plan"
   },
   {
    "ply": 54,
@@ -504,7 +520,7 @@
    "line": [
     "Rb8+"
    ],
-   "spoken": "Give a check."
+   "spoken": ""
   },
   {
    "ply": 60,
@@ -522,7 +538,7 @@
    "line": [
     "Nxc5"
    ],
-   "spoken": "Now that the bishop has left e7, we simply take the pawn."
+   "spoken": ""
   },
   {
    "ply": 62,
@@ -558,7 +574,7 @@
    "line": [
     "Bxf7+"
    ],
-   "spoken": "Take on f7 — three pawns up."
+   "spoken": ""
   },
   {
    "ply": 66,
@@ -594,7 +610,7 @@
    "line": [
     "Ne6+"
    ],
-   "spoken": "An intermediate check first — the knight to e6."
+   "spoken": ""
   },
   {
    "ply": 70,
@@ -662,7 +678,7 @@
     "Kh8",
     "Bxe8"
    ],
-   "spoken": "And take the bishop — the game is won."
+   "spoken": ""
   },
   {
    "ply": 78,
