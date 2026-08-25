@@ -1,7 +1,7 @@
 {
  "videoId": "SV-y9Ai7QkA",
  "title": "Expanding Early on the Queenside | Sicilian | The Sensei Speedrun | GM Naroditsky",
- "openingName": "Sicilian Defense",
+ "openingName": "Sicilian Defence",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "The Sicilian — in the mood for a combative game."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "The knight to c3 — the jumping-off point for the Grand Prix, but also a tricky move order: White can develop the other knight and transpose to an Open Sicilian with d4."
+   "spoken": "The knight to c3 is a springboard into many systems — you'll know it as the Grand Prix introduction, but it's also a sly move order, because next move the other knight can come out and transpose straight back into an Open Sicilian. So how you answer it depends entirely on which Sicilian you play."
   },
   {
    "ply": 4,
@@ -33,7 +33,8 @@
    "line": [
     "a6"
    ],
-   "spoken": "How you meet the knight to c3 depends on your Sicilian. The long-time favourite here is the early a6 — underrated, and a fine way to combat the Grand Prix and the Closed Sicilian."
+   "spoken": "The underrated reply is an early a6 — most reach for a knight or a central pawn, but a6 makes wonderful sense for a Najdorf player and is a fine way to meet the Closed Sicilian and the Grand Prix alike.",
+   "kind": "plan"
   },
   {
    "ply": 5,
@@ -51,7 +52,8 @@
    "line": [
     "b5"
    ],
-   "spoken": "The point: an early b5, expanding on the queenside quickly."
+   "spoken": "The whole point of a6 is a quick b5 — grabbing queenside space early and, just as importantly, handing the light-squared bishop a natural home on the long diagonal.",
+   "kind": "plan"
   },
   {
    "ply": 7,
@@ -69,7 +71,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": "The bishop to b7, fianchettoed."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -78,7 +80,8 @@
    "line": [
     "Bg2"
    ],
-   "spoken": "Now a setup taught long ago: the pawns to d6 and e6, a Scheveningen-like structure controlling key central squares — passive-looking, but the heart of the Sicilian. You can start with the knight to f6, unafraid of e5 since the bishop on g2 would hang."
+   "spoken": "Now the classic Sicilian setup: the central pawns settle on d6 and e6, a Scheveningen-style shell that controls a cluster of key squares. It looks passive but it's the heart and soul of the opening — and the knight can come out to f6 without fear, since the central break just runs into a loose bishop.",
+   "kind": "plan"
   },
   {
    "ply": 10,
@@ -87,7 +90,8 @@
    "line": [
     "d6"
    ],
-   "spoken": "Start with d6 — flexible, and it opens a future home on d7 for the other knight."
+   "spoken": "d6 gives maximum flexibility and, crucially, opens a d7 square for the other knight — in these structures it belongs there rather than on c6, where it would clumsily block the fianchettoed bishop.",
+   "kind": "plan"
   },
   {
    "ply": 11,
@@ -96,7 +100,7 @@
    "line": [
     "d3"
    ],
-   "spoken": "The knight often goes to d7 rather than c6, since c6 would block the bishop awkwardly."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -105,7 +109,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "Then e6 — you can see why the pawns sit on d6 and e6: they control the centre and give the kingside pieces room."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -123,7 +127,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Now development begins — the knight to f6."
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -141,7 +145,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "The bishop to e7, preparing to castle."
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -150,7 +154,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": "White castles, and the queen to c7 is well-timed — it connects the rooks, and once the knight reaches d7, both it and the queen control e5, blunting White's e5 break."
+   "spoken": "This is the moment for the queen to c7, and it's played for layered reasons: it connects the rooks, and paired with the knight on d7 it double-guards e5 — smothering the central break that would otherwise be so dangerous. It's simply a better home than the back rank.",
+   "kind": "plan"
   },
   {
    "ply": 18,
@@ -159,7 +164,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "The knight to d7 — a developing move first is more flexible than the queen move."
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -177,7 +182,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "White prepares g4 with h3; Black plays the queen to c7."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -186,7 +191,8 @@
    "line": [
     "Ne2"
    ],
-   "spoken": "This resembles a Hedgehog. Now, which way to castle? Long is very risky — those queenside pawns become hooks White can use to prise open files — so kingside is safer, though not mandatory."
+   "spoken": "You'll feel the kinship with a hedgehog or hippo here — the d6-and-e6 pawns give that flavour, though it's really its own animal. And a castling caution: going long is risky, since those queenside pawns are hooks the opponent can lever open; short is safer, though long is never off the table.",
+   "kind": "plan"
   },
   {
    "ply": 22,
@@ -195,7 +201,8 @@
    "line": [
     "h5"
    ],
-   "spoken": "A risky, annoying move — h5, stopping g4 and keeping the king in the centre for now."
+   "spoken": "A deliberately provocative move — h5 to stop the kingside pawn expansion, keeping the king parked in the centre for now. It's risky, but the aim is to be as annoying as possible and see how the opponent reacts.",
+   "kind": "plan"
   },
   {
    "ply": 23,
@@ -213,7 +220,7 @@
    "line": [
     "b4"
    ],
-   "spoken": "White's a4 is premature; Black answers b4, keeping the queenside closed."
+   "spoken": ""
   },
   {
    "ply": 25,
@@ -222,7 +229,8 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "When the opponent props the centre with c3, the thing to notice is that it has quietly weakened d3. And here's the key insight — you don't only attack a weak pawn with pieces, you undermine it with your own pawns. That points toward a c-pawn thrust to c4.",
+   "kind": "plan"
   },
   {
    "ply": 26,
@@ -231,7 +239,8 @@
    "line": [
     "bxc3"
    ],
-   "spoken": ""
+   "spoken": "But capture on c3 first — playing the thrust immediately would leave the advanced b-pawn hanging. A small preparatory recapture, and then the undermining pawn goes in with a clear conscience.",
+   "kind": "plan"
   },
   {
    "ply": 27,
@@ -249,7 +258,8 @@
    "line": [
     "c4"
    ],
-   "spoken": "c3 invites c4 in reply — and White is already in some trouble."
+   "spoken": "Now the pawn arrives and the centre creaks. See how the minor pieces suddenly make sense — the queen guards the pawn, the bishop and knight both rake e4, and where they were biting on granite before, d3 is now a glaring weakness. That's the danger of shrinking your own pawn chain: the fewer links, the easier it is to undermine.",
+   "kind": "plan"
   },
   {
    "ply": 29,
@@ -267,7 +277,8 @@
    "line": [
     "Nc5"
    ],
-   "spoken": "The knight to c5 — don't play it on autopilot, but here it piles on pressure and cuts White's targets from two to one."
+   "spoken": "Don't snatch the weak pawn on reflex — the move is a knight to c5, bringing a piece into the attack and piling on d3, now genuinely threatening the capture. If the pawn advances to dodge, the central capture on e4 forces matters.",
+   "kind": "tactic"
   },
   {
    "ply": 29,
@@ -283,7 +294,9 @@
    "line": [
     "Nc5"
    ],
-   "spoken": ""
+   "spoken": "The reason not to grab first is patience: taking immediately lets the queen into the game, and the tempting knight jump attacking it just shoos it to safety, cutting your targets from two down to one. Leave the tension, keep both weaknesses, and let the opponent stew in the ultimatum.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -292,7 +305,8 @@
    "line": [
     "e5"
    ],
-   "spoken": "e5, and after the bishop trade on g2 there is nothing left to worry about with the bishops."
+   "spoken": "And a permission worth hearing: you're allowed not to castle at all. When the centre is closed and both wings look dangerous, keeping the king in the middle can be the lesser evil — the only real cost is that the rooks stay disconnected, which is rarely mission-critical.",
+   "kind": "plan"
   },
   {
    "ply": 32,
@@ -301,7 +315,8 @@
    "line": [
     "Bxg2"
    ],
-   "spoken": ""
+   "spoken": "The centre bursts open, and now it's pure order of operations. Trade on g2 first — that eliminates the bishop headache, and if the opponent grabs the knight the rook is simply captured with an extra exchange in hand. Clear the simplest question before weighing the harder one.",
+   "kind": "tactic"
   },
   {
    "ply": 33,
@@ -328,7 +343,8 @@
    "line": [
     "exf6"
    ],
-   "spoken": "After the recaptures Black stays up a pawn, and the g-file swings open."
+   "spoken": "Of the remaining captures, the pawn recapture keeps the centre intact and stays a pawn up, and the pawn mass shields the king while the opponent's own shelter is far more exposed with the g-file about to open.",
+   "kind": "plan"
   },
   {
    "ply": 36,
@@ -337,7 +353,8 @@
    "line": [
     "dxe2"
    ],
-   "spoken": ""
+   "spoken": "Recapturing toward the centre with the pawn is counter-intuitive but correct — in the Sicilian, keeping pawns pristine is rarely the priority. Shifting a pawn onto the f-file actually improves the structure: more pawns mean a safer king, it pries open the g-file as a direct road to the enemy king, and the front doubled pawn becomes a free battering ram to push while the one behind guards home. And it sets up the e4 outpost, the crown of the whole plan.",
+   "kind": "plan"
   },
   {
    "ply": 40,
@@ -349,7 +366,7 @@
     "Qd5",
     "f5"
    ],
-   "spoken": "Black can chase the knight away with f5."
+   "spoken": ""
   },
   {
    "ply": 44,
@@ -400,7 +417,7 @@
     "Ng5",
     "Rg8"
    ],
-   "spoken": "White is losing — Black has so many strong continuations here."
+   "spoken": ""
   },
   {
    "ply": 52,
@@ -421,7 +438,7 @@
    "line": [
     "fxg5"
    ],
-   "spoken": "This is already essentially resignable."
+   "spoken": ""
   },
   {
    "ply": 54,
@@ -448,7 +465,8 @@
    "line": [
     "d5"
    ],
-   "spoken": "Careful — the king is not fully safe — but d5 is strong, stronger than the immediate h4."
+   "spoken": "The pawn to d5 does three jobs at once — it cements the monster knight, springs the queen to life, and adds a third attacker to the target. And once you're this far ahead, remember the value of simplification: trading eliminates calculation, and don't fret about conceding a passed rook-pawn — it's a marathon from promotion while the centre steamrolls. In the technical phase, a pawn can even be used to cut the enemy bishop off a key square near the queening line.",
+   "kind": "plan"
   },
   {
    "ply": 4,
@@ -488,8 +506,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "With d4 this becomes the Open Sicilian, White's main line.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -509,7 +526,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "A map every Sicilian player needs: from the standard tabiya there are four great highways — the Najdorf with a6, the Classical or Rauzer with the knight to c6, the Dragon with g6, and the Kan or Scheveningen family with e6. Which one you drive determines your whole answer to the early knight to c3.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -518,8 +536,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "There are four major Sicilians here: the Najdorf with a6, the Classical with the knight to c6, the Dragon with g6, and the Scheveningen with e6.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -599,7 +616,9 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "One tempting move to avoid: the immediate e5 is bad, because a bishop check on b5 exploits the hole it leaves. That's the very reason a6 comes first — it prepares e5 while taking the b5 square away from that annoying check.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -608,8 +627,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "There is also the bishop to d7, and the Kalashnikov with e5 — but e5 is met by the check on b5. That is exactly why you play a6: to prepare e5 and take away b5.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -641,7 +659,8 @@
    "line": [
     "g4"
    ],
-   "spoken": "The Kalashnikov fell from fashion thanks to Keres and his g4 attack — dangerous for Black.",
+   "spoken": "Why did the pure Scheveningen fall from fashion? Because of the sharp pawn storm with g4 — a genuinely dangerous plan that puts the defender under real pressure. Keeping the e-pawn back a step delays that thrust, which is part of the appeal of the flexible move order.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -697,8 +716,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "The snag of meeting the knight to c3 with e6 as a Najdorf player: White can play the knight to f3 and d4, reaching a Scheveningen — not a Najdorf, since the a-pawn hasn't moved.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -714,8 +732,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "The fix is to play d6 here — so if White plays the knight to f3, you play the knight to f6 and you are chilling.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -779,8 +796,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "Sveshnikov and Accelerated Dragon players meet it with the knight to c6, then g6 for the Accelerated.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -812,8 +828,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "It is like three freeway exits — you take one depending on which Sicilian you play.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -900,8 +915,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "a6 suits Najdorf, Kan, or Taimanov players. If White plays the knight to f3, a Najdorf player answers d6, a Kan player e6 — closing the window.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -931,7 +945,8 @@
    "t": 1558,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 1 2",
    "line": [],
-   "spoken": ""
+   "spoken": "In practice the knight to c3 usually isn't followed by the transposing knight move at all — far more often it's the Closed Sicilian with a kingside fianchetto, or the Grand Prix Attack with the f-pawn. Either way, the lesson stands: have a prepared line against the early knight to c3.",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -949,8 +964,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "Most of the time after the knight to c3 White does not play the knight to f3 — instead the Closed Sicilian with g3, popular in the seventies and eighties, still reputable.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -966,8 +980,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "Or the Grand Prix, with the knight to c3 and f4.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -1001,8 +1014,7 @@
    "line": [
     "a3"
    ],
-   "spoken": "So against the Closed Sicilian, Black plays a6 and expands with b5. a3 is a timid, automatic move — b4 is not a dangerous prospect at all.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -1069,8 +1081,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "It is the Closed Sicilian precisely because White does not play d4 — the centre stays closed.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -1158,8 +1169,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "The knight to c6 has been tried, but I prefer to route the knight to d7 — it does not obstruct the bishop.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -1177,7 +1187,8 @@
    "line": [
     "h5"
    ],
-   "spoken": "This setup is more active than just developing the bishop and pushing g4 on the kingside; the fianchetto with g6 was possible but less to my taste.",
+   "spoken": "Against the kingside pawn storm, the right idea is h6 — not to prevent the knight lunge, which can't be stopped, but to draw its sting. If it lunges and is met by the capture, the recapture weakens the opponent's grip on the central squares, and a knight will land on the resulting e5 outpost as a monster. The half-open file it opens is of no concern.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -1207,8 +1218,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "c3 was a serious inaccuracy — after the recapture and c4, Black is already better, White's centre collapsing.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 26,
@@ -1226,7 +1236,9 @@
    "line": [
     "Nxc3"
    ],
-   "spoken": ""
+   "spoken": "A subtle branch: after the recapture the opponent really should take back on c3 with the knight, because that knight keeps the centre intact by defending e4 — meaning the undermining thrust to c4 no longer bites the same way.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -1251,8 +1263,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "Recapturing on c3 with the knight keeps the centre more intact — then the c4 break loses its punch, since the knight now guards e4.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 29,
@@ -1286,7 +1297,9 @@
    "t": 1895,
    "fen": "r3k2r/1bq1bpp1/p2ppn2/2n3Np/P1p1PP2/2NP2PP/1P4B1/R1BQ1RK1 w kq - 2 16",
    "line": [],
-   "spoken": ""
+   "spoken": "Contrast the two positions — with the knight recycled to e2 it no longer covers e4, so that pawn is far more feebly defended and the whole centre caves. The difference of one square for one knight decides whether the undermining works.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -1469,7 +1482,9 @@
     "Bxg2",
     "Kxg2"
    ],
-   "spoken": ""
+   "spoken": "Why trade the light-squared bishops? Purely to strip the enemy king of its defender — king safety outranks any square complex here. Since the g-file and the e4 outpost are already secured, removing the bishop from beside the king guarantees there's no extra guard for the weak point in front of it.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 34,
@@ -1478,14 +1493,17 @@
    "line": [
     "cxd3"
    ],
-   "spoken": ""
+   "spoken": "And why the e4 outpost is safe even if the knight is challenged by a retreat: with a rook already on the g-file the pawn beside the king hangs, so there's no time for the challenge. Even if there were, the outpost can be re-occupied by a protected passed pawn, or reinforced by the queen, or simply cashed for the free pawn on c3. There's always an answer.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 24,
    "t": 2161,
    "fen": "r3k2r/1bqnbpp1/p2ppn2/2p4p/Pp2PP2/3P1NPP/1PP1N1B1/R1BQ1RK1 w kq - 0 13",
    "line": [],
-   "spoken": ""
+   "spoken": "A closing technical note on the endgame trade: knights are the worst piece at halting a passed rook-pawn, so hesitation is natural — but here the king sits so close to the pawn that it hardly matters what stops it. Judge the piece by the concrete race, not the general rule.",
+   "reanchor": true
   }
  ]
 }
