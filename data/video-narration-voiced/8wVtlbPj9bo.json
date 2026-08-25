@@ -1,10 +1,10 @@
 {
  "videoId": "8wVtlbPj9bo",
  "title": "Breaking Down The Averbakh Variation | King's Indian | The Sensei Speedrun | GM Naroditsky",
- "openingName": "King's Indian Defense: Averbakh Variation",
+ "openingName": "King's Indian Defense",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:8wVtlbPj9bo",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "We take White and open d4; Black plays ...Nf6."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "We claim space with c4."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "Black fianchettoes with ...g6."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "Black completes the fianchetto with the bishop to g7."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "e4"
    ],
-   "spoken": ""
+   "spoken": "We build the big centre with e4."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6 — a true King's Indian."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to e2."
   },
   {
    "ply": 8,
@@ -103,7 +103,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 11,
@@ -112,10 +112,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "The bishop to g5 is the Averbakh's sting. It means Black's natural e5 break now costs a pawn, because after the centre trades the pin on the knight on f6 tells — so Black is nudged into the slightly awkward h6.",
-   "kind": "main",
-   "teaches": "The Averbakh's bishop on g5 pre-empts Black's freeing e5 break by pinning the f6-knight.",
-   "plans": "Provoke h6, retreat the bishop to e3, then storm with g4 and h4."
+   "spoken": "We pin the knight with the bishop to g5."
   },
   {
    "ply": 12,
@@ -124,7 +121,7 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "Black plays h6."
   },
   {
    "ply": 11,
@@ -149,7 +146,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "We retreat the bishop to e3."
   },
   {
    "ply": 14,
@@ -158,7 +155,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "Black plays the Mar del Plata ...e5."
   },
   {
    "ply": 15,
@@ -167,9 +164,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "When Black does play e5, White closes with d5 and the plan crystallizes: a kingside pawn storm, since the locked centre means White can hurl the g- and h-pawns forward without fear of a counterblow.",
-   "kind": "main",
-   "teaches": "With the centre locked, storm the wing where you hold the space."
+   "spoken": "We close the centre with d5."
   },
   {
    "ply": 16,
@@ -178,7 +173,7 @@
    "line": [
     "a5"
    ],
-   "spoken": ""
+   "spoken": "Black expands with a5."
   },
   {
    "ply": 17,
@@ -187,7 +182,7 @@
    "line": [
     "g4"
    ],
-   "spoken": ""
+   "spoken": "We launch the g4 pawn storm."
   },
   {
    "ply": 16,
@@ -203,9 +198,7 @@
    "line": [
     "g4"
    ],
-   "spoken": "White plays g4 — full send. With the centre shut, the kingside pawns are free to storm Black's king, gaining ground and heading for h5 and g5 to prise the position open.",
-   "kind": "main",
-   "teaches": "A closed centre is the green light for a wing pawn storm."
+   "spoken": ""
   },
   {
    "ply": 18,
@@ -214,7 +207,7 @@
    "line": [
     "Na6"
    ],
-   "spoken": ""
+   "spoken": "Black develops ...Na6."
   },
   {
    "ply": 19,
@@ -223,7 +216,7 @@
    "line": [
     "h4"
    ],
-   "spoken": ""
+   "spoken": "We push h4."
   },
   {
    "ply": 20,
@@ -232,7 +225,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "Black reroutes the knight to d7."
   },
   {
    "ply": 21,
@@ -241,7 +234,7 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "We push h5."
   },
   {
    "ply": 22,
@@ -250,7 +243,7 @@
    "line": [
     "g5"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...g5, blocking."
   },
   {
    "ply": 23,
@@ -259,7 +252,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 22,
@@ -284,7 +277,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black's knight returns to f6."
   },
   {
    "ply": 25,
@@ -293,7 +286,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "We reroute the knight to d2."
   },
   {
    "ply": 27,
@@ -303,7 +296,7 @@
     "Nc5",
     "f3"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...Nc5; we buttress with f3."
   },
   {
    "ply": 28,
@@ -312,7 +305,7 @@
    "line": [
     "c6"
    ],
-   "spoken": ""
+   "spoken": "Black challenges with c6."
   },
   {
    "ply": 29,
@@ -321,7 +314,7 @@
    "line": [
     "Nf1"
    ],
-   "spoken": ""
+   "spoken": "We reroute the knight to f1."
   },
   {
    "ply": 28,
@@ -346,7 +339,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d5."
   },
   {
    "ply": 31,
@@ -355,7 +348,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the c-pawn."
   },
   {
    "ply": 32,
@@ -364,7 +357,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to d7."
   },
   {
    "ply": 33,
@@ -373,7 +366,7 @@
    "line": [
     "Ng3"
    ],
-   "spoken": ""
+   "spoken": "We swing the knight to g3."
   },
   {
    "ply": 34,
@@ -382,7 +375,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to b6."
   },
   {
    "ply": 35,
@@ -391,7 +384,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": ""
+   "spoken": "We play the queen to d2."
   },
   {
    "ply": 36,
@@ -400,7 +393,7 @@
    "line": [
     "Rac8"
    ],
-   "spoken": ""
+   "spoken": "Black plays the rook to c8."
   },
   {
    "ply": 37,
@@ -409,7 +402,7 @@
    "line": [
     "Kf2"
    ],
-   "spoken": ""
+   "spoken": "We tuck the king to f2."
   },
   {
    "ply": 38,
@@ -418,7 +411,7 @@
    "line": [
     "a4"
    ],
-   "spoken": ""
+   "spoken": "Black pushes a4."
   },
   {
    "ply": 39,
@@ -427,7 +420,7 @@
    "line": [
     "Rab1"
    ],
-   "spoken": ""
+   "spoken": "We play the rook to b1."
   },
   {
    "ply": 40,
@@ -436,7 +429,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to a5."
   },
   {
    "ply": 41,
@@ -445,7 +438,7 @@
    "line": [
     "Bxg5"
    ],
-   "spoken": ""
+   "spoken": "We grab on g5 with the bishop."
   },
   {
    "ply": 42,
@@ -454,7 +447,7 @@
    "line": [
     "hxg5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the h-pawn."
   },
   {
    "ply": 43,
@@ -463,7 +456,7 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "We push the h-pawn to h6, cramping."
   },
   {
    "ply": 44,
@@ -472,7 +465,7 @@
    "line": [
     "Bh8"
    ],
-   "spoken": ""
+   "spoken": "Black tucks the bishop to h8."
   },
   {
    "ply": 45,
@@ -481,7 +474,7 @@
    "line": [
     "h7+"
    ],
-   "spoken": ""
+   "spoken": "We push h7 with check."
   },
   {
    "ply": 44,
@@ -507,7 +500,7 @@
     "Nxh7",
     "Rxh7"
    ],
-   "spoken": ""
+   "spoken": "Black takes on h7 with the knight; our rook takes the knight."
   },
   {
    "ply": 48,
@@ -516,7 +509,7 @@
    "line": [
     "Kxh7"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the king."
   },
   {
    "ply": 49,
@@ -525,7 +518,7 @@
    "line": [
     "Qxg5"
    ],
-   "spoken": ""
+   "spoken": "We grab on g5 with the queen."
   },
   {
    "ply": 43,
