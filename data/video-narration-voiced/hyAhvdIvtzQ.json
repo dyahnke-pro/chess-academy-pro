@@ -24,7 +24,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "Take the pawn — that's how you meet the Englund."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -51,7 +51,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "He plays d6 instead of the testing queen to e7."
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -67,8 +67,8 @@
    "line": [
     "d6"
    ],
-   "spoken": "d6 just gives up a pawn — so we trade on our own terms.",
-   "reanchor": true
+   "spoken": "Trying to win the pawn back gives it up for nothing, so the aim is to trade on your own terms — and the way to do that is to develop a piece to f4, inviting the opponent to be the one who captures and steers into a queen trade.",
+   "kind": "plan"
   },
   {
    "ply": 7,
@@ -77,15 +77,14 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "Develop the bishop to f4 — trying to get him to take on e5, so we trade queens on our terms."
+   "spoken": ""
   },
   {
    "ply": 6,
    "t": 69.5,
    "fen": "r1bqkbnr/ppp2ppp/2np4/4P3/8/5N2/PPP1PPPP/RNBQKB1R w KQkq - 0 4",
    "line": [],
-   "spoken": "If he captures on e5, we trade queens — very desirable, since we're up a pawn and his position is passive.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -103,7 +102,8 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "He tries the bishop to g4 — but taking on d6 is much better for us; he'll be left with a backward pawn either way he recaptures."
+   "spoken": "Capturing on d6 is better than letting the bishop develop, because however the opponent recaptures — pawn or bishop — they're saddled with a backward, sickly pawn. Choose the exchange that leaves the enemy structure worst.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -121,7 +121,7 @@
    "line": [
     "cxd6"
    ],
-   "spoken": "He recaptures and is saddled with a bad pawn."
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -130,7 +130,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Don't get arrogant just because the opening went well — simply keep developing, the knight to c3."
+   "spoken": "A successful opening is no licence to get arrogant — just keep developing. The knight comes to c3, and a modest pawn to e3 is preferred over the bolder advance, out of caution that the enemy queen could otherwise swing to e7 and x-ray down the file.",
+   "kind": "plan"
   },
   {
    "ply": 12,
@@ -148,7 +149,7 @@
    "line": [
     "e3"
    ],
-   "spoken": "e3 rather than e4 — I don't want him getting the queen to e7 and x-raying me."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -165,7 +166,7 @@
     "e3",
     "d5"
    ],
-   "spoken": "He pushes d5 — but he's still down a pawn; getting the pawn there doesn't really mean anything."
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -174,7 +175,8 @@
    "line": [
     "a3"
    ],
-   "spoken": "a3, to annoy him — he wants the bishop to b4, a nasty pin that could wreck my queenside pawns. It delays my own development, but with him a pawn down and undeveloped, it's a judgment call I can afford."
+   "spoken": "The opponent wants to develop the bishop to b4 with a nasty pin that could wreck the queenside structure — so a rook-pawn to a3 pre-empts it. Delaying your own development is a real cost, but it's a judgement call worth making when the opponent is a pawn down and still uncoordinated.",
+   "kind": "plan"
   },
   {
    "ply": 16,
@@ -183,7 +185,8 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "The queen to b6 is less dangerous than it appears."
+   "spoken": "The queen sortie to b6 is less dangerous than it looks — it can simply be met by tucking the rook back to defend the pawn. Plain, working-person's play beats an ambitious blunder every time.",
+   "kind": "plan"
   },
   {
    "ply": 17,
@@ -192,7 +195,7 @@
    "line": [
     "Rb1"
    ],
-   "spoken": "The rook to b1 — plain, honest, working-person's play, just defending the pawn."
+   "spoken": ""
   },
   {
    "ply": 18,
@@ -210,7 +213,8 @@
    "line": [
     "b4"
    ],
-   "spoken": "Look at his queen carefully — it has only two squares, c5 and a5. Take them away with b4."
+   "spoken": "Now the sting — look hard at that queen and count its squares. It has only two, c5 and a5, so a pawn thrust to b4 snatches both away. Take a piece's escape squares before you spring the net.",
+   "kind": "tactic"
   },
   {
    "ply": 20,
@@ -228,7 +232,8 @@
    "line": [
     "Na4"
    ],
-   "spoken": "And now the knight to a4 — the queen is trapped. Exactly the Timman-Polugaevsky idea: queens can absolutely get caught in the middlegame."
+   "spoken": "And it's caught — with both flight squares gone, the queen has nowhere to run and falls. This exact motif once decided a famous fifteen-move miniature between two world-class players, finished by quiet knight retreats to the third rank and a rook-pawn move sealing the queen in. Queens really can be trapped in the middlegame — train yourself to hunt for it.",
+   "kind": "tactic"
   },
   {
    "ply": 3,
@@ -255,8 +260,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "The classical testing move is the queen to e7 — and the strongest reply, by my analysis, is the bishop to g5.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -265,7 +269,9 @@
    "line": [
     "Qb4+"
    ],
-   "spoken": ""
+   "spoken": "For the record, the sharpest reply is the queen check on b4 — one of the opening's traps — but here it's still the strongest move, and a calm block on d2 refutes it, leaving the pawn-grab unsound.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -274,8 +280,7 @@
    "line": [
     "Bd2"
    ],
-   "spoken": "It looks like walking into one of the Englund traps, but the bishop to d2 is still best.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -447,7 +452,8 @@
    "t": 600,
    "fen": "rnbqkbnr/pppp1ppp/8/4P3/8/8/PPP1PPPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": "The Rosentrap: after the bishop to c5 and d6, if White carelessly takes on e7, then Bxf2-check and the queen falls. The right treatment is the bishop to f4 — get him to recapture with a pawn and weaken his structure, and never take on e7.",
+   "spoken": "Against the sister trap — the bishop out to c5 with a quick d6 and a knight to e7 — the poison is that capturing the knight allows a bishop check on f2 and a capture that wins the queen. So never take there. Instead trade on your own terms, developing the bishop to f4 to bait a pawn recapture that damages the enemy structure, exactly as before.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -482,7 +488,8 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "A closing thought on psychology — against a gambiteer, do some investigating into what your opponent actually wants. Gambit players crave sharp, chaotic positions; the last thing they want is a dry endgame a pawn down. That's partly why the quiet developing move was chosen. Play the person, not just the board — within reason.",
+   "reanchor": true
   }
  ]
 }
