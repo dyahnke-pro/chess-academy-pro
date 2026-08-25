@@ -1,10 +1,10 @@
 {
  "videoId": "0npOMfkAlVU",
  "title": "Beginner To Master | Chess Speedrun | Najdorf Sicilian | Grandmaster Naroditsky",
- "openingName": "Sicilian Defense: Najdorf Variation (Black)",
+ "openingName": "Sicilian Defense: Najdorf Variation",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:0npOMfkAlVU",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We answer the king's pawn with c5 — the Sicilian, heading for the Najdorf."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "We continue with d6."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "White opens the centre with d4 — the Open Sicilian."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "We capture on d4."
   },
   {
    "ply": 8,
@@ -61,7 +61,7 @@
     "Nxd4",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "White recaptures with the knight and we develop our knight to f6. After White's knight to c3 we'd have several roads — ...g6 for the Dragon, ...Nc6 for the Classical, ...e6, or ...e5."
   },
   {
    "ply": 9,
@@ -70,10 +70,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "After the knight to c3 the Open Sicilian reaches its great fork: the fianchetto to g6 is the Dragon, the knight to c6 is the Classical, and the little pawn to a6 is the Najdorf — each a different world.",
-   "kind": "main",
-   "teaches": "The 5th-move choice defines your whole Sicilian — Dragon, Classical, or Najdorf.",
-   "plans": "Pick the Najdorf: maximum flexibility."
+   "spoken": "White develops the knight to c3."
   },
   {
    "ply": 10,
@@ -82,10 +79,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "The pawn to a6 is the Najdorf — the most respected Sicilian of all. It takes the b5-square away from White's pieces and keeps every plan open, deciding on the setup only after White commits.",
-   "kind": "main",
-   "teaches": "…a6 is prophylaxis plus flexibility — it denies b5 and delays Black's commitment.",
-   "plans": "Wait for White's system, then choose …e5 or …e6 accordingly."
+   "spoken": "The Najdorf's signature move: a6, dear to every Sicilian player. Its first point is simple — it covers b5, keeping White's knight and bishop off that square."
   },
   {
    "ply": 11,
@@ -94,7 +88,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "White chooses the bishop to e2 — a very popular reply, and White's quietest. But \"quiet\" is relative: the position stays sharp. It's called quiet because here White castles short, whereas in the bishop-g5 and bishop-b3 systems White castles long and both sides storm opposite wings."
   },
   {
    "ply": 10,
@@ -110,7 +104,8 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "Najdorf players broadly split into two camps — the ...e6 players, heading for a Scheveningen structure, and the ...e5 players.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -119,7 +114,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We play e5. To an outsider this looks bizarre — if it doesn't strike you as strange, you're missing something. ...e6 would give the Scheveningen; the ...e5 Najdorf is our choice."
   },
   {
    "ply": 13,
@@ -128,7 +123,7 @@
    "line": [
     "Nb3"
    ],
-   "spoken": ""
+   "spoken": "White retreats the knight to b3. Now, why does ...e5 look like a blunder? It weakens the d6-pawn and, above all, the d5-square. This is exactly why the Najdorf isn't for beginners — you're breaking basic positional rules, and you only earn that right once you truly know them. There's no single reason ...e5 holds up; it's a web of them, and the first is the most basic: we get on with development."
   },
   {
    "ply": 14,
@@ -137,7 +132,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to e7 — the main move, readying quick castling; the c8-bishop may later fianchetto to b7. Here's the first strand of the web: we have a crowd of pieces to fight for the d5-square."
   },
   {
    "ply": 15,
@@ -146,7 +141,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles. Concretely: our bishop can go to e6 and the f6-knight be backed up by its partner from d7 — two pieces directly and one indirectly guarding d5, so White can rarely plant a knight there and make it stick."
   },
   {
    "ply": 16,
@@ -155,14 +150,15 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle. The second strand: we get counterplay on both wings, the ...b5 advance in particular offsetting the d5 weakness. Even so, the hole is real — a knight that lands on d5 and stays can decide the game, so it must be respected, never ignored."
   },
   {
    "ply": 11,
    "t": 940,
    "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP1BPPP/R1BQK2R b KQkq - 1 6",
    "line": [],
-   "spoken": ""
+   "spoken": "The bishop-e2 Najdorf is a quiet but deep line — Karpov, one of history's great positional players, championed it for its balance of the tactical and the positional.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -171,7 +167,8 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "The ...e6 Scheveningen avoids weakening d5, but it carries real drawbacks: it hems in the light-squared bishop, the e6-pawn becomes a target for White's f4–f5 plan, and Black stays cramped, which makes a kingside attack hard to meet. Playing ...e5 instead makes it harder for White to attack at all.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -181,7 +178,8 @@
     "Nb3",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "It's the same reason many players avoid the French — you keep landing in these cramped structures.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -193,7 +191,7 @@
     "Rg1",
     "Rg8"
    ],
-   "spoken": ""
+   "spoken": "A key idea for White here is the queen to d3, over-protecting e4 — that frees the c3-knight from guarding the pawn, so it can head for d5. Here, though, we can capture on d5, giving sharp opposite-wing play rather than letting White keep a dominant outpost."
   },
   {
    "ply": 19,
@@ -202,7 +200,7 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "White tries f4. It's playable, but without the bite it would carry if our pawn were back on e6 — here we can simply take on f4."
   },
   {
    "ply": 20,
@@ -211,7 +209,7 @@
    "line": [
     "exf4"
    ],
-   "spoken": ""
+   "spoken": "We capture, exf4."
   },
   {
    "ply": 21,
@@ -220,7 +218,7 @@
    "line": [
     "Bxf4"
    ],
-   "spoken": ""
+   "spoken": "White recaptures with the bishop on f4. Now a very typical picture: the d6-pawn looks weak, but just as bad bishops defend good pawns, bad pawns defend good squares — d6 underpins a knight bound for e5, where it sits like a rock. This capture on f4 followed by the knight to e5 is one of the oldest, most classical Najdorf ideas."
   },
   {
    "ply": 11,
