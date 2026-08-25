@@ -1,7 +1,7 @@
 {
  "videoId": "hGOKlDmY4ig",
  "title": "Analyzing Fabiano Caruana | Kings Indian",
- "openingName": "English Opening",
+ "openingName": "English Opening: Symmetrical",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -15,7 +15,7 @@
     "c4",
     "c5"
    ],
-   "spoken": "This is a line in the Symmetrical English where the famous capture on c3 occurs."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -88,7 +88,7 @@
    "line": [
     "Nc2"
    ],
-   "spoken": "The knight to c2 — this used to be a very popular line."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -97,7 +97,8 @@
    "line": [
     "Bxc3+"
    ],
-   "spoken": "Then along came players like Fischer, taking on c3 — at first sight crazy, giving up such a bishop and creating a hole on g7. But White's own weaknesses justify the whole approach."
+   "spoken": "Here comes a famous concession — capturing on c3 and giving up the fianchettoed bishop. At first sight it looks reckless, surrendering a prized piece and tearing a hole on the long diagonal — unthinkable to a beginner — yet the structural damage it inflicts on the opponent more than justifies it.",
+   "kind": "plan"
   },
   {
    "ply": 13,
@@ -115,7 +116,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "White can't really exploit the dark squares, because the knight quickly comes out to f6."
+   "spoken": "And the supposed dark-square weakness can't actually be exploited, because the knight hops out to f6 to cover the sensitive squares. The trade is all upside once the defence is properly arranged.",
+   "kind": "plan"
   },
   {
    "ply": 15,
@@ -124,7 +126,7 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "And even after Black castles, White putting the bishop on h6 means nothing inherently — it just chills there, not doing anything."
+   "spoken": "Even a bishop swung out to h6 achieves nothing here — it just sits there, doing no real work, while the opponent's shattered pawns quietly begin to collapse. Menacing placement without a threat behind it is empty."
   },
   {
    "ply": 16,
@@ -133,7 +135,8 @@
    "line": [
     "Qa5"
    ],
-   "spoken": "The bishop on h6 does nothing in particular, while White's pawns begin to collapse. And that's the parallel to Fabi's capture: a trade like this leaves the enemy's central pawn weak and tied down to a single defender."
+   "spoken": "The lasting point of the whole exchange is that the opponent's central pawn is badly weakened, left leaning on a single defending bishop — and it's never healthy to have a piece chained to a pawn. Meanwhile a knight is already routing toward c5, where it will pile onto that very pawn.",
+   "kind": "plan"
   }
  ]
 }
