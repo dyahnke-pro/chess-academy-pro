@@ -52,8 +52,11 @@ IN-GAME / WATCH register, not the post-game-review register).
 ## Setup (once)
 
 ```bash
-# 1. Branch off main (direct push to main is classifier-blocked; you'll open a PR).
-git fetch origin main && git checkout -B claude/voiced-shard-<X> origin/main
+# 1. Branch off the tooling branch (it carries author-video/author-all/recover-
+#    bank/verify-shard + the shard lists; main doesn't have them yet). Direct
+#    push to main is classifier-blocked; you'll open a PR.
+git fetch origin claude/gem-teaching-learn-coach-1oe5pw
+git checkout -B claude/voiced-shard-<X> origin/claude/gem-teaching-learn-coach-1oe5pw
 
 # 2. Live DeepSeek key — the session env copy is stale (401). Pull from Vercel:
 T="team_EG9m215w9cQHWilBOPnOtIFS"; P="prj_qYJMwF1apaxdp6sIZzcvZMz9BcZN"
