@@ -2,9 +2,9 @@
  "videoId": "8L-cDJJBbxc",
  "title": "Dominating the Center | Trompowsky Attack, Sicilian Dragon | GM Naroditsky's DYI Chess Speedrun",
  "openingName": "Trompowsky Attack",
- "studentSide": "black",
+ "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:8L-cDJJBbxc",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "We take White and open d4; Black plays ...Nf6."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "We play the Trompowsky — the bishop to g5, pinning the knight."
   },
   {
    "ply": 4,
@@ -33,9 +33,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "The knight leaps into e4, striking the bishop on g5 and grabbing the center instead of meekly defending. This is the point against the Trompowsky — challenge the bishop at once.",
-   "kind": "main",
-   "teaches": "Meet an early bishop pin by counterattacking the pinning piece, not by passively unpinning."
+   "spoken": "Black breaks the pin with ...Ne4, hitting the bishop."
   },
   {
    "ply": 5,
@@ -44,7 +42,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": ""
+   "spoken": "We retreat the bishop to f4."
   },
   {
    "ply": 9,
@@ -126,7 +124,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black's knight returns to f6."
   },
   {
    "ply": 11,
@@ -135,7 +133,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 12,
@@ -144,9 +142,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "The light bishop comes out to g4, pinning the knight on f3 to the queen before White can lock it out with h3. Get this piece active while the door is still open.",
-   "kind": "main",
-   "teaches": "Develop the light-squared bishop outside the pawn chain early, before pawns can shut it in."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -200,7 +196,7 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "Black plays e6."
   },
   {
    "ply": 19,
@@ -209,7 +205,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": ""
+   "spoken": "We plant the knight on e5."
   },
   {
    "ply": 20,
@@ -236,9 +232,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "Bishop to d6 challenges the bishop planted on e5, handing White the very question we were just asked. Trade off the strong piece and the tension resolves in our favor.",
-   "kind": "main",
-   "teaches": "Contest a centralized enemy piece with a trade offer rather than living around it."
+   "spoken": "Black challenges with ...Bd6."
   },
   {
    "ply": 23,
@@ -283,7 +277,7 @@
    "line": [
     "f3"
    ],
-   "spoken": ""
+   "spoken": "We play f3, buttressing the centre."
   },
   {
    "ply": 28,
@@ -292,9 +286,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "The knight drops back to d7 and quietly hits the e5-pawn, which has no defender. White's kingside pawns have overextended and now the weaknesses simply fall.",
-   "kind": "main",
-   "teaches": "When the opponent overextends, calm recentralizing moves collect the loose pawns."
+   "spoken": ""
   },
   {
    "ply": 26,
@@ -321,7 +313,8 @@
    "line": [
     "Qxg5"
    ],
-   "spoken": ""
+   "spoken": "Black's pieces swarm the queenside and the attack breaks through into a mating net — a reminder that even a solid opening still needs accurate follow-up.",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -473,9 +466,7 @@
    "line": [
     "Qf4+"
    ],
-   "spoken": "Queen to f4 checks along the dark diagonal into c1. White must either shed the queens or watch another pawn drop — both outcomes hand us the win.",
-   "kind": "review",
-   "teaches": "With a material edge, force checks that trade queens or win more material to simplify home."
+   "spoken": ""
   },
   {
    "ply": 48,
