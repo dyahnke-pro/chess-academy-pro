@@ -4,7 +4,7 @@
  "openingName": "King's Indian Defense",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:kQHOIgVhyow",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "We take Black and face d4, replying with the knight to f6."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "White claims space with c4."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "We start the fianchetto with g6."
   },
   {
    "ply": 5,
@@ -42,14 +42,15 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to f3."
   },
   {
    "ply": 4,
    "t": 64,
    "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "Don't rush ...d5 here: if you play it before Nc3, White trades and plays e4, and there's no knight on c3 to capture — you'd have drifted into a King's Indian by accident. Fianchetto first, wait for Nc3, then choose.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -67,7 +68,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "We complete the fianchetto with the bishop to g7."
   },
   {
    "ply": 7,
@@ -76,7 +77,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": ""
+   "spoken": "White plays the offbeat bishop to f4, delaying the queenside knight."
   },
   {
    "ply": 8,
@@ -85,7 +86,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle — the most flexible move, forcing White to commit first."
   },
   {
    "ply": 9,
@@ -94,7 +95,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to c3."
   },
   {
    "ply": 10,
@@ -103,10 +104,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Facing White's flexible Bf4 system, Black commits to a King's Indian with d6 rather than the Grünfeld's d5. The lesson is transitions: read White's setup and choose the structure that punishes it.",
-   "kind": "main",
-   "teaches": "Stay flexible — pick your central structure, King's Indian or Grünfeld, based on how White develops.",
-   "plans": "Expand on the queenside with c6, a6 and b5."
+   "spoken": "We choose a King's Indian setup with d6 — very effective against the f4-bishop."
   },
   {
    "ply": 11,
@@ -115,7 +113,7 @@
    "line": [
     "e3"
    ],
-   "spoken": ""
+   "spoken": "White props the bishop with e3."
   },
   {
    "ply": 12,
@@ -124,7 +122,7 @@
    "line": [
     "c6"
    ],
-   "spoken": ""
+   "spoken": "We play c6 — preparing queenside expansion and grabbing central space, without blocking the b8-knight's usual route to d7."
   },
   {
    "ply": 13,
@@ -133,7 +131,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "White develops the bishop to e2."
   },
   {
    "ply": 14,
@@ -142,7 +140,7 @@
    "line": [
     "a6"
    ],
-   "spoken": ""
+   "spoken": "We play a6, preparing ...b5 — the a6, b5, c6 pawn triangle."
   },
   {
    "ply": 15,
@@ -151,7 +149,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": ""
+   "spoken": "White plays the queen to d2."
   },
   {
    "ply": 16,
@@ -160,9 +158,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "Black expands on the queenside with a6 and b5, grabbing space and opening the bishop's diagonal. Against White's slow centre, the play belongs on the wing where Black is quicker.",
-   "kind": "main",
-   "teaches": "When White plays a slow central system, seize space on the queenside with a6 and b5."
+   "spoken": "We expand with b5, just in time."
   },
   {
    "ply": 17,
@@ -171,7 +167,7 @@
    "line": [
     "a3"
    ],
-   "spoken": ""
+   "spoken": "White stops ...b4 with a3."
   },
   {
    "ply": 18,
@@ -180,7 +176,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": ""
+   "spoken": "We fianchetto the bishop to b7."
   },
   {
    "ply": 19,
@@ -189,7 +185,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles."
   },
   {
    "ply": 20,
@@ -198,7 +194,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": ""
+   "spoken": "We complete development with ...Nbd7, discouraging c5."
   },
   {
    "ply": 21,
@@ -207,7 +203,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "White makes a waiting move, h3."
   },
   {
    "ply": 22,
@@ -216,7 +212,7 @@
    "line": [
     "bxc4"
    ],
-   "spoken": ""
+   "spoken": "We discharge the tension, taking on c4."
   },
   {
    "ply": 23,
@@ -225,7 +221,7 @@
    "line": [
     "Bxc4"
    ],
-   "spoken": ""
+   "spoken": "White recaptures with the bishop."
   },
   {
    "ply": 24,
@@ -234,7 +230,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We push c5 — opening the bishop and threatening ...Bxf3 to wreck White's structure."
   },
   {
    "ply": 25,
@@ -243,9 +239,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "The game transitions into a Benoni: after Black plays c5, White pushes d5, and Black gets the classic queenside majority with the long-diagonal bishop pointing straight through the position.",
-   "kind": "main",
-   "teaches": "These King's Indian setups can transition into a Benoni where Black plays on the queenside behind the fianchetto bishop."
+   "spoken": "White closes with d5 — a Benoni structure."
   },
   {
    "ply": 26,
@@ -254,7 +248,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "We hit the bishop with ...Nb6, pressuring d5 and forcing it to a poor square."
   },
   {
    "ply": 27,
@@ -263,7 +257,7 @@
    "line": [
     "Ba2"
    ],
-   "spoken": ""
+   "spoken": "White retreats the bishop to a2."
   },
   {
    "ply": 28,
@@ -272,7 +266,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "We push c4, slicing the bishop from the pawn and vacating c5 as an outpost."
   },
   {
    "ply": 29,
@@ -281,7 +275,7 @@
    "line": [
     "e4"
    ],
-   "spoken": ""
+   "spoken": "White plays e4."
   },
   {
    "ply": 30,
