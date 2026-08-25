@@ -1,0 +1,854 @@
+{
+ "videoId": "JEMVGw2WdCE",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 2100",
+ "openingName": "King's Indian Defense",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:JEMVGw2WdCE",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 32,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 35.5,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 37.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "g6"
+   ],
+   "spoken": "Black heads into the King's Indian with g6."
+  },
+  {
+   "ply": 5,
+   "t": 38.5,
+   "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 40,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 2 4",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": "The fianchetto completed, the bishop to g7 — a King's Indian."
+  },
+  {
+   "ply": 7,
+   "t": 45.5,
+   "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "e4"
+   ],
+   "spoken": "White builds the full centre with e4."
+  },
+  {
+   "ply": 8,
+   "t": 48,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 52.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR b KQkq - 0 5",
+   "line": [
+    "f3"
+   ],
+   "spoken": "And here is the recommendation against the King's Indian — the Sämisch, marked by f3."
+  },
+  {
+   "ply": 10,
+   "t": 59,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR w KQ - 1 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "The idea of f3, familiar from the Sicilian: cement the e4-pawn."
+  },
+  {
+   "ply": 11,
+   "t": 82.5,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N1BP2/PP4PP/R2QKBNR b KQ - 2 6",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "Not the premature d5 — instead develop the bishop to e3; the h4 storm is the ultimate idea."
+  },
+  {
+   "ply": 12,
+   "t": 88,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPP3/2N1BP2/PP4PP/R2QKBNR w KQ - 0 7",
+   "line": [
+    "c5"
+   ],
+   "spoken": "The Sämisch is the one King's Indian line where White routinely castles long."
+  },
+  {
+   "ply": 13,
+   "t": 92.5,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPP3/2N1BP2/PP2N1PP/R2QKB1R b KQ - 1 7",
+   "line": [
+    "Nge2"
+   ],
+   "spoken": "Two reasons for f3: it cements the centre, and it stops Black harassing the bishop with the knight to g4 — and White won't give up that bishop except for its counterpart."
+  },
+  {
+   "ply": 14,
+   "t": 111,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/8/2PpP3/2N1BP2/PP2N1PP/R2QKB1R w KQ - 0 8",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 112.5,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/8/2PNP3/2N1BP2/PP4PP/R2QKB1R b KQ - 0 8",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 114,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2PNP3/2N1BP2/PP4PP/R2QKB1R w KQ - 1 9",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Black has reached an Accelerated-Dragon-type structure — but this is not the best way to meet the Sämisch; White is just solidly better now."
+  },
+  {
+   "ply": 17,
+   "t": 132,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2PNP3/2N1BP2/PP1Q2PP/R3KB1R b KQ - 2 9",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "The queen to d2 is good. White could also retreat the knight to c2 to dodge the trade, but the trade is fine here."
+  },
+  {
+   "ply": 18,
+   "t": 154,
+   "fen": "r1bqr1k1/pp2ppbp/2np1np1/8/2PNP3/2N1BP2/PP1Q2PP/R3KB1R w KQ - 3 10",
+   "line": [
+    "Re8"
+   ],
+   "spoken": "A lesson in flexibility: begin the game with one plan, but be ready to stop on a dime. White planned a quick attack, but with a positional edge in hand, the plan can change."
+  },
+  {
+   "ply": 19,
+   "t": 172.5,
+   "fen": "r1bqr1k1/pp2ppbp/2np1np1/8/2PNP3/2N1BP2/PP1Q2PP/2KR1B1R b - - 4 10",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "The rook to e8 was a bit of an empty move — so White castles long, intentions perfectly clear."
+  },
+  {
+   "ply": 20,
+   "t": 183.5,
+   "fen": "r2qr1k1/pp1bppbp/2np1np1/8/2PNP3/2N1BP2/PP1Q2PP/2KR1B1R w - - 5 11",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "White goes straight for the throat, conventional style — h4, h5, open the h-file, checkmate."
+  },
+  {
+   "ply": 21,
+   "t": 188,
+   "fen": "r2qr1k1/pp1bppbp/2np1np1/8/2PNP2P/2N1BP2/PP1Q2P1/2KR1B1R b - - 0 11",
+   "line": [
+    "h4"
+   ],
+   "spoken": "So — h4, no delay. And the pawn will be sacrificed; that is the whole point of the attack."
+  },
+  {
+   "ply": 22,
+   "t": 193,
+   "fen": "r3r1k1/pp1bppbp/2np1np1/q7/2PNP2P/2N1BP2/PP1Q2P1/2KR1B1R w - - 1 12",
+   "line": [
+    "Qa5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 218.5,
+   "fen": "r3r1k1/pp1bppbp/2np1np1/q7/2PNP2P/2N1BP2/PP1Q2P1/1K1R1B1R b - - 2 12",
+   "line": [
+    "Kb1"
+   ],
+   "spoken": "And the Russian-school move: the king to b1. Once you have castled long, this is a healthy prophylactic step — the king is simply safer, off the c-file where Black's rooks will point."
+  },
+  {
+   "ply": 24,
+   "t": 224.5,
+   "fen": "2r1r1k1/pp1bppbp/2np1np1/q7/2PNP2P/2N1BP2/PP1Q2P1/1K1R1B1R w - - 3 13",
+   "line": [
+    "Rac8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 232.5,
+   "fen": "2r1r1k1/pp1bppbp/2np1np1/q6P/2PNP3/2N1BP2/PP1Q2P1/1K1R1B1R b - - 0 13",
+   "line": [
+    "h5"
+   ],
+   "spoken": "Now the attack flows more smoothly with the king tucked away — not globally safe, but harder to reach, buying time to orchestrate the kingside storm."
+  },
+  {
+   "ply": 26,
+   "t": 241.5,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/q6n/2PNP3/2N1BP2/PP1Q2P1/1K1R1B1R w - - 0 14",
+   "line": [
+    "Nxh5"
+   ],
+   "spoken": "Careful now — g4 to chase the knight runs into a nasty reply."
+  },
+  {
+   "ply": 27,
+   "t": 280,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/q6n/2P1P3/1NN1BP2/PP1Q2P1/1K1R1B1R b - - 1 14",
+   "line": [
+    "Nb3"
+   ],
+   "spoken": "The knight to g3 would hit the rook. So, in the spirit of prepare-slowly-attack-fast, White drops the knight back to b3 — reducing the tension on d4, forcing the queen to move, and untying White's hands for the attack."
+  },
+  {
+   "ply": 26,
+   "t": 309,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/q6n/2PNP3/2N1BP2/PP1Q2P1/1K1R1B1R w - - 0 14",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 315,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/q6n/2P1P3/1NN1BP2/PP1Q2P1/1K1R1B1R b - - 1 14",
+   "line": [
+    "Nb3"
+   ],
+   "spoken": "The point of easing the d4 tension is to attack single-mindedly on the kingside, with no more worry about trades. If Black takes on c3, White recaptures and has removed Black's best piece — structure be damned, well worth it.",
+   "reanchor": true
+  },
+  {
+   "ply": 28,
+   "t": 373,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/4q2n/2P1P3/1NN1BP2/PP1Q2P1/1K1R1B1R w - - 2 15",
+   "line": [
+    "Qe5"
+   ],
+   "spoken": "The battle is simple: who mates first — White on the kingside, Black on the queenside. And the alarm bells ring: a move that failed before can work now. Consider g4."
+  },
+  {
+   "ply": 29,
+   "t": 403,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/4q2n/2P1P1P1/1NN1BP2/PP1Q4/1K1R1B1R b - - 0 15",
+   "line": [
+    "g4"
+   ],
+   "spoken": "Because the queen has repositioned to the centre, where it is most exposed, after g4 and the knight to g3 a new resource appears."
+  },
+  {
+   "ply": 31,
+   "t": 409.5,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/4q3/2P1PBP1/1NN2Pn1/PP1Q4/1K1R1B1R b - - 2 16",
+   "line": [
+    "Ng3",
+    "Bf4"
+   ],
+   "spoken": "The bishop to f4 forks the queen and the knight — a fake fork, since Black can take on f1 and hit the queen."
+  },
+  {
+   "ply": 32,
+   "t": 411,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/4q3/2P1PBP1/1NN2P2/PP1Q4/1K1R1n1R w - - 0 17",
+   "line": [
+    "Nxf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 413,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/4q3/2P1PBP1/1NN2P2/PP1Q4/1K3R1R b - - 0 17",
+   "line": [
+    "Rdxf1"
+   ],
+   "spoken": "But remember the goal — not to win material, just to remove that knight and finally free the queen for the h-file and mate on h2."
+  },
+  {
+   "ply": 34,
+   "t": 426,
+   "fen": "2r1r1k1/pp1bppbp/2npq1p1/8/2P1PBP1/1NN2P2/PP1Q4/1K3R1R w - - 1 18",
+   "line": [
+    "Qe6"
+   ],
+   "spoken": "White is far closer to mating than Black is to anything on the queenside — and that whole wing is intact, thanks to the king move."
+  },
+  {
+   "ply": 35,
+   "t": 435,
+   "fen": "2r1r1k1/pp1bppbp/2npq1p1/8/2P1PBP1/1NN2P2/PP5Q/1K3R1R b - - 2 18",
+   "line": [
+    "Qh2"
+   ],
+   "spoken": "Here comes the queen to h2 — big trouble, because taking on h7 leads to mate in just a couple of moves."
+  },
+  {
+   "ply": 36,
+   "t": 463.5,
+   "fen": "2r1r1k1/pp1bppbp/3pq1p1/4n3/2P1PBP1/1NN2P2/PP5Q/1K3R1R w - - 3 19",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "With so many pieces aimed at the king, Black is busted — his own queen stuck out of play, unable to help."
+  },
+  {
+   "ply": 40,
+   "t": 466,
+   "fen": "2r1rb2/pp1bppkp/3pq1p1/4n3/2P1PBP1/1NN2P2/PP6/1K3R1R w - - 0 21",
+   "line": [
+    "Qh6",
+    "Bf8",
+    "Qg7+",
+    "Kxg7"
+   ],
+   "spoken": "A very typical idea: the queen to h8 would be mate but for the bishop — so eliminate it with the bishop to h6, and it is mate anyway, thanks to the pin.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 498,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR b KQkq - 0 5",
+   "line": [],
+   "spoken": "White never even got touched — the pawn structure stayed whole. The Sämisch, with f3, was first played by Sämisch himself in 1925, one of those openings named for the man who first played it.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 557,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR w KQ - 1 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 573.5,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR w KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 577,
+   "fen": "rnbqk2r/ppp1ppbp/3p1np1/8/2PPP3/2N2P2/PP4PP/R1BQKBNR b KQkq - 0 5",
+   "line": [
+    "f3"
+   ],
+   "spoken": "The Sämisch has two ideas. First, protect the e4-pawn — because against the King's Indian it is not how much centre you control but how well: the bishop guards the d-pawn, a pawn guards the e-pawn.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 583,
+   "fen": "rnbq1rk1/ppp1ppbp/3p1np1/8/2PPP3/2N1BP2/PP4PP/R2QKBNR b KQ - 2 6",
+   "line": [
+    "O-O",
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 593,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPP3/2N1BP2/PP4PP/R2QKBNR w KQ - 0 7",
+   "line": [
+    "c5"
+   ],
+   "spoken": "Then castle long and roll h4-h5. As it happens, c5 is one of Black's best replies — a pawn sacrifice; taking it is possible but leads to wild complications where Black is fine.",
+   "reanchor": true
+  },
+  {
+   "ply": 14,
+   "t": 598.5,
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2p5/2P1P3/2N1BP2/PP4PP/R2QKBNR w KQ - 0 8",
+   "line": [
+    "dxc5",
+    "dxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 600,
+   "fen": "rnbq1rk1/pp2ppbp/5np1/2B5/2P1P3/2N2P2/PP4PP/R2QKBNR b KQ - 0 8",
+   "line": [
+    "Bxc5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 601.5,
+   "fen": "r1bq1rk1/pp2ppbp/2n2np1/2B5/2P1P3/2N2P2/PP4PP/R2QKBNR w KQ - 1 9",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 608.5,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPP3/2N1BP2/PP4PP/R2QKBNR w KQ - 0 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 611,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPP3/2N1BP2/PP2N1PP/R2QKB1R b KQ - 1 7",
+   "line": [
+    "Nge2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 613.5,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/8/2PpP3/2N1BP2/PP2N1PP/R2QKB1R w KQ - 0 8",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": "So White leaves it, and Black's capture on d4 was a serious inaccuracy.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 617.5,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPP3/2N1BP2/PP2N1PP/R2QKB1R b KQ - 1 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 618.5,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/8/2PNP3/2N1BP2/PP4PP/R2QKB1R b KQ - 0 8",
+   "line": [
+    "cxd4",
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 624,
+   "fen": "rnbq1rk1/pp2ppbp/3p1np1/2p5/2PPP3/2N1BP2/PP2N1PP/R2QKB1R b KQ - 1 7",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 625,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/2p5/2PPP3/2N1BP2/PP2N1PP/R2QKB1R w KQ - 2 8",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "It releases the tension into a Maroczy-type bind. Instead the knight to c6, keeping the tension and pressing the d-pawn, was the better path.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 630.5,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/2pP4/2P1P3/2N1BP2/PP2N1PP/R2QKB1R b KQ - 0 8",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 644,
+   "fen": "r1bq1rk1/pp2ppbp/3p1np1/2pPn3/2P1P3/2N1BP2/PP2N1PP/R2QKB1R w KQ - 1 9",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "And after d5, where does the knight go? When a central pawn advances, ask which squares weaken — here it is e5, so the knight to e5, hitting the pawn.",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 648,
+   "fen": "r1bq1rk1/pp2ppbp/3p1np1/2pP4/2PnP3/2N1BP2/PP2N1PP/R2QKB1R w KQ - 5 11",
+   "line": [
+    "Bd4",
+    "Nc6",
+    "Be3",
+    "Nd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 650.5,
+   "fen": "r1bq1rk1/pp2ppbp/3p1np1/3P4/2PNP3/2N2P2/PP4PP/R2QKB1R b KQ - 0 12",
+   "line": [
+    "Bxd4",
+    "cxd4",
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 653,
+   "fen": "r1bq1rk1/pp2ppbp/3p1np1/2pPn3/2P1P3/2N1BP2/PP2N1PP/R2QKB1R w KQ - 1 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 654.5,
+   "fen": "r1bq1rk1/pp2ppbp/3p1np1/2pPn3/2P1P3/2N1BP2/PP4PP/R1NQKB1R b KQ - 2 9",
+   "line": [
+    "Nc1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 655.5,
+   "fen": "r1bq1rk1/pp3pbp/3ppnp1/2pPn3/2P1P3/2N1BP2/PP4PP/R1NQKB1R w KQ - 0 10",
+   "line": [
+    "e6"
+   ],
+   "spoken": "From there Black strikes back in the centre with Benoni-style pawn breaks — a whole world of theory.",
+   "reanchor": true
+  },
+  {
+   "ply": 16,
+   "t": 661.5,
+   "fen": "r1bq1rk1/pp2ppbp/3p1np1/2pPn3/2P1P3/2N1BP2/PP2N1PP/R2QKB1R w KQ - 1 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 663.5,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/2p5/2PPP3/2N1BP2/PP2N1PP/R2QKB1R w KQ - 2 8",
+   "line": [],
+   "spoken": "But the capture Black actually chose gives White a comfortable, easy game.",
+   "reanchor": true
+  },
+  {
+   "ply": 17,
+   "t": 670.5,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2PNP3/2N1BP2/PP1Q2PP/R3KB1R b KQ - 0 9",
+   "line": [
+    "Qd2",
+    "cxd4",
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 673,
+   "fen": "r1bqr1k1/pp2ppbp/2np1np1/8/2PNP3/2N1BP2/PP1Q2PP/R3KB1R w KQ - 1 10",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 674,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2PNP3/2N1BP2/PP1Q2PP/R3KB1R b KQ - 0 9",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 675.5,
+   "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2PNP3/2N1BP2/PP1Q2PP/R3KB1R w KQ - 1 10",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 680.5,
+   "fen": "r2q1rk1/pp1bppbp/2np1np1/8/2PNP3/2N1BP2/PP1QB1PP/R3K2R b KQ - 2 10",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 690.5,
+   "fen": "r1bq1rk1/pp2ppbp/2np1np1/8/2PNP3/2N1BP2/PP1Q2PP/R3KB1R b KQ - 4 11",
+   "line": [
+    "Bc8",
+    "Bf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 691.5,
+   "fen": "r1bqr1k1/pp2ppbp/2np1np1/8/2PNP3/2N1BP2/PP1Q2PP/R3KB1R w KQ - 5 12",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 692.5,
+   "fen": "r1bqr1k1/pp2ppbp/2np1np1/8/2PNP3/2N1BP2/PP1Q2PP/2KR1B1R b - - 6 12",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 694.5,
+   "fen": "r2qr1k1/pp1bppbp/2np1np1/8/2PNP3/2N1BP2/PP1Q2PP/2KR1B1R w - - 7 13",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 695.5,
+   "fen": "r2qr1k1/pp1bppbp/2np1np1/8/2PNP2P/2N1BP2/PP1Q2P1/2KR1B1R b - - 0 13",
+   "line": [
+    "h4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 697,
+   "fen": "r3r1k1/pp1bppbp/2np1np1/q7/2PNP2P/2N1BP2/PP1Q2P1/1K1R1B1R b - - 2 14",
+   "line": [
+    "Qa5",
+    "Kb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 707.5,
+   "fen": "r1bqr1k1/pp2ppbp/2np1np1/8/2PNP3/2N1BP2/PP1Q2PP/R3KB1R w KQ - 5 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 735,
+   "fen": "r3r1k1/pp1bppbp/2np1np1/q7/2PNP2P/2N1BP2/PP1Q2P1/2KR1B1R w - - 3 14",
+   "line": [
+    "h4",
+    "Bd7",
+    "O-O-O",
+    "Qa5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 737,
+   "fen": "r3r1k1/pp1bppbp/2np1np1/8/1qP1P2P/1NN1BP2/PP1Q2P1/2KR1B1R w - - 5 15",
+   "line": [
+    "Nb3",
+    "Qb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 740,
+   "fen": "r3r1k1/pp1bppbp/2np1np1/8/2P1P2P/PqN1BP2/1P1Q2P1/2KR1B1R w - - 0 16",
+   "line": [
+    "a3",
+    "Qxb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 741.5,
+   "fen": "r3r1k1/pp1bppbp/2np1np1/8/1qP1P2P/1NN1BP2/PP1Q2P1/2KR1B1R w - - 5 15",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 32,
+   "t": 745.5,
+   "fen": "2r1r1k1/pp1bppbp/2np1np1/q7/2PNP2P/2N1BP2/PP1Q2P1/1K1R1B1R w - - 9 17",
+   "line": [
+    "Nd4",
+    "Rac8",
+    "Kb1",
+    "Qa5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 747,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/q6n/2PNP3/2N1BP2/PP1Q2P1/1K1R1B1R w - - 0 18",
+   "line": [
+    "h5",
+    "Nxh5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 749,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/q6n/2PNP1P1/2N1BP2/PP1Q4/1K1R1B1R b - - 0 18",
+   "line": [
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 750,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/q7/2PNP1P1/2N1BPn1/PP1Q4/1K1R1B1R w - - 1 19",
+   "line": [
+    "Ng3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 752.5,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/q7/2PNP1P1/2N1BPnR/PP1Q4/1K1R1B2 b - - 2 19",
+   "line": [
+    "Rh3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 753.5,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/q7/2PNP1P1/2N1BP1R/PP1Q4/1K1R1n2 w - - 0 20",
+   "line": [
+    "Nxf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 756.5,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/q7/2PNP1P1/2N1BP1R/PP1Q4/1K3R2 b - - 0 20",
+   "line": [
+    "Rxf1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 40,
+   "t": 777.5,
+   "fen": "2r1r1k1/pp1bppbp/3p2p1/q3n3/2PNP1P1/2N1BP1R/PP1Q4/1K3R2 w - - 1 21",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 791,
+   "fen": "2r1r1k1/pp1bppbp/3p2p1/q3n3/2PNP1P1/2N1BP1R/PP5Q/1K3R2 b - - 2 21",
+   "line": [
+    "Qh2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 42,
+   "t": 792,
+   "fen": "2r1r1k1/pp1bppbp/3p2p1/q7/2nNP1P1/2N1BP1R/PP5Q/1K3R2 w - - 0 22",
+   "line": [
+    "Nxc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 793.5,
+   "fen": "2r1r1k1/pp1bppbR/3p2p1/q7/2nNP1P1/2N1BP2/PP5Q/1K3R2 b - - 0 22",
+   "line": [
+    "Rxh7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 795.5,
+   "fen": "2r1r1k1/pp1bppbR/3p2p1/q7/3NP1P1/2N1nP2/PP5Q/1K3R2 w - - 0 23",
+   "line": [
+    "Nxe3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 802.5,
+   "fen": "2r1r1k1/pp1bppbp/3p2p1/q3n3/2PNP1P1/2N1BP1R/PP5Q/1K3R2 b - - 2 21",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 805.5,
+   "fen": "2r1r1k1/pp1bppbp/2np2p1/q7/2PNP1P1/2N1BPn1/PP1Q4/1K1R1B1R w - - 1 19",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 810.5,
+   "fen": "r3r1k1/pp1bppbp/2np1np1/q7/2P1P2P/1NN1BP2/PP1Q2P1/2KR1B1R b - - 4 14",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
