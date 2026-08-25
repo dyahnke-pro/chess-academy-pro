@@ -2,7 +2,7 @@
  "videoId": "6-d45BL5GoY",
  "title": "Danya Is Sick!? Coming Back Strong vs GM Alexander Rustemov!! | Blitz Match | GM Naroditsky",
  "openingName": "Slav Defense",
- "studentSide": "white",
+ "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
  "source": "yt:6-d45BL5GoY",
@@ -165,7 +165,7 @@
    "line": [
     "b4"
    ],
-   "spoken": "Black hits back with b4. And the nagging truth for White is that the compensation for the gambited pawn just is not quite enough — that is the core of the problem, and getting castled sooner would have helped."
+   "spoken": "The real issue here is that this is insufficient compensation — that's the core of the problem, and I probably should have captured earlier."
   },
   {
    "ply": 25,
@@ -222,7 +222,7 @@
    "line": [
     "Bxe4"
    ],
-   "spoken": ""
+   "spoken": "I need to find a very accurate move here, or I'm simply lost."
   },
   {
    "ply": 34,
@@ -240,7 +240,7 @@
    "line": [
     "Rd4"
    ],
-   "spoken": ""
+   "spoken": "He somehow defends everything, so the rook to d4 — I really don't think I have a choice."
   },
   {
    "ply": 37,
@@ -277,7 +277,7 @@
    "line": [
     "Nxb2"
    ],
-   "spoken": ""
+   "spoken": "Now I get to trap the knight."
   },
   {
    "ply": 41,
@@ -304,7 +304,7 @@
    "line": [
     "Rb3"
    ],
-   "spoken": "And the tables turn — with the rook to b3, Black's knight is suddenly trapped. Earlier the rook to d4 ran into the knight to c5, cutting the bishop off, but now the rook to d1 comes next move and the knight has nowhere to run."
+   "spoken": "After the rook to b3 the knight is suddenly trapped — the rook to d1 next seals it. In the rook-to-d4 line his knight to c5 intercepted the bishop, but here the rook simply comes to d1 and it works."
   },
   {
    "ply": 44,
@@ -338,7 +338,7 @@
    "line": [
     "gxf4"
    ],
-   "spoken": "Recapturing with the pawn is the practical call here — it stops Black from generating easy passed pawns on the kingside.",
+   "spoken": "Recapture with the pawn — to stop him from making passed pawns so easily.",
    "reanchor": true
   },
   {
@@ -375,7 +375,7 @@
    "line": [
     "a4"
    ],
-   "spoken": "White fixes the pawn on a dark square — precisely so the dark-squared bishop can come and hound it. Creating a fixed, colour-bound target is exactly how these endings are won."
+   "spoken": "Fix his pawn on a dark square, so that we can attack it with our bishop."
   },
   {
    "ply": 50,
@@ -403,7 +403,7 @@
     "Rd3",
     "Kf2"
    ],
-   "spoken": "Now White goes for the direct attack — the king steps up to f2 and the rooks bear down on g7."
+   "spoken": "Infiltrating makes sense — the rook to d3, the king to f2, and then go for the direct attack on g7."
   },
   {
    "ply": 54,
@@ -421,7 +421,7 @@
    "line": [
     "Rc7"
    ],
-   "spoken": ""
+   "spoken": "The rook to c7 is simpler, though everything is winning by now."
   },
   {
    "ply": 56,
