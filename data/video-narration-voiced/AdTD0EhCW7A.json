@@ -211,7 +211,7 @@
    "line": [
     "cxd6"
    ],
-   "spoken": "Black recaptures with the pawn, and this tidies the structure nicely — the doubled pawns are gone."
+   "spoken": "Recapturing toward the centre with the pawn is the point here — it heals the structure. The doubled pawns are gone, and we're left with a clean, healthy pawn front instead of a crippled one."
   },
   {
    "ply": 23,
@@ -373,7 +373,8 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "There's a tactical shot lurking in this position: if the queen grabs the pawn on d5, the position explodes into real complications. It's the kind of central capture that looks greedy but changes the whole character of the fight.",
+   "kind": "tactic"
   }
  ]
 }
