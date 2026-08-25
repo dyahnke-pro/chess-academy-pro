@@ -1,7 +1,7 @@
 {
  "videoId": "vzR7wHdNuOU",
  "title": "9 Move Scotch!? | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Four Knights Game",
+ "openingName": "Four Knights Game: Scotch",
  "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -42,7 +42,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "The Four Knights Scotch — the knights come out, then d4. Not a boring beginner opening; it's popular at the highest level and dangerous for an imprecise Black."
+   "spoken": "The Four Knights Scotch is ideal for practising the fundamentals of getting every piece out — but it's no beginner's toy: it's popular at the very top and genuinely dangerous for the defender who isn't precise with the theory.",
+   "kind": "plan"
   },
   {
    "ply": 6,
@@ -51,7 +52,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "The bishop to c5 is a well-known inaccuracy in this line."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -60,7 +61,8 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "The knight takes on e5 — and don't fear the response Bxf2-check; it turns out to be essentially losing for Black."
+   "spoken": "The bishop to c5 is a well-known inaccuracy, and the way to punish it is to snatch the central pawn without fear. The reply people dread, a bishop sacrifice with check, isn't merely harmless here — it's essentially losing for the defender.",
+   "kind": "tactic"
   },
   {
    "ply": 8,
@@ -85,7 +87,8 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "Then the pawn advances to d4, forking the two minor pieces and forcing the opponent to give one up. The correct retreat is the bishop back to d6; the instinctive capture of the pawn is bad, because the queen then skewers the knight and the game can collapse quickly.",
+   "kind": "tactic"
   },
   {
    "ply": 9,
@@ -94,7 +97,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4, forking back the minor pieces — Black has to give one of them up."
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -103,7 +106,7 @@
    "line": [
     "Bb6"
    ],
-   "spoken": "He should play Bd6, the traditional best defence; Bxd4 is bad, giving the bishop away this early; and his bishop to b6 doesn't even win a pawn for the fork."
+   "spoken": "The bishop retreat to b6 is also poor, because the defender won't even get a pawn back for the fork. A concession that hands over material for nothing is no way to meet the trick."
   },
   {
    "ply": 11,
@@ -130,7 +133,8 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "A fancy move that also sets a trap — the bishop to c4. Any time the queens stand off and the kings are uncastled, look for this: if he takes, then Bxf7-check, since his queen is defended only by the king."
+   "spoken": "Now a fancy option that lays a trap — whenever there's a standoff between the queens and the kings are still uncastled, and the opponent's pieces are underdeveloped, look for it. The key is that the enemy queen is guarded only by its king. So develop the bishop to c4, and a capture invites a sacrifice on f7 that distracts the king and wins the queen.",
+   "kind": "tactic"
   },
   {
    "ply": 14,
@@ -139,7 +143,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": "And he falls right into it."
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -166,7 +170,8 @@
    "line": [
     "Qxd8"
    ],
-   "spoken": "Win the queen — just make sure your own king isn't on e2, or you'd walk straight into a check on g4."
+   "spoken": "And the one detail to verify when running this combination — make sure your own king isn't exposed to an in-between check that turns the tables. Here it's fine, but confirming there's no such resource is exactly the discipline these tactics demand.",
+   "kind": "tactic"
   },
   {
    "ply": 6,
@@ -200,7 +205,8 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "The fork with Qf6 is easily met by the prosaic knight to f3 — just drop it back.",
+   "spoken": "For the record, the reason not to fear the central capture — the queen move that seems to fork knight and pawn is easily met by simply dropping the knight back. The fork evaporates against calm defence.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -227,7 +233,9 @@
     "Qh4",
     "Ne5"
    ],
-   "spoken": ""
+   "spoken": "Another scarecrow is an aggressive queen lunge — but a quiet pawn move sends it packing, after which the knight develops and the bishop fianchettoes on the diagonal that pawn move just opened. Don't be spooked; answer it and develop.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -237,8 +245,7 @@
     "Qf6",
     "g3"
    ],
-   "spoken": "And against Qh4, I like g3 — the queen has to come back, and then Nf3, fianchettoing the bishop.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -264,7 +271,8 @@
     "Kxf2",
     "Nxe5"
    ],
-   "spoken": "Against Bxf2-check, White's king is only temporarily weak — castle by hand with the rook to f1 and the king to g1; what's permanent is our development and central control.",
+   "spoken": "The critical refutation try is the bishop sacrifice with check — and the thing to understand is that the king's exposure is only temporary. You castle by hand, stepping the king to safety and bringing the rook to the file. What's permanent, by contrast, is the lasting grip on the centre and the lead in development.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -332,7 +340,9 @@
     "Nf6",
     "Kg1"
    ],
-   "spoken": ""
+   "spoken": "The punchline of that line — not only did the king reach safety by hand, but the newly opened f-file actively favours the attacker. So the sacrifice did a favour, because a bishop pin makes the pressure on the enemy knight instantly unbearable, threatening to shatter the king's cover.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -510,7 +520,9 @@
     "Nxe5",
     "d4"
    ],
-   "spoken": ""
+   "spoken": "The proper way to meet the pawn fork is the bishop to d6 — and after the exchanges the first player emerges with a central pawn, a slight development lead, and an awkward enemy bishop that a pawn thrust can harass later. A pleasant, risk-free edge.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -529,8 +541,7 @@
     "dxe5",
     "Bxe5"
    ],
-   "spoken": "The proper defence is Bd6 — after dxe5 and Bxe5, White has a central pawn, a slight development edge, and the bishop on e5 is awkward, hittable later by f4.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -553,7 +564,9 @@
    "t": 476.5,
    "fen": "r1bqk1nr/pppp1ppp/3b4/4n3/3PP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 1 6",
    "line": [],
-   "spoken": ""
+   "spoken": "When the enemy king is this weak, the guiding principle is to avoid trading queens — the capture that regains material lets the defender swap the queens off into an endgame, throwing away the whole attack. Keep the queens on and keep the king in the crosshairs.",
+   "kind": "plan",
+   "reanchor": true
   }
  ]
 }
