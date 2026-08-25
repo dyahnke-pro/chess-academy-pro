@@ -1,0 +1,237 @@
+{
+ "videoId": "ts8OsKe0taY",
+ "title": "Daniel Reunited With MoistCr1tikal | Streamer Lesson",
+ "openingName": "Italian Game: Two Knights Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:ts8OsKe0taY",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 903,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 905,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 906,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 907,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 909.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 912.5,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p1N1/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 5 4",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "He plays the Fried Liver — the knight to g5."
+  },
+  {
+   "ply": 8,
+   "t": 927.5,
+   "fen": "r1bqkb1r/ppp2ppp/2n2n2/3pp1N1/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 0 5",
+   "line": [
+    "d5"
+   ],
+   "spoken": "The defence is d5 — he's threatening to take on f7 with a fork, so intercept the bishop; and if he takes, don't recapture that pawn with your knight."
+  },
+  {
+   "ply": 9,
+   "t": 936,
+   "fen": "r1bqkb1r/ppp2ppp/2n2n2/3Pp1N1/2B5/8/PPPP1PPP/RNBQK2R b KQkq - 0 5",
+   "line": [
+    "exd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 948.5,
+   "fen": "r1bqkb1r/ppp2ppp/5n2/n2Pp1N1/2B5/8/PPPP1PPP/RNBQK2R w KQkq - 1 6",
+   "line": [
+    "Na5"
+   ],
+   "spoken": "Move the knight out of c6 and chase the bishop on c4 — the knight to a5."
+  },
+  {
+   "ply": 5,
+   "t": 1513,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1519,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p3/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 4 4",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": "To avoid the Fried Liver altogether, you can also develop the bishop first with Bc5 — then your queen covers the g5 square, and he can't play Ng5.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1542.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p1N1/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 6 5",
+   "line": [
+    "Ng5",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1550.5,
+   "fen": "r1bqk2r/pppp1Npp/2n2n2/2b1p3/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 5",
+   "line": [
+    "Nxf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 1565.5,
+   "fen": "r1bqk2r/pppp1Npp/2n2n2/4p3/2B1P3/8/PPPP1bPP/RNBQK2R w KQkq - 0 6",
+   "line": [
+    "Bxf2+"
+   ],
+   "spoken": "The Traxler idea — the crazy-looking bishop takes on f2, with check.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 1576.5,
+   "fen": "r1bqk2r/pppp1Npp/2n2n2/4p3/2B1P3/8/PPPP1KPP/RNBQ3R b kq - 0 6",
+   "line": [
+    "Kxf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1581,
+   "fen": "r1bqk2r/pppp1Npp/2n5/4p3/2B1n3/8/PPPP1KPP/RNBQ3R w kq - 0 7",
+   "line": [
+    "Nxe4+"
+   ],
+   "spoken": "Then the knight takes on e4, with check.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 1583,
+   "fen": "r1bqk2r/pppp1Npp/2n5/4p3/2B1n3/8/PPPP2PP/RNBQ2KR b kq - 1 7",
+   "line": [
+    "Kg1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 1614,
+   "fen": "r1b1k2r/pppp1Npp/2n5/4p3/2B1n2q/8/PPPP2PP/RNBQ2KR w kq - 2 8",
+   "line": [
+    "Qh4"
+   ],
+   "spoken": "The queen to h4 — that's the move, with the same devastating mating idea.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 1629.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p1N1/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 6 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 1634.5,
+   "fen": "r1bqk2r/pppp1Bpp/2n2n2/2b1p1N1/4P3/8/PPPP1PPP/RNBQK2R b KQkq - 0 5",
+   "line": [
+    "Bxf7+"
+   ],
+   "spoken": "But the bishop takes on f7 with check sidesteps the whole Traxler — just grab the pawn, keep it simple, up a pawn, and Black has no attack.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 1639,
+   "fen": "r1bq1k1r/pppp1Bpp/2n2n2/2b1p1N1/4P3/8/PPPP1PPP/RNBQK2R w KQ - 1 6",
+   "line": [
+    "Kf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1640,
+   "fen": "r1bq1k1r/pppp2pp/2n2n2/2b1p1N1/4P3/1B6/PPPP1PPP/RNBQK2R b KQ - 2 6",
+   "line": [
+    "Bb3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1647.5,
+   "fen": "r1bq1k1r/pppp2pp/2n2n2/4p1N1/4P3/1B6/PPPP1bPP/RNBQK2R w KQ - 0 7",
+   "line": [
+    "Bxf2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1674.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p1N1/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 6 5",
+   "line": [],
+   "spoken": "Why doesn't the Traxler work here anymore? Because the e4 square is covered.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 1675.5,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p1N1/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 5 4",
+   "line": [],
+   "spoken": "And why is recapturing on d5 with the knight bad? Nxf7, king takes, and the check on f3 leaves the king stuck out on e6 — White is simply better.",
+   "reanchor": true
+  }
+ ]
+}
