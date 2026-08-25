@@ -1,0 +1,421 @@
+{
+ "videoId": "UXWYC8k7Gas",
+ "title": "Master Class | 900 Elo | Chess Speedrun | Grandmaster Naroditsky",
+ "openingName": "Danish Gambit",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:UXWYC8k7Gas",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 1167.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4",
+    "e5",
+    "e4"
+   ],
+   "spoken": "Hoping to finally play the Danish Gambit — d4, e5, e4."
+  },
+  {
+   "ply": 4,
+   "t": 1177,
+   "fen": "rnbqkbnr/pppp2pp/5p2/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "f6"
+   ],
+   "spoken": "But f6 — a horrible move, one of the worst here, a Damiano-style weakening."
+  },
+  {
+   "ply": 5,
+   "t": 1204.5,
+   "fen": "rnbqkbnr/pppp2pp/5p2/4P3/4P3/8/PPP2PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": "Not the immediate check on h5 — Black answers g6. First take on e5, and if he takes back, he is basically lost."
+  },
+  {
+   "ply": 9,
+   "t": 1215.5,
+   "fen": "rnbqkbnr/pppp3p/6p1/4Q3/4P3/8/PPP2PPP/RNB1KBNR b KQkq - 0 5",
+   "line": [
+    "g6",
+    "Qd4",
+    "fxe5",
+    "Qxe5+"
+   ],
+   "spoken": "It is like the Damiano, except White has not even sacrificed the knight — the queen check wins the rook. As old as the hills."
+  },
+  {
+   "ply": 10,
+   "t": 1241.5,
+   "fen": "rnb1kbnr/ppppq2p/6p1/4Q3/4P3/8/PPP2PPP/RNB1KBNR w KQkq - 1 6",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1243,
+   "fen": "rnb1kbnQ/ppppq2p/6p1/8/4P3/8/PPP2PPP/RNB1KBNR b KQq - 0 6",
+   "line": [
+    "Qxh8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1245.5,
+   "fen": "rnb1kb1Q/ppppq2p/5np1/8/4P3/8/PPP2PPP/RNB1KBNR w KQq - 1 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "f6 is a natural-looking move — beginners don't grasp how it weakens the king. But now White must be precise: don't fool around with the queen, it is trapped."
+  },
+  {
+   "ply": 13,
+   "t": 1271,
+   "fen": "rnb1kb1Q/ppppq2p/5npB/8/4P3/8/PPP2PPP/RN2KBNR b KQq - 2 7",
+   "line": [
+    "Bh6"
+   ],
+   "spoken": "To untrap it, use the fact that the queen pins the bishop — the elementary bishop to h6, forcing a queen trade."
+  },
+  {
+   "ply": 14,
+   "t": 1279.5,
+   "fen": "r1b1kb1Q/ppppq2p/2n2npB/8/4P3/8/PPP2PPP/RN2KBNR w KQq - 3 8",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "Don't be deterred by the check on c4 — just cover it. And White needn't take on f8 immediately; develop the knight first and defend the pawn."
+  },
+  {
+   "ply": 15,
+   "t": 1287.5,
+   "fen": "r1b1kb1Q/ppppq2p/2n2npB/8/4P3/2N5/PPP2PPP/R3KBNR b KQq - 4 8",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 1291.5,
+   "fen": "r1b1kb1Q/ppppq2p/5npB/4n3/4P3/2N5/PPP2PPP/R3KBNR w KQq - 5 9",
+   "line": [
+    "Ne5"
+   ],
+   "spoken": "Still no rush to take on f8 — make another developing move, castling."
+  },
+  {
+   "ply": 17,
+   "t": 1309.5,
+   "fen": "r1b1kb1Q/ppppq2p/5npB/4n3/4P3/2N5/PPP2PPP/2KR1BNR b q - 6 9",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1315.5,
+   "fen": "r1b1kb1Q/ppppqn1p/5npB/8/4P3/2N5/PPP2PPP/2KR1BNR w q - 7 10",
+   "line": [
+    "Nf7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 1320.5,
+   "fen": "r1b1kQ2/ppppqn1p/5npB/8/4P3/2N5/PPP2PPP/2KR1BNR b q - 0 10",
+   "line": [
+    "Qxf8+"
+   ],
+   "spoken": "Black finds an ingenious idea, but White takes on f8 at the last moment. As a beginner, though, I'd take at once — you are inside a professional's head here."
+  },
+  {
+   "ply": 21,
+   "t": 1324.5,
+   "fen": "r1b1kB2/pppp1n1p/5np1/8/4P3/2N5/PPP2PPP/2KR1BNR b q - 0 11",
+   "line": [
+    "Qxf8",
+    "Bxf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1326,
+   "fen": "r1b2k2/pppp1n1p/5np1/8/4P3/2N5/PPP2PPP/2KR1BNR w - - 0 12",
+   "line": [
+    "Kxf8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 1332,
+   "fen": "r1b2k2/pppp1n1p/5np1/8/4PP2/2N5/PPP3PP/2KR1BNR b - - 0 12",
+   "line": [
+    "f4"
+   ],
+   "spoken": "A good idea — f4, advancing another pawn into the centre."
+  },
+  {
+   "ply": 24,
+   "t": 1334,
+   "fen": "r1b2k2/pppp1n1p/6p1/8/4PPn1/2N5/PPP3PP/2KR1BNR w - - 1 13",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 1347.5,
+   "fen": "r1b2k2/pppp1n1p/6p1/8/4PPn1/2N5/PPPR2PP/2K2BNR b - - 2 13",
+   "line": [
+    "Rd2"
+   ],
+   "spoken": "The knight to g4 hits f2. Defend with the rook to d2 rather than the knight to h3 — no knight on the rim — and then chase Black's knight with h3."
+  },
+  {
+   "ply": 26,
+   "t": 1365,
+   "fen": "r1b2k2/pppp3p/3n2p1/8/4PPn1/2N5/PPPR2PP/2K2BNR w - - 3 14",
+   "line": [
+    "Nd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 1369,
+   "fen": "r1b2k2/pppp3p/3n2p1/8/4PPn1/2N2N2/PPPR2PP/2K2B1R b - - 4 14",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "Completely winning, up a full rook — just develop and use common sense. No need for h3 yet; the knight to f3, and remember, a piece on your side of the board is not scary."
+  },
+  {
+   "ply": 28,
+   "t": 1380.5,
+   "fen": "r1b2k2/p1pp3p/1p1n2p1/8/4PPn1/2N2N2/PPPR2PP/2K2B1R w - - 0 15",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 1383.5,
+   "fen": "r1b2k2/p1pp3p/1p1n2p1/8/4PPn1/2N2N1P/PPPR2P1/2K2B1R b - - 0 15",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1387.5,
+   "fen": "r1b2k2/p1pp3p/1p1n1np1/4P3/5P2/2N2N1P/PPPR2P1/2K2B1R b - - 0 16",
+   "line": [
+    "Nf6",
+    "e5"
+   ],
+   "spoken": "Now e5 forks the two knights."
+  },
+  {
+   "ply": 32,
+   "t": 1393,
+   "fen": "r1b2k2/p1pp3p/1p1n2p1/4P3/4nP2/2N2N1P/PPPR2P1/2K2B1R w - - 1 17",
+   "line": [
+    "Nfe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1405.5,
+   "fen": "r1b2k2/p1pp3p/1p1P2p1/8/4nP2/2N2N1P/PPPR2P1/2K2B1R b - - 0 17",
+   "line": [
+    "exd6"
+   ],
+   "spoken": "Take on d6 — two pieces for a rook, and now two full pieces up."
+  },
+  {
+   "ply": 34,
+   "t": 1407.5,
+   "fen": "r1b2k2/p1pp3p/1p1P2p1/8/5P2/2N2N1P/PPPn2P1/2K2B1R w - - 0 18",
+   "line": [
+    "Nxd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1408.5,
+   "fen": "r1b2k2/p1pp3p/1p1P2p1/8/5P2/2N2N1P/PPPK2P1/5B1R b - - 0 18",
+   "line": [
+    "Kxd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1411,
+   "fen": "r1b2k2/p2p3p/1p1p2p1/8/5P2/2NB1N1P/PPPK2P1/7R b - - 1 19",
+   "line": [
+    "cxd6",
+    "Bd3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 1417.5,
+   "fen": "r4k2/pb1p3p/1p1p2p1/8/5P2/2NB1N1P/PPPK2P1/4R3 b - - 3 20",
+   "line": [
+    "Bb7",
+    "Re1"
+   ],
+   "spoken": "Complete development, bring the rook into the game, and win."
+  },
+  {
+   "ply": 40,
+   "t": 1431,
+   "fen": "r4k2/pb1p4/1p1p2p1/7p/5P2/2NB1N1P/PPPK2P1/4R3 w - - 0 21",
+   "line": [
+    "h5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 41,
+   "t": 1432.5,
+   "fen": "r4k2/pb1p4/1p1p2B1/7p/5P2/2N2N1P/PPPK2P1/4R3 b - - 0 21",
+   "line": [
+    "Bxg6"
+   ],
+   "spoken": "The bishop takes on g6, and Black resigns."
+  },
+  {
+   "ply": 43,
+   "t": 1436,
+   "fen": "r7/pb1p2k1/1p1p2B1/5P1p/8/2N2N1P/PPPK2P1/4R3 b - - 0 22",
+   "line": [
+    "Kg7",
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1446,
+   "fen": "rnbqkbnr/pppp2pp/5p2/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1447.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1449,
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "d6"
+   ],
+   "spoken": "If Black declines the Center Game, d6 is the better way — far from ideal, but White can transpose to a Philidor, or take the queens off into an endgame that is OK for Black but not great, since Black has lost castling.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 1454.5,
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 1 3",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1456.5,
+   "fen": "rnbqkbnr/ppp2ppp/3p4/4p3/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1459.5,
+   "fen": "rnbk1bnr/ppp2ppp/8/4p3/4P3/8/PPP2PPP/RNB1KBNR w KQ - 0 5",
+   "line": [
+    "dxe5",
+    "dxe5",
+    "Qxd8+",
+    "Kxd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 1468,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 1470,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/8/PPP2PPP/RNBQKBNR w KQkq - 0 3",
+   "line": [
+    "exd4"
+   ],
+   "spoken": "Playing Black against the Danish, you simply accept the gambit — that is part of the package: after c3 you take on c3, and with some effort you get a fine game.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 1476.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "c3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1480.5,
+   "fen": "rnbqkbnr/pp1p1ppp/8/2p5/3pP3/2P5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1482.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/3pP3/2P5/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1483.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/8/4P3/2p5/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "dxc3"
+   ],
+   "spoken": ""
+  }
+ ]
+}
