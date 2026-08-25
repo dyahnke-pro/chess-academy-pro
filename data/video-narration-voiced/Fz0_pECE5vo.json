@@ -1,7 +1,7 @@
 {
  "videoId": "Fz0_pECE5vo",
  "title": "Scandi as WHITE!? Chase The Queen! | Sicilian, Smith-Morra | Top Theory Speedrun | GM Naroditsky",
- "openingName": "Sicilian Defense",
+ "openingName": "Sicilian Defence",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -16,7 +16,7 @@
     "c5",
     "e4"
    ],
-   "spoken": "White sidesteps the knight moves and plays into a gambit-style d4, and once the centre opens, e4."
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -26,7 +26,7 @@
     "cxd4",
     "Qxd4"
    ],
-   "spoken": "Black takes on d4, and White recaptures with the queen. Not terrible, but not good — this kind of play makes sense against e5, where it is the Center Game, not against the Sicilian."
+   "spoken": "Recapturing with the queen isn't outright terrible, but it's misplaced here. Against a king's-pawn game this early queen sortie is the Center Game — genuinely playable. Against the Sicilian it's just poor, because it hands over a stack of tempi."
   },
   {
    "ply": 6,
@@ -35,7 +35,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Here it just bleeds tempo — White is essentially playing a Scandinavian with colours reversed, and that is dubious enough with Black. So Black hits the queen with the knight to c6."
+   "spoken": "Why so many lost tempi? Because it amounts to playing a Scandinavian a move up as the wrong colour — and the Scandinavian is dubious enough that nobody wants it with either colour. Meanwhile the knight leaps out with gain of time, hitting the queen."
   },
   {
    "ply": 7,
@@ -44,7 +44,8 @@
    "line": [
     "Qa4"
    ],
-   "spoken": "The queen scurries to a4 — a reversed Scandi, with the pawn already advanced to e4. Black has many good setups; the key is to stay consistent with the open-Sicilian line you'd normally play."
+   "spoken": "There are countless ways to arrange the pieces from here, and the guiding idea is to stay true to the spirit of whatever open-Sicilian repertoire you'd normally play — Dragon players reach for g6, Taimanov and Sveshnikov players for e6, Najdorf players for d6. All of them are valid.",
+   "kind": "plan"
   },
   {
    "ply": 8,
@@ -53,7 +54,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "As Accelerated Dragon players, Black sticks to the fianchetto with g6."
+   "spoken": "In the spirit of the accelerated fianchetto, the bishop's diagonal comes first whenever there's no concrete reason to deviate — and here there's no downside to it."
   },
   {
    "ply": 9,
@@ -62,7 +63,7 @@
    "line": [
     "Bd2"
    ],
-   "spoken": "White develops the bishop to d2, a classic idea, heading for c3."
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -71,7 +72,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": "Black continues the fianchetto with the bishop to g7 — and against the bishop coming to c3, Black definitely does not want to trade the dark bishops."
+   "spoken": "The one thing to refuse is a trade of the fianchettoed bishop — swapping that piece off would be a real mistake, so the plan is simply to complete the setup around it."
   },
   {
    "ply": 11,
@@ -80,7 +81,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "White plays c3 — a conceptually poor move: it develops nothing and self-restricts the knight. White's lack of development is reaching alarming proportions, but Black just keeps developing, with d5 to open the centre as a future idea."
+   "spoken": "That little pawn move is conceptually bad — it develops nothing and cramps its own knight. The opponent's development has fallen alarmingly behind, but that changes nothing on this side: just keep bringing pieces out, with a d5 break in the back pocket for when the moment to open the centre arrives."
   },
   {
    "ply": 12,
@@ -89,7 +90,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "So Black develops the knight to f6 — no need to haul the queen out early the way White did."
+   "spoken": "Keep developing — the knight comes to f6. The trap to avoid is the very error the opponent fell into: dragging the queen out too early."
   },
   {
    "ply": 11,
@@ -106,7 +107,9 @@
     "Nf6",
     "Bf4"
    ],
-   "spoken": "A lesson in comparison: earlier Black chose e6 and a knight to e7 to avoid blocking the dark bishop — but this is a different situation. With the centre about to open, speed matters more than that diagonal, and the knight to f6 is efficient, active, and leans on the e4-pawn."
+   "spoken": "This looks like it contradicts the usual advice to play e6 and g7 so as not to block the dark-squared bishop — but it's a different situation, and knowing the difference is proper use of comparison. Here the bishop isn't the centre of the universe; speed and cracking the centre open are. The e6-and-g7 plan costs two moves, while the knight leap is efficient, active, and leans on the e-pawn.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -126,7 +129,8 @@
     "Nf6",
     "Bf4"
    ],
-   "spoken": ""
+   "spoken": "The knight on f6 is doing real work — efficient, active, and pressing the e4-pawn. It's still too early for the central break; there's a useful move to insert first.",
+   "kind": "plan"
   },
   {
    "ply": 18,
@@ -135,7 +139,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "First, just castle — tuck the king away. White is nowhere near finishing development, so Black can afford the move."
+   "spoken": "That move is castling — just tuck the king away. The opponent is nowhere near finishing development, so there's plenty of time to spend a safety move first."
   },
   {
    "ply": 19,
@@ -144,7 +148,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "And there it is, e5 — the move Black dreamed of. White overextends with no pieces out; the train left the tracks long ago. When a pawn advances a square opens up — always ask which, and whether you can occupy it."
+   "spoken": "The push overextends a position with no pieces out — the train left the tracks long ago. And a general rule fires here: whenever a pawn advances, it mathematically vacates a square. Always know which square just opened and whether a piece can seize it."
   },
   {
    "ply": 20,
@@ -153,7 +157,8 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "The knight to d5, centralised by principle — though the knight to h5 was also perfectly fine."
+   "spoken": "The vacated square invites the knight to centralise on d5 — keeping the piece in the middle where its reach is greatest, in line with the principle. The rim square works too, but central posting is the cleaner choice.",
+   "kind": "plan"
   },
   {
    "ply": 21,
@@ -162,7 +167,7 @@
    "line": [
     "Qe4"
    ],
-   "spoken": "White's queen wanders to e4, continuing to derail."
+   "spoken": ""
   },
   {
    "ply": 23,
@@ -191,7 +196,7 @@
    "line": [
     "Nxf4"
    ],
-   "spoken": "Black takes the bishop. The knight to g4 was also strong — perhaps even best — guaranteeing the win of the e5-pawn."
+   "spoken": ""
   },
   {
    "ply": 23,
@@ -210,8 +215,8 @@
     "Nxf4",
     "Qxf4"
    ],
-   "spoken": "After the knight to g4 there are three attackers and only one defender on e5. Now — capture the pawn with what? A fine test of understanding: take with the knight. Grabbing with the bishop is one-move-itis — the queen out on f4 is a liability, and the knight capture sets up a fork on d3 while keeping the queen pinned where Black wants it.",
-   "reanchor": true
+   "spoken": "Now a lesson in resisting one-move-itis: recapture the pawn with the knight, not the bishop. Taking with the knight sets up a fork on d3 and keeps the exposed queen pinned to its awkward post. Grabbing with the bishop hands the queen a route back to safety — and pulling a fianchettoed bishop off its diagonal, even along the same line, invites the opponent to develop with tempo and offer the trade you least want.",
+   "kind": "tactic"
   },
   {
    "ply": 28,
@@ -220,7 +225,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "So the knight takes on e5 — a no-brainer, keeping the bishop and setting up the d3 fork. Sound small decisions make the whole game run smoothly."
+   "spoken": ""
   },
   {
    "ply": 29,
@@ -229,7 +234,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "White develops the knight to d2. Black keeps the pedal to the metal — the maximally forcing approach, a threat on every move."
+   "spoken": ""
   },
   {
    "ply": 30,
@@ -238,7 +243,8 @@
    "line": [
     "Qc7"
    ],
-   "spoken": "Queen b6 was excellent, but Black prefers the subtler queen to c7. And this is not playing for tricks — the test is: would you play it even without the threat? Yes: the white queen has few comfortable squares, and if White castles long the queen on c7 x-rays the c3-pawn and helps coordinate the rooks."
+   "spoken": "Rather than the obvious queen thrust, a subtler post is better — and it passes the honest test for whether a move is a mere trick: would you still play it if the threat vanished? Yes — the queen here eyes the c3-pawn should the opponent castle long, and helps knit the rooks together. That it also threatens to win the queen is a bonus, not the whole point.",
+   "kind": "plan"
   },
   {
    "ply": 31,
@@ -256,7 +262,8 @@
    "line": [
     "Nd3+"
    ],
-   "spoken": "And there is the point — the knight to d3 with check, the fork trick."
+   "spoken": "And the trick cashes in — a knight check on d3 wins the queen outright.",
+   "kind": "tactic"
   },
   {
    "ply": 33,
@@ -274,7 +281,7 @@
    "line": [
     "Qxf4"
    ],
-   "spoken": "White has to take, and Black snaps off the queen — a clean, easy win in thirteen moves."
+   "spoken": ""
   },
   {
    "ply": 35,
@@ -283,7 +290,7 @@
    "line": [
     "Be4"
    ],
-   "spoken": "The whole game was simply reacting to White's threats, developing, and winning the queen. Now, rather than grab more with the capture on f2, the priority is to open the centre fast, before White ever finishes developing."
+   "spoken": ""
   },
   {
    "ply": 36,
@@ -292,7 +299,8 @@
    "line": [
     "d5"
    ],
-   "spoken": "So — d5. Who cares about a pawn when you're up a queen? Give it back, open the d-file, and win faster."
+   "spoken": "Up a queen, the right instinct isn't to snatch more pawns but to open the position before the opponent ever finishes developing. So don't dawdle with d6 — throw in d5, gift a pawn, and blow the d-file wide open. Speed is worth more than a pawn here.",
+   "kind": "plan"
   },
   {
    "ply": 37,
@@ -310,7 +318,7 @@
    "line": [
     "Rd8"
    ],
-   "spoken": "And now a rook to d8 — the whole plan is to pile every piece onto that knight on d2."
+   "spoken": ""
   },
   {
    "ply": 36,
@@ -328,8 +336,7 @@
     "Rd8",
     "Bb3"
    ],
-   "spoken": "Knowing when to take material and when to give a little back is an art, not a science.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 40,
@@ -338,7 +345,7 @@
    "line": [
     "Bh6"
    ],
-   "spoken": "The straightforward way to get at that d2-knight is the bishop from g7 to h6 — yes, leaving the fianchetto square, but here for a very good reason.",
+   "spoken": "Knowing when to grab material and when to give it back is an art, not a science. The direct route to the loose knight is to reroute the dark-squared bishop up to h6.",
    "reanchor": true
   },
   {
@@ -348,8 +355,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "A small detail, though: after the bishop to g4, White could slip the king to b1, and if Black then takes the knight on f3, the other knight recaptures. So an amendment is needed.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 42,
@@ -358,8 +364,8 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "Instead of the bishop to g4, Black plays the bishop to f5 — pinning the king in place, since a moving target is harder to catch — and prepares the last piece with a rook to c8, sacrifices on c3 in the air.",
-   "reanchor": true
+   "spoken": "A careful amendment: the natural pin would let the king slip to the corner, and then a recapture keeps everything defended. So instead, plant the bishop on f5 to freeze the king in place — a target that can't move is far easier to hunt down — while readying the last rook to join.",
+   "kind": "plan"
   },
   {
    "ply": 43,
@@ -368,8 +374,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "There is even a hidden mate threat, which White can parry with a rook to e1 — but he does not.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 44,
@@ -378,8 +383,8 @@
    "line": [
     "Qe4"
    ],
-   "spoken": "Now, taking on f3 to exploit the pin is tempting, but there is better — the queen to e4, mate in two. The knight is untouchable because it is pinned, and the threat is a queen to b1, mate.",
-   "reanchor": true
+   "spoken": "The cleanest finish uses the pin instead of the greedy capture: the queen steps to e4, and because the enemy knight is pinned to its king, both squares it seems to guard are an illusion. Mate follows on the back rank — the pure power of the pin.",
+   "kind": "tactic"
   },
   {
    "ply": 45,
@@ -388,8 +393,7 @@
    "line": [
     "Nd4"
    ],
-   "spoken": "See the pure power of the pin — both key squares look defended by the knight, but a pinned knight defends nothing.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 46,
@@ -398,8 +402,7 @@
    "line": [
     "Qb1#"
    ],
-   "spoken": "And there it is — the queen to b1, checkmate. The knight cannot capture, because it is pinned to the king.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 43,
@@ -417,7 +420,7 @@
     "Nd4",
     "Qf5"
    ],
-   "spoken": "The lesson: when you see a free piece, take another fifteen or twenty seconds to weigh the other candidates. If you would never find a move like this, ask why — usually you are underestimating the power of the pin.",
+   "spoken": "The takeaway when a combination like this feels invisible: it's usually because the pin is being underestimated and the eye is glued to the free piece. Train the habit — every time a piece hangs, spend an extra fifteen or twenty seconds weighing the quieter candidate moves before grabbing it.",
    "reanchor": true
   },
   {
@@ -425,8 +428,7 @@
    "t": 802.5,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": "If you see a good move, look for a better one. A clean, straightforward game — White got off on the wrong foot with that odd queen-takes-d4 line.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -436,7 +438,7 @@
     "cxd4",
     "Qxd4"
    ],
-   "spoken": "To be fair, against e5, d4 is legitimate — that is the Center Game, played even by strong grandmasters. Against the Sicilian it makes far less sense; the queen normally drops back to e3, and here it is simply a poor choice. Even so, White is not lost after two queen moves — but he must be very accurate to hold.",
+   "spoken": "To be fair about the theory — against a king's-pawn game this same queen recapture is the respectable Center Game, played even at the top level as an offbeat try. It's only against the Sicilian that it sinks to the bottom tier; there the queen really ought to stay planted in the centre.",
    "reanchor": true
   }
  ]
