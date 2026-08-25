@@ -1,10 +1,10 @@
 {
  "videoId": "OQsa_sdKzjY",
  "title": "Master Class | Alekhine Defense | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Alekhine's Defense: Exchange Variation",
+ "openingName": "Alekhine Defense",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:OQsa_sdKzjY",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "We answer the king's pawn with the knight to f6 — the Alekhine, a rare but sound choice."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "e5",
     "Nd5"
    ],
-   "spoken": ""
+   "spoken": "White chases with e5 and our knight hops to d5."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "White expands with c4."
   },
   {
    "ply": 6,
@@ -43,7 +43,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "We retreat the knight to b6."
   },
   {
    "ply": 7,
@@ -52,10 +52,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "White occupies the centre with the pawn to d4 — the sound, measured way to meet the Alekhine, building the big centre without overreaching.",
-   "kind": "main",
-   "teaches": "Against the Alekhine's provocation, occupy the centre soundly rather than lunging forward.",
-   "plans": "Complete the centre, then develop."
+   "spoken": "White plays d4, taking the centre in a measured way."
   },
   {
    "ply": 8,
@@ -64,7 +61,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "We strike back with d6."
   },
   {
    "ply": 9,
@@ -73,7 +70,7 @@
    "line": [
     "exd6"
    ],
-   "spoken": ""
+   "spoken": "White captures on d6 — one of the two main lines."
   },
   {
    "ply": 10,
@@ -82,10 +79,7 @@
    "line": [
     "cxd6"
    ],
-   "spoken": "Recapture with the c-pawn — the recommended choice. It teaches you to play with an imbalanced structure: White gets a queenside pawn majority, Black a kingside majority, and each side plays where it is stronger.",
-   "kind": "main",
-   "teaches": "Recapturing toward the wing creates majorities — an imbalance you steer for your own plans.",
-   "plans": "Play on the kingside where your majority lies."
+   "spoken": "We recapture with the c-pawn on d6 — my recommendation for Alekhine beginners, because it teaches you to handle an imbalanced structure: White gets a queenside pawn majority, we get a kingside majority."
   },
   {
    "ply": 11,
@@ -94,7 +88,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to c3. Our light-squared bishop will struggle to get out, so we'll fianchetto."
   },
   {
    "ply": 12,
@@ -103,10 +97,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "The pawn to g6 prepares the fianchetto. The light-squared bishop has a hard time finding a good diagonal here, so the natural home for the dark-squared bishop is the long diagonal on g7.",
-   "kind": "main",
-   "teaches": "When a bishop's natural diagonal is blocked, fianchetto it to the long diagonal instead.",
-   "plans": "Fianchetto, castle, and target the centre."
+   "spoken": "We play g6, preparing the fianchetto."
   },
   {
    "ply": 13,
@@ -124,7 +115,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "The bishop settles on g7."
   },
   {
    "ply": 18,
@@ -136,10 +127,7 @@
     "Rg1",
     "O-O"
    ],
-   "spoken": "The knight to c6 completes the plan: Black's pieces bear down on White's two central pawns. That pressure is the whole point of the setup.",
-   "kind": "main",
-   "teaches": "In the Alekhine the target is the pawn centre — pile pieces against it.",
-   "plans": "Pressure c4 and d4; provoke a concession."
+   "spoken": "We continue naturally with the knight to c6, and the plan writes itself: press White's two central pawns. It resembles a Dragon but far calmer — both sides castle short and nobody's getting mated soon. It's hard to play at club level for two reasons: you're a touch cramped, so accuracy matters, and you must know how to meet a wide range of White setups."
   }
  ]
 }
