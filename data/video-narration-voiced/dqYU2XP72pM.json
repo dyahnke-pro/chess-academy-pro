@@ -1,0 +1,293 @@
+{
+ "videoId": "dqYU2XP72pM",
+ "title": "Bishop & Knight for a Rook?! Sneaky!! | Jobava London | GM Naroditsky’s Theory Speed Run",
+ "openingName": "London System",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:dqYU2XP72pM",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 22,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 1 2",
+   "line": [
+    "d4",
+    "Nf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 23,
+   "fen": "rnbqkb1r/pppppppp/5n2/8/3P4/2N5/PPP1PPPP/R1BQKBNR b KQkq - 2 2",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "The Jobava London — the knight to c3."
+  },
+  {
+   "ply": 4,
+   "t": 25,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3",
+   "line": [
+    "d5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 26.5,
+   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR b KQkq - 1 3",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 30,
+   "fen": "rnbqkb1r/1pp1pppp/p4n2/3p4/3P1B2/2N5/PPP1PPPP/R2QKBNR w KQkq - 0 4",
+   "line": [
+    "a6"
+   ],
+   "spoken": "a6 is one of the common tries, alongside e6 and the bishop to f5."
+  },
+  {
+   "ply": 7,
+   "t": 52,
+   "fen": "rnbqkb1r/1pp1pppp/p4n2/3p4/3P1B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 4",
+   "line": [
+    "e3"
+   ],
+   "spoken": "e3 — a move you always make in the Jobava. It looks innocuous, but it's actually a very aggressive, attacking system."
+  },
+  {
+   "ply": 8,
+   "t": 74,
+   "fen": "rnbqkb1r/1p2pppp/p4n2/2pp4/3P1B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 0 5",
+   "line": [
+    "c5"
+   ],
+   "spoken": "c5 is already a mistake — an attempt to punish the knight on c3, but that knight is pressuring the d5-pawn, which changes everything."
+  },
+  {
+   "ply": 9,
+   "t": 116,
+   "fen": "rnbqkb1r/1p2pppp/p4n2/2Pp4/5B2/2N1P3/PPP2PPP/R2QKBNR b KQkq - 0 5",
+   "line": [
+    "dxc5"
+   ],
+   "spoken": "So take — dxc5. The pressure on d5 intensifies, and it's surprisingly hard for Black to win the pawn back without falling behind in development."
+  },
+  {
+   "ply": 10,
+   "t": 125,
+   "fen": "r1bqkb1r/1p2pppp/p1n2n2/2Pp4/5B2/2N1P3/PPP2PPP/R2QKBNR w KQkq - 1 6",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 146,
+   "fen": "r1bqkb1r/1p2pppp/p1n2n2/2Pp4/5B2/P1N1P3/1PP2PPP/R2QKBNR b KQkq - 0 6",
+   "line": [
+    "a3"
+   ],
+   "spoken": "The knight to f3 is the common online move, but it's not correct here — the right move is a3, planning b4 to hold the c5-pawn."
+  },
+  {
+   "ply": 12,
+   "t": 155,
+   "fen": "r1bqkb1r/1p3ppp/p1n2n2/2Ppp3/5B2/P1N1P3/1PP2PPP/R2QKBNR w KQkq - 0 7",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Black grabs the centre with e5, threatening to win back c5 with interest."
+  },
+  {
+   "ply": 13,
+   "t": 167,
+   "fen": "r1bqkb1r/1p3ppp/p1n2n2/2Ppp1B1/8/P1N1P3/1PP2PPP/R2QKBNR b KQkq - 1 7",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "But here's the catch — rather than retreating meekly, the bishop to g5, threatening Bxf6 and then Nxd5, knocking out a key central pawn while keeping the extra material."
+  },
+  {
+   "ply": 14,
+   "t": 179,
+   "fen": "r2qkb1r/1p3ppp/p1n1bn2/2Ppp1B1/8/P1N1P3/1PP2PPP/R2QKBNR w KQkq - 2 8",
+   "line": [
+    "Be6"
+   ],
+   "spoken": "Black has to waste a tempo with the bishop to e6."
+  },
+  {
+   "ply": 15,
+   "t": 190,
+   "fen": "r2qkb1r/1p3ppp/p1n1bn2/2Ppp1B1/1P6/P1N1P3/2P2PPP/R2QKBNR b KQkq - 0 8",
+   "line": [
+    "b4"
+   ],
+   "spoken": "And that lets us finally secure the c5-pawn with b4 — exactly why we played a3."
+  },
+  {
+   "ply": 16,
+   "t": 194,
+   "fen": "r2qk2r/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1P3/2P2PPP/R2QKBNR w KQkq - 1 9",
+   "line": [
+    "Be7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 233,
+   "fen": "r2qk2r/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P2PPP/R2QKB1R b KQkq - 2 9",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "Now catch up in development — the knight to f3; there's no rush for the Na4-to-b6 maneuver yet."
+  },
+  {
+   "ply": 18,
+   "t": 235.5,
+   "fen": "r2q1rk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P2PPP/R2QKB1R w KQ - 3 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 245,
+   "fen": "r2q1rk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2QK2R b KQ - 4 10",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "Not the bishop to d3, which walks into a fork — develop modestly to e2. Up a full pawn, and one that cramps Black badly."
+  },
+  {
+   "ply": 20,
+   "t": 332.5,
+   "fen": "r3qrk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2QK2R w KQ - 5 11",
+   "line": [
+    "Qe8"
+   ],
+   "spoken": "The queen to e8 is a tricky move, setting a trap: if Bxf6 Bxf6 Nxd5, watch the alignment of Black's bishop and our rook in the corner."
+  },
+  {
+   "ply": 21,
+   "t": 381.5,
+   "fen": "r3qrk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2Q1RK1 b - - 6 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "No reason not to castle — Black clearly wants a rook on d8, x-raying our queen and preparing d4."
+  },
+  {
+   "ply": 22,
+   "t": 388.5,
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2Ppp1B1/1P2n3/P1N1PN2/2P1BPPP/R2Q1RK1 w - - 7 12",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "Black plays the knight to e4 — did I miss something? A genuinely brilliant resource."
+  },
+  {
+   "ply": 25,
+   "t": 401.5,
+   "fen": "r3qrk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2QR2K b - - 10 13",
+   "line": [
+    "Re1",
+    "Nf6",
+    "Kh1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 404.5,
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2Ppp1B1/1P2n3/P1N1PN2/2P1BPPP/R2Q1RK1 w - - 7 12",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 417,
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2Ppp1B1/1P2N3/P3PN2/2P1BPPP/R2Q1RK1 b - - 0 12",
+   "line": [
+    "Nxe4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 424,
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2P1p1B1/1P2p3/P3PN2/2P1BPPP/R2Q1RK1 w - - 0 13",
+   "line": [
+    "dxe4"
+   ],
+   "spoken": "Here's what I missed: if the queen were still on d8, we could take on e7 and hit the queen at the same time — but now we can't.",
+   "reanchor": true
+  },
+  {
+   "ply": 25,
+   "t": 437.5,
+   "fen": "r3qrk1/1p2Bppp/p1n1b3/2P1p3/1P2p3/P3PN2/2P1BPPP/R2Q1RK1 b - - 0 13",
+   "line": [
+    "Bxe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 439.5,
+   "fen": "r3qrk1/1p2Bppp/p1n1b3/2P1p3/1P6/P3Pp2/2P1BPPP/R2Q1RK1 w - - 0 14",
+   "line": [
+    "exf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 442.5,
+   "fen": "r3qBk1/1p3ppp/p1n1b3/2P1p3/1P6/P3Pp2/2P1BPPP/R2Q1RK1 b - - 0 14",
+   "line": [
+    "Bxf8"
+   ],
+   "spoken": "We take the rook — and at the end of it, two pawns and a rook for two minor pieces; I'd still slightly prefer White here."
+  },
+  {
+   "ply": 31,
+   "t": 501.5,
+   "fen": "r4qk1/1p3ppp/p1n1b3/2P1p3/1P6/P3P3/2P1pPPP/RQ1R2K1 b - - 1 16",
+   "line": [
+    "Qxf8",
+    "Qb1",
+    "fxe2",
+    "Rd1"
+   ],
+   "spoken": "With a rook against two pieces, the key is rook activity as fast as possible: get a rook to d1, the only open file, and eye the juicy d6 square as an anchor."
+  },
+  {
+   "ply": 21,
+   "t": 510.5,
+   "fen": "r3qrk1/1p2bppp/p1n1bn2/2Ppp1B1/1P6/P1N1PN2/2P1BPPP/R2Q1RK1 b - - 6 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 513.5,
+   "fen": "r3qrk1/1p2bppp/p1n1b3/2Ppp1B1/1P2n3/P1N1PN2/2P1BPPP/R2Q1RK1 w - - 7 12",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": ""
+  }
+ ]
+}
