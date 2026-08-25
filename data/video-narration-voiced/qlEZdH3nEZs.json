@@ -1,0 +1,396 @@
+{
+ "videoId": "qlEZdH3nEZs",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1220",
+ "openingName": "Modern Defense",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:qlEZdH3nEZs",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 416,
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "g6"
+   ],
+   "spoken": "He plays the Modern — Black fianchettoes immediately and yields the centre."
+  },
+  {
+   "ply": 3,
+   "t": 418,
+   "fen": "rnbqkbnr/pppppp1p/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 419.5,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/8/PPP2PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 426.5,
+   "fen": "rnbqk1nr/ppppppbp/6p1/8/3PP3/2N5/PPP2PPP/R1BQKBNR b KQkq - 2 3",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 429.5,
+   "fen": "rnbqk1nr/pppp1pbp/4p1p1/8/3PP3/2N5/PPP2PPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 460.5,
+   "fen": "rnbqk1nr/pppp1pbp/4p1p1/8/3PP2P/2N5/PPP2PP1/R1BQKBNR b KQkq - 0 4",
+   "line": [
+    "h4"
+   ],
+   "spoken": "A brute-force approach that tests his understanding — Black's pushed pawns are targets, so we push up the h-file with h4."
+  },
+  {
+   "ply": 8,
+   "t": 464,
+   "fen": "rnbqk1nr/pppp1pb1/4p1p1/7p/3PP2P/2N5/PPP2PP1/R1BQKBNR w KQkq - 0 5",
+   "line": [
+    "h5"
+   ],
+   "spoken": "He answers h5 at once — but ask yourself what square that has just weakened."
+  },
+  {
+   "ply": 9,
+   "t": 478.5,
+   "fen": "rnbqk1nr/pppp1pb1/4p1p1/6Bp/3PP2P/2N5/PPP2PP1/R2QKBNR b KQkq - 1 5",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": "The bishop to g5, creating a threat and a chain reaction — h5 was already a mistake."
+  },
+  {
+   "ply": 10,
+   "t": 481,
+   "fen": "rnbqk1nr/pppp1p2/4pbp1/6Bp/3PP2P/2N5/PPP2PP1/R2QKBNR w KQkq - 2 6",
+   "line": [
+    "Bf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 491,
+   "fen": "rnbqk1nr/pppp1p2/4pBp1/7p/3PP2P/2N5/PPP2PP1/R2QKBNR b KQkq - 0 6",
+   "line": [
+    "Bxf6"
+   ],
+   "spoken": "Accept the trade — his dark squares have been badly weakened by g6 and e6."
+  },
+  {
+   "ply": 12,
+   "t": 494,
+   "fen": "rnb1k1nr/pppp1p2/4pqp1/7p/3PP2P/2N5/PPP2PP1/R2QKBNR w KQkq - 0 7",
+   "line": [
+    "Qxf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 505.5,
+   "fen": "rnb1k1nr/pppp1p2/4pqp1/4P2p/3P3P/2N5/PPP2PP1/R2QKBNR b KQkq - 0 7",
+   "line": [
+    "e5"
+   ],
+   "spoken": "Cement control of those dark squares — e5, and now the f6 square is firmly ours."
+  },
+  {
+   "ply": 14,
+   "t": 515,
+   "fen": "rnb1k1nr/ppppqp2/4p1p1/4P2p/3P3P/2N5/PPP2PP1/R2QKBNR w KQkq - 1 8",
+   "line": [
+    "Qe7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 523,
+   "fen": "rnb1k1nr/ppppqp2/4p1p1/4P2p/3P3P/2NB4/PPP2PP1/R2QK1NR b KQkq - 2 8",
+   "line": [
+    "Bd3"
+   ],
+   "spoken": "Combine the dark-square control with development — complete our pieces first."
+  },
+  {
+   "ply": 16,
+   "t": 526.5,
+   "fen": "rnb1k2r/ppppqp2/4p1pn/4P2p/3P3P/2NB4/PPP2PP1/R2QK1NR w KQkq - 3 9",
+   "line": [
+    "Nh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 528,
+   "fen": "rnb1k2r/ppppqp2/4p1pn/4P2p/3P3P/2NB1N2/PPP2PP1/R2QK2R b KQkq - 4 9",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 530,
+   "fen": "rnb2rk1/ppppqp2/4p1pn/4P2p/3P3P/2NB1N2/PPP2PP1/R2QK2R w KQ - 5 10",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 542,
+   "fen": "rnb2rk1/ppppqp2/4p1pn/4P2p/3P3P/2NB1N2/PPPQ1PP1/R3K2R b KQ - 6 10",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "A great developing move with tempo — the queen to d2, preparing to castle long, and later it can swing to g5 to attack."
+  },
+  {
+   "ply": 21,
+   "t": 549.5,
+   "fen": "rnb2r2/ppppqpk1/4p1pn/4P2p/3PN2P/3B1N2/PPPQ1PP1/R3K2R b KQ - 8 11",
+   "line": [
+    "Kg7",
+    "Ne4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 554,
+   "fen": "rnb2r2/ppp1qpk1/3ppNpn/4P2p/3P3P/3B1N2/PPPQ1PP1/R3K2R b KQ - 1 12",
+   "line": [
+    "d6",
+    "Nf6"
+   ],
+   "spoken": "Maneuver the knight to the f6 outpost, protected by the pawn on e5 — which is itself protected by the pawn on d4. That's the power of a pawn chain."
+  },
+  {
+   "ply": 24,
+   "t": 562.5,
+   "fen": "rnb2r2/ppp1qpk1/4pNpn/4p2p/3P3P/3B1N2/PPPQ1PP1/R3K2R w KQ - 0 13",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 563.5,
+   "fen": "rnb2r2/ppp1qpk1/4pNpn/4P2p/7P/3B1N2/PPPQ1PP1/R3K2R b KQ - 0 13",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 568,
+   "fen": "r1b2r2/pppnqpk1/4pNpn/4P2p/7P/3B1N2/PPPQ1PP1/R3K2R w KQ - 1 14",
+   "line": [
+    "Nd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 603,
+   "fen": "r1b2r2/pppnqpk1/4p1pn/4P2p/4N2P/3B1N2/PPPQ1PP1/R3K2R b KQ - 2 14",
+   "line": [
+    "Ne4"
+   ],
+   "spoken": "He plays the knight to d7, which I underestimated — so admit it and bring our knight back to e4. Sometimes you just have to say sorry."
+  },
+  {
+   "ply": 28,
+   "t": 611.5,
+   "fen": "r1b2r2/p1pnqpk1/1p2p1pn/4P2p/4N2P/3B1N2/PPPQ1PP1/R3K2R w KQ - 0 15",
+   "line": [
+    "b6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 617.5,
+   "fen": "r1b2r2/p1pnqpk1/1p2p1pn/4P2p/4N2P/3B1N2/PPPQ1PP1/2KR3R b - - 1 15",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": "Now castle long."
+  },
+  {
+   "ply": 30,
+   "t": 621,
+   "fen": "r1b2r2/2pnqpk1/1p2p1pn/p3P2p/4N2P/3B1N2/PPPQ1PP1/2KR3R w - - 0 16",
+   "line": [
+    "a5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 623,
+   "fen": "r1b2r2/2pnqpk1/1p2p1pn/p3P2p/4NQ1P/3B1N2/PPP2PP1/2KR3R b - - 1 16",
+   "line": [
+    "Qf4"
+   ],
+   "spoken": "Bring the queen to a more active square — the queen to f4 — to act as the glue keeping the e5 pawn defended."
+  },
+  {
+   "ply": 32,
+   "t": 631,
+   "fen": "r4r2/2pnqpk1/bp2p1pn/p3P2p/4NQ1P/3B1N2/PPP2PP1/2KR3R w - - 2 17",
+   "line": [
+    "Ba6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 633.5,
+   "fen": "r4r2/2pnqpk1/Bp2p1pn/p3P2p/4NQ1P/5N2/PPP2PP1/2KR3R b - - 0 17",
+   "line": [
+    "Bxa6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 636,
+   "fen": "5r2/2pnqpk1/rp2p1pn/p3P2p/4NQ1P/5N2/PPP2PP1/2KR3R w - - 0 18",
+   "line": [
+    "Rxa6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 36,
+   "t": 689,
+   "fen": "5r2/2pnqpk1/rp2p1p1/p3Pn1p/4NQ1P/5N2/PPPR1PP1/2K4R w - - 2 19",
+   "line": [
+    "Rd2",
+    "Nf5"
+   ],
+   "spoken": "Double the rooks on the d-file to attack the knight — because we still want to land our knight on f6."
+  },
+  {
+   "ply": 37,
+   "t": 690.5,
+   "fen": "5r2/2pnqpk1/rp2p1p1/p3Pn1p/4NQ1P/5N2/PPPR1PP1/2KR4 b - - 3 19",
+   "line": [
+    "Rhd1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 38,
+   "t": 705,
+   "fen": "3r4/2pnqpk1/rp2p1p1/p3Pn1p/4NQ1P/5N2/PPPR1PP1/2KR4 w - - 4 20",
+   "line": [
+    "Rd8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 39,
+   "t": 717.5,
+   "fen": "3r4/2pnqpk1/rp2pNp1/p3Pn1p/5Q1P/5N2/PPPR1PP1/2KR4 b - - 5 20",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "A simple tactic — the knight to f6; and if he takes, don't grab the rook yet — the intermediate exf6 with check wins the maximum material."
+  },
+  {
+   "ply": 41,
+   "t": 749.5,
+   "fen": "r2r4/2pRqpk1/1p2pNp1/p3Pn1p/5Q1P/5N2/PPP2PP1/2KR4 b - - 0 21",
+   "line": [
+    "Raa8",
+    "Rxd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 43,
+   "t": 752,
+   "fen": "r7/2pRqpk1/1p2pNp1/p3Pn1p/5Q1P/5N2/PPP2PP1/2K5 b - - 0 22",
+   "line": [
+    "Rxd7",
+    "Rxd7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 44,
+   "t": 767,
+   "fen": "r7/2pR1pk1/1p2pNp1/p3Pn1p/1q3Q1P/5N2/PPP2PP1/2K5 w - - 1 23",
+   "line": [
+    "Qb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 45,
+   "t": 771.5,
+   "fen": "r7/2pR1pk1/1p2pNp1/p3Pn1p/1Q5P/5N2/PPP2PP1/2K5 b - - 0 23",
+   "line": [
+    "Qxb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 46,
+   "t": 775,
+   "fen": "r7/2pR1pk1/1p2pNp1/4Pn1p/1p5P/5N2/PPP2PP1/2K5 w - - 0 24",
+   "line": [
+    "axb4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 47,
+   "t": 783.5,
+   "fen": "r7/2pR1pk1/1p2pNp1/4PnNp/1p5P/8/PPP2PP1/2K5 b - - 1 24",
+   "line": [
+    "Ng5"
+   ],
+   "spoken": "Bring the final piece into the attack — the knight to g5, hitting f7 and e6, where the pawn is pinned."
+  },
+  {
+   "ply": 49,
+   "t": 791.5,
+   "fen": "r7/2pR1pk1/1p2NNpn/4P2p/1p5P/8/PPP2PP1/2K5 b - - 0 25",
+   "line": [
+    "Nh6",
+    "Nxe6+"
+   ],
+   "spoken": ""
+  }
+ ]
+}
