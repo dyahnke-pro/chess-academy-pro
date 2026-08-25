@@ -1,7 +1,7 @@
 {
  "videoId": "Oj04sSCzraE",
  "title": "Mastering the Maróczy Bind | Sicilian Defense | GM Naroditsky’s Top Theory Speedrun",
- "openingName": "Sicilian Defense",
+ "openingName": "Sicilian Defence: Accelerated Dragon",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": "Another speedrun with Black — hoping for a juicy Accelerated Dragon."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "White develops the knight to f3."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "The knight to c6."
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "White opens with d4, heading for the Open Sicilian."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -52,7 +52,7 @@
     "cxd4",
     "Nxd4"
    ],
-   "spoken": "Black takes, and White recaptures with the knight."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -61,7 +61,7 @@
    "line": [
     "g6"
    ],
-   "spoken": "Black fianchettoes — the Accelerated Dragon."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -70,7 +70,8 @@
    "line": [
     "c4"
    ],
-   "spoken": "And there it is — c4, the Maróczy Bind. This is what most players who avoid the Accelerated Dragon fear, and rightly so. It is both a variation and a structure — Sicilian positions with pawns on e4 and c4, both aiming at d5. Because the Dragon's whole idea is to push d5 and free the pieces, and now that break is almost impossible. Named for Géza Maróczy, a top Hungarian of the late nineteenth century."
+   "spoken": "And there it is — the Maróczy Bind, the very thing most people who avoid the Accelerated Dragon are afraid of, and rightly so. It's both a variation and a structure: pawns planted on e4 and c4, both trained on the d5 square. That's the bind — it makes the freeing break to d5, the whole point of the Dragon, virtually impossible, leaving black cramped.",
+   "kind": "plan"
   },
   {
    "ply": 10,
@@ -79,7 +80,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "The sideline to show delays the fianchetto. You would assume the bishop to g7 is automatic, but this is more dangerous and practical: start with the knight to f6, immediately hitting the e4-pawn."
+   "spoken": "Here's the dangerous, under-the-radar answer: instead of the automatic fianchetto, start with the knight to f6, delaying the bishop. It immediately puts the question to the e4-pawn and hands black real chances to fight for the initiative rather than just sit passively.",
+   "kind": "plan"
   },
   {
    "ply": 11,
@@ -88,7 +90,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "White defends with the knight to c3. A key side note: if White takes on c6 and pushes e5 to kick the knight, Black has a check on a5 that snaps up the e5-pawn — it works tactically."
+   "spoken": "A tactical footnote that makes it sound: if the opponent captures on c6 and pushes to e5 to boot the knight, there's a queen check on a5 that scoops the e-pawn back. The whole idea holds together on concrete tactics.",
+   "kind": "tactic"
   },
   {
    "ply": 12,
@@ -97,7 +100,8 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "Now step two, which looks odd — take on d4, sending White's queen into the centre."
+   "spoken": "Now the step that startles the uninitiated — capture on d4, dragging the queen out into the centre. It looks reckless, inviting the knight to be pinned with a menacing central push, but it works out concretely for black.",
+   "kind": "plan"
   },
   {
    "ply": 13,
@@ -106,7 +110,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "It should look dangerous — you are allowing the knight to be pinned, and e5 seems threatening — but concretely it works out for Black."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -115,14 +119,16 @@
    "line": [
     "d6"
    ],
-   "spoken": "Because of e5, do not play the bishop to g7 yet — that walks into it. Instead throw in d6: it opens the bishop and halts White's e-pawn. White can still push e5, but you just take it; and if White trades queens, Black loses castling rights — but it is not worth a pawn for White to reach that."
+   "spoken": "It's important not to fianchetto here, since that would walk into the central push — so insert d6 instead. It frees the bishop and, just as importantly, jams the advance of the enemy e-pawn. If it pushes anyway, it's simply captured; and even if the queens come off at the cost of castling rights, that trade isn't worth a whole pawn to the opponent.",
+   "kind": "plan"
   },
   {
    "ply": 9,
    "t": 202.5,
    "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5",
    "line": [],
-   "spoken": "This is a main line, though a sideline next to the bishop to g7. The high-level point of taking on d4: once Black fianchettoes, the white queen is in the crosshairs, and Black gains a tempo for development by forcing it off d4 to an awkward square. There may be no immediate discovered-attack threat, but after development there will be — and the queen has few good squares in these structures.",
+   "spoken": "The deeper idea behind grabbing on d4 is a tempo hunt. Once the bishop finally fianchettoes, the centralised queen is staring down its diagonal — so it has to scramble off d4, and while there's no immediate discovered attack, one will exist the moment development completes. Finding a good square for that queen is genuinely awkward — it has precious few in these structures.",
+   "kind": "plan",
    "reanchor": true
   }
  ]
