@@ -1,0 +1,129 @@
+{
+ "videoId": "Oj04sSCzraE",
+ "title": "Mastering the Maróczy Bind | Sicilian Defense | GM Naroditsky’s Top Theory Speedrun",
+ "openingName": "Sicilian Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:Oj04sSCzraE",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 20.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": "Another speedrun with Black — hoping for a juicy Accelerated Dragon."
+  },
+  {
+   "ply": 3,
+   "t": 22,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": "White develops the knight to f3."
+  },
+  {
+   "ply": 4,
+   "t": 23,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "The knight to c6."
+  },
+  {
+   "ply": 5,
+   "t": 24.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": "White opens with d4, heading for the Open Sicilian."
+  },
+  {
+   "ply": 7,
+   "t": 26.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "cxd4",
+    "Nxd4"
+   ],
+   "spoken": "Black takes, and White recaptures with the knight."
+  },
+  {
+   "ply": 8,
+   "t": 28,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 0 5",
+   "line": [
+    "g6"
+   ],
+   "spoken": "Black fianchettoes — the Accelerated Dragon."
+  },
+  {
+   "ply": 9,
+   "t": 29.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "c4"
+   ],
+   "spoken": "And there it is — c4, the Maróczy Bind. This is what most players who avoid the Accelerated Dragon fear, and rightly so. It is both a variation and a structure — Sicilian positions with pawns on e4 and c4, both aiming at d5. Because the Dragon's whole idea is to push d5 and free the pieces, and now that break is almost impossible. Named for Géza Maróczy, a top Hungarian of the late nineteenth century."
+  },
+  {
+   "ply": 10,
+   "t": 120.5,
+   "fen": "r1bqkb1r/pp1ppp1p/2n2np1/8/2PNP3/8/PP3PPP/RNBQKB1R w KQkq - 1 6",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "The sideline to show delays the fianchetto. You would assume the bishop to g7 is automatic, but this is more dangerous and practical: start with the knight to f6, immediately hitting the e4-pawn."
+  },
+  {
+   "ply": 11,
+   "t": 138.5,
+   "fen": "r1bqkb1r/pp1ppp1p/2n2np1/8/2PNP3/2N5/PP3PPP/R1BQKB1R b KQkq - 2 6",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "White defends with the knight to c3. A key side note: if White takes on c6 and pushes e5 to kick the knight, Black has a check on a5 that snaps up the e5-pawn — it works tactically."
+  },
+  {
+   "ply": 12,
+   "t": 153,
+   "fen": "r1bqkb1r/pp1ppp1p/5np1/8/2PnP3/2N5/PP3PPP/R1BQKB1R w KQkq - 0 7",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": "Now step two, which looks odd — take on d4, sending White's queen into the centre."
+  },
+  {
+   "ply": 13,
+   "t": 157.5,
+   "fen": "r1bqkb1r/pp1ppp1p/5np1/8/2PQP3/2N5/PP3PPP/R1B1KB1R b KQkq - 0 7",
+   "line": [
+    "Qxd4"
+   ],
+   "spoken": "It should look dangerous — you are allowing the knight to be pinned, and e5 seems threatening — but concretely it works out for Black."
+  },
+  {
+   "ply": 14,
+   "t": 175.5,
+   "fen": "r1bqkb1r/pp2pp1p/3p1np1/8/2PQP3/2N5/PP3PPP/R1B1KB1R w KQkq - 0 8",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Because of e5, do not play the bishop to g7 yet — that walks into it. Instead throw in d6: it opens the bishop and halts White's e-pawn. White can still push e5, but you just take it; and if White trades queens, Black loses castling rights — but it is not worth a pawn for White to reach that."
+  },
+  {
+   "ply": 9,
+   "t": 202.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/8/2PNP3/8/PP3PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [],
+   "spoken": "This is a main line, though a sideline next to the bishop to g7. The high-level point of taking on d4: once Black fianchettoes, the white queen is in the crosshairs, and Black gains a tempo for development by forcing it off d4 to an awkward square. There may be no immediate discovered-attack threat, but after development there will be — and the queen has few good squares in these structures.",
+   "reanchor": true
+  }
+ ]
+}
