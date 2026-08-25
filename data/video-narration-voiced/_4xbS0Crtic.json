@@ -1,7 +1,7 @@
 {
  "videoId": "_4xbS0Crtic",
  "title": "Master Class | No Stafford's For Danya! | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Stafford Gambit",
+ "openingName": "Scotch Game",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -42,7 +42,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "He declines the Stafford with the knight to c3."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "The bishop to c5, inviting him to take on e5 and transpose right back into Stafford territory."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 — a souped-up Scotch; at least it's a fresh position."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -78,7 +78,8 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "Essentially a Scotch where we've skipped the knight to c6 — and our bishop already presses his knight."
+   "spoken": "This is a Scotch where the queen's knight was never committed — an odd but pleasant version, with the bishop already leaning on the centre. The most ambitious choice isn't a quiet developing move but to castle: it keeps a central break in reserve for the right moment, and it readies a rook to pile onto the weak e-pawn.",
+   "kind": "plan"
   },
   {
    "ply": 10,
@@ -87,7 +88,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "The most ambitious choice is to castle: flexible, and the pawn on e4 is weak — if he dawdles one more move we pile up on it with the rook. Even e5 is never dangerous; we just answer with the rook to e8."
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -96,7 +97,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "The bishop to e2 is a touch passive — nothing wrong with it, but it hands us the initiative."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -105,7 +106,8 @@
    "line": [
     "Re8"
    ],
-   "spoken": "The rook to e8, attacking the pawn; if he props it with f3, that's a huge concession — it weakens the diagonal and we strike with d5."
+   "spoken": "Press the luck — the rook swings to e8 to attack the weak pawn. If the opponent props it with the f-pawn, that's a huge concession, weakening the diagonal and inviting a central strike.",
+   "kind": "plan"
   },
   {
    "ply": 13,
@@ -114,7 +116,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "He tries to defend the pawn indirectly by pinning the knight."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -123,7 +125,7 @@
    "line": [
     "h6"
    ],
-   "spoken": "So we chase the bishop away — and if it takes the knight, that's a fine trade for us."
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -132,7 +134,8 @@
    "line": [
     "Bh4"
    ],
-   "spoken": ""
+   "spoken": "When the bishop pins to defend the pawn indirectly and then retreats, the real question is whether to grab the pawn with a further push that weakens the king — so weigh it concretely. The verdict is yes: it's a valuable central pawn, and the calculation holds up, because after the dust settles the enemy knight hangs and the king is still stuck in the centre, tied up, buying the time to consolidate. That's the judgement: a concrete line, not a general rule, decides it.",
+   "kind": "plan"
   },
   {
    "ply": 16,
@@ -141,7 +144,7 @@
    "line": [
     "g5"
    ],
-   "spoken": "Should we play g5? It wins the pawn but weakens the king — and concretely it's worth it: he must retreat, we take on e4, his knight on d4 is left hanging with his king still uncastled, and we consolidate in the time he needs to untangle."
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -159,7 +162,8 @@
    "line": [
     "Nxe4"
    ],
-   "spoken": "The knight takes on e4 — and now the jump to f5 is available, because the bishop still doesn't cover that square; we haven't committed the d-pawn."
+   "spoken": "A tactic to watch for in the resulting position — a knight leap to f5 becomes possible precisely because the central pawn hasn't moved yet, so that square isn't yet under control. Always check which squares your own un-played pawns are leaving open.",
+   "kind": "tactic"
   },
   {
    "ply": 19,
@@ -168,7 +172,8 @@
    "line": [
     "Nf5"
    ],
-   "spoken": "He jumps to f5 at once. Taking his bishop would be bad — the recapture opens his rook — so instead we look at taking the knight."
+   "spoken": "Don't snatch the bishop — the recapture would open a file and hand the opponent pressure. Instead the knight captures on c3, and the in-between check doesn't work because the king simply steps up and wins the piece back. Calculate the zwischenzug one step further before trusting it.",
+   "kind": "tactic"
   },
   {
    "ply": 20,
@@ -177,7 +182,7 @@
    "line": [
     "Nxc3"
    ],
-   "spoken": "The knight takes on c3 — a stabilising move; if the queen checks on d3, we simply take the knight anyway, and then the queen comes to f6."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -195,7 +200,8 @@
    "line": [
     "Qf6"
    ],
-   "spoken": "The queen to f6 — attacking and defending in one."
+   "spoken": "The queen to f6 does triple duty — attacking, defending, and eyeing threats at once. And if the opponent lunges the queen out, the central pawn advances to shove the knight back, and the position is officially consolidated.",
+   "kind": "plan"
   },
   {
    "ply": 23,
@@ -213,7 +219,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "The knight to c6 makes the most trouble, piling onto the knight on d4 — and if he takes, his pawn on c3 hangs."
+   "spoken": "Rather than the automatic pawn move, develop as incisively as possible — with threats. The knight to c6 piles onto the enemy knight immediately, and if it's captured, a recapture leaves a piece hanging. Develop while harassing, not just developing.",
+   "kind": "plan"
   },
   {
    "ply": 25,
@@ -222,7 +229,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "He castles, which just gives up a second pawn — and there's no reason not to take it."
+   "spoken": ""
   },
   {
    "ply": 26,
@@ -231,7 +238,8 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "Take with the knight — I'd rather keep the dark-squared bishop here; bishops are a little better than knights at guarding weak squares."
+   "spoken": "When there's a choice of recaptures, take with the knight rather than the queen — keeping the dark-squared bishop, because bishops guard weak squares better than knights do. Grabbing with the queen would tempt a trade but creates no threat and lets a pawn fall.",
+   "kind": "plan"
   },
   {
    "ply": 27,
@@ -249,7 +257,7 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": "Take the bishop. Taking with the queen looks tempting for a trade, but it creates no threat and lets him grab on c7."
+   "spoken": ""
   },
   {
    "ply": 29,
@@ -267,7 +275,8 @@
    "line": [
     "d6"
    ],
-   "spoken": "Now, at last, d6."
+   "spoken": "Only now, once the pressure has done its work, is it time for the modest pawn to d6 — the king is still a touch airy, so a couple of consolidating moves finish the job and leave an excellent position.",
+   "kind": "plan"
   },
   {
    "ply": 31,
@@ -276,7 +285,7 @@
    "line": [
     "Bf3"
    ],
-   "spoken": "The bishop to f3 hits the pawn."
+   "spoken": ""
   },
   {
    "ply": 32,
@@ -285,7 +294,8 @@
    "line": [
     "c6"
    ],
-   "spoken": "Not the passive rook to b8 — c6 builds a pawn chain so the bishop bites on granite, and we can expand further with d5."
+   "spoken": "When the bishop attacks the pawn, the passive rook retreat ties a heavy piece to defence — better is a pawn to c6, building a chain so the bishop just bites on granite, with a further central expansion to follow.",
+   "kind": "plan"
   },
   {
    "ply": 31,
@@ -301,7 +311,9 @@
    "line": [
     "c6"
    ],
-   "spoken": ""
+   "spoken": "A cluster of technique here. Instead of shackling a rook to defend a pawn, remember you can intercept the attackers — a rook to e7 both guards the pawn and prepares to double, better still. Double and trade on your own terms. And before committing, ask the honest question — what happens if I just do it anyway? Here that reveals the killer: with a pawn already on g5, the opponent's bishop has no retreat, so a pawn thrust to g4 traps it outright. That's pure pattern recognition — the very trap a young world-champion-to-be once famously missed in an Alekhine, earning himself the nickname of that move. Studying such games is how the shot becomes instinctive.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -383,7 +395,8 @@
     "Bxf7+",
     "Kxf7"
    ],
-   "spoken": "If you play the Italian you'll know this idea: the bishop takes on f7, the king recaptures, and then we snap off the knight to clear the air.",
+   "spoken": "A tactical footnote from the analysis — a bishop sacrifice on f7 followed by the king's exposure, exactly the kind of idea an Italian player should recognise, opens the way to regain the material with interest.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -402,7 +415,8 @@
    "line": [
     "Rxe4"
    ],
-   "spoken": "After the rook takes, beware the popular wrong answer, the queen to f3 — you think it wins the rook, but Qf6 nets two pieces for it. The safer queen to h5, then once the king tucks away, the check on d5 finally collects the rook.",
+   "spoken": "And a trap in that line to avoid: the popular wrong answer thinks it wins a rook, but calculating one move further, a queen move gathers two pieces for the rook and full compensation — so a quieter queen retreat is the safer route, only switching back to winning the rook once the knight can't be given for it. Don't stop calculating at the move that looks like it wins.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -527,7 +541,8 @@
     "Bh4",
     "g5"
    ],
-   "spoken": "This is the lesson of the whole game: at this level you must know the principles cold — but also know when to violate them. Underdeveloped, king weakened, yet the concrete features of the position let you get away with it.",
+   "spoken": "The deeper lesson of the whole game — there's a clear shift as you improve. Early on, chess is applying the rules by the book, and it wins plenty of games. To go further you must know the rules cold and also know when to break them: this is underdeveloped, this weakens my king, yet the specific features of the position let me get away with it. That's where concrete calculation transcends general reasoning.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -556,7 +571,9 @@
     "Nxe4",
     "Rxe4"
    ],
-   "spoken": ""
+   "spoken": "The two things that reassured the intuition before a single line was calculated: after the pawn thrust the enemy knight hangs, which is a free tempo, and the king is uncastled, which is another tempo lost to getting safe. The whole risk came down to a race — whether the extra pawn could be consolidated before the counterplay arrived.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -583,8 +600,7 @@
    "line": [
     "Qd6"
    ],
-   "spoken": "When two of your pieces are attacked at once, don't panic — usually only two things are truly hanging, and there are several ways to save both: defend them directly, or create a bigger counter-threat.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 27,
