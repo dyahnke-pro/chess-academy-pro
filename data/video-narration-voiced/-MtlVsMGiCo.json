@@ -25,7 +25,7 @@
     "Bg5",
     "Ne4"
    ],
-   "spoken": ""
+   "spoken": "A Trompowsky — the bishop to g5 — met at once by the knight to e4, hitting the bishop."
   },
   {
    "ply": 6,
@@ -102,7 +102,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "He avoids the little trick, and the position is still basically equal."
   },
   {
    "ply": 20,
@@ -158,7 +158,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "White's bishop settles on d3, a comfortable square. Black is weighing something sharp — trading the bishop for the knight on f3 to smash up White's pawns, then breaking with e5. It is the only real way to play for a win here."
+   "spoken": "The bishop to d3 is a nice move. The idea I'm weighing is to take on f3 and follow with e5."
   },
   {
    "ply": 26,
@@ -167,7 +167,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "Black commits to the risky path and captures on f3, handing over the bishop pair to double White's pawns. Objectively dubious, but a quiet game offers no winning chances."
+   "spoken": "Taking on f3 — very risky, but the only way to play for a win here is to take on real risk."
   },
   {
    "ply": 28,
@@ -177,7 +177,7 @@
     "gxf3",
     "e5"
    ],
-   "spoken": "White recaptures, and Black strikes into the centre with e5, trying to blow the position open before White consolidates."
+   "spoken": "He recaptures, and now e5, striking at the centre — the risk we have to accept to win."
   },
   {
    "ply": 29,
@@ -195,7 +195,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "White grabs the pawn and Black takes back with the knight on e5. There was a nasty idea Black had underestimated — Bb5 hitting the loose pieces, with a rook lift to c6 to follow."
+   "spoken": "He takes on e5 — that surprised me. Now the bishop to b5 and rook to c6 are strong for him, and I have to recapture with the knight. I underestimated that."
   },
   {
    "ply": 31,
@@ -213,7 +213,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "Black plays c6, shoring up the light squares and keeping ideas like f5 in reserve."
+   "spoken": "I think I can get away with c6."
   },
   {
    "ply": 33,
@@ -222,7 +222,7 @@
    "line": [
     "Rd1"
    ],
-   "spoken": "But a tactic is brewing on h7 — the classic bishop sacrifice against the short-castled king. It is not immediately fatal, but it has to be reckoned with."
+   "spoken": "He's eyeing a tactic here — the bishop into h7 — but it's not the end of the game."
   },
   {
    "ply": 34,
@@ -231,7 +231,7 @@
    "line": [
     "Bc7"
    ],
-   "spoken": "Black slips with the bishop to c7, and now that little tactic is on."
+   "spoken": ""
   },
   {
    "ply": 35,
@@ -240,7 +240,7 @@
    "line": [
     "Bxh7+"
    ],
-   "spoken": "And there it is — the bishop crashes in with check on h7, the standard sacrifice."
+   "spoken": "I'd forgotten this trick — the bishop takes on h7 with check, the classic sacrifice — though it's still complicated."
   },
   {
    "ply": 36,
@@ -258,7 +258,7 @@
    "line": [
     "Qxd8"
    ],
-   "spoken": "The queens come off with the capture on d8 — exactly the simplification Black did not want when trying to win."
+   "spoken": "The queens come off, which isn't what I want to see."
   },
   {
    "ply": 38,
@@ -276,7 +276,7 @@
    "line": [
     "Be4"
    ],
-   "spoken": ""
+   "spoken": "I still had f5 available."
   },
   {
    "ply": 40,
@@ -396,7 +396,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "Even a pawn down, it is the bishop pair that really does the damage here — those two bishops raking the open board hurt more than the missing pawn ever would."
+   "spoken": "Here's the key to the position: it's the bishop pair that really kills me — not even the extra pawn. That's the decisive factor."
   },
   {
    "ply": 48,
@@ -486,7 +486,7 @@
    "line": [
     "Bh4+"
    ],
-   "spoken": "Material is level again, but Black is completely tied up; every piece is passive, nothing moves with any purpose."
+   "spoken": "Now the material is level again, but I'm completely paralysed."
   },
   {
    "ply": 58,
@@ -550,7 +550,7 @@
    "line": [
     "Bg3"
    ],
-   "spoken": "The real trouble is that Black has no pieces in the game at all — even pinning White's bishop down changes nothing."
+   "spoken": "He can't easily move his bishop — but that doesn't help me, because I have no pieces in the game."
   },
   {
    "ply": 66,
@@ -691,15 +691,14 @@
     "Bd5",
     "Rg2"
    ],
-   "spoken": ""
+   "spoken": "The bishop to d5 is such an annoying move, stopping my rook from swinging to g2 — otherwise it was still unclear."
   },
   {
    "ply": 81,
    "t": 4663,
    "fen": "4r2n/3R1pk1/5b2/5P2/PP3P2/1BpKP2p/7B/8 b - - 2 41",
    "line": [],
-   "spoken": "That quiet retreat to d5 is a maddening move — it shuts the rook out of g2, and without that resource Black's counterplay was murky at best.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 22,
@@ -718,7 +717,8 @@
     "Rc1",
     "Bxf3"
    ],
-   "spoken": ""
+   "spoken": "It felt fine for Black, and then suddenly it got really bad.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -739,7 +739,8 @@
     "Nxe5",
     "Be4"
    ],
-   "spoken": ""
+   "spoken": "Just a plus-one for White, but the position is simply difficult to hold.",
+   "reanchor": true
   },
   {
    "ply": 33,
@@ -829,7 +830,7 @@
     "Rxd1",
     "Rxd1"
    ],
-   "spoken": "Every single White move was the engine's top pick; the only clean win ran through the bishop retreat to d5, slamming the door on the rook swing to g2.",
+   "spoken": "Every move he found was the top move — the bishop to d5 the only clean win. A classical-level game played at blitz speed.",
    "reanchor": true
   },
   {
