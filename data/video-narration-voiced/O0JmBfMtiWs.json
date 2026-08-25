@@ -1,10 +1,10 @@
 {
  "videoId": "O0JmBfMtiWs",
  "title": "The Power of Counterplay: Exploiting Weaknesses | Alapin Sicilian | GM Naroditsky’s Theory Speed Run",
- "openingName": "Sicilian Defense: Delayed Alapin vs …Nc6 (White)",
- "studentSide": "white",
+ "openingName": "Sicilian Defense: Alapin Variation",
+ "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:O0JmBfMtiWs",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We take Black and answer with the Sicilian, c5."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "Nf3",
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to f3 and we bring ours to c6."
   },
   {
    "ply": 5,
@@ -34,10 +34,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "The pawn to c3 against the accelerated-dragon move order sets up the Alapin — but with Black's knight already on c6, the usual d5-break loses some of its point, and White gets to fight for a broad centre.",
-   "kind": "main",
-   "teaches": "Move order matters: with the knight already on c6, Black's d5 break is less effective.",
-   "plans": "Prepare d4 and claim the centre."
+   "spoken": "White plays c3 — the Alapin. But this move order, with the knights already out, denies us the line I usually recommend."
   },
   {
    "ply": 2,
@@ -55,7 +52,8 @@
     "Nc6",
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "Normally against the Alapin I like ...d5, and after the trade ...Nf6 — but with our knight already on c6, ...d5 would force a queen recapture. So here we choose between transposing with ...d5, a ...Nf6/...e5/...Nd5 setup, or the sharp sideline ...e5.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -64,7 +62,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take the risk with e5 — objectively White is a touch better with precise play, but it's hard to prove, and I want to test our improvisation in fresh territory."
   },
   {
    "ply": 7,
@@ -73,10 +71,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "If Black answers with the pawn to e5, it creates a big hole on d5 — a lasting weakness. White strikes at the centre with d4 in Italian style, opening lines against the loosened position.",
-   "kind": "main",
-   "teaches": "A pawn to e5 that leaves a hole on d5 is a long-term concession — occupy the outpost.",
-   "plans": "Break with d4 and exploit the d5-hole."
+   "spoken": "White strikes with d4. Our ...e5 is risky mainly because it leaves a hole on d5 — but as in the Najdorf's ...e5 structures, that square can be well covered by our minor pieces, so it's far from the end of the world."
   },
   {
    "ply": 6,
@@ -92,7 +87,8 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "d4 is one of White's two main moves — the other is the Italian-style bishop to c4. It forces mass trades in the centre; ...d6 exists but lets White steer into an unpleasant endgame.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -101,7 +97,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "So we take on d4."
   },
   {
    "ply": 10,
@@ -111,7 +107,7 @@
     "cxd4",
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "The centre pawns are swapped off."
   },
   {
    "ply": 11,
@@ -120,7 +116,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "White recaptures with the knight. This is essentially a Scotch, only with the c-pawns already gone — which slightly favours White, because our d6-square is tender: if we try the bishop to c5, as I like against a normal Scotch, White gets the extra shot of the knight to f5, exploiting d6."
   },
   {
    "ply": 12,
@@ -129,7 +125,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "So instead the knight to f6 — now White has no time for the knight to f5, because the e4-pawn hangs. We reach a Scotch-like game, a shade worse for us but very playable."
   },
   {
    "ply": 13,
@@ -138,7 +134,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to c3 and we've transposed into a Four Knights Scotch. The main move is the bishop to b4, pressuring e4 — there's also the sharp ...Nxe4 — but let's keep it straightforward with the bishop to b4."
   }
  ]
 }

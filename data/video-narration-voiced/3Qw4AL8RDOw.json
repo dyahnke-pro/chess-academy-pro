@@ -1,10 +1,10 @@
 {
  "videoId": "3Qw4AL8RDOw",
  "title": "Natural Developing Moves | Scandinavian Defense: Modern | GM Naroditsky’s Top Theory Speedrun",
- "openingName": "Scandinavian Defense: 2.exd5 Nf6, 3.Bb5+ (White)",
+ "openingName": "Scandinavian Defense: Modern Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:3Qw4AL8RDOw",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "d5"
    ],
-   "spoken": ""
+   "spoken": "We take White and Black plays the Scandinavian, d5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "We capture on d5."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the knight to f6 — the modern gambit approach, a cousin of the Portuguese. White isn't meant to cling to the extra pawn: after c4, ...c6 gives Black huge compensation — a stronghold on d4 and a wretched White light-squared bishop biting on c4."
   },
   {
    "ply": 5,
@@ -42,10 +42,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "The bishop check on b5 — an easy-to-learn, effective line against the Nf6 Scandinavian. It forces Black to block and commit awkwardly.",
-   "kind": "main",
-   "teaches": "The b5 check is a low-theory way to get a pleasant, slightly better game against the Scandinavian.",
-   "plans": "Provoke a clumsy block, then develop with a pull."
+   "spoken": "So we play the instructive check on b5 — an odd first bishop move, but it develops with tempo; if Black blocks with ...c6 we simply take, having never committed to c4."
   },
   {
    "ply": 6,
@@ -54,10 +51,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": "Most players block with the bishop to d7 — but that piece is poorly placed: it deprives the queen's knight of its natural d7-square and clogs Black's development.",
-   "kind": "main",
-   "teaches": "A blocking bishop on d7 is a liability — it robs the b8-knight of its best square.",
-   "plans": "Keep that bishop stuck; don't trade it off."
+   "spoken": "Black usually blocks with the bishop to d7 — but that bishop is poor there, denying the b8-knight its square and cutting the queen from the centre. We've provoked a counterproductive move, so we leave it. Retreating our bishop to c4 would invite ...Bg4, hitting the queen."
   },
   {
    "ply": 7,
@@ -66,10 +60,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "Retreat the bishop to e2 rather than allowing an exchange — the whole idea is to leave Black's awkward d7-bishop on the board, a lasting inconvenience.",
-   "kind": "main",
-   "teaches": "Preserve the opponent's bad piece by declining the trade.",
-   "plans": "Recover the d5-pawn and take the centre."
+   "spoken": "So the bishop goes to e2 instead — it stops ...Bg4, and above all refuses Black the chance to swap off his awkward d7-bishop."
   },
   {
    "ply": 11,
@@ -108,7 +99,8 @@
     "Nxd5",
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "We occupy the centre with d4 — and it must be d4 first: the careless knight to f3 would allow ...Nf4, suddenly hitting our bishop and g2.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -118,10 +110,7 @@
     "e6",
     "d4"
    ],
-   "spoken": "Grab the centre with the pawn to d4 — and it is important to start with d4, not a sloppy e6-type move that would leave the bishop and the g2-square under fire.",
-   "kind": "main",
-   "teaches": "Move order matters — take the centre with d4 before the pieces can be harassed.",
-   "plans": "Complete development behind the centre."
+   "spoken": "We grab the centre. The roadmap: c4 is coming to shove the knight from d5, leaving us better development and a small but stable edge — first the knight to f3, then castle, then c4."
   },
   {
    "ply": 17,
@@ -131,7 +120,7 @@
     "c5",
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "Black contests with ...c5, forcing our hand — so rather than castle we strike with c4 at once, knocking the knight out before Black completes his development."
   },
   {
    "ply": 19,
@@ -141,7 +130,8 @@
     "Nf6",
     "c4"
    ],
-   "spoken": ""
+   "spoken": "We push c4. Rushing the pawn to d5 to make a passer would only create an early isolated liability that Black blockades with ...Bd6 — so we keep the tension, develop the knight to c3, and recapture on d4 with the knight, not the queen (which walks into ...Nc6).",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -151,10 +141,8 @@
     "Nc6",
     "Nc3"
    ],
-   "spoken": "Develop the knight to c6 — principled, by-the-book play. With the extra space and Black's awkward bishop, White simply stands more comfortably.",
-   "kind": "main",
-   "teaches": "When you have a structural edge, keep developing soundly — the advantage compounds.",
-   "plans": "Finish development and press the space."
+   "spoken": "Black plays the knight to c6, and here a rule worth remembering: an idea that failed in one position can suddenly work in another — now d5 is strong, a tempo push on the knight that also denies Black the time for the blockading ...Bd6. Prevent ...Bd6 with the bishop to f4, since that bishop is Black's only way to blockade the passed pawn — kept out, the passer becomes a huge asset. A few threads run through the finish: when you're a pawn up, unlike a piece up, you generally do NOT want to trade queens, as it relieves the defender; the g5-pin is dangerous, all the more with the queen already eyeing the knight; and combinations are built by stacking threats — a capture on f6 opens the g-file for a queen check on g3, while a rook to d1 x-rays the queen, so a discovered check wins material. Principled development plus these small, flexible observations is what makes strong players win almost automatically.",
+   "reanchor": true
   },
   {
    "ply": 3,
@@ -170,7 +158,8 @@
    "line": [
     "Qxd5"
    ],
-   "spoken": ""
+   "spoken": "A note on the ...Nbd7 block instead of ...Bd7: simplest is d4, recapture the d5-pawn, knight to f3 — just develop; and after ...a6, the bishop drops to the active d3-square.",
+   "reanchor": true
   }
  ]
 }
