@@ -1,7 +1,7 @@
 {
  "videoId": "ofUcXj4ArHA",
  "title": "Scotch Gambit (AMAZING Game) | The Sensei Speedrun | GM Naroditsky",
- "openingName": "Scotch Gambit",
+ "openingName": "Scotch Game",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -34,7 +34,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The Italian — the bishop to c4; the two main replies are the bishop to c5 and the knight to f6."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -43,7 +43,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "The knight to f6 — the move I keep recommending, which allows the Fried Liver."
+   "spoken": "The consistent recommendation against the Italian bishop is the knight to f6, which invites the sharp Fried Liver — a line you simply must know. And a central pawn thrust is a serious sideline of its own, transposing into the Scotch Gambit that also has to be prepared.",
+   "kind": "plan"
   },
   {
    "ply": 7,
@@ -52,7 +53,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 — this is the Scotch Gambit, a sideline you have to know."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -70,7 +71,8 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "In the Scotch Gambit the knight can hop away, but the move you have to know, considered by far the most reputable, is the central strike to d5 — hitting back in the middle rather than retreating passively.",
+   "kind": "plan"
   },
   {
    "ply": 10,
@@ -79,7 +81,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "The most reputable move by far here is d5."
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -97,7 +99,8 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "Instead of the old main move to g4, the interesting modern alternative: the knight back to d7, covering the pin so Nxd4 isn't effective."
+   "spoken": "Tradition held that the forward knight retreat was practically the only move, but a popular modern alternative is to drop the knight all the way home to d7. It looks like nothing special, yet it neatly covers the pin — the central capture no longer works, since the pawn can be taken or the knight grabbed and the position held with a pawn move.",
+   "kind": "plan"
   },
   {
    "ply": 13,
@@ -115,7 +118,8 @@
    "line": [
     "Be7"
    ],
-   "spoken": "Develop the bishop to e7 — and keep the c5 square free, so we can play c6 and then c5 once the trades happen."
+   "spoken": "Don't waste a tempo shooing the bishop — it's likely to capture of its own accord anyway. Develop the bishop to e7, deliberately keeping the c-square free so the pawn can later expand there once the exchanges happen.",
+   "kind": "plan"
   },
   {
    "ply": 13,
@@ -157,7 +161,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": "We can't take on e5 — we'd end up pinned — so castle to unpin, which is a useful developing move anyway."
+   "spoken": "Note that capturing the advanced pawn fails, because a recapture leaves you pinned. The right way to break the pin isn't the reflexive rook-pawn move but castling — an unpin that also completes development. Solve two problems with one move.",
+   "kind": "plan"
   },
   {
    "ply": 17,
@@ -166,7 +171,8 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "The most oppressive feature of the position is the advanced enemy pawn hanging over everything, cutting the arteries and denying the pieces access to the sixth rank. So the idea is to challenge it directly with f6 and try to remove it at all costs. A knight retreat to reinforce the queenside is the quieter alternative.",
+   "kind": "plan"
   },
   {
    "ply": 18,
@@ -175,7 +181,7 @@
    "line": [
     "f6"
    ],
-   "spoken": "The risky idea: f6, trying to remove that e5 pawn, which hangs over our whole position and cuts off our pieces."
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -211,7 +217,8 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "The knight to e5 — if White takes twice, his king is left exposed and we get real attacking chances, plus the open f-file."
+   "spoken": "The practical decision is to plant the knight on e5 — if the opponent captures twice there, the castled king is stripped of defenders, and with the bishops activated and the f-file thrown open there are real attacking chances. Sometimes the soundest choice is the one that maximises practical trouble for the opponent.",
+   "kind": "tactic"
   },
   {
    "ply": 23,
@@ -229,7 +236,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "I thought c5 would simply win the pawn — but there's an insane line I failed to calculate."
+   "spoken": ""
   },
   {
    "ply": 25,
@@ -303,7 +310,8 @@
     "Nf3",
     "Rg7"
    ],
-   "spoken": ""
+   "spoken": "A classic manoeuvre — push the pawn to d4 and follow with the queen to d5. When a square you want for a piece is blocked by your own pawn, advance the pawn to vacate it, and the piece slots into the strong central post it clears.",
+   "kind": "plan"
   },
   {
    "ply": 36,
@@ -395,7 +403,8 @@
     "Re1",
     "O-O"
    ],
-   "spoken": "In retrospect, f6 was a little over-ambitious — the knight back to b8 was probably the safer choice.",
+   "spoken": "Salvaging a worse position calls for the Magnus method — play one move at a time, posing a fresh problem on every single move and surviving just one more, dragging the opponent's clock down until something finally gives. As long as the last fighting pawn survives, there's still breathing room and still a game.",
+   "kind": "plan",
    "reanchor": true
   }
  ]
