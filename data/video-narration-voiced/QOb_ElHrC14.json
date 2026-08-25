@@ -1,10 +1,10 @@
 {
  "videoId": "QOb_ElHrC14",
  "title": "Philidor Defence | The Sensei Speedrun | GM Naroditsky",
- "openingName": "Philidor Defence",
+ "openingName": "Philidor Defense",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:QOb_ElHrC14",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take White and open e4, Black meets e5."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6 — the Philidor, not a Four Knights."
   },
   {
    "ply": 5,
@@ -42,9 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 challenges the center against the Philidor's ...d6 — opening lines to leave White with the freer, better-developed position.",
-   "kind": "main",
-   "teaches": "Strike with d4 to gain central control against a passive defense."
+   "spoken": "The way to get an edge against the Philidor is to strike the centre with d4."
   },
   {
    "ply": 6,
@@ -53,7 +51,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 7,
@@ -62,7 +60,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight, with better control of the centre."
   },
   {
    "ply": 9,
@@ -72,7 +70,7 @@
     "Nf6",
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6 and we bring ours to c3."
   },
   {
    "ply": 10,
@@ -81,7 +79,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e7. There are several good setups — the bishop to f4 with the queen to d2 — but a nastier one that flies under the radar is to fianchetto with g3."
   },
   {
    "ply": 11,
@@ -90,9 +88,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "g3 is the sneaky idea — the bishop fianchettoes to g2, where it clamps down on the d5-square and makes it very hard for Black to free himself with ...d5.",
-   "kind": "main",
-   "teaches": "Fianchetto the light bishop to control d5 and stifle the opponent's freeing break."
+   "spoken": "We play g3 — the fianchettoed bishop and the e4-pawn team up to make it very hard for Black to break with ...d5."
   },
   {
    "ply": 12,
@@ -101,7 +97,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 13,
@@ -110,7 +106,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": ""
+   "spoken": "We complete the fianchetto with the bishop to g2."
   },
   {
    "ply": 14,
@@ -119,7 +115,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "Black plays the classic ...c5 — but it's a positional error: it leaves the d6-pawn backward and, above all, weakens the d5-square. Now, where should our knight go? We want it working efficiently."
   },
   {
    "ply": 15,
@@ -128,9 +124,7 @@
    "line": [
     "Nde2"
    ],
-   "spoken": "Retreating the knight to e2 keeps a grip on d5 and reroutes it toward the fine f4 or d5 outposts, rather than blocking on d4 after ...c5.",
-   "kind": "main",
-   "teaches": "Reroute a knight off an exchange-prone square to keep an outpost under control."
+   "spoken": "The knight to f5 allows ...Bxf5, a trade I don't want, so we play the knight to e2 — from there it heads to f4 to control d5."
   },
   {
    "ply": 16,
@@ -139,7 +133,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6."
   },
   {
    "ply": 17,
@@ -148,7 +142,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "No need to rush the knight to f4 — first we complete development and castle."
   },
   {
    "ply": 18,
@@ -157,7 +151,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Black pins with the bishop to g4."
   },
   {
    "ply": 19,
@@ -166,7 +160,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "We play h3 to chase the bishop — f3 would work but we'd rather not weaken ourselves."
   },
   {
    "ply": 20,
@@ -175,7 +169,7 @@
    "line": [
     "Bxe2"
    ],
-   "spoken": ""
+   "spoken": "Black captures on e2."
   },
   {
    "ply": 21,
@@ -184,7 +178,7 @@
    "line": [
     "Nxe2"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight, not the queen — the queen would walk into ...Nd4 with tempo. And we still deny ...d5: we hold three defenders against two attackers on that square."
   },
   {
    "ply": 22,
@@ -193,7 +187,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to b6. Our plan: reroute the knight to f4, and restrict Black's c6-knight."
   },
   {
    "ply": 23,
@@ -202,7 +196,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We play c3, clamping down on the c6-knight's advance squares."
   },
   {
    "ply": 24,
@@ -211,7 +205,8 @@
    "line": [
     "Ne5"
    ],
-   "spoken": ""
+   "spoken": "Black's knight to e5 is aimless. Rather than rush f4, we improve patiently: the queen to c2 defends b2, connects the rooks and prepares a rook to d1 reinforcing d5; then b3 to shoo the knight when we choose, the bishop to e3 x-raying the queen, and even c4 to clamp d5 harder — unafraid of the d4-square, since bishop and rook cover it. Keep turning the screw; under steady pressure, opponents buckle.",
+   "reanchor": true
   },
   {
    "ply": 5,
