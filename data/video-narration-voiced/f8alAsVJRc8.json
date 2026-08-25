@@ -1,7 +1,7 @@
 {
  "videoId": "f8alAsVJRc8",
  "title": "The Value of Retreating Moves | Sicilian Defense | GM Naroditsky’s Theory Speed Run",
- "openingName": "Sicilian Defense",
+ "openingName": "Sicilian Defence",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -24,7 +24,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The bishop to c4 right away — essentially playing the Italian against the Sicilian, which is pretty innocuous."
+   "spoken": ""
   },
   {
    "ply": 2,
@@ -40,8 +40,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The bishop wants to make contact with f7, but once we can play e6 and shut it out, the move makes very little sense.",
-   "reanchor": true
+   "spoken": "Bringing the bishop out to c4 at once is the Italian idea against the Sicilian, and it's innocuous — because the pawn to e6 can slam the door on it. The bishop only makes sense while it can menace f7, so the moment that's shut out, its purpose evaporates."
   },
   {
    "ply": 4,
@@ -50,7 +49,8 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "No need to play e6 right away — White isn't threatening to take on f7 — so first bring the knight out."
+   "spoken": "There's no need to rush the shutting-out move — nothing is threatened on f7 yet — so develop the knight first, keeping the options open before committing the pawn.",
+   "kind": "plan"
   },
   {
    "ply": 5,
@@ -59,7 +59,7 @@
    "line": [
     "a3"
    ],
-   "spoken": "a3 is probably not real preparation — and the best answer to odd play is to follow principles to a tee."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -68,7 +68,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "The simplest approach: the other knight to f6. And White can't play e5, because that square is defended — that's exactly why we played the knight to c6 first."
+   "spoken": "Against offbeat play the recipe is to follow principles to the letter — just develop, and there's only so much harm the opponent can do. The knight comes to f6, and the central push is already denied, since that square is guarded — which is exactly why the other knight came out first.",
+   "kind": "plan"
   },
   {
    "ply": 7,
@@ -77,7 +78,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "The centre fork trick — take on e4, then win the piece back with d5 — is available, but here it's a little premature and leads to needless complications."
+   "spoken": "The centre-fork trick is available — capturing in the centre and regaining the piece with a pawn break — but here it's premature and leads to needless complications. A calmer path is better.",
+   "kind": "plan"
   },
   {
    "ply": 8,
@@ -86,7 +88,8 @@
    "line": [
     "e6"
    ],
-   "spoken": "Simpler is e6, preparing to expand with d5 — and the fork-trick idea doesn't disappear, it just depends on how White develops."
+   "spoken": "So play e6 instead, quietly preparing to expand with the central break. The fork trick doesn't vanish — it stays in reserve, ready depending on how the opponent develops.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -95,7 +98,7 @@
    "line": [
     "Ba2"
    ],
-   "spoken": "The bishop retreats to a2 — no more fork trick, but we simply keep calmly expanding in the centre."
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -104,7 +107,8 @@
    "line": [
     "d5"
    ],
-   "spoken": "Playing principled chess against a second-string opening — d5, grabbing the centre and taking it right to the opponent."
+   "spoken": "Against a second-rate opening, play principled chess and punish it — the pawn to d5 grabs the centre and takes the fight to the opponent, rather than drifting. Seize the initiative when the opening invites it.",
+   "kind": "plan"
   },
   {
    "ply": 11,
@@ -122,7 +126,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "Recapture with the pawn — already a very pleasant position, with the better control of the centre."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -131,7 +135,8 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Develop the kingside, since our king is still in the centre — but note White signals d4, and we mustn't sleepwalk into an isolated-queen-pawn structure with that bishop eyeing d5."
+   "spoken": "Priority now is kingside development, since the king is still central and the opponent is signalling a quick castle. But there's a subtlety — they also intend a central push, and sleepwalking into the recapture would leave an isolated queen's pawn, with the opponent controlling the square in front of it and that bishop suddenly justified. Meeting the push yourself is an option, though it too has a real cost, opening that bishop's diagonal.",
+   "kind": "plan"
   }
  ]
 }
