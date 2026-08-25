@@ -24,7 +24,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "d4 — and we continue with the Queen's Gambit Declined."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -51,7 +51,8 @@
    "line": [
     "Be7"
    ],
-   "spoken": "A nice move-order trick — start with the bishop to e7, which prevents Bg5."
+   "spoken": "A neat move-order trick — sometimes lead with the bishop to e7. It quietly prevents an early pin, and if the opponent develops the knight, the reply keeps you out of the more annoying lines of the opening. Small orderings can dodge a lot of theory.",
+   "kind": "plan"
   },
   {
    "ply": 7,
@@ -87,7 +88,8 @@
    "line": [
     "c6"
    ],
-   "spoken": "The cool players' setup: c6, then reposition the bishop from e7 to d6."
+   "spoken": "The cool treatment is a pawn to c6 and then repositioning the bishop from e7 across to d6. It looks like a waste of tempi, but it's the setup strong players favour — offering to trade the dark-squared bishops, which helps the defender, since that bishop is often awkward with no good parking spot.",
+   "kind": "plan"
   },
   {
    "ply": 12,
@@ -97,7 +99,8 @@
     "Bf4",
     "Bd6"
    ],
-   "spoken": "The bishop to d6, offering the trade of dark-squared bishops — often good for Black, since that bishop has no good parking spot on e7."
+   "spoken": "You might object that no pieces are being developed — how can that be safe? It's all down to the state of the centre. With a solid pawn chain and a closed middle, the opponent can't break with the central push while their own king is stuck there, so you can afford several moves with one piece. Don't be a slave to the rule — judge the position intuitively.",
+   "kind": "plan"
   },
   {
    "ply": 14,
@@ -116,7 +119,7 @@
    "line": [
     "e3"
    ],
-   "spoken": "Everything stays solid — the centre is closed, so we can afford to move one piece several times."
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -125,14 +128,16 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "The bishop to f5, before the knights — if we let White play Bd3 first, we lose the chance to put it here."
+   "spoken": ""
   },
   {
    "ply": 15,
    "t": 181,
    "fen": "rnb1k1nr/pp3ppp/2pq4/3p4/3P4/2N1PN2/PP3PPP/R2QKB1R b KQkq - 0 8",
    "line": [],
-   "spoken": ""
+   "spoken": "The bishop develops to f5 before the knights, and for a concrete reason: allow the opponent's bishop to reach d3 and this active post is lost forever. The alternative pin square is a viable developing move but tends to be overrated here.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -159,7 +164,8 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "A subtlety — the knight to d7 before f6, to prevent Ne5."
+   "spoken": "A subtlety in the knight order — develop to d7 before f6, because leading with the other knight would invite a central leap into e5. Deny that outpost first, then bring the second knight out. And if the queen probes the b-pawn, defend with a rook: yes, the rook is tied to defence, but the queen is equally tied to the attack — a happy trade of duties.",
+   "kind": "plan"
   },
   {
    "ply": 19,
@@ -177,7 +183,7 @@
    "line": [
     "Ngf6"
    ],
-   "spoken": "And the knight to f6 — our opening problems are solved, the position very comfortable."
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -204,7 +210,8 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "Don't rush the knight to e4 yet — first let White commit."
+   "spoken": "Don't rush the central knight jump — but keep the key motif in mind: if it's exchanged, recapture with the pawn to pry open d5 for the other knight. Timing that break is what turns a solid position into an initiative.",
+   "kind": "plan"
   },
   {
    "ply": 24,
@@ -231,7 +238,8 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "Now is the moment for the knight to e4 — because after the recapture, his knight can no longer drop back to e1 and starts to have real problems."
+   "spoken": "Now is the perfect moment for the knight to e4, because after the exchange and pawn recapture the enemy knight can no longer retreat to its home square, and the piece stranded on the rim starts to find itself in real trouble.",
+   "kind": "tactic"
   },
   {
    "ply": 28,
@@ -250,7 +258,8 @@
    "line": [
     "Nh2"
    ],
-   "spoken": ""
+   "spoken": "There's a choice of approaches, and the positional one is to route a knight to d5 — a semi-outpost in the heart of the board. Resist the central break, which would only open lines for the opponent; keeping the centre closed is where the advantage lives.",
+   "kind": "plan"
   },
   {
    "ply": 30,
@@ -259,7 +268,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Play positionally — route the knight toward d5, and don't rush the attack until the advantage is cemented."
+   "spoken": ""
   },
   {
    "ply": 29,
@@ -293,7 +302,8 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "Complete the maneuver — the knight to d5. It holds the c-file, prevents b4, and can leap to f4; a perfect central perch."
+   "spoken": "What is the centralised knight actually doing? Nothing specific — and that's fine. It occupies a central square, radiates control across the board, prevents the opponent's pawn expansion, and stands ready to spring to f4. Think about what a piece does, but don't box yourself in by demanding a single concrete task.",
+   "kind": "plan"
   },
   {
    "ply": 33,
@@ -311,7 +321,8 @@
    "line": [
     "a5"
    ],
-   "spoken": "a5 — the automatic response to his b4 preparation."
+   "spoken": "As the opponent prepares to expand, the near-automatic response is a5, meeting the advance head-on and keeping the queenside from opening on the enemy's terms.",
+   "kind": "plan"
   },
   {
    "ply": 35,
@@ -329,7 +340,8 @@
    "line": [
     "Re6"
    ],
-   "spoken": ""
+   "spoken": "There's a way to prevent the pawn break for good — a pawn to a4, so that any advance is met by a capture that hangs a rook. No rush to play it, though, since the break isn't yet a threat; first swing a rook toward the kingside, and keep the freeze in reserve.",
+   "kind": "plan"
   },
   {
    "ply": 37,
@@ -338,7 +350,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "He forces the bishop trade with Bg4, leaving a knight-versus-knight battle where ours is far superior."
+   "spoken": ""
   },
   {
    "ply": 39,
@@ -357,7 +369,8 @@
    "line": [
     "f6"
    ],
-   "spoken": "f6 first, to shut the e5 square off from his knight."
+   "spoken": "Pushing the enemy knight back takes real care — the immediate pawn thrust would only hand it a counter-outpost. So play the shielding pawn first to shut off that square, then the rook-pawn to chase the knight into the corner, and only then advance the f-pawn to blow the position open. One pawn stops the knight, the other does the pushing.",
+   "kind": "plan"
   },
   {
    "ply": 41,
@@ -375,7 +388,7 @@
    "line": [
     "f5"
    ],
-   "spoken": "Then f5 — the floodgates are opening on the kingside."
+   "spoken": ""
   },
   {
    "ply": 43,
@@ -393,7 +406,8 @@
    "line": [
     "a4"
    ],
-   "spoken": ""
+   "spoken": "The traditional plan is to prepare the pawn break with a rook behind it. Toss in the queenside freeze first so the opponent gets no counterplay — there's never a formula for how much a wing pawn is worth, but denying counterchances before attacking is the safe order.",
+   "kind": "plan"
   },
   {
    "ply": 45,
@@ -411,7 +425,7 @@
    "line": [
     "Rf8"
    ],
-   "spoken": "The rook to f8, preparing the f4 break — I like a rook behind the pawn."
+   "spoken": ""
   },
   {
    "ply": 47,
@@ -429,7 +443,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "h5 and f4 — the same idea: one pawn stops the knight, the other does the pushing."
+   "spoken": ""
   },
   {
    "ply": 49,
@@ -447,7 +461,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "And finally f4 — the breakthrough is ready."
+   "spoken": ""
   },
   {
    "ply": 51,
@@ -456,7 +470,8 @@
    "line": [
     "exf4"
    ],
-   "spoken": ""
+   "spoken": "And the break lands at last — after all the patience, the knight that waited so long on its central square becomes the hero of the attack, and the pressure down the newly opened lines is about to make something collapse.",
+   "kind": "tactic"
   },
   {
    "ply": 52,
@@ -465,7 +480,7 @@
    "line": [
     "Nxf4"
    ],
-   "spoken": "The knight that waited so patiently on d5 now takes on f4 and becomes the hero of the attack."
+   "spoken": ""
   },
   {
    "ply": 53,
@@ -483,7 +498,7 @@
    "line": [
     "Rg6"
    ],
-   "spoken": "The rook lifts to g6 — something is going to collapse."
+   "spoken": ""
   },
   {
    "ply": 53,
@@ -509,7 +524,8 @@
    "line": [
     "Rxg3"
    ],
-   "spoken": "The breakthrough — take on g3; this is the classic transformation of positional dominance into hard material."
+   "spoken": "Here's the classic transformation — a capture that converts positional domination straight into material. Trade into it, and the queen crashes through with check.",
+   "kind": "tactic"
   },
   {
    "ply": 57,
@@ -527,7 +543,8 @@
    "line": [
     "Qxd4+"
    ],
-   "spoken": "The queen takes on d4 with check — and it's not just one pawn, it's two. That's what makes this pretty."
+   "spoken": "And the beauty is it wins two pawns, not one — that's what makes it worth going for. A knight check forks in behind it, and the whole edge cashes into a decisive material lead.",
+   "kind": "tactic"
   },
   {
    "ply": 60,
@@ -593,7 +610,8 @@
     "Nxf1",
     "Nxd4"
    ],
-   "spoken": "Up two pawns in a knight endgame — completely winning; just centralise the king and push the majority."
+   "spoken": "The dust settles two pawns up in a knight endgame — completely winning. From here it's the simplest technique: centralise the king and roll the extra pawns forward. The conversion practically plays itself.",
+   "kind": "plan"
   },
   {
    "ply": 69,
@@ -647,7 +665,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "To be clinical, start with b5, preparing to roll the queenside pawns."
+   "spoken": ""
   },
   {
    "ply": 75,
@@ -701,7 +719,7 @@
    "line": [
     "Nf3+"
    ],
-   "spoken": "Use the knight to win the h3-pawn — White's biggest weakness."
+   "spoken": ""
   },
   {
    "ply": 82,
@@ -845,7 +863,7 @@
     "b6",
     "e2"
    ],
-   "spoken": "The pawn promotes — and the mate is not far behind."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -1289,8 +1307,7 @@
    "t": 1778,
    "fen": "rnb1k1nr/pp2bppp/2pB4/3p4/3P4/2N1PN2/PP3PPP/R2QKB1R b KQkq - 0 11",
    "line": [],
-   "spoken": "Why not castle queenside? The c6 hook makes the king weak — Qa4, b4, b5 comes fast, and Black would be mated in a few moves. A damaged structure is fine, but not as a shelter for the king.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -1318,8 +1335,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "The Carlsbad structure — after exd5 — is exactly where White's classic minority attack, b4 and b5, chisels away at Black's pawn chain.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
