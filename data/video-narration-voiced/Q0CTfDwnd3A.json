@@ -1,10 +1,10 @@
 {
  "videoId": "Q0CTfDwnd3A",
  "title": "Exploding the Center | IQP | In-depth Sicilian Alapin | GM Naroditsky’s Theory Speed Run",
- "openingName": "Sicilian Defense: Alapin, 2…e6 IQP (White)",
+ "openingName": "Sicilian Defense: Alapin Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:Q0CTfDwnd3A",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Sicilian."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We play c3 — the Alapin."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "Black plays e6, heading for a French-like structure."
   },
   {
    "ply": 3,
@@ -49,10 +49,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "The pawn to e6 is a flexible reply — not a bad move, just one of several ways Black can steer the game. It keeps options open between a French-type structure and an isolated-pawn fight.",
-   "kind": "main",
-   "teaches": "e6 is a flexible Alapin try, deferring the choice of pawn structure.",
-   "plans": "Meet it with d4 and head for the isolated-pawn positions."
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -61,7 +58,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We build the centre with d4."
   },
   {
    "ply": 6,
@@ -70,10 +67,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "The traditional response is the pawn to d5. Many Black players are really bluffing White into locking the centre with e5 — but there is no need to oblige, and capturing keeps White better.",
-   "kind": "main",
-   "teaches": "Don't be bluffed into closing the centre; capture and play against the structure.",
-   "plans": "Take, saddle Black with an isolated d-pawn, and blockade."
+   "spoken": "Black challenges with d5."
   },
   {
    "ply": 7,
@@ -82,7 +76,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "We take on d5."
   },
   {
    "ply": 8,
@@ -91,7 +85,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the e-pawn."
   },
   {
    "ply": 9,
@@ -100,10 +94,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "The bishop check on b5 gains a tempo, and the plan behind it is clean: capture on c5 to leave Black with an isolated d-pawn, then blockade and pressure it for the rest of the game.",
-   "kind": "main",
-   "teaches": "Use a tempo-gaining check to set up the capture that fixes the opponent's isolani.",
-   "plans": "Bxc5, blockade d5, and trade toward a better endgame."
+   "spoken": "We give the check on b5."
   },
   {
    "ply": 10,
@@ -112,7 +103,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black blocks with the knight to c6."
   },
   {
    "ply": 9,
@@ -137,7 +128,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 12,
@@ -146,7 +137,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to d6."
   },
   {
    "ply": 13,
@@ -155,7 +146,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": ""
+   "spoken": "We take on c5."
   },
   {
    "ply": 14,
@@ -164,7 +155,7 @@
    "line": [
     "Bxc5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the bishop."
   },
   {
    "ply": 15,
@@ -173,7 +164,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 16,
@@ -182,7 +173,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 17,
@@ -191,7 +182,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "We pin the knight with the bishop to g5."
   },
   {
    "ply": 18,
@@ -200,7 +191,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "Black defends with the bishop to e6."
   },
   {
    "ply": 20,
@@ -210,7 +201,7 @@
     "Bc1",
     "Bc8"
    ],
-   "spoken": ""
+   "spoken": "The bishop retreats to c1 and Black's back to c8 — probing."
   },
   {
    "ply": 22,
@@ -220,7 +211,7 @@
     "Bg5",
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "We try the pin again with Bg5, and Black returns ...Be6."
   },
   {
    "ply": 23,
@@ -229,7 +220,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to d2."
   },
   {
    "ply": 24,
@@ -238,7 +229,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 25,
@@ -247,7 +238,7 @@
    "line": [
     "Nb3"
    ],
-   "spoken": ""
+   "spoken": "We reroute the knight to b3, hitting the bishop."
   },
   {
    "ply": 26,
@@ -256,7 +247,7 @@
    "line": [
     "Bb6"
    ],
-   "spoken": ""
+   "spoken": "Black tucks the bishop to b6."
   },
   {
    "ply": 27,
@@ -265,7 +256,7 @@
    "line": [
     "Nbd4"
    ],
-   "spoken": ""
+   "spoken": "We centralize the knight on d4."
   },
   {
    "ply": 28,
@@ -274,7 +265,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "Black plays the bishop to d7."
   },
   {
    "ply": 29,
@@ -283,7 +274,7 @@
    "line": [
     "Bxc6"
    ],
-   "spoken": ""
+   "spoken": "We take on c6."
   },
   {
    "ply": 30,
@@ -292,7 +283,7 @@
    "line": [
     "bxc6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the b-pawn."
   },
   {
    "ply": 31,
@@ -301,7 +292,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": ""
+   "spoken": "We jump the knight into e5."
   },
   {
    "ply": 28,
@@ -328,7 +319,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "Black plays c5."
   },
   {
    "ply": 33,
@@ -337,7 +328,7 @@
    "line": [
     "Bxf6"
    ],
-   "spoken": ""
+   "spoken": "We take on f6."
   },
   {
    "ply": 34,
@@ -346,7 +337,7 @@
    "line": [
     "gxf6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the g-pawn, wrecking his kingside."
   },
   {
    "ply": 35,
@@ -355,7 +346,7 @@
    "line": [
     "Nxd7"
    ],
-   "spoken": ""
+   "spoken": "The knight grabs on d7."
   },
   {
    "ply": 36,
@@ -364,7 +355,7 @@
    "line": [
     "Qxd7"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the queen."
   },
   {
    "ply": 37,
@@ -373,7 +364,7 @@
    "line": [
     "Nc2"
    ],
-   "spoken": ""
+   "spoken": "We reroute the knight to c2."
   },
   {
    "ply": 38,
@@ -382,7 +373,7 @@
    "line": [
     "Rfd8"
    ],
-   "spoken": ""
+   "spoken": "Black doubles rooks with ...Rfd8."
   },
   {
    "ply": 40,
@@ -392,7 +383,7 @@
     "Qf3",
     "Qd6"
    ],
-   "spoken": ""
+   "spoken": "We bring the queen to f3; Black plays ...Qd6."
   }
  ]
 }
