@@ -1,10 +1,10 @@
 {
  "videoId": "Ov4J-FZWoQg",
  "title": "Mastering the Belgrade Gambit | Scotch Accepted | GM Naroditsky’s Theory Speed Run",
- "openingName": "Belgrade Gambit",
+ "openingName": "Four Knights Game: Belgrade Gambit",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:Ov4J-FZWoQg",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take White; Black answers our king's pawn with ...e5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black defends with ...Nc6."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 7,
@@ -60,9 +60,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 opens the Four Knights into gambit territory — after Black captures, White has the sharp Belgrade in store rather than the quiet main line.",
-   "kind": "main",
-   "teaches": "Use the Four Knights move order to reach a surprise gambit."
+   "spoken": "We open the centre with d4 — the Scotch Four Knights."
   },
   {
    "ply": 8,
@@ -71,7 +69,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 9,
@@ -80,9 +78,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "Nd5 is the Belgrade Gambit — instead of recapturing on d4, White centralizes the knight, throwing a rare, aggressive problem at Black that's easy to mishandle over the board.",
-   "kind": "main",
-   "teaches": "A well-timed piece leap can be worth a pawn when it creates immediate concrete problems."
+   "spoken": "We play the Belgrade Gambit — the knight to d5."
   },
   {
    "ply": 8,
@@ -107,7 +103,7 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "Black plays h6."
   },
   {
    "ply": 11,
@@ -116,7 +112,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to d3."
   },
   {
    "ply": 12,
@@ -125,7 +121,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6."
   },
   {
    "ply": 13,
@@ -134,7 +130,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": ""
+   "spoken": "We reposition the bishop to b5, pinning the knight."
   },
   {
    "ply": 11,
@@ -178,7 +174,8 @@
     "Ba4",
     "a6"
    ],
-   "spoken": ""
+   "spoken": "Against ...a6 we keep the bishop active — Ba4, and if ...b5 then Bb3 — so the bishop stays on the a2–g8 diagonal.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -231,9 +228,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": "The bishop drops to b3, eyeing f7 through the pin — White keeps maximum tension, refusing trades and piling pressure on Black's exposed kingside.",
-   "kind": "main",
-   "teaches": "Retreat the bishop to b3 to keep it aimed at f7 while preserving the tension."
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -242,7 +237,8 @@
    "line": [
     "Ne5"
    ],
-   "spoken": ""
+   "spoken": "Black's tries to untangle — ...Ne5, ...Nxd4, ...c5 — all run into our lead in development and the pin.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -302,7 +298,7 @@
    "line": [
     "Rb8"
    ],
-   "spoken": ""
+   "spoken": "Black plays the rook to b8."
   },
   {
    "ply": 33,
@@ -311,7 +307,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 34,
@@ -320,7 +316,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e7."
   },
   {
    "ply": 35,
@@ -347,7 +343,8 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "Our plan is f3 and f4, then e5, blasting open the centre while Black's king is still stuck in the middle.",
+   "reanchor": true
   },
   {
    "ply": 36,
@@ -381,7 +378,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We strike with e5, opening lines against Black's uncastled king."
   },
   {
    "ply": 31,
