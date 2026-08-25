@@ -1,10 +1,10 @@
 {
  "videoId": "Gti01VN0zXA",
  "title": "Master Class | Ruy Lopez, Bishop Sac Variation | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Ruy Lopez (bishop-odds showcase)",
+ "openingName": "Bishop's Opening",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:Gti01VN0zXA",
  "moves": [
   {
@@ -16,7 +16,7 @@
     "e5",
     "Ba6"
    ],
-   "spoken": ""
+   "spoken": "We take White, and after ...e5 play the outrageous bishop to a6 — a deliberate handicap."
   },
   {
    "ply": 4,
@@ -25,9 +25,7 @@
    "line": [
     "Nxa6"
    ],
-   "spoken": "White has deliberately given up the bishop on a6 — a huge handicap taken on purpose. The whole game is a lesson in generating attacking chances from a lost position: develop fast and create complications.",
-   "kind": "main",
-   "teaches": "When down material by design, seek activity and complications rather than passive defense."
+   "spoken": "Black snaps the bishop with the knight."
   },
   {
    "ply": 5,
@@ -36,7 +34,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 6,
@@ -45,7 +43,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6."
   },
   {
    "ply": 7,
@@ -54,9 +52,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 stakes a claim in the center — down a piece, White must fight for space and open lines, and Black's passive ...d6 with the offside knight on a6 offers real practical chances.",
-   "kind": "main",
-   "teaches": "Build a strong center to turn a material deficit into attacking initiative."
+   "spoken": "We grab the centre with d4."
   },
   {
    "ply": 8,
@@ -65,7 +61,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Black pins with ...Bg4."
   },
   {
    "ply": 9,
@@ -74,7 +70,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We play c3."
   },
   {
    "ply": 10,
@@ -83,7 +79,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e7."
   },
   {
    "ply": 11,
@@ -92,9 +88,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "Bishop to e3 shores up a solid pawn-and-piece center and prepares to castle long — the plan is to castle opposite Black and race a pawn storm at his king.",
-   "kind": "main",
-   "teaches": "Castle on the opposite wing from your opponent to launch a mutual pawn-storm race."
+   "spoken": "We develop the bishop to e3."
   },
   {
    "ply": 10,
@@ -119,7 +113,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 13,
@@ -128,7 +122,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to d2."
   },
   {
    "ply": 14,
@@ -137,7 +131,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 15,
@@ -146,7 +140,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "We poke the bishop with h3."
   },
   {
    "ply": 16,
@@ -155,7 +149,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": ""
+   "spoken": "Black takes our knight, capturing on f3."
   },
   {
    "ply": 18,
@@ -165,7 +159,7 @@
     "Qxf3",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the queen; Black strikes with c5."
   },
   {
    "ply": 19,
@@ -174,7 +168,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "We take on e5."
   },
   {
    "ply": 20,
@@ -183,7 +177,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the d-pawn."
   },
   {
    "ply": 21,
@@ -192,7 +186,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle queenside — opposite wings."
   },
   {
    "ply": 22,
@@ -201,7 +195,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to a5."
   },
   {
    "ply": 23,
@@ -210,7 +204,7 @@
    "line": [
     "Kb1"
    ],
-   "spoken": ""
+   "spoken": "We tuck the king to b1."
   },
   {
    "ply": 24,
@@ -219,7 +213,7 @@
    "line": [
     "Rad8"
    ],
-   "spoken": ""
+   "spoken": "Black doubles rooks with ...Rad8."
   },
   {
    "ply": 25,
@@ -228,7 +222,7 @@
    "line": [
     "g4"
    ],
-   "spoken": ""
+   "spoken": "We launch the kingside storm with g4."
   },
   {
    "ply": 27,
@@ -238,7 +232,7 @@
     "b5",
     "g5"
    ],
-   "spoken": ""
+   "spoken": "Black pushes b5; we roll g5."
   },
   {
    "ply": 28,
@@ -247,7 +241,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "Black retreats the knight to d7."
   },
   {
    "ply": 29,
@@ -256,7 +250,7 @@
    "line": [
     "h4"
    ],
-   "spoken": ""
+   "spoken": "We push h4."
   },
   {
    "ply": 30,
@@ -265,7 +259,7 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "Black plays g6."
   },
   {
    "ply": 31,
@@ -274,7 +268,7 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "We push h5."
   },
   {
    "ply": 32,
@@ -283,7 +277,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the knight to b6."
   },
   {
    "ply": 33,
@@ -292,7 +286,7 @@
    "line": [
     "Qh3"
    ],
-   "spoken": ""
+   "spoken": "We swing the queen to h3."
   },
   {
    "ply": 34,
@@ -301,7 +295,7 @@
    "line": [
     "Nc4"
    ],
-   "spoken": ""
+   "spoken": "Black plays the knight to c4."
   },
   {
    "ply": 35,
@@ -310,7 +304,7 @@
    "line": [
     "hxg6"
    ],
-   "spoken": ""
+   "spoken": "We take on g6, opening the h-file."
   },
   {
    "ply": 33,
@@ -336,7 +330,7 @@
    "line": [
     "Nxd2+"
    ],
-   "spoken": ""
+   "spoken": "Black takes our knight on d2 with check."
   },
   {
    "ply": 37,
@@ -345,7 +339,7 @@
    "line": [
     "Rxd2"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the rook."
   },
   {
    "ply": 38,
@@ -354,7 +348,7 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "Black plays h5."
   },
   {
    "ply": 39,
@@ -363,7 +357,7 @@
    "line": [
     "Qxh5"
    ],
-   "spoken": ""
+   "spoken": "We grab on h5 with the queen."
   },
   {
    "ply": 40,
@@ -372,7 +366,7 @@
    "line": [
     "f6"
    ],
-   "spoken": ""
+   "spoken": "Black plays f6."
   },
   {
    "ply": 39,
