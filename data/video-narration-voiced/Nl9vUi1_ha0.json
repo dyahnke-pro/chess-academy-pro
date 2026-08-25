@@ -1,0 +1,730 @@
+{
+ "videoId": "Nl9vUi1_ha0",
+ "title": "Forks & Board Awareness!! | Glek + Scandi | Develop Your Instincts | GM Naroditsky's DYI Speedrun",
+ "openingName": "Four Knights Game",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:Nl9vUi1_ha0",
+ "moves": [
+  {
+   "ply": 3,
+   "t": 71.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "e4",
+    "e5",
+    "Nf3"
+   ],
+   "spoken": "Finally a Glek System — the Four Knights with g3, White's recommendation."
+  },
+  {
+   "ply": 7,
+   "t": 73,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 2 4",
+   "line": [
+    "Nc6",
+    "g3",
+    "Nf6",
+    "Nc3"
+   ],
+   "spoken": "White fianchettoes with g3 — this is the Glek."
+  },
+  {
+   "ply": 8,
+   "t": 78.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R w KQkq - 3 5",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": "Black develops the bishop to c5."
+  },
+  {
+   "ply": 10,
+   "t": 84,
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQK2R w KQkq - 5 6",
+   "line": [
+    "Bg2",
+    "Ng4"
+   ],
+   "spoken": "After the bishop to g2, Black plays a typical move at this level — the knight to g4. It looks intimidating..."
+  },
+  {
+   "ply": 11,
+   "t": 95,
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQ1RK1 b kq - 6 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "...but White just castles. In most of these lines the knight takes on f2 and the bishop recaptures, leaving White two pieces for a rook and a pawn — and in the middlegame the rooks are not mobilised, so the pieces dominate."
+  },
+  {
+   "ply": 12,
+   "t": 104,
+   "fen": "r1bqk2r/ppp2ppp/2np4/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQ1RK1 w kq - 0 7",
+   "line": [
+    "d6"
+   ],
+   "spoken": "Black plays d6. White can chase the knight with h3, or play d3 — no hurry."
+  },
+  {
+   "ply": 13,
+   "t": 128,
+   "fen": "r1bqk2r/ppp2ppp/2np4/2b1p3/4P1n1/2N2NPP/PPPP1PB1/R1BQ1RK1 b kq - 0 7",
+   "line": [
+    "h3"
+   ],
+   "spoken": "Let's force the commitment with h3."
+  },
+  {
+   "ply": 14,
+   "t": 135,
+   "fen": "r1bqk2r/ppp2ppp/2np3n/2b1p3/4P3/2N2NPP/PPPP1PB1/R1BQ1RK1 w kq - 1 8",
+   "line": [
+    "Nh6"
+   ],
+   "spoken": "Black drops back to h6 — an odd square. The likely idea is a quick f5, but that is near-suicidal with the king stuck in the centre."
+  },
+  {
+   "ply": 15,
+   "t": 162,
+   "fen": "r1bqk2r/ppp2ppp/2np3n/2b1p3/4P3/2NP1NPP/PPP2PB1/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "d3"
+   ],
+   "spoken": "So White just plays the normal Glek move, d3, completing development and setting up the positional threat of taking on h6."
+  },
+  {
+   "ply": 16,
+   "t": 168,
+   "fen": "r1bq1rk1/ppp2ppp/2np3n/2b1p3/4P3/2NP1NPP/PPP2PB1/R1BQ1RK1 w - - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 192,
+   "fen": "r1bq1rk1/ppp2ppp/2np3B/2b1p3/4P3/2NP1NPP/PPP2PB1/R2Q1RK1 b - - 0 9",
+   "line": [
+    "Bxh6"
+   ],
+   "spoken": "Black ignores it and castles — so the bishop takes on h6. Not for the pawn structure per se, but because Black has castled to that very side. Had Black tucked the bishop back to b6 instead, White would be far more hesitant to take."
+  },
+  {
+   "ply": 15,
+   "t": 197,
+   "fen": "r1bqk2r/ppp2ppp/2np3n/2b1p3/4P3/2NP1NPP/PPP2PB1/R1BQ1RK1 b kq - 0 8",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 201,
+   "fen": "r1bq1rk1/ppp2p1p/2np3p/2b1p3/4P3/2NP1NPP/PPP2PB1/R2Q1RK1 w - - 0 10",
+   "line": [
+    "O-O",
+    "Bxh6",
+    "gxh6"
+   ],
+   "spoken": "Now White has an easily attackable target on h6."
+  },
+  {
+   "ply": 19,
+   "t": 215,
+   "fen": "r1bq1rk1/ppp2p1p/2np3p/2b1p3/4P3/2NP1NPP/PPPQ1PB1/R4RK1 b - - 1 10",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "The low-hanging move to attack it is the queen to d2 — built on a tactical detail newer players miss."
+  },
+  {
+   "ply": 20,
+   "t": 235,
+   "fen": "r1b2rk1/ppp2p1p/2np1q1p/2b1p3/4P3/2NP1NPP/PPPQ1PB1/R4RK1 w - - 2 11",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": "The instinct is the queen to f6, getting active — but it walks into a nasty knight jump to d5, hitting c7."
+  },
+  {
+   "ply": 21,
+   "t": 236,
+   "fen": "r1b2rk1/ppp2p1p/2np1q1p/2bNp3/4P3/3P1NPP/PPPQ1PB1/R4RK1 b - - 3 11",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "And there it is. Notice the power of the bishop on g2 — it protects the knight, guards the pawn on h3, and keeps White's king safe."
+  },
+  {
+   "ply": 22,
+   "t": 250,
+   "fen": "r1b2rk1/ppp2p1p/2np2qp/2bNp3/4P3/3P1NPP/PPPQ1PB1/R4RK1 w - - 4 12",
+   "line": [
+    "Qg6"
+   ],
+   "spoken": "The knight to d5 is a menace. Black's queen to g6 threatens to take on g3 — but White has an incredible resource. Whenever the enemy king and queen sit on forkable squares and the forking square is reachable, put your tactical cap on: if we can deflect the defending knight from c6, there is a win in our pocket."
+  },
+  {
+   "ply": 23,
+   "t": 304,
+   "fen": "r1b2rk1/ppp2p1p/2np2qp/2bNp3/1P2P3/3P1NPP/P1PQ1PB1/R4RK1 b - - 0 12",
+   "line": [
+    "b4"
+   ],
+   "spoken": "The knight takes c5 fails, since Black recaptures with the pawn — but b4 does the job."
+  },
+  {
+   "ply": 24,
+   "t": 307,
+   "fen": "r1b2rk1/ppp2p1p/1bnp2qp/3Np3/1P2P3/3P1NPP/P1PQ1PB1/R4RK1 w - - 1 13",
+   "line": [
+    "Bb6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 308.5,
+   "fen": "r1b2rk1/ppp2p1p/1bnp2qp/1P1Np3/4P3/3P1NPP/P1PQ1PB1/R4RK1 b - - 0 13",
+   "line": [
+    "b5"
+   ],
+   "spoken": "Black is completely unsuspecting — b5, and he misses..."
+  },
+  {
+   "ply": 26,
+   "t": 311.5,
+   "fen": "r1b2rk1/ppp2p1p/1b1p2qp/1P1Np3/3nP3/3P1NPP/P1PQ1PB1/R4RK1 w - - 1 14",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 312.5,
+   "fen": "r1b2rk1/ppp1Np1p/1b1p2qp/1P2p3/3nP3/3P1NPP/P1PQ1PB1/R4RK1 b - - 2 14",
+   "line": [
+    "Ne7+"
+   ],
+   "spoken": "...the fork on e7, and White wins. This is whole-board awareness — doing something on one wing that decides the game on another. b4 is hard to see precisely because it happens on the quiet queenside, but all three zones of the board are intricately connected."
+  },
+  {
+   "ply": 7,
+   "t": 354,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 2 4",
+   "line": [],
+   "spoken": "Black resigns — a quick tour of the first Glek System, but far from the last.",
+   "reanchor": true
+  },
+  {
+   "ply": 3,
+   "t": 355.5,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 357,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 360,
+   "fen": "r1bqkb1r/pppp1ppp/2n2n2/4p3/4P3/2N2NP1/PPPP1P1P/R1BQKB1R b KQkq - 2 4",
+   "line": [
+    "g3",
+    "Nf6",
+    "Nc3"
+   ],
+   "spoken": "The Glek is launched with g3 — a fine opening at all levels; players rarely meet it and start floundering almost at once.",
+   "reanchor": true
+  },
+  {
+   "ply": 9,
+   "t": 402.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 4 5",
+   "line": [
+    "Bc5",
+    "Bg2"
+   ],
+   "spoken": "And the knight to g4 followed by castling is already a serious inaccuracy.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 403.5,
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQK2R w KQkq - 5 6",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 405,
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQ1RK1 b kq - 6 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 408,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 4 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 418,
+   "fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R w KQ - 5 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 440.5,
+   "fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1N3/4P3/2N3P1/PPPP1PBP/R1BQK2R b KQ - 0 6",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 444.5,
+   "fen": "r1bq1rk1/pppp1ppp/2n2n2/4N3/4P3/2N3P1/PPPP1bBP/R1BQK2R w KQ - 0 7",
+   "line": [
+    "Bxf2+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 447,
+   "fen": "r1bq1rk1/pppp1ppp/2n2n2/4N3/4P3/2N3P1/PPPP1KBP/R1BQ3R b - - 0 7",
+   "line": [
+    "Kxf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 448,
+   "fen": "r1bq1rk1/pppp1ppp/5n2/4n3/4P3/2N3P1/PPPP1KBP/R1BQ3R w - - 0 8",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 453.5,
+   "fen": "r1bq1rk1/pppp1ppp/5n2/4n3/3PP3/2N3P1/PPP2KBP/R1BQ3R b - - 0 8",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 457,
+   "fen": "r1bq1rk1/pppp1ppp/5n2/8/3PP1n1/2N3P1/PPP2KBP/R1BQ3R w - - 1 9",
+   "line": [
+    "Neg4+"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 460,
+   "fen": "r1bq1rk1/pppp1ppp/5n2/8/3PP1n1/2N3P1/PPP3BP/R1BQ2KR b - - 2 9",
+   "line": [
+    "Kg1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 473.5,
+   "fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R w KQ - 5 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 475.5,
+   "fen": "r1bq1rk1/pppp1ppp/5n2/2b1n3/4P3/2N3P1/PPPP1PBP/R1BQK2R w KQ - 0 7",
+   "line": [
+    "Nxe5",
+    "Nxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 477,
+   "fen": "r1bq1rk1/pppp1ppp/3b1n2/4n3/3PP3/2N3P1/PPP2PBP/R1BQK2R w KQ - 1 8",
+   "line": [
+    "d4",
+    "Bd6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 489.5,
+   "fen": "r1bq1rk1/pppp1ppp/5n2/4b3/4P3/2N3P1/PPP2PBP/R1BQ1RK1 b - - 1 9",
+   "line": [
+    "dxe5",
+    "Bxe5",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 515.5,
+   "fen": "r1bq1rk1/ppp2ppp/3p1n2/4b3/4P3/2N3P1/PPP2PBP/R1BQ1RK1 w - - 0 10",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 535,
+   "fen": "r1bq1rk1/ppp2ppp/3p1n2/4b3/4PP2/2N3P1/PPP3BP/R1BQ1RK1 b - - 0 10",
+   "line": [
+    "f4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 536.5,
+   "fen": "r1bq1rk1/ppp2ppp/3p1n2/8/4PP2/2b3P1/PPP3BP/R1BQ1RK1 w - - 0 11",
+   "line": [
+    "Bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 538.5,
+   "fen": "r1bq1rk1/ppp2ppp/3p1n2/8/4PP2/2P3P1/P1P3BP/R1BQ1RK1 b - - 0 11",
+   "line": [
+    "bxc3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 539.5,
+   "fen": "r1bqr1k1/ppp2ppp/3p1n2/8/4PP2/2P3P1/P1P3BP/R1BQ1RK1 w - - 1 12",
+   "line": [
+    "Re8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 603,
+   "fen": "r1bq1rk1/ppp2ppp/3p1n2/8/4PP2/2P3P1/P1P3BP/R1BQ1RK1 b - - 0 11",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 607,
+   "fen": "r1bqr1k1/ppp2ppp/3p1n2/4P3/5P2/2P3P1/P1P3BP/R1BQ1RK1 b - - 0 12",
+   "line": [
+    "Re8",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 610.5,
+   "fen": "r1bqr1k1/ppp2ppp/5n2/4p3/5P2/2P3P1/P1P3BP/R1BQ1RK1 w - - 0 13",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 27,
+   "t": 613,
+   "fen": "r1br2k1/ppp2ppp/5n2/4P3/8/2P3P1/P1P3BP/R1B2RK1 b - - 0 14",
+   "line": [
+    "Qxd8",
+    "Rxd8",
+    "fxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 621,
+   "fen": "r1br2k1/ppp2ppp/8/3nP3/8/2P3P1/P1P3BP/R1B2RK1 w - - 1 15",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 29,
+   "t": 624,
+   "fen": "r1br2k1/ppp2ppp/8/3nP1B1/8/2P3P1/P1P3BP/R4RK1 b - - 2 15",
+   "line": [
+    "Bg5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 631,
+   "fen": "r1bq1rk1/pppp1ppp/2n2n2/2b1N3/4P3/2N3P1/PPPP1PBP/R1BQK2R b KQ - 0 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 632.5,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 4 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 634.5,
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R w KQkq - 0 6",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 638,
+   "fen": "r1bqk2r/ppp2ppp/2np1n2/2b1p3/4P3/2NP1NP1/PPP2PBP/R1BQK2R b KQkq - 0 6",
+   "line": [
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 9,
+   "t": 642,
+   "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p3/4P3/2N2NP1/PPPP1PBP/R1BQK2R b KQkq - 4 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 645,
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQ1RK1 b kq - 6 6",
+   "line": [
+    "Ng4",
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 650.5,
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P3/2N2NP1/PPPP1nBP/R1BQ1RK1 w kq - 0 7",
+   "line": [
+    "Nxf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 654,
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P3/2N2NP1/PPPP1RBP/R1BQ2K1 b kq - 0 7",
+   "line": [
+    "Rxf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 656,
+   "fen": "r1bqk2r/pppp1ppp/2n5/4p3/4P3/2N2NP1/PPPP1KBP/R1BQ4 b kq - 0 8",
+   "line": [
+    "Bxf2+",
+    "Kxf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 669.5,
+   "fen": "r1bq1rk1/pppp1ppp/2n5/4p3/4P3/2N2NP1/PPPP1KBP/R1BQ4 w - - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 676,
+   "fen": "r1bq1rk1/pppp1ppp/2n5/4p3/3PP3/2N2NP1/PPP2KBP/R1BQ4 b - - 0 9",
+   "line": [
+    "d4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 684,
+   "fen": "r1bq1rk1/pppp1ppp/2n5/8/3pP3/2N2NP1/PPP2KBP/R1BQ4 w - - 0 10",
+   "line": [
+    "exd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 687.5,
+   "fen": "r1bq1rk1/pppp1ppp/8/8/3QP3/2N3P1/PPP2KBP/R1B5 b - - 0 11",
+   "line": [
+    "Nxd4",
+    "Nxd4",
+    "Qxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 697,
+   "fen": "r1bq1rk1/pppp2pp/8/5p2/3QP3/2N3P1/PPP2KBP/R1B5 w - - 0 12",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 700.5,
+   "fen": "r1bq1rk1/pppp2pp/8/4Pp2/3Q4/2N3P1/PPP2KBP/R1B5 b - - 0 12",
+   "line": [
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 707.5,
+   "fen": "r1bqk2r/pppp1ppp/2n5/2b1p3/4P1n1/2N2NP1/PPPP1PBP/R1BQ1RK1 b kq - 6 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 713,
+   "fen": "r1bqk2r/ppp2ppp/2np4/2b1p3/4P1n1/2N2NPP/PPPP1PB1/R1BQ1RK1 b kq - 0 7",
+   "line": [
+    "d6",
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 718,
+   "fen": "r1bqk2r/ppp2ppp/2np3n/2b1p3/4P3/2NP1NPP/PPP2PB1/R1BQ1RK1 b kq - 0 8",
+   "line": [
+    "Nh6",
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 721.5,
+   "fen": "r1bq1rk1/ppp2ppp/2np3n/2b1p3/4P3/2NP1NPP/PPP2PB1/R1BQ1RK1 w - - 1 9",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 19,
+   "t": 726,
+   "fen": "r1bq1rk1/ppp2p1p/2np3p/2b1p3/4P3/2NP1NPP/PPPQ1PB1/R4RK1 b - - 1 10",
+   "line": [
+    "Bxh6",
+    "gxh6",
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 731,
+   "fen": "r1bq1r2/ppp2pkp/2np3p/2b1p3/4P3/2NP1NPP/PPPQ1PB1/R4RK1 w - - 2 11",
+   "line": [
+    "Kg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 742.5,
+   "fen": "r1bq1r2/ppp2pkp/2np3p/2b1p3/4P3/2NP1NPP/PPPQ1PBK/R4R2 b - - 3 11",
+   "line": [
+    "Kh2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 762,
+   "fen": "r1bq1r2/ppp3kp/2np3p/2b1pp2/4P3/2NP1NPP/PPPQ1PBK/R4R2 w - - 0 12",
+   "line": [
+    "f5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 23,
+   "t": 763.5,
+   "fen": "r1bq1r2/ppp3kp/2np3p/2b1pP2/8/2NP1NPP/PPPQ1PBK/R4R2 b - - 0 12",
+   "line": [
+    "exf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 767,
+   "fen": "r2q1r2/ppp3kp/2np3p/2b1pb2/N7/3P1NPP/PPPQ1PBK/R4R2 b - - 1 13",
+   "line": [
+    "Bxf5",
+    "Na4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 21,
+   "t": 777,
+   "fen": "r1bq1r2/ppp2pkp/2np3p/2b1p3/4P3/2NP1NPP/PPPQ1PBK/R4R2 b - - 3 11",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
