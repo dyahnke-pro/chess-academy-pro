@@ -1,7 +1,7 @@
 {
  "videoId": "g36Y1YDdqoQ",
  "title": "Dance Off Adoption Match | Naroditsky vs Botez Sisters | Adoption Challenge",
- "openingName": "Sicilian Defense: Alapin Variation",
+ "openingName": "Sicilian Defence: Alapin",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -28,7 +28,7 @@
     "d5",
     "exd5"
    ],
-   "spoken": "An Alapin structure — the move is d5, striking in the centre."
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -40,7 +40,8 @@
     "cxd4",
     "cxd4"
    ],
-   "spoken": "Take back on d5 — the position has no threats, so just develop quickly with e6 or the knight to f6."
+   "spoken": "A sound practical idea against a theory-heavy opponent — capture to pull them out of their preparation, then develop simply with a modest pawn or the knight. There are no threats to fear, so calm development is the safe course.",
+   "kind": "plan"
   },
   {
    "ply": 12,
@@ -49,7 +50,8 @@
    "line": [
     "e6"
    ],
-   "spoken": "e6, so that the bishop can come out to g4."
+   "spoken": "The pawn to e6 is chosen with a follow-up in mind — it clears the way to develop the bishop actively to g4, pinning and pressuring rather than sitting passively.",
+   "kind": "plan"
   },
   {
    "ply": 13,
@@ -106,7 +108,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "He plays the bishop to g5, eyeing the knight to d5 — so we have to defend with h6."
+   "spoken": "When a knight lunges toward a central outpost, the pawn to h6 is the necessary defence, shoring up the piece under fire before anything else. First keep everything protected, then look for counterplay."
   }
  ]
 }
