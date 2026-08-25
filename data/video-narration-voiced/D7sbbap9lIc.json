@@ -1,10 +1,10 @@
 {
  "videoId": "D7sbbap9lIc",
  "title": "Four Knights Game: Scotch Variation | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Four Knights Game, Scotch Variation",
+ "openingName": "Four Knights Game: Scotch Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:D7sbbap9lIc",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take White and open e4, Black meets e5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The knight develops to f3."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops to c6. We're playing the Four Knights Scotch — a great opening for improving players: it brings every piece out on sound principles, not gimmicks."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black completes the knights with ...Nf6."
   },
   {
    "ply": 7,
@@ -60,9 +60,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 is the heart of the Four Knights Scotch — with every piece developing naturally, White opens the center on sound principles, no gimmicks.",
-   "kind": "main",
-   "teaches": "The Scotch Four Knights fights for the center by principle, not by trick."
+   "spoken": "Now the point: d4, opening the centre — and dangerous if Black plays inaccurately."
   },
   {
    "ply": 9,
@@ -72,7 +70,7 @@
     "exd4",
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes and we recapture with the knight."
   },
   {
    "ply": 10,
@@ -81,7 +79,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to c5."
   },
   {
    "ply": 11,
@@ -90,7 +88,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "The most principled move is the bishop to e3 — it defends our knight and sets a threat: take on c6, and Black's bishop on c5 falls because the queen behind it hangs."
   },
   {
    "ply": 12,
@@ -99,7 +97,7 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": ""
+   "spoken": "Black releases the tension with ...Bxd4 — already an inaccuracy, conceding the centre."
   },
   {
    "ply": 13,
@@ -108,9 +106,7 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": "Recapturing on d4 with the bishop leaves White the two bishops and a firm grip on the center — Black's early trade only handed over those long-term assets.",
-   "kind": "main",
-   "teaches": "An opponent's premature trade can gift you the bishop pair and central control."
+   "spoken": "We recapture with the bishop, and now we hold the two bishops and a bigger share of the centre."
   },
   {
    "ply": 14,
@@ -119,7 +115,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles. Our priority: finish developing quickly while preserving the bishop pair."
   },
   {
    "ply": 15,
@@ -128,7 +124,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "We keep the pair by retreating the bishop to e3 — the aggressive c5 would just invite ...d6; on an open board we want both bishops."
   },
   {
    "ply": 16,
@@ -137,7 +133,7 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...h6 — and that's a hook. A good moment to train your castling intuition: I'd castle queenside, because ...h6 invites g4–g5 to prise it open, and with the bishop pair and more centre, an opposite-side race favours us."
   },
   {
    "ply": 17,
@@ -146,7 +142,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": ""
+   "spoken": "We begin with the flexible queen to d2."
   },
   {
    "ply": 18,
@@ -155,7 +151,7 @@
    "line": [
     "Kh7"
    ],
-   "spoken": ""
+   "spoken": "Black tucks the king to h7."
   },
   {
    "ply": 19,
@@ -164,7 +160,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle queenside. Note f3 isn't only to stop ...Ng4 — it also props up e4 and prepares g4."
   },
   {
    "ply": 20,
@@ -173,7 +169,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6."
   },
   {
    "ply": 21,
@@ -182,9 +178,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "f3 reinforces the e4-pawn and readies a kingside storm with g4 and h4 — with kings on opposite wings, White races to prise open Black's king.",
-   "kind": "main",
-   "teaches": "Bolster your center with f3, then storm the wing where the enemy king has castled."
+   "spoken": "We play f3 — unlike h3, it supports the e4-pawn, so it's automatic here: the English-Attack setup of f3, g4 and h4."
   },
   {
    "ply": 22,
@@ -193,7 +187,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e6."
   },
   {
    "ply": 23,
@@ -202,7 +196,7 @@
    "line": [
     "g4"
    ],
-   "spoken": ""
+   "spoken": "The king to b1 is a fine improving move, but Black has so little counterplay that we simply start the attack with g4."
   },
   {
    "ply": 24,
@@ -211,14 +205,16 @@
    "line": [
     "Ne5"
    ],
-   "spoken": ""
+   "spoken": "Black centralises with the knight to e5 — a good move, and now attacking calls for creativity. We must defend f3 — losing it collapses our kingside — while helping the attack, and the queen to g2 does both, landing on the g-file beside the rook to bear down on g7. Then g5 rolls in. And the Shankland question returns: can we play f5 anyway? Yes — f5 traps and wins the queen, and even after a capture the pin from the bishop to d3 decides. The theme throughout: keep asking \"what if I do it anyway\" instead of recoiling from a threat.",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 799.5,
    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
    "line": [],
-   "spoken": ""
+   "spoken": "One more: keep the tension. Against the bishop to e3 the main move is ...Bb6, retreating to a defended square — not ...d5, which blunders a piece to the x-ray, nor the passive ...d6. Learn to spot an undefended piece sitting on an x-ray.",
+   "reanchor": true
   }
  ]
 }
