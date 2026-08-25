@@ -4,7 +4,7 @@
  "openingName": "Scotch Gambit",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:-PSQS88VdZU",
  "moves": [
   {
@@ -42,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We push d4 and offer the Scotch Gambit."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes the pawn on d4."
   },
   {
    "ply": 7,
@@ -60,9 +60,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "Bishop to c4 is the gambit's soul — instead of hurrying to win back the d4-pawn, White throws the bishop onto the a2-g8 diagonal, aiming at f7 with fast Italian-style development.",
-   "kind": "main",
-   "teaches": "In a gambit, prize rapid piece activity and pressure over recovering the pawn."
+   "spoken": "We develop the bishop to c4 — this is the Scotch Gambit, a hybrid of the Scotch and the Italian. It's a genuinely dangerous, grandmaster-approved weapon, and a fine alternative if you like the Evans Gambit; at club level its traps bring quick wins."
   },
   {
    "ply": 8,
@@ -71,7 +69,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6, a solid, slightly passive choice that sidesteps the gambit's traps — a line playable with the black pieces too, leaving a marginally worse game. The point of the early bishop, as in the Italian, is access to the g5-square, where a knight or bishop is a key resource in many lines."
   },
   {
    "ply": 5,
@@ -114,7 +112,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture on d4 with the knight, regaining the gambit pawn and opening lines. White has the pleasant side — better central control, the bishop raking from c4 as in a good Scotch, and the sacrificed pawn already back."
   },
   {
    "ply": 10,
@@ -123,7 +121,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6. Should we fear a capture on d4 that drops the queen into the centre?"
   },
   {
    "ply": 11,
@@ -132,7 +130,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3. No — a capture on d4 wouldn't scare us: Black has no second knight on b8 to come to c6 and harass the queen, so it would just be well-placed for us to strike at. This is the same solid setup you can reach through a Philidor move order."
   },
   {
    "ply": 12,
@@ -141,7 +139,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Black tucks the bishop to e7 — very solid, the d6-pawn restraining our e-pawn. Don't lunge at Black's throat here."
   },
   {
    "ply": 13,
@@ -150,7 +148,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle. Rather than force matters, nurture the edge: complete development and enjoy White's space and well-placed pieces."
   },
   {
    "ply": 14,
@@ -159,7 +157,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles. Now a deceptively tricky moment. f4 is premature with the queen undeveloped, and the natural bishop moves to e3 or g5 each walk into tactics: after the bishop to e3, the knight to g4 is annoying, and worse, the shot on e4 — because ...d5 then regains the piece and forces the mass trades we're trying to avoid."
   },
   {
    "ply": 15,
@@ -168,14 +166,15 @@
    "line": [
     "Bb3"
    ],
-   "spoken": ""
+   "spoken": "The move that permanently removes that idea is the bishop to b3: it drops the bishop onto a defended square, out of reach of a future ...d5 pawn fork."
   },
   {
    "ply": 14,
    "t": 1331.5,
    "fen": "r1bq1rk1/ppp1bppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQ1RK1 w - - 5 8",
    "line": [],
-   "spoken": ""
+   "spoken": "An alternative was f3 — slightly weakening, but playable: it would let the bishop go to e3 and immediately cover the diagonal f3 opens.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -185,9 +184,7 @@
     "Bb3",
     "Ne5"
    ],
-   "spoken": "The bishop steps back to b3, tucking onto the long diagonal, and now the knight on e5 sits unstable in the center — f4 will chase it with tempo.",
-   "kind": "main",
-   "teaches": "Reroute a bishop to a safe, active diagonal so the follow-up pawn strike arrives with tempo."
+   "spoken": "Black's knight heads to e5 — an odd move that walks straight into a hit."
   },
   {
    "ply": 17,
@@ -196,14 +193,15 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "We don't need h3; we strike at once with f4, since Black's knight there isn't stable — we kick it and seize more of the centre."
   },
   {
    "ply": 14,
    "t": 1398.5,
    "fen": "r1bq1rk1/ppp1bppp/2np1n2/8/2BNP3/2N5/PPP2PPP/R1BQ1RK1 w - - 5 8",
    "line": [],
-   "spoken": ""
+   "spoken": "f4 was dismissed a moment ago only because it came without tempo; now that the bishop sits safely on b3, the same break is better justified and safer.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -223,7 +221,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Black plays the bishop to g4, hitting the queen — but that's all it does, and the bishop can land in real trouble. Where to put the queen? On a square where it also does something: d2 is awkward and d3 is covered by the knight, so the queen goes to e1 — from there it can later swing to g3, and it doesn't block our bishop. Simple logic is often the right logic."
   },
   {
    "ply": 19,
@@ -232,7 +230,7 @@
    "line": [
     "Qe1"
    ],
-   "spoken": ""
+   "spoken": "The queen steps to e1, eyeing the later lift to g3 to x-ray the king."
   },
   {
    "ply": 20,
@@ -241,7 +239,7 @@
    "line": [
     "Ned7"
    ],
-   "spoken": ""
+   "spoken": "Black reroutes the knight to d7."
   },
   {
    "ply": 22,
@@ -270,7 +268,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "We play h3, and the g4-bishop is in trouble. If it retreats to b6 we win the exchange — not with f5, which lets Black out, but by taking on e6: after the recapture, the knight lands on e6, forking king, queen and rook. If instead the bishop goes to h5, we trap it plainly: g4, the bishop drops to g6, and f5 corners it. Advancing a second pawn in front of the king is justified here because Black simply has no firepower near it, winning a piece is a big event, and the queen can always come to g3 to shelter our king."
   },
   {
    "ply": 26,
@@ -279,7 +277,7 @@
    "line": [
     "Bxh3"
    ],
-   "spoken": ""
+   "spoken": "Black gives up the bishop, taking on h3."
   },
   {
    "ply": 27,
@@ -288,7 +286,7 @@
    "line": [
     "gxh3"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the g-pawn — the pawn on h3 lends the king some shelter."
   },
   {
    "ply": 19,
@@ -305,7 +303,8 @@
     "Ned7",
     "h3"
    ],
-   "spoken": ""
+   "spoken": "The way to have rescued the bishop was a counter-attack: ...c5, hitting the knight. If the knight moves, the bishop can grab it and then drop back to e6 — but this is panic, because with the trade the e6-square is no longer covered.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -324,9 +323,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Black's c5 tries to evict the knight from d4, but White simply reroutes it — a piece up, the e- and f-pawns rolling and the b3-bishop's diagonal open, White is winning.",
-   "kind": "review",
-   "teaches": "When material ahead, welcome trades and use tempo-gaining retreats to keep the initiative."
+   "spoken": ""
   },
   {
    "ply": 25,
@@ -335,7 +332,8 @@
    "line": [
     "Nf5"
    ],
-   "spoken": ""
+   "spoken": "A key habit: after winning the bishop, don't submissively drop the knight back to f3 — see how the trade changed things. The f5-square has cleared, so the knight belongs there: every piece then points at Black's king, and on top of the extra piece we're building a powerful attacking machine.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -353,7 +351,8 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "Even better than the immediate queen to g3 (which Black meets with ...g6, biting on granite) is the central break e5 — opening a second front: we keep the g3 idea in our pocket while also striking down the middle, and the two threats together crush Black.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -362,7 +361,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "We open the centre with the capture on e5."
   },
   {
    "ply": 29,
@@ -371,7 +370,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": ""
+   "spoken": "We recapture on e5, and Black's position is falling apart."
   },
   {
    "ply": 30,
@@ -380,7 +379,7 @@
    "line": [
     "Nh5"
    ],
-   "spoken": ""
+   "spoken": "Black tries the knight to h5. No matter that the queen can't go to g3 now — we have a stronger idea."
   },
   {
    "ply": 31,
@@ -389,14 +388,15 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "We push e6, unleashing the b3-bishop's full potential: it's crushing, hitting the knight, the pawn, and the bishop, which all fall."
   },
   {
    "ply": 25,
    "t": 1746,
    "fen": "r2q1rk1/pp1nbppp/3p1n2/2p2N2/4PP2/1BN4P/PPP5/R1B1QRK1 b - - 1 13",
    "line": [],
-   "spoken": ""
+   "spoken": "The finish is a lesson in undefended pieces. A \"type-one\" undefended piece is a hanging one, guarded by nothing; a \"type-two\" is guarded by only a single piece — and by prying open the e-file we exploit exactly that, since the queen is a poor defender. The clean win is e-takes-f7, but we can take the bishop first: if Black recaptures, then e-takes-f7 wins the queen — even ...Rxf7 leaves the rook pinned. Up two pieces, we then just consolidate. When the queen comes to b6 setting up an x-ray with a ...c4-check threat, the strongest reply isn't the passive block but the queen to e6, using the trade as a weapon: it forces the queen back, plants ours in Black's face, and clears the way for the bishop to e3. Purdy's rule holds — you play to win points, not to paint pictures; up material, resist the flashy move and take the simple win.",
+   "reanchor": true
   },
   {
    "ply": 5,
