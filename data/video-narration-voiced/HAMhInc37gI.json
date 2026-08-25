@@ -15,7 +15,7 @@
     "d4",
     "d5"
    ],
-   "spoken": "Absolutely classical chess today — the queen's pawn met by d5."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "c4",
     "e6"
    ],
-   "spoken": "The Queen's Gambit, met with e6 — the Queen's Gambit Declined with Black."
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -43,7 +43,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "This is the QGD, the opening to recommend to every beginner — a gateway to so much else."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -52,7 +52,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "White pins with the bishop to g5. The traditional reply is the bishop to e7, but for a little edge there is the knight to d7 — which looks like it just drops a pawn."
+   "spoken": "The Queen's Gambit Declined is the ideal beginner's opening — a gateway into a whole world of classical play. The traditional developing move is the bishop to e7, but there's a sharper try for a little extra edge, one that looks for all the world like it hangs a pawn."
   },
   {
    "ply": 8,
@@ -61,7 +61,8 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "And there it is, the knight to d7 — inviting a very old, very famous trap."
+   "spoken": "That try is the knight to d7 — and the point is a trap plenty of players walk straight into. It makes a perfectly sound theoretical move while quietly laying a snare.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -86,8 +87,7 @@
    "line": [
     "e3"
    ],
-   "spoken": "White plays the main move e3. And Black develops the bishop to e7 — not d6 — mainly to break the pin, since White was threatening to win a pawn.",
-   "reanchor": true
+   "spoken": "e3 is the main line, and now the bishop develops to e7 rather than d6 — because there's a pin to break. Answering the pin and freeing the position is the priority."
   },
   {
    "ply": 10,
@@ -96,7 +96,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": "The bishop comes to e7, unpinning."
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -114,7 +114,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Black completes the kingside — castling short."
+   "spoken": "Round out the kingside by castling short — get the king safe before committing the rest of the army."
   },
   {
    "ply": 13,
@@ -123,7 +123,7 @@
    "line": [
     "Rc1"
    ],
-   "spoken": "Now the question is what to do with this bishop. This is the Capablanca simplifying system — a way of playing the QGD that has been around since the 1800s."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -132,7 +132,8 @@
    "line": [
     "c6"
    ],
-   "spoken": "The move is c6 — and be warned, it looks bad, it looks passive. But it is the heart of the system."
+   "spoken": "Here's the offbeat gem — the simplifying system. Instead of the usual queenside fianchetto, play the modest c6. Be warned, it looks bad: passive, and it does hem in the light-squared bishop. But there's a method behind the passivity.",
+   "kind": "plan"
   },
   {
    "ply": 15,
@@ -141,7 +142,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "White develops the bishop to d3. Yes, c6 does hem in Black's own light bishop for now."
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -150,7 +151,7 @@
    "line": [
     "dxc4"
    ],
-   "spoken": "Now something even more paradoxical — the capture on c4. Notice Black waited for White to commit that bishop first, so taking now wins a tempo."
+   "spoken": "Now the paradox pays off — capture on c4. Because the exchange was delayed until the opponent's light bishop had already committed, recapturing it costs them a tempo. Patience turns into a free move."
   },
   {
    "ply": 13,
@@ -184,8 +185,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "And here the simplifying move: the knight to d5, inviting the trade of dark-squared bishops. Black recaptures with the queen, keeping a knight on that fine central stronghold.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -197,7 +197,9 @@
     "Bxe7",
     "Qxe7"
    ],
-   "spoken": "This system really teaches how pieces and pawns work: at first glance Black looks worse — a passive bishop, White with more centre — but it is very close to equal."
+   "spoken": "The heart of the system is the knight to d5, offering to trade the dark-squared bishops and recapturing with the queen so the knight sits on a genuine stronghold. It's a marvellous teacher of how pieces and pawns really work — at first glance the position looks worse, with a passive bishop and less of the centre, yet it's close to dead equal.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -206,7 +208,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "And much of that is the lack of weaknesses in Black's camp. An underrated truth: with no weaknesses, a position is hard to crack even when it is passive."
+   "spoken": "The reason it holds is the complete absence of weaknesses — an under-appreciated truth of chess. A position with no targets is extremely hard to crack, no matter how passive it looks. Solidity itself is a resource."
   },
   {
    "ply": 22,
@@ -215,7 +217,8 @@
    "line": [
     "Nxc3"
    ],
-   "spoken": "Now, the freeing break e5 played at once would blunder — it leaves the knight on d5 underprotected — so Black takes on c3 first."
+   "spoken": "Firing e5 at once would misfire, because the knight would be left loose on its central post. So capture on c3 first, and only then uncoil with e5 — expanding on the right terms and opening the bishop's diagonal in the process.",
+   "kind": "plan"
   },
   {
    "ply": 24,
@@ -225,7 +228,7 @@
     "Rxc3",
     "e5"
    ],
-   "spoken": "And now Black uncoils with e5, opening the diagonal for the bishop. The position is very balanced; the question is whether Black can outplay from here."
+   "spoken": ""
   },
   {
    "ply": 25,
@@ -253,7 +256,7 @@
     "Nxe5",
     "Qxe5"
    ],
-   "spoken": "Black has essentially equalised — all that remains is to develop the bishop, to e6 to neutralise White's, or to f5 with tempo. The whole approach is simple, fundamentally sound chess."
+   "spoken": "Equality is reached; the last job is to free the light-squared bishop, and e6 is the square, neutralising the opponent's bishop. A queen sortie to b3 would try to discourage it, and a kingside pawn thrust holds no fear — the position is simply too solid, with nothing to attack."
   },
   {
    "ply": 32,
@@ -286,7 +289,7 @@
    "line": [
     "Rd1"
    ],
-   "spoken": "White slips, and here is a free pawn — but before grabbing such a pawn, always verify your queen cannot be trapped."
+   "spoken": "A rook lifts to the d-file, and a loose pawn appears — but before ever snatching such a pawn, run the check that the queen isn't walking into a trap. That verification is never optional."
   },
   {
    "ply": 38,
@@ -295,7 +298,8 @@
    "line": [
     "Qxa2"
    ],
-   "spoken": "So Black takes on a2. If White tries to trap it, the queen simply returns to e6, the square it came from."
+   "spoken": "The pawn can be taken safely — even if the rook lunges to harass, the queen simply retraces its steps to e6, the very square it came from, with the extra pawn pocketed.",
+   "kind": "tactic"
   },
   {
    "ply": 39,
@@ -304,7 +308,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "Care is needed now — those queenside pawns are delicate, and a careless move allows a rook to d7."
+   "spoken": ""
   },
   {
    "ply": 40,
@@ -313,7 +317,7 @@
    "line": [
     "Qe6"
    ],
-   "spoken": ""
+   "spoken": "The queenside pawns demand real care here — natural-looking tries run into a rook fork of the queen and the a-pawn. The clean answer is just to shuttle the queen back to e6 and sidestep all the tricks."
   },
   {
    "ply": 41,
@@ -331,8 +335,8 @@
    "line": [
     "Rfe8"
    ],
-   "spoken": "There is a standard technique for a rook infiltrating to the seventh rank, worth committing to memory: the rook to e8 first, so that a rook to d7 can be met by a rook to e7.",
-   "reanchor": true
+   "spoken": "Against a rook trying to burrow into the seventh rank, there's a technique worth committing to memory: play the rook to e8 first, so that the infiltration to d7 can be met by the other rook stepping to e7 — a forcing offer to trade off the invader.",
+   "kind": "plan"
   },
   {
    "ply": 43,
@@ -341,8 +345,8 @@
    "line": [
     "Rd7"
    ],
-   "spoken": "And the key detail — a rook to d8 is not needed; Black just meets the infiltration and drops the rook back.",
-   "reanchor": true
+   "spoken": "And the detail that makes it work: if the rook shifts along the back rank instead, it's simply captured, and the defending rook drops back to e8 unharmed. The invasion is neutralised either way.",
+   "kind": "tactic"
   },
   {
    "ply": 45,
@@ -373,7 +377,7 @@
     "Rcd6",
     "Bb3"
    ],
-   "spoken": "It resolves into a drawn rook ending — the plan is to push the b-pawn all the way and hope the defender slips, which eventually he does."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -389,8 +393,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": "Now the trap in full — White takes on d5...",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -418,7 +421,8 @@
    "line": [
     "Bxd8"
    ],
-   "spoken": "...and after the recaptures, White snatches the queen with the bishop — but this is the point.",
+   "spoken": "Here's the snare the early knight set: if the centre pawns are swapped and the knight is captured, a bishop grabs the queen — but the in-between check on b4 wins the piece straight back and leaves an extra one in hand. A famous old trap that catches players well into club strength.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -428,8 +432,7 @@
    "line": [
     "Bb4+"
    ],
-   "spoken": "The bishop checks on b4. It is not mate — White blocks with the queen to d2 — but Black takes on d2 with check, and when the dust settles Black takes the queen and is up a clean piece.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -472,8 +475,7 @@
    "t": 821,
    "fen": "r1bqkb1r/pppn1ppp/4pn2/3p2B1/2PP4/2N5/PP2PPPP/R2QKBNR w KQkq - 4 5",
    "line": [],
-   "spoken": "So the knight to d7 is a lovely way to make a sound theoretical move and set a trap at the same time.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -533,8 +535,7 @@
     "Bxe7",
     "Qxe7"
    ],
-   "spoken": "This is all main line — a very reputable system with well over a thousand games in the database.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -577,8 +578,7 @@
    "line": [
     "bxc3"
    ],
-   "spoken": "After the knight trade and the recapture, here is one of the main ideas of the line.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 27,
@@ -590,7 +590,8 @@
     "Qb4",
     "Rb2"
    ],
-   "spoken": "The queen to b4 is tempting but superficial — a lone queen rarely causes real damage. And on pins: two factors decide their danger. First, is the pinned piece defended by a pawn — if so, the pin is far less dangerous. Second, how temporary is it — a pin against a king that is about to castle loses almost all its value. That is exactly why queens make poor pinners: they are so easy to chase away.",
+   "spoken": "A framework for judging any pin: two factors decide how dangerous it is. First, is the pinned piece shielded by a pawn — if it is, the pin bites far less. Second, how temporary is it — a pin against a king that can castle next move loses almost all its sting. And queens make poor pinners, since they're so easily chased off the job.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -600,7 +601,8 @@
    "line": [
     "Qe7"
    ],
-   "spoken": "The move is e5, contesting the centre — notice how perfectly Black's pieces are poised on it. And remember: a space advantage by itself is no reason to worry.",
+   "spoken": "e5 is the thematic strike at the centre, with the pieces perfectly poised — both bearing on that square, so any trade leaves an excellent game. And remember: a mere space advantage is not, by itself, a reason to worry.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -611,7 +613,8 @@
     "O-O",
     "c5"
    ],
-   "spoken": "Why e5 over c5? White could just castle and ignore c5, then trade in the centre — and it leaves Black's bishop problem unsolved.",
+   "spoken": "Between the two breaks, e5 beats c5 — c5 isn't foolish, but the opponent can just castle and later trade in the centre, and it never cures the underlying problem of the passive bishop. e5 both breaks the centre and springs that bishop to life.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -630,8 +633,7 @@
    "t": 1007,
    "fen": "r1b2rk1/pp1n1ppp/2p1p3/8/1qBPP3/2P2N2/PR3PPP/3QK2R b K - 4 14",
    "line": [],
-   "spoken": "The point of e5 is that it not only breaks in the centre but also opens the diagonal for Black's light bishop.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 28,
@@ -659,8 +661,7 @@
    "t": 1015,
    "fen": "r1b2rk1/pp1nqppp/2p1p3/3n4/2BPP3/2N2N2/PP3PPP/2RQK2R b K - 0 11",
    "line": [],
-   "spoken": "And why not the fianchetto with the bishop to b7? It is playable, but a little passive — after some pressure the defence gets awkward, so this simplifying system is the cleaner path.",
-   "reanchor": true
+   "spoken": ""
   }
  ]
 }
