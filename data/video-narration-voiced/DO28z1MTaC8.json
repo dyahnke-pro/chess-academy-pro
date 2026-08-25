@@ -4,7 +4,7 @@
  "openingName": "Three Knights Game",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:DO28z1MTaC8",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We answer e4 with e5, looking for something offbeat."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The knight to f3 — I'd love to play the Elephant Gambit or the Stafford here."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "We play the knight to f6, angling for the Stafford."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "But the knight to c3 sidesteps it — no Stafford now. You can play d5 here for an interesting game, and the bishop to c5 might transpose to the Stafford."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "We try the bishop to c5, Eric Rosen style, hoping to goad a gambit."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "He plays the bishop to c4 — so we'll have to play conventionally, but we'll make it interesting."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "If we castle and he takes, there's no Stafford left — he's close to castling. So we either play the knight to c6 into a Four Knights, or d6; it doesn't much matter, so we start with d6 to defend the e5 pawn."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles. Now, to make it hard for him to develop, how do we add some spice?"
   },
   {
    "ply": 10,
@@ -87,9 +87,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "Bishop to g4 pins the knight on f3 and lays a trap — after h3 the bishop simply stays, provoking the weakening g4 and handing Black targets around White's king.",
-   "kind": "main",
-   "teaches": "Pin an enemy knight to bait a loosening pawn advance in front of the king."
+   "spoken": "The bishop to g4 — because if we play the knight to c6 first, knowing his style he'll play h3 and we'll regret it, so we squeeze this in while we can. He'll probably retreat to e2."
   },
   {
    "ply": 11,
@@ -98,7 +96,7 @@
    "line": [
     "d3"
    ],
-   "spoken": ""
+   "spoken": "d3."
   },
   {
    "ply": 12,
@@ -107,7 +105,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Now we play the knight to c6, threatening the knight to d4."
   },
   {
    "ply": 13,
@@ -116,7 +114,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "The bishop to e3. A classic line. The knight to d4 is possible but less strong with the bishop on e3, since he can take with the bishop and keep his structure. Against boring players, keep the tension — give them rope and force decisions."
   },
   {
    "ply": 14,
@@ -125,9 +123,7 @@
    "line": [
     "Bb6"
    ],
-   "spoken": "Retreating to b6 keeps the bishop and sidesteps a trade on c5 that would have handed White the two bishops — Black holds onto both bishops and the tension.",
-   "kind": "main",
-   "teaches": "Retreat a bishop to dodge a trade that would concede the bishop pair."
+   "spoken": "The classic way to make White decide is to drop the bishop back to b6, avoiding his taking on c5 and ruining our structure — and if he takes now, a takes b6 gives us doubled pawns that don't matter, plus the a-file, which is great."
   },
   {
    "ply": 15,
@@ -136,7 +132,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "Make these players think, and they'll do something irrational or panic. h3."
   },
   {
    "ply": 16,
@@ -145,9 +141,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": "The bishop slides to h5, keeping the pin alive after h3 and daring White to play g4 — every provoked pawn move opens another seam near the white king.",
-   "kind": "main",
-   "teaches": "Maintain a pin along the diagonal to keep provoking committal pawn moves."
+   "spoken": "We drop the bishop to h5 — he'll probably contemplate g4 for a while; if he plays it, we consider a sacrifice on g4."
   },
   {
    "ply": 17,
@@ -156,7 +150,7 @@
    "line": [
     "Kh2"
    ],
-   "spoken": ""
+   "spoken": "I don't think the time's right for the sac — not enough there — so we keep the bishop. He plays the king to h2, a weird move; maybe planning the rook to g1 and g4."
   },
   {
    "ply": 18,
@@ -165,7 +159,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We just castle — no point doing anything wild."
   },
   {
    "ply": 19,
@@ -174,7 +168,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": ""
+   "spoken": "The queen to d2. Now I see his idea: the king went to h2 so that after the bishop takes f3, g takes f3 keeps his king off the open file, and he can play the rook to g1 and attack down the g-file — even with a ruined structure, he gets the file."
   },
   {
    "ply": 20,
@@ -183,7 +177,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": ""
+   "spoken": "Does that warrant not taking on f3? No — the bishop takes f3, capturing on f3, creates such damage on his kingside that it's worth it, as long as we're careful."
   },
   {
    "ply": 21,
@@ -192,7 +186,7 @@
    "line": [
     "gxf3"
    ],
-   "spoken": ""
+   "spoken": "He recaptures, capturing on f3. The weaknesses he's created are permanent, so it's worth it if we manage the open g-file. Two things: start kingside operations, moves like the knight to h5, and balance that with some prophylaxis."
   },
   {
    "ply": 22,
@@ -201,7 +195,7 @@
    "line": [
     "Nh5"
    ],
-   "spoken": ""
+   "spoken": "The greater priority is to stake a claim on the kingside so he doesn't run circles over us — so the knight to h5, getting the wheels turning."
   },
   {
    "ply": 23,
@@ -210,7 +204,7 @@
    "line": [
     "Rg1"
    ],
-   "spoken": ""
+   "spoken": "The rook to g1 — a pin. Many people reflexively play the king to h8, but that tempo could matter against a skilled attacker. Where's the queen doing more, on f6 or h4? Only one creates a threat."
   },
   {
    "ply": 24,
@@ -219,7 +213,7 @@
    "line": [
     "Qf6"
    ],
-   "spoken": ""
+   "spoken": "The queen to f6 — on h4 it does nothing, since we've no light-squared bishop to hit h3; on f6 it's active."
   },
   {
    "ply": 25,
@@ -228,7 +222,7 @@
    "line": [
     "Rg4"
    ],
-   "spoken": ""
+   "spoken": "The rook to g4, ignoring the attack on f3 — this guy's legit, gone from passive to aggressive in a snap."
   },
   {
    "ply": 26,
@@ -237,7 +231,7 @@
    "line": [
     "Qxf3"
    ],
-   "spoken": ""
+   "spoken": "As the Russian expression goes, having said A you must say B — putting the queen on f6 and NOT taking on f3 makes no sense, so the queen takes f3, capturing on f3."
   },
   {
    "ply": 27,
@@ -246,7 +240,7 @@
    "line": [
     "Rag1"
    ],
-   "spoken": ""
+   "spoken": "The rook to g1, doubling — now the threats on g7 are serious. One more move and he creates insurmountable threats, probably a sacrifice; g6 doesn't solve it, and he could sack on g6 via the pin. So now's the time."
   },
   {
    "ply": 28,
@@ -255,7 +249,7 @@
    "line": [
     "Kh8"
    ],
-   "spoken": ""
+   "spoken": "The king to h8 — the problem is the g-file, not his bishop. The king to h8 is the better move."
   },
   {
    "ply": 29,
@@ -264,7 +258,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": ""
+   "spoken": "The knight to d5 is good — this guy's very legit; I'll play faster. We keep attacking; our king is very safe."
   },
   {
    "ply": 30,
@@ -273,7 +267,7 @@
    "line": [
     "f5"
    ],
-   "spoken": ""
+   "spoken": "We need spice on the kingside — open files, something to join this lonely queen. So f5 — gutsy play by both of us."
   },
   {
    "ply": 31,
@@ -282,7 +276,7 @@
    "line": [
     "exf5"
    ],
-   "spoken": ""
+   "spoken": "He takes, capturing on f5. With my queen so dominant and the knight on h5 defending g7, I'm optimistic about the attack."
   },
   {
    "ply": 32,
@@ -291,7 +285,7 @@
    "line": [
     "Rxf5"
    ],
-   "spoken": ""
+   "spoken": "The rook takes, capturing on f5."
   },
   {
    "ply": 33,
@@ -300,7 +294,7 @@
    "line": [
     "R4g2"
    ],
-   "spoken": ""
+   "spoken": "The rook to g2 — this seems like capitulation of his attack, which I like; it means he doesn't know what to do and is milking my clock. Now g7 is protected; we want to triple, with the knight to d4 and the rook to f8 coming."
   },
   {
    "ply": 34,
@@ -309,7 +303,7 @@
    "line": [
     "Raf8"
    ],
-   "spoken": ""
+   "spoken": "The rook to f8, continuing to pile pieces on the kingside — no need to change strategy."
   },
   {
    "ply": 35,
@@ -318,7 +312,7 @@
    "line": [
     "Nxb6"
    ],
-   "spoken": ""
+   "spoken": "He takes, capturing on b6 — you have to take."
   },
   {
    "ply": 36,
@@ -327,7 +321,7 @@
    "line": [
     "axb6"
    ],
-   "spoken": ""
+   "spoken": "We recapture, capturing on b6, checking for intermediate moves first — nothing there."
   },
   {
    "ply": 37,
@@ -336,7 +330,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "The bishop to e6 — a very advanced idea I'll admit I missed: if we move the rook, he plays the bishop to g4 and wins a piece. So we'll have to sac the exchange."
   },
   {
    "ply": 38,
@@ -345,7 +339,7 @@
    "line": [
     "Ne7"
    ],
-   "spoken": ""
+   "spoken": "We sac the exchange with the knight to e7."
   },
   {
    "ply": 40,
@@ -355,7 +349,7 @@
     "Bxf5",
     "Nxf5"
    ],
-   "spoken": ""
+   "spoken": "After the bishop takes f5 and we recapture with the knight on f5, my worry isn't even the position, it's the clock."
   },
   {
    "ply": 41,
@@ -364,7 +358,7 @@
    "line": [
     "Rg5"
    ],
-   "spoken": ""
+   "spoken": "The rook to g5."
   },
   {
    "ply": 42,
@@ -373,14 +367,15 @@
    "line": [
     "Nh4"
    ],
-   "spoken": ""
+   "spoken": "The knight to h4."
   },
   {
    "ply": 41,
    "t": 652,
    "fen": "5r1k/1pp3pp/1p1p4/4pnRn/8/3PBq1P/PPPQ1P1K/6R1 b - - 1 21",
    "line": [],
-   "spoken": ""
+   "spoken": "I always check the game afterward — he's playing very well, but I've seen 1800s play this well many times.",
+   "reanchor": true
   },
   {
    "ply": 42,
@@ -389,7 +384,8 @@
    "line": [
     "Nh4"
    ],
-   "spoken": ""
+   "spoken": "The knight to h4.",
+   "reanchor": true
   },
   {
    "ply": 43,
@@ -398,7 +394,7 @@
    "line": [
     "R5g4"
    ],
-   "spoken": ""
+   "spoken": "The rook to g4 — he's blundered back; a small blunder."
   },
   {
    "ply": 44,
@@ -407,14 +403,15 @@
    "line": [
     "Qxg4"
    ],
-   "spoken": ""
+   "spoken": "Now I want a knight on f3, so we take the rook first, the queen capturing on g4."
   },
   {
    "ply": 43,
    "t": 693,
    "fen": "5r1k/1pp3pp/1p1p4/4p2n/6Rn/3PBq1P/PPPQ1P1K/6R1 b - - 3 22",
    "line": [],
-   "spoken": ""
+   "spoken": "...then the knight to f3 recaptures his queen, winning back the exchange, and we're up a pawn.",
+   "reanchor": true
   },
   {
    "ply": 44,
@@ -423,7 +420,8 @@
    "line": [
     "Qxg4"
    ],
-   "spoken": ""
+   "spoken": "A very hard endgame to win with one minute, but I'll try my best.",
+   "reanchor": true
   },
   {
    "ply": 46,
@@ -433,7 +431,7 @@
     "hxg4",
     "Nf3+"
    ],
-   "spoken": ""
+   "spoken": "He takes on g4, and the knight to f3 comes with check."
   },
   {
    "ply": 48,
@@ -443,7 +441,7 @@
     "Kg2",
     "Nxd2"
    ],
-   "spoken": ""
+   "spoken": "The king to g2, and the knight takes, capturing on d2."
   },
   {
    "ply": 49,
@@ -452,7 +450,7 @@
    "line": [
     "Bxd2"
    ],
-   "spoken": ""
+   "spoken": "He recaptures with the bishop on d2."
   },
   {
    "ply": 50,
@@ -461,7 +459,7 @@
    "line": [
     "Nf4+"
    ],
-   "spoken": ""
+   "spoken": "We play the knight to f4, check, centralizing it; if he takes, that's a good trade for us — up a pawn."
   },
   {
    "ply": 51,
@@ -470,7 +468,7 @@
    "line": [
     "Bxf4"
    ],
-   "spoken": ""
+   "spoken": "He takes, capturing on f4."
   },
   {
    "ply": 52,
@@ -479,7 +477,7 @@
    "line": [
     "Rxf4"
    ],
-   "spoken": ""
+   "spoken": "We recapture, capturing on f4 — a very nice rook on f4, and we're up a pawn."
   },
   {
    "ply": 53,
@@ -488,7 +486,7 @@
    "line": [
     "f3"
    ],
-   "spoken": ""
+   "spoken": "He plays f3."
   },
   {
    "ply": 54,
@@ -497,7 +495,7 @@
    "line": [
     "Kg8"
    ],
-   "spoken": ""
+   "spoken": "Let's get our king out — the king to g8."
   },
   {
    "ply": 56,
@@ -507,7 +505,7 @@
     "a3",
     "b5"
    ],
-   "spoken": ""
+   "spoken": "a3, and we push b5."
   },
   {
    "ply": 57,
@@ -516,7 +514,7 @@
    "line": [
     "Kg3"
    ],
-   "spoken": ""
+   "spoken": "The king to g3."
   },
   {
    "ply": 58,
@@ -525,7 +523,7 @@
    "line": [
     "Kf7"
    ],
-   "spoken": ""
+   "spoken": "Our king comes to f7."
   },
   {
    "ply": 59,
@@ -534,7 +532,7 @@
    "line": [
     "Rh1"
    ],
-   "spoken": ""
+   "spoken": "The rook to h1."
   },
   {
    "ply": 60,
@@ -543,7 +541,7 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "We play h6."
   },
   {
    "ply": 61,
@@ -552,7 +550,7 @@
    "line": [
     "Rh5"
    ],
-   "spoken": ""
+   "spoken": "The rook to h5."
   },
   {
    "ply": 62,
@@ -561,7 +559,7 @@
    "line": [
     "Kg6"
    ],
-   "spoken": ""
+   "spoken": "The king to g6 — I want to make things go boom on the other side of the board."
   },
   {
    "ply": 63,
@@ -570,7 +568,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "c3."
   },
   {
    "ply": 64,
@@ -579,7 +577,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We push c5."
   },
   {
    "ply": 65,
@@ -588,7 +586,7 @@
    "line": [
     "Rh1"
    ],
-   "spoken": ""
+   "spoken": "The rook to h1."
   },
   {
    "ply": 66,
@@ -597,7 +595,7 @@
    "line": [
     "Ra4"
    ],
-   "spoken": ""
+   "spoken": "The rook to a4."
   },
   {
    "ply": 67,
@@ -606,7 +604,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "The rook to e1."
   },
   {
    "ply": 68,
@@ -615,7 +613,7 @@
    "line": [
     "Kf6"
    ],
-   "spoken": ""
+   "spoken": "The king to f6."
   },
   {
    "ply": 69,
@@ -624,7 +622,7 @@
    "line": [
     "Re4"
    ],
-   "spoken": ""
+   "spoken": "He offers a rook trade with the rook to e4 — if this is a draw I'll be shocked; let me calculate."
   },
   {
    "ply": 70,
@@ -633,7 +631,7 @@
    "line": [
     "Rxe4"
    ],
-   "spoken": ""
+   "spoken": "Let's take it — the rook capturing on e4."
   },
   {
    "ply": 71,
@@ -642,7 +640,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": ""
+   "spoken": "He recaptures, capturing on e4."
   },
   {
    "ply": 72,
@@ -651,7 +649,7 @@
    "line": [
     "Ke6"
    ],
-   "spoken": ""
+   "spoken": "The king to e6."
   },
   {
    "ply": 74,
@@ -661,7 +659,7 @@
     "Kh4",
     "g6"
    ],
-   "spoken": ""
+   "spoken": "The king to h4, and we play g6."
   },
   {
    "ply": 75,
@@ -670,7 +668,7 @@
    "line": [
     "g5"
    ],
-   "spoken": ""
+   "spoken": "White pushes g5."
   },
   {
    "ply": 76,
@@ -679,7 +677,7 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "We play h5."
   },
   {
    "ply": 78,
@@ -689,7 +687,7 @@
     "Kg3",
     "d5"
    ],
-   "spoken": ""
+   "spoken": "The king to g3, and we push d5."
   },
   {
    "ply": 79,
@@ -698,7 +696,7 @@
    "line": [
     "Kf2"
    ],
-   "spoken": ""
+   "spoken": "The king to f2."
   },
   {
    "ply": 80,
@@ -707,7 +705,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We push d4."
   },
   {
    "ply": 82,
@@ -717,7 +715,7 @@
     "Ke2",
     "h4"
    ],
-   "spoken": ""
+   "spoken": "The king to e2, and we push h4 — this is winning: two passed pawns."
   },
   {
    "ply": 83,
@@ -726,7 +724,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "He takes, capturing on d4 — but I've plenty of clock; this is not a draw."
   },
   {
    "ply": 84,
@@ -735,7 +733,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture, capturing on d4 — two connected passers too far from his king."
   },
   {
    "ply": 85,
@@ -744,7 +742,7 @@
    "line": [
     "Kf2"
    ],
-   "spoken": ""
+   "spoken": "The king to f2."
   },
   {
    "ply": 86,
@@ -753,7 +751,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "We just go h3."
   },
   {
    "ply": 87,
@@ -762,7 +760,7 @@
    "line": [
     "Kg3"
    ],
-   "spoken": ""
+   "spoken": "The king to g3."
   },
   {
    "ply": 88,
@@ -771,14 +769,15 @@
    "line": [
     "d3"
    ],
-   "spoken": ""
+   "spoken": "We push d3 — d2, d1, and it's a queen. A good game by this guy. There's no stalemate: I leave him a pawn, then walk my king around to mate on the other side. A tip: when mating with a couple of seconds left, leave your opponent pawn moves so you never have to worry about stalemate."
   },
   {
    "ply": 3,
    "t": 1022.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": ""
+   "spoken": "Let's take a look at the game.",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -787,7 +786,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "1800s are genuinely good.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -796,7 +796,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "The knight to c3 — unfortunately he didn't play into the Stafford.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -805,14 +806,16 @@
    "line": [
     "Bc5"
    ],
-   "spoken": ""
+   "spoken": "The bishop to c5 — the other way to spice it up...",
+   "reanchor": true
   },
   {
    "ply": 5,
    "t": 1073,
    "fen": "rnbqkb1r/pppp1ppp/5n2/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 3 3",
    "line": [],
-   "spoken": ""
+   "spoken": "...is to go d5 and transpose into the Elephant Gambit.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -821,7 +824,8 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "...the Elephant Gambit.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -830,7 +834,8 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "After he takes d5 and the bishop to d6, this is the Elephant Gambit — interesting. If he plays the knight to g5, Eric's idea is the knight to c6, offering a transition to the Stafford with the knight to c3 and the bishop to c5. White could play the knight to f3 — the downside of this move order.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -839,14 +844,16 @@
    "line": [
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "...the bishop to d6. After castling, d4, the bishop to b4, this looks okay for Black — Eric has surely analyzed it.",
+   "reanchor": true
   },
   {
    "ply": 7,
    "t": 1112.5,
    "fen": "rnbqkb1r/ppp2ppp/5n2/3Pp3/8/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "So the bishop to c4, d6, castles — as White I'd start with h3 to stop the bishop to g4, though it doesn't change the eval; d3, the knight to c6, and the bishop to e3 is important. Now a common misunderstanding: after the bishop to b6, h3, the bishop to h5, if White plays g4, many think you should always sacrifice — not true. Sacking on g4 is exceedingly dangerous for BOTH sides, especially the one sacrificing: yes, you'd have two pawns for the piece, the king wide open, the queen coming to f6 — real compensation — but White can bring the king up to g2 to support the knight, and after the queen to f6 there's the nasty knight to d5, or the rook to h1. It's often not as simple as it looks.",
+   "reanchor": true
   }
  ]
 }
