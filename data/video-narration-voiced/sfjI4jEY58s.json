@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": "Definitely we play e4 — starting with the Four Knights Scotch."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "Qf6"
    ],
-   "spoken": "He plays the queen to f6 — a bad move: it develops no minor piece and deprives the g8-knight of its natural square."
+   "spoken": ""
   },
   {
    "ply": 3,
@@ -49,7 +49,8 @@
    "line": [
     "Qf6"
    ],
-   "spoken": ""
+   "spoken": "The early queen move to f6 is a poor one — it develops nothing and, worse, it robs the other knight of its natural square. Reacting to such openings is easier than it looks: the first step is simply to build a lead in development, and only then think about opening the centre.",
+   "kind": "plan"
   },
   {
    "ply": 5,
@@ -58,7 +59,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "First grab a lead in development — the knight to c3 — then think about opening the centre."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -75,7 +76,8 @@
     "Nc3",
     "c6"
    ],
-   "spoken": ""
+   "spoken": "With a two-to-nothing lead in development and the enemy queen already exposed, this is the moment to strike with the central break and open the position. Open lines punish the side that hasn't developed.",
+   "kind": "plan"
   },
   {
    "ply": 7,
@@ -84,7 +86,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "With two pieces developed to his zero, this is the moment — d4, opening the centre."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -120,7 +122,8 @@
    "line": [
     "Be3"
    ],
-   "spoken": "An easy developing move that also defends the knight — don't hesitate to defend a piece with another piece; a bishop on the neighbouring square is one of the safest ways."
+   "spoken": "A simple, sturdy developing move that also guards the knight — and a lesson in it: don't hesitate to defend a piece with another piece. A bishop on the neighbouring diagonal square is one of the safest ways to hold a knight, far better than an awkward pin-worried alternative.",
+   "kind": "plan"
   },
   {
    "ply": 12,
@@ -129,7 +132,8 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Develop the light-squared bishop before deciding on castling, because long castling is a live option — and waiting to see what the opponent commits to is a genuine technique for solving the where-to-castle question. Keep your options open until the position tells you.",
+   "kind": "plan"
   },
   {
    "ply": 13,
@@ -138,7 +142,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "Develop the bishop — c4 is the most active square."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -147,7 +151,8 @@
    "line": [
     "Nh6"
    ],
-   "spoken": "The knight to h6 — an unusual developing move to the rim, so smell a rat; there's usually a hidden intention."
+   "spoken": "An unusual developing move — a knight shoved to the rim — should make you smell a rat. Off-beat moves usually hide an intention, so look hard for it. The point here isn't the harmless-looking pin; the real idea is a knight leap that would damage your pawns.",
+   "kind": "plan"
   },
   {
    "ply": 15,
@@ -156,7 +161,8 @@
    "line": [
     "h3"
    ],
-   "spoken": "He wants the knight to g4, ruining our pawn structure — so h3 stops it in its tracks."
+   "spoken": "To stop that leap there's a choice between two pawn moves, and in the vast majority of cases you want the rook-pawn one, not the bishop-pawn one — the latter weakens far too much. And since a wing pawn has already advanced, it dovetails with castling long, the pawn serving as an anchor for a further push toward the enemy king.",
+   "kind": "plan"
   },
   {
    "ply": 16,
@@ -174,7 +180,7 @@
    "line": [
     "Qd2"
    ],
-   "spoken": "Having pushed h3, the queen to d2 and castle queenside — that h3 pawn anchors a later g4 push."
+   "spoken": ""
   },
   {
    "ply": 18,
@@ -210,7 +216,8 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": "Castle long — and now, at last, we're ready to attack on the kingside."
+   "spoken": "Castle long, and the battle lines are drawn — opposite-side castling, which means it's a race. At last the pieces are set to storm the enemy king on the far wing.",
+   "kind": "plan"
   },
   {
    "ply": 22,
@@ -228,7 +235,8 @@
    "line": [
     "Nxc6"
    ],
-   "spoken": "The knight takes on c6, grabbing a free pawn and chopping the legs right off his pawn phalanx."
+   "spoken": "A reminder — whenever pawns are pushed, others are often left undefended, so always scan for loose pawns as well as weak squares. Here a free pawn is simply collected, chopping the legs out from under the opponent's pawn phalanx.",
+   "kind": "tactic"
   },
   {
    "ply": 24,
@@ -246,7 +254,8 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "The knight to d5 — centralising and attacking the queen, which suddenly has very few good squares."
+   "spoken": "The move that squeezes the most from the position is the knight to d5 — centralising, attacking the queen, and leaving it with painfully few safe squares. Beware the diverting capture that abandons the centre and drops a pawn; the centralising jump is far stronger.",
+   "kind": "tactic"
   },
   {
    "ply": 26,
@@ -264,7 +273,8 @@
    "line": [
     "Nce7+"
    ],
-   "spoken": "The fork — and it doesn't matter which knight goes to e7 when you're winning the queen; don't overthink a winning move."
+   "spoken": "A practical point about clean wins — when there are two ways to fork and win a whole queen, it usually doesn't matter which you pick. Compare them briefly, but don't sit there agonising over minuscule differences; both win the queen, so just play it.",
+   "kind": "tactic"
   },
   {
    "ply": 28,
@@ -300,7 +310,8 @@
    "line": [
     "Bxh6"
    ],
-   "spoken": "Brute force — the bishop takes on h6; look straight at his king."
+   "spoken": "Up a queen, the brute-force route is to wreck the king's shelter — but first check whether the game can just be finished. A capture on h6 does it, and crucially, don't lock yourself into the obvious recapture. Reassess every time the enemy king's cover changes.",
+   "kind": "tactic"
   },
   {
    "ply": 32,
@@ -318,7 +329,7 @@
    "line": [
     "Qc3+"
    ],
-   "spoken": "His pawn recaptured on h6, so it left g7 — that opens a diagonal, and the check on c3 sets up mate."
+   "spoken": ""
   },
   {
    "ply": 34,
@@ -327,7 +338,8 @@
    "line": [
     "Kg8"
    ],
-   "spoken": ""
+   "spoken": "A subtle mating trap to avoid — the natural knight jump is not mate, because the checking piece itself blocks the queen's control of the escape square. The winning move is the other knight, a double check that leaves the king no flight square at all. Never forget that a discovering piece can cut off a line it was relying on.",
+   "kind": "tactic"
   },
   {
    "ply": 35,
@@ -336,7 +348,7 @@
    "line": [
     "Ne7#"
    ],
-   "spoken": "The knight to e7 — a double check, and mate: the queen covers every one of the king's escape squares."
+   "spoken": ""
   },
   {
    "ply": 2,
@@ -396,7 +408,9 @@
    "line": [
     "Nd5"
    ],
-   "spoken": ""
+   "spoken": "A word on the commonest thinking flaw — one-move-itis. Players see a move that makes a threat, even two threats, and their calculation just stops there, feeling they've made progress. Often they haven't: a knight jump that attacks the queen looks impressive, but the opponent can develop with tempo and offer a trade, leaving you to move the same knight twice.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -405,8 +419,7 @@
    "line": [
     "Qd8"
    ],
-   "spoken": "The knight to d5 early is not as impressive as it looks — Black just develops the knight to f6 and offers a trade, and you've moved your knight twice for nothing. That's one-move-itis.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -462,7 +475,9 @@
    "t": 664.5,
    "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/2N2N2/PPPP1PPP/R1BQKB1R b KQkq - 7 5",
    "line": [],
-   "spoken": ""
+   "spoken": "And the science behind why the f-pawn advance is so often bad — it's tempting to beginners because it seems to do a lot, building a chain and covering a square. But it fatally weakens two of the busiest diagonals on the board, the ones through which so much of the game flows, which is exactly why a similar-looking move one file over isn't condemned the same way.",
+   "kind": "plan",
+   "reanchor": true
   }
  ]
 }
