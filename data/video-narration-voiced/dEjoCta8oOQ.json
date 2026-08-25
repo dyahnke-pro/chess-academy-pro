@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "White enters with d4 — the Danish, gambiting pawns in rapid succession for a big lead in development."
+   "spoken": "The Danish begins when the opponent thrusts into the centre, prepared to shed pawns for speed. Recapturing with the queen instead would be the Center Game, which is largely frowned upon — the true gambit lies down a sharper road."
   },
   {
    "ply": 4,
@@ -58,8 +58,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "White plays c3, gambiting the first pawn — much like a Smith-Morra, only against e5 instead of c5.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -68,7 +67,7 @@
    "line": [
     "dxc3"
    ],
-   "spoken": ""
+   "spoken": "The Danish proper offers the first pawn with a supporting pawn move — very much a Smith-Morra idea transplanted against the king's-pawn game. Accepting is a choice, not an obligation, and there's a practical way to decline worth keeping in reserve."
   },
   {
    "ply": 5,
@@ -93,8 +92,7 @@
    "line": [
     "Nxc3"
    ],
-   "spoken": "If Black accepts and White recaptures on c3 with the knight — uncommon, but a line that has to be examined carefully.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -110,8 +108,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The far more traditional treatment gambits a second pawn — the bishop to c4, onto its optimal square, staring at the f7-pawn.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -129,7 +126,7 @@
    "line": [
     "Bxb2"
    ],
-   "spoken": "White recaptures the far pawn — and now both bishops are developed, the dark-squared one staring down the long diagonal toward g7. Clear compensation: better central control and a big lead in development."
+   "spoken": "When both pawns are grabbed, the opponent recaptures and unveils the point: for two pawns comes a big lead in development, with both bishops on ideal squares and the dark-squared one raking the long diagonal toward the king. It's obvious compensation even to an untrained eye — but only three or four accurate moves are needed to send it packing."
   },
   {
    "ply": 5,
@@ -162,8 +159,8 @@
    "line": [
     "d5"
    ],
-   "spoken": "The practical alternative is to decline with d5, counterstriking the centre — it takes all the fun out of the gambit for a White player who wanted to sacrifice.",
-   "reanchor": true
+   "spoken": "The practical way out is to decline with a central counterstrike of d5. Its whole appeal is psychological as much as positional — gambiteers hate having their fun spoiled by a dry, equal game, so this drains all the poison, and the resulting position is genuinely comfortable to handle.",
+   "kind": "plan"
   },
   {
    "ply": 5,
@@ -204,8 +201,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "d5 opens the centre and counterstrikes at e4; White's hand is essentially forced — he has to take on d5.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -221,7 +217,8 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": ""
+   "spoken": "After the counterstrike, the capture in the centre is essentially forced — the queen recapture would only reach an inferior Center Game. Supporting the advanced pawn with the bishop then hands the second player a lead in development and an easy initiative.",
+   "kind": "plan"
   },
   {
    "ply": 8,
@@ -240,7 +237,7 @@
     "exd5",
     "Bxd5"
    ],
-   "spoken": "After the trade on d5, Black gets a development advantage and brings the knight out with tempo — White is already struggling for equality."
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -258,7 +255,7 @@
    "line": [
     "Qe7+"
    ],
-   "spoken": "If White chases with c4, Black needn't move the bishop — the queen to e7 with check escapes the x-ray and hits the king."
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -287,7 +284,9 @@
    "t": 504,
    "fen": "rnbqkbnr/ppp2ppp/8/3p4/3QP3/2P5/PP3PPP/RNB1KBNR b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "The heart of the declined line resembles an Alapin, only more toothless. Develop the knight to hit the loose central pawn, and remember the key order: check from b4 first, because once it's blocked the piece is pinned and the queen no longer has to move — buying time to bring the other bishop out and pin the second knight. Then a capture on f3 opens a square for the queen, prevents the opponent from castling, and attacks in two directions at once, forcing a liquidation into a comfortable endgame.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -316,8 +315,7 @@
     "Nf3",
     "Bb4+"
    ],
-   "spoken": "In this line the first move to remember is the bishop to b4, check — start specifically with that.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -345,8 +343,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "And after the bishop retreats to e2, the second move to remember is the bishop takes on f3 — counterintuitive, but we sink our teeth into the c4 square.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 18,
@@ -356,8 +353,7 @@
     "Bxf3",
     "Qc4"
    ],
-   "spoken": "The queen to c4 — this virtually forces White to liquidate into an endgame that's very easy for Black.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -366,7 +362,7 @@
    "line": [
     "Bxc6+"
    ],
-   "spoken": "White has to give up the bishop on c6 with check."
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -387,7 +383,7 @@
     "Kxe2",
     "O-O-O"
    ],
-   "spoken": "Take back with the pawn to keep control of f1, the queens come off, and Black reaches a comfortable endgame — White saddled with a weak isolated pawn on d4."
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -410,7 +406,8 @@
    "line": [
     "dxc3"
    ],
-   "spoken": ""
+   "spoken": "For an objective advantage rather than mere equality, you do have to accept the gambit and take the pawn. From here it's more theory — but the moves that truly matter are few, and understanding their ideas is what sends the Danish home.",
+   "kind": "plan"
   },
   {
    "ply": 7,
@@ -460,8 +457,8 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "Here, develop in the right order — and avoid the tempting knight to f6.",
-   "reanchor": true
+   "spoken": "In the rarer knight-recapture line, the order of minor-piece development is everything — and the tempting knight to f6 is actually a blunder, walking straight into a pawn thrust to e5 that leaves it no good squares. Develop with care, not on autopilot.",
+   "kind": "tactic"
   },
   {
    "ply": 9,
@@ -470,8 +467,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "It walks straight into e5, the knight has no good square, and Black is in immediate trouble.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -487,8 +483,8 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "Instead, the bishop to c5 first — violating knights-before-bishops, but in these gambits general principles go out the window.",
-   "reanchor": true
+   "spoken": "The right move is the bishop to c5 first, solidified by a modest pawn to d6 — deliberately delaying the kingside knight because it would be vulnerable to the central push. In gambits the usual knights-before-bishops maxim goes out the window; there are more urgent matters to attend to.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -535,7 +531,8 @@
    "line": [
     "d6"
    ],
-   "spoken": "Solidify with d6 — it defends the bishop, opens a path for the other bishop, and kills the Bxf7-plus-Qd5 fork idea at once.",
+   "spoken": "The bishop out to c4 carries a real tactical threat — a sacrifice on f7 followed by a queen check on d5 forking king and bishop. The pawn to d6 answers everything at once: it shores up the bishop, opens a path for the other one, and takes the sting out of both the sacrifice and the fork.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -581,7 +578,8 @@
    "line": [
     "Qb3"
    ],
-   "spoken": "The one tricky try is the computer move, the queen to b3, with the nasty threat of taking on f7.",
+   "spoken": "The opponent's only route to dodge a clearly worse position is a computer-like queen to b3 — uncommon, but important to know, because it sets a rather nasty threat that has to be met precisely.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -591,8 +589,7 @@
    "line": [
     "Nh6"
    ],
-   "spoken": "The natural defence, the knight to h6...",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -601,8 +598,7 @@
    "line": [
     "Bxh6"
    ],
-   "spoken": "...just fails, because White snaps it off with the bishop.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -627,8 +623,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "And the queen to e7 runs into the super-nasty knight to d5 — we're paying the price for not developing our knights.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -647,8 +642,7 @@
    "line": [
     "Qh4"
    ],
-   "spoken": "The move to remember is not Qe7, not Qf6, but the queen to h4 — ignoring the threat on f7 and posing our own counter-threat against f2.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 21,
@@ -666,8 +660,7 @@
    "line": [
     "Kf8"
    ],
-   "spoken": "White takes on f7 with check — but extend one move further and it's White who's in serious trouble: completely overextended, with f2 falling.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 23,
@@ -685,8 +678,7 @@
    "line": [
     "Qf6"
    ],
-   "spoken": "g3 loses on the spot: the queen slides back to f6 — a simple fork of the bishop on f7 and the pawn on f2.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 25,
@@ -932,8 +924,7 @@
    "line": [
     "Qe7"
    ],
-   "spoken": "After f4, the queen returns to e7 — a weird-looking maneuver, but it stops the knight jumping to d5 and frees a natural square for our own knight.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 25,
@@ -1056,8 +1047,7 @@
    "line": [
     "Qc2"
    ],
-   "spoken": "The only way for White to stay playable is the illogical queen to c2 — which almost nobody plays, since it abandons the whole point of Qb3.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 22,
@@ -1187,8 +1177,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "The move you'll face far more often is the knight to f3, continuing development.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 28,
@@ -1207,8 +1196,7 @@
     "O-O",
     "O-O"
    ],
-   "spoken": "White castles, we castle — and Black is simply up a pawn for very little compensation.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 31,
@@ -1217,8 +1205,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "e5 is never dangerous while we keep a pawn on d6 — it only helps us, by allowing a queen trade.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 32,
@@ -1243,8 +1230,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "Most play the bishop to g5 — and the one thing to remember is to bring the knight to d7, not c6.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 32,
@@ -1253,8 +1239,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "The knight to d7 links the knights, taking the sting out of Nd5, and keeps c6 free for the pawn that will restrict White's knight for good.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 31,
@@ -1665,8 +1650,7 @@
    "t": 1969.5,
    "fen": "rnbqkbnr/pppp1ppp/8/8/4P3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
    "line": [],
-   "spoken": "Now the traditional Danish with the bishop to c4 — and this is quite a bit easier to master than the knight-takes-c3 line.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -1700,8 +1684,7 @@
    "line": [
     "Bxb2"
    ],
-   "spoken": "Start by accepting the second sacrifice.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -1710,8 +1693,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "The old wisdom is to give the pawn straight back with d5, opening a diagonal for the bishop...",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -1776,8 +1758,7 @@
     "Bxd2+",
     "Nxd2"
    ],
-   "spoken": "...but that endgame is actually really unpleasant for Black — and we don't want to fight the Danish from a position of weakness.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -1802,8 +1783,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "So the recommendation is the knight to f6 — attacking the e4-pawn, challenging the gambit in principled fashion.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -1812,8 +1792,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Almost forced is e5 — you'll see it in about 95% of your games.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -2385,8 +2364,7 @@
    "line": [
     "Bb4+"
    ],
-   "spoken": "And now the fun part — after e5, respond with the bishop to b4, check. It's rare online, and most White players walk straight into a losing line.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -2427,8 +2405,7 @@
    "line": [
     "Bc3"
    ],
-   "spoken": "Only the bishop to c3 keeps White's position feasible; in every other line Black's advantage is nearly decisive.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -2469,8 +2446,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": "Why does the knight to c3 lose? The key is to find the knight to e4 — not the retreat to g4.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -2479,8 +2455,7 @@
    "line": [
     "Bxf7+"
    ],
-   "spoken": "The retreat to g4 fails, because the bishop takes on f7 and the check on d5 picks up the knight.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -2575,8 +2550,7 @@
    "t": 2557.5,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": "It's the same principle as in the Scotch Gambit: after e5, the check on b4, and the knight to c3, we push d5 to neutralise the centre. After exf6, don't recapture on c4 — play the queen to f6, and White's knight and bishop would both be hanging with no way to defend both at once.",
-   "reanchor": true
+   "spoken": ""
   }
  ]
 }
