@@ -1,0 +1,320 @@
+{
+ "videoId": "PHAmfkkrSSs",
+ "title": "Grandmaster Naroditsky Chess Speedrun Pt. 5",
+ "openingName": "Borg Defense",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:PHAmfkkrSSs",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 1048,
+   "fen": "rnbqkbnr/pppppp1p/8/6p1/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "g5"
+   ],
+   "spoken": "White plays d4, and Black replies with the bizarre g5 — the Borg, a reversed Grob."
+  },
+  {
+   "ply": 4,
+   "t": 1054,
+   "fen": "rnbqkbnr/ppppp2p/5p2/6B1/3P4/8/PPP1PPPP/RN1QKBNR w KQkq - 0 3",
+   "line": [
+    "Bxg5",
+    "f6"
+   ],
+   "spoken": "White simply grabs on g5."
+  },
+  {
+   "ply": 5,
+   "t": 1065.5,
+   "fen": "rnbqkbnr/ppppp2p/5p2/6B1/3PP3/8/PPP2PPP/RN1QKBNR b KQkq - 0 3",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 1066.5,
+   "fen": "rnbqkbnr/ppppp3/5p2/6Bp/3PP3/8/PPP2PPP/RN1QKBNR w KQkq - 0 4",
+   "line": [
+    "h5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 1081.5,
+   "fen": "rnbqkbnr/ppppp3/5p2/6Bp/3PP3/8/PPP1BPPP/RN1QK1NR b KQkq - 1 4",
+   "line": [
+    "Be2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1101.5,
+   "fen": "rnbqkbnr/pppp4/5p2/4p1Bp/3PP3/8/PPP1BPPP/RN1QK1NR w KQkq - 0 5",
+   "line": [
+    "e5"
+   ],
+   "spoken": "If Black takes the bishop, White takes on h5 with mate in two."
+  },
+  {
+   "ply": 9,
+   "t": 1105,
+   "fen": "rnbqkbnr/pppp4/5p2/4p1BB/3PP3/8/PPP2PPP/RN1QK1NR b KQkq - 0 5",
+   "line": [
+    "Bxh5+"
+   ],
+   "spoken": "Black stops the mate, but White grabs another pawn — up two now, and dragging the king into the open."
+  },
+  {
+   "ply": 10,
+   "t": 1108.5,
+   "fen": "rnbq1bnr/ppppk3/5p2/4p1BB/3PP3/8/PPP2PPP/RN1QK1NR w KQ - 1 6",
+   "line": [
+    "Ke7"
+   ],
+   "spoken": "The king is hauled out to e7 — what more could you ask from five moves?"
+  },
+  {
+   "ply": 11,
+   "t": 1130,
+   "fen": "rnbq1bnr/ppppk3/5p2/4p2B/3PP3/4B3/PPP2PPP/RN1QK1NR b KQ - 2 6",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "Careful with the bishop — Black wants to take on d4, and if White recaptures with the queen, the bishop on h5 hangs. So the bishop to e3, adding a defender to d4 — now recapturing with a pawn deforms Black's camp."
+  },
+  {
+   "ply": 12,
+   "t": 1152.5,
+   "fen": "rnbq1bnr/ppp1k3/3p1p2/4p2B/3PP3/4B3/PPP2PPP/RN1QK1NR w KQ - 0 7",
+   "line": [
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 13,
+   "t": 1170,
+   "fen": "rnbq1bnr/ppp1k3/3p1p2/4p2B/3PP3/2N1B3/PPP2PPP/R2QK1NR b KQ - 1 7",
+   "line": [
+    "Nc3"
+   ],
+   "spoken": "Develop — but the knight to f3 would be a blunder. The knight to c3 is right, threatening the knight to c5, almost mate."
+  },
+  {
+   "ply": 14,
+   "t": 1175.5,
+   "fen": "rnbq1bnr/pp2k3/2pp1p2/4p2B/3PP3/2N1B3/PPP2PPP/R2QK1NR w KQ - 0 8",
+   "line": [
+    "c6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 15,
+   "t": 1196.5,
+   "fen": "rnbq1bnr/pp2k3/2pp1p2/4p3/3PP3/2N1B3/PPP1BPPP/R2QK1NR b KQ - 1 8",
+   "line": [
+    "Be2"
+   ],
+   "spoken": "This bishop is a nuisance, so retreat it to e2. Sometimes a bishop on e2 is fine — not super active, but with two extra pawns and the black king stranded on e7, it is totally OK for a piece to sit on a quiet square, provided there is a good reason for it."
+  },
+  {
+   "ply": 16,
+   "t": 1214,
+   "fen": "rnbq2nr/pp2k3/2pp1p1b/4p3/3PP3/2N1B3/PPP1BPPP/R2QK1NR w KQ - 2 9",
+   "line": [
+    "Bh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 17,
+   "t": 1217.5,
+   "fen": "rnbq2nr/pp2k3/2pp1p1B/4p3/3PP3/2N5/PPP1BPPP/R2QK1NR b KQ - 0 9",
+   "line": [
+    "Bxh6"
+   ],
+   "spoken": "No reason not to trade — take, and keep developing with the knight to f3."
+  },
+  {
+   "ply": 19,
+   "t": 1223,
+   "fen": "rnbq3r/pp2k3/2pp1p1n/4p3/3PP3/2N2N2/PPP1BPPP/R2QK2R b KQ - 1 10",
+   "line": [
+    "Nxh6",
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1234.5,
+   "fen": "rnbq3r/pp2k3/2pp1p2/4p3/3PP1n1/2N2N2/PPP1BPPP/R2QK2R w KQ - 2 11",
+   "line": [
+    "Ng4"
+   ],
+   "spoken": "Which side to castle? Since Black no longer has those kingside pawns, castling short would hand him a ready-made attack — so White will castle long."
+  },
+  {
+   "ply": 21,
+   "t": 1245,
+   "fen": "rnbq3r/pp2k3/2pp1p2/4p3/3PP1n1/2N2N2/PPPQBPPP/R3K2R b KQ - 3 11",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": "Ignore the knight on g4 — a knight there does not always do anything. But before castling long, get rid of it, or Black forks the pawn on f2."
+  },
+  {
+   "ply": 22,
+   "t": 1266,
+   "fen": "r1bq3r/pp2k3/n1pp1p2/4p3/3PP1n1/2N2N2/PPPQBPPP/R3K2R w KQ - 4 12",
+   "line": [
+    "Na6"
+   ],
+   "spoken": "So chase it — only to prepare castling, not because the knight is doing anything."
+  },
+  {
+   "ply": 23,
+   "t": 1269,
+   "fen": "r1bq3r/pp2k3/n1pp1p2/4p3/3PP1n1/2N2N1P/PPPQBPP1/R3K2R b KQ - 0 12",
+   "line": [
+    "h3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 24,
+   "t": 1274.5,
+   "fen": "r1bq3r/pp2k3/n1pp1p1n/4p3/3PP3/2N2N1P/PPPQBPP1/R3K2R w KQ - 1 13",
+   "line": [
+    "Nh6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 1278.5,
+   "fen": "r1bq3r/pp2k3/n1pp1p1n/4p3/3PP3/2N2N1P/PPPQBPP1/2KR3R b - - 2 13",
+   "line": [
+    "O-O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 26,
+   "t": 1294.5,
+   "fen": "r1bq3r/pp2k3/2pp1p1n/4p3/1n1PP3/2N2N1P/PPPQBPP1/2KR3R w - - 3 14",
+   "line": [
+    "Nb4"
+   ],
+   "spoken": "And remember — it matters less to ruin the pawn structure, more to wreck the structure around the king."
+  },
+  {
+   "ply": 27,
+   "t": 1295.5,
+   "fen": "r1bq3r/pp2k3/2pp1p1n/4p3/1n1PP3/P1N2N1P/1PPQBPP1/2KR3R b - - 0 14",
+   "line": [
+    "a3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 28,
+   "t": 1302.5,
+   "fen": "r1bq3r/pp2k3/n1pp1p1n/4p3/3PP3/P1N2N1P/1PPQBPP1/2KR3R w - - 1 15",
+   "line": [
+    "Na6"
+   ],
+   "spoken": "Taking on a6 would open the b-file and help Black attack — don't. The time has come to open the centre."
+  },
+  {
+   "ply": 29,
+   "t": 1323,
+   "fen": "r1bq3r/pp2k3/n1pp1p1n/4P3/4P3/P1N2N1P/1PPQBPP1/2KR3R b - - 0 15",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": "And do not push d5 — exactly what to avoid. Just take the pawn and open the d-file."
+  },
+  {
+   "ply": 30,
+   "t": 1328,
+   "fen": "r1bq3r/pp2k3/n1pp3n/4p3/4P3/P1N2N1P/1PPQBPP1/2KR3R w - - 0 16",
+   "line": [
+    "fxe5"
+   ],
+   "spoken": "Black weakens a square with the recapture. Look for the tactic: the rook and queen sit in an x-ray, and with an x-ray you look for a discovery."
+  },
+  {
+   "ply": 31,
+   "t": 1364.5,
+   "fen": "r1bq3r/pp2k3/n1pp3n/4N3/4P3/P1N4P/1PPQBPP1/2KR3R b - - 0 16",
+   "line": [
+    "Nxe5"
+   ],
+   "spoken": "Move the knight and clear the d6-pawn and White wins the queen — the knight takes on e5 does both, and if Black recaptures, a check wins."
+  },
+  {
+   "ply": 32,
+   "t": 1367,
+   "fen": "r1bq3r/pp2k3/n1p4n/4p3/4P3/P1N4P/1PPQBPP1/2KR3R w - - 0 17",
+   "line": [
+    "dxe5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 33,
+   "t": 1368,
+   "fen": "r1bq3r/pp2k3/n1p4n/4p1Q1/4P3/P1N4P/1PP1BPP1/2KR3R b - - 1 17",
+   "line": [
+    "Qg5+"
+   ],
+   "spoken": "The queen check ends it — Black loses the queen and gets mated in the bargain."
+  },
+  {
+   "ply": 34,
+   "t": 1392.5,
+   "fen": "r1bqk2r/pp6/n1p4n/4p1Q1/4P3/P1N4P/1PP1BPP1/2KR3R w - - 2 18",
+   "line": [
+    "Ke8"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 35,
+   "t": 1412,
+   "fen": "r1bqk2r/pp6/n1p4n/4p1QB/4P3/P1N4P/1PP2PP1/2KR3R b - - 3 18",
+   "line": [
+    "Bh5+"
+   ],
+   "spoken": "There is even a mate in two: check first with the bishop to h5..."
+  },
+  {
+   "ply": 37,
+   "t": 1416.5,
+   "fen": "r1bRk2r/pp3n2/n1p5/4p1QB/4P3/P1N4P/1PP2PP1/2K4R b - - 0 19",
+   "line": [
+    "Nf7",
+    "Rxd8#"
+   ],
+   "spoken": "...then a piece to f7 blocks the king's escape, and the rook delivers mate."
+  },
+  {
+   "ply": 2,
+   "t": 1425,
+   "fen": "rnbqkbnr/pppppp1p/8/6p1/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [],
+   "spoken": "g5 is terrible, and terrible after e4 too. Nothing extraordinary was needed — e4 prepared the mate, the bishop to e2 threatened to take on h5 with mate, and the key move to notice was dropping the bishop back: it had done its job, so retreat it and keep developing. No crazy g4 — just develop, and castle long to deny any attack.",
+   "reanchor": true
+  }
+ ]
+}
