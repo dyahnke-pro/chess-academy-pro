@@ -1,0 +1,386 @@
+{
+ "videoId": "aoWDLhcoQtE",
+ "title": "Grandmaster Naroditsky | Chess Speedrun | 1770",
+ "openingName": "English Opening",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:aoWDLhcoQtE",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 924.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "c5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 927,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2P1P3/8/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": "c4 isn't a great move — it weakens the d4 square."
+  },
+  {
+   "ply": 4,
+   "t": 936,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/8/PP1P1PPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": "And we occupy that weak square, developing the knight toward it."
+  },
+  {
+   "ply": 5,
+   "t": 937.5,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/3P4/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 951.5,
+   "fen": "r1bqkbnr/pp1ppp1p/2n3p1/2p5/2P1P3/3P4/PP3PPP/RNBQKBNR w KQkq - 0 4",
+   "line": [
+    "g6"
+   ],
+   "spoken": "The fianchetto, exactly as in an Accelerated Dragon — and it reinforces our grip on d4."
+  },
+  {
+   "ply": 8,
+   "t": 953.5,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/2P1P3/2NP4/PP3PPP/R1BQKBNR w KQkq - 2 5",
+   "line": [
+    "Nc3",
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 956,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NPB3/PP3PPP/R2QKBNR w KQkq - 0 6",
+   "line": [
+    "Be3",
+    "d6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 959,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR b KQkq - 0 6",
+   "line": [
+    "h3"
+   ],
+   "spoken": "Often the choice is whether to stick to the main setup — and often the answer is yes."
+  },
+  {
+   "ply": 12,
+   "t": 986,
+   "fen": "r1bqk1nr/pp3pbp/2npp1p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR w KQkq - 0 7",
+   "line": [
+    "e6"
+   ],
+   "spoken": "The knight to f6 would block the bishop's control of d4, so instead this knight can head to e7."
+  },
+  {
+   "ply": 14,
+   "t": 990,
+   "fen": "r1bqk2r/pp2npbp/2npp1p1/2p5/2P1P3/2NPB2P/PP2NPP1/R2QKB1R w KQkq - 2 8",
+   "line": [
+    "Nge2",
+    "Nge7"
+   ],
+   "spoken": "It looks a little odd, but this is a very typical setup — it keeps the bishop's eye on d4."
+  },
+  {
+   "ply": 15,
+   "t": 992.5,
+   "fen": "r1bqk2r/pp2npbp/2npp1p1/2p5/2P1P1P1/2NPB2P/PP2NP2/R2QKB1R b KQkq - 0 8",
+   "line": [
+    "g4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 16,
+   "t": 995.5,
+   "fen": "r1bqk2r/pp2npbp/3pp1p1/2p5/2PnP1P1/2NPB2P/PP2NP2/R2QKB1R w KQkq - 1 9",
+   "line": [
+    "Nd4"
+   ],
+   "spoken": "Now reap the reward — the knight lands on the d4 outpost."
+  },
+  {
+   "ply": 17,
+   "t": 998,
+   "fen": "r1bqk2r/pp2npbp/3pp1p1/2p5/2PnP1P1/2NPB2P/PP2NPB1/R2QK2R b KQkq - 2 9",
+   "line": [
+    "Bg2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 1000,
+   "fen": "r1bqk2r/pp3pbp/2npp1p1/2p5/2PnP1P1/2NPB2P/PP2NPB1/R2QK2R w KQkq - 3 10",
+   "line": [
+    "Nec6"
+   ],
+   "spoken": "Support it with the other knight; now both knights guard one another."
+  },
+  {
+   "ply": 19,
+   "t": 1002.5,
+   "fen": "r1bqk2r/pp3pbp/2npp1p1/2p5/2PnP1P1/2NPB2P/PP1QNPB1/R3K2R b KQkq - 4 10",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 20,
+   "t": 1017,
+   "fen": "r1bq1rk1/pp3pbp/2npp1p1/2p5/2PnP1P1/2NPB2P/PP1QNPB1/R3K2R w KQ - 5 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "Before jumping the gun, finish development — castle and make the king safe."
+  },
+  {
+   "ply": 21,
+   "t": 1018.5,
+   "fen": "r1bq1rk1/pp3pbp/2npp1p1/2p5/2PnP1P1/2NPB2P/PP1QNPB1/R4RK1 b - - 6 11",
+   "line": [
+    "O-O"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 22,
+   "t": 1042,
+   "fen": "r1bq1rk1/pp4bp/2npp1p1/2p2p2/2PnP1P1/2NPB2P/PP1QNPB1/R4RK1 w - - 0 12",
+   "line": [
+    "f5"
+   ],
+   "spoken": "f5, opening the position — we have a beautiful knight on d4 and better-placed pieces, and that's exactly the moment to open the centre. Risky in front of our own king, but sound."
+  },
+  {
+   "ply": 23,
+   "t": 1051,
+   "fen": "r1bq1rk1/pp4bp/2npp1p1/2p2p2/2PnPPP1/2NPB2P/PP1QN1B1/R4RK1 b - - 0 12",
+   "line": [
+    "f4"
+   ],
+   "spoken": "He pushes to f4 — but having pushed g4, he's created a hook for us to attack."
+  },
+  {
+   "ply": 24,
+   "t": 1054.5,
+   "fen": "r1bq1rk1/pp4bp/2npp1p1/2p5/2PnPPp1/2NPB2P/PP1QN1B1/R4RK1 w - - 0 13",
+   "line": [
+    "fxg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 25,
+   "t": 1062.5,
+   "fen": "r1bq1rk1/pp4bp/2npp1p1/2p5/2PnPPP1/2NPB3/PP1QN1B1/R4RK1 b - - 0 13",
+   "line": [
+    "hxg4"
+   ],
+   "spoken": "This is how you attack a hook."
+  },
+  {
+   "ply": 26,
+   "t": 1065.5,
+   "fen": "r1b2rk1/pp4bp/2npp1p1/2p5/2PnPPPq/2NPB3/PP1QN1B1/R4RK1 w - - 1 14",
+   "line": [
+    "Qh4"
+   ],
+   "spoken": "Attack the g4-pawn with the queen — the queen to h4."
+  },
+  {
+   "ply": 27,
+   "t": 1067.5,
+   "fen": "r1b2rk1/pp4bp/2npp1p1/2p3P1/2PnPP1q/2NPB3/PP1QN1B1/R4RK1 b - - 0 14",
+   "line": [
+    "g5"
+   ],
+   "spoken": "He pushes on, but keeps overextending — his pawns only get harder to defend."
+  },
+  {
+   "ply": 28,
+   "t": 1081,
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p1p1P1/2PnPP1q/2NPB3/PP1QN1B1/R4RK1 w - - 0 15",
+   "line": [
+    "e5"
+   ],
+   "spoken": "And we strike with e5, trying to shatter his defences."
+  },
+  {
+   "ply": 29,
+   "t": 1088.5,
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p1p1P1/2PnPP1q/2NP4/PP1QNBB1/R4RK1 b - - 1 15",
+   "line": [
+    "Bf2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 30,
+   "t": 1090.5,
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p1p1P1/2PnPPq1/2NP4/PP1QNBB1/R4RK1 w - - 2 16",
+   "line": [
+    "Qg4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 31,
+   "t": 1099.5,
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p1p1P1/2PnPPq1/2NP4/PP1QNBBK/R4R2 b - - 3 16",
+   "line": [
+    "Kh2"
+   ],
+   "spoken": "Kh2 is not a good move — he's lost the initiative. And the knight on d4 is already paying off: the jump to f3 was a huge threat."
+  },
+  {
+   "ply": 32,
+   "t": 1118.5,
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p3P1/2PnPpq1/2NP4/PP1QNBBK/R4R2 w - - 0 17",
+   "line": [
+    "exf4"
+   ],
+   "spoken": "No need for anything fancy — just take the free pawn on f4; it will march to f3, kick the bishop back, and then the queen comes to h3."
+  },
+  {
+   "ply": 33,
+   "t": 1129.5,
+   "fen": "r1b2rk1/pp4bp/2np2p1/2p3P1/2PNPpq1/2NP4/PP1Q1BBK/R4R2 b - - 0 17",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 34,
+   "t": 1131,
+   "fen": "r1b2rk1/pp4bp/3p2p1/2p3P1/2PnPpq1/2NP4/PP1Q1BBK/R4R2 w - - 0 18",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": "Recapture with the knight."
+  },
+  {
+   "ply": 35,
+   "t": 1136.5,
+   "fen": "r1b2rk1/pp4bp/3p2p1/2p3P1/2PBPpq1/2NP4/PP1Q2BK/R4R2 b - - 0 18",
+   "line": [
+    "Bxd4"
+   ],
+   "spoken": "We allow him to trade off that knight — but look at the dark squares around his king now."
+  },
+  {
+   "ply": 36,
+   "t": 1143,
+   "fen": "r1b2rk1/pp5p/3p2p1/2p3P1/2PbPpq1/2NP4/PP1Q2BK/R4R2 w - - 0 19",
+   "line": [
+    "Bxd4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 37,
+   "t": 1150.5,
+   "fen": "r1b2rk1/pp5p/3p2p1/2pN2P1/2PbPpq1/3P4/PP1Q2BK/R4R2 b - - 1 19",
+   "line": [
+    "Nd5"
+   ],
+   "spoken": "The knight to d5 — threatening the queen to h4, which is essentially mate in two."
+  },
+  {
+   "ply": 38,
+   "t": 1153.5,
+   "fen": "r1b2rk1/pp5p/3p2p1/2pN2P1/2PbPp2/3P3q/PP1Q2BK/R4R2 w - - 2 20",
+   "line": [
+    "Qh3+"
+   ],
+   "spoken": "The check on h3 — and his king can't escape to g1. That's how fast it collapses once you push too many pawns in front of the king."
+  },
+  {
+   "ply": 3,
+   "t": 1170.5,
+   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2P1P3/8/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 1173,
+   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2P1P3/3P4/PP3PPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "Nc6",
+    "d3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 1174.5,
+   "fen": "r1bqk1nr/pp1pppbp/2n3p1/2p5/2P1P3/2NP4/PP3PPP/R1BQKBNR w KQkq - 2 5",
+   "line": [
+    "g6",
+    "Nc3",
+    "Bg7"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1176.5,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR b KQkq - 1 6",
+   "line": [
+    "h3",
+    "d6",
+    "Be3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1178,
+   "fen": "r1bqk1nr/pp3pbp/2npp1p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR w KQkq - 0 7",
+   "line": [
+    "e6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 11,
+   "t": 1179,
+   "fen": "r1bqk1nr/pp2ppbp/2np2p1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR b KQkq - 1 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 12,
+   "t": 1181.5,
+   "fen": "r1bqk2r/pp2ppbp/2np1np1/2p5/2P1P3/2NPB2P/PP3PP1/R2QKBNR w KQkq - 2 7",
+   "line": [
+    "Nf6"
+   ],
+   "spoken": "Why not the knight to f6? It's perfectly fine, but it gives up part of our control of d4 and leaves the bishop unhappy — so we find the knight another home. And White's big miss was not playing d4 himself to cure his weakness.",
+   "reanchor": true
+  }
+ ]
+}
