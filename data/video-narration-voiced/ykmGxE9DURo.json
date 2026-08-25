@@ -1,7 +1,7 @@
 {
  "videoId": "ykmGxE9DURo",
  "title": "Trashing the Traxler | Busting Unsound Openings",
- "openingName": "Italian Game: Two Knights Defense",
+ "openingName": "Italian Game: Two Knights Defence",
  "studentSide": "white",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -52,7 +52,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "The Fried Liver — the knight to g5, one of the most common variations at every level."
+   "spoken": "The knight leap to g5 is the Fried Liver Attack — one of the most common variations at every level, and especially among improving players. It's the branching point where the Traxler lurks."
   },
   {
    "ply": 8,
@@ -61,7 +61,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "d5 is Black's main reply, intercepting the bishop."
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -79,7 +79,7 @@
    "line": [
     "Na5"
    ],
-   "spoken": "After exd5, Black is supposed to play the knight to a5, not recapture the pawn — the main theoretical line."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -95,8 +95,8 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "The Traxler Counterattack — the bishop to c5, leaving f7 hanging. It looks absurd, but that is exactly the point.",
-   "reanchor": true
+   "spoken": "Instead of the usual defence, the bishop swings to c5 — the Traxler Counterattack. At first blush it looks absurd, simply leaving the f-pawn hanging, and that's exactly the trap: most players facing it think it's a blunder and grab the pawn.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -114,8 +114,8 @@
    "line": [
     "Bxf2+"
    ],
-   "spoken": "Grab the pawn and you're hit with the bishop takes on f2, check — a genuine sacrifice that leads to wild complications.",
-   "reanchor": true
+   "spoken": "And that's where it bites — a bishop sacrifice with check on f2. It's a genuine, sound sacrifice that hurls the position into wild complications the moment the bishop is taken. Snatching the pawn walks straight into the storm.",
+   "kind": "tactic"
   },
   {
    "ply": 11,
@@ -151,7 +151,9 @@
    "line": [
     "Qh4"
    ],
-   "spoken": ""
+   "spoken": "After the king is dragged forward and a knight check jolts it further, the queen swings to h4 and a swarm of mate threats descends. Keep grabbing material against all that attacking force and the king simply gets mated in one of the Traxler's famous sequences.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -214,8 +216,7 @@
    "t": 219.5,
    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p1N1/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 6 5",
    "line": [],
-   "spoken": "After taking on f7 with the knight, White isn't even supposed to be better — and it's all crazy memorization, not in the spirit of my recommendations.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -224,8 +225,7 @@
    "line": [
     "Bxf7+"
    ],
-   "spoken": "The other capture, the bishop takes on f7 with check, then Ke7, dropping the bishop all the way back — objectively good, the computer's top line, but not very practical.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -252,7 +252,8 @@
    "line": [
     "Rf8"
    ],
-   "spoken": "After the rook to f8, Black has a lot of practical compensation for the pawn — scary to hold with White in a blitz game.",
+   "spoken": "The commonly recommended answer is the bishop check on f7 and a retreat — objectively the engine's top line, but not practical. After the rook joins, the defender has real practical compensation: even though the first player is better with perfect play, it's a genuinely frightening position to hold in a fast game.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -340,7 +341,8 @@
    "line": [
     "d4"
    ],
-   "spoken": "The recommendation is d4 — virtually unheard of at the top, and very likely to catch your opponent completely off guard.",
+   "spoken": "The recommendation instead is the quiet central push to d4 — a distant third in popularity and virtually unseen at the top level, which is precisely its first virtue: it's very likely to catch the opponent completely off guard.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -350,7 +352,8 @@
    "line": [
     "d5"
    ],
-   "spoken": "Black's only response is d5, counterattacking our bishop — miss it, and he's immediately in a completely lost position.",
+   "spoken": "And it's not just a surprise — the only saving reply is a counter-thrust to d5, hitting the bishop, which is far from an intuitive move. Miss it and the defender lands immediately in a lost position.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -367,7 +370,8 @@
    "line": [
     "Bxd4"
    ],
-   "spoken": "The genius of d4: if he takes with the bishop, then the knight takes on f7 — and the usual bishop-takes-f2 mayhem no longer works.",
+   "spoken": "The point of the central push reveals itself if the pawn is grabbed with the bishop — now the knight takes on f7 and the usual Traxler sacrifice follows, but with one decisive change from the standard line.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -525,7 +529,9 @@
    "t": 476,
    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p1N1/2BPP3/8/PPP2PPP/RNBQK2R b KQkq - 0 5",
    "line": [],
-   "spoken": ""
+   "spoken": "Here's the crux — without the central pawn move, the main line ends in a draw by perpetual check, the queen relentlessly harrying a king that can't escape. That perpetual is exactly what the extra pawn move is designed to prevent.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -553,7 +559,8 @@
     "Bxf2+",
     "Kxf2"
    ],
-   "spoken": "Without d4, that line is a draw by perpetual with the check on f4; but with d4 played, that check is impossible — our dark-squared bishop now covers f4.",
+   "spoken": "With the pawn move inserted, the defender who follows the memorised main line gets a cold shower — the key perpetual check is simply no longer available, because the freed bishop now guards that square. Down a rook and a piece with no perpetual, the defence collapses, and a queen check followed by a knight capture and rook check crashes through.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -588,7 +595,8 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "Taking with the knight loses in a very similar fashion.",
+   "spoken": "Grabbing the pawn with the knight instead loses in a similar way — it cuts off its own access to the sacrifice square, so the whole Traxler idea vanishes and the defender is simply forced to surrender the rook. Every capture leads to the same collapse.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -671,7 +679,9 @@
     "Be2",
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Once a whole rook is won, remember the goal changes — it's no longer about hoovering up maximum material but about consolidating and getting the pieces out as fast as possible. The careful, watertight retreat is the right call, defusing the last tricks.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -751,8 +761,7 @@
    "t": 694.5,
    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p1N1/2BPP3/8/PPP2PPP/RNBQK2R b KQkq - 0 5",
    "line": [],
-   "spoken": "And taking with the pawn is even worse — Nxf7, Qe7, Nxh8, and Black has just a single check.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -813,8 +822,7 @@
    "t": 715.5,
    "fen": "r1bqk2r/pppp1Npp/2n2n2/2b5/2BpP3/8/PPP2PPP/RNBQK2R b KQkq - 0 6",
    "line": [],
-   "spoken": "All three recaptures lose the game — so Black simply has to know the move d5.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -839,8 +847,7 @@
    "line": [
     "Bxd5"
    ],
-   "spoken": "After d5, the best is the bishop takes on d5 — once again posing Black an unenviable choice.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -858,8 +865,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": "The tempting knight takes on d5 leads to a nearly lost endgame — we grab on c5, up a pawn, with his knights terribly placed.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -953,8 +959,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "The only move is the knight takes on d4 — an incredibly narrow line.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -990,8 +995,7 @@
    "line": [
     "Bxf7+"
    ],
-   "spoken": "And here, don't take with the knight — take on f7 with the bishop, check.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -1053,8 +1057,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "Quietly step the bishop back to c4 — threatening Nf7; then c3 smokes the knight out of d4, which is Black's only good piece.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 20,
@@ -1180,8 +1183,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "f3 is an important move here — building a pawn chain, limiting the knight, and giving the king a nice window.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 19,
@@ -1351,8 +1353,7 @@
     "Bxd4",
     "Nxf7"
    ],
-   "spoken": "The whole point of d4: with the pawn gone, the bishop on c1 controls f4 — and that kills the perpetual check in the critical line.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -1371,8 +1372,7 @@
    "t": 1478.5,
    "fen": "r1bqk2r/pppp1ppp/2n2n2/4p1N1/2BbP3/8/PPP2PPP/RNBQK2R w KQkq - 0 6",
    "line": [],
-   "spoken": "The summary: remember to play Bxd5 if Black plays c5; and in the main line take on f7 with the bishop, not the knight, drop it back to c4, threaten c3, and castle up a clean pawn.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 9,
