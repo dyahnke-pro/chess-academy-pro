@@ -1,10 +1,10 @@
 {
  "videoId": "1tbpB-Qrqds",
  "title": "Sacking A Piece in the Alapin | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Sicilian Defense: Alapin, 2…Nc6 (White)",
+ "openingName": "Sicilian Defense: Alapin Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:1tbpB-Qrqds",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We take White and meet the Sicilian — today we play normal theory, then deliberately sacrifice a piece and show how to fight back from a lost position."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We open the Alapin with c3."
   },
   {
    "ply": 4,
@@ -42,10 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "The pawn to d4 is the Alapin's whole idea — build the classical centre. After the exchange, White recaptures with a pawn and stands on a broad, mobile centre.",
-   "kind": "main",
-   "teaches": "c3 supports d4 — the point of the Alapin is the pawn centre.",
-   "plans": "Occupy the centre and develop naturally."
+   "spoken": "We strike with d4."
   },
   {
    "ply": 7,
@@ -55,7 +52,7 @@
     "cxd4",
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "The c-pawns come off on d4."
   },
   {
    "ply": 8,
@@ -64,7 +61,7 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "Black plays e6."
   },
   {
    "ply": 9,
@@ -73,10 +70,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Develop the knight to c3, adding a piece to the centre. When Black pins with the bishop on b4, the bishop to g5 is a natural follow-up, creating pressure of its own.",
-   "kind": "main",
-   "teaches": "Develop toward the centre; meet a pin with counter-development, not passive defence.",
-   "plans": "Complete development and keep the central pull."
+   "spoken": "We develop the knight to c3 — though the bishop to g5 would have been a fine chance to hang it; now Black just plays ...Nf6."
   },
   {
    "ply": 10,
@@ -85,7 +79,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": ""
+   "spoken": "Black pins with the bishop to b4 — and here's our chance: we play the bishop to g5."
   },
   {
    "ply": 11,
@@ -94,7 +88,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "We play the bishop to g5 — a believable blunder, and at least it develops a piece. The comedy would be if Black declined it."
   },
   {
    "ply": 12,
@@ -103,7 +97,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 13,
@@ -112,7 +106,7 @@
    "line": [
     "Ba6"
    ],
-   "spoken": ""
+   "spoken": "We even offer the bishop to a6 — all but begging Black to win material; it's oddly hard to give a piece away."
   },
   {
    "ply": 14,
@@ -121,7 +115,7 @@
    "line": [
     "Bxc3+"
    ],
-   "spoken": ""
+   "spoken": "Black takes on c3 with check."
   },
   {
    "ply": 15,
@@ -130,7 +124,7 @@
    "line": [
     "bxc3"
    ],
-   "spoken": ""
+   "spoken": "We recapture, bxc3."
   },
   {
    "ply": 16,
@@ -139,7 +133,7 @@
    "line": [
     "bxa6"
    ],
-   "spoken": ""
+   "spoken": "Black wins our bishop, the pawn recapturing on a6 — the sacrifice is complete, and we've even traded off another pair of minors, making it harder on ourselves. Now the recovery begins, a full piece down. First, know this: ...e5 does not win the knight back — after ...h6, the bishop to h4, ...g5 unpins, and if the bishop drops to g3 the knight is free. Basic, but essential."
   },
   {
    "ply": 17,
@@ -148,7 +142,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "So we play e5 — in a situation like this it's a genuine attempt to complicate the game."
   },
   {
    "ply": 18,
@@ -157,7 +151,7 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "Black plays h6. It slightly weakens his structure, but down a piece a small weakness isn't enough — we need something concrete. The idea is to take on f6: after ...hxg5 we push to g7, and even after ...Rg8 we defend the g7-pawn indirectly with the queen to h5 — if the rook grabs g7, the queen forks on h8. Recovery rarely comes in a single move: build tension and sow doubt."
   },
   {
    "ply": 19,
@@ -166,7 +160,7 @@
    "line": [
     "exf6"
    ],
-   "spoken": ""
+   "spoken": "We capture on f6."
   },
   {
    "ply": 20,
@@ -175,7 +169,7 @@
    "line": [
     "hxg5"
    ],
-   "spoken": ""
+   "spoken": "Black wins our bishop, recapturing on g5."
   },
   {
    "ply": 21,
@@ -184,7 +178,8 @@
    "line": [
     "fxg7"
    ],
-   "spoken": ""
+   "spoken": "We push to g7 and set the queen toward h5, sowing doubt. This game is really about recovery technique when you're lost, and the principles are these. Complicate — pose your opponent decision after decision, because decisions breed fatigue and doubt. Keep your pieces active — bring the rook in with h4 rather than a timid g3, and ask the \"Shankland question\": what happens if you just do it anyway, developing and ignoring a pawn? Defend key pawns by developing, not by a passive king move — a rook to d3 both guards c3 and prepares to lift to g3. Manoeuvre the knight toward a dream square like d6, via f7. Use a break like d5 not only to lure the bishop off b7 but to open lines and strip away defenders. And once you win material back, convert with a passed pawn — push it hard while the opponent is passive, escort it with a rook cutting off the king, and finish with the ladder-mate technique, bringing your own king up to guard the checking square so the rooks can deliver mate. Even dead lost, purposeful, problem-posing play saves a remarkable number of games.",
+   "reanchor": true
   },
   {
    "ply": 3,
