@@ -1,7 +1,7 @@
 {
  "videoId": "ts8OsKe0taY",
  "title": "Daniel Reunited With MoistCr1tikal | Streamer Lesson",
- "openingName": "Italian Game: Two Knights Defense",
+ "openingName": "Italian Game: Two Knights Defence",
  "studentSide": "black",
  "voice": "danya-dna",
  "rewrittenAt": "2026-08-25",
@@ -60,7 +60,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": "He plays the Fried Liver — the knight to g5."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -69,7 +69,8 @@
    "line": [
     "d5"
    ],
-   "spoken": "The defence is d5 — he's threatening to take on f7 with a fork, so intercept the bishop; and if he takes, don't recapture that pawn with your knight."
+   "spoken": "The knight lunge threatens a fork on f7, so the reply is the central break d5, interposing to block the bishop's aim. And the key rule to remember — if the pawn captures, do not recapture it with the knight.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -87,7 +88,8 @@
    "line": [
     "Na5"
    ],
-   "spoken": "Move the knight out of c6 and chase the bishop on c4 — the knight to a5."
+   "spoken": "Once a piece up, the whole plan is patience and then opening the position so the extra piece is felt. Don't rush to grab the enemy knight — keep developing and let the opponent be the one to decide and to commit, since forcing choices saves you time and invites their mistakes. Finish the kingside first for king safety, then peel the position open: recapture toward the centre to free the f-pawn, push it to f5, and blow the file open. Bring the queen into the attack as an extra force, and when your pieces outnumber the defenders of a target, take with the knight to keep the bishop as your strongest attacker. And don't tunnel-vision the kingside — a queen check from the far wing swings in to finish, the move most people miss because they only look where the king sits.",
+   "kind": "plan"
   },
   {
    "ply": 5,
@@ -103,8 +105,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "To avoid the Fried Liver altogether, you can also develop the bishop first with Bc5 — then your queen covers the g5 square, and he can't play Ng5.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -114,7 +115,9 @@
     "Ng5",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "A warning about the sharp gambit line — pushing the knight to attack when the queen isn't yet defended is actually the worst move in the position, because it simply loses the queen. Know which tempting move is the trap.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -132,7 +135,8 @@
    "line": [
     "Bxf2+"
    ],
-   "spoken": "The Traxler idea — the crazy-looking bishop takes on f2, with check.",
+   "spoken": "The Traxler's whole point — when the knight grabs on f7 and it looks like the attacker is just winning a rook, the crazy-looking reply is a bishop sacrifice with check on f2. It comes out of nowhere, dragging the king forward into the storm.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -151,7 +155,8 @@
    "line": [
     "Nxe4+"
    ],
-   "spoken": "Then the knight takes on e4, with check.",
+   "spoken": "And the follow-up after the king takes — a knight check on e4, ripping open the position around the exposed king. The sacrifice was only the doorway; this is the blow that gives the attack real teeth.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -170,7 +175,8 @@
    "line": [
     "Qh4"
    ],
-   "spoken": "The queen to h4 — that's the move, with the same devastating mating idea.",
+   "spoken": "The move that sustains the assault is the queen to h4, threatening mate — the idea generations of analysts toiled over to decide whether the whole attack is truly sound. Bring the queen to bear before the defence can regroup.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -187,8 +193,7 @@
    "line": [
     "Bxf7+"
    ],
-   "spoken": "But the bishop takes on f7 with check sidesteps the whole Traxler — just grab the pawn, keep it simple, up a pawn, and Black has no attack.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 10,
@@ -197,7 +202,9 @@
    "line": [
     "Kf8"
    ],
-   "spoken": ""
+   "spoken": "The practical way to sidestep the entire Traxler is a quiet bishop check on f7 instead of the knight grab — take the pawn, retreat the bishop, and stand a clean pawn up with no attack for the defender to muster.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -222,7 +229,8 @@
    "t": 1674.5,
    "fen": "r1bqk2r/pppp1ppp/2n2n2/2b1p1N1/2B1P3/8/PPPP1PPP/RNBQK2R w KQkq - 6 5",
    "line": [],
-   "spoken": "Why doesn't the Traxler work here anymore? Because the e4 square is covered.",
+   "spoken": "Why does the sacrifice no longer work in that version? Because the key central square is covered — the whole combination relied on the knight crashing in there, and once it's guarded, the fireworks simply fizzle. One small change to what's defended flips the assessment.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -230,7 +238,8 @@
    "t": 1675.5,
    "fen": "r1bqk1nr/pppp1ppp/2n5/2b1p1N1/2B1P3/8/PPPP1PPP/RNBQK2R b KQkq - 5 4",
    "line": [],
-   "spoken": "And why is recapturing on d5 with the knight bad? Nxf7, king takes, and the check on f3 leaves the king stuck out on e6 — White is simply better.",
+   "spoken": "And the reason recapturing the pawn with the knight is bad in the main line — it runs into the sacrifice on f7 and a queen check that drags the king out to the sixth rank in the opening. A king stranded in the centre that early is a lasting problem, and the attacker is better.",
+   "kind": "tactic",
    "reanchor": true
   }
  ]
