@@ -1,0 +1,275 @@
+{
+ "videoId": "Ytkf3qZTj74",
+ "title": "Grandmaster Naroditsky Chess Speedrun Pt. 1",
+ "openingName": "Scotch Game",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:Ytkf3qZTj74",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 17,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 19,
+   "fen": "rnbqkbnr/pppp1ppp/8/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
+   "line": [
+    "Nf3"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 20.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/4P3/5N2/PPPP1PPP/RNBQKB1R w KQkq - 2 3",
+   "line": [
+    "Nc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 22.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [
+    "d4"
+   ],
+   "spoken": "He plays the Scotch — one of the oldest openings there is. Its idea is to contest the centre at once and open the bishop's diagonal."
+  },
+  {
+   "ply": 6,
+   "t": 32,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3pP3/5N2/PPP2PPP/RNBQKB1R w KQkq - 0 4",
+   "line": [
+    "exd4"
+   ],
+   "spoken": "We have to answer the central tension."
+  },
+  {
+   "ply": 7,
+   "t": 34.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
+   "line": [
+    "Nxd4"
+   ],
+   "spoken": "The downside of the Scotch: White has moved the same piece twice in the opening."
+  },
+  {
+   "ply": 8,
+   "t": 47,
+   "fen": "r1bqk1nr/pppp1ppp/2n5/2b5/3NP3/8/PPP2PPP/RNBQKB1R w KQkq - 1 5",
+   "line": [
+    "Bc5"
+   ],
+   "spoken": "The bishop to c5 develops while attacking his knight — developing with tempo, which is exactly what punishes moving a piece twice."
+  },
+  {
+   "ply": 9,
+   "t": 52.5,
+   "fen": "r1bqk1nr/pppp1ppp/2N5/2b5/4P3/8/PPP2PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [
+    "Nxc6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 58,
+   "fen": "r1b1k1nr/pppp1ppp/2N2q2/2b5/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 1 6",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": "The queen to f6 — an in-between move; we do not recapture the knight yet."
+  },
+  {
+   "ply": 11,
+   "t": 66,
+   "fen": "r1b1k1nr/pppp1ppp/2N2q2/2b5/4P3/5P2/PPP3PP/RNBQKB1R b KQkq - 0 6",
+   "line": [
+    "f3"
+   ],
+   "spoken": "He props things up with f3."
+  },
+  {
+   "ply": 12,
+   "t": 86.5,
+   "fen": "r1b1k1nr/ppp2ppp/2p2q2/2b5/4P3/5P2/PPP3PP/RNBQKB1R w KQkq - 0 7",
+   "line": [
+    "dxc6"
+   ],
+   "spoken": "Recapture with the d-pawn — it opens the diagonal for the bishop, and f3 has already weakened his king."
+  },
+  {
+   "ply": 13,
+   "t": 95.5,
+   "fen": "r1b1k1nr/ppp2ppp/2p2q2/2b5/2B1P3/5P2/PPP3PP/RNBQK2R b KQkq - 1 7",
+   "line": [
+    "Bc4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 99.5,
+   "fen": "r1b1k2r/ppp1nppp/2p2q2/2b5/2B1P3/5P2/PPP3PP/RNBQK2R w KQkq - 2 8",
+   "line": [
+    "Ne7"
+   ],
+   "spoken": "Developing the knight to e7 — and he can't castle: the bishop on c5 rakes into g1, and f3 just opened everything up. That's why strong players warn never to play f3."
+  },
+  {
+   "ply": 15,
+   "t": 114,
+   "fen": "r1b1k2r/ppp1nppp/2p2q2/2b5/2B1PB2/5P2/PPP3PP/RN1QK2R b KQkq - 3 8",
+   "line": [
+    "Bf4"
+   ],
+   "spoken": "He plays the bishop to f4 — but the problem is he only sees that he's hitting a pawn; he misses my queen. This is tunnel vision, the source of most beginner mistakes."
+  },
+  {
+   "ply": 16,
+   "t": 125.5,
+   "fen": "r1b1k2r/ppp1nppp/2p5/2b5/2B1Pq2/5P2/PPP3PP/RN1QK2R w KQkq - 0 9",
+   "line": [
+    "Qxf4"
+   ],
+   "spoken": "So he's simply blundered a piece."
+  },
+  {
+   "ply": 17,
+   "t": 129.5,
+   "fen": "r1b1k2r/ppp1nppp/2p5/2b5/2B1Pq2/5P2/PPPQ2PP/RN2K2R b KQkq - 1 9",
+   "line": [
+    "Qd2"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 18,
+   "t": 152,
+   "fen": "r1b1k2r/ppp1nppp/2p5/2b1q3/2B1P3/5P2/PPPQ2PP/RN2K2R w KQkq - 2 10",
+   "line": [
+    "Qe5"
+   ],
+   "spoken": "Do we trade queens? Today's theme is converting a material advantage — and that starts here."
+  },
+  {
+   "ply": 19,
+   "t": 166,
+   "fen": "r1b1k2r/ppp1nppp/2p5/2b1q3/2B1PP2/8/PPPQ2PP/RN2K2R b KQkq - 0 10",
+   "line": [
+    "f4"
+   ],
+   "spoken": "He plays f4 — and whenever a pawn moves, check what it left unprotected; a pawn push always leaves weaknesses in its wake."
+  },
+  {
+   "ply": 20,
+   "t": 187,
+   "fen": "r1b1k2r/ppp1nppp/2p5/2b5/2B1PP2/8/PqPQ2PP/RN2K2R w KQkq - 0 11",
+   "line": [
+    "Qxb2"
+   ],
+   "spoken": "It leaves both e4 and b2 loose. Qb2 is the better grab — it also attacks the rook on a1, which he can't save."
+  },
+  {
+   "ply": 21,
+   "t": 203.5,
+   "fen": "r1b1k2r/ppp1nppp/2p5/2b2P2/2B1P3/8/PqPQ2PP/RN2K2R b KQkq - 0 11",
+   "line": [
+    "f5"
+   ],
+   "spoken": "Now the queen and king sit on the same diagonal — whenever that happens, look for pins."
+  },
+  {
+   "ply": 22,
+   "t": 210.5,
+   "fen": "r1b1k2r/ppp1nppp/2p5/2b2P2/2B1P3/8/P1PQ2PP/qN2K2R w Kkq - 0 12",
+   "line": [
+    "Qxa1"
+   ],
+   "spoken": "He never moves the rook, so we take it — up a rook and a piece."
+  },
+  {
+   "ply": 23,
+   "t": 220,
+   "fen": "r1b1k2r/ppp1nppp/2p5/2b2P2/2B1P3/8/P1PQK1PP/qN5R b kq - 1 12",
+   "line": [
+    "Ke2"
+   ],
+   "spoken": "And he still can't castle — that's what kills him; the king has to walk out just to defend the knight."
+  },
+  {
+   "ply": 24,
+   "t": 228.5,
+   "fen": "r1b1k2r/ppp1nppp/2p5/2b1qP2/2B1P3/8/P1PQK1PP/1N5R w kq - 2 13",
+   "line": [
+    "Qe5"
+   ],
+   "spoken": "Evacuate the queen before it can be trapped on a1 — back to e5, pinning the pawn to the king."
+  },
+  {
+   "ply": 9,
+   "t": 247.5,
+   "fen": "r1bqk1nr/pppp1ppp/2N5/2b5/4P3/8/PPP2PPP/RNBQKB1R b KQkq - 0 5",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 10,
+   "t": 249,
+   "fen": "r1b1k1nr/pppp1ppp/2N2q2/2b5/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 1 6",
+   "line": [
+    "Qf6"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 259.5,
+   "fen": "r1bqk1nr/pppp1ppp/2N5/2b5/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 5 8",
+   "line": [
+    "Nd8",
+    "Qe7",
+    "Nc6",
+    "Qd8"
+   ],
+   "spoken": "The correct move for White was the queen to f3.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 260.5,
+   "fen": "r1b1k1nr/pppp1ppp/2N2q2/2b5/4P3/8/PPP2PPP/RNBQKB1R w KQkq - 1 6",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 266,
+   "fen": "r1b1k1nr/ppp2ppp/2p5/2b5/4P3/5P2/PPP2P1P/RNB1KB1R w KQkq - 0 8",
+   "line": [
+    "Qf3",
+    "Qxf3",
+    "gxf3",
+    "dxc6"
+   ],
+   "spoken": "After the queens come off — Qxf3, gxf3, then the recapture on c6 — you reach an endgame that has occurred thousands of times in top-level play.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 284.5,
+   "fen": "r1bqkbnr/pppp1ppp/2n5/4p3/3PP3/5N2/PPP2PPP/RNBQKB1R b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  }
+ ]
+}
