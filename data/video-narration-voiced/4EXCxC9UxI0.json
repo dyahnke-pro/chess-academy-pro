@@ -1,0 +1,231 @@
+{
+ "videoId": "4EXCxC9UxI0",
+ "title": "Baltic Defense | The Sensei Speedrun | GM Naro",
+ "openingName": "Baltic Defense",
+ "studentSide": "black",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:4EXCxC9UxI0",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 13,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/3P4/8/PPP1PPPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "d4",
+    "d5"
+   ],
+   "spoken": "White opens with the queen's pawn and Black answers symmetrically with d5 — heading, for a change, away from the well-worn Queen's Gambit Declined toward something friskier."
+  },
+  {
+   "ply": 3,
+   "t": 21,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [
+    "c4"
+   ],
+   "spoken": "White offers the Queen's Gambit with c4."
+  },
+  {
+   "ply": 4,
+   "t": 29.5,
+   "fen": "rn1qkbnr/ppp1pppp/8/3p1b2/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": "And here is the Baltic — the bishop steps out to f5 before it can get shut behind the pawn chain, which is the whole appeal of the line. White's most testing reply is the queen to b3: it develops with tempo, hits b7, and suddenly Black has two pawns hanging at once. The antidote is nerve — don't cling to the pawns, close your eyes to the threats, and just develop as fast as you can, aiming to prise the centre open before White gets organised."
+  },
+  {
+   "ply": 3,
+   "t": 736,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": "Looking back, the sharpest road runs deeper still — an Albin-Gambit-on-steroids where Black gives up material and White pays a heavy price for developing nothing but the queen.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 768,
+   "fen": "rn1qkbnr/ppp1pppp/8/3p1b2/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": "The idea behind the Baltic is simple and sound: you want a Queen's Gambit Declined, but without burying this bishop behind the pawn chain — so you get it outside the wall first.",
+   "reanchor": true
+  },
+  {
+   "ply": 6,
+   "t": 774,
+   "fen": "rn1qkbnr/ppp2ppp/4p3/3p1b2/2PP4/2N5/PP2PPPP/R1BQKBNR w KQkq - 0 4",
+   "line": [
+    "Nc3",
+    "e6"
+   ],
+   "spoken": "Black can also just brace the centre with e6 — a solid, positionally healthy way to handle it.",
+   "reanchor": true
+  },
+  {
+   "ply": 4,
+   "t": 782.5,
+   "fen": "rn1qkbnr/ppp1pppp/8/3p1b2/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 785,
+   "fen": "rn1qkbnr/ppp1pppp/8/3P1b2/3P4/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "line": [
+    "cxd5"
+   ],
+   "spoken": "The critical test is the capture on d5.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 790.5,
+   "fen": "rn2kbnr/ppp1pppp/8/3q1b2/3P4/2N5/PP2PPPP/R1BQKBNR b KQkq - 1 4",
+   "line": [
+    "Qxd5",
+    "Nc3"
+   ],
+   "spoken": "And here is the key: recapturing with the queen is exactly what to avoid — that just lands Black in a joyless Scandinavian.",
+   "reanchor": true
+  },
+  {
+   "ply": 5,
+   "t": 793,
+   "fen": "rn1qkbnr/ppp1pppp/8/3P1b2/3P4/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 6,
+   "t": 794.5,
+   "fen": "rn1qkbnr/ppp1pppp/8/3P4/3P4/8/PP2PPPP/RbBQKBNR w KQkq - 0 4",
+   "line": [
+    "Bxb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 7,
+   "t": 797,
+   "fen": "rn1qkbnr/ppp1pppp/8/3P4/3P4/8/PP2PPPP/1RBQKBNR b Kkq - 0 4",
+   "line": [
+    "Rxb1"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 8,
+   "t": 798.5,
+   "fen": "rn2kbnr/ppp1pppp/8/3q4/3P4/8/PP2PPPP/1RBQKBNR w Kkq - 0 5",
+   "line": [
+    "Qxd5"
+   ],
+   "spoken": "Instead the recipe is to snap off White's knight first, then take on d5 with the queen, and race the queenside into play — the knight to c6, castle long, and break with e5.",
+   "reanchor": true
+  },
+  {
+   "ply": 7,
+   "t": 806.5,
+   "fen": "rn1qkbnr/ppp1pppp/8/3P4/3P4/8/PP2PPPP/1RBQKBNR b Kkq - 0 4",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 5,
+   "t": 808,
+   "fen": "rn1qkbnr/ppp1pppp/8/3P1b2/3P4/8/PP2PPPP/RNBQKBNR b KQkq - 0 3",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 810.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 818,
+   "fen": "rn1qkbnr/ppp1pppp/8/3p1b2/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 3,
+   "t": 821.5,
+   "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
+   "line": [],
+   "spoken": ""
+  },
+  {
+   "ply": 4,
+   "t": 824,
+   "fen": "rn1qkbnr/ppp1pppp/8/3p1b2/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 1 3",
+   "line": [
+    "Bf5"
+   ],
+   "spoken": "In the game White grabbed on b7 and went hunting with the queen, but steering it to c6 was already going wrong — that is where White's troubles began.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 841,
+   "fen": "r2qkbnr/pppnpppp/8/5b2/2pP4/2NQ4/PP2PPPP/R1B1KBNR w KQkq - 0 5",
+   "line": [
+    "Nc3",
+    "Nd7",
+    "Qd3",
+    "dxc4"
+   ],
+   "spoken": "The real improvement for White was the knight to c3, when White stands much better: the pawn comes to e4 with tempo, and then the capture on c4. Trying to do everything with the queen while nothing else is developed is simply a bad plan.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 849.5,
+   "fen": "r2qkbnr/pppnpppp/8/5b2/2pP4/8/PP2PPPP/RQB1KBNR w KQkq - 2 7",
+   "line": [
+    "Ne4",
+    "Bxe4",
+    "Qb1",
+    "Bf5"
+   ],
+   "spoken": "White might try to bail out with e4, but Black just lifts the rook to b8, and now the queen can no longer hold everything together.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 850.5,
+   "fen": "r2qkbnr/pppnpppp/8/5b2/2pPP3/8/PP3PPP/RQB1KBNR b KQkq - 0 7",
+   "line": [
+    "e4"
+   ],
+   "spoken": ""
+  },
+  {
+   "ply": 14,
+   "t": 852.5,
+   "fen": "1r1qkbnr/pppnpppp/8/5b2/2pPP3/8/PP3PPP/RQB1KBNR w KQk - 1 8",
+   "line": [
+    "Rb8"
+   ],
+   "spoken": "The rook swings to b8, and the queen loses all contact with the e4-pawn.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 861,
+   "fen": "r2qkbnr/pppnpppp/8/5b2/2pP4/8/PP2PPPP/RQB1KBNR w KQkq - 2 7",
+   "line": [],
+   "spoken": "The verdict: the knight to c3 was the move. Even later White could have righted the ship, but shuffling the queen instead of developing was fatal — when a piece finally came out it was the wrong one, and the b2-pawn was left hanging.",
+   "reanchor": true
+  }
+ ]
+}
