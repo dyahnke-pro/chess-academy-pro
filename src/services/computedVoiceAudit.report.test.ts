@@ -23,7 +23,6 @@ import { buildTacticsLiveContext } from './liveTacticsContext';
 import { buildPlayCommentary } from './playCommentary';
 import { findLivePunishment } from './gemCrushLines';
 import { teachingSourceForBoard, spokenBeatText, generalizedTeaching } from './danyaTeachingService';
-import { bakedTeachingForPly } from './bakedWalkthroughNarration';
 import { curatedBeatAt } from './curatedBeatSource';
 import { detectOpening } from './openingDetectionService';
 import { noteStaysInScope } from './noteAnchorIntegrity';
@@ -146,7 +145,6 @@ describe('computed voice audit', () => {
       let lastComputedKey = '';
       const spokenTacticLines = new Set<string>();
       const spokenThreatLines = new Set<string>();
-      const bakedPlySeen = new Set<number>();
       const curatedSeen = new Set<string>();
       const corpusSeen = new Set<string>();
       let openingName: string | null = null;
@@ -309,21 +307,13 @@ describe('computed voice audit', () => {
 
         let noteLine: string | null = null;
         let noteTier = '';
+        // Tier 1 (corpus) is measured below via the position-keyed note; here the
+        // curated masterclass beat is the first ladder rung (the generic bake is
+        // gone — David 2026-08-24).
         try {
-          const baked = bakedTeachingForPly(openingName, history, game.student)
-            ?? (history.length > 1 ? bakedTeachingForPly(openingName, history.slice(0, -1), game.student) : null);
-          if (baked && !bakedPlySeen.has(baked.ply)) {
-            bakedPlySeen.add(baked.ply);
-            noteLine = baked.text;
-            noteTier = 'baked';
-          }
+          const beat = curatedBeatAt(history, fenAfterReply, curatedSeen, openingName);
+          if (beat) { curatedSeen.add(beat.id); noteLine = beat.text; noteTier = 'curated'; }
         } catch { /* bonus */ }
-        if (!noteLine) {
-          try {
-            const beat = curatedBeatAt(history, fenAfterReply, curatedSeen, openingName);
-            if (beat) { curatedSeen.add(beat.id); noteLine = beat.text; noteTier = 'curated'; }
-          } catch { /* bonus */ }
-        }
 
         // ── WHAT THE LADDER NEVER ASKED ───────────────────────────────────
         // The teaching ladder is `if (!noteLine)` chained: bake, then curated,
@@ -337,13 +327,6 @@ describe('computed voice audit', () => {
         // this turn but never got a turn.
         const avail: Record<string, boolean> = {};
         for (const [tier, text] of Object.entries({
-          baked: (() => {
-            try {
-              const b = bakedTeachingForPly(openingName, history, game.student)
-                ?? (history.length > 1 ? bakedTeachingForPly(openingName, history.slice(0, -1), game.student) : null);
-              return b && !bakedPlySeen.has(b.ply) ? b.text : '';
-            } catch { return ''; }
-          })(),
           curated: (() => {
             try { return curatedBeatAt(history, fenAfterReply, curatedSeen, openingName)?.text ?? ''; }
             catch { return ''; }
