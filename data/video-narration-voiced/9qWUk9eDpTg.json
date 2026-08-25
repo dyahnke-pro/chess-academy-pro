@@ -1,343 +1,325 @@
 {
- "videoId": "9qWUk9eDpTg",
- "title": "Queenside Vs Kingside Castle!! | Alekhine's Defense | The Sensei Speedrun | GM Naroditsky",
- "openingName": "Alekhine's Defense: Scandinavian Variation (2.Nc3 d5)",
- "studentSide": "black",
- "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
- "source": "yt:9qWUk9eDpTg",
- "moves": [
-  {
-   "ply": 2,
-   "t": 17.5,
-   "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2",
-   "line": [
-    "e4",
-    "Nf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 3,
-   "t": 25.5,
-   "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 2 2",
-   "line": [
-    "Nc3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 4,
-   "t": 41,
-   "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
-   "line": [
-    "d5"
-   ],
-   "spoken": "White sidesteps with the knight to c3 rather than the main advance. The genuine Alekhine reply is the pawn to d5: pushing on into a Vienna is playable, but d5 steers into a favourable Scandinavian instead.",
-   "kind": "main",
-   "teaches": "When White declines the main line with Nc3, strike with d5 for a good Scandinavian structure.",
-   "plans": "Trade in the centre and reach a comfortable Scandi."
-  },
-  {
-   "ply": 5,
-   "t": 47,
-   "fen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 0 3",
-   "line": [
-    "exd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 49,
-   "fen": "rnbqkb1r/ppp1pppp/8/3n4/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 4",
-   "line": [
-    "Nxd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 7,
-   "t": 55.5,
-   "fen": "rnbqkb1r/ppp1pppp/8/3N4/8/8/PPPP1PPP/R1BQKBNR b KQkq - 0 4",
-   "line": [
-    "Nxd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 56.5,
-   "fen": "rnb1kb1r/ppp1pppp/8/3q4/8/8/PPPP1PPP/R1BQKBNR w KQkq - 0 5",
-   "line": [
-    "Qxd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 58,
-   "fen": "rnb1kb1r/ppp1pppp/8/3q4/8/5N2/PPPP1PPP/R1BQKB1R b KQkq - 1 5",
-   "line": [
-    "Nf3"
-   ],
-   "spoken": "After the exchanges it is a Scandinavian with a key difference: White's knight is already gone from c3, so it can never harass the queen with tempo. The queen sits comfortably in the centre.",
-   "kind": "main",
-   "teaches": "A Scandinavian where White's knight has left c3 is ideal — the exposed queen is never chased.",
-   "plans": "Develop actively behind the safe central queen."
-  },
-  {
-   "ply": 10,
-   "t": 102.5,
-   "fen": "rn2kb1r/ppp1pppp/8/3q4/6b1/5N2/PPPP1PPP/R1BQKB1R w KQkq - 2 6",
-   "line": [
-    "Bg4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 106.5,
-   "fen": "r3kb1r/ppp1pppp/2n5/3q4/6b1/5N2/PPPPBPPP/R1BQK2R w KQkq - 4 7",
-   "line": [
-    "Be2",
-    "Nc6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 111,
-   "fen": "2kr1b1r/ppp1pppp/2n5/3q4/6b1/3P1N2/PPP1BPPP/R1BQK2R w KQ - 1 8",
-   "line": [
-    "d3",
-    "O-O-O"
-   ],
-   "spoken": "Develop with the bishop to g4 and the knight to c6, then castle queenside — a harmonious, aggressive setup with the pieces pointing at White's position.",
-   "kind": "main",
-   "teaches": "Rapid development plus opposite-wing castling turns a solid structure into an attacking one.",
-   "plans": "Castle long and open lines toward White's king."
-  },
-  {
-   "ply": 15,
-   "t": 118,
-   "fen": "2kr1b1r/ppp1pppp/2n5/3q4/6b1/3P1N2/PPP1BPPP/R1BQ1RK1 b - - 2 8",
-   "line": [
-    "O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 16,
-   "t": 136.5,
-   "fen": "2kr1b1r/ppp2ppp/2n5/3qp3/6b1/3P1N2/PPP1BPPP/R1BQ1RK1 w - - 0 9",
-   "line": [
-    "e5"
-   ],
-   "spoken": "Because White has set up passively with the pawn on d3, the thrust e5 makes good sense — grab as much central space as possible while White is cramped.",
-   "kind": "main",
-   "teaches": "Against a passive setup, expand in the centre and take the space on offer.",
-   "plans": "Build the centre, then storm the kingside."
-  },
-  {
-   "ply": 17,
-   "t": 140,
-   "fen": "2kr1b1r/ppp2ppp/2n5/3qp3/6b1/3PBN2/PPP1BPPP/R2Q1RK1 b - - 1 9",
-   "line": [
-    "Be3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 143.5,
-   "fen": "1k1r1b1r/ppp2ppp/2n5/3qp3/6b1/3PBN2/PPP1BPPP/R2Q1RK1 w - - 2 10",
-   "line": [
-    "Kb8"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 17,
-   "t": 156.5,
-   "fen": "2kr1b1r/ppp2ppp/2n5/3qp3/6b1/3PBN2/PPP1BPPP/R2Q1RK1 b - - 1 9",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 160.5,
-   "fen": "2kr1b1r/ppp3pp/2n5/3qpp2/6b1/3PBN2/PPP1BPPP/R2Q1RK1 w - - 0 10",
-   "line": [
-    "f5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 19,
-   "t": 186.5,
-   "fen": "2kr1b1r/ppp3pp/2n5/3qppN1/6b1/3PB3/PPP1BPPP/R2Q1RK1 b - - 1 10",
-   "line": [
-    "Ng5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 20,
-   "t": 192,
-   "fen": "2kr1b1r/ppp3pp/2n5/3qppN1/8/3PB3/PPP1bPPP/R2Q1RK1 w - - 0 11",
-   "line": [
-    "Bxe2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 23,
-   "t": 206,
-   "fen": "2kr1b1r/ppp3p1/2n4p/3qppN1/2P5/3PB3/PPQ1bPPP/R4RK1 b - - 1 12",
-   "line": [
-    "c4",
-    "h6",
-    "Qc2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 26,
-   "t": 226.5,
-   "fen": "2kr1b1r/ppp3p1/2n4p/3qpp2/8/3PBN2/PPQ1bPPP/R4RK1 w - - 2 14",
-   "line": [
-    "Qxc4",
-    "Nf3",
-    "Qd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 30,
-   "t": 238.5,
-   "fen": "2kr1b1r/ppp5/2n4p/3qppp1/8/3PBN2/PPQ1bPPP/R4RK1 w - - 0 16",
-   "line": [
-    "Bg5",
-    "g6",
-    "Be3",
-    "g5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 31,
-   "t": 271.5,
-   "fen": "2kr1b1r/ppp5/2n4p/3qppp1/8/3PB3/PPQ1bPPP/R3NRK1 b - - 1 16",
-   "line": [
-    "Ne1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 32,
-   "t": 305,
-   "fen": "2kr3r/ppp5/2nb3p/3qppp1/8/3PB3/PPQ1bPPP/R3NRK1 w - - 2 17",
-   "line": [
-    "Bd6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 33,
-   "t": 317,
-   "fen": "2kr3r/ppp5/2nb3p/3qppp1/8/3P4/PPQBbPPP/R3NRK1 b - - 3 17",
-   "line": [
-    "Bd2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 34,
-   "t": 352.5,
-   "fen": "2krr3/ppp5/2nb3p/3qppp1/8/3P4/PPQBbPPP/R3NRK1 w - - 4 18",
-   "line": [
-    "Rhe8"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 35,
-   "t": 357,
-   "fen": "2krr3/ppp5/2nb3p/3qppp1/8/2BP4/PPQ1bPPP/R3NRK1 b - - 5 18",
-   "line": [
-    "Bc3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 36,
-   "t": 374,
-   "fen": "2krr3/ppp5/2nb3p/3qpp2/6p1/2BP4/PPQ1bPPP/R3NRK1 w - - 0 19",
-   "line": [
-    "g4"
-   ],
-   "spoken": "The pawn to g4 is the key improving move — it takes the f3-square away from White's pieces, freezing them, before the attack rolls forward.",
-   "kind": "main",
-   "teaches": "Before attacking, deny the defender its best squares — g4 removes the f3 outpost.",
-   "plans": "Then push the h-pawn down the board."
-  },
-  {
-   "ply": 37,
-   "t": 389,
-   "fen": "2krr3/ppp5/2nb3p/3qpp2/6p1/2BP4/PPQ1bPPP/3RNRK1 b - - 1 19",
-   "line": [
-    "Rd1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 38,
-   "t": 397,
-   "fen": "2krr3/ppp5/2nb4/3qpp1p/6p1/2BP4/PPQ1bPPP/3RNRK1 w - - 0 20",
-   "line": [
-    "h5"
-   ],
-   "spoken": "Now the attack begins in earnest: the pawn to h5, slow but genuinely dangerous, with every piece already improved to its best square. There is no rush — the position is ready.",
-   "kind": "main",
-   "teaches": "Attack only once every piece is optimally placed — then the pawn storm is decisive, not desperate.",
-   "plans": "Roll the h- and g-pawns into White's king."
-  },
-  {
-   "ply": 39,
-   "t": 409,
-   "fen": "2krr3/ppp5/2nb4/3qpp1p/6p1/2BP2P1/PPQ1bP1P/3RNRK1 b - - 0 20",
-   "line": [
-    "g3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 40,
-   "t": 433,
-   "fen": "2krr3/ppp5/2nb4/3qpp2/6pp/2BP2P1/PPQ1bP1P/3RNRK1 w - - 0 21",
-   "line": [
-    "h4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 41,
-   "t": 453,
-   "fen": "2krr3/ppp5/2nb4/3qpp2/6pp/2BP2P1/PPQ1bPNP/3R1RK1 b - - 1 21",
-   "line": [
-    "Ng2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 42,
-   "t": 503,
-   "fen": "2krr3/ppp5/3b4/3qpp2/3n2pp/2BP2P1/PPQ1bPNP/3R1RK1 w - - 2 22",
-   "line": [
-    "Nd4"
-   ],
-   "spoken": ""
-  }
- ]
+  "videoId": "9qWUk9eDpTg",
+  "title": "Queenside Vs Kingside Castle!! | Alekhine's Defense | The Sensei Speedrun | GM Naroditsky",
+  "openingName": "Alekhine's Defense",
+  "studentSide": "black",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-25",
+  "source": "yt:9qWUk9eDpTg",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 17.5,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 1 2",
+      "line": [
+        "e4",
+        "Nf6"
+      ],
+      "spoken": "We take Black and play the Alekhine with ...Nf6."
+    },
+    {
+      "ply": 3,
+      "t": 25.5,
+      "fen": "rnbqkb1r/pppppppp/5n2/8/4P3/2N5/PPPP1PPP/R1BQKBNR b KQkq - 2 2",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "White plays Nc3, sidestepping the main Alekhine."
+    },
+    {
+      "ply": 4,
+      "t": 41,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3p4/4P3/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 3",
+      "line": [
+        "d5"
+      ],
+      "spoken": "We play d5 — the genuine Alekhine choice, into a favorable Scandinavian."
+    },
+    {
+      "ply": 5,
+      "t": 47,
+      "fen": "rnbqkb1r/ppp1pppp/5n2/3P4/8/2N5/PPPP1PPP/R1BQKBNR b KQkq - 0 3",
+      "line": [
+        "exd5"
+      ],
+      "spoken": "White takes on d5."
+    },
+    {
+      "ply": 6,
+      "t": 49,
+      "fen": "rnbqkb1r/ppp1pppp/8/3n4/8/2N5/PPPP1PPP/R1BQKBNR w KQkq - 0 4",
+      "line": [
+        "Nxd5"
+      ],
+      "spoken": "We recapture with the knight."
+    },
+    {
+      "ply": 7,
+      "t": 55.5,
+      "fen": "rnbqkb1r/ppp1pppp/8/3N4/8/8/PPPP1PPP/R1BQKBNR b KQkq - 0 4",
+      "line": [
+        "Nxd5"
+      ],
+      "spoken": "White takes."
+    },
+    {
+      "ply": 8,
+      "t": 56.5,
+      "fen": "rnb1kb1r/ppp1pppp/8/3q4/8/8/PPPP1PPP/R1BQKBNR w KQkq - 0 5",
+      "line": [
+        "Qxd5"
+      ],
+      "spoken": "We recapture with the queen — a comfortable Scandi where White can't chase it with Nc3."
+    },
+    {
+      "ply": 9,
+      "t": 58,
+      "fen": "rnb1kb1r/ppp1pppp/8/3q4/8/5N2/PPPP1PPP/R1BQKB1R b KQkq - 1 5",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "White develops the knight to f3."
+    },
+    {
+      "ply": 10,
+      "t": 102.5,
+      "fen": "rn2kb1r/ppp1pppp/8/3q4/6b1/5N2/PPPP1PPP/R1BQKB1R w KQkq - 2 6",
+      "line": [
+        "Bg4"
+      ],
+      "spoken": "We develop the bishop to g4, aiming for a quick queenside castle."
+    },
+    {
+      "ply": 12,
+      "t": 106.5,
+      "fen": "r3kb1r/ppp1pppp/2n5/3q4/6b1/5N2/PPPPBPPP/R1BQK2R w KQkq - 4 7",
+      "line": [
+        "Be2",
+        "Nc6"
+      ],
+      "spoken": "White blocks with the bishop to e2; we develop the knight to c6."
+    },
+    {
+      "ply": 14,
+      "t": 111,
+      "fen": "2kr1b1r/ppp1pppp/2n5/3q4/6b1/3P1N2/PPP1BPPP/R1BQK2R w KQ - 1 8",
+      "line": [
+        "d3",
+        "O-O-O"
+      ],
+      "spoken": "White plays d3; we castle queenside, going for opposite-side chances."
+    },
+    {
+      "ply": 15,
+      "t": 118,
+      "fen": "2kr1b1r/ppp1pppp/2n5/3q4/6b1/3P1N2/PPP1BPPP/R1BQ1RK1 b - - 2 8",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "White castles short — the race is on."
+    },
+    {
+      "ply": 16,
+      "t": 136.5,
+      "fen": "2kr1b1r/ppp2ppp/2n5/3qp3/6b1/3P1N2/PPP1BPPP/R1BQ1RK1 w - - 0 9",
+      "line": [
+        "e5"
+      ],
+      "spoken": "We grab the centre with e5, since White's d3 is passive."
+    },
+    {
+      "ply": 17,
+      "t": 140,
+      "fen": "2kr1b1r/ppp2ppp/2n5/3qp3/6b1/3PBN2/PPP1BPPP/R2Q1RK1 b - - 1 9",
+      "line": [
+        "Be3"
+      ],
+      "spoken": "White develops the bishop to e3."
+    },
+    {
+      "ply": 18,
+      "t": 143.5,
+      "fen": "1k1r1b1r/ppp2ppp/2n5/3qp3/6b1/3PBN2/PPP1BPPP/R2Q1RK1 w - - 2 10",
+      "line": [
+        "Kb8"
+      ],
+      "spoken": "We tuck the king safely to b8."
+    },
+    {
+      "ply": 17,
+      "t": 156.5,
+      "fen": "2kr1b1r/ppp2ppp/2n5/3qp3/6b1/3PBN2/PPP1BPPP/R2Q1RK1 b - - 1 9",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 18,
+      "t": 160.5,
+      "fen": "2kr1b1r/ppp3pp/2n5/3qpp2/6b1/3PBN2/PPP1BPPP/R2Q1RK1 w - - 0 10",
+      "line": [
+        "f5"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 19,
+      "t": 186.5,
+      "fen": "2kr1b1r/ppp3pp/2n5/3qppN1/6b1/3PB3/PPP1BPPP/R2Q1RK1 b - - 1 10",
+      "line": [
+        "Ng5"
+      ],
+      "spoken": "White plays the knight to g5."
+    },
+    {
+      "ply": 20,
+      "t": 192,
+      "fen": "2kr1b1r/ppp3pp/2n5/3qppN1/8/3PB3/PPP1bPPP/R2Q1RK1 w - - 0 11",
+      "line": [
+        "Bxe2"
+      ],
+      "spoken": "We take the bishop on e2."
+    },
+    {
+      "ply": 23,
+      "t": 206,
+      "fen": "2kr1b1r/ppp3p1/2n4p/3qppN1/2P5/3PB3/PPQ1bPPP/R4RK1 b - - 1 12",
+      "line": [
+        "c4",
+        "h6",
+        "Qc2"
+      ],
+      "spoken": "White plays c4; we kick with h6; White retreats the queen to c2."
+    },
+    {
+      "ply": 26,
+      "t": 226.5,
+      "fen": "2kr1b1r/ppp3p1/2n4p/3qpp2/8/3PBN2/PPQ1bPPP/R4RK1 w - - 2 14",
+      "line": [
+        "Qxc4",
+        "Nf3",
+        "Qd5"
+      ],
+      "spoken": "We grab on c4 with the queen; White retreats the knight to f3, and we drop back to d5."
+    },
+    {
+      "ply": 30,
+      "t": 238.5,
+      "fen": "2kr1b1r/ppp5/2n4p/3qppp1/8/3PBN2/PPQ1bPPP/R4RK1 w - - 0 16",
+      "line": [
+        "Bg5",
+        "g6",
+        "Be3",
+        "g5"
+      ],
+      "spoken": "White tries Bg5; we play g6; the bishop retreats to e3; and we push g5, expanding on the kingside."
+    },
+    {
+      "ply": 31,
+      "t": 271.5,
+      "fen": "2kr1b1r/ppp5/2n4p/3qppp1/8/3PB3/PPQ1bPPP/R3NRK1 b - - 1 16",
+      "line": [
+        "Ne1"
+      ],
+      "spoken": "White reroutes the knight to e1."
+    },
+    {
+      "ply": 32,
+      "t": 305,
+      "fen": "2kr3r/ppp5/2nb3p/3qppp1/8/3PB3/PPQ1bPPP/R3NRK1 w - - 2 17",
+      "line": [
+        "Bd6"
+      ],
+      "spoken": "We develop the bishop to d6, overprotecting e5."
+    },
+    {
+      "ply": 33,
+      "t": 317,
+      "fen": "2kr3r/ppp5/2nb3p/3qppp1/8/3P4/PPQBbPPP/R3NRK1 b - - 3 17",
+      "line": [
+        "Bd2"
+      ],
+      "spoken": "White plays the bishop to d2."
+    },
+    {
+      "ply": 34,
+      "t": 352.5,
+      "fen": "2krr3/ppp5/2nb3p/3qppp1/8/3P4/PPQBbPPP/R3NRK1 w - - 4 18",
+      "line": [
+        "Rhe8"
+      ],
+      "spoken": "We bring the rook to e8."
+    },
+    {
+      "ply": 35,
+      "t": 357,
+      "fen": "2krr3/ppp5/2nb3p/3qppp1/8/2BP4/PPQ1bPPP/R3NRK1 b - - 5 18",
+      "line": [
+        "Bc3"
+      ],
+      "spoken": "White plays the bishop to c3."
+    },
+    {
+      "ply": 36,
+      "t": 374,
+      "fen": "2krr3/ppp5/2nb3p/3qpp2/6p1/2BP4/PPQ1bPPP/R3NRK1 w - - 0 19",
+      "line": [
+        "g4"
+      ],
+      "spoken": "We push g4, taking the f3-square from White's pieces — the e1-knight's only exit."
+    },
+    {
+      "ply": 37,
+      "t": 389,
+      "fen": "2krr3/ppp5/2nb3p/3qpp2/6p1/2BP4/PPQ1bPPP/3RNRK1 b - - 1 19",
+      "line": [
+        "Rd1"
+      ],
+      "spoken": "White plays the rook to d1."
+    },
+    {
+      "ply": 38,
+      "t": 397,
+      "fen": "2krr3/ppp5/2nb4/3qpp1p/6p1/2BP4/PPQ1bPPP/3RNRK1 w - - 0 20",
+      "line": [
+        "h5"
+      ],
+      "spoken": "We roll the h-pawn with h5, opening the attack."
+    },
+    {
+      "ply": 39,
+      "t": 409,
+      "fen": "2krr3/ppp5/2nb4/3qpp1p/6p1/2BP2P1/PPQ1bP1P/3RNRK1 b - - 0 20",
+      "line": [
+        "g3"
+      ],
+      "spoken": "White plays g3."
+    },
+    {
+      "ply": 40,
+      "t": 433,
+      "fen": "2krr3/ppp5/2nb4/3qpp2/6pp/2BP2P1/PPQ1bP1P/3RNRK1 w - - 0 21",
+      "line": [
+        "h4"
+      ],
+      "spoken": "We push h4, prying at White's king."
+    },
+    {
+      "ply": 41,
+      "t": 453,
+      "fen": "2krr3/ppp5/2nb4/3qpp2/6pp/2BP2P1/PPQ1bPNP/3R1RK1 b - - 1 21",
+      "line": [
+        "Ng2"
+      ],
+      "spoken": "White plays the knight to g2."
+    },
+    {
+      "ply": 42,
+      "t": 503,
+      "fen": "2krr3/ppp5/3b4/3qpp2/3n2pp/2BP2P1/PPQ1bPNP/3R1RK1 w - - 2 22",
+      "line": [
+        "Nd4"
+      ],
+      "spoken": ""
+    }
+  ]
 }

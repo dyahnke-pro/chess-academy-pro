@@ -1,10 +1,10 @@
 {
  "videoId": "bXAHcPB2hEk",
  "title": "Master Class for Attacking!! | Sicilian Defense: Alapin | GM Naroditsky’s Top Theory Speedrun",
- "openingName": "Sicilian Defense: Alapin, 2…e6 (White)",
+ "openingName": "Sicilian Defense: Alapin Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:bXAHcPB2hEk",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Sicilian."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We play c3 — the Alapin."
   },
   {
    "ply": 4,
@@ -33,17 +33,15 @@
    "line": [
     "e6"
    ],
-   "spoken": "The pawn to e6 is a third-tier move — respectable but a notch below the main d5 and Nf6. Its interesting property is transpositional: after d4 it can funnel into the same structures as the main lines.",
-   "kind": "main",
-   "teaches": "A sideline that transposes into your main lines is nothing to fear — steer it home.",
-   "plans": "Play d4 and reach a familiar structure."
+   "spoken": "Black plays e6 — a second-tier move."
   },
   {
    "ply": 3,
    "t": 39,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "...e6 has a quirk: after d4, if Black plays ...d5, White can transpose to the Advance French with e5. Since we don't play the Advance, when ...d5 comes we simply take instead.",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -61,7 +59,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We take the centre with d4."
   },
   {
    "ply": 6,
@@ -70,10 +68,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "When Black strikes with d5, the play is simply to take on d5 and, after the queen recaptures, reach exactly the position of the main 2…d5 line — the sideline has transposed.",
-   "kind": "main",
-   "teaches": "Recognise transpositions: e6 then d5 is just the main line reached by a different order.",
-   "plans": "Develop with the knight to f3 into the known tabiya."
+   "spoken": "Black challenges with d5."
   },
   {
    "ply": 7,
@@ -82,7 +77,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "We take on d5."
   },
   {
    "ply": 8,
@@ -91,7 +86,7 @@
    "line": [
     "Qxd5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the queen."
   },
   {
    "ply": 3,
@@ -144,7 +139,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 10,
@@ -153,7 +148,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...Nf6."
   },
   {
    "ply": 11,
@@ -162,7 +157,7 @@
    "line": [
     "Na3"
    ],
-   "spoken": ""
+   "spoken": "We play the dangerous rare move — the knight to a3, heading for b5."
   },
   {
    "ply": 12,
@@ -171,7 +166,7 @@
    "line": [
     "a6"
    ],
-   "spoken": ""
+   "spoken": "Black correctly plays a6, stopping Nb5."
   },
   {
    "ply": 13,
@@ -180,14 +175,15 @@
    "line": [
     "Nc4"
    ],
-   "spoken": ""
+   "spoken": "Since ...a6 stops Nb5, we reroute — the knight to c4, eyeing the b6 fork square."
   },
   {
    "ply": 12,
    "t": 279.5,
    "fen": "rnb1kb1r/1p3ppp/p3pn2/2pq4/3P4/N1P2N2/PP3PPP/R1BQKB1R w KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "The knight to c4 is better than the bishop there: Bc4 would take away the knight's only aggressive square and can be chased off by ...b5, while the knight on c4 is far more sustainable.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -222,7 +218,7 @@
    "line": [
     "Qd8"
    ],
-   "spoken": ""
+   "spoken": "Black retreats the queen to d8."
   },
   {
    "ply": 15,
@@ -231,7 +227,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to d3, aiming at h7 for a possible Greek-gift attack."
   },
   {
    "ply": 14,
@@ -256,7 +252,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e7."
   },
   {
    "ply": 17,
@@ -265,7 +261,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 18,
@@ -274,7 +270,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 19,
@@ -283,7 +279,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": ""
+   "spoken": "We take on c5, opening the d-file for our rooks."
   },
   {
    "ply": 20,

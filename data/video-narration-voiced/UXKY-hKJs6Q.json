@@ -4,7 +4,7 @@
  "openingName": "Philidor Defense",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:UXKY-hKJs6Q",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take White; Black answers our king's pawn with ...e5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6 — the Philidor."
   },
   {
    "ply": 3,
@@ -58,7 +58,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "We develop the Italian bishop to c4."
   },
   {
    "ply": 6,
@@ -67,7 +67,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e7."
   },
   {
    "ply": 7,
@@ -76,7 +76,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We strike with d4."
   },
   {
    "ply": 8,
@@ -85,7 +85,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 9,
@@ -94,7 +94,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight."
   },
   {
    "ply": 8,
@@ -119,7 +119,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 11,
@@ -128,7 +128,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3."
   },
   {
    "ply": 12,
@@ -137,9 +137,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Black's c5 is the trap-trigger. With the bishop on c4 raking toward f7 and the king still in the centre, loosening the queenside like this invites a tactic — the alarm bells should ring the moment that bishop appears on c4.",
-   "kind": "trap",
-   "teaches": "When the enemy bishop eyes f7 and your king is uncastled, a loosening pawn move can walk into tactics."
+   "spoken": "Black hits the knight with c5."
   },
   {
    "ply": 11,
@@ -164,9 +162,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "White punishes with the check on b5. It drags a piece to d7 and clears the way for the knight to jump to f5 and b5, unravelling Black's position with tempo.",
-   "kind": "main",
-   "teaches": "Refute a loosening move with a forcing check that pries open tactical lines."
+   "spoken": "We insert the check on b5."
   },
   {
    "ply": 14,
@@ -175,7 +171,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "Black blocks with the bishop to d7."
   },
   {
    "ply": 15,
@@ -184,7 +180,7 @@
    "line": [
     "Nf5"
    ],
-   "spoken": ""
+   "spoken": "We leap the knight into f5, eyeing e7 and g7."
   },
   {
    "ply": 14,
@@ -201,7 +197,8 @@
     "Nf5",
     "Bxb5"
    ],
-   "spoken": ""
+   "spoken": "The knight on f5 is the sting: through the coming exchanges, Nxe7 followed by Nxd5 with check would fork Black's exposed king and win material.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -341,9 +338,7 @@
     "Kxe7",
     "Nxd5+"
    ],
-   "spoken": "The combination lands: White snaps the bishop off e7 and, when the king recaptures, the knight forks in on d5 with check. Black's defence collapses and the game is over.",
-   "kind": "main",
-   "teaches": "A knight fork delivered with check is the clean way to cash in an attack."
+   "spoken": ""
   },
   {
    "ply": 10,

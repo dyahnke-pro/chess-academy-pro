@@ -4,7 +4,7 @@
  "openingName": "King's Indian Defense: Fianchetto Variation",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:ukVf_JfGTOw",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "Nf3",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "White opens with the knight to f3; we reply with the knight to f6."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "White claims space with c4."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "We start the fianchetto with g6."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "White builds the big centre with d4."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "We complete the fianchetto with the bishop to g7."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "g3"
    ],
-   "spoken": ""
+   "spoken": "White chooses g3 — the Fianchetto Variation, one of the most respected and positionally dangerous answers to the King's Indian."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle. We haven't committed to a King's Indian yet — that comes when we push ...d6."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "Bg2"
    ],
-   "spoken": ""
+   "spoken": "White fianchettoes the bishop to g2."
   },
   {
    "ply": 10,
@@ -87,7 +87,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "We play d6, committing to a traditional King's Indian."
   },
   {
    "ply": 11,
@@ -96,7 +96,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to c3 — a wide theoretical crossroads."
   },
   {
    "ply": 12,
@@ -105,7 +105,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": ""
+   "spoken": "We choose the knight to d7, preparing a quick ...e5 — the most classic, King's-Indian-like setup."
   },
   {
    "ply": 13,
@@ -114,7 +114,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles."
   },
   {
    "ply": 14,
@@ -123,10 +123,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "With the setup complete, Black strikes the centre with e5 — the whole point of the knight on d7, challenging d4 head-on and claiming central space of Black's own.",
-   "kind": "main",
-   "teaches": "The Nbd7 setup exists to prepare the central e5 break.",
-   "plans": "Press d4 and e4; keep the tension."
+   "spoken": "We strike in the centre with e5."
   },
   {
    "ply": 15,
@@ -135,7 +132,7 @@
    "line": [
     "e4"
    ],
-   "spoken": ""
+   "spoken": "White's main try — striking back with e4, a Maroczy-like clamp with pawns on c4 and e4."
   },
   {
    "ply": 16,
@@ -144,9 +141,7 @@
    "line": [
     "c6"
    ],
-   "spoken": "After White clamps with e4, Black plays c6, patiently pressing the big white centre. White holds more space, but that centre is a long-term target Black keeps needling.",
-   "kind": "main",
-   "teaches": "Against a space advantage, apply steady pressure to the centre rather than forcing matters."
+   "spoken": "Rather than release with ...exd4, we play the older, trickier c6 — a line that slips past even experienced fianchetto players."
   },
   {
    "ply": 17,
@@ -155,7 +150,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "White plays h3."
   },
   {
    "ply": 18,
@@ -164,9 +159,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": "The queen to a5 is the point of this line — it leans on the knight on c3 and the whole centre, keeping pressure on while Black stays flexible.",
-   "kind": "main",
-   "teaches": "An active queen sortie to a5 pressures the c3-knight and White's centre at once."
+   "spoken": "We bring the queen out to a5 — the whole point of the line."
   },
   {
    "ply": 19,
@@ -175,7 +168,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "White plays the bishop to e3 — the modern top recommendation, where players used to prefer the rook to e1."
   },
   {
    "ply": 18,
@@ -208,7 +201,8 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "Against the older rook to e1, the idea is to release with ...exd4 just before White can push d5 and lock the centre — and then White must choose between the bishop and the routine knight recapture on d4.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -226,7 +220,8 @@
     "exd4",
     "Bxd4"
    ],
-   "spoken": ""
+   "spoken": "The annoying reply is the bishop recapture on d4: then the natural ...Ne5 would run into c5, undermining the knight — and if we take on f3, the queen recaptures and our f6-knight suddenly hangs. That's why we keep the knight on d7 for now.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -235,7 +230,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": ""
+   "spoken": "So we pick the low-hanging fruit — the rook to e8, a move that can't hurt us — and wait for White to show his cards."
   },
   {
    "ply": 23,
@@ -244,7 +239,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "White answers with the rook to e1."
   },
   {
    "ply": 24,
@@ -253,14 +248,15 @@
    "line": [
     "Qc7"
    ],
-   "spoken": ""
+   "spoken": "We reroute the queen to c7, so that ...Ne5 finally becomes playable — the knight can't sit on d7 forever, blocking in the c8-bishop."
   },
   {
    "ply": 18,
    "t": 566,
    "fen": "r1b2rk1/pp1n1pbp/2pp1np1/q3p3/2PPP3/2N2NPP/PP3PB1/R1BQ1RK1 w - - 1 10",
    "line": [],
-   "spoken": ""
+   "spoken": "The point of ...Qa5: it can swing to h5, and it eyes the knight on c3 — so White can't slot in the useful b3 to defend c4, because b3 would simply drop that knight, a common blunder even at higher levels.",
+   "reanchor": true
   }
  ]
 }

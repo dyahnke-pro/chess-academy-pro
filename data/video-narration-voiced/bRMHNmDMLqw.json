@@ -1,10 +1,10 @@
 {
  "videoId": "bRMHNmDMLqw",
  "title": "Master Class | French, Advance | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "French Defense: Advance Variation, Nimzowitsch gambit (4.Nf3), e5-control battle",
+ "openingName": "French Defense: Advance Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:bRMHNmDMLqw",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e6"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the French."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We build the centre with d4."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black challenges with d5."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We lock the chain with e5 — the Advance."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "Black hits the base with c5."
   },
   {
    "ply": 7,
@@ -60,10 +60,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "The pawn to c5 arrives and the normal move would be c3 — but not here. The knight to f3, leaving d4, is the treatment: an idea of Nimzowitsch's whose whole purpose is to accelerate White's development.",
-   "kind": "main",
-   "teaches": "Nf3 over c3: give the pawn, take the lead in development.",
-   "plans": "Develop fast, fight for e5."
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 8,
@@ -72,7 +69,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6."
   },
   {
    "ply": 9,
@@ -81,10 +78,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "Develop as if nothing is happening — the bishop to d3, not b5. The bishop to b5 is a very common mistake in these positions: the queenside pin is rarely dangerous, whereas from d3 the bishop points straight at the kingside where Black will castle.",
-   "kind": "main",
-   "teaches": "Prefer Bd3 aiming at the king over the tempting but toothless ...Bb5 pin.",
-   "plans": "Bd3, castle, target the king."
+   "spoken": "We develop the bishop to d3, in Milner-Barry style."
   },
   {
    "ply": 10,
@@ -93,7 +87,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 11,
@@ -102,7 +96,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle, offering the d4-pawn."
   },
   {
    "ply": 12,
@@ -111,10 +105,7 @@
    "line": [
     "f6"
    ],
-   "spoken": "Now the zen of the whole system: establish total control of the e5-square. That advanced pawn — and the piece that replaces it — is everything. Lose the grip on e5 and Black's pawns start rolling up the board; hold it and Black stays cramped.",
-   "kind": "main",
-   "teaches": "The system lives or dies on control of e5 — a pawn there can be replaced by a piece, but never relinquish the square.",
-   "plans": "Pile defenders on e5."
+   "spoken": "Black challenges with ...f6."
   },
   {
    "ply": 13,
@@ -123,10 +114,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": "So the rook comes to e1, reinforcing the e5-point before Black can chip at it. Rook to e1 or bishop to f4 — either adds a guard to the square the whole game revolves around.",
-   "kind": "main",
-   "teaches": "Add defenders to your key square proactively, before it's attacked.",
-   "plans": "Re1 to back up e5."
+   "spoken": "We play the rook to e1."
   },
   {
    "ply": 14,
@@ -135,7 +123,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": ""
+   "spoken": "Black takes on e5."
   },
   {
    "ply": 15,
@@ -144,10 +132,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": "Recapturing with the knight on e5 keeps the grip — the pawn is gone but a piece takes its place, and control of the square is unbroken.",
-   "kind": "main",
-   "teaches": "A piece can inherit a pawn's outpost; the square matters more than which unit holds it.",
-   "plans": "Nxe5, keep the clamp."
+   "spoken": "We recapture with the knight."
   },
   {
    "ply": 16,
@@ -156,7 +141,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 17,
@@ -165,10 +150,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "The bishop goes to f4, and don't be seduced by the one-move pin on g5. The goal isn't a cheap pin — it's more control of e5. Even if f4 looks a touch lame, positionally it's the right call because it guards the square.",
-   "kind": "main",
-   "teaches": "Choose the move that serves your strategic goal over a flashy one-move pin.",
-   "plans": "Bf4, reinforce e5."
+   "spoken": "We develop the bishop to f4."
   },
   {
    "ply": 18,
@@ -177,10 +159,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": "Even more control is needed, so combine two jobs in one: develop the last knight to a square where it heads for f3 and adds yet another defender of e5. Bring the undeveloped piece out and let it reinforce the battle square at the same time.",
-   "kind": "main",
-   "teaches": "Develop a piece toward the exact square it can also defend — economy of tempo.",
-   "plans": "Nd2 then Ndf3, stacking guards on e5."
+   "spoken": "Black offers a trade with ...Bd6."
   },
   {
    "ply": 19,
@@ -189,7 +168,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to d2."
   },
   {
    "ply": 20,
@@ -198,7 +177,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 21,
@@ -207,10 +186,7 @@
    "line": [
     "Ndf3"
    ],
-   "spoken": "With the knight to f3 there are now so many pieces holding e5 that any single one can leave its post and the square still stands — that was the whole point. Just stay alert to the x-ray on the undefended bishop; a later drop back to g3 is the tidy prophylactic.",
-   "kind": "main",
-   "teaches": "Over-guard a square so no single trade or departure loosens it; watch for x-ray discoveries.",
-   "plans": "Ndf3; keep Bg3 in reserve."
+   "spoken": "We reroute the knight to f3."
   },
   {
    "ply": 22,
@@ -219,7 +195,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": ""
+   "spoken": "Black jumps the knight to e4."
   },
   {
    "ply": 24,
@@ -229,10 +205,7 @@
     "Nxc6",
     "bxc6"
    ],
-   "spoken": "The capture on c6 comes with force — the recapture with the b-pawn is forced, because otherwise the queen simply hangs. That opens the way to collect on d6 next.",
-   "kind": "trap",
-   "teaches": "A capture that also attacks the queen forces the recapture — read the in-between threat.",
-   "plans": "Nxc6, then win on d6."
+   "spoken": "We take on c6; Black recaptures with the b-pawn."
   },
   {
    "ply": 26,
@@ -242,7 +215,7 @@
     "Bxd6",
     "Qxd6"
    ],
-   "spoken": ""
+   "spoken": "We trade on d6; Black recaptures with the queen."
   },
   {
    "ply": 27,
@@ -251,7 +224,7 @@
    "line": [
     "Bxe4"
    ],
-   "spoken": ""
+   "spoken": "We take on e4."
   },
   {
    "ply": 28,
@@ -260,10 +233,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": "A textbook never-pre-move moment: the rook takes on c4 looks great, but calculate one move further — Black replies c5 and rips open a massive diagonal for the bishop, and White isn't better. Take the two seconds; the right move is the queen to d4.",
-   "kind": "main",
-   "teaches": "Never pre-move a natural recapture — check one move deeper for the opponent's resource.",
-   "plans": "Qxd4, not the hasty Rxc4."
+   "spoken": "Black recaptures with the d-pawn."
   },
   {
    "ply": 29,
@@ -272,21 +242,14 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": "The queen to d4 hits the enemy queen, and a trade there leaves Black's pawn structure in ruins. This is the typical way to convert: force the queens off into a position where the static weaknesses decide.",
-   "kind": "main",
-   "teaches": "Offer a queen trade that leaves the opponent with a wrecked structure.",
-   "plans": "Qxd4, trade into a better ending."
+   "spoken": "We grab on d4 with the queen, restoring material."
   },
   {
    "ply": 24,
    "t": 432.5,
    "fen": "r1bq1rk1/p5pp/2pbp3/3p4/3pnB2/3B1N2/PPP2PPP/R2QR1K1 w - - 0 13",
    "line": [],
-   "spoken": "The order mattered: taking on e4 first would have let Black grab the dark-squared bishop, so White captured on d6 first and only then won the pawn. Right result, right sequence.",
-   "kind": "review",
-   "teaches": "Sequence captures so the opponent never gets an in-between recapture of a valuable piece.",
-   "plans": "Bxd6 first, then collect.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -349,11 +312,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "And you actually want Black to push the pawn to c4 — the bishop just drops back to e2, and the central chain is no longer under any pressure at all. The advance releases the tension in White's favour.",
-   "kind": "review",
-   "teaches": "Welcome ...c4: it frees the bishop to retreat and de-stresses the centre.",
-   "plans": "Meet ...c4 with Be2.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -503,11 +462,7 @@
    "line": [
     "Bg3"
    ],
-   "spoken": "Objectively the knight to e4 was the inaccuracy — the quiet queen to c7 keeps equality — but even level, White's side is easier to play: healthy improving moves like queen to e2 and rook to d1, full compensation for the pawn, and Black clamped out. The e6-pawn stays a chronic weakness.",
-   "kind": "review",
-   "teaches": "Full compensation plus easy improving moves can make an equal position much easier to play.",
-   "plans": "Improve slowly, pressure e6.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 24,

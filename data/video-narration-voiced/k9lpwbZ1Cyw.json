@@ -1,10 +1,10 @@
 {
  "videoId": "k9lpwbZ1Cyw",
  "title": "Master Class | Sicilian, Rossolimo / Vienna | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Sicilian Defense: Rossolimo (3.Bb5) (Black)",
- "studentSide": "black",
+ "openingName": "Sicilian Defense: Rossolimo Variation",
+ "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:k9lpwbZ1Cyw",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Sicilian."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": ""
+   "spoken": "We play the bishop to b5 — the Rossolimo."
   },
   {
    "ply": 6,
@@ -51,10 +51,7 @@
    "line": [
     "a6"
    ],
-   "spoken": "The pawn to a6 questions the bishop at once. Unlike the Ruy Lopez there is no e5-pawn to defend, so the bishop has little reason to sit on b5 — it must either retreat or take.",
-   "kind": "main",
-   "teaches": "…a6 in the Rossolimo puts the question immediately — the bishop has no strong pawn target to justify staying.",
-   "plans": "Provoke the trade or the retreat, then develop."
+   "spoken": "Black chases with a6."
   },
   {
    "ply": 7,
@@ -63,7 +60,7 @@
    "line": [
     "Bxc6"
    ],
-   "spoken": ""
+   "spoken": "We take on c6."
   },
   {
    "ply": 8,
@@ -72,10 +69,7 @@
    "line": [
     "bxc6"
    ],
-   "spoken": "After the capture on c6 the recapture with the b-pawn does double the pawns — but Black gets the bishop pair and a strong central pawn mass. Structure isn't everything; the two bishops and the half-open b-file are real compensation.",
-   "kind": "main",
-   "teaches": "Doubled pawns are fine when you get the bishop pair and central control in return.",
-   "plans": "Open the position for the two bishops and press the b-file."
+   "spoken": "Black recaptures with the b-pawn."
   },
   {
    "ply": 2,
@@ -113,7 +107,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 10,
@@ -122,7 +116,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6."
   },
   {
    "ply": 11,
@@ -131,7 +125,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "We play h3."
   },
   {
    "ply": 12,
@@ -140,7 +134,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 13,
@@ -149,7 +143,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "We play the rook to e1."
   },
   {
    "ply": 15,
@@ -159,7 +153,7 @@
     "g6",
     "c3"
    ],
-   "spoken": ""
+   "spoken": "Black fianchettoes with ...g6; we play c3."
   },
   {
    "ply": 17,
@@ -169,7 +163,7 @@
     "Bg7",
     "d4"
    ],
-   "spoken": ""
+   "spoken": "Black completes the fianchetto; we strike with d4."
   },
   {
    "ply": 18,
@@ -178,7 +172,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 19,
@@ -187,7 +181,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": ""
+   "spoken": "We take on c5."
   },
   {
    "ply": 20,
@@ -196,7 +190,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the d-pawn."
   },
   {
    "ply": 22,
@@ -206,7 +200,7 @@
     "Qa4",
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "We play the queen to a4; Black plays ...Qb6."
   },
   {
    "ply": 23,
@@ -215,7 +209,7 @@
    "line": [
     "Na3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to a3."
   },
   {
    "ply": 24,
@@ -224,7 +218,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e6."
   },
   {
    "ply": 25,
@@ -233,7 +227,7 @@
    "line": [
     "Ng5"
    ],
-   "spoken": ""
+   "spoken": "We jump the knight to g5."
   },
   {
    "ply": 26,
@@ -242,7 +236,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...Nd7."
   },
   {
    "ply": 27,
@@ -251,7 +245,7 @@
    "line": [
     "Nxe6"
    ],
-   "spoken": ""
+   "spoken": "We take on e6."
   },
   {
    "ply": 28,
@@ -260,7 +254,7 @@
    "line": [
     "fxe6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the f-pawn."
   },
   {
    "ply": 29,
@@ -269,7 +263,7 @@
    "line": [
     "Qc4"
    ],
-   "spoken": ""
+   "spoken": "We play the queen to c4."
   },
   {
    "ply": 30,
@@ -278,7 +272,7 @@
    "line": [
     "Bf6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the bishop to f6."
   },
   {
    "ply": 31,
@@ -287,7 +281,7 @@
    "line": [
     "Qxe6+"
    ],
-   "spoken": ""
+   "spoken": "We grab on e6 with the queen, check."
   },
   {
    "ply": 32,
@@ -296,7 +290,7 @@
    "line": [
     "Kh8"
    ],
-   "spoken": ""
+   "spoken": "Black's king steps to h8."
   },
   {
    "ply": 33,
@@ -305,7 +299,7 @@
    "line": [
     "Qxd7"
    ],
-   "spoken": ""
+   "spoken": "We take on d7, winning the knight."
   },
   {
    "ply": 34,
@@ -314,7 +308,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "Black pushes c4."
   },
   {
    "ply": 35,
@@ -323,7 +317,7 @@
    "line": [
     "Nxc4"
    ],
-   "spoken": ""
+   "spoken": "We take on c4 with the knight."
   },
   {
    "ply": 36,
@@ -332,7 +326,7 @@
    "line": [
     "Qc5"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to c5."
   },
   {
    "ply": 37,
@@ -341,7 +335,7 @@
    "line": [
     "Qd3"
    ],
-   "spoken": ""
+   "spoken": "We play the queen to d3."
   },
   {
    "ply": 38,
@@ -350,7 +344,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "Black retreats the bishop to g7."
   },
   {
    "ply": 39,
@@ -359,7 +353,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to e3."
   },
   {
    "ply": 40,
@@ -368,7 +362,7 @@
    "line": [
     "Qb5"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to b5."
   },
   {
    "ply": 41,
@@ -377,7 +371,7 @@
    "line": [
     "a4"
    ],
-   "spoken": ""
+   "spoken": "We play a4."
   },
   {
    "ply": 42,
@@ -386,7 +380,7 @@
    "line": [
     "Qh5"
    ],
-   "spoken": ""
+   "spoken": "Black swings the queen to h5."
   },
   {
    "ply": 43,
@@ -395,7 +389,7 @@
    "line": [
     "Rad1"
    ],
-   "spoken": ""
+   "spoken": "We centralize the rook to d1."
   },
   {
    "ply": 44,
@@ -404,7 +398,7 @@
    "line": [
     "Bh6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the bishop to h6."
   },
   {
    "ply": 45,
@@ -413,7 +407,7 @@
    "line": [
     "Bxh6"
    ],
-   "spoken": ""
+   "spoken": "We take on h6."
   },
   {
    "ply": 46,
@@ -422,7 +416,7 @@
    "line": [
     "Qxh6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the queen."
   },
   {
    "ply": 47,
@@ -431,7 +425,7 @@
    "line": [
     "Qg3"
    ],
-   "spoken": ""
+   "spoken": "We swing the queen to g3."
   },
   {
    "ply": 48,
@@ -440,7 +434,7 @@
    "line": [
     "Rab8"
    ],
-   "spoken": ""
+   "spoken": "Black plays the rook to b8."
   },
   {
    "ply": 49,
@@ -449,7 +443,7 @@
    "line": [
     "Rd7"
    ],
-   "spoken": ""
+   "spoken": "We infiltrate with the rook to d7."
   },
   {
    "ply": 50,
@@ -458,7 +452,7 @@
    "line": [
     "Qg7"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to g7."
   },
   {
    "ply": 51,
@@ -467,7 +461,7 @@
    "line": [
     "Re3"
    ],
-   "spoken": ""
+   "spoken": "We lift the rook to e3."
   },
   {
    "ply": 52,
@@ -476,7 +470,7 @@
    "line": [
     "Rbe8"
    ],
-   "spoken": ""
+   "spoken": "Black doubles rooks with ...Rbe8."
   },
   {
    "ply": 53,
@@ -485,7 +479,7 @@
    "line": [
     "Rf3"
    ],
-   "spoken": ""
+   "spoken": "We swing the rook to f3."
   },
   {
    "ply": 54,
@@ -494,7 +488,7 @@
    "line": [
     "Rf7"
    ],
-   "spoken": ""
+   "spoken": "Black plays the rook to f7."
   },
   {
    "ply": 55,
@@ -503,7 +497,7 @@
    "line": [
     "Rxf7"
    ],
-   "spoken": ""
+   "spoken": "We take on f7 with the rook."
   },
   {
    "ply": 56,
@@ -512,7 +506,7 @@
    "line": [
     "Qxf7"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the queen."
   },
   {
    "ply": 57,
@@ -521,7 +515,7 @@
    "line": [
     "Nd6"
    ],
-   "spoken": ""
+   "spoken": "We plant the knight on d6."
   },
   {
    "ply": 58,
@@ -530,7 +524,7 @@
    "line": [
     "Qe6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to e6."
   },
   {
    "ply": 59,
@@ -539,7 +533,7 @@
    "line": [
     "Nxe8"
    ],
-   "spoken": ""
+   "spoken": "We take on e8, winning the rook."
   },
   {
    "ply": 61,
@@ -549,7 +543,7 @@
     "Qxd7",
     "Qe5+"
    ],
-   "spoken": ""
+   "spoken": "Black grabs on d7; we check with the queen on e5."
   },
   {
    "ply": 62,
@@ -558,7 +552,7 @@
    "line": [
     "Kg8"
    ],
-   "spoken": ""
+   "spoken": "Black's king steps to g8."
   },
   {
    "ply": 63,
@@ -567,7 +561,7 @@
    "line": [
     "Qg7#"
    ],
-   "spoken": ""
+   "spoken": "The queen delivers mate on g7."
   }
  ]
 }

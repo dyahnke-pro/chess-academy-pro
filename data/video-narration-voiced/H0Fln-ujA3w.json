@@ -2,9 +2,9 @@
  "videoId": "H0Fln-ujA3w",
  "title": "Scotch Game: Göring, Main Line | The Sensei Speedrun | GM Naroditsky",
  "openingName": "Scotch Game",
- "studentSide": "black",
+ "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:H0Fln-ujA3w",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take White; Black answers our king's pawn with ...e5."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
     "Nf3",
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3; Black defends with ...Nc6."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We strike with d4 — the Scotch."
   },
   {
    "ply": 6,
@@ -43,7 +43,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 7,
@@ -52,7 +52,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight."
   },
   {
    "ply": 8,
@@ -61,9 +61,7 @@
    "line": [
     "Bc5"
    ],
-   "spoken": "Bishop to c5 is the practical choice against the Scotch — it hits the knight on d4 and develops actively, dodging the heavy theory of ...Nf6.",
-   "kind": "main",
-   "teaches": "Pick an active, less-theoretical developing move to sidestep the opponent's preparation."
+   "spoken": "Black develops the bishop to c5 — the classical Scotch."
   },
   {
    "ply": 9,
@@ -72,7 +70,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to e3."
   },
   {
    "ply": 10,
@@ -81,9 +79,7 @@
    "line": [
     "Qf6"
    ],
-   "spoken": "Queen to f6 doubles the pressure on d4 and quietly parries the Nxc6-then-Bxc5 fork — active without exposing itself.",
-   "kind": "main",
-   "teaches": "Add a second attacker to a target while defusing the opponent's tactical trick."
+   "spoken": "Black plays ...Qf6, pressuring the knight."
   },
   {
    "ply": 11,
@@ -92,7 +88,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We support the knight with c3."
   },
   {
    "ply": 12,
@@ -101,7 +97,7 @@
    "line": [
     "Nge7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to e7."
   },
   {
    "ply": 13,
@@ -110,7 +106,7 @@
    "line": [
     "Nxc6"
    ],
-   "spoken": ""
+   "spoken": "We take on c6."
   },
   {
    "ply": 14,
@@ -119,9 +115,7 @@
    "line": [
     "Bxe3"
    ],
-   "spoken": "Taking on e3 first is the key in-between move — it wrecks White's structure and, after fxe3, uncorks a Qh4+ fork, so Black wins back the knight with a superior position.",
-   "kind": "main",
-   "teaches": "Insert an in-between capture that damages structure before you recapture."
+   "spoken": "Black takes our bishop, capturing on e3."
   },
   {
    "ply": 15,
@@ -130,7 +124,7 @@
    "line": [
     "fxe3"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the f-pawn, opening the f-file."
   },
   {
    "ply": 16,
@@ -139,7 +133,7 @@
    "line": [
     "dxc6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures the knight with the d-pawn."
   },
   {
    "ply": 17,
@@ -148,7 +142,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to d2."
   },
   {
    "ply": 18,
@@ -157,7 +151,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 19,
@@ -166,7 +160,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to e2."
   },
   {
    "ply": 20,
@@ -175,7 +169,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e6."
   },
   {
    "ply": 21,
@@ -184,7 +178,7 @@
    "line": [
     "Bf3"
    ],
-   "spoken": ""
+   "spoken": "We reroute the bishop to f3."
   },
   {
    "ply": 22,
@@ -193,7 +187,7 @@
    "line": [
     "Qg5"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to g5."
   },
   {
    "ply": 10,

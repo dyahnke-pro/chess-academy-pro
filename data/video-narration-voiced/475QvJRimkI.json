@@ -1,370 +1,361 @@
 {
- "videoId": "475QvJRimkI",
- "title": "Master Vs Master!! CM Joins the Analysis! | Caro Kann-Fantasy | The Sensei Speedrun | GM Naroditsky",
- "openingName": "Caro-Kann Defense: Fantasy Variation",
- "studentSide": "white",
- "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
- "source": "yt:475QvJRimkI",
- "moves": [
-  {
-   "ply": 2,
-   "t": 24,
-   "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "line": [
-    "e4",
-    "c6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 3,
-   "t": 34.5,
-   "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
-   "line": [
-    "d4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 37,
-   "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
-   "line": [
-    "d5",
-    "f3"
-   ],
-   "spoken": "The pawn to f3 is the Fantasy Variation — White keeps the big centre and plays for a rich, tactical middlegame rather than a theoretical duel.",
-   "kind": "main",
-   "teaches": "f3 defends the centre with a pawn and steers toward sharp, less-charted play."
-  },
-  {
-   "ply": 6,
-   "t": 38,
-   "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
-   "line": [
-    "dxe4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 40.5,
-   "fen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/8/PPP3PP/RNBQKBNR w KQkq - 0 5",
-   "line": [
-    "fxe4",
-    "e5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 9,
-   "t": 52,
-   "fen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/5N2/PPP3PP/RNBQKB1R b KQkq - 1 5",
-   "line": [
-    "Nf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 55.5,
-   "fen": "rn1qkbnr/pp3ppp/2p5/4p3/3PP1b1/5N2/PPP3PP/RNBQKB1R w KQkq - 2 6",
-   "line": [
-    "Bg4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 11,
-   "t": 129,
-   "fen": "rn1qkbnr/pp3ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R b KQkq - 3 6",
-   "line": [
-    "Bc4"
-   ],
-   "spoken": "The bishop to c4 trains on f7 and must stay on that diagonal — it is what keeps the pressure on f7 alive for the tactics to come.",
-   "kind": "main",
-   "teaches": "Keep the light-squared bishop on the a2-g8 diagonal; f7 is the target the whole attack leans on.",
-   "plans": "Castle, then build against f7."
-  },
-  {
-   "ply": 12,
-   "t": 131.5,
-   "fen": "r2qkbnr/pp1n1ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R w KQkq - 4 7",
-   "line": [
-    "Nd7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 140.5,
-   "fen": "r2qkbnr/pp1n1ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQ1RK1 b kq - 5 7",
-   "line": [
-    "O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 145.5,
-   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP1b1/5N2/PPP3PP/RNBQ1RK1 w kq - 6 8",
-   "line": [
-    "Ngf6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 167.5,
-   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP1b1/2P2N2/PP4PP/RNBQ1RK1 b kq - 0 8",
-   "line": [
-    "c3"
-   ],
-   "spoken": "The quiet pawn to c3 shores up d4, the pawn holding White's centre. If d4 ever falls, a black knight lands on the e5 outpost and White is in trouble, so the centre is secured first.",
-   "kind": "main",
-   "teaches": "Before attacking, defend the central pawn that keeps the enemy knight out of e5."
-  },
-  {
-   "ply": 16,
-   "t": 170,
-   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p2b/2BPP3/2P2N2/PP4PP/RNBQ1RK1 w kq - 1 9",
-   "line": [
-    "Bh5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 17,
-   "t": 226,
-   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p2b/2BPP3/2P2N2/PP4PP/RNB1QRK1 b kq - 2 9",
-   "line": [
-    "Qe1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 16,
-   "t": 289,
-   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p2b/2BPP3/2P2N2/PP4PP/RNBQ1RK1 w kq - 1 9",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 312.5,
-   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP1b1/5N2/PPP3PP/RNBQ1RK1 w kq - 6 8",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 313.5,
-   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP1b1/2P2N2/PP4PP/RNBQ1RK1 b kq - 0 8",
-   "line": [
-    "c3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 17,
-   "t": 327,
-   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p2b/2BPP3/2P2N2/PP4PP/RNB1QRK1 b kq - 2 9",
-   "line": [
-    "Bh5",
-    "Qe1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 341,
-   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP3/2P2b2/PP4PP/RNB1QRK1 w kq - 0 10",
-   "line": [
-    "Bxf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 19,
-   "t": 402.5,
-   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP3/2P2R2/PP4PP/RNB1Q1K1 b kq - 0 10",
-   "line": [
-    "Rxf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 20,
-   "t": 404,
-   "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p3/2BPP3/2P2R2/PP4PP/RNB1Q1K1 w kq - 1 11",
-   "line": [
-    "Bd6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 407.5,
-   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP3/2P2b2/PP4PP/RNB1QRK1 w kq - 0 10",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 20,
-   "t": 415,
-   "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p3/2BPP3/2P2R2/PP4PP/RNB1Q1K1 w kq - 1 11",
-   "line": [
-    "Rxf3",
-    "Bd6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 21,
-   "t": 508,
-   "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP4PP/RN2Q1K1 b kq - 2 11",
-   "line": [
-    "Bg5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 541.5,
-   "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP3/2P2b2/PP4PP/RNB1QRK1 w kq - 0 10",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 21,
-   "t": 555.5,
-   "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP4PP/RN2Q1K1 b kq - 0 11",
-   "line": [
-    "Bg5",
-    "Bd6",
-    "Rxf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 22,
-   "t": 629,
-   "fen": "r3k2r/ppqn1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP4PP/RN2Q1K1 w kq - 1 12",
-   "line": [
-    "Qc7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 23,
-   "t": 665.5,
-   "fen": "r3k2r/ppqn1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP1N2PP/R3Q1K1 b kq - 2 12",
-   "line": [
-    "Nd2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 24,
-   "t": 668.5,
-   "fen": "r3kr2/ppqn1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP1N2PP/R3Q1K1 w q - 3 13",
-   "line": [
-    "Rf8"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 25,
-   "t": 719.5,
-   "fen": "r3kr2/ppqn1ppp/2pb1n2/4p1B1/3PP3/2PB1R2/PP1N2PP/R3Q1K1 b q - 4 13",
-   "line": [
-    "Bd3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 26,
-   "t": 799,
-   "fen": "2kr1r2/ppqn1ppp/2pb1n2/4p1B1/3PP3/2PB1R2/PP1N2PP/R3Q1K1 w - - 5 14",
-   "line": [
-    "O-O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 27,
-   "t": 804,
-   "fen": "2kr1r2/ppqn1ppp/2pb1n2/4p1B1/2NPP3/2PB1R2/PP4PP/R3Q1K1 b - - 6 14",
-   "line": [
-    "Nc4"
-   ],
-   "spoken": "Rather than a caveman pawn storm, White improves the pieces: the knight to c4 eyes the bishop on d6 and the dark squares. Against opposite-side castling, a piece build-up is a valid, less committal plan.",
-   "kind": "main",
-   "teaches": "Opposite-side castling can be attacked with pieces, not only by hurling pawns."
-  },
-  {
-   "ply": 28,
-   "t": 831.5,
-   "fen": "2k1rr2/ppqn1ppp/2pb1n2/4p1B1/2NPP3/2PB1R2/PP4PP/R3Q1K1 w - - 7 15",
-   "line": [
-    "Rde8"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 29,
-   "t": 855.5,
-   "fen": "2k1rr2/ppqn1ppp/2pb1n2/4p1B1/2NPP3/2PB1RQ1/PP4PP/R5K1 b - - 8 15",
-   "line": [
-    "Qg3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 30,
-   "t": 957.5,
-   "fen": "2k1rrn1/ppqn1ppp/2pb4/4p1B1/2NPP3/2PB1RQ1/PP4PP/R5K1 w - - 9 16",
-   "line": [
-    "Ng8"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 31,
-   "t": 1002,
-   "fen": "2k1rrn1/ppqn1ppp/2pb4/4p3/2NPP3/2PBBRQ1/PP4PP/R5K1 b - - 10 16",
-   "line": [
-    "Be3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 32,
-   "t": 1021,
-   "fen": "2k1rrn1/ppqn1p1p/2pb2p1/4p3/2NPP3/2PBBRQ1/PP4PP/R5K1 w - - 0 17",
-   "line": [
-    "g6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 33,
-   "t": 1071.5,
-   "fen": "2k1rrn1/ppqn1p1p/2pb2p1/4p3/2NPP3/2PBBRQ1/PP4PP/5RK1 b - - 1 17",
-   "line": [
-    "Raf1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 34,
-   "t": 1074,
-   "fen": "2k1rrn1/ppqn3p/2pb1pp1/4p3/2NPP3/2PBBRQ1/PP4PP/5RK1 w - - 0 18",
-   "line": [
-    "f6"
-   ],
-   "spoken": ""
-  }
- ]
+  "videoId": "475QvJRimkI",
+  "title": "Master Vs Master!! CM Joins the Analysis! | Caro Kann-Fantasy | The Sensei Speedrun | GM Naroditsky",
+  "openingName": "Caro-Kann Defense: Fantasy Variation",
+  "studentSide": "white",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-25",
+  "source": "yt:475QvJRimkI",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 24,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "e4",
+        "c6"
+      ],
+      "spoken": "We take White and face the Caro-Kann."
+    },
+    {
+      "ply": 3,
+      "t": 34.5,
+      "fen": "rnbqkbnr/pp1ppppp/2p5/8/3PP3/8/PPP2PPP/RNBQKBNR b KQkq - 0 2",
+      "line": [
+        "d4"
+      ],
+      "spoken": "We build the centre with d4."
+    },
+    {
+      "ply": 5,
+      "t": 37,
+      "fen": "rnbqkbnr/pp2pppp/2p5/3p4/3PP3/5P2/PPP3PP/RNBQKBNR b KQkq - 0 3",
+      "line": [
+        "d5",
+        "f3"
+      ],
+      "spoken": "Black plays d5; we answer f3 — the Fantasy Variation."
+    },
+    {
+      "ply": 6,
+      "t": 38,
+      "fen": "rnbqkbnr/pp2pppp/2p5/8/3Pp3/5P2/PPP3PP/RNBQKBNR w KQkq - 0 4",
+      "line": [
+        "dxe4"
+      ],
+      "spoken": "Black takes on e4."
+    },
+    {
+      "ply": 8,
+      "t": 40.5,
+      "fen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/8/PPP3PP/RNBQKBNR w KQkq - 0 5",
+      "line": [
+        "fxe4",
+        "e5"
+      ],
+      "spoken": "We recapture on e4; Black strikes with the reputable ...e5."
+    },
+    {
+      "ply": 9,
+      "t": 52,
+      "fen": "rnbqkbnr/pp3ppp/2p5/4p3/3PP3/5N2/PPP3PP/RNBQKB1R b KQkq - 1 5",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "We must proceed with the knight to f3, since dxe5 runs into ...Qh4 check."
+    },
+    {
+      "ply": 10,
+      "t": 55.5,
+      "fen": "rn1qkbnr/pp3ppp/2p5/4p3/3PP1b1/5N2/PPP3PP/RNBQKB1R w KQkq - 2 6",
+      "line": [
+        "Bg4"
+      ],
+      "spoken": "Black develops the bishop to g4 — solid, the book recommendation."
+    },
+    {
+      "ply": 11,
+      "t": 129,
+      "fen": "rn1qkbnr/pp3ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R b KQkq - 3 6",
+      "line": [
+        "Bc4"
+      ],
+      "spoken": "We play the bishop to c4, the main move, threatening Bxf7 and Nxe5."
+    },
+    {
+      "ply": 12,
+      "t": 131.5,
+      "fen": "r2qkbnr/pp1n1ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQK2R w KQkq - 4 7",
+      "line": [
+        "Nd7"
+      ],
+      "spoken": "Black plays ...Nd7, covering the e5-square and the f7-sacrifice."
+    },
+    {
+      "ply": 13,
+      "t": 140.5,
+      "fen": "r2qkbnr/pp1n1ppp/2p5/4p3/2BPP1b1/5N2/PPP3PP/RNBQ1RK1 b kq - 5 7",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "We castle."
+    },
+    {
+      "ply": 14,
+      "t": 145.5,
+      "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP1b1/5N2/PPP3PP/RNBQ1RK1 w kq - 6 8",
+      "line": [
+        "Ngf6"
+      ],
+      "spoken": "Black develops the knight to f6."
+    },
+    {
+      "ply": 15,
+      "t": 167.5,
+      "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP1b1/2P2N2/PP4PP/RNBQ1RK1 b kq - 0 8",
+      "line": [
+        "c3"
+      ],
+      "spoken": "We support d4 with c3, since ...exd4 always looms."
+    },
+    {
+      "ply": 16,
+      "t": 170,
+      "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p2b/2BPP3/2P2N2/PP4PP/RNBQ1RK1 w kq - 1 9",
+      "line": [
+        "Bh5"
+      ],
+      "spoken": "Black retreats the bishop to h5."
+    },
+    {
+      "ply": 17,
+      "t": 226,
+      "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p2b/2BPP3/2P2N2/PP4PP/RNB1QRK1 b kq - 2 9",
+      "line": [
+        "Qe1"
+      ],
+      "spoken": "We play the flexible queen to e1 — unpinning the knight and taking the sting out of ...exd4."
+    },
+    {
+      "ply": 16,
+      "t": 289,
+      "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p2b/2BPP3/2P2N2/PP4PP/RNBQ1RK1 w kq - 1 9",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 14,
+      "t": 312.5,
+      "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP1b1/5N2/PPP3PP/RNBQ1RK1 w kq - 6 8",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 15,
+      "t": 313.5,
+      "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP1b1/2P2N2/PP4PP/RNBQ1RK1 b kq - 0 8",
+      "line": [
+        "c3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 17,
+      "t": 327,
+      "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p2b/2BPP3/2P2N2/PP4PP/RNB1QRK1 b kq - 2 9",
+      "line": [
+        "Bh5",
+        "Qe1"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 18,
+      "t": 341,
+      "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP3/2P2b2/PP4PP/RNB1QRK1 w kq - 0 10",
+      "line": [
+        "Bxf3"
+      ],
+      "spoken": "Black takes our knight, capturing on f3."
+    },
+    {
+      "ply": 19,
+      "t": 402.5,
+      "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP3/2P2R2/PP4PP/RNB1Q1K1 b kq - 0 10",
+      "line": [
+        "Rxf3"
+      ],
+      "spoken": "We recapture with the rook — solidifying e4 and eyeing the semi-open f-file."
+    },
+    {
+      "ply": 20,
+      "t": 404,
+      "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p3/2BPP3/2P2R2/PP4PP/RNB1Q1K1 w kq - 1 11",
+      "line": [
+        "Bd6"
+      ],
+      "spoken": "Black develops the bishop to d6."
+    },
+    {
+      "ply": 18,
+      "t": 407.5,
+      "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP3/2P2b2/PP4PP/RNB1QRK1 w kq - 0 10",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 20,
+      "t": 415,
+      "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p3/2BPP3/2P2R2/PP4PP/RNB1Q1K1 w kq - 1 11",
+      "line": [
+        "Rxf3",
+        "Bd6"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 21,
+      "t": 508,
+      "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP4PP/RN2Q1K1 b kq - 2 11",
+      "line": [
+        "Bg5"
+      ],
+      "spoken": "We pin the knight with the bishop to g5."
+    },
+    {
+      "ply": 18,
+      "t": 541.5,
+      "fen": "r2qkb1r/pp1n1ppp/2p2n2/4p3/2BPP3/2P2b2/PP4PP/RNB1QRK1 w kq - 0 10",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 21,
+      "t": 555.5,
+      "fen": "r2qk2r/pp1n1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP4PP/RN2Q1K1 b kq - 0 11",
+      "line": [
+        "Bg5",
+        "Bd6",
+        "Rxf3"
+      ],
+      "spoken": ""
+    },
+    {
+      "ply": 22,
+      "t": 629,
+      "fen": "r3k2r/ppqn1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP4PP/RN2Q1K1 w kq - 1 12",
+      "line": [
+        "Qc7"
+      ],
+      "spoken": "Black plays the queen to c7, eyeing queenside castling."
+    },
+    {
+      "ply": 23,
+      "t": 665.5,
+      "fen": "r3k2r/ppqn1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP1N2PP/R3Q1K1 b kq - 2 12",
+      "line": [
+        "Nd2"
+      ],
+      "spoken": "We develop the knight to d2, happy to sacrifice h2 for a monster centre."
+    },
+    {
+      "ply": 24,
+      "t": 668.5,
+      "fen": "r3kr2/ppqn1ppp/2pb1n2/4p1B1/2BPP3/2P2R2/PP1N2PP/R3Q1K1 w q - 3 13",
+      "line": [
+        "Rf8"
+      ],
+      "spoken": "Black plays the rook to f8, defending f7."
+    },
+    {
+      "ply": 25,
+      "t": 719.5,
+      "fen": "r3kr2/ppqn1ppp/2pb1n2/4p1B1/3PP3/2PB1R2/PP1N2PP/R3Q1K1 b q - 4 13",
+      "line": [
+        "Bd3"
+      ],
+      "spoken": "We reroute the bishop to d3 — now defending e4 and freeing the knight for c4."
+    },
+    {
+      "ply": 26,
+      "t": 799,
+      "fen": "2kr1r2/ppqn1ppp/2pb1n2/4p1B1/3PP3/2PB1R2/PP1N2PP/R3Q1K1 w - - 5 14",
+      "line": [
+        "O-O-O"
+      ],
+      "spoken": "Black castles queenside."
+    },
+    {
+      "ply": 27,
+      "t": 804,
+      "fen": "2kr1r2/ppqn1ppp/2pb1n2/4p1B1/2NPP3/2PB1R2/PP4PP/R3Q1K1 b - - 6 14",
+      "line": [
+        "Nc4"
+      ],
+      "spoken": "We bring the knight to c4, pressuring the bishop and e5."
+    },
+    {
+      "ply": 28,
+      "t": 831.5,
+      "fen": "2k1rr2/ppqn1ppp/2pb1n2/4p1B1/2NPP3/2PB1R2/PP4PP/R3Q1K1 w - - 7 15",
+      "line": [
+        "Rde8"
+      ],
+      "spoken": "Black plays the rook to e8."
+    },
+    {
+      "ply": 29,
+      "t": 855.5,
+      "fen": "2k1rr2/ppqn1ppp/2pb1n2/4p1B1/2NPP3/2PB1RQ1/PP4PP/R5K1 b - - 8 15",
+      "line": [
+        "Qg3"
+      ],
+      "spoken": "We play the queen to g3 — a fine square that now prevents ...exd4, since Nxd6 would win the bishop with check."
+    },
+    {
+      "ply": 30,
+      "t": 957.5,
+      "fen": "2k1rrn1/ppqn1ppp/2pb4/4p1B1/2NPP3/2PB1RQ1/PP4PP/R5K1 w - - 9 16",
+      "line": [
+        "Ng8"
+      ],
+      "spoken": "Black retreats the knight to g8."
+    },
+    {
+      "ply": 31,
+      "t": 1002,
+      "fen": "2k1rrn1/ppqn1ppp/2pb4/4p3/2NPP3/2PBBRQ1/PP4PP/R5K1 b - - 10 16",
+      "line": [
+        "Be3"
+      ],
+      "spoken": "We drop the bishop back to e3 — solidifying the centre and hitting g7."
+    },
+    {
+      "ply": 32,
+      "t": 1021,
+      "fen": "2k1rrn1/ppqn1p1p/2pb2p1/4p3/2NPP3/2PBBRQ1/PP4PP/R5K1 w - - 0 17",
+      "line": [
+        "g6"
+      ],
+      "spoken": "Black plays g6 — a significant weakening."
+    },
+    {
+      "ply": 33,
+      "t": 1071.5,
+      "fen": "2k1rrn1/ppqn1p1p/2pb2p1/4p3/2NPP3/2PBBRQ1/PP4PP/5RK1 b - - 1 17",
+      "line": [
+        "Raf1"
+      ],
+      "spoken": "We double rooks with the rook to f1."
+    },
+    {
+      "ply": 34,
+      "t": 1074,
+      "fen": "2k1rrn1/ppqn3p/2pb1pp1/4p3/2NPP3/2PBBRQ1/PP4PP/5RK1 w - - 0 18",
+      "line": [
+        "f6"
+      ],
+      "spoken": "Black plays f6."
+    }
+  ]
 }

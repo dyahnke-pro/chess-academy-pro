@@ -156,7 +156,6 @@ import { parseCoachMoveCommand } from '../../services/coachMoveCommand';
 import { sanToSpeech } from '../../utils/sanToSpeech';
 import { teachingSourceForBoard, teachingFactLine, generalizedTeaching, noteCoverageForLine, spokenBeatText, notesForOpening, noteSpeaksOnlyPiecesOnBoard } from '../../services/danyaTeachingService';
 import { secondarySupportNotes } from '../../services/secondaryCorpora';
-import { bakedTeachingForPly, bakedSpineNextMove } from '../../services/bakedWalkthroughNarration';
 import { framedOpponentPlan } from '../../services/opponentVoice';
 import { noteStaysInScope, noteSuitsStudentSide, noteAdvisesSide } from '../../services/noteAnchorIntegrity';
 
@@ -1632,9 +1631,6 @@ export function CoachTeachPage(): JSX.Element {
   const spokenThreatLinesRef = useRef<Set<string>>(new Set());
   /** Every tactic sentence already spoken this game — see the guard below. */
   const spokenTacticLinesRef = useRef<Set<string>>(new Set());
-  /** Baked opening plies already taught this game — the bake is one idea per
-   *  move, so a repeat means the same move was re-narrated. */
-  const bakedPlySeenRef = useRef<Set<number>>(new Set());
   // Which teaching tier taught the ply just narrated — read by the turnFacts
   // audit so a run reports its tier MIX instead of having it grepped out of the
   // transcript afterwards. `position` is a note authored AT this board;
@@ -5969,23 +5965,10 @@ export function CoachTeachPage(): JSX.Element {
       walkthrough.tree?.openingName ??
       useCoachMemoryStore.getState().intendedOpening?.name ??
       null;
-    // 1a) THE LINE WE HAVE TEACHING FOR, when the student asked for it and the
-    //     game is still on it. The book and the bake are two different
-    //     continuations of the same opening: asked for the Latvian, the book
-    //     answered Nxe5 while the authored spine runs Bc4, so the game left
-    //     the taught line at move three and 10 of its 14 plies of reviewed
-    //     prose were unreachable in the game the student asked for. Same
-    //     provenance rules — the bake is DB-derived and gated before it ships
-    //     — so preferring it costs nothing and buys the whole opening.
-    if (openingName) {
-      try {
-        const next = bakedSpineNextMove(openingName, fen);
-        if (next) {
-          const probe = new Chess(fen);
-          if (probe.move(next)) return next;
-        }
-      } catch { /* fall through to the book */ }
-    }
+    // 1a) THE BOOK CONTINUATION of the opening the student chose. (The old
+    //     authored-spine bake, `bakedSpineNextMove`, is gone with the generic
+    //     bake — David 2026-08-24. The book line below is the DB-derived
+    //     continuation the coach replies with while the student is on the line.)
     if (openingName) {
       try {
         const bookMoves = getOpeningMoves(openingName);
@@ -6214,10 +6197,6 @@ export function CoachTeachPage(): JSX.Element {
     let announceLine: string | null = null;
     let noteLine: string | null = null;
     let gemLine: string | null = null;
-    // Which ply of the bake spoke, so an audit can prove the opening was taught
-    // move by move from the app's own event rather than by pattern-matching the
-    // prose back out of the spoken line.
-    let bakedPly: number | null = null;
     teachingTierRef.current = 'none';
     // THE COACH IS THE OPPONENT ON THIS PATH. This builder runs once per coach
     // REPLY in a live game — it is handed the move the coach just played and
@@ -6496,59 +6475,15 @@ export function CoachTeachPage(): JSX.Element {
       }
     } catch { /* gems are a bonus, never a blocker */ }
 
-    // ── TIER 1: THE BAKE — authored for THIS ply, reviewed before it shipped.
-    //
-    // 220 plies of opening prose sit in `walkthrough-narrations.json`, one idea
-    // for EVERY move of 23 openings. A live game could not reach any of it:
-    // `bakedNarrationFor` asks "is this whole line baked", which is a lesson's
-    // question, and a game three moves in can never answer yes.
-    //
-    // It runs FIRST, above the corpus, because the tier doctrine says so
-    // outright: a baked ply takes no runtime note splice. Both sources can be
-    // true of the board; only one of them was read by a human before it
-    // shipped, and only one was written about the move actually on the screen.
-    // A farmed note that merely transposes into this FEN is the weaker claim.
-    let bakedLine: string | null = null;
-    try {
-      // The opening the student ASKED for beats the one the detector has got
-      // to so far. "Play the Latvian against me" names the line before a
-      // single move is on the board; detection cannot name it until f5, which
-      // is three plies of teaching too late.
-      const wanted = useCoachMemoryStore.getState().intendedOpening?.name
-        ?? announcedOpeningNameRef.current;
-      // TWO plies happened this turn — yours and mine — and this runs once,
-      // after the reply. So the only ply ever asked about was the coach's, and
-      // when the coach stepped off the line the student's own move went
-      // untaught even though it was still on it. The audit watched f5 go by in
-      // silence: the move that IS the Latvian, on the line, with authored
-      // prose about it sitting on disk. Ask about the reply first, then about
-      // the move the student actually made.
-      const unspoken = (h: string[]) => {
-        // THE SIDE GOES WITH IT. A bake records whose teaching it is; without
-        // this the coach reads White's first-person plan to a Black student.
-        const hit = bakedTeachingForPly(wanted, h, args.studentColor);
-        return hit && !bakedPlySeenRef.current.has(hit.ply) ? hit : null;
-      };
-      const baked = unspoken(history)
-        ?? (history.length > 1 ? unspoken(history.slice(0, -1)) : null);
-      if (baked) {
-        bakedPlySeenRef.current.add(baked.ply);
-        bakedLine = baked.text;
-        bakedPly = baked.ply;
-        teachingTierRef.current = 'baked';
-        factLines.push(`Opening teaching (${baked.openingName}, move ${baked.ply}): ${baked.text}`);
-        const seg = groundedSegmentArrows(baked.text, '', { from: args.moveFrom, to: args.moveTo, fen: args.fenAfterReply });
-        for (const a of (seg.arrows ?? [])) {
-          if (a.color === 'green') leadEyeArrows.push({ startSquare: a.from, endSquare: a.to, color: 'green' });
-        }
-      }
-    } catch { /* the bake is a bonus, never a blocker */ }
+    // ── TIER 1 REMOVED — the generic offline bake (walkthrough-narrations.json)
+    // is gone (David 2026-08-24). A generic line pinned to a position is a false
+    // claim, never a real tier. Tier 1 is now THE CORPUS — the video-distilled,
+    // position-keyed, board-true notes below (`noteArrowSourceAt`), which now
+    // lead in free play instead of being suppressed by the bake.
 
     // ── THE TAUGHT NOTE + its lead-the-eye arrows ──────────────────────────
     try {
-      const noteText = bakedLine
-        ? null
-        : noteArrowSourceAt(history, args.fenAfterReply, teachNoteSeenIdsRef.current);
+      const noteText = noteArrowSourceAt(history, args.fenAfterReply, teachNoteSeenIdsRef.current);
       if (noteText) {
         factLines.push(`Coaching note taught at THIS position: ${noteText}`);
         noteLine = noteText;
@@ -6708,11 +6643,11 @@ export function CoachTeachPage(): JSX.Element {
     // is the standard a farmed note only reaches once baked.
     let curatedLine: string | null = null;
     try {
-      // Both this and the bake are verified-before-ship, so whichever fires is
-      // the right thing to say — but saying both stacks two full teaching
-      // paragraphs onto one move, which is the wordiness David has already
-      // called out twice. One per ply.
-      const beat = bakedLine
+      // TIER 2 — the hand-written masterclass beat. It fires only when the
+      // corpus (Tier 1) is silent here: saying both stacks two full teaching
+      // paragraphs onto one move (the wordiness David called out), so the
+      // corpus leads and the masterclass beat fills where the corpus can't.
+      const beat = noteLine
         ? null
         : curatedBeatAt(history, args.fenAfterReply, curatedBeatSeenRef.current, announcedOpeningNameRef.current);
       if (beat) {
@@ -6931,7 +6866,7 @@ export function CoachTeachPage(): JSX.Element {
     // belongs to the PROSE, not to the tier it came from. Student moves green,
     // the opponent's blue, so whose move is whose needs no narration.
     try {
-      const recited = bakedLine ?? curatedLine ?? noteLine ?? teachingLine;
+      const recited = noteLine ?? curatedLine ?? teachingLine;
       if (recited) {
         for (const a of moveOrderArrows(recited, args.fenAfterReply)) {
           leadEyeArrows.push({
@@ -6955,7 +6890,7 @@ export function CoachTeachPage(): JSX.Element {
     // behaviour and the positional filler. The URGENT interrupts (gem / tactic /
     // threat) and the opening naming still ride — those are the ~10% the corpus
     // doctrine keeps alongside the note, not the wordy lanes he flagged.
-    const noteHere = !!(curatedLine || noteLine || bakedLine);
+    const noteHere = !!(curatedLine || noteLine);
     const softStandDown = NARRATE_DNA_ONLY && noteHere;
     const instantFull = buildVoicePackage([
       ...(gemLine ? [{ kind: 'gem' as const, text: gemLine, fen: args.fenAfterReply }] : []),
@@ -6967,14 +6902,16 @@ export function CoachTeachPage(): JSX.Element {
       // computed lanes and above the positional observation filler. Stands down
       // behind a note (softStandDown).
       ...(behaviorLine && !softStandDown ? [{ kind: 'computed' as const, text: behaviorLine, fen: args.fenAfterReply, squares: behaviorSquares.filter((s) => /^[a-h][1-8]$/.test(s)) }] : []),
-      // The masterclass beat first among the teaching lanes — it is the only
-      // one verified before it shipped.
-      ...(curatedLine ? [{ kind: 'note' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
+      // TIER 1 — the corpus (video-distilled, position-keyed, board-true) leads
+      // the teaching lanes. It is the coach's DNA voice on this exact board, and
+      // David's tier restructure (2026-08-24) makes it primary: "Tier 1 needs to
+      // be the baked narrations we just made from the video. The corpus."
       ...(noteLine ? [{ kind: 'note' as const, text: noteLine, fen: args.fenAfterReply }] : []),
-      // Authored for this exact ply and verified before it shipped. It runs
-      // ahead of both lanes above at SELECTION, so reaching here at all means
-      // they were empty.
-      ...(bakedLine ? [{ kind: 'note' as const, text: bakedLine, fen: args.fenAfterReply }] : []),
+      // TIER 2 — the hand-written masterclass beat, verified before it shipped
+      // (narrationAccuracy, lessonIntegrity). It is selected only when the corpus
+      // is silent here (see `curatedBeatAt` gated on `noteLine`), so reaching
+      // this entry means Tier 1 had nothing at this position.
+      ...(curatedLine ? [{ kind: 'note' as const, text: curatedLine, fen: args.fenAfterReply }] : []),
       // Corpus teaching reached by structure/concept transfer — BORROWED, and
       // now ranked as such. It used to ship at the same `note` rank as the
       // exact-position tier on the grounds that both are the corpus speaking.
@@ -7007,16 +6944,6 @@ export function CoachTeachPage(): JSX.Element {
     const pkg = (NARRATE_DNA_ONLY && instantDna.length < instantFull.kept.length)
       ? buildVoicePackage(instantDna.map((f) => ({ kind: f.kind, text: f.text, squares: f.squares, fen: args.fenAfterReply })))
       : instantFull;
-
-    if (bakedPly !== null) {
-      void logAppAudit({
-        kind: 'coach-narration-spoken',
-        category: 'narration',
-        source: 'CoachTeachPage.bakedOpeningTeaching',
-        summary: `opening teaching, move ${bakedPly}: ${(bakedLine ?? '').slice(0, 80)}`,
-        fen: args.fenAfterReply,
-      });
-    }
 
     // ── LEAD THE EYE ON THE COMPUTED LANES ─────────────────────────────────
     // David 2026-08-10, after a live run in which the coach named d6, b5, c6
@@ -8154,7 +8081,6 @@ export function CoachTeachPage(): JSX.Element {
                       lastThreatRef.current = '';
                       spokenTacticLinesRef.current.clear();
                       spokenThreatLinesRef.current.clear();
-                      bakedPlySeenRef.current.clear();
                       forkTalkCountRef.current = 0;
                       pendingForkRef.current = null;
                       rejectedTemptingCountRef.current = 0;

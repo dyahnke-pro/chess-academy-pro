@@ -1,10 +1,10 @@
 {
  "videoId": "o29kg7LLAVg",
  "title": "The Alapin (C3) Sicilian Defense | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Sicilian Defense: Alapin Variation (2.c3)",
+ "openingName": "Sicilian Defense: Alapin Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:o29kg7LLAVg",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Sicilian."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We play c3 — the Alapin."
   },
   {
    "ply": 4,
@@ -33,10 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "The principled reply is the pawn to d5, striking the centre at once — one of the two main lines, and the move that keeps Black fully in the game.",
-   "kind": "main",
-   "teaches": "Meet the Alapin with the central break d5 before White completes the big centre.",
-   "plans": "Trade in the centre and develop the queen actively."
+   "spoken": "Black challenges with d5."
   },
   {
    "ply": 5,
@@ -45,7 +42,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "We take on d5 — Black's ...d5 is one of the two main lines."
   },
   {
    "ply": 6,
@@ -54,10 +51,7 @@
    "line": [
     "Qxd5"
    ],
-   "spoken": "The queen recaptures on d5 — centralised, but exposed. That early queen is the target White will develop against, gaining time with each piece that comes out.",
-   "kind": "main",
-   "teaches": "An early recapturing queen is active but vulnerable — its exposure hands the other side tempi.",
-   "plans": "Chase it with natural developing moves."
+   "spoken": "Black recaptures with the queen."
   },
   {
    "ply": 7,
@@ -66,10 +60,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "White answers with the pawn to d4 — the standard Alapin tabiya. From here Black chooses between the knights to c6 or f6, and the c-pawn tension defines the middlegame.",
-   "kind": "main",
-   "teaches": "The exd5 Qxd5 d4 structure is the Alapin main battleground — small centre versus the c-pawn tension.",
-   "plans": "Develop with tempo and keep the tension."
+   "spoken": "We play d4. Now Black usually chooses ...Nf6 or ...Nc6."
   },
   {
    "ply": 8,
@@ -78,10 +69,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "With the knight on c6 the tension between the c5- and c3-pawns sits unresolved — and usually Black should not release it, since capturing on d4 would open the c3-square for White's knight.",
-   "kind": "main",
-   "teaches": "Holding pawn tension is often better than releasing it into your opponent's development.",
-   "plans": "Keep the tension; develop and pressure the queen."
+   "spoken": "Black develops the knight to c6. There's tension between the c5- and c3-pawns, and it's usually bad for Black to grab on d4 early, since it opens the c3-square for our knight."
   },
   {
    "ply": 9,
@@ -90,7 +78,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3. Black has many tries — ...Bg4, ...Nf6, ...e6 — but under 2000 few know the theory, and that queen on d5 is double-edged: it commands squares but is horribly exposed, especially once we hit it with a bishop to c4."
   },
   {
    "ply": 10,
@@ -99,7 +87,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Black pins with the bishop to g4. The obvious bishop to b2 is fine, but there's a sharper try if Black doesn't know the theory."
   },
   {
    "ply": 11,
@@ -108,10 +96,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": "The knight to d2 accepts that Black may take on f3 and damage the structure — but the plan comes first: reroute the knights and hit the exposed queen. The structural cost is worth the initiative.",
-   "kind": "main",
-   "teaches": "Sometimes a slight structural concession is the price of a faster, more active plan.",
-   "plans": "Follow with the bishop to c4, gaining time on the queen."
+   "spoken": "The dangerous move: the knight to d2. It reinforces the f3-knight — guarding against ...Bxf3 wrecking our pawns — but it breaks the queen's defence of d4, so ...cxd4 wins a pawn. We sacrifice it for rapid development: after ...cxd4 our plan against almost anything is the bishop to c4, developing with tempo on the queen, then the queen to b3, hitting b7 and f7. It does block our c1-bishop — a real drawback — but we prioritise the other pieces."
   },
   {
    "ply": 12,
@@ -120,7 +105,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6 — which doesn't change our plan."
   },
   {
    "ply": 13,
@@ -129,10 +114,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The bishop to c4 strikes the queen, gaining a tempo and driving Black to react while White completes development and keeps the initiative.",
-   "kind": "main",
-   "teaches": "Develop with tempo against a centralised queen — every gained move compounds.",
-   "plans": "Chase the queen, castle, and press."
+   "spoken": "We develop the bishop to c4, hitting the queen and following the plan."
   },
   {
    "ply": 14,
@@ -141,7 +123,8 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": ""
+   "spoken": "Black takes on f3, the critical moment. Recapturing with the queen invites a trade that neutralises our initiative — not what we want. The strong move is the queen to b3, ignoring the bishop entirely: crucially Black's queen has no escape with check, since a4, b5 and e6 are all covered. We threaten f7 with check and, keeping queens on, our initiative is huge because Black's king is miles from safety. Black's best defence is the knight to a5; against it prefer the check on b5 to a4, and after Black blocks we simply take the bishop with the knight, still better.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -221,7 +204,8 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "A defensive lesson Black missed: from a young age you're taught never to give up your queen, and players develop an irrational fear of it — going blind to strong moves that sacrifice the queen for large material. Here the resource was ...Bxg2, offering the queen; don't rush to grab the rook. Always at least consider a queen sacrifice for enough material rather than dismissing it out of hand.",
+   "reanchor": true
   }
  ]
 }

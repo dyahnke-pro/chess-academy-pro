@@ -1,10 +1,10 @@
 {
  "videoId": "8QxDmN_BMaU",
  "title": "Beginner To Master | Chess Speedrun | King's Gambit | Grandmaster Naroditsky",
- "openingName": "King’s Gambit",
+ "openingName": "King's Gambit",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:8QxDmN_BMaU",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We open the King's Gambit — a romantic opening as old as European chess itself, dating to the 16th century."
   },
   {
    "ply": 3,
@@ -24,9 +24,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "The King's Gambit — f4 offers a pawn to blast open the f-file and seize the center, the oldest romantic attacking try in chess.",
-   "kind": "main",
-   "teaches": "Gambit a wing pawn to open lines and build a big center for a direct attack."
+   "spoken": "We play f4, offering the gambit pawn."
   },
   {
    "ply": 2,
@@ -104,7 +102,8 @@
    "t": 1389,
    "fen": "rnbqkbnr/pppp1ppp/8/4p3/4PP2/8/PPPP2PP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "A word on f4: it isn't an intuitive move — it actually weakens White's own king, and it took real daring for the old masters to play it. Importantly, the King's Gambit has never been refuted: Black isn't winning and holds no large advantage. But Black does have several ways to reach a comfortable game and defuse White's attack, which is why the opening gradually fell out of fashion.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -115,7 +114,8 @@
     "Nf3",
     "exf4"
    ],
-   "spoken": ""
+   "spoken": "Declining with ...d6 is passive; more critically Black takes on f4, and White answers with d4.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -125,9 +125,8 @@
     "d4",
     "g5"
    ],
-   "spoken": "In the classical King's Gambit Black clings to the extra pawn with g5, propping up a pawn chain — but that chain is loose, and White strikes it with h4.",
-   "kind": "main",
-   "teaches": "When the opponent over-defends a gambit pawn on the wing, undermine the chain that supports it."
+   "spoken": "Black holds the extra pawn with ...g5 — otherwise the gambit makes no sense — and here h4 is the main line, the bishop to c4 a rarer try.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -136,9 +135,7 @@
    "line": [
     "h4"
    ],
-   "spoken": "h4 hits the g5-pawn at once, prying open the h-file and refusing to let Black consolidate the extra pawn — the sharp, sacrificial soul of the opening.",
-   "kind": "main",
-   "teaches": "In sharp gambits, keep hitting the opponent's defensive pawns before they finish developing."
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -148,7 +145,8 @@
     "g4",
     "Ng5"
    ],
-   "spoken": ""
+   "spoken": "After h4 ...g4, the flashy knight to g5 is interesting but probably unsound — the real move is the knight back to g1: you've softened f4 enough that undeveloping is justified. And against ...g4 the thematic idea is to sacrifice the knight and castle — a Muzio Gambit in spirit, sound because of White's huge lead in development and Black's exposed king.",
+   "reanchor": true
   }
  ]
 }

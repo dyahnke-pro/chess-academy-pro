@@ -1,10 +1,10 @@
 {
  "videoId": "nSASokndzVQ",
  "title": "Mastering Alapin Sicilian Defense | Learn from GM Naroditsky's Theory Speed Run",
- "openingName": "Sicilian Defense: Alapin, 2…d5 3.exd5 Nf6, 4.Bb5+ (White)",
+ "openingName": "Sicilian Defense: Alapin Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:nSASokndzVQ",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We get White again against a strong opponent, and another Sicilian — c5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We play the Alapin, c3."
   },
   {
    "ply": 4,
@@ -33,7 +33,8 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black challenges with d5.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -42,7 +43,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "We capture on d5."
   },
   {
    "ply": 6,
@@ -51,7 +52,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black plays a knight to f6 — the line I recommend for Black, actually. The point is to recapture with the knight; and c4 is no solution, because Black answers e6, and after the trade gets a monopoly over the central squares and full compensation for the pawn."
   },
   {
    "ply": 7,
@@ -60,10 +61,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "The bishop check on b5 poses real problems at first — it forces a piece to appear on d7 and, in doing so, cuts the contact between Black's queen and the d5-pawn.",
-   "kind": "main",
-   "teaches": "A well-timed b5 check can sever the defence of a pawn by forcing an awkward block.",
-   "plans": "Exploit the loosened d5-pawn."
+   "spoken": "So we start with a bishop check on b5 — a natural move that poses real problems and tests our opponent."
   },
   {
    "ply": 8,
@@ -72,14 +70,16 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": ""
+   "spoken": "Black plays a knight to d7 — the correct reply.",
+   "reanchor": true
   },
   {
    "ply": 7,
    "t": 151,
    "fen": "rnbqkb1r/pp2pppp/5n2/1BpP4/8/2P5/PP1P1PPP/RNBQK1NR b KQkq - 2 4",
    "line": [],
-   "spoken": ""
+   "spoken": "The check forces a piece to d7, severing the contact between Black's queen and the d5 pawn.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -88,10 +88,8 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": "The knight to d7 is Black's correct reply — but note the point: it has severed the queen's link to the d5-pawn, and now White can build with the centre rather than grabbing prematurely.",
-   "kind": "main",
-   "teaches": "Force the defender to block on d7, then develop against the weakened pawn.",
-   "plans": "Take the centre with d4 before opening lines."
+   "spoken": "Now that the knight sits awkwardly on d7 and Black's bishop is boxed in, this is when we open the center — not with the theoretical c4, which Black meets with a6 and b5.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -100,17 +98,15 @@
    "line": [
     "d4"
    ],
-   "spoken": "Rather than the loosening queen sortie to f3 — which Black meets with a6 — the sound choice is the pawn to d4, taking the centre and keeping every option open.",
-   "kind": "main",
-   "teaches": "Prefer a solid central move to a committal queen raid that invites a6 with tempo.",
-   "plans": "Build the centre, then decide on c4 once lines open."
+   "spoken": "We strike with d4. If a knight capture on d5, we take on c5 with a discovered attack, since the pawn can't be recaptured — the knight is pinned. If Black captures on d4, we recapture with the queen, shielded by the d5 pawn like an umbrella, and unless Black is precise he ends up a pawn down for nothing."
   },
   {
    "ply": 6,
    "t": 277.5,
    "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 1 4",
    "line": [],
-   "spoken": ""
+   "spoken": "Once the center is opened, c4 has no downside — whereas playing c4 with the pawn still on d2 makes it backward and hands Black the d4 outpost.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -130,7 +126,7 @@
    "line": [
     "a6"
    ],
-   "spoken": ""
+   "spoken": "Black plays a6. A bishop to a4 would be too stubborn, enabling b5 and gifting Black the fianchetto square — the point is to use the pawn as a bargaining chip for a development lead, not to cling to it."
   },
   {
    "ply": 11,
@@ -139,7 +135,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "So we drop the bishop back to e2 — not d3, which would sever the queen's contact with the d5 pawn. It's the same idea as the Portuguese Scandinavian: check on b5, then retreat all the way to e2."
   },
   {
    "ply": 10,
@@ -156,7 +152,8 @@
     "Be2",
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "A bishop to d3 would let Black capture on d4 into an IQP where the knight already blockades — instead we drop to e2 and keep developing.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -182,7 +179,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "I like the look of c4, driving the pawn to d5 Benoni-style — this is our only chance to play c4 and d5."
   },
   {
    "ply": 14,
@@ -191,7 +188,8 @@
    "line": [
     "N5f6"
    ],
-   "spoken": ""
+   "spoken": "Black retreats the knight to f6.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -200,7 +198,8 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "We push d5. It works because Black's pawn isn't on e6 yet — otherwise, after a trade, our d5 pawn would be a sitting duck. If Black plays e6, we take on e6 and ruin his structure.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -209,7 +208,8 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "Black plays g6, treating it like a Benoni. We just develop.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -218,7 +218,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We've made enough pawn moves to last a lifetime — a knight to c3.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -228,7 +229,8 @@
     "Bg7",
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The other knight comes to f3, and we get the king out of the center.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -237,7 +239,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle. We could throw in h3 to cover g4, but I'm not worried about a knight to g4 — and a4 also merits attention, to prevent a Benko-style b5.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -246,7 +249,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black is worse — we have a space advantage and a nice central pawn wedge. a4 was worth considering to stop b5, though it slightly weakens b4, a square Black can't easily reach.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -255,7 +259,8 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "Our opponent plays b5 — impressive, since it needs Benko-Gambit understanding, though I'm skeptical of its soundness.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -264,7 +269,8 @@
    "line": [
     "cxb5"
    ],
-   "spoken": ""
+   "spoken": "We call the bluff and capture on b5 — otherwise we let the pawn reach b4 or let Black take on c4.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -273,7 +279,8 @@
    "line": [
     "axb5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures on b5.",
+   "reanchor": true
   },
   {
    "ply": 25,
@@ -282,7 +289,8 @@
    "line": [
     "Bxb5"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the bishop on b5 — a knight recapture is awkward, opening Black's bishop and taking our eyes off d5. The bishop keeps the knight on its natural square and can later dive to c6. This is a Benko structure, but a seriously inferior one for Black: we've already castled, our knights are out, and Black's d7 knight is passive with a weak c5 pawn.",
+   "reanchor": true
   },
   {
    "ply": 26,
@@ -291,7 +299,8 @@
    "line": [
     "Bb7"
    ],
-   "spoken": ""
+   "spoken": "Black plays a bishop to b7, wanting a knight to b6 to gang up on d5. A bishop to c6 tempts but runs into a queen to b6, hitting it two ways and landing the queen on its ideal Benko square — so instead a bishop to e3 or f4 to meet a knight to b6 with d6.",
+   "reanchor": true
   },
   {
    "ply": 27,
@@ -300,7 +309,8 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "A bishop to e3, tying Black to the c5 pawn — if a knight to b6, we take on c5 with connected passed pawns, a huge asset if the queens come off.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -318,7 +328,8 @@
    "line": [
     "Bxc5"
    ],
-   "spoken": ""
+   "spoken": "We take on c5.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -334,7 +345,8 @@
    "t": 831.5,
    "fen": "r2q1rk1/1b2ppbp/1n3np1/1BpP4/8/2N1BN2/PP3PPP/R2Q1RK1 w - - 3 15",
    "line": [],
-   "spoken": ""
+   "spoken": "Maybe a bishop to c6 was possible here — we'll explore that after.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -378,7 +390,8 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "A knight capture on d5 — from a bird's-eye view we want to trade pieces, because with connected passers any endgame should be winning.",
+   "reanchor": true
   },
   {
    "ply": 33,
@@ -387,7 +400,8 @@
    "line": [
     "Bd4"
    ],
-   "spoken": ""
+   "spoken": "A bishop to d4 poses an ultimatum: give up your g7 bishop or retreat the knight passively. I looked at a knight to f4 because Black's b7 bishop is intimidating, but here we take on g7, force the queens off, and trust the extra pawn in the endgame.",
+   "reanchor": true
   },
   {
    "ply": 34,
@@ -396,7 +410,8 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "Black plays e5 — a stunning move not on my radar. A bishop recapture on e5 is obvious, then a knight recapture, and a queen to g5 with pressure on g2 — but we have the ingenious bishop to c6 to force that bishop off the board.",
+   "reanchor": true
   },
   {
    "ply": 35,
@@ -405,7 +420,8 @@
    "line": [
     "Bxe5"
    ],
-   "spoken": ""
+   "spoken": "We recapture on e5 with the bishop — a knight recapture I like less, because a knight to f4 tangles our pieces.",
+   "reanchor": true
   },
   {
    "ply": 34,
@@ -422,7 +438,8 @@
     "Bxe5",
     "Bxe5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures on e5.",
+   "reanchor": true
   },
   {
    "ply": 34,
@@ -448,7 +465,8 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "We recapture on e5 with the knight. I've checked for a fork on our two undefended pieces, but the queen can't hit both. Against a queen to g5, the danger is pressure on g2 and the attack on our knight — but the bishop to c6 rescues us: if Black takes the knight we take the bishop, if he takes the bishop we recapture with the knight, and a knight to f4 threatening mate is just one move, met by a queen to f3, leaving us two pawns up as Black's initiative dies out.",
+   "reanchor": true
   },
   {
    "ply": 38,
@@ -457,7 +475,8 @@
    "line": [
     "Qf6"
    ],
-   "spoken": ""
+   "spoken": "Black plays a lovely queen to f6, luring us into a knight to d7 that appears to win the exchange — because then a queen to g5 comes, and a rook grab runs into a knight to e3 with a double attack on g2 and the queen. So after a knight to d7 and a queen to g5 it's very tactical. I settle on the quiet, anticlimactic a4 — I want the bishop defended so that if the knight moves I needn't fear the queen's attack, and it lets me focus on the kingside, since the bishop also guards our knight stranded in Black's camp; it even sets up a knight to b6 forking the rooks once the bishop is supported.",
+   "reanchor": true
   },
   {
    "ply": 39,
@@ -466,7 +485,8 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "We play a knight to d7 — if the rook moves, a knight to c5 hits the bishop where it hurts.",
+   "reanchor": true
   },
   {
    "ply": 40,
@@ -475,14 +495,16 @@
    "line": [
     "Qg5"
    ],
-   "spoken": ""
+   "spoken": "Black plays a queen to g5, and we bring the queen to the rescue with a queen to f3 — not a knight grab, because of the knight to e3 double attack. The key concept: a pin is a two-way street. Yes the queen is more valuable, but the b7 bishop is just as undefended as the queen, so the knight can't move — that's why the risky-looking queen to f3 works. Then a4 supports the bishop, and the conversion runs on the recurring theme: our bishop and knight rearrange to make new threats (a knight to c5-to-b7, a bishop to c6 forking rook and knight), Black's queen and rook are poor defenders, and with the extra pawns White wins. A quiet improving move like a4 or a rook to d1 is exactly what these positions demand once you confirm Black has no real threat.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 1884.5,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/2P5/PP1P1PPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "Our opponent played a fantastic game — close, with a lot to analyze. Let me open the elephant Bible, Kalifman's squeezing-the-Sicilian book.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -493,7 +515,8 @@
     "exd5",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "My hunch was right — Kalifman recommends a queen check on a4 against the knight to f6. If a bishop to d7, the queen drops to b3 hitting the pawn, and a queen to b6 is forced; White loads up on the pawn and is clearly better. If a knight to d7, again a queen to b3, and White keeps the extra pawn, waiting to open the center for a better endgame.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -504,14 +527,16 @@
     "Nbd7",
     "Qa3"
    ],
-   "spoken": ""
+   "spoken": "Against a knight to d7 you play a queen to b3 too — easy to remember, b3 against both. If a knight to b6, you check with the bishop and follow with c4, so that after e6 and the trade Black has to recapture with the pawn, which is horribly awkward and leaves no compensation. If Black fianchettoes with g6, develop modestly with a bishop to e2, avoid a bishop to c4, castle, and only then play c4. The engine improvement on move nine is the immediate c4 — don't lose a tempo on d3, advance d4 at once for a slight edge.",
+   "reanchor": true
   },
   {
    "ply": 6,
    "t": 2219.5,
    "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 1 4",
    "line": [],
-   "spoken": ""
+   "spoken": "This is Kalifman's recommendation against the knight to f6 — very few people know it, so our bishop-b5 check is a fine alternative. Same idea, but with the queen check on a4 the queen retreats to b3, keeps the pawn, and you open the center at the right moment for a better endgame.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -520,7 +545,8 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": ""
+   "spoken": "So we can absolutely keep playing this with Black too — my bishop-b5 check is a viable alternative that few people know by heart.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -538,7 +564,8 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "After a knight to d7, we open the center with d4.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -547,7 +574,8 @@
    "line": [
     "a6"
    ],
-   "spoken": ""
+   "spoken": "a6 is the only correct move for Black.",
+   "reanchor": true
   },
   {
    "ply": 9,
@@ -563,7 +591,8 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "If Black had played a knight capture on d5, that's hasty...",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -572,7 +601,8 @@
    "line": [
     "dxc5"
    ],
-   "spoken": ""
+   "spoken": "...because White simply emerges a pawn up.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -581,7 +611,8 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "And after e6...",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -590,7 +621,8 @@
    "line": [
     "c6"
    ],
-   "spoken": ""
+   "spoken": "...we drive the pawn to c6 and make it even worse for Black.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -601,7 +633,8 @@
     "Bxc6",
     "Rb8"
    ],
-   "spoken": ""
+   "spoken": "Black has to trade; I wouldn't grab a second pawn, which walks into a bishop to b7 with a huge initiative...",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -610,7 +643,8 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "...instead just develop with a knight to f3, threatening a knight to e5. Black has insufficient compensation.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -627,7 +661,8 @@
     "Be2",
     "a6"
    ],
-   "spoken": ""
+   "spoken": "After a6 we bring the bishop back and Black recaptures on d5.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -636,7 +671,8 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "I like our decision to play c4 and d5 — extremely testing.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -655,7 +691,8 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "I think Black's main mistake was g6 — natural, but a serious inaccuracy after which equality is impossible.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -671,7 +708,8 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "Instead Black should go b5 immediately, not e6 — the Benko-style idea.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -680,7 +718,8 @@
    "line": [
     "cxb5"
    ],
-   "spoken": ""
+   "spoken": "After the capture, Black plays a knight to b6...",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -689,14 +728,16 @@
    "line": [
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "...and the key difference is that Black wins back the d5 pawn.",
+   "reanchor": true
   },
   {
    "ply": 16,
    "t": 2409,
    "fen": "r1bqkb1r/3npppp/p4n2/1ppP4/2P5/8/PP2BPPP/RNBQK1NR w KQkq - 0 9",
    "line": [],
-   "spoken": ""
+   "spoken": "Even in the game Black should have played a knight to b6 to regain the pawn — which is why, after a knight to c3, spending a tempo on a4 to prevent b5 was worth it. I forgot that a knight to b6 wins the pawn back.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -723,7 +764,8 @@
    "line": [
     "bxa6"
    ],
-   "spoken": ""
+   "spoken": "If White captures on a6...",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -732,7 +774,8 @@
    "line": [
     "Bxa6"
    ],
-   "spoken": ""
+   "spoken": "...the simplest is to recapture — the pawn isn't going anywhere.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -742,21 +785,24 @@
     "Bxa6",
     "Rxa6"
    ],
-   "spoken": ""
+   "spoken": "After the trade Black wins back d5 and is close to equal. The engine gives a queen to e2 hitting the rook, and after a nasty check on b5, Black must find c4 intercepting the queen, then trades on d5, develops, and it's about equal.",
+   "reanchor": true
   },
   {
    "ply": 18,
    "t": 2482.5,
    "fen": "r1bqkb1r/4pppp/pn3n2/1PpP4/8/8/PP2BPPP/RNBQK1NR w KQkq - 1 10",
    "line": [],
-   "spoken": ""
+   "spoken": "White has a nice passed pawn, Black has active pieces — dead level, but it takes several accurate moves: you have to know b5 and the knight to b6.",
+   "reanchor": true
   },
   {
    "ply": 12,
    "t": 2492,
    "fen": "r1bqkb1r/1p1npppp/p7/2pn4/3P4/2P5/PP2BPPP/RNBQK1NR w KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "So in the game our opponent developed the kingside first, which is fine.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -797,14 +843,16 @@
    "line": [
     "a4"
    ],
-   "spoken": ""
+   "spoken": "a4 was more precise for us, to prevent b5 — because after b5 and the captures, the automatic a-pawn recapture is a serious mistake: our bishop jumps to an active square, Black is too late for a knight to b6, and a bishop to c6 protects the pawn. If Black plays the knight to b6 immediately, we can't defend the pawn with the bishop, and it becomes a dream Benko for Black. So the key for our opponent was a knight to b6 at once — the subtlety of this level. In the game the queen to f3 was instructive: a pin is a two-way street, especially when the lower-value piece giving the x-ray is itself undefended. And a4 supported the bishop and enabled the recurring knight-to-b6 fork, which is why I chose it over a rook to d1 in time pressure — it guaranteed everything was protected. The finish came via a bishop to c6 and a knight to b7, dislodging the rook, with the a-pawn making it an elementary win.",
+   "reanchor": true
   },
   {
    "ply": 6,
    "t": 3493.5,
    "fen": "rnbqkb1r/pp2pppp/5n2/2pP4/8/2P5/PP1P1PPP/RNBQKBNR w KQkq - 1 4",
    "line": [],
-   "spoken": ""
+   "spoken": "We covered the theory, the queen check on a4.",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -816,7 +864,8 @@
     "Bb5",
     "a6"
    ],
-   "spoken": ""
+   "spoken": "We examined the Benko-like ideas Black must carry out to equalize.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -825,7 +874,8 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "For completeness, the Benko Gambit: d4, a knight to f6, c4, c5, then b5 — the Volga Gambit in Russia. Black sacrifices the pawn, plays a6, and uses the open a- and b-files to pressure White's queenside, usually with the dark-squared bishop fianchettoed. White need not capture — he can decline with b6 to keep the queenside closed. It's an incredibly complex opening, and Black had to demonstrate exactly those ideas to equalize.",
+   "reanchor": true
   }
  ]
 }

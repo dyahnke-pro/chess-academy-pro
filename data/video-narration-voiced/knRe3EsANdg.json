@@ -4,7 +4,7 @@
  "openingName": "King's Indian Attack",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:knRe3EsANdg",
  "moves": [
   {
@@ -16,7 +16,7 @@
     "e6",
     "e4"
    ],
-   "spoken": ""
+   "spoken": "We take White and set up the King's Indian Attack — d3, and after Black's ...e6, we play e4."
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black stakes the centre with d5."
   },
   {
    "ply": 5,
@@ -34,10 +34,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "The knight belongs on d2, not c3 — the whole point of the King's Indian Attack. On c3 it invites dxe4 and a queen trade that would kill the attack; on d2 White keeps the queens on and the plan intact.",
-   "kind": "main",
-   "teaches": "In the King's Indian Attack, develop the knight to d2 to avoid a queen-trading dxe4 and keep attacking chances.",
-   "plans": "g3, Bg2, then e5 and a kingside attack."
+   "spoken": "We develop the knight to d2."
   },
   {
    "ply": 7,
@@ -204,7 +201,7 @@
     "Nf6",
     "g3"
    ],
-   "spoken": ""
+   "spoken": "Black develops ...Nf6; we begin the fianchetto with g3."
   },
   {
    "ply": 12,
@@ -213,9 +210,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Black builds a French-style centre with e6, d5 and c5, but that is exactly what White wants: the King's Indian Attack hands over the centre on purpose, planning to gain kingside space with e5 — a King's Indian with colours reversed and a tempo to spare.",
-   "kind": "main",
-   "teaches": "The KIA concedes the centre deliberately to play a reversed King's Indian a tempo up."
+   "spoken": "Black expands with c5."
   },
   {
    "ply": 14,
@@ -225,7 +220,7 @@
     "Bg2",
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "We complete the fianchetto with the bishop to g2; Black develops ...Nc6."
   },
   {
    "ply": 15,
@@ -234,7 +229,7 @@
    "line": [
     "Ngf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 16,
@@ -243,7 +238,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e7."
   },
   {
    "ply": 18,
@@ -253,7 +248,7 @@
     "O-O",
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle and Black castles."
   },
   {
    "ply": 19,
@@ -262,9 +257,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "The pawn to e5 is the King's Indian Attack's signature push. It seizes kingside space and cramps Black exactly as a King's Indian cramps White — and now White turns to storming the kingside.",
-   "kind": "main",
-   "teaches": "The e5 push gains space and launches White's kingside attack."
+   "spoken": "We play the KIA advance — e5, clamping the centre and preparing a kingside attack."
   },
   {
    "ply": 21,
@@ -274,7 +267,7 @@
     "Nd7",
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "Black retreats the knight to d7; we play the rook to e1."
   },
   {
    "ply": 22,
@@ -283,7 +276,7 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "Black expands on the queenside with b5."
   },
   {
    "ply": 23,
@@ -292,7 +285,7 @@
    "line": [
     "Nf1"
    ],
-   "spoken": ""
+   "spoken": "We reroute the knight to f1 — the classic KIA maneuver toward g3 or e3."
   },
   {
    "ply": 24,
@@ -301,7 +294,7 @@
    "line": [
     "b4"
    ],
-   "spoken": ""
+   "spoken": "Black pushes b4, gaining queenside space."
   },
   {
    "ply": 23,
@@ -367,7 +360,7 @@
    "line": [
     "a3"
    ],
-   "spoken": ""
+   "spoken": "We challenge the pawn chain with a3."
   },
   {
    "ply": 30,
@@ -401,7 +394,7 @@
    "line": [
     "b3"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...b3, trying to fix a weakness."
   },
   {
    "ply": 31,

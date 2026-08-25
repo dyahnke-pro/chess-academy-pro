@@ -4,7 +4,7 @@
  "openingName": "Danish Gambit",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:RSZfxqk9wNc",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take White; Black meets our king's pawn with ...e5."
   },
   {
    "ply": 3,
@@ -24,9 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 opens the Danish Gambit — White offers pawns to blow the center open and generate a raging development lead.",
-   "kind": "main",
-   "teaches": "Gambit central pawns to accelerate development and open lines."
+   "spoken": "We build the centre with d4."
   },
   {
    "ply": 4,
@@ -35,7 +33,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 5,
@@ -44,7 +42,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We offer c3 — the Danish Gambit."
   },
   {
    "ply": 6,
@@ -53,7 +51,7 @@
    "line": [
     "dxc3"
    ],
-   "spoken": ""
+   "spoken": "Black takes on c3, accepting."
   },
   {
    "ply": 7,
@@ -62,9 +60,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "Bishop to c4 completes the Danish — with two pawns sacrificed, the bishops rake toward f7 and the whole army will crash out with tempo.",
-   "kind": "main",
-   "teaches": "In the Danish, aim the bishops at f7 and prize activity over the two pawns."
+   "spoken": "We develop the bishop to c4 — the heart of the Danish."
   },
   {
    "ply": 8,
@@ -73,7 +69,7 @@
    "line": [
     "Qe7"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to e7 — targeting our pawn, but with nothing else developed it's a poor way to do it, and it blocks in his own bishop."
   },
   {
    "ply": 9,
@@ -82,9 +78,7 @@
    "line": [
     "Nxc3"
    ],
-   "spoken": "Recapturing on c3 with the knight leaves White a massive lead in development and open lines — the two pawns are gone, but Black is badly behind and cramped.",
-   "kind": "main",
-   "teaches": "Measure a gambit by development and activity, not the pawn count."
+   "spoken": "We recapture on c3 with the knight — two pieces out already, and that queen on e7 is a liability."
   },
   {
    "ply": 10,
@@ -93,7 +87,7 @@
    "line": [
     "c6"
    ],
-   "spoken": ""
+   "spoken": "Black plays c6."
   },
   {
    "ply": 11,
@@ -102,7 +96,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3. If ...d5 comes, so much the better — with our lead in development we want the centre opened."
   },
   {
    "ply": 12,
@@ -111,7 +105,7 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "Black plays h6 — you can't abandon development like this; it will backfire in a few moves."
   },
   {
    "ply": 13,
@@ -120,7 +114,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We simply castle — no need for wild sacrifices; completing development already does us a huge favour."
   },
   {
    "ply": 14,
@@ -129,7 +123,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6, the lesser evil. Now for a little creativity — rather than the murky e5 break with a sacrifice on d5, notice the queen and king sitting on the same file."
   },
   {
    "ply": 15,
@@ -138,7 +132,7 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "We slide the rook to e1 — queen and king share the e-file. The e4-pawn is in the way for now, but this sets up the knight to d5."
   },
   {
    "ply": 16,
@@ -147,7 +141,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e6."
   },
   {
    "ply": 17,
@@ -156,7 +150,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": ""
+   "spoken": "The knight leaps to d5 — not really a sacrifice, since ...cxd5 is met by exd5, reopening lines and prying open the e-file."
   },
   {
    "ply": 18,
@@ -165,7 +159,7 @@
    "line": [
     "cxd5"
    ],
-   "spoken": ""
+   "spoken": "Black takes the knight, a pawn landing on d5."
   },
   {
    "ply": 19,
@@ -174,7 +168,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "We recapture on d5, and now the bishop on e6 is attacked — once it falls the whole position caves in."
   },
   {
    "ply": 20,
@@ -183,7 +177,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black finally develops the knight to f6 — but here developing is the decisive mistake."
   },
   {
    "ply": 21,
@@ -192,7 +186,7 @@
    "line": [
     "dxe6"
    ],
-   "spoken": ""
+   "spoken": "We take the bishop, our pawn landing on e6."
   },
   {
    "ply": 22,
@@ -201,7 +195,7 @@
    "line": [
     "Ne4"
    ],
-   "spoken": ""
+   "spoken": "Black tries the knight to e4."
   },
   {
    "ply": 23,
@@ -210,7 +204,7 @@
    "line": [
     "Rxe4"
    ],
-   "spoken": ""
+   "spoken": "We simply take it with the rook."
   },
   {
    "ply": 24,
@@ -219,7 +213,7 @@
    "line": [
     "f6"
    ],
-   "spoken": ""
+   "spoken": "Black plays f6."
   },
   {
    "ply": 25,
@@ -228,7 +222,7 @@
    "line": [
     "Nh4"
    ],
-   "spoken": ""
+   "spoken": "The knight swings to h4, eyeing the juicy light squares — g6 is coming."
   },
   {
    "ply": 26,
@@ -237,7 +231,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6."
   },
   {
    "ply": 27,
@@ -246,7 +240,7 @@
    "line": [
     "Ng6"
    ],
-   "spoken": ""
+   "spoken": "We drop the knight into g6, heading straight for the rook."
   },
   {
    "ply": 29,
@@ -256,7 +250,7 @@
     "Qc7",
     "Nxh8"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to c7; the knight crashes in and takes the rook — up a rook and a piece, it's time for Black to resign."
   },
   {
    "ply": 2,

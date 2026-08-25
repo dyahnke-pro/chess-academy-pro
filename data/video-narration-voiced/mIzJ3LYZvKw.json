@@ -1,538 +1,529 @@
 {
- "videoId": "mIzJ3LYZvKw",
- "title": "Master Class | Sicilian, Najdorf Variation | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Sicilian Defense: 2.Bc4 (Black)",
- "studentSide": "black",
- "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
- "source": "yt:mIzJ3LYZvKw",
- "moves": [
-  {
-   "ply": 2,
-   "t": 16.5,
-   "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-   "line": [
-    "e4",
-    "c5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 3,
-   "t": 20,
-   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
-   "line": [
-    "Bc4"
-   ],
-   "spoken": "The bishop to c4 is an early, offbeat anti-Sicilian, aiming at f7 before developing the centre. The clean way to meet it is to blunt that bishop rather than fear it.",
-   "kind": "main",
-   "teaches": "Against an early Bc4, prepare to challenge it with …e6 and …d5 — bite on granite.",
-   "plans": "Play …e6, develop, and hit the bishop with …d5."
-  },
-  {
-   "ply": 4,
-   "t": 32,
-   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
-   "line": [
-    "Nc6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 5,
-   "t": 35,
-   "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
-   "line": [
-    "Nf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 6,
-   "t": 49.5,
-   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
-   "line": [
-    "e6"
-   ],
-   "spoken": "The pawn to e6 prepares the freeing …d5, walling off the c4-bishop's diagonal. There is no rush — the bishop isn't going anywhere, so develop first and break when ready.",
-   "kind": "main",
-   "teaches": "…e6 shuts the c4-bishop's diagonal and readies the …d5 central break.",
-   "plans": "Develop the knight, then strike with …d5."
-  },
-  {
-   "ply": 7,
-   "t": 52.5,
-   "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/P4N2/1PPP1PPP/RNBQK2R b KQkq - 0 4",
-   "line": [
-    "a3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 8,
-   "t": 62.5,
-   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/P4N2/1PPP1PPP/RNBQK2R w KQkq - 1 5",
-   "line": [
-    "Nf6"
-   ],
-   "spoken": "Develop the knight to f6, adding a piece and pressure on e4 before committing the centre. With everything ready, …d5 will challenge White head-on.",
-   "kind": "main",
-   "teaches": "Complete development before the freeing break so it lands with full force.",
-   "plans": "Follow with …d5 and equalise comfortably."
-  },
-  {
-   "ply": 9,
-   "t": 68,
-   "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/P2P1N2/1PP2PPP/RNBQK2R b KQkq - 0 5",
-   "line": [
-    "d3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 10,
-   "t": 69.5,
-   "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2B1P3/P2P1N2/1PP2PPP/RNBQK2R w KQkq - 0 6",
-   "line": [
-    "d5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 12,
-   "t": 74,
-   "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/2B5/P2P1N2/1PP2PPP/RNBQK2R w KQkq - 0 7",
-   "line": [
-    "exd5",
-    "exd5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 13,
-   "t": 79.5,
-   "fen": "r1bqkb1r/pp3ppp/2n2n2/1Bpp4/8/P2P1N2/1PP2PPP/RNBQK2R b KQkq - 1 7",
-   "line": [
-    "Bb5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 14,
-   "t": 106.5,
-   "fen": "r1b1kb1r/pp3ppp/2n2n2/qBpp4/8/P2P1N2/1PP2PPP/RNBQK2R w KQkq - 2 8",
-   "line": [
-    "Qa5+"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 15,
-   "t": 146.5,
-   "fen": "r1b1kb1r/pp3ppp/2n2n2/qBpp4/8/P1NP1N2/1PP2PPP/R1BQK2R b KQkq - 3 8",
-   "line": [
-    "Nc3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 16,
-   "t": 148,
-   "fen": "r1b1kb1r/pp3ppp/2n2n2/qBp5/3p4/P1NP1N2/1PP2PPP/R1BQK2R w KQkq - 0 9",
-   "line": [
-    "d4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 17,
-   "t": 151,
-   "fen": "r1b1kb1r/pp3ppp/2B2n2/q1p5/3p4/P1NP1N2/1PP2PPP/R1BQK2R b KQkq - 0 9",
-   "line": [
-    "Bxc6+"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 18,
-   "t": 152,
-   "fen": "r1b1kb1r/p4ppp/2p2n2/q1p5/3p4/P1NP1N2/1PP2PPP/R1BQK2R w KQkq - 0 10",
-   "line": [
-    "bxc6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 19,
-   "t": 155.5,
-   "fen": "r1b1kb1r/p4ppp/2p2n2/q1p5/1P1p4/P1NP1N2/2P2PPP/R1BQK2R b KQkq - 0 10",
-   "line": [
-    "b4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 20,
-   "t": 164.5,
-   "fen": "r1b1kb1r/p4ppp/2p2n2/q7/1p1p4/P1NP1N2/2P2PPP/R1BQK2R w KQkq - 0 11",
-   "line": [
-    "cxb4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 21,
-   "t": 174,
-   "fen": "r1b1kb1r/p4ppp/2p2n2/q7/1p1pN3/P2P1N2/2P2PPP/R1BQK2R b KQkq - 1 11",
-   "line": [
-    "Ne4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 22,
-   "t": 191.5,
-   "fen": "r1b1kb1r/p4ppp/2p5/q7/1p1pn3/P2P1N2/2P2PPP/R1BQK2R w KQkq - 0 12",
-   "line": [
-    "Nxe4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 23,
-   "t": 196.5,
-   "fen": "r1b1kb1r/p4ppp/2p5/q7/1p1pP3/P4N2/2P2PPP/R1BQK2R b KQkq - 0 12",
-   "line": [
-    "dxe4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 24,
-   "t": 251,
-   "fen": "r1b1kb1r/p4ppp/2p5/q7/3pP3/p4N2/2P2PPP/R1BQK2R w KQkq - 0 13",
-   "line": [
-    "bxa3+"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 25,
-   "t": 254,
-   "fen": "r1b1kb1r/p4ppp/2p5/q7/3pP3/p4N2/2PQ1PPP/R1B1K2R b KQkq - 1 13",
-   "line": [
-    "Qd2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 26,
-   "t": 266,
-   "fen": "r1b1k2r/p4ppp/2p5/q7/1b1pP3/p4N2/2PQ1PPP/R1B1K2R w KQkq - 2 14",
-   "line": [
-    "Bb4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 27,
-   "t": 286.5,
-   "fen": "r1b1k2r/p4ppp/2p5/q7/1b1pP3/R4N2/2PQ1PPP/2B1K2R b Kkq - 0 14",
-   "line": [
-    "Rxa3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 28,
-   "t": 295,
-   "fen": "r1b1k2r/p4ppp/2p5/q7/3pP3/R4N2/2Pb1PPP/2B1K2R w Kkq - 0 15",
-   "line": [
-    "Bxd2+"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 29,
-   "t": 299.5,
-   "fen": "r1b1k2r/p4ppp/2p5/q7/3pP3/R7/2PN1PPP/2B1K2R b Kkq - 0 15",
-   "line": [
-    "Nxd2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 30,
-   "t": 336.5,
-   "fen": "r1b1k2r/p4ppp/2p5/2q5/3pP3/R7/2PN1PPP/2B1K2R w Kkq - 1 16",
-   "line": [
-    "Qc5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 32,
-   "t": 349.5,
-   "fen": "r1b1k2r/p4ppp/2p5/8/3pP3/R7/2qN1PPP/2B2RK1 w kq - 0 17",
-   "line": [
-    "O-O",
-    "Qxc2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 33,
-   "t": 364,
-   "fen": "r1b1k2r/p4ppp/2p5/8/3pP3/R4N2/2q2PPP/2B2RK1 b kq - 1 17",
-   "line": [
-    "Nf3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 34,
-   "t": 390,
-   "fen": "r1b1k2r/p4ppp/8/2p5/3pP3/R4N2/2q2PPP/2B2RK1 w kq - 0 18",
-   "line": [
-    "c5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 35,
-   "t": 407.5,
-   "fen": "r1b1k2r/p4ppp/8/2p5/3pPB2/R4N2/2q2PPP/5RK1 b kq - 1 18",
-   "line": [
-    "Bf4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 36,
-   "t": 419,
-   "fen": "r1b2rk1/p4ppp/8/2p5/3pPB2/R4N2/2q2PPP/5RK1 w - - 2 19",
-   "line": [
-    "O-O"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 37,
-   "t": 428.5,
-   "fen": "r1b2rk1/p4ppp/8/2p5/3pPB2/R4N2/2q2PPP/4R1K1 b - - 3 19",
-   "line": [
-    "Re1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 38,
-   "t": 450,
-   "fen": "r4rk1/pb3ppp/8/2p5/3pPB2/R4N2/2q2PPP/4R1K1 w - - 4 20",
-   "line": [
-    "Bb7"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 39,
-   "t": 459,
-   "fen": "r4rk1/pb3ppp/8/2p1N3/3pPB2/R7/2q2PPP/4R1K1 b - - 5 20",
-   "line": [
-    "Ne5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 40,
-   "t": 468.5,
-   "fen": "r3r1k1/pb3ppp/8/2p1N3/3pPB2/R7/2q2PPP/4R1K1 w - - 6 21",
-   "line": [
-    "Rfe8"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 41,
-   "t": 474,
-   "fen": "r3r1k1/pb3ppp/8/2p1N3/3pPB2/6R1/2q2PPP/4R1K1 b - - 7 21",
-   "line": [
-    "Rg3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 42,
-   "t": 492.5,
-   "fen": "r3r1k1/p4ppp/8/2p1N3/3pbB2/6R1/2q2PPP/4R1K1 w - - 0 22",
-   "line": [
-    "Bxe4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 43,
-   "t": 505,
-   "fen": "r3r1k1/p4ppp/8/2p1N3/3pbB2/6RP/2q2PP1/4R1K1 b - - 0 22",
-   "line": [
-    "h3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 44,
-   "t": 524,
-   "fen": "r3r1k1/p4ppp/6b1/2p1N3/3p1B2/6RP/2q2PP1/4R1K1 w - - 1 23",
-   "line": [
-    "Bg6"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 45,
-   "t": 537.5,
-   "fen": "r3r1k1/p4ppp/6b1/2p1N3/3p1B2/6RP/2q2PP1/2R3K1 b - - 2 23",
-   "line": [
-    "Rc1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 46,
-   "t": 555.5,
-   "fen": "r3r1k1/p4ppp/6b1/2p1N3/3p1B2/6RP/5PP1/2q3K1 w - - 0 24",
-   "line": [
-    "Qxc1+"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 48,
-   "t": 561,
-   "fen": "r5k1/p4ppp/6b1/2p1r3/3p4/6RP/5PP1/2B3K1 w - - 0 25",
-   "line": [
-    "Bxc1",
-    "Rxe5"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 49,
-   "t": 568,
-   "fen": "r5k1/p4ppp/6b1/2p1r3/3p1B2/6RP/5PP1/6K1 b - - 1 25",
-   "line": [
-    "Bf4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 50,
-   "t": 570,
-   "fen": "r5k1/p4ppp/6b1/2p5/3p1B2/6RP/5PP1/4r1K1 w - - 2 26",
-   "line": [
-    "Re1+"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 51,
-   "t": 573.5,
-   "fen": "r5k1/p4ppp/6b1/2p5/3p1B2/6RP/5PPK/4r3 b - - 3 26",
-   "line": [
-    "Kh2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 52,
-   "t": 576,
-   "fen": "r5k1/p4ppp/6b1/2p5/5B2/3p2RP/5PPK/4r3 w - - 0 27",
-   "line": [
-    "d3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 53,
-   "t": 585,
-   "fen": "r5k1/p4ppp/6b1/2p5/5B2/3pR2P/5PPK/4r3 b - - 1 27",
-   "line": [
-    "Re3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 54,
-   "t": 586.5,
-   "fen": "r5k1/p4ppp/6b1/2p5/5B2/3pr2P/5PPK/8 w - - 0 28",
-   "line": [
-    "Rxe3"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 56,
-   "t": 589,
-   "fen": "r5k1/p4ppp/6b1/8/2p5/3pB2P/5PPK/8 w - - 0 29",
-   "line": [
-    "Bxe3",
-    "c4"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 57,
-   "t": 591,
-   "fen": "r5k1/p4ppp/6b1/8/2p5/3pB2P/5PP1/6K1 b - - 1 29",
-   "line": [
-    "Kg1"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 60,
-   "t": 594,
-   "fen": "r5k1/p4ppp/6b1/8/8/2p1B2P/3p1PP1/5K2 w - - 0 31",
-   "line": [
-    "c3",
-    "Kf1",
-    "d2"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 62,
-   "t": 596,
-   "fen": "3r2k1/p4ppp/6b1/8/8/2p1B2P/3pKPP1/8 w - - 2 32",
-   "line": [
-    "Ke2",
-    "Rd8"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 64,
-   "t": 606,
-   "fen": "3r2k1/p4ppp/6b1/8/8/4B2P/2pp1PP1/3K4 w - - 0 33",
-   "line": [
-    "Kd1",
-    "c2+"
-   ],
-   "spoken": ""
-  },
-  {
-   "ply": 17,
-   "t": 611.5,
-   "fen": "r1b1kb1r/pp3ppp/2B2n2/q1p5/3p4/P1NP1N2/1PP2PPP/R1BQK2R b KQkq - 0 9",
-   "line": [],
-   "spoken": ""
-  },
-  {
-   "ply": 3,
-   "t": 613,
-   "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
-   "line": [],
-   "spoken": ""
-  }
- ]
+  "videoId": "mIzJ3LYZvKw",
+  "title": "Master Class | Sicilian, Najdorf Variation | Chess Speedrun | Grandmaster Naroditsky",
+  "openingName": "Bishop's Opening",
+  "studentSide": "white",
+  "voice": "danya-dna",
+  "rewrittenAt": "2026-08-25",
+  "source": "yt:mIzJ3LYZvKw",
+  "moves": [
+    {
+      "ply": 2,
+      "t": 16.5,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+      "line": [
+        "e4",
+        "c5"
+      ],
+      "spoken": "We take White and face the Sicilian."
+    },
+    {
+      "ply": 3,
+      "t": 20,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+      "line": [
+        "Bc4"
+      ],
+      "spoken": "We play the Bishop's Opening against the Sicilian — the bishop to c4."
+    },
+    {
+      "ply": 4,
+      "t": 32,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR w KQkq - 2 3",
+      "line": [
+        "Nc6"
+      ],
+      "spoken": "Black develops the knight to c6."
+    },
+    {
+      "ply": 5,
+      "t": 35,
+      "fen": "r1bqkbnr/pp1ppppp/2n5/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R b KQkq - 3 3",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "We develop the knight to f3."
+    },
+    {
+      "ply": 6,
+      "t": 49.5,
+      "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/5N2/PPPP1PPP/RNBQK2R w KQkq - 0 4",
+      "line": [
+        "e6"
+      ],
+      "spoken": "Black plays e6."
+    },
+    {
+      "ply": 7,
+      "t": 52.5,
+      "fen": "r1bqkbnr/pp1p1ppp/2n1p3/2p5/2B1P3/P4N2/1PPP1PPP/RNBQK2R b KQkq - 0 4",
+      "line": [
+        "a3"
+      ],
+      "spoken": "We play a3."
+    },
+    {
+      "ply": 8,
+      "t": 62.5,
+      "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/P4N2/1PPP1PPP/RNBQK2R w KQkq - 1 5",
+      "line": [
+        "Nf6"
+      ],
+      "spoken": "Black develops the knight to f6."
+    },
+    {
+      "ply": 9,
+      "t": 68,
+      "fen": "r1bqkb1r/pp1p1ppp/2n1pn2/2p5/2B1P3/P2P1N2/1PP2PPP/RNBQK2R b KQkq - 0 5",
+      "line": [
+        "d3"
+      ],
+      "spoken": "We play d3."
+    },
+    {
+      "ply": 10,
+      "t": 69.5,
+      "fen": "r1bqkb1r/pp3ppp/2n1pn2/2pp4/2B1P3/P2P1N2/1PP2PPP/RNBQK2R w KQkq - 0 6",
+      "line": [
+        "d5"
+      ],
+      "spoken": "Black strikes with d5."
+    },
+    {
+      "ply": 12,
+      "t": 74,
+      "fen": "r1bqkb1r/pp3ppp/2n2n2/2pp4/2B5/P2P1N2/1PP2PPP/RNBQK2R w KQkq - 0 7",
+      "line": [
+        "exd5",
+        "exd5"
+      ],
+      "spoken": "We take on d5; Black recaptures with the e-pawn."
+    },
+    {
+      "ply": 13,
+      "t": 79.5,
+      "fen": "r1bqkb1r/pp3ppp/2n2n2/1Bpp4/8/P2P1N2/1PP2PPP/RNBQK2R b KQkq - 1 7",
+      "line": [
+        "Bb5"
+      ],
+      "spoken": "We pin with the bishop to b5."
+    },
+    {
+      "ply": 14,
+      "t": 106.5,
+      "fen": "r1b1kb1r/pp3ppp/2n2n2/qBpp4/8/P2P1N2/1PP2PPP/RNBQK2R w KQkq - 2 8",
+      "line": [
+        "Qa5+"
+      ],
+      "spoken": "Black checks with ...Qa5."
+    },
+    {
+      "ply": 15,
+      "t": 146.5,
+      "fen": "r1b1kb1r/pp3ppp/2n2n2/qBpp4/8/P1NP1N2/1PP2PPP/R1BQK2R b KQkq - 3 8",
+      "line": [
+        "Nc3"
+      ],
+      "spoken": "We block with the knight to c3."
+    },
+    {
+      "ply": 16,
+      "t": 148,
+      "fen": "r1b1kb1r/pp3ppp/2n2n2/qBp5/3p4/P1NP1N2/1PP2PPP/R1BQK2R w KQkq - 0 9",
+      "line": [
+        "d4"
+      ],
+      "spoken": "Black pushes d4, hitting the knight."
+    },
+    {
+      "ply": 17,
+      "t": 151,
+      "fen": "r1b1kb1r/pp3ppp/2B2n2/q1p5/3p4/P1NP1N2/1PP2PPP/R1BQK2R b KQkq - 0 9",
+      "line": [
+        "Bxc6+"
+      ],
+      "spoken": "We take on c6 with check."
+    },
+    {
+      "ply": 18,
+      "t": 152,
+      "fen": "r1b1kb1r/p4ppp/2p2n2/q1p5/3p4/P1NP1N2/1PP2PPP/R1BQK2R w KQkq - 0 10",
+      "line": [
+        "bxc6"
+      ],
+      "spoken": "Black recaptures with the b-pawn."
+    },
+    {
+      "ply": 19,
+      "t": 155.5,
+      "fen": "r1b1kb1r/p4ppp/2p2n2/q1p5/1P1p4/P1NP1N2/2P2PPP/R1BQK2R b KQkq - 0 10",
+      "line": [
+        "b4"
+      ],
+      "spoken": "We play b4, hitting the queen."
+    },
+    {
+      "ply": 20,
+      "t": 164.5,
+      "fen": "r1b1kb1r/p4ppp/2p2n2/q7/1p1p4/P1NP1N2/2P2PPP/R1BQK2R w KQkq - 0 11",
+      "line": [
+        "cxb4"
+      ],
+      "spoken": "Black takes on b4."
+    },
+    {
+      "ply": 21,
+      "t": 174,
+      "fen": "r1b1kb1r/p4ppp/2p2n2/q7/1p1pN3/P2P1N2/2P2PPP/R1BQK2R b KQkq - 1 11",
+      "line": [
+        "Ne4"
+      ],
+      "spoken": "We jump the knight to e4."
+    },
+    {
+      "ply": 22,
+      "t": 191.5,
+      "fen": "r1b1kb1r/p4ppp/2p5/q7/1p1pn3/P2P1N2/2P2PPP/R1BQK2R w KQkq - 0 12",
+      "line": [
+        "Nxe4"
+      ],
+      "spoken": "Black grabs on e4 with the knight."
+    },
+    {
+      "ply": 23,
+      "t": 196.5,
+      "fen": "r1b1kb1r/p4ppp/2p5/q7/1p1pP3/P4N2/2P2PPP/R1BQK2R b KQkq - 0 12",
+      "line": [
+        "dxe4"
+      ],
+      "spoken": "We recapture with the pawn."
+    },
+    {
+      "ply": 24,
+      "t": 251,
+      "fen": "r1b1kb1r/p4ppp/2p5/q7/3pP3/p4N2/2P2PPP/R1BQK2R w KQkq - 0 13",
+      "line": [
+        "bxa3+"
+      ],
+      "spoken": "Black takes on a3 with check."
+    },
+    {
+      "ply": 25,
+      "t": 254,
+      "fen": "r1b1kb1r/p4ppp/2p5/q7/3pP3/p4N2/2PQ1PPP/R1B1K2R b KQkq - 1 13",
+      "line": [
+        "Qd2"
+      ],
+      "spoken": "We block with the queen to d2."
+    },
+    {
+      "ply": 26,
+      "t": 266,
+      "fen": "r1b1k2r/p4ppp/2p5/q7/1b1pP3/p4N2/2PQ1PPP/R1B1K2R w KQkq - 2 14",
+      "line": [
+        "Bb4"
+      ],
+      "spoken": "Black pins with ...Bb4."
+    },
+    {
+      "ply": 27,
+      "t": 286.5,
+      "fen": "r1b1k2r/p4ppp/2p5/q7/1b1pP3/R4N2/2PQ1PPP/2B1K2R b Kkq - 0 14",
+      "line": [
+        "Rxa3"
+      ],
+      "spoken": "We grab on a3 with the rook."
+    },
+    {
+      "ply": 28,
+      "t": 295,
+      "fen": "r1b1k2r/p4ppp/2p5/q7/3pP3/R4N2/2Pb1PPP/2B1K2R w Kkq - 0 15",
+      "line": [
+        "Bxd2+"
+      ],
+      "spoken": "Black takes our queen, capturing on d2 with check."
+    },
+    {
+      "ply": 29,
+      "t": 299.5,
+      "fen": "r1b1k2r/p4ppp/2p5/q7/3pP3/R7/2PN1PPP/2B1K2R b Kkq - 0 15",
+      "line": [
+        "Nxd2"
+      ],
+      "spoken": "We recapture with the knight."
+    },
+    {
+      "ply": 30,
+      "t": 336.5,
+      "fen": "r1b1k2r/p4ppp/2p5/2q5/3pP3/R7/2PN1PPP/2B1K2R w Kkq - 1 16",
+      "line": [
+        "Qc5"
+      ],
+      "spoken": "Black plays the queen to c5."
+    },
+    {
+      "ply": 32,
+      "t": 349.5,
+      "fen": "r1b1k2r/p4ppp/2p5/8/3pP3/R7/2qN1PPP/2B2RK1 w kq - 0 17",
+      "line": [
+        "O-O",
+        "Qxc2"
+      ],
+      "spoken": "We castle; Black grabs on c2 with the queen."
+    },
+    {
+      "ply": 33,
+      "t": 364,
+      "fen": "r1b1k2r/p4ppp/2p5/8/3pP3/R4N2/2q2PPP/2B2RK1 b kq - 1 17",
+      "line": [
+        "Nf3"
+      ],
+      "spoken": "We reroute the knight to f3."
+    },
+    {
+      "ply": 34,
+      "t": 390,
+      "fen": "r1b1k2r/p4ppp/8/2p5/3pP3/R4N2/2q2PPP/2B2RK1 w kq - 0 18",
+      "line": [
+        "c5"
+      ],
+      "spoken": "Black plays c5."
+    },
+    {
+      "ply": 35,
+      "t": 407.5,
+      "fen": "r1b1k2r/p4ppp/8/2p5/3pPB2/R4N2/2q2PPP/5RK1 b kq - 1 18",
+      "line": [
+        "Bf4"
+      ],
+      "spoken": "We develop the bishop to f4."
+    },
+    {
+      "ply": 36,
+      "t": 419,
+      "fen": "r1b2rk1/p4ppp/8/2p5/3pPB2/R4N2/2q2PPP/5RK1 w - - 2 19",
+      "line": [
+        "O-O"
+      ],
+      "spoken": "Black castles."
+    },
+    {
+      "ply": 37,
+      "t": 428.5,
+      "fen": "r1b2rk1/p4ppp/8/2p5/3pPB2/R4N2/2q2PPP/4R1K1 b - - 3 19",
+      "line": [
+        "Re1"
+      ],
+      "spoken": "We play the rook to e1."
+    },
+    {
+      "ply": 38,
+      "t": 450,
+      "fen": "r4rk1/pb3ppp/8/2p5/3pPB2/R4N2/2q2PPP/4R1K1 w - - 4 20",
+      "line": [
+        "Bb7"
+      ],
+      "spoken": "Black develops the bishop to b7."
+    },
+    {
+      "ply": 39,
+      "t": 459,
+      "fen": "r4rk1/pb3ppp/8/2p1N3/3pPB2/R7/2q2PPP/4R1K1 b - - 5 20",
+      "line": [
+        "Ne5"
+      ],
+      "spoken": "We plant the knight on e5."
+    },
+    {
+      "ply": 40,
+      "t": 468.5,
+      "fen": "r3r1k1/pb3ppp/8/2p1N3/3pPB2/R7/2q2PPP/4R1K1 w - - 6 21",
+      "line": [
+        "Rfe8"
+      ],
+      "spoken": "Black plays the rook to e8."
+    },
+    {
+      "ply": 41,
+      "t": 474,
+      "fen": "r3r1k1/pb3ppp/8/2p1N3/3pPB2/6R1/2q2PPP/4R1K1 b - - 7 21",
+      "line": [
+        "Rg3"
+      ],
+      "spoken": "We lift the rook to g3."
+    },
+    {
+      "ply": 42,
+      "t": 492.5,
+      "fen": "r3r1k1/p4ppp/8/2p1N3/3pbB2/6R1/2q2PPP/4R1K1 w - - 0 22",
+      "line": [
+        "Bxe4"
+      ],
+      "spoken": "Black snatches on e4."
+    },
+    {
+      "ply": 43,
+      "t": 505,
+      "fen": "r3r1k1/p4ppp/8/2p1N3/3pbB2/6RP/2q2PP1/4R1K1 b - - 0 22",
+      "line": [
+        "h3"
+      ],
+      "spoken": "We play h3."
+    },
+    {
+      "ply": 44,
+      "t": 524,
+      "fen": "r3r1k1/p4ppp/6b1/2p1N3/3p1B2/6RP/2q2PP1/4R1K1 w - - 1 23",
+      "line": [
+        "Bg6"
+      ],
+      "spoken": "Black retreats the bishop to g6."
+    },
+    {
+      "ply": 45,
+      "t": 537.5,
+      "fen": "r3r1k1/p4ppp/6b1/2p1N3/3p1B2/6RP/2q2PP1/2R3K1 b - - 2 23",
+      "line": [
+        "Rc1"
+      ],
+      "spoken": "We swing the rook to c1."
+    },
+    {
+      "ply": 46,
+      "t": 555.5,
+      "fen": "r3r1k1/p4ppp/6b1/2p1N3/3p1B2/6RP/5PP1/2q3K1 w - - 0 24",
+      "line": [
+        "Qxc1+"
+      ],
+      "spoken": "Black takes our rook, capturing on c1 with check."
+    },
+    {
+      "ply": 48,
+      "t": 561,
+      "fen": "r5k1/p4ppp/6b1/2p1r3/3p4/6RP/5PP1/2B3K1 w - - 0 25",
+      "line": [
+        "Bxc1",
+        "Rxe5"
+      ],
+      "spoken": "We recapture with the bishop; Black takes our knight on e5 with the rook."
+    },
+    {
+      "ply": 49,
+      "t": 568,
+      "fen": "r5k1/p4ppp/6b1/2p1r3/3p1B2/6RP/5PP1/6K1 b - - 1 25",
+      "line": [
+        "Bf4"
+      ],
+      "spoken": "We play the bishop to f4."
+    },
+    {
+      "ply": 50,
+      "t": 570,
+      "fen": "r5k1/p4ppp/6b1/2p5/3p1B2/6RP/5PP1/4r1K1 w - - 2 26",
+      "line": [
+        "Re1+"
+      ],
+      "spoken": "Black checks with the rook on e1."
+    },
+    {
+      "ply": 51,
+      "t": 573.5,
+      "fen": "r5k1/p4ppp/6b1/2p5/3p1B2/6RP/5PPK/4r3 b - - 3 26",
+      "line": [
+        "Kh2"
+      ],
+      "spoken": "We tuck the king to h2."
+    },
+    {
+      "ply": 52,
+      "t": 576,
+      "fen": "r5k1/p4ppp/6b1/2p5/5B2/3p2RP/5PPK/4r3 w - - 0 27",
+      "line": [
+        "d3"
+      ],
+      "spoken": "Black pushes the passed d-pawn."
+    },
+    {
+      "ply": 53,
+      "t": 585,
+      "fen": "r5k1/p4ppp/6b1/2p5/5B2/3pR2P/5PPK/4r3 b - - 1 27",
+      "line": [
+        "Re3"
+      ],
+      "spoken": "We interpose the rook on e3."
+    },
+    {
+      "ply": 54,
+      "t": 586.5,
+      "fen": "r5k1/p4ppp/6b1/2p5/5B2/3pr2P/5PPK/8 w - - 0 28",
+      "line": [
+        "Rxe3"
+      ],
+      "spoken": "Black takes our rook on e3."
+    },
+    {
+      "ply": 56,
+      "t": 589,
+      "fen": "r5k1/p4ppp/6b1/8/2p5/3pB2P/5PPK/8 w - - 0 29",
+      "line": [
+        "Bxe3",
+        "c4"
+      ],
+      "spoken": "We recapture with the bishop; Black pushes the passed c-pawn."
+    },
+    {
+      "ply": 57,
+      "t": 591,
+      "fen": "r5k1/p4ppp/6b1/8/2p5/3pB2P/5PP1/6K1 b - - 1 29",
+      "line": [
+        "Kg1"
+      ],
+      "spoken": "We step the king to g1."
+    },
+    {
+      "ply": 60,
+      "t": 594,
+      "fen": "r5k1/p4ppp/6b1/8/8/2p1B2P/3p1PP1/5K2 w - - 0 31",
+      "line": [
+        "c3",
+        "Kf1",
+        "d2"
+      ],
+      "spoken": "Black pushes c3; we walk the king to f1; Black rolls the pawn to d2."
+    },
+    {
+      "ply": 62,
+      "t": 596,
+      "fen": "3r2k1/p4ppp/6b1/8/8/2p1B2P/3pKPP1/8 w - - 2 32",
+      "line": [
+        "Ke2",
+        "Rd8"
+      ],
+      "spoken": "Our king comes to e2; Black plays the rook to d8."
+    },
+    {
+      "ply": 64,
+      "t": 606,
+      "fen": "3r2k1/p4ppp/6b1/8/8/4B2P/2pp1PP1/3K4 w - - 0 33",
+      "line": [
+        "Kd1",
+        "c2+"
+      ],
+      "spoken": "Our king steps to d1; Black's pawn crashes to c2 with check."
+    },
+    {
+      "ply": 17,
+      "t": 611.5,
+      "fen": "r1b1kb1r/pp3ppp/2B2n2/q1p5/3p4/P1NP1N2/1PP2PPP/R1BQK2R b KQkq - 0 9",
+      "line": [],
+      "spoken": ""
+    },
+    {
+      "ply": 3,
+      "t": 613,
+      "fen": "rnbqkbnr/pp1ppppp/8/2p5/2B1P3/8/PPPP1PPP/RNBQK1NR b KQkq - 1 2",
+      "line": [],
+      "spoken": ""
+    }
+  ]
 }

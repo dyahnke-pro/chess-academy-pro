@@ -1,10 +1,10 @@
 {
  "videoId": "FozbGMUOOjs",
  "title": "Master Class | French Defense | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "French Defense: Advance Variation vs 3...b6 (...Ba6 plan)",
+ "openingName": "French Defense: Advance Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:FozbGMUOOjs",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e6"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the French."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We build the centre with d4."
   },
   {
    "ply": 5,
@@ -34,10 +34,7 @@
     "d5",
     "e5"
    ],
-   "spoken": "The French, and against it the pawn to e5 — the Advance. The clamp goes up and Black must find counterplay against it.",
-   "kind": "main",
-   "teaches": "e5 is the thematic Advance clamp against the French.",
-   "plans": "e5, then support the chain."
+   "spoken": "Black plays d5; we lock the chain with e5 — the Advance."
   },
   {
    "ply": 6,
@@ -46,10 +43,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "Instead of the main move c5, Black tries the pawn to b6 — an old sideline. The whole idea is the bishop to a6, to swap off the light-squared bishop that the French normally leaves boxed in behind e6.",
-   "kind": "main",
-   "teaches": "Against the Advance, ...b6 aims to trade Black's bad light-squared bishop via ...Ba6.",
-   "plans": "Prevent or punish the bishop trade."
+   "spoken": "Black plays b6 — an old alternative to the main ...c5, angling to free the bishop to a6."
   },
   {
    "ply": 7,
@@ -58,10 +52,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "The pawn to c3 quietly does two jobs. It props up d4 — and it clears the d1-a4 diagonal, so that if the bishop comes to a6, White captures and then the queen to a4 checks the king while forking the knight on a6.",
-   "kind": "trap",
-   "teaches": "c3 opens the d1-a4 diagonal: ...Ba6 Bxa6 Nxa6 Qa4+ forks king and knight.",
-   "plans": "c3, then meet ...Ba6 with the Qa4+ fork."
+   "spoken": "We play c3, which we'd normally use in the Advance, and here it prevents ...Ba6: if the bishop comes to a6, we take it and the check on a4 picks off the knight."
   },
   {
    "ply": 8,
@@ -70,7 +61,7 @@
    "line": [
     "c6"
    ],
-   "spoken": ""
+   "spoken": "Black plays c6, covering that diagonal."
   },
   {
    "ply": 7,
@@ -95,10 +86,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "With the bishop trade defused, just develop nicely — the bishop to d3, taking a good diagonal and preparing to castle.",
-   "kind": "main",
-   "teaches": "Once the opponent's key idea is stopped, develop by principle.",
-   "plans": "Bd3, castle, then attack."
+   "spoken": "Nothing special is needed against ...Ba6 now — we just develop, starting with the bishop to d3."
   },
   {
    "ply": 10,
@@ -107,7 +95,7 @@
    "line": [
     "a5"
    ],
-   "spoken": ""
+   "spoken": "Black plays a5, expanding on the queenside."
   },
   {
    "ply": 11,
@@ -116,10 +104,7 @@
    "line": [
     "Ne2"
    ],
-   "spoken": "The knight goes to e2, not f3 — deliberately. Keeping the f-pawn free lets it charge f4 and f5 later, and that pawn on e6 is exactly the target the storm will crash into.",
-   "kind": "main",
-   "teaches": "Develop the knight to e2 to keep the f-pawn free for the f4-f5 break against e6.",
-   "plans": "Ne2, later f4-f5."
+   "spoken": "We choose the knight on e2 over f3 — it keeps the f-pawn free to charge f4 and f5 against Black's chain, where the e6-pawn can come under tremendous pressure."
   },
   {
    "ply": 12,
@@ -128,7 +113,7 @@
    "line": [
     "Ba6"
    ],
-   "spoken": ""
+   "spoken": "Black gets the bishop to a6, offering to trade off his problem French bishop."
   },
   {
    "ply": 13,
@@ -137,10 +122,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Don't rush the f-pawn — castle and complete the setup first. Black is grabbing queenside space instead of developing, which is the signal to finish preparing and then hit the gas with f4.",
-   "kind": "main",
-   "teaches": "Complete development before launching the pawn storm; punish an undeveloping opponent by speeding up.",
-   "plans": "O-O, then f4 toward f5."
+   "spoken": "We castle — complete development before rushing. The whole plan in this Advance French is the f4–f5 break; it's a closed centre, so nothing happens fast against good play. Be methodical: prepare with h3 and g4 to fight for the f5-square, bring the queen behind the break to f3, and only then strike. Black's queenside expansion without developing means we can press the gas."
   },
   {
    "ply": 2,
@@ -177,11 +159,7 @@
    "line": [
     "Ba6"
    ],
-   "spoken": "This is the recurring theme against the French: Black always wants to get rid of that light-squared bishop. The bishop to a6 is the try — and move order decides whether it's punished.",
-   "kind": "review",
-   "teaches": "Recognise Black's standing wish to trade the bad French bishop and time your response.",
-   "plans": "Trade on a6 at the right moment.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -193,10 +171,7 @@
     "Qxd7+",
     "Kxd7"
    ],
-   "spoken": "The wrong order: the immediate queen to a4 check runs into the queen to d7, blocking and hitting back — there's no time to grab the bishop, and after the king recaptures Black is out of the woods. You must trade on a6 first, then win the knight.",
-   "kind": "review",
-   "teaches": "Move order matters: capture the bishop first, then Qa4+ wins the knight — the check first fails to ...Qd7.",
-   "plans": "Bxa6 first, then Qa4+.",
+   "spoken": "Why not the check on a4 at once? Move order matters — Black would answer ...Qd7, meeting the tension, and after the queens come off and the king recaptures, Black is out of the woods. So trade on a6 first, then win the knight.",
    "reanchor": true
   },
   {
@@ -289,10 +264,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Black keeps neglecting development, so castle and bang on the gas — the pawn to f4. Against the knight to h6, the quiet h3 keeps things in hand before committing the storm; the natural-looking knight to g3 has a hidden drawback here.",
-   "kind": "main",
-   "teaches": "Speed up against a lagging opponent, but check for the tactical drawback before the obvious preparing move.",
-   "plans": "f4, h3, then f5."
+   "spoken": ""
   }
  ]
 }

@@ -4,7 +4,7 @@
  "openingName": "Caro-Kann Defense: Fantasy Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:i8G7wozMNcU",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Caro-Kann."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We build the centre with d4."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black challenges with d5."
   },
   {
    "ply": 5,
@@ -42,9 +42,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "The pawn to f3 is the Fantasy Variation — an offbeat, tricky way to keep the full centre and steer for a quick attack. Its reputation is far worse than its bite.",
-   "kind": "main",
-   "teaches": "f3 holds the centre and invites sharp play many Caro players simply don't know."
+   "spoken": "We play f3 — the Fantasy Variation."
   },
   {
    "ply": 6,
@@ -53,7 +51,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on e4."
   },
   {
    "ply": 7,
@@ -62,7 +60,7 @@
    "line": [
     "fxe4"
    ],
-   "spoken": ""
+   "spoken": "We recapture on e4."
   },
   {
    "ply": 8,
@@ -71,7 +69,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...e5, the main line."
   },
   {
    "ply": 9,
@@ -80,7 +78,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 10,
@@ -89,7 +87,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Black pins with ...Bg4 — but without ...e6 to support it, it's flirting with disaster."
   },
   {
    "ply": 11,
@@ -98,7 +96,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to c4, aiming at f7."
   },
   {
    "ply": 12,
@@ -107,7 +105,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6 — a blunder that walks into the shot."
   },
   {
    "ply": 13,
@@ -116,9 +114,7 @@
    "line": [
     "Bxf7+"
    ],
-   "spoken": "White sacrifices the bishop on f7 with check. The point is the reply: after the king takes, the knight leaps to e5 with check and forks the king together with the loose bishop on g4 — check first, win the piece next.",
-   "kind": "trap",
-   "teaches": "A sacrifice works when the recapture runs into a knight that checks the king and hits a piece in the same move."
+   "spoken": "The bishop crashes on f7 with check."
   },
   {
    "ply": 14,
@@ -127,7 +123,7 @@
    "line": [
     "Kxf7"
    ],
-   "spoken": ""
+   "spoken": "Black takes with the king."
   },
   {
    "ply": 15,
@@ -136,7 +132,7 @@
    "line": [
     "Nxe5+"
    ],
-   "spoken": ""
+   "spoken": "The knight takes on e5 with check, forking the king and the g4-bishop."
   },
   {
    "ply": 16,
@@ -145,7 +141,7 @@
    "line": [
     "Kg8"
    ],
-   "spoken": ""
+   "spoken": "Black's king scrambles back to g8."
   },
   {
    "ply": 17,
@@ -154,9 +150,7 @@
    "line": [
     "Nxg4"
    ],
-   "spoken": "Two pawns up, the black king dragged to g8 and stripped bare, White's knight picks off the bishop that had come to g4. This is already winning, straight out of the opening.",
-   "kind": "main",
-   "teaches": "The sacrifice's dividend is material plus a permanently exposed king."
+   "spoken": "We scoop the bishop, taking on g4 — up a clean pawn."
   },
   {
    "ply": 18,
@@ -165,7 +159,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to d7."
   },
   {
    "ply": 19,
@@ -174,7 +168,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3."
   },
   {
    "ply": 20,
@@ -183,7 +177,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": ""
+   "spoken": "Black pins with the bishop to b4."
   },
   {
    "ply": 21,
@@ -192,7 +186,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle, up a pawn with a raging attack."
   },
   {
    "ply": 22,
@@ -201,7 +195,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to c7."
   },
   {
    "ply": 23,
@@ -210,7 +204,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We push e5, kicking the f6-knight."
   },
   {
    "ply": 22,
@@ -332,9 +326,7 @@
    "line": [
     "Na4"
    ],
-   "spoken": "In the ...Qb6 sideline lurks a trap: Black's bishop to c5 builds a dark-square battery, and a careless knight to e2 is mated — check on f2, the king dragged to d2, and the queen to e3 finishes it. The antidote is the knight to a4, which hits the c5-bishop and shores up those dark squares.",
-   "kind": "trap",
-   "teaches": "Know the one defensive move that both attacks the intruder and plugs the mating squares."
+   "spoken": ""
   },
   {
    "ply": 14,

@@ -4,7 +4,7 @@
  "openingName": "Alekhine's Defense: Four Pawns Attack",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:1rcEbI44WqE",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "We open with e4, and Black springs the Alekhine, the knight to f6."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We go for maximum space, chasing the knight with e5."
   },
   {
    "ply": 4,
@@ -33,10 +33,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "The Alekhine: Black offers the knight as a target, daring White's pawns forward. The whole opening is a provocation — let the centre advance, then strike at it.",
-   "kind": "main",
-   "teaches": "The Alekhine is hypermodern — invite the pawn centre, then undermine it.",
-   "plans": "Build the big centre, but be ready to defend it."
+   "spoken": "The knight jumps in to d5."
   },
   {
    "ply": 5,
@@ -45,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We build the big centre with d4 — heading for the Four Pawns Attack."
   },
   {
    "ply": 6,
@@ -54,7 +51,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black strikes at our centre with d6."
   },
   {
    "ply": 7,
@@ -63,7 +60,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "We keep grabbing space with c4, kicking the knight again."
   },
   {
    "ply": 8,
@@ -72,7 +69,7 @@
    "line": [
     "Nb6"
    ],
-   "spoken": ""
+   "spoken": "The knight retreats to b6. The classical main line is to take on d6, but there's a far more ambitious road."
   },
   {
    "ply": 9,
@@ -81,10 +78,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "The pawn to f4 completes the Four Pawns Attack — pawns on c4, d4, e4 and f4, absolute central domination. It is the most ambitious try, but it comes at the cost of development: play it carelessly and White can be crushed inside five moves.",
-   "kind": "main",
-   "teaches": "Maximum space and lagging development are two sides of one coin — the Four Pawns must be handled precisely.",
-   "plans": "Hold the centre together and catch up in development."
+   "spoken": "The Four Pawns Attack — f4, propping up e5. It's central domination, and if White doesn't know it, White can get crushed in five moves."
   },
   {
    "ply": 10,
@@ -93,7 +87,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "Black strikes first, capturing on e5."
   },
   {
    "ply": 11,
@@ -102,7 +96,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": ""
+   "spoken": "We recapture on e5 with the f-pawn — a giant centre, but we've fallen behind in development."
   },
   {
    "ply": 12,
@@ -111,7 +105,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6. The automatic knight-to-f3 here is a serious inaccuracy because of the bishop to g4."
   },
   {
    "ply": 13,
@@ -120,10 +114,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": "The key restraint: do NOT push c5 to gain a tempo — that would concede the d5-square as a permanent outpost and tear a hole in the centre. Instead defend the e-pawn by developing the bishop to e3, keeping the whole pawn mass intact.",
-   "kind": "main",
-   "teaches": "Don't chase a tempo with a pawn push that hands the opponent a permanent hole — develop to defend instead.",
-   "plans": "Hold d5 under control; develop the pieces behind the centre."
+   "spoken": "Rather than c5, which would gift the d5 outpost, we defend the centre with the bishop to e3."
   },
   {
    "ply": 14,
@@ -132,7 +123,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to f5."
   },
   {
    "ply": 15,
@@ -141,10 +132,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Develop the knight to c3. It supports the centre and readies the answer to the knight jump to b4 — the rook simply steps to c1 and the intruder achieves nothing.",
-   "kind": "main",
-   "teaches": "Develop toward your weaknesses — the c3-knight and c1-rook cover the b4 and c-file ideas.",
-   "plans": "Complete development, then expand."
+   "spoken": "We develop the knight to c3, so a later knight-to-b4 can be met with the rook to c1."
   },
   {
    "ply": 16,
@@ -153,7 +141,7 @@
    "line": [
     "Qd7"
    ],
-   "spoken": ""
+   "spoken": "Black lines the queen up on d7."
   },
   {
    "ply": 17,
@@ -162,10 +150,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "Now the knight comes to f3. With enough pieces out, the pin by the bishop on g4 has lost its sting, so it is time to finish developing and think about castling.",
-   "kind": "main",
-   "teaches": "A pin is only dangerous while you're underdeveloped — once you can meet it, ignore it and develop.",
-   "plans": "Castle and turn to the attack."
+   "spoken": "Now that we're developed, the knight to f3 is safe — the bishop-g4 pin no longer bites."
   },
   {
    "ply": 18,
@@ -174,7 +159,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Black pins the f3-knight with the bishop to g4 anyway."
   },
   {
    "ply": 19,
@@ -183,7 +168,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "We sacrifice a pawn for development — the bishop to e2, classic Naroditsky style, trusting our two bishops and lead in development."
   },
   {
    "ply": 20,
@@ -192,7 +177,7 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles queenside instead of grabbing the pawn."
   },
   {
    "ply": 21,
@@ -201,10 +186,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Once Black has castled queenside, the pawn to c5 changes everything: it clamps the position and jump-starts a queenside pawn-storm straight at the black king, with the queen ready to swing out to a4 and join in.",
-   "kind": "main",
-   "teaches": "Against a queenside-castled king, a pawn clamp like c5 is the first move of a direct attack.",
-   "plans": "Push the queenside pawns and bring the queen to a4."
+   "spoken": "The engine's idea — c5. With Black castled queenside, giving up d5 is worth it: c5 clamps down and jump-starts our own attack."
   },
   {
    "ply": 22,
@@ -213,7 +195,7 @@
    "line": [
     "Nd5"
    ],
-   "spoken": ""
+   "spoken": "Black posts the knight on d5."
   },
   {
    "ply": 23,
@@ -222,7 +204,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "We take on d5."
   },
   {
    "ply": 24,
@@ -231,7 +213,7 @@
    "line": [
     "Qxd5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the queen, capturing on d5."
   },
   {
    "ply": 25,
@@ -240,7 +222,7 @@
    "line": [
     "Kf2"
    ],
-   "spoken": ""
+   "spoken": "Artemis-style — the king to f2, guarding the bishop, connecting the rooks, and preparing the queen to a4."
   },
   {
    "ply": 26,
@@ -249,7 +231,7 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "Black solidifies with e6."
   },
   {
    "ply": 27,
@@ -258,7 +240,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "The queen to a4 is tempting, but first we tickle with h3 — so if the bishop ever comes to h5, we have g4 in our pocket."
   },
   {
    "ply": 28,
@@ -267,7 +249,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": ""
+   "spoken": "The bishop drops instead to f5, a little unexpected."
   },
   {
    "ply": 30,
@@ -277,7 +259,7 @@
     "Qa4",
     "Qe4"
    ],
-   "spoken": ""
+   "spoken": "Out comes the queen to a4, and Black answers with the queen to e4, eyeing our c5-pawn."
   },
   {
    "ply": 33,
@@ -288,7 +270,7 @@
     "Qc2",
     "b4"
    ],
-   "spoken": ""
+   "spoken": "We sidestep the queen to a3, Black slots the queen into c2, and we push b4, insisting on the attack."
   },
   {
    "ply": 35,
@@ -298,7 +280,7 @@
     "Be7",
     "b5"
    ],
-   "spoken": ""
+   "spoken": "Black tucks the bishop to e7, and we roll on with b5."
   },
   {
    "ply": 36,
@@ -307,7 +289,7 @@
    "line": [
     "Nb8"
    ],
-   "spoken": ""
+   "spoken": "The knight is forced back to b8 — so we can simply grab the a7-pawn."
   },
   {
    "ply": 37,
@@ -316,7 +298,7 @@
    "line": [
     "Qxa7"
    ],
-   "spoken": ""
+   "spoken": "We snatch the pawn, capturing on a7 with the queen."
   },
   {
    "ply": 38,
@@ -325,7 +307,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "Black tries the bishop to d3 — less of a problem than it looks."
   },
   {
    "ply": 39,
@@ -334,7 +316,7 @@
    "line": [
     "Rhe1"
    ],
-   "spoken": ""
+   "spoken": "We defend by bringing the h-rook over to e1."
   },
   {
    "ply": 40,
@@ -343,7 +325,7 @@
    "line": [
     "Bxb5"
    ],
-   "spoken": ""
+   "spoken": "Black grabs back, capturing on b5 with the bishop. It's tremendously complex — you just roll with the chaos."
   },
   {
    "ply": 41,
@@ -352,7 +334,7 @@
    "line": [
     "Rab1"
    ],
-   "spoken": ""
+   "spoken": "Better than trading queens: the a-rook swings to b1."
   },
   {
    "ply": 42,
@@ -361,7 +343,7 @@
    "line": [
     "Qa4"
    ],
-   "spoken": ""
+   "spoken": "Black finds a brilliant resource — the queen to a4, defending the bishop and offering the trade."
   },
   {
    "ply": 44,
@@ -371,7 +353,7 @@
     "Qxa4",
     "Bxa4"
    ],
-   "spoken": ""
+   "spoken": "We have to take, and Black recaptures with the bishop, capturing on a4 — into an endgame."
   },
   {
    "ply": 45,
@@ -380,7 +362,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "We reroute — the knight to d2, aiming for c4 and a5."
   },
   {
    "ply": 46,
@@ -389,7 +371,7 @@
    "line": [
     "f6"
    ],
-   "spoken": ""
+   "spoken": "Black plays f6. That b7-pawn is a long-term weakness with the file open."
   },
   {
    "ply": 47,
@@ -398,7 +380,7 @@
    "line": [
     "Nc4"
    ],
-   "spoken": ""
+   "spoken": "The knight to c4 — if Black takes on e5 we take back with the knight, so we both eye a5 and guard e5."
   },
   {
    "ply": 48,
@@ -407,7 +389,7 @@
    "line": [
     "Bc6"
    ],
-   "spoken": ""
+   "spoken": "The bishop returns to c6. Now knight-to-a5 no longer works — it would drop the e5-pawn."
   },
   {
    "ply": 49,
@@ -416,7 +398,7 @@
    "line": [
     "Bf3"
    ],
-   "spoken": ""
+   "spoken": "We don't want the centre to collapse, so we target the bishop and offer a trade with the bishop to f3."
   },
   {
    "ply": 50,
@@ -425,7 +407,7 @@
    "line": [
     "fxe5"
    ],
-   "spoken": ""
+   "spoken": "Black takes, capturing on e5 — but now b7 loses its last defender."
   },
   {
    "ply": 51,
@@ -434,7 +416,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "We take back with the knight, capturing on e5."
   },
   {
    "ply": 52,
@@ -443,7 +425,7 @@
    "line": [
     "Rhf8"
    ],
-   "spoken": ""
+   "spoken": "Black lifts the h-rook to f8 — but that leaves the e6-pawn weak."
   },
   {
    "ply": 53,
@@ -452,7 +434,7 @@
    "line": [
     "Kg3"
    ],
-   "spoken": ""
+   "spoken": "We step the king to g3, breaking the pin."
   },
   {
    "ply": 55,
@@ -462,7 +444,7 @@
     "Bxf3",
     "Nxf3"
    ],
-   "spoken": ""
+   "spoken": "Black takes on f3, and we recapture with the knight, capturing on f3 — no isolated pawns."
   },
   {
    "ply": 56,
@@ -471,7 +453,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "The knight comes out to c6 — and the rook stops covering e6."
   },
   {
    "ply": 57,
@@ -480,7 +462,7 @@
    "line": [
     "Bf2"
    ],
-   "spoken": ""
+   "spoken": "We drop the bishop back to f2, building pressure on e6 and planning to double rooks on the e-file."
   },
   {
    "ply": 59,
@@ -490,7 +472,7 @@
     "Rf6",
     "Re4"
    ],
-   "spoken": ""
+   "spoken": "Black defends with the rook to f6, and we centralise our rook to e4. About equal — this will be a grind."
   },
   {
    "ply": 61,
@@ -500,7 +482,7 @@
     "Rd5",
     "Rbe1"
    ],
-   "spoken": ""
+   "spoken": "Black slides the rook to d5, and we double up with the rook to e1."
   },
   {
    "ply": 63,
@@ -510,7 +492,7 @@
     "Kd7",
     "Kh2"
    ],
-   "spoken": ""
+   "spoken": "Black's king walks to d7, and our king tucks back to h2, freeing the bishop's diagonal."
   },
   {
    "ply": 65,
@@ -520,7 +502,7 @@
     "h6",
     "Bg3"
    ],
-   "spoken": ""
+   "spoken": "Black plays h6, and we reposition the bishop to g3 — d4 still has its two defenders."
   },
   {
    "ply": 67,
@@ -530,7 +512,7 @@
     "g5",
     "Be5"
    ],
-   "spoken": ""
+   "spoken": "Black expands with g5, and we plant the bishop on e5, offering a trade to shift that f6-rook."
   },
   {
    "ply": 68,
@@ -539,7 +521,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "Black goes for it, capturing on e5 with the knight."
   },
   {
    "ply": 69,
@@ -548,7 +530,7 @@
    "line": [
     "Nxe5+"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight, capturing on e5 with check — and the king must leave d7, weakening e6."
   },
   {
    "ply": 70,
@@ -557,7 +539,7 @@
    "line": [
     "Kd8"
    ],
-   "spoken": ""
+   "spoken": "The king steps to d8."
   },
   {
    "ply": 71,
@@ -566,7 +548,7 @@
    "line": [
     "Ng4"
    ],
-   "spoken": ""
+   "spoken": "The knight swings back to g4, hitting the rook and preparing to capture on e6."
   },
   {
    "ply": 72,
@@ -575,7 +557,7 @@
    "line": [
     "Rg6"
    ],
-   "spoken": ""
+   "spoken": "Black defends with the rook to g6. Grabbing e6 now gets murky, so we play patiently."
   },
   {
    "ply": 73,
@@ -584,7 +566,7 @@
    "line": [
     "Rf1"
    ],
-   "spoken": ""
+   "spoken": "We take the open f-file with the rook to f1, continuing to probe."
   },
   {
    "ply": 74,
@@ -593,7 +575,7 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "Black pushes h5. Our plan is to make inroads with a rook to f7."
   },
   {
    "ply": 75,
@@ -602,7 +584,7 @@
    "line": [
     "Ne3"
    ],
-   "spoken": ""
+   "spoken": "We don't want the rook reaching f6, so we drop the knight back to e3 with tempo."
   },
   {
    "ply": 76,
@@ -611,7 +593,7 @@
    "line": [
     "Rd7"
    ],
-   "spoken": ""
+   "spoken": "Black covers with the rook to d7 — now the rook to f7 runs into a bishop-d6 check, so we reroute."
   },
   {
    "ply": 77,
@@ -620,7 +602,7 @@
    "line": [
     "Rb1"
    ],
-   "spoken": ""
+   "spoken": "The rook goes to b1, back to the old plan of hitting b7."
   },
   {
    "ply": 78,
@@ -629,7 +611,7 @@
    "line": [
     "Kc8"
    ],
-   "spoken": ""
+   "spoken": "The king shuffles to c8."
   },
   {
    "ply": 80,
@@ -639,7 +621,7 @@
     "Nc4",
     "g4"
    ],
-   "spoken": ""
+   "spoken": "We reroute the knight to c4, and Black lunges g4."
   },
   {
    "ply": 81,
@@ -648,7 +630,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": ""
+   "spoken": "The knight lands on e5 — pressure, pressure, pressure."
   },
   {
    "ply": 82,
@@ -657,7 +639,7 @@
    "line": [
     "g3+"
    ],
-   "spoken": ""
+   "spoken": "And finally a blunder — Black pushes g3 with check."
   },
   {
    "ply": 83,
@@ -666,7 +648,7 @@
    "line": [
     "Kg1"
    ],
-   "spoken": ""
+   "spoken": "We step the king to g1."
   },
   {
    "ply": 84,
@@ -675,7 +657,7 @@
    "line": [
     "Rf6"
    ],
-   "spoken": ""
+   "spoken": "Black missed the fork, playing the rook to f6 and expecting knight-to-a5."
   },
   {
    "ply": 85,
@@ -684,7 +666,7 @@
    "line": [
     "Nxd7"
    ],
-   "spoken": ""
+   "spoken": "There's the fork — the knight takes, capturing on d7."
   },
   {
    "ply": 86,
@@ -693,7 +675,7 @@
    "line": [
     "Kxd7"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the king on d7."
   },
   {
    "ply": 87,
@@ -702,7 +684,7 @@
    "line": [
     "Rf1"
    ],
-   "spoken": ""
+   "spoken": "Rather than grab another pawn, we play the rook to f1, offering the trade and preparing to infiltrate on f7."
   },
   {
    "ply": 88,
@@ -711,7 +693,7 @@
    "line": [
     "Rg6"
    ],
-   "spoken": ""
+   "spoken": "Black sidesteps the rook to g6."
   },
   {
    "ply": 89,
@@ -720,7 +702,7 @@
    "line": [
     "Rf7"
    ],
-   "spoken": ""
+   "spoken": "We reach the seventh rank with the rook to f7."
   },
   {
    "ply": 90,
@@ -729,7 +711,7 @@
    "line": [
     "Ke8"
    ],
-   "spoken": ""
+   "spoken": "The king retreats to e8."
   },
   {
    "ply": 91,
@@ -738,7 +720,7 @@
    "line": [
     "Rh7"
    ],
-   "spoken": ""
+   "spoken": "The other rook joins on h7."
   },
   {
    "ply": 92,
@@ -747,7 +729,7 @@
    "line": [
     "h4"
    ],
-   "spoken": ""
+   "spoken": "Black pushes h4."
   },
   {
    "ply": 93,
@@ -756,7 +738,7 @@
    "line": [
     "Rf4"
    ],
-   "spoken": ""
+   "spoken": "We don't want the rook coming to f6 and f2, so we cover with the rook to f4, planning to double on the seventh."
   },
   {
    "ply": 95,
@@ -766,7 +748,7 @@
     "Bg5",
     "Rf3"
    ],
-   "spoken": ""
+   "spoken": "Black tries the bishop to g5, and we swing the rook to f3, snuffing out counterplay Soviet-schoolboy style."
   },
   {
    "ply": 96,
@@ -775,7 +757,7 @@
    "line": [
     "Bf6"
    ],
-   "spoken": ""
+   "spoken": "Black blocks with the bishop to f6 — we may have to concede the d4-pawn."
   },
   {
    "ply": 97,
@@ -784,7 +766,7 @@
    "line": [
     "Rf4"
    ],
-   "spoken": ""
+   "spoken": "We suck it up and play the rook to f4, heading for f7."
   },
   {
    "ply": 99,
@@ -794,7 +776,7 @@
     "Bg5",
     "Rff7"
    ],
-   "spoken": ""
+   "spoken": "Black returns the bishop to g5, and we double on the seventh with the rook to f7 — totally winning; it's just one pawn."
   },
   {
    "ply": 101,
@@ -804,7 +786,7 @@
     "Be3+",
     "Kf1"
    ],
-   "spoken": ""
+   "spoken": "Black checks with the bishop to e3, and our king steps to f1. We're going to take on c7 and threaten mate."
   },
   {
    "ply": 103,
@@ -814,7 +796,7 @@
     "Bxd4",
     "Rxc7"
    ],
-   "spoken": ""
+   "spoken": "Black grabs the pawn, capturing on d4, and we take on c7 with the rook — threatening mate on c8."
   },
   {
    "ply": 104,
@@ -823,7 +805,7 @@
    "line": [
     "Rf6+"
    ],
-   "spoken": ""
+   "spoken": "Black checks with the rook to f6."
   },
   {
    "ply": 105,
@@ -832,7 +814,7 @@
    "line": [
     "Ke2"
    ],
-   "spoken": ""
+   "spoken": "We march the king toward the centre — king to e2, staying clear of any mating net."
   },
   {
    "ply": 107,
@@ -842,14 +824,15 @@
     "Be5",
     "Rc8#"
    ],
-   "spoken": ""
+   "spoken": "Black tries the bishop to e5, and we finish it — the rook to c8, checkmate. Tough game, but we're over 2100."
   },
   {
    "ply": 9,
    "t": 1146.5,
    "fen": "rnbqkb1r/ppp1pppp/1n1p4/4P3/2PP1P2/8/PP4PP/RNBQKBNR b KQkq - 0 5",
    "line": [],
-   "spoken": ""
+   "spoken": "Looking back, after the queen to a4 and Black's queen to e4, we simply had the knight to g5 — Black would be busted, forced to move the queen, and we'd win a heap of material. A relatively straightforward miss.",
+   "reanchor": true
   }
  ]
 }

@@ -4,7 +4,7 @@
  "openingName": "Scotch Game",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:OE2pJpVVzYw",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take White; Black answers our king's pawn with ...e5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6."
   },
   {
    "ply": 5,
@@ -42,9 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 is the Scotch — striking e5 at once to open the center and free the pieces for quick, active development.",
-   "kind": "main",
-   "teaches": "The Scotch opens the center immediately with d4."
+   "spoken": "We strike with d4 — the Scotch, opening the centre and teaching you to play with all your pieces."
   },
   {
    "ply": 6,
@@ -53,7 +51,7 @@
    "line": [
     "exd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 7,
@@ -62,7 +60,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight."
   },
   {
    "ply": 8,
@@ -71,14 +69,15 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6 — passive: it frees one bishop but blocks the other."
   },
   {
    "ply": 7,
    "t": 151.5,
    "fen": "r1bqkbnr/pppp1ppp/2n5/8/3NP3/8/PPP2PPP/RNBQKB1R b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "The trouble with ...d6 is that the dark-squared bishop now only reaches e7, a serviceable but unexciting square. The ten-out-of-ten choices were ...Bc5 or ...Nf6.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -96,7 +95,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3."
   },
   {
    "ply": 10,
@@ -105,7 +104,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 11,
@@ -114,9 +113,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "Bishop to c4 trains on f7 — the softest square in Black's camp — building long-term pressure and setting up sacrificial ideas against the king.",
-   "kind": "main",
-   "teaches": "Place the bishop on c4 to pressure f7 and prepare tactics."
+   "spoken": "We drop the bishop on c4 — not b5, whose pin Black would simply break with ...Bd7. On c4 it mounts sustained pressure on f7."
   },
   {
    "ply": 12,
@@ -125,7 +122,7 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "Black plays g6 to fianchetto — but notice the queens standing off along the d-file, and Black's queen guarded only by the knight and the king."
   },
   {
    "ply": 13,
@@ -134,7 +131,7 @@
    "line": [
     "Nxc6"
    ],
-   "spoken": ""
+   "spoken": "The plan begins — we take on c6, clearing the knight so the f7 breakthrough becomes possible."
   },
   {
    "ply": 15,
@@ -144,9 +141,7 @@
     "bxc6",
     "e5"
    ],
-   "spoken": "e5 is a decoy thrust — it attacks the knight on f6 and, if Black grabs it, opens lines to spring Bxf7-based tactics against the king.",
-   "kind": "main",
-   "teaches": "A central pawn push can act as a decoy, luring pieces away and opening attacking lines."
+   "spoken": "Black recaptures with the b-pawn onto c6; we play the decoy e5, attacking the f6-knight."
   },
   {
    "ply": 16,
@@ -155,7 +150,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black hits our bishop with d5, counterattacking."
   },
   {
    "ply": 17,
@@ -164,14 +159,15 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "The cleaner way to win the knight — the bishop to g5, pinning it to the queen and setting up a fork."
   },
   {
    "ply": 16,
    "t": 410.5,
    "fen": "r1bqkb1r/p1p2p1p/2p2np1/3pP3/2B5/2N5/PPP2PPP/R1BQK2R w KQkq - 0 9",
    "line": [],
-   "spoken": ""
+   "spoken": "When your opponent is this far behind — both bishops still home, castling nowhere in sight — opening the position and using the e-file favours the better-developed side.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -190,7 +186,8 @@
    "line": [
     "exf6"
    ],
-   "spoken": ""
+   "spoken": "Take the knight with the pawn, not the bishop: after exf6, if Black recaptures we stay a clean piece up, whereas grabbing on g5 first would only trade our bishops off. A piece up, we needn't trade everything — opening the f-file with f4 and f5 to attack the king is often the faster conversion, and after ...g5 the h5-square would open for the queen.",
+   "reanchor": true
   },
   {
    "ply": 20,

@@ -1,10 +1,10 @@
 {
  "videoId": "BzN6MEleBlQ",
  "title": "Beating The Scandinavian Defense | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Scandinavian Defense: 3.Nc3 Qa5, g3 System (White)",
+ "openingName": "Scandinavian Defense",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:BzN6MEleBlQ",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "d5"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Scandinavian."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "We take on d5."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Qxd5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the queen."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3, hitting the queen with tempo."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": ""
+   "spoken": "Black slides the queen to a5."
   },
   {
    "ply": 7,
@@ -60,10 +60,7 @@
    "line": [
     "g3"
    ],
-   "spoken": "Here is the surprise: the fianchetto with the pawn to g3. It looks modest, but it is an easy, low-theory system against the Qa5 Scandinavian that catches many players off guard.",
-   "kind": "main",
-   "teaches": "A quiet fianchetto setup can be a practical weapon precisely because opponents don't prepare for it.",
-   "plans": "Fianchetto, develop, and target the c6-pawn."
+   "spoken": "We fianchetto with g3."
   },
   {
    "ply": 9,
@@ -73,7 +70,7 @@
     "c6",
     "Bg2"
    ],
-   "spoken": ""
+   "spoken": "Black plays c6; we complete the fianchetto with the bishop to g2."
   },
   {
    "ply": 10,
@@ -82,7 +79,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 11,
@@ -91,10 +88,7 @@
    "line": [
     "Nge2"
    ],
-   "spoken": "The knight develops to e2, not f3 — deliberately, so it does not block the g2-bishop. White's whole plan is to break down Black's c6-pawn and open the long diagonal for that bishop.",
-   "kind": "main",
-   "teaches": "Develop the knight to e2 to keep the fianchettoed bishop's diagonal clear.",
-   "plans": "Prepare the b-pawn advance to hit c6."
+   "spoken": "We develop the knight to e2."
   },
   {
    "ply": 13,
@@ -104,7 +98,7 @@
     "e5",
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black grabs the centre with ...e5; we castle."
   },
   {
    "ply": 14,
@@ -113,7 +107,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": ""
+   "spoken": "Black pins with the bishop to b4."
   },
   {
    "ply": 15,
@@ -122,10 +116,7 @@
    "line": [
     "a3"
    ],
-   "spoken": "Meet the bishop pin on b4 with the simple pawn to a3. It is a natural response, and it fits the plan — the b-pawn is on its way to b4 and b5, a minority attack against c6.",
-   "kind": "main",
-   "teaches": "a3 both questions the pinning bishop and clears the path for the b-pawn's advance.",
-   "plans": "Push b4-b5 to undermine c6."
+   "spoken": "We challenge the bishop with a3."
   },
   {
    "ply": 16,
@@ -134,7 +125,7 @@
    "line": [
     "Bxc3"
    ],
-   "spoken": ""
+   "spoken": "Black takes our knight, capturing on c3."
   },
   {
    "ply": 17,
@@ -143,7 +134,7 @@
    "line": [
     "Nxc3"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight."
   },
   {
    "ply": 18,
@@ -152,10 +143,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "Against the bishop coming to g4, do NOT weaken with f3 — instead the queen steps to e1, unpinning quietly and keeping the queenside plan rolling.",
-   "kind": "main",
-   "teaches": "Answer a pin with a repositioning move, not a weakening pawn push.",
-   "plans": "Continue the b-pawn minority attack."
+   "spoken": "Black plays the bishop to g4."
   },
   {
    "ply": 19,
@@ -164,7 +152,7 @@
    "line": [
     "Qe1"
    ],
-   "spoken": ""
+   "spoken": "We unpin with the flexible queen to e1."
   },
   {
    "ply": 20,
@@ -173,7 +161,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 21,
@@ -182,7 +170,7 @@
    "line": [
     "d3"
    ],
-   "spoken": ""
+   "spoken": "We play d3, solidifying the centre."
   },
   {
    "ply": 22,
@@ -191,7 +179,7 @@
    "line": [
     "Re8"
    ],
-   "spoken": ""
+   "spoken": "Black plays the rook to e8."
   },
   {
    "ply": 23,
@@ -200,7 +188,7 @@
    "line": [
     "b4"
    ],
-   "spoken": ""
+   "spoken": "We gain a tempo with b4, expanding on the queenside."
   },
   {
    "ply": 24,
@@ -209,7 +197,7 @@
    "line": [
     "Qa6"
    ],
-   "spoken": ""
+   "spoken": "Black retreats the queen to a6."
   },
   {
    "ply": 25,
@@ -218,7 +206,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "We play h3, poking the bishop."
   },
   {
    "ply": 26,
@@ -227,7 +215,7 @@
    "line": [
     "Bh5"
    ],
-   "spoken": ""
+   "spoken": "Black retreats the bishop to h5."
   },
   {
    "ply": 27,
@@ -236,7 +224,7 @@
    "line": [
     "Bb2"
    ],
-   "spoken": ""
+   "spoken": "We fianchetto the dark-squared bishop to b2."
   },
   {
    "ply": 26,

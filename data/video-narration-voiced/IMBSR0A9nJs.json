@@ -1,10 +1,10 @@
 {
  "videoId": "IMBSR0A9nJs",
  "title": "Philidor Defence | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Philidor Defence",
+ "openingName": "Philidor Defense",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:IMBSR0A9nJs",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take White; Black answers our king's pawn with ...e5."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "Black plays d6 — the Philidor."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": ""
+   "spoken": "We develop the Italian bishop to c4."
   },
   {
    "ply": 4,
@@ -68,9 +68,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 opens the center — Black's ...c6/...d6 shell is passive, so prying lines open exposes his lag in development.",
-   "kind": "main",
-   "teaches": "Open the center against a passive shell to punish slow development."
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -79,7 +77,7 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "Black lunges ...b5, hitting the bishop."
   },
   {
    "ply": 9,
@@ -88,7 +86,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": ""
+   "spoken": "We retreat the bishop to b3."
   },
   {
    "ply": 10,
@@ -106,9 +104,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": "Recapturing with the knight centralizes it powerfully on d4 — better than the pawn, which would only have been a target for Black's queenside expansion.",
-   "kind": "main",
-   "teaches": "Recapture toward the center with a piece to gain a strong central post."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -117,7 +113,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "Black grabs more space with c5."
   },
   {
    "ply": 13,
@@ -126,9 +122,7 @@
    "line": [
     "Bd5"
    ],
-   "spoken": "Bishop to d5 punishes the greedy overextension — it dominates the long diagonal, hits the undefended rook on a8, and Black's loose queenside pawns can't cope.",
-   "kind": "main",
-   "teaches": "Exploit overextended pawns with a piece that strikes through the gaps they left."
+   "spoken": "We plant the bishop on d5, eyeing the a8-rook down the long diagonal."
   },
   {
    "ply": 12,
@@ -154,7 +148,8 @@
    "line": [
     "Bxa8"
    ],
-   "spoken": ""
+   "spoken": "The point of Bd5 is the raid on a8 — but snatching the rook there can trap the bishop in the corner, so we keep developing and hold the threat over Black.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -163,7 +158,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to b6."
   },
   {
    "ply": 17,
@@ -172,7 +167,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 18,
@@ -181,7 +176,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e7."
   },
   {
    "ply": 19,
@@ -190,7 +185,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We play c3, buttressing d4."
   },
   {
    "ply": 20,
@@ -199,7 +194,7 @@
    "line": [
     "Na6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to a6."
   },
   {
    "ply": 21,

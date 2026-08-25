@@ -1,10 +1,10 @@
 {
  "videoId": "_j8aiuqS4_0",
  "title": "Master Class | Scandinavian Defense | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Scandinavian Defense: 2.exd5 Nf6, 3.Bb5+ (White)",
+ "openingName": "Scandinavian Defense",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:_j8aiuqS4_0",
  "moves": [
   {
@@ -17,7 +17,7 @@
     "exd5",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "We take White; Black plays the Scandinavian, and after we take on d5 recaptures with ...Nf6 rather than the queen."
   },
   {
    "ply": 5,
@@ -26,10 +26,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "The bishop check on b5 is the point of this whole system against the Nf6 Scandinavian — it provokes a block, and the natural blocks leave Black slightly awkward.",
-   "kind": "main",
-   "teaches": "A check that forces a clumsy block is worth a tempo — the b5 bishop unbalances Black's development.",
-   "plans": "Retreat the bishop and keep the small pull."
+   "spoken": "We give the instructive check on b5."
   },
   {
    "ply": 6,
@@ -38,7 +35,7 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": ""
+   "spoken": "Black blocks with the knight to d7."
   },
   {
    "ply": 5,
@@ -54,7 +51,8 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "The bishop block on d7 is the more popular choice; after ...Nxd5 and d4 that bishop sits awkwardly and is often forced to move again to f5, while White keeps a slight edge.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -63,10 +61,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": "Drop the bishop back to e2. The point is to keep Black's blocking bishop badly placed — refuse the trade and leave it in its own way.",
-   "kind": "main",
-   "teaches": "Don't relieve the opponent by trading off their bad piece — retreat and let it stay awkward.",
-   "plans": "Grab the centre with d4 next."
+   "spoken": "We simply drop the bishop back to e2, giving the pawn back."
   },
   {
    "ply": 9,
@@ -76,7 +71,7 @@
     "Nxd5",
     "d4"
    ],
-   "spoken": ""
+   "spoken": "Black regains the pawn with the knight on d5; we take the centre with d4."
   },
   {
    "ply": 10,
@@ -85,10 +80,7 @@
    "line": [
     "Bf5"
    ],
-   "spoken": "After the knight recaptures and the pawn comes to d4, Black's blocking bishop is in the way of everything and usually has to move yet again to f5. Black is tremendously solid — but White holds a slight, lasting edge.",
-   "kind": "main",
-   "teaches": "A rock-solid but passive setup still concedes a small edge — pressure the extra space.",
-   "plans": "Develop naturally and squeeze the space."
+   "spoken": "Black develops the bishop to f5, out of its own way."
   },
   {
    "ply": 11,
@@ -97,7 +89,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 12,
@@ -106,7 +98,7 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "Black plays e6 — a tremendously solid setup."
   },
   {
    "ply": 13,
@@ -115,10 +107,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "Here is the positional trap: the natural-looking pawn to c4 is less good than it appears, because the knight jumps to b4 and threatens the fork on c2, which is very hard to meet.",
-   "kind": "trap",
-   "teaches": "Before a space-grab like c4, check for a knight leap to b4 hitting c2 — a common Scandinavian/Alekhine trap.",
-   "plans": "Prepare c4 with a3 first."
+   "spoken": "We play c4 — though this is less good than it looks."
   },
   {
    "ply": 14,
@@ -127,7 +116,7 @@
    "line": [
     "Bb4+"
    ],
-   "spoken": ""
+   "spoken": "Black tries the check on b4 — not the most testing reply."
   },
   {
    "ply": 15,
@@ -136,7 +125,7 @@
    "line": [
     "Bd2"
    ],
-   "spoken": ""
+   "spoken": "We block with the bishop to d2."
   },
   {
    "ply": 16,
@@ -145,7 +134,7 @@
    "line": [
     "Bxd2+"
    ],
-   "spoken": ""
+   "spoken": "Black trades on d2 with check."
   },
   {
    "ply": 17,
@@ -154,14 +143,15 @@
    "line": [
     "Qxd2"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the queen — comfortable, in great shape."
   },
   {
    "ply": 13,
    "t": 1316,
    "fen": "rn1qkb1r/ppp2ppp/4p3/3n1b2/2PP4/5N2/PP2BPPP/RNBQK2R b KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "The real point against c4 is ...Nb4, threatening ...Nc2 with a fork — White's only serious defence is Na3, and that knight is left stranded, unable to re-enter the game. That's why c4 is less good than it looks; d4, transposing to a Panov, is the cleaner path.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -179,10 +169,7 @@
    "line": [
     "Na3"
    ],
-   "spoken": "The only serious defence to the c2-fork is the knight to a3 — and look how bad it is: stuck on the rim, it cannot re-enter the game, while Black is free to strike with c5. That is the price of the careless c4.",
-   "kind": "main",
-   "teaches": "A knight banished to a3 to stop a fork is a long-term liability — avoid the move that forces it.",
-   "plans": "(Prevention: play a3 before c4.)"
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -215,10 +202,7 @@
    "t": 1349.5,
    "fen": "rn1qkb1r/pppbpppp/5n2/1B1P4/8/8/PPPP1PPP/RNBQK1NR w KQkq - 3 4",
    "line": [],
-   "spoken": "The correct handling is prophylaxis first: play a3 to cover b4, and only then c4. The trap is defused and White keeps the space with no downside.",
-   "kind": "main",
-   "teaches": "Cover the tactical square before the strategic push — a3 then c4.",
-   "plans": "Then develop harmoniously with the extra central space."
+   "spoken": ""
   },
   {
    "ply": 8,

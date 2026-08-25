@@ -4,7 +4,7 @@
  "openingName": "Caro-Kann Defense: Exchange Variation",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:kO4qTTR0B7o",
  "moves": [
   {
@@ -16,7 +16,7 @@
     "c6",
     "e4"
    ],
-   "spoken": ""
+   "spoken": "We play the Caro-Kann; White builds a big centre with d4 and e4."
   },
   {
    "ply": 7,
@@ -28,7 +28,7 @@
     "cxd5",
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We challenge with d5, the centre is exchanged, and White plays the knight to c3 — an inaccuracy. It blocks the c2-pawn, so White's d4-pawn effectively becomes isolated, with no pawn left to defend it. The sharp c4, the Panov, is fine; the solid path I teach is the bishop to d3 and then c3 to shore the pawn up."
   },
   {
    "ply": 8,
@@ -37,7 +37,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c6, hitting the d4-pawn."
   },
   {
    "ply": 9,
@@ -46,7 +46,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to f3."
   },
   {
    "ply": 10,
@@ -55,7 +55,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f6."
   },
   {
    "ply": 12,
@@ -65,9 +65,7 @@
     "Bb5",
     "Bg4"
    ],
-   "spoken": "The bishop to g4 pins the knight on f3 — but the real lesson is timing: when do you cash a pin, and when do you keep the tension?",
-   "kind": "main",
-   "teaches": "A pin is a resource to be timed, not a move to resolve automatically."
+   "spoken": "White pins with the bishop to b5, and we pin back with the bishop to g4."
   },
   {
    "ply": 13,
@@ -76,7 +74,7 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "White plays h3, questioning our bishop."
   },
   {
    "ply": 14,
@@ -85,7 +83,7 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": ""
+   "spoken": "Here's the instructive decision: take on f3, or retreat the bishop to h5?"
   },
   {
    "ply": 13,
@@ -133,7 +131,8 @@
    "line": [
     "Bh5"
    ],
-   "spoken": ""
+   "spoken": "The rule for when to capture versus procrastinate: delay until the point of no return — the moment your opponent can permanently prevent what you want. Here, retreating to h5 lets White play g4, and suddenly you've lost the chance to take the knight at all.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -142,7 +141,7 @@
    "line": [
     "g4"
    ],
-   "spoken": ""
+   "spoken": "See it: had we retreated, g4 hits the bishop."
   },
   {
    "ply": 16,
@@ -151,7 +150,7 @@
    "line": [
     "Bg6"
    ],
-   "spoken": ""
+   "spoken": "The bishop goes to g6 — and the whole point, taking the knight, is gone."
   },
   {
    "ply": 17,
@@ -160,9 +159,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "The danger of over-holding the pin: if the bishop keeps retreating, White plays g4 and then the knight to e5 — the pin is broken, the bishop is shut out on g6, and Black is simply worse. That is the point of no return.",
-   "kind": "branch",
-   "teaches": "Don't cling to a pin past the moment the opponent can break it favorably."
+   "spoken": "White lands the knight on e5, very unpleasant: the bishop that was supposed to capture White's knight now becomes the instrument of our own demise — it can even get trapped."
   },
   {
    "ply": 18,
@@ -171,7 +168,7 @@
    "line": [
     "Rc8"
    ],
-   "spoken": ""
+   "spoken": "We're forced into the rook to c8, and with h4–h5 coming it's grim."
   },
   {
    "ply": 13,
@@ -204,9 +201,8 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "So Black takes on f3 at the right moment, trading the bishop for the knight before White can ever untangle with g4 and the knight leap. Timing the capture is the whole point.",
-   "kind": "main",
-   "teaches": "Cash a pin the instant before the opponent could free the pinned piece on good terms."
+   "spoken": "The real lesson: don't treat g4 as automatically weakening and something to induce — here inducing it backfires. Instead we simply take the knight and play ...e6, ...Bd6, castle, and press the weak pawn with ...Qb6. For White, castling long is dangerous with that weak d-pawn and the semi-open c-file, and castling short just drops the pawn.",
+   "reanchor": true
   }
  ]
 }

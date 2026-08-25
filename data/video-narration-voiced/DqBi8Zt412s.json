@@ -1,10 +1,10 @@
 {
  "videoId": "DqBi8Zt412s",
  "title": "Master Class | Nimzowitsch | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Center Game / Danish",
+ "openingName": "Center Game",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:DqBi8Zt412s",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We take White; Black answers our king's pawn with ...e5."
   },
   {
    "ply": 3,
@@ -24,9 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": "d4 hits e5 at once — the Center Game and Danish family, offering to open the position fast and drag Black into a fight before development is complete.",
-   "kind": "main",
-   "teaches": "Challenge e5 with d4 to open the center immediately."
+   "spoken": "We strike immediately with d4."
   },
   {
    "ply": 4,
@@ -35,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black defends with ...Nc6."
   },
   {
    "ply": 5,
@@ -44,7 +42,7 @@
    "line": [
     "dxe5"
    ],
-   "spoken": ""
+   "spoken": "We take on e5."
   },
   {
    "ply": 6,
@@ -53,7 +51,7 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the knight."
   },
   {
    "ply": 7,
@@ -62,7 +60,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3."
   },
   {
    "ply": 8,
@@ -71,7 +69,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": ""
+   "spoken": "Black pins with the bishop to b4."
   },
   {
    "ply": 9,
@@ -80,9 +78,7 @@
    "line": [
     "Qd4"
    ],
-   "spoken": "The queen boldly takes d4, centralizing and eyeing the knight on e5 and the bishop on b4 together — aggressive and committal, bending opening rules for concrete pressure.",
-   "kind": "main",
-   "teaches": "A centralized queen can be strong early if it makes real threats faster than it can be harassed."
+   "spoken": "We play the queen to d4, forking the knight and the bishop."
   },
   {
    "ply": 10,
@@ -91,7 +87,7 @@
    "line": [
     "Qe7"
    ],
-   "spoken": ""
+   "spoken": "Black defends with ...Qe7."
   },
   {
    "ply": 11,
@@ -100,7 +96,7 @@
    "line": [
     "f4"
    ],
-   "spoken": ""
+   "spoken": "We kick the knight with f4."
   },
   {
    "ply": 10,
@@ -116,9 +112,7 @@
    "line": [
     "f4"
    ],
-   "spoken": "f4 kicks the strong knight off e5 with tempo, clearing the center while the queen keeps dominating from d4.",
-   "kind": "main",
-   "teaches": "Use a pawn thrust to evict a centralized enemy knight with gain of time."
+   "spoken": ""
   },
   {
    "ply": 12,
@@ -127,7 +121,7 @@
    "line": [
     "Ng6"
    ],
-   "spoken": ""
+   "spoken": "Black retreats the knight to g6."
   },
   {
    "ply": 13,
@@ -136,7 +130,7 @@
    "line": [
     "Qxg7"
    ],
-   "spoken": ""
+   "spoken": "The queen grabs on g7."
   },
   {
    "ply": 14,
@@ -145,7 +139,7 @@
    "line": [
     "Qxe4+"
    ],
-   "spoken": ""
+   "spoken": "Black snatches on e4 with check."
   },
   {
    "ply": 15,
@@ -154,7 +148,7 @@
    "line": [
     "Kd1"
    ],
-   "spoken": ""
+   "spoken": "We step the king to d1."
   },
   {
    "ply": 16,
@@ -163,7 +157,7 @@
    "line": [
     "Bxc3"
    ],
-   "spoken": ""
+   "spoken": "Black takes our knight, capturing on c3."
   },
   {
    "ply": 17,
@@ -172,7 +166,7 @@
    "line": [
     "Qxc3"
    ],
-   "spoken": ""
+   "spoken": "We snap the bishop, the queen swinging down the long diagonal to c3."
   },
   {
    "ply": 18,
@@ -181,7 +175,7 @@
    "line": [
     "c6"
    ],
-   "spoken": ""
+   "spoken": "Black plays c6."
   },
   {
    "ply": 19,
@@ -190,7 +184,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 20,
@@ -199,7 +193,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black plays d5."
   },
   {
    "ply": 21,
@@ -208,7 +202,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to d3, hitting the queen."
   },
   {
    "ply": 20,

@@ -1,10 +1,10 @@
 {
  "videoId": "cKeN_oR3VEA",
  "title": "The Alapin Sicilian | The Sensei Speedrun | Grandmaster Naroditsky",
- "openingName": "Sicilian Defense: Alapin Variation (2.c3)",
+ "openingName": "Sicilian Defense: Alapin Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:cKeN_oR3VEA",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Sicilian."
   },
   {
    "ply": 3,
@@ -24,10 +24,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "The pawn to c3 — the Alapin. Instead of a theory-heavy Open Sicilian, White prepares to build a big centre with d4 and simply gets a pleasant, better position out of the opening again and again.",
-   "kind": "main",
-   "teaches": "The Alapin sidesteps Sicilian theory and fights for a classical pawn centre.",
-   "plans": "Follow with d4 and occupy the centre."
+   "spoken": "We play c3 — the Alapin."
   },
   {
    "ply": 4,
@@ -36,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6."
   },
   {
    "ply": 5,
@@ -45,7 +42,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We build the centre with d4."
   },
   {
    "ply": 6,
@@ -54,7 +51,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 7,
@@ -63,10 +60,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": "After the centre is exchanged, Black essentially must play d5 to get a viable game — every other move hands White full control of the centre and a wonderful position.",
-   "kind": "main",
-   "teaches": "In the Alapin, if Black doesn't hit back with d5, White simply owns the centre.",
-   "plans": "If Black doesn't play d5, seize the centre with pieces."
+   "spoken": "We recapture on d4."
   },
   {
    "ply": 8,
@@ -75,10 +69,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "The pawn to d6 is a common inaccuracy — it declines the d5 break and cedes the centre. White is already better and can develop with a free hand.",
-   "kind": "main",
-   "teaches": "Passing up the freeing break in the Alapin is a real, if quiet, concession.",
-   "plans": "Build the centre and develop with tempo."
+   "spoken": "Black plays d6."
   },
   {
    "ply": 9,
@@ -87,10 +78,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Develop the knight to c3 first, not f3 — the knight on f3 would allow the pin with the bishop on g4. There is no reason to hand Black that extra option.",
-   "kind": "main",
-   "teaches": "Choose the developing move that denies the opponent a useful pin.",
-   "plans": "Restrict the c8-bishop before committing the king's knight."
+   "spoken": "We develop the knight to c3."
   },
   {
    "ply": 10,
@@ -99,7 +87,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 11,
@@ -108,10 +96,7 @@
    "line": [
     "h3"
    ],
-   "spoken": "The little pawn to h3 restricts the light-squared bishop, taking g4 away and nudging it toward the far more passive d7-square. A small move with a lasting positional point.",
-   "kind": "main",
-   "teaches": "A timely h3 denies the bishop its active diagonal and keeps it passive.",
-   "plans": "Complete development behind the big centre."
+   "spoken": "We play h3, taking the g4-square."
   },
   {
    "ply": 12,
@@ -120,7 +105,7 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "Black fianchettoes with ...g6."
   },
   {
    "ply": 13,
@@ -129,7 +114,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 14,
@@ -138,7 +123,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "Black completes the fianchetto with the bishop to g7."
   },
   {
    "ply": 15,
@@ -147,7 +132,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to e3."
   },
   {
    "ply": 16,
@@ -156,7 +141,7 @@
    "line": [
     "a6"
    ],
-   "spoken": ""
+   "spoken": "Black plays a6."
   },
   {
    "ply": 17,
@@ -165,10 +150,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "Place the bishop on d3, NOT c4. On c4 it would be vulnerable to the pawn thrust b5 and to being hit by the pieces; on d3 it reinforces the centre and stays safe, giving White a free hand on both wings.",
-   "kind": "main",
-   "teaches": "Develop the bishop where it supports the centre and dodges b5 — d3 over c4 here.",
-   "plans": "Castle, keep the centre, and play on both sides."
+   "spoken": "We develop the bishop to d3."
   },
   {
    "ply": 18,
@@ -177,7 +159,7 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "Black expands with b5."
   },
   {
    "ply": 19,
@@ -186,7 +168,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 18,
@@ -211,7 +193,7 @@
    "line": [
     "Bb7"
    ],
-   "spoken": ""
+   "spoken": "Black fianchettoes the bishop to b7."
   },
   {
    "ply": 21,
@@ -220,7 +202,7 @@
    "line": [
     "a4"
    ],
-   "spoken": ""
+   "spoken": "We challenge with a4."
   },
   {
    "ply": 22,
@@ -229,7 +211,7 @@
    "line": [
     "Na7"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...Na7, defending b5."
   },
   {
    "ply": 21,
@@ -254,7 +236,7 @@
    "line": [
     "axb5"
    ],
-   "spoken": ""
+   "spoken": "We take on b5."
   },
   {
    "ply": 24,
@@ -263,7 +245,7 @@
    "line": [
     "axb5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the a-pawn."
   },
   {
    "ply": 25,
@@ -272,7 +254,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "We push d5, gaining space."
   },
   {
    "ply": 26,
@@ -281,7 +263,7 @@
    "line": [
     "b4"
    ],
-   "spoken": ""
+   "spoken": "Black pushes b4, hitting the knight."
   },
   {
    "ply": 29,
@@ -292,7 +274,7 @@
     "Nd7",
     "Qxb4"
    ],
-   "spoken": ""
+   "spoken": "We play the queen to b3; Black develops ...Nd7; and we snap on b4 with the queen."
   },
   {
    "ply": 30,
@@ -301,7 +283,7 @@
    "line": [
     "Qb8"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to b8."
   },
   {
    "ply": 31,
@@ -310,7 +292,7 @@
    "line": [
     "Nb5"
    ],
-   "spoken": ""
+   "spoken": "We jump the knight to b5."
   },
   {
    "ply": 33,
@@ -320,7 +302,7 @@
     "Nxb5",
     "Bxb5"
    ],
-   "spoken": ""
+   "spoken": "Black takes our knight on b5; we recapture with the bishop."
   },
   {
    "ply": 30,
@@ -347,7 +329,7 @@
    "line": [
     "Qc7"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to c7."
   },
   {
    "ply": 35,
@@ -356,7 +338,7 @@
    "line": [
     "Bb6"
    ],
-   "spoken": ""
+   "spoken": "We play the bishop to b6, hitting the queen."
   },
   {
    "ply": 34,
@@ -381,7 +363,7 @@
    "line": [
     "Qb8"
    ],
-   "spoken": ""
+   "spoken": "Black retreats the queen to b8."
   },
   {
    "ply": 37,
@@ -390,7 +372,7 @@
    "line": [
     "Bxd7+"
    ],
-   "spoken": ""
+   "spoken": "The bishop grabs on d7 with check."
   },
   {
    "ply": 38,
@@ -399,7 +381,7 @@
    "line": [
     "Kxd7"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the king."
   },
   {
    "ply": 37,

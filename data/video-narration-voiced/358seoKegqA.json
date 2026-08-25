@@ -1,10 +1,10 @@
 {
  "videoId": "358seoKegqA",
  "title": "Settle for a Draw!?! | Scandinavian Defense | GM Naroditsky’s Theory Speed Run",
- "openingName": "Scandinavian Defense: 2.exd5 Nf6, 3.Bb5+ (White)",
+ "openingName": "Scandinavian Defense: Modern Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:358seoKegqA",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "d5"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Scandinavian, the Center Counter."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "We capture on d5."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures the idea with the knight to f6 — the Modern variation, less common than ...Qxd5."
   },
   {
    "ply": 3,
@@ -58,10 +58,7 @@
    "line": [
     "Bb5+"
    ],
-   "spoken": "The bishop check on b5 — an easy-to-play line that dodges heavy theory. It forces a piece to appear on d7, an awkward square for Black.",
-   "kind": "main",
-   "teaches": "The b5 check trades a little material tension for an easy, slightly better game.",
-   "plans": "Return the pawn later, keep the space and the better bishop."
+   "spoken": "We play the instructive check on b5 — a developing move that forces a piece to d7, cutting the queen off from the d5-pawn. You could try to cling to the pawn with a trade and c4, but that's a mistake: ...c6 gives Black massive compensation."
   },
   {
    "ply": 6,
@@ -70,7 +67,7 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "Black blocks with the bishop to d7."
   },
   {
    "ply": 7,
@@ -79,7 +76,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "Instead we drop the bishop back to e2 — we simply give the d5-pawn back."
   },
   {
    "ply": 8,
@@ -88,7 +85,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "Black regains the pawn with the knight on d5."
   },
   {
    "ply": 9,
@@ -97,7 +94,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We occupy the centre with d4 for a small, easy edge. The whole point of the b5–e2 manoeuvre was to lure Black's bishop to the awkward d7-square, where it cuts the queen from the centre and clogs the knight's development."
   },
   {
    "ply": 10,
@@ -106,7 +103,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...c5. If we take, ...Qa5 with check regains the pawn and fights for the centre."
   },
   {
    "ply": 9,
@@ -131,10 +128,7 @@
    "line": [
     "c4"
    ],
-   "spoken": "When Black strikes with c5, the clamp is the pawn to c4 followed by d5 — driving a pawn deep and establishing a firm central presence Black must play around.",
-   "kind": "main",
-   "teaches": "Answer a wing break by clamping the centre with c4 and d5.",
-   "plans": "Fix the centre, then finish development."
+   "spoken": "As in the Alapin, we push c4, planning to drive on to d5 for a firmer central grip."
   },
   {
    "ply": 12,
@@ -143,7 +137,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black retreats the knight to f6."
   },
   {
    "ply": 13,
@@ -152,7 +146,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "We stick to the plan and push d5."
   },
   {
    "ply": 14,
@@ -161,10 +155,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "With the pawn wedged on d5 and Black committed to e6, White has a pleasant space advantage and a clear plan — a comfortable, low-risk edge out of the opening.",
-   "kind": "main",
-   "teaches": "A protected pawn on d5 cramping the opponent is a durable, easy-to-play plus.",
-   "plans": "Develop behind the clamp and press."
+   "spoken": "Black hits the wedge with ...e6. The instinct is the knight to c3 and recapture with the c-pawn, but an isolated d5-pawn would become a liability — so, anticlimactically, we take on e6."
   },
   {
    "ply": 16,
@@ -174,7 +165,7 @@
     "dxe6",
     "fxe6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the f-pawn. That saddles Black with a weak e6-pawn and a less safe king — though I underrated how strong Black's central pawns would later become."
   },
   {
    "ply": 17,
@@ -183,7 +174,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to c3, guarding against a black knight reaching d4."
   },
   {
    "ply": 18,
@@ -192,7 +183,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6."
   },
   {
    "ply": 19,
@@ -201,7 +192,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 20,
@@ -210,7 +201,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to e7."
   },
   {
    "ply": 21,
@@ -219,7 +210,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle."
   },
   {
    "ply": 22,
@@ -228,14 +219,15 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles. Now the key decision is where to develop our dark-squared bishop, while watching Black's plan of ...e5 with a knight outpost on d4."
   },
   {
    "ply": 13,
    "t": 420,
    "fen": "rn1qkb1r/pp1bpppp/5n2/2pP4/2P5/8/PP2BPPP/RNBQK1NR b KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "The middlegame turns on the d4-square. Don't let Black plant a knight there — trading it only leaves an annoying pawn in its place. The bishop to f4 is prophylactic but steps into a \"positional discovered attack\", ...Ne4, which trades off our dark bishop to secure d4; the bishop to g5 is the safest development. Against ...Nh5 you needn't trade — the retreat to g3 keeps the tension, though it concedes the bishop pair. The quiet, unstated battle throughout is who controls d4, and it's worth small, patient improving moves rather than forcing matters. And a candid lesson: even played naturally, you'll sometimes just get outplayed — not every game is mistake-free.",
+   "reanchor": true
   },
   {
    "ply": 16,

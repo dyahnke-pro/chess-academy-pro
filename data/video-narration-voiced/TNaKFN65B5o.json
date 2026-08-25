@@ -1,10 +1,10 @@
 {
  "videoId": "TNaKFN65B5o",
  "title": "Master Class | Ruy Lopez | Chess Speedrun | Grandmaster Naroditsky",
- "openingName": "Ruy Lopez, Marshall Attack",
+ "openingName": "Ruy Lopez: Marshall Attack",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:TNaKFN65B5o",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We play e5 for once — we haven't gone for it much this speedrun, even though it's what most people play."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White develops the knight to f3, hitting our pawn."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "We defend with a knight to c6."
   },
   {
    "ply": 5,
@@ -42,7 +42,7 @@
    "line": [
     "Bb5"
    ],
-   "spoken": ""
+   "spoken": "A bishop to b5 — the Ruy Lopez."
   },
   {
    "ply": 6,
@@ -51,7 +51,7 @@
    "line": [
     "a6"
    ],
-   "spoken": ""
+   "spoken": "We head for the main line with a6, questioning the bishop."
   },
   {
    "ply": 7,
@@ -60,7 +60,7 @@
    "line": [
     "Ba4"
    ],
-   "spoken": ""
+   "spoken": "White retreats to a4."
   },
   {
    "ply": 8,
@@ -69,7 +69,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "And we develop the knight to f6, hitting e4."
   },
   {
    "ply": 9,
@@ -78,7 +78,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles — Morphy's move, the main line ever since. The main reply isn't a bishop to c5."
   },
   {
    "ply": 10,
@@ -87,7 +87,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "A bishop to c5 is the Møller and a bishop to b5-side is the Archangel; the main move is the modest bishop to e7."
   },
   {
    "ply": 11,
@@ -96,14 +96,16 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "White plays a rook to e1 — and now it actually poses a threat.",
+   "reanchor": true
   },
   {
    "ply": 10,
    "t": 80.5,
    "fen": "r1bqk2r/1pppbppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 w kq - 4 6",
    "line": [],
-   "spoken": ""
+   "spoken": "At various points in the Ruy, White can capture on c6 and grab e5 — pointless while our e4 is hanging.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -112,7 +114,8 @@
    "line": [
     "Re1"
    ],
-   "spoken": ""
+   "spoken": "But once the rook comes to e1, a capture on c6 followed by a capture on e5 becomes a real threat.",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -121,9 +124,7 @@
    "line": [
     "b5"
    ],
-   "spoken": "The move b5 grabs queenside space and kicks the bishop back — a useful insertion that removes the Bxc6 ideas before Black commits to the freeing ...d5 plan.",
-   "kind": "main",
-   "teaches": "Insert a useful tempo-gaining pawn move before your main freeing break."
+   "spoken": "You might think it's time for d6, but first we throw in the very useful b5 — grabbing queenside space and forcing the bishop back."
   },
   {
    "ply": 13,
@@ -132,7 +133,7 @@
    "line": [
     "Bb3"
    ],
-   "spoken": ""
+   "spoken": "White retreats to b3. Now e5 is no longer hanging, so d6 isn't forced — the main move d6 just opens the bishop, but we can also play the Marshall Gambit."
   },
   {
    "ply": 14,
@@ -141,7 +142,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle, going for the Marshall — not moving the d-pawn, hoping to play d5 in one fell swoop. If White plays c3, we can choose the Marshall with d5 or transpose back to the main line with d6."
   },
   {
    "ply": 15,
@@ -150,7 +151,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "White plays c3."
   },
   {
    "ply": 16,
@@ -159,9 +160,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "d5 is the Marshall Gambit — Black boldly sacrifices the e5-pawn to blow the center open and unleash a ferocious attack on White's king, buying the initiative for a pawn.",
-   "kind": "main",
-   "teaches": "Sacrifice a central pawn to open lines and seize a lasting attacking initiative."
+   "spoken": "So we play the Marshall Gambit — d5, sacrificing a pawn for a raging initiative."
   },
   {
    "ply": 17,
@@ -170,7 +169,8 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "White captures on d5.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -179,7 +179,8 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight on d5.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -188,7 +189,8 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "White grabs on e5 — the gambit is that we've sacrificed it.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -197,7 +199,8 @@
    "line": [
     "Nxe5"
    ],
-   "spoken": ""
+   "spoken": "We take on e5, and White recaptures with the rook.",
+   "reanchor": true
   },
   {
    "ply": 21,
@@ -206,7 +209,8 @@
    "line": [
     "Rxe5"
    ],
-   "spoken": ""
+   "spoken": "Our knight on d5 is hanging, so we have to deal with that threat.",
+   "reanchor": true
   },
   {
    "ply": 22,
@@ -215,7 +219,7 @@
    "line": [
     "c6"
    ],
-   "spoken": ""
+   "spoken": "The best move is to defend the knight with a pawn — c6. Defending a piece with a pawn is generally the way forward."
   },
   {
    "ply": 23,
@@ -224,7 +228,8 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "White plays d4. Now we need to chase the rook off e5 — it's in our way — while aiming our pieces at White's king.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -233,7 +238,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "So a bishop to d6, chasing the rook knowing that once it moves, our pieces are trained on the white king."
   },
   {
    "ply": 26,
@@ -243,9 +248,8 @@
     "Re1",
     "Qh4"
    ],
-   "spoken": "Queen to h4 hurls the last attacker at the white king — the standard Marshall follow-up, coordinating queen, bishop and knight for threats on the kingside.",
-   "kind": "main",
-   "teaches": "Bring the queen into the attack to combine with your active pieces against the king."
+   "spoken": "The rook retreats, and we bring the queen into the attack with a queen to h4.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -255,7 +259,8 @@
     "g3",
     "Qh3"
    ],
-   "spoken": ""
+   "spoken": "White plays g3, and the queen sinks into h3. This is all theory — I'm rusty on it, and White looks out of book too. Our compensation is clear: a development lead and Swiss-cheese light squares around White's king. If his bishop could reach g2, Black would have nothing — but it can't, so those weak light squares are a lasting problem. The immediate threat is a bishop to g4, hitting the queen.",
+   "reanchor": true
   },
   {
    "ply": 29,
@@ -264,7 +269,8 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "White plays a knight to d2 — not a main line, sensible but awkward.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -273,7 +279,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Now the bishop can't move, and it does nothing against a bishop to g4 — so let's play it and see where his queen goes."
   },
   {
    "ply": 31,
@@ -282,14 +288,15 @@
    "line": [
     "f3"
    ],
-   "spoken": ""
+   "spoken": "White plays f3, tremendously weakening — and the moment it's played you should start looking for the typical tactic."
   },
   {
    "ply": 30,
    "t": 332,
    "fen": "r4rk1/5ppp/p1pb4/1p1n4/3P2b1/1BP3Pq/PP1N1P1P/R1BQR1K1 w - - 3 16",
    "line": [],
-   "spoken": ""
+   "spoken": "It's not a knight to e3, which just drops the knight — it's a bishop capture on g3. The f3 push weakened g3, a weak link in White's camp.",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -298,7 +305,8 @@
    "line": [
     "f3"
    ],
-   "spoken": ""
+   "spoken": "Sacrificing the bishop on g3 is often low-risk, because we have a perpetual check in our pocket. If you spot a sacrifice that at least guarantees a draw, the risk collapses — you can spend the rest of your time hunting for the win, since a draw beats a loss.",
+   "reanchor": true
   },
   {
    "ply": 32,
@@ -307,7 +315,8 @@
    "line": [
     "Bxg3"
    ],
-   "spoken": ""
+   "spoken": "So a bishop capture on g3. If White grabs the light-squared bishop instead he gets mated — a queen to h2, the king to f1, a queen to f2 — so he essentially has to take, and then a queen recapture on g3 gives at least perpetual, though I believe we have more.",
+   "reanchor": true
   },
   {
    "ply": 33,
@@ -316,7 +325,8 @@
    "line": [
     "Nf1"
    ],
-   "spoken": ""
+   "spoken": "White plays a knight to f1 — not testing. A big mistake when sacrificing is forgetting you can simply win material.",
+   "reanchor": true
   },
   {
    "ply": 34,
@@ -325,7 +335,8 @@
    "line": [
     "Bxe1"
    ],
-   "spoken": ""
+   "spoken": "A bishop capture on e1 — the rook just hangs! We take it, go up the exchange, and the attack rolls on. Black is winning.",
+   "reanchor": true
   },
   {
    "ply": 35,
@@ -334,7 +345,8 @@
    "line": [
     "fxg4"
    ],
-   "spoken": ""
+   "spoken": "White recaptures on g4.",
+   "reanchor": true
   },
   {
    "ply": 36,
@@ -343,7 +355,7 @@
    "line": [
     "Rae8"
    ],
-   "spoken": ""
+   "spoken": "We could retreat the bishop to h4, but that's plain — a rook to e8 does more, defending the bishop and bringing the rook toward e4 to hit g4, potentially crushing."
   },
   {
    "ply": 37,
@@ -352,7 +364,8 @@
    "line": [
     "Bxd5"
    ],
-   "spoken": ""
+   "spoken": "White captures on d5.",
+   "reanchor": true
   },
   {
    "ply": 38,
@@ -361,7 +374,8 @@
    "line": [
     "cxd5"
    ],
-   "spoken": ""
+   "spoken": "We recapture on d5. The only reason I put the a-rook on e8 was a possible f5 to open the file — otherwise it doesn't much matter.",
+   "reanchor": true
   },
   {
    "ply": 39,
@@ -370,7 +384,8 @@
    "line": [
     "Bf4"
    ],
-   "spoken": ""
+   "spoken": "White plays a bishop to f4. The f5 idea looks really nice here.",
+   "reanchor": true
   },
   {
    "ply": 40,
@@ -379,7 +394,7 @@
    "line": [
     "f5"
    ],
-   "spoken": ""
+   "spoken": "So let's play f5, trying to open the f-file. If White answers g5, we get a passed f-pawn that can later push to f4 and accelerate the attack."
   },
   {
    "ply": 41,
@@ -388,7 +403,8 @@
    "line": [
     "Be5"
    ],
-   "spoken": ""
+   "spoken": "White plays a bishop to e5 — a good move. In such positions it's less about exact moves than following a consistent strategy with healthy attacking moves.",
+   "reanchor": true
   },
   {
    "ply": 42,
@@ -397,7 +413,8 @@
    "line": [
     "Bh4"
    ],
-   "spoken": ""
+   "spoken": "White intercepts with a bishop to h4, so our bishop is attacked and must move — but that's no issue; if we open the file, the game ends fast.",
+   "reanchor": true
   },
   {
    "ply": 43,
@@ -406,7 +423,8 @@
    "line": [
     "gxf5"
    ],
-   "spoken": ""
+   "spoken": "White captures on f5.",
+   "reanchor": true
   },
   {
    "ply": 44,
@@ -415,7 +433,8 @@
    "line": [
     "Rxf5"
    ],
-   "spoken": ""
+   "spoken": "We recapture, and the f-file is ours with a million threats — a rook to f2 hitting the queen and threatening mate on g2. Its only drawback is that White can give up material to survive a little longer, so a rook to f8 doubling might finish faster. But if you see a move that wins the queen and you know how to convert, just do it — don't rule out a win because it takes a few extra moves.",
+   "reanchor": true
   },
   {
    "ply": 47,
@@ -426,7 +445,8 @@
     "Rf2",
     "Qxf2"
    ],
-   "spoken": ""
+   "spoken": "You get into trouble when you dismiss options just because they feel slow.",
+   "reanchor": true
   },
   {
    "ply": 49,
@@ -445,7 +465,8 @@
    "line": [
     "Rf8+"
    ],
-   "spoken": ""
+   "spoken": "We throw in a rook check on f8 to reposition the rook onto the open file.",
+   "reanchor": true
   },
   {
    "ply": 51,
@@ -454,7 +475,8 @@
    "line": [
     "Kg1"
    ],
-   "spoken": ""
+   "spoken": "The king goes to g1. Now the plan is to eliminate White's defensive resource.",
+   "reanchor": true
   },
   {
    "ply": 52,
@@ -463,7 +485,8 @@
    "line": [
     "h5"
    ],
-   "spoken": ""
+   "spoken": "We want to stop White from blocking a check with a piece on g5, so we push the h-pawn to take that square under control — White is totally paralyzed — and then lift a rook to g5 to force the king out.",
+   "reanchor": true
   },
   {
    "ply": 53,
@@ -472,14 +495,16 @@
    "line": [
     "Rd1"
    ],
-   "spoken": ""
+   "spoken": "White plays a rook to d1. The classic mistake would be to reflexively push the h-pawn — but keep your eyes peeled for faster wins, like a queen to g4 winning the rook.",
+   "reanchor": true
   },
   {
    "ply": 9,
    "t": 820,
    "fen": "r1bqkb1r/1ppp1ppp/p1n2n2/4p3/B3P3/5N2/PPPP1PPP/RNBQ1RK1 b kq - 3 5",
    "line": [],
-   "spoken": ""
+   "spoken": "A simple game. At this level the Marshall is a very good weapon against the main-line Ruy Lopez.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -499,7 +524,8 @@
     "b5",
     "Bb3"
    ],
-   "spoken": ""
+   "spoken": "We won't dwell on the opening — this isn't an opening course. At the very top, people don't enter the Marshall much anymore; players like Wesley, Duda and Giri prefer the Anti-Marshall.",
+   "reanchor": true
   },
   {
    "ply": 14,
@@ -508,7 +534,8 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "At the highest level the Marshall is considered to fully equalize for Black — nobody's found anything serious for White — so you'll often see a4 instead.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -517,7 +544,8 @@
    "line": [
     "a4"
    ],
-   "spoken": ""
+   "spoken": "a4 gets a different kind of position.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -527,7 +555,8 @@
     "d5",
     "axb5"
    ],
-   "spoken": ""
+   "spoken": "You can't play d5 there — it just drops b5.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -543,7 +572,8 @@
    "line": [
     "b4"
    ],
-   "spoken": ""
+   "spoken": "And after b4, White often goes for d4...",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -552,7 +582,8 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "...which gets its own position, again denying Black the d5 Marshall break.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -575,7 +606,8 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "Even ten years ago almost everyone went into the Marshall, and people still do — it's not gone.",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -585,7 +617,8 @@
     "d5",
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "Marshall was actually the second person to play it. His original idea wasn't the knight recapture on d5 — he first played it against Frere in 1917, then against Capablanca.",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -594,7 +627,8 @@
    "line": [
     "e4"
    ],
-   "spoken": ""
+   "spoken": "Against Capablanca, in his very first Marshall in a simul, he played a capture on e4 here — still the second-most-popular move, but modern theory says it's just not good for Black.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -604,7 +638,8 @@
     "dxc6",
     "exf3"
    ],
-   "spoken": ""
+   "spoken": "White captures on c6, Black takes on f3, and White can even grab another pawn.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -615,7 +650,8 @@
     "Bg4",
     "Qg3"
    ],
-   "spoken": ""
+   "spoken": "Despite Black's initiative, there just isn't enough compensation for two pawns.",
+   "reanchor": true
   },
   {
    "ply": 24,
@@ -633,21 +669,24 @@
    "line": [
     "Qh4"
    ],
-   "spoken": ""
+   "spoken": "So a year later, in 1918, Marshall switched to the knight recapture on d5 — but the theory was primitive then.",
+   "reanchor": true
   },
   {
    "ply": 18,
    "t": 940.5,
    "fen": "r1bq1rk1/2p1bppp/p1n2n2/1p1P4/4p3/1BP2N2/PP1P1PPP/RNBQR1K1 w - - 0 10",
    "line": [],
-   "spoken": ""
+   "spoken": "Everybody up to the 1940s played a knight to f6 after the rook capture, rerouting the knight via g4 — nowadays that's not good. The move c6 was first played only in 1939 by Conel Hugh O'Donel Alexander, who also helped decrypt German communications in the war — the Imitation Game connection. After c6, d4, a bishop to d6, a rook to e1, a queen to h4, g3, a queen to h3, there are two main tries for White: a bishop to e3 and a rook to e4. A knight to d2 is just bad — in our game it's essentially a fatal mistake because of the bishop to g4. Black overwhelms White in the center and on the kingside; if a knight to f3, then a nasty pin with a queen to h5 and a rook to e8 leaves White in ruins. After f3 and the bishop to g3, if White had captured, the winning move is a knight to f4, threatening mate on g2; if he gives up the rook, a bishop capture on f3 and we're winning on material and attack. The engine says White's only try is a rook to e2 giving up the exchange, but after the bishop capture on c2 and a queen to e2, Black is much better. So the Marshall was absolutely not refuted — Marshall just didn't play accurately because the theory was undeveloped. Black is doing great in the Marshall today.",
+   "reanchor": true
   },
   {
    "ply": 14,
    "t": 1201,
    "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N2/PPPP1PPP/RNBQR1K1 w - - 2 8",
    "line": [],
-   "spoken": ""
+   "spoken": "The Anti-Marshall isn't one thing — it's several moves that discourage d5, like h3.",
+   "reanchor": true
   },
   {
    "ply": 15,
@@ -656,7 +695,8 @@
    "line": [
     "h3"
    ],
-   "spoken": ""
+   "spoken": "One of them is h3.",
+   "reanchor": true
   },
   {
    "ply": 16,
@@ -665,7 +705,8 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "And I believe d5 there is inaccurate...",
+   "reanchor": true
   },
   {
    "ply": 18,
@@ -675,7 +716,8 @@
     "exd5",
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "...because after the capture and the knight recapture on d5, White doesn't have to take on e5.",
+   "reanchor": true
   },
   {
    "ply": 19,
@@ -684,14 +726,16 @@
    "line": [
     "a4"
    ],
-   "spoken": ""
+   "spoken": "White plays a4 and is supposed to be better, because the c3 square is left open for his knight — that's the key difference.",
+   "reanchor": true
   },
   {
    "ply": 15,
    "t": 1224,
    "fen": "r1bq1rk1/2ppbppp/p1n2n2/1p2p3/4P3/1B3N1P/PPPP1PP1/RNBQR1K1 b - - 0 8",
    "line": [],
-   "spoken": ""
+   "spoken": "So after h3, Black should probably revert to a main line, d6 or a bishop to e7 — but check that yourself; I'm not much of a specialist.",
+   "reanchor": true
   }
  ]
 }

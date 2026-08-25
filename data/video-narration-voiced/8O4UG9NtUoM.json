@@ -1,10 +1,10 @@
 {
  "videoId": "8O4UG9NtUoM",
  "title": "Beginner To Master | Chess Speedrun | French Defense | Grandmaster Naroditsky",
- "openingName": "French Defense (1.d4 d5 2.Nc3 e6 3.e4 transposition), ...Nd7 punished",
+ "openingName": "French Defense",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:8O4UG9NtUoM",
  "moves": [
   {
@@ -16,7 +16,7 @@
     "d5",
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "We open d4, Black replies ...d5, and we develop the knight to c3."
   },
   {
    "ply": 4,
@@ -25,10 +25,7 @@
    "line": [
     "e6"
    ],
-   "spoken": "Black answers in the centre with the pawn to e6, steering the game into a French — the solid, conceptual structure where the d5-pawn is backed by e6 and the fight is about the light squares.",
-   "kind": "main",
-   "teaches": "e6 turns a queen's-pawn move order into a French: the pawn on d5 gets a permanent defender.",
-   "plans": "Play on the light squares behind the d5/e6 chain."
+   "spoken": "Black plays e6 — the French."
   },
   {
    "ply": 5,
@@ -37,7 +34,7 @@
    "line": [
     "e4"
    ],
-   "spoken": ""
+   "spoken": "We enter the French proper with e4."
   },
   {
    "ply": 6,
@@ -46,10 +43,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": "And here is the small but significant slip: the knight to d7. It looks natural, but it stands directly in front of the queen and cuts off her defence of the d5-pawn down the file. That single detail hands White a clean pawn.",
-   "kind": "trap",
-   "teaches": "A developing move that blocks your own piece's defence of a key pawn is a real error, not a nuance.",
-   "plans": "Punish by opening the centre while the pawn is undefended."
+   "spoken": "Black plays ...Nd7 — a small but significant mistake, leaving the d5-pawn underdefended."
   },
   {
    "ply": 7,
@@ -58,10 +52,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": "White cracks it open with the pawn takes on d5. The recapture is forced, and every route leads back to a d5-pawn that the knight on d7 has left to fend for itself.",
-   "kind": "main",
-   "teaches": "Open the position exactly where the opponent's coordination has broken down.",
-   "plans": "Trade on d5 and collect the loose pawn."
+   "spoken": "We take on d5."
   },
   {
    "ply": 8,
@@ -70,7 +61,7 @@
    "line": [
     "exd5"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures on d5."
   },
   {
    "ply": 9,
@@ -79,10 +70,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "The knight simply takes on d5, winning the pawn. The queen on d8 would love to be guarding it, but her own knight on d7 is in the way — the flaw made concrete.",
-   "kind": "main",
-   "teaches": "When a defender is blocked, the target isn't defended — count the real guards, not the nominal ones.",
-   "plans": "Bank the pawn, then develop calmly."
+   "spoken": "We grab the free pawn, the knight landing on d5."
   },
   {
    "ply": 10,
@@ -91,7 +79,7 @@
    "line": [
     "Ngf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops with ...Ngf6."
   },
   {
    "ply": 11,
@@ -100,10 +88,7 @@
    "line": [
     "Nxf6+"
    ],
-   "spoken": "Already a pawn up, there is no reason to reinvent the wheel — the knight takes on f6 and simplifies. Trading pieces while ahead in material sharpens the advantage rather than dulling it.",
-   "kind": "main",
-   "teaches": "When you're up material, trade pieces; the extra pawn matters more with fewer men on the board.",
-   "plans": "Simplify, finish development, convert."
+   "spoken": "Already a pawn up, we simplify — trading on f6 with check."
   },
   {
    "ply": 12,
@@ -112,7 +97,7 @@
    "line": [
     "Qxf6"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the queen."
   },
   {
    "ply": 13,
@@ -121,7 +106,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3, a clean pawn up in the centre."
   },
   {
    "ply": 14,
@@ -130,7 +115,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to d6."
   },
   {
    "ply": 15,
@@ -139,10 +124,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": "The bishop belongs on d3, not b5. The pin on b5 looks tempting, but Black just plays the pawn to c6 and shrugs it off with a healthy central move. Pins are powerful and also the most over-rated idea in chess — this one costs a tempo for nothing.",
-   "kind": "main",
-   "teaches": "Don't over-value a pin the opponent can dissolve with a useful move; place the bishop where it stays active.",
-   "plans": "Aim the bishop at h7 and build toward the battery."
+   "spoken": "We choose the bishop on d3, not b5 — a pin there is easily broken by ...c6, which would be a healthy move for Black anyway."
   },
   {
    "ply": 16,
@@ -151,7 +133,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles."
   },
   {
    "ply": 17,
@@ -160,10 +142,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "Castling first, keeping things circumspect — no wayward check on e8, king tucked away, and the c1-bishop left alone for now, since it already does plenty guarding the dark squares from home.",
-   "kind": "main",
-   "teaches": "Get the king safe before committing pieces; a piece that already covers key squares needn't move.",
-   "plans": "King safety first, then the attacking plan."
+   "spoken": "We castle."
   },
   {
    "ply": 18,
@@ -172,7 +151,7 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "Black plays h6."
   },
   {
    "ply": 19,
@@ -181,10 +160,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "The pawn to c3 launches the standard plan: it props up the d4-pawn and clears the way for bishop-to-c2 and then queen-to-d3 — the queen in front of the bishop, because that way she leads the battery and carries the mate threat toward h7.",
-   "kind": "main",
-   "teaches": "Build the bishop-and-queen battery with the queen in front, so the queen delivers the threat and the bishop supports.",
-   "plans": "c3, Bc2, Qd3 aiming at h7."
+   "spoken": "We play c3 — supporting d4 and preparing the Bc2 then Qd3 battery."
   },
   {
    "ply": 20,
@@ -193,7 +169,7 @@
    "line": [
     "c5"
    ],
-   "spoken": ""
+   "spoken": "Black strikes with c5."
   },
   {
    "ply": 21,
@@ -202,7 +178,7 @@
    "line": [
     "Bc2"
    ],
-   "spoken": ""
+   "spoken": "Our d4-pawn is well protected, so we ignore the poke and continue with the bishop to c2."
   },
   {
    "ply": 22,
@@ -211,7 +187,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "Black plays c4, trying to stop Qd3."
   },
   {
    "ply": 23,
@@ -220,10 +196,7 @@
    "line": [
     "b3"
    ],
-   "spoken": "Black's pawn has poked out to c4, sticking out like a sore thumb, and the textbook cure is to undermine it at the base with the pawn to b3. If it captures, the a-file opens and the intruder is gone.",
-   "kind": "main",
-   "teaches": "Undermine an over-extended pawn at its base rather than attacking the head of it.",
-   "plans": "b3 to dissolve or fix the c4-pawn."
+   "spoken": "We undermine that pawn with b3 — the textbook method."
   },
   {
    "ply": 24,
@@ -232,7 +205,7 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "Black holds with b5."
   },
   {
    "ply": 25,
@@ -241,10 +214,7 @@
    "line": [
     "bxc4"
    ],
-   "spoken": "First soften it with the capture on c4, so the pawn is no longer protected, and the knight can reroute back through d2 to pile up on the weakness. Keep the bishop right where it is on c2 — a4 would only distract it.",
-   "kind": "main",
-   "teaches": "Remove a weak pawn's protection first, then bring a rerouted piece to attack it.",
-   "plans": "Reroute the knight via d2 onto c4."
+   "spoken": "We take on c4, softening it up."
   },
   {
    "ply": 26,
@@ -253,7 +223,7 @@
    "line": [
     "bxc4"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures on c4 — but the pawn is now weak."
   },
   {
    "ply": 30,
@@ -265,10 +235,7 @@
     "Qc2",
     "Qg6"
    ],
-   "spoken": "Here is the sting. The bishop on e4 and Black's rook on a8 sit on the same diagonal, screened only by the queen on g6 — an x-ray. Move the queen with a capture and the bishop's line springs open: the queen crashes into a8, taking the rook. Boom goes the dynamite.",
-   "kind": "trap",
-   "teaches": "Behind a piece on an x-ray, remove the screen with tempo and the rear piece's power is unleashed.",
-   "plans": "Desperado the queen into a8, cashing the x-ray."
+   "spoken": "We swing the bishop to e4, completing the battery that threatens mate on h7; Black defends with ...Nb6, we bring the queen to c2 behind the bishop, and Black must cover with ...Qg6."
   },
   {
    "ply": 34,
@@ -280,21 +247,14 @@
     "Qc2",
     "Qxc2"
    ],
-   "spoken": "Loose pieces drop off — the rule that decides so many positions. With Black's pieces hanging, White is up a full rook. From here, converting means trades, not heroics: a pawn is worth giving to swap the last minor pieces, but avoid the unnecessary simplification that only helps the defender.",
-   "kind": "review",
-   "teaches": "When winning, trade toward a clear technical position and don't cling to every pawn; loose pieces drop off.",
-   "plans": "Trade pieces, keep the extra rook, convert."
+   "spoken": "We reposition the queen to b3; Black grabs our bishop with ...Qxe4; we return to c2 offering the trade, and the queens come off on c2 — leaving us up material."
   },
   {
    "ply": 4,
    "t": 833,
    "fen": "rnbqkbnr/ppp2ppp/4p3/3p4/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 3",
    "line": [],
-   "spoken": "Back at the transposition, the honest label: this simply became a French, and Black got moved into a structure they may not know. The advice that follows is general.",
-   "kind": "review",
-   "teaches": "A move order can drop you into an opening you don't play — recognise it and follow principles.",
-   "plans": "Treat it as a French and play soundly.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -312,11 +272,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": "If you're move-ordered into an opening you don't know, don't chase accuracy — mind the pressure points, make sure nothing hangs, trade to reduce tension, and develop healthily. Here the pawn simply takes on e4 and the game stays simple.",
-   "kind": "review",
-   "teaches": "In an unfamiliar opening: don't blunder, reduce tension, develop — accuracy comes second to safety.",
-   "plans": "Trade, simplify, develop by principle.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 7,
