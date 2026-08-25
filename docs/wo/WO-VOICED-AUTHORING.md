@@ -22,22 +22,36 @@ subtlety, AND the hypothetical / what-if lines he walks ("if Black takes,
 then…"). Only genuinely non-position chatter (greetings, results-talk, "we'll
 have plenty after the game") is left blank.
 
-This is **G0/G3 translation, not invention**: the model REWORDS the teacher's
-own transcript (reference only, never quoted) anchored to a code-computed board.
-It adds ZERO chess content of its own — if he didn't say a piece is pinned, the
-line doesn't say it's pinned. Two hard gates run inline and drop any line that
-can't be made clean:
-- **board-truth** — no "the knight on f5" unless f5 holds a knight on THAT move's
-  board (hypothetical/typical sentences exempt — that's how the what-if lines
-  survive);
-- **no-verbatim** — no 8-word span may match his transcript (plagiarism guard,
-  locked 2026-07-02);
-- plus the depersonalization ban (no teacher/channel/"speedrun") and the
-  move-number-prefix ban ("Nc3", never "2.Nc3").
+### 🚫 ZERO LLM — YOU HAND-WRITE EVERY LINE. This is non-negotiable (David msgs 51, 147).
 
-**A dropped line is silence, never a lie** — that is the correct failure per
-David's "no false narrations, ever" rule. Coverage still jumps from ~5 beats to
-30+ moves per video.
+David rejected LLM authoring twice: *"all in his own words, zero LLM… ALL IN OUR
+OWN WORDS!!!"* and *"You are rewriting by hand right? I don't want to lose
+anything because a computer is doing it."* An earlier DeepSeek pipeline
+(`author-video.mjs` / `author-all.mjs`) DROPPED any line it couldn't auto-gate —
+losing teaching and costing money. **Those scripts are disabled. Do NOT run
+them. Do NOT call any LLM API to write narration.** You — the reasoning agent —
+read the distilled transcript and write each line yourself.
+
+**These narrations are the most important coach teaching data and feed multiple
+surfaces. Nothing position-relevant may be lost.** The rules:
+
+- **Capture EVERYTHING he says about the position** — idea, plan, threat,
+  subtlety, and every hypothetical/what-if line. Length uncapped; match his
+  depth. If in doubt whether a line is position-relevant, KEEP it.
+- **Never drop to fix a problem — REPHRASE.** If a board-truth or wording issue
+  makes a line hard, rewrite it so the idea survives. Dropping a line loses
+  teaching; that is the failure mode we are fixing, not a tool.
+- **Translation, not invention (G0/G3).** Say what HE taught, in your own words —
+  add ZERO chess content of your own. If he didn't say a piece is pinned, don't
+  say pinned. When his transcript is vague, stay vague.
+- **Board-truth is absolute.** Only name a piece on a square if it's really there
+  on that move's board. A destination/hypothetical square is fine ("the knight
+  heads for f5"). Verify against the piece list `scripts/voiced-authoring/inspect.mjs`
+  prints per move.
+- **No verbatim** — never copy his phrasing (plagiarism guard, locked 2026-07-02).
+  Rewrite in the DNA voice.
+- **No attribution** (never name him/the channel/"speedrun") and **no move-number
+  prefixes** ("Nc3", never "2.Nc3").
 
 ## The voice (house register — apply to every line)
 
@@ -58,37 +72,54 @@ IN-GAME / WATCH register, not the post-game-review register).
 git fetch origin claude/gem-teaching-learn-coach-1oe5pw
 git checkout -B claude/voiced-shard-<X> origin/claude/gem-teaching-learn-coach-1oe5pw
 
-# 2. Live DeepSeek key — the session env copy is stale (401). Pull from Vercel:
-T="team_EG9m215w9cQHWilBOPnOtIFS"; P="prj_qYJMwF1apaxdp6sIZzcvZMz9BcZN"
-EID=$(curl -s "https://api.vercel.com/v10/projects/$P/env?teamId=$T" -H "Authorization: Bearer $VERCEL_TOKEN" | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>{const j=JSON.parse(d);(j.envs||j).forEach(e=>{if(e.key==='DEEPSEEK_KEY')console.log(e.id)})})")
-export DEEPSEEK_KEY=$(curl -s "https://api.vercel.com/v1/projects/$P/env/$EID?teamId=$T&decrypt=true" -H "Authorization: Bearer $VERCEL_TOKEN" | node -e "let d='';process.stdin.on('data',c=>d+=c).on('end',()=>console.log(JSON.parse(d).value))")
-# sanity: should print 200
-curl -s -o /dev/null -w "%{http_code}\n" https://api.deepseek.com/chat/completions -H "authorization: Bearer $DEEPSEEK_KEY" -H "content-type: application/json" -d '{"model":"deepseek-chat","max_tokens":5,"messages":[{"role":"user","content":"ping"}]}'
-
-# 3. Recover your shard's bank transcripts (they're gitignored — live in 09120f6):
+# 2. Recover your shard's bank transcripts (they're gitignored — live in 09120f6).
+#    NO API KEY is needed — you hand-write, no LLM is called.
 node scripts/voiced-authoring/recover-bank.mjs docs/wo/voiced-shards/shard-<X>.txt
 ```
 
-## Author your shard (move by move)
+## Author your shard BY HAND (move by move)
 
-```bash
-node scripts/voiced-authoring/author-all.mjs --ids-file docs/wo/voiced-shards/shard-<X>.txt --concurrency 4
-```
+For **each** video id in your shard, one at a time:
 
-This runs `scripts/voiced-authoring/author-video.mjs` per video: it hands the
-WHOLE move timeline (each move's played SAN, the exact piece placement after it,
-and the raw transcript around it) to the model and asks for a spoken line on
-every position-relevant move, then gates + repairs (up to 3x) each line, then
-writes `data/video-narration-voiced/<id>.json` preserving the bank's
-`{ply,t,fen,line}` exactly.
+1. **Read the whole timeline** — this is "watching the video" (David [66]):
+   ```bash
+   node scripts/voiced-authoring/inspect.mjs <id>            # idx | ply | move | transcript, per move
+   node scripts/voiced-authoring/inspect.mjs <id> 3 14 24    # full FEN for specific indexes
+   ```
+   Read every row start to finish before writing. Understand the game he played
+   and what he taught at each move. The `line` field = the move(s) made at that
+   row (the video's real line); the `said` field = his raw words there (auto-
+   caption — misheard words are common: "fortnite scotch" = "four knights
+   scotch"; repair them by sense).
 
-- It creates a NEW voiced file per video (these are all un-voiced today).
-- `openingName` is carried from the bank title (best-effort). If a video has no
-  title it ships blank — that is FINE: the corpus notes are position-keyed
-  (`opening:null`), so a blank label does not affect free-play/review delivery.
-  Leave opening-detection refinement to the integration WO.
-- Re-runs are idempotent (rewrite in place). If a video's output looks thin,
-  re-run just it: `node scripts/voiced-authoring/author-video.mjs <id>`.
+2. **Write the voiced file yourself** — build the moves array by hand. The move
+   spine (`ply`, `t`, `fen`, `line`) is COPIED from the bank verbatim (position +
+   timestamp preserved); you write only `spoken` per move. Use the shared helper
+   so fidelity is automatic — author an index→text map and pass it to `build`:
+   ```js
+   // scratch script you run with node, e.g. scripts/voiced-authoring/_author-<id>.mjs
+   import { build } from './lib.mjs';
+   build('<id>', 'Opening Name', 'white', {
+     6:  { explains: 'your hand-written line for row 6 …' },
+     7:  { explains: 'your hand-written line for row 7 …' },
+     8:  { explains: 'your hand-written line for row 8 …', reanchor: true }, // analysis/rewind row
+     // …a key for EVERY position-relevant row; omit only pure-chatter rows
+   });
+   ```
+   Write in the DNA voice, capture every position-relevant line (incl.
+   hypotheticals), board-true, never dropping to dodge a problem — rephrase.
+   `openingName` from the bank title is fine; blank is OK (corpus notes are
+   position-keyed, `opening:null`).
+
+3. **Verify that one video** before moving on:
+   ```bash
+   node scripts/voiced-authoring/verify.mjs <id>
+   ```
+   FIDELITY must PASS; eyeball the board-truth table (each square you named,
+   with what's actually on it) — fix any square that isn't what you said.
+
+Work through the shard video by video. Yes, it's slow — that's the point; this
+is the coach's most important teaching data and it is authored by hand.
 
 ## Verify (must pass before you commit)
 

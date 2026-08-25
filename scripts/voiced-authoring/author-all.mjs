@@ -19,6 +19,17 @@ import { readdirSync, readFileSync, existsSync } from 'node:fs';
 import { authorVideo } from './author-video.mjs';
 import { VOICED, BANK, readBank } from './lib.mjs';
 
+// ⛔ DISABLED — David rejected LLM authoring (message 51: "zero LLM... ALL IN OUR
+// OWN WORDS", message 147: "rewriting by hand"). This pipeline used DeepSeek to
+// rewrite the transcripts and DROPPED any line it couldn't gate — losing
+// teaching AND costing money. Narrations are HAND-authored now: read the
+// distilled transcript and write every move yourself, nothing dropped. See
+// docs/wo/WO-VOICED-AUTHORING.md. This script stays only as a reference; it will
+// not run.
+console.error('⛔ DISABLED: LLM authoring was rejected (zero-LLM, hand-authored only).');
+console.error('   Hand-author per docs/wo/WO-VOICED-AUTHORING.md — do NOT run this (it costs money and drops content).');
+process.exit(1);
+
 const arg = (n, d) => { const i = process.argv.indexOf(`--${n}`); return i >= 0 ? process.argv[i + 1] : d; };
 const only = (arg('only', '') || '').split(',').filter(Boolean);
 const idsFile = arg('ids-file', '');

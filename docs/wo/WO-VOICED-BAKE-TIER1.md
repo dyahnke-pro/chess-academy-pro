@@ -1,10 +1,24 @@
 # WO-VOICED-BAKE-TIER1 — bake the voiced corpus into free play + every Tier-1 spot, finish the tier restructure
 
+## 🛑 DO NOT START THE BAKE YET — the corpus is being hand-rewritten
+
+The voiced corpus is **not final**. The 147 voiced files present are the old
+sparse ones, and they are being **hand-authored move-by-move (zero LLM)** — see
+WO-VOICED-AUTHORING. Rebuilding `voiced-teachings.json` / `voiced-walkthroughs.json`
+now would bake the OLD content. **Wait until the hand-authored voiced files land
+and David says go**, then rebuild and bake from the finished corpus.
+
+What IS safe to do now (code only, independent of the corpus content): the
+tier-restructure cleanup in Part C (the generic bake is deleted; corpus is
+registered as Tier 1). Do NOT run the Part A rebuild or the Part B/E gates
+against the current, unfinished corpus.
+
 **Owner note (David):** this is the integration half. It runs AFTER the
-WO-VOICED-AUTHORING shard PRs have merged to main (so the full voiced corpus is
-in the tree). One session owns it — do not split it, the file edits overlap.
-Session c28ca97f may already have parts of the tier-restructure code done; if so,
-rebase on its branch/PR first and finish what's left rather than redoing it.
+WO-VOICED-AUTHORING shards are hand-authored and merged (so the full voiced
+corpus is in the tree). One session owns it — do not split it, the file edits
+overlap. Session c28ca97f has the tier-restructure code done (generic bake
+deleted, corpus registered Tier 1); rebase on its branch and finish what's left
+rather than redoing it.
 
 ## The tier model (David 2026-08-24, LOCKED — get the numbers right)
 

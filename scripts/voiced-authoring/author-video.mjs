@@ -247,6 +247,8 @@ export async function authorVideo(id, opts = {}) {
 
 // CLI entry — run directly for one video.
 if (import.meta.url === `file://${process.argv[1]}`) {
-  authorVideo(id, { opening: arg('opening', undefined), side: arg('side', undefined), dry: DRY })
-    .catch((e) => { console.error(e); process.exit(1); });
+  // ⛔ DISABLED — LLM authoring was rejected (zero-LLM, hand-authored only;
+  // David messages 51 + 147). Hand-author per docs/wo/WO-VOICED-AUTHORING.md.
+  console.error('⛔ DISABLED: LLM authoring rejected. Hand-author per docs/wo/WO-VOICED-AUTHORING.md.');
+  process.exit(1);
 }
