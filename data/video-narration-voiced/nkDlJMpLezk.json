@@ -1,10 +1,10 @@
 {
  "videoId": "nkDlJMpLezk",
  "title": "Best Game So Far!! | Mastering the Alapin Sicilian | GM Naroditsky's Theory Speed Run",
- "openingName": "London System (Black)",
- "studentSide": "black",
+ "openingName": "London System",
+ "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:nkDlJMpLezk",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "d4",
     "d5"
    ],
-   "spoken": ""
+   "spoken": "We open d4, Black replies d5. In queen's-pawn openings like the London this often leads to a queen b3 versus b6 standoff."
   },
   {
    "ply": 3,
@@ -24,10 +24,7 @@
    "line": [
     "Bf4"
    ],
-   "spoken": "The bishop to f4 outside the pawn chain is the London System — a solid, low-theory setup White can play on autopilot. Black should meet it with a clear, active plan rather than mirroring passively.",
-   "kind": "main",
-   "teaches": "The London is easy to play but not threatening — answer it with an active, concrete plan.",
-   "plans": "Build c5/Nc6 and pressure b2 with the queen."
+   "spoken": "We develop the bishop to f4 — the London System."
   },
   {
    "ply": 5,
@@ -37,7 +34,7 @@
     "Nf6",
     "e3"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6 and we support with e3."
   },
   {
    "ply": 6,
@@ -55,7 +52,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 8,
@@ -74,10 +71,7 @@
     "c3",
     "Nc6"
    ],
-   "spoken": "Black sets up the standard counter: pawns on d5 and c5 with the knight on c6, striking at White's centre and preparing pressure on the queenside.",
-   "kind": "main",
-   "teaches": "Against the London, hit the centre with c5 and develop the knight to c6.",
-   "plans": "Prepare the queen sortie to b6."
+   "spoken": "We buttress with c3, and Black brings the knight to c6."
   },
   {
    "ply": 11,
@@ -86,7 +80,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "We complete the setup with the knight to d2."
   },
   {
    "ply": 12,
@@ -95,10 +89,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "The queen to b6 is the most standard way to play — it eyes the b2-pawn and the loose queenside, forcing White to react before he can complete his comfortable setup.",
-   "kind": "main",
-   "teaches": "Queen to b6 is the thematic London antidote — it targets b2 and asks White real questions.",
-   "plans": "Pressure b2 and c4-type breaks, seizing the initiative."
+   "spoken": "Black plays the standard queen to b6, eyeing b2."
   },
   {
    "ply": 14,
@@ -108,7 +99,7 @@
     "Qb3",
     "Qxb3"
    ],
-   "spoken": ""
+   "spoken": "We meet it with the queen to b3 — the classic standoff, where neither side wants to be the one to capture, even though it damages a pawn structure."
   },
   {
    "ply": 15,
@@ -117,7 +108,7 @@
    "line": [
     "axb3"
    ],
-   "spoken": ""
+   "spoken": "Black trades and we recapture with the a-pawn — not the knight — opening the a-file and keeping a serious edge. The lesson: pawn structure is subservient to piece placement and activity; the doubled b-pawns are a small price for the open file and better pieces."
   },
   {
    "ply": 14,
@@ -162,14 +153,16 @@
     "Nf3",
     "a6"
    ],
-   "spoken": ""
+   "spoken": "Two big themes surface here. First, the power of a knight or bishop planted on d6 (or d3) when the opponent's queenside is undeveloped — such a piece can paralyse a whole flank, and it's devastating when a back-rank bishop has no way out. Second, prophylactic thinking: always ask what your opponent WANTS and prevent it — not just concrete threats but improving ideas like ...e6, worth stopping even though it wins nothing, because it frees the opponent's game.",
+   "reanchor": true
   },
   {
    "ply": 3,
    "t": 4510,
    "fen": "rnbqkbnr/ppp1pppp/8/3p4/2PP4/8/PP2PPPP/RNBQKBNR b KQkq - 0 2",
    "line": [],
-   "spoken": ""
+   "spoken": "And a London reflex worth keeping: meeting a bishop to d6 with the bishop to g3, trading on your own terms — here recapturing toward the centre to open the file, the same principle applied to a different file.",
+   "reanchor": true
   }
  ]
 }

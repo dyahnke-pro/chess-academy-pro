@@ -1,10 +1,10 @@
 {
  "videoId": "vbWQt7Qn_eQ",
  "title": "Restarting the Speedrun Soon!? | Sicilian - Najdorf | GM Naroditsky's Theory Speedrun",
- "openingName": "Sicilian Defense: Najdorf, English Attack (Black)",
+ "openingName": "Sicilian Defense: Najdorf Variation",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:vbWQt7Qn_eQ",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c5"
    ],
-   "spoken": ""
+   "spoken": "We take Black and play the Sicilian, c5."
   },
   {
    "ply": 3,
@@ -33,7 +33,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "We continue with d6, heading for the Najdorf."
   },
   {
    "ply": 8,
@@ -45,7 +45,7 @@
     "Nxd4",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "The centre opens — we take on d4, White recaptures with the knight, and we develop to f6: a mainline Najdorf at last."
   },
   {
    "ply": 10,
@@ -55,10 +55,7 @@
     "Nc3",
     "a6"
    ],
-   "spoken": "The pawn to a6 reaches the Najdorf. When White answers with the early pawn to f3, that is the calling card of the English Attack — White braces the centre and plans to castle long and storm the kingside.",
-   "kind": "main",
-   "teaches": "An early f3 in the Najdorf signals the English Attack — brace, castle long, pawn-storm.",
-   "plans": "Meet the plan with central counterplay."
+   "spoken": "White develops the knight to c3 and we play the Najdorf move, a6."
   },
   {
    "ply": 11,
@@ -67,7 +64,7 @@
    "line": [
     "f3"
    ],
-   "spoken": ""
+   "spoken": "White plays the early f3 — the English Attack."
   },
   {
    "ply": 12,
@@ -76,10 +73,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "The pawn to e5 is the principled answer to the English Attack — it grabs central space and hits the d4-knight, forcing it back to b3 and blunting White's attacking build-up.",
-   "kind": "main",
-   "teaches": "Against the English Attack, …e5 gains the centre and kicks the knight before White gets rolling.",
-   "plans": "Follow with …Be6 and queenside play."
+   "spoken": "We strike in the centre with e5."
   },
   {
    "ply": 13,
@@ -88,7 +82,7 @@
    "line": [
     "Nb3"
    ],
-   "spoken": ""
+   "spoken": "White retreats the knight to b3. In the English Attack White typically follows with the bishop to e3, the queen to d2, castles long, and storms the kingside with pawns."
   },
   {
    "ply": 14,
@@ -97,7 +91,7 @@
    "line": [
     "Be6"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to e6."
   },
   {
    "ply": 15,
@@ -106,7 +100,7 @@
    "line": [
     "Be3"
    ],
-   "spoken": ""
+   "spoken": "White develops the bishop to e3."
   },
   {
    "ply": 16,
@@ -115,7 +109,7 @@
    "line": [
     "Be7"
    ],
-   "spoken": ""
+   "spoken": "We play the bishop to e7. Normally this is the classic opposite-wing race — Black on the queenside, White on the kingside."
   },
   {
    "ply": 17,
@@ -124,7 +118,7 @@
    "line": [
     "Be2"
    ],
-   "spoken": ""
+   "spoken": "But White chooses the modest bishop to e2 — not dangerous; combining f3 with kingside castling is slightly weakening, though far from fatal."
   },
   {
    "ply": 18,
@@ -133,7 +127,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "White castles short."
   },
   {
    "ply": 19,
@@ -142,7 +136,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle too."
   },
   {
    "ply": 20,
@@ -151,14 +145,15 @@
    "line": [
     "Nbd7"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to d7 — the customary Najdorf square; the knight rarely goes to c6 here, for positional reasons."
   },
   {
    "ply": 10,
    "t": 120.5,
    "fen": "rnbqkb1r/1p2pppp/p2p1n2/8/3NP3/2N5/PPP2PPP/R1BQKB1R w KQkq - 0 6",
    "line": [],
-   "spoken": ""
+   "spoken": "The plan: White has mixed the quiet Karpov bishop-e2 with the English Attack's f3 — a mishmash that hands us comfortable play. We improve with the rook to c8 and the thematic ...b5, watching for a4. If White jumps a knight to d5, we take, and after the recapture drop the bishop to f5, keeping the bishop pair; then reroute it to g6 and roll our kingside pawns — a reverse English Attack, where we attack White's king and slot in ...a4 as prophylaxis against White's queenside play. As a King's-Indian player, attacking the enemy king suits us perfectly.",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -176,7 +171,8 @@
    "t": 932.5,
    "fen": "rnbqkbnr/pp1ppppp/8/2p5/4P3/5N2/PPPP1PPP/RNBQKB1R b KQkq - 1 2",
    "line": [],
-   "spoken": ""
+   "spoken": "A theory note: the main tabiya runs with ...Be6 and White's bishop to b3; against the sharper setups the topical ...Nbd7 leads to the wild g4 ...b5 g5 ...b4 races, though the offbeat ...a5, sending the a-pawn up the board, scores well even against grandmasters in blitz.",
+   "reanchor": true
   }
  ]
 }
