@@ -44,7 +44,8 @@
    "line": [
     "Be2"
    ],
-   "spoken": "Play it like a Philidor structure — a quiet, positional game."
+   "spoken": "The choice here is a quiet, Philidor-like structure — modest development, no early confrontation, a slow positional game where small advantages are accumulated rather than forced.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -137,7 +138,8 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "With the centre settling, the pawn to c3 is the thematic idea — bracing the position and preparing to challenge the opponent's central pawns on favourable terms.",
+   "kind": "plan"
   },
   {
    "ply": 22,
@@ -147,7 +149,7 @@
     "c3",
     "c5"
    ],
-   "spoken": "Now figure out how to play — c3 is generally considered the idea here, supporting the centre."
+   "spoken": ""
   },
   {
    "ply": 23,
@@ -194,7 +196,7 @@
     "b6",
     "Bf1"
    ],
-   "spoken": "Retooling the position — getting the bishop back to a more civilized square with the retreat to f1."
+   "spoken": ""
   },
   {
    "ply": 31,
@@ -249,7 +251,8 @@
    "line": [
     "Rae8"
    ],
-   "spoken": ""
+   "spoken": "A trade evaluation worth making explicitly: who benefits from swapping bishops? Here it favours this side, because both of these bishops are poorly placed — and trading off your bad pieces is a quiet way to improve the whole position.",
+   "kind": "plan"
   },
   {
    "ply": 37,
@@ -258,7 +261,7 @@
    "line": [
     "Bc1"
    ],
-   "spoken": "Who benefits from a bishop trade here? Probably me — both of my bishops are bad."
+   "spoken": ""
   },
   {
    "ply": 39,
@@ -323,7 +326,7 @@
    "line": [
     "Ne5"
    ],
-   "spoken": "Try to improve the bishop — right now it's just staring at its own pawn."
+   "spoken": ""
   },
   {
    "ply": 49,
@@ -352,7 +355,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "The bishop was biting on granite — but not anymore."
+   "spoken": ""
   },
   {
    "ply": 52,
@@ -361,7 +364,8 @@
    "line": [
     "f6"
    ],
-   "spoken": "Now our bishop is good, and we've got other things to worry about: this pawn is weak, and that knight is very strong."
+   "spoken": "The plan has been to breathe life into the bad bishop, which was staring blankly into a pawn — and now, with the central pawn lever resolved, it finally has scope. One problem solved, the focus shifts to the next: a weak pawn to target and a strong enemy knight to neutralise.",
+   "kind": "plan"
   },
   {
    "ply": 53,
@@ -370,7 +374,8 @@
    "line": [
     "Kh2"
    ],
-   "spoken": "The king to h2 — get it out of the danger zone and solidify the position."
+   "spoken": "Before pressing, tuck the king out of the danger zone — a quiet step to solidify. Getting the king safe first is what lets the initiative be pursued without fear of a counterblow.",
+   "kind": "plan"
   },
   {
    "ply": 54,
@@ -474,7 +479,9 @@
    "line": [
     "Re2"
    ],
-   "spoken": ""
+   "spoken": "The refined, prophylactic choice — the Karpov-style rook to e2, quietly shoring things up and stopping the opponent's idea before pushing on. Prevention before ambition is the mark of the mature move.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 62,
