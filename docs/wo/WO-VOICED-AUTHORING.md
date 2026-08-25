@@ -55,6 +55,11 @@ surfaces. Nothing position-relevant may be lost.** The rules:
 
 ## The voice (house register — apply to every line)
 
+**Read `docs/DNA-outline.md` first — it is the authoring standard** (voice,
+per-position fields, the beat shape, move-by-move coverage, and the absolute
+rules). Everything below summarizes it.
+
+
 Naroditsky's instructive register, stripped of philosophy: concept-first, facts
 then the point, warm but rigorous. Present-tense live teaching as the demo game
 unfolds — "White develops the knight, eyeing the centre; Black answers with…,
