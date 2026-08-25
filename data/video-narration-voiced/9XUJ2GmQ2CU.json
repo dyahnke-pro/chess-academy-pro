@@ -1,344 +1,368 @@
 {
-  "videoId": "9XUJ2GmQ2CU",
-  "title": "French; Steinitz Variation | The Sensei Speedrun | GM Naroditsky",
-  "openingName": "French Defense: Advance Variation",
-  "studentSide": "white",
-  "voice": "danya-dna",
-  "rewrittenAt": "2026-08-25",
-  "source": "yt:9XUJ2GmQ2CU",
-  "moves": [
-    {
-      "ply": 2,
-      "t": 10.5,
-      "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
-      "line": [
-        "e4",
-        "e6"
-      ],
-      "spoken": "We take White and face the French."
-    },
-    {
-      "ply": 6,
-      "t": 25.5,
-      "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq d6 0 4",
-      "line": [
-        "e5",
-        "c5",
-        "d4",
-        "d5"
-      ],
-      "spoken": "We push e5 — the Steinitz Advance; Black hits with ...c5, we build d4, Black plays ...d5."
-    },
-    {
-      "ply": 8,
-      "t": 37.5,
-      "fen": "rn1qkbnr/pp1b1ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
-      "line": [
-        "Nf3",
-        "Bd7"
-      ],
-      "spoken": "We develop the knight to f3; Black plays ...Bd7, expecting c3 — which we're not going to play."
-    },
-    {
-      "ply": 10,
-      "t": 60.5,
-      "fen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R w KQkq - 4 6",
-      "line": [
-        "Bd3",
-        "Nc6"
-      ],
-      "spoken": "We develop the bishop to d3; Black plays ...Nc6."
-    },
-    {
-      "ply": 11,
-      "t": 63.5,
-      "fen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 5 6",
-      "line": [
-        "O-O"
-      ],
-      "spoken": "We castle, making the normal French moves but conserving the tempo on c3."
-    },
-    {
-      "ply": 12,
-      "t": 67.5,
-      "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
-      "line": [
-        "cxd4"
-      ],
-      "spoken": "Black takes on d4 — we let the pawn go; the whole system revolves around the e5-pawn."
-    },
-    {
-      "ply": 14,
-      "t": 92,
-      "fen": "r3kbnr/pp1b1ppp/1qn1p3/3pP3/3p1B2/3B1N2/PPP2PPP/RN1Q1RK1 w kq - 2 8",
-      "line": [
-        "Bf4",
-        "Qb6"
-      ],
-      "spoken": "We over-protect e5 with the bishop to f4; Black plays ...Qb6, hitting b2."
-    },
-    {
-      "ply": 15,
-      "t": 117.5,
-      "fen": "r3kbnr/pp1b1ppp/1qn1p3/3pP3/3p1B2/3B1N2/PPPN1PPP/R2Q1RK1 b kq - 3 8",
-      "line": [
-        "Nbd2"
-      ],
-      "spoken": "We develop the knight to d2 — not defending b2: if ...Qxb2, then Rb1 opens the file to Black's disaster."
-    },
-    {
-      "ply": 16,
-      "t": 139.5,
-      "fen": "r3kbnr/pp1b1ppp/1q2p3/3pP3/1n1p1B2/3B1N2/PPPN1PPP/R2Q1RK1 w kq - 4 9",
-      "line": [
-        "Nb4"
-      ],
-      "spoken": "Black tries ...Nb4, eyeing our bishop."
-    },
-    {
-      "ply": 17,
-      "t": 152,
-      "fen": "r3kbnr/pp1b1ppp/1q2p3/3pP3/1n1p1B2/1N1B1N2/PPP2PPP/R2Q1RK1 b kq - 5 9",
-      "line": [
-        "Nb3"
-      ],
-      "spoken": "We reroute the knight to b3, eyeing c5 — happy to give up the light-squared bishop."
-    },
-    {
-      "ply": 19,
-      "t": 190,
-      "fen": "r3kbnr/pp1b1ppp/1q2p3/3pP3/3p1B2/1N1P1N2/PP3PPP/R2Q1RK1 b kq - 0 10",
-      "line": [
-        "Nxd3",
-        "cxd3"
-      ],
-      "spoken": "Black takes our bishop on d3; we recapture with the c-pawn, opening the c-file — recapturing with the queen would drop to ...Bb5."
-    },
-    {
-      "ply": 20,
-      "t": 191.5,
-      "fen": "2r1kbnr/pp1b1ppp/1q2p3/3pP3/3p1B2/1N1P1N2/PP3PPP/R2Q1RK1 w k - 1 11",
-      "line": [
-        "Rc8"
-      ],
-      "spoken": "Black plays the rook to c8."
-    },
-    {
-      "ply": 22,
-      "t": 228.5,
-      "fen": "2r1kb1r/pp1bnppp/1q2p3/3pP3/3p1B2/1N1P1N2/PP3PPP/2RQ1RK1 w k - 3 12",
-      "line": [
-        "Rc1",
-        "Ne7"
-      ],
-      "spoken": "We contest the file with the rook to c1; Black plays ...Ne7."
-    },
-    {
-      "ply": 24,
-      "t": 276.5,
-      "fen": "2r1kb1r/pp1b1ppp/1qn1p3/3pP3/3N1B2/1N1P4/PP3PPP/2RQ1RK1 w k - 1 13",
-      "line": [
-        "Nfxd4",
-        "Nc6"
-      ],
-      "spoken": "We finally take on d4 with the king's knight; Black develops the knight to c6."
-    },
-    {
-      "ply": 25,
-      "t": 279.5,
-      "fen": "2r1kb1r/pp1b1ppp/1qn1p3/3pP3/3N4/1N1PB3/PP3PPP/2RQ1RK1 b k - 2 13",
-      "line": [
-        "Be3"
-      ],
-      "spoken": "We drop the bishop back to e3, x-raying the queen and eyeing an f4–f5 kingside push."
-    },
-    {
-      "ply": 26,
-      "t": 336.5,
-      "fen": "2r1kb1r/pp1b1ppp/q1n1p3/3pP3/3N4/1N1PB3/PP3PPP/2RQ1RK1 w k - 3 14",
-      "line": [
-        "Qa6"
-      ],
-      "spoken": "Black plays the queen to a6, threatening ...Nxe5."
-    },
-    {
-      "ply": 27,
-      "t": 350.5,
-      "fen": "2r1kb1r/pp1b1ppp/q1N1p3/3pP3/8/1N1PB3/PP3PPP/2RQ1RK1 b k - 0 14",
-      "line": [
-        "Nxc6"
-      ],
-      "spoken": "We take on c6."
-    },
-    {
-      "ply": 26,
-      "t": 386.5,
-      "fen": "2r1kb1r/pp1b1ppp/q1n1p3/3pP3/3N4/1N1PB3/PP3PPP/2RQ1RK1 w k - 3 14",
-      "line": [],
-      "spoken": ""
-    },
-    {
-      "ply": 28,
-      "t": 435.5,
-      "fen": "2r1kb1r/pp3ppp/q1b1p3/3pP3/8/1N1PB3/PP3PPP/2RQ1RK1 w k - 0 15",
-      "line": [
-        "Nxc6",
-        "Bxc6"
-      ],
-      "spoken": "From here the plan runs itself: trade on c6, centralize a knight on d4, keep the queen on e2 so it can swing to g4, and roll f4–f5 to punish Black's undeveloped kingside. After fxe6 and Nxe6 restoring material, the finish is a demolition — Nxg7, and after the king recaptures, e6 clears the path for Bd4+ and mate.",
-      "reanchor": true
-    },
-    {
-      "ply": 30,
-      "t": 471,
-      "fen": "2r1kb1r/pp3ppp/2b1p3/3pP3/3N4/3PB3/qP3PPP/2RQ1RK1 w k - 0 16",
-      "line": [
-        "Nd4",
-        "Qxa2"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 33,
-      "t": 548.5,
-      "fen": "2r1kb1r/pp3ppp/2b1p3/q2pP3/3N1P2/3PB3/1P2Q1PP/2R2RK1 b k - 2 17",
-      "line": [
-        "f4",
-        "Qa5",
-        "Qe2"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 34,
-      "t": 570,
-      "fen": "2r1k2r/pp3ppp/2b1p3/q2pP3/1b1N1P2/3PB3/1P2Q1PP/2R2RK1 w k - 3 18",
-      "line": [
-        "Bb4"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 35,
-      "t": 571.5,
-      "fen": "2r1k2r/pp3ppp/2b1p3/q2pPP2/1b1N4/3PB3/1P2Q1PP/2R2RK1 b k - 0 18",
-      "line": [
-        "f5"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 37,
-      "t": 588.5,
-      "fen": "2r2rk1/pp3ppp/2b1P3/q2pP3/1b1N4/3PB3/1P2Q1PP/2R2RK1 b - - 0 19",
-      "line": [
-        "O-O",
-        "fxe6"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 38,
-      "t": 591.5,
-      "fen": "2r2rk1/pp4pp/2b1p3/q2pP3/1b1N4/3PB3/1P2Q1PP/2R2RK1 w - - 0 20",
-      "line": [
-        "fxe6"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 39,
-      "t": 593,
-      "fen": "2r2rk1/pp4pp/2b1N3/q2pP3/1b6/3PB3/1P2Q1PP/2R2RK1 b - - 0 20",
-      "line": [
-        "Nxe6"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 41,
-      "t": 612.5,
-      "fen": "2r3k1/pp4pp/2b1N3/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 b - - 0 21",
-      "line": [
-        "Rxf1+",
-        "Rxf1"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 42,
-      "t": 624.5,
-      "fen": "2r3k1/pp1b2pp/4N3/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 w - - 1 22",
-      "line": [
-        "Bd7"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 43,
-      "t": 637,
-      "fen": "2r3k1/pp1b2Np/8/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 b - - 0 22",
-      "line": [
-        "Nxg7"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 44,
-      "t": 652,
-      "fen": "2r5/pp1b2kp/8/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 w - - 0 23",
-      "line": [
-        "Kxg7"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 47,
-      "t": 702.5,
-      "fen": "2r5/pp4kp/4b3/q2p4/1b1B4/3P4/1P2Q1PP/5RK1 b - - 1 24",
-      "line": [
-        "e6",
-        "Bxe6",
-        "Bd4+"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 48,
-      "t": 704,
-      "fen": "2r3k1/pp5p/4b3/q2p4/1b1B4/3P4/1P2Q1PP/5RK1 w - - 2 25",
-      "line": [
-        "Kg8"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 8,
-      "t": 803,
-      "fen": "rn1qkbnr/pp1b1ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
-      "line": [],
-      "spoken": ""
-    },
-    {
-      "ply": 12,
-      "t": 816.5,
-      "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
-      "line": [
-        "Bd3",
-        "Nc6",
-        "O-O",
-        "cxd4"
-      ],
-      "spoken": ""
-    },
-    {
-      "ply": 13,
-      "t": 821.5,
-      "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQR1K1 b kq - 1 7",
-      "line": [
-        "Re1"
-      ],
-      "spoken": ""
-    }
-  ]
+ "videoId": "9XUJ2GmQ2CU",
+ "title": "French; Steinitz Variation | The Sensei Speedrun | GM Naroditsky",
+ "openingName": "French Defense: Steinitz Variation",
+ "studentSide": "white",
+ "voice": "danya-dna",
+ "rewrittenAt": "2026-08-25",
+ "source": "yt:9XUJ2GmQ2CU",
+ "moves": [
+  {
+   "ply": 2,
+   "t": 10.5,
+   "fen": "rnbqkbnr/pppp1ppp/4p3/8/4P3/8/PPPP1PPP/RNBQKBNR w KQkq - 0 2",
+   "line": [
+    "e4",
+    "e6"
+   ],
+   "spoken": "We have White and open the pawn to e4, met by e6 — the French Defence."
+  },
+  {
+   "ply": 6,
+   "t": 25.5,
+   "fen": "rnbqkbnr/pp3ppp/4p3/2ppP3/3P4/8/PPP2PPP/RNBQKBNR w KQkq d6 0 4",
+   "line": [
+    "e5",
+    "c5",
+    "d4",
+    "d5"
+   ],
+   "spoken": "We play the pawn to e5 — the Steinitz Variation — and I'm a big fan of following up with the knight to f3.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 37.5,
+   "fen": "rn1qkbnr/pp1b1ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
+   "line": [
+    "Nf3",
+    "Bd7"
+   ],
+   "spoken": "The knight to f3. Black pre-moves the bishop to d7 expecting the pawn to c3 — but we're not going to play c3.",
+   "reanchor": true
+  },
+  {
+   "ply": 10,
+   "t": 60.5,
+   "fen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQK2R w KQkq - 4 6",
+   "line": [
+    "Bd3",
+    "Nc6"
+   ],
+   "spoken": "The traditional bishop to d3. The whole point of the Steinitz is that we leave the pawn on d4 and never play c3, conserving that tempo.",
+   "reanchor": true
+  },
+  {
+   "ply": 11,
+   "t": 63.5,
+   "fen": "r2qkbnr/pp1b1ppp/2n1p3/2ppP3/3P4/3B1N2/PPP2PPP/RNBQ1RK1 b kq - 5 6",
+   "line": [
+    "O-O"
+   ],
+   "spoken": "We castle — making all the normal French moves except c3."
+  },
+  {
+   "ply": 12,
+   "t": 67.5,
+   "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+   "line": [
+    "cxd4"
+   ],
+   "spoken": "Black captures on d4. The entire system revolves around the e5-pawn — we over-protect it with everything we have, and recover d4 later by rerouting the knight from d2 to b3."
+  },
+  {
+   "ply": 14,
+   "t": 92,
+   "fen": "r3kbnr/pp1b1ppp/1qn1p3/3pP3/3p1B2/3B1N2/PPP2PPP/RN1Q1RK1 w kq - 2 8",
+   "line": [
+    "Bf4",
+    "Qb6"
+   ],
+   "spoken": "But first the bishop to f4 to over-protect e5, so we needn't worry about it. Against the queen to b6, don't play b3 — we want that square for our knight — and don't reflexively defend b2 either.",
+   "reanchor": true
+  },
+  {
+   "ply": 15,
+   "t": 117.5,
+   "fen": "r3kbnr/pp1b1ppp/1qn1p3/3pP3/3p1B2/3B1N2/PPPN1PPP/R2Q1RK1 b kq - 3 8",
+   "line": [
+    "Nbd2"
+   ],
+   "spoken": "The knight to d2, without defending b2. If Black takes on b2, the rook to b1 opens the file, and with Black so undeveloped that's disaster for him — no calculation needed. So the plan is the knight to b3 and the rook to e1."
+  },
+  {
+   "ply": 16,
+   "t": 139.5,
+   "fen": "r3kbnr/pp1b1ppp/1q2p3/3pP3/1n1p1B2/3B1N2/PPPN1PPP/R2Q1RK1 w kq - 4 9",
+   "line": [
+    "Nb4"
+   ],
+   "spoken": "Black plays the knight to b4 — a good move, but it doesn't change our approach; we're in no rush to grab the d4-pawn."
+  },
+  {
+   "ply": 17,
+   "t": 152,
+   "fen": "r3kbnr/pp1b1ppp/1q2p3/3pP3/1n1p1B2/1N1B1N2/PPP2PPP/R2Q1RK1 b kq - 5 9",
+   "line": [
+    "Nb3"
+   ],
+   "spoken": "The knight to b3. In this system it's fine to give up the light-squared bishop — not ideal, but survivable — and Black keeps neglecting his kingside, which could get costly."
+  },
+  {
+   "ply": 19,
+   "t": 190,
+   "fen": "r3kbnr/pp1b1ppp/1q2p3/3pP3/3p1B2/1N1P1N2/PP3PPP/R2Q1RK1 b kq - 0 10",
+   "line": [
+    "Nxd3",
+    "cxd3"
+   ],
+   "spoken": "After the capture on d3, the queen recapture loses to the bishop to b5, so we take with the c-pawn — which we'd want anyway, since it opens the c-file for a rook.",
+   "reanchor": true
+  },
+  {
+   "ply": 20,
+   "t": 191.5,
+   "fen": "2r1kbnr/pp1b1ppp/1q2p3/3pP3/3p1B2/1N1P1N2/PP3PPP/R2Q1RK1 w k - 1 11",
+   "line": [
+    "Rc8"
+   ],
+   "spoken": "Black plays the rook to c8. I wouldn't rush to take on d4 — that pawn isn't going anywhere. Better to contest the c-file first with the rook to c1 and capture d4 at our leisure."
+  },
+  {
+   "ply": 22,
+   "t": 228.5,
+   "fen": "2r1kb1r/pp1bnppp/1q2p3/3pP3/3p1B2/1N1P1N2/PP3PPP/2RQ1RK1 w k - 3 12",
+   "line": [
+    "Rc1",
+    "Ne7"
+   ],
+   "spoken": "The rook to c1, and Black plays the knight to e7. Now it's a good moment to take on d4 — but which knight? We take with the f-knight, so the b3-knight can later jump into c5 with queenside pressure.",
+   "reanchor": true
+  },
+  {
+   "ply": 24,
+   "t": 276.5,
+   "fen": "2r1kb1r/pp1b1ppp/1qn1p3/3pP3/3N1B2/1N1P4/PP3PPP/2RQ1RK1 w k - 1 13",
+   "line": [
+    "Nfxd4",
+    "Nc6"
+   ],
+   "spoken": "The f-knight takes d4, and Black recaptures with the knight to c6. I'm also thinking of dropping the bishop back to e3.",
+   "reanchor": true
+  },
+  {
+   "ply": 25,
+   "t": 279.5,
+   "fen": "2r1kb1r/pp1b1ppp/1qn1p3/3pP3/3N4/1N1PB3/PP3PPP/2RQ1RK1 b k - 2 13",
+   "line": [
+    "Be3"
+   ],
+   "spoken": "The bishop to e3. A kingside plan to consider: pushing the pawn to f4 and f5. We're x-raying the queen with a fine position and central control — and if Black takes on e5, we have a cool discovery with the knight to c6."
+  },
+  {
+   "ply": 26,
+   "t": 336.5,
+   "fen": "2r1kb1r/pp1b1ppp/q1n1p3/3pP3/3N4/1N1PB3/PP3PPP/2RQ1RK1 w k - 3 14",
+   "line": [
+    "Qa6"
+   ],
+   "spoken": "Black plays the queen to a6, threatening to take on c5 — we need to react."
+  },
+  {
+   "ply": 27,
+   "t": 350.5,
+   "fen": "2r1kb1r/pp1b1ppp/q1N1p3/3pP3/8/1N1PB3/PP3PPP/2RQ1RK1 b k - 0 14",
+   "line": [
+    "Nxc6"
+   ],
+   "spoken": "We take on c6. The pawn to f4 was possible too, but taking is simplest — these positions always offer three or four roughly equal options."
+  },
+  {
+   "ply": 26,
+   "t": 386.5,
+   "fen": "2r1kb1r/pp1b1ppp/q1n1p3/3pP3/3N4/1N1PB3/PP3PPP/2RQ1RK1 w k - 3 14",
+   "line": [],
+   "spoken": "The simplest way to meet a capture on e5 is to trade knights, which also gains a tempo, and the other knight can head to d4 or c5. Like the paradox of the horse between two identical fields — at some point you just trust intuition and choose. The a2-pawn hangs, but it's not the pawn we must defend.",
+   "reanchor": true
+  },
+  {
+   "ply": 28,
+   "t": 435.5,
+   "fen": "2r1kb1r/pp3ppp/q1b1p3/3pP3/8/1N1PB3/PP3PPP/2RQ1RK1 w k - 0 15",
+   "line": [
+    "Nxc6",
+    "Bxc6"
+   ],
+   "spoken": "We recapture on c6. We can sacrifice the a2-pawn if we find something compelling — and I think I have. Let's just bring the other knight into the centre to d4.",
+   "reanchor": true
+  },
+  {
+   "ply": 30,
+   "t": 471,
+   "fen": "2r1kb1r/pp3ppp/2b1p3/3pP3/3N4/3PB3/qP3PPP/2RQ1RK1 w k - 0 16",
+   "line": [
+    "Nd4",
+    "Qxa2"
+   ],
+   "spoken": "The knight to d4. After the queen grabs a2, intuition says Black can't survive with the light-squared bishop still home. There's a simple, powerful move that threatens to trap the queen and connects the rooks — not b3, which doesn't cover the b2-square. The choice is the queen to e2 or d2, and I play the queen to e2, to keep the option of the queen to g4 hitting g7 once the bishop moves.",
+   "reanchor": true
+  },
+  {
+   "ply": 33,
+   "t": 548.5,
+   "fen": "2r1kb1r/pp3ppp/2b1p3/q2pP3/3N1P2/3PB3/1P2Q1PP/2R2RK1 b k - 2 17",
+   "line": [
+    "f4",
+    "Qa5",
+    "Qe2"
+   ],
+   "spoken": "We could win a2 back with the rook to a1, but instead the pawn to f4 — going after the kingside and punishing Black for the undeveloped bishop.",
+   "reanchor": true
+  },
+  {
+   "ply": 34,
+   "t": 570,
+   "fen": "2r1k2r/pp3ppp/2b1p3/q2pP3/1b1N1P2/3PB3/1P2Q1PP/2R2RK1 w k - 3 18",
+   "line": [
+    "Bb4"
+   ],
+   "spoken": "Black develops the bishop to b4 — but by the time it's out, we'll already have the pawn to f5, and the a2-pawn simply doesn't matter for the next twenty moves.",
+   "reanchor": true
+  },
+  {
+   "ply": 35,
+   "t": 571.5,
+   "fen": "2r1k2r/pp3ppp/2b1p3/q2pPP2/1b1N4/3PB3/1P2Q1PP/2R2RK1 b k - 0 18",
+   "line": [
+    "f5"
+   ],
+   "spoken": "We push the pawn to f5 and enjoy life, still with a great position.",
+   "reanchor": true
+  },
+  {
+   "ply": 37,
+   "t": 588.5,
+   "fen": "2r2rk1/pp3ppp/2b1P3/q2pP3/1b1N4/3PB3/1P2Q1PP/2R2RK1 b - - 0 19",
+   "line": [
+    "O-O",
+    "fxe6"
+   ],
+   "spoken": "The pawn to f6 was an option, but simplest is to take on e6, opening as many files and avenues on the kingside as possible.",
+   "reanchor": true
+  },
+  {
+   "ply": 38,
+   "t": 591.5,
+   "fen": "2r2rk1/pp4pp/2b1p3/q2pP3/1b1N4/3PB3/1P2Q1PP/2R2RK1 w - - 0 20",
+   "line": [
+    "fxe6"
+   ],
+   "spoken": "We take again on e6.",
+   "reanchor": true
+  },
+  {
+   "ply": 39,
+   "t": 593,
+   "fen": "2r2rk1/pp4pp/2b1N3/q2pP3/1b6/3PB3/1P2Q1PP/2R2RK1 b - - 0 20",
+   "line": [
+    "Nxe6"
+   ],
+   "spoken": "The knight takes e6, forcing the rook to move and restoring material equality. The bishop to d7 is an annoying reply.",
+   "reanchor": true
+  },
+  {
+   "ply": 41,
+   "t": 612.5,
+   "fen": "2r3k1/pp4pp/2b1N3/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 b - - 0 21",
+   "line": [
+    "Rxf1+",
+    "Rxf1"
+   ],
+   "spoken": "The c8-rook is undefended — so once the g7-pawn disappears, there are forking ideas in the air.",
+   "reanchor": true
+  },
+  {
+   "ply": 42,
+   "t": 624.5,
+   "fen": "2r3k1/pp1b2pp/4N3/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 w - - 1 22",
+   "line": [
+    "Bd7"
+   ],
+   "spoken": "Black plays the bishop to d7 — and I think I see a really cool sacrifice, hammering away at Black's king.",
+   "reanchor": true
+  },
+  {
+   "ply": 43,
+   "t": 637,
+   "fen": "2r3k1/pp1b2Np/8/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 b - - 0 22",
+   "line": [
+    "Nxg7"
+   ],
+   "spoken": "The knight takes g7 — a demolition sacrifice: give up a piece to shatter the pawn cover around the king, then blast through with the rest.",
+   "reanchor": true
+  },
+  {
+   "ply": 44,
+   "t": 652,
+   "fen": "2r5/pp1b2kp/8/q2pP3/1b6/3PB3/1P2Q1PP/5RK1 w - - 0 23",
+   "line": [
+    "Kxg7"
+   ],
+   "spoken": "Black recaptures on g7. Now the follow-up: not the queen to g4, which hangs; the queen to h5 is great, but there's better. We access the king from d4 — the bishop to d4 is a touch slow, allowing the bishop to e6 to blockade, so invert the order.",
+   "reanchor": true
+  },
+  {
+   "ply": 47,
+   "t": 702.5,
+   "fen": "2r5/pp4kp/4b3/q2p4/1b1B4/3P4/1P2Q1PP/5RK1 b - - 1 24",
+   "line": [
+    "e6",
+    "Bxe6",
+    "Bd4+"
+   ],
+   "spoken": "The pawn to e6 first clears the bishop's path, and then the bishop to d4 with check is basically mate — a very quick attack, only seven moves from f4.",
+   "reanchor": true
+  },
+  {
+   "ply": 48,
+   "t": 704,
+   "fen": "2r3k1/pp5p/4b3/q2p4/1b1B4/3P4/1P2Q1PP/5RK1 w - - 2 25",
+   "line": [
+    "Kg8"
+   ],
+   "spoken": "The king to g8, and the queen takes e6 is literally checkmate. A note on the opening: we could transpose to the Advance main line with c3, but we preserved the Steinitz. And we're not afraid of the pawn to c4 — it actually benefits White, because Black's whole plan is to pressure d4, and c4 relieves that pressure while we divert fully to the kingside.",
+   "reanchor": true
+  },
+  {
+   "ply": 8,
+   "t": 803,
+   "fen": "rn1qkbnr/pp1b1ppp/4p3/2ppP3/3P4/5N2/PPP2PPP/RNBQKB1R w KQkq - 2 5",
+   "line": [],
+   "spoken": "It's not that attacking the king is easy, but at least we're free of the pressure on d4 — and going forward and then back is a normal part of high-level chess.",
+   "reanchor": true
+  },
+  {
+   "ply": 12,
+   "t": 816.5,
+   "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQ1RK1 w kq - 0 7",
+   "line": [
+    "Bd3",
+    "Nc6",
+    "O-O",
+    "cxd4"
+   ],
+   "spoken": "The knight to c6, castling, and Black finally takes on d4, transposing into a main line.",
+   "reanchor": true
+  },
+  {
+   "ply": 13,
+   "t": 821.5,
+   "fen": "r2qkbnr/pp1b1ppp/2n1p3/3pP3/3p4/3B1N2/PPP2PPP/RNBQR1K1 b kq - 1 7",
+   "line": [
+    "Re1"
+   ],
+   "spoken": "We play the bishop to f4 — the rook to e1 is a viable alternative too. The bishop to f4 does allow the queen to b6 aiming at the pawn, met by the knight to d2 and then b3. The key decision was taking with the f-knight, paving the way for the pawn to advance while keeping the other knight back on the queenside.",
+   "reanchor": true
+  }
+ ]
 }
