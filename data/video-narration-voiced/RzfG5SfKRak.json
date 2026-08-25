@@ -16,7 +16,7 @@
     "Nf6",
     "Bf4"
    ],
-   "spoken": "Black faces a London System."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -25,7 +25,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "And meets it with c5 — but if you already have a comfortable line against the London, keep it; these are proposals, not commands."
+   "spoken": "A framing note before the theory: if you already have an answer to the London that makes you comfortable — a central strike, a fianchetto, whatever — keep playing it. What follows are proposals, not a demand to tear up a repertoire that already makes you happy."
   },
   {
    "ply": 5,
@@ -34,7 +34,7 @@
    "line": [
     "dxc5"
    ],
-   "spoken": "White's options: the capture on c5 is rare and not good."
+   "spoken": "The opponent has a handful of tries against the early c-pawn break: an immediate capture, which is rare and simply not good; the ambitious central push to d5; the modest c3; and the topical e3. Knowing which is which is half the battle."
   },
   {
    "ply": 4,
@@ -50,8 +50,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Then there is d5, one of White's better tries — but there is a nice line against it.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -67,8 +66,7 @@
    "line": [
     "c3"
    ],
-   "spoken": "And c3, the move played here. One appeal of c5 is that c3 is actually not good.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -77,7 +75,8 @@
    "line": [
     "Qb6"
    ],
-   "spoken": "Because after the queen to b6, White is borderline worse — b2 is hit and it is hard to find a move. Defend it with the queen and d4 comes loose. Develop the knight to c6, White plays e3, and Black plays d6 or d5. And here is a standard London tactic with the queen on b6: the bishop to f5, forking the queen, rook and knight — White is busted. Deeper still, the knight to d3 uses the pin to drag the king out, then the knight to f4, and Black is clearly better."
+   "spoken": "One appeal of the c5 break is that after c3 the queen swings to b6 and the first player is already close to worse — starved for a good move, with the b-pawn under fire. This is a signature London theme: with the queen on b6, a bishop to f5 exploits the loose queenside, forking heavy pieces, and a follow-up knight to d3 uses the pin to make the piece untouchable and drags the king into the open.",
+   "kind": "tactic"
   },
   {
    "ply": 7,
@@ -86,7 +85,8 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "White's better try, which few know, is the knight to d2 — taking on b2 leads to insane complications."
+   "spoken": "The better, lesser-known try is a knight to d2 — grabbing the b-pawn leads to insane complications, so the clean path is to just plant d5 and reach a superior version of a standard London.",
+   "kind": "plan"
   },
   {
    "ply": 8,
@@ -95,7 +95,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Simplest is just d5, reaching a superior version of a standard London."
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -106,7 +106,7 @@
     "cxd4",
     "Qxb6"
    ],
-   "spoken": "If the queen goes to b3, take on d4, forcing White to grab the queen or lose the d-pawn."
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -116,7 +116,8 @@
     "axb6",
     "cxd4"
    ],
-   "spoken": "And the side that owns the a-file has the edge — Black's pawns look ugly, but he is far more comfortable."
+   "spoken": "If the queen probes to b3, capture on d4 to force matters — the queens come off, and as ever, the side that owns the open a-file holds the edge. The pawns may look ragged, but the position is far more comfortable.",
+   "kind": "plan"
   },
   {
    "ply": 14,
@@ -135,7 +136,7 @@
     "e3",
     "Nb4"
    ],
-   "spoken": "The knight to c6, and after e3 the knight to b4 — White has a lot of problems to solve."
+   "spoken": ""
   },
   {
    "ply": 4,
@@ -160,8 +161,7 @@
    "line": [
     "d6"
    ],
-   "spoken": "Against the more ambitious d5, the proposal is d6.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -179,8 +179,8 @@
    "line": [
     "e5"
    ],
-   "spoken": "And after the knight to c3, a rare move that solves Black's problems — e5, forming a pawn triangle and forcing White to commit.",
-   "reanchor": true
+   "spoken": "Against the ambitious central push, the plan is a modest d6 and then e5, building an odd little pawn triangle that forces the opponent to commit. It looks passive but it seizes the initiative in the centre.",
+   "kind": "plan"
   },
   {
    "ply": 9,
@@ -198,8 +198,7 @@
    "line": [
     "Bxe6"
    ],
-   "spoken": "If White takes en passant, then after the bishop takes on e6, Black is super comfortable.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -217,8 +216,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": "Usually White plays e4; you develop, White develops.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 13,
@@ -236,8 +234,8 @@
    "line": [
     "Be7"
    ],
-   "spoken": "You might think Black is worse with the backward pawn, but you will push d5 and the structure frees right up.",
-   "reanchor": true
+   "spoken": "You might fear the backward pawn — but it's only a temporary weakness, because the freeing push to d5 is inevitable: the opponent simply can't guard that square enough times. Once it goes in the structure is symmetrical, and if anything the second player is to be preferred.",
+   "kind": "plan"
   },
   {
    "ply": 15,
@@ -265,7 +263,7 @@
    "line": [
     "h6"
    ],
-   "spoken": "Castle, play h6 to stop the knight to g5, then calmly play d5 — Black is doing great."
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -290,8 +288,8 @@
    "line": [
     "Bg5"
    ],
-   "spoken": "If White plays the bishop to g5 instead of capturing, there is a nice detail — the bishop to e7.",
-   "reanchor": true
+   "spoken": "If the bishop pins with a jump to g5, step back with the bishop to e7 — and there's a lovely tactical detail waiting, because the natural central push runs into a knight capture on d5 that simultaneously defends the pinned bishop.",
+   "kind": "tactic"
   },
   {
    "ply": 10,
@@ -318,8 +316,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": "White's natural e4 runs into the knight takes on d5, which simultaneously protects the bishop — if White takes, you escape with d5, recapturing with an extra pawn.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -336,7 +333,8 @@
    "t": 2704,
    "fen": "rnbqk2r/pp2bppp/3p4/2pnp1B1/4P3/2N5/PPP2PPP/R2QKBNR w KQkq - 0 7",
    "line": [],
-   "spoken": ""
+   "spoken": "After the dust settles the king is perfectly safe on f8, and a warning: don't develop the bishop to e6, which drops the b-pawn and traps the rook. The right move is the queen to e8 — the opponent has enough for the pawn but no more, and no clear plan against the queenside expansion to come.",
+   "kind": "tactic"
   },
   {
    "ply": 10,
@@ -370,8 +368,7 @@
    "line": [
     "e4"
    ],
-   "spoken": "White often gives up the bishop pair with the capture on f6 — then Black has uncontested dark-square control, and can steer into a King's-Indian setup with g6, the bishop to g7, and eventually f5.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -415,8 +412,7 @@
    "line": [
     "Bxg5"
    ],
-   "spoken": "The knight takes on d5 is simply bad — Black plays the bishop takes on c5, and where is White's compensation? The check on b5 is harmless — just block with the knight to c6.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -449,7 +445,8 @@
    "line": [
     "Bg3"
    ],
-   "spoken": ""
+   "spoken": "If the bishop retreats to g3 it just bites on granite, doing nothing behind its own pawns. That inactivity is the cue to grab kingside space with a bold pawn to h5 — challenging, energetic play.",
+   "kind": "plan"
   },
   {
    "ply": 10,
@@ -458,8 +455,7 @@
    "line": [
     "h5"
    ],
-   "spoken": "If White plays the bishop to g3, it is terrible there. The engine likes h5, grabbing kingside space; after h3, then h4 and b5 — a Benko-style sacrifice exploiting the undeveloped bishop.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -478,7 +474,8 @@
     "h4",
     "Bh2"
    ],
-   "spoken": ""
+   "spoken": "Push on with h4 and then b5 in Benko-Gambit style, exploiting the fact that the queenside is still undeveloped. The pawn offer isn't about one tactic — it's about keeping the opponent from ever organising the central break, while every black piece comes to life.",
+   "kind": "plan"
   },
   {
    "ply": 14,
@@ -514,8 +511,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "After the knight takes b5, the check on a5, and then a quiet Benko-Gambit move keeping White from ever playing e4.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 18,
@@ -551,8 +547,7 @@
    "line": [
     "Rb1"
    ],
-   "spoken": "White's position collapses at the seams — the rook to b8, and after the rook to b1, the rook takes on b2.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 22,
@@ -579,7 +574,8 @@
    "line": [
     "Qxc3"
    ],
-   "spoken": ""
+   "spoken": "And a gorgeous finish appears — a queen capture on the knight is a deflection: the defender is dragged off its guard, the rook falls with check, and a knight fork on the king and queen leaves a whole rook to the good.",
+   "kind": "tactic"
   },
   {
    "ply": 25,
@@ -615,8 +611,7 @@
    "line": [
     "Ne4+"
    ],
-   "spoken": "It is a deflection: take the rook, and the knight fork does the rest — Black ends up a whole rook up.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 14,
@@ -658,8 +653,7 @@
     "Nd2",
     "h4"
    ],
-   "spoken": "That b5 sacrifice puts serious pressure on. If White defends h5 with a piece, you immobilise the knight and trap the bishop with h4.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 6,
@@ -700,8 +694,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "Are there alternatives to d5? White can play c4, but e5 is strong again — the same strategy as after the knight to c3.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 9,
@@ -735,7 +728,8 @@
    "line": [
     "e3"
    ],
-   "spoken": ""
+   "spoken": "Against the rare pawn-grab capture, the crisp reply is a knight to a6. If the queen recaptures, a check on a5 wins the pawn straight back, and keeping the queens on leads to a superior game with a better centre.",
+   "kind": "tactic"
   },
   {
    "ply": 6,
@@ -744,7 +738,8 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "Now the topical main move — and the recommended treatment is to capture in the centre first and only then bring the queen to b6. Taking first is the point: it rules out an awkward queen retreat that would otherwise defend, since the pawn is left hanging, and it steers into a fresher position.",
+   "kind": "plan"
   },
   {
    "ply": 8,
@@ -754,8 +749,7 @@
     "exd4",
     "Qb6"
    ],
-   "spoken": "If White plays the capture, nothing to fear — take on d4 first, then the queen to b6; taking first even prevents the queen to c1.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -790,8 +784,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": "Black scores extremely well in this whole structure.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -807,7 +800,9 @@
    "line": [
     "Na3"
    ],
-   "spoken": ""
+   "spoken": "The engine's one bid for an edge is the very rare knight to a3 rather than c3 — and the whole difference is that it leaves the c-pawn free to advance to c3 and shore up the d-pawn. When you play the white side of a London, keeping that d4-pawn well guarded is the essence of the system.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -816,7 +811,8 @@
    "line": [
     "Nd5"
    ],
-   "spoken": "White's rare try is the knight to a3 — the key is to keep the d4 pawn well protected; the bishop retreats all the way back to c1.",
+   "spoken": "The interesting reply is a knight hop to d5, forcing the bishop to shuffle all the way home to c1 — and a natural-looking knight to c4 walks into a queen check on e6 that hits bishop and king at once. Active piece play breeds these tactics.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -838,8 +834,7 @@
     "Nd5",
     "Bf4"
    ],
-   "spoken": "A common line is the knight to c4, but the check on e6 hits the king, White drops back to e3, and then b5 forces the knight away, winning the e3 pawn — Black dominates.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 16,
@@ -947,7 +942,8 @@
    "line": [
     "e6"
    ],
-   "spoken": "So the knight to c4 is a blunder; White must play the bishop to c1. Then e6, opening the bishop's diagonal; the knight to c4 is met by the queen to c7, and Black is perfectly fine.",
+   "spoken": "Once the bishop is chased back, the clean idea is e6 — developing and opening the diagonal for the light-squared bishop. No edge exists for the opponent in this whole line; the second player is simply fine.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -984,8 +980,7 @@
    "line": [
     "b6"
    ],
-   "spoken": "White plays the knight to f3, and you play b6 and develop the bishop.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 17,
@@ -1023,7 +1018,8 @@
    "line": [
     "Bb4+"
    ],
-   "spoken": "After the trade on d5 and the bishop to d3, Black has a great position — there is even the bishop to b4 with check, and if c3, the bishop takes on c3 with check. The line is full of tactics because the pieces are so active.",
+   "spoken": "A bishop check on b4 forces the king to f1, because blocking with c3 runs into a capture on c3 with check — the line brims with these shots precisely because the pieces are so active. Activity, not material, is doing the talking.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -1088,8 +1084,7 @@
     "Bc1",
     "e6"
    ],
-   "spoken": "As long as you remember the knight to d5 and e6, you are in great shape against the London.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -1105,7 +1100,9 @@
    "line": [
     "b3"
    ],
-   "spoken": ""
+   "spoken": "If the opponent props things with b3, nothing much happens — just answer with d5, and now the queenside light squares are permanently weakened, an inferior version of the main line for the first player.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 10,
@@ -1114,8 +1111,7 @@
    "line": [
     "d5"
    ],
-   "spoken": "Against b3, just play d5 — White has permanently weakened his whole queenside.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -1124,7 +1120,9 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "The one rule always to remember here: a knight to f3 is met by the bishop pin to g4. Miss that chance and the natural developing move can allow an annoying central knight leap — so the pin comes first, every time.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 12,
@@ -1156,8 +1154,7 @@
    "t": 3490.5,
    "fen": "rnb1kb1r/pp2pppp/1q3n2/3p4/3P1B2/1P3N2/P1P2PPP/RN1QKB1R b KQkq - 1 6",
    "line": [],
-   "spoken": "If you miss the moment and play the knight to c6, you risk the knight to e5. Your instinct against the knight to f3 should be the bishop to g4.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 8,
@@ -1182,7 +1179,8 @@
    "line": [
     "a6"
    ],
-   "spoken": "After the knight to c3, the move I love — a6, with a staggering score. Then d5, and Black's position is preferable.",
+   "spoken": "And the move to love in the main line is a6 — Black scores a staggering fifty-nine percent from here in serious over-the-board games, an astonishing figure against the London.",
+   "kind": "plan",
    "reanchor": true
   },
   {
@@ -1217,7 +1215,9 @@
    "line": [
     "a3"
    ],
-   "spoken": ""
+   "spoken": "The only way to hold equality is the typical London prophylaxis a3, defusing the queenside — because otherwise grabbing the b-pawn walks into a knight to a4, and the queen is trapped.",
+   "kind": "tactic",
+   "reanchor": true
   },
   {
    "ply": 13,
@@ -1227,8 +1227,7 @@
     "Qxb2",
     "Na4"
    ],
-   "spoken": "White's best is a3 — but beware the queen-trap idea, the knight to a4.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -1262,8 +1261,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": "You play d5; against the knight to f3, the bishop to g4, and Black has a great position.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 15,
@@ -1299,7 +1297,8 @@
    "line": [
     "Bxf3"
    ],
-   "spoken": "The knight to a4 was tried, but the check on a5, and after c3 you take on f3 — the queen is overloaded, White must take with the pawn, and then e6 leaves Black slightly better.",
+   "spoken": "Here the point is a capture on f3 exploiting an overloaded queen — it can't recapture, so the pawn must, shattering the kingside, and then e6 leaves the second player comfortably better.",
+   "kind": "tactic",
    "reanchor": true
   },
   {
@@ -1343,7 +1342,9 @@
    "line": [
     "e6"
    ],
-   "spoken": ""
+   "spoken": "The deeper truth of the whole line: London players hate seeing a knight committed to c3, because it saddles them with a weakness on c4 — the exact opposite of what they signed up for. So just play e6, press the knight with a capture and a knight to c6, and enjoy an excellent exchange-Caro structure that a London can transpose straight into.",
+   "kind": "plan",
+   "reanchor": true
   },
   {
    "ply": 17,
@@ -1371,8 +1372,7 @@
     "Bxf3",
     "Nc6"
    ],
-   "spoken": "London players hate the knight sitting on c3. White castles, and the thematic approach is the bishop takes on f3 and the knight to c6, piling on the pawn.",
-   "reanchor": true
+   "spoken": ""
   }
  ]
 }
