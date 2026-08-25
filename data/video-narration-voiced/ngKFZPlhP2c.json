@@ -1,10 +1,10 @@
 {
  "videoId": "ngKFZPlhP2c",
  "title": "Tempo Vs Pawns | French Defence: Tarrasch Variation | The Sensei Speedrun | GM Naroditsky",
- "openingName": "French Defense: Tarrasch Variation (3.Nd2), 7.Ngf3 pawn sacrifice",
+ "openingName": "French Defense: Tarrasch Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:ngKFZPlhP2c",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "e6"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the French."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We build the centre with d4."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black challenges with d5."
   },
   {
    "ply": 5,
@@ -42,10 +42,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": "This time not the Advance but the knight to d2 — the Tarrasch. It looks odd because it blocks in the c1-bishop, so the whole point had better be worth that.",
-   "kind": "main",
-   "teaches": "The Tarrasch develops the knight to d2, accepting a temporarily blocked bishop for other gains.",
-   "plans": "Nd2, then e5 and c3."
+   "spoken": "We introduce the Tarrasch — the knight to d2, keeping the c-pawn free for c3."
   },
   {
    "ply": 6,
@@ -54,7 +51,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6."
   },
   {
    "ply": 7,
@@ -63,10 +60,7 @@
    "line": [
     "e5"
    ],
-   "spoken": "The pawn to e5 gains space and kicks the knight, which tucks back to d7. Now the clamp is up and White has the familiar French space advantage.",
-   "kind": "main",
-   "teaches": "e5 clamps the centre and drives the f6-knight to a passive square.",
-   "plans": "Advance e5, keep the space."
+   "spoken": "We grab space with e5."
   },
   {
    "ply": 8,
@@ -75,7 +69,7 @@
    "line": [
     "Nfd7"
    ],
-   "spoken": ""
+   "spoken": "Black tucks the knight to d7."
   },
   {
    "ply": 9,
@@ -84,7 +78,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to d3."
   },
   {
    "ply": 11,
@@ -94,10 +88,7 @@
     "c5",
     "c3"
    ],
-   "spoken": "Here is why d2 was worth blocking the bishop: when Black hits with c5, White answers with the pawn to c3 and keeps the centre fully intact. It's the best of both worlds — pieces develop, the d4-e5 chain holds, and the other knight will take over guarding d4.",
-   "kind": "main",
-   "teaches": "Nd2 lets White meet ...c5 with c3, holding the centre while developing — the knight's payoff.",
-   "plans": "c3 to hold d4, develop behind it."
+   "spoken": "Black strikes with ...c5; we hold the centre with c3 — the whole point of Nd2."
   },
   {
    "ply": 12,
@@ -106,7 +97,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to c6."
   },
   {
    "ply": 13,
@@ -115,10 +106,7 @@
    "line": [
     "Ngf3"
    ],
-   "spoken": "The knight to f3 — the g-knight, not the natural-looking knight to b3. For decades this was thought inferior because d4 is hard to hold, but engines flipped the verdict: it's the more testing move.",
-   "kind": "main",
-   "teaches": "Modern theory prefers Ngf3 over Nb3 despite the harder-to-defend d4-pawn.",
-   "plans": "Ngf3, castle, don't fear for d4."
+   "spoken": "We develop the knight to f3 — more testing than the old Ne2."
   },
   {
    "ply": 14,
@@ -127,7 +115,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...Qb6, the classical line, pressuring d4."
   },
   {
    "ply": 15,
@@ -136,10 +124,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": "And this is the modern question the computers asked: what if you simply don't defend d4 at all? Castle and let the pawn go — in return you get a lead in development, more space, and the e5-pawn clamping the centre.",
-   "kind": "main",
-   "teaches": "Sacrifice d4 for development, space, and the e5-clamp rather than passively defending it.",
-   "plans": "O-O; let d4 fall for the initiative."
+   "spoken": "We castle."
   },
   {
    "ply": 16,
@@ -148,7 +133,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on d4."
   },
   {
    "ply": 17,
@@ -157,7 +142,7 @@
    "line": [
     "cxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture on d4."
   },
   {
    "ply": 18,
@@ -166,7 +151,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "Black takes with the knight."
   },
   {
    "ply": 19,
@@ -175,7 +160,7 @@
    "line": [
     "Nxd4"
    ],
-   "spoken": ""
+   "spoken": "We recapture with the knight."
   },
   {
    "ply": 20,
@@ -184,7 +169,7 @@
    "line": [
     "Qxd4"
    ],
-   "spoken": ""
+   "spoken": "Black recaptures with the queen, centralizing on d4."
   },
   {
    "ply": 21,
@@ -193,10 +178,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": "This is the move that holds it all together — the knight to f3. After the queen grabs on d4 the bishop and pawns are hanging and the position would collapse without it, but the knight develops with tempo, driving the queen off before she can cash in. From here White must keep following up accurately, like in any d4-pawn gambit.",
-   "kind": "trap",
-   "teaches": "Recapture the initiative with a developing move that hits the greedy queen with tempo.",
-   "plans": "Nf3, chase the queen, keep the lead."
+   "spoken": "We develop the knight to f3 with tempo, hitting the queen."
   },
   {
    "ply": 22,
@@ -205,7 +187,7 @@
    "line": [
     "Qb6"
    ],
-   "spoken": ""
+   "spoken": "Black retreats the queen to b6."
   },
   {
    "ply": 6,
@@ -256,11 +238,7 @@
     "Bb4+",
     "Nc3"
    ],
-   "spoken": "Compare the alternative: the knight to c3 walks into the bishop to b4 — the Winawer pin. The knight to d2 quietly sidesteps that whole family of pinning ideas.",
-   "kind": "review",
-   "teaches": "Nd2 avoids the Winawer's ...Bb4 pin that Nc3 must allow.",
-   "plans": "Prefer Nd2 to dodge ...Bb4.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 11,
@@ -286,11 +264,7 @@
    "line": [
     "Bb4"
    ],
-   "spoken": "And should Black still try the bishop to b4, it's toothless — the pawn to c3 simply shoves it away. With the knight on d2 the c-pawn is free to do that job.",
-   "kind": "review",
-   "teaches": "With Nd2, ...Bb4 is met by c3; the pin has no bite.",
-   "plans": "Answer ...Bb4 with c3.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 7,
@@ -315,11 +289,7 @@
    "line": [
     "Nf6"
    ],
-   "spoken": "The second point of d2: it leaves the c-pawn unblocked. When Black challenges the centre, the pawn to c3 is there to support d4 — which is exactly how the game went.",
-   "kind": "review",
-   "teaches": "Nd2 keeps the c-pawn free to reinforce d4 against ...c5.",
-   "plans": "Support d4 with c3 on demand.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 5,
@@ -335,11 +305,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "Black has two main replies to the Tarrasch — the knight to f6 played here, or the immediate pawn to c5. Against ...c5 the modern route is the knight to f3, with a great deal of theory behind it.",
-   "kind": "review",
-   "teaches": "The Tarrasch's two main tries are ...Nf6 and the immediate ...c5.",
-   "plans": "Know both main-line branches.",
-   "reanchor": true
+   "spoken": ""
   },
   {
    "ply": 7,
