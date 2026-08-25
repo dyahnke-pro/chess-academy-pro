@@ -4,7 +4,7 @@
  "openingName": "King's Indian Defense",
  "studentSide": "black",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:QVw89_6fh2Y",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "d4",
     "Nf6"
    ],
-   "spoken": ""
+   "spoken": "White opens d4 and we answer with a knight to f6, heading for a King's Indian setup."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "White grabs the center with c4."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "g6"
    ],
-   "spoken": ""
+   "spoken": "We fianchetto with g6 — another King's Indian."
   },
   {
    "ply": 5,
@@ -42,14 +42,15 @@
    "line": [
     "e3"
    ],
-   "spoken": ""
+   "spoken": "And White plays the modest e3."
   },
   {
    "ply": 4,
    "t": 36,
    "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "A couple of games ago we faced a similar offbeat setup with a knight to c3 and a bishop to e3.",
+   "reanchor": true
   },
   {
    "ply": 5,
@@ -58,7 +59,8 @@
    "line": [
     "e3"
    ],
-   "spoken": ""
+   "spoken": "Until we climb past 1500-1600 we won't often see the main King's Indian lines, which is exactly why you lay the groundwork of understanding the ideas — so you can react when your opponent throws something unexpected.",
+   "reanchor": true
   },
   {
    "ply": 6,
@@ -67,7 +69,7 @@
    "line": [
     "Bg7"
    ],
-   "spoken": ""
+   "spoken": "We complete the fianchetto with a bishop to g7."
   },
   {
    "ply": 7,
@@ -76,21 +78,23 @@
    "line": [
     "b3"
    ],
-   "spoken": ""
+   "spoken": "White adds b3 — a double-fianchetto setup."
   },
   {
    "ply": 5,
    "t": 68,
    "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/4P3/PP3PPP/RNBQKBNR b KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "It's impossible to memorize all of White's possible setups; there are a million of them.",
+   "reanchor": true
   },
   {
    "ply": 4,
    "t": 69.5,
    "fen": "rnbqkb1r/pppppp1p/5np1/8/2PP4/8/PP2PPPP/RNBQKBNR w KQkq - 0 3",
    "line": [],
-   "spoken": ""
+   "spoken": "The important thing is to understand which setup you're going for and how to react to your opponent's.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -101,7 +105,8 @@
     "Bg7",
     "e3"
    ],
-   "spoken": ""
+   "spoken": "White is just playing moves — e3, b3 — and that doesn't really change our reaction.",
+   "reanchor": true
   },
   {
    "ply": 8,
@@ -110,7 +115,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "So the first step is to play all the standard King's Indian moves. We castle."
   },
   {
    "ply": 9,
@@ -119,7 +124,7 @@
    "line": [
     "Bb2"
    ],
-   "spoken": ""
+   "spoken": "White plays a bishop to b2, and now the big decision I discussed last game: the traditional King's Indian is to prepare d6 and e5, but the modern understanding is that against some setups it's more efficient to play Benoni-style with c5, or even Grünfeld-style with d5. Stay flexible about which pawn break you choose. Against this setup a case can be made for either c5 or preparing e5."
   },
   {
    "ply": 10,
@@ -128,7 +133,7 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "The c5 break tempts, since it would create a bishop standoff with White's king still in the center — but I also want to show the classic King's Indian way, so let's play d6 and carry out the e5 break even with White's bishop already on b2."
   },
   {
    "ply": 11,
@@ -137,7 +142,7 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "White plays a knight to c3, trying to discourage e5 — but the great thing about the King's Indian is you can usually force that break anyway. Still, this changes my thinking a little."
   },
   {
    "ply": 12,
@@ -146,10 +151,7 @@
    "line": [
     "c5"
    ],
-   "spoken": "In the King's Indian, Black strikes with c5, challenging White's centre and opening lines for the fianchettoed bishop — refusing to sit passively against White's quiet setup.",
-   "kind": "main",
-   "teaches": "Meet a slow White system by striking the centre with c5.",
-   "plans": "Follow with Qa5 pressure and watch the c3-knight."
+   "spoken": "The problem with e5 now is that it allows a queen trade, and I want more than an endgame. So because White played the knight to c3, I like c5 a lot more — after White's standard d5, we have a tactic: a knight to e4, exposing the bishop on b2 and grabbing the bishop pair."
   },
   {
    "ply": 13,
@@ -158,7 +160,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "White develops a knight to f3. We're going to pressure White's center, but carefully."
   },
   {
    "ply": 14,
@@ -167,9 +169,7 @@
    "line": [
     "Qa5"
    ],
-   "spoken": "The queen to a5 loads pressure onto the knight on c3, and it sets a trap: if White ever loosens his grip on c3, the fianchetto bishop and the queen combine to win material there.",
-   "kind": "main",
-   "teaches": "Pile the queen onto a knight the fianchetto bishop also eyes — the pressure turns tactical."
+   "spoken": "A knight to c6 right now would let White push d5 with tempo, so we reserve it and start with a queen to a5 — a very challenging move, already setting up the knight-to-e4 idea while we play on the queenside."
   },
   {
    "ply": 15,
@@ -178,7 +178,7 @@
    "line": [
     "Bd3"
    ],
-   "spoken": ""
+   "spoken": "White plays a bishop to d3, which stops the knight to e4 — but since the bishop didn't go to e2, we now have a bishop-to-g4 idea for the right moment."
   },
   {
    "ply": 16,
@@ -187,7 +187,7 @@
    "line": [
     "Nc6"
    ],
-   "spoken": ""
+   "spoken": "And the right moment isn't yet — the whole point of the queen to a5 was to enable a knight to c6, because now we have a tactic against d5."
   },
   {
    "ply": 17,
@@ -196,7 +196,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "White pushes d5, and our pieces come together — we're piling serious pressure on d4. A knight to e4 is the thematic idea, but there's a better execution."
   },
   {
    "ply": 18,
@@ -205,7 +205,7 @@
    "line": [
     "Nxd5"
    ],
-   "spoken": ""
+   "spoken": "Since we're moving the knight anyway, we grab the pawn with a knight capture on d5 — just winning a pawn. It's easy to calculate: a recapture on d5, and then a bishop to c3 with check trades the bishops and leaves White in shambles."
   },
   {
    "ply": 19,
@@ -214,7 +214,8 @@
    "line": [
     "cxd5"
    ],
-   "spoken": ""
+   "spoken": "White recaptures on d5.",
+   "reanchor": true
   },
   {
    "ply": 20,
@@ -223,7 +224,7 @@
    "line": [
     "Bxc3+"
    ],
-   "spoken": ""
+   "spoken": "The bishop takes on c3 with check — and it's very important that it's a check."
   },
   {
    "ply": 22,
@@ -233,9 +234,8 @@
     "Bxc3",
     "Qxc3+"
    ],
-   "spoken": "The tactic springs: after the knights come off, the bishop takes on c3 with check and the queen recaptures with check too, forking the king and the loose rook on a1. White's position collapses.",
-   "kind": "main",
-   "teaches": "A bishop-then-queen capture on c3 with check can fork the king and the corner rook."
+   "spoken": "White's position collapses. He can't play a queen to d2, a common reflexive blunder here, because it drops the rook on a1 — a bit of whole-board awareness.",
+   "reanchor": true
   },
   {
    "ply": 23,
@@ -244,7 +244,7 @@
    "line": [
     "Ke2"
    ],
-   "spoken": ""
+   "spoken": "White bites the bullet with the king to e2, but it brings little relief. A common mistake is to win a pawn and rest on your laurels — dropping back or trading knights — but we have a better way."
   },
   {
    "ply": 24,
@@ -253,7 +253,7 @@
    "line": [
     "Nb4"
    ],
-   "spoken": ""
+   "spoken": "Don't forget our knight is hanging, but we don't want to stop at one pawn while White's position is collapsing. The instinctive move is a knight to b4 — it hits the pawn, pressures the bishop, and sits very stably."
   },
   {
    "ply": 25,
@@ -262,7 +262,7 @@
    "line": [
     "Rc1"
    ],
-   "spoken": ""
+   "spoken": "White is lost. After a rook to c1, we have a really pretty move."
   },
   {
    "ply": 26,
@@ -271,7 +271,8 @@
    "line": [
     "Nxa2"
    ],
-   "spoken": ""
+   "spoken": "You might expect a knight capture on d5, but I prefer a capture on a2 — it also hits the rook, and if White takes our queen we recapture with a fork.",
+   "reanchor": true
   },
   {
    "ply": 28,
@@ -281,7 +282,8 @@
     "Rxc3",
     "Nxc3+"
    ],
-   "spoken": ""
+   "spoken": "White takes and walks right into it, and we win — up a ton of material.",
+   "reanchor": true
   },
   {
    "ply": 30,
@@ -291,7 +293,8 @@
     "Kd2",
     "Nxd1"
    ],
-   "spoken": ""
+   "spoken": "The rest is easy: we have a big queenside majority and the extra exchange.",
+   "reanchor": true
   },
   {
    "ply": 31,
@@ -300,7 +303,7 @@
    "line": [
     "Rxd1"
    ],
-   "spoken": ""
+   "spoken": "The next step is to open files for our rooks."
   },
   {
    "ply": 32,
@@ -309,14 +312,15 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "A bishop to g4 trading minor pieces is fine, but to win efficiently I want to open a rook's file. Playing a5 immediately creates a weak square on b5 for White's bishop — pedantic here, but let's start with a bishop to d7 to make the a5-a4 push smoother."
   },
   {
    "ply": 31,
    "t": 474.5,
    "fen": "r1b2rk1/pp2pp1p/3p2p1/2pP4/8/1P1BPN2/3K1PPP/3R4 b - - 0 16",
    "line": [],
-   "spoken": ""
+   "spoken": "Would my opponent really play a bishop to b5 at this level? Probably not.",
+   "reanchor": true
   },
   {
    "ply": 32,
@@ -325,7 +329,8 @@
    "line": [
     "Bd7"
    ],
-   "spoken": ""
+   "spoken": "But the point of the speedrun is to build good habits early.",
+   "reanchor": true
   },
   {
    "ply": 33,
@@ -343,7 +348,7 @@
    "line": [
     "a5"
    ],
-   "spoken": ""
+   "spoken": "Now we play a5 — f5 is worse, because pushing to f4 lets White keep things locked up."
   },
   {
    "ply": 35,
@@ -352,7 +357,7 @@
    "line": [
     "Bc2"
    ],
-   "spoken": ""
+   "spoken": "White plays a bishop to c2."
   },
   {
    "ply": 36,
@@ -361,7 +366,7 @@
    "line": [
     "b5"
    ],
-   "spoken": ""
+   "spoken": "Obviously we push b5."
   },
   {
    "ply": 38,
@@ -371,7 +376,8 @@
     "Ke2",
     "a4"
    ],
-   "spoken": ""
+   "spoken": "And a4, creating a passed pawn and opening the b-file.",
+   "reanchor": true
   },
   {
    "ply": 40,
@@ -381,7 +387,8 @@
     "bxa4",
     "bxa4"
    ],
-   "spoken": ""
+   "spoken": "We'll occupy the b-file with our other rook.",
+   "reanchor": true
   },
   {
    "ply": 41,
@@ -390,7 +397,7 @@
    "line": [
     "Nd2"
    ],
-   "spoken": ""
+   "spoken": "White plays a knight to d2."
   },
   {
    "ply": 42,
@@ -399,7 +406,8 @@
    "line": [
     "Rfb8"
    ],
-   "spoken": ""
+   "spoken": "If White aims for c4, that's no problem — a bishop to b5 pins and pressures the knight.",
+   "reanchor": true
   },
   {
    "ply": 44,
@@ -409,7 +417,8 @@
     "Nc4",
     "Bb5"
    ],
-   "spoken": ""
+   "spoken": "It doesn't win the knight, but it trades it off, letting our pawn inch forward.",
+   "reanchor": true
   },
   {
    "ply": 46,
@@ -419,7 +428,8 @@
     "Bd3",
     "Bxc4"
    ],
-   "spoken": ""
+   "spoken": "Just trading — I'm playing quickly here.",
+   "reanchor": true
   },
   {
    "ply": 48,
@@ -438,7 +448,7 @@
    "line": [
     "Kf3"
    ],
-   "spoken": ""
+   "spoken": "Everything is simple now — we want to push the pawn toward a2."
   },
   {
    "ply": 50,
@@ -447,7 +457,8 @@
    "line": [
     "Rb4"
    ],
-   "spoken": ""
+   "spoken": "A rook to b4, forcing the bishop back.",
+   "reanchor": true
   },
   {
    "ply": 51,
@@ -465,7 +476,8 @@
    "line": [
     "Rb2"
    ],
-   "spoken": ""
+   "spoken": "And a rook to b2, tying the bishop down; if it moves again, a2.",
+   "reanchor": true
   },
   {
    "ply": 54,
@@ -475,7 +487,8 @@
     "Bc4",
     "a2"
    ],
-   "spoken": ""
+   "spoken": "The bishop moves, we push to a2, and it's easy.",
+   "reanchor": true
   },
   {
    "ply": 55,
@@ -484,7 +497,8 @@
    "line": [
     "g4"
    ],
-   "spoken": ""
+   "spoken": "People are taught to trade pieces, so they'd give up the a-pawn — but that takes longer to convert, and there's no reason to give it up.",
+   "reanchor": true
   },
   {
    "ply": 56,
@@ -493,7 +507,8 @@
    "line": [
     "Ra4"
    ],
-   "spoken": ""
+   "spoken": "The easier win is to chase the bishop with the other rook, a rook to a4, and push the c-pawn.",
+   "reanchor": true
   },
   {
    "ply": 57,
@@ -511,7 +526,8 @@
    "line": [
     "c4"
    ],
-   "spoken": ""
+   "spoken": "c4.",
+   "reanchor": true
   },
   {
    "ply": 60,
@@ -521,7 +537,8 @@
     "Be4",
     "c3"
    ],
-   "spoken": ""
+   "spoken": "This is dull for advanced players, but c3, c2...",
+   "reanchor": true
   },
   {
    "ply": 61,
@@ -566,7 +583,8 @@
    "line": [
     "h4"
    ],
-   "spoken": ""
+   "spoken": "The last step is just to get this rook to b1.",
+   "reanchor": true
   },
   {
    "ply": 66,
@@ -575,7 +593,8 @@
    "line": [
     "Rb4"
    ],
-   "spoken": ""
+   "spoken": "A rook to b4.",
+   "reanchor": true
   },
   {
    "ply": 68,
@@ -585,7 +604,8 @@
     "h5",
     "Rb1"
    ],
-   "spoken": ""
+   "spoken": "We don't care what our opponent is doing.",
+   "reanchor": true
   },
   {
    "ply": 70,
@@ -595,7 +615,8 @@
     "Rxb1",
     "axb1=N"
    ],
-   "spoken": ""
+   "spoken": "And the pawn promotes.",
+   "reanchor": true
   },
   {
    "ply": 71,
@@ -604,7 +625,8 @@
    "line": [
     "hxg6"
    ],
-   "spoken": ""
+   "spoken": "We recapture on g6.",
+   "reanchor": true
   },
   {
    "ply": 72,
@@ -613,7 +635,8 @@
    "line": [
     "hxg6"
    ],
-   "spoken": ""
+   "spoken": "And our opponent resigns — a simple game. The big blunder came on move nineteen, but it happened because we chose the right pawn break.",
+   "reanchor": true
   },
   {
    "ply": 3,
@@ -630,7 +653,8 @@
     "g6",
     "e3"
    ],
-   "spoken": ""
+   "spoken": "Our opponent played e3 — not a bad move in itself...",
+   "reanchor": true
   },
   {
    "ply": 4,
@@ -646,7 +670,8 @@
    "line": [
     "Nc3"
    ],
-   "spoken": ""
+   "spoken": "...if White follows up normally with the main line, a knight to c3 and e4.",
+   "reanchor": true
   },
   {
    "ply": 7,
@@ -665,14 +690,16 @@
    "line": [
     "d6"
    ],
-   "spoken": ""
+   "spoken": "That's the entry point to a million King's Indian variations.",
+   "reanchor": true
   },
   {
    "ply": 7,
    "t": 631.5,
    "fen": "rnbqk2r/ppppppbp/5np1/8/2PPP3/2N5/PP3PPP/R1BQKBNR b KQkq - 0 4",
    "line": [],
-   "spoken": ""
+   "spoken": "With e3 and b3 the engine still reads roughly equal, so don't think of it as terrible. We played d6 and White played a knight to c3 — I expected a knight to f3. Here's an important idea: you can play e5 here, and it looks like a flat-out blunder, but King's Indian players know it. White can hop the knight away, but a knight to d7 is more common, and the e5-push is toast — you attack it three times, White can't defend it, and can't move it because his bishop falls. This idea shows up most against a Zukertort or double-fianchetto b3 setup, where playing a King's Indian in response is completely fine.",
+   "reanchor": true
   }
  ]
 }
