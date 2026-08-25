@@ -4,7 +4,7 @@
  "openingName": "Caro-Kann Defense: Fantasy Variation",
  "studentSide": "white",
  "voice": "danya-dna",
- "rewrittenAt": "2026-08-24",
+ "rewrittenAt": "2026-08-25",
  "source": "yt:UiNSl_OnvDQ",
  "moves": [
   {
@@ -15,7 +15,7 @@
     "e4",
     "c6"
    ],
-   "spoken": ""
+   "spoken": "We take White and face the Caro-Kann."
   },
   {
    "ply": 3,
@@ -24,7 +24,7 @@
    "line": [
     "d4"
    ],
-   "spoken": ""
+   "spoken": "We build the centre with d4."
   },
   {
    "ply": 4,
@@ -33,7 +33,7 @@
    "line": [
     "d5"
    ],
-   "spoken": ""
+   "spoken": "Black challenges with d5."
   },
   {
    "ply": 5,
@@ -42,9 +42,7 @@
    "line": [
     "f3"
    ],
-   "spoken": "The pawn to f3 is the Fantasy — the kryptonite of many Caro players: less studied, sharply tactical, and it forces Black to know real theory instead of drifting.",
-   "kind": "main",
-   "teaches": "An offbeat but sound line forces the opponent out of memorized moves."
+   "spoken": "We play f3 — the Fantasy Variation. It's the kryptonite of most Caro-Kann players: less studied than the mainline trifecta, and so sharp that Black can't get away with just improvising standard Caro moves."
   },
   {
    "ply": 4,
@@ -69,7 +67,7 @@
    "line": [
     "dxe4"
    ],
-   "spoken": ""
+   "spoken": "Black takes on e4."
   },
   {
    "ply": 8,
@@ -79,7 +77,7 @@
     "fxe4",
     "e5"
    ],
-   "spoken": ""
+   "spoken": "We recapture on e4, and Black plays ...e5, the main line. Note we must not grab with our own pawn on e5 — ...Qh4 with check would then pick off the e4-pawn — so we prioritise development."
   },
   {
    "ply": 9,
@@ -88,7 +86,7 @@
    "line": [
     "Nf3"
    ],
-   "spoken": ""
+   "spoken": "We develop the knight to f3."
   },
   {
    "ply": 10,
@@ -97,7 +95,7 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Black pins with the bishop to g4, the best move."
   },
   {
    "ply": 9,
@@ -113,7 +111,8 @@
    "line": [
     "Bg4"
    ],
-   "spoken": ""
+   "spoken": "Against ...Bg4 there are two roads: the solid c3 then bishop to e2 that I play, and the more ambitious bishop to c4 I recommend for stronger players — it forces Black to demonstrate deep theory and sets countless tactical traps.",
+   "reanchor": true
   },
   {
    "ply": 11,
@@ -122,10 +121,7 @@
    "line": [
     "Bc4"
    ],
-   "spoken": "The bishop to c4 fixes on f7. The sacrifice on f7 becomes a standing threat for the whole middlegame, so Black can never fully relax there.",
-   "kind": "main",
-   "teaches": "Keep a live sacrificial threat on f7 to restrict the defender's freedom.",
-   "plans": "Castle and pile toward f7."
+   "spoken": "We bring the bishop to c4. In past games the shot on f7 has been overlooked by unprepared opponents."
   },
   {
    "ply": 12,
@@ -134,7 +130,7 @@
    "line": [
     "Nd7"
    ],
-   "spoken": ""
+   "spoken": "Black correctly plays the knight to d7, guarding against the f7 sacrifice."
   },
   {
    "ply": 13,
@@ -143,7 +139,7 @@
    "line": [
     "O-O"
    ],
-   "spoken": ""
+   "spoken": "We castle kingside — a big appeal of the Fantasy: the semi-open f-file that fuels the attack."
   },
   {
    "ply": 14,
@@ -152,7 +148,7 @@
    "line": [
     "Ngf6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the knight to f6. Now we must shore up the centre, because once Black is developed ...exd4 grows nasty."
   },
   {
    "ply": 15,
@@ -161,7 +157,7 @@
    "line": [
     "c3"
    ],
-   "spoken": ""
+   "spoken": "We play c3 to buttress the centre — the b1-knight can develop via d2 later. And a capture on e5 doesn't work: Black would take our f3-knight first, and then the centre just evaporates."
   },
   {
    "ply": 16,
@@ -170,7 +166,7 @@
    "line": [
     "Bd6"
    ],
-   "spoken": ""
+   "spoken": "Black develops the bishop to d6. As a rule, get the bishop out before the knight, so one piece doesn't block another."
   },
   {
    "ply": 17,
@@ -179,7 +175,7 @@
    "line": [
     "Bg5"
    ],
-   "spoken": ""
+   "spoken": "We develop the bishop to g5, its one good square."
   },
   {
    "ply": 18,
@@ -188,7 +184,7 @@
    "line": [
     "h6"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...h6, and this is about where most club players leave theory."
   },
   {
    "ply": 19,
@@ -197,7 +193,7 @@
    "line": [
     "Bh4"
    ],
-   "spoken": ""
+   "spoken": "We retreat to h4, provoking ...g5."
   },
   {
    "ply": 20,
@@ -206,7 +202,7 @@
    "line": [
     "g5"
    ],
-   "spoken": ""
+   "spoken": "Black plays ...g5."
   },
   {
    "ply": 21,
@@ -215,9 +211,7 @@
    "line": [
     "Bg3"
    ],
-   "spoken": "The bishop can't just sit, so it travels: to g5, and when kicked it retreats along h4 to g3 — each step provoking a pawn move, first h6 then g5, that permanently weakens Black's kingside.",
-   "kind": "main",
-   "teaches": "A repositioning bishop can provoke weakening pawn pushes as it travels."
+   "spoken": "We drop the bishop to g3 — and remember, ...Nxe4 is never a real problem, because the check on f7 always answers it."
   },
   {
    "ply": 22,
@@ -226,7 +220,7 @@
    "line": [
     "Qe7"
    ],
-   "spoken": ""
+   "spoken": "Black plays the queen to e7, solidifying e5 and preparing to castle queenside — an opposite-wing race, with Black storming ...h5–h4 while we can advance a4–a5 or swing the queen to b3 or a4 to worry his weak queenside pawns."
   },
   {
    "ply": 23,
@@ -235,7 +229,7 @@
    "line": [
     "Nbd2"
    ],
-   "spoken": ""
+   "spoken": "First we complete development with the knight to d2."
   },
   {
    "ply": 24,
@@ -244,7 +238,8 @@
    "line": [
     "O-O-O"
    ],
-   "spoken": ""
+   "spoken": "Black castles queenside. Before pawn-storming, apply the best-case-scenario test: even if a4–a5–a6 all worked, Black just plays ...b5 and we've wasted three tempi for an unexploitable weakness — so we attack with pieces instead, starting with the queen to a4, and don't forget the standing weakness on f7.",
+   "reanchor": true
   }
  ]
 }
